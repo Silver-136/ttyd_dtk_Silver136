@@ -15,6 +15,7 @@ s32 evt_lottery(void* event) {
     extern s64 OSGetTime(void);
     extern void OSTicksToCalendarTime(s64,void*);
     extern s32 rand(void);
+    extern s64 __div2i(s64, s64);
     extern s32 dbg_lotteryinfo;
     s32* args=*(s32**)((u8*)event+0x18);
     s32 mode=evtGetValue(event,args[0]);
@@ -22,10 +23,11 @@ s32 evt_lottery(void* event) {
     u8* global=(u8*)gp;
     u8* work=global+0xA8;
     u16* flags=(u16*)work;
-    s64* pickTimes=(s64*)(work+0x30);
-    s64* signTime=(s64*)(work+8);
-    s16* number=(s16*)(work+0x10);
-    s32 calOld[10],calNow[10];
+    s32 calPickOld[10], calPickNow[10];
+    s32 calModePastOld[10], calModePastNow[10];
+    s32 calModeFutureOld[10], calModeFutureNow[10];
+    s32 calSignOld[10], calSignNow[10];
+    s32 calOutput[10];
     dbg_lotteryinfo=1;
     *flags&=~0x1000;
     *flags&=~0x2000;
@@ -33,9 +35,9 @@ s32 evt_lottery(void* event) {
     *flags&=~0x8000;
     if(*flags&8) {
         if(*(s64*)(work+0x18)<now) {
-            OSTicksToCalendarTime(*(s64*)(work+0x18),calOld);
-            OSTicksToCalendarTime(now,calNow);
-            if(calOld[0]!=calNow[0]||calOld[1]!=calNow[1]||calOld[2]!=calNow[2]) {
+            OSTicksToCalendarTime(*(s64*)(work+0x18),calPickOld);
+            OSTicksToCalendarTime(now,calPickNow);
+            if(calPickOld[0]!=calPickNow[0]||calPickOld[1]!=calPickNow[1]||calPickOld[2]!=calPickNow[2]) {
                 *flags&=~4;
                 *flags&=~8;
             }
@@ -45,103 +47,110 @@ s32 evt_lottery(void* event) {
         }
     }
     if((*flags&2)==0) {
-        pickTimes[mode]=0;
+        *(s64*)(work+0x30+mode*8)=0;
     } else {
-        OSTicksToCalendarTime(pickTimes[mode],calOld);
-        OSTicksToCalendarTime(now,calNow);
-        if(calOld[0]==calNow[0]&&calOld[1]==calNow[1]&&calOld[2]==calNow[2]) {
-            *flags&=~0x10;
+        if (*(s64*)(work+0x30+mode*8) < now) {
+            OSTicksToCalendarTime(*(s64*)(work+0x30+mode*8),calModePastOld);
+            OSTicksToCalendarTime(now,calModePastNow);
+            if(calModePastOld[0]==calModePastNow[0]&&calModePastOld[1]==calModePastNow[1]&&calModePastOld[2]==calModePastNow[2]) {
+                *flags&=~0x10;
+            } else {
+                if((*flags&8)==0) *flags|=0x10;
+                *(s64*)(work+0x30+mode*8)=now;
+            }
         } else {
-            if((*flags&8)==0) *flags|=0x10;
-            pickTimes[mode]=now;
+            OSTicksToCalendarTime(*(s64*)(work+0x30+mode*8),calModeFutureOld);
+            OSTicksToCalendarTime(now,calModeFutureNow);
+            if(calModeFutureOld[0]==calModeFutureNow[0]&&calModeFutureOld[1]==calModeFutureNow[1]&&calModeFutureOld[2]==calModeFutureNow[2]) {
+                *flags&=~0x10;
+            } else {
+                *flags|=0x10;
+                *(s64*)(work+0x30+mode*8)=now;
+            }
+            *flags|=4;
         }
     }
     if((*flags&1)==0) {
         *flags|=1;
-        *signTime=now;
-        *number=(s16)(rand()%10000);
+        *(s64*)(work+8)=now;
+        *(s16*)(work+0x10)=(s16)(rand()%10000);
     } else {
-        OSTicksToCalendarTime(*signTime,calOld);
-        OSTicksToCalendarTime(now,calNow);
-        if(calOld[0]!=calNow[0]||calOld[1]!=calNow[1]||calOld[2]!=calNow[2]) {
-            if(mode==1) *signTime=now;
-            if((*flags&2)==0) *number=(s16)(rand()%10000);
-            else if(now<*(s64*)(work+0x18)) { *flags|=4; *number=-1; }
+        OSTicksToCalendarTime(*(s64*)(work+8),calSignOld);
+        OSTicksToCalendarTime(now,calSignNow);
+        if(calSignOld[0]!=calSignNow[0]||calSignOld[1]!=calSignNow[1]||calSignOld[2]!=calSignNow[2]) {
+            if(mode==1) *(s64*)(work+8)=now;
+            if((*flags&2)==0) *(s16*)(work+0x10)=(s16)(rand()%10000);
+            else if(now<*(s64*)(work+0x18)) { *flags|=4; *(s16*)(work+0x10)=-1; }
             else {
-                s64 ticksPerDay = (s64)(*(u32*)0x800000F8 >> 2) * 60 * 60 * 24;
-                s32 days = (s32)((now - *(s64*)(work + 0x18)) / ticksPerDay);
-                s16* grand = (s16*)(work + 0x22);
-                s16* second = (s16*)(work + 0x24);
-                s16* third = (s16*)(work + 0x26);
-                s16* fourth = (s16*)(work + 0x28);
+                s64 elapsed = now - *(s64*)(work + 0x18);
+                s32 days;
                 s32 value;
-                value = *grand;
+                elapsed = __div2i(elapsed, (*(u32*)0x800000F8 >> 2));
+                elapsed = __div2i(elapsed, 60);
+                elapsed = __div2i(elapsed, 60);
+                elapsed = __div2i(elapsed, 24);
+                days = (s32)elapsed;
+                value = *(s16*)(work + 0x22);
                 while (value < days) value += 395 - rand() % 60;
-                *grand = (s16)(value - days);
-                value = *second;
+                *(s16*)(work + 0x22) = (s16)(value - days);
+                value = *(s16*)(work + 0x24);
                 while (value < days) value += 115 - rand() % 30;
-                *second = (s16)(value - days);
-                value = *third;
+                *(s16*)(work + 0x24) = (s16)(value - days);
+                value = *(s16*)(work + 0x26);
                 while (value < days) value += 35 - rand() % 10;
-                *third = (s16)(value - days);
-                value = *fourth;
+                *(s16*)(work + 0x26) = (s16)(value - days);
+                value = *(s16*)(work + 0x28);
                 while (value < days) value += 10 - rand() % 6;
-                *fourth = (s16)(value - days);
-                if (days == *grand) {
-                    *number = *(s16*)(work + 0x20);
+                *(s16*)(work + 0x28) = (s16)(value - days);
+                if (days == *(s16*)(work + 0x22)) {
+                    *(s16*)(work+0x10) = *(s16*)(work + 0x20);
                     *flags |= 0x1000;
-                } else if (days == *second) {
-                    s32 candidate;
+                } else if (days == *(s16*)(work + 0x24)) {
                     do {
-                        candidate = *(s16*)(work + 0x20) % 1000 + (rand() % 10) * 1000;
-                    } while (candidate == *(s16*)(work + 0x20));
-                    *number = (s16)candidate;
+                        *(s16*)(work+0x10) = *(s16*)(work + 0x20) % 1000 + (rand() % 10) * 1000;
+                    } while (*(s16*)(work+0x10) == *(s16*)(work + 0x20));
                     *flags |= 0x2000;
-                } else if (days == *third) {
-                    s32 candidate;
+                } else if (days == *(s16*)(work + 0x26)) {
                     do {
-                        candidate = *(s16*)(work + 0x20) % 100 + (rand() % 100) * 100;
-                    } while (candidate == *(s16*)(work + 0x20) ||
-                             candidate / 1000 == *(s16*)(work + 0x20) / 1000);
-                    *number = (s16)candidate;
+                        do {
+                            *(s16*)(work+0x10) = *(s16*)(work + 0x20) % 100 + (rand() % 100) * 100;
+                        } while (*(s16*)(work+0x10) == *(s16*)(work + 0x20));
+                    } while (*(s16*)(work+0x10) % 1000 == *(s16*)(work + 0x20) % 1000);
                     *flags |= 0x4000;
-                } else if (days == *fourth) {
-                    s32 candidate;
+                } else if (days == *(s16*)(work + 0x28)) {
                     do {
-                        candidate = *(s16*)(work + 0x20) % 10 + (rand() % 1000) * 10;
-                    } while (candidate == *(s16*)(work + 0x20) ||
-                             candidate / 1000 == *(s16*)(work + 0x20) / 1000 ||
-                             candidate / 100 % 10 == *(s16*)(work + 0x20) / 100 % 10);
-                    *number = (s16)candidate;
+                        do {
+                            *(s16*)(work+0x10) = *(s16*)(work + 0x20) % 10 + (rand() % 1000) * 10;
+                        } while (*(s16*)(work+0x10) == *(s16*)(work + 0x20));
+                    } while (*(s16*)(work+0x10) % 1000 == *(s16*)(work + 0x20) % 1000 ||
+                             *(s16*)(work+0x10) % 100 == *(s16*)(work + 0x20) % 100);
                     *flags |= 0x8000;
                 } else {
-                    s32 candidate;
                     do {
-                        candidate = rand() % 10000;
-                    } while (candidate == *(s16*)(work + 0x20) ||
-                             candidate / 1000 == *(s16*)(work + 0x20) / 1000 ||
-                             candidate / 100 % 10 == *(s16*)(work + 0x20) / 100 % 10 ||
-                             candidate / 10 % 10 == *(s16*)(work + 0x20) / 10 % 10);
-                    *number = (s16)candidate;
+                        do {
+                            *(s16*)(work+0x10) = rand() % 10000;
+                        } while (*(s16*)(work+0x10) == *(s16*)(work + 0x20));
+                    } while (*(s16*)(work+0x10) % 1000 == *(s16*)(work + 0x20) % 1000 ||
+                             *(s16*)(work+0x10) % 100 == *(s16*)(work + 0x20) % 100 ||
+                             *(s16*)(work+0x10) % 10 == *(s16*)(work + 0x20) % 10);
                 }
             }
         } else {
             *flags |= 4;
-            *number = -1;
-            *signTime = now;
+            *(s16*)(work+0x10) = -1;
+            *(s64*)(work+8) = now;
         }
     }
     evtSetValue(event, args[1], *flags);
-    evtSetValue(event, args[2], *number);
-    OSTicksToCalendarTime(now, calNow);
+    evtSetValue(event, args[2], *(s16*)(work+0x10));
+    OSTicksToCalendarTime(now, calOutput);
     if (*flags & 2) {
-        s64 ticksPerDay = (s64)(*(u32*)0x800000F8 >> 2) * 60 * 60 * 24;
         s64 baseTime = *(s64*)(work + 0x18);
-        OSTicksToCalendarTime(baseTime, calNow);
-        OSTicksToCalendarTime(baseTime + ticksPerDay * *(s16*)(work + 0x22), calNow);
-        OSTicksToCalendarTime(baseTime + ticksPerDay * *(s16*)(work + 0x24), calNow);
-        OSTicksToCalendarTime(baseTime + ticksPerDay * *(s16*)(work + 0x26), calNow);
-        OSTicksToCalendarTime(baseTime + ticksPerDay * *(s16*)(work + 0x28), calNow);
+        OSTicksToCalendarTime(baseTime, calOutput);
+        OSTicksToCalendarTime(baseTime + (s64)(*(u32*)0x800000F8 >> 2) * 60 * 60 * 24 * *(s16*)(work + 0x22), calOutput);
+        OSTicksToCalendarTime(baseTime + (s64)(*(u32*)0x800000F8 >> 2) * 60 * 60 * 24 * *(s16*)(work + 0x24), calOutput);
+        OSTicksToCalendarTime(baseTime + (s64)(*(u32*)0x800000F8 >> 2) * 60 * 60 * 24 * *(s16*)(work + 0x26), calOutput);
+        OSTicksToCalendarTime(baseTime + (s64)(*(u32*)0x800000F8 >> 2) * 60 * 60 * 24 * *(s16*)(work + 0x28), calOutput);
     }
     return 2;
 }

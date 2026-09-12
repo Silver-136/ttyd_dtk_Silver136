@@ -1,0 +1,11 @@
+{
+  "component": "mri.rel",
+  "mapping_count": 2,
+  "schema_version": 1,
+  "units": {
+    "mri/unit_pakkun_flower": {
+      "zero_mri_000274a8": "@32",
+      "double_to_int_mri_000274b0": "@34"
+    }
+  }
+}

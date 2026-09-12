@@ -28,11 +28,14 @@ void* effSleepEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 angle) {
     void* child;
     f32 rad;
     f32 radius;
-    f32 angleCopy;
+    f32 cosValue;
+    f32 radiusStep;
+    f32 zero;
+    f32 scaleStep;
+    f32 one;
     s32 i;
     s32 delay;
 
-    angleCopy = angle;
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = &str_Sleep_804289f0;
     *(s32*)((s32)entry + 8) = 4;
@@ -45,7 +48,7 @@ void* effSleepEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 angle) {
     *(f32*)((s32)work + 4) = x;
     *(f32*)((s32)work + 8) = y;
     *(f32*)((s32)work + 0xC) = z;
-    *(f32*)((s32)work + 0x10) = angleCopy;
+    *(f32*)((s32)work + 0x10) = angle;
     *(s32*)((s32)work + 0x14) = 0;
     if (timer <= 0) {
         *(s32*)((s32)work + 0x18) = 1000;
@@ -54,19 +57,26 @@ void* effSleepEntry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 angle) {
     }
     *(s32*)((s32)work + 0x1C) = 0;
 
-    rad = (float_6p2832_804289d4 * angleCopy) / float_360_804289f8;
+    rad = (float_6p2832_804289d4 * angle) / float_360_804289f8;
+    radiusStep = float_16_804289fc;
     child = (void*)((s32)work + 0x24);
+    i = 1;
+    zero = float_0_804289e4;
+    scaleStep = float_0p2_80428a00;
     delay = 0x10;
-    for (i = 1; i < *(s32*)((s32)entry + 8); i++) {
-        radius = float_16_804289fc * (f32)i;
-        *(f32*)((s32)child + 4) = radius * (f32)cos(rad);
+    one = float_1_804289e0;
+    while (i < *(s32*)((s32)entry + 8)) {
+        cosValue = (f32)cos(rad);
+        radius = radiusStep * (f32)i;
+        *(f32*)((s32)child + 4) = radius * cosValue;
         *(f32*)((s32)child + 8) = radius * (f32)sin(rad);
-        *(f32*)((s32)child + 0xC) = float_0_804289e4;
-        *(f32*)((s32)child + 0x10) = float_1_804289e0 + float_0p2_80428a00 * (f32)i;
+        *(f32*)((s32)child + 0xC) = zero;
+        *(f32*)((s32)child + 0x10) = one + scaleStep * (f32)i;
         *(s32*)((s32)child + 0x14) = 0;
         *(s32*)((s32)child + 0x20) = delay;
         delay += 0x10;
         child = (void*)((s32)child + 0x24);
+        i++;
     }
     return entry;
 }

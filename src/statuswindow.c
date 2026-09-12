@@ -238,9 +238,12 @@ u8 gaugeDisp(s32 value, f32 x, f32 y) {
         f32 y;
         f32 z;
     } LocalVec3;
+    extern void* pouchGetPtr(void);
     extern void iconDispGx(LocalVec3* pos, s32 size, s32 iconId, f32 scale);
     extern u16 gauge_wakka[];
     extern u16 gauge_back[];
+    extern const f32 float_0_80422be8;
+    extern const f32 float_1_80422bf4;
     extern const f32 float_12_80422c58;
     s32 max;
     s32 i;
@@ -248,6 +251,8 @@ u8 gaugeDisp(s32 value, f32 x, f32 y) {
     s32 full;
     s32 rest;
     s32 fill;
+    s32 high;
+    s32 product;
     LocalVec3 pos;
 
     max = 0;
@@ -263,9 +268,13 @@ u8 gaugeDisp(s32 value, f32 x, f32 y) {
         value = 0;
     }
 
-    full = value / 100;
-    rest = value % 100;
-    fill = (rest * 15) / 100;
+    high = __mulhw(0x51EB851F, value);
+    full = (high >> 5) + ((u32)(high >> 5) >> 31);
+    rest = value - (full * 100);
+    product = rest * 15;
+    high = __mulhw(0xA57FA503, product);
+    fill = ((high + product) >> 6);
+    fill += (u32)fill >> 31;
     if (rest != 0 && value != 0 && fill == 0) {
         fill = 1;
     }
@@ -303,12 +312,34 @@ void statusWinDisp(void) {
     extern void iconNumberDispGx(f32 mtx[3][4], s32 value, s32 type, u32* color);
     extern void gaugeDisp(f32 x, f32 y, s32 value);
     extern s32 pouchGetPartyColor(s32 partyId);
+    extern s32 swByteGet(s32 index);
+    extern u32 partyChkJoin(s32 partyId);
+    extern s32 pouchGetHaveBadgeCnt(void);
     extern const u32 dat_80422bcc;
     extern const u32 dat_80422bc8;
     extern const u32 dat_80422bd0;
+    extern const u32 dat_80422bd4;
+    extern const u32 dat_80422bd8;
+    extern const u32 dat_80422bdc;
+    extern const u32 dat_80422be0;
+    extern const u32 dat_80422be4;
     extern const f32 float_78_80422c34;
+    extern const f32 float_0_80422be8;
+    extern const f32 float_neg180_80422c38;
+    extern const f32 float_neg190_80422c3c;
+    extern const f32 float_0p75_80422c40;
+    extern const f32 float_neg250_80422c44;
+    extern const f32 float_16_80422c48;
+    extern const f32 float_50_80422c4c;
+    extern const f32 float_neg130_80422c50;
+    extern const f32 float_25_80422c54;
     extern StatusIcon partysDt[];
     extern u16 party_icon[];
+    extern u16 party_icon_tbl[];
+    extern u16 gear_icon_tbl[];
+    extern u16 badge_icon_tbl[];
+    extern u16 journal_icon_tbl[];
+    extern const f32 dat_802f3a30[];
     StatusIcon* icon;
     f32 trans[3][4];
     f32 scale[3][4];
@@ -318,6 +349,9 @@ void statusWinDisp(void) {
     s32 blink;
     s32 party;
     s32 i;
+    s32 iconId;
+    s32 index;
+    f32 commandY;
 
     x = *(f32*)((char*)wp + 0x20);
     y = *(f32*)((char*)wp + 0x24);
@@ -407,6 +441,51 @@ void statusWinDisp(void) {
                     4.0f + 2.0f + (y - float_78_80422c34), 0.0f);
         color = dat_80422bc8;
         iconNumberDispGx(trans, *(s16*)((char*)wp + 0x5C), 1, &color);
+    }
+
+    if ((*(u16*)((char*)wp + 4) & 0x100) != 0 &&
+        *(s32*)((char*)gp + 0x14) == 0) {
+        commandY = (*(f32*)((char*)wp + 0x34) - *(f32*)((char*)wp + 0x24)) + float_neg180_80422c38;
+        index = *(s32*)((char*)gp + 0x16C);
+
+        PSMTXTrans(trans, float_neg190_80422c3c, commandY, float_0_80422be8);
+        PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+        PSMTXConcat(trans, scale, trans);
+        color = dat_80422bd4;
+        iconDispGxCol(trans, 0x10, 0x214, &color);
+
+        if (swByteGet(0) >= 7 || partyChkJoin(1) != 0) {
+            PSMTXTrans(trans, float_neg250_80422c44, commandY + float_16_80422c48, float_0_80422be8);
+            PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+            PSMTXConcat(trans, scale, trans);
+            color = dat_80422bd8;
+            iconId = party_icon_tbl[index];
+            iconDispGxCol(trans, 0x10, iconId, &color);
+        }
+
+        PSMTXTrans(trans, float_neg190_80422c3c, commandY + float_50_80422c4c, float_0_80422be8);
+        PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+        PSMTXConcat(trans, scale, trans);
+        color = dat_80422bdc;
+        iconId = gear_icon_tbl[index];
+        iconDispGxCol(trans, 0x10, iconId, &color);
+
+        if (swByteGet(0) >= 20 || pouchGetHaveBadgeCnt() != 0) {
+            PSMTXTrans(trans, float_neg130_80422c50 + dat_802f3a30[index],
+                       commandY + float_16_80422c48, float_0_80422be8);
+            PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+            PSMTXConcat(trans, scale, trans);
+            color = dat_80422be0;
+            iconId = badge_icon_tbl[index];
+            iconDispGxCol(trans, 0x10, iconId, &color);
+        }
+
+        PSMTXTrans(trans, float_neg190_80422c3c, commandY - float_25_80422c54, float_0_80422be8);
+        PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+        PSMTXConcat(trans, scale, trans);
+        color = dat_80422be4;
+        iconId = journal_icon_tbl[index];
+        iconDispGxCol(trans, 0x10, iconId, &color);
     }
 }
 
@@ -567,7 +646,8 @@ void valueUpdate(void) {
 
     statusGetValue(values);
 
-    count = (count + 1) % 0x4B0;
+    count++;
+    count %= 0x4B0;
     if ((count & 1) != 0) {
         return;
     }
@@ -578,7 +658,9 @@ void valueUpdate(void) {
     diff = values[8] - *(s16*)((s32)wp + 0x60);
     step = 0;
     if (diff != 0) {
-        step = diff / 10;
+        step = __mulhw(0x66666667, diff);
+        step >>= 2;
+        step += (u32)step >> 31;
         if (step == 0) {
             if (*(s16*)((s32)wp + 0x60) < values[8]) {
                 step = 1;
@@ -596,7 +678,9 @@ void valueUpdate(void) {
     diff = target - current;
     step = 0;
     if (diff != 0) {
-        step = diff / 10;
+        step = __mulhw(0x66666667, diff);
+        step >>= 2;
+        step += (u32)step >> 31;
         if (step == 0) {
             step = current < target ? 1 : -1;
         }
@@ -608,7 +692,9 @@ void valueUpdate(void) {
     diff = target - current;
     step = 0;
     if (diff != 0) {
-        step = diff / 10;
+        step = __mulhw(0x66666667, diff);
+        step >>= 2;
+        step += (u32)step >> 31;
         if (step == 0) {
             step = current < target ? 1 : -1;
         }
@@ -620,7 +706,9 @@ void valueUpdate(void) {
     diff = target - current;
     step = 0;
     if (diff != 0) {
-        step = diff / 10;
+        step = __mulhw(0x66666667, diff);
+        step >>= 2;
+        step += (u32)step >> 31;
         if (step == 0) {
             step = current < target ? 1 : -1;
         }

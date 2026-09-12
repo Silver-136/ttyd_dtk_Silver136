@@ -78,48 +78,63 @@ void effBattenMain(void* effect) {
     } Vec;
 
     extern void* gp;
-    extern u32 animGroupBaseAsync(char*, s32, s32);
+    extern s32 animGroupBaseAsync(char*, s32, s32);
     extern s32 animPoseEntry(char*, u32);
     extern void animPoseSetAnim(s32, char*, s32);
     extern void animPoseRelease(s32);
     extern void effDelete(void*);
-    extern f64 dispCalcZ(Vec*);
+    extern f32 dispCalcZ(Vec*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effBattenDisp(s32, void*);
     extern void effBattenDisp2(s32, void*);
     extern const char str_EFF_batten_x_80300364[];
     extern const char str_EFF_batten_rocket_80300374[];
-    extern char str_A_1_80427f00[];
-    extern char str_A_2_80427f04[];
+    extern char str_A_1_80427f00;
+    extern char str_A_2_80427f04;
+    extern f32 vec3_80300358[];
 
     u8* entry = effect;
+    f32* vectors = vec3_80300358;
     u8* work = *(u8**)(entry + 0x0C);
     s32 type = *(s32*)work;
-    s32 inBattle = *(s32*)((u8*)gp + 0x14) != 0;
+    u32 inBattle = *(s32*)((u8*)gp + 0x14);
+    Vec initial;
     Vec pos;
     s32 finished = 0;
     s32 i;
 
-    pos.x = *(f32*)(work + 4);
-    pos.y = *(f32*)(work + 8);
-    pos.z = *(f32*)(work + 0x0C);
+    initial = *(Vec*)vectors;
+    initial.x = *(f32*)(work + 4);
+    initial.y = *(f32*)(work + 8);
+    initial.z = *(f32*)(work + 0x0C);
+    pos = initial;
+    inBattle = (inBattle | -inBattle) >> 31;
 
-    if (type == 1 || type == 2) {
-        char* anim = type == 2 ? str_A_2_80427f04 : str_A_1_80427f00;
-        if (animGroupBaseAsync((char*)str_EFF_batten_x_80300364, inBattle, 0) == 0) {
+    if (type == 2) {
+        if (animGroupBaseAsync((char*)vectors + 0x0C, inBattle, 0) == 0) {
             return;
         }
         if (*(s32*)(work + 0x24) == -1) {
-            *(s32*)(work + 0x24) = animPoseEntry((char*)str_EFF_batten_x_80300364, inBattle);
-            animPoseSetAnim(*(s32*)(work + 0x24), anim, 1);
+            *(s32*)(work + 0x24) = animPoseEntry((char*)vectors + 0x0C, inBattle);
+            animPoseSetAnim(*(s32*)(work + 0x24), &str_A_2_80427f04, 1);
         }
-    } else if (type == 3) {
-        if (animGroupBaseAsync((char*)str_EFF_batten_rocket_80300374, inBattle, 0) == 0) {
+    } else if (type < 2) {
+        if (type > 0) {
+            if (animGroupBaseAsync((char*)vectors + 0x0C, inBattle, 0) == 0) {
+                return;
+            }
+            if (*(s32*)(work + 0x24) == -1) {
+                *(s32*)(work + 0x24) = animPoseEntry((char*)vectors + 0x0C, inBattle);
+                animPoseSetAnim(*(s32*)(work + 0x24), &str_A_1_80427f00, 1);
+            }
+        }
+    } else if (type < 4) {
+        if (animGroupBaseAsync((char*)vectors + 0x1C, inBattle, 0) == 0) {
             return;
         }
         if (*(s32*)(work + 0x24) == -1) {
-            *(s32*)(work + 0x24) = animPoseEntry((char*)str_EFF_batten_rocket_80300374, inBattle);
-            animPoseSetAnim(*(s32*)(work + 0x24), str_A_1_80427f00, 1);
+            *(s32*)(work + 0x24) = animPoseEntry((char*)vectors + 0x1C, inBattle);
+            animPoseSetAnim(*(s32*)(work + 0x24), &str_A_1_80427f00, 1);
         }
     }
 
@@ -143,54 +158,49 @@ void effBattenMain(void* effect) {
     }
 
     if (type != 0) {
-        dispEntry(3, 2, effBattenDisp2, effect, (f32)dispCalcZ(&pos));
+        dispEntry(4, 2, effBattenDisp2, effect, dispCalcZ(&pos));
         return;
     }
 
-    for (i = 1; i < *(s32*)(entry + 8); i++) {
-        u8* child = work + i * 0x5C;
-        s32 state = *(s32*)(child + 0x18);
-        s32 timer = *(s32*)(child + 0x1C);
+    work += 0x5C;
+    for (i = 1; i < *(s32*)(entry + 8); i++, work += 0x5C) {
+        s32 state = *(s32*)(work + 0x18);
 
         switch (state) {
             case 0:
-                timer--;
-                *(s32*)(child + 0x1C) = timer;
-                if (timer < 0) {
-                    *(s32*)(child + 0x1C) = 0;
-                    (*(s32*)(child + 0x18))++;
+                if ((s32)--*(u32*)(work + 0x1C) < 0) {
+                    *(s32*)(work + 0x1C) = 0;
+                    (*(s32*)(work + 0x18))++;
                 }
                 break;
 
             case 1:
-                if (timer < 30) {
-                    *(f32*)(child + 0x10) += (1.0f - *(f32*)(child + 0x10)) * 0.125f;
-                    *(u8*)(child + 0x14) =
-                        (u8)((128.0f - (f32)*(u8*)(child + 0x14)) * 0.125f +
-                             (f32)*(u8*)(child + 0x14));
-                    (*(s32*)(child + 0x1C))++;
+                if (*(s32*)(work + 0x1C) < 30) {
+                    *(f32*)(work + 0x10) += (1.0f - *(f32*)(work + 0x10)) * 0.125f;
+                    *(u8*)(work + 0x14) =
+                        (u8)((128.0f - (f32)*(u8*)(work + 0x14)) * 0.125f +
+                             (f32)*(u8*)(work + 0x14));
+                    (*(s32*)(work + 0x1C))++;
                 } else {
-                    *(s32*)(child + 0x1C) = (3 - i) * 10;
-                    (*(s32*)(child + 0x18))++;
+                    *(s32*)(work + 0x1C) = (3 - i) * 10;
+                    (*(s32*)(work + 0x18))++;
                 }
                 break;
 
             case 2:
-                timer--;
-                *(s32*)(child + 0x1C) = timer;
-                if (timer < 0) {
-                    *(s32*)(child + 0x1C) = 0;
-                    (*(s32*)(child + 0x18))++;
+                if ((s32)--*(u32*)(work + 0x1C) < 0) {
+                    *(s32*)(work + 0x1C) = 0;
+                    (*(s32*)(work + 0x18))++;
                 }
                 break;
 
             case 3:
-                if (timer < 30) {
-                    *(f32*)(child + 0x10) += (10.0f - *(f32*)(child + 0x10)) * 0.125f;
-                    *(u8*)(child + 0x14) =
-                        (u8)((0.0f - (f32)*(u8*)(child + 0x14)) * 0.125f +
-                             (f32)*(u8*)(child + 0x14));
-                    (*(s32*)(child + 0x1C))++;
+                if (*(s32*)(work + 0x1C) < 30) {
+                    *(f32*)(work + 0x10) += (10.0f - *(f32*)(work + 0x10)) * 0.125f;
+                    *(u8*)(work + 0x14) =
+                        (u8)((0.0f - (f32)*(u8*)(work + 0x14)) * 0.125f +
+                             (f32)*(u8*)(work + 0x14));
+                    (*(s32*)(work + 0x1C))++;
                 } else {
                     finished++;
                 }
@@ -199,7 +209,7 @@ void effBattenMain(void* effect) {
     }
 
     if (finished < *(s32*)(entry + 8) - 1) {
-        dispEntry(3, 2, effBattenDisp, effect, (f32)dispCalcZ(&pos));
+        dispEntry(4, 2, effBattenDisp, effect, dispCalcZ(&pos));
     } else {
         effDelete(effect);
     }

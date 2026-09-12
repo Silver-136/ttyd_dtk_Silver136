@@ -33,16 +33,15 @@ void ParticleEmit(void* emitter, void* particle, f32 matrix[3][4]) {
     f32 z;
     f32 length;
     const u8* constPool = (const u8*)vec3_80300c00;
-    f32 randomScale = *(const f32*)&dat_804282a8;
 
     if (use_last_431 == 0) {
         f32 y;
         f32 factor;
         do {
             seed = seed * 0x5EEDF715 + 0x1B0CB173;
-            x = float_2_8042828c * (randomScale * (f32)(u32)seed) - float_1_80428290;
+            x = float_2_8042828c * (*(const f32*)&dat_804282a8 * (f32)(u32)seed) - float_1_80428290;
             seed = seed * 0x5EEDF715 + 0x1B0CB173;
-            y = float_2_8042828c * (randomScale * (f32)(u32)seed) - float_1_80428290;
+            y = float_2_8042828c * (*(const f32*)&dat_804282a8 * (f32)(u32)seed) - float_1_80428290;
             length = x * x + y * y;
         } while (length > float_1_80428290);
         factor = (float_neg2_804282ac * (f32)log(length)) / length;
@@ -92,9 +91,9 @@ void ParticleEmit(void* emitter, void* particle, f32 matrix[3][4]) {
         (s32)(((f32*)matrix)[0x18] * gaussian + ((f32*)matrix)[0x17]);
     do {
         seed = seed * 0x5EEDF715 + 0x1B0CB173;
-        x = float_2_8042828c * (randomScale * (f32)(u32)seed) - float_1_80428290;
+        x = float_2_8042828c * (*(const f32*)&dat_804282a8 * (f32)(u32)seed) - float_1_80428290;
         seed = seed * 0x5EEDF715 + 0x1B0CB173;
-        z = float_2_8042828c * (randomScale * (f32)(u32)seed) - float_1_80428290;
+        z = float_2_8042828c * (*(const f32*)&dat_804282a8 * (f32)(u32)seed) - float_1_80428290;
         length = x * x + z * z;
     } while (length > float_1_80428290);
 
@@ -285,64 +284,67 @@ void* effParticleEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32 z, f
 
 /* fallback stub-fill: map=effParticleMain addr=0x80244f78 size=0x000001d8 */
 void effParticleMain(void* effect) {
+    typedef struct Vec {
+        f32 x, y, z;
+    } Vec;
     extern void effDelete(void* effect);
     extern void EmitterEmit(void* effect, void* data);
     extern void PSVECAdd(f32* a, f32* b, f32* out);
     extern f32 dispCalcZ(f32* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, f32 z, void* param);
     extern void effParticleDisp(s32 cameraId, void* effect);
-    extern const f32 float_neg0p03_80428294;
+    extern f32 float_neg0p03_80428294;
+    extern Vec vec3_80300c0c;
 
-    void* work;
-    void* particle;
-    void* particles;
-    f32 pos[3];
-    u32 idx;
-    u32 max;
+    s32* work;
+    s32* link;
+    s32* particle;
+    Vec pos;
+    s32 idx;
 
-    work = *(void**)((s32)effect + 0xC);
-    pos[0] = *(f32*)((s32)work + 4);
-    pos[1] = *(f32*)((s32)work + 8);
-    pos[2] = *(f32*)((s32)work + 0xC);
+    pos = vec3_80300c0c;
+    work = *(s32**)((s32)effect + 0xC);
+    pos.x = *(f32*)&work[1];
+    pos.y = *(f32*)&work[2];
+    pos.z = *(f32*)&work[3];
 
     if ((*(u32*)effect & 4) != 0) {
         *(u32*)effect &= ~4u;
-        *(s32*)((s32)work + 0x28) = 0x10;
+        work[10] = 0x10;
     }
-    if (*(s32*)((s32)work + 0x28) < 1000) {
-        *(s32*)((s32)work + 0x28) -= 1;
+    if (work[10] < 1000) {
+        work[10]--;
     }
-    if (*(s32*)((s32)work + 0x28) < 0) {
+    if (work[10] < 0) {
         effDelete(effect);
-        return;
-    }
-
-    if (*(s32*)((s32)work + 0x28) < 0x10) {
-        *(s32*)((s32)work + 0x30) = *(s32*)((s32)work + 0x28) << 4;
-    }
-
-    *(s32*)((s32)work + 0x2C) += 1;
-    EmitterEmit(effect, (void*)((s32)work + 0x34));
-
-    max = *(u32*)((s32)work + 0xA4);
-    particles = *(void**)((s32)work + 0xA0);
-    idx = *(u32*)((s32)particles + (max << 5));
-    while (idx != max + 1) {
-        particle = (void*)((s32)particles + (idx << 5));
-        *(s32*)((s32)particle + 0x1C) -= 1;
-        if (*(s32*)((s32)particle + 0x1C) < 0) {
-            *(u32*)((s32)particles + (max << 5)) = *(u32*)particle;
-            *(u32*)particle = *(u32*)((s32)particles + (max << 5) + 0x20);
-            *(u32*)((s32)particles + (max << 5) + 0x20) = idx;
-            *(u32*)((s32)work + 0xA8) -= 1;
-        } else {
-            PSVECAdd((f32*)((s32)particle + 4), (f32*)((s32)particle + 0x10), (f32*)((s32)particle + 4));
-            *(f32*)((s32)particle + 0x14) += float_neg0p03_80428294;
+    } else {
+        if (work[10] < 0x10) {
+            work[12] = work[10] << 4;
         }
-        idx = *(u32*)((s32)particles + (max << 5));
-    }
+        work[11]++;
+        EmitterEmit(effect, work + 13);
 
-    dispEntry(4, 2, effParticleDisp, dispCalcZ(pos), effect);
+        work = *(s32**)((s32)effect + 0xC);
+        link = (s32*)(work[40] + (work[41] << 5));
+        idx = *link;
+        while (idx != work[41] + 1) {
+            particle = (s32*)(work[40] + (idx << 5));
+            particle[7]--;
+            if (particle[7] < 0) {
+                *link = *particle;
+                *particle = *(s32*)(work[40] + (work[41] << 5) + 0x20);
+                *(s32*)(work[40] + (work[41] << 5) + 0x20) = idx;
+                work[42]--;
+                particle = link;
+            } else {
+                PSVECAdd((f32*)(particle + 1), (f32*)(particle + 4), (f32*)(particle + 1));
+                *(f32*)&particle[5] += float_neg0p03_80428294;
+            }
+            link = particle;
+            idx = *particle;
+        }
+        dispEntry(4, 2, effParticleDisp, dispCalcZ((f32*)&pos), effect);
+    }
 }
 
 

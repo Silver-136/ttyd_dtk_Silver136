@@ -393,19 +393,20 @@ void N_cloud_use(void* pParty) {
         *(u8*)((s32)pParty + 0x39) = 0;
         use = __memAlloc(0, 0x48);
         *(void**)((s32)pParty + 0x170) = use;
-        memset(use, 0, 0x48);
-        *(f32*)((s32)use + 0x00) = 100.0f;
-        *(f32*)((s32)use + 0x0C) = 120.0f;
-        *(f32*)((s32)use + 0x10) = 0.0f;
-        *(s32*)((s32)use + 0x14) = 0;
-        *(f32*)((s32)use + 0x18) = 0.0f;
-        *(s32*)((s32)use + 0x1C) = 1;
+        memset(*(void**)((s32)pParty + 0x170), 0, 0x48);
+        *(f32*)((s32)*(void**)((s32)pParty + 0x170) + 0x00) = 100.0f;
+        *(f32*)((s32)*(void**)((s32)pParty + 0x170) + 0x0C) = 120.0f;
+        *(f32*)((s32)*(void**)((s32)pParty + 0x170) + 0x10) = 0.0f;
+        *(s32*)((s32)*(void**)((s32)pParty + 0x170) + 0x14) = 0;
+        *(f32*)((s32)*(void**)((s32)pParty + 0x170) + 0x18) = 0.0f;
+        *(s32*)((s32)*(void**)((s32)pParty + 0x170) + 0x1C) = 1;
         *(void**)((s32)pParty + 0x178) = 0;
-        if (use != 0) {
-            *(s32*)((s32)use + 0x34) = -1;
+        if (*(void**)((s32)pParty + 0x170) != 0) {
+            *(s32*)((s32)*(void**)((s32)pParty + 0x170) + 0x34) = -1;
         }
         if ((*(u32*)pParty & 1) != 0) {
-            *(s32*)((s32)use + 0x30) = sysMsec2Frame(*(s32*)((s32)pParty + 0x16C));
+            *(s32*)((s32)*(void**)((s32)pParty + 0x170) + 0x30) =
+                sysMsec2Frame(*(s32*)((s32)pParty + 0x16C));
         }
     }
     use = *(void**)((s32)pParty + 0x170);
@@ -416,9 +417,9 @@ void N_cloud_use(void* pParty) {
             *(s32*)((s32)pParty + 0x24) = 4;
             *(u8*)((s32)pParty + 0x39) = 1;
         case 1:
-            *(f32*)((s32)pParty + 0x94) = *(f32*)((s32)player + 0x8C);
-            *(f32*)((s32)pParty + 0x98) = *(f32*)((s32)player + 0x90);
-            *(f32*)((s32)pParty + 0x9C) = *(f32*)((s32)player + 0x94);
+            *(s32*)((s32)pParty + 0x94) = *(s32*)((s32)player + 0x8C);
+            *(s32*)((s32)pParty + 0x98) = *(s32*)((s32)player + 0x90);
+            *(s32*)((s32)pParty + 0x9C) = *(s32*)((s32)player + 0x94);
             dir = *(f32*)((s32)player + 0x1B0);
             if (dir < 90.0f || dir >= 270.0f) {
                 dir += -90.0f;
@@ -442,9 +443,9 @@ void N_cloud_use(void* pParty) {
             }
             break;
         case 10:
-            *(f32*)((s32)pParty + 0x94) = *(f32*)((s32)player + 0x8C);
-            *(f32*)((s32)pParty + 0x98) = *(f32*)((s32)player + 0x90);
-            *(f32*)((s32)pParty + 0x9C) = *(f32*)((s32)player + 0x94);
+            *(s32*)((s32)pParty + 0x94) = *(s32*)((s32)player + 0x8C);
+            *(s32*)((s32)pParty + 0x98) = *(s32*)((s32)player + 0x90);
+            *(s32*)((s32)pParty + 0x9C) = *(s32*)((s32)player + 0x94);
             dir = *(f32*)((s32)player + 0x1B0);
             if (dir < 90.0f || dir >= 270.0f) {
                 dir += -90.0f;
@@ -454,9 +455,9 @@ void N_cloud_use(void* pParty) {
             dir = toMovedir(dir);
             movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), 3.3f, dir);
             *(f32*)((s32)pParty + 0x98) += 10.0f;
-            *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
-            *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);
-            *(f32*)((s32)pParty + 0x60) = *(f32*)((s32)pParty + 0x9C);
+            *(s32*)((s32)pParty + 0x58) = *(s32*)((s32)pParty + 0x94);
+            *(s32*)((s32)pParty + 0x5C) = *(s32*)((s32)pParty + 0x98);
+            *(s32*)((s32)pParty + 0x60) = *(s32*)((s32)pParty + 0x9C);
             marioChgMot(0x1B);
             marioChgPose(str_M_A_2A_802f89d8);
             partyChgPose(pParty, str_PWD_A_5_802f89e0);
@@ -468,9 +469,9 @@ void N_cloud_use(void* pParty) {
             *(f32*)((s32)use + 4) = *(f32*)((s32)player + 0x1AC);
             break;
         case 11:
-            *(f32*)((s32)pParty + 0x94) = *(f32*)((s32)player + 0x8C);
-            *(f32*)((s32)pParty + 0x98) = *(f32*)((s32)player + 0x90);
-            *(f32*)((s32)pParty + 0x9C) = *(f32*)((s32)player + 0x94);
+            *(s32*)((s32)pParty + 0x94) = *(s32*)((s32)player + 0x8C);
+            *(s32*)((s32)pParty + 0x98) = *(s32*)((s32)player + 0x90);
+            *(s32*)((s32)pParty + 0x9C) = *(s32*)((s32)player + 0x94);
             dir = *(f32*)((s32)player + 0x1B0);
             if (dir < 90.0f || dir >= 270.0f) {
                 dir += -90.0f;
@@ -480,18 +481,18 @@ void N_cloud_use(void* pParty) {
             dir = toMovedir(dir);
             movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), 3.3f, dir);
             *(f32*)((s32)pParty + 0x98) += 10.0f;
-            *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
-            *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);
-            *(f32*)((s32)pParty + 0x60) = *(f32*)((s32)pParty + 0x9C);
+            *(s32*)((s32)pParty + 0x58) = *(s32*)((s32)pParty + 0x94);
+            *(s32*)((s32)pParty + 0x5C) = *(s32*)((s32)pParty + 0x98);
+            *(s32*)((s32)pParty + 0x60) = *(s32*)((s32)pParty + 0x9C);
             if (--*(s32*)((s32)pParty + 0x24) < 1) {
                 partyChgPose(pParty, str_PWD_A_6_802f89e8);
                 *(u8*)((s32)pParty + 0x39) = 12;
             }
             break;
         case 12:
-            *(f32*)((s32)pParty + 0x94) = *(f32*)((s32)player + 0x8C);
-            *(f32*)((s32)pParty + 0x98) = *(f32*)((s32)player + 0x90);
-            *(f32*)((s32)pParty + 0x9C) = *(f32*)((s32)player + 0x94);
+            *(s32*)((s32)pParty + 0x94) = *(s32*)((s32)player + 0x8C);
+            *(s32*)((s32)pParty + 0x98) = *(s32*)((s32)player + 0x90);
+            *(s32*)((s32)pParty + 0x9C) = *(s32*)((s32)player + 0x94);
             dir = *(f32*)((s32)player + 0x1B0);
             if (dir < float_90_80424304 || dir >= float_270_80424308) {
                 dir += float_neg90_8042432c;
@@ -501,9 +502,9 @@ void N_cloud_use(void* pParty) {
             dir = toMovedir(dir);
             movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), float_3p3_80424330, dir);
             *(f32*)((s32)pParty + 0x98) += float_10_80424334;
-            *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
-            *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);
-            *(f32*)((s32)pParty + 0x60) = *(f32*)((s32)pParty + 0x9C);
+            *(s32*)((s32)pParty + 0x58) = *(s32*)((s32)pParty + 0x94);
+            *(s32*)((s32)pParty + 0x5C) = *(s32*)((s32)pParty + 0x98);
+            *(s32*)((s32)pParty + 0x60) = *(s32*)((s32)pParty + 0x9C);
             partyUpdateKeyData(pParty);
 
             *(f32*)((s32)player + 0x1AC) = *(f32*)((s32)use + 4);
@@ -581,9 +582,9 @@ void N_cloud_use(void* pParty) {
             }
             break;
         case 13:
-            *(f32*)((s32)pParty + 0x94) = *(f32*)((s32)player + 0x8C);
-            *(f32*)((s32)pParty + 0x98) = *(f32*)((s32)player + 0x90);
-            *(f32*)((s32)pParty + 0x9C) = *(f32*)((s32)player + 0x94);
+            *(s32*)((s32)pParty + 0x94) = *(s32*)((s32)player + 0x8C);
+            *(s32*)((s32)pParty + 0x98) = *(s32*)((s32)player + 0x90);
+            *(s32*)((s32)pParty + 0x9C) = *(s32*)((s32)player + 0x94);
             dir = *(f32*)((s32)player + 0x1B0);
             if (dir < 90.0f || dir >= 270.0f) {
                 dir += -90.0f;
@@ -593,9 +594,9 @@ void N_cloud_use(void* pParty) {
             dir = toMovedir(dir);
             movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), 3.3f, dir);
             *(f32*)((s32)pParty + 0x98) += 10.0f;
-            *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
-            *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);
-            *(f32*)((s32)pParty + 0x60) = *(f32*)((s32)pParty + 0x9C);
+            *(s32*)((s32)pParty + 0x58) = *(s32*)((s32)pParty + 0x94);
+            *(s32*)((s32)pParty + 0x5C) = *(s32*)((s32)pParty + 0x98);
+            *(s32*)((s32)pParty + 0x60) = *(s32*)((s32)pParty + 0x9C);
             partyUpdateKeyData(pParty);
             partyChgPose(pParty, str_PWD_A_6_802f89e8);
             if ((*(u16*)((s32)pParty + 0x152) & 0x400) != 0) {
@@ -616,9 +617,9 @@ void N_cloud_use(void* pParty) {
                 effSoftDelete(*(void**)((s32)pParty + 0x178));
                 *(void**)((s32)pParty + 0x178) = 0;
             }
-            *(f32*)((s32)pParty + 0x94) = *(f32*)((s32)player + 0x8C);
-            *(f32*)((s32)pParty + 0x98) = *(f32*)((s32)player + 0x90);
-            *(f32*)((s32)pParty + 0x9C) = *(f32*)((s32)player + 0x94);
+            *(s32*)((s32)pParty + 0x94) = *(s32*)((s32)player + 0x8C);
+            *(s32*)((s32)pParty + 0x98) = *(s32*)((s32)player + 0x90);
+            *(s32*)((s32)pParty + 0x9C) = *(s32*)((s32)player + 0x94);
             dir = *(f32*)((s32)player + 0x1B0);
             if (dir < 90.0f || dir >= 270.0f) {
                 dir += -90.0f;
@@ -628,9 +629,9 @@ void N_cloud_use(void* pParty) {
             dir = toMovedir(dir);
             movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), 3.3f, dir);
             *(f32*)((s32)pParty + 0x98) += 10.0f;
-            *(f32*)((s32)pParty + 0x58) = *(f32*)((s32)pParty + 0x94);
-            *(f32*)((s32)pParty + 0x5C) = *(f32*)((s32)pParty + 0x98);
-            *(f32*)((s32)pParty + 0x60) = *(f32*)((s32)pParty + 0x9C);
+            *(s32*)((s32)pParty + 0x58) = *(s32*)((s32)pParty + 0x94);
+            *(s32*)((s32)pParty + 0x5C) = *(s32*)((s32)pParty + 0x98);
+            *(s32*)((s32)pParty + 0x60) = *(s32*)((s32)pParty + 0x9C);
             *(u32*)((s32)pParty + 4) &= ~0x10;
             marioAdjustMoveDir();
             partyChgRunMode(pParty, 2);

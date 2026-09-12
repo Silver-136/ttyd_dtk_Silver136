@@ -1,7 +1,7 @@
 #include "effect/n64/eff_peach_dust_n64.h"
 
 
-void* effPeachDustN64Entry(f32 x, f32 y, f32 z, s32 unused, f32 angle, s32 type) {
+void* effPeachDustN64Entry(f32 x, f32 y, f32 z, f32 unused, f32 angle, s32 type) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32, s32);
     extern void effPeachDustMain(void*);
@@ -16,12 +16,18 @@ void* effPeachDustN64Entry(f32 x, f32 y, f32 z, s32 unused, f32 angle, s32 type)
     u8* work;
     u8* part;
     u8* pattern;
+    u8* patternBase;
     s32 row;
     s32 column;
     s32 count;
     s32 random;
+    s32 rowBase;
+    s32 remaining;
+    s32 groups;
     f32 baseX;
     f32 radians;
+    f32 angleScale;
+    f32 zero;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_PeachDustN64_802fbc80;
@@ -29,27 +35,30 @@ void* effPeachDustN64Entry(f32 x, f32 y, f32 z, s32 unused, f32 angle, s32 type)
     work = __memAlloc(3, 0x115C);
     *(u8**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effPeachDustMain;
-    *(s32*)work = type;
+    rowBase = 0;
+    angleScale = float_6p2832_80425cf0 * angle;
     *(f32*)(work + 4) = x;
+    patternBase = data + type * 0x100;
+    part = work + 0x2C;
+    count = 1;
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
-    *(s32*)(work + 0x1C) = 0x50;
-    *(s32*)(work + 0x20) = 0;
-
-    count = 1;
     row = 0;
-    part = work + 0x2C;
-    while (row < 16 && count <= 100) {
-        pattern = data + (15 - row) * 16 + type * 0x100;
+    *(s32*)(work + 0x20) = 0;
+    *(s32*)work = type;
+    *(s32*)(work + 0x1C) = 0x50;
+
+    do {
         column = 0;
-        while (column < 16 && count <= 100) {
-            if (pattern[column] != '.') {
+        pattern = patternBase + (15 - row) * 16;
+        do {
+            if (*pattern != '.') {
                 random = rand() % 20 - 10;
-                radians = float_6p2832_80425cf0 * angle / float_360_80425cf4;
+                radians = angleScale / float_360_80425cf4;
                 baseX = float_0p1_80425cec * (f32)random + (f32)((column - 8) * 2);
                 *(f32*)(part + 4) = baseX * (f32)cos((f64)radians);
                 random = rand() % 20 - 10;
-                *(f32*)(part + 8) = float_0p1_80425cec * (f32)random + (f32)(row * 2);
+                *(f32*)(part + 8) = float_0p1_80425cec * (f32)random + (f32)rowBase;
                 *(f32*)(part + 0xC) = baseX * (f32)sin((f64)radians);
                 *(f32*)(part + 0x10) = float_0p04_80425cf8 * *(f32*)(part + 4);
                 *(f32*)(part + 0x14) = float_0p04_80425cf8 * *(f32*)(part + 8);
@@ -58,23 +67,81 @@ void* effPeachDustN64Entry(f32 x, f32 y, f32 z, s32 unused, f32 angle, s32 type)
                 *(s32*)(part + 0x20) = 0;
                 part += 0x2C;
                 count++;
+                if (count >= 0x65) {
+                    break;
+                }
             }
             column++;
+            pattern++;
+        } while (column < 16);
+        if (count >= 0x65) {
+            break;
         }
         row++;
-    }
-    while (count < 0x65) {
-        *(f32*)(part + 4) = float_0_80425cd4;
-        *(f32*)(part + 8) = float_0_80425cd4;
-        *(f32*)(part + 0xC) = float_0_80425cd4;
-        *(f32*)(part + 0x10) = float_0_80425cd4;
-        *(f32*)(part + 0x14) = float_0_80425cd4;
-        *(f32*)(part + 0x18) = float_0_80425cd4;
-        *(s32*)(part + 0x1C) = -1;
-        *(s32*)(part + 0x20) = 0;
-        *(f32*)(part + 0x24) = float_0_80425cd4;
-        part += 0x2C;
-        count++;
+        rowBase += 2;
+    } while (row < 16);
+
+    remaining = 0x65 - count;
+    zero = float_0_80425cd4;
+    if (count < 0x65) {
+        groups = remaining >> 2;
+        if (groups != 0) {
+            do {
+                *(f32*)(part + 0x24) = zero;
+                *(f32*)(part + 0x18) = zero;
+                *(f32*)(part + 0x14) = zero;
+                *(f32*)(part + 0x10) = zero;
+                *(f32*)(part + 0xC) = zero;
+                *(f32*)(part + 8) = zero;
+                *(f32*)(part + 4) = zero;
+                *(s32*)(part + 0x1C) = -1;
+                *(s32*)(part + 0x20) = 0;
+                *(f32*)(part + 0x50) = zero;
+                *(f32*)(part + 0x44) = zero;
+                *(f32*)(part + 0x40) = zero;
+                *(f32*)(part + 0x3C) = zero;
+                *(f32*)(part + 0x38) = zero;
+                *(f32*)(part + 0x34) = zero;
+                *(f32*)(part + 0x30) = zero;
+                *(s32*)(part + 0x48) = -1;
+                *(s32*)(part + 0x4C) = 0;
+                *(f32*)(part + 0x7C) = zero;
+                *(f32*)(part + 0x70) = zero;
+                *(f32*)(part + 0x6C) = zero;
+                *(f32*)(part + 0x68) = zero;
+                *(f32*)(part + 0x64) = zero;
+                *(f32*)(part + 0x60) = zero;
+                *(f32*)(part + 0x5C) = zero;
+                *(s32*)(part + 0x74) = -1;
+                *(s32*)(part + 0x78) = 0;
+                *(f32*)(part + 0xA8) = zero;
+                *(f32*)(part + 0x9C) = zero;
+                *(f32*)(part + 0x98) = zero;
+                *(f32*)(part + 0x94) = zero;
+                *(f32*)(part + 0x90) = zero;
+                *(f32*)(part + 0x8C) = zero;
+                *(f32*)(part + 0x88) = zero;
+                *(s32*)(part + 0xA0) = -1;
+                *(s32*)(part + 0xA4) = 0;
+                part += 0xB0;
+            } while (--groups != 0);
+            remaining &= 3;
+            if (remaining == 0) {
+                return entry;
+            }
+        }
+        do {
+            *(f32*)(part + 0x24) = zero;
+            *(f32*)(part + 0x18) = zero;
+            *(f32*)(part + 0x14) = zero;
+            *(f32*)(part + 0x10) = zero;
+            *(f32*)(part + 0xC) = zero;
+            *(f32*)(part + 8) = zero;
+            *(f32*)(part + 4) = zero;
+            *(s32*)(part + 0x1C) = -1;
+            *(s32*)(part + 0x20) = 0;
+            part += 0x2C;
+        } while (--remaining != 0);
     }
     return entry;
 }

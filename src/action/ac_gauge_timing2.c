@@ -75,12 +75,12 @@ state_100:
     {
         if ((*(u32*)(bw + 0x1C94) & 1) && (*(u32*)(unit + 0x27C) & 0x10)) {
             s32 random = irand(100);
-            if (random < 0) {
-                *(u8*)(extra + 0x6A) = 1;
-                *(s32*)(bw + 0x1C98) = 0x1E;
-            } else {
+            if (random >= 0) {
                 *(s32*)(bw + 0x1C98) = 0x1E;
                 *(u8*)(extra + 0x6A) = 0;
+            } else {
+                *(u8*)(extra + 0x6A) = 1;
+                *(s32*)(bw + 0x1C98) = 0x1E;
             }
             *(s32*)(bw + 0x1C9C) = 1001;
             goto return_one;
@@ -88,43 +88,6 @@ state_100:
         *(s32*)(bw + 0x1C9C) = 1000;
     }
     goto state_1000;
-state_1001:
-    {
-        if (--*(s32*)(bw + 0x1C98) > -1) goto return_one;
-        if (*(u8*)(extra + 0x6A) == 0) {
-            *(s32*)(bw + 0x1CB8) = 0;
-            *(s32*)(bw + 0x1CE8) = 0;
-        } else {
-            *(s32*)(bw + 0x1CB8) = 2;
-            (*(s32*)(bw + 0x1CB4))++;
-            *(s32*)(bw + 0x1CE8) = irand(*(s32*)(bw + 0x1CD0)) + 1;
-        }
-        *(u32*)(bw + 0x1CC0) |= 1;
-        return 0;
-    }
-state_1002:
-    *(s32*)(bw + 0x1C9C) = 1003;
-state_1003:
-    {
-        *(s32*)(bw + 0x1CEC) = 1;
-        *(u32*)(bw + 0x1CC0) |= 1;
-        *(s32*)(extra + 0x6C) = 0x3C;
-        *(s32*)(bw + 0x1C9C) = 1004;
-    }
-state_1004:
-    {
-        if (--*(s32*)(extra + 0x6C) > 0) goto return_one;
-        *(s32*)(bw + 0x1C9C) = 1005;
-        goto return_one;
-    }
-state_1005:
-    {
-        *(s32*)(bw + 0x1CA0) = 0;
-        *(s32*)(bw + 0x1CA8) = 0;
-        *(s32*)(bw + 0x1CA4) = 0;
-        *(s32*)(bw + 0x1CAC) = 0;
-        return 0;
-    }
 state_1000:
     (*(s32*)extra)++;
     {
@@ -218,6 +181,44 @@ state_1000:
                 }
             }
         }
+    }
+state_1001:
+    {
+        if (--*(s32*)(bw + 0x1C98) > -1) goto return_one;
+        if (*(u8*)(extra + 0x6A) == 0) {
+            *(s32*)(bw + 0x1CB8) = 0;
+            *(s32*)(bw + 0x1CE8) = 0;
+        } else {
+            *(s32*)(bw + 0x1CB8) = 2;
+            (*(s32*)(bw + 0x1CB4))++;
+            *(s32*)(bw + 0x1CE8) = irand(*(s32*)(bw + 0x1CD0)) + 1;
+        }
+        *(u32*)(bw + 0x1CC0) |= 1;
+        return 0;
+    }
+state_1002:
+    *(s32*)(bw + 0x1C9C) = 1003;
+state_1003:
+    {
+        *(s32*)(bw + 0x1CEC) = 1;
+        *(u32*)(bw + 0x1CC0) |= 1;
+        *(s32*)(extra + 0x6C) = 0x3C;
+        *(s32*)(bw + 0x1C9C) = 1004;
+    }
+state_1004:
+    {
+        *(s32*)(extra + 0x6C) = *(s32*)(extra + 0x6C) - 1;
+        if (*(s32*)(extra + 0x6C) > 0) goto return_one;
+        *(s32*)(bw + 0x1C9C) = 1005;
+        goto return_one;
+    }
+state_1005:
+    {
+        *(s32*)(bw + 0x1CA0) = 0;
+        *(s32*)(bw + 0x1CA8) = 0;
+        *(s32*)(bw + 0x1CA4) = 0;
+        *(s32*)(bw + 0x1CAC) = 0;
+        return 0;
     }
 return_one:
     return 1;

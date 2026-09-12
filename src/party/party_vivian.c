@@ -63,6 +63,11 @@ u8 mot_vivian(void) {
 }
 
 u8 mot_vivian_post(void) {
+    typedef struct VivianVecWords {
+        s32 x;
+        s32 y;
+        s32 z;
+    } VivianVecWords;
     extern void partyPaperOff(void* party);
     extern void partyChgRunMode(void* party, s32 mode);
     extern void partyChgPoseId(void* party, s32 pose);
@@ -70,25 +75,27 @@ u8 mot_vivian_post(void) {
     extern s32 vec3_802f8954[];
     void* party;
     void* mario;
+    VivianVecWords* partyVec;
+    f32 partyTime;
 
     party = partyGetPtr(marioGetPartyId());
     mario = marioGetPtr();
     if (*(u16*)((s32)mario + 0x2E) == 0x20 || *(u16*)((s32)mario + 0x2E) == 0x1F) {
         *(u32*)((s32)mario + 4) &= ~0x1000;
         marioPaperOff();
-        *(s32*)((s32)mario + 0xA4) = vec3_802f8948[0];
-        *(s32*)((s32)mario + 0xA8) = vec3_802f8948[1];
-        *(s32*)((s32)mario + 0xAC) = vec3_802f8948[2];
+        *(VivianVecWords*)((s32)mario + 0xA4) =
+            *(VivianVecWords*)vec3_802f8948;
         *(u32*)mario &= ~0x400;
         if (party != 0) {
             partyPaperOff(party);
+            partyTime = float_10_80424270;
+            partyVec = (VivianVecWords*)vec3_802f8954;
             *(u32*)party &= ~0x100;
             *(u32*)party &= 0x7FFFFFFF;
             *(u32*)((s32)party + 4) &= ~0x200000;
-            *(f32*)((s32)party + 0x174) = float_10_80424270;
-            *(s32*)((s32)party + 0x7C) = vec3_802f8954[0];
-            *(s32*)((s32)party + 0x80) = vec3_802f8954[1];
-            *(s32*)((s32)party + 0x84) = vec3_802f8954[2];
+            *(f32*)((s32)party + 0x174) = partyTime;
+            *(VivianVecWords*)((s32)party + 0x7C) =
+                *partyVec;
             partyChgRunMode(party, 2);
             *(u8*)((s32)party + 0x3B) = 0;
             partyChgPoseId(party, 1);
@@ -323,21 +330,33 @@ void vivian_use(void* pParty) {
     f32 side;
     f32 delta;
     s32 animeId;
+    s32 movePlayerPos[10][3];
+    f32 moveScreenX[10];
+    f32 moveScreenY[10];
+    f32 moveScreenZ[10];
+    f32 moveGroundY[10];
+    f32 moveGroundX[10];
+    f32 moveGroundZ[10];
 
-#define VIVIAN_MOVE_BLOCK()                                                        \
+#define VIVIAN_MOVE_BLOCK(slot)                                                    \
     do {                                                                           \
-        player = *(void**)((s32)pParty + 0x160);                                   \
-        playerPos[0] = *(f32*)((s32)player + 0x8C);                                \
-        playerPos[1] = *(f32*)((s32)player + 0x90);                                \
-        playerPos[2] = *(f32*)((s32)player + 0x94);                                \
-        marioGetScreenPos(playerPos, &screenX, &screenY, &screenZ);                \
-        ground = marioSearchGround(37.0f, -37.0f,        \
-                                   &groundY, &groundX, &groundZ);                   \
-        if (ground != 0 && (hitGetAttr(ground) & 0xA00) == 0) {                    \
-            *(void**)((s32)player + 0x1E8) = ground;                               \
-            *(f32*)((s32)player + 0x90) = groundY;                                 \
-            if (*(f32*)((s32)player + 0x178) < 0.0f) {                 \
-                groundY += 0.2f;                                     \
+        void* movePlayer;                                                          \
+        void* moveGround;                                                          \
+        f32 moveSide;                                                              \
+        movePlayer = *(void**)((s32)pParty + 0x160);                               \
+        movePlayerPos[slot][0] = *(s32*)((s32)movePlayer + 0x8C);                  \
+        movePlayerPos[slot][1] = *(s32*)((s32)movePlayer + 0x90);                  \
+        movePlayerPos[slot][2] = *(s32*)((s32)movePlayer + 0x94);                  \
+        marioGetScreenPos((f32*)movePlayerPos[slot], &moveScreenX[slot],           \
+                          &moveScreenY[slot], &moveScreenZ[slot]);                  \
+        moveGround = marioSearchGround(37.0f, -37.0f,                              \
+                                       &moveGroundY[slot], &moveGroundX[slot],      \
+                                       &moveGroundZ[slot]);                         \
+        if (moveGround != 0 && (hitGetAttr(moveGround) & 0xA00) == 0) {            \
+            *(void**)((s32)movePlayer + 0x1E8) = moveGround;                       \
+            *(f32*)((s32)movePlayer + 0x90) = moveGroundY[slot];                   \
+            if (*(f32*)((s32)movePlayer + 0x178) < 0.0f) {                         \
+                moveGroundY[slot] += 0.2f;                                         \
             }                                                                      \
         }                                                                          \
         if (*(u8*)((s32)pParty + 0x39) >= 0x14 &&                                  \
@@ -346,15 +365,15 @@ void vivian_use(void* pParty) {
             if (*(f32*)((s32)pParty + 0x17C) < -13.0f) {             \
                 *(f32*)((s32)pParty + 0x17C) = -13.0f;               \
             }                                                                      \
-            *(f32*)((s32)pParty + 0x94) = *(f32*)((s32)player + 0x8C);             \
-            *(f32*)((s32)pParty + 0x98) = *(f32*)((s32)player + 0x90);             \
-            *(f32*)((s32)pParty + 0x9C) = *(f32*)((s32)player + 0x94);             \
+            *(s32*)((s32)pParty + 0x94) = *(s32*)((s32)movePlayer + 0x8C);         \
+            *(s32*)((s32)pParty + 0x98) = *(s32*)((s32)movePlayer + 0x90);         \
+            *(s32*)((s32)pParty + 0x9C) = *(s32*)((s32)movePlayer + 0x94);         \
             movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C),        \
                     *(f32*)((s32)pParty + 0x17C),                                  \
-                    toMovedirSimple(*(f32*)((s32)player + 0x1AC)));                \
+                    toMovedirSimple(*(f32*)((s32)movePlayer + 0x1AC)));            \
             movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C),        \
                     0.0f,                                              \
-                    toMovedirSimple(*(f32*)((s32)player + 0x1AC)));                \
+                    toMovedirSimple(*(f32*)((s32)movePlayer + 0x1AC)));            \
         } else {                                                                   \
             if (*(u8*)((s32)pParty + 0x39) >= 4) {                                 \
                 *(f32*)((s32)pParty + 0x17C) += 0.4f;                \
@@ -362,25 +381,25 @@ void vivian_use(void* pParty) {
                     *(f32*)((s32)pParty + 0x17C) = 0.0f;               \
                 }                                                                  \
             }                                                                      \
-            *(f32*)((s32)pParty + 0x94) = *(f32*)((s32)player + 0x8C);             \
-            *(f32*)((s32)pParty + 0x98) = *(f32*)((s32)player + 0x90);             \
-            *(f32*)((s32)pParty + 0x9C) = *(f32*)((s32)player + 0x94);             \
+            *(s32*)((s32)pParty + 0x94) = *(s32*)((s32)movePlayer + 0x8C);         \
+            *(s32*)((s32)pParty + 0x98) = *(s32*)((s32)movePlayer + 0x90);         \
+            *(s32*)((s32)pParty + 0x9C) = *(s32*)((s32)movePlayer + 0x94);         \
             movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C),        \
                     *(f32*)((s32)pParty + 0x17C),                                  \
-                    toMovedirSimple(*(f32*)((s32)player + 0x1AC)));                \
+                    toMovedirSimple(*(f32*)((s32)movePlayer + 0x1AC)));            \
         }                                                                          \
-        side = 2.5f;                                                 \
-        if (*(f32*)((s32)player + 0x1B0) == 0.0f) {                    \
-            side = -2.5f;                                          \
+        moveSide = 2.5f;                                                          \
+        if (*(f32*)((s32)movePlayer + 0x1B0) == 0.0f) {                           \
+            moveSide = -2.5f;                                                     \
         }                                                                          \
-        movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), side,      \
+        movePos((f32*)((s32)pParty + 0x94), (f32*)((s32)pParty + 0x9C), moveSide,  \
                 toMovedir(270.0f +                                     \
-                           *(f32*)((s32)player + 0x1AC)));                          \
+                           *(f32*)((s32)movePlayer + 0x1AC)));                      \
         if (strcmp((char*)gp + 0x12C, "eki_02") == 0) {                 \
             unk_800c27c0(pParty, 0.0f,                                 \
-                          (void*)((s32)player + 0x8C),                              \
-                          *(f32*)((s32)player + 0x1A4),                             \
-                          *(f32*)((s32)player + 0x1C0),                             \
+                          (void*)((s32)movePlayer + 0x8C),                          \
+                          *(f32*)((s32)movePlayer + 0x1A4),                         \
+                          *(f32*)((s32)movePlayer + 0x1C0),                         \
                           0.5f);                                      \
         }                                                                          \
     } while (0)
@@ -406,7 +425,7 @@ void vivian_use(void* pParty) {
             marioChgMot(0x1C);
             *(f32*)((s32)pParty + 0x17C) = -13.0f;
 
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(0);
 
             *(f32*)((s32)pParty + 0x100) =
                 angleABf(*(f32*)((s32)pParty + 0x58),
@@ -423,7 +442,7 @@ void vivian_use(void* pParty) {
             /* fallthrough */
 
         case 1:
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(1);
 
             *(f32*)((s32)pParty + 0x58) +=
                 (*(f32*)((s32)pParty + 0x94) - *(f32*)((s32)pParty + 0x58)) /
@@ -468,7 +487,7 @@ void vivian_use(void* pParty) {
             /* fallthrough */
 
         case 4:
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(2);
 
             if (30 - *(s32*)((s32)pParty + 0x24) < 25) {
                 *(f32*)((s32)pParty + 0x80) += 0.4f;
@@ -509,7 +528,7 @@ void vivian_use(void* pParty) {
             /* fallthrough */
 
         case 5:
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(3);
 
             *(f32*)((s32)pParty + 0x174) -= 1.0f;
             if (*(f32*)((s32)pParty + 0x174) <= 10.0f) {
@@ -520,7 +539,7 @@ void vivian_use(void* pParty) {
             break;
 
         case 10:
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(4);
 
             partyUpdateKeyData(pParty);
 
@@ -592,7 +611,7 @@ void vivian_use(void* pParty) {
             /* fallthrough */
 
         case 0x15:
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(5);
 
             *(f32*)((s32)pParty + 0x174) += 1.0f;
             if (*(f32*)((s32)pParty + 0x174) >= 20.0f) {
@@ -614,7 +633,7 @@ void vivian_use(void* pParty) {
             break;
 
         case 0x17:
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(6);
 
             animPoseSetLocalTime(24.0f, *(s32*)((s32)pParty + 0xC));
             *(u16*)((s32)pParty + 0x20) = 0x18;
@@ -624,7 +643,7 @@ void vivian_use(void* pParty) {
             /* fallthrough */
 
         case 0x18:
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(7);
 
             animPoseSetLocalTime(
                 (f64)*(s32*)((s32)pParty + 0x24),
@@ -646,7 +665,7 @@ void vivian_use(void* pParty) {
             break;
 
         case 0x19:
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(8);
 
             animPoseSetLocalTime(
                 (f64)*(s32*)((s32)pParty + 0x24),
@@ -679,7 +698,7 @@ void vivian_use(void* pParty) {
             /* fallthrough */
 
         case 0x1A:
-            VIVIAN_MOVE_BLOCK();
+            VIVIAN_MOVE_BLOCK(9);
 
             animPoseSetLocalTime(0.0f, *(s32*)((s32)pParty + 0xC));
 

@@ -191,6 +191,7 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
     extern void PSMTXRotRad(Mtx, f32, char);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXConcat(Mtx, Mtx, Mtx);
+    extern void PSMTXRotAxisRad(Mtx, Vec*, f32);
     extern void PSMTXMultVec(Mtx, Vec*, Vec*);
     extern void GXLoadTexMtxImm(Mtx, s32, s32);
     extern void GXLoadPosMtxImm(Mtx, s32);
@@ -210,6 +211,7 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
     extern f32 float_0p02_80425568;
     extern f32 float_0p015625_80425574;
     extern f32 float_0p03125_80425578;
+    extern Vec vec3_802fb174;
     u8* work = *(u8**)(effectAddress + 0xC);
     u8* camera = (u8*)camGetPtr(cameraId);
     u8 tex[0x20];
@@ -240,7 +242,7 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
     GXSetTevColorOp(2, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
     GXSetTevColorIn(2, 2, 4, 0, 15);
-    GXSetTevAlphaIn(2, 7, 0, 5, 7);
+    GXSetTevAlphaIn(2, 7, 0, 1, 7);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
@@ -288,6 +290,12 @@ u8 effKamekiTornadeDisp(s32 cameraId, s32 effectAddress) {
                    float_10_8042556c * *(f32*)(work + 0x78 + strand * 4));
         PSMTXRotRad(rotation, float_deg2rad_80425560 * *(f32*)(work + 0x118 + strand * 4), 'z');
         PSMTXConcat(transform, rotation, transform);
+        {
+            Vec axis = vec3_802fb174;
+            PSMTXRotAxisRad(rotation, &axis, float_deg2rad_80425560 *
+                (*(f32*)(work + 0x138) + (f32)(strand * strand)));
+            PSMTXConcat(transform, rotation, transform);
+        }
         PSMTXScale(scale, strandScale, *(f32*)(work + 0x34), strandScale);
         PSMTXConcat(transform, scale, transform);
         PSMTXTrans(scale, radius * (f32)sin(phase), float_0_80425570, radius * (f32)cos(phase));

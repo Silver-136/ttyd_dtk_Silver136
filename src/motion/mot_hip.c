@@ -42,6 +42,10 @@ void mot_hip(void) {
     extern s32 sysMsec2Frame(s32);
     extern f32 marioGetFallSpd(void);
     extern void* marioSearchGround(f64, f64, f32*, void*, void*);
+    extern s32 hitGetAttr(void*);
+    extern void set_damage_root_ypos(f64);
+    extern void marioChgMot(s32);
+    extern f32 float_neg0p4_804243d8;
     extern s32 marioBgmodeChk(void);
     extern void camFollowYOn(void);
     extern char str_M_A_1A_802f94a8[];
@@ -55,6 +59,7 @@ void mot_hip(void) {
     u32 outB;
     void* hit;
     s32 ground;
+    s32 attr;
     u32 state;
 
     mario = marioGetPtr();
@@ -153,7 +158,7 @@ void mot_hip(void) {
             if (hit == 0) {
                 *(f32*)(mario + 0x90) += fall;
             } else {
-                *(s16*)(mario + 0x42) = 0x21;
+                *(s16*)(mario + 0x2E) = 0x11;
                 *(s32*)(mario + 0x44) = 22;
                 *(s32*)(mario + 0x48) = 20;
                 *(void**)(mario + 0x1E8) = hit;
@@ -165,6 +170,21 @@ void mot_hip(void) {
                 *(s16*)(mario + 0x52) = 0;
                 *(f32*)(mario + 0xA8) = 0.0f;
                 marioChgPose(str_M_A_1B_802f94b0);
+                attr = hitGetAttr(hit);
+                if (attr & 0x200) {
+                    set_damage_root_ypos((f64)*(f32*)(mario + 0x90));
+                    *(f32*)(mario + 0x7C) = float_neg0p4_804243d8;
+                    *(f32*)(mario + 0x80) = float_neg0p4_804243d8;
+                    *(f32*)(mario + 0x84) = 0.0f;
+                    *(f32*)(mario + 0x88) = 0.0f;
+                    marioChgMot(0x1F);
+                    return;
+                }
+                if (attr & 0xC00) {
+                    set_damage_root_ypos((f64)*(f32*)(mario + 0x90));
+                    marioChgMot(0x20);
+                    return;
+                }
                 psndSFXOn_3D((char*)0x159, mario + 0x8C);
             }
             if (*(s32*)(mario + 0x2D8) > 400 && marioBgmodeChk() == 0) {

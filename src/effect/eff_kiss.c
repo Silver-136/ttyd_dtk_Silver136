@@ -1,6 +1,8 @@
 #include "effect/eff_kiss.h"
 
 /* stub-fill: effKissEntry | missing_definition | ghidra_signature */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
@@ -22,7 +24,9 @@ void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
     void* child;
     s32 count = 2;
     s32 i;
-    f32 phase = float_6p2832_80427990 * angleRate;
+    f32 phase;
+    f32 value;
+    f32 zero;
 
     if (type == 5) {
         effStampN64Entry(2, x, y, z);
@@ -31,7 +35,7 @@ void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
 
     *(const char**)((s32)effect + 0x14) = str_kiss_804279b0;
     *(s32*)((s32)effect + 8) = count;
-    work = __memAlloc(3, count * 0x38);
+    work = __memAlloc(3, *(s32*)((s32)effect + 8) * 0x38);
     *(void**)((s32)effect + 0xC) = work;
     *(void**)((s32)effect + 0x10) = effKissMain;
 
@@ -39,20 +43,23 @@ void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
     *(f32*)((s32)work + 4) = x;
     *(f32*)((s32)work + 8) = y;
     *(f32*)((s32)work + 0xC) = z;
-    *(f32*)((s32)work + 0x20) = float_1_8042795c;
-    *(f32*)((s32)work + 0x24) = float_1_8042795c;
+    value = float_1_8042795c;
+    *(f32*)((s32)work + 0x24) = value;
+    *(f32*)((s32)work + 0x20) = value;
     *(s32*)((s32)work + 0x28) = (type == 4) ? 0x3C : 0x28;
     *(s32*)((s32)work + 0x2C) = 0;
     *(s32*)((s32)work + 0x30) = 0xFF;
     *(f32*)((s32)work + 0x18) = angleRate;
-    *(f32*)((s32)work + 0x1C) = float_0_80427964;
+    zero = float_0_80427964;
+    phase = float_6p2832_80427990 * angleRate;
+    *(f32*)((s32)work + 0x1C) = zero;
 
     child = (void*)((s32)work + 0x38);
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x38)) {
-        *(f32*)((s32)child + 4) = float_0_80427964;
-        *(f32*)((s32)child + 8) = float_0_80427964;
-        *(f32*)((s32)child + 0xC) = float_0_80427964;
-        *(f32*)((s32)child + 0x1C) = float_0_80427964;
+        *(f32*)((s32)child + 4) = zero;
+        *(f32*)((s32)child + 8) = zero;
+        *(f32*)((s32)child + 0xC) = zero;
+        *(f32*)((s32)child + 0x1C) = zero;
         *(s32*)((s32)child + 0x28) = 0;
         *(s32*)((s32)child + 0x2C) = 0;
 
@@ -60,8 +67,9 @@ void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
             case 0:
             case 3: {
                 f32 angle = phase / float_360_8042799c;
-                *(f32*)((s32)child + 0x20) = float_1_8042795c;
-                *(f32*)((s32)child + 0x24) = float_1_8042795c;
+                value = float_1_8042795c;
+                *(f32*)((s32)child + 0x24) = value;
+                *(f32*)((s32)child + 0x20) = value;
                 *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
                 *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
                 break;
@@ -69,21 +77,23 @@ void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
             case 1:
             case 2: {
                 f32 angle = phase / float_360_8042799c;
-                *(f32*)((s32)child + 0x20) = float_0_80427964;
-                *(f32*)((s32)child + 0x24) = float_0_80427964;
+                *(f32*)((s32)child + 0x24) = zero;
+                *(f32*)((s32)child + 0x20) = zero;
                 *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
                 *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
                 break;
             }
             case 4:
-                *(f32*)((s32)child + 0x20) = float_1_8042795c;
-                *(f32*)((s32)child + 0x24) = float_1_8042795c;
+                value = float_1_8042795c;
+                *(f32*)((s32)child + 0x24) = value;
+                *(f32*)((s32)child + 0x20) = value;
                 break;
             case 5: {
                 f32 span = float_360_8042799c * (f32)i / (f32)(*(s32*)((s32)effect + 8) - 1);
                 f32 angle = (float_6p2832_80427990 * span) / float_360_8042799c;
-                *(f32*)((s32)child + 0x20) = float_1p5_80427970;
-                *(f32*)((s32)child + 0x24) = float_1p5_80427970;
+                value = float_1p5_80427970;
+                *(f32*)((s32)child + 0x24) = value;
+                *(f32*)((s32)child + 0x20) = value;
                 *(f32*)((s32)child + 0x1C) = span;
                 *(f32*)((s32)child + 0x10) = float_3_804279b8 * (f32)sin(angle);
                 *(f32*)((s32)child + 0x14) = float_3_804279b8 * (f32)cos(angle);
@@ -96,8 +106,6 @@ void* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angleRate) {
     return effect;
 }
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 void effKissMain(void* effect) {
     typedef struct Vec {
         f32 x;
@@ -287,15 +295,16 @@ void effKissDisp(s32 cameraId, void* effect) {
     extern void* camGetPtr(s32); extern void PSMTXTrans(Mtx,f64,f64,f64); extern void PSMTXScale(Mtx,f32,f32,f32); extern void PSMTXRotRad(Mtx,f64,char); extern void PSMTXConcat(void*,void*,void*);
     extern void GXSetNumChans(s32);extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetCullMode(s32);extern void GXClearVtxDesc(void);extern void GXSetVtxDesc(s32,s32);extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);extern void GXSetChanMatColor(s32,Color*);
     extern void effGetTexObj(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void GXBegin(s32,s32,s32);extern volatile f32 DAT_cc008000;
-    u8* base=*(u8**)((u8*)effect+0xC);void* cam=camGetPtr(cameraId);Mtx root,trans,rot,scale,model;TexObj tex;Color color;s32 type=*(s32*)base;s32 pass;s32 i;u8* child;f32 halfW;f32 top;
+    extern f32 float_0_80427964; extern f32 float_5_80427980;
+    u8* base=*(u8**)((u8*)effect+0xC);void* cam=camGetPtr(cameraId);Mtx root,trans,rot,scale,model;TexObj tex;Color color;s32 colorIndex=*(s32*)(base+0x2C);s32 alpha=*(s32*)(base+0x30);f32 angle=*(f32*)(base+0x18);s32 type=*(s32*)base;s32 pass;s32 i;u8* child;f32 halfW;f32 top;
     PSMTXTrans(trans,*(f32*)(base+4),*(f32*)(base+8),*(f32*)(base+0xC));PSMTXScale(scale,*(f32*)(base+0x20),*(f32*)(base+0x24),*(f32*)(base+0x24));PSMTXRotRad(rot,-0.017453292f**(f32*)((u8*)camGetPtr(4)+0x114),'y');PSMTXConcat(trans,rot,trans);PSMTXConcat(trans,scale,root);
     GXSetNumChans(1);GXSetChanCtrl(4,0,0,0,0,0,2);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,4);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,15,15,15,10);GXSetTevAlphaIn(0,7,4,5,7);GXSetCullMode(0);GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,13,1,4,0);
     for(pass=0;pass<2;pass++){
         child=base+0x38;
         for(i=1;i<*(s32*)((u8*)effect+8);i++,child+=0x38){
             if(type==3){effGetTexObj(pass?0x58:0x59,tex);halfW=pass?10.0f:16.0f;top=pass?16.0f:20.0f;}else{effGetTexObj(0x14,tex);halfW=4.0f;top=8.0f;}
-            GXLoadTexObj(tex,0);color.r=color.g=color.b=0xFF;color.a=(u8)*(s32*)(base+0x30);GXSetChanMatColor(4,&color);
-            PSMTXTrans(trans,*(f32*)(child+4),*(f32*)(child+8),*(f32*)(child+0xC));PSMTXRotRad(rot,-0.017453292f**(f32*)(base+0x18),'z');PSMTXConcat(trans,rot,trans);PSMTXRotRad(rot,0.017453292f**(f32*)(child+0x1C),'y');PSMTXConcat(trans,rot,trans);PSMTXScale(scale,*(f32*)(child+0x20),*(f32*)(child+0x24),*(f32*)(child+0x24));PSMTXConcat(trans,scale,trans);PSMTXConcat(root,trans,model);PSMTXConcat((u8*)cam+0x11C,model,model);GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);GXBegin(0x80,0,4);
+            GXLoadTexObj(tex,0);color.r=color.g=color.b=0xFF;color.a=(u8)alpha;GXSetChanMatColor(4,&color);
+            PSMTXTrans(trans,*(f32*)(child+4),*(f32*)(child+8),*(f32*)(child+0xC));PSMTXRotRad(rot,-0.017453292f*angle,'z');PSMTXConcat(trans,rot,trans);PSMTXRotRad(rot,0.017453292f**(f32*)(child+0x1C),'y');PSMTXConcat(trans,rot,trans);if(type==3){PSMTXRotRad(rot,0.017453292f*angle,'z');PSMTXConcat(trans,rot,trans);}PSMTXScale(scale,*(f32*)(child+0x20),*(f32*)(child+0x24),*(f32*)(child+0x24));PSMTXConcat(trans,scale,trans);if(type==3){PSMTXTrans(scale,float_0_80427964,float_5_80427980,float_0_80427964);PSMTXConcat(trans,scale,trans);}PSMTXConcat(root,trans,model);PSMTXConcat((u8*)cam+0x11C,model,model);GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);GXBegin(0x80,0,4);
             DAT_cc008000=-halfW;DAT_cc008000=top;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=halfW;DAT_cc008000=top;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=0;DAT_cc008000=halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=1;DAT_cc008000=-halfW;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;
         }
     }
@@ -305,12 +314,13 @@ void effKissDisp(s32 cameraId, void* effect) {
             f32 width=4.0f;
             if(type==3){effGetTexObj(pass?0x42:0x5A,tex);if(pass==0)width=16.0f;}
             else{effGetTexObj(0x42,tex);}
-            GXLoadTexObj(tex,0);color.r=color.g=color.b=0xFF;color.a=(u8)*(s32*)(base+0x30);GXSetChanMatColor(4,&color);
-            PSMTXTrans(trans,offset,-offset,offset-offset);PSMTXRotRad(rot,-0.017453292f**(f32*)(base+0x18),'z');PSMTXConcat(rot,trans,trans);PSMTXConcat(root,trans,model);PSMTXConcat((u8*)cam+0x11C,model,model);GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);GXBegin(0x80,0,4);
+            GXLoadTexObj(tex,0);color.r=color.g=color.b=0xFF;color.a=(u8)alpha;GXSetChanMatColor(4,&color);
+            PSMTXTrans(trans,offset,-offset,offset-offset);PSMTXRotRad(rot,-0.017453292f*angle,'z');PSMTXConcat(rot,trans,trans);PSMTXConcat(root,trans,model);PSMTXConcat((u8*)cam+0x11C,model,model);GXLoadPosMtxImm(model,0);GXSetCurrentMtx(0);GXBegin(0x80,0,4);
             top=*(f32*)(base+0x40);
             DAT_cc008000=-width;DAT_cc008000=top;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=width;DAT_cc008000=top;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=0;DAT_cc008000=width;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;DAT_cc008000=1;DAT_cc008000=-width;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=0;DAT_cc008000=1;
         }
     }
+    (void)colorIndex;
 }
 
 void effKissDisp2(s32 cameraId, void* effect) {

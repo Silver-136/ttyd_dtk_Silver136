@@ -1,5 +1,20 @@
 #include "effect/eff_spirit.h"
 
+extern const f32 float_0_80428824[1];
+extern const f32 float_2_80428828[1];
+extern const f32 float_0p95_8042882c[1];
+extern const f32 float_0p1_80428830[1];
+extern const f32 float_3p1416_80428834[1];
+extern const f32 float_50_80428838[1];
+extern const f32 float_1_8042883c[1];
+extern const f32 float_255_80428840[1];
+extern const f32 float_37_80428844[1];
+extern const f32 float_242_80428848[1];
+extern const f32 float_254_8042884c[1];
+extern const f32 float_246_80428850[1];
+extern const f32 float_226_80428854[1];
+extern const f32 float_65_80428858[1];
+
 /* CHATGPT STUB FILL: main/effect/eff_spirit 20260624_184929 */
 
 /* stub-fill: effSpiritEntry | missing_definition | ghidra_signature */
@@ -8,9 +23,9 @@ void* effSpiritEntry(f32 x, f32 y, f32 z, f32 targetX, f32 targetY, f32 targetZ,
     extern void* __memAlloc(s32 heap, u32 size);
     extern char str_Spirit_80302988[];
     extern int effSpiritMain(void);
-    extern f32 float_0_80428824;
-    extern f32 float_2_80428828;
-    extern f32 float_1_8042883c;
+    extern const f32 float_0_80428824[1];
+    extern const f32 float_2_80428828[1];
+    extern const f32 float_1_8042883c[1];
 
     void* entry;
     void* work;
@@ -28,13 +43,13 @@ void* effSpiritEntry(f32 x, f32 y, f32 z, f32 targetX, f32 targetY, f32 targetZ,
     *(f32*)((s32)work + 0x14) = y;
     *(f32*)((s32)work + 0x18) = z;
     *(f32*)((s32)work + 0x60) = scale;
-    *(f32*)((s32)work + 0x64) = float_1_8042883c;
+    *(f32*)((s32)work + 0x64) = float_1_8042883c[0];
     *(s32*)((s32)work + 0xC) = 0;
     *(s32*)((s32)work + 8) = 1000;
     *(s32*)((s32)work + 4) = 0;
-    *(f32*)((s32)work + 0x34) = float_0_80428824;
-    *(f32*)((s32)work + 0x38) = float_2_80428828;
-    *(f32*)((s32)work + 0x3C) = float_0_80428824;
+    *(f32*)((s32)work + 0x34) = float_0_80428824[0];
+    *(f32*)((s32)work + 0x38) = float_2_80428828[0];
+    *(f32*)((s32)work + 0x3C) = float_0_80428824[0];
     *(f32*)((s32)work + 0x1C) = *(f32*)((s32)work + 0x10);
     *(f32*)((s32)work + 0x20) = *(f32*)((s32)work + 0x14);
     *(f32*)((s32)work + 0x24) = *(f32*)((s32)work + 0x18);
@@ -51,6 +66,21 @@ void* effSpiritEntry(f32 x, f32 y, f32 z, f32 targetX, f32 targetY, f32 targetZ,
     *(s32*)((s32)work + 0x44) = flags;
     return entry;
 }
+
+const f32 float_0_80428824[1] = { 0.0f };
+const f32 float_2_80428828[1] = { 2.0f };
+const f32 float_0p95_8042882c[1] = { 0.95f };
+const f32 float_0p1_80428830[1] = { 0.1f };
+const f32 float_3p1416_80428834[1] = { 3.14159274f };
+const f32 float_50_80428838[1] = { 50.0f };
+const f32 float_1_8042883c[1] = { 1.0f };
+const f32 float_255_80428840[1] = { 255.0f };
+const f32 float_37_80428844[1] = { 37.0f };
+const f32 float_242_80428848[1] = { 242.0f };
+const f32 float_254_8042884c[1] = { 254.0f };
+const f32 float_246_80428850[1] = { 246.0f };
+const f32 float_226_80428854[1] = { 226.0f };
+const f32 float_65_80428858[1] = { 65.0f };
 
 /* CHATGPT FALLBACK MISSING STUBS: main/effect/eff_spirit 20260624_191429 */
 
@@ -92,8 +122,8 @@ void effSpiritMain(void* effect) {
     if (state == 0) {
         *(f32*)(work + 0x10) += (f32)sin((f64)((f32)*(s32*)(work + 0xC) * 0.5f));
         *(f32*)(work + 0x14) += *(f32*)(work + 0x38);
-        *(f32*)(work + 0x38) *= 0.95f;
-        if (*(f32*)(work + 0x38) < 0.1f) {
+        *(f32*)(work + 0x38) *= float_0p95_8042882c[0];
+        if (*(f32*)(work + 0x38) < float_0p1_80428830[0]) {
             *(f32*)(work + 0x1C) = *(f32*)(work + 0x10);
             *(f32*)(work + 0x20) = *(f32*)(work + 0x14);
             *(f32*)(work + 0x24) = *(f32*)(work + 0x18);
@@ -110,32 +140,40 @@ void effSpiritMain(void* effect) {
         *(f32*)(work + 0x10) = (f32)intplGetValue(*(f32*)(work + 0x1C), *(f32*)(work + 0x28), 0xB, step, *(s32*)(work + 0x44));
         *(f32*)(work + 0x14) = (f32)intplGetValue(*(f32*)(work + 0x20), *(f32*)(work + 0x2C), 0xB, step, *(s32*)(work + 0x44));
         *(f32*)(work + 0x18) = (f32)intplGetValue(*(f32*)(work + 0x24), *(f32*)(work + 0x30), 0xB, step, *(s32*)(work + 0x44));
-        *(f32*)(work + 0x14) += 50.0f * (f32)sin(3.1416f * (f32)step / (f32)*(s32*)(work + 0x44));
-        *(f32*)(work + 0x64) = (f32)intplGetValue(1.0f, 0.0f, 0xB, step, *(s32*)(work + 0x44));
+        *(f32*)(work + 0x14) += float_50_80428838[0] * (f32)sin(float_3p1416_80428834[0] * (f32)step / (f32)*(s32*)(work + 0x44));
+        *(f32*)(work + 0x64) = (f32)intplGetValue(float_1_8042883c[0], float_0_80428824[0], 0xB, step, *(s32*)(work + 0x44));
     }
 
-    state = *(s32*)(work + 0x58);
-    step = *(s32*)(work + 0x5C);
-    if (state == 0) {
-        *(s32*)(work + 0x48) = (s32)intplGetValue(255.0, 37.0, 0xB, step, 0x20);
-        *(s32*)(work + 0x4C) = (s32)intplGetValue(242.0, 254.0, 0xB, step, 0x20);
-        *(s32*)(work + 0x50) = (s32)intplGetValue(0.0, 246.0, 0xB, step, 0x20);
-    } else if (state == 1) {
-        *(s32*)(work + 0x48) = (s32)intplGetValue(37.0, 226.0, 0xB, step, 0x20);
-        *(s32*)(work + 0x4C) = (s32)intplGetValue(254.0, 65.0, 0xB, step, 0x20);
-        *(s32*)(work + 0x50) = (s32)intplGetValue(246.0, 255.0, 0xB, step, 0x20);
-    } else {
-        *(s32*)(work + 0x48) = (s32)intplGetValue(226.0, 255.0, 0xB, step, 0x20);
-        *(s32*)(work + 0x4C) = (s32)intplGetValue(65.0, 242.0, 0xB, step, 0x20);
-        *(s32*)(work + 0x50) = (s32)intplGetValue(255.0, 0.0, 0xB, step, 0x20);
+    if (*(s32*)(work + 0x58) == 1) {
+        *(s32*)(work + 0x48) = (s32)intplGetValue(float_37_80428844[0], float_226_80428854[0], 0xB, *(s32*)(work + 0x5C), 0x20);
+        *(s32*)(work + 0x4C) = (s32)intplGetValue(float_254_8042884c[0], float_65_80428858[0], 0xB, *(s32*)(work + 0x5C), 0x20);
+        *(s32*)(work + 0x50) = (s32)intplGetValue(float_246_80428850[0], float_255_80428840[0], 0xB, *(s32*)(work + 0x5C), 0x20);
+        (*(s32*)(work + 0x5C))++;
+        if (*(s32*)(work + 0x5C) > 0x1F) {
+            *(s32*)(work + 0x58) = 2;
+            *(s32*)(work + 0x5C) = 0;
+        }
+    } else if (*(s32*)(work + 0x58) < 1) {
+        if (*(s32*)(work + 0x58) > -1) {
+            *(s32*)(work + 0x48) = (s32)intplGetValue(float_255_80428840[0], float_37_80428844[0], 0xB, *(s32*)(work + 0x5C), 0x20);
+            *(s32*)(work + 0x4C) = (s32)intplGetValue(float_242_80428848[0], float_254_8042884c[0], 0xB, *(s32*)(work + 0x5C), 0x20);
+            *(s32*)(work + 0x50) = (s32)intplGetValue(float_0_80428824[0], float_246_80428850[0], 0xB, *(s32*)(work + 0x5C), 0x20);
+            (*(s32*)(work + 0x5C))++;
+            if (*(s32*)(work + 0x5C) > 0x1F) {
+                *(s32*)(work + 0x58) = 1;
+                *(s32*)(work + 0x5C) = 0;
+            }
+        }
+    } else if (*(s32*)(work + 0x58) < 3) {
+        *(s32*)(work + 0x48) = (s32)intplGetValue(float_226_80428854[0], float_255_80428840[0], 0xB, *(s32*)(work + 0x5C), 0x20);
+        *(s32*)(work + 0x4C) = (s32)intplGetValue(float_65_80428858[0], float_242_80428848[0], 0xB, *(s32*)(work + 0x5C), 0x20);
+        *(s32*)(work + 0x50) = (s32)intplGetValue(float_255_80428840[0], float_0_80428824[0], 0xB, *(s32*)(work + 0x5C), 0x20);
+        (*(s32*)(work + 0x5C))++;
+        if (*(s32*)(work + 0x5C) > 0x1F) {
+            *(s32*)(work + 0x58) = 0;
+            *(s32*)(work + 0x5C) = 0;
+        }
     }
-    step++;
-    if (step >= 0x20) {
-        step = 0;
-        state = (state + 1) % 3;
-    }
-    *(s32*)(work + 0x58) = state;
-    *(s32*)(work + 0x5C) = step;
     dispEntry(4, 2, effSpiritDisp, effect, dispCalcZ(pos));
 }
 

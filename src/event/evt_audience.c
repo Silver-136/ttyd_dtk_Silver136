@@ -247,6 +247,8 @@ s32 evt_audience_move_position_speed(void* evt, s32 isFirstCall) {
         dx = x - *(f32*)((s32)audience + 0x48);
         dz = z - *(f32*)((s32)audience + 0x50);
         dist = sqrt(dx * dx + dy * dy + dz * dz);
+        *(s32*)((s32)audience + 0xF8) = (s32)(dist / speed);
+        *(s32*)((s32)audience + 0xFC) = (s32)(dist / speed);
         if (float_0_80422b50 == dx) {
             *(f32*)((s32)audience + 0x118) = float_0_80422b50;
         } else {
@@ -262,8 +264,6 @@ s32 evt_audience_move_position_speed(void* evt, s32 isFirstCall) {
         } else {
             *(f32*)((s32)audience + 0x120) = speed * (dz / dist);
         }
-        *(s32*)((s32)audience + 0xF8) = (s32)(dist / speed);
-        *(s32*)((s32)audience + 0xFC) = (s32)(dist / speed);
     }
 
     dx = *(f32*)((s32)audience + 0x118);

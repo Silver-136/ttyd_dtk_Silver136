@@ -100,126 +100,86 @@ void* effCloudN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
 #pragma optimize_for_size off
 
 u8 effCloudMain(u32* effect) {
-    extern void effDelete(void* effect);
-    extern f32 dispCalcZ(void* pos);
-    extern void dispEntry(s32 prio, s32 layer, void* callback, void* arg, f32 z);
+    typedef union FloatBitsLocal { f32 value; u32 bits; } FloatBitsLocal;
+    extern void effDelete(void*);
+    extern f32 dispCalcZ(void*);
+    extern void dispEntry(s32, s32, void*, void*, f32);
     extern u8 effCloudDisp(void);
-    extern f32 sqrtf(f32 x);
+    extern f64 __frsqrte(f64);
+    extern f32 __float_nan;
+    extern f64 double_0p5_802fad18;
+    extern f64 double_3_802fad20;
+    extern f64 double_0_802fad28;
     extern u32 vec3_802fad00[];
-
     u8* work = (u8*)effect[3];
-    u32 v0;
-    u32 v1;
-    u32 v2;
-    f32 dispPos[3];
-    f32 calcPos[3];
-    s32 type;
-    s32 timer;
-    s32 frame;
-    s32 idx;
-    s32 next;
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 oldX;
-    f32 oldY;
-    f32 oldZ;
-    f32 dx;
-    f32 dy;
-    f32 dz;
-    f32 distSq;
-    f32 dist;
-    f32 oldDist;
+    u32 v0, v1, v2;
+    f32 dispPos[3], calcPos[3];
+    s32 type, timer, frame, idx, next, r, category;
+    f32 x, y, z, oldX, oldY, oldZ, dx, dy, dz, distSq, dist, oldDist;
+    f64 value, estimate;
+    FloatBitsLocal classify;
 
-    v0 = vec3_802fad00[0];
-    v1 = vec3_802fad00[1];
-    v2 = vec3_802fad00[2];
-
-    *(u32*)&dispPos[0] = v0;
-    dispPos[0] = *(f32*)(work + 0x04);
-    *(u32*)&dispPos[1] = v1;
-    dispPos[1] = *(f32*)(work + 0x08);
-    *(u32*)&dispPos[2] = v2;
-    dispPos[2] = *(f32*)(work + 0x0C);
-
+    v0 = vec3_802fad00[0]; v1 = vec3_802fad00[1]; v2 = vec3_802fad00[2];
+    *(u32*)&dispPos[0] = v0; dispPos[0] = *(f32*)(work + 0x04);
+    *(u32*)&dispPos[1] = v1; dispPos[1] = *(f32*)(work + 0x08);
+    *(u32*)&dispPos[2] = v2; dispPos[2] = *(f32*)(work + 0x0C);
     *(u32*)&calcPos[0] = *(u32*)&dispPos[0];
     *(u32*)&calcPos[1] = *(u32*)&dispPos[1];
     *(u32*)&calcPos[2] = *(u32*)&dispPos[2];
-
-    type = *(s32*)(work + 0x00);
-
-    if ((*effect & 4) != 0) {
-        *effect &= ~4;
-        *(s32*)(work + 0x10) = 0x10;
-    }
-
+    type = *(s32*)work;
+    if ((*effect & 4) != 0) { *effect &= ~4; *(s32*)(work + 0x10) = 0x10; }
     timer = *(s32*)(work + 0x10);
-    if (timer < 1000) {
-        timer--;
-        *(s32*)(work + 0x10) = timer;
-    }
-
-    frame = *(s32*)(work + 0x14) + 1;
-    *(s32*)(work + 0x14) = frame;
-
+    if (timer < 1000) { timer--; *(s32*)(work + 0x10) = timer; }
+    frame = *(s32*)(work + 0x14) + 1; *(s32*)(work + 0x14) = frame;
     timer = *(s32*)(work + 0x10);
-    if (timer < 0) {
-        effDelete(effect);
-        return 0;
-    }
-
-    if (timer < 0x10) {
-        *(s32*)(work + 0x24) = timer << 4;
-    }
-
+    if (timer < 0) { effDelete(effect); return 0; }
+    if (timer < 0x10) *(s32*)(work + 0x24) = timer << 4;
     if (type == 3) {
         *(f32*)(work + 0x44) += (f32)((rand() % 10) - 5);
         *(f32*)(work + 0x48) += (f32)((rand() % 10) - 5);
-
         *(f32*)(work + 0x38) += *(f32*)(work + 0x44);
         *(f32*)(work + 0x3C) += *(f32*)(work + 0x48);
         *(f32*)(work + 0x40) += *(f32*)(work + 0x4C);
     }
-
-    x = *(f32*)(work + 0x38);
-    y = *(f32*)(work + 0x3C);
-    z = *(f32*)(work + 0x40);
-
+    x = *(f32*)(work + 0x38); y = *(f32*)(work + 0x3C); z = *(f32*)(work + 0x40);
     idx = *(s32*)(work + 0x2A8) % 30;
-    oldX = ((f32*)(work + 0x50))[idx];
-    oldY = ((f32*)(work + 0xC8))[idx];
+    oldX = ((f32*)(work + 0x50))[idx]; oldY = ((f32*)(work + 0xC8))[idx];
     oldZ = ((f32*)(work + 0x140))[idx];
-
     if (!(x == oldX && y == oldY && z == oldZ)) {
         oldDist = ((f32*)(work + 0x2AC))[idx];
-
-        next = *(s32*)(work + 0x2A8) + 1;
-        *(s32*)(work + 0x2A8) = next;
-        if (*(s32*)(work + 0x2A8) >= 30) {
-            *(s32*)(work + 0x2A8) = 0;
-        }
-
+        next = *(s32*)(work + 0x2A8) + 1; *(s32*)(work + 0x2A8) = next;
+        if (*(s32*)(work + 0x2A8) >= 30) *(s32*)(work + 0x2A8) = 0;
         next = *(s32*)(work + 0x2A8);
         ((s32*)(work + 0x230))[next] = 1;
-        ((f32*)(work + 0x50))[next] = x;
-        ((f32*)(work + 0xC8))[next] = y;
-        ((f32*)(work + 0x140))[next] = z;
-        ((s32*)(work + 0x1B8))[next] = frame;
-
-        dx = x - oldX;
-        dy = y - oldY;
-        dz = z - oldZ;
+        ((f32*)(work + 0x50))[next] = x; ((f32*)(work + 0xC8))[next] = y;
+        ((f32*)(work + 0x140))[next] = z; ((s32*)(work + 0x1B8))[next] = frame;
+        dx = x - oldX; dy = y - oldY; dz = z - oldZ;
         distSq = dx * dx + dy * dy + dz * dz;
-
-        if (distSq == float_0_80424f18) {
-            dist = float_0_80424f18;
-        } else {
-            dist = sqrtf(distSq);
-        }
-
+        value = (f64)distSq;
+        if (value != (f64)float_0_80424f18) {
+            if (value > double_0_802fad28) {
+                estimate = __frsqrte(value);
+                estimate = double_0p5_802fad18 * estimate * (double_3_802fad20 - value * estimate * estimate);
+                estimate = double_0p5_802fad18 * estimate * (double_3_802fad20 - value * estimate * estimate);
+                estimate = double_0p5_802fad18 * estimate * (double_3_802fad20 - value * estimate * estimate);
+                dist = (f32)(value * estimate);
+            } else {
+                dist = distSq;
+                if (value < double_0_802fad28) dist = __float_nan;
+                else {
+                    classify.value = distSq;
+                    category = 1;
+                    if ((classify.bits & 0x7F800000) == 0x7F800000) {
+                        if ((classify.bits & 0x007FFFFF) == 0) category = 2;
+                    } else if ((classify.bits & 0x7F800000) == 0) {
+                        category = (classify.bits & 0x007FFFFF) ? 5 : 3;
+                    } else category = 4;
+                    if (category == 1) dist = __float_nan;
+                }
+            }
+        } else dist = float_0_80424f18;
         ((f32*)(work + 0x2AC))[next] = oldDist + dist;
     }
-
     dispEntry(4, 2, effCloudDisp, effect, dispCalcZ(calcPos));
     return 0;
 }

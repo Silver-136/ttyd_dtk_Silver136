@@ -1,0 +1,13 @@
+{
+  "authority_status": "candidate_reviewed_u2b2_proof",
+  "component": "gor.rel",
+  "evidence_bundle": "u2b2_order_alias_component_acceptance_20260901_182132.zip",
+  "evidence_bundle_sha256": "a50fc9f0bd2279b59db21aaf970d18b8820abf26d05478a23a44bf3db5d7e581",
+  "mapping_count": 1,
+  "schema_version": 1,
+  "units": {
+    "gor/gor_01": {
+      "double_to_int_mask_gor_000183f0": "@268"
+    }
+  }
+}

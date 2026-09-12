@@ -260,14 +260,36 @@ Matching = True
 NonMatching = False
 
 
-def load_nontext_symbol_mappings(path: Path) -> Dict[str, Dict[str, str]]:
+def _nontext_component_unit_prefix(component: str) -> str:
+    component = str(component or "").strip()
+    if component == "main.dol":
+        return "main/"
+    if component.endswith(".rel"):
+        stem = component[:-4]
+        if stem and all(ch.isalnum() or ch in "._-" for ch in stem):
+            return stem + "/"
+    sys.exit(f"Unsupported non-text mapping component: {component!r}")
+
+
+def load_component_nontext_symbol_mappings(
+    path: Path,
+    expected_component: str | None = None,
+) -> tuple[str, Dict[str, Dict[str, str]]]:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         sys.exit(f"Failed to load non-text symbol mappings from {path}: {exc}")
 
-    if data.get("schema_version") != 1 or data.get("component") != "main.dol":
+    component = str(data.get("component") or "").strip()
+    if data.get("schema_version") != 1:
         sys.exit(f"Unsupported non-text symbol mapping manifest: {path}")
+    if expected_component is not None and component != expected_component:
+        sys.exit(
+            f"Non-text mapping component mismatch in {path}: "
+            f"expected {expected_component}, found {component!r}"
+        )
+    prefix = _nontext_component_unit_prefix(component)
+
     units = data.get("units")
     if not isinstance(units, dict):
         sys.exit(f"Invalid non-text symbol mapping units in {path}")
@@ -275,8 +297,11 @@ def load_nontext_symbol_mappings(path: Path) -> Dict[str, Dict[str, str]]:
     normalized: Dict[str, Dict[str, str]] = {}
     mapping_count = 0
     for unit_name, mappings in units.items():
-        if not isinstance(unit_name, str) or not unit_name.startswith("main/"):
-            sys.exit(f"Invalid non-text symbol mapping unit {unit_name!r} in {path}")
+        if not isinstance(unit_name, str) or not unit_name.startswith(prefix):
+            sys.exit(
+                f"Invalid non-text symbol mapping unit {unit_name!r} "
+                f"for {component} in {path}"
+            )
         if not isinstance(mappings, dict) or not mappings:
             sys.exit(f"Invalid non-text symbol mappings for {unit_name} in {path}")
         rebuilt_owners: Dict[str, str] = {}
@@ -302,31 +327,64 @@ def load_nontext_symbol_mappings(path: Path) -> Dict[str, Dict[str, str]]:
             f"Non-text mapping count mismatch in {path}: "
             f"declared {data.get('mapping_count')}, found {mapping_count}"
         )
+    return component, normalized
+
+
+def load_nontext_symbol_mappings(path: Path) -> Dict[str, Dict[str, str]]:
+    """Historical main.dol loader retained for compatibility."""
+    _, normalized = load_component_nontext_symbol_mappings(
+        path,
+        expected_component="main.dol",
+    )
     return normalized
 
 
-def apply_nontext_symbol_mappings(
-    project_config: ProjectConfig, manifest_path: Path
-) -> None:
-    manifest_units = load_nontext_symbol_mappings(manifest_path)
+def apply_component_nontext_symbol_mappings(
+    project_config: ProjectConfig,
+    manifest_path: Path,
+    expected_component: str | None = None,
+) -> str:
+    component, manifest_units = load_component_nontext_symbol_mappings(
+        manifest_path,
+        expected_component=expected_component,
+    )
     applied_units = set()
+
+    if component == "main.dol":
+        component_stem = "main"
+        expected_src_dir = Path(project_config.src_dir)
+    else:
+        component_stem = component[:-4]
+        expected_src_dir = Path("src") / "rel" / component_stem
 
     for lib in project_config.libs or []:
         src_dir = Path(lib.get("src_dir", project_config.src_dir))
-        if src_dir != project_config.src_dir:
-            continue
+        if component == "main.dol":
+            if src_dir != Path(project_config.src_dir):
+                continue
+        else:
+            if src_dir != expected_src_dir or str(lib.get("lib", "")) != component_stem:
+                continue
+
         for obj in lib["objects"]:
-            unit_name = f"main/{obj.base_name.as_posix()}"
+            unit_name = f"{component_stem}/{obj.base_name.as_posix()}"
             new_mappings = manifest_units.get(unit_name)
             if new_mappings is None:
                 continue
             if unit_name in applied_units:
-                sys.exit(f"Duplicate configured object for non-text mapping unit {unit_name}")
+                sys.exit(
+                    f"Duplicate configured object for non-text mapping unit {unit_name}"
+                )
 
             existing = dict(obj.options.get("symbol_mappings") or {})
             rebuilt_owners = {rebuilt: target for target, rebuilt in existing.items()}
             for target_symbol, rebuilt_symbol in new_mappings.items():
                 if target_symbol in existing:
+                    if existing[target_symbol] == rebuilt_symbol:
+                        sys.exit(
+                            f"Non-text mapping redundantly duplicates existing mapping "
+                            f"in {unit_name}: {target_symbol} -> {rebuilt_symbol}"
+                        )
                     sys.exit(
                         f"Non-text mapping target conflict in {unit_name}: {target_symbol}"
                     )
@@ -344,9 +402,22 @@ def apply_nontext_symbol_mappings(
     missing_units = sorted(set(manifest_units) - applied_units)
     if missing_units:
         sys.exit(
-            "Non-text mapping units are absent or non-main in configure.py: "
+            f"Non-text mapping units are absent from configured component {component}: "
             + ", ".join(missing_units)
         )
+    return component
+
+
+def apply_nontext_symbol_mappings(
+    project_config: ProjectConfig, manifest_path: Path
+) -> None:
+    """Historical main.dol entrypoint retained byte-semantically."""
+    apply_component_nontext_symbol_mappings(
+        project_config,
+        manifest_path,
+        expected_component="main.dol",
+    )
+
 
 config.warn_missing_config = False
 config.warn_missing_source = False
@@ -529,13 +600,21 @@ config.libs = [
                 },
             ),
             Object(NonMatching, "battle/battle_seq_end.c"),
-            Object(NonMatching, "battle/battle_stage.c"),
+            Object(
+                NonMatching,
+                "battle/battle_stage.c",
+                symbol_mappings={"double_to_int_mask_802f3828": "@684"},
+            ),
             Object(
                 NonMatching,
                 "battle/battle_stage_object.c",
                 symbol_mappings={"jumptable_803771F0": "@1067"},
             ),
-            Object(NonMatching, "battle/battle_status_effect.c"),
+            Object(
+                NonMatching,
+                "battle/battle_status_effect.c",
+                symbol_mappings={"double_to_int_802f9a58": "@278"},
+            ),
             Object(NonMatching, "battle/battle_status_icon.c"),
             Object(NonMatching, "battle/battle_sub.c"),
             Object(NonMatching, "battle/battle_unit.c"),
@@ -577,7 +656,14 @@ config.libs = [
             Object(NonMatching, "driver/casedrv.c"),
             Object(NonMatching, "driver/dispdrv.c"),
             Object(NonMatching, "driver/effdrv.c"),
-            Object(NonMatching, "driver/envdrv.c"),
+            Object(
+                NonMatching,
+                "driver/envdrv.c",
+                symbol_mappings={
+                    "double_to_int_mask_802f9c58": "@602",
+                    "double_to_int_802f9c50": "@675",
+                },
+            ),
             Object(NonMatching, "driver/extdrv.c"),
             Object(NonMatching, "driver/fadedrv.c"),
             Object(NonMatching, "driver/hitdrv.c"),
@@ -712,7 +798,11 @@ config.libs = [
             Object(NonMatching, "effect/n64/eff_fire_ring_n64.c"),
             Object(NonMatching, "effect/n64/eff_fire_spark_n64.c"),
             Object(NonMatching, "effect/n64/eff_fireflower_n64.c"),
-            Object(NonMatching, "effect/n64/eff_fireworks_n64.c"),
+            Object(
+                NonMatching,
+                "effect/n64/eff_fireworks_n64.c",
+                symbol_mappings={"sflag$449": "sflag", "salpha$450": "salpha"},
+            ),
             Object(NonMatching, "effect/n64/eff_flame_n64.c"),
             Object(NonMatching, "effect/n64/eff_flower_n64.c"),
             Object(NonMatching, "effect/n64/eff_freeze_n64.c"),
@@ -884,7 +974,11 @@ config.libs = [
         "cflags": cflags_static,
         "host": False,
         "objects": [
-            Object(NonMatching, "motion/mot_damage.c"),
+            Object(
+                NonMatching,
+                "motion/mot_damage.c",
+                symbol_mappings={"float_160_80422bac": "@374"},
+            ),
             Object(NonMatching, "motion/mot_dokan.c"),
             Object(NonMatching, "motion/mot_hammer.c"),
             Object(NonMatching, "motion/mot_hip.c"),
@@ -987,12 +1081,28 @@ config.libs = [
                     "help$764": "help",
                     "name$763": "name",
                     "msg_help$506": "msg_help",
+                    "pos_tbl$1271": "chapterPos",
                 },
             ),
-            Object(NonMatching, "window/win_main.c"),
-            Object(NonMatching, "window/win_mario.c"),
+            Object(
+                NonMatching,
+                "window/win_main.c",
+                symbol_mappings={
+                    "winFontSetEdgeWidth": "unk_8017d10c",
+                    "winFontSetWidth": "winFontSetPitch",
+                },
+            ),
+            Object(
+                NonMatching,
+                "window/win_mario.c",
+                symbol_mappings={"jumptable_803778E8": "@1369"},
+            ),
             Object(NonMatching, "window/win_party.c"),
-            Object(NonMatching, "window/win_root.c"),
+            Object(
+                NonMatching,
+                "window/win_root.c",
+                symbol_mappings={"msg_help$486": "msgHelp"},
+            ),
         ],
     },
     Rel(
@@ -1774,6 +1884,26 @@ apply_nontext_symbol_mappings(config, nontext_symbol_mappings_path)
 if config.reconfig_deps is None:
     config.reconfig_deps = []
 config.reconfig_deps.append(nontext_symbol_mappings_path)
+
+# Keep the historical main.dol manifest path and semantics untouched.  REL
+# manifests are optional, component-qualified, and discovered deterministically
+# from a separate directory so adding REL authority never changes the main
+# manifest's bytes or schema.
+rel_nontext_manifest_dir = (
+    Path("config") / config.version / "nontext_symbol_mappings_rel"
+)
+if rel_nontext_manifest_dir.is_dir():
+    for rel_manifest_path in sorted(rel_nontext_manifest_dir.glob("*.json")):
+        component = apply_component_nontext_symbol_mappings(
+            config,
+            rel_manifest_path,
+        )
+        if component == "main.dol":
+            sys.exit(
+                f"REL non-text manifest directory may not contain main.dol authority: "
+                f"{rel_manifest_path}"
+            )
+        config.reconfig_deps.append(rel_manifest_path)
 
 if args.mode == "configure":
     # Write build.ninja and objdiff.json

@@ -185,10 +185,23 @@ void* DVDMgrOpen(const char* path, s32 mode, s32 unk) {
     }
 
     entry = dvdq;
-    for (i = 0; i < 0x100; i++, entry = (void*)((s32)entry + 0x98)) {
-        if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) {
-            break;
-        }
+    for (i = 0; i < 0x100; i += 8) {
+        if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
+        i++; entry = (void*)((s32)entry + 0x98);
+        if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
+        i++; entry = (void*)((s32)entry + 0x98);
+        if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
+        i++; entry = (void*)((s32)entry + 0x98);
+        if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
+        i++; entry = (void*)((s32)entry + 0x98);
+        if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
+        i++; entry = (void*)((s32)entry + 0x98);
+        if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
+        i++; entry = (void*)((s32)entry + 0x98);
+        if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
+        i++; entry = (void*)((s32)entry + 0x98);
+        if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
+        entry = (void*)((s32)entry + 0x98);
     }
 
     if (i >= 0x100) {

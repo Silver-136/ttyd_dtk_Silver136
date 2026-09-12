@@ -23,17 +23,18 @@ extern void FontDrawStart(void);
 extern char name_party0[],name_party1[],name_party2[],name_party4[],name_party5[],name_party6[];
 extern void PSMTXTrans(f32[3][4], f32, f32, f32);
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 unk_8023f8d0(void* event, s32 isFirstCall) {
     extern void* pouchGetPtr(void);
     extern s32 partyChkJoin(s32 partyId);
     extern s32 evtGetValue(void* event, s32 value);
     extern s32 evtSetValue(void* event, s32 target, s32 value);
-    extern u16 party_id_table[];
+    extern u16 party_id_table[8];
 
     s32* args;
     void* pouch;
     u16* party;
-    s32 value;
     s32 threshold;
 
     args = *(s32**)((s32)event + 0x18);
@@ -42,11 +43,17 @@ s32 unk_8023f8d0(void* event, s32 isFirstCall) {
     while (*party != 0) {
         if (partyChkJoin(*party) != 0) {
             if (evtGetValue(event, 0xF8406022) == 0) {
-                value = *(s16*)((s32)pouch + *party * 0xE + 0xC);
-                threshold = value >= 1 ? 1 : 0;
+                if (*(s16*)((s32)pouch + *party * 0xE + 0xC) < 1) {
+                    threshold = 0;
+                } else {
+                    threshold = 1;
+                }
             } else {
-                value = *(s16*)((s32)pouch + *party * 0xE + 0xC);
-                threshold = value >= 2 ? 2 : 0;
+                if (*(s16*)((s32)pouch + *party * 0xE + 0xC) < 2) {
+                    threshold = 0;
+                } else {
+                    threshold = 2;
+                }
             }
             if (threshold == 0) {
                 evtSetValue(event, args[0], 1);
@@ -59,12 +66,14 @@ s32 unk_8023f8d0(void* event, s32 isFirstCall) {
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 s32 unk_8023f79c(void* event, s32 isFirstCall) {
     extern void* pouchGetPtr(void);
     extern s32 partyChkJoin(s32 partyId);
     extern s32 evtGetValue(void* event, s32 value);
     extern s32 evtSetValue(void* event, s32 target, s32 value);
-    extern u16 party_id_table[];
+    extern u16 party_id_table[8];
 
     s32* args;
     void* pouch;
@@ -73,28 +82,34 @@ s32 unk_8023f79c(void* event, s32 isFirstCall) {
     s32 missing;
     s32 hasValue;
     s32 threshold;
-    s32 value;
 
     args = *(s32**)((s32)event + 0x18);
     pouch = pouchGetPtr();
-    joined = 0;
     missing = 0;
+    joined = 0;
     hasValue = 0;
     party = party_id_table;
     while (*party != 0) {
         if (partyChkJoin(*party) != 0) {
             joined++;
-            value = *(s16*)((s32)pouch + *party * 0xE + 0xC);
-            if (value != 0) {
+            if (*(s16*)((s32)pouch + *party * 0xE + 0xC) != 0) {
                 hasValue = 1;
-                if (evtGetValue(event, 0xF8406022) == 0) {
-                    threshold = value >= 1 ? 1 : 0;
+            }
+            if (evtGetValue(event, 0xF8406022) == 0) {
+                if (*(s16*)((s32)pouch + *party * 0xE + 0xC) < 1) {
+                    threshold = 0;
                 } else {
-                    threshold = value >= 2 ? 2 : 0;
+                    threshold = 1;
                 }
-                if (threshold == 0) {
-                    missing = 1;
+            } else {
+                if (*(s16*)((s32)pouch + *party * 0xE + 0xC) < 2) {
+                    threshold = 0;
+                } else {
+                    threshold = 2;
                 }
+            }
+            if (threshold == 0) {
+                missing = 1;
             }
         }
         party++;
@@ -128,6 +143,7 @@ void winMgrDisp(s32 cameraId, s32 winArg, void* unused) {
     extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
     extern void windowDispGX2_Waku_col(f32, f32, f32, f32, f32, f32[3][4], s32, u32*);
     extern f32 float_deg2rad_80428060;
+    extern u32 unk_804298d8;
     extern u32 dat_80427fa0;
     extern u32 dat_80427fa4;
     extern u32 dat_80427fa8;
@@ -160,10 +176,15 @@ void winMgrDisp(s32 cameraId, s32 winArg, void* unused) {
         WinMgrDescLocal* desc;
     } WinMgrEntryLocal;
 
-    f32 rot[3][4];
     f32 scaleMtx[3][4];
+    f32 rot[3][4];
     WinMgrEntryLocal* win = (WinMgrEntryLocal*)winArg;
-    u32 color;
+    u32 temp0, color0;
+    u32 temp1, color1;
+    u32 temp2, color2;
+    u32 temp3, color3;
+    u32 temp4, color4;
+    u32 temp5, color5;
     (void)cameraId;
     (void)unused;
 
@@ -171,48 +192,55 @@ void winMgrDisp(s32 cameraId, s32 winArg, void* unused) {
     PSMTXScale(scaleMtx, win->scale, win->scale, win->scale);
     PSMTXConcat(rot, scaleMtx, scaleMtx);
 
-    color = win->desc->color;
-    ((u8*)&color)[3] = (u8)win->windowColAlpha;
-    windowDispGX2_Waku_col(
-        (f32)win->x,
-        (f32)win->y,
-        (f32)win->width,
-        (f32)win->height,
-        20.0f, scaleMtx, 0, &color);
+    temp0 = unk_804298d8;
+    ((u8*)&temp0)[0] = ((u8*)&win->desc->color)[0];
+    ((u8*)&temp0)[1] = ((u8*)&win->desc->color)[1];
+    ((u8*)&temp0)[2] = ((u8*)&win->desc->color)[2];
+    ((u8*)&temp0)[3] = (u8)win->windowColAlpha;
+    color0 = temp0;
+    windowDispGX2_Waku_col((f32)win->x, (f32)win->y, (f32)win->width,
+        (f32)win->height, 20.0f, scaleMtx, 0, &color0);
 
-    if (win->desc->headingType == 1) {
-        color = dat_80427fa0;
-        ((u8*)&color)[3] = (u8)win->windowColAlpha;
-        windowDispGX2_Waku_col(
-            (f32)(win->x + (win->width - 150) / 2),
-            (f32)(win->y + 14),
-            150.0f, 28.0f, 8.0f, scaleMtx, 0, &color);
-    } else if (win->desc->headingType == 3) {
-        color = dat_80427fa4;
-        ((u8*)&color)[3] = (u8)win->windowColAlpha;
-        windowDispGX2_Waku_col(
-            (f32)(win->x + 10),
-            (f32)(win->y + 14),
-            100.0f, 28.0f, 8.0f, scaleMtx, 0, &color);
-        color = dat_80427fa8;
-        ((u8*)&color)[3] = (u8)win->windowColAlpha;
-        windowDispGX2_Waku_col(
-            (f32)(win->x + win->width / 2 - 10),
-            (f32)(win->y + 14),
-            100.0f, 28.0f, 8.0f, scaleMtx, 0, &color);
-    } else if (win->desc->headingType >= 4 && win->desc->headingType < 6) {
-        color = dat_80427fac;
-        ((u8*)&color)[3] = (u8)win->windowColAlpha;
+    switch (win->desc->headingType) {
+    case 1:
+        temp1 = dat_80427fa0;
+        ((u8*)&temp1)[3] = (u8)win->windowColAlpha;
+        color1 = temp1;
+        windowDispGX2_Waku_col((f32)(win->x + (win->width - 150) / 2),
+            (f32)(win->y + 14), 150.0f, 28.0f,
+            8.0f, scaleMtx, 0, &color1);
+        break;
+    case 3:
+        temp2 = dat_80427fa4;
+        ((u8*)&temp2)[3] = (u8)win->windowColAlpha;
+        color2 = temp2;
+        windowDispGX2_Waku_col((f32)(win->x + 10), (f32)(win->y + 14),
+            100.0f, 28.0f, 8.0f,
+            scaleMtx, 0, &color2);
+        temp3 = dat_80427fa8;
+        ((u8*)&temp3)[3] = (u8)win->windowColAlpha;
+        color3 = temp3;
+        windowDispGX2_Waku_col((f32)(win->x + win->width / 2 - 10),
+            (f32)(win->y + 14), 100.0f, 28.0f,
+            8.0f, scaleMtx, 0, &color3);
+        break;
+    case 4:
+    case 5:
+        temp4 = dat_80427fac;
+        ((u8*)&temp4)[3] = (u8)win->windowColAlpha;
+        color4 = temp4;
         windowDispGX2_Waku_col(
             (f32)(win->x + (((win->width * 3 / 5) - 120) * 2) / 3),
-            (f32)(win->y + 14),
-            120.0f, 28.0f, 8.0f, scaleMtx, 0, &color);
-        color = dat_80427fb0;
-        ((u8*)&color)[3] = (u8)win->windowColAlpha;
+            (f32)(win->y + 14), 120.0f, 28.0f,
+            8.0f, scaleMtx, 0, &color4);
+        temp5 = dat_80427fb0;
+        ((u8*)&temp5)[3] = (u8)win->windowColAlpha;
+        color5 = temp5;
         windowDispGX2_Waku_col(
             (f32)(win->x + win->width * 3 / 5 + ((win->width * 2 / 5) - 85) / 3),
-            (f32)(win->y + 14),
-            85.0f, 28.0f, 8.0f, scaleMtx, 0, &color);
+            (f32)(win->y + 14), 85.0f, 28.0f,
+            8.0f, scaleMtx, 0, &color5);
+        break;
     }
 
     if (win->desc->dispFunc != 0) {
@@ -261,16 +289,29 @@ void winMgrSeq(void* ptr) {
         u32 flags;
         s32 fadeState;
         s32 fadeFrameCounter;
-        u32 windowColAlpha;
+        s32 windowColAlpha;
         f32 scale;
         f32 zRotDeg;
         s32 x, y, width, height;
         Desc* desc;
     } Win;
-    extern f64 intplGetValue(f64, f64, s32, s32, s32);
-    extern void* gpGlobals;
+    typedef struct {
+        u32 flags;
+        s32 mFPS;
+    } GlobalWorkPrefix;
+    extern f32 intplGetValue(f32, f32, s32, s32, s32);
+    extern s32 __mulhw(s32, s32);
+    extern GlobalWorkPrefix* gp;
+    extern const f32 float_0_80428018;
+    extern const f32 float_1_80428010;
+    extern const f32 float_30_80428048;
+    extern const f32 float_255_8042805c;
     Win* win = ptr;
+    s32 scaled;
     s32 duration;
+#define FRAME_DURATION() (scaled = gp->mFPS << 3, \
+    duration = (__mulhw((s32)0x88888889, scaled) + scaled) >> 5, \
+    duration += (u32)duration >> 31)
 
     win->flags |= 4;
     switch (win->desc->fadeMode) {
@@ -281,26 +322,24 @@ void winMgrSeq(void* ptr) {
             break;
         case 1:
             win->flags |= 2;
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            win->zRotDeg = (f32)intplGetValue(30.0, 0.0, 12, win->fadeFrameCounter, duration);
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            win->scale = (f32)intplGetValue(0.0, 1.0, 12, win->fadeFrameCounter, duration);
+            win->zRotDeg = intplGetValue(float_30_80428048, float_0_80428018, 12,
+                win->fadeFrameCounter, FRAME_DURATION());
+            win->scale = intplGetValue(float_0_80428018, float_1_80428010, 12,
+                win->fadeFrameCounter, FRAME_DURATION());
             win->windowColAlpha = 0xFF;
             win->fadeFrameCounter++;
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            if (duration < win->fadeFrameCounter) {
+            if (FRAME_DURATION() < win->fadeFrameCounter) {
                 win->fadeState = 0;
             }
             break;
         case 2:
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            win->zRotDeg = (f32)intplGetValue(0.0, 30.0, 12, win->fadeFrameCounter, duration);
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            win->scale = (f32)intplGetValue(1.0, 0.0, 12, win->fadeFrameCounter, duration);
+            win->zRotDeg = intplGetValue(float_0_80428018, float_30_80428048, 12,
+                win->fadeFrameCounter, FRAME_DURATION());
+            win->scale = intplGetValue(float_1_80428010, float_0_80428018, 12,
+                win->fadeFrameCounter, FRAME_DURATION());
             win->windowColAlpha = 0xFF;
             win->fadeFrameCounter++;
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            if (duration < win->fadeFrameCounter) {
+            if (FRAME_DURATION() < win->fadeFrameCounter) {
                 win->fadeState = 0;
                 win->flags &= ~2;
                 if (win->flags & 8) win->flags &= ~1;
@@ -315,23 +354,23 @@ void winMgrSeq(void* ptr) {
             break;
         case 1:
             win->flags |= 2;
-            win->zRotDeg = 1.0f;
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            win->scale = (f32)intplGetValue(0.0, 1.0, 12, win->fadeFrameCounter, duration);
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            win->windowColAlpha = (u32)intplGetValue(0.0, 255.0, 12, win->fadeFrameCounter, duration);
+            win->zRotDeg = float_1_80428010;
+            win->scale = intplGetValue(float_0_80428018, float_1_80428010, 12,
+                win->fadeFrameCounter, FRAME_DURATION());
+            win->windowColAlpha = (s32)intplGetValue(float_0_80428018, float_255_8042805c, 12,
+                win->fadeFrameCounter, FRAME_DURATION());
             win->fadeFrameCounter++;
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            if (duration < win->fadeFrameCounter) win->fadeState = 0;
+            if (FRAME_DURATION() < win->fadeFrameCounter) {
+                win->fadeState = 0;
+            }
             break;
         case 2:
-            win->zRotDeg = 0.0f;
-            win->scale = 1.0f;
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            win->windowColAlpha = (u32)intplGetValue(255.0, 0.0, 12, win->fadeFrameCounter, duration);
+            win->zRotDeg = float_0_80428018;
+            win->scale = float_1_80428010;
+            win->windowColAlpha = (s32)intplGetValue(float_255_8042805c, float_0_80428018, 12,
+                win->fadeFrameCounter, FRAME_DURATION());
             win->fadeFrameCounter++;
-            duration = (*(s32*)((u8*)gpGlobals + 4) * 8) / 60;
-            if (duration < win->fadeFrameCounter) {
+            if (FRAME_DURATION() < win->fadeFrameCounter) {
                 win->fadeState = 0;
                 win->flags &= ~2;
                 if (win->flags & 8) win->flags &= ~1;
@@ -346,15 +385,15 @@ void winMgrSeq(void* ptr) {
             break;
         case 1:
             win->flags |= 2;
-            win->zRotDeg = 1.0f;
-            win->scale = 1.0f;
+            win->zRotDeg = float_1_80428010;
+            win->scale = float_1_80428010;
             win->windowColAlpha = 0xFF;
             win->fadeState = 0;
             break;
         case 2:
             win->flags &= ~2;
-            win->zRotDeg = 1.0f;
-            win->scale = 1.0f;
+            win->zRotDeg = float_1_80428010;
+            win->scale = float_1_80428010;
             win->windowColAlpha = 0xFF;
             win->fadeState = 0;
             if (win->flags & 8) win->flags &= ~1;
@@ -362,6 +401,7 @@ void winMgrSeq(void* ptr) {
         }
         break;
     }
+#undef FRAME_DURATION
 }
 
 s32 winMgrEntry(void* tpl) {
@@ -519,62 +559,67 @@ void winMgrHelpDraw(void* win) {
     f32 trans[3][4];
     f32 scale[3][4];
     char buffer[0x400];
-    char* help = *(char**)((s32)win + 0x34);
-    s32 cursor = *(s32*)((s32)win + 0x38);
-    s32 lineCount = *(s32*)((s32)win + 0x3C);
-    s32 x;
-    s32 y;
 
     if ((*(u32*)win & 4) != 0) {
         return;
     }
 
     GXSetScissor(0, 0x180, 0x260, 0x38);
-    if (strcmp(help, msgSearch(&vec3_803003a0[0x554])) == 0) {
+    if (strcmp(*(char**)((s32)win + 0x34), msgSearch(&vec3_803003a0[0x554])) == 0) {
         void* lottery = lotteryGetPtr();
-        sprintf(buffer, help, *(s16*)((s32)lottery + 0x20));
+        sprintf(buffer, *(char**)((s32)win + 0x34), *(s16*)((s32)lottery + 0x20));
         FontDrawStart();
-        FontDrawMessage(-210, cursor * 28 - 144, buffer);
+        FontDrawMessage(-210, *(s32*)((s32)win + 0x38) * 28 - 144, buffer);
     } else {
         FontDrawStart();
-        FontDrawMessage(-210, cursor * 28 - 144, help);
+        FontDrawMessage(-210, *(s32*)((s32)win + 0x38) * 28 - 144,
+                        *(char**)((s32)win + 0x34));
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
 
-    if (lineCount > 2) {
-        x = *(s32*)((s32)win + 0x18) + *(s32*)((s32)win + 0x20) - 12;
-        if (cursor == 0) {
+    if (*(s32*)((s32)win + 0x3C) > 2) {
+        if (*(s32*)((s32)win + 0x38) == 0) {
             if ((*(u32*)((s32)gpGlobals + 0x1C) & 0x1F) < 0x14) {
-                y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) - 4;
-                PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
+                PSMTXTrans(trans,
+                           (f32)(*(s32*)((s32)win + 0x18) + *(s32*)((s32)win + 0x20) - 12),
+                           (f32)(*(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) - 4),
+                           0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(trans, scale, trans);
                 iconDispGx2(trans, 0x10, 0x1BE);
             }
-        } else if (cursor + 2 == lineCount) {
+        } else if (*(s32*)((s32)win + 0x38) + 2 == *(s32*)((s32)win + 0x3C)) {
             if ((*(u32*)((s32)gpGlobals + 0x1C) & 0x1F) < 0x14) {
-                y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 44;
-                PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
+                PSMTXTrans(trans,
+                           (f32)(*(s32*)((s32)win + 0x18) + *(s32*)((s32)win + 0x20) - 12),
+                           (f32)(*(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 44),
+                           0.0f);
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(trans, scale, trans);
                 iconDispGx2(trans, 0x10, 0x1BD);
             }
         } else if ((*(u32*)((s32)gpGlobals + 0x1C) & 0x1F) < 0x14) {
-            y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 44;
-            PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
+            PSMTXTrans(trans,
+                       (f32)(*(s32*)((s32)win + 0x18) + *(s32*)((s32)win + 0x20) - 12),
+                       (f32)(*(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 44),
+                       0.0f);
             PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
             PSMTXConcat(trans, scale, trans);
             iconDispGx2(trans, 0x10, 0x1BD);
 
-            y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) - 4;
-            PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
+            PSMTXTrans(trans,
+                       (f32)(*(s32*)((s32)win + 0x18) + *(s32*)((s32)win + 0x20) - 12),
+                       (f32)(*(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) - 4),
+                       0.0f);
             PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
             PSMTXConcat(trans, scale, trans);
             iconDispGx2(trans, 0x10, 0x1BE);
-            }
+        }
 
-        y = *(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 10;
-        PSMTXTrans(trans, (f32)x, (f32)y, 0.0f);
+        PSMTXTrans(trans,
+                   (f32)(*(s32*)((s32)win + 0x18) + *(s32*)((s32)win + 0x20) - 12),
+                   (f32)(*(s32*)((s32)win + 0x1C) - *(s32*)((s32)win + 0x24) + 10),
+                   0.0f);
         PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
         PSMTXConcat(trans, scale, trans);
         iconDispGx2(trans, 0x10, 0x78);
@@ -1081,14 +1126,71 @@ s32* winMgrSelectEntry(u32 selectType, s32 newItem, s32 isCancellable) {
 
             select->rowData = (WinMgrSelectRowLocal*)__memAlloc(0, maxCount << 2);
             memset(select->rowData, 0, maxCount << 2);
-            select->rowCount = 0;
-
             i = 0;
-            while (i < maxCount) {
-                s32 row = select->rowCount;
-                select->rowCount = row + 1;
-                select->rowData[row].value = (u16)badge_bottakuru100_table[i];
-                i++;
+            select->rowCount = i;
+
+            if (maxCount > 0) {
+                if (maxCount > 8) {
+                    u32* table = badge_bottakuru100_table;
+
+                    for (; i < maxCount - 8; i += 8) {
+                        s32 row;
+                        u32 item;
+
+                        row = select->rowCount;
+                        item = table[0];
+                        select->rowCount = row + 1;
+                        select->rowData[row].value = (u16)item;
+
+                        row = select->rowCount;
+                        item = table[1];
+                        select->rowCount = row + 1;
+                        select->rowData[row].value = (u16)item;
+
+                        row = select->rowCount;
+                        item = table[2];
+                        select->rowCount = row + 1;
+                        select->rowData[row].value = (u16)item;
+
+                        row = select->rowCount;
+                        item = table[3];
+                        select->rowCount = row + 1;
+                        select->rowData[row].value = (u16)item;
+
+                        row = select->rowCount;
+                        item = table[4];
+                        select->rowCount = row + 1;
+                        select->rowData[row].value = (u16)item;
+
+                        row = select->rowCount;
+                        item = table[5];
+                        select->rowCount = row + 1;
+                        select->rowData[row].value = (u16)item;
+
+                        row = select->rowCount;
+                        item = table[6];
+                        select->rowCount = row + 1;
+                        select->rowData[row].value = (u16)item;
+
+                        row = select->rowCount;
+                        item = table[7];
+                        table += 8;
+                        select->rowCount = row + 1;
+                        select->rowData[row].value = (u16)item;
+                    }
+                }
+
+                if (i < maxCount) {
+                    u32* table = badge_bottakuru100_table + i;
+
+                    for (; i < maxCount; i++) {
+                        s32 row = select->rowCount;
+                        u32 item = *table++;
+
+                        select->rowCount = row + 1;
+                        select->rowData[row].value = (u16)item;
+                    }
+                }
             }
         }
         break;
@@ -1537,27 +1639,13 @@ void select_main(void* win) {
     extern u16 keyGetButtonTrg(s32);
 
     void* select = *(void**)((s32)win + 0x2C);
-    void* entries = *(void**)((s32)wp + 4);
-    s32 state = *(s32*)((s32)select + 8);
-    s32 count = *(s32*)((s32)select + 0x20);
-    s32* entryIndices = (s32*)((s32)select + 0x24);
     s32 i;
 
-    if (state == 2) {
-        for (i = 0; i < count; i++) {
-            void* entry = (void*)((s32)entries + entryIndices[i] * 0x44);
-            if ((*(u32*)entry & 1) != 0) {
-                *(s32*)((s32)entry + 4) = 2;
-                *(s32*)((s32)entry + 8) = 0;
-            }
-        }
-        psndSFXOn(0x2002B);
-        statusWinForceOff();
-        *(s32*)((s32)select + 8) += 1;
-    } else if (state < 2) {
-        if (state == 0) {
-            for (i = 0; i < count; i++) {
-                void* entry = (void*)((s32)entries + entryIndices[i] * 0x44);
+    switch (*(s32*)((s32)select + 8)) {
+        case 0: {
+            s32* index = (s32*)((s32)select + 0x24);
+            for (i = 0; i < *(s32*)((s32)select + 0x20); i++, index++) {
+                void* entry = (void*)((s32)*(void**)((s32)wp + 4) + *index * 0x44);
                 if ((*(u32*)entry & 1) != 0) {
                     *(s32*)((s32)entry + 4) = 1;
                     *(s32*)((s32)entry + 8) = 0;
@@ -1566,23 +1654,26 @@ void select_main(void* win) {
                     *(void**)((s32)entry + 0x34) = 0;
                 }
             }
-            if (count > 2) {
-                void* help = (void*)((s32)entries + entryIndices[2] * 0x44);
-                *(s32*)((s32)help + 0x38) = 0;
-                *(s32*)((s32)help + 0x3C) = 0;
-                *(void**)((s32)help + 0x34) = 0;
+            if (*(s32*)((s32)select + 0x20) >= 3) {
+                void* entry = (void*)((s32)*(void**)((s32)wp + 4) +
+                                      *(s32*)((s32)select + 0x2C) * 0x44);
+                *(s32*)((s32)entry + 0x38) = 0;
+                *(s32*)((s32)entry + 0x3C) = 0;
+                *(void**)((s32)entry + 0x34) = 0;
             }
             psndSFXOn(0x2002A);
             statusWinForceOpen();
             *(s32*)((s32)select + 8) += 1;
-        } else if (state >= 0) {
-            void* first = (void*)((s32)entries + entryIndices[0] * 0x44);
-            if ((*(u32*)first & 4) == 0) {
+            break;
+        }
+
+        case 1: {
+            void* entry = (void*)((s32)*(void**)((s32)wp + 4) +
+                                  *(s32*)((s32)select + 0x24) * 0x44);
+            if ((*(u32*)entry & 4) == 0) {
                 s32 previous = *(s32*)((s32)select + 0xC);
                 s32 cursor;
-                s32 rowCount = *(s32*)((s32)select + 0x34);
                 s32 offset;
-                u16 rowFlags;
 
                 if (keyGetDirRep(0) & 0x2000) {
                     *(s32*)((s32)select + 0xC) += 1;
@@ -1590,46 +1681,46 @@ void select_main(void* win) {
                 if (keyGetDirRep(0) & 0x1000) {
                     *(s32*)((s32)select + 0xC) -= 1;
                 }
-                cursor = *(s32*)((s32)select + 0xC);
-                if (cursor >= rowCount) {
-                    if ((keyGetDirTrg(0) & 0x2000) == 0) {
-                        *(s32*)((s32)select + 0xC) -= 1;
-                    } else {
+                if (*(s32*)((s32)select + 0xC) >= *(s32*)((s32)select + 0x34)) {
+                    if (keyGetDirTrg(0) & 0x2000) {
                         *(s32*)((s32)select + 0xC) = 0;
                         *(s32*)((s32)select + 0x10) = 0;
+                    } else {
+                        *(s32*)((s32)select + 0xC) -= 1;
                     }
                 }
                 if (*(s32*)((s32)select + 0xC) < 0) {
-                    if ((keyGetDirTrg(0) & 0x1000) == 0) {
-                        *(s32*)((s32)select + 0xC) += 1;
-                    } else {
-                        *(s32*)((s32)select + 0xC) = rowCount - 1;
-                        if (rowCount - 8 > 0) {
-                            *(s32*)((s32)select + 0x10) = rowCount - 8;
+                    if (keyGetDirTrg(0) & 0x1000) {
+                        *(s32*)((s32)select + 0xC) = *(s32*)((s32)select + 0x34) - 1;
+                        if (*(s32*)((s32)select + 0x34) - 8 > 0) {
+                            *(s32*)((s32)select + 0x10) = *(s32*)((s32)select + 0x34) - 8;
                         }
+                    } else {
+                        *(s32*)((s32)select + 0xC) += 1;
                     }
                 }
 
                 cursor = *(s32*)((s32)select + 0xC);
                 offset = *(s32*)((s32)select + 0x10);
                 if (previous < cursor) {
-                    if (cursor > 5 && offset < (u32)(rowCount - 8)) {
+                    if (cursor > 5 && offset < (u32)(*(s32*)((s32)select + 0x34) - 8)) {
                         *(s32*)((s32)select + 0x10) = offset + 1;
                     }
-                } else if (cursor < previous && cursor - offset < 3 && offset > 0) {
-                    *(s32*)((s32)select + 0x10) = offset - 1;
+                } else if (previous > cursor) {
+                    if (cursor - offset < 3 && offset > 0) {
+                        *(s32*)((s32)select + 0x10) = offset - 1;
+                    }
                 }
                 if (previous != cursor) {
                     psndSFXOn(0x20005);
                 }
 
                 if (keyGetButtonTrg(0) & 0x100) {
-                    rowFlags = *(u16*)((s32)*(void**)((s32)select + 0x30) + cursor * 4);
-                    if ((rowFlags & 1) == 0) {
+                    if ((*(u16*)((s32)*(void**)((s32)select + 0x30) + cursor * 4) & 1) != 0) {
+                        psndSFXOn(0x20014);
+                    } else {
                         psndSFXOn(0x20012);
                         *(s32*)((s32)select + 8) += 1;
-                    } else {
-                        psndSFXOn(0x20014);
                     }
                 } else if ((keyGetButtonTrg(0) & 0x200) && (*(u16*)select & 0x100)) {
                     psndSFXOn(0x20013);
@@ -1647,16 +1738,38 @@ void select_main(void* win) {
                        (f32)(*(s32*)((s32)win + 0x1C) - 54)) -
                      *(f32*)((s32)select + 0x18)) / 6.0f;
             }
+            break;
         }
-    } else if (state != 4 && state < 4) {
-        void* first = (void*)((s32)entries + entryIndices[0] * 0x44);
-        if ((*(u32*)first & 4) == 0) {
-            for (i = 0; i < count; i++) {
-                void* entry = (void*)((s32)entries + entryIndices[i] * 0x44);
-                *(u32*)entry &= ~1;
+
+        case 2: {
+            s32* index = (s32*)((s32)select + 0x24);
+            for (i = 0; i < *(s32*)((s32)select + 0x20); i++, index++) {
+                void* entry = (void*)((s32)*(void**)((s32)wp + 4) + *index * 0x44);
+                if ((*(u32*)entry & 1) != 0) {
+                    *(s32*)((s32)entry + 4) = 2;
+                    *(s32*)((s32)entry + 8) = 0;
+                }
             }
-            *(u16*)select |= 0x1000;
+            psndSFXOn(0x2002B);
+            statusWinForceOff();
             *(s32*)((s32)select + 8) += 1;
+            break;
+        }
+
+        case 3: {
+            void* entry = (void*)((s32)*(void**)((s32)wp + 4) +
+                                  *(s32*)((s32)select + 0x24) * 0x44);
+            if ((*(u32*)entry & 4) == 0) {
+                s32* index = (s32*)((s32)select + 0x24);
+                for (i = 0; i < *(s32*)((s32)select + 0x20); i++, index++) {
+                    s32 entryIndex = *index;
+                    void* item = (void*)((s32)*(void**)((s32)wp + 4) + entryIndex * 0x44);
+                    *(u32*)item &= ~1;
+                }
+                *(u16*)select |= 0x1000;
+                *(s32*)((s32)select + 8) += 1;
+            }
+            break;
         }
     }
 }
@@ -1670,12 +1783,15 @@ void select_disp(void* win) {
     extern void winIconGrayInit(void); extern void winIconSet(s32,Vec*,Vec*,void*);
     extern u16 FontGetMessageWidth(char*); extern void winFontSetEdgeWidth(Vec*,Vec*,void*,f32,char*,...);
     extern void iconDispGx(f64,Vec*,u16,u16); extern void* gpGlobals;
+    extern void iconDispGxCol(f32[3][4],s32,u16,u32*);
     extern char str_msg_window_title_1_803008c4[],str_msg_window_title_2_80300888[];
     extern char str_msg_window_title_3_8030089c[],str_msg_window_title_4_803008b0[];
     extern char str_msg_window_title_5_80300808[];
     extern s32 sprintf(char*,char*,...);
+    extern s32 evtGetValue(void*,s32);
     u8* w=win; u8* sel=*(u8**)(w+0x2C); u8* rows=*(u8**)(sel+0x30);
-    u8* entries=*(u8**)((u8*)wp+4); s32 oldX,oldY,oldW,oldH,i; Vec pos,scale;
+    u8* entries=*(u8**)((u8*)wp+4); s32 oldX,oldY,oldW,oldH,i; Vec pos,scale,specialPos;
+    f32 transMtx[3][4],scaleMtx[3][4]; u32 specialColor;
     u32 color=0xFFFFFFFF,fog=0; char* title; f32 width; char priceText[32];
     if ((*(u32*)(entries + *(s32*)(sel+0x2C)*0x44) & 4) != 0) return;
     GXSetFog(0,0.0f,0.0f,0.0f,0.0f,&fog); GXGetScissor(&oldX,&oldY,&oldW,&oldH);
@@ -1691,13 +1807,17 @@ void select_disp(void* win) {
             pos.x=(f32)(*(s32*)(w+0x18)+0x3C);pos.y=y+12.0f;
             winFontSetWidth(&pos,&scale,&color,185.0f,msgSearch(*(char**)(item+8)));
             {
-                s32 price=-1;
-                switch(*(s32*)(sel+4)) {
-                    case 3: price=*(u16*)(item+0x1A); break;
-                    case 0xB: price=*(u16*)(item+0x14); break;
-                    case 0x11: price=*(u16*)(item+0x18); break;
-                }
-                if(price>=0) {
+                s32 price;
+                s32 showPrice=1;
+                s32 type=*(s32*)(sel+4);
+                if(type==3 || type==0xC) price=*(u16*)(item+0x1A);
+                else if(type==0xB) price=*(u16*)(item+0x14);
+                else if(type==0xD) price=*(u16*)(item+0x18);
+                else if(type==0xE) price=(*(u16*)(item+0x14)*12)/10;
+                else if(type==0xF) price=(*(u16*)(item+0x14)*(evtGetValue(0,-0xA21F957)+11))/10;
+                else if(type==0x10) price=(*(u16*)(item+0x14)*2+2)/3;
+                else showPrice=0;
+                if(showPrice) {
                     sprintf(priceText,"%d",price); width=(f32)FontGetMessageWidth(priceText);
                     if(width>30.0f) width=30.0f; winFontInit();
                     pos.x=(f32)(*(s32*)(w+0x18)+*(s32*)(w+0x20)-10)-width;
@@ -1715,15 +1835,41 @@ void select_disp(void* win) {
         }
     }
     GXSetScissor(oldX,oldY,oldW,oldH);
-    switch(*(s32*)(sel+4)) {
-        case 2: case 0xB: title=msgSearch(str_msg_window_title_2_80300888); break;
-        case 0x11: title=msgSearch(str_msg_window_title_5_80300808); break;
-        default: title=msgSearch(str_msg_window_title_1_803008c4); break;
-    }
+    if(*(s32*)(sel+4)==2 || *(s32*)(sel+4)==0xB ||
+       *(s32*)(sel+4)==0xC || *(s32*)(sel+4)==0xD)
+        title=msgSearch(str_msg_window_title_2_80300888);
+    else if(*(s32*)(sel+4)==0xE)
+        title=msgSearch(str_msg_window_title_3_8030089c);
+    else if(*(s32*)(sel+4)==0x10)
+        title=msgSearch(str_msg_window_title_4_803008b0);
+    else if(*(s32*)(sel+4)==0x11)
+        title=msgSearch(str_msg_window_title_5_80300808);
+    else
+        title=msgSearch(str_msg_window_title_1_803008c4);
     width=(f32)FontGetMessageWidth(title); if(width>120.0f) width=120.0f;
     winFontInit(); pos.x=(f32)*(s32*)(w+0x18)+((f32)*(s32*)(w+0x20)-width)*0.5f;
     pos.y=(f32)(*(s32*)(w+0x1C)+0xE); pos.z=0.0f;
     winFontSetEdgeWidth(&pos,&scale,&color,120.0f,title);
+    {
+        s32 type=*(s32*)(sel+4);
+        s32 specialIcon=-1;
+        if(type==0xD) specialIcon=0x195;
+        else if(type==0x10) specialIcon=0x147;
+        else if(type==3 || type==0xB || type==0xC || type==0xE || type==0xF)
+            specialIcon=0x193;
+        if(specialIcon>=0) {
+            PSMTXTrans(transMtx,(f32)(*(s32*)(w+0x18)+0x10C),
+                         (f32)(*(s32*)(w+0x1C)-0x12),0.0f);
+            PSMTXScale(scaleMtx,0.6f,0.6f,0.6f);
+            PSMTXConcat(transMtx,scaleMtx,transMtx);
+            specialColor=0xFFFFFFFF;
+            iconDispGxCol(transMtx,0x10,0x213,&specialColor);
+            specialPos.x=(f32)(*(s32*)(w+0x18)+0x10C);
+            specialPos.y=(f32)(*(s32*)(w+0x1C)-0xC);
+            specialPos.z=0.0f;
+            iconDispGx(0.6,&specialPos,0x10,(u16)specialIcon);
+        }
+    }
     pos.x=*(f32*)(sel+0x14); pos.y=*(f32*)(sel+0x18); pos.z=0.0f;
     iconDispGx(1.0,&pos,0x14,0x1F8);
     if(*(s32*)(sel+0x34)>8 && ((*(u32*)((u8*)gpGlobals+0x10)&0x1F)<0x14)) {
@@ -2077,9 +2223,9 @@ extern const f32 float_1_80428010;
 
     u32 normalBase;
     u32 disabledBase;
-    u32 iconBase;
-    u32 titleBase;
-    u32 extraBase;
+    volatile u32 iconBase;
+    volatile u32 titleBase;
+    volatile u32 extraBase;
     u32 fog;
 
     char number[4];
@@ -2462,18 +2608,19 @@ void select_disp_luigi(void* win) {
     GXSetScissor(*(s32*)(entry + 0x18) + 0x130,
                  0x112 - *(s32*)(entry + 0x1C),
                  *(s32*)(entry + 0x20), *(s32*)(entry + 0x24) - 0x32);
-    listScale = vec3_803005ec;
     for (i = 0; i < *(s32*)(select + 0x34); i++) {
         f32 y = *(f32*)(select + 0x1C) + (f32)(*(s32*)(entry + 0x1C) - 0x20 - i * 0x18);
         if (y - 32.0f <= (f32)*(s32*)(entry + 0x1C) &&
             y + 32.0f >= (f32)(*(s32*)(entry + 0x1C) - *(s32*)(entry + 0x24))) {
-            u8* rowInfo = _jdt + i * 0x10;
+            u8* rowInfo = *(u8**)_jdt + i * 0x10;
             char* message = *(char**)(rowInfo + 4);
             s16 messageEnd = *(s16*)(rowInfo + 8);
             u8 saved = message[messageEnd];
             winFontInit();
             message[messageEnd] = 0;
             listColor = (*(u16*)(*(u8**)(select + 0x30) + i * 4) & 1) ? disabled : normal;
+            listPos = vec3_803005e0;
+            listScale = vec3_803005ec;
             listPos.x = (f32)(*(s32*)(entry + 0x18) + 0x19);
             listPos.y = y;
             listPos.z = vec3_803005e0.z;
@@ -2493,7 +2640,15 @@ void select_disp_luigi(void* win) {
         }
     }
     GXSetScissor(oldX, oldY, oldW, oldH);
-    title = msgSearch(*(s32*)(select + 4) == 0x11 ? str_msg_window_title_5_80300808 : str_msg_window_title_6_8030081c);
+    switch (*(s32*)(select + 4)) {
+        case 0x11:
+            title = msgSearch(str_msg_window_title_5_80300808);
+            break;
+        case 0x12:
+        default:
+            title = msgSearch(str_msg_window_title_6_8030081c);
+            break;
+    }
     titleWidth = (f32)FontGetMessageWidth(title);
     if (titleWidth > 120.0f) titleWidth = 120.0f;
     winFontInit();
@@ -2586,10 +2741,13 @@ void select_disp2(void* win) {
     char* message = msgSearch(strings + 0x358);
     EntryMini* linked;
     u16 lines;
-    u16 messageWidth;
+    u32 messageWidth;
     f32 drawnWidth;
     f32 x;
     f32 y;
+    s32 linkedWidth;
+    s32 linkedHeight;
+    s32 linkedY;
 
     switch (select->type) {
         case 3:
@@ -2648,12 +2806,15 @@ void select_disp2(void* win) {
         FontDrawStart();
         FontDrawMessageMtx(transMtx, message);
 
+        linkedWidth = window->width;
         linked = &((WorkMini*)wp)->entries[select->entryIndices[1]];
+        linkedHeight = window->desc->height;
+        linkedY = window->desc->y;
         if ((linked->flags & 1) != 0) {
             linked->x = window->x;
-            linked->y = window->desc->y + ((u32)lines * 22 >> 1);
-            linked->width = window->width;
-            linked->height = window->desc->height + (u32)lines * 22;
+            linked->y = linkedY + ((u32)lines * 22 >> 1);
+            linked->width = linkedWidth;
+            linked->height = linkedHeight + (u32)lines * 22;
         }
     }
 }
@@ -2715,6 +2876,10 @@ void select_disp3(void* win) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void select_disp3_party(void* win) {
+    typedef struct SelectPartyEntry {
+        u16 flags;
+        u16 party;
+    } SelectPartyEntry;
     extern void* pouchGetPtr(void);
     extern s32 sprintf(char* str, const char* fmt, ...);
     extern char* msgSearch(char* msg);
@@ -2726,7 +2891,7 @@ void select_disp3_party(void* win) {
 
     char buf[0x50];
     void* data;
-    void* list;
+    SelectPartyEntry* list;
     void* pouch;
     u16 flags;
     u16 party;
@@ -2741,8 +2906,8 @@ void select_disp3_party(void* win) {
     pouch = pouchGetPtr();
     if ((*(u32*)((s32)*(void**)((s32)wp + 4) + *(s32*)((s32)data + 0x2C) * 0x44) & 4) == 0) {
         index = *(s32*)((s32)data + 0xC);
-        list = *(void**)((s32)data + 0x30);
-        flags = *(u16*)((s32)list + (index << 2));
+        list = *(SelectPartyEntry**)((s32)data + 0x30);
+        flags = list[index].flags;
         label = str_help_80428008;
         if (flags & 2) {
             label = &base[0x30C];
@@ -2752,7 +2917,7 @@ void select_disp3_party(void* win) {
         } else {
             state = &base[0x33C];
         }
-        party = *(u16*)((s32)list + (index << 2) + 2);
+        party = list[index].party;
         count = *(s16*)((s32)pouch + party_id_table[party] * 0xE + 0xC) + 1;
         sprintf(buf, &base[0x348], label, state, count, party_labelname_table[party]);
         *(char**)((s32)win + 0x34) = msgSearch(buf);

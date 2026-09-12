@@ -30,8 +30,11 @@ void* effMahorn2Entry(f32 x, f32 y, f32 z, f32 targetX, f32 targetY,
     void* entry = effEntry();
     u8* work;
     u8* child;
-    s32 i;
     f32 zero = float_0_80428b58;
+    f32 six = float_6_80428b7c;
+    f32 twoPi;
+    f32 temp;
+    s32 i;
 
     *(char**)((s32)entry + 0x14) = str_Mahorn2_80302ffc;
     *(s32*)((s32)entry + 8) = 14;
@@ -40,6 +43,8 @@ void* effMahorn2Entry(f32 x, f32 y, f32 z, f32 targetX, f32 targetY,
     *(void**)((s32)entry + 0x10) = effMahorn2Main;
 
     *(s32*)(work + 0) = kind;
+    *(s32*)(work + 0x30) = 0;
+    *(s32*)(work + 0x28) = 0;
     *(f32*)(work + 4) = x;
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
@@ -49,57 +54,56 @@ void* effMahorn2Entry(f32 x, f32 y, f32 z, f32 targetX, f32 targetY,
     *(f32*)(work + 0x1C) = targetDistance;
     *(f32*)(work + 0x20) = speed;
     *(s32*)(work + 0x24) = 0xFF;
-    *(s32*)(work + 0x28) = 0;
     *(s32*)(work + 0x2C) = 0;
-    *(s32*)(work + 0x30) = 0;
     *(s32*)(work + 0x38) = 0;
-
     child = work + 0x3C;
+
     for (i = 1; i < 4; i++, child += 0x3C) {
         memset(child, 0, 0x3C);
+        *(s32*)(child + 0x2C) = 1;
         *(f32*)(child + 4) = zero;
         *(f32*)(child + 8) = zero;
         *(f32*)(child + 0xC) = zero;
-        *(f32*)(child + 0x1C) = float_6_80428b7c;
+        *(f32*)(child + 0x1C) = six;
         *(s32*)(child + 0x24) = 0;
-        *(s32*)(child + 0x2C) = 1;
         *(s32*)(child + 0x34) = (i - 1) * 15;
     }
 
-    memset(child, 0, 0x3C);
-    *(f32*)(child + 4) = zero;
-    *(f32*)(child + 8) = zero;
-    *(f32*)(child + 0xC) = zero;
-    *(f32*)(child + 0x1C) = zero;
-    *(s32*)(child + 0x24) = 0x99;
-    *(s32*)(child + 0x2C) = 2;
-    *(s32*)(child + 0x34) = 15;
-    child += 0x3C;
-
-    memset(child, 0, 0x3C);
-    *(f32*)(child + 4) = zero;
-    *(f32*)(child + 8) = zero;
-    *(f32*)(child + 0xC) = zero;
-    *(f32*)(child + 0x1C) = zero;
-    *(s32*)(child + 0x24) = 0x99;
-    *(s32*)(child + 0x2C) = 3;
-    *(s32*)(child + 0x34) = 60;
-    child += 0x3C;
-
-    for (i = 6; i < *(s32*)((s32)entry + 8); i++, child += 0x3C) {
-        f32 angle;
+    for (i = 4; i < 5; i++, child += 0x3C) {
         memset(child, 0, 0x3C);
+        *(s32*)(child + 0x2C) = 2;
+        *(f32*)(child + 4) = zero;
+        *(f32*)(child + 8) = zero;
+        *(f32*)(child + 0xC) = zero;
+        *(f32*)(child + 0x1C) = zero;
+        *(s32*)(child + 0x24) = 0x99;
+        *(s32*)(child + 0x34) = 15;
+    }
+
+    for (i = 5; i < 6; i++, child += 0x3C) {
+        memset(child, 0, 0x3C);
+        *(s32*)(child + 0x2C) = 3;
+        *(f32*)(child + 4) = zero;
+        *(f32*)(child + 8) = zero;
+        *(f32*)(child + 0xC) = zero;
+        *(f32*)(child + 0x1C) = zero;
+        *(s32*)(child + 0x24) = 0x99;
+        *(s32*)(child + 0x34) = 60;
+    }
+
+    twoPi = float_6p2832_80428b80;
+    for (i = 6; i < *(s32*)((s32)entry + 8); i++, child += 0x3C) {
+        memset(child, 0, 0x3C);
+        *(s32*)(child + 0x2C) = 4;
         *(f32*)(child + 4) = targetX - x;
         *(f32*)(child + 8) = targetY - y;
         *(f32*)(child + 0xC) = targetZ - z;
-        angle = (float_6p2832_80428b80 * (f32)(i - 6)) /
-                (f32)(*(s32*)((s32)entry + 8) - 6);
-        *(f32*)(child + 0x10) = float_6_80428b7c * (f32)sin(angle);
-        *(f32*)(child + 0x14) = float_6_80428b7c * (f32)cos(angle);
+        temp = twoPi * (f32)(i - 6);
+        *(f32*)(child + 0x10) = six * (f32)sin(temp / (f32)(*(s32*)((s32)entry + 8) - 6));
+        *(f32*)(child + 0x14) = six * (f32)cos(temp / (f32)(*(s32*)((s32)entry + 8) - 6));
         *(f32*)(child + 0x18) = zero;
         *(f32*)(child + 0x1C) = zero;
         *(s32*)(child + 0x24) = 0xFF;
-        *(s32*)(child + 0x2C) = 4;
         *(s32*)(child + 0x34) = 0;
     }
     return entry;
@@ -108,16 +112,18 @@ void* effMahorn2Entry(f32 x, f32 y, f32 z, f32 targetX, f32 targetY,
 /* CHATGPT STUB FILL: main/effect/eff_mahorn2 20260624_185035 */
 
 /* stub-fill: effMahorn2Main | missing_definition | ghidra_signature */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effMahorn2Main(void* entry) {
     extern f32 intplGetValue(f32 start, f32 end, s32 mode, s32 step, s32 duration);
     extern f32 PSVECDistance(void* a, void* b);
     extern f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
     extern f64 sin(f64 angle);
     extern f64 cos(f64 angle);
-    extern void effHitEntry(void);
+    extern void effHitEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
     extern void effDelete(void* effect);
     extern f32 dispCalcZ(void* position);
-    extern void dispEntry(s32 camera, s32 layer, void* callback, void* effect);
+    extern void dispEntry(s32 camera, s32 layer, void* callback, void* effect, f32 z);
     extern void effMahorn2Disp(s32 camera, void* effect);
     extern f32 float_0_80428b58;
     extern f32 float_0p0625_80428b5c;
@@ -130,25 +136,33 @@ void effMahorn2Main(void* entry) {
     extern f32 float_1_80428b78;
 
     void* work = *(void**)((s32)entry + 0xC);
-    f32 start[3];
     f32 target[3];
+    f32 targetCopy[3];
     f32 current[3];
     f32 zpos[3];
+    f32 zposCopy[3];
     f32 speed = *(f32*)((s32)work + 0x20);
+    f32 hitScale = *(f32*)((s32)work + 0x1C);
     s32 i;
 
-    start[0] = *(f32*)((s32)work + 4);
-    start[1] = *(f32*)((s32)work + 8);
-    start[2] = *(f32*)((s32)work + 0xC);
+    ((u32*)zpos)[0] = vec3_80302fa8[0];
+    ((u32*)zpos)[1] = vec3_80302fa8[1];
+    ((u32*)zpos)[2] = vec3_80302fa8[2];
+    zpos[0] = *(f32*)((s32)work + 4);
+    zpos[1] = *(f32*)((s32)work + 8);
+    zpos[2] = *(f32*)((s32)work + 0xC);
+    ((u32*)zposCopy)[0] = ((u32*)zpos)[0];
+    ((u32*)zposCopy)[1] = ((u32*)zpos)[1];
+    ((u32*)zposCopy)[2] = ((u32*)zpos)[2];
+    ((u32*)target)[0] = vec3_80302fa8[3];
+    ((u32*)target)[1] = vec3_80302fa8[4];
+    ((u32*)target)[2] = vec3_80302fa8[5];
     target[0] = *(f32*)((s32)work + 0x10);
     target[1] = *(f32*)((s32)work + 0x14);
     target[2] = *(f32*)((s32)work + 0x18);
-    current[0] = target[0];
-    current[1] = target[1];
-    current[2] = target[2];
-    zpos[0] = start[0];
-    zpos[1] = start[1];
-    zpos[2] = start[2];
+    ((u32*)targetCopy)[0] = ((u32*)target)[0];
+    ((u32*)targetCopy)[1] = ((u32*)target)[1];
+    ((u32*)targetCopy)[2] = ((u32*)target)[2];
 
     for (i = 0; i < *(s32*)((s32)entry + 8); i++, work = (void*)((s32)work + 0x3C)) {
         if (*(s32*)((s32)work + 0x34) != 0) {
@@ -168,10 +182,11 @@ void effMahorn2Main(void* entry) {
 
             case 2:
                 if (*(s32*)((s32)work + 0x28) < 0x5A) {
-                    *(s32*)((s32)work + 0x28) += 1;
+                    s32 timer = *(s32*)((s32)work + 0x28) + 1;
+                    *(s32*)((s32)work + 0x28) = timer;
                     *(f32*)((s32)work + 0x1C) = intplGetValue(
                         float_0_80428b58, float_3_80428b60, 11,
-                        *(s32*)((s32)work + 0x28), 0x2D);
+                        timer, 0x2D);
                 }
                 break;
 
@@ -180,18 +195,14 @@ void effMahorn2Main(void* entry) {
                 f32 angle;
                 f32 radians;
 
-                current[0] = zpos[0] + *(f32*)((s32)work + 4);
-                current[1] = zpos[1] + *(f32*)((s32)work + 8);
-                current[2] = zpos[2] + *(f32*)((s32)work + 0xC);
-                distance = PSVECDistance(target, current);
-                if (distance <= speed) {
-                    *(f32*)((s32)work + 0x1C) -=
-                        *(f32*)((s32)work + 0x1C) * float_0p125_80428b70;
-                    if (*(s32*)((s32)*(void**)((s32)entry + 0xC) + 0x38) == 0) {
-                        *(s32*)((s32)*(void**)((s32)entry + 0xC) + 0x38) = 1;
-                        effHitEntry();
-                    }
-                } else {
+                ((u32*)current)[0] = vec3_80302fa8[6];
+                ((u32*)current)[1] = vec3_80302fa8[7];
+                ((u32*)current)[2] = vec3_80302fa8[8];
+                current[0] = zposCopy[0] + *(f32*)((s32)work + 4);
+                current[1] = zposCopy[1] + *(f32*)((s32)work + 8);
+                current[2] = zposCopy[2] + *(f32*)((s32)work + 0xC);
+                distance = PSVECDistance(targetCopy, current);
+                if (distance > speed) {
                     angle = angleABf(current[0], current[1], target[0], target[1]);
                     radians = (float_6p2832_80428b64 * angle) / float_360_80428b68;
                     *(f32*)((s32)work + 4) += speed * (f32)sin(radians);
@@ -199,6 +210,13 @@ void effMahorn2Main(void* entry) {
                     *(f32*)((s32)work + 0x1C) +=
                         (float_4_80428b6c - *(f32*)((s32)work + 0x1C)) *
                         float_0p125_80428b70;
+                } else {
+                    *(f32*)((s32)work + 0x1C) -=
+                        *(f32*)((s32)work + 0x1C) * float_0p125_80428b70;
+                    if (*(s32*)((s32)*(void**)((s32)entry + 0xC) + 0x38) == 0) {
+                        *(s32*)((s32)*(void**)((s32)entry + 0xC) + 0x38) = 1;
+                        effHitEntry(0, 4, targetCopy[0], targetCopy[1], targetCopy[2], hitScale);
+                    }
                 }
                 break;
             }
@@ -223,9 +241,10 @@ void effMahorn2Main(void* entry) {
         }
     }
 
-    dispCalcZ(zpos);
-    dispEntry(4, 2, effMahorn2Disp, entry);
+    dispEntry(4, 2, effMahorn2Disp, entry, dispCalcZ(zposCopy));
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 /* CHATGPT STUB FILL: main/effect/eff_mahorn2 20260624_185035 */
@@ -276,6 +295,12 @@ void effMahorn2Disp(s32 cameraId, void* effect) {
     volatile f32* fifo = (volatile f32*)0xCC008000;
     s32 baseAlpha = *(s32*)(work + 0x24);
     f32 baseScale = *(f32*)(work + 0x1C);
+    f32 deg2rad = float_deg2rad_80428b44;
+    f32 size16 = float_16_80428b48;
+    f32 size2 = float_2_80428b4c;
+    f32 size8 = float_8_80428b50;
+    f32 half = float_0p5_80428b54;
+    f32 zero = float_0_80428b58;
     s32 i;
 
     PSMTXTrans(base, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
@@ -298,8 +323,8 @@ void effMahorn2Disp(s32 cameraId, void* effect) {
 
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, particle += 0x3C) {
         s32 mode;
-        f32 width = float_2_80428b4c;
-        f32 height = float_16_80428b48;
+        f32 width = size2;
+        f32 height = size16;
 
         if (*(s32*)(particle + 0x34) != 0) {
             continue;
@@ -325,7 +350,7 @@ void effMahorn2Disp(s32 cameraId, void* effect) {
         width = *(f32*)(particle + 0x1C) * baseScale;
         PSMTXScale(scaleMtx, width, width, width);
         PSMTXConcat(transform, scaleMtx, transform);
-        PSMTXRotRad(rotation, 'y', float_deg2rad_80428b44 *
+        PSMTXRotRad(rotation, 'y', deg2rad *
                     -*(f32*)((u8*)camGetPtr(cameraId) + 0x114));
         PSMTXConcat(transform, rotation, transform);
         PSMTXConcat(base, transform, transform);
@@ -334,28 +359,28 @@ void effMahorn2Disp(s32 cameraId, void* effect) {
         GXSetCurrentMtx(0);
 
         if (mode == 2) {
-            width = float_2_80428b4c;
-            height = float_16_80428b48;
+            width = size2;
+            height = size16;
         } else if (mode == 3) {
-            width = float_2_80428b4c;
-            height = float_2_80428b4c;
+            width = size2;
+            height = size2;
         } else if (mode == 4) {
-            width = float_2_80428b4c;
-            height = float_8_80428b50;
+            width = size2;
+            height = size8;
         }
 
         GXBegin(0x80, 0, 4);
-        *fifo = -width * float_0p5_80428b54;
-        *fifo = height * float_0p5_80428b54;
-        *fifo = float_0_80428b58; *fifo = 0.0f; *fifo = 0.0f;
-        *fifo = width * float_0p5_80428b54;
-        *fifo = height * float_0p5_80428b54;
-        *fifo = float_0_80428b58; *fifo = 2.0f; *fifo = 0.0f;
-        *fifo = width * float_0p5_80428b54;
-        *fifo = -height * float_0p5_80428b54;
-        *fifo = float_0_80428b58; *fifo = 2.0f; *fifo = 2.0f;
-        *fifo = -width * float_0p5_80428b54;
-        *fifo = -height * float_0p5_80428b54;
-        *fifo = float_0_80428b58; *fifo = 0.0f; *fifo = 2.0f;
+        *fifo = -width * half;
+        *fifo = height * half;
+        *fifo = zero; *fifo = 0.0f; *fifo = 0.0f;
+        *fifo = width * half;
+        *fifo = height * half;
+        *fifo = zero; *fifo = 2.0f; *fifo = 0.0f;
+        *fifo = width * half;
+        *fifo = -height * half;
+        *fifo = zero; *fifo = 2.0f; *fifo = 2.0f;
+        *fifo = -width * half;
+        *fifo = -height * half;
+        *fifo = zero; *fifo = 0.0f; *fifo = 2.0f;
     }
 }

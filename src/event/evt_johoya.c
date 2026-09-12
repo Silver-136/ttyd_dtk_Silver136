@@ -345,75 +345,84 @@ s32 johoya_luigi_newjoho_setreadflag(void) {
 
 int johoya_data_make(s32 param_1, u32 param_2) {
     extern s32 _ismbblead(s32 c);
-    char label[64];
-    char key[76];
-    char* scan;
-    char* body;
-    s16 bodyLen;
-    s32 maxLabel = evtGetValue(NULL, GSW(0));
-    s32 count = 0;
-    s32 index = 0;
-    s32 offset = 0;
-    s32 copyField;
+    JohoyaData* data = &_jdt;
+    char key[64];
+    char tag[64];
     s32 pos;
+    s32 maxLabel;
+    s32 index;
+    s32 tagNum;
     s32 done;
+    s32 entryIndex;
+    s32 body;
+    s16 bodyLen;
+    char* scan;
+    s32 count;
     s32 labelIndex;
     char** table;
 
+    maxLabel = evtGetValue(NULL, GSW(0));
+    count = 0;
+    index = 0;
+    entryIndex = 0;
     while (1) {
         sprintf(key, "%s%04d", param_1, index);
         scan = msgSearch(key);
-        if (scan[0] != '<' || scan[1] != '!') {
-            return count;
+        if (scan[0] != '<') {
+            break;
+        }
+        scan += 2;
+        if (scan[-1] != '!') {
+            break;
         }
 
-        scan += 2;
-        copyField = 0;
+        tagNum = 0;
         pos = 0;
         done = 0;
         while (!done) {
-            if (_ismbblead(*scan) != 0) {
-                if (copyField == 0) {
-                    label[pos++] = scan[0];
-                    label[pos++] = scan[1];
+            if (_ismbblead(*scan)) {
+                if (tagNum == 0) {
+                    tag[pos++] = scan[0];
+                    tag[pos++] = scan[1];
+                    scan += 2;
                 } else {
                     pos += 2;
+                    scan += 2;
                 }
-                scan += 2;
             } else {
-                if (*scan == '>') {
-                    done = 1;
-                } else if (*scan != ',') {
-                    if (copyField == 0) {
-                        label[pos++] = *scan++;
-                    } else {
-                        pos++;
+                switch (scan[0]) {
+                    case '>':
+                        done = 1;
+                    case ',':
                         scan++;
-                    }
-                    continue;
+                        if (tagNum == 0) {
+                            tag[pos] = '\0';
+                            body = (s32)scan;
+                        } else {
+                            bodyLen = (s16)pos;
+                        }
+                        pos = 0;
+                        tagNum++;
+                        break;
+                    default:
+                        if (tagNum == 0) {
+                            tag[pos++] = *scan++;
+                        } else {
+                            pos++;
+                            scan++;
+                        }
                 }
-
-                scan++;
-                if (copyField == 0) {
-                    label[pos] = 0;
-                    body = scan;
-                } else {
-                    bodyLen = (s16)pos;
-                }
-                pos = 0;
-                copyField++;
             }
         }
 
-        if (strcmp(label, "enddata") == 0) {
-            return count;
+        if (!strcmp(tag, "enddata")) {
+            break;
         }
-
-        if (strcmp(label, "") != 0) {
+        if (strcmp(tag, "")) {
             labelIndex = 0;
             table = evtNoLabel;
             while (labelIndex < 0x197) {
-                if (strcmp(label, *table) == 0) {
+                if (strcmp(tag, *table) == 0) {
                     break;
                 }
                 labelIndex++;
@@ -422,22 +431,21 @@ int johoya_data_make(s32 param_1, u32 param_2) {
             if (labelIndex >= 0x197) {
                 labelIndex = -1;
             }
-
             if (labelIndex != -1 && labelIndex <= maxLabel) {
-                if ((param_2 & 1) != 0) {
-                    *(s16*)((s32)_jdt.entries + offset + 2) = (s16)labelIndex;
-                    *(char**)((s32)_jdt.entries + offset + 4) = body;
-                    *(s16*)((s32)_jdt.entries + offset + 8) = bodyLen;
-                    *(s16*)((s32)_jdt.entries + offset + 0xA) = 5;
-                    *(s16*)((s32)_jdt.entries + offset + 0xC) = (s16)index;
+                if (param_2 & 1) {
+                    *(s16*)((s32)data->entries + entryIndex + 2) = (s16)labelIndex;
+                    *(s32*)((s32)data->entries + entryIndex + 4) = body;
+                    *(s16*)((s32)data->entries + entryIndex + 8) = bodyLen;
+                    *(s16*)((s32)data->entries + entryIndex + 0xA) = 5;
+                    *(s16*)((s32)data->entries + entryIndex + 0xC) = (s16)index;
                 }
-                offset += 0x10;
+                entryIndex += 0x10;
                 count++;
             }
         }
-
         index++;
     }
+    return count;
 }
 
 void johoya_init(void) {

@@ -204,15 +204,16 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, u32* color, const char* format, ...
     extern u32 vec3_803025e4[];
     extern u32 vec3_803025f0[];
 
-    RomFontVaList args;
-    char text[1036];
-    u8 textureObject[32];
-    f32 lookAt[3][4];
+    char text[1024];
     f32 translation[3][4];
     f32 scaling[3][4];
-    f32 up[3];
+    f32 lookAt[3][4];
+    u8 textureObject[32];
     f32 target[3];
+    f32 up[3];
     f32 camera[3];
+    RomFontVaList args;
+    u32 materialColor;
     volatile u16* fifo = (volatile u16*)0xCC008000;
     s16 penX = 0;
     s16 penY = 0;
@@ -221,11 +222,11 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, u32* color, const char* format, ...
     up[0] = *(f32*)&vec3_803025d8[0];
     up[1] = *(f32*)&vec3_803025d8[1];
     up[2] = *(f32*)&vec3_803025d8[2];
-    target[0] = *(f32*)&vec3_803025e4[0];
-    target[1] = *(f32*)&vec3_803025e4[1];
-    target[2] = *(f32*)&vec3_803025e4[2];
-    camera[0] = *(f32*)&vec3_803025f0[0];
-    camera[1] = *(f32*)&vec3_803025f0[1];
+    target[0] = *(f32*)&vec3_803025d8[3];
+    target[1] = *(f32*)&vec3_803025d8[4];
+    target[2] = *(f32*)&vec3_803025d8[5];
+    camera[0] = *(f32*)&vec3_803025d8[6];
+    camera[1] = *(f32*)&vec3_803025d8[7];
     camera[2] = 240.0f / (f32)tan(0.2181661564992912);
 
     args.regInfo = 0x02030000;
@@ -246,7 +247,8 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, u32* color, const char* format, ...
     GXSetZMode(0, 3, 0);
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-    GXSetChanMatColor(4, color);
+    materialColor = *color;
+    GXSetChanMatColor(4, &materialColor);
     GXSetNumTevStages(1);
     GXSetTevOrder(0, 0, 0, 4);
     GXSetTevOp(0, 0);
@@ -261,11 +263,63 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, u32* color, const char* format, ...
 
     for (;;) {
         u8 byte = (u8)text[index];
+        u16 wide = *(u16*)&text[index];
         u8* glyph;
-        s32 count;
-        u16 code;
 
         if (*(s32*)((s32)wp + 8) != 0) {
+            if (byte == '\n') {
+                penX = 0;
+                penY -= 0x18;
+                index++;
+                continue;
+            }
+            if (byte == 0) {
+                return;
+            }
+            {
+                u8* first = *(u8**)wp;
+                s32 count = *(s32*)((s32)wp + 4);
+                glyph = first;
+                if (count > 0) {
+                    do {
+                        if (*(u16*)(glyph + 0x120) == (u16)byte) {
+                            goto glyph_ready;
+                        }
+                        glyph += 0x140;
+                    } while (--count != 0);
+                }
+                glyph = first;
+            }
+            index++;
+        } else if (byte >= 0x20 && byte < 0x80) {
+            u8* first = *(u8**)wp;
+            s32 count = *(s32*)((s32)wp + 4);
+            glyph = first;
+            if (count > 0) {
+                do {
+                    if (*(u16*)(glyph + 0x120) == (u16)byte) {
+                        goto glyph_ready;
+                    }
+                    glyph += 0x140;
+                } while (--count != 0);
+            }
+            glyph = first;
+            index++;
+        } else if ((byte >= 0x80 && byte < 0xA0) || byte >= 0xE0) {
+            u8* first = *(u8**)wp;
+            s32 count = *(s32*)((s32)wp + 4);
+            glyph = first;
+            if (count > 0) {
+                do {
+                    if (*(u16*)(glyph + 0x120) == wide) {
+                        goto glyph_ready;
+                    }
+                    glyph += 0x140;
+                } while (--count != 0);
+            }
+            glyph = first;
+            index += 2;
+        } else {
             if (byte == 0) {
                 return;
             }
@@ -274,44 +328,15 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, u32* color, const char* format, ...
                 penY -= 0x18;
                 index++;
                 continue;
-            }
-            code = byte;
-            index++;
-        } else {
-            if (byte >= 0x20 && byte < 0x80) {
-                code = byte;
-                index++;
-            } else if ((byte >= 0x80 && byte < 0xA0) || byte >= 0xE0) {
-                code = *(u16*)&text[index];
-                index += 2;
             } else {
-                if (byte == 0) {
-                    return;
-                }
-                if (byte == '\n') {
-                    penX = 0;
-                    penY -= 0x18;
-                    index++;
-                    continue;
-                }
-                code = byte;
+                glyph = *(u8**)wp;
                 index++;
             }
         }
 
-        glyph = *(u8**)wp;
-        count = *(s32*)((s32)wp + 4);
-        while (count > 0) {
-            if (*(u16*)(glyph + 0x120) == code) {
-                break;
-            }
-            glyph += 0x140;
-            count--;
-        }
-        if (count <= 0) {
-            glyph = *(u8**)wp;
-        }
-
+glyph_ready:
+        {
+            /* Keep the renderer body after the encoding-specific lookup. */
         GXInitTexObj(textureObject, glyph, 0x18, 0x18, 0, 0, 0, 0);
         GXInitTexObjLOD(textureObject, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
         GXLoadTexObj(textureObject, 0);
@@ -342,6 +367,7 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, u32* color, const char* format, ...
         *fifo = 1;
 
         penX += *(s16*)(glyph + 0x122);
+        }
     }
 }
 
@@ -351,29 +377,21 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, u32* color, const char* format, ...
 /* stub-fill: romFontGetWidth | missing_definition | ghidra_signature */
 int romFontGetWidth(s32 message, s32 entry) {
     extern u8* wp;
-    u8* font;
-    s32 width;
-    s32 index;
-    s32 maximum;
-    u8 character;
-    u16 wideCharacter;
-    s32 first;
-    s32 count;
-    s32 current;
+    u8* font = wp;
+    s32 width = 0;
+    s32 index = 0;
+    s32 maximum = 0;
 
-    font = wp;
-    width = 0;
-    index = 0;
-    maximum = 0;
-    do {
-        character = *(u8*)(message + index);
-        wideCharacter = *(u16*)(message + index);
+    for (;;) {
+        u8 character = *(u8*)(message + index);
+        u16 wideCharacter = *(u16*)(message + index);
+
         if (*(s32*)(font + 8) != 0) {
             if (character == 0) {
                 if (maximum < width) {
                     maximum = width;
                 }
-                return maximum;
+                break;
             }
             if (character == '\n') {
                 if (maximum < width) {
@@ -382,63 +400,57 @@ int romFontGetWidth(s32 message, s32 entry) {
                 width = 0;
                 index++;
             } else {
-                first = *(s32*)font;
-                count = *(s32*)(font + 4);
-                current = first;
-                entry = first;
-                if (count > 0) {
-                    do {
-                        entry = current;
-                        if (*(u16*)(current + 0x120) == character) {
-                            break;
-                        }
-                        current += 0x140;
-                        count--;
-                        entry = first;
-                    } while (count != 0);
+                u8* first = *(u8**)font;
+                u8* current = first;
+                s32 count = *(s32*)(font + 4);
+
+                while (count-- > 0) {
+                    if (*(u16*)(current + 0x120) == (u16)character) {
+                        goto narrow_found;
+                    }
+                    current += 0x140;
                 }
+                current = first;
+narrow_found:
+                entry = (s32)current;
                 index++;
             }
         } else if (character >= 0x20 && character < 0x80) {
-            first = *(s32*)font;
-            count = *(s32*)(font + 4);
-            current = first;
-            entry = first;
-            if (count > 0) {
-                do {
-                    entry = current;
-                    if (*(u16*)(current + 0x120) == character) {
-                        break;
-                    }
-                    current += 0x140;
-                    count--;
-                    entry = first;
-                } while (count != 0);
+            u8* first = *(u8**)font;
+            u8* current = first;
+            s32 count = *(s32*)(font + 4);
+
+            while (count-- > 0) {
+                if (*(u16*)(current + 0x120) == (u16)character) {
+                    goto ascii_found;
+                }
+                current += 0x140;
             }
+            current = first;
+ascii_found:
+            entry = (s32)current;
             index++;
         } else if ((character >= 0x80 && character < 0xA0) || character >= 0xE0) {
-            first = *(s32*)font;
-            count = *(s32*)(font + 4);
-            current = first;
-            entry = first;
-            if (count > 0) {
-                do {
-                    entry = current;
-                    if (*(u16*)(current + 0x120) == wideCharacter) {
-                        break;
-                    }
-                    current += 0x140;
-                    count--;
-                    entry = first;
-                } while (count != 0);
+            u8* first = *(u8**)font;
+            u8* current = first;
+            s32 count = *(s32*)(font + 4);
+
+            while (count-- > 0) {
+                if (*(u16*)(current + 0x120) == wideCharacter) {
+                    goto wide_found;
+                }
+                current += 0x140;
             }
+            current = first;
+wide_found:
+            entry = (s32)current;
             index += 2;
         } else {
             if (character == 0) {
                 if (maximum < width) {
                     maximum = width;
                 }
-                return maximum;
+                break;
             }
             if (character == '\n') {
                 if (maximum < width) {
@@ -451,6 +463,7 @@ int romFontGetWidth(s32 message, s32 entry) {
             }
         }
         width += *(u16*)(entry + 0x122);
-    } while (1);
+    }
+    return maximum;
 }
 

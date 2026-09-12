@@ -6,6 +6,9 @@ extern f32 float_6p2832_804252a0;
 extern f32 float_360_804252a4;
 extern f32 float_0_804252b0;
 
+s32 salpha;
+s32 sflag;
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effFireworksN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, f32 scale) {
@@ -94,24 +97,29 @@ void effFireworksMain(void* effect) {
     extern f32 float_80_804252d0;
     extern f32 float_0p1_804252d4;
     extern f32 float_neg1000_804252d8;
+    struct EffFireworksMainVec {
+        f32 x, y, z;
+    };
+    extern struct EffFireworksMainVec vec3_802faf28[];
 
     u8* work;
-    f32 pos[3];
+    struct EffFireworksMainVec pos;
     f32 angle;
     f32 damp;
     f32 gravity;
     f32 lerp;
+    f32 particleGravity;
     f32 s;
     s32 frame;
     s32 slot;
-    s32 r;
     s32 i;
     u8* p;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos[0] = *(f32*)(work + 4);
-    pos[1] = *(f32*)(work + 8);
-    pos[2] = *(f32*)(work + 0xC);
+    pos = vec3_802faf28[0];
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
 
     if ((*(u32*)effect & 4) != 0) {
         *(u32*)effect &= ~4;
@@ -132,11 +140,10 @@ void effFireworksMain(void* effect) {
         *(s32*)(work + 0x30) = *(s32*)(work + 0x1C) << 3;
     }
 
-    damp = float_0p95_804252c4;
-    gravity = float_0p15_804252c8;
-    lerp = float_0p11_804252cc;
-
     if (*(s32*)(work + 0x4C) == 1) {
+        damp = float_0p95_804252c4;
+        gravity = float_0p15_804252c8;
+        lerp = float_0p11_804252cc;
         *(f32*)(work + 4) += *(f32*)(work + 0x10);
         *(f32*)(work + 8) += *(f32*)(work + 0x14);
         *(f32*)(work + 0xC) += *(f32*)(work + 0x18);
@@ -156,47 +163,71 @@ void effFireworksMain(void* effect) {
             (float_80_804252d0 * s - float_80_804252d0);
         *(f32*)(work + 0x70 + slot) = *(f32*)(work + 0xC) - (*(f32*)(work + 0x18) * (f32)(0x20 - frame));
 
-        r = rand();
-        *(f32*)(work + 0x80 + slot) = float_0p1_804252d4 * (f32)((r % 0xB) - 5);
-        r = rand();
-        *(f32*)(work + 0x90 + slot) = float_0p1_804252d4 * (f32)((r % 0xB) - 5);
-        r = rand();
-        *(f32*)(work + 0xA0 + slot) = float_0p1_804252d4 * (f32)((r % 0xB) - 5);
+        *(f32*)(work + 0x80 + slot) = float_0p1_804252d4 * (f32)((rand() % 0xB) - 5);
+        *(f32*)(work + 0x90 + slot) = float_0p1_804252d4 * (f32)((rand() % 0xB) - 5);
+        *(f32*)(work + 0xA0 + slot) = float_0p1_804252d4 * (f32)((rand() % 0xB) - 5);
 
+        particleGravity = float_0p15_804252c8;
         if (frame < 0x1B) {
-            for (i = 0; i < 4; i++) {
-                p = work + (i * 4);
-                *(f32*)(p + 0x50) += *(f32*)(p + 0x80);
-                *(f32*)(p + 0x60) += *(f32*)(p + 0x90);
-                *(f32*)(p + 0x70) += *(f32*)(p + 0xA0);
-                *(f32*)(p + 0x90) -= gravity;
-            }
+            *(f32*)(work + 0x50) += *(f32*)(work + 0x80);
+            *(f32*)(work + 0x60) += *(f32*)(work + 0x90);
+            *(f32*)(work + 0x70) += *(f32*)(work + 0xA0);
+            *(f32*)(work + 0x90) -= particleGravity;
+            *(f32*)(work + 0x54) += *(f32*)(work + 0x84);
+            *(f32*)(work + 0x64) += *(f32*)(work + 0x94);
+            *(f32*)(work + 0x74) += *(f32*)(work + 0xA4);
+            *(f32*)(work + 0x94) -= particleGravity;
+            *(f32*)(work + 0x58) += *(f32*)(work + 0x88);
+            *(f32*)(work + 0x68) += *(f32*)(work + 0x98);
+            *(f32*)(work + 0x78) += *(f32*)(work + 0xA8);
+            *(f32*)(work + 0x98) -= particleGravity;
+            *(f32*)(work + 0x5C) += *(f32*)(work + 0x8C);
+            *(f32*)(work + 0x6C) += *(f32*)(work + 0x9C);
+            *(f32*)(work + 0x7C) += *(f32*)(work + 0xAC);
+            *(f32*)(work + 0x9C) -= particleGravity;
         } else {
-            for (i = 0; i < 4; i++) {
-                p = work + (i * 4);
+            i = 2;
+            p = work;
+            do {
                 *(f32*)(p + 0x50) += *(f32*)(p + 0x80);
                 *(f32*)(p + 0x60) += *(f32*)(p + 0x90);
                 *(f32*)(p + 0x70) += *(f32*)(p + 0xA0);
-                *(f32*)(p + 0x90) -= gravity;
+                *(f32*)(p + 0x90) -= particleGravity;
                 *(f32*)(p + 0x60) = float_neg1000_804252d8;
-            }
+                *(f32*)(p + 0x54) += *(f32*)(p + 0x84);
+                *(f32*)(p + 0x64) += *(f32*)(p + 0x94);
+                *(f32*)(p + 0x74) += *(f32*)(p + 0xA4);
+                *(f32*)(p + 0x94) -= particleGravity;
+                *(f32*)(p + 0x64) = float_neg1000_804252d8;
+                p += 8;
+                i--;
+            } while (i != 0);
         }
 
-        if (frame > 0x1F) {
+        if (frame >= 0x20) {
             *(s32*)(work + 0x4C) = 1;
             *(s32*)(work + 0x20) = 1;
         }
     }
 
-    dispEntry(4, 2, effFireworksDisp, effect, dispCalcZ(pos));
+    dispEntry(4, 2, effFireworksDisp, effect, dispCalcZ(&pos));
 }
 
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 void effFireworksDisp(s32 cameraId, void* effect) {
     extern void* camGetPtr(s32 id);
     extern double cos(f64 x);
+    struct EffFireworksVec {
+        f32 x, y, z;
+    };
+    typedef struct EffFireworksVtxData {
+        s8* vertices;
+        s32 count;
+    } EffFireworksVtxData;
+    extern EffFireworksVtxData vtx_data[];
+    extern u32 unk_804296b0, unk_804296b4;
     extern void GXSetNumChans(s32 count);
     extern void GXSetNumTevStages(s32 count);
     extern void GXSetTevOrder(s32 stage, s32 coord, s32 tex, s32 color);
@@ -230,6 +261,7 @@ void effFireworksDisp(s32 cameraId, void* effect) {
     extern f32 float_1_804252b8;
     extern f32 float_32768_804252bc;
     extern f32 float_8_804252c0;
+    extern struct EffFireworksVec vec3_802faf28[];
 
     volatile f32* fifoF;
     volatile u16* fifoU16;
@@ -241,9 +273,9 @@ void effFireworksDisp(s32 cameraId, void* effect) {
     f32 look[3][4];
     f32 pos[3];
     f32 out[3];
-    f32 eye[3];
-    f32 up[3];
-    f32 target[3];
+    struct EffFireworksVec eye;
+    struct EffFireworksVec up;
+    struct EffFireworksVec target;
     u8* work;
     f32 angle;
     f32 s;
@@ -251,16 +283,24 @@ void effFireworksDisp(s32 cameraId, void* effect) {
     f32 sx;
     f32 sy;
     f32 size;
+    f32 baseX;
+    f32 baseY;
+    f32 baseZ;
+    f32 particleScale;
     s32 i;
+    s32 type;
     s32 mode;
-    s32 color;
+    u32 color;
+    u32 color2;
     s32 count;
+    s8* vertices;
 
     fifoF = (volatile f32*)0xCC008000;
     fifoU16 = (volatile u16*)0xCC008000;
     cam = camGetPtr(cameraId);
     work = *(u8**)((s32)effect + 0xC);
     color = *(s32*)(work + 0x30);
+    type = *(s32*)work;
     mode = *(s32*)(work + 0x4C);
 
     cam3d = camGetPtr(4);
@@ -268,13 +308,21 @@ void effFireworksDisp(s32 cameraId, void* effect) {
     s = (f32)sin(angle);
     c = (f32)cos(angle);
 
+    if (sflag != *(s32*)((s32)gp + 0x1C)) {
+        salpha = 0;
+        sflag = *(s32*)((s32)gp + 0x1C);
+    }
+    if (salpha < color) {
+        salpha = color;
+    }
+
     GXSetNumChans(0);
     GXSetNumTevStages(1);
     GXSetTevOrder(0, 0, 0, 0xFF);
     GXSetTevColorOp(0, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 2, 1, 8, 0xF);
-    GXSetTevAlphaIn(0, 7, 4, 6, 7);
+    GXSetTevColorIn(0, 4, 2, 8, 0xF);
+    GXSetTevAlphaIn(0, 7, 1, 4, 7);
     effGetTexObjN64(8, texObj);
     GXLoadTexObj(texObj, 0);
     GXSetNumTexGens(1);
@@ -286,20 +334,40 @@ void effFireworksDisp(s32 cameraId, void* effect) {
     GXSetVtxAttrFmt(0, 9, 1, 4, 0);
     GXSetVtxAttrFmt(0, 0xD, 1, 3, 0);
 
-    color = (*(u8*)(work + 0x24) << 24) | (*(u8*)(work + 0x28) << 16) |
-            (*(u8*)(work + 0x2C) << 8) | *(u8*)(work + 0x30);
+    color = unk_804296b0;
+    ((u8*)&color)[0] = *(u8*)(work + 0x24);
+    ((u8*)&color)[1] = *(u8*)(work + 0x28);
+    ((u8*)&color)[2] = *(u8*)(work + 0x2C);
+    ((u8*)&color)[3] = (u8)salpha;
+    baseX = *(f32*)(work + 4);
+    baseY = *(f32*)(work + 8);
+    baseZ = *(f32*)(work + 0xC);
+    particleScale = *(f32*)(work + 0x44);
     GXSetTevColor(1, &color);
-    GXSetTevColor(2, &color);
 
-    count = (mode == 1) ? 8 : 4;
+    color2 = unk_804296b4;
+    ((u8*)&color2)[0] = *(u8*)(work + 0x24);
+    ((u8*)&color2)[1] = *(u8*)(work + 0x28);
+    ((u8*)&color2)[2] = *(u8*)(work + 0x2C);
+    GXSetTevColor(2, &color2);
+
+    if (mode == 1) {
+        vertices = vtx_data[type].vertices;
+        count = vtx_data[type].count;
+    } else {
+        vertices = 0;
+        count = 4;
+    }
     for (i = 0; i < count; i++) {
         if (mode == 1) {
             if ((rand() % 0x11) <= 5) {
+                vertices += 3;
                 continue;
             }
-            pos[0] = *(f32*)(work + 4) + (*(f32*)(work + 0x48) * ((f32)((i & 3) - 1) * c + (f32)((i >> 1) - 1) * s));
-            pos[1] = *(f32*)(work + 8) + (*(f32*)(work + 0x48) * (f32)((i & 3) - 1));
-            pos[2] = *(f32*)(work + 0xC) + (*(f32*)(work + 0x48) * (-(f32)((i & 3) - 1) * s + (f32)((i >> 1) - 1) * c));
+            pos[0] = baseX + (particleScale * ((f32)vertices[0] * c + (f32)vertices[2] * s));
+            pos[1] = baseY + (particleScale * (f32)vertices[1]);
+            pos[2] = baseZ + (particleScale * (-(f32)vertices[0] * s + (f32)vertices[2] * c));
+            vertices += 3;
         } else {
             pos[0] = *(f32*)(work + 0x50 + i * 4);
             pos[1] = *(f32*)(work + 0x60 + i * 4);
@@ -308,24 +376,18 @@ void effFireworksDisp(s32 cameraId, void* effect) {
 
         PSMTXMultVec((void*)((s32)cam + 0x11C), pos, out);
         PSMTX44MultVec((void*)((s32)cam + 0x15C), out, out);
-        sx = out[0] * (f32)*(u16*)((s32)gp + 0x1C) * float_0p5_804252a8;
-        sy = out[1] * (f32)*(u16*)((s32)gp + 0x1E) * float_0p5_804252a8;
+        sx = out[0] * (f32)*(u16*)((s32)gp + 0x170) * float_0p5_804252a8;
+        sy = out[1] * (f32)*(u16*)((s32)gp + 0x172) * float_0p5_804252a8;
 
-        eye[0] = float_0_804252b0;
-        eye[1] = float_0_804252b0;
-        eye[2] = float_0_804252b0;
-        up[0] = float_0_804252b0;
-        up[1] = float_1_804252b8;
-        up[2] = float_0_804252b0;
-        target[0] = float_0_804252b0;
-        target[1] = float_0_804252b0;
-        target[2] = float_1_804252b8;
+        eye = vec3_802faf28[2];
+        target = vec3_802faf28[3];
+        up = vec3_802faf28[4];
 
         GXGetProjectionv(proj);
         C_MTXOrtho(float_480_804252ac, float_0_804252b0, float_0_804252b0,
                    float_608_804252b4, float_1_804252b8, float_32768_804252bc, ortho);
         GXSetProjection(ortho, 1);
-        C_MTXLookAt(look, up, target, eye);
+        C_MTXLookAt(look, &target, &up, &eye);
         GXLoadPosMtxImm(look, 0);
         GXSetCurrentMtx(0);
         GXBegin(0x80, 0, 4);

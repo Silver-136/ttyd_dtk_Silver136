@@ -78,10 +78,12 @@ void effMahornMain(void* entry) {
     void* child;
     u32 i;
     u32 v;
+    u32 oddValue;
+    u32 evenValue;
     u32 idx;
     u32 neg;
-    u32 pos[3];
     u32 dispPos[3];
+    u32 pos[3];
 
     work = *(void**)((s32)entry + 0xC);
     pos[0] = vec3_80302950[0];
@@ -109,13 +111,17 @@ void effMahornMain(void* entry) {
     i = 1;
     child = (void*)((s32)work + 0x28);
     while ((s32)i < *(s32*)((s32)entry + 8)) {
-        if (*(s32*)((s32)child + 0x24) == 0) {
+        if (*(s32*)((s32)child + 0x24) != 0) {
+            *(s32*)((s32)child + 0x24) -= 1;
+        } else {
             *(s32*)((s32)child + 0x20) += 1;
             idx = *(u32*)((s32)child + 0x20) % 0x15;
             if (i & 1) {
-                v = scale_dt[idx];
+                oddValue = scale_dt[idx];
+                v = oddValue;
             } else {
-                v = scale_dt2[idx];
+                evenValue = scale_dt2[idx];
+                v = evenValue;
             }
             *(f32*)((s32)child + 0x10) = (f32)v / float_100_80428800;
             *(f32*)((s32)child + 0x14) =
@@ -125,8 +131,6 @@ void effMahornMain(void* entry) {
             *(s32*)((s32)child + 0x18) =
                 *(s32*)((s32)child + 0x18) + ((s32)neg >> 6) +
                 ((s32)neg < 0 && (neg & 0x3F) != 0);
-        } else {
-            *(s32*)((s32)child + 0x24) -= 1;
         }
         i++;
         child = (void*)((s32)child + 0x28);

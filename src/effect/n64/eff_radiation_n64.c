@@ -37,7 +37,7 @@ void* effRadiationN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
     *(s32*)(work + 0x98) = 4;
 
     particle = work;
-    if (type < 2) {
+    if (type < 2 && type >= 0) {
         s32 seed0 = 3;
         s32 seed1 = 4;
         s32 seed2 = 5;
@@ -128,7 +128,7 @@ void effRadiationMain(void* effect) {
     }
 
     part = work;
-    if (type >= 0 && type < 2) {
+    if (type < 2 && type >= 0) {
         seed = (*(s32*)(work + 0x2C) * 10 + 1) * 3;
         for (i = 1; i < *(s32*)((u8*)effect + 8); i++, part += 0x9C) {
             *(s32*)(part + 0xC4) -= 1;
@@ -203,10 +203,11 @@ void effRadiationMain(void* effect) {
             }
         }
     }
-    if (*(s32*)(work + 0x94) == 0) {
-        dispEntry(*(s32*)(work + 0x98), 2, effRadiationDisp, effect, dispCalcZ(pos));
+    part = *(u8**)((s32)effect + 0xC);
+    if (*(s32*)(part + 0x94) == 0) {
+        dispEntry(*(s32*)(part + 0x98), 2, effRadiationDisp, effect, dispCalcZ(pos));
     } else {
-        dispEntry(*(s32*)(work + 0x98), 8, effRadiationDisp, effect, dispCalcZ(pos));
+        dispEntry(*(s32*)(part + 0x98), 8, effRadiationDisp, effect, dispCalcZ(pos));
     }
 }
 
@@ -245,6 +246,9 @@ void effRadiationDisp(s32 cameraId, void* effect) {
     extern f32 float_deg2rad_80425e24, float_0p25_80425e28, float_3_80425e2c;
     extern f32 float_0p3_80425e30, float_0p5_80425e34, float_0p9_80425e38;
     extern u32 dat_80425e10, dat_80425e14;
+    f32 invAlpha = float_255_80425e20;
+    f32 degrees = float_deg2rad_80425e24;
+    f32 zero = float_0_80425e1c;
     u8 texObj[0x20];
     f32 trans[3][4], rot[3][4], mtx[3][4], scale[3][4];
     u8* camera = camGetPtr(cameraId);
@@ -259,7 +263,7 @@ void effRadiationDisp(s32 cameraId, void* effect) {
     }
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
-    if (type >= 0 && type < 2) {
+    if (type < 2 && type >= 0) {
         GXSetNumTevStages(1);
         GXSetTevOrder(0, 0, 0, 0xFF);
         GXSetTevColorOp(0, 0, 0, 0, 1, 0);
@@ -285,16 +289,15 @@ void effRadiationDisp(s32 cameraId, void* effect) {
     GXSetCullMode(0);
     PSMTXTrans(trans, *(f32*)(work + 0x10), *(f32*)(work + 0x14), *(f32*)(work + 0x18));
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, work += 0x9C) {
-        f32 alpha = (f32)*(s32*)(work + 0xC0) / float_255_80425e20;
-        PSMTXRotRad(rot, 0x78, float_deg2rad_80425e24 * *(f32*)(work + 0xF8));
+        f32 alpha = (f32)*(s32*)(work + 0xC0) / invAlpha;
+        PSMTXRotRad(rot, 0x78, degrees * *(f32*)(work + 0xF8));
         PSMTXConcat(trans, rot, mtx);
         if (type < 2) {
-            PSMTXRotRad(rot, 0x79, float_deg2rad_80425e24 * *(f32*)(work + 0xFC));
+            PSMTXRotRad(rot, 0x79, degrees * *(f32*)(work + 0xFC));
             PSMTXConcat(mtx, rot, mtx);
-            PSMTXRotRad(rot, 0x7A, float_deg2rad_80425e24 * *(f32*)(work + 0x100));
+            PSMTXRotRad(rot, 0x7A, degrees * *(f32*)(work + 0x100));
             PSMTXConcat(mtx, rot, mtx);
-            PSMTXTrans(scale, *(f32*)(work + 0xF4), float_0_80425e1c,
-                       float_0_80425e1c);
+            PSMTXTrans(scale, *(f32*)(work + 0xF4), zero, zero);
             PSMTXConcat(mtx, scale, mtx);
             color = (dat_80425e14 & 0xFFFFFF00) | (*(u32*)(work + 0xC0) & 0xFF);
         } else {
@@ -322,7 +325,7 @@ void effRadiationDisp(s32 cameraId, void* effect) {
         GXLoadPosMtxImm(mtx, 0);
         GXSetCurrentMtx(0);
         GXSetTevColor(1, &color);
-        if (type >= 0 && type < 2) {
+        if (type < 2 && type >= 0) {
             effSetVtxDescN64((void*)0x803A7850);
             GXBegin(0x90, 0, 6);
             tri2(0, 1, 2, 0, 0, 2, 3, 0);

@@ -200,7 +200,6 @@ s32 evt_win_one_message(EventEntry* event, s32 isFirstCall) {
     extern void winMgrDelete(void* win);
     s32 value;
     s32* work;
-    s32 state;
 
     value = evtGetValue(event, *(s32*)event->args);
     if (isFirstCall != 0) {
@@ -214,35 +213,37 @@ s32 evt_win_one_message(EventEntry* event, s32 isFirstCall) {
     }
 
     work = *(s32**)((s32)event + 0x78);
-    state = work[0];
-    if (state == 3) {
-        winMgrClose((void*)work[2]);
-        work[0]++;
-    } else if (state < 3) {
-        if (state == 1) {
+    switch (work[0]) {
+        case 0:
+            winMgrOpen(work[2]);
+            work[0]++;
+            break;
+        case 1:
             if (winMgrAction(work[2]) == 0) {
                 work[0]++;
             }
-        } else if (state < 1) {
-            if (state >= 0) {
-                winMgrOpen(work[2]);
+            break;
+        case 2:
+            if ((keyGetButtonTrg(0) & 0x100) != 0) {
+                if (work[1] == 0) {
+                    psndSFXOn_3D(str_SFX_MAIL_RECEPTION1_802fe4c0, (void*)((s32)marioGetPtr() + 0x8C));
+                }
                 work[0]++;
             }
-        } else if ((keyGetButtonTrg(0) & 0x100) != 0) {
-            if (work[1] == 0) {
-                psndSFXOn_3D(str_SFX_MAIL_RECEPTION1_802fe4c0, (void*)((s32)marioGetPtr() + 0x8C));
-            }
+            break;
+        case 3:
+            winMgrClose((void*)work[2]);
             work[0]++;
-        }
-    } else {
-        if (state == 5) {
+            break;
+        case 4:
+            if (winMgrAction(work[2]) == 0) {
+                work[0]++;
+            }
+            break;
+        case 5:
             winMgrDelete((void*)work[2]);
             _mapFree(mapalloc_base_ptr, work);
             return 2;
-        }
-        if (state < 5 && winMgrAction(work[2]) == 0) {
-            work[0]++;
-        }
     }
     return 0;
 }

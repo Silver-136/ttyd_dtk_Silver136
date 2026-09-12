@@ -73,110 +73,79 @@ void* effButterflyN64Entry(s32 type, f32 x, f32 y, f32 z) {
 
 
 void effButterflyMain(void* effect) {
-    typedef struct LocalVec3 {
-        f32 x;
-        f32 y;
-        f32 z;
-    } LocalVec3;
-    extern void effDelete(void* effect);
-    extern s32 rand(void);
-    extern double sin(f64 x);
-    extern double cos(f64 x);
-    extern double sqrt(f64 x);
-    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
-    extern f32 dispCalcZ(LocalVec3* pos);
-    extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
-    extern void effButterflyDisp(s32 cameraId, void* effect);
-    extern f32 float_6p2832_80424efc;
-    extern f32 float_360_80424f00;
-    extern f32 float_0_80424ef8;
-    extern f32 float_1_80424f04;
+    typedef struct LocalVec3 { f32 x; f32 y; f32 z; } LocalVec3;
+    typedef union FloatBitsLocal { f32 value; u32 bits; } FloatBitsLocal;
+    typedef struct LocalConstants { LocalVec3 zero; u32 pad; f64 doubleToInt; f64 half; f64 three; f64 zeroDouble; } LocalConstants;
+    extern void effDelete(void*); extern s32 rand(void);
+    extern double sin(f64); extern double cos(f64); extern double __frsqrte(f64);
+    extern f32 angleABf(f32, f32, f32, f32); extern f32 dispCalcZ(LocalVec3*);
+    extern void dispEntry(s32, s32, void*, void*, f32); extern void effButterflyDisp(s32, void*);
+    extern const LocalConstants vec3_802facc0;
+    extern f32 __float_nan; extern f32 float_6p2832_80424efc;
+    extern f32 float_360_80424f00; extern f32 float_0_80424ef8; extern f32 float_1_80424f04;
+    const LocalConstants* constants;
     EffButterflyWork* work;
-    volatile LocalVec3 pos;
-    LocalVec3 depthPos;
-    f32 dx;
-    f32 dy;
-    f32 dz;
-    f32 len;
-    f32 invLen;
-    s32 r;
-    s32 mod;
-    f32 angle;
+    LocalVec3 pos, depthPos;
+    FloatBitsLocal classify;
+    f32 angle, dx, dy, dz, len, invLen;
+    f64 value, estimate;
+    s32 category, r, mod;
 
+    constants = &vec3_802facc0;
     work = *(EffButterflyWork**)((s32)effect + 0xC);
-    pos.x = float_0_80424ef8;
-    pos.y = float_0_80424ef8;
-    pos.z = float_0_80424ef8;
-    pos.x = work->x;
-    pos.y = work->y;
-    pos.z = work->z;
-    depthPos = *(LocalVec3*)&pos;
-
-    if ((*(u32*)effect & 4) != 0) {
-        *(u32*)effect = *(u32*)effect & ~4;
-        work->timer = 900;
-    }
-
-    if (work->timer < 1000) {
-        work->timer--;
-    }
+    *(u32*)&pos.x = *(const u32*)&constants->zero.x;
+    *(u32*)&pos.y = *(const u32*)&constants->zero.y;
+    *(u32*)&pos.z = *(const u32*)&constants->zero.z;
+    pos.x = work->x; pos.y = work->y; pos.z = work->z;
+    depthPos = pos;
+    if ((*(u32*)effect & 4) != 0) { *(u32*)effect &= ~4; work->timer = 900; }
+    if (work->timer < 1000) work->timer--;
     work->unk_08++;
-
-    if (work->timer < 0) {
-        effDelete(effect);
-        return;
-    }
-
-    if (work->timer < 0x10) {
-        work->alpha = work->timer << 4;
-    }
-
+    if (work->timer < 0) { effDelete(effect); return; }
+    if (work->timer < 0x10) work->alpha = work->timer << 4;
     work->unk_30--;
-    if (work->unk_30 < 1) {
-        r = rand();
-        mod = r % 0x168;
+    if (work->unk_30 <= 0) {
+        r = rand(); mod = r % 0x168;
         angle = (float_6p2832_80424efc * (f32)mod) / float_360_80424f00;
         dx = work->unk_34 * (f32)sin(angle) + work->x2 - work->x;
-
-        r = rand();
-        dy = work->y2 + (f32)(r % (s32)work->unk_38) - work->y;
-
+        r = rand(); dy = work->y2 + (f32)(r % (s32)work->unk_38) - work->y;
         dz = work->unk_34 * (f32)cos(angle) + work->z2 - work->z;
-
-        r = rand();
-        work->unk_30 = (r % 100) + 10;
-
+        r = rand(); work->unk_30 = (r % 100) + 10;
         if ((dx == float_0_80424ef8) && (dy == float_0_80424ef8) && (dz == float_0_80424ef8)) {
-            dx = work->x2 - work->x;
-            dy = work->y2 - work->y;
-            dz = work->z2 - work->z;
+            dx = work->x2 - work->x; dy = work->y2 - work->y; dz = work->z2 - work->z;
             if ((dx == float_0_80424ef8) && (dy == float_0_80424ef8) && (dz == float_0_80424ef8)) {
-                dx = float_1_80424f04;
-                dy = float_0_80424ef8;
-                dz = float_0_80424ef8;
+                dx = float_1_80424f04; dy = float_0_80424ef8; dz = float_0_80424ef8;
             }
         }
-
-        len = dx * dx + dy * dy + dz * dz;
-        if (len != float_0_80424ef8) {
-            invLen = float_1_80424f04 / (f32)sqrt(len);
-        } else {
-            invLen = float_0_80424ef8;
-        }
+        len = dx * dx + dy * dy + dz * dz; value = (f64)len;
+        if (value != (f64)float_0_80424ef8) {
+            if (value > constants->zeroDouble) {
+                estimate = __frsqrte(value);
+                estimate = constants->half * estimate * (constants->three - value * estimate * estimate);
+                estimate = constants->half * estimate * (constants->three - value * estimate * estimate);
+                estimate = constants->half * estimate * (constants->three - value * estimate * estimate);
+                len = (f32)(value * estimate);
+            } else {
+                len = (f32)value;
+                if (value < constants->zeroDouble) len = __float_nan;
+                else {
+                    classify.value = len;
+                    if ((classify.bits & 0x7F800000) == 0x7F800000) category = (classify.bits & 0x007FFFFF) ? 1 : 2;
+                    else if ((classify.bits & 0x7F800000) == 0) category = (classify.bits & 0x007FFFFF) ? 5 : 3;
+                    else category = 4;
+                    if (category == 1) len = __float_nan;
+                }
+            }
+            invLen = float_1_80424f04 / len;
+        } else invLen = float_0_80424ef8;
         *(f32*)((s32)work + 0x3C) = dx * invLen;
         *(f32*)((s32)work + 0x40) = dy * invLen;
         *(f32*)((s32)work + 0x44) = dz * invLen;
-        work->unk_28 = angleABf(float_0_80424ef8, float_0_80424ef8,
-                                -*(f32*)((s32)work + 0x3C), *(f32*)((s32)work + 0x44));
+        *(f32*)((s32)work + 0x28) = angleABf(float_0_80424ef8, float_0_80424ef8,
+                                             -*(f32*)((s32)work + 0x3C), *(f32*)((s32)work + 0x44));
     }
-
-    work->unk_2c += 3;
-    if (work->unk_2c > 0x1D) {
-        work->unk_2c -= 0x1E;
-    }
-
-    work->x += *(f32*)((s32)work + 0x3C);
-    work->y += *(f32*)((s32)work + 0x40);
+    work->unk_2c += 3; if (work->unk_2c >= 0x1E) work->unk_2c -= 0x1E;
+    work->x += *(f32*)((s32)work + 0x3C); work->y += *(f32*)((s32)work + 0x40);
     work->z += *(f32*)((s32)work + 0x44);
     dispEntry(4, 1, effButterflyDisp, effect, dispCalcZ(&depthPos));
 }
@@ -216,19 +185,19 @@ void effButterflyDisp(int cameraId, int effect) {
     extern float float_0p015625_80424ef4;
     extern float float_0_80424ef8;
     unsigned char texObj[0x20];
+    Mtx model;
     Mtx scale;
     Mtx rotation;
-    Mtx model;
     unsigned char* camera = (unsigned char*)camGetPtr(cameraId);
-    int* work = *(int**)(effect + 0xC);
-    int frame = work[0xB];
-    unsigned char alpha = (unsigned char)work[9];
+    u8* work = *(u8**)(effect + 0xC);
+    int frame = *(s32*)(work + 0x2C);
+    unsigned char alpha = (unsigned char)*(s32*)(work + 0x24);
     unsigned int color;
 
-    PSMTXTrans(model, (float)work[3],
-        (float)work[4] + float_0p3_80424ee4 * (float)y_data[frame],
-        (float)work[5]);
-    PSMTXRotRad(rotation, float_deg2rad_80424ee8 * (float)work[10], 'y');
+    PSMTXTrans(model, *(f32*)(work + 0xC),
+        *(f32*)(work + 0x10) + float_0p3_80424ee4 * (float)y_data[frame],
+        *(f32*)(work + 0x14));
+    PSMTXRotRad(rotation, float_deg2rad_80424ee8 * *(f32*)(work + 0x28), 'y');
     PSMTXConcat(model, rotation, model);
     PSMTXScale(scale, float_0p02_80424eec, float_0p02_80424eec, float_0p02_80424eec);
     PSMTXConcat(model, scale, model);
@@ -250,7 +219,7 @@ void effButterflyDisp(int cameraId, int effect) {
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
     PSMTXScale(scale, float_0p03125_80424ef0, float_0p015625_80424ef4, float_0_80424ef8);
     GXLoadTexMtxImm(scale, 0x1E, 1);
-    effGetTexObjN64(work[0] + 0x78, texObj);
+    effGetTexObjN64(*(s32*)work + 0x78, texObj);
     GXLoadTexObj(texObj, 0);
     GXSetCullMode(0);
     effSetVtxDescN64(but_02_v + frame * 0x54);

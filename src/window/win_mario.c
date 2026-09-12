@@ -32,17 +32,16 @@ u8 winMarioInit(void* pWin) {
     extern void animPoseSetAnim(s32 poseId, char* anim, s32 force);
     extern void animPoseSetMaterialFlagOn(s32 poseId, u32 flags);
     extern char str_msg_menu_mario_lv_802f5e88[];
-    extern char str_S_1_80423890[];
-    extern char str_S_2_80423a1c[];
-    extern char str_S_3_80423a20[];
-    extern char str_S_4_80423a24[];
-    extern char str_M_S_1_80423888[];
+    extern char str_S_1_80423890[4];
+    extern char str_S_2_80423a1c[4];
+    extern char str_S_3_80423a20[4];
+    extern char str_S_4_80423a24[4];
+    extern char str_M_S_1_80423888[6];
     void* pouch;
     char* base;
     char* name;
     s32 color;
-    s32 count;
-    u16 powers;
+    s32 index;
 
     base = str_msg_menu_mario_lv_802f5e88;
     pouch = pouchGetPtr();
@@ -83,44 +82,34 @@ u8 winMarioInit(void* pWin) {
         animPoseSetMaterialFlagOn(*(s32*)((s32)pWin + 0x188), 0x0A000000);
     }
 
-    count = 0;
     *(s32*)((s32)pWin + 0x18C) = 0;
     *(s32*)((s32)pWin + 0x190) = 0;
     *(s32*)((s32)pWin + 0x194) = 0;
     *(s32*)((s32)pWin + 0x198) = 0;
-    powers = *(u16*)((s32)pouch + 0x8C);
-    if ((powers & (1 << 0)) != 0) {
-        count = *(s32*)((s32)pWin + 0x198);
-        *(s32*)((s32)pWin + 0x198) = count + 1;
-    }
-    if ((powers & (1 << 1)) != 0) {
-        count = *(s32*)((s32)pWin + 0x198);
-        *(s32*)((s32)pWin + 0x198) = count + 1;
-    }
-    if ((powers & (1 << 2)) != 0) {
-        count = *(s32*)((s32)pWin + 0x198);
-        *(s32*)((s32)pWin + 0x198) = count + 1;
-    }
-    if ((powers & (1 << 3)) != 0) {
-        count = *(s32*)((s32)pWin + 0x198);
-        *(s32*)((s32)pWin + 0x198) = count + 1;
-    }
-    if ((powers & (1 << 4)) != 0) {
-        count = *(s32*)((s32)pWin + 0x198);
-        *(s32*)((s32)pWin + 0x198) = count + 1;
-    }
-    if ((powers & (1 << 5)) != 0) {
-        count = *(s32*)((s32)pWin + 0x198);
-        *(s32*)((s32)pWin + 0x198) = count + 1;
-    }
-    if ((powers & (1 << 6)) != 0) {
-        count = *(s32*)((s32)pWin + 0x198);
-        *(s32*)((s32)pWin + 0x198) = count + 1;
-    }
-    if ((powers & (1 << 7)) != 0) {
-        count = *(s32*)((s32)pWin + 0x198);
-        *(s32*)((s32)pWin + 0x198) = count + 1;
-    }
+    index = *(s32*)((s32)pWin + 0x198);
+    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
+        (*(s32*)((s32)pWin + 0x198))++;
+    index++;
+    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
+        (*(s32*)((s32)pWin + 0x198))++;
+    index++;
+    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
+        (*(s32*)((s32)pWin + 0x198))++;
+    index++;
+    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
+        (*(s32*)((s32)pWin + 0x198))++;
+    index++;
+    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
+        (*(s32*)((s32)pWin + 0x198))++;
+    index++;
+    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
+        (*(s32*)((s32)pWin + 0x198))++;
+    index++;
+    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
+        (*(s32*)((s32)pWin + 0x198))++;
+    index++;
+    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
+        (*(s32*)((s32)pWin + 0x198))++;
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -199,7 +188,8 @@ s32 winMarioMain(void* pWin) {
     s32 state;
     s32 available;
     s32 color;
-    char* pose;
+    char* closePose;
+    char* displayPose;
     u32 buttons;
     u32 dirs;
 
@@ -228,38 +218,38 @@ s32 winMarioMain(void* pWin) {
         psndSFXOn(0x20013);
 
         if ((*(u16*)pWin & 0x2000) == 0) {
-            pose = str_M_S_1_80423888;
+            closePose = str_M_S_1_80423888;
         } else {
             if (strcmp(str_S_1_80423890, str_S_1_80423890) == 0) {
                 color = marioGetColor();
                 if (color == 2) {
-                    pose = str_S_3_80423a20;
+                    closePose = str_S_3_80423a20;
                 } else if (color < 2) {
                     if (color == 0) {
-                        pose = str_S_1_80423890;
+                        closePose = str_S_1_80423890;
                     } else if (color >= 0) {
-                        pose = str_S_2_80423a1c;
+                        closePose = str_S_2_80423a1c;
                     }
                 } else if (color < 4) {
-                    pose = str_S_4_80423a24;
+                    closePose = str_S_4_80423a24;
                 }
             } else {
                 color = marioGetColor();
                 if (color == 2) {
-                    pose = str_R_17_80423a30;
+                    closePose = str_R_17_80423a30;
                 } else if (color < 2) {
                     if (color == 0) {
-                        pose = str_R_1_8042389c;
+                        closePose = str_R_1_8042389c;
                     } else if (color >= 0) {
-                        pose = str_R_15_80423a28;
+                        closePose = str_R_15_80423a28;
                     }
                 } else if (color < 4) {
-                    pose = str_R_18_80423a38;
+                    closePose = str_R_18_80423a38;
                 }
             }
         }
 
-        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), pose, 0);
+        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), closePose, 0);
         return -1;
     }
 
@@ -361,38 +351,38 @@ update_display:
 
     if (state == 2) {
         if ((*(u16*)pWin & 0x2000) == 0) {
-            pose = hammer_pose[pouchGetHammerLv()];
+            displayPose = hammer_pose[pouchGetHammerLv()];
         } else {
             if (strcmp(row->paperPose, str_S_1_80423890) == 0) {
                 color = marioGetColor();
                 if (color == 2) {
-                    pose = str_S_3_80423a20;
+                    displayPose = str_S_3_80423a20;
                 } else if (color < 2) {
                     if (color == 0) {
-                        pose = str_S_1_80423890;
+                        displayPose = str_S_1_80423890;
                     } else if (color >= 0) {
-                        pose = str_S_2_80423a1c;
+                        displayPose = str_S_2_80423a1c;
                     }
                 } else if (color < 4) {
-                    pose = str_S_4_80423a24;
+                    displayPose = str_S_4_80423a24;
                 }
             } else {
                 color = marioGetColor();
                 if (color == 2) {
-                    pose = str_R_17_80423a30;
+                    displayPose = str_R_17_80423a30;
                 } else if (color < 2) {
                     if (color == 0) {
-                        pose = str_R_1_8042389c;
+                        displayPose = str_R_1_8042389c;
                     } else if (color >= 0) {
-                        pose = str_R_15_80423a28;
+                        displayPose = str_R_15_80423a28;
                     }
                 } else if (color < 4) {
-                    pose = str_R_18_80423a38;
+                    displayPose = str_R_18_80423a38;
                 }
             }
         }
 
-        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), pose, 0);
+        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), displayPose, 0);
 
         if (*(s32*)((s32)pWin + 0x18C) == 0) {
             if (animPoseGetLoopTimes(*(s32*)((s32)pWin + 0x188)) >=
@@ -411,38 +401,38 @@ update_display:
         *(s32*)((s32)pWin + 0x18C) = 0;
 
         if ((*(u16*)pWin & 0x2000) == 0) {
-            pose = row->pose;
+            displayPose = row->pose;
         } else {
             if (strcmp(row->paperPose, str_S_1_80423890) == 0) {
                 color = marioGetColor();
                 if (color == 2) {
-                    pose = str_S_3_80423a20;
+                    displayPose = str_S_3_80423a20;
                 } else if (color < 2) {
                     if (color == 0) {
-                        pose = str_S_1_80423890;
+                        displayPose = str_S_1_80423890;
                     } else if (color >= 0) {
-                        pose = str_S_2_80423a1c;
+                        displayPose = str_S_2_80423a1c;
                     }
                 } else if (color < 4) {
-                    pose = str_S_4_80423a24;
+                    displayPose = str_S_4_80423a24;
                 }
             } else {
                 color = marioGetColor();
                 if (color == 2) {
-                    pose = str_R_17_80423a30;
+                    displayPose = str_R_17_80423a30;
                 } else if (color < 2) {
                     if (color == 0) {
-                        pose = str_R_1_8042389c;
+                        displayPose = str_R_1_8042389c;
                     } else if (color >= 0) {
-                        pose = str_R_15_80423a28;
+                        displayPose = str_R_15_80423a28;
                     }
                 } else if (color < 4) {
-                    pose = str_R_18_80423a38;
+                    displayPose = str_R_18_80423a38;
                 }
             }
         }
 
-        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), pose, 0);
+        animPoseSetAnim(*(s32*)((s32)pWin + 0x188), displayPose, 0);
     }
 
     state = *(s32*)((s32)pWin + 0x160);
@@ -814,52 +804,52 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     s32 starCount = *(s32*)(w + 0x198);
     static s32 pri[6] = { 3, 2, 8, 10, 7, 9 };
 
-    Vec3 pName, sName;
-    Vec3 pLevelIcon, sLevelIcon;
-    Vec3 pLevelLabel, sLevelLabel;
-    Vec3 pLevelValue, sLevelValue;
-    Vec3 pRankIcon, sRankIcon;
-    Vec3 pRankText, sRankText;
-    Vec3 pStatusBg, sStatusBg;
-    Vec3 pStatusText, sStatusText;
-    Vec3 pStatusRuby, sStatusRuby;
-    Vec3 pHpIcon, sHpIcon;
-    Vec3 pFpIcon, sFpIcon;
-    Vec3 pBpIcon, sBpIcon;
-    Vec3 pHp, sHp;
-    Vec3 pFp, sFp;
-    Vec3 pBp, sBp;
-    Vec3 pMaxHp, sMaxHp;
-    Vec3 pMaxFp, sMaxFp;
-    Vec3 pStarBox, sStarBox;
-    Vec3 pStarIcon, sStarIcon;
-    Vec3 pSpLabel, sSpLabel;
-    Vec3 pSpecialText, sSpecialText;
+    Vec3 pNameRaw, pName, sName;
+    Vec3 pLevelIconRaw, pLevelIcon, sLevelIcon;
+    Vec3 pLevelLabelRaw, pLevelLabel, sLevelLabel;
+    Vec3 pLevelValueRaw, pLevelValue, sLevelValue;
+    Vec3 pRankIconRaw, pRankIcon, sRankIcon;
+    Vec3 pRankTextRaw, pRankText, sRankText;
+    Vec3 pStatusBgRaw, pStatusBg, sStatusBg;
+    Vec3 pStatusTextRaw, pStatusText, sStatusText;
+    Vec3 pStatusRubyRaw, pStatusRuby, sStatusRuby;
+    Vec3 pHpIconRaw, pHpIcon, sHpIcon;
+    Vec3 pFpIconRaw, pFpIcon, sFpIcon;
+    Vec3 pBpIconRaw, pBpIcon, sBpIcon;
+    Vec3 pHpRaw, pHp, sHp;
+    Vec3 pFpRaw, pFp, sFp;
+    Vec3 pBpRaw, pBp, sBp;
+    Vec3 pMaxHpRaw, pMaxHp, sMaxHp;
+    Vec3 pMaxFpRaw, pMaxFp, sMaxFp;
+    Vec3 pStarBoxRaw, pStarBox, sStarBox;
+    Vec3 pStarIconRaw, pStarIcon, sStarIcon;
+    Vec3 pSpLabelRaw, pSpLabel, sSpLabel;
+    Vec3 pSpecialTextRaw, pSpecialText, sSpecialText;
 
-    Vec3 pInfoIcon0, sInfoIcon0;
-    Vec3 pInfoIcon1, sInfoIcon1;
-    Vec3 pInfoIcon2, sInfoIcon2;
-    Vec3 pInfoIcon3, sInfoIcon3;
-    Vec3 pInfoIcon4, sInfoIcon4;
-    Vec3 pInfoLabel0, sInfoLabel0;
-    Vec3 pInfoLabel1, sInfoLabel1;
-    Vec3 pInfoLabel2, sInfoLabel2;
-    Vec3 pInfoLabel3, sInfoLabel3;
-    Vec3 pInfoLabel4, sInfoLabel4;
-    Vec3 pInfoValue0, sInfoValue0;
-    Vec3 pInfoValue1, sInfoValue1;
-    Vec3 pInfoValue2, sInfoValue2;
-    Vec3 pInfoValue3, sInfoValue3;
-    Vec3 pInfoTimeH, sInfoTimeH;
-    Vec3 pInfoTimeM, sInfoTimeM;
-    Vec3 pDivider, sDivider;
-    Vec3 pDividerEnd, sDividerEnd;
+    Vec3 pInfoIcon0Raw, pInfoIcon0, sInfoIcon0;
+    Vec3 pInfoIcon1Raw, pInfoIcon1, sInfoIcon1;
+    Vec3 pInfoIcon2Raw, pInfoIcon2, sInfoIcon2;
+    Vec3 pInfoIcon3Raw, pInfoIcon3, sInfoIcon3;
+    Vec3 pInfoIcon4Raw, pInfoIcon4, sInfoIcon4;
+    Vec3 pInfoLabel0Raw, pInfoLabel0, sInfoLabel0;
+    Vec3 pInfoLabel1Raw, pInfoLabel1, sInfoLabel1;
+    Vec3 pInfoLabel2Raw, pInfoLabel2, sInfoLabel2;
+    Vec3 pInfoLabel3Raw, pInfoLabel3, sInfoLabel3;
+    Vec3 pInfoLabel4Raw, pInfoLabel4, sInfoLabel4;
+    Vec3 pInfoValue0Raw, pInfoValue0, sInfoValue0;
+    Vec3 pInfoValue1Raw, pInfoValue1, sInfoValue1;
+    Vec3 pInfoValue2Raw, pInfoValue2, sInfoValue2;
+    Vec3 pInfoValue3Raw, pInfoValue3, sInfoValue3;
+    Vec3 pInfoTimeHRaw, pInfoTimeH, sInfoTimeH;
+    Vec3 pInfoTimeMRaw, pInfoTimeM, sInfoTimeM;
+    Vec3 pDividerRaw, pDivider, sDivider;
+    Vec3 pDividerEndRaw, pDividerEnd, sDividerEnd;
 
-    Vec3 pWazaTitle, sWazaTitle;
-    Vec3 pWazaAp, sWazaAp;
-    Vec3 pWazaName, sWazaName;
-    Vec3 pWazaCost, sWazaCost;
-    Vec3 pWazaCostAp, sWazaCostAp;
+    Vec3 pWazaTitleRaw, pWazaTitle, sWazaTitle;
+    Vec3 pWazaApRaw, pWazaAp, sWazaAp;
+    Vec3 pWazaNameRaw, pWazaName, sWazaName;
+    Vec3 pWazaCostRaw, pWazaCost, sWazaCost;
+    Vec3 pWazaCostApRaw, pWazaCostAp, sWazaCostAp;
 
     f32 marioMtx[3][4];
 
@@ -940,7 +930,8 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     winFontInit();
     nameX = x - 255.0f;
     baseY = y + 152.0f;
-    SET_POS(pName, nameX, baseY);
+    SET_POS(pNameRaw, nameX, baseY);
+    pName = pNameRaw;
     UNIT_SCALE(sName);
     text = msgSearch("name_mario");
     winFontSetEdge(&pName, &sName, &white0, text);
@@ -950,13 +941,15 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     nameX += width * 0.8f + 20.0f;
 
     winIconInit();
-    SET_POS(pLevelIcon, nameX, y + 142.0f);
+    SET_POS(pLevelIconRaw, nameX, y + 142.0f);
+    pLevelIcon = pLevelIconRaw;
     UNIT_SCALE(sLevelIcon);
     winIconSet(0x1A6, &pLevelIcon, &sLevelIcon, &white1);
 
     nameX += 20.0f;
     winFontInit();
-    SET_POS(pLevelLabel, nameX, baseY);
+    SET_POS(pLevelLabelRaw, nameX, baseY);
+    pLevelLabel = pLevelLabelRaw;
     UNIT_SCALE(sLevelLabel);
     text = msgSearch("msg_menu_mario_level");
     winFontSetEdgeWidth(&pLevelLabel, &sLevelLabel, &white2, 45.0f, text);
@@ -969,18 +962,21 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     }
 
     winFontInit();
-    SET_POS(pLevelValue, ((x - 265.0f) + 190.0f) - width - 10.0f, baseY);
+    SET_POS(pLevelValueRaw, ((x - 265.0f) + 190.0f) - width - 10.0f, baseY);
+    pLevelValue = pLevelValueRaw;
     UNIT_SCALE(sLevelValue);
     winFontSetEdgeWidth(&pLevelValue, &sLevelValue, &white3, 20.0f, levelText);
 
     /* Rank icon + rank name. */
     winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
-    SET_POS(pRankIcon, x - 255.0f, y + 112.0f);
+    SET_POS(pRankIconRaw, x - 255.0f, y + 112.0f);
+    pRankIcon = pRankIconRaw;
     UNIT_SCALE(sRankIcon);
     winTexSet(0xB0, &pRankIcon, &sRankIcon, &white4);
 
     winFontInit();
-    SET_POS(pRankText, x - 240.0f, y + 124.0f);
+    SET_POS(pRankTextRaw, x - 240.0f, y + 124.0f);
+    pRankText = pRankTextRaw;
     UNIT_SCALE(sRankText);
     text = msgSearch(BattleGetRankNameLabel(*(s16*)(pouch + 0x8A)));
     winFontSetWidth(&pRankText, &sRankText, &black, 140.0f, text);
@@ -1033,17 +1029,20 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
         GXSetTevColorIn(0, 15, 15, 15, 2);
         GXSetTevAlphaIn(0, 7, 1, 4, 7);
 
-        SET_POS(pStatusBg, x - 222.0f, rowY - 4.0f);
+        SET_POS(pStatusBgRaw, x - 222.0f, rowY - 4.0f);
+        pStatusBg = pStatusBgRaw;
         UNIT_SCALE(sStatusBg);
         winTexSet(0xAF, &pStatusBg, &sStatusBg, &bgColors[i]);
 
         winFontInit();
 
-        SET_POS(pStatusText, (x - 220.0f) - (f32)statusWidth * 0.5f, rowY + 12.0f);
+        SET_POS(pStatusTextRaw, (x - 220.0f) - (f32)statusWidth * 0.5f, rowY + 12.0f);
+        pStatusText = pStatusTextRaw;
         UNIT_SCALE(sStatusText);
         winFontSet(&pStatusText, &sStatusText, &black, statusName);
 
-        SET_POS(pStatusRuby, (x - 220.0f) - (f32)rubyWidth * 0.25f, rowY + 21.0f);
+        SET_POS(pStatusRubyRaw, (x - 220.0f) - (f32)rubyWidth * 0.25f, rowY + 21.0f);
+        pStatusRuby = pStatusRubyRaw;
         HALF_SCALE(sStatusRuby);
         text = msgSearch(rubyNames[i]);
         winFontSet(&pStatusRuby, &sStatusRuby, &rubyColors[i], text);
@@ -1052,15 +1051,18 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     }
 
     winIconInit();
-    SET_POS(pHpIcon, x - 160.0f, y - 34.0f);
+    SET_POS(pHpIconRaw, x - 160.0f, y - 34.0f);
+    pHpIcon = pHpIconRaw;
     UNIT_SCALE(sHpIcon);
     winIconSet(0x1A7, &pHpIcon, &sHpIcon, &white8);
 
-    SET_POS(pFpIcon, x - 160.0f, y - 68.0f);
+    SET_POS(pFpIconRaw, x - 160.0f, y - 68.0f);
+    pFpIcon = pFpIconRaw;
     UNIT_SCALE(sFpIcon);
     winIconSet(0x1A8, &pFpIcon, &sFpIcon, &white8);
 
-    SET_POS(pBpIcon, x - 160.0f, y - 102.0f);
+    SET_POS(pBpIconRaw, x - 160.0f, y - 102.0f);
+    pBpIcon = pBpIconRaw;
     UNIT_SCALE(sBpIcon);
     winIconSet(0x1A9, &pBpIcon, &sBpIcon, &white8);
 
@@ -1068,23 +1070,27 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     winFontInit();
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x70));
-    SET_POS(pHp, x - 140.0f, y - 22.0f);
+    SET_POS(pHpRaw, x - 140.0f, y - 22.0f);
+    pHp = pHpRaw;
     UNIT_SCALE(sHp);
     winFontSetR(&pHp, &sHp, &black, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x74));
-    SET_POS(pFp, x - 140.0f, y - 56.0f);
+    SET_POS(pFpRaw, x - 140.0f, y - 56.0f);
+    pFp = pFpRaw;
     UNIT_SCALE(sFp);
     winFontSetR(&pFp, &sFp, &black, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x94));
-    SET_POS(pBp, x - 140.0f, y - 90.0f);
+    SET_POS(pBpRaw, x - 140.0f, y - 90.0f);
+    pBp = pBpRaw;
     UNIT_SCALE(sBp);
     winFontSetR(&pBp, &sBp, &black, "%s", tmp2);
 
     /* Target draws separator texture and maximum HP/FP values separately. */
     winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
-    SET_POS(pStatusBg, x - 80.0f, y - 34.0f);
+    SET_POS(pStatusBgRaw, x - 80.0f, y - 34.0f);
+    pStatusBg = pStatusBgRaw;
     UNIT_SCALE(sStatusBg);
     winTexSet(0x10, &pStatusBg, &sStatusBg, &white6);
     pStatusBg.y -= 34.0f;
@@ -1092,12 +1098,14 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
 
     winFontInit();
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x72));
-    SET_POS(pMaxHp, x - 70.0f, y - 22.0f);
+    SET_POS(pMaxHpRaw, x - 70.0f, y - 22.0f);
+    pMaxHp = pMaxHpRaw;
     UNIT_SCALE(sMaxHp);
     winFontSet(&pMaxHp, &sMaxHp, &black, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x76));
-    SET_POS(pMaxFp, x - 70.0f, y - 56.0f);
+    SET_POS(pMaxFpRaw, x - 70.0f, y - 56.0f);
+    pMaxFp = pMaxFpRaw;
     UNIT_SCALE(sMaxFp);
     winFontSet(&pMaxFp, &sMaxFp, &black, "%s", tmp2);
 
@@ -1107,16 +1115,19 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
         winKirinukiGX(x + 10.0f, y + 130.0f, 260.0f, 80.0f, pWin, 0);
 
         winIconInit();
-        SET_POS(pStarBox, x + 50.0f, y + 106.0f);
+        SET_POS(pStarBoxRaw, x + 50.0f, y + 106.0f);
+        pStarBox = pStarBoxRaw;
         UNIT_SCALE(sStarBox);
         winIconSet(0x212, &pStarBox, &sStarBox, &white0);
 
-        SET_POS(pSpLabel, x + 50.0f, y + 70.0f);
+        SET_POS(pSpLabelRaw, x + 50.0f, y + 70.0f);
+        pSpLabel = pSpLabelRaw;
         UNIT_SCALE(sSpLabel);
         winIconSet(0x19F, &pSpLabel, &sSpLabel, &white0);
 
         winFontInit();
-        SET_POS(pSpecialText, x + 80.0f, y + 80.0f);
+        SET_POS(pSpecialTextRaw, x + 80.0f, y + 80.0f);
+        pSpecialText = pSpecialTextRaw;
         UNIT_SCALE(sSpecialText);
         text = msgSearch("msg_menu_mario_speci");
         winFontSetWidth(&pSpecialText, &sSpecialText, &black, 175.0f, text);
@@ -1124,7 +1135,8 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
         winIconInit();
         filledStars = *(s16*)(pouch + 0x7A) / 100;
         for (i = 0; i < starCount; i++) {
-            SET_POS(pStarIcon, x + 90.0f + (f32)(i * 22), y + 106.0f);
+            SET_POS(pStarIconRaw, x + 90.0f + (f32)(i * 22), y + 106.0f);
+            pStarIcon = pStarIconRaw;
             UNIT_SCALE(sStarIcon);
             if (i < filledStars) {
                 winIconSet(0x1BF + i, &pStarIcon, &sStarIcon, &white1);
@@ -1143,50 +1155,60 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     winIconInit();
     infoX = x + 30.0f;
 
-    SET_POS(pInfoIcon0, infoX, y + 10.0f);
+    SET_POS(pInfoIcon0Raw, infoX, y + 10.0f);
+    pInfoIcon0 = pInfoIcon0Raw;
     UNIT_SCALE(sInfoIcon0);
     winIconSet(0x194, &pInfoIcon0, &sInfoIcon0, &white0);
 
-    SET_POS(pInfoIcon1, infoX, y - 18.0f);
+    SET_POS(pInfoIcon1Raw, infoX, y - 18.0f);
+    pInfoIcon1 = pInfoIcon1Raw;
     UNIT_SCALE(sInfoIcon1);
     winIconSet(0x193, &pInfoIcon1, &sInfoIcon1, &white0);
 
-    SET_POS(pInfoIcon2, infoX, y - 46.0f);
+    SET_POS(pInfoIcon2Raw, infoX, y - 46.0f);
+    pInfoIcon2 = pInfoIcon2Raw;
     UNIT_SCALE(sInfoIcon2);
     winIconSet(0x195, &pInfoIcon2, &sInfoIcon2, &white0);
 
-    SET_POS(pInfoIcon3, infoX, y - 74.0f);
+    SET_POS(pInfoIcon3Raw, infoX, y - 74.0f);
+    pInfoIcon3 = pInfoIcon3Raw;
     UNIT_SCALE(sInfoIcon3);
     winIconSet(0x10A, &pInfoIcon3, &sInfoIcon3, &white0);
 
-    SET_POS(pInfoIcon4, infoX, y - 102.0f);
+    SET_POS(pInfoIcon4Raw, infoX, y - 102.0f);
+    pInfoIcon4 = pInfoIcon4Raw;
     UNIT_SCALE(sInfoIcon4);
     winIconSet(0x1AA, &pInfoIcon4, &sInfoIcon4, &white0);
 
     winFontInit();
     labelX = x + 45.0f;
 
-    SET_POS(pInfoLabel0, labelX, y + 22.0f);
+    SET_POS(pInfoLabel0Raw, labelX, y + 22.0f);
+    pInfoLabel0 = pInfoLabel0Raw;
     UNIT_SCALE(sInfoLabel0);
     text = msgSearch("msg_menu_mario_num_sp");
     winFontSetWidth(&pInfoLabel0, &sInfoLabel0, &black, 140.0f, text);
 
-    SET_POS(pInfoLabel1, labelX, y - 6.0f);
+    SET_POS(pInfoLabel1Raw, labelX, y - 6.0f);
+    pInfoLabel1 = pInfoLabel1Raw;
     UNIT_SCALE(sInfoLabel1);
     text = msgSearch("msg_menu_mario_num_coin");
     winFontSetWidth(&pInfoLabel1, &sInfoLabel1, &black, 140.0f, text);
 
-    SET_POS(pInfoLabel2, labelX, y - 34.0f);
+    SET_POS(pInfoLabel2Raw, labelX, y - 34.0f);
+    pInfoLabel2 = pInfoLabel2Raw;
     UNIT_SCALE(sInfoLabel2);
     text = msgSearch("msg_menu_mario_num_hoshi");
     winFontSetWidth(&pInfoLabel2, &sInfoLabel2, &black, 140.0f, text);
 
-    SET_POS(pInfoLabel3, labelX, y - 62.0f);
+    SET_POS(pInfoLabel3Raw, labelX, y - 62.0f);
+    pInfoLabel3 = pInfoLabel3Raw;
     UNIT_SCALE(sInfoLabel3);
     text = msgSearch("msg_menu_mario_num_super_coin");
     winFontSetWidth(&pInfoLabel3, &sInfoLabel3, &black, 140.0f, text);
 
-    SET_POS(pInfoLabel4, labelX, y - 90.0f);
+    SET_POS(pInfoLabel4Raw, labelX, y - 90.0f);
+    pInfoLabel4 = pInfoLabel4Raw;
     UNIT_SCALE(sInfoLabel4);
     text = msgSearch("msg_menu_mario_num_playtime");
     winFontSetWidth(&pInfoLabel4, &sInfoLabel4, &black, 125.0f, text);
@@ -1194,22 +1216,26 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     infoX = x + 215.0f;
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x96));
-    SET_POS(pInfoValue0, infoX, y + 22.0f);
+    SET_POS(pInfoValue0Raw, infoX, y + 22.0f);
+    pInfoValue0 = pInfoValue0Raw;
     UNIT_SCALE(sInfoValue0);
     winFontSetR(&pInfoValue0, &sInfoValue0, &black, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x78));
-    SET_POS(pInfoValue1, infoX, y - 6.0f);
+    SET_POS(pInfoValue1Raw, infoX, y - 6.0f);
+    pInfoValue1 = pInfoValue1Raw;
     UNIT_SCALE(sInfoValue1);
     winFontSetR(&pInfoValue1, &sInfoValue1, &black, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x9A));
-    SET_POS(pInfoValue2, infoX, y - 34.0f);
+    SET_POS(pInfoValue2Raw, infoX, y - 34.0f);
+    pInfoValue2 = pInfoValue2Raw;
     UNIT_SCALE(sInfoValue2);
     winFontSetR(&pInfoValue2, &sInfoValue2, &black, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x9C));
-    SET_POS(pInfoValue3, infoX, y - 62.0f);
+    SET_POS(pInfoValue3Raw, infoX, y - 62.0f);
+    pInfoValue3 = pInfoValue3Raw;
     UNIT_SCALE(sInfoValue3);
     winFontSetR(&pInfoValue3, &sInfoValue3, &black, "%s", tmp2);
 
@@ -1232,13 +1258,15 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
 
     sprintf(hourFmt, "%%0%dd", 2);
     sprintf(unk_803e5f78, hourFmt, hours);
-    SET_POS(pInfoTimeH, x + 168.0f, y - 90.0f);
+    SET_POS(pInfoTimeHRaw, x + 168.0f, y - 90.0f);
+    pInfoTimeH = pInfoTimeHRaw;
     UNIT_SCALE(sInfoTimeH);
     winFontSetR(&pInfoTimeH, &sInfoTimeH, &black, "%s", unk_803e5f78);
 
     sprintf(minuteFmt, "%%0%dd", 2);
     sprintf(unk_803e5f78, minuteFmt, minutes);
-    SET_POS(pInfoTimeM, infoX, y - 90.0f);
+    SET_POS(pInfoTimeMRaw, infoX, y - 90.0f);
+    pInfoTimeM = pInfoTimeMRaw;
     UNIT_SCALE(sInfoTimeM);
     winFontSetR(&pInfoTimeM, &sInfoTimeM, &black, "%s", unk_803e5f78);
 
@@ -1246,11 +1274,13 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
     UNIT_SCALE(sDivider);
     for (i = 0; i < 4; i++) {
-        SET_POS(pDivider, x + 200.0f, y + 10.0f - (f32)(i * 28));
+        SET_POS(pDividerRaw, x + 200.0f, y + 10.0f - (f32)(i * 28));
+        pDivider = pDividerRaw;
         winTexSet(0x11, &pDivider, &sDivider, &white1);
     }
 
-    SET_POS(pDividerEnd, x + 220.0f, y - 102.0f);
+    SET_POS(pDividerEndRaw, x + 220.0f, y - 102.0f);
+    pDividerEnd = pDividerEndRaw;
     UNIT_SCALE(sDividerEnd);
     winTexSet(0x12, &pDividerEnd, &sDividerEnd, &white0);
 
@@ -1290,11 +1320,13 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
         winFontInit();
         titleWidth = FontGetMessageWidth(text);
         titleOffset = (240 - (s32)titleWidth) / 2;
-        SET_POS(pWazaTitle, (x - 270.0f) + (f32)titleOffset, 155.0f);
+        SET_POS(pWazaTitleRaw, (x - 270.0f) + (f32)titleOffset, 155.0f);
+        pWazaTitle = pWazaTitleRaw;
         POINT8_SCALE(sWazaTitle);
         winFontSetEdge(&pWazaTitle, &sWazaTitle, &white0, text);
 
-        SET_POS(pWazaAp, x - 50.0f, 155.0f);
+        SET_POS(pWazaApRaw, x - 50.0f, 155.0f);
+        pWazaAp = pWazaApRaw;
         POINT8_SCALE(sWazaAp);
         text = msgSearch("btl_cost_disp_AP");
         winFontSetEdge(&pWazaAp, &sWazaAp, &white0, text);
@@ -1303,7 +1335,8 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
             void* action = superActionTable[j];
             char* actionName = *(char**)action;
 
-            SET_POS(pWazaName, x - 250.0f, 130.0f - (f32)(j * 26));
+            SET_POS(pWazaNameRaw, x - 250.0f, 130.0f - (f32)(j * 26));
+            pWazaName = pWazaNameRaw;
             UNIT_SCALE(sWazaName);
             text = msgSearch(actionName);
             winFontSetWidth(&pWazaName, &sWazaName, &black, 180.0f, text);
@@ -1313,11 +1346,13 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
             sprintf(costText, "%s", tmp2);
             costWidth = FontGetMessageWidth(costText);
 
-            SET_POS(pWazaCost, x - 42.0f - (f32)(costWidth / 2), 130.0f - (f32)(j * 26));
+            SET_POS(pWazaCostRaw, x - 42.0f - (f32)(costWidth / 2), 130.0f - (f32)(j * 26));
+            pWazaCost = pWazaCostRaw;
             UNIT_SCALE(sWazaCost);
             winFontSet(&pWazaCost, &sWazaCost, &black, costText);
 
-            SET_POS(pWazaCostAp, x - 29.0f, 120.0f - (f32)(j * 26));
+            SET_POS(pWazaCostApRaw, x - 29.0f, 120.0f - (f32)(j * 26));
+            pWazaCostAp = pWazaCostApRaw;
             HALF_SCALE(sWazaCostAp);
             text = msgSearch("btl_cost_disp_AP");
             winFontSet(&pWazaCostAp, &sWazaCostAp, &black, text);

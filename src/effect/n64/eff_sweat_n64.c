@@ -140,15 +140,25 @@ void effSweatMain(void* effect) {
 
 
 void effSweatDisp(s32 cameraId, void* effect) {
+    typedef union SweatColor {
+        u32 word;
+        u8 chan[4];
+    } SweatColor;
     extern void* camGetPtr(s32);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXRotRad(void*, s32, f32);
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetNumTexGens(s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void GXSetNumTevStages(s32);
     extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetChanMatColor(s32, void*);
     extern void GXSetCullMode(s32);
     extern void effGetTexObj(s32, void*);
     extern void GXLoadTexObj(void*, s32);
@@ -158,26 +168,76 @@ void effSweatDisp(s32 cameraId, void* effect) {
     extern void GXLoadPosMtxImm(void*, s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXBegin(s32, s32, s32);
+    extern u32 dat_80426328;
+    extern f32 float_9p6_80426330;
+    extern f32 float_6p4_80426334;
+    extern f32 float_neg1_80426338;
+    extern f32 float_0_8042633c;
+    extern f32 float_0p5_80426340;
+    extern f32 float_4p8_80426344;
+    extern f32 float_1_80426348;
+    u8* camera = (u8*)camGetPtr(cameraId);
     u8* work = *(u8**)((s32)effect + 0xC);
-    f32 trans[3][4], rot[3][4], base[3][4], mtx[3][4];
+    f32 trans[3][4];
+    f32 rot[3][4];
+    f32 base[3][4];
     u8 tex[0x20];
+    f32 halfHeight;
     s32 i;
+
     PSMTXTrans(base, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
     PSMTXRotRad(rot, 0x79, -0.017453292f * *(f32*)((s32)camGetPtr(4) + 0x114));
-    PSMTXConcat(base, rot, base);
-    PSMTXConcat((u8*)camGetPtr(cameraId) + 0x11C, base, base);
-    GXSetNumChans(1); GXSetNumTexGens(1); GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
-    GXSetNumTevStages(1); GXSetTevOrder(0, 0, 0, 4); GXSetCullMode(0);
-    effGetTexObj(0x5D, tex); GXLoadTexObj(tex, 0);
-    GXClearVtxDesc(); GXSetVtxDesc(9, 1); GXSetVtxDesc(13, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 4, 0); GXSetVtxAttrFmt(0, 13, 1, 4, 0);
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        u8* part = work + i * 0x34;
-        if (*(s32*)(part + 0x2C) == 0) {
-            PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
-            PSMTXRotRad(rot, 0x7A, 0.017453292f * *(f32*)(part + 0x10));
-            PSMTXConcat(trans, rot, mtx); PSMTXConcat(base, mtx, mtx);
-            GXLoadPosMtxImm(mtx, 0); GXSetCurrentMtx(0); GXBegin(0x80, 0, 4);
+    PSMTXConcat(base, rot, trans);
+    PSMTXConcat(camera + 0x11C, trans, trans);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
+    GXSetTevAlphaIn(0, 7, 5, 4, 7);
+    GXSetCullMode(0);
+    effGetTexObj(0x5D, tex);
+    GXLoadTexObj(tex, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    halfHeight = -float_9p6_80426330;
+    work += 0x34;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, work += 0x34) {
+        if (*(s32*)(work + 0x2C) == 0) {
+            SweatColor color;
+            volatile f32* fifo = (volatile f32*)0xCC008000;
+            f32 right = float_6p4_80426334;
+            f32 left;
+            f32 top = float_4p8_80426344;
+            f32 bottom;
+
+            color.word = dat_80426328;
+            color.chan[3] = *(u8*)(work + 0x30);
+            GXSetChanMatColor(4, &color);
+            PSMTXTrans(base, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+            PSMTXRotRad(rot, 0x7A, 0.017453292f * *(f32*)(work + 0x10));
+            PSMTXConcat(base, rot, base);
+            PSMTXConcat(trans, base, base);
+            GXLoadPosMtxImm(base, 0);
+            GXSetCurrentMtx(0);
+            GXBegin(0x80, 0, 4);
+            if (*(f32*)(work + 0x10) > float_0_8042633c) {
+                right *= float_neg1_80426338;
+            }
+            left = -right * float_0p5_80426340;
+            right *= float_0p5_80426340;
+            bottom = halfHeight * float_0p5_80426340;
+            *fifo = left; *fifo = top; *fifo = float_0_8042633c; *fifo = float_0_8042633c; *fifo = float_0_8042633c;
+            *fifo = right; *fifo = top; *fifo = float_0_8042633c; *fifo = float_1_80426348; *fifo = float_0_8042633c;
+            *fifo = right; *fifo = bottom; *fifo = float_0_8042633c; *fifo = float_1_80426348; *fifo = float_1_80426348;
+            *fifo = left; *fifo = bottom; *fifo = float_0_8042633c; *fifo = float_0_8042633c; *fifo = float_1_80426348;
         }
     }
 }

@@ -20,7 +20,6 @@ void* effHibashiraEntry(
     extern double sin(double x);
     extern void effHibashiraMain(void* entry);
     extern char str_hibashira_80302a44[];
-    extern double double_to_int_80302a50;
     extern f32 float_3p1416_804288f8;
     extern f32 float_0p5_804288fc;
 
@@ -29,12 +28,6 @@ void* effHibashiraEntry(
     void* child;
     s32 count;
     s32 i;
-    f32 dx;
-    f32 dy;
-    f32 dz;
-    f32 denom;
-    f32 prev;
-    f32 cur;
 
     entry = effEntry();
     count = 1;
@@ -67,19 +60,13 @@ void* effHibashiraEntry(
     }
     *(s32*)((s32)work + 0x20) = 0;
 
-    dx = targetX - x;
-    dy = targetY - y;
-    dz = targetZ - z;
     child = (void*)((s32)work + 0x28);
     i = 1;
     while (i < *(s32*)((s32)entry + 8)) {
-        denom = (f32)(*(s32*)((s32)entry + 8) - 1);
-        prev = (f32)(i - 1);
-        cur = (f32)i;
-        *(f32*)((s32)child + 4) = prev * (dx / denom);
-        *(f32*)((s32)child + 8) = prev * (dy / denom);
-        *(f32*)((s32)child + 0xC) = prev * (dz / denom);
-        *(f32*)((s32)child + 0x10) = float_0p5_804288fc + (f32)sin((float_3p1416_804288f8 * cur) / denom);
+        *(f32*)((s32)child + 4) = (f32)(i - 1) * ((targetX - x) / (f32)(*(s32*)((s32)entry + 8) - 1));
+        *(f32*)((s32)child + 8) = (f32)(i - 1) * ((targetY - y) / (f32)(*(s32*)((s32)entry + 8) - 1));
+        *(f32*)((s32)child + 0xC) = (f32)(i - 1) * ((targetZ - z) / (f32)(*(s32*)((s32)entry + 8) - 1));
+        *(f32*)((s32)child + 0x10) = float_0p5_804288fc + (f32)sin((float_3p1416_804288f8 * (f32)i) / (f32)(*(s32*)((s32)entry + 8) - 1));
         *(s32*)((s32)child + 0x14) = -1;
         *(s32*)((s32)child + 0x18) = 0xFF;
         *(s32*)((s32)child + 0x1C) = 0;

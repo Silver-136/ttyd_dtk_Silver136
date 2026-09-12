@@ -34,13 +34,13 @@ void* effKumokumoN64Entry(f32 x, f32 y, f32 z, f32 scale, f32 unused, f32 angle,
     extern f64 sin(f64);
     extern f64 cos(f64);
     extern char str_KumokumoN64_802fb3e0[];
+    s32 delay;
+    s32 phase;
     void* entry;
     u8* work;
     u8* part;
     s32 count;
     s32 i;
-    s32 delay;
-    s32 phase;
 
     entry = effEntry();
     count = type == 1 ? 1 : 11;
@@ -53,7 +53,7 @@ void* effKumokumoN64Entry(f32 x, f32 y, f32 z, f32 scale, f32 unused, f32 angle,
     *(u32*)entry |= 2;
     *(s32*)work = type;
     *(s32*)(work + 0x14) = 0;
-    if (duration < 1) {
+    if (duration <= 0) {
         *(s32*)(work + 0x10) = 1000;
     } else {
         *(s32*)(work + 0x10) = duration;
@@ -119,35 +119,35 @@ void* effKumokumoN64Entry(f32 x, f32 y, f32 z, f32 scale, f32 unused, f32 angle,
     i = 1;
     delay = 30;
     phase = 15;
-    part = work;
-    while (i < count) {
+    part = work + 0x64;
+    while (i < *(s32*)((u8*)entry + 8)) {
         if (type == 3) {
             f32 radians = float_6p2832_80425934 * (f32)irand(360) / float_360_80425910;
             f32 radius = float_200_8042593c + (f32)irand(200);
-            *(f32*)(part + 0x68) = radius * (f32)sin(radians);
-            *(f32*)(part + 0x6C) = radius * (f32)cos(radians);
-            *(f32*)(part + 0x70) = float_0_8042590c;
-            *(f32*)(part + 0xC0) = float_2_8042591c;
-            *(s32*)(part + 0x88) = 0;
-            *(s32*)(part + 0x74) = phase;
-            *(f32*)(part + 0xBC) = float_0_8042590c;
+            *(f32*)(part + 0x04) = radius * (f32)sin(radians);
+            *(f32*)(part + 0x08) = radius * (f32)cos(radians);
+            *(f32*)(part + 0x0C) = float_0_8042590c;
+            *(f32*)(part + 0x5C) = float_2_8042591c;
+            *(s32*)(part + 0x24) = 0;
+            *(s32*)(part + 0x10) = phase;
+            *(f32*)(part + 0x58) = float_0_8042590c;
         } else if (type == 2) {
-            *(f32*)(part + 0x68) = (f32)(200 - irand(400));
-            *(f32*)(part + 0x6C) = -(f32)(irand(50) + 200);
-            *(f32*)(part + 0x70) = float_0_8042590c;
-            *(f32*)(part + 0xC0) = float_1_80425918;
-            *(s32*)(part + 0x88) = 0;
-            *(s32*)(part + 0x74) = phase;
-            *(f32*)(part + 0xBC) = float_0_8042590c;
+            *(f32*)(part + 0x04) = (f32)(200 - irand(400));
+            *(f32*)(part + 0x08) = -(f32)(irand(50) + 200);
+            *(f32*)(part + 0x0C) = float_0_8042590c;
+            *(f32*)(part + 0x5C) = float_1_80425918;
+            *(s32*)(part + 0x24) = 0;
+            *(s32*)(part + 0x10) = phase;
+            *(f32*)(part + 0x58) = float_0_8042590c;
         } else {
-            *(f32*)(part + 0x68) = float_0_8042590c;
-            *(f32*)(part + 0x6C) = float_3_80425924;
-            *(f32*)(part + 0x70) = float_0_8042590c;
-            *(f32*)(part + 0xC0) = float_0_8042590c;
-            *(s32*)(part + 0x88) = 0xCC;
-            *(s32*)(part + 0x74) = delay;
-            *(f32*)(part + 0xBC) = -(f32)irand(20);
-            *(f32*)(part + 0x9C) = float_8_80425928;
+            *(f32*)(part + 0x04) = float_0_8042590c;
+            *(f32*)(part + 0x08) = float_3_80425924;
+            *(f32*)(part + 0x0C) = float_0_8042590c;
+            *(f32*)(part + 0x5C) = float_0_8042590c;
+            *(s32*)(part + 0x24) = 0xCC;
+            *(s32*)(part + 0x10) = delay;
+            *(f32*)(part + 0x58) = -(f32)irand(20);
+            *(f32*)(part + 0x38) = float_8_80425928;
         }
         delay += 30;
         phase += 15;
@@ -158,12 +158,13 @@ void* effKumokumoN64Entry(f32 x, f32 y, f32 z, f32 scale, f32 unused, f32 angle,
 }
 
 void effKumokumoMain(void* effect) {
-    extern void effDelete(void*); extern s32 irand(s32); extern f64 sin(f64); extern f64 cos(f64); extern f64 fmod(f64,f64); extern f32 dispCalcZ(void*); extern void dispEntry(s32,s32,void*,void*,f32); extern void effKumokumoDisp(s32,void*); extern u8 rz_tbl[]; extern const f64 double_360_802fb3d8;
-    u8* e=effect; u8* w=*(u8**)(e+0xC); u8* p=w+0x64; f32 pos[3]; s32 type=*(s32*)w,timer,i,camera=*(s32*)(w+0x60),delay=30,phase=15;
-    pos[0]=*(f32*)(w+4);pos[1]=*(f32*)(w+8);pos[2]=*(f32*)(w+0xC);if((*(u32*)e&4)!=0){*(u32*)e&=~4;*(s32*)(w+0x10)=16;}if(*(s32*)(w+0x10)<1000)(*(s32*)(w+0x10))--;(*(s32*)(w+0x14))++;timer=*(s32*)(w+0x10);if(timer<0){effDelete(effect);return;}if(timer<16)*(s32*)(w+0x24)=timer<<4;if(*(s32*)(w+0x14)<16)*(s32*)(w+0x24)=*(s32*)(w+0x14)*16+15;
+    typedef struct Vec { f32 x, y, z; } Vec;
+    extern void effDelete(void*); extern s32 irand(s32); extern f64 sin(f64); extern f64 cos(f64); extern f64 fmod(f64,f64); extern f32 dispCalcZ(void*); extern void dispEntry(s32,s32,void*,void*,f32); extern void effKumokumoDisp(s32,void*); extern u8 rz_tbl[]; extern const f64 double_360_802fb3d8; extern const Vec vec3_802fb3b8;
+    u8* e=effect; u8* w=*(u8**)(e+0xC); u8* p=w+0x64; Vec dispPos,pos=vec3_802fb3b8; s32 type=*(s32*)w,timer,i,camera=*(s32*)(w+0x60),delay=30,phase=15;
+    pos.x=*(f32*)(w+4);pos.y=*(f32*)(w+8);pos.z=*(f32*)(w+0xC);dispPos=pos;if((*(u32*)e&4)!=0){*(u32*)e&=~4;*(s32*)(w+0x10)=16;}if(*(s32*)(w+0x10)<1000)(*(s32*)(w+0x10))--;(*(s32*)(w+0x14))++;timer=*(s32*)(w+0x10);if(timer<0){effDelete(effect);return;}if(timer<16)*(s32*)(w+0x24)=timer<<4;if(*(s32*)(w+0x14)<16)*(s32*)(w+0x24)=*(s32*)(w+0x14)*16+15;
     *(f32*)(w+0x38)+=*(f32*)(w+0x3C);*(f32*)(w+0x40)+=*(f32*)(w+0x44);*(f32*)(w+0x48)+=*(f32*)(w+0x4C);*(f32*)(w+0x50)+=*(f32*)(w+0x54);if(type==3)*(f32*)(w+0x58)-=float_2_8042591c;
     for(i=1;i<*(s32*)(e+8);i++,p+=0x64,delay+=30,phase+=15){if(*(s32*)(p+0x10)==0){if(type==0||type==4){(*(s32*)(p+0x24))-=2;if(*(s32*)(p+0x24)<0){*(f32*)(p+0x04)=float_0_8042590c;*(f32*)(p+0x08)=float_3_80425924;*(f32*)(p+0x0C)=float_0_8042590c;*(f32*)(p+0x5C)=float_0_8042590c;*(s32*)(p+0x24)=0xCC;*(s32*)(p+0x10)=delay;*(f32*)(p+0x58)=-(f32)irand(20);*(f32*)(p+0x38)=float_8_80425928;}else{*(f32*)(p+0x5C)+=(float_1p5_8042592c-*(f32*)(p+0x5C))/float_30_80425930;*(f32*)(p+0x58)+=(float_30_80425930-*(f32*)(p+0x58))/float_30_80425930;*(f32*)(p+0x04)+=*(f32*)(p+0x38)*(f32)cos(float_6p2832_80425934**(f32*)(p+0x58)/float_360_80425910);*(f32*)(p+0x08)+=float_2_8042591c**(f32*)(p+0x38)*(f32)sin(float_6p2832_80425934**(f32*)(p+0x58)/float_360_80425910);*(f32*)(p+0x38)+=(float_2_8042591c-*(f32*)(p+0x38))/float_30_80425930;}}else if(type==2){u32 counter;u32 angleValue;*(s32*)(p+0x24)+=(0xFF-*(s32*)(p+0x24))/4;*(f32*)(p+0x5C)+=-*(f32*)(p+0x5C)*float_0p03125_80425938;*(f32*)(p+0x04)+=-*(f32*)(p+0x04)*float_0p03125_80425938;*(f32*)(p+0x08)+=-*(f32*)(p+0x08)*float_0p03125_80425938;*(f32*)(p+0x0C)+=-*(f32*)(p+0x0C)*float_0p03125_80425938;if(*(f32*)(p+0x5C)<float_0p1_80425908){*(f32*)(p+0x04)=(f32)(200-irand(400));*(f32*)(p+0x08)=-(f32)(irand(50)+200);*(f32*)(p+0x0C)=float_0_8042590c;*(f32*)(p+0x5C)=float_1_80425918;*(s32*)(p+0x24)=0;*(s32*)(p+0x10)=phase;*(f32*)(p+0x58)=float_0_8042590c;}counter=*(u32*)(p+0x14);angleValue=(u32)rz_tbl[counter%31]+(counter*180U)/31U;*(f32*)(p+0x58)=(f32)fmod((f64)angleValue,double_360_802fb3d8);}else{*(s32*)(p+0x24)+=(0xC0-*(s32*)(p+0x24))/4;*(f32*)(p+0x04)+=-*(f32*)(p+0x04)*float_0p03125_80425938;*(f32*)(p+0x08)+=-*(f32*)(p+0x08)*float_0p03125_80425938;*(f32*)(p+0x0C)+=-*(f32*)(p+0x0C)*float_0p03125_80425938;}(*(s32*)(p+0x14))++;}else (*(s32*)(p+0x10))--;}
-    dispEntry(camera,2,effKumokumoDisp,effect,dispCalcZ(pos));
+    dispEntry(camera,2,effKumokumoDisp,effect,dispCalcZ(&dispPos));
 }
 
 
@@ -393,7 +394,61 @@ void effKumokumoDisp(s32 cameraId, s32 effectAddress) {
 
     GXSetCullMode(0);
 
-    if (type == 3) {
+    switch (type) {
+    case 0:
+    case 1:
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 2);
+        GXSetVtxAttrFmt(0, 9, 1, 3, 6);
+        GXSetArray(9, dataBase + 0x40, 6);
+        GXSetVtxDesc(10, 2);
+        GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+        GXSetArray(10, cloud_normal_tbl, 3);
+        GXSetVtxDesc(11, 2);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetArray(11, cloud_color0_tbl, 4);
+        GXSetVtxDesc(13, 2);
+        GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+        GXSetArray(13, dataBase + 0x120, 4);
+        GXSetVtxDesc(14, 2);
+        GXSetVtxAttrFmt(0, 14, 1, 3, 14);
+        GXSetArray(14, dataBase + 0x1C0, 4);
+
+        j = 0;
+        do {
+            GXCallDisplayList(cloud_dl_0_tbl[j],
+                              (u32)cloud_dl_0_size_tbl[j] << 5);
+            j++;
+        } while (j < 4);
+        break;
+
+    case 2:
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 2);
+        GXSetVtxAttrFmt(0, 9, 1, 3, 6);
+        GXSetArray(9, dataBase + 0x3E0, 6);
+        GXSetVtxDesc(10, 2);
+        GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+        GXSetArray(10, batten_normal_tbl, 3);
+        GXSetVtxDesc(11, 2);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetArray(11, batten_color0_tbl, 4);
+        GXSetVtxDesc(13, 2);
+        GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+        GXSetArray(13, dataBase + 0x4C0, 4);
+        GXSetVtxDesc(14, 2);
+        GXSetVtxAttrFmt(0, 14, 1, 3, 14);
+        GXSetArray(14, dataBase + 0x560, 4);
+
+        j = 0;
+        do {
+            GXCallDisplayList(batten_dl_0_tbl[j],
+                              (u32)batten_dl_0_size_tbl[j] << 5);
+            j++;
+        } while (j < 4);
+        break;
+
+    case 3: {
         F64Conv conv;
 
         deg = float_deg2rad_804258f8;
@@ -437,88 +492,35 @@ void effKumokumoDisp(s32 cameraId, s32 effectAddress) {
 
             i++;
         } while (i < 5);
-        goto second_pass;
+        break;
     }
 
-    if (type < 3) {
-        if (type > 1) {
-            GXClearVtxDesc();
-            GXSetVtxDesc(9, 2);
-            GXSetVtxAttrFmt(0, 9, 1, 3, 6);
-            GXSetArray(9, dataBase + 0x3E0, 6);
-            GXSetVtxDesc(10, 2);
-            GXSetVtxAttrFmt(0, 10, 0, 1, 6);
-            GXSetArray(10, batten_normal_tbl, 3);
-            GXSetVtxDesc(11, 2);
-            GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-            GXSetArray(11, batten_color0_tbl, 4);
-            GXSetVtxDesc(13, 2);
-            GXSetVtxAttrFmt(0, 13, 1, 3, 14);
-            GXSetArray(13, dataBase + 0x4C0, 4);
-            GXSetVtxDesc(14, 2);
-            GXSetVtxAttrFmt(0, 14, 1, 3, 14);
-            GXSetArray(14, dataBase + 0x560, 4);
+    default:
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 2);
+        GXSetVtxAttrFmt(0, 9, 1, 3, 6);
+        GXSetArray(9, dataBase + 0x40, 6);
+        GXSetVtxDesc(10, 2);
+        GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+        GXSetArray(10, cloud_normal_tbl, 3);
+        GXSetVtxDesc(11, 2);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetArray(11, cloud_color0_tbl, 4);
+        GXSetVtxDesc(13, 2);
+        GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+        GXSetArray(13, dataBase + 0x120, 4);
+        GXSetVtxDesc(14, 2);
+        GXSetVtxAttrFmt(0, 14, 1, 3, 14);
+        GXSetArray(14, dataBase + 0x1C0, 4);
 
-            j = 0;
-            do {
-                GXCallDisplayList(batten_dl_0_tbl[j],
-                                  (u32)batten_dl_0_size_tbl[j] << 5);
-                j++;
-            } while (j < 4);
-            goto second_pass;
-        }
-
-        if (type > -1) {
-            GXClearVtxDesc();
-            GXSetVtxDesc(9, 2);
-            GXSetVtxAttrFmt(0, 9, 1, 3, 6);
-            GXSetArray(9, dataBase + 0x40, 6);
-            GXSetVtxDesc(10, 2);
-            GXSetVtxAttrFmt(0, 10, 0, 1, 6);
-            GXSetArray(10, cloud_normal_tbl, 3);
-            GXSetVtxDesc(11, 2);
-            GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-            GXSetArray(11, cloud_color0_tbl, 4);
-            GXSetVtxDesc(13, 2);
-            GXSetVtxAttrFmt(0, 13, 1, 3, 14);
-            GXSetArray(13, dataBase + 0x120, 4);
-            GXSetVtxDesc(14, 2);
-            GXSetVtxAttrFmt(0, 14, 1, 3, 14);
-            GXSetArray(14, dataBase + 0x1C0, 4);
-
-            j = 0;
-            do {
-                GXCallDisplayList(cloud_dl_0_tbl[j],
-                                  (u32)cloud_dl_0_size_tbl[j] << 5);
-                j++;
-            } while (j < 4);
-            goto second_pass;
-        }
+        j = 0;
+        do {
+            GXCallDisplayList(cloud_dl_0_tbl[j],
+                              (u32)cloud_dl_0_size_tbl[j] << 5);
+            j++;
+        } while (j < 4);
+        break;
     }
-
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 2);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 6);
-    GXSetArray(9, dataBase + 0x40, 6);
-    GXSetVtxDesc(10, 2);
-    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
-    GXSetArray(10, cloud_normal_tbl, 3);
-    GXSetVtxDesc(11, 2);
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-    GXSetArray(11, cloud_color0_tbl, 4);
-    GXSetVtxDesc(13, 2);
-    GXSetVtxAttrFmt(0, 13, 1, 3, 14);
-    GXSetArray(13, dataBase + 0x120, 4);
-    GXSetVtxDesc(14, 2);
-    GXSetVtxAttrFmt(0, 14, 1, 3, 14);
-    GXSetArray(14, dataBase + 0x1C0, 4);
-
-    j = 0;
-    do {
-        GXCallDisplayList(cloud_dl_0_tbl[j],
-                          (u32)cloud_dl_0_size_tbl[j] << 5);
-        j++;
-    } while (j < 4);
 
 second_pass:
     GXSetNumChans(1);

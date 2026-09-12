@@ -135,12 +135,19 @@ void effToikiMain(void* effect) {
 
 /* stub-fill: effToikiDisp | missing_definition | ghidra_signature */
 void effToikiDisp(s32 cameraId, void* effect) {
+    typedef struct GXColor {
+        u8 r;
+        u8 g;
+        u8 b;
+        u8 a;
+    } GXColor;
+
     extern void* camGetPtr(s32);
     extern void effGetTexObj(s32, void*);
     extern void GXLoadTexObj(void*, s32);
     extern void GXSetNumChans(s32);
     extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
-    extern void GXSetTevColor(s32, u32*);
+    extern void GXSetTevColor(s32, GXColor*);
     extern void GXSetNumTexGens(s32);
     extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
     extern void PSMTXTrans(f32[3][4], f32, f32, f32);
@@ -162,33 +169,43 @@ void effToikiDisp(s32 cameraId, void* effect) {
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
     extern void GXSetArray(s32, void*, s32);
     extern void GXCallDisplayList(void*, s32);
+    extern f32 float_0_80428200;
     extern f32 float_deg2rad_80428204;
-    extern u32 color_tbl[];
-    extern u8 queen_toiki_vertex_tbl[];
+    extern GXColor unk_804298e0;
+    extern GXColor color_tbl[];
+    extern u8 lbl_803B64A0[];
     extern u8 queen_toiki_normal_tbl[];
     extern u8 queen_toiki_color0_tbl[];
-    extern u8 queen_toiki_texcoord0_tbl[];
-    extern void* queen_toiki_dl_0_tbl[];
     extern u8 queen_toiki_dl_0_size_tbl[];
 
+    u8* data = lbl_803B64A0;
     s32* work = *(s32**)((s32)effect + 0xC);
     void* camera = camGetPtr(cameraId);
+    s32 type = work[0];
+    u8 texObj[0x20];
     f32 trans[3][4];
     f32 rot[3][4];
     f32 scaleMtx[3][4];
-    u8 texObj[0x20];
-    u32 color = (color_tbl[work[0]] & 0xFFFFFF00) | ((s32)*(f32*)&work[10] & 0xFF);
+    GXColor color = unk_804298e0;
+    GXColor tevColor;
     f32 size;
-    s32 i;
+    void** dl;
+    u8* dlSize;
+    u32 i;
 
     effGetTexObj(0x5C, texObj);
     GXLoadTexObj(texObj, 0);
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
-    GXSetTevColor(1, &color);
+    color.r = color_tbl[type].r;
+    color.g = color_tbl[type].g;
+    color.b = color_tbl[type].b;
+    color.a = (u8)(s32)*(f32*)&work[10];
+    tevColor = color;
+    GXSetTevColor(1, &tevColor);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-    PSMTXTrans(trans, *(f32*)&work[9], 0.0f, 0.0f);
+    PSMTXTrans(trans, *(f32*)&work[9], float_0_80428200, float_0_80428200);
     GXLoadTexMtxImm(trans, 0x1E, 1);
     GXSetNumTevStages(1);
     GXSetTevOrder(0, 0, 0, 4);
@@ -198,7 +215,9 @@ void effToikiDisp(s32 cameraId, void* effect) {
     GXSetTevAlphaIn(0, 7, 4, 5, 7);
 
     PSMTXTrans(trans, *(f32*)&work[1], *(f32*)&work[2], *(f32*)&work[3]);
-    PSMTXRotRad(rot, 0x79, float_deg2rad_80428204 * -*(f32*)((s32)camGetPtr(cameraId) + 0x114));
+    PSMTXRotRad(rot, 0x79,
+                float_deg2rad_80428204 *
+                    -*(f32*)((s32)camGetPtr(cameraId) + 0x114));
     PSMTXConcat(trans, rot, trans);
     PSMTXRotRad(rot, 0x7A, float_deg2rad_80428204 * *(f32*)&work[8]);
     PSMTXConcat(trans, rot, trans);
@@ -212,7 +231,7 @@ void effToikiDisp(s32 cameraId, void* effect) {
     GXClearVtxDesc();
     GXSetVtxDesc(9, 2);
     GXSetVtxAttrFmt(0, 9, 1, 3, 6);
-    GXSetArray(9, queen_toiki_vertex_tbl, 6);
+    GXSetArray(9, data + 0x40, 6);
     GXSetVtxDesc(0xA, 2);
     GXSetVtxAttrFmt(0, 0xA, 0, 1, 6);
     GXSetArray(0xA, queen_toiki_normal_tbl, 3);
@@ -221,9 +240,16 @@ void effToikiDisp(s32 cameraId, void* effect) {
     GXSetArray(0xB, queen_toiki_color0_tbl, 4);
     GXSetVtxDesc(0xD, 2);
     GXSetVtxAttrFmt(0, 0xD, 1, 3, 0xE);
-    GXSetArray(0xD, queen_toiki_texcoord0_tbl, 4);
-    for (i = 0; i < 14; i++) {
-        GXCallDisplayList(queen_toiki_dl_0_tbl[i], queen_toiki_dl_0_size_tbl[i] << 5);
-    }
+    GXSetArray(0xD, data + 0x1C0, 4);
+
+    dl = (void**)(data + 0x360);
+    i = 0;
+    dlSize = queen_toiki_dl_0_size_tbl;
+    do {
+        GXCallDisplayList(*dl, (u32)*dlSize << 5);
+        i++;
+        dl++;
+        dlSize++;
+    } while (i < 14);
 }
 

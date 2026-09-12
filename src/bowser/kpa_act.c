@@ -227,6 +227,7 @@ void kpaAddCoin(s32 coin) {
     }
 }
 
+#pragma optimize_for_size off
 /* stub-fill: kpaAddCoinPos | missing_definition | ghidra_signature */
 void kpaAddCoinPos(s32 coin, f32* pos) {
     extern void* ksdp;
@@ -247,6 +248,7 @@ void kpaAddCoinPos(s32 coin, f32* pos) {
     s8 digit10;
     s8 digit1;
     char* out;
+    char* cursor;
     u8* slot;
 
     if (pouchAddKpaCoin(coin) != 0) {
@@ -271,21 +273,27 @@ void kpaAddCoinPos(s32 coin, f32* pos) {
             digit10 = score / 10;
             digit1 = score % 10;
             started = 0;
+            cursor = out;
 
             if (digit10000 != 0) {
-                out[started++] = digit10000 + '0';
+                *cursor++ = digit10000 + '0';
+                started++;
             }
             if (started != 0 || digit1000 != 0) {
-                out[started++] = digit1000 + '0';
+                *cursor++ = digit1000 + '0';
+                started++;
             }
             if (started != 0 || digit100 != 0) {
-                out[started++] = digit100 + '0';
+                *cursor++ = digit100 + '0';
+                started++;
             }
             if (started != 0 || digit10 != 0) {
-                out[started++] = digit10 + '0';
+                *cursor++ = digit10 + '0';
+                started++;
             }
             if (started != 0 || digit1 != 0) {
-                out[started++] = digit1 + '0';
+                *cursor = digit1 + '0';
+                started++;
             }
             out[started] = 0;
 
@@ -297,6 +305,7 @@ void kpaAddCoinPos(s32 coin, f32* pos) {
         }
     }
 }
+#pragma optimize_for_size on
 
 void kpaAddScore(s32 score) {
     extern void pouchAddKpaScore(s32 score);
@@ -311,6 +320,7 @@ void kpaAddScore(s32 score) {
 
 /* CHATGPT STUB FILL: main/bowser/kpa_act 20260624_184128 */
 
+#pragma optimize_for_size off
 /* stub-fill: kpaAddScorePos | missing_definition | ghidra_signature */
 void kpaAddScorePos(s32 score, f32* pos) {
     extern void* ksdp;
@@ -329,6 +339,7 @@ void kpaAddScorePos(s32 score, f32* pos) {
     s8 digit10;
     s8 digit1;
     char* out;
+    char* cursor;
     u8* slot;
 
     if (score > 10000) {
@@ -348,22 +359,28 @@ void kpaAddScorePos(s32 score, f32* pos) {
             digit1 = score % 10;
             offset = i * 0x18;
             out = (char*)((s32)ksdp + offset);
+            cursor = out;
             started = 0;
 
             if (digit10000 != 0) {
-                out[started++] = digit10000 + '0';
+                *cursor++ = digit10000 + '0';
+                started++;
             }
             if (started != 0 || digit1000 != 0) {
-                out[started++] = digit1000 + '0';
+                *cursor++ = digit1000 + '0';
+                started++;
             }
             if (started != 0 || digit100 != 0) {
-                out[started++] = digit100 + '0';
+                *cursor++ = digit100 + '0';
+                started++;
             }
             if (started != 0 || digit10 != 0) {
-                out[started++] = digit10 + '0';
+                *cursor++ = digit10 + '0';
+                started++;
             }
             if (started != 0 || digit1 != 0) {
-                out[started++] = digit1 + '0';
+                *cursor = digit1 + '0';
+                started++;
             }
             out[started] = 0;
 
@@ -375,6 +392,7 @@ void kpaAddScorePos(s32 score, f32* pos) {
         }
     }
 }
+#pragma optimize_for_size on
 
 s32 kpa_chg_pose(void* evt) {
     extern s32 evtGetValue(void* evt, s32 value);

@@ -323,17 +323,21 @@ void effMahojinMain(void* entry) {
 /* stub-fill: effMahojinDisp | prototype_only | source_prototype */
 void effMahojinDisp(s32 cameraId, void* effect) {
     typedef f32 MtxLocal[3][4];
-    typedef struct MapEntryLocal {
-        u16 dataFlags;
-    } MapEntryLocal;
     typedef struct MapWorkLocal {
-        MapEntryLocal entries[2];
+        u32 pad;
+        u16 dataFlags;
     } MapWorkLocal;
     typedef struct VecLocal {
         f32 x;
         f32 y;
         f32 z;
     } VecLocal;
+    typedef struct ColorLocal {
+        u8 r;
+        u8 g;
+        u8 b;
+        u8 a;
+    } ColorLocal;
 
     extern void camGetPtr(s32 cameraId);
     extern MapWorkLocal* mapGetWork(void);
@@ -352,65 +356,96 @@ void effMahojinDisp(s32 cameraId, void* effect) {
     extern f32 float_10_80427768;
 
     void* base = *(void**)((s32)effect + 0xC);
-    s32 rate = *(s32*)((s32)base + 0x20);
-    MapWorkLocal* map = mapGetWork();
-    u16 oldFlags = map->entries[0].dataFlags;
+    s32 rate;
+    MapWorkLocal* map;
+    u16 oldFlags;
+    MtxLocal mtx;
     f32 zs[16];
     s32 order[16];
-    MtxLocal mtx;
     s32 pass;
     s32 i;
     s32 j;
+    s32 poseOffset;
 
     camGetPtr(cameraId);
-    for (pass = 0; pass < 2; pass++) {
+    rate = *(s32*)((s32)base + 0x20);
+    map = mapGetWork();
+    oldFlags = map->dataFlags;
+
+    poseOffset = 0;
+    for (pass = 0; pass < 2; pass++, poseOffset += 4) {
+        i = 0;
         if (pass == 0) {
-            zs[0] = float_neg9999_80427758;
-            zs[1] = float_neg10000_8042775c;
+            zs[i] = float_neg9999_80427758;
+            order[i++] = 0;
+            zs[i] = float_neg10000_8042775c;
+            order[i++] = 1;
         } else {
-            zs[0] = float_neg10000_8042775c;
-            zs[1] = float_10000_80427760;
+            zs[i] = float_neg10000_8042775c;
+            order[i++] = 0;
+            zs[i] = float_10000_80427760;
+            order[i++] = 1;
         }
-        order[0] = 0;
-        order[1] = 1;
-        for (i = 2; i < *(s32*)((s32)effect + 8); i++) {
-            zs[i] = dispCalcZ(&pos_tbl[i - 2]);
-            order[i] = i;
+
+        {
+            s32 partIndex = 2;
+            s32 byteOffset = i * 4;
+            f32* zPtr = &zs[i];
+            for (; partIndex < *(s32*)((s32)effect + 8); partIndex++, i++, byteOffset += 4, zPtr++) {
+                *zPtr = dispCalcZ(&pos_tbl[partIndex - 2]);
+                *(s32*)((u8*)order + byteOffset) = partIndex;
+            }
         }
-        for (i = 0; i < *(s32*)((s32)effect + 8) - 1; i++) {
-            for (j = i + 1; j < *(s32*)((s32)effect + 8); j++) {
-                if (zs[j] < zs[i]) {
-                    f32 tmpZ = zs[i];
-                    s32 tmpIdx = order[i];
-                    zs[i] = zs[j];
-                    order[i] = order[j];
-                    zs[j] = tmpZ;
-                    order[j] = tmpIdx;
+
+        {
+            f32* outerZ = zs;
+            s32* outerOrder = order;
+            for (i = 0; i < *(s32*)((s32)effect + 8) - 1; outerZ++, outerOrder++, i++) {
+                f32* innerZ = &zs[i + 1];
+                s32* innerOrder = &order[i + 1];
+                for (j = i + 1; j < *(s32*)((s32)effect + 8); innerZ++, innerOrder++, j++) {
+                    if (*outerZ > *innerZ) {
+                        f32 tmpZ = *outerZ;
+                        s32 tmpIdx = *outerOrder;
+                        *outerZ = *innerZ;
+                        *outerOrder = *innerOrder;
+                        *innerZ = tmpZ;
+                        *innerOrder = tmpIdx;
+                    }
                 }
             }
         }
-        map->entries[0].dataFlags &= 0xFFFE;
+
+        map->dataFlags &= 0xFFFE;
         PSMTXTrans(mtx, *(f32*)((s32)base + 4), *(f32*)((s32)base + 8), *(f32*)((s32)base + 0xC));
-        for (i = 0; i < *(s32*)((s32)effect + 8); i++) {
-            void* work = (void*)((s32)base + order[i] * 0x30);
-            s32 poseId = *(s32*)((s32)work + 0x18 + pass * 4);
-            if (pass == 1 && *(s32*)((s32)work + 0x28) != 0) {
-                ((void (*)(s32))(*(void**)((s32)work + 0x2C)))(cameraId);
-            }
-            if (poseId != -1) {
-                u32 color = dat_80427754;
-                u32 colorCopy;
-                s32 alpha = *(s32*)((s32)work + 0x20) * rate;
-                alpha = alpha / 0xFF + (alpha >> 31);
-                animPoseMain(poseId);
-                animPoseSetMaterialFlagOn(poseId, 0x40);
-                ((u8*)&color)[3] = (u8)(alpha - (alpha >> 31));
-                colorCopy = color;
-                animPoseSetMaterialEvtColor(poseId, &colorCopy);
-                animPoseDrawMtx(poseId, mtx, 3, float_0_80427764, float_10_80427768);
+
+        {
+            s32* orderPtr = order;
+            for (i = 0; i < *(s32*)((s32)effect + 8); i++, orderPtr++) {
+                void* work = (void*)((s32)base + *orderPtr * 0x30);
+                s32 poseField = (s32)work + 0x18;
+
+                if (pass == 1 && *(void**)((s32)work + 0x28) != NULL) {
+                    ((void (*)(s32))(*(void**)((s32)work + 0x2C)))(cameraId);
+                }
+
+                if (*(s32*)(poseField + poseOffset) != -1) {
+                    u32 colorCopy;
+                    u32 color;
+                    s32 alpha;
+
+                    animPoseMain(*(s32*)(poseField + poseOffset));
+                    animPoseSetMaterialFlagOn(*(s32*)(poseField + poseOffset), 0x40);
+                    alpha = *(s32*)((s32)work + 0x20) * rate;
+                    color = dat_80427754;
+                    ((u8*)&color)[3] = (u8)(alpha / 0xFF);
+                    colorCopy = color;
+                    animPoseSetMaterialEvtColor(*(s32*)(poseField + poseOffset), &colorCopy);
+                    animPoseDrawMtx(*(s32*)(poseField + poseOffset), mtx, 3, float_0_80427764, float_10_80427768);
+                }
             }
         }
-        map->entries[0].dataFlags = oldFlags;
+        map->dataFlags = oldFlags;
     }
 }
 

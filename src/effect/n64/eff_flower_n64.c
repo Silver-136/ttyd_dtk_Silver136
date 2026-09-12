@@ -19,11 +19,13 @@ void* effFlowerN64Entry(float x, float y, float z, int type, int timer) {
     extern float float_0p12_80425368;
     extern float float_neg0p0152_8042536c;
     extern float float_3_80425370;
-    unsigned char* entry = (unsigned char*)effEntry();
-    unsigned char* work = (unsigned char*)__memAlloc(3, 0x48);
+    unsigned char* entry;
+    unsigned char* work;
 
+    entry = (unsigned char*)effEntry();
     *(char**)(entry + 0x14) = str_FlowerN64_802fafbc;
     *(int*)(entry + 8) = 1;
+    work = (unsigned char*)__memAlloc(3, 0x48);
     *(unsigned char**)(entry + 0xC) = work;
     *(void**)(entry + 0x10) = effFlowerMain;
     *(int*)work = type;
@@ -36,21 +38,26 @@ void* effFlowerN64Entry(float x, float y, float z, int type, int timer) {
     *(float*)(work + 0x1C) = float_0p12_80425368;
     *(float*)(work + 0x20) = float_neg0p0152_8042536c;
     if (type == 0) {
+        f32 rawSpin;
+        s32 spin;
+        *(float*)(work + 0x18) = float_0_8042534c;
         *(float*)(work + 0x24) = float_0_8042534c;
         *(float*)(work + 0x28) = float_0_8042534c;
         *(float*)(work + 0x2C) = float_3_80425370;
-        *(float*)(work + 0x30) = kaiten_412 != 0 ? -10.0f : 10.0f;
+        rawSpin = kaiten_412 != 0 ? -10.0f : 10.0f;
+        spin = (s32)rawSpin;
+        *(float*)(work + 0x30) = (float)spin;
         *(int*)(work + 0x34) = timer;
     } else {
-        *(float*)(work + 0x24) = (float)((rand() & 1) * 30 - 15);
+        *(float*)(work + 0x24) = (float)((rand() % 2) * 30 - 15);
         *(float*)(work + 0x28) = (float)(rand() % 361);
         *(float*)(work + 0x2C) = float_0_8042534c;
-        *(float*)(work + 0x30) = (float)((rand() & 1) * 8 - 4);
+        *(float*)(work + 0x30) = (float)((rand() % 2) * 8 - 4);
         *(int*)(work + 0x34) = timer;
         *(int*)(work + 0x38) = 0;
         *(int*)(work + 0x44) = rand() % 11;
         *(int*)(work + 0x40) = rand() % 21;
-        *(int*)(work + 0x3C) = (rand() & 1) * 2 - 1;
+        *(int*)(work + 0x3C) = (rand() % 2) * 2 - 1;
     }
     kaiten_412++;
     if (kaiten_412 > 1) kaiten_412 = 0;

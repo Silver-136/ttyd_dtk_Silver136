@@ -24,8 +24,7 @@ void* GetScissorPtr(void) {
 
 /* stub-fill: scissor_intersection | prototype_only | source_prototype */
 s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2,
-                         f32 x3, f32 y3, f32 x4, f32 y4) {
-    f32 outX, outY;
+                         f32 x3, f32 y3, f32 x4, f32 y4, f32* outX, f32* outY) {
     f32 minX1 = x1 < x2 ? x1 : x2;
     f32 maxX1 = x1 < x2 ? x2 : x1;
     f32 minY1 = y1 < y2 ? y1 : y2;
@@ -49,43 +48,43 @@ s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2,
         f32 t;
         if (denominator == 0.0f) denominator = 0.000001f;
         t = ((x3 - x1) * dy2 - (y3 - y1) * dx2) / denominator;
-        outX = x1 + dx1 * t;
-        outY = y1 + dy1 * t;
-        return outX >= minX1 && outX <= maxX1 && outY >= minY1 && outY <= maxY1 &&
-               outX >= minX2 && outX <= maxX2 && outY >= minY2 && outY <= maxY2;
+        *outX = x1 + dx1 * t;
+        *outY = y1 + dy1 * t;
+        return *outX >= minX1 && *outX <= maxX1 && *outY >= minY1 && *outY <= maxY1 &&
+               *outX >= minX2 && *outX <= maxX2 && *outY >= minY2 && *outY <= maxY2;
     }
     if (kind1 == 1 && kind2 == 0) {
-        outX = x1;
-        outY = y3 + dy2 / dx2 * (outX - x3);
-        return outX >= minX2 && outX <= maxX2 && outY >= minY1 && outY <= maxY1;
+        *outX = x1;
+        *outY = y3 + dy2 / dx2 * (*outX - x3);
+        return *outX >= minX2 && *outX <= maxX2 && *outY >= minY1 && *outY <= maxY1;
     }
     if (kind1 == 0 && kind2 == 1) {
-        outX = x3;
-        outY = y1 + dy1 / dx1 * (outX - x1);
-        return outX >= minX1 && outX <= maxX1 && outY >= minY2 && outY <= maxY2;
+        *outX = x3;
+        *outY = y1 + dy1 / dx1 * (*outX - x1);
+        return *outX >= minX1 && *outX <= maxX1 && *outY >= minY2 && *outY <= maxY2;
     }
     if (kind1 == 2 && kind2 == 0) {
-        outY = y1;
-        outX = x3 + dx2 / dy2 * (outY - y3);
-        return outY >= minY2 && outY <= maxY2 && outX >= minX1 && outX <= maxX1;
+        *outY = y1;
+        *outX = x3 + dx2 / dy2 * (*outY - y3);
+        return *outY >= minY2 && *outY <= maxY2 && *outX >= minX1 && *outX <= maxX1;
     }
     if (kind1 == 0 && kind2 == 2) {
-        outY = y3;
-        outX = x1 + dx1 / dy1 * (outY - y1);
-        return outY >= minY1 && outY <= maxY1 && outX >= minX2 && outX <= maxX2;
+        *outY = y3;
+        *outX = x1 + dx1 / dy1 * (*outY - y1);
+        return *outY >= minY1 && *outY <= maxY1 && *outX >= minX2 && *outX <= maxX2;
     }
     if (kind1 == 1 && kind2 == 1)
-        return x1 == x3 && ((y1 >= minY2 && y1 <= maxY2) || (y2 >= minY2 && y2 <= maxY2));
+        return x1 == x3 && ((*outX = x3), (*outY = y3), ((y1 >= minY2 && y1 <= maxY2) || (y2 >= minY2 && y2 <= maxY2)));
     if (kind1 == 2 && kind2 == 2)
-        return y1 == y3 && ((x1 >= minX2 && x1 <= maxX2) || (x2 >= minX2 && x2 <= maxX2));
+        return y1 == y3 && ((*outX = x3), (*outY = y3), ((x1 >= minX2 && x1 <= maxX2) || (x2 >= minX2 && x2 <= maxX2)));
     if (kind1 == 1 && kind2 == 2)
-        return x1 >= minX2 && x1 <= maxX2 && y3 >= minY1 && y3 <= maxY1;
+        return (*outX = x1), (*outY = y3), x1 >= minX2 && x1 <= maxX2 && y3 >= minY1 && y3 <= maxY1;
     if (kind1 == 2 && kind2 == 1)
-        return x3 >= minX1 && x3 <= maxX1 && y1 >= minY2 && y1 <= maxY2;
+        return (*outX = x3), (*outY = y1), x3 >= minX1 && x3 <= maxX1 && y1 >= minY2 && y1 <= maxY2;
     return 0;
 }
 
-s32 scissor_intersection2(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4) {
+s32 scissor_intersection2(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* outX, f32* outY) {
     if (x1 == x3 && y1 == y3) {
         return 0;
     }
@@ -98,12 +97,11 @@ s32 scissor_intersection2(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4
     if (x2 == x4 && y2 == y4) {
         return 0;
     }
-    return scissor_intersection(x1, y1, x2, y2, x3, y3, x4, y4);
+    return scissor_intersection(x1, y1, x2, y2, x3, y3, x4, y4, outX, outY);
 }
 
 s32 scissor_intersection3(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4) {
     extern f32 float_1000_80427d10;
-    extern s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4);
 
     f32 dx;
     f32 zero;
@@ -136,7 +134,7 @@ s32 scissor_intersection3(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, 
         y1 = float_neg1000_80427cfc;
         y2 = float_1000_80427d10;
     }
-    return scissor_intersection(x1, y1, x2, y2, x3, y3, x4, y4);
+    return scissor_intersection(x1, y1, x2, y2, x3, y3, x4, y4, outX, outY);
 }
 
 s32 scissor_intersection4(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4) {
@@ -189,7 +187,7 @@ s32 scissor_cross(f32* pos1, f32* pos2, f32* poly, s32 count) {
         next = (i + 1) % count;
         cur = &poly[i * 2];
         nxt = &poly[next * 2];
-        if (scissor_intersection2(pos1[0], pos1[1], pos2[0], pos2[1], cur[0], cur[1], nxt[0], nxt[1]) != 0) {
+        if (scissor_intersection2(pos1[0], pos1[1], pos2[0], pos2[1], cur[0], cur[1], nxt[0], nxt[1], &outX, &outY) != 0) {
             return 0;
         }
     }

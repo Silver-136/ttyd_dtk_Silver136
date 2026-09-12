@@ -44,6 +44,7 @@ void* effStarStoneEntry(f64 xPos, f64 yPos, f64 zPos, f64 param_4, s32 param_5) 
     } GXColorLocal;
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
+    extern s32 __mulhw(s32, s32);
     extern u8 effStarStoneMain(s32 effEntry);
     extern void* effSnowDustN64Entry(f64 x, f64 y, f64 z, f64 scaleX, f64 scaleY, f64 scaleZ, s32 unk1, s32 unk2, s32 unk3);
     extern void* gpGlobals;
@@ -56,14 +57,13 @@ void* effStarStoneEntry(f64 xPos, f64 yPos, f64 zPos, f64 param_4, s32 param_5) 
     extern f32 float_90_804270c0;
     extern f64 float_1p5_804270d4;
     extern f32 edge_color[8][3];
-    extern u8 color_tbl[];
-    extern u8 dat_80427088;
+    extern u8* color_tbl[];
+    extern u32 dat_80427088;
 
     void* entry;
     void* work;
-    void* dust;
     s32 kind;
-    s32 div;
+    s32 quotient;
     f32 zero;
     f32 scale;
     GXColorLocal color;
@@ -77,8 +77,9 @@ void* effStarStoneEntry(f64 xPos, f64 yPos, f64 zPos, f64 param_4, s32 param_5) 
     *(void (**)(void))((s32)entry + 0x10) = (void (*)(void))effStarStoneMain;
     *(u32*)entry |= 2;
 
-    div = param_5 / 7 + (param_5 >> 0x1F);
-    kind = param_5 + (div - (div >> 0x1F)) * -7;
+    quotient = (__mulhw((s32)0x92492493, param_5) + param_5) >> 2;
+    quotient += (u32)quotient >> 31;
+    kind = param_5 - quotient * 7;
     *(s32*)work = kind;
     *(u16*)((s32)work + 4) = 0;
     *(f32*)((s32)work + 8) = (f32)xPos;
@@ -113,18 +114,18 @@ void* effStarStoneEntry(f64 xPos, f64 yPos, f64 zPos, f64 param_4, s32 param_5) 
         *(u16*)((s32)work + 4) |= 2;
     }
     if ((*(u16*)((s32)work + 4) & 2) == 0) {
-        tbl = &color_tbl[kind * 3];
-        dust = effSnowDustN64Entry((f64)xPos,
-                                   -((f64)(float_10_804270a4 * scale) - (f64)yPos),
-                                   (f64)zPos,
-                                   (f64)(float_20_804270b4 * scale),
-                                   (f64)(float_20_804270b4 * scale),
-                                   (f64)float_1_8042709c,
-                                   2, 4, 0);
-        *(void**)((s32)work + 0x34) = dust;
-        *(u32*)((s32)*(void**)((s32)dust + 0xC) + 0x4C) = tbl[0];
-        *(u32*)((s32)*(void**)((s32)dust + 0xC) + 0x50) = tbl[1];
-        *(u32*)((s32)*(void**)((s32)dust + 0xC) + 0x54) = tbl[2];
+        tbl = color_tbl[kind];
+        *(void**)((s32)work + 0x34) = effSnowDustN64Entry(
+            (f64)xPos,
+            -((f64)(float_10_804270a4 * scale) - (f64)yPos),
+            (f64)zPos,
+            (f64)(float_20_804270b4 * scale),
+            (f64)(float_20_804270b4 * scale),
+            (f64)float_1_8042709c,
+            2, 4, 0);
+        *(u32*)((s32)*(void**)((s32)*(void**)((s32)work + 0x34) + 0xC) + 0x4C) = tbl[0];
+        *(u32*)((s32)*(void**)((s32)*(void**)((s32)work + 0x34) + 0xC) + 0x50) = tbl[1];
+        *(u32*)((s32)*(void**)((s32)*(void**)((s32)work + 0x34) + 0xC) + 0x54) = tbl[2];
     }
     *(u16*)((s32)*(void**)((s32)entry + 0xC) + 4) |= 4;
     if (param_5 > 6) {
@@ -167,7 +168,7 @@ u8 effStarStoneMain(s32 effEntry) {
     extern void effStardustN64SetDrawCam(s32,s32);
     extern s32 shadowEntry(f64,f64,f64,f64);
     extern void U_shadowSetMode(s32,u8);
-    extern u8 color_tbl[];
+    extern u8* color_tbl[];
     extern const f32 float_0_80427094, float_0p01_80427098, float_1_8042709c;
     extern const f32 float_0p4_804270a0, float_10_804270a4, float_neg1_804270a8;
     extern const f32 float_neg0p5_804270ac, float_5_804270b0, float_20_804270b4;
@@ -176,37 +177,42 @@ u8 effStarStoneMain(s32 effEntry) {
     extern const f32 float_8_804270d0;
     u8* effect = (u8*)effEntry;
     u8* work = *(u8**)(effect + 0xC);
-    VecLocal pos = vec3_802fe698;
+    VecLocal basePos = vec3_802fe698;
+    VecLocal pos;
     s32 type = *(s32*)work;
     u16 flags = *(u16*)(work + 4);
     s32 phase = *(s32*)(work + 0x3C);
     s32 cameraId = *(s32*)(work + 0x38);
     s32 timer, spawned, shadow;
-    f32 angle, hitY, hitDist, hitA, hitB, hitC, hitD, hitE, hitF;
+    f32 angle, sinAngle, cosAngle, hitY, hitDist, hitA, hitB, hitC, hitD, hitE, hitF;
     void* camera;
     u8* color;
     StarStoneU8Double cvt0, cvt1, cvt2;
     f64 conversionMask;
 
-    pos.x = *(f32*)(work + 8); pos.y = *(f32*)(work + 0xC); pos.z = *(f32*)(work + 0x10);
+    basePos.x = *(f32*)(work + 8); basePos.y = *(f32*)(work + 0xC); basePos.z = *(f32*)(work + 0x10);
+    pos = basePos;
     if ((*(u32*)effect & 4) != 0) {
         *(u32*)effect &= ~4;
-        if (*(void**)(work + 0x60) != 0) effSoftDelete(*(void**)(work + 0x60));
-        if ((flags & 8) != 0) psndSFXOff(*(u32*)(work + 0x58));
+        if (*(void**)(work + 0x34) != 0) effSoftDelete(*(void**)(work + 0x34));
+        if ((flags & 8) != 0) psndSFXOff(*(u32*)(work + 0x60));
         effDelete(effect);
         return 0;
     }
     if ((flags & 4) != 0) {
         if ((flags & 8) == 0) {
             flags |= 8;
-            *(u32*)(work + 0x58) = psndSFXOn_3D(str_SFX_EVT_STARSTONE_SH_802fe6a4, &pos);
+            *(u16*)(work + 4) = flags;
+            *(u32*)(work + 0x60) = psndSFXOn_3D(str_SFX_EVT_STARSTONE_SH_802fe6a4, &pos);
         }
-        psndSFX_pos(*(u32*)(work + 0x58), &pos);
+        if ((*(u16*)(work + 4) & 8) != 0) {
+            psndSFX_pos(*(u32*)(work + 0x60), &pos);
+        }
     } else if ((flags & 8) != 0) {
         flags &= ~8;
-        psndSFXOff(*(u32*)(work + 0x58));
+        *(u16*)(work + 4) = flags;
+        psndSFXOff(*(u32*)(work + 0x60));
     }
-    *(u16*)(work + 4) = flags;
     if (phase == 1) {
         *(u16*)(work + 4) |= 1;
         *(f32*)(work + 0x44) = float_0_80427094;
@@ -232,7 +238,7 @@ u8 effStarStoneMain(s32 effEntry) {
                 *(s32*)(work + 0x3C) += 1;
                 if ((*(u16*)(work + 4) & 8) != 0) {
                     *(u16*)(work + 4) &= ~8;
-                    psndSFXOff(*(u32*)(work + 0x58));
+                    psndSFXOff(*(u32*)(work + 0x60));
                     *(u16*)(work + 4) &= ~4;
                 }
                 if ((*(u16*)(work + 4) & 0x10) == 0)
@@ -241,7 +247,7 @@ u8 effStarStoneMain(s32 effEntry) {
                     spawned = effStardustN64Entry(*(f32*)(work+8), *(f32*)(work+0xC) +
                                                    (float_5_804270b0 + float_10_804270a4) * *(f32*)(work+0x14),
                                                    *(f32*)(work+0x10), float_20_804270b4 * *(f32*)(work+0x14), 4);
-                    color = &color_tbl[type * 3];
+                    color = color_tbl[type];
                     cvt0.words.hi = 0x43300000;
                     cvt1.words.hi = 0x43300000;
                     cvt2.words.hi = 0x43300000;
@@ -282,12 +288,16 @@ u8 effStarStoneMain(s32 effEntry) {
         if ((*(s32*)(work + 0x2C) % 10 == 0) && (*(s32*)(work + 0x3C) == 0)) {
             camera = camGetPtr(4);
             angle = float_6p2832_804270bc * *(f32*)((u8*)camera + 0x114) / float_360_804270c4;
+            sinAngle = (f32)sin(angle);
+            camera = camGetPtr(4);
+            angle = float_6p2832_804270bc * *(f32*)((u8*)camera + 0x114) / float_360_804270c4;
+            cosAngle = (f32)cos(angle);
             spawned = effStardustN64Entry(
-                pos.x + float_10_804270a4 * (f32)sin(angle),
+                pos.x + float_10_804270a4 * sinAngle,
                 pos.y - float_10_804270a4 * *(f32*)(work + 0x14),
-                pos.z - float_10_804270a4 * (f32)cos(angle),
+                pos.z - float_10_804270a4 * cosAngle,
                 3);
-            color = &color_tbl[type * 3];
+            color = color_tbl[type];
             cvt0.words.hi = 0x43300000;
             cvt1.words.hi = 0x43300000;
             cvt2.words.hi = 0x43300000;
@@ -302,8 +312,8 @@ u8 effStarStoneMain(s32 effEntry) {
                 spawned);
             effStardustN64SetDrawCam(spawned,cameraId);
         }
-        if (*(void**)(work + 0x60) != 0) {
-            u8* dust = *(u8**)(*(u8**)(work + 0x60) + 0xC);
+        {
+            u8* dust = *(u8**)(*(u8**)(work + 0x34) + 0xC);
             if (*(s32*)(work + 0x3C) == 0) {
                 *(s32*)(dust + 0x68) = cameraId; *(f32*)(dust+4)=pos.x;
                 *(f32*)(dust+8)=pos.y-float_10_804270a4* *(f32*)(work+0x14); *(f32*)(dust+0xC)=pos.z;
@@ -371,7 +381,7 @@ void effStarStoneDisp_1(s32 cameraId, s32 effectAddress) {
     PSMTXConcat(trans,scale,trans);
     PSMTXRotRad(rot,0.017453292f * *(f32*)(work+0x1C),'y');
     PSMTXConcat(trans,rot,trans);
-    PSMTXConcat(camera+0x118,trans,trans);
+    PSMTXConcat(camera+0x11C,trans,trans);
     GXLoadPosMtxImm(trans,0);
     GXSetCurrentMtx(0);
     GXSetBlendMode(1,4,5,0);
@@ -380,40 +390,63 @@ void effStarStoneDisp_1(s32 cameraId, s32 effectAddress) {
     GXSetZMode(1,3,0);
     GXSetCullMode(2);
 
-    GXClearVtxDesc();
-    GXSetVtxDesc(9,2);
-    GXSetVtxAttrFmt(0,9,1,3,11);
-    GXSetArray(9,(void*)(type == 0 ? 0x803AF180 : 0x803AF780),6);
-    GXSetVtxDesc(10,2);
-    GXSetVtxAttrFmt(0,10,0,1,6);
-    GXSetArray(10,(void*)(type == 0 ? 0x803AF280 : 0x803AF880),3);
-    GXSetVtxDesc(11,2);
-    GXSetVtxAttrFmt(0,11,1,5,0);
-    GXSetArray(11,(void*)(type == 0 ? 0x803AF3A0 : 0x803AFA20),4);
-    GXSetVtxDesc(13,2);
-    GXSetVtxAttrFmt(0,13,1,3,13);
-    GXSetArray(13,(void*)(type == 0 ? 0x803AF300 : 0x803AF900),4);
     if (type == 0) {
+        GXClearVtxDesc();
+        GXSetVtxDesc(9,2);
+        GXSetVtxAttrFmt(0,9,1,3,11);
+        GXSetArray(9,(void*)0x803AF180,6);
+        GXSetVtxDesc(10,2);
+        GXSetVtxAttrFmt(0,10,0,1,6);
+        GXSetArray(10,(void*)0x803AF280,3);
+        GXSetVtxDesc(11,2);
+        GXSetVtxAttrFmt(0,11,1,5,0);
+        GXSetArray(11,(void*)0x803AF3A0,4);
+        GXSetVtxDesc(13,2);
+        GXSetVtxAttrFmt(0,13,1,3,13);
+        GXSetArray(13,(void*)0x803AF300,4);
         for (i=0;i<34;i++) GXCallDisplayList(diamond_1_dl_0_tbl[i], diamond_1_dl_0_size_tbl[i] << 5);
-    } else {
-        for (i=0;i<34;i++) GXCallDisplayList(diamond_7_dl_0_tbl[i], diamond_7_dl_0_size_tbl[i] << 5);
-    }
 
-    GXClearVtxDesc();
-    GXSetVtxDesc(9,2);
-    GXSetVtxAttrFmt(0,9,1,3,11);
-    GXSetArray(9,(void*)(type == 0 ? 0x803AF180 : 0x803AF780),6);
-    GXSetVtxDesc(10,2);
-    GXSetVtxAttrFmt(0,10,0,1,6);
-    GXSetArray(10,(void*)(type == 0 ? 0x803AF280 : 0x803AF880),3);
-    GXSetVtxDesc(11,2);
-    GXSetVtxAttrFmt(0,11,1,5,0);
-    GXSetVtxDesc(13,2);
-    GXSetVtxAttrFmt(0,13,1,3,13);
-    GXSetArray(13,(void*)(type == 0 ? 0x803AF300 : 0x803AF900),4);
-    if (type == 0) {
+        GXClearVtxDesc();
+        GXSetVtxDesc(9,2);
+        GXSetVtxAttrFmt(0,9,1,3,11);
+        GXSetArray(9,(void*)0x803AF180,6);
+        GXSetVtxDesc(10,2);
+        GXSetVtxAttrFmt(0,10,0,1,6);
+        GXSetArray(10,(void*)0x803AF280,3);
+        GXSetVtxDesc(11,2);
+        GXSetVtxAttrFmt(0,11,1,5,0);
+        GXSetVtxDesc(13,2);
+        GXSetVtxAttrFmt(0,13,1,3,13);
+        GXSetArray(13,(void*)0x803AF300,4);
         for (i=0;i<34;i++) GXCallDisplayList(diamond_1_dl_1_tbl[i], diamond_1_dl_1_size_tbl[i] << 5);
     } else {
+        GXClearVtxDesc();
+        GXSetVtxDesc(9,2);
+        GXSetVtxAttrFmt(0,9,1,3,11);
+        GXSetArray(9,(void*)0x803AF780,6);
+        GXSetVtxDesc(10,2);
+        GXSetVtxAttrFmt(0,10,0,1,6);
+        GXSetArray(10,(void*)0x803AF880,3);
+        GXSetVtxDesc(11,2);
+        GXSetVtxAttrFmt(0,11,1,5,0);
+        GXSetArray(11,(void*)0x803AFA20,4);
+        GXSetVtxDesc(13,2);
+        GXSetVtxAttrFmt(0,13,1,3,13);
+        GXSetArray(13,(void*)0x803AF900,4);
+        for (i=0;i<34;i++) GXCallDisplayList(diamond_7_dl_0_tbl[i], diamond_7_dl_0_size_tbl[i] << 5);
+
+        GXClearVtxDesc();
+        GXSetVtxDesc(9,2);
+        GXSetVtxAttrFmt(0,9,1,3,11);
+        GXSetArray(9,(void*)0x803AF780,6);
+        GXSetVtxDesc(10,2);
+        GXSetVtxAttrFmt(0,10,0,1,6);
+        GXSetArray(10,(void*)0x803AF880,3);
+        GXSetVtxDesc(11,2);
+        GXSetVtxAttrFmt(0,11,1,5,0);
+        GXSetVtxDesc(13,2);
+        GXSetVtxAttrFmt(0,13,1,3,13);
+        GXSetArray(13,(void*)0x803AF900,4);
         for (i=0;i<33;i++) GXCallDisplayList(diamond_7_dl_1_tbl[i], diamond_7_dl_1_size_tbl[i] << 5);
     }
 
@@ -442,32 +475,36 @@ void effStarStoneDisp_1(s32 cameraId, s32 effectAddress) {
     PSMTXConcat(trans, scale, trans);
     PSMTXRotRad(rot, 0.017453292f * *(f32*)(work + 0x1C), 'y');
     PSMTXConcat(trans, rot, trans);
-    PSMTXConcat(camera + 0x118, trans, trans);
+    PSMTXConcat(camera + 0x11C, trans, trans);
     GXLoadPosMtxImm(trans, 0);
     GXSetCurrentMtx(0);
-    effGetTexObj(type == 0 ? 0x2E : 0x2F, texObj);
+    if (type == 0) effGetTexObj(0x2E, texObj);
+    else effGetTexObj(0x2F, texObj);
     GXLoadTexObj(texObj, 0);
     GXSetBlendMode(1, 4, 5, 0);
     GXSetZCompLoc(1);
     GXSetAlphaCompare(7, 0, 0, 7, 0);
     GXSetZMode(1, 3, 0);
 
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 2);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 11);
-    GXSetArray(9, (void*)(type == 0 ? 0x803AF180 : 0x803AF780), 6);
-    GXSetVtxDesc(10, 2);
-    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
-    GXSetArray(10, (void*)(type == 0 ? 0x803AF280 : 0x803AF880), 3);
-    GXSetVtxDesc(11, 2);
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-    GXSetArray(11, (void*)(type == 0 ? 0x803AF3A0 : 0x803AFA20), 4);
-    GXSetVtxDesc(13, 2);
-    GXSetVtxAttrFmt(0, 13, 1, 3, 13);
-    GXSetArray(13, (void*)(type == 0 ? 0x803AF300 : 0x803AF900), 4);
     if (type == 0) {
+        GXClearVtxDesc(); GXSetVtxDesc(9,2); GXSetVtxAttrFmt(0,9,1,3,11);
+        GXSetArray(9,(void*)0x803AF180,6);
+        GXSetVtxDesc(10,2); GXSetVtxAttrFmt(0,10,0,1,6);
+        GXSetArray(10,(void*)0x803AF280,3);
+        GXSetVtxDesc(11,2); GXSetVtxAttrFmt(0,11,1,5,0);
+        GXSetArray(11,(void*)0x803AF3A0,4);
+        GXSetVtxDesc(13,2); GXSetVtxAttrFmt(0,13,1,3,13);
+        GXSetArray(13,(void*)0x803AF300,4);
         for (i = 0; i < 34; i++) GXCallDisplayList(diamond_1_dl_0_tbl[i], diamond_1_dl_0_size_tbl[i] << 5);
     } else {
+        GXClearVtxDesc(); GXSetVtxDesc(9,2); GXSetVtxAttrFmt(0,9,1,3,11);
+        GXSetArray(9,(void*)0x803AF780,6);
+        GXSetVtxDesc(10,2); GXSetVtxAttrFmt(0,10,0,1,6);
+        GXSetArray(10,(void*)0x803AF880,3);
+        GXSetVtxDesc(11,2); GXSetVtxAttrFmt(0,11,1,5,0);
+        GXSetArray(11,(void*)0x803AFA20,4);
+        GXSetVtxDesc(13,2); GXSetVtxAttrFmt(0,13,1,3,13);
+        GXSetArray(13,(void*)0x803AF900,4);
         for (i = 0; i < 34; i++) GXCallDisplayList(diamond_7_dl_0_tbl[i], diamond_7_dl_0_size_tbl[i] << 5);
     }
 
@@ -477,22 +514,24 @@ void effStarStoneDisp_1(s32 cameraId, s32 effectAddress) {
     GXSetZCompLoc(1);
     GXSetAlphaCompare(7, 0, 0, 7, 0);
     GXSetZMode(1, 3, 0);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 2);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 11);
-    GXSetArray(9, (void*)(type == 0 ? 0x803AF180 : 0x803AF780), 6);
-    GXSetVtxDesc(10, 2);
-    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
-    GXSetArray(10, (void*)(type == 0 ? 0x803AF280 : 0x803AF880), 3);
-    GXSetVtxDesc(11, 2);
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-    if (type != 0) GXSetArray(11, (void*)0x803AFA20, 4);
-    GXSetVtxDesc(13, 2);
-    GXSetVtxAttrFmt(0, 13, 1, 3, 13);
-    GXSetArray(13, (void*)(type == 0 ? 0x803AF300 : 0x803AF900), 4);
     if (type == 0) {
+        GXClearVtxDesc(); GXSetVtxDesc(9,2); GXSetVtxAttrFmt(0,9,1,3,11);
+        GXSetArray(9,(void*)0x803AF180,6);
+        GXSetVtxDesc(10,2); GXSetVtxAttrFmt(0,10,0,1,6);
+        GXSetArray(10,(void*)0x803AF280,3);
+        GXSetVtxDesc(11,2); GXSetVtxAttrFmt(0,11,1,5,0);
+        GXSetVtxDesc(13,2); GXSetVtxAttrFmt(0,13,1,3,13);
+        GXSetArray(13,(void*)0x803AF300,4);
         for (i = 0; i < 34; i++) GXCallDisplayList(diamond_1_dl_1_tbl[i], diamond_1_dl_1_size_tbl[i] << 5);
     } else {
+        GXClearVtxDesc(); GXSetVtxDesc(9,2); GXSetVtxAttrFmt(0,9,1,3,11);
+        GXSetArray(9,(void*)0x803AF780,6);
+        GXSetVtxDesc(10,2); GXSetVtxAttrFmt(0,10,0,1,6);
+        GXSetArray(10,(void*)0x803AF880,3);
+        GXSetVtxDesc(11,2); GXSetVtxAttrFmt(0,11,1,5,0);
+        GXSetArray(11,(void*)0x803AFA20,4);
+        GXSetVtxDesc(13,2); GXSetVtxAttrFmt(0,13,1,3,13);
+        GXSetArray(13,(void*)0x803AF900,4);
         for (i = 0; i < 33; i++) GXCallDisplayList(diamond_7_dl_1_tbl[i], diamond_7_dl_1_size_tbl[i] << 5);
     }
 }

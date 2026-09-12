@@ -382,24 +382,26 @@ s32 BSE_TurnFirstProcessEffectMain(void* unit) {
 }
 
 void BattleStatusChangeInfoWorkInit(BattleWorkUnit* unit) {
-    s32 offset;
-    s32 count;
-    u8* base;
-    s8 minusOne;
-    u8 zeroA;
-    u8 zeroB;
-    u8 zeroC;
-    s32 zeroWord;
+    register s32 offset;
+    register s32 count;
+    register u8* base;
+    register s8 minusOne;
+    register u8 zeroA;
+    register u8 zeroB;
+    register u8 zeroC;
+    register s32 zeroWord;
     u8* entry;
 
     offset = 0;
     count = 6;
     base = (u8*)((s32)unit + 0xAE8);
     minusOne = -1;
-    zeroA = 0;
-    zeroB = 0;
-    zeroC = 0;
-    zeroWord = 0;
+    asm {
+        mr zeroA, offset
+        mr zeroB, offset
+        mr zeroC, offset
+        mr zeroWord, offset
+    }
 
     while (count != 0) {
         entry = base + offset;
@@ -716,26 +718,25 @@ int BattleStatusChangeMsgMain(void* battleWork) {
 void _st_chg_msg_disp(void) {
     void* battleWork;
     char* msg;
-    u16 lines[2];
     u32 color;
-    s32 width;
-    s32 halfWidth;
-    u16 lineCount;
-    s32 metrics;
+    u16 lines[2];
+    u32 metrics;
     f32 x;
 
     battleWork = _battleWorkPointer;
-    msg = (char*)((s32)battleWork + 0x18EF0);
-    metrics = FontGetMessageWidthLine(msg, lines);
-    width = (u16)metrics;
-    halfWidth = (metrics >> 16) & 0x7FFF;
-    lineCount = lines[0] + 1;
-    x = float_0_80424710 - (f32)halfWidth;
-    lines[0] = lineCount;
+    msg = (char*)((s32)battleWork + 0x20000);
+    metrics = FontGetMessageWidthLine(msg - 0x7110, lines);
+    lines[0] += 1;
+    x = float_0_80424710 - (f32)(s32)((metrics >> 16) & 0x7FFF);
     color = dat_8042470c;
-    windowDispGX_Waku_col(0, &color, x - float_20_80424714, float_neg117_80424718 + (f32)(width + 0x28), (f32)((lineCount - 1) * 0x1D), (f32)(lineCount * 0x1D + 1), float_10_8042471c);
+    windowDispGX_Waku_col(0, &color, x - float_20_80424714,
+                         float_neg117_80424718 + (f32)((u16)metrics + 0x28),
+                         (f32)((lines[0] - 1) * 0x1D),
+                         (f32)(lines[0] * 0x1D + 1), float_10_8042471c);
     FontDrawStart();
-    FontDrawMessage((s32)x, (s32)float_neg120_80424720 + (lineCount - 1) * 0x1D, msg);
+    FontDrawMessage((s32)x,
+                    (s32)float_neg120_80424720 + (lines[0] - 1) * 0x1D,
+                    msg - 0x7110);
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

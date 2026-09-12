@@ -10,24 +10,24 @@ void* effDamageStarEntry(f32 x, f32 y, f32 z, f32 speed, f32 baseRot, s32 kind, 
     extern char str_DamageStar_802f3a80[];
     extern void* damageStar_effAnimDt;
     extern u8 effDamageStarMain(void*);
-    extern f32 float_0_80422c80;
-    extern f32 float_1_80422c98;
-    extern f32 float_30_80422cdc;
-    extern f32 float_360_80422ce4;
-    extern f32 float_6p2832_80422ce0;
-    extern f32 float_1p5_80422cd0;
-    extern f32 float_0p2_80422d04;
-    extern f32 float_0p16605_80422cec;
-    extern f32 float_3p1416_80422cf0;
-    extern f32 float_0p4967_80422d00;
-    extern f32 float_0p00761_80422ce8;
-    extern f32 float_0p03705_80422cfc;
-    extern f32 float_1p5708_80422cf4;
-    extern f32 float_4p7124_80422cf8;
+    extern const f32 float_0_80422c80;
+    extern const f32 float_1_80422c98;
+    extern const f32 float_30_80422cdc;
+    extern const f32 float_360_80422ce4;
+    extern const f32 float_6p2832_80422ce0;
+    extern const f32 float_1p5_80422cd0;
+    extern const f32 float_0p2_80422d04;
+    extern const f32 float_0p16605_80422cec;
+    extern const f32 float_3p1416_80422cf0;
+    extern const f32 float_0p4967_80422d00;
+    extern const f32 float_0p00761_80422ce8;
+    extern const f32 float_0p03705_80422cfc;
+    extern const f32 float_1p5708_80422cf4;
+    extern const f32 float_4p7124_80422cf8;
     void* entry;
     u8* work;
     u8* part;
-    s32 effCount;
+    s32 originalCount;
     s32 size;
     s32 i;
     f32 angle;
@@ -39,11 +39,11 @@ void* effDamageStarEntry(f32 x, f32 y, f32 z, f32 speed, f32 baseRot, s32 kind, 
     f32 c;
 
     entry = effEntry();
+    originalCount = count;
     if (count > 20) count = 20;
-    effCount = count + 2;
     *(void**)((s32)entry + 0x14) = str_DamageStar_802f3a80;
-    *(s32*)((s32)entry + 0x8) = effCount;
-    size = effCount * 0x48;
+    *(s32*)((s32)entry + 0x8) = count + 2;
+    size = (count + 2) * 0x48;
     work = __memAlloc(3, size);
     *(void**)((s32)entry + 0xC) = work;
     memset(work, 0, size);
@@ -58,52 +58,58 @@ void* effDamageStarEntry(f32 x, f32 y, f32 z, f32 speed, f32 baseRot, s32 kind, 
     *(f32*)(work + 0x38) = baseRot;
     *(s32*)(work + 0x24) = 99;
     *(s32*)(work + 0x28) = 0;
-    *(s32*)(work + 0x3C) = count;
+    *(s32*)(work + 0x3C) = originalCount;
     *(s32*)(work + 0x40) = *(s32*)((s32)gpGlobals + 0x1C);
 
-    spread = float_30_80422cdc - (f32)effCount;
+    spread = float_30_80422cdc - (f32)(count + 2);
     part = work + 0x48;
-    for (i = 1; i < effCount; i++, part += 0x48) {
-        dir = (f32)((i * ((i & 1) ? 1 : -1)) / 2);
+    for (i = 1; i < count + 2; i++, part += 0x48) {
+        dir = (f32)((i * (((i % 2) * 2) - 1)) / 2);
         *(f32*)(part + 0x38) = baseRot + spread * dir;
         *(f32*)(part + 0x4) = float_0_80422c80;
         *(f32*)(part + 0x8) = float_0_80422c80;
         *(f32*)(part + 0xC) = float_0_80422c80;
         angle = (float_6p2832_80422ce0 * *(f32*)(part + 0x38)) / float_360_80422ce4;
 
-        if (angle > float_3p1416_80422cf0) {
-            if (angle >= float_4p7124_80422cf8) {
-                t = float_1p5708_80422cf4 - (angle - float_4p7124_80422cf8);
-                t2 = t * t;
-                s = -(((float_0p00761_80422ce8 * t2 - float_0p16605_80422cec) * t2 + float_1_80422c98) * t);
+        if (angle <= float_3p1416_80422cf0) {
+            if (angle <= float_1p5708_80422cf4) {
+                t = angle;
             } else {
-                t = angle - float_3p1416_80422cf0;
-                t2 = t * t;
-                s = -(((float_0p00761_80422ce8 * t2 - float_0p16605_80422cec) * t2 + float_1_80422c98) * t);
+                t = float_1p5708_80422cf4 - (angle - float_1p5708_80422cf4);
             }
-        } else if (angle > float_1p5708_80422cf4) {
-            t = float_1p5708_80422cf4 - (angle - float_1p5708_80422cf4);
             t2 = t * t;
             s = ((float_0p00761_80422ce8 * t2 - float_0p16605_80422cec) * t2 + float_1_80422c98) * t;
         } else {
-            t2 = angle * angle;
-            s = ((float_0p00761_80422ce8 * t2 - float_0p16605_80422cec) * t2 + float_1_80422c98) * angle;
+            if (angle >= float_4p7124_80422cf8) {
+                t = float_1p5708_80422cf4 - (angle - float_4p7124_80422cf8);
+            } else {
+                t = angle - float_3p1416_80422cf0;
+            }
+            t2 = t * t;
+            s = -(((float_0p00761_80422ce8 * t2 - float_0p16605_80422cec) * t2 + float_1_80422c98) * t);
         }
         *(f32*)(part + 0x10) = -(speed * s) * float_1p5_80422cd0;
 
-        if (angle > float_3p1416_80422cf0) {
-            if (angle >= float_4p7124_80422cf8) t = float_1p5708_80422cf4 - (angle - float_4p7124_80422cf8);
-            else t = angle - float_3p1416_80422cf0;
-            t2 = t * t;
-            c = (float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98;
-            if (angle < float_4p7124_80422cf8) c = -c;
-        } else if (angle > float_1p5708_80422cf4) {
-            t = float_1p5708_80422cf4 - (angle - float_1p5708_80422cf4);
-            t2 = t * t;
-            c = -((float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98);
+        if (angle <= float_3p1416_80422cf0) {
+            if (angle <= float_1p5708_80422cf4) {
+                t = angle;
+                t2 = t * t;
+                c = (float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98;
+            } else {
+                t = float_1p5708_80422cf4 - (angle - float_1p5708_80422cf4);
+                t2 = t * t;
+                c = -((float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98);
+            }
         } else {
-            t2 = angle * angle;
-            c = (float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98;
+            if (angle >= float_4p7124_80422cf8) {
+                t = float_1p5708_80422cf4 - (angle - float_4p7124_80422cf8);
+                t2 = t * t;
+                c = (float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98;
+            } else {
+                t = angle - float_3p1416_80422cf0;
+                t2 = t * t;
+                c = -((float_0p03705_80422cfc * t2 - float_0p4967_80422d00) * t2 + float_1_80422c98);
+            }
         }
         *(f32*)(part + 0x14) = (speed * c) * float_1p5_80422cd0;
         *(f32*)(part + 0x18) = float_0_80422c80;
@@ -130,7 +136,7 @@ u8 effDamageStarMain(void* effEntry) {
     extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 z);
     extern u8 effDamageStarDisp(void);
     extern void* gpGlobals;
-    extern LocalVec3 vec3_802f3a60;
+    extern const LocalVec3 vec3_802f3a60;
     extern u8 scale_data[];
     extern f32 float_0_80422c80;
     extern f32 float_1_80422c98;
@@ -141,20 +147,24 @@ u8 effDamageStarMain(void* effEntry) {
     extern f32 float_1p5_80422cd0;
     extern f32 float_0p1_80422cd4;
     extern f32 float_0p75_80422cd8;
+    LocalVec3 pos;
     LocalVec3 dispPos;
     void* work;
     void* part;
-    s32 delta;
+    u8* scaleTable;
+    u32 delta;
     s32 timer;
     s32 i;
     f32 scale;
-    f32 velScale = float_0p75_80422cd8;
+    f32 velScale;
 
     work = *(void**)((s32)effEntry + 0xC);
-    dispPos = vec3_802f3a60;
-    dispPos.x = *(f32*)((s32)work + 0x4);
-    dispPos.y = *(f32*)((s32)work + 0x8);
-    dispPos.z = *(f32*)((s32)work + 0xC);
+
+    pos = vec3_802f3a60;
+    pos.x = *(f32*)((s32)work + 0x4);
+    pos.y = *(f32*)((s32)work + 0x8);
+    pos.z = *(f32*)((s32)work + 0xC);
+    dispPos = pos;
 
     effCalcMayaAnim(*(void**)((s32)work + 0x44));
 
@@ -166,7 +176,11 @@ u8 effDamageStarMain(void* effEntry) {
         delta = 1;
     }
 
-    while (delta-- > 0) {
+    velScale = float_0p75_80422cd8;
+
+    while (delta-- != 0) {
+        work = *(void**)((s32)effEntry + 0xC);
+
         if (*(s32*)((s32)work + 0x24) < 100) {
             *(s32*)((s32)work + 0x24) -= 1;
         }
@@ -175,30 +189,43 @@ u8 effDamageStarMain(void* effEntry) {
         if (*(s32*)((s32)work + 0x24) < 0) {
             effDeleteMayaAnim(*(void**)((s32)work + 0x44));
             effDelete(effEntry);
-            return 0;
+            goto exit;
         }
 
         timer = *(s32*)((s32)work + 0x28);
+        i = 2;
+        scaleTable = scale_data;
         part = (void*)((s32)work + 0x90);
-        for (i = 2; i < *(s32*)((s32)effEntry + 0x8); i++, part = (void*)((s32)part + 0x48)) {
+
+        for (; i < *(s32*)((s32)effEntry + 0x8);
+             i++, part = (void*)((s32)part + 0x48)) {
             if (timer < 20) {
-                scale = float_0p01_80422cc8 * (f32)scale_data[timer];
-                *(f32*)((s32)part + 0x2C) = scale;
-                *(f32*)((s32)part + 0x30) = scale;
+                scale = float_0p01_80422cc8 * (f32)scaleTable[timer];
                 *(f32*)((s32)part + 0x34) = scale;
+                *(f32*)((s32)part + 0x30) = scale;
+                *(f32*)((s32)part + 0x2C) = scale;
             } else if (timer < 40) {
-                *(f32*)((s32)part + 0x1C) = intplGetValue(float_0_80422c80, float_720_80422ccc, 0xB, timer - 20, 19);
+                *(f32*)((s32)part + 0x1C) =
+                    intplGetValue(float_0_80422c80, float_720_80422ccc, 0xB, timer - 20, 19);
             } else if (timer < 50) {
-                *(f32*)((s32)part + 0x2C) = intplGetValue(float_1_80422c98, float_1p5_80422cd0, 4, timer - 40, 9);
-                *(f32*)((s32)part + 0x30) = intplGetValue(float_1_80422c98, float_0p5_80422cc4, 4, timer - 40, 9);
+                *(f32*)((s32)part + 0x2C) =
+                    intplGetValue(float_1_80422c98, float_1p5_80422cd0, 4, timer - 40, 9);
+                *(f32*)((s32)part + 0x30) =
+                    intplGetValue(float_1_80422c98, float_0p5_80422cc4, 4, timer - 40, 9);
             } else if (timer < 60) {
-                *(f32*)((s32)part + 0x2C) = intplGetValue(float_1p5_80422cd0, float_0p1_80422cd4, 1, timer - 50, 9);
-                *(f32*)((s32)part + 0x30) = intplGetValue(float_0p5_80422cc4, float_1_80422c98, 1, timer - 50, 9);
-                *(f32*)((s32)part + 0x8) = intplGetValue(*(f32*)((s32)part + 0x8), *(f32*)((s32)part + 0x8) + float_10_80422ca4, 1, timer - 50, 9);
+                *(f32*)((s32)part + 0x2C) =
+                    intplGetValue(float_1p5_80422cd0, float_0p1_80422cd4, 1, timer - 50, 9);
+                *(f32*)((s32)part + 0x30) =
+                    intplGetValue(float_0p5_80422cc4, float_1_80422c98, 1, timer - 50, 9);
+                *(f32*)((s32)part + 0x8) =
+                    intplGetValue(*(f32*)((s32)part + 0x8),
+                                  *(f32*)((s32)part + 0x8) + float_10_80422ca4,
+                                  1, timer - 50, 9);
             } else {
-                *(f32*)((s32)part + 0x2C) = float_0_80422c80;
-                *(f32*)((s32)part + 0x30) = float_0_80422c80;
-                *(f32*)((s32)part + 0x34) = float_0_80422c80;
+                scale = float_0_80422c80;
+                *(f32*)((s32)part + 0x34) = scale;
+                *(f32*)((s32)part + 0x30) = scale;
+                *(f32*)((s32)part + 0x2C) = scale;
             }
 
             *(f32*)((s32)part + 0x10) *= velScale;
@@ -210,9 +237,12 @@ u8 effDamageStarMain(void* effEntry) {
         }
     }
 
+    work = *(void**)((s32)effEntry + 0xC);
     *(s32*)((s32)work + 0x40) = *(s32*)((s32)gpGlobals + 0x1C);
     dispEntry(4, 8, effDamageStarDisp, effEntry, dispCalcZ(&dispPos));
-    return 0;
+
+exit:
+    ;
 }
 
 
@@ -352,12 +382,18 @@ void effDamageStarDisp(s32 cameraId, void* effect) {
     if (*(s32*)work == 1) {
         effGetTexObj(0x27, &tex);
         GXLoadTexObj(&tex, 3);
+        GXBegin(0x80, 0, 4);
+        *fifo=float_neg2_80422cb4;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_0_80422c80;
+        *fifo=float_2_80422c94;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_0_80422c80;
+        *fifo=float_2_80422c94;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_1_80422c98;
+        *fifo=float_neg2_80422cb4;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_1_80422c98;
+    } else {
+        GXBegin(0x80, 0, 4);
+        *fifo=float_neg2_80422cb4;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_0_80422c80;
+        *fifo=float_2_80422c94;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_0_80422c80;
+        *fifo=float_2_80422c94;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_1_80422c98;
+        *fifo=float_neg2_80422cb4;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_1_80422c98;
     }
-    GXBegin(0x80, 0, 4);
-    *fifo=float_neg2_80422cb4;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_0_80422c80;
-    *fifo=float_2_80422c94;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_0_80422c80;
-    *fifo=float_2_80422c94;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_1_80422c98;
-    *fifo=float_neg2_80422cb4;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_1_80422c98;
 
     PSMTXConcat((f32(*)[4])(camera + 0x48), base, model);
     GXLoadPosMtxImm(model, 0);
@@ -373,11 +409,17 @@ void effDamageStarDisp(s32 cameraId, void* effect) {
         effGetTexObj(0x13, &tex);
         GXLoadTexObj(&tex, 2);
         GXSetTevOp(0, 3);
+        GXBegin(0x80, 0, 4);
+        *fifo=float_neg2_80422cb4;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_0_80422c80;
+        *fifo=float_2_80422c94;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_0_80422c80;
+        *fifo=float_2_80422c94;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_1_80422c98;*fifo=float_1_80422c98;
+        *fifo=float_neg2_80422cb4;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_1_80422c98;
+    } else {
+        GXBegin(0x80, 0, 4);
+        *fifo=float_neg2_80422cb4;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_0_80422c80;
+        *fifo=float_2_80422c94;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_0_80422c80;
+        *fifo=float_2_80422c94;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_1_80422c98;*fifo=float_1_80422c98;
+        *fifo=float_neg2_80422cb4;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_1_80422c98;
     }
-    GXBegin(0x80, 0, 4);
-    *fifo=float_neg2_80422cb4;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_0_80422c80;
-    *fifo=float_2_80422c94;*fifo=float_2_80422c94;*fifo=float_0_80422c80;*fifo=float_2_80422c94;*fifo=float_0_80422c80;
-    *fifo=float_2_80422c94;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_1_80422c98;*fifo=float_1_80422c98;
-    *fifo=float_neg2_80422cb4;*fifo=float_neg2_80422cb4;*fifo=float_0_80422c80;*fifo=float_0_80422c80;*fifo=float_1_80422c98;
 }
 

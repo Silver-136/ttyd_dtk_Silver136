@@ -85,6 +85,7 @@ void effBreathFireMain(void* effect) {
         f32 y;
         f32 z;
     } LocalVec3;
+    static const LocalVec3 vec3_802fac18 = {0.0f, 0.0f, 0.0f};
     extern void effDelete(void* effect);
     extern f32 dispCalcZ(LocalVec3* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
@@ -97,18 +98,17 @@ void effBreathFireMain(void* effect) {
     extern f32 float_0p01_80424e1c;
     f32* work;
     void* child;
-    f32 progress;
-    f32 duration;
+    s32 elapsed;
     s32 timeLeft;
     s32 total;
-    LocalVec3 pos;
+    LocalVec3 pos = vec3_802fac18;
 
     work = *(f32**)((s32)effect + 0xC);
     pos.x = work[3];
     pos.y = work[4];
     pos.z = work[5];
 
-    *(s32*)&work[23] = (s32)((float_4_80424e0c * (f32)*(s32*)&work[19]) / float_10_80424e10);
+    work[23] = (float_4_80424e0c * (f32)*(s32*)&work[19]) / float_10_80424e10;
     (*(s32*)&work[18])--;
     (*(s32*)&work[19])++;
     timeLeft = *(s32*)&work[18];
@@ -123,34 +123,30 @@ void effBreathFireMain(void* effect) {
         work[14] += float_0p05_80424e14 * (float_2p5_80424e18 - work[14]);
     }
 
-    progress = (f32)*(s32*)&work[19];
-    duration = (f32)total;
-    work[3] = work[6] + (progress * (work[20] + (work[9] - work[6]))) / duration;
-    work[4] = work[7] + (progress * (work[21] + (work[10] - work[7]))) / duration;
-    work[5] = work[8] + (progress * (work[22] + (work[11] - work[8]))) / duration;
+    elapsed = *(s32*)&work[19];
+    work[3] = work[6] + ((f32)elapsed * (work[20] + (work[9] - work[6]))) / (f32)total;
+    work[4] = work[7] + ((f32)elapsed * (work[21] + (work[10] - work[7]))) / (f32)total;
+    work[5] = work[8] + ((f32)elapsed * (work[22] + (work[11] - work[8]))) / (f32)total;
 
     if (*(s32*)&work[0] == 1) {
-        work[24] += float_0p01_80424e1c * progress;
+        work[24] += float_0p01_80424e1c * (f32)elapsed;
         work[4] += work[24];
     }
 
-    if ((*(s32*)&work[19] == *(s32*)&work[2] + 1) && (*(s32*)&work[1] > 0)) {
+    if ((elapsed == *(s32*)&work[2] + 1) && (*(s32*)&work[1] > 0)) {
         child = effBreathFireN64Entry(work[6], work[7], work[8], work[9], work[10], work[11],
                                       *(s32*)&work[0], *(s32*)&work[1] - 1,
                                       *(s32*)&work[2], total);
-        {
-            f32* childWork = *(f32**)((s32)child + 0xC);
-            *(s32*)&childWork[25] = *(s32*)&work[25];
-            *(s32*)&childWork[26] = *(s32*)&work[26];
-            *(s32*)&childWork[27] = *(s32*)&work[27];
-            *(s32*)&childWork[28] = *(s32*)&work[28];
-            *(s32*)&childWork[29] = *(s32*)&work[29];
-            *(s32*)&childWork[30] = *(s32*)&work[30];
-            childWork[14] = work[12];
-            childWork[12] = work[12];
-            childWork[13] = work[13];
-            childWork[15] = work[15];
-        }
+        *(s32*)&(*(f32**)((s32)child + 0xC))[25] = *(s32*)&work[25];
+        *(s32*)&(*(f32**)((s32)child + 0xC))[26] = *(s32*)&work[26];
+        *(s32*)&(*(f32**)((s32)child + 0xC))[27] = *(s32*)&work[27];
+        *(s32*)&(*(f32**)((s32)child + 0xC))[28] = *(s32*)&work[28];
+        *(s32*)&(*(f32**)((s32)child + 0xC))[29] = *(s32*)&work[29];
+        *(s32*)&(*(f32**)((s32)child + 0xC))[30] = *(s32*)&work[30];
+        (*(f32**)((s32)child + 0xC))[14] = work[12];
+        (*(f32**)((s32)child + 0xC))[12] = work[12];
+        (*(f32**)((s32)child + 0xC))[13] = work[13];
+        (*(f32**)((s32)child + 0xC))[15] = work[15];
     }
 
     if ((timeLeft < 10) && (*(s32*)&work[0] == 0)) {

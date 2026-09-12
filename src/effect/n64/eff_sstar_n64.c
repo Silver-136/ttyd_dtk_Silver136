@@ -1,6 +1,10 @@
 #include "effect/n64/eff_sstar_n64.h"
+#include "dolphin/os/OSFastCast.h"
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* effSstarN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f32 speed, s32 type) {
+    typedef union FloatBits { f32 value; s32 bits; } FloatBits;
     extern void* effEntry(void);
     extern void* __memAlloc(s32, s32);
     extern void effSstarMain(void*);
@@ -15,6 +19,8 @@ void* effSstarN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f32 sp
     extern f32 float_0_8042610c, float_0p2_80426144, float_0p5_80426148;
     extern f32 float_6p2832_8042614c, float_360_80426150;
     extern f32 float_neg20_80426154, float_20_80426158;
+    extern f32 __float_nan[];
+    u8* constants = vec3_802fbfe0;
     void* entry;
     u8* work;
     u8* camera;
@@ -23,7 +29,7 @@ void* effSstarN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f32 sp
     s32 i;
 
     entry = effEntry();
-    *(char**)((s32)entry + 0x14) = (char*)vec3_802fbfe0 + 0x28;
+    *(char**)((s32)entry + 0x14) = (char*)constants + 0x28;
     *(s32*)((s32)entry + 8) = 1;
     work = __memAlloc(3, 0x25C);
     *(u8**)((s32)entry + 0xC) = work;
@@ -56,16 +62,54 @@ void* effSstarN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f32 sp
     dy = dstY - y;
     dz = dstZ - z;
     len = dx * dx + dy * dy + dz * dz;
-    if (len > float_0_8042610c) {
-        f64 estimate = __frsqrte(len);
-        f64 half = *(f64*)(vec3_802fbfe0 + 0x10);
-        f64 three = *(f64*)(vec3_802fbfe0 + 0x18);
-        estimate = half * estimate * (three - len * estimate * estimate);
-        estimate = half * estimate * (three - len * estimate * estimate);
-        estimate = half * estimate * (three - len * estimate * estimate);
-        len = (f32)(len * estimate);
+    {
+        FloatBits classify;
+        register f64 value, estimate;
+        s32 category, exponent;
+        value = (f64)len;
+        invLen = (f32)value;
+        if (value != (f64)float_0_8042610c) {
+            if (value > (f64)float_0_8042610c) {
+#ifdef __MWERKS__
+                asm { frsqrte estimate, value }
+#else
+                estimate = 1.0 / value;
+#endif
+                estimate = *(f64*)(constants + 0x10) * estimate *
+                           (*(f64*)(constants + 0x18) - value * estimate * estimate);
+                estimate = *(f64*)(constants + 0x10) * estimate *
+                           (*(f64*)(constants + 0x18) - value * estimate * estimate);
+                len = (f32)(value * *(f64*)(constants + 0x10) * estimate *
+                            (*(f64*)(constants + 0x18) - value * estimate * estimate));
+            } else if (value < *(f64*)(constants + 0x20)) {
+                len = __float_nan[0];
+            } else {
+                classify.value = len;
+                exponent = classify.bits & 0x7F800000;
+                if (exponent == 0x7F800000) {
+                    if ((classify.bits & 0x7FFFFF) == 0) {
+                        category = 2;
+                    } else {
+                        category = 1;
+                    }
+                } else if (exponent >= 0x7F800000) {
+                    category = 4;
+                } else if (exponent == 0) {
+                    if ((classify.bits & 0x7FFFFF) == 0) {
+                        category = 3;
+                    } else {
+                        category = 5;
+                    }
+                } else {
+                    category = 4;
+                }
+                if (category == 1) {
+                    len = __float_nan[0];
+                }
+            }
+            invLen = speed / len;
+        }
     }
-    invLen = speed / len;
     *(f32*)(work + 0x10) = dx * invLen;
     *(f32*)(work + 0x14) = dy * invLen;
     *(f32*)(work + 0x18) = dz * invLen;
@@ -77,14 +121,51 @@ void* effSstarN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f32 sp
     projectedX = -cs * *(f32*)(work + 0x10);
     projectedZ = -sn * *(f32*)(work + 0x18);
     projectedLen = projectedX * projectedX + projectedZ * projectedZ;
-    if (projectedLen > float_0_8042610c) {
-        f64 estimate = __frsqrte(projectedLen);
-        f64 half = *(f64*)(vec3_802fbfe0 + 0x10);
-        f64 three = *(f64*)(vec3_802fbfe0 + 0x18);
-        estimate = half * estimate * (three - projectedLen * estimate * estimate);
-        estimate = half * estimate * (three - projectedLen * estimate * estimate);
-        estimate = half * estimate * (three - projectedLen * estimate * estimate);
-        projectedLen = (f32)(projectedLen * estimate);
+    {
+        FloatBits classify;
+        register f64 value, estimate;
+        s32 category, exponent;
+        value = (f64)projectedLen;
+        if (value != (f64)float_0_8042610c) {
+            if (value > (f64)float_0_8042610c) {
+#ifdef __MWERKS__
+                asm { frsqrte estimate, value }
+#else
+                estimate = 1.0 / value;
+#endif
+                estimate = *(f64*)(constants + 0x10) * estimate *
+                           (*(f64*)(constants + 0x18) - value * estimate * estimate);
+                estimate = *(f64*)(constants + 0x10) * estimate *
+                           (*(f64*)(constants + 0x18) - value * estimate * estimate);
+                projectedLen = (f32)(value * *(f64*)(constants + 0x10) * estimate *
+                                     (*(f64*)(constants + 0x18) - value * estimate * estimate));
+            } else if (value < *(f64*)(constants + 0x20)) {
+                projectedLen = __float_nan[0];
+            } else {
+                classify.value = projectedLen;
+                exponent = classify.bits & 0x7F800000;
+                if (exponent == 0x7F800000) {
+                    if ((classify.bits & 0x7FFFFF) == 0) {
+                        category = 2;
+                    } else {
+                        category = 1;
+                    }
+                } else if (exponent >= 0x7F800000) {
+                    category = 4;
+                } else if (exponent == 0) {
+                    if ((classify.bits & 0x7FFFFF) == 0) {
+                        category = 3;
+                    } else {
+                        category = 5;
+                    }
+                } else {
+                    category = 4;
+                }
+                if (category == 1) {
+                    projectedLen = __float_nan[0];
+                }
+            }
+        }
     }
     if (projectedX + projectedZ >= float_0_8042610c) {
         *(f32*)(work + 0x2C) = float_20_80426158;
@@ -103,124 +184,76 @@ void* effSstarN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f32 sp
     *(s32*)(work + 0x3C) = -1;
     return entry;
 }
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers off
 
 u8 effSstarMain(int* effect) {
-    extern void* marioGetPtr(void);
-    extern void* gpGlobals;
-    extern s32 hitCheckFilter(f64, f64, f64, f64, f64, f64, s32,
-                              f32*, f32*, f32*, f32*, f32*, f32*, f32*);
-    extern void effDelete(void*);
-    extern f32 dispCalcZ(void*);
-    extern void dispEntry(s32, s32, void*, void*, f32);
-    extern void effSstarDisp(void);
-    extern f64 __frsqrte(f64);
-    extern f32 angleABf(f32, f32, f32, f32);
-    extern f32 float_0p01_80426118;
-    extern f32 float_1_80426114;
-    extern f32 float_32_8042611c;
-    extern f32 FLOAT_80426120;
-    extern f32 float_42_80426128;
-    extern f32 float_0p6_8042612c;
-    extern f32 float_0p7_80426130;
-    extern f32 float_10_80426134;
-    extern f32 float_neg0p5_80426138;
-    extern f32 float_300_8042613c;
-    extern f32 float_neg300_80426140;
-    extern f64 double_0p5_802fbff0;
-    extern f64 double_3_802fbff8;
-    u8* work = *(u8**)((u8*)effect + 0xC);
-    u8* mario = marioGetPtr();
-    f32 oldPos[3];
-    f32 displayPos[3];
-    f32 length;
-    f32 inverse;
-    f32 nx;
-    f32 ny;
-    f32 nz;
-    f32 outX;
-    f32 outY;
-    f32 outZ;
-    f32 distance;
-    f32 outNX;
-    f32 outNY;
-    f32 outNZ;
-
-    oldPos[0] = *(f32*)(work + 4);
-    oldPos[1] = *(f32*)(work + 8);
-    oldPos[2] = *(f32*)(work + 0xC);
-    displayPos[0] = oldPos[0];
-    displayPos[1] = oldPos[1];
-    displayPos[2] = oldPos[2];
-    if (*(s32*)(work + 0x38) > 1) {
-        nx = *(f32*)(work + 0x10);
-        ny = *(f32*)(work + 0x14);
-        nz = *(f32*)(work + 0x18);
-        length = nx * nx + ny * ny + nz * nz;
-        inverse = length;
-        if (length > float_0p01_80426118) {
-            f64 value = (f64)length;
-            f64 estimate = __frsqrte(value);
-            estimate = double_0p5_802fbff0 * estimate *
-                       (double_3_802fbff8 - value * estimate * estimate);
-            estimate = double_0p5_802fbff0 * estimate *
-                       (double_3_802fbff8 - value * estimate * estimate);
-            estimate = double_0p5_802fbff0 * estimate *
-                       (double_3_802fbff8 - value * estimate * estimate);
-            inverse = float_1_80426114 / (f32)(value * estimate);
-        }
-        nx *= inverse;
-        ny *= inverse;
-        nz *= inverse;
-        distance = FLOAT_80426120;
-        if (*(s32*)work != 0 && *(f32*)(work + 0x14) < 0.0f &&
-            hitCheckFilter(*(f32*)(work + 4) - float_32_8042611c * nx,
-                           *(f32*)(work + 8) - float_32_8042611c * ny,
-                           *(f32*)(work + 0xC) - float_32_8042611c * nz,
-                           0.0, -1.0, 0.0, 0,
-                           &outX, &outY, &outZ, &distance,
-                           &outNX, &outNY, &outNZ) != 0 &&
-            distance < float_42_80426128) {
-            *(f32*)(work + 0x14) = -*(f32*)(work + 0x14) * float_0p6_8042612c;
-            *(f32*)(work + 0x10) *= float_0p7_80426130;
-            *(f32*)(work + 0x34) *= float_0p7_80426130;
-            *(f32*)(work + 0x2C) *= float_0p7_80426130;
-            *(f32*)(work + 0x1C) += float_1_80426114;
-            *(s32*)work = 0;
-            if (*(f32*)(work + 0x1C) >= float_10_80426134) {
-                *(s32*)(work + 0x30) = -1;
-            }
-        }
-        if (*(f32*)(work + 0x1C) != 0.0f) {
-            *(f32*)(work + 0x14) += float_neg0p5_80426138;
-            *(f32*)(work + 0x24) += *(f32*)(work + 0x2C);
-            *(f32*)(work + 0x20) =
-                angleABf(0.0f, 0.0f, -*(f32*)(work + 0x14), *(f32*)(work + 0x34));
-        }
+    typedef union FloatBits { f32 value; s32 bits; } FloatBits;
+    extern void* marioGetPtr(void); extern void* gpGlobals;
+    extern s32 hitCheckFilter(f64,f64,f64,f64,f64,f64,s32,f32*,f32*,f32*,f32*,f32*,f32*,f32*);
+    extern void effDelete(void*); extern f64 dispCalcZ(void*); extern void dispEntry(s32,s32,void*,void*,f32);
+    extern void effSstarDisp(void); extern f64 angleABf(f64,f64,f64,f64);
+    extern u8 vec3_802fbfe0[]; extern f32 __float_nan[];
+    extern f32 float_0p01_80426118,float_1_80426114,float_32_8042611c,FLOAT_80426120;
+    extern f32 float_42_80426128,float_0p6_8042612c,float_0p7_80426130,float_10_80426134;
+    extern f32 float_0_8042610c,float_neg1_80426124,float_neg0p5_80426138,float_300_8042613c,float_neg300_80426140;
+    u8* constants=vec3_802fbfe0; u8* work=*(u8**)((u8*)effect+0xC); u8* mario=marioGetPtr();
+    volatile f32 oldPos[3]; f32 displayPos[3],length,inverse,nx,ny,nz;
+    f32 outX,outY,outZ,distance,outNX,outNY,outNZ;
+    oldPos[0]=*(f32*)(constants); oldPos[1]=*(f32*)(constants+4); oldPos[2]=*(f32*)(constants+8);
+    oldPos[0]=*(f32*)(work+4); oldPos[1]=*(f32*)(work+8); oldPos[2]=*(f32*)(work+0xC);
+    displayPos[0]=oldPos[0]; displayPos[1]=oldPos[1]; displayPos[2]=oldPos[2];
+    if(*(s32*)(work+0x38)>1){
+        FloatBits classify; register f64 value,estimate; s32 category,exponent;
+        nx=*(f32*)(work+0x10); ny=*(f32*)(work+0x14); nz=*(f32*)(work+0x18);
+        length=nx*nx+ny*ny+nz*nz; value=(f64)length;
+        if(value>(f64)float_0p01_80426118){
+            if(value>(f64)float_0_8042610c){
+#ifdef __MWERKS__
+                asm { frsqrte estimate, value }
+#else
+                estimate=1.0/value;
+#endif
+                estimate=*(f64*)(constants+0x10)*estimate*(*(f64*)(constants+0x18)-value*estimate*estimate);
+                estimate=*(f64*)(constants+0x10)*estimate*(*(f64*)(constants+0x18)-value*estimate*estimate);
+                length=(f32)(value**(f64*)(constants+0x10)*estimate*(*(f64*)(constants+0x18)-value*estimate*estimate));
+            }else if(value<*(f64*)(constants+0x20)) length=__float_nan[0];
+            else { classify.value=length; exponent=classify.bits&0x7F800000;
+                if(exponent==0x7F800000){if((classify.bits&0x7FFFFF)==0)category=2;else category=1;}
+                else if(exponent>=0x7F800000)category=4;
+                else if(exponent==0){if((classify.bits&0x7FFFFF)==0)category=3;else category=5;}
+                else category=4; if(category==1)length=__float_nan[0]; }
+            inverse=float_1_80426114/length;
+        }else inverse=length;
+        nx*=inverse;ny*=inverse;nz*=inverse;distance=FLOAT_80426120;
+        if(*(s32*)work!=0&&*(f32*)(work+0x14)<float_0_8042610c&&
+          hitCheckFilter(*(f32*)(work+4)-float_32_8042611c*nx,*(f32*)(work+8)-float_32_8042611c*ny,
+          *(f32*)(work+0xC)-float_32_8042611c*nz,float_0_8042610c,float_neg1_80426124,float_0_8042610c,0,
+          &outX,&outY,&outZ,&distance,&outNX,&outNY,&outNZ)!=0&&distance<float_42_80426128){
+            *(f32*)(work+0x14)=-*(f32*)(work+0x14)*float_0p6_8042612c;*(f32*)(work+0x10)*=float_0p7_80426130;
+            *(f32*)(work+0x34)*=float_0p7_80426130;*(f32*)(work+0x2C)*=float_0p7_80426130;
+            *(f32*)(work+0x1C)+=float_1_80426114;*(s32*)work=0;
+            if(*(f32*)(work+0x1C)>=float_10_80426134)*(s32*)(work+0x30)=-1;}
+        if(*(f32*)(work+0x1C)!=float_0_8042610c){*(f32*)(work+0x14)+=float_neg0p5_80426138;
+          *(f32*)(work+0x24)+=*(f32*)(work+0x2C);*(f32*)(work+0x20)=(f32)angleABf(float_0_8042610c,
+          float_0_8042610c,-*(f32*)(work+0x14),*(f32*)(work+0x34));}
     }
-    if (*(s32*)((u8*)gpGlobals + 0x14) == 0) {
-        if (*(f32*)(mario + 0x90) - *(f32*)(work + 8) > float_300_8042613c) {
-            *(s32*)(work + 0x30) = -1;
-        }
-    } else if (*(f32*)(work + 8) < float_neg300_80426140) {
-        *(s32*)(work + 0x30) = -1;
-    }
-    *(f32*)(work + 4) += *(f32*)(work + 0x10);
-    *(f32*)(work + 8) += *(f32*)(work + 0x14);
-    *(f32*)(work + 0xC) += *(f32*)(work + 0x18);
-    if (*(s32*)(work + 0x30) < 0) {
-        effDelete(effect);
-    } else {
-        dispEntry(4, 2, effSstarDisp, effect, dispCalcZ(displayPos));
-    }
-    return 0;
+    if(*(s32*)((u8*)gpGlobals+0x14)==0){if(*(f32*)(mario+0x90)-*(f32*)(work+8)>float_300_8042613c)*(s32*)(work+0x30)=-1;}
+    else if(*(f32*)(work+8)<float_neg300_80426140)*(s32*)(work+0x30)=-1;
+    *(f32*)(work+4)+=*(f32*)(work+0x10);*(f32*)(work+8)+=*(f32*)(work+0x14);*(f32*)(work+0xC)+=*(f32*)(work+0x18);
+    if(*(s32*)(work+0x30)<0)effDelete(effect);else dispEntry(4,2,effSstarDisp,effect,(f32)dispCalcZ(displayPos));return 0;
 }
 
 const f32 vec3_802fbfe0[3] = { 0.0f, 0.0f, 0.0f };
+const f64 double_0p5_802fbff0 = 0.5;
+const f64 double_3_802fbff8 = 3.0;
+const f64 double_0_802fc000 = 0.0;
 const char str_SstarN64_802fc008[] = "SstarN64";
 
 
-u8 effSstarDisp(s32 cameraId, s32 effectAddress) {
+void effSstarDisp(s32 cameraId, s32 effectAddress) {
     typedef f32 Mtx[3][4];
+    typedef struct Vec3 { f32 x, y, z; } Vec3;
     typedef struct GXTexObj { u32 data[8]; } GXTexObj;
     extern void* camGetPtr(s32);
     extern void effGetTexObj(s32, void*);
@@ -247,6 +280,12 @@ u8 effSstarDisp(s32 cameraId, s32 effectAddress) {
     extern void GXSetCurrentMtx(s32);
     extern void GXSetCullMode(s32);
     extern void GXBegin(s32, s32, s16);
+    extern void PSMTXMultVec(Mtx, Vec3*, Vec3*);
+    extern void GXInvalidateVtxCache(void);
+    extern void DCFlushRange(void*, u32);
+    extern void* memcpy(void*, const void*, u32);
+    extern u8 shooting_dust_vtx[];
+    extern f32 float_1_80426114;
     u8* work = *(u8**)(effectAddress + 0xC);
     char* camera = camGetPtr(cameraId);
     GXTexObj tex;
@@ -256,9 +295,9 @@ u8 effSstarDisp(s32 cameraId, s32 effectAddress) {
 
     PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
     PSMTXRotRad(rot, -0.017453292f * *(f32*)(camera + 0x114), 'y');
+    PSMTXConcat(trans, rot, model);
     PSMTXScale(scale, *(f32*)(work + 0x1C0), *(f32*)(work + 0x1C0),
                *(f32*)(work + 0x1C0));
-    PSMTXConcat(trans, rot, model);
     PSMTXConcat(model, scale, model);
     PSMTXRotRad(rot, *(f32*)(work + 0x24) * 0.017453292f, 'z');
     PSMTXConcat(model, rot, model);
@@ -321,6 +360,57 @@ u8 effSstarDisp(s32 cameraId, s32 effectAddress) {
     GXLoadTexMtxImm(scale, 0x1E, 1);
     effGetTexObj(type == 3 ? 0xB : 0xA, &tex);
     GXLoadTexObj(&tex, 0);
-    GXBegin(0x90, 0, 6);
-    return 0;
+    *(s32*)(work + 0x3C) += 1;
+    if (*(s32*)(work + 0x3C) > 7) {
+        *(s32*)(work + 0x3C) = 0;
+    }
+    if (*(f32*)(work + 0x1C) <= float_1_80426114) {
+        s32 frame = *(s32*)(work + 0x3C);
+        s32 i;
+        PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8),
+                   *(f32*)(work + 0xC));
+        camera = camGetPtr(cameraId);
+        PSMTXRotRad(rot, -0.017453292f * *(f32*)(camera + 0x114), 'y');
+        PSMTXConcat(trans, rot, trans);
+        PSMTXScale(scale, *(f32*)(work + 0x1C0), *(f32*)(work + 0x1C0),
+                   *(f32*)(work + 0x1C0));
+        PSMTXConcat(trans, scale, trans);
+        PSMTXRotRad(rot, *(f32*)(work + 0x20) * 0.017453292f, 'z');
+        PSMTXConcat(trans, rot, work + 0x40 + *(s32*)(work + 0x3C) * 0x30);
+        for (i = 0; i < 5; i++) {
+            u8* dst = work + 0x1D0 + i * 0x1C;
+            const u8* src = shooting_dust_vtx + i * 0x1C;
+            Mtx* history = (Mtx*)(work + 0x40 + ((frame - i + 13) & 7) * 0x30);
+            Vec3 v;
+            s16* vertex;
+            memcpy(dst, src, 0xE);
+            vertex = (s16*)dst;
+            v.x = __OSs16tof32(&vertex[0]);
+            v.y = __OSs16tof32(&vertex[1]);
+            v.z = __OSs16tof32(&vertex[2]);
+            PSMTXMultVec(*history, &v, &v);
+            vertex[0] = __OSf32tos16(v.x);
+            vertex[1] = __OSf32tos16(v.y);
+            vertex[2] = __OSf32tos16(v.z);
+            memcpy(dst + 0xE, src + 0xE, 0xE);
+            vertex = (s16*)(dst + 0xE);
+            v.x = __OSs16tof32(&vertex[0]);
+            v.y = __OSs16tof32(&vertex[1]);
+            v.z = __OSs16tof32(&vertex[2]);
+            PSMTXMultVec(*history, &v, &v);
+            vertex[0] = __OSf32tos16(v.x);
+            vertex[1] = __OSf32tos16(v.y);
+            vertex[2] = __OSf32tos16(v.z);
+        }
+        GXInvalidateVtxCache();
+        DCFlushRange(work + 0x1D0, 0x8C);
+        effSetVtxDescN64(work + 0x1D0);
+        GXLoadPosMtxImm((f32(*)[4])(camera + 0x11C), 0);
+        for (i = 0; i < 4; i++) {
+            s16 vertex = (s16)(i * 2);
+            GXBegin(0x90, 0, 6);
+            tri2(vertex, vertex + 1, vertex + 2, i * 2,
+                 vertex + 1, vertex + 3, vertex + 2, i * 2);
+        }
+    }
 }

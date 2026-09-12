@@ -1036,87 +1036,93 @@ void kpaFireMain(void) {
     extern void* fireefp;
     extern f32 baseScaleTbl[4];
     u8* mario = marioGetPtr();
-    u8* kpa = *(u8**)(mario + 0x298);
-    s32 isLeft = 0;
+    s32 left = 0;
 
-    *(void**)(kpa + 0x18) = NULL;
+    *(void**)(*(u8**)(mario + 0x298) + 0x18) = NULL;
     if (fireefp != NULL) {
-        u8* effect = fireefp;
-        u8* work = *(u8**)(effect + 0xC);
-        u8* current;
-        u32 level = 0;
+        u32 level;
         f32 side = -1.0f;
         f32 scale;
         f32 x;
         f32 y;
         f32 z;
-        s32 i;
 
-        if (*(f32*)(mario + 0x1AC) >= 90.0f && *(f32*)(mario + 0x1AC) <= 270.0f) {
-            isLeft = 1;
+        if (*(f32*)(mario + 0x1AC) >= 90.0f &&
+            *(f32*)(mario + 0x1AC) <= 270.0f) {
+            left = 1;
+        }
+        if (left) {
             side = 1.0f;
         }
+        level = 0;
+        mario = marioGetPtr();
         if (*(u8*)(mario + 0x3C) == 2) {
-            level = *(u32*)(kpa + 4);
+            level = *(u32*)(*(u8**)(mario + 0x298) + 4);
         }
         scale = baseScaleTbl[level];
-        x = *(f32*)(mario + 0x8C) + 40.0f * side * scale;
+        x = 40.0f * side * scale + *(f32*)(mario + 0x8C);
         y = *(f32*)(mario + 0x90) + 20.0f * scale;
         if ((*(u32*)((u8*)marioGetPtr() + 0x14) & 1) == 0) {
             y += 6.0f;
         }
         z = *(f32*)(mario + 0x94);
-        *(f32*)(work + 4) = x;
-        *(f32*)(work + 8) = y;
-        *(f32*)(work + 0xC) = z;
-        if (*(void**)(work + 0x4C) != NULL) {
-            u8* childWork = *(u8**)((u8*)*(void**)(work + 0x4C) + 0xC);
-            *(f32*)(childWork + 4) = x;
-            *(f32*)(childWork + 8) = y;
-            *(f32*)(childWork + 0xC) = z;
+        *(f32*)(*(u8**)((u8*)fireefp + 0xC) + 4) = x;
+        *(f32*)(*(u8**)((u8*)fireefp + 0xC) + 8) = y;
+        *(f32*)(*(u8**)((u8*)fireefp + 0xC) + 0xC) = z;
+        if (*(void**)(*(u8**)((u8*)fireefp + 0xC) + 0x4C) != NULL) {
+            *(f32*)(*(u8**)(*(u8**)(*(u8**)((u8*)fireefp + 0xC) + 0x4C) + 0xC) + 4) = x;
+            *(f32*)(*(u8**)(*(u8**)(*(u8**)((u8*)fireefp + 0xC) + 0x4C) + 0xC) + 8) = y;
+            *(f32*)(*(u8**)(*(u8**)(*(u8**)((u8*)fireefp + 0xC) + 0x4C) + 0xC) + 0xC) = z;
         }
 
         level = 0;
         mario = marioGetPtr();
-        kpa = *(u8**)(mario + 0x298);
         if (*(u8*)(mario + 0x3C) == 2) {
-            level = *(u32*)(kpa + 4);
+            level = *(u32*)(*(u8**)(mario + 0x298) + 4);
         }
         if (level != 0) {
-            Mtx translate, rotate, scaleMtx, rootMtx, particleMtx;
-            f32 rootScale = *(f32*)(work + 0x40);
+            u8* effect = fireefp;
+            u8* work;
+            Mtx trans;
+            Mtx rot;
+            Mtx scaleMtx;
+            Mtx rootMtx;
+            Vec3 origin;
+            Vec3 position;
+            f32 rootScale;
+            f32 particleScale;
+            s32 i;
+
             camGetPtr(4);
-            PSMTXTrans(translate, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
-            PSMTXRotRad(rotate, 'y',
-                        0.017453292f * (*(f32*)(work + 0x48) -
-                                        *(f32*)((u8*)camGetPtr(4) + 0x114)));
-            if (*(f32*)(work + 0x48) <= 90.0f || *(f32*)(work + 0x48) >= 270.0f) {
-                PSMTXScale(scaleMtx, rootScale, rootScale, rootScale);
-            } else {
+            work = *(u8**)(effect + 0xC);
+            rootScale = *(f32*)(work + 0x40);
+            PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+            PSMTXRotRad(rot, 'y', 0.017453292f *
+                        (*(f32*)(work + 0x48) - *(f32*)((u8*)camGetPtr(4) + 0x114)));
+            if (*(f32*)(work + 0x48) > 90.0f &&
+                *(f32*)(work + 0x48) < 270.0f) {
                 PSMTXScale(scaleMtx, rootScale, rootScale, -rootScale);
+            } else {
+                PSMTXScale(scaleMtx, rootScale, rootScale, rootScale);
             }
-            PSMTXConcat(translate, rotate, translate);
-            PSMTXConcat(translate, scaleMtx, rootMtx);
-            current = work;
-            for (i = 1; i < *(s32*)(effect + 8); i++, current += 0x50) {
-                if (((i - 1) & 3) == 0 && *(s32*)(current + 0x94) == 0 &&
-                    *(s32*)(current + 0x6C) > 16) {
-                    f32 particleScale = 7.0f * *(f32*)(current + 0x90);
+            PSMTXConcat(trans, rot, trans);
+            PSMTXConcat(trans, scaleMtx, rootMtx);
+            for (i = 1, work += 0x50; i < *(s32*)(effect + 8); i++, work += 0x50) {
+                if (((i - 1) & 3) == 0 && *(s32*)(work + 0x44) == 0 &&
+                    *(s32*)(work + 0x1C) > 16) {
+                    particleScale = 7.0f * *(f32*)(work + 0x40);
                     if (particleScale * rootScale >= 7.0f) {
-                        Vec3 origin;
-                        Vec3 position;
-                        PSMTXTrans(translate, *(f32*)(current + 0x54),
-                                  *(f32*)(current + 0x58), *(f32*)(current + 0x5C));
+                        PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
                         PSMTXScale(scaleMtx, particleScale, particleScale, particleScale);
-                        PSMTXConcat(translate, scaleMtx, particleMtx);
-                        PSMTXConcat(rootMtx, particleMtx, particleMtx);
+                        PSMTXConcat(trans, scaleMtx, trans);
+                        PSMTXConcat(rootMtx, trans, trans);
                         origin.x = *(f32*)(vec3_802fd238 + 0);
                         origin.y = *(f32*)(vec3_802fd238 + 4);
                         origin.z = *(f32*)(vec3_802fd238 + 8);
-                        PSMTXMultVec(particleMtx, &origin, &position);
-                        *(void**)(kpa + 0x18) = kpaFlameHitCheck(position.x, position.y,
-                                                               position.x, position.y);
-                        if (*(void**)(kpa + 0x18) != NULL) {
+                        PSMTXMultVec(trans, &origin, &position);
+                        *(void**)(*(u8**)(mario + 0x298) + 0x18) =
+                            kpaFlameHitCheck(position.x, position.y, position.z, particleScale * rootScale);
+                        if (*(void**)(*(u8**)(mario + 0x298) + 0x18) != NULL) {
                             break;
                         }
                     }
@@ -1126,10 +1132,11 @@ void kpaFireMain(void) {
     }
 
     mario = marioGetPtr();
-    kpa = *(u8**)(mario + 0x298);
-    if ((*(u32*)mario & 1) == 0 ||
-        !((*(s32*)(kpa + 0x13C) >= 0x14 && *(s32*)(kpa + 0x13C) <= 0x17) ||
-          (*(s32*)(kpa + 0x13C) >= 0x28 && *(s32*)(kpa + 0x13C) <= 0x2B))) {
+    if (((*(u32*)mario & 1) == 0) ||
+        !((*(s32*)(*(u8**)(mario + 0x298) + 0x13C) >= 0x14 &&
+           *(s32*)(*(u8**)(mario + 0x298) + 0x13C) <= 0x17) ||
+          (*(s32*)(*(u8**)(mario + 0x298) + 0x13C) >= 0x28 &&
+           *(s32*)(*(u8**)(mario + 0x298) + 0x13C) <= 0x2B))) {
         if (fireefp != NULL) {
             effSoftDelete(fireefp);
             fireefp = NULL;

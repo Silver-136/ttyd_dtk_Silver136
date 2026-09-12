@@ -121,42 +121,145 @@ void effCoolLeafMain(void* effect) {
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32,s32,void*,void*,f32);
     extern void effCoolLeafDisp(s32,void*);
+    extern f32 float_0p95_80424ffc, float_30_80425010, float_neg200_80425014;
+    extern f32 float_0p98_8042501c;
+    typedef struct LocalVec3 { f32 x, y, z; } LocalVec3;
+    extern const LocalVec3 vec3_802fad88;
     u8* entry = effect;
     u8* work = *(u8**)(entry + 0xC);
     u8* leaf;
-    f32 pos[3];
-    s32 type, frame, i;
-    pos[0]=*(f32*)(work+4); pos[1]=*(f32*)(work+8); pos[2]=*(f32*)(work+0xC);
-    (*(s32*)(work+0x28))--; (*(s32*)(work+0x2C))++;
-    if (*(s32*)(work+0x28) < 0) { effDelete(effect); return; }
-    frame=*(s32*)(work+0x2C); type=*(s32*)work;
-    if (frame < 10) *(s32*)(work+0x24) += (s32)(0.3f * (255 - *(s32*)(work+0x24)));
-    if (*(s32*)(work+0x28) < 10) *(s32*)(work+0x24) = (s32)(0.8f * *(s32*)(work+0x24));
-    leaf=work+0x3C;
-    for(i=1;i<*(s32*)(entry+8);i++,leaf+=0x3C,frame+=20){
-        f32 phase;
-        if(type<2){
-            phase=(6.2832f*2.0f**(f32*)(leaf+0x18))/360.0f;
-            *(f32*)(leaf+0x14)-=0.05f;
-            *(f32*)(leaf+0x10)+=(type?0.4f:0.2f)*(f32)sin(phase);
-            *(f32*)(leaf+0x10)*=type?0.8464f:0.94f;
+    LocalVec3 seed = vec3_802fad88;
+    LocalVec3 pos;
+    u32 type;
+    s32 frame, i;
+    f32 phase;
+    volatile f32 s03 = 0.3f;
+    volatile f32 s08 = 0.8f;
+    volatile f32 sTau2 = 12.5664f;
+    volatile f32 s360 = 360.0f;
+    volatile f32 s005 = 0.05f;
+    volatile f32 s04 = 0.4f;
+    volatile f32 s02 = 0.2f;
+    volatile f32 s08464 = 0.8464f;
+    volatile f32 s094 = 0.94f;
+    volatile f32 sTau = 6.2832f;
+    volatile f32 s10 = 10.0f;
+    volatile f32 s05 = 0.5f;
+    volatile f32 sNeg08 = -0.8f;
+    volatile f32 s0 = 0.0f;
+    volatile f32 s096 = 0.96f;
+    f32 c03 = s03;
+    f32 c08 = s08;
+    f32 cTau2 = sTau2;
+    f32 c360 = s360;
+    f32 c005 = s005;
+    f32 c04 = s04;
+    f32 c02 = s02;
+    f32 c08464 = s08464;
+    f32 c094 = s094;
+    f32 cTau = sTau;
+    f32 c10 = s10;
+    f32 c05 = s05;
+    f32 cNeg08 = sNeg08;
+    f32 c0 = s0;
+    f32 c096 = s096;
+
+    seed.x = *(f32*)(work + 4);
+    seed.y = *(f32*)(work + 8);
+    seed.z = *(f32*)(work + 0xC);
+    pos = seed;
+    --*(s32*)(work + 0x28);
+    ++*(s32*)(work + 0x2C);
+    if (*(s32*)(work + 0x28) < 0) {
+        effDelete(effect);
+        return;
+    }
+    frame = *(s32*)(work + 0x2C);
+    type = *(u32*)work;
+    if (frame < 10) {
+        *(s32*)(work + 0x24) = (s32)(c03 *
+            (f32)(255 - *(s32*)(work + 0x24)) + (f32)*(s32*)(work + 0x24));
+    }
+    if (*(s32*)(work + 0x28) < 10) {
+        *(s32*)(work + 0x24) = (s32)((f32)*(s32*)(work + 0x24) * c08);
+    }
+
+    leaf = work + 0x3C;
+    if (type == 1) {
+        for (i = 1; i < *(s32*)(entry + 8); i++, leaf += 0x3C, frame += 20) {
+            phase = (cTau2 * *(f32*)(leaf + 0x18)) / c360;
+            *(f32*)(leaf + 0x14) -= c005;
+            *(f32*)(leaf + 0x10) += c04 * (f32)sin(phase);
+            *(f32*)(leaf + 0x14) -= c005;
+            *(f32*)(leaf + 0x10) *= c08464;
+            *(f32*)(leaf + 0x1C) += (f32)(effTblRandN64(50, frame) - 25);
+            phase = (cTau * *(f32*)(leaf + 0x1C)) / c360;
+            *(f32*)(leaf + 0x18) += c10 * (f32)sin(phase);
+            phase = (cTau * *(f32*)(leaf + 0x1C)) / c360;
+            *(f32*)(leaf + 0x20) += c10 * (f32)cos(phase * c05);
+            *(f32*)(leaf + 4) += *(f32*)(leaf + 0x10);
+            *(f32*)(leaf + 8) += *(f32*)(leaf + 0x14);
+            if (*(f32*)(leaf + 8) >= float_30_80425010) {
+                *(f32*)(leaf + 0x30) += (*(f32*)(leaf + 4) <= c0) ? c08 : cNeg08;
+                *(f32*)(leaf + 0x38) += (*(f32*)(leaf + 0xC) <= c0) ? c08 : cNeg08;
+            } else {
+                *(f32*)(leaf + 0x30) += (*(f32*)(leaf + 4) <= float_neg200_80425014) ? c08 : cNeg08;
+                *(f32*)(leaf + 0x38) += (*(f32*)(leaf + 0xC) <= c0) ? c08 : cNeg08;
+                *(f32*)(leaf + 0x14) *= c096;
+            }
+            *(f32*)(leaf + 0x30) *= c096;
+            *(f32*)(leaf + 0x38) *= c096;
+            *(f32*)(leaf + 4) += *(f32*)(leaf + 0x30);
+            *(f32*)(leaf + 8) += *(f32*)(leaf + 0x34);
+            *(f32*)(leaf + 0xC) += *(f32*)(leaf + 0x38);
         }
-        *(f32*)(leaf+0x1C)+=(f32)(effTblRandN64(50,frame)-25);
-        phase=(6.2832f**(f32*)(leaf+0x1C))/360.0f;
-        *(f32*)(leaf+0x18)+=10.0f*(f32)sin(phase);
-        *(f32*)(leaf+0x20)+=10.0f*(f32)cos(phase*0.5f);
-        *(f32*)(leaf+4)+=*(f32*)(leaf+0x10);
-        *(f32*)(leaf+8)+=*(f32*)(leaf+0x14);
-        if(type<2){
-            *(f32*)(leaf+0x30)+=(*(f32*)(leaf+4)<=0.0f)?0.8f:-0.8f;
-            *(f32*)(leaf+0x38)+=(*(f32*)(leaf+0xC)<=0.0f)?0.8f:-0.8f;
-            *(f32*)(leaf+0x30)*=0.96f; *(f32*)(leaf+0x38)*=0.96f;
-            *(f32*)(leaf+4)+=*(f32*)(leaf+0x30);
-            *(f32*)(leaf+8)+=*(f32*)(leaf+0x34);
-            *(f32*)(leaf+0xC)+=*(f32*)(leaf+0x38);
+    } else if ((s32)type < 1) {
+        if ((s32)type > -1) {
+            for (i = 1; i < *(s32*)(entry + 8); i++, leaf += 0x3C, frame += 20) {
+                phase = (cTau2 * *(f32*)(leaf + 0x18)) / c360;
+                *(f32*)(leaf + 0x14) -= c005;
+                *(f32*)(leaf + 0x10) += c02 * (f32)sin(phase);
+                *(f32*)(leaf + 0x10) *= c094;
+                phase = (cTau * *(f32*)(leaf + 0x18)) / c360;
+                *(f32*)(leaf + 0x14) *= c005 * (f32)sin(phase) + float_0p95_80424ffc;
+                *(f32*)(leaf + 0x1C) += (f32)(effTblRandN64(50, frame) - 25);
+                phase = (cTau * *(f32*)(leaf + 0x1C)) / c360;
+                *(f32*)(leaf + 0x18) += c10 * (f32)sin(phase);
+                phase = (cTau * *(f32*)(leaf + 0x1C)) / c360;
+                *(f32*)(leaf + 0x20) += c10 * (f32)cos(phase * c05);
+                *(f32*)(leaf + 4) += *(f32*)(leaf + 0x10);
+                *(f32*)(leaf + 8) += *(f32*)(leaf + 0x14);
+                if (*(f32*)(leaf + 8) >= float_30_80425010) {
+                    if (*(f32*)(leaf + 4) <= c0) *(f32*)(leaf + 0x30) += c04;
+                    else *(f32*)(leaf + 0x30) -= c04;
+                    if (*(f32*)(leaf + 0xC) <= c0) *(f32*)(leaf + 0x38) += c04;
+                    else *(f32*)(leaf + 0x38) -= c04;
+                } else {
+                    if (*(f32*)(leaf + 4) <= float_neg200_80425014) *(f32*)(leaf + 0x30) += c04;
+                    else *(f32*)(leaf + 0x30) -= c04;
+                    if (*(f32*)(leaf + 0xC) <= c0) *(f32*)(leaf + 0x38) += c04;
+                    else *(f32*)(leaf + 0x38) -= c04;
+                    *(f32*)(leaf + 0x14) *= float_0p98_8042501c;
+                }
+                *(f32*)(leaf + 0x30) *= float_0p98_8042501c;
+                *(f32*)(leaf + 0x38) *= float_0p98_8042501c;
+                *(f32*)(leaf + 4) += *(f32*)(leaf + 0x30);
+                *(f32*)(leaf + 8) += *(f32*)(leaf + 0x34);
+                *(f32*)(leaf + 0xC) += *(f32*)(leaf + 0x38);
+            }
+        }
+    } else if ((s32)type < 3) {
+        for (i = 1; i < *(s32*)(entry + 8); i++, leaf += 0x3C, frame += 20) {
+            *(f32*)(leaf + 0x1C) += (f32)(effTblRandN64(50, frame) - 25);
+            phase = (cTau * *(f32*)(leaf + 0x1C)) / c360;
+            *(f32*)(leaf + 0x18) += c10 * (f32)sin(phase);
+            phase = (cTau * *(f32*)(leaf + 0x1C)) / c360;
+            *(f32*)(leaf + 0x20) += c10 * (f32)cos(phase * c05);
+            *(f32*)(leaf + 4) += *(f32*)(leaf + 0x10);
+            *(f32*)(leaf + 8) += *(f32*)(leaf + 0x14);
         }
     }
-    dispEntry(4,2,effCoolLeafDisp,effect,dispCalcZ(pos));
+    dispEntry(4, 2, effCoolLeafDisp, effect, dispCalcZ(&pos));
 }
 
 #pragma no_register_save_helpers on

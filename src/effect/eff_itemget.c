@@ -290,9 +290,9 @@ void effItemGetDisp(s32 cameraId, void* effect) {
     extern void GXSetCurrentMtx(s32);
     extern void GXBegin(s32,s32,s32);
     extern volatile f32 DAT_cc008000;
-    extern f32 vec3_802fe6fc[];
-    extern f32 vec3_802fe708[];
-    extern f32 vec3_802fe714[];
+    extern VecLocal vec3_802fe6fc;
+    extern VecLocal vec3_802fe708;
+    extern VecLocal vec3_802fe714;
     extern u32 white;
     extern u32 color_tbl[];
     extern u32 unk_80429898;
@@ -329,12 +329,13 @@ void effItemGetDisp(s32 cameraId, void* effect) {
     f32 childTop;
     s32 opacity;
     s32 alpha;
+    s32 alpha2;
     s32 pass;
     s32 i;
 
-    eye.x=vec3_802fe6fc[0]; eye.y=vec3_802fe6fc[1]; eye.z=vec3_802fe6fc[2];
-    up.x=vec3_802fe708[0]; up.y=vec3_802fe708[1]; up.z=vec3_802fe708[2];
-    target.x=vec3_802fe714[0]; target.y=vec3_802fe714[1]; target.z=vec3_802fe714[2];
+    eye = vec3_802fe6fc;
+    up = vec3_802fe708;
+    target = vec3_802fe714;
     opacity=*(s32*)(work+0x34);
     size=*(f32*)(work+0x10) * *(f32*)(work+0x14);
     GXSetBlendMode(1,4,5,0); GXSetZCompLoc(1); GXSetAlphaCompare(7,0,0,7,0); GXSetZMode(1,3,0);
@@ -368,14 +369,17 @@ void effItemGetDisp(s32 cameraId, void* effect) {
     GXSetVtxAttrFmt(0,9,1,4,0); GXSetVtxAttrFmt(0,13,1,4,0);
 
     left=-32.0f; top=32.0f;
-    alpha=(opacity<<7)/0xFF; pass=0;
+    alpha=(opacity<<7)/0xFF;
+    alpha2=(opacity*0xFF)/0xFF;
+    pass=0;
     do {
-        PSMTXConcat((u8*)camera+0x11C,model,trans);
         if (pass==0) {
+            PSMTXConcat((u8*)camera+0x11C,model,trans);
             PSMTXTrans(rot,float_2_804270f4,float_neg2_80427118,float_0_804270fc); PSMTXConcat(trans,rot,trans);
             tevColor=unk_80429898; ((u8*)&tevColor)[3]=(u8)alpha;
         } else {
-            tevColor=dat_804270d8; ((u8*)&tevColor)[3]=(u8)opacity;
+            PSMTXConcat((u8*)camera+0x11C,model,trans);
+            tevColor=dat_804270d8; ((u8*)&tevColor)[3]=(u8)alpha2;
         }
         GXSetChanMatColor(4,&tevColor); GXLoadPosMtxImm(trans,0); GXSetCurrentMtx(0); GXBegin(0x80,0,4);
         DAT_cc008000=left; DAT_cc008000=top; DAT_cc008000=0; DAT_cc008000=0; DAT_cc008000=0;
@@ -392,16 +396,21 @@ void effItemGetDisp(s32 cameraId, void* effect) {
         u8* child=work+i*0x3C;
         pass=0;
         do {
-            PSMTXTrans(trans,*(f32*)(child+4),*(f32*)(child+8),*(f32*)(child+0xC));
-            PSMTXConcat(model,trans,texMtx);
             if(pass==0) {
+                alpha=(*(s32*)(child+0x34)<<7)/0xFF;
+                if(*(s32*)(child+0x34)!=0xFF && (alpha-=0x14)<0) alpha=0;
+                PSMTXTrans(trans,*(f32*)(child+4),*(f32*)(child+8),*(f32*)(child+0xC));
+                PSMTXConcat(model,trans,texMtx);
                 PSMTXTrans(trans,float_2_804270f4,float_neg2_80427118,float_0_804270fc); PSMTXConcat(texMtx,trans,texMtx);
-                alpha=(*(s32*)(child+0x34)<<7)/0xFF; if(*(s32*)(child+0x34)!=0xFF && (alpha-=0x14)<0) alpha=0;
+                PSMTXRotRad(rot,*(f32*)(child+0x30),'z'); PSMTXConcat(texMtx,rot,texMtx);
                 tevColor=unk_8042989c;
             } else {
-                alpha=(*(s32*)(child+0x34)*0xFF)/0xFF; tevColor=dat_804270dc;
+                PSMTXTrans(trans,*(f32*)(child+4),*(f32*)(child+8),*(f32*)(child+0xC));
+                PSMTXConcat(model,trans,texMtx);
+                PSMTXRotRad(rot,*(f32*)(child+0x30),'z'); PSMTXConcat(texMtx,rot,texMtx);
+                alpha=(*(s32*)(child+0x34)*0xFF)/0xFF;
+                tevColor=dat_804270dc;
             }
-            PSMTXRotRad(rot,*(f32*)(child+0x30),'z'); PSMTXConcat(texMtx,rot,texMtx);
             ((u8*)&tevColor)[3]=(u8)alpha; GXSetChanMatColor(4,&tevColor);
             PSMTXConcat((u8*)camera+0x11C,texMtx,trans); GXLoadPosMtxImm(trans,0); GXSetCurrentMtx(0);
             PSMTXConcat(light,texMtx,trans); GXLoadTexMtxImm(trans,0x1E,0); GXBegin(0x80,0,4);

@@ -216,10 +216,7 @@ s32 kpaSearchGround(f64 height, f32* outY, f32* outDelta, f32* outAngle) {
         groundOffset = float_0p25_804273e0 * *(f32*)(mario + 0x1BC);
     }
 
-    currentX = *(f32*)(mario + 0x8C);
-    currentY = *(f32*)(mario + 0x90);
-    currentZ = *(f32*)(mario + 0x94);
-    *outY = currentY;
+    *outY = *(f32*)(mario + 0x90);
     *outDelta = float_neg1_804273c4;
 
     if (*(f32*)(mario + 0x180) != float_0_804273c0) {
@@ -227,6 +224,10 @@ s32 kpaSearchGround(f64 height, f32* outY, f32* outDelta, f32* outAngle) {
     } else {
         direction = toMovedir(*(f32*)(mario + 0x1AC));
     }
+
+    currentX = *(f32*)(mario + 0x8C);
+    currentY = *(f32*)(mario + 0x90);
+    currentZ = *(f32*)(mario + 0x94);
 
     for (i = 0; i < 10; i++) {
         work = *(u8**)((u8*)marioGetPtr() + 0x298);
@@ -240,7 +241,7 @@ s32 kpaSearchGround(f64 height, f32* outY, f32* outDelta, f32* outAngle) {
         rays = 7;
         baseRadius = float_0p6_804273e4 *
                      ((float_0p5_804273b0 * *(f32*)(mario + 0x1B8)) / float_3_804273e8);
-    } else {
+    } else if (level < 3 && level > -1) {
         rays = 3;
         baseRadius = (f32)((f64)0.6f *
                            (0.5 * (f64)*(f32*)(mario + 0x1B8)));

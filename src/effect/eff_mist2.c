@@ -66,6 +66,8 @@ void* effMist2Entry(f32 x, f32 y, f32 z, f32 radius, f32 height, s32 type, s32 l
 }
 
 /* stub-fill: effMist2Main | missing_definition | ghidra_signature */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effMist2Main(void* effect) {
     extern void effDelete(void*);
     extern f32 dispCalcZ(f32*);
@@ -138,12 +140,17 @@ void effMist2Main(void* effect) {
     }
     dispEntry(4, 2, effMist2Disp, effect, dispCalcZ(pos));
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 
 /* CHATGPT STUB FILL: main/effect/eff_mist2 20260624_184929 */
 
 /* stub-fill: effMist2Disp | missing_definition | ghidra_signature */
 void effMist2Disp(s32 cameraId, void* effect) {
+    typedef struct GXColor {
+        u8 r, g, b, a;
+    } GXColor;
     extern void* camGetPtr(s32);
     extern void effGetTexObj(s32, void*);
     extern void GXLoadTexObj(void*, s32);
@@ -167,22 +174,30 @@ void effMist2Disp(s32 cameraId, void* effect) {
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
     extern void GXLoadPosMtxImm(f32[3][4], s32);
     extern void GXSetCurrentMtx(s32);
-    extern void GXSetChanMatColor(s32, u32*);
+    extern void GXSetChanMatColor(s32, GXColor*);
     extern void GXBegin(s32, s32, s32);
     extern f32 float_deg2rad_80428240;
+    extern u32 unk_804298e8;
 
     u8* work = *(u8**)((u8*)effect + 0xC);
     void* camera = camGetPtr(cameraId);
-    f32 base[3][4];
-    f32 trans[3][4];
-    f32 rot[3][4];
-    f32 scaleMtx[3][4];
+    f32 alpha = *(f32*)(work + 0x2C);
+    s32 alphaInt = (s32)alpha;
+    GXColor color;
+    GXColor drawColor;
     u8 texObj[0x20];
-    volatile f32* fifo = (volatile f32*)0xCC008000;
-    f32 half = -8.0f;
-    f32 baseAlpha = *(f32*)(work + 0x2C);
+    f32 base[3][4];
+    f32 scaleMtx[3][4];
+    f32 rot[3][4];
+    f32 trans[3][4];
+    f64 conversion;
+    s64 converted;
     s32 i;
+    volatile f32* fifo = (volatile f32*)0xCC008000;
 
+    color.r = *(u8*)(work + 0x38);
+    color.g = *(u8*)(work + 0x39);
+    color.b = *(u8*)(work + 0x3A);
     effGetTexObj(0x5E, texObj);
     GXLoadTexObj(texObj, 0);
     GXSetNumChans(1);
@@ -194,13 +209,15 @@ void effMist2Disp(s32 cameraId, void* effect) {
     GXSetTevColorOp(0, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
     GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
-    GXSetTevAlphaIn(0, 7, 4, 4, 7);
+    GXSetTevAlphaIn(0, 7, 5, 4, 7);
     PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
-    PSMTXRotRad(rot, 0x79, float_deg2rad_80428240 * -*(f32*)((s32)camGetPtr(cameraId) + 0x114));
-    PSMTXScale(scaleMtx, *(f32*)(work + 0x18), *(f32*)(work + 0x18), *(f32*)(work + 0x18));
+    PSMTXRotRad(rot, 0x79,
+                float_deg2rad_80428240 * -*(f32*)((u8*)camGetPtr(cameraId) + 0x114));
+    PSMTXScale(scaleMtx, *(f32*)(work + 0x18), *(f32*)(work + 0x18),
+                *(f32*)(work + 0x18));
     PSMTXConcat(trans, rot, base);
     PSMTXConcat(base, scaleMtx, base);
-    PSMTXConcat((f32(*)[4])((s32)camera + 0x34), base, base);
+    PSMTXConcat((f32(*)[4])((u8*)camera + 0x11C), base, base);
     GXSetCullMode(0);
     GXClearVtxDesc();
     GXSetVtxDesc(9, 1);
@@ -208,28 +225,44 @@ void effMist2Disp(s32 cameraId, void* effect) {
     GXSetVtxAttrFmt(0, 9, 1, 4, 0);
     GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
 
-    for (i = 1; i < *(s32*)((u8*)effect + 8); i++) {
-        u8* part = work + i * 0x48;
-        f32 size = *(f32*)(part + 0x18);
-        u32 color;
-        ((u8*)&color)[0] = *(u8*)(work + 0x38);
-        ((u8*)&color)[1] = *(u8*)(work + 0x39);
-        ((u8*)&color)[2] = *(u8*)(work + 0x3A);
-        ((u8*)&color)[3] = (u8)(*(f32*)(part + 0x2C) * baseAlpha / 255.0f);
-        PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
+    work += 0x48;
+    for (i = 1; i < *(s32*)((u8*)effect + 8); i++, work += 0x48) {
+        f32 size;
+        PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+        size = *(f32*)(work + 0x18);
         PSMTXScale(scaleMtx, size, size, size);
-        PSMTXRotRad(rot, 0x7A, float_deg2rad_80428240 * *(f32*)(part + 0x24));
+        PSMTXRotRad(rot, 0x7A, float_deg2rad_80428240 * *(f32*)(work + 0x24));
         PSMTXConcat(trans, scaleMtx, trans);
         PSMTXConcat(trans, rot, trans);
         PSMTXConcat(base, trans, trans);
         GXLoadPosMtxImm(trans, 0);
         GXSetCurrentMtx(0);
-        GXSetChanMatColor(4, &color);
+        conversion = (f64)alphaInt;
+        color.a = (u8)((*(f32*)(work + 0x2C) * (f32)conversion) /
+                       255.0f);
+        drawColor = color;
+        GXSetChanMatColor(4, &drawColor);
         GXBegin(0x80, 0, 4);
-        fifo[0] = half; fifo[0] = 8.0f; fifo[0] = 0.0f; fifo[0] = 0.0f; fifo[0] = 0.0f;
-        fifo[0] = 8.0f; fifo[0] = 8.0f; fifo[0] = 0.0f; fifo[0] = 1.0f; fifo[0] = 0.0f;
-        fifo[0] = 8.0f; fifo[0] = half; fifo[0] = 0.0f; fifo[0] = 1.0f; fifo[0] = 1.0f;
-        fifo[0] = half; fifo[0] = half; fifo[0] = 0.0f; fifo[0] = 0.0f; fifo[0] = 1.0f;
+        fifo[0] = -16.0f * 0.5f;
+        fifo[0] = 8.0f;
+        fifo[0] = 0.0f;
+        fifo[0] = 0.0f;
+        fifo[0] = 0.0f;
+        fifo[0] = 8.0f;
+        fifo[0] = 8.0f;
+        fifo[0] = 0.0f;
+        fifo[0] = 1.0f;
+        fifo[0] = 0.0f;
+        fifo[0] = 8.0f;
+        fifo[0] = -16.0f * 0.5f;
+        fifo[0] = 0.0f;
+        fifo[0] = 1.0f;
+        fifo[0] = 1.0f;
+        fifo[0] = -16.0f * 0.5f;
+        fifo[0] = -16.0f * 0.5f;
+        fifo[0] = 0.0f;
+        fifo[0] = 0.0f;
+        fifo[0] = 1.0f;
     }
 }
 

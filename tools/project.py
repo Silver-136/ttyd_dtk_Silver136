@@ -134,8 +134,12 @@ class ProjectConfig:
             if getattr(self, attr) is None:
                 sys.exit(f"ProjectConfig.{attr} missing")
 
-    def find_object(self, name: str) -> Optional[Tuple[Dict[str, Any], Object]]:
+    def find_object(
+        self, name: str, library: Optional[str] = None
+    ) -> Optional[Tuple[Dict[str, Any], Object]]:
         for lib in self.libs or {}:
+            if library is not None and lib["lib"] != library:
+                continue
             for obj in lib["objects"]:
                 if obj.name == name:
                     return lib, obj
@@ -160,6 +164,46 @@ def make_flags_str(cflags: Union[str, List[str]]) -> str:
         return " ".join(cflags)
     else:
         return cflags
+
+
+def generated_source_product_base(
+    build_root: Path, obj: Object, source_path: Path
+) -> Path:
+    """Return the canonical generated-product base for one configured source.
+
+    Main-DOL products retain the historical Object.base_name layout.  REL
+    products preserve their configured ``src/rel/<component>/...`` ownership so
+    equal basenames in different components cannot alias the same physical
+    object, context, or compiler basefile.
+    """
+    source = Path(source_path)
+    parts = source.parts
+    for index in range(len(parts) - 2):
+        if parts[index : index + 2] == ("src", "rel"):
+            return build_root.joinpath(*parts[index + 1 :]).with_suffix("")
+    return build_root / obj.base_name
+
+
+def claim_generated_output(
+    owners: Dict[Path, Tuple[str, ...]],
+    output: Path,
+    identity: Tuple[str, ...],
+) -> bool:
+    """Claim an output for one compilation identity.
+
+    Returns False for an exact repeated source/recipe and raises when a distinct
+    compilation would otherwise share the physical product.
+    """
+    existing = owners.get(output)
+    if existing is None:
+        owners[output] = identity
+        return True
+    if existing == identity:
+        return False
+    raise ValueError(
+        f"generated output ownership collision for {output}: "
+        f"{existing!r} vs {identity!r}"
+    )
 
 
 # Load decomp-toolkit generated config.json
@@ -668,7 +712,7 @@ def generate_build_ninja(
         used_compiler_versions: Set[str] = set()
         source_inputs: List[Path] = []
         host_source_inputs: List[Path] = []
-        source_added: Set[Path] = set()
+        source_added: Dict[Path, Tuple[str, ...]] = {}
 
         def c_build(
             obj: Object, options: Dict[str, Any], lib_name: str, src_path: Path
@@ -679,17 +723,25 @@ def generate_build_ninja(
                 cflags_str += " " + extra_cflags_str
             used_compiler_versions.add(options["mw_version"])
 
-            src_obj_path = build_src_path / f"{obj.base_name}.o"
-            src_base_path = build_src_path / obj.base_name
-
-            # Avoid creating duplicate build rules
-            if src_obj_path in source_added:
-                return src_obj_path
-            source_added.add(src_obj_path)
-
             shift_jis = options["shift_jis"]
             if shift_jis is None:
                 shift_jis = config.shift_jis
+
+            src_base_path = generated_source_product_base(
+                build_src_path, obj, src_path
+            )
+            src_obj_path = src_base_path.with_suffix(".o")
+            compile_identity = (
+                "c",
+                src_path.as_posix(),
+                str(options["mw_version"]),
+                cflags_str,
+                str(bool(shift_jis)),
+            )
+
+            # Avoid duplicate rules only for the exact same source and recipe.
+            if not claim_generated_output(source_added, src_obj_path, compile_identity):
+                return src_obj_path
 
             # Add MWCC build rule
             n.comment(f"{obj.name}: {lib_name} (linked {obj.completed})")
@@ -707,7 +759,7 @@ def generate_build_ninja(
             )
 
             # Add ctx build rule
-            ctx_path = build_src_path / f"{obj.base_name}.ctx"
+            ctx_path = src_base_path.with_suffix(".ctx")
             n.build(
                 outputs=ctx_path,
                 rule="decompctx",
@@ -717,8 +769,10 @@ def generate_build_ninja(
 
             # Add host build rule
             if options.get("host", False):
-                host_obj_path = build_host_path / f"{obj.base_name}.o"
-                host_base_path = build_host_path / obj.base_name
+                host_base_path = generated_source_product_base(
+                    build_host_path, obj, src_path
+                )
+                host_obj_path = host_base_path.with_suffix(".o")
                 n.build(
                     outputs=host_obj_path,
                     rule="host_cc" if src_path.suffix == ".c" else "host_cpp",
@@ -743,6 +797,7 @@ def generate_build_ninja(
             lib_name: str,
             src_path: Path,
             build_path: Path,
+            identity_path: Optional[Path] = None,
         ) -> Optional[Path]:
             asflags = options["asflags"] or config.asflags
             if asflags is None:
@@ -752,12 +807,19 @@ def generate_build_ninja(
                 extra_asflags_str = make_flags_str(options["extra_asflags"])
                 asflags_str += " " + extra_asflags_str
 
-            asm_obj_path = build_path / f"{obj.base_name}.o"
+            product_base = generated_source_product_base(
+                build_path, obj, identity_path or src_path
+            )
+            asm_obj_path = product_base.with_suffix(".o")
+            compile_identity = (
+                "asm",
+                src_path.as_posix(),
+                asflags_str,
+            )
 
-            # Avoid creating duplicate build rules
-            if asm_obj_path in source_added:
+            # Avoid duplicate rules only for the exact same source and recipe.
+            if not claim_generated_output(source_added, asm_obj_path, compile_identity):
                 return asm_obj_path
-            source_added.add(asm_obj_path)
 
             # Add assembler build rule
             n.comment(f"{obj.name}: {lib_name} (linked {obj.completed})")
@@ -777,7 +839,9 @@ def generate_build_ninja(
 
         def add_unit(build_obj, link_step: LinkStep):
             obj_path, obj_name = build_obj["object"], build_obj["name"]
-            result = config.find_object(obj_name)
+            result = config.find_object(
+                obj_name, link_step.name if link_step.module_id != 0 else None
+            )
             if not result:
                 if config.warn_missing_config and not build_obj["autogenerated"]:
                     print(f"Missing configuration for {obj_name}")
@@ -823,7 +887,12 @@ def generate_build_ninja(
             if unit_asm_path is not None and unit_asm_path.exists():
                 link_built_obj = True
                 built_obj_path = asm_build(
-                    obj, options, lib_name, unit_asm_path, build_asm_path
+                    obj,
+                    options,
+                    lib_name,
+                    unit_asm_path,
+                    build_asm_path,
+                    unit_src_path,
                 )
 
             if link_built_obj and built_obj_path is not None:
@@ -1171,6 +1240,7 @@ def generate_objdiff_config(
         "GC/1.2.5": "mwcc_233_163",
         "GC/1.2.5e": "mwcc_233_163e",
         "GC/1.2.5n": "mwcc_233_163n",
+        "GC/1.3": "mwcc_242_53",
         "GC/1.3.2": "mwcc_242_81",
         "GC/1.3.2r": "mwcc_242_81r",
         "GC/2.0": "mwcc_247_92",
@@ -1197,7 +1267,9 @@ def generate_objdiff_config(
 
     build_path = config.out_path()
 
-    def add_unit(build_obj: Dict[str, Any], module_name: str) -> None:
+    def add_unit(
+        build_obj: Dict[str, Any], module_name: str, rel_component: bool = False
+    ) -> None:
         if build_obj["autogenerated"]:
             # Skip autogenerated objects
             return
@@ -1209,7 +1281,7 @@ def generate_objdiff_config(
             "target_path": obj_path,
         }
 
-        result = config.find_object(obj_name)
+        result = config.find_object(obj_name, module_name if rel_component else None)
         if not result:
             objdiff_config["units"].append(unit_config)
             return
@@ -1233,8 +1305,11 @@ def generate_objdiff_config(
             return
 
         cflags = options["cflags"]
-        src_obj_path = build_path / "src" / f"{obj.base_name}.o"
-        src_ctx_path = build_path / "src" / f"{obj.base_name}.ctx"
+        product_base = generated_source_product_base(
+            build_path / "src", obj, unit_src_path
+        )
+        src_obj_path = product_base.with_suffix(".o")
+        src_ctx_path = product_base.with_suffix(".ctx")
 
         reverse_fn_order = False
         if type(cflags) is list:
@@ -1286,7 +1361,7 @@ def generate_objdiff_config(
     # Add REL units
     for module in build_config["modules"]:
         for unit in module["units"]:
-            add_unit(unit, module["name"])
+            add_unit(unit, module["name"], rel_component=True)
 
     # Write objdiff.json
     with open("objdiff.json", "w", encoding="utf-8") as w:

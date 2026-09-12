@@ -5,15 +5,21 @@ extern f64 sin(f64);
 void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
     typedef f32 Mtx[3][4];
     typedef struct Vec { f32 x, y, z; } Vec;
+    typedef union FloatBits { f32 f; u32 u; } FloatBits;
     extern void* effEntry(void);
     extern void* __memAlloc(s32,s32);
     extern void effMagic3Main(void*);
     extern void* camGetPtr(s32);
+    extern f64 sin(f64);
     extern f64 cos(f64);
-    extern f32 sqrtf(f32);
+    extern f64 __frsqrte(f64);
+    extern f32 __float_nan;
     extern void PSMTXRotAxisRad(Mtx,Vec*,f32);
     extern char str_Magic3N64_802fb4a8[];
     extern const f32 vec3_802fb470[];
+    extern const f64 double_0p5_802fb490;
+    extern const f64 double_3_802fb498;
+    extern const f64 double_0_802fb4a0;
     void* entry = effEntry();
     u8* work;
     u8* camera;
@@ -21,16 +27,44 @@ void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
     Vec axis;
     Vec direction;
     Vec perpendicular;
+    FloatBits bits;
     f32 length;
+    f32 lengthSq;
     f32 perpendicularLengthSq;
     f32 cameraAngle;
     f32 spread;
+    f64 root;
+    f64 inv;
+    s32 floatClass;
     s32 i;
 
     direction.x = 0.0f;
     direction.y = -1.0f;
     direction.z = 0.0f;
-    length = sqrtf(direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
+    lengthSq = direction.x * direction.x + direction.y * direction.y + direction.z * direction.z;
+    root = (f64)lengthSq;
+    if (root > double_0_802fb4a0) {
+        inv = __frsqrte(root);
+        inv = double_0p5_802fb490 * inv * (double_3_802fb498 - root * inv * inv);
+        inv = double_0p5_802fb490 * inv * (double_3_802fb498 - root * inv * inv);
+        root = (f64)(f32)(root * (double_0p5_802fb490 * inv *
+            (double_3_802fb498 - root * inv * inv)));
+    } else if (root < double_0_802fb4a0) {
+        root = (f64)__float_nan;
+    } else {
+        bits.f = lengthSq;
+        if ((bits.u & 0x7F800000) == 0x7F800000) {
+            floatClass = (bits.u & 0x7FFFFF) == 0 ? 2 : 1;
+        } else if ((bits.u & 0x7F800000) == 0) {
+            floatClass = (bits.u & 0x7FFFFF) == 0 ? 3 : 5;
+        } else {
+            floatClass = 4;
+        }
+        if (floatClass == 1) {
+            root = (f64)__float_nan;
+        }
+    }
+    length = (f32)root;
     if (length == 0.0f) {
         return 0;
     }
@@ -71,8 +105,8 @@ void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
         axis.x = vec3_802fb470[0];
         axis.y = vec3_802fb470[1];
         axis.z = vec3_802fb470[2];
-        axis.x = (f32)sin(cameraAngle);
-        axis.z = -(f32)cos(cameraAngle);
+        axis.x = (f32)sin((f64)cameraAngle);
+        axis.z = -(f32)cos((f64)cameraAngle);
         if (i == 1) {
             spread = 0.0f;
         } else {
@@ -84,10 +118,10 @@ void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
         *(f32*)(work + 8) = y;
         *(f32*)(work + 0xC) = z;
         *(f32*)(work + 0x10) = 0.6f *
-                               (rot[0][0] * direction.x + rot[0][1] * direction.y + rot[0][2] * direction.z);
+            (rot[0][0] * direction.x + rot[0][1] * direction.y + rot[0][2] * direction.z);
         *(f32*)(work + 0x14) = rot[1][0] * direction.x + rot[1][1] * direction.y + rot[1][2] * direction.z;
         *(f32*)(work + 0x18) = 0.6f *
-                               (rot[2][0] * direction.x + rot[2][1] * direction.y + rot[2][2] * direction.z);
+            (rot[2][0] * direction.x + rot[2][1] * direction.y + rot[2][2] * direction.z);
         *(f32*)(work + 0x1C) = (f32)(50 - i * 25);
         *(f32*)(work + 0x20) = 0.5f;
         *(s32*)(work + 0x28) = arg;
@@ -100,45 +134,69 @@ void* effMagic3N64Entry(f32 x, f32 y, f32 z, s32 type, s32 arg) {
 void effMagic3Main(void* effect) {
     typedef struct Vec3 { f32 x; f32 y; f32 z; } Vec3;
     extern void effDelete(void*);
+    extern f64 sin(f64);
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effMagic3Disp(s32, s32);
+    extern f32 vec3_802fb47c[3];
     extern f32 float_0p8_80425a94, float_0p4_80425a98, float_6p2832_80425a90;
     extern f32 float_360_80425a9c, float_3_80425aa0, float_0p7_80425aa8;
     extern f32 float_0p6_80425aa4, float_30_80425aac;
     u8* work;
-    Vec3 pos;
-    s32 timer, i;
+    Vec3 initialPos;
+    Vec3 displayPos;
+    s32 timer;
+    s32 i;
     f32 phase;
+    f32 wave;
+    f32 halfWave;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos.x = *(f32*)(work + 4); pos.y = *(f32*)(work + 8); pos.z = *(f32*)(work + 0xC);
+    initialPos.x = vec3_802fb47c[0];
+    initialPos.y = vec3_802fb47c[1];
+    initialPos.z = vec3_802fb47c[2];
+    initialPos.x = *(f32*)(work + 4);
+    initialPos.y = *(f32*)(work + 8);
+    initialPos.z = *(f32*)(work + 0xC);
+    displayPos = initialPos;
     *(s32*)(work + 0x28) -= 1;
     *(s32*)(work + 0x2C) += 1;
     timer = *(s32*)(work + 0x28);
-    if (timer < 0) { effDelete(effect); return; }
-    phase = float_6p2832_80425a90 * (f32)(*(s32*)(work + 0x2C) * 30) / float_360_80425a9c;
+    if (timer < 0) {
+        effDelete(effect);
+        return;
+    }
+    phase = float_6p2832_80425a90 * (f32)(*(s32*)(work + 0x2C) * 30);
     for (i = 0; i < *(s32*)((s32)effect + 8); i++) {
         if (timer > 5) {
             *(f32*)(work + 0x10) *= float_0p8_80425a94;
             *(f32*)(work + 0x14) *= float_0p8_80425a94;
             *(f32*)(work + 0x18) *= float_0p8_80425a94;
-            *(s32*)(work + 0x24) = (s32)(float_0p4_80425a98 * (255 - *(s32*)(work + 0x24)) + *(s32*)(work + 0x24));
-            *(f32*)(work + 0x20) = (f32)sin((f64)phase);
+            *(s32*)(work + 0x24) = (s32)(float_0p4_80425a98 *
+                (f32)(255 - *(s32*)(work + 0x24)) +
+                (f32)*(s32*)(work + 0x24));
+            wave = (f32)sin((f64)(phase / float_360_80425a9c));
+            halfWave = (f32)sin((f64)(float_6p2832_80425a90 *
+                (f32)(*(s32*)(work + 0x24) / 2) / float_360_80425a9c));
+            *(f32*)(work + 0x20) = float_3_80425aa0 * halfWave + wave;
         }
         if (timer < 5) {
             *(s32*)(work + 0x24) = (s32)((f32)*(s32*)(work + 0x24) * float_0p6_80425aa4);
             *(f32*)(work + 0x10) *= float_0p7_80425aa8;
             *(f32*)(work + 0x14) *= float_0p7_80425aa8;
             *(f32*)(work + 0x18) *= float_0p7_80425aa8;
-            *(f32*)(work + 0x20) = (255 - *(s32*)(work + 0x24)) / float_30_80425aac + (f32)sin((f64)phase);
+            wave = (f32)sin((f64)(phase / float_360_80425a9c));
+            halfWave = (f32)sin((f64)(float_6p2832_80425a90 *
+                (f32)(*(s32*)(work + 0x24) / 2) / float_360_80425a9c));
+            *(f32*)(work + 0x20) = (f32)(255 - *(s32*)(work + 0x24)) /
+                float_30_80425aac + float_3_80425aa0 * halfWave + wave;
         }
         *(f32*)(work + 4) += *(f32*)(work + 0x10);
         *(f32*)(work + 8) += *(f32*)(work + 0x14);
         *(f32*)(work + 0xC) += *(f32*)(work + 0x18);
         work += 0x30;
     }
-    dispEntry(4, 2, effMagic3Disp, effect, dispCalcZ(&pos));
+    dispEntry(4, 2, effMagic3Disp, effect, dispCalcZ(&displayPos));
 }
 
 #pragma no_register_save_helpers on

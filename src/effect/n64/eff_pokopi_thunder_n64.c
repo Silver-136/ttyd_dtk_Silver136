@@ -6,14 +6,11 @@ void* effPokopiThunderN64Entry(s32 type, s32 time, f32 x0, f32 y0, f32 z0, f32 x
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effPokopiThunderMain(void*);
     extern s32 rand(void);
-    extern f64 __frsqrte(f64);
-    extern const char str_PokopiThunderN64_802fbd48[];
+    extern const u8 vec3_802fbd28[];
     extern f32 float_0_80425db0;
     extern f32 float_0p005_80425ddc;
-    extern f32 __float_nan;
-    extern f64 double_0p5_802fbd60;
-    extern f64 double_3_802fbd68;
-    extern f64 double_0_802fbd70;
+    extern s32 __float_nan[];
+    const u8* data = vec3_802fbd28;
     void* entry;
     u8* work;
     s32 camera;
@@ -28,14 +25,15 @@ void* effPokopiThunderN64Entry(s32 type, s32 time, f32 x0, f32 y0, f32 z0, f32 x
     if (type >= 10) {
         camera = 8;
     }
-    *(const char**)((s32)entry + 0x14) = str_PokopiThunderN64_802fbd48;
+    *(const char**)((s32)entry + 0x14) = (const char*)(data + 0x20);
     *(s32*)((s32)entry + 8) = 1;
+    type %= 10;
     work = __memAlloc(3, 0x11C);
     *(u8**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effPokopiThunderMain;
     *(u32*)entry |= 2;
 
-    *(s32*)work = type % 10;
+    *(s32*)work = type;
     *(s32*)(work + 0x2C) = 0;
     if (time <= 0) {
         *(s32*)(work + 0x28) = 0x3E8;
@@ -43,6 +41,11 @@ void* effPokopiThunderN64Entry(s32 type, s32 time, f32 x0, f32 y0, f32 z0, f32 x
         *(s32*)(work + 0x28) = time;
     }
     *(s32*)(work + 0x3C) = 0xFF;
+
+    dy = y0 - y1;
+    dx = x0 - x1;
+    dz = z0 - z1;
+    square = dy * dy + dx * dx + dz * dz;
     *(f32*)(work + 0x10) = x0;
     *(f32*)(work + 0x14) = y0;
     *(f32*)(work + 0x18) = z0;
@@ -55,24 +58,22 @@ void* effPokopiThunderN64Entry(s32 type, s32 time, f32 x0, f32 y0, f32 z0, f32 x
     *(f32*)(work + 0x4C) = scale;
     *(s32*)(work + 0x118) = camera;
 
-    dx = x0 - x1;
-    dy = y0 - y1;
-    dz = z0 - z1;
-    square = dy * dy + dx * dx + dz * dz;
     if (square == float_0_80425db0) {
         return 0;
     }
     if (square > float_0_80425db0) {
-        f64 inv = __frsqrte((f64)square);
-        inv = double_0p5_802fbd60 * inv *
-              -(square * inv * inv - double_3_802fbd68);
-        inv = double_0p5_802fbd60 * inv *
-              -(square * inv * inv - double_3_802fbd68);
-        inv = double_0p5_802fbd60 * inv *
-              -(square * inv * inv - double_3_802fbd68);
-        dist = (f32)(square * inv);
-    } else if ((f64)square < double_0_802fbd70) {
-        dist = __float_nan;
+        register f64 value = (f64)square;
+        register f64 inv;
+        asm { frsqrte inv, value }
+        inv = *(const f64*)(data + 0x38) * inv *
+              -((value * inv * inv) - *(const f64*)(data + 0x40));
+        inv = *(const f64*)(data + 0x38) * inv *
+              -((value * inv * inv) - *(const f64*)(data + 0x40));
+        inv = *(const f64*)(data + 0x38) * inv *
+              -((value * inv * inv) - *(const f64*)(data + 0x40));
+        dist = (f32)(value * inv);
+    } else if ((f64)square < *(const f64*)(data + 0x48)) {
+        dist = *(f32*)__float_nan;
     } else {
         union {
             f32 value;
@@ -84,15 +85,28 @@ void* effPokopiThunderN64Entry(s32 type, s32 time, f32 x0, f32 y0, f32 z0, f32 x
         classify.value = square;
         exponent = classify.bits & 0x7F800000;
         if (exponent == 0x7F800000) {
-            kind = (classify.bits & 0x7FFFFF) != 0 ? 1 : 2;
-        } else if (exponent == 0) {
-            kind = (classify.bits & 0x7FFFFF) != 0 ? 5 : 3;
+            if ((classify.bits & 0x7FFFFF) != 0) {
+                kind = 1;
+            } else {
+                kind = 2;
+            }
+        } else if ((exponent < 0x7F800000) && (exponent == 0)) {
+            if ((classify.bits & 0x7FFFFF) != 0) {
+                kind = 5;
+            } else {
+                kind = 3;
+            }
         } else {
             kind = 4;
         }
-        dist = kind == 1 ? __float_nan : square;
+        if (kind == 1) {
+            dist = *(f32*)__float_nan;
+        } else {
+            dist = square;
+        }
     }
-    *(f32*)(work + 0x114) = dist * float_0p005_80425ddc;
+    *(f32*)(work + 0x114) = dist;
+    *(f32*)(work + 0x114) *= float_0p005_80425ddc;
     *(s32*)(work + 0x30) = 0xFF;
     *(s32*)(work + 0x34) = 0xDC;
     *(s32*)(work + 0x38) = 0x14;
@@ -186,12 +200,17 @@ u8 effPokopiThunderDisp(s32 cameraId, s32 effectAddress) {
     extern void PSMTXConcat(void*, void*, void*);
     extern void GXLoadPosMtxImm(Mtx, s32);
     extern void GXSetCurrentMtx(s32);
+    extern void GXGetProjectionv(f32*);
+    extern void GXGetViewportv(f32*);
+    extern void GXSetProjection(void*, s32);
+    extern void GXSetProjectionv(f32*);
+    extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
     extern void GXSetCullMode(s32);
     extern void GXBegin(s32, s32, s16);
     extern void DCFlushRange(void*, u32);
     extern void GXInvalidateVtxCache(void);
     extern void effSetVtxDescN64(void*);
-    extern u8 tri2(s16, s16, s16, s32, s16, s16, s16);
+    extern u8 tri2(s16, s16, s16, s32, s16, s16, s16, s32);
     extern f64 sin(f64);
     extern f64 cos(f64);
     extern f64 angleABf(f64, f64, f64, f64);
@@ -206,16 +225,30 @@ u8 effPokopiThunderDisp(s32 cameraId, s32 effectAddress) {
     extern f32 float_180_80425dcc;
     extern f32 float_neg180_80425dd0;
     extern f32 float_10_80425dd8;
+    extern u8 yuragi_data[];
+    extern u8* yuragi_data_table[];
     u8* work = *(u8**)(effectAddress + 0xC);
     char* camera = camGetPtr(cameraId);
     GXTexObj tex;
     Mtx scale, model;
+    f32 projection[7];
+    f32 viewport[6];
     f32* vertices;
     u32 color;
     s32 i;
+    s32 frame;
+    s32 type;
+    u8* pattern;
+
+    if (*(s32*)(work + 0x118) != 4) {
+        camera = camGetPtr(4);
+        GXGetProjectionv(projection);
+        GXGetViewportv(viewport);
+        GXSetProjection(camera + 0x15C, *(s32*)(camera + 0x19C));
+    }
 
     PSMTXScale(scale, 0.1f, 0.1f, 0.1f);
-    PSMTXConcat(camera + 0x118, scale, model);
+    PSMTXConcat(camera + 0x11C, scale, model);
     GXLoadPosMtxImm(model, 0);
     GXSetCurrentMtx(0);
     color = (*(u8*)(work + 0x30) << 24) | (*(u8*)(work + 0x34) << 16) |
@@ -257,13 +290,29 @@ u8 effPokopiThunderDisp(s32 cameraId, s32 effectAddress) {
     GXLoadTexObj(&tex, 1);
     GXSetCullMode(0);
 
+    type = *(s32*)work;
+    frame = *(s32*)(work + 0x2C) - 1;
+    if (type == 2) {
+        if (frame < 8) {
+            pattern = yuragi_data + frame * 0x18;
+        } else if (frame < 0x24) {
+            pattern = yuragi_data + (frame % 6 + 2) * 0x18;
+        } else {
+            pattern = yuragi_data + 0xF0;
+        }
+    } else if (frame < 0xB) {
+        pattern = yuragi_data_table[type] + frame * 0x18;
+    } else {
+        pattern = yuragi_data_table[type] + 0xF0;
+    }
+
     /* Build the twelve-point center line before expanding it to a ribbon. */
     for (i = 0; i < 12; i++) {
         f32 t = (f32)i / 11.0f;
         f32 phase = float_6p2832_80425db8 *
             (f32)(*(s32*)(work + 0x110) + (i - *(s32*)(work + 0x2C)) * 10 - 60) /
             float_360_80425dbc;
-        f32 amount = float_0p04_80425dc0 * (f32)((i * 17 + 7) & 0xFF);
+        f32 amount = float_0p04_80425dc0 * (f32)pattern[i];
         f32 waveX = amount * (f32)cos(phase);
         f32 waveY = amount * (f32)sin(phase);
         *(f32*)(work + 0x50 + i * 4) = *(f32*)(work + 0x10) +
@@ -272,7 +321,7 @@ u8 effPokopiThunderDisp(s32 cameraId, s32 effectAddress) {
             t * (*(f32*)(work + 0x20) - *(f32*)(work + 0x14)) + waveY;
         *(f32*)(work + 0xB0 + i * 4) = *(f32*)(work + 0x18) +
             t * (*(f32*)(work + 0x24) - *(f32*)(work + 0x18));
-        *(f32*)(work + 0xE0 + i * 4) = float_0p1_80425da4;
+        *(f32*)(work + 0xE0 + i * 4) = float_0p1_80425da4 * (f32)pattern[i + 12];
     }
 
     vertices = smartAlloc(0x2A0, 3);
@@ -331,7 +380,11 @@ u8 effPokopiThunderDisp(s32 cameraId, s32 effectAddress) {
     for (i = 0; i < 11; i++) {
         GXBegin(0x90, 0, 6);
         tri2((s16)(i * 2), (s16)(i * 2 + 2), (s16)(i * 2 + 1), 2,
-             (s16)(i * 2 + 1), (s16)(i * 2 + 2), (s16)(i * 2 + 3));
+             (s16)(i * 2 + 1), (s16)(i * 2 + 2), (s16)(i * 2 + 3), 0);
+    }
+    if (*(s32*)(work + 0x118) != 4) {
+        GXSetProjectionv(projection);
+        GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
     }
     return 0;
 }

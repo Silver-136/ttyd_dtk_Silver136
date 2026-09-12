@@ -1,6 +1,30 @@
 #include "effect/n64/eff_timestamp_n64.h"
 
 extern f32 float_0_80426438;
+/* Initial positions and stagger timers for the ten timestamp particles. */
+s32 pos_data[5][6] = {
+    { -50, -70, 5, 80, -90, 20 },
+    { 20, -50, 45, -80, 30, 10 },
+    { 30, 0, 35, 120, -30, 50 },
+    { 10, 50, 30, 100, 30, 15 },
+    { 40, 100, 40, 140, 90, 25 },
+};
+
+__declspec(section ".data") f32 lbl_803AB598[2] = { -1.0f, 1.0f };
+
+static u8 scale_data[4] = { 0x78, 0x50, 0x28, 0x3C };
+static u8 colr[17] = {
+    0xFF, 0xFF, 0xFF, 0xC6, 0x8A, 0x82, 0x82, 0x82, 0x82,
+    0x82, 0xAF, 0xD7, 0xFA, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+static u8 colg[17] = {
+    0x82, 0x82, 0x82, 0x82, 0x82, 0xA5, 0xD5, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xE1, 0xC6, 0x9F, 0x82,
+};
+static u8 colb[17] = {
+    0x82, 0xC4, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xCA,
+    0x90, 0x82, 0x82, 0x82, 0x82, 0x82, 0x82, 0x82,
+};
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -9,7 +33,6 @@ void* effTimestampN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effTimestampMain(void*);
     extern char str_TimestampN64_802fc200[];
-    extern s32 pos_data[];
     extern f32 float_1_80426454;
     void* entry;
     u8* work;
@@ -40,7 +63,7 @@ void* effTimestampN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     *(s32*)(work + 0x20) = 0x78;
     *(s32*)(work + 0x2C) = 0;
     *(f32*)(work + 0x30) = float_1_80426454;
-    data = pos_data;
+    data = &pos_data[0][0];
     for (i = 0; i < 5; i++, data += 6, work += 8) {
         *(f32*)(work + 0x34) = (f32)data[0];
         *(f32*)(work + 0x5C) = (f32)data[1];
@@ -188,8 +211,15 @@ void effTimestampDisp(s32 cameraId, void* effect)  {
     f32 base[3][4],m[3][4],r[3][4],s[3][4];
     u8 texObj[0x20];
     s16* v;
+    s16* vp;
     u32 color;
     s32 i,j;
+    s32 frame=*(s32*)(work+0x14);
+    s32 alpha=*(s32*)(work+0x24);
+    s32 phase0=frame*10;
+    s32 phase1=phase0;
+    s16 ypos=0;
+    s16 texv=0;
     f32 wave;
     PSMTXTrans(base,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));
     PSMTXScale(s,*(f32*)(work+0x28),*(f32*)(work+0x28),*(f32*)(work+0x28));
@@ -221,18 +251,24 @@ void effTimestampDisp(s32 cameraId, void* effect)  {
     color=0xFFFFFF00|(*(s32*)(work+0x2C)&0xFF);
     GXSetTevColor(2,&color);
     v=smartAlloc(0x1C0,3);
+    vp=v;
     for(i=0;i<16;i++) {
         wave=*(f32*)(work+0x30);
-        v[i*14]=(s16)(wave*500.0f*(f32)sin((6.2832f*(f32)(*(s32*)(work+0x14)*10+i*60))/360.0f))-0xC80;
-        v[i*14+1]=(s16)(wave*200.0f*(f32)sin((6.2832f*(f32)(*(s32*)(work+0x14)*10+i*6))/360.0f)+i*400-3000);
-        v[i*14+2]=0;
-        v[i*14+3]=0;
-        v[i*14+4]=(s16)(i*0x80);
-        v[i*14+7]=v[i*14]+0x1900;
-        v[i*14+8]=v[i*14+1];
-        v[i*14+9]=0;
-        v[i*14+10]=0x800;
-        v[i*14+11]=(s16)(i*0x80);
+        vp[0]=(s16)(wave*500.0f*(f32)sin((6.2832f*(f32)phase0)/360.0f))-0xC80;
+        vp[1]=(s16)(wave*200.0f*(f32)sin((6.2832f*(f32)phase1)/360.0f)+ypos-3000);
+        vp[2]=0;
+        vp[3]=0;
+        vp[4]=texv;
+        vp[7]=vp[0]+0x1900;
+        vp[8]=vp[1];
+        vp[9]=0;
+        vp[10]=0x800;
+        vp[11]=texv;
+        phase0+=60;
+        phase1+=6;
+        ypos+=400;
+        texv+=0x80;
+        vp+=14;
     }
     DCFlushRange(v,0x1C0);
     GXInvalidateVtxCache();
@@ -240,12 +276,20 @@ void effTimestampDisp(s32 cameraId, void* effect)  {
     effSetVtxDescN64(v);
     for(i=0;i<10;i++) {
         PSMTXTrans(m,*(f32*)(work+0x34+i*4),*(f32*)(work+0x5C+i*4),*(f32*)(work+0x84+i*4));
+        PSMTXScale(s,(f32)scale_data[i%4]*0.01f,(f32)scale_data[i%4]*0.01f,(f32)scale_data[i%4]*0.01f);
+        PSMTXConcat(m,s,m);
+        PSMTXRotRad(r,0x78,0.017453292f**(f32*)(work+0xAC+i*4));
+        PSMTXConcat(m,r,m);
+        PSMTXRotRad(r,0x79,0.017453292f**(f32*)(work+0xD4+i*4));
+        PSMTXConcat(m,r,m);
+        PSMTXRotRad(r,0x7A,0.017453292f**(f32*)(work+0xFC+i*4));
+        PSMTXConcat(m,r,m);
         PSMTXScale(s,0.01f,0.01f,0.01f);
         PSMTXConcat(m,s,m);
         PSMTXConcat(base,m,m);
         GXLoadPosMtxImm(m,0);
         GXSetCurrentMtx(0);
-        color=0xFFFFFF00|((*(s32*)(work+0x24) * *(s32*)(work+0x124+i*4))/0xFF&0xFF);
+        color=((u32)colr[i]<<24)|((u32)colg[i]<<16)|((u32)colb[i]<<8)|((alpha * *(s32*)(work+0x124+i*4))/0xFF&0xFF);
         GXSetTevColor(1,&color);
         for(j=0;j<15;j++) {
             GXBegin(0x90,0,6);
@@ -253,28 +297,3 @@ void effTimestampDisp(s32 cameraId, void* effect)  {
         }
     }
 }
-
-/* Initial positions and stagger timers for the ten timestamp particles. */
-s32 pos_data[5][6] = {
-    { -50, -70, 5, 80, -90, 20 },
-    { 20, -50, 45, -80, 30, 10 },
-    { 30, 0, 35, 120, -30, 50 },
-    { 10, 50, 30, 100, 30, 15 },
-    { 40, 100, 40, 140, 90, 25 },
-};
-
-__declspec(section ".data") f32 lbl_803AB598[2] = { -1.0f, 1.0f };
-
-static u8 scale_data[4] = { 0x78, 0x50, 0x28, 0x3C };
-static u8 colr[17] = {
-    0xFF, 0xFF, 0xFF, 0xC6, 0x8A, 0x82, 0x82, 0x82, 0x82,
-    0x82, 0xAF, 0xD7, 0xFA, 0xFF, 0xFF, 0xFF, 0xFF,
-};
-static u8 colg[17] = {
-    0x82, 0x82, 0x82, 0x82, 0x82, 0xA5, 0xD5, 0xFF, 0xFF,
-    0xFF, 0xFF, 0xFF, 0xFF, 0xE1, 0xC6, 0x9F, 0x82,
-};
-static u8 colb[17] = {
-    0x82, 0xC4, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xCA,
-    0x90, 0x82, 0x82, 0x82, 0x82, 0x82, 0x82, 0x82,
-};

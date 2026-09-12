@@ -131,7 +131,6 @@ void winPartyInit(void* pWin) {
     pouch = pouchGetPtr();
     dt = winPartyDt;
     *(s32*)((s32)pWin + 0x1E0) = 0;
-
     i = 0;
     dtScan = dt;
     do {
@@ -139,59 +138,31 @@ void winPartyInit(void* pWin) {
         scan = pouch;
         j = 0;
         do {
-            if (j == partyId &&
-                (*(u16*)scan & 1) != 0 &&
-                (*(u16*)scan & 2) == 0) {
+            if (j == partyId && (*(u16*)scan & 1) != 0 && (*(u16*)scan & 2) == 0) {
                 if ((*(u16*)pWin & 0x2000) != 0) {
                     eff = *(char**)((s32)dtScan + 0x18);
                     color = pouchGetPartyColor(4);
                     switch (color) {
-                        case 0:
-                            anim = (char*)str_R_5_804234c8;
-                            break;
-                        case 1:
-                            anim = (char*)str_R_6_80423568;
-                            break;
-                        case 2:
-                            anim = (char*)str_R_7_8042356c;
-                            break;
-                        case 3:
-                            anim = (char*)str_R_8_80423570;
-                            break;
-                        case 4:
-                            anim = (char*)str_R_9_80423574;
-                            break;
-                        case 5:
-                            anim = (char*)str_R_10_80423578;
-                            break;
-                        default:
-                            anim = (char*)str_R_11_80423580;
-                            break;
+                        case 0: anim = (char*)str_R_5_804234c8; break;
+                        case 1: anim = (char*)str_R_6_80423568; break;
+                        case 2: anim = (char*)str_R_7_8042356c; break;
+                        case 3: anim = (char*)str_R_8_80423570; break;
+                        case 4: anim = (char*)str_R_9_80423574; break;
+                        case 5: anim = (char*)str_R_10_80423578; break;
+                        case 6:
+                        default: anim = (char*)str_R_11_80423580; break;
                     }
                 } else if (j == 4) {
                     color = pouchGetPartyColor(4);
                     switch (color) {
-                        case 0:
-                            eff = str_EFF_m_yoshi_802f4e90;
-                            break;
-                        case 1:
-                            eff = str_EFF_m_yoshi2_802f51f0;
-                            break;
-                        case 2:
-                            eff = str_EFF_m_yoshi3_802f5200;
-                            break;
-                        case 3:
-                            eff = str_EFF_m_yoshi4_802f5210;
-                            break;
-                        case 4:
-                            eff = str_EFF_m_yoshi5_802f5220;
-                            break;
-                        case 5:
-                            eff = str_EFF_m_yoshi6_802f5230;
-                            break;
-                        default:
-                            eff = str_EFF_m_yoshi7_802f5240;
-                            break;
+                        case 0: eff = str_EFF_m_yoshi_802f4e90; break;
+                        case 1: eff = str_EFF_m_yoshi2_802f51f0; break;
+                        case 2: eff = str_EFF_m_yoshi3_802f5200; break;
+                        case 3: eff = str_EFF_m_yoshi4_802f5210; break;
+                        case 4: eff = str_EFF_m_yoshi5_802f5220; break;
+                        case 5: eff = str_EFF_m_yoshi6_802f5230; break;
+                        case 6:
+                        default: eff = str_EFF_m_yoshi7_802f5240; break;
                     }
                     anim = (char*)str_W_1_804234b8;
                 } else {
@@ -263,27 +234,14 @@ void winPartyInit(void* pWin) {
 
     color = pouchGetPartyColor(4);
     switch (color) {
-        case 0:
-            *(s32*)((s32)winPartyDt + 0x70) = 0x160;
-            break;
-        case 1:
-            *(s32*)((s32)winPartyDt + 0x70) = 0x161;
-            break;
-        case 2:
-            *(s32*)((s32)winPartyDt + 0x70) = 0x162;
-            break;
-        case 3:
-            *(s32*)((s32)winPartyDt + 0x70) = 0x163;
-            break;
-        case 4:
-            *(s32*)((s32)winPartyDt + 0x70) = 0x164;
-            break;
-        case 5:
-            *(s32*)((s32)winPartyDt + 0x70) = 0x165;
-            break;
-        default:
-            *(s32*)((s32)winPartyDt + 0x70) = 0x166;
-            break;
+        case 0: *(s32*)((s32)winPartyDt + 0x70) = 0x160; break;
+        case 1: *(s32*)((s32)winPartyDt + 0x70) = 0x161; break;
+        case 2: *(s32*)((s32)winPartyDt + 0x70) = 0x162; break;
+        case 3: *(s32*)((s32)winPartyDt + 0x70) = 0x163; break;
+        case 4: *(s32*)((s32)winPartyDt + 0x70) = 0x164; break;
+        case 5: *(s32*)((s32)winPartyDt + 0x70) = 0x165; break;
+        case 6:
+        default: *(s32*)((s32)winPartyDt + 0x70) = 0x166; break;
     }
 }
 
@@ -380,6 +338,30 @@ s32 winPartyMain(void* pWin) {
                     if (prev != *(s32*)((s32)pWin + 0x1DC)) {
                         psndSFXOn(0x209D6);
                     }
+
+                    entry = winPartyDt;
+                    active = 0;
+                    for (i = 0; i < 2; i++) {
+                        partyId = *(s32*)((s32)pWin + 0x1BC + (*(s32*)((s32)pWin + 0x1DC) * 4));
+                        if (partyId == *(s32*)((s32)entry + 0x00)) {
+                            *(s32*)((s32)pWin + 0x1D8) = active;
+                            break;
+                        }
+                        if (partyId == *(s32*)((s32)entry + 0x24)) {
+                            *(s32*)((s32)pWin + 0x1D8) = active + 1;
+                            break;
+                        }
+                        if (partyId == *(s32*)((s32)entry + 0x48)) {
+                            *(s32*)((s32)pWin + 0x1D8) = active + 2;
+                            break;
+                        }
+                        if (partyId == *(s32*)((s32)entry + 0x6C)) {
+                            *(s32*)((s32)pWin + 0x1D8) = active + 3;
+                            break;
+                        }
+                        entry = (void*)((s32)entry + 0x90);
+                        active += 4;
+                    }
                 } else if ((dirs & 0x8000) != 0) {
                     prev = *(s32*)((s32)pWin + 0x1DC);
                     *(s32*)((s32)pWin + 0x1DC) = prev + 1;
@@ -396,16 +378,30 @@ s32 winPartyMain(void* pWin) {
                     if (prev != *(s32*)((s32)pWin + 0x1DC)) {
                         psndSFXOn(0x209D6);
                     }
-                }
-            }
 
-            partyId = *(s32*)((s32)pWin + 0x1BC + (*(s32*)((s32)pWin + 0x1DC) * 4));
-            entry = winPartyDt;
-            active = 0;
-            for (i = 0; i < 8; i++, active++, entry = (void*)((s32)entry + 0x24)) {
-                if (partyId == *(s32*)entry) {
-                    *(s32*)((s32)pWin + 0x1D8) = active;
-                    break;
+                    entry = winPartyDt;
+                    active = 0;
+                    for (i = 0; i < 2; i++) {
+                        partyId = *(s32*)((s32)pWin + 0x1BC + (*(s32*)((s32)pWin + 0x1DC) * 4));
+                        if (partyId == *(s32*)((s32)entry + 0x00)) {
+                            *(s32*)((s32)pWin + 0x1D8) = active;
+                            break;
+                        }
+                        if (partyId == *(s32*)((s32)entry + 0x24)) {
+                            *(s32*)((s32)pWin + 0x1D8) = active + 1;
+                            break;
+                        }
+                        if (partyId == *(s32*)((s32)entry + 0x48)) {
+                            *(s32*)((s32)pWin + 0x1D8) = active + 2;
+                            break;
+                        }
+                        if (partyId == *(s32*)((s32)entry + 0x6C)) {
+                            *(s32*)((s32)pWin + 0x1D8) = active + 3;
+                            break;
+                        }
+                        entry = (void*)((s32)entry + 0x90);
+                        active += 4;
+                    }
                 }
             }
 

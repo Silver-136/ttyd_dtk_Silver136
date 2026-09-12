@@ -70,6 +70,8 @@ void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type) {
 /* CHATGPT STUB FILL: main/effect/eff_majinai 20260624_185035 */
 
 /* stub-fill: effMajinaiMain | prototype_only | source_prototype */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effMajinaiMain(void* effect) {
     extern void* gp;
     extern void* _battleWorkPointer;
@@ -198,6 +200,8 @@ void effMajinaiMain(void* effect) {
     dispEntry(4, 2, effMajinaiDisp, effect, dispCalcZ(pos));
 }
 
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void effMajinaiDisp(s32 cameraId, void* entry) {

@@ -1053,6 +1053,18 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
     s32 i;
     s32 yOffset;
     u32 selectedColor;
+    LocalVec selectedRawPos;
+    LocalVec selectedPos;
+    LocalVec selectedSize;
+    u32 selectedBgColor;
+    LocalVec highlightRawPos;
+    LocalVec highlightPos;
+    LocalVec highlightSize;
+    u32 highlightColor;
+    LocalVec normalRawPos;
+    LocalVec normalPos;
+    LocalVec normalSize;
+    u32 normalColor;
 
     x = *(f32*)((s32)pWin + param_3 * 0x14 + 0xC4);
     y = *(f32*)((s32)pWin + param_3 * 0x14 + 0xC8);
@@ -1072,45 +1084,32 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
 
     for (i = 0, yOffset = 0; i < 2; i++, yOffset += 0x32) {
         if (i == *(s32*)((s32)pWin + 0x210)) {
-            LocalVec rawPos;
-            LocalVec pos;
-            LocalVec size;
-            u32 color;
-            LocalVec rawPos2;
-            LocalVec pos2;
-            LocalVec size2;
-
             winTexInit(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
-            color = dat_8042374c;
-            size = vec3_802f5acc;
-            rawPos.x = x - float_215_80423840;
-            rawPos.y = float_20_804237e8 + (baseY - (f32)yOffset);
-            rawPos.z = vec3_802f5ac0.z;
-            pos = rawPos;
-            winTexSet(0xB3, &pos, &size, &color);
+            selectedBgColor = dat_8042374c;
+            selectedSize = vec3_802f5acc;
+            selectedRawPos = vec3_802f5ac0;
+            selectedRawPos.x = x - float_215_80423840;
+            selectedRawPos.y = float_20_804237e8 + (baseY - (f32)yOffset);
+            selectedPos = selectedRawPos;
+            winTexSet(0xB3, &selectedPos, &selectedSize, &selectedBgColor);
 
             winTexInit_x2(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
-            color = selectedColor;
-            size2 = vec3_802f5ae4;
-            rawPos2.x = selectedX;
-            rawPos2.y = float_20_804237e8 + (selectedY - (f32)yOffset);
-            rawPos2.z = vec3_802f5ad8.z;
-            pos2 = rawPos2;
-            winTexSet_x2(i + 0x18, 0xB3, &pos2, &size2, &color);
+            highlightColor = selectedColor;
+            highlightSize = vec3_802f5ae4;
+            highlightRawPos = vec3_802f5ad8;
+            highlightRawPos.x = selectedX;
+            highlightRawPos.y = float_20_804237e8 + (selectedY - (f32)yOffset);
+            highlightPos = highlightRawPos;
+            winTexSet_x2(i + 0x18, 0xB3, &highlightPos, &highlightSize, &highlightColor);
         } else {
-            LocalVec rawPos;
-            LocalVec pos;
-            LocalVec size;
-            u32 color;
-
             winTexInit_x2(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
-            color = dat_80423750;
-            size = vec3_802f5afc;
-            rawPos.x = x - float_215_80423840;
-            rawPos.y = float_20_804237e8 + (baseY - (f32)yOffset);
-            rawPos.z = vec3_802f5af0.z;
-            pos = rawPos;
-            winTexSet_x2(i + 0x18, 0xB3, &pos, &size, &color);
+            normalColor = dat_80423750;
+            normalSize = vec3_802f5afc;
+            normalRawPos = vec3_802f5af0;
+            normalRawPos.x = x - float_215_80423840;
+            normalRawPos.y = float_20_804237e8 + (baseY - (f32)yOffset);
+            normalPos = normalRawPos;
+            winTexSet_x2(i + 0x18, 0xB3, &normalPos, &normalSize, &normalColor);
         }
     }
 
@@ -1172,20 +1171,28 @@ void item_disp(f32 x, f32 y, void* pWin) {
     Vec3 itemScaleKey;
     Vec3 itemScale;
     Vec3 itemPos;
+    Vec3 itemPosWork;
     Vec3 itemFontScale;
     Vec3 itemFontPos;
+    Vec3 itemFontPosWork;
     Vec3 upTexScale;
     Vec3 upTexPos;
+    Vec3 upTexPosWork;
     Vec3 upIconScale;
     Vec3 upIconPos;
+    Vec3 upIconPosWork;
     Vec3 downTexScale;
     Vec3 downTexPos;
+    Vec3 downTexPosWork;
     Vec3 downIconScale;
     Vec3 downIconPos;
+    Vec3 downIconPosWork;
     Vec3 sortFontScale;
     Vec3 sortFontPos;
+    Vec3 sortFontPosWork;
     Vec3 sortIconScale;
     Vec3 sortIconPos;
+    Vec3 sortIconPosWork;
 
     normalColor = dat_80423758;
     disabledColor = dat_8042375c;
@@ -1256,9 +1263,10 @@ void item_disp(f32 x, f32 y, void* pWin) {
             }
 
             column *= 0xCC;
-            itemPos.x = x - float_125_804237f8 + (f32)column;
-            itemPos.y = drawY;
-            itemPos.z = ((Vec3*)(catalog + 0x5E8))->z;
+            itemPosWork = *(Vec3*)(catalog + 0x5E8);
+            itemPosWork.x = x - float_125_804237f8 + (f32)column;
+            itemPosWork.y = drawY;
+            itemPos = itemPosWork;
 
             iconColor3 = iconColor2;
             winIconSet(
@@ -1275,9 +1283,10 @@ void item_disp(f32 x, f32 y, void* pWin) {
             }
             fontColor = *fontColorPtr;
 
-            itemFontPos.x = x - 105.0f + (f32)column;
-            itemFontPos.y = scroll + 20.0f + rowY;
-            itemFontPos.z = ((Vec3*)(catalog + 0x60C))->z;
+            itemFontPosWork = *(Vec3*)(catalog + 0x60C);
+            itemFontPosWork.x = x - 105.0f + (f32)column;
+            itemFontPosWork.y = scroll + 20.0f + rowY;
+            itemFontPos = itemFontPosWork;
             itemFontScale = *(Vec3*)(catalog + 0x618);
 
             winFontSetWidth(
@@ -1299,17 +1308,19 @@ void item_disp(f32 x, f32 y, void* pWin) {
         py = 18.0f + py;
         py = 20.0f + py;
 
-        upTexPos.x = px;
-        upTexPos.y = py;
-        upTexPos.z = ((Vec3*)(catalog + 0x624))->z;
+        upTexPosWork = *(Vec3*)(catalog + 0x624);
+        upTexPosWork.x = px;
+        upTexPosWork.y = py;
+        upTexPos = upTexPosWork;
         upTexScale = *(Vec3*)(catalog + 0x630);
         winTexSet(0x17, &upTexPos, &upTexScale, &iconColor0);
 
         winIconInit();
 
-        upIconPos.x = px;
-        upIconPos.y = 20.0f + (y + 113.0f);
-        upIconPos.z = ((Vec3*)(catalog + 0x63C))->z;
+        upIconPosWork = *(Vec3*)(catalog + 0x63C);
+        upIconPosWork.x = px;
+        upIconPosWork.y = 20.0f + (y + 113.0f);
+        upIconPos = upIconPosWork;
         upIconScale = *(Vec3*)(catalog + 0x648);
         winIconSet(0x86, &upIconPos, &upIconScale, &iconColor1);
     }
@@ -1321,17 +1332,19 @@ void item_disp(f32 x, f32 y, void* pWin) {
         px = x + 250.0f;
         py = 20.0f + ((y - 90.0f) - 15.0f);
 
-        downTexPos.x = px;
-        downTexPos.y = py;
-        downTexPos.z = ((Vec3*)(catalog + 0x654))->z;
+        downTexPosWork = *(Vec3*)(catalog + 0x654);
+        downTexPosWork.x = px;
+        downTexPosWork.y = py;
+        downTexPos = downTexPosWork;
         downTexScale = *(Vec3*)(catalog + 0x660);
         winTexSet(0x17, &downTexPos, &downTexScale, &iconColor2);
 
         winIconInit();
 
-        downIconPos.x = px;
-        downIconPos.y = 20.0f + (y - 90.0f);
-        downIconPos.z = ((Vec3*)(catalog + 0x66C))->z;
+        downIconPosWork = *(Vec3*)(catalog + 0x66C);
+        downIconPosWork.x = px;
+        downIconPosWork.y = 20.0f + (y - 90.0f);
+        downIconPos = downIconPosWork;
         downIconScale = *(Vec3*)(catalog + 0x678);
         winIconSet(0x88, &downIconPos, &downIconScale, &iconColor2);
     }
@@ -1342,9 +1355,10 @@ void item_disp(f32 x, f32 y, void* pWin) {
     winFontInit();
 
     px = x + (220.0f - width);
-    sortFontPos.x = px;
-    sortFontPos.y = 20.0f + ((y - 92.0f) - 10.0f);
-    sortFontPos.z = ((Vec3*)(catalog + 0x684))->z;
+    sortFontPosWork = *(Vec3*)(catalog + 0x684);
+    sortFontPosWork.x = px;
+    sortFontPosWork.y = 20.0f + ((y - 92.0f) - 10.0f);
+    sortFontPos = sortFontPosWork;
     sortFontScale = *(Vec3*)(catalog + 0x690);
     sortColor = normalColor;
 
@@ -1356,9 +1370,10 @@ void item_disp(f32 x, f32 y, void* pWin) {
 
     winIconInit();
 
-    sortIconPos.x = px - 30.0f;
-    sortIconPos.y = 20.0f + ((y - 100.0f) - 10.0f);
-    sortIconPos.z = ((Vec3*)(catalog + 0x69C))->z;
+    sortIconPosWork = *(Vec3*)(catalog + 0x69C);
+    sortIconPosWork.x = px - 30.0f;
+    sortIconPosWork.y = 20.0f + ((y - 100.0f) - 10.0f);
+    sortIconPos = sortIconPosWork;
     sortIconScale = *(Vec3*)(catalog + 0x6A8);
     sortIconColor = dat_80423754;
 
@@ -1833,6 +1848,8 @@ item_use_row_done:
     winTexSet(0, &cursorPosB, &cursorScaleB, &cursorColorB);
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void itemUseDisp2(void* pWinMgr) {
     typedef struct LocalVec {
         f32 x;
@@ -1845,7 +1862,7 @@ void itemUseDisp2(void* pWinMgr) {
     extern u32 FontGetMessageWidthLine(char* msg, u16* width);
     extern void winMgrSetSize(s32 entryId, s32 x, s32 y, s32 width, s32 height);
     extern void winFontInit(void);
-    extern void winFontSetPitch(LocalVec* position, LocalVec* scale, u32* color, char* msg, f32 pitch);
+    extern void winFontSetWidth(LocalVec* position, LocalVec* scale, u32* color, f32 width, char* msg, ...);
     extern const u32 dat_804237b0[1];
     extern LocalVec vec3_802f5df0;
     extern LocalVec vec3_802f5de4;
@@ -1887,9 +1904,11 @@ void itemUseDisp2(void* pWinMgr) {
             + (f32)*(s32*)((s32)pWinMgr + 0x18);
         position.y = vec3_802f5de4.y;
         position.z = vec3_802f5de4.z;
-        winFontSetPitch(&position, &scale, &color, msg, maxWidth);
+        winFontSetWidth(&position, &scale, &color, maxWidth, msg);
     }
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 u16 menu_skip_list[18] = {
     9, 10, 11, 6, 7, 8, 5, 3, 2,

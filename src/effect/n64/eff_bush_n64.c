@@ -86,9 +86,11 @@ void effBushMain(void* effect) {
     extern void effDelete(void* effect);
     extern double sin(f64 x);
     extern double cos(f64 x);
+    extern s32 rand(void);
     extern f32 dispCalcZ(LocalVec3* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effBushDisp(s32 cameraId, void* effect);
+    extern LocalVec3 vec3_802faca0;
     extern f32 float_0p3_80424ea4;
     extern f32 float_0p8_80424ea8;
     extern f32 float_6p2832_80424eac;
@@ -109,8 +111,17 @@ void effBushMain(void* effect) {
     s32 i;
     s32 r;
     LocalVec3 pos;
+    f32 angle;
+    f32 two;
+    f32 divisor;
+    f32 fall;
+    f32 wave;
+    f32 randomCenter;
+    f32 ten;
+    f32 half;
 
     work = *(u8**)((s32)effect + 0xC);
+    pos = vec3_802faca0;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);
@@ -136,27 +147,35 @@ void effBushMain(void* effect) {
             *(s32*)(work + 0x24) = (s32)((f32)*(s32*)(work + 0x24) * float_0p8_80424ea8);
         }
 
+        angle = float_6p2832_80424eac;
+        two = float_2_80424eb0;
+        divisor = float_360_80424eb4;
+        fall = float_neg0p05_80424eb8;
+        wave = float_0p2_80424ebc;
+        randomCenter = float_25_80424ed0;
+        ten = float_10_80424ed4;
+        half = float_0p5_80424ed8;
         part = work + 0x34;
         for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x34) {
-            *(f32*)(part + 0x18) += float_neg0p05_80424eb8;
-            *(f32*)(part + 0x14) += float_0p2_80424ebc *
-                (f32)sin((float_6p2832_80424eac * float_2_80424eb0 * *(f32*)(part + 0x1C)) / float_360_80424eb4);
+            *(f32*)(part + 0x18) += fall;
+            *(f32*)(part + 0x14) += wave *
+                (f32)sin((angle * two * *(f32*)(part + 0x1C)) / divisor);
             if (type == 0) {
                 *(f32*)(part + 0x14) *= float_0p94_80424ec0;
                 *(f32*)(part + 0x18) *=
                     float_0p05_80424ec8 *
-                    (f32)sin((float_6p2832_80424eac * *(f32*)(part + 0x1C)) / float_360_80424eb4) +
+                    (f32)sin((angle * *(f32*)(part + 0x1C)) / divisor) +
                     float_0p95_80424ec4;
             } else {
-                *(f32*)(part + 0x18) += float_neg0p05_80424eb8;
+                *(f32*)(part + 0x18) += fall;
                 *(f32*)(part + 0x14) *= float_0p92_80424ecc;
             }
             r = rand();
-            *(f32*)(part + 0x20) += (f32)(r % 50) - float_25_80424ed0;
-            *(f32*)(part + 0x1C) += float_10_80424ed4 *
-                (f32)sin((float_6p2832_80424eac * *(f32*)(part + 0x20)) / float_360_80424eb4);
-            *(f32*)(part + 0x24) += float_10_80424ed4 *
-                (f32)cos((float_6p2832_80424eac * *(f32*)(part + 0x20) * float_0p5_80424ed8) / float_360_80424eb4);
+            *(f32*)(part + 0x20) += (f32)(r % 50) - randomCenter;
+            *(f32*)(part + 0x1C) += ten *
+                (f32)sin((angle * *(f32*)(part + 0x20)) / divisor);
+            *(f32*)(part + 0x24) += ten *
+                (f32)cos((angle * *(f32*)(part + 0x20) * half) / divisor);
             *(f32*)(part + 0x10) += *(f32*)(part + 0x14);
             *(f32*)(part + 0x14) += *(f32*)(part + 0x18);
         }

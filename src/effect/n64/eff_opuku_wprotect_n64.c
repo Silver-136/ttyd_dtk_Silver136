@@ -92,6 +92,7 @@ void effOpukuWprotectMain(void* effect) {
     extern f32 vec3_802fbc10[3];
     u8* work = *(u8**)((s32)effect + 0xC);
     Vec3 pos;
+    Vec3 dispPos;
     s32 type = *(s32*)work;
     s32 timer;
     s32 frame;
@@ -105,15 +106,20 @@ void effOpukuWprotectMain(void* effect) {
 
     pos.x=vec3_802fbc10[0]; pos.y=vec3_802fbc10[1]; pos.z=vec3_802fbc10[2];
     pos.x=*(f32*)(work+4); pos.y=*(f32*)(work+8); pos.z=*(f32*)(work+0xC);
+    dispPos = pos;
     if (*(s32*)effect & 4) {
-        *(s32*)effect &= ~4;
-        *(s32*)(work + 0x10) = type == 1 ? 4 : 0x10;
+        if (type == 1) {
+            *(s32*)effect &= ~4;
+            *(s32*)(work + 0x10) = 4;
+        } else {
+            *(s32*)effect &= ~4;
+            *(s32*)(work + 0x10) = 0x10;
+        }
     }
     if (*(s32*)(work + 0x10) < 1000) *(s32*)(work + 0x10) -= 1;
     *(s32*)(work + 0x14) += 1;
     if (*(s32*)(work + 0x14) > 0x4F1A0) *(s32*)(work + 0x14) = 0x100;
     timer = *(s32*)(work + 0x10);
-    frame = *(s32*)(work + 0x14);
     if (timer < 0) {
         if (type == 1) {
             effWaterDamageN64Entry(*(f32*)(work+4),float_24_80425c30+*(f32*)(work+8),*(f32*)(work+0xC),float_2_80425c34,0,0x1E);
@@ -122,6 +128,7 @@ void effOpukuWprotectMain(void* effect) {
         effDelete(effect);
         return;
     }
+    frame = *(s32*)(work + 0x14);
     if (type == 0) {
         if (timer < 0x10) { *(s32*)(work+0x24)=timer<<4; *(s32*)(work+0x28)=timer<<4; }
         if (frame < 0x10) { *(s32*)(work+0x24)=(frame<<4)+0xF; *(s32*)(work+0x28)=(frame<<4)+0xF; }
@@ -160,7 +167,7 @@ void effOpukuWprotectMain(void* effect) {
             }
         }
     }
-    dispEntry(4,2,effOpukuWprotectDisp,effect,dispCalcZ(&pos));
+    dispEntry(4,2,effOpukuWprotectDisp,effect,dispCalcZ(&dispPos));
 }
 
 void effOpukuWprotectDisp(s32 cameraId, void* effect) {

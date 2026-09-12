@@ -31,52 +31,69 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
     s32 techLv;
     void* party;
     u8* data;
+    u8* entry;
 
     party = BattleGetPartyPtr(_battleWorkPointer);
     techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
 
     data = lbl_803875D0;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-    *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x650;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-    *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-        *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-    *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-        msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x90) = -1;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x94) = 0;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(void**)(entry + 0x80) = data + 0x650;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x84) = 0;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+    *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+        msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
     *count = *count + 1;
 
     if (techLv >= 0) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x710;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x94) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(void**)(entry + 0x80) = data + 0x710;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x84) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+        *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
     if (techLv >= 1) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x7D0;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x94) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(void**)(entry + 0x80) = data + 0x7D0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x84) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+        *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
     if (techLv >= 2) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x890;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x94) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(void**)(entry + 0x80) = data + 0x890;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x84) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+        *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
 }

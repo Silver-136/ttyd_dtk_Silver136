@@ -152,6 +152,12 @@ void battleAcDelete_MonosiriTarget(void* wp) {
 
 /* stub-fill: actionCommandDisp | prototype_only | source_prototype */
 void actionCommandDisp(f32 x, f32 y) {
+    typedef struct Vec3Local {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3Local;
+    typedef void (*BtlDispTex4ByValue)(s32, Vec3Local, Vec3Local, Vec3Local, u32*);
     extern void* _battleWorkPointer;
     extern void btlGetScreenPoint(const f32* world, f32* screen);
     extern void btlDispTex4(s32 texture, const f32* position,
@@ -160,16 +166,7 @@ void actionCommandDisp(f32 x, f32 y) {
     extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
     extern u32 BattleACGetButtonIcon(s32 buttons, s32 pressed);
     extern void iconDispGx(f32 scale, const f32* position, s32 flags, u16 iconId);
-    extern u32 vec3_80301220[];
-    extern u32 vec3_8030122c[];
-    extern u32 vec3_80301238[];
-    extern u32 vec3_80301244[];
-    extern u32 vec3_80301250[];
-    extern u32 vec3_8030125c[];
-    extern u32 vec3_80301268[];
-    extern u32 vec3_80301274[];
-    extern u32 vec3_80301280[];
-    extern u32 vec3_8030128c[];
+    extern f32 vec3_80301220[];
     extern u32 dat_804285f0;
     extern u32 dat_804285f4;
     extern u32 dat_804285f8;
@@ -179,33 +176,35 @@ void actionCommandDisp(f32 x, f32 y) {
 
     u8* battle = _battleWorkPointer;
     u8* work = battle + 0x1F4C;
-    f32 screen[3];
-    u32 params0[3];
-    u32 params1[3];
-    u32 color;
+    f32* vectors = vec3_80301220;
+    Vec3Local p0;
+    Vec3Local p1;
+    Vec3Local a2;
+    Vec3Local b2;
+    Vec3Local a3;
+    Vec3Local b3;
+    Vec3Local a4;
+    Vec3Local b4;
+    u32 color0;
+    u32 color1;
+    u32 color2;
+    u32 color3;
+    u32 color4;
     f32 glow = 0.0f;
 
-    btlGetScreenPoint((f32*)(work + 0x14), screen);
-    params0[0] = vec3_80301220[0];
-    params0[1] = vec3_80301220[1];
-    params0[2] = vec3_80301220[2];
-    params1[0] = vec3_8030122c[0];
-    params1[1] = vec3_8030122c[1];
-    params1[2] = vec3_8030122c[2];
-    color = dat_804285f0;
-    btlDispTex4(0x58, screen, params0, params1, &color);
+    btlGetScreenPoint((f32*)(work + 0x14), (f32*)&p0);
+    color0 = dat_804285f0;
+    ((BtlDispTex4ByValue)btlDispTex4)(0x58, p0,
+                                     *(Vec3Local*)&vectors[0],
+                                     *(Vec3Local*)&vectors[3], &color0);
 
-    screen[0] += 4.0f;
-    screen[1] -= 4.0f;
-    screen[2] -= 2.0f;
-    params0[0] = vec3_80301238[0];
-    params0[1] = vec3_80301238[1];
-    params0[2] = vec3_80301238[2];
-    params1[0] = vec3_80301244[0];
-    params1[1] = vec3_80301244[1];
-    params1[2] = vec3_80301244[2];
-    color = dat_804285f4;
-    btlDispTex4(0x58, screen, params0, params1, &color);
+    p0.x += 4.0f;
+    p0.y -= 4.0f;
+    p0.z -= 2.0f;
+    color1 = dat_804285f4;
+    ((BtlDispTex4ByValue)btlDispTex4)(0x58, p0,
+                                     *(Vec3Local*)&vectors[6],
+                                     *(Vec3Local*)&vectors[9], &color1);
 
     if (*(s32*)(work + 0x30) != 0) {
         s32 step = *(s32*)(work + 0x34) % 0x1E;
@@ -214,41 +213,31 @@ void actionCommandDisp(f32 x, f32 y) {
         }
     }
 
-    btlGetScreenPoint((f32*)(work + 0x20), screen);
-    params0[0] = vec3_80301250[0];
-    params0[1] = vec3_80301250[1];
-    params0[2] = vec3_80301250[2];
-    params1[0] = vec3_8030125c[0];
-    params1[1] = vec3_8030125c[1];
-    params1[2] = *(u32*)(work + 0x2C);
-    color = dat_804285f8;
-    btlDispTex4(0x57, screen, params0, params1, &color);
+    btlGetScreenPoint((f32*)(work + 0x20), (f32*)&p1);
+    a2 = *(Vec3Local*)&vectors[12];
+    b2 = *(Vec3Local*)&vectors[15];
+    b2.z = *(f32*)(work + 0x2C);
+    color2 = dat_804285f8;
+    ((BtlDispTex4ByValue)btlDispTex4)(0x57, p1, a2, b2, &color2);
 
     if (glow > 0.0f) {
-        f32 glowParams[3];
-        u32 glowUv[3];
-
-        glowParams[0] = glow;
-        glowParams[1] = glow;
-        glowParams[2] = *(f32*)&vec3_80301268[2];
-        glowUv[0] = vec3_80301274[0];
-        glowUv[1] = vec3_80301274[1];
-        glowUv[2] = *(u32*)(work + 0x2C);
-        color = dat_804285fc;
-        btlDispTex4(0x57, screen, glowParams, glowUv, &color);
+        a3 = *(Vec3Local*)&vectors[18];
+        a3.x = glow;
+        a3.y = glow;
+        b3 = *(Vec3Local*)&vectors[21];
+        b3.z = *(f32*)(work + 0x2C);
+        color3 = dat_804285fc;
+        ((BtlDispTex4ByValue)btlDispTex4)(0x57, p1, a3, b3, &color3);
     }
 
-    screen[0] += 4.0f;
-    screen[1] -= 4.0f;
-    screen[2] -= 2.0f;
-    params0[0] = vec3_80301280[0];
-    params0[1] = vec3_80301280[1];
-    params0[2] = vec3_80301280[2];
-    params1[0] = vec3_8030128c[0];
-    params1[1] = vec3_8030128c[1];
-    params1[2] = *(u32*)(work + 0x2C);
-    color = dat_80428600;
-    btlDispTex4(0x57, screen, params0, params1, &color);
+    p1.x += 4.0f;
+    p1.y -= 4.0f;
+    p1.z -= 2.0f;
+    a4 = *(Vec3Local*)&vectors[24];
+    b4 = *(Vec3Local*)&vectors[27];
+    b4.z = *(f32*)(work + 0x2C);
+    color4 = dat_80428600;
+    ((BtlDispTex4ByValue)btlDispTex4)(0x57, p1, a4, b4, &color4);
 
     *(f32*)(work + 0x2C) += 2.0f;
     {

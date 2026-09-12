@@ -111,6 +111,14 @@ void seq_e3Main(void* sequence) {
     extern void pouchReviseMarioParam(void);
     extern void pouchRevisePartyParam(void);
     extern void statusWinForceUpdate(void);
+    extern void* marioGetPtr(void);
+    extern u64 OSGetTime(void);
+    extern u64 none_key;
+    extern u32 dat_804286e4;
+    extern u32 dat_804286e8;
+    extern u32 dat_804286ec;
+    extern u32 dat_804286f0;
+    extern u32 dat_804286f4;
     extern char str_gor_00_803027f4[];
     extern char str_hei_00_803027fc[];
     extern char str_dokan_2_80302804[];
@@ -120,7 +128,11 @@ void seq_e3Main(void* sequence) {
     s32 state = *(s32*)(seq + 0xC);
     s32 selection;
     s32 oldSelection;
-    u32 color;
+    u32 color1;
+    u32 color2;
+    u32 color3;
+    u32 color4;
+    u32 color5;
 
     *(f32*)(camera + 0x18) = vec3_80302664[0];
     *(f32*)(camera + 0x1C) = vec3_80302664[1];
@@ -134,16 +146,16 @@ void seq_e3Main(void* sequence) {
     } else if (state == 1) {
         if (fadeIsFinish() && (keyGetButtonTrg(0) & 0x1100)) {
             psndSFXOn("SFX_PRESS_START1");
-            color = 0;
-            fadeEntry(1, 0, &color);
+            color1 = dat_804286e4;
+            fadeEntry(1, 0, &color1);
             fadeSetOffscreenCallback(e3DispOffscreen, wp);
             *(s32*)(work + 8) = 1;
             *(s32*)(seq + 0xC) += 1;
         }
     } else if (state == 2) {
         if (fadeIsFinish()) {
-            color = 0;
-            fadeEntry(2, 0, &color);
+            color2 = dat_804286e8;
+            fadeEntry(2, 0, &color2);
             selection = *(s32*)(work + 0xC) * 3;
             *(f32*)(work + 0x18) = e3_tbl[selection];
             *(f32*)(work + 0x10) = e3_tbl[selection];
@@ -164,10 +176,11 @@ void seq_e3Main(void* sequence) {
         }
         if (oldSelection != *(s32*)(work + 0xC)) {
             psndSFXOn((void*)5);
-        } else if (keyGetButtonTrg(0) & 0x200) {
+        } else if ((keyGetButtonTrg(0) & 0x200) ||
+                   ((OSGetTime() - none_key) / (*(u32*)0x800000F8 >> 2)) > 120) {
             psndSFXOn((void*)0x13);
-            color = 0;
-            fadeEntry(1, 0, &color);
+            color3 = dat_804286ec;
+            fadeEntry(1, 0, &color3);
             fadeSetOffscreenCallback(e3DispOffscreen, sequence);
             *(s32*)(work + 8) = 0;
             *(s32*)(seq + 0xC) += 1;
@@ -177,13 +190,13 @@ void seq_e3Main(void* sequence) {
         }
     } else if (state == 5) {
         if (fadeIsFinish()) {
-            color = 0;
-            fadeEntry(2, 0, &color);
+            color4 = dat_804286f0;
+            fadeEntry(2, 0, &color4);
             *(s32*)(seq + 0xC) = 0;
         }
     } else if (state == 100) {
-        color = 0;
-        fadeEntry(4, 200, &color);
+        color5 = dat_804286f4;
+        fadeEntry(4, 200, &color5);
         *(s32*)(seq + 0xC) += 1;
     } else if (state == 101) {
         if (fadeIsFinish()) *(s32*)(seq + 0xC) += 1;
@@ -234,6 +247,11 @@ void seq_e3Main(void* sequence) {
         if (*(u8*)record == 1) marioChgShipMotion();
         else if (*(u8*)record == 0) marioChgStayMotion();
         marioPartyKill();
+        {
+            u8* mario = marioGetPtr();
+            mario[0x247] = 0;
+            mario[0x248] = 0;
+        }
         if (*(u8*)(record + 1) != 0) marioPartyEntry(*(u8*)(record + 1));
         if (*(u8*)(record + 2) != 0) marioPartyEntry(*(u8*)(record + 2));
         if (*(s32*)(work + 0xC) == 0) {

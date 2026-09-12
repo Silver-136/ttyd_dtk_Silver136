@@ -57,10 +57,18 @@ void* effBrokenBarrierN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 sca
     }
 
     part = work + 0x6C;
+    j = 1;
     for (i = 0; i < 12; i++) {
-        for (j = 1; j < 6; j++) {
-            *(s32*)(part + 0x30 + (j - 1) * 0x6C) = (s32)(-(f32)j * step) - 1;
-        }
+        *(s32*)(part + 0x30) = (s32)(-(f32)j * step) - 1;
+        j++;
+        *(s32*)(part + 0x9C) = (s32)(-(f32)j * step) - 1;
+        j++;
+        *(s32*)(part + 0x108) = (s32)(-(f32)j * step) - 1;
+        j++;
+        *(s32*)(part + 0x174) = (s32)(-(f32)j * step) - 1;
+        j++;
+        *(s32*)(part + 0x1E0) = (s32)(-(f32)j * step) - 1;
+        j++;
         part += 0x21C;
     }
 
@@ -69,13 +77,25 @@ void* effBrokenBarrierN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 sca
 
 
 void effBrokenBarrierMain(void* effect) {
+    typedef union FloatBitsLocal {
+        f32 value;
+        u32 bits;
+    } FloatBitsLocal;
     extern void effDelete(void*);
     extern int rand(void);
     extern double sin(double);
     extern double cos(double);
+    extern double __frsqrte(double);
     extern float dispCalcZ(void*);
     extern void dispEntry(int, int, void*, void*, float);
     extern void effBrokenBarrierDisp(int, void*);
+    extern f32 __float_nan;
+    extern f32 vec3_802fac50[];
+    extern f32 float_0p05_80424e6c;
+    extern f32 float_1_80424e70;
+    extern f64 double_0p5_802fac70;
+    extern f64 double_3_802fac78;
+    extern f64 double_0_802fac80;
     unsigned char* entry = (unsigned char*)effect;
     unsigned char* work = *(unsigned char**)(entry + 0xC);
     unsigned char* part;
@@ -84,12 +104,23 @@ void effBrokenBarrierMain(void* effect) {
     float height;
     float halfWidth;
     float halfHeight;
+    float lengthSq;
+    float length;
+    float angleX;
+    float angleY;
+    double value;
+    double estimate;
     int widthInt;
     int heightInt;
     int type = *(int*)work;
     int timer;
+    int category;
     int i;
+    FloatBitsLocal classify;
 
+    pos[0] = vec3_802fac50[0];
+    pos[1] = vec3_802fac50[1];
+    pos[2] = vec3_802fac50[2];
     pos[0] = *(float*)(work + 4);
     pos[1] = *(float*)(work + 8);
     pos[2] = *(float*)(work + 0xC);
@@ -112,9 +143,11 @@ void effBrokenBarrierMain(void* effect) {
 
     width = *(float*)(work + 0x10);
     height = *(float*)(work + 0x14);
-    if (type >= 2 && type < 4) {
-        width *= 4.0f;
-        height *= 4.0f;
+    if (type < 4) {
+        if (type >= 2) {
+            width *= 4.0f;
+            height *= 4.0f;
+        }
     }
     widthInt = (int)width;
     heightInt = (int)height;
@@ -123,43 +156,103 @@ void effBrokenBarrierMain(void* effect) {
 
     part = work + 0x6C;
     for (i = 1; i < *(int*)(entry + 8); i++, part += 0x6C) {
-        int frame = ++*(int*)(part + 0x30);
-        if (frame > 19) {
-            frame = 0;
+        (*(int*)(part + 0x30))++;
+        if (*(int*)(part + 0x30) > 19) {
             *(int*)(part + 0x30) = 0;
         }
-        if (frame >= 0) {
-            if (frame == 0) {
-                if (type == 0 || type == 2) {
-                    float angleY = (6.283185f * (float)(rand() % 360)) / 360.0f;
-                    float angleX = (6.283185f * (float)(rand() % 360)) / 360.0f;
-                    *(float*)(part + 4) = width * (float)sin(angleX) * (float)cos(angleY);
-                    *(float*)(part + 8) = height * (float)cos(angleX) * (float)cos(angleY);
-                    *(float*)(part + 0xC) = width * (float)sin(angleY);
-                    *(float*)(part + 0x18) = 0.4f * *(float*)(part + 4);
-                    *(float*)(part + 0x1C) = 0.4f * *(float*)(part + 8);
-                    *(float*)(part + 0x20) = 0.4f * *(float*)(part + 0xC);
-                    *(float*)(part + 0x24) = 0.1f * *(float*)(part + 0x18);
-                    *(float*)(part + 0x28) = 0.1f * *(float*)(part + 0x1C);
-                    *(float*)(part + 0x2C) = 0.1f * *(float*)(part + 0x20);
-                } else {
-                    *(float*)(part + 4) = (float)(rand() % widthInt) - halfWidth;
-                    *(float*)(part + 8) = (float)(rand() % heightInt) - halfHeight;
-                    *(float*)(part + 0xC) = (float)(rand() % widthInt) - halfWidth;
-                    *(float*)(part + 0x18) = 0.3f * *(float*)(part + 4);
-                    *(float*)(part + 0x1C) = 0.3f * *(float*)(part + 8);
-                    *(float*)(part + 0x20) = 0.3f * *(float*)(part + 0xC);
-                    *(float*)(part + 0x24) = 0.02f * *(float*)(part + 0x18);
-                    *(float*)(part + 0x28) = 0.02f * *(float*)(part + 0x1C);
-                    *(float*)(part + 0x2C) = 0.02f * *(float*)(part + 0x20);
+        if (*(int*)(part + 0x30) >= 0) {
+            if (*(int*)(part + 0x30) == 0) {
+                angleY = (float)(rand() % 360);
+                angleX = (float)(rand() % 360);
+                if (type == 1) {
+                    goto random_position;
                 }
+                if (type < 1) {
+                    if (type < 0) {
+                        goto random_position;
+                    }
+                } else if (type >= 3) {
+                    goto random_position;
+                }
+
+                angleY = (6.283185f * angleY) / 360.0f;
+                angleX = (6.283185f * angleX) / 360.0f;
+                *(float*)(part + 4) = width * (float)sin(angleX) * (float)cos(angleY);
+                *(float*)(part + 8) = height * (float)cos(angleX) * (float)cos(angleY);
+                *(float*)(part + 0xC) = width * (float)sin(angleY);
+                *(float*)(part + 0x18) = 0.4f * *(float*)(part + 4);
+                *(float*)(part + 0x1C) = 0.4f * *(float*)(part + 8);
+                *(float*)(part + 0x20) = 0.4f * *(float*)(part + 0xC);
+                *(float*)(part + 0x24) = 0.1f * *(float*)(part + 0x18);
+                *(float*)(part + 0x28) = 0.1f * *(float*)(part + 0x1C);
+                *(float*)(part + 0x2C) = 0.1f * *(float*)(part + 0x20);
+                goto initialized;
+
+random_position:
+                *(float*)(part + 4) = (float)(rand() % widthInt) - halfWidth;
+                *(float*)(part + 8) = (float)(rand() % heightInt) - halfHeight;
+                *(float*)(part + 0xC) = (float)(rand() % widthInt) - halfWidth;
+                *(float*)(part + 0x18) = 0.3f * *(float*)(part + 4);
+                *(float*)(part + 0x1C) = 0.3f * *(float*)(part + 8);
+                *(float*)(part + 0x20) = 0.3f * *(float*)(part + 0xC);
+                *(float*)(part + 0x24) = 0.02f * *(float*)(part + 0x18);
+                *(float*)(part + 0x28) = 0.02f * *(float*)(part + 0x1C);
+                *(float*)(part + 0x2C) = 0.02f * *(float*)(part + 0x20);
+
+initialized:
                 *(float*)(part + 0x64) = (float)(rand() % 15);
                 *(float*)(part + 0x68) = (float)(rand() % 15);
                 *(float*)(part + 0x34) = 0.0f;
                 *(int*)(part + 0x4C) = 0xFF;
             }
-            *(float*)(part + 0x60) = scale_data[frame];
+
+            *(float*)(part + 0x60) = scale_data[*(int*)(part + 0x30)];
             *(float*)(part + 0x34) += 4.0f;
+            if (type < 4) {
+                if (type >= 2) {
+                    *(float*)(part + 0x18) = float_0p05_80424e6c * -*(float*)(part + 4);
+                    *(float*)(part + 0x1C) = float_0p05_80424e6c * -*(float*)(part + 8);
+                    *(float*)(part + 0x20) = float_0p05_80424e6c * -*(float*)(part + 0xC);
+                    lengthSq = *(float*)(part + 0x18) * *(float*)(part + 0x18) +
+                               *(float*)(part + 0x1C) * *(float*)(part + 0x1C) +
+                               *(float*)(part + 0x20) * *(float*)(part + 0x20);
+                    value = (double)lengthSq;
+                    if (value > double_0_802fac80) {
+                        estimate = __frsqrte(value);
+                        estimate = double_0p5_802fac70 * estimate *
+                                   (double_3_802fac78 - value * estimate * estimate);
+                        estimate = double_0p5_802fac70 * estimate *
+                                   (double_3_802fac78 - value * estimate * estimate);
+                        estimate = double_0p5_802fac70 * estimate *
+                                   (double_3_802fac78 - value * estimate * estimate);
+                        length = (float)(value * estimate);
+                    } else {
+                        length = lengthSq;
+                        if (value < double_0_802fac80) {
+                            length = __float_nan;
+                        } else {
+                            classify.value = lengthSq;
+                            if ((classify.bits & 0x7F800000) == 0x7F800000) {
+                                category = (classify.bits & 0x007FFFFF) ? 1 : 2;
+                            } else if ((classify.bits & 0x7F800000) == 0) {
+                                category = (classify.bits & 0x007FFFFF) ? 5 : 3;
+                            } else {
+                                category = 4;
+                            }
+                            if (category == 1) {
+                                length = __float_nan;
+                            }
+                        }
+                    }
+                    if (length < float_1_80424e70) {
+                        angleY = (6.283185f * (float)(rand() % 360)) / 360.0f;
+                        angleX = (6.283185f * (float)(rand() % 360)) / 360.0f;
+                        *(float*)(part + 4) = width * (float)sin(angleX) * (float)cos(angleY);
+                        *(float*)(part + 8) = height * (float)cos(angleX) * (float)cos(angleY);
+                        *(float*)(part + 0xC) = width * (float)sin(angleY);
+                    }
+                }
+            }
             *(float*)(part + 4) += *(float*)(part + 0x18);
             *(float*)(part + 8) += *(float*)(part + 0x1C);
             *(float*)(part + 0xC) += *(float*)(part + 0x20);
@@ -260,6 +353,7 @@ u8 main_dl(void* effect, f32 view[3][4]) {
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(s32,s32,s32);
     extern void tri2(s32,s32,s32,s32,s32,s32,s32);
+    extern u8 size8x8_tex22x22_vtx[];
     u8* entry;
     u8* part;
     Mtx trans;
@@ -268,6 +362,7 @@ u8 main_dl(void* effect, f32 view[3][4]) {
     f32 alphaScale;
     f32 size;
     u32 color;
+    void* vtx;
     s32 i;
 
     entry = effect;
@@ -291,7 +386,33 @@ u8 main_dl(void* effect, f32 view[3][4]) {
                 ((u32)*(u8*)(part + 0x58) << 8) |
                 (u8)((f32)*(s32*)(part + 0x4C) * alphaScale);
         GXSetTevColor(1, &color);
-        effSetVtxDescN64((void*)0x8039E310);
+        switch (i & 7) {
+            case 0:
+                vtx = size8x8_tex22x22_vtx + 0xA8;
+                break;
+            case 1:
+                vtx = size8x8_tex22x22_vtx + 0xE0;
+                break;
+            case 2:
+                vtx = size8x8_tex22x22_vtx + 0x118;
+                break;
+            case 3:
+                vtx = size8x8_tex22x22_vtx + 0x150;
+                break;
+            case 4:
+                vtx = size8x8_tex22x22_vtx + 0x188;
+                break;
+            case 5:
+                vtx = size8x8_tex22x22_vtx;
+                break;
+            case 6:
+                vtx = size8x8_tex22x22_vtx + 0x38;
+                break;
+            case 7:
+                vtx = size8x8_tex22x22_vtx + 0x70;
+                break;
+        }
+        effSetVtxDescN64(vtx);
         GXBegin(0x90, 0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3);
     }

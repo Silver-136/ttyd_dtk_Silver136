@@ -61,12 +61,21 @@ s32 battleAcMain_GaugeTiming(void* battleWork) {
     if (state == 99) return 1;
     if (state == 100) {
         if ((*(u32*)(bw + 0x1C94) & 1) && (*(u32*)(unit + 0x27C) & 0x10)) {
-            *(u8*)(extra + 0x14) = irand(100) < 0;
-            *(s32*)(bw + 0x1C98) = 0x1E;
+            if (irand(100) < 0) {
+                *(u8*)(extra + 0x14) = 1;
+                *(s32*)(bw + 0x1C98) = 0x1E;
+            } else {
+                *(s32*)(bw + 0x1C98) = 0x1E;
+                *(u8*)(extra + 0x14) = 0;
+            }
             *(s32*)(bw + 0x1C9C) = 1002;
             return 1;
         }
-        *(s32*)(bw + 0x1C9C) = *(u8*)(extra + 0x16) == 0 ? 1000 : 1001;
+        if (*(u8*)(extra + 0x16) == 0) {
+            *(s32*)(bw + 0x1C9C) = 1000;
+        } else {
+            *(s32*)(bw + 0x1C9C) = 1001;
+        }
     }
     state = *(s32*)(bw + 0x1C9C);
     if (state == 1002) goto state_1002;
@@ -158,7 +167,10 @@ s32 battleAcMain_GaugeTiming(void* battleWork) {
 input_done:
     if (autoCommand != 0 && *(s32*)(extra + 0x10) != 0) *(u8*)(extra + 0x15) = 2;
     if (*(u8*)(extra + 0x15) == 2) {
-        if (*(s32*)(extra + 0x10) == 0) *(s32*)(bw + 0x1CB8) = 0;
+        if (*(s32*)(extra + 0x10) == 0) {
+            *(s32*)(bw + 0x1CB8) = 0;
+            *(u32*)(bw + 0x1CB8) &= ~2u;
+        }
         else { *(s32*)(bw + 0x1CB8) = 2; (*(s32*)(bw + 0x1CB4))++; }
         *(s32*)(bw + 0x1C9C) = 1003;
     }
@@ -317,9 +329,16 @@ void actionCommandDisp(f32 x, f32 y) {
         }
     }
 
-    button = params[0] == 0 ? 0x20 : (params[0] == 2 ? 0x40000 : 0x100);
-    pressedIcon = BattleACGetButtonIcon(button, 1);
-    normalIcon = BattleACGetButtonIcon(button, 0);
+    if (params[0] == 0) {
+        pressedIcon = BattleACGetButtonIcon(0x20, 1);
+        normalIcon = BattleACGetButtonIcon(0x20, 0);
+    } else if (params[0] == 2) {
+        pressedIcon = BattleACGetButtonIcon(0x40000, 1);
+        normalIcon = BattleACGetButtonIcon(0x40000, 0);
+    } else {
+        pressedIcon = BattleACGetButtonIcon(0x100, 1);
+        normalIcon = BattleACGetButtonIcon(0x100, 0);
+    }
     if (*(u32*)(wp + 0x1C9C) == 1002) {
         return;
     }

@@ -63,59 +63,121 @@ void boo_polygon_0(void) {
 }
 
 void boo_polygon_1(void) {
-    extern u8 boo_dl_1_0[],boo_dl_1_1[],boo_dl_1_2[],boo_dl_1_3[],boo_dl_1_4[],boo_dl_1_5[],boo_dl_1_6[],boo_dl_1_7[];
-    extern u8 boo_dl_1_8[],boo_dl_1_9[],boo_dl_1_10[],boo_dl_1_11[],boo_dl_1_12[],boo_dl_1_13[],boo_dl_1_14[],boo_dl_1_15[];
-    extern u8 boo_dl_1_16[],boo_dl_1_17[],boo_dl_1_18[],boo_dl_1_19[],boo_dl_1_20[],boo_dl_1_21[],boo_dl_1_22[],boo_dl_1_23[];
-    extern u8 boo_dl_1_24[],boo_dl_1_25[],boo_dl_1_26[],boo_dl_1_27[],boo_dl_1_28[],boo_dl_1_29[],boo_dl_1_30[],boo_dl_1_31[];
+    extern u8 lbl_8039D980[];
+    extern u8 boo_color0_tbl[4];
+    extern u8 boo_dl_1_4[0x20], boo_dl_1_5[0x20], boo_dl_1_6[0x20], boo_dl_1_7[0x20];
+    extern u8 boo_dl_1_8[0x20], boo_dl_1_9[0x20], boo_dl_1_10[0x20], boo_dl_1_11[0x20];
+    extern u8 boo_dl_1_12[0x20], boo_dl_1_13[0x20], boo_dl_1_14[0x20], boo_dl_1_15[0x20];
+    extern u8 boo_dl_1_16[0x20], boo_dl_1_17[0x20], boo_dl_1_18[0x20], boo_dl_1_19[0x20];
+    extern u8 boo_dl_1_20[0x20], boo_dl_1_21[0x20], boo_dl_1_22[0x20], boo_dl_1_23[0x20];
+    extern u8 boo_dl_1_24[0x20], boo_dl_1_25[0x20], boo_dl_1_26[0x20], boo_dl_1_27[0x20];
+    extern u8 boo_dl_1_28[0x20], boo_dl_1_29[0x20], boo_dl_1_30[0x20], boo_dl_1_31[0x20];
+    u8* data = lbl_8039D980;
+
     GXClearVtxDesc();
-    GXSetVtxDesc(9,2); GXSetVtxAttrFmt(0,9,1,3,14); GXSetArray(9,(void*)0x8039D9C0,6);
-    GXSetVtxDesc(10,2); GXSetVtxAttrFmt(0,10,0,1,6); GXSetArray(10,(void*)0x8039DD60,3);
-    GXSetVtxDesc(11,2); GXSetVtxAttrFmt(0,11,1,5,0); GXSetArray(11,(void*)0x80418C40,4);
-    GXSetVtxDesc(13,2); GXSetVtxAttrFmt(0,13,1,3,14); GXSetArray(13,(void*)0x8039DE00,4);
-    GXCallDisplayList(boo_dl_1_0,0x40); GXCallDisplayList(boo_dl_1_1,0x40);
-    GXCallDisplayList(boo_dl_1_2,0x40); GXCallDisplayList(boo_dl_1_3,0x40);
-    GXCallDisplayList(boo_dl_1_4,0x20); GXCallDisplayList(boo_dl_1_5,0x20);
-    GXCallDisplayList(boo_dl_1_6,0x20); GXCallDisplayList(boo_dl_1_7,0x20);
-    GXCallDisplayList(boo_dl_1_8,0x20); GXCallDisplayList(boo_dl_1_9,0x20);
-    GXCallDisplayList(boo_dl_1_10,0x20); GXCallDisplayList(boo_dl_1_11,0x20);
-    GXCallDisplayList(boo_dl_1_12,0x20); GXCallDisplayList(boo_dl_1_13,0x20);
-    GXCallDisplayList(boo_dl_1_14,0x20); GXCallDisplayList(boo_dl_1_15,0x20);
-    GXCallDisplayList(boo_dl_1_16,0x20); GXCallDisplayList(boo_dl_1_17,0x20);
-    GXCallDisplayList(boo_dl_1_18,0x20); GXCallDisplayList(boo_dl_1_19,0x20);
-    GXCallDisplayList(boo_dl_1_20,0x20); GXCallDisplayList(boo_dl_1_21,0x20);
-    GXCallDisplayList(boo_dl_1_22,0x20); GXCallDisplayList(boo_dl_1_23,0x20);
-    GXCallDisplayList(boo_dl_1_24,0x20); GXCallDisplayList(boo_dl_1_25,0x20);
-    GXCallDisplayList(boo_dl_1_26,0x20); GXCallDisplayList(boo_dl_1_27,0x20);
-    GXCallDisplayList(boo_dl_1_28,0x20); GXCallDisplayList(boo_dl_1_29,0x20);
-    GXCallDisplayList(boo_dl_1_30,0x20); GXCallDisplayList(boo_dl_1_31,0x20);
+    GXSetVtxDesc(9, 2);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 14);
+    GXSetArray(9, data + 0x40, 6);
+    GXSetVtxDesc(10, 2);
+    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+    GXSetArray(10, data + 0x3E0, 3);
+    GXSetVtxDesc(11, 2);
+    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+    GXSetArray(11, boo_color0_tbl, 4);
+    GXSetVtxDesc(13, 2);
+    GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+    GXSetArray(13, data + 0x480, 4);
+    GXCallDisplayList(data + 0x5E0, 0x40);
+    GXCallDisplayList(data + 0x620, 0x40);
+    GXCallDisplayList(data + 0x660, 0x40);
+    GXCallDisplayList(data + 0x6A0, 0x40);
+    GXCallDisplayList(boo_dl_1_4, 0x20);
+    GXCallDisplayList(boo_dl_1_5, 0x20);
+    GXCallDisplayList(boo_dl_1_6, 0x20);
+    GXCallDisplayList(boo_dl_1_7, 0x20);
+    GXCallDisplayList(boo_dl_1_8, 0x20);
+    GXCallDisplayList(boo_dl_1_9, 0x20);
+    GXCallDisplayList(boo_dl_1_10, 0x20);
+    GXCallDisplayList(boo_dl_1_11, 0x20);
+    GXCallDisplayList(boo_dl_1_12, 0x20);
+    GXCallDisplayList(boo_dl_1_13, 0x20);
+    GXCallDisplayList(boo_dl_1_14, 0x20);
+    GXCallDisplayList(boo_dl_1_15, 0x20);
+    GXCallDisplayList(boo_dl_1_16, 0x20);
+    GXCallDisplayList(boo_dl_1_17, 0x20);
+    GXCallDisplayList(boo_dl_1_18, 0x20);
+    GXCallDisplayList(boo_dl_1_19, 0x20);
+    GXCallDisplayList(boo_dl_1_20, 0x20);
+    GXCallDisplayList(boo_dl_1_21, 0x20);
+    GXCallDisplayList(boo_dl_1_22, 0x20);
+    GXCallDisplayList(boo_dl_1_23, 0x20);
+    GXCallDisplayList(boo_dl_1_24, 0x20);
+    GXCallDisplayList(boo_dl_1_25, 0x20);
+    GXCallDisplayList(boo_dl_1_26, 0x20);
+    GXCallDisplayList(boo_dl_1_27, 0x20);
+    GXCallDisplayList(boo_dl_1_28, 0x20);
+    GXCallDisplayList(boo_dl_1_29, 0x20);
+    GXCallDisplayList(boo_dl_1_30, 0x20);
+    GXCallDisplayList(boo_dl_1_31, 0x20);
 }
 
 void boo_polygon_2(void) {
-    extern u8 boo_dl_2_0[],boo_dl_2_1[],boo_dl_2_2[],boo_dl_2_3[],boo_dl_2_4[],boo_dl_2_5[],boo_dl_2_6[],boo_dl_2_7[];
-    extern u8 boo_dl_2_8[],boo_dl_2_9[],boo_dl_2_10[],boo_dl_2_11[],boo_dl_2_12[],boo_dl_2_13[],boo_dl_2_14[],boo_dl_2_15[];
-    extern u8 boo_dl_2_16[],boo_dl_2_17[],boo_dl_2_18[],boo_dl_2_19[],boo_dl_2_20[],boo_dl_2_21[],boo_dl_2_22[],boo_dl_2_23[];
-    extern u8 boo_dl_2_24[],boo_dl_2_25[],boo_dl_2_26[],boo_dl_2_27[],boo_dl_2_28[],boo_dl_2_29[],boo_dl_2_30[],boo_dl_2_31[];
+    extern u8 lbl_8039D980[];
+    extern u8 boo_color0_tbl[4];
+    extern u8 boo_dl_2_4[0x20], boo_dl_2_5[0x20], boo_dl_2_6[0x20], boo_dl_2_7[0x20];
+    extern u8 boo_dl_2_8[0x20], boo_dl_2_9[0x20], boo_dl_2_10[0x20], boo_dl_2_11[0x20];
+    extern u8 boo_dl_2_12[0x20], boo_dl_2_13[0x20], boo_dl_2_14[0x20], boo_dl_2_15[0x20];
+    extern u8 boo_dl_2_16[0x20], boo_dl_2_17[0x20], boo_dl_2_18[0x20], boo_dl_2_19[0x20];
+    extern u8 boo_dl_2_20[0x20], boo_dl_2_21[0x20], boo_dl_2_22[0x20], boo_dl_2_23[0x20];
+    extern u8 boo_dl_2_24[0x20], boo_dl_2_25[0x20], boo_dl_2_26[0x20], boo_dl_2_27[0x20];
+    extern u8 boo_dl_2_28[0x20], boo_dl_2_29[0x20], boo_dl_2_30[0x20], boo_dl_2_31[0x20];
+    u8* data = lbl_8039D980;
+
     GXClearVtxDesc();
-    GXSetVtxDesc(9,2); GXSetVtxAttrFmt(0,9,1,3,14); GXSetArray(9,(void*)0x8039D9C0,6);
-    GXSetVtxDesc(10,2); GXSetVtxAttrFmt(0,10,0,1,6); GXSetArray(10,(void*)0x8039DD60,3);
-    GXSetVtxDesc(11,2); GXSetVtxAttrFmt(0,11,1,5,0); GXSetArray(11,(void*)0x80418C40,4);
-    GXSetVtxDesc(13,2); GXSetVtxAttrFmt(0,13,1,3,14); GXSetArray(13,(void*)0x8039DE00,4);
-    GXCallDisplayList(boo_dl_2_0,0x40); GXCallDisplayList(boo_dl_2_1,0x40);
-    GXCallDisplayList(boo_dl_2_2,0x40); GXCallDisplayList(boo_dl_2_3,0x40);
-    GXCallDisplayList(boo_dl_2_4,0x20); GXCallDisplayList(boo_dl_2_5,0x20);
-    GXCallDisplayList(boo_dl_2_6,0x20); GXCallDisplayList(boo_dl_2_7,0x20);
-    GXCallDisplayList(boo_dl_2_8,0x20); GXCallDisplayList(boo_dl_2_9,0x20);
-    GXCallDisplayList(boo_dl_2_10,0x20); GXCallDisplayList(boo_dl_2_11,0x20);
-    GXCallDisplayList(boo_dl_2_12,0x20); GXCallDisplayList(boo_dl_2_13,0x20);
-    GXCallDisplayList(boo_dl_2_14,0x20); GXCallDisplayList(boo_dl_2_15,0x20);
-    GXCallDisplayList(boo_dl_2_16,0x20); GXCallDisplayList(boo_dl_2_17,0x20);
-    GXCallDisplayList(boo_dl_2_18,0x20); GXCallDisplayList(boo_dl_2_19,0x20);
-    GXCallDisplayList(boo_dl_2_20,0x20); GXCallDisplayList(boo_dl_2_21,0x20);
-    GXCallDisplayList(boo_dl_2_22,0x20); GXCallDisplayList(boo_dl_2_23,0x20);
-    GXCallDisplayList(boo_dl_2_24,0x20); GXCallDisplayList(boo_dl_2_25,0x20);
-    GXCallDisplayList(boo_dl_2_26,0x20); GXCallDisplayList(boo_dl_2_27,0x20);
-    GXCallDisplayList(boo_dl_2_28,0x20); GXCallDisplayList(boo_dl_2_29,0x20);
-    GXCallDisplayList(boo_dl_2_30,0x20); GXCallDisplayList(boo_dl_2_31,0x20);
+    GXSetVtxDesc(9, 2);
+    GXSetVtxAttrFmt(0, 9, 1, 3, 14);
+    GXSetArray(9, data + 0x40, 6);
+    GXSetVtxDesc(10, 2);
+    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+    GXSetArray(10, data + 0x3E0, 3);
+    GXSetVtxDesc(11, 2);
+    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+    GXSetArray(11, boo_color0_tbl, 4);
+    GXSetVtxDesc(13, 2);
+    GXSetVtxAttrFmt(0, 13, 1, 3, 14);
+    GXSetArray(13, data + 0x480, 4);
+    GXCallDisplayList(data + 0x6E0, 0x40);
+    GXCallDisplayList(data + 0x720, 0x40);
+    GXCallDisplayList(data + 0x760, 0x40);
+    GXCallDisplayList(data + 0x7A0, 0x40);
+    GXCallDisplayList(boo_dl_2_4, 0x20);
+    GXCallDisplayList(boo_dl_2_5, 0x20);
+    GXCallDisplayList(boo_dl_2_6, 0x20);
+    GXCallDisplayList(boo_dl_2_7, 0x20);
+    GXCallDisplayList(boo_dl_2_8, 0x20);
+    GXCallDisplayList(boo_dl_2_9, 0x20);
+    GXCallDisplayList(boo_dl_2_10, 0x20);
+    GXCallDisplayList(boo_dl_2_11, 0x20);
+    GXCallDisplayList(boo_dl_2_12, 0x20);
+    GXCallDisplayList(boo_dl_2_13, 0x20);
+    GXCallDisplayList(boo_dl_2_14, 0x20);
+    GXCallDisplayList(boo_dl_2_15, 0x20);
+    GXCallDisplayList(boo_dl_2_16, 0x20);
+    GXCallDisplayList(boo_dl_2_17, 0x20);
+    GXCallDisplayList(boo_dl_2_18, 0x20);
+    GXCallDisplayList(boo_dl_2_19, 0x20);
+    GXCallDisplayList(boo_dl_2_20, 0x20);
+    GXCallDisplayList(boo_dl_2_21, 0x20);
+    GXCallDisplayList(boo_dl_2_22, 0x20);
+    GXCallDisplayList(boo_dl_2_23, 0x20);
+    GXCallDisplayList(boo_dl_2_24, 0x20);
+    GXCallDisplayList(boo_dl_2_25, 0x20);
+    GXCallDisplayList(boo_dl_2_26, 0x20);
+    GXCallDisplayList(boo_dl_2_27, 0x20);
+    GXCallDisplayList(boo_dl_2_28, 0x20);
+    GXCallDisplayList(boo_dl_2_29, 0x20);
+    GXCallDisplayList(boo_dl_2_30, 0x20);
+    GXCallDisplayList(boo_dl_2_31, 0x20);
 }
 
 void* effBoobooN64Entry(void) {
@@ -156,21 +218,20 @@ void effBoobooMain(void* effect) {
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effBoobooDisp(s32, void*);
     extern f32 float_2_80424de8, float_0_80424dec, float_4_80424df0, float_12_80424df4;
-    extern u8 anime_data_walk[];
-    EffBoobooWork* work = *(EffBoobooWork**)((u8*)effect + 0xC);
-    u8* bytes;
-    u8* slot;
-    s32* wordSlot;
-    s32 i;
+    extern u8 anime_data_walk[8];
+    register s32* wordSlot;
+    register u8* slot;
+    register EffBoobooWork* work;
+    register s32 i;
 
+    work = *(EffBoobooWork**)((u8*)effect + 0xC);
     work->unk_04++;
-    bytes = (u8*)work;
     wordSlot = (s32*)work;
     for (i = 0; i < 11; i++, wordSlot++) {
-        s8 frame;
         u8 state;
-        s32 done = 0;
-        slot = bytes + i;
+        register s32 done = 0;
+        register s32 frame;
+        slot = (u8*)work + i;
         state = *(u8*)(slot + 0xFA);
         frame = *(s8*)(slot + 0x13C);
         switch (state) {
@@ -192,6 +253,7 @@ void effBoobooMain(void* effect) {
                 *(f32*)((u8*)wordSlot + 0x110) = float_4_80424df0 * (f32)sin((float_6p2832_80424ddc * (f32)(frame * 20)) / float_360_80424de0);
                 if (frame >= 9) { done = 1; *(f32*)((u8*)wordSlot + 0x110) = float_0_80424dec; *(u8*)(slot + 0x13C) = 0; }
                 break;
+            case 5:
             default:
                 *(u8*)(slot + 0x105) = anime_data_walk[frame % 8];
                 *(f32*)((u8*)wordSlot + 0x110) = float_12_80424df4 * (f32)sin((float_6p2832_80424ddc * (f32)(frame * 5)) / float_360_80424de0);

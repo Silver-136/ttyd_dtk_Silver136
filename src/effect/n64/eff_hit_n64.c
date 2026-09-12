@@ -1,5 +1,7 @@
 #include "effect/n64/eff_hit_n64.h"
 
+#pragma optimize_for_size off
+
 void* effHitN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -13,6 +15,8 @@ void* effHitN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale) {
     u8* part;
     s32 i;
     s32 n;
+    s32 random;
+    f32 zero;
 
     entry = effEntry();
     n = ((count * 5 + 0x14) / 3) + 1;
@@ -27,63 +31,83 @@ void* effHitN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale) {
     *(f32*)(work + 8) = y;
     *(f32*)(work + 0xC) = z;
     *(s32*)(work + 0x30) = cnt_table[type];
+    zero = float_0_80425468;
     *(s32*)(work + 0x34) = 0;
-    *(f32*)(work + 0x38) = float_0_80425468;
+    *(f32*)(work + 0x38) = zero;
 
-    switch (type) {
-        case 0:
-            *(u8*)(work + 0x3C) = 0xFF;
-            *(u8*)(work + 0x3D) = 0xFF;
-            *(u8*)(work + 0x3E) = 0xFF;
-            *(u8*)(work + 0x3F) = 0xFF;
-            *(u8*)(work + 0x40) = 0xFF;
-            *(u8*)(work + 0x41) = 0xFF;
-            break;
-        case 1:
-            *(u8*)(work + 0x3C) = 0xFF;
-            *(u8*)(work + 0x3D) = 0xFF;
-            *(u8*)(work + 0x3E) = 0;
-            *(u8*)(work + 0x3F) = 0xFF;
-            *(u8*)(work + 0x40) = 0;
-            *(u8*)(work + 0x41) = 0;
-            break;
-        case 2:
-            *(u8*)(work + 0x3C) = 0xFF;
-            *(u8*)(work + 0x3D) = 0xFF;
-            *(u8*)(work + 0x3E) = 0;
-            *(u8*)(work + 0x3F) = 0xC8;
-            *(u8*)(work + 0x40) = 0xFF;
-            *(u8*)(work + 0x41) = 0xE6;
-            break;
-        default:
-            *(u8*)(work + 0x3C) = 0;
-            *(u8*)(work + 0x3D) = 0xFF;
-            *(u8*)(work + 0x3E) = 0xFF;
-            *(u8*)(work + 0x3F) = 0;
-            *(u8*)(work + 0x40) = 0;
-            *(u8*)(work + 0x41) = 0xE6;
-            break;
+    if (type == 2) {
+        goto type_2;
     }
+    if (type >= 2) {
+        goto type_default;
+    }
+    if (type == 0) {
+        goto type_0;
+    }
+    if (type >= 0) {
+        goto type_1;
+    }
+    goto type_default;
+
+type_0:
+    *(u8*)(work + 0x3C) = 0xFF;
+    *(u8*)(work + 0x3D) = 0xFF;
+    *(u8*)(work + 0x3E) = 0xFF;
+    *(u8*)(work + 0x3F) = 0xFF;
+    *(u8*)(work + 0x40) = 0xFF;
+    *(u8*)(work + 0x41) = 0xFF;
+    goto color_done;
+
+type_1:
+    *(u8*)(work + 0x3C) = 0xFF;
+    *(u8*)(work + 0x3D) = 0xFF;
+    *(u8*)(work + 0x3E) = 0;
+    *(u8*)(work + 0x3F) = 0xFF;
+    *(u8*)(work + 0x40) = 0;
+    *(u8*)(work + 0x41) = 0;
+    goto color_done;
+
+type_2:
+    *(u8*)(work + 0x3C) = 0xFF;
+    *(u8*)(work + 0x3D) = 0xFF;
+    *(u8*)(work + 0x3E) = 0;
+    *(u8*)(work + 0x3F) = 0xC8;
+    *(u8*)(work + 0x40) = 0xFF;
+    *(u8*)(work + 0x41) = 0xE6;
+    goto color_done;
+
+type_default:
+    *(u8*)(work + 0x3C) = 0;
+    *(u8*)(work + 0x3D) = 0xFF;
+    *(u8*)(work + 0x3E) = 0xFF;
+    *(u8*)(work + 0x3F) = 0;
+    *(u8*)(work + 0x40) = 0;
+    *(u8*)(work + 0x41) = 0xE6;
+
+color_done:
     *(f32*)(work + 0x28) = scale;
 
     part = work + 0x44;
     for (i = 1; i < n; i++) {
-        *(f32*)(part + 4) = float_0_80425468;
-        *(f32*)(part + 8) = float_0_80425468;
-        *(f32*)(part + 0xC) = float_0_80425468;
-        *(f32*)(part + 0x10) = float_0_80425468;
-        *(f32*)(part + 0x14) = float_0_80425468;
-        *(f32*)(part + 0x20) = float_0_80425468;
+        random = rand();
+        *(f32*)(part + 4) = zero;
+        *(f32*)(part + 8) = zero;
+        *(f32*)(part + 0xC) = zero;
+        *(f32*)(part + 0x10) = zero;
+        *(f32*)(part + 0x14) = zero;
+        *(f32*)(part + 0x20) = zero;
         *(s32*)part = 0;
-        *(f32*)(part + 0x1C) = (f32)(0x168 / (n - 1));
-        *(f32*)(part + 0x24) = (f32)(rand() % 0x168);
-        *(f32*)(part + 0x10) = float_0_80425468;
+        *(f32*)(part + 0x1C) = (f32)((i * 0x168) / (n - 1));
+        *(f32*)(part + 0x24) = (f32)(random % 0x168);
+        *(f32*)(part + 0x10) = zero;
         *(s32*)(part + 0x2C) = 0xFF;
         part += 0x44;
     }
 
     return entry;
 }
+
+#pragma optimize_for_size on
 
 void effHitMain(void* effect) {
     typedef struct Vec3 {
@@ -175,27 +199,82 @@ void effHitDisp(s32 cameraId, void* effect) {
     extern f32 float_5_80425458;
     extern f32 float_deg2rad_80425470;
     extern f32 vec3_802fb0ac[];
+    extern u32 unk_804296e0;
+    extern u32 unk_804296e4;
+    extern u8 fire_data[];
     u8 texObj[0x20];
     Mtx base;
     Mtx rotation;
     Mtx model;
-    u8* work = *(u8**)((u8*)effect + 0xC);
+    f32 axis[3];
+    u8* work;
     u8* camera3d;
-    f32 frameValue = float_5_80425458 * *(f32*)(work + 0x38);
-    s32 frame = (s32)frameValue;
+    f32 frameValue;
+    f32 scale;
+    s32 frame;
+    s32 type;
+    s32 counter;
+    s32 alpha;
     s32 i;
     u32 color0;
     u32 color1;
+    u8 c0r, c0g, c0b;
+    u8 c1r, c1g, c1b;
 
-    if (frame >= 5) {
+    camGetPtr(cameraId);
+    work = *(u8**)((u8*)effect + 0xC);
+    frameValue = float_5_80425458 * *(f32*)(work + 0x38);
+    counter = *(s32*)(work + 0x34);
+    type = *(s32*)work;
+    frame = (s32)frameValue;
+    if (frame > 4) {
         return;
     }
+    scale = *(f32*)(work + 0x28);
     PSMTXTrans(base, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
     camera3d = (u8*)camGetPtr(4);
     PSMTXRotRad(rotation, float_deg2rad_80425470 * -*(f32*)(camera3d + 0x114), 'y');
-    PSMTXScale(model, *(f32*)(work + 0x28), *(f32*)(work + 0x28), *(f32*)(work + 0x28));
+    PSMTXScale(model, scale, scale, scale);
     PSMTXConcat(base, rotation, base);
-    PSMTXConcat(base, model, base);
+    PSMTXConcat(base, model, model);
+    alpha = (s32)(256.0f * (frameValue - (f32)frame));
+    if (type == 1) {
+        s32 fade;
+        if (counter - 1 < 13) {
+            fade = fire_data[counter - 1];
+        } else {
+            fade = 0;
+        }
+        c0r = *(u8*)(work + 0x3C);
+        c0g = (*(u8*)(work + 0x3D) * fade) >> 8;
+        c0b = (*(u8*)(work + 0x3E) * fade) >> 8;
+        c1r = (*(u8*)(work + 0x3F) * fade) >> 8;
+        c1g = (*(u8*)(work + 0x40) * fade) >> 8;
+        c1b = (*(u8*)(work + 0x41) * fade) >> 8;
+    } else if (type >= 1 && type < 3) {
+        if (counter & 1) {
+            c0r = *(u8*)(work + 0x3C);
+            c0g = *(u8*)(work + 0x3D);
+            c0b = *(u8*)(work + 0x3E);
+            c1r = *(u8*)(work + 0x3F);
+            c1g = *(u8*)(work + 0x40);
+            c1b = *(u8*)(work + 0x41);
+        } else {
+            c0r = 0;
+            c0g = 0;
+            c0b = 0;
+            c1r = *(u8*)(work + 0x3C);
+            c1g = *(u8*)(work + 0x3D);
+            c1b = *(u8*)(work + 0x3E);
+        }
+    } else {
+        c0r = *(u8*)(work + 0x3C);
+        c0g = *(u8*)(work + 0x3D);
+        c0b = *(u8*)(work + 0x3E);
+        c1r = *(u8*)(work + 0x3F);
+        c1g = *(u8*)(work + 0x40);
+        c1b = *(u8*)(work + 0x41);
+    }
     GXSetNumChans(0);
     GXSetNumTevStages(2);
     GXSetTevOrder(0, 0, 0, 0xFF);
@@ -206,16 +285,18 @@ void effHitDisp(s32 cameraId, void* effect) {
     GXSetTevOrder(1, 1, 1, 0xFF);
     GXSetTevColorOp(1, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(1, 2, 12, 0, 15);
-    GXSetTevAlphaIn(1, 0, 4, 6, 7);
-    color0 = ((u32)*(u8*)(work + 0x3C) << 24) |
-             ((u32)*(u8*)(work + 0x3D) << 16) |
-             ((u32)*(u8*)(work + 0x3E) << 8) |
-             *(u8*)(work + 0x2C);
-    color1 = ((u32)*(u8*)(work + 0x3F) << 24) |
-             ((u32)*(u8*)(work + 0x40) << 16) |
-             ((u32)*(u8*)(work + 0x41) << 8) |
-             (u8)(256.0f * (frameValue - (f32)frame));
+    GXSetTevColorIn(1, 4, 2, 0, 15);
+    GXSetTevAlphaIn(1, 0, 4, 2, 7);
+    color0 = unk_804296e0;
+    ((u8*)&color0)[0] = c0r;
+    ((u8*)&color0)[1] = c0g;
+    ((u8*)&color0)[2] = c0b;
+    ((u8*)&color0)[3] = *(u8*)(work + 0x2C);
+    color1 = unk_804296e4;
+    ((u8*)&color1)[0] = c1r;
+    ((u8*)&color1)[1] = c1g;
+    ((u8*)&color1)[2] = c1b;
+    ((u8*)&color1)[3] = (u8)alpha;
     GXSetTevColor(1, &color0);
     GXSetTevColor(2, &color1);
     effGetTexObjN64(0x4A, texObj);
@@ -226,8 +307,11 @@ void effHitDisp(s32 cameraId, void* effect) {
     GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
     GXSetCullMode(0);
     for (i = 0; i < 3; i++) {
-        PSMTXRotAxisRad(rotation, vec3_802fb0ac, float_deg2rad_80425470 * (f32)(i * 120));
-        PSMTXConcat(base, rotation, model);
+        axis[0] = vec3_802fb0ac[0];
+        axis[1] = vec3_802fb0ac[1];
+        axis[2] = vec3_802fb0ac[2];
+        PSMTXRotAxisRad(rotation, axis, float_deg2rad_80425470 * (f32)(i * 120));
+        PSMTXConcat(model, rotation, model);
         main_dl(effect, model);
     }
 }

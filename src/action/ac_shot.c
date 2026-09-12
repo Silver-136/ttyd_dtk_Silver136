@@ -472,9 +472,12 @@ void actionCommandDisp(f32 x, f32 y) {
 }
 
 void _draw_target_mark(u32* color, f32 x, f32 y, f32 z, f32 angle) {
+    typedef void (*BtlDispTex4ByValue)(s32, AcShotVec, AcShotVec, AcShotVec, u32*);
     AcShotVec pos;
-    AcShotVec scale;
-    AcShotVec rot;
+    AcShotVec scale1;
+    AcShotVec rot1;
+    AcShotVec scale2;
+    AcShotVec rot2;
     u32 color1;
     u32 color2;
 
@@ -483,16 +486,16 @@ void _draw_target_mark(u32* color, f32 x, f32 y, f32 z, f32 angle) {
     pos.x = x;
     pos.y = y;
     pos.z = z;
-    rot = vec3_802f9b68[3];
-    rot.z = reviseAngle(-angle);
-    scale = vec3_802f9b68[2];
-    btlDispTex4(0x58, &pos, &scale, &rot, &color1);
+    rot1 = vec3_802f9b68[3];
+    rot1.z = reviseAngle(-angle);
+    scale1 = vec3_802f9b68[2];
+    ((BtlDispTex4ByValue)btlDispTex4)(0x58, pos, scale1, rot1, &color1);
 
     color2 = *color;
-    rot = vec3_802f9b68[5];
-    rot.z = reviseAngle(angle);
-    scale = vec3_802f9b68[4];
-    btlDispTex4(0x57, &pos, &scale, &rot, &color2);
+    rot2 = vec3_802f9b68[5];
+    rot2.z = reviseAngle(angle);
+    scale2 = vec3_802f9b68[4];
+    ((BtlDispTex4ByValue)btlDispTex4)(0x57, pos, scale2, rot2, &color2);
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

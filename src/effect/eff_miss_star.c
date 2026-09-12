@@ -1,6 +1,13 @@
 #include "effect/eff_miss_star.h"
 
 void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed) {
+    typedef union IntToDouble {
+        f64 value;
+        struct {
+            u32 high;
+            u32 low;
+        } words;
+    } IntToDouble;
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* camGetPtr(s32 cameraId);
@@ -15,12 +22,22 @@ void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed) {
     extern f32 float_0p7_80422e70;
     extern f32 float_2_80422e74;
     extern f32 float_255_80422e78;
+    extern const f64 double_to_int_802f3ca8;
     void* entry;
     void* work;
     void* cam;
     f32 speedScale;
     f32 rotScale;
-    f32 dir;
+    IntToDouble conv;
+    f32 dirFloat;
+    f32 spin;
+    f32 two;
+    f32 zero;
+    f32 alpha;
+    volatile f32 retainedLiteral;
+    s32 dir;
+    s32 dirBits;
+    s32 spinBits;
     s32 i;
     s32 idx;
 
@@ -32,45 +49,52 @@ void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed) {
         speedScale = float_0p4_80422e6c;
         rotScale = float_0p7_80422e70;
     }
-    dir = float_1_80422e60;
+    dir = 1;
     if (seed < 0) {
         seed = -seed;
-        dir = -float_1_80422e60;
+        dir = -1;
     }
     while (seed > 5) {
         seed -= 5;
     }
-
     *(char**)((s32)entry + 0x14) = str_SmallStar_802f3c9c;
     *(s32*)((s32)entry + 0x8) = count;
     work = __memAlloc(3, count * 0x44);
     *(void**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effMissStarMain;
+    dirBits = dir ^ 0x80000000;
+    spinBits = (dir * 107) ^ 0x80000000;
+    retainedLiteral = 107.0f;
+    two = float_2_80422e74;
+    zero = float_0_80422e5c;
+    alpha = float_255_80422e78;
 
     for (i = 0; i < count; i++, work = (void*)((s32)work + 0x44), seed++) {
-        idx = seed;
-        while (idx > 5) {
-            idx -= 5;
-        }
+        conv.words.high = 0x43300000;
+        conv.words.low = (u32)dirBits;
+        dirFloat = (f32)(conv.value - double_to_int_802f3ca8);
+        conv.words.low = (u32)spinBits;
+        spin = (f32)(conv.value - double_to_int_802f3ca8);
+        idx = seed % 8;
         idx *= 3;
         *(f32*)((s32)work + 0x0) = (f32)x;
         *(f32*)((s32)work + 0x4) = (f32)y;
         *(f32*)((s32)work + 0x8) = (f32)z;
-        *(f32*)((s32)work + 0x18) = rotScale * dir * float_2_80422e74 * spd_tbl[idx + 0];
-        *(f32*)((s32)work + 0x1C) = rotScale * float_2_80422e74 * spd_tbl[idx + 1];
-        *(f32*)((s32)work + 0x20) = rotScale * float_2_80422e74 * spd_tbl[idx + 2];
-        *(f32*)((s32)work + 0xC) = rotScale * dir * spd_tbl[idx + 0];
+        *(f32*)((s32)work + 0x18) = rotScale * dirFloat * two * spd_tbl[idx + 0];
+        *(f32*)((s32)work + 0x1C) = rotScale * two * spd_tbl[idx + 1];
+        *(f32*)((s32)work + 0x20) = rotScale * two * spd_tbl[idx + 2];
+        *(f32*)((s32)work + 0xC) = rotScale * dirFloat * spd_tbl[idx + 0];
         *(f32*)((s32)work + 0x10) = rotScale * spd_tbl[idx + 1];
         *(f32*)((s32)work + 0x14) = rotScale * spd_tbl[idx + 2];
-        *(f32*)((s32)work + 0x38) = speedScale * scale_tbl[(i & 7) * 3];
-        *(f32*)((s32)work + 0x2C) = float_0_80422e5c;
-        *(f32*)((s32)work + 0x30) = dir * 107.0f;
+        *(f32*)((s32)work + 0x38) = speedScale * scale_tbl[(i % 8) * 3];
+        *(f32*)((s32)work + 0x2C) = zero;
+        *(f32*)((s32)work + 0x30) = spin;
         cam = camGetPtr(4);
         *(f32*)((s32)work + 0x34) = -*(f32*)((s32)cam + 0x114);
         *(s32*)((s32)work + 0x24) = 14;
         *(s32*)((s32)work + 0x28) = delay;
         *(s32*)((s32)work + 0x3C) = 10;
-        *(f32*)((s32)work + 0x40) = float_255_80422e78;
+        *(f32*)((s32)work + 0x40) = alpha;
     }
     return entry;
 }

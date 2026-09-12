@@ -184,9 +184,9 @@ void winMain(void) {
     extern char str_yuu_8042402c[];
     extern f32 float_250_80424034;
     extern f32 float_500_80424038;
-    void* win = g_winPtr;
+#define win wp
     void* player = marioGetPtr();
-    s32 state = *(s32*)((s32)win + 0x20);
+    s32 state;
 
     if ((*(u16*)win & 1) != 0 || seqGetSeq() != 2 || seqCheckSeq() != 0) return;
     *(u32*)((s32)win + 4) = keyGetButtonTrg(0);
@@ -202,7 +202,9 @@ void winMain(void) {
     if ((keyGetButtonRep(0) & 8) != 0) *(u32*)((s32)win + 0x10) |= 0x1000;
     if ((keyGetButtonRep(0) & 4) != 0) *(u32*)((s32)win + 0x10) |= 0x2000;
     winLectureKeyMask();
-    if (state == 0) {
+    state = *(s32*)((s32)win + 0x20);
+    switch (state) {
+    case 0: {
         s32 openMenu = 0;
         u32 buttons = *(u32*)((s32)win + 4);
 
@@ -277,7 +279,9 @@ void winMain(void) {
                 *(s32*)((u8*)win + 0x20) = 1;
             }
         }
-    } else if (state == 1) {
+        break;
+    }
+    case 1: {
         char* languages[6];
         languages[0] = str_jp_80423f5c;
         languages[1] = str_us_80423f60;
@@ -290,9 +294,11 @@ void winMain(void) {
             *(void**)((u8*)win + 0x28) = fileAllocf(
                 4, str_PCTs_w_PCTs_win_tpl_802f7398, getMarioStDvdRoot(),
                 languages[*(s32*)((u8*)gp + 0x16C)]);
-            *(s32*)((u8*)win + 0x20) = 2;
+            (*(s32*)((u8*)win + 0x20))++;
         }
-    } else if (state == 2) {
+        break;
+    }
+    case 2: {
         if (*(u8*)((u8*)player + 0x3C) == 0) {
             s32 result = winRootMain(win);
             if (result == -2) {
@@ -301,13 +307,15 @@ void winMain(void) {
                 if (*(s32*)((u8*)win + 0x2D4) == 0x4E) *(s32*)((u8*)win + 0x20) = 300;
                 else *(s32*)((u8*)win + 0x20) = 200;
             } else if (result < 0) {
-                *(s32*)((s32)win + 0x20) = 3;
+                (*(s32*)((s32)win + 0x20))++;
             }
         } else if ((*(u32*)((u8*)win + 4) & 0x1000) != 0) {
             kpaPauseSE2();
             *(s32*)((u8*)win + 0x20) = 3;
         }
-    } else if (state == 3) {
+        break;
+    }
+    case 3: {
         void* camera = camGetPtr(1);
         *(u16*)camera &= ~0x200;
         if (*(u8*)((u8*)player + 0x3C) == 2 && kpaGetStageViewType() == 0) marioCtrlOn();
@@ -324,27 +332,36 @@ void winMain(void) {
         *(void**)((s32)win + 0x28) = 0;
         *(u16*)win = 0;
         *(s32*)((s32)win + 0x20) = 0;
-    } else if (state == 100) {
+        break;
+    }
+    case 100: {
         s32 partyId = *(s32*)((s32)win + 0x1BC +
                              *(s32*)((s32)win + 0x1DC) * 4);
         if (marioBgmodeChk() == 0) {
             if (animGroupBaseAsync(*(char**)(partyDataTbl + partyId * 0x28),
                                    2, 0) != 0) {
-                *(s32*)((s32)win + 0x20) = 101;
+                (*(s32*)((s32)win + 0x20))++;
             }
         } else {
+            *(s8*)((u8*)player + 0x247) = (s8)partyId;
             *(s32*)((s32)win + 0x20) = 3;
         }
-    } else if (state == 101) {
+        break;
+    }
+    case 101: {
         marioPartyGoodbye();
-        *(s32*)((s32)win + 0x20) = 102;
-    } else if (state == 102) {
+        (*(s32*)((s32)win + 0x20))++;
+        break;
+    }
+    case 102: {
         if (marioGetParty() == 0) {
             marioPartyHello(*(s32*)((s32)win + 0x1BC +
                                     *(s32*)((s32)win + 0x1DC) * 4));
             *(s32*)((s32)win + 0x20) = 3;
         }
-    } else if (state == 200) {
+        break;
+    }
+    case 200: {
         void* partyOrder[8];
         void* evt;
         s32 currentParty;
@@ -379,26 +396,38 @@ void winMain(void) {
         *(s32*)((u8*)win + 0x20) = 201;
         pouchRemoveItemIndex(*(s32*)((u8*)win + 0x2D4),
                              *(s32*)((u8*)win + 0x2D8));
-    } else if (state == 201) {
+        break;
+    }
+    case 201: {
         void* evt = *(void**)((u8*)win + 0x3C);
         if (evtCheckID(*(s32*)((u8*)evt + 0x15C)) == 0) {
             *(s32*)((u8*)win + 0x20) = 3;
         }
-    } else if (state == 300) {
+        break;
+    }
+    case 300: {
         *(void**)((u8*)win + 0x3C) = evtEntryType(evt_diary_read, 0, 0, 0);
         *(s32*)((u8*)win + 0x20) = 301;
-    } else if (state == 301) {
+        break;
+    }
+    case 301: {
         void* evt = *(void**)((u8*)win + 0x3C);
         if (evtCheckID(*(s32*)((u8*)evt + 0x15C)) == 0) {
             *(s32*)((u8*)win + 0x20) = 3;
         }
-    } else if (state == 400) {
+        break;
+    }
+    case 400: {
         evtYuuWindow();
-        *(s32*)((u8*)win + 0x20) = 401;
-    } else if (state == 401) {
+        (*(s32*)((u8*)win + 0x20))++;
+        break;
+    }
+    case 401: {
         if (evtYuuWindowEndChk() != 0) {
             *(s32*)((u8*)win + 0x20) = 3;
         }
+        break;
+    }
     }
 
 win_main_done:
@@ -413,6 +442,7 @@ win_main_done:
             dispEntry(1, 0, winDispKoopa, 0, float_250_80424034);
         }
     }
+#undef win
 }
 
 void winDisp(s32 cameraId) {
@@ -481,9 +511,9 @@ s32 itemUseFunc(void* pEvt, int param_2) {
     s32 eff;
 
     itemId = *(s32*)((s32)pEvt + 0xC4);
+    itemData = itemDataTable + itemId * 0x28;
     mario = marioGetPtr();
     party = partyGetPtr(0);
-    itemData = itemDataTable + itemId * 0x28;
     partyId = *(s32*)((s32)pEvt + 0xC8);
 
     if (param_2 != 0) {
@@ -723,12 +753,22 @@ void winFontSetR(void* position, void* scale, void* color, char* format, ...) {
         void* inputArgArea;
         void* regSaveArea;
     } FontVaList;
+    typedef union WidthConversion {
+        f64 value;
+        u32 words[2];
+    } WidthConversion;
+    extern char str_999_80424018[];
+    extern f64 double_to_int_802f7380;
 
     FontVaList args;
     char text[4096];
     f32 translation[3][4];
     f32 scaling[3][4];
     u32 drawColor;
+    s32 fieldWidth;
+    s32 messageWidth;
+    WidthConversion conversion;
+    f32 offset;
 
     args.regInfo = 0x04000000;
     args.inputArgArea = (u8*)&args + 0x30;
@@ -738,8 +778,18 @@ void winFontSetR(void* position, void* scale, void* color, char* format, ...) {
         format = text;
     }
 
+    if (*(u32*)((s32)gp + 0x16C) == 0) {
+        fieldWidth = FontGetMessageWidth((char*)0x802F7390) & 0xFFFF;
+    } else {
+        fieldWidth = FontGetMessageWidth(str_999_80424018) & 0xFFFF;
+    }
+    messageWidth = FontGetMessageWidth(format) & 0xFFFF;
+    conversion.words[0] = 0x43300000;
+    conversion.words[1] = (fieldWidth - messageWidth) ^ 0x80000000;
+    offset = (f32)(conversion.value - double_to_int_802f7380);
+
     PSMTXTrans(translation,
-               *(f32*)((s32)position + 0),
+               *(f32*)((s32)position + 0) + *(f32*)((s32)scale + 0) * offset,
                *(f32*)((s32)position + 4),
                *(f32*)((s32)position + 8));
     PSMTXScale(scaling,

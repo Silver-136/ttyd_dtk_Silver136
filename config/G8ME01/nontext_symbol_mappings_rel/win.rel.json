@@ -1,0 +1,11 @@
+{
+  "component": "win.rel",
+  "mapping_count": 2,
+  "schema_version": 1,
+  "units": {
+    "win/unit_pakkun_flower": {
+      "zero_win_000054a8": "@27",
+      "double_to_int_win_000054b0": "@29"
+    }
+  }
+}

@@ -172,28 +172,34 @@ void countDownMain(void) {
 /* CHATGPT STUB FILL: main/countdown 20260624_184008 */
 
 /* stub-fill: countDownDisp | missing_definition | ghidra_signature */
-u8 countDownDisp(void) {
+void countDownDisp(void) {
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXConcat(void*, void*, void*);
     extern u8 iconDispGxCol(void*, s32, s32, void*);
     extern void* wp;
     u8* work = wp;
-    f32 trans[3][4];
-    f32 scale[3][4];
     f32 mtx[3][4];
+    f32 scale[3][4];
+    f32 trans[3][4];
     s32 digits[3];
-    s32 color0 = -1;
-    s32 color1 = -1;
+    volatile s32 baseColor0 = -1;
+    volatile s32 baseColor1 = -1;
+    volatile s32 baseColor2 = -1;
+    s32 headerColor;
+    s32 digitColor;
+    s32 separatorColor;
+    s32 millisColor;
     s32 remaining;
     s32 seconds;
     s32 millis;
-    s32 ticksPerMs;
+    u32 ticksPerMs;
     s32 i;
     s32 x;
-    u8 result = 0;
+    s32 q;
+    s32* digit;
 
-    ticksPerMs = (((*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 6);
+    ticksPerMs = (u32)(((u64)(*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 38);
     remaining = *(s32*)(work + 0x18) -
                 (s32)(*(s64*)(work + 8) / ticksPerMs);
     if ((*(u16*)work & 4) == 0) {
@@ -201,48 +207,54 @@ u8 countDownDisp(void) {
             remaining = 0;
         }
 
-        seconds = remaining / 1000;
-        millis = remaining % 1000;
+        q = remaining / 1000 + (remaining >> 31);
+        seconds = q - (q >> 31);
+        millis = remaining + seconds * -1000;
         PSMTXTrans(trans,
                    *(f32*)(work + 0x20) + *(f32*)(work + 0x28),
                    *(f32*)(work + 0x24) + *(f32*)(work + 0x2C),
                    0.0f);
         PSMTXScale(scale, 2.5f, 1.0f, 1.0f);
         PSMTXConcat(trans, scale, mtx);
-        color0 = -103;
-        iconDispGxCol(mtx, 0x10, 0x1FD, &color0);
+        headerColor = -103;
+        iconDispGxCol(mtx, 0x10, 0x1FD, &headerColor);
 
-        digits[0] = seconds / 100;
-        seconds %= 100;
-        digits[1] = seconds / 10;
-        digits[2] = seconds % 10;
+        q = seconds / 100 + (seconds >> 31);
+        digits[0] = q - (q >> 31);
+        seconds = seconds + digits[0] * -100;
+        q = seconds / 10 + (seconds >> 31);
+        digits[1] = q - (q >> 31);
+        digits[2] = seconds + digits[1] * -10;
         x = -50;
-        for (i = 0; i < 3; i++, x += 30) {
+        digit = digits;
+        for (i = 0; i < 3; i++, digit++, x += 30) {
             PSMTXTrans(mtx, (f32)x, 8.0f, 0.0f);
             PSMTXConcat(trans, mtx, mtx);
-            color0 = color1;
-            iconDispGxCol(mtx, 0x10, digits[i] + 0x1FE, &color0);
+            digitColor = baseColor2;
+            iconDispGxCol(mtx, 0x10, *digit + 0x1FE, &digitColor);
         }
 
         PSMTXTrans(mtx, 28.0f, 10.0f, 0.0f);
         PSMTXConcat(trans, mtx, mtx);
-        color0 = -1;
-        iconDispGxCol(mtx, 0x10, 0x208, &color0);
+        separatorColor = baseColor1;
+        iconDispGxCol(mtx, 0x10, 0x208, &separatorColor);
 
-        digits[0] = millis / 100;
-        millis %= 100;
-        digits[1] = millis / 10;
+        q = millis / 100 + (millis >> 31);
+        digits[0] = q - (q >> 31);
+        millis = millis + digits[0] * -100;
+        q = millis / 10 + (millis >> 31);
+        digits[1] = q - (q >> 31);
         x = 40;
-        for (i = 0; i < 2; i++, x += 15) {
+        digit = digits;
+        for (i = 0; i < 2; i++, digit++, x += 15) {
             PSMTXTrans(mtx, (f32)x, 8.0f, 0.0f);
             PSMTXScale(scale, 0.5f, 0.5f, 0.5f);
             PSMTXConcat(mtx, scale, mtx);
             PSMTXConcat(trans, mtx, mtx);
-            color0 = color1;
-            result = iconDispGxCol(mtx, 0x10, digits[i] + 0x1FE, &color0);
+            millisColor = baseColor0;
+            iconDispGxCol(mtx, 0x10, *digit + 0x1FE, &millisColor);
         }
     }
-    return result;
 }
 
 s32 countDownGetStatus(void) {

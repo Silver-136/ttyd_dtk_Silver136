@@ -214,6 +214,7 @@ void effRecoveryMain(void* effect) {
     s32 i;
     s32 finished;
     s32 count;
+    s32 doneCount = 0;
     f32 angle;
     f32 radius;
 
@@ -300,8 +301,17 @@ void effRecoveryMain(void* effect) {
                         *(s8*)(part+0x46)+=1;
                     }
                     break;
+                case 6:
+                    doneCount++;
+                    break;
             }
         }
+    }
+
+    if ((type < 2 || type == 7 || type == 8 || type == 4 || type == 5) && doneCount >= count) {
+        effDeleteMayaAnim(*(void**)(work + 0x38));
+        effDelete(effect);
+        return;
     }
 
     *(u32*)(work + 0x34) = *(u32*)((char*)gpGlobals + 4);
@@ -328,33 +338,38 @@ u8 effRecoveryMain2(void* effEntry) {
     extern f32 float_40_80422e14;
     extern f32 float_45_80422e18;
     extern f32 float_0p95_80422e1c;
+    extern f32 vec3_802f3b5c[];
     LocalVec3 pos;
+    LocalVec3 drawPos;
     void* work;
     void* part;
     s32 i;
-    f32 rad;
 
     work = *(void**)((s32)effEntry + 0xC);
+    pos = *(LocalVec3*)vec3_802f3b5c;
     pos.x = *(f32*)((s32)work + 0x8);
     pos.y = *(f32*)((s32)work + 0xC);
     pos.z = *(f32*)((s32)work + 0x10);
 
-    if (*(s16*)((s32)work + 0x2) < 1000) {
-        *(s16*)((s32)work + 0x2) -= 1;
+    drawPos = pos;
+
+    if (*(s16*)((s32)work + 0x2C) < 1000) {
+        *(s16*)((s32)work + 0x2C) -= 1;
     }
-    if (*(s16*)((s32)work + 0x2) < 0x20) {
-        *(s32*)((s32)work + 0x4) = *(s16*)((s32)work + 0x2) << 3;
+    if (*(s16*)((s32)work + 0x2C) < 0x20) {
+        *(s32*)((s32)work + 0x4) = *(s16*)((s32)work + 0x2C) << 3;
     }
-    if (*(s16*)((s32)work + 0x2) < 0) {
+    if (*(s16*)((s32)work + 0x2C) < 0) {
         effStardustEntry(*(f32*)((s32)work + 0x8), *(f32*)((s32)work + 0xC), *(f32*)((s32)work + 0x10),
                          float_40_80422e14, float_45_80422e18, 2, 6, 0x1E);
         effDelete(effEntry);
-        return 0;
-    }
-
-    part = (void*)((s32)work + 0x44);
-    for (i = 1; i < *(s32*)((s32)effEntry + 0x8); i++, part = (void*)((s32)part + 0x44)) {
-        if (*(s32*)((s32)part + 0x3C) == 0) {
+    } else {
+        part = (void*)((s32)work + 0x44);
+        for (i = 1; i < *(s32*)((s32)effEntry + 0x8); i++, part = (void*)((s32)part + 0x44)) {
+            if (*(s32*)((s32)part + 0x3C) != 0) {
+                *(s32*)((s32)part + 0x3C) -= 1;
+                continue;
+            }
             *(f32*)((s32)part + 0x8) += *(f32*)((s32)part + 0x14);
             *(f32*)((s32)part + 0xC) += *(f32*)((s32)part + 0x18);
             *(f32*)((s32)part + 0x10) += *(f32*)((s32)part + 0x1C);
@@ -372,19 +387,14 @@ u8 effRecoveryMain2(void* effEntry) {
                     *(f32*)((s32)part + 0x8) = float_0_80422dcc;
                     *(f32*)((s32)part + 0xC) = float_0_80422dcc;
                     *(f32*)((s32)part + 0x10) = float_0_80422dcc;
-                    rad = (float_6p2832_80422e20 * *(f32*)((s32)part + 0x30)) / float_360_80422e24;
-                    *(f32*)((s32)part + 0x14) = float_2_80422dd8 * (f32)cos(rad);
-                    *(f32*)((s32)part + 0x18) = float_2_80422dd8 * (f32)sin(rad);
+                    *(f32*)((s32)part + 0x14) = float_2_80422dd8 * (f32)cos((float_6p2832_80422e20 * *(f32*)((s32)part + 0x30)) / float_360_80422e24);
+                    *(f32*)((s32)part + 0x18) = float_2_80422dd8 * (f32)sin((float_6p2832_80422e20 * *(f32*)((s32)part + 0x30)) / float_360_80422e24);
                     *(s32*)((s32)part + 0x4) = 0xFF;
                 }
             }
-        } else {
-            *(s32*)((s32)part + 0x3C) -= 1;
         }
+        dispEntry(4, 2, effRecoveryDisp4, effEntry, dispCalcZ(&drawPos));
     }
-
-    dispEntry(4, 2, effRecoveryDisp4, effEntry, dispCalcZ(&pos));
-    return 0;
 }
 
 u8 effRecoveryDisp(int cameraId, int effect) {
@@ -673,6 +683,7 @@ void effRecoveryDisp3(s32 cameraId, void* effect) {
 
 void effRecoveryDisp4(s32 cameraId, void* effect) {
     typedef struct Tex { u32 data[8]; } Tex;
+    typedef struct Color { u8 r, g, b, a; } Color;
     extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetTevOp(s32, s32);
     extern void GXSetChanMatColor(s32, void*);
@@ -684,17 +695,21 @@ void effRecoveryDisp4(s32 cameraId, void* effect) {
     Mtx model;
     Tex tex;
     volatile f32* fifo = (volatile f32*)0xCC008000;
-    char* work = *(char**)((char*)effect + 0x0C);
-    char* part = work;
+    char* part = *(char**)((char*)effect + 0x0C);
     char* camera = (char*)camGetPtr(cameraId);
-    u32 color;
+    s32 baseAlpha = *(s32*)(part + 4);
+    Color color0;
+    Color color1;
+    Color color2;
+    Color color3;
     s32 alpha;
     s32 i;
     f32 u;
     f32 yoff;
     f32 left;
 
-    PSMTXTrans(trans, *(f32*)(work + 8), *(f32*)(work + 0xC), *(f32*)(work + 0x10));
+    PSMTXTrans(trans, *(f32*)(part + 8), *(f32*)(part + 0xC), *(f32*)(part + 0x10));
+    camera = (char*)camGetPtr(cameraId);
     PSMTXRotRad(rotate, -0.017453292f * *(f32*)(camera + 0x114), 'y');
     PSMTXConcat(trans, rotate, model);
     GXSetNumTexGens(1);
@@ -711,26 +726,40 @@ void effRecoveryDisp4(s32 cameraId, void* effect) {
     GXSetVtxAttrFmt(0, 9, 1, 4, 0);
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
     left = -32.0f;
+    part += 0x44;
     for (i = 1; i < *(s32*)((char*)effect + 8); i++, part += 0x44) {
-        if (*(s32*)(part + 0x80) != 0) {
+        if (*(s32*)(part + 0x3C) != 0) {
             continue;
         }
-        alpha = *(s32*)(work + 4) * *(s32*)(part + 0x48) / 255;
         if (i == 1) {
             effGetTexObj(0x12, &tex);
-            color = (dat_80422dbc & 0xFFFFFF00) | (alpha & 0xFF);
+            GXLoadTexObj(&tex, 0);
+            alpha = baseAlpha * *(s32*)(part + 4) / 255;
+            color0 = *(Color*)&dat_80422dbc;
+            color0.a = alpha;
+            color1 = color0;
+            GXSetChanMatColor(4, &color1);
         } else {
+            s32 index;
+            alpha = baseAlpha * *(s32*)(part + 4) / 255;
+            index = ((i + *(u32*)((char*)gpGlobals + 4)) % 12) * 3;
+            color2.r = color_rotation_data[index];
+            color2.g = color_rotation_data[index + 1];
+            color2.b = color_rotation_data[index + 2];
+            color2.a = alpha;
+            color3 = color2;
             effGetTexObj(0x14, &tex);
-            color = ((u32)color_rotation_data[((i + *(u32*)((char*)gpGlobals + 4)) % 12) * 3] << 24) |
-                    ((u32)color_rotation_data[((i + *(u32*)((char*)gpGlobals + 4)) % 12) * 3 + 1] << 16) |
-                    ((u32)color_rotation_data[((i + *(u32*)((char*)gpGlobals + 4)) % 12) * 3 + 2] << 8) |
-                    (alpha & 0xFF);
+            GXLoadTexObj(&tex, 0);
+            color0 = color3;
+            GXSetChanMatColor(4, &color0);
         }
-        GXLoadTexObj(&tex, 0);
-        GXSetChanMatColor(4, &color);
-        PSMTXTrans(trans, *(f32*)(part + 0x4C), *(f32*)(part + 0x50), *(f32*)(part + 0x54));
-        PSMTXScale(scale, *(f32*)(part + 0x64), *(f32*)(part + 0x68), *(f32*)(part + 0x6C));
-        PSMTXRotRad(rotate, i == 1 ? 0.0f : 0.017453292f * (*(f32*)(part + 0x74) - 90.0f), 'z');
+        PSMTXTrans(trans, *(f32*)(part + 8), *(f32*)(part + 0xC), *(f32*)(part + 0x10));
+        PSMTXScale(scale, *(f32*)(part + 0x20), *(f32*)(part + 0x24), *(f32*)(part + 0x28));
+        if (i == 1) {
+            PSMTXRotRad(rotate, 0.0f, 'z');
+        } else {
+            PSMTXRotRad(rotate, 0.017453292f * (*(f32*)(part + 0x30) - 90.0f), 'z');
+        }
         PSMTXConcat(model, trans, trans);
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(trans, rotate, trans);

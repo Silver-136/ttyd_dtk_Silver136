@@ -11,6 +11,7 @@ void* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
     extern s32 rand(void);
     extern char str_OnpuN64_802fbb40[];
     extern f32 float_0_80425b18;
+    extern f32 float_1_80425b24;
     extern f32 float_neg5_80425b2c;
     extern f32 float_0p1_80425b30;
     extern f32 float_0p5_80425b34;
@@ -18,6 +19,7 @@ void* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
     void* entry;
     u8* work;
     s32 r;
+    s32 quotient;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_OnpuN64_802fbb40;
@@ -34,7 +36,10 @@ void* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
     *(s32*)(work + 0x18) = 0x40;
     *(s32*)(work + 0x14) = 0;
     *(s32*)(work + 0x1C) = 0;
-    *(s32*)(work + 0x20) = rand() % 7;
+    r = rand();
+    quotient = (__mulhw((s32)0x92492493, r) + r) >> 2;
+    quotient += (u32)quotient >> 31;
+    *(s32*)(work + 0x20) = r - quotient * 7;
 
     switch (type) {
         case 0:
@@ -44,17 +49,29 @@ void* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
             *(f32*)(work + 0x30) = float_1_80425b24;
             break;
         case 1:
-            r = rand() % 11;
+            r = rand();
+            quotient = __mulhw(0x2E8BA2E9, r) >> 1;
+            quotient += (u32)quotient >> 31;
+            r -= quotient * 11;
             *(f32*)(work + 0x24) = float_neg5_80425b2c + (float_0p1_80425b30 * (f32)r);
-            r = rand() % 11;
+            r = rand();
+            quotient = __mulhw(0x2E8BA2E9, r) >> 1;
+            quotient += (u32)quotient >> 31;
+            r -= quotient * 11;
             *(f32*)(work + 0x28) = float_0p5_80425b34 + (float_0p1_80425b30 * (f32)r);
             *(f32*)(work + 0x2C) = float_0_80425b18;
             *(f32*)(work + 0x30) = float_0_80425b18;
             break;
         default:
-            r = rand() % 11;
+            r = rand();
+            quotient = __mulhw(0x2E8BA2E9, r) >> 1;
+            quotient += (u32)quotient >> 31;
+            r -= quotient * 11;
             *(f32*)(work + 0x24) = float_5_80425b38 - (float_0p1_80425b30 * (f32)r);
-            r = rand() % 11;
+            r = rand();
+            quotient = __mulhw(0x2E8BA2E9, r) >> 1;
+            quotient += (u32)quotient >> 31;
+            r -= quotient * 11;
             *(f32*)(work + 0x28) = float_1_80425b24 + (float_0p1_80425b30 * (f32)r);
             *(f32*)(work + 0x2C) = float_0_80425b18;
             *(f32*)(work + 0x30) = float_0_80425b18;

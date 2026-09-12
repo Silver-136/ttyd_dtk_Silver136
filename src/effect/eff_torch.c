@@ -18,32 +18,47 @@ u8 effTorchMain(int param_1);
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effTorchEntry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
-    void* entry;
-    void* work;
+    typedef struct EntryLocal {
+        u32 flags;
+        s32 unk4;
+        s32 count;
+        void* data;
+        void* main;
+        const char* name;
+    } EntryLocal;
+    typedef struct TorchWorkLocal {
+        s32 type;
+        TorchVec pos;
+        f32 size;
+        f32 scaleX;
+        f32 scaleY;
+        u8 pad1C;
+    } TorchWorkLocal;
+
+    EntryLocal* entry;
+    TorchWorkLocal* work;
     TorchVec pos;
-    s32 main;
     f32 size;
     f32 one;
 
-    entry = effEntry();
-    *(const char**)((s32)entry + 0x14) = str_Torch_804247b4;
-    *(s32*)((s32)entry + 8) = 1;
-    work = __memAlloc(3, 0x20);
-    main = (s32)effTorchMain;
-    *(void**)((s32)entry + 0xC) = work;
-    *(s32*)((s32)entry + 0x10) = main;
-    pos = vec3_802f9a88[0];
+    entry = (EntryLocal*)effEntry();
+    entry->name = str_Torch_804247b4;
+    entry->count = 1;
+    work = (TorchWorkLocal*)__memAlloc(3, sizeof(TorchWorkLocal));
+    entry->data = work;
+    entry->main = (void*)effTorchMain;
+    work->type = type;
+    work->pad1C = 0;
     size = float_0p5_804247bc * scale;
     one = float_1_804247ac;
-    *(s32*)((s32)work + 0) = type;
-    *(u8*)((s32)work + 0x1C) = 0;
+    pos = vec3_802f9a88[0];
     pos.x = x;
     pos.y = y;
     pos.z = z;
-    *(TorchVec*)((s32)work + 4) = pos;
-    *(f32*)((s32)work + 0x10) = size;
-    *(f32*)((s32)work + 0x14) = one;
-    *(f32*)((s32)work + 0x18) = one;
+    work->pos = pos;
+    work->size = size;
+    work->scaleX = one;
+    work->scaleY = one;
     return entry;
 }
 #pragma no_register_save_helpers off

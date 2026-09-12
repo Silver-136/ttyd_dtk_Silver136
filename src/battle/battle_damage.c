@@ -70,114 +70,344 @@ typedef struct BattleWeaponPreCheck {
 /* AUTOSTUB BattleDamageDirect size 0xB24 */
 void BattleDamageDirect(s32 unitIdx, BattleWorkUnit* unit, BattleWorkUnitPart* part,
                         s32 damage, s32 fpDamage, s32 flags, s32 hitEffect, s32 runEvent) {
-    extern BattleWork* _battleWorkPointer;
-    extern BattleWorkUnit* BattleGetUnitPtr(BattleWork*, s32);
     extern BattleWorkUnitPart* BtlUnit_GetPartsPtr(BattleWorkUnit*, s32);
     extern s32 BtlUnit_GetBodyPartsId(BattleWorkUnit*);
     extern s32 BtlUnit_GetFp(BattleWorkUnit*);
     extern void BtlUnit_SetFp(BattleWorkUnit*, s32);
-    extern u32 BtlUnit_GetBelong(BattleWorkUnit*);
-    extern void effHitEntry(void);
-    extern void effIceN64Entry(f32, f32, f32, s32);
-    extern void effKemuri12N64Entry(f32, f32, f32, f32, s32, s32);
+    extern s32 BtlUnit_GetBelong(BattleWorkUnit*);
+    extern void BtlUnit_RecoverFp(BattleWorkUnit*, s32);
+    extern s32 BtlUnit_GetHeight(BattleWorkUnit*);
+    extern s32 BtlUnit_CheckRecoveryStatus(BattleWorkUnit*, s32);
+    extern void effHitEntry(s32, s32, f32, f32, f32, f32);
+    extern void effIceN64Entry(s32, f32, f32, f32);
+    extern void effKemuri12N64Entry(s32, s32, f32, f32, f32, f32);
     extern void effDamageStarEntry(f32, f32, f32, f32, f32, s32, s32);
+    extern void effFukidashiEntry(f32, f32, f32, f32, f32, s32, s32, s32, s32);
+    extern void effRecoveryEntry(s32, s32, f32, f32, f32);
+    extern void psndSFXOn_3D(const char*, Vec*);
+    extern void BtlActRec_AddCount(void*);
+    extern void BtlActRec_AddPoint(void*, u32);
+    extern void BattleAudience_Case_MarioBigDamage(s32);
+    extern void BattleAudience_Case_PartyDown(void);
+    extern void BattleAudience_Case_KillEnemy(s32);
+    extern void BattleAudience_Case_FinalAttack(void);
+    extern s32 _checkDamageCode_EmergencyRevival(s32, u32*);
     extern void BattleRunHitEvent(BattleWorkUnit*, s32);
-    f32 hitX;
-    f32 hitY;
-    f32 hitZ;
-    s32 fp;
-    BattleWorkUnit* attacker;
+    extern const char str_SFX_MARIO_HAMMER_PIK_802ee2e0[];
+    extern const char str_SFX_MARIO_HAMMER_PIK_802ee2fc[];
+    extern const char str_SFX_MARIO_HAMMER_PIK_802ee318[];
+    extern const char str_SFX_MARIO_HAMMER_PIK_802ee334[];
+    extern const char str_SFX_MARIO_HAMMER_PIK_802ee350[];
+    extern const char str_SFX_MARIO_GUARD1_802ee36c[];
+    extern const char str_SFX_MARIO_DAMAGE_FP1_802ee380[];
+    extern f32 float_0_804221ec;
 
+    BattleWork* battleWork;
+    BattleWorkUnit* attacker;
+    Vec hitPos;
+    f32 effectX, effectY, effectZ;
+    f32 rushX, rushY, rushZ;
+    f32 missX, missY, missZ;
+    f32 recoveryX, recoveryY, recoveryZ;
+    f32 pityX, pityY, pityZ;
+    f32 sleepX, sleepY, sleepZ;
+    s32 fp;
+    s32 amount;
+    s32 i;
+    s32 recoverCount;
+    u32 kind;
+    s32 height;
+    union {
+        f64 value;
+        u32 words[2];
+    } intToFloat;
+
+    battleWork = _battleWorkPointer;
     if (unitIdx == -5) {
-        attacker = 0;
+        attacker = NULL;
     } else {
-        attacker = BattleGetUnitPtr(_battleWorkPointer, unitIdx);
+        attacker = BattleGetUnitPtr(battleWork, unitIdx);
     }
+
     if (damage >= 100) {
         damage = 99;
     } else if (damage < -99) {
         damage = -99;
     }
-    if (attacker != 0) {
+
+    if (attacker != NULL) {
         *(s32*)((s32)attacker + 0x284) += damage;
     }
-    if (part == 0) {
+
+    if (part != NULL) {
+        *(BattleWorkUnitPart**)((s32)unit + 0x258) = part;
+    } else {
         part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+        *(BattleWorkUnitPart**)((s32)unit + 0x258) = part;
     }
-    *(BattleWorkUnitPart**)((s32)unit + 0x258) = part;
+
     *(u32*)((s32)unit + 0x274) = hitEffect;
-    if ((*(u32*)((s32)unit + 0x104) & 0x200000) != 0 &&
-        (hitEffect == 0x15 || hitEffect - 0x16 < 2 || hitEffect == 0x18)) {
-        *(u32*)((s32)unit + 0x274) = 0;
-    }
-    BtlUnit_GetHitPos(unit, part, &hitX, &hitY, &hitZ);
-
-    if ((flags & 0x2000) == 0 && damage == 0 && fpDamage == 0) {
-        BtlUnit_GetHitPos(unit, part, &hitX, &hitY, &hitZ);
-        if (hitEffect != 2 && hitEffect != 3 && hitEffect != 0x15 && hitEffect != 0x16 &&
-            hitEffect != 0x14 && hitEffect != 0x13 && hitEffect != 0x1B && hitEffect != 7 &&
-            (flags & 0xFF) != 0x16) {
-            effMissStarEntry(hitX, hitY, hitZ, (flags & 0x20000) != 0, 1,
-                             BtlUnit_GetBelong(unit) == 0 ? -1 : 1);
+    if ((unit->attributes & 0x200000) != 0) {
+        kind = *(u32*)((s32)unit + 0x274);
+        if (kind == 0x15 || kind - 0x16 < 2 || kind == 0x18) {
+            *(u32*)((s32)unit + 0x274) = 0;
         }
     }
 
-    if ((flags & 0x2000) == 0 && (damage != 0 || fpDamage != 0)) {
-        BtlUnit_GetHitPos(unit, part, &hitX, &hitY, &hitZ);
-        if ((flags & 0xFF) == 0x1A) {
-            effIceN64Entry(hitX, hitY, hitZ, 0);
-        } else if ((flags & 0xFF) >= 0x18 && (flags & 0xFF) < 0x1A) {
-            effKemuri12N64Entry(hitX, hitY, hitZ, 1.0f, 0, 0x1E);
-        }
-        effHitEntry();
-        if (BtlUnit_GetBelong(unit) == 0) {
-            if (damage != 0 && (*(u32*)((s32)unit + 0x104) & 0x400000) == 0) {
-                effDamageStarEntry(hitX - 8.0f, hitY + 5.0f, hitZ, 10.0f, 30.0f, 0, damage);
+    BtlUnit_GetHitPos(unit, part, &hitPos.x, &hitPos.y, &hitPos.z);
+
+    if ((flags & 0x2000) == 0) {
+        if (damage != 0 || fpDamage != 0) {
+            BtlUnit_GetHitPos(unit, part, &effectX, &effectY, &effectZ);
+            kind = flags & 0xFF;
+            if (kind == 0x1A) {
+                effIceN64Entry(0, effectX, effectY, effectZ);
+                effHitEntry(3, 3, effectX, effectY, effectZ, 1.0f);
+            } else if (kind < 0x1A) {
+                if (kind >= 0x18) {
+                    effKemuri12N64Entry(0, 0x1E, effectX, effectY, effectZ, 1.0f);
+                    effHitEntry(1, 3, effectX, effectY, effectZ, 1.0f);
+                } else {
+                    effHitEntry(0, 3, effectX, effectY, effectZ, 1.0f);
+                }
+            } else if (kind < 0x1C) {
+                effHitEntry(2, 3, effectX, effectY, effectZ, 1.0f);
+            } else {
+                effHitEntry(0, 3, effectX, effectY, effectZ, 1.0f);
             }
-            if (fpDamage != 0) {
-                effDamageStarEntry(hitX - 8.0f, hitY + 5.0f, hitZ, 10.0f,
-                                   damage == 0 ? 30.0f : 60.0f, 1, fpDamage);
+
+            if ((s8)BtlUnit_GetBelong(unit) == 0) {
+                if (damage != 0 && (unit->attributes & 0x400000) == 0) {
+                    effDamageStarEntry(effectX - 8.0f, effectY + 5.0f, effectZ,
+                                       10.0f, 30.0f, 0, damage);
+                }
+                if (fpDamage != 0) {
+                    if (damage != 0) {
+                        effDamageStarEntry(effectX - 8.0f, effectY + 5.0f, effectZ,
+                                           10.0f, 60.0f, 1, fpDamage);
+                    } else {
+                        effDamageStarEntry(effectX - 8.0f, effectY + 5.0f, effectZ,
+                                           10.0f, 30.0f, 1, fpDamage);
+                    }
+                }
+            } else {
+                if (damage != 0 && (unit->attributes & 0x400000) == 0) {
+                    effDamageStarEntry(effectX, effectY + 10.0f, effectZ,
+                                       10.0f, -30.0f, 0, damage);
+                }
+                if (fpDamage != 0) {
+                    if (damage != 0) {
+                        effDamageStarEntry(effectX, effectY + 10.0f, effectZ,
+                                           10.0f, -60.0f, 1, fpDamage);
+                    } else {
+                        effDamageStarEntry(effectX, effectY + 10.0f, effectZ,
+                                           10.0f, -30.0f, 1, fpDamage);
+                    }
+                }
+            }
+
+            if (unitIdx != -5 && attacker != NULL &&
+                *(u8*)((s32)attacker + 0x2E7) != 0 &&
+                attacker->currentHP <= attacker->data->perilHP) {
+                BtlUnit_GetHitPos(unit, part, &rushX, &rushY, &rushZ);
+                effFukidashiEntry(rushX, rushY, rushZ, 10.0f, float_0_804221ec, 0, 0, 0, 0x3C);
             }
         } else {
-            if (damage != 0 && (*(u32*)((s32)unit + 0x104) & 0x400000) == 0) {
-                effDamageStarEntry(hitX, hitY + 10.0f, hitZ, 10.0f, -30.0f, 0, damage);
+            BtlUnit_GetHitPos(unit, part, &missX, &missY, &missZ);
+            if (hitEffect != 2 && hitEffect != 3 && hitEffect != 0x15 && hitEffect != 0x16 &&
+                hitEffect != 0x14 && hitEffect != 0x13 && hitEffect != 0x1B && hitEffect != 7 &&
+                (flags & 0xFF) != 0x16) {
+                s32 seed = ((s8)BtlUnit_GetBelong(unit) == 0) ? -1 : 1;
+                if ((flags & 0x20000) != 0) {
+                    effMissStarEntry(missX, missY, missZ, 1, 1, seed);
+                } else {
+                    effMissStarEntry(missX, missY, missZ, 0, 1, seed);
+                }
             }
-            if (fpDamage != 0) {
-                effDamageStarEntry(hitX, hitY + 10.0f, hitZ, 10.0f,
-                                   damage == 0 ? -30.0f : -60.0f, 1, fpDamage);
+        }
+    } else {
+        BtlUnit_GetHitPos(unit, part, &recoveryX, &recoveryY, &recoveryZ);
+        amount = damage;
+        if (amount < 0) {
+            amount = -amount;
+        }
+        effRecoveryEntry(0, amount, recoveryX, recoveryY, recoveryZ);
+    }
+
+    if ((flags & 0x2000) == 0 && damage > 0) {
+        i = *(u8*)((s32)unit + 0x2F8);
+        recoverCount = 0;
+        while (i > 0) {
+            if (irand(100) < 30) {
+                recoverCount++;
+            }
+            i--;
+        }
+        if (recoverCount > 0) {
+            BtlUnit_RecoverFp(unit, recoverCount);
+            BtlUnit_GetPos(unit, &pityX, &pityY, &pityZ);
+            height = BtlUnit_GetHeight(unit);
+            intToFloat.words[0] = 0x43300000;
+            intToFloat.words[1] = (u32)height ^ 0x80000000;
+            pityY += unit->sizeMultiplier *
+                     (f32)(intToFloat.value - double_to_int_802ee0a8) + 5.0f;
+            effRecoveryEntry(1, recoverCount, pityX, pityY, pityZ);
+        }
+    }
+
+    if (hitEffect != 0x13 && hitEffect != 0x1B) {
+        if ((flags & 0x01000000) != 0) {
+            psndSFXOn_3D(str_SFX_MARIO_HAMMER_PIK_802ee2e0, &hitPos);
+        } else if ((flags & 0x02000000) != 0) {
+            psndSFXOn_3D(str_SFX_MARIO_HAMMER_PIK_802ee2fc, &hitPos);
+        } else if ((flags & 0x04000000) != 0) {
+            psndSFXOn_3D(str_SFX_MARIO_HAMMER_PIK_802ee318, &hitPos);
+        } else if ((flags & 0x08000000) != 0) {
+            psndSFXOn_3D(str_SFX_MARIO_HAMMER_PIK_802ee334, &hitPos);
+        } else if ((flags & 0x10000000) != 0) {
+            psndSFXOn_3D(str_SFX_MARIO_HAMMER_PIK_802ee350, &hitPos);
+        } else if ((s8)BtlUnit_GetBelong(unit) == 0 && (flags & 0x40000) != 0) {
+            psndSFXOn_3D(str_SFX_MARIO_GUARD1_802ee36c, &hitPos);
+        } else {
+            if (damage > 0) {
+                kind = flags & 0xFF;
+                if (kind == 0x1A) {
+                    psndSFXOn_3D(*(const char**)((s32)unit->data + 0xA4), &hitPos);
+                    psndSFXOn_3D(*(const char**)((s32)unit->data + 0x9C), &hitPos);
+                } else if (kind < 0x1A) {
+                    if (kind == 0x18) {
+                        psndSFXOn_3D(*(const char**)((s32)unit->data + 0xA0), &hitPos);
+                        psndSFXOn_3D(*(const char**)((s32)unit->data + 0x9C), &hitPos);
+                    } else {
+                        psndSFXOn_3D(*(const char**)((s32)unit->data + 0x9C), &hitPos);
+                    }
+                } else if (kind < 0x1C) {
+                    psndSFXOn_3D(*(const char**)((s32)unit->data + 0xA8), &hitPos);
+                    psndSFXOn_3D(*(const char**)((s32)unit->data + 0x9C), &hitPos);
+                } else {
+                    psndSFXOn_3D(*(const char**)((s32)unit->data + 0x9C), &hitPos);
+                }
+            }
+            if (fpDamage > 0 && (s8)BtlUnit_GetBelong(unit) == 0) {
+                psndSFXOn_3D(str_SFX_MARIO_DAMAGE_FP1_802ee380, &hitPos);
             }
         }
     }
 
-    *(s8*)((s32)unit + 0x270) = damage;
-    *(s32*)((s32)unit + 0x264) += *(s8*)((s32)unit + 0x270);
-    *(s8*)((s32)unit + 0x271) = fpDamage;
-    *(s8*)((s32)unit + 0x272) = fpDamage;
-    *(s32*)((s32)unit + 0x268) += *(s8*)((s32)unit + 0x271);
-    if ((flags & 0x2000) == 0 && (damage != 0 || fpDamage != 0)) {
-        if ((*(u32*)((s32)unit + 0x104) & 0x40000000) == 0) {
-            *(s32*)((s32)unit + 0x208) = *(s16*)((s32)unit + 0x10C);
-            *(s16*)((s32)unit + 0x10C) -= *(s8*)((s32)unit + 0x270);
-            if (*(s16*)((s32)unit + 0x10C) > *(s16*)((s32)unit + 0x108)) {
-                *(s16*)((s32)unit + 0x10C) = *(s16*)((s32)unit + 0x108);
-            }
-            if (*(s16*)((s32)unit + 0x10C) < 0) {
-                *(s16*)((s32)unit + 0x10C) = 0;
-            }
+    unit->hpDamageTaken = (s8)damage;
+    unit->totalHpDamageTaken += unit->hpDamageTaken;
+    unit->fpDamageTaken = (s8)fpDamage;
+    *(s8*)((s32)unit + 0x272) = (s8)fpDamage;
+    unit->totalFpDamageTaken += unit->fpDamageTaken;
+
+    if ((unit->attributes & 0x40000000) == 0 && (part->attributes & 0x800000) == 0) {
+        unit->healthGauge.unkC = unit->currentHP;
+        unit->currentHP -= unit->hpDamageTaken;
+        if (unit->currentHP > unit->currentMaxHP) {
+            unit->currentHP = unit->currentMaxHP;
         }
-        if (fpDamage != 0) {
-            fp = BtlUnit_GetFp(unit) - (s8)fpDamage;
-            if (fp < 0) {
-                *(s8*)((s32)unit + 0x272) = BtlUnit_GetFp(unit);
-                fp = 0;
-            }
-            BtlUnit_SetFp(unit, fp);
-            *(s32*)((s32)unit + 0x26C) += *(s8*)((s32)unit + 0x272);
+        if (unit->currentHP < 0) {
+            unit->currentHP = 0;
+        }
+        unit->healthGauge.unk10 = unit->currentHP;
+        if (unit->hpDamageTaken != 0) {
+            unit->healthGauge.unk4 = unit->healthGauge.unk6;
+            unit->healthGauge.unk8 = unit->healthGauge.unkA;
+        }
+        if ((flags & 0x100) != 0) {
+            unit->healthGauge.unk2 |= 1;
+        } else {
+            unit->healthGauge.unk2 &= 0xFFFE;
         }
     }
-    if (runEvent != 0) {
-        BattleRunHitEvent(unit, flags);
+
+    if (unit->fpDamageTaken != 0) {
+        fp = BtlUnit_GetFp(unit);
+        if (fp < fpDamage) {
+            *(s8*)((s32)unit + 0x272) = (s8)fp;
+        } else {
+            *(s8*)((s32)unit + 0x272) = (s8)fpDamage;
+        }
+        fp -= fpDamage;
+        if (fp < 0) {
+            fp = 0;
+        }
+        BtlUnit_SetFp(unit, fp);
+        unit->totalFpLost += *(s8*)((s32)unit + 0x272);
     }
+
+    if (damage > 0) {
+        if (unit->currentType == 0xDE) {
+            BtlActRec_AddCount((void*)((s32)battleWork + 0x16F3E));
+            BtlActRec_AddPoint((void*)((s32)battleWork + 0x16F3C), (u8)damage);
+        } else if (unit->currentType >= 0xE0 && unit->currentType < 0xE7) {
+            BtlActRec_AddCount((void*)((s32)battleWork + 0x16F3F));
+            BtlActRec_AddPoint((void*)((s32)battleWork + 0x16F3D), (u8)damage);
+        }
+    }
+
+    if (runEvent != 0 && (damage > 0 || fpDamage > 0) &&
+        BtlUnit_CheckStatus(unit, STATUS_SLEEP) != 0 && irand(100) < 50) {
+        *(s8*)((s32)unit + 0x118) = 1;
+        *(s8*)((s32)unit + 0x119) = 100;
+        BtlUnit_CheckRecoveryStatus(unit, STATUS_SLEEP);
+        BtlUnit_GetPos(unit, &sleepX, &sleepY, &sleepZ);
+        height = BtlUnit_GetHeight(unit) / 2;
+        intToFloat.words[0] = 0x43300000;
+        intToFloat.words[1] = (u32)height ^ 0x80000000;
+        sleepY += (f32)(intToFloat.value - double_to_int_802ee0a8);
+        effFukidashiEntry(sleepX, sleepY, sleepZ, 10.0f, float_0_804221ec, 0, 0, 0, 0x3C);
+    }
+
+    if (unit->currentType == 0xDE) {
+        BattleAudience_Case_MarioBigDamage(unit->hpDamageTaken);
+    }
+
+    if (unit->currentHP > 0) {
+        if (*(u32*)((s32)unit + 0x274) == 0x19) {
+            *(u32*)((s32)unit + 0x274) = 0;
+        }
+    } else {
+        unit->currentHP = 0;
+        if ((flags & 0x100) != 0) {
+            flags |= 0x200;
+            if ((unit->attributes & 0x10000) == 0) {
+                flags |= 0x400;
+                _checkDamageCode_EmergencyRevival((s32)unit, (u32*)&flags);
+            } else {
+                u32 code = flags & 0xFF;
+                if (code == 0x18 || code == 0x19 || code == 0x2E ||
+                    code == 0x31 || code == 0x32 || code == 0x36) {
+                    flags |= 0x400;
+                }
+            }
+
+            if (*(u32*)((s32)unit + 0x274) == 0x19) {
+                s32 clearPattern = 1;
+                if ((flags & 0x400) != 0 && (flags & 0x800) == 0 &&
+                    (flags & 0x100) != 0 &&
+                    *(u8*)(*(s32*)((s32)unit + 0x144) + 0x10) != 0) {
+                    clearPattern = 0;
+                }
+                if (clearPattern != 0) {
+                    *(u32*)((s32)unit + 0x274) = 0;
+                }
+            }
+
+            if ((flags & 0x400) != 0) {
+                if (unit->currentType >= 0xE0 && unit->currentType < 0xE7) {
+                    BattleAudience_Case_PartyDown();
+                }
+                if (unit->currentType >= 1 && unit->currentType < 0xD8) {
+                    BattleAudience_Case_KillEnemy(*(u8*)((s32)unit + 0xD));
+                    BattleAudience_Case_FinalAttack();
+                }
+            }
+        }
+    }
+
+    unit->tokenFlags |= 1;
+    BattleRunHitEvent(unit, flags);
 }
 
 /* MANUAL_AUTOMATION_STUBS_END main/battle/battle_damage */

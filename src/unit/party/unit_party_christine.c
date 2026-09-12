@@ -39,6 +39,20 @@ s32 krb_get_dir(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void __makeTechMenuFunc(void* commandWork, s32* count) {
+    typedef struct TechMenuEntry {
+        char** name;
+        s32 value;
+        char* message;
+        u16 icon;
+        u16 pad_e;
+        s32 field_10;
+        s32 field_14;
+        s32 pad_18;
+    } TechMenuEntry;
+    typedef struct TechMenuWork {
+        u8 pad_0[0x80];
+        TechMenuEntry entries[1];
+    } TechMenuWork;
     extern void* BattleGetPartyPtr(void* battleWork);
     extern s32 BattleTransPartyId(s32 id);
     extern s32 partyGetTechLv(s32 partyId);
@@ -47,52 +61,46 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
     s32 techLv;
     void* party;
     u8* data;
+    TechMenuWork* work;
 
+    data = lbl_80393A58 + 0x450;
+    work = commandWork;
     party = BattleGetPartyPtr(_battleWorkPointer);
     techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
 
-    data = lbl_80393A58;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-    *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x450;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-    *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-        *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-    *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-        msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+    work->entries[*count].field_10 = -1;
+    work->entries[*count].field_14 = 0;
+    work->entries[*count].name = (char**)(data + 0x0);
+    work->entries[*count].value = 0;
+    work->entries[*count].icon = *(u16*)(work->entries[*count].name + 1);
+    work->entries[*count].message = msgSearch(*work->entries[*count].name);
     *count = *count + 1;
 
     if (techLv >= 0) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x510;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        work->entries[*count].field_10 = -1;
+        work->entries[*count].field_14 = 0;
+        work->entries[*count].name = (char**)(data + 0xC0);
+        work->entries[*count].value = 0;
+        work->entries[*count].icon = *(u16*)(work->entries[*count].name + 1);
+        work->entries[*count].message = msgSearch(*work->entries[*count].name);
         *count = *count + 1;
     }
     if (techLv >= 1) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x5D0;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        work->entries[*count].field_10 = -1;
+        work->entries[*count].field_14 = 0;
+        work->entries[*count].name = (char**)(data + 0x180);
+        work->entries[*count].value = 0;
+        work->entries[*count].icon = *(u16*)(work->entries[*count].name + 1);
+        work->entries[*count].message = msgSearch(*work->entries[*count].name);
         *count = *count + 1;
     }
     if (techLv >= 2) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x690;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        work->entries[*count].field_10 = -1;
+        work->entries[*count].field_14 = 0;
+        work->entries[*count].name = (char**)(data + 0x240);
+        work->entries[*count].value = 0;
+        work->entries[*count].icon = *(u16*)(work->entries[*count].name + 1);
+        work->entries[*count].message = msgSearch(*work->entries[*count].name);
         *count = *count + 1;
     }
 }

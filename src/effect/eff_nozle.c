@@ -2,7 +2,7 @@
 
 /* stub-fill: effNozleEntry | missing_definition | ghidra_signature */
 void* effNozleEntry(s32 mode, f32 x, f32 y, f32 z, s32 timer, f32 arg5, f32 arg6) {
-    extern void effKemuTestEntry(s32 kind, f32 x, f32 y, f32 z, f32 scale);
+    extern void* effKemuTestEntry(s32 kind, f32 x, f32 y, f32 z, f32 scale);
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effNozleMain(void* effect);
@@ -18,13 +18,16 @@ void* effNozleEntry(s32 mode, f32 x, f32 y, f32 z, s32 timer, f32 arg5, f32 arg6
     s32 i;
 
     if (mode == 1) {
-        effKemuTestEntry(3, x, y, z, float_1_80427790);
-        return 0;
+        return effKemuTestEntry(3, x, y, z, float_1_80427790);
     }
 
     effect = effEntry();
     count = 1;
-    if (mode == 3) {
+    if (mode < 3) {
+        if (mode >= 0) {
+            count = 1;
+        }
+    } else if (mode == 3) {
         count = 4;
     }
     *(const char**)((s32)effect + 0x14) = str_Nozle_804277bc;
@@ -40,12 +43,20 @@ void* effNozleEntry(s32 mode, f32 x, f32 y, f32 z, s32 timer, f32 arg5, f32 arg6
     *(f32*)((s32)work + 0xC) = z;
     *(f32*)((s32)work + 0x10) = (mode == 3) ? float_1_80427790 : float_0_8042778c;
     *(f32*)((s32)work + 0x14) = (mode == 3) ? float_1_80427790 : float_0_8042778c;
-    *(f32*)((s32)work + 0x28) = float_1_80427790;
-    *(f32*)((s32)work + 0x1C) = float_0_8042778c;
-    *(f32*)((s32)work + 0x18) = float_0_8042778c;
-    *(f32*)((s32)work + 0x24) = float_0_8042778c;
-    *(f32*)((s32)work + 0x20) = float_0_8042778c;
-    *(s32*)((s32)work + 0x2C) = (timer <= 0) ? 1000 : timer;
+    {
+        f32 one = float_1_80427790;
+        f32 zero = float_0_8042778c;
+        *(f32*)((s32)work + 0x28) = one;
+        *(f32*)((s32)work + 0x1C) = zero;
+        *(f32*)((s32)work + 0x18) = zero;
+        *(f32*)((s32)work + 0x24) = zero;
+        *(f32*)((s32)work + 0x20) = zero;
+    }
+    if (timer > 0) {
+        *(s32*)((s32)work + 0x2C) = timer;
+    } else {
+        *(s32*)((s32)work + 0x2C) = 1000;
+    }
     *(s32*)((s32)work + 0x30) = 0;
     *(s32*)((s32)work + 0x34) = 0xFF;
     *(f32*)((s32)work + 0x3C) = arg5;
@@ -53,16 +64,28 @@ void* effNozleEntry(s32 mode, f32 x, f32 y, f32 z, s32 timer, f32 arg5, f32 arg6
 
     child = (void*)((s32)work + 0x44);
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, child = (void*)((s32)child + 0x44)) {
-        s32 sign = (i & 1) ? -1 : 1;
+        s32 sign;
+        f32 one = float_1_80427790;
+        f32 zero = float_0_8042778c;
+        if (i & 1) {
+            sign = -1;
+        } else {
+            sign = 1;
+        }
         *(f32*)((s32)child + 4) = (f32)(sign * 0x190);
-        *(f32*)((s32)child + 8) = float_0_8042778c;
+        *(f32*)((s32)child + 8) = zero;
         *(f32*)((s32)child + 0xC) = float_20_804277c4 * (f32)i;
-        *(f32*)((s32)child + 0x10) = (f32)-sign;
-        *(f32*)((s32)child + 0x14) = float_1_80427790;
-        *(f32*)((s32)child + 0x1C) = float_0_8042778c;
-        *(f32*)((s32)child + 0x18) = float_0_8042778c;
-        *(f32*)((s32)child + 0x24) = float_0_8042778c;
-        *(f32*)((s32)child + 0x20) = float_0_8042778c;
+        if (i & 1) {
+            sign = 1;
+        } else {
+            sign = -1;
+        }
+        *(f32*)((s32)child + 0x10) = (f32)sign;
+        *(f32*)((s32)child + 0x14) = one;
+        *(f32*)((s32)child + 0x1C) = zero;
+        *(f32*)((s32)child + 0x18) = zero;
+        *(f32*)((s32)child + 0x24) = zero;
+        *(f32*)((s32)child + 0x20) = zero;
         *(s32*)((s32)child + 0x34) = 0xFF;
         *(s32*)((s32)child + 0x38) = 0;
     }
@@ -256,6 +279,7 @@ void effNozleDisp(s32 cameraId, void* effect) {
     extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevColor(s32, void*);
     extern void GXSetCullMode(s32);
     extern void GXLoadTexObj(void*, s32);
     extern void effGetTexObj(s32, void*);
@@ -288,6 +312,15 @@ void effNozleDisp(s32 cameraId, void* effect) {
     extern u8 nozle_3_dl_0_size_tbl[];
     extern void* nozle_3_dl_1_tbl[];
     extern u8 nozle_3_dl_1_size_tbl[];
+    extern s16 nozle_4_vertex_tbl[];
+    extern s8 nozle_4_normal_tbl[];
+    extern u8 nozle_4_color0_tbl[];
+    extern s16 nozle_4_texcoord0_tbl[];
+    extern s16 nozle_4_texcoord1_tbl[];
+    extern void* nozle_4_dl_0_tbl[];
+    extern u8 nozle_4_dl_0_size_tbl[];
+    extern u32 unk_804298a8;
+    extern f32 float_1_80427790;
 
     s32* work = *(s32**)((u8*)effect + 0xC);
     u8* camera = camGetPtr(cameraId);
@@ -297,6 +330,7 @@ void effNozleDisp(s32 cameraId, void* effect) {
     f32 m2[3][4];
     f32 model[3][4];
     f32 scale = *(f32*)(work + 10);
+    s32 alpha = work[13];
     s32 i;
 
     GXSetBlendMode(1, 4, 5, 0);
@@ -430,6 +464,67 @@ void effNozleDisp(s32 cameraId, void* effect) {
         GXSetArray(14, nozle_1_texcoord1_tbl, 4);
         for (i = 0; i < 10; i++) {
             GXCallDisplayList(nozle_1_dl_1_tbl[i], (u32)nozle_1_dl_1_size_tbl[i] << 5);
+        }
+    } else if (*work == 3) {
+        u32 colorCopy;
+        u32 color = unk_804298a8;
+        u8* part = (u8*)work;
+
+        GXSetTevAlphaIn(0, 7, 1, 4, 7);
+        ((u8*)&color)[3] = (u8)alpha;
+        colorCopy = color;
+        GXSetTevColor(1, &colorCopy);
+
+        for (i = 1; i < *(s32*)((u8*)effect + 8); i++, part += 0x44) {
+            PSMTXTrans(m0,
+                       *(f32*)(part + 0x5C),
+                       -*(f32*)(part + 0x60),
+                       0.0f);
+            GXLoadTexMtxImm(m0, 0x1E, 1);
+            PSMTXTrans(m0,
+                       *(f32*)(part + 0x64),
+                       -*(f32*)(part + 0x68),
+                       0.0f);
+            GXLoadTexMtxImm(m0, 0x21, 1);
+            PSMTXTrans(m0,
+                       *(f32*)(part + 0x48),
+                       *(f32*)(part + 0x4C),
+                       *(f32*)(part + 0x50));
+            PSMTXScale(m2,
+                       *(f32*)(part + 0x54),
+                       *(f32*)(part + 0x58),
+                       float_1_80427790);
+            PSMTXConcat(m0, m2, m2);
+            PSMTXConcat(model, m2, m2);
+            GXLoadPosMtxImm(m2, 0);
+
+            GXClearVtxDesc();
+            GXSetVtxDesc(9, 2);
+            GXSetVtxAttrFmt(0, 9, 1, 3, 6);
+            GXSetArray(9, nozle_4_vertex_tbl, 6);
+            GXSetVtxDesc(10, 2);
+            GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+            GXSetArray(10, nozle_4_normal_tbl, 3);
+            GXSetVtxDesc(11, 2);
+            GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+            GXSetArray(11, nozle_4_color0_tbl, 4);
+            GXSetVtxDesc(13, 2);
+            GXSetVtxAttrFmt(0, 13, 1, 3, 13);
+            GXSetArray(13, nozle_4_texcoord0_tbl, 4);
+            GXSetVtxDesc(14, 2);
+            GXSetVtxAttrFmt(0, 14, 1, 3, 13);
+            GXSetArray(14, nozle_4_texcoord1_tbl, 4);
+            {
+                void** dl = nozle_4_dl_0_tbl;
+                u8* size = nozle_4_dl_0_size_tbl;
+                u32 j = 0;
+                do {
+                    GXCallDisplayList(*dl, (u32)*size << 5);
+                    j++;
+                    dl++;
+                    size++;
+                } while (j < 8);
+            }
         }
     }
 }

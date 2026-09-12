@@ -187,14 +187,11 @@ void effBalloonDisp(s32 cameraId, void* effect) {
     s32 i;
 
     if (type == 0) {
-        effGetTexObjN64(0x5F, texObj);
-        GXLoadTexObj(texObj, 0);
+        effGetTexObjN64(0x5F, texObj); GXLoadTexObj(texObj, 0);
     } else if (type == 1) {
-        effGetTexObjN64(0x5E, texObj);
-        GXLoadTexObj(texObj, 0);
+        effGetTexObjN64(0x5E, texObj); GXLoadTexObj(texObj, 0);
     } else {
-        effGetTexObjN64(0x5D, texObj);
-        GXLoadTexObj(texObj, 0);
+        effGetTexObjN64(0x5D, texObj); GXLoadTexObj(texObj, 0);
     }
     GXSetNumChans(0);
     GXSetNumTexGens(1);
@@ -207,20 +204,17 @@ void effBalloonDisp(s32 cameraId, void* effect) {
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
     GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xC);
     GXSetTevAlphaIn(0, 7, 7, 7, 4);
-
     PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
     memcpy(vertices, balloon_vtx + 7, 0xE);
     vec.x = vertices[0]; vec.y = vertices[1]; vec.z = vertices[2];
     PSMTXMultVec(trans, &vec, &vec);
     vertices[0] = (s16)vec.x; vertices[1] = (s16)vec.y; vertices[2] = (s16)vec.z;
-
     PSMTXRotRad(rot, 0x7A, float_deg2rad_80424cc0 * *(f32*)(work + 0x10));
     PSMTXConcat(trans, rot, billboard);
     PSMTXRotRad(rot, 0x79, float_deg2rad_80424cc0 * -*(f32*)((u8*)camGetPtr(4) + 0x114));
     PSMTXTrans(trans, *(f32*)(work + 0xC4), *(f32*)(work + 0xC8), float_0_80424cbc);
     PSMTXConcat(rot, trans, model);
     PSMTXConcat(billboard, model, model);
-
     memcpy(vertices + 7, balloon_vtx, 0xE);
     vec.x = vertices[7]; vec.y = vertices[8]; vec.z = vertices[9];
     PSMTXMultVec(model, &vec, &vec);
@@ -245,14 +239,18 @@ void effBalloonDisp(s32 cameraId, void* effect) {
     if (type < 100) {
         GXBegin(0x90, 0, 3);
         tri1(0x15, 2, 1);
+        for (i = 0; i < 0x13; i++) {
+            GXBegin(0x90, 0, 3);
+            tri1(1, i + 2, i + 3);
+        }
     } else {
         GXBegin(0x90, 0, 6);
         tri1(0, 1, 2);
         tri1(0, 0x15, 1);
-    }
-    for (i = 0; i < 0x13; i++) {
-        GXBegin(0x90, 0, 3);
-        tri1(1, i + 2, i + 3);
+        for (i = 0; i < 0x13; i++) {
+            GXBegin(0x90, 0, 3);
+            tri1(1, i + 2, i + 3);
+        }
     }
 }
 

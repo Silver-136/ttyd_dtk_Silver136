@@ -342,7 +342,7 @@ void effStageClearDisp(s32 cameraId, void* effect) {
     u8* base=*(u8**)((u8*)effect+0xC); void* cam; Mtx baseMtx,trans,scale,model,perspective,lookAt; TexObj tex;
     Vec eye,target,up;
     f32 projection[7]; f32 viewport[6];
-    s32 type=*(s32*)base; s32 frame=*(s32*)(base+0x1C); s32 i; s32 pass; u8* child;
+    s32 type=*(s32*)base; s32 frame=*(s32*)(base+0x1C); s32 i; s32 pass; s32 kind; u8* child;
     f32 size=float_0p9_80427450*float_1p7_80427454**(f32*)(base+0x14);
     camGetPtr(cameraId);
     if(*(s32*)((u8*)gp+0x16C)!=0) size*=float_0p6_80427458;
@@ -353,36 +353,47 @@ void effStageClearDisp(s32 cameraId, void* effect) {
     PSMTXScale(scale,size,size,size);PSMTXConcat(trans,scale,baseMtx);GXSetNumChans(0);GXSetNumTexGens(2);
     GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);GXSetTexCoordGen2(1,1,0,0x1E,0,0x7D);GXSetCullMode(0);GXClearVtxDesc();
     GXSetVtxDesc(9,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,13,1,4,0);
+    kind=type%10;
     for(pass=1;pass>=0;pass--){
         child=base+0x2C;
         for(i=1;i<*(s32*)((u8*)effect+8);i++,child+=0x2C){
-            if(type%10==0 && pass==0) {
-                s32 lang=*(s32*)((u8*)gp+0x16C);
-                s32 texId=texid_tbl[lang].ids[i-1];
-                u32 tevColor;
-                if(texId==-1) continue;
-                effGetTexObj(texId,tex); GXLoadTexObj(tex,0);
-                effGetTexObj(niji_tbl[lang],tex); GXLoadTexObj(tex,1);
-                GXSetNumTevStages(3); GXSetTevOrder(0,0,0,0xFF);
-                GXSetTevColorOp(0,0xE,0,0,1,0); GXSetTevAlphaOp(0,0xE,0,0,1,0);
-                GXSetTevColorIn(0,8,15,8,15); GXSetTevAlphaIn(0,4,7,4,7);
-                GXSetTevSwapModeTable(1,0,1,2,0); GXSetTevSwapMode(0,1,1);
-                GXSetTevOrder(1,1,1,0xFF); GXSetTevColorOp(1,0,0,0,1,0); GXSetTevAlphaOp(1,0,0,0,1,0);
-                GXSetTevColorIn(1,15,0,8,15); GXSetTevAlphaIn(1,7,7,7,0);
-                GXSetTevOrder(2,0,0,0xFF); GXSetTevColorOp(2,0,0,0,1,0); GXSetTevAlphaOp(2,0,0,0,1,0);
-                GXSetTevColorIn(2,2,0,1,15); GXSetTevAlphaIn(2,7,7,7,4);
-                tevColor=dat_8042744c; GXSetTevColor(1,&tevColor);
-            } else {
-                if(type%10==0) effGetTexObj(0x40+i,tex); else effGetTexObj(i+(pass?0x4F:0x49),tex);
-                GXLoadTexObj(tex,0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);
-            }
-            if (type%10 != 0 && pass != 0) {
+            if(pass!=0) {
+                s32 texId;
                 u32 tevColor=dat_80427448;
+                if(kind!=0) {
+                    texId=i+0x4F;
+                } else {
+                    s32 lang=*(s32*)((u8*)gp+0x16C);
+                    texId=texid_tbl[lang].ids[i-1];
+                    if(texId==-1) continue;
+                }
+                effGetTexObj(texId,tex); GXLoadTexObj(tex,0);
+                GXSetNumTevStages(1); GXSetTevOrder(0,0,0,0xFF);
                 GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0);
                 GXSetTevColorIn(0,15,8,2,15); GXSetTevAlphaIn(0,7,4,5,7);
                 GXSetTevColor(1,&tevColor);
-            } else if (type%10 != 0) {
-                GXSetTevOp(0,type%10?3:0);
+            } else {
+                if(kind==0) {
+                    s32 lang=*(s32*)((u8*)gp+0x16C);
+                    s32 texId=texid_tbl[lang].ids[i-1];
+                    u32 tevColor;
+                    if(texId==-1) continue;
+                    effGetTexObj(texId,tex); GXLoadTexObj(tex,0);
+                    effGetTexObj(niji_tbl[lang],tex); GXLoadTexObj(tex,1);
+                    GXSetNumTevStages(3); GXSetTevOrder(0,0,0,0xFF);
+                    GXSetTevColorOp(0,0xE,0,0,1,0); GXSetTevAlphaOp(0,0xE,0,0,1,0);
+                    GXSetTevColorIn(0,8,15,8,15); GXSetTevAlphaIn(0,4,7,4,7);
+                    GXSetTevSwapModeTable(1,0,1,2,0); GXSetTevSwapMode(0,1,1);
+                    GXSetTevOrder(1,1,1,0xFF); GXSetTevColorOp(1,0,0,0,1,0); GXSetTevAlphaOp(1,0,0,0,1,0);
+                    GXSetTevColorIn(1,15,0,8,15); GXSetTevAlphaIn(1,7,7,7,0);
+                    GXSetTevOrder(2,0,0,0xFF); GXSetTevColorOp(2,0,0,0,1,0); GXSetTevAlphaOp(2,0,0,0,1,0);
+                    GXSetTevColorIn(2,2,0,1,15); GXSetTevAlphaIn(2,7,7,7,4);
+                    tevColor=dat_8042744c; GXSetTevColor(1,&tevColor);
+                } else {
+                    effGetTexObj(i+0x49,tex); GXLoadTexObj(tex,0);
+                    GXSetNumTevStages(1); GXSetTevOrder(0,0,0,0xFF);
+                    GXSetTevOp(0,3);
+                }
             }
             PSMTXTrans(trans,*(f32*)(child+4)+(f32)(pass*4),*(f32*)(child+8)-(f32)(pass*4),float_0_80427460);
             PSMTXScale(scale,*(f32*)(child+0x14),*(f32*)(child+0x14),*(f32*)(child+0x14));

@@ -51,6 +51,8 @@ s32 urouro_init_func(void* event, s32 isFirstCall) {
 
 /* CHATGPT STUB FILL: main/event/evt_urouro 20260624_184929 */
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 /* stub-fill: urouro_main_func | missing_definition | ghidra_signature */
 s32 urouro_main_func(void* event) {
     typedef struct Vec {
@@ -74,7 +76,7 @@ s32 urouro_main_func(void* event) {
         f32 field_1B8;
         f32 moveZ;
         u8 pad_1C0[0x18];
-        u16 soundSide;
+        s16 soundSide;
         u16 pad_1DA;
         f32 soundDistance;
         char* leftSfx;
@@ -107,7 +109,8 @@ s32 urouro_main_func(void* event) {
     extern void psndSFXOnEx_3D(char*, Vec*, s8, s8, u32, u16);
 
     s32* args = *(s32**)((u8*)event + 0x18);
-    NpcWork* npc = evtNpcNameToPtr(event, evtGetValue(event, args[0]));
+    s32 name = evtGetValue(event, args[0]);
+    NpcWork* npc = evtNpcNameToPtr(event, name);
     PlayerWork* player = marioGetPtr();
     u32* work = *(u32**)((u8*)event + 0xC4);
     u32 state = work[1];
@@ -120,7 +123,7 @@ s32 urouro_main_func(void* event) {
             if (state == 0) {
             random = irand((s32)work[4] / 2 + 1);
             work[2] = (s32)work[4] / 2 + random;
-            work[2] = ((s32)work[2] / 20) * 20;
+            work[2] -= (s32)work[2] % 20;
             work[3] = 0;
             random = irand(60);
             npc->rotationY = (f32)reviseAngle(npc->rotationY + (f32)random - 30.0f);
@@ -187,9 +190,15 @@ s32 urouro_main_func(void* event) {
                     soundFlags = 0x10000;
                 }
                 if ((f32)npc->soundId / npc->jumpScale < npc->soundDistance) {
-                    char* sfx = npc->soundSide == 0 ? npc->rightSfx : npc->leftSfx;
-                    if (sfx != 0) {
-                        sfx = searchPSSFXList(sfx);
+                    char* sfx;
+                    if (npc->soundSide != 0) {
+                        if (npc->leftSfx != 0) {
+                            sfx = searchPSSFXList(npc->leftSfx);
+                            psndSFXOnEx_3D((char*)(soundFlags | (u32)sfx),
+                                          &npc->position, -1, -1, 0, 8);
+                        }
+                    } else if (npc->rightSfx != 0) {
+                        sfx = searchPSSFXList(npc->rightSfx);
                         psndSFXOnEx_3D((char*)(soundFlags | (u32)sfx),
                                       &npc->position, -1, -1, 0, 8);
                     }
@@ -228,3 +237,5 @@ s32 urouro_main_func(void* event) {
     }
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on

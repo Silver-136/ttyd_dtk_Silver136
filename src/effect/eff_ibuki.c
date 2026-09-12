@@ -9,6 +9,9 @@ void* effIbukiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     extern void* effEntry(s32 type);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void effIbukiMain(void);
+    extern s32 irand(s32 max);
+    extern f64 cos(f64 x);
+    extern f64 sin(f64 x);
     extern char str_Ibuki_804284e0[];
     extern f32 float_1_804284c8;
     extern f32 float_0_804284a0;
@@ -21,6 +24,10 @@ void* effIbukiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     s32 i;
     s32 angle;
     f32 radians;
+    f32 one;
+    f32 zero;
+    f32 circle;
+    f32 degrees;
 
     effect = effEntry(type);
     *(char**)((s32)effect + 0x14) = str_Ibuki_804284e0;
@@ -33,36 +40,43 @@ void* effIbukiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     *(f32*)((s32)work + 4) = x;
     *(f32*)((s32)work + 8) = y;
     *(f32*)((s32)work + 0xC) = z;
-    *(s32*)((s32)work + 0x30) = (duration > 0) ? duration : 1000;
+    if (duration <= 0) {
+        duration = 1000;
+    }
+    *(s32*)((s32)work + 0x30) = duration;
     *(s32*)((s32)work + 0x34) = 0;
-    *(f32*)((s32)work + 0x2C) = float_1_804284c8;
+    one = float_1_804284c8;
+    zero = float_0_804284a0;
+    circle = float_6p2832_804284d8;
+    degrees = float_360_804284dc;
+    *(f32*)((s32)work + 0x2C) = one;
     *(s32*)((s32)work + 0x38) = 0;
     *(s32*)((s32)work + 0x3C) = 0;
-    *(f32*)((s32)work + 0x40) = float_0_804284a0;
-    *(f32*)((s32)work + 0x44) = float_0_804284a0;
-    *(f32*)((s32)work + 0x48) = float_0_804284a0;
-    *(f32*)((s32)work + 0x4C) = float_0_804284a0;
+    *(f32*)((s32)work + 0x40) = zero;
+    *(f32*)((s32)work + 0x44) = zero;
+    *(f32*)((s32)work + 0x48) = zero;
+    *(f32*)((s32)work + 0x4C) = zero;
 
     part = (void*)((s32)work + 0x54);
     for (i = 1, angle = 10; i < *(s32*)((s32)effect + 8); i++, angle += 10, part = (void*)((s32)part + 0x54)) {
         angle = 0x1E - irand(0x28);
-        *(f32*)((s32)part + 4) = float_0_804284a0;
+        *(f32*)((s32)part + 4) = zero;
         *(f32*)((s32)part + 8) = (f32)irand(0x1E);
-        *(f32*)((s32)part + 0xC) = float_0_804284a0;
-        radians = (float_6p2832_804284d8 * (f32)angle) / float_360_804284dc;
+        *(f32*)((s32)part + 0xC) = zero;
+        radians = (circle * (f32)angle) / degrees;
         *(f32*)((s32)part + 0x10) = (f32)cos(radians);
         *(f32*)((s32)part + 0x14) = (f32)sin(radians);
-        *(f32*)((s32)part + 0x18) = float_0_804284a0;
-        *(f32*)((s32)part + 0x2C) = float_1_804284c8;
+        *(f32*)((s32)part + 0x18) = zero;
+        *(f32*)((s32)part + 0x2C) = one;
         *(s32*)((s32)part + 0x38) = 0;
         *(s32*)((s32)part + 0x50) = i * 10;
-        *(f32*)((s32)part + 0x1C) = float_0_804284a0;
-        *(f32*)((s32)part + 0x20) = float_0_804284a0;
+        *(f32*)((s32)part + 0x1C) = zero;
+        *(f32*)((s32)part + 0x20) = zero;
         if (irand(1000) < 500) {
             *(f32*)((s32)part + 0x24) = (f32)(irand(10) + 10);
-            *(f32*)((s32)part + 0x28) = float_0_804284a0;
+            *(f32*)((s32)part + 0x28) = zero;
         } else {
-            *(f32*)((s32)part + 0x24) = float_0_804284a0;
+            *(f32*)((s32)part + 0x24) = zero;
             *(f32*)((s32)part + 0x28) = (f32)(irand(10) + 10);
         }
     }
@@ -256,12 +270,12 @@ void effIbukiDisp(s32 cameraId, void* effect) {
     GXSetTevOrder(0,1,1,0xFF);
     GXSetTevColorOp(0,0,0,0,1,0);
     GXSetTevAlphaOp(0,0,0,0,1,0);
-    GXSetTevColorIn(0,15,15,15,6);
+    GXSetTevColorIn(0,15,15,15,12);
     GXSetTevAlphaIn(0,7,7,7,4);
     GXSetTevOrder(1,0,0,0xFF);
     GXSetTevColorOp(1,0,0,0,1,0);
     GXSetTevAlphaOp(1,0,0,0,1,0);
-    GXSetTevColorIn(1,15,0,8,15);
+    GXSetTevColorIn(1,15,0,9,15);
     GXSetTevAlphaIn(1,7,0,4,7);
     GXSetTevOrder(2,0xFF,0xFF,4);
     GXSetTevColorOp(2,0,0,0,1,0);
@@ -276,17 +290,17 @@ void effIbukiDisp(s32 cameraId, void* effect) {
     alpha = alpha / 255 + (alpha >> 31);
     color = 0xFFFFFF00 | (u8)(alpha - (alpha >> 31));
     GXSetTevColor(1,&color);
-    PSMTXTrans(trans,(f32)work[0x10],(f32)work[0x11],0.0f);
+    PSMTXTrans(trans,((f32*)work)[0x10],((f32*)work)[0x11],0.0f);
     GXLoadTexMtxImm(trans,0x1E,1);
-    PSMTXTrans(trans,(f32)work[0x12],0.02f,0.0f);
+    PSMTXTrans(trans,((f32*)work)[0x12],0.02f,0.0f);
     GXLoadTexMtxImm(trans,0x21,1);
     GXSetCullMode(0);
-    PSMTXTrans(trans,(f32)work[1],(f32)work[2],(f32)work[3]);
+    PSMTXTrans(trans,((f32*)work)[1],((f32*)work)[2],((f32*)work)[3]);
     PSMTXRotRad(rotate,'y',-0.017453292f * *(f32*)(camera + 0x114));
     if (work[0] == 0) {
-        PSMTXScale(scale,(f32)work[0xB],(f32)work[0xB],(f32)work[0xB]);
+        PSMTXScale(scale,((f32*)work)[0xB],((f32*)work)[0xB],((f32*)work)[0xB]);
     } else {
-        PSMTXScale(scale,-(f32)work[0xB],(f32)work[0xB],(f32)work[0xB]);
+        PSMTXScale(scale,-((f32*)work)[0xB],((f32*)work)[0xB],((f32*)work)[0xB]);
     }
     PSMTXConcat(trans,rotate,model);
     PSMTXConcat(model,scale,model);
@@ -344,12 +358,12 @@ void effIbukiDisp(s32 cameraId, void* effect) {
             s32 particleAlpha = particle[0x23] * alpha;
             particleAlpha = particleAlpha / 255 + (particleAlpha >> 31);
             if (particle[0x29] == 0) {
-                PSMTXTrans(trans,(f32)particle[0x16],(f32)particle[0x17],(f32)particle[0x18]);
-                PSMTXRotRad(rotate,'x',float_deg2rad_804284a8 * (f32)particle[0x1C]);
+                PSMTXTrans(trans,((f32*)particle)[0x16],((f32*)particle)[0x17],((f32*)particle)[0x18]);
+                PSMTXRotRad(rotate,'x',float_deg2rad_804284a8 * ((f32*)particle)[0x1C]);
                 PSMTXConcat(trans,rotate,trans);
-                PSMTXRotRad(rotate,'y',float_deg2rad_804284a8 * (f32)particle[0x1D]);
+                PSMTXRotRad(rotate,'y',float_deg2rad_804284a8 * ((f32*)particle)[0x1D]);
                 PSMTXConcat(trans,rotate,trans);
-                PSMTXScale(scale,(f32)particle[0x20],(f32)particle[0x20],(f32)particle[0x20]);
+                PSMTXScale(scale,((f32*)particle)[0x20],((f32*)particle)[0x20],((f32*)particle)[0x20]);
                 PSMTXConcat(trans,scale,trans);
                 PSMTXConcat(model,trans,trans);
                 GXLoadPosMtxImm(trans,0);

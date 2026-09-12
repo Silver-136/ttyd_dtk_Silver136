@@ -2,6 +2,7 @@
 extern f32 float_0_80425220;
 extern f32 float_0p5_80425224;
 
+#pragma optimize_for_size off
 void* effFireSparkN64Entry(f32 x, f32 y, f32 z, f32 width, f32 height, f32 unkScale,
                            f32 velScaleA, f32 velScaleB, s32 type, s32 count, s32 duration) {
     extern void* effEntry(void);
@@ -60,6 +61,7 @@ void* effFireSparkN64Entry(f32 x, f32 y, f32 z, f32 width, f32 height, f32 unkSc
 }
 
 
+#pragma optimize_for_size on
 void effFireSparkMain(void* effect) {
     extern void effDelete(void* effect);
     extern s32 rand(void);

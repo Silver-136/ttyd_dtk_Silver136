@@ -11,18 +11,22 @@ void* effNanigaEntry(f32 x, f32 y, f32 z, s32 type, s32* items, s32 item) {
     extern void* camGetPtr(s32);
     extern void PSMTXMultVec(f32[3][4], f32*, f32*);
     extern void PSMTX44MultVec(f32[4][4], f32*, f32*);
-    extern const char str_Naniga_80300a54[];
-    extern const char str_EFF_naniga_80300a48[];
+    extern char str_Naniga_80300a54[];
+    extern char str_EFF_naniga_80300a48[];
     extern void* gpGlobals;
 
     void* effect = effEntry();
-    s32* work = __memAlloc(3, 0x50);
+    s32 inBattle = *(s32*)((s32)gpGlobals + 0x14);
+    s32* work;
     void* camera;
     s32 index = 0;
+    s32 remaining;
+    s32 count;
     s32 random;
 
-    *(const char**)((s32)effect + 0x14) = str_Naniga_80300a54;
+    *(char**)((s32)effect + 0x14) = str_Naniga_80300a54;
     *(s32*)((s32)effect + 8) = 1;
+    work = __memAlloc(3, 0x50);
     *(void**)((s32)effect + 0xC) = work;
     *(void**)((s32)effect + 0x10) = effNanigaMain;
     *(u32*)effect |= 2;
@@ -41,10 +45,19 @@ void* effNanigaEntry(f32 x, f32 y, f32 z, s32 type, s32* items, s32 item) {
     work[12] = item;
     *(f32*)&work[13] = 0.0f;
     *(f32*)&work[14] = 0.0f;
-    while (index < work[11] && items[index] != item) {
-        index++;
+    count = work[11];
+    remaining = count;
+    if (count > 0) {
+        do {
+            if (item == *items) {
+                break;
+            }
+            items++;
+            index++;
+            remaining--;
+        } while (remaining != 0);
     }
-    *(f32*)&work[15] = (f32)index * 40.0f + (f32)work[11] * 120.0f;
+    *(f32*)&work[15] = (f32)index * 40.0f + 3.0f * 40.0f * (f32)count;
     random = rand();
     if (random % 3 == 0) {
         work[18] = 1;
@@ -56,8 +69,7 @@ void* effNanigaEntry(f32 x, f32 y, f32 z, s32 type, s32* items, s32 item) {
         work[18] = 0;
     }
 
-    animGroupBaseAsync((char*)str_EFF_naniga_80300a48,
-                       *(s32*)((s32)gpGlobals + 0x14) != 0, 0);
+    animGroupBaseAsync(str_EFF_naniga_80300a48, inBattle != 0, 0);
     work[16] = -1;
     work[17] = 0xFF;
     *(f32*)&work[4] = *(f32*)&work[1];

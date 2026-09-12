@@ -76,23 +76,68 @@ void badgeShop_bottakuruGeneration(void) {
         s32 item;
         s32 sort;
     } BottakuruEntry;
+    extern s32 irand(s32);
     extern void qqsort(void*, s32, s32, void*);
-    BottakuruEntry entries[17] = {
-        {0, 200}, {0, 200}, {0, 200}, {0, 200}, {0, 200}, {0, 200},
-        {0, 200}, {0, 200}, {0, 200}, {0, 200}, {0, 200}, {0, 200},
-        {0, 200}, {0, 200}, {0, 200}, {0, 200}, {0, 200}
-    };
-    BottakuruEntry* out = entries;
-    s32 item = 0;
-    u32 count = 0;
+    BottakuruEntry entries[17];
+    BottakuruEntry* out;
+    s32 item;
+    u32 count;
+    s32 i = 16;
+
+    entries[0].sort = 200;
+    entries[0].item = 0;
+    entries[1].sort = 200;
+    entries[1].item = 0;
+    entries[2].sort = 200;
+    entries[2].item = 0;
+    entries[3].sort = 200;
+    entries[3].item = 0;
+    entries[4].sort = 200;
+    entries[4].item = 0;
+    entries[5].sort = 200;
+    entries[5].item = 0;
+    entries[6].sort = 200;
+    entries[6].item = 0;
+    entries[7].sort = 200;
+    entries[7].item = 0;
+    entries[8].sort = 200;
+    entries[8].item = 0;
+    entries[9].sort = 200;
+    entries[9].item = 0;
+    entries[10].sort = 200;
+    entries[10].item = 0;
+    entries[11].sort = 200;
+    entries[11].item = 0;
+    entries[12].sort = 200;
+    entries[12].item = 0;
+    entries[13].sort = 200;
+    entries[13].item = 0;
+    entries[14].sort = 200;
+    entries[14].item = 0;
+    entries[15].sort = 200;
+    entries[15].item = 0;
+    for (; i < 17; i++) {
+        entries[i].sort = 200;
+        entries[i].item = 0;
+    }
+    out = entries;
+    item = 0;
+    count = 0;
 
     do {
+        void* shop = (u8*)bdsw + 0x4B;
+        s32 base;
         s16 itemId = (s16)(item + 1);
         s16 stock;
-        if (itemId < 1 || itemId > 0x152) {
+        if (shop == (void*)((u8*)bdsw + 0x4B) || shop == (void*)((u8*)bdsw + 0xA0)) {
+            base = 1;
+        } else {
+            base = 0xF0;
+        }
+        if (itemId < base || itemId > 0x152) {
             stock = 0;
         } else {
-            u32 index = (u32)(s16)item;
+            s32 index = (s16)(itemId - base);
             u32 mask;
             u32 shift;
             switch (index & 3) {
@@ -101,7 +146,7 @@ void badgeShop_bottakuruGeneration(void) {
                 case 2: mask = 0x30; shift = 4; break;
                 case 3: mask = 0xC0; shift = 6; break;
             }
-            stock = (s16)((*(u8*)((u8*)bdsw + 0x4B + (index >> 2)) & mask) >> shift);
+            stock = (s16)((*((u8*)shop + index / 4) & mask) >> shift);
         }
         while (stock > 0) {
             out->sort = irand(100);
@@ -191,11 +236,12 @@ void badgeShop_bargainGeneration(void) {
     s32 item;
     s32 availableCount = 0;
     s32 alternateCount = 0;
+    s32 eligibleCount = 0;
     s32 desired;
     s32 selected;
 
 #define UNLOCK_STAGE(threshold, flag, stageTable)                                  \
-    if (evtGetValue(NULL, -170000000) > (threshold) &&                            \
+    if (evtGetValue(NULL, -170000000) >= ((threshold) + 1) &&                            \
         evtGetValue(NULL, (flag)) == 0) {                                          \
         evtSetValue(NULL, (flag), 1);                                               \
         table = (stageTable);                                                       \
@@ -212,11 +258,11 @@ void badgeShop_bargainGeneration(void) {
     UNLOCK_STAGE(0x151, -0x7BFA38D, badge_special_table_stage_6_clear);
 #undef UNLOCK_STAGE
 
-    if (evtGetValue(NULL, -170000000) > 0x174 &&
+    if (evtGetValue(NULL, -170000000) >= 0x175 &&
         evtGetValue(NULL, -0x7BFA38C) == 0) {
         evtSetValue(NULL, -0x7BFA38C, 1);
     }
-    if (evtGetValue(NULL, -170000000) > 400 &&
+    if (evtGetValue(NULL, -170000000) >= 401 &&
         evtGetValue(NULL, -0x7BFA38B) == 0) {
         evtSetValue(NULL, -0x7BFA38B, 1);
     }
@@ -246,9 +292,13 @@ void badgeShop_bargainGeneration(void) {
         if (stock != 0) {
             availableCount++;
             badgeShop_set(available, itemId, 1);
+            eligibleCount++;
         }
     }
-    desired = availableCount < 6 ? availableCount : 5;
+    desired = 5;
+    if (eligibleCount <= 5) {
+        desired = eligibleCount;
+    }
     irand(0x100);
 
     while (desired > *(s32*)((u8*)bdsw + 0x10C) + *(s32*)((u8*)bdsw + 0x110)) {
@@ -484,14 +534,14 @@ USER_FUNC(evt_badgeShop_starmaniac_dec) {
 
 
 USER_FUNC(evt_badgeShop_bottakuru_dec) {
-    s32 item = evtGetValue(event, event->args[0]);
-    s32* table = badge_bottakuru_table;
+    s32 value;
     s32 i;
 
-    badgeShop_add((void*)((s32)bdsw + 0x4B), (s16)item, -1);
+    value = evtGetValue(event, *event->args);
+    badgeShop_add((void*)((s32)bdsw + 0x4B), (s16)value, -1);
     for (i = 0; i < 4; i++) {
-        if (item == table[evtGetValue(event, GSW(i + 0x76))]) {
-            evtSetValue(event, GSW(i + 0x76), 0x10);
+        if (value == badge_bottakuru_table[evtGetValue(event, i + GSW(118))]) {
+            evtSetValue(event, i + GSW(118), 0x10);
         }
     }
     return 2;

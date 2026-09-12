@@ -160,6 +160,11 @@ void* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
 
 /* stub-fill: effMiniGameMain | prototype_only | source_prototype */
 void effMiniGameMain(u32* effect) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
     extern void psndSFXOn(s32 id);
     extern void effDelete(void* effect);
     extern f32 dispCalcZ(void* pos);
@@ -167,26 +172,29 @@ void effMiniGameMain(u32* effect) {
     extern void effMiniGameDisp(void);
     extern void* gp;
     extern u8 poyon_scale[];
+    extern const VecLocal vec3_802ff000;
 
-    u8* work = (u8*)effect[3];
-    f32 pos[3];
+    u8* base = (u8*)effect[3];
+    u8* work;
+    VecLocal pos = vec3_802ff000;
     s32 done = 0;
     s32 i;
 
-    pos[0] = *(f32*)(work + 4);
-    pos[1] = *(f32*)(work + 8);
-    pos[2] = *(f32*)(work + 0xC);
+    pos.x = *(f32*)(base + 4);
+    pos.y = *(f32*)(base + 8);
+    pos.z = *(f32*)(base + 0xC);
+    work = base + 0x38;
     for (i = 1; i < (s32)effect[2]; i++, work += 0x38) {
-        s32* timer = (s32*)(work + 0x60);
-        s32* state = (s32*)(work + 0x68);
-        s32* alpha = (s32*)(work + 0x6C);
-        f32* y = (f32*)(work + 0x3C);
-        f32* z = (f32*)(work + 0x40);
-        f32* sx = (f32*)(work + 0x48);
-        f32* sy = (f32*)(work + 0x4C);
-        f32* rot = (f32*)(work + 0x50);
-        f32* vy = (f32*)(work + 0x58);
-        f32* gravity = (f32*)(work + 0x5C);
+        s32* timer = (s32*)(work + 0x28);
+        s32* state = (s32*)(work + 0x30);
+        s32* alpha = (s32*)(work + 0x34);
+        f32* y = (f32*)(work + 4);
+        f32* z = (f32*)(work + 8);
+        f32* sx = (f32*)(work + 0x10);
+        f32* sy = (f32*)(work + 0x14);
+        f32* rot = (f32*)(work + 0x18);
+        f32* vy = (f32*)(work + 0x20);
+        f32* gravity = (f32*)(work + 0x24);
 
         switch (*state) {
             case 0:
@@ -324,7 +332,7 @@ void effMiniGameMain(u32* effect) {
         effect[0] &= ~4;
         effDelete(effect);
     } else {
-        dispEntry(2, 2, effMiniGameDisp, effect, dispCalcZ(pos));
+        dispEntry(2, 2, effMiniGameDisp, effect, dispCalcZ(&pos));
     }
 }
 

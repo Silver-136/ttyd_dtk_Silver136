@@ -307,20 +307,25 @@ void main_weapon(s32 index) {
     extern void* BattleGetMarioPtr(void*);
     extern s32 BattleAudience_GetAudienceNum(void);
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern f64 cos(f64);
+    extern f64 sin(f64);
     extern void BtlUnit_snd_se(void*, char*, s32, s16);
     extern void effStardustN64Entry(f32, f32, f32, f32, s32);
-    extern void effHitEntry(void);
+    extern void effHitEntry(s32, s32, f32, f32, f32, f32);
     extern u32 psndSFXOn_3D(char*, Vec*);
     extern void BattleAudienceSoundCallKind(s32);
     extern void BattleAudienceSoundHandBeat(void);
     extern void BattleAudienceSoundBooingKind(s32);
     extern char str_SFX_BTL_SAC_HEART_SH_80300e10[];
+    extern Vec vec3_80300c50[];
+    Vec* vecBase = vec3_80300c50;
     u8* work = (u8*)get_ptr();
     s32* weapon = (s32*)(work + 0x10C + index * 0x54);
     void* mario = BattleGetMarioPtr(_battleWorkPointer);
-    s32 audience = BattleAudience_GetAudienceNum();
     f32 angle = 3.1416f * 2.0f * *(f32*)(work + 0x6C) / 360.0f;
+    s32 audience = BattleAudience_GetAudienceNum();
     s32 i;
+    Vec velocity;
 
     for (i = 2; i > 0; i--) {
         weapon[5 + i * 3] = weapon[5 + (i - 1) * 3];
@@ -328,18 +333,21 @@ void main_weapon(s32 index) {
         weapon[7 + i * 3] = weapon[7 + (i - 1) * 3];
     }
     weapon[5] = weapon[2]; weapon[6] = weapon[3]; weapon[7] = weapon[4];
-    if (weapon[0] == 0) {
-        *(f32*)&weapon[2] = *(f32*)&weapon[3] = *(f32*)&weapon[4] = 0.0f;
-    } else if (weapon[0] == 1) {
+    switch (weapon[0]) {
+    case 0:
+        *(Vec*)&weapon[2] = vecBase[0];
+        break;
+    case 1:
         if (--weapon[1] < 0) {
             s32 off;
             weapon[0] = 2;
             BtlUnit_GetPos(mario, (f32*)&weapon[2], (f32*)&weapon[3], (f32*)&weapon[4]);
-            *(f32*)&weapon[2] += 20.0f;
-            *(f32*)&weapon[3] += 28.0f;
-            *(f32*)&weapon[14] = 10.0f * (f32)cos(angle);
-            *(f32*)&weapon[15] = 10.0f * (f32)sin(angle);
-            *(f32*)&weapon[16] = 0.0f;
+            *(f32*)&weapon[2] += 20.0f * *(f32*)((s32)mario + 0x114);
+            *(f32*)&weapon[3] += 28.0f * *(f32*)((s32)mario + 0x114);
+            velocity = vecBase[1];
+            velocity.x = 10.0f * (f32)cos(angle);
+            velocity.y = 10.0f * (f32)sin(angle);
+            *(Vec*)&weapon[14] = velocity;
             for (off = 0; off < 7; off++) {
                 s32* trail = (s32*)(work + 0x80 + off * 0x14);
                 if (trail[0] < 1) {
@@ -353,8 +361,7 @@ void main_weapon(s32 index) {
             }
             BtlUnit_snd_se(mario, str_SFX_BTL_SAC_HEART_SH_80300e10, -250000000, 0);
         }
-    }
-    if (weapon[0] == 2) {
+    case 2: {
         f32 marioX, marioY, marioZ;
         s32 nearest = -1;
         f32 nearestDist = 10000000.0f;
@@ -386,7 +393,8 @@ void main_weapon(s32 index) {
                     weapon[0] = 3;
                     object[0] = 3;
                     effStardustN64Entry(*(f32*)&object[3], *(f32*)&object[4], *(f32*)&object[5], 10.0f, 5);
-                    effHitEntry();
+                    effHitEntry(0, 5, *(f32*)&object[3], *(f32*)&object[4],
+                                *(f32*)&object[5], 1.0f);
                     if (object[2] == 0 || object[2] == 1) {
                         *(s32*)(work + 0x10) += object[2] == 0 ? 1 : 3;
                         if (*(s32*)(work + 0x10) > 98) *(s32*)(work + 0x10) = 99;
@@ -401,18 +409,36 @@ void main_weapon(s32 index) {
                     }
                     psndSFXOn_3D((char*)(0xA64 + object[2]), (Vec*)&weapon[2]);
                     if (object[2] == 6) {
-                        if (audience < 100) BattleAudienceSoundBooingKind(1);
-                        else BattleAudienceSoundBooingKind(audience < 150 ? 2 : 3);
+                        if (audience >= 1 && audience <= 49)
+                            BattleAudienceSoundBooingKind(1);
+                        if (audience >= 50 && audience <= 99)
+                            BattleAudienceSoundBooingKind(1);
+                        if (audience >= 100 && audience <= 149)
+                            BattleAudienceSoundBooingKind(2);
+                        if (audience >= 150)
+                            BattleAudienceSoundBooingKind(3);
                     } else {
-                        BattleAudienceSoundCallKind(audience < 100 ? 1 : 2);
-                        if ((audience >= 50 && audience < 100) || audience >= 150)
+                        if (audience >= 1 && audience <= 49)
+                            BattleAudienceSoundCallKind(1);
+                        if (audience >= 50 && audience <= 99) {
+                            BattleAudienceSoundCallKind(1);
                             BattleAudienceSoundHandBeat();
+                        }
+                        if (audience >= 100 && audience <= 149)
+                            BattleAudienceSoundCallKind(2);
+                        if (audience >= 150) {
+                            BattleAudienceSoundCallKind(2);
+                            BattleAudienceSoundHandBeat();
+                        }
                     }
                 }
             }
         }
-    } else if (weapon[0] == 3) {
+        break;
+    }
+    case 3:
         weapon[0] = 0;
+        break;
     }
     if (weapon[17] != 0) {
         u8* ew = *(u8**)((u8*)weapon[17] + 0xC);
@@ -511,31 +537,40 @@ void main_star(void) {
 
 /* stub-fill: main_star0 | prototype_only | source_prototype */
 void main_star0(s32 index) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+
     extern void* BattleGetMarioPtr(void*);
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
     extern void* effStarStoneEntry(f32, f32, f32, f32, s32);
     extern f64 intplGetValue(f64, f64, s32, s32, s32);
+    extern Vec3 vec3_80300c50[];
+    Vec3* vecBase = vec3_80300c50;
     u8* work = (u8*)get_ptr();
     s32* star = (s32*)(work + 0x510 + index * 100);
     void* mario = BattleGetMarioPtr(_battleWorkPointer);
     f32 marioX, marioY, marioZ;
 
-    if (star[0] == 1) {
+    switch (star[0]) {
+    case 1:
         star[0] = 2;
         star[1] = 0;
         star[24] = (s32)effStarStoneEntry(0.0f, -1000.0f, 0.0f, 1.0f, index);
         BtlUnit_GetPos(mario, (f32*)&star[3], (f32*)&star[4], (f32*)&star[5]);
-        *(f32*)&star[4] += 37.0f;
-        star[6] = star[3]; star[7] = star[4]; star[8] = star[5];
-        star[9] = star[3]; star[10] = star[4]; star[11] = star[5];
+        *(f32*)&star[4] += *(f32*)((s32)mario + 0x114) *
+            (f32)*(s16*)((s32)mario + 0xCE) + 37.0f;
+        *(Vec3*)&star[6] = *(Vec3*)&star[3];
+        *(Vec3*)&star[9] = *(Vec3*)&star[3];
         *(f32*)&star[10] += 30.0f;
-        *(f32*)&star[15] = *(f32*)&star[16] = *(f32*)&star[17] = 0.0f;
-        *(f32*)&star[18] = *(f32*)&star[19] = *(f32*)&star[20] = 0.0f;
+        *(Vec3*)&star[15] = vecBase[3];
+        *(Vec3*)&star[18] = vecBase[4];
         *(f32*)&star[21] = 0.0f;
         *(f32*)&star[22] = 6.2832f * (f32)index / 7.0f;
         *(f32*)&star[23] = 0.1f;
-    }
-    if (star[0] == 2) {
+    case 2:
         star[1]++;
         BtlUnit_GetPos(mario, &marioX, &marioY, &marioZ);
         if (star[1] < 101) {
@@ -566,7 +601,8 @@ void main_star0(s32 index) {
                 60.0f * 60.0f * -(0.01f * (f32)index - 0.2f)) / 120.0f;
             *(f32*)&star[14] = 0.0f;
         }
-    } else if (star[0] == 3) {
+        break;
+    case 3:
         star[1]++;
         *(f32*)&star[3] = (f32)intplGetValue(*(f32*)&star[6], *(f32*)&star[9], 4, star[1], 60);
         *(f32*)&star[4] += *(f32*)&star[13];
@@ -579,7 +615,8 @@ void main_star0(s32 index) {
             *(f32*)&star[12] = irand(2) == 0 ? -(0.05f * (f32)index + 2.0f) : 0.05f * (f32)index + 2.0f;
             *(f32*)&star[13] = 0.0f;
         }
-    } else if (star[0] == 4) {
+        break;
+    case 4:
         *(f32*)&star[3] += *(f32*)&star[12];
         if (*(f32*)&star[3] < 0.0f) *(f32*)&star[12] = 0.05f * (f32)index + 3.0f;
         if (*(f32*)&star[3] > 200.0f) *(f32*)&star[12] = -(0.05f * (f32)index + 3.0f);
@@ -587,6 +624,7 @@ void main_star0(s32 index) {
         if (*(f32*)&star[13] >= 6.2832f) *(f32*)&star[13] -= 6.2832f;
         *(f32*)&star[4] = 10.0f * (f32)sin(*(f32*)&star[13]) + 180.0f;
         if (*(s32*)(work + 0x40) < 1) star[0] = 5;
+        break;
     }
     if (star[24] != 0) {
         u8* effectWork = *(u8**)((u8*)star[24] + 0xC);
@@ -602,37 +640,39 @@ void main_star0(s32 index) {
 
 /* stub-fill: main_star1 | prototype_only | source_prototype */
 void main_star1(void) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+
     extern void* BattleGetMarioPtr(void*);
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
     extern void* effStarStoneEntry(f32, f32, f32, f32, s32);
     extern f64 intplGetValue(f64, f64, s32, s32, s32);
+    extern Vec3 vec3_80300c50[];
 
+    Vec3* vecBase = vec3_80300c50;
     u8* work = get_ptr();
     void* mario = BattleGetMarioPtr(_battleWorkPointer);
     s32 state = *(s32*)(work + 0x510);
     s32 timer;
+    Vec3 temp;
 
-    if (state == 1) {
+    switch (state) {
+    case 1:
         *(s32*)(work + 0x510) = 2;
         *(s32*)(work + 0x514) = 0;
         *(void**)(work + 0x570) = effStarStoneEntry(0.0f, -1000.0f, 0.0f, 1.0f, 4);
         BtlUnit_GetPos(mario, (f32*)(work + 0x51C), (f32*)(work + 0x520), (f32*)(work + 0x524));
         *(f32*)(work + 0x520) += *(f32*)((s32)mario + 0x114) * (f32)*(s16*)((s32)mario + 0xCE) + 37.0f;
-        *(f32*)(work + 0x528) = *(f32*)(work + 0x51C);
-        *(f32*)(work + 0x52C) = *(f32*)(work + 0x520);
-        *(f32*)(work + 0x530) = *(f32*)(work + 0x524);
-        *(f32*)(work + 0x534) = *(f32*)(work + 0x51C);
+        *(Vec3*)(work + 0x528) = *(Vec3*)(work + 0x51C);
+        *(Vec3*)(work + 0x534) = *(Vec3*)(work + 0x51C);
         *(f32*)(work + 0x538) = *(f32*)(work + 0x520) + 50.0f;
         *(f32*)(work + 0x53C) = *(f32*)(work + 0x524) - 1.0f;
-        *(f32*)(work + 0x54C) = 0.0f;
-        *(f32*)(work + 0x550) = 0.0f;
-        *(f32*)(work + 0x554) = 0.0f;
-        *(f32*)(work + 0x558) = 0.0f;
-        *(f32*)(work + 0x55C) = 0.0f;
-        *(f32*)(work + 0x560) = 0.0f;
-        state = 2;
-    }
-    if (state == 2) {
+        *(Vec3*)(work + 0x54C) = vecBase[8];
+        *(Vec3*)(work + 0x558) = vecBase[9];
+    case 2:
         timer = ++*(s32*)(work + 0x514);
         if (timer < 101) {
             *(f32*)(work + 0x51C) = (f32)intplGetValue(*(f32*)(work + 0x528), *(f32*)(work + 0x534), 0, timer, 100);
@@ -653,18 +693,17 @@ void main_star1(void) {
         if (timer > 119) {
             *(s32*)(work + 0x510) = 3;
             *(s32*)(work + 0x514) = 0;
-            *(f32*)(work + 0x528) = *(f32*)(work + 0x51C);
-            *(f32*)(work + 0x52C) = *(f32*)(work + 0x520);
-            *(f32*)(work + 0x530) = *(f32*)(work + 0x524);
-            *(f32*)(work + 0x534) = 200.0f * (f32)rand() / 32767.0f;
-            *(f32*)(work + 0x538) = 0.0f;
-            *(f32*)(work + 0x53C) = *(f32*)(work + 0x530);
-            *(f32*)(work + 0x540) = 0.0f;
+            *(Vec3*)(work + 0x528) = *(Vec3*)(work + 0x51C);
+            temp = vecBase[10];
+            temp.x = 200.0f * (f32)rand() / 32767.0f;
+            temp.z = *(f32*)(work + 0x530);
+            *(Vec3*)(work + 0x534) = temp;
+            *(Vec3*)(work + 0x540) = vecBase[11];
             *(f32*)(work + 0x544) =
                 (2.0f * (*(f32*)(work + 0x538) - *(f32*)(work + 0x52C)) - 720.0f) / 120.0f;
-            *(f32*)(work + 0x548) = 0.0f;
         }
-    } else if (state == 3) {
+        break;
+    case 3:
         timer = ++*(s32*)(work + 0x514);
         *(f32*)(work + 0x51C) = (f32)intplGetValue(*(f32*)(work + 0x528), *(f32*)(work + 0x534), 4, timer, 60);
         *(f32*)(work + 0x520) += *(f32*)(work + 0x544);
@@ -679,7 +718,8 @@ void main_star1(void) {
             *(f32*)(work + 0x540) = irand(2) == 0 ? -2.0f : 2.0f;
             *(f32*)(work + 0x544) = 0.0f;
         }
-    } else if (state == 4) {
+        break;
+    case 4:
         *(f32*)(work + 0x51C) += *(f32*)(work + 0x540);
         if (*(f32*)(work + 0x51C) < 0.0f) *(f32*)(work + 0x540) = 3.0f;
         if (*(f32*)(work + 0x51C) > 200.0f) *(f32*)(work + 0x540) = -3.0f;
@@ -693,6 +733,7 @@ void main_star1(void) {
             *(f32*)(work + 0x520) = 0.0f;
             *(f32*)(work + 0x524) = 0.0f;
         }
+        break;
     }
 
     if (*(void**)(work + 0x570) != 0) {

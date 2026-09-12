@@ -191,26 +191,27 @@ void envDisp2(void) {
     f32 proj[7];
     void* entry;
     void* glare;
-    u16 type;
+    u8* glareData = lbl_8039B860;
 
     GXGetViewportv(vp);
     GXGetProjectionv(proj);
-    entry = env_current_work();
+    entry = (*(s32*)((s32)gp + 0x14) != 0) ? (void*)((s32)work + 0xF0) : work;
     glare = (void*)((s32)entry + 0xB0);
     if ((*(u32*)entry & 0x20000000) != 0) {
-        type = *(u16*)((s32)glare + 2);
-        switch (type) {
+        switch (*(u16*)((s32)glare + 2)) {
+            case 0:
+                break;
             case 1:
-                envGlare(lbl_8039B860 + 0x40);
+                envGlare(glareData + 0x40);
                 break;
             case 2:
-                envGlare(lbl_8039B860 + 0xDC);
+                envGlare(glareData + 0xDC);
                 break;
             case 3:
-                envGlare(lbl_8039B860 + 0x138);
+                envGlare(glareData + 0x138);
                 break;
             case 4:
-                envGlare(lbl_8039B860 + 0x2F4);
+                envGlare(glareData + 0x2F4);
                 break;
         }
     }
@@ -274,10 +275,13 @@ void envDisp_DepthOfField(void) {
     extern f32 float_0p16605_80424928;
     extern f32 float_100_8042492c;
     extern f32 float_0p5_804248a8;
+    extern f32 float_1_804248e4;
+    extern f32 float_0_804248ac;
+    extern s32 dat_802f9be8[];
     u8* env = (u8*)work;
     char* cam;
     Mtx mtx;
-    u32 dofFlags;
+    u8* dof;
     s32 sample;
     u32 tevColor;
 
@@ -288,7 +292,7 @@ void envDisp_DepthOfField(void) {
         return;
     }
     cam = camGetPtr(8);
-    GXSetProjection(cam + 0x15C, *(s32*)(cam + 0x19C));
+    GXSetProjection((char*)camGetPtr(8) + 0x15C, *(s32*)(cam + 0x19C));
     cam = camGetPtr(8);
     GXLoadPosMtxImm(cam + 0x11C, 0);
     GXSetCurrentMtx(0);
@@ -307,47 +311,51 @@ void envDisp_DepthOfField(void) {
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
     GXSetCullMode(0);
 
-    dofFlags = *(u32*)(env + 0x88);
+    dof = env + 0x88;
 
 #define DRAW_DOF_PASS(flag, amountOffset, colorOffset, secondPass) \
-    if ((dofFlags & flag) != 0 && *(f32*)(env + amountOffset) != 0.0f) { \
-        f32 amount = *(f32*)(env + amountOffset); \
+    if ((*(u16*)dof & flag) != 0 && *(f32*)(dof + amountOffset) != 0.0f) { \
+        f32 amount = *(f32*)(dof + amountOffset); \
         for (sample = 0; sample < 4; sample++) { \
             f32 angle = float_6p2832_804248c8 * (f32)sample * float_0p25_804248ec; \
             f32 s; \
             f32 c; \
             f32 t; \
-            if (angle > float_3p1416_804248f0) { \
-                if (angle >= float_4p7124_80424920) { \
-                    t = float_1p5708_8042491c - (angle - float_4p7124_80424920); \
-                    s = -(((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t); \
+            if (angle <= float_3p1416_804248f0) { \
+                if (angle <= float_1p5708_8042491c) { \
+                    t = angle; \
                 } else { \
-                    t = angle - float_3p1416_804248f0; \
-                    s = -(((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t); \
+                    t = float_1p5708_8042491c - (angle - float_1p5708_8042491c); \
                 } \
-            } else if (angle > float_1p5708_8042491c) { \
-                t = float_1p5708_8042491c - (angle - float_1p5708_8042491c); \
-                s = ((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t; \
+                s = ((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t + float_1_804248e4) * t; \
             } else { \
-                s = ((float_0p00761_80424924 * angle * angle - float_0p16605_80424928) * angle * angle) * angle; \
+                if (angle < float_4p7124_80424920) { \
+                    t = angle - float_3p1416_804248f0; \
+                } else { \
+                    t = float_1p5708_8042491c - (angle - float_4p7124_80424920); \
+                } \
+                s = -(((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t + float_1_804248e4) * t); \
             } \
-            if (angle > float_3p1416_804248f0) { \
-                if (angle >= float_4p7124_80424920) { \
-                    t = float_1p5708_8042491c - (angle - float_4p7124_80424920); \
-                    c = (float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t; \
+            if (angle <= float_3p1416_804248f0) { \
+                if (angle <= float_1p5708_8042491c) { \
+                    t = angle; \
+                    c = (float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t + float_1_804248e4; \
                 } else { \
-                    t = angle - float_3p1416_804248f0; \
-                    c = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t); \
+                    t = float_1p5708_8042491c - (angle - float_1p5708_8042491c); \
+                    c = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t + float_1_804248e4); \
                 } \
-            } else if (angle > float_1p5708_8042491c) { \
-                t = float_1p5708_8042491c - (angle - float_1p5708_8042491c); \
-                c = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t); \
             } else { \
-                c = (float_0p03705_80424914 * angle * angle - float_0p4967_80424918) * angle * angle; \
+                if (angle < float_4p7124_80424920) { \
+                    t = angle - float_3p1416_804248f0; \
+                    c = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t + float_1_804248e4); \
+                } else { \
+                    t = float_1p5708_8042491c - (angle - float_4p7124_80424920); \
+                    c = (float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t + float_1_804248e4; \
+                } \
             } \
             PSMTXTrans(mtx, amount * s / float_100_8042492c, amount * c / float_100_8042492c, 0.0f); \
-            GXLoadTexMtxImm(mtx, 0x1E + sample * 3, 1); \
-            GXSetTexCoordGen2(sample, 1, 4, 0x1E + sample * 3, 0, 0x7D); \
+            GXLoadTexMtxImm(mtx, dat_802f9be8[sample], 1); \
+            GXSetTexCoordGen2(sample, 1, 4, dat_802f9be8[sample], 0, 0x7D); \
             GXSetTevKColorSel(sample, 6); \
             GXSetTevKAlphaSel(sample, 6); \
             GXSetTevOrder(sample, sample, 0, -1); \
@@ -357,7 +365,7 @@ void envDisp_DepthOfField(void) {
             GXSetTevAlphaIn(sample, 7, 4, 6, sample == 0 ? 7 : 0); \
             GXSetTevSwapMode(sample, 0, 0); \
         } \
-        tevColor = ((u32)env[colorOffset] << 24) | 0xFF; \
+        tevColor = ((u32)dof[colorOffset] << 24) | 0xFF; \
         GXSetTevKColor(0, &tevColor); \
         GXSetTexCoordGen2(4, 1, 4, 0x3C, 0, 0x7D); \
         if (secondPass) { u32 white = 0xFFFFFFFF; GXSetTevColor(2, &white); } \
@@ -378,20 +386,18 @@ void envDisp_DepthOfField(void) {
             GXSetTevSwapMode(5, 0, 0); \
         } \
         { \
-        f32 halfW = (f32)*(u16*)((u8*)gp + 0x170) * float_0p5_804248a8; \
-        f32 halfH = (f32)*(u16*)((u8*)gp + 0x172) * float_0p5_804248a8; \
         GXSetNumTexGens(5); \
         GXSetNumTevStages(secondPass ? 6 : 5); \
         GXBegin(0x80, 0, 4); \
-        *(volatile f32*)0xCC008000 = -halfW; *(volatile f32*)0xCC008000 = halfH;  *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; \
-        *(volatile f32*)0xCC008000 = halfW;  *(volatile f32*)0xCC008000 = halfH;  *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; \
-        *(volatile f32*)0xCC008000 = halfW;  *(volatile f32*)0xCC008000 = -halfH; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; \
-        *(volatile f32*)0xCC008000 = -halfW; *(volatile f32*)0xCC008000 = -halfH; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; *(volatile f32*)0xCC008000 = 0.0f; \
+        *(volatile f32*)0xCC008000 = (f32)-(s32)*(u16*)((u8*)gp + 0x170) * float_0p5_804248a8; *(volatile f32*)0xCC008000 = (f32)*(u16*)((u8*)gp + 0x172) * float_0p5_804248a8; *(volatile f32*)0xCC008000 = float_0_804248ac; *(volatile f32*)0xCC008000 = float_0_804248ac; *(volatile f32*)0xCC008000 = float_0_804248ac; \
+        *(volatile f32*)0xCC008000 = (f32)*(u16*)((u8*)gp + 0x170) * float_0p5_804248a8; *(volatile f32*)0xCC008000 = (f32)*(u16*)((u8*)gp + 0x172) * float_0p5_804248a8; *(volatile f32*)0xCC008000 = float_0_804248ac; *(volatile f32*)0xCC008000 = float_1_804248e4; *(volatile f32*)0xCC008000 = float_0_804248ac; \
+        *(volatile f32*)0xCC008000 = (f32)*(u16*)((u8*)gp + 0x170) * float_0p5_804248a8; *(volatile f32*)0xCC008000 = (f32)-(s32)*(u16*)((u8*)gp + 0x172) * float_0p5_804248a8; *(volatile f32*)0xCC008000 = float_0_804248ac; *(volatile f32*)0xCC008000 = float_1_804248e4; *(volatile f32*)0xCC008000 = float_1_804248e4; \
+        *(volatile f32*)0xCC008000 = (f32)-(s32)*(u16*)((u8*)gp + 0x170) * float_0p5_804248a8; *(volatile f32*)0xCC008000 = (f32)-(s32)*(u16*)((u8*)gp + 0x172) * float_0p5_804248a8; *(volatile f32*)0xCC008000 = float_0_804248ac; *(volatile f32*)0xCC008000 = float_0_804248ac; *(volatile f32*)0xCC008000 = float_1_804248e4; \
         } \
     }
 
-    DRAW_DOF_PASS(1, 0x8C, 0x8A, 0);
-    DRAW_DOF_PASS(2, 0x90, 0x8B, 1);
+    DRAW_DOF_PASS(1, 4, 2, 0);
+    DRAW_DOF_PASS(2, 8, 3, 1);
 #undef DRAW_DOF_PASS
 }
 
@@ -426,22 +432,23 @@ void envDisp_Blur(void) {
     extern volatile f32 DAT_cc008000;
     extern f32 float_0_804248ac;
     extern f32 float_0p5_804248a8;
-
-    void* envWork;
-    void* gpPtr;
+    extern f32 float_1_804248e4;
+    extern f32 float_128_804248c4;
+    extern f32 float_255_80424934;
+    extern f32 float_120_80424938;
+    extern u32 dat_80424884;
+    extern u32 dat_80424888;
+    void* envWork = work;
+    void* blur;
     void* cam;
     u32 color;
-    f32 half;
-    f32 zero;
-    f32 width;
-    f32 height;
+    s32 alpha;
+    s32 duration;
+    u64 elapsed;
+    f32 progress;
 
-    envWork = work;
-    gpPtr = gp;
-    if (*(s32*)((s32)gpPtr + 0x14) != 0) {
-        envWork = (void*)((s32)envWork + 0xF0);
-    }
-
+    if (*(s32*)((s32)gp + 0x14) != 0) envWork = (void*)((s32)envWork + 0xF0);
+    blur = (void*)((s32)envWork + 0x98);
     if (((*(u32*)envWork & 0x40000000) != 0) && ((*(u32*)envWork & 8) != 0)) {
         cam = camGetPtr(8);
         GXSetProjection((void*)((s32)camGetPtr(8) + 0x15C), *(s32*)((s32)cam + 0x19C));
@@ -461,11 +468,20 @@ void envDisp_Blur(void) {
         GXSetTevSwapMode(0, 0, 0);
         GXSetTevKColorSel(0, 0xC);
         GXSetTevKAlphaSel(0, 0x1C);
-
-        if (*(u32*)((s32)envWork + 0xA8) == 0) {
-            color = 0xFFFFFFA0;
+        duration = *(s32*)((s32)blur + 0x10);
+        if (duration != 0) {
+            elapsed = *(u64*)((s32)gp + 0x38) - *(u64*)((s32)blur + 8);
+            progress = (f32)(elapsed / ((*(u32*)0x800000F8 >> 2) / 1000)) / (f32)duration;
+            if (progress > float_1_804248e4) progress = float_1_804248e4;
+            if ((*(u16*)blur & 1) != 0) {
+                alpha = (s32)(float_255_80424934 * (float_1_804248e4 - progress));
+            } else {
+                alpha = (s32)(float_120_80424938 * (float_1_804248e4 - progress) + float_128_804248c4);
+            }
+            color = dat_80424884;
+            *((u8*)&color + 3) = (u8)alpha;
         } else {
-            color = 0xFFFFFF80;
+            color = dat_80424888;
         }
         GXSetTevKColor(0, &color);
         GXLoadTexObj((void*)((s32)envWork + 0x50), 0);
@@ -479,32 +495,26 @@ void envDisp_Blur(void) {
         GXSetVtxAttrFmt(0, 9, 1, 4, 0);
         GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
         GXBegin(0x80, 0, 4);
-
-        half = float_0p5_804248a8;
-        zero = float_0_804248ac;
-        width = (f32)*(u16*)((s32)gpPtr + 0x170) * half;
-        height = (f32)*(u16*)((s32)gpPtr + 0x172) * half;
-
-        DAT_cc008000 = -width;
-        DAT_cc008000 = height;
-        DAT_cc008000 = zero;
-        DAT_cc008000 = zero;
-        DAT_cc008000 = zero;
-        DAT_cc008000 = width;
-        DAT_cc008000 = height;
-        DAT_cc008000 = zero;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = zero;
-        DAT_cc008000 = width;
-        DAT_cc008000 = -height;
-        DAT_cc008000 = zero;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = -width;
-        DAT_cc008000 = -height;
-        DAT_cc008000 = zero;
-        DAT_cc008000 = zero;
-        DAT_cc008000 = 1.0f;
+        DAT_cc008000 = (f32)-(s32)*(u16*)((s32)gp + 0x170) * float_0p5_804248a8;
+        DAT_cc008000 = (f32)*(u16*)((s32)gp + 0x172) * float_0p5_804248a8;
+        DAT_cc008000 = float_0_804248ac;
+        DAT_cc008000 = float_0_804248ac;
+        DAT_cc008000 = float_0_804248ac;
+        DAT_cc008000 = (f32)*(u16*)((s32)gp + 0x170) * float_0p5_804248a8;
+        DAT_cc008000 = (f32)*(u16*)((s32)gp + 0x172) * float_0p5_804248a8;
+        DAT_cc008000 = float_0_804248ac;
+        DAT_cc008000 = float_1_804248e4;
+        DAT_cc008000 = float_0_804248ac;
+        DAT_cc008000 = (f32)*(u16*)((s32)gp + 0x170) * float_0p5_804248a8;
+        DAT_cc008000 = (f32)-(s32)*(u16*)((s32)gp + 0x172) * float_0p5_804248a8;
+        DAT_cc008000 = float_0_804248ac;
+        DAT_cc008000 = float_1_804248e4;
+        DAT_cc008000 = float_1_804248e4;
+        DAT_cc008000 = (f32)-(s32)*(u16*)((s32)gp + 0x170) * float_0p5_804248a8;
+        DAT_cc008000 = (f32)-(s32)*(u16*)((s32)gp + 0x172) * float_0p5_804248a8;
+        DAT_cc008000 = float_0_804248ac;
+        DAT_cc008000 = float_0_804248ac;
+        DAT_cc008000 = float_1_804248e4;
     }
 }
 
@@ -715,6 +725,12 @@ void envGlareFilterZ(f32 z) {
 }
 
 void envDisp_FF(void) {
+    typedef union FloatBitsLocal {
+        f32 value;
+        u32 bits;
+    } FloatBitsLocal;
+    extern f32 float_1_804248e4;
+    extern f32 __float_nan;
     extern void* camGetPtr(s32);
     extern void GXLoadPosMtxImm(void*, s32);
     extern void GXSetCurrentMtx(s32);
@@ -753,6 +769,7 @@ void envDisp_FF(void) {
     extern f32 float_100_8042492c;
     extern f64 double_0p5_802f9c60;
     extern f64 double_3_802f9c68;
+    extern f64 double_0_802f9c70;
 
     void* envWork;
     void* gpPtr;
@@ -769,6 +786,16 @@ void envDisp_FF(void) {
     f64 radiusValue;
     f64 estimate;
     s32 radiusSquare;
+    f32 cJitterDiv;
+    f32 cSinCoeff;
+    f32 cCosCoeff;
+    f32 cPi;
+    f32 cTwoPi;
+    f32 cCount;
+    f32 one;
+    volatile f32* fifo;
+    FloatBitsLocal classify;
+    s32 category;
 
     envWork = work;
     gpPtr = gp;
@@ -808,51 +835,78 @@ void envDisp_FF(void) {
                        (((s32)(*(u16*)((s32)gpPtr + 0x172) >> 1) *
                          (s32)*(u16*)((s32)gpPtr + 0x172)) >> 1);
         radiusValue = (f64)(f32)radiusSquare;
-        estimate = __frsqrte(radiusValue);
-        estimate = double_0p5_802f9c60 * estimate *
-                   (double_3_802f9c68 - radiusValue * estimate * estimate);
-        estimate = double_0p5_802f9c60 * estimate *
-                   (double_3_802f9c68 - radiusValue * estimate * estimate);
-        estimate = double_0p5_802f9c60 * estimate *
-                   (double_3_802f9c68 - radiusValue * estimate * estimate);
-        radius = (f32)(radiusValue * estimate);
+        if (radiusValue > double_0_802f9c70) {
+            estimate = __frsqrte(radiusValue);
+            estimate = double_0p5_802f9c60 * estimate *
+                       (double_3_802f9c68 - radiusValue * estimate * estimate);
+            estimate = double_0p5_802f9c60 * estimate *
+                       (double_3_802f9c68 - radiusValue * estimate * estimate);
+            estimate = double_0p5_802f9c60 * estimate *
+                       (double_3_802f9c68 - radiusValue * estimate * estimate);
+            radius = (f32)(radiusValue * estimate);
+        } else {
+            radius = (f32)radiusValue;
+            if (radiusValue < double_0_802f9c70) {
+                radius = __float_nan;
+            } else {
+                classify.value = radius;
+                if ((classify.bits & 0x7F800000) == 0x7F800000) {
+                    category = (classify.bits & 0x007FFFFF) ? 1 : 2;
+                } else if ((classify.bits & 0x7F800000) == 0) {
+                    category = (classify.bits & 0x007FFFFF) ? 5 : 3;
+                } else {
+                    category = 4;
+                }
+                if (category == 1) {
+                    radius = __float_nan;
+                }
+            }
+        }
+        fifo = (volatile f32*)0xCC008000;
         GXBegin(0xA8, 0, 2000);
+        cJitterDiv = float_100_8042492c;
+        cSinCoeff = float_0p16605_80424928;
+        cCosCoeff = float_0p4967_80424918;
+        cPi = float_3p1416_804248f0;
+        cTwoPi = float_6p2832_804248c8;
+        cCount = float_1000_804248b0;
+        one = float_1_804248e4;
         for (i = 0; i < 1000; i++) {
-            angle = (float_6p2832_804248c8 * (f32)i) / float_1000_804248b0;
-            if (angle > float_3p1416_804248f0) {
+            angle = (cTwoPi * (f32)i) / cCount;
+            if (angle > cPi) {
                 if (angle >= float_4p7124_80424920) {
                     t = float_1p5708_8042491c - (angle - float_4p7124_80424920);
-                    x = -(((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t);
-                    y = (float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t;
+                    y = (float_0p03705_80424914 * t * t - cCosCoeff) * t * t + one;
+                    x = -(((float_0p00761_80424924 * t * t - cSinCoeff) * t * t + one) * t);
                 } else {
-                    t = angle - float_3p1416_804248f0;
-                    x = -(((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t);
-                    y = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t);
+                    t = angle - cPi;
+                    y = -((float_0p03705_80424914 * t * t - cCosCoeff) * t * t + one);
+                    x = -(((float_0p00761_80424924 * t * t - cSinCoeff) * t * t + one) * t);
                 }
             } else if (angle > float_1p5708_8042491c) {
                 t = float_1p5708_8042491c - (angle - float_1p5708_8042491c);
-                x = ((float_0p00761_80424924 * t * t - float_0p16605_80424928) * t * t) * t;
-                y = -((float_0p03705_80424914 * t * t - float_0p4967_80424918) * t * t);
+                y = -((float_0p03705_80424914 * t * t - cCosCoeff) * t * t + one);
+                x = ((float_0p00761_80424924 * t * t - cSinCoeff) * t * t + one) * t;
             } else {
-                x = ((float_0p00761_80424924 * angle * angle - float_0p16605_80424928) *
-                     angle * angle) * angle;
-                y = (float_0p03705_80424914 * angle * angle - float_0p4967_80424918) *
-                    angle * angle;
+                y = (float_0p03705_80424914 * angle * angle - cCosCoeff) *
+                    angle * angle + one;
+                x = ((float_0p00761_80424924 * angle * angle - cSinCoeff) *
+                     angle * angle + one) * angle;
             }
-            jitter = (f32)(rand() % 10) / float_100_8042492c;
+            jitter = (f32)(rand() % 10) / cJitterDiv;
 
-            DAT_cc008000 = x * radius;
-            DAT_cc008000 = y * radius;
-            DAT_cc008000 = zero;
-            DAT_cc008000 = jitter;
-            DAT_cc008000 = jitter;
-            DAT_cc008000 = x * 5.0f + 5.0f + jitter;
-            DAT_cc008000 = -y * 5.0f + 5.0f + jitter;
-            DAT_cc008000 = zero;
-            DAT_cc008000 = zero;
-            DAT_cc008000 = zero;
-            DAT_cc008000 = 0.5f;
-            DAT_cc008000 = 0.5f;
+            *fifo = x * radius;
+            *fifo = y * radius;
+            *fifo = zero;
+            *fifo = jitter;
+            *fifo = jitter;
+            *fifo = x * 5.0f + 5.0f + jitter;
+            *fifo = -y * 5.0f + 5.0f + jitter;
+            *fifo = zero;
+            *fifo = zero;
+            *fifo = zero;
+            *fifo = 0.5f;
+            *fifo = 0.5f;
         }
     }
 }
@@ -870,23 +924,32 @@ void envTevLoadTexMtxImm(s32 type, s32 texMtx, s32 texMtx2, s32 mtxType) {
     extern void PSVECNormalize(void*, void*);
     extern void PSMTXMultVecSR(void*, void*, void*);
     extern void C_VECHalfAngle(void*, void*, void*);
+    extern f32 PSVECDotProduct(void*, void*);
+    extern void PSVECCrossProduct(void*, void*, void*);
+    extern void PSMTXRotAxisRad(void*, void*, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXIdentity(void*);
     extern void GXLoadTexMtxImm(void*, s32, s32);
     extern f64 sin(f64);
     extern f64 cos(f64);
+    extern f64 acos(f64);
     extern Vec vec3_802f9c10;
+    extern Vec vec3_802f9c1c;
     extern f32 float_3p1416_804248f0;
     extern f32 float_180_804248f4;
+    extern f32 float_neg1_804248fc;
     char* env = (char*)work;
     Mtx matrix;
     Mtx temp;
+    Mtx rotation;
     Vec direction;
     Vec halfAngle;
+    Vec axis;
     f32 angleY;
     f32 angleZ;
     f32 scale;
+    f32 dot;
 
     if (*(s32*)((char*)gp + 0x14) != 0) env += 0xF0;
     switch (type) {
@@ -943,12 +1006,38 @@ void envTevLoadTexMtxImm(s32 type, s32 texMtx, s32 texMtx2, s32 mtxType) {
             GXLoadTexMtxImm(matrix, texMtx, mtxType);
             break;
         case 3:
+            angleY = (float_3p1416_804248f0 * *(f32*)(env + 0x80)) /
+                     float_180_804248f4;
+            angleZ = (float_3p1416_804248f0 * *(f32*)(env + 0x84)) /
+                     float_180_804248f4;
+            direction.x = (f32)cos((f64)angleZ) * (f32)sin((f64)angleY);
+            direction.y = (f32)sin((f64)angleZ);
+            direction.z = (f32)cos((f64)angleZ) * (f32)cos((f64)angleY);
+            PSMTXMultVecSR(*(void**)(env + 0x70), &direction, &direction);
+            dot = PSVECDotProduct(&direction, &vec3_802f9c1c);
+            if (dot == float_neg1_804248fc) {
+                PSMTXScale(matrix, 0.0f, 0.0f, 0.0f);
+                GXLoadTexMtxImm(matrix, texMtx, 1);
+                break;
+            }
+            C_VECHalfAngle(&direction, &vec3_802f9c1c, &halfAngle);
+            halfAngle.x = -halfAngle.x;
+            halfAngle.y = -halfAngle.y;
+            halfAngle.z = -halfAngle.z;
             PSMTXInvXpose(*(void**)(env + 0x78), matrix);
             PSVECNormalize(matrix, matrix);
             PSVECNormalize((char*)matrix + 0x10, (char*)matrix + 0x10);
             PSVECNormalize((char*)matrix + 0x20, (char*)matrix + 0x20);
-            PSMTXScale(temp, 2.0f * *(f32*)(env + 0x7C),
-                       2.0f * *(f32*)(env + 0x7C), 0.0f);
+            if (dot == 0.0f) {
+                PSMTXIdentity(rotation);
+            } else {
+                PSVECCrossProduct(&halfAngle, &vec3_802f9c1c, &axis);
+                dot = PSVECDotProduct(&vec3_802f9c1c, &halfAngle);
+                PSMTXRotAxisRad(rotation, &axis, (f32)acos((f64)dot));
+            }
+            PSMTXConcat(rotation, matrix, matrix);
+            scale = 2.0f * *(f32*)(env + 0x7C);
+            PSMTXScale(temp, scale, scale, 0.0f);
             PSMTXConcat(temp, matrix, matrix);
             PSMTXTrans(temp, 0.5f, 0.5f, 0.0f);
             PSMTXConcat(temp, matrix, matrix);
@@ -1037,12 +1126,12 @@ void envAddTev(s32 stage, s32 entryAddress) {
     extern u32 dat_8042488c;
 
     u8* entry;
-    u8* envWork;
     char* cam;
     u32 tevStage;
     u32 texMap;
     u32 texCoord;
     u32 field18;
+    u8* envWork;
 
     Mtx viewMtx;
     GXTexObj tex1;
@@ -1108,7 +1197,6 @@ void envAddTev(s32 stage, s32 entryAddress) {
     if (*(s32*)((u8*)gp + 0x14) != 0) {
         envWork += 0xF0;
     }
-
     tevStage = *(u32*)(entry + 0x0C);
     texMap = *(u32*)(entry + 0x10);
     texCoord = *(u32*)(entry + 0x14);
@@ -1284,10 +1372,16 @@ void envAddTev(s32 stage, s32 entryAddress) {
 
 
 void envSetWater(s32* param) {
-    typedef struct GXTexObj { u32 data[8]; } GXTexObj;
-    typedef struct Vec { f32 x, y, z; } Vec;
+    typedef struct GXTexObjLocal { u32 data[8]; } GXTexObjLocal;
+    typedef struct VecLocal { f32 x, y, z; } VecLocal;
+    typedef f32 MtxLocal[3][4];
+    typedef struct SmartAllocationDataLocal { void* pMemory; } SmartAllocationDataLocal;
+    typedef union IntDoubleLocal {
+        f64 value;
+        struct { u32 hi, lo; } words;
+    } IntDoubleLocal;
     extern void* gp;
-    extern void* smartAlloc(u32, s32);
+    extern SmartAllocationDataLocal* smartAlloc(u32, s32);
     extern void GXTexModeSync(void);
     extern void GXLoadTexObj(void*, s32);
     extern void GXSetTexCopySrc(u32, u32, u32, u32);
@@ -1297,30 +1391,63 @@ void envSetWater(s32* param) {
     extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
     extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
     extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevSwapMode(s32, s32, s32);
     extern void GXSetIndTexMtx(s32, f32*, s32);
     extern void GXSetIndTexOrder(s32, s32, s32);
     extern void GXSetIndTexCoordScale(s32, s32, s32);
     extern void GXSetTevIndWarp(s32, s32, s32, s32, s32);
-    extern void PSMTXMultVec(void*, void*, Vec*);
+    extern void PSMTXMultVec(void*, void*, VecLocal*);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void C_MTXLightFrustum(f32, f32, f32, f32, f32, f32, f32, f32, void*, f32);
     extern void* camGetCurPtr(void);
-    extern f32 PSVECDistance(Vec*, Vec*);
+    extern void* camGetPtr(s32);
+    extern f32 PSVECDistance(VecLocal*, VecLocal*);
+    extern f64 sin(f64);
+    extern f64 tan(f64);
+    extern void DCFlushRange(void*, u32);
+    extern s32 texmtx_tbl[];
+    extern f32 float_0_804248ac;
+    extern f32 float_0p5_804248a8;
+    extern f32 float_1000_804248b0;
+    extern f32 float_10_80424894;
+    extern f32 float_127_804248b4;
+    extern f32 float_18p85_804248b8;
+    extern f32 float_0p015625_804248bc;
+    extern f32 float_0p6_804248c0;
+    extern f32 float_128_804248c4;
+    extern f32 float_6p2832_804248c8;
+    extern f32 float_360_804248cc;
+    extern f64 double_to_int_802f9c50;
+    extern f64 double_to_int_mask_802f9c58;
+
     u32* obj = (u32*)param[0];
-    u32 flags = *obj;
-    u32 left, top, right, bottom;
-    u16 width, height;
-    u32 size;
     s32 tevStage = param[3];
     s32 texMap = param[4];
     s32 texCoord = param[5];
     s32 indStage = param[6];
+    u32 flags = *obj;
+    s32 left;
+    s32 top;
+    s32 right;
+    s32 bottom;
+    s32 copyWidth;
+    s32 copyHeight;
+    u16 width;
+    u16 height;
+    SmartAllocationDataLocal* allocation;
     void* image;
-    GXTexObj tex;
-    Vec worldPos;
-    void* camera;
     void* indirectImage;
+    GXTexObjLocal tex;
+    GXTexObjLocal indirectTex;
+    VecLocal worldPos;
+    void* camera;
     f32 distance;
     f32 intensity;
     f32 indMtx[6] = {0.5f, 0.0f, 0.0f, 0.5f, 0.0f, 0.0f};
+    MtxLocal mtx;
+    s32 y;
+    s32 x;
 
     if ((flags & 0x20) == 0) {
         if ((flags & 0x20000000) == 0) {
@@ -1330,7 +1457,9 @@ void envSetWater(s32* param) {
     } else {
         do {
             obj = (u32*)obj[0x38];
-            if (obj == 0) return;
+            if (obj == 0) {
+                return;
+            }
             flags = *obj;
         } while ((flags & 0x10) == 0);
         if ((flags & 0x20000000) == 0) {
@@ -1338,47 +1467,145 @@ void envSetWater(s32* param) {
             return;
         }
     }
-    left = *(u16*)((char*)obj + 0xEC);
-    top = *(u16*)((char*)obj + 0xEE);
-    right = *(u16*)((char*)obj + 0xF0);
-    bottom = *(u16*)((char*)obj + 0xF2);
-    if (left == 0x3FF || top == 0x3FF || right == 0x3FF || bottom == 0x3FF) return;
-    if ((left | top | right | bottom) == 0) return;
-    left &= ~1;
-    top &= ~1;
+
+    left = *(u16*)((u8*)obj + 0xEC);
+    top = *(u16*)((u8*)obj + 0xEE);
+    right = *(u16*)((u8*)obj + 0xF0);
+    bottom = *(u16*)((u8*)obj + 0xF2);
+    if (left == 0x3FF || top == 0x3FF || right == 0x3FF || bottom == 0x3FF) {
+        return;
+    }
+    if (left == 0 && top == 0 && right == 0 && bottom == 0) {
+        return;
+    }
+
+    left -= left & 1;
+    top -= top & 1;
     right += right & 1;
     bottom += bottom & 1;
-    if (right > *(u16*)((char*)gp + 0x170)) right = *(u16*)((char*)gp + 0x170);
-    if (bottom > *(u16*)((char*)gp + 0x172)) bottom = *(u16*)((char*)gp + 0x172);
-    width = (right - left) >> 1;
-    height = (bottom - top) >> 1;
-    size = GXGetTexBufferSize(width, height, 4, 0, 0);
-    image = smartAlloc(size, 3);
-    GXSetTexCopySrc(left, top, right - left, bottom - top);
+    if (left < 0) left = 0;
+    if (top < 0) top = 0;
+    if (right > *(u16*)((u8*)gp + 0x170)) right = *(u16*)((u8*)gp + 0x170);
+    if (bottom > *(u16*)((u8*)gp + 0x172)) bottom = *(u16*)((u8*)gp + 0x172);
+
+    copyWidth = right - left;
+    copyHeight = bottom - top;
+    width = copyWidth / 2;
+    height = copyHeight / 2;
+    allocation = smartAlloc(GXGetTexBufferSize(width, height, 4, 0, 0), 3);
+    image = allocation->pMemory;
+    GXSetTexCopySrc(left, top, copyWidth, copyHeight);
     GXSetTexCopyDst(width, height, 4, 1);
     GXCopyTex(image, 0);
     GXPixModeSync();
     GXTexModeSync();
     GXInitTexObj(&tex, image, width, height, 4, 0, 0, 0);
-    GXInitTexObjLOD(&tex, 0, 0, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+    GXInitTexObjLOD(&tex, 0, 0, float_0_804248ac, float_0_804248ac, float_0_804248ac, 0, 0, 0);
+
     PSMTXMultVec((void*)param[1], (u8*)obj + 0x10, &worldPos);
     camera = camGetCurPtr();
-    distance = PSVECDistance((Vec*)((u8*)camera + 0x0C), &worldPos);
-    intensity = 1000.0f / distance;
-    if (intensity < 0.0f) intensity = 0.0f;
-    if (intensity > 127.0f) intensity = 127.0f;
-    indirectImage = smartAlloc(GXGetTexBufferSize(0x40, 0x40, 3, 0, 0), 3);
+    distance = PSVECDistance((VecLocal*)((u8*)camera + 0x0C), &worldPos);
+    intensity = float_1000_804248b0 / distance;
+    if (intensity < float_0_804248ac) intensity = float_0_804248ac;
+    if (intensity > float_127_804248b4) intensity = float_127_804248b4;
+
+    allocation = smartAlloc(GXGetTexBufferSize(0x40, 0x40, 3, 0, 0), 3);
+    indirectImage = allocation->pMemory;
+    {
+    f32 phaseScale = float_18p85_804248b8;
+    f64 signedBias = double_to_int_802f9c50;
+    f32 xScale = float_0p015625_804248bc;
+    f64 unsignedBias = double_to_int_mask_802f9c58;
+    f32 timeDivisor = float_10_80424894;
+    f32 outputBias = float_128_804248c4;
+    f32 outputAdd = float_0p6_804248c0;
+    for (y = 0; y < 0x40; y++) {
+        for (x = 0; x < 0x40; x++) {
+            s32 offset;
+            s32 value;
+            f32 wave;
+            f32 xFloat;
+            f32 timeFloat;
+            IntDoubleLocal convert;
+            convert.words.hi = 0x43300000;
+            convert.words.lo = (u32)x ^ 0x80000000;
+            xFloat = (f32)(convert.value - signedBias);
+            convert.words.hi = 0x43300000;
+            convert.words.lo = *(u32*)((u8*)gp + 0x1C);
+            timeFloat = (f32)(convert.value - unsignedBias);
+            wave = (f32)sin((f64)(phaseScale * xFloat * xScale + timeFloat / timeDivisor));
+            value = (s32)(outputAdd + intensity * wave + outputBias);
+            offset = (y / 4) * 0x20 + (x / 4) * 0x200 + ((y % 4) + (x % 4) * 4) * 2;
+            ((u8*)indirectImage)[offset] = value;
+            ((u8*)indirectImage)[offset + 1] = 0x80;
+        }
+    }
+    }
+    DCFlushRange(indirectImage, 0x2000);
+    GXInitTexObj(&indirectTex, indirectImage, 0x40, 0x40, 3, 1, 1, 0);
+    GXInitTexObjLOD(&indirectTex, 1, 1, float_0_804248ac, float_0_804248ac, float_0_804248ac, 0, 0, 0);
+
+    camera = camGetPtr(4);
+    {
+        s32 halfWidth = *(u16*)((u8*)gp + 0x170) >> 1;
+        s32 halfHeight = *(u16*)((u8*)gp + 0x172) >> 1;
+        f32 halfHeightFloat;
+        f32 frustumTop;
+        f32 frustumBottom;
+        f32 frustumLeft;
+        f32 frustumRight;
+        IntDoubleLocal cvHalf;
+        IntDoubleLocal cvTop;
+        IntDoubleLocal cvBottom;
+        IntDoubleLocal cvLeft;
+        IntDoubleLocal cvRight;
+        f32 tangent = (f32)tan((f64)((float_6p2832_804248c8 * *(f32*)((u8*)camera + 0x38) *
+                                    float_0p5_804248a8) / float_360_804248cc));
+        cvHalf.words.hi = 0x43300000;
+        cvHalf.words.lo = (u32)halfHeight;
+        halfHeightFloat = (f32)(cvHalf.value - double_to_int_mask_802f9c58);
+        cvTop.words.hi = 0x43300000;
+        cvTop.words.lo = (u32)(halfHeight - bottom) ^ 0x80000000;
+        frustumTop = (f32)(cvTop.value - double_to_int_802f9c50);
+        cvBottom.words.hi = 0x43300000;
+        cvBottom.words.lo = (u32)(halfHeight - top) ^ 0x80000000;
+        frustumBottom = (f32)(cvBottom.value - double_to_int_802f9c50);
+        cvLeft.words.hi = 0x43300000;
+        cvLeft.words.lo = (u32)(left - halfWidth) ^ 0x80000000;
+        frustumLeft = (f32)(cvLeft.value - double_to_int_802f9c50);
+        cvRight.words.hi = 0x43300000;
+        cvRight.words.lo = (u32)(right - halfWidth) ^ 0x80000000;
+        frustumRight = (f32)(cvRight.value - double_to_int_802f9c50);
+        C_MTXLightFrustum(frustumTop, frustumBottom,
+                          frustumLeft, frustumRight,
+                          halfHeightFloat / tangent,
+                          float_0p5_804248a8, float_0p5_804248a8, float_0p5_804248a8,
+                          mtx, float_0p5_804248a8);
+    }
+    camera = camGetCurPtr();
+    PSMTXConcat(mtx, (u8*)camera + 0x11C, mtx);
+    PSMTXConcat(mtx, (void*)param[1], mtx);
+
+    GXSetTexCoordGen2(texCoord, 0, 0, texmtx_tbl[texMap], 0, 0x7D);
+    GXLoadTexMtxImm(mtx, texmtx_tbl[texMap], 0);
     GXLoadTexObj(&tex, texMap);
-    GXSetTexCoordGen2(texCoord, 0, 0, 0x1E + texMap * 3, 0, 0x7D);
-    GXSetTevOrder(tevStage, texCoord, texMap, -1);
+    GXLoadTexObj(&indirectTex, texMap + 1);
+    GXSetTevOrder(tevStage, texCoord, texMap, 0xFF);
     GXSetTevColorOp(tevStage, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(tevStage, 0, 0, 0, 1, 0);
     GXSetTevColorIn(tevStage, 8, 0, 1, 15);
     GXSetTevAlphaIn(tevStage, 7, 7, 7, 4);
+    GXSetTevSwapMode(tevStage, 0, 0);
+
     GXSetIndTexMtx(1, indMtx, 1);
     GXSetIndTexOrder(indStage, texCoord, texMap + 1);
     GXSetIndTexCoordScale(indStage, 0, 0);
     GXSetTevIndWarp(tevStage, indStage, 1, 0, 1);
+
+    param[3] = tevStage + 1;
+    param[5] = texCoord + 1;
+    param[6] = indStage + 1;
+    param[4] = texMap + 2;
 }
 
 void envSetYamiView(void* mtx) {

@@ -61,8 +61,13 @@ s32 search_result(void* pEvt, int param_2) {
 
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 s32 set_msg(void* pEvt) {
+    typedef struct VecBits {
+        u32 x;
+        u32 y;
+        u32 z;
+    } VecBits;
     extern s32 marioGetPartyId(void);
     extern void* partyGetPtr(s32 id);
     extern void* itemNearDistCheck(f32 x, f32 y, f32 z, f32 dist);
@@ -77,14 +82,17 @@ s32 set_msg(void* pEvt) {
     void* item;
     void* mobj;
     u32* entry;
+    char* data;
     f32 range;
     f32 best;
     f32 angle;
     f32 dist;
-    f32 objPos[3];
-    f32 bestMapPos[3];
-    f32 itemPos[3];
-    f32 mobjPos[3];
+    f32 direction;
+    VecBits obj;
+    VecBits pos;
+    VecBits bestMapPos;
+    VecBits itemObj;
+    VecBits itemPos;
     s32 foundType;
     s32 foundMap;
     s32 pass;
@@ -98,104 +106,118 @@ s32 set_msg(void* pEvt) {
         return 2;
     }
 
+    data = str_MOBJ_TreasureBox_802f8a08;
     pass = 0;
     do {
+        range = float_10000_80424380;
         if (pass == 0) {
             range = float_150_8042437c;
-        } else {
-            range = float_10000_80424380;
         }
-
         foundType = -1;
 
         item = itemNearDistCheck(*(f32*)((s32)mario + 0x8C),
                                  *(f32*)((s32)mario + 0x90),
-                                 *(f32*)((s32)mario + 0x94),
-                                 range);
+                                 *(f32*)((s32)mario + 0x94), range);
         mobj = mobjNearDistCheck2(mobj_list,
                                   *(f32*)((s32)mario + 0x8C),
                                   *(f32*)((s32)mario + 0x90),
-                                  *(f32*)((s32)mario + 0x94),
-                                  range);
+                                  *(f32*)((s32)mario + 0x94), range);
 
         foundMap = 0;
+        mario = *(void**)((s32)party + 0x160);
         best = float_10000_80424380;
         entry = unk_8038e994;
         for (i = 0; i < 0x28; i++, entry += 5) {
-            if (strcmp((char*)gp + 0x12C, (char*)entry[0]) == 0 && evtGetValue(0, entry[1]) == 0) {
-                objPos[0] = (f32)(s32)entry[2];
-                objPos[1] = (f32)(s32)entry[3];
-                objPos[2] = (f32)(s32)entry[4];
-                dist = PSVECDistance((f32*)((s32)mario + 0x8C), objPos);
+            if (strcmp((char*)gp + 0x12C, (char*)entry[0]) == 0 &&
+                evtGetValue(0, entry[1]) == 0) {
+                obj.x = *(u32*)(data + 0x244);
+                obj.y = *(u32*)(data + 0x248);
+                obj.z = *(u32*)(data + 0x24C);
+                *(f32*)&obj.x = (f32)(s32)entry[2];
+                *(f32*)&obj.y = (f32)(s32)entry[3];
+                *(f32*)&obj.z = (f32)(s32)entry[4];
+                pos = obj;
+                dist = PSVECDistance((f32*)((s32)mario + 0x8C), (f32*)&pos);
                 if (dist <= range && dist < best) {
-                    best = dist;
                     foundMap = 1;
-                    bestMapPos[0] = objPos[0];
-                    bestMapPos[1] = objPos[1];
-                    bestMapPos[2] = objPos[2];
+                    bestMapPos = pos;
+                    best = dist;
                 }
             }
         }
 
         best = float_10000_80424380;
         if (item != 0) {
-            itemPos[0] = *(f32*)((s32)item + 0x3C);
-            itemPos[1] = *(f32*)((s32)item + 0x40);
-            itemPos[2] = *(f32*)((s32)item + 0x44);
-            dist = PSVECDistance(itemPos, (f32*)((s32)mario + 0x8C));
+            itemObj.x = *(u32*)(data + 0x130);
+            itemObj.y = *(u32*)(data + 0x134);
+            itemObj.z = *(u32*)(data + 0x138);
+            *(f32*)&itemObj.x = *(f32*)((s32)item + 0x3C);
+            *(f32*)&itemObj.y = *(f32*)((s32)item + 0x40);
+            *(f32*)&itemObj.z = *(f32*)((s32)item + 0x44);
+            itemPos = itemObj;
+            dist = PSVECDistance((f32*)&itemPos, (f32*)((s32)mario + 0x8C));
             if (dist < best) {
-                best = dist;
-                angle = revise360(angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60),
-                                           itemPos[0], itemPos[2]) - *(f32*)((s32)party + 0xF8));
+                best = PSVECDistance((f32*)&itemPos, (f32*)((s32)mario + 0x8C));
+                angle = revise360(angleABf(*(f32*)((s32)party + 0x58),
+                                           *(f32*)((s32)party + 0x60),
+                                           *(f32*)((s32)item + 0x3C),
+                                           *(f32*)((s32)item + 0x44)) -
+                                  *(f32*)((s32)party + 0xF8));
                 foundType = 0;
             }
         }
 
         if (mobj != 0) {
-            mobjPos[0] = *(f32*)((s32)mobj + 0x3C);
-            mobjPos[1] = *(f32*)((s32)mobj + 0x40);
-            mobjPos[2] = *(f32*)((s32)mobj + 0x44);
-            dist = PSVECDistance(mobjPos, (f32*)((s32)mario + 0x8C));
+            dist = PSVECDistance((f32*)((s32)mobj + 0x38),
+                                 (f32*)((s32)mario + 0x8C));
             if (dist < best) {
-                best = dist;
-                angle = revise360(angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60),
-                                           mobjPos[0], mobjPos[2]) - *(f32*)((s32)party + 0xF8));
+                best = PSVECDistance((f32*)((s32)mobj + 0x38),
+                                     (f32*)((s32)mario + 0x8C));
+                angle = revise360(angleABf(*(f32*)((s32)party + 0x58),
+                                           *(f32*)((s32)party + 0x60),
+                                           *(f32*)((s32)mobj + 0x38),
+                                           *(f32*)((s32)mobj + 0x40)) -
+                                  *(f32*)((s32)party + 0xF8));
                 foundType = 1;
             }
         }
 
         if (foundMap != 0) {
-            dist = PSVECDistance(bestMapPos, (f32*)((s32)mario + 0x8C));
+            dist = PSVECDistance((f32*)&bestMapPos,
+                                 (f32*)((s32)mario + 0x8C));
             if (dist < best) {
-                best = dist;
-                angle = revise360(angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60),
-                                           bestMapPos[0], bestMapPos[2]) - *(f32*)((s32)party + 0xF8));
+                PSVECDistance((f32*)&bestMapPos,
+                              (f32*)((s32)mario + 0x8C));
+                angle = revise360(angleABf(*(f32*)((s32)party + 0x58),
+                                           *(f32*)((s32)party + 0x60),
+                                           *(f32*)&bestMapPos.x,
+                                           *(f32*)&bestMapPos.z) -
+                                  *(f32*)((s32)party + 0xF8));
                 foundType = 2;
             }
         }
-        pass++;
-    } while (foundType < 0 && pass < 2);
+    } while (foundType < 0 && ++pass < 2);
 
     if (foundType < 0) {
-        *(char**)((s32)pEvt + 0x9C) = str_MOBJ_TreasureBox_802f8a08 + 0x288;
+        *(char**)((s32)pEvt + 0x9C) = data + 0x288;
         *(s32*)((s32)pEvt + 0xA0) = 0;
     } else {
         if (range == float_150_8042437c) {
-            *(char**)((s32)pEvt + 0x9C) = str_MOBJ_TreasureBox_802f8a08 + 0x268;
+            *(char**)((s32)pEvt + 0x9C) = data + 0x268;
             *(s32*)((s32)pEvt + 0xA0) = 2;
         } else {
-            *(char**)((s32)pEvt + 0x9C) = str_MOBJ_TreasureBox_802f8a08 + 0x278;
+            *(char**)((s32)pEvt + 0x9C) = data + 0x278;
             *(s32*)((s32)pEvt + 0xA0) = 1;
         }
-        if (angle <= float_180_80424384) {
-            *(f32*)((s32)party + 0x110) = float_180_80424384;
-        } else {
-            *(f32*)((s32)party + 0x110) = float_0_80424370;
+        direction = float_180_80424384;
+        if (direction < angle) {
+            direction = float_0_80424370;
         }
-        *(f32*)((s32)party + 0xFC) = partyToMovedir(*(f32*)((s32)party + 0x110), party);
+        *(f32*)((s32)party + 0x110) = direction;
+        *(f32*)((s32)party + 0xFC) =
+            partyToMovedir(*(f32*)((s32)party + 0x110), party);
         *(f32*)((s32)party + 0x100) = *(f32*)((s32)party + 0xFC);
     }
-
     return 2;
 }
 
@@ -218,48 +240,56 @@ s32 post_msg(void* party) {
 u8 chuchu_searchObject(void) {
     extern s32 itemNearDistCheck(f32 x, f32 y, f32 z, f32 dist);
     extern s32 mobjNearDistCheck2(void* list, f32 x, f32 y, f32 z, f32 dist);
-    extern f32 vec3_802f8c4c[3];
+    extern const u32 vec3_802f8c4c[3];
+    extern void* memcpy(void* dst, const void* src, u32 size);
     void* party;
     void* mario;
     u32* entry;
     f32 best;
-    f32 pos[3];
-    f32 obj[3];
+    u32 pos[3];
+    u32 obj[3];
     f32 dist;
     s32 found;
     s32 i;
 
     party = partyGetPtr(marioGetPartyId());
     mario = *(void**)((s32)party + 0x160);
-    if (itemNearDistCheck(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x90), *(f32*)((s32)mario + 0x94), float_150_8042437c) != 0) {
+    if (itemNearDistCheck(*(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x90),
+                          *(f32*)((s32)mario + 0x94), float_150_8042437c)) {
         return 1;
     }
-    if (mobjNearDistCheck2(mobj_list, *(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x90), *(f32*)((s32)mario + 0x94), float_150_8042437c) != 0) {
+    if (mobjNearDistCheck2(mobj_list, *(f32*)((s32)mario + 0x8C), *(f32*)((s32)mario + 0x90),
+                           *(f32*)((s32)mario + 0x94), float_150_8042437c)) {
         return 1;
     }
 
     entry = unk_8038e994;
     found = 0;
+    mario = *(void**)((s32)party + 0x160);
     best = float_10000_80424380;
     for (i = 0; i < 0x28; i++, entry += 5) {
-        if (strcmp((char*)gp + 0x12C, (char*)entry[0]) == 0 && evtGetValue(0, entry[1]) == 0) {
-            obj[0] = (f32)(s32)entry[2];
-            obj[1] = (f32)(s32)entry[3];
-            obj[2] = (f32)(s32)entry[4];
-            pos[0] = vec3_802f8c4c[0];
-            pos[1] = vec3_802f8c4c[1];
-            pos[2] = vec3_802f8c4c[2];
-            pos[0] = obj[0];
-            pos[1] = obj[1];
-            pos[2] = obj[2];
-            dist = PSVECDistance((f32*)((s32)mario + 0x8C), pos);
-            if (dist <= float_150_8042437c && dist < best) {
+        if (strcmp((char*)gp + 0x12C, (char*)entry[0]) != 0) {
+            continue;
+        }
+        if (evtGetValue(0, entry[1]) != 0) {
+            continue;
+        }
+        memcpy(obj, vec3_802f8c4c, 12);
+        *(f32*)&obj[0] = (f32)(s32)entry[2];
+        *(f32*)&obj[1] = (f32)(s32)entry[3];
+        *(f32*)&obj[2] = (f32)(s32)entry[4];
+        pos[0] = obj[0];
+        pos[1] = obj[1];
+        pos[2] = obj[2];
+        dist = PSVECDistance((f32*)((s32)mario + 0x8C), (f32*)pos);
+        if (float_150_8042437c >= dist) {
+            if (best > dist) {
                 best = dist;
                 found = 1;
             }
         }
     }
-    return found != 0;
+    return (u32)(-found | found) >> 31;
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -316,43 +346,41 @@ void chuchu_use(void* pParty) {
     extern void marioChgMot(s32 mot);
     extern void msg_evt;
     extern char str_PCH_A2_1_802f8c58[];
-    extern double double_to_int_802f8c68;
 
-    void* player;
+    void* player = *(void**)((s32)pParty + 0x160);
     Vec3 pos;
     s32 timer;
 
-    player = *(void**)((s32)pParty + 0x160);
     if (*(u32*)((s32)pParty + 8) & 8) {
         *(u32*)((s32)pParty + 8) &= ~8;
-        *(s32*)((s32)pParty + 0x39) = 0;
+        *(u8*)((s32)pParty + 0x39) = 0;
         marioStSystemLevel(1);
     }
 
     switch (*(u8*)((s32)pParty + 0x39)) {
         case 0:
             partyGetAppearPos3(pParty, &pos);
-            *(f32*)((s32)pParty + 0x94) = pos.x;
-            *(f32*)((s32)pParty + 0x98) = pos.y;
-            *(f32*)((s32)pParty + 0x9C) = pos.z;
+            *(u32*)((s32)pParty + 0x94) = *(u32*)((s32)&pos + 0);
+            *(u32*)((s32)pParty + 0x98) = *(u32*)((s32)&pos + 4);
+            *(u32*)((s32)pParty + 0x9C) = *(u32*)((s32)&pos + 8);
             *(s32*)((s32)pParty + 0x24) = 4;
-            *(f32*)((s32)pParty + 0x1B0) = angleABf(*(f32*)((s32)pParty + 0x58), *(f32*)((s32)pParty + 0x60),
-                                                    *(f32*)((s32)pParty + 0x94), *(f32*)((s32)pParty + 0x9C));
-            *(f32*)((s32)pParty + 0x1B4) = *(f32*)((s32)pParty + 0x1B0);
-            *(s8*)((s32)pParty + 0x174) = *(s8*)((s32)player + 0x280);
-            *(s8*)((s32)pParty + 0x175) = *(s8*)((s32)player + 0x280);
-            *(f32*)((s32)pParty + 0x1A8) =
+            *(f32*)((s32)pParty + 0xFC) = angleABf(*(f32*)((s32)pParty + 0x58), *(f32*)((s32)pParty + 0x60),
+                                                   *(f32*)((s32)pParty + 0x94), *(f32*)((s32)pParty + 0x9C));
+            *(f32*)((s32)pParty + 0x100) = *(f32*)((s32)pParty + 0xFC);
+            *(f32*)((s32)pParty + 0x10C) = *(f32*)((s32)player + 0x1AC);
+            *(f32*)((s32)pParty + 0x110) = *(f32*)((s32)player + 0x1AC);
+            *(f32*)((s32)pParty + 0x104) =
                 distABf(*(f32*)((s32)pParty + 0x58), *(f32*)((s32)pParty + 0x60),
                         *(f32*)((s32)pParty + 0x94), *(f32*)((s32)pParty + 0x9C)) /
                 (f32)(*(s32*)((s32)pParty + 0x24));
-            *(f32*)((s32)pParty + 0x1AC) = float_0_80424370;
+            *(f32*)((s32)pParty + 0x114) = float_0_80424370;
             *(u8*)((s32)pParty + 0x39) = 1;
             break;
         case 1:
             partyGetAppearPos3(pParty, &pos);
-            *(f32*)((s32)pParty + 0x94) = pos.x;
-            *(f32*)((s32)pParty + 0x98) = pos.y;
-            *(f32*)((s32)pParty + 0x9C) = pos.z;
+            *(u32*)((s32)pParty + 0x94) = *(u32*)((s32)&pos + 0);
+            *(u32*)((s32)pParty + 0x98) = *(u32*)((s32)&pos + 4);
+            *(u32*)((s32)pParty + 0x9C) = *(u32*)((s32)&pos + 8);
             *(f32*)((s32)pParty + 0x58) += (*(f32*)((s32)pParty + 0x94) - *(f32*)((s32)pParty + 0x58)) /
                                            (f32)(*(s32*)((s32)pParty + 0x24));
             *(f32*)((s32)pParty + 0x5C) += (*(f32*)((s32)pParty + 0x98) - *(f32*)((s32)pParty + 0x5C)) /
@@ -365,13 +393,13 @@ void chuchu_use(void* pParty) {
                 return;
             }
             partyChgPoseId(pParty, 1);
-            *(f32*)((s32)pParty + 0x1A8) = float_0_80424370;
+            *(f32*)((s32)pParty + 0x104) = float_0_80424370;
             *(u8*)((s32)pParty + 0x39) = 0xA;
             break;
         case 0xA:
-            *(s8*)((s32)pParty + 0x175) = *(s8*)((s32)player + 0x281);
-            *(f32*)((s32)pParty + 0x1B0) = toMovedir((f32)*(s8*)((s32)pParty + 0x175));
-            *(f32*)((s32)pParty + 0x1B4) = *(f32*)((s32)pParty + 0x1B0);
+            *(f32*)((s32)pParty + 0x110) = *(f32*)((s32)player + 0x1B0);
+            *(f32*)((s32)pParty + 0xFC) = toMovedir(*(f32*)((s32)pParty + 0x110));
+            *(f32*)((s32)pParty + 0x100) = *(f32*)((s32)pParty + 0xFC);
             *(u8*)((s32)pParty + 0x39) = 0x14;
             *(s32*)((s32)pParty + 0x24) = 0x19;
             break;
@@ -411,4 +439,3 @@ void chuchu_use(void* pParty) {
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
-

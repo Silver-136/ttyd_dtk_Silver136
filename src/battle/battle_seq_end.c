@@ -1042,12 +1042,13 @@ void _MarioExpDisp(void* disp, void* battleWork) {
 }
 
 void _LvupParamConfirmDisp(void* disp, void* battleWork) {
-    char buf[24];
-    u32 color;
+    char buf[20];
+    u32 color1;
+    u32 color2;
     f32 pos[3];
     void* work;
-    char* base;
-    s32 len;
+    register char* base;
+    u32 len;
     f32 halfWidth;
 
     extern char str_msg_menu_mario_name__802fe738[];
@@ -1073,7 +1074,7 @@ void _LvupParamConfirmDisp(void* disp, void* battleWork) {
     extern f32 float_1_804271a8;
     extern const char* msgSearch(const char* msg);
     extern s32 sprintf(char* str, const char* format, ...);
-    extern s32 strlen(const char* str);
+    extern u32 strlen(const char* str);
     extern void FontDrawStart(void);
     extern void FontDrawString(const char* str, f32 x, f32 y);
     extern void iconDispGx(f32* pos, s32 icon, s32 color, f32 scale);
@@ -1084,19 +1085,19 @@ void _LvupParamConfirmDisp(void* disp, void* battleWork) {
     sprintf(buf, msgSearch(base + 0x314));
     len = strlen(buf);
     halfWidth = float_6p25_8042724c * len;
-    color = dat_8042714c;
+    color1 = dat_8042714c;
     windowDispGX_Waku_col(
         0,
-        &color,
+        &color1,
         float_neg30_80427248 - halfWidth,
         float_30_80427250,
         float_12p5_80427254 * len + float_65_804271ec,
         float_32_80427258,
         float_10_80427214);
-    color = dat_80427150;
+    color2 = dat_80427150;
     windowDispGX_Waku_col(
         0,
-        &color,
+        &color2,
         float_neg70_8042725c,
         float_neg10_80427260,
         float_130_80427264,
@@ -1185,11 +1186,6 @@ void L__LvupParamHelpMsgDisp(void* disp, void* battleWork) {
 
 /* fallback stub-fill: map=_GetExpIcon_Init addr=0x802149ec size=0x0000025c */
 void _GetExpIcon_Init(void* seqEndWork) {
-    typedef struct VecLocal {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecLocal;
     extern int sprintf(char* s, const char* fmt, ...);
     extern void iconEntry2D(char* name, u16 id);
     extern void* iconNameToPtr(char* name);
@@ -1217,8 +1213,6 @@ void _GetExpIcon_Init(void* seqEndWork) {
     f32 f24 = float_24_8042722c;
     f32 f25 = float_25_804271e0;
     f32 zero = float_0_804271c0;
-    f32 f162 = float_16p2_80427244;
-    f32 f869 = float_86p9_80427240;
 
     iconOffset = 0;
     posOffset = 0;
@@ -1230,31 +1224,9 @@ void _GetExpIcon_Init(void* seqEndWork) {
         iconSetScale(float_0p9_80427238, iconEntryName);
         iconFlagOn(iconEntryName, 2);
         *(s32*)((s32)seqEndWork + 0xCC + iconOffset) = 0;
-        ((VecLocal*)((s32)seqEndWork + 0x118))[i].x =
-            f36 * (f32)i - (f18 * (f32)(*(s16*)((s32)seqEndWork + 0xA) / 10) - f24);
-        ((VecLocal*)((s32)seqEndWork + 0x118))[i].y = f25;
-        ((VecLocal*)((s32)seqEndWork + 0x118))[i].z = zero;
-        iconSetPos(((VecLocal*)((s32)seqEndWork + 0x118))[i].x,
-                   ((VecLocal*)((s32)seqEndWork + 0x118))[i].y,
-                   ((VecLocal*)((s32)seqEndWork + 0x118))[i].z,
-                   iconEntryName);
-        iconOffset += 4;
-        posOffset += 0xC;
-    }
-
-    iconOffset = 0x28;
-    posOffset = 0x78;
-    for (i = 10; i < 0x13; i++) {
-        sprintf(iconEntryName, str_BgspPCTd_802fe9c0, i);
-        iconEntry2D(iconEntryName, 0x194);
-        iconEntry = iconNameToPtr(iconEntryName);
-        *(void**)((s32)seqEndWork + 0x34 + iconOffset) = iconEntry;
-        iconSetScale(float_0p45_8042723c, iconEntryName);
-        iconFlagOn(iconEntryName, 2);
-        *(s32*)((s32)seqEndWork + 0xCC + iconOffset) = 0;
         *(f32*)((s32)seqEndWork + 0x118 + posOffset) =
-            -(f162 * (f32)(i - 9) - f869);
-        *(f32*)((s32)seqEndWork + 0x11C + posOffset) = zero;
+            f36 * (f32)i - (f18 * (f32)(*(s16*)((s32)seqEndWork + 0xA) / 10) - f24);
+        *(f32*)((s32)seqEndWork + 0x11C + posOffset) = f25;
         *(f32*)((s32)seqEndWork + 0x120 + posOffset) = zero;
         iconSetPos(*(f32*)((s32)seqEndWork + 0x118 + posOffset),
                    *(f32*)((s32)seqEndWork + 0x11C + posOffset),
@@ -1262,6 +1234,34 @@ void _GetExpIcon_Init(void* seqEndWork) {
                    iconEntryName);
         iconOffset += 4;
         posOffset += 0xC;
+    }
+
+    {
+        f32 f162 = float_16p2_80427244;
+        f32 f869 = float_86p9_80427240;
+        f32 zero2 = float_0_804271c0;
+
+        iconOffset = 0x28;
+        posOffset = 0x78;
+        for (i = 10; i < 0x13; i++) {
+            sprintf(iconEntryName, str_BgspPCTd_802fe9c0, i);
+            iconEntry2D(iconEntryName, 0x194);
+            iconEntry = iconNameToPtr(iconEntryName);
+            *(void**)((s32)seqEndWork + 0x34 + iconOffset) = iconEntry;
+            iconSetScale(float_0p45_8042723c, iconEntryName);
+            iconFlagOn(iconEntryName, 2);
+            *(s32*)((s32)seqEndWork + 0xCC + iconOffset) = 0;
+            *(f32*)((s32)seqEndWork + 0x118 + posOffset) =
+                -(f162 * (f32)(i - 9) - f869);
+            *(f32*)((s32)seqEndWork + 0x11C + posOffset) = zero2;
+            *(f32*)((s32)seqEndWork + 0x120 + posOffset) = zero2;
+            iconSetPos(*(f32*)((s32)seqEndWork + 0x118 + posOffset),
+                       *(f32*)((s32)seqEndWork + 0x11C + posOffset),
+                       *(f32*)((s32)seqEndWork + 0x120 + posOffset),
+                       iconEntryName);
+            iconOffset += 4;
+            posOffset += 0xC;
+        }
     }
     *(u32*)((s32)seqEndWork + 0x30) |= 2;
 }
@@ -1443,17 +1443,17 @@ void N__draw_select_one_to_upgrade_text(void) {
     extern void FontDrawMessage(s32 x, s32 y, const char* msg);
 
     msg = msgSearch(str_select_HPFPBP_802fe9b0);
-    width = FontGetMessageWidthLine(msg, &lines);
+    width = FontGetMessageWidthLine(msg, &lines) & 0xFFFF;
     lineCount = (u16)(lines + 1);
     color = dat_80427168;
-    x = float_0_804271c0 - (f32)((s32)(u16)width / 2);
+    x = float_0_804271c0 - (f32)(width / 2);
     lines = lineCount;
     windowDispGX_Waku_col(
         0,
         &color,
         x - float_20_8042718c,
         float_neg145_80427210 + (f32)((lineCount - 1) * 0x1D),
-        (f32)((u16)width + 0x28),
+        (f32)(width + 0x28),
         (f32)(lineCount * 0x1D + 1),
         float_10_80427214);
     FontDrawStart_alpha(0xFF);
@@ -1616,7 +1616,7 @@ s32 _lvup_spot_on(void* event) {
     entry = *(u8**)(spot + 4) + id * 0x2C;
     switch (id) {
         case 0:
-            pos0.x = float_neg50_80427208;
+            pos0.x = float_neg50_80427208 + float_25_804271e0 * (f32)(s32)id;
             pos0.y = *(f32*)(base + 0x1A0);
             pos0.z = *(f32*)(base + 0x1A4);
             *(Vec3f_LvupSpotOn*)(entry + 4) = pos0;
@@ -1628,7 +1628,7 @@ s32 _lvup_spot_on(void* event) {
             *(Vec3f_LvupSpotOn*)(entry + 4) = pos1;
             break;
         case 2:
-            pos2.x = float_neg50_80427208 + float_25_804271e0 * 2.0f;
+            pos2.x = float_neg50_80427208 + float_25_804271e0 * (f32)(s32)id;
             pos2.y = *(f32*)(base + 0x1B8);
             pos2.z = *(f32*)(base + 0x1BC);
             *(Vec3f_LvupSpotOn*)(entry + 4) = pos2;
@@ -1994,17 +1994,13 @@ s32 _lvup_select_object_init(void) {
     extern u32 dat_80427178;
     extern u32 dat_8042717c;
     extern u32 dat_80427180;
-    void* battleWork;
+    void* pouch;
     u8* work;
     char* base;
-    u16 hp;
-    u16 fp;
-    u16 bp;
 
     base = str_msg_menu_mario_name__802fe738;
-    battleWork = _battleWorkPointer;
-    work = *(u8**)((s32)battleWork + 0xF28);
-    pouchGetPtr();
+    work = *(u8**)((s32)_battleWorkPointer + 0xF28);
+    pouch = pouchGetPtr();
 
     *(u32*)(work + 0x200) = *(u32*)(base + 0x1F0);
     *(u32*)(work + 0x204) = *(u32*)(base + 0x1F4);
@@ -2029,30 +2025,39 @@ s32 _lvup_select_object_init(void) {
 
     work[0x228] = 0;
     *(u32*)(work + 0x230) = dat_80427178;
-    hp = *(s16*)((s32)battleWork + 0x8E);
-    *(u16*)(work + 0x224) = hp;
+    *(u16*)(work + 0x224) = *(s16*)((s32)pouch + 0x8E);
     *(u32*)(work + 0x218) = *(u32*)(base + 0x238);
     *(u32*)(work + 0x21C) = *(u32*)(base + 0x23C);
     *(u32*)(work + 0x220) = *(u32*)(base + 0x240);
-    *(u16*)(work + 0x226) = (hp >= 0xC8) ? hp : hp + 5;
+    if (*(u16*)(work + 0x224) >= 0xC8) {
+        *(u16*)(work + 0x226) = *(u16*)(work + 0x224);
+    } else {
+        *(u16*)(work + 0x226) = *(u16*)(work + 0x224) + 5;
+    }
 
     work[0x25C] = 0;
     *(u32*)(work + 0x264) = dat_8042717c;
-    fp = *(s16*)((s32)battleWork + 0x90);
-    *(u16*)(work + 0x258) = fp;
+    *(u16*)(work + 0x258) = *(s16*)((s32)pouch + 0x90);
     *(u32*)(work + 0x24C) = *(u32*)(base + 0x244);
     *(u32*)(work + 0x250) = *(u32*)(base + 0x248);
     *(u32*)(work + 0x254) = *(u32*)(base + 0x24C);
-    *(u16*)(work + 0x25A) = (fp >= 0xC8) ? fp : fp + 5;
+    if (*(u16*)(work + 0x258) >= 0xC8) {
+        *(u16*)(work + 0x25A) = *(u16*)(work + 0x258);
+    } else {
+        *(u16*)(work + 0x25A) = *(u16*)(work + 0x258) + 5;
+    }
 
     work[0x290] = 0;
     *(u32*)(work + 0x298) = dat_80427180;
-    bp = *(s16*)((s32)battleWork + 0x94);
-    *(u16*)(work + 0x28C) = bp;
+    *(u16*)(work + 0x28C) = *(s16*)((s32)pouch + 0x94);
     *(u32*)(work + 0x280) = *(u32*)(base + 0x250);
     *(u32*)(work + 0x284) = *(u32*)(base + 0x254);
     *(u32*)(work + 0x288) = *(u32*)(base + 0x258);
-    *(u16*)(work + 0x28E) = (bp >= 0x63) ? bp : bp + 3;
+    if (*(u16*)(work + 0x28C) >= 0x63) {
+        *(u16*)(work + 0x28E) = *(u16*)(work + 0x28C);
+    } else {
+        *(u16*)(work + 0x28E) = *(u16*)(work + 0x28C) + 3;
+    }
 
     *(u32*)(work + 0x30) |= 8;
     return 2;

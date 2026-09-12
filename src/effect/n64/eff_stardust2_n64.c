@@ -169,6 +169,7 @@ particle_done:
 }
 
 u8 effStardust2Main(void* effect) {
+    typedef struct Vec { f32 x, y, z; } Vec;
     extern void effDelete(void*);
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
@@ -179,10 +180,11 @@ u8 effStardust2Main(void* effect) {
     extern f32 float_120_80426244;
     extern f32 float_neg0p05_8042624c;
     extern f64 double_to_int_mask_802fc078;
+    extern Vec vec3_802fc068;
 
     u8* work = *(u8**)((s32)effect + 0xC);
     u8* particle = work + 0x30;
-    f32 position[3];
+    Vec position = vec3_802fc068;
     s32 type;
     s32 frame;
     s32 dead = 0;
@@ -193,9 +195,9 @@ u8 effStardust2Main(void* effect) {
         struct { u32 hi, lo; } words;
     } cvt;
 
-    position[0] = *(f32*)(work + 4);
-    position[1] = *(f32*)(work + 8);
-    position[2] = *(f32*)(work + 0xC);
+    position.x = *(f32*)(work + 4);
+    position.y = *(f32*)(work + 8);
+    position.z = *(f32*)(work + 0xC);
     *(s32*)(work + 0x24) -= 1;
     *(s32*)(work + 0x20) += 1;
     type = *(s16*)(work + 2);
@@ -227,14 +229,16 @@ u8 effStardust2Main(void* effect) {
                         float_0p01_80426238 *
                         (f32)(cvt.value - double_to_int_mask_802fc078);
                 } else {
+                    f32 one;
                     angle = (float_360_80426240 / (f32)count) * (f32)i + float_60_8042623c;
                     if (i & 1) {
                         angle -= float_120_80426244;
                     }
                     angle = float_6p2832_80426248 * angle / float_360_80426240;
                     *(s16*)(particle + 2) = 10;
-                    *(f32*)(particle + 0x10) = float_1_8042621c * (f32)sin(angle);
-                    *(f32*)(particle + 0x14) = float_1_8042621c * (f32)cos(angle);
+                    one = float_1_8042621c;
+                    *(f32*)(particle + 0x10) = one * (f32)sin(angle);
+                    *(f32*)(particle + 0x14) = one * (f32)cos(angle);
                     *(f32*)(particle + 0x18) = float_neg0p05_8042624c;
                 }
                 continue;
@@ -302,7 +306,7 @@ u8 effStardust2Main(void* effect) {
     }
 
     if (type < 2 || type == 3 || type > 9 || dead < count) {
-        dispEntry(*(s32*)(work + 0x2C), 2, effStardust2Disp, effect, dispCalcZ(position));
+        dispEntry(*(s32*)(work + 0x2C), 2, effStardust2Disp, effect, dispCalcZ(&position));
     } else {
         effDelete(effect);
     }

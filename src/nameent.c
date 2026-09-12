@@ -67,68 +67,80 @@ s32 nameEntPrepare(void) {
 /* stub-fill: nameEntOn | missing_definition | ghidra_signature */
 #pragma optimize_for_size off
 void nameEntOn(int param_1) {
-    extern char* strcpy(char* dst, const char* src);
-    extern char* strcat(char* dst, const char* src);
     extern char lbl_803AE790[];
+    extern char str___80426910[];
+    extern char str__80426d80[];
     extern char str_p_80426c8c[];
     extern char float_0_80426e94[];
     extern f32 float_neg106_80426e90;
     extern f32 float_135_80426e8c;
+    extern f32 float_0_80426ddc;
+    extern char* strcpy(char* dst, const char* src);
+    extern char* strcat(char* dst, const char* src);
     s32 i;
     s32 col;
     s32 row;
+    s32 quotient;
     f32 x;
     f32 y;
+    f32 left;
+    f32 right;
     char* fill;
+    char* base = lbl_803AE790;
 
     *(u16*)wp = 0;
     *(s32*)((s32)wp + 0xC) = param_1;
     *(s32*)((s32)wp + 4) = 1;
     *(s32*)((s32)wp + 8) = 0;
     if (*(u32*)((s32)gp + 0x16C) == 0) {
-        *(void**)((s32)wp + 0x50) = lbl_803AE790 + 0x40;
+        *(void**)((s32)wp + 0x50) = base + 0x40;
     } else {
-        *(void**)((s32)wp + 0x50) = lbl_803AE790 + 0x430;
+        *(void**)((s32)wp + 0x50) = base + 0x430;
     }
 
     *(s32*)((s32)wp + 0x18) = 0;
     *(s32*)((s32)wp + 0x10) = 0;
     *(s32*)((s32)wp + 0x14) = 0;
     col = *(s32*)((s32)wp + 0x10);
-    x = (f32)(col * 0x18 + (col / 5) * 0x1E - 0xBE);
+    quotient = col / 5;
+    x = (f32)(col * 0x18 + quotient * 0x1E - 0xBE);
     *(f32*)((s32)wp + 0x24) = x;
     *(f32*)((s32)wp + 0x1C) = x;
     row = *(s32*)((s32)wp + 0x14);
     y = (f32)(0x70 - row * 0x1C);
     *(f32*)((s32)wp + 0x28) = y;
     *(f32*)((s32)wp + 0x20) = y;
-    *(f32*)((s32)wp + 0x34) = float_neg106_80426e90;
-    *(f32*)((s32)wp + 0x2C) = float_neg106_80426e90;
-    *(f32*)((s32)wp + 0x38) = float_135_80426e8c;
-    *(f32*)((s32)wp + 0x30) = float_135_80426e8c;
+    left = float_neg106_80426e90;
+    right = float_135_80426e8c;
+    *(f32*)((s32)wp + 0x34) = left;
+    *(f32*)((s32)wp + 0x2C) = left;
+    *(f32*)((s32)wp + 0x38) = right;
+    *(f32*)((s32)wp + 0x30) = right;
 
     strcpy((char*)((s32)wp + 0x3C), float_0_80426e94);
-    for (i = 0; i < 8; i++) {
+    i = 0;
+    do {
         fill = str__80426d80;
         if (*(u32*)((s32)gp + 0x16C) == 0) {
             fill = str___80426910;
         }
         strcat((char*)((s32)wp + 0x3C), fill);
-    }
+        i++;
+    } while (i < 8);
     *(f32*)((s32)wp + 0x54) = float_0_80426ddc;
 
     if (*(u32*)((s32)gp + 0x16C) == 0) {
         if (param_1 == 2) {
-            *(char**)(lbl_803AE790 + 0x64) = str___80426910;
-            *(char**)(lbl_803AE790 + 0x25C) = str___80426910;
+            *(char**)(base + 0x64) = str___80426910;
+            *(char**)(base + 0x25C) = str___80426910;
         } else {
-            *(char**)(lbl_803AE790 + 0x64) = (char*)0x80426918;
-            *(char**)(lbl_803AE790 + 0x25C) = (char*)0x80426AA8;
+            *(char**)(base + 0x64) = (char*)0x80426918;
+            *(char**)(base + 0x25C) = (char*)0x80426AA8;
         }
     } else if (param_1 == 2) {
-        *(char**)(lbl_803AE790 + 0x4EC) = str__80426d80;
+        *(char**)(base + 0x4EC) = str__80426d80;
     } else {
-        *(char**)(lbl_803AE790 + 0x4EC) = str_p_80426c8c;
+        *(char**)(base + 0x4EC) = str_p_80426c8c;
     }
 }
 #pragma optimize_for_size on
@@ -165,25 +177,25 @@ char* nameEntGetName(void) {
         count = 7;
         offset = 0xE;
         zero = 0;
-        while (strncmp((char*)((s32)wp + offset + 0x3C), str___80426910, 2) == 0) {
+        do {
+            if (strncmp((char*)((s32)wp + offset + 0x3C), str___80426910, 2) != 0) {
+                break;
+            }
             count--;
             *(u8*)((s32)wp + offset + 0x3C) = zero;
             *(u8*)((s32)wp + offset + 0x3D) = zero;
             offset -= 2;
-            if (count < 1) {
-                break;
-            }
-        }
+        } while (count >= 1);
     } else {
         offset = 7;
         zero = 0;
-        while (strncmp((char*)((s32)wp + offset + 0x3C), str__80426d80, 1) == 0) {
-            *(u8*)((s32)wp + offset + 0x3C) = zero;
-            offset--;
-            if (offset < 1) {
+        do {
+            if (strncmp((char*)((s32)wp + offset + 0x3C), str__80426d80, 1) != 0) {
                 break;
             }
-        }
+            *(u8*)((s32)wp + offset + 0x3C) = zero;
+            offset--;
+        } while (offset >= 1);
     }
     return (char*)((s32)wp + 0x3C);
 }
@@ -708,7 +720,9 @@ cursor_fade:
 void nameEntDisp(void) {
     typedef f32 Mtx[3][4];
     typedef struct Vec { f32 x, y, z; } Vec;
+    extern void* wp;
     extern void* camGetCurPtr(void);
+    extern void* camGetPtr(s32);
     extern void GXGetProjectionv(f32*);
     extern void GXGetViewportv(f32*);
     extern void GXSetProjection(void*, s32);
@@ -716,6 +730,8 @@ void nameEntDisp(void) {
     extern void GXSetViewport(f32, f32, f32, f32, f32, f32);
     extern void winTexInit(s32);
     extern void winTexSet(s32, Vec*, Vec*, void*);
+    extern void winTexInit_x2(s32);
+    extern void winTexSet_x2(s32, s32, Vec*, Vec*, void*);
     extern void nameBG(void);
     extern void nameKirinukiGX(f64, f64, f64, f64);
     extern void nameWinGX(f64, f64, f64, f64, s32, s32);
@@ -736,21 +752,42 @@ void nameEntDisp(void) {
     extern char str_msg_nameent_yes_802fe460[];
     extern char str_msg_nameent_no_802fe470[];
     extern char str_msg_nameent_ok_01_802fe480[];
+    extern void* gp;
+    extern u32 dat_80426db4;
+    extern Vec vec3_802fe378;
+    extern Vec vec3_802fe384;
+    extern Vec vec3_802fe390;
+    extern Vec vec3_802fe39c;
+    extern Vec vec3_802fe3a8;
+    extern Vec vec3_802fe3b4;
     u8* work = wp;
     f32 projection[7];
     f32 viewport[6];
-    Mtx saved;
+    u32 savedCamera[0x98];
     Vec pos, scale;
     u32 color = 0xFFFFFFFF;
     u32 messageColor = 0xFFFFFFFF;
     char glyph[16];
     s32 file = ***(s32***)(work + 0x60);
     s32 i;
+    s32 row;
+    s32 col;
+    u32* src;
+    u32* dst;
 
     GXGetProjectionv(projection);
     GXGetViewportv(viewport);
-    for (i = 0; i < 12; i++) {
-        ((f32*)saved)[i] = *(f32*)((u8*)camGetCurPtr() + 0x118 + i * 4);
+    src = (u32*)camGetCurPtr();
+    dst = savedCamera;
+    for (i = 0; i < 0x4C; i++) {
+        *dst++ = *src++;
+        *dst++ = *src++;
+    }
+    src = (u32*)camGetPtr(1);
+    dst = (u32*)camGetCurPtr();
+    for (i = 0; i < 0x4C; i++) {
+        *dst++ = *src++;
+        *dst++ = *src++;
     }
     GXSetProjection((u8*)camGetPtr(1) + 0x160, *(s32*)((u8*)camGetPtr(1) + 0x1A0));
 
@@ -769,6 +806,41 @@ void nameEntDisp(void) {
     scale.x = 500.0f; scale.y = 40.0f;
     winTexSet(0x2B, &pos, &scale, &color);
     nameKirinukiGX(-240.0, 120.0, 480.0, 270.0);
+
+    FontDrawStart();
+    i = 0;
+    for (row = 0; row < 9; row++) {
+        for (col = 0; col < 14; col++, i++) {
+            const char* entry = (*(char***)(work + 0x50))[i];
+            if (entry != 0) {
+                u16 width = FontGetMessageWidth(entry);
+                FontDrawString((f32)(col * 24 + (col / 5) * 30 - 190 +
+                                     (24 - (s32)width) / 2),
+                               (f32)(112 - row * 28), entry);
+            }
+        }
+    }
+
+    for (i = (*(u32*)((u8*)gp + 0x16C) == 0) ? 0 : 2; i < 4; i++) {
+        if (*(s32*)(work + 0x10) < 10 || *(s32*)(work + 0x14) - 4 != i) {
+            winTexInit_x2(file);
+            pos = vec3_802fe3a8;
+            pos.y = (f32)(-20 - i * 34);
+            scale = vec3_802fe3b4;
+            winTexSet_x2(i + 0x25, 0x37, &pos, &scale, &color);
+        } else {
+            winTexInit(file);
+            pos = vec3_802fe378;
+            pos.y = (f32)(-20 - i * 34);
+            scale = vec3_802fe384;
+            winTexSet(0x37, &pos, &scale, &dat_80426db4);
+            winTexInit_x2(file);
+            pos = vec3_802fe390;
+            pos.y = (f32)(-14 - i * 34);
+            scale = vec3_802fe39c;
+            winTexSet_x2(i + 0x25, 0x37, &pos, &scale, &color);
+        }
+    }
 
     FontDrawStart();
     for (i = 0; i < 8; i++) {
@@ -823,6 +895,12 @@ void nameEntDisp(void) {
     pos.x = *(f32*)(work + 0x1C);
     pos.y = *(f32*)(work + 0x20);
     winTexSet(0, &pos, &scale, &color);
+    src = savedCamera;
+    dst = (u32*)camGetCurPtr();
+    for (i = 0; i < 0x4C; i++) {
+        *dst++ = *src++;
+        *dst++ = *src++;
+    }
     GXSetProjectionv(projection);
     GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
 }

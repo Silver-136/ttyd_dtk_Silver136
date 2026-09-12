@@ -83,58 +83,49 @@ void BattleStageInit(void) {
 
 void BattleStageMain(void) {
     extern void batSpotMain(void);
-    extern f64 intplGetValue(f64, f64, s32, s32, s32);
-    extern f64 getSpline(f32*, f32*, f32*, f32*, s32, s32, s32);
+    extern f32 intplGetValue(f64, f64, s32, s32, s32);
+    extern f32 getSpline(f32*, f32*, f32*, f32*, s32, s32, s32);
     void* stage;
     u8* light;
     s32* spline;
     s32 i;
     s32 remain;
-    s32 total;
-    s32 frame;
 
     stage = (void*)((s32)_battleWorkPointer + 0x163FC);
     batSpotMain();
     for (i = 0; i < 12; i++) {
         light = (u8*)stage + (i * 0xE8) + 4;
-        if ((*(u32*)light & 1) == 0) {
-            goto inactive_entry;
-        }
+        if ((*(u32*)light & 1) == 0) goto inactive_entry;
         remain = *(s32*)(light + 0x30);
-        total = *(s32*)(light + 0x34);
         if (remain > 0) {
-            *(s32*)(light + 0x30) = --remain;
-            light[0x24] = (u8)(s32)intplGetValue(light[0x28], light[0x2C], (s8)light[0x38], total-remain, total);
-            light[0x25] = (u8)(s32)intplGetValue(light[0x29], light[0x2D], (s8)light[0x38], total-remain, total);
-            light[0x26] = (u8)(s32)intplGetValue(light[0x2A], light[0x2E], (s8)light[0x38], total-remain, total);
+            *(s32*)(light + 0x30) = remain - 1;
+            light[0x24] = (u8)(s32)intplGetValue(light[0x28], light[0x2C], (s8)light[0x38], *(s32*)(light + 0x34) - *(s32*)(light + 0x30), *(s32*)(light + 0x34));
+            light[0x25] = (u8)(s32)intplGetValue(light[0x29], light[0x2D], (s8)light[0x38], *(s32*)(light + 0x34) - *(s32*)(light + 0x30), *(s32*)(light + 0x34));
+            light[0x26] = (u8)(s32)intplGetValue(light[0x2A], light[0x2E], (s8)light[0x38], *(s32*)(light + 0x34) - *(s32*)(light + 0x30), *(s32*)(light + 0x34));
             if (((*(u32*)light & 2) != 0) && light[0x24] == 0 && light[0x25] == 0 && light[0x26] == 0) {
                 *(u32*)light = 0;
                 goto next_entry;
             }
         }
         remain = *(s32*)(light + 0x48);
-        total = *(s32*)(light + 0x4C);
         if (remain > 0) {
-            *(s32*)(light + 0x48) = --remain;
-            *(f32*)(light + 0x3C) = (f32)intplGetValue(*(f32*)(light + 0x40), *(f32*)(light + 0x44),
-                (s8)light[0x50], total-remain, total);
+            *(s32*)(light + 0x48) = remain - 1;
+            *(f32*)(light + 0x3C) = intplGetValue(*(f32*)(light + 0x40), *(f32*)(light + 0x44), (s8)light[0x50], *(s32*)(light + 0x4C) - *(s32*)(light + 0x48), *(s32*)(light + 0x4C));
         }
         remain = *(s32*)(light + 0x78);
-        total = *(s32*)(light + 0x7C);
         if (remain > 0) {
-            *(s32*)(light + 0x78) = --remain;
-            *(f32*)(light + 0x54) = (f32)intplGetValue(*(f32*)(light + 0x60), *(f32*)(light + 0x6C), (s8)light[0x80], total-remain, total);
-            *(f32*)(light + 0x58) = (f32)intplGetValue(*(f32*)(light + 0x64), *(f32*)(light + 0x70), (s8)light[0x80], total-remain, total);
-            *(f32*)(light + 0x5C) = (f32)intplGetValue(*(f32*)(light + 0x68), *(f32*)(light + 0x74), (s8)light[0x80], total-remain, total);
+            *(s32*)(light + 0x78) = remain - 1;
+            *(f32*)(light + 0x54) = intplGetValue(*(f32*)(light + 0x60), *(f32*)(light + 0x6C), (s8)light[0x80], *(s32*)(light + 0x7C) - *(s32*)(light + 0x78), *(s32*)(light + 0x7C));
+            *(f32*)(light + 0x58) = intplGetValue(*(f32*)(light + 0x64), *(f32*)(light + 0x70), (s8)light[0x80], *(s32*)(light + 0x7C) - *(s32*)(light + 0x78), *(s32*)(light + 0x7C));
+            *(f32*)(light + 0x5C) = intplGetValue(*(f32*)(light + 0x68), *(f32*)(light + 0x74), (s8)light[0x80], *(s32*)(light + 0x7C) - *(s32*)(light + 0x78), *(s32*)(light + 0x7C));
         }
         if ((*(u32*)light & 4) == 0) {
             remain = *(s32*)(light + 0xA8);
-            total = *(s32*)(light + 0xAC);
             if (remain > 0) {
-                *(s32*)(light + 0xA8) = --remain;
-                *(f32*)(light + 0x84) = (f32)intplGetValue(*(f32*)(light + 0x90), *(f32*)(light + 0x9C), (s8)light[0xB0], total-remain, total);
-                *(f32*)(light + 0x88) = (f32)intplGetValue(*(f32*)(light + 0x94), *(f32*)(light + 0xA0), (s8)light[0xB0], total-remain, total);
-                *(f32*)(light + 0x8C) = (f32)intplGetValue(*(f32*)(light + 0x98), *(f32*)(light + 0xA4), (s8)light[0xB0], total-remain, total);
+                *(s32*)(light + 0xA8) = remain - 1;
+                *(f32*)(light + 0x84) = intplGetValue(*(f32*)(light + 0x90), *(f32*)(light + 0x9C), (s8)light[0xB0], *(s32*)(light + 0xAC) - *(s32*)(light + 0xA8), *(s32*)(light + 0xAC));
+                *(f32*)(light + 0x88) = intplGetValue(*(f32*)(light + 0x94), *(f32*)(light + 0xA0), (s8)light[0xB0], *(s32*)(light + 0xAC) - *(s32*)(light + 0xA8), *(s32*)(light + 0xAC));
+                *(f32*)(light + 0x8C) = intplGetValue(*(f32*)(light + 0x98), *(f32*)(light + 0xA4), (s8)light[0xB0], *(s32*)(light + 0xAC) - *(s32*)(light + 0xA8), *(s32*)(light + 0xAC));
             }
             if (*(void**)(light + 0xE4) != 0) {
                 BattleFree(*(void**)(light + 0xE4));
@@ -142,30 +133,23 @@ void BattleStageMain(void) {
             }
         } else {
             spline = *(s32**)(light + 0xE4);
-            frame = *(s32*)(light + 0xA8);
-            *(f32*)(light + 0x84) = (f32)getSpline((f32*)(spline + 9), (f32*)(spline + 0x11),
-                (f32*)(spline + 0x19), (f32*)(spline + 0x21), spline[1], spline[0], frame);
-            *(f32*)(light + 0x88) = (f32)getSpline((f32*)(spline + 0x29), (f32*)(spline + 0x31),
-                (f32*)(spline + 0x39), (f32*)(spline + 0x41), spline[1], spline[0], frame);
-            *(f32*)(light + 0x8C) = (f32)getSpline((f32*)(spline + 0x49), (f32*)(spline + 0x51),
-                (f32*)(spline + 0x59), (f32*)(spline + 0x61), spline[1], spline[0], frame);
-            frame++;
-            if (frame >= spline[spline[0]]) {
-                if ((*(u32*)light & 8) == 0) frame = spline[spline[0]];
-                else frame -= spline[spline[0]];
+            *(f32*)(light + 0x84) = getSpline((f32*)(spline + 9), (f32*)(spline + 0x11), (f32*)(spline + 0x19), (f32*)(spline + 0x21), spline[1], spline[0], *(s32*)(light + 0xA8));
+            *(f32*)(light + 0x88) = getSpline((f32*)(spline + 0x29), (f32*)(spline + 0x31), (f32*)(spline + 0x39), (f32*)(spline + 0x41), spline[1], spline[0], *(s32*)(light + 0xA8));
+            *(f32*)(light + 0x8C) = getSpline((f32*)(spline + 0x49), (f32*)(spline + 0x51), (f32*)(spline + 0x59), (f32*)(spline + 0x61), spline[1], spline[0], *(s32*)(light + 0xA8));
+            (*(s32*)(light + 0xA8))++;
+            if (*(s32*)(light + 0xA8) >= spline[spline[0]]) {
+                if ((*(u32*)light & 8) == 0) *(s32*)(light + 0xA8) = spline[spline[0]];
+                else *(s32*)(light + 0xA8) -= spline[spline[0]];
             }
-            *(s32*)(light + 0xA8) = frame;
         }
         remain = *(s32*)(light + 0xD8);
-        total = *(s32*)(light + 0xDC);
         if (remain > 0) {
-            *(s32*)(light + 0xD8) = --remain;
-            *(f32*)(light + 0xB4) = (f32)intplGetValue(*(f32*)(light + 0xC0), *(f32*)(light + 0xCC), (s8)light[0xE0], total-remain, total);
-            *(f32*)(light + 0xB8) = (f32)intplGetValue(*(f32*)(light + 0xC4), *(f32*)(light + 0xD0), (s8)light[0xE0], total-remain, total);
-            *(f32*)(light + 0xBC) = (f32)intplGetValue(*(f32*)(light + 0xC8), *(f32*)(light + 0xD4), (s8)light[0xE0], total-remain, total);
+            *(s32*)(light + 0xD8) = remain - 1;
+            *(f32*)(light + 0xB4) = intplGetValue(*(f32*)(light + 0xC0), *(f32*)(light + 0xCC), (s8)light[0xE0], *(s32*)(light + 0xDC) - *(s32*)(light + 0xD8), *(s32*)(light + 0xDC));
+            *(f32*)(light + 0xB8) = intplGetValue(*(f32*)(light + 0xC4), *(f32*)(light + 0xD0), (s8)light[0xE0], *(s32*)(light + 0xDC) - *(s32*)(light + 0xD8), *(s32*)(light + 0xDC));
+            *(f32*)(light + 0xBC) = intplGetValue(*(f32*)(light + 0xC8), *(f32*)(light + 0xD4), (s8)light[0xE0], *(s32*)(light + 0xDC) - *(s32*)(light + 0xD8), *(s32*)(light + 0xDC));
         }
         goto next_entry;
-
 inactive_entry:
         if (*(void**)(light + 0xE4) != 0) {
             BattleFree(*(void**)(light + 0xE4));
@@ -174,51 +158,53 @@ inactive_entry:
 next_entry:
         ;
     }
-
     light = (u8*)stage + 0xAE8;
     remain = *(s32*)(light + 8);
-    total = *(s32*)(light + 0x10);
     if (remain > 0) {
-        *(s32*)(light + 8) = --remain;
-        light[0] = (u8)(s32)intplGetValue(light[2], light[4], (s8)light[0x18], total-remain, total);
+        *(s32*)(light + 8) = remain - 1;
+        light[0] = (u8)(s32)intplGetValue(light[2], light[4], (s8)light[0x18], *(s32*)(light + 0x10) - *(s32*)(light + 8), *(s32*)(light + 0x10));
     }
     remain = *(s32*)(light + 0xC);
-    total = *(s32*)(light + 0x14);
     if (remain > 0) {
-        *(s32*)(light + 0xC) = --remain;
-        light[1] = (u8)(s32)intplGetValue(light[3], light[5], (s8)light[0x19], total-remain, total);
+        *(s32*)(light + 0xC) = remain - 1;
+        light[1] = (u8)(s32)intplGetValue(light[3], light[5], (s8)light[0x19], *(s32*)(light + 0x14) - *(s32*)(light + 0xC), *(s32*)(light + 0x14));
     }
-
     light += 0x20;
     remain = *(s32*)(light + 8);
-    total = *(s32*)(light + 0x10);
     if (remain > 0) {
-        *(s32*)(light + 8) = --remain;
-        light[0] = (u8)(s32)intplGetValue(light[2], light[4], (s8)light[0x18], total-remain, total);
+        *(s32*)(light + 8) = remain - 1;
+        light[0] = (u8)(s32)intplGetValue(light[2], light[4], (s8)light[0x18], *(s32*)(light + 0x10) - *(s32*)(light + 8), *(s32*)(light + 0x10));
     }
     remain = *(s32*)(light + 0xC);
-    total = *(s32*)(light + 0x14);
     if (remain > 0) {
-        *(s32*)(light + 0xC) = --remain;
-        light[1] = (u8)(s32)intplGetValue(light[3], light[5], (s8)light[0x19], total-remain, total);
+        *(s32*)(light + 0xC) = remain - 1;
+        light[1] = (u8)(s32)intplGetValue(light[3], light[5], (s8)light[0x19], *(s32*)(light + 0x14) - *(s32*)(light + 0xC), *(s32*)(light + 0x14));
     }
 }
 
 void BattleStageEnd(void) {
     extern void unk_US_EU_09_80137fe4(void);
     char* stage;
+    char* entry;
     void* allocation;
     s32 i;
+    s32 offset;
+    s32 zero;
 
-    unk_US_EU_09_80137fe4();
     stage = (char*)_battleWorkPointer + 0x163FC;
-    for (i = 0; i < 12; i++) {
-        allocation = *(void**)(stage + 0xE8);
+    unk_US_EU_09_80137fe4();
+    offset = 0;
+    i = 0;
+    zero = offset;
+    while (i < 12) {
+        entry = stage + offset + 4;
+        allocation = *(void**)(entry + 0xE4);
         if (allocation != 0) {
             BattleFree(allocation);
-            *(void**)(stage + 0xE8) = 0;
+            *(void**)(entry + 0xE4) = (void*)zero;
         }
-        stage += 0xE8;
+        i++;
+        offset += 0xE8;
     }
 }
 
@@ -337,12 +323,7 @@ void BattleStageDispDark(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void BattleStageDispLight(void) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
-
+    typedef struct Vec { f32 x; f32 y; f32 z; } Vec;
     extern void* camGetPtr(s32 cameraId);
     extern void GXSetCullMode(s32 mode);
     extern void GXSetZCompLoc(s32 beforeTex);
@@ -369,7 +350,6 @@ void BattleStageDispLight(void) {
     extern void* _battleWorkPointer;
     extern f32 float_2_80422b20;
     extern f32 float_0p34907_80422b24;
-
     volatile f32* fifoF;
     volatile u8* fifoB;
     void* battleWork;
@@ -408,7 +388,6 @@ void BattleStageDispLight(void) {
     battleWork = _battleWorkPointer;
     stage = (void*)((s32)battleWork + 0x163FC);
     cam = camGetPtr(4);
-
     GXSetCullMode(2);
     GXSetZCompLoc(1);
     GXSetAlphaCompare(7, 0, 0, 7, 0);
@@ -427,19 +406,19 @@ void BattleStageDispLight(void) {
     GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
     GXSetTevAlphaIn(0, 7, 7, 7, 7);
-    GXSetTevOrder(0, 0, 0, 0xFF);
-    GXLoadPosMtxImm((void*)((s32)cam + 0x13C), 0);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
 
     offset = 0;
     i = 0;
     while (i < 0xC) {
-        light = (void*)((s32)stage + offset + 4);
+        light = (void*)((s32)stage + offset);
         two = float_2_80422b20;
-        if ((*(u32*)light & 1) != 0) {
-            diffX = *(f32*)((s32)light + 0x88) - *(f32*)((s32)light + 0x80);
-            diffY = *(f32*)((s32)light + 0x8C) - *(f32*)((s32)light + 0x84);
-            diffZ = *(f32*)((s32)light + 0x90) - *(f32*)((s32)light + 0x88);
-            radius = *(f32*)((s32)light + 0x68);
+        if ((*(u32*)((s32)light + 4) & 1) != 0) {
+            diffX = *(f32*)((s32)light + 0x88) - *(f32*)((s32)light + 0x58);
+            diffY = *(f32*)((s32)light + 0x8C) - *(f32*)((s32)light + 0x5C);
+            diffZ = *(f32*)((s32)light + 0x90) - *(f32*)((s32)light + 0x60);
+            radius = *(f32*)((s32)light + 0x40);
             up.x = *(f32*)((s32)light + 0xB8);
             up.y = *(f32*)((s32)light + 0xBC);
             up.z = *(f32*)((s32)light + 0xC0);
@@ -448,25 +427,24 @@ void BattleStageDispLight(void) {
             axis.z = diffZ;
             j = 0;
             while (j < 0x12) {
-                baseX = *(f32*)((s32)light + 0x80);
-                baseY = *(f32*)((s32)light + 0x84);
-                baseZ = *(f32*)((s32)light + 0x88);
+                baseX = *(f32*)((s32)light + 0x58);
+                baseY = *(f32*)((s32)light + 0x5C);
+                baseZ = *(f32*)((s32)light + 0x60);
                 p0x = two * (*(f32*)((s32)light + 0x88) - baseX) + baseX;
                 p0y = two * (*(f32*)((s32)light + 0x8C) - baseY) + baseY;
                 p0z = two * (*(f32*)((s32)light + 0x90) - baseZ) + baseZ;
-                oldX = up.x * radius;
-                oldY = up.y * radius;
-                oldZ = up.z * radius;
+                oldX = up.x * radius + p0x;
+                oldY = up.y * radius + p0y;
+                oldZ = up.z * radius + p0z;
                 PSMTXRotAxisRad(mtx, &axis, float_0p34907_80422b24);
                 PSMTXMultVec(mtx, &up, &up);
                 PSVECNormalize(&up, &up);
-                p1x = up.x * radius;
-                p1y = up.y * radius;
-                p1z = up.z * radius;
-                r = *(u8*)((s32)light + 0x50);
-                g = *(u8*)((s32)light + 0x51);
-                b = *(u8*)((s32)light + 0x52);
-
+                p1x = up.x * radius + p0x;
+                p1y = up.y * radius + p0y;
+                p1z = up.z * radius + p0z;
+                r = *(u8*)((s32)light + 0x28);
+                g = *(u8*)((s32)light + 0x29);
+                b = *(u8*)((s32)light + 0x2A);
                 GXBegin(0x90, 0, 3);
                 *fifoF = baseX;
                 *fifoF = baseY;
@@ -475,16 +453,16 @@ void BattleStageDispLight(void) {
                 *fifoB = g;
                 *fifoB = b;
                 *fifoB = 0;
-                *fifoF = oldX + p0x;
-                *fifoF = oldY + p0y;
-                *fifoF = oldZ + p0z;
+                *fifoF = oldX;
+                *fifoF = oldY;
+                *fifoF = oldZ;
                 *fifoB = r;
                 *fifoB = g;
                 *fifoB = b;
                 *fifoB = 0;
-                *fifoF = p1x + p0x;
-                *fifoF = p1y + p0y;
-                *fifoF = p1z + p0z;
+                *fifoF = p1x;
+                *fifoF = p1y;
+                *fifoF = p1z;
                 *fifoB = r;
                 *fifoB = g;
                 *fifoB = b;

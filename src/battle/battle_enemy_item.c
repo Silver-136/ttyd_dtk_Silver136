@@ -158,16 +158,21 @@ s32 _check_attack_item(void* unit) {
     void* battleWork;
     void* sampleWork;
     void* weapon;
+    void* group;
     s32 i;
 
-    battleWork = _battleWorkPointer;
-    sampleWork = (void*)((s32)battleWork + 0x428);
-    item = itemDataTable + itemId * 0x28;
+    sampleWork = (void*)((s32)_battleWorkPointer + 0x428);
+    battleWork = (void*)((s32)sampleWork - 0x428);
+    item = itemDataTable;
+    item += itemId * 0x28;
     weapon = *(void**)(item += 0x24);
+    group = (void*)((s32)battleWork + ((s8)*(u8*)((s32)unit + 0xC)) * 8);
 
-    BattleSamplingEnemy(sampleWork, weapon, *(s32*)unit, (s8)BtlUnit_GetEnemyBelong(unit), *(s32*)((s32)weapon + 0x64),
+    BattleSamplingEnemy(sampleWork, weapon, *(s32*)unit,
+                        (s8)BtlUnit_GetEnemyBelong(unit),
+                        *(s32*)((s32)weapon + 0x64),
                         *(s32*)((s32)weapon + 0x68),
-                        *(s8*)((s32)battleWork + ((s8)*(u8*)((s32)unit + 0xC)) * 8 + 0xA));
+                        *(s8*)((s32)group + 0xA));
 
     if (*(s8*)((s32)sampleWork + 0xA6C) <= 0) {
         return 0;
@@ -175,10 +180,12 @@ s32 _check_attack_item(void* unit) {
 
     if (itemId == 0x8B || itemId == 0x85) {
         for (i = 0; i < *(s8*)((s32)sampleWork + 0xA6C); i++) {
-            s32 offset = i + 0xA6D;
-            void* target =
-                BattleGetUnitPtr(battleWork, *(s16*)((s32)sampleWork + (*(s8*)((s32)sampleWork + offset)) * 0x24 + 4));
-            if (*(s32*)((s32)target + 8) == 0xE1 && !(*(s32*)((s32)unit + 0x104) & 0x20000) &&
+            void* target = BattleGetUnitPtr(
+                battleWork,
+                *(s16*)((s32)sampleWork +
+                        (*(s8*)((s32)sampleWork + i + 0xA6D)) * 0x24 + 4));
+            if (*(s32*)((s32)target + 8) == 0xE1 &&
+                !(*(s32*)((s32)unit + 0x104) & 0x20000) &&
                 BtlUnit_CanActStatus(target) == 0) {
                 return *(s32*)((s32)*(void**)item + 0xB0);
             }

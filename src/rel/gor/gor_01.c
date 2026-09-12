@@ -643,14 +643,16 @@ next_recipe:
 }
 s32 itemNameToID(char* name) {
     s32 cmp;
+    s32 item_base;
     s32 item;
     s32 offset;
 
+    item_base = (s32)&itemDataTable;
     item = 0;
     offset = 0;
 
     do {
-        cmp = strcmp(name, *(char**)((s32)&itemDataTable + offset));
+        cmp = strcmp(name, *(char**)(item_base + offset));
 
         if (cmp == 0) {
             break;
@@ -660,8 +662,8 @@ s32 itemNameToID(char* name) {
         offset += 0x28;
     } while (item < 0x153);
 
-    if (item > 0x152) {
-        item = 0;
+    if (item >= 0x153) {
+        return 0;
     }
 
     return item;

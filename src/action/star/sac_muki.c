@@ -245,8 +245,8 @@ void main_cursor(void) {
     extern void BattleAudienceSoundBooingKind(s32);
     extern u16 keyGetButtonTrg(s32);
     extern u32 keyGetDirTrg(s32);
-    extern f64 intplGetValue(f64, f64, s32, s32, s32);
-    extern void effHitEntry(void);
+    extern f32 intplGetValue(s32, s32, f32, f32, s32);
+    extern void effHitEntry(s32, s32, f32, f32, f32, f32);
     extern void* effStampN64Entry(s32, f32, f32, f32);
     extern s32 psndSFXOn(const char*);
     extern char str_btl_wn_sac_mukimuki__80301078[];
@@ -270,7 +270,7 @@ void main_cursor(void) {
     void* effect;
     f32 x, y, z;
 
-    switch (*(s32*)(work + 0x38)) {
+    switch (*(u32*)(work + 0x38)) {
         case 1:
             if (*(s32*)(work + 0x108) < 5) return;
             *(s32*)(work + 0x38) = 2;
@@ -296,7 +296,8 @@ void main_cursor(void) {
                 point = *(u8**)(work + 0x98 + index * 0x24);
                 if (point != 0) {
                     *(s32*)point = 5;
-                    effHitEntry();
+                    effHitEntry(0, 5, *(f32*)(point + 0xC), *(f32*)(point + 0x10),
+                                *(f32*)(point + 0x14), 1.0f);
                     if (*(s32*)(point + 8) == 1) {
                         oldValue = (s32)*(f32*)(work + 0x1C);
                         *(f32*)(work + 0x1C) += 0.2f;
@@ -362,9 +363,19 @@ void main_cursor(void) {
         case 4:
             *(s32*)(work + 0x3C) += 1;
             *(u32*)(work + 0x74) = dat_804284f0;
-            *(f32*)(work + 0x44) = (f32)intplGetValue(*(f32*)(work + 0x50), *(f32*)(work + 0x5C), 4, *(s32*)(work + 0x3C), (*(u32*)work & 1) ? 0x19 : 5);
-            *(f32*)(work + 0x48) = (f32)intplGetValue(*(f32*)(work + 0x54), *(f32*)(work + 0x60), 4, *(s32*)(work + 0x3C), (*(u32*)work & 1) ? 0x19 : 5);
-            if (((*(u32*)work & 1) && *(s32*)(work + 0x3C) > 0x18) || (!(*(u32*)work & 1) && *(s32*)(work + 0x3C) > 4)) *(s32*)(work + 0x38) = 2;
+            if ((*(u32*)work & 1) == 0) {
+                *(f32*)(work + 0x44) = intplGetValue(4, *(s32*)(work + 0x3C), *(f32*)(work + 0x50), *(f32*)(work + 0x5C), 5);
+                *(f32*)(work + 0x48) = intplGetValue(4, *(s32*)(work + 0x3C), *(f32*)(work + 0x54), *(f32*)(work + 0x60), 5);
+                if (*(s32*)(work + 0x3C) >= 5) {
+                    *(s32*)(work + 0x38) = 2;
+                }
+            } else {
+                *(f32*)(work + 0x44) = intplGetValue(4, *(s32*)(work + 0x3C), *(f32*)(work + 0x50), *(f32*)(work + 0x5C), 0x19);
+                *(f32*)(work + 0x48) = intplGetValue(4, *(s32*)(work + 0x3C), *(f32*)(work + 0x54), *(f32*)(work + 0x60), 0x19);
+                if (*(s32*)(work + 0x3C) >= 0x19) {
+                    *(s32*)(work + 0x38) = 2;
+                }
+            }
             break;
         case 5:
             *(s32*)(work + 0x38) = 6;
@@ -605,7 +616,7 @@ void main_star(void) {
         /* fallthrough */
     case 2:
         *(s32*)(work + 0x3B8) += 1;
-        if (*(s32*)(work + 0x3B8) < 0x65) {
+        if (*(s32*)(work + 0x3B8) <= 100) {
         *(f32*)(work + 0x3BC) =
             (f32)intplGetValue(*(f32*)(work + 0x3C8),
                                *(f32*)(work + 0x3D4), 0,
@@ -634,7 +645,7 @@ void main_star(void) {
         *(f32*)(work + 0x3FC) =
             (f32)intplGetValue(0.0, 2160.0, 4,
                                *(s32*)(work + 0x3B8), 0x78);
-        if (*(s32*)(work + 0x3B8) > 0x77) {
+        if (*(s32*)(work + 0x3B8) >= 120) {
             *(s32*)(work + 0x3B4) = 3;
             *(s32*)(work + 0x3B8) = 0;
             *(u32*)(work + 0x3C8) = *(u32*)(work + 0x3BC);
@@ -649,7 +660,7 @@ void main_star(void) {
             (f32)intplGetValue(*(f32*)(work + 0x3CC),
                                *(f32*)(work + 0x3D8), 1,
                                *(s32*)(work + 0x3B8), 0x3C);
-        if (*(s32*)(work + 0x3B8) > 0x3B) {
+        if (*(s32*)(work + 0x3B8) >= 60) {
             *(s32*)(work + 0x3B4) = 5;
             *(s32*)(work + 0x3B8) = 0;
         }
@@ -688,6 +699,7 @@ USER_FUNC(end_muki) {
 /* stub-fill: disp_2D | prototype_only | source_prototype */
 void disp_2D(void) {
     typedef f32 Mtx[3][4];
+    extern void* get_ptr(void);
     extern void* camGetPtr(s32 camera);
     extern void btlGetScreenPoint(f32* in, f32* out);
     extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
@@ -709,9 +721,11 @@ void disp_2D(void) {
     u32 numberColor;
     f32 x;
     f32 y;
+    f32 fraction;
+    f32 delta;
     s32 flash;
 
-    if (*(s32*)(work + 4) < 2 || *(s32*)(work + 4) >= 8) {
+    if (*(s32*)(work + 4) < 2 || *(s32*)(work + 4) > 7) {
         return;
     }
 
@@ -731,12 +745,14 @@ void disp_2D(void) {
     PSMTXScale(matrix, -1.0f, 1.0f, 1.0f);
     PSMTXTransApply(matrix, matrix, x + 32.0f + 8.0f, y, 0.0f);
     btlDispTexPlane2(matrix, 0x59, &white);
+    fraction = *(f32*)(work + 0x18) - (f32)(s32)*(f32*)(work + 0x18);
     btlDispGXInit2DRasta();
-    GXLoadPosMtxImm((u8*)camGetPtr(5) + 0x40, 0);
-    if (*(f32*)(work + 0x14) - *(f32*)(work + 0x18) == 0.0f) {
-        btlDispGXQuads2DRasta(x - 40.0f, y, x, y + 8.0f, 0xF0, 0xA0, 0xA0, 0xFF);
+    GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0);
+    delta = *(f32*)(work + 0x14) - *(f32*)(work + 0x18);
+    if (delta == 0.0f) {
+        btlDispGXQuads2DRasta(x, y + 8.0f, x + fraction * 80.0f, y - 8.0f, 0xF0, 0xA0, 0xA0, 0xFF);
     } else {
-        btlDispGXQuads2DRasta(x - 40.0f, y, x, y + 8.0f, 0xFF, 0xB4, 0xB4, 0xFF);
+        btlDispGXQuads2DRasta(x, y + 8.0f, x + fraction * 80.0f, y - 8.0f, 0xFF, 0xB4, 0xB4, 0xFF);
     }
     flash = *(s32*)(work + 0x24) % 12;
     if (flash >= 0 && flash < 6) {
@@ -768,12 +784,14 @@ void disp_2D(void) {
     PSMTXScale(matrix, -1.0f, 1.0f, 1.0f);
     PSMTXTransApply(matrix, matrix, x + 32.0f + 8.0f, y, 0.0f);
     btlDispTexPlane2(matrix, 0x59, &white);
+    fraction = *(f32*)(work + 0x20) - (f32)(s32)*(f32*)(work + 0x20);
     btlDispGXInit2DRasta();
-    GXLoadPosMtxImm((u8*)camGetPtr(5) + 0x40, 0);
-    if (*(f32*)(work + 0x14) - *(f32*)(work + 0x18) == 0.0f) {
-        btlDispGXQuads2DRasta(x - 40.0f, y, x, y + 8.0f, 0xA0, 0xA0, 0xF0, 0xFF);
+    GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0);
+    delta = *(f32*)(work + 0x1C) - *(f32*)(work + 0x20);
+    if (delta == 0.0f) {
+        btlDispGXQuads2DRasta(x, y + 8.0f, x + fraction * 80.0f, y - 8.0f, 0xA0, 0xA0, 0xF0, 0xFF);
     } else {
-        btlDispGXQuads2DRasta(x - 40.0f, y, x, y + 8.0f, 0xB4, 0xB4, 0xFF, 0xFF);
+        btlDispGXQuads2DRasta(x, y + 8.0f, x + fraction * 80.0f, y - 8.0f, 0xB4, 0xB4, 0xFF, 0xFF);
     }
     flash = *(s32*)(work + 0x28) % 12;
     if (flash >= 0 && flash < 6) {

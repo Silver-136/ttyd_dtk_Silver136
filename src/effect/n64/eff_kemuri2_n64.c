@@ -134,12 +134,20 @@ void main_dl(s32 type) {
     extern void GXSetVtxDesc(s32, s32);
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
     extern void GXBegin(s32, s32, s32);
+    extern f32 float_0_80425648;
+    extern f32 float_1_80425644;
     GXTexObj tex;
 
-    if (type == 1) effGetTexObjN64(0xD, &tex);
-    else if (type == 0) effGetTexObjN64(0xC, &tex);
-    else effGetTexObjN64(0xE, &tex);
-    GXLoadTexObj(&tex, 0);
+    if (type == 1) {
+        effGetTexObjN64(0xD, &tex);
+        GXLoadTexObj(&tex, 0);
+    } else if (type == 0) {
+        effGetTexObjN64(0xC, &tex);
+        GXLoadTexObj(&tex, 0);
+    } else {
+        effGetTexObjN64(0xE, &tex);
+        GXLoadTexObj(&tex, 0);
+    }
     GXSetNumChans(0);
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
@@ -148,25 +156,58 @@ void main_dl(s32 type) {
     GXSetTevOrder(0, 0, 0, -1);
     GXSetTevColorOp(0, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 0, 0, 0, 2);
-    GXSetTevAlphaIn(0, 0, 0, 0, 4);
+    GXSetTevColorIn(0, 15, 15, 15, 2);
+    GXSetTevAlphaIn(0, 7, 7, 7, 4);
     GXSetTevOrder(1, 1, 0, -1);
     GXSetTevColorOp(1, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(1, 0, 0, 0, 0);
-    GXSetTevAlphaIn(1, 0, 1, 4, 7);
-    GXSetTevOrder(2, -1, -1, -1);
+    GXSetTevColorIn(1, 15, 15, 15, 0);
+    GXSetTevAlphaIn(1, 0, 4, 2, 7);
+    GXSetTevOrder(2, 0xFF, 0xFF, -1);
     GXSetTevColorOp(2, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(2, 0, 0, 0, 0);
-    GXSetTevAlphaIn(2, 0, 1, 2, 7);
+    GXSetTevColorIn(2, 15, 15, 15, 0);
+    GXSetTevAlphaIn(2, 7, 0, 1, 7);
     GXSetCullMode(0);
     GXClearVtxDesc();
     GXSetVtxDesc(9, 1);
     GXSetVtxDesc(13, 1);
     GXSetVtxAttrFmt(0, 9, 1, 3, 0);
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
-    GXBegin(0x80, 0, 4);
+    {
+        s16 width;
+        s16 height;
+        volatile s16* fifo16 = (volatile s16*)0xCC008000;
+        volatile f32* fifo32 = (volatile f32*)0xCC008000;
+        if (type == 0) {
+            width = 0x10;
+            height = 0x10;
+        } else {
+            width = 0x18;
+            height = 0x18;
+        }
+        GXBegin(0x80, 0, 4);
+        *fifo16 = -width / 2;
+        *fifo16 = height / 2;
+        *fifo16 = 0;
+        *fifo32 = float_0_80425648;
+        *fifo32 = float_0_80425648;
+        *fifo16 = width / 2;
+        *fifo16 = height / 2;
+        *fifo16 = 0;
+        *fifo32 = float_1_80425644;
+        *fifo32 = float_0_80425648;
+        *fifo16 = width / 2;
+        *fifo16 = -height / 2;
+        *fifo16 = 0;
+        *fifo32 = float_1_80425644;
+        *fifo32 = float_1_80425644;
+        *fifo16 = -width / 2;
+        *fifo16 = -height / 2;
+        *fifo16 = 0;
+        *fifo32 = float_0_80425648;
+        *fifo32 = float_1_80425644;
+    }
 }
 
 void effKemuri2Disp(s32 cameraId, void* effect) {
@@ -188,35 +229,61 @@ void effKemuri2Disp(s32 cameraId, void* effect) {
     extern f32 float_1_80425644;
     extern f32 float_0_80425648;
     extern f32 float_deg2rad_8042564c;
+    extern u32 dat_80425628;
+    extern u32 dat_8042562c;
     u8* entry = (u8*)effect;
     u8* work = *(u8**)(entry + 0xC);
     u8* camera = (u8*)camGetPtr(cameraId);
     Mtx scale;
-    Mtx texMtx;
     Mtx trans;
     Mtx rotate;
     Mtx draw;
-    u32 color0 = 0xFFFFFFFF;
-    u32 color1 = 0x808080FF;
+    u32 color0;
+    u32 color1;
+    s32 special = 0;
     s32 i;
     s32 frame = *(s32*)(work + 0x60);
     s32 type = *(u16*)(work + 4);
-    s32 tile = type == 0 ? 0x18 : 0x20;
-    f32 width = type == 0 ? float_176_80425630 : (type == 1 ? float_224_80425638 : float_256_80425640);
-    f32 height = type == 0 ? float_24_80425634 : float_32_8042563c;
-    f32 sx = (f32)tile / width;
-    f32 sy = (f32)tile / height;
+    s32 tile;
+    f32 width;
+    f32 height;
+    f32 sx;
+    f32 sy;
 
+    if ((*(s32*)(work + 0x58) == 0 && frame == 6) ||
+        (*(s32*)(work + 0x58) == 1 && frame == 7)) {
+        special = 1;
+    }
+    color0 = dat_80425628;
     GXSetTevColor(1, &color0);
+    color1 = dat_8042562c;
     GXSetTevColor(2, &color1);
+    if (type == 1) {
+        height = float_32_8042563c;
+        width = float_224_80425638;
+    } else if (type == 0) {
+        height = float_24_80425634;
+        width = float_176_80425630;
+    } else {
+        height = float_32_8042563c;
+        width = float_256_80425640;
+    }
+    tile = 0x20;
+    if (type == 0) tile = 0x18;
+    sx = (f32)tile / width;
+    sy = (f32)tile / height;
     PSMTXScale(scale, sx, sy, float_1_80425644);
     PSMTXTrans(trans, (f32)(frame * tile) / width, float_0_80425648 / height, float_0_80425648);
-    PSMTXConcat(trans, scale, texMtx);
-    GXLoadTexMtxImm(texMtx, 0x1E, 1);
-    PSMTXScale(scale, sx, sy, float_1_80425644);
+    PSMTXConcat(trans, scale, trans);
+    GXLoadTexMtxImm(trans, 0x1E, 1);
+    if (special) {
+        PSMTXScale(scale, sx, float_0_80425648, float_1_80425644);
+    } else {
+        PSMTXScale(scale, sx, sy, float_1_80425644);
+    }
     PSMTXTrans(trans, (f32)((frame + 1) * tile) / width, float_0_80425648 / height, float_0_80425648);
-    PSMTXConcat(trans, scale, texMtx);
-    GXLoadTexMtxImm(texMtx, 0x21, 1);
+    PSMTXConcat(trans, scale, trans);
+    GXLoadTexMtxImm(trans, 0x21, 1);
     for (i = 0; i < *(s32*)(entry + 8); i++, work += 0x64) {
         u8* camera3d;
         PSMTXTrans(trans, *(f32*)(work + 8), *(f32*)(work + 0xC), *(f32*)(work + 0x10));

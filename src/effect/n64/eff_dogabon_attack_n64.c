@@ -14,12 +14,20 @@ void* effDogabonAttackN64Entry(float x, float y, float z, float scale, int type,
     extern float float_15_80425090;
     extern float float_120_804250a0;
     extern float float_0_8042506c;
+    register int savedType = type;
+    register int savedTimer = timer;
     unsigned char* entry = (unsigned char*)effEntry();
     int* work;
-    int* part;
+    register int* part;
+    register signed char* yPtr;
+    register float twoPi;
+    register float divisor;
+    register float radius1;
+    register float radius2;
+    register float zero;
     int i;
-    int phase = 0;
-    int delay = 1;
+    int phase;
+    int delay;
 
     *(char**)(entry + 0x14) = str_DogabonAttackN64_802fadf8;
     *(int*)(entry + 8) = 1;
@@ -27,9 +35,13 @@ void* effDogabonAttackN64Entry(float x, float y, float z, float scale, int type,
     *(int**)(entry + 0xC) = work;
     *(void**)(entry + 0x10) = effDogabonAttackMain;
     *(unsigned int*)entry |= 2;
-    work[0] = type;
+    work[0] = savedType;
     work[5] = 0;
-    work[4] = timer < 1 ? 1000 : timer;
+    if (savedTimer < 1) {
+        work[4] = 1000;
+    } else {
+        work[4] = savedTimer;
+    }
     work[9] = 0xFF;
     *(float*)&work[1] = x;
     *(float*)&work[2] = y;
@@ -39,24 +51,38 @@ void* effDogabonAttackN64Entry(float x, float y, float z, float scale, int type,
     work[7] = 0xB4;
     work[8] = 0x78;
 
+    twoPi = float_6p2832_80425084;
+    divisor = float_360_80425088;
+    radius1 = float_15_80425090;
+    radius2 = float_120_804250a0;
+    zero = float_0_8042506c;
+    i = 0;
+    phase = 0;
+    delay = 1;
+    yPtr = y_data;
     part = work;
-    for (i = 0; i < 25; i++, part++, phase += 0x438, delay += 2) {
-        float angle = (float_6p2832_80425084 * (float)(phase / 25)) / float_360_80425088;
+    do {
+        float angle = (twoPi * (float)(phase / 25)) / divisor;
         float sine = (float)sin(angle);
         float cosine = (float)cos(angle);
         part[0x11E] = (int)(float)((rand() % 360) - 180);
-        *(float*)&part[0xA1] = float_15_80425090 * sine;
-        *(float*)&part[0xBA] = (float)y_data[i] + 10.0f;
-        *(float*)&part[0xD3] = float_15_80425090 * cosine;
-        *(float*)&part[0x56] = float_120_804250a0 * sine;
-        *(float*)&part[0x6F] = (float)(y_data[i] * 8 + 0x28);
-        *(float*)&part[0x88] = float_120_804250a0 * cosine;
-        *(float*)&part[0x169] = float_0_8042506c;
+        *(float*)&part[0xA1] = radius1 * sine;
+        *(float*)&part[0xBA] = (float)*yPtr + 10.0f;
+        *(float*)&part[0xD3] = radius1 * cosine;
+        *(float*)&part[0x56] = radius2 * sine;
+        *(float*)&part[0x6F] = (float)(*yPtr * 8 + 0x28);
+        *(float*)&part[0x88] = radius2 * cosine;
+        *(float*)&part[0x169] = zero;
         part[0x19B] = delay;
         part[0x1B4] = 0;
         part[0x1CD] = 0;
-        *(float*)&part[0x137] = float_0_8042506c;
-    }
+        *(float*)&part[0x137] = zero;
+        i++;
+        phase += 0x438;
+        delay += 2;
+        yPtr++;
+        part++;
+    } while (i < 25);
     return entry;
 }
 
@@ -72,6 +98,7 @@ void effDogabonAttackMain(void* effect) {
     extern unsigned char move_data_1[];
     extern unsigned char move_data_2[];
     extern unsigned char move_data_hazure[];
+    extern float float_0p9_8042509c;
     unsigned char* entry = (unsigned char*)effect;
     unsigned char* work = *(unsigned char**)(entry + 0xC);
     unsigned char* part = work;
@@ -149,10 +176,31 @@ void effDogabonAttackMain(void* effect) {
             }
             case 3:
                 if (i == 24) {
-                    int j;
-                    for (j = 0; j < 25; j++) {
-                        ((int*)(work + 0x6D0))[j] = 4;
-                    }
+                    *(int*)(work + 0x6D0) = 4;
+                    *(int*)(work + 0x6D4) = 4;
+                    *(int*)(work + 0x6D8) = 4;
+                    *(int*)(work + 0x6DC) = 4;
+                    *(int*)(work + 0x6E0) = 4;
+                    *(int*)(work + 0x6E4) = 4;
+                    *(int*)(work + 0x6E8) = 4;
+                    *(int*)(work + 0x6EC) = 4;
+                    *(int*)(work + 0x6F0) = 4;
+                    *(int*)(work + 0x6F4) = 4;
+                    *(int*)(work + 0x6F8) = 4;
+                    *(int*)(work + 0x6FC) = 4;
+                    *(int*)(work + 0x700) = 4;
+                    *(int*)(work + 0x704) = 4;
+                    *(int*)(work + 0x708) = 4;
+                    *(int*)(work + 0x70C) = 4;
+                    *(int*)(work + 0x710) = 4;
+                    *(int*)(work + 0x714) = 4;
+                    *(int*)(work + 0x718) = 4;
+                    *(int*)(work + 0x71C) = 4;
+                    *(int*)(work + 0x720) = 4;
+                    *(int*)(work + 0x724) = 4;
+                    *(int*)(work + 0x728) = 4;
+                    *(int*)(work + 0x72C) = 4;
+                    *(int*)(work + 0x730) = 4;
                 }
                 break;
             case 4: {
@@ -180,12 +228,14 @@ void effDogabonAttackMain(void* effect) {
                 *(float*)(part + 0x90) += *(float*)(part + 0x5A4);
                 *(float*)(part + 0xF4) += *(float*)(part + 0x608);
                 *(float*)(part + 0x540) *= 0.99f;
-                *(float*)(part + 0x5A4) = *(float*)(part + 0x5A4) * 0.99f - 0.1f;
+                *(float*)(part + 0x5A4) *= 0.99f;
                 *(float*)(part + 0x608) *= 0.99f;
+                *(float*)(part + 0x5A4) += -0.1f;
                 if (++*(int*)(part + 0x734) > 16) {
                     *(int*)(part + 0x734) = 0;
                     *(int*)(part + 0x6D0) = 6;
                 }
+                *(float*)(part + 0x478) *= float_0p9_8042509c;
                 break;
             case 20: {
                 float t = 0.01f * (float)move_data_hazure[tick];
@@ -195,6 +245,9 @@ void effDogabonAttackMain(void* effect) {
                 if (++*(int*)(part + 0x734) > 19) {
                     *(int*)(part + 0x734) = 0;
                     *(int*)(part + 0x6D0) = 5;
+                    *(float*)(part + 0x540) = 0.5f * *(float*)(part + 0x284);
+                    *(float*)(part + 0x5A4) = 0.5f * *(float*)(part + 0x2E8);
+                    *(float*)(part + 0x608) = 0.5f * *(float*)(part + 0x34C);
                 }
                 break;
             }

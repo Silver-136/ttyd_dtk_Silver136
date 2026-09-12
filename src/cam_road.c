@@ -370,308 +370,210 @@ void calcCurrentCamState(void* out) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw on
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw on
-
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw on
-
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw on
-
-
 s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
     extern const Vec3 vec3_802bf564;
     extern const f32 float_0_8041f62c;
     extern const f64 double_0_802bf588;
 
-    u32 p0;
-    u32 p1;
-    u32 p2;
-    u32 v00;
-    u32 v01;
-    u32 v02;
-    u32 v10;
-    u32 v11;
-    u32 v12;
-    u32 v20;
-    u32 v21;
-    u32 v22;
-    u32 dir0;
-    u32 dir1;
-    u32 dir2;
-    u32* dirPtr;
+    Vec3* pointPtr = (Vec3*)a;
+    Vec3* v0Ptr = (Vec3*)b;
+    Vec3* v1Ptr = (Vec3*)c;
+    Vec3* v2Ptr = (Vec3*)d;
+    f32* outY = (f32*)e;
 
-    volatile u32 scratch[228];
-    volatile u32 e01[3];
-    volatile u32 e20[3];
-    volatile u32 e12[3];
-    volatile u32 normal[3];
-    volatile u32 diff[3];
-    volatile u32 tmpVec[3];
-    volatile u32 hit[3];
-    volatile u32 distBits;
-    volatile u32 denomBits;
-    volatile u32 sideBits;
-
-    f32 tmp;
+    Vec3 v0;
+    Vec3 v1;
+    Vec3 v2;
+    Vec3 e01;
+    Vec3 e20;
+    Vec3 e12;
+    Vec3 normal;
+    Vec3 direction;
+    Vec3 point;
+    Vec3 hit;
     f32 dist;
     f32 denom;
     f32 side;
     f32 oldY;
-    f32 scale;
     f32 hitY;
+    f32 scale;
 
-    v10 = ((u32*)c)[0];
-    v00 = ((u32*)b)[0];
-    v01 = ((u32*)b)[1];
-    v11 = ((u32*)c)[1];
-    v02 = ((u32*)b)[2];
-    v12 = ((u32*)c)[2];
-    v20 = ((u32*)d)[0];
-    v21 = ((u32*)d)[1];
-    v22 = ((u32*)d)[2];
+    /*
+     * A24r keeps A24's aggregate/inline-helper hypothesis, but expresses the
+     * helper bodies as function-local macros so chatgpt_try's function-only
+     * replacement keeps them in cam_road.c.
+     *
+     * Each subtraction/cross macro deliberately creates two input Vec copies
+     * plus one Vec result, reproducing the 3-Vec aggregate pressure expected
+     * from an inlined by-value helper.
+     */
+#define CT_SUB3(dst_, lhs_, rhs_)                   \
+    do {                                             \
+        Vec3 ct_lhs = (lhs_);                        \
+        Vec3 ct_rhs = (rhs_);                        \
+        Vec3 ct_out;                                 \
+        ct_out.x = ct_lhs.x - ct_rhs.x;             \
+        ct_out.y = ct_lhs.y - ct_rhs.y;             \
+        ct_out.z = ct_lhs.z - ct_rhs.z;             \
+        (dst_) = ct_out;                             \
+    } while (0)
 
-    p0 = ((u32*)a)[0];
-    p1 = ((u32*)a)[1];
-    p2 = ((u32*)a)[2];
+#define CT_CROSS3(dst_, lhs_, rhs_)                 \
+    do {                                             \
+        Vec3 ct_lhs = (lhs_);                        \
+        Vec3 ct_rhs = (rhs_);                        \
+        Vec3 ct_out;                                 \
+        ct_out.x = (ct_lhs.y * ct_rhs.z) -          \
+                   (ct_lhs.z * ct_rhs.y);            \
+        ct_out.z = (ct_lhs.x * ct_rhs.y) -          \
+                   (ct_lhs.y * ct_rhs.x);            \
+        ct_out.y = (ct_lhs.z * ct_rhs.x) -          \
+                   (ct_lhs.x * ct_rhs.z);            \
+        (dst_) = ct_out;                             \
+    } while (0)
 
-    dirPtr = (u32*)&vec3_802bf564;
-    dir0 = dirPtr[0];
-    dir1 = dirPtr[1];
-    dir2 = dirPtr[2];
+#define CT_DOT2(dst_, lhs_, rhs_)                   \
+    do {                                             \
+        Vec3 ct_lhs = (lhs_);                        \
+        Vec3 ct_rhs = (rhs_);                        \
+        (dst_) = (ct_lhs.z * ct_rhs.z) +            \
+                 (ct_lhs.x * ct_rhs.x) +            \
+                 (ct_lhs.y * ct_rhs.y);              \
+    } while (0)
 
-    tmp = ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207])) - ((scratch[204] = (v10)), (*(volatile f32*)&scratch[204]));
-    (*(volatile f32*)&scratch[0]) = (tmp);
-    e01[0] = scratch[0];
+    /*
+     * A24r2 composes the already-successful by-value subtract/cross shapes
+     * inside each side test instead of spelling their arithmetic directly.
+     *
+     * In A24r the compiler materialized only the four input Vecs for each
+     * side block and kept diff/cross in registers, producing 0x30-byte
+     * per-test stack regions.  The target has 0x48-byte per-test regions.
+     * CT_SUB3 + CT_CROSS3 should force the missing result-Vec
+     * materialization/copy topology while preserving the arithmetic that
+     * raised the score to 60.390278%.
+     */
+#define CT_SIDE6(dst_, point_, vertex_, edge_, direction_) \
+    do {                                                    \
+        Vec3 ct_diff;                                       \
+        Vec3 ct_cross;                                      \
+        CT_SUB3(ct_diff, (point_), (vertex_));              \
+        CT_CROSS3(ct_cross, (edge_), (direction_));         \
+        (dst_) = (ct_diff.z * ct_cross.z) +                 \
+                 (ct_diff.x * ct_cross.x) +                 \
+                 (ct_diff.y * ct_cross.y);                  \
+    } while (0)
 
-    tmp = ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208])) - ((scratch[205] = (v11)), (*(volatile f32*)&scratch[205]));
-    (*(volatile f32*)&scratch[1]) = (tmp);
-    e01[1] = scratch[1];
+#define CT_FINAL5(dst_, point_, direction_, scale_)         \
+    do {                                                     \
+        Vec3 ct_point = (point_);                            \
+        Vec3 ct_direction = (direction_);                    \
+        Vec3 ct_scaled;                                      \
+        Vec3 ct_scaled_copy;                                 \
+        Vec3 ct_out;                                         \
+        ct_scaled.x = ct_direction.x * (scale_);             \
+        ct_scaled.y = ct_direction.y * (scale_);             \
+        ct_scaled.z = ct_direction.z * (scale_);             \
+        ct_scaled_copy = ct_scaled;                          \
+        ct_out.x = ct_point.x + ct_scaled_copy.x;            \
+        ct_out.y = ct_point.y + ct_scaled_copy.y;            \
+        ct_out.z = ct_point.z + ct_scaled_copy.z;            \
+        (dst_) = ct_out;                                     \
+    } while (0)
 
-    tmp = ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209])) - ((scratch[206] = (v12)), (*(volatile f32*)&scratch[206]));
-    (*(volatile f32*)&scratch[2]) = (tmp);
-    e01[2] = scratch[2];
+    /*
+     * The caller passes four actual Vec3 objects.  Preserve that abstraction
+     * directly instead of loading their components into u32 scalars.
+     */
+    v1 = *v1Ptr;
+    v0 = *v0Ptr;
+    v2 = *v2Ptr;
+    direction = vec3_802bf564;
 
-    tmp = ((scratch[213] = (v20)), (*(volatile f32*)&scratch[213])) - ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207]));
-    (*(volatile f32*)&scratch[3]) = (tmp);
-    e20[0] = scratch[3];
+    CT_SUB3(e01, v0, v1);
+    CT_SUB3(e20, v2, v0);
+    CT_SUB3(e12, v1, v2);
+    CT_CROSS3(normal, e20, e01);
 
-    tmp = ((scratch[214] = (v21)), (*(volatile f32*)&scratch[214])) - ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208]));
-    (*(volatile f32*)&scratch[4]) = (tmp);
-    e20[1] = scratch[4];
-
-    tmp = ((scratch[215] = (v22)), (*(volatile f32*)&scratch[215])) - ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209]));
-    (*(volatile f32*)&scratch[5]) = (tmp);
-    e20[2] = scratch[5];
-
-    tmp = ((scratch[204] = (v10)), (*(volatile f32*)&scratch[204])) - ((scratch[213] = (v20)), (*(volatile f32*)&scratch[213]));
-    (*(volatile f32*)&scratch[6]) = (tmp);
-    e12[0] = scratch[6];
-
-    tmp = ((scratch[205] = (v11)), (*(volatile f32*)&scratch[205])) - ((scratch[214] = (v21)), (*(volatile f32*)&scratch[214]));
-    (*(volatile f32*)&scratch[7]) = (tmp);
-    e12[1] = scratch[7];
-
-    tmp = ((scratch[206] = (v12)), (*(volatile f32*)&scratch[206])) - ((scratch[215] = (v22)), (*(volatile f32*)&scratch[215]));
-    (*(volatile f32*)&scratch[8]) = (tmp);
-    e12[2] = scratch[8];
-
-    tmp = ((*(volatile f32*)&e20[1]) * (*(volatile f32*)&e01[2])) -
-          ((*(volatile f32*)&e20[2]) * (*(volatile f32*)&e01[1]));
-    (*(volatile f32*)&scratch[20]) = (tmp);
-    normal[0] = scratch[20];
-
-    tmp = ((*(volatile f32*)&e20[2]) * (*(volatile f32*)&e01[0])) -
-          ((*(volatile f32*)&e20[0]) * (*(volatile f32*)&e01[2]));
-    (*(volatile f32*)&scratch[21]) = (tmp);
-    normal[1] = scratch[21];
-
-    tmp = ((*(volatile f32*)&e20[0]) * (*(volatile f32*)&e01[1])) -
-          ((*(volatile f32*)&e20[1]) * (*(volatile f32*)&e01[0]));
-    (*(volatile f32*)&scratch[22]) = (tmp);
-    normal[2] = scratch[22];
-
-    if ((float_0_8041f62c == (*(volatile f32*)&normal[0])) &&
-        (float_0_8041f62c == (*(volatile f32*)&normal[1])) &&
-        (float_0_8041f62c == (*(volatile f32*)&normal[2]))) {
+    if ((float_0_8041f62c == normal.x) &&
+        (float_0_8041f62c == normal.y) &&
+        (float_0_8041f62c == normal.z)) {
         return 0;
     }
 
-    tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207]));
-    (*(volatile f32*)&scratch[23]) = (tmp);
-    diff[0] = scratch[23];
+    /* Target does not need the query point until after the zero-normal exit. */
+    point = *pointPtr;
 
-    tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208]));
-    (*(volatile f32*)&scratch[24]) = (tmp);
-    diff[1] = scratch[24];
+    {
+        Vec3 ct_point = point;
+        Vec3 ct_vertex = v0;
+        Vec3 ct_diff;
+        Vec3 ct_normal = normal;
 
-    tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209]));
-    (*(volatile f32*)&scratch[25]) = (tmp);
-    diff[2] = scratch[25];
+        ct_diff.x = ct_point.x - ct_vertex.x;
+        ct_diff.y = ct_point.y - ct_vertex.y;
+        ct_diff.z = ct_point.z - ct_vertex.z;
+        dist = (ct_normal.z * ct_diff.z) +
+               (ct_normal.x * ct_diff.x) +
+               (ct_normal.y * ct_diff.y);
+    }
 
-    dist = ((*(volatile f32*)&normal[2]) * (*(volatile f32*)&diff[2])) +
-           ((*(volatile f32*)&normal[0]) * (*(volatile f32*)&diff[0])) +
-           ((*(volatile f32*)&normal[1]) * (*(volatile f32*)&diff[1]));
-    (*(volatile f32*)&scratch[26]) = (dist);
-    distBits = scratch[26];
-
-    denom = ((*(volatile f32*)&normal[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) +
-            ((*(volatile f32*)&normal[0]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) +
-            ((*(volatile f32*)&normal[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])));
-    (*(volatile f32*)&scratch[27]) = (denom);
-    denomBits = scratch[27];
-
-    if ((*(volatile f32*)&distBits) <= float_0_8041f62c) {
-        if ((f64)(*(volatile f32*)&denomBits) <= double_0_802bf588) {
+    if (dist <= float_0_8041f62c) {
+        CT_DOT2(denom, normal, direction);
+        if ((f64)denom <= double_0_802bf588) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209]));
-        (*(volatile f32*)&scratch[40]) = (tmp);
-        tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207]));
-        (*(volatile f32*)&scratch[38]) = (tmp);
-        tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208]));
-        (*(volatile f32*)&scratch[39]) = (tmp);
-        tmpVec[1] = scratch[39];
-
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e20[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e20[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e20[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e20[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e20[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e20[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
-        (*(volatile f32*)&scratch[28]) = (side);
-        sideBits = scratch[28];
-        if ((f64)(*(volatile f32*)&sideBits) < double_0_802bf588) {
+        CT_SIDE6(side, point, v0, e20, direction);
+        if ((f64)side < double_0_802bf588) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[206] = (v12)), (*(volatile f32*)&scratch[206]));
-        (*(volatile f32*)&scratch[40]) = (tmp);
-        tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[204] = (v10)), (*(volatile f32*)&scratch[204]));
-        (*(volatile f32*)&scratch[38]) = (tmp);
-        tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[205] = (v11)), (*(volatile f32*)&scratch[205]));
-        (*(volatile f32*)&scratch[39]) = (tmp);
-        tmpVec[1] = scratch[39];
-
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e01[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e01[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e01[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e01[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e01[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e01[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
-        (*(volatile f32*)&scratch[28]) = (side);
-        sideBits = scratch[28];
-        if ((f64)(*(volatile f32*)&sideBits) < double_0_802bf588) {
+        CT_SIDE6(side, point, v1, e01, direction);
+        if ((f64)side < double_0_802bf588) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[215] = (v22)), (*(volatile f32*)&scratch[215]));
-        (*(volatile f32*)&scratch[40]) = (tmp);
-        tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[213] = (v20)), (*(volatile f32*)&scratch[213]));
-        (*(volatile f32*)&scratch[38]) = (tmp);
-        tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[214] = (v21)), (*(volatile f32*)&scratch[214]));
-        (*(volatile f32*)&scratch[39]) = (tmp);
-        tmpVec[1] = scratch[39];
-
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e12[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e12[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e12[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e12[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e12[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e12[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
-        (*(volatile f32*)&scratch[28]) = (side);
-        sideBits = scratch[28];
-        if ((f64)(*(volatile f32*)&sideBits) < double_0_802bf588) {
+        CT_SIDE6(side, point, v2, e12, direction);
+        if ((f64)side < double_0_802bf588) {
             return 0;
         }
     } else {
-        if (double_0_802bf588 <= (f64)(*(volatile f32*)&denomBits)) {
+        CT_DOT2(denom, normal, direction);
+        if (double_0_802bf588 <= (f64)denom) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[209] = (v02)), (*(volatile f32*)&scratch[209]));
-        (*(volatile f32*)&scratch[40]) = (tmp);
-        tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[207] = (v00)), (*(volatile f32*)&scratch[207]));
-        (*(volatile f32*)&scratch[38]) = (tmp);
-        tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[208] = (v01)), (*(volatile f32*)&scratch[208]));
-        (*(volatile f32*)&scratch[39]) = (tmp);
-        tmpVec[1] = scratch[39];
-
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e20[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e20[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e20[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e20[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e20[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e20[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
-        (*(volatile f32*)&scratch[28]) = (side);
-        sideBits = scratch[28];
-        if (double_0_802bf588 < (f64)(*(volatile f32*)&sideBits)) {
+        CT_SIDE6(side, point, v0, e20, direction);
+        if (double_0_802bf588 < (f64)side) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[206] = (v12)), (*(volatile f32*)&scratch[206]));
-        (*(volatile f32*)&scratch[40]) = (tmp);
-        tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[204] = (v10)), (*(volatile f32*)&scratch[204]));
-        (*(volatile f32*)&scratch[38]) = (tmp);
-        tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[205] = (v11)), (*(volatile f32*)&scratch[205]));
-        (*(volatile f32*)&scratch[39]) = (tmp);
-        tmpVec[1] = scratch[39];
-
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e01[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e01[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e01[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e01[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e01[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e01[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
-        (*(volatile f32*)&scratch[28]) = (side);
-        sideBits = scratch[28];
-        if (double_0_802bf588 < (f64)(*(volatile f32*)&sideBits)) {
+        CT_SIDE6(side, point, v1, e01, direction);
+        if (double_0_802bf588 < (f64)side) {
             return 0;
         }
 
-        tmp = ((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) - ((scratch[215] = (v22)), (*(volatile f32*)&scratch[215]));
-        (*(volatile f32*)&scratch[40]) = (tmp);
-        tmpVec[2] = scratch[40];
-        tmp = ((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) - ((scratch[213] = (v20)), (*(volatile f32*)&scratch[213]));
-        (*(volatile f32*)&scratch[38]) = (tmp);
-        tmpVec[0] = scratch[38];
-        tmp = ((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) - ((scratch[214] = (v21)), (*(volatile f32*)&scratch[214]));
-        (*(volatile f32*)&scratch[39]) = (tmp);
-        tmpVec[1] = scratch[39];
-
-        side = ((*(volatile f32*)&tmpVec[2]) * (((*(volatile f32*)&e12[0]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))) - ((*(volatile f32*)&e12[1]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))))) +
-               ((*(volatile f32*)&tmpVec[0]) * (((*(volatile f32*)&e12[1]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223]))) - ((*(volatile f32*)&e12[2]) * ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224]))))) +
-               ((*(volatile f32*)&tmpVec[1]) * (((*(volatile f32*)&e12[2]) * ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222]))) - ((*(volatile f32*)&e12[0]) * ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])))));
-        (*(volatile f32*)&scratch[28]) = (side);
-        sideBits = scratch[28];
-        if (double_0_802bf588 < (f64)(*(volatile f32*)&sideBits)) {
+        CT_SIDE6(side, point, v2, e12, direction);
+        if (double_0_802bf588 < (f64)side) {
             return 0;
         }
     }
 
-    scale = -(*(volatile f32*)&distBits) / (*(volatile f32*)&denomBits);
+    CT_DOT2(denom, normal, direction);
+    scale = -dist / denom;
+    CT_FINAL5(hit, point, direction, scale);
 
-    tmp = ((scratch[222] = (dir0)), (*(volatile f32*)&scratch[222])) * scale;
-    (*(volatile f32*)&scratch[50]) = (((scratch[30] = (p0)), (*(volatile f32*)&scratch[30])) + tmp);
-    hit[0] = scratch[50];
-
-    tmp = ((scratch[223] = (dir1)), (*(volatile f32*)&scratch[223])) * scale;
-    (*(volatile f32*)&scratch[51]) = (((scratch[31] = (p1)), (*(volatile f32*)&scratch[31])) + tmp);
-    hit[1] = scratch[51];
-
-    tmp = ((scratch[224] = (dir2)), (*(volatile f32*)&scratch[224])) * scale;
-    (*(volatile f32*)&scratch[52]) = (((scratch[32] = (p2)), (*(volatile f32*)&scratch[32])) + tmp);
-    hit[2] = scratch[52];
-
-    oldY = *(f32*)e;
-    hitY = *(volatile f32*)&hit[1];
+    oldY = *outY;
+    hitY = hit.y;
     if (oldY <= hitY) {
-        *(f32*)e = hitY;
+        *outY = hitY;
     }
+
+#undef CT_FINAL5
+#undef CT_SIDE6
+#undef CT_DOT2
+#undef CT_CROSS3
+#undef CT_SUB3
 
     return oldY <= hitY;
 }
@@ -679,208 +581,528 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
-#pragma use_lmw_stmw reset
-#pragma no_register_save_helpers reset
-
-
-
-s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
-    extern f64 __frsqrte(f64 value);
-    extern f64 __fabs(f64 value);
-    extern f32 __float_nan[];
+extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
+    const char* curveRodata = vec3_802bf540;
     f32* point = (f32*)pos;
-    f32* out = (f32*)result;
+    CurveResult* out = (CurveResult*)result;
     f32* vertices;
     f32* normals;
+    f32* startNormal;
+    f32* startVertex;
+    f32* endNormal;
+    f32* endVertex;
     s32 count;
-    s32 roadMode;
-    s32 start;
-    s32 end;
-    f32 limitA;
-    f32 limitB;
-    f32 best = dat_8041f688;
     s32 found = 0;
     s32 i;
+    s32 start;
+    s32 end;
+    s32 roadMode;
+    s32 typeFlag;
+    f32 limitA;
+    f32 limitB;
+    volatile f32 yBounds[2];
+    f32 best = dat_8041f688;
 
-    if (type != 0) {
-        count = *(s32*)((s32)road + 0x64) / 2;
+#define endY   yBounds[0]
+#define startY yBounds[1]
+
+#define CC_SQRT(dst_, sq_)                                                        \
+    do {                                                                          \
+        f32 cc_sq = (sq_);                                                        \
+        f32 cc_result;                                                            \
+        if (*(f64*)(curveRodata + 0x48) != (f64)cc_sq) {                         \
+            if (cc_sq > float_0_8041f62c) {                                       \
+                f64 cc_value = (f64)cc_sq;                                        \
+                f64 cc_inv = __frsqrte(cc_value);                                 \
+                f64 cc_half = *(f64*)(curveRodata + 0x38);                        \
+                f64 cc_three = *(f64*)(curveRodata + 0x40);                       \
+                f64 cc_square = cc_inv * cc_inv;                                  \
+                cc_inv = (cc_half * cc_inv) * (cc_three - cc_value * cc_square);  \
+                cc_square = cc_inv * cc_inv;                                      \
+                cc_inv = (cc_half * cc_inv) * (cc_three - cc_value * cc_square);  \
+                cc_square = cc_inv * cc_inv;                                      \
+                cc_inv = (cc_half * cc_inv) * (cc_three - cc_value * cc_square);  \
+                cc_result = (f32)(cc_value * cc_inv);                             \
+            } else if ((f64)cc_sq < *(f64*)(curveRodata + 0x48)) {               \
+                cc_result = __float_nan[0];                                       \
+            } else {                                                              \
+                f32 cc_classify = cc_sq;                                          \
+                u32 cc_bits = *(u32*)&cc_classify;                                \
+                s32 cc_exp = cc_bits & 0x7F800000;                                \
+                s32 cc_type;                                                      \
+                switch (cc_exp) {                                                 \
+                    case 0x7F800000:                                              \
+                        if ((cc_bits & 0x007FFFFF) != 0) {                        \
+                            cc_type = 1;                                           \
+                        } else {                                                  \
+                            cc_type = 2;                                           \
+                        }                                                         \
+                        break;                                                     \
+                    case 0:                                                       \
+                        if ((cc_bits & 0x007FFFFF) != 0) {                        \
+                            cc_type = 5;                                           \
+                        } else {                                                  \
+                            cc_type = 3;                                           \
+                        }                                                         \
+                        break;                                                     \
+                    default:                                                      \
+                        cc_type = 4;                                               \
+                        break;                                                     \
+                }                                                                 \
+                if (cc_type == 1) cc_result = __float_nan[0];                    \
+                else cc_result = cc_sq;                                           \
+            }                                                                     \
+        } else {                                                                  \
+            cc_result = float_0_8041f62c;                                         \
+        }                                                                         \
+        (dst_) = cc_result;                                                       \
+    } while (0)
+
+    if (type == 0) {
+        s32 rawCount = *(s32*)((s32)road + 0xA4);
+        s32 baseIndex = *(s32*)((s32)road + 0xA0);
+        f32* geomBase = (f32*)(*(s32*)(*(s32*)wp + 0xF8));
+
+        count = (rawCount + (s32)((u32)rawCount >> 31)) >> 1;
+        typeFlag = 0;
+        start = *(s32*)((s32)road + 0x40);
+        end = *(s32*)((s32)road + 0x44);
+        limitB = *(f32*)((s32)road + 0x48);
+        limitA = *(f32*)((s32)road + 0x4C);
+        roadMode = *(s32*)((s32)road + 0x84);
+        vertices = geomBase + baseIndex * 3;
+        normals = geomBase + (baseIndex + count) * 3;
+    } else {
+        s32 rawCount = *(s32*)((s32)road + 0x64);
+        s32 baseIndex = *(s32*)((s32)road + 0x60);
+        f32* geomBase = (f32*)(*(s32*)(*(s32*)wp + 0xF8));
+
+        count = (rawCount + (s32)((u32)rawCount >> 31)) >> 1;
         start = 0;
         end = 1;
-        limitA = 0.0f;
-        limitB = 0.0f;
+        limitB = float_0_8041f62c;
+        limitA = limitB;
         roadMode = 0;
-        vertices = (f32*)(*(s32*)(*(s32*)wp + 0xF8) + *(s32*)((s32)road + 0x60) * 12);
-    } else {
-        count = *(s32*)((s32)road + 0xA4) / 2;
-        start = *(f32*)((s32)road + 0x40);
-        end = *(f32*)((s32)road + 0x44);
-        limitA = *(f32*)((s32)road + 0x4C);
-        limitB = *(f32*)((s32)road + 0x48);
-        roadMode = *(s32*)((s32)road + 0x84);
-        vertices = (f32*)(*(s32*)(*(s32*)wp + 0xF8) + *(s32*)((s32)road + 0xA0) * 12);
+        typeFlag = 1;
+        vertices = geomBase + baseIndex * 3;
+        normals = geomBase + (baseIndex + count) * 3;
     }
-    normals = vertices + count * 3;
+
+    endY = normals[end * 3 + 1];
+    startY = normals[start * 3 + 1];
+    if (__fabsf(endY - startY) < *(f64*)(curveRodata + 0x58)) {
+        startY = endY;
+    }
+    if (typeFlag) {
+        roadMode = 0;
+    }
+
+    startNormal = normals + start * 3;
+    startVertex = vertices + start * 3;
+    endNormal = normals + end * 3;
+    endVertex = vertices + end * 3;
 
     for (i = 0; i < count - 1; i++, vertices += 3, normals += 3) {
-        f32 dx0 = point[0] - vertices[0];
-        f32 dz0 = point[2] - vertices[2];
-        f32 dx1 = point[0] - vertices[3];
-        f32 dz1 = point[2] - vertices[5];
-        f32 side0 = normals[0] * dx0 + normals[2] * dz0;
-        f32 side1 = -(normals[3] * dx1 + normals[5] * dz1);
+        f32 v0x = vertices[0];
+        f32 v0y = vertices[1];
+        f32 v0z = vertices[2];
+        f32 v1x = vertices[3];
+        f32 v1z = vertices[5];
+        f32 n0x = normals[0];
+        f32 n0z = normals[2];
+        f32 n1x = normals[3];
+        f32 n1z = normals[5];
+        f32 side0;
+        f32 side1;
+        u32 flags = 0;
 
-        if (side0 >= float_0_8041f62c && side1 >= float_0_8041f62c) {
-            f32 edgeX = vertices[3] - vertices[0];
-            f32 edgeZ = vertices[5] - vertices[2];
-            f32 t;
-            f32 interp;
-            f32 hitX;
-            f32 hitZ;
-            f32 offX;
-            f32 offZ;
-            f32 distanceSq;
-            f32 distance;
-            f32 hitY;
-            f32 clampFlag = float_0_8041f62c;
+        side0 = n0x * (point[0] - v0x) + n0z * (point[2] - v0z);
+        side1 = (-n1x) * (point[0] - v1x) + (-n1z) * (point[2] - v1z);
+        if (float_0_8041f62c <= side0 && float_0_8041f62c <= side1) {
+            f32 t0x = -n0z;
+            f32 t0z = n0x;
+            f32 t1x = -n1z;
+            f32 t1z = n1x;
 
-            if (__fabs((f64)-edgeZ) <= __fabs((f64)edgeX)) {
-                if ((f64)edgeX == 0.0) {
-                    t = float_0_8041f62c;
-                } else {
-                    t = (f32)((((f64)-edgeZ * (f64)((vertices[2] - point[2]) / edgeX) +
-                                  (f64)point[0]) - (f64)vertices[0]) /
-                                -(f64)((f32)((f64)-edgeZ * (f64)(edgeZ / edgeX)) - edgeX));
-                }
-            } else {
-                t = (f32)((((f64)edgeX * (f64)((vertices[0] - point[0]) / -edgeZ) +
-                              (f64)point[2]) - (f64)vertices[2]) /
-                            -(f64)((f32)((f64)edgeX * (f64)(edgeX / -edgeZ)) - edgeZ));
+            if ((__fabsf(t0x - t1x) < *(f64*)(curveRodata + 0x60)) &&
+                (__fabsf(t0z - t1z) < *(f64*)(curveRodata + 0x60))) {
+                t0x = float_0p5_8041f64c * (t0x + t1x);
+                t0z = float_0p5_8041f64c * (t0z + t1z);
+                t1x = t0x;
+                t1z = t0z;
             }
-            hitX = vertices[0] + t * edgeX;
-            hitZ = vertices[2] + t * edgeZ;
-            if (__fabs((f64)edgeX) <= __fabs((f64)edgeZ)) {
-                if ((f64)edgeZ != 0.0) interp = (hitZ - vertices[2]) / edgeZ;
-                else interp = float_0_8041f62c;
-            } else {
-                interp = (hitX - vertices[0]) / edgeX;
-            }
-            offX = point[0] - hitX;
-            offZ = point[2] - hitZ;
-            distanceSq = offX * offX + offZ * offZ;
 
-            if (distanceSq > float_0_8041f62c) {
-                f64 value = (f64)distanceSq;
-                f64 inv = __frsqrte(value);
-                f64 half = *(f64*)(vec3_802bf540 + 0x38);
-                f64 three = *(f64*)(vec3_802bf540 + 0x40);
-                f64 square = inv * inv;
-                inv = (half * inv) * (three - value * square);
-                square = inv * inv;
-                inv = (half * inv) * (three - value * square);
-                distance = (f32)(value * half * inv * (three - value * inv * inv));
-            } else if (distanceSq < float_0_8041f62c) {
-                distance = __float_nan[0];
-            } else {
-                distance = float_0_8041f62c;
-            }
-            hitY = normals[1] + interp * (normals[4] - normals[1]);
+            if ((t0x != t1x) || (t0z != t1z)) {
+                f32 centerStep;
+                f32 centerX;
+                f32 centerZ;
+                f32 aX;
+                f32 aZ;
+                f32 bX;
+                f32 bZ;
+                f32 pX;
+                f32 pZ;
+                f32 distanceSign = float_1_8041f638;
+                f32 radiusASq;
+                f32 pointRadiusSq;
+                f32 radiusBSq;
+                f32 radiusA;
+                f32 pointRadius;
+                f32 radiusB;
+                f32 cosA;
+                f32 cosB;
+                f32 angleA;
+                f32 angleB;
+                f32 frac;
+                f32 distance;
+                f32 hitY;
+                f32 orientation;
+                volatile f32 normalSign = float_1_8041f638;
 
-            if (distance < best) {
-                if (roadMode != 0) {
-                    f32 lowY = normals[(s32)start * 3 + 1];
-                    f32 highY = normals[(s32)end * 3 + 1];
-                    if (hitY < lowY) {
-                        hitY = lowY;
-                        clampFlag = 1.40129846e-45f;
-                    } else if (hitY > highY) {
-                        hitY = highY;
-                        clampFlag = 1.40129846e-45f;
+                if (*(f64*)(curveRodata + 0x48) == (f64)t1x) {
+                    if (*(f64*)(curveRodata + 0x48) == (f64)t1z) {
+                        centerStep = float_0_8041f62c;
+                    } else {
+                        centerStep = ((t1x * ((v0z - v1z) / t1z) + v1x) - v0x) /
+                                     -(t1x * (t0z / t1z) - t0x);
                     }
-                    if (offX * edgeX + offZ * edgeZ >= float_0_8041f62c) {
-                        if (limitA < distance) distance = limitA;
-                    } else if (limitB < distance) distance = limitB;
+                } else {
+                    centerStep = ((t1z * ((v0x - v1x) / t1x) + v1z) - v0z) /
+                                 -(t1z * (t0x / t1x) - t0z);
                 }
-                best = distance;
-                found = 1;
-                out[0] = hitY;
-                out[2] = vertices[1];
-                out[3] = hitX;
-                out[4] = float_0_8041f62c;
-                out[5] = hitZ;
-                out[6] = normals[0] + interp * (normals[3] - normals[0]);
-                out[7] = float_0_8041f62c;
-                out[8] = normals[2] + interp * (normals[5] - normals[2]);
-                out[9] = (f32)i;
-                out[10] = clampFlag;
-            }
-        } else {
-            f32 ax = point[0] - vertices[0];
-            f32 az = point[2] - vertices[2];
-            f32 bx = point[0] - vertices[3];
-            f32 bz = point[2] - vertices[5];
-            f32 distA2 = ax * ax + az * az;
-            f32 distB2 = bx * bx + bz * bz;
-            f32 distance;
-            f32 endpoint;
-            f32 invLen;
 
-            if (distA2 <= distB2) {
-                f64 value = (f64)distA2;
-                endpoint = float_0_8041f62c;
-                if (value > 0.0) {
-                    f64 inv = __frsqrte(value);
-                    f64 half = *(f64*)(vec3_802bf540 + 0x38);
-                    f64 three = *(f64*)(vec3_802bf540 + 0x40);
-                    inv = half * inv * (three - value * inv * inv);
-                    inv = half * inv * (three - value * inv * inv);
-                    distance = (f32)(value * half * inv * (three - value * inv * inv));
-                } else distance = float_0_8041f62c;
-            } else {
-                f64 value = (f64)distB2;
-                endpoint = float_1_8041f638;
-                if (value > 0.0) {
-                    f64 inv = __frsqrte(value);
-                    f64 half = *(f64*)(vec3_802bf540 + 0x38);
-                    f64 three = *(f64*)(vec3_802bf540 + 0x40);
-                    inv = half * inv * (three - value * inv * inv);
-                    inv = half * inv * (three - value * inv * inv);
-                    distance = (f32)(value * half * inv * (three - value * inv * inv));
-                } else distance = float_0_8041f62c;
-            }
+                centerZ = centerStep * t0z + v0z;
+                centerX = centerStep * t0x + v0x;
+                aZ = v0z - centerZ;
+                aX = v0x - centerX;
+                radiusASq = aX * aX + aZ * aZ;
+                CC_SQRT(radiusA, radiusASq);
 
-            if (distance < best) {
-                invLen = distance != float_0_8041f62c ? float_1_8041f638 / distance : float_0_8041f62c;
-                best = distance;
-                found = 1;
-                out[0] = normals[1] + endpoint * (normals[4] - normals[1]);
-                out[2] = vertices[1];
-                out[3] = point[0] - (endpoint == float_0_8041f62c ? ax : bx);
-                out[4] = float_0_8041f62c;
-                out[5] = point[2] - (endpoint == float_0_8041f62c ? az : bz);
-                out[6] = (endpoint == float_0_8041f62c ? ax : bx) * invLen;
-                out[7] = float_0_8041f62c;
-                out[8] = (endpoint == float_0_8041f62c ? az : bz) * invLen;
-                out[9] = (f32)i;
-                out[10] = 4.20389539e-45f;
-            }
+                pZ = point[2] - centerZ;
+                pX = point[0] - centerX;
+                pointRadiusSq = pX * pX + pZ * pZ;
+                CC_SQRT(pointRadius, pointRadiusSq);
+
+                bZ = v1z - centerZ;
+                bX = v1x - centerX;
+                radiusBSq = bX * bX + bZ * bZ;
+                CC_SQRT(radiusB, radiusBSq);
+
+                cosA = (aX * pX + aZ * pZ) / (radiusA * pointRadius);
+                cosB = (bX * pX + bZ * pZ) / (radiusB * pointRadius);
+                if (cosA < float_neg1_8041f684) cosA = float_neg1_8041f684;
+                else if (float_1_8041f638 < cosA) cosA = float_1_8041f638;
+                if (cosB < float_neg1_8041f684) cosB = float_neg1_8041f684;
+                else if (float_1_8041f638 < cosB) cosB = float_1_8041f638;
+
+                angleA = (f32)acos((f64)cosA);
+                angleB = (f32)acos((f64)cosB);
+                frac = angleA / (angleA + angleB);
+                distance = frac * ((pointRadius - radiusB) - (pointRadius - radiusA)) +
+                           (pointRadius - radiusA);
+                if (distance < float_0_8041f62c) {
+                    distance = -distance;
+                    distanceSign = float_neg1_8041f684;
+                }
+
+                if (distance < best) {
+                    best = distance;
+                    hitY = frac * (normals[4] - normals[1]) + normals[1];
+                    orientation = aX * -(v1z - v0z) + aZ * (v1x - v0x);
+
+                    if (roadMode != 0) {
+                        if (hitY < startY) {
+                            if ((f64)orientation <= *(f64*)(curveRodata + 0x48)) {
+                                if (float_0_8041f62c <= distanceSign) {
+                                    if (limitB < distance) {
+                                        flags |= 2;
+                                        distance = limitB;
+                                    }
+                                } else {
+                                    if (limitA < distance) {
+                                        flags |= 2;
+                                        distance = limitA;
+                                    }
+                                    distance = -distance;
+                                }
+                            } else if (float_0_8041f62c <= distanceSign) {
+                                if (limitA < distance) {
+                                    flags |= 2;
+                                    distance = limitA;
+                                }
+                                distance = -distance;
+                            } else if (limitB < distance) {
+                                flags |= 2;
+                                distance = limitB;
+                            }
+                            found = 1;
+                            out->t = startY;
+                            out->x = distance * startNormal[2] + startVertex[0];
+                            out->y = float_0_8041f62c;
+                            out->z = -(distance * startNormal[0] - startVertex[2]);
+                            out->nx = startNormal[0];
+                            out->ny = float_0_8041f62c;
+                            out->nz = startNormal[2];
+                            out->bestY = v0y;
+                            out->index = start;
+                            out->flags = flags | 1;
+                            continue;
+                        }
+
+                        if (endY < hitY) {
+                            if ((f64)orientation <= *(f64*)(curveRodata + 0x48)) {
+                                if (float_0_8041f62c <= distanceSign) {
+                                    if (limitB < distance) {
+                                        flags |= 2;
+                                        distance = limitB;
+                                    }
+                                } else {
+                                    if (limitA < distance) {
+                                        flags |= 2;
+                                        distance = limitA;
+                                    }
+                                    distance = -distance;
+                                }
+                            } else if (float_0_8041f62c <= distanceSign) {
+                                if (limitA < distance) {
+                                    flags |= 2;
+                                    distance = limitA;
+                                }
+                                distance = -distance;
+                            } else if (limitB < distance) {
+                                flags |= 2;
+                                distance = limitB;
+                            }
+                            found = 1;
+                            out->t = endY;
+                            out->x = distance * endNormal[2] + endVertex[0];
+                            out->y = float_0_8041f62c;
+                            out->z = -(distance * endNormal[0] - endVertex[2]);
+                            out->nx = endNormal[0];
+                            out->ny = float_0_8041f62c;
+                            out->nz = endNormal[2];
+                            out->bestY = v0y;
+                            out->index = end;
+                            out->flags = flags | 1;
+                            continue;
+                        }
+
+                        if ((f64)orientation <= *(f64*)(curveRodata + 0x48)) {
+                            if (float_0_8041f62c <= distanceSign) {
+                                if (limitB < distance) {
+                                    pX = pX / pointRadius;
+                                    flags |= 2;
+                                    pZ = pZ / pointRadius;
+                                    pointRadius = pointRadius - (distance - limitB);
+                                    pX = pX * pointRadius;
+                                    pZ = pZ * pointRadius;
+                                }
+                            } else if (limitA < distance) {
+                                pX = pX / pointRadius;
+                                flags |= 2;
+                                pZ = pZ / pointRadius;
+                                pointRadius = pointRadius + (distance - limitA);
+                                pX = pX * pointRadius;
+                                pZ = pZ * pointRadius;
+                            }
+                            normalSign = float_neg1_8041f684;
+                        } else if (float_0_8041f62c <= distanceSign) {
+                            if (limitA < distance) {
+                                pX = pX / pointRadius;
+                                flags |= 2;
+                                pZ = pZ / pointRadius;
+                                pointRadius = pointRadius - (distance - limitA);
+                                pX = pX * pointRadius;
+                                pZ = pZ * pointRadius;
+                            }
+                        } else if (limitB < distance) {
+                            pX = pX / pointRadius;
+                            flags |= 2;
+                            pZ = pZ / pointRadius;
+                            pointRadius = pointRadius + (distance - limitB);
+                            pX = pX * pointRadius;
+                            pZ = pZ * pointRadius;
+                        }
+                    } else {
+                        if (typeFlag) {
+                            if ((f64)orientation <= *(f64*)(curveRodata + 0x48)) {
+                                if ((distanceSign < float_0_8041f62c) &&
+                                    (float_0_8041f62c < distance)) {
+                                    pX = pX / pointRadius;
+                                    flags = 3;
+                                    pZ = pZ / pointRadius;
+                                    pointRadius = pointRadius + distance;
+                                    pX = pX * pointRadius;
+                                    pZ = pZ * pointRadius;
+                                }
+                                normalSign = float_neg1_8041f684;
+                            } else if ((float_0_8041f62c <= distanceSign) &&
+                                       (float_0_8041f62c < distance)) {
+                                pX = pX / pointRadius;
+                                flags = 3;
+                                pZ = pZ / pointRadius;
+                                pointRadius = pointRadius - distance;
+                                pX = pX * pointRadius;
+                                pZ = pZ * pointRadius;
+                            }
+                        } else if ((f64)orientation <= *(f64*)(curveRodata + 0x48)) {
+                            normalSign = float_neg1_8041f684;
+                        }
+                    }
+
+                    out->x = centerX + pX;
+                    out->y = float_0_8041f62c;
+                    out->z = centerZ + pZ;
+                    if (float_0_8041f62c <= normalSign) {
+                        out->nx = pZ / pointRadius;
+                        out->ny = float_0_8041f62c;
+                        out->nz = -pX / pointRadius;
+                    } else {
+                        out->nx = -pZ / pointRadius;
+                        out->ny = float_0_8041f62c;
+                        out->nz = pX / pointRadius;
+                    }
+                    out->t = hitY;
+                    found = 1;
+                    out->bestY = v0y;
+                    out->index = i;
+                    out->flags = flags;
+                }
+                        } else {
+                f32 edgeZ = v1z - v0z;
+                f32 edgeX = v1x - v0x;
+                f32 negEdgeZ = -edgeZ;
+                f32 t;
+                f32 hitX;
+                f32 hitZ;
+                f32 interp = float_0_8041f62c;
+                f32 offX;
+                f32 offZ;
+                f32 distanceSq;
+                f32 distance;
+                f32 hitY;
+                f32 dotSide;
+
+                if (__fabsf(negEdgeZ) <= __fabsf(edgeX)) {
+                    if (*(f64*)(curveRodata + 0x48) == (f64)edgeX) {
+                        t = float_0_8041f62c;
+                    } else {
+                        t = ((negEdgeZ * ((v0z - point[2]) / edgeX) + point[0]) - v0x) /
+                            -(negEdgeZ * (edgeZ / edgeX) - edgeX);
+                    }
+                } else {
+                    t = ((edgeX * ((v0x - point[0]) / negEdgeZ) + point[2]) - v0z) /
+                        -(edgeX * (edgeX / negEdgeZ) - edgeZ);
+                }
+
+                hitX = v0x + t * edgeX;
+                hitZ = v0z + t * edgeZ;
+                if (__fabsf(edgeX) <= __fabsf(edgeZ)) {
+                    if (*(f64*)(curveRodata + 0x48) != (f64)edgeZ) {
+                        interp = (hitZ - v0z) / edgeZ;
+                    }
+                } else {
+                    interp = (hitX - v0x) / edgeX;
+                }
+
+                offX = point[0] - hitX;
+                offZ = point[2] - hitZ;
+                distanceSq = offX * offX + offZ * offZ;
+                CC_SQRT(distance, distanceSq);
+                hitY = normals[1] + interp * (normals[4] - normals[1]);
+
+                if (distance < best) {
+                    best = distance;
+                    dotSide = offX * negEdgeZ + offZ * edgeX;
+                    if (roadMode != 0) {
+                        if (hitY < startY) {
+                            if (float_0_8041f62c <= dotSide) {
+                                if (limitA < distance) {
+                                    flags |= 2;
+                                    distance = limitA;
+                                }
+                                distance = -distance;
+                            } else if (limitB < distance) {
+                                flags |= 2;
+                                distance = limitB;
+                            }
+                            found = 1;
+                            out->t = startY;
+                            out->x = distance * startNormal[2] + startVertex[0];
+                            out->y = float_0_8041f62c;
+                            out->z = -(distance * startNormal[0] - startVertex[2]);
+                            out->nx = startNormal[0];
+                            out->ny = float_0_8041f62c;
+                            out->nz = startNormal[2];
+                            out->bestY = v0y;
+                            out->index = start;
+                            out->flags = flags | 1;
+                            continue;
+                        }
+
+                        if (endY < hitY) {
+                            if (float_0_8041f62c <= dotSide) {
+                                if (limitA < distance) {
+                                    flags |= 2;
+                                    distance = limitA;
+                                }
+                                distance = -distance;
+                            } else if (limitB < distance) {
+                                flags |= 2;
+                                distance = limitB;
+                            }
+                            found = 1;
+                            out->t = endY;
+                            out->x = distance * endNormal[2] + endVertex[0];
+                            out->y = float_0_8041f62c;
+                            out->z = -(distance * endNormal[0] - endVertex[2]);
+                            out->nx = endNormal[0];
+                            out->ny = float_0_8041f62c;
+                            out->nz = endNormal[2];
+                            out->bestY = v0y;
+                            out->index = end;
+                            out->flags = flags | 1;
+                            continue;
+                        }
+
+                        if (float_0_8041f62c <= dotSide) {
+                            if ((f64)limitA < (f64)distance) {
+                                flags |= 2;
+                                offX = limitA * (offX / distance);
+                                offZ = limitA * (offZ / distance);
+                            }
+                        } else if ((f64)limitB < (f64)distance) {
+                            flags |= 2;
+                            offX = limitB * (offX / distance);
+                            offZ = limitB * (offZ / distance);
+                        }
+                    }
+
+                    out->t = hitY;
+                    found = 1;
+                    out->x = hitX + offX;
+                    out->y = float_0_8041f62c;
+                    out->z = hitZ + offZ;
+                    out->nx = normals[0] + interp * (normals[3] - normals[0]);
+                    out->ny = float_0_8041f62c;
+                    out->nz = normals[2] + interp * (normals[5] - normals[2]);
+                    out->bestY = v0y;
+                    out->index = i;
+                    out->flags = flags;
+                }
+                        }
         }
     }
+
+#undef CC_SQRT
+#undef startY
+#undef endY
+
     return found;
 }
 
 void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 checkWidth, void* out, void* prev) {
+    const char* rodata;
     void* work0;
     void* road;
     void* foundRoad;
@@ -979,11 +1201,11 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
     triPos.y = param5;
     triPos.z = param6;
 
-    for (i = 0; i < *(s32*)((s32)work0 + 0xC8); i++, road = (void*)((s32)road + 0xB8)) {
-        roadEntry = (void*)((s32)*(void**)((s32)work0 + 0xF0) + (*(s32*)((s32)road + 0xA8) * 0x68));
+    for (i = 0; i < *(s32*)((s32)*(void**)wp + 0xC8); i++, road = (void*)((s32)road + 0xB8)) {
+        roadEntry = (void*)((s32)*(void**)((s32)*(void**)wp + 0xF0) + (*(s32*)((s32)road + 0xA8) * 0x68));
         blockCount = *(s32*)((s32)road + 0xAC);
 
-        if ((*(u32*)((s32)work0 + 0x1D0) == 0x65) && (*(u32*)((s32)road + 0x28) != 0)) {
+        if ((*(u32*)((s32)wp + 0x1D0) == 0x65) && (*(u32*)((s32)road + 0x28) != 0)) {
         continue;
         }
 
@@ -998,26 +1220,21 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
         }
 
         for (j = 0; j < blockCount; j++, roadEntry = (void*)((s32)roadEntry + 0x68)) {
-            vertexBase = (void*)((s32)*(void**)((s32)work0 + 0xFC) + (*(s32*)((s32)roadEntry + 0x58) * 0xC));
-            triBase = (void*)((s32)*(void**)((s32)work0 + 0xF4) + (*(s32*)((s32)roadEntry + 0x60) * 8));
-            indexBase = *(void**)((s32)work0 + 0x100);
+            vertexBase = (void*)((s32)*(void**)((s32)*(void**)wp + 0xFC) + (*(s32*)((s32)roadEntry + 0x58) * 0xC));
+            triBase = (void*)((s32)*(void**)((s32)*(void**)wp + 0xF4) + (*(s32*)((s32)roadEntry + 0x60) * 8));
             polyCount = *(s32*)((s32)roadEntry + 0x64);
 
             for (k = 0; k < polyCount; k++, triBase = (void*)((s32)triBase + 8)) {
                 s32 firstIndex = *(s32*)triBase;
                 indexCount = *(s32*)((s32)triBase + 4) - 1;
 
-                firstIndexPtr = (s32*)((s32)indexBase + (firstIndex * 4));
+                firstIndexPtr = (s32*)((s32)*(void**)((s32)*(void**)wp + 0x100) + (firstIndex * 4));
                 walkIndexPtr = firstIndexPtr + 1;
 
                 for (tri = 1; tri < indexCount; tri++, walkIndexPtr++) {
-                idx2 = walkIndexPtr[1];
-                idx1 = walkIndexPtr[0];
-                idx0 = firstIndexPtr[0];
-
-                    p3 = *(Vec3*)((s32)vertexBase + (idx2 * 0xC));
-                    p2 = *(Vec3*)((s32)vertexBase + (idx1 * 0xC));
-                    p1 = *(Vec3*)((s32)vertexBase + (idx0 * 0xC));
+                    p3 = *(Vec3*)((s32)vertexBase + (walkIndexPtr[1] * 0xC));
+                    p2 = *(Vec3*)((s32)vertexBase + (walkIndexPtr[0] * 0xC));
+                    p1 = *(Vec3*)((s32)vertexBase + (firstIndexPtr[0] * 0xC));
                     p0 = triPos;
 
                     if (collisionTri_simple(&p0, &p1, &p2, &p3, &bestY) != 0) {
@@ -1030,12 +1247,14 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
     }
 
     if (foundRoad != NULL) {
+        Vec3 curveInput;
         hit.bestY = float_neg1E06_8041f680;
         hit.nx = float_0_8041f62c;
         hit.ny = float_0_8041f62c;
         hit.nz = float_0_8041f62c;
 
-        if (collisionCurve(0, foundRoad, &pos, &hit) == 0) {
+        curveInput = pos;
+        if (collisionCurve(0, foundRoad, &curveInput, &hit) == 0) {
             foundRoad = NULL;
         }
     }
@@ -1116,8 +1335,8 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
         if (*(f64*)(rodata + 0x48) != (f64)distSq) {
             if (distSq > float_0_8041f62c) {
                 inv = __frsqrte(distSq);
-                half = *(f64*)(vec3_802bf540 + 0x38);
-                three = *(f64*)(vec3_802bf540 + 0x40);
+                half = *(f64*)(rodata + 0x38);
+                three = *(f64*)(rodata + 0x40);
 
                 square = inv * inv;
                 inv = (half * inv) * (three - ((f64)distSq * square));
@@ -1127,10 +1346,31 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
                 inv = (half * inv) * (three - ((f64)distSq * square));
 
                 dist = (f32)((f64)distSq * inv);
-                dx = dx / dist;
-                dz = dz / dist;
-                dirY = float_0_8041f62c;
+            } else if ((f64)distSq < *(f64*)(rodata + 0x48)) {
+                dist = __float_nan[0];
+            } else {
+                u32 bits = *(u32*)&distSq;
+                s32 exponent = bits & 0x7f800000;
+                s32 classification;
+                switch (exponent) {
+                    case 0x7f800000:
+                        classification = (bits & 0x7fffff) ? 1 : 2;
+                        break;
+                    case 0:
+                        classification = (bits & 0x7fffff) ? 5 : 3;
+                        break;
+                    default:
+                        classification = 4;
+                        break;
+                }
+                dist = distSq;
+                if (classification == 1) {
+                    dist = __float_nan[0];
+                }
             }
+            dx = dx / dist;
+            dz = dz / dist;
+            dirY = float_0_8041f62c;
         }
 
         dirX = dx * float_neg1_8041f684;
@@ -1140,16 +1380,18 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
 
     if (*(s32*)((s32)chosenRoad + 0xB4) != 0) {
         Vec3 curvePos;
+        Vec3 curveInput;
 
         curvePos.x = outX;
         curvePos.y = dat_8041f688;
         curvePos.z = outZ;
         hit.bestY = float_neg1E06_8041f680;
+        curveInput = curvePos;
 
         if (collisionCurve(1,
                            (void*)((s32)*(void**)((s32)*(void**)wp + 0x104) +
                                   (*(s32*)((s32)chosenRoad + 0xB0) * 0x68)),
-                           &curvePos,
+                           &curveInput,
                            &hit) != 0) {
             outX = hit.x;
             outZ = hit.z;
@@ -1165,6 +1407,10 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
     if ((checkWidth != float_0_8041f62c) &&
         (foundRoad != NULL) &&
         (*(s32*)prev != 0)) {
+        Vec3 sideInputA;
+        Vec3 sideCurveInputA;
+        Vec3 sideInputB;
+        Vec3 sideCurveInputB;
 
         c = cos(curveAngle);
         s = sin(curveAngle);
@@ -1181,11 +1427,13 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
                  (*(f32*)((s32)prev + 0x58) * float_1_8041f638 *
                   ((float_640_8041f68c * ((roadScale * s) / c)) / float_480_8041f690));
 
-        sidePosA.x = x + (offset * sideX);
+        sidePosA = pos;
         sidePosA.y = float_1E06_8041f694;
-        sidePosA.z = z + (offset * dirX);
+        sidePosA.x += offset * sideX;
+        sidePosA.z += offset * dirX;
 
-        hitAny = collisionCurve(0, chosenRoad, &sidePosA, &sideHitA);
+        sideInputA = sidePosA;
+        hitAny = collisionCurve(0, chosenRoad, &sideInputA, &sideHitA);
         if (hitAny != 0) {
             sidePosA.x = sideHitA.x;
             sidePosA.y = outY;
@@ -1194,10 +1442,11 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
 
         if (*(s32*)((s32)chosenRoad + 0xB4) != 0) {
             sideHitA.bestY = float_neg1E06_8041f680;
+            sideCurveInputA = sidePosA;
             if (collisionCurve(1,
                                (void*)((s32)*(void**)((s32)*(void**)wp + 0x104) +
                                       (*(s32*)((s32)chosenRoad + 0xB0) * 0x68)),
-                               &sidePosA,
+                               &sideCurveInputA,
                                &sideHitA) != 0) {
                 hitAny = 1;
                 sidePosA.x = sideHitA.x;
@@ -1224,11 +1473,13 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
           (float_1_8041f638 *
            ((float_640_8041f68c * ((roadScale * s2) / c2)) / float_480_8041f690)));
 
-        sidePosB.x = x + (offset * sideX);
+        sidePosB = pos;
         sidePosB.y = float_1E06_8041f694;
-        sidePosB.z = z + (offset * dirX);
+        sidePosB.x += offset * sideX;
+        sidePosB.z += offset * dirX;
 
-        active = collisionCurve(0, chosenRoad, &sidePosB, &sideHitB);
+        sideInputB = sidePosB;
+        active = collisionCurve(0, chosenRoad, &sideInputB, &sideHitB);
         flags = 0;
         if (active != 0) {
             sidePosB.x = sideHitB.x;
@@ -1239,10 +1490,11 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
 
         if (*(s32*)((s32)chosenRoad + 0xB4) != 0) {
             sideHitB.bestY = float_neg1E06_8041f680;
+            sideCurveInputB = sidePosB;
             if (collisionCurve(1,
                                (void*)((s32)*(void**)((s32)*(void**)wp + 0x104) +
                                       (*(s32*)((s32)chosenRoad + 0xB0) * 0x68)),
-                               &sidePosB,
+                               &sideCurveInputB,
                                &sideHitB) != 0) {
                 active = 1;
                 sidePosB.x = sideHitB.x;

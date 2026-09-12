@@ -23,6 +23,7 @@ void* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 wait) {
     s32 i;
     s32 j;
     s32 lang;
+    s32* texids;
     f32 scale;
     f32 left;
     f32 total;
@@ -43,18 +44,19 @@ void* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 wait) {
     item = (void*)((s32)work + 0x24);
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, item = (void*)((s32)item + 0x24)) {
         lang = *(s32*)((s32)gp + 0x16C);
+        texids = (s32*)((s32)texid_tbl + (lang * 0x18));
         scale = (lang == 3) ? float_0p9_804275e0 : float_1_804275dc;
         left = float_0_804275e8;
         for (j = 0; j < i - 1; j++) {
-            effGetTexObj(*(s32*)((s32)texid_tbl + (lang * 0x18) + (j * 4)), texObj);
+            effGetTexObj(texids[j], texObj);
             left += scale * (f32)(GXGetTexObjWidth(texObj) & 0xFFFF);
         }
-        effGetTexObj(*(s32*)((s32)texid_tbl + (lang * 0x18) + (j * 4)), texObj);
+        effGetTexObj(texids[j], texObj);
         left += scale * ((f32)(GXGetTexObjWidth(texObj) & 0xFFFF) * float_0p5_804275e4);
 
         total = float_0_804275e8;
         for (j = 0; j < 3; j++) {
-            effGetTexObj(*(s32*)((s32)texid_tbl + (lang * 0x18) + (j * 4)), texObj);
+            effGetTexObj(texids[j], texObj);
             total += scale * ((f32)(GXGetTexObjWidth(texObj) & 0xFFFF) * float_0p5_804275e4);
         }
 

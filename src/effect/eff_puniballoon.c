@@ -45,11 +45,7 @@ void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale) 
     s32 child;
     s32 count;
     s32 i;
-    s32 r;
-    s32 q;
-    s32 rem;
     f32 zero;
-    f64 conv;
 
     entry = effEntry();
 
@@ -70,7 +66,7 @@ void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale) 
     *(void (**)(void))((s32)entry + 0x10) = effPuniBalloonMain;
 
     zero = float_0_80426f60;
-    *(u32*)entry = *(u32*)entry | 2;
+    *(u32*)entry |= 2;
 
     *(s32*)work = type;
     *(f32*)(work + 4) = (f32)x;
@@ -88,40 +84,16 @@ void* effPuniBalloonEntry(s32 type, double x, double y, double z, double scale) 
     *(f32*)(work + 0x20) = zero;
     *(f32*)(work + 0x1C) = (f32)scale;
 
-    conv = double_to_int_802fe558;
     child = work + 0x30;
     i = 1;
-
     while (i < *(s32*)((s32)entry + 8)) {
         *(f32*)(child + 4) = zero;
         *(f32*)(child + 8) = zero;
         *(f32*)(child + 0xC) = zero;
         *(f32*)(child + 0x20) = (f32)scale;
-
-        r = rand();
-        q = r / 11;
-        if (r < 0 && (r - q * 11) != 0) {
-            q--;
-        }
-        rem = r - q * 11;
-        *(f32*)(child + 0x10) = (f32)(rem - 5);
-
-        r = rand();
-        q = r / 11;
-        if (r < 0 && (r - q * 11) != 0) {
-            q--;
-        }
-        rem = r - q * 11;
-        *(f32*)(child + 0x14) = (f32)(rem - 5);
-
-        r = rand();
-        q = r / 11;
-        if (r < 0 && (r - q * 11) != 0) {
-            q--;
-        }
-        rem = r - q * 11;
-        *(f32*)(child + 0x18) = (f32)(rem - 5);
-
+        *(f32*)(child + 0x10) = (f32)((rand() % 11) - 5);
+        *(f32*)(child + 0x14) = (f32)((rand() % 11) - 5);
+        *(f32*)(child + 0x18) = (f32)((rand() % 11) - 5);
         i++;
         child += 0x30;
     }

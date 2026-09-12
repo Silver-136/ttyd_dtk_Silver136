@@ -5,11 +5,14 @@
 
 void actionCommandDisp(f32 x, f32 y);
 s32 battleAcMain_PowerGauge(void* battleWork) {
+    extern void* memset(void* dest, int ch, u32 count);
+    extern s32 irand(s32 range);
     extern void BattleAcGaugeSeInit(void);
     extern s32 BattlePadGetNow(void);
     extern s32 BattlePadCheckTrigger(u32 buttons);
     extern s32 BattlePadCheckNow(u32 buttons);
     extern s32 BattlePadCheckUp(u32 buttons);
+    extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern void BattleAcGaugeSeUpdate(double value);
     extern void BattleAcGaugeSeDelete(void);
 
@@ -42,34 +45,29 @@ s32 battleAcMain_PowerGauge(void* battleWork) {
 
     state = *(s32*)(bw + 0x1C9C);
 
-    if (state == 0x3EA) {
-        goto state_3ea;
-    }
-
-    if (state >= 0x3EA) {
-        if (state == 0x3ED) {
-            goto state_3ed;
-        }
-        if (state >= 0x3ED) {
-            if (state >= 0x3EF) {
-                return 1;
-            }
-            goto state_3ee;
-        }
-        if (state >= 0x3EC) {
+    switch (state) {
+        case 0:
+            break;
+        case 99:
+            goto return_one;
+        case 100:
+            goto state_100;
+        case 0x3E8:
+        case 0x3E9:
+            goto state_loop;
+        case 0x3EA:
+            goto state_3ea;
+        case 0x3EB:
+            goto state_3eb;
+        case 0x3EC:
             goto state_3ec;
-        }
-        goto state_3eb;
+        case 0x3ED:
+            goto state_3ed;
+        case 0x3EE:
+            goto state_3ee;
+        default:
+            goto return_one;
     }
-
-    if (state == 99) {
-        return 1;
-    }
-
-    if (state < 99) {
-        if (state != 0) {
-            return 1;
-        }
 
         memset((void*)disp, 0, 0x2C);
         *(f32*)(disp + 0x14) = float_neg300_80427b14;
@@ -123,11 +121,8 @@ s32 battleAcMain_PowerGauge(void* battleWork) {
         }
 
         return 1;
-    }
 
-    if (state > 100) {
-        return 1;
-    }
+state_100:
 
     if ((*(u32*)(bw + 0x1C94) & 1) != 0 && (*(u32*)(unit + 0x27C) & 0x10) != 0) {
         value = irand(100);
@@ -291,6 +286,9 @@ state_3ee:
     *(s32*)(bw + 0x1CA4) = 0;
     *(s32*)(bw + 0x1CAC) = 0;
     return 0;
+
+return_one:
+    return 1;
 }
 
 s32 battleAcResult_PowerGauge(void* wp) {
@@ -403,10 +401,10 @@ void actionCommandDisp(f32 x, f32 y) {
     s32* params = (s32*)(battleWork + 0x1CC8);
     u32 acFlags;
     s32 state;
-    u16 pressedIcon = 0;
-    u16 releasedIcon = 0;
-    u16 pressedSecondIcon = 0;
-    u16 releasedSecondIcon = 0;
+    u16 pressedIcon;
+    u16 releasedIcon;
+    u16 pressedSecondIcon;
+    u16 releasedSecondIcon;
     f32 ratio;
 
     camGetPtr(8);
@@ -437,11 +435,11 @@ void actionCommandDisp(f32 x, f32 y) {
     } else {
         s32 markerIcon;
 
-        if (extraWork->gaugeValue < (f32)params[4] ||
-            extraWork->gaugeValue > 100.0f) {
-            markerIcon = 0x99;
-        } else {
+        if ((f32)params[4] <= extraWork->gaugeValue &&
+            extraWork->gaugeValue <= 100.0f) {
             markerIcon = 0x9D;
+        } else {
+            markerIcon = 0x99;
         }
 
         if ((acFlags & 8) == 0) {
@@ -496,8 +494,8 @@ void actionCommandDisp(f32 x, f32 y) {
             }
 
             if (extraWork->inputMode == 0) {
-                if (((extraWork->gaugeValue < (f32)params[4]) ||
-                     (extraWork->gaugeValue > 100.0f)) &&
+                if (!(((f32)params[4] <= extraWork->gaugeValue) &&
+                      (extraWork->gaugeValue <= 100.0f)) &&
                     (*(s32*)(battleWork + 0x1CE8) != 0)) {
                     if (pressedSecondIcon != 0) {
                         VecLocal first = {0.0f, 0.0f, 0.0f};

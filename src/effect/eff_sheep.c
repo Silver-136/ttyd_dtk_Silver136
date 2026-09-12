@@ -87,10 +87,11 @@ void effSheepMain(void* effect) {
         f32 z;
     } Vec;
 
+    extern f32 vec3_803002f0[];
     extern void* gp;
     extern void animPoseRelease(s32);
     extern void effDelete(void*);
-    extern u32 animGroupBaseAsync(char*, s32, s32);
+    extern s32 animGroupBaseAsync(char*, s32, s32);
     extern s32 animPoseEntry(char*, u32);
     extern void animPoseSetAnim(s32, char*, s32);
     extern u32 psndSFXOn_3D(char*, Vec*);
@@ -99,76 +100,88 @@ void effSheepMain(void* effect) {
     extern s32 irand(s32);
     extern void effKemuTestEntry(f32, f32, f32, f32, s32);
     extern void animPoseMain(s32);
-    extern f64 dispCalcZ(Vec*);
+    extern f32 dispCalcZ(Vec*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effSheepDisp(s32, void*);
     extern const char str_EFF_hituji_80300340[];
-    extern char str_A_1_80427eb0[];
+    extern char str_A_1_80427eb0;
     extern const char str_SFX_ITEM_SLEEP1_80300320[];
     extern const char str_SFX_ITEM_SLEEP2_80300330[];
 
     u8* entry = effect;
     u8* work = *(u8**)(entry + 0x0C);
+    f32* vectors = vec3_803002f0;
     Vec base;
-    s32 inBattle = *(s32*)((u8*)gp + 0x14) != 0;
+    Vec initial;
+    Vec sleep1Pos;
+    Vec sleep2Pos;
+    Vec updatePos;
+    u32 inBattle = *(s32*)((u8*)gp + 0x14);
     s32 finished = 0;
-    s32 count = *(s32*)(entry + 0x08);
     s32 i;
+    u8* part;
 
-    base.x = *(f32*)(work + 0x04);
-    base.y = *(f32*)(work + 0x08);
-    base.z = *(f32*)(work + 0x0C);
+    initial = *(Vec*)vectors;
+    initial.x = *(f32*)(work + 0x04);
+    initial.y = *(f32*)(work + 0x08);
+    initial.z = *(f32*)(work + 0x0C);
+    base = initial;
+    inBattle = (inBattle | -inBattle) >> 31;
 
     if ((*(u32*)entry & 4) != 0) {
         *(u32*)entry &= ~4;
-        for (i = 1; i < count; i++) {
-            u8* part = work + i * 0x34;
+        part = work + 0x34;
+        for (i = 1; i < *(s32*)(entry + 0x08); i++, part += 0x34) {
             if (*(s32*)(part + 0x20) != -1) {
                 animPoseRelease(*(s32*)(part + 0x20));
             }
         }
         psndSFXOff(*(s32*)(work + 0x64));
-        psndSFXOff(*(s32*)(work + count * 0x34 - 4));
+        psndSFXOff(*(s32*)(work + *(s32*)(entry + 0x08) * 0x34 - 4));
         effDelete(effect);
         return;
     }
 
-    for (i = 1; i < count; i++) {
-        u8* part = work + i * 0x34;
+    part = work + 0x34;
+    for (i = 1; i < *(s32*)(entry + 0x08); i++, part += 0x34) {
         s32 state = *(s32*)(part + 0x24);
 
         switch (state) {
             case 0:
                 if (animGroupBaseAsync((char*)str_EFF_hituji_80300340, inBattle, 0) != 0) {
                     *(s32*)(part + 0x20) = animPoseEntry((char*)str_EFF_hituji_80300340, inBattle);
-                    animPoseSetAnim(*(s32*)(part + 0x20), str_A_1_80427eb0, 1);
+                    animPoseSetAnim(*(s32*)(part + 0x20), &str_A_1_80427eb0, 1);
                     (*(s32*)(part + 0x24))++;
                 }
                 break;
 
             case 1:
                 if ((s32)--*(u32*)(part + 0x28) < 0) {
-                    Vec pos;
                     *(s32*)(part + 0x28) = 0;
-                    pos.x = base.x + *(f32*)(part + 0x04);
-                    pos.y = base.y + *(f32*)(part + 0x08);
-                    pos.z = base.z + *(f32*)(part + 0x0C);
                     if (i == 1) {
-                        *(s32*)(part + 0x30) = psndSFXOn_3D((char*)str_SFX_ITEM_SLEEP1_80300320, &pos);
-                    } else if (i == count - 1) {
-                        *(s32*)(part + 0x30) = psndSFXOn_3D((char*)str_SFX_ITEM_SLEEP2_80300330, &pos);
+                        sleep1Pos = *(Vec*)(vectors + 3);
+                        sleep1Pos.x = base.x + *(f32*)(part + 0x04);
+                        sleep1Pos.y = base.y + *(f32*)(part + 0x08);
+                        sleep1Pos.z = base.z + *(f32*)(part + 0x0C);
+                        *(s32*)(part + 0x30) = psndSFXOn_3D((char*)str_SFX_ITEM_SLEEP1_80300320, &sleep1Pos);
+                    } else if (i == *(s32*)(entry + 0x08) - 1) {
+                        sleep2Pos = *(Vec*)(vectors + 6);
+                        sleep2Pos.x = base.x + *(f32*)(part + 0x04);
+                        sleep2Pos.y = base.y + *(f32*)(part + 0x08);
+                        sleep2Pos.z = base.z + *(f32*)(part + 0x0C);
+                        *(s32*)(part + 0x30) = psndSFXOn_3D((char*)str_SFX_ITEM_SLEEP2_80300330, &sleep2Pos);
                     }
                     (*(s32*)(part + 0x24))++;
                 }
                 break;
 
             case 2:
-                if (i == 1 || i == count - 1) {
-                    Vec pos;
-                    pos.x = base.x + *(f32*)(part + 0x04);
-                    pos.y = base.y + *(f32*)(part + 0x08);
-                    pos.z = base.z + *(f32*)(part + 0x0C);
-                    psndSFX_pos(*(s32*)(part + 0x30), &pos);
+                if (i == 1 || i == *(s32*)(entry + 0x08) - 1) {
+                    updatePos = *(Vec*)(vectors + 9);
+                    updatePos.x = base.x + *(f32*)(part + 0x04);
+                    updatePos.y = base.y + *(f32*)(part + 0x08);
+                    updatePos.z = base.z + *(f32*)(part + 0x0C);
+                    psndSFX_pos(*(s32*)(part + 0x30), &updatePos);
                 }
                 if (*(f32*)(part + 0x04) >= 500.0f) {
                     (*(s32*)(part + 0x24))++;
@@ -192,10 +205,10 @@ void effSheepMain(void* effect) {
                 break;
 
             case 3:
-                if (i == count - 2) {
+                if (i == *(s32*)(entry + 0x08) - 2) {
                     psndSFXOff(*(s32*)(work + 0x64));
                 }
-                if (i == count - 1) {
+                if (i == *(s32*)(entry + 0x08) - 1) {
                     psndSFXOff(*(s32*)(part + 0x30));
                 }
                 animPoseRelease(*(s32*)(part + 0x20));
@@ -213,8 +226,8 @@ void effSheepMain(void* effect) {
         }
     }
 
-    if (finished < count - 1) {
-        dispEntry(3, 1, effSheepDisp, effect, (f32)dispCalcZ(&base));
+    if (finished < *(s32*)(entry + 0x08) - 1) {
+        dispEntry(4, 1, effSheepDisp, effect, dispCalcZ(&base));
     } else {
         effDelete(effect);
     }

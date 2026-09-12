@@ -30,7 +30,6 @@ void* effSmallStarN64Entry(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s3
     u8* part;
     Vec cameraAxis4;
     Vec cameraAxis3;
-    Vec directionVec;
     Vec rotAxis;
     Mtx matrix;
     f32 axisX;
@@ -222,8 +221,27 @@ void* effSmallStarN64Entry(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s3
                 matrix[1][0] * dirX + matrix[1][1] * dirY + matrix[1][2] * dirZ;
             *(f32*)(part + 0x18) =
                 matrix[2][0] * dirX + matrix[2][1] * dirY + matrix[2][2] * dirZ;
-        } else if (type >= 3) {
-            if (type < 5) {
+        } else if (type < 3) {
+            if (type > -1) {
+                angle = 360.0f * (f32)i / (f32)(count - 1);
+
+                rotAxis = *(const Vec*)vec3_802fbf18;
+                rotAxis.x = dirX;
+                rotAxis.y = dirY;
+                rotAxis.z = dirZ;
+
+                PSMTXRotAxisRad(matrix, &rotAxis, 0.017453292f * angle);
+                *(f32*)(part + 0x10) =
+                    matrix[0][0] * axisX + matrix[0][1] * axisY +
+                    matrix[0][2] * axisZ + dirX;
+                *(f32*)(part + 0x14) =
+                    matrix[1][0] * axisX + matrix[1][1] * axisY +
+                    matrix[1][2] * axisZ + dirY;
+                *(f32*)(part + 0x18) =
+                    matrix[2][0] * axisX + matrix[2][1] * axisY +
+                    matrix[2][2] * axisZ + dirZ;
+            }
+        } else if (type < 5) {
                 angle = 360.0f * (f32)i / (f32)(count - 1);
 
                 cameraAxis4 = *(const Vec*)vec3_802fbf30;
@@ -238,26 +256,6 @@ void* effSmallStarN64Entry(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s3
                     matrix[1][0] * dirX + matrix[1][1] * dirY + matrix[1][2] * dirZ;
                 *(f32*)(part + 0x18) =
                     matrix[2][0] * dirX + matrix[2][1] * dirY + matrix[2][2] * dirZ;
-            }
-        } else if (type >= 0) {
-            angle = 360.0f * (f32)i / (f32)(count - 1);
-
-            directionVec = *(const Vec*)vec3_802fbf18;
-            directionVec.x = dirX;
-            directionVec.y = dirY;
-            directionVec.z = dirZ;
-            rotAxis = directionVec;
-
-            PSMTXRotAxisRad(matrix, &rotAxis, 0.017453292f * angle);
-            *(f32*)(part + 0x10) =
-                matrix[0][0] * axisX + matrix[0][1] * axisY +
-                matrix[0][2] * axisZ + dirX;
-            *(f32*)(part + 0x14) =
-                matrix[1][0] * axisX + matrix[1][1] * axisY +
-                matrix[1][2] * axisZ + dirY;
-            *(f32*)(part + 0x18) =
-                matrix[2][0] * axisX + matrix[2][1] * axisY +
-                matrix[2][2] * axisZ + dirZ;
         }
 
         if (type == 2) {
@@ -290,14 +288,25 @@ void* effSmallStarN64Entry(f32 x, f32 y, f32 z, f32 dirX, f32 dirY, f32 dirZ, s3
 }
 
 void effSmallStarMain(void* effect) {
+    typedef struct Vec { f32 x, y, z; } Vec;
     extern void effDelete(void*);
     extern f32 dispCalcZ(void*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effSmallStarDisp(void);
     extern f32 float_0p8_80426030, float_0p94_80426028, float_0_8042602c, float_0p7_80426038,
         float_0p6_80426034, float_1_80426014;
+    extern f32 float_6p2832_80426004, float_360_80426008, float_0p03705_8042600c,
+        float_0p4967_80426010, float_3p1416_80426018, float_1p5708_8042601c,
+        float_4p7124_80426020, float_4_80426024;
+    extern const Vec vec3_802fbf3c;
     u8* work = *(u8**)((s32)effect + 0xC);
-    s32 timer, i, type = *(s32*)work;
+    Vec pos = vec3_802fbf3c;
+    s32 timer, i, type;
+    f32 angle;
+    f32 value;
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
     timer = *(s32*)(work + 0x28) - 1;
     *(s32*)(work + 0x28) = timer;
     *(s32*)(work + 0x2C) += 1;
@@ -305,9 +314,30 @@ void effSmallStarMain(void* effect) {
         effDelete(effect);
         return;
     }
+    angle = float_6p2832_80426004 * (f32)(*(s32*)(work + 0x2C) * 6);
     for (i = 0; i < *(s32*)((s32)effect + 8); i++, work += 0x34) {
+        type = *(s32*)work;
         if (type == 2) {
-            *(f32*)(work + 0x14) = float_1_80426014;
+            value = angle / float_360_80426008;
+            if (value > float_3p1416_80426018) {
+                if (value >= float_4p7124_80426020) {
+                    value = float_1p5708_8042601c - (value - float_4p7124_80426020);
+                    value *= value;
+                    value = (float_0p03705_8042600c * value - float_0p4967_80426010) * value + float_1_80426014;
+                } else {
+                    value -= float_3p1416_80426018;
+                    value *= value;
+                    value = -((float_0p03705_8042600c * value - float_0p4967_80426010) * value + float_1_80426014);
+                }
+            } else if (value > float_1p5708_8042601c) {
+                value = float_1p5708_8042601c - (value - float_1p5708_8042601c);
+                value *= value;
+                value = -((float_0p03705_8042600c * value - float_0p4967_80426010) * value + float_1_80426014);
+            } else {
+                value *= value;
+                value = (float_0p03705_8042600c * value - float_0p4967_80426010) * value + float_1_80426014;
+            }
+            *(f32*)(work + 0x14) = float_4_80426024 * value;
             *(f32*)(work + 0x10) *= float_0p94_80426028;
             *(f32*)(work + 0x18) *= float_0p94_80426028;
             if (*(f32*)(work + 0x14) < float_0_8042602c) {
@@ -321,7 +351,11 @@ void effSmallStarMain(void* effect) {
                 *(f32*)(work + 0x14) *= float_0p8_80426030;
                 *(f32*)(work + 0x18) *= float_0p8_80426030;
             }
-            if (timer < 5) {
+            if (timer < 20 && timer > 5) {
+                if (type == 0) {
+                    *(f32*)(work + 0x20) += float_1_80426014;
+                }
+            } else if (timer < 5) {
                 *(f32*)(work + 0x20) *= float_0p8_80426030;
                 *(s32*)(work + 0x24) = (s32)((f32) * (s32*)(work + 0x24) * float_0p6_80426034);
                 *(f32*)(work + 0x10) *= float_0p7_80426038;
@@ -335,7 +369,7 @@ void effSmallStarMain(void* effect) {
         *(f32*)(work + 0x1C) += *(f32*)(work + 0x20);
     }
     dispEntry(*(u8*)(*(u8**)((s32)effect + 0xC) + 0x30), 2, effSmallStarDisp, effect,
-              dispCalcZ(*(u8**)((s32)effect + 0xC) + 4));
+              dispCalcZ(&pos));
 }
 
 void effSmallStarDisp(s32 cameraId, void* effect) {

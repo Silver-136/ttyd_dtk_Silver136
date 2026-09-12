@@ -81,8 +81,6 @@ void* effFireFlowerN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z) {
     return entry;
 }
 
-#pragma optimize_for_size on
-
 void effFireFlowerMain(void* effect) {
     extern void effDelete(void* effect);
     extern void effRotHammerSuccessN64Entry(f32 x, f32 y, f32 z, s32 type, s32 count, s32 timer);
@@ -100,7 +98,6 @@ void effFireFlowerMain(void* effect) {
     extern f32 float_200_80425288;
 
     u8* work;
-    u8* partBase;
     f32 pos[3];
     s32 state;
     s32 frame;
@@ -169,20 +166,20 @@ void effFireFlowerMain(void* effect) {
             } else {
                 *(f32*)(work + 0x2C) = float_0_80425254;
                 *(s32*)(work + 0x34) = 3;
-                if (((u32)frame & 4) == 0) {
-                    *(f32*)(work + 0x30) = float_1p05_80425274;
-                } else {
+                if (((u32)frame & 4) != 0) {
                     *(f32*)(work + 0x30) = float_1_80425250;
+                } else {
+                    *(f32*)(work + 0x30) = float_1p05_80425274;
                 }
             }
             break;
         case 5:
-            if (frame < 0x14) {
-                *(s32*)(work + 0x34) = 0;
-                *(f32*)(work + 0x2C) = float_neg10_80425278;
-            } else {
+            if (frame >= 0x14) {
                 *(s32*)(work + 4) = state + 1;
                 *(s32*)(work + 0x44) = 0;
+            } else {
+                *(s32*)(work + 0x34) = 0;
+                *(f32*)(work + 0x2C) = float_neg10_80425278;
             }
             break;
         case 6:
@@ -199,19 +196,19 @@ void effFireFlowerMain(void* effect) {
     state = *(s32*)(work + 4);
     if ((state > 3) && (state < 7)) {
         count = *(s32*)((s32)effect + 8);
-        partBase = work;
-        for (i = 1; i < count; i++, partBase += 0x54) {
-            if ((*(s32*)(partBase + 0xA0) < 1) ||
-                ((*(s32*)(partBase + 0xA0) = *(s32*)(partBase + 0xA0) - 1), *(s32*)(partBase + 0xA0) < 1)) {
-                *(f32*)(partBase + 0x6C) += *(f32*)(partBase + 0x74);
-                *(f32*)(partBase + 0x5C) += *(f32*)(partBase + 0x68);
-                *(f32*)(partBase + 0x60) += *(f32*)(partBase + 0x6C);
-                *(f32*)(partBase + 0x64) += *(f32*)(partBase + 0x70);
-                if ((state == 4) && (float_200_80425288 < *(f32*)(partBase + 0x5C))) {
-                    *(f32*)(partBase + 0x5C) = float_0_80425254;
-                    *(f32*)(partBase + 0x60) = float_0_80425254;
-                    *(f32*)(partBase + 0x6C) = float_0_80425254;
-                    *(f32*)(partBase + 0x64) = float_0_80425254;
+        work += 0x54;
+        for (i = 1; i < count; i++, work += 0x54) {
+            if ((*(s32*)(work + 0x4C) < 1) ||
+                ((*(s32*)(work + 0x4C) = *(s32*)(work + 0x4C) - 1), *(s32*)(work + 0x4C) < 1)) {
+                *(f32*)(work + 0x18) += *(f32*)(work + 0x20);
+                *(f32*)(work + 8) += *(f32*)(work + 0x14);
+                *(f32*)(work + 0xC) += *(f32*)(work + 0x18);
+                *(f32*)(work + 0x10) += *(f32*)(work + 0x1C);
+                if ((state == 4) && (float_200_80425288 < *(f32*)(work + 8))) {
+                    *(f32*)(work + 8) = float_0_80425254;
+                    *(f32*)(work + 0xC) = float_0_80425254;
+                    *(f32*)(work + 0x18) = float_0_80425254;
+                    *(f32*)(work + 0x10) = float_0_80425254;
                 }
             }
         }
@@ -219,6 +216,8 @@ void effFireFlowerMain(void* effect) {
 
     dispEntry(4, 2, effFireFlowerDisp, effect, dispCalcZ(pos));
 }
+
+#pragma optimize_for_size on
 
 void effFireFlowerDisp(s32 cameraId, void* effect) {
     typedef f32 Mtx[3][4];

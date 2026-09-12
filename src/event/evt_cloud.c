@@ -27,7 +27,7 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
     extern void imgEntry(char* name, s32 heap);
     extern void* imgNameToPtr(char* name, s32 heap);
     extern s32 animPaperPoseGetId(char* name, s32 heap);
-    extern f64 animTimeGetTime(s32 heap);
+    extern u64 animTimeGetTime(s32 heap);
     extern void imgClearVirtualPoint(void* image);
     extern void imgSetShadow(void* image, s32 type);
     extern void imgFreeCapture(s32 image, s32 heap);
@@ -37,8 +37,8 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
     extern char str_P_oof_cloud_2_802f73f0[];
     extern char str_SFX_OFF_CLAUD_WIND2_802f7400[];
     extern char str_SFX_OFF_CLAUD_WIND3_802f7414[];
-    extern char str_A_1_80424050[];
-    extern char str_A_2_80424058[];
+    extern const char str_A_1_80424050[4];
+    extern const char str_A_2_80424058[4];
     extern const f64 double_to_int_mask_802f7428;
     extern const f64 double_to_int_802f7430;
     extern f32 float_90_80424040;
@@ -76,7 +76,8 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
     hit3 = cloudGetHitBreathout(3);
 
     state = *(s32*)(cloud + 4);
-    if (state == 0) {
+    switch (state) {
+    case 0: {
         if (cloud_once_flag != 1) {
             hit = hitNameToPtr((char*)cloud + 0x88);
             if (hit == hit0 || hit == hit1 || hit == hit2 || hit == hit3) {
@@ -84,7 +85,9 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
             }
             *(s32*)(cloud + 0xAC) = 0;
         }
-    } else if (state == 1) {
+        break;
+    }
+    case 1: {
         if (*(f32*)((s32)player + 0x1B0) <= float_90_80424040 ||
             *(f32*)((s32)player + 0x1B0) > float_270_80424044) {
             strcpy((char*)cloud + 8, str_P_oof_cloud_1_802f73c8);
@@ -104,8 +107,10 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
             }
             *(s32*)(cloud + 4) += 1;
         }
-    } else if (state == 2) {
-        u8 captureEvent[0x1B0];
+        break;
+    }
+    case 2: {
+        u8 captureEvent[0x1E0];
         s32 captureArgs[8];
         f32 position[3];
         s32 left;
@@ -121,12 +126,7 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
         f32 halfWidth;
         f32 halfHeight;
 
-        if (*(u16*)(cloud + 0xC0) == 0 || *(u16*)(cloud + 0xC2) == 0) {
-            left = 0;
-            top = 0;
-            width = 0;
-            height = 0;
-        } else {
+        if (*(u16*)(cloud + 0xC0) != 0 && *(u16*)(cloud + 0xC2) != 0) {
             void* camera;
             mapObjGetPos((char*)cloud + 0x68, position);
             camera = camGetPtr(4);
@@ -156,12 +156,17 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
             if (height > *(u16*)((u8*)gp + 0x172) - top) {
                 height = *(u16*)((u8*)gp + 0x172) - top;
             }
+        } else {
+            left = 0;
+            top = 0;
+            width = 0;
+            height = 0;
         }
         imgEntry((char*)cloud + 0x28, heap);
         image = imgNameToPtr((char*)cloud + 0x28, heap);
         *(u32*)((s32)image + 0xCC) |= 2;
         *(s32*)((s32)image + 0x104) = animPaperPoseGetId((char*)cloud + 8, heap);
-        *(f64*)((s32)image + 0x110) = animTimeGetTime(heap);
+        *(u64*)((s32)image + 0x110) = animTimeGetTime(heap);
         captureArgs[0] = (s32)cloud + 0x28;
         captureArgs[1] = 0;
         captureArgs[2] = (s32)cloud + 0x48;
@@ -175,16 +180,20 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
         imgClearVirtualPoint(image);
         imgSetShadow(image, 2);
         *(s32*)(cloud + 4) += 1;
-    } else if (state == 3) {
+        break;
+    }
+    case 3: {
         image = imgNameToPtr((char*)cloud + 0x28, heap);
         *(u32*)((s32)image + 0xCC) &= ~2;
-        *(char**)((s32)image + 0x108) = str_A_1_80424050;
-        *(f64*)((s32)image + 0x110) = animTimeGetTime(heap);
+        *(char**)((s32)image + 0x108) = (char*)str_A_1_80424050;
+        *(u64*)((s32)image + 0x110) = animTimeGetTime(heap);
         mapGrpFlagOn((char*)cloud + 0x68, 1);
         *(s32*)(cloud + 0xB8) = 30;
         *(s32*)(cloud + 4) += 1;
         *(f32*)(cloud + 0xC4) = float_0_80424054;
-    } else if (state == 4) {
+        break;
+    }
+    case 4: {
         image = imgNameToPtr((char*)cloud + 0x28, heap);
         if (*(f32*)(cloud + 0xC4) == float_0_80424054 ||
             *(f32*)(cloud + 0xC4) + float_1_80424048 < *(f32*)((s32)image + 0x118)) {
@@ -209,22 +218,28 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
         } else {
             *(s32*)(cloud + 4) = 10;
         }
-    } else if (state == 10) {
+        break;
+    }
+    case 10: {
         mapGrpFlagOff((char*)cloud + 0x68, 1);
         *(s32*)(cloud + 4) = 99;
-    } else if (state == 20) {
+        break;
+    }
+    case 20: {
         psndSFXOn_3D(str_SFX_OFF_CLAUD_WIND3_802f7414,
                      (void*)((s32)player + 0x8C));
         if (*(void**)(cloud + 0xB4) != 0) {
             evtEntry(*(void**)(cloud + 0xB4), 0, 0);
         }
         image = imgNameToPtr((char*)cloud + 0x28, heap);
-        *(char**)((s32)image + 0x108) = str_A_2_80424058;
-        *(f64*)((s32)image + 0x110) = animTimeGetTime(heap);
+        *(char**)((s32)image + 0x108) = (char*)str_A_2_80424058;
+        *(u64*)((s32)image + 0x110) = animTimeGetTime(heap);
         hitObjFlagOn((char*)cloud + 0x68, 1);
         *(s32*)(cloud + 0xB8) = 60;
         *(s32*)(cloud + 4) += 1;
-    } else if (state == 21) {
+        break;
+    }
+    case 21: {
         if (*(s32*)(cloud + 0xB8) == 0) {
             *(s32*)(cloud + 0xB8) = 30;
             *(s32*)(cloud + 0xAC) += 2;
@@ -232,7 +247,9 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
         } else {
             *(s32*)(cloud + 0xB8) -= 1;
         }
-    } else if (state == 99) {
+        break;
+    }
+    case 99: {
         image = imgNameToPtr((char*)cloud + 0x28, heap);
         if ((*(u16*)cloud & 2) == 0) {
             mapGrpClearOffScreen((char*)cloud + 0x68);
@@ -248,6 +265,8 @@ s32 evt_cloud_main(void* pEvt, s32 firstCall) {
         offscreenDelete((char*)cloud + 0x48);
         cloud_once_flag = 0;
         *(s32*)(cloud + 4) = 0;
+        break;
+    }
     }
     return 0;
 }
@@ -288,7 +307,9 @@ s32 evt_cloud_ent(void* pEvt) {
     s32 outName;
     s32 mode;
     s32 i;
+    s32 count;
     u8* entry;
+    u8* scan;
 
     args = *(s32**)((s32)pEvt + 0x18);
     indirectName = evtGetValue(pEvt, args[0]);
@@ -296,15 +317,41 @@ s32 evt_cloud_ent(void* pEvt) {
     outName = evtGetValue(pEvt, args[2]);
     mode = evtGetValue(pEvt, args[3]);
 
-    entry = cloud;
-    for (i = 0; i < 0x10; i++, entry += 0xC8) {
-        if ((*(u16*)entry & 1) == 0) {
-            break;
+    scan = cloud;
+    count = 0;
+    for (i = 0; i < 2; i++) {
+        if ((*(u16*)scan & 1) == 0) {
+            goto cloud_entry_found;
         }
+        count++;
+        scan += 0xC8;
+        if ((*(u16*)scan & 1) == 0) goto cloud_entry_found;
+        count++;
+        scan += 0xC8;
+        if ((*(u16*)scan & 1) == 0) goto cloud_entry_found;
+        count++;
+        scan += 0xC8;
+        if ((*(u16*)scan & 1) == 0) goto cloud_entry_found;
+        count++;
+        scan += 0xC8;
+        if ((*(u16*)scan & 1) == 0) goto cloud_entry_found;
+        count++;
+        scan += 0xC8;
+        if ((*(u16*)scan & 1) == 0) goto cloud_entry_found;
+        count++;
+        scan += 0xC8;
+        if ((*(u16*)scan & 1) == 0) goto cloud_entry_found;
+        count++;
+        scan += 0xC8;
+        if ((*(u16*)scan & 1) == 0) goto cloud_entry_found;
+        count++;
+        scan += 0xC8;
     }
-    if (i >= 0x10) {
+cloud_entry_found:
+    if (count >= 0x10) {
         return 2;
     }
+    entry = cloud + count * 0xC8;
 
     *(u16*)entry |= 1;
     strncpy((char*)entry + 8, str_P_oof_cloud_1_802f73c8, 0x20);

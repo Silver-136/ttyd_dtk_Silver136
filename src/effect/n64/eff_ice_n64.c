@@ -76,7 +76,7 @@ void effIceMain(void* effect) {
     extern f32 dispCalcZ(Vec3*);
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void effIceDisp(s32, s32);
-    extern Vec3 vec3_802fb150[];
+    extern Vec3 vec3_802fb148[];
     extern f32 float_0p3_80425524;
     extern f32 float_0p8_80425528;
     extern f32 float_6p2832_8042552c;
@@ -92,9 +92,17 @@ void effIceMain(void* effect) {
     Vec3 dispPos;
     s32 time;
     s32 i;
+    f32 two;
+    f32 cycle;
+    f32 degrees;
+    f32 gravity;
+    f32 accel;
+    f32 damping;
+    f32 ten;
+    f32 half;
 
     work = *(u8**)((s32)effect + 0xC);
-    base = vec3_802fb150;
+    base = vec3_802fb148;
     pos = *base;
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
@@ -115,15 +123,23 @@ void effIceMain(void* effect) {
         *(s32*)(work + 0x24) = (s32)((f32)*(s32*)(work + 0x24) * float_0p8_80425528);
     }
 
+    cycle = float_6p2832_8042552c;
+    two = float_2_80425530;
+    degrees = float_360_80425534;
+    gravity = float_neg0p05_80425538;
+    accel = float_0p2_8042553c;
+    damping = float_0p92_80425540;
+    ten = float_10_80425544;
+    half = float_0p5_80425548;
     part = work + 0x30;
     for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        *(f32*)(part + 0x14) += float_neg0p05_80425538;
-        *(f32*)(part + 0x10) += float_0p2_8042553c * (f32)sin((f64)((float_6p2832_8042552c * float_2_80425530 * *(f32*)(part + 0x18)) / float_360_80425534));
-        *(f32*)(part + 0x14) += float_neg0p05_80425538;
-        *(f32*)(part + 0x10) *= float_0p92_80425540;
+        *(f32*)(part + 0x14) += gravity;
+        *(f32*)(part + 0x10) += accel * (f32)sin((f64)((cycle * two * *(f32*)(part + 0x18)) / degrees));
+        *(f32*)(part + 0x14) += gravity;
+        *(f32*)(part + 0x10) *= damping;
         *(f32*)(part + 0x1C) += (f32)(effTblRandN64(50, time + i * 0x14) - 25);
-        *(f32*)(part + 0x18) += float_10_80425544 * (f32)sin((f64)((float_6p2832_8042552c * *(f32*)(part + 0x1C)) / float_360_80425534));
-        *(f32*)(part + 0x20) += float_10_80425544 * (f32)cos((f64)((float_6p2832_8042552c * *(f32*)(part + 0x1C) * float_0p5_80425548) / float_360_80425534));
+        *(f32*)(part + 0x18) += ten * (f32)sin((f64)((cycle * *(f32*)(part + 0x1C)) / degrees));
+        *(f32*)(part + 0x20) += ten * (f32)cos((f64)((cycle * *(f32*)(part + 0x1C) * half) / degrees));
         *(f32*)(part + 4) += *(f32*)(part + 0x10);
         *(f32*)(part + 8) += *(f32*)(part + 0x14);
         part += 0x30;

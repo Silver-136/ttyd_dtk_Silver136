@@ -24,23 +24,11 @@ void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
     f32 radiusScale = scale;
 
     switch (type) {
-        case 0:
-            count = 0x24;
-            break;
-        case 1:
-            count = 4;
-            break;
-        case 2:
-            count = 8;
-            break;
-        case 3:
-            count = 4;
-            radiusScale = 8.0f;
-            break;
-        default:
-            count = 8;
-            radiusScale = 8.0f;
-            break;
+        case 0: count = 0x24; break;
+        case 1: count = 4; break;
+        case 2: count = 8; break;
+        case 3: count = 4; radiusScale = 8.0f; break;
+        default: count = 8; radiusScale = 8.0f; break;
     }
 
     *(char**)((s32)entry + 0x14) = str_StardustN64_802fc0b8;
@@ -80,7 +68,7 @@ void* effStardustN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type) {
             continue;
         }
 
-        if (type < 3) {
+        if (type < 3 && type >= 0) {
             angle = (360.0f / (f32)count) * (f32)i + (f32)(rand() % 360);
             angleRad = (6.2832f * angle) / 360.0f;
             *(f32*)(part + 0x18) =
@@ -208,10 +196,133 @@ u8 effStardustMain(void* effect) {
 }
 
 void effStardustDisp(s32 cameraId, void* effect) {
-    extern void* camGetPtr(s32);extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXRotRad(void*,s32,f32);extern void PSMTXScale(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void GXSetNumChans(s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void effGetTexObjN64(s32,void*);extern void GXLoadTexObj(void*,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetCullMode(s32);extern void GXSetTevColor(s32,void*);extern void GXLoadPosMtxImm(void*,s32);extern void GXSetCurrentMtx(s32);extern void effSetVtxDescN64(void*);extern void GXBegin(s32,s32,s32);extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);extern f32 float_deg2rad_80426274,float_0p0056818_80426278,float_0p045455_8042627c,float_0_80426280;
-    f32 base[3][4],rot[3][4],scale[3][4],mtx[3][4];u8 texObj[0x20];u8* work=*(u8**)((s32)effect+0xC);u8* p=work+0x40;s32 i;u32 color;
-    PSMTXTrans(base,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));PSMTXRotRad(rot,0x79,float_deg2rad_80426274*-*(f32*)((s32)camGetPtr(cameraId)+0x114));PSMTXScale(scale,*(f32*)(work+0x1C),*(f32*)(work+0x1C),*(f32*)(work+0x1C));PSMTXConcat(base,rot,base);PSMTXConcat(base,scale,base);PSMTXConcat((void*)((s32)camGetPtr(cameraId)+0x11C),base,base);GXSetNumChans(0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);PSMTXScale(scale,float_0p0056818_80426278,float_0p045455_8042627c,float_0_80426280);GXLoadTexMtxImm(scale,0x1E,1);effGetTexObjN64(0x20,texObj);GXLoadTexObj(texObj,0);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,2,1,8,0);GXSetTevAlphaIn(0,0,1,7,7);GXSetCullMode(0);
-    for(i=0;i<*(s32*)((s32)effect+8)-1;i++,p+=0x40){if(*(s32*)(p+0x38)<0)continue;PSMTXTrans(mtx,*(f32*)(p+4),*(f32*)(p+8),*(f32*)(p+0xC));PSMTXScale(scale,*(f32*)(p+0x1C),*(f32*)(p+0x1C),*(f32*)(p+0x1C));PSMTXConcat(mtx,scale,mtx);PSMTXConcat(base,mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);color=*(u32*)(p+0x28);GXSetTevColor(1,&color);effSetVtxDescN64((void*)0x803A9000);GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3,0);}
+    extern void* camGetPtr(s32);
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, s32, f32);
+    extern void PSMTXScale(void*, f32, f32, f32);
+    extern void PSMTXConcat(void*, void*, void*);
+    extern void GXSetNumChans(s32);
+    extern void GXSetNumTexGens(s32);
+    extern void GXSetTexCoordGen2(s32, s32, s32, s32, s32, s32);
+    extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern void effGetTexObjN64(s32, void*);
+    extern void GXLoadTexObj(void*, s32);
+    extern void GXSetNumTevStages(s32);
+    extern void GXSetTevOrder(s32, s32, s32, s32);
+    extern void GXSetTevColorOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaOp(s32, s32, s32, s32, s32, s32);
+    extern void GXSetTevColorIn(s32, s32, s32, s32, s32);
+    extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
+    extern void GXSetCullMode(s32);
+    extern void GXSetTevColor(s32, void*);
+    extern void GXLoadPosMtxImm(void*, s32);
+    extern void GXSetCurrentMtx(s32);
+    extern void effSetVtxDescN64(void*);
+    extern void GXBegin(s32, s32, s32);
+    extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
+    extern f32 float_deg2rad_80426274;
+    extern f32 float_0p0056818_80426278;
+    extern f32 float_0p045455_8042627c;
+    extern f32 float_0_80426280;
+    extern f64 double_to_int_mask_802fc0a8;
+    extern u8 color_rotation_data[];
+    extern u32 dat_80426270;
+    f32 trans[3][4];
+    f32 rot[3][4];
+    f32 scale[3][4];
+    f32 base[3][4];
+    u8 texObj[0x20];
+    u8* work = *(u8**)((s32)effect + 0xC);
+    u8* part;
+    void* camera = camGetPtr(cameraId);
+    f32 red = *(f32*)(work + 0x28);
+    f32 green = *(f32*)(work + 0x2C);
+    f32 blue = *(f32*)(work + 0x30);
+    s32 colorIndex = (*(s32*)(work + 0x20) - 1) * 3;
+    s32 i;
+    union {
+        f64 value;
+        struct {
+            u32 hi;
+            u32 lo;
+        } words;
+    } cvt;
+
+    PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
+    PSMTXRotRad(rot, 0x79,
+                float_deg2rad_80426274 * -*(f32*)((s32)camGetPtr(cameraId) + 0x114));
+    PSMTXScale(scale, *(f32*)(work + 0x1C), *(f32*)(work + 0x1C),
+                *(f32*)(work + 0x1C));
+    PSMTXConcat(trans, rot, base);
+    PSMTXConcat(base, scale, base);
+    PSMTXConcat((void*)((s32)camera + 0x11C), base, base);
+
+    GXSetNumChans(0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
+    PSMTXScale(scale, float_0p0056818_80426278, float_0p045455_8042627c,
+                float_0_80426280);
+    GXLoadTexMtxImm(scale, 0x1E, 1);
+    effGetTexObjN64(0x20, texObj);
+    GXLoadTexObj(texObj, 0);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 0xFF);
+    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+    GXSetTevColorIn(0, 2, 0xC, 8, 0xF);
+    GXSetTevAlphaIn(0, 7, 1, 4, 7);
+    GXSetCullMode(0);
+
+    part = work + 0x40;
+    for (i = 0; i < *(s32*)((s32)effect + 8) - 1; i++, part += 0x40) {
+        s32 frame = *(s32*)(part + 0x38);
+        u8* vertices;
+        u32 color;
+        s32 r;
+        s32 g;
+        s32 b;
+
+        if (frame < 0) {
+            continue;
+        }
+
+        PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
+        trans[0][0] = *(f32*)(part + 0x1C);
+        trans[1][1] = *(f32*)(part + 0x1C);
+        trans[2][2] = *(f32*)(part + 0x1C);
+        PSMTXConcat(base, trans, trans);
+        GXLoadPosMtxImm(trans, 0);
+        GXSetCurrentMtx(0);
+
+        colorIndex += 3;
+        while (colorIndex >= 36) {
+            colorIndex -= 36;
+        }
+        cvt.words.hi = 0x43300000;
+        cvt.words.lo = color_rotation_data[colorIndex];
+        r = (s32)((f32)(cvt.value - double_to_int_mask_802fc0a8) * red);
+        cvt.words.lo = color_rotation_data[colorIndex + 1];
+        g = (s32)((f32)(cvt.value - double_to_int_mask_802fc0a8) * green);
+        cvt.words.lo = color_rotation_data[colorIndex + 2];
+        b = (s32)((f32)(cvt.value - double_to_int_mask_802fc0a8) * blue);
+        if (r > 255) r = 255;
+        if (g > 255) g = 255;
+        if (b > 255) b = 255;
+        color = (r << 24) | (g << 16) | (b << 8) | (dat_80426270 & 0xFF);
+        GXSetTevColor(1, &color);
+
+        if ((frame & 7) == 0) vertices = (u8*)0x803A9270;
+        else if ((frame & 7) == 1) vertices = (u8*)0x803A92A8;
+        else if ((frame & 7) == 2) vertices = (u8*)0x803A92E0;
+        else if ((frame & 7) == 3) vertices = (u8*)0x803A9318;
+        else if ((frame & 7) == 4) vertices = (u8*)0x803A9350;
+        else if ((frame & 7) == 5) vertices = (u8*)0x803A91C8;
+        else if ((frame & 7) == 6) vertices = (u8*)0x803A9200;
+        else vertices = (u8*)0x803A9238;
+        effSetVtxDescN64(vertices);
+        GXBegin(0x90, 0, 6);
+        tri2(0, 1, 2, 0, 0, 2, 3, 0);
+    }
 }
 
 void effStardustN64SetColor(void* effect, f32 r, f32 g, f32 b) {

@@ -9,22 +9,28 @@ void* effKemuri11N64Entry(f32 x, f32 y, f32 z, s32 type) {
     void* entry;
     u8* work;
     u8* part;
-    s32 kind;
+    u16 kind;
     s32 count;
     s32 i;
 
     entry = effEntry();
-    if (type == 3) kind = 5;
-    else if (type == 1) kind = 2;
-    else if (type == 0) kind = 3;
-    else if (type == 2) kind = 4;
-    else if (type == 5) kind = 7;
-    else if (type == 4) kind = 6;
-    else kind = 5;
+    switch (type) {
+        case 0: kind = 3; break;
+        case 1: kind = 2; break;
+        case 2: kind = 4; break;
+        case 3: kind = 5; break;
+        case 4: kind = 6; break;
+        case 5: kind = 7; break;
+        default: kind = 5; break;
+    }
 
-    if (kind == 2 || kind == 5) count = 3;
-    else if (kind < 2) count = kind == 0 ? 3 : 1;
-    else count = 2;
+    switch (kind) {
+        case 0: count = 3; break;
+        case 1: count = 1; break;
+        case 2:
+        case 5: count = 3; break;
+        default: count = 2; break;
+    }
 
     *(char**)((s32)entry + 0x14) = str_Kemuri11N64_802fb340;
     *(s32*)((s32)entry + 8) = count + 1;
@@ -41,40 +47,60 @@ void* effKemuri11N64Entry(f32 x, f32 y, f32 z, s32 type) {
     *(s16*)(work + 0x38) = 0;
     *(s16*)(work + 0x3A) = 0xFF;
 
-    if (kind < 2) {
+    switch (kind) {
+    case 0:
+    case 1:
+        {
             work[0x50] = 0; work[0x51] = 0xFF;
             work[0x52] = 0x7A; work[0x53] = 0xF0;
             work[0x54] = 0xFF; work[0x55] = 0xFA;
-    } else if (kind == 2) {
+        }
+        break;
+    case 2:
+        {
             work[0x50] = 0x7D; work[0x51] = 0x78;
             work[0x52] = 0x64; work[0x53] = 0xFF;
             work[0x54] = 0xFF; work[0x55] = 0xF0;
-    } else if (kind == 3) {
+        }
+        break;
+    case 3:
+        {
             work[0x50] = 0xDC; work[0x51] = 0xD2;
             work[0x52] = 0xC8; work[0x53] = 0xFF;
             work[0x54] = 0xFF; work[0x55] = 0xFA;
-    } else if (kind == 5) {
+        }
+        break;
+    case 5:
+        {
             work[0x50] = 0xE1; work[0x51] = 0xCC;
             work[0x52] = 0x5D; work[0x53] = 0xE8;
             work[0x54] = 0xE7; work[0x55] = 0xAB;
-    } else if (kind == 6) {
-            *(s16*)(work + 0x28) = 0;
-            *(s16*)(work + 0x2A) = 0x32;
+        }
+        break;
+    case 6:
+        {
+            *(s32*)(work + 0x28) = 0x32;
             work[0x50] = 0xD4; work[0x51] = 0xB7;
             work[0x52] = 5; work[0x53] = 0xC1;
             work[0x54] = 0xA3; work[0x55] = 9;
-    } else if (kind == 7) {
-            *(s16*)(work + 0x28) = 0;
-            *(s16*)(work + 0x2A) = 0x32;
+        }
+        break;
+    case 7:
+        {
+            *(s32*)(work + 0x28) = 0x32;
             work[0x50] = 0x21; work[0x51] = 0x8C;
             work[0x52] = 0x8D; work[0x53] = 0x18;
             work[0x54] = 0xA5; work[0x55] = 0xA3;
-    } else {
-            *(s16*)(work + 0x28) = 0;
-            *(s16*)(work + 0x2A) = 0x32;
+        }
+        break;
+    default:
+        {
+            *(s32*)(work + 0x28) = 0x32;
             work[0x50] = 0xD0; work[0x51] = 0x88;
             work[0x52] = 0x28; work[0x53] = 0xD8;
             work[0x54] = 0xA9; work[0x55] = 0x41;
+        }
+        break;
     }
 
     part = work;
@@ -115,6 +141,7 @@ void effKemuri11Main(void* effect) {
     extern f32 float_1p002_804258b8;
     extern f32 float_128_804258bc;
     u8* work;
+    Vec3 dispPos;
     Vec3 pos;
     u16 kind;
     s32 i;
@@ -124,6 +151,7 @@ void effKemuri11Main(void* effect) {
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);
+    dispPos = pos;
     ++*(s32*)(work + 0x2C);
     --*(s32*)(work + 0x28);
     if (*(s32*)(work + 0x28) < 0) {
@@ -156,28 +184,28 @@ void effKemuri11Main(void* effect) {
                     *(f32*)(work + 0xA0) = float_32_80425894;
                     *(f32*)(work + 0x78) = float_8_80425898 - (f32)i;
 
-                    if (kind == 3) {
+                    switch (kind) {
+                    case 3:
                         value = (f32)(i + 3);
                         *(f32*)(work + 0x74) = value;
                         *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
                         *(f32*)(work + 0x94) = float_16_8042589c;
                         *(f32*)(work + 0x98) = float_16_8042589c;
                         *(f32*)(work + 0xA0) = float_16_8042589c;
-                    } else if (kind < 3) {
-                        if (kind < 2) {
-                            value = float_0p5_80425890 + (f32)i;
-                            *(f32*)(work + 0x74) = value;
-                            *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
-                        } else {
-                            value = (f32)(i + 2);
-                            *(f32*)(work + 0x74) = value;
-                            *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
-                        }
-                    } else if (kind == 5) {
+                        break;
+                    case 0:
+                    case 1:
+                        value = float_0p5_80425890 + (f32)i;
+                        *(f32*)(work + 0x74) = value;
+                        *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
+                        break;
+                    case 2:
+                    case 5:
                         value = (f32)(i + 2);
                         *(f32*)(work + 0x74) = value;
                         *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
-                    } else {
+                        break;
+                    default:
                         value = float_0p5_80425890 * (f32)(i + 3);
                         *(f32*)(work + 0x74) = value;
                         *(f32*)(work + 0x7C) = float_0p5_80425890 * value;
@@ -190,23 +218,32 @@ void effKemuri11Main(void* effect) {
                             *(f32*)(work + 0x98) = float_16_8042589c;
                             *(f32*)(work + 0xA0) = float_16_8042589c;
                         }
+                        break;
                     }
                     *(f32*)(work + 0x9C) = float_32_80425894;
                 }
 
                 *(f32*)(work + 0x94) += *(f32*)(work + 0x98);
                 *(f32*)(work + 0x9C) += *(f32*)(work + 0xA0);
-                if (kind == 2 || kind == 5) {
+                switch (kind) {
+                case 2:
+                case 5:
                     *(f32*)(work + 0x98) *= float_0p75_804258a4;
                     *(f32*)(work + 0xA0) *= float_0p99_804258a8;
-                } else if (kind < 2) {
+                    break;
+                case 0:
+                case 1:
                     *(f32*)(work + 0x98) *= float_0p9_804258a0;
-                } else if (kind == 6 || kind == 7) {
+                    break;
+                case 6:
+                case 7:
                     *(f32*)(work + 0x98) *= float_0p88_804258ac;
                     *(f32*)(work + 0xA0) *= float_0p98_804258b0;
-                } else {
+                    break;
+                default:
                     *(f32*)(work + 0x98) *= float_0p75_804258a4;
                     *(f32*)(work + 0xA0) *= float_0p95_804258b4;
+                    break;
                 }
                 *(f32*)(work + 0x74) *= float_1p002_804258b8;
                 *(f32*)(work + 0x7C) *= float_1p002_804258b8;
@@ -216,7 +253,7 @@ void effKemuri11Main(void* effect) {
             }
             work += 0x58;
         }
-        dispEntry(4, 2, effKemuri11Disp, effect, dispCalcZ(&pos));
+        dispEntry(4, 2, effKemuri11Disp, effect, dispCalcZ(&dispPos));
     }
 }
 
@@ -345,11 +382,13 @@ void main_dl(void* effect, void* view) {
     part = *(u8**)((s32)effect + 0xC) + 0x58;
     for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
         if (*(s32*)(part + 0x4C) >= 0) {
-            PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0x64));
+            PSMTXTrans(trans, *(f32*)(part + 4), *(f32*)(part + 8), *(f32*)(part + 0xC));
             PSMTXRotRad(rot, float_deg2rad_80425860 * *(f32*)(part + 0x8C), 'z');
             PSMTXConcat(trans, rot, trans);
             PSMTXScale(scale, float_0p3_80425864 * *(f32*)(part + 0x74), float_0p3_80425864 * *(f32*)(part + 0x78), float_0p3_80425864 * *(f32*)(part + 0x7C));
             PSMTXConcat(trans, scale, trans);
+            PSMTXRotRad(rot, float_deg2rad_80425860 * *(f32*)(part + 0x88), 'y');
+            PSMTXConcat(trans, rot, trans);
             PSMTXConcat(view, trans, trans);
             GXLoadPosMtxImm(trans, 0);
             GXSetCurrentMtx(0);
@@ -365,6 +404,12 @@ void main_dl(void* effect, void* view) {
             tri2(0, 1, 2, 0, 2, 3, 4);
             tri2(2, 4, 5, 0, 1, 3, 2);
             tri2(4, 6, 5, 0, 5, 6, 7);
+            tri2(5, 7, 8, 0, 0, 9, 1);
+            tri2(10, 9, 0, 0, 11, 10, 0);
+            tri2(11, 12, 10, 0, 13, 12, 11);
+            tri2(8, 14, 15, 0, 7, 14, 8);
+            tri2(8, 15, 16, 0, 15, 17, 16);
+            tri2(16, 17, 18, 0, 16, 18, 19);
         }
         part += 0x58;
     }

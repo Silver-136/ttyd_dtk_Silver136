@@ -73,12 +73,13 @@ void effMagic2Main(void* effect) {
     extern f32 vec3_802fb440[3], vec3_802fb44c[3];
     extern f32 float_0p7_80425a48,float_6p2832_80425a4c,float_360_80425a50,float_0p4_80425a54,float_0p1_80425a58,float_0p3_80425a5c;
     extern f32 float_304_80425a60,float_240_80425a64,float_0_80425a34;
-    u8* work=*(u8**)((s32)effect+0xC); Vec3 displayPos,projected; s32 timer,i; void* camera; f32 wave;
-    displayPos.x=vec3_802fb440[0]; displayPos.y=vec3_802fb440[1]; displayPos.z=vec3_802fb440[2];
-    displayPos.x=*(f32*)(work+0x10); displayPos.y=*(f32*)(work+0x14); displayPos.z=*(f32*)(work+0x18);
+    u8* work=*(u8**)((s32)effect+0xC); Vec3 initialPos,displayPos,initialProjected,projected; s32 timer,i; void* camera; f32 wave;
+    initialPos.x=vec3_802fb440[0]; initialPos.y=vec3_802fb440[1]; initialPos.z=vec3_802fb440[2];
+    initialPos.x=*(f32*)(work+0x10); initialPos.y=*(f32*)(work+0x14); initialPos.z=*(f32*)(work+0x18);
+    displayPos=initialPos;
     *(s32*)(work+0x28)-=1; *(s32*)(work+0x2C)+=1; timer=*(s32*)(work+0x28);
     if(timer<0){effDelete(effect);return;}
-    if(*(s32*)(work+0x2C)<11) *(s32*)(work+0x24)=(*(s32*)(work+0x2C)*0xFF)/10;
+    if(*(s32*)(work+0x2C)<=10) *(s32*)(work+0x24)=(*(s32*)(work+0x2C)*0xFF)/10;
     if(timer<6) *(s32*)(work+0x24)=(timer*0xFF)/6;
     if(timer<10&&*(s32*)work==0) *(f32*)(work+0x1C)*=float_0p7_80425a48;
     if(*(s32*)work==1){
@@ -88,11 +89,14 @@ void effMagic2Main(void* effect) {
         wave=(f32)sin((f64)(float_6p2832_80425a4c*(f32)(timer*10)/float_360_80425a50));
         *(f32*)(work+0x1C)=float_0p3_80425a5c*((*(f32*)(work+0x20)*float_0p1_80425a58*wave+*(f32*)(work+0x20))-*(f32*)(work+0x1C))+*(f32*)(work+0x1C);
     }
-    projected.x=vec3_802fb44c[0]; projected.y=vec3_802fb44c[1]; projected.z=vec3_802fb44c[2];
-    projected.x=*(f32*)(work+4); projected.y=*(f32*)(work+8); projected.z=*(f32*)(work+0xC);
+    initialProjected.x=vec3_802fb44c[0]; initialProjected.y=vec3_802fb44c[1]; initialProjected.z=vec3_802fb44c[2];
+    initialProjected.x=*(f32*)(work+4); initialProjected.y=*(f32*)(work+8); initialProjected.z=*(f32*)(work+0xC);
+    projected=initialProjected;
     camera=camGetPtr(4); PSMTXMultVec((u8*)camera+0x11C,&projected,&projected);
     camera=camGetPtr(4); PSMTX44MultVec((u8*)camera+0x15C,&projected,&projected);
-    *(s32*)(work+0x10)=(s32)(float_304_80425a60*projected.x); *(s32*)(work+0x14)=(s32)(float_240_80425a64*projected.y); *(s32*)(work+0x18)=(s32)float_0_80425a34;
+    *(f32*)(work+0x10)=float_304_80425a60*projected.x;
+    *(f32*)(work+0x14)=float_240_80425a64*projected.y;
+    *(f32*)(work+0x18)=float_0_80425a34;
     for(i=0;i<*(s32*)((s32)effect+8);i++){
         *(f32*)(work+0x58)+=*(f32*)(work+0x5C); *(f32*)(work+0x50)+=*(f32*)(work+0x54);
         *(s32*)(work+0x30)+=*(s32*)(work+0x34); *(s32*)(work+0x38)+=*(s32*)(work+0x3C);
@@ -105,6 +109,7 @@ void effMagic2Main(void* effect) {
 void effMagic2Disp(s32 cameraId, void* effect) {
     typedef f32 Mtx[3][4];
     typedef f32 Mtx44[4][4];
+    typedef struct GXColorLocal { u8 r, g, b, a; } GXColorLocal;
     extern void* camGetPtr(s32);
     extern void GXGetProjectionv(f32*);
     extern void GXGetViewportv(f32*);
@@ -124,18 +129,25 @@ void effMagic2Disp(s32 cameraId, void* effect) {
     extern void GXSetScissorBoxOffset(s32,s32);
     extern void magic2_4_dl(void);
     extern void magic2_2_line_dl(void);
+    extern u8 color_rotation_data[];
+    extern u32 unk_80429758;
+    extern u32 unk_8042975c;
     u8* entry = effect;
-    u8* work = *(u8**)(entry + 0xC);
+    u8* work;
     f32 projection[7];
     f32 viewport[6];
     Mtx44 trans44, scale44, perspective;
     Mtx mtx, scale;
-    u32 color1, color2;
-    s32 type = *(s32*)work;
-    s32 angle = *(s32*)(work + 0x2C) * 3;
+    GXColorLocal color1_temp, color1, color2_temp, color2;
+    s32 type;
+    s32 angle;
+    s32 alpha;
+    s32 scroll_x1, scroll_y1, scroll_x2, scroll_y2;
     s32 i;
 
     camGetPtr(cameraId);
+    work = *(u8**)(entry + 0xC);
+    type = *(s32*)work;
     GXGetProjectionv(projection);
     GXGetViewportv(viewport);
     PSMTX44Trans(*(f32*)(work + 0x10), *(f32*)(work + 0x14), *(f32*)(work + 0x18), trans44);
@@ -146,33 +158,48 @@ void effMagic2Disp(s32 cameraId, void* effect) {
     GXSetProjection(perspective, 0);
     if (type == 1) {
         PSMTXTrans(mtx, 0.0f, 0.0f, -70.0f);
-    } else {
+    } else if (type < 1 && type > -1) {
         PSMTXTrans(mtx, 0.0f, 0.0f, -80.0f);
     }
     GXLoadPosMtxImm(mtx, 0);
     GXSetCurrentMtx(0);
+    alpha = *(s32*)(work + 0x24);
+    angle = *(s32*)(work + 0x2C) * 3;
     for (i = 0; i < *(s32*)(entry + 8); i++, work += 0x60) {
         angle = (angle + 30) % 24;
-        color1 = 0xFFFFFF00 | (u8)*(s32*)(work + 0x24);
-        color2 = 0xFFFFFF00 | (u8)(*(s32*)(work + 0x24) / 2);
+        *(u32*)&color1_temp = unk_80429758;
+        color1_temp.a = (u8)alpha;
+        color1_temp.r = color_rotation_data[angle];
+        color1_temp.b = color_rotation_data[angle + 2];
+        color1 = color1_temp;
         GXSetTevColor(1, &color1);
+        *(u32*)&color2_temp = unk_8042975c;
+        color2_temp.a = (u8)(alpha / 2);
+        color2 = color2_temp;
         GXSetTevColor(2, &color2);
+        scroll_x1 = *(s32*)(work + 0x30);
+        scroll_y1 = *(s32*)(work + 0x40);
+        scroll_x2 = *(s32*)(work + 0x38);
+        scroll_y2 = *(s32*)(work + 0x48);
         if (type == 0) {
             PSMTXScale(scale, 0.015625f, 0.015625f, 1.0f);
-            PSMTXTrans(mtx, (f32)(*(s32*)(work + 0x30) / 4), (f32)(*(s32*)(work + 0x40) / 4), 0.0f);
+            PSMTXTrans(mtx, (f32)(scroll_x1 / 4), (f32)(scroll_y1 / 4), 0.0f);
             PSMTXConcat(scale, mtx, mtx); GXLoadTexMtxImm(mtx, 0x1E, 1);
             PSMTXScale(scale, 0.015625f, 0.015625f, 1.0f);
-            PSMTXTrans(mtx, (f32)(*(s32*)(work + 0x38) / 4), (f32)(*(s32*)(work + 0x48) / 4), 0.0f);
+            PSMTXTrans(mtx, (f32)(scroll_x2 / 4), (f32)(scroll_y2 / 4), 0.0f);
             PSMTXConcat(scale, mtx, mtx); GXLoadTexMtxImm(mtx, 0x21, 1);
-            magic2_2_line_dl();
         } else {
             PSMTXScale(scale, 0.015625f, 0.0625f, 0.0f);
-            PSMTXTrans(mtx, (f32)(*(s32*)(work + 0x30) / 4), (f32)(*(s32*)(work + 0x40) / 4), 0.0f);
+            PSMTXTrans(mtx, (f32)(scroll_x1 / 4), (f32)(scroll_y1 / 4), 0.0f);
             PSMTXConcat(scale, mtx, mtx); GXLoadTexMtxImm(mtx, 0x1E, 1);
             PSMTXScale(scale, 0.015625f, 0.0625f, 1.0f);
-            PSMTXTrans(mtx, (f32)(*(s32*)(work + 0x38) / 4), (f32)(*(s32*)(work + 0x48) / 4), 0.0f);
+            PSMTXTrans(mtx, (f32)(scroll_x2 / 4), (f32)(scroll_y2 / 4), 0.0f);
             PSMTXConcat(scale, mtx, mtx); GXLoadTexMtxImm(mtx, 0x21, 1);
+        }
+        if (type == 1) {
             magic2_4_dl();
+        } else if (type < 1 && type > -1) {
+            magic2_2_line_dl();
         }
     }
     GXSetProjectionv(projection);

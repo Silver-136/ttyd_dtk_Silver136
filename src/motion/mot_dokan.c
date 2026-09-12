@@ -7,6 +7,11 @@ extern f32 revise360(f32 angle);
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void _partyEntry(int param_1) {
+    typedef struct RawVec3 {
+        s32 x;
+        s32 y;
+        s32 z;
+    } RawVec3;
     extern void partyChgRunMode(void* party, s32 mode);
     extern s32 partyEntryPos(s32 party, f32 x, f32 y, f32 z);
     extern s32 partyEntry2Pos(s32 party, f32 x, f32 y, f32 z);
@@ -47,9 +52,7 @@ void _partyEntry(int param_1) {
                         party = partyGetPtr(partyId);
                         partyChgRunMode(party, 10);
                         if (param_1 == 0) {
-                            *(s32*)((s32)party + 0x70) = *(s32*)(vec3_802f4548 + 0);
-                            *(s32*)((s32)party + 0x74) = *(s32*)(vec3_802f4548 + 4);
-                            *(s32*)((s32)party + 0x78) = *(s32*)(vec3_802f4548 + 8);
+                            *(RawVec3*)((s32)party + 0x70) = *(RawVec3*)vec3_802f4548;
                         }
                         *(u32*)party |= 0x04000000;
                         *(u32*)party |= 0x02000000;
@@ -68,9 +71,7 @@ void _partyEntry(int param_1) {
                 party = partyGetPtr(partyId);
                 partyChgRunMode(party, 10);
                 if (param_1 == 0) {
-                    *(s32*)((s32)party + 0x70) = *(s32*)(vec3_802f4554 + 0);
-                    *(s32*)((s32)party + 0x74) = *(s32*)(vec3_802f4554 + 4);
-                    *(s32*)((s32)party + 0x78) = *(s32*)(vec3_802f4554 + 8);
+                    *(RawVec3*)((s32)party + 0x70) = *(RawVec3*)vec3_802f4554;
                 }
                 *(u32*)party |= 0x04000000;
                 *(u32*)party |= 0x02000000;
@@ -93,6 +94,11 @@ void _partyEntry(int param_1) {
 
 
 void mot_dokan(void) {
+    typedef struct RawVec3 {
+        s32 x;
+        s32 y;
+        s32 z;
+    } RawVec3;
     extern void _partyEntry(s32 mode);
     extern void marioPaperOn(char* name);
     extern void marioPaperOff(void);
@@ -103,16 +109,25 @@ void mot_dokan(void) {
     extern s32 marioGetExtraPartyId(void);
     extern void partyDokanEnd(s32 id, s32 dokan);
     extern void marioUpdateCamPos(void);
+    extern void partyShadowOff(void* party);
+    extern void marioSlitForceCancel(void);
+    extern f32 toMovedir(f32 angle);
+    extern f32 float_90_80423050;
+    extern f32 float_270_80423054;
+    extern f32 float_neg30_80423058;
+    extern f32 float_30_8042304c;
     extern f32 vec3_802f4548[];
     extern char str_PM_D_1B_802f461c[];
     extern char str_M_Z_1_80423044[];
-    u8* player = marioGetPtr();
+    u8* player;
     u32 state;
     u8 dokan;
     f32 scale;
     u8* party;
     s32 partyId;
     u8* data = (u8*)vec3_802f4548;
+
+    player = marioGetPtr();
 
     if ((*(u32*)(player + 0xC) & 1) != 0) {
         *(u32*)(player + 0xC) &= ~1;
@@ -125,27 +140,74 @@ void mot_dokan(void) {
         *(s16*)(player + 0x50) = 0;
         *(f32*)(player + 0x180) = 0.0f;
         dokan = *(u8*)(player + 0x3E);
-        if (dokan == 0) {
-            _partyEntry(0);
-            *(u32*)(player + 0x44) = 30;
+        if (dokan == 2 || dokan == 3) {
+            *(u32*)(player + 0x44) = 10;
         } else if (dokan == 1) {
             marioPaperOn((char*)(data + 0xB4));
             marioChgPaper((char*)(data + 0xC0));
             marioChgPose(str_M_Z_1_80423044);
             marioPaperLightOff();
+            *(u32*)(player + 4) |= 0x8;
+            *(u32*)(player + 4) |= 0x100;
+            *(f32*)(player + 0x1AC) = *(f32*)(player + 0x1B0);
             *(u32*)(player + 0x44) = 20;
+            *(f32*)(player + 0x2B8) = 0.0f;
             *(f32*)(player + 0x2B8) = 30.0f;
+            *(RawVec3*)(player + 0xC8) = *(RawVec3*)(data + 0x18);
             _partyEntry(1);
-        } else if (dokan == 2 || dokan == 3) {
-            *(u32*)(player + 0x44) = 10;
-        } else {
+        } else if (dokan == 0) {
+            _partyEntry(0);
+            *(u32*)(player + 0x44) = 30;
+        } else if (dokan == 5) {
+            *(u32*)(player + 4) |= 0x1000;
+            party = partyGetPtr(0);
+            if (party != 0) {
+                partyShadowOff(party);
+            }
+            party = partyGetPtr(1);
+            if (party != 0) {
+                partyShadowOff(party);
+            }
+            *(RawVec3*)(player + 0x98) = *(RawVec3*)(data + 0x24);
+            *(RawVec3*)(player + 0xA4) = *(RawVec3*)(data + 0x30);
+            *(RawVec3*)(player + 0xBC) = *(RawVec3*)(data + 0x3C);
+            *(RawVec3*)(player + 0xB0) = *(RawVec3*)(data + 0x48);
+            marioSlitForceCancel();
             marioPaperOn((char*)(data + 0xC8));
             marioPaperLightOff();
             marioChgPaper((char*)(data + 0xC0));
             marioChgPose(str_M_Z_1_80423044);
-            *(u32*)(player + 0x44) = 40;
+            *(f32*)(player + 0x1AC) = *(f32*)(player + 0x1B0);
             *(f32*)(player + 0x2B8) = 30.0f;
+            *(s32*)(player + 0x48) = 20;
+            *(u32*)(player + 0x44) = 0;
+        } else if (dokan == 4) {
+            *(RawVec3*)(player + 0xC8) = *(RawVec3*)(data + 0x54);
+            *(RawVec3*)(player + 0x98) = *(RawVec3*)(data + 0x60);
+            *(RawVec3*)(player + 0xA4) = *(RawVec3*)(data + 0x6C);
+            *(RawVec3*)(player + 0xBC) = *(RawVec3*)(data + 0x78);
+            *(RawVec3*)(player + 0xB0) = *(RawVec3*)(data + 0x84);
+            *(f32*)(player + 0x1A4) = toMovedir(*(f32*)(player + 0x1AC));
+            *(f32*)(player + 0x1A0) = *(f32*)(player + 0x1A4);
+            marioPaperOn((char*)(data + 0xC8));
+            marioPaperLightOff();
+            marioChgPaper((char*)(data + 0xC0));
+            marioChgPose(str_M_Z_1_80423044);
+            if (*(f32*)(player + 0x1B0) >= float_90_80423050 &&
+                *(f32*)(player + 0x1B0) <= float_270_80423054) {
+                *(f32*)(player + 0x2B8) = float_30_8042304c;
+            } else {
+                *(u32*)(player + 4) |= 0x8;
+                *(f32*)(player + 0x2B8) = float_neg30_80423058;
+            }
+            *(u32*)(player + 4) |= 0x100;
+            marioPaperLightOff();
+            *(f32*)(player + 0x1AC) = *(f32*)(player + 0x1B0);
+            *(u32*)(player + 0x44) = 40;
             _partyEntry(1);
+            *(u32*)(player + 4) |= 0x1000;
+            partyShadowOff(partyGetPtr(marioGetPartyId()));
+            partyShadowOff(partyGetPtr(marioGetExtraPartyId()));
         }
     }
 

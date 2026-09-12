@@ -21,6 +21,12 @@ void* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     u8* part;
     f32 degrees;
     f32 angle;
+    f32 radiansScale;
+    f32 baseAngle;
+    f32 fullCircle;
+    f32 one;
+    f32 zero;
+    f32 tenth;
     s32 i;
 
     entry = effEntry();
@@ -79,19 +85,25 @@ type2:
         *(u8*)(work + 0x3A) = 0xDA;
     }
 colors_done:
+    radiansScale = float_6p2832_80426198;
     part = work + 0x40;
+    baseAngle = float_90_8042619c;
+    fullCircle = float_360_804261a0;
+    one = float_1_8042616c;
+    zero = float_0_80426168;
+    tenth = float_0p1_80426174;
     for (i = 1; i < 8; i++, part += 0x40) {
         degrees = (f32)(((i - 1) * 360) / 7);
-        angle = ((float_90_8042619c + degrees) * float_6p2832_80426198) / float_360_804261a0;
-        *(f32*)(part + 4) = float_1_8042616c * (f32)cos(angle);
-        *(f32*)(part + 8) = float_1_8042616c * (f32)sin(angle);
-        *(f32*)(part + 0xC) = float_0_80426168;
-        *(f32*)(part + 0x10) = float_0_80426168;
-        *(f32*)(part + 0x14) = float_0_80426168;
-        *(f32*)(part + 0x18) = float_0_80426168;
-        *(f32*)(part + 0x1C) = float_0p1_80426174;
-        *(f32*)(part + 0x20) = float_0p1_80426174;
-        *(f32*)(part + 0x30) = float_1_8042616c;
+        angle = ((baseAngle + degrees) * radiansScale) / fullCircle;
+        *(f32*)(part + 4) = one * (f32)cos(angle);
+        *(f32*)(part + 8) = one * (f32)sin(angle);
+        *(f32*)(part + 0xC) = zero;
+        *(f32*)(part + 0x10) = zero;
+        *(f32*)(part + 0x14) = zero;
+        *(f32*)(part + 0x18) = zero;
+        *(f32*)(part + 0x1C) = tenth;
+        *(f32*)(part + 0x20) = tenth;
+        *(f32*)(part + 0x30) = one;
         *(f32*)(part + 0x2C) = degrees;
     }
     return entry;
@@ -128,6 +140,9 @@ void effStampMain(void* effect) {
     s32 frame;
     s32 i;
     f32 angle;
+    f32 radiansScale;
+    f32 baseAngle;
+    f32 fullCircle;
 
     work = *(u8**)((s32)effect + 0xC);
     pos = vec3_802fc018;
@@ -145,8 +160,12 @@ void effStampMain(void* effect) {
     if (frame > 10) {
         *(s32*)(work + 0x34) = (s32)((f32)*(s32*)(work + 0x34) * float_0p9_80426170);
     }
+    radiansScale = float_6p2832_80426198;
+    i = 1;
+    baseAngle = float_90_8042619c;
     part = work + 0x40;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x40) {
+    fullCircle = float_360_804261a0;
+    for (; i < *(s32*)((s32)effect + 8); i++, part += 0x40) {
         if (frame > 10) {
             *(f32*)(part + 0x1C) += float_0p1_80426174 * (float_1_8042616c - *(f32*)(part + 0x1C));
             *(f32*)(part + 0x20) += float_0p1_80426174 * (float_2p4_80426178 - *(f32*)(part + 0x20));
@@ -157,7 +176,7 @@ void effStampMain(void* effect) {
             *(f32*)(part + 0x20) += float_0p1_80426174 * (float_1_8042616c - *(f32*)(part + 0x20));
             *(f32*)(part + 0x30) += float_0p6_80426190 * (float_0p05_80426188 * (float_10_80426194 - *(f32*)(part + 0x30)));
         }
-        angle = ((float_90_8042619c + *(f32*)(part + 0x2C)) * float_6p2832_80426198) / float_360_804261a0;
+        angle = ((baseAngle + *(f32*)(part + 0x2C)) * radiansScale) / fullCircle;
         *(f32*)(part + 4) = *(f32*)(part + 0x30) * (f32)cos(angle);
         *(f32*)(part + 8) = *(f32*)(part + 0x30) * (f32)sin(angle);
     }

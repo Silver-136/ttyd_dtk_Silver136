@@ -79,6 +79,9 @@ void BattleBreakSlot_Main(void) {
     extern f32 float_5_804268c4;
     extern f32 float_2_804268c8;
     extern f32 float_3_804268cc;
+    extern f32 float_0p2_804268b4;
+    extern f32 float_0p15_804268b8;
+    extern f32 float_32767_804268bc;
     extern char str_SFX_BTL_SYS_BREAK1_802fe298[];
     extern char str_SFX_HP_RECOVER_BIG1_802fe2ac[];
     extern u8 star_effect[];
@@ -204,6 +207,9 @@ void BattleBreakSlot_Main(void) {
                 for (i = 0; i < 3; i++) {
                     if (*(s32*)(reel + 8) == 8) {
                         *(s32*)(reel + 8) = 9;
+                        *(f32*)(reel + 0x54) = -1.0f *
+                            (float_0p2_804268b4 +
+                             (float_0p15_804268b8 * (f32)rand()) / float_32767_804268bc);
                         *(f32*)(reel + 0x54) = -1.0f;
                         break;
                     }
@@ -812,7 +818,7 @@ void BattleBreakSlot_End(void) {
 void BattleBreakSlot_PointInc(void) {
     extern void* pouchGetPtr(void);
     extern s32 irand(s32 range);
-    void* battle = _battleWorkPointer;
+    s32 battle = (s32)_battleWorkPointer + 0x20000;
     void* work = BattleBreakSlotGetPtr();
     void* reel;
     void* reel1;
@@ -835,6 +841,23 @@ void BattleBreakSlot_PointInc(void) {
     index = *(s32*)reel;
     switch (index) {
         case 0:
+            index = irand(*(s32*)((s32)reel + 0x18));
+            *(s32*)((s32)reel + 0x1C) = index - 1;
+            if (*(s32*)((s32)reel + 0x1C) == -1) {
+                *(s32*)((s32)reel + 0x1C) = *(s32*)((s32)reel + 0x18) - 1;
+            }
+            *(s32*)((s32)reel + 0x10) =
+                ((s32*)*(void**)((s32)reel + 0x14))[*(s32*)((s32)reel + 0x1C)];
+            if ((*(u32*)(battle - 0x6F88) & 0x80000) != 0) {
+                item_appear_force(reel, *(s32*)(battle - 0x6F74));
+            }
+            if ((*(u32*)work & 1) != 0) {
+                item_appear_force(reel, 3);
+            }
+            if ((*(u32*)work & 4) != 0) {
+                item_appear_force(reel, 3);
+            }
+            break;
         case 1:
             index = irand(*(s32*)((s32)reel + 0x18));
             *(s32*)((s32)reel + 0x1C) = index - 1;
@@ -843,8 +866,8 @@ void BattleBreakSlot_PointInc(void) {
             }
             *(s32*)((s32)reel + 0x10) =
                 ((s32*)*(void**)((s32)reel + 0x14))[*(s32*)((s32)reel + 0x1C)];
-            if ((*(u32*)((s32)battle + 0x19078) & 0x80000) != 0) {
-                item_appear_force(reel, *(s32*)((s32)battle + 0x1908C));
+            if ((*(u32*)(battle - 0x6F88) & 0x80000) != 0) {
+                item_appear_force(reel, *(s32*)(battle - 0x6F74));
             }
             if ((*(u32*)work & 1) != 0) {
                 item_appear_force(reel, 3);

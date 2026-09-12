@@ -383,6 +383,41 @@ hammer_default:
 
 
 void _btlcmd_MakeSelectWeaponTable(void* battleWork, s32 type) {
+    typedef struct WeaponLocal {
+        char* name;
+        u16 icon;
+        u16 pad6;
+        s32 itemId;
+        u8 padC[0xB4];
+    } WeaponLocal;
+
+    typedef struct ItemDataLocal {
+        u8 pad0[4];
+        char* name;
+        u8 pad8[8];
+        u16 useLocations;
+        u8 pad12[0xE];
+        u16 icon;
+        u8 pad22[2];
+        WeaponLocal* weapon;
+    } ItemDataLocal;
+
+    typedef struct WeaponEntryLocal {
+        WeaponLocal* weapon;
+        s32 unk4;
+        char* name;
+        u16 icon;
+        u16 padE;
+        s32 index;
+        s32 item;
+        s32 unk18;
+    } WeaponEntryLocal;
+
+    typedef struct CommandLocal {
+        u8 pad0[0x80];
+        WeaponEntryLocal weaponTable[0x15];
+    } CommandLocal;
+
     extern void* pouchGetPtr(void);
     extern s32 pouchEquipCheckBadge(s32 item);
     extern s32 _getJumpIconId(void);
@@ -392,254 +427,322 @@ void _btlcmd_MakeSelectWeaponTable(void* battleWork, s32 type) {
     extern void _btlcmd_UpdateSelectWeaponTable(void*, s32);
     extern void* BattleGetUnitPtr(void*, s32);
     extern s32 BtlUnit_GetData(void*, s32);
-    extern u8 marioDefaultWeapon_Jump[];
-    extern u8 marioWeapon_KururinJump[];
-    extern u8 marioWeapon_JyabaraJump[];
-    extern u8 marioDefaultWeapon_Hammer[];
-    extern u8 marioWeapon_KaitenHammer[];
-    extern u8 marioWeapon_UltraHammer[];
+    extern WeaponLocal marioDefaultWeapon_Jump;
+    extern WeaponLocal marioWeapon_KururinJump;
+    extern WeaponLocal marioWeapon_JyabaraJump;
+    extern WeaponLocal marioDefaultWeapon_Hammer;
+    extern WeaponLocal marioWeapon_KaitenHammer;
+    extern WeaponLocal marioWeapon_UltraHammer;
     extern s32 _jump_badge_table[];
     extern s32 _hammer_badge_table[];
-    extern u8 itemDataTable[];
-    extern void* superActionTable[];
-    extern u8 ItemWeaponData_CookingItem[];
+    extern ItemDataLocal itemDataTable[];
+    extern WeaponLocal* superActionTable[];
+    extern WeaponLocal ItemWeaponData_CookingItem;
+
     u8* pouch;
-    u8* command;
-    u8* cursor;
-    u8* entry;
-    u8* weapon;
-    u8* itemData;
-    s32* badges;
-    s32 badgeCount;
-    s32 count;
-    s32 i;
-    s32 item;
+    CommandLocal* command;
+    WeaponLocal* weapon;
+    ItemDataLocal* itemData;
+    BattleWorkCommandCursor* cursor;
     void* unit;
+    s32 badgeIndex;
+    s32 badgeOffset;
+    s32 count;
+    s32 itemIndex;
+    s32 itemOffset;
+    s32 item;
+    u16 powers;
 
     unit = BattleGetUnitPtr(battleWork, *(s32*)((u8*)battleWork + 0x420));
-    command = (u8*)battleWork + 0x171C;
+    command = (CommandLocal*)((u8*)battleWork + 0x171C);
     pouch = pouchGetPtr();
+
     if (command == 0) {
         return;
     }
+
     _btlcmd_GetCursorPtr(command, type, (void**)&cursor);
     count = 0;
 
-    if (type == 1) {
-        if (*(s8*)(pouch + 0x99) > 0) {
-            entry = command + 0x80;
-            *(s32*)(entry + 0x10) = -1;
-            *(s32*)(entry + 0x14) = 0;
-            *(u8**)entry = marioDefaultWeapon_Hammer;
-            *(s32*)(entry + 4) = 0;
-            *(s32*)(entry + 0x18) = 0;
-            *(u16*)(entry + 0xC) = (u16)_getHammerIconId();
-            weapon = *(u8**)entry;
-            if (*(char**)weapon == 0) {
-                itemData = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
-            } else {
-                *(char**)(entry + 8) = msgSearch(*(char**)weapon);
-            }
-            if ((*(u32*)((u8*)battleWork + 0xEF4) & 0x0A000000) != 0 &&
-                *(s32*)((u8*)battleWork + 0x424) != -1) {
-                void* specialUnit = BattleGetUnitPtr(battleWork, *(s32*)((u8*)battleWork + 0x424));
-                *(void**)entry = (void*)BtlUnit_GetData(specialUnit, 0x45);
-            }
-            count++;
-        }
-        if (*(s8*)(pouch + 0x99) > 1) {
-            entry = command + 0x80 + count * 0x1C;
-            *(s32*)(entry + 0x10) = -1;
-            *(s32*)(entry + 0x14) = 0;
-            *(u8**)entry = marioWeapon_KaitenHammer;
-            *(s32*)(entry + 4) = 0;
-            *(s32*)(entry + 0x18) = 0;
-            *(u16*)(entry + 0xC) = (u16)_getHammerIconId();
-            weapon = *(u8**)entry;
-            if (*(char**)weapon == 0) {
-                itemData = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
-            } else {
-                *(char**)(entry + 8) = msgSearch(*(char**)weapon);
-            }
-            count++;
-        }
-        if (*(s8*)(pouch + 0x99) > 2) {
-            entry = command + 0x80 + count * 0x1C;
-            *(s32*)(entry + 0x10) = -1;
-            *(s32*)(entry + 0x14) = 0;
-            *(u8**)entry = marioWeapon_UltraHammer;
-            *(s32*)(entry + 4) = 0;
-            *(s32*)(entry + 0x18) = 0;
-            *(u16*)(entry + 0xC) = (u16)_getHammerIconId();
-            weapon = *(u8**)entry;
-            if (*(char**)weapon == 0) {
-                itemData = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
-            } else {
-                *(char**)(entry + 8) = msgSearch(*(char**)weapon);
-            }
-            count++;
-        }
-    } else if (type >= 0 && type < 1) {
+    switch (type) {
+    case 0:
         if (*(s8*)(pouch + 0x98) > 0) {
-            entry = command + 0x80;
-            *(s32*)(entry + 0x10) = -1;
-            *(s32*)(entry + 0x14) = 0;
-            *(u8**)entry = marioDefaultWeapon_Jump;
-            *(s32*)(entry + 4) = 0;
-            *(s32*)(entry + 0x18) = 0;
-            *(u16*)(entry + 0xC) = (u16)_getJumpIconId();
-            weapon = *(u8**)entry;
-            if (*(char**)weapon == 0) {
-                itemData = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
+            command->weaponTable[0].index = -1;
+            command->weaponTable[count].item = 0;
+            command->weaponTable[count].weapon = &marioDefaultWeapon_Jump;
+            command->weaponTable[count].unk4 = 0;
+            command->weaponTable[count].unk18 = 0;
+            command->weaponTable[count].icon = (u16)_getJumpIconId();
+
+            weapon = command->weaponTable[count].weapon;
+            if (weapon->name != 0) {
+                command->weaponTable[count].name = msgSearch(weapon->name);
             } else {
-                *(char**)(entry + 8) = msgSearch(*(char**)weapon);
+                command->weaponTable[count].name = msgSearch(itemDataTable[weapon->itemId].name);
             }
+
             if ((*(u32*)((u8*)battleWork + 0xEF4) & 0x09000000) != 0 &&
                 *(s32*)((u8*)battleWork + 0x424) != -1) {
-                void* specialUnit = BattleGetUnitPtr(battleWork, *(s32*)((u8*)battleWork + 0x424));
-                *(void**)entry = (void*)BtlUnit_GetData(specialUnit, 0x44);
+                void* specialUnit = BattleGetUnitPtr(
+                    battleWork, *(s32*)((u8*)battleWork + 0x424));
+                command->weaponTable[count].weapon =
+                    (WeaponLocal*)BtlUnit_GetData(specialUnit, 0x44);
             }
+
             count++;
         }
+
         if (*(s8*)(pouch + 0x98) > 1) {
-            entry = command + 0x80 + count * 0x1C;
-            *(s32*)(entry + 0x10) = -1;
-            *(s32*)(entry + 0x14) = 0;
-            *(u8**)entry = marioWeapon_KururinJump;
-            *(s32*)(entry + 4) = 0;
-            *(s32*)(entry + 0x18) = 0;
-            *(u16*)(entry + 0xC) = (u16)_getJumpIconId();
-            weapon = *(u8**)entry;
-            if (*(char**)weapon == 0) {
-                itemData = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
+            command->weaponTable[count].index = -1;
+            command->weaponTable[count].item = 0;
+            command->weaponTable[count].weapon = &marioWeapon_KururinJump;
+            command->weaponTable[count].unk4 = 0;
+            command->weaponTable[count].unk18 = 0;
+            command->weaponTable[count].icon = (u16)_getJumpIconId();
+
+            weapon = command->weaponTable[count].weapon;
+            if (weapon->name != 0) {
+                command->weaponTable[count].name = msgSearch(weapon->name);
             } else {
-                *(char**)(entry + 8) = msgSearch(*(char**)weapon);
+                command->weaponTable[count].name = msgSearch(itemDataTable[weapon->itemId].name);
             }
+
             count++;
         }
+
         if (*(s8*)(pouch + 0x98) > 2) {
-            entry = command + 0x80 + count * 0x1C;
-            *(s32*)(entry + 0x10) = -1;
-            *(s32*)(entry + 0x14) = 0;
-            *(u8**)entry = marioWeapon_JyabaraJump;
-            *(s32*)(entry + 4) = 0;
-            *(s32*)(entry + 0x18) = 0;
-            *(u16*)(entry + 0xC) = (u16)_getJumpIconId();
-            weapon = *(u8**)entry;
-            if (*(char**)weapon == 0) {
-                itemData = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
+            command->weaponTable[count].index = -1;
+            command->weaponTable[count].item = 0;
+            command->weaponTable[count].weapon = &marioWeapon_JyabaraJump;
+            command->weaponTable[count].unk4 = 0;
+            command->weaponTable[count].unk18 = 0;
+            command->weaponTable[count].icon = (u16)_getJumpIconId();
+
+            weapon = command->weaponTable[count].weapon;
+            if (weapon->name != 0) {
+                command->weaponTable[count].name = msgSearch(weapon->name);
             } else {
-                *(char**)(entry + 8) = msgSearch(*(char**)weapon);
+                command->weaponTable[count].name = msgSearch(itemDataTable[weapon->itemId].name);
             }
+
             count++;
         }
+        break;
+    case 1:
+        if (*(s8*)(pouch + 0x99) > 0) {
+            command->weaponTable[0].index = -1;
+            command->weaponTable[count].item = 0;
+            command->weaponTable[count].weapon = &marioDefaultWeapon_Hammer;
+            command->weaponTable[count].unk4 = 0;
+            command->weaponTable[count].unk18 = 0;
+            command->weaponTable[count].icon = (u16)_getHammerIconId();
+
+            weapon = command->weaponTable[count].weapon;
+            if (weapon->name != 0) {
+                command->weaponTable[count].name = msgSearch(weapon->name);
+            } else {
+                command->weaponTable[count].name = msgSearch(itemDataTable[weapon->itemId].name);
+            }
+
+            if ((*(u32*)((u8*)battleWork + 0xEF4) & 0x0A000000) != 0 &&
+                *(s32*)((u8*)battleWork + 0x424) != -1) {
+                void* specialUnit = BattleGetUnitPtr(
+                    battleWork, *(s32*)((u8*)battleWork + 0x424));
+                command->weaponTable[count].weapon =
+                    (WeaponLocal*)BtlUnit_GetData(specialUnit, 0x45);
+            }
+
+            count++;
+        }
+
+        if (*(s8*)(pouch + 0x99) > 1) {
+            command->weaponTable[count].index = -1;
+            command->weaponTable[count].item = 0;
+            command->weaponTable[count].weapon = &marioWeapon_KaitenHammer;
+            command->weaponTable[count].unk4 = 0;
+            command->weaponTable[count].unk18 = 0;
+            command->weaponTable[count].icon = (u16)_getHammerIconId();
+
+            weapon = command->weaponTable[count].weapon;
+            if (weapon->name != 0) {
+                command->weaponTable[count].name = msgSearch(weapon->name);
+            } else {
+                command->weaponTable[count].name = msgSearch(itemDataTable[weapon->itemId].name);
+            }
+
+            count++;
+        }
+
+        if (*(s8*)(pouch + 0x99) > 2) {
+            command->weaponTable[count].index = -1;
+            command->weaponTable[count].item = 0;
+            command->weaponTable[count].weapon = &marioWeapon_UltraHammer;
+            command->weaponTable[count].unk4 = 0;
+            command->weaponTable[count].unk18 = 0;
+            command->weaponTable[count].icon = (u16)_getHammerIconId();
+
+            weapon = command->weaponTable[count].weapon;
+            if (weapon->name != 0) {
+                command->weaponTable[count].name = msgSearch(weapon->name);
+            } else {
+                command->weaponTable[count].name = msgSearch(itemDataTable[weapon->itemId].name);
+            }
+
+            count++;
+        }
+        break;
     }
 
-    if (type == 1) {
-        for (i = 0; i < 9; i++) {
-            item = _hammer_badge_table[i];
+    switch (type) {
+    case 0:
+        badgeIndex = 0;
+        badgeOffset = 0;
+        do {
+            item = *(s32*)((u8*)_jump_badge_table + badgeOffset);
             if (pouchEquipCheckBadge(item) > 0) {
-                itemData = itemDataTable + item * 0x28;
-                entry = command + 0x80 + count * 0x1C;
-                *(s32*)(entry + 0x10) = i;
-                *(s32*)(entry + 0x14) = item;
-                weapon = *(u8**)(itemData + 0x24);
-                *(u8**)entry = weapon;
-                *(s32*)(entry + 4) = 0;
-                *(s32*)(entry + 0x18) = 0;
-                *(u16*)(entry + 0xC) = *(s32*)(weapon + 8) == 0
-                    ? *(u16*)(weapon + 4) : *(u16*)(itemData + 0x20);
-                if (*(char**)weapon != 0) {
-                    *(char**)(entry + 8) = msgSearch(*(char**)weapon);
+                itemData = &itemDataTable[item];
+
+                command->weaponTable[count].index = badgeIndex;
+                command->weaponTable[count].item = item;
+                command->weaponTable[count].weapon = itemData->weapon;
+                command->weaponTable[count].unk4 = 0;
+                command->weaponTable[count].unk18 = 0;
+
+                weapon = command->weaponTable[count].weapon;
+                if (weapon->itemId != 0) {
+                    command->weaponTable[count].icon = itemData->icon;
                 } else {
-                    itemData = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                    *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
+                    command->weaponTable[count].icon = weapon->icon;
                 }
+
+                weapon = command->weaponTable[count].weapon;
+                if (weapon->name != 0) {
+                    command->weaponTable[count].name = msgSearch(weapon->name);
+                } else {
+                    command->weaponTable[count].name =
+                        msgSearch(itemDataTable[weapon->itemId].name);
+                }
+
                 count++;
             }
-        }
-    } else if (type >= 0 && type < 1) {
-        for (i = 0; i < 8; i++) {
-            item = _jump_badge_table[i];
+
+            badgeIndex++;
+            badgeOffset += 4;
+        } while ((u32)badgeIndex < 8);
+        break;
+    case 1:
+        badgeIndex = 0;
+        badgeOffset = 0;
+        do {
+            item = *(s32*)((u8*)_hammer_badge_table + badgeOffset);
             if (pouchEquipCheckBadge(item) > 0) {
-                itemData = itemDataTable + item * 0x28;
-                entry = command + 0x80 + count * 0x1C;
-                *(s32*)(entry + 0x10) = i;
-                *(s32*)(entry + 0x14) = item;
-                weapon = *(u8**)(itemData + 0x24);
-                *(u8**)entry = weapon;
-                *(s32*)(entry + 4) = 0;
-                *(s32*)(entry + 0x18) = 0;
-                if (*(s32*)(weapon + 8) == 0) {
-                    *(u16*)(entry + 0xC) = *(u16*)(weapon + 4);
+                itemData = &itemDataTable[item];
+
+                command->weaponTable[count].index = badgeIndex;
+                command->weaponTable[count].item = item;
+                command->weaponTable[count].weapon = itemData->weapon;
+                command->weaponTable[count].unk4 = 0;
+                command->weaponTable[count].unk18 = 0;
+
+                weapon = command->weaponTable[count].weapon;
+                if (weapon->itemId != 0) {
+                    command->weaponTable[count].icon = itemData->icon;
                 } else {
-                    *(u16*)(entry + 0xC) = *(u16*)(itemData + 0x20);
+                    command->weaponTable[count].icon = weapon->icon;
                 }
-                if (*(char**)weapon == 0) {
-                    itemData = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                    *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
+
+                weapon = command->weaponTable[count].weapon;
+                if (weapon->name != 0) {
+                    command->weaponTable[count].name = msgSearch(weapon->name);
                 } else {
-                    *(char**)(entry + 8) = msgSearch(*(char**)weapon);
+                    command->weaponTable[count].name =
+                        msgSearch(itemDataTable[weapon->itemId].name);
                 }
+
                 count++;
             }
-        }
-    } else if (type == 2) {
-        for (i = 0; i < 20 && count < 21; i++) {
-            item = *(s16*)(pouch + 0x192 + i * 2);
-            if (item != 0) {
-                itemData = itemDataTable + item * 0x28;
-                if ((*(u16*)(itemData + 0x10) & 2) != 0) {
-                    entry = command + 0x80 + count * 0x1C;
-                    *(s32*)(entry + 0x10) = i;
-                    *(s32*)(entry + 0x14) = item;
-                    weapon = *(u8**)(itemData + 0x24);
-                    *(u8**)entry = weapon;
-                    *(s32*)(entry + 4) = 0;
-                    *(s32*)(entry + 0x18) = 0;
-                    if (weapon == 0) {
-                        *(u8**)entry = ItemWeaponData_CookingItem;
-                        *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
-                        *(u16*)(entry + 0xC) = *(u16*)(itemData + 0x20);
+
+            badgeIndex++;
+            badgeOffset += 4;
+        } while ((u32)badgeIndex < 9);
+        break;
+    }
+
+    if (type == 4) {
+        powers = *(u16*)(pouch + 0x8C);
+        itemIndex = 0;
+        itemOffset = 0;
+
+        do {
+            if (((powers & (1 << itemIndex)) != 0) &&
+                *(WeaponLocal**)((u8*)superActionTable + itemOffset) != 0) {
+                command->weaponTable[count].index = -1;
+                command->weaponTable[count].item = 0;
+                command->weaponTable[count].weapon =
+                    *(WeaponLocal**)((u8*)superActionTable + itemOffset);
+                command->weaponTable[count].unk4 = 0;
+                command->weaponTable[count].icon =
+                    (*(WeaponLocal**)((u8*)superActionTable + itemOffset))->icon;
+                command->weaponTable[count].unk18 = 0;
+
+                weapon = command->weaponTable[count].weapon;
+                if (weapon->name != 0) {
+                    command->weaponTable[count].name = msgSearch(weapon->name);
+                } else {
+                    command->weaponTable[count].name =
+                        msgSearch(itemDataTable[weapon->itemId].name);
+                }
+
+                count++;
+                if (count > 0x14) {
+                    break;
+                }
+            }
+
+            itemIndex++;
+            itemOffset += 4;
+        } while (itemIndex < 0x10);
+    } else if (type < 4) {
+        if (type == 2) {
+            itemIndex = 0;
+            itemOffset = 0;
+
+            do {
+                item = *(s16*)(pouch + 0x192 + itemOffset);
+                itemData = &itemDataTable[item];
+
+                if ((item != 0) && ((itemData->useLocations & 2) != 0)) {
+                    command->weaponTable[count].index = itemIndex;
+                    command->weaponTable[count].item = item;
+                    command->weaponTable[count].weapon = itemData->weapon;
+                    command->weaponTable[count].unk4 = 0;
+                    command->weaponTable[count].unk18 = 0;
+
+                    if (command->weaponTable[count].weapon == 0) {
+                        command->weaponTable[count].weapon = &ItemWeaponData_CookingItem;
+                        command->weaponTable[count].name = msgSearch(itemData->name);
+                        command->weaponTable[count].icon = itemData->icon;
                     } else {
-                        *(u16*)(entry + 0xC) = *(u16*)(itemData + 0x20);
-                        if (*(char**)weapon == 0) {
-                            u8* weaponItem = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                            *(char**)(entry + 8) = msgSearch(*(char**)(weaponItem + 4));
+                        command->weaponTable[count].icon = itemData->icon;
+                        weapon = command->weaponTable[count].weapon;
+                        if (weapon->name != 0) {
+                            command->weaponTable[count].name = msgSearch(weapon->name);
                         } else {
-                            *(char**)(entry + 8) = msgSearch(*(char**)weapon);
+                            command->weaponTable[count].name =
+                                msgSearch(itemDataTable[weapon->itemId].name);
                         }
                     }
+
                     count++;
+                    if (count > 0x14) {
+                        break;
+                    }
                 }
-            }
-        }
-    } else if (type == 4) {
-        u16 powers = *(u16*)(pouch + 0x8C);
-        for (i = 0; i < 16 && count < 21; i++) {
-            if ((powers & (1 << i)) != 0 && superActionTable[i] != 0) {
-                weapon = superActionTable[i];
-                entry = command + 0x80 + count * 0x1C;
-                *(s32*)(entry + 0x10) = -1;
-                *(s32*)(entry + 0x14) = 0;
-                *(u8**)entry = weapon;
-                *(s32*)(entry + 4) = 0;
-                *(u16*)(entry + 0xC) = *(u16*)(weapon + 4);
-                *(s32*)(entry + 0x18) = 0;
-                if (*(char**)weapon != 0) {
-                    *(char**)(entry + 8) = msgSearch(*(char**)weapon);
-                } else {
-                    itemData = itemDataTable + *(s32*)(weapon + 8) * 0x28;
-                    *(char**)(entry + 8) = msgSearch(*(char**)(itemData + 4));
-                }
-                count++;
-            }
+
+                itemIndex++;
+                itemOffset += 2;
+            } while (itemIndex < 0x14);
+
         }
     } else if (type == 6) {
         void (*makeTable)(void*, s32*);
@@ -648,13 +751,17 @@ void _btlcmd_MakeSelectWeaponTable(void* battleWork, s32 type) {
     }
 
     if (count > 0) {
-        *(s32*)(cursor + 8) = count;
-        if (*(s32*)cursor >= count) {
-            *(s32*)cursor = count - 1;
+        cursor->numOptions = count;
+
+        if (cursor->numOptions <= cursor->absolutePos) {
+            cursor->absolutePos = cursor->numOptions - 1;
         }
-        while (*(s32*)(cursor + 4) > 0 && *(s32*)(cursor + 4) + 6 > count) {
-            (*(s32*)(cursor + 4))--;
+
+        while ((cursor->numOptions < cursor->relativePos + 6) &&
+               (cursor->relativePos > 0)) {
+            cursor->relativePos--;
         }
+
         _btlcmd_UpdateSelectWeaponTable(battleWork, type);
     }
 }

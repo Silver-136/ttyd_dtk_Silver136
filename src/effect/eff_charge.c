@@ -104,7 +104,6 @@ void effChargeMain(void* effect) {
     extern VecLocal vec3_802f9710;
 
     u8* work;
-    u8* part;
     VecLocal pos;
     s32 frame;
     s32 i;
@@ -143,36 +142,43 @@ void effChargeMain(void* effect) {
     if (frame & 1) {
         *(s32*)(work + 0x14) /= 2;
     }
-    parity = frame & 1;
+    parity = *(volatile s32*)(work + 0x1C) & 1;
 
-    part = work + 0x48;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x48) {
-        radius = *(f32*)(part + 0x2C);
-        angle1 = (6.2831854820251465f * *(f32*)(part + 0x20)) / 360.0f;
+    work += 0x48;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, work += 0x48) {
+        radius = *(f32*)(work + 0x2C);
+        angle0 = *(f32*)(work + 0x24);
+        angle1 = (6.2831854820251465f * *(f32*)(work + 0x20)) / 360.0f;
         sin1 = (f32)sin(angle1);
         cos1 = (f32)cos(angle1);
-        angle0 = (6.2831854820251465f * *(f32*)(part + 0x24)) / 360.0f;
+        angle0 = (6.2831854820251465f * angle0) / 360.0f;
         sin0 = (f32)sin(angle0);
         cos0 = (f32)cos(angle0);
-        *(f32*)(part + 8) = cos0 * radius * sin1;
-        *(f32*)(part + 0xC) = cos0 * radius * cos1;
-        *(f32*)(part + 0x10) = radius * sin0;
+        *(f32*)(work + 8) = cos0 * radius * sin1;
+        *(f32*)(work + 0xC) = cos0 * radius * cos1;
+        *(f32*)(work + 0x10) = radius * sin0;
         temp = (s32)(100.0f - radius) * 0x1FE;
         temp = temp / 100;
-        *(s32*)(part + 0x14) = temp;
-        if (*(s32*)(part + 0x14) > 0xFF) {
-            *(s32*)(part + 0x14) = 0xFF;
+        *(s32*)(work + 0x14) = temp;
+        if (*(s32*)(work + 0x14) > 0xFF) {
+            *(s32*)(work + 0x14) = 0xFF;
         }
-        *(f32*)(part + 0x28) = 0.20000000298023224f + (radius / 80.0f);
-        *(f32*)(part + 0x2C) = radius - (f32)(((i & 3) * 2) + 2);
-        if (*(f32*)(part + 0x2C) < 0.0f) {
-            *(f32*)(part + 0x2C) = 0.0f;
-            *(f32*)(part + 0x28) = 0.0f;
+        *(f32*)(work + 0x28) = 0.20000000298023224f + (radius / 80.0f);
+        *(f32*)(work + 0x2C) = radius - (f32)(((i & 3) * 2) + 2);
+        if (*(f32*)(work + 0x2C) < 0.0f) {
+            *(f32*)(work + 0x2C) = 0.0f;
+            *(f32*)(work + 0x28) = 0.0f;
         }
-        delta0 = parity ? 5 : 2;
-        delta1 = parity ? 2 : 5;
-        *(f32*)(part + 0x20) += (f32)delta0;
-        *(f32*)(part + 0x24) += (f32)delta1;
+        delta0 = 2;
+        if (parity) {
+            delta0 = 5;
+        }
+        delta1 = 5;
+        if (parity) {
+            delta1 = 2;
+        }
+        *(f32*)(work + 0x20) += (f32)delta0;
+        *(f32*)(work + 0x24) += (f32)delta1;
     }
     dispEntry(4, 2, effChargeDisp, effect, dispCalcZ(&pos));
 }

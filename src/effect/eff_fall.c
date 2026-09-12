@@ -229,6 +229,21 @@ void effFallMain(void* effect) {
     pos[0] = *(f32*)(base + 4);
     pos[1] = *(f32*)(base + 8);
     pos[2] = *(f32*)(base + 0xC);
+    if ((*(u32*)effect & 4) != 0) {
+        *(u32*)effect &= ~4;
+        for (i = 0; i < count; i++) {
+            u8* p = base + i * 0x68;
+            if (*(s32*)(p + 0x5C) != -1) {
+                animPoseRelease(*(s32*)(p + 0x5C));
+            }
+            if (*(s32*)(p + 0x60) != -1) {
+                animPoseRelease(*(s32*)(p + 0x60));
+            }
+            psndSFXOff(*(s32*)(p + 0x64));
+        }
+        effDelete(effect);
+        return;
+    }
     for (i = 1; i < count; i++) {
         u8* p = base + i * 0x68;
         s32* state = (s32*)(p + 0x38);
@@ -646,20 +661,7 @@ void effFallMain(void* effect) {
         }
     }
 
-    if ((*(u32*)effect & 4) != 0) {
-        *(u32*)effect &= ~4;
-        for (i = 0; i < count; i++) {
-            u8* p = base + i * 0x68;
-            if (*(s32*)(p + 0x5C) != -1) {
-                animPoseRelease(*(s32*)(p + 0x5C));
-            }
-            if (*(s32*)(p + 0x60) != -1) {
-                animPoseRelease(*(s32*)(p + 0x60));
-            }
-            psndSFXOff(*(s32*)(p + 0x64));
-        }
-        effDelete(effect);
-    } else if (alive == 0) {
+    if (alive == 0) {
         effDelete(effect);
     } else {
         if (type == 3) {
@@ -702,8 +704,7 @@ void effFallDisp(s32 cameraId, void* effect) {
     extern void PSMTXRotAxisRad(void*, void*, f32);
     extern void animPoseDrawMtx(s32, void*, s32, f64, f64);
     u8* base = *(u8**)((u8*)effect + 0xC);
-    s32 count = *(s32*)((u8*)effect + 8);
-    s32 type = *(s32*)base;
+    s32 type;
     u8 tex[64];
     f32 trans[3][4];
     f32 scale[3][4];
@@ -718,6 +719,7 @@ void effFallDisp(s32 cameraId, void* effect) {
     s32 i;
 
     camera = camGetPtr(cameraId);
+    type = *(s32*)base;
     PSMTXTrans(trans, *(f32*)(base + 4), *(f32*)(base + 8), *(f32*)(base + 0xC));
     rotationCamera = camGetPtr(cameraId);
     PSMTXRotRad(rot, 0x79,
@@ -738,7 +740,6 @@ void effFallDisp(s32 cameraId, void* effect) {
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-    poseAxisAngle = 6.2832f * *(f32*)(base + 0x18);
     if (type == 2) {
         effGetTexObj(0x33, tex);
         GXLoadTexObj(tex, 0);
@@ -746,7 +747,8 @@ void effFallDisp(s32 cameraId, void* effect) {
         effGetTexObj(0x32, tex);
         GXLoadTexObj(tex, 0);
     }
-    for (i = 1; i < count; i++) {
+    poseAxisAngle = 6.2832f * *(f32*)(base + 0x18);
+    for (i = 1; i < *(s32*)((u8*)effect + 8); i++) {
         u8* p = base + i * 0x68;
         u32 color;
 

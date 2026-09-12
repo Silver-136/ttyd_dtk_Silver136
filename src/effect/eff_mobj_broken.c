@@ -37,54 +37,73 @@ void* effMObjBrokenEntry(double x, double y, double z, u32 typeId) {
     f32 randScale = 0.0625f;
     f32 divFive = 5.0f;
 
-    if ((s32)typeId >= 0 && (s32)typeId < 7) {
+    if ((s32)typeId != 6) {
+        if ((s32)typeId < 6) {
+            if ((s32)typeId >= 0) {
+                count = 17;
+            }
+        } else if ((s32)typeId < 8) {
+            count = 9;
+        }
+    } else {
         count = 17;
-    } else if ((s32)typeId < 8) {
-        count = 9;
     }
 
     *(char**)((s32)effect + 0x14) = "MObjBroken";
     *(s32*)((s32)effect + 8) = count;
-    work = (BrokenWork*)__memAlloc(3, count * 0x30);
+    work = (BrokenWork*)__memAlloc(3, *(s32*)((s32)effect + 8) * 0x30);
     *(BrokenWork**)((s32)effect + 0xC) = work;
     *(void**)((s32)effect + 0x10) = effMObjBrokenMain;
     *(u32*)effect |= 2;
 
     work->typeId = typeId;
-    work->pos.x = (f32)x;
-    work->pos.y = (f32)y;
-    work->pos.z = (f32)z;
+    work->pos.x = x;
+    work->pos.y = y;
+    work->pos.z = z;
     work->scale = 1.0f;
     work->poseId = -1;
 
     child = work + 1;
-    for (i = 1; i < count; i++, child++) {
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, child++) {
         s32 index = i;
         s32 n;
-        s32 a = 0;
-        s32 b = 0;
-        s32 c = 0;
-        f32 size = 12.5f;
+        s32 a;
+        s32 b;
+        s32 c;
+        f32 size;
         f32 halfSize;
 
         if (index > 9) {
             index -= 8;
         }
-        n = index - 1;
-
-        if ((s32)typeId >= 0 && (s32)typeId < 3) {
-            size = 6.25f;
-            a = ((n % 4) / 2);
-            b = n / 4;
-            c = (n % 4) & 1;
-        } else if (((s32)typeId >= 3 && (s32)typeId < 6)) {
+        if ((s32)typeId != 6) {
+            if ((s32)typeId < 6) {
+                if ((s32)typeId < 3) {
+                    if ((s32)typeId >= 0) {
+                        n = index - 1;
+                        size = 6.25f;
+                        a = (n % 4) >> 1;
+                        b = n / 4;
+                        c = n % 2;
+                    }
+                } else {
+                    n = index - 1;
+                    size = 12.5f;
+                    a = (n % 4) >> 1;
+                    b = n / 4;
+                    c = n % 2;
+                }
+            } else if ((s32)typeId < 8) {
+                n = index - 1;
+                size = 12.5f;
+                a = n % 2;
+                b = n / 2;
+                c = 0;
+            }
+        } else {
+            n = index - 1;
             size = 12.5f;
-            a = ((n % 4) / 2);
-            b = n / 4;
-            c = (n % 4) & 1;
-        } else if (typeId == 6 || ((s32)typeId >= 6 && (s32)typeId < 8)) {
-            size = 12.5f;
-            a = n & 1;
+            a = n % 2;
             b = n / 2;
             c = 0;
         }
@@ -103,14 +122,14 @@ void* effMObjBrokenEntry(double x, double y, double z, u32 typeId) {
         child->vel.z = (f32)(irand(5) + 2) / divFive;
     }
 
-    if (typeId == 7) {
-        effKemuTestEntry(0x10, x, (f32)(y + child[1].pos.y), z, 1.0f);
-    } else {
+    if (typeId != 7) {
         f32 scale = 1.0f;
         if ((s32)typeId < 3) {
             scale = 0.5f;
         }
-        effKemuTestEntry(2, x, (f32)(y + child->pos.y), z, scale);
+        effKemuTestEntry(2, x, (f32)(y + child[-1].pos.y), z, scale);
+    } else {
+        effKemuTestEntry(0x10, x, (f32)(y + child->pos.y), z, 1.0f);
     }
 
     return effect;
@@ -273,13 +292,7 @@ void effMObjBrokenMain(void* effect) {
         }
     }
 
-    if (deadCount < *(s32*)((s32)effect + 8) - 1) {
-        if (type == 7) {
-            dispEntry(4, 8, effMObjBrokenDisp2, effect, dispCalcZ(&pos));
-        } else {
-            dispEntry(4, 8, effMObjBrokenDisp, effect, dispCalcZ(&pos));
-        }
-    } else {
+    if (deadCount >= *(s32*)((s32)effect + 8) - 1) {
         child = work;
         for (i = 0; i < *(s32*)((s32)effect + 8); i++, child++) {
             if (child->poseId != -1) {
@@ -287,6 +300,10 @@ void effMObjBrokenMain(void* effect) {
             }
         }
         effDelete(effect);
+    } else if (type == 7) {
+        dispEntry(4, 8, effMObjBrokenDisp2, effect, dispCalcZ(&pos));
+    } else {
+        dispEntry(4, 8, effMObjBrokenDisp, effect, dispCalcZ(&pos));
     }
 }
 

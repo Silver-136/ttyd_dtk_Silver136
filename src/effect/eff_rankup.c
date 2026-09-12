@@ -40,6 +40,7 @@ void* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
 
 /* stub-fill: effRankupMain | prototype_only | source_prototype */
 void effRankupMain(void* effect) {
+    typedef struct Vec { f32 x, y, z; } Vec;
     extern void* gp;
     extern void animPoseRelease(s32 poseId);
     extern void effDelete(void* effect);
@@ -52,16 +53,20 @@ void effRankupMain(void* effect) {
     extern void effRankupDisp(s32 cameraId, void* effect);
     extern const char* eff_rankup_str_tbl[];
     extern const char str_Z_1_80428188[];
+    extern const f32 float_1_8042818c;
     extern const f32 float_0p61538_80428190;
+    extern const Vec vec3_80300af4;
 
     void* work;
-    f32 pos[3];
+    Vec pos = vec3_80300af4;
+    Vec dispPos;
     s32 heap;
 
     work = *(void**)((s32)effect + 0xC);
-    pos[0] = *(f32*)((s32)work + 4);
-    pos[1] = *(f32*)((s32)work + 8);
-    pos[2] = *(f32*)((s32)work + 0xC);
+    pos.x = *(f32*)((s32)work + 4);
+    pos.y = *(f32*)((s32)work + 8);
+    pos.z = *(f32*)((s32)work + 0xC);
+    dispPos = pos;
     heap = (*(s32*)((s32)gp + 0x14) != 0);
 
     if ((*(u32*)effect & 4) != 0) {
@@ -98,7 +103,7 @@ void effRankupMain(void* effect) {
         }
     }
 
-    dispEntry(4, 2, effRankupDisp, dispCalcZ(pos), effect);
+    dispEntry(4, 2, effRankupDisp, dispCalcZ((f32*)&dispPos), effect);
 }
 
 #pragma no_register_save_helpers on

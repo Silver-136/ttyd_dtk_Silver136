@@ -198,7 +198,11 @@ void BattleAudienceCtrlProcessKinopioWait(s32 audienceId, u8 front) {
     u32 flags;
 
     pouchGetPtr();
-    BattleAudience_SetAnim(audienceId, front == 1 ? 0 : 1, 0);
+    if (front == 1) {
+        BattleAudience_SetAnim(audienceId, 0, 0);
+    } else {
+        BattleAudience_SetAnim(audienceId, 1, 0);
+    }
     ratio = (*(f32*)(base + 0x1377C) + *(f32*)(base + 0x13780)) / *(f32*)(base + 0x13778);
     if (ratio >= 0.75f) { period = 1.0f; amount = 1.0f; }
     else if (ratio >= 0.5f) { period = 2.0f; amount = 0.5f; }
@@ -1466,135 +1470,102 @@ void BattleAudienceCtrlProcessKinopioEat(int audienceId) {
     extern f32 float_neg1_804244fc;
     extern f32 float_neg100_80424500;
     extern f32 float_0p1_80424504;
-
-    char* base;
-    char* audience;
-    char* stage;
+    char* base = BattleAudienceBaseGetPtr();
+    char* audience = BattleAudienceGetPtr(audienceId);
+    char* stage = BattleStageGetPtr();
     char* target;
-    s32 state;
-    s32 found;
-    s32 count;
-    s32 offset;
-    s32 i;
-    s32 targets[60];
+    s32 state = *(s32*)(audience + 4);
+    s32 found, count, offset, i;
+    s32 targets[69];
     f32 value;
 
-    base = BattleAudienceBaseGetPtr();
-    audience = BattleAudienceGetPtr(audienceId);
-    stage = BattleStageGetPtr();
-    state = *(s32*)(audience + 4);
-
-    if (state == 7) {
-        found = BattleAudienceDetectPakkunEatTarget(audienceId);
-        if (found == -1) {
-            count = 0;
-            offset = 0;
-            i = 0;
-            do {
-                if (((BattleAudience_GetExist(i) & 0xFF) == 0) &&
-                    ((*(u32*)BattleAudienceGetPtr(i) & 0x100) == 0) &&
-                    (BattleAudienceDetectPakkunEatTarget(i) != -1)) {
-                    *(s32*)((s32)targets + offset) = i;
-                    count++;
-                    offset += 4;
-                }
-                i++;
-            } while (i < 0x3C);
-            if (count < 1) {
-                if (i == 0x3C) {
-                    *(s32*)(audience + 4) = 99;
-                    *(s32*)(audience + 8) = 10;
-                }
-            } else {
-                *(s32*)(audience + 4) = 8;
-                *(s32*)(audience + 0x12C) = targets[irand(count)];
+    switch (state) {
+        case 0:
+            found = BattleAudienceDetectPakkunEatTarget(audienceId);
+            if (found == -1) {
+                BattleAudience_ChangeStatus(audienceId, 0);
+                return;
             }
-        } else {
-            *(s32*)(audience + 4) = 99;
-            *(s32*)(audience + 8) = 10;
-        }
-    } else if (state < 7) {
-        if (state == 3) {
+            *(s16*)(audience + 0xF0) = found;
             target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
-            if (*(f32*)(audience + 0x48) < *(f32*)(target + 0x48)) {
-                *(f32*)(audience + 0x6C) += float_6_804244ec;
-            } else {
-                *(f32*)(audience + 0x6C) -= float_6_804244ec;
-            }
-            value = *(f32*)(audience + 0x6C);
-            if (value <= float_neg60_804244f0 || float_60_804244f4 <= value) {
-                (*(s32*)(audience + 4))++;
-            }
-        } else if (state < 3) {
-            if (state != 1) {
-                if (state > 0) {
-                    return;
-                }
-                if (state < 0) {
-                    return;
-                }
-                found = BattleAudienceDetectPakkunEatTarget(audienceId);
-                if (found == -1) {
-                    BattleAudience_ChangeStatus(audienceId, 0);
-                    return;
-                }
-                *(s16*)(audience + 0xF0) = found;
-                target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
-                if (*(f32*)(audience + 0x48) < *(f32*)(target + 0x48)) {
-                    *(f32*)(audience + 0xE8) = float_90_804244e4;
-                } else {
-                    *(f32*)(audience + 0xE8) = float_270_804244e0;
-                }
-                BattleAudience_SetAnim(audienceId, 0, 0);
-                *(s32*)(audience + 8) = 0x1E;
-                (*(s32*)(audience + 4))++;
-            }
+            if (*(f32*)(audience + 0x48) < *(f32*)(target + 0x48))
+                *(f32*)(audience + 0xE8) = float_90_804244e4;
+            else
+                *(f32*)(audience + 0xE8) = float_270_804244e0;
+            BattleAudience_SetAnim(audienceId, 0, 0);
+            *(s32*)(audience + 8) = 0x1E;
+            (*(s32*)(audience + 4))++;
+            break;
+        case 1:
             target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
-            if (*(s32*)(audience + 8) > 0) {
+            if (*(s32*)(audience + 8) > 0)
                 (*(s32*)(audience + 8))--;
-            }
             if (*(s32*)(audience + 8) < 1 && *(f32*)(target + 0xD0) == float_0_804244e8) {
                 BattleAudience_SetAnim(audienceId, 0x12, 0);
                 *(u32*)target |= 2;
                 *(s32*)(audience + 4) = 3;
             }
-        } else if (state == 5) {
+            break;
+        case 3:
+            target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
+            if (*(f32*)(audience + 0x48) < *(f32*)(target + 0x48))
+                *(f32*)(audience + 0x6C) += float_6_804244ec;
+            else
+                *(f32*)(audience + 0x6C) -= float_6_804244ec;
             value = *(f32*)(audience + 0x6C);
-            if (value <= float_0_804244e8) {
-                *(f32*)(audience + 0x6C) = value + float_6_804244ec;
-                if (float_0_804244e8 <= *(f32*)(audience + 0x6C)) {
-                    *(s32*)(audience + 4) = 7;
-                }
-            } else {
-                *(f32*)(audience + 0x6C) = value - float_6_804244ec;
-                if (*(f32*)(audience + 0x6C) <= float_0_804244e8) {
-                    *(s32*)(audience + 4) = 7;
-                }
-            }
-        } else if (state < 5) {
+            if (value <= float_neg60_804244f0 || float_60_804244f4 <= value)
+                (*(s32*)(audience + 4))++;
+            break;
+        case 4:
             target = BattleAudienceGetPtr(*(s16*)(audience + 0xF0));
             *(u32*)target = 0;
             *(f32*)(base + 0x1377C) -= float_1_804244f8;
             BattleAudienceSoundPakkunEat(audienceId);
             (*(s32*)(audience + 4))++;
-        }
-    } else if (state == 0xB) {
-        value = *(f32*)(stage + 0x200);
-        if (value <= *(f32*)(audience + 0x4C)) {
-            *(f32*)(audience + 0xB8) = value;
-            *(f32*)(audience + 0x4C) = value;
-            *(f32*)(audience + 0x7C) = float_0_804244e8;
-            *(s32*)(audience + 4) = 99;
-            *(s32*)(audience + 8) = 10;
-            target = BattleAudienceGetPtr(*(s32*)(audience + 0x12C));
-            memcpy(target, audience, 0x134);
-            BattleAudience_Delete(audienceId);
-        }
-    } else if (state < 0xB) {
-        if (state == 9) {
+            break;
+        case 5:
+            value = *(f32*)(audience + 0x6C);
+            if (value <= float_0_804244e8) {
+                *(f32*)(audience + 0x6C) = value + float_6_804244ec;
+                if (float_0_804244e8 <= *(f32*)(audience + 0x6C)) *(s32*)(audience + 4) = 7;
+            } else {
+                *(f32*)(audience + 0x6C) = value - float_6_804244ec;
+                if (*(f32*)(audience + 0x6C) <= float_0_804244e8) *(s32*)(audience + 4) = 7;
+            }
+            break;
+        case 7:
+            found = BattleAudienceDetectPakkunEatTarget(audienceId);
+            if (found == -1) {
+                count = 0; offset = 0; i = 0;
+                do {
+                    if (((BattleAudience_GetExist(i) & 0xFF) == 0) &&
+                        ((*(u32*)BattleAudienceGetPtr(i) & 0x100) == 0) &&
+                        (BattleAudienceDetectPakkunEatTarget(i) != -1)) {
+                        *(s32*)((s32)targets + offset) = i;
+                        count++; offset += 4;
+                    }
+                    i++;
+                } while (i < 0x3C);
+                if (count < 1) {
+                    if (i == 0x3C) { *(s32*)(audience + 4) = 99; *(s32*)(audience + 8) = 10; }
+                } else {
+                    *(s32*)(audience + 4) = 8;
+                    *(s32*)(audience + 0x12C) = targets[irand(count)];
+                }
+            } else {
+                *(s32*)(audience + 4) = 99;
+                *(s32*)(audience + 8) = 10;
+            }
+            break;
+        case 8:
+            *(f32*)(audience + 0x78) = float_0_804244e8;
+            *(f32*)(audience + 0x7C) = float_neg1_804244fc;
+            *(f32*)(audience + 0x80) = float_0_804244e8;
+            (*(s32*)(audience + 4))++;
+            break;
+        case 9:
             if (*(f32*)(audience + 0x4C) <= float_neg100_80424500) {
-                i = *(s32*)(audience + 0x12C);
-                found = rand();
+                i = *(s32*)(audience + 0x12C); found = rand();
                 *(f32*)(audience + 0x48) = (f32)((i % 0x14) * 0x19 + (found * 10) / 0x7FFF - 0xEB);
                 *(f32*)(audience + 0xB4) = *(f32*)(audience + 0x48);
                 value = float_0p1_80424504 * (f32)(i % 0x14) + (f32)((i / 0x14) * 0x1E + 0x73);
@@ -1603,22 +1574,30 @@ void BattleAudienceCtrlProcessKinopioEat(int audienceId) {
                 *(f32*)(audience + 0xBC) = value;
                 (*(s32*)(audience + 4))++;
             }
-        } else if (state < 9) {
-            *(f32*)(audience + 0x78) = float_0_804244e8;
-            *(f32*)(audience + 0x7C) = float_neg1_804244fc;
-            *(f32*)(audience + 0x80) = float_0_804244e8;
-            (*(s32*)(audience + 4))++;
-        } else {
+            break;
+        case 10:
             *(f32*)(audience + 0x78) = float_0_804244e8;
             *(f32*)(audience + 0x7C) = float_1_804244f8;
             *(f32*)(audience + 0x80) = float_0_804244e8;
             (*(s32*)(audience + 4))++;
-        }
-    } else if (state == 99) {
-        (*(s32*)(audience + 8))--;
-        if (*(s32*)(audience + 8) < 1) {
-            BattleAudience_ChangeStatus(audienceId, 0);
-        }
+            break;
+        case 11:
+            value = *(f32*)(stage + 0x200);
+            if (value <= *(f32*)(audience + 0x4C)) {
+                *(f32*)(audience + 0xB8) = value;
+                *(f32*)(audience + 0x4C) = value;
+                *(f32*)(audience + 0x7C) = float_0_804244e8;
+                *(s32*)(audience + 4) = 99;
+                *(s32*)(audience + 8) = 10;
+                target = BattleAudienceGetPtr(*(s32*)(audience + 0x12C));
+                memcpy(target, audience, 0x134);
+                BattleAudience_Delete(audienceId);
+            }
+            break;
+        case 99:
+            (*(s32*)(audience + 8))--;
+            if (*(s32*)(audience + 8) < 1) BattleAudience_ChangeStatus(audienceId, 0);
+            break;
     }
 }
 

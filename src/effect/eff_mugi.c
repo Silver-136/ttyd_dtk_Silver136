@@ -22,6 +22,14 @@ void* effMugiKemuriEntry(f64 x, f64 y, f64 z, f64 angle) {
     s32 i;
     f32 curAngle;
     f32 rad;
+    f32 spread;
+    f32 zero;
+    f32 scale;
+    f32 rise;
+    f32 accel;
+    f32 velocity;
+    f32 tau;
+    f32 degrees;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_MugiKemuri_802f3b10;
@@ -31,30 +39,38 @@ void* effMugiKemuriEntry(f64 x, f64 y, f64 z, f64 angle) {
     memset(work, 0, 500);
     *(void**)((s32)entry + 0x10) = effMugiKemuriMain;
     *(u32*)((s32)entry + 0x0) |= 2;
+    spread = float_0p3_80422da0;
+    zero = float_0_80422d64;
+    scale = float_0p7_80422d84;
+    rise = float_1p75_80422da4;
+    accel = float_neg0p08_80422da8;
+    velocity = float_neg3p9_80422dac;
+    tau = float_6p2832_80422d98;
+    degrees = float_360_80422d9c;
 
     for (i = 0; i < 5; i++, work = (void*)((s32)work + 100)) {
         *(s32*)((s32)work + 0x0) = 1;
-        *(f32*)((s32)work + 0x30) = float_0p3_80422da0;
-        *(f32*)((s32)work + 0x34) = float_0_80422d64;
-        *(f32*)((s32)work + 0x38) = float_0_80422d64;
-        *(f32*)((s32)work + 0x8) = (f32)x;
-        *(f32*)((s32)work + 0xC) = (f32)y;
-        *(f32*)((s32)work + 0x10) = (f32)z;
-        *(f32*)((s32)work + 0x20) = float_0p7_80422d84;
-        *(f32*)((s32)work + 0x24) = float_0p7_80422d84;
-        *(f32*)((s32)work + 0x28) = float_0p7_80422d84;
+        *(f32*)((s32)work + 0x30) = spread;
+        *(f32*)((s32)work + 0x34) = zero;
+        *(f32*)((s32)work + 0x38) = zero;
+        *(f32*)((s32)work + 0x8) = x;
+        *(f32*)((s32)work + 0xC) = y;
+        *(f32*)((s32)work + 0x10) = z;
+        *(f32*)((s32)work + 0x20) = scale;
+        *(f32*)((s32)work + 0x24) = scale;
+        *(f32*)((s32)work + 0x28) = scale;
         *(s32*)((s32)work + 0x58) = 0xFF;
         *(s32*)((s32)work + 0x54) = 0x3C;
-        *(f32*)((s32)work + 0x14) = float_0_80422d64;
-        curAngle = (f32)(angle + (f64)(i * 72));
+        *(f32*)((s32)work + 0x14) = zero;
+        curAngle = angle + (f64)(i * 72);
         *(f32*)((s32)work + 0x18) = curAngle;
-        *(f32*)((s32)work + 0x1C) = float_0_80422d64;
-        *(f32*)((s32)work + 0x3C) = float_1p75_80422da4;
-        *(f32*)((s32)work + 0x40) = float_neg0p08_80422da8;
-        *(f32*)((s32)work + 0x44) = float_0_80422d64;
-        *(f32*)((s32)work + 0x48) = float_0_80422d64;
-        *(f32*)((s32)work + 0x2C) = float_neg3p9_80422dac;
-        rad = (float_6p2832_80422d98 * reviseAngle(curAngle)) / float_360_80422d9c;
+        *(f32*)((s32)work + 0x1C) = zero;
+        *(f32*)((s32)work + 0x3C) = rise;
+        *(f32*)((s32)work + 0x40) = accel;
+        *(f32*)((s32)work + 0x44) = zero;
+        *(f32*)((s32)work + 0x48) = zero;
+        *(f32*)((s32)work + 0x2C) = velocity;
+        rad = (tau * reviseAngle(curAngle)) / degrees;
         *(f32*)((s32)work + 0x4C) = (f32)sin(rad);
         *(f32*)((s32)work + 0x50) = (f32)cos(rad);
         *(s32*)((s32)work + 0x60) = -1;
@@ -86,9 +102,16 @@ void* effMugiKemuri2Entry(f64 x, f64 y, f64 z, f64 angle, f64 dir, s32 arg5) {
     void* entry;
     void* work;
     s32 i;
-    s32 r;
-    s32 baseAngle;
     f32 rad;
+    f32 zero;
+    f32 scale;
+    f32 one;
+    f32 speed;
+    f32 half;
+    f32 accel;
+    f32 jerk;
+    f32 tau;
+    f32 degrees;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_MugiKemuri2_802f3af8;
@@ -98,38 +121,40 @@ void* effMugiKemuri2Entry(f64 x, f64 y, f64 z, f64 angle, f64 dir, s32 arg5) {
     memset(work, 0, 500);
     *(void**)((s32)entry + 0x10) = effMugiKemuri2Main;
     *(u32*)((s32)entry + 0x0) |= 2;
+    zero = float_0_80422d64;
+    scale = float_0p7_80422d84;
+    one = float_1_80422d7c;
+    speed = float_5p4_80422d88;
+    half = float_0p5_80422d8c;
+    accel = float_neg0p07_80422d90;
+    jerk = float_0p003_80422d94;
+    tau = float_6p2832_80422d98;
+    degrees = float_360_80422d9c;
 
     for (i = 0; i < 5; i++, work = (void*)((s32)work + 100)) {
         *(s32*)((s32)work + 0x0) = 1;
         *(s32*)((s32)work + 0x4) = arg5;
-        *(f32*)((s32)work + 0x38) = float_0_80422d64;
-        *(f32*)((s32)work + 0x8) = (f32)x;
-        *(f32*)((s32)work + 0xC) = (f32)y;
-        *(f32*)((s32)work + 0x10) = (f32)z;
-        *(f32*)((s32)work + 0x20) = float_0p7_80422d84;
-        *(f32*)((s32)work + 0x24) = float_0p7_80422d84;
-        *(f32*)((s32)work + 0x28) = float_0p7_80422d84;
+        *(f32*)((s32)work + 0x38) = zero;
+        *(f32*)((s32)work + 0x8) = x;
+        *(f32*)((s32)work + 0xC) = y;
+        *(f32*)((s32)work + 0x10) = z;
+        *(f32*)((s32)work + 0x20) = scale;
+        *(f32*)((s32)work + 0x24) = scale;
+        *(f32*)((s32)work + 0x28) = scale;
         *(s32*)((s32)work + 0x58) = 0xFF;
-        *(f32*)((s32)work + 0x34) = float_1_80422d7c;
-        *(f32*)((s32)work + 0x30) = float_5p4_80422d88;
-        if (dir == (f64)float_0_80422d64) {
-            *(f32*)((s32)work + 0x2C) = 10.0f;
-            baseAngle = 90;
-        } else {
-            *(f32*)((s32)work + 0x2C) = -10.0f;
-            baseAngle = -90;
-        }
-        *(f32*)((s32)work + 0x3C) = float_0p5_80422d8c;
-        *(f32*)((s32)work + 0x40) = float_neg0p07_80422d90;
-        *(f32*)((s32)work + 0x44) = float_0p003_80422d94;
-        *(f32*)((s32)work + 0x48) = float_0_80422d64;
+        *(f32*)((s32)work + 0x34) = one;
+        *(f32*)((s32)work + 0x30) = speed;
+        *(f32*)((s32)work + 0x2C) = (dir == (f64)zero) ? 10 : -10;
+        *(f32*)((s32)work + 0x3C) = half;
+        *(f32*)((s32)work + 0x40) = accel;
+        *(f32*)((s32)work + 0x44) = jerk;
+        *(f32*)((s32)work + 0x48) = zero;
         *(s32*)((s32)work + 0x54) = 0xF;
-        *(f32*)((s32)work + 0x18) = (f32)angle;
-        *(f32*)((s32)work + 0x14) = float_0_80422d64;
-        *(f32*)((s32)work + 0x1C) = float_0_80422d64;
-        r = rand();
-        *(f32*)((s32)work + 0x5C) = (f32)(((r % 100) >> 4) & 1);
-        rad = (float_6p2832_80422d98 * reviseAngle((f32)(angle + (f64)baseAngle))) / float_360_80422d9c;
+        *(f32*)((s32)work + 0x18) = angle;
+        *(f32*)((s32)work + 0x14) = zero;
+        *(f32*)((s32)work + 0x1C) = zero;
+        *(f32*)((s32)work + 0x5C) = ((rand() % 100) >> 4) & 1;
+        rad = (tau * reviseAngle(angle + (dir == (f64)zero ? 90 : -90))) / degrees;
         *(f32*)((s32)work + 0x4C) = (f32)sin(rad);
         *(f32*)((s32)work + 0x50) = (f32)cos(rad);
         *(s32*)((s32)work + 0x60) = -1;
@@ -188,7 +213,7 @@ u8 effMugiKemuriMain(void* effEntry) {
             }
         }
         effDelete(effEntry);
-        return 0;
+        goto done;
     }
 
     cur = work;
@@ -199,7 +224,7 @@ u8 effMugiKemuriMain(void* effEntry) {
                 name = str_EFF_Hana_802f3ad4;
             }
             if (animGroupBaseAsync(name, battle, 0) == 0) {
-                return 0;
+                goto done;
             }
             *(s32*)((s32)cur + 0x60) = animPoseEntry(name, battle);
             animPoseSetAnim(*(s32*)((s32)cur + 0x60), str_Z_1_80422d70, 1);
@@ -210,8 +235,7 @@ u8 effMugiKemuriMain(void* effEntry) {
     cur = work;
     for (i = 0; i < *(s32*)((s32)effEntry + 0x8); i++, cur = (void*)((s32)cur + 100)) {
         if (*(s32*)((s32)cur + 0x0) != 0) {
-            *(s32*)((s32)cur + 0x54) -= 1;
-            if (*(s32*)((s32)cur + 0x54) < 1) {
+            if (--*(s32*)((s32)cur + 0x54) <= 0) {
                 *(s32*)((s32)cur + 0x0) = 0;
             } else {
                 alive = 1;
@@ -233,9 +257,7 @@ u8 effMugiKemuriMain(void* effEntry) {
         }
     }
 
-    if (alive != 0) {
-        dispEntry(4, 2, effMugiKemuriDisp, effEntry, dispCalcZ(&pos));
-    } else {
+    if (alive == 0) {
         cur = work;
         for (i = 0; i < *(s32*)((s32)effEntry + 0x8); i++, cur = (void*)((s32)cur + 100)) {
             if (*(s32*)((s32)cur + 0x60) != -1) {
@@ -243,8 +265,11 @@ u8 effMugiKemuriMain(void* effEntry) {
             }
         }
         effDelete(effEntry);
+    } else {
+        dispEntry(4, 2, effMugiKemuriDisp, effEntry, dispCalcZ(&pos));
     }
-    return 0;
+done:
+    ;
 }
 u8 effMugiKemuri2Main(void* effEntry) {
     typedef struct LocalVec3 {

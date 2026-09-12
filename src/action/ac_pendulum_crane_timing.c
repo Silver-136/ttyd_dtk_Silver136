@@ -14,116 +14,61 @@ extern f32 float_30_80426ee8;
 void actionCommandDisp(f32 x, f32 y);
 
 /* stub-fill: battleAcMain_PendulumCraneTiming | missing_definition | ghidra_signature */
-s32 battleAcMain_PendulumCraneTiming(s32 work)  {
-    extern void* BattleGetUnitPtr(void*,s32);
-    extern void* BtlUnit_GetPartsPtr(void*,s32);
-    extern void BtlUnit_SetRotateOffset(void*,f32,f32,f32);
-    extern void BtlUnit_GetPos(void*,f32*,f32*,f32*);
-    extern void BtlUnit_SetRotate(void*,f32,f32,f32);
-    extern f64 sinfd(f64);
-    extern f32 reviseAngle(f32);
-    extern s32 _get_angle_hp(s32);
-    extern s32 _get_angle_rate(f32);
-    extern s32 BattlePadCheckTrigger(s32);
-    extern void psndSFXOn(char*);
-    extern void psndSFXOff(s32);
-    extern char str_SFX_AC_GAUGE_MOVE1_802fe508[];
-    void* unit;
-    u32 state=*(u32*)(work+0x1C9C);
-    s32 total;
-    f32 angle;
-    f32 sign;
-    f32 input=0.0f;
-    s32 rate;
-    s32 zone;
-    s32 oldZone;
-    u8 autoBadge=*(u8*)(work+0x1D00);
-    unit=BattleGetUnitPtr((void*)work,*(s32*)(work+0x1CC8));
-    BtlUnit_GetPartsPtr(unit,*(s32*)(work+0x1CCC));
-    if(state==0) {
-        memset((void*)(work+0x1F20),0,0x2C);
-        *(f32*)(work+0x1F34)=-300.0f;
-        *(f32*)(work+0x1F38)=0.0f;
-        *(s32*)(work+0x1F40)=20;
-        *(s32*)(work+0x1F24)=0;
-        *(f32*)(work+0x1F4C)=0.0f;
-        *(s32*)(work+0x1F54)=*(s32*)(work+0x1CD4);
-        *(s32*)(work+0x1F58)=0;
-        *(f32*)(work+0x1F48)=3.0f;
-        *(s32*)(work+0x1F68)=-1;
-        *(s32*)(work+0x1F20)=0x100;
-        *(s32*)(work+0x1CB8)=1;
-        *(s32*)(work+0x1CE8)=0;
-        *(s32*)(work+0x1CEC)=_get_angle_hp(50);
-        *(s32*)(work+0x1CF0)=_get_angle_hp(0);
-        *(s32*)(work+0x1F60)=50;
-        *(s32*)(work+0x1F6C)=-1;
-        *(s32*)(work+0x1C9C)=99;
-        return 1;
-    }
-    if(state==100) {
-        BtlUnit_SetRotateOffset(unit,0.0f,(f32)*(s32*)(work+0x1CCC),0.0f);
-        BtlUnit_GetPos(unit,(f32*)(work+0x1F34),(f32*)(work+0x1F38),(f32*)(work+0x1F3C));
-        *(f32*)(work+0x1F28)=*(f32*)(work+0x1F34);
-        *(f32*)(work+0x1F2C)=*(f32*)(work+0x1F38);
-        *(f32*)(work+0x1F30)=*(f32*)(work+0x1F3C);
-        *(s32*)(work+0x1F24)=0;
-        *(f32*)(work+0x1F40)=0.5f;
-        *(s32*)(work+0x1F5C)=1;
-        *(s32*)(work+0x1C9C)=1000;
-        state=1000;
-    }
-    if(state==1000) {
-        (*(s32*)(work+0x1F24))++;
-        total=*(s32*)(work+0x1CD4)*2;
-        *(f32*)(work+0x1F50)=(f32)((((*(s32*)(work+0x1F54)+*(s32*)(work+0x1F58))%total)*360)/total);
-        angle=reviseAngle(45.0f*(f32)sinfd(*(f32*)(work+0x1F50)));
-        *(f32*)(work+0x1F4C)=angle;
-        sign=(*(f32*)(work+0x1F50)>=90.0f&&*(f32*)(work+0x1F50)<270.0f)?-1.0f:1.0f;
-        *(s32*)(work+0x1F58)=(s32)((f32)*(s32*)(work+0x1F58)+input);
-        *(s32*)(work+0x1F54)=(s32)((f32)*(s32*)(work+0x1F54)+*(f32*)(work+0x1F48));
-        *(f32*)(work+0x1F50)=(f32)((((*(s32*)(work+0x1F54)+*(s32*)(work+0x1F58))%total)*360)/total);
-        angle=reviseAngle(45.0f*(f32)sinfd(*(f32*)(work+0x1F50)));
-        *(f32*)(work+0x1F4C)=angle;
-        BtlUnit_SetRotate(unit,0.0f,0.0f,angle);
-        if(sign!=((*(f32*)(work+0x1F50)>=90.0f&&*(f32*)(work+0x1F50)<270.0f)?-1.0f:1.0f))*(s32*)(work+0x1F5C)=0;
-        rate=_get_angle_rate(angle);
-        *(s32*)(work+0x1CEC)=_get_angle_hp(rate);
-        *(s32*)(work+0x1F60)=rate;
-        zone=rate<6?0:(rate>94?1:-1);
-        oldZone=*(s32*)(work+0x1F68);
-        if(zone!=-1&&zone!=oldZone) {
-            psndSFXOn(str_SFX_AC_GAUGE_MOVE1_802fe508);
-            *(s32*)(work+0x1F68)=zone;
+s32 battleAcMain_PendulumCraneTiming(s32 work) {
+    extern void* memset(void*, s32, s32); extern void* BattleGetUnitPtr(void*, s32); extern void* BtlUnit_GetPartsPtr(void*, s32); extern void BtlUnit_SetRotateOffset(void*, f32, f32, f32); extern void BtlUnit_GetPos(void*, f32*, f32*, f32*); extern void BtlUnit_SetRotate(void*, f32, f32, f32); extern f64 sinfd(f64); extern f32 reviseAngle(f32); extern s32 _get_angle_hp(s32); extern s32 _get_angle_rate(f32); extern s32 BattlePadCheckTrigger(s32); extern void psndSFXOn(char*); extern void psndSFXOff(s32); extern char str_SFX_AC_GAUGE_MOVE1_802fe508[]; extern void* _battleWorkPointer; extern f64 double_to_int_802fe500; extern f64 double_to_int_mask_802fe520; extern f32 float_0p0078125_80426efc; extern f32 float_0p95_80426f00;
+    union I2D { f64 d; struct { u32 hi, lo; } w; } cvt, cvt2;
+    void* unit; u32 state; s32 total, accum, rate, zone, autoBadge; f32 angle, oldSign, newSign, input, magnitude; u32 trigger;
+    autoBadge = *(u8*)(*(u32*)(work + 0x1C90) + 0x307) != 0;
+    unit = BattleGetUnitPtr((void*)work, *(s32*)(work + 0x1CCC));
+    BtlUnit_GetPartsPtr(unit, *(s32*)(work + 0x1CD0));
+    state = *(u32*)(work + 0x1C9C);
+    switch (state) {
+    case 0:
+        memset((void*)(work + 0x1F20), 0, 0x2C);
+        *(f32*)(work + 0x1F34) = -300.0f; *(f32*)(work + 0x1F38) = 0.0f; *(s32*)(work + 0x1F40) = 20;
+        *(s32*)(work + 0x1F50) = 0; *(f32*)(work + 0x1F78) = 0.0f; *(s32*)(work + 0x1F80) = *(s32*)(work + 0x1CD8); *(s32*)(work + 0x1F84) = 0;
+        *(f32*)(work + 0x1F74) = 3.0f; *(s32*)(work + 0x1F94) = -1; *(s32*)(work + 0x1F4C) = 0x100; *(s32*)(work + 0x1CE8) = 0;
+        *(s32*)(work + 0x1CEC) = _get_angle_hp(50); *(s32*)(work + 0x1CF0) = _get_angle_hp(0); *(s32*)(work + 0x1F8C) = 50;
+        *(s32*)(work + 0x1C9C) = 99; *(s32*)(work + 0x1CB8) = 1; *(s32*)(work + 0x1F90) = -1; break;
+    case 100:
+        cvt.w.hi = 0x43300000; cvt.w.lo = *(u32*)(work + 0x1CD4) ^ 0x80000000;
+        BtlUnit_SetRotateOffset(unit, 0.0f, (f32)(cvt.d - double_to_int_802fe500), 0.0f);
+        unit = BattleGetUnitPtr((void*)work, *(s32*)(work + 0x1CCC)); BtlUnit_GetPartsPtr(unit, *(s32*)(work + 0x1CD0));
+        BtlUnit_GetPos(unit, (f32*)(work + 0x1F60), (f32*)(work + 0x1F64), (f32*)(work + 0x1F68));
+        *(s32*)(work + 0x1F54) = *(s32*)(work + 0x1F60); *(s32*)(work + 0x1F58) = *(s32*)(work + 0x1F64); *(s32*)(work + 0x1F5C) = *(s32*)(work + 0x1F68);
+        *(s32*)(work + 0x1F50) = 0; *(f32*)(work + 0x1F6C) = 0.5f; *(s32*)(work + 0x1F88) = 1; *(s32*)(work + 0x1C9C) = 1000;
+    case 1000:
+        (*(s32*)(work + 0x1F50))++; total = *(s32*)(work + 0x1CD8) * 2; accum = *(s32*)(work + 0x1F80) + *(s32*)(work + 0x1F84);
+        cvt.w.hi = 0x43300000; cvt.w.lo = (((accum % total) * 360) / total) ^ 0x80000000; *(f32*)(work + 0x1F7C) = (f32)(cvt.d - double_to_int_802fe500);
+        angle = reviseAngle(45.0f * (f32)sinfd(*(f32*)(work + 0x1F7C))); *(f32*)(work + 0x1F78) = angle;
+        oldSign = (*(f32*)(work + 0x1F7C) >= 90.0f && *(f32*)(work + 0x1F7C) < 270.0f) ? -1.0f : 1.0f;
+        input = 0.0f;
+        if ((*(u32*)(work + 0x1CC4) & 1) != 0) {
+            trigger = *(u8*)((u8*)_battleWorkPointer + 0xF33);
+            if (trigger > 10 && *(u8*)((u8*)_battleWorkPointer + 0xF32) < 10) {
+                if (oldSign < 0.0f) { cvt.w.hi = 0x43300000; cvt.w.lo = trigger; magnitude = (f32)(cvt.d - double_to_int_mask_802fe520) * float_0p0078125_80426efc; if (magnitude > 1.0f) magnitude = 1.0f; input = float_0p95_80426f00 * -*(f32*)(work + 0x1F74) * magnitude; }
+            } else if (trigger < 10) {
+                trigger = *(u8*)((u8*)_battleWorkPointer + 0xF32);
+                if (trigger > 10 && oldSign > 0.0f) { cvt.w.hi = 0x43300000; cvt.w.lo = trigger; magnitude = (f32)(cvt.d - double_to_int_mask_802fe520) * float_0p0078125_80426efc; if (magnitude > 1.0f) magnitude = 1.0f; input = float_0p95_80426f00 * -*(f32*)(work + 0x1F74) * magnitude; }
+            }
         }
-        if((autoBadge&&*(s32*)(work+0x1CEC)>=_get_angle_hp(50))||BattlePadCheckTrigger(*(s32*)(work+0x1F20))) {
-            *(s32*)(work+0x1CE8)=1;
-            *(s32*)(work+0x1CB8)=2;
-            (*(s32*)(work+0x1CB4))++;
-            *(s32*)(work+0x1C9C)=1002;
-        } else if(*(s32*)(work+0x1CD8)<*(s32*)(work+0x1F24)) {
-            *(s32*)(work+0x1CB8)=0;
-            *(s32*)(work+0x1C9C)=1002;
-        }
-        return 1;
-    }
-    if(state==1002) {
-        *(u32*)(work+0x1CB0)|=1;
-        *(s32*)(work+0x1F6C)=60;
-        if(*(s32*)(work+0x1F64)!=-1)psndSFXOff(*(s32*)(work+0x1F64));
-        *(s32*)(work+0x1C9C)=1003;
-        return 1;
-    }
-    if(state==1003) {
-        if(--*(s32*)(work+0x1F6C)<=0)*(s32*)(work+0x1C9C)=1004;
-        return 1;
-    }
-    if(state==1004) {
-        *(s32*)(work+0x1CA0)=0;
-        *(s32*)(work+0x1CA4)=0;
-        *(s32*)(work+0x1CA8)=0;
-        *(s32*)(work+0x1CAC)=0;
-        return 0;
+        cvt.w.hi = 0x43300000; cvt.w.lo = *(u32*)(work + 0x1F84) ^ 0x80000000; *(s32*)(work + 0x1F84) = (s32)((f32)(cvt.d - double_to_int_802fe500) + input);
+        newSign = (*(f32*)(work + 0x1F7C) >= 90.0f && *(f32*)(work + 0x1F7C) < 270.0f) ? -1.0f : 1.0f;
+        cvt2.w.hi = 0x43300000; cvt2.w.lo = *(u32*)(work + 0x1F80) ^ 0x80000000; *(s32*)(work + 0x1F80) = (s32)((f32)(cvt2.d - double_to_int_802fe500) + *(f32*)(work + 0x1F74));
+        accum = *(s32*)(work + 0x1F80) + *(s32*)(work + 0x1F84); cvt.w.hi = 0x43300000; cvt.w.lo = (((accum % total) * 360) / total) ^ 0x80000000; *(f32*)(work + 0x1F7C) = (f32)(cvt.d - double_to_int_802fe500);
+        angle = reviseAngle(45.0f * (f32)sinfd(*(f32*)(work + 0x1F7C))); *(f32*)(work + 0x1F78) = angle; BtlUnit_SetRotate(unit, 0.0f, 0.0f, angle);
+        if (oldSign != newSign) *(s32*)(work + 0x1F88) = 0;
+        rate = _get_angle_rate(angle); *(s32*)(work + 0x1CEC) = _get_angle_hp(rate); *(s32*)(work + 0x1F8C) = rate; rate = _get_angle_rate(angle);
+        zone = -1; if (rate < 6) zone = 0; else if (rate > 94) zone = 1;
+        if (zone != -1 && zone != *(s32*)(work + 0x1F94)) { psndSFXOn(str_SFX_AC_GAUGE_MOVE1_802fe508); *(s32*)(work + 0x1F94) = zone; }
+        if ((autoBadge && *(s32*)(work + 0x1CEC) >= _get_angle_hp(50)) || BattlePadCheckTrigger(*(s32*)(work + 0x1F4C))) { *(s32*)(work + 0x1CE8) = 1; *(s32*)(work + 0x1CB8) = 2; (*(s32*)(work + 0x1CB4))++; *(s32*)(work + 0x1C9C) = 1002; }
+        else if (*(s32*)(work + 0x1CDC) < *(s32*)(work + 0x1F50)) { *(s32*)(work + 0x1CB8) = 0; *(s32*)(work + 0x1C9C) = 1002; } break;
+    case 1002:
+        *(u32*)(work + 0x1CC0) |= 1; *(s32*)(work + 0x1F98) = 60; if (*(s32*)(work + 0x1F90) != -1) psndSFXOff(*(s32*)(work + 0x1F90)); *(s32*)(work + 0x1C9C) = 1003; break;
+    case 1003:
+        if (--*(s32*)(work + 0x1F98) <= 0) *(s32*)(work + 0x1C9C) = 1004; break;
+    case 1004:
+        *(s32*)(work + 0x1CA0) = 0; *(s32*)(work + 0x1CA8) = 0; *(s32*)(work + 0x1CA4) = 0; *(s32*)(work + 0x1CAC) = 0; return 0;
     }
     return 1;
 }
@@ -201,13 +146,16 @@ void actionCommandDisp(f32 x, f32 y) {
         f32 y;
         f32 z;
     } Vec;
+    extern void* _battleWorkPointer;
     extern u32 vec3_802fe4e8[];
     extern f32 float_neg200_80426ec8;
     extern f32 float_25_80426ecc;
     extern f32 float_1_80426ed0;
     extern f32 float_88_80426ed4;
     extern f32 float_50_80426ed8;
+    extern f32 float_100_80426ec0;
     extern f32 float_neg288_80426ee0;
+    extern f32 float_45_80426ebc;
     extern void* camGetPtr(s32 cameraId);
     extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
     extern void btlDispGXInit2DRasta(void);
@@ -222,6 +170,7 @@ void actionCommandDisp(f32 x, f32 y) {
     f32 x2;
     s32 i;
     s32 intensity;
+    void* battleWork = _battleWorkPointer;
 
     camGetPtr(8);
     iconPos = *(Vec*)vec3_802fe4e8;
@@ -246,7 +195,7 @@ void actionCommandDisp(f32 x, f32 y) {
     }
 
     markerPos = *(Vec*)(vec3_802fe4e8 + 3);
-    markerPos.x = float_neg288_80426ee0 + x + (f32)(*(s32*)((s32)_battleWorkPointer + 0x1CD0) * 0xB0) / float_100_80426ec0;
+    markerPos.x = float_neg288_80426ee0 + x + (f32)(*(s32*)((s32)battleWork + 0x1F8C) * 0xB0) / float_100_80426ec0;
     markerPos.y = float_45_80426ebc + y;
     iconDispGx(float_1_80426ed0, &markerPos, 0x10, 0x9E);
 }

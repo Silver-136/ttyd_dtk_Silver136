@@ -6,6 +6,8 @@ typedef struct EffTreasureMapVec {
     f32 z;
 } EffTreasureMapVec;
 
+__declspec(section ".sdata2") char str_Z_1_8042793c[] = "Z_1";
+
 extern f32 float_0_80427934;
 
 #pragma no_register_save_helpers on
@@ -41,6 +43,8 @@ void* effTreasureMapEntry(s32 kind, f32 x, f32 y, f32 z) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 /* stub-fill: effTreasureMapMain | prototype_only | source_prototype */
 void effTreasureMapMain(void* effect) {
@@ -55,7 +59,6 @@ void effTreasureMapMain(void* effect) {
     extern void effTreasureMapDisp(s32 cameraId, void* effect);
     extern const EffTreasureMapVec vec3_802ff058;
     extern const char str_EFF_treasure_map_802ff064[];
-    extern char str_Z_1_8042793c[];
 
     void* work = *(void**)((s32)effect + 0xC);
     EffTreasureMapVec pos = vec3_802ff058;
@@ -124,6 +127,7 @@ void effTreasureMapDisp(s32 cameraId, void* effect) {
     extern f32 float_1p1_80427928;
     extern f32 float_1p06_8042792c;
     extern f32 float_deg2rad_80427930;
+    extern f32 float_0_80427934;
     extern f32 float_10_80427938;
 
     void* work = *(void**)((s32)effect + 0xC);
@@ -137,23 +141,32 @@ void effTreasureMapDisp(s32 cameraId, void* effect) {
     if (*(s32*)((s32)work + 0x24) != -1) {
         for (i = 0; i < 2; i++) {
             f32 s = float_1p1_80427928 * *(f32*)((s32)work + 0x10);
-            u32 color;
-            u32 colorCopy;
             if (i == 0) {
+                u32 color = dat_80427920;
+                u32 colorCopy;
+                PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
                 s *= float_1p06_8042792c;
-                color = dat_80427920;
+                PSMTXScale(scale, s, s, s);
+                PSMTXRotRad(rot, 0x79, float_deg2rad_80427930 * *(f32*)((s32)work + 0x20));
+                PSMTXConcat(trans, scale, mtx);
+                PSMTXConcat(mtx, rot, mtx);
+                animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0x24), 0x40);
+                ((u8*)&color)[3] = *(u8*)((s32)work + 0x14);
+                colorCopy = color;
+                animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0x24), &colorCopy);
             } else {
-                color = dat_80427924;
+                u32 color = dat_80427924;
+                u32 colorCopy;
+                PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
+                PSMTXScale(scale, s, s, s);
+                PSMTXRotRad(rot, 0x79, float_deg2rad_80427930 * *(f32*)((s32)work + 0x20));
+                PSMTXConcat(trans, scale, mtx);
+                PSMTXConcat(mtx, rot, mtx);
+                animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0x24), 0x40);
+                ((u8*)&color)[3] = *(u8*)((s32)work + 0x14);
+                colorCopy = color;
+                animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0x24), &colorCopy);
             }
-            PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
-            PSMTXScale(scale, s, s, s);
-            PSMTXRotRad(rot, 0x79, float_deg2rad_80427930 * *(f32*)((s32)work + 0x20));
-            PSMTXConcat(trans, scale, mtx);
-            PSMTXConcat(mtx, rot, mtx);
-            animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0x24), 0x40);
-            ((u8*)&color)[3] = *(u8*)((s32)work + 0x14);
-            colorCopy = color;
-            animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0x24), &colorCopy);
             animPoseMain(*(s32*)((s32)work + 0x24));
             animPoseDrawMtx(*(s32*)((s32)work + 0x24), mtx, 1, float_0_80427934, float_10_80427938);
             animPoseDrawMtx(*(s32*)((s32)work + 0x24), mtx, 2, float_0_80427934, float_10_80427938);

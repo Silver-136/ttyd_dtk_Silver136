@@ -79,6 +79,8 @@ s32 battleAcMain_SignalTiming(int work) {
     extern const char str_SFX_AC_PONE1_802ff78c[];
     u8* wp = (u8*)work;
     s32* extra = (s32*)(wp + 0x1F4C);
+    u8* disp = wp + 0x1F20;
+    char* sfxNg = (char*)str_SFX_AC_COMMAND_NG1_802ff7b0;
     s32 state;
     s32 i;
     s32 j;
@@ -91,7 +93,7 @@ s32 battleAcMain_SignalTiming(int work) {
     s32 unique;
     s32 valid;
     s32 pressed;
-    u8 demo = *(u8*)(*(s32*)(wp + 0x1C90) + 0x307);
+    s32 demo = *(u8*)(*(s32*)(wp + 0x1C90) + 0x307) != 0;
 
     do {
         state = *(s32*)(wp + 0x1C9C);
@@ -99,17 +101,17 @@ s32 battleAcMain_SignalTiming(int work) {
         switch (state) {
             case 0:
                 *(s32*)(wp + 0x1CB8) = 1;
-                memset(wp + 0x1F20, 0, 0x2C);
-                *(f32*)(wp + 0x1F34) = float_neg300_80427c70;
-                *(f32*)(wp + 0x1F38) = float_0_80427c54;
-                *(s32*)(wp + 0x1F40) = 20;
+                memset(disp, 0, 0x2C);
+                *(f32*)(disp + 0x14) = float_neg300_80427c70;
+                *(f32*)(disp + 0x18) = float_0_80427c54;
+                *(s32*)(disp + 0x20) = 20;
                 extra[0] = 0;
-                *(s32*)(wp + 0x1F50) = 0;
-                *(s32*)(wp + 0x1F5C) = 0;
-                *(s32*)(wp + 0x1F54) = 0;
-                *(s32*)(wp + 0x1F58) = 0;
-                *(s32*)(wp + 0x1F78) = BattleActionCommandGetDifficulty(wp);
-                *(s32*)(wp + 0x1F7C) = 0;
+                extra[1] = 0;
+                extra[4] = 0;
+                extra[2] = 0;
+                extra[3] = 0;
+                extra[11] = BattleActionCommandGetDifficulty(wp);
+                extra[12] = 0;
                 *(s32*)(wp + 0x1CEC) = 0;
                 for (i = 0; i < 5; i++) {
                     ((u8*)extra)[0x4C + i] = 0;
@@ -211,7 +213,7 @@ s32 battleAcMain_SignalTiming(int work) {
                                 ((u8*)extra)[0x4C + index - first] = 0xFF;
                                 if ((*(u32*)(wp + 0x1C94) & 1) == 0 ||
                                     (*(u32*)(*(s32*)(wp + 0x1C90) + 0x27C) & 0x10) == 0) {
-                                    psndSFXOn((char*)str_SFX_AC_COMMAND_NG1_802ff7b0);
+                                    psndSFXOn(sfxNg);
                                 }
                                 *(s32*)(wp + 0x1CEC) = -1;
                             }
@@ -246,7 +248,7 @@ s32 battleAcMain_SignalTiming(int work) {
                         ((u8*)extra)[0x4C + index - first] = 0xFF;
                         if ((*(u32*)(wp + 0x1C94) & 1) == 0 ||
                             (*(u32*)(*(s32*)(wp + 0x1C90) + 0x27C) & 0x10) == 0) {
-                            psndSFXOn((char*)str_SFX_AC_COMMAND_NG1_802ff7b0);
+                            psndSFXOn(sfxNg);
                         }
                     }
                 }
@@ -427,32 +429,34 @@ static void actionCommandDisp(f32 x, f32 y) {
     filled = *(s32*)(battle + 0x1F58);
     if ((*(u32*)(battle + 0x1CC4) & 1) == 0) {
         if (*(s32*)(extra + 0x30) != 0) {
-            prompt1 = templates[0];
-            prompt1.x = x + float_neg200_80427c40;
-            prompt1.y = y + float_70_80427c44;
-            iconDispGx(float_1_80427c48, &prompt1, 0x10, 0x6D);
-        } else {
-            prompt0 = templates[1];
+            prompt0 = templates[0];
             prompt0.x = x + float_neg200_80427c40;
             prompt0.y = y + float_70_80427c44;
-            iconDispGx(float_1_80427c48, &prompt0, 0x10, 0x6C);
+            iconDispGx(float_1_80427c48, &prompt0, 0x10, 0x6D);
+        } else {
+            prompt1 = templates[1];
+            prompt1.x = x + float_neg200_80427c40;
+            prompt1.y = y + float_70_80427c44;
+            iconDispGx(float_1_80427c48, &prompt1, 0x10, 0x6C);
         }
     }
 
-    if (kind == 3) {
-        span = *(s32*)(battle + 0x1CE0) * 2 + 0xB;
-    } else if (kind < 3) {
-        if (kind == 1) {
+    switch (kind) {
+        case 1:
             span = *(s32*)(battle + 0x1CE0) * 2 + 5;
-        } else {
+            break;
+        case 3:
             span = *(s32*)(battle + 0x1CE0) * 2 + 0xB;
-        }
-    } else if (kind == 5) {
-        span = *(s32*)(battle + 0x1CE0) * 2 + 0xF;
-    } else if (kind < 5) {
-        span = *(s32*)(battle + 0x1CE0) * 2 + 0xD;
-    } else {
-        span = *(s32*)(battle + 0x1CE0) * 2 + 0xB;
+            break;
+        case 4:
+            span = *(s32*)(battle + 0x1CE0) * 2 + 0xD;
+            break;
+        case 5:
+            span = *(s32*)(battle + 0x1CE0) * 2 + 0xF;
+            break;
+        default:
+            span = *(s32*)(battle + 0x1CE0) * 2 + 0xB;
+            break;
     }
     baseY = y + float_25_80427c50;
     barStart = templates[2];
@@ -568,40 +572,47 @@ static void actionCommandDisp(f32 x, f32 y) {
                 iconDispGx(float_1_80427c48, &passiveMiss, 0x10, 0x99);
             }
         }
+    } else if ((*(u32*)(battle + 0x1CC4) & 2) == 0) {
+        s32* buttons = (s32*)(extra + 0x38);
+        s32 tick = *(s32*)(extra + 0x10);
+        f32 timingY = y + float_15_80427c60;
+        for (i = 0; i < kind; i++) {
+            s32 index = i + *(s32*)(battle + 0x1CE0);
+            s32 target = *(s32*)(battle + 0x1CD0) * index;
+            s32 pressed;
+            f32 iconScale;
+            if (filled == index && tick >= target - 5 && tick < target) {
+                pressed = 0;
+                iconScale = float_0p8_80427c64;
+                timedHit = templates[10];
+                timedHit.x = x + (f32)(*(s32*)(battle + 0x1CE0) * 0x21 + i * 0x30 - 0xFA);
+                timedHit.y = timingY;
+                iconDispGx(iconScale, &timedHit, 0x10,
+                           BattleACGetButtonIcon(buttons[i], pressed));
+            } else {
+                pressed = 1;
+                timedMiss = templates[11];
+                if (index < filled) {
+                    yOffset = -10;
+                    iconScale = float_0p8_80427c64;
+                } else {
+                    yOffset = -2;
+                    iconScale = float_0p6_80427c68;
+                }
+                timedMiss.y = y + (f32)(yOffset + 25);
+                timedMiss.x =
+                    x + (f32)(*(s32*)(battle + 0x1CE0) * 0x21 + i * 0x30 - 0xFA);
+                iconDispGx(iconScale, &timedMiss, 0x10,
+                           BattleACGetButtonIcon(buttons[i], pressed));
+            }
+        }
     } else {
         s32* buttons = (s32*)(extra + 0x38);
         s32 tick = *(s32*)(extra + 0x10);
         for (i = 0; i < kind; i++) {
             s32 index = i + *(s32*)(battle + 0x1CE0);
             s32 target = *(s32*)(battle + 0x1CD0) * index;
-            s32 pressed;
-            f32 iconScale;
-            if ((*(u32*)(battle + 0x1CC4) & 2) == 0) {
-                if (filled == index && tick >= target - 5 && tick < target) {
-                    pressed = 0;
-                    iconScale = float_0p8_80427c64;
-                    timedHit = templates[10];
-                    timedHit.x = x + (f32)(*(s32*)(battle + 0x1CE0) * 0x21 + i * 0x30 - 0xFA);
-                    timedHit.y = y + float_15_80427c60;
-                    iconDispGx(iconScale, &timedHit, 0x10,
-                               BattleACGetButtonIcon(buttons[i], pressed));
-                } else {
-                    pressed = 1;
-                    timedMiss = templates[11];
-                    if (index < filled) {
-                        yOffset = -10;
-                        iconScale = float_0p8_80427c64;
-                    } else {
-                        yOffset = -2;
-                        iconScale = float_0p6_80427c68;
-                    }
-                    timedMiss.y = y + (f32)(yOffset + 25);
-                    timedMiss.x =
-                        x + (f32)(*(s32*)(battle + 0x1CE0) * 0x21 + i * 0x30 - 0xFA);
-                    iconDispGx(iconScale, &timedMiss, 0x10,
-                               BattleACGetButtonIcon(buttons[i], pressed));
-                }
-            } else if (filled == index && tick >= target - 20 && tick <= target) {
+            if (filled == index && tick >= target - 20 && tick <= target) {
                 holdHit = templates[12];
                 holdHit.x = x + (f32)(*(s32*)(battle + 0x1CE0) * 0x21 + i * 0x30 - 0xFA);
                 holdHit.y = baseY;

@@ -12,9 +12,10 @@ void* effAkariChargeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale
     void* entry;
     void* work;
     s32 i;
-    s32 j;
     s32 seq;
     u8* particle;
+    f32 zero;
+    f32 one;
 
     entry = effEntry();
     *(const char**)((s32)entry + 0x14) = str_AkariChargeN64_802faad0;
@@ -43,18 +44,51 @@ void* effAkariChargeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale
     *(s32*)((s32)work + 0x2C) = 0xFF;
     *(s32*)((s32)work + 0x30) = 0xFF;
 
+    zero = float_0_80424c24;
+    one = float_1_80424c2c;
     particle = (u8*)work + 0x44;
-    seq = 0;
+    seq = 1;
     for (i = 0; i < 7; i++) {
-        for (j = 0; j < 3; j++, seq++, particle += 0x44) {
-            *(s32*)(particle + 0x10) = 0x14;
-            *(s32*)(particle + 0x14) = 0;
-            *(f32*)(particle + 4) = float_0_80424c24;
-            *(f32*)(particle + 8) = float_0_80424c24;
-            *(f32*)(particle + 0x34) = float_1_80424c2c;
-            *(s32*)(particle + 0x3C) = (seq * 360) / 21;
-            *(s32*)(particle + 0x40) = seq & 0xF;
-        }
+        s32 product;
+        s32 quotient;
+
+        *(s32*)(particle + 0x10) = 0x14;
+        *(s32*)(particle + 0x14) = 0;
+        *(f32*)(particle + 4) = zero;
+        *(f32*)(particle + 8) = zero;
+        *(f32*)(particle + 0x34) = one;
+        product = (seq - 1) * 360;
+        quotient = __mulhw(0x30C30C31, product) >> 2;
+        quotient += (u32)quotient >> 31;
+        *(f32*)(particle + 0x3C) = (f32)quotient;
+        *(s32*)(particle + 0x40) = seq & 0xF;
+
+        *(s32*)(particle + 0x54) = 0x14;
+        *(s32*)(particle + 0x58) = 0;
+        *(f32*)(particle + 0x48) = zero;
+        *(f32*)(particle + 0x4C) = zero;
+        *(f32*)(particle + 0x78) = one;
+        product = seq * 360;
+        quotient = __mulhw(0x30C30C31, product) >> 2;
+        quotient += (u32)quotient >> 31;
+        *(f32*)(particle + 0x80) = (f32)quotient;
+        seq++;
+        *(s32*)(particle + 0x84) = seq & 0xF;
+
+        *(s32*)(particle + 0x98) = 0x14;
+        *(s32*)(particle + 0x9C) = 0;
+        *(f32*)(particle + 0x8C) = zero;
+        *(f32*)(particle + 0x90) = zero;
+        *(f32*)(particle + 0xBC) = one;
+        product = seq * 360;
+        quotient = __mulhw(0x30C30C31, product) >> 2;
+        quotient += (u32)quotient >> 31;
+        *(f32*)(particle + 0xC4) = (f32)quotient;
+        seq++;
+        *(s32*)(particle + 0xC8) = seq & 0xF;
+
+        seq++;
+        particle += 0xCC;
     }
 
     return entry;
@@ -62,6 +96,18 @@ void* effAkariChargeN64Entry(s32 type, s32 timer, f32 x, f32 y, f32 z, f32 scale
 
 
 void effAkariChargeMain(void* entry) {
+    typedef struct Vec3Local {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3Local;
+    typedef union FloatBitsLocal {
+        f32 value;
+        u32 bits;
+    } FloatBitsLocal;
+    typedef struct HistoryLocal {
+        s32 word[17];
+    } HistoryLocal;
     extern void effDelete(void* entry);
     extern int rand(void);
     extern f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
@@ -72,15 +118,27 @@ void effAkariChargeMain(void* entry) {
     extern f32 float_6p2832_80424c38;
     extern f32 float_360_80424c3c;
     extern f32 float_1024_80424c40;
+    extern f64 __frsqrte(f64);
+    extern f32 __float_nan;
+    extern f64 double_0p5_802faab8;
+    extern f64 double_3_802faac0;
+    extern f64 double_0_802faac8;
+    extern Vec3Local vec3_802faaa0;
+    extern s32 __mulhw(s32, s32);
     s32* work = *(s32**)((s32)entry + 0xC);
-    f32 pos[3];
+    Vec3Local tempPos = vec3_802faaa0;
+    Vec3Local pos;
     s32 type;
     s32 i;
     u8* particle;
+    f32 twoPi;
+    f32 degrees;
+    f32 amplitude;
 
-    pos[0] = *(f32*)((s32)work + 4);
-    pos[1] = *(f32*)((s32)work + 8);
-    pos[2] = *(f32*)((s32)work + 0xC);
+    tempPos.x = *(f32*)((s32)work + 4);
+    tempPos.y = *(f32*)((s32)work + 8);
+    tempPos.z = *(f32*)((s32)work + 0xC);
+    pos = tempPos;
     type = work[0];
 
     if ((*(u32*)entry & 4) != 0) {
@@ -104,6 +162,9 @@ void effAkariChargeMain(void* entry) {
         work[9] = (work[5] << 4) + 0xF;
     }
 
+    twoPi = float_6p2832_80424c38;
+    degrees = float_360_80424c3c;
+    amplitude = float_1024_80424c40;
     particle = (u8*)work + 0x44;
     for (i = 1; i < *(s32*)((s32)entry + 8); i += 3, particle += 0xCC) {
         s32 life = *(s32*)(particle + 0x10);
@@ -112,37 +173,50 @@ void effAkariChargeMain(void* entry) {
         f32 oldY;
 
         if (life <= age) {
-            *(s32*)(particle + 0x10) = (rand() % 0x32) + 0x14;
+            s32 random = rand();
+            s32 quotient = __mulhw(0x51EB851F, random) >> 4;
+            quotient += (u32)quotient >> 31;
+            *(s32*)(particle + 0x10) = random - quotient * 0x32 + 0x14;
             *(s32*)(particle + 0x14) = 0;
-            *(f32*)(particle + 0x3C) = (f32)(rand() % 0x168);
+            random = rand();
+            quotient = (__mulhw(0xB60B60B7, random) + random) >> 8;
+            quotient += (u32)quotient >> 31;
+            *(f32*)(particle + 0x3C) = (f32)(random - quotient * 0x168);
             *(f32*)(particle + 4) = float_0_80424c24;
             *(f32*)(particle + 8) = float_0_80424c24;
         }
 
-        if ((rand() % 100) < 0x33) {
-            s32 j;
-            s32* src;
-            s32* dst;
+        {
+            s32 remainder;
+
+            {
+                s32 random = rand();
+                s32 quotient = __mulhw(0x51EB851F, random) >> 5;
+                quotient += (u32)quotient >> 31;
+                remainder = random - quotient * 100;
+            }
+            if (remainder <= 0x32) {
             f32 dx;
             f32 dy;
             f32 dist2;
 
             oldX = *(f32*)(particle + 4);
             oldY = *(f32*)(particle + 8);
-            dx = (f32)((rand() % 0x11) - 8);
-            dy = (f32)((rand() % 0x11) - 8);
-
-            src = (s32*)(particle + 0x40);
-            dst = (s32*)(particle + 0x84);
-            for (j = 0; j < 0x11; j++) {
-                dst[j] = src[j];
+            {
+                s32 random = rand();
+                s32 quotient = __mulhw(0x78787879, random) >> 3;
+                quotient += (u32)quotient >> 31;
+                dx = (f32)(random - quotient * 0x11 - 8);
+            }
+            {
+                s32 random = rand();
+                s32 quotient = __mulhw(0x78787879, random) >> 3;
+                quotient += (u32)quotient >> 31;
+                dy = (f32)(random - quotient * 0x11 - 8);
             }
 
-            src = (s32*)(particle - 4);
-            dst = (s32*)(particle + 0x40);
-            for (j = 0; j < 0x11; j++) {
-                dst[j] = src[j];
-            }
+            *(HistoryLocal*)(particle + 0x84) = *(HistoryLocal*)(particle + 0x40);
+            *(HistoryLocal*)(particle + 0x40) = *(HistoryLocal*)(particle - 4);
 
             *(f32*)(particle + 4) = oldX + dx;
             *(f32*)(particle + 8) = oldY + dy;
@@ -150,12 +224,46 @@ void effAkariChargeMain(void* entry) {
             if ((dx == float_0_80424c24) && (dy == float_0_80424c24)) {
                 *(f32*)(particle + 0x34) = float_0_80424c24;
             } else {
+                f64 value;
+                f64 inv;
+                FloatBitsLocal classify;
+                s32 category;
+
                 dist2 = (dx * dx) + (dy * dy);
+                value = (f64)dist2;
+                if (value > (f64)float_0_80424c24) {
+                    inv = __frsqrte(value);
+                    inv = double_0p5_802faab8 * inv *
+                          (double_3_802faac0 - value * inv * inv);
+                    inv = double_0p5_802faab8 * inv *
+                          (double_3_802faac0 - value * inv * inv);
+                    inv = double_0p5_802faab8 * inv *
+                          (double_3_802faac0 - value * inv * inv);
+                    dist2 = (f32)(value * inv);
+                } else {
+                    dist2 = (f32)value;
+                    if (value < double_0_802faac8) {
+                        dist2 = __float_nan;
+                    } else {
+                        classify.value = dist2;
+                        if ((classify.bits & 0x7F800000) == 0x7F800000) {
+                            category = (classify.bits & 0x007FFFFF) ? 1 : 2;
+                        } else if ((classify.bits & 0x7F800000) == 0) {
+                            category = (classify.bits & 0x007FFFFF) ? 5 : 3;
+                        } else {
+                            category = 4;
+                        }
+                        if (category == 1) {
+                            dist2 = __float_nan;
+                        }
+                    }
+                }
                 *(f32*)(particle + 0x34) = dist2;
+            }
             }
         }
 
-        *(s32*)(particle + 0x24) = (s32)(float_1024_80424c40 * (f32)sin((f64)((float_6p2832_80424c38 * (f32)((*(s32*)(particle + 0x14) * 0xB4) / *(s32*)(particle + 0x10))) / float_360_80424c3c)));
+        *(s32*)(particle + 0x24) = (s32)(amplitude * (f32)sin((f64)((twoPi * (f32)((*(s32*)(particle + 0x14) * 0xB4) / *(s32*)(particle + 0x10))) / degrees)));
         if (*(s32*)(particle + 0x24) > 0xFF) {
             *(s32*)(particle + 0x24) = 0xFF;
         }
@@ -164,13 +272,13 @@ void effAkariChargeMain(void* entry) {
 
     particle = (u8*)work + 0x44;
     for (i = 1; i < *(s32*)((s32)entry + 8); i++, particle += 0x44) {
-        *(s32*)(particle + 0x40) = rand() & 0xF;
+        *(s32*)(particle + 0x40) = rand() % 0x10;
     }
 
     if (type == 0) {
-        dispEntry(4, 2, effAkariChargeDisp, entry, dispCalcZ(pos));
+        dispEntry(4, 2, effAkariChargeDisp, entry, dispCalcZ(&pos));
     } else {
-        dispEntry(8, 2, effAkariChargeDisp, entry, dispCalcZ(pos));
+        dispEntry(8, 2, effAkariChargeDisp, entry, dispCalcZ(&pos));
     }
 }
 

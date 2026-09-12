@@ -16,8 +16,14 @@ extern f32 float_320_80423c0c;
 extern f32 float_neg240_80423bf0;
 extern f32 float_neg200_80423c30;
 extern f32 float_60_80423b58;
+const f32 float_100_80423b60 = 100.0f;
 extern s16 tubuDt[];
 extern void* gp;
+
+f32 chapterPos[14] = {
+    165.0f, 68.0f, 0.0f, 75.0f, 97.0f, 150.0f, -139.0f,
+    -33.0f, 41.0f, -163.0f, 211.0f, -91.0f, -209.0f, 159.0f
+};
 
 void fileFree(void* ptr);
 void animPoseRelease(s32 poseId);
@@ -1804,7 +1810,6 @@ void winLogDisp(s32 cameraId, void* pWin, s32 index) {
     extern u32 dat_80423abc;
     extern f32 float_50_80423b64;
     extern f32 float_120_80423bcc;
-    extern f32 float_100_80423b60;
     extern f32 float_0p75_80423b10;
     extern f32 float_128_80423c10;
     extern f32 float_4_80423be8;
@@ -2157,15 +2162,22 @@ void mapGX(double x, double y, void* pWin) {
     s16* area;
     s32 available;
     s32 texture;
+    s32 chapter;
+    s32 chapterIcon;
+    s32 chapterIndex;
+    f32 mapX;
+    f32 mapY;
     f32 pulse;
     Mtx matrix;
 
+    mapX = (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38);
+    mapY = (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C);
     if (*(void**)((s32)pWin + 0x30) == 0) return;
     GXSetScissor((u32)((f32)x + 72.0f), (u32)(118.0f - (f32)y),
                  0x1D0, 0xF4);
     winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x30) + 0xA0));
-    mapPos.x = (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38);
-    mapPos.y = (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C);
+    mapPos.x = mapX;
+    mapPos.y = mapY;
     mapPos.z = 0.0f;
     mapScale.x = 1.0f;
     mapScale.y = 1.0f;
@@ -2189,15 +2201,15 @@ void mapGX(double x, double y, void* pWin) {
             continue;
         }
         if (*(s32*)((s32)pWin + 0xE14) == i) {
-            selectedPos.x = (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38) + (f32)area[0];
-            selectedPos.y = (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C) + (f32)area[1];
+            selectedPos.x = mapX + (f32)area[0];
+            selectedPos.y = mapY + (f32)area[1];
             selectedPos.z = 0.0f;
             selectedScale = mapScale;
             texture = ((*(u32*)((s32)gp + 0x1C) >> 4) & 1) ? 0xB9 : 0xBA;
             winTexSet(texture, &selectedPos, &selectedScale, &white);
         } else {
-            normalPos.x = (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38) + (f32)area[0];
-            normalPos.y = (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C) + (f32)area[1];
+            normalPos.x = mapX + (f32)area[0];
+            normalPos.y = mapY + (f32)area[1];
             normalPos.z = 0.0f;
             normalScale = mapScale;
             texture = 0xB8;
@@ -2207,12 +2219,43 @@ void mapGX(double x, double y, void* pWin) {
             winTexSet(texture, &normalPos, &normalScale, &white);
         }
     }
-    winIconInit();
-    iconPos.x = (f32)x;
-    iconPos.y = (f32)y;
-    iconPos.z = 0.0f;
-    iconScale = mapScale;
-    winIconSet(0x1A6, &iconPos, &iconScale, &white);
+    chapter = swByteGet(0);
+    chapterIcon = -1;
+    if (chapter < 0x13 || chapter > 0x36) {
+        if (chapter < 0x41 || chapter > 0x6F) {
+            if (chapter < 0x79 || chapter > 0xA3) {
+                if (chapter < 0xAF || chapter > 0xD4) {
+                    if (chapter < 0xDE || chapter > 0x104) {
+                        if (chapter < 0x110 || chapter > 0x151) {
+                            if (chapter > 0x15B && chapter < 0x175) {
+                                chapterIcon = 0x1A3; chapterIndex = 6;
+                            }
+                        } else {
+                            chapterIcon = 0x1A1; chapterIndex = 5;
+                        }
+                    } else {
+                        chapterIcon = 0x1A5; chapterIndex = 4;
+                    }
+                } else {
+                    chapterIcon = 0x1A4; chapterIndex = 3;
+                }
+            } else {
+                chapterIcon = 0x1A2; chapterIndex = 2;
+            }
+        } else {
+            chapterIcon = 0x1A0; chapterIndex = 1;
+        }
+    } else {
+        chapterIcon = 0x19F; chapterIndex = 0;
+    }
+    if (chapterIcon != -1) {
+        winIconInit();
+        iconPos.x = mapX + chapterPos[chapterIndex * 2];
+        iconPos.y = float_45_80423bdc + mapY + chapterPos[chapterIndex * 2 + 1];
+        iconPos.z = 0.0f;
+        iconScale.x = 1.0f; iconScale.y = 1.0f; iconScale.z = 1.0f;
+        winIconSet(chapterIcon, &iconPos, &iconScale, &white);
+    }
     if (*(s32*)((s32)pWin + 0xE1C) != -1) {
         s32 poseId = *(s32*)((s32)pWin + 0x188);
         s32 mapPoseId = *(s32*)((s32)pWin + 0xE1C);
@@ -2224,10 +2267,8 @@ void mapGX(double x, double y, void* pWin) {
         animPoseGetAnimPosePtr(poseId);
         animData = animPoseGetAnimDataPtr(poseId);
         PSMTXTrans(matrix,
-                   (f32)x + 74.0f + *(f32*)((s32)pWin + 0xE38) +
-                       (f32)tubuDt[currentArea * 6],
-                   (f32)y + 120.0f + *(f32*)((s32)pWin + 0xE3C) +
-                       (f32)tubuDt[currentArea * 6 + 1], 0.0f);
+                   mapX + (f32)tubuDt[currentArea * 6],
+                   mapY + (f32)tubuDt[currentArea * 6 + 1], 0.0f);
         duration = (u32)*(f32*)(*(s32*)((s32)animData + 0x24) + 8);
         animPoseSetLocalTime((f32)(*(u32*)((s32)gp + 0x1C) % duration),
                              mapPoseId);
@@ -2261,24 +2302,28 @@ void mapGX(double x, double y, void* pWin) {
 
     pulse = 2.0f * (f32)sin((double)((f32)*(u32*)((s32)gp + 0x1C) * 0.125f));
     if (pulse < 0.0f) pulse = -pulse;
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
     arrowTopPos.x = (f32)x;
     arrowTopPos.y = (f32)y + 120.0f +
             (*(f32*)((s32)pWin + 0xE3C) == -240.0f ? 0.0f : pulse);
     arrowTopPos.z = 0.0f;
     arrowTopScale = mapScale;
     winTexSet(0xBD, &arrowTopPos, &arrowTopScale, &white);
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
     arrowRightPos.x = (f32)x + 220.0f +
             (*(f32*)((s32)pWin + 0xE38) == -148.0f ? 0.0f : pulse);
     arrowRightPos.y = (f32)y;
     arrowRightPos.z = 0.0f;
     arrowRightScale = mapScale;
     winTexSet(0xBC, &arrowRightPos, &arrowRightScale, &white);
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
     arrowBottomPos.x = (f32)x;
     arrowBottomPos.y = (f32)y - 120.0f -
             (*(f32*)((s32)pWin + 0xE3C) == 0.0f ? 0.0f : pulse);
     arrowBottomPos.z = 0.0f;
     arrowBottomScale = mapScale;
     winTexSet(0xBE, &arrowBottomPos, &arrowBottomScale, &white);
+    winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
     arrowLeftPos.x = (f32)x - 220.0f -
             (*(f32*)((s32)pWin + 0xE38) == 0.0f ? 0.0f : pulse);
     arrowLeftPos.y = (f32)y;
@@ -2287,12 +2332,17 @@ void mapGX(double x, double y, void* pWin) {
     winTexSet(0xBB, &arrowLeftPos, &arrowLeftScale, &white);
 }
 
-void monoshiriGX(double x, double y, void* pWin) {
-    typedef struct Vec3 { f32 x, y, z; } Vec3;
+void monoshiriGX(f32 x, f32 y, void* pWin) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+
     extern void winBookGX(double x, double y, void* win, s32 page);
     extern void winKirinukiGX(double x, double y, double width, double height,
                               void* win, s32 type);
-    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text);
+    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text, ...);
     extern void winFontSetWidth(Vec3* pos, Vec3* scale, void* color,
                                 f32 width, char* text, ...);
     extern u16 FontGetMessageWidth(char* text);
@@ -2300,101 +2350,237 @@ void monoshiriGX(double x, double y, void* pWin) {
     extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
     extern s32 evtGetValue(void* evt, s32 value);
     extern char* msgSearch(char* key);
-    extern char str_msg_menu_monosiri_ka_802f6bb8[];
-    extern char str_msg_menu_sort_narabi_802f6be0[];
+
     extern u8 enemy_monoshiri_sort_table[];
-    extern char str_btl_un_hatena_802f6b28[];
-    extern char str_btl_un_rampell_802f6b38[];
-    Vec3 pos, scale;
-    Vec3 titlePos, titleScale;
-    Vec3 countPos, countScale;
-    u32 white = 0xFFFFFFFF;
-    s32 page = *(s32*)((s32)pWin + 0x104C);
-    s32 count = *(s32*)((s32)pWin + 0x1040);
-    s32 i, idx, unit;
+    extern char str_PCTd_PCTd_80423b74[];
+    extern char str__80423b8c[];
+    extern char str_PCTd_80423b90[];
+
+    extern u32 dat_80423ac4;
+    extern u32 dat_80423ac8;
+
+    u8* catalog = (u8*)str_msg_menu_kiroku_map_802f6708;
+    volatile u32 titleColorSeed;
+    volatile u32 textureColorSeed;
+    volatile u32 countColorSeed;
+    volatile u32 listColorSeed;
+
+    Vec3 titlePos, titleCallPos, titleScale;
+    Vec3 countPos, countCallPos, countScale;
+    Vec3 numberPos, numberCallPos, numberScale;
+    Vec3 namePos, nameCallPos, nameScale;
+    Vec3 upTexPos, upTexCallPos, upTexScale;
+    Vec3 upIconPos, upIconCallPos, upIconScale;
+    Vec3 downTexPos, downTexCallPos, downTexScale;
+    Vec3 downIconPos, downIconCallPos, downIconScale;
+    Vec3 sortPos, sortCallPos, sortScale;
+    Vec3 sortIconPos, sortIconCallPos, sortIconScale;
+
+    u32 titleColor;
+    u32 countColor;
+    u32 numberColor;
+    u32 nameColor;
+    u32 upTexColor;
+    u32 upIconColor;
+    u32 downTexColor;
+    u32 downIconColor;
+    u32 sortColor;
+    u32 sortIconColor;
+
+    s32 i;
+    s32 unit;
     char countText[256];
     char numberText[32];
+    char* format;
     char* name;
     char* title;
-    f32 titleWidth;
-    f32 countWidth;
+    char* sortText;
+    void** mono;
+    u16 messageWidth;
+    u16 scaledWidth;
+    f32 numberBaseX;
+    f32 nameBaseX;
+    f32 baseY;
+    f32 sortWidth;
+
+    titleColorSeed = dat_80423ac8;
+    textureColorSeed = dat_80423ac4;
+    countColorSeed = dat_80423ac8;
+    listColorSeed = dat_80423ac8;
 
     winBookGX(x, y, pWin, 1);
-    winKirinukiGX((double)((f32)x - 110.0f), (double)((f32)y - 160.0f),
+    winKirinukiGX((double)((f32)x - 110.0f),
+                  (double)((f32)y - 160.0f),
                   100.0, 50.0, pWin, 0);
-    titleScale.x = 0.75f; titleScale.y = 0.75f; titleScale.z = 1.0f;
-    titlePos.z = 0.0f;
-    title = msgSearch(str_msg_menu_monosiri_ka_802f6bb8);
-    titleWidth = 0.75f * (f32)FontGetMessageWidth(title);
-    if (titleWidth > 80.0f) {
-        titleScale.x *= 80.0f / titleWidth;
-        titleWidth = 80.0f;
+
+    title = msgSearch((char*)catalog + 0x4B0);
+    messageWidth = FontGetMessageWidth(title);
+    scaledWidth = (u16)(0.75f * (f32)messageWidth);
+    if ((f32)scaledWidth > 80.0f) {
+        scaledWidth = (u16)((f32)scaledWidth *
+                            (80.0f / (f32)scaledWidth));
     }
+
     winFontInit();
-    titlePos.x = (f32)x - 108.0f + (100.0f - titleWidth) * 0.5f;
+    titlePos = *(Vec3*)(catalog + 0x290);
+    titlePos.x = (f32)x - 108.0f +
+                 (f32)((100 - scaledWidth) / 2);
     titlePos.y = (f32)y - 166.0f;
-    winFontSetWidth(&titlePos, &titleScale, &white, 80.0f, title);
-    sprintf(countText, "%d/%d", *(s32*)((s32)pWin + 0x1044), count);
-    countScale.x = 0.75f; countScale.y = 0.75f; countScale.z = 1.0f;
-    countPos.z = 0.0f;
-    countWidth = 0.75f * (f32)FontGetMessageWidth(countText);
-    countPos.x = (f32)x - 108.0f + (100.0f - countWidth) * 0.5f;
+    titleScale = *(Vec3*)(catalog + 0x29C);
+    titleCallPos = titlePos;
+    titleColor = titleColorSeed;
+    winFontSetWidth(&titleCallPos, &titleScale, &titleColor,
+                    80.0f, title);
+
+    format = "%d/%d";
+    if ((u32)*(s32*)((s32)gp + 0x16C) != 0) {
+        format = str_PCTd_PCTd_80423b74;
+    }
+    sprintf(countText, format, *(s32*)((s32)pWin + 0x1044),
+            *(s32*)((s32)pWin + 0x1040));
+
+    messageWidth = FontGetMessageWidth(countText);
+    scaledWidth = (u16)(0.75f * (f32)messageWidth);
+    countPos = *(Vec3*)(catalog + 0x2A8);
+    countPos.x = (f32)x - 108.0f +
+                 (f32)((100 - scaledWidth) / 2);
     countPos.y = (f32)y - 184.0f;
-    winFontSet(&countPos, &countScale, &white, countText);
-    scale.x = 0.75f; scale.y = 0.75f; scale.z = 1.0f; pos.z = 0.0f;
+    countScale = *(Vec3*)(catalog + 0x2B4);
+    countCallPos = countPos;
+    countColor = countColorSeed;
+    winFontSet(&countCallPos, &countScale, &countColor, countText);
+
     winFontInit();
-    for (i = 0; i < 16; i++) {
-        idx = page * 16 + i;
-        if (idx >= count) break;
-        unit = *(u8*)((s32)pWin + 0x1058 + idx * 2 + 1);
-        if (swGet(unit + 0x117A) == 0) {
-            name = "---";
-        } else if (unit == 0x4D || unit == 0x87) {
-            if (evtGetValue(0, -170000000) < 0xD2) {
-                name = msgSearch(str_btl_un_hatena_802f6b28);
+    numberBaseX = (f32)x + 19.0f;
+    baseY = (f32)y - 16.0f;
+    nameBaseX = (f32)x + 56.0f;
+
+    i = 0;
+    do {
+        unit = ((u8*)pWin)[
+            0x1059 + ((*(s32*)((s32)pWin + 0x104C) * 16 + i) * 2)];
+        mono = (void**)battleGetUnitMonosiriPtr(unit);
+
+        if ((*(s32*)((s32)pWin + 0x104C) * 16 + i) >=
+            *(s32*)((s32)pWin + 0x1040)) {
+            break;
+        }
+
+        if (swGet(unit + 0x117A) != 0) {
+            if (unit == 0x4D || unit == 0x87) {
+                if (evtGetValue(0, -170000000) < 0xD2) {
+                    name = msgSearch((char*)catalog + 0x420);
+                } else {
+                    name = msgSearch((char*)catalog + 0x430);
+                }
             } else {
-                name = msgSearch(str_btl_un_rampell_802f6b38);
+                name = msgSearch((char*)mono[0]);
             }
         } else {
-            name = msgSearch(*(char**)battleGetUnitMonosiriPtr(unit));
+            name = "---";
+            if ((u32)*(s32*)((s32)gp + 0x16C) != 0) {
+                name = str__80423b8c;
+            }
         }
-        sprintf(numberText, "%d", enemy_monoshiri_sort_table[unit]);
-        pos.x = (f32)x + 19.0f + (i >> 3) * 216.0f;
-        pos.y = (f32)y - 16.0f - (i & 7) * 24.0f;
-        winFontSetWidth(&pos, &scale, &white, 40.0f, numberText);
-        pos.x = (f32)x + 56.0f + (i >> 3) * 216.0f;
-        winFontSetWidth(&pos, &scale, &white, 145.0f, name);
-    }
-    winIconInit();
-    if (page > 0) {
+
+        format = "%d";
+        if ((u32)*(s32*)((s32)gp + 0x16C) != 0) {
+            format = str_PCTd_80423b90;
+        }
+        sprintf(numberText, format, enemy_monoshiri_sort_table[unit]);
+
+        {
+            s32 columnOffset = (i / 8) * 216;
+            s32 rowOffset = (i % 8) * 24;
+            f32 rowY = baseY - (f32)rowOffset;
+
+            namePos = *(volatile Vec3*)(catalog + 0x2D8);
+            namePos.x = nameBaseX + (f32)(i / 8) * 216.0f;
+            namePos.y = baseY - (f32)(i % 8) * 24.0f;
+
+            numberPos = *(volatile Vec3*)(catalog + 0x2C0);
+            numberPos.x = numberBaseX + (f32)columnOffset;
+            numberPos.y = rowY;
+            numberScale = *(volatile Vec3*)(catalog + 0x2CC);
+            numberCallPos = numberPos;
+            numberColor = listColorSeed;
+            winFontSetWidth(&numberCallPos, &numberScale, &numberColor,
+                            40.0f, numberText);
+
+            nameScale = *(volatile Vec3*)(catalog + 0x2E4);
+            nameCallPos = namePos;
+            nameColor = listColorSeed;
+            winFontSetWidth(&nameCallPos, &nameScale, &nameColor,
+                            145.0f, name);
+        }
+
+        i++;
+    } while (i < 16);
+
+    if (*(s32*)((s32)pWin + 0x104C) > 0) {
         winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-        pos.x = (f32)x + 440.0f;
-        pos.y = (f32)y + 18.0f;
-        winTexSet(0x17, &pos, &scale, &white);
+
+        upTexPos = *(Vec3*)(catalog + 0x2F0);
+        upTexPos.x = (f32)x + 440.0f;
+        upTexPos.y = (f32)y + 18.0f;
+        upTexScale = *(Vec3*)(catalog + 0x2FC);
+        upTexCallPos = upTexPos;
+        upTexColor = textureColorSeed;
+        winTexSet(0x17, &upTexCallPos, &upTexScale, &upTexColor);
+
         winIconInit();
-        pos.y = (f32)y;
-        winIconSet(0x86, &pos, &scale, &white);
+        upIconPos = *(Vec3*)(catalog + 0x308);
+        upIconPos.x = (f32)x + 440.0f;
+        upIconPos.y = (f32)y;
+        upIconScale = *(Vec3*)(catalog + 0x314);
+        upIconCallPos = upIconPos;
+        upIconColor = textureColorSeed;
+        winIconSet(0x86, &upIconCallPos, &upIconScale, &upIconColor);
     }
-    if ((page + 1) * 16 < count) {
+
+    if (*(s32*)((s32)pWin + 0x104C) <
+        ((*(s32*)((s32)pWin + 0x1040) + 15) / 16) - 1) {
         winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-        pos.x = (f32)x + 440.0f;
-        pos.y = (f32)y - 255.0f;
-        winTexSet(0x17, &pos, &scale, &white);
+
+        downTexPos = *(Vec3*)(catalog + 0x320);
+        downTexPos.x = (f32)x + 440.0f;
+        downTexPos.y = (f32)y - 255.0f;
+        downTexScale = *(Vec3*)(catalog + 0x32C);
+        downTexCallPos = downTexPos;
+        downTexColor = textureColorSeed;
+        winTexSet(0x17, &downTexCallPos, &downTexScale, &downTexColor);
+
         winIconInit();
-        pos.y = (f32)y - 240.0f;
-        winIconSet(0x88, &pos, &scale, &white);
+        downIconPos = *(Vec3*)(catalog + 0x338);
+        downIconPos.x = (f32)x + 440.0f;
+        downIconPos.y = (f32)y - 240.0f;
+        downIconScale = *(Vec3*)(catalog + 0x344);
+        downIconCallPos = downIconPos;
+        downIconColor = textureColorSeed;
+        winIconSet(0x88, &downIconCallPos, &downIconScale, &downIconColor);
     }
-    pos.x = (f32)x + 390.0f;
-    pos.y = (f32)y - 210.0f;
-    scale.x = 0.7f;
-    scale.y = 0.7f;
+
+    sortText = msgSearch((char*)catalog + 0x4D8);
+    sortWidth =
+        0.7f * (f32)FontGetMessageWidth(sortText);
+
     winFontInit();
-    winFontSet(&pos, &scale, &white,
-               msgSearch(str_msg_menu_sort_narabi_802f6be0));
-    pos.x -= 30.0f;
-    pos.y -= 10.0f;
+    sortPos = *(Vec3*)(catalog + 0x350);
+    sortPos.x = ((f32)x + 390.0f) + (30.0f - sortWidth);
+    sortPos.y = (f32)y - 210.0f;
+    sortScale = *(Vec3*)(catalog + 0x35C);
+    sortCallPos = sortPos;
+    sortColor = titleColorSeed;
+    winFontSet(&sortCallPos, &sortScale, &sortColor, sortText);
+
     winIconInit();
-    winIconSet(0x219, &pos, &scale, &white);
+    sortIconPos = *(Vec3*)(catalog + 0x368);
+    sortIconPos.x = sortPos.x - 30.0f;
+    sortIconPos.y = ((f32)y - 210.0f) - 10.0f;
+    sortIconScale = *(Vec3*)(catalog + 0x374);
+    sortIconCallPos = sortIconPos;
+    sortIconColor = textureColorSeed;
+    winIconSet(0x219, &sortIconCallPos, &sortIconScale, &sortIconColor);
 }
 
 #pragma no_register_save_helpers on
@@ -2425,6 +2611,7 @@ MonosiriWork* monosiriInit(s32 param, f32 x, f32 y) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 u8 monosiriMain(void* param_1) {
+    extern void* gp;
     extern char str_jp_80423acc[];
     extern char str_us_80423ad0[];
     extern char str_ge_80423ad4[];
@@ -2439,17 +2626,24 @@ u8 monosiriMain(void* param_1) {
     extern f32 float_600_80423b4c;
     extern f32 float_neg400_80423b50;
     extern f32 float_6_80423b54;
+    extern f32 float_60_80423b58;
     extern s32 getMarioStDvdRoot(void);
     extern s32 fileAsyncf(s32 kind, s32 unused, char* fmt, s32 root, char* lang, ...);
     extern void* fileAllocf(s32 kind, char* fmt, s32 root, char* lang, ...);
+    extern void TEXGetGXTexObjFromPalette(void* tpl, void* texObj, s32 id);
+    extern s32 GXGetTexObjHeight(void* texObj);
+    extern s32 GXGetTexObjWidth(void* texObj);
     extern s32 GXGetTexBufferSize(s32 width, s32 height, s32 format, s32 mipmap, s32 maxLod);
     extern void* smartAlloc(s32 size, s32 heap);
+    extern void* battleGetUnitMonosiriPtr(s32 enemyType);
     extern s32 animGroupBaseAsync(char* name, s32 battle, s32 unused);
     extern s32 animPoseEntry(char* name, s32 battle);
     extern void animPoseSetAnim(s32 poseId, char* anim, s32 loop);
     extern void animPoseWorldPositionEvalOn(s32 poseId, s32 flag);
+    extern void animPoseMain(s32 poseId);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern void capture(void);
+    extern void monosiri_disp(s32 param_1, void* monosiriWork);
 
     void* work = param_1;
     char* langs[6];
@@ -2470,7 +2664,8 @@ u8 monosiriMain(void* param_1) {
 
     if (work != NULL) {
         state = *(s32*)work;
-        if (state == 0) {
+        switch (state) {
+        case 0: {
             s32 dvdRoot;
             char* lang;
             u32 texObj[8];
@@ -2507,7 +2702,10 @@ u8 monosiriMain(void* param_1) {
                     *(void**)((s32)work + 0x28) = smartAlloc(size, 0);
                 }
             }
-        } else if (state == 1) {
+
+            break;
+        }
+        case 1:
             monoData = battleGetUnitMonosiriPtr(*(s32*)((s32)work + 4));
             if (animGroupBaseAsync(*(char**)((s32)monoData + 0xC), inBattle, 0) != 0 &&
                 (*(s32*)((s32)work + 4) != 0x6B ||
@@ -2517,11 +2715,11 @@ u8 monosiriMain(void* param_1) {
                     *(s32*)((s32)work + 0x2C) = 0xFF;
                 }
                 if (*(s32*)((s32)work + 0x20) == -1) {
-                    *(s32*)((s32)work + 0x20) =
-                        animPoseEntry(*(char**)((s32)monoData + 0xC), inBattle);
-                    animPoseSetAnim(*(s32*)((s32)work + 0x20),
-                                    *(char**)((s32)monoData + 0x10), 1);
                     if (*(s32*)((s32)work + 4) == 0x6B) {
+                        *(s32*)((s32)work + 0x20) =
+                            animPoseEntry(*(char**)((s32)monoData + 0xC), inBattle);
+                        animPoseSetAnim(*(s32*)((s32)work + 0x20),
+                                        *(char**)((s32)monoData + 0x10), 1);
                         animPoseWorldPositionEvalOn(*(s32*)((s32)work + 0x20), 0);
                         animPoseMain(*(s32*)((s32)work + 0x20));
                         *(s32*)((s32)work + 0x24) =
@@ -2529,21 +2727,30 @@ u8 monosiriMain(void* param_1) {
                         animPoseSetAnim(*(s32*)((s32)work + 0x24), str_S_1_80423b48, 1);
                         animPoseMain(*(s32*)((s32)work + 0x24));
                     } else {
+                        *(s32*)((s32)work + 0x20) =
+                            animPoseEntry(*(char**)((s32)monoData + 0xC), inBattle);
+                        animPoseSetAnim(*(s32*)((s32)work + 0x20),
+                                        *(char**)((s32)monoData + 0x10), 1);
                         animPoseMain(*(s32*)((s32)work + 0x20));
                     }
                     dispEntry(7, 6, capture, work, float_0_80423aec);
                 }
             }
-        } else if (state < 3) {
+
+            break;
+        case 2:
             *(f32*)((s32)work + 0x18) = float_600_80423b4c;
             *(f32*)((s32)work + 0x1C) = targetY;
+
+            break;
         }
 
-        denom = (float_6_80423b54 * (f32)*(s32*)((s32)gp + 4)) / float_60_80423b58;
         *(f32*)((s32)work + 0x10) +=
-            (*(f32*)((s32)work + 0x18) - *(f32*)((s32)work + 0x10)) / denom;
+            (*(f32*)((s32)work + 0x18) - *(f32*)((s32)work + 0x10)) /
+            ((float_6_80423b54 * (f32)*(s32*)((s32)gp + 4)) / float_60_80423b58);
         *(f32*)((s32)work + 0x14) +=
-            (*(f32*)((s32)work + 0x1C) - *(f32*)((s32)work + 0x14)) / denom;
+            (*(f32*)((s32)work + 0x1C) - *(f32*)((s32)work + 0x14)) /
+            ((float_6_80423b54 * (f32)*(s32*)((s32)gp + 4)) / float_60_80423b58);
         if (*(s32*)work > 0) {
             dispEntry(8, 0, monosiri_disp, work, float_0_80423aec);
         }
@@ -2646,12 +2853,14 @@ void capture(s32 cameraId, void* work) {
     s32 width, height;
     s32 poseId = *(s32*)((s32)work + 0x20);
     u8* animData = animPoseGetAnimDataPtr(poseId);
-    f32 minX = *(f32*)(animData + 0x44);
-    f32 minY = *(f32*)(animData + 0x48);
-    f32 maxX = *(f32*)(animData + 0x50);
-    f32 maxY = *(f32*)(animData + 0x54);
-    f32 centerX = (minX + maxX) * 0.5f;
-    f32 centerY = (minY + maxY) * 0.5f;
+    Vec3 minBounds = *(Vec3*)(animData + 0x44);
+    Vec3 maxBounds = *(Vec3*)(animData + 0x50);
+    f32 minX = minBounds.x;
+    f32 minY = minBounds.y;
+    f32 maxX = maxBounds.x;
+    f32 maxY = maxBounds.y;
+    f32 centerX = (minBounds.x + maxBounds.x) * 0.5f;
+    f32 centerY = (minBounds.y + maxBounds.y) * 0.5f;
     s32 i;
     u16 left, right, top, bottom;
     void* file = *(void**)((s32)work + 8);
@@ -2795,6 +3004,11 @@ void capture(s32 cameraId, void* work) {
 }
 
 void monosiri_disp(s32 param_1,void* work){
+    typedef struct DispVec { f32 x, y, z; } DispVec;
+    typedef union DispConvert {
+        f64 d;
+        struct { u32 hi, lo; } w;
+    } DispConvert;
     extern void winHalfBookGX(f32, f32, void*, s32);
     extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
     extern void GXLoadTexObj(void*, s32);
@@ -2817,9 +3031,85 @@ void monosiri_disp(s32 param_1,void* work){
     extern volatile f32 DAT_cc008000;
     extern u32 dat_80423ae8;
     extern u32 unk_804295f8;
-    u32 texObj[8],tev=dat_80423ae8,alpha;s32 i,w,h;void* file=*(void**)((s32)work+8);f32 x=*(f32*)((s32)work+0x18),y=*(f32*)((s32)work+0x1C);f32 a[3][4],b[3][4],c[3][4];
+    extern u8 enemy_monoshiri_sort_table[];
+    extern char* msgSearch(char*);
+    extern s32 evtGetValue(void*, s32);
+    extern u16 FontGetMessageWidth(char*);
+    extern void winFontSet(DispVec*, DispVec*, void*, char*);
+    extern DispVec vec3_802f6ae8;
+    extern DispVec vec3_802f6af4;
+    extern DispVec vec3_802f6b00;
+    extern DispVec vec3_802f6b0c;
+    extern f32 float_0p75_80423b10;
+    extern f32 float_16_80423b14;
+    extern f32 float_248_80423b18;
+    extern f32 float_180_80423b1c;
+    extern f32 float_210_80423b28;
+    extern f64 double_to_int_mask_802f6b78;
+    extern char str_PCTs_PCTs_80423b20[];
+    u32 texObj[8],tev=dat_80423ae8,alpha;s32 i,w,h;void* file=*(void**)((s32)work+8);f32 x=*(f32*)((s32)work+0x10),y=*(f32*)((s32)work+0x14);f32 a[3][4],b[3][4],c[3][4];
     if(file==0)return;winHalfBookGX(x,y,**(void***)((s32)file+0xA0),0);TEXGetGXTexObjFromPalette(**(void***)((s32)file+0xA0),texObj,0x37);w=GXGetTexObjWidth(texObj);h=GXGetTexObjHeight(texObj);TEXGetGXTexObjFromPalette(**(void***)((s32)file+0xA0),texObj,0x37);GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,0);GXInitTexObj(texObj,**(void***)((s32)work+0x28),(s16)w,(s16)h,5,0,0,0);GXInitTexObjLOD(texObj,1,1,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,1);GXSetNumTexGens(8);for(i=0;i<8;i++){f32 s=float_1_80423af0-float_0p04_80423af4*(f32)(7-i);PSMTXTrans(a,float_0p5_80423af8,float_0p5_80423af8,0.0f);PSMTXScale(b,s,s,s);PSMTXTrans(c,float_neg0p5_80423afc,float_neg0p5_80423afc,0.0f);PSMTXConcat(a,b,a);PSMTXConcat(a,c,a);GXLoadTexMtxImm(a,0x1E+i*3,1);GXSetTexCoordGen2(i,1,4,0x1E+i*3,0,0x7D);}GXSetTevColor(1,&tev);alpha=(unk_804295f8&0xFFFFFF00)|*(u8*)((s32)work+0x2C);GXSetTevColor(2,&alpha);GXSetNumTevStages(12);
     for(i=0;i<8;i++){GXSetTevOrder(i,i,1,0xFF);GXSetTevColorOp(i,0,0,0,1,0);GXSetTevAlphaOp(i,0,0,0,1,0);GXSetTevColorIn(i,15,15,15,2);GXSetTevAlphaIn(i,7,4,6,i?0:7);GXSetTevKAlphaSel(i,7);}
     GXSetTevOrder(8,7,1,0xFF);GXSetTevColorOp(8,0,0,0,1,0);GXSetTevAlphaOp(8,0,0,0,1,0);GXSetTevColorIn(8,0,8,9,15);GXSetTevAlphaIn(8,0,7,4,4);GXSetTevOrder(9,0xFF,0xFF,0xFF);GXSetTevColorOp(9,0,0,0,1,0);GXSetTevAlphaOp(9,0,0,0,1,0);GXSetTevColorIn(9,15,15,15,0);GXSetTevAlphaIn(9,7,0,6,7);GXSetTevOrder(10,7,0,0xFF);GXSetTevColorOp(10,0,0,0,1,0);GXSetTevAlphaOp(10,0,0,0,1,0);GXSetTevColorIn(10,15,8,0,15);GXSetTevAlphaIn(10,7,7,7,0);GXSetTevOrder(11,7,0,0xFF);GXSetTevColorOp(11,0,0,0,1,0);GXSetTevAlphaOp(11,0,0,0,1,0);GXSetTevColorIn(11,8,0,1,15);GXSetTevAlphaIn(11,7,7,7,4);
     GXBegin(0x80,0,4);DAT_cc008000=x+32.0f;DAT_cc008000=y-8.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=x+32.0f;DAT_cc008000=y-168.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=x+248.0f;DAT_cc008000=y-168.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=1.0f;DAT_cc008000=x+248.0f;DAT_cc008000=y-8.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;
+    {
+        char text[256];
+        char* base = (char*)str_msg_menu_kiroku_map_802f6708;
+        char* format;
+        char* message;
+        void** mono;
+        s32 unit = *(s32*)((s32)work + 4);
+        u32 color = dat_80423ae8;
+        f32 width;
+        u16 messageWidth;
+        DispConvert convert;
+        DispVec pos;
+        DispVec scale;
+
+        mono = battleGetUnitMonosiriPtr(unit);
+        if (unit == 0x4D || unit == 0x87) {
+            if (evtGetValue(0, -170000000) < 0xD2) {
+                message = msgSearch(base + 0x420);
+            } else {
+                message = msgSearch(base + 0x430);
+            }
+        } else {
+            message = msgSearch((char*)mono[0]);
+        }
+        format = base + 0x418;
+        if (*(s32*)((s32)gp + 0x16C) != 0) {
+            format = base + 0x410;
+        }
+        sprintf(text, format, enemy_monoshiri_sort_table[unit], message);
+        messageWidth = FontGetMessageWidth(text);
+        convert.w.hi = 0x43300000;
+        convert.w.lo = messageWidth;
+        width = float_0p75_80423b10 *
+                (f32)(convert.d - double_to_int_mask_802f6b78);
+        winFontInit();
+        pos = vec3_802f6ae8;
+        pos.x = (float_248_80423b18 - width) * float_0p5_80423af8 +
+                (float_16_80423b14 + x);
+        pos.y = y - float_180_80423b1c;
+        scale = vec3_802f6af4;
+        winFontSet(&pos, &scale, &color, text);
+
+        format = base + 0x440;
+        if (*(s32*)((s32)gp + 0x16C) != 0) {
+            format = str_PCTs_PCTs_80423b20;
+        }
+        sprintf(text, format, msgSearch(base + 0x448), msgSearch((char*)mono[5]));
+        messageWidth = FontGetMessageWidth(text);
+        convert.w.hi = 0x43300000;
+        convert.w.lo = messageWidth;
+        width = float_0p75_80423b10 *
+                (f32)(convert.d - double_to_int_mask_802f6b78);
+        pos = vec3_802f6b00;
+        pos.x = float_1_80423af0 +
+                (float_248_80423b18 - width) * float_0p5_80423af8 +
+                (float_16_80423b14 + x);
+        pos.y = y - float_210_80423b28;
+        scale = vec3_802f6b0c;
+        winFontSet(&pos, &scale, &color, text);
+    }
 }

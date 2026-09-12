@@ -21,7 +21,7 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
 
     void* eff;
     s32* work;
-    f32* fwork;
+    u8* part;
     s32 i;
     s32 y;
     s32 yRot;
@@ -29,20 +29,20 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
     s32 zSeed;
     s32 colorIndex;
     s32 randBit;
-    f32 zero;
+    f32 scaled;
 
     eff = effEntry();
     *(const char**)((s32)eff + 0x14) = str_WhirlwindN64_802faa90;
     *(s32*)((s32)eff + 8) = 5;
     work = __memAlloc(3, 0x168);
-    fwork = (f32*)work;
     *(s32**)((s32)eff + 0xC) = work;
     *(void**)((s32)eff + 0x10) = effWhirlwindMain;
 
     work[0] = type;
     work[1] = (s32)follow;
-    fwork[5] = float_1p2_80424c04 * scale;
-    fwork[6] = float_1p2_80424c04 * scale;
+    scaled = float_1p2_80424c04 * scale;
+    *(f32*)((u8*)work + 0x14) = scaled;
+    *(f32*)((u8*)work + 0x18) = scaled;
     work[8] = lifetime;
     work[9] = lifetime;
     work[7] = 0;
@@ -53,56 +53,62 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
     yRot = 0x78;
     xRot = 0x19;
     zSeed = 0x26;
+    part = (u8*)work + 0x48;
     do {
-        zero = float_0_80424bd4;
         switch (type) {
             case 0:
             case 2:
             case 4:
-            case 6:
-                fwork[0x14] = zero;
-                fwork[0x15] = (f32)y;
-                fwork[0x16] = zero;
-                fwork[0x20] = zero;
-                fwork[0x21] = float_60_80424c08;
-                fwork[0x22] = zero;
-                fwork[0x1D] = zero;
-                fwork[0x1E] = (f32)yRot;
-                fwork[0x1F] = zero;
-                fwork[0x17] = float_1_80424c0c;
+            case 6: {
+                f32 zero = float_0_80424bd4;
+                *(f32*)(part + 0x08) = zero;
+                *(f32*)(part + 0x0C) = (f32)y;
+                *(f32*)(part + 0x10) = zero;
+                *(f32*)(part + 0x38) = zero;
+                *(f32*)(part + 0x3C) = float_60_80424c08;
+                *(f32*)(part + 0x40) = zero;
+                *(f32*)(part + 0x2C) = zero;
+                *(f32*)(part + 0x30) = (f32)yRot;
+                *(f32*)(part + 0x34) = zero;
+                *(f32*)(part + 0x14) = float_1_80424c0c;
                 break;
+            }
             case 1:
             case 3:
             case 5:
-            case 7:
-                fwork[0x14] = zero;
-                fwork[0x15] = (f32)y;
-                fwork[0x16] = zero;
-                fwork[0x20] = zero;
-                fwork[0x21] = float_neg60_80424c10;
-                fwork[0x22] = zero;
-                fwork[0x1D] = zero;
-                fwork[0x1E] = (f32)yRot;
-                fwork[0x1F] = zero;
-                fwork[0x17] = float_1_80424c0c;
-                *(u8*)((s32)work + 0x8C) = 0xFF;
-                *(u8*)((s32)work + 0x8D) = 0xFF;
-                *(u8*)((s32)work + 0x8E) = 0xFF;
+            case 7: {
+                f32 zero = float_0_80424bd4;
+                *(f32*)(part + 0x08) = zero;
+                *(f32*)(part + 0x0C) = (f32)y;
+                *(f32*)(part + 0x10) = zero;
+                *(f32*)(part + 0x38) = zero;
+                *(f32*)(part + 0x3C) = float_neg60_80424c10;
+                *(f32*)(part + 0x40) = zero;
+                *(f32*)(part + 0x2C) = zero;
+                *(f32*)(part + 0x30) = (f32)yRot;
+                *(f32*)(part + 0x34) = zero;
+                *(f32*)(part + 0x14) = float_1_80424c0c;
+                part[0x44] = 0xFF;
+                part[0x45] = 0xFF;
+                part[0x46] = 0xFF;
                 break;
-            default:
-                fwork[0x14] = zero;
-                fwork[0x15] = float_0p5_80424c14 * *(f32*)((s32)follow + 0x1BC);
-                fwork[0x16] = zero;
+            }
+            default: {
+                f32 zero = float_0_80424bd4;
+                *(f32*)(part + 0x08) = zero;
+                *(f32*)(part + 0x0C) = float_0p5_80424c14 * *(f32*)((s32)follow + 0x1BC);
+                *(f32*)(part + 0x10) = zero;
                 randBit = ((rand() % 2) * 2) - 1;
-                fwork[0x20] = (f32)(randBit * 4);
-                fwork[0x21] = zero;
+                *(f32*)(part + 0x38) = (f32)(randBit * 4);
+                *(f32*)(part + 0x3C) = zero;
                 randBit = ((rand() % 2) * 2) - 1;
-                fwork[0x22] = (f32)(randBit * 4);
-                fwork[0x17] = (float_0p5_80424c14 * (f32)(i - 1) * float_0p25_80424c18) + float_0p5_80424c14;
-                fwork[0x1D] = (f32)xRot;
-                fwork[0x1E] = (f32)(((i - 1) * 0x168) >> 2);
-                fwork[0x1F] = (f32)(0x168 - zSeed);
+                *(f32*)(part + 0x40) = (f32)(randBit * 4);
+                *(f32*)(part + 0x14) = (float_0p5_80424c14 * (f32)(i - 1) * float_0p25_80424c18) + float_0p5_80424c14;
+                *(f32*)(part + 0x2C) = (f32)xRot;
+                *(f32*)(part + 0x30) = (f32)(((i - 1) * 0x168) / 4);
+                *(f32*)(part + 0x34) = (f32)(0x168 - zSeed);
                 break;
+            }
         }
 
         if (type < 6) {
@@ -122,16 +128,15 @@ void* effWhirlwindN64Entry(f32 scale, s32 type, void* follow, s32 lifetime) {
         }
 
         i++;
-        *(u8*)((s32)work + 0x8C) = col_r[colorIndex];
+        part[0x44] = col_r[colorIndex];
         y += 7;
         yRot += 0x78;
         xRot += 0x19;
         zSeed += 0x26;
-        *(u8*)((s32)work + 0x8D) = col_g[colorIndex];
-        *(u8*)((s32)work + 0x8E) = col_b[colorIndex];
-        work += 0x12;
-        fwork += 0x12;
-    } while (i <= 4);
+        part[0x45] = col_g[colorIndex];
+        part[0x46] = col_b[colorIndex];
+        part += 0x48;
+    } while (i < 5);
 
     return eff;
 }
@@ -222,7 +227,8 @@ void effWhirlwindDisp(s32 cameraId, void* entry) {
     extern void PSMTXRotRad(void* m, f32 angle, s32 axis);
     extern void PSMTXConcat(void* a, void* b, void* out);
     extern void GXSetCullMode(s32 mode);
-    extern void effSetVtxDescN64(s32 desc);
+    extern void effSetVtxDescN64(void* desc);
+    extern u8 eff_whirlwind_v[];
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void GXSetCurrentMtx(s32 id);
     extern void GXSetTevColor(s32 id, void* color);
@@ -235,7 +241,7 @@ void effWhirlwindDisp(s32 cameraId, void* entry) {
 
     void* cam;
     void* cam3d;
-    s32* work;
+    u8* work;
     s32 i;
     s32 alpha;
     s32 type;
@@ -249,14 +255,13 @@ void effWhirlwindDisp(s32 cameraId, void* entry) {
     f32 transMtx[3][4];
     f32 rotMtx[3][4];
     f32 modelMtx[3][4];
-    f32 concatMtx[3][4];
 
     cam = camGetPtr(cameraId);
-    work = *(s32**)((s32)entry + 0x0C);
-    type = work[0];
-    baseScale = (f32)work[5];
-    maxScale = (f32)work[6];
-    alpha = work[7];
+    work = *(u8**)((s32)entry + 0x0C);
+    type = *(s32*)(work + 0x0);
+    baseScale = *(f32*)(work + 0x14);
+    maxScale = *(f32*)(work + 0x18);
+    alpha = *(s32*)(work + 0x1C);
 
     GXSetNumChans(0);
     GXSetNumTexGens(1);
@@ -269,29 +274,29 @@ void effWhirlwindDisp(s32 cameraId, void* entry) {
     GXSetTevOrder(0, 0, 0, 0xFF);
     GXSetTevColorOp(0, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xC);
-    GXSetTevAlphaIn(0, 0, 4, 0, 7);
+    GXSetTevColorIn(0, 0xF, 0xF, 0xF, 2);
+    GXSetTevAlphaIn(0, 7, 4, 1, 7);
 
-    PSMTXTrans(transMtx, (f32)work[2], (f32)work[3], (f32)work[4]);
-    cam3d = camGetPtr(3);
+    PSMTXTrans(transMtx, *(f32*)(work + 0x8), *(f32*)(work + 0xC), *(f32*)(work + 0x10));
+    cam3d = camGetPtr(4);
     PSMTXRotRad(rotMtx, float_deg2rad_80424bd8 * -*(f32*)((s32)cam3d + 0x114), 'y');
     PSMTXConcat(transMtx, rotMtx, modelMtx);
-    PSMTXConcat((void*)((s32)cam + 0x120), modelMtx, modelMtx);
+    PSMTXConcat((void*)((s32)cam + 0x11C), modelMtx, modelMtx);
 
     GXSetCullMode(0);
-    effSetVtxDescN64(0x8039D418);
+    effSetVtxDescN64(eff_whirlwind_v);
 
     offset = float_3_80424bdc * (baseScale - maxScale);
-    for (i = 1; i < *(s32*)((s32)entry + 8); i++, work += 0x12) {
-        PSMTXTrans(transMtx, (f32)work[0x14], (f32)work[0x15], (f32)work[0x16]);
-        PSMTXRotRad(rotMtx, float_deg2rad_80424bd8 * (f32)work[0x1D], 'x');
+    for (i = 1, work += 0x48; i < *(s32*)((s32)entry + 8); i++, work += 0x48) {
+        PSMTXTrans(transMtx, *(f32*)(work + 0x8), *(f32*)(work + 0xC), *(f32*)(work + 0x10));
+        PSMTXRotRad(rotMtx, float_deg2rad_80424bd8 * *(f32*)(work + 0x2C), 'x');
         PSMTXConcat(transMtx, rotMtx, transMtx);
-        PSMTXRotRad(rotMtx, float_deg2rad_80424bd8 * (f32)work[0x1F], 'z');
+        PSMTXRotRad(rotMtx, float_deg2rad_80424bd8 * *(f32*)(work + 0x34), 'z');
         PSMTXConcat(transMtx, rotMtx, transMtx);
-        scale = baseScale * (f32)work[0x17];
-        PSMTXScale(concatMtx, scale, scale, scale);
-        PSMTXConcat(transMtx, concatMtx, transMtx);
-        PSMTXRotRad(rotMtx, float_deg2rad_80424bd8 * (f32)work[0x1E], 'y');
+        scale = baseScale * *(f32*)(work + 0x14);
+        PSMTXScale(texMtx, scale, scale, scale);
+        PSMTXConcat(transMtx, texMtx, transMtx);
+        PSMTXRotRad(rotMtx, float_deg2rad_80424bd8 * *(f32*)(work + 0x30), 'y');
         PSMTXConcat(transMtx, rotMtx, rotMtx);
 
         if (type < 8) {

@@ -10,12 +10,18 @@ char* msgSearch(char* key);
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void winMakeEquipList(void* pWin) {
-    void* pouch = pouchGetPtr();
-    void* out = pWin;
-    s32 index = 0;
-    s32 one = 1;
+    void* pouch;
+    void* out;
+    s32 index;
+    s32 one;
     s32 i;
-    s32 count = 0;
+    s32 count;
+
+    count = 0;
+    pouch = pouchGetPtr();
+    out = pWin;
+    index = 0;
+    one = 1;
 
     for (i = 0; i < 0x28; i++) {
         if (*(s16*)((s32)pouch + 0x38A) != 0) {
@@ -25,45 +31,37 @@ void winMakeEquipList(void* pWin) {
             *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38A);
             out = (void*)((s32)out + 0xC);
         }
+        index++;
         if (*(s16*)((s32)pouch + 0x38C) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
-            index++;
             *(s32*)((s32)out + 0x408) = index;
             *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38C);
             out = (void*)((s32)out + 0xC);
-        } else {
-            index++;
         }
+        index++;
         if (*(s16*)((s32)pouch + 0x38E) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
-            index++;
             *(s32*)((s32)out + 0x408) = index;
             *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38E);
             out = (void*)((s32)out + 0xC);
-        } else {
-            index++;
         }
+        index++;
         if (*(s16*)((s32)pouch + 0x390) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
-            index++;
             *(s32*)((s32)out + 0x408) = index;
             *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x390);
             out = (void*)((s32)out + 0xC);
-        } else {
-            index++;
         }
+        index++;
         if (*(s16*)((s32)pouch + 0x392) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
-            index++;
             *(s32*)((s32)out + 0x408) = index;
             *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x392);
             out = (void*)((s32)out + 0xC);
-        } else {
-            index++;
         }
         pouch = (void*)((s32)pouch + 0xA);
         index++;
@@ -84,7 +82,6 @@ void winBadgeInit(void* pWin) {
     s32 index;
     s32 one = 1;
     s32 i;
-    s16 badge;
 
     *(s32*)((s32)pWin + 0x3DC) = 0;
     *(s32*)((s32)pWin + 0x3E0) = 0;
@@ -97,48 +94,43 @@ void winBadgeInit(void* pWin) {
     out = pWin;
     index = 0;
     for (i = 0; i < 0x28; i++) {
-        badge = *(s16*)((s32)pouch + 0x38A);
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x38A) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38A);
             out = (void*)((s32)out + 0xC);
         }
-        badge = *(s16*)((s32)pouch + 0x38C);
         index++;
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x38C) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38C);
             out = (void*)((s32)out + 0xC);
         }
-        badge = *(s16*)((s32)pouch + 0x38E);
         index++;
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x38E) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38E);
             out = (void*)((s32)out + 0xC);
         }
-        badge = *(s16*)((s32)pouch + 0x390);
         index++;
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x390) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x390);
             out = (void*)((s32)out + 0xC);
         }
-        badge = *(s16*)((s32)pouch + 0x392);
         index++;
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x392) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x392);
             out = (void*)((s32)out + 0xC);
         }
         pouch = (void*)((s32)pouch + 0xA);
@@ -162,7 +154,6 @@ u8 winBadgeInit2(void* pWin) {
     s32 index;
     s32 one;
     s32 i;
-    s16 badge;
     f32 value;
     char* msg;
 
@@ -186,48 +177,43 @@ u8 winBadgeInit2(void* pWin) {
     index = 0;
     one = 1;
     for (i = 0; i < 0x28; i++) {
-        badge = *(s16*)((s32)pouch + 0x38A);
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x38A) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38A);
             out = (void*)((s32)out + 0xC);
         }
-        badge = *(s16*)((s32)pouch + 0x38C);
         index++;
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x38C) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38C);
             out = (void*)((s32)out + 0xC);
         }
-        badge = *(s16*)((s32)pouch + 0x38E);
         index++;
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x38E) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x38E);
             out = (void*)((s32)out + 0xC);
         }
-        badge = *(s16*)((s32)pouch + 0x390);
         index++;
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x390) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x390);
             out = (void*)((s32)out + 0xC);
         }
-        badge = *(s16*)((s32)pouch + 0x392);
         index++;
-        if (badge != 0) {
+        if (*(s16*)((s32)pouch + 0x392) != 0) {
             *(s32*)((s32)out + 0x404) = one;
             count++;
             *(s32*)((s32)out + 0x408) = index;
-            *(s32*)((s32)out + 0x40C) = badge;
+            *(s32*)((s32)out + 0x40C) = *(s16*)((s32)pouch + 0x392);
             out = (void*)((s32)out + 0xC);
         }
         pouch = (void*)((s32)pouch + 0xA);
@@ -467,9 +453,17 @@ s32 winBadgeMain(void* pWin) {
         else if (repeat & 0x20) { s32 pages=(count+7)/8; if (++*page >= pages) *page=pages-1; *cursor=*page<<3; psndSFXOn(0x20035); }
         else if (dirs & 0x1000) { --*cursor; psndSFXOn(0x20035); }
         else if (dirs & 0x2000) { ++*cursor; psndSFXOn(0x20035); }
-        if (count > 0) { if (*cursor < 0) *cursor = count - 1; if (*cursor >= count) *cursor = 0; *page = *cursor / 8; }
+        else if (pressed & 0x10) {
+            winSortEntry(-310.0f, 150.0f, pWin, sub == 0 ? 2 : 3);
+            *(s32*)((s32)pWin + 0x124) = state;
+            psndSFXOn(0x20012);
+            *(s32*)((s32)pWin + 0x3DC) = 1000;
+        }
+        if (*cursor < 0) *cursor = count - 1;
+        if (*cursor >= count) *cursor = 0;
+        *page = *cursor / 8;
         *(f32*)((s32)pWin + 0x158) = -110.0f;
-        *(f32*)((s32)pWin + 0x15C) = (f32)(110 - (*cursor & 7) * 23);
+        *(f32*)((s32)pWin + 0x15C) = (f32)(110 - (*cursor % 8) * 23);
         if (sub == 0) {
             s32 badge = pouchHaveBadge(*cursor);
             winMsgEntry(pWin, badge, *(char**)(itemDataTable + badge * 0x28 + 8), 0);
@@ -523,8 +517,8 @@ void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
     Vec3 scale;
     u32 white = 0xFFFFFFFF;
     void* pouch = pouchGetPtr();
-    f32 x = *(f32*)((u8*)pWin + 0x30 + index * 0x18);
-    f32 y = *(f32*)((u8*)pWin + 0x34 + index * 0x18);
+    f32 x = *(f32*)((u8*)pWin + 0xC4 + index * 0x14);
+    f32 y = *(f32*)((u8*)pWin + 0xC8 + index * 0x14);
     s32 active = *(s32*)((u8*)pWin + 0x3E0);
     s32 total = *(s16*)((u8*)pouch + 0x94);
     s32 available = *(s16*)((u8*)pouch + 0x92);
@@ -589,22 +583,38 @@ void winBadgeDisp(s32 cameraId, void* pWin, s32 index) {
 
 void badge_disp(double x, double y, void* pWin) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
-    extern s32 pouchHaveBadge(s32 index);
-    extern s32 pouchEquipCheckBadgeIndex(s32 index);
-    extern void GXSetScissor(s32 x, s32 y, s32 w, s32 h);
-    extern void winTexInit(void* texture);
-    extern void winTexSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
+    extern void* pouchGetPtr(void);
+    extern s32 pouchGetHaveBadgeCnt(void);
+    extern s32 pouchHaveBadge(s32);
+    extern s32 pouchEquipCheckBadgeIndex(s32);
+    extern void GXSetScissor(s32, s32, s32, s32);
+    extern void winTexInit(void*);
+    extern void winTexSet(s32, Vec3*, Vec3*, void*);
     extern void winIconInit(void);
     extern void winIconGrayInit(void);
-    extern void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
-    extern void winFontSet(Vec3* pos, Vec3* scale, void* color, char* text, ...);
-    extern void winFontSetWidth(Vec3* pos, Vec3* scale, void* color, f32 width,
-                                char* text, ...);
-    extern u32 FontGetMessageWidth(char* text);
-    extern s32 sprintf(char* dst, char* format, ...);
+    extern void winIconSet(s32, Vec3*, Vec3*, void*);
+    extern void winFontInit(void);
+    extern void winFontSet(Vec3*, Vec3*, void*, char*, ...);
+    extern void winFontSetWidth(Vec3*, Vec3*, void*, f32, char*, ...);
+    extern u32 FontGetMessageWidth(char*);
+    extern char* msgSearch(char*);
+    extern char* winZenkakuStr(s32);
+    extern s32 sprintf(char*, char*, ...);
     extern u8 itemDataTable[];
     extern char str_msg_menu_sort_narabi_802f5464[];
     extern char str_msg_menu_badge_hituy_802f547c[];
+    extern f32 float_160_80423658;
+    extern f32 float_0p7_80423690;
+    extern f32 vec3_802f5350;
+    extern f32 vec3_802f5368;
+    extern f32 vec3_802f5380;
+    extern f32 vec3_802f53c8;
+    extern f32 vec3_802f53e0;
+    extern f32 vec3_802f53f8;
+    extern f32 vec3_802f5410;
+    extern f32 vec3_802f5428;
+    extern f32 vec3_802f5440;
+    extern f32 vec3_802f5458;
     Vec3 pos;
     Vec3 scale;
     u32 white = 0xFFFFFFFF;
@@ -612,10 +622,6 @@ void badge_disp(double x, double y, void* pWin) {
     s32 mode = *(s32*)((u8*)pWin + 0x3E0);
     s32 count;
     s32 index;
-    s32 badge;
-    s32 equipped;
-    f32 scroll;
-    f32 row_y;
     char cost[64];
 
     if (mode == 0) {
@@ -623,11 +629,19 @@ void badge_disp(double x, double y, void* pWin) {
     } else {
         count = *(s32*)((u8*)pWin + 0xD64);
     }
-
     GXSetScissor(0, 0x77, 0x260, 0xB8);
     scale.x = scale.y = scale.z = 1.0f;
     pos.z = 0.0f;
     for (index = 0; index < count; index++) {
+        s32 badge;
+        s32 equipped;
+        s32 grayFlag;
+        s32 bpCost;
+        s32 i;
+        f32 scroll;
+        f32 rowY;
+        u32* color;
+
         if (mode == 0) {
             badge = pouchHaveBadge(index);
             equipped = pouchEquipCheckBadgeIndex(index);
@@ -636,69 +650,103 @@ void badge_disp(double x, double y, void* pWin) {
             equipped = *(s32*)((u8*)pWin + 0x404 + index * 0xC);
         }
         scroll = *(f32*)((u8*)pWin + 0x3F4 + mode * 4);
-        row_y = (f32)y + 110.0f - (f32)(index * 23) + scroll;
-        if (row_y > 240.0f) {
+        rowY = (f32)y + 110.0f - (f32)(index * 23) + scroll;
+        if (rowY > 240.0f) {
             continue;
         }
-        if (row_y < -240.0f) {
+        if (rowY < -240.0f) {
             break;
         }
 
+        bpCost = *(s8*)(itemDataTable + badge * 0x28 + 0x1C);
         if (equipped == 0) {
-            winIconInit();
+            if (bpCost > *(s16*)((u8*)pouchGetPtr() + 0x92)) {
+                grayFlag = 1;
+                color = &gray;
+            } else {
+                grayFlag = 0;
+                color = &white;
+            }
         } else {
             winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+            scale.x = vec3_802f5350;
+            scale.y = scale.z = 1.0f;
             pos.x = (f32)x + 82.0f;
-            pos.y = row_y;
+            pos.y = rowY;
             winTexSet(0x1E, &pos, &scale, &white);
-            winIconInit();
+            grayFlag = 0;
+            color = &white;
         }
-
+        if (grayFlag == 0) {
+            winIconInit();
+        } else {
+            winIconGrayInit();
+        }
+        scale.x = scale.y = scale.z = vec3_802f5368;
         pos.x = (f32)x - 75.0f;
-        pos.y = row_y;
-        winIconSet(*(s32*)(itemDataTable + badge * 0x28 + 0x28), &pos, &scale, &white);
+        pos.y = rowY;
+        winIconSet(*(s16*)(itemDataTable + badge * 0x28 + 0x20), &pos, &scale, &white);
 
         winFontInit();
+        scale.x = scale.y = scale.z = vec3_802f5380;
         pos.x = (f32)x - 55.0f;
-        pos.y = row_y + 12.0f;
-        winFontSetWidth(&pos, &scale, equipped ? &white : &gray, 170.0f,
-                        msgSearch(*(char**)(itemDataTable + badge * 0x28 + 8)));
-
-        sprintf(cost, "%s", winZenkakuStr(*(s8*)(itemDataTable + badge * 0x28 + 0x24)));
+        pos.y = rowY + 12.0f;
+        winFontSetWidth(&pos, &scale, color, 170.0f,
+                        msgSearch(*(char**)(itemDataTable + badge * 0x28 + 4)));
+        sprintf(cost, "%s", winZenkakuStr(bpCost));
         pos.x = (f32)x + 142.0f - (f32)(FontGetMessageWidth(cost) >> 1);
-        pos.y = row_y + 12.0f;
-        winFontSet(&pos, &scale, equipped ? &white : &gray, cost);
+        pos.y = rowY + 12.0f;
+        winFontSet(&pos, &scale, color, cost);
+
+        winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+        scale.x = scale.y = scale.z = 1.0f;
+        for (i = 0; i < bpCost; i++) {
+            pos.x = (f32)x + float_160_80423658 + (f32)(i * 13);
+            pos.y = rowY;
+            winTexSet(equipped != 0 ? 0x1C : 0x1D, &pos, &scale, &white);
+        }
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);
 
     if (*(s32*)((u8*)pWin + 0x3EC + mode * 4) > 0) {
         winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+        scale.x = scale.y = scale.z = vec3_802f53c8;
         pos.x = (f32)x + 250.0f;
         pos.y = (f32)y + 151.0f;
         winTexSet(0x17, &pos, &scale, &white);
         winIconInit();
+        scale.x = scale.y = scale.z = vec3_802f53e0;
         pos.y = (f32)y + 133.0f;
         winIconSet(0x86, &pos, &scale, &white);
     }
     if (*(s32*)((u8*)pWin + 0x3EC + mode * 4) * 8 + 8 < count) {
         winTexInit(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0));
+        scale.x = scale.y = scale.z = vec3_802f53f8;
         pos.x = (f32)x + 250.0f;
         pos.y = (f32)y - 85.0f;
         winTexSet(0x17, &pos, &scale, &white);
         winIconInit();
+        scale.x = scale.y = scale.z = vec3_802f5410;
         pos.y = (f32)y - 70.0f;
         winIconSet(0x88, &pos, &scale, &white);
     }
 
+    {
+        char* text = msgSearch(str_msg_menu_sort_narabi_802f5464);
+        f32 textWidth = (f32)(FontGetMessageWidth(text) & 0xFFFF) * float_0p7_80423690;
+        winFontInit();
+        scale.x = scale.y = scale.z = vec3_802f5428;
+        pos.x = (f32)x + 220.0f - textWidth;
+        pos.y = (f32)y - 82.0f;
+        winFontSet(&pos, &scale, &white, text);
+        winIconInit();
+        scale.x = scale.y = scale.z = vec3_802f5440;
+        pos.x -= 30.0f;
+        pos.y -= 8.0f;
+        winIconSet(0x219, &pos, &scale, &white);
+    }
     winFontInit();
-    pos.x = (f32)x + 220.0f;
-    pos.y = (f32)y - 82.0f;
-    winFontSet(&pos, &scale, &white, msgSearch(str_msg_menu_sort_narabi_802f5464));
-    winIconInit();
-    pos.x -= 30.0f;
-    pos.y -= 8.0f;
-    winIconSet(0x219, &pos, &scale, &white);
-    winFontInit();
+    scale.x = scale.y = scale.z = vec3_802f5458;
     pos.x = (f32)x + 120.0f;
     pos.y = (f32)y + 135.0f;
     winFontSet(&pos, &scale, &white, msgSearch(str_msg_menu_badge_hituy_802f547c));

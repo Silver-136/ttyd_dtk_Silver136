@@ -93,11 +93,20 @@ void set_damage_root_ypos(f32 y) {
 
 u8 mot_damage(void) {
     typedef struct Vec { f32 x, y, z; } Vec;
+    extern void* marioGetPtr(void);
+    extern void marioClearSlitFloor(void);
     extern void marioOfsRotReset(void);
+    extern void marioAdjustMoveDir(void);
+    extern void marioSlitForceCancel(void);
+    extern void bomhei_use_cancel2(void);
+    extern void marioNoUpdateCamPos(void);
     extern void marioChgPose(char*);
     extern void marioChgEvtPose(char*);
     extern void marioMakeJumpPara(void);
+    extern void marioSetFallPara(void);
+    extern f32 marioGetFallSpd(void);
     extern void* marioChkLandon(f32, f32*);
+    extern void mario_simple_kemuri(void);
     extern void npcStopForEvent(void);
     extern void npcStartForEvent(void);
     extern void* evtEntry(void*, s32, s32);
@@ -106,17 +115,26 @@ u8 mot_damage(void) {
     extern f32 distABf(f32, f32, f32, f32);
     extern f32 angleABf(f32, f32, f32, f32);
     extern void movePos(f32, f32, f32*, f32*);
+    extern s32 marioBgmodeChk(void);
     extern s32 pouchAddHP(s16);
+    extern s32 pouchGetHP(void);
+    extern void marioUpdateCamPos(void);
     extern void marioChgMot(s32);
+    extern s32 quake_evt[8];
+    extern s32 quake_bgmode_evt[8];
     extern s32 evt_gazigazi[8];
     extern char str_KPA_D_1_802f38b8[];
     extern char str_M_F_1_80422ba4[];
     extern char str_KPA_D_2_802f38d8[];
+    extern char str_M_D_2_80422b90[];
+    extern char str_M_U_3_80422b98[];
+    extern Vec vec3_802f3838[2];
     extern Vec vec3_802f385c;
     void* mario;
     void* hit;
     void* code;
     Vec target;
+    Vec splash;
     Vec* returnPos;
     f32 landY;
     f32 fall;
@@ -146,8 +164,19 @@ u8 mot_damage(void) {
         }
         *(s32*)((s32)mario + 0x44) = 0;
         *(s32*)((s32)mario + 0x48) = 0;
+        *(s16*)((s32)mario + 0x50) = 0;
         *(f32*)((s32)mario + 0x180) = 0.0f;
-        *(s32*)((s32)mario + 0x2C4) = 20;
+        if (*(u16*)((s32)mario + 0x30) != 0x1A && *(u16*)((s32)mario + 0x30) != 0x18) {
+            splash.x = *(f32*)((s32)mario + 0x8C);
+            splash.y = *(f32*)((s32)mario + 0x90);
+            splash.z = *(f32*)((s32)mario + 0x94);
+            psndSFXOn_3D(0x194, &splash);
+            if (marioBgmodeChk() != 1) {
+                effSplashEntry(0, splash.x, splash.y, splash.z, float_1_80422b78);
+            }
+        }
+        *(Vec*)((s32)mario + 0x98) = vec3_802f3838[0];
+        *(Vec*)((s32)mario + 0xA4) = vec3_802f3838[1];
         npcStopForEvent();
     }
 

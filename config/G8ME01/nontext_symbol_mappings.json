@@ -3,49 +3,50 @@
   "component": "main.dol",
   "source_audit_sha256": "84d3d72a8a69dbaf066a8f99104ace53a7891f659665ab72cc3eb0f7dd720c40",
   "reverification_sha256": "3b33f3320f7f77b8613e6b1d6608161cfce8f6db9134574fd7961625eb7c8ea2",
-  "mapping_count": 1779,
+  "mapping_count": 1805,
   "units": {
     "main/action/ac_crane_timing": {
       "double_to_int_802fe690": "@136",
       "gap_09_80427084_sdata2": "@134"
     },
     "main/action/ac_lst_rc_keep": {
-      "double_to_int_802f9e20": "@189"
+      "double_to_int_802f9e20": "@187"
     },
     "main/action/ac_pendulum_crane_timing": {
-      "float_1_80426ed0": "@200"
+      "float_1_80426ed0": "@234"
     },
     "main/action/ac_power_gauge": {
-      "float_12_80427afc": "@315",
-      "vec3_802ff260": "@149",
-      "vec3_802ff26c": "@157",
-      "vec3_802ff278": "@159",
-      "vec3_802ff284": "@189",
-      "vec3_802ff290": "@190",
-      "vec3_802ff29c": "@192",
-      "vec3_802ff2a8": "@195",
-      "vec3_802ff2b4": "@196",
-      "vec3_802ff2c0": "@198",
-      "vec3_802ff2cc": "@205",
-      "vec3_802ff2d8": "@206",
-      "vec3_802ff2e4": "@208",
-      "vec3_802ff2f0": "@211",
-      "vec3_802ff2fc": "@212",
-      "vec3_802ff308": "@214",
-      "vec3_802ff314": "@222",
-      "vec3_802ff320": "@224",
-      "vec3_802ff32c": "@225"
+      "float_12_80427afc": "@309",
+      "vec3_802ff260": "@143",
+      "vec3_802ff26c": "@151",
+      "vec3_802ff278": "@153",
+      "vec3_802ff284": "@183",
+      "vec3_802ff290": "@184",
+      "vec3_802ff29c": "@186",
+      "vec3_802ff2a8": "@189",
+      "vec3_802ff2b4": "@190",
+      "vec3_802ff2c0": "@192",
+      "vec3_802ff2cc": "@199",
+      "vec3_802ff2d8": "@200",
+      "vec3_802ff2e4": "@202",
+      "vec3_802ff2f0": "@205",
+      "vec3_802ff2fc": "@206",
+      "vec3_802ff308": "@208",
+      "vec3_802ff314": "@216",
+      "vec3_802ff320": "@218",
+      "vec3_802ff32c": "@219"
     },
     "main/action/ac_power_gauge_lv": {
       "double_to_int_802ff398": "@119"
     },
     "main/action/ac_power_gauge_lv2": {
       "double_to_int_80300ba0": "@325",
-      "float_100_804281c8": "@201",
-      "float_120_804281d0": "@203",
-      "float_1_804281c4": "@200",
-      "float_70_804281cc": "@202",
-      "float_neg300_804281d4": "@322"
+      "float_0_804281dc": "@322",
+      "float_100_804281c8": "@200",
+      "float_120_804281d0": "@202",
+      "float_1_804281c4": "@199",
+      "float_70_804281cc": "@201",
+      "float_neg300_804281d4": "@321"
     },
     "main/action/ac_stick_keep_left": {
       "float_0_80422708": "@303",
@@ -66,7 +67,7 @@
       "gap_09_804221AC_sdata2": "@425"
     },
     "main/battle/battle_ac_help": {
-      "double_to_int_802feb50": "@30",
+      "double_to_int_802feb50": "@35",
       "str_めっせーじがみつかりません_802feb30": "str_message_not_found_802feb30"
     },
     "main/battle/battle_acrobat": {
@@ -76,24 +77,47 @@
       "double_to_int_802f4280": "@96"
     },
     "main/battle/battle_audience": {
-      "float_0_80424988": "@3328"
+      "float_0_80424988": "@3563"
     },
     "main/battle/battle_audience_kinopio": {
-      "float_0_804244e8": "@815",
-      "float_1p5_80424580": "@1365"
+      "float_0_804244e8": "@768",
+      "float_1p5_80424580": "@1318"
     },
     "main/battle/battle_camera": {
-      "float_0p5_80422748": "@990",
-      "vec3_802f0240": "@16"
+      "float_0p5_80422748": "@982",
+      "vec3_802f0240": "@16",
+      "double_to_int_802f02b0": "@479",
+      "str_かめら_でふぉると_802f02b8": "@981",
+      "str_かめら_でふぉるとズーム_802f02cc": "@983",
+      "str_かめら_かーそるがうえに_802f02e8": "@985",
+      "str_かめら_ふりー_802f0304": "@986",
+      "str_かめら_ぶたいうら_802f0314": "@988",
+      "str_かめら_ぶたいうら２_802f0328": "@991",
+      "str_かめら_かんきゃく_802f0340": "@992",
+      "str_かめら_ゆにっとついび_802f0354": "@998",
+      "double_20_802f0370": "@1001",
+      "double_1_802f0378": "@1002",
+      "str_かめら_２ゆにっとかんついび_802f0380": "@1003",
+      "str_かめら_ぱーつついび_802f03a0": "@1004",
+      "str_かめら_２ぱーつかんついび_802f03b8": "@1005",
+      "str_かめら_かんきゃくついび_802f03d4": "@1006",
+      "str_かめら_ゆにっとかんきゃくかんついび_802f03f0": "@1007",
+      "str_かめら_ふつうにはいった_802f0418": "@1008",
+      "str_かめら_うまくはいった_802f0434": "@1009",
+      "str_かめら_だめにはいった_802f044c": "@1010",
+      "str_かめら_しょうり_802f0464": "@1011",
+      "str_かめら_はいぼく_802f0478": "@1012",
+      "str_かめら_にげてる_802f048c": "@1013",
+      "str_かめら_おかしい_802f04a0": "@1014"
     },
     "main/battle/battle_damage": {
-      "float_0p75_804221bc": "@1316",
-      "float_10_804221b8": "@1315",
-      "float_1_804221c0": "@1317",
-      "float_20_804221d4": "@1674",
-      "float_45_804221b4": "@1314",
-      "float_60_804221b0": "@1313",
-      "zero_802ee050": "@77"
+      "float_0p75_804221bc": "@1442",
+      "float_10_804221b8": "@1441",
+      "float_1_804221c0": "@1443",
+      "float_20_804221d4": "@1800",
+      "float_45_804221b4": "@1440",
+      "float_60_804221b0": "@1439",
+      "zero_802ee050": "@203"
     },
     "main/battle/battle_detect": {
       "float_0p05_80422208": "@597",
@@ -134,21 +158,21 @@
       "double_to_int_802f00b8": "@1194"
     },
     "main/bowser/koopa": {
-      "float_20_8042672c": "@550",
-      "float_40_80426728": "@549",
-      "float_6_80426730": "@551",
-      "str_KPA_A_1A_802fd250": "@845",
-      "str_KPA_A_1B_802fd268": "@847",
+      "float_20_8042672c": "@552",
+      "float_40_80426728": "@551",
+      "float_6_80426730": "@553",
+      "str_KPA_A_1A_802fd250": "@847",
+      "str_KPA_A_1B_802fd268": "@849",
       "vec3_802fd238": "kpaFireMain_zero_vec_rodata"
     },
     "main/bowser/koopa_hit": {
-      "double_0p5_802fecd0": "@472",
-      "double_0p6_802fecc8": "@471",
-      "double_to_int_802fecc0": "@280"
+      "double_0p5_802fecd0": "@478",
+      "double_0p6_802fecc8": "@477",
+      "double_to_int_802fecc0": "@283"
     },
     "main/bowser/koopa_motion": {
-      "float_0_804272e0": "@655",
-      "float_280_804272e4": "@656"
+      "float_0_804272e0": "@661",
+      "float_280_804272e4": "@662"
     },
     "main/bowser/kpa_act": {
       "double_to_int_mask_802feb68": "@132"
@@ -1246,7 +1270,7 @@
       "double_to_int_802c1f18": "@230"
     },
     "main/driver/envdrv": {
-      "float_0_804248ac": "@360"
+      "float_0_804248ac": "@402"
     },
     "main/driver/extdrv": {
       "Colors$474": "localColors$10",
@@ -1276,66 +1300,69 @@
     },
     "main/effect/eff_bomb": {
       "double_to_int_802f9ab0": "@49",
-      "double_to_int_mask_802f9ab8": "@73"
+      "double_to_int_mask_802f9ab8": "@70"
     },
     "main/effect/eff_charge": {
-      "float_0_80424660": "@65",
-      "float_0p2_80424688": "@104",
-      "float_100_80424684": "@103",
-      "float_12_80424674": "@70",
-      "float_1_80424658": "@63",
-      "float_30_80424694": "@120",
-      "float_360_80424680": "@102",
-      "float_6p2832_8042467c": "@101",
-      "float_80_8042468c": "@105",
-      "float_8_80424668": "@67",
-      "float_9_80424690": "@119",
-      "float_deg2rad_8042465c": "@64",
-      "float_neg12_80424670": "@69",
-      "float_neg24_8042466c": "@68",
-      "float_neg36_80424678": "@71",
-      "float_neg8_80424664": "@66"
+      "float_0_80424660": "@69",
+      "float_0p2_80424688": "@106",
+      "float_100_80424684": "@105",
+      "float_12_80424674": "@74",
+      "float_1_80424658": "@67",
+      "float_30_80424694": "@122",
+      "float_360_80424680": "@104",
+      "float_6p2832_8042467c": "@103",
+      "float_80_8042468c": "@107",
+      "float_8_80424668": "@71",
+      "float_9_80424690": "@121",
+      "float_deg2rad_8042465c": "@68",
+      "float_neg12_80424670": "@73",
+      "float_neg24_8042466c": "@72",
+      "float_neg36_80424678": "@75",
+      "float_neg8_80424664": "@70"
     },
     "main/effect/eff_fall": {
-      "float_10_80427500": "@632",
+      "float_10_80427500": "@631",
       "float_deg2rad_804274c0": "@394"
     },
     "main/effect/eff_gonbaba_breath": {
-      "double_to_int_80302b88": "@208"
+      "double_to_int_80302b88": "@209"
     },
     "main/effect/eff_hibashira": {
-      "double_to_int_80302a50": "@176"
+      "double_to_int_80302a50": "@179"
     },
     "main/effect/eff_ibuki": {
       "gap_07_8041DEC4_sdata": "ibuki_texcoord1_padding"
     },
     "main/effect/eff_kemutest": {
-      "float_10_8042703c": "@360"
+      "float_10_8042703c": "@383"
     },
     "main/effect/eff_kiss": {
-      "float_0_80427964": "@182"
+      "float_0_80427964": "@197"
     },
     "main/effect/eff_mahorn2": {
-      "double_to_int_80303008": "@175"
+      "double_to_int_80303008": "@199"
     },
     "main/effect/eff_mist": {
       "double_to_int_802ff220": "@76"
     },
     "main/effect/eff_mist2": {
-      "float_0_80428254": "@61",
-      "float_1_80428258": "@62",
-      "float_255_80428248": "@58",
-      "float_8_80428250": "@60"
+      "float_0_80428254": "@59",
+      "float_1_80428258": "@60",
+      "float_255_80428248": "@56",
+      "float_8_80428250": "@58"
     },
     "main/effect/eff_mizutama": {
-      "double_to_int_802feff8": "@119"
+      "double_to_int_802feff8": "@116"
     },
     "main/effect/eff_mobj_broken": {
-      "float_deg2rad_80427640": "@194"
+      "float_deg2rad_80427640": "@199"
+    },
+    "main/effect/eff_nice": {
+      "double_to_int_802f3f68": "@191"
     },
     "main/effect/eff_nozle": {
-      "float_0_8042778c": "@118",
-      "float_deg2rad_80427788": "@117"
+      "float_0_8042778c": "@160",
+      "float_deg2rad_80427788": "@159"
     },
     "main/effect/eff_number": {
       "double_to_int_80302a58": "@75"
@@ -1344,13 +1371,13 @@
       "float_0_80424878": "@23"
     },
     "main/effect/eff_sheep": {
-      "float_neg1_80427eb8": "@153"
+      "float_neg1_80427eb8": "@156"
     },
     "main/effect/eff_sleep": {
-      "double_to_int_80302ad8": "@76"
+      "double_to_int_80302ad8": "@75"
     },
     "main/effect/eff_splash": {
-      "float_deg2rad_80427860": "@129"
+      "float_deg2rad_80427860": "@252"
     },
     "main/effect/eff_starpoint": {
       "double_to_int_802fe540": "@134"
@@ -1361,9 +1388,6 @@
     "main/effect/eff_toge_flush": {
       "double_to_int_802f9740": "@102"
     },
-    "main/effect/eff_toiki": {
-      "float_0_80428200": "@36"
-    },
     "main/effect/eff_ultra_hammer": {
       "double_to_int_80303038": "@111",
       "negone_one$360": "negone_one_360",
@@ -1372,27 +1396,27 @@
       "one_negone$373": "one_negone_373"
     },
     "main/effect/n64/eff_akari_charge_n64": {
-      "double_to_int_802faab0": "@97"
+      "double_to_int_802faab0": "@96"
     },
     "main/effect/n64/eff_akari_pose_n64": {
-      "double_to_int_802faaf0": "@104"
+      "double_to_int_802faaf0": "@113"
     },
     "main/effect/n64/eff_akari_sflush_n64": {
       "double_to_int_802fab18": "@52"
     },
     "main/effect/n64/eff_booboo_n64": {
-      "double_to_int_802fac00": "@138"
+      "double_to_int_802fac00": "@139"
     },
     "main/effect/n64/eff_broken_barrier_n64": {
-      "double_to_int_802fac68": "@74",
-      "float_255_80424e30": "@71",
-      "float_deg2rad_80424e34": "@72"
+      "double_to_int_802fac68": "@122",
+      "float_255_80424e30": "@119",
+      "float_deg2rad_80424e34": "@120"
     },
     "main/effect/n64/eff_butterfly_n64": {
-      "double_to_int_802facd0": "@37"
+      "double_to_int_802facd0": "@51"
     },
     "main/effect/n64/eff_expbom_n64": {
-      "float_0_804250ac": "@65"
+      "float_0_804250ac": "@72"
     },
     "main/effect/n64/eff_explosion_n64": {
       "double_to_int_802fae48": "@63"
@@ -1401,10 +1425,10 @@
       "double_to_int_802fae70": "@109"
     },
     "main/effect/n64/eff_freeze_n64": {
-      "double_to_int_802fafe0": "@55"
+      "double_to_int_802fafe0": "@80"
     },
     "main/effect/n64/eff_guruguru_n64": {
-      "double_to_int_802fb058": "@58"
+      "double_to_int_802fb058": "@53"
     },
     "main/effect/n64/eff_hagetaka_flush_n64": {
       "double_to_int_802fb080": "@35"
@@ -1413,7 +1437,7 @@
       "double_to_int_802fb130": "@42"
     },
     "main/effect/n64/eff_ice_n64": {
-      "double_to_int_802fb158": "@66"
+      "double_to_int_802fb158": "@68"
     },
     "main/effect/n64/eff_kemuri10_n64": {
       "float_0_80425830": "@111",
@@ -1424,19 +1448,19 @@
       "double_to_int_802fb360": "@43"
     },
     "main/effect/n64/eff_kemuri2_n64": {
-      "double_to_int_802fb1e8": "@52"
+      "double_to_int_802fb1e8": "@76"
     },
     "main/effect/n64/eff_kemuri5_n64": {
-      "double_to_int_802fb258": "@78"
+      "double_to_int_802fb258": "@76"
     },
     "main/effect/n64/eff_kemuri6_n64": {
-      "double_to_int_802fb278": "@76"
+      "double_to_int_802fb278": "@82"
     },
     "main/effect/n64/eff_kemuri8_n64": {
-      "float_1_804257a0": "@73"
+      "float_1_804257a0": "@90"
     },
     "main/effect/n64/eff_magic2_n64": {
-      "float_1_80425a28": "@69"
+      "float_1_80425a28": "@92"
     },
     "main/effect/n64/eff_opuku_jetwrain_n64": {
       "float_0_80425b58": "@91",
@@ -1452,13 +1476,13 @@
       "vec3_802fbb7c": "@61"
     },
     "main/effect/n64/eff_opuku_wgun_n64": {
-      "float_20_80425be0": "@126",
-      "float_2_80425bc4": "@119",
-      "float_30_80425bd4": "@123",
-      "float_360_80425bdc": "@125"
+      "float_20_80425be0": "@143",
+      "float_2_80425bc4": "@136",
+      "float_30_80425bd4": "@140",
+      "float_360_80425bdc": "@142"
     },
     "main/effect/n64/eff_packn_bfire_n64": {
-      "double_to_int_802fbc60": "@144"
+      "double_to_int_802fbc60": "@134"
     },
     "main/effect/n64/eff_pikkyolo_n64": {
       "float_0_80425d08": "@53",
@@ -1480,28 +1504,30 @@
       "float_deg2rad_80425f84": "@42"
     },
     "main/effect/n64/eff_snow_dust_n64": {
-      "float_0_80426538": "@127",
-      "float_0p0039062_80426540": "@129",
-      "float_0p015625_80426534": "@126",
-      "float_0p03125_8042653c": "@128",
-      "float_0p04_80426564": "@197",
-      "float_0p05_80426558": "@194",
-      "float_0p1_80426568": "@198",
-      "float_0p2_8042655c": "@195",
-      "float_0p6_80426560": "@196",
-      "float_0p97_8042656c": "@199",
-      "float_255_80426530": "@125",
-      "float_64_80426548": "@131",
+      "float_0_80426538": "@146",
+      "float_0p0039062_80426540": "@148",
+      "float_0p015625_80426534": "@145",
+      "float_0p03125_8042653c": "@147",
+      "float_0p04_80426564": "@217",
+      "float_0p05_80426558": "@214",
+      "float_0p1_80426568": "@218",
+      "float_0p2_8042655c": "@215",
+      "float_0p6_80426560": "@216",
+      "float_0p97_8042656c": "@219",
+      "float_255_80426530": "@144",
+      "float_64_80426548": "@150",
       "negone_one$360": "negone_one_360",
       "negone_one$374": "negone_one_374",
       "one_negone$359": "one_negone_359",
       "one_negone$373": "one_negone_373"
     },
     "main/effect/n64/eff_snowman_n64": {
-      "float_0_804260c0": "@118",
-      "float_0p01_804260c4": "@119",
-      "float_14_804260d8": "@124",
-      "float_2_804260c8": "@120"
+      "float_0_804260c0": "@125",
+      "float_0p01_804260c4": "@126",
+      "float_14_804260d8": "@131",
+      "float_2_804260c8": "@127",
+      "float_10_804260d0": "@129",
+      "float_neg2_804260d4": "@130"
     },
     "main/effect/n64/eff_star_power_n64": {
       "float_0_804261ac": "@111",
@@ -1521,19 +1547,19 @@
       "float_neg1200_804262e4": "@101"
     },
     "main/effect/n64/eff_sweat_n64": {
-      "double_to_int_802fc160": "@124",
-      "float_deg2rad_8042632c": "@70"
+      "double_to_int_802fc160": "@130",
+      "float_deg2rad_8042632c": "@76"
     },
     "main/effect/n64/eff_thruhammer_n64": {
-      "float_0_80426370": "@64",
-      "float_0p3_80426364": "@61",
-      "float_deg2rad_80426360": "@60"
+      "float_0_80426370": "@67",
+      "float_0p3_80426364": "@64",
+      "float_deg2rad_80426360": "@63"
     },
     "main/effect/n64/eff_timestamp_n64": {
-      "float_0_80426438": "@96",
-      "float_0p015625_80426434": "@95",
-      "float_200_80426448": "@100",
-      "float_deg2rad_80426430": "@94"
+      "float_0_80426438": "@94",
+      "float_0p015625_80426434": "@93",
+      "float_200_80426448": "@98",
+      "float_deg2rad_80426430": "@92"
     },
     "main/effect/n64/eff_vapor_n64": {
       "float_0p0039062_8042646c": "@62",
@@ -1547,7 +1573,7 @@
       "one_negone$373": "one_negone_373"
     },
     "main/effect/n64/eff_whirlwind_n64": {
-      "double_to_int_802faa88": "@91"
+      "double_to_int_802faa88": "@130"
     },
     "main/event": {
       "str_かぎ_80421db8": "str_jp_80421db8",
@@ -1577,7 +1603,7 @@
       "double_to_int_802c9048": "@202"
     },
     "main/event/evt_johoya": {
-      "zero_804265a8": "@282"
+      "zero_804265a8": "@281"
     },
     "main/event/evt_kinopio": {
       "str_カメラマン_802ed39c": "str_cameraman_802ed39c",
@@ -1587,7 +1613,7 @@
       "gap_07_8041DFCC_sdata": "all_juyoitem_lecture_padding"
     },
     "main/event/evt_movefloor": {
-      "float_0_80426584": "@295"
+      "float_0_80426584": "@289"
     },
     "main/event/evt_party": {
       "double_to_int_802e7c00": "@722"
@@ -1597,19 +1623,19 @@
       "float_80_80421ec0": "@608"
     },
     "main/event/evt_uranaisi": {
-      "zero_804267c0": "@293"
+      "zero_804267c0": "@300"
     },
     "main/event/evt_urouro": {
-      "double_to_int_80300248": "@145",
-      "double_to_int_mask_80300250": "@146",
-      "float_1000_80427e48": "@140",
-      "float_180_80427e40": "@138",
-      "float_20_80427e44": "@139",
-      "float_30_80427e38": "@136",
-      "float_360_80427e50": "@142",
-      "float_6p2832_80427e4c": "@141",
-      "float_90_80427e3c": "@137",
-      "lbl_80427E54": "@143"
+      "double_to_int_80300248": "@155",
+      "double_to_int_mask_80300250": "@156",
+      "float_1000_80427e48": "@150",
+      "float_180_80427e40": "@148",
+      "float_20_80427e44": "@149",
+      "float_30_80427e38": "@146",
+      "float_360_80427e50": "@152",
+      "float_6p2832_80427e4c": "@151",
+      "float_90_80427e3c": "@147",
+      "lbl_80427E54": "@153"
     },
     "main/manager/evtmgr": {
       "float_0_8041fa34": "@965",
@@ -1622,9 +1648,9 @@
       "float_1_8041fa24": "@1674"
     },
     "main/manager/winmgr": {
-      "vec3_803003a0": "@612",
-      "vec3_80300430": "@694",
-      "vec3_8030043c": "@697"
+      "vec3_803003a0": "@663",
+      "vec3_80300430": "@745",
+      "vec3_8030043c": "@748"
     },
     "main/mario/mario_kemuri": {
       "cnt2$492": "cnt2_492$59",
@@ -1641,19 +1667,19 @@
       "double_to_int_802c2a80": "@336"
     },
     "main/motion/mot_damage": {
-      "float_0_80422b60": "@359"
+      "float_0_80422b60": "@372"
     },
     "main/motion/mot_dokan": {
-      "gap_09_8042308C_sdata2": "@148"
+      "gap_09_8042308C_sdata2": "@177"
     },
     "main/motion/mot_hammer": {
       "double_to_int_802c3fc8": "@782"
     },
     "main/motion/mot_hip": {
-      "float_0_804243d4": "@120",
-      "float_1_804243d0": "@119",
-      "float_5p2_804243e8": "@196",
-      "float_neg0p4_804243d8": "@121"
+      "float_0_804243d4": "@124",
+      "float_1_804243d0": "@123",
+      "float_5p2_804243e8": "@204",
+      "float_neg0p4_804243d8": "@125"
     },
     "main/motion/mot_jabara": {
       "double_to_int_802c4080": "@930"
@@ -2013,21 +2039,21 @@
       "double_180_802cc600": "@593"
     },
     "main/party/party_vivian": {
-      "float_0_80424274": "@907",
-      "float_0p2_80424284": "@911",
-      "float_0p5_8042429c": "@918",
-      "float_10_80424270": "@906",
-      "float_1_804242b0": "@926",
-      "float_1p5_804242b8": "@928",
-      "float_1p6_804242a0": "@923",
-      "float_20_804242b4": "@927",
-      "float_2p5_80424290": "@914",
-      "float_37_8042427c": "@909",
-      "float_8_804242ac": "@925",
-      "float_neg0p4_80424288": "@912",
-      "float_neg13_80424278": "@908",
-      "float_neg37_80424280": "@910",
-      "str_M_B_3_804242a4": "@924"
+      "float_0_80424274": "@904",
+      "float_0p2_80424284": "@908",
+      "float_0p5_8042429c": "@915",
+      "float_10_80424270": "@903",
+      "float_1_804242b0": "@923",
+      "float_1p5_804242b8": "@925",
+      "float_1p6_804242a0": "@920",
+      "float_20_804242b4": "@924",
+      "float_2p5_80424290": "@911",
+      "float_37_8042427c": "@906",
+      "float_8_804242ac": "@922",
+      "float_neg0p4_80424288": "@909",
+      "float_neg13_80424278": "@905",
+      "float_neg37_80424280": "@907",
+      "str_M_B_3_804242a4": "@921"
     },
     "main/sdk/arc": {
       "str_ARCInitHandle_bad_ar_802c2bd8": "@301",
@@ -2047,18 +2073,18 @@
       "str_PCTs_PCTsPCTs_802e3cd0": "@1876"
     },
     "main/statuswindow": {
-      "gap_09_80422C74_sdata2": "@661"
+      "gap_09_80422C74_sdata2": "@681"
     },
     "main/unk_0x8025DE70": {
-      "str_0xPCT08x_0xPCT08x_0x_80303150": "@121",
-      "str_Address_Back_Chain_L_8030312c": "@120",
-      "str_Context_0xPCT08x_8030308c": "@114",
-      "str_DSISR_0xPCT08x_DAR_0_8030310c": "@118",
-      "str_Instruction_at_0xPCT_8030316c": "@122",
-      "str_LR_0xPCT08x_CR_0xPCT_803030cc": "@116",
-      "str_OS_ERROR_PROGRAM_80303070": "@113",
-      "str_SRR0_0xPCT08x_SRR1_0_803030ec": "@117",
-      "str_rPCT_2d_0xPCT08x_rPC_803030a8": "@115"
+      "str_0xPCT08x_0xPCT08x_0x_80303150": "@127",
+      "str_Address_Back_Chain_L_8030312c": "@126",
+      "str_Context_0xPCT08x_8030308c": "@120",
+      "str_DSISR_0xPCT08x_DAR_0_8030310c": "@124",
+      "str_Instruction_at_0xPCT_8030316c": "@128",
+      "str_LR_0xPCT08x_CR_0xPCT_803030cc": "@122",
+      "str_OS_ERROR_PROGRAM_80303070": "@119",
+      "str_SRR0_0xPCT08x_SRR1_0_803030ec": "@123",
+      "str_rPCT_2d_0xPCT08x_rPC_803030a8": "@121"
     }
   }
 }

@@ -1821,39 +1821,98 @@ void itemseq_GetItem(void* item, s32 p2, s32 p3, s32 p4, u32* p5, u32 p6) {
     }
 }
 
+s32 _move_dir;
+
 u8 itemseq_Bound(void* item) {
     extern void* marioGetPtr(void);
     extern void* camGetPtr(s32);
+    extern void* mobjHitObjPtrToPtr(void*);
+    extern s32 irand(s32);
+    extern s32 strcmp(char*, char*);
+    extern void pouchArriveBadge(s32);
+    extern void effSoftDelete(void*);
+    extern void iconDelete(void*);
     extern void* gp;
     extern void* hitCheckFilter(f64, f64, f64, f64, f64, f64, s32, void*, f32*, void*, f32*, void*, void*, void*);
     extern u32 hitGetAttr(void*);
-    extern u32 psndSFXOn_3D(s32, void*);
+    extern u32 psndSFXOn_3D(char*, void*);
     extern void effStardustEntry(f64, f64, f64, f64, f64, s32, s32, s32);
+    extern void effSplashEntry(f32, f32, f32, f32, s32);
+    extern char str_SFX_COIN_LEAPED1_802c9114[];
+    extern char str_SFX_EVT_GAME_MONTE_L_802c9128[];
+    extern char str_SFX_HEART_LEAPED1_802c9144[];
+    extern char str_SFX_FLOWER_LEAPED1_802c9158[];
+    extern char str_SFX_STAR_PIECE_LEAPE_802c916c[];
+    extern char str_SFX_EVT_STARSTONE_JU_802c9184[];
+    extern char str_SFX_BADGE_LEAPED1_802c919c[];
+    extern char str_SFX_ITEM_LEAPED1_802c91b0[];
     extern f64 sin(f64);
     extern f64 cos(f64);
     extern const f64 double_neg1_802c92d8;
+    extern const f64 double_20_802c9098;
+    extern f64 fabs(f64);
     extern f32 float_0p5_804210d0;
+    extern f32 float_0p25_80421104;
     extern f32 float_0p7_8042110c;
     extern f32 float_8_80421110;
     extern f32 float_1E06_804210f4;
     extern f32 float_neg1000_80421108;
+    extern f32 float_neg980_80421100;
+    extern f32 float_6p2832_804210f8;
+    extern f32 float_360_804210fc;
+    extern f32 float_0_804210b4;
+    extern f32 float_20_804210b8;
+    extern f32 float_neg1_804210c4;
+    extern f32 float_500_804210e4;
+    extern char str_MOBJ_KururinFloor_802c91c4[];
+    extern f32 float_15_804210cc;
+    extern f32 float_100_804210d8;
+    extern f32 float_90_804210e8;
+    extern f32 float_30_804210ec;
+    extern f32 float_0p67_804210f0;
+    extern char str_aji_03_802c910c[];
+
+    typedef struct BoundVec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } BoundVec;
+    extern BoundVec vec3_802c9074;
+    extern BoundVec vec3_802c9080;
     f32* pos = (f32*)((s32)item + 0x3C);
     u32* status = (u32*)((s32)item + 0x38);
     u32* flags = (u32*)((s32)item + 0x34);
-    f32 speed;
-    s32 angle;
-    f32 gravity;
-    f32 jump;
-    f32 nextX, nextZ, floorY, distance;
+    f32 nextX;
+    f32 nextZ;
     s32 nextAngle;
-    void* hit;
-    f32 radians, dx, dz, dy;
-    s64 now, deltaCycles, accumulatedCycles;
-    f32 deltaTime, accumulatedTime, totalTime;
 
-    marioGetPtr();
-    camGetPtr(4);
-    if (*(u16*)((s32)item + 0x26) == 0) {
+    u32 ceilingWork6;
+    u32 ceilingWork5;
+    u32 ceilingWork4;
+    f32 ceilingDistance;
+    u32 ceilingWork2;
+    f32 ceilingY;
+    u32 ceilingWork0;
+
+    u32 floorWork6;
+    u32 floorWork5;
+    u32 floorWork4;
+    f32 floorDistance;
+    u32 floorWork2;
+    f32 floorY;
+    u32 floorWork0;
+
+    void* hit;
+    f32 dx, dz, dy;
+    s64 deltaCycles, accumulatedCycles;
+    f32 deltaTime, accumulatedTime, totalTime;
+    u8* camera;
+    u8* mario;
+
+    mario = marioGetPtr();
+    camera = camGetPtr(4);
+    switch (*(s16*)((s32)item + 0x26)) {
+    case 0: {
         *(u16*)((s32)item + 0x26) = 1;
         *(u32*)((s32)item + 0x64) = 0;
         *(u32*)((s32)item + 0x60) = 0;
@@ -1862,53 +1921,104 @@ u8 itemseq_Bound(void* item) {
         *(u32*)((s32)item + 0x74) = *(u32*)((s32)gp + 0x3C);
         *(u32*)((s32)item + 0x70) = *(u32*)((s32)gp + 0x38);
         *(s32*)((s32)item + 0x8C) = 0;
-        if ((*(u16*)item & 0x10) != 0) return 0;
+        if ((*status & 0x10) == 0) {
         switch (*(u16*)((s32)item + 0x24)) {
         case 3:
         case 4:
             if (*(u16*)((s32)item + 0x24) == 4) {
                 *status |= 8;
             }
-            if ((*flags & 0x10) == 0) {
+            if ((*(u16*)item & 0x10) == 0) {
                 *(f32*)((s32)item + 0x80) = 1.0f;
-                *(f32*)((s32)item + 0x58) = 1.0f;
-                *(f32*)((s32)item + 0x84) = 0.0f;
+                *(f32*)((s32)item + 0x84) = 1.0f;
+                *(s32*)((s32)item + 0x88) = 0;
             }
             *(f32*)((s32)item + 0x50) = 0.0f;
             *(s32*)((s32)item + 0x54) = 0;
-            *(f32*)((s32)item + 0x5C) = 0.0f;
+            *(f32*)((s32)item + 0x58) = 0.0f;
             break;
-        case 6:
-            *status |= 4;
-            if ((*flags & 0x10) == 0) {
-                *(f32*)((s32)item + 0x80) = 1.0f;
-                *(f32*)((s32)item + 0x58) = 1.0f;
-                *(f32*)((s32)item + 0x84) = 0.0f;
-                *(f32*)((s32)item + 0x5C) = 500.0f;
+        case 5:
+        case 6: {
+            s32 itemId;
+            s32 randomAngle;
+
+            if (*(u16*)((s32)item + 0x24) == 6) {
+                *status |= 4;
             }
-            break;
-        case 10:
-            *(f32*)((s32)item + 0x80) = 1.0f;
-            *(f32*)((s32)item + 0x58) = 1.0f;
-            *(f32*)((s32)item + 0x84) = 0.0f;
-            *(f32*)((s32)item + 0x5C) = 500.0f;
-            *(f32*)((s32)item + 0x50) = 0.0f;
-            *(s32*)((s32)item + 0x54) = 0;
-            *status |= 0x24;
+            if ((*(u16*)item & 0x10) == 0) {
+                *(f32*)((s32)item + 0x80) = 1.0f;
+                *(f32*)((s32)item + 0x84) = 1.0f;
+                *(s32*)((s32)item + 0x88) = 0;
+                *(f32*)((s32)item + 0x58) = float_500_804210e4;
+            }
+
+            if ((*status & 0x40) == 0) {
+                itemId = *(s32*)((s32)item + 4);
+
+                if (itemId == 0x79 || itemId == 0x7B || itemId == 0x7C) {
+                    *(f32*)((s32)item + 0x50) = (f32)(irand(0x1E) + 0x2D);
+
+                    if (irand(100) < 50) {
+                        randomAngle = irand(0x3C);
+                        *(s32*)((s32)item + 0x54) =
+                            (s32)((float_90_804210e8 + *(f32*)(camera + 0x114) +
+                                   (f32)randomAngle) - float_30_804210ec);
+                    } else {
+                        randomAngle = irand(0x3C);
+                        *(s32*)((s32)item + 0x54) =
+                            (s32)(((*(f32*)(camera + 0x114) - float_90_804210e8) +
+                                   (f32)randomAngle) - float_30_804210ec);
+                    }
+                } else {
+                    *(f32*)((s32)item + 0x50) = float_100_804210d8;
+
+                    if (irand(100) < 50) {
+                        randomAngle = irand(0x1E);
+                        *(s32*)((s32)item + 0x54) =
+                            (s32)((float_90_804210e8 + *(f32*)(camera + 0x114) +
+                                   (f32)randomAngle) - float_15_804210cc);
+                    } else {
+                        randomAngle = irand(0x1E);
+                        *(s32*)((s32)item + 0x54) =
+                            (s32)(((*(f32*)(camera + 0x114) - float_90_804210e8) +
+                                   (f32)randomAngle) - float_15_804210cc);
+                    }
+                }
+
+                if (strcmp((char*)((s32)gp + 0x12C),
+                           str_aji_03_802c910c) == 0) {
+                    *(s32*)((s32)item + 0x54) = irand(0x5A);
+                }
+            } else {
+                *(s32*)((s32)item + 0x54) = _move_dir;
+                _move_dir += 0x84;
+                if (_move_dir >= 0x168) {
+                    _move_dir -= 0x168;
+                }
+
+                *(f32*)((s32)item + 0x50) =
+                    float_0p67_804210f0 * (f32)(irand(0x1E) + 0x41);
+            }
             break;
         }
-        *status &= ~0x10;
-        return 0;
+        case 10:
+            *(f32*)((s32)item + 0x80) = 1.0f;
+            *(f32*)((s32)item + 0x84) = 1.0f;
+            *(s32*)((s32)item + 0x88) = 0;
+            *(f32*)((s32)item + 0x58) = float_500_804210e4;
+            *(f32*)((s32)item + 0x50) = 0.0f;
+            *(s32*)((s32)item + 0x54) = 0;
+            *status |= 0x20;
+            *status |= 4;
+            break;
+        }
+        }
+        break;
     }
-    if (*(u16*)((s32)item + 0x26) != 1) {
-        return 0;
-    }
-    speed = *(f32*)((s32)item + 0x50);
-    angle = *(s32*)((s32)item + 0x54);
-    gravity = *(f32*)((s32)item + 0x58);
-    jump = *(f32*)((s32)item + 0x5C);
-    now = *(s64*)((s32)gp + 0x38);
-    deltaCycles = now - *(s64*)((s32)item + 0x68);
+    case 1: {
+    *(s64*)((s32)item + 0x70) = *(s64*)((s32)gp + 0x38);
+    deltaCycles =
+        *(s64*)((s32)item + 0x70) - *(s64*)((s32)item + 0x68);
     accumulatedCycles = *(s64*)((s32)item + 0x60);
     deltaTime = (f32)((deltaCycles * 8) / (*(u32*)0x800000F8 / 500000)) /
                 float_1E06_804210f4;
@@ -1916,119 +2026,286 @@ u8 itemseq_Bound(void* item) {
                       (*(u32*)0x800000F8 / 500000)) / float_1E06_804210f4;
     totalTime = (f32)(((accumulatedCycles + deltaCycles) * 8) /
                 (*(u32*)0x800000F8 / 500000)) / float_1E06_804210f4;
-    nextAngle = angle;
-    radians = 6.2832f * (f32)angle / 360.0f;
-    dx = deltaTime * speed * (f32)sin(radians);
-    dz = deltaTime * speed * -(f32)cos(radians);
+
+    nextAngle = *(s32*)((s32)item + 0x54);
+    dx = deltaTime * *(f32*)((s32)item + 0x50) *
+         (f32)sin((float_6p2832_804210f8 *
+                   (f32)*(s32*)((s32)item + 0x54)) /
+                  float_360_804210fc);
+    dz = deltaTime * *(f32*)((s32)item + 0x50) *
+         -(f32)cos((float_6p2832_804210f8 *
+                    (f32)*(s32*)((s32)item + 0x54)) /
+                   float_360_804210fc);
     if ((*status & 0x8000) != 0) {
-        dz = 0.0f;
+        dz = float_0_804210b4;
     }
-    dy = jump * deltaTime + float_neg1000_80421108 * gravity * 0.98f *
+
+    dy = *(f32*)((s32)item + 0x58) * deltaTime +
+         float_neg980_80421100 * *(f32*)((s32)item + 0x84) *
          -(accumulatedTime * accumulatedTime - totalTime * totalTime);
     if ((*status & 4) != 0 && (*(s32*)((s32)item + 0x8C) != 0 || dy < 0.0f)) *status &= ~4;
     if ((*status & 8) != 0 && *(s32*)((s32)item + 0x8C) != 0) *status &= ~8;
     if ((*status & 0x20) != 0 && dy < 0.0f) {
+        void* workSet;
+        u8* scan;
+        s32 i;
+
         effStardustEntry(pos[0], pos[1], pos[2], 16.0, 16.0, 1, 3, 30);
+
+        workSet = work;
+        if (*(s32*)((s32)gp + 0x14) != 0) {
+            workSet = (void*)((s32)workSet + 0x1C);
+        }
+
+        scan = *(u8**)((s32)workSet + 4);
+        for (i = 0; i < *(s32*)workSet; i++, scan += 0x98) {
+            if (strcmp((char*)(scan + 0xC), (char*)((u8*)item + 0xC)) == 0) {
+                s32 itemId = *(s32*)(scan + 4);
+
+                if (*(s32*)((s32)gp + 0x14) == 0 &&
+                    itemId >= 0xF0 && itemId < 0x153 &&
+                    (*(u16*)scan & 0x100) != 0) {
+                    pouchArriveBadge(itemId);
+                }
+
+                if (itemId >= 0x72 && itemId < 0x79) {
+                    effSoftDelete(*(void**)(scan + 0x1C));
+                } else {
+                    iconDelete(scan + 0xC);
+                }
+
+                *(u16*)scan &= ~1;
+            }
+        }
         return 0;
     }
     nextX = pos[0];
     nextZ = pos[2];
     if (itemHitCheckSide(dx, dz, item, &nextX, &nextZ, &nextAngle) != 0) {
-        *(f32*)((s32)item + 0x50) *= 0.25f;
+        *(f32*)((s32)item + 0x50) *= float_0p25_80421104;
     }
     pos[0] = nextX;
     pos[2] = nextZ;
     *(u32*)((s32)item + 0x54) = nextAngle;
 
     hit = 0;
-    if ((*status & 0x20) == 0 && (*flags & 0x800) == 0) {
+    if ((*status & 0x20) == 0 && ((*(u16*)item & 0x800) == 0)) {
         if (dy > 0.0f) {
-            distance = 20.0f + dy;
+            ceilingDistance = 20.0f + dy;
             hit = hitCheckFilter(pos[0], pos[1] + 20.0f, pos[2],
                                  0.0, 1.0, 0.0, 0,
-                                 0, &floorY, 0, &distance, 0, 0, 0);
+                                 &ceilingWork0, &ceilingY, &ceilingWork2,
+                                 &ceilingDistance, &ceilingWork4,
+                                 &ceilingWork5, &ceilingWork6);
             if (hit == 0) {
-                distance = 20.0f + dy;
+                ceilingDistance = 20.0f + dy;
                 hit = hitCheckFilter(pos[0], pos[1], pos[2],
                                      0.0, 1.0, 0.0, 0,
-                                     0, &floorY, 0, &distance, 0, 0, 0);
+                                     &ceilingWork0, &ceilingY, &ceilingWork2,
+                                     &ceilingDistance, &ceilingWork4,
+                                     &ceilingWork5, &ceilingWork6);
                 if (hit != 0) {
-                    pos[1] = floorY - 20.0f;
+                    pos[1] = ceilingY - 20.0f;
                 }
             } else {
-                pos[1] = floorY - 24.0f;
+                pos[1] = ceilingY - 24.0f;
             }
         }
         if (hit != 0) {
-            *(f32*)((s32)item + 0x5C) = -jump * 0.25f;
-            *(u32*)((s32)item + 0x60) = 0;
+            *(f32*)((s32)item + 0x58) =
+                -*(f32*)((s32)item + 0x58) * float_0p25_80421104;
+            dy = float_0_804210b4;
             *(u32*)((s32)item + 0x64) = 0;
-            *(u32*)((s32)item + 0x68) = *(u32*)((s32)item + 0x70);
+            *(u32*)((s32)item + 0x60) = 0;
             *(u32*)((s32)item + 0x6C) = *(u32*)((s32)item + 0x74);
+            *(u32*)((s32)item + 0x68) = *(u32*)((s32)item + 0x70);
+            hit = 0;
         }
     }
-    if (hit == 0 && dy < 0.0f && (*status & 0x100000) == 0) {
-        distance = 20.0f - dy;
-        hit = hitCheckFilter(pos[0], pos[1] + 20.0f, pos[2],
-                             0.0, double_neg1_802c92d8, 0.0, 0,
-                             0, &floorY, 0, &distance, 0, 0, 0);
+    if ((*status & 0x100000) != 0 && pos[1] <= float_neg1000_80421108) {
+        s32 itemId = *(s32*)((s32)item + 4);
+
+        *(u16*)((s32)item + 0x24) = 7;
+        *(u16*)((s32)item + 0x26) = 0;
+        *status &= ~(4 | 8 | 0x4000);
+
+        if ((itemId >= 1 && itemId < 0x79) ||
+            (itemId >= 0xF0 && itemId < 0x153)) {
+            *(s32*)((s32)item + 0x78) = 0;
+            *(s32*)((s32)item + 0x7C) = 0;
+        } else {
+            *(s32*)((s32)item + 0x78) = 0;
+            *(s32*)((s32)item + 0x7C) = 0x4E20;
+            *status |= 0x10000;
+            *status &= ~0x1000;
+            *(u16*)item |= 0x100;
+        }
+        return 0;
+    }
+    if (dy >= float_0_804210b4) {
+        pos[1] += dy;
+        hit = 0;
+    } else if ((*status & 0x100000) != 0) {
+        pos[1] += dy;
+        hit = 0;
+    } else {
+        floorDistance =
+            (f32)(double_20_802c9098 + fabs((f64)dy));
+        hit = hitCheckFilter(pos[0], pos[1] + float_20_804210b8, pos[2],
+                             float_0_804210b4, float_neg1_804210c4,
+                             float_0_804210b4, 0,
+                             &floorWork0, &floorY, &floorWork2,
+                             &floorDistance, &floorWork4,
+                             &floorWork5, &floorWork6);
         if (hit != 0) {
             pos[1] = floorY;
         } else {
+            hit = 0;
             pos[1] += dy;
         }
-    } else if (hit == 0) {
-        pos[1] += dy;
     }
-    if ((*status & 0x100000) != 0 && pos[1] <= -1000.0f) {
-        *(u16*)((s32)item + 0x24) = 7;
-        *(u16*)((s32)item + 0x26) = 0;
-        *status &= ~(4 | 8 | 0x4000 | 0x1000);
-        *status |= 0x10000;
-        *flags |= 0x100;
-        return 0;
-    } else if (hit != 0) {
-        *status |= 0x100000;
-        *flags |= 2;
-    }
-    if (hit != 0 && (hitGetAttr(hit) & 0x600) == 0) {
+    if (hit != 0) {
+        if ((hitGetAttr(hit) & 0x600) != 0) {
+            BoundVec splashPos = vec3_802c9074;
+
+            *status |= 0x100000;
+            splashPos.x = pos[0];
+            splashPos.y = pos[1];
+            splashPos.z = pos[2];
+            psndSFXOn_3D((char*)0x194, &splashPos);
+            effSplashEntry(pos[0], pos[1], pos[2],
+                           float_0p7_8042110c, 0);
+            *(u16*)item |= 2;
+        } else {
         s32 bounds = ++*(s32*)((s32)item + 0x8C);
-        if ((hitGetAttr(hit) & 0x80000000) == 0 && *(f32*)((s32)item + 0x90) != 0.0f &&
-            bounds >= (s32)*(f32*)((s32)item + 0x90)) {
+        if ((hitGetAttr(hit) & 0x80000000) == 0 &&
+            *(s32*)((s32)item + 0x88) != 0 &&
+            bounds >= *(s32*)((s32)item + 0x88)) {
             *(u16*)((s32)item + 0x24) = 1;
             *(u16*)((s32)item + 0x26) = 0;
-            *status &= ~(4 | 8 | 0x4000);
+            *status &= ~4;
+            *status &= ~8;
+            *status &= ~0x4000;
+            goto itemseq_bound_cleanup;
         } else {
-            f32 accel = float_neg1000_80421108 * 0.98f * gravity;
             f32 nextJump;
             f32 bounceTime;
+            BoundVec bouncePos = vec3_802c9080;
+            BoundVec soundPos;
+            s32 itemId;
 
-            nextJump = float_0p7_8042110c * *(f32*)((s32)item + 0x80) *
-                       (-(jump * deltaTime + accel *
-                          ((totalTime + deltaTime) * (totalTime + deltaTime) -
-                           totalTime * totalTime)) / deltaTime);
-            *(f32*)((s32)item + 0x5C) = nextJump;
-            bounceTime = float_0p5_804210d0 * (nextJump / accel);
-            if (bounceTime < 0.0f) {
-                bounceTime = -bounceTime;
+            bouncePos.x = pos[0];
+            bouncePos.y = pos[1];
+            bouncePos.z = pos[2];
+            soundPos = bouncePos;
+            itemId = *(s32*)((s32)item + 4);
+
+            if (itemId == 0x7B) {
+                psndSFXOn_3D(str_SFX_HEART_LEAPED1_802c9144, &soundPos);
+            } else if (itemId < 0x7B) {
+                if (itemId == 0x79) {
+                    psndSFXOn_3D(str_SFX_COIN_LEAPED1_802c9114, &soundPos);
+                } else if (itemId < 0x79) {
+                    if (itemId >= 0x72) {
+                        psndSFXOn_3D(str_SFX_EVT_STARSTONE_JU_802c9184, &soundPos);
+                    } else if (itemId >= 0xF0 && itemId < 0x153) {
+                        psndSFXOn_3D(str_SFX_BADGE_LEAPED1_802c919c, &soundPos);
+                    } else {
+                        psndSFXOn_3D(str_SFX_ITEM_LEAPED1_802c91b0, &soundPos);
+                    }
+                } else {
+                    psndSFXOn_3D(str_SFX_EVT_GAME_MONTE_L_802c9128, &soundPos);
+                }
+            } else if (itemId == 0x7D) {
+                psndSFXOn_3D(str_SFX_STAR_PIECE_LEAPE_802c916c, &soundPos);
+            } else if (itemId < 0x7D) {
+                psndSFXOn_3D(str_SFX_FLOWER_LEAPED1_802c9158, &soundPos);
+            } else if (itemId >= 0xF0 && itemId < 0x153) {
+                psndSFXOn_3D(str_SFX_BADGE_LEAPED1_802c919c, &soundPos);
+            } else {
+                psndSFXOn_3D(str_SFX_ITEM_LEAPED1_802c91b0, &soundPos);
             }
-            if (nextJump * bounceTime + bounceTime * accel * bounceTime <=
-                float_8_80421110) {
-                *(u16*)((s32)item + 0x24) = 1;
-                *(u16*)((s32)item + 0x26) = 0;
-                *status &= ~(4 | 8 | 0x4000);
-            }
-            if ((*flags & 0x200) != 0 && bounds < 2) {
-                *(s32*)((s32)item + 0x54) = *(s32*)((s32)item + 0x90);
-                *(f32*)((s32)item + 0x50) = *(f32*)((s32)item + 0x94);
-                *flags &= ~0x200;
+
+            {
+                s32 preserveVelocity;
+                s32 specialSurface = 0;
+                f32 verticalVelocity = *(f32*)((s32)item + 0x58);
+                f32 targetAccel;
+
+                if ((*(u16*)item & 0x80) != 0 &&
+                    verticalVelocity != float_0_804210b4) {
+                    preserveVelocity = 1;
+                } else if ((hitGetAttr(hit) & 0x80000000) != 0 &&
+                           verticalVelocity != float_0_804210b4) {
+                    u8* hitObj = mobjHitObjPtrToPtr(hit);
+
+                    if (*(u8*)(mario + 0x3C) == 2) {
+                        preserveVelocity = 0;
+                    } else if (hitObj != 0 &&
+                               strcmp((char*)(hitObj + 0x15),
+                                      str_MOBJ_KururinFloor_802c91c4) != 0) {
+                        preserveVelocity = 1;
+                        specialSurface = 1;
+                    } else {
+                        preserveVelocity = 0;
+                    }
+                } else {
+                    preserveVelocity = 0;
+                }
+
+                if (preserveVelocity == 0) {
+                    targetAccel =
+                        float_neg980_80421100 * *(f32*)((s32)item + 0x84);
+                    verticalVelocity =
+                        float_0p7_8042110c * *(f32*)((s32)item + 0x80) *
+                        (-(verticalVelocity * deltaTime +
+                           targetAccel *
+                               ((totalTime + deltaTime) *
+                                    (totalTime + deltaTime) -
+                                totalTime * totalTime)) /
+                         deltaTime);
+                    *(f32*)((s32)item + 0x58) = verticalVelocity;
+                }
+
+                targetAccel =
+                    float_neg980_80421100 * *(f32*)((s32)item + 0x84);
+                bounceTime =
+                    float_0p5_804210d0 * (verticalVelocity / targetAccel);
+                if (bounceTime < float_0_804210b4) {
+                    bounceTime = -bounceTime;
+                }
+
+                if (specialSurface == 0 &&
+                    verticalVelocity * bounceTime +
+                            bounceTime * targetAccel * bounceTime <=
+                        float_8_80421110) {
+                    *(u16*)((s32)item + 0x24) = 1;
+                    *(u16*)((s32)item + 0x26) = 0;
+                    *status &= ~4;
+                    *status &= ~8;
+                    *status &= ~0x4000;
+                }
+
+                if ((*(u16*)item & 0x200) != 0 && bounds < 2) {
+                    *(s32*)((s32)item + 0x54) =
+                        *(s32*)((s32)item + 0x90);
+                    *(f32*)((s32)item + 0x50) =
+                        *(f32*)((s32)item + 0x94);
+                    *(u16*)item &= ~0x200;
+                }
             }
             *(s64*)((s32)item + 0x60) = 0;
-            *(s64*)((s32)item + 0x68) = now;
+            *(s64*)((s32)item + 0x68) = *(s64*)((s32)gp + 0x38);
+            goto itemseq_bound_cleanup;
+        }
         }
     }
     *(s64*)((s32)item + 0x60) = accumulatedCycles + deltaCycles;
     *(s64*)((s32)item + 0x68) = *(s64*)((s32)item + 0x70);
+        break;
+    }
+    }
+itemseq_bound_cleanup:
     *status &= ~0x10;
     return 0;
 }

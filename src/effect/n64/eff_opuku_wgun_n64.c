@@ -8,7 +8,9 @@ void* effOpukuWgunN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f3
     extern f32 float_10_80425c00, float_2_80425bc4, float_0_80425be4;
     void* entry;
     u8* work;
+    u8* p;
     s32 i;
+    s32 delay;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_OpukuWgunN64_802fbc00;
@@ -19,11 +21,25 @@ void* effOpukuWgunN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f3
     *(s32*)entry |= 2;
     *(s32*)work = type;
     *(s32*)(work + 0x30) = 0;
-    *(s32*)(work + 0x2C) = time < 1 ? 1000 : (type == 0 ? time * 2 : time * 4);
+    if (time < 1) {
+        *(s32*)(work + 0x2C) = 1000;
+    } else if (type == 0) {
+        *(s32*)(work + 0x2C) = time * 2;
+    } else {
+        *(s32*)(work + 0x2C) = time * 4;
+    }
     *(s32*)(work + 0x28) = time;
-    *(s32*)(work + 0x40) = type == 0 ? 200 : 255;
-    *(f32*)(work + 4) = x; *(f32*)(work + 8) = y; *(f32*)(work + 0xC) = z;
-    *(f32*)(work + 0x1C) = dstX; *(f32*)(work + 0x20) = dstY; *(f32*)(work + 0x24) = dstZ;
+    if (type == 0) {
+        *(s32*)(work + 0x40) = 200;
+    } else {
+        *(s32*)(work + 0x40) = 255;
+    }
+    *(f32*)(work + 0x10) = x;
+    *(f32*)(work + 0x14) = y;
+    *(f32*)(work + 0x18) = z;
+    *(f32*)(work + 0x1C) = dstX;
+    *(f32*)(work + 0x20) = dstY;
+    *(f32*)(work + 0x24) = dstZ;
     *(f32*)(work + 0x50) = scale;
     *(s32*)(work + 0x34) = 0xD2;
     *(s32*)(work + 0x38) = 0xE6;
@@ -32,17 +48,42 @@ void* effOpukuWgunN64Entry(f32 x, f32 y, f32 z, f32 dstX, f32 dstY, f32 dstZ, f3
     *(s32*)(work + 0x48) = 0x1E;
     *(s32*)(work + 0x4C) = 0xCD;
     *(s32*)(work + 0x54) = 0;
-    *(f32*)(work + 0x10) = x; *(f32*)(work + 0x14) = y; *(f32*)(work + 0x18) = z;
-    for (i = 0; i < 12; i++) {
-        *(f32*)(work + 0x58 + i * 4) = float_10_80425c00;
-        *(f32*)(work + 0x88 + i * 4) = float_2_80425bc4;
-        *(f32*)(work + 0xB8 + i * 4) = float_0_80425be4;
-        *(f32*)(work + 0xE8 + i * 4) = x;
-        *(f32*)(work + 0x118 + i * 4) = y;
-        *(f32*)(work + 0x148 + i * 4) = z;
-        *(s32*)(work + 0x178 + i * 4) = type == 0 ? i + 1 : i * 5 + 1;
-        *(s32*)(work + 0x1A8 + i * 4) = 0;
+    *(f32*)(work + 4) = x;
+    *(f32*)(work + 8) = y;
+    *(f32*)(work + 0xC) = z;
+
+#define INIT_PARTICLE(d) \
+    *(f32*)(p + 0x58) = float_10_80425c00; \
+    *(f32*)(p + 0x88) = float_2_80425bc4; \
+    *(f32*)(p + 0xB8) = float_0_80425be4; \
+    *(s32*)(p + 0x178) = (d); \
+    *(f32*)(p + 0xE8) = *(f32*)(work + 4); \
+    *(f32*)(p + 0x118) = *(f32*)(work + 8); \
+    *(f32*)(p + 0x148) = *(f32*)(work + 0xC); \
+    *(s32*)(p + 0x1A8) = 0; \
+    p += 4
+
+    p = work;
+    if (type == 0) {
+        delay = 0;
+        for (i = 0; i < 3; i++) {
+            INIT_PARTICLE(delay + 1);
+            INIT_PARTICLE(delay + 2);
+            INIT_PARTICLE(delay + 3);
+            delay += 4;
+            INIT_PARTICLE(delay);
+        }
+    } else {
+        delay = 1;
+        for (i = 0; i < 3; i++) {
+            INIT_PARTICLE(delay);
+            INIT_PARTICLE(delay + 5);
+            INIT_PARTICLE(delay + 10);
+            INIT_PARTICLE(delay + 15);
+            delay += 20;
+        }
     }
+#undef INIT_PARTICLE
     return entry;
 }
 
@@ -151,11 +192,12 @@ void effOpukuWgunDisp(s32 cameraId, void* effect) {
     extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32); extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
     extern void GXLoadTexMtxImm(Mtx,s32,s32); extern void effGetTexObjN64(s32,void*); extern void GXLoadTexObj(void*,s32);
     extern void GXBegin(s32,s32,s32); extern void tri2(s32,s32,s32,s32,s32,s32,s32,s32);
-    u8* work=*(u8**)((u8*)effect+0xC); u8* camera=camGetPtr(cameraId); SmartAllocationData* allocation=smartAlloc(0x2A0,3); Vtx* v=allocation->pMemory; Mtx mtx; u8 tex[0x20]; Vec3 pos;
+    u8* work=*(u8**)((u8*)effect+0xC); u8* camera=camGetPtr(cameraId); SmartAllocationData* allocation; Vtx* v; Mtx mtx; u8 tex[0x20]; Vec3 pos;
     u32 color0,color1; s32 type=*(s32*)work; s32 i; s16 texS=0; f32 angle=0.0f,thickness,radius,sx,sy;
     color0=(*(u8*)(work+0x34)<<24)|(*(u8*)(work+0x38)<<16)|(*(u8*)(work+0x3C)<<8)|*(u8*)(work+0x40);
-    color1=(*(u8*)(work+0x44)<<24)|(*(u8*)(work+0x48)<<16)|(*(u8*)(work+0x4C)<<8)|0xFF;
+    color1=(*(u8*)(work+0x44)<<24)|(*(u8*)(work+0x48)<<16)|(*(u8*)(work+0x4C)<<8)|0xC8;
     GXSetTevColor(1,&color0); GXSetTevColor(2,&color1); GXSetCullMode(0);
+    allocation=smartAlloc(0x2A0,3); v=allocation->pMemory;
     for(i=0;i<12;i++) {
         if(i==0 || (i!=11 && *(s32*)(work+0x178+i*4)==0))
             angle=-(f32)angleABf(*(f32*)(work+0x11C+i*4),-*(f32*)(work+0xEC+i*4),*(f32*)(work+0x118+i*4),-*(f32*)(work+0xE8+i*4));

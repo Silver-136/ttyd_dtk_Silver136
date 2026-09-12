@@ -28,49 +28,76 @@ s32 evt_moving_floor_alloc(void* event) {
     s32* args = *(s32**)(evt + 0x18);
     s32* lw = (s32*)(evt + 0x9C);
     u32* floor = _mapAlloc(mapalloc_base_ptr, 0x88);
-    s32 type;
+    f32 one = 1.0f;
 
     memset(floor, 0, 0x88);
     floor[8] = lw[6];
     floor[1] = lw[12];
-    type = floor[8];
-    if (type == 0 || type == 5) {
-        floor[0] &= ~1;
-        floor[10] = 0;
-        *(f32*)&floor[25] = 1.0f;
-        *(f32*)&floor[11] = (f32)lw[2];
-        *(f32*)&floor[14] = (f32)lw[3];
-        floor[26] = lw[4];
-        *(f32*)&floor[17] = *(f32*)&floor[11];
-        *(f32*)&floor[32] = (f32)lw[11];
-    } else if (type == 1) {
-        floor[10] = 1;
-        *(f32*)&floor[25] = 1.0f;
-        *(f32*)&floor[12] = (f32)lw[2];
-        *(f32*)&floor[15] = (f32)lw[3];
-        floor[27] = lw[4];
-        *(f32*)&floor[18] = *(f32*)&floor[12];
-        *(f32*)&floor[32] = (f32)lw[11];
-    } else if (type == 2) {
-        floor[10] = 2;
-        *(f32*)&floor[25] = 1.0f;
-        *(f32*)&floor[13] = (f32)lw[2];
-        *(f32*)&floor[16] = (f32)lw[3];
-        floor[28] = lw[4];
-        *(f32*)&floor[19] = *(f32*)&floor[13];
-        *(f32*)&floor[32] = (f32)lw[11];
-    } else if (type == 3 || type == 4) {
-        floor[10] = type == 3 ? 0 : 2;
-        *(f32*)&floor[25] = 1.0f;
-        *(f32*)&floor[11] = (f32)lw[2];
-        *(f32*)&floor[14] = (f32)lw[3];
-        floor[26] = lw[4];
-        *(f32*)&floor[17] = 0.5f * (*(f32*)&floor[11] + *(f32*)&floor[14]);
-        *(f32*)&floor[13] = (f32)lw[8];
-        *(f32*)&floor[16] = (f32)lw[9];
-        floor[28] = lw[10];
-        *(f32*)&floor[19] = 0.5f * (*(f32*)&floor[13] + *(f32*)&floor[16]);
-        *(f32*)&floor[32] = (f32)lw[11];
+    switch (floor[8]) {
+        case 0:
+            floor[0] &= ~1;
+            floor[10] = 0;
+            *(f32*)&floor[25] = one;
+            *(f32*)&floor[11] = (f32)lw[2];
+            *(f32*)&floor[14] = (f32)lw[3];
+            floor[26] = lw[4];
+            *(f32*)&floor[17] = *(f32*)&floor[11];
+            *(f32*)&floor[32] = (f32)lw[11];
+            break;
+        case 1:
+            floor[10] = 1;
+            *(f32*)&floor[25] = one;
+            *(f32*)&floor[12] = (f32)lw[2];
+            *(f32*)&floor[15] = (f32)lw[3];
+            floor[27] = lw[4];
+            *(f32*)&floor[18] = *(f32*)&floor[12];
+            *(f32*)&floor[32] = (f32)lw[11];
+            break;
+        case 2:
+            floor[10] = 2;
+            *(f32*)&floor[25] = one;
+            *(f32*)&floor[13] = (f32)lw[2];
+            *(f32*)&floor[16] = (f32)lw[3];
+            floor[28] = lw[4];
+            *(f32*)&floor[19] = *(f32*)&floor[13];
+            *(f32*)&floor[32] = (f32)lw[11];
+            break;
+        case 3:
+            floor[10] = 0;
+            *(f32*)&floor[25] = one;
+            *(f32*)&floor[11] = (f32)lw[2];
+            *(f32*)&floor[14] = (f32)lw[3];
+            floor[26] = lw[4];
+            *(f32*)&floor[17] = 0.5f * (*(f32*)&floor[11] + *(f32*)&floor[14]);
+            *(f32*)&floor[13] = (f32)lw[8];
+            *(f32*)&floor[16] = (f32)lw[9];
+            floor[28] = lw[10];
+            *(f32*)&floor[19] = 0.5f * (*(f32*)&floor[13] + *(f32*)&floor[16]);
+            *(f32*)&floor[32] = (f32)lw[11];
+            break;
+        case 4:
+            floor[10] = 2;
+            *(f32*)&floor[25] = one;
+            *(f32*)&floor[11] = (f32)lw[2];
+            *(f32*)&floor[14] = (f32)lw[3];
+            floor[26] = lw[4];
+            *(f32*)&floor[17] = *(f32*)&floor[11];
+            *(f32*)&floor[13] = (f32)lw[8];
+            *(f32*)&floor[16] = (f32)lw[9];
+            floor[28] = lw[10];
+            *(f32*)&floor[19] = *(f32*)&floor[13];
+            *(f32*)&floor[32] = (f32)lw[11];
+            break;
+        case 5:
+            floor[0] &= ~1;
+            floor[10] = 0;
+            *(f32*)&floor[25] = one;
+            *(f32*)&floor[11] = (f32)lw[2];
+            *(f32*)&floor[14] = (f32)lw[3];
+            floor[26] = lw[4];
+            *(f32*)&floor[17] = *(f32*)&floor[11];
+            *(f32*)&floor[32] = (f32)lw[11];
+            break;
     }
     floor[29] = lw[5];
     floor[20] = floor[17];
@@ -112,84 +139,104 @@ u8 evt_moving_floor_init(s32 event) {
     u32* floor = (u32*)evtGetValue(evt, args[0]);
     s32 direction;
     f32 fraction;
-    s32 kind = (s32)floor[8];
 
-    if (kind == 3) {
-        switch (floor[9]) {
-            case 0:
-                direction = 1; fraction = 0.5f; floor[0] &= ~1; floor[10] = 0; *(f32*)&floor[25] = float_1_804265a4;
-                break;
-            case 1:
-                direction = 0; fraction = 0.0f; floor[0] |= 1; floor[10] = 0; *(f32*)&floor[25] = 0.5f;
-                break;
-            case 2:
-                direction = 1; fraction = 0.5f; floor[0] &= ~1; floor[10] = 2; *(f32*)&floor[25] = float_1_804265a4;
-                break;
-            case 3:
-                direction = 0; fraction = 0.0f; floor[0] |= 1; floor[10] = 2; *(f32*)&floor[25] = 0.5f;
-                break;
-            case 4:
-                direction = 0; fraction = 0.5f; floor[0] &= ~1; floor[10] = 0; *(f32*)&floor[25] = float_1_804265a4;
-                break;
-            case 5:
-                direction = 1; fraction = 0.0f; floor[0] |= 1; floor[10] = 0; *(f32*)&floor[25] = 0.5f;
-                break;
-            case 6:
-                direction = 0; fraction = 0.5f; floor[0] &= ~1; floor[10] = 2; *(f32*)&floor[25] = float_1_804265a4;
-                break;
-            case 7:
-                direction = 1; fraction = 0.0f; floor[0] |= 1; floor[10] = 2; *(f32*)&floor[25] = 0.5f;
-                break;
-        }
-        floor[9]++;
-        if ((s32)floor[9] > 7) {
-            floor[9] = 0;
-        }
-    } else if (kind < 3) {
-        direction = floor[9];
-        fraction = 0.0f;
-        floor[9]++;
-        if ((s32)floor[9] > 1) {
-            floor[9] = 0;
-        }
-    } else if (kind == 5) {
-        direction = floor[9];
-        fraction = 1.0f;
-    } else if (kind == 4) {
-        fraction = 0.0f;
-        switch (floor[9]) {
-            case 0:
-                floor[10] = 2; direction = 0; *(f32*)&floor[25] = float_1_804265a4;
-                break;
-            case 1:
-                floor[10] = 0; direction = 0; *(f32*)&floor[25] = float_1_804265a4;
-                break;
-            case 2:
-                floor[10] = 2; direction = 1; *(f32*)&floor[25] = float_1_804265a4;
-                break;
-            case 3:
-                floor[10] = 0; direction = 1; *(f32*)&floor[25] = float_1_804265a4;
-                break;
-        }
-        floor[9]++;
-        if ((s32)floor[9] > 3) {
-            floor[9] = 0;
-        }
+    fraction = 0.5f;
+    switch ((s32)floor[8]) {
+        case 0:
+            direction = floor[9];
+            fraction = 0.0f;
+            floor[9]++;
+            if ((s32)floor[9] >= 2) {
+                floor[9] = 0;
+            }
+            break;
+        case 1:
+            direction = floor[9];
+            fraction = 0.0f;
+            floor[9]++;
+            if ((s32)floor[9] >= 2) {
+                floor[9] = 0;
+            }
+            break;
+        case 2:
+            direction = floor[9];
+            fraction = 0.0f;
+            floor[9]++;
+            if ((s32)floor[9] >= 2) {
+                floor[9] = 0;
+            }
+            break;
+        case 3:
+            switch (floor[9]) {
+                case 0:
+                    direction = 1; fraction = 0.5f; floor[0] &= ~1; floor[10] = 0; *(f32*)&floor[25] = float_1_804265a4;
+                    break;
+                case 1:
+                    direction = 0; fraction = 0.0f; floor[0] |= 1; floor[10] = 0; *(f32*)&floor[25] = 0.5f;
+                    break;
+                case 2:
+                    direction = 1; fraction = 0.5f; floor[0] &= ~1; floor[10] = 2; *(f32*)&floor[25] = float_1_804265a4;
+                    break;
+                case 3:
+                    direction = 0; fraction = 0.0f; floor[0] |= 1; floor[10] = 2; *(f32*)&floor[25] = 0.5f;
+                    break;
+                case 4:
+                    direction = 0; fraction = 0.5f; floor[0] &= ~1; floor[10] = 0; *(f32*)&floor[25] = float_1_804265a4;
+                    break;
+                case 5:
+                    direction = 1; fraction = 0.0f; floor[0] |= 1; floor[10] = 0; *(f32*)&floor[25] = 0.5f;
+                    break;
+                case 6:
+                    direction = 0; fraction = 0.5f; floor[0] &= ~1; floor[10] = 2; *(f32*)&floor[25] = float_1_804265a4;
+                    break;
+                case 7:
+                    direction = 1; fraction = 0.0f; floor[0] |= 1; floor[10] = 2; *(f32*)&floor[25] = 0.5f;
+                    break;
+            }
+            floor[9]++;
+            if ((s32)floor[9] >= 8) {
+                floor[9] = 0;
+            }
+            break;
+        case 4:
+            switch (floor[9]) {
+                case 0:
+                    floor[10] = 2; direction = 0; fraction = 0.0f; *(f32*)&floor[25] = float_1_804265a4;
+                    break;
+                case 1:
+                    floor[10] = 0; direction = 0; fraction = 0.0f; *(f32*)&floor[25] = float_1_804265a4;
+                    break;
+                case 2:
+                    floor[10] = 2; direction = 1; fraction = 0.0f; *(f32*)&floor[25] = float_1_804265a4;
+                    break;
+                case 3:
+                    floor[10] = 0; direction = 1; fraction = 0.0f; *(f32*)&floor[25] = float_1_804265a4;
+                    break;
+            }
+            floor[9]++;
+            if ((s32)floor[9] >= 4) {
+                floor[9] = 0;
+            }
+            break;
+        case 5:
+            direction = floor[9];
+            fraction = float_1_804265a4;
+            break;
     }
 
-    if (direction == 0) {
-        *(f32*)&floor[2] = (*(f32*)&floor[floor[10] + 14] - *(f32*)&floor[floor[10] + 11]) /
-                           (f32)(s32)floor[floor[10] + 26];
-    } else {
+    if (direction != 0) {
         *(f32*)&floor[2] = (*(f32*)&floor[floor[10] + 11] - *(f32*)&floor[floor[10] + 14]) /
                            (f32)(s32)floor[floor[10] + 26];
-    }
-    if (direction == 0) {
-        *(f32*)&floor[3] = *(f32*)&floor[floor[10] + 11] * (1.0f - fraction) +
-                           *(f32*)&floor[floor[10] + 14] * fraction;
     } else {
-        *(f32*)&floor[3] = *(f32*)&floor[floor[10] + 14] * (1.0f - fraction) +
+        *(f32*)&floor[2] = (*(f32*)&floor[floor[10] + 14] - *(f32*)&floor[floor[10] + 11]) /
+                           (f32)(s32)floor[floor[10] + 26];
+    }
+    if (direction != 0) {
+        *(f32*)&floor[3] = *(f32*)&floor[floor[10] + 14] * (float_1_804265a4 - fraction) +
                            *(f32*)&floor[floor[10] + 11] * fraction;
+    } else {
+        *(f32*)&floor[3] = *(f32*)&floor[floor[10] + 11] * (float_1_804265a4 - fraction) +
+                           *(f32*)&floor[floor[10] + 14] * fraction;
     }
     *(f32*)&floor[4] = (f32)(s32)floor[floor[10] + 26] * fraction;
     return 2;

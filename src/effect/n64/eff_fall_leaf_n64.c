@@ -14,6 +14,8 @@ char size12x12_tex64x64_vtx[112] = {
 extern f32 float_2_80425158;
 extern f32 float_10_80425178;
 
+#pragma optimize_for_size off
+
 void* effFallLeafN64Entry(f32 x, f32 y, f32 z, u32 type, s32 timer) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -25,7 +27,6 @@ void* effFallLeafN64Entry(f32 x, f32 y, f32 z, u32 type, s32 timer) {
     u8* work;
     u8* part;
     s32 i;
-    s32 r;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_FallLeafN64_802fae78;
@@ -44,46 +45,36 @@ void* effFallLeafN64Entry(f32 x, f32 y, f32 z, u32 type, s32 timer) {
 
     part = work + 0x30;
     for (i = 1; i < 5; i++, part += 0x30) {
-        if (type == 1) {
-            r = rand();
-            *(f32*)(part + 4) = (f32)((r % 10) - 5);
-            r = rand();
-            *(f32*)(part + 8) = (f32)((r % 10) + 5);
+        if ((s32)type != 1) {
+            if ((s32)type >= 0 && (s32)type < 5) {
+                *(f32*)(part + 4) = (f32)((rand() % 0x32) - 0x19);
+                *(f32*)(part + 8) = (f32)((rand() % 0x32) - 0x19);
+                *(f32*)(part + 0xC) = float_0_80425180;
+                *(f32*)(part + 0x18) = (f32)(rand() % 0x168);
+                *(f32*)(part + 0x20) = (f32)(rand() % 0x168);
+                *(f32*)(part + 0x1C) = (f32)(rand() % 100) / float_10_80425178;
+                *(f32*)(part + 0x10) = float_0_80425180;
+                *(f32*)(part + 0x14) = float_0_80425180;
+            }
+        } else {
+            *(f32*)(part + 4) = (f32)((rand() % 10) - 5);
+            *(f32*)(part + 8) = (f32)((rand() % 10) + 5);
             *(f32*)(part + 0xC) = float_10_80425178;
-            r = rand();
-            *(f32*)(part + 0x18) = (f32)(r % 0x168);
-            r = rand();
-            *(f32*)(part + 0x20) = (f32)(r % 0x168);
-            r = rand();
-            *(f32*)(part + 0x1C) = (f32)(r % 100) / float_10_80425178;
+            *(f32*)(part + 0x18) = (f32)(rand() % 0x168);
+            *(f32*)(part + 0x20) = (f32)(rand() % 0x168);
+            *(f32*)(part + 0x1C) = (f32)(rand() % 100) / float_10_80425178;
             *(f32*)(part + 0x10) = float_0_80425180;
             *(f32*)(part + 0x14) = float_2_80425158;
-        } else if ((s32)type < 1 ? ((s32)type > -1) : ((s32)type < 5)) {
-            r = rand();
-            *(f32*)(part + 4) = (f32)((r % 0x32) - 0x19);
-            r = rand();
-            *(f32*)(part + 8) = (f32)((r % 0x32) - 0x19);
-            *(f32*)(part + 0xC) = float_0_80425180;
-            r = rand();
-            *(f32*)(part + 0x18) = (f32)(r % 0x168);
-            r = rand();
-            *(f32*)(part + 0x20) = (f32)(r % 0x168);
-            r = rand();
-            *(f32*)(part + 0x1C) = (f32)(r % 100) / float_10_80425178;
-            *(f32*)(part + 0x10) = float_0_80425180;
-            *(f32*)(part + 0x14) = float_0_80425180;
         }
     }
 
     return entry;
 }
 
+#pragma optimize_for_size on
+
 void effFallLeafMain(void* effect) {
-    typedef struct LocalVec3 {
-        f32 x;
-        f32 y;
-        f32 z;
-    } LocalVec3;
+    typedef struct LocalVec3 { f32 x; f32 y; f32 z; } LocalVec3;
     extern void effDelete(void* effect);
     extern s32 effTblRandN64(s32 max, s32 seed);
     extern double sin(f64 x);
@@ -91,30 +82,34 @@ void effFallLeafMain(void* effect) {
     extern f32 dispCalcZ(LocalVec3* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effFallLeafDisp(s32 cameraId, void* effect);
-    extern f32 float_0p3_8042514c;
-    extern f32 float_0p8_80425150;
-    extern f32 float_6p2832_80425154;
-    extern f32 float_360_8042515c;
-    extern f32 float_neg0p05_80425160;
-    extern f32 float_0p2_80425164;
-    extern f32 float_0p94_80425168;
-    extern f32 float_0p95_8042516c;
-    extern f32 float_0p05_80425170;
-    extern f32 float_0p92_80425174;
-    extern f32 float_0p5_8042517c;
+    extern const LocalVec3 vec3_802fae60;
+    extern const f32 float_0p3_8042514c;
+    extern const f32 float_0p8_80425150;
+    extern const f32 float_6p2832_80425154;
+    extern f32 float_2_80425158;
+    extern const f32 float_360_8042515c;
+    extern const f32 float_neg0p05_80425160;
+    extern const f32 float_0p2_80425164;
+    extern const f32 float_0p94_80425168;
+    extern const f32 float_0p95_8042516c;
+    extern const f32 float_0p05_80425170;
+    extern const f32 float_0p92_80425174;
+    extern f32 float_10_80425178;
+    extern const f32 float_0p5_8042517c;
     u8* work;
     u8* part;
     LocalVec3 pos;
+    LocalVec3 temp = vec3_802fae60;
     s32 frame;
     s32 type;
     s32 i;
     s32 seed;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos.x = *(f32*)(work + 4);
-    pos.y = *(f32*)(work + 8);
-    pos.z = *(f32*)(work + 0xC);
-
+    temp.x = *(f32*)(work + 4);
+    temp.y = *(f32*)(work + 8);
+    temp.z = *(f32*)(work + 0xC);
+    pos = temp;
     (*(s32*)(work + 0x28))--;
     (*(s32*)(work + 0x2C))++;
     if (*(s32*)(work + 0x28) < 0) {
@@ -143,28 +138,22 @@ void effFallLeafMain(void* effect) {
         if (type == 1) {
             *(f32*)(part + 0x14) += float_neg0p05_80425160;
             *(f32*)(part + 0x10) *= float_0p92_80425174;
-        } else if ((type < 1) ? (type > -1) : (type < 5)) {
+        } else if (type >= 0 && type < 5) {
             *(f32*)(part + 0x10) *= float_0p94_80425168;
-            *(f32*)(part + 0x14) *=
-                float_0p05_80425170 *
-                    (f32)sin((float_6p2832_80425154 * *(f32*)(part + 0x18)) / float_360_8042515c) +
+            *(f32*)(part + 0x14) *= float_0p05_80425170 *
+                (f32)sin((float_6p2832_80425154 * *(f32*)(part + 0x18)) / float_360_8042515c) +
                 float_0p95_8042516c;
         }
-
         *(f32*)(part + 0x1C) += (f32)(effTblRandN64(0x32, seed) - 0x19);
-        *(f32*)(part + 0x18) =
-            float_10_80425178 *
-                (f32)sin((float_6p2832_80425154 * *(f32*)(part + 0x1C)) / float_360_8042515c) +
+        *(f32*)(part + 0x18) = float_10_80425178 *
+            (f32)sin((float_6p2832_80425154 * *(f32*)(part + 0x1C)) / float_360_8042515c) +
             *(f32*)(part + 0x18);
-        *(f32*)(part + 0x20) =
-            float_10_80425178 *
-                (f32)cos((float_6p2832_80425154 * *(f32*)(part + 0x1C) * float_0p5_8042517c) /
-                         float_360_8042515c) +
-            *(f32*)(part + 0x20);
+        *(f32*)(part + 0x20) = float_10_80425178 *
+            (f32)cos((float_6p2832_80425154 * *(f32*)(part + 0x1C) * float_0p5_8042517c) /
+                     float_360_8042515c) + *(f32*)(part + 0x20);
         *(f32*)(part + 4) += *(f32*)(part + 0x10);
         *(f32*)(part + 8) += *(f32*)(part + 0x14);
     }
-
     dispEntry(4, 2, effFallLeafDisp, effect, dispCalcZ(&pos));
 }
 

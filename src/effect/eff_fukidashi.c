@@ -15,7 +15,7 @@ u8 calc_pos(void* work, s32 flag) {
     extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
     extern void* partyGetPtr(s32 id);
-    extern Vec vec3_802f3648;
+    extern const Vec vec3_802f3648;
     extern f32 float_deg2rad_804228c4;
     extern f32 float_20_80422950;
     extern f32 float_16_804228e0;
@@ -24,10 +24,10 @@ u8 calc_pos(void* work, s32 flag) {
 
     void* cam;
     void* base;
-    Vec axis;
+    void* target;
     Vec rotAxis;
+    Vec axis;
     f32 mtx[3][4];
-    s32 target;
     s32 offset;
 
     cam = camGetPtr(4);
@@ -40,8 +40,8 @@ u8 calc_pos(void* work, s32 flag) {
                     float_deg2rad_804228c4 *
                         -((*(f32*)((s32)work + 0x1C) - float_20_80422950) + (f32)offset));
 
-    target = *(s32*)((s32)work + 0x44);
-    if (target == -1) {
+    target = *(void**)((s32)work + 0x44);
+    if ((s32)target == -1) {
         base = marioGetPtr();
         *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
                                   (*(f32*)((s32)base + 0x8C) + *(f32*)((s32)work + 0x10));
@@ -49,7 +49,7 @@ u8 calc_pos(void* work, s32 flag) {
                                   (*(f32*)((s32)base + 0x90) + *(f32*)((s32)work + 0x14));
         *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
                                     (*(f32*)((s32)base + 0x94) + *(f32*)((s32)work + 0x18));
-    } else if (target == -2) {
+    } else if ((s32)target == -2) {
         base = partyGetPtr(marioGetPartyId());
         if (base != 0) {
             *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
@@ -59,7 +59,7 @@ u8 calc_pos(void* work, s32 flag) {
             *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
                                         (*(f32*)((s32)base + 0x60) + *(f32*)((s32)work + 0x18));
         }
-    } else if (target == -3) {
+    } else if ((s32)target == -3) {
         base = partyGetPtr(marioGetExtraPartyId());
         if (base != 0) {
             *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
@@ -69,25 +69,25 @@ u8 calc_pos(void* work, s32 flag) {
             *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
                                         (*(f32*)((s32)base + 0x60) + *(f32*)((s32)work + 0x18));
         }
-    } else if (target == 0) {
+    } else if (target != 0) {
+        *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                  (*(f32*)((s32)target + 0x8C) + *(f32*)((s32)work + 0x10));
+        *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                  (*(f32*)((s32)target + 0x90) + *(f32*)((s32)work + 0x14));
+        *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+                                    (*(f32*)((s32)target + 0x94) + *(f32*)((s32)work + 0x18));
+    } else {
         *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
                                   *(f32*)((s32)work + 0x10);
         *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
                                   *(f32*)((s32)work + 0x14);
         *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
                                     *(f32*)((s32)work + 0x18);
-    } else {
-        *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
-                                  (*(f32*)(target + 0x8C) + *(f32*)((s32)work + 0x10));
-        *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
-                                  (*(f32*)(target + 0x90) + *(f32*)((s32)work + 0x14));
-        *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
-                                    (*(f32*)(target + 0x94) + *(f32*)((s32)work + 0x18));
     }
 
     *(f32*)((s32)work + 0x28) = (*(f32*)((s32)work + 0x1C) - float_20_80422950) + (f32)offset;
-    *(f32*)((s32)work + 0x2C) = float_0p5_8042291c * (*(f32*)((s32)work + 0x20) / float_12_80422954) + float_0p5_8042291c;
-    return 0;
+    *(f32*)((s32)work + 0x2C) =
+        float_0p5_8042291c * (*(f32*)((s32)work + 0x20) / float_12_80422954) + float_0p5_8042291c;
 }
 
 #pragma no_register_save_helpers on
@@ -108,10 +108,10 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
     extern s32 marioGetExtraPartyId(void);
     extern void* partyGetPtr(s32 id);
     extern u32 psndSFXOn_3D(char* id, Vec* pos);
-    extern Vec vec3_802f3654;
-    extern Vec vec3_802f3660;
-    extern Vec vec3_802f366c;
-    extern Vec vec3_802f3678;
+    extern const Vec vec3_802f3654;
+    extern const Vec vec3_802f3660;
+    extern const Vec vec3_802f366c;
+    extern const Vec vec3_802f3678;
     extern char str_Fukidashi_802f36b0[];
     extern char str_SFX_EVT_NPC_BIKKURI__802f36bc[];
     extern char str_SFX_EVT_NPC_QUESTION_802f36d8[];
@@ -122,7 +122,11 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
     void* effect;
     void* work;
     void* base;
-    Vec soundPos;
+    void* targetPtr;
+    Vec partyBikkuriPos;
+    Vec partyQuestionPos;
+    Vec npcBikkuriPos;
+    Vec npcQuestionPos;
 
     effect = effEntry();
     *(char**)((s32)effect + 0x14) = str_Fukidashi_802f36b0;
@@ -155,58 +159,65 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
         *(f32*)((s32)work + 0x24) = float_neg450_8042294c;
     }
 
-    if (target == -1) {
+    targetPtr = *(void**)((s32)work + 0x44);
+    if ((s32)targetPtr == -1) {
         base = marioGetPtr();
         x += *(f32*)((s32)base + 0x8C);
         y += *(f32*)((s32)base + 0x90);
         z += *(f32*)((s32)base + 0x94);
-    } else if (target == -2) {
+    } else if ((s32)targetPtr == -2) {
         base = partyGetPtr(marioGetPartyId());
         if (base != 0) {
             x += *(f32*)((s32)base + 0x58);
             y += *(f32*)((s32)base + 0x5C);
             z += *(f32*)((s32)base + 0x60);
         }
-    } else if (target == -3) {
+    } else if ((s32)targetPtr == -3) {
         base = partyGetPtr(marioGetExtraPartyId());
         if (base != 0) {
             x += *(f32*)((s32)base + 0x58);
             y += *(f32*)((s32)base + 0x5C);
             z += *(f32*)((s32)base + 0x60);
         }
-    } else if (target != 0) {
-        x = *(f32*)(target + 0x8C);
-        y = *(f32*)(target + 0x90);
-        z = *(f32*)(target + 0x94);
+    } else if (targetPtr != 0) {
+        x = *(f32*)((s32)targetPtr + 0x8C);
+        y = *(f32*)((s32)targetPtr + 0x90);
+        z = *(f32*)((s32)targetPtr + 0x94);
     }
 
     if ((target == -2) || (target == -3)) {
-        if (kind == 1) {
-            soundPos = vec3_802f3660;
-            soundPos.x = x;
-            soundPos.y = y;
-            soundPos.z = z;
-            psndSFXOn_3D((char*)0x5E, &soundPos);
-        } else if (kind == 0) {
-            soundPos = vec3_802f3654;
-            soundPos.x = x;
-            soundPos.y = y;
-            soundPos.z = z;
-            psndSFXOn_3D((char*)0x5D, &soundPos);
+        switch (kind) {
+        case 0:
+            partyBikkuriPos = vec3_802f3654;
+            partyBikkuriPos.x = x;
+            partyBikkuriPos.y = y;
+            partyBikkuriPos.z = z;
+            psndSFXOn_3D((char*)0x5D, &partyBikkuriPos);
+            break;
+        case 1:
+            partyQuestionPos = vec3_802f3660;
+            partyQuestionPos.x = x;
+            partyQuestionPos.y = y;
+            partyQuestionPos.z = z;
+            psndSFXOn_3D((char*)0x5E, &partyQuestionPos);
+            break;
         }
     } else if ((target != 0) && (target != -1)) {
-        if (kind == 1) {
-            soundPos = vec3_802f3678;
-            soundPos.x = x;
-            soundPos.y = y;
-            soundPos.z = z;
-            psndSFXOn_3D(str_SFX_EVT_NPC_QUESTION_802f36d8, &soundPos);
-        } else if (kind == 0) {
-            soundPos = vec3_802f366c;
-            soundPos.x = x;
-            soundPos.y = y;
-            soundPos.z = z;
-            psndSFXOn_3D(str_SFX_EVT_NPC_BIKKURI__802f36bc, &soundPos);
+        switch (kind) {
+        case 0:
+            npcBikkuriPos = vec3_802f366c;
+            npcBikkuriPos.x = x;
+            npcBikkuriPos.y = y;
+            npcBikkuriPos.z = z;
+            psndSFXOn_3D(str_SFX_EVT_NPC_BIKKURI__802f36bc, &npcBikkuriPos);
+            break;
+        case 1:
+            npcQuestionPos = vec3_802f3678;
+            npcQuestionPos.x = x;
+            npcQuestionPos.y = y;
+            npcQuestionPos.z = z;
+            psndSFXOn_3D(str_SFX_EVT_NPC_QUESTION_802f36d8, &npcQuestionPos);
+            break;
         }
     }
 
@@ -239,7 +250,6 @@ u8 effFukidashiMain(void* effect) {
     LocalVec3 dispPos;
     LocalVec3 pos;
     s32 value;
-    s32 frame;
     s32 kind;
 
     work = *(void**)((s32)effect + 0xC);
@@ -250,13 +260,12 @@ u8 effFukidashiMain(void* effect) {
     dispPos = pos;
     kind = *(s32*)work;
 
-    frame = *(s32*)((s32)work + 0x34);
     if (*(s32*)((s32)work + 0x40) == 0) {
-        value = anim_data_table[kind][frame / 2];
+        value = anim_data_table[kind][*(s32*)((s32)work + 0x34) / 2];
     } else {
-        value = anim_data_table_2[kind][frame / 2];
+        value = anim_data_table_2[kind][*(s32*)((s32)work + 0x34) / 2];
     }
-    *(s32*)((s32)work + 0x34) = frame + 1;
+    *(s32*)((s32)work + 0x34) += 1;
     *(s32*)((s32)work + 0x38) = value;
 
     if (value < 0) {
@@ -264,32 +273,35 @@ u8 effFukidashiMain(void* effect) {
             effDelete(effect);
             return 0;
         }
-        frame = (-10 - value) * 2;
-        *(s32*)((s32)work + 0x34) = frame;
+        *(s32*)((s32)work + 0x34) = (-10 - value) * 2;
         if (*(s32*)((s32)work + 0x40) == 0) {
-            value = anim_data_table[kind][frame / 2];
+            value = anim_data_table[kind][*(s32*)((s32)work + 0x34) / 2];
         } else {
-            value = anim_data_table_2[kind][frame / 2];
+            value = anim_data_table_2[kind][*(s32*)((s32)work + 0x34) / 2];
         }
-        *(s32*)((s32)work + 0x34) = frame + 1;
+        *(s32*)((s32)work + 0x34) += 1;
         *(s32*)((s32)work + 0x38) = value;
     }
 
     if (kind == 6) {
-        if (*(s32*)((s32)work + 0x54) == 0) {
+        switch (*(s32*)((s32)work + 0x54)) {
+        case 0:
             *(f32*)((s32)work + 0x24) += float_22p5_80422940;
             if (*(f32*)((s32)work + 0x24) >= float_0_804228c0) {
                 *(f32*)((s32)work + 0x24) = float_0_804228c0;
                 *(s32*)((s32)work + 0x54) += 1;
             }
-        } else if (*(s32*)((s32)work + 0x54) == 0x78) {
+            break;
+        case 0x78:
             *(f32*)((s32)work + 0x24) -= float_9_80422944;
             if (*(f32*)((s32)work + 0x24) <= float_neg90_80422948) {
                 effDelete(effect);
                 return 0;
             }
-        } else {
+            break;
+        default:
             *(s32*)((s32)work + 0x54) += 1;
+            break;
         }
     } else if (*(s32*)((s32)work + 0x40) > 0) {
         if (*(s32*)((s32)work + 0x30) < 10000) {
@@ -304,7 +316,7 @@ u8 effFukidashiMain(void* effect) {
     if (*(void**)((s32)work + 0x44) != 0) {
         calc_pos(work, 1);
     }
-    if (kind == 4) {
+    if (*(s32*)work == 4) {
         dispEntry(*(s32*)((s32)work + 0x4C), 2, effFukidashiDisp, effect, dispCalcZ(&dispPos));
     } else {
         dispEntry(*(s32*)((s32)work + 0x4C), 8, effFukidashiDisp, effect, dispCalcZ(&dispPos));

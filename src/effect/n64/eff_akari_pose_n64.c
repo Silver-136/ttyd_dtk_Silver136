@@ -29,44 +29,73 @@ u8 a_data2[] = {
 extern f32 float_0_80424c50;
 
 void* effAkariPoseN64Entry(s32 type, s32 count, s32 timer, f32 x, f32 y, f32 z, f32 scale) {
+    typedef struct AkariPoseWork {
+        s32 type; f32 x, y, z; f32 moveX, moveY; f32 targetX, targetY;
+        s32 sequence; f32 angle; s32 timer; s32 frame; s32 alpha; f32 scale;
+    } AkariPoseWork;
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
     extern void effAkariPoseMain(void);
     extern f32 float_0p5_80424c70;
     extern f32 float_neg1_80424c74;
     void* entry;
-    void* work;
-    u8* item;
+    AkariPoseWork* work;
+    AkariPoseWork* item;
     s32 i;
+    s32 blocks;
+    s32 remainder;
+    s32 value;
     f32 halfSeq;
 
     entry = effEntry();
     *(const char**)((s32)entry + 0x14) = str_AkariPoseN64_802faaf8;
     *(s32*)((s32)entry + 8) = count + 1;
-    work = __memAlloc(3, (count + 1) * 0x38);
+    work = __memAlloc(3, (count + 1) * sizeof(AkariPoseWork));
     *(void**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effAkariPoseMain;
     *(u32*)entry |= 2;
-
-    *(s32*)work = type;
-    *(s32*)((s32)work + 0x2C) = 0;
+    work->type = type;
+    work->frame = 0;
     if (timer <= 0) {
-        *(s32*)((s32)work + 0x28) = 1000;
+        work->timer = 1000;
     } else {
-        *(s32*)((s32)work + 0x28) = timer;
+        work->timer = timer;
     }
-    *(s32*)((s32)work + 0x30) = 0xFF;
-    *(f32*)((s32)work + 4) = x;
-    *(f32*)((s32)work + 8) = y;
-    *(f32*)((s32)work + 0xC) = z;
-    *(f32*)((s32)work + 0x34) = scale;
+    work->alpha = 0xFF;
+    work->x = x;
+    work->y = y;
+    work->z = z;
+    work->scale = scale;
 
     halfSeq = (f32)max_seq_num[type] * float_0p5_80424c70;
-    item = (u8*)work + 0x38;
-    for (i = 1; i < count + 1; i++, item += 0x38) {
-        *(s32*)(item + 0x20) = (s32)(float_neg1_80424c74 - (halfSeq * (f32)(i & 1)));
+    item = work + 1;
+    i = 1;
+    if (count + 1 > 1) {
+        blocks = (u32)count >> 2;
+        if (blocks != 0) {
+            do {
+                value = (s32)(float_neg1_80424c74 - halfSeq * (f32)(i & 1));
+                item[0].sequence = value;
+                value = (s32)(float_neg1_80424c74 - halfSeq * (f32)((i + 1) & 1));
+                item[1].sequence = value;
+                value = (s32)(float_neg1_80424c74 - halfSeq * (f32)((i + 2) & 1));
+                item[2].sequence = value;
+                value = (s32)(float_neg1_80424c74 - halfSeq * (f32)((i + 3) & 1));
+                item[3].sequence = value;
+                item += 4;
+                i += 4;
+            } while (--blocks != 0);
+        }
+        remainder = count & 3;
+        if (remainder != 0) {
+            do {
+                value = (s32)(float_neg1_80424c74 - halfSeq * (f32)(i & 1));
+                item->sequence = value;
+                item++;
+                i++;
+            } while (--remainder != 0);
+        }
     }
-
     return entry;
 }
 

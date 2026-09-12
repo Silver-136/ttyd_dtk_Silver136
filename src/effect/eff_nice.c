@@ -57,10 +57,11 @@ void* effNiceEntry(f64 x, f64 y, f64 z, s32 kind) {
     extern void animPoseSetGXFunc(s32 poseId, void* func, s32 arg);
     extern u8 effNiceMain(void* effEntry);
     extern s32 rendermodeFunc(s32 param);
-    extern void* gpGlobals;
+    extern void* gp;
     extern char str_Nice_80422ec4[];
     extern char str_A_1_80422ed0[];
     extern char** anim_tbl[];
+    extern s32 acrobat_tbl[][2];
     extern f32 float_0_80422e94;
     extern f32 float_1_80422e9c;
     extern f32 float_1000_80422ecc;
@@ -69,16 +70,18 @@ void* effNiceEntry(f64 x, f64 y, f64 z, s32 kind) {
     s32 count;
     s32 poseId;
     s32 i;
-    s32 language;
+    f32 one;
+    f32 zero;
+    f32 thousand;
 
     entry = effEntry();
     if (kind == 5) {
         kind = 0;
     }
-    language = *(s32*)((s32)gpGlobals + 0x128);
-    count = 1;
     if (kind == 7) {
-        count = 2;
+        count = acrobat_tbl[*(s32*)((s32)gp + 0x16C)][1] + 1;
+    } else {
+        count = 1;
     }
 
     *(char**)((s32)entry + 0x14) = str_Nice_80422ec4;
@@ -86,6 +89,7 @@ void* effNiceEntry(f64 x, f64 y, f64 z, s32 kind) {
     work = __memAlloc(3, count * 100);
     *(void**)((s32)entry + 0xC) = work;
     memset(work, 0, count * 100);
+    one = float_1_80422e9c;
     *(void**)((s32)entry + 0x10) = effNiceMain;
     *(u32*)((s32)entry + 0x0) |= 2;
 
@@ -93,25 +97,27 @@ void* effNiceEntry(f64 x, f64 y, f64 z, s32 kind) {
     *(f32*)((s32)work + 0x4) = (f32)x;
     *(f32*)((s32)work + 0x8) = (f32)y;
     *(f32*)((s32)work + 0xC) = (f32)z;
-    *(f32*)((s32)work + 0x10) = float_1_80422e9c;
-    *(f32*)((s32)work + 0x14) = float_1_80422e9c;
-    *(f32*)((s32)work + 0x18) = float_1_80422e9c;
-    *(f32*)((s32)work + 0x1C) = float_1_80422e9c;
+    *(f32*)((s32)work + 0x10) = one;
+    *(f32*)((s32)work + 0x14) = one;
+    *(f32*)((s32)work + 0x18) = one;
+    *(f32*)((s32)work + 0x1C) = one;
     *(s32*)((s32)work + 0x30) = -1;
 
+    thousand = float_1000_80422ecc;
+    zero = float_0_80422e94;
     if (kind == 7) {
         for (i = 1, work = (void*)((s32)work + 100); i < count; i++, work = (void*)((s32)work + 100)) {
-            *(f32*)((s32)work + 0x4) = float_1000_80422ecc;
-            *(f32*)((s32)work + 0x8) = float_0_80422e94;
-            *(f32*)((s32)work + 0xC) = float_0_80422e94;
-            *(f32*)((s32)work + 0x10) = float_1_80422e9c;
-            *(f32*)((s32)work + 0x14) = float_1_80422e9c;
-            *(f32*)((s32)work + 0x18) = float_1_80422e9c;
+            *(f32*)((s32)work + 0x4) = thousand;
+            *(f32*)((s32)work + 0x8) = zero;
+            *(f32*)((s32)work + 0xC) = zero;
+            *(f32*)((s32)work + 0x10) = one;
+            *(f32*)((s32)work + 0x14) = one;
+            *(f32*)((s32)work + 0x18) = one;
             *(s32*)((s32)work + 0x2C) = 0;
             *(s32*)((s32)work + 0x24) = 0;
         }
     } else {
-        poseId = animPoseEntry(anim_tbl[language][kind], (*(s32*)((s32)gpGlobals + 0x14) != 0));
+        poseId = animPoseEntry(anim_tbl[*(s32*)((s32)gp + 0x16C)][kind], (*(s32*)((s32)gp + 0x14) != 0));
         *(s32*)((s32)*(void**)((s32)entry + 0xC) + 0x30) = poseId;
         animPoseSetAnim(poseId, str_A_1_80422ed0, 1);
         animPoseSetMaterialFlagOn(poseId, 0x1800);
@@ -144,7 +150,10 @@ u8 effNiceMain(void* effEntry) {
     extern f32 float_0_80422e94;
     extern f32 float_1_80422e9c;
     extern f32 float_255_80422ec0;
+    extern f32 N_stylish_anim_data[7][6];
+    extern LocalVec3 vec3_802f3e94;
     LocalVec3 pos;
+    LocalVec3 dispPos;
     void* work;
     void* pose;
     void* animData;
@@ -153,12 +162,19 @@ u8 effNiceMain(void* effEntry) {
     u32 color;
     s32 kind;
     s32 poseId;
+    s32 copyIndex;
+    u32* copySrc;
+    u32* copyDst;
+    volatile f32 retainedLiteral;
 
+    retainedLiteral = 5.0f;
+    pos = vec3_802f3e94;
     work = *(void**)((s32)effEntry + 0xC);
     kind = *(s32*)((s32)work + 0x0);
     pos.x = *(f32*)((s32)work + 0x4);
     pos.y = *(f32*)((s32)work + 0x8);
     pos.z = *(f32*)((s32)work + 0xC);
+    dispPos = pos;
     poseId = *(s32*)((s32)work + 0x30);
 
     if ((*(u32*)((s32)effEntry + 0x0) & 4) != 0) {
@@ -175,18 +191,26 @@ u8 effNiceMain(void* effEntry) {
         animData = animPoseGetAnimDataPtr(poseId);
         animPoseMain(poseId);
         if (kind >= 0 && kind < 7) {
+            f32 stylishAnimData[7][6];
             endFrame = *(f32*)(*(s32*)((s32)animData + 0x24) + 0x8);
-            if (kind == *(s32*)((s32)work + 0x0)) {
-                fade = endFrame - 5.0f;
-                if (fade < *(f32*)((s32)pose + 0x34)) {
-                    fade = float_1_80422e9c - ((*(f32*)((s32)pose + 0x34) - fade) / (endFrame - fade));
-                    if (fade < float_0_80422e94) {
-                        fade = float_0_80422e94;
-                    }
-                    animPoseSetMaterialFlagOn(poseId, 0x40);
-                    color = (dat_80422e80 & 0xFFFFFF00) | ((s32)(float_255_80422ec0 * fade) & 0xFF);
-                    animPoseSetMaterialEvtColor(poseId, &color);
+            copySrc = (u32*)N_stylish_anim_data;
+            copyDst = (u32*)stylishAnimData;
+            for (copyIndex = 0; copyIndex < 21; copyIndex++) {
+                copyDst[0] = copySrc[0];
+                copyDst[1] = copySrc[1];
+                copySrc += 2;
+                copyDst += 2;
+            }
+            fade = stylishAnimData[kind][*(s32*)((s32)gpGlobals + 0x16C)];
+            if (fade < *(f32*)((s32)pose + 0x24)) {
+                fade = float_1_80422e9c - ((*(f32*)((s32)pose + 0x24) - fade) / (endFrame - fade));
+                if (fade < float_0_80422e94) {
+                    fade = float_0_80422e94;
                 }
+                animPoseSetMaterialFlagOn(poseId, 0x40);
+                color = dat_80422e80;
+                ((u8*)&color)[3] = (u8)(float_255_80422ec0 * fade);
+                animPoseSetMaterialEvtColor(poseId, &color);
             }
         }
         if (animPoseGetLoopTimes(poseId) >= float_1_80422e9c) {
@@ -199,7 +223,7 @@ u8 effNiceMain(void* effEntry) {
     if (kind == 7) {
         acrobatMain(effEntry);
     } else {
-        dispEntry(4, 8, effNiceDisp, effEntry, dispCalcZ(&pos));
+        dispEntry(4, 8, effNiceDisp, effEntry, dispCalcZ(&dispPos));
     }
     return 0;
 }

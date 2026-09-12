@@ -87,26 +87,26 @@ s32 battleAcMain_ShotTarget(void* battleWork) {
                     _ac_rumble_param_set(rumbleType, (s16*)(extra + 0x28),
                                          (s16*)(extra + 0x2A), (f32*)(extra + 0x2C));
                 }
-                oldValue = *(f32*)(extra + 0x2C) *
-                           (f32)sinfd((f32)((*(s16*)(extra + 0x2A) + 1) * 180 /
-                                           *(s16*)(extra + 0x28)));
-                newValue = *(f32*)(extra + 0x2C) *
-                           (f32)sinfd((f32)(*(s16*)(extra + 0x2A) * 180 /
-                                           *(s16*)(extra + 0x28)));
-                *(f32*)(extra + 0x14) += newValue - oldValue;
+                *(f32*)(extra + 0x14) +=
+                    *(f32*)(extra + 0x2C) *
+                        (f32)sinfd((f32)(*(s16*)(extra + 0x2A) * 180 /
+                                         *(s16*)(extra + 0x28))) -
+                    *(f32*)(extra + 0x2C) *
+                        (f32)sinfd((f32)((*(s16*)(extra + 0x2A) + 1) * 180 /
+                                         *(s16*)(extra + 0x28)));
 
                 (*(s16*)(extra + 0x32))--;
                 if (*(s16*)(extra + 0x32) < 0) {
                     _ac_rumble_param_set(rumbleType, (s16*)(extra + 0x30),
                                          (s16*)(extra + 0x32), (f32*)(extra + 0x34));
                 }
-                oldValue = *(f32*)(extra + 0x34) *
-                           (f32)sinfd((f32)((*(s16*)(extra + 0x32) + 1) * 180 /
-                                           *(s16*)(extra + 0x30)));
-                newValue = *(f32*)(extra + 0x34) *
-                           (f32)sinfd((f32)(*(s16*)(extra + 0x32) * 180 /
-                                           *(s16*)(extra + 0x30)));
-                *(f32*)(extra + 0x18) += newValue - oldValue;
+                *(f32*)(extra + 0x18) +=
+                    *(f32*)(extra + 0x34) *
+                        (f32)sinfd((f32)(*(s16*)(extra + 0x32) * 180 /
+                                         *(s16*)(extra + 0x30))) -
+                    *(f32*)(extra + 0x34) *
+                        (f32)sinfd((f32)((*(s16*)(extra + 0x32) + 1) * 180 /
+                                         *(s16*)(extra + 0x30)));
 
                 *(f32*)(extra + 0x14) += (f32)*(s8*)(bw + 0xF2E) / 10.0f;
                 *(f32*)(extra + 0x18) += (f32)*(s8*)(bw + 0xF2F) / 10.0f;
@@ -114,7 +114,7 @@ s32 battleAcMain_ShotTarget(void* battleWork) {
                 if (autoCommand) {
                     f32 cursor = *(f32*)(extra + 0x14);
                     f32 target = *(f32*)(extra + 0x08);
-                    if (__fabsf(cursor - target) >= 3.0f) {
+                    if (__fabs((f64)(cursor - target)) >= 3.0) {
                         *(f32*)(extra + 0x14) = cursor <= target ? cursor + 3.0f : cursor - 3.0f;
                     } else {
                         *(f32*)(extra + 0x14) = target;
@@ -122,7 +122,7 @@ s32 battleAcMain_ShotTarget(void* battleWork) {
 
                     cursor = *(f32*)(extra + 0x18);
                     target = *(f32*)(extra + 0x0C);
-                    if (__fabsf(cursor - target) >= 3.0f) {
+                    if (__fabs((f64)(cursor - target)) >= 3.0) {
                         *(f32*)(extra + 0x18) = cursor <= target ? cursor + 3.0f : cursor - 3.0f;
                     } else {
                         *(f32*)(extra + 0x18) = target;
@@ -326,6 +326,7 @@ void actionCommandDisp(f32 x, f32 y) {
         f32 y;
         f32 z;
     } Vec3Local;
+    typedef void (*BtlDispTex4ByValue)(s32, Vec3Local, Vec3Local, Vec3Local, u32*);
     extern f32 vec3_80300258[];
     extern void* _battleWorkPointer;
     extern void btlGetScreenPoint(f32* in, f32* out);
@@ -337,13 +338,10 @@ void actionCommandDisp(f32 x, f32 y) {
     extern f32 float_4_80427e70;
 
     void* battleWork;
-    void* work;
+    u8* work;
+    f32* vectors;
     Vec3Local p0;
     Vec3Local p1;
-    Vec3Local a0;
-    Vec3Local b0;
-    Vec3Local a1;
-    Vec3Local b1;
     Vec3Local a2;
     Vec3Local b2;
     Vec3Local a3;
@@ -355,7 +353,8 @@ void actionCommandDisp(f32 x, f32 y) {
     s32 state;
 
     battleWork = _battleWorkPointer;
-    work = (void*)((s32)battleWork + 0x1F4C);
+    work = (u8*)battleWork + 0x1F4C;
+    vectors = vec3_80300258;
     state = *(s32*)((s32)battleWork + 0x1C9C);
     if (state >= 1000) {
         if (state >= 1003) {
@@ -365,38 +364,38 @@ void actionCommandDisp(f32 x, f32 y) {
         return;
     }
 
-    *(f32*)((s32)work + 0x24) += float_2_80427e6c;
-    btlGetScreenPoint((f32*)((s32)work + 0x14), (f32*)&p0);
-    a0 = *(Vec3Local*)&vec3_80300258[3];
-    b0 = *(Vec3Local*)&vec3_80300258[6];
+    *(f32*)(work + 0x24) += float_2_80427e6c;
+    btlGetScreenPoint((f32*)(work + 0x14), (f32*)&p0);
     color0 = dat_80427e5c;
-    btlDispTex4(0x58, (f32*)&p0, (f32*)&b0, (f32*)&a0, &color0);
+    ((BtlDispTex4ByValue)btlDispTex4)(0x58, p0,
+                                     *(Vec3Local*)&vectors[3],
+                                     *(Vec3Local*)&vectors[6], &color0);
 
     p0.x += float_4_80427e70;
     p0.y -= float_4_80427e70;
     p0.z -= float_2_80427e6c;
-    a1 = *(Vec3Local*)&vec3_80300258[9];
-    b1 = *(Vec3Local*)&vec3_80300258[12];
     color1 = dat_80427e60;
-    btlDispTex4(0x58, (f32*)&p0, (f32*)&b1, (f32*)&a1, &color1);
+    ((BtlDispTex4ByValue)btlDispTex4)(0x58, p0,
+                                     *(Vec3Local*)&vectors[9],
+                                     *(Vec3Local*)&vectors[12], &color1);
 
-    btlGetScreenPoint((f32*)((s32)work + 8), (f32*)&p1);
-    a2 = *(Vec3Local*)&vec3_80300258[15];
-    a2.z = *(f32*)((s32)work + 0x24);
-    b2 = *(Vec3Local*)&vec3_80300258[18];
-    b2.z = *(f32*)((s32)work + 0x24);
+    btlGetScreenPoint((f32*)(work + 8), (f32*)&p1);
+    a2 = *(Vec3Local*)&vectors[15];
+    a2.z = *(f32*)(work + 0x24);
+    b2 = *(Vec3Local*)&vectors[18];
+    b2.z = *(f32*)(work + 0x24);
     color2 = dat_80427e64;
-    btlDispTex4(0x57, (f32*)&p1, (f32*)&b2, (f32*)&a2, &color2);
+    ((BtlDispTex4ByValue)btlDispTex4)(0x57, p1, a2, b2, &color2);
 
     p1.x += float_4_80427e70;
     p1.y -= float_4_80427e70;
     p1.z -= float_2_80427e6c;
-    a3 = *(Vec3Local*)&vec3_80300258[21];
-    a3.z = *(f32*)((s32)work + 0x24);
-    b3 = *(Vec3Local*)&vec3_80300258[24];
-    b3.z = *(f32*)((s32)work + 0x24);
+    a3 = *(Vec3Local*)&vectors[21];
+    a3.z = *(f32*)(work + 0x24);
+    b3 = *(Vec3Local*)&vectors[24];
+    b3.z = *(f32*)(work + 0x24);
     color3 = dat_80427e68;
-    btlDispTex4(0x57, (f32*)&p1, (f32*)&b3, (f32*)&a3, &color3);
+    ((BtlDispTex4ByValue)btlDispTex4)(0x57, p1, a3, b3, &color3);
 }
 
 const f32 vec3_80300258[] = { 0.0f, 60.0f, 0.0f };

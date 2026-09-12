@@ -90,12 +90,13 @@ void* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 }
 
 void effBombMain(void* effect) {
+    typedef struct BombVec { f32 x; f32 y; f32 z; } BombVec;
     extern void effDelete(void* effect);
     extern f32 dispCalcZ(void* pos);
     extern void* dispEntry(s32 cameraId, s32 order, void* callback, void* param, f32 priority);
     extern u8 effBombDisp(void);
     extern f32 float_100_804247e4;
-    extern f32 vec3_802f9aa0[3];
+    extern BombVec vec3_802f9aa0;
     u8* work;
     u8* entry;
     u8* table1;
@@ -104,21 +105,17 @@ void effBombMain(void* effect) {
     u8* table1_2;
     u8* table2_1;
     u8* table2_2;
-    f32 pos[3];
-    f32 dispPos[3];
+    BombVec dispPos;
+    BombVec pos;
     s32 oldFrame;
     s32 i;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos[0] = vec3_802f9aa0[0];
-    pos[1] = vec3_802f9aa0[1];
-    pos[2] = vec3_802f9aa0[2];
-    pos[0] = *(f32*)(work + 4);
-    pos[1] = *(f32*)(work + 8);
-    pos[2] = *(f32*)(work + 0xC);
-    dispPos[0] = pos[0];
-    dispPos[1] = pos[1];
-    dispPos[2] = pos[2];
+    pos = vec3_802f9aa0;
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
+    dispPos = pos;
 
     oldFrame = *(s32*)(work + 0x20);
     *(s32*)(work + 0x20) = oldFrame + 1;
@@ -151,7 +148,7 @@ void effBombMain(void* effect) {
         entry += 0x28;
     }
 
-    dispEntry(4, 2, effBombDisp, effect, dispCalcZ(dispPos));
+    dispEntry(4, 2, effBombDisp, effect, dispCalcZ(&dispPos));
 }
 
 

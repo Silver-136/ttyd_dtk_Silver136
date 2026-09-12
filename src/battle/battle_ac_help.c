@@ -53,31 +53,36 @@ void _ac_help_disp(void) {
     extern f32 float_neg145_804272ac;
     extern f32 float_10_804272b0;
     extern f32 float_neg148_804272b4;
+    extern const char str_message_not_found_802feb30[27];
     extern const char* msgSearch(const char* msg);
     extern u32 FontGetMessageWidthLine(const char* msg, u16* lines);
     extern void FontDrawStart_alpha(s32 alpha);
     extern void FontDrawMessage(s32 x, s32 y, const char* msg);
     extern void windowDispGX_Waku_col(s32, void*, f32, f32, f32, f32, f32);
 
-    battleWork = _battleWorkPointer;
+    battleWork = (void*)((s32)_battleWorkPointer + 0x20000);
     alpha = 0xFF;
-    if (*(s32*)((s32)battleWork + 0x1900C) == 1) {
+    if (*(s32*)((s32)battleWork - 0x6FF4) == 1) {
         alpha = 0x80;
     }
 
-    msg = msgSearch(*(const char**)((s32)battleWork + 0x19008));
+    msg = msgSearch(*(const char**)((s32)battleWork - 0x6FF8));
+    if (msg == NULL) {
+        msg = str_message_not_found_802feb30;
+    }
     width = FontGetMessageWidthLine(msg, &lines);
+    width &= 0xFFFF;
     lineCount = (u16)(lines + 1);
     color = dat_804272a0;
     ((u8*)&color)[3] = alpha;
-    x = float_0_804272a4 - (f32)((s32)(u16)width / 2);
+    x = float_0_804272a4 - (f32)(width / 2);
     lines = lineCount;
     windowDispGX_Waku_col(
         0,
         &color,
         x - float_20_804272a8,
         float_neg145_804272ac + (f32)((lineCount - 1) * 0x1D),
-        (f32)((u16)width + 0x28),
+        (f32)(width + 0x28),
         (f32)(lineCount * 0x1D + 1),
         float_10_804272b0);
     FontDrawStart_alpha(alpha);

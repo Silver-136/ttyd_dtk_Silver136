@@ -40,6 +40,7 @@ extern const f32 float_225_80428b0c;
 /* CHATGPT STUB FILL: main/effect/eff_gonbaba_breath 20260624_185035 */
 
 /* stub-fill: init_breath | missing_definition | ghidra_signature */
+#pragma use_lmw_stmw off
 void init_breath(void* workPtr, s32 index, s32 type) {
     extern s32 irand(s32);
     extern u8* col_tbl[];
@@ -56,17 +57,7 @@ void init_breath(void* workPtr, s32 index, s32 type) {
     *(s32*)work = type;
 
     if (type < 10) {
-        if (type >= 0 && type < 7) {
-            *(s32*)(work + 0x44) = index << 2;
-            *(f32*)(work + 4) = float_0_80428ab4;
-            *(f32*)(work + 8) = float_0_80428ab4;
-            *(f32*)(work + 0xC) = float_0_80428ab4;
-            *(f32*)(work + 0x40) = float_0_80428ab4;
-            *(f32*)(work + 0x10) = float_neg2p4_80428adc;
-            *(f32*)(work + 0x14) = float_0p1_80428ae0;
-            *(s32*)(work + 0x1C) = 0x40;
-            *(s32*)(work + 0x3C) = 0xFF;
-        } else if (type == 7) {
+        if (type == 7) {
             *(s32*)(work + 0x44) = index << 3;
             *(f32*)(work + 4) = float_0_80428ab4;
             *(f32*)(work + 8) = float_0_80428ab4;
@@ -76,6 +67,18 @@ void init_breath(void* workPtr, s32 index, s32 type) {
             *(f32*)(work + 0x14) = float_0p1_80428ae0;
             *(s32*)(work + 0x1C) = 0x40;
             *(s32*)(work + 0x3C) = 0xFF;
+        } else if (type < 7) {
+            if (type >= 0) {
+            *(s32*)(work + 0x44) = index << 2;
+            *(f32*)(work + 4) = float_0_80428ab4;
+            *(f32*)(work + 8) = float_0_80428ab4;
+            *(f32*)(work + 0xC) = float_0_80428ab4;
+            *(f32*)(work + 0x40) = float_0_80428ab4;
+            *(f32*)(work + 0x10) = float_neg2p4_80428adc;
+            *(f32*)(work + 0x14) = float_0p1_80428ae0;
+            *(s32*)(work + 0x1C) = 0x40;
+            *(s32*)(work + 0x3C) = 0xFF;
+            }
         }
     } else if (type < 0x11) {
         angle = (float_240_80428ae8 + (f32)irand(0x3C)) * float_6p2832_80428a90 / float_360_80428a94;
@@ -86,52 +89,56 @@ void init_breath(void* workPtr, s32 index, s32 type) {
         *(f32*)(work + 8) = float_0_80428ab4;
         *(f32*)(work + 0xC) = float_0_80428ab4;
 
-        if (float_3p1416_80428af8 < angle) {
-            if (float_4p7124_80428b00 <= angle) {
-                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
-                t2 = t * t;
-                sinv = -(((float_0p00761_80428af0 * t2 -
-                           float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
+        if (angle <= float_3p1416_80428af8) {
+            if (angle <= float_1p5708_80428afc) {
+                t2 = angle * angle;
+                sinv = ((float_0p00761_80428af0 * t2 -
+                         float_0p16605_80428af4) * t2 + float_1_80428ab8) * angle;
             } else {
+                t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
+                t2 = t * t;
+                sinv = ((float_0p00761_80428af0 * t2 -
+                         float_0p16605_80428af4) * t2 + float_1_80428ab8) * t;
+            }
+        } else {
+            if (angle <= float_4p7124_80428b00) {
                 t = angle - float_3p1416_80428af8;
                 t2 = t * t;
                 sinv = -(((float_0p00761_80428af0 * t2 -
                            float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
+            } else {
+                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
+                t2 = t * t;
+                sinv = -(((float_0p00761_80428af0 * t2 -
+                           float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
             }
-        } else if (float_1p5708_80428afc < angle) {
-            t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
-            t2 = t * t;
-            sinv = ((float_0p00761_80428af0 * t2 -
-                     float_0p16605_80428af4) * t2 + float_1_80428ab8) * t;
-        } else {
-            t2 = angle * angle;
-            sinv = ((float_0p00761_80428af0 * t2 -
-                     float_0p16605_80428af4) * t2 + float_1_80428ab8) * angle;
         }
 
         *(f32*)(work + 0x10) = speed * sinv;
 
-        if (float_3p1416_80428af8 < angle) {
-            if (float_4p7124_80428b00 <= angle) {
-                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
-                t2 = t * t;
+        if (angle <= float_3p1416_80428af8) {
+            if (angle <= float_1p5708_80428afc) {
+                t2 = angle * angle;
                 cosv = (float_0p03705_80428b04 * t2 -
                         float_0p4967_80428b08) * t2 + float_1_80428ab8;
             } else {
-                t = angle - float_3p1416_80428af8;
+                t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
                 t2 = t * t;
                 cosv = -((float_0p03705_80428b04 * t2 -
                           float_0p4967_80428b08) * t2 + float_1_80428ab8);
             }
-        } else if (float_1p5708_80428afc < angle) {
-            t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
-            t2 = t * t;
-            cosv = -((float_0p03705_80428b04 * t2 -
-                      float_0p4967_80428b08) * t2 + float_1_80428ab8);
         } else {
-            t2 = angle * angle;
-            cosv = (float_0p03705_80428b04 * t2 -
-                    float_0p4967_80428b08) * t2 + float_1_80428ab8;
+            if (angle <= float_4p7124_80428b00) {
+                t = angle - float_3p1416_80428af8;
+                t2 = t * t;
+                cosv = -((float_0p03705_80428b04 * t2 -
+                          float_0p4967_80428b08) * t2 + float_1_80428ab8);
+            } else {
+                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
+                t2 = t * t;
+                cosv = (float_0p03705_80428b04 * t2 -
+                        float_0p4967_80428b08) * t2 + float_1_80428ab8;
+            }
         }
 
         *(f32*)(work + 0x14) = speed * cosv;
@@ -140,15 +147,12 @@ void init_breath(void* workPtr, s32 index, s32 type) {
         *(s32*)(work + 0x3C) = 0xFF;
 
         colorType = type % 10;
-        {
-            u8* colors = col_tbl[colorType];
-            *(s32*)(work + 0x24) = colors[0xC];
-            *(s32*)(work + 0x28) = colors[0xD];
-            *(s32*)(work + 0x2C) = colors[0xE];
-            *(s32*)(work + 0x30) = colors[0];
-            *(s32*)(work + 0x34) = colors[1];
-            *(s32*)(work + 0x38) = colors[2];
-        }
+        *(s32*)(work + 0x24) = col_tbl[colorType][0xC];
+        *(s32*)(work + 0x28) = col_tbl[colorType][0xD];
+        *(s32*)(work + 0x2C) = col_tbl[colorType][0xE];
+        *(s32*)(work + 0x30) = col_tbl[colorType][0];
+        *(s32*)(work + 0x34) = col_tbl[colorType][1];
+        *(s32*)(work + 0x38) = col_tbl[colorType][2];
 
     } else if (type == 0x11) {
         angle = (float_225_80428b0c + (f32)irand(0x5A)) * float_6p2832_80428a90 / float_360_80428a94;
@@ -159,52 +163,56 @@ void init_breath(void* workPtr, s32 index, s32 type) {
         *(f32*)(work + 8) = float_0_80428ab4;
         *(f32*)(work + 0xC) = float_0_80428ab4;
 
-        if (float_3p1416_80428af8 < angle) {
-            if (float_4p7124_80428b00 <= angle) {
-                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
-                t2 = t * t;
-                sinv = -(((float_0p00761_80428af0 * t2 -
-                           float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
+        if (angle <= float_3p1416_80428af8) {
+            if (angle <= float_1p5708_80428afc) {
+                t2 = angle * angle;
+                sinv = ((float_0p00761_80428af0 * t2 -
+                         float_0p16605_80428af4) * t2 + float_1_80428ab8) * angle;
             } else {
+                t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
+                t2 = t * t;
+                sinv = ((float_0p00761_80428af0 * t2 -
+                         float_0p16605_80428af4) * t2 + float_1_80428ab8) * t;
+            }
+        } else {
+            if (angle <= float_4p7124_80428b00) {
                 t = angle - float_3p1416_80428af8;
                 t2 = t * t;
                 sinv = -(((float_0p00761_80428af0 * t2 -
                            float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
+            } else {
+                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
+                t2 = t * t;
+                sinv = -(((float_0p00761_80428af0 * t2 -
+                           float_0p16605_80428af4) * t2 + float_1_80428ab8) * t);
             }
-        } else if (float_1p5708_80428afc < angle) {
-            t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
-            t2 = t * t;
-            sinv = ((float_0p00761_80428af0 * t2 -
-                     float_0p16605_80428af4) * t2 + float_1_80428ab8) * t;
-        } else {
-            t2 = angle * angle;
-            sinv = ((float_0p00761_80428af0 * t2 -
-                     float_0p16605_80428af4) * t2 + float_1_80428ab8) * angle;
         }
 
         *(f32*)(work + 0x10) = speed * sinv;
 
-        if (float_3p1416_80428af8 < angle) {
-            if (float_4p7124_80428b00 <= angle) {
-                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
-                t2 = t * t;
+        if (angle <= float_3p1416_80428af8) {
+            if (angle <= float_1p5708_80428afc) {
+                t2 = angle * angle;
                 cosv = (float_0p03705_80428b04 * t2 -
                         float_0p4967_80428b08) * t2 + float_1_80428ab8;
             } else {
-                t = angle - float_3p1416_80428af8;
+                t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
                 t2 = t * t;
                 cosv = -((float_0p03705_80428b04 * t2 -
                           float_0p4967_80428b08) * t2 + float_1_80428ab8);
             }
-        } else if (float_1p5708_80428afc < angle) {
-            t = float_1p5708_80428afc - (angle - float_1p5708_80428afc);
-            t2 = t * t;
-            cosv = -((float_0p03705_80428b04 * t2 -
-                      float_0p4967_80428b08) * t2 + float_1_80428ab8);
         } else {
-            t2 = angle * angle;
-            cosv = (float_0p03705_80428b04 * t2 -
-                    float_0p4967_80428b08) * t2 + float_1_80428ab8;
+            if (angle <= float_4p7124_80428b00) {
+                t = angle - float_3p1416_80428af8;
+                t2 = t * t;
+                cosv = -((float_0p03705_80428b04 * t2 -
+                          float_0p4967_80428b08) * t2 + float_1_80428ab8);
+            } else {
+                t = float_1p5708_80428afc - (angle - float_4p7124_80428b00);
+                t2 = t * t;
+                cosv = (float_0p03705_80428b04 * t2 -
+                        float_0p4967_80428b08) * t2 + float_1_80428ab8;
+            }
         }
 
         *(f32*)(work + 0x14) = speed * cosv;
@@ -221,6 +229,7 @@ void init_breath(void* workPtr, s32 index, s32 type) {
 
     }
 }
+#pragma use_lmw_stmw reset
 
 /* CHATGPT STUB FILL: main/effect/eff_gonbaba_breath 20260624_185035 */
 

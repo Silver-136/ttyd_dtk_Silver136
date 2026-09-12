@@ -25,6 +25,11 @@ void* effRappaN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 baseAngle, 
     f32 sinAngle;
     f32 cosAngle;
     s32 i;
+    f32 twoPi;
+    f32 fullCircle;
+    f32 quarter;
+    f32 five;
+    f32 ten;
     s32 randValue;
     s32 angleOffset;
 
@@ -39,7 +44,12 @@ void* effRappaN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 baseAngle, 
     *(u8**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effRappaMain;
 
-    baseRad = (float_6p2832_80425e78 * baseAngle) / float_360_80425e84;
+    twoPi = float_6p2832_80425e78;
+    fullCircle = float_360_80425e84;
+    quarter = float_0p25_80425e80;
+    five = float_5_80425e7c;
+    ten = float_10_80425e74;
+    baseRad = (twoPi * baseAngle) / fullCircle;
     *(s32*)work = type;
     *(f32*)(work + 4) = x;
     *(f32*)(work + 8) = y;
@@ -55,10 +65,10 @@ void* effRappaN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 baseAngle, 
         *(f32*)(part + 4) = x;
         *(f32*)(part + 8) = y;
         *(f32*)(part + 0xC) = z;
-        speed = (f32)(randValue % 10) * float_0p25_80425e80 + float_5_80425e7c;
+        speed = (f32)(randValue % 10) * quarter + five;
         sinBase = (f32)sin(baseRad);
         angleOffset = ((i & 2) * (i / 2)) << 2;
-        angleRad = (float_6p2832_80425e78 * (spreadAngle + (f32)angleOffset)) / float_360_80425e84;
+        angleRad = (twoPi * (spreadAngle + (f32)angleOffset)) / fullCircle;
         cosAngle = (f32)cos(angleRad);
         *(f32*)(part + 0x10) = cosAngle * sinBase;
         sinAngle = (f32)sin(angleRad);
@@ -67,7 +77,7 @@ void* effRappaN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 baseAngle, 
         cosAngle = (f32)cos(angleRad);
         *(f32*)(part + 0x18) = cosAngle * cosBase;
         *(f32*)(part + 0x28) = speed;
-        *(f32*)(part + 0x24) = speed / float_10_80425e74;
+        *(f32*)(part + 0x24) = speed / ten;
     }
     return entry;
 }

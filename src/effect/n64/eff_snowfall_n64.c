@@ -66,8 +66,11 @@ void cam_clip_chk(u8* work, s32 xRange, s32 yRange, s32 timer) {
 
 void* effSnowfallN64Entry(s32 flags, s32 count) {
     extern void* effEntry(void);extern void* __memAlloc(s32,s32);extern void effSnowfallMain(void*);extern char str_SnowfallN64_802fbf9c[];extern void* camGetPtr(s32);extern s32 rand(void);extern f32 float_1000_804260a8,float_0p05_804260ac,float_10_804260b0,float_neg1p2_804260b4,float_0p01_804260b8,float_0p5_804260bc;
-    void* entry;u8* work;u8* part;u8* cam;s32 i;entry=effEntry();*(char**)((s32)entry+0x14)=str_SnowfallN64_802fbf9c;*(s32*)((s32)entry+8)=count+1;work=__memAlloc(3,(count+1)*0x34);*(u8**)((s32)entry+0xC)=work;*(void**)((s32)entry+0x10)=effSnowfallMain;*(s32*)(work+0x24)=0;*(s32*)(work+0x20)=100;*(s32*)(work+4)=flags;*(s32*)(work+0x2C)=count;*(s32*)(work+0x28)=0xFF;*(s32*)work=1;part=work+0x34;
-    for(i=0;i<count;i++,part+=0x34){cam=camGetPtr(4);*(f32*)(part+8)=*(f32*)(cam+0x18)+(f32)(rand()%2000)-float_1000_804260a8;*(f32*)(part+0xC)=*(f32*)(cam+0x1C)+(f32)(rand()%2000)-float_1000_804260a8;*(f32*)(part+0x10)=*(f32*)(cam+0x20)+(f32)(rand()%2000)-float_1000_804260a8;*(f32*)(part+0x14)=float_0p05_804260ac*((f32)(rand()%20)-float_10_804260b0);*(f32*)(part+0x18)=-(float_0p01_804260b8*(f32)(rand()%80)-float_neg1p2_804260b4);*(f32*)(part+0x1C)=float_0p05_804260ac*((f32)(rand()%20)-float_10_804260b0);*(s32*)(part+0x2C)=0xFF;*(f32*)(part+0x14)*=float_0p5_804260bc;*(f32*)(part+0x18)*=float_0p5_804260bc;*(f32*)(part+0x1C)*=float_0p5_804260bc;*(s32*)(part+0x30)=0;}
+    void* entry;u8* work;u8* part;u8* cam;s32 i;
+    f32 c1000, c005, c10, cneg12, c001, c05;
+    entry=effEntry();*(char**)((s32)entry+0x14)=str_SnowfallN64_802fbf9c;*(s32*)((s32)entry+8)=count+1;work=__memAlloc(3,(count+1)*0x34);*(u8**)((s32)entry+0xC)=work;*(void**)((s32)entry+0x10)=effSnowfallMain;*(s32*)(work+0x24)=0;*(s32*)(work+0x20)=100;*(s32*)(work+4)=flags;
+    c1000=float_1000_804260a8;*(s32*)(work+0x2C)=count;c10=float_10_804260b0;*(s32*)(work+0x28)=0xFF;c005=float_0p05_804260ac;*(s32*)work=1;c05=float_0p5_804260bc;c001=float_0p01_804260b8;cneg12=float_neg1p2_804260b4;part=work+0x34;
+    for(i=0;i<count;i++,part+=0x34){cam=camGetPtr(4);*(f32*)(part+8)=*(f32*)(cam+0x18)+(f32)(rand()%2000)-c1000;*(f32*)(part+0xC)=*(f32*)(cam+0x1C)+(f32)(rand()%2000)-c1000;*(f32*)(part+0x10)=*(f32*)(cam+0x20)+(f32)(rand()%2000)-c1000;*(f32*)(part+0x14)=c005*((f32)(rand()%20)-c10);*(f32*)(part+0x18)=-(c001*(f32)(rand()%80)-cneg12);*(f32*)(part+0x1C)=c005*((f32)(rand()%20)-c10);*(s32*)(part+0x2C)=0xFF;*(f32*)(part+0x14)*=c05;*(f32*)(part+0x18)*=c05;*(f32*)(part+0x1C)*=c05;*(s32*)(part+0x30)=0;}
     return entry;
 }
 

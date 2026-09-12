@@ -235,7 +235,7 @@ s32 battleAcMain_TimingWide(void* battleWork) {
         *(s32*)(work + 0xC) = 5;
     }
 
-    if (state == 0x3ED || *(s32*)((s32)battleWork + 0x1C9C) == 0x3ED) {
+    if (state == 0x3EC || state == 0x3ED) {
         *(s32*)(work + 0x10) = *(s32*)(work + 0x10) - 1;
         if (*(s32*)(work + 0x10) > 0) {
             return 1;

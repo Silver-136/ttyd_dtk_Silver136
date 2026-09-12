@@ -2,6 +2,7 @@
 
 extern f32 float_0_80425434;
 
+#pragma optimize_for_size off
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effGuruguruN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 radius) {
@@ -40,44 +41,7 @@ void* effGuruguruN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 radius) 
     *(f32*)(work + 0x2C) = one;
 
     part = work + 0x30;
-    for (i = 1; i + 3 < count + 1; i += 4, part += 0xC0) {
-        angle = ((i - 1) * 0x168) / count;
-        *(f32*)(part + 4) = zero;
-        *(f32*)(part + 8) = zero;
-        *(f32*)(part + 0xC) = zero;
-        *(f32*)(part + 0x18) = (f32)angle;
-        *(f32*)(part + 0x1C) = twenty;
-        *(f32*)(part + 0x20) = zero;
-        *(s32*)(part + 0x24) = angle;
-
-        angle = (i * 0x168) / count;
-        *(f32*)(part + 0x34) = zero;
-        *(f32*)(part + 0x38) = zero;
-        *(f32*)(part + 0x3C) = zero;
-        *(f32*)(part + 0x48) = (f32)angle;
-        *(f32*)(part + 0x4C) = twenty;
-        *(f32*)(part + 0x50) = zero;
-        *(s32*)(part + 0x54) = angle;
-
-        angle = ((i + 1) * 0x168) / count;
-        *(f32*)(part + 0x64) = zero;
-        *(f32*)(part + 0x68) = zero;
-        *(f32*)(part + 0x6C) = zero;
-        *(f32*)(part + 0x78) = (f32)angle;
-        *(f32*)(part + 0x7C) = twenty;
-        *(f32*)(part + 0x80) = zero;
-        *(s32*)(part + 0x84) = angle;
-
-        angle = ((i + 2) * 0x168) / count;
-        *(f32*)(part + 0x94) = zero;
-        *(f32*)(part + 0x98) = zero;
-        *(f32*)(part + 0x9C) = zero;
-        *(f32*)(part + 0xA8) = (f32)angle;
-        *(f32*)(part + 0xAC) = twenty;
-        *(f32*)(part + 0xB0) = zero;
-        *(s32*)(part + 0xB4) = angle;
-    }
-    for (; i < count + 1; i++, part += 0x30) {
+    for (i = 1; i < count + 1; i++, part += 0x30) {
         angle = ((i - 1) * 0x168) / count;
         *(f32*)(part + 4) = zero;
         *(f32*)(part + 8) = zero;
@@ -90,6 +54,7 @@ void* effGuruguruN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 radius) 
     return entry;
 }
 
+#pragma optimize_for_size on
 #pragma use_lmw_stmw on
 #pragma no_register_save_helpers off
 
@@ -115,8 +80,6 @@ void effGuruguruMain(void* effect) {
     Vec3 dispPos;
     s32 i;
     f32 radius;
-    f32 angle0;
-    f32 angle1;
 
     work = *(u8**)((s32)effect + 0xC);
     base = vec3_802fb048;
@@ -132,11 +95,9 @@ void effGuruguruMain(void* effect) {
         radius = *(f32*)(work + 0x10);
         part = work + 0x30;
         for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-            angle0 = float_6p2832_8042542c * (f32)*(s32*)(part + 0x24) / float_360_80425430;
-            *(f32*)(part + 4) = radius * (f32)sin(angle0);
-            angle1 = float_6p2832_8042542c * *(f32*)(part + 0x20) / float_360_80425430;
-            *(f32*)(part + 0xC) = radius * (f32)cos(angle0) * (f32)cos(angle1);
-            *(f32*)(part + 8) = radius * (f32)cos(angle0) * (f32)sin(angle1);
+            *(f32*)(part + 4) = radius * (f32)sin(float_6p2832_8042542c * (f32)*(s32*)(part + 0x24) / float_360_80425430);
+            *(f32*)(part + 0xC) = radius * (f32)cos(float_6p2832_8042542c * (f32)*(s32*)(part + 0x24) / float_360_80425430) * (f32)cos(float_6p2832_8042542c * *(f32*)(part + 0x20) / float_360_80425430);
+            *(f32*)(part + 8) = radius * (f32)cos(float_6p2832_8042542c * (f32)*(s32*)(part + 0x24) / float_360_80425430) * (f32)sin(float_6p2832_8042542c * *(f32*)(part + 0x20) / float_360_80425430);
             *(f32*)(part + 0x18) += *(f32*)(part + 0x1C);
             *(f32*)(part + 0x20) = float_0_80425434;
             *(s32*)(part + 0x24) += 0x10;

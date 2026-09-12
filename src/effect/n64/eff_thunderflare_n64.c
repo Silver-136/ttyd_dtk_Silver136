@@ -90,13 +90,25 @@ void effThunderflareMain(void* effect) {
     extern f32 float_100_80426420;
     extern f32 float_0p2_80426424;
     extern f32 float_80_80426428;
+    extern const f32 vec3_802fc1b8[3];
     u8* work = *(u8**)((s32)effect + 0xC);
     u8* particle = work;
     f32 position[3];
     s32 frame;
     s32 odd;
     s32 i;
+    f32 zero;
+    f32 tau;
+    f32 degrees;
+    f32 two;
+    f32 maxAlpha;
+    f32 maxRadius;
+    f32 baseScale;
+    f32 radiusScale;
 
+    ((u32*)position)[0] = ((const u32*)vec3_802fc1b8)[0];
+    ((u32*)position)[1] = ((const u32*)vec3_802fc1b8)[1];
+    ((u32*)position)[2] = ((const u32*)vec3_802fc1b8)[2];
     position[0] = *(f32*)(work + 8);
     position[1] = *(f32*)(work + 0xC);
     position[2] = *(f32*)(work + 0x10);
@@ -121,12 +133,19 @@ void effThunderflareMain(void* effect) {
     }
     odd = frame & 1;
 
+    zero = float_0_80426408;
+    tau = float_6p2832_80426410;
+    degrees = float_360_80426414;
+    two = float_2_80426418;
+    maxAlpha = float_255_8042641c;
+    maxRadius = float_100_80426420;
+    baseScale = float_0p2_80426424;
+    radiusScale = float_80_80426428;
+
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, particle += 0x48) {
         f32 radius = *(f32*)(particle + 0x74);
-        f32 angleA = float_6p2832_80426410 * *(f32*)(particle + 0x68) /
-                     float_360_80426414;
-        f32 angleB = float_6p2832_80426410 * *(f32*)(particle + 0x6C) /
-                     float_360_80426414;
+        f32 angleA = tau * *(f32*)(particle + 0x68) / degrees;
+        f32 angleB = tau * *(f32*)(particle + 0x6C) / degrees;
         f32 sinA = (f32)sin(angleA);
         f32 cosA = (f32)cos(angleA);
         f32 sinB = (f32)sin(angleB);
@@ -138,18 +157,17 @@ void effThunderflareMain(void* effect) {
         *(f32*)(particle + 0x54) = cosB * radius * cosA;
         *(f32*)(particle + 0x58) = radius * sinB;
         *(s32*)(particle + 0x5C) =
-            (s32)((float_2_80426418 * float_255_8042641c *
-                   (float_100_80426420 - radius)) / float_100_80426420);
+            (s32)((two * maxAlpha * (maxRadius - radius)) / maxRadius);
         if (*(s32*)(particle + 0x5C) > 0xFF) {
             *(s32*)(particle + 0x5C) = 0xFF;
         }
         *(f32*)(particle + 0x70) =
-            float_0p2_80426424 + radius / float_80_80426428;
+            baseScale + radius / radiusScale;
         radius -= (f32)(((i & 3) * 2) + 2);
         *(f32*)(particle + 0x74) = radius;
-        if (radius < float_0_80426408) {
-            *(f32*)(particle + 0x74) = float_0_80426408;
-            *(f32*)(particle + 0x70) = float_0_80426408;
+        if (radius < zero) {
+            *(f32*)(particle + 0x74) = zero;
+            *(f32*)(particle + 0x70) = zero;
         }
         stepA = odd ? 5 : 2;
         stepB = odd ? 2 : 5;

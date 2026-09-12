@@ -56,7 +56,10 @@ void* effKemuri7N64Entry(f32 x, f32 y, f32 z, f32 angle, f32 scale) {
     u8* work;
     f32 revised;
     f32 rad;
-    f32 adjusted;
+    f32 twoPi;
+    f32 fullCircle;
+    f32 diagonal;
+    f32 distance;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_Kemuri7N64_802fb28c;
@@ -67,9 +70,13 @@ void* effKemuri7N64Entry(f32 x, f32 y, f32 z, f32 angle, f32 scale) {
     *(s32*)work = 1;
     *(f32*)(work + 0x6C) = float_0_80425768;
     *(f32*)(work + 0xC) = x;
+    twoPi = float_6p2832_80425784;
     *(f32*)(work + 0x10) = y;
+    fullCircle = float_360_80425788;
     *(f32*)(work + 0x14) = z;
+    diagonal = float_45_8042578c;
     *(f32*)(work + 0x18) = float_1_80425770;
+    distance = float_5_80425790;
     *(f32*)(work + 0x1C) = float_1_80425770;
     *(f32*)(work + 0x20) = float_1_80425770;
     *(u8*)(work + 8) = 0xFF;
@@ -82,14 +89,12 @@ void* effKemuri7N64Entry(f32 x, f32 y, f32 z, f32 angle, f32 scale) {
     *(f32*)(work + 0x2C) = float_0_80425768;
 
     revised = reviseAngle(angle);
-    rad = (float_6p2832_80425784 * revised) / float_360_80425788;
+    rad = (twoPi * revised) / fullCircle;
     *(f32*)(work + 0x80) = (f32)sin(rad);
     *(f32*)(work + 0x84) = (f32)cos(rad);
-
-    adjusted = float_45_8042578c + revised - (float_180_80425780 * scale);
-    rad = (float_6p2832_80425784 * adjusted) / float_360_80425788;
-    *(f32*)(work + 0xC) += float_5_80425790 * (f32)sin(rad);
-    *(f32*)(work + 0x14) += float_5_80425790 * (f32)cos(rad);
+    rad = (twoPi * (diagonal + revised - (float_180_80425780 * scale))) / fullCircle;
+    *(f32*)(work + 0xC) += distance * (f32)sin(rad);
+    *(f32*)(work + 0x14) += distance * (f32)cos(rad);
     *(u8*)(work + 8) = 0xFF;
     return entry;
 }

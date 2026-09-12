@@ -92,32 +92,62 @@ void* effFireRingN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale
 #pragma use_lmw_stmw on
 #pragma no_register_save_helpers off
 void effFireRingMain(void* effect) {
+    typedef struct LocalVec3 {
+        float x;
+        float y;
+        float z;
+    } LocalVec3;
+    typedef union IntDouble {
+        struct {
+            unsigned int hi;
+            unsigned int lo;
+        } words;
+        double value;
+    } IntDouble;
     extern void effDelete(void*);
     extern int effTblRandN64(int, int);
+    extern double sin(double);
+    extern double cos(double);
     extern float dispCalcZ(void*);
     extern void dispEntry(int, int, void*, void*, float);
     extern void effFireRingDisp(int, void*);
-    extern float float_128_804251f8;
+    extern void effFireDustN64Entry(float, float, float, float, float, int, int, unsigned int);
+    extern LocalVec3 vec3_802faeb0;
     extern float float_0_804251e4;
+    extern float float_6p2832_804251ec;
+    extern float float_360_804251f0;
+    extern float float_10_804251f4;
+    extern float float_128_804251f8;
+    static const double conversionBias = 4503601774854144.0;
     unsigned char* entry = (unsigned char*)effect;
     unsigned char* work = *(unsigned char**)(entry + 0xC);
-    float pos[3];
+    LocalVec3 pos = vec3_802faeb0;
+    float angle;
+    IntDouble conversion;
     int timer;
     unsigned int frame;
 
-    pos[0] = *(float*)(work + 4);
-    pos[1] = *(float*)(work + 8);
-    pos[2] = *(float*)(work + 0xC);
-    timer = --*(int*)(work + 0x28);
-    frame = ++*(unsigned int*)(work + 0x2C);
+    pos.x = *(float*)(work + 4);
+    pos.y = *(float*)(work + 8);
+    pos.z = *(float*)(work + 0xC);
+    --*(int*)(work + 0x28);
+    ++*(unsigned int*)(work + 0x2C);
+    timer = *(int*)(work + 0x28);
     if (timer < 0) {
         effDelete(effect);
         return;
     }
+    frame = *(unsigned int*)(work + 0x2C);
     if ((frame & 1) != 0) {
-        effTblRandN64(0x168, frame);
+        conversion.words.hi = 0x43300000;
+        conversion.words.lo = effTblRandN64(0x168, frame) ^ 0x80000000;
+        angle = (float_6p2832_804251ec * (float)(conversion.value - conversionBias)) / float_360_804251f0;
+        sin(angle);
+        cos(angle);
+        conversion.words.hi = 0x43300000;
+        conversion.words.lo = (frame << 3) ^ 0x80000000;
         effFireDustN64Entry(*(float*)(work + 4), *(float*)(work + 8), *(float*)(work + 0xC),
-                            (float)(frame << 3), 10.0f, 0, 10, 0x14);
+                            (float)(conversion.value - conversionBias), 10.0f, 0, 10, 0x14);
     }
     *(float*)(work + 0x1C) += *(float*)(work + 0x20);
     if (timer < 10) {
@@ -135,7 +165,7 @@ void effFireRingMain(void* effect) {
     if (*(float*)(work + 0x34) < float_0_804251e4) *(float*)(work + 0x34) += float_128_804251f8;
     if (*(float*)(work + 0x38) < float_0_804251e4) *(float*)(work + 0x38) += float_128_804251f8;
     if (*(float*)(work + 0x3C) < float_0_804251e4) *(float*)(work + 0x3C) += float_128_804251f8;
-    dispEntry(4, 2, effFireRingDisp, effect, dispCalcZ(pos));
+    dispEntry(4, 2, effFireRingDisp, effect, dispCalcZ(&pos));
 }
 
 

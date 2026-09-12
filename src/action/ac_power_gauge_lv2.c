@@ -345,31 +345,47 @@ void battleAcDelete_PowerGaugeLv2(void* wp) {
 }
 
 void actionCommandDisp(f32 x, f32 y) {
-    extern void* camGetPtr(s32);
-    extern void iconDispGx(f32, f32*, s32, s32);
-    extern void BattleAcDrawGauge(f32, s32, s32, s32, s32, s32, s32, s32, s32);
-    extern s32 BattleACGetButtonIcon(s32, s32);
-    extern void* g_BattleWork;
+    typedef struct Vec {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec;
 
-    u8* work = (u8*)g_BattleWork + 0x1C90;
-    f32 pos[3];
+    extern void* camGetPtr(s32);
+    extern void iconDispGx(Vec*, s32, s32, f32);
+    extern void BattleAcDrawGauge(s32, s32, s32, s32, s32, s32, s32, s32, f32);
+    extern s32 BattleACGetButtonIcon(s32, s32);
+    extern void* _battleWorkPointer;
+
+    u8* work = (u8*)_battleWorkPointer + 0x1C90;
+    const Vec* vec = (const Vec*)vec3_80300b60;
+    Vec pos0;
+    Vec pos1;
+    Vec pos2;
+    Vec pos3;
+    Vec pos4;
     s32 gauge[5];
     f32 ratio;
-    f32 iconX = x - 200.0f;
-    s32 count = 0;
+    f32 iconX;
+    f32 iconY;
+    s32 count;
     s32 i;
     s32 icon0;
     s32 icon1;
     s32 state;
-    s32 highlight = 0;
+    s32 highlight;
+    s32 finalIcon;
 
     camGetPtr(8);
-    pos[0] = iconX;
-    pos[1] = y + 25.0f;
-    pos[2] = 0.0f;
-    iconDispGx(1.0f, pos, 0x10, 0x94);
+    iconX = x - 200.0f;
+    iconY = y + 25.0f;
+    pos0 = vec[0];
+    pos0.x = iconX;
+    pos0.y = iconY;
+    iconDispGx(&pos0, 0x10, 0x94, 1.0f);
 
     ratio = *(f32*)(work + 0x2C4) / 100.0f;
+    highlight = 0;
     if (ratio > 1.0f) {
         ratio = 1.0f;
     }
@@ -377,54 +393,72 @@ void actionCommandDisp(f32 x, f32 y) {
     if (*(s32*)(work + 0x2D4) != 0) {
         *(u8*)(work + 0x29D) += *(s8*)(work + 0x2A1);
         *(u8*)(work + 0x29E) += *(s8*)(work + 0x2A2);
-        highlight = ratio >= 1.0f;
-        if (*(u8*)(work + 0x29D) < 0x81 && *(s8*)(work + 0x2A1) < 0) {
-            *(s8*)(work + 0x2A1) = 0x10;
-            *(s8*)(work + 0x2A2) = 0x10;
+        if (*(f32*)(work + 0x2B8) >= 1.0f) {
+            highlight |= 1;
         }
-        if (*(u8*)(work + 0x29D) > 0xF4 && *(s8*)(work + 0x2A1) > 0) {
-            *(s8*)(work + 0x2A1) = -0x10;
+        if (*(u8*)(work + 0x29D) <= 0x80 && *(s8*)(work + 0x2A1) < 0) {
+            *(s8*)(work + 0x2A2) = 0x10;
+            *(s8*)(work + 0x2A1) = 0x10;
+        }
+        if (*(u8*)(work + 0x29D) >= 0xF5 && *(s8*)(work + 0x2A1) > 0) {
             *(s8*)(work + 0x2A2) = -0x10;
+            *(s8*)(work + 0x2A1) = -0x10;
         }
     }
 
-    for (i = 0; i < 4; i++) {
+    i = 0;
+    do {
         gauge[i] = 100;
-    }
+        i++;
+    } while (i < 4);
+    count = 0;
     for (i = 0; i < 4; i++) {
         gauge[i] = *(s32*)(work + 0x78 + i * 4);
-        if (i != 0 && gauge[i] - gauge[i - 1] < 1) {
+        if (i != 0 && (gauge[i] - gauge[i - 1]) <= 0) {
             break;
         }
         count++;
     }
-    BattleAcDrawGauge(*(f32*)(work + 0x2B8), (s32)x, (s32)y, 0xB2,
-                      count, gauge[0], gauge[1], gauge[2], highlight);
+    BattleAcDrawGauge((s32)x, (s32)y, 0xB2, count,
+                      gauge[0], gauge[1], gauge[2], highlight,
+                      *(f32*)(work + 0x2B8));
 
     icon1 = BattleACGetButtonIcon(*(s32*)(work + 0x2C8), 1);
     icon0 = BattleACGetButtonIcon(*(s32*)(work + 0x2C8), 0);
     state = *(s32*)(work + 0xC);
-    if (state == 1000) {
-        pos[0] = iconX;
-        pos[1] = y + 70.0f;
-        pos[2] = 0.0f;
-        if (*(s32*)(work + 0x2D8) == 0) {
-            iconDispGx(1.0f, pos, 0x10, icon0);
-        } else {
-            iconDispGx(1.0f, pos, 0x10, icon1);
-        }
-    } else if ((state >= 99 && state <= 100) ||
-               (state >= 1002 && state <= 1004)) {
-        pos[0] = iconX;
-        pos[1] = y + 70.0f;
-        pos[2] = 0.0f;
-        iconDispGx(1.0f, pos, 0x10, icon0);
+    switch (state) {
+        case 99:
+        case 100:
+        case 1002:
+        case 1003:
+        case 1004:
+            pos1 = vec[1];
+            pos1.x = iconX;
+            pos1.y = y + 70.0f;
+            iconDispGx(&pos1, 0x10, icon0, 1.0f);
+            break;
+        case 1000:
+            if (*(s32*)(work + 0x2D8) != 0) {
+                pos2 = vec[2];
+                pos2.x = iconX;
+                pos2.y = y + 70.0f;
+                iconDispGx(&pos2, 0x10, icon1, 1.0f);
+            } else {
+                pos3 = vec[3];
+                pos3.x = iconX;
+                pos3.y = y + 70.0f;
+                iconDispGx(&pos3, 0x10, icon0, 1.0f);
+            }
+            break;
     }
 
-    pos[0] = iconX + 120.0f;
-    pos[1] = y + 25.0f;
-    pos[2] = 0.0f;
-    iconDispGx(1.0f, pos, 0x10,
-               *(s32*)(work + 0x2D8) != 0 ? 0x9D : 0x99);
+    finalIcon = 0x99;
+    if (*(s32*)(work + 0x2D8) != 0) {
+        finalIcon = 0x9D;
+    }
+    pos4 = vec[4];
+    pos4.x = iconX + 120.0f;
+    pos4.y = iconY;
+    iconDispGx(&pos4, 0x10, finalIcon, 1.0f);
 }
 

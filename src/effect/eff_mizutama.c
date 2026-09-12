@@ -244,8 +244,6 @@ void effMizutamaDisp(s32 cameraId, void* effect) {
     MtxLocal trans;
     MtxLocal scale;
     MtxLocal baseMtx;
-    MtxLocal childMtx;
-    MtxLocal drawMtx;
     u8 texObj[0x20];
     s32 i;
     f32 size;
@@ -272,39 +270,44 @@ void effMizutamaDisp(s32 cameraId, void* effect) {
     GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
 
     size = -float_8_804277c8;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        work = (void*)((s32)work + 0x28);
+    work = (void*)((s32)work + 0x28);
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, work = (void*)((s32)work + 0x28)) {
         if (*(s32*)((s32)work + 0x24) == 0) {
             PSMTXTrans(trans, *(f32*)((s32)work + 4), *(f32*)((s32)work + 8), *(f32*)((s32)work + 0xC));
             PSMTXScale(scale, *(f32*)((s32)work + 0x18), *(f32*)((s32)work + 0x18), *(f32*)((s32)work + 0x18));
-            PSMTXConcat(trans, scale, childMtx);
-            PSMTXConcat(baseMtx, childMtx, drawMtx);
-            if (y <= float_360_804277cc) {
-                f32 half = size * float_0p5_804277d0;
-                PSMTXConcat(cam->viewMtx, drawMtx, drawMtx);
-                GXLoadPosMtxImm(drawMtx, 0);
+            PSMTXConcat(trans, scale, trans);
+            PSMTXConcat(baseMtx, trans, trans);
+            if (y > float_360_804277cc) {
+                continue;
+            }
+            {
+                PSMTXConcat(cam->viewMtx, trans, trans);
+                GXLoadPosMtxImm(trans, 0);
                 GXSetCurrentMtx(0);
                 GXBegin(0x80, 0, 4);
-                DAT_cc008000 = half;
-                DAT_cc008000 = float_4_804277d4;
-                DAT_cc008000 = float_0_804277d8;
-                DAT_cc008000 = float_0_804277d8;
-                DAT_cc008000 = float_0_804277d8;
-                DAT_cc008000 = float_4_804277d4;
-                DAT_cc008000 = float_4_804277d4;
-                DAT_cc008000 = float_0_804277d8;
-                DAT_cc008000 = float_1_804277dc;
-                DAT_cc008000 = float_0_804277d8;
-                DAT_cc008000 = float_4_804277d4;
-                DAT_cc008000 = half;
-                DAT_cc008000 = float_0_804277d8;
-                DAT_cc008000 = float_1_804277dc;
-                DAT_cc008000 = float_1_804277dc;
-                DAT_cc008000 = half;
-                DAT_cc008000 = half;
-                DAT_cc008000 = float_0_804277d8;
-                DAT_cc008000 = float_0_804277d8;
-                DAT_cc008000 = float_1_804277dc;
+                {
+                    f32 half = size * float_0p5_804277d0;
+                    *(volatile f32*)0xCC008000 = half;
+                    *(volatile f32*)0xCC008000 = float_4_804277d4;
+                    *(volatile f32*)0xCC008000 = float_0_804277d8;
+                    *(volatile f32*)0xCC008000 = float_0_804277d8;
+                    *(volatile f32*)0xCC008000 = float_0_804277d8;
+                    *(volatile f32*)0xCC008000 = float_4_804277d4;
+                    *(volatile f32*)0xCC008000 = float_4_804277d4;
+                    *(volatile f32*)0xCC008000 = float_0_804277d8;
+                    *(volatile f32*)0xCC008000 = float_1_804277dc;
+                    *(volatile f32*)0xCC008000 = float_0_804277d8;
+                    *(volatile f32*)0xCC008000 = float_4_804277d4;
+                    *(volatile f32*)0xCC008000 = half;
+                    *(volatile f32*)0xCC008000 = float_0_804277d8;
+                    *(volatile f32*)0xCC008000 = float_1_804277dc;
+                    *(volatile f32*)0xCC008000 = float_1_804277dc;
+                    *(volatile f32*)0xCC008000 = half;
+                    *(volatile f32*)0xCC008000 = half;
+                    *(volatile f32*)0xCC008000 = float_0_804277d8;
+                    *(volatile f32*)0xCC008000 = float_0_804277d8;
+                    *(volatile f32*)0xCC008000 = float_1_804277dc;
+                }
             }
         }
     }

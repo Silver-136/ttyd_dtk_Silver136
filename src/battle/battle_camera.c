@@ -9,7 +9,6 @@ void BtlUnit_GetHomePos(void* unit, f32* x, f32* y, f32* z);
 void padRumbleOn(s32 channel);
 void btl_camera_shake_w(s32 priority, f32 a, f32 b, s32 time, s32 type);
 
-/* Reorder pilot prototypes: needed because this file originally relied on source order. */
 void btl_camera_set_prilimit(s32 limit);
 void btl_camera_set_zoom(s32 priority, f32 zoom);
 void btl_camera_add_zoom(s32 priority, f32 zoom);
@@ -72,6 +71,21 @@ void battleCameraInit(void) {
     camera->counter = 0;
 }
 
+typedef struct Vec3f_HomingUnit {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3f_HomingUnit;
+
+const Vec vec3_802f024c = {0.0f, 0.0f, 0.0f};
+const Vec vec3_802f0258 = {0.0f, 0.0f, 0.0f};
+const Vec3f_HomingUnit vec3_802f0264 = {0.0f, 0.0f, 0.0f};
+const Vec3f_HomingUnit vec3_802f0270 = {0.0f, 0.0f, 0.0f};
+const Vec vec3_802f027c = {0.0f, 0.0f, 0.0f};
+const Vec vec3_802f0288 = {0.0f, 0.0f, 0.0f};
+const Vec vec3_802f0294 = {0.0f, 0.0f, 0.0f};
+const Vec vec3_802f02a0 = {0.0f, 0.0f, 0.0f};
+
 void battleCameraMain(void) {
     extern f32 intplGetValue(f32, f32, s32, s32, s32);
     extern BattleWorkUnit* BattleGetUnitPtr(BattleWork*, s32);
@@ -86,6 +100,7 @@ void battleCameraMain(void) {
     extern void* BattleAudienceBaseGetPtr(void);
     extern void* pouchGetPtr(void);
     extern void padRumbleOff(s32);
+    extern char* strcpy(char*, const char*);
 
     extern f32 float_0_8042273c;
     extern f32 float_0p5_80422748;
@@ -127,11 +142,7 @@ void battleCameraMain(void) {
     f32 dtx;
     f32 dty;
     f32 dtz;
-    f32 px;
-    f32 py;
     f32 pz;
-    f32 tx;
-    f32 ty;
     f32 tz;
     f32 unitPos[3];
     f32 unitPos2[3];
@@ -152,10 +163,10 @@ void battleCameraMain(void) {
     f32 shake;
     f32 audienceX;
     f32 audienceZ;
+    char cameraName[64];
     s16 oldMove;
     s16 oldZoom;
     s16 rank;
-    s32 current;
     s32 audienceIndex;
     s32 total;
     s32 remaining;
@@ -196,6 +207,7 @@ void battleCameraMain(void) {
         if (camera->mode == 0) {
             battleCameraMoveTo(0.0f, 110.0f, 750.0f, 0.0f, 60.0f, 0.0f, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xc5\x82\xd3\x82\xa7\x82\xe9\x82\xc6");
             break;
         }
         else if (camera->mode == 1) {
@@ -203,81 +215,67 @@ void battleCameraMain(void) {
             tz = -camera->zoom * 0.5f;
             battleCameraMoveTo(0.0f, 110.0f, pz, 0.0f, 60.0f, tz, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xc5\x82\xd3\x82\xa7\x82\xe9\x82\xc6\x83\x59\x81\x5b\x83\x80");
             break;
         }
-        else if (camera->mode == 2) {
-            battleCameraMoveTo(0.0f, 160.0f, 750.0f, 0.0f, 110.0f, 0.0f, 1, 1,
-                               &dx, &dy, &dz, &dtx, &dty, &dtz);
-            /* target falls through into the mode-3 interpolation tail */
+        else if (camera->mode == 2 || camera->mode == 3) {
+            if (camera->mode == 2) {
+                battleCameraMoveTo(0.0f, 160.0f, 750.0f, 0.0f, 110.0f, 0.0f, 1, 1,
+                                   &dx, &dy, &dz, &dtx, &dty, &dtz);
+                strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xa9\x81\x5b\x82\xbb\x82\xe9\x82\xaa\x82\xa4\x82\xa6\x82\xc9");
+            }
             if (*(s32*)((u8*)camera + 0x84) > 0) {
+                Vec interpPos;
+                f32 interpTargetX;
+                f32 interpTargetY;
+                f32 interpTargetZ;
+
                 oldMove = camera->moveSpeedLevel;
                 (*(s32*)((u8*)camera + 0x84))--;
-                current = *(s32*)((u8*)camera + 0x88) - *(s32*)((u8*)camera + 0x84);
-                px = intplGetValue(*(f32*)((u8*)camera + 0x8C), *(f32*)((u8*)camera + 0x98),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                py = intplGetValue(*(f32*)((u8*)camera + 0x90), *(f32*)((u8*)camera + 0x9C),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                pz = intplGetValue(*(f32*)((u8*)camera + 0x94), *(f32*)((u8*)camera + 0xA0),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                tx = intplGetValue(*(f32*)((u8*)camera + 0xA4), *(f32*)((u8*)camera + 0xB0),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                ty = intplGetValue(*(f32*)((u8*)camera + 0xA8), *(f32*)((u8*)camera + 0xB4),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                tz = intplGetValue(*(f32*)((u8*)camera + 0xAC), *(f32*)((u8*)camera + 0xB8),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
+                interpPos.x = intplGetValue(*(f32*)((u8*)camera + 0x8C), *(f32*)((u8*)camera + 0x98),
+                                            *(s32*)((u8*)camera + 0x80),
+                                            *(s32*)((u8*)camera + 0x88) - *(s32*)((u8*)camera + 0x84),
+                                            *(s32*)((u8*)camera + 0x88));
+                interpPos.y = intplGetValue(*(f32*)((u8*)camera + 0x90), *(f32*)((u8*)camera + 0x9C),
+                                            *(s32*)((u8*)camera + 0x80),
+                                            *(s32*)((u8*)camera + 0x88) - *(s32*)((u8*)camera + 0x84),
+                                            *(s32*)((u8*)camera + 0x88));
+                interpPos.z = intplGetValue(*(f32*)((u8*)camera + 0x94), *(f32*)((u8*)camera + 0xA0),
+                                            *(s32*)((u8*)camera + 0x80),
+                                            *(s32*)((u8*)camera + 0x88) - *(s32*)((u8*)camera + 0x84),
+                                            *(s32*)((u8*)camera + 0x88));
+                interpTargetX = intplGetValue(*(f32*)((u8*)camera + 0xA4), *(f32*)((u8*)camera + 0xB0),
+                                              *(s32*)((u8*)camera + 0x80),
+                                              *(s32*)((u8*)camera + 0x88) - *(s32*)((u8*)camera + 0x84),
+                                              *(s32*)((u8*)camera + 0x88));
+                interpTargetY = intplGetValue(*(f32*)((u8*)camera + 0xA8), *(f32*)((u8*)camera + 0xB4),
+                                              *(s32*)((u8*)camera + 0x80),
+                                              *(s32*)((u8*)camera + 0x88) - *(s32*)((u8*)camera + 0x84),
+                                              *(s32*)((u8*)camera + 0x88));
+                interpTargetZ = intplGetValue(*(f32*)((u8*)camera + 0xAC), *(f32*)((u8*)camera + 0xB8),
+                                              *(s32*)((u8*)camera + 0x80),
+                                              *(s32*)((u8*)camera + 0x88) - *(s32*)((u8*)camera + 0x84),
+                                              *(s32*)((u8*)camera + 0x88));
                 camera->moveSpeedLevel = 3;
                 camera->zoomSpeedLevel = 3;
-                battleCameraMoveTo(px, py, pz, tx, ty, tz, 0, 0,
+                battleCameraMoveTo(interpPos.x, interpPos.y, interpPos.z,
+                                   interpTargetX, interpTargetY, interpTargetZ, 0, 0,
                                    &dx, &dy, &dz, &dtx, &dty, &dtz);
                 camera->moveSpeedLevel = oldMove;
             }
-            break;
-        }
-        else if (camera->mode == 3) {
-            if (*(s32*)((u8*)camera + 0x84) > 0) {
-                oldMove = camera->moveSpeedLevel;
-                (*(s32*)((u8*)camera + 0x84))--;
-                current = *(s32*)((u8*)camera + 0x88) - *(s32*)((u8*)camera + 0x84);
-                px = intplGetValue(*(f32*)((u8*)camera + 0x8C), *(f32*)((u8*)camera + 0x98),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                py = intplGetValue(*(f32*)((u8*)camera + 0x90), *(f32*)((u8*)camera + 0x9C),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                pz = intplGetValue(*(f32*)((u8*)camera + 0x94), *(f32*)((u8*)camera + 0xA0),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                tx = intplGetValue(*(f32*)((u8*)camera + 0xA4), *(f32*)((u8*)camera + 0xB0),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                ty = intplGetValue(*(f32*)((u8*)camera + 0xA8), *(f32*)((u8*)camera + 0xB4),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                tz = intplGetValue(*(f32*)((u8*)camera + 0xAC), *(f32*)((u8*)camera + 0xB8),
-                                   *(s32*)((u8*)camera + 0x80), current,
-                                   *(s32*)((u8*)camera + 0x88));
-                camera->moveSpeedLevel = 3;
-                camera->zoomSpeedLevel = 3;
-                battleCameraMoveTo(px, py, pz, tx, ty, tz, 0, 0,
-                                   &dx, &dy, &dz, &dtx, &dty, &dtz);
-                camera->moveSpeedLevel = oldMove;
-            }
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xd3\x82\xe8\x81\x5b");
             break;
         }
         else if (camera->mode == 4) {
             battleCameraMoveTo(0.0f, 110.0f, -750.0f, 0.0f, 60.0f, 0.0f, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xd4\x82\xbd\x82\xa2\x82\xa4\x82\xe7");
             break;
         }
         else if (camera->mode == 5) {
             battleCameraMoveTo(0.0f, 400.0f, -617.0f, 0.0f, 60.0f, 0.0f, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xd4\x82\xbd\x82\xa2\x82\xa4\x82\xe7\x82\x51");
             break;
         }
         else if (camera->mode == 6) {
@@ -296,6 +294,7 @@ void battleCameraMain(void) {
             battleCameraMoveTo(float_0_8042273c, float_110_80422768, pz,
                                float_0_8042273c, float_60_80422770, float_0_8042273c,
                                1, 1, &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xa9\x82\xf1\x82\xab\x82\xe1\x82\xad");
             break;
         }
         else if (camera->mode == 7) {
@@ -326,6 +325,7 @@ void battleCameraMain(void) {
                                float_750_8042276c - spread, unitPos[0],
                                float_60_80422770 + height + focusY, -spread, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xe4\x82\xc9\x82\xc1\x82\xc6\x82\xc2\x82\xa2\x82\xd1");
             break;
         }
         else if (camera->mode == 8) {
@@ -374,11 +374,12 @@ void battleCameraMain(void) {
             if (vertical < float_0_8042273c) {
                 vertical = float_0_8042273c;
             }
-            height = vertical - float_20_804227b4 * (float_1_80422758 - ratio);
+            height = (f32)(20.0 * -(1.0 - ratio) + vertical);
             battleCameraMoveTo(midpoint, float_110_80422768 + height + focusY,
                                float_750_8042276c - spread, midpoint,
                                float_60_80422770 + height + focusY, -spread, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\x51\x82\xe4\x82\xc9\x82\xc1\x82\xc6\x82\xa9\x82\xf1\x82\xc2\x82\xa2\x82\xd1");
             break;
         }
         else if (camera->mode == 9) {
@@ -413,6 +414,7 @@ void battleCameraMain(void) {
                                float_750_8042276c - spread, midpoint,
                                float_60_80422770 + height + focusY, -spread, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xe4\x82\xc9\x82\xc1\x82\xc6\x82\xc2\x82\xa2\x82\xd1");
             break;
         }
         else if (camera->mode == 10) {
@@ -447,6 +449,7 @@ void battleCameraMain(void) {
                                float_750_8042276c - spread, unitPos[0],
                                float_60_80422770 + height + focusY, -spread, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xcf\x81\x5b\x82\xc2\x82\xc2\x82\xa2\x82\xd1");
             break;
         }
         else if (camera->mode == 11) {
@@ -499,11 +502,12 @@ void battleCameraMain(void) {
             if (vertical < float_0_8042273c) {
                 vertical = float_0_8042273c;
             }
-            height = vertical - float_20_804227b4 * (float_1_80422758 - ratio);
+            height = (f32)(20.0 * -(1.0 - ratio) + vertical);
             battleCameraMoveTo(midpoint, float_110_80422768 + height + focusY,
                                float_750_8042276c - spread, midpoint,
                                float_60_80422770 + height + focusY, -spread, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\x51\x82\xcf\x81\x5b\x82\xc2\x82\xa9\x82\xf1\x82\xc2\x82\xa2\x82\xd1");
             break;
         }
         else if (camera->mode == 12) {
@@ -514,6 +518,7 @@ void battleCameraMain(void) {
                                float_400_8042277c + audienceZ,
                                audienceX, float_0_8042273c, audienceZ, 1, 0,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xa9\x82\xf1\x82\xab\x82\xe1\x82\xad\x82\xc2\x82\xa2\x82\xd1");
             break;
         }
         else if (camera->mode == 13) {
@@ -551,11 +556,12 @@ void battleCameraMain(void) {
                 vertical = float_neg30_804227a8;
             }
             zoomShift = (float_1_80422758 - ratio) * 2.0f * camera->zoom;
-            height = -(float_1_80422758 - ratio) * (float_125_804227ac - vertical);
+            height = (f32)(-(1.0 - ratio) * (float_125_804227ac - vertical));
             battleCameraMoveTo(midpoint, float_110_80422768 + height,
                                float_750_8042276c - zoomShift, midpoint,
                                float_60_80422770 + height, -zoomShift, 1, 1,
                                &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xe4\x82\xc9\x82\xc1\x82\xc6\x82\xa9\x82\xf1\x82\xab\x82\xe1\x82\xad\x82\xa9\x82\xf1\x82\xc2\x82\xa2\x82\xd1");
             break;
         }
         else if (camera->mode == 14) {
@@ -586,6 +592,7 @@ void battleCameraMain(void) {
                                       float_750_8042276c, float_0_8042273c,
                                       float_60_80422770, float_0_8042273c, 0x78, 4);
             }
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xd3\x82\xc2\x82\xa4\x82\xc9\x82\xcd\x82\xa2\x82\xc1\x82\xbd");
             break;
         }
         else if (camera->mode == 15) {
@@ -594,6 +601,7 @@ void battleCameraMain(void) {
             battleCameraMoveTo(float_0_8042273c, float_110_80422768, float_500_804227b0,
                                float_0_8042273c, float_60_80422770, float_0_8042273c,
                                1, 1, &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xa4\x82\xdc\x82\xad\x82\xcd\x82\xa2\x82\xc1\x82\xbd");
             break;
         }
         else if (camera->mode == 16) {
@@ -602,32 +610,42 @@ void battleCameraMain(void) {
             battleCameraMoveTo(float_neg100_80422750, float_110_80422768, float_500_804227b0,
                                float_neg100_80422750, float_60_80422770, float_0_8042273c,
                                1, 1, &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xbe\x82\xdf\x82\xc9\x82\xcd\x82\xa2\x82\xc1\x82\xbd");
             break;
         }
         else if (camera->mode == 17 || camera->mode == 18) {
+            f32 centerX;
+            f32 centerY;
+            f32 centerZ;
+
             mario = BattleGetMarioPtr(battleWork);
             party = BattleGetPartyPtr(battleWork);
-            BtlUnit_GetHomePos(mario, &home1[0], &home1[1], &home1[2]);
-            if (party == 0) {
-                midpoint = home1[0];
-            } else {
+            if (party != 0) {
+                BtlUnit_GetHomePos(mario, &home1[0], &home1[1], &home1[2]);
                 BtlUnit_GetHomePos(party, &home2[0], &home2[1], &home2[2]);
-                midpoint = float_0p5_80422748 * (home1[0] + home2[0]);
-                home1[1] = float_0p5_80422748 * (home1[1] + home2[1]);
-                home1[2] = float_0p5_80422748 * (home1[2] + home2[2]);
+                centerX = float_0p5_80422748 * (home1[0] + home2[0]);
+                centerY = float_0p5_80422748 * (home1[1] + home2[1]);
+                centerZ = float_0p5_80422748 * (home1[2] + home2[2]);
                 if (camera->mode == 18) {
-                    home1[1] -= float_20_804227b4;
+                    centerY -= float_20_804227b4;
                 }
+            } else {
+                BtlUnit_GetHomePos(mario, &home1[0], &home1[1], &home1[2]);
+                centerX = home1[0];
+                centerY = home1[1];
+                centerZ = home1[2];
             }
             camera->moveSpeedLevel = 1;
             camera->zoomSpeedLevel = 1;
-            battleCameraMoveTo(midpoint, 100.0f + home1[1],
-                               float_350_804227b8 + home1[2], midpoint,
-                               50.0f + home1[1], float_0_8042273c,
+            battleCameraMoveTo(centerX, 100.0f + centerY,
+                               float_350_804227b8 + centerZ, centerX,
+                               50.0f + centerY, float_0_8042273c,
                                0, 1, &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xb5\x82\xe5\x82\xa4\x82\xe8");
             break;
         }
         else if (camera->mode == 19) {
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xcd\x82\xa2\x82\xda\x82\xad");
             break;
         }
         else if (camera->mode == 20) {
@@ -636,11 +654,12 @@ void battleCameraMain(void) {
             battleCameraMoveTo(float_neg100_80422750, 100.0f, float_400_8042277c,
                                float_neg100_80422750, 50.0f, float_0_8042273c,
                                1, 1, &dx, &dy, &dz, &dtx, &dty, &dtz);
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xc9\x82\xb0\x82\xc4\x82\xe9");
             break;
         }
         else {
+            strcpy(cameraName, "\x82\xa9\x82\xdf\x82\xe7\x81\x40\x82\xa8\x82\xa9\x82\xb5\x82\xa2");
             break;
-                
         }
     } while (0);
 
@@ -1016,19 +1035,12 @@ s32 evt_btl_camera_set_mode(void* evt) {
 }
 
 s32 evt_btl_camera_set_homing_unit(int event) {
-    typedef struct Vec3f_HomingUnit {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec3f_HomingUnit;
     extern s32 evtGetValue(void*, s32);
     extern s32 BattleTransID(void*, s32);
     extern void* BattleGetUnitPtr(void*, s32);
     extern s32 BtlUnit_GetBodyPartsId(void*);
     extern void* BattleGetUnitPartsPtr(s32, s32);
     extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
-    extern const Vec3f_HomingUnit vec3_802f0264;
-    extern const Vec3f_HomingUnit vec3_802f0270;
     s32* args = *(s32**)(event + 0x18);
     u8* work;
     s32 unit1;
@@ -1075,18 +1087,11 @@ s32 evt_btl_camera_set_homing_unit(int event) {
 }
 
 s32 evt_btl_camera_set_homing_unitparts(int event) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
     extern s32 evtGetValue(void*, s32);
     extern s32 BattleTransID(void*, s32);
     extern void* BattleGetUnitPtr(void*, s32);
     extern void* BattleGetUnitPartsPtr(s32, s32);
     extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
-    extern Vec vec3_802f027c;
-    extern Vec vec3_802f0288;
     s32* args = *(s32**)(event + 0x18);
     s32 priority = evtGetValue((void*)event, args[0]);
     s32 unit1 = evtGetValue((void*)event, args[1]);
@@ -1135,11 +1140,6 @@ s32 evt_btl_camera_set_homing_unitparts(int event) {
 }
 
 s32 evt_btl_camera_set_homing_unit_audience(int event) {
-    typedef struct Vec {
-        f32 x;
-        f32 y;
-        f32 z;
-    } Vec;
     extern s32 evtGetValue(void*, s32);
     extern s32 BattleTransID(void*, s32);
     extern void* BattleGetUnitPtr(void*, s32);
@@ -1147,8 +1147,6 @@ s32 evt_btl_camera_set_homing_unit_audience(int event) {
     extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
     extern void BtlUnit_GetHitPos(void*, void*, f32*, f32*, f32*);
     extern void* BattleAudienceBaseGetPtr(void);
-    extern Vec vec3_802f0294;
-    extern Vec vec3_802f02a0;
     s32* args = *(s32**)(event + 0x18);
     s32 priority = evtGetValue((void*)event, args[0]);
     s32 unitId = evtGetValue((void*)event, args[1]);

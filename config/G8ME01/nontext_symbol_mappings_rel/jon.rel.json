@@ -1,0 +1,11 @@
+{
+  "component": "jon.rel",
+  "mapping_count": 2,
+  "schema_version": 1,
+  "units": {
+    "jon/unit_pakkun_flower": {
+      "zero_jon_0000c800": "@27",
+      "double_to_int_jon_0000c808": "@29"
+    }
+  }
+}

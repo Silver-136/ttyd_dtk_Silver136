@@ -91,52 +91,69 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
     s32 techLv;
     void* party;
     u8* data;
+    u8* entry;
 
     party = BattleGetPartyPtr(_battleWorkPointer);
     techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
 
     data = lbl_8037C440;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-    *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x624;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-    *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-        *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-    *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-        msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x90) = -1;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x94) = 0;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(void**)(entry + 0x80) = data + 0x624;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x84) = 0;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+    *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+        msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
     *count = *count + 1;
 
     if (techLv >= 0) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x6E4;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x94) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(void**)(entry + 0x80) = data + 0x6E4;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x84) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+        *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
     if (techLv >= 1) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0xAA4;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x94) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(void**)(entry + 0x80) = data + 0xAA4;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x84) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+        *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
     if (techLv >= 2) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0xB64;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x94) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(void**)(entry + 0x80) = data + 0xB64;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x84) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+        *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
 }
@@ -310,21 +327,11 @@ u8 btl_yoshi_yoroyoro_jump_move(void* evt, s32 first) {
                    *(f32*)((s32)unit + 0x15C), unit);
 
     *(s32*)((s32)evt + 0x7C) = *(s32*)((s32)evt + 0x7C) + 1;
-    if (*(s32*)((s32)evt + 0x7C) < 0x15) {
-        effect = *(s32*)((s32)evt + 0x80);
-        if (*(s32*)((s32)evt + 0x7C) < 0x10) {
-            *(f32*)(*(s32*)((s32)effect + 0xC) + 4) = *(f32*)((s32)unit + 0x154);
-            height = (f32)BtlUnit_GetHeight(unit);
-            *(f32*)(*(s32*)((s32)effect + 0xC) + 8) =
-                *(f32*)((s32)unit + 0x114) * float_0p5_80424108 * height +
-                *(f32*)((s32)unit + 0x158);
-            *(f32*)(*(s32*)((s32)effect + 0xC) + 0xC) = *(f32*)((s32)unit + 0x15C);
-        }
-    } else {
+    if (*(s32*)((s32)evt + 0x7C) > 0x14) {
         f32 xOffset;
         *(s32*)((s32)evt + 0x7C) = 0;
         xOffset = float_50_80424104;
-        if (*(s8*)((s32)unit + 0x188) > -1) {
+        if (*(s8*)((s32)unit + 0x188) >= 0) {
             xOffset = float_neg50_80424100;
         }
         height = (f32)BtlUnit_GetHeight(unit);
@@ -334,6 +341,16 @@ u8 btl_yoshi_yoroyoro_jump_move(void* evt, s32 first) {
                                  *(f32*)((s32)unit + 0x158),
                              *(f32*)((s32)unit + 0x15C),
                              float_5_804240e0 * *(f32*)((s32)unit + 0x114), xOffset, 1, 0x10);
+    } else {
+        effect = *(s32*)((s32)evt + 0x80);
+        if (*(s32*)((s32)evt + 0x7C) < 0x10) {
+            *(f32*)(*(s32*)((s32)effect + 0xC) + 4) = *(f32*)((s32)unit + 0x154);
+            height = (f32)BtlUnit_GetHeight(unit);
+            *(f32*)(*(s32*)((s32)effect + 0xC) + 8) =
+                *(f32*)((s32)unit + 0x114) * float_0p5_80424108 * height +
+                *(f32*)((s32)unit + 0x158);
+            *(f32*)(*(s32*)((s32)effect + 0xC) + 0xC) = *(f32*)((s32)unit + 0x15C);
+        }
     }
 
     *(s32*)((s32)unit + 0x16C) = *(s32*)((s32)unit + 0x16C) - 1;
@@ -466,8 +483,6 @@ u32 _wait_yoshig_complete(void* evt) {
 }
 
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
 u8 _gundan_yoshi_run_effect(void* evt, s32 first) {
     typedef struct LocalVec {
         f32 x;
@@ -520,16 +535,25 @@ u8 _gundan_yoshi_run_effect(void* evt, s32 first) {
         work = *(s32**)((s32)unit + 0x314);
     }
 
+    if (work[0] == 1) {
+        goto process;
+    }
+    if (work[0] < 1) {
+        if (work[0] == 0) {
+            work[0]++;
+            goto process;
+        }
+        return 0;
+    }
     if (work[0] == 999) {
         psndSFXOff(*(s32*)((s32)evt + 0x7C));
         BattleFree(*(void**)((s32)unit + 0x314));
         *(void**)((s32)unit + 0x314) = NULL;
         return 2;
     }
-    if (work[0] == 0) {
-        work[0]++;
-    }
+    return 0;
 
+process:
     active = 0;
     *(f32*)((s32)work + 0x3008) = float_0_804240b4;
     p = work + 1;
@@ -538,7 +562,7 @@ u8 _gundan_yoshi_run_effect(void* evt, s32 first) {
         if (*(u8*)((s32)p + 0x24) > 2) {
             *(u8*)((s32)p + 0x24) = 0;
             *(u8*)((s32)p + 0x25) = *(u8*)((s32)p + 0x25) + 1;
-            if (*(u8*)((s32)p + 0x25) > 5) {
+            if (*(u8*)((s32)p + 0x25) >= 6) {
                 *(u8*)((s32)p + 0x25) = 0;
             }
         }
@@ -607,8 +631,6 @@ u8 _gundan_yoshi_run_effect(void* evt, s32 first) {
     }
     return 0;
 }
-#pragma no_register_save_helpers off
-#pragma use_lmw_stmw on
 
 
 void _btlYoshiDisp(void* camera, void* work) {

@@ -64,6 +64,8 @@ void* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
 /* CHATGPT STUB FILL: main/effect/eff_teresa 20260624_184823 */
 
 /* stub-fill: effTeresaMain | prototype_only | source_prototype */
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void effTeresaMain(void* effect) {
     extern void* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
     extern void effDelete(void* effect);
@@ -78,16 +80,20 @@ void effTeresaMain(void* effect) {
     extern f32 float_1_80427ac4;
     extern f32 float_10_80427ac8;
     extern f32 float_178p5_80427acc;
+    extern f32 float_0_80427ab4;
     extern f32 float_20_80427ad0;
+    extern f32 float_30_80427ad4;
     extern f32 float_3_80427ad8;
     extern f32 float_0p98_80427adc;
 
     void* work = *(void**)((s32)effect + 0xC);
     EffTeresaVec pos = vec3_802ff234;
+    EffTeresaVec dispPos;
 
     pos.x = *(f32*)((s32)work + 4);
     pos.y = *(f32*)((s32)work + 8);
     pos.z = *(f32*)((s32)work + 0xC);
+    dispPos = pos;
 
     if (*(s32*)work == 0) {
         if (*(s32*)((s32)work + 0x3C) == 0) {
@@ -123,7 +129,7 @@ void effTeresaMain(void* effect) {
         }
     }
 
-    dispEntry(4, 2, effTeresaDisp, effect, dispCalcZ(&pos));
+    dispEntry(4, 2, effTeresaDisp, effect, dispCalcZ(&dispPos));
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

@@ -101,8 +101,10 @@ s32 evt_twoddisp_init(void* event) {
     extern f32 float_0_80422f80;
     extern f32 float_1_80422f84;
     void* child;
-    void* entry;
     s32 i;
+    s32 offset;
+    f32 zero;
+    f32 one;
 
     child = evtEntryType(&twoddisp_main_event, *(u8*)((s32)event + 0xB), 0, *(u8*)((s32)event + 0xC));
     *(s32*)((s32)child + 0x160) = *(s32*)((s32)event + 0x160);
@@ -131,42 +133,37 @@ s32 evt_twoddisp_init(void* event) {
     twodID = *(s32*)((s32)child + 0x15C);
 
     twodPtr = _mapAlloc(mapalloc_base_ptr, 0x1450);
-#define INIT_TWOD_ENTRY(ptr) \
+    i = 0;
+    offset = 0;
+    zero = float_0_80422f80;
+    one = float_1_80422f84;
+#define INIT_AT(off) \
     do { \
-        *(u8*)((s32)(ptr) + 0x0) = 0; \
-        *(u16*)((s32)(ptr) + 0x10) = 0; \
-        *(u16*)((s32)(ptr) + 0x12) = 0; \
-        *(f32*)((s32)(ptr) + 0x14) = float_0_80422f80; \
-        *(f32*)((s32)(ptr) + 0x1C) = float_0_80422f80; \
-        *(f32*)((s32)(ptr) + 0x18) = float_0_80422f80; \
-        *(f32*)((s32)(ptr) + 0x20) = float_0_80422f80; \
-        *(s32*)((s32)(ptr) + 0x24) = 0; \
-        *(f32*)((s32)(ptr) + 0x28) = float_1_80422f84; \
+        u8* p = (u8*)twodPtr + offset + (off); \
+        *(u8*)(p + 0x0) = 0; \
+        *(u16*)(p + 0x10) = 0; \
+        *(u16*)(p + 0x12) = 0; \
+        *(f32*)(p + 0x14) = zero; \
+        *(f32*)(p + 0x1C) = zero; \
+        *(f32*)(p + 0x18) = zero; \
+        *(f32*)(p + 0x20) = zero; \
+        *(s32*)(p + 0x24) = 0; \
+        *(f32*)(p + 0x28) = one; \
     } while (0)
-    for (i = 0; i < 96; i += 8) {
-        entry = (void*)((s32)twodPtr + (i * 0x34));
-        INIT_TWOD_ENTRY((u8*)entry + 0x000);
-        INIT_TWOD_ENTRY((u8*)entry + 0x034);
-        INIT_TWOD_ENTRY((u8*)entry + 0x068);
-        INIT_TWOD_ENTRY((u8*)entry + 0x09C);
-        INIT_TWOD_ENTRY((u8*)entry + 0x0D0);
-        INIT_TWOD_ENTRY((u8*)entry + 0x104);
-        INIT_TWOD_ENTRY((u8*)entry + 0x138);
-        INIT_TWOD_ENTRY((u8*)entry + 0x16C);
+    for (; i < 96; i += 8, offset += 0x1A0) {
+        INIT_AT(0x000);
+        INIT_AT(0x034);
+        INIT_AT(0x068);
+        INIT_AT(0x09C);
+        INIT_AT(0x0D0);
+        INIT_AT(0x104);
+        INIT_AT(0x138);
+        INIT_AT(0x16C);
     }
-#undef INIT_TWOD_ENTRY
-    for (; i < 100; i++) {
-        entry = (void*)((s32)twodPtr + (i * 0x34));
-        *(u8*)((s32)entry + 0x0) = 0;
-        *(u16*)((s32)entry + 0x10) = 0;
-        *(u16*)((s32)entry + 0x12) = 0;
-        *(f32*)((s32)entry + 0x14) = float_0_80422f80;
-        *(f32*)((s32)entry + 0x1C) = float_0_80422f80;
-        *(f32*)((s32)entry + 0x18) = float_0_80422f80;
-        *(f32*)((s32)entry + 0x20) = float_0_80422f80;
-        *(s32*)((s32)entry + 0x24) = 0;
-        *(f32*)((s32)entry + 0x28) = float_1_80422f84;
+    for (; i < 100; i++, offset += 0x34) {
+        INIT_AT(0);
     }
+#undef INIT_AT
     return 2;
 }
 

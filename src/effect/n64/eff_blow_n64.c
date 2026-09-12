@@ -10,17 +10,92 @@ u8 size16x16_tex32x32_vtx[] = {
     0x00, 0x00, 0x04, 0x00, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
-extern f32 float_0_80424d00;
+extern const f32 float_0_80424d00;
+extern const u32 dat_80424cf8;
+extern const f32 float_0p03125_80424cfc, float_deg2rad_80424d04, float_0p5_80424d08, float_4_80424d0c;
+extern const f32 float_20_80424d10, float_8_80424d14, float_0p03_80424d18, lbl_80424D1C, float_6_80424d20;
+extern const f32 float_0p2_80424d24, float_0p225_80424d28, float_0p45_80424d2c, float_0p8_80424d30;
+extern const f32 float_neg1_80424d34, float_1_80424d38, float_2_80424d3c, float_0p05_80424d40, float_0p1_80424d44;
 
 void* effBlowN64Entry(f32 x,f32 y,f32 z,f32 dx,f32 dy,f32 dz,s32 type,s32 count) {
-    extern void* effEntry(void);extern void* __memAlloc(s32,s32);extern f64 sqrt(f64);extern s32 rand(void);extern void effBlowMain(void*);extern char str_BlowN64_802fabb0[];
+    typedef union FloatBits { f32 f; u32 u; } FloatBits;
+    extern void* effEntry(void);extern void* __memAlloc(s32,s32);extern f64 __frsqrte(f64);extern f32 __float_nan;extern s32 rand(void);extern void effBlowMain(void*);extern char str_BlowN64_802fabb0[];
+    extern f64 double_0_802faba8;
+    extern f64 double_0p5_802fab98;
+    extern f64 double_3_802faba0;
+    extern void PSMTXRotAxisRad(f32 [3][4], f32*, f32);
     void* entry=effEntry();u8* work;u8* p;f32 len,inv,nx,ny,nz,px,py,pz,plen; s32 i;
-    if(count==0)return 0;len=(f32)sqrt((f64)(dx*dx+dy*dy+dz*dz));if(len==0.0f)return 0;inv=-1.0f/len;nx=dx*inv;ny=dy*inv;nz=dz*inv;
-    if(nx==0.0f){px=0.0f;if(ny==0.0f){py=1.0f;pz=-nx/nz;}else{py=-nx/ny;pz=1.0f;}}else{px=1.0f;py=-ny/nx;pz=0.0f;}
-    plen=(f32)sqrt((f64)(px*px+py*py+pz*pz));if(plen==0.0f)return 0;px/=plen;py/=plen;pz/=plen;
+    f32 square;
+    f32 zero=float_0_80424d00;
+    f64 value;
+    f64 estimate;
+    FloatBits classify;
+    s32 category;
+    if(count==0)return 0;
+    square=dx*dx+dy*dy+dz*dz;
+    value=(f64)square;
+    if(square==zero)return 0;
+    if(square>zero){
+        estimate=__frsqrte(value);
+        estimate=double_0p5_802fab98*estimate*(double_3_802faba0-value*estimate*estimate);
+        estimate=double_0p5_802fab98*estimate*(double_3_802faba0-value*estimate*estimate);
+        estimate=double_0p5_802fab98*estimate*(double_3_802faba0-value*estimate*estimate);
+        value=(f64)(f32)(value*estimate);
+    }else if(square<zero){
+        value=(f64)__float_nan;
+    }else{
+        classify.f=square;
+        if((classify.u&0x7f800000)==0x7f800000){category=(classify.u&0x7fffff)?1:2;}
+        else if((classify.u&0x7f800000)==0){category=(classify.u&0x7fffff)?5:3;}
+        else{category=4;}
+        if(category==1)value=(f64)__float_nan;
+    }
+    len=(f32)value;inv=float_neg1_80424d34/len;nx=dx*inv;ny=dy*inv;nz=dz*inv;
+    if(nx==zero){py=float_1_80424d38;if(ny==zero){px=-nx/nz;pz=zero;}else{px=zero;pz=-nx/ny;}}else{px=zero;py=-ny/nx;pz=float_1_80424d38;}
+    square=px*px+py*py+pz*pz;
+    value=(f64)square;
+    if(square==zero)return 0;
+    if(square>zero){
+        estimate=__frsqrte(value);
+        estimate=double_0p5_802fab98*estimate*(double_3_802faba0-value*estimate*estimate);
+        estimate=double_0p5_802fab98*estimate*(double_3_802faba0-value*estimate*estimate);
+        estimate=double_0p5_802fab98*estimate*(double_3_802faba0-value*estimate*estimate);
+        value=(f64)(f32)(value*estimate);
+    }else if(square<zero){value=(f64)__float_nan;}
+    else{
+        classify.f=square;
+        if((classify.u&0x7f800000)==0x7f800000){category=(classify.u&0x7fffff)?1:2;}
+        else if((classify.u&0x7f800000)==0){category=(classify.u&0x7fffff)?5:3;}
+        else{category=4;}
+        if(category==1)value=(f64)__float_nan;
+    }
+    plen=(f32)value;px/=plen;py/=plen;pz/=plen;
+    nx*=float_8_80424d14;ny*=float_8_80424d14;nz*=float_8_80424d14;
+    px*=float_8_80424d14;py*=float_8_80424d14;pz*=float_8_80424d14;
     *(char**)((u8*)entry+0x14)=str_BlowN64_802fabb0;*(s32*)((u8*)entry+8)=count+1;work=__memAlloc(3,(count+1)*0x68);*(u8**)((u8*)entry+0xC)=work;*(void**)((u8*)entry+0x10)=effBlowMain;
-    *(s32*)(work+4)=type;*(f32*)(work+8)=x;*(f32*)(work+0xC)=y;*(f32*)(work+0x10)=z;*(s32*)(work+0x5C)=10;*(s32*)(work+0x60)=0;
-    p=work+0x68;for(i=1;i<count+1;i++,p+=0x68){f32 a=(f32)((rand()%201)-100)*0.01f;f32 b=(f32)((rand()%201)-100)*0.01f;*(f32*)(p+8)=0.0f;*(f32*)(p+0xC)=0.0f;*(f32*)(p+0x10)=0.0f;*(f32*)(p+0x14)=nx*8.0f+px*a+pz*b;*(f32*)(p+0x18)=ny*8.0f+py*a;*(f32*)(p+0x1C)=nz*8.0f+pz*a-px*b;*(f32*)(p+0x20)=*(f32*)(p+0x14);*(f32*)(p+0x24)=*(f32*)(p+0x18);*(f32*)(p+0x28)=*(f32*)(p+0x1C);*(f32*)(p+0x44)=0.5f;*(f32*)(p+0x48)=4.0f;*(f32*)(p+0x50)=20.0f;*(s32*)(p+0x58)=255;*(s32*)(p+0x5C)=10;*(s32*)(p+0x60)=0;*(s32*)(p+0x64)=i;}
+    *(s32*)work=type;*(s32*)(work+4)=0;*(f32*)(work+8)=x;*(f32*)(work+0xC)=y;*(f32*)(work+0x10)=z;*(s32*)(work+0x5C)=10;*(s32*)(work+0x60)=0;
+    p=work+0x68;
+    for(i=1;i<count+1;i++,p+=0x68){
+        f32 axis[3];f32 rotation[3][4];f32 rx,ry,rz;f32 randomAngle;
+        *(f32*)(p+8)=zero;*(f32*)(p+0xC)=zero;*(f32*)(p+0x10)=zero;
+        axis[0]=nx;axis[1]=ny;axis[2]=nz;
+        PSMTXRotAxisRad(rotation,axis,float_deg2rad_80424d04*(f32)((i*360)/5));
+        *(f32*)(p+0x14)=*(f32*)(p+0x20)=float_2_80424d3c*nx;
+        *(f32*)(p+0x18)=*(f32*)(p+0x24)=float_2_80424d3c*ny;
+        *(f32*)(p+0x1C)=*(f32*)(p+0x28)=float_2_80424d3c*nz;
+        *(f32*)(p+0x38)=float_4_80424d0c*float_0p05_80424d40*-nx;
+        *(f32*)(p+0x3C)=float_4_80424d0c*float_0p05_80424d40*-ny;
+        *(f32*)(p+0x40)=float_4_80424d0c*float_0p05_80424d40*-nz;
+        rx=rotation[0][0]*px+rotation[0][1]*py+rotation[0][2]*pz;
+        ry=rotation[1][0]*px+rotation[1][1]*py+rotation[1][2]*pz;
+        rz=rotation[2][0]*px+rotation[2][1]*py+rotation[2][2]*pz;
+        *(f32*)(p+0x2C)=float_4_80424d0c*float_0p1_80424d44*rx;
+        *(f32*)(p+0x30)=float_4_80424d0c*float_0p1_80424d44*ry;
+        *(f32*)(p+0x34)=float_4_80424d0c*float_0p1_80424d44*rz;
+        *(f32*)(p+0x44)=float_0p5_80424d08;*(f32*)(p+0x48)=float_4_80424d0c;*(f32*)(p+0x50)=float_20_80424d10;
+        randomAngle=(f32)(rand()%360);*(f32*)(p+0x4C)=randomAngle;*(f32*)(p+0x54)=randomAngle;
+        *(s32*)(p+0x58)=255;*(s32*)(p+0x5C)=10;*(s32*)(p+0x60)=0;*(s32*)(p+0x64)=((i-1)/5)*2;
+    }
     return entry;
 }
 
@@ -29,17 +104,17 @@ void effBlowMain(int* entry) {
     extern f32 dispCalcZ(void* pos);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
     extern void effBlowDisp(void);
-    extern f32 float_0p5_80424d08;
-    extern f32 float_4_80424d0c;
-    extern f32 float_20_80424d10;
-    extern f32 float_8_80424d14;
-    extern f32 float_0p03_80424d18;
-    extern f32 FLOAT_80424d1c;
-    extern f32 float_6_80424d20;
-    extern f32 float_0p2_80424d24;
-    extern f32 float_0p225_80424d28;
-    extern f32 float_0p45_80424d2c;
-    extern f32 float_0p8_80424d30;
+    extern const f32 float_0p5_80424d08;
+    extern const f32 float_4_80424d0c;
+    extern const f32 float_20_80424d10;
+    extern const f32 float_8_80424d14;
+    extern const f32 float_0p03_80424d18;
+    extern const f32 lbl_80424D1C;
+    extern const f32 float_6_80424d20;
+    extern const f32 float_0p2_80424d24;
+    extern const f32 float_0p225_80424d28;
+    extern const f32 float_0p45_80424d2c;
+    extern const f32 float_0p8_80424d30;
     u8* work = (u8*)entry[3];
     u8* item;
     f32 pos[3];
@@ -108,7 +183,7 @@ void effBlowMain(int* entry) {
         }
 
         if (subTimer < 8) {
-            *(f32*)(item + 0x44) += float_8_80424d14 * float_0p03_80424d18 * (FLOAT_80424d1c - *(f32*)(item + 0x44));
+            *(f32*)(item + 0x44) += float_8_80424d14 * float_0p03_80424d18 * (lbl_80424D1C - *(f32*)(item + 0x44));
             *(f32*)(item + 0x48) += float_6_80424d20 * float_0p03_80424d18 * (float_0p5_80424d08 - *(f32*)(item + 0x48));
         }
 
@@ -167,9 +242,9 @@ void effBlowDisp(int param_1, void* param_2) {
     extern void GXSetCurrentMtx(s32 id);
     extern void GXBegin(s32 primitive, s32 vtxfmt, s32 count);
     extern void tri2(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, s32 h);
-    extern f32 float_0p03125_80424cfc;
-    extern f32 float_deg2rad_80424d04;
-    extern u32 dat_80424cf8;
+    extern const f32 float_0p03125_80424cfc;
+    extern const f32 float_deg2rad_80424d04;
+    extern const u32 dat_80424cf8;
     u8* work;
     u8* item;
     void* cam;
@@ -223,3 +298,24 @@ void effBlowDisp(int param_1, void* param_2) {
         tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }
 }
+
+const u32 dat_80424cf8 = 0xC8FFFF00;
+const f32 float_0p03125_80424cfc = 0.03125f;
+const f32 float_0_80424d00 = 0.0f;
+const f32 float_deg2rad_80424d04 = 0.017453292f;
+const f32 float_0p5_80424d08 = 0.5f;
+const f32 float_4_80424d0c = 4.0f;
+const f32 float_20_80424d10 = 20.0f;
+const f32 float_8_80424d14 = 8.0f;
+const f32 float_0p03_80424d18 = 0.03f;
+const f32 lbl_80424D1C = 3.0f;
+const f32 float_6_80424d20 = 6.0f;
+const f32 float_0p2_80424d24 = 0.2f;
+const f32 float_0p225_80424d28 = 0.225f;
+const f32 float_0p45_80424d2c = 0.45f;
+const f32 float_0p8_80424d30 = 0.8f;
+const f32 float_neg1_80424d34 = -1.0f;
+const f32 float_1_80424d38 = 1.0f;
+const f32 float_2_80424d3c = 2.0f;
+const f32 float_0p05_80424d40 = 0.05f;
+const f32 float_0p1_80424d44 = 0.1f;

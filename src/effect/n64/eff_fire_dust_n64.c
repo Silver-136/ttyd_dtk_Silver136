@@ -6,6 +6,7 @@ extern void PSMTXConcat(Mtx, Mtx, Mtx);
 extern void PSMTXRotRad(Mtx, double, char);
 extern void GXSetTevColor(int, void*);
 
+#pragma optimize_for_size off
 void* effFireDustN64Entry(f32 x, f32 y, f32 z, f32 scaleA, f32 scaleB, s32 type, s32 count, u32 timer) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, s32 size);
@@ -77,6 +78,7 @@ void effFireDustMain(void* effect) {
     extern f32 dispCalcZ(LocalVec3* pos);
     extern void dispEntry(s32 cameraId, s32 layer, void* callback, void* param, f32 z);
     extern void effFireDustDisp(s32 cameraId, void* effect);
+    extern LocalVec3 vec3_802fae88;
     extern f32 scale_data[];
     extern f32 float_0_80425198;
     extern f32 float_0p5_804251a4;
@@ -91,9 +93,11 @@ void effFireDustMain(void* effect) {
     extern f32 float_0p04_804251c8;
     u8* work;
     u8* part;
-    LocalVec3 pos;
+    LocalVec3 pos = vec3_802fae88;
     f32 angle;
+    f32 radius;
     f32 halfHeight;
+    s32 height;
     s32 i;
     s32 r;
 
@@ -118,10 +122,11 @@ void effFireDustMain(void* effect) {
         *(s32*)(work + 0x4C) = *(s32*)(work + 0x38) << 5;
     }
 
+    height = (s32)*(f32*)(work + 0x14);
+    radius = *(f32*)(work + 0x10);
     halfHeight = float_0p5_804251a4 * *(f32*)(work + 0x14);
-    part = work;
-    for (i = 1; i < *(s32*)((s32)effect + 8); i++) {
-        part += 0x6C;
+    part = work + 0x6C;
+    for (i = 1; i < *(s32*)((s32)effect + 8); i++, part += 0x6C) {
         (*(s32*)(part + 0x30))++;
         if (*(s32*)(part + 0x30) > 0x13) {
             *(s32*)(part + 0x30) = 0;
@@ -131,10 +136,10 @@ void effFireDustMain(void* effect) {
                 r = rand();
                 angle = (float_6p2832_804251a8 * (f32)(r % 0x168)) / float_360_804251ac;
                 rand();
-                *(f32*)(part + 4) = *(f32*)(work + 0x10) * (f32)sin(angle);
+                *(f32*)(part + 4) = radius * (f32)sin(angle);
                 r = rand();
-                *(f32*)(part + 8) = (f32)(r % (s32)*(f32*)(work + 0x14)) - halfHeight;
-                *(f32*)(part + 0xC) = *(f32*)(work + 0x10) * (f32)cos(angle);
+                *(f32*)(part + 8) = (f32)(r % height) - halfHeight;
+                *(f32*)(part + 0xC) = radius * (f32)cos(angle);
                 *(f32*)(part + 0x18) = float_15_804251b0 * (f32)sin(angle);
                 *(f32*)(part + 0x1C) = float_0p4_804251b4 * *(f32*)(part + 8);
                 *(f32*)(part + 0x20) = float_15_804251b0 * (f32)cos(angle);
@@ -164,6 +169,7 @@ void effFireDustMain(void* effect) {
 
     dispEntry(4, 2, effFireDustDisp, effect, dispCalcZ(&pos));
 }
+#pragma optimize_for_size on
 
 void effFireDustDisp(int cameraId, int effect) {
     extern void* camGetPtr(int);
@@ -232,8 +238,14 @@ void effFireDustDisp(int cameraId, int effect) {
 }
 
 void main_dl(int effect, float view[3][4]) {
+    typedef float Mtx[3][4];
+    extern void PSMTXTrans(Mtx, double, double, double);
+    extern void PSMTXRotRad(Mtx, double, char);
+    extern void PSMTXScale(Mtx, float, float, float);
+    extern void PSMTXConcat(Mtx, Mtx, Mtx);
     extern void GXLoadPosMtxImm(Mtx, int);
     extern void GXSetCurrentMtx(int);
+    extern void GXSetTevColor(int, void*);
     extern void effSetVtxDescN64(void*);
     extern void GXBegin(int, int, int);
     extern void tri2(int, int, int, int, int, int, int);
@@ -244,6 +256,9 @@ void main_dl(int effect, float view[3][4]) {
     unsigned char* entry = (unsigned char*)effect;
     unsigned char* work = *(unsigned char**)(entry + 0xC);
     unsigned char* part = work + 0x6C;
+    unsigned int red = *(unsigned int*)(work + 0x50);
+    unsigned int green = *(unsigned int*)(work + 0x54);
+    unsigned int blue = *(unsigned int*)(work + 0x58);
     void* vertexData = 0;
     Mtx rotation;
     Mtx scale;
@@ -266,9 +281,8 @@ void main_dl(int effect, float view[3][4]) {
         PSMTXConcat(view, model, model);
         GXLoadPosMtxImm(model, 0);
         GXSetCurrentMtx(0);
-        color = ((unsigned int)*(unsigned char*)(work + 0x50) << 24) |
-                ((unsigned int)*(unsigned char*)(work + 0x54) << 16) |
-                ((unsigned int)*(unsigned char*)(work + 0x58) << 8) |
+        color = ((unsigned char)red << 24) | ((unsigned char)green << 16) |
+                ((unsigned char)blue << 8) |
                 (unsigned char)((float)*(int*)(part + 0x4C) * alphaScale);
         GXSetTevColor(1, &color);
         switch (i & 7) {

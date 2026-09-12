@@ -614,25 +614,24 @@ void kpa_hip(void) {
     if (*(s32*)(mario + 0x44) == 20) {
         goto falling;
     }
-    if (*(s32*)(mario + 0x44) < 20) {
-        if (*(s32*)(mario + 0x44) != 10) {
+    if (*(s32*)(mario + 0x44) >= 20) {
+        if (*(s32*)(mario + 0x44) >= 22) {
             return;
         }
-        marioChkLandon(0.0f, landY);
-        if (--*(s32*)(mario + 0x48) > 0) {
-            return;
-        }
-        *(s32*)(mario + 0x44) = 20;
-        *(f32*)(mario + 0x80) = -0.4744f;
-        *(f32*)(mario + 0x84) = 0.4704f;
-        *(f32*)(mario + 0x88) = -0.1904f;
-        *(f32*)(mario + 0x7C) = *(f32*)(mario + 0x80);
-        goto falling;
+        goto state_21;
     }
-    if (*(s32*)(mario + 0x44) >= 22) {
+    if (*(s32*)(mario + 0x44) != 10) {
         return;
     }
-    goto state_21;
+    marioChkLandon(0.0f, landY);
+    if (--*(s32*)(mario + 0x48) > 0) {
+        return;
+    }
+    *(s32*)(mario + 0x44) = 20;
+    *(f32*)(mario + 0x80) = -0.4744f;
+    *(f32*)(mario + 0x84) = 0.4704f;
+    *(f32*)(mario + 0x88) = -0.1904f;
+    *(f32*)(mario + 0x7C) = *(f32*)(mario + 0x80);
 
 falling:
     fall = marioGetFallSpd();
@@ -644,9 +643,7 @@ falling:
         *(f32*)(mario + 0x7C) = -100.0f;
         fall = -100.0f;
     }
-    if (hit == 0) {
-        *(f32*)(mario + 0x90) += fall;
-    } else {
+    if (hit != 0) {
         *(void**)(mario + 0x1E8) = hit;
         *(void**)(mario + 0x1EC) = 0;
         *(u16*)(mario + 0x2E) = 0x11;
@@ -657,6 +654,8 @@ falling:
         evtEntry(quake_kpaHipAttack_evt, 0, 0);
         *(s16*)(mario + 0x50) = 0;
         *(s16*)(mario + 0x52) = 0;
+    } else {
+        *(f32*)(mario + 0x90) += fall;
     }
     goto done;
 
@@ -1043,8 +1042,11 @@ void kpa_swim(void) {
         *(s8*)(mario + 0x253) = 0;
     } else if (kpaGetBodyStatus() == 2 && (*(u16*)(mario + 0x24C) & 0x100)) {
         state = *(s32*)(mario + 0x44);
-        if ((state >= 0 && state <= 1 && *(f32*)(mario + 0x90) < 280.0f) ||
-            (state > 29 && state < 33)) {
+        if (state >= 0 && state <= 1) {
+            if (*(f32*)(mario + 0x90) < 280.0f) {
+                *(s32*)(mario + 0x44) = 0;
+            }
+        } else if (state >= 30 && state <= 32) {
             *(s32*)(mario + 0x44) = 0;
         }
     }

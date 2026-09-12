@@ -82,6 +82,11 @@ void* effFreezeN64Entry(s32 type, s32 param2, f32 x, f32 y, f32 z, f32 scale) {
 
 
 void effFreezeMain(void* effect) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
     extern s32 rand(void);
     extern void effDelete(void* effect);
     extern void effVaporN64Entry(f32 x, f32 y, f32 z, s32 type, s32 timer);
@@ -96,23 +101,32 @@ void effFreezeMain(void* effect) {
     extern f32 float_0p01_8042539c;
     extern f32 float_neg0p1_804253a0;
     extern f32 float_40_804253a4;
+    extern Vec3 vec3_802fafd0[];
 
     u8* work;
-    f32 pos[3];
+    Vec3* initial;
+    Vec3 pos;
+    Vec3 dispPos;
     s32 timer;
     s32 frame;
     s32 i;
     s32 r;
+    s32 q;
+    s32 rem;
     void* glass;
     u8* glassWork;
-    void* snowDust;
-    u8* snowWork;
     f32 scale;
+    f32 glassX;
+    f32 glassY;
+    f32 glassScale;
 
     work = *(u8**)((s32)effect + 0xC);
-    pos[0] = *(f32*)(work + 4);
-    pos[1] = *(f32*)(work + 8);
-    pos[2] = *(f32*)(work + 0xC);
+    initial = vec3_802fafd0;
+    pos = *initial;
+    pos.x = *(f32*)(work + 4);
+    pos.y = *(f32*)(work + 8);
+    pos.z = *(f32*)(work + 0xC);
+    dispPos = pos;
 
     if ((*(u32*)effect & 4) != 0) {
         *(u32*)effect &= ~4;
@@ -125,25 +139,57 @@ void effFreezeMain(void* effect) {
 
     timer = *(s32*)(work + 0x10);
     if (timer < 0) {
+        f32 zero = float_0_80425384;
+        f32 three = float_3_8042538c;
+        f32 base = float_0p3_80425390;
+        f32 tenth = float_0p1_80425394;
+        f32 sevenTenths = float_0p7_80425398;
+        f32 hundredth = float_0p01_8042539c;
+        f32 negativeTenth = float_neg0p1_804253a0;
+        f32 ten = float_10_80425388;
         for (i = 0; i < 10; i++) {
             r = rand();
+            q = (r / 10) + (r >> 31);
+            rem = r - ((q - (q >> 31)) * 10);
             scale = *(f32*)(work + 0x20);
-            glass = effGlassN64Entry(
-                (*(f32*)(work + 4) + (f32)(rand() % 0x14)) - float_10_80425388,
-                (*(f32*)(work + 0x20) * (f32)(rand() % 0x28)) + *(f32*)(work + 8),
-                float_3_8042538c + *(f32*)(work + 0xC),
-                scale * ((float_0p1_80425394 * float_0p7_80425398 * (f32)(r % 10)) + float_0p3_80425390),
-                (i & 1) + 2,
-                i + 0x1E);
+            glassScale = scale * ((tenth * sevenTenths * (f32)rem) + base);
+            r = rand();
+            q = (r / 0x28) + (r >> 31);
+            rem = r - ((q - (q >> 31)) * 0x28);
+            glassY = (*(f32*)(work + 0x20) * (f32)rem) + *(f32*)(work + 8);
+            r = rand();
+            q = (r / 0x14) + (r >> 31);
+            rem = r - ((q - (q >> 31)) * 0x14);
+            glassX = (*(f32*)(work + 4) + (f32)rem) - ten;
+            glass = effGlassN64Entry(glassX, glassY, three + *(f32*)(work + 0xC),
+                                     glassScale, (i % 2) + 2, i + 0x1E);
             glassWork = *(u8**)((s32)glass + 0xC);
-            *(f32*)(glassWork + 0x44) = float_0p1_80425394 * (f32)(rand() % 10);
-            *(f32*)(glassWork + 0x48) = (float_0p01_8042539c * (f32)(rand() % 0x1E)) + float_0p1_80425394;
-            *(f32*)(glassWork + 0x3C) = (f32)(rand() % 0x168);
-            *(f32*)(glassWork + 0x40) = (f32)(rand() % 0x14);
-            *(f32*)(glassWork + 0x4C) = (f32)((rand() % 10) - 5);
-            *(f32*)(glassWork + 0x50) = (f32)((rand() % 10) - 5);
-            *(f32*)(glassWork + 0x54) = float_0_80425384;
-            *(f32*)(glassWork + 0x58) = float_neg0p1_804253a0;
+            r = rand();
+            q = (r / 10) + (r >> 31);
+            rem = r - ((q - (q >> 31)) * 10);
+            *(f32*)(glassWork + 0x44) = tenth * (f32)rem;
+            r = rand();
+            q = (r / 0x1E) + (r >> 31);
+            rem = r - ((q - (q >> 31)) * 0x1E);
+            *(f32*)(glassWork + 0x48) = (hundredth * (f32)rem) + tenth;
+            r = rand();
+            q = (r / 0x168) + (r >> 31);
+            rem = r - ((q - (q >> 31)) * 0x168);
+            *(f32*)(glassWork + 0x3C) = (f32)rem;
+            r = rand();
+            q = (r / 0x14) + (r >> 31);
+            rem = r - ((q - (q >> 31)) * 0x14);
+            *(f32*)(glassWork + 0x40) = (f32)rem;
+            r = rand();
+            q = (r / 10) + (r >> 31);
+            rem = r - ((q - (q >> 31)) * 10);
+            *(f32*)(glassWork + 0x4C) = (f32)(rem - 5);
+            r = rand();
+            q = (r / 10) + (r >> 31);
+            rem = r - ((q - (q >> 31)) * 10);
+            *(f32*)(glassWork + 0x50) = (f32)(rem - 5);
+            *(f32*)(glassWork + 0x54) = zero;
+            *(f32*)(glassWork + 0x58) = negativeTenth;
         }
         effDelete(*(void**)(work + 0x28));
         effDelete(effect);
@@ -156,7 +202,8 @@ void effFreezeMain(void* effect) {
         *(s8*)(work + 0x25) = (s8)((rand() % 0x3C) + 8);
     }
     if (*(s8*)(work + 0x25) < 8) {
-        *(u8*)(work + 0x24) = *(s8*)(work + 0x25) / 2;
+        s32 halfValue = *(s8*)(work + 0x25);
+        *(u8*)(work + 0x24) = (halfValue + ((u32)halfValue >> 31)) >> 1;
     } else {
         *(u8*)(work + 0x24) = 0;
     }
@@ -167,13 +214,12 @@ void effFreezeMain(void* effect) {
                          *(f32*)(work + 0xC), 2, 0x1E);
     }
 
-    snowDust = *(void**)(work + 0x28);
-    snowWork = *(u8**)((s32)snowDust + 0xC);
-    *(f32*)(snowWork + 4) = *(f32*)(work + 4);
-    *(f32*)(snowWork + 8) = float_10_80425388 + *(f32*)(work + 8);
-    *(f32*)(snowWork + 0xC) = *(f32*)(work + 0xC);
+    *(f32*)(*(s32*)(*(s32*)(work + 0x28) + 0xC) + 4) = *(f32*)(work + 4);
+    *(f32*)(*(s32*)(*(s32*)(work + 0x28) + 0xC) + 8) =
+        float_10_80425388 + *(f32*)(work + 8);
+    *(f32*)(*(s32*)(*(s32*)(work + 0x28) + 0xC) + 0xC) = *(f32*)(work + 0xC);
 
-    dispEntry(4, 2, effFreezeDisp, effect, dispCalcZ(pos));
+    dispEntry(4, 2, effFreezeDisp, effect, dispCalcZ(&dispPos));
 }
 
 void effFreezeDisp(int cameraId, int effect) {

@@ -31,8 +31,6 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
     u8* base;
     u8* part;
     s32 count;
-    s32 countMinusOne;
-    s32 typeMod3;
     s32 i;
     s32 random;
     s32 mod3;
@@ -79,12 +77,12 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
     random = random - (random / 360) * 360;
     baseAngle = (f32)random;
 
-    countMinusOne = count - 1;
-    typeMod3 = type - (type / 3) * 3;
+    lifetime = count - 1;
+    count = type - (type / 3) * 3;
 
     part = base + 0x48;
     for (i = 1; i < *(s32*)((u8*)entry + 8); i++, part += 0x48) {
-        *(s32*)part = typeMod3;
+        *(s32*)part = count;
 
         switch (type) {
         case 0:
@@ -223,7 +221,7 @@ void* effPokopiPchargeN64Entry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 lif
         *(f32*)(part + 0xC) = float_0_80425d2c;
         *(f32*)(part + 0x3C) =
             baseAngle +
-            (f32)(((i - 1) * 360) / countMinusOne);
+            (f32)(((i - 1) * 360) / lifetime);
     }
 
     return entry;

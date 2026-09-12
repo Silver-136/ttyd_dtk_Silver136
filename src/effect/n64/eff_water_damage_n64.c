@@ -9,147 +9,70 @@ extern const f32 float_360_80426524;
 extern const f32 float_0p1_80426528;
 
 void* effWaterDamageN64Entry(f64 x, f64 y, f64 z, f64 scale, s32 type, s32 timer) {
-    typedef struct WaterPart {
-        s32 type;
-        f32 x;
-        f32 y;
-        f32 z;
-        f32 vx;
-        f32 vy;
-        f32 vz;
-        s32 timer;
-        s32 frame;
-        s32 r;
-        s32 g;
-        s32 b;
-        s32 alpha;
-        f32 size;
-        s32 altDisp;
-    } WaterPart;
-    extern void* effEntry(void);
-    extern void* __memAlloc(s32, u32);
-    extern void effWaterDamageMain(void*);
-    extern s32 rand(void);
-    extern s32 irand(s32);
-    extern f64 sin(f64);
-    extern f64 cos(f64);
-    extern void* marioGetPtr(void);
-    extern void* camGetPtr(s32);
-    extern char str_WaterDamageN64_802fc280[];
-    void* entry;
-    WaterPart* work;
-    s32 count;
-    s32 altDisp;
-    s32 i;
-    s32 phase;
-
-    entry = effEntry();
-    altDisp = type > 9;
-    if (altDisp) {
-        type %= 10;
-    }
-    if (type == 2) {
-        count = 0x29;
-    } else if (type == 0 || type == 1) {
-        count = 0x15;
-    } else if (type == 6) {
-        count = 9;
-    } else {
-        count = 0xB;
-    }
-    *(char**)((s32)entry + 0x14) = str_WaterDamageN64_802fc280;
-    *(s32*)((s32)entry + 8) = count;
-    work = __memAlloc(3, count * sizeof(WaterPart));
-    *(WaterPart**)((s32)entry + 0xC) = work;
-    *(void**)((s32)entry + 0x10) = effWaterDamageMain;
-    *(u32*)entry |= 2;
-
-    work[0].type = type;
-    work[0].frame = 0;
-    work[0].timer = timer < 1 ? 1000 : timer;
-    work[0].alpha = 0xFF;
-    work[0].x = (f32)x;
-    work[0].y = (f32)y;
-    work[0].z = (f32)z;
-    work[0].size = (f32)scale;
-    work[0].r = 0x46;
-    work[0].g = 0xB4;
-    work[0].b = 0xFF;
-    work[0].altDisp = altDisp;
-
-    phase = 3;
-    for (i = 1; i < count; i++, phase += 3) {
-        WaterPart* part = &work[i];
-        part->x = 0.0f;
-        part->y = 0.0f;
-        part->z = 0.0f;
-        part->size = 2.0f;
-        switch (type) {
+    typedef struct WaterPart { s32 type; f32 x,y,z,vx,vy,vz; s32 timer,frame,r,g,b,alpha; f32 size; s32 altDisp; } WaterPart;
+    extern void* effEntry(void); extern void* __memAlloc(s32,u32); extern void effWaterDamageMain(void*);
+    extern s32 rand(void); extern s32 irand(s32); extern f64 sin(f64); extern f64 cos(f64);
+    extern void* marioGetPtr(void); extern void* camGetPtr(s32); extern char str_WaterDamageN64_802fc280[];
+    void* entry; WaterPart* work; WaterPart* part; s32 count,altDisp,i,phase,r,q;
+#define REM10() do { r=rand(); q=__mulhw(0x66666667,r)>>2; q+=(u32)q>>31; r-=q*10; } while(0)
+#define REM11() do { r=rand(); q=__mulhw(0x2E8BA2E9,r)>>1; q+=(u32)q>>31; r-=q*11; } while(0)
+#define REM100() do { r=rand(); q=__mulhw(0x51EB851F,r)>>5; q+=(u32)q>>31; r-=q*100; } while(0)
+#define REM7() do { r=rand(); q=(__mulhw(0x92492493,r)+r)>>2; q+=(u32)q>>31; r-=q*7; } while(0)
+#define REM5() do { r=rand(); q=__mulhw(0x66666667,r)>>1; q+=(u32)q>>31; r-=q*5; } while(0)
+#define REM3() do { r=rand(); q=__mulhw(0x55555556,r); r-=q*3; } while(0)
+    entry=effEntry(); altDisp=type>9;
+    if(altDisp){ q=__mulhw(0x66666667,type)>>2; q+=(u32)q>>31; type-=q*10; }
+    if(type==2) count=0x29; else if(type==0||type==1) count=0x15; else if(type==6) count=9; else count=0xB;
+    *(char**)((s32)entry+0x14)=str_WaterDamageN64_802fc280; *(s32*)((s32)entry+8)=count;
+    work=__memAlloc(3,count*sizeof(WaterPart)); *(WaterPart**)((s32)entry+0xC)=work;
+    *(void**)((s32)entry+0x10)=effWaterDamageMain; *(u32*)entry|=2;
+    work->type=type; work->frame=0; work->timer=timer<1?1000:timer; work->alpha=0xFF;
+    work->x=(f32)x; work->y=(f32)y; work->z=(f32)z; work->size=(f32)scale;
+    work->r=0x46; work->g=0xB4; work->b=0xFF; work->altDisp=altDisp;
+    phase=3; part=work+1;
+    for(i=1;i<*(s32*)((s32)entry+8);i++,phase+=3,part++){
+        part->x=0.0f; part->y=0.0f; part->z=0.0f; part->size=2.0f;
+        switch(type){
             case 0:
-                part->vx = (f32)((rand() % 11) - 2);
-                part->vy = (f32)((rand() % 11) - 5);
-                part->vz = (f32)((rand() % 11) - 5);
-                break;
+                REM11(); part->vx=(f32)(r-2); REM11(); part->vy=(f32)(r-5); REM11(); part->vz=(f32)(r-5); break;
             case 1:
-                part->vx = -(f32)((rand() % 11) - 2);
-                part->vy = (f32)((rand() % 11) - 5);
-                part->vz = (f32)((rand() % 11) - 5);
-                break;
+                REM11(); part->vx=-(f32)(r-2); REM11(); part->vy=(f32)(r-5); REM11(); part->vz=(f32)(r-5); break;
             case 2:
-                part->vx = 0.07f * (f32)((rand() % 100) - 50);
-                part->vy = 0.2f * (f32)((rand() % 100) + 10);
-                part->vz = 0.07f * (f32)((rand() % 100) - 50);
-                break;
+                REM100(); part->vx=0.07f*(f32)(r-50); REM100(); part->vy=0.2f*(f32)(r+10);
+                REM100(); part->vz=0.07f*(f32)(r-50); break;
             case 3:
-                part->vx = 0.5f * (f32)((rand() % 10) - 5);
-                part->vy = 0.5f * (f32)((rand() % 10) - 5);
-                part->vz = 0.5f * (f32)((rand() % 10) - 5);
-                part->size = 0.4f;
-                part->timer = i;
-                break;
+                REM10(); part->vx=0.5f*(f32)(r-5); REM10(); part->vy=0.5f*(f32)(r-5);
+                REM10(); part->vz=0.5f*(f32)(r-5); part->size=0.4f; part->timer=i; break;
             case 4:
-                part->vx = (f32)((rand() % 7) - 3);
-                part->vy = (f32)((rand() % 3) + 1);
-                part->vz = (f32)((rand() % 7) - 3);
-                break;
+                REM7(); part->vx=(f32)(r-3); REM3(); part->vy=(f32)(r+1); REM7(); part->vz=(f32)(r-3); break;
             case 5:
-                part->vx = 0.3f * (f32)((rand() % 10) - 5);
-                part->vy = 0.3f * (f32)((rand() % 10) + 5);
-                part->vz = 0.3f * (f32)((rand() % 10) - 5);
-                part->size = 1.0f;
-                part->timer = i;
-                break;
-            case 6:
-            {
-                f32 angle = 6.2832f * (f32)i / (f32)count;
-                part->x = 10.0f * (f32)sin(angle);
-                part->z = 10.0f * (f32)cos(angle);
-                part->vx = part->x / 12.0f;
-                part->vy = 0.3f * (f32)(rand() % 5);
-                part->vz = part->z / 12.0f;
-                part->size = 1.0f;
-                part->timer = phase;
-                break;
+                REM10(); part->vx=0.3f*(f32)(r-5); REM10(); part->vy=0.3f*(f32)(r+5);
+                REM10(); part->vz=0.3f*(f32)(r-5); part->size=1.0f; part->timer=i; break;
+            case 6:{
+                f32 angle=6.2832f*(f32)i/(f32)count;
+                part->x=10.0f*(f32)sin(angle); part->z=10.0f*(f32)cos(angle);
+                part->vx=part->x/12.0f; REM5(); part->vy=0.3f*(f32)r;
+                part->vz=part->z/12.0f; part->size=1.0f; part->timer=phase; break;
             }
             case 7:
-            default:
-            {
-                void* player = marioGetPtr();
-                f32 direction = (f32)(irand(90) - 45) - *(f32*)((u8*)player + 0x100) +
-                                *(f32*)((u8*)camGetPtr(0) + 0x114);
-                f32 angle = 6.2832f * direction / float_360_80426524;
-                part->x = (f32)sin(angle);
-                part->z = (f32)cos(angle);
-                part->vx = *(f32*)((u8*)player + 0x1B0) * part->x * 0.5f;
-                part->vy = float_0p1_80426528 * (f32)((rand() % 10) + 5);
-                part->vz = *(f32*)((u8*)player + 0x1B0) * part->z * 0.5f;
-                part->size = 1.0f;
-                part->timer = phase;
-                break;
+            default:{
+                void* player=marioGetPtr(); f32 direction=(f32)(irand(90)-45)-*(f32*)((u8*)player+0x1A4)+*(f32*)((u8*)camGetPtr(4)+0x114);
+                f32 angle=6.2832f*direction/float_360_80426524;
+                part->x=(f32)sin(angle); part->z=(f32)cos(angle);
+                part->vx=*(f32*)((u8*)player+0x180)*part->x*0.5f;
+                REM10(); part->vy=float_0p1_80426528*(f32)(r+5);
+                part->vz=*(f32*)((u8*)player+0x180)*part->z*0.5f;
+                part->size=1.0f; part->timer=phase; break;
             }
         }
-        part->alpha = 0xFF;
+        part->alpha=0xFF;
     }
+#undef REM10
+#undef REM11
+#undef REM100
+#undef REM7
+#undef REM5
+#undef REM3
     return entry;
 }
 
@@ -285,81 +208,62 @@ void effWaterDamageDisp(s32 cameraId, void* effect) {
 }
 
 void effWaterDamageDisp2(s32 cameraId, void* effect) {
-    extern void* camGetPtr(s32);
-    extern void GXSetBlendMode(s32,s32,s32,s32);
-    extern void GXSetZCompLoc(s32);
-    extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
-    extern void GXSetZMode(s32,s32,s32);
-    extern void PSMTXTrans(void*,f32,f32,f32);
-    extern void PSMTXRotRad(void*,s32,f32);
-    extern void PSMTXScale(void*,f32,f32,f32);
-    extern void PSMTXConcat(void*,void*,void*);
-    extern void GXSetNumChans(s32);
-    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);
-    extern void GXSetChanMatColor(s32,void*);
-    extern void GXSetNumTevStages(s32);
-    extern void GXSetTevOrder(s32,s32,s32,s32);
-    extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
-    extern void GXSetNumTexGens(s32);
-    extern void GXLoadTexMtxImm(void*,s32,s32);
-    extern void effGetTexObjN64(s32,void*);
-    extern void GXLoadTexObj(void*,s32);
-    extern void GXSetCullMode(s32);
-    extern void GXSetCurrentMtx(s32);
-    extern void GXLoadPosMtxImm(void*,s32);
-    extern void effSetVtxDescN64(void*);
-    extern void GXBegin(s32,s32,s32);
-    extern void tri2();
-    extern f32 float_deg2rad_804264dc;
-    extern f32 float_0p0625_804264e0;
-    extern f32 float_0_804264e4;
-    extern u32 dat_804264d8;
-    u8* work = *(u8**)((s32)effect + 0xC);
-    void* camera = camGetPtr(cameraId);
-    f32 trans[3][4], rot[3][4], scaleMtx[3][4], base[3][4];
-    u8 texObj[0x20];
-    u8 color[4];
-    s32 i;
-    s32 alpha = *(s32*)(work + 0x30);
+    extern void* camGetPtr(s32); extern void GXSetBlendMode(s32,s32,s32,s32);
+    extern void GXSetZCompLoc(s32); extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);
+    extern void GXSetZMode(s32,s32,s32); extern void PSMTXTrans(void*,f32,f32,f32);
+    extern void PSMTXRotRad(void*,s32,f32); extern void PSMTXScale(void*,f32,f32,f32);
+    extern void PSMTXConcat(void*,void*,void*); extern void GXSetNumChans(s32);
+    extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32); extern void GXSetChanMatColor(s32,void*);
+    extern void GXSetNumTevStages(s32); extern void GXSetTevOrder(s32,s32,s32,s32);
+    extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32); extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);
+    extern void GXSetTevColorIn(s32,s32,s32,s32,s32); extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);
+    extern void GXSetNumTexGens(s32); extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
+    extern void GXLoadTexMtxImm(void*,s32,s32); extern void effGetTexObjN64(s32,void*);
+    extern void GXLoadTexObj(void*,s32); extern void GXSetCullMode(s32); extern void GXSetCurrentMtx(s32);
+    extern void GXLoadPosMtxImm(void*,s32); extern void effSetVtxDescN64(void*);
+    extern void GXBegin(s32,s32,s32); extern void tri2();
+    extern f32 float_deg2rad_804264dc, float_0p0625_804264e0, float_0_804264e4;
+    extern u32 dat_804264d8; extern f32 negone_one_374[]; extern void* gp;
+    u8* vertices=(u8*)negone_one_374; u8* work; u8* part; void* camera;
+    s32 x,y,alpha,product,quotient,i;
+    f32 trans[3][4],scaleMtx[3][4],rot[3][4],base[3][4];
+    u8 texObj[0x20]; u32 colorA,colorB;
 
-    GXSetBlendMode(1,4,5,0);
-    GXSetZCompLoc(1);
-    GXSetAlphaCompare(7,0,0,7,0);
-    GXSetZMode(1,3,0);
-    PSMTXTrans(trans,(f32)(s32)*(f32*)(work+4),(f32)(s32)*(f32*)(work+8),*(f32*)(work+0xC));
+    camera=camGetPtr(cameraId); work=*(u8**)((s32)effect+0xC);
+    x=(s32)*(f32*)(work+4); y=(s32)*(f32*)(work+8); alpha=*(s32*)(work+0x30);
+    GXSetBlendMode(1,4,5,0); GXSetZCompLoc(1); GXSetAlphaCompare(7,0,0,7,0); GXSetZMode(1,3,0);
+    PSMTXTrans(trans,(f32)x,(f32)y,*(f32*)(work+0xC));
     PSMTXRotRad(rot,0x79,float_deg2rad_804264dc * -*(f32*)((s32)camGetPtr(4)+0x114));
     PSMTXScale(scaleMtx,*(f32*)(work+0x34),*(f32*)(work+0x34),*(f32*)(work+0x34));
-    PSMTXConcat(trans,scaleMtx,trans);
-    PSMTXConcat(trans,rot,trans);
+    PSMTXConcat(trans,scaleMtx,trans); PSMTXConcat(trans,rot,trans);
     PSMTXConcat((void*)((s32)camera+0x11C),trans,base);
-    GXSetNumChans(1);
-    GXSetChanCtrl(4,0,0,0,0,0,2);
-    color[0]=(dat_804264d8>>24)&0xFF;color[1]=(dat_804264d8>>16)&0xFF;
-    color[2]=(dat_804264d8>>8)&0xFF;color[3]=(alpha*alpha)/0xFF;
-    GXSetChanMatColor(4,color);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(0,0,0,4);
-    GXSetTevColorOp(0,0,0,0,1,0);
-    GXSetTevAlphaOp(0,0,0,0,1,0);
-    GXSetTevColorIn(0,8,0,0,10);
-    GXSetTevAlphaIn(0,0,2,4,7);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+    GXSetNumChans(1); GXSetChanCtrl(4,0,0,0,0,0,2);
+    product=alpha*alpha;
+    quotient=__mulhw(0x80808081,product);
+    quotient=(quotient+product)>>7;
+    quotient+=(u32)quotient>>31;
+    colorA=dat_804264d8; ((u8*)&colorA)[3]=quotient; colorB=colorA;
+    GXSetChanMatColor(4,&colorB);
+    GXSetNumTevStages(1); GXSetTevOrder(0,0,0,4);
+    GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0);
+    GXSetTevColorIn(0,8,15,15,10); GXSetTevAlphaIn(0,7,5,4,7);
+    GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
     PSMTXScale(scaleMtx,float_0p0625_804264e0,float_0p0625_804264e0,float_0_804264e4);
-    GXLoadTexMtxImm(scaleMtx,0x1E,1);
-    effGetTexObjN64(0x89,texObj);GXLoadTexObj(texObj,0);
-    GXSetCullMode(0);GXSetCurrentMtx(0);
-    for(i=1;i<*(s32*)((s32)effect+8);i++){
-        u8* part=work+i*0x3C;
-        f32 scale=*(f32*)(part+0x34);
+    GXLoadTexMtxImm(scaleMtx,0x1E,1); effGetTexObjN64(0x89,texObj); GXLoadTexObj(texObj,0);
+    GXSetCullMode(0); GXSetCurrentMtx(0);
+    part=work+0x3C;
+    for(i=1;i<*(s32*)((s32)effect+8);i++,part+=0x3C){
+        f32 scale; u32 frame;
         PSMTXTrans(trans,*(f32*)(part+4),*(f32*)(part+8),*(f32*)(part+0xC));
-        PSMTXScale(scaleMtx,scale,scale,scale);
-        PSMTXConcat(trans,scaleMtx,trans);PSMTXConcat(base,trans,trans);
-        GXLoadPosMtxImm(trans,0);
-        if((i&3)==0||((i&3)==2))effSetVtxDescN64((void*)0x803AB8E0);
-        else if((i&3)==1)effSetVtxDescN64((void*)0x803AB918);
-        else effSetVtxDescN64((void*)0x803AB950);
-        GXBegin(0x90,0,6);tri2(0,1,2,0,0,2,3);
+        scale=*(f32*)(part+0x34); PSMTXScale(scaleMtx,scale,scale,scale);
+        PSMTXConcat(trans,scaleMtx,trans); PSMTXConcat(base,trans,trans); GXLoadPosMtxImm(trans,0);
+        frame=(i+((u32)*(s32*)((s32)gp+0x1C)>>1))&3;
+        switch(frame){
+            case 0: case 2: effSetVtxDescN64(vertices+0x40); break;
+            case 1: effSetVtxDescN64(vertices+0x78); break;
+            default: effSetVtxDescN64(vertices+0xB0); break;
+        }
+        GXBegin(0x90,0,6); tri2(0,1,2,0,0,2,3,0);
     }
 }
 

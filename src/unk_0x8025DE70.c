@@ -53,7 +53,13 @@ void N_systemErrorHandler(u16 error, u8* context, u32 dsisr, u32 dar) {
         sprintf(line,"Address:     Back Chain   LR Save\n"); strcat(message,line); backchain=*(u32**)(context+4); i=0;
         while(backchain && backchain!=(u32*)-1 && i++<16){sprintf(line,"0x%08x:  0x%08x   0x%08x\n",backchain,backchain[0],backchain[1]);strcat(message,line);backchain=(u32*)backchain[0];}
         strcat(message,"\n"); sprintf(line,"Instruction at 0x%x\n(read from SRR0) attempted to access\ninvalid address 0x%x (read from DAR)\n",*(u32*)(context+0x198),dar); strcat(message,line);
-        psndExit(); L_OSFillFPUContext(context); L_smartReInit(); allocation=smartAlloc(OSGetFontEncode(),0); L_OSInitFont(*(void**)allocation);
+        psndExit(); L_OSFillFPUContext(context); L_smartReInit();
+        if (OSGetFontEncode() == 1) {
+            allocation = smartAlloc(0x120F00, 0);
+        } else {
+            allocation = smartAlloc(0x20120, 0);
+        }
+        L_OSInitFont(*(void**)allocation);
         GXSetCopyClear(&dat_80428ba8,0xFFFFFF); GXCopyDisp(L_DEMOGetCurrentBuffer(),1);
         GXSetViewport(float_0_80428bb0,float_0_80428bb0,float_608_80428bb4,float_480_80428bb8,float_0_80428bb0,float_1_80428bbc); GXSetScissor(0,0,608,480);
         C_MTXOrtho(projection,float_0_80428bb0,float_608_80428bb4,float_0_80428bb0,float_480_80428bb8,float_0_80428bb0,float_1_80428bbc); GXSetProjection(projection,1);

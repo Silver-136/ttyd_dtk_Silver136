@@ -71,10 +71,15 @@ u8 effIceMain(u32* effect) {
     extern f32 float_1p005_80424784;
 
     u8* work;
+    u8* globals;
+    VecLocal dispPos;
     VecLocal pos;
     s32 mode;
     s32 frame;
     s32 r;
+    s64 globalTime;
+    s64 frameTime;
+    s64 tickDivisor;
     f32 mayaFrame;
 
     work = (u8*)effect[3];
@@ -82,34 +87,44 @@ u8 effIceMain(u32* effect) {
     pos.x = *(f32*)(work + 4);
     pos.y = *(f32*)(work + 8);
     pos.z = *(f32*)(work + 0xC);
+    dispPos = pos;
 
     if (*effect & 4) {
         *effect &= ~4;
         *(s32*)(work + 0x24) = 0x5A;
         *(s32*)(work + 0x28) = 1;
-        /* First-pass baseline: leave exact global-time maya offset for a later shape pass. */
-        *(s32*)(*(s32*)(work + 0x2C) + 8) = 0;
-        *(s32*)(*(s32*)(work + 0x2C) + 0xC) = 0;
+        globals = (u8*)gp;
+        if (*(s32*)(globals + 0x14) != 0) {
+            globalTime = *(u64*)(globals + 0x38);
+        } else {
+            globalTime = *(u64*)(globals + 0x40);
+        }
+        frameTime = (s64)(float_1000_80424778 / (f32)*(s32*)(globals + 4));
+        frameTime *= *(s32*)(work + 0x24);
+        tickDivisor = (*(volatile u32*)0x800000F8 >> 2) / 1000;
+        globalTime = globalTime / tickDivisor - frameTime;
+        *(u64*)(*(s32*)(work + 0x2C) + 8) = globalTime;
     }
 
     mode = *(s32*)(work + 0x28);
-    if (mode == 1) {
+    switch (mode) {
+    case 1:
         *(s32*)(work + 0x24) += 1;
         effCalcMayaAnim(*(void**)(work + 0x2C));
-    } else if (mode < 1) {
-        if (mode >= 0) {
-            if (*(s32*)(work + 0x20) < 1000) {
-                *(s32*)(work + 0x20) -= 1;
-            }
-            if (*(s32*)(work + 0x20) == 0) {
-                *(s32*)(work + 0x28) = 1;
-            }
-            if (*(s32*)(work + 0x24) < 0x5A) {
-                *(s32*)(work + 0x24) += 1;
-                effCalcMayaAnim(*(void**)(work + 0x2C));
-            }
+        break;
+    case 0:
+        if (*(s32*)(work + 0x20) < 1000) {
+            *(s32*)(work + 0x20) -= 1;
         }
-    } else if (mode < 3) {
+        if (*(s32*)(work + 0x20) == 0) {
+            *(s32*)(work + 0x28) = 1;
+        }
+        if (*(s32*)(work + 0x24) < 0x5A) {
+            *(s32*)(work + 0x24) += 1;
+            effCalcMayaAnim(*(void**)(work + 0x2C));
+        }
+        break;
+    case 2:
         *(s32*)(work + 0x24) += 1;
         frame = *(s32*)(work + 0x24);
         if ((frame % 30) == 0) {
@@ -121,25 +136,30 @@ u8 effIceMain(u32* effect) {
         *(f32*)(work + 0x18) *= float_0p99_80424780;
         *(f32*)(work + 0x14) *= float_1p005_80424784;
         *(f32*)(work + 0x1C) *= float_0p99_80424780;
+        break;
     }
 
     mode = *(s32*)(work + 0x28);
-    if (mode == 2) {
+    switch (mode) {
+    case 2:
         if (*(s32*)(work + 0x24) > 200) {
             effDeleteMayaAnim(*(void**)(work + 0x2C));
             effDelete(effect);
-            return 0;
+            return;
         }
-    } else if ((mode < 2) && (mode >= 0)) {
+        break;
+    case 0:
+    case 1:
         mayaFrame = *(f32*)(*(s32*)(*(s32*)(work + 0x2C) + 0x10) + 4);
         if (mayaFrame < (f32)*(s32*)(work + 0x24)) {
             effDeleteMayaAnim(*(void**)(work + 0x2C));
             effDelete(effect);
-            return 0;
+            return;
         }
+        break;
     }
-    dispEntry(4, 2, effIceDisp, effect, dispCalcZ(&pos));
-    return 0;
+    dispEntry(4, 2, effIceDisp, effect, dispCalcZ(&dispPos));
+    return;
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

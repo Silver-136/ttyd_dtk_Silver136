@@ -143,35 +143,54 @@ void BattleStatusIconDisp(s32 cameraId, void* unit) {
     u8* work = (u8*)unit + 0x348;
     f32 screen[3];
     s32 index;
+    s32 entryOffset;
+    s32 depthOffset;
+    f32 numberMatrix[3][4];
+    f32 matrix[3][4];
+    f32 position[3][4];
+    f32 scaling[3][4];
+    f32 negativePivot[3][4];
+    f32 positivePivot[3][4];
+    f32 rotateX[3][4];
+    f32 rotateY[3][4];
+    f32 rotateZ[3][4];
+    volatile f32 x;
+    volatile f32 y;
+    volatile f32 z;
+    u32 baseColor;
+    u32 backgroundColorA;
+    u32 backgroundColorB;
+    u32 textureColor;
+    u32 numberColor;
 
     (void)cameraId;
+    baseColor = dat_80428788;
     btlGetScreenPoint((f32*)work, screen);
 
-    for (index = *(s16*)(work + 0x794) - 1; index >= 0; index--) {
-        u8* entry = work + 0x20 + index * 0x44;
-        f32 x = screen[0] + *(f32*)(work + 0xC);
-        f32 y = screen[1] + *(f32*)(work + 0x10) +
-                *(f32*)(work + 0x18) * (f32)index;
-        f32 z = screen[2] + *(f32*)(work + 0x14) + (f32)(index * 2);
+    index = *(s16*)(work + 0x794) - 1;
+    entryOffset = index * 0x44;
+    depthOffset = index * 2;
+    for (; index >= 0; index--) {
+        u8* entry = work + 0x20 + entryOffset;
         u32 flags = *(u32*)(entry + 0x40);
+        x = screen[0] + *(f32*)(work + 0xC);
+        y = screen[1] + *(f32*)(work + 0x10) +
+            *(f32*)(work + 0x18) * (f32)index;
+        z = screen[2] + *(f32*)(work + 0x14) + (f32)depthOffset;
 
         if ((flags & 1) == 0) {
-            u32 color = dat_80428788;
-            f32 scaleY = (*(u32*)(work + 0x1C) & 1) == 0 ? 0.8f : 1.0f;
-            btlDispTexPlane(0x30, &color, 0, x, y, z, 0.8f, scaleY);
+            if ((*(u32*)(work + 0x1C) & 1) == 0) {
+                backgroundColorA = baseColor;
+                btlDispTexPlane(0x30, &backgroundColorA, 0, x, y, z, 0.8f, 0.8f);
+            } else {
+                backgroundColorB = baseColor;
+                btlDispTexPlane(0x30, &backgroundColorB, 0, x, y, z, 0.8f, -0.8f);
+            }
         }
 
         if (*(s32*)(entry + 8) != 0) {
             if ((flags & 2) == 0) {
-                f32 position[3][4];
-                f32 scaling[3][4];
-                f32 negativePivot[3][4];
-                f32 positivePivot[3][4];
-                f32 rotateX[3][4];
-                f32 rotateY[3][4];
-                f32 rotateZ[3][4];
-                f32 matrix[3][4];
-                u32 color = *(u32*)(entry + 0x3C);
+                textureColor = *(u32*)(entry + 0x3C);
 
                 PSMTXTrans(position,
                            x + *(f32*)(entry + 0x30),
@@ -204,20 +223,19 @@ void BattleStatusIconDisp(s32 cameraId, void* unit) {
                 PSMTXConcat(rotateX, matrix, matrix);
                 PSMTXConcat(positivePivot, matrix, matrix);
                 PSMTXConcat(position, matrix, matrix);
-                btlDispTexPlane2(matrix, *(s32*)(entry + 8), &color);
+                btlDispTexPlane2(matrix, *(s32*)(entry + 8), &textureColor);
             }
 
             if (*(s32*)(entry + 4) != 0) {
-                f32 matrix[3][4];
-                f32 translation[3][4];
-                u32 color = dat_8042878c;
-
-                PSMTXIdentity(matrix);
-                PSMTXTrans(translation, x + 21.6f, y - 16.0f, z);
-                PSMTXConcat(translation, matrix, matrix);
-                iconNumberDispGx(matrix, *(s32*)(entry + 4), 1, &color);
+                PSMTXIdentity(numberMatrix);
+                PSMTXTrans(position, x + 21.6f, y - 16.0f, z);
+                PSMTXConcat(position, numberMatrix, numberMatrix);
+                numberColor = dat_8042878c;
+                iconNumberDispGx(numberMatrix, *(s32*)(entry + 4), 1, &numberColor);
             }
         }
+        depthOffset -= 2;
+        entryOffset -= 0x44;
     }
 }
 

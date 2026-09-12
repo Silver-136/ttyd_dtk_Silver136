@@ -163,7 +163,7 @@ void* effFireEntry(f32 x, f32 y, f32 z, f32 scale, s32 type, s32 duration) {
 #pragma use_lmw_stmw on
 
 
-u8 effFireMain(void* effect) {
+void effFireMain(void* effect) {
     extern void effFireSparkN64Entry(f32, f32, f32, f32, s32, s32, s32);
     extern void* effEntry(void);
     extern f32 dispCalcZ(void*);
@@ -193,6 +193,7 @@ u8 effFireMain(void* effect) {
     void* smoke;
     s32* smokeWork;
     f32 y;
+    f32 z;
 
     work = *(s32**)((s32)effect + 0xC);
     type = work[0];
@@ -208,10 +209,10 @@ u8 effFireMain(void* effect) {
     }
     if (work[5] < 0) {
         effDelete(effect);
-        return 0;
+        return;
     }
 
-    if (type < 9 && type > 2) {
+    if (type < 9 && type >= 3) {
         work[10] = (s32)(((f32)work[13] * (f32)work[6]) / (f32)work[12]);
         work[11] = (s32)(((f32)work[13] * (f32)(work[6] + 1)) / (f32)work[12]);
         if (work[13] <= work[10]) {
@@ -228,7 +229,14 @@ u8 effFireMain(void* effect) {
         work[6] = 0;
     }
 
-    if (type == 8 || (type < 8 && type > 2 && !(type > 4))) {
+    if (type == 8) goto fire_scale;
+    if (type >= 8) goto fire_smoke;
+    if (type >= 5) goto fire_spark;
+    if (type >= 3) goto fire_scale;
+    goto fire_smoke;
+
+fire_scale:
+    {
         if (type == 4) {
             idx = 4;
             table = scale2;
@@ -254,8 +262,11 @@ u8 effFireMain(void* effect) {
         work[17] = (s32)((f32)work[17] * float_1p4_804244c8);
         work[17] = (s32)((f32)work[17] * float_1p2_804244cc);
         work[16]++;
-    } else {
-        if (type < 8 && type > 4) {
+    }
+    goto fire_dispatch;
+
+fire_spark:
+    {
             work[7]++;
             if (work[8] < work[7]) {
                 effFireSparkN64Entry((f32)work[1],
@@ -267,10 +278,15 @@ u8 effFireMain(void* effect) {
                 r = rand();
                 work[8] = r % 30 + 30;
             }
-        } else {
+    }
+    goto fire_dispatch;
+
+fire_smoke:
+    {
             work[7]++;
             if (work[8] < work[7]) {
-                y = (f32)work[2] + (f32)dat_80424428[type];
+                y = *(f32*)&work[2] + (f32)dat_80424428[type];
+                z = *(f32*)&work[3] - float_5_8042448c;
                 smoke = effEntry();
                 *(char**)((s32)smoke + 0x14) = str_FireSmoke_802f9510;
                 *(s32*)((s32)smoke + 8) = 1;
@@ -282,7 +298,7 @@ u8 effFireMain(void* effect) {
                 *(u8*)((s32)smokeWork + 0x33) = 0x80;
                 smokeWork[1] = work[1];
                 *(f32*)(smokeWork + 2) = y;
-                *(f32*)(smokeWork + 3) = (f32)work[3] - float_5_8042448c;
+                *(f32*)(smokeWork + 3) = z;
                 smokeWork[15] = work[9];
                 smokeWork[13] = 0x3C;
                 smokeWork[14] = 0;
@@ -297,16 +313,23 @@ u8 effFireMain(void* effect) {
                 r = rand();
                 work[8] = r % 30 + 30;
             }
-        }
     }
 
-    if (type == 8 || (type < 8 && type > 2 && !(type > 4))) {
-        dispEntry(4, 2, effFireDisp2, effect, dispCalcZ(work + 1));
-    } else if (type < 8 && type > 4) {
-        dispEntry(4, 2, effFireDisp3, effect, dispCalcZ(work + 1));
-    } else {
-        dispEntry(4, 8, effFireDisp, effect, dispCalcZ(work + 1));
-    }
+fire_dispatch:
+    if (type == 8) goto fire_disp2;
+    if (type >= 8) goto fire_disp1;
+    if (type >= 5) goto fire_disp3;
+    if (type >= 3) goto fire_disp2;
+    goto fire_disp1;
+
+fire_disp2:
+    dispEntry(4, 2, effFireDisp2, effect, dispCalcZ(work + 1));
+    return;
+fire_disp3:
+    dispEntry(4, 2, effFireDisp3, effect, dispCalcZ(work + 1));
+    return;
+fire_disp1:
+    dispEntry(4, 8, effFireDisp, effect, dispCalcZ(work + 1));
 }
 
 void effFireDisp(int camId, int effect) {
@@ -703,6 +726,10 @@ u8 effFireDisp3(s32 camId, s32 effect) {
     extern void GXSetCullMode(s32);
     extern void PSMTXIdentity(Mtx);
     extern void PSMTXMultVec(Mtx, Vec3*, Vec3*);
+    extern void* mapGetWork(void);
+    extern void mapGetBlend(void*);
+    extern void GXSetTevColor(s32, void*);
+    extern u32 unk_80429608;
     extern f32 getScreenPoint(f32*, f32*);
     extern f32 float_deg2rad_80424468;
     extern f32 float_32_80424488;
@@ -726,6 +753,9 @@ u8 effFireDisp3(s32 camId, s32 effect) {
     f32 y0, y1, v0, v1;
     Vec3 point;
     f32 screen[2];
+    u32 blendColor;
+    u32 tevColor;
+    void* mapWork;
 
     effGetTexObj(0x49, &tex);
     GXLoadTexObj(&tex, 0);
@@ -749,10 +779,6 @@ u8 effFireDisp3(s32 camId, s32 effect) {
     PSMTXScale(scale, sx, sy, baseScale);
     PSMTXConcat(trans, rot, model);
     PSMTXConcat(model, scale, model);
-    GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(11, 1);
-    GXSetVtxDesc(13, 1);
     GXSetNumTevStages(3);
     GXSetTevOrder(0, 0, 0, -1);
     GXSetTevColorOp(0, 0, 0, 0, 1, 0);
@@ -769,7 +795,28 @@ u8 effFireDisp3(s32 camId, s32 effect) {
     GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
     GXSetTevColorIn(2, 15, 15, 15, 0);
     GXSetTevAlphaIn(2, 7, 0, 1, 7);
+    if (work[0x22] != 0) {
+        mapWork = mapGetWork();
+        if ((*(u16*)((u8*)mapWork + 4) & 2) != 0) {
+            mapGetBlend(&blendColor);
+            GXSetNumTevStages(4);
+            GXSetTevOrder(3, 0xFF, 0xFF, -1);
+            GXSetTevColorOp(3, 0, 0, 0, 1, 0);
+            GXSetTevAlphaOp(3, 0, 0, 0, 1, 0);
+            GXSetTevColorIn(3, 15, 0, 2, 15);
+            GXSetTevAlphaIn(3, 7, 0, 1, 7);
+            tevColor = blendColor;
+            GXSetTevColor(2, &tevColor);
+        }
+    }
+    blendColor = (unk_80429608 & 0xFFFFFF00) | *(u8*)((u8*)work + 0x10);
+    tevColor = blendColor;
+    GXSetTevColor(1, &tevColor);
     GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(11, 1);
+    GXSetVtxDesc(13, 1);
     GXSetVtxAttrFmt(0, 9, 1, 4, 0);
     GXSetVtxAttrFmt(0, 11, 1, 5, 0);
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);

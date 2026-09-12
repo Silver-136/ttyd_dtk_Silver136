@@ -445,20 +445,40 @@ void effSplashGetCol(void* unused, void* entry) {
 
 /* stub-fill: effSplashDisp | prototype_only | source_prototype */
 void effSplashDisp(s32 cameraId, void* entry) {
-    typedef struct Vec { f32 x, y, z; } Vec;
-    typedef struct {
+    typedef struct VecSplash {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecSplash;
+    typedef struct EffSplashWork {
         s32 type;
-        Vec pos;
-        f32 vx, vz;
-        Vec scale;
-        s32 frame, timer;
-        f32 vy, gravity;
-        s32 unk, state;
-        u8 r, g, b, a;
-    } Work;
-    extern void* camGetPtr(s32);
-    extern void effGetTexObj(s32, void*);
-    extern void GXLoadTexObj(void*, s32);
+        VecSplash pos;
+        f32 velX;
+        f32 velZ;
+        VecSplash scale;
+        s32 frame;
+        s32 timer;
+        f32 velY;
+        f32 gravity;
+        s32 unused34;
+        s32 state;
+        u8 r;
+        u8 g;
+        u8 b;
+        u8 a;
+    } EffSplashWork;
+    typedef union SplashColor {
+        u32 word;
+        struct {
+            u8 r;
+            u8 g;
+            u8 b;
+            u8 a;
+        } c;
+    } SplashColor;
+    extern void* camGetPtr(s32 cameraId);
+    extern void effGetTexObj(s32 id, void* texObj);
+    extern void GXLoadTexObj(void* texObj, s32 map);
     extern void GXSetNumChans(s32);
     extern void GXSetChanCtrl(s32, s32, s32, s32, s32, s32, s32);
     extern void GXSetNumTexGens(s32);
@@ -472,8 +492,10 @@ void effSplashDisp(s32 cameraId, void* entry) {
     extern void GXClearVtxDesc(void);
     extern void GXSetVtxDesc(s32, s32);
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
+    extern void GXSetArray(s32 attr, void* base, s32 stride);
     extern void GXSetCurrentMtx(s32);
     extern void GXBegin(s32, s32, s32);
+    extern void GXCallDisplayList(void* list, u32 nbytes);
     extern void PSMTXTrans(void*, f32, f32, f32);
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXRotRad(void*, s32, f32);
@@ -481,23 +503,107 @@ void effSplashDisp(s32 cameraId, void* entry) {
     extern void GXLoadPosMtxImm(void*, s32);
     extern void PSMTXIdentity(void*);
     extern void GXLoadTexMtxImm(void*, s32, s32);
+    extern f64 sin(f64);
+    extern f64 cos(f64);
 
-    u8 tex[64];
-    f32 trans[3][4];
-    f32 rot[3][4];
-    f32 scale[3][4];
-    f32 baseMtx[3][4];
-    f32 model[3][4];
-    Work* work = *(Work**)((u8*)entry + 0xC);
-    s32 count = *(s32*)((u8*)entry + 8);
-    s32 first = 0;
-    u8* viewCamera = camGetPtr(cameraId);
+    extern void* gp;
+
+    extern f32 float_20_80427864;
+    extern f32 float_0_80427868;
+    extern f32 float_40_8042786c;
+    extern f32 float_10_80427870;
+    extern f32 float_23_80427874;
+    extern f32 float_15_80427878;
+    extern f32 float_neg37_8042787c;
+    extern f32 float_1p8_80427880;
+    extern f32 float_6_80427884;
+    extern f32 float_neg85_80427888;
+    extern f32 float_11p6_8042788c;
+    extern f32 float_neg21_80427890;
+    extern f32 float_neg20_80427894;
+    extern f32 float_12_80427898;
+    extern f32 float_neg10_8042789c;
+    extern f32 float_1_804278a0;
+    extern f32 float_255_804278a4;
+    extern f32 float_0p869_804278a8;
+    extern f32 float_0p314_804278ac;
+    extern f32 float_6p2832_804278b0;
+    extern f32 float_0p125_804278b4;
+    extern f32 float_0p1_804278b8;
+    extern f32 float_2p1_804278bc;
+    extern f32 float_8_804278c0;
+    extern f32 float_0p5_804278c4;
+    extern f32 float_4_804278c8;
+
+    extern u8 geso_shibuki_vertex_tbl[];
+    extern u8 geso_shibuki_normal_tbl[];
+    extern u32 geso_shibuki_color0_tbl[];
+    extern u8 geso_shibuki_texcoord0_tbl[];
+    extern void* geso_shibuki_dl_0_tbl[];
+    extern u8 geso_shibuki_dl_0_size_tbl[];
+
+#define SPLASH_FIFO_F(value) (*(volatile f32*)0xCC008000 = (value))
+#define SPLASH_FIFO_B(value) (*(volatile u8*)0xCC008000 = (u8)(value))
+
+    EffSplashWork* work;
+    EffSplashWork* child;
+    u8* viewCamera;
     u8* camera;
+    s32 type;
+    s32 first;
+    s32 fixedIndex;
     s32 i;
-    f32 cameraAngle;
-    f32 degreesToRadians;
+    s32 j;
+    s32 count;
+    f32 scroll;
+    f32 outerRadius;
+    f32 innerRadius;
+    f32 lowerY;
+    f32 topR;
+    f32 topG;
+    f32 topB;
+    f32 bottomR;
+    f32 bottomG;
+    f32 bottomB;
+    f32 fi;
+    f32 angle;
+    f32 s;
+    f32 c;
+    f32 texS;
+    f32 quadNeg;
+    f32 quadR;
+    f32 quadG;
+    f32 quadB;
+    s32 botRi;
+    s32 botGi;
+    s32 botBi;
+    s32 topRi;
+    s32 topGi;
+    s32 topBi;
+    s32 quadRi;
+    s32 quadGi;
+    s32 quadBi;
 
-    switch (work->type) {
+    /*
+     * The lexical order is deliberate.  MWCC allocates these address-taken
+     * aggregates in reverse, matching the target's +0xBC/+0x8C/+0x5C/+0x2C
+     * matrix regions, followed by GXTexObj at +0x0C and the packed color word
+     * at +0x08.
+     */
+    f32 tempMtx[3][4];
+    f32 scaleMtx[3][4];
+    f32 rotMtx[3][4];
+    f32 rootMtx[3][4];
+    u8 texObj[32];
+    SplashColor baseColor;
+
+    work = *(EffSplashWork**)((u8*)entry + 0xC);
+    viewCamera = (u8*)camGetPtr(cameraId);
+    type = work->type;
+    baseColor.word = *(u32*)&work->r;
+
+    first = 0;
+    switch (type) {
         case 0:
         case 1:
         case 4:
@@ -510,16 +616,15 @@ void effSplashDisp(s32 cameraId, void* entry) {
             first = 6;
             break;
     }
-    PSMTXTrans(trans, work->pos.x, work->pos.y, work->pos.z);
-    camera = camGetPtr(4);
-    cameraAngle = *(f32*)(camera + 0x114);
-    cameraAngle = -cameraAngle;
-    degreesToRadians = 0.017453292f;
-    PSMTXRotRad(rot, 'y', degreesToRadians * cameraAngle);
-    PSMTXScale(scale, work->scale.x, work->scale.y, work->scale.z);
-    PSMTXConcat(trans, rot, baseMtx);
-    PSMTXConcat(baseMtx, scale, baseMtx);
-    PSMTXConcat(viewCamera + 0x11C, baseMtx, baseMtx);
+
+    PSMTXTrans(tempMtx, work->pos.x, work->pos.y, work->pos.z);
+    camera = (u8*)camGetPtr(4);
+    PSMTXRotRad(rotMtx, 'y',
+                0.017453292f * -*(f32*)(camera + 0x114));
+    PSMTXScale(scaleMtx, work->scale.x, work->scale.y, work->scale.z);
+    PSMTXConcat(tempMtx, rotMtx, rootMtx);
+    PSMTXConcat(rootMtx, scaleMtx, rootMtx);
+    PSMTXConcat(viewCamera + 0x11C, rootMtx, rootMtx);
 
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
@@ -539,49 +644,269 @@ void effSplashDisp(s32 cameraId, void* entry) {
     GXSetVtxAttrFmt(0, 11, 1, 5, 0);
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
 
-    for (i = first; i < count; i++) {
-        Work* child = work + i;
-        u32 color;
+    child = work + 1;
+    for (fixedIndex = 1; fixedIndex < first + 1; fixedIndex++, child++) {
         if (child->timer != 0) {
             continue;
         }
-        PSMTXTrans(trans, child->pos.x, child->pos.y, child->pos.z);
-        PSMTXRotRad(rot, 'y', 0.017453292f * -*(f32*)(camera + 0x114));
-        PSMTXScale(scale, child->scale.x, child->scale.y, child->scale.z);
-        PSMTXConcat(trans, rot, trans);
-        PSMTXConcat(trans, scale, trans);
-        PSMTXConcat(baseMtx, trans, model);
-        GXLoadPosMtxImm(model, 0);
+
+        PSMTXTrans(tempMtx, child->pos.x, child->pos.y, child->pos.z);
+        PSMTXScale(scaleMtx, child->scale.x, child->scale.y, child->scale.z);
+        PSMTXConcat(tempMtx, scaleMtx, tempMtx);
+        PSMTXConcat(rootMtx, tempMtx, tempMtx);
+        GXLoadPosMtxImm(tempMtx, 0);
         GXSetCurrentMtx(0);
-        effGetTexObj(0x40, tex);
-        GXLoadTexObj(tex, 0);
-        PSMTXIdentity(trans);
-        GXLoadTexMtxImm(trans, 0x1E, 1);
-        color = *(u32*)&child->r;
-        GXBegin(0x80, 0, 4);
-        *(volatile f32*)0xCC008000 = -1.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile u32*)0xCC008000 = color;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile u32*)0xCC008000 = color;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = -1.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile u32*)0xCC008000 = color;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
-        *(volatile f32*)0xCC008000 = -1.0f;
-        *(volatile f32*)0xCC008000 = -1.0f;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile u32*)0xCC008000 = color;
-        *(volatile f32*)0xCC008000 = 0.0f;
-        *(volatile f32*)0xCC008000 = 1.0f;
+
+        switch (type) {
+            case 0:
+            case 1:
+            case 2:
+            case 4:
+                effGetTexObj(0x41, texObj);
+                GXLoadTexObj(texObj, 0);
+                break;
+
+            case 3:
+                effGetTexObj(0x43, texObj);
+                GXLoadTexObj(texObj, 0);
+                break;
+        }
+
+        switch (type) {
+            case 0:
+            case 1:
+            case 4:
+                scroll = (f32)*(u32*)((u8*)gp + 0x1C) / float_20_80427864;
+                PSMTXTrans(tempMtx, scroll, float_0_80427868, float_0_80427868);
+                break;
+
+            case 2:
+                scroll = (f32)*(u32*)((u8*)gp + 0x1C) / float_40_8042786c;
+                PSMTXTrans(tempMtx, scroll, float_0_80427868, float_0_80427868);
+                break;
+
+            case 3:
+                scroll = (f32)*(u32*)((u8*)gp + 0x1C) / float_10_80427870;
+                PSMTXTrans(tempMtx, scroll, float_0_80427868, float_0_80427868);
+                break;
+        }
+
+        GXLoadTexMtxImm(tempMtx, 0x1E, 1);
+
+        switch (type) {
+            case 0:
+            case 2:
+                outerRadius = float_23_80427874;
+                innerRadius = float_15_80427878;
+                lowerY = float_neg37_8042787c;
+                break;
+
+            case 1:
+                if (fixedIndex == 1) {
+                    outerRadius = float_1p8_80427880;
+                    innerRadius = float_6_80427884;
+                    lowerY = float_neg85_80427888;
+                } else {
+                    outerRadius = float_11p6_8042788c;
+                    innerRadius = float_11p6_8042788c;
+                    lowerY = float_neg21_80427890;
+                }
+                break;
+
+            case 4:
+                if (fixedIndex == 1) {
+                    outerRadius = float_10_80427870;
+                    innerRadius = float_10_80427870;
+                    lowerY = float_neg20_80427894;
+                } else {
+                    outerRadius = float_15_80427878;
+                    innerRadius = float_12_80427898;
+                    lowerY = float_neg10_8042789c;
+                }
+                break;
+        }
+
+        if (type != 3) {
+            if (type == 2) {
+                topR = float_1_804278a0;
+                topG = float_0p869_804278a8;
+                topB = float_0_80427868;
+                bottomR = float_1_804278a0;
+                bottomG = float_0p314_804278ac;
+                bottomB = float_0_80427868;
+            } else {
+                bottomR = (f32)baseColor.c.r;
+                bottomG = (f32)baseColor.c.g;
+                bottomB = (f32)baseColor.c.b;
+                bottomR /= float_255_804278a4;
+                bottomG /= float_255_804278a4;
+                bottomB /= float_255_804278a4;
+                topR = float_1_804278a0;
+                topG = float_1_804278a0;
+                topB = float_1_804278a0;
+            }
+
+            botRi = (s32)(float_255_804278a4 * bottomR);
+            botGi = (s32)(float_255_804278a4 * bottomG);
+            botBi = (s32)(float_255_804278a4 * bottomB);
+
+            GXBegin(0x98, 0, 0x12);
+            for (j = 0; j < 9; j++) {
+                fi = (f32)j;
+                angle = float_6p2832_804278b0 * fi * float_0p125_804278b4;
+                c = (f32)cos((f64)angle);
+                s = (f32)sin((f64)angle);
+
+                SPLASH_FIFO_F(outerRadius * s);
+                SPLASH_FIFO_F(float_0_80427868);
+                SPLASH_FIFO_F(outerRadius * c);
+                topRi = (s32)(float_255_804278a4 * topR);
+                topGi = (s32)(float_255_804278a4 * topG);
+                topBi = (s32)(float_255_804278a4 * topB);
+                SPLASH_FIFO_B(topRi);
+                SPLASH_FIFO_B(topGi);
+                SPLASH_FIFO_B(topBi);
+                SPLASH_FIFO_B(0xFF);
+                texS = (f32)(j & 1);
+                SPLASH_FIFO_F(texS);
+                SPLASH_FIFO_F(float_0p1_804278b8);
+
+                c = (f32)cos((f64)angle);
+                s = (f32)sin((f64)angle);
+                SPLASH_FIFO_F(innerRadius * s);
+                SPLASH_FIFO_F(lowerY);
+                SPLASH_FIFO_F(innerRadius * c);
+                SPLASH_FIFO_B(botRi);
+                SPLASH_FIFO_B(botGi);
+                SPLASH_FIFO_B(botBi);
+                SPLASH_FIFO_B(0xFF);
+                texS = (f32)(j & 1);
+                SPLASH_FIFO_F(texS);
+                SPLASH_FIFO_F(float_2p1_804278bc);
+            }
+        } else {
+            geso_shibuki_color0_tbl[0] = baseColor.word;
+
+            GXClearVtxDesc();
+            GXSetVtxDesc(9, 2);
+            GXSetVtxAttrFmt(0, 9, 1, 3, 8);
+            GXSetArray(9, geso_shibuki_vertex_tbl, 6);
+
+            GXSetVtxDesc(10, 2);
+            GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+            GXSetArray(10, geso_shibuki_normal_tbl, 3);
+
+            GXSetVtxDesc(11, 2);
+            GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+            GXSetArray(11, geso_shibuki_color0_tbl, 4);
+
+            GXSetVtxDesc(13, 2);
+            GXSetVtxAttrFmt(0, 13, 1, 3, 0xE);
+            GXSetArray(13, geso_shibuki_texcoord0_tbl, 4);
+
+            for (j = 0; j < 5; j++) {
+                GXCallDisplayList(geso_shibuki_dl_0_tbl[j],
+                                  (u32)geso_shibuki_dl_0_size_tbl[j] << 5);
+            }
+        }
     }
+
+    GXSetCullMode(0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(11, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+
+    quadNeg = -1.0f;
+    count = *(s32*)((u8*)entry + 8);
+
+    for (i = first + 1; i < count; i++, child++) {
+        if (child->timer != 0) {
+            continue;
+        }
+
+        PSMTXTrans(tempMtx, child->pos.x, child->pos.y, child->pos.z);
+        camera = (u8*)camGetPtr(4);
+        PSMTXRotRad(rotMtx, 'y',
+                    0.017453292f * -*(f32*)(camera + 0x114));
+        PSMTXScale(scaleMtx, child->scale.x, child->scale.y, child->scale.z);
+        PSMTXConcat(tempMtx, rotMtx, tempMtx);
+        PSMTXConcat(tempMtx, scaleMtx, tempMtx);
+        PSMTXConcat(rootMtx, tempMtx, tempMtx);
+        GXLoadPosMtxImm(tempMtx, 0);
+        GXSetCurrentMtx(0);
+
+        effGetTexObj(0x40, texObj);
+        GXLoadTexObj(texObj, 0);
+        PSMTXIdentity(tempMtx);
+        GXLoadTexMtxImm(tempMtx, 0x1E, 1);
+
+        if (type == 2) {
+            quadR = 1.0f;
+            quadG = float_0p869_804278a8;
+            quadB = 0.0f;
+        } else {
+            quadR = (f32)baseColor.c.r;
+            quadG = (f32)baseColor.c.g;
+            quadB = (f32)baseColor.c.b;
+            quadR = (float_1_804278a0 + quadR / float_255_804278a4) *
+                    float_0p5_804278c4;
+            quadG = (float_1_804278a0 + quadG / float_255_804278a4) *
+                    float_0p5_804278c4;
+            quadB = (float_1_804278a0 + quadB / float_255_804278a4) *
+                    float_0p5_804278c4;
+        }
+
+        quadRi = (s32)(float_255_804278a4 * quadR);
+        quadGi = (s32)(float_255_804278a4 * quadG);
+        quadBi = (s32)(float_255_804278a4 * quadB);
+
+        GXBegin(0x80, 0, 4);
+
+        SPLASH_FIFO_F(quadNeg * float_4_804278c8);
+        SPLASH_FIFO_F(float_4_804278c8);
+        SPLASH_FIFO_F(float_0_80427868);
+        SPLASH_FIFO_B(quadRi);
+        SPLASH_FIFO_B(quadGi);
+        SPLASH_FIFO_B(quadBi);
+        SPLASH_FIFO_B(0xFF);
+        SPLASH_FIFO_F(float_0_80427868);
+        SPLASH_FIFO_F(float_0_80427868);
+
+        SPLASH_FIFO_F(float_4_804278c8);
+        SPLASH_FIFO_F(float_4_804278c8);
+        SPLASH_FIFO_F(float_0_80427868);
+        SPLASH_FIFO_B(quadRi);
+        SPLASH_FIFO_B(quadGi);
+        SPLASH_FIFO_B(quadBi);
+        SPLASH_FIFO_B(0xFF);
+        SPLASH_FIFO_F(float_1_804278a0);
+        SPLASH_FIFO_F(float_0_80427868);
+
+        SPLASH_FIFO_F(float_4_804278c8);
+        SPLASH_FIFO_F(quadNeg * float_4_804278c8);
+        SPLASH_FIFO_F(float_0_80427868);
+        SPLASH_FIFO_B(quadRi);
+        SPLASH_FIFO_B(quadGi);
+        SPLASH_FIFO_B(quadBi);
+        SPLASH_FIFO_B(0xFF);
+        SPLASH_FIFO_F(float_1_804278a0);
+        SPLASH_FIFO_F(float_1_804278a0);
+
+        SPLASH_FIFO_F(quadNeg * float_4_804278c8);
+        SPLASH_FIFO_F(quadNeg * float_4_804278c8);
+        SPLASH_FIFO_F(float_0_80427868);
+        SPLASH_FIFO_B(quadRi);
+        SPLASH_FIFO_B(quadGi);
+        SPLASH_FIFO_B(quadBi);
+        SPLASH_FIFO_B(0xFF);
+        SPLASH_FIFO_F(float_0_80427868);
+        SPLASH_FIFO_F(float_1_804278a0);
+    }
+
+#undef SPLASH_FIFO_B
+#undef SPLASH_FIFO_F
 }

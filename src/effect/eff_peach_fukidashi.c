@@ -27,13 +27,22 @@ void* effPeachFukidashiEntry(s32 flags, void* owner, s32 timer, double unused0, 
     } Vec;
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
+    extern void* camGetPtr(s32 cameraId);
+    extern void* marioGetPtr(void);
+    extern double sin(double x);
+    extern double cos(double x);
     extern void PSMTXRotAxisRad(Mtx m, Vec* axis, f32 angle);
     extern void effPeachFukidashiMain(void* effect);
     extern const char str_PeachFukidashi_802fe59c[];
+    extern u32 vec3_802fe570[];
+    extern f32 float_deg2rad_80426f6c;
+    extern f32 float_0p5_80426f70;
+    extern f32 float_16_80426f74;
     void* entry;
     s32 work;
     void* cam;
     void* baseObj;
+    Vec axisTemp;
     Vec axis;
     Vec base;
     Mtx axisMtx;
@@ -54,24 +63,19 @@ void* effPeachFukidashiEntry(s32 flags, void* owner, s32 timer, double unused0, 
     *(void**)(work + 0x20) = owner;
 
     cam = camGetPtr(4);
-    axis.x = ((f32*)vec3_802fe570)[0];
-    axis.y = ((f32*)vec3_802fe570)[1];
-    axis.z = ((f32*)vec3_802fe570)[2];
-    axis.x = (f32)sin((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
-    axis.z = -(f32)cos((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axisTemp = *(Vec*)vec3_802fe570;
+    axisTemp.x = (f32)sin((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axisTemp.z = -(f32)cos((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axis = axisTemp;
 
     dist = float_0p5_80426f70 * (float_16_80426f74 + *(f32*)(work + 0x14));
     baseObj = *(void**)(work + 0x20);
     if (baseObj != 0) {
-        base.x = *(f32*)((s32)baseObj + 0x8C);
-        base.y = *(f32*)((s32)baseObj + 0x90);
-        base.z = *(f32*)((s32)baseObj + 0x94);
+        base = *(Vec*)((s32)baseObj + 0x8C);
         ownerY = *(f32*)((s32)baseObj + 0x150);
     } else {
         baseObj = marioGetPtr();
-        base.x = *(f32*)((s32)baseObj + 0x8C);
-        base.y = *(f32*)((s32)baseObj + 0x90);
-        base.z = *(f32*)((s32)baseObj + 0x94);
+        base = *(Vec*)((s32)baseObj + 0x8C);
         ownerY = *(f32*)((s32)baseObj + 0x1BC);
     }
 
@@ -105,6 +109,10 @@ void effPeachFukidashiDisp(s32 cameraId, void* effect) {
         f32 z;
     } Vec;
 
+    extern void* camGetPtr(s32 cameraId);
+    extern void* marioGetPtr(void);
+    extern double sin(double x);
+    extern double cos(double x);
     extern void PSMTXRotAxisRad(Mtx m, Vec* axis, f32 angle);
     extern void PSMTXTrans(Mtx m, double x, double y, double z);
     extern void PSMTXRotRad(Mtx m, double angle, char axis);
@@ -115,8 +123,12 @@ void effPeachFukidashiDisp(s32 cameraId, void* effect) {
     extern void FontDrawColor(void* color);
     extern void FontDrawStringMtx(void* mtx, char* str);
 
+    extern u32 vec3_802fe570[];
     extern u32 dat_802fe57c[];
     extern u32 dat_80426f68;
+    extern f32 float_deg2rad_80426f6c;
+    extern f32 float_0p5_80426f70;
+    extern f32 float_16_80426f74;
     extern f32 float_0p4_80426f78;
     extern f32 float_0p34_80426f7c;
     extern f32 float_40_80426f80;
@@ -135,9 +147,14 @@ void effPeachFukidashiDisp(s32 cameraId, void* effect) {
     s32 work;
     void* cam;
     void* owner;
-    Vec axis;
-    Vec base;
-    Mtx axisMtx;
+    Vec axisTemp1;
+    Vec axis1;
+    Vec base1;
+    Vec axisTemp2;
+    Vec axis2;
+    Vec base2;
+    Mtx axisMtx1;
+    Mtx axisMtx2;
     Mtx transMtx;
     Mtx rotMtx;
     Mtx viewMtx;
@@ -157,33 +174,28 @@ void effPeachFukidashiDisp(s32 cameraId, void* effect) {
     camGetPtr(cameraId);
     cam = camGetPtr(4);
 
-    axis.x = ((f32*)vec3_802fe570)[0];
-    axis.y = ((f32*)vec3_802fe570)[1];
-    axis.z = ((f32*)vec3_802fe570)[2];
+    axisTemp1 = *(Vec*)vec3_802fe570;
 
-    axis.x = (f32)sin((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
-    axis.z = -(f32)cos((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axisTemp1.x = (f32)sin((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axisTemp1.z = -(f32)cos((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axis1 = axisTemp1;
 
     dist = float_0p5_80426f70 * (float_16_80426f74 + *(f32*)(work + 0x14));
     owner = *(void**)(work + 0x20);
     if (owner != 0) {
-        base.x = *(f32*)((s32)owner + 0x8C);
-        base.y = *(f32*)((s32)owner + 0x90);
-        base.z = *(f32*)((s32)owner + 0x94);
+        base1 = *(Vec*)((s32)owner + 0x8C);
         ownerY = *(f32*)((s32)owner + 0x150);
     } else {
         owner = marioGetPtr();
-        base.x = *(f32*)((s32)owner + 0x8C);
-        base.y = *(f32*)((s32)owner + 0x90);
-        base.z = *(f32*)((s32)owner + 0x94);
+        base1 = *(Vec*)((s32)owner + 0x8C);
         ownerY = *(f32*)((s32)owner + 0x1BC);
     }
 
-    PSMTXRotAxisRad(axisMtx, &axis, float_deg2rad_80426f6c * -*(f32*)(work + 0x10));
+    PSMTXRotAxisRad(axisMtx1, &axis1, float_deg2rad_80426f6c * -*(f32*)(work + 0x10));
 
-    *(f32*)(work + 0x4) = axisMtx[0][1] * dist + base.x;
-    *(f32*)(work + 0x8) = axisMtx[1][1] * dist + base.y + ownerY;
-    *(f32*)(work + 0xC) = axisMtx[2][1] * dist + base.z;
+    *(f32*)(work + 0x4) = axisMtx1[0][1] * dist + base1.x;
+    *(f32*)(work + 0x8) = axisMtx1[1][1] * dist + base1.y + ownerY;
+    *(f32*)(work + 0xC) = axisMtx1[2][1] * dist + base1.z;
     *(f32*)(work + 0x18) = *(f32*)(work + 0x10);
 
     PSMTXTrans(
@@ -205,33 +217,28 @@ void effPeachFukidashiDisp(s32 cameraId, void* effect) {
 
     cam = camGetPtr(4);
 
-    axis.x = ((f32*)vec3_802fe570)[0];
-    axis.y = ((f32*)vec3_802fe570)[1];
-    axis.z = ((f32*)vec3_802fe570)[2];
+    axisTemp2 = *(Vec*)vec3_802fe570;
 
-    axis.x = (f32)sin((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
-    axis.z = -(f32)cos((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axisTemp2.x = (f32)sin((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axisTemp2.z = -(f32)cos((double)(float_deg2rad_80426f6c * *(f32*)((s32)cam + 0x114)));
+    axis2 = axisTemp2;
 
     dist = float_0p5_80426f70 * (float_40_80426f80 + *(f32*)(work + 0x14));
     owner = *(void**)(work + 0x20);
     if (owner != 0) {
-        base.x = *(f32*)((s32)owner + 0x8C);
-        base.y = *(f32*)((s32)owner + 0x90);
-        base.z = *(f32*)((s32)owner + 0x94);
+        base2 = *(Vec*)((s32)owner + 0x8C);
         ownerY = *(f32*)((s32)owner + 0x150);
     } else {
         owner = marioGetPtr();
-        base.x = *(f32*)((s32)owner + 0x8C);
-        base.y = *(f32*)((s32)owner + 0x90);
-        base.z = *(f32*)((s32)owner + 0x94);
+        base2 = *(Vec*)((s32)owner + 0x8C);
         ownerY = *(f32*)((s32)owner + 0x1BC);
     }
 
-    PSMTXRotAxisRad(axisMtx, &axis, float_deg2rad_80426f6c * -*(f32*)(work + 0x10));
+    PSMTXRotAxisRad(axisMtx2, &axis2, float_deg2rad_80426f6c * -*(f32*)(work + 0x10));
 
-    *(f32*)(work + 0x4) = axisMtx[0][1] * dist + base.x;
-    *(f32*)(work + 0x8) = axisMtx[1][1] * dist + base.y + ownerY;
-    *(f32*)(work + 0xC) = axisMtx[2][1] * dist + base.z;
+    *(f32*)(work + 0x4) = axisMtx2[0][1] * dist + base2.x;
+    *(f32*)(work + 0x8) = axisMtx2[1][1] * dist + base2.y + ownerY;
+    *(f32*)(work + 0xC) = axisMtx2[2][1] * dist + base2.z;
     *(f32*)(work + 0x18) = *(f32*)(work + 0x10);
 
     rise = (float_1p5_80426f8c * *(f32*)(work + 0x10)) / float_90_80426f90;

@@ -22,6 +22,11 @@ extern f32 float_2_8042421c;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 battle_evt_majo_disp_on(void* evt, s32 isFirstCall) {
+    typedef struct MajoDispPos {
+        f32 x;
+        f32 y;
+        f32 z;
+    } MajoDispPos;
     extern void animPoseSetPaperAnimGroup(s32 poseId, char* group, s32 flags);
     extern f32 float_200_80424228;
     extern f32 float_0p66667_8042422c;
@@ -35,6 +40,7 @@ s32 battle_evt_majo_disp_on(void* evt, s32 isFirstCall) {
     void* unit;
     void* parts;
     s32 poseId;
+    MajoDispPos pos;
 
     args = *(s32**)((s32)evt + 0x18);
     unitId = BattleTransID(evt, evtGetValue(evt, args[0]));
@@ -52,9 +58,11 @@ s32 battle_evt_majo_disp_on(void* evt, s32 isFirstCall) {
         *(s32*)((s32)evt + 0x7C) = 0;
         *(s32*)((s32)evt + 0x80) = 0;
         *(s32*)((s32)evt + 0x84) = 0;
-        *(f32*)((s32)unit + 0x3C) = x;
-        *(f32*)((s32)unit + 0x40) = y - float_200_80424228;
-        *(f32*)((s32)unit + 0x44) = z;
+        pos = *(MajoDispPos*)((s32)unit + 0xEC);
+        pos.x = x;
+        pos.y = y - float_200_80424228;
+        pos.z = z;
+        *(MajoDispPos*)((s32)unit + 0x3C) = pos;
         animEffectAsync(str_PTR_D_4_802f84d0 + 0x3E8, 1);
     }
 
@@ -223,52 +231,69 @@ void __makeTechMenuFunc(void* commandWork, s32* count) {
     s32 techLv;
     void* party;
     u8* data;
+    u8* entry;
 
     party = BattleGetPartyPtr(_battleWorkPointer);
     techLv = partyGetTechLv(BattleTransPartyId(*(s32*)((s32)party + 8)));
 
     data = lbl_8038B6B0;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-    *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x830;
-    *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-    *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-        *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-    *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-        msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x90) = -1;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x94) = 0;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(void**)(entry + 0x80) = data + 0x830;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(s32*)(entry + 0x84) = 0;
+    entry = (u8*)commandWork + *count * 0x1C;
+    *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+    *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+        msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
     *count = *count + 1;
 
     if (techLv >= 0) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x8F0;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x94) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(void**)(entry + 0x80) = data + 0x8F0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x84) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+        *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
     if (techLv >= 1) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0x9B0;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x94) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(void**)(entry + 0x80) = data + 0x9B0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x84) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+        *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
     if (techLv >= 2) {
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x90) = -1;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x94) = 0;
-        *(void**)((s32)commandWork + *count * 0x1C + 0x80) = data + 0xA70;
-        *(s32*)((s32)commandWork + *count * 0x1C + 0x84) = 0;
-        *(u16*)((s32)commandWork + *count * 0x1C + 0x8C) =
-            *(u16*)(*(s32*)((s32)commandWork + *count * 0x1C + 0x80) + 4);
-        *(void**)((s32)commandWork + *count * 0x1C + 0x88) =
-            msgSearch(**(char***)((s32)commandWork + *count * 0x1C + 0x80));
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x90) = -1;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x94) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(void**)(entry + 0x80) = data + 0xA70;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(s32*)(entry + 0x84) = 0;
+        entry = (u8*)commandWork + *count * 0x1C;
+        *(u16*)(entry + 0x8C) = *(u16*)(*(u8**)(entry + 0x80) + 4);
+        *(void**)((u8*)commandWork + *count * 0x1C + 0x88) =
+            msgSearch(**(char***)((u8*)commandWork + *count * 0x1C + 0x80));
         *count = *count + 1;
     }
 }

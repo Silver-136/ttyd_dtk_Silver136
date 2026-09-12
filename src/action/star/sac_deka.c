@@ -74,20 +74,22 @@ void yuka_init(void) {
     extern void* smartAlloc(u32 size, s32 type);
     extern void dispEntry(s32 camera, s32 renderMode, void* callback, void* param, f32 order);
     extern f32 float_0p0078125_80428444;
-    extern f32 vec3_80300e98[], vec3_80300ea4[], vec3_80300eb0[];
+    extern f32 vec3_80300e98[];
+    u8* data = (u8*)vec3_80300e98;
     u8* work = (u8*)get_ptr();
-    u8* map = (u8*)mapGetMapObj(str_stg_b_yuka_80301050);
-    u8* joint = *(u8**)(map + 8);
+    u8* map = (u8*)mapGetMapObj((const char*)(data + 0x1B8));
     u8* memory;
     s32 width, height, row, column;
     u32 textureSize;
-    mapGrpFlagOn(str_stg_b_yuka_80301050, 0x400001);
-    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(joint + 0x3C), (Vec*)(work + 4));
-    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(joint + 0x48), (Vec*)(work + 0x10));
+    mapGrpFlagOn((const char*)(data + 0x1B8), 0x400001);
+    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(*(u8**)(map + 8) + 0x3C), (Vec*)(work + 4));
+    PSMTXMultVec((f32(*)[4])(map + 0x1C), (Vec*)(*(u8**)(map + 8) + 0x48), (Vec*)(work + 0x10));
     width = (s32)(*(f32*)(work + 0x10) - *(f32*)(work + 4));
-    *(s32*)(work + 0x1C) = width; *(s32*)(work + 0x24) = width;
+    *(s32*)(work + 0x24) = width;
+    *(s32*)(work + 0x1C) = width;
     height = (s32)(*(f32*)(work + 0x18) - *(f32*)(work + 0xC));
-    *(s32*)(work + 0x20) = height; *(s32*)(work + 0x28) = height;
+    *(s32*)(work + 0x28) = height;
+    *(s32*)(work + 0x20) = height;
     *(u32*)(work + 0x24) += *(u32*)(work + 0x24) & 1;
     *(u32*)(work + 0x28) += *(u32*)(work + 0x28) & 1;
     if (*(s32*)(work + 0x24) > 0x260) *(s32*)(work + 0x24) = 0x260;
@@ -101,9 +103,16 @@ void yuka_init(void) {
             f32* vertex = (f32*)(memory + row * 0x60C + column * 0xC);
             f32 x = *(f32*)(work + 4) + (f32)*(s32*)(work + 0x1C) * float_0p0078125_80428444 * (f32)column;
             f32 z = *(f32*)(work + 0xC) + (f32)*(s32*)(work + 0x20) * (f32)row;
-            vertex[0] = x; vertex[1] = vec3_80300ea4[1]; vertex[2] = z;
-            vertex[0x306] = x; vertex[0x307] = vec3_80300e98[1]; vertex[0x308] = z;
-            vertex[0x60C] = vec3_80300eb0[0]; vertex[0x60D] = vec3_80300eb0[1]; vertex[0x60E] = vec3_80300eb0[2];
+            Vec upper = *(Vec*)(data + 0x00);
+            Vec lower = *(Vec*)(data + 0x0C);
+            Vec velocity = *(Vec*)(data + 0x18);
+            upper.x = x;
+            upper.z = z;
+            lower.x = x;
+            lower.z = z;
+            *(Vec*)(vertex + 0x306) = upper;
+            *(Vec*)vertex = lower;
+            *(Vec*)(vertex + 0x60C) = velocity;
             *(f32*)(memory + 0x3060 + row * 0x204 + column * 4) = float_0p0078125_80428444 * (f32)column;
             *(f32*)(memory + 0x3468 + row * 0x204 + column * 4) = (f32)row;
         }
@@ -236,6 +245,8 @@ USER_FUNC(yuka_end) {
 
 /* stub-fill: main_base | prototype_only | source_prototype */
 void main_base(void) {
+    extern void* get_ptr(void);
+    extern void create_timing(void);
     extern u32 psndSFXOn(const char* name);
     extern void psndSFXOff(u32 id);
     extern void psndSFX_pit(u32 id, s32 pitch);
@@ -256,11 +267,26 @@ void main_base(void) {
     s32 i;
     s32 j;
 
-    if (state != 3) {
-        if (state > 2) {
-            if (state == 5 || state > 4) {
+    switch (state) {
+        case 1:
+            *(s32*)(work + 0x30) = 2;
+            *(u32*)(work + 0x40) = 1;
+            *(s32*)(work + 0x44) = 0;
+            *(f32*)(work + 0x38) = 180.0f;
+            *(f32*)(work + 0x3C) = 0.0f;
+            create_timing();
+            *(s32*)(work + 0x50) = 1;
+            /* fallthrough */
+        case 2:
+            if (*(s32*)(work + 0x50) != 3) {
                 return;
             }
+            *(s32*)(work + 0x30) = 3;
+            *(u32*)(work + 0x6C) = psndSFXOn(str_SFX_BTL_SAC_DOKKAN1__80301010);
+            break;
+        case 3:
+            break;
+        case 4:
             *(s32*)(work + 0x34) -= 1;
             *(f32*)(work + 0x4C) =
                 (f32)intplGetValue(-40.0, 0.0, 0,
@@ -271,23 +297,8 @@ void main_base(void) {
             *(s32*)(work + 0x30) = 3;
             *(u32*)(work + 0x6C) = psndSFXOn(str_SFX_BTL_SAC_DOKKAN1__80301010);
             return;
-        }
-        if (state == 1) {
-            *(s32*)(work + 0x30) = 2;
-            *(u32*)(work + 0x40) = 1;
-            *(s32*)(work + 0x44) = 0;
-            *(f32*)(work + 0x38) = 180.0f;
-            *(f32*)(work + 0x3C) = 0.0f;
-            create_timing();
-            *(s32*)(work + 0x50) = 1;
-        } else if (state < 1) {
+        default:
             return;
-        }
-        if (*(s32*)(work + 0x50) != 3) {
-            return;
-        }
-        *(s32*)(work + 0x30) = 3;
-        *(u32*)(work + 0x6C) = psndSFXOn(str_SFX_BTL_SAC_DOKKAN1__80301010);
     }
 
     if (*(s32*)(work + 0x50) == 3) {
@@ -299,7 +310,7 @@ void main_base(void) {
                       (4096.0f * *(f32*)(work + 0x3C)) / *(f32*)(work + 0x38));
         psndSFX_pit(*(u32*)(work + 0x6C), pitch);
 
-        if (*(f32*)(work + 0x38) <= *(f32*)(work + 0x3C)) {
+        if (*(f32*)(work + 0x3C) >= *(f32*)(work + 0x38)) {
             void* event;
             s32 audienceValue;
 
@@ -309,20 +320,20 @@ void main_base(void) {
             *(s32*)(work + 0x3F0) = 6;
             psndSFXOff(*(u32*)(work + 0x6C));
             event = evtEntry(nice_event, 0, 0x20);
-            audienceValue = *(s32*)(work + 0x44) + 1;
-            if (audienceValue >= 6) {
-                audienceValue = 6;
+            audienceValue = 6;
+            if (*(s32*)(work + 0x44) + 1 < 6) {
+                audienceValue = *(s32*)(work + 0x44) + 1;
             }
             *(s32*)((s32)event + 0x9C) = audienceValue;
 
-            if (*(s32*)(work + 0x40) < 6) {
+            if (*(s32*)(work + 0x40) > 5) {
+                *(s32*)(work + 0x30) = 5;
+                *(s32*)(work + 0x50) = 5;
+            } else {
                 *(s32*)(work + 0x30) = 4;
                 *(s32*)(work + 0x34) = 0x1E;
                 *(f32*)(work + 0x4C) = -40.0f;
                 create_timing();
-            } else {
-                *(s32*)(work + 0x30) = 5;
-                *(s32*)(work + 0x50) = 5;
             }
         }
     }
@@ -486,6 +497,7 @@ void main_timing(s32 index) {
 
 /* stub-fill: main_star | prototype_only | source_prototype */
 void main_star(void) {
+    typedef struct Vec { f32 x, y, z; } Vec;
     extern void* _battleWorkPointer;
     extern void* get_ptr(void);
     extern void* BattleGetMarioPtr(void*);
@@ -496,11 +508,22 @@ void main_star(void) {
     extern void BattleAudienceSoundCallKind(s32);
     extern void BattleAudienceSoundWhistleKind(s32);
     extern void psndSFXOn(const char*);
+    extern void btl_camera_shake_h(s32, f32, f32, s32, s32);
     extern const char str_SFX_BTL_SAC_DOKKAN5_80300ffc[];
     extern f32 float_5_804283f8;
     extern f32 float_neg0p5_80428464;
     extern f32 float_40_80428400;
     extern f32 float_255_80428430;
+    extern f32 float_2_80428414;
+    extern f32 float_neg1_8042842c;
+    extern f32 float_43_80428468;
+    extern f32 float_4_804283fc;
+    extern f32 dat_80300f50[6];
+    extern f32 dat_80300f68[6];
+    extern s32 dat_80300ef8[11];
+    extern s32 dat_80300f24[11];
+    extern Vec vec3_80300ee0;
+    extern Vec vec3_80300eec;
     u8* work = get_ptr();
     u8* mario = BattleGetMarioPtr(_battleWorkPointer);
     s32 timer;
@@ -520,12 +543,8 @@ void main_star(void) {
         *(f32*)(work + 0x414) = *(f32*)(work + 0x3FC);
         *(f32*)(work + 0x418) = *(f32*)(work + 0x400) + 50.0f;
         *(f32*)(work + 0x41C) = *(f32*)(work + 0x404) - 1.0f;
-        *(f32*)(work + 0x42C) = 0.0f;
-        *(f32*)(work + 0x430) = 0.0f;
-        *(f32*)(work + 0x434) = 0.0f;
-        *(f32*)(work + 0x438) = 0.0f;
-        *(f32*)(work + 0x43C) = 0.0f;
-        *(f32*)(work + 0x440) = 0.0f;
+        *(Vec*)(work + 0x42C) = vec3_80300ee0;
+        *(Vec*)(work + 0x438) = vec3_80300eec;
         /* fallthrough */
     case 2:
         timer = ++*(s32*)(work + 0x3F4);
@@ -585,11 +604,16 @@ void main_star(void) {
             BattleAudienceSoundWhistleKind(3);
         }
         /* fallthrough */
-    case 7:
+    case 7: {
+        s32 bounceTiming[11];
+        s32 copyIndex;
+        for (copyIndex = 0; copyIndex < 11; copyIndex++) {
+            bounceTiming[copyIndex] = dat_80300ef8[copyIndex];
+        }
         timer = ++*(s32*)(work + 0x3F4);
         *(f32*)(work + 0x42C) = (f32)intplGetValue(
             *(f32*)(work + 0x444), *(f32*)(work + 0x448), 4,
-            timer >> 2, 5);
+            bounceTiming[timer >> 2], 5);
         *(f32*)(work + 0x430) = *(f32*)(work + 0x42C);
         *(f32*)(work + 0x434) = *(f32*)(work + 0x42C);
         *(f32*)(work + 0x400) =
@@ -602,17 +626,23 @@ void main_star(void) {
             *(f32*)(work + 0x434) = *(f32*)(work + 0x448);
         }
         break;
+    }
     case 8:
         *(s32*)(work + 0x3F0) = 9;
         *(s32*)(work + 0x3F4) = 0;
         *(f32*)(work + 0x444) = *(f32*)(work + 0x42C);
         *(f32*)(work + 0x448) = 2.0f;
         /* fallthrough */
-    case 9:
+    case 9: {
+        s32 bounceTiming[11];
+        s32 copyIndex;
+        for (copyIndex = 0; copyIndex < 11; copyIndex++) {
+            bounceTiming[copyIndex] = dat_80300f24[copyIndex];
+        }
         timer = ++*(s32*)(work + 0x3F4);
         *(f32*)(work + 0x42C) = (f32)intplGetValue(
             *(f32*)(work + 0x444), *(f32*)(work + 0x448), 4,
-            timer >> 2, 5);
+            bounceTiming[timer >> 2], 5);
         *(f32*)(work + 0x430) = *(f32*)(work + 0x42C);
         *(f32*)(work + 0x434) = *(f32*)(work + 0x42C);
         *(f32*)(work + 0x400) =
@@ -625,6 +655,7 @@ void main_star(void) {
             *(f32*)(work + 0x434) = *(f32*)(work + 0x448);
         }
         break;
+    }
     case 10:
         *(s32*)(work + 0x3F0) = 11;
         *(f32*)(work + 0x418) = *(f32*)(work + 0x400);
@@ -636,11 +667,42 @@ void main_star(void) {
         *(f32*)(work + 0x400) += *(f32*)(work + 0x424);
         *(f32*)(work + 0x424) += float_neg0p5_80428464;
         if (*(f32*)(work + 0x400) < *(f32*)(work + 0x418)) {
+            f32 shakeScale[6];
+            f32 launchScale[6];
+            s32 side;
+            s32 slot;
+            for (slot = 0; slot < 6; slot++) {
+                shakeScale[slot] = dat_80300f50[slot];
+            }
+            for (slot = 0; slot < 6; slot++) {
+                launchScale[slot] = dat_80300f68[slot];
+            }
             *(s32*)(work + 0x3F8) += 1;
+            btl_camera_shake_h(0, (f32)*(s32*)(work + 0x3F8) *
+                shakeScale[*(s32*)(work + 0x44)], 0.0f, 20, 0);
             psndSFXOn(str_SFX_BTL_SAC_DOKKAN5_80300ffc);
+            for (side = 0; side < 2; side++) {
+                for (slot = 0; slot < 6; slot++) {
+                    if (*(u8*)(work + 0x518 + slot) == 0) {
+                        *(u8*)(work + 0x518 + slot) = 1;
+                        *(f32*)(work + 0x520 + slot * 4) = float_2_80428414;
+                        if (side == 1) {
+                            *(f32*)(work + 0x520 + slot * 4) *= float_neg1_8042842c;
+                        }
+                        *(s32*)(work + 0x538 + slot * 4) = side == 0 ? 42 : 41;
+                        *(f32*)(work + 0x550 + slot * 4) = float_43_80428468;
+                        *(f32*)(work + 0x568 + slot * 4) =
+                            (f32)*(s32*)(work + 0x3F8) *
+                            launchScale[*(s32*)(work + 0x44)] + float_4_804283fc;
+                        break;
+                    }
+                }
+            }
             if (*(s32*)(work + 0x3F8) < 6) {
+                f32 bounce = float_4_804283fc * (f32)*(s32*)(work + 0x3F8) + 20.0f;
                 *(f32*)(work + 0x400) = *(f32*)(work + 0x418);
-                *(f32*)(work + 0x424) = (f32)*(s32*)(work + 0x3F8) + float_5_804283f8;
+                *(f32*)(work + 0x424) =
+                    (0.5f * bounce * bounce) / (float_2_80428414 * bounce);
             } else {
                 *(s32*)(work + 0x3F0) = 12;
                 *(s32*)(work + 0x3F4) = 30;
@@ -688,7 +750,6 @@ void main_star(void) {
 
 void main_enemy(void) {
     extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
-
     void* battleWork;
     void* work;
     void* unit;
@@ -704,9 +765,8 @@ void main_enemy(void) {
             main_enemy_sub(unit, &count);
         }
     }
-    while (count < 10) {
-        *(s32*)((s32)work + 0x450 + count * 4) = -1;
-        count++;
+    for (i = count; i < 10; i++) {
+        *(s32*)((s32)work + 0x450 + i * 4) = -1;
     }
 }
 
@@ -841,69 +901,93 @@ USER_FUNC(end_deka) {
 /* stub-fill: disp_2D | prototype_only | source_prototype */
 void disp_2D(void) {
     typedef f32 Mtx[3][4];
+    typedef union {
+        f64 value;
+        struct { u32 high, low; } words;
+    } IntToDouble;
+    extern void* get_ptr(void);
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void PSMTXScale(Mtx, f32, f32, f32);
     extern void PSMTXConcat(Mtx, Mtx, Mtx);
     extern void btlDispTexPlane2(Mtx, s32, u32*);
     extern void btlDispGXInit2DRasta(void);
-    extern void btlDispGXQuads2DRasta(f64, f64, f64, f64, s32, s32, s32, s32);
+    extern void btlDispGXQuads2DRasta(f32, f32, f32, f32, u8, u8, u8, u8);
+    extern void* camGetPtr(s32);
+    extern void GXLoadPosMtxImm(void*, s32);
     extern void GXSetScissor(s32, s32, s32, s32);
     extern void iconDispGxCol(Mtx, u16, u16, u32*);
+    extern u8* gp;
+    extern u32 dat_804283d8;
+    extern u32 dat_804283dc;
+    extern u32 dat_804283e0;
+    extern f32 float_255_80428430;
+    extern f64 double_to_int_mask_80300fe0;
     u8* work = (u8*)get_ptr();
-    s32 state = *(s32*)(work + 0x50);
-    f32 gaugeWidth = *(f32*)(work + 0x58);
-    f32 centerX = *(f32*)(work + 0x5C);
-    f32 centerY = *(f32*)(work + 0x60);
-    f32 centerZ = *(f32*)(work + 0x64);
-    u8 alpha = *(u8*)(work + 0x68);
-    f32 left = centerX - 0.5f * gaugeWidth - 8.0f;
-    f32 right = centerX + 0.5f * gaugeWidth + 8.0f;
-    u32 color = 0xFFFFFF00 | alpha;
+    f32 left = *(f32*)(work + 0x5C) - 0.5f * *(f32*)(work + 0x58) - 8.0f;
+    f32 right = *(f32*)(work + 0x5C) + 0.5f * *(f32*)(work + 0x58) + 8.0f;
+    u32 color;
     Mtx trans, scale, model;
+    IntToDouble alphaConvert, itemConvert;
     s32 i;
 
-    if (state > 1 && state < 6) {
-        PSMTXTrans(trans, left, centerY, centerZ);
-        btlDispTexPlane2(trans, 0x59, &color);
-        PSMTXScale(scale, gaugeWidth * 0.25f, 1.0f, 1.0f);
-        PSMTXTrans(trans, centerX, centerY, centerZ);
+    if (*(s32*)(work + 0x50) > 1 && *(s32*)(work + 0x50) < 6) {
+        u32 drawColor;
+        color = dat_804283d8;
+        ((u8*)&color)[3] = *(u8*)(work + 0x68);
+        PSMTXTrans(trans, left, *(f32*)(work + 0x60), *(f32*)(work + 0x64));
+        drawColor = color;
+        btlDispTexPlane2(trans, 0x59, &drawColor);
+        PSMTXScale(scale, *(f32*)(work + 0x58) * 0.25f, 1.0f, 1.0f);
+        PSMTXTrans(trans, *(f32*)(work + 0x5C), *(f32*)(work + 0x60), *(f32*)(work + 0x64));
         PSMTXConcat(trans, scale, model);
-        btlDispTexPlane2(model, 0x5A, &color);
+        drawColor = color;
+        btlDispTexPlane2(model, 0x5A, &drawColor);
         PSMTXScale(scale, -1.0f, 1.0f, 1.0f);
-        PSMTXTrans(trans, right, centerY, centerZ);
+        PSMTXTrans(trans, right, *(f32*)(work + 0x60), *(f32*)(work + 0x64));
         PSMTXConcat(trans, scale, model);
-        btlDispTexPlane2(model, 0x59, &color);
-        {
-            f32 ratio = *(f32*)(work + 0x3C) / *(f32*)(work + 0x38);
-            if (ratio >= 0.0f && ratio <= 1.0f) {
-                btlDispGXInit2DRasta();
-                btlDispGXQuads2DRasta(left, centerY + 8.0f,
-                    left + (right - left) * ratio, centerY + 8.0f,
-                    0xFF, 0, 0, alpha);
-            }
+        drawColor = color;
+        btlDispTexPlane2(model, 0x59, &drawColor);
+    }
+    if (*(s32*)(work + 0x50) > 1 && *(s32*)(work + 0x50) < 6) {
+        f32 ratio = *(f32*)(work + 0x3C) / *(f32*)(work + 0x38);
+        if (ratio >= 0.0f && ratio <= 1.0f) {
+            btlDispGXInit2DRasta();
+            GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0);
+            btlDispGXQuads2DRasta(left, *(f32*)(work + 0x60) + 8.0f,
+                left + (right - left) * ratio, *(f32*)(work + 0x60) - 8.0f,
+                0xFF, 0, 0, *(u8*)(work + 0x68));
         }
     }
-    GXSetScissor(0, 0x78, 608, 480);
-    if (state > 1 && state < 6) {
+    GXSetScissor(0, 0x78, *(u16*)(gp + 0x170), *(u16*)(gp + 0x172));
+    if (*(s32*)(work + 0x50) > 1 && *(s32*)(work + 0x50) < 6) {
         f32 span = right - left;
         for (i = 0; i < 8; i++) {
             u8* timing = work + 0x230 + i * 0x38;
             f32 x = *(f32*)(timing + 0x10) +
                 (*(f32*)(timing + 0x0C) / *(f32*)(work + 0x38)) * span + left;
             u8 itemAlpha = *(u8*)(timing + 0x34);
-            u32 itemColor = 0xFFFFFF00 | ((u32)alpha * itemAlpha / 255);
+            u32 itemColor = dat_804283dc;
+            u32 drawColor;
+            alphaConvert.words.high = 0x43300000;
+            alphaConvert.words.low = *(u8*)(work + 0x68);
+            itemConvert.words.high = 0x43300000;
+            itemConvert.words.low = itemAlpha;
+            ((u8*)&itemColor)[3] = (s32)((f32)(alphaConvert.value - double_to_int_mask_80300fe0) *
+                ((f32)(itemConvert.value - double_to_int_mask_80300fe0) / float_255_80428430));
             if (*(s32*)(timing + 8) == 1) {
                 PSMTXScale(scale, 0.75f, 0.75f, 0.75f);
-                PSMTXTrans(trans, x, 40.0f + *(f32*)(work + 0x4C) + centerY - 18.0f +
-                    *(f32*)(timing + 0x14), centerZ + *(f32*)(timing + 0x18));
+                PSMTXTrans(trans, x, 40.0f + *(f32*)(work + 0x4C) + *(f32*)(work + 0x60) - 18.0f +
+                    *(f32*)(timing + 0x14), *(f32*)(work + 0x64) + *(f32*)(timing + 0x18));
                 PSMTXConcat(trans, scale, model);
-                iconDispGxCol(model, 0x10, 0x9D, &itemColor);
+                drawColor = itemColor;
+                iconDispGxCol(model, 0x10, 0x9D, &drawColor);
             } else if (*(s32*)(timing + 8) == 2) {
                 PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
-                PSMTXTrans(trans, x, 40.0f + *(f32*)(work + 0x4C) + centerY +
-                    *(f32*)(timing + 0x14), centerZ + *(f32*)(timing + 0x18));
+                PSMTXTrans(trans, x, 40.0f + *(f32*)(work + 0x4C) + *(f32*)(work + 0x60) +
+                    *(f32*)(timing + 0x14), *(f32*)(work + 0x64) + *(f32*)(timing + 0x18));
                 PSMTXConcat(trans, scale, model);
-                btlDispTexPlane2(model, 0x42, &itemColor);
+                drawColor = itemColor;
+                btlDispTexPlane2(model, 0x42, &drawColor);
             }
         }
         for (i = 0; i < 8; i++) {
@@ -911,32 +995,46 @@ void disp_2D(void) {
             f32 x = *(f32*)(timing + 0x10) +
                 (*(f32*)(timing + 0x0C) / *(f32*)(work + 0x38)) * span + left;
             u8 itemAlpha = *(u8*)(timing + 0x34);
-            u32 itemColor = 0xFFFFFF00 | ((u32)alpha * itemAlpha / 255);
+            u32 itemColor = dat_804283e0;
+            u32 drawColor;
+            alphaConvert.words.high = 0x43300000;
+            alphaConvert.words.low = *(u8*)(work + 0x68);
+            itemConvert.words.high = 0x43300000;
+            itemConvert.words.low = itemAlpha;
+            ((u8*)&itemColor)[3] = (s32)((f32)(alphaConvert.value - double_to_int_mask_80300fe0) *
+                ((f32)(itemConvert.value - double_to_int_mask_80300fe0) / float_255_80428430));
             if (*(s32*)timing > 1 && *(s32*)timing < 6) {
                 if (*(s32*)(timing + 4) == 1) {
                     u16 icon = *(f32*)(work + 0x3C) < *(f32*)(timing + 0x0C) - 7.0f ? 0x99 : 0x9D;
                     PSMTXScale(scale, 0.75f, 0.75f, 0.75f);
-                    PSMTXTrans(trans, x, *(f32*)(work + 0x4C) + centerY - 18.0f +
-                        *(f32*)(timing + 0x14), centerZ + *(f32*)(timing + 0x18));
+                    PSMTXTrans(trans, x, *(f32*)(work + 0x4C) + *(f32*)(work + 0x60) - 18.0f +
+                        *(f32*)(timing + 0x14), *(f32*)(work + 0x64) + *(f32*)(timing + 0x18));
                     PSMTXConcat(trans, scale, model);
-                    iconDispGxCol(model, 0x10, icon, &itemColor);
+                    drawColor = itemColor;
+                    iconDispGxCol(model, 0x10, icon, &drawColor);
                 } else {
                     PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
-                    PSMTXTrans(trans, x, *(f32*)(work + 0x4C) + centerY +
-                        *(f32*)(timing + 0x14), centerZ + *(f32*)(timing + 0x18));
+                    PSMTXTrans(trans, x, *(f32*)(work + 0x4C) + *(f32*)(work + 0x60) +
+                        *(f32*)(timing + 0x14), *(f32*)(work + 0x64) + *(f32*)(timing + 0x18));
                     PSMTXConcat(trans, scale, model);
-                    btlDispTexPlane2(model, 0x42, &itemColor);
+                    drawColor = itemColor;
+                    btlDispTexPlane2(model, 0x42, &drawColor);
                 }
             }
             PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
-            PSMTXTrans(trans, x, centerY + *(f32*)(timing + 0x14) - 40.0f,
-                centerZ + *(f32*)(timing + 0x18));
+            PSMTXTrans(trans, x, *(f32*)(work + 0x60) + *(f32*)(timing + 0x14) - 40.0f,
+                *(f32*)(work + 0x64) + *(f32*)(timing + 0x18));
             PSMTXConcat(trans, scale, model);
-            if (*(u8*)(timing + 0x35) == 1) btlDispTexPlane2(model, 0x54, &itemColor);
-            else if (*(u8*)(timing + 0x35) == 2) btlDispTexPlane2(model, 0x55, &itemColor);
+            if (*(u8*)(timing + 0x35) == 1) {
+                drawColor = itemColor;
+                btlDispTexPlane2(model, 0x54, &drawColor);
+            } else if (*(u8*)(timing + 0x35) == 2) {
+                drawColor = itemColor;
+                btlDispTexPlane2(model, 0x55, &drawColor);
+            }
         }
     }
-    GXSetScissor(0, 0, 608, 480);
+    GXSetScissor(0, 0, *(u16*)(gp + 0x170), *(u16*)(gp + 0x172));
 }
 
 void disp_3D(void) {
@@ -955,11 +1053,11 @@ void yuka_capture(s32 cameraId) {
     extern void* camGetPtr(s32 cameraId);
     extern f64 tan(f64 value);
     extern void C_MTXLookAt(Mtx dst, Vec* pos, Vec* up, Vec* target);
-    extern void C_MTXPerspective(Mtx44 dst, f64 fov, f64 aspect,
-                                f64 nearZ, f64 farZ);
+    extern void C_MTXPerspective(Mtx44 dst, f32 fov, f32 aspect,
+                                f32 nearZ, f32 farZ);
     extern void GXSetProjection(Mtx44 projection, s32 type);
-    extern void GXSetViewport(f64 x, f64 y, f64 width, f64 height,
-                              f64 nearZ, f64 farZ);
+    extern void GXSetViewport(f32 x, f32 y, f32 width, f32 height,
+                              f32 nearZ, f64 farZ);
     extern void GXSetScissor(u32 x, u32 y, u32 width, u32 height);
     extern void test_kururing_mapdisp(s32 cameraId);
     extern void sysWaitDrawSync(void);
@@ -968,35 +1066,35 @@ void yuka_capture(s32 cameraId) {
     extern void GXSetZMode(u8 enable, u32 func, u8 update);
     extern void GXCopyTex(void* destination, u8 clear);
     extern void GXPixModeSync(void);
+    extern f32 float_0p5_804283ec;
     extern f32 float_25_8042841c;
     extern f32 float_1_80428420;
+    extern f32 float_32767_80428404;
+    extern Vec vec3_80300f80[];
 
     u8 cameraCopy[0x260];
     u8* work = (u8*)get_ptr();
     u8* camera = (u8*)camGetPtr(cameraId);
-    Vec* position = (Vec*)(camera + 0xC);
-    Vec* target = (Vec*)(camera + 0x18);
-    Vec* up = (Vec*)(camera + 0x24);
-    f32 half = float_0p5_804283ec;
+    Vec position;
 
     memcpy(cameraCopy, camGetPtr(cameraId), 0x260);
-    up->x = 0.0f;
-    up->y = 1.0f;
-    up->z = 0.0f;
-    position->x = (*(f32*)(work + 4) + *(f32*)(work + 0x10)) * half;
-    position->y = (*(f32*)(work + 8) + *(f32*)(work + 0x14)) * half;
-    position->z = (*(f32*)(work + 0xC) + *(f32*)(work + 0x18)) * half;
-    *target = *position;
-    position->y += ((f32)*(s32*)(work + 0x20) * half) /
+    position.x = (*(f32*)(work + 4) + *(f32*)(work + 0x10)) * float_0p5_804283ec;
+    position.y = (*(f32*)(work + 8) + *(f32*)(work + 0x14)) * float_0p5_804283ec;
+    position.z = (*(f32*)(work + 0xC) + *(f32*)(work + 0x18)) * float_0p5_804283ec;
+    *(Vec*)(camera + 0x24) = vec3_80300f80[0];
+    *(Vec*)(camera + 0xC) = position;
+    *(Vec*)(camera + 0x18) = *(Vec*)(camera + 0xC);
+    *(f32*)(camera + 0x10) += ((f32)*(s32*)(work + 0x20) * float_0p5_804283ec) /
                    (f32)tan(0.21817);
-    C_MTXLookAt((f32(*)[4])(camera + 0x11C), position, up, target);
+    C_MTXLookAt((f32(*)[4])(camera + 0x11C), (Vec*)(camera + 0xC),
+                (Vec*)(camera + 0x24), (Vec*)(camera + 0x18));
     C_MTXPerspective((f32(*)[4])(camera + 0x15C), float_25_8042841c,
-                     (f64)*(s32*)(work + 0x1C) / (f64)*(s32*)(work + 0x20),
+                     (f32)*(s32*)(work + 0x1C) / (f32)*(s32*)(work + 0x20),
                      float_1_80428420, float_32767_80428404);
     *(s32*)(camera + 0x19C) = 0;
     GXSetProjection((f32(*)[4])(camera + 0x15C), *(s32*)(camera + 0x19C));
-    GXSetViewport(0.0, 0.0, (f64)*(s32*)(work + 0x24),
-                  (f64)*(s32*)(work + 0x28), 0.0, 1.0);
+    GXSetViewport(0.0f, 0.0f, (f32)*(s32*)(work + 0x24),
+                  (f32)*(s32*)(work + 0x28), 0.0f, 1.0);
     GXSetScissor(0, 0, *(u32*)(work + 0x24), *(u32*)(work + 0x28));
     test_kururing_mapdisp(cameraId);
     sysWaitDrawSync();

@@ -26,12 +26,21 @@ void* effBreakEntry(s32 kind, f32 x, f32 y, f32 z, s32 timer) {
     s32 j;
     f32 left;
     f32 total;
+    f32 halfWidth;
+    f32 fullWidth;
+    f32 zero;
+    f32 height;
 
     *(const char**)((s32)effect + 0x14) = str_Break_80427614;
     *(s32*)((s32)effect + 8) = count;
     work = __memAlloc(3, count * 0x24);
     *(void**)((s32)effect + 0xC) = work;
     *(void**)((s32)effect + 0x10) = effBreakMain;
+
+    halfWidth = float_36_80427624;
+    fullWidth = float_72_80427620;
+    zero = float_0_80427600;
+    height = float_10_80427628;
 
     *(s32*)work = kind;
     *(f32*)((s32)work + 4) = x;
@@ -42,24 +51,24 @@ void* effBreakEntry(s32 kind, f32 x, f32 y, f32 z, s32 timer) {
 
     item = (void*)((s32)work + 0x24);
     for (i = 1; i < *(s32*)((s32)effect + 8); i++, item = (void*)((s32)item + 0x24)) {
-        left = float_0_80427600;
+        left = zero;
         for (j = 0; j < i - 1; j++) {
             effGetTexObj(texid_tbl[*(s32*)((s32)gp + 0x16C)][j], texObj);
-            left += float_72_80427620;
+            left += fullWidth;
         }
         effGetTexObj(texid_tbl[*(s32*)((s32)gp + 0x16C)][j], texObj);
-        left += float_36_80427624;
+        left += halfWidth;
 
-        total = float_0_80427600;
+        total = zero;
         for (j = 0; j < *(s32*)((s32)effect + 8) - 1; j++) {
             effGetTexObj(texid_tbl[*(s32*)((s32)gp + 0x16C)][j], texObj);
-            total += float_36_80427624;
+            total += halfWidth;
         }
 
         *(f32*)((s32)item + 4) = left - total;
-        *(f32*)((s32)item + 8) = float_0_80427600;
-        *(f32*)((s32)item + 0xC) = float_0_80427600;
-        *(f32*)((s32)item + 0x14) = float_10_80427628;
+        *(f32*)((s32)item + 8) = zero;
+        *(f32*)((s32)item + 0xC) = zero;
+        *(f32*)((s32)item + 0x14) = height;
         *(s32*)((s32)item + 0x18) = 0;
         *(s32*)((s32)item + 0x10) = (i - 1) * 0x15;
         *(s32*)((s32)item + 0x1C) = 0;
