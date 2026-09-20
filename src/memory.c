@@ -92,8 +92,15 @@ void memInit(void) {
 }
 
 void memClear(s32 heap) {
+    typedef struct MapAllocEntry {
+        struct MapAllocEntry* next;
+        u32 size;
+        u16 inuse;
+        u16 pad_A;
+        u8 pad_C[0x14];
+    } MapAllocEntry;
+    MapAllocEntry* ptr;
     u32 size;
-    void* ptr;
 
     OSDestroyHeap(heapHandle[heap]);
     OSCreateHeap(heapStart[heap], heapEnd[heap]);
@@ -106,10 +113,11 @@ void memClear(s32 heap) {
             memset(ptr, 0, size);
             DCFlushRange(ptr, size);
         }
+        size = mapalloc_size;
         mapalloc_base_ptr = ptr;
-        *(s32*)ptr = 0;
-        *(u32*)((s32)ptr + 4) = mapalloc_size - 0x20;
-        *(u16*)((s32)ptr + 8) = 0;
+        ptr->next = 0;
+        ptr->size = size - 0x20;
+        ptr->inuse = 0;
     }
 }
 
@@ -150,100 +158,114 @@ void N_battleMapFree(void) {
 }
 
 void* _mapAlloc(void* base, u32 size) {
-    u32 aligned;
-    u32 need;
-    u32 bestSize;
-    void* next;
-    void* bestNext;
-    void* best;
-    void* result;
-    u32 remain;
+    typedef struct MapAllocEntry {
+        struct MapAllocEntry* next;
+        u32 size;
+        u16 inuse;
+        u16 pad_A;
+        u8 pad_C[0x14];
+    } MapAllocEntry;
+    MapAllocEntry* nextptr;
+    MapAllocEntry* entry;
+    MapAllocEntry* tailEntry;
+    MapAllocEntry* currEntry;
+    void* usableData;
+    u32 usableSize;
+    u32 maxSize;
+    u32 fullSize;
 
-    aligned = (size + 0x1F) & ~0x1F;
-    if (aligned == 0) {
+    usableSize = (size + 0x1F) & ~0x1F;
+    if (!usableSize) {
         return 0;
     }
 
-    need = aligned + 0x20;
-    bestSize = 0;
-    bestNext = 0;
-    best = 0;
-
-    while (base != 0) {
-        if (*(u16*)((s32)base + 8) == 0 && *(u32*)((s32)base + 4) >= need) {
-            if (bestSize >= *(u32*)((s32)base + 4) || bestSize == 0) {
-                bestNext = *(void**)base;
-                best = base;
-                bestSize = *(u32*)((s32)base + 4);
+    entry = base;
+    fullSize = usableSize + 0x20;
+    maxSize = 0;
+    tailEntry = 0;
+    while (1) {
+        if (!entry->inuse && entry->size >= fullSize) {
+            if (maxSize > entry->size || !maxSize) {
+                tailEntry = entry->next;
+                currEntry = entry;
+                maxSize = entry->size;
             }
         }
-        base = *(void**)base;
+        if (!entry->next) {
+            break;
+        }
+        entry = entry->next;
     }
 
-    if (bestSize == 0) {
-        return 0;
+    if (maxSize) {
+        usableData = (void*)((u32)currEntry + 0x20);
+        currEntry->next = (MapAllocEntry*)((u32)currEntry + fullSize);
+        currEntry->size = usableSize;
+        currEntry->inuse = 1;
+        nextptr = currEntry->next;
+        nextptr->next = tailEntry;
+        nextptr->size = maxSize - fullSize;
+        nextptr->inuse = 0;
+        memset(usableData, 0, usableSize);
+        DCFlushRange(usableData, usableSize);
+        return usableData;
     }
-
-    *(void**)best = (void*)((s32)best + need);
-    result = (void*)((s32)best + 0x20);
-    remain = bestSize - need;
-    *(u32*)((s32)best + 4) = aligned;
-    *(u16*)((s32)best + 8) = 1;
-    **(void***)best = bestNext;
-    *(u32*)(*(s32*)best + 4) = remain;
-    *(u16*)(*(s32*)best + 8) = 0;
-    memset(result, 0, aligned);
-    DCFlushRange(result, aligned);
-    return result;
+    return 0;
 }
 
 void* _mapAllocTail(void* base, u32 size) {
-    u32 aligned;
-    u32 need;
-    u32 bestSize;
-    void* bestNext;
-    void* best;
-    void* block;
-    void* result;
-    u32 remain;
+    typedef struct MapAllocEntry {
+        struct MapAllocEntry* next;
+        u32 size;
+        u16 inuse;
+        u16 pad_A;
+        u8 pad_C[0x14];
+    } MapAllocEntry;
+    MapAllocEntry* nextptr;
+    MapAllocEntry* entry;
+    MapAllocEntry* tailEntry;
+    MapAllocEntry* currEntry;
+    u32 maxSize;
+    u32 fullSize;
+    u32 usableSize;
 
-    aligned = (size + 0x1F) & ~0x1F;
-    if (aligned == 0) {
+    usableSize = (size + 0x1F) & ~0x1F;
+    if (!usableSize) {
         return 0;
     }
 
-    need = aligned + 0x20;
-    bestSize = 0;
-    bestNext = 0;
-    best = 0;
-
-    while (base != 0) {
-        if (*(u16*)((s32)base + 8) == 0 && *(u32*)((s32)base + 4) >= need) {
-            bestNext = *(void**)base;
-            best = base;
-            bestSize = *(u32*)((s32)base + 4);
+    entry = base;
+    fullSize = usableSize + 0x20;
+    maxSize = 0;
+    tailEntry = 0;
+    while (1) {
+        if (!entry->inuse && entry->size >= fullSize) {
+            tailEntry = entry->next;
+            currEntry = entry;
+            maxSize = entry->size;
         }
-        base = *(void**)base;
+        if (!entry->next) {
+            break;
+        }
+        entry = entry->next;
     }
 
-    if (bestSize == 0) {
-        return 0;
+    if (maxSize) {
+        memset(currEntry, 0, fullSize);
+        DCFlushRange(currEntry, fullSize);
+        currEntry->next = (MapAllocEntry*)(((u32)currEntry + maxSize) - fullSize);
+        currEntry->size = maxSize - fullSize;
+        currEntry->inuse = 0;
+        nextptr = currEntry->next;
+        nextptr->next = tailEntry;
+        tailEntry = (MapAllocEntry*)((u32)nextptr + 0x20);
+        nextptr->size = usableSize;
+        nextptr->inuse = 1;
+        memset(tailEntry, 0, usableSize);
+        DCFlushRange(tailEntry, usableSize);
+        return tailEntry;
     }
-
-    memset(best, 0, need);
-    DCFlushRange(best, need);
-    remain = bestSize - need;
-    block = (void*)((s32)best + remain);
-    *(void**)best = block;
-    *(u32*)((s32)best + 4) = remain;
-    *(u16*)((s32)best + 8) = 0;
-    *(void**)block = bestNext;
-    result = (void*)((s32)block + 0x20);
-    *(u32*)((s32)block + 4) = aligned;
-    *(u16*)((s32)block + 8) = 1;
-    memset(result, 0, aligned);
-    DCFlushRange(result, aligned);
-    return result;
+    return 0;
 }
 
 void _mapFree(void* base, void* ptr) {
@@ -484,15 +506,14 @@ void* smartAlloc(u32 param_1, u8 param_2) {
     extern void smartAutoFree(s32 kind);
     extern void _fileGarbage(s32 kind);
     extern void smartGarbage(void);
-    SmartAllocationData* entry;
-    SmartAllocationData* scan;
+    SmartAllocationData* scan, *entry;
     s32 i;
 
-    if (g_bFirstSmartAlloc == 0) {
+    if (!g_bFirstSmartAlloc) {
         g_bFirstSmartAlloc = 1;
         smartAutoFree(3);
     }
-    if (wp[0x3806] != 0) {
+    if ((s32)wp[0x3806]) {
         sysWaitDrawSync();
         wp[0x3806] = 0;
     }
@@ -515,7 +536,7 @@ void* smartAlloc(u32 param_1, u8 param_2) {
         entry->pNext->pPrev = entry->pPrev;
     }
 
-    if ((param_1 & 0x1F) != 0) {
+    if (param_1 & 0x1F) {
         param_1 += 0x20 - (param_1 & 0x1F);
     }
     entry->bUsed = 1;
@@ -534,7 +555,7 @@ void* smartAlloc(u32 param_1, u8 param_2) {
         }
         wp[0x3802] = (u32)entry;
         if (entry->pNext == 0) {
-            entry->unusedSize = (((u32)heapEnd[4] - (u32)heapStart[4]) + wp[0] - 0x20) - (u32)entry->pMemory - entry->usedSize;
+            entry->unusedSize = wp[0] + (u32)heapEnd[4] - (u32)heapStart[4] - 0x20 - (u32)entry->pMemory - entry->usedSize;
             wp[0x3803] = (u32)entry;
         }
         return entry;
@@ -542,16 +563,16 @@ void* smartAlloc(u32 param_1, u8 param_2) {
 
     scan = (SmartAllocationData*)wp[0x3802];
     while (scan != 0) {
-        if (param_1 <= scan->unusedSize) {
+        if (scan->unusedSize >= param_1) {
             entry->pMemory = (void*)((s32)scan->pMemory + scan->usedSize);
             entry->unusedSize = scan->unusedSize - param_1;
             entry->pNext = scan->pNext;
             entry->pPrev = scan;
             scan->unusedSize = 0;
-            if (scan->pNext == 0) {
-                wp[0x3803] = (u32)entry;
-            } else {
+            if (scan->pNext) {
                 scan->pNext->pPrev = entry;
+            } else {
+                wp[0x3803] = (u32)entry;
             }
             scan->pNext = entry;
             return entry;
@@ -561,23 +582,26 @@ void* smartAlloc(u32 param_1, u8 param_2) {
 
     i = 0;
     while (i < 3) {
-        if (i == 1) {
-            _fileGarbage(1);
-        } else if (i > 0 && i < 3) {
-            _fileGarbage(0);
+        switch (i) {
+            case 1:
+                _fileGarbage(1);
+                break;
+            case 2:
+                _fileGarbage(0);
+                break;
         }
         smartGarbage();
         scan = (SmartAllocationData*)wp[0x3803];
-        if (param_1 <= scan->unusedSize) {
+        if (scan->unusedSize >= param_1) {
             entry->pMemory = (void*)((s32)scan->pMemory + scan->usedSize);
             entry->unusedSize = scan->unusedSize - param_1;
             entry->pNext = scan->pNext;
             entry->pPrev = scan;
             scan->unusedSize = 0;
-            if (scan->pNext == 0) {
-                wp[0x3803] = (u32)entry;
-            } else {
+            if (scan->pNext) {
                 scan->pNext->pPrev = entry;
+            } else {
+                wp[0x3803] = (u32)entry;
             }
             scan->pNext = entry;
             return entry;
@@ -625,26 +649,21 @@ void smartGarbage(void) {
             goto moved;
         }
         if (entry[2] != 0) {
-            if (*(u8*)entry[2] != 3) {
-                fileGarbageMoveMem(dst, (char*)entry[2]);
-                goto moved;
-            }
-            if (*(u32*)(entry[2] + 0xAC) == 0) {
-                fileGarbageMoveMem(dst, (char*)entry[2]);
-                goto moved;
-            }
-            if (OSGetCurrentThread() == dvdmgr_thread) {
-                fileGarbageMoveMem(dst, (char*)entry[2]);
-                goto moved;
+            if (*(u8*)entry[2] != 3 || *(u32*)(entry[2] + 0xAC) == 0 ||
+                OSGetCurrentThread() == dvdmgr_thread) {
+                goto file_move;
             }
             if (prev != 0) {
                 prev[4] = (u32)src - (u32)dst;
             } else {
                 wp[0x3801] = (u32)src - (u32)dst;
             }
-            entry[4] = 0;
             dst = (void*)(entry[0] + entry[1]);
+            entry[4] = 0;
             goto next;
+file_move:
+            fileGarbageMoveMem(dst, (char*)entry[2]);
+            goto moved;
         }
         memmove(dst, src, entry[1]);
         entry[0] = (u32)dst;
@@ -658,7 +677,7 @@ next:
 
     prev = (u32*)wp[0x3803];
     if (prev != 0) {
-        prev[4] = (((u32)heapEnd[4] - (u32)heapStart[4]) + wp[0] - 0x20) - prev[0] - prev[1];
+        prev[4] = (u32)heapEnd[4] - (u32)heapStart[4] + wp[0] - 0x20 - prev[0] - prev[1];
     }
     DCFlushRange((void*)wp[0], (u32)heapEnd[4] - (u32)heapStart[4] - 0x20);
 }

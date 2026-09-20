@@ -15,7 +15,7 @@ extern void windowDispGX_Waku_col(s32, void*, f32, f32, f32, f32, f32);
 extern u32 dat_80427158;
 extern void* BattleGetMarioPtr();
 extern void* evtEntry();
-extern void _koura_delete_event();
+extern u32 _koura_delete_event[];
 extern void* pouchGetPtr();
 extern void evtSetValue();
 extern f32 evtGetFloat();
@@ -144,13 +144,13 @@ void btlseqEnd(void* battleWork) {
     extern void BtlActRec_JudgeRuleKeep(void);
     extern void BattleAudienceSoundStop(s32);
 
-    extern s32 _curtain_close_event[];
-    extern s32 _move_to_flower_event[];
-    extern s32 _move_to_heart_event[];
-    extern s32 _move_to_badge_point_event[];
-    extern s32 _jump_event[];
-    extern s32 _rank_up_event[];
-    extern s32 _event_MajinaiEnd[];
+    extern u32 _curtain_close_event[];
+    extern u32 _move_to_flower_event[];
+    extern u32 _move_to_heart_event[];
+    extern u32 _move_to_badge_point_event[];
+    extern u32 _jump_event[];
+    extern u32 _rank_up_event[];
+    extern u32 _event_MajinaiEnd[];
     extern s32 marioAttackEvent_MajinaiExpUp[];
     extern u8 pose_table_nokotarou_stay[];
 
@@ -2466,3 +2466,309 @@ s32 _get_rank_up_msg(void* event) {
     evtSetValue(event, out, data->message);
     return 2;
 }
+
+/* Exact US Event/table reconstruction dependencies. */
+extern u32 _confetti_control_event[];
+extern const f32 float_0_8042715c;
+extern char str_M_V_2_80427160[];
+extern char str_SFX_BTL_LVUP_BLOCK_H_802fe8a4[];
+extern char str_SFX_BTL_LVUP_BLOCK_M_802fe888[];
+extern char str_SFX_BTL_LVUP_CURSOR1_802fe8bc[];
+extern char str_SFX_PARTY_BATTLE_SUB_802fe810[];
+extern char str_SFX_PARTY_BATTLE_SUB_802fe82c[];
+extern char str_SFX_PARTY_BATTLE_SUB_802fe848[];
+extern char str_SFX_VOICE_MARIO_PAUS_802fe864[];
+extern char str_btl_msg_mj_last_802fe7bc[];
+extern char str_butai_01_802fe750[];
+extern char str_butai_02_802fe78c[];
+extern char str_butai_03_802fe7b0[];
+extern char str_confetti_802fe7fc[];
+extern char str_msg_menu_mario_name__802fe738[];
+extern char str_msg_menu_mario_name__802fe75c[];
+extern char str_msg_menu_mario_name__802fe774[];
+extern char str_msg_menu_mario_name__802fe798[];
+extern char str_nozzle_c_802fe7e4[];
+extern char str_nozzle_l_802fe7d8[];
+extern char str_nozzle_r_802fe7f0[];
+extern char str_spotlight_802fe87c[];
+extern s32 btlevtcmd_AnimeChangePose();
+extern s32 btlevtcmd_AnimeChangePoseType();
+extern s32 btlevtcmd_AnnounceMessage();
+extern s32 btlevtcmd_BtlStageObjFlagOnOff();
+extern s32 btlevtcmd_BtlStageObjGetRotate();
+extern s32 btlevtcmd_BtlStageObjSetRotate();
+extern s32 btlevtcmd_ClearAllStatus();
+extern s32 btlevtcmd_GetBodyId();
+extern s32 btlevtcmd_GetPos();
+extern s32 btlevtcmd_GetUnitId();
+extern s32 btlevtcmd_GetUnitKind();
+extern s32 btlevtcmd_JumpPosition();
+extern s32 btlevtcmd_MovePosition();
+extern s32 btlevtcmd_PadCheckTrigger();
+extern s32 btlevtcmd_RunDataEventChild();
+extern s32 btlevtcmd_SetFallAccel();
+extern s32 btlevtcmd_SetMoveSoundDataWork();
+extern s32 btlevtcmd_SetPos();
+extern s32 btlevtcmd_WaitEventEnd();
+extern s32 btlevtcmd_check_battleflag();
+extern s32 btlevtcmd_onoff_battleflag();
+extern s32 btlevtcmd_snd_se();
+extern s32 evt_audience_sound_cheer();
+extern s32 evt_batstage_set_aud_dark();
+extern s32 evt_batstage_set_stg_dark();
+extern s32 evt_batstage_set_stg_dark_base();
+extern s32 evt_btl_camera_set_mode();
+extern s32 evt_btl_camera_set_moveSpeedLv();
+extern s32 evt_btl_camera_shake_h();
+extern s32 evt_eff();
+extern s32 evt_fade_end_wait();
+extern s32 evt_fade_entry();
+extern s32 evt_fade_set_anim_ofs_pos();
+extern s32 evt_fade_set_anim_virtual_pos();
+extern s32 evt_msg_print();
+extern s32 evt_snd_sfxon_3d();
+extern s32 evt_sub_intpl_get_float();
+extern s32 evt_sub_intpl_get_value();
+extern s32 evt_sub_intpl_init();
+extern s32 evt_sub_intpl_init_float();
+
+/* Exact US rank metadata and documented battle-end Event arrays. */
+RankUpData _rank_up_data[5] = {
+    { 1, 0, str_msg_menu_mario_name__802fe738, str_butai_01_802fe750 },
+    { 10, 1, str_msg_menu_mario_name__802fe75c, str_butai_01_802fe750 },
+    { 20, 2, str_msg_menu_mario_name__802fe774, str_butai_02_802fe78c },
+    { 30, 3, str_msg_menu_mario_name__802fe798, str_butai_03_802fe7b0 },
+    { -1, 0, NULL, NULL },
+};
+
+u32 _curtain_close_event[693] = {
+    0x0000006E, 0x0004005B, (u32)evt_batstage_set_stg_dark, 0x00000050, 0x0000001E, 0x00000000,
+    0x0004005B, (u32)evt_batstage_set_stg_dark_base, 0x00000050, 0x0000001E, 0x00000000, 0x00000070,
+    0x0000006E, 0x0006005B, (u32)evt_fade_entry, 0x00000018, 0x000003E8, 0x00000000,
+    0x00000000, 0x00000000, 0x0003005B, (u32)evt_fade_set_anim_ofs_pos, 0x00000000, 0x00000082,
+    0x0004005B, (u32)evt_fade_set_anim_virtual_pos, 0x00000000, 0x00000000, 0x00000050, 0x0001005B,
+    (u32)evt_fade_end_wait, 0x00000070, 0x0003005B, (u32)btlevtcmd_check_battleflag, 0xFE363C80, 0x00000100,
+    0x00020019, 0xFE363C80, 0x00000000, 0x0000006E, 0x0004005B, (u32)btlevtcmd_AnimeChangePoseType,
+    0xFFFFFFFD, 0x00000001, 0x0000002A, 0x0005005B, (u32)btlevtcmd_GetPos, 0xFFFFFFFD,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x0008005B, (u32)btlevtcmd_MovePosition, 0xFFFFFFFD,
+    0xFFFFFED4, 0xFE363C81, 0xFE363C82, 0x00000078, 0xFFFFFFFF, 0x00000000,
+    0x00000070, 0x0003005B, (u32)btlevtcmd_GetUnitId, 0xFFFFFFFC, 0xFE363C83, 0x00020019,
+    0xFE363C83, 0xFFFFFFFF, 0x0000006E, 0x0003005B, (u32)btlevtcmd_GetBodyId, 0xFE363C83,
+    0xFE363C84, 0x0004005B, (u32)btlevtcmd_AnimeChangePoseType, 0xFE363C83, 0xFE363C84, 0x0000002A,
+    0x0005005B, (u32)btlevtcmd_GetPos, 0xFE363C83, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0008005B, (u32)btlevtcmd_MovePosition, 0xFE363C83, 0xFFFFFEB6, 0xFE363C81, 0xFE363C82,
+    0x00000078, 0xFFFFFFFF, 0x00000000, 0x00000070, 0x00000021, 0x00000021,
+    0x0000006E, 0x0005005B, (u32)evt_sub_intpl_init_float, 0x00000000, 0x00000000, 0xF249DA80,
+    0x0000001D, 0x00010005, 0x0000001E, 0x0003005B, (u32)evt_sub_intpl_get_float, 0xFE363C80,
+    0xF1194D80, 0x0003005B, (u32)_nozzle_set_offset, (u32)(char*)str_nozzle_l_802fe7d8, 0xFE363C80, 0x00010009,
+    0x00000001, 0x00000006, 0x00000070, 0x0000006E, 0x0005005B, (u32)evt_sub_intpl_init_float,
+    0x00000000, 0x00000000, 0xF249DA80, 0x0000001D, 0x00010005, 0x0000001E,
+    0x0003005B, (u32)evt_sub_intpl_get_float, 0xFE363C80, 0xF1194D80, 0x0003005B, (u32)_nozzle_set_offset,
+    (u32)(char*)str_nozzle_c_802fe7e4, 0xFE363C80, 0x00010009, 0x00000001, 0x00000006, 0x00000070,
+    0x0000006E, 0x0005005B, (u32)evt_sub_intpl_init_float, 0x00000000, 0x00000000, 0xF249DA80,
+    0x0000001D, 0x00010005, 0x0000001E, 0x0003005B, (u32)evt_sub_intpl_get_float, 0xFE363C80,
+    0xF1194D80, 0x0003005B, (u32)_nozzle_set_offset, (u32)(char*)str_nozzle_r_802fe7f0, 0xFE363C80, 0x00010009,
+    0x00000001, 0x00000006, 0x00000070, 0x0003005B, (u32)btlevtcmd_onoff_battleflag, 0x00000000,
+    0x00000100, 0x0003005B, (u32)evt_btl_camera_set_mode, 0x00000000, 0x00000000, 0x0003005B,
+    (u32)evt_btl_camera_set_moveSpeedLv, 0x00000000, 0x00000001, 0x0001000A, 0x000005DC, 0x0000006E,
+    0x00010005, 0x00000006, 0x000F005B, (u32)evt_eff, (u32)(f32*)&float_0_8042715c, (u32)(char*)str_confetti_802fe7fc,
+    0x0000000D, 0x00000000, 0x0000012C, 0x0000005F, 0x000000B4, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00010009, 0x00000014, 0x00000006, 0x00000070, 0x0002005D, (u32)_confetti_control_event,
+    0xFE363C80, 0x0002005B, (u32)_set_confetti_control_evtid, 0xFE363C80, 0x000F005B, (u32)evt_eff,
+    (u32)(f32*)&float_0_8042715c, (u32)(char*)str_levelup_802fe808, 0x00000000, 0x00000000, 0x00000032, 0x00000064,
+    0x0000003C, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00010009, 0x00000030, 0x0001005B, (u32)_lvup_ap_recover_full,
+    0x0001000A, 0x000003E8, 0x0001006F, 0xFE363C8F, 0x00010009, 0x00000002,
+    0x0002005B, (u32)_lvup_spot_on, 0x00000000, 0x0002005B, (u32)_lvup_spot_move, 0x00000000,
+    0x00000070, 0x0001005B, (u32)_disable_enemy_unit_disp, 0x0000006E, 0x0003005B, (u32)btlevtcmd_GetUnitId,
+    0xFFFFFFFC, 0xFE363C83, 0x00020019, 0xFE363C83, 0xFFFFFFFF, 0x0005005B,
+    (u32)btlevtcmd_SetPos, 0xFE363C83, 0xFFFFFF1A, 0x00000000, 0x0000005A, 0x0002005B,
+    (u32)btlevtcmd_ClearAllStatus, 0xFE363C83, 0x0003005B, (u32)btlevtcmd_GetBodyId, 0xFE363C83, 0xFE363C84,
+    0x0004005B, (u32)btlevtcmd_AnimeChangePoseType, 0xFE363C83, 0xFE363C84, 0x00000028, 0x00020032,
+    0xFE363C80, 0xFFFFFF65, 0x00020032, 0xFE363C81, 0x00000000, 0x00020032,
+    0xFE363C82, 0x0000005A, 0x00020032, 0xFE363C86, 0x0000001C, 0x0003005B,
+    (u32)btlevtcmd_GetUnitKind, 0xFE363C83, 0xFE363C85, 0x00010022, 0xFE363C85, 0x0001002B,
+    0x000000E0, 0x0001002B, 0x000000E1, 0x0009005B, (u32)btlevtcmd_SetMoveSoundDataWork, 0xFE363C83,
+    (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe810, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe82c, 0x00000006, 0x0000000C, 0x00000010, 0x00000000,
+    0x00000000, 0x0008005B, (u32)btlevtcmd_MovePosition, 0xFE363C83, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0xFE363C86, 0xFFFFFFFE, 0x00000001, 0x0000002E, 0x00010024,
+    0x000000E2, 0x0009005B, (u32)btlevtcmd_SetMoveSoundDataWork, 0xFE363C83, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe810, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe82c,
+    0x00000000, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x0008005B,
+    (u32)btlevtcmd_MovePosition, 0xFE363C83, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0xFE363C86,
+    0xFFFFFFFE, 0x00000001, 0x00010024, 0x000000E3, 0x0009005B, (u32)btlevtcmd_SetMoveSoundDataWork,
+    0xFE363C83, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe848, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe848, 0x00000006, 0x0000000C, 0x00000010,
+    0x00000000, 0x00000000, 0x0008005B, (u32)btlevtcmd_MovePosition, 0xFE363C83, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0xFE363C86, 0xFFFFFFFE, 0x00000001, 0x00010024,
+    0x000000E4, 0x0009005B, (u32)btlevtcmd_SetMoveSoundDataWork, 0xFE363C83, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe848, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe848,
+    0x00000000, 0x0000000F, 0x0000000D, 0x00000000, 0x00000000, 0x0008005B,
+    (u32)btlevtcmd_MovePosition, 0xFE363C83, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0xFE363C86,
+    0xFFFFFFFE, 0x00000001, 0x00010024, 0x000000E5, 0x0009005B, (u32)btlevtcmd_SetMoveSoundDataWork,
+    0xFE363C83, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe810, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe82c, 0x00000000, 0x00000012, 0x00000012,
+    0x00000000, 0x00000000, 0x0008005B, (u32)btlevtcmd_MovePosition, 0xFE363C83, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0xFE363C86, 0xFFFFFFFE, 0x00000001, 0x00010024,
+    0x000000E6, 0x0009005B, (u32)btlevtcmd_SetMoveSoundDataWork, 0xFE363C83, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe810, (u32)(char*)str_SFX_PARTY_BATTLE_SUB_802fe82c,
+    0x00000000, 0x0000000F, 0x0000000D, 0x00000000, 0x00000000, 0x0008005B,
+    (u32)btlevtcmd_MovePosition, 0xFE363C83, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0xFE363C86,
+    0xFFFFFFFE, 0x00000001, 0x00000031, 0x0004005B, (u32)btlevtcmd_AnimeChangePoseType, 0xFE363C83,
+    0xFE363C84, 0x0000002B, 0x00000021, 0x00000070, 0x0005005B, (u32)btlevtcmd_SetPos,
+    0xFFFFFFFD, 0xFFFFFF38, 0x00000000, 0x0000005A, 0x0002005B, (u32)btlevtcmd_ClearAllStatus,
+    0xFFFFFFFD, 0x0004005B, (u32)btlevtcmd_AnimeChangePoseType, 0xFFFFFFFD, 0x00000001, 0x00000028,
+    0x0008005B, (u32)btlevtcmd_MovePosition, 0xFFFFFFFD, 0x00000000, 0x00000000, 0x0000005A,
+    0x0000004B, 0xFFFFFFFF, 0x00000000, 0x0006005B, (u32)btlevtcmd_snd_se, 0xFFFFFFFD,
+    (u32)(char*)str_SFX_VOICE_MARIO_PAUS_802fe864, 0xF1194D80, 0x00000000, 0xF1194D80, 0x0004005B, (u32)btlevtcmd_AnimeChangePose,
+    0xFFFFFFFD, 0x00000001, (u32)(char*)str_M_V_2_80427160, 0x0003005B, (u32)evt_audience_sound_cheer, 0x000000B4,
+    0x00000028, 0x0001000A, 0x000003E8, 0x0001005B, (u32)_lvup_select_object_init, 0x0000006E,
+    0x0002005B, (u32)_lvup_spot_off, 0x0000001E, 0x00000070, 0x0001006C, 0xFE363C8A,
+    0x0004005B, (u32)evt_batstage_set_stg_dark, 0x00000000, 0x0000001E, 0x00000000, 0x0004005B,
+    (u32)evt_batstage_set_stg_dark_base, 0x00000000, 0x0000001E, 0x00000000, 0x0006005B, (u32)_lvup_obj_set_color,
+    0x00000000, 0x00000064, 0x00000080, 0x00000080, 0x000000FF, 0x0006005B,
+    (u32)_lvup_obj_set_color, 0x00000001, 0x00000064, 0x00000080, 0x00000080, 0x000000FF,
+    0x0006005B, (u32)_lvup_obj_set_color, 0x00000002, 0x00000064, 0x00000080, 0x00000080,
+    0x000000FF, 0x0004005B, (u32)evt_batstage_set_aud_dark, 0x00000000, 0x0000003C, 0x00000000,
+    0x0006005B, (u32)evt_fade_entry, 0x00000019, 0x000003E8, 0x00000000, 0x00000000,
+    0x00000000, 0x0003005B, (u32)evt_fade_set_anim_ofs_pos, 0x00000000, 0x00000082, 0x0004005B,
+    (u32)evt_fade_set_anim_virtual_pos, 0x00000000, 0x00000000, 0x00000050, 0x0001005B, (u32)evt_fade_end_wait,
+    0x0000006D, 0x0002005B, (u32)btlevtcmd_WaitEventEnd, 0xFE363C8A, 0x0001006F, 0xFE363C8A,
+    0x00020032, 0xFE363C85, 0x00000005, 0x00010005, 0xFE363C85, 0x0001005B,
+    (u32)N__display_select_one_to_upgrade_text, 0x00010009, 0x00000001, 0x00020032, 0xFE363C85, 0x00000005,
+    0x00000006, 0x00000070, 0x00010003, 0x0000003C, 0x0004005B, (u32)btlevtcmd_PadCheckTrigger,
+    0x00000000, 0x00040000, 0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0001006F, 0xFE363C80, 0x0002005B, (u32)N__set_initial_upgrade_cursor_position, 0x00000002, 0x0005005B,
+    (u32)btlevtcmd_BtlStageObjSetRotate, (u32)(char*)str_spotlight_802fe87c, 0x00000000, 0x00000000, 0x00000046, 0x0004005B,
+    (u32)btlevtcmd_BtlStageObjFlagOnOff, (u32)(char*)str_spotlight_802fe87c, 0x00000001, 0x00000000, 0x0005005B, (u32)evt_sub_intpl_init,
+    0x00000005, 0x00000046, 0x0000001E, 0x0000000A, 0x00010005, 0x0000000B,
+    0x0001005B, (u32)evt_sub_intpl_get_value, 0x0005005B, (u32)btlevtcmd_BtlStageObjSetRotate, (u32)(char*)str_spotlight_802fe87c, 0x00000000,
+    0x00000000, 0xFE363C80, 0x00010009, 0x00000001, 0x00000006, 0x0006005B,
+    (u32)_lvup_obj_set_color, 0x00000002, 0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF,
+    0x0003005B, (u32)_lvup_disp_flag_onoff, 0x00000002, 0x00000020, 0x0001005B, (u32)_lvup_select_obj_disp_on,
+    0x00000070, 0x0002005B, (u32)btlevtcmd_WaitEventEnd, 0xFE363C80, 0x00010004, 0x00000045,
+    0x00000021, 0x00010003, 0x0000003D, 0x0004005B, (u32)btlevtcmd_PadCheckTrigger, 0x00000000,
+    0x00080000, 0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000, 0x0001006F,
+    0xFE363C80, 0x0002005B, (u32)N__set_initial_upgrade_cursor_position, 0x00000000, 0x0005005B, (u32)btlevtcmd_BtlStageObjSetRotate,
+    (u32)(char*)str_spotlight_802fe87c, 0x00000000, 0x00000000, 0xFFFFFFBA, 0x0004005B, (u32)btlevtcmd_BtlStageObjFlagOnOff,
+    (u32)(char*)str_spotlight_802fe87c, 0x00000001, 0x00000000, 0x0005005B, (u32)evt_sub_intpl_init, 0x00000005,
+    0xFFFFFFBA, 0xFFFFFFE2, 0x0000000A, 0x00010005, 0x0000000B, 0x0001005B,
+    (u32)evt_sub_intpl_get_value, 0x0005005B, (u32)btlevtcmd_BtlStageObjSetRotate, (u32)(char*)str_spotlight_802fe87c, 0x00000000, 0x00000000,
+    0xFE363C80, 0x00010009, 0x00000001, 0x00000006, 0x0006005B, (u32)_lvup_obj_set_color,
+    0x00000000, 0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF, 0x0003005B,
+    (u32)_lvup_disp_flag_onoff, 0x00000000, 0x00000020, 0x0001005B, (u32)_lvup_select_obj_disp_on, 0x00000070,
+    0x0002005B, (u32)btlevtcmd_WaitEventEnd, 0xFE363C80, 0x00010004, 0x00000045, 0x00000021,
+    0x00010009, 0x00000001, 0x00010004, 0x0000003C, 0x00010003, 0x00000045,
+    0x0001005F, 0xFE363C8A, 0x0004005B, (u32)btlevtcmd_BtlStageObjFlagOnOff, (u32)(char*)str_spotlight_802fe87c, 0x00000001,
+    0x00000000, 0x0001005B, (u32)_lvup_select_obj_lvup_param_disp, 0x0003005B, (u32)_lvup_disp_flag_onoff, 0x00000001,
+    0x00000020, 0x00000002, 0x00000001,
+};
+
+u32 _confetti_control_event[42] = {
+    0x00020032, 0xFE363C80, 0x00000001, 0x00020032, 0xFE363C85, 0x00000005,
+    0x00010005, 0xFE363C85, 0x00020036, 0xFE363C80, 0x00000001, 0x0002001C,
+    0xFE363C80, 0x00000000, 0x00020032, 0xFE363C80, 0x00000014, 0x000F005B,
+    (u32)evt_eff, (u32)(f32*)&float_0_8042715c, (u32)(char*)str_confetti_802fe7fc, 0x00000003, 0x00000000, 0x0000012C,
+    0x00000005, 0x000000B4, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021, 0x00010009, 0x00000001,
+    0x00020032, 0xFE363C85, 0x00000005, 0x00000006, 0x00000002, 0x00000001,
+};
+
+u32 _jump_event[74] = {
+    0x0000006E, 0x0001005B, (u32)_lvup_object_noselect_delete, 0x00000070, 0x0006005B, (u32)evt_snd_sfxon_3d,
+    (u32)(char*)str_SFX_BTL_LVUP_BLOCK_M_802fe888, 0x00000000, 0x0000007D, 0x00000000, 0x00000000, 0x0001005B,
+    (u32)_lvup_object_select_move, 0x0005005B, (u32)btlevtcmd_GetPos, 0xFFFFFFFD, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x0004005B, (u32)btlevtcmd_AnimeChangePoseType, 0xFFFFFFFD, 0x00000001, 0x0000002C,
+    0x0000006B, 0x00010009, 0x0000000A, 0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_BTL_LVUP_BLOCK_H_802fe8a4,
+    0x00000000, 0x0000007D, 0x00000000, 0x00000000, 0x0006005B, (u32)evt_btl_camera_shake_h,
+    0x00000000, 0x00000006, 0x00000000, 0x00000014, 0x0000000D, 0x0001005B,
+    (u32)_lvup_object_decide_bound, 0x0000006D, 0x0003005B, (u32)btlevtcmd_SetFallAccel, 0xFFFFFFFD, 0xF24A7C19,
+    0x0007005B, (u32)btlevtcmd_JumpPosition, 0xFFFFFFFD, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0000001E, 0xFFFFFFFF, 0x0006005B, (u32)btlevtcmd_snd_se, 0xFFFFFFFD, (u32)(char*)str_SFX_VOICE_MARIO_PAUS_802fe864,
+    0xF1194D80, 0x00000000, 0xF1194D80, 0x0004005B, (u32)btlevtcmd_AnimeChangePose, 0xFFFFFFFD,
+    0x00000001, (u32)(char*)str_M_V_2_80427160, 0x0003005B, (u32)evt_audience_sound_cheer, 0x000000B4, 0x00000028,
+    0x00000002, 0x00000001,
+};
+
+u32 _move_to_heart_event[70] = {
+    0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_BTL_LVUP_CURSOR1_802fe8bc, 0x00000000, 0x0000007D, 0x00000000,
+    0x00000000, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000000, 0x00000064, 0x00000080,
+    0x00000080, 0x000000FF, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000001, 0x00000064,
+    0x00000080, 0x00000080, 0x000000FF, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000002,
+    0x00000064, 0x00000080, 0x00000080, 0x000000FF, 0x0003005B, (u32)_lvup_disp_flag_onoff,
+    0x00000000, 0x00000020, 0x0005005B, (u32)evt_sub_intpl_init, 0x00000005, 0x00000000,
+    0xFFFFFFE2, 0x0000000A, 0x00010005, 0x0000000B, 0x0001005B, (u32)evt_sub_intpl_get_value,
+    0x0005005B, (u32)btlevtcmd_BtlStageObjSetRotate, (u32)(char*)str_spotlight_802fe87c, 0x00000000, 0x00000000, 0xFE363C80,
+    0x00010009, 0x00000001, 0x00000006, 0x0005005B, (u32)btlevtcmd_BtlStageObjSetRotate, (u32)(char*)str_spotlight_802fe87c,
+    0x00000000, 0x00000000, 0xFFFFFFE2, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000000,
+    0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF, 0x0003005B, (u32)_lvup_disp_flag_onoff,
+    0x00000001, 0x00000020, 0x00000002, 0x00000001,
+};
+
+u32 _move_to_flower_event[76] = {
+    0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_BTL_LVUP_CURSOR1_802fe8bc, 0x00000000, 0x0000007D, 0x00000000,
+    0x00000000, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000000, 0x00000064, 0x00000080,
+    0x00000080, 0x000000FF, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000001, 0x00000064,
+    0x00000080, 0x00000080, 0x000000FF, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000002,
+    0x00000064, 0x00000080, 0x00000080, 0x000000FF, 0x0003005B, (u32)_lvup_disp_flag_onoff,
+    0x00000000, 0x00000020, 0x0005005B, (u32)btlevtcmd_BtlStageObjGetRotate, (u32)(char*)str_spotlight_802fe87c, 0xF1194D80,
+    0xF1194D80, 0xFE363C85, 0x0005005B, (u32)evt_sub_intpl_init, 0x00000005, 0xFE363C85,
+    0x00000000, 0x0000000A, 0x00010005, 0x0000000B, 0x0001005B, (u32)evt_sub_intpl_get_value,
+    0x0005005B, (u32)btlevtcmd_BtlStageObjSetRotate, (u32)(char*)str_spotlight_802fe87c, 0x00000000, 0x00000000, 0xFE363C80,
+    0x00010009, 0x00000001, 0x00000006, 0x0005005B, (u32)btlevtcmd_BtlStageObjSetRotate, (u32)(char*)str_spotlight_802fe87c,
+    0x00000000, 0x00000000, 0x00000000, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000001,
+    0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF, 0x0003005B, (u32)_lvup_disp_flag_onoff,
+    0x00000001, 0x00000020, 0x00000002, 0x00000001,
+};
+
+u32 _move_to_badge_point_event[70] = {
+    0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_BTL_LVUP_CURSOR1_802fe8bc, 0x00000000, 0x0000007D, 0x00000000,
+    0x00000000, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000000, 0x00000064, 0x00000080,
+    0x00000080, 0x000000FF, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000001, 0x00000064,
+    0x00000080, 0x00000080, 0x000000FF, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000002,
+    0x00000064, 0x00000080, 0x00000080, 0x000000FF, 0x0003005B, (u32)_lvup_disp_flag_onoff,
+    0x00000000, 0x00000020, 0x0005005B, (u32)evt_sub_intpl_init, 0x00000005, 0x00000000,
+    0x0000001E, 0x0000000A, 0x00010005, 0x0000000B, 0x0001005B, (u32)evt_sub_intpl_get_value,
+    0x0005005B, (u32)btlevtcmd_BtlStageObjSetRotate, (u32)(char*)str_spotlight_802fe87c, 0x00000000, 0x00000000, 0xFE363C80,
+    0x00010009, 0x00000001, 0x00000006, 0x0005005B, (u32)btlevtcmd_BtlStageObjSetRotate, (u32)(char*)str_spotlight_802fe87c,
+    0x00000000, 0x00000000, 0x0000001E, 0x0006005B, (u32)_lvup_obj_set_color, 0x00000002,
+    0x000000FF, 0x000000FF, 0x000000FF, 0x000000FF, 0x0003005B, (u32)_lvup_disp_flag_onoff,
+    0x00000001, 0x00000020, 0x00000002, 0x00000001,
+};
+
+u32 _koura_delete_event[14] = {
+    0x0003005B, (u32)_check_guard_koura, 0xFFFFFFFD, 0xFE363C8A, 0x00020019, 0xFE363C8A,
+    0xFFFFFFFF, 0x0003005B, (u32)btlevtcmd_RunDataEventChild, 0xFE363C8A, 0x0000003E, 0x00000021,
+    0x00000002, 0x00000001,
+};
+
+__declspec(section ".sdata") u32 _event_MajinaiEnd[11] = {
+    0x0006005B, (u32)btlevtcmd_AnnounceMessage, 0x00000000, 0x00000000, 0xFFFFFFDC, (u32)(char*)str_btl_msg_mj_last_802fe7bc,
+    0x0000003C, 0x00010009, 0x0000003C, 0x00000002, 0x00000001,
+};
+
+__declspec(section ".sdata") s32 hp_tex_tbl[6] = { 52, 52, 53, 54, 54, 55 };
+__declspec(section ".sdata") s32 fp_tex_tbl[6] = { 56, 56, 57, 58, 58, 58 };
+__declspec(section ".sdata") s32 bp_tex_tbl[6] = { 59, 59, 60, 61, 62, 63 };
+
+__declspec(section ".sdata") u32 _rank_up_event[11] = {
+    0x0002005B, (u32)_get_rank_up_msg, 0xFE363C80, 0x0005005B, (u32)evt_msg_print, 0x00000000,
+    0xFE363C80, 0x00000000, 0x00000000, 0x00000002, 0x00000001,
+};
+
+/* Exact US small-data prefix.
+ * Definitions are intentionally late so executable consumers retain their
+ * existing declaration-only compiler view.  The two bytes after M_V_2 are
+ * natural alignment before the following u32 object, not authored padding. */
+__declspec(section ".sdata2") u32 dat_80427140 = 0x000000FF;
+__declspec(section ".sdata2") u32 dat_80427144 = 0x000000FF;
+__declspec(section ".sdata2") u32 dat_80427148 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8042714c = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_80427150 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_80427154 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_80427158 = 0xFFFFFF80;
+__declspec(section ".sdata2") const f32 float_0_8042715c = 0.0f;
+__declspec(section ".sdata2") char str_M_V_2_80427160[6] = "M_V_2";
+__declspec(section ".sdata2") u32 dat_80427168 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8042716c = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_80427170 = 0xFFFFFF00;
+__declspec(section ".sdata2") u32 dat_80427174 = 0xFFFFFF00;
+__declspec(section ".sdata2") u32 dat_80427178 = 0xC8FFFFFF;
+__declspec(section ".sdata2") u32 dat_8042717c = 0xC8FFFFFF;
+__declspec(section ".sdata2") u32 dat_80427180 = 0xC8FFFFFF;

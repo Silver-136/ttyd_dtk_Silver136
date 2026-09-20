@@ -49,6 +49,58 @@ void hitReInit(void) {
 }
 
 void* _hitEnt(void* param_1, s32 param_2, s32 param_3, int param_4) {
+    typedef f32 MtxLocal[3][4];
+    typedef struct VecLocal { f32 x, y, z; } VecLocal;
+    typedef struct DrawModeLocal { u8 pad0[8]; u32 attributes; } DrawModeLocal;
+    typedef struct MeshLocal {
+        u8 pad0[3];
+        u8 isPackedDisplay;
+        s32 displayListCount;
+        u8 pad8[8];
+        void* displayLists[1];
+    } MeshLocal;
+    typedef struct PartLocal { MeshLocal* mesh; u32 pad4; } PartLocal;
+    typedef struct JointLocal {
+        u8 pad0[0x18];
+        VecLocal scale;
+        VecLocal rotation;
+        VecLocal translation;
+        VecLocal bboxMin;
+        VecLocal bboxMax;
+        DrawModeLocal* drawMode;
+        s32 partCount;
+        u8 pad60[4];
+        PartLocal parts[1];
+    } JointLocal;
+    typedef struct HitVectorLocal { u8 data[0x54]; } HitVectorLocal;
+    typedef struct HitEntryLocal {
+        u16 flags;
+        u8 pad2[2];
+        u32 attributes;
+        JointLocal* joint;
+        MtxLocal worldMtx;
+        MtxLocal localMtx;
+        VecLocal centerLocal;
+        s16 unkA8;
+        s16 mapIndex;
+        HitVectorLocal* vectors;
+        void* damage;
+        u8 padB4[0xC];
+        VecLocal centerWorld;
+        f32 radius;
+        void* mapObj;
+        struct HitEntryLocal* parent;
+        struct HitEntryLocal* child;
+        struct HitEntryLocal* sibling;
+        struct HitEntryLocal* siblingActive;
+    } HitEntryLocal;
+    typedef struct MapEntryLocal {
+        u8 pad0[0x158];
+        s32 hitNumJoints;
+        HitEntryLocal* hitEntries;
+        u8 pad160[0x18];
+    } MapEntryLocal;
+    typedef struct MapWorkLocal { MapEntryLocal entries[1]; } MapWorkLocal;
     extern void* mapGetWork(void);
     extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
@@ -63,135 +115,70 @@ void* _hitEnt(void* param_1, s32 param_2, s32 param_3, int param_4) {
     extern const f32 float_deg2rad_8041f850;
     extern const f32 float_0p5_8041f84c;
     extern const f32 float_0p1_8041f83c;
+    MapWorkLocal* wp = mapGetWork();
+    JointLocal* joint = (JointLocal*)param_1;
+    HitEntryLocal* hit = wp->entries[param_4].hitEntries;
+    MtxLocal trans, scale, rotX, rotY, rotZ;
+    VecLocal vtmp;
+    s32 i;
 
-    void* map;
-    void* group;
-    void* hit;
-    void* part;
-    void* poly;
-    void* alloc;
-    f32 transMtx[3][4];
-    f32 scaleMtx[3][4];
-    f32 rotXMtx[3][4];
-    f32 rotYMtx[3][4];
-    f32 rotZMtx[3][4];
-    f32 tempVec[3];
-    f32 pad;
-    s32 groupOffset;
-    s32 hitCount;
-    s32 partCount;
-    s32 triCount;
-    s32 partIndex;
-    s32 polyIndex;
-    s32 polyCount;
-    s32 unroll;
-    s32 remaining;
-
-    map = mapGetWork();
-    groupOffset = param_4 * 0x178;
-    group = (void*)((s32)map + groupOffset);
-    hitCount = *(s32*)((s32)group + 0x158);
-    hit = *(void**)((s32)group + 0x15C);
-
-    if (hitCount > 0) {
-        do {
-            if (*(void**)((s32)hit + 0x08) == 0) {
-                break;
-            }
-            hit = (void*)((s32)hit + 0xE4);
-            hitCount--;
-        } while (hitCount != 0);
+    for (i = 0; i < wp->entries[param_4].hitNumJoints; hit++, i++) {
+        if (!hit->joint) break;
     }
-
-    *(u16*)hit = 0;
-    *(void**)((s32)hit + 0x08) = param_1;
-    *(s16*)((s32)hit + 0xAA) = (s16)param_4;
-
-    PSMTXTrans(
-        transMtx,
-        *(f32*)((s32)param_1 + 0x30),
-        *(f32*)((s32)param_1 + 0x34),
-        *(f32*)((s32)param_1 + 0x38)
-    );
-    PSMTXScale(
-        scaleMtx,
-        *(f32*)((s32)param_1 + 0x18),
-        *(f32*)((s32)param_1 + 0x1C),
-        *(f32*)((s32)param_1 + 0x20)
-    );
-    PSMTXRotRad(rotXMtx, 'x', float_deg2rad_8041f850 * *(f32*)((s32)param_1 + 0x24));
-    PSMTXRotRad(rotYMtx, 'y', float_deg2rad_8041f850 * *(f32*)((s32)param_1 + 0x28));
-    PSMTXRotRad(rotZMtx, 'z', float_deg2rad_8041f850 * *(f32*)((s32)param_1 + 0x2C));
-
-    PSMTXConcat(transMtx, rotZMtx, transMtx);
-    PSMTXConcat(transMtx, rotYMtx, transMtx);
-    PSMTXConcat(transMtx, rotXMtx, transMtx);
-    PSMTXConcat(transMtx, scaleMtx, (void*)((s32)hit + 0x3C));
-    PSMTXConcat((void*)param_3, (void*)((s32)hit + 0x3C), (void*)((s32)hit + 0x0C));
-
-    *(s32*)((s32)hit + 0xD4) = param_2;
-    *(s32*)((s32)hit + 0xDC) = 0;
-    *(s32*)((s32)hit + 0xD8) = 0;
-    *(s32*)((s32)hit + 0xAC) = 0;
-
-    if (*(void**)((s32)param_1 + 0x58) != 0) {
-        *(u32*)((s32)hit + 0x04) = *(u32*)(*(s32*)((s32)param_1 + 0x58) + 0x08);
+    hit->flags = 0;
+    hit->joint = joint;
+    hit->mapIndex = param_4;
+    PSMTXTrans(trans, joint->translation.x, joint->translation.y, joint->translation.z);
+    PSMTXScale(scale, joint->scale.x, joint->scale.y, joint->scale.z);
+    PSMTXRotRad(rotX, 'x', float_deg2rad_8041f850 * joint->rotation.x);
+    PSMTXRotRad(rotY, 'y', float_deg2rad_8041f850 * joint->rotation.y);
+    PSMTXRotRad(rotZ, 'z', float_deg2rad_8041f850 * joint->rotation.z);
+    PSMTXConcat(trans, rotZ, trans);
+    PSMTXConcat(trans, rotY, trans);
+    PSMTXConcat(trans, rotX, trans);
+    PSMTXConcat(trans, scale, hit->localMtx);
+    PSMTXConcat((void*)param_3, hit->localMtx, hit->worldMtx);
+    hit->parent = (HitEntryLocal*)param_2;
+    hit->sibling = 0;
+    hit->child = 0;
+    hit->vectors = 0;
+    hit->attributes = joint->drawMode != 0 ? joint->drawMode->attributes : 0;
+    if (joint->partCount) {
+        PSVECAdd(&joint->bboxMin, &joint->bboxMax, &hit->centerLocal);
+        PSVECScale(&hit->centerLocal, &hit->centerLocal, float_0p5_8041f84c);
     } else {
-        *(u32*)((s32)hit + 0x04) = 0;
+        hit->centerLocal = joint->translation;
     }
-
-    if (*(s32*)((s32)param_1 + 0x5C) != 0) {
-        PSVECAdd((void*)((s32)param_1 + 0x3C), (void*)((s32)param_1 + 0x48), (void*)((s32)hit + 0x9C));
-        PSVECScale((void*)((s32)hit + 0x9C), (void*)((s32)hit + 0x9C), float_0p5_8041f84c);
-    } else {
-        *(u32*)((s32)hit + 0x9C) = *(u32*)((s32)param_1 + 0x30);
-        *(u32*)((s32)hit + 0xA0) = *(u32*)((s32)param_1 + 0x34);
-        *(u32*)((s32)hit + 0xA4) = *(u32*)((s32)param_1 + 0x38);
-    }
-
-    PSMTXMultVec((void*)((s32)hit + 0x0C), (void*)((s32)hit + 0x9C), (void*)((s32)hit + 0xC0));
-
-    *(f32*)((s32)param_1 + 0x3C) -= float_0p1_8041f83c;
-    *(f32*)((s32)param_1 + 0x40) -= float_0p1_8041f83c;
-    *(f32*)((s32)param_1 + 0x44) -= float_0p1_8041f83c;
-    *(f32*)((s32)param_1 + 0x48) += float_0p1_8041f83c;
-    *(f32*)((s32)param_1 + 0x4C) += float_0p1_8041f83c;
-    *(f32*)((s32)param_1 + 0x50) += float_0p1_8041f83c;
-
-    PSMTXMultVec((void*)((s32)hit + 0x0C), (void*)((s32)param_1 + 0x48), tempVec);
-    *(f32*)((s32)hit + 0xCC) = PSVECDistance(tempVec, (void*)((s32)hit + 0xC0));
-
-    triCount = 0;
-    partIndex = 0;
-    partCount = *(s32*)((s32)param_1 + 0x5C);
-    while (partIndex < partCount) {
-        part = *(void**)((s32)param_1 + 0x64 + partIndex * 8);
-        if (part != 0) {
-            polyCount = *(s32*)((s32)part + 0x04);
-            polyIndex = 0;
-            if (*(u8*)((s32)part + 0x03) == 0) {
-                while (polyIndex < polyCount) {
-                    poly = *(void**)((s32)part + 0x10 + polyIndex * 4);
-                    triCount += *(s32*)poly - 2;
-                    polyIndex++;
+    PSMTXMultVec(hit->worldMtx, &hit->centerLocal, &hit->centerWorld);
+    joint->bboxMin.x -= float_0p1_8041f83c;
+    joint->bboxMin.y -= float_0p1_8041f83c;
+    joint->bboxMin.z -= float_0p1_8041f83c;
+    joint->bboxMax.x += float_0p1_8041f83c;
+    joint->bboxMax.y += float_0p1_8041f83c;
+    joint->bboxMax.z += float_0p1_8041f83c;
+    PSMTXMultVec(hit->worldMtx, &hit->joint->bboxMax, &vtmp);
+    hit->radius = PSVECDistance(&vtmp, &hit->centerWorld);
+    {
+        s32 numVectors, j, k;
+        s32 partIdx;
+        for (numVectors = 0, partIdx = 0; partIdx < hit->joint->partCount; partIdx++) {
+            MeshLocal* mesh = hit->joint->parts[partIdx].mesh;
+            if (mesh == 0) continue;
+            if (!mesh->isPackedDisplay) {
+                for (j = 0; j < mesh->displayListCount; j++) {
+                    numVectors += *(s32*)mesh->displayLists[j] - 2;
                 }
             } else {
-                while (polyIndex < polyCount) {
-                    poly = *(void**)((s32)part + 0x10 + polyIndex * 8);
-                    triCount += *(u16*)((s32)poly + 1) - 2;
-                    polyIndex++;
+                for (k = 0; k < mesh->displayListCount; k++) {
+                    numVectors += *(u16*)((u8*)mesh->displayLists[k * 2] + 1) - 2;
                 }
             }
         }
-        partIndex++;
+        if (numVectors > 0) {
+            hit->vectors = _mapAlloc(mapalloc_base_ptr, sizeof(HitVectorLocal) * numVectors);
+            hit->unkA8 = (s16)hitCalcVtxPosition(hit);
+        }
     }
-
-    if (triCount > 0) {
-        alloc = _mapAlloc(mapalloc_base_ptr, triCount * 0x54);
-        *(void**)((s32)hit + 0xAC) = alloc;
-        *(s16*)((s32)hit + 0xA8) = (s16)hitCalcVtxPosition(hit);
-    }
-
     return hit;
 }
 
@@ -264,24 +251,31 @@ void* hitEntrySub(void* joint, s32 parent, void* parentMtx, s32 rootOnly, s32 gr
 }
 
 void* hitEntry(void* mapObj, void* arg, s32 idx) {
+    typedef struct HitEntryLocal {
+        u8 data[0xE4];
+    } HitEntryLocal;
+    typedef struct MapEntryLocal {
+        u8 unk0[0x158];
+        s32 hitNumJoints;
+        HitEntryLocal* hitEntries;
+        u8 unk160[0x18];
+    } MapEntryLocal;
+    typedef struct MapWorkLocal {
+        MapEntryLocal entries[1];
+    } MapWorkLocal;
     extern void* mapGetWork(void);
     extern s32 mapGetJoints(void* mapObj);
     extern void* _mapAlloc(void* heap, u32 size);
     extern void* mapalloc_base_ptr;
     extern void memset(void* dst, s32 value, u32 size);
 
-    void* map;
-    void* group;
-    s32 joints;
+    MapWorkLocal* wp = mapGetWork();
     u32 size;
 
-    map = mapGetWork();
-    joints = mapGetJoints(mapObj);
-    group = (void*)((s32)map + idx * 0x178);
-    *(s32*)((s32)group + 0x158) = joints;
-    size = (u32)((joints + 0x80) * 0xE4 + 0x1F) & ~0x1F;
-    *(void**)((s32)group + 0x15C) = _mapAlloc(mapalloc_base_ptr, size);
-    memset(*(void**)((s32)group + 0x15C), 0, size);
+    wp->entries[idx].hitNumJoints = mapGetJoints(mapObj);
+    size = (u32)((wp->entries[idx].hitNumJoints + 0x80) * sizeof(HitEntryLocal) + 0x1F) & ~0x1F;
+    wp->entries[idx].hitEntries = _mapAlloc(mapalloc_base_ptr, size);
+    memset(wp->entries[idx].hitEntries, 0, size);
     return hitEntrySub(mapObj, 0, arg, 1, idx);
 }
 
@@ -362,6 +356,7 @@ void hitMain(void) {
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern const f32 float_10_8041f840;
     void* map = mapGetWork();
+    void* scan = mapGetWork();
     void* group;
     void* hit;
     void* last = NULL;
@@ -370,8 +365,8 @@ void hitMain(void) {
     f32 scale[3][4];
 
     unk_8041e628 = NULL;
-    group = map;
-    for (groupIndex = 0; groupIndex < *(s32*)map; groupIndex++, group = (void*)((s32)group + 0x178)) {
+    group = scan;
+    for (groupIndex = 0; groupIndex < *(s32*)scan; groupIndex++, group = (void*)((s32)group + 0x178)) {
         hit = *(void**)((s32)group + 0x15C);
         for (hitIndex = 0; hitIndex < *(s32*)((s32)group + 0x158); hitIndex++, hit = (void*)((s32)hit + 0xE4)) {
             if (*(s32*)(*(s32*)((s32)hit + 8) + 0x5C) != 0 && (*(u16*)hit & 0x81) == 0) {
@@ -390,29 +385,38 @@ void hitMain(void) {
         s32 changed = 0;
         for (animIndex = 0; animIndex < *(s32*)((s32)group + 0x160); animIndex++, entry = (void*)((s32)entry + 0x20)) {
             u16 flags = *(u16*)entry;
-            void* tracks = *(void**)(*(s32*)((s32)entry + 0x18) + 0x18);
+            void* tracks = *(void**)(*(s32*)((s32)entry + 0x18) + 0x0C);
             if ((flags & 1) != 0 && ((flags & 2) == 0 || (flags & 0x1000) == 0) && tracks != NULL) {
                 s32 trackIndex;
                 void* trackNode = tracks;
                 for (trackIndex = 0; trackIndex < *(s32*)tracks; trackIndex++, trackNode = (void*)((s32)trackNode + 4)) {
                     void* track = *(void**)((s32)trackNode + 4);
-                    char* name = *(char**)((s32)track + 4);
-                    void* searchGroup = map;
+                    char* name = *(char**)track;
+                    void* searchMap = mapGetWork();
+                    void* searchGroup;
                     s32 searchGroupIndex;
-                    hit = NULL;
-                    for (searchGroupIndex = 0; name != NULL && searchGroupIndex < *(s32*)map; searchGroupIndex++, searchGroup = (void*)((s32)searchGroup + 0x178)) {
-                        void* candidate = *(void**)((s32)searchGroup + 0x15C);
-                        for (hitIndex = 0; hitIndex < *(s32*)((s32)searchGroup + 0x158); hitIndex++, candidate = (void*)((s32)candidate + 0xE4)) {
-                            if ((*(u16*)candidate & 0x80) == 0 && strcmp(**(char***)((s32)candidate + 8), name) == 0) {
-                                hit = candidate;
-                                break;
+                    if (name == NULL) {
+                        hit = NULL;
+                    } else {
+                        searchGroup = searchMap;
+                        for (searchGroupIndex = 0; searchGroupIndex < *(s32*)searchMap;
+                             searchGroupIndex++, searchGroup = (void*)((s32)searchGroup + 0x178)) {
+                            hit = *(void**)((s32)searchGroup + 0x15C);
+                            for (hitIndex = 0; hitIndex < *(s32*)((s32)searchGroup + 0x158);
+                                 hitIndex++, hit = (void*)((s32)hit + 0xE4)) {
+                                if ((*(u16*)hit & 0x80) == 0 &&
+                                    strcmp(**(char***)((s32)hit + 8), name) == 0) {
+                                    goto search_done;
+                                }
                             }
                         }
-                        if (hit != NULL) break;
+                        hit = NULL;
                     }
+search_done:
                     if (hit != NULL) {
                         mapCalcAnimMatrix((void*)((s32)hit + 0x6C), (void*)((s32)hit + 0x3C), entry, track);
-                        *(u16*)hit |= 0x50;
+                        *(u16*)hit |= 0x10;
+                        *(u16*)hit |= 0x40;
                         *(u16*)entry |= 0x1000;
                         changed = 1;
                     }
@@ -1532,6 +1536,32 @@ s32 hitCalcVtxPosition(void* hit) {
     extern void PSMTXMultVec(void*, void*, void*);
     extern void PSVECSubtract(void*, void*, void*);
     extern void PSVECCrossProduct(void*, void*, void*);
+    typedef struct VecCalcUnpacked {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecCalcUnpacked;
+    typedef struct HitVectorCalcUnpacked {
+        VecCalcUnpacked v0;
+        VecCalcUnpacked v1;
+        VecCalcUnpacked v2;
+        VecCalcUnpacked edge0;
+        VecCalcUnpacked edge1;
+        VecCalcUnpacked edge2;
+        VecCalcUnpacked normal;
+    } HitVectorCalcUnpacked;
+    typedef struct HitEntryCalc {
+        u16 flags;
+        u8 unk2[2];
+        s32 attributes;
+        void* joint;
+        f32 worldMtx[3][4];
+        u8 unk3C[0xA8 - 0x3C];
+        s16 unkA8;
+        s16 mapIndex;
+        void* vectors;
+    } HitEntryCalc;
+    HitEntryCalc* entry = (HitEntryCalc*)hit;
     void* joint;
     void* shape;
     s32* poly;
@@ -1543,12 +1573,13 @@ s32 hitCalcVtxPosition(void* hit) {
     s32 triIndex;
     s32 triOffset;
 
-    if (*(s32*)((s32)hit + 0xAC) == 0) {
+    if (entry->vectors == NULL) {
         return 0;
     }
-    jointOffset = 0;
-    for (jointIndex = 0; jointIndex < *(s32*)(*(s32*)((s32)hit + 8) + 0x5C); jointIndex++) {
-        joint = *(void**)(*(s32*)((s32)hit + 8) + jointOffset + 0x64);
+    for (jointIndex = 0, jointOffset = 0;
+         jointIndex < *(s32*)((s32)entry->joint + 0x5C);
+         jointIndex++, jointOffset += 8) {
+        joint = *(void**)((s32)entry->joint + jointOffset + 0x64);
         if (joint != 0) {
             if (*(u8*)((s32)joint + 3) == 0) {
                 s32 index0;
@@ -1556,34 +1587,36 @@ s32 hitCalcVtxPosition(void* hit) {
                 s32 index2;
                 s32 temp;
                 s32* polyIter;
+                HitVectorCalcUnpacked* out;
                 shape = joint;
                 for (shapeIndex = 0; shapeIndex < *(s32*)((s32)joint + 4); shapeIndex++) {
                     poly = *(s32**)((s32)shape + 0x10);
                     polyIter = poly;
                     triOffset = count * 0x54;
                     for (triIndex = 0; triIndex < *poly - 2; triIndex++) {
-                        tri = (void*)(*(s32*)((s32)hit + 0xAC) + triOffset);
+                        tri = (void*)((s32)entry->vectors + triOffset);
+                        out = (HitVectorCalcUnpacked*)tri;
                         index1 = *(s16*)((s32)polyIter + 0x1C);
                         index2 = *(s16*)((s32)polyIter + 0x34);
                         count++;
                         triOffset += 0x54;
-                        PSMTXMultVec((void*)((s32)hit + 0xC),
+                        PSMTXMultVec(entry->worldMtx,
                                      (void*)(**(s32**)((s32)joint + 0xC) + 4 +
-                                             *(s16*)((s32)polyIter + 4) * 0xC), tri);
+                                             *(s16*)((s32)polyIter + 4) * 0xC), &out->v0);
                         temp = index1;
                         if ((triIndex & 1) == 0) temp = index2;
-                        PSMTXMultVec((void*)((s32)hit + 0xC),
+                        PSMTXMultVec(entry->worldMtx,
                                      (void*)(**(s32**)((s32)joint + 0xC) + 4 + temp * 0xC),
-                                     (void*)((s32)tri + 0xC));
+                                     &out->v1);
                         temp = index2;
                         if ((triIndex & 1) == 0) temp = index1;
-                        PSMTXMultVec((void*)((s32)hit + 0xC),
+                        PSMTXMultVec(entry->worldMtx,
                                      (void*)(**(s32**)((s32)joint + 0xC) + 4 + temp * 0xC),
-                                     (void*)((s32)tri + 0x18));
-                        PSVECSubtract((void*)((s32)tri + 0x18), tri, (void*)((s32)tri + 0x24));
-                        PSVECSubtract(tri, (void*)((s32)tri + 0xC), (void*)((s32)tri + 0x30));
-                        PSVECSubtract((void*)((s32)tri + 0xC), (void*)((s32)tri + 0x18), (void*)((s32)tri + 0x3C));
-                        PSVECCrossProduct((void*)((s32)tri + 0x24), (void*)((s32)tri + 0x30), (void*)((s32)tri + 0x48));
+                                     &out->v2);
+                        PSVECSubtract(&out->v2, &out->v0, &out->edge0);
+                        PSVECSubtract(&out->v0, &out->v1, &out->edge1);
+                        PSVECSubtract(&out->v1, &out->v2, &out->edge2);
+                        PSVECCrossProduct(&out->edge0, &out->edge1, &out->normal);
                         polyIter += 6;
                     }
                     shape = (void*)((s32)shape + 4);
@@ -1622,14 +1655,14 @@ s32 hitCalcVtxPosition(void* hit) {
                         index0 = *(u16*)((s32)poly + stride * triIndex + 3);
                         index1 = *(u16*)((s32)poly + stride * (triIndex + 1) + 3);
                         index2 = *(u16*)((s32)poly + stride * (triIndex + 2) + 3);
-                        tri = (void*)(*(s32*)((s32)hit + 0xAC) + triOffset);
+                        tri = (void*)((s32)entry->vectors + triOffset);
                         temp = index1;
                         if ((triIndex & 1) == 0) temp = index2;
                         index1 = temp;
                         temp = index2;
                         if ((triIndex & 1) == 0) temp = *(u16*)((s32)poly + stride * (triIndex + 1) + 3);
                         index2 = temp;
-                        qreg = *(u32*)((s32)*(void**)((s32)map + *(s16*)((s32)hit + 0xAA) * 0x178 + 0xA4) + 0x44);
+                        qreg = *(u32*)((s32)*(void**)((s32)map + entry->mapIndex * 0x178 + 0xA4) + 0x44);
                         qreg = (qreg << 8) | 7;
                         qreg |= qreg << 16;
                         asm { mtspr GQR5, qreg }
@@ -1661,9 +1694,9 @@ s32 hitCalcVtxPosition(void* hit) {
                         qoffset += 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex2[2] = qvalue;
-                        PSMTXMultVec((void*)((s32)hit + 0xC), vertex0, tri);
-                        PSMTXMultVec((void*)((s32)hit + 0xC), vertex1, (void*)((s32)tri + 0xC));
-                        PSMTXMultVec((void*)((s32)hit + 0xC), vertex2, (void*)((s32)tri + 0x18));
+                        PSMTXMultVec(entry->worldMtx, vertex0, tri);
+                        PSMTXMultVec(entry->worldMtx, vertex1, (void*)((s32)tri + 0xC));
+                        PSMTXMultVec(entry->worldMtx, vertex2, (void*)((s32)tri + 0x18));
                         PSVECSubtract((void*)((s32)tri + 0x18), tri, (void*)((s32)tri + 0x24));
                         PSVECSubtract(tri, (void*)((s32)tri + 0xC), (void*)((s32)tri + 0x30));
                         PSVECSubtract((void*)((s32)tri + 0xC), (void*)((s32)tri + 0x18), (void*)((s32)tri + 0x3C));
@@ -1680,7 +1713,6 @@ s32 hitCalcVtxPosition(void* hit) {
                 }
             }
         }
-        jointOffset += 8;
     }
     return count;
 }
@@ -2090,41 +2122,14 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
 void* hitCheckFilter(void* filter, f32* outX, f32* outY, f32* outZ,
                      f32* outDist, f32* outNX, f32* outNY, f32* outNZ,
                      f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz) {
-    typedef struct VecLocal {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecLocal;
-    typedef struct HitCheckQueryLocal {
-        s32 singleSided;
-        s32 user0;
-        s32 user1;
-        VecLocal targetPos;
-        VecLocal targetDir;
-        VecLocal hitPos;
-        VecLocal hitNormal;
-        f32 targetDistance;
-    } HitCheckQueryLocal;
+    HitCheckQuery temp;
+    HitCheckQuery* query = &temp;
+    HitEntry* entry;
 
-    extern const f32 vec3_802bf7b8[3];
-    extern const f32 vec3_802bf7c4[3];
-
-    HitCheckQueryLocal temp;
-    HitCheckQueryLocal* query = &temp;
-    VecLocal targetPos = *(VecLocal*)vec3_802bf7b8;
-    VecLocal targetDir = *(VecLocal*)vec3_802bf7c4;
-    void* entry;
-
-    targetPos.x = x;
-    targetPos.y = y;
-    targetPos.z = z;
-    targetDir.x = vx;
-    targetDir.y = vy;
-    targetDir.z = vz;
-    query->targetPos = targetPos;
-    query->targetDir = targetDir;
+    query->targetPos = (Vec){ x, y, z };
+    query->targetDir = (Vec){ vx, vy, vz };
     query->targetDistance = *outDist;
-    entry = (void*)hitCheckVecFilter((HitCheckQuery*)query, (HitFilterCallback)filter);
+    entry = hitCheckVecFilter(query, (HitFilterCallback)filter);
     if (entry == NULL) {
         return NULL;
     }
@@ -2146,102 +2151,93 @@ void* hitCheckFilter(void* filter, f32* outX, f32* outY, f32* outZ,
 #pragma use_lmw_stmw off
 
 u8 checkTriVec_xz(void* ray, void* tri) {
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern f32 PSVECDotProduct(void* a, void* b);
-    extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern const f32 float_0_8041f838;
-    extern const f32 float_neg1_8041f848;
+    HitCheckQuery* query = (HitCheckQuery*)ray;
+    HitVector* vector = (HitVector*)tri;
+    Vec v1, v2, v3;
+    f32 cosAngle;
+    f32 distToTrianglePlane;
 
-    f32 vec0[3];
-    f32 vec1[3];
-    f32 vec2[3];
-    f32 dot;
-    f32 side;
-    f32 denom;
-    f32 t;
-
-    PSVECSubtract((void*)((s32)ray + 0x0C), tri, vec0);
-    dot = PSVECDotProduct((void*)((s32)tri + 0x48), vec0);
-
-    if (*(s32*)ray != 0) {
-        if (dot < float_0_8041f838) {
+    PSVECSubtract(&query->targetPos, &vector->v0, &v1);
+    distToTrianglePlane = PSVECDotProduct(&vector->normal, &v1);
+    if (query->singleSided != 0) {
+        if (distToTrianglePlane < float_0_8041f838) {
             return 0;
         }
-
-        side = vec0[1] * (*(f32*)((s32)tri + 0x24) * *(f32*)((s32)ray + 0x20) - *(f32*)((s32)tri + 0x2C) * *(f32*)((s32)ray + 0x18))
-             + vec0[0] * (-*(f32*)((s32)tri + 0x28) * *(f32*)((s32)ray + 0x20))
-             + vec0[2] * (*(f32*)((s32)tri + 0x28) * *(f32*)((s32)ray + 0x18));
-        if (side < float_0_8041f838) {
+        if ((v1.x * (-vector->edge0.y * query->targetDir.z)) +
+                (v1.y * ((vector->edge0.x * query->targetDir.z) -
+                         (vector->edge0.z * query->targetDir.x))) +
+                (v1.z * (vector->edge0.y * query->targetDir.x)) <
+            float_0_8041f838) {
             return 0;
         }
-
-        PSVECSubtract((void*)((s32)ray + 0x0C), (void*)((s32)tri + 0x0C), vec1);
-        side = vec1[1] * (*(f32*)((s32)tri + 0x30) * *(f32*)((s32)ray + 0x20) - *(f32*)((s32)tri + 0x38) * *(f32*)((s32)ray + 0x18))
-             + vec1[0] * (-*(f32*)((s32)tri + 0x34) * *(f32*)((s32)ray + 0x20))
-             + vec1[2] * (*(f32*)((s32)tri + 0x34) * *(f32*)((s32)ray + 0x18));
-        if (side < float_0_8041f838) {
+        PSVECSubtract(&query->targetPos, &vector->v1, &v2);
+        if ((v2.x * (-vector->edge1.y * query->targetDir.z)) +
+                (v2.y * ((vector->edge1.x * query->targetDir.z) -
+                         (vector->edge1.z * query->targetDir.x))) +
+                (v2.z * (vector->edge1.y * query->targetDir.x)) <
+            float_0_8041f838) {
             return 0;
         }
-
-        PSVECSubtract((void*)((s32)ray + 0x0C), (void*)((s32)tri + 0x18), vec2);
-        side = vec2[1] * (*(f32*)((s32)tri + 0x3C) * *(f32*)((s32)ray + 0x20) - *(f32*)((s32)tri + 0x44) * *(f32*)((s32)ray + 0x18))
-             + vec2[0] * (-*(f32*)((s32)tri + 0x40) * *(f32*)((s32)ray + 0x20))
-             + vec2[2] * (*(f32*)((s32)tri + 0x40) * *(f32*)((s32)ray + 0x18));
-        if (side < float_0_8041f838) {
+        PSVECSubtract(&query->targetPos, &vector->v2, &v3);
+        if ((v3.x * (-vector->edge2.y * query->targetDir.z)) +
+                (v3.y * ((vector->edge2.x * query->targetDir.z) -
+                         (vector->edge2.z * query->targetDir.x))) +
+                (v3.z * (vector->edge2.y * query->targetDir.x)) <
+            float_0_8041f838) {
             return 0;
         }
     } else {
-        denom = *(f32*)((s32)tri + 0x48) * *(f32*)((s32)ray + 0x18)
-              + *(f32*)((s32)tri + 0x50) * *(f32*)((s32)ray + 0x20);
-        if (dot * denom >= float_0_8041f838) {
+        if (((vector->normal.x * query->targetDir.x) +
+             (vector->normal.z * query->targetDir.z)) *
+                distToTrianglePlane >=
+            float_0_8041f838) {
             return 0;
         }
-
-        side = dot * (vec0[1] * (*(f32*)((s32)tri + 0x24) * *(f32*)((s32)ray + 0x20) - *(f32*)((s32)tri + 0x2C) * *(f32*)((s32)ray + 0x18))
-                    + vec0[0] * (-*(f32*)((s32)tri + 0x28) * *(f32*)((s32)ray + 0x20))
-                    + vec0[2] * (*(f32*)((s32)tri + 0x28) * *(f32*)((s32)ray + 0x18)));
-        if (side < float_0_8041f838) {
+        if (((v1.x * (-vector->edge0.y * query->targetDir.z)) +
+             (v1.y * ((vector->edge0.x * query->targetDir.z) -
+                      (vector->edge0.z * query->targetDir.x))) +
+             (v1.z * (vector->edge0.y * query->targetDir.x))) *
+                distToTrianglePlane <
+            float_0_8041f838) {
             return 0;
         }
-
-        PSVECSubtract((void*)((s32)ray + 0x0C), (void*)((s32)tri + 0x0C), vec1);
-        side = dot * (vec1[1] * (*(f32*)((s32)tri + 0x30) * *(f32*)((s32)ray + 0x20) - *(f32*)((s32)tri + 0x38) * *(f32*)((s32)ray + 0x18))
-                    + vec1[0] * (-*(f32*)((s32)tri + 0x34) * *(f32*)((s32)ray + 0x20))
-                    + vec1[2] * (*(f32*)((s32)tri + 0x34) * *(f32*)((s32)ray + 0x18)));
-        if (side < float_0_8041f838) {
+        PSVECSubtract(&query->targetPos, &vector->v1, &v2);
+        if (((v2.x * (-vector->edge1.y * query->targetDir.z)) +
+             (v2.y * ((vector->edge1.x * query->targetDir.z) -
+                      (vector->edge1.z * query->targetDir.x))) +
+             (v2.z * (vector->edge1.y * query->targetDir.x))) *
+                distToTrianglePlane <
+            float_0_8041f838) {
             return 0;
         }
-
-        PSVECSubtract((void*)((s32)ray + 0x0C), (void*)((s32)tri + 0x18), vec2);
-        side = dot * (vec2[1] * (*(f32*)((s32)tri + 0x3C) * *(f32*)((s32)ray + 0x20) - *(f32*)((s32)tri + 0x44) * *(f32*)((s32)ray + 0x18))
-                    + vec2[0] * (-*(f32*)((s32)tri + 0x40) * *(f32*)((s32)ray + 0x20))
-                    + vec2[2] * (*(f32*)((s32)tri + 0x40) * *(f32*)((s32)ray + 0x18)));
-        if (side < float_0_8041f838) {
+        PSVECSubtract(&query->targetPos, &vector->v2, &v3);
+        if (((v3.x * (-vector->edge2.y * query->targetDir.z)) +
+             (v3.y * ((vector->edge2.x * query->targetDir.z) -
+                      (vector->edge2.z * query->targetDir.x))) +
+             (v3.z * (vector->edge2.y * query->targetDir.x))) *
+                distToTrianglePlane <
+            float_0_8041f838) {
             return 0;
         }
     }
-
-    denom = *(f32*)((s32)tri + 0x48) * *(f32*)((s32)ray + 0x18)
-          + *(f32*)((s32)tri + 0x50) * *(f32*)((s32)ray + 0x20);
-    t = -dot / denom;
-
-    if (*(f32*)((s32)ray + 0x3C) < float_0_8041f838 || t < *(f32*)((s32)ray + 0x3C)) {
-        *(f32*)((s32)ray + 0x3C) = t;
-        *(f32*)((s32)ray + 0x24) = *(f32*)((s32)ray + 0x18) * t + *(f32*)((s32)ray + 0x0C);
-        *(f32*)((s32)ray + 0x28) = *(f32*)((s32)ray + 0x10);
-        *(f32*)((s32)ray + 0x2C) = *(f32*)((s32)ray + 0x20) * t + *(f32*)((s32)ray + 0x14);
-
-        if (dot < float_0_8041f838) {
-            *(s32*)((s32)ray + 0x30) = *(s32*)((s32)tri + 0x48);
-            *(s32*)((s32)ray + 0x34) = *(s32*)((s32)tri + 0x4C);
-            *(s32*)((s32)ray + 0x38) = *(s32*)((s32)tri + 0x50);
-        } else {
-            PSVECScale((void*)((s32)tri + 0x48), (void*)((s32)ray + 0x30), float_neg1_8041f848);
-        }
-        return 1;
+    cosAngle = (vector->normal.x * query->targetDir.x) +
+               (vector->normal.z * query->targetDir.z);
+    if (query->targetDistance >= float_0_8041f838 &&
+        -distToTrianglePlane / cosAngle >= query->targetDistance) {
+        return 0;
     }
-
-    return 0;
+    query->targetDistance = -distToTrianglePlane / cosAngle;
+    query->hitPos.x = query->targetPos.x +
+                      (query->targetDir.x * query->targetDistance);
+    query->hitPos.y = query->targetPos.y;
+    query->hitPos.z = query->targetPos.z +
+                      (query->targetDir.z * query->targetDistance);
+    if (distToTrianglePlane >= float_0_8041f838) {
+        query->hitNormal = vector->normal;
+    } else {
+        PSVECScale(&vector->normal, &query->hitNormal, float_neg1_8041f848);
+    }
+    return 1;
 }
 
 #pragma use_lmw_stmw reset
@@ -2249,17 +2245,21 @@ u8 checkTriVec_xz(void* ray, void* tri) {
 
 
 u8 hitCheckVecHitObjXZ(s32* ray, void* hitObj) {
-    extern f32 PSVECDotProduct(void* a, void* b);
-    extern u8 checkTriVec_xz(void* ray, void* tri);
-    f32* fRay = (f32*)ray;
-    u8* tri;
-    s32 i;
+    HitCheckQuery* query = (HitCheckQuery*)ray;
+    HitEntry* entry = (HitEntry*)hitObj;
+    HitVector* vector;
+    int i;
 
-    ray[0] = (*(u8*)(*(s32*)(*(s32*)((s32)hitObj + 8) + 0x58) + 1) == 1);
-    tri = *(u8**)((s32)hitObj + 0xAC);
-    for (i = 0; i < *(s16*)((s32)hitObj + 0xA8); i++, tri += 0x54) {
-        if ((ray[0] == 0 || PSVECDotProduct(tri + 0x48, fRay + 6) < 0.0f) &&
-            checkTriVec_xz(ray, tri) != 0) {
+    if (entry->joint->drawMode->cullMode == 1) {
+        query->singleSided = 1;
+    } else {
+        query->singleSided = 0;
+    }
+    vector = entry->vectors;
+    for (i = 0; i < entry->unkA8; i++, vector++) {
+        if ((query->singleSided == 0 ||
+             !(PSVECDotProduct(&vector->normal, &query->targetDir) >= float_0_8041f838)) &&
+            checkTriVec_xz(query, vector)) {
             return 1;
         }
     }
@@ -2273,45 +2273,19 @@ s32 chkFilterAttr(void* a, void* b) {
 void* hitCheckAttr(s32 flags, f32* outX, f32* outY, f32* outZ, f32* outDist,
                    f32* outNX, f32* outNY, f32* outNZ,
                    f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz) {
-    typedef struct VecLocal {
-        f32 x;
-        f32 y;
-        f32 z;
-    } VecLocal;
-    typedef struct HitCheckQueryLocal {
-        s32 singleSided;
-        s32 user0;
-        s32 user1;
-        VecLocal targetPos;
-        VecLocal targetDir;
-        VecLocal hitPos;
-        VecLocal hitNormal;
-        f32 targetDistance;
-    } HitCheckQueryLocal;
+    HitCheckQuery temp;
+    HitCheckQuery* query = &temp;
+    HitEntry* entry;
 
-    extern const f32 vec3_802bf7d0[3];
-    extern const f32 vec3_802bf7dc[3];
-
-    HitCheckQueryLocal temp;
-    HitCheckQueryLocal* query = &temp;
-    VecLocal targetPos = *(VecLocal*)vec3_802bf7d0;
-    VecLocal targetDir = *(VecLocal*)vec3_802bf7dc;
-    void* entry;
-
-    targetPos.x = x;
-    targetPos.y = y;
-    targetPos.z = z;
-    targetDir.x = vx;
-    targetDir.y = vy;
-    targetDir.z = vz;
-    query->targetPos = targetPos;
-    query->targetDir = targetDir;
+    query->targetPos = (Vec){ x, y, z };
+    query->targetDir = (Vec){ vx, vy, vz };
     query->targetDistance = *outDist;
     query->user0 = flags;
-    entry = (void*)hitCheckVecFilter((HitCheckQuery*)query, (HitFilterCallback)chkFilterAttr);
+    entry = hitCheckVecFilter(query, (HitFilterCallback)chkFilterAttr);
     if (entry == NULL) {
         return NULL;
     }
+
     *outDist = query->targetDistance;
     *outX = query->hitPos.x;
     *outY = query->hitPos.y;
@@ -2322,239 +2296,105 @@ void* hitCheckAttr(s32 flags, f32* outX, f32* outY, f32* outZ, f32* outDist,
     return entry;
 }
 
-void* hitCheckSphereFilter(void* filter, f32 x, f32 y, f32 z, f32 radius) {
-    extern void* mapGetWork(void);
-    extern f32 PSVECDistance(void* a, void* b);
-    extern void PSVECSubtract(void* a, void* b, void* out);
-    extern void PSVECNormalize(void* src, void* dst);
-    extern f32 PSVECDotProduct(void* a, void* b);
-    extern void PSVECCrossProduct(void* a, void* b, void* out);
-    extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern void PSVECAdd(void* a, void* b, void* out);
-    extern const f32 float_neg1_8041f848;
-    extern const f32 float_0_8041f838;
-    extern const f32 float_0p5_8041f84c;
+void* hitCheckSphereFilter(void* filter, f32 x, f32 y, f32 z, f32 distance) {
+    typedef s32 (*HitSphereFilterFunc)(HitCheckQuery* query, HitEntry* entry);
+    typedef struct MapEntryLocal {
+        s32 count;
+        u8 unk4[0x154];
+        s32 hitNumJoints;
+        HitEntry* hitEntries;
+        u8 unk160[0x18];
+    } MapEntryLocal;
+    typedef struct MapWorkLocal {
+        MapEntryLocal entries[1];
+    } MapWorkLocal;
+    extern const f32 vec3_802bf7e8[3];
 
-    typedef s32 (*HitSphereFilterFunc)(void* work, void* hit);
+    MapWorkLocal* wp = mapGetWork();
+    MapEntryLocal* var_r31 = wp->entries;
+    MapEntryLocal* map;
+    Vec sp68;
+    int j;
+    HitEntry* temp_r27;
+    HitEntry* var_r23;
+    HitVector* vector;
+    f32 var_f28;
+    f32 temp_f1;
+    f32 var_f30;
+    f32 var_f31;
+    s32 entryId;
+    s32 objectId;
+    s32 var_r29;
+    HitCheckQuery temp;
+    HitCheckQuery* query;
+    int i;
 
-    void* map;
-    void* group;
-    void* hit;
-    void* selected;
-    void* tri;
-    f32 pos[3];
-    f32 scanPos[3];
-    f32 work[16];
-    f32 vec0[3];
-    f32 vec1[3];
-    f32 vec2[3];
-    f32 cross0[3];
-    f32 cross1[3];
-    f32 cross2[3];
-    f32 scaled[3];
-    f32 hitPos[3];
-    f32 hitNormal[3];
-    f32 bestDist;
-    f32 bestRadius;
-    f32 dist;
-    f32 hitRadius;
-    f32 dot;
-    f32 denom;
-    f32 side;
-    f32 t;
-    f32 bestT;
-    s32 bestGroup;
-    s32 bestIndex;
-    s32 groupIndex;
-    s32 hitIndex;
-    s32 triIndex;
-    s32 triHit;
-    s32 oneSided;
-
-    map = mapGetWork();
-    bestDist = float_neg1_8041f848;
-    bestIndex = -1;
-    bestGroup = 0;
-
-    pos[0] = x;
-    pos[1] = y;
-    pos[2] = z;
-    scanPos[0] = x;
-    scanPos[1] = y;
-    scanPos[2] = z;
-
-    group = map;
-    groupIndex = 0;
-    while (groupIndex < *(s32*)map) {
-        hit = *(void**)((s32)group + 0x15C);
-        hitIndex = 0;
-        while (hitIndex < *(s32*)((s32)group + 0x158)) {
-            if ((*(u32*)((s32)hit + 0x04) & 0x80000000) != 0 &&
-                *(s32*)(*(s32*)((s32)hit + 0x08) + 0x5C) != 0 &&
-                (*(u16*)hit & 1) == 0 &&
-                (*(u16*)hit & 0x80) == 0) {
-                dist = PSVECDistance(scanPos, (void*)((s32)hit + 0xC0));
-                hitRadius = *(f32*)((s32)hit + 0xCC);
-                if (dist <= radius + hitRadius) {
-                    if (filter == 0 || ((HitSphereFilterFunc)filter)(work, hit) != 0) {
-                        if (bestDist < float_0_8041f838 || dist < bestDist) {
-                            bestDist = dist;
-                            bestRadius = hitRadius;
-                            bestIndex = hitIndex;
-                            bestGroup = groupIndex;
+    var_f28 = float_neg1_8041f848;
+    objectId = -1;
+    query = &temp;
+    sp68 = *(Vec*)vec3_802bf7e8;
+    sp68.x = x;
+    sp68.y = y;
+    sp68.z = z;
+    for (i = 0; i < var_r31->count; var_r31++, i++) {
+        var_r23 = var_r31->hitEntries;
+        for (j = 0; j < var_r31->hitNumJoints; j++, var_r23++) {
+            if ((var_r23->attributes & 0x80000000) &&
+                (*(s32*)((u8*)var_r23->joint + 0x5C) != 0)) {
+                var_r29 = var_r23->flags;
+                if (!(var_r29 & 1) && !(var_r29 & 0x80)) {
+                    temp_f1 = PSVECDistance(&sp68, &var_r23->centerWorld);
+                    if (!(temp_f1 > (distance + var_r23->radius))) {
+                        if (filter == NULL || ((HitSphereFilterFunc)filter)(query, var_r23)) {
+                            if (var_f28 < float_0_8041f838 || var_f28 > temp_f1) {
+                                var_f28 = temp_f1;
+                                var_f31 = var_r23->radius;
+                                objectId = j;
+                                entryId = i;
+                            }
                         }
                     }
                 }
             }
-            hitIndex++;
-            hit = (void*)((s32)hit + 0xE4);
         }
-        group = (void*)((s32)group + 0x178);
-        groupIndex++;
     }
-
-    if (bestIndex < 0) {
-        return 0;
+    if (objectId < 0) {
+        return NULL;
     }
-
-    group = (void*)((s32)map + bestGroup * 0x178);
-    selected = (void*)(*(s32*)((s32)group + 0x15C) + bestIndex * 0xE4);
-
-    if (bestDist < float_0p5_8041f84c * bestRadius) {
-        return selected;
+    if (var_f28 < (float_0p5_8041f84c * var_f31)) {
+        return &wp->entries[entryId].hitEntries[objectId];
     }
-
-    PSVECSubtract((void*)((s32)selected + 0xC0), scanPos, (void*)((s32)work + 0x18));
-    PSVECNormalize((void*)((s32)work + 0x18), (void*)((s32)work + 0x18));
-
-    work[3] = scanPos[0];
-    work[4] = scanPos[1];
-    work[5] = scanPos[2];
-    work[15] = radius;
-
-    oneSided = (*(u8*)(*(s32*)(*(s32*)((s32)selected + 0x08) + 0x58) + 1) == 1);
-    *(s32*)work = oneSided;
-
-    tri = *(void**)((s32)selected + 0xAC);
-    bestT = float_neg1_8041f848;
-    triHit = -1;
-    triIndex = 0;
-    while (triIndex < *(s16*)((s32)selected + 0xA8)) {
-        if (oneSided != 0) {
-            if (PSVECDotProduct((void*)((s32)tri + 0x48), (void*)((s32)work + 0x18)) >= float_0_8041f838) {
-                triIndex++;
-                tri = (void*)((s32)tri + 0x54);
-                continue;
-            }
-
-            PSVECSubtract((void*)((s32)work + 0x0C), tri, vec0);
-            dot = PSVECDotProduct((void*)((s32)tri + 0x48), vec0);
-            if (dot < float_0_8041f838) {
-                triIndex++;
-                tri = (void*)((s32)tri + 0x54);
-                continue;
-            }
-
-            PSVECCrossProduct((void*)((s32)work + 0x18), (void*)((s32)tri + 0x24), cross0);
-            side = PSVECDotProduct(vec0, cross0);
-            if (side < float_0_8041f838) {
-                triIndex++;
-                tri = (void*)((s32)tri + 0x54);
-                continue;
-            }
-
-            PSVECSubtract((void*)((s32)work + 0x0C), (void*)((s32)tri + 0x0C), vec1);
-            PSVECCrossProduct((void*)((s32)work + 0x18), (void*)((s32)tri + 0x30), cross1);
-            side = PSVECDotProduct(vec1, cross1);
-            if (side < float_0_8041f838) {
-                triIndex++;
-                tri = (void*)((s32)tri + 0x54);
-                continue;
-            }
-
-            PSVECSubtract((void*)((s32)work + 0x0C), (void*)((s32)tri + 0x18), vec2);
-            PSVECCrossProduct((void*)((s32)work + 0x18), (void*)((s32)tri + 0x3C), cross2);
-            side = PSVECDotProduct(vec2, cross2);
-            if (side < float_0_8041f838) {
-                triIndex++;
-                tri = (void*)((s32)tri + 0x54);
-                continue;
-            }
-
-            denom = PSVECDotProduct((void*)((s32)tri + 0x48), (void*)((s32)work + 0x18));
-        } else {
-            PSVECSubtract((void*)((s32)work + 0x0C), tri, vec0);
-            dot = PSVECDotProduct((void*)((s32)tri + 0x48), vec0);
-            denom = PSVECDotProduct((void*)((s32)tri + 0x48), (void*)((s32)work + 0x18));
-            if (denom * dot >= float_0_8041f838) {
-                triIndex++;
-                tri = (void*)((s32)tri + 0x54);
-                continue;
-            }
-
-            PSVECCrossProduct((void*)((s32)work + 0x18), (void*)((s32)tri + 0x24), cross0);
-            side = dot * PSVECDotProduct(vec0, cross0);
-            if (side < float_0_8041f838) {
-                triIndex++;
-                tri = (void*)((s32)tri + 0x54);
-                continue;
-            }
-
-            PSVECSubtract((void*)((s32)work + 0x0C), (void*)((s32)tri + 0x0C), vec1);
-            PSVECCrossProduct((void*)((s32)work + 0x18), (void*)((s32)tri + 0x30), cross1);
-            side = dot * PSVECDotProduct(vec1, cross1);
-            if (side < float_0_8041f838) {
-                triIndex++;
-                tri = (void*)((s32)tri + 0x54);
-                continue;
-            }
-
-            PSVECSubtract((void*)((s32)work + 0x0C), (void*)((s32)tri + 0x18), vec2);
-            PSVECCrossProduct((void*)((s32)work + 0x18), (void*)((s32)tri + 0x3C), cross2);
-            side = dot * PSVECDotProduct(vec2, cross2);
-            if (side < float_0_8041f838) {
-                triIndex++;
-                tri = (void*)((s32)tri + 0x54);
-                continue;
+    map = &wp->entries[entryId];
+    temp_r27 = &map->hitEntries[objectId];
+    PSVECSubtract(&temp_r27->centerWorld, &sp68, &query->targetDir);
+    PSVECNormalize(&query->targetDir, &query->targetDir);
+    var_f30 = float_neg1_8041f848;
+    var_r29 = -1;
+    query->targetPos = sp68;
+    query->targetDistance = distance;
+    if (temp_r27->joint->drawMode->cullMode == 1) {
+        query->singleSided = 1;
+    } else {
+        query->singleSided = 0;
+    }
+    vector = temp_r27->vectors;
+    for (i = 0; i < temp_r27->unkA8; i++, vector++) {
+        if ((query->singleSided == 0) ||
+            !(PSVECDotProduct(&vector->normal, &query->targetDir) >= float_0_8041f838)) {
+            if (tempfunc3(query, vector) &&
+                ((var_f30 < float_0_8041f838) || (var_f30 > query->targetDistance))) {
+                var_f30 = query->targetDistance;
+                var_r29 = 1;
             }
         }
-
-        t = -dot / denom;
-        if (work[15] >= float_0_8041f838 && t >= work[15]) {
-            triIndex++;
-            tri = (void*)((s32)tri + 0x54);
-            continue;
-        }
-
-        work[15] = t;
-        PSVECScale((void*)((s32)work + 0x18), scaled, t);
-        PSVECAdd((void*)((s32)work + 0x0C), scaled, (void*)((s32)work + 0x24));
-
-        if (dot <= float_0_8041f838) {
-            *(s32*)((s32)work + 0x30) = *(s32*)((s32)tri + 0x48);
-            *(s32*)((s32)work + 0x34) = *(s32*)((s32)tri + 0x4C);
-            *(s32*)((s32)work + 0x38) = *(s32*)((s32)tri + 0x50);
-        } else {
-            PSVECScale((void*)((s32)tri + 0x48), (void*)((s32)work + 0x30), float_neg1_8041f848);
-        }
-
-        if (bestT < float_0_8041f838 || work[15] < bestT) {
-            bestT = work[15];
-            triHit = 1;
-        }
-
-        triIndex++;
-        tri = (void*)((s32)tri + 0x54);
     }
-
-    if (bestT > radius) {
-        return 0;
+    if (var_f30 > distance) {
+        return NULL;
     }
-    if (triHit < 0) {
-        return 0;
+    if (var_r29 < 0) {
+        return NULL;
     }
-
-    return selected;
+    return &map->hitEntries[objectId];
 }
 
 void* hitNameToPtr(char* hitName) {
@@ -2598,67 +2438,67 @@ void hitObjGetPosSub(u32 param_1, u32 param_2, s32* param_3, BOOL param_4) {
   typedef struct { f32 x; f32 y; f32 z; } HitVec;
   extern void PSMTXMultVec(void* mtx, void* src, void* dst);
   extern void PSVECAdd(void* a, void* b, void* out);
-  u32 iVar1;
-  u32 iVar2;
   u32 iVar3;
-  HitVec VStack_d8;
-  HitVec VStack_cc;
-  HitVec VStack_c0;
-  HitVec VStack_b4;
-  HitVec VStack_a8;
-  HitVec VStack_9c;
-  HitVec VStack_90;
-  HitVec VStack_84;
-  HitVec VStack_78;
-  HitVec VStack_6c;
-  HitVec VStack_60;
-  HitVec VStack_54;
-  HitVec VStack_48;
-  HitVec VStack_3c;
+  u32 iVar2;
+  u32 iVar1;
   HitVec VStack_30;
+  HitVec VStack_3c;
+  HitVec VStack_48;
+  HitVec VStack_54;
+  HitVec VStack_60;
+  HitVec VStack_6c;
+  HitVec VStack_78;
+  HitVec VStack_84;
+  HitVec VStack_90;
+  HitVec VStack_9c;
+  HitVec VStack_a8;
+  HitVec VStack_b4;
+  HitVec VStack_c0;
+  HitVec VStack_cc;
+  HitVec VStack_d8;
 
   iVar3 = *(int *)(param_1 + 0xd8);
   if (iVar3 != 0) {
     iVar2 = *(int *)(iVar3 + 0xd8);
-    if (iVar2 == 0) {
-      PSMTXMultVec((void*)(iVar3 + 0xc), (void*)(iVar3 + 0x9c), &VStack_3c);
-      PSVECAdd((void*)param_2, &VStack_3c, (void*)param_2);
-      *param_3 = *param_3 + 1;
-    }
-    else {
+    if (iVar2 != 0) {
       iVar1 = *(int *)(iVar2 + 0xd8);
-      if (iVar1 == 0) {
-        PSMTXMultVec((void*)(iVar2 + 0xc), (void*)(iVar2 + 0x9c), &VStack_54);
-        PSVECAdd((void*)param_2, &VStack_54, (void*)param_2);
-        *param_3 = *param_3 + 1;
-      }
-      else {
-        if (*(int *)(iVar1 + 0xd8) == 0) {
+      if (iVar1 != 0) {
+        if (*(int *)(iVar1 + 0xd8) != 0) {
+          hitObjGetPosSub(*(int *)(iVar1 + 0xd8), param_2, param_3, 1);
+        }
+        else {
           PSMTXMultVec((void*)(iVar1 + 0xc), (void*)(iVar1 + 0x9c), &VStack_84);
           PSVECAdd((void*)param_2, &VStack_84, (void*)param_2);
           *param_3 = *param_3 + 1;
-        }
-        else {
-          hitObjGetPosSub(*(int *)(iVar1 + 0xd8), param_2, param_3, 1);
         }
         if (*(int *)(iVar1 + 0xdc) != 0) {
           hitObjGetPosSub(*(int *)(iVar1 + 0xdc), param_2, param_3, 1);
         }
       }
+      else {
+        PSMTXMultVec((void*)(iVar2 + 0xc), (void*)(iVar2 + 0x9c), &VStack_54);
+        PSVECAdd((void*)param_2, &VStack_54, (void*)param_2);
+        *param_3 = *param_3 + 1;
+      }
       iVar2 = *(int *)(iVar2 + 0xdc);
       if (iVar2 != 0) {
-        if (*(int *)(iVar2 + 0xd8) == 0) {
+        if (*(int *)(iVar2 + 0xd8) != 0) {
+          hitObjGetPosSub(*(int *)(iVar2 + 0xd8), param_2, param_3, 1);
+        }
+        else {
           PSMTXMultVec((void*)(iVar2 + 0xc), (void*)(iVar2 + 0x9c), &VStack_90);
           PSVECAdd((void*)param_2, &VStack_90, (void*)param_2);
           *param_3 = *param_3 + 1;
-        }
-        else {
-          hitObjGetPosSub(*(int *)(iVar2 + 0xd8), param_2, param_3, 1);
         }
         if (*(int *)(iVar2 + 0xdc) != 0) {
           hitObjGetPosSub(*(int *)(iVar2 + 0xdc), param_2, param_3, 1);
         }
       }
+    }
+    else {
+      PSMTXMultVec((void*)(iVar3 + 0xc), (void*)(iVar3 + 0x9c), &VStack_3c);
+      PSVECAdd((void*)param_2, &VStack_3c, (void*)param_2);
+      *param_3 = *param_3 + 1;
     }
     iVar3 = *(int *)(iVar3 + 0xdc);
     if (iVar3 != 0) {
@@ -2669,13 +2509,13 @@ void hitObjGetPosSub(u32 param_1, u32 param_2, s32* param_3, BOOL param_4) {
         *param_3 = *param_3 + 1;
       }
       else {
-        if (*(int *)(iVar2 + 0xd8) == 0) {
+        if (*(int *)(iVar2 + 0xd8) != 0) {
+          hitObjGetPosSub(*(int *)(iVar2 + 0xd8), param_2, param_3, 1);
+        }
+        else {
           PSMTXMultVec((void*)(iVar2 + 0xc), (void*)(iVar2 + 0x9c), &VStack_9c);
           PSVECAdd((void*)param_2, &VStack_9c, (void*)param_2);
           *param_3 = *param_3 + 1;
-        }
-        else {
-          hitObjGetPosSub(*(int *)(iVar2 + 0xd8), param_2, param_3, 1);
         }
         if (*(int *)(iVar2 + 0xdc) != 0) {
           hitObjGetPosSub(*(int *)(iVar2 + 0xdc), param_2, param_3, 1);
@@ -2683,13 +2523,13 @@ void hitObjGetPosSub(u32 param_1, u32 param_2, s32* param_3, BOOL param_4) {
       }
       iVar3 = *(int *)(iVar3 + 0xdc);
       if (iVar3 != 0) {
-        if (*(int *)(iVar3 + 0xd8) == 0) {
+        if (*(int *)(iVar3 + 0xd8) != 0) {
+          hitObjGetPosSub(*(int *)(iVar3 + 0xd8), param_2, param_3, 1);
+        }
+        else {
           PSMTXMultVec((void*)(iVar3 + 0xc), (void*)(iVar3 + 0x9c), &VStack_a8);
           PSVECAdd((void*)param_2, &VStack_a8, (void*)param_2);
           *param_3 = *param_3 + 1;
-        }
-        else {
-          hitObjGetPosSub(*(int *)(iVar3 + 0xd8), param_2, param_3, 1);
         }
         if (*(int *)(iVar3 + 0xdc) != 0) {
           hitObjGetPosSub(*(int *)(iVar3 + 0xdc), param_2, param_3, 1);
@@ -2704,76 +2544,76 @@ void hitObjGetPosSub(u32 param_1, u32 param_2, s32* param_3, BOOL param_4) {
   }
   if ((param_4 != 0) && (iVar3 = *(int *)(param_1 + 0xdc), iVar3 != 0)) {
     iVar2 = *(int *)(iVar3 + 0xd8);
-    if (iVar2 == 0) {
-      PSMTXMultVec((void*)(iVar3 + 0xc), (void*)(iVar3 + 0x9c), &VStack_48);
-      PSVECAdd((void*)param_2, &VStack_48, (void*)param_2);
-      *param_3 = *param_3 + 1;
-    }
-    else {
+    if (iVar2 != 0) {
       iVar1 = *(int *)(iVar2 + 0xd8);
-      if (iVar1 == 0) {
-        PSMTXMultVec((void*)(iVar2 + 0xc), (void*)(iVar2 + 0x9c), &VStack_6c);
-        PSVECAdd((void*)param_2, &VStack_6c, (void*)param_2);
-        *param_3 = *param_3 + 1;
-      }
-      else {
-        if (*(int *)(iVar1 + 0xd8) == 0) {
+      if (iVar1 != 0) {
+        if (*(int *)(iVar1 + 0xd8) != 0) {
+          hitObjGetPosSub(*(int *)(iVar1 + 0xd8), param_2, param_3, 1);
+        }
+        else {
           PSMTXMultVec((void*)(iVar1 + 0xc), (void*)(iVar1 + 0x9c), &VStack_b4);
           PSVECAdd((void*)param_2, &VStack_b4, (void*)param_2);
           *param_3 = *param_3 + 1;
-        }
-        else {
-          hitObjGetPosSub(*(int *)(iVar1 + 0xd8), param_2, param_3, 1);
         }
         if (*(int *)(iVar1 + 0xdc) != 0) {
           hitObjGetPosSub(*(int *)(iVar1 + 0xdc), param_2, param_3, 1);
         }
       }
+      else {
+        PSMTXMultVec((void*)(iVar2 + 0xc), (void*)(iVar2 + 0x9c), &VStack_6c);
+        PSVECAdd((void*)param_2, &VStack_6c, (void*)param_2);
+        *param_3 = *param_3 + 1;
+      }
       iVar2 = *(int *)(iVar2 + 0xdc);
       if (iVar2 != 0) {
-        if (*(int *)(iVar2 + 0xd8) == 0) {
+        if (*(int *)(iVar2 + 0xd8) != 0) {
+          hitObjGetPosSub(*(int *)(iVar2 + 0xd8), param_2, param_3, 1);
+        }
+        else {
           PSMTXMultVec((void*)(iVar2 + 0xc), (void*)(iVar2 + 0x9c), &VStack_c0);
           PSVECAdd((void*)param_2, &VStack_c0, (void*)param_2);
           *param_3 = *param_3 + 1;
-        }
-        else {
-          hitObjGetPosSub(*(int *)(iVar2 + 0xd8), param_2, param_3, 1);
         }
         if (*(int *)(iVar2 + 0xdc) != 0) {
           hitObjGetPosSub(*(int *)(iVar2 + 0xdc), param_2, param_3, 1);
         }
       }
     }
+    else {
+      PSMTXMultVec((void*)(iVar3 + 0xc), (void*)(iVar3 + 0x9c), &VStack_48);
+      PSVECAdd((void*)param_2, &VStack_48, (void*)param_2);
+      *param_3 = *param_3 + 1;
+    }
     iVar3 = *(int *)(iVar3 + 0xdc);
     if (iVar3 != 0) {
       iVar2 = *(int *)(iVar3 + 0xd8);
-      if (iVar2 == 0) {
-        PSMTXMultVec((void*)(iVar3 + 0xc), (void*)(iVar3 + 0x9c), &VStack_78);
-        PSVECAdd((void*)param_2, &VStack_78, (void*)param_2);
-        *param_3 = *param_3 + 1;
-      }
-      else {
-        if (*(int *)(iVar2 + 0xd8) == 0) {
+      if (iVar2 != 0) {
+        if (*(int *)(iVar2 + 0xd8) != 0) {
+          hitObjGetPosSub(*(int *)(iVar2 + 0xd8), param_2, param_3, 1);
+        }
+        else {
           PSMTXMultVec((void*)(iVar2 + 0xc), (void*)(iVar2 + 0x9c), &VStack_cc);
           PSVECAdd((void*)param_2, &VStack_cc, (void*)param_2);
           *param_3 = *param_3 + 1;
-        }
-        else {
-          hitObjGetPosSub(*(int *)(iVar2 + 0xd8), param_2, param_3, 1);
         }
         if (*(int *)(iVar2 + 0xdc) != 0) {
           hitObjGetPosSub(*(int *)(iVar2 + 0xdc), param_2, param_3, 1);
         }
       }
+      else {
+        PSMTXMultVec((void*)(iVar3 + 0xc), (void*)(iVar3 + 0x9c), &VStack_78);
+        PSVECAdd((void*)param_2, &VStack_78, (void*)param_2);
+        *param_3 = *param_3 + 1;
+      }
       iVar3 = *(int *)(iVar3 + 0xdc);
       if (iVar3 != 0) {
-        if (*(int *)(iVar3 + 0xd8) == 0) {
+        if (*(int *)(iVar3 + 0xd8) != 0) {
+          hitObjGetPosSub(*(int *)(iVar3 + 0xd8), param_2, param_3, 1);
+        }
+        else {
           PSMTXMultVec((void*)(iVar3 + 0xc), (void*)(iVar3 + 0x9c), &VStack_d8);
           PSVECAdd((void*)param_2, &VStack_d8, (void*)param_2);
           *param_3 = *param_3 + 1;
-        }
-        else {
-          hitObjGetPosSub(*(int *)(iVar3 + 0xd8), param_2, param_3, 1);
         }
         if (*(int *)(iVar3 + 0xdc) != 0) {
           hitObjGetPosSub(*(int *)(iVar3 + 0xdc), param_2, param_3, 1);
@@ -2784,56 +2624,51 @@ void hitObjGetPosSub(u32 param_1, u32 param_2, s32* param_3, BOOL param_4) {
 }
 
 void hitObjGetPos(char* name, f32* out) {
-    extern void* mapGetWork(void);
-    extern s32 strcmp(const char* str1, const char* str2);
-    extern void hitObjGetPosSub(void* hit, void* pos, s32* count, s32 recursive);
-    extern void PSVECScale(void* src, void* dst, f32 scale);
-    extern const f32 float_1_8041f844;
-
-    void* map;
-    void* group;
-    void* hit;
-    s32 groupIndex;
-    s32 hitIndex;
+    typedef struct HitMapEntryInline {
+        s32 count;
+        u8 unk4[0x154];
+        s32 hitNumJoints;
+        HitEntry* hitEntries;
+        u8 unk160[0x18];
+    } HitMapEntryInline;
+    extern const f32 vec3_802bf7f4[3];
+    extern const f32 vec3_802bf800[3];
+    Vec pos;
     s32 count;
-    f32 pos[3];
+    HitEntry* hit;
+    HitMapEntryInline* map;
+    HitMapEntryInline* wp;
+    int j;
+    HitMapEntryInline* new_var;
+    HitMapEntryInline* new_var2;
+    int i;
 
     count = 0;
-    pos[0] = 0.0f;
-    pos[1] = 0.0f;
-    pos[2] = 0.0f;
-
-    map = mapGetWork();
+    pos = *(Vec*)vec3_802bf7f4;
+    wp = mapGetWork();
     if (name == NULL) {
         hit = NULL;
     } else {
-        group = map;
-        groupIndex = 0;
-        while (groupIndex < *(s32*)map) {
-            hit = *(void**)((s32)group + 0x15C);
-            hitIndex = 0;
-            while (hitIndex < *(s32*)((s32)group + 0x158)) {
-                if ((*(u16*)hit & 0x80) == 0 &&
-                    strcmp(**(char***)((s32)hit + 0x8), name) == 0) {
+        map = wp;
+        new_var = map;
+        new_var2 = new_var;
+        for (i = 0; i < new_var2->count; map++, i++) {
+            hit = map->hitEntries;
+            for (j = 0; j < map->hitNumJoints; j++, hit++) {
+                if (!(hit->flags & 0x80) && !strcmp(*(char**)hit->joint, name)) {
                     goto found;
                 }
-                hitIndex++;
-                hit = (void*)((s32)hit + 0xE4);
             }
-            group = (void*)((s32)group + 0x178);
-            groupIndex++;
         }
         hit = NULL;
     }
 
 found:
     if (hit == NULL) {
-        out[0] = 0.0f;
-        out[1] = -1000.0f;
-        out[2] = 0.0f;
+        *(Vec*)out = *(Vec*)vec3_802bf800;
     } else {
-        hitObjGetPosSub(hit, pos, &count, 0);
-        PSVECScale(pos, out, float_1_8041f844 / (f32)count);
+        hitObjGetPosSub((u32)hit, (u32)&pos, &count, 0);
+        PSVECScale(&pos, out, float_1_8041f844 / (f32)count);
     }
 }
 
@@ -2923,9 +2758,9 @@ u32 hitGetAttr(void* hit) {
     return 0;
 }
 u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
-  int iVar1;
-  int iVar2;
-  int iVar3;
+  u32 iVar3;
+  u32 iVar2;
+  u32 iVar1;
 
   *(u32 *)(param_1 + 4) = *(u32 *)(param_1 + 4) | 0x40000000;
   *(s32 *)(param_1 + 0xb0) = param_2;
@@ -2941,10 +2776,10 @@ u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
       if (iVar1 != 0) {
         *(u32 *)(iVar1 + 4) = *(u32 *)(iVar1 + 4) | 0x40000000;
         *(s32 *)(iVar1 + 0xb0) = param_2;
-        if (*(int *)(iVar1 + 0xd8) != 0) {
+        if (*(u32 *)(iVar1 + 0xd8) != 0) {
           hitDamageReturnSet(*(int *)(iVar1 + 0xd8), param_2, 1);
         }
-        if (*(int *)(iVar1 + 0xdc) != 0) {
+        if (*(u32 *)(iVar1 + 0xdc) != 0) {
           hitDamageReturnSet(*(int *)(iVar1 + 0xdc), param_2, 1);
         }
       }
@@ -2952,10 +2787,10 @@ u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
       if (iVar2 != 0) {
         *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
         *(s32 *)(iVar2 + 0xb0) = param_2;
-        if (*(int *)(iVar2 + 0xd8) != 0) {
+        if (*(u32 *)(iVar2 + 0xd8) != 0) {
           hitDamageReturnSet(*(int *)(iVar2 + 0xd8), param_2, 1);
         }
-        if (*(int *)(iVar2 + 0xdc) != 0) {
+        if (*(u32 *)(iVar2 + 0xdc) != 0) {
           hitDamageReturnSet(*(int *)(iVar2 + 0xdc), param_2, 1);
         }
       }
@@ -2968,10 +2803,10 @@ u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
       if (iVar2 != 0) {
         *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
         *(s32 *)(iVar2 + 0xb0) = param_2;
-        if (*(int *)(iVar2 + 0xd8) != 0) {
+        if (*(u32 *)(iVar2 + 0xd8) != 0) {
           hitDamageReturnSet(*(int *)(iVar2 + 0xd8), param_2, 1);
         }
-        if (*(int *)(iVar2 + 0xdc) != 0) {
+        if (*(u32 *)(iVar2 + 0xdc) != 0) {
           hitDamageReturnSet(*(int *)(iVar2 + 0xdc), param_2, 1);
         }
       }
@@ -2979,10 +2814,10 @@ u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
       if (iVar3 != 0) {
         *(u32 *)(iVar3 + 4) = *(u32 *)(iVar3 + 4) | 0x40000000;
         *(s32 *)(iVar3 + 0xb0) = param_2;
-        if (*(int *)(iVar3 + 0xd8) != 0) {
+        if (*(u32 *)(iVar3 + 0xd8) != 0) {
           hitDamageReturnSet(*(int *)(iVar3 + 0xd8), param_2, 1);
         }
-        if (*(int *)(iVar3 + 0xdc) != 0) {
+        if (*(u32 *)(iVar3 + 0xdc) != 0) {
           hitDamageReturnSet(*(int *)(iVar3 + 0xdc), param_2, 1);
         }
       }
@@ -2999,10 +2834,10 @@ u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
       if (iVar1 != 0) {
         *(u32 *)(iVar1 + 4) = *(u32 *)(iVar1 + 4) | 0x40000000;
         *(s32 *)(iVar1 + 0xb0) = param_2;
-        if (*(int *)(iVar1 + 0xd8) != 0) {
+        if (*(u32 *)(iVar1 + 0xd8) != 0) {
           hitDamageReturnSet(*(int *)(iVar1 + 0xd8), param_2, 1);
         }
-        if (*(int *)(iVar1 + 0xdc) != 0) {
+        if (*(u32 *)(iVar1 + 0xdc) != 0) {
           hitDamageReturnSet(*(int *)(iVar1 + 0xdc), param_2, 1);
         }
       }
@@ -3010,10 +2845,10 @@ u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
       if (iVar2 != 0) {
         *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
         *(s32 *)(iVar2 + 0xb0) = param_2;
-        if (*(int *)(iVar2 + 0xd8) != 0) {
+        if (*(u32 *)(iVar2 + 0xd8) != 0) {
           hitDamageReturnSet(*(int *)(iVar2 + 0xd8), param_2, 1);
         }
-        if (*(int *)(iVar2 + 0xdc) != 0) {
+        if (*(u32 *)(iVar2 + 0xdc) != 0) {
           hitDamageReturnSet(*(int *)(iVar2 + 0xdc), param_2, 1);
         }
       }
@@ -3026,10 +2861,10 @@ u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
       if (iVar2 != 0) {
         *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
         *(s32 *)(iVar2 + 0xb0) = param_2;
-        if (*(int *)(iVar2 + 0xd8) != 0) {
+        if (*(u32 *)(iVar2 + 0xd8) != 0) {
           hitDamageReturnSet(*(int *)(iVar2 + 0xd8), param_2, 1);
         }
-        if (*(int *)(iVar2 + 0xdc) != 0) {
+        if (*(u32 *)(iVar2 + 0xdc) != 0) {
           hitDamageReturnSet(*(int *)(iVar2 + 0xdc), param_2, 1);
         }
       }
@@ -3037,10 +2872,10 @@ u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
       if (iVar3 != 0) {
         *(u32 *)(iVar3 + 4) = *(u32 *)(iVar3 + 4) | 0x40000000;
         *(s32 *)(iVar3 + 0xb0) = param_2;
-        if (*(int *)(iVar3 + 0xd8) != 0) {
+        if (*(u32 *)(iVar3 + 0xd8) != 0) {
           hitDamageReturnSet(*(int *)(iVar3 + 0xd8), param_2, 1);
         }
-        if (*(int *)(iVar3 + 0xdc) != 0) {
+        if (*(u32 *)(iVar3 + 0xdc) != 0) {
           hitDamageReturnSet(*(int *)(iVar3 + 0xdc), param_2, 1);
         }
       }
@@ -3207,10 +3042,6 @@ found:
     }
 }
 
-const f32 vec3_802bf7b8[3] = { 0.0f, 0.0f, 0.0f };
-const f32 vec3_802bf7c4[3] = { 0.0f, 0.0f, 0.0f };
-const f32 vec3_802bf7d0[3] = { 0.0f, 0.0f, 0.0f };
-const f32 vec3_802bf7dc[3] = { 0.0f, 0.0f, 0.0f };
 const f32 vec3_802bf7e8[3] = { 0.0f, 0.0f, 0.0f };
 const f32 vec3_802bf7f4[3] = { 0.0f, 0.0f, 0.0f };
 const f32 vec3_802bf800[3] = { 0.0f, 0.0f, 0.0f };

@@ -71,5 +71,3 @@ ActionCommandEntry ActionCommandList[] = {
 };
 
 #undef ACTION_COMMAND
-
-__declspec(section ".data") const u32 gap_05_803644EC_data = 0;

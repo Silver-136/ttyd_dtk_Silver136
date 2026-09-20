@@ -2386,6 +2386,7 @@ void psndENVOn(s32 id, s32 a2) {
     psndENVOn_f_d(id, a2, 1000, 0);
 }
 
+#pragma optimize_for_size off
 u32 psndENVOn_f_d(u32 flags, s32 name, s32 frames, s32 extra) {
     typedef struct PSndEnvListEntryLocal {
         u16 envId;
@@ -2406,146 +2407,222 @@ u32 psndENVOn_f_d(u32 flags, s32 name, s32 frames, s32 extra) {
         u8 unk1A;
         u8 pad1B;
     } PSndEnvListEntryLocal;
+
+    typedef struct PSndEnvStateLocal {
+        u8 state;
+        u8 pad1;
+        s16 fadeFrames;
+        s16 fadeValue;
+        u8 mode;
+        u8 volume;
+        s16 unk8;
+        s16 unkA;
+    } PSndEnvStateLocal;
+
+    typedef struct PSndWorkEnvLocal {
+        PSndEnvStateLocal envState[2];
+        u16 activeId[2];
+        s16 value1[2];
+        s16 value2[2];
+        u8 pad24[0x56 - 0x24];
+        u16 flags;
+    } PSndWorkEnvLocal;
+
+    typedef struct PSndEnvEntryLocal {
+        u32 soundId;
+        u16 envId;
+        u8 unk6;
+        u8 unk7;
+        u8 mode;
+        u8 randRange;
+        u8 baseTime;
+        u8 unkB;
+        u8 unkC;
+        u8 unkD;
+        u16 timer;
+        u16 unk10;
+        u8 pad12[0x18 - 0x12];
+        u32 unk18;
+        u32 unk1C;
+        u32 unk20;
+    } PSndEnvEntryLocal;
+
     extern char* psenvlistname[];
     extern PSndEnvListEntryLocal psenvlist[];
     extern void* gp;
     extern const f32 float_1000_804218cc;
     extern int strcmp(const char*, const char*);
     extern s32 irand(s32);
-    extern u8 psndENV_stop(u32);
+    extern void psndENV_stop(u32);
 
-    u8* envSlot;
-    u16* activeIdPtr;
-    u16 activeId;
     PSndEnvListEntryLocal* list;
     char** nameEntry;
-    s32 i;
+    PSndEnvStateLocal* envSlot;
+    u16* activeIdPtr;
+    u16 activeId;
+    s32 resolvedName;
+    s32 slot;
 
     list = psenvlist;
     nameEntry = psenvlistname;
-    if (name < 0) {
-        i = 0;
+
+    if (name >= 0) {
+        resolvedName = name;
+    } else {
+        resolvedName = 0;
         do {
             if (strcmp(*nameEntry, (char*)name) == 0) {
                 break;
             }
-            i++;
+            resolvedName++;
             nameEntry++;
-        } while (i < 0x76);
-        name = i;
-        if (name >= 0x76) {
-            name = 0;
+        } while (resolvedName < 0x76);
+
+        if (resolvedName >= 0x76) {
+            resolvedName = 0;
         }
     }
 
-    envSlot = (u8*)&psnd + (flags & 0xF) * 0xC;
-    activeIdPtr = (u16*)((u8*)&psnd + 0x18 + (flags & 0xF) * 2);
+    slot = flags & 0xF;
+    envSlot = &((PSndWorkEnvLocal*)&psnd)->envState[slot];
 
-    if ((*(u16*)((u8*)&psnd + 0x56) & 2) != 0) {
+    if ((((PSndWorkEnvLocal*)&psnd)->flags & 2) != 0) {
         return 0;
     }
 
+    activeIdPtr = &((PSndWorkEnvLocal*)&psnd)->activeId[slot];
     activeId = *activeIdPtr;
+
     if (activeId != 0) {
         if ((flags & 0x10) == 0) {
             if ((flags & 0x20) != 0) {
                 if ((flags & 0x100) != 0) {
-                    envSlot[0] = 1;
-                    *(s16*)(envSlot + 2) = (s16)((f32)frames / (float_1000_804218cc / (f32)*(s32*)((s32)gp + 4)));
-                    *(s16*)(envSlot + 4) = 0;
+                    envSlot->state = 1;
+                    envSlot->fadeFrames =
+                        (s16)((f32)(u32)frames /
+                              (float_1000_804218cc /
+                               (f32)*(s32*)((u8*)gp + 4)));
+                    envSlot->fadeValue = 0;
                 } else {
-                    envSlot[0] = 0;
-                    *(s16*)(envSlot + 2) = 1;
-                    *(s16*)(envSlot + 4) = 1;
+                    envSlot->state = 0;
+                    envSlot->fadeFrames = 1;
+                    envSlot->fadeValue = 1;
                 }
 
-                if ((flags & 0x80) != 0 && envSlot[6] == 8) {
+                if ((flags & 0x80) != 0 && envSlot->mode == 8) {
                     s32 fade;
-                    envSlot[6] = 0x10;
-                    *(s16*)(envSlot + 8) = (s16)((f32)frames / (float_1000_804218cc / (f32)*(s32*)((s32)gp + 4)));
-                    fade = *(s16*)(envSlot + 8) * envSlot[7];
-                    fade = fade / 100 + (fade >> 31);
-                    *(s16*)(envSlot + 0xA) = (s16)fade - (s16)(fade >> 31);
+
+                    envSlot->mode = 0x10;
+                    envSlot->unk8 =
+                        (s16)((f32)(u32)frames /
+                              (float_1000_804218cc /
+                               (f32)*(s32*)((u8*)gp + 4)));
+                    fade = envSlot->unk8 * envSlot->volume;
+                    envSlot->unkA = (s16)(fade / 100);
                 }
-                return 1;
+                goto success;
             }
 
-            if (activeId == (u16)name && envSlot[0] != 2) {
-                return 1;
+            if (activeId == resolvedName && envSlot->state != 2) {
+                goto success;
             }
         }
 
         psndENV_stop(activeId);
         *activeIdPtr = 0;
-        list = psenvlist;
     }
 
-    while (1) {
+    while (list->envId != 0x76) {
         u16 listId = list->envId;
 
-        if (listId == 0x76) {
-            *activeIdPtr = (u16)name;
-            envSlot[0] = 0;
-            *(s16*)((u8*)activeIdPtr + 4) = 32000;
-            *(s16*)((u8*)activeIdPtr + 8) = 32000;
-
-            if ((flags & 0x100) != 0) {
-                envSlot[0] = 1;
-                *(s16*)(envSlot + 2) = (s16)((f32)frames / (float_1000_804218cc / (f32)*(s32*)((s32)gp + 4)));
-                *(s16*)(envSlot + 4) = 0;
-            } else {
-                envSlot[0] = 0;
-                *(s16*)(envSlot + 2) = 1;
-                *(s16*)(envSlot + 4) = 1;
-            }
-            *(s16*)(envSlot + 8) = 1;
-            *(s16*)(envSlot + 0xA) = 1;
-            envSlot[6] = 0;
-            *(s16*)(envSlot + 8) = 1;
-            *(s16*)(envSlot + 0xA) = 1;
-            return 1;
-        }
-
-        if (listId == (u16)name) {
-            u8* dst = NULL;
+        if (listId == resolvedName) {
+            PSndEnvEntryLocal* dst = NULL;
+            PSndEnvEntryLocal* envBase = (PSndEnvEntryLocal*)psenv;
             s32 idx;
 
-            dst = NULL;
             for (idx = 0; idx < 0x10; idx++) {
-                if (*(s16*)((s32)&psenv[idx] + 4) == 0) {
-                    dst = (u8*)&psenv[idx];
+                if (envBase[idx].envId == 0) {
+                    dst = &envBase[idx];
                     break;
                 }
             }
-            if (dst != NULL) {
-                *(u16*)(dst + 4) = listId;
-                *(u32*)dst = list->soundId;
-                dst[6] = list->unk4;
-                dst[7] = list->unk5;
-                dst[8] = list->mode;
-                dst[9] = list->randRange;
-                dst[0xA] = list->baseTime;
-                *(u32*)(dst + 0x18) = list->unkC;
-                *(u32*)(dst + 0x1C) = list->unk10;
-                *(u32*)(dst + 0x20) = list->unk14;
-                dst[0xB] = list->unk18;
-                dst[0xC] = list->unk19;
-                *(u16*)(dst + 0x10) = list->unk1A;
-                dst[0xD] = 0;
-                *(u16*)(dst + 0xE) = 0;
 
-                if (dst[8] == 2) {
-                    *(u16*)(dst + 0xE) = dst[0xA] * *(s16*)((s32)gp + 4);
-                    *(s16*)(dst + 0xE) += *(s16*)((s32)gp + 4) * (s16)irand(dst[9]);
-                } else if (dst[8] < 2 && dst[8] == 0) {
-                    *(u16*)(dst + 0xE) = dst[0xA] * *(s16*)((s32)gp + 4);
-                    *(s16*)(dst + 0xE) += *(s16*)((s32)gp + 4) * (s16)irand(dst[9]);
+            if (dst != NULL) {
+                dst->envId = listId;
+                dst->soundId = list->soundId;
+                dst->unk6 = list->unk4;
+                dst->unk7 = list->unk5;
+                dst->mode = list->mode;
+                dst->randRange = list->randRange;
+                dst->baseTime = list->baseTime;
+                {
+                    u32 word0 = list->unkC;
+                    u32 word1 = list->unk10;
+
+                    dst->unk18 = word0;
+                    dst->unk1C = word1;
+                    dst->unk20 = list->unk14;
+                }
+                dst->unkB = list->unk18;
+                dst->unkC = list->unk19;
+                dst->unk10 = list->unk1A;
+                dst->unkD = 0;
+                dst->timer = 0;
+
+                switch (dst->mode) {
+                    case 0:
+                        dst->timer =
+                            dst->baseTime * *(s32*)((u8*)gp + 4);
+                        dst->timer +=
+                            *(s32*)((u8*)gp + 4) * irand(dst->randRange);
+                        break;
+
+                    case 2:
+                        dst->timer =
+                            dst->baseTime * *(s32*)((u8*)gp + 4);
+                        dst->timer +=
+                            *(s32*)((u8*)gp + 4) * irand(dst->randRange);
+                        break;
                 }
             }
         }
+
         list++;
     }
+
+    *activeIdPtr = (u16)resolvedName;
+    envSlot->state = 0;
+    ((PSndWorkEnvLocal*)&psnd)->value1[slot] = 32000;
+    ((PSndWorkEnvLocal*)&psnd)->value2[slot] = 32000;
+
+    if ((flags & 0x100) != 0) {
+        envSlot->state = 1;
+        envSlot->fadeFrames =
+            (s16)((f32)(u32)frames /
+                  (float_1000_804218cc /
+                   (f32)*(s32*)((u8*)gp + 4)));
+        envSlot->fadeValue = 0;
+        envSlot->unk8 = 1;
+        envSlot->unkA = 1;
+        envSlot->mode = 0;
+        envSlot->unk8 = 1;
+        envSlot->unkA = 1;
+    } else {
+        envSlot->state = 0;
+        envSlot->fadeFrames = 1;
+        envSlot->fadeValue = 1;
+        envSlot->unk8 = 1;
+        envSlot->unkA = 1;
+        envSlot->mode = 0;
+        envSlot->unk8 = 1;
+        envSlot->unkA = 1;
+    }
+
+success:
+    return 1;
 }
+
+#pragma optimize_for_size reset
 
 void psndENVOff(s32 id) {
     extern void psndENVOff_f_d(s32 id, s32 fade, s32 unk);

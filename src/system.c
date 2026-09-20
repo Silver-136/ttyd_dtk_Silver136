@@ -110,78 +110,55 @@ f32 reviseAngle(f32 angle) {
 }
 
 f32 distABf(f32 ax, f32 ay, f32 bx, f32 by) {
-    f32 dx;
-    f32 dy;
-    f64 dvalue;
-    f64 inv;
-    s32 exp;
-    u32 bits;
-    s32 type;
+    f32 xdiff, ydiff;
+    f32 value;
     const char* linear;
-    f32 classifyValue;
-    f64 square;
-    dy = by - ay;
-    dx = bx - ax;
+    f64 guess;
 
-    ax = dy * dy;
-    ax = dx * dx + ax;
-    dy = by - ay;
+    ydiff = by - ay;
     linear = str_LINEAR_802bf178;
-    dx = bx - ax;
+    xdiff = bx - ax;
+    value = (xdiff * xdiff) + (ydiff * ydiff);
 
-    dvalue = ax;
-
-    if (dvalue > (f64)float_0_8041f448) {
-        inv = __frsqrte(dvalue);
-
-        square = inv * inv;
-        inv = *(const f64*)(linear + 0x80) * inv *
-    (*(const f64*)(linear + 0x88) - dvalue * square);
-
-        square = inv * inv;
-        inv = *(const f64*)(linear + 0x80) * inv *
-    (*(const f64*)(linear + 0x88) - dvalue * square);
-
-        square = inv * inv;
-        inv = *(const f64*)(linear + 0x80) * inv *
-    (*(const f64*)(linear + 0x88) - dvalue * square);
-
-        return (f32)(dvalue * inv);
-    }
-
-    if (dvalue < *(const f64*)(linear + 0x90)) {
+    if (value > float_0_8041f448) {
+        guess = __frsqrte(value);
+        guess = *(const f64*)(linear + 0x80) * guess *
+                (*(const f64*)(linear + 0x88) - guess * guess * value);
+        guess = *(const f64*)(linear + 0x80) * guess *
+                (*(const f64*)(linear + 0x88) - guess * guess * value);
+        guess = *(const f64*)(linear + 0x80) * guess *
+                (*(const f64*)(linear + 0x88) - guess * guess * value);
+        return value * guess;
+    } else if ((f64)value < *(const f64*)(linear + 0x90)) {
         return __float_nan[0];
-    }
-
-    classifyValue = ax;
-    bits = *(u32*)&classifyValue;
-    exp = bits;
-    exp &= 0x7F800000;
-    if (exp >= 0x7F800000) {
-        if (exp == 0x7F800000) {
-            if ((bits & 0x7FFFFF) != 0) {
-                type = 1;
-            } else {
-                type = 2;
-            }
-        } else {
-            type = 4;
-        }
-    } else if (exp == 0) {
-        if ((bits & 0x7FFFFF) != 0) {
-            type = 5;
-        } else {
-            type = 3;
-        }
     } else {
-        type = 4;
-    }
+        s32 bits = *(s32*)&value;
+        s32 type;
 
-    if (type == 1) {
-        return __float_nan[0];
+        switch (bits & 0x7F800000) {
+            case 0x7F800000:
+                if (bits & 0x007FFFFF) {
+                    type = 1;
+                } else {
+                    type = 2;
+                }
+                break;
+            case 0:
+                if (bits & 0x007FFFFF) {
+                    type = 5;
+                } else {
+                    type = 3;
+                }
+                break;
+            default:
+                type = 4;
+                break;
+        }
+        if (type == 1) {
+            return __float_nan[0];
+        }
     }
-
-    return ax;
+    return value;
 }
 
 f32 compAngle(f32 angleA, f32 angleB) {
@@ -643,97 +620,99 @@ void fsort(void** base, u32 n) {
 }
 
 void qqsort(void* base, u32 count, u32 size, QSortCompareFunc compare) {
-    void** tableBase;
-    void** table;
-    void** slot;
-    u8* tmp;
-    u8* item;
-    u8* current;
-    u8* next;
+    u8* dst;
+    void** idx;
     u32 i;
-    u32 fillCount;
+    void** table;
+    u8* buf;
+    void** slot;
+    u8* cur;
+    void* p;
+    u32 j;
+    void** pp;
+    u8* src;
     u32 chunks;
     u32 remainder;
 
-    tableBase = tmp0;
-    tmp = tmp1;
+    table = tmp0;
+    buf = tmp1;
     comp = compare;
 
     if (count <= 1) {
         return;
     }
 
-    fillCount = count;
-    item = base;
-    table = tableBase;
+    src = base;
+    pp = table;
+    j = count;
 
-    if (fillCount > 0) {
-        chunks = fillCount >> 3;
+    if (j > 0) {
+        chunks = j >> 3;
 
         if (chunks != 0) {
             for (; chunks > 0; chunks--) {
-                table[0] = item;
-                item += size;
-                table[1] = item;
-                item += size;
-                table[2] = item;
-                item += size;
-                table[3] = item;
-                item += size;
-                table[4] = item;
-                item += size;
-                table[5] = item;
-                item += size;
-                table[6] = item;
-                item += size;
-                table[7] = item;
-                item += size;
-                table += 8;
+                pp[0] = src;
+                src += size;
+                pp[1] = src;
+                src += size;
+                pp[2] = src;
+                src += size;
+                pp[3] = src;
+                src += size;
+                pp[4] = src;
+                src += size;
+                pp[5] = src;
+                src += size;
+                pp[6] = src;
+                src += size;
+                pp[7] = src;
+                src += size;
+                pp += 8;
             }
         }
 
-        remainder = fillCount & 7;
+        remainder = j & 7;
 
         if (remainder != 0) {
             for (; remainder > 0; remainder--) {
-                *table = item;
-                item += size;
-                table++;
+                *pp = src;
+                src += size;
+                pp++;
             }
         }
     }
 
-    fsort(tableBase, count);
+    fsort(table, count);
 
-    item = base;
-    table = tableBase;
+    dst = base;
+    idx = table;
     i = 0;
 
     for (; i < count; i++) {
-        if (*table != 0) {
-            if (*table != item) {
-                slot = table;
-                current = item;
+        p = *idx;
+        if (p != 0) {
+            slot = idx;
+            if (p != dst) {
+                cur = dst;
 
-                memcpy(tmp, item, size);
+                memcpy(buf, dst, size);
 
                 do {
-                    memcpy(current, *slot, size);
+                    memcpy(cur, *slot, size);
 
-                    next = *slot;
+                    cur = *slot;
                     *slot = 0;
 
-                    slot = &tableBase[(u32)(next - (u8*)base) / size];
-                    current = next;
-                } while (*slot != item);
+                    slot = &table[(u32)(cur - (u8*)base) / size];
+                } while (*slot != dst);
 
-                memcpy(current, tmp, size);
+                memcpy(cur, buf, size);
                 *slot = 0;
             }
         }
 
-        item += size;
-        table++;
+        dst += size;
+        idx++;
     }
 }
 
@@ -761,10 +740,7 @@ void makeKey(void) {
         *(u32*)(gp + wordOfs + 0x1398) =
             *(u32*)(gp + wordOfs + 0x1388);
 
-        if ((value == 0) || (value != *(u32*)(gp + wordOfs + 0x1378))) {
-            slow = *(s32*)(gp + 4) * 0x18 / 0x3C;
-            *(s32*)(gp + wordOfs + 0x13A8) = slow;
-        } else {
+        if ((value != 0) && (value == *(u32*)(gp + wordOfs + 0x1378))) {
             slow = *(s32*)(gp + wordOfs + 0x13A8) - 1;
             *(s32*)(gp + wordOfs + 0x13A8) = slow;
 
@@ -774,6 +750,9 @@ void makeKey(void) {
                 slow = *(s32*)(gp + 4) * 6 / 0x3C;
                 *(s32*)(gp + wordOfs + 0x13A8) = slow;
             }
+        } else {
+            slow = *(s32*)(gp + 4) * 0x18 / 0x3C;
+            *(s32*)(gp + wordOfs + 0x13A8) = slow;
         }
 
         *(u32*)(gp + wordOfs + 0x1378) = value;
@@ -792,10 +771,7 @@ void makeKey(void) {
         *(u32*)(gp + wordOfs + 0x1348) =
             *(u32*)(gp + wordOfs + 0x1338);
 
-        if ((value == 0) || (value != *(u32*)(gp + wordOfs + 0x1328))) {
-            slow = *(s32*)(gp + 4) * 0x18 / 0x3C;
-            *(s32*)(gp + wordOfs + 0x1358) = slow;
-        } else {
+        if ((value != 0) && (value == *(u32*)(gp + wordOfs + 0x1328))) {
             slow = *(s32*)(gp + wordOfs + 0x1358) - 1;
             *(s32*)(gp + wordOfs + 0x1358) = slow;
 
@@ -805,6 +781,9 @@ void makeKey(void) {
                 slow = *(s32*)(gp + 4) * 6 / 0x3C;
                 *(s32*)(gp + wordOfs + 0x1358) = slow;
             }
+        } else {
+            slow = *(s32*)(gp + 4) * 0x18 / 0x3C;
+            *(s32*)(gp + wordOfs + 0x1358) = slow;
         }
 
         *(u32*)(gp + wordOfs + 0x1328) = value;
@@ -814,27 +793,14 @@ void makeKey(void) {
         wordOfs += 4;
     }
 
-    padOfs = 0;
-    byteOfs = 0;
-    for (count = 0; count < 2; count++) {
-        *(u8*)(gp + byteOfs + 0x13B8) = *(u8*)(DemoPad + padOfs + 0x2);
-        *(u8*)(gp + byteOfs + 0x13BC) = *(u8*)(DemoPad + padOfs + 0x3);
-        *(u8*)(gp + byteOfs + 0x13C0) = *(u8*)(DemoPad + padOfs + 0x4);
-        *(u8*)(gp + byteOfs + 0x13C4) = *(u8*)(DemoPad + padOfs + 0x5);
-        *(u8*)(gp + byteOfs + 0x13C8) = *(u8*)(DemoPad + padOfs + 0x6);
-        *(u8*)(gp + byteOfs + 0x13CC) = *(u8*)(DemoPad + padOfs + 0x7);
-
-        padOfs += 0x1E;
-
-        *(u8*)(gp + byteOfs + 1 + 0x13B8) = *(u8*)(DemoPad + padOfs + 0x2);
-        *(u8*)(gp + byteOfs + 1 + 0x13BC) = *(u8*)(DemoPad + padOfs + 0x3);
-        *(u8*)(gp + byteOfs + 1 + 0x13C0) = *(u8*)(DemoPad + padOfs + 0x4);
-        *(u8*)(gp + byteOfs + 1 + 0x13C4) = *(u8*)(DemoPad + padOfs + 0x5);
-        *(u8*)(gp + byteOfs + 1 + 0x13C8) = *(u8*)(DemoPad + padOfs + 0x6);
-        *(u8*)(gp + byteOfs + 1 + 0x13CC) = *(u8*)(DemoPad + padOfs + 0x7);
-
-        padOfs += 0x1E;
-        byteOfs += 2;
+    for (count = 0; count < 4; count++) {
+        padOfs = count * 0x1E;
+        *(u8*)(gp + count + 0x13B8) = *(u8*)(DemoPad + padOfs + 0x2);
+        *(u8*)(gp + count + 0x13BC) = *(u8*)(DemoPad + padOfs + 0x3);
+        *(u8*)(gp + count + 0x13C0) = *(u8*)(DemoPad + padOfs + 0x4);
+        *(u8*)(gp + count + 0x13C4) = *(u8*)(DemoPad + padOfs + 0x5);
+        *(u8*)(gp + count + 0x13C8) = *(u8*)(DemoPad + padOfs + 0x6);
+        *(u8*)(gp + count + 0x13CC) = *(u8*)(DemoPad + padOfs + 0x7);
     }
 
     wordOfs = 0;
@@ -1043,25 +1009,16 @@ void sysWaitDrawSync(void) {
     u32 startTick;
     u32 elapsed;
     u32 tickRate;
-    u32 magic;
-    volatile u32* tickBase;
 
-    drawToken = token;
-    token = drawToken + 1;
-
+    drawToken = token++;
     startTick = OSGetTick();
 
-    if (__mapdrv_make_dl == 0) {
+    if (!__mapdrv_make_dl) {
         GXSetDrawSync(drawToken);
-
-        magic = 0x10624DD3;
-        tickBase = (volatile u32*)0x800000F8;
-        drawToken = (u16)drawToken;
 
         while ((u16)GXReadDrawSync() != drawToken) {
             elapsed = OSGetTick() - startTick;
-            tickRate = (u32)(((u64)(*tickBase >> 2) * magic) >> 32);
-            tickRate >>= 6;
+            tickRate = __mulhwu(0x10624DD3, *(volatile u32*)0x800000F8 >> 2) >> 6;
 
             if ((elapsed / tickRate) > 100) {
                 break;
@@ -1142,10 +1099,10 @@ f32 getV60FPS(f32 scale, u64 start, u64 end) {
     u64 endFrame;
     u64 diff;
 
-    tickRate = (*(u32*)0x800000F8 >> 2) / 1000;
+    tickRate = __mulhwu(0x10624DD3, *(volatile u32*)0x800000F8 >> 2) >> 6;
 
-    startFrame = start / tickRate;
-    endFrame = end / tickRate;
+    startFrame = (s64)start / tickRate;
+    endFrame = (s64)end / tickRate;
 
     if (endFrame >= startFrame) {
         diff = endFrame - startFrame;

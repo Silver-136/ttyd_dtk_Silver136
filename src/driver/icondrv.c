@@ -606,22 +606,14 @@ void iconDispGxAlpha(f32 scale, void* pos, s32 someBitfield, s32 iconId, s32 alp
     u32 color;
     s32 count;
     s32 total;
-    s32 used;
     s32 i;
-    void* scan;
     s32 retrace;
     f32 angle;
 
     cam = camGetCurPtr();
     iconPtr = icon;
-
     if (icon_tpl_ok != 0 && icon_bin_ok != 0) {
-        PSMTXTrans(
-            trans,
-            *(f32*)((s32)pos + 0x0),
-            *(f32*)((s32)pos + 0x4),
-            *(f32*)((s32)pos + 0x8)
-        );
+        PSMTXTrans(trans, *(f32*)((s32)pos), *(f32*)((s32)pos + 4), *(f32*)((s32)pos + 8));
         PSMTXScale(scaleMtx, scale, scale, scale);
         angle = -*(f32*)((s32)cam + 0x114);
         PSMTXRotRad(rot, 0x79, float_deg2rad_8041f8a0 * angle);
@@ -634,7 +626,6 @@ void iconDispGxAlpha(f32 scale, void* pos, s32 someBitfield, s32 iconId, s32 alp
         iconPtr[0] = someBitfield;
         *(u32*)((s32)iconPtr + 0x14) = color;
         iconPtr[0x14] = iconId;
-
         id = (u16)iconId;
         bin = icon_bin;
         if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
@@ -649,66 +640,29 @@ void iconDispGxAlpha(f32 scale, void* pos, s32 someBitfield, s32 iconId, s32 alp
             } else {
                 id = ICON_SDA_U16_TABLE(unk_8041504c, *(s32*)((s32)gp + 0x16C));
             }
-
             entry = (void*)((s32)bin + (((u16)id) << 1));
             entry = (void*)((s32)bin + *(u16*)((s32)entry + 2));
         }
-
-        iconPtr[0x15] = *(u16*)((s32)entry + 0x2);
-        iconPtr[0x16] = *(u16*)((s32)entry + 0x4);
-        iconPtr[0x19] = *(u16*)((s32)entry + 0x8);
+        iconPtr[0x15] = *(u16*)((s32)entry + 2);
+        iconPtr[0x16] = *(u16*)((s32)entry + 4);
+        iconPtr[0x19] = *(u16*)((s32)entry + 8);
         iconPtr[0x1A] = *(u16*)((s32)entry + 0xA);
-
-        count = *(u16*)((s32)entry + 0x6);
+        count = *(u16*)((s32)entry + 6);
         if (count > 1) {
             total = 0;
-            used = 0;
-            if (count != 0) {
-                if (count > 8 && (s32)(count - 8) > 0) {
-                    scan = entry;
-                    i = (count - 1) >> 3;
-                    do {
-                        used += 8;
-                        total += *(u16*)((s32)scan + 0xA);
-                        total += *(u16*)((s32)scan + 0xE);
-                        total += *(u16*)((s32)scan + 0x12);
-                        total += *(u16*)((s32)scan + 0x16);
-                        total += *(u16*)((s32)scan + 0x1A);
-                        total += *(u16*)((s32)scan + 0x1E);
-                        total += *(u16*)((s32)scan + 0x22);
-                        total += *(u16*)((s32)scan + 0x26);
-                        scan = (void*)((s32)scan + 0x20);
-                        i--;
-                    } while (i != 0);
-                }
-
-                scan = (void*)((s32)entry + (used * 4));
-                i = count - used;
-                if (used < (s32)count) {
-                    do {
-                        total += *(u16*)((s32)scan + 0xA);
-                        scan = (void*)((s32)scan + 4);
-                        i--;
-                    } while (i != 0);
-                }
+            for (i = 0; i < count; i++) {
+                total += *(u16*)((s32)entry + (i * 4) + 0xA);
             }
-
             retrace = *(s32*)((s32)gp + 0x1C);
             retrace = retrace - ((retrace / total) * total);
-            scan = entry;
-            i = 0;
-            while (count != 0) {
-                if (retrace < *(u16*)((s32)scan + 0xA)) {
-                    iconPtr[0x19] = *(u16*)((s32)entry + (i * 4) + 0x8);
+            for (i = 0; i < count; i++) {
+                if (retrace < *(u16*)((s32)entry + (i * 4) + 0xA)) {
+                    iconPtr[0x19] = *(u16*)((s32)entry + (i * 4) + 8);
                     break;
                 }
-                retrace -= *(u16*)((s32)scan + 0xA);
-                scan = (void*)((s32)scan + 4);
-                i++;
-                count--;
+                retrace -= *(u16*)((s32)entry + (i * 4) + 0xA);
             }
         }
-
         iconGX(concatMtx, iconPtr);
     }
 }
@@ -725,21 +679,19 @@ void iconDispGx2(s32 mtx, s16 param_2, u16 iconId) {
     void* bin;
     f32 concatMtx[3][4];
     u16 icon[0x1C];
+    u16* iconp;
     u32 count;
-    u32 id;
+    s32 id;
     s32 total;
-    s32 used;
     s32 i;
-    void* scan;
     s32 retrace;
 
     cam = camGetCurPtr();
-
+    iconp = icon;
     if (icon_tpl_ok != 0 && icon_bin_ok != 0) {
-        icon[0] = param_2;
-        *(u32*)((s32)icon + 0x14) = dat_8041f864;
-        icon[0x14] = iconId;
-
+        iconp[0] = param_2;
+        *(u32*)((s32)iconp + 0x14) = dat_8041f864;
+        iconp[0x14] = iconId;
         bin = icon_bin;
         id = iconId;
         if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
@@ -755,68 +707,31 @@ void iconDispGx2(s32 mtx, s16 param_2, u16 iconId) {
             } else {
                 id = ICON_SDA_U16_TABLE(unk_8041504c, *(s32*)((s32)gp + 0x16C));
             }
-
             entry = (void*)((s32)bin + (((u16)id) << 1));
             entry = (void*)((s32)bin + *(u16*)((s32)entry + 2));
         }
-
-        icon[0x15] = *(u16*)((s32)entry + 0x2);
-        icon[0x16] = *(u16*)((s32)entry + 0x4);
-        icon[0x19] = *(u16*)((s32)entry + 0x8);
-        icon[0x1A] = *(u16*)((s32)entry + 0xA);
-
-        count = *(u16*)((s32)entry + 0x6);
+        iconp[0x15] = *(u16*)((s32)entry + 2);
+        iconp[0x16] = *(u16*)((s32)entry + 4);
+        iconp[0x19] = *(u16*)((s32)entry + 8);
+        iconp[0x1A] = *(u16*)((s32)entry + 0xA);
+        count = *(u16*)((s32)entry + 6);
         if (count > 1) {
             total = 0;
-            used = 0;
-            if (count != 0) {
-                if (count > 8 && (s32)(count - 8) > 0) {
-                    scan = entry;
-                    i = (count - 1) >> 3;
-                    do {
-                        used += 8;
-                        total += *(u16*)((s32)scan + 0xA);
-                        total += *(u16*)((s32)scan + 0xE);
-                        total += *(u16*)((s32)scan + 0x12);
-                        total += *(u16*)((s32)scan + 0x16);
-                        total += *(u16*)((s32)scan + 0x1A);
-                        total += *(u16*)((s32)scan + 0x1E);
-                        total += *(u16*)((s32)scan + 0x22);
-                        total += *(u16*)((s32)scan + 0x26);
-                        scan = (void*)((s32)scan + 0x20);
-                        i--;
-                    } while (i != 0);
-                }
-
-                scan = (void*)((s32)entry + (used * 4));
-                i = count - used;
-                if (used < (s32)count) {
-                    do {
-                        total += *(u16*)((s32)scan + 0xA);
-                        scan = (void*)((s32)scan + 4);
-                        i--;
-                    } while (i != 0);
-                }
+            for (i = 0; i < (s32)count; i++) {
+                total += *(u16*)((s32)entry + (i * 4) + 0xA);
             }
-
             retrace = *(s32*)((s32)gp + 0x1C);
             retrace = retrace - ((retrace / total) * total);
-            scan = entry;
-            i = 0;
-            while (count != 0) {
-                if (retrace < *(u16*)((s32)scan + 0xA)) {
-                    icon[0x19] = *(u16*)((s32)entry + (i * 4) + 0x8);
+            for (i = 0; i < (s32)count; i++) {
+                if (retrace < *(u16*)((s32)entry + (i * 4) + 0xA)) {
+                    iconp[0x19] = *(u16*)((s32)entry + (i * 4) + 8);
                     break;
                 }
-                retrace -= *(u16*)((s32)scan + 0xA);
-                scan = (void*)((s32)scan + 4);
-                i++;
-                count--;
+                retrace -= *(u16*)((s32)entry + (i * 4) + 0xA);
             }
         }
-
         PSMTXConcat((void*)((s32)cam + 0x11C), (void*)mtx, concatMtx);
-        iconGX(concatMtx, icon);
+        iconGX(concatMtx, iconp);
     }
 }
 
@@ -826,22 +741,20 @@ void iconDispGxCol(s32 mtx, s16 someBitfield, u16 iconId, void* color) {
     void* entry;
     void* bin;
     u16 icon[0x1C];
+    u16* iconp;
     f32 concatMtx[3][4];
-    s32 count;
+    u32 count;
     s32 id;
     s32 total;
-    s32 used;
     s32 i;
-    void* scan;
     s32 retrace;
 
     cam = camGetCurPtr();
-
+    iconp = icon;
     if (icon_tpl_ok != 0 && icon_bin_ok != 0) {
-        icon[0] = someBitfield;
-        *(u32*)((s32)icon + 0x14) = *(u32*)color;
-        icon[0x14] = iconId;
-
+        iconp[0] = someBitfield;
+        *(u32*)((s32)iconp + 0x14) = *(u32*)color;
+        iconp[0x14] = iconId;
         bin = icon_bin;
         id = iconId;
         if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
@@ -857,68 +770,31 @@ void iconDispGxCol(s32 mtx, s16 someBitfield, u16 iconId, void* color) {
             } else {
                 id = ICON_SDA_U16_TABLE(unk_8041504c, *(s32*)((s32)gp + 0x16C));
             }
-
             entry = (void*)((s32)bin + (((u16)id) << 1));
             entry = (void*)((s32)bin + *(u16*)((s32)entry + 2));
         }
-
-        icon[0x15] = *(u16*)((s32)entry + 0x2);
-        icon[0x16] = *(u16*)((s32)entry + 0x4);
-        icon[0x19] = *(u16*)((s32)entry + 0x8);
-        icon[0x1A] = *(u16*)((s32)entry + 0xA);
-
-        count = *(u16*)((s32)entry + 0x6);
+        iconp[0x15] = *(u16*)((s32)entry + 2);
+        iconp[0x16] = *(u16*)((s32)entry + 4);
+        iconp[0x19] = *(u16*)((s32)entry + 8);
+        iconp[0x1A] = *(u16*)((s32)entry + 0xA);
+        count = *(u16*)((s32)entry + 6);
         if (count > 1) {
             total = 0;
-            used = 0;
-            if (count != 0) {
-                if (count > 8 && (count - 8) > 0) {
-                    scan = entry;
-                    i = (count - 1) >> 3;
-                    do {
-                        used += 8;
-                        total += *(u16*)((s32)scan + 0xA);
-                        total += *(u16*)((s32)scan + 0xE);
-                        total += *(u16*)((s32)scan + 0x12);
-                        total += *(u16*)((s32)scan + 0x16);
-                        total += *(u16*)((s32)scan + 0x1A);
-                        total += *(u16*)((s32)scan + 0x1E);
-                        total += *(u16*)((s32)scan + 0x22);
-                        total += *(u16*)((s32)scan + 0x26);
-                        scan = (void*)((s32)scan + 0x20);
-                        i--;
-                    } while (i != 0);
-                }
-
-                scan = (void*)((s32)entry + (used * 4));
-                i = count - used;
-                if (used < count) {
-                    do {
-                        total += *(u16*)((s32)scan + 0xA);
-                        scan = (void*)((s32)scan + 4);
-                        i--;
-                    } while (i != 0);
-                }
+            for (i = 0; i < (s32)count; i++) {
+                total += *(u16*)((s32)entry + (i * 4) + 0xA);
             }
-
             retrace = *(s32*)((s32)gp + 0x1C);
             retrace = retrace - ((retrace / total) * total);
-            scan = entry;
-            i = 0;
-            while (count != 0) {
-                if (retrace < *(u16*)((s32)scan + 0xA)) {
-                    icon[0x19] = *(u16*)((s32)entry + (i * 4) + 0x8);
+            for (i = 0; i < (s32)count; i++) {
+                if (retrace < *(u16*)((s32)entry + (i * 4) + 0xA)) {
+                    iconp[0x19] = *(u16*)((s32)entry + (i * 4) + 8);
                     break;
                 }
-                retrace -= *(u16*)((s32)scan + 0xA);
-                scan = (void*)((s32)scan + 4);
-                i++;
-                count--;
+                retrace -= *(u16*)((s32)entry + (i * 4) + 0xA);
             }
         }
-
         PSMTXConcat((void*)((s32)cam + 0x11C), (void*)mtx, concatMtx);
-        iconGX(concatMtx, icon);
+        iconGX(concatMtx, iconp);
     }
 }
 
@@ -930,92 +806,53 @@ void iconGetTexObj(u32* texObj, u16 iconId) {
     extern f32 float_0_8041f87c;
     void* entry;
     void* bin;
-    u32 id;
-    u32 count;
+    s32 id;
+    s32 count;
     u32 texId;
     s32 total;
-    s32 used;
     s32 i;
-    void* scan;
     s32 retrace;
 
     id = iconId;
-
     if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
         GXInitTexObj(texObj, &dummy_651, 1, 1, 0, 0, 0, 0);
         return;
     }
-
     bin = icon_bin;
-
     if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
         entry = NULL;
     } else {
         id = (u16)id;
-
-        if (id == 0x67) {
+        if (id != 0x67) {
+            if (id < 0x67) {
+                if (id == 0x49) {
+                    id = ICON_SDA_U16_TABLE(unk_80415040, *(s32*)((s32)gp + 0x16C));
+                }
+            }
+        } else {
             id = ICON_SDA_U16_TABLE(unk_8041504c, *(s32*)((s32)gp + 0x16C));
-        } else if (id < 0x67 && id == 0x49) {
-            id = ICON_SDA_U16_TABLE(unk_80415040, *(s32*)((s32)gp + 0x16C));
         }
-
         entry = (void*)((s32)bin + (((u16)id) << 1));
         entry = (void*)((s32)bin + *(u16*)((s32)entry + 2));
     }
 
-    count = *(u16*)((s32)entry + 0x6);
-    texId = *(u16*)((s32)entry + 0x8);
-
+    count = *(u16*)((s32)entry + 6);
+    texId = *(u16*)((s32)entry + 8);
     if (count > 1) {
         total = 0;
-        used = 0;
-
-        if (count != 0) {
-            if (count > 8 && (s32)(count - 8) > 0) {
-                scan = entry;
-                i = (count - 1) >> 3;
-                do {
-                    used += 8;
-                    total += *(u16*)((s32)scan + 0xA);
-                    total += *(u16*)((s32)scan + 0xE);
-                    total += *(u16*)((s32)scan + 0x12);
-                    total += *(u16*)((s32)scan + 0x16);
-                    total += *(u16*)((s32)scan + 0x1A);
-                    total += *(u16*)((s32)scan + 0x1E);
-                    total += *(u16*)((s32)scan + 0x22);
-                    total += *(u16*)((s32)scan + 0x26);
-                    scan = (void*)((s32)scan + 0x20);
-                    i--;
-                } while (i != 0);
-            }
-
-            scan = (void*)((s32)entry + (used * 4));
-            i = count - used;
-            if (used < (s32)count) {
-                do {
-                    total += *(u16*)((s32)scan + 0xA);
-                    scan = (void*)((s32)scan + 4);
-                    i--;
-                } while (i != 0);
-            }
+        for (i = 0; i < count; i++) {
+            total += *(u16*)((s32)entry + (i * 4) + 0xA);
         }
-
         retrace = *(s32*)((s32)gp + 0x1C);
         retrace = retrace - ((retrace / total) * total);
-        scan = entry;
-        i = 0;
-        while (count != 0) {
-            if (retrace < *(u16*)((s32)scan + 0xA)) {
-                texId = *(u16*)((s32)entry + (i * 4) + 0x8);
+        for (i = 0; i < count; i++) {
+            if (retrace < *(u16*)((s32)entry + (i * 4) + 0xA)) {
+                texId = *(u16*)((s32)entry + (i * 4) + 8);
                 break;
             }
-            retrace -= *(u16*)((s32)scan + 0xA);
-            scan = (void*)((s32)scan + 4);
-            i++;
-            count--;
+            retrace -= *(u16*)((s32)entry + (i * 4) + 0xA);
         }
     }
-
     TEXGetGXTexObjFromPalette(icon_tpl, texObj, texId);
     GXInitTexObjLOD(texObj, 1, 1, float_0_8041f87c, float_0_8041f87c, float_0_8041f87c, 0, 0, 0);
 }
@@ -1068,6 +905,8 @@ void iconGX(void* mtx, void* icon) {
     extern void* camGetCurPtr(void);
     extern void mapSetMaterialLight(u32 flags, void* pos);
     extern void mapSetMaterialFog(void);
+    extern void* mapGetWork(void);
+    extern void mapGetBlend(void* color);
     extern void TEXGetGXTexObjFromPalette(void* tpl, void* obj, u32 id);
     extern void GXInitTexObj(void*, void*, u16, u16, s32, s32, s32, u8);
     extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, u8, u8, s32);
@@ -1096,6 +935,7 @@ void iconGX(void* mtx, void* icon) {
     extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
     extern void GXSetZMode(s32, s32, s32);
     extern void GXSetCullMode(s32);
+    extern void GXSetFog(s32, f32, f32, f32, f32, void*);
     extern void GXClearVtxDesc(void);
     extern void GXSetVtxDesc(s32, s32);
     extern void GXSetVtxAttrFmt(s32, s32, s32, s32, s32);
@@ -1104,6 +944,8 @@ void iconGX(void* mtx, void* icon) {
     extern void GXBegin(s32, s32, s32);
     extern u32 dat_8041f868;
     extern u32 dat_8041f86c;
+    extern u32 dat_8041f870;
+    extern const f32 float_0_8041f87c;
     extern u8 dummy_672[1];
     u16* data;
     Mtx scale;
@@ -1112,8 +954,11 @@ void iconGX(void* mtx, void* icon) {
     f32 pos[3];
     u32 color;
     u32 white;
-    u32 width;
-    u32 height;
+    u32 blend;
+    u32 blendCopy;
+    u32 fogColor;
+    u16 width;
+    u16 height;
     f32 left;
     f32 top;
     f32 right;
@@ -1167,6 +1012,20 @@ void iconGX(void* mtx, void* icon) {
         GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
         GXSetTevColorIn(1, 0xF, 2, 0, 0xF);
         GXSetTevAlphaIn(1, 7, 1, 0, 7);
+        if (((*data & 0x10) == 0) && ((*data & 0x40) == 0) && ((*data & 0x80) == 0) &&
+            ((*(u16*)((s32)mapGetWork() + 4) & 2) != 0)) {
+            mapGetBlend(&blend);
+            blendCopy = blend;
+            GXSetTevColor(2, &blendCopy);
+            GXSetNumTevStages(3);
+            GXSetTevOrder(2, 0xFF, 0xFF, 0xFF);
+            GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+            GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+            GXSetTevColorIn(2, 0xF, 0, 1, 0xF);
+            GXSetTevAlphaIn(2, 7, 0, 2, 7);
+        }
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
     } else {
         GXSetNumTevStages(3);
         GXSetTevSwapModeTable(1, 0, 0, 0, 3);
@@ -1194,12 +1053,15 @@ void iconGX(void* mtx, void* icon) {
         GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
         GXSetTevColorIn(2, 0xF, 2, 8, 0);
         GXSetTevAlphaIn(2, 7, 1, 4, 7);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
     }
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
 
     if ((*data & 0x10) == 0) {
         mapSetMaterialFog();
+    } else {
+        fogColor = dat_8041f870;
+        GXSetFog(0, float_0_8041f87c, float_0_8041f87c, float_0_8041f87c, float_0_8041f87c, &fogColor);
     }
 
     if (*(s8*)((u8*)data + 0x17) == -1) {
@@ -1233,7 +1095,7 @@ void iconGX(void* mtx, void* icon) {
     left = -(f32)width * 0.5f;
     top = (f32)height;
     right = left + (f32)width;
-    bottom = 0.0f;
+    bottom = -top;
     if ((*data & 0x10) == 0) {
         left *= 0.6f;
         top *= 0.6f;
@@ -1509,7 +1371,7 @@ u32 iconNumberDispGx(void* mtx, s32 number, s32 small, u32* color) {
     s32 thousands;
     s32 hundreds;
     s32 tens;
-    s32 hundredThousands;
+    s32 originalNumber;
     s32 i;
     s32 x;
     f32 step;
@@ -1519,12 +1381,13 @@ u32 iconNumberDispGx(void* mtx, s32 number, s32 small, u32* color) {
     s32 isLarge;
 
     isLarge = small == 0;
-    step = float_16_8041f884;
     if (isLarge) {
         step = float_20_8041f880;
+    } else {
+        step = float_16_8041f884;
     }
 
-    hundredThousands = number / 100000;
+    originalNumber = number;
     number %= 100000;
     tenThousands = number / 10000;
     digits[4] = tenThousands;
@@ -1539,26 +1402,18 @@ u32 iconNumberDispGx(void* mtx, s32 number, s32 small, u32* color) {
     digits[1] = tens;
     digits[0] = number - (tens * 10);
 
-    if (hundredThousands == 0) {
-        if (digits[4] == 0) {
-            if (digits[3] == 0) {
-                if (digits[2] == 0) {
-                    if (digits[1] == 0) {
-                        count = 1;
-                    } else {
-                        count = 2;
-                    }
-                } else {
-                    count = 3;
-                }
-            } else {
-                count = 4;
-            }
-        } else {
-            count = 5;
-        }
-    } else {
+    if (originalNumber / 100000 != 0) {
         count = 5;
+    } else if (digits[4] != 0) {
+        count = 5;
+    } else if (digits[3] != 0) {
+        count = 4;
+    } else if (digits[2] != 0) {
+        count = 3;
+    } else if (digits[1] != 0) {
+        count = 2;
+    } else {
+        count = 1;
     }
 
     x = 0;
@@ -1592,7 +1447,7 @@ u32 iconNumberDispGx3D(void* mtx, s32 number, s32 small, u32* color) {
     s32 thousands;
     s32 hundreds;
     s32 tens;
-    s32 hundredThousands;
+    s32 originalNumber;
     s32 i;
     s32 x;
     f32 step;
@@ -1602,12 +1457,13 @@ u32 iconNumberDispGx3D(void* mtx, s32 number, s32 small, u32* color) {
     s32 isLarge;
 
     isLarge = small == 0;
-    step = float_8_8041f878;
     if (isLarge) {
         step = float_10_8041f874;
+    } else {
+        step = float_8_8041f878;
     }
 
-    hundredThousands = number / 100000;
+    originalNumber = number;
     number %= 100000;
     tenThousands = number / 10000;
     digits[4] = tenThousands;
@@ -1622,26 +1478,18 @@ u32 iconNumberDispGx3D(void* mtx, s32 number, s32 small, u32* color) {
     digits[1] = tens;
     digits[0] = number - (tens * 10);
 
-    if (hundredThousands == 0) {
-        if (digits[4] == 0) {
-            if (digits[3] == 0) {
-                if (digits[2] == 0) {
-                    if (digits[1] == 0) {
-                        count = 1;
-                    } else {
-                        count = 2;
-                    }
-                } else {
-                    count = 3;
-                }
-            } else {
-                count = 4;
-            }
-        } else {
-            count = 5;
-        }
-    } else {
+    if (originalNumber / 100000 != 0) {
         count = 5;
+    } else if (digits[4] != 0) {
+        count = 5;
+    } else if (digits[3] != 0) {
+        count = 4;
+    } else if (digits[2] != 0) {
+        count = 3;
+    } else if (digits[1] != 0) {
+        count = 2;
+    } else {
+        count = 1;
     }
 
     x = 0;

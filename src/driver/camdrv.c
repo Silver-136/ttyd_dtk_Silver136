@@ -465,13 +465,8 @@ void* camEntryPersp(
     f32 viewportNear,
     f32 viewportFar
 ) {
-    VecRaw* defaults;
-    CamDoubleConv widthConv;
-    CamDoubleConv heightConv;
     void* cam;
     void* renderMode;
-
-    defaults = vec3_802bf5d8;
 
     cam = __memAlloc(0, 0x260);
     memset(cam, 0, 0x260);
@@ -530,14 +525,10 @@ void* camEntryPersp(
     *(f32*)((s32)cam + 0x100) = float_0_8041f6b4;
 
     renderMode = DEMOGetRenderModeObj();
-    widthConv.words.hi = 0x43300000;
-    widthConv.words.lo = *(u16*)((s32)renderMode + 0x4);
-    *(f32*)((s32)cam + 0x104) = (f32)(widthConv.value - *(f64*)((s32)defaults + 0x68));
+    *(f32*)((s32)cam + 0x104) = (f32)*(u16*)((s32)renderMode + 0x4);
 
     renderMode = DEMOGetRenderModeObj();
-    heightConv.words.hi = 0x43300000;
-    heightConv.words.lo = *(u16*)((s32)renderMode + 0x6);
-    *(f32*)((s32)cam + 0x108) = (f32)(heightConv.value - *(f64*)((s32)defaults + 0x68));
+    *(f32*)((s32)cam + 0x108) = (f32)*(u16*)((s32)renderMode + 0x6);
 
     *(f32*)((s32)cam + 0x10C) = viewportNear;
     *(f32*)((s32)cam + 0x110) = viewportFar;
@@ -559,17 +550,16 @@ void* camEntryPersp(
     *(s16*)((s32)cam + 0x21C) = 0;
     *(s16*)((s32)cam + 0x21E) = 0;
 
-    *(VecRaw*)((s32)cam + 0x224) = defaults[0];
-    *(VecRaw*)((s32)cam + 0x230) = defaults[1];
-    *(VecRaw*)((s32)cam + 0x23C) = defaults[2];
-    *(VecRaw*)((s32)cam + 0x248) = defaults[3];
+    *(VecRaw*)((s32)cam + 0x224) = (VecRaw){ 0, 0, 0 };
+    *(VecRaw*)((s32)cam + 0x230) = (VecRaw){ 0x41200000, 0x41200000, 0x41200000 };
+    *(VecRaw*)((s32)cam + 0x23C) = (VecRaw){ 0, 0, 0 };
+    *(VecRaw*)((s32)cam + 0x248) = (VecRaw){ 0, 0, 0 };
 
     return cam;
 }
 
+#pragma opt_common_subs off
 void camMain(void) {
-    void** camPtr;
-    void* cam;
     void* cam4;
     void* player;
     void* renderMode;
@@ -578,14 +568,9 @@ void camMain(void) {
 
     VecRaw pointB;
 
-    f32 projectedZ;
-    f32 projectedY;
-    f32 projectedX;
+    VecRaw screen;
 
     VecRaw pointA;
-
-    f32* projectedZPtr;
-    f32* projectedYPtr;
 
     f32 deg2rad;
     f32 strength;
@@ -610,12 +595,8 @@ void camMain(void) {
 
     deg2rad = float_deg2rad_8041f6f0;
 
-    projectedZPtr = &projectedZ;
-    projectedYPtr = &projectedY;
-
-    camPtr = camPtrTbl;
-    for (i = 0; i < 13; i++, camPtr++) {
-        cam = *camPtr;
+    for (i = 0; i < 13; i++) {
+        void* cam = camPtrTbl[i];
 
         callback = *(CamCallback*)((s32)cam + 0x1EC);
         if (callback != NULL) {
@@ -660,14 +641,11 @@ void camMain(void) {
 
             pointA = vec3_802bf608[0];
 
-            player = marioGetPtr();
-            *(f32*)&pointA.x = *(f32*)((s32)player + 0x8C) + *(f32*)((s32)player + 0x6C);
+            *(f32*)&pointA.x = *(f32*)((s32)marioGetPtr() + 0x8C) + *(f32*)((s32)marioGetPtr() + 0x6C);
 
-            player = marioGetPtr();
-            *(f32*)&pointA.y = *(f32*)((s32)player + 0x90) + *(f32*)((s32)player + 0x70);
+            *(f32*)&pointA.y = *(f32*)((s32)marioGetPtr() + 0x90) + *(f32*)((s32)marioGetPtr() + 0x70);
 
-            player = marioGetPtr();
-            *(f32*)&pointA.z = *(f32*)((s32)player + 0x94) + *(f32*)((s32)player + 0x74);
+            *(f32*)&pointA.z = *(f32*)((s32)marioGetPtr() + 0x94) + *(f32*)((s32)marioGetPtr() + 0x74);
 
             pointB = pointA;
 
@@ -699,15 +677,15 @@ void camMain(void) {
                 (void*)((s32)cam4 + 0x11C),
                 projection,
                 viewport,
-                &projectedX,
-                projectedYPtr,
-                projectedZPtr
+                (f32*)&screen.x,
+                (f32*)&screen.y,
+                (f32*)&screen.z
             );
 
             GXSetProjectionv(oldProjection);
 
-            projectedX = projectedX - float_304_8041f6b8;
-            projectedY = float_240_8041f6bc - projectedY;
+            *(f32*)&screen.x = *(f32*)&screen.x - float_304_8041f6b8;
+            *(f32*)&screen.y = float_240_8041f6bc - *(f32*)&screen.y;
 
             if (strength > float_1_8041f6c0) {
                 strength = float_1_8041f6c0;
@@ -715,8 +693,8 @@ void camMain(void) {
                 strength = float_0_8041f6b4;
             }
 
-            offsetX = float_0p5_8041f6f4 * projectedX * strength;
-            offsetY = float_0p5_8041f6f4 * projectedY * strength;
+            offsetX = float_0p5_8041f6f4 * *(f32*)&screen.x * strength;
+            offsetY = float_0p5_8041f6f4 * *(f32*)&screen.y * strength;
 
             limit = -extentX * float_0p2_8041f6f8;
             if (offsetX < limit) {
@@ -774,6 +752,7 @@ void camMain(void) {
         }
     }
 }
+#pragma opt_common_subs reset
 
 void camEvalNearFar(void* cam) {
     typedef struct CamEvalWork {
@@ -1138,18 +1117,16 @@ void cam3dMain(void* cam) {
             }
 
             if (!(camera->flags & 0x10)) {
-                MarioWorkLocal* mario = marioGetPtr();
-                camera->marioPos.y += ((float_1_8041f6c0 + mario->field_EC.y - camera->marioPos.y) * marioGetCamFollowRate());
+                camera->marioPos.y +=
+                    ((float_1_8041f6c0 + ((MarioWorkLocal*)marioGetPtr())->field_EC.y - camera->marioPos.y) *
+                     marioGetCamFollowRate());
             }
-            {
-                MarioWorkLocal* mario = marioGetPtr();
-                camera->marioPos.x = float_0p01_8041f6c4 + mario->field_EC.x;
-                camera->marioPos.z = mario->field_EC.z;
-                camera->dollyStart = float_0_8041f6b4;
-                camera->marioAt.x = mario->field_F8.x;
-                camera->marioAt.y = float_1_8041f6c0 + mario->field_F8.y;
-                camera->marioAt.z = mario->field_F8.z;
-            }
+            camera->marioPos.x = float_0p01_8041f6c4 + ((MarioWorkLocal*)marioGetPtr())->field_EC.x;
+            camera->marioPos.z = ((MarioWorkLocal*)marioGetPtr())->field_EC.z;
+            camera->dollyStart = float_0_8041f6b4;
+            camera->marioAt.x = ((MarioWorkLocal*)marioGetPtr())->field_F8.x;
+            camera->marioAt.y = float_1_8041f6c0 + ((MarioWorkLocal*)marioGetPtr())->field_F8.y;
+            camera->marioAt.z = ((MarioWorkLocal*)marioGetPtr())->field_F8.z;
 
             {
                 f32 t, it;
@@ -1184,8 +1161,12 @@ void cam3dMain(void* cam) {
                 work.fovY = float_25_8041f6cc;
                 work.aspect = float_1_8041f6c0;
                 work.far = float_32768_8041f6d0;
-                work.pos = camera->storedPos;
-                work.at = camera->storedAt;
+                work.pos.x = camera->storedPos.x;
+                work.pos.y = camera->storedPos.y;
+                work.pos.z = camera->storedPos.z;
+                work.at.x = camera->storedAt.x;
+                work.at.y = camera->storedAt.y;
+                work.at.z = camera->storedAt.z;
 
                 switch (camera->stateA) {
                     case 0:
@@ -1214,8 +1195,12 @@ void cam3dMain(void* cam) {
                         work2.fovY = work.fovY;
                         work2.aspect = work.aspect;
                         work2.far = work.far;
-                        work2.pos = camera->presetPos;
-                        work2.at = camera->presetAt;
+                        work2.pos.x = camera->presetPos.x;
+                        work2.pos.y = camera->presetPos.y;
+                        work2.pos.z = camera->presetPos.z;
+                        work2.at.x = camera->presetAt.x;
+                        work2.at.y = camera->presetAt.y;
+                        work2.at.z = camera->presetAt.z;
                         break;
                 }
 

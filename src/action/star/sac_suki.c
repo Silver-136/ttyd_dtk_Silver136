@@ -7,11 +7,11 @@
 #include "system.h"
 #include "effect/n64/eff_crystal_n64.h"
 
-void* get_ptr(void);
+static void* get_ptr(void);
 void main_button(s32 index);
-void disp_2D(void);
-void disp_3D(void);
-void disp_3D_alpha(void);
+static void disp_2D(void);
+static void disp_3D(void);
+static void disp_3D_alpha(void);
 
 extern void* _battleWorkPointer;
 void* mapGetMapObj(s32 name);
@@ -30,11 +30,12 @@ void iconDispGx2(Mtx mtx, s32 flags, s32 iconId);
 void iconDispGx(Vec* pos, s32 flags, s32 iconId, f32 scale);
 void btlGetScreenPoint(Vec* pos, Vec* out);
 void N__disp_2D(s32 type, s32 index);
-void main_base(void);
-void main_star(void);
+static void main_base(void);
+static void main_star(void);
 void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
-extern u8 weapon[];
-extern u32 N_ohko_rate_tbl;
+static u32 weapon[48];
+static u32 nice_event[8];
+extern u8 N_ohko_rate_tbl[6];
 extern const u32 dat_80301384[];
 extern const Vec vec3_80301394;
 extern const Vec vec3_80301418;
@@ -91,7 +92,7 @@ USER_FUNC(main_suki) {
 }
 
 /* stub-fill: main_base | prototype_only | source_prototype */
-void main_base(void) {
+static void main_base(void) {
     extern s32 BattleAudience_GetAudienceNum(void);
     extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
     extern void* memcpy(void* dst, const void* src, u32 size);
@@ -102,7 +103,6 @@ void main_base(void) {
     extern void BattleAudienceSoundWhistleKind(s32 kind);
     extern const char str_SFX_BTL_SAC_SUKKIRI1_80301518[];
     extern const char str_SFX_BTL_SAC_SUKKIRI2_80301500[];
-    extern const s32 nice_event[];
     extern u32 DAT_80301364;
     extern u32 DAT_80301368;
     extern u32 vec3_8030136c[];
@@ -268,7 +268,7 @@ void main_button(s32 index) {
 }
 
 /* stub-fill: main_star | prototype_only | source_prototype */
-void main_star(void) {
+static void main_star(void) {
     extern void* BattleGetMarioPtr(void* battleWork);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
@@ -475,7 +475,7 @@ USER_FUNC(end_suki) {
     return 2;
 }
 
-void disp_2D(void) {
+static void disp_2D(void) {
     Mtx mtx;
     Vec pos_a;
     Vec pos_b;
@@ -586,19 +586,19 @@ void N__disp_2D(s32 type, s32 index) {
     }
 }
 
-void disp_3D(void) {
+static void disp_3D(void) {
     ;
 }
 
-void disp_3D_alpha(void) {
+static void disp_3D_alpha(void) {
     ;
 }
 
-void* get_ptr(void) {
+static void* get_ptr(void) {
     return (void*)((s32)_battleWorkPointer + 0x1F4C);
 }
 
-USER_FUNC(start_game) {
+static s32 start_game(EventEntry* event, BOOL isFirstCall) {
     void* wp;
 
     wp = get_ptr();
@@ -606,7 +606,7 @@ USER_FUNC(start_game) {
     return 2;
 }
 
-USER_FUNC(wait_game_end) {
+static s32 wait_game_end(EventEntry* event, BOOL isFirstCall) {
     void* wp;
     s32* args;
 
@@ -619,7 +619,7 @@ USER_FUNC(wait_game_end) {
     return 0;
 }
 
-USER_FUNC(star_stone_appear) {
+static s32 star_stone_appear(EventEntry* event, BOOL isFirstCall) {
     void* wp;
 
     wp = get_ptr();
@@ -646,7 +646,7 @@ USER_FUNC(star_stone_get_attack_point) {
     return 2;
 }
 
-USER_FUNC(star_stone_attack) {
+static s32 star_stone_attack(EventEntry* event, BOOL isFirstCall) {
     void* work;
     void* cam;
     s32 index;
@@ -677,7 +677,7 @@ USER_FUNC(wait_star_stone_attack_end) {
     return value == 8 ? 2 : 0;
 }
 
-USER_FUNC(set_weapon) {
+static s32 set_weapon(EventEntry* event, BOOL isFirstCall) {
     s32 type;
     s32* args;
     void* work;
@@ -686,8 +686,8 @@ USER_FUNC(set_weapon) {
     args = event->args;
     type = evtGetValue(event, args[0]);
     work = get_ptr();
-    *(u32*)&rates[0] = N_ohko_rate_tbl;
-    *(u16*)&rates[4] = *(u16*)((s32)&N_ohko_rate_tbl + 4);
+    *(u32*)&rates[0] = *(u32*)&N_ohko_rate_tbl[0];
+    *(u16*)&rates[4] = *(u16*)&N_ohko_rate_tbl[4];
     memcpy((void*)((s32)work + 0x284), weapon, 0xC0);
     *(u8*)((s32)work + 0x322) = rates[type - 1];
     evtSetValue(event, args[1], (s32)work + 0x284);
@@ -790,3 +790,277 @@ void set_tev(void* param) {
 }
 
 const u32 dat_80301384[] = { 0x100, 0x200, 0x400, 0x800 };
+
+/* Exact US Showstopper weapon/Event reconstruction dependencies. */
+extern char str_A1_80428654[];
+extern char str_A2_80428658[];
+extern char str_A_1_80428644[];
+extern char str_B_8042865c[];
+extern char str_C_80428660[];
+extern char str_M_I_Y_8042863c[];
+extern char str_OFF_d_yabu_small_80301478[];
+extern char str_SFX_BTL_SAC_START1_8030143c[];
+extern char str_SFX_BTL_SAC_START2_80301450[];
+extern char str_SFX_BTL_SAC_START3_80301464[];
+extern char str_SFX_BTL_SAC_SUKKIRI4_80301498[];
+extern char str_SFX_BTL_SAC_SUKKIRI4_803014b0[];
+extern char str_SFX_BTL_SAC_SUKKIRI5_803014c8[];
+extern char str_bti_S_8042864c[];
+extern char str_gamen_80428664[];
+extern char str_indirect_8030148c[];
+extern char str_msg_sac_7_80301300[];
+extern char str_msg_sukkari_sukkiri_803012ec[];
+extern char zero_80428648[];
+extern u32 sac_ac_help_off[];
+extern u32 sac_ac_help_on[];
+extern u32 sac_cheer[];
+extern u32 sac_cheer_end[];
+extern u32 sac_mario_back_home[];
+extern u32 sac_mario_item_on_end_evt[];
+extern u32 sac_mario_item_on_evt[];
+extern u32 sac_start_camera_evt[];
+extern u32 sac_start_stardust[];
+extern s32 btlevtcmd_ACSuccessEffect();
+extern s32 btlevtcmd_AnimeChangePose();
+extern s32 btlevtcmd_AnimeChangePoseType();
+extern s32 btlevtcmd_AttackDeclare();
+extern s32 btlevtcmd_CheckDamage();
+extern s32 btlevtcmd_CheckPartsAttribute();
+extern s32 btlevtcmd_CheckStatus();
+extern s32 btlevtcmd_ChoiceSamplingEnemy();
+extern s32 btlevtcmd_CommandGetWeaponAddress();
+extern s32 btlevtcmd_CommandPayWeaponCost();
+extern s32 btlevtcmd_GetBodyId();
+extern s32 btlevtcmd_GetEnemyBelong();
+extern s32 btlevtcmd_GetSelectEnemy();
+extern s32 btlevtcmd_GetSelectNextEnemy();
+extern s32 btlevtcmd_GetUnitId();
+extern s32 btlevtcmd_OffPartsAttribute();
+extern s32 btlevtcmd_OnPartsAttribute();
+extern s32 btlevtcmd_SamplingEnemy();
+extern s32 btlevtcmd_SetAlpha();
+extern s32 btlevtcmd_SetRGB();
+extern s32 btlevtcmd_StartWaitEvent();
+extern s32 btlevtcmd_WaitGuardMove();
+extern s32 btlevtcmd_WeaponAftereffect();
+extern s32 btlevtcmd_reset_move_color_lv_all();
+extern s32 btlevtcmd_snd_se();
+extern s32 evt_batstage_return_aud_dark_base();
+extern s32 evt_batstage_return_stg_dark_base();
+extern s32 evt_batstage_set_aud_dark();
+extern s32 evt_batstage_set_stg_dark();
+extern s32 evt_btl_camera_set_mode();
+extern s32 evt_btl_camera_set_moveSpeedLv();
+extern s32 evt_btl_camera_shake_h();
+extern s32 evt_eff();
+extern s32 evt_img_alloc_capture();
+extern s32 evt_img_clear_virtual_point();
+extern s32 evt_img_entry();
+extern s32 evt_img_onoff();
+extern s32 evt_img_release();
+extern s32 evt_img_set_paper();
+extern s32 evt_img_set_paper_anim();
+extern s32 evt_map_set_tevcallback();
+extern s32 evt_mapobj_flag_onoff();
+extern s32 evt_paper_delete();
+extern s32 evt_paper_entry();
+extern s32 evt_snd_sfxoff();
+extern s32 evt_snd_sfxon();
+extern s32 tou_gamen_screen_tev();
+extern u32 flash_evt[];
+extern u32 flash_main_evt[];
+extern u32 flash_cancel_evt[];
+extern u32 marioAttackEvent_Suki[];
+
+/* Exact US local BattleWeapon payload followed by documented Event arrays. */
+static u32 weapon[48] = {
+    (u32)(char*)str_btl_wn_sac_sukkari_s_803012d0, 0x01A10000, 0x00000000, (u32)(char*)str_msg_sukkari_sukkiri_803012ec, 0x64000200, 0x3F800000,
+    0x01056432, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x02101260, 0x20000000, 0x00000302, (u32)(char*)str_msg_sac_7_80301300, 0x00020008,
+    0x000007FF, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00006400, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, (u32)marioAttackEvent_Suki, 0x00000064, 0x00000000, 0x00000000,
+};
+
+u32 marioAttackEvent_Suki[439] = {
+    0x0003005B, (u32)btlevtcmd_GetUnitId, 0xFFFFFFFC, 0xFE363C8E, 0x0003005B, (u32)btlevtcmd_GetBodyId,
+    0xFE363C8E, 0xFE363C8F, 0x0004005B, (u32)btlevtcmd_CheckStatus, 0xFE363C8E, 0x0000001B,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000, 0x00020032, 0xFE363C8E,
+    0xFFFFFFFF, 0x00000021, 0x0004005B, (u32)btlevtcmd_ChoiceSamplingEnemy, (u32)weapon, 0xFE363C83,
+    0xFE363C84, 0x0003005B, (u32)btlevtcmd_GetSelectEnemy, 0xFE363C83, 0xFE363C84, 0x00020018,
+    0xFE363C83, 0xFFFFFFFF, 0x00010004, 0x00000063, 0x00000021, 0x0004005B,
+    (u32)btlevtcmd_AttackDeclare, 0xFFFFFFFE, 0xFE363C83, 0xFE363C84, 0x0001005B, (u32)btlevtcmd_WaitGuardMove,
+    0x0002005B, (u32)btlevtcmd_CommandPayWeaponCost, 0xFFFFFFFE, 0x0003005B, (u32)btlevtcmd_CommandGetWeaponAddress, 0xFFFFFFFE,
+    0xFE363C80, 0x0002005B, (u32)btlevtcmd_WeaponAftereffect, 0xFE363C80, 0x0001005B, (u32)btlevtcmd_reset_move_color_lv_all,
+    0x0000006E, 0x0002005B, (u32)main_suki, 0xFE363C8E, 0x00000070, 0x0001005E,
+    (u32)sac_start_camera_evt, 0x0001000A, 0x000001F4, 0x0006005B, (u32)btlevtcmd_snd_se, 0xFFFFFFFE,
+    (u32)(char*)str_SFX_BTL_SAC_START1_8030143c, 0xF1194D80, 0x00000000, 0xF1194D80, 0x0001005E, (u32)sac_mario_item_on_evt,
+    0x0001000A, 0x000001F4, 0x0006005B, (u32)btlevtcmd_snd_se, 0xFFFFFFFE, (u32)(char*)str_SFX_BTL_SAC_START2_80301450,
+    0xF1194D80, 0x00000000, 0xFE363C8B, 0x0001005B, (u32)star_stone_appear, 0x0000006E,
+    0x0001005E, (u32)sac_start_stardust, 0x00000070, 0x00010009, 0x00000064, 0x0006005B,
+    (u32)btlevtcmd_snd_se, 0xFFFFFFFE, (u32)(char*)str_SFX_BTL_SAC_START3_80301464, 0xF1194D80, 0x00000000, 0xF1194D80,
+    0x0002005B, (u32)evt_snd_sfxoff, 0xFE363C8B, 0x00010009, 0x00000028, 0x0001005E,
+    (u32)sac_mario_item_on_end_evt, 0x0001005E, (u32)sac_mario_back_home, 0x0004005B, (u32)btlevtcmd_AnimeChangePose, 0xFFFFFFFE,
+    0x00000001, (u32)(char*)str_M_I_Y_8042863c, 0x0001005B, (u32)wait_star_stone_up_end, 0x0001000A, 0x00000064,
+    0x0000006E, 0x0002005B, (u32)sac_cheer, 0x00000000, 0x00000070, 0x0001005B,
+    (u32)sac_ac_help_on, 0x0001005B, (u32)start_game, 0x0002005B, (u32)wait_game_end, 0xFE363C80,
+    0x0001005B, (u32)sac_ac_help_off, 0x0001005B, (u32)sac_cheer_end, 0x0003005B, (u32)set_weapon,
+    0xFE363C80, 0xFE363C89, 0x0001000A, 0x000001F4, 0x0003005B, (u32)evt_btl_camera_set_mode,
+    0x00000000, 0x00000000, 0x0003005B, (u32)evt_btl_camera_set_moveSpeedLv, 0x00000000, 0x00000002,
+    0x0001000A, 0x000003E8, 0x00020032, 0xFE363C8A, 0x00000000, 0x00020032,
+    0xFE363C8B, 0xFE363C80, 0x0002005B, (u32)evt_paper_entry, (u32)(char*)str_OFF_d_yabu_small_80301478, 0x00010005,
+    0xFE363C8B, 0x0005005B, (u32)star_stone_get_attack_point, 0xFE363C8A, 0xFE363C81, 0xFE363C82,
+    0xFE363C83, 0x0003005B, (u32)get_img_name, 0xFE363C8A, 0xFE363C8D, 0x0002005B,
+    (u32)evt_img_entry, 0xFE363C8D, 0x0003005B, (u32)evt_img_set_paper, 0xFE363C8D, (u32)(char*)str_OFF_d_yabu_small_80301478,
+    0x0006005B, (u32)get_screen_point, 0xFE363C81, 0xFE363C82, 0xFE363C83, 0xFE363C84,
+    0xFE363C85, 0x00020035, 0xFE363C84, 0x00000100, 0x00020037, 0xFE363C85,
+    0xFFFFFFFF, 0x00020035, 0xFE363C85, 0x000000CC, 0x0009005B, (u32)evt_img_alloc_capture,
+    0xFE363C8D, 0x00000000, 0x00000000, 0x00000000, 0xFE363C84, 0xFE363C85,
+    0x00000060, 0x00000048, 0x0002005B, (u32)evt_img_clear_virtual_point, 0xFE363C8D, 0x0003005B,
+    (u32)evt_img_onoff, 0xFE363C8D, 0x00000001, 0x0003005B, (u32)evt_img_set_paper_anim, 0xFE363C8D,
+    (u32)(char*)str_A_1_80428644, 0x0000006E, 0x0002005B, (u32)star_stone_attack, 0xFE363C8A, 0x0006005B,
+    (u32)evt_btl_camera_shake_h, 0x00000000, 0x00000008, 0x00000000, 0x0000000A, 0x00000000,
+    0x00000070, 0x0003005B, (u32)eff_crystal, 0xFE363C81, 0xFE363C82, 0x000F005B,
+    (u32)evt_eff, (u32)(char*)zero_80428648, (u32)(char*)str_indirect_8030148c, 0x00000000, 0xFE363C81, 0xFE363C82,
+    0x0000001E, 0x0000003C, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x0003005B, (u32)evt_snd_sfxon, (u32)(char*)str_SFX_BTL_SAC_SUKKIRI4_80301498,
+    0x00000000, 0x0003005B, (u32)evt_snd_sfxon, (u32)(char*)str_SFX_BTL_SAC_SUKKIRI4_803014b0, 0x00000000, 0x00020018,
+    0xFE363C8A, 0x00000000, 0x0003005B, (u32)btlevtcmd_GetEnemyBelong, 0xFFFFFFFE, 0xFE363C81,
+    0x0004005B, (u32)btlevtcmd_SamplingEnemy, 0xFFFFFFFE, 0xFE363C81, (u32)weapon, 0x0004005B,
+    (u32)btlevtcmd_ChoiceSamplingEnemy, (u32)weapon, 0xFE363C83, 0xFE363C84, 0x0003005B, (u32)btlevtcmd_GetSelectEnemy,
+    0xFE363C83, 0xFE363C84, 0x00010003, 0x00000005, 0x00020018, 0xFE363C83,
+    0xFFFFFFFF, 0x00010004, 0x00000008, 0x00000021, 0x0005005B, (u32)btlevtcmd_CheckPartsAttribute,
+    0xFE363C83, 0xFE363C84, 0x20000000, 0xFE363C81, 0x00020018, 0xFE363C81,
+    0x00000000, 0x0004005B, (u32)btlevtcmd_AnimeChangePoseType, 0xFE363C83, 0xFE363C84, 0x00000027,
+    0x00000021, 0x0003005B, (u32)btlevtcmd_GetSelectNextEnemy, 0xFE363C83, 0xFE363C84, 0x00010004,
+    0x00000005, 0x00000021, 0x00010003, 0x00000008, 0x00010009, 0x0000001E,
+    0x0001005B, (u32)wait_star_stone_attack_end, 0x00020035, 0xFE363C8A, 0x00000001, 0x00000006,
+    0x0002005B, (u32)evt_paper_delete, (u32)(char*)str_OFF_d_yabu_small_80301478, 0x00020032, 0xFE363C8A, 0x00000000,
+    0x00020032, 0xFE363C8B, 0xFE363C80, 0x00010005, 0xFE363C8B, 0x0003005B,
+    (u32)get_img_name, 0xFE363C8A, 0xFE363C8D, 0x0002005B, (u32)evt_img_release, 0xFE363C8D,
+    0x00020035, 0xFE363C8A, 0x00000001, 0x00000006, 0x0001005E, (u32)flash_evt,
+    0x00020032, 0xFE363C8A, 0x00000003, 0x00010005, 0x00000004, 0x0003005B,
+    (u32)evt_snd_sfxon, (u32)(char*)str_SFX_BTL_SAC_SUKKIRI5_803014c8, 0x00000000, 0x00010005, 0x00000004, 0x00020035,
+    0xFE363C8A, 0x0000003F, 0x0002005B, (u32)flash_update, 0xFE363C8A, 0x0001005E,
+    (u32)flash_main_evt, 0x00010009, 0x00000001, 0x00000006, 0x00010005, 0x00000004,
+    0x00020036, 0xFE363C8A, 0x0000003F, 0x0002005B, (u32)flash_update, 0xFE363C8A,
+    0x0001005E, (u32)flash_main_evt, 0x00010009, 0x00000001, 0x00000006, 0x00000006,
+    0x0001005E, (u32)flash_cancel_evt, 0x0003005B, (u32)btlevtcmd_GetEnemyBelong, 0xFFFFFFFE, 0xFE363C80,
+    0x0004005B, (u32)btlevtcmd_SamplingEnemy, 0xFFFFFFFE, 0xFE363C80, (u32)weapon, 0x0004005B,
+    (u32)btlevtcmd_ChoiceSamplingEnemy, (u32)weapon, 0xFE363C83, 0xFE363C84, 0x0003005B, (u32)btlevtcmd_GetSelectEnemy,
+    0xFE363C83, 0xFE363C84, 0x00010003, 0x0000000A, 0x00020018, 0xFE363C83,
+    0xFFFFFFFF, 0x00010004, 0x00000014, 0x00000021, 0x0005005B, (u32)btlevtcmd_CheckPartsAttribute,
+    0xFE363C83, 0xFE363C84, 0x00004000, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0x00000000, 0x0007005B, (u32)btlevtcmd_CheckDamage, 0xFFFFFFFE, 0xFE363C83, 0xFE363C84,
+    0xFE363C89, 0x00000100, 0xFE363C85, 0x00000021, 0x0003005B, (u32)btlevtcmd_GetSelectNextEnemy,
+    0xFE363C83, 0xFE363C84, 0x00010004, 0x0000000A, 0x00010003, 0x00000014,
+    0x00010009, 0x0000001E, 0x0003005B, (u32)evt_btl_camera_set_mode, 0x00000000, 0x00000000,
+    0x0001005B, (u32)end_suki, 0x0002005B, (u32)btlevtcmd_StartWaitEvent, 0xFFFFFFFE, 0x00000002,
+    0x00000001,
+};
+
+u32 flash_evt[182] = {
+    0x0003005B, (u32)evt_map_set_tevcallback, 0x00000001, (u32)set_tev, 0x0005005B, (u32)evt_mapobj_flag_onoff,
+    0x00000001, 0x00000001, (u32)(char*)str_bti_S_8042864c, 0x01000000, 0x0005005B, (u32)evt_mapobj_flag_onoff,
+    0x00000001, 0x00000000, (u32)(char*)str_bti_S_8042864c, 0x00000100, 0x0003005B, (u32)exist_map,
+    (u32)(char*)str_A1_80428654, 0xFE363C80, 0x00020018, 0xFE363C80, 0x00000001, 0x0005005B,
+    (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000000, (u32)(char*)str_A1_80428654, 0x0F000000, 0x0005005B,
+    (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (u32)(char*)str_A1_80428654, 0x01000000, 0x0005005B,
+    (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000000, (u32)(char*)str_A1_80428654, 0x00000100, 0x00000021,
+    0x0003005B, (u32)exist_map, (u32)(char*)str_A2_80428658, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0x00000001, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (u32)(char*)str_A2_80428658,
+    0x01000000, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000000, (u32)(char*)str_A2_80428658,
+    0x00000100, 0x00000021, 0x0003005B, (u32)exist_map, (u32)(char*)str_B_8042865c, 0xFE363C80,
+    0x00020018, 0xFE363C80, 0x00000001, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (u32)(char*)str_B_8042865c, 0x01000000, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000000, (u32)(char*)str_B_8042865c, 0x00000100, 0x00000021, 0x0003005B, (u32)exist_map,
+    (u32)(char*)str_C_80428660, 0xFE363C80, 0x00020018, 0xFE363C80, 0x00000001, 0x0005005B,
+    (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (u32)(char*)str_C_80428660, 0x01000000, 0x0005005B,
+    (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000000, (u32)(char*)str_C_80428660, 0x00000100, 0x00000021,
+    0x0004005B, (u32)btlevtcmd_SetAlpha, 0xFFFFFFFE, 0x00000001, 0x00000000, 0x0004005B,
+    (u32)btlevtcmd_OnPartsAttribute, 0xFFFFFFFE, 0x00000001, 0x02000000, 0x00020019, 0xFE363C8E,
+    0xFFFFFFFF, 0x0004005B, (u32)btlevtcmd_SetAlpha, 0xFE363C8E, 0xFE363C8F, 0x00000000,
+    0x0004005B, (u32)btlevtcmd_OnPartsAttribute, 0xFE363C8E, 0xFE363C8F, 0x02000000, 0x00000021,
+    0x0003005B, (u32)btlevtcmd_GetEnemyBelong, 0xFFFFFFFE, 0xFE363C80, 0x0004005B, (u32)btlevtcmd_SamplingEnemy,
+    0xFFFFFFFE, 0xFE363C80, (u32)weapon, 0x0004005B, (u32)btlevtcmd_ChoiceSamplingEnemy, (u32)weapon,
+    0xFE363C83, 0xFE363C84, 0x0003005B, (u32)btlevtcmd_GetSelectEnemy, 0xFE363C83, 0xFE363C84,
+    0x00010003, 0x00000005, 0x00020018, 0xFE363C83, 0xFFFFFFFF, 0x00010004,
+    0x00000008, 0x00000021, 0x0006005B, (u32)btlevtcmd_SetRGB, 0xFE363C83, 0xFE363C84,
+    0x00000000, 0x00000000, 0x00000000, 0x0003005B, (u32)btlevtcmd_GetSelectNextEnemy, 0xFE363C83,
+    0xFE363C84, 0x00010004, 0x00000005, 0x00010003, 0x00000008, 0x0002005B,
+    (u32)aud_set_draw, 0x00000000, 0x0004005B, (u32)evt_batstage_set_stg_dark, 0x00000000, 0x00000000,
+    0x00000000, 0x0004005B, (u32)evt_batstage_set_aud_dark, 0x00000000, 0x00000000, 0x00000000,
+    0x00000002, 0x00000001,
+};
+
+u32 flash_main_evt[52] = {
+    0x00020032, 0xFE363C8B, 0x000000FF, 0x00020036, 0xFE363C8B, 0xFE363C8A,
+    0x0002005B, (u32)flash_update, 0xFE363C8A, 0x0003005B, (u32)btlevtcmd_GetEnemyBelong, 0xFFFFFFFE,
+    0xFE363C80, 0x0004005B, (u32)btlevtcmd_SamplingEnemy, 0xFFFFFFFE, 0xFE363C80, (u32)weapon,
+    0x0004005B, (u32)btlevtcmd_ChoiceSamplingEnemy, (u32)weapon, 0xFE363C83, 0xFE363C84, 0x0003005B,
+    (u32)btlevtcmd_GetSelectEnemy, 0xFE363C83, 0xFE363C84, 0x00010003, 0x00000005, 0x00020018,
+    0xFE363C83, 0xFFFFFFFF, 0x00010004, 0x00000008, 0x00000021, 0x0006005B,
+    (u32)btlevtcmd_SetRGB, 0xFE363C83, 0xFE363C84, 0xFE363C8B, 0xFE363C8B, 0xFE363C8B,
+    0x0003005B, (u32)btlevtcmd_GetSelectNextEnemy, 0xFE363C83, 0xFE363C84, 0x00010004, 0x00000005,
+    0x00010003, 0x00000008, 0x00000002, 0x00000001,
+};
+
+u32 flash_cancel_evt[194] = {
+    0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000000, (u32)(char*)str_bti_S_8042864c, 0x0F000000,
+    0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (u32)(char*)str_bti_S_8042864c, 0x00000100,
+    0x0003005B, (u32)exist_map, (u32)(char*)str_A1_80428654, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0x00000001, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000000, (u32)(char*)str_A1_80428654,
+    0x0F000000, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (u32)(char*)str_A1_80428654,
+    0x00000100, 0x00000021, 0x0003005B, (u32)exist_map, (u32)(char*)str_A2_80428658, 0xFE363C80,
+    0x00020018, 0xFE363C80, 0x00000001, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000000, (u32)(char*)str_A2_80428658, 0x0F000000, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (u32)(char*)str_A2_80428658, 0x00000100, 0x00000021, 0x0003005B, (u32)exist_map,
+    (u32)(char*)str_B_8042865c, 0xFE363C80, 0x00020018, 0xFE363C80, 0x00000001, 0x0005005B,
+    (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000000, (u32)(char*)str_B_8042865c, 0x0F000000, 0x0005005B,
+    (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (u32)(char*)str_B_8042865c, 0x00000100, 0x00000021,
+    0x0003005B, (u32)exist_map, (u32)(char*)str_C_80428660, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0x00000001, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000000, (u32)(char*)str_C_80428660,
+    0x0F000000, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (u32)(char*)str_C_80428660,
+    0x00000100, 0x00000021, 0x0003005B, (u32)exist_map, (u32)(char*)str_gamen_80428664, 0xFE363C80,
+    0x00020018, 0xFE363C80, 0x00000001, 0x0003005B, (u32)evt_map_set_tevcallback, 0x00000008,
+    (u32)tou_gamen_screen_tev, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (u32)(char*)str_gamen_80428664,
+    0x08000000, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000000, (u32)(char*)str_gamen_80428664,
+    0x00000100, 0x00000021, 0x0004005B, (u32)btlevtcmd_SetAlpha, 0xFFFFFFFE, 0x00000001,
+    0x000000FF, 0x0004005B, (u32)btlevtcmd_OffPartsAttribute, 0xFFFFFFFE, 0x00000001, 0x02000000,
+    0x00020019, 0xFE363C8E, 0xFFFFFFFF, 0x0004005B, (u32)btlevtcmd_SetAlpha, 0xFE363C8E,
+    0xFE363C8F, 0x000000FF, 0x0004005B, (u32)btlevtcmd_OffPartsAttribute, 0xFE363C8E, 0xFE363C8F,
+    0x02000000, 0x00000021, 0x0003005B, (u32)btlevtcmd_GetEnemyBelong, 0xFFFFFFFE, 0xFE363C80,
+    0x0004005B, (u32)btlevtcmd_SamplingEnemy, 0xFFFFFFFE, 0xFE363C80, (u32)weapon, 0x0004005B,
+    (u32)btlevtcmd_ChoiceSamplingEnemy, (u32)weapon, 0xFE363C83, 0xFE363C84, 0x0003005B, (u32)btlevtcmd_GetSelectEnemy,
+    0xFE363C83, 0xFE363C84, 0x00010003, 0x00000005, 0x00020018, 0xFE363C83,
+    0xFFFFFFFF, 0x00010004, 0x00000008, 0x00000021, 0x0006005B, (u32)btlevtcmd_SetRGB,
+    0xFE363C83, 0xFE363C84, 0x000000FF, 0x000000FF, 0x000000FF, 0x0003005B,
+    (u32)btlevtcmd_GetSelectNextEnemy, 0xFE363C83, 0xFE363C84, 0x00010004, 0x00000005, 0x00010003,
+    0x00000008, 0x0002005B, (u32)aud_set_draw, 0x00000001, 0x0003005B, (u32)evt_batstage_return_stg_dark_base,
+    0x00000000, 0x00000000, 0x0003005B, (u32)evt_batstage_return_aud_dark_base, 0x00000000, 0x00000000,
+    0x00000002, 0x00000001,
+};
+
+/* Exact local 8-word success Event in .sdata. */
+__declspec(section ".sdata") static u32 nice_event[8] = {
+    0x0005005B, (u32)btlevtcmd_ACSuccessEffect, 0xFE363C80, 0xFFFFFF88, 0x00000078, 0x00000000,
+    0x00000002, 0x00000001,
+};
+
+/* Exact US Showstopper small-data prefix before the compiler scalar pool.
+ * Real objects occupy target +0x00..+0x3B; natural alignment supplies the
+ * target two-byte gaps at +0x06 and +0x3A.  Scalar storage from +0x3C onward
+ * remains compiler/function-source-shape owned in this breadth-first pass. */
+__declspec(section ".sdata2") u8 N_ohko_rate_tbl[6] = { 50, 60, 70, 80, 90, 100 };
+__declspec(section ".sdata2") GXColor dat_80428638 = { 0, 0, 0, 0xFF };
+__declspec(section ".sdata2") char str_M_I_Y_8042863c[] = "M_I_Y";
+__declspec(section ".sdata2") char str_A_1_80428644[] = "A_1";
+__declspec(section ".sdata2") char zero_80428648[] = "";
+__declspec(section ".sdata2") char str_bti_S_8042864c[] = "bti_S";
+__declspec(section ".sdata2") char str_A1_80428654[] = "A1";
+__declspec(section ".sdata2") char str_A2_80428658[] = "A2";
+__declspec(section ".sdata2") char str_B_8042865c[] = "B";
+__declspec(section ".sdata2") char str_C_80428660[] = "C";
+__declspec(section ".sdata2") char str_gamen_80428664[] = "gamen";

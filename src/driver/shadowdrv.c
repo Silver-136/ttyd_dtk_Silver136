@@ -74,7 +74,7 @@ void shadowInit(void) {
     extern void* cswp;
     extern void* dswp;
     extern void* pswp;
-    extern u16 ShadowSizeTbl[];
+    extern u16 ShadowSizeTbl[4];
     extern u32 dat_8041f9c0;
     extern u32 dat_8041f9cc;
     extern u32 dat_8041f9d0;
@@ -82,8 +82,9 @@ void shadowInit(void) {
     extern f32 float_20_8041fa08;
     u8* tex8;
     u16* tex16;
-    u32 size;
     u32 i;
+    u32 size;
+    void* wp;
 
     *(u32*)((s32)cswp + 0x0) = 0;
     *(u32*)((s32)cswp + 0x4) = 0;
@@ -96,7 +97,8 @@ void shadowInit(void) {
     *(u32*)((s32)cswp + 0x104) = 0;
     *(void**)((s32)cswp + 0x108) = __memAlloc(0, 0x1700);
     memset(*(void**)((s32)cswp + 0x108), 0, 0x1700);
-    *(void**)((s32)cswp + 0xFC) = smartAlloc(GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], 2, 0, 0), 0);
+    wp = cswp;
+    *(void**)((s32)wp + 0xFC) = smartAlloc(GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], 2, 0, 0), 0);
 
     *(u32*)((s32)dswp + 0x0) = 2;
     *(u32*)((s32)dswp + 0x4) = 0;
@@ -166,9 +168,9 @@ void shadowDisp(s32 param_1, s32 param_2) {
     extern void* pswp;
     extern void* dswp;
     extern u8 lbl_80304A20[];
-    extern u16 ShadowSizeTbl[];
-    extern s32 tmp_sci[];
-    extern f32 tmp_vp[];
+    extern u16 ShadowSizeTbl[4];
+    extern s32 tmp_sci[4];
+    extern f32 tmp_vp[6];
     extern f32 tmp_view[3][4];
     extern u8 color_tbl;
     extern f32 float_0_8041f9d4;
@@ -260,13 +262,15 @@ void shadowDisp(s32 param_1, s32 param_2) {
                 GXInvalidateTexAll();
                 cfgIndex = *(s32*)((s32)wp + 8);
                 cfgOff = cfgIndex * 0x48;
-                cfg = cfgBase + cfgOff;
-                shadowSize = ShadowSizeTbl[*(s32*)(cfg + 0x40)];
+                shadowSize = ShadowSizeTbl[*(s32*)(cfgBase + cfgOff + 0x40)];
                 GXGetViewportv(tmp_vp);
                 GXGetScissor(&tmp_sci[0], &tmp_sci[1], &tmp_sci[2], &tmp_sci[3]);
                 shadowSizeF = (f32)shadowSize;
                 GXSetViewport(float_0_8041f9d4, float_0_8041f9d4, shadowSizeF, shadowSizeF, float_0_8041f9d4, float_1_8041f9e4);
                 GXSetScissor(1, 1, shadowSize - 2, shadowSize - 2);
+                cfgIndex = *(s32*)((s32)wp + 8);
+                cfgOff = cfgIndex * 0x48;
+                cfg = cfgBase + cfgOff;
                 pos_case5[0] = *(u32*)(cfg + 4);
                 pos_case5[1] = *(u32*)(cfg + 8);
                 pos_case5[2] = *(u32*)(cfg + 0xC);
@@ -276,7 +280,7 @@ void shadowDisp(s32 param_1, s32 param_2) {
                 } else {
                     C_MTXOrtho(*(f32*)(cfg + 0x2C), -*(f32*)(cfg + 0x2C), *(f32*)(cfg + 0x28), -*(f32*)(cfg + 0x28), *(f32*)(cfg + 0x30), *(f32*)(cfg + 0x34), (void*)((s32)wp + 0x3C));
                 }
-                GXSetProjection((void*)((s32)wp + 0x3C), *(s32*)(cfg + 0x38));
+                GXSetProjection((void*)((s32)wp + 0x3C), *(s32*)(cfgBase + *(s32*)((s32)wp + 8) * 0x48 + 0x38));
                 cam = camGetCurPtr();
                 PSMTXCopy((void*)((s32)cam + 0x11C), tmp_view);
                 cam = camGetCurPtr();
@@ -290,13 +294,15 @@ void shadowDisp(s32 param_1, s32 param_2) {
                 GXInvalidateTexAll();
                 cfgIndex = *(s32*)((s32)wp + 8);
                 cfgOff = cfgIndex * 0x48;
-                cfg = cfgBase + cfgOff;
-                shadowSize = ShadowSizeTbl[*(s32*)(cfg + 0x40)];
+                shadowSize = ShadowSizeTbl[*(s32*)(cfgBase + cfgOff + 0x40)];
                 GXGetViewportv(tmp_vp);
                 GXGetScissor(&tmp_sci[0], &tmp_sci[1], &tmp_sci[2], &tmp_sci[3]);
                 shadowSizeF = (f32)shadowSize;
                 GXSetViewport(float_0_8041f9d4, float_0_8041f9d4, shadowSizeF, shadowSizeF, float_0_8041f9d4, float_1_8041f9e4);
                 GXSetScissor(1, 1, shadowSize - 2, shadowSize - 2);
+                cfgIndex = *(s32*)((s32)wp + 8);
+                cfgOff = cfgIndex * 0x48;
+                cfg = cfgBase + cfgOff;
                 pos_case0[0] = *(u32*)(cfg + 4);
                 pos_case0[1] = *(u32*)(cfg + 8);
                 pos_case0[2] = *(u32*)(cfg + 0xC);
@@ -306,7 +312,7 @@ void shadowDisp(s32 param_1, s32 param_2) {
                 } else {
                     C_MTXOrtho(*(f32*)(cfg + 0x2C), -*(f32*)(cfg + 0x2C), *(f32*)(cfg + 0x28), -*(f32*)(cfg + 0x28), *(f32*)(cfg + 0x30), *(f32*)(cfg + 0x34), (void*)((s32)wp + 0x3C));
                 }
-                GXSetProjection((void*)((s32)wp + 0x3C), *(s32*)(cfg + 0x38));
+                GXSetProjection((void*)((s32)wp + 0x3C), *(s32*)(cfgBase + *(s32*)((s32)wp + 8) * 0x48 + 0x38));
                 cam = camGetCurPtr();
                 PSMTXCopy((void*)((s32)cam + 0x11C), tmp_view);
                 cam = camGetCurPtr();
@@ -319,14 +325,16 @@ void shadowDisp(s32 param_1, s32 param_2) {
                 GXInvalidateTexAll();
                 cfgIndex = *(s32*)((s32)wp + 8);
                 cfgOff = cfgIndex * 0x48;
-                cfg = cfgBase + cfgOff;
-                shadowSize = ShadowSizeTbl[*(s32*)(cfg + 0x40)];
+                shadowSize = ShadowSizeTbl[*(s32*)(cfgBase + cfgOff + 0x40)];
                 GXSetColorUpdate(0);
                 GXGetViewportv(tmp_vp);
                 GXGetScissor(&tmp_sci[0], &tmp_sci[1], &tmp_sci[2], &tmp_sci[3]);
                 shadowSizeF = (f32)shadowSize;
                 GXSetViewport(float_0_8041f9d4, float_0_8041f9d4, shadowSizeF, shadowSizeF, float_0_8041f9d4, float_1_8041f9e4);
                 GXSetScissor(1, 1, shadowSize - 2, shadowSize - 2);
+                cfgIndex = *(s32*)((s32)wp + 8);
+                cfgOff = cfgIndex * 0x48;
+                cfg = cfgBase + cfgOff;
                 pos_case2[0] = *(u32*)(cfg + 4);
                 pos_case2[1] = *(u32*)(cfg + 8);
                 pos_case2[2] = *(u32*)(cfg + 0xC);
@@ -336,7 +344,7 @@ void shadowDisp(s32 param_1, s32 param_2) {
                 } else {
                     C_MTXOrtho(*(f32*)(cfg + 0x2C), -*(f32*)(cfg + 0x2C), *(f32*)(cfg + 0x28), -*(f32*)(cfg + 0x28), *(f32*)(cfg + 0x30), *(f32*)(cfg + 0x34), (void*)((s32)wp + 0x3C));
                 }
-                GXSetProjection((void*)((s32)wp + 0x3C), *(s32*)(cfg + 0x38));
+                GXSetProjection((void*)((s32)wp + 0x3C), *(s32*)(cfgBase + *(s32*)((s32)wp + 8) * 0x48 + 0x38));
                 cam = camGetCurPtr();
                 PSMTXCopy((void*)((s32)cam + 0x11C), tmp_view);
                 cam = camGetCurPtr();
@@ -366,6 +374,19 @@ s32 _filter(s32 param_1, int param_2) {
 }
 
 void shadowCharShadowDisp_Collision(void) {
+    typedef struct Vec3 {
+        f32 x;
+        f32 y;
+        f32 z;
+    } Vec3;
+    typedef struct HitData {
+        u8 pad_00[0xC];
+        Vec3 position;
+        Vec3 direction;
+        Vec3 result_a;
+        Vec3 result_b;
+        f32 max_distance;
+    } HitData;
     extern void PSMTXTrans(void* mtx, f32 x, f32 y, f32 z);
     extern s32 hitCheckVecFilter(void* data, void* filter);
     extern s32 _filter(s32, int);
@@ -374,61 +395,59 @@ void shadowCharShadowDisp_Collision(void) {
     extern f32 float_1_8041f9e4;
     extern f32 float_1p5_8041fa04;
     extern f32 float_150_8041fa00;
-    extern f32 vec3_802bfd10[];
-    u8 data[0x40];
+    extern const Vec3 vec3_802bfd10;
+    HitData data;
     f32 size;
     f32 zero;
-    s32 result;
-    void* mtx;
+    u32 result;
+    u8* entry;
     s32 i;
-    u16* entry;
+    f32* mtx;
 
-    entry = *(u16**)((s32)cswp + 0x108);
+    entry = *(u8**)((s32)cswp + 0x108);
     camGetCurPtr();
     zero = float_0_8041f9d4;
     i = 0;
     while (i < *(s32*)((s32)cswp + 0x104)) {
-        mtx = entry + 0x16;
-        if (*(f32*)(entry + 8) != zero && (*entry & 2) == 0) {
-            if (*(u8*)(entry + 1) != 3 && (*entry & 1) != 0) {
-                *(u32*)(data + 0x0C) = *(u32*)(entry + 2);
-                *(f32*)(data + 0x10) = *(f32*)(entry + 4) + float_1_8041f9e4;
-                *(u32*)(data + 0x14) = *(u32*)(entry + 6);
-                *(u32*)(data + 0x18) = *(u32*)((u8*)vec3_802bfd10 + 0);
-                *(u32*)(data + 0x1C) = *(u32*)((u8*)vec3_802bfd10 + 4);
-                *(u32*)(data + 0x20) = *(u32*)((u8*)vec3_802bfd10 + 8);
-                *(f32*)(data + 0x3C) = float_150_8041fa00;
-                result = hitCheckVecFilter(data, _filter);
+        mtx = (f32*)(entry + 0x2C);
+        if (*(f32*)(entry + 0x10) != zero && (*(u16*)entry & 2) == 0) {
+            if (entry[2] != 3 && (*(u16*)entry & 1) != 0) {
+                data.position = *(Vec3*)(entry + 4);
+                data.position.y += float_1_8041f9e4;
+                data.direction = vec3_802bfd10;
+                data.max_distance = float_150_8041fa00;
+                result = hitCheckVecFilter(&data, _filter);
                 if (result == 0) {
                     goto next;
                 }
-                size = *(f32*)(entry + 8);
-                *(f32*)(entry + 0x1C) = *(f32*)(data + 0x24) + *(f32*)(data + 0x30);
-                *(f32*)(entry + 0x24) = *(f32*)(data + 0x28) + *(f32*)(data + 0x34);
-                *(f32*)(entry + 0x2C) = *(f32*)(data + 0x2C) + *(f32*)(data + 0x38);
-                *(f32*)(entry + 0x1E) = *(f32*)(data + 0x30) * size;
-                *(f32*)(entry + 0x20) = *(f32*)(data + 0x34) * *(f32*)(entry + 10);
-                *(f32*)(entry + 0x22) = *(f32*)(data + 0x38) * size;
-                *(f32*)(entry + 0x26) = zero;
-                *(f32*)(entry + 0x28) = *(f32*)(data + 0x38) * size;
-                *(f32*)(entry + 0x2A) = -*(f32*)(data + 0x34) * size;
-                *(f32*)(entry + 0x16) = size *
-                    (-*(f32*)(data + 0x34) * *(f32*)(data + 0x34) -
-                     *(f32*)(data + 0x38) * *(f32*)(data + 0x38));
-                *(f32*)(entry + 0x18) = size * *(f32*)(data + 0x30) * *(f32*)(data + 0x34);
-                *(f32*)(entry + 0x1A) = size * *(f32*)(data + 0x30) * *(f32*)(data + 0x38);
+                size = *(f32*)(entry + 0x10);
+                mtx[3] = data.result_a.x + data.result_b.x;
+                mtx[7] = data.result_a.y + data.result_b.y;
+                mtx[11] = data.result_a.z + data.result_b.z;
+                mtx[4] = data.result_b.x * size;
+                mtx[5] = data.result_b.y * *(f32*)(entry + 0x14);
+                mtx[6] = data.result_b.z * size;
+                mtx[8] = float_0_8041f9d4;
+                mtx[9] = data.result_b.z * size;
+                mtx[10] = -data.result_b.y * size;
+                mtx[0] = size *
+                    (-data.result_b.y * data.result_b.y -
+                     data.result_b.z * data.result_b.z);
+                mtx[1] = size * data.result_b.x * data.result_b.y;
+                mtx[2] = size * data.result_b.x * data.result_b.z;
             } else {
-                PSMTXTrans(mtx, *(f32*)(entry + 2), float_1p5_8041fa04 + *(f32*)(entry + 4),
-                           *(f32*)(entry + 6));
-                *(f32*)(entry + 0x2A) = *(f32*)(entry + 8);
-                *(f32*)(entry + 0x16) = *(f32*)(entry + 8);
-                *(u32*)(entry + 0x20) = *(u32*)(entry + 10);
+                PSMTXTrans(mtx, *(f32*)(entry + 4), float_1p5_8041fa04 + *(f32*)(entry + 8),
+                           *(f32*)(entry + 0xC));
+                size = *(f32*)(entry + 0x10);
+                mtx[10] = size;
+                mtx[0] = size;
+                mtx[5] = *(f32*)(entry + 0x14);
             }
-            *entry |= 2;
+            *(u16*)entry |= 2;
         }
 next:
         i++;
-        entry += 0x2E;
+        entry += 0x5C;
     }
 }
 
@@ -812,12 +831,17 @@ void cylinderShadowDraw(s32 param_1) {
     extern u32 unk_80429540;
     extern u32 unk_80429544;
     extern f32 float_0_8041f9d4;
-    extern u8 lbl_80304A20[];
+    extern u32 color_tbl_cube[];
+    extern u8 cube_dl_top[];
+    extern u8 cube_dl_bottom[];
+    extern u8 cube_dl_side[];
     f32 mtx[3][4];
-    void* cam;
+    void* view;
     void* entry;
+    u32 colorTemp;
     u32 color;
     u32 matColor;
+    f32 zero;
     s32 i;
     u16 left;
     u16 top;
@@ -825,9 +849,10 @@ void cylinderShadowDraw(s32 param_1) {
     u16 bottom;
 
     entry = *(void**)((s32)cswp + 0x108);
-    cam = camGetCurPtr();
+    view = (void*)((s32)camGetCurPtr() + 0x11C);
+    zero = float_0_8041f9d4;
     for (i = 0; i < *(s32*)((s32)cswp + 0x104); i++, entry = (void*)((s32)entry + 0x5C)) {
-        if (*(f32*)((s32)entry + 0x10) != float_0_8041f9d4
+        if (*(f32*)((s32)entry + 0x10) != zero
             && *(u8*)((s32)entry + 2) == 2
             && (*(u16*)entry & 2) != 0
             && *(s16*)((s32)entry + 0x1A) == param_1) {
@@ -835,9 +860,11 @@ void cylinderShadowDraw(s32 param_1) {
                 sysWaitDrawSync();
                 GXClearBoundingBox();
             }
-            PSMTXConcat((void*)((s32)cam + 0x11C), (void*)((s32)entry + 0x2C), mtx);
+            PSMTXConcat(view, (void*)((s32)entry + 0x2C), mtx);
             GXLoadPosMtxImm(mtx, 0);
-            color = (unk_80429540 & 0xFFFFFF00) | *(u8*)((s32)entry + 0x28);
+            colorTemp = unk_80429540;
+            ((u8*)&colorTemp)[3] = *(u8*)((s32)entry + 0x28);
+            color = colorTemp;
             GXSetTevColor(1, &color);
 
             GXSetZMode(1, 3, 0);
@@ -847,13 +874,16 @@ void cylinderShadowDraw(s32 param_1) {
             GXSetAlphaUpdate(1);
             GXSetColorUpdate(0);
             GXSetChanCtrl(4, 0, 0, 1, 0, 2, 2);
-            if (*(u8*)((s32)entry + 3) == 1) {
-                GXSetArray(0xB, lbl_80304A20 + 0x760, 4);
-                GXCallDisplayList(lbl_80304A20 + 0x540, 0x40);
-                GXCallDisplayList(lbl_80304A20 + 0x580, 0x20);
-                GXCallDisplayList(lbl_80304A20 + 0x5A0, 0x20);
-            } else {
-                cylinder(entry);
+            switch (*(u8*)((s32)entry + 3)) {
+                case 1:
+                    GXSetArray(0xB, color_tbl_cube, 4);
+                    GXCallDisplayList(cube_dl_top, 0x40);
+                    GXCallDisplayList(cube_dl_bottom, 0x20);
+                    GXCallDisplayList(cube_dl_side, 0x20);
+                    break;
+                default:
+                    cylinder(entry);
+                    break;
             }
 
             GXSetZMode(1, 3, 0);
@@ -864,13 +894,16 @@ void cylinderShadowDraw(s32 param_1) {
             matColor = unk_80429544;
             GXSetChanMatColor(4, &matColor);
             GXSetChanCtrl(4, 0, 0, 0, 0, 2, 2);
-            if (*(u8*)((s32)entry + 3) == 1) {
-                GXSetArray(0xB, lbl_80304A20 + 0x760, 4);
-                GXCallDisplayList(lbl_80304A20 + 0x540, 0x40);
-                GXCallDisplayList(lbl_80304A20 + 0x580, 0x20);
-                GXCallDisplayList(lbl_80304A20 + 0x5A0, 0x20);
-            } else {
-                cylinder(entry);
+            switch (*(u8*)((s32)entry + 3)) {
+                case 1:
+                    GXSetArray(0xB, color_tbl_cube, 4);
+                    GXCallDisplayList(cube_dl_top, 0x40);
+                    GXCallDisplayList(cube_dl_bottom, 0x20);
+                    GXCallDisplayList(cube_dl_side, 0x20);
+                    break;
+                default:
+                    cylinder(entry);
+                    break;
             }
 
             GXSetCullMode(2);
@@ -879,13 +912,16 @@ void cylinderShadowDraw(s32 param_1) {
             GXSetColorUpdate(1);
             matColor = *(u32*)((s32)cswp + 0x100);
             GXSetChanMatColor(4, &matColor);
-            if (*(u8*)((s32)entry + 3) == 1) {
-                GXSetArray(0xB, lbl_80304A20 + 0x760, 4);
-                GXCallDisplayList(lbl_80304A20 + 0x540, 0x40);
-                GXCallDisplayList(lbl_80304A20 + 0x580, 0x20);
-                GXCallDisplayList(lbl_80304A20 + 0x5A0, 0x20);
-            } else {
-                cylinder(entry);
+            switch (*(u8*)((s32)entry + 3)) {
+                case 1:
+                    GXSetArray(0xB, color_tbl_cube, 4);
+                    GXCallDisplayList(cube_dl_top, 0x40);
+                    GXCallDisplayList(cube_dl_bottom, 0x20);
+                    GXCallDisplayList(cube_dl_side, 0x20);
+                    break;
+                default:
+                    cylinder(entry);
+                    break;
             }
 
             if (param_1 == 1) {
@@ -897,7 +933,7 @@ void cylinderShadowDraw(s32 param_1) {
     }
 }
 
-void shadowEntry(double x, double y, double z, double size) {
+void shadowEntry(f32 x, f32 y, f32 z, f32 size) {
     typedef struct Vec3 {
         f32 x;
         f32 y;
@@ -945,7 +981,7 @@ void shadowEntry(double x, double y, double z, double size) {
     *(s32*)((u8*)cswp + 0x104) = *(s32*)((u8*)cswp + 0x104) + 1;
 }
 
-s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
+s32 shadowEntryMode(f32 x, f32 y, f32 z, f32 size, u8 mode) {
     typedef struct Vec3 {
         f32 x;
         f32 y;
@@ -959,6 +995,9 @@ s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
     u8* entry;
     s32 index;
     Vec3 pos;
+    f32 volume0;
+    f32 volume1;
+    f32 volume2;
 
     {
         u8* work = cswp;
@@ -970,6 +1009,9 @@ s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
         *(u16*)entry |= 1;
     }
     pos = vec3_802bfd64;
+    volume0 = float_1_8041f9e4;
+    volume1 = float_0p2_8041f9ec;
+    volume2 = float_0p4_8041f9f0;
     pos.x = x;
     pos.y = y;
     pos.z = z;
@@ -980,11 +1022,11 @@ s32 shadowEntryMode(double x, double y, double z, double size, u8 mode) {
     *(f32*)(entry + 0x14) = *(f32*)((u8*)cswp + 0x114);
     entry[2] = mode;
     entry[3] = 0;
-    *(u16*)(entry + 0x18) = 0xFFFF;
+    *(s16*)(entry + 0x18) = -1;
     *(u16*)(entry + 0x1A) = 4;
-    *(f32*)(entry + 0x1C) = float_1_8041f9e4;
-    *(f32*)(entry + 0x20) = float_0p2_8041f9ec;
-    *(f32*)(entry + 0x24) = float_0p4_8041f9f0;
+    *(f32*)(entry + 0x1C) = volume0;
+    *(f32*)(entry + 0x20) = volume1;
+    *(f32*)(entry + 0x24) = volume2;
     entry[0x28] = 0xFF;
     *(s32*)((u8*)cswp + 0x104) = *(s32*)((u8*)cswp + 0x104) + 1;
     return index;
@@ -1120,10 +1162,10 @@ void* shadowGetProjShadowConfig(void) {
 void projShadowEnd(s32 param_1, u32* param_2) {
     extern void GXSetZMode(u32 enable, u32 func, u32 update_enable);
     extern f32 tmp_view[3][4];
-    extern s32 tmp_sci[];
-    extern f32 tmp_vp[];
+    extern s32 tmp_sci[4];
+    extern f32 tmp_vp[6];
     extern u8 shadowConfig[];
-    extern u16 ShadowSizeTbl[];
+    extern u16 ShadowSizeTbl[4];
     extern f32 float_0_8041f9d4;
     extern f32 float_0p5_8041f9d8;
     f32 mtx[3][4];
@@ -1165,6 +1207,7 @@ void projShadowEnd(s32 param_1, u32* param_2) {
             GXInitTexObj((void*)((s32)param_2 + 0xDC), *(void**)param_2[0x3F], width, width, 2, 0, 0, 0);
         }
         GXInitTexObjLOD((void*)((s32)param_2 + 0xDC), 1, 1, float_0_8041f9d4, float_0_8041f9d4, float_0_8041f9d4, 0, 0, 0);
+        config = shadowConfig + param_2[2] * 0x48;
         if ((void*)((s32)param_2 + 0x7C) != 0) {
             if (*(s32*)((s32)config + 0x38) == 0) {
                 C_MTXLightFrustum(-*(f32*)((s32)config + 0x2C), *(f32*)((s32)config + 0x2C), *(f32*)((s32)config + 0x28), -*(f32*)((s32)config + 0x28), *(f32*)((s32)config + 0x30), float_0p5_8041f9d8, float_0p5_8041f9d8, float_0p5_8041f9d8, mtx, float_0p5_8041f9d8);
@@ -1178,14 +1221,15 @@ void projShadowEnd(s32 param_1, u32* param_2) {
 }
 
 #pragma no_register_save_helpers on
+#pragma opt_common_subs off
 void depthShadowEnd(s32 param_1, u32* param_2) {
     extern void GXSetZMode(u32 enable, u32 func, u32 update_enable);
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern f32 tmp_view[3][4];
-    extern s32 tmp_sci[];
-    extern f32 tmp_vp[];
+    extern s32 tmp_sci[4];
+    extern f32 tmp_vp[6];
     extern u8 shadowConfig[];
-    extern u16 ShadowSizeTbl[];
+    extern u16 ShadowSizeTbl[4];
     extern f32 float_0_8041f9d4;
     extern f32 float_0p5_8041f9d8;
     extern f32 float_1_8041f9e4;
@@ -1197,8 +1241,8 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
     void* cam;
     u8* config;
     u16 width;
-    u32 copyFmt;
     u32 texFmt;
+    u32 copyFmt;
     u32 shadowType;
     u32 isType2;
     f32 nearz;
@@ -1212,10 +1256,10 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
     GXSetViewport(tmp_vp[0], tmp_vp[1], tmp_vp[2], tmp_vp[3], tmp_vp[4], tmp_vp[5]);
     GXSetScissor(tmp_sci[0], tmp_sci[1], tmp_sci[2], tmp_sci[3]);
 
-    if (param_2[1] != 0) {
+    if ((s32)param_2[1] != 0) {
         config = shadowConfig + param_2[2] * 0x48;
         shadowType = *(u32*)(config + 0x3C);
-        if (shadowType < 3) {
+        if (shadowType <= 2) {
             copyFmt = 0x11;
             texFmt = 1;
         } else {
@@ -1236,7 +1280,7 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
 
         config = shadowConfig + param_2[2] * 0x48;
         shadowType = *(u32*)(config + 0x3C);
-        isType2 = shadowType == 2;
+        isType2 = shadowType > 2;
         if ((void*)((s32)param_2 + 0x7C) != 0) {
             if (*(s32*)(config + 0x38) == 0) {
                 C_MTXLightFrustum(-*(f32*)(config + 0x2C), *(f32*)(config + 0x2C), *(f32*)(config + 0x28), -*(f32*)(config + 0x28), *(f32*)(config + 0x30), float_0p5_8041f9d8, float_0p5_8041f9d8, float_0p5_8041f9d8, projTexMtx, float_0p5_8041f9d8);
@@ -1275,6 +1319,7 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
         param_2[0] |= 1;
     }
 }
+#pragma opt_common_subs reset
 #pragma no_register_save_helpers off
 
 const f32 vec3_802bfd10[3] = { 0.0f, -1.0f, 0.0f };

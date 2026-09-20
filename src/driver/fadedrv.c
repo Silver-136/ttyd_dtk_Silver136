@@ -261,11 +261,11 @@ void fadeEntry(s32 type, s32 time, void* data) {
     extern const char str_OFF_f_in_out_mario_802bf760[];
     extern const char str_OFF_f_in_out_peach_802bf774[];
     extern const char str_OFF_f_in_out_kuppa_802bf788[];
-    extern const char str_A_1_8041f824[];
-    extern const char str_A_2_8041f80c[];
-    extern const char str_A_3_8041f830[];
-    extern const char str_Z_1_8041f828[];
-    extern const char str_Z_2_8041f82c[];
+    extern const char str_A_1_8041f824[4];
+    extern const char str_A_2_8041f80c[4];
+    extern const char str_A_3_8041f830[4];
+    extern const char str_Z_1_8041f828[4];
+    extern const char str_Z_2_8041f82c[4];
 #define str_OFF_d_maku_up_down_802bf6fc (stringBase + 0x94)
 #define str_OFF_d_maku_left_righ_802bf710 (stringBase + 0xA8)
 #define str_OFF_d_maku_center_802bf728 (stringBase + 0xC0)
@@ -279,7 +279,6 @@ void fadeEntry(s32 type, s32 time, void* data) {
 #define str_OFF_f_in_out_peach_802bf774 (stringBase + 0x10C)
 #define str_OFF_f_in_out_kuppa_802bf788 (stringBase + 0x120)
     const char* stringBase = (const char*)&vec3_802bf668;
-    s32 work;
     s32 entry;
     s32 reset;
     s32 slot;
@@ -306,9 +305,6 @@ void fadeEntry(s32 type, s32 time, void* data) {
     *(f32*)(reset + 0x78) = float_0_8041f7a8; \
     *(f32*)(reset + 0x7C) = float_0_8041f7a8; \
     *(f32*)(reset + 0x90) = float_1_8041f7ac; \
-    if ((slot == 0) && (type <= 14) && (time != 0)) { \
-        *(s32*)(work + 0xAC) = 2; \
-    } \
 } while (0)
 
     if (type == 0) {
@@ -351,7 +347,6 @@ void fadeEntry(s32 type, s32 time, void* data) {
         time = 1000;
     }
 
-    work = (s32)wp;
     reset = 0;
     if (type < 0x29) {
         if (type < 9) {
@@ -361,7 +356,7 @@ void fadeEntry(s32 type, s32 time, void* data) {
         } else {
             if (type > 0x15) {
                 slot = 1;
-                entry = work + 0xB0;
+                entry = (s32)wp + 0xB0;
                 goto entry_selected;
             }
             if (type > 0xF) {
@@ -369,24 +364,38 @@ void fadeEntry(s32 type, s32 time, void* data) {
             }
         }
         slot = 0;
-        reset = work + 0x158;
-        entry = work + 8;
+        reset = (s32)wp + 0x158;
+        entry = (s32)wp + 8;
         RESET_SELECTED_ENTRY();
+        switch (type) {
+            case 1:
+            case 3:
+            case 5:
+            case 9:
+            case 11:
+            case 14:
+                if (time != 0) {
+                    *(s32*)((s32)wp + 0xAC) = 2;
+                }
+                break;
+            default:
+                break;
+        }
     } else {
         if (type == 0x33) {
             slot = 1;
-            entry = work + 0xB0;
+            entry = (s32)wp + 0xB0;
             goto entry_selected;
         }
         if (type < 0x33) {
             if (type < 0x31) {
                 slot = 2;
-                reset = work + 8;
-                entry = work + 0x158;
+                reset = (s32)wp + 8;
+                entry = (s32)wp + 0x158;
                 RESET_SELECTED_ENTRY();
             } else {
                 slot = 3;
-                entry = work + 0x200;
+                entry = (s32)wp + 0x200;
             }
         } else {
             if (type >= 0x41) {
@@ -394,15 +403,15 @@ void fadeEntry(s32 type, s32 time, void* data) {
             }
             if (type >= 0x3F) {
                 slot = 4;
-                entry = work + 0x2A8;
+                entry = (s32)wp + 0x2A8;
                 goto entry_selected;
             }
             slot = 3;
-            entry = work + 0x200;
+            entry = (s32)wp + 0x200;
         }
         if ((type == 0x32) || (type == 0x35) || (type == 0x36) ||
             (type == 0x38) || (type == 0x3A)) {
-            reset = work + 8;
+            reset = (s32)wp + 8;
             RESET_SELECTED_ENTRY();
         }
     }
@@ -423,7 +432,7 @@ entry_selected:
     if ((type != 0x32) && (type != 0x35)) {
         *(s32*)(entry + 0x9C) = 0;
     }
-    *(s32*)(work + 0x350) = slot;
+    *(s32*)((s32)wp + 0x350) = slot;
 
     if ((type == 0x22) || (type == 0x28)) {
         *(f32*)(entry + 0x90) = float_3_8041f814;
@@ -1051,12 +1060,12 @@ void disp_texture(void) {
     void* cam;
     void* texPalette;
     u32 tevColor;
-    f32 proj[7];
     u8 texObj[0x20];
-    f32 rotMtx[3][4];
-    f32 scaleMtx[3][4];
-    f32 transMtx[3][4];
+    f32 proj[7];
     f32 baseMtx[3][4];
+    f32 transMtx[3][4];
+    f32 scaleMtx[3][4];
+    f32 rotMtx[3][4];
     f32 value;
     f32 radius;
     f32 negSize;
@@ -1067,27 +1076,31 @@ void disp_texture(void) {
 
     switch (*(u32*)((s32)fade + 0xC)) {
         case 1:
-        case 2:
         case 3:
-        case 4:
         case 5:
-        case 6:
-            if ((*(u16*)((s32)fade + 0x8) & 2) != 0) {
-                return;
-            }
-            break;
+        case 9:
+        case 11:
+        case 14:
+            goto check_hidden;
         case 0:
+        case 2:
+        case 4:
+        case 6:
         case 7:
         case 8:
-        case 9:
         case 10:
-        case 11:
         case 12:
         case 13:
-        case 14:
         default:
-            break;
+            goto draw_texture;
     }
+
+check_hidden:
+    if ((*(u16*)((s32)fade + 0x8) & 2) != 0) {
+        return;
+    }
+
+draw_texture:
 
     GXGetProjectionv(proj);
     GXSetProjection((void*)((s32)cam + 0x15C), *(s32*)((s32)cam + 0x19C));
@@ -1199,31 +1212,31 @@ void disp_texture(void) {
 
     GXBegin(0x80, 0, 4);
 
-    negSize = -float_304_8041f800;
+    negSize = -READ_F32_FADE(float_304_8041f800);
 
     FIFO_F32_FADE = negSize;
-    FIFO_F32_FADE = float_304_8041f800;
-    FIFO_F32_FADE = float_0_8041f7a8;
-    FIFO_F32_FADE = float_0_8041f7a8;
-    FIFO_F32_FADE = float_0_8041f7a8;
+    FIFO_F32_FADE = READ_F32_FADE(float_304_8041f800);
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
 
-    FIFO_F32_FADE = float_304_8041f800;
-    FIFO_F32_FADE = float_304_8041f800;
-    FIFO_F32_FADE = float_0_8041f7a8;
-    FIFO_F32_FADE = float_1_8041f7ac;
-    FIFO_F32_FADE = float_0_8041f7a8;
+    FIFO_F32_FADE = READ_F32_FADE(float_304_8041f800);
+    FIFO_F32_FADE = READ_F32_FADE(float_304_8041f800);
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+    FIFO_F32_FADE = READ_F32_FADE(float_1_8041f7ac);
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
 
-    FIFO_F32_FADE = float_304_8041f800;
+    FIFO_F32_FADE = READ_F32_FADE(float_304_8041f800);
     FIFO_F32_FADE = negSize;
-    FIFO_F32_FADE = float_0_8041f7a8;
-    FIFO_F32_FADE = float_1_8041f7ac;
-    FIFO_F32_FADE = float_1_8041f7ac;
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+    FIFO_F32_FADE = READ_F32_FADE(float_1_8041f7ac);
+    FIFO_F32_FADE = READ_F32_FADE(float_1_8041f7ac);
 
     FIFO_F32_FADE = negSize;
     FIFO_F32_FADE = negSize;
-    FIFO_F32_FADE = float_0_8041f7a8;
-    FIFO_F32_FADE = float_0_8041f7a8;
-    FIFO_F32_FADE = float_1_8041f7ac;
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+    FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
+    FIFO_F32_FADE = READ_F32_FADE(float_1_8041f7ac);
 
     GXSetProjectionv(proj);
 }
@@ -1359,10 +1372,6 @@ void disp_maku(s32 cameraId, void* fade) {
     f32 height;
     f32 mtxA[3][4];
     f32 mtxB[3][4];
-    FadeDoubleConv widthConv0;
-    FadeDoubleConv heightConv0;
-    FadeDoubleConv widthConv1;
-    FadeDoubleConv heightConv1;
 
     camGetPtr(cameraId);
 
@@ -1383,8 +1392,13 @@ void disp_maku(s32 cameraId, void* fade) {
         } else if (type >= 0x1A) {
             goto after_bit2_check;
         }
-    } else if (type != 0x40) {
-        goto after_bit2_check;
+    } else {
+        switch (type) {
+            case 0x40:
+                goto check_bit2;
+            default:
+                goto after_bit2_check;
+        }
     }
 }
 
@@ -1408,12 +1422,17 @@ if (type != 0x33) {
             return;
         }
 
-        if (type < 0x3F) {
-            return;
+        switch (type) {
+            case 0x3F:
+            case 0x40:
+                goto valid_type;
+            default:
+                return;
         }
     }
 }
 
+valid_type:
     if (*(s32*)((s32)fade + 0x6C) < 0) {
      return;
     }
@@ -1460,13 +1479,8 @@ if (type != 0x33) {
         zFill();
     }
 
-    widthConv0.words.hi = 0x43300000;
-    widthConv0.words.lo = *(u16*)((s32)gp + 0x170);
-    width = (f32)(widthConv0.value - double_to_int_mask_802bf678);
-
-    heightConv0.words.hi = 0x43300000;
-    heightConv0.words.lo = *(u16*)((s32)gp + 0x172);
-    height = (f32)(heightConv0.value - double_to_int_mask_802bf678);
+    width = *(u16*)((s32)gp + 0x170);
+    height = *(u16*)((s32)gp + 0x172);
 
     xRate = ((*(f32*)((s32)fade + 0x78) * scale) + float_0_8041f7a8) / width;
     yRate = ((*(f32*)((s32)fade + 0x7C) * scale) + float_0_8041f7a8) / height;
@@ -1487,13 +1501,8 @@ if (type != 0x33) {
 
     PSMTXConcat(mtxA, mtxB, mtxA);
 
-    widthConv1.words.hi = 0x43300000;
-    widthConv1.words.lo = *(u16*)((s32)gp + 0x170);
-    width = (f32)(widthConv1.value - double_to_int_mask_802bf678);
-
-    heightConv1.words.hi = 0x43300000;
-    heightConv1.words.lo = *(u16*)((s32)gp + 0x172);
-    height = (f32)(heightConv1.value - double_to_int_mask_802bf678);
+    width = *(u16*)((s32)gp + 0x170);
+    height = *(u16*)((s32)gp + 0x172);
 
     xRate = float_608_8041f7d8 / width;
 

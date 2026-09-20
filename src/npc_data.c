@@ -2241,7 +2241,7 @@ __declspec(section ".rodata") const char str_NPC_TERRITORY_TYPE_N_802e7b9c[27] =
 
 __declspec(section ".rodata") const char str_NPC_TERRITORY_TYPE_C_802e7bb8[26] = "NPC_TERRITORY_TYPE_CIRCLE";
 
-__declspec(section ".rodata") const char str_NPC_TERRITORY_TYPE_S_802e7bd4[28] = "NPC_TERRITORY_TYPE_SQUARE";
+__declspec(section ".rodata") const char str_NPC_TERRITORY_TYPE_S_802e7bd4[26] = "NPC_TERRITORY_TYPE_SQUARE";
 
 __declspec(section ".sdata2") const char str_c_pkr_80421b70[6] = "c_pkr";
 
@@ -2389,7 +2389,1942 @@ __declspec(section ".sdata2") const char str_P_W_2_80421d24[6] = "P_W_2";
 
 __declspec(section ".sdata2") const char str_P_R_2_80421d2c[6] = "P_R_2";
 
-__declspec(section ".sdata2") const char str_000001c4_sdata2[12] = "\202\310\202\265";
+__declspec(section ".sdata2") const char str_000001c4_sdata2[5] = "\202\310\202\265";
+
+typedef struct NpcTribeRecord {
+    const char* strings[10];
+    f32 field_28;
+    f32 field_2C;
+    u32 field_30;
+    u32 field_34;
+    f32 field_38;
+    f32 field_3C;
+    const char* sound_40;
+    const char* sound_44;
+    u32 field_48;
+    const char* sound_4C;
+    const char* sound_50;
+} NpcTribeRecord;
+
+NpcTribeRecord npcTribe[328] = {
+    { /* 000 */
+        {str_00000000_rodata, str_c_pkr_80421b70, str_PKR_S_1_802e41e0, str_PKR_Z_1_802e41e8, str_PKR_S_1_802e41e0, str_PKR_T_1_802e41f0, str_PKR_W_1_802e41f8, str_PKR_R_1_802e4200, str_PKR_D_1_802e4208, str_PKR_D_1_802e4208},
+        20.0f, 27.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_PARTY_MO_802e4210, str_SFX_FLD_NPC_PARTY_MO_802e422c, 0x2EE00000, str_SFX_FLD_NPC_PARTY_JU_802e4248, str_SFX_FLD_NPC_PARTY_LA_802e4260
+    },
+    { /* 001 */
+        {str_000000ac_rodata, str_c_nokonoko_802e4288, str_NOK_S_1_802e4294, str_NOK_Z_1_802e429c, str_NOK_S_1_802e4294, str_NOK_T_1_802e42a4, str_NOK_W_1_802e42ac, str_NOK_R_1_802e42b4, str_NOK_S_1_802e4294, str_NOK_S_1_802e4294},
+        30.0f, 35.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_NOKO_MOV_802e42bc, str_SFX_FLD_NPC_NOKO_MOV_802e42d4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 002 */
+        {str_00000148_rodata, str_c_kinopio_802e4324, str_KNP_S_1_802e4330, str_KNP_Z_1_802e4338, str_KNP_S_1_802e4330, str_KNP_T_1_802e4340, str_KNP_W_1_802e4348, str_KNP_R_1_802e4350, str_KNP_S_1_802e4330, str_KNP_S_1_802e4330},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 003 */
+        {str_000001c0_rodata, str_c_kinopio_b_802e439c, str_KNP_S_1_802e4330, str_KNP_Z_1_802e4338, str_KNP_S_1_802e4330, str_KNP_T_1_802e4340, str_KNP_W_1_802e4348, str_KNP_R_1_802e4350, str_KNP_S_1_802e4330, str_KNP_S_1_802e4330},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 004 */
+        {str_000001d8_rodata, str_c_kinopio_g_802e43b4, str_KNP_S_1_802e4330, str_KNP_Z_1_802e4338, str_KNP_S_1_802e4330, str_KNP_T_1_802e4340, str_KNP_W_1_802e4348, str_KNP_R_1_802e4350, str_KNP_S_1_802e4330, str_KNP_S_1_802e4330},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 005 */
+        {str_000001f0_rodata, str_c_kinopiko_802e43cc, str_KNF_S_1_802e43d8, str_KNF_Z_1_802e43e0, str_KNF_S_1_802e43d8, str_KNF_T_1_802e43e8, str_KNF_W_1_802e43f0, str_KNF_R_1_802e43f8, str_KNF_S_1_802e43d8, str_KNF_S_1_802e43d8},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 006 */
+        {str_00000230_rodata, str_c_kinopiko_p_802e4410, str_KNF_S_1_802e43d8, str_KNF_Z_1_802e43e0, str_KNF_S_1_802e43d8, str_KNF_T_1_802e43e8, str_KNF_W_1_802e43f0, str_KNF_R_1_802e43f8, str_KNF_S_1_802e43d8, str_KNF_S_1_802e43d8},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 007 */
+        {str_00000250_rodata, str_c_kinopiko_v_802e4430, str_KNF_S_1_802e43d8, str_KNF_Z_1_802e43e0, str_KNF_S_1_802e43d8, str_KNF_T_1_802e43e8, str_KNF_W_1_802e43f0, str_KNF_R_1_802e43f8, str_KNF_S_1_802e43d8, str_KNF_S_1_802e43d8},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 008 */
+        {str_00000270_rodata, str_c_kokinopio_802e444c, str_CKP_S_1_802e4458, str_CKP_Z_1_802e4460, str_CKP_S_1_802e4458, str_CKP_T_1_802e4468, str_CKP_W_1_802e4470, str_CKP_R_1_802e4478, str_CKP_S_1_802e4458, str_CKP_S_1_802e4458},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4480, str_SFX_FLD_NPC_KINOPIO__802e44a0, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 009 */
+        {str_000002f0_rodata, str_c_kokinopio_g_802e44d0, str_CKP_S_1_802e4458, str_CKP_Z_1_802e4460, str_CKP_S_1_802e4458, str_CKP_T_1_802e4468, str_CKP_W_1_802e4470, str_CKP_R_1_802e4478, str_CKP_S_1_802e4458, str_CKP_S_1_802e4458},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 010 */
+        {str_00000310_rodata, str_c_kokinopio_b_802e44f0, str_CKP_S_1_802e4458, str_CKP_Z_1_802e4460, str_CKP_S_1_802e4458, str_CKP_T_1_802e4468, str_CKP_W_1_802e4470, str_CKP_R_1_802e4478, str_CKP_S_1_802e4458, str_CKP_S_1_802e4458},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 011 */
+        {str_00000330_rodata, str_c_kokinopio_y_802e4510, str_CKP_S_1_802e4458, str_CKP_Z_1_802e4460, str_CKP_S_1_802e4458, str_CKP_T_1_802e4468, str_CKP_W_1_802e4470, str_CKP_R_1_802e4478, str_CKP_S_1_802e4458, str_CKP_S_1_802e4458},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 012 */
+        {str_00000350_rodata, str_c_jpiko_p_802e4530, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 013 */
+        {str_0000036c_rodata, str_c_flower_802e454c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_FLOWER_M_802e4558, str_SFX_FLD_NPC_FLOWER_M_802e4574, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 014 */
+        {str_000003c0_rodata, str_c_flower_b_802e45a0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_FLOWER_M_802e4558, str_SFX_FLD_NPC_FLOWER_M_802e4574, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 015 */
+        {str_000003dc_rodata, str_c_flower_y_802e45bc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_FLOWER_M_802e4558, str_SFX_FLD_NPC_FLOWER_M_802e4574, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 016 */
+        {str_000003f8_rodata, str_c_deale_802e45d8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_POWER_MO_802e45e0, str_SFX_FLD_NPC_POWER_MO_802e45fc, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 017 */
+        {str_00000448_rodata, str_c_levela_802e4628, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_POWER_MO_802e45e0, str_SFX_FLD_NPC_POWER_MO_802e45fc, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 018 */
+        {str_00000464_rodata, str_c_mania_802e4640, str_MNA_S_1_802e4648, str_MNA_Z_1_802e4650, str_MNA_S_1_802e4648, str_MNA_T_1_802e4658, str_MNA_W_1_802e4660, str_MNA_R_1_802e4668, str_MNA_Z_1_802e4650, str_MNA_Z_1_802e4650},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STARMANI_802e4670, str_SFX_FLD_NPC_STARMANI_802e4690, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 019 */
+        {str_000004e0_rodata, str_c_uranai_802e46bc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_POWER_MO_802e45e0, str_SFX_FLD_NPC_POWER_MO_802e45fc, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 020 */
+        {str_000004f8_rodata, str_c_majinai_802e46d4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_POWER_MO_802e45e0, str_SFX_FLD_NPC_POWER_MO_802e45fc, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 021 */
+        {str_00000510_rodata, str_c_joho_a_802e46ec, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_INFO_MOV_802e46f8, str_SFX_FLD_NPC_INFO_MOV_802e4710, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 022 */
+        {str_00000558_rodata, str_c_joho_b_802e4734, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_INFO_MOV_802e46f8, str_SFX_FLD_NPC_INFO_MOV_802e4710, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 023 */
+        {str_00000570_rodata, str_c_botta_802e4750, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        40.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_BOTTAKUR_802e4758, str_SFX_FLD_NPC_BOTTAKUR_802e4778, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 024 */
+        {str_000005c8_rodata, str_c_gshop_m_802e47a0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 025 */
+        {str_000005dc_rodata, str_c_gshop_w_802e47b4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 026 */
+        {str_000005f0_rodata, str_c_tyusan_t_802e47d0, str_CHU_S_1_802e47dc, str_CHU_Z_1_802e47e4, str_CHU_S_1_802e47dc, str_CHU_T_1_802e47ec, str_CHU_W_1_802e47f4, str_CHU_R_1_802e47fc, str_CHU_S_1_802e47dc, str_CHU_S_1_802e47dc},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 027 */
+        {str_00000634_rodata, str_c_bteresa2_802e4814, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        25.0f, 38.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_TELESA_M_802e4820, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 028 */
+        {str_0000066c_rodata, str_c_kiza_802e4848, str_Z_1_80421b7c, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 45.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KIZA_MOV_802e4850, str_SFX_FLD_NPC_KIZA_MOV_802e4868, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 029 */
+        {str_000006b0_rodata, str_c_pnk_80421b8c, str_PNK_S_1_802e488c, str_PNK_Z_1_802e4894, str_PNK_S_1_802e488c, str_PNK_T_1_802e489c, str_PNK_W_1_802e48a4, str_PNK_R_1_802e48ac, str_PNK_S_1_802e488c, str_PNK_S_1_802e488c},
+        30.0f, 35.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PARTY_MO_802e4210, str_SFX_FLD_NPC_PARTY_MO_802e422c, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 030 */
+        {str_000006e4_rodata, str_c_nokopapa_802e48c4, str_NKP_S_1_802e48d0, str_NKP_Z_1_802e48d8, str_NKP_S_1_802e48d0, str_NKP_T_1_802e48e0, str_NKP_W_1_802e48e8, str_NKP_R_1_802e48f0, str_NKP_S_1_802e48d0, str_NKP_S_1_802e48d0},
+        40.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_NOKO_MOV_802e42bc, str_SFX_FLD_NPC_NOKO_MOV_802e42d4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 031 */
+        {str_00000728_rodata, str_c_nokoson_802e4904, str_NKS_S_1_802e4910, str_NKS_Z_1_802e4918, str_NKS_S_1_802e4910, str_NKS_T_1_802e4920, str_NKS_W_1_802e4928, str_NKS_R_1_802e4930, str_NKS_S_1_802e4910, str_NKS_S_1_802e4910},
+        30.0f, 35.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_NOKO_MOV_802e42bc, str_SFX_FLD_NPC_NOKO_MOV_802e42d4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 032 */
+        {str_00000768_rodata, str_c_nokorin_802e4944, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 35.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_NOKO_MOV_802e42bc, str_SFX_FLD_NPC_NOKO_MOV_802e42d4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 033 */
+        {str_00000780_rodata, str_c_gonbaba_802e495c, str_GNB_S_1_802e4968, str_GNB_Z_1_802e4970, str_GNB_S_1_802e4968, str_GNB_T_1_802e4978, str_GNB_S_1_802e4968, str_GNB_S_1_802e4968, str_GNB_S_1_802e4968, str_GNB_S_1_802e4968},
+        450.0f, 20.0f, 0x00000000, 0x00000000, -50.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 034 */
+        {str_000007b0_rodata, str_c_gonbaba2_802e498c, str_GNB_F_1_802e4998, str_GNB_F_1_802e4998, str_GNB_F_1_802e4998, str_GNB_F_1_802e4998, str_GNB_F_1_802e4998, str_GNB_F_1_802e4998, str_GNB_F_1_802e4998, str_GNB_F_1_802e4998},
+        20.0f, 20.0f, 0x00000000, 0x00000000, -50.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 035 */
+        {str_000007d0_rodata, str_c_gonbaba3_802e49ac, str_GNB_k_1_802e49b8, str_GNB_k_1_802e49b8, str_GNB_k_1_802e49b8, str_GNB_k_1_802e49b8, str_GNB_k_1_802e49b8, str_GNB_k_1_802e49b8, str_GNB_k_1_802e49b8, str_GNB_k_1_802e49b8},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 036 */
+        {str_000007f0_rodata, str_c_karon_r_h_802e49cc, str_KRN_S_1_802e49d8, str_KRN_Z_1_802e49e0, str_KRN_S_1_802e49d8, str_KRN_S_1_802e49d8, str_KRN_W_1_802e49e8, str_KRN_R_1_802e49f0, str_KRN_D_2_802e49f8, str_KRN_D_2_802e49f8},
+        20.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_HONENOKO_802e4a00, str_SFX_FLD_ENM_HONENOKO_802e4a1c, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 037 */
+        {str_00000868_rodata, str_c_tyutyu_802e4a48, str_PCH_S_1_802e4a54, str_PCH_Z_1_802e4a5c, str_PCH_S_1_802e4a54, str_PCH_T_1_802e4a64, str_PCH_W_1_802e4a6c, str_PCH_R_1_802e4a74, str_PCH_S_1_802e4a54, str_PCH_S_1_802e4a54},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PARTY_MO_802e4210, str_SFX_FLD_NPC_PARTY_MO_802e422c, 0x2EE00000, str_SFX_FLD_NPC_PARTY_JU_802e4248, str_SFX_FLD_NPC_PARTY_LA_802e4260
+    },
+    { /* 038 */
+        {str_000008ac_rodata, str_c_gazigazi_802e4a88, str_GAZ_S_1_802e4a94, str_GAZ_Z_1_802e4a9c, str_GAZ_S_1_802e4a94, str_GAZ_A_1_802e4aa4, str_GAZ_A_1_802e4aa4, str_GAZ_A_1_802e4aa4, str_GAZ_A_1_802e4aa4, str_GAZ_A_1_802e4aa4},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PUKUPUKU_802e4aac, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 039 */
+        {str_000008f8_rodata, str_c_karon_g_h_802e4ad4, str_KRN_S_1_802e49d8, str_KRN_Z_1_802e49e0, str_KRN_S_1_802e49d8, str_KRN_S_1_802e49d8, str_KRN_W_1_802e49e8, str_KRN_R_1_802e49f0, str_KRN_D_2_802e49f8, str_KRN_D_2_802e49f8},
+        20.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_HONENOKO_802e4a00, str_SFX_FLD_ENM_HONENOKO_802e4a1c, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 040 */
+        {str_00000910_rodata, str_c_vivian_802e4aec, str_PTR_S_1_802e4af8, str_PTR_Z_1_802e4b00, str_PTR_S_1_802e4af8, str_PTR_T_1_802e4b08, str_PTR_W_1_802e4b10, str_PTR_R_1_802e4b18, str_PTR_D_1_802e4b20, str_PTR_D_1_802e4b20},
+        30.0f, 38.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PARTY_HA_802e4b28, str_SFX_FLD_NPC_PARTY_HA_802e4b28, 0x9C400000, str_SFX_EVT_VIVI_JUMP1_802e4b40, NULL
+    },
+    { /* 041 */
+        {str_00000984_rodata, str_c_vivian_802e4aec, str_PTR_S_3_802e4b64, str_PTR_S_3_802e4b64, str_PTR_S_3_802e4b64, str_PTR_T_3_802e4b6c, str_PTR_W_3_802e4b74, str_PTR_R_3_802e4b7c, str_PTR_R_3_802e4b7c, str_PTR_R_3_802e4b7c},
+        30.0f, 38.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PARTY_HA_802e4b28, str_SFX_FLD_NPC_PARTY_HA_802e4b28, 0x9C400000, str_SFX_EVT_VIVI_JUMP1_802e4b40, NULL
+    },
+    { /* 042 */
+        {str_000009b4_rodata, str_c_vivian_802e4aec, str_PTR_S_4_802e4b94, str_PTR_S_4_802e4b94, str_PTR_S_4_802e4b94, str_PTR_T_5_802e4b9c, str_PTR_W_3_802e4b74, str_PTR_R_3_802e4b7c, str_PTR_R_3_802e4b7c, str_PTR_R_3_802e4b7c},
+        30.0f, 38.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PARTY_HA_802e4b28, str_SFX_FLD_NPC_PARTY_HA_802e4b28, 0x9C400000, str_SFX_EVT_VIVI_JUMP1_802e4b40, NULL
+    },
+    { /* 043 */
+        {str_000009d4_rodata, str_c_maririn_802e4bb0, str_MRR_S_1_802e4bbc, str_MRR_Z_1_802e4bc4, str_MRR_S_1_802e4bbc, str_MRR_T_1_802e4bcc, str_MRR_W_1_802e4bd4, str_MRR_R_1_802e4bdc, str_MRR_D_1_802e4be4, str_MRR_D_1_802e4be4},
+        30.0f, 53.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MARI_HAN_802e4bec, str_SFX_FLD_NPC_MARI_HAN_802e4bec, 0x17700000, str_SFX_EVT_MARI_JUMP1_802e4c04, NULL
+    },
+    { /* 044 */
+        {str_00000a48_rodata, str_c_majyorin_802e4c24, str_MJR_S_1_802e4c30, str_MJR_Z_1_802e4c38, str_MJR_S_1_802e4c30, str_MJR_T_1_802e4c40, str_MJR_W_1_802e4c48, str_MJR_R_1_802e4c50, str_MJR_D_1_802e4c58, str_MJR_D_1_802e4c58},
+        30.0f, 33.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MAJO_HAN_802e4c60, str_SFX_FLD_NPC_MAJO_HAN_802e4c60, 0x17700000, str_SFX_EVT_MAJO_JUMP1_802e4c78, NULL
+    },
+    { /* 045 */
+        {str_00000abc_rodata, str_c_windy_802e4c98, str_PWD_S_1_802e4ca0, str_PWD_Z_1_802e4ca8, str_PWD_S_1_802e4ca0, str_PWD_T_1_802e4cb0, str_PWD_W_1_802e4cb8, str_PWD_R_1_802e4cc0, str_PWD_S_1_802e4ca0, str_PWD_S_1_802e4ca0},
+        30.0f, 47.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PARTY_HA_802e4b28, str_SFX_FLD_NPC_PARTY_HA_802e4b28, 0x9C400000, NULL, NULL
+    },
+    { /* 046 */
+        {str_00000af8_rodata, str_c_shuryo_802e4cd8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        65.0f, 65.0f, 0x00000000, 0x00000000, -10.0f, 50.0f,
+        str_SFX_FLD_NPC_SYURYO_M_802e4ce4, str_SFX_FLD_NPC_SYURYO_M_802e4d00, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 047 */
+        {str_00000b4c_rodata, str_c_shuryo_802e4cd8, str_S_3_80421b98, str_Z_2_80421b9c, str_S_3_80421b98, str_T_4_80421ba0, str_W_2_80421ba4, str_R_2_80421ba8, str_D_4_80421bac, str_D_4_80421bac},
+        65.0f, 65.0f, 0x00000000, 0x00000000, -10.0f, 50.0f,
+        str_SFX_FLD_NPC_SYURYO_M_802e4ce4, str_SFX_FLD_NPC_SYURYO_M_802e4d00, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 048 */
+        {str_00000b64_rodata, str_c_kanbu_ibt_802e4d44, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KANBU_MO_802e4d50, str_SFX_FLD_NPC_KANBU_MO_802e4d6c, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 049 */
+        {str_00000bb8_rodata, str_c_zako_n_802e4d98, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 33.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_3RD1_MOV_802e4da4, str_SFX_FLD_ENM_3RD1_MOV_802e4dbc, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 050 */
+        {str_00000c04_rodata, str_c_zako_m_802e4de4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 33.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_3RD1_MOV_802e4da4, str_SFX_FLD_ENM_3RD1_MOV_802e4dbc, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 051 */
+        {str_00000c20_rodata, str_c_zako_e_802e4e04, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 33.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_3RD1_MOV_802e4da4, str_SFX_FLD_ENM_3RD1_MOV_802e4dbc, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 052 */
+        {str_00000c40_rodata, str_c_paretta_802e4e1c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 30.0f,
+        str_SFXEVT_OPN_PARETTA_M_802e4e28, str_SFXEVT_OPN_PARETTA_M_802e4e28, 0x2EE00000, NULL, NULL
+    },
+    { /* 053 */
+        {str_00000c74_rodata, str_c_mokomoko_802e4e50, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 30.0f,
+        str_SFX_FLD_NPC_MOKOMOKO_802e4e5c, str_SFX_FLD_NPC_MOKOMOKO_802e4e78, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 054 */
+        {str_00000cc4_rodata, str_c_p_majin_802e4ea0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 30.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 055 */
+        {str_00000cdc_rodata, str_c_luigi_802e4eb8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        22.0f, 47.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_LUIGI_MO_802e4ec0, str_SFX_FLD_NPC_LUIGI_MO_802e4edc, 0x2EE00000, str_SFX_FLD_NPC_LUIGI_JU_802e4ef8, str_SFX_FLD_NPC_LUIGI_LA_802e4f10
+    },
+    { /* 056 */
+        {str_00000d5c_rodata, str_c_lp_gesso_802e4f34, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 057 */
+        {str_00000d70_rodata, str_c_lp_bom_802e4f4c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 058 */
+        {str_00000d88_rodata, str_c_lp_met_802e4f60, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 059 */
+        {str_00000d9c_rodata, str_c_lp_pansy_802e4f78, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 060 */
+        {str_00000db4_rodata, str_c_lp_moa_802e4f94, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 061 */
+        {str_00000dd0_rodata, str_c_lp_gesso_802e4f34, str_S_2_80421bb0, str_Z_2_80421b9c, str_S_2_80421bb0, str_T_2_80421bb4, str_W_2_80421ba4, str_R_2_80421ba8, str_S_2_80421bb0, str_S_2_80421bb0},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 062 */
+        {str_00000ddc_rodata, str_c_peach_802e4fbc, str_P_S_1_80421bb8, str_P_Z_1_80421bc0, str_P_S_1_80421bb8, str_P_T_1_80421bc8, str_P_W_1_80421bd0, str_P_R_1_80421bd8, str_P_S_1_80421bb8, str_P_S_1_80421bb8},
+        30.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 063 */
+        {str_00000df4_rodata, str_c_peach_802e4fbc, str_P_S_7_80421be0, str_P_Z_7_80421be8, str_P_S_7_80421be0, str_P_T_13_802e4fd4, str_P_W_7_80421bf0, str_P_R_7_80421bf8, str_P_S_7_80421be0, str_P_S_7_80421be0},
+        30.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 064 */
+        {str_00000e0c_rodata, str_c_peach_802e4fbc, str_P_S_8_80421c00, str_P_Z_8_80421c08, str_P_S_8_80421c00, str_P_T_14_802e4ff0, str_P_W_8_80421c10, str_P_R_8_80421c18, str_P_S_8_80421c00, str_P_S_8_80421c00},
+        30.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 065 */
+        {str_00000e28_rodata, str_c_peach_802e4fbc, str_P_S_4_80421c20, str_P_Z_4_80421c28, str_P_S_4_80421c20, str_P_T_4_80421c30, str_P_W_4_80421c38, str_P_R_4_80421c40, str_P_S_4_80421c20, str_P_S_4_80421c20},
+        30.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, NULL, NULL
+    },
+    { /* 066 */
+        {str_00000e38_rodata, str_c_nazo_802e5010, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_NAZO_MOV_802e5018, str_SFX_FLD_NPC_NAZO_MOV_802e5030, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 067 */
+        {str_00000e78_rodata, str_c_kino_ji_802e5054, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 068 */
+        {str_000000d8_sdata2, str_c_borodo_n_802e5060, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_THIEF_MO_802e506c, str_SFX_FLD_NPC_THIEF_MO_802e5088, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 069 */
+        {str_00000ed4_rodata, str_c_monban_802e50ac, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MONBAN_M_802e50b8, str_SFX_FLD_NPC_MONBAN_M_802e50d4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 070 */
+        {str_00000f20_rodata, str_c_binbo_802e50fc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_THIEF_MO_802e506c, str_SFX_FLD_NPC_THIEF_MO_802e5088, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 071 */
+        {str_00000f34_rodata, str_c_m_buka_802e5110, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        35.0f, 55.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MONTE_MO_802e511c, str_SFX_FLD_NPC_MONTE_MO_802e5138, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 072 */
+        {str_00000f84_rodata, str_c_m_boss_802e5164, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        35.0f, 55.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MONTE_MO_802e511c, str_SFX_FLD_NPC_MONTE_MO_802e5138, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 073 */
+        {str_00000fa0_rodata, str_c_m_waka_802e517c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        35.0f, 55.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MONTE_MO_802e511c, str_SFX_FLD_NPC_MONTE_MO_802e5138, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 074 */
+        {str_00000fb8_rodata, str_c_m_waka_802e517c, str_S_2_80421bb0, str_Z_2_80421b9c, str_S_2_80421bb0, str_T_2_80421bb4, str_W_2_80421ba4, str_R_2_80421ba8, str_S_2_80421bb0, str_S_2_80421bb0},
+        35.0f, 55.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MONTE_MO_802e511c, str_SFX_FLD_NPC_MONTE_MO_802e5138, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 075 */
+        {str_00000fcc_rodata, str_c_m_ojo_802e51a4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        35.0f, 55.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MONTE_MO_802e511c, str_SFX_FLD_NPC_MONTE_MO_802e5138, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 076 */
+        {str_00000fdc_rodata, str_c_m_ojo_802e51a4, str_S_2_80421bb0, str_Z_2_80421b9c, str_S_2_80421bb0, str_T_2_80421bb4, str_W_2_80421ba4, str_R_2_80421ba8, str_S_2_80421bb0, str_S_2_80421bb0},
+        35.0f, 55.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MONTE_MO_802e511c, str_SFX_FLD_NPC_MONTE_MO_802e5138, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 077 */
+        {str_00000fec_rodata, str_c_kuri_h_802e51c8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_d_1_80421c50, str_d_1_80421c50},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KURI_MOV_802e51d4, str_SFX_FLD_NPC_KURI_MOV_802e51ec, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 078 */
+        {str_00001034_rodata, str_c_pub_m_802e5210, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MASTER_M_802e5218, str_SFX_FLD_NPC_MASTER_M_802e5234, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 079 */
+        {str_00001080_rodata, str_c_barten_802e5264, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MASTER_M_802e5218, str_SFX_FLD_NPC_MASTER_M_802e5234, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 080 */
+        {str_000010a0_rodata, str_c_f_mura_802e5280, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STG4_MOV_802e528c, str_SFX_FLD_NPC_STG4_MOV_802e52a4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 081 */
+        {str_000010ec_rodata, str_c_cook_802e52c8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 082 */
+        {str_00001100_rodata, str_c_puku_s_802e52dc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 083 */
+        {str_00001118_rodata, str_c_suifu_b_802e52f4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 084 */
+        {str_00001148_rodata, str_c_kuribo_802e5328, str_KUR_S_1_802e5334, str_KUR_Z_2_802e533c, str_KUR_S_1_802e5334, str_KUR_T_1_802e5344, str_KUR_W_1_802e534c, str_KUR_R_1_802e5354, str_KUR_D_1_802e535c, str_KUR_D_1_802e535c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KURI_MOV_802e51d4, str_SFX_FLD_NPC_KURI_MOV_802e51ec, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 085 */
+        {str_00001194_rodata, str_c_kuribo_802e5328, str_TGK_S_1_802e5374, str_TGK_Z_2_802e537c, str_TGK_S_1_802e5374, str_TGK_T_1_802e5384, str_TGK_W_1_802e538c, str_TGK_R_1_802e5394, str_TGK_D_1_802e539c, str_TGK_K_1_802e53a4},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KURI_MOV_802e51d4, str_SFX_FLD_NPC_KURI_MOV_802e51ec, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 086 */
+        {str_000011dc_rodata, str_c_kuribo_802e5328, str_PTK_S_1_802e53bc, str_PTK_Z_2_802e53c4, str_PTK_S_1_802e53bc, str_PTK_T_1_802e53cc, str_PTK_W_1_802e53d4, str_PTK_R_1_802e53dc, str_PTK_D_1_802e53e4, str_PTK_K_1_802e53ec},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KURI_MOV_802e51d4, str_SFX_FLD_NPC_KURI_MOV_802e51ec, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 087 */
+        {str_00001224_rodata, str_c_kuribo_n_802e5400, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KURI_MOV_802e51d4, str_SFX_FLD_NPC_KURI_MOV_802e51ec, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 088 */
+        {str_0000123c_rodata, str_c_bom_n_802e5418, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 089 */
+        {str_000000e4_sdata2, str_c_monban_802e50ac, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MONBAN_M_802e50b8, str_SFX_FLD_NPC_MONBAN_M_802e50d4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 090 */
+        {str_00001250_rodata, str_c_gesso4_802e542c, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438},
+        50.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 091 */
+        {str_00001270_rodata, str_c_gesso4_802e542c, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438, str_GSO_Z_1_802e5438},
+        20.0f, 10.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 092 */
+        {str_00001280_rodata, str_c_bom_deb_802e5460, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 093 */
+        {str_0000129c_rodata, str_c_tyusan_802e5478, str_CHU_S_1_802e47dc, str_CHU_Z_1_802e47e4, str_CHU_S_1_802e47dc, str_CHU_T_1_802e47ec, str_CHU_W_1_802e47f4, str_CHU_R_1_802e47fc, str_CHU_S_1_802e47dc, str_CHU_S_1_802e47dc},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_CHUSAN_M_802e5484, str_SFX_FLD_NPC_CHUSAN_M_802e54a0, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 094 */
+        {str_000012ec_rodata, str_c_tyutyu_t_802e54d0, str_CHU_S_1_802e47dc, str_CHU_Z_1_802e47e4, str_CHU_S_1_802e47dc, str_CHU_T_1_802e47ec, str_CHU_W_1_802e47f4, str_CHU_R_1_802e47fc, str_CHU_S_1_802e47dc, str_CHU_S_1_802e47dc},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 30.0f,
+        str_SFX_FLD_NPC_PARTY_MO_802e4210, str_SFX_FLD_NPC_PARTY_MO_802e422c, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 095 */
+        {str_0000130c_rodata, str_c_roten_802e54e4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 100.0f,
+        str_SFX_FLD_NPC_ROTEN_MO_802e54ec, str_SFX_FLD_NPC_ROTEN_MO_802e5508, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 096 */
+        {str_00001354_rodata, str_c_roten_o_802e5530, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_ROTEN_MO_802e54ec, str_SFX_FLD_NPC_ROTEN_MO_802e5508, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 097 */
+        {str_0000136c_rodata, str_c_roten_g_802e5548, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_ROTEN_MO_802e54ec, str_SFX_FLD_NPC_ROTEN_MO_802e5508, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 098 */
+        {str_00001384_rodata, str_c_karon_p_802e5560, str_KRN_S_1_802e49d8, str_KRN_Z_1_802e49e0, str_KRN_S_1_802e49d8, str_KRN_S_1_802e49d8, str_KRN_W_1_802e49e8, str_KRN_R_1_802e49f0, str_KRN_D_2_802e49f8, str_KRN_D_2_802e49f8},
+        30.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_HONENOKO_802e4a00, str_SFX_FLD_ENM_HONENOKO_802e4a1c, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 099 */
+        {str_0000139c_rodata, str_c_puni_802e5574, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 24.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 100 */
+        {str_000013ac_rodata, str_c_toge_802e5584, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 101 */
+        {str_000013bc_rodata, str_c_pguide_802e5594, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 24.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 102 */
+        {str_000013d0_rodata, str_c_psister_802e55ac, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 24.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 103 */
+        {str_000013e8_rodata, str_c_prival_802e55c4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 104 */
+        {str_00001400_rodata, str_c_tchibi_802e55dc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 105 */
+        {str_00001418_rodata, str_c_psoncho_802e55f4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 106 */
+        {str_00001430_rodata, str_c_pshop_802e560c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 24.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 107 */
+        {str_00001444_rodata, str_c_pjoho_802e5620, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 24.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 108 */
+        {str_00001458_rodata, str_c_mb_robo_1a_802e5638, str_S_3_80421b98, str_Z_2_80421b9c, str_S_3_80421b98, str_T_3_80421c5c, str_W_1_80421b84, str_W_1_80421b84, str_S_3_80421b98, str_S_3_80421b98},
+        30.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_STG2_BOSS_MOVE1L_802e5648, str_SFX_STG2_BOSS_MOVE1R_802e5660, 0xBB800000, NULL, NULL
+    },
+    { /* 109 */
+        {str_000014a8_rodata, str_c_mb_robo_c_802e568c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 110 */
+        {str_000014c8_rodata, str_c_kinopio_802e4324, str_KNP_S_1_802e4330, str_KNP_Z_1_802e4338, str_KNP_S_1_802e4330, str_KNP_T_1_802e4340, str_KNP_W_1_802e4348, str_KNP_R_1_802e4350, str_KNP_S_1_802e4330, str_KNP_S_1_802e4330},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 111 */
+        {str_000014d4_rodata, str_c_bred_h_802e56b4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_3_80421c60, str_D_3_80421c60},
+        50.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_STG3_BLED_MOVE1L_802e56c0, str_SFX_STG3_BLED_MOVE1R_802e56d8, 0x2EE00000, str_SFX_STG3_BLED_JUMP1_802e56f0, NULL
+    },
+    { /* 112 */
+        {str_00001534_rodata, str_c_bred_h_802e56b4, str_S_9_80421c64, str_Z_9_80421c68, str_S_9_80421c64, str_T_9_80421c6c, str_W_3_80421c70, str_R_2_80421ba8, str_D_3_80421c60, str_D_3_80421c60},
+        50.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_STG3_BLED_MOVE1L_802e56c0, str_SFX_STG3_BLED_MOVE1R_802e56d8, 0x2EE00000, str_SFX_STG3_BLED_JUMP1_802e56f0, NULL
+    },
+    { /* 113 */
+        {str_0000154c_rodata, str_c_ksikowa_802e5728, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_STG3_KINOSIKOWA__802e5734, str_SFX_STG3_KINOSIKOWA__802e5750, 0x1F400000, str_SFX_STG3_KINOSIKOWA__802e576c, str_SFX_STG3_KINOSIKOWA__802e5788
+    },
+    { /* 114 */
+        {str_000015d8_rodata, str_c_ksikowa_802e5728, str_S_2_80421bb0, str_Z_2_80421b9c, str_S_2_80421bb0, str_T_2_80421bb4, str_W_2_80421ba4, str_R_2_80421ba8, str_Z_2_80421b9c, str_Z_2_80421b9c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_STG3_KINOSIKOWA__802e5734, str_SFX_STG3_KINOSIKOWA__802e5750, 0x1F400000, str_SFX_STG3_KINOSIKOWA__802e576c, str_SFX_STG3_KINOSIKOWA__802e5788
+    },
+    { /* 115 */
+        {str_00000104_sdata2, str_c_bijo_802e57c0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 116 */
+        {str_000015f8_rodata, str_c_gans_802e57d0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        40.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_STG3_GANSU_MOVE1_802e57d8, str_SFX_STG3_GANSU_MOVE1_802e57f0, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 117 */
+        {str_00001638_rodata, str_c_gans_802e57d0, str_S_2_80421bb0, str_Z_2_80421b9c, str_S_2_80421bb0, str_T_2_80421bb4, str_W_2_80421ba4, str_R_2_80421ba8, str_Z_2_80421b9c, str_Z_2_80421b9c},
+        40.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_STG3_GANSU_MOVE1_802e57d8, str_SFX_STG3_GANSU_MOVE1_802e57f0, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 118 */
+        {str_00001648_rodata, str_c_guard_802e5824, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_STG3_GUARDMAN_MO_802e582c, str_SFX_STG3_GUARDMAN_MO_802e5848, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 119 */
+        {str_00001694_rodata, str_c_babyyoshi_802e586c, str_PYS_E_1_802e5878, str_PYS_E_1_802e5878, str_PYS_E_1_802e5878, str_PYS_E_1_802e5878, str_PYS_E_1_802e5878, str_PYS_E_1_802e5878, str_PYS_E_1_802e5878, str_PYS_E_1_802e5878},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, str_SFX_STG3_YOSH_EGG_JU_802e5880, NULL
+    },
+    { /* 120 */
+        {str_000016c8_rodata, str_c_babyyoshi_802e586c, str_PYS_S_1_802e58a4, str_PYS_Z_1_802e58ac, str_PYS_S_1_802e58a4, str_PYS_T_1_802e58b4, str_PYS_W_1_802e58bc, str_PYS_R_1_802e58c4, str_PYS_S_1_802e58a4, str_PYS_S_1_802e58a4},
+        30.0f, 28.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_PARTY_MOVE1L_802e58cc, str_SFX_PARTY_MOVE1R_802e58e0, 0x2EE00000, NULL, NULL
+    },
+    { /* 121 */
+        {str_00001724_rodata, str_c_dance_r_802e58fc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 122 */
+        {str_00001738_rodata, str_c_dance_p_802e5918, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 123 */
+        {str_00001754_rodata, str_c_dance_k_802e5930, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 124 */
+        {str_0000176c_rodata, str_c_hotdog_802e594c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_STG3_HOTDOG_MOVE_802e5958, str_SFX_STG3_HOTDOG_MOVE_802e5970, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 125 */
+        {str_000017b8_rodata, str_c_report_802e5994, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 126 */
+        {str_000017d0_rodata, str_c_kinopio_802e4324, str_KNP_S_1_802e4330, str_KNP_Z_1_802e4338, str_KNP_S_1_802e4330, str_KNP_T_1_802e4340, str_KNP_W_1_802e4348, str_KNP_R_1_802e4350, str_KNP_S_1_802e4330, str_KNP_S_1_802e4330},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_STG3_FIGHTING1_802e59ac, str_SFX_STG3_FIGHTING1_802e59ac, 0x27100000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 127 */
+        {str_000017f0_rodata, str_c_k_chof_802e59d0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 128 */
+        {str_0000180c_rodata, str_c_jugem_n_802e59ec, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_JUGEM_MO_802e59f8, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 129 */
+        {str_00001840_rodata, str_c_borodo_g_802e5a20, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_BORODO_M_802e5a2c, str_SFX_FLD_NPC_BORODO_M_802e5a48, 0x2EE00000, NULL, NULL
+    },
+    { /* 130 */
+        {str_00001894_rodata, str_c_jugem_c_802e5a70, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 131 */
+        {str_000018ac_rodata, str_c_bomhey_802e5a88, str_BOM_S_1_802e5a94, str_BOM_Z_1_802e5a9c, str_BOM_S_1_802e5a94, str_BOM_T_1_802e5aa4, str_BOM_W_1_802e5aac, str_BOM_R_1_802e5ab4, str_BOM_D_1_802e5abc, str_BOM_K_1_802e5ac4},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, NULL, NULL
+    },
+    { /* 132 */
+        {str_000018fc_rodata, str_c_met_h_802e5ae4, str_TMT_S_1_802e5aec, str_TMT_Z_1_802e5af4, str_TMT_S_1_802e5aec, str_TMT_T_1_802e5afc, str_TMT_W_1_802e5b04, str_TMT_R_1_802e5b0c, str_TMT_D_1_802e5b14, str_TMT_K_1_802e5b1c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_MET_MOVE_802e5b24, str_SFX_FLD_NPC_MET_MOVE_802e5b3c, 0x2EE00000, str_SFX_FLD_ENM_MET_ATTA_802e5b54, NULL
+    },
+    { /* 133 */
+        {str_0000199c_rodata, str_c_f_mura_802e5280, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STG4_MOV_802e528c, str_SFX_FLD_NPC_STG4_MOV_802e52a4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 134 */
+        {str_000019ac_rodata, str_c_f_mura_802e5280, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_STG4_NPC_MOVE1L_802e5b90, str_SFX_STG4_NPC_MOVE1R_802e5ba4, 0x27100000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 135 */
+        {str_000019e8_rodata, str_c_f_mama_802e5bcc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STG4_MOV_802e528c, str_SFX_FLD_NPC_STG4_MOV_802e52a4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 136 */
+        {str_00001a08_rodata, str_c_f_child_a_802e5be8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STG4_S_M_802e5bf4, str_SFX_FLD_NPC_STG4_S_M_802e5c10, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 137 */
+        {str_00001a5c_rodata, str_c_f_child_b_802e5c3c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STG4_S_M_802e5bf4, str_SFX_FLD_NPC_STG4_S_M_802e5c10, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 138 */
+        {str_00001a78_rodata, str_c_f_child_c_802e5c58, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STG4_S_M_802e5bf4, str_SFX_FLD_NPC_STG4_S_M_802e5c10, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 139 */
+        {str_00001a94_rodata, str_c_f_son_802e5c74, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STG4_MOV_802e528c, str_SFX_FLD_NPC_STG4_MOV_802e52a4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 140 */
+        {str_00001aac_rodata, str_c_f_son_802e5c74, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_STG4_NPC_MOVE1L_802e5b90, str_SFX_STG4_NPC_MOVE1R_802e5ba4, 0x27100000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 141 */
+        {str_00001ac0_rodata, str_c_f_oji_802e5ca4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STG4_MOV_802e528c, str_SFX_FLD_NPC_STG4_MOV_802e52a4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 142 */
+        {str_00001adc_rodata, str_c_f_oba_802e5cc0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_STG4_MOV_802e528c, str_SFX_FLD_NPC_STG4_MOV_802e52a4, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 143 */
+        {str_00001af8_rodata, str_c_mario_802e5cd4, str_EM_S_1_802e5cdc, str_EM_Z_1_802e5ce4, str_EM_S_1_802e5cdc, str_EM_T_1_802e5cec, str_EM_W_1_802e5cf4, str_EM_R_1_802e5cfc, str_EM_D_1_802e5d04, str_EM_D_1_802e5d04},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_STG4_LANPEL_M_MO_802e5d0c, str_SFX_STG4_LANPEL_M_MO_802e5d28, 0x27100000, str_SFX_STG4_LANPEL_M_JU_802e5d44, str_STG4_LANPEL_M_LANDIN_802e5d5c
+    },
+    { /* 144 */
+        {str_00001ba4_rodata, str_a_mario_802e5d84, str_M_S_1_80421c80, str_M_Z_1_80421c88, str_M_S_1_80421c80, str_M_I_2_80421c90, str_M_W_1_80421c98, str_M_R_1_80421ca0, str_M_D_1_80421ca8, str_M_D_1_80421ca8},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 145 */
+        {str_00001bbc_rodata, str_c_f_karas_802e5d94, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_A_1_80421cb0, str_A_1_80421cb0, str_A_1_80421cb0, str_A_1_80421cb0},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 146 */
+        {str_00001bd0_rodata, str_c_teresa_802e5da8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_TELESA_M_802e4820, NULL, 0x00000000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 147 */
+        {str_00001be4_rodata, str_c_teresa_p_802e5dc4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_TELESA_M_802e4820, NULL, 0x00000000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 148 */
+        {str_00001c00_rodata, str_c_atmic_trs_802e5de4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, -15.0f, 20.0f,
+        str_SFX_FLD_ENM_TELESA_M_802e4820, NULL, 0x00000000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 149 */
+        {str_00001c20_rodata, str_c_ranpel_802e5dfc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_STG4_LANPEL_MOVE_802e5e08, str_SFX_STG4_LANPEL_MOVE_802e5e20, 0x27100000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 150 */
+        {str_00001c68_rodata, str_c_ranpel_802e5dfc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_STG4_LANPEL_MOVE_802e5e08, str_SFX_STG4_LANPEL_MOVE_802e5e20, 0x27100000, str_SFX_STG4_LANPEL_JUMP_802e5e48, NULL
+    },
+    { /* 151 */
+        {str_00001c90_rodata, str_c_f_owm_802e5e68, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_A_1_80421cb0, str_A_1_80421cb0, str_A_1_80421cb0, str_A_1_80421cb0},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 152 */
+        {str_00000144_sdata2, str_c_bubusan_802e5e70, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_W_1_80421b84, str_W_1_80421b84, str_W_1_80421b84},
+        30.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 153 */
+        {str_00001cac_rodata, str_c_gara_802e5e8c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        40.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_STG5_SAILER_MOVE_802e5e94, str_SFX_STG5_SAILER_MOVE_802e5e94, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 154 */
+        {str_00001cdc_rodata, str_c_marco_802e5eb4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x2EE00000, str_SFX_STG5_MARCO_LANDI_802e5ebc, str_SFX_STG5_MARCO_JUMP1_802e5ed4
+    },
+    { /* 155 */
+        {str_00001d1c_rodata, str_c_megane_802e5ef8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 156 */
+        {str_00001d34_rodata, str_c_odo_k_802e5f14, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 157 */
+        {str_0000014c_sdata2, str_c_suifu_k_802e5f1c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 158 */
+        {str_00001d58_rodata, str_c_boro_k_802e5f34, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 159 */
+        {str_00001d70_rodata, str_c_elmos_802e5f4c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_BUBBLE_M_802e5f54, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 160 */
+        {str_00001da0_rodata, str_c_bomt_n_802e5f7c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PARTY_MO_802e4210, str_SFX_FLD_NPC_PARTY_MO_802e422c, 0x2EE00000, str_SFX_FLD_NPC_PARTY_JU_802e4248, str_SFX_FLD_NPC_PARTY_LA_802e4260
+    },
+    { /* 161 */
+        {str_00001db8_rodata, str_c_bomt_n_802e5f7c, str_D_2_80421cc4, str_D_2_80421cc4, str_D_2_80421cc4, str_T_1_80421b80, str_W_3_80421c70, str_R_3_80421cc8, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PARTY_MO_802e4210, str_SFX_FLD_NPC_PARTY_MO_802e422c, 0x2EE00000, str_SFX_FLD_NPC_PARTY_JU_802e4248, str_SFX_FLD_NPC_PARTY_LA_802e4260
+    },
+    { /* 162 */
+        {str_00001dcc_rodata, str_c_bomt_n_802e5f7c, str_N_1_80421ccc, str_N_1_80421ccc, str_N_1_80421ccc, str_T_1_80421b80, str_W_3_80421c70, str_R_3_80421cc8, str_D_1_80421b94, str_D_1_80421b94},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_NPC_PARTY_MO_802e4210, str_SFX_FLD_NPC_PARTY_MO_802e422c, 0x2EE00000, str_SFX_FLD_NPC_PARTY_JU_802e4248, str_SFX_FLD_NPC_PARTY_LA_802e4260
+    },
+    { /* 163 */
+        {str_00001de0_rodata, str_c_korutesu3_802e5fbc, str_KRT_S_1_802e5fc8, str_KRT_Z_1_802e5fd0, str_KRT_S_1_802e5fc8, str_KRT_T_2_802e5fd8, str_KRT_W_1_802e5fe0, str_KRT_R_1_802e5fe8, str_KRT_D_1_802e5ff0, str_KRT_D_1_802e5ff0},
+        60.0f, 60.0f, 0x00000000, 0x00000000, -15.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 164 */
+        {str_00001e28_rodata, str_c_kuribo_n_802e5400, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 165 */
+        {str_00001e34_rodata, str_c_koburon_802e6010, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_S_1_80421b78, str_S_1_80421b78, str_D_1_80421b94, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 166 */
+        {str_00001e4c_rodata, str_c_unten_802e6024, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 167 */
+        {str_00001e5c_rodata, str_c_rose_802e6034, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 168 */
+        {str_00001e6c_rodata, str_c_kinodebu_802e604c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 169 */
+        {str_00001e88_rodata, str_c_powan_802e6064, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 170 */
+        {str_00001e9c_rodata, str_c_ghost_k_802e6078, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 171 */
+        {str_00001eb4_rodata, str_c_haiyu_802e608c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_C_1_80421cd0, str_C_1_80421cd0},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 172 */
+        {str_00001ec4_rodata, str_c_haiyu_802e608c, str_D_1_80421b94, str_Z_1_80421b7c, str_D_1_80421b94, str_T_5_80421cd4, str_W_1_80421b84, str_R_1_80421b88, str_C_1_80421cd0, str_C_1_80421cd0},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 173 */
+        {str_00001ed4_rodata, str_c_smoko_802e60b4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 174 */
+        {str_00001eec_rodata, str_c_hanbai_802e60c8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 175 */
+        {str_00000168_sdata2, str_c_shasho_r_802e60d4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 176 */
+        {str_00001f10_rodata, str_c_shasho_r_802e60d4, str_O_1_80421ce0, str_Z_1_80421b7c, str_O_1_80421ce0, str_T_3_80421c5c, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 177 */
+        {str_00001f18_rodata, str_c_puku_c_802e60f0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 178 */
+        {str_00001f2c_rodata, str_c_waitress_802e610c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 999.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 179 */
+        {str_00001f48_rodata, str_c_waitress_802e610c, str_P_1_80421ce4, str_Z_1_80421b7c, str_P_1_80421ce4, str_T_5_80421cd4, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 999.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 180 */
+        {str_00001f58_rodata, str_c_papab_802e6138, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 181 */
+        {str_00001f70_rodata, str_c_mamab_802e6150, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 182 */
+        {str_00001f88_rodata, str_c_konari_802e6164, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 15.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 183 */
+        {str_00000178_sdata2, str_c_shasho_b_802e6170, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 184 */
+        {str_00001fac_rodata, str_c_kinopiko_g_802e6184, str_KNF_S_1_802e43d8, str_KNF_Z_1_802e43e0, str_KNF_S_1_802e43d8, str_KNF_T_1_802e43e8, str_KNF_W_1_802e43f0, str_KNF_R_1_802e43f8, str_KNF_S_1_802e43d8, str_KNF_S_1_802e43d8},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 185 */
+        {str_00001fc4_rodata, str_c_ta_kun_802e61a0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_KINOPIO__802e4358, str_SFX_FLD_NPC_KINOPIO__802e4374, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 186 */
+        {str_00001fdc_rodata, str_c_yoshi_802e61b8, str_YSH_S_1_802e61c0, str_YSH_Z_1_802e61c8, str_YSH_S_1_802e61c0, str_YSH_T_1_802e61d0, str_YSH_W_1_802e61d8, str_YSH_R_1_802e61e0, str_YSH_S_1_802e61c0, str_YSH_S_1_802e61c0},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_YOSHI_MO_802e61e8, str_SFX_FLD_NPC_YOSHI_MO_802e6204, 0x00000000, NULL, NULL
+    },
+    { /* 187 */
+        {str_00002050_rodata, str_c_resaresa_802e622c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_S_1_80421b78, str_S_1_80421b78, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 188 */
+        {str_00002068_rodata, str_c_sebaschan_802e6248, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_S_1_80421b78, str_S_1_80421b78, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 189 */
+        {str_00002084_rodata, str_c_bomson_802e6260, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 190 */
+        {str_0000209c_rodata, str_c_hito_b_802e6274, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 191 */
+        {str_000020b0_rodata, str_c_hito_b_802e6274, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 192 */
+        {str_000020c0_rodata, str_c_hito_b_802e6274, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 193 */
+        {str_000020cc_rodata, str_c_hito_b_802e6274, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 194 */
+        {str_000020d8_rodata, str_c_bwhite_802e62b8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_BOMB_MOV_802e5300, str_SFX_FLD_NPC_BOMB_MOV_802e5300, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 195 */
+        {str_000020f4_rodata, str_c_mb_robo_2a_802e62d4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        80.0f, 150.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0xBB800000, str_SFX_STG7_BOSS_JUMP1_802e62e4, str_SFX_STG7_BOSS_LANDIN_802e62f8
+    },
+    { /* 196 */
+        {str_00002140_rodata, str_c_karon_h_802e6318, str_KRN_S_1_802e49d8, str_KRN_Z_1_802e49e0, str_KRN_S_1_802e49d8, str_KRN_S_1_802e49d8, str_KRN_W_1_802e49e8, str_KRN_R_1_802e49f0, str_KRN_D_1_802e6324, str_KRN_K_1_802e632c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_HONENOKO_802e4a00, str_SFX_FLD_ENM_HONENOKO_802e4a1c, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 197 */
+        {str_00002164_rodata, str_c_karon_b_h_802e6340, str_KRN_S_1_802e49d8, str_KRN_Z_1_802e49e0, str_KRN_S_1_802e49d8, str_KRN_S_1_802e49d8, str_KRN_W_1_802e49e8, str_KRN_R_1_802e49f0, str_KRN_D_2_802e49f8, str_KRN_D_2_802e49f8},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_HONENOKO_802e4a00, str_SFX_FLD_ENM_HONENOKO_802e4a1c, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 198 */
+        {str_0000217c_rodata, str_c_gonbaba_b_802e6358, str_GNB_S_1_802e4968, str_GNB_Z_1_802e4970, str_GNB_S_1_802e4968, str_GNB_T_1_802e4978, str_GNB_S_1_802e4968, str_GNB_S_1_802e4968, str_GNB_S_1_802e4968, str_GNB_S_1_802e4968},
+        450.0f, 20.0f, 0x00000000, 0x00000000, -50.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 199 */
+        {str_00002194_rodata, str_c_koopa_802e636c, str_KPA_S_1_802e6374, str_KPA_Z_1_802e637c, str_KPA_S_1_802e6374, str_KPA_T_1_802e6384, str_KPA_W_1_802e638c, str_KPA_R_1_802e6394, str_KPA_D_1_802e639c, str_KPA_D_1_802e639c},
+        60.0f, 75.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_KUPPA_MOVE1_802e63a4, str_SFX_KUPPA_MOVE2_802e63b4, 0x2EE00000, str_SFX_KUPPA_JUMP1_802e63c4, str_SFX_KUPPA_LANDING1_802e63d4
+    },
+    { /* 200 */
+        {str_00002218_rodata, str_c_peach_802e4fbc, str_P_S_1_80421bb8, str_P_Z_1_80421bc0, str_P_S_1_80421bb8, str_P_T_1_80421bc8, str_P_W_1_80421bd0, str_P_R_1_80421bd8, str_P_S_1_80421bb8, str_P_S_1_80421bb8},
+        20.0f, 47.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_PEACH_MOVE1L_802e63f4, str_SFX_PEACH_MOVE1R_802e6408, 0x2EE00000, NULL, str_SFX_PEACH_LANDING1_802e641c
+    },
+    { /* 201 */
+        {str_00002260_rodata, str_c_peach_802e4fbc, str_P_S_7_80421be0, str_P_Z_7_80421be8, str_P_S_7_80421be0, str_P_T_13_802e4fd4, str_P_W_7_80421bf0, str_P_R_7_80421bf8, str_P_S_7_80421be0, str_P_S_7_80421be0},
+        20.0f, 47.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_PEACH_MOVE1L_802e63f4, str_SFX_PEACH_MOVE1R_802e6408, 0x2EE00000, NULL, str_SFX_PEACH_LANDING1_802e641c
+    },
+    { /* 202 */
+        {str_00002274_rodata, str_c_peach_f_802e645c, str_P_S_9F_802e6468, str_P_Z_9F_802e6470, str_P_S_9F_802e6468, str_P_T_9F_802e6478, str_P_W_9F_802e6480, str_P_R_9F_802e6488, str_P_S_9F_802e6468, str_P_S_9F_802e6468},
+        20.0f, 47.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_PEACH_MOVE1L_802e63f4, str_SFX_PEACH_MOVE1R_802e6408, 0x2EE00000, NULL, str_SFX_PEACH_LANDING1_802e641c
+    },
+    { /* 203 */
+        {str_000022c0_rodata, str_c_b_peach_b_802e64a0, str_KRT_S_1_802e5fc8, str_KRT_Z_1_802e5fd0, str_KRT_S_1_802e5fc8, str_KRT_T_1_802e64ac, str_KRT_W_1_802e5fe0, str_KRT_W_1_802e5fe0, str_KRT_S_1_802e5fc8, str_KRT_S_1_802e5fc8},
+        20.0f, 47.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 204 */
+        {str_000022e4_rodata, str_c_q_kage_802e64c0, str_KRT_S_1_802e5fc8, str_KRT_Z_1_802e5fd0, str_KRT_S_1_802e5fc8, str_KRT_T_1_802e64ac, str_KRT_S_1_802e5fc8, str_KRT_S_1_802e5fc8, str_KRT_S_1_802e5fc8, str_KRT_S_1_802e5fc8},
+        20.0f, 47.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 205 */
+        {str_000022fc_rodata, str_c_togenoko_802e64d8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_NOKO_MOV_802e64e4, str_SFX_FLD_ENM_NOKO_MOV_802e64fc, 0x2EE00000, str_SFX_FLD_ENM_NOKO_JUM_802e6514, NULL
+    },
+    { /* 206 */
+        {str_0000235c_rodata, str_c_burosu_h_802e6540, str_BRO_S_1_802e654c, str_BRO_Z_1_802e6554, str_BRO_S_1_802e654c, str_BRO_T_1_802e655c, str_BRO_W_1_802e6564, str_BRO_R_1_802e656c, str_BRO_D_1_802e6574, str_BRO_K_1_802e657c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_NPC_NOKO_MOV_802e42bc, str_SFX_FLD_NPC_NOKO_MOV_802e42d4, 0x17700000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 207 */
+        {str_000023b4_rodata, str_c_kamek_be_802e6594, str_S_2_80421bb0, str_Z_2_80421b9c, str_S_2_80421bb0, str_T_9_80421c6c, str_W_2_80421ba4, str_R_2_80421ba8, str_S_2_80421bb0, str_S_2_80421bb0},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 70.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 208 */
+        {str_000023d0_rodata, str_c_kamek_be_802e6594, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_S_1_80421b78, str_S_1_80421b78},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 70.0f,
+        str_SFX_KUPPA_KAMEBABA_M_802e65b8, str_SFX_KUPPA_KAMEBABA_M_802e65d4, 0x2EE00000, str_SFX_KUPPA_KAMEBABA_J_802e65f0, str_SFX_KUPPA_KAMEBABA_L_802e660c
+    },
+    { /* 209 */
+        {str_00002458_rodata, str_c_kamek_be_802e6594, str_I_1_80421cf0, str_Z_1_80421b7c, str_I_1_80421cf0, str_T_3_80421c5c, str_I_2_80421cf4, str_I_2_80421cf4, str_I_1_80421cf0, str_I_1_80421cf0},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 70.0f,
+        str_SFX_KUPPA_KAMEBABA_M_802e65b8, str_SFX_KUPPA_KAMEBABA_M_802e65d4, 0x2EE00000, str_SFX_KUPPA_KAMEBABA_J_802e65f0, str_SFX_KUPPA_KAMEBABA_L_802e660c
+    },
+    { /* 210 */
+        {str_00002470_rodata, str_c_kamek_be_802e6594, str_S_3_80421b98, str_Z_3_80421cf8, str_S_3_80421b98, str_T_11_80421cfc, str_W_3_80421c70, str_W_3_80421c70, str_S_3_80421b98, str_S_3_80421b98},
+        30.0f, 50.0f, 0x00000000, 0x00000000, 0.0f, 70.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 211 */
+        {str_00002488_rodata, str_c_kamek_802e6664, str_KMK_S_1_802e666c, str_KMK_Z_1_802e6674, str_KMK_S_1_802e666c, str_KMK_T_1_802e667c, str_KMK_W_1_802e6684, str_KMK_R_1_802e668c, str_KMK_D_1_802e6694, str_KMK_K_1_802e669c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 212 */
+        {str_000024d4_rodata, str_c_hkoopa_802e66b4, str_HKPA_S_1_802e66c0, str_HKPA_Z_1_802e66cc, str_HKPA_S_1_802e66c0, str_HKPA_T_1_802e66d8, str_HKPA_W_1_802e66e4, str_HKPA_R_1_802e66f0, str_HKPA_S_1_802e66c0, str_HKPA_S_1_802e66c0},
+        40.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 213 */
+        {str_0000252c_rodata, str_c_kuribo_802e5328, str_PTK_S_1_802e53bc, str_PTK_Z_2_802e53c4, str_PTK_S_1_802e53bc, str_PTK_T_1_802e53cc, str_PTK_W_1_802e53d4, str_PTK_R_1_802e53dc, str_PTK_D_1_802e53e4, str_PTK_D_1_802e53e4},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_PATAKURI_802e6708, str_SFX_FLD_ENM_PATAKURI_802e6708, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 214 */
+        {str_00002554_rodata, str_c_kuribo_802e5328, str_KUR_S_1_802e5334, str_KUR_Z_2_802e533c, str_KUR_S_1_802e5334, str_KUR_T_1_802e5344, str_KUR_W_1_802e534c, str_KUR_R_1_802e5354, str_KUR_D_1_802e535c, str_KUR_K_1_802e6730},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KURI_MOV_802e6738, str_SFX_FLD_ENM_KURI_MOV_802e6750, 0x2EE00000, NULL, NULL
+    },
+    { /* 215 */
+        {str_00002598_rodata, str_c_kuribo_802e5328, str_TGK_S_1_802e5374, str_TGK_Z_2_802e537c, str_TGK_S_1_802e5374, str_TGK_T_1_802e5384, str_TGK_W_1_802e538c, str_TGK_R_1_802e5394, str_TGK_D_1_802e539c, str_TGK_K_1_802e53a4},
+        20.0f, 28.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KURI_MOV_802e6738, str_SFX_FLD_ENM_KURI_MOV_802e6750, 0x2EE00000, NULL, NULL
+    },
+    { /* 216 */
+        {str_000025a4_rodata, str_c_kuribo_802e5328, str_PTK_S_1_802e53bc, str_PTK_Z_2_802e53c4, str_PTK_S_1_802e53bc, str_PTK_T_1_802e53cc, str_PTK_W_1_802e53d4, str_PTK_R_1_802e53dc, str_PTK_D_1_802e53e4, str_PTK_K_1_802e53ec},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_PATAKURI_802e6708, str_SFX_FLD_ENM_PATAKURI_802e6708, 0x2EE00000, NULL, NULL
+    },
+    { /* 217 */
+        {str_000025b0_rodata, str_c_kuribo_h_802e6794, str_KUR_S_1_802e5334, str_KUR_Z_2_802e533c, str_KUR_S_1_802e5334, str_KUR_T_1_802e5344, str_KUR_W_1_802e534c, str_KUR_R_1_802e5354, str_KUR_D_1_802e535c, str_KUR_K_1_802e6730},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KURI_MOV_802e6738, str_SFX_FLD_ENM_KURI_MOV_802e6750, 0x2EE00000, NULL, NULL
+    },
+    { /* 218 */
+        {str_000025d0_rodata, str_c_kuribo_h_802e6794, str_TGK_S_1_802e5374, str_TGK_Z_2_802e537c, str_TGK_S_1_802e5374, str_TGK_T_1_802e5384, str_TGK_W_1_802e538c, str_TGK_R_1_802e5394, str_TGK_D_1_802e539c, str_TGK_K_1_802e53a4},
+        20.0f, 28.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KURI_MOV_802e6738, str_SFX_FLD_ENM_KURI_MOV_802e6750, 0x2EE00000, NULL, NULL
+    },
+    { /* 219 */
+        {str_000025e4_rodata, str_c_kuribo_h_802e6794, str_PTK_S_1_802e53bc, str_PTK_Z_2_802e53c4, str_PTK_S_1_802e53bc, str_PTK_T_1_802e53cc, str_PTK_W_1_802e53d4, str_PTK_R_1_802e53dc, str_PTK_D_1_802e53e4, str_PTK_K_1_802e53ec},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_PATAKURI_802e6708, str_SFX_FLD_ENM_PATAKURI_802e6708, 0x2EE00000, NULL, NULL
+    },
+    { /* 220 */
+        {str_000025f8_rodata, str_c_kuribo_y_802e67d8, str_KUR_S_1_802e5334, str_KUR_Z_2_802e533c, str_KUR_S_1_802e5334, str_KUR_T_1_802e5344, str_KUR_W_1_802e534c, str_KUR_R_1_802e5354, str_KUR_D_1_802e535c, str_KUR_K_1_802e6730},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KURI_MOV_802e6738, str_SFX_FLD_ENM_KURI_MOV_802e6750, 0x2EE00000, NULL, NULL
+    },
+    { /* 221 */
+        {str_00002614_rodata, str_c_kuribo_y_802e67d8, str_TGK_S_1_802e5374, str_TGK_Z_2_802e537c, str_TGK_S_1_802e5374, str_TGK_T_1_802e5384, str_TGK_W_1_802e538c, str_TGK_R_1_802e5394, str_TGK_D_1_802e539c, str_TGK_K_1_802e53a4},
+        20.0f, 28.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KURI_MOV_802e6738, str_SFX_FLD_ENM_KURI_MOV_802e6750, 0x2EE00000, NULL, NULL
+    },
+    { /* 222 */
+        {str_00002624_rodata, str_c_kuribo_y_802e67d8, str_PTK_S_1_802e53bc, str_PTK_Z_2_802e53c4, str_PTK_S_1_802e53bc, str_PTK_T_1_802e53cc, str_PTK_W_1_802e53d4, str_PTK_R_1_802e53dc, str_PTK_D_1_802e53e4, str_PTK_K_1_802e53ec},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_PATAKURI_802e6708, str_SFX_FLD_ENM_PATAKURI_802e6708, 0x2EE00000, NULL, NULL
+    },
+    { /* 223 */
+        {str_00002634_rodata, str_c_karon_g_h_802e4ad4, str_KRN_S_1_802e49d8, str_KRN_Z_1_802e49e0, str_KRN_S_1_802e49d8, str_KRN_T_1_802e6810, str_KRN_W_1_802e49e8, str_KRN_R_1_802e49f0, str_KRN_D_1_802e6324, str_KRN_K_1_802e632c},
+        24.0f, 36.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_HONENOKO_802e4a00, str_SFX_FLD_ENM_HONENOKO_802e4a1c, 0x2EE00000, NULL, NULL
+    },
+    { /* 224 */
+        {str_00002648_rodata, str_c_bomhey_802e5a88, str_BOM_S_1_802e5a94, str_BOM_Z_1_802e5a9c, str_BOM_S_1_802e5a94, str_BOM_T_1_802e5aa4, str_BOM_W_1_802e5aac, str_BOM_R_1_802e5ab4, str_BOM_D_1_802e5abc, str_BOM_K_1_802e5ac4},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_BOMB_MOV_802e6820, str_SFX_FLD_ENM_BOMB_MOV_802e6820, 0x2EE00000, NULL, NULL
+    },
+    { /* 225 */
+        {str_00002668_rodata, str_c_met_80421d04, str_MET_S_1_802e6840, str_MET_Z_1_802e6848, str_MET_S_1_802e6840, str_MET_T_1_802e6850, str_MET_W_1_802e6858, str_MET_R_1_802e6860, str_MET_D_1_802e6868, str_MET_K_1_802e6870},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_MET_MOVE_802e6878, str_SFX_FLD_ENM_MET_MOVE_802e6890, 0x2EE00000, str_SFX_FLD_ENM_MET_ATTA_802e5b54, NULL
+    },
+    { /* 226 */
+        {str_000026d8_rodata, str_c_met_80421d04, str_TMT_S_1_802e5aec, str_TMT_Z_1_802e5af4, str_TMT_S_1_802e5aec, str_TMT_T_1_802e5afc, str_TMT_W_1_802e5b04, str_TMT_R_1_802e5b0c, str_TMT_D_1_802e5b14, str_TMT_K_1_802e5b1c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_MET_MOVE_802e6878, str_SFX_FLD_ENM_MET_MOVE_802e6890, 0x2EE00000, str_SFX_FLD_ENM_MET_ATTA_802e5b54, NULL
+    },
+    { /* 227 */
+        {str_000026e4_rodata, str_c_met_80421d04, str_PTM_S_1_802e68c4, str_PTM_Z_1_802e68cc, str_PTM_S_1_802e68c4, str_PTM_T_1_802e68d4, str_PTM_W_1_802e68dc, str_PTM_R_1_802e68e4, str_PTM_D_1_802e68ec, str_PTM_K_1_802e68f4},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_PATAMET__802e68fc, str_SFX_FLD_ENM_PATAMET__802e68fc, 0x2EE00000, NULL, NULL
+    },
+    { /* 228 */
+        {str_00002748_rodata, str_c_met_80421d04, str_PMT_S_1_802e6924, str_PMT_Z_1_802e692c, str_PMT_S_1_802e6924, str_PMT_T_1_802e6934, str_PMT_W_1_802e693c, str_PMT_R_1_802e6944, str_PMT_D_1_802e694c, str_PMT_K_1_802e6954},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_PATAMET__802e68fc, str_SFX_FLD_ENM_PATAMET__802e68fc, 0x2EE00000, NULL, NULL
+    },
+    { /* 229 */
+        {str_0000278c_rodata, str_c_met_h_802e5ae4, str_MET_S_1_802e6840, str_MET_Z_1_802e6848, str_MET_S_1_802e6840, str_MET_T_1_802e6850, str_MET_W_1_802e6858, str_MET_R_1_802e6860, str_MET_D_1_802e6868, str_MET_K_1_802e6870},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_MET_MOVE_802e6878, str_SFX_FLD_ENM_MET_MOVE_802e6890, 0x2EE00000, str_SFX_FLD_ENM_MET_ATTA_802e5b54, NULL
+    },
+    { /* 230 */
+        {str_0000279c_rodata, str_c_met_h_802e5ae4, str_TMT_S_1_802e5aec, str_TMT_Z_1_802e5af4, str_TMT_S_1_802e5aec, str_TMT_T_1_802e5afc, str_TMT_W_1_802e5b04, str_TMT_R_1_802e5b0c, str_TMT_D_1_802e5b14, str_TMT_K_1_802e5b1c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_MET_MOVE_802e6878, str_SFX_FLD_ENM_MET_MOVE_802e6890, 0x2EE00000, str_SFX_FLD_ENM_MET_ATTA_802e5b54, NULL
+    },
+    { /* 231 */
+        {str_000027b0_rodata, str_c_met_h_802e5ae4, str_PTM_S_1_802e68c4, str_PTM_Z_1_802e68cc, str_PTM_S_1_802e68c4, str_PTM_T_1_802e68d4, str_PTM_W_1_802e68dc, str_PTM_R_1_802e68e4, str_PTM_D_1_802e68ec, str_PTM_K_1_802e68f4},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_PATAMET__802e68fc, str_SFX_FLD_ENM_PATAMET__802e68fc, 0x2EE00000, NULL, NULL
+    },
+    { /* 232 */
+        {str_000027c8_rodata, str_c_met_h_802e5ae4, str_PMT_S_1_802e6924, str_PMT_Z_1_802e692c, str_PMT_S_1_802e6924, str_PMT_T_1_802e6934, str_PMT_W_1_802e693c, str_PMT_R_1_802e6944, str_PMT_D_1_802e694c, str_PMT_K_1_802e6954},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_PATAMET__802e68fc, str_SFX_FLD_ENM_PATAMET__802e68fc, 0x2EE00000, NULL, NULL
+    },
+    { /* 233 */
+        {str_000027dc_rodata, str_c_sanbo_802e69b4, str_SNB_S_1_802e69bc, str_SNB_Z_1_802e69c4, str_SNB_S_1_802e69bc, str_SNB_T_1_802e69cc, str_SNB_W_1_802e69d4, str_SNB_W_1_802e69d4, str_SNB_D_1_802e69dc, str_SNB_K_1_802e69e4},
+        20.0f, 80.0f, 0x00000000, 0x00000000, 0.0f, 999.0f,
+        str_SFX_FLD_ENM_SAMBO_MO_802e69ec, NULL, 0x4E200000, NULL, NULL
+    },
+    { /* 234 */
+        {str_00002834_rodata, str_c_sanbo_m_802e6a14, str_SNB_S_1_802e69bc, str_SNB_Z_1_802e69c4, str_SNB_S_1_802e69bc, str_SNB_T_1_802e69cc, str_SNB_W_1_802e69d4, str_SNB_W_1_802e69d4, str_SNB_D_1_802e69dc, str_SNB_K_1_802e69e4},
+        20.0f, 80.0f, 0x00000000, 0x00000000, 0.0f, 999.0f,
+        str_SFX_FLD_ENM_SAMBO_MO_802e69ec, NULL, 0x4E200000, NULL, NULL
+    },
+    { /* 235 */
+        {str_00002850_rodata, str_c_sinemon_802e6a2c, str_SIN_S_1_802e6a38, str_SIN_Z_1_802e6a40, str_SIN_S_1_802e6a38, str_SIN_T_1_802e6a48, str_SIN_W_1_802e6a50, str_SIN_R_1_802e6a58, str_SIN_D_1_802e6a60, str_SIN_K_1_802e6a68},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_EMON_MOV_802e6a70, str_SFX_FLD_ENM_EMON_MOV_802e6a88, 0x2EE00000, NULL, NULL
+    },
+    { /* 236 */
+        {str_000028d0_rodata, str_c_sinemon_h_802e6ab4, str_SIN_S_1_802e6a38, str_SIN_Z_1_802e6a40, str_SIN_S_1_802e6a38, str_SIN_T_1_802e6a48, str_SIN_W_1_802e6a50, str_SIN_R_1_802e6a58, str_SIN_D_1_802e6a60, str_SIN_K_1_802e6a68},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_EMON_MOV_802e6a70, str_SFX_FLD_ENM_EMON_MOV_802e6a88, 0x2EE00000, NULL, NULL
+    },
+    { /* 237 */
+        {str_000028f0_rodata, str_c_sinemon_w_802e6ad4, str_SIN_S_1_802e6a38, str_SIN_Z_1_802e6a40, str_SIN_S_1_802e6a38, str_SIN_T_1_802e6a48, str_SIN_W_1_802e6a50, str_SIN_R_1_802e6a58, str_SIN_D_1_802e6a60, str_SIN_K_1_802e6a68},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_EMON_MOV_802e6a70, str_SFX_FLD_ENM_EMON_MOV_802e6a88, 0x2EE00000, NULL, NULL
+    },
+    { /* 238 */
+        {str_00002910_rodata, str_c_sinnosuke_802e6aec, str_SIS_S_1_802e6af8, str_SIS_Z_1_802e6b00, str_SIS_S_1_802e6af8, str_SIS_T_1_802e6b08, str_SIS_W_1_802e6b10, str_SIS_R_1_802e6b18, str_SIS_D_1_802e6b20, str_SIS_K_1_802e6b28},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_EMON_MOV_802e6a70, str_SFX_FLD_ENM_EMON_MOV_802e6a88, 0x2EE00000, NULL, NULL
+    },
+    { /* 239 */
+        {str_00002960_rodata, str_c_basabasa_802e6b3c, str_BSA_S_1_802e6b48, str_BSA_S_1_802e6b48, str_BSA_S_1_802e6b48, str_BSA_T_1_802e6b50, str_BSA_S_1_802e6b48, str_BSA_S_1_802e6b48, str_BSA_D_1_802e6b58, str_BSA_K_1_802e6b60},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_BASA_MOV_802e6b68, str_SFX_FLD_ENM_BASA_MOV_802e6b68, 0x2EE00000, NULL, NULL
+    },
+    { /* 240 */
+        {str_000029b0_rodata, str_c_cyuru_802e6b94, str_CYU_S_1_802e6b9c, str_CYU_S_1_802e6b9c, str_CYU_S_1_802e6b9c, str_CYU_T_1_802e6ba4, str_CYU_S_1_802e6b9c, str_CYU_S_1_802e6b9c, str_CYU_D_1_802e6bac, str_CYU_K_1_802e6bb4},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_BASA_MOV_802e6b68, str_SFX_FLD_ENM_BASA_MOV_802e6b68, 0x2EE00000, NULL, NULL
+    },
+    { /* 241 */
+        {str_000029ec_rodata, str_c_basabasa_g_802e6bd0, str_BSA_S_1_802e6b48, str_BSA_S_1_802e6b48, str_BSA_S_1_802e6b48, str_BSA_T_1_802e6b50, str_BSA_S_1_802e6b48, str_BSA_S_1_802e6b48, str_BSA_D_1_802e6b58, str_BSA_K_1_802e6b60},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_BASA_MOV_802e6b68, str_SFX_FLD_ENM_BASA_MOV_802e6b68, 0x2EE00000, NULL, NULL
+    },
+    { /* 242 */
+        {str_00002a10_rodata, str_c_nokoteki_802e6bec, str_NKT_S_1_802e6bf8, str_NKT_Z_1_802e6c00, str_NKT_S_1_802e6bf8, str_NKT_T_1_802e6c08, str_NKT_W_1_802e6c10, str_NKT_R_1_802e6c18, str_NKT_D_1_802e6c20, str_NKT_K_1_802e6c28},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_NOKO_MOV_802e64e4, str_SFX_FLD_ENM_NOKO_MOV_802e64fc, 0x2EE00000, str_SFX_FLD_ENM_NOKO_JUM_802e6514, NULL
+    },
+    { /* 243 */
+        {str_00002a60_rodata, str_c_nokoteki_802e6bec, str_PTP_S_1_802e6c3c, str_PTP_Z_1_802e6c44, str_PTP_S_1_802e6c3c, str_PTP_T_1_802e6c4c, str_PTP_W_1_802e6c54, str_PTP_R_1_802e6c5c, str_PTP_D_1_802e6c64, str_PTP_K_1_802e6c6c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 30.0f,
+        str_SFX_FLD_ENM_PATA_MOV_802e6c74, str_SFX_FLD_ENM_PATA_MOV_802e6c74, 0x2EE00000, NULL, NULL
+    },
+    { /* 244 */
+        {str_00002abc_rodata, str_c_yaminoko_802e6c9c, str_NKT_S_1_802e6bf8, str_NKT_Z_1_802e6c00, str_NKT_S_1_802e6bf8, str_NKT_T_1_802e6c08, str_NKT_W_1_802e6c10, str_NKT_R_1_802e6c18, str_NKT_D_1_802e6c20, str_NKT_K_1_802e6c28},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_NOKO_MOV_802e64e4, str_SFX_FLD_ENM_NOKO_MOV_802e64fc, 0x2EE00000, str_SFX_FLD_ENM_NOKO_JUM_802e6514, NULL
+    },
+    { /* 245 */
+        {str_00002ad8_rodata, str_c_yaminoko_802e6c9c, str_PTP_S_1_802e6c3c, str_PTP_Z_1_802e6c44, str_PTP_S_1_802e6c3c, str_PTP_T_1_802e6c4c, str_PTP_W_1_802e6c54, str_PTP_R_1_802e6c5c, str_PTP_D_1_802e6c64, str_PTP_K_1_802e6c6c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 30.0f,
+        str_SFX_FLD_ENM_PATA_MOV_802e6c74, str_SFX_FLD_ENM_PATA_MOV_802e6c74, 0x2EE00000, NULL, NULL
+    },
+    { /* 246 */
+        {str_00002ae8_rodata, str_c_touginoko_802e6cc8, str_NKT_S_1_802e6bf8, str_NKT_Z_1_802e6c00, str_NKT_S_1_802e6bf8, str_NKT_T_1_802e6c08, str_NKT_W_1_802e6c10, str_NKT_R_1_802e6c18, str_NKT_D_1_802e6c20, str_NKT_K_1_802e6c28},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_NOKO_MOV_802e64e4, str_SFX_FLD_ENM_NOKO_MOV_802e64fc, 0x2EE00000, str_SFX_FLD_ENM_NOKO_JUM_802e6514, NULL
+    },
+    { /* 247 */
+        {str_00002b04_rodata, str_c_touginoko_802e6cc8, str_PTP_S_1_802e6c3c, str_PTP_Z_1_802e6c44, str_PTP_S_1_802e6c3c, str_PTP_T_1_802e6c4c, str_PTP_W_1_802e6c54, str_PTP_R_1_802e6c5c, str_PTP_D_1_802e6c64, str_PTP_K_1_802e6c6c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 30.0f,
+        str_SFX_FLD_ENM_PATA_MOV_802e6c74, str_SFX_FLD_ENM_PATA_MOV_802e6c74, 0x2EE00000, NULL, NULL
+    },
+    { /* 248 */
+        {str_00002b14_rodata, str_c_chorobon_802e6cf0, str_CBN_S_1_802e6cfc, str_CBN_Z_1_802e6d04, str_CBN_S_1_802e6cfc, str_CBN_T_1_802e6d0c, str_CBN_W_1_802e6d14, str_CBN_R_1_802e6d1c, str_CBN_D_1_802e6d24, str_CBN_K_1_802e6d2c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, str_SFX_FLD_ENM_CHORO1_M_802e6d34, NULL
+    },
+    { /* 249 */
+        {str_00002b80_rodata, str_c_chorobon_g_802e6d64, str_CBN_S_1_802e6cfc, str_CBN_Z_1_802e6d04, str_CBN_S_1_802e6cfc, str_CBN_T_1_802e6d0c, str_CBN_W_1_802e6d14, str_CBN_R_1_802e6d1c, str_CBN_D_1_802e6d24, str_CBN_K_1_802e6d2c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, str_SFX_FLD_ENM_CHORO1_M_802e6d34, NULL
+    },
+    { /* 250 */
+        {str_00002ba4_rodata, str_c_chorobon_f_802e6d88, str_CBN_S_1_802e6cfc, str_CBN_Z_1_802e6d04, str_CBN_S_1_802e6cfc, str_CBN_T_1_802e6d0c, str_CBN_W_1_802e6d14, str_CBN_R_1_802e6d1c, str_CBN_D_1_802e6d24, str_CBN_K_1_802e6d2c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, str_SFX_FLD_ENM_CHORO1_M_802e6d34, NULL
+    },
+    { /* 251 */
+        {str_00002bc8_rodata, str_c_chorobon_k_802e6dac, str_CBN_S_1_802e6cfc, str_CBN_Z_1_802e6d04, str_CBN_S_1_802e6cfc, str_CBN_T_1_802e6d0c, str_CBN_W_1_802e6d14, str_CBN_R_1_802e6d1c, str_CBN_D_1_802e6d24, str_CBN_K_1_802e6d2c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, str_SFX_FLD_ENM_CHORO1_M_802e6d34, NULL
+    },
+    { /* 252 */
+        {str_00002bec_rodata, str_c_pansy_802e6dcc, str_PAN_S_1_802e6dd4, str_PAN_Z_1_802e6ddc, str_PAN_S_1_802e6dd4, str_PAN_T_1_802e6de4, str_PAN_W_1_802e6dec, str_PAN_R_1_802e6df4, str_PAN_D_1_802e6dfc, str_PAN_K_1_802e6e04},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_PANZI_MO_802e6e0c, str_SFX_FLD_ENM_PANZI_MO_802e6e28, 0x2EE00000, NULL, NULL
+    },
+    { /* 253 */
+        {str_00002c74_rodata, str_c_kpansy_802e6e5c, str_PAN_S_1_K_802e6e68, str_PAN_Z_1_K_802e6e74, str_PAN_S_1_K_802e6e68, str_PAN_T_1_K_802e6e80, str_PAN_W_1_K_802e6e8c, str_PAN_R_1_K_802e6e98, str_PAN_D_1_K_802e6ea4, str_PAN_K_1_K_802e6eb0},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_PANZI_MO_802e6e0c, str_SFX_FLD_ENM_PANZI_MO_802e6e28, 0x2EE00000, NULL, NULL
+    },
+    { /* 254 */
+        {str_00002cec_rodata, str_c_killtai_802e6ec8, str_KTA_S_1_802e6ed4, str_KTA_Z_1_802e6edc, str_KTA_S_1_802e6ed4, str_KTA_T_1_802e6ee4, str_KTA_S_1_802e6ed4, str_KTA_S_1_802e6ed4, str_KTA_D_1_802e6eec, str_KTA_K_1_802e6ef4},
+        45.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 255 */
+        {str_00002d2c_rodata, str_c_kilr_802e6f04, str_KIL_S_1_802e6f0c, str_KIL_Z_1_802e6f14, str_KIL_S_1_802e6f0c, str_KIL_T_1_802e6f1c, str_KIL_W_1_802e6f24, str_KIL_R_1_802e6f2c, str_KIL_D_1_802e6f34, str_KIL_K_1_802e6f3c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 256 */
+        {str_00002d74_rodata, str_c_killtai_g_802e6f58, str_KTA_S_1_802e6ed4, str_KTA_Z_1_802e6edc, str_KTA_S_1_802e6ed4, str_KTA_T_1_802e6ee4, str_KTA_S_1_802e6ed4, str_KTA_S_1_802e6ed4, str_KTA_D_1_802e6eec, str_KTA_K_1_802e6ef4},
+        45.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 257 */
+        {str_00002d94_rodata, str_c_kilr_g_802e6f74, str_KIL_S_1_802e6f0c, str_KIL_Z_1_802e6f14, str_KIL_S_1_802e6f0c, str_KIL_T_1_802e6f1c, str_KIL_W_1_802e6f24, str_KIL_R_1_802e6f2c, str_KIL_D_1_802e6f34, str_KIL_K_1_802e6f3c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 258 */
+        {str_00002db0_rodata, str_c_togedaruma_802e6f90, str_TGD_S_1_802e6fa0, str_TGD_Z_1_802e6fa8, str_TGD_S_1_802e6fa0, str_TGD_T_1_802e6fb0, str_TGD_S_1_802e6fa0, str_TGD_S_1_802e6fa0, str_TGD_D_1_802e6fb8, str_TGD_K_1_802e6fc0},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 259 */
+        {str_00002df8_rodata, str_c_togedaruma_b_802e6fdc, str_TGD_S_1_802e6fa0, str_TGD_Z_1_802e6fa8, str_TGD_S_1_802e6fa0, str_TGD_T_1_802e6fb0, str_TGD_S_1_802e6fa0, str_TGD_S_1_802e6fa0, str_TGD_D_1_802e6fb8, str_TGD_K_1_802e6fc0},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 260 */
+        {str_00002e1c_rodata, str_c_pakflwr_802e7000, str_PKF_S_1_802e700c, str_PKF_Z_1_802e7014, str_PKF_S_1_802e700c, str_PKF_T_1_802e701c, str_PKF_W_1_802e7024, str_PKF_Z_1_802e7014, str_PKF_D_1_802e702c, str_PKF_K_1_802e7034},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 261 */
+        {str_00002e6c_rodata, str_c_pakflwr_t_802e7054, str_PKF_S_1_802e700c, str_PKF_Z_1_802e7014, str_PKF_S_1_802e700c, str_PKF_T_1_802e701c, str_PKF_W_1_802e7024, str_PKF_Z_1_802e7014, str_PKF_D_1_802e702c, str_PKF_K_1_802e7034},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 262 */
+        {str_00002e90_rodata, str_c_pakflwr_p_802e7074, str_PKF_S_1_802e700c, str_PKF_Z_1_802e7014, str_PKF_S_1_802e700c, str_PKF_T_1_802e701c, str_PKF_W_1_802e7024, str_PKF_Z_1_802e7014, str_PKF_D_1_802e702c, str_PKF_K_1_802e7034},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 263 */
+        {str_00002eb0_rodata, str_c_pakflwr_a_802e7090, str_PKF_S_1_802e700c, str_PKF_Z_1_802e7014, str_PKF_S_1_802e700c, str_PKF_T_1_802e701c, str_PKF_W_1_802e7024, str_PKF_Z_1_802e7014, str_PKF_D_1_802e702c, str_PKF_K_1_802e7034},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 264 */
+        {str_00002ecc_rodata, str_c_sinemon_w_802e6ad4, str_SIN_S_1_802e6a38, str_SIN_Z_1_802e6a40, str_SIN_S_1_802e6a38, str_SIN_S_1_802e6a38, str_SIN_W_1_802e6a50, str_SIN_R_1_802e6a58, str_SIN_D_1_802e6a60, str_SIN_K_1_802e6a68},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_EMON_MOV_802e6a70, str_SFX_FLD_ENM_EMON_MOV_802e6a88, 0x2EE00000, NULL, NULL
+    },
+    { /* 265 */
+        {str_00002ee0_rodata, str_c_kmoon_g_802e70c0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_Z_1_80421b7c, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KUMO_MOV_802e70cc, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 266 */
+        {str_00002f14_rodata, str_c_paid_802e70f0, str_PAI_S_1_802e70f8, str_PAI_Z_1_802e7100, str_PAI_S_1_802e70f8, str_PAI_Z_1_802e7100, str_PAI_W_1_802e7108, str_PAI_Z_1_802e7100, str_PAI_D_1_802e7110, str_PAI_K_1_802e7118},
+        30.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 267 */
+        {str_00002f50_rodata, str_c_paid_b_802e7130, str_PAI_S_1_802e70f8, str_PAI_Z_1_802e7100, str_PAI_S_1_802e70f8, str_PAI_Z_1_802e7100, str_PAI_W_1_802e7108, str_PAI_Z_1_802e7100, str_PAI_D_1_802e7110, str_PAI_K_1_802e7118},
+        30.0f, 60.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 268 */
+        {str_00002f6c_rodata, str_c_baria_802e7148, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_Z_1_80421b7c, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 269 */
+        {str_00002f80_rodata, str_c_baria_z_802e715c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_Z_1_80421b7c, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 270 */
+        {str_00002f98_rodata, str_c_baria_c_802e717c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_Z_1_80421b7c, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 271 */
+        {str_00002fb8_rodata, str_c_zako_n_802e4d98, str_Z_1_80421b7c, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        30.0f, 33.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_3RD1_MOV_802e4da4, str_SFX_FLD_ENM_3RD1_MOV_802e4dbc, 0x2EE00000, NULL, NULL
+    },
+    { /* 272 */
+        {str_00002fc4_rodata, str_c_zako_e_802e4e04, str_Z_1_80421b7c, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        30.0f, 33.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_3RD1_MOV_802e4da4, str_SFX_FLD_ENM_3RD1_MOV_802e4dbc, 0x2EE00000, NULL, NULL
+    },
+    { /* 273 */
+        {str_00002fd8_rodata, str_c_zako_m_802e4de4, str_Z_1_80421b7c, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        30.0f, 33.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_3RD1_MOV_802e4da4, str_SFX_FLD_ENM_3RD1_MOV_802e4dbc, 0x2EE00000, NULL, NULL
+    },
+    { /* 274 */
+        {str_00002fec_rodata, str_c_borodo_802e71c8, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_BORODO_M_802e71d4, str_SFX_FLD_ENM_BORODO_M_802e71f0, 0x2EE00000, NULL, NULL
+    },
+    { /* 275 */
+        {str_0000303c_rodata, str_c_borodo_t_802e721c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_BORODO_M_802e71d4, str_SFX_FLD_ENM_BORODO_M_802e71f0, 0x2EE00000, NULL, NULL
+    },
+    { /* 276 */
+        {str_00003058_rodata, str_c_kuri_kn_802e7238, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_D_2_80421cc4, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 60.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 277 */
+        {str_00003074_rodata, str_c_zako_kn_802e7254, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_D_2_80421cc4, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 60.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 278 */
+        {str_00003090_rodata, str_c_zako_km_802e7274, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_D_2_80421cc4, str_S_1_80421b78, str_S_1_80421b78, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 60.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 279 */
+        {str_000030b0_rodata, str_c_geso_kn_802e7290, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_Z_1_80421b7c, str_A_1_80421cb0, str_A_1_80421cb0, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 60.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 280 */
+        {str_000030cc_rodata, str_c_jugemu_802e72a8, str_JGM_S_1_802e72b4, str_JGM_Z_1_802e72bc, str_JGM_S_1_802e72b4, str_JGM_T_1_802e72c4, str_JGM_W_1_802e72cc, str_JGM_R_1_802e72d4, str_JGM_D_1_802e72dc, str_JGM_K_1_802e72e4},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_JUGEM_MO_802e72ec, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 281 */
+        {str_00003134_rodata, str_c_jugemu_b_802e7318, str_JGM_S_1_802e72b4, str_JGM_Z_1_802e72bc, str_JGM_S_1_802e72b4, str_JGM_T_1_802e72c4, str_JGM_W_1_802e72cc, str_JGM_R_1_802e72d4, str_JGM_D_1_802e72dc, str_JGM_K_1_802e72e4},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_JUGEM_MO_802e72ec, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 282 */
+        {str_00003154_rodata, str_c_uranoko_802e7330, str_NKT_S_1_802e6bf8, str_NKT_Z_1_802e6c00, str_NKT_S_1_802e6bf8, str_NKT_T_1_802e6c08, str_NKT_W_1_802e6c10, str_NKT_R_1_802e6c18, str_NKT_D_1_802e6c20, str_NKT_K_1_802e6c28},
+        20.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_NOKO_MOV_802e64e4, str_SFX_FLD_ENM_NOKO_MOV_802e64fc, 0x2EE00000, str_SFX_FLD_ENM_NOKO_JUM_802e6514, NULL
+    },
+    { /* 283 */
+        {str_0000316c_rodata, str_c_bomhey_802e5a88, str_BOM_S_1_802e5a94, str_BOM_Z_1_802e5a9c, str_BOM_S_1_802e5a94, str_BOM_T_1_802e5aa4, str_BOM_W_1_802e5aac, str_BOM_R_1_802e5ab4, str_BOM_D_1_802e5abc, str_BOM_K_1_802e5ac4},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_BOMB_MOV_802e6820, str_SFX_FLD_ENM_BOMB_MOV_802e6820, 0x2EE00000, NULL, NULL
+    },
+    { /* 284 */
+        {str_00003178_rodata, str_c_kmoon_802e7358, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_Z_1_80421b7c, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_KUMO_MOV_802e70cc, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 285 */
+        {str_00003190_rodata, str_c_kmoon_b_802e736c, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_Z_1_80421b7c, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_KUMO_MOV_802e70cc, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 286 */
+        {str_000031a8_rodata, str_c_kmoon_wb_802e7390, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_Z_1_80421b7c, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_KUMO_MOV_802e70cc, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 287 */
+        {str_000031cc_rodata, str_c_togezo_802e73a8, str_TGZ_S_1_802e73b4, str_TGZ_Z_1_802e73bc, str_TGZ_S_1_802e73b4, str_TGZ_S_1_802e73b4, str_TGZ_W_1_802e73c4, str_TGZ_R_1_802e73cc, str_TGZ_D_1_802e73d4, str_TGZ_K_1_802e73dc},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 288 */
+        {str_00003214_rodata, str_c_sinnosuke_h_802e73f8, str_SIS_S_1_802e6af8, str_SIS_Z_1_802e6b00, str_SIS_S_1_802e6af8, str_SIS_T_1_802e6b08, str_SIS_W_1_802e6b10, str_SIS_R_1_802e6b18, str_SIS_D_1_802e6b20, str_SIS_K_1_802e6b28},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_EMON_MOV_802e6a70, str_SFX_FLD_ENM_EMON_MOV_802e6a88, 0x2EE00000, NULL, NULL
+    },
+    { /* 289 */
+        {str_00003238_rodata, str_c_sinemon_a_802e741c, str_SIN_S_1_802e6a38, str_SIN_Z_1_802e6a40, str_SIN_S_1_802e6a38, str_SIN_T_1_802e6a48, str_SIN_W_1_802e6a50, str_SIN_R_1_802e6a58, str_SIN_D_1_802e6a60, str_SIN_K_1_802e6a68},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_EMON_MOV_802e6a70, str_SFX_FLD_ENM_EMON_MOV_802e6a88, 0x2EE00000, str_SFX_STG3_ISIN_JUMP1_802e7428, NULL
+    },
+    { /* 290 */
+        {str_0000326c_rodata, str_c_sinemon_m_802e7450, str_SIN_S_1_802e6a38, str_SIN_Z_1_802e6a40, str_SIN_S_1_802e6a38, str_SIN_T_1_802e6a48, str_SIN_W_1_802e6a50, str_SIN_R_1_802e6a58, str_SIN_D_1_802e6a60, str_SIN_K_1_802e6a68},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_EMON_MOV_802e6a70, str_SFX_FLD_ENM_EMON_MOV_802e6a88, 0x2EE00000, str_SFX_STG3_ISIN_JUMP1_802e7428, NULL
+    },
+    { /* 291 */
+        {str_0000328c_rodata, str_c_uranoko_802e7330, str_PTP_S_1_802e6c3c, str_PTP_Z_1_802e6c44, str_PTP_S_1_802e6c3c, str_PTP_T_1_802e6c4c, str_PTP_W_1_802e6c54, str_PTP_R_1_802e6c5c, str_PTP_D_1_802e6c64, str_PTP_K_1_802e6c6c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_PATA_MOV_802e6c74, str_SFX_FLD_ENM_PATA_MOV_802e6c74, 0x2EE00000, NULL, NULL
+    },
+    { /* 292 */
+        {str_00003298_rodata, str_c_burosu_h_802e6540, str_BRO_S_1_802e654c, str_BRO_Z_1_802e6554, str_BRO_S_1_802e654c, str_BRO_T_1_802e655c, str_BRO_W_1_802e6564, str_BRO_R_1_802e656c, str_BRO_D_1_802e6574, str_BRO_K_1_802e657c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_BROS_MOV_802e7478, str_SFX_FLD_ENM_BROS_MOV_802e7490, 0x2EE00000, str_SFX_FLD_NPC_JUMP1_802e42ec, str_SFX_FLD_NPC_LANDING1_802e4300
+    },
+    { /* 293 */
+        {str_000032d8_rodata, str_c_burosu_f_802e74b8, str_BRO_S_1_802e654c, str_BRO_Z_1_802e6554, str_BRO_S_1_802e654c, str_BRO_T_1_802e655c, str_BRO_W_1_802e6564, str_BRO_R_1_802e656c, str_BRO_D_1_802e6574, str_BRO_K_1_802e657c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_BROS_MOV_802e7478, str_SFX_FLD_ENM_BROS_MOV_802e7490, 0x2EE00000, NULL, NULL
+    },
+    { /* 294 */
+        {str_000032f4_rodata, str_c_burosu_b_802e74d8, str_BRO_S_1_802e654c, str_BRO_Z_1_802e6554, str_BRO_S_1_802e654c, str_BRO_T_1_802e655c, str_BRO_W_1_802e6564, str_BRO_R_1_802e656c, str_BRO_D_1_802e6574, str_BRO_K_1_802e657c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_BROS_MOV_802e7478, str_SFX_FLD_ENM_BROS_MOV_802e7490, 0x2EE00000, NULL, NULL
+    },
+    { /* 295 */
+        {str_00003314_rodata, str_c_maho_802e74f0, str_MAH_S_1_802e74f8, str_MAH_Z_1_802e7500, str_MAH_S_1_802e74f8, str_MAH_S_1_802e74f8, str_MAH_W_1_802e7508, str_MAH_R_1_802e7510, str_MAH_D_1_802e7518, str_MAH_K_1_802e7520},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_MAHO_MOV_802e7528, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 296 */
+        {str_00003370_rodata, str_c_maho_b_802e7554, str_MAH_S_1_802e74f8, str_MAH_Z_1_802e7500, str_MAH_S_1_802e74f8, str_MAH_S_1_802e74f8, str_MAH_W_1_802e7508, str_MAH_R_1_802e7510, str_MAH_D_1_802e7518, str_MAH_K_1_802e7520},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_MAHO_MOV_802e7528, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 297 */
+        {str_00003390_rodata, str_c_maho_w_802e7574, str_MAH_S_1_802e74f8, str_MAH_Z_1_802e7500, str_MAH_S_1_802e74f8, str_MAH_S_1_802e74f8, str_MAH_W_1_802e7508, str_MAH_R_1_802e7510, str_MAH_D_1_802e7518, str_MAH_K_1_802e7520},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_FLD_ENM_MAHO_MOV_802e7528, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 298 */
+        {str_000033b0_rodata, str_c_monban_802e50ac, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_Z_1_80421b7c, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        str_SFX_PARTY_MOVE1L_802e58cc, str_SFX_PARTY_MOVE1R_802e58e0, 0x2EE00000, str_SFX_PARTY_JUMP1_802e758c, str_SFX_PARTY_LANDING1_802e759c
+    },
+    { /* 299 */
+        {str_000033e0_rodata, str_c_bred_h_802e56b4, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c, str_Z_1_80421b7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 300 */
+        {str_000033f0_rodata, str_c_m_gansu_802e75d0, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 301 */
+        {str_0000340c_rodata, str_c_wanwan_802e75e8, str_WAN_S_1A_802e75f4, str_WAN_Z_1_802e7600, str_WAN_S_1A_802e75f4, str_WAN_A_1_802e7608, str_WAN_S_1A_802e75f4, str_WAN_S_1A_802e75f4, str_WAN_D_1_802e7610, str_WAN_K_1_802e7618},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 302 */
+        {str_00003450_rodata, str_c_bubble_802e7628, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_BUBBLE_M_802e5f54, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 303 */
+        {str_00003464_rodata, str_c_phantom_802e7640, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 55.0f,
+        str_SFX_FLD_ENM_BUBBLE_M_802e5f54, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 304 */
+        {str_0000347c_rodata, str_c_heavy_802e7658, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        40.0f, 60.0f, 0x00000000, 0x00000000, -10.0f, 22.0f,
+        str_SFX_FLD_ENM_BOMB_MOV_802e6820, str_SFX_FLD_ENM_BOMB_MOV_802e6820, 0x2EE00000, NULL, NULL
+    },
+    { /* 305 */
+        {str_00003490_rodata, str_c_giant_802e7674, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        40.0f, 60.0f, 0x00000000, 0x00000000, -10.0f, 22.0f,
+        str_SFX_FLD_ENM_BOMB_MOV_802e6820, str_SFX_FLD_ENM_BOMB_MOV_802e6820, 0x2EE00000, NULL, NULL
+    },
+    { /* 306 */
+        {str_000034ac_rodata, str_c_wanwan_a_802e7690, str_WAN_S_1A_802e75f4, str_WAN_Z_1_802e7600, str_WAN_S_1A_802e75f4, str_WAN_A_1_802e7608, str_WAN_S_1A_802e75f4, str_WAN_S_1A_802e75f4, str_WAN_D_1_802e7610, str_WAN_K_1_802e7618},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 307 */
+        {str_000034cc_rodata, str_c_togenoko_b_802e76ac, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_NOKO_MOV_802e64e4, str_SFX_FLD_ENM_NOKO_MOV_802e64fc, 0x2EE00000, str_SFX_FLD_ENM_NOKO_JUM_802e6514, NULL
+    },
+    { /* 308 */
+        {str_000034ec_rodata, str_c_monban_t_802e76cc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_T_1_80421b80, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 309 */
+        {str_00003508_rodata, str_c_hannya_802e76e4, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_S_1_80421b78, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 310 */
+        {str_00003520_rodata, str_c_hannya_n_802e76fc, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_S_1_80421b78, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 311 */
+        {str_00003538_rodata, str_c_hannya_t_802e7714, str_S_1_80421b78, str_Z_1_80421b7c, str_S_1_80421b78, str_S_1_80421b78, str_W_1_80421b84, str_R_1_80421b88, str_D_1_80421b94, str_K_1_80421c7c},
+        20.0f, 20.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 312 */
+        {str_00003550_rodata, str_c_kamek_802e6664, str_KMK_S_2_802e7734, str_KMK_Z_2_802e773c, str_KMK_S_2_802e7734, str_KMK_T_2_802e7744, str_KMK_W_2_802e774c, str_KMK_R_2_802e7754, str_KMK_D_2_802e775c, str_KMK_K_2_802e7764},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 313 */
+        {str_0000359c_rodata, str_c_kamek_802e6664, str_KMK_S_1_802e666c, str_KMK_Z_1_802e6674, str_KMK_S_1_802e666c, str_KMK_T_1_802e667c, str_KMK_W_1_802e6684, str_KMK_R_1_802e668c, str_KMK_D_1_802e6694, str_KMK_K_1_802e669c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KAMEKU_M_802e7780, str_SFX_FLD_ENM_KAMEKU_M_802e779c, 0x2EE00000, NULL, NULL
+    },
+    { /* 314 */
+        {str_000035e8_rodata, str_c_kamek_r_802e77c4, str_KMR_S_1_802e77d0, str_KMR_Z_1_802e77d8, str_KMR_S_1_802e77d0, str_KMR_T_1_802e77e0, str_KMR_W_1_802e77e8, str_KMR_R_1_802e77f0, str_KMR_D_1_802e77f8, str_KMR_K_1_802e7800},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KAMEKU_M_802e7780, str_SFX_FLD_ENM_KAMEKU_M_802e779c, 0x2EE00000, NULL, NULL
+    },
+    { /* 315 */
+        {str_00003638_rodata, str_c_kamek_w_802e7814, str_KMW_S_1_802e7820, str_KMW_Z_1_802e7828, str_KMW_S_1_802e7820, str_KMW_T_1_802e7830, str_KMW_W_1_802e7838, str_KMW_R_1_802e7840, str_KMW_D_1_802e7848, str_KMW_K_1_802e7850},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KAMEKU_M_802e7780, str_SFX_FLD_ENM_KAMEKU_M_802e779c, 0x2EE00000, NULL, NULL
+    },
+    { /* 316 */
+        {str_00003688_rodata, str_c_kamek_g_802e7864, str_KMG_S_1_802e7870, str_KMG_Z_1_802e7878, str_KMG_S_1_802e7870, str_KMG_T_1_802e7880, str_KMG_W_1_802e7888, str_KMG_R_1_802e7890, str_KMG_D_1_802e7898, str_KMG_K_1_802e78a0},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KAMEKU_M_802e7780, str_SFX_FLD_ENM_KAMEKU_M_802e779c, 0x2EE00000, NULL, NULL
+    },
+    { /* 317 */
+        {str_000036d8_rodata, str_c_kamek_802e6664, str_KMK_S_1_802e666c, str_KMK_Z_1_802e6674, str_KMK_S_1_802e666c, str_KMK_T_1_802e667c, str_KMK_W_1_802e6684, str_KMK_R_1_802e668c, str_KMK_D_1_802e6694, str_KMK_K_1_802e669c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        str_SFX_FLD_ENM_KAMEKU_M_802e7780, str_SFX_FLD_ENM_KAMEKU_M_802e779c, 0x2EE00000, NULL, NULL
+    },
+    { /* 318 */
+        {str_000036e4_rodata, str_c_kamek_r_802e77c4, str_KMR_S_2_802e78c4, str_KMR_Z_2_802e78cc, str_KMR_S_2_802e78c4, str_KMR_T_2_802e78d4, str_KMR_W_2_802e78dc, str_KMR_R_2_802e78e4, str_KMR_D_2_802e78ec, str_KMR_K_2_802e78f4},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 319 */
+        {str_0000372c_rodata, str_c_kamek_w_802e7814, str_KMW_S_2_802e790c, str_KMW_Z_2_802e7914, str_KMW_S_2_802e790c, str_KMW_T_2_802e791c, str_KMW_W_2_802e7924, str_KMW_R_2_802e792c, str_KMW_D_2_802e7934, str_KMW_K_2_802e793c},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 320 */
+        {str_00003774_rodata, str_c_kamek_g_802e7864, str_KMG_S_2_802e7954, str_KMG_Z_2_802e795c, str_KMG_S_2_802e7954, str_KMG_T_2_802e7964, str_KMG_W_2_802e796c, str_KMG_R_2_802e7974, str_KMG_D_2_802e797c, str_KMG_K_2_802e7984},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 321 */
+        {str_000037bc_rodata, str_c_kamek_802e6664, str_KMK_S_2_802e7734, str_KMK_Z_2_802e773c, str_KMK_S_2_802e7734, str_KMK_T_2_802e7744, str_KMK_W_2_802e774c, str_KMK_R_2_802e7754, str_KMK_D_2_802e775c, str_KMK_K_2_802e7764},
+        30.0f, 40.0f, 0x00000000, 0x00000000, 0.0f, 20.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 322 */
+        {str_000037cc_rodata, str_a_mario_802e5d84, str_M_S_1_80421c80, str_M_Z_1_80421c88, str_M_S_1_80421c80, str_M_I_2_80421c90, str_M_W_1_80421c98, str_M_R_1_80421ca0, str_M_D_1_80421ca8, str_M_D_1_80421ca8},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 323 */
+        {str_000037e0_rodata, str_c_peach_802e4fbc, str_P_S_1_80421bb8, str_P_Z_1_80421bc0, str_P_S_1_80421bb8, str_P_T_1_80421bc8, str_P_W_1_80421bd0, str_P_R_1_80421bd8, str_P_S_1_80421bb8, str_P_S_1_80421bb8},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 324 */
+        {str_000037f4_rodata, str_c_peach_802e4fbc, str_P_S_2_80421d0c, str_P_Z_2_80421d14, str_P_S_2_80421d0c, str_P_T_2_80421d1c, str_P_W_2_80421d24, str_P_R_2_80421d2c, str_P_S_2_80421d0c, str_P_S_2_80421d0c},
+        30.0f, 30.0f, 0x00000000, 0x00000000, 0.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 325 */
+        {str_0000380c_rodata, str_c_gonbaba_z_802e79e8, str_GNB_S_1_802e4968, str_GNB_Z_1_802e4970, str_GNB_S_1_802e4968, str_GNB_T_1_802e4978, str_GNB_S_1_802e4968, str_GNB_S_1_802e4968, str_GNB_S_1_802e4968, str_GNB_S_1_802e4968},
+        450.0f, 20.0f, 0x00000000, 0x00000000, -50.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 326 */
+        {str_00003824_rodata, str_c_bom_sen_802e7a08, str_S_2_80421bb0, str_S_2_80421bb0, str_S_2_80421bb0, str_S_2_80421bb0, str_S_2_80421bb0, str_S_2_80421bb0, str_S_2_80421bb0, str_S_2_80421bb0},
+        450.0f, 20.0f, 0x00000000, 0x00000000, -50.0f, 50.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+    { /* 327 */
+        {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
+        0.0f, 0.0f, 0x00000000, 0x00000000, 0.0f, 0.0f,
+        NULL, NULL, 0x00000000, NULL, NULL
+    },
+};
+
+typedef struct NpcAiTypeTableRecord {
+    const char* name;
+    u32 flags;
+    void* initEvent;
+    void* moveEvent;
+    void* deadEvent;
+    void* findEvent;
+    void* lostEvent;
+    void* returnEvent;
+    void* blowEvent;
+} NpcAiTypeTableRecord;
+
+extern u32 npc_init_evt[];
+extern u32 testenemynpc_init_event[];
+extern u32 unk_evt_8033f9b0[];
+extern u32 enemy_common_dead_event[];
+extern u32 enemy_common_blow_event[];
+extern u32 kuriboo_init_event[];
+extern u32 kuriboo_move_event[];
+extern u32 kuriboo_find_event[];
+extern u32 kuriboo_lost_event[];
+extern u32 kuriboo_return_event[];
+extern u32 patakuri_init_event[];
+extern u32 patakuri_move_event[];
+extern u32 patakuri_find_event[];
+extern u32 patakuri_lost_event[];
+extern u32 patakuri_return_event[];
+extern u32 nokonoko_init_event[];
+extern u32 nokonoko_move_event[];
+extern u32 nokonoko_find_event[];
+extern u32 nokonoko_lost_event[];
+extern u32 nokonoko_return_event[];
+extern u32 patapata_init_event[];
+extern u32 patapata_move_event[];
+extern u32 patapata_find_event[];
+extern u32 patapata_lost_event[];
+extern u32 patapata_return_event[];
+extern u32 met_init_event[];
+extern u32 met_move_event[];
+extern u32 met_find_event[];
+extern u32 met_lost_event[];
+extern u32 met_return_event[];
+extern u32 met_init_event_ceil[];
+extern u32 togemet_init_event[];
+extern u32 togemet_init_event_ceil[];
+extern u32 patamet_init_event[];
+extern u32 patamet_move_event[];
+extern u32 patamet_find_event[];
+extern u32 patamet_lost_event[];
+extern u32 patamet_return_event[];
+extern u32 honenoko2_init_event[];
+extern u32 honenoko2_move_event[];
+extern u32 honenoko2_find_event[];
+extern u32 honenoko2_lost_event[];
+extern u32 honenoko2_return_event[];
+extern u32 karon_init_event[];
+extern u32 karon_move_event[];
+extern u32 karon_dead_event[];
+extern u32 karon_find_event[];
+extern u32 karon_lost_event[];
+extern u32 karon_return_event[];
+extern u32 karon_blow_event[];
+extern u32 chorobon_init_event[];
+extern u32 chorobon_move_event[];
+extern u32 chorobon_find_event[];
+extern u32 chorobon_lost_event[];
+extern u32 chorobon_return_event[];
+extern u32 killer_cannon_init_event[];
+extern u32 killer_cannon_move_event[];
+extern u32 killer_init_event[];
+extern u32 killer_dead_event[];
+extern u32 sambo_init_event[];
+extern u32 sambo_move_event[];
+extern u32 sambo_find_event[];
+extern u32 sambo_lost_event[];
+extern u32 sambo_return_event[];
+extern u32 sinnosuke_init_event[];
+extern u32 sinnosuke_move_event[];
+extern u32 sinnosuke_find_event[];
+extern u32 sinnosuke_lost_event[];
+extern u32 sinnosuke_return_event[];
+extern u32 sinemon_init_event[];
+extern u32 sinemon_move_event[];
+extern u32 sinemon_find_event[];
+extern u32 sinemon_lost_event[];
+extern u32 sinemon_return_event[];
+extern u32 togedaruma_init_event[];
+extern u32 togedaruma_move_event[];
+extern u32 togedaruma_find_event[];
+extern u32 togedaruma_lost_event[];
+extern u32 togedaruma_return_event[];
+extern u32 barriern_init_event[];
+extern u32 barriern_move_event[];
+extern u32 barriern_dead_event[];
+extern u32 barriern_find_event[];
+extern u32 barriern_lost_event[];
+extern u32 barriern_return_event[];
+extern u32 barriern_blow_event[];
+extern u32 barriern2_move_event[];
+extern u32 piders_init_event[];
+extern u32 piders_move_event[];
+extern u32 piders_find_event[];
+extern u32 piders_blow_event[];
+extern u32 pakkun_init_event[];
+extern u32 pakkun_move_event[];
+extern u32 pakkun_find_event[];
+extern u32 pakkun_return_event[];
+extern u32 dokugassun_init_event[];
+extern u32 dokugassun_move_event[];
+extern u32 dokugassun_find_event[];
+extern u32 dokugassun_lost_event[];
+extern u32 dokugassun_return_event[];
+extern u32 basabasa_init_event[];
+extern u32 basabasa_move_event[];
+extern u32 basabasa_dead_event[];
+extern u32 basabasa_find_event[];
+extern u32 basabasa_lost_event[];
+extern u32 basabasa_return_event[];
+extern u32 basabasa2_init_event[];
+extern u32 basabasa2_move_event[];
+extern u32 basabasa2_dead_event[];
+extern u32 basabasa2_find_event[];
+extern u32 basabasa2_lost_event[];
+extern u32 basabasa2_return_event[];
+extern u32 teresa_init_event[];
+extern u32 teresa_move_event[];
+extern u32 teresa_dead_event[];
+extern u32 teresa_find_event[];
+extern u32 teresa_lost_event[];
+extern u32 teresa_return_event[];
+extern u32 pansy_init_event[];
+extern u32 pansy_move_event[];
+extern u32 pansy_find_event[];
+extern u32 pansy_lost_event[];
+extern u32 pansy_return_event[];
+extern u32 twinkling_pansy_init_event[];
+extern u32 twinkling_pansy_move_event[];
+extern u32 twinkling_pansy_find_event[];
+extern u32 twinkling_pansy_lost_event[];
+extern u32 twinkling_pansy_return_event[];
+extern u32 bubble_init_event[];
+extern u32 bubble_move_event[];
+extern u32 bubble_find_event[];
+extern u32 bubble_lost_event[];
+extern u32 bubble_return_event[];
+extern u32 hbom_init_event[];
+extern u32 hbom_move_event[];
+extern u32 hbom_find_event[];
+extern u32 hbom_lost_event[];
+extern u32 hbom_return_event[];
+extern u32 mahoon_init_event[];
+extern u32 mahoon_move_event[];
+extern u32 mahoon_dead_event[];
+extern u32 mahoon_find_event[];
+extern u32 mahoon_lost_event[];
+extern u32 mahoon_return_event[];
+extern u32 zakowiz_init_event[];
+extern u32 zakowiz_move_event[];
+extern u32 zakowiz_dead_event[];
+extern u32 zakowiz_find_event[];
+extern u32 zakowiz_lost_event[];
+extern u32 zakowiz_return_event[];
+extern u32 zakowiz_blow_event[];
+extern u32 hannya_init_event[];
+extern u32 hannya_move_event[];
+extern u32 hannya_find_event[];
+extern u32 hannya_lost_event[];
+extern u32 hannya_return_event[];
+extern u32 kamec_init_event[];
+extern u32 kamec_move_event[];
+extern u32 kamec_dead_event[];
+extern u32 kamec_find_event[];
+extern u32 kamec_lost_event[];
+extern u32 kamec_return_event[];
+extern u32 kamec_blow_event[];
+extern u32 kamec2_init_event[];
+extern u32 kamec2_move_event[];
+extern u32 kamec2_dead_event[];
+extern u32 kamec2_find_event[];
+extern u32 kamec2_lost_event[];
+extern u32 kamec2_return_event[];
+extern u32 kamec2_blow_event[];
+extern u32 hbross_init_event[];
+extern u32 hbross_move_event[];
+extern u32 hbross_dead_event[];
+extern u32 hbross_find_event[];
+extern u32 hbross_lost_event[];
+extern u32 hbross_return_event[];
+extern u32 hbross_blow_event[];
+extern u32 wanwan_init_event[];
+extern u32 wanwan_move_event[];
+extern u32 wanwan_find_event[];
+extern u32 togenoko_init_event[];
+extern u32 togenoko_move_event[];
+extern u32 togenoko_find_event[];
+extern u32 togenoko_lost_event[];
+extern u32 togenoko_return_event[];
+extern u32 enemy_2d_common_dead_event[];
+extern u32 kuriboo2D_init_event[];
+extern u32 kuriboo2D_move_event[];
+extern u32 kuriboo2D_find_event[];
+extern u32 zako2D_init_event[];
+extern u32 zako2D_move_event[];
+extern u32 zako2D_find_event[];
+extern u32 dokan2D_init_event[];
+extern u32 dokan2D_regl_event[];
+extern u32 fall2D_init_event[];
+extern u32 fall2D_regl_event[];
+extern u32 gesso2D_init_event[];
+extern u32 gesso2D_move_event[];
+extern u32 zakoM2D_init_event[];
+extern u32 zakoM2D_move_event[];
+extern u32 zakoM2D_dead_event[];
+extern u32 unk_evt_8034bdb4[];
+extern u32 npc_urouro_init_event[];
+extern u32 npc_urouro_move_event[];
+
+NpcAiTypeTableRecord npc_ai_type_table[57] = {
+    { str_000001c4_sdata2, 0x00000000, NULL, NULL, NULL, NULL, NULL, NULL, NULL }, /* 00 */
+    { str_00003844_rodata, 0x00000000, npc_init_evt, NULL, NULL, NULL, NULL, NULL, NULL }, /* 01 */
+    { str_00003854_rodata, 0x40000600, NULL, NULL, NULL, NULL, NULL, NULL, NULL }, /* 02 */
+    { str_00003870_rodata, 0x00000000, testenemynpc_init_event, unk_evt_8033f9b0, enemy_common_dead_event, NULL, NULL, NULL, enemy_common_blow_event }, /* 03 */
+    { str_00002554_rodata, 0x00000000, kuriboo_init_event, kuriboo_move_event, enemy_common_dead_event, kuriboo_find_event, kuriboo_lost_event, kuriboo_return_event, enemy_common_blow_event }, /* 04 */
+    { str_00002598_rodata, 0x00000000, kuriboo_init_event, kuriboo_move_event, enemy_common_dead_event, kuriboo_find_event, kuriboo_lost_event, kuriboo_return_event, enemy_common_blow_event }, /* 05 */
+    { str_000025a4_rodata, 0x00000000, patakuri_init_event, patakuri_move_event, enemy_common_dead_event, patakuri_find_event, patakuri_lost_event, patakuri_return_event, enemy_common_blow_event }, /* 06 */
+    { str_000000ac_rodata, 0x00000000, nokonoko_init_event, nokonoko_move_event, enemy_common_dead_event, nokonoko_find_event, nokonoko_lost_event, nokonoko_return_event, enemy_common_blow_event }, /* 07 */
+    { str_00002a60_rodata, 0x00000000, patapata_init_event, patapata_move_event, enemy_common_dead_event, patapata_find_event, patapata_lost_event, patapata_return_event, enemy_common_blow_event }, /* 08 */
+    { str_00002668_rodata, 0x00000000, met_init_event, met_move_event, enemy_common_dead_event, met_find_event, met_lost_event, met_return_event, enemy_common_blow_event }, /* 09 */
+    { str_00003888_rodata, 0x00000000, met_init_event_ceil, met_move_event, enemy_common_dead_event, met_find_event, met_lost_event, met_return_event, enemy_common_blow_event }, /* 0A */
+    { str_000026d8_rodata, 0x00000000, togemet_init_event, met_move_event, enemy_common_dead_event, met_find_event, met_lost_event, met_return_event, enemy_common_blow_event }, /* 0B */
+    { str_00003894_rodata, 0x00000000, togemet_init_event_ceil, met_move_event, enemy_common_dead_event, met_find_event, met_lost_event, met_return_event, enemy_common_blow_event }, /* 0C */
+    { str_00002748_rodata, 0x00000000, patamet_init_event, patamet_move_event, enemy_common_dead_event, patamet_find_event, patamet_lost_event, patamet_return_event, enemy_common_blow_event }, /* 0D */
+    { str_000038a4_rodata, 0x00000000, honenoko2_init_event, honenoko2_move_event, enemy_common_dead_event, honenoko2_find_event, honenoko2_lost_event, honenoko2_return_event, enemy_common_blow_event }, /* 0E */
+    { str_000038b4_rodata, 0x00000000, karon_init_event, karon_move_event, karon_dead_event, karon_find_event, karon_lost_event, karon_return_event, karon_blow_event }, /* 0F */
+    { str_00002b14_rodata, 0x00000000, chorobon_init_event, chorobon_move_event, enemy_common_dead_event, chorobon_find_event, chorobon_lost_event, chorobon_return_event, enemy_common_blow_event }, /* 10 */
+    { str_00002bc8_rodata, 0x00000000, NULL, NULL, enemy_common_dead_event, NULL, NULL, NULL, NULL }, /* 11 */
+    { str_00002cec_rodata, 0x00000000, killer_cannon_init_event, killer_cannon_move_event, enemy_common_dead_event, NULL, NULL, NULL, enemy_common_blow_event }, /* 12 */
+    { str_00002d2c_rodata, 0x00000000, killer_init_event, NULL, killer_dead_event, NULL, NULL, NULL, enemy_common_blow_event }, /* 13 */
+    { str_000027dc_rodata, 0x00000000, sambo_init_event, sambo_move_event, enemy_common_dead_event, sambo_find_event, sambo_lost_event, sambo_return_event, enemy_common_blow_event }, /* 14 */
+    { str_00002910_rodata, 0x00000000, sinnosuke_init_event, sinnosuke_move_event, enemy_common_dead_event, sinnosuke_find_event, sinnosuke_lost_event, sinnosuke_return_event, enemy_common_blow_event }, /* 15 */
+    { str_00002850_rodata, 0x00000000, sinemon_init_event, sinemon_move_event, enemy_common_dead_event, sinemon_find_event, sinemon_lost_event, sinemon_return_event, enemy_common_blow_event }, /* 16 */
+    { str_00002db0_rodata, 0x00000000, togedaruma_init_event, togedaruma_move_event, enemy_common_dead_event, togedaruma_find_event, togedaruma_lost_event, togedaruma_return_event, enemy_common_blow_event }, /* 17 */
+    { str_000038c4_rodata, 0x00000000, kuriboo_init_event, kuriboo_move_event, enemy_common_dead_event, kuriboo_find_event, kuriboo_lost_event, kuriboo_return_event, enemy_common_blow_event }, /* 18 */
+    { str_00002f6c_rodata, 0x00000000, barriern_init_event, barriern_move_event, barriern_dead_event, barriern_find_event, barriern_lost_event, barriern_return_event, barriern_blow_event }, /* 19 */
+    { str_00002f98_rodata, 0x00000000, barriern_init_event, barriern2_move_event, barriern_dead_event, barriern_find_event, barriern_lost_event, barriern_return_event, barriern_blow_event }, /* 1A */
+    { str_00002f14_rodata, 0x00000000, piders_init_event, piders_move_event, enemy_common_dead_event, piders_find_event, NULL, NULL, piders_blow_event }, /* 1B */
+    { str_00002e1c_rodata, 0x00000000, pakkun_init_event, pakkun_move_event, enemy_common_dead_event, pakkun_find_event, NULL, pakkun_return_event, enemy_common_blow_event }, /* 1C */
+    { str_00002ee0_rodata, 0x00000000, dokugassun_init_event, dokugassun_move_event, enemy_common_dead_event, dokugassun_find_event, dokugassun_lost_event, dokugassun_return_event, enemy_common_blow_event }, /* 1D */
+    { str_00002fec_rodata, 0x00000000, kuriboo_init_event, kuriboo_move_event, enemy_common_dead_event, kuriboo_find_event, kuriboo_lost_event, kuriboo_return_event, enemy_common_blow_event }, /* 1E */
+    { str_000038d0_rodata, 0x00000000, basabasa_init_event, basabasa_move_event, basabasa_dead_event, basabasa_find_event, basabasa_lost_event, basabasa_return_event, enemy_common_blow_event }, /* 1F */
+    { str_000038e4_rodata, 0x00000000, basabasa2_init_event, basabasa2_move_event, basabasa2_dead_event, basabasa2_find_event, basabasa2_lost_event, basabasa2_return_event, enemy_common_blow_event }, /* 20 */
+    { str_00001bd0_rodata, 0x00000000, teresa_init_event, teresa_move_event, teresa_dead_event, teresa_find_event, teresa_lost_event, teresa_return_event, enemy_common_blow_event }, /* 21 */
+    { str_00002bec_rodata, 0x00000000, pansy_init_event, pansy_move_event, enemy_common_dead_event, pansy_find_event, pansy_lost_event, pansy_return_event, enemy_common_blow_event }, /* 22 */
+    { str_00002c74_rodata, 0x00000000, twinkling_pansy_init_event, twinkling_pansy_move_event, enemy_common_dead_event, twinkling_pansy_find_event, twinkling_pansy_lost_event, twinkling_pansy_return_event, enemy_common_blow_event }, /* 23 */
+    { str_00003450_rodata, 0x00000000, bubble_init_event, bubble_move_event, enemy_common_dead_event, bubble_find_event, bubble_lost_event, bubble_return_event, enemy_common_blow_event }, /* 24 */
+    { str_0000347c_rodata, 0x00000000, hbom_init_event, hbom_move_event, enemy_common_dead_event, hbom_find_event, hbom_lost_event, hbom_return_event, enemy_common_blow_event }, /* 25 */
+    { str_00003314_rodata, 0x00000000, mahoon_init_event, mahoon_move_event, mahoon_dead_event, mahoon_find_event, mahoon_lost_event, mahoon_return_event, enemy_common_blow_event }, /* 26 */
+    { str_000038f8_rodata, 0x00000000, zakowiz_init_event, zakowiz_move_event, zakowiz_dead_event, zakowiz_find_event, zakowiz_lost_event, zakowiz_return_event, zakowiz_blow_event }, /* 27 */
+    { str_00003508_rodata, 0x00000000, hannya_init_event, hannya_move_event, enemy_common_dead_event, hannya_find_event, hannya_lost_event, hannya_return_event, enemy_common_blow_event }, /* 28 */
+    { str_0000390c_rodata, 0x00000000, kamec_init_event, kamec_move_event, kamec_dead_event, kamec_find_event, kamec_lost_event, kamec_return_event, kamec_blow_event }, /* 29 */
+    { str_0000359c_rodata, 0x00000000, kamec2_init_event, kamec2_move_event, kamec2_dead_event, kamec2_find_event, kamec2_lost_event, kamec2_return_event, kamec2_blow_event }, /* 2A */
+    { str_00003298_rodata, 0x00000000, hbross_init_event, hbross_move_event, hbross_dead_event, hbross_find_event, hbross_lost_event, hbross_return_event, hbross_blow_event }, /* 2B */
+    { str_0000340c_rodata, 0x00000000, wanwan_init_event, wanwan_move_event, enemy_common_dead_event, wanwan_find_event, NULL, NULL, enemy_common_blow_event }, /* 2C */
+    { str_000022fc_rodata, 0x00000000, togenoko_init_event, togenoko_move_event, enemy_common_dead_event, togenoko_find_event, togenoko_lost_event, togenoko_return_event, enemy_common_blow_event }, /* 2D */
+    { str_00003920_rodata, 0x08000000, testenemynpc_init_event, unk_evt_8033f9b0, enemy_2d_common_dead_event, NULL, NULL, NULL, NULL }, /* 2E */
+    { str_00003934_rodata, 0x08000000, kuriboo2D_init_event, kuriboo2D_move_event, enemy_2d_common_dead_event, kuriboo2D_find_event, NULL, NULL, NULL }, /* 2F */
+    { str_00003940_rodata, 0x08000000, zako2D_init_event, zako2D_move_event, enemy_2d_common_dead_event, zako2D_find_event, NULL, NULL, NULL }, /* 30 */
+    { str_0000394c_rodata, 0x08000000, zako2D_init_event, zako2D_move_event, enemy_2d_common_dead_event, zako2D_find_event, NULL, NULL, NULL }, /* 31 */
+    { str_0000395c_rodata, 0x08000000, dokan2D_init_event, dokan2D_regl_event, NULL, NULL, NULL, NULL, NULL }, /* 32 */
+    { str_00003974_rodata, 0x08000000, zako2D_init_event, zako2D_move_event, enemy_2d_common_dead_event, zako2D_find_event, NULL, NULL, NULL }, /* 33 */
+    { str_00003988_rodata, 0x08000000, fall2D_init_event, fall2D_regl_event, NULL, NULL, NULL, NULL, NULL }, /* 34 */
+    { str_000030b0_rodata, 0x08000000, gesso2D_init_event, gesso2D_move_event, enemy_2d_common_dead_event, NULL, NULL, NULL, NULL }, /* 35 */
+    { str_000039a0_rodata, 0x08000000, zakoM2D_init_event, zakoM2D_move_event, zakoM2D_dead_event, unk_evt_8034bdb4, NULL, NULL, NULL }, /* 36 */
+    { str_000039b4_rodata, 0x00000000, npc_urouro_init_event, npc_urouro_move_event, NULL, NULL, NULL, NULL, NULL }, /* 37 */
+    { NULL, 0x00000000, NULL, NULL, NULL, NULL, NULL, NULL, NULL }, /* 38 */
+};
 
 typedef struct NpcTerritoryTypeRecord {
     const char* name;

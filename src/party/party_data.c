@@ -176,7 +176,6 @@ __declspec(section ".rodata") const char str_PYS_W_2_802cb75c[] = "PYS_W_2";
 
 __declspec(section ".rodata") const char str_PYS_R_2_802cb764[] = "PYS_R_2";
 
-__declspec(section ".rodata") const u8 gap_04_802CB76C_rodata[4] = { 0x00, 0x00, 0x00, 0x00 };
 
 __declspec(section ".sdata2") const char str_c_pkr_804213e0[] = "c_pkr";
 
@@ -282,7 +281,6 @@ __declspec(section ".sdata2") const char str_W_11_804214ec[] = "W_11";
 
 __declspec(section ".sdata2") const char str_R_11_804214f4[] = "R_11";
 
-__declspec(section ".sdata2") const u8 gap_09_804214F9_sdata2[7] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
 extern void kuribo_init(void);
 extern void partyMoveWalk(void);
@@ -394,5 +392,3 @@ __declspec(section ".data") const char* yoshiDotPoseTbl[7][15] = {
     { str_Z_10_804214cc, str_Z_10_804214cc, str_W_10_804214d4, str_R_10_804214dc, str_Z_10_804214cc, str_Z_10_804214cc, str_Z_10_804214cc, str_Z_10_804214cc, str_Z_10_804214cc, str_Z_10_804214cc, str_Z_10_804214cc, str_Z_10_804214cc, str_Z_10_804214cc, str_W_10_804214d4, str_R_10_804214dc },
     { str_Z_11_804214e4, str_Z_11_804214e4, str_W_11_804214ec, str_R_11_804214f4, str_Z_11_804214e4, str_Z_11_804214e4, str_Z_11_804214e4, str_Z_11_804214e4, str_Z_11_804214e4, str_Z_11_804214e4, str_Z_11_804214e4, str_Z_11_804214e4, str_Z_11_804214e4, str_W_11_804214ec, str_R_11_804214f4 },
 };
-
-__declspec(section ".data") const u32 gap_05_80314F3C_data = 0;

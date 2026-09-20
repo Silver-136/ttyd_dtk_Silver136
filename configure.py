@@ -203,6 +203,40 @@ cflags_runtime = [
     "-inline auto",
 ]
 
+# MetroTRK library flags (GC/1.3 reference configuration)
+cflags_trk = [
+    "-nodefaults",
+    "-proc gekko",
+    "-align powerpc",
+    "-enum int",
+    "-fp hardware",
+    "-Cpp_exceptions off",
+    "-O4,p",
+    "-inline auto",
+    '-pragma "cats off"',
+    '-pragma "warn_notinlined off"',
+    "-maxerrors 1",
+    "-nosyspath",
+    "-RTTI off",
+    "-fp_contract on",
+    "-str reuse",
+    "-i include",
+    "-i extern/musyx/include",
+    f"-i build/{config.version}/include",
+    "-multibyte",
+    f"-DVERSION={version_num}",
+    "-DMUSY_TARGET=MUSY_TARGET_DOLPHIN",
+    "-DNDEBUG=1",
+    "-use_lmw_stmw on",
+    "-str reuse,readonly",
+    "-common off",
+    "-sdata 0",
+    "-sdata2 0",
+    "-inline auto,deferred",
+    "-enum min",
+    "-sdatathreshold 0",
+]
+
 # Game-specific flags
 cflags_static = [
     *cflags_base,
@@ -423,12 +457,34 @@ config.warn_missing_config = False
 config.warn_missing_source = False
 config.libs = [
     {
+        "lib": "TRK_MINNOW_DOLPHIN",
+        "mw_version": "GC/1.3",
+        "cflags": cflags_trk,
+        "host": False,
+        "objects": [
+            Object(NonMatching, "TRK_MINNOW_DOLPHIN/mem_TRK.c"),
+            Object(NonMatching, "TRK_MINNOW_DOLPHIN/__exception.s"),
+            Object(NonMatching, "TRK_MINNOW_DOLPHIN/dolphin_trk.c"),
+        ],
+    },
+    {
         "lib": "Runtime.PPCEABI.H",
         "mw_version": config.linker_version,
         "cflags": cflags_runtime,
         "host": False,
         "objects": [
+            Object(NonMatching, "Runtime.PPCEABI.H/__mem.c"),
             Object(NonMatching, "Runtime.PPCEABI.H/global_destructor_chain.c"),
+        ],
+    },
+    {
+        "lib": "os",
+        "mw_version": "GC/1.2.5n",
+        "cflags": [*cflags_base, "-fp_contract off"],
+        "host": False,
+        "objects": [
+            Object(NonMatching, "os/__start.c"),
+            Object(NonMatching, "os/__ppc_eabi_init.cpp"),
         ],
     },
     {

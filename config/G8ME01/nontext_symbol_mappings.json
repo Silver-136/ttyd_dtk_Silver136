@@ -3,7 +3,7 @@
   "component": "main.dol",
   "source_audit_sha256": "84d3d72a8a69dbaf066a8f99104ace53a7891f659665ab72cc3eb0f7dd720c40",
   "reverification_sha256": "3b33f3320f7f77b8613e6b1d6608161cfce8f6db9134574fd7961625eb7c8ea2",
-  "mapping_count": 1805,
+  "mapping_count": 1820,
   "units": {
     "main/action/ac_crane_timing": {
       "double_to_int_802fe690": "@136",
@@ -140,6 +140,10 @@
     },
     "main/battle/battle_icon": {
       "double_to_int_802fa880": "@127"
+    },
+    "main/battle/battle_mario": {
+      "double_to_int_802ef630": "@135",
+      "str_SFX_BTL_JUMP_TATUMAK_802ef638": "@226"
     },
     "main/battle/battle_menu_disp": {
       "str_SFX_BTL_SYS_CAUTION__802ef7a4": "str_SFX_BTL_SYS_CAUTION_802ef7a4",
@@ -1277,14 +1281,14 @@
       "Normals$473": "localNormals$9"
     },
     "main/driver/hitdrv": {
-      "double_to_int_802bf810": "@1649"
+      "double_to_int_802bf810": "@1632"
     },
     "main/driver/icondrv": {
-      "double_to_int_802bf848": "@609",
-      "double_to_int_mask_802bf850": "@797",
+      "double_to_int_802bf848": "@583",
+      "double_to_int_mask_802bf850": "@780",
       "dummy$651": "dummy_651",
-      "str_PCTs_icon_bin_802bf864": "@1284",
-      "str_PCTs_icon_tpl_802bf858": "@1283"
+      "str_PCTs_icon_bin_802bf864": "@1232",
+      "str_PCTs_icon_tpl_802bf858": "@1231"
     },
     "main/driver/imgdrv": {
       "double_to_int_mask_802c2aa8": "@339"
@@ -1296,7 +1300,7 @@
       "float_0_804201b8": "@1117"
     },
     "main/driver/shadowdrv": {
-      "double_to_int_mask_802bfe60": "@484"
+      "double_to_int_mask_802bfe60": "@462"
     },
     "main/effect/eff_bomb": {
       "double_to_int_802f9ab0": "@49",
@@ -1613,7 +1617,8 @@
       "gap_07_8041DFCC_sdata": "all_juyoitem_lecture_padding"
     },
     "main/event/evt_movefloor": {
-      "float_0_80426584": "@289"
+      "double_to_int_802fc308": "@188",
+      "double_to_int_mask_802fc310": "@206"
     },
     "main/event/evt_party": {
       "double_to_int_802e7c00": "@722"
@@ -1642,10 +1647,10 @@
       "float_1_8041fa30": "@944"
     },
     "main/manager/evtmgr_cmd": {
-      "float_0_8041fa20": "@1628",
-      "float_0p00097656_8041fa1c": "@1627",
-      "float_1024_8041fa18": "@1626",
-      "float_1_8041fa24": "@1674"
+      "float_0_8041fa20": "@1651",
+      "float_0p00097656_8041fa1c": "@1650",
+      "float_1024_8041fa18": "@1649",
+      "float_1_8041fa24": "@1697"
     },
     "main/manager/winmgr": {
       "vec3_803003a0": "@663",
@@ -2085,6 +2090,30 @@
       "str_OS_ERROR_PROGRAM_80303070": "@119",
       "str_SRR0_0xPCT08x_SRR1_0_803030ec": "@123",
       "str_rPCT_2d_0xPCT08x_rPC_803030a8": "@121"
+    },
+    "main/driver/camdrv": {
+      "vec3_802bf5d8": "@28",
+      "vec3_802bf5e4": "@30",
+      "vec3_802bf5f0": "@32",
+      "vec3_802bf5fc": "@34"
+    },
+    "main/unit/party/unit_party_nokotarou": {
+      "double_to_int_802f90b0": "@70"
+    },
+    "main/unit/party/unit_party_chuchurina": {
+      "double_to_int_802f81d8": "@188"
+    },
+    "main/unit/party/unit_party_sanders": {
+      "double_to_int_802f84c8": "@50"
+    },
+    "main/unit/party/unit_party_clauda": {
+      "double_to_int_802f77d0": "@49"
+    },
+    "main/battle/battle_seq_end": {
+      "float_deg2rad_80427184": "@772",
+      "float_16_80427188": "@773",
+      "float_20_8042718c": "@774",
+      "float_2_80427190": "@775"
     }
   }
 }

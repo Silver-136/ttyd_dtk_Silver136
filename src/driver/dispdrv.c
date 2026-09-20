@@ -100,20 +100,25 @@ void dispSort(void) {
 }
 
 void dispDraw(s32 cameraId) {
-    s32 offset;
     s32 i;
     DispWork* work;
 
-    for (offset = 0, i = 0; i < entry_n; offset += 4, i++) {
-        work = *(DispWork**)((s32)pSortWork + offset);
+    for (i = 0; i < entry_n; i++) {
+        work = pSortWork[i];
 
         if (work->cameraId == cameraId) {
             GXSetColorUpdate(1);
 
-            if ((cameraId >= 4) && (cameraId < 8) && (cameraId != 6)) {
-                GXSetAlphaUpdate(0);
-            } else {
-                GXSetAlphaUpdate(1);
+            switch (cameraId) {
+                case 4:
+                case 5:
+                case 7:
+                    GXSetAlphaUpdate(0);
+                    break;
+                default:
+                case 6:
+                    GXSetAlphaUpdate(1);
+                    break;
             }
 
             GXSetZScaleOffset(float_1_8041f770, float_0_8041f764);
@@ -126,14 +131,14 @@ void dispDraw(s32 cameraId) {
                     GXSetZMode(1, 3, 1);
                     break;
 
-                case 1:
+                case 3:
                     GXSetBlendMode(0, 1, 0, 0);
                     GXSetZCompLoc(1);
                     GXSetAlphaCompare(7, 0, 0, 7, 0);
                     GXSetZMode(0, 3, 0);
                     break;
 
-                case 2:
+                case 1:
                     GXSetBlendMode(0, 1, 0, 0);
                     GXSetZCompLoc(0);
                     GXSetAlphaCompare(6, 0x80, 1, 0, 0);
@@ -147,20 +152,14 @@ void dispDraw(s32 cameraId) {
                     GXSetZMode(0, 3, 0);
                     break;
 
-                case 3:
+                case 2:
+                case 5:
+                case 9:
+                case 10:
                     GXSetBlendMode(1, 4, 5, 0);
                     GXSetZCompLoc(1);
                     GXSetAlphaCompare(7, 0, 0, 7, 0);
                     GXSetZMode(1, 3, 0);
-                    break;
-
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                case 10:
-                default:
                     break;
             }
 

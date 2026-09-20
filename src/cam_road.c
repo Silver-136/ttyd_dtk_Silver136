@@ -585,6 +585,8 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
     const char* curveRodata = vec3_802bf540;
     f32* point = (f32*)pos;
     CurveResult* out = (CurveResult*)result;
+    f32* branchVertices;
+    f32* branchNormals;
     f32* vertices;
     f32* normals;
     f32* startNormal;
@@ -598,13 +600,21 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
     s32 end;
     s32 roadMode;
     s32 typeFlag;
+    typedef struct CurveStackCluster {
+        f32 centerX;
+        f32 best;
+        volatile f32 endY;
+        volatile f32 startY;
+    } CurveStackCluster;
+
     f32 limitA;
     f32 limitB;
-    volatile f32 yBounds[2];
-    f32 best = dat_8041f688;
+    CurveStackCluster stackCluster;
 
-#define endY   yBounds[0]
-#define startY yBounds[1]
+#define centerX stackCluster.centerX
+#define best    stackCluster.best
+#define endY    stackCluster.endY
+#define startY  stackCluster.startY
 
 #define CC_SQRT(dst_, sq_)                                                        \
     do {                                                                          \
@@ -658,6 +668,8 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
         (dst_) = cc_result;                                                       \
     } while (0)
 
+    best = dat_8041f688;
+
     if (type == 0) {
         s32 rawCount = *(s32*)((s32)road + 0xA4);
         s32 baseIndex = *(s32*)((s32)road + 0xA0);
@@ -665,13 +677,13 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
 
         count = (rawCount + (s32)((u32)rawCount >> 31)) >> 1;
         typeFlag = 0;
-        start = *(s32*)((s32)road + 0x40);
-        end = *(s32*)((s32)road + 0x44);
         limitB = *(f32*)((s32)road + 0x48);
         limitA = *(f32*)((s32)road + 0x4C);
+        start = *(s32*)((s32)road + 0x40);
+        end = *(s32*)((s32)road + 0x44);
         roadMode = *(s32*)((s32)road + 0x84);
-        vertices = geomBase + baseIndex * 3;
-        normals = geomBase + (baseIndex + count) * 3;
+        branchVertices = geomBase + baseIndex * 3;
+        branchNormals = geomBase + (baseIndex + count) * 3;
     } else {
         s32 rawCount = *(s32*)((s32)road + 0x64);
         s32 baseIndex = *(s32*)((s32)road + 0x60);
@@ -684,15 +696,17 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
         limitA = limitB;
         roadMode = 0;
         typeFlag = 1;
-        vertices = geomBase + baseIndex * 3;
-        normals = geomBase + (baseIndex + count) * 3;
+        branchVertices = geomBase + baseIndex * 3;
+        branchNormals = geomBase + (baseIndex + count) * 3;
     }
 
-    endY = normals[end * 3 + 1];
-    startY = normals[start * 3 + 1];
+    endY = branchNormals[end * 3 + 1];
+    startY = branchNormals[start * 3 + 1];
     if (__fabsf(endY - startY) < *(f64*)(curveRodata + 0x58)) {
         startY = endY;
     }
+    vertices = branchVertices;
+    normals = branchNormals;
     if (typeFlag) {
         roadMode = 0;
     }
@@ -734,7 +748,6 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
 
             if ((t0x != t1x) || (t0z != t1z)) {
                 f32 centerStep;
-                f32 centerX;
                 f32 centerZ;
                 f32 aX;
                 f32 aZ;
@@ -1097,12 +1110,14 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
 #undef CC_SQRT
 #undef startY
 #undef endY
+#undef best
+#undef centerX
 
     return found;
 }
 
 void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 checkWidth, void* out, void* prev) {
-    const char* rodata;
+    const char* volatile rodata;
     void* work0;
     void* road;
     void* foundRoad;
@@ -1212,9 +1227,11 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
         if (blockCount == 0) {
             f32 roadY = *(f32*)((s32)road + 0x8C);
 
-            if ((roadY <= param5) && (roadY > bestY)) {
-                bestY = roadY;
-                foundRoad = road;
+            if (!(roadY > param5)) {
+                if (roadY > bestY) {
+                    bestY = roadY;
+                    foundRoad = road;
+                }
             }
             continue;
         }

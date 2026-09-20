@@ -4,8 +4,8 @@
 
 void shadowInit(void);
 void shadowMain(void);
-void shadowEntry(double x, double y, double z, double size);
-s32 shadowEntryMode(double x, double y, double z, double size, u8 mode);
+void shadowEntry(f32 x, f32 y, f32 z, f32 size);
+s32 shadowEntryMode(f32 x, f32 y, f32 z, f32 size, u8 mode);
 void shadowSetType(s32 id, u8 type);
 void shadowSetSize(s32 id, f32 size);
 void shadowSetCamId(s32 id, s16 camId);

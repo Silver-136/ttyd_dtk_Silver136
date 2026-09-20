@@ -96,37 +96,36 @@ void DEMOInit(void* param_1) {
         rmode = rmodeobj;
     } else {
         tvFormat = VIGetTvFormat();
-        if (tvFormat == 2) rmode = GXMpal480IntDf;
-        else if (tvFormat < 2) {
-            if (tvFormat == 0) rmode = GXNtsc480IntDf;
-            else if (tvFormat >= 0) rmode = GXPal528IntDf;
-            else OSPanic(str_DEMOInit_c_802bfe68, 0x206, str_DEMOInit_invalid_TV__802bfe74);
-        } else if (tvFormat == 5) rmode = GXEurgb60Hz480IntDf;
-        else OSPanic(str_DEMOInit_c_802bfe68, 0x206, str_DEMOInit_invalid_TV__802bfe74);
+        switch (tvFormat) {
+            case 0: rmode = GXNtsc480IntDf; break;
+            case 1: rmode = GXPal528IntDf; break;
+            case 5: rmode = GXEurgb60Hz480IntDf; break;
+            case 2: rmode = GXMpal480IntDf; break;
+            default: OSPanic(str_DEMOInit_c_802bfe68, 0x206, str_DEMOInit_invalid_TV__802bfe74); break;
+        }
         GXAdjustForOverscan(rmode, rmodeobj, 0, 0x10);
         rmode = rmodeobj;
     }
     arena = (u32)OSGetArenaLo();
     OSGetArenaHi();
     {
-    GXRenderModeObj* mode = (GXRenderModeObj*)rmode;
     DemoFrameBuffer1 = (void*)((arena + 0x1F) & ~0x1F);
-    fbSize = (((*(u16*)((s32)mode + 4) + 0xF) & 0xFFF0) * *(u16*)((s32)mode + 8) * 2) + 0x1F;
-    DemoCurrentBuffer = (void*)(((u32)DemoFrameBuffer1 + fbSize) & ~0x1F);
-    DemoFrameBuffer2 = DemoCurrentBuffer;
-    OSSetArenaLo((void*)(((u32)DemoCurrentBuffer + fbSize) & ~0x1F));
+    fbSize = (((*(u16*)((s32)rmode + 4) + 0xF) & 0xFFF0) * *(u16*)((s32)rmode + 8) * 2) + 0x1F;
+    DemoFrameBuffer2 = (void*)(((u32)DemoFrameBuffer1 + fbSize) & ~0x1F);
+    DemoCurrentBuffer = DemoFrameBuffer2;
+    OSSetArenaLo((void*)(((u32)DemoFrameBuffer2 + fbSize) & ~0x1F));
     memInit();
     VIConfigure(rmode);
     DefaultFifo = __memAlloc(0, 0x64000);
     DefaultFifoObj = GXInit(DefaultFifo, 0x64000);
-    GXSetViewport(float_0_8041fa10, float_0_8041fa10, (f32)*(u16*)((s32)mode + 4), (f32)*(u16*)((s32)mode + 6), float_0_8041fa10, float_1_8041fa14);
-    GXSetScissor(0, 0, *(u16*)((s32)mode + 4), *(u16*)((s32)mode + 6));
-    yScale = GXSetDispCopyYScale(GXGetYScaleFactor(*(u16*)((s32)mode + 6), *(u16*)((s32)mode + 8)));
-    GXSetDispCopySrc(0, 0, *(u16*)((s32)mode + 4), *(u16*)((s32)mode + 6));
-    GXSetDispCopyDst(*(u16*)((s32)mode + 4), yScale);
-    GXSetCopyFilter(*(u8*)((s32)mode + 0x19), (void*)((s32)mode + 0x1A), 1, (void*)((s32)mode + 0x32));
-    if (*(u8*)((s32)mode + 0x19) == 0) GXSetPixelFmt(1, 0);
-    else GXSetPixelFmt(2, 0);
+    GXSetViewport(float_0_8041fa10, float_0_8041fa10, (f32)*(u16*)((s32)rmode + 4), (f32)*(u16*)((s32)rmode + 6), float_0_8041fa10, float_1_8041fa14);
+    GXSetScissor(0, 0, *(u16*)((s32)rmode + 4), *(u16*)((s32)rmode + 6));
+    yScale = GXSetDispCopyYScale(GXGetYScaleFactor(*(u16*)((s32)rmode + 6), *(u16*)((s32)rmode + 8)));
+    GXSetDispCopySrc(0, 0, *(u16*)((s32)rmode + 4), *(u16*)((s32)rmode + 6));
+    GXSetDispCopyDst(*(u16*)((s32)rmode + 4), yScale);
+    GXSetCopyFilter(*(u8*)((s32)rmode + 0x19), (void*)((s32)rmode + 0x1A), 1, (void*)((s32)rmode + 0x32));
+    if (*(u8*)((s32)rmode + 0x19)) GXSetPixelFmt(2, 0);
+    else GXSetPixelFmt(1, 0);
     color = unk_80429548;
     GXSetCopyClear(&color, 0xFFFFFF);
     GXCopyDisp(DemoCurrentBuffer, 1);
@@ -181,35 +180,34 @@ void DEMODoneRender(void) {
     extern void VISetBlack(s32);
     extern void __NoHangDoneRender(void);
 
-    if (GPHangWorkaround == 0) {
-        if (DemoStatEnable != 0) {
-            GXDrawDone();
-            DEMOUpdateStats(1);
-            DEMOPrintStats();
-            GXDrawDone();
-            DEMOUpdateStats(0);
-        }
-        GXSetZMode(1, 3, 1);
-        GXSetColorUpdate(1);
-        GXSetAlphaCompare(7, 0, 1, 7, 0);
-        GXSetAlphaUpdate(1);
-        GXCopyDisp(DemoCurrentBuffer, 1);
-        GXDrawDone();
-        VISetNextFrameBuffer(DemoCurrentBuffer);
-        if (DemoFirstFrame != 0) {
-            VISetBlack(0);
-            DemoFirstFrame = 0;
-        }
-        VIFlush();
-        VIWaitForRetrace();
-        if (DemoCurrentBuffer == DemoFrameBuffer1) {
-            DemoCurrentBuffer = DemoFrameBuffer2;
-        } else {
-            DemoCurrentBuffer = DemoFrameBuffer1;
-        }
-    } else {
+    if (GPHangWorkaround != 0) {
         __NoHangDoneRender();
+        return;
     }
+    if (DemoStatEnable != 0) {
+        GXDrawDone();
+        DEMOUpdateStats(1);
+        DEMOPrintStats();
+        GXDrawDone();
+        DEMOUpdateStats(0);
+    }
+    GXSetZMode(1, 3, 1);
+    GXSetColorUpdate(1);
+    GXSetAlphaCompare(7, 0, 1, 7, 0);
+    GXSetAlphaUpdate(1);
+    GXCopyDisp(DemoCurrentBuffer, 1);
+    GXDrawDone();
+    VISetNextFrameBuffer(DemoCurrentBuffer);
+    if (DemoFirstFrame != 0) {
+        VISetBlack(0);
+        DemoFirstFrame = 0;
+    }
+    VIFlush();
+    VIWaitForRetrace();
+    if (DemoCurrentBuffer == DemoFrameBuffer1)
+        DemoCurrentBuffer = DemoFrameBuffer2;
+    else
+        DemoCurrentBuffer = DemoFrameBuffer1;
 }
 
 void* DEMOGetRenderModeObj(void) {
@@ -341,7 +339,6 @@ void __NoHangDoneRender(void) {
     volatile u16* fifo16 = (volatile u16*)0xCC008000;
     volatile u32* fifo32 = (volatile u32*)0xCC008000;
     GXRenderModeObj fifoObj[2];
-    GXRenderModeObj* mode;
     void* oldMode;
     void* tempFifo;
     void* oldFifo;
@@ -350,8 +347,10 @@ void __NoHangDoneRender(void) {
     u16 token;
     u32 yScale;
     u32 color;
+    u32 copyA;
+    u32 copyB;
     s32 tvFormat;
-    u8 hung;
+    s32 hung;
 
     hung = 0;
     token = sysGetToken();
@@ -377,44 +376,43 @@ void __NoHangDoneRender(void) {
             GXSetCPUFifo(fifoObj);
             GXSetGPFifo(fifoObj);
             if (oldMode != 0) {
-                ((u32*)rmodeobj)[0] = ((u32*)oldMode)[0];
-                ((u32*)rmodeobj)[1] = ((u32*)oldMode)[1];
-                ((u32*)rmodeobj)[2] = ((u32*)oldMode)[2];
-                ((u32*)rmodeobj)[3] = ((u32*)oldMode)[3];
-                ((u32*)rmodeobj)[4] = ((u32*)oldMode)[4];
-                ((u32*)rmodeobj)[5] = ((u32*)oldMode)[5];
-                ((u32*)rmodeobj)[6] = ((u32*)oldMode)[6];
-                ((u32*)rmodeobj)[7] = ((u32*)oldMode)[7];
-                ((u32*)rmodeobj)[8] = ((u32*)oldMode)[8];
-                ((u32*)rmodeobj)[9] = ((u32*)oldMode)[9];
-                ((u32*)rmodeobj)[10] = ((u32*)oldMode)[10];
-                ((u32*)rmodeobj)[11] = ((u32*)oldMode)[11];
-                ((u32*)rmodeobj)[12] = ((u32*)oldMode)[12];
-                ((u32*)rmodeobj)[13] = ((u32*)oldMode)[13];
+                copyA = ((u32*)oldMode)[0]; copyB = ((u32*)oldMode)[1];
+                ((u32*)rmodeobj)[0] = copyA; ((u32*)rmodeobj)[1] = copyB;
+                copyA = ((u32*)oldMode)[2]; copyB = ((u32*)oldMode)[3];
+                ((u32*)rmodeobj)[2] = copyA; ((u32*)rmodeobj)[3] = copyB;
+                copyA = ((u32*)oldMode)[4]; copyB = ((u32*)oldMode)[5];
+                ((u32*)rmodeobj)[4] = copyA; ((u32*)rmodeobj)[5] = copyB;
+                copyA = ((u32*)oldMode)[6]; copyB = ((u32*)oldMode)[7];
+                ((u32*)rmodeobj)[6] = copyA; ((u32*)rmodeobj)[7] = copyB;
+                copyA = ((u32*)oldMode)[8]; copyB = ((u32*)oldMode)[9];
+                ((u32*)rmodeobj)[8] = copyA; ((u32*)rmodeobj)[9] = copyB;
+                copyA = ((u32*)oldMode)[10]; copyB = ((u32*)oldMode)[11];
+                ((u32*)rmodeobj)[10] = copyA; ((u32*)rmodeobj)[11] = copyB;
+                copyA = ((u32*)oldMode)[12]; copyB = ((u32*)oldMode)[13];
+                ((u32*)rmodeobj)[12] = copyA; ((u32*)rmodeobj)[13] = copyB;
                 ((u32*)rmodeobj)[14] = ((u32*)oldMode)[14];
                 rmode = rmodeobj;
             } else {
                 tvFormat = VIGetTvFormat();
-                if (tvFormat == 2) rmode = GXMpal480IntDf;
-                else if (tvFormat < 2) {
-                    if (tvFormat == 0) rmode = GXNtsc480IntDf;
-                    else if (tvFormat >= 0) rmode = GXPal528IntDf;
-                    else OSPanic(str_DEMOInit_c_802bfe68, 0x206, str_DEMOInit_invalid_TV__802bfe74);
-                } else if (tvFormat == 5) rmode = GXEurgb60Hz480IntDf;
-                else OSPanic(str_DEMOInit_c_802bfe68, 0x206, str_DEMOInit_invalid_TV__802bfe74);
+                switch (tvFormat) {
+                    case 0: rmode = GXNtsc480IntDf; break;
+                    case 1: rmode = GXPal528IntDf; break;
+                    case 5: rmode = GXEurgb60Hz480IntDf; break;
+                    case 2: rmode = GXMpal480IntDf; break;
+                    default: OSPanic(str_DEMOInit_c_802bfe68, 0x206, str_DEMOInit_invalid_TV__802bfe74); break;
+                }
                 GXAdjustForOverscan(rmode, rmodeobj, 0, 0x10);
                 rmode = rmodeobj;
             }
-            mode = (GXRenderModeObj*)rmode;
             DefaultFifoObj = GXInit(oldBase, oldSize);
-            GXSetViewport(float_0_8041fa10, float_0_8041fa10, (f32)*(u16*)((s32)mode + 4), (f32)*(u16*)((s32)mode + 6), float_0_8041fa10, float_1_8041fa14);
-            GXSetScissor(0, 0, *(u16*)((s32)mode + 4), *(u16*)((s32)mode + 6));
-            yScale = GXSetDispCopyYScale(GXGetYScaleFactor(*(u16*)((s32)mode + 6), *(u16*)((s32)mode + 8)));
-            GXSetDispCopySrc(0, 0, *(u16*)((s32)mode + 4), *(u16*)((s32)mode + 6));
-            GXSetDispCopyDst(*(u16*)((s32)mode + 4), yScale);
-            GXSetCopyFilter(*(u8*)((s32)mode + 0x19), (void*)((s32)mode + 0x1A), 1, (void*)((s32)mode + 0x32));
-            if (*(u8*)((s32)mode + 0x19) == 0) GXSetPixelFmt(1, 0);
-            else GXSetPixelFmt(2, 0);
+            GXSetViewport(float_0_8041fa10, float_0_8041fa10, (f32)*(u16*)((s32)rmode + 4), (f32)*(u16*)((s32)rmode + 6), float_0_8041fa10, float_1_8041fa14);
+            GXSetScissor(0, 0, *(u16*)((s32)rmode + 4), *(u16*)((s32)rmode + 6));
+            yScale = GXSetDispCopyYScale(GXGetYScaleFactor(*(u16*)((s32)rmode + 6), *(u16*)((s32)rmode + 8)));
+            GXSetDispCopySrc(0, 0, *(u16*)((s32)rmode + 4), *(u16*)((s32)rmode + 6));
+            GXSetDispCopyDst(*(u16*)((s32)rmode + 4), yScale);
+            GXSetCopyFilter(*(u8*)((s32)rmode + 0x19), (void*)((s32)rmode + 0x1A), 1, (void*)((s32)rmode + 0x32));
+            if (*(u8*)((s32)rmode + 0x19)) GXSetPixelFmt(2, 0);
+            else GXSetPixelFmt(1, 0);
             color = unk_80429548;
             GXSetCopyClear(&color, 0xFFFFFF);
             GXCopyDisp(DemoCurrentBuffer, 1);
@@ -444,52 +442,43 @@ void __NoHangDoneRender(void) {
 }
 
 void __DEMODiagnoseHang(void) {
-    extern void GXReadXfRasMetric(s32* xf, s32* ras, s32* xfiread, s32* xfwrite);
+    extern void GXReadXfRasMetric(u32* xf, u32* ras, u32* xfiread, u32* xfwrite);
     extern void GXGetGPStatus(u8* overhi, u8* underlow, u8* readIdle, u8* cmdIdle, u8* brkpt);
     extern s32 sprintf(char* s, const char* fmt, ...);
     extern char* strcat(char* dst, const char* src);
     extern char* strcpy(char* dst, const char* src);
-    char msg[4096];
-    char add[4112];
-    s32 xfTop0;
-    s32 rasTop0;
-    s32 xfBot0;
-    s32 rasBot0;
-    s32 xfTop1;
-    s32 rasTop1;
-    s32 xfBot1;
-    s32 rasBot1;
-    u8 overhi;
-    u8 cmdIdle;
-    u8 readIdle[2];
-    s32 sameXfTop;
-    s32 sameRasTop;
-    s32 diffRasBot;
-    s32 diffXfBot;
+    u32 xfTop0, xfBot0, suRdy0, r0Rdy0;
+    u32 xfTop1, xfBot1, suRdy1, r0Rdy1;
+    u32 xfTopD, xfBotD, suRdyD, r0RdyD;
+    u8 readIdle, cmdIdle, junk;
+    char fullmsg[4096];
+    char newmsg[4112];
 
-    GXReadXfRasMetric(&xfTop0, &rasTop0, &xfBot0, &rasBot0);
-    GXReadXfRasMetric(&xfTop1, &rasTop1, &xfBot1, &rasBot1);
-    diffRasBot = rasBot1 != rasBot0;
-    sameRasTop = rasTop1 == rasTop0;
-    sameXfTop = xfTop1 == xfTop0;
-    diffXfBot = xfBot1 != xfBot0;
-    GXGetGPStatus(&overhi, &overhi, readIdle, &cmdIdle, &overhi);
-    sprintf(msg, str_GP_status_PCTdPCTdPC_802bfea0, readIdle[0], cmdIdle, sameRasTop, sameXfTop, diffRasBot, diffXfBot);
-    if (sameXfTop == 0 && diffRasBot) {
-        sprintf(add, str_GP_hang_due_to_XF_st_802bfebc);
-        strcat(msg, add);
-    } else if (sameRasTop == 0 && sameXfTop != 0 && diffRasBot) {
-        sprintf(add, str_GP_hang_due_to_unter_802bfedc);
-        strcat(msg, add);
-    } else if (cmdIdle == 0 && sameRasTop != 0 && sameXfTop != 0 && diffRasBot) {
-        sprintf(add, str_GP_hang_due_to_illeg_802bff04);
-        strcat(msg, add);
-    } else if (readIdle[0] != 0 && cmdIdle != 0 && sameRasTop != 0 && sameXfTop != 0 && diffRasBot && diffXfBot) {
-        sprintf(add, str_GP_appears_to_be_not_802bff2c);
-        strcat(msg, add);
+    GXReadXfRasMetric(&xfBot0, &xfTop0, &r0Rdy0, &suRdy0);
+    GXReadXfRasMetric(&xfBot1, &xfTop1, &r0Rdy1, &suRdy1);
+
+    xfTopD = (xfTop1 - xfTop0) == 0;
+    xfBotD = (xfBot1 - xfBot0) == 0;
+    suRdyD = (suRdy1 - suRdy0) > 0;
+    r0RdyD = (r0Rdy1 - r0Rdy0) > 0;
+
+    GXGetGPStatus(&junk, &junk, &readIdle, &cmdIdle, &junk);
+    sprintf(fullmsg, str_GP_status_PCTdPCTdPC_802bfea0, readIdle, cmdIdle, xfTopD, xfBotD, suRdyD, r0RdyD);
+    if (!xfBotD && suRdyD) {
+        sprintf(newmsg, str_GP_hang_due_to_XF_st_802bfebc);
+        strcat(fullmsg, newmsg);
+    } else if (!xfTopD && xfBotD && suRdyD) {
+        sprintf(newmsg, str_GP_hang_due_to_unter_802bfedc);
+        strcat(fullmsg, newmsg);
+    } else if (!cmdIdle && xfTopD && xfBotD && suRdyD) {
+        sprintf(newmsg, str_GP_hang_due_to_illeg_802bff04);
+        strcat(fullmsg, newmsg);
+    } else if (readIdle && cmdIdle && xfTopD && xfBotD && suRdyD && r0RdyD) {
+        sprintf(newmsg, str_GP_appears_to_be_not_802bff2c);
+        strcat(fullmsg, newmsg);
     } else {
-        sprintf(add, str_GP_is_in_unknown_sta_802bff5c);
-        strcat(msg, add);
+        sprintf(newmsg, str_GP_is_in_unknown_sta_802bff5c);
+        strcat(fullmsg, newmsg);
     }
-    strcpy(__GXErrorMessage, add);
+    strcpy(__GXErrorMessage, newmsg);
 }

@@ -100,6 +100,7 @@ void lightMain(void) {
     Vec direction;
     Mtx view;
     Vec out;
+    Vec normalized;
     Vec paperPos;
     Vec booPos;
 
@@ -122,79 +123,65 @@ void lightMain(void) {
         + view[0][2] * direction.x
         + view[2][2] * direction.y;
 
-    PSVECNormalize(&out, &out);
+    normalized = out;
+    PSVECNormalize(&normalized, &normalized);
 
     paperPos = *(Vec*)((u8*)constants + 0x78);
-    paperPos.x = float_1p0486E06_8041f8c0 * out.x;
-    paperPos.y = float_1p0486E06_8041f8c0 * out.y;
-    paperPos.z = float_1p0486E06_8041f8c0 * out.z;
+    paperPos.x = float_1p0486E06_8041f8c0 * normalized.x;
+    paperPos.y = float_1p0486E06_8041f8c0 * normalized.y;
+    paperPos.z = float_1p0486E06_8041f8c0 * normalized.z;
     paperLight3D.position = paperPos;
 
     booPos = *(Vec*)((u8*)constants + 0x84);
     booLight.position = booPos;
 }
 
-int lightEntry(char* pName, int lightType, void* pos, void* rot, GXColor* color, int distanceAttenType, u32 flags, double spotAngle, double angleAtten) {
+int lightEntry(char* pName, int lightType, void* pos, void* rot, GXColor* color, int distanceAttenType, u32 flags, f32 spotAngle, f32 angleAtten) {
     extern s32 sprintf(char* buffer, const char* format, ...);
     extern void strcpy(char* dst, const char* src);
     extern const char str_PCTs_PCT04d_802bf930[];
-    extern Vec dat_802bf900[4];
+    extern const Vec dat_802bf900[4];
     LightWorkSet* set;
     LightEntry* entry;
     s32 i;
     s32 j;
+    s32 group;
     char nameBuf[264];
 
+    group = mapGetActiveGroup();
     set = work;
-    if (mapGetActiveGroup() == 1) {
+    if (group == 1) {
         set++;
     }
 
     entry = set->entries;
-    i = 0;
-    while (i < set->count) {
-        if ((entry->flags & LIGHT_ENABLED) != 0) {
-            if (strcmp(entry->name, pName) == 0) {
-                break;
-            }
+    for (i = 0; i < set->count; i++, entry++) {
+        if ((entry->flags & LIGHT_ENABLED) != 0 && strcmp(entry->name, pName) == 0) {
+            break;
         }
-        i++;
-        entry++;
     }
 
     if (i < 0x20) {
-        j = 0;
-        while (1) {
+        for (j = 0;; j++) {
             sprintf(nameBuf, str_PCTs_PCT04d_802bf930, pName, j);
             pName = nameBuf;
             entry = set->entries;
-            i = 0;
-            while (i < set->count) {
-                if ((entry->flags & LIGHT_ENABLED) != 0) {
-                    if (strcmp(entry->name, pName) == 0) {
-                        break;
-                    }
+            for (i = 0; i < set->count; i++, entry++) {
+                if ((entry->flags & LIGHT_ENABLED) != 0 && strcmp(entry->name, pName) == 0) {
+                    break;
                 }
-                i++;
-                entry++;
             }
             if (i >= 0x20) {
                 break;
             }
-            j++;
         }
     }
 
-    i = 0;
     entry = set->entries;
-    if (set->count > 0) {
-        do {
-            if ((entry->flags & LIGHT_ENABLED) == 0) {
-                break;
-            }
-            i++;
-            entry++;
-        } while (i < set->count);
+    for (i = 0; i < set->count; i++, entry++) {
+        if ((entry->flags & LIGHT_ENABLED) == 0) {
+            break;
+        }
     }
 
     memset(entry, 0, sizeof(LightEntry));
@@ -204,21 +191,26 @@ int lightEntry(char* pName, int lightType, void* pos, void* rot, GXColor* color,
     entry->rotation = *(Vec*)rot;
     entry->field_0x3C = *(Vec*)pos;
     entry->color = *color;
-    entry->spotAngle = (f32)spotAngle;
-    entry->attenAngle = (f32)angleAtten;
-    entry->attenDistCoef = dat_802bf900[distanceAttenType];
+    entry->spotAngle = spotAngle;
+    entry->attenAngle = angleAtten;
+    entry->attenDistCoef.x = dat_802bf900[distanceAttenType].x;
+    entry->attenDistCoef.y = dat_802bf900[distanceAttenType].y;
+    entry->attenDistCoef.z = dat_802bf900[distanceAttenType].z;
 
     entry->flags |= LIGHT_ENABLED;
-    if (lightType == 2) {
-        entry->flags |= LIGHT_SPOT;
-    } else if (lightType < 2) {
-        if (lightType == 0) {
+    switch (lightType) {
+        case 0:
             entry->flags |= LIGHT_AMBIENT;
-        } else if (lightType > -1) {
+            break;
+        case 1:
             entry->flags |= LIGHT_POINT;
-        }
-    } else if (lightType < 4) {
-        entry->flags |= LIGHT_DIRECTIONAL;
+            break;
+        case 2:
+            entry->flags |= LIGHT_SPOT;
+            break;
+        case 3:
+            entry->flags |= LIGHT_DIRECTIONAL;
+            break;
     }
 
     if ((flags & 2) != 0) {
@@ -281,20 +273,23 @@ void lightGetNearObj(void* pPos, LightEntry** pDst, int count, LightEntryFlags f
     LightWorkSet* set;
     LightWorkSet* countSet;
     LightEntry* entry;
-    LightSortEntry sortEntries[64];
+    LightSortEntry sortEntries[32];
     LightSortEntry* sort;
     s32 enabledCount;
     s32 num;
     s32 i;
+    s32 group;
     LightEntryFlags entryFlags;
 
+    group = mapGetActiveGroup();
     set = work;
-    if (mapGetActiveGroup() == 1) {
+    if (group == 1) {
         set++;
     }
 
+    group = mapGetActiveGroup();
     countSet = work;
-    if (mapGetActiveGroup() == 1) {
+    if (group == 1) {
         countSet++;
     }
 
@@ -306,10 +301,10 @@ void lightGetNearObj(void* pPos, LightEntry** pDst, int count, LightEntryFlags f
         }
     }
 
-    sort = sortEntries;
-    num = 0;
-    entry = set->entries;
     if (enabledCount > 8) {
+        entry = set->entries;
+        sort = sortEntries;
+        num = 0;
         for (i = 0; i < set->count; i++, entry++) {
             if ((entry->flags & LIGHT_ENABLED) != 0) {
                 sort->entry = entry;
@@ -320,6 +315,9 @@ void lightGetNearObj(void* pPos, LightEntry** pDst, int count, LightEntryFlags f
         }
         qqsort(sortEntries, num, sizeof(LightSortEntry), _sort);
     } else {
+        entry = set->entries;
+        sort = sortEntries;
+        num = 0;
         for (i = 0; i < set->count; i++, entry++) {
             if ((entry->flags & LIGHT_ENABLED) != 0) {
                 sort->entry = entry;
