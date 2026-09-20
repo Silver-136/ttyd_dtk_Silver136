@@ -3,7 +3,7 @@
   "component": "main.dol",
   "source_audit_sha256": "84d3d72a8a69dbaf066a8f99104ace53a7891f659665ab72cc3eb0f7dd720c40",
   "reverification_sha256": "3b33f3320f7f77b8613e6b1d6608161cfce8f6db9134574fd7961625eb7c8ea2",
-  "mapping_count": 1820,
+  "mapping_count": 1821,
   "units": {
     "main/action/ac_crane_timing": {
       "double_to_int_802fe690": "@136",
@@ -1643,14 +1643,14 @@
       "lbl_80427E54": "@153"
     },
     "main/manager/evtmgr": {
-      "float_0_8041fa34": "@965",
-      "float_1_8041fa30": "@944"
+      "float_0_8041fa34": "@978",
+      "float_1_8041fa30": "@955"
     },
     "main/manager/evtmgr_cmd": {
-      "float_0_8041fa20": "@1651",
-      "float_0p00097656_8041fa1c": "@1650",
-      "float_1024_8041fa18": "@1649",
-      "float_1_8041fa24": "@1697"
+      "float_0_8041fa20": "@1646",
+      "float_0p00097656_8041fa1c": "@1645",
+      "float_1024_8041fa18": "@1644",
+      "float_1_8041fa24": "@1692"
     },
     "main/manager/winmgr": {
       "vec3_803003a0": "@663",
@@ -2066,8 +2066,8 @@
     },
     "main/sdk/texPalette": {
       "double_to_int_mask_802c0140": "@38",
-      "str_invalid_version_numb_802c0158": "@74",
-      "str_texPalette_c_802c0148": "@73"
+      "str_invalid_version_numb_802c0158": "@70",
+      "str_texPalette_c_802c0148": "@69"
     },
     "main/sequence/seq_logo": {
       "double_to_int_802c3b38": "@363"
@@ -2114,6 +2114,9 @@
       "float_16_80427188": "@773",
       "float_20_8042718c": "@774",
       "float_2_80427190": "@775"
+    },
+    "main/action/star/sac_deka": {
+      "float_7_80428410": "@699"
     }
   }
 }

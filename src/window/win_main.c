@@ -3,7 +3,9 @@
 #include "driver/seqdrv.h"
 #include "statuswindow.h"
 
-void* wp;
+s32 cnt;
+s32 winTexTpl;
+static void* wp;
 void* __memAlloc(s32 heap, u32 size);
 void FontDrawStart(void);
 void allPartyForceSlitOff(void);
@@ -13,8 +15,7 @@ s32 evtGetValue(void* evt, s32 var);
 s32 evtCheckID(s32 id);
 s32 pouchGetPartyColor(s32 partyId);
 s32 evtEntry(void* script, s32 priority, s32 flags);
-extern s32 evt_lecture_msg[];
-extern s32 winTexTpl;
+extern u32 evt_lecture_msg[];
 extern s32 dat_80423ff8;
 extern f32 float_0_80424004;
 void GXSetCullMode(s32 mode);
@@ -153,8 +154,8 @@ void winMain(void) {
     extern s32 pouchGetHaveBadgeCnt(void);
     extern void* evtEntryType(void*, s8, u32, u32);
     extern s32 evtCheckID(s32);
-    extern s32 evt_item_use[];
-    extern s32 evt_diary_read[];
+    extern u32 evt_item_use[];
+    extern u32 evt_diary_read[];
     extern void pouchRemoveItemIndex(s32, s32);
     extern void evtYuuWindow(void);
     extern s32 evtYuuWindowEndChk(void);
@@ -501,8 +502,6 @@ s32 itemUseFunc(void* pEvt, int param_2) {
     extern s32 effRecoveryEntry(f32 x, f32 y, f32 z, s32 type);
     extern u8 itemDataTable[];
     extern f32 float_0p5_80424000;
-    static s32 cnt;
-
     s32 itemId;
     s32 partyId;
     void* itemData;
@@ -1375,3 +1374,320 @@ s32 winLectureCheck(void) {
     *(u16*)wp &= ~0x1000;
     return 0;
 }
+
+/* Exact US win_main Event-prefix reconstruction dependencies. */
+extern const char str_I_1_80423f74[];
+extern const char str_M_I_1_80423fcc[];
+extern const char str_M_S_1_80423fc4[];
+extern const char str_M_V_2_80423fd4[];
+extern char str_PCH_I_1_802f71a8[];
+extern char str_PCH_Y_1_802f71d8[];
+extern char str_PKR_I_1_802f7180[];
+extern char str_PKR_Y_1_802f71b0[];
+extern char str_PNK_I_1_802f7188[];
+extern char str_PNK_Y_1_802f71b8[];
+extern char str_PTR_I_1_802f71a0[];
+extern char str_PTR_Y_1_802f71d0[];
+extern char str_PWD_I_1_802f7198[];
+extern char str_PWD_Y_1_802f71c8[];
+extern char str_PYS_I_1_802f7190[];
+extern char str_PYS_Y_1_802f71c0[];
+extern const char str_R_10_80423fa0[];
+extern const char str_R_11_80423fa8[];
+extern const char str_R_12_80423fb4[];
+extern const char str_R_13_80423f84[];
+extern const char str_R_15_80423fbc[];
+extern const char str_R_2_80423f7c[];
+extern const char str_R_3_80423f80[];
+extern const char str_R_4_80423fb0[];
+extern const char str_R_5_80423f8c[];
+extern const char str_R_6_80423f90[];
+extern const char str_R_7_80423f94[];
+extern const char str_R_8_80423f98[];
+extern const char str_R_9_80423f9c[];
+extern char str_SFX_ITEM_MARIO_USE1_802f71f4[];
+extern char str_SFX_ITEM_RECOVERY_SH_802f7208[];
+extern const char str_Y_1_80423f78[];
+extern char str_itemget_802f71ec[];
+extern char str_menu_dummy_802f71e0[];
+extern char str_stardust2_n64_802f7224[];
+extern s32 evt_eff();
+extern s32 evt_eff64();
+extern s32 evt_item_delete();
+extern s32 evt_item_entry();
+extern s32 evt_mario_adjust_dir();
+extern s32 evt_mario_get_party();
+extern s32 evt_mario_get_pos();
+extern s32 evt_mario_normalize();
+extern s32 evt_mario_set_normal_pose();
+extern s32 evt_mario_set_pose();
+extern s32 evt_party_get_pos();
+extern s32 evt_party_nokotaro_get_status();
+extern s32 evt_party_set_breed_pose();
+extern s32 evt_party_set_pose();
+extern s32 evt_snd_sfxon_3d();
+
+/* Exact documented Event arrays in target .data order. */
+u32 kime_pose[61] = {
+    0x0003005B, (u32)evt_party_nokotaro_get_status, 0x00000000, 0xFE363C80, 0x00020019, 0xFE363C80,
+    0x00000000, 0x00000002, 0x00000021, 0x0002005B, (u32)evt_mario_get_party, 0xFE363C80,
+    0x00010022, 0xFE363C80, 0x00010024, 0x00000000, 0x00010024, 0x00000001,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PKR_I_1_802f7180, 0x00010024, 0x00000002,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PNK_I_1_802f7188, 0x00010024, 0x00000003,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_I_1_80423f74, 0x00010024, 0x00000004,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PYS_I_1_802f7190, 0x00010024, 0x00000005,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PWD_I_1_802f7198, 0x00010024, 0x00000006,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PTR_I_1_802f71a0, 0x00010024, 0x00000007,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PCH_I_1_802f71a8, 0x00000031, 0x00000002,
+    0x00000001,
+};
+
+u32 kime_pose2[61] = {
+    0x0003005B, (u32)evt_party_nokotaro_get_status, 0x00000000, 0xFE363C80, 0x00020019, 0xFE363C80,
+    0x00000000, 0x00000002, 0x00000021, 0x0002005B, (u32)evt_mario_get_party, 0xFE363C80,
+    0x00010022, 0xFE363C80, 0x00010024, 0x00000000, 0x00010024, 0x00000001,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PKR_Y_1_802f71b0, 0x00010024, 0x00000002,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PNK_Y_1_802f71b8, 0x00010024, 0x00000003,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_Y_1_80423f78, 0x00010024, 0x00000004,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PYS_Y_1_802f71c0, 0x00010024, 0x00000005,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PWD_Y_1_802f71c8, 0x00010024, 0x00000006,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PTR_Y_1_802f71d0, 0x00010024, 0x00000007,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_PCH_Y_1_802f71d8, 0x00000031, 0x00000002,
+    0x00000001,
+};
+
+u32 unk_evt_803781d0[15] = {
+    0x0003005B, (u32)evt_party_nokotaro_get_status, 0x00000000, 0xFE363C80, 0x00020019, 0xFE363C80,
+    0x00000000, 0x00000002, 0x00000021, 0x0003005B, (u32)evt_party_set_breed_pose, 0x00000000,
+    0x00000001, 0x00000002, 0x00000001,
+};
+
+u32 kime_pose_famicom[105] = {
+    0x0003005B, (u32)evt_party_nokotaro_get_status, 0x00000000, 0xFE363C80, 0x00020019, 0xFE363C80,
+    0x00000000, 0x00000002, 0x00000021, 0x0002005B, (u32)evt_mario_get_party, 0xFE363C80,
+    0x00010022, 0xFE363C80, 0x00010024, 0x00000000, 0x00010024, 0x00000001,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_2_80423f7c, 0x00010024, 0x00000002,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_3_80423f80, 0x00010024, 0x00000003,
+    0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_13_80423f84, 0x00010024, 0x00000004,
+    0x0002005B, (u32)party_color, 0xFE363C80, 0x00010022, 0xFE363C80, 0x00010024,
+    0x00000000, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_5_80423f8c, 0x00010024,
+    0x00000001, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_6_80423f90, 0x00010024,
+    0x00000002, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_7_80423f94, 0x00010024,
+    0x00000003, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_8_80423f98, 0x00010024,
+    0x00000004, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_9_80423f9c, 0x00010024,
+    0x00000005, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_10_80423fa0, 0x00010024,
+    0x00000006, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_11_80423fa8, 0x00000031,
+    0x00010024, 0x00000005, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_4_80423fb0,
+    0x00010024, 0x00000006, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_12_80423fb4,
+    0x00010024, 0x00000007, 0x0003005B, (u32)evt_party_set_pose, 0x00000000, (u32)(char*)str_R_15_80423fbc,
+    0x00000031, 0x00000002, 0x00000001,
+};
+
+u32 evt_item_use[240] = {
+    0x00010063, 0x00000000, 0x0001005B, (u32)evt_mario_normalize, 0x0001005B, (u32)unk_8017d8f8,
+    0x00010009, 0x00000001, 0x0001005B, (u32)evt_mario_adjust_dir, 0x0002005B, (u32)evt_mario_set_pose,
+    (u32)(char*)str_M_S_1_80423fc4, 0x0001005E, (u32)unk_evt_803781d0, 0x00020018, 0xFE363C8B, 0x00000000,
+    0x0005005B, (u32)evt_mario_get_pos, 0x00000000, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00020035, 0xFE363C81, 0x00000032, 0x0009005B, (u32)evt_item_entry, (u32)(char*)str_menu_dummy_802f71e0,
+    0xFE363C8A, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000011, 0xFFFFFFFF,
+    0x00000000, 0x00020035, 0xFE363C81, 0x0000000A, 0x000F005B, (u32)evt_eff,
+    0x00000000, (u32)(char*)str_itemget_802f71ec, 0x0000000A, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_ITEM_MARIO_USE1_802f71f4, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00000000, 0x0002005B, (u32)evt_mario_set_pose, (u32)(char*)str_M_I_1_80423fcc,
+    0x0001000A, 0x000003E8, 0x0002005B, (u32)evt_item_delete, (u32)(char*)str_menu_dummy_802f71e0, 0x0005005B,
+    (u32)evt_mario_get_pos, 0x00000000, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0x0006005B,
+    (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_ITEM_RECOVERY_SH_802f7208, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000000,
+    0x000F005B, (u32)evt_eff64, 0x00000000, (u32)(char*)str_stardust2_n64_802f7224, 0x00000004, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00000028, 0x00000028, 0x0000001E, 0x00000078,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x0001000A, 0x00000578,
+    0x0002005B, (u32)evt_mario_set_pose, (u32)(char*)str_M_V_2_80423fd4, 0x0001005B, (u32)itemUseFunc, 0x0001000A,
+    0x000005DC, 0x0001005B, (u32)itemUseFunc2, 0x0001005B, (u32)evt_mario_set_normal_pose, 0x00000002,
+    0x00000021, 0x0002005B, (u32)evt_mario_get_party, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0xFE363C8B, 0x0005005B, (u32)evt_party_get_pos, 0x00000000, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x00020035, 0xFE363C81, 0x00000032, 0x0009005B, (u32)evt_item_entry,
+    (u32)(char*)str_menu_dummy_802f71e0, 0xFE363C8A, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000011,
+    0xFFFFFFFF, 0x00000000, 0x00020035, 0xFE363C81, 0x0000000A, 0x000F005B,
+    (u32)evt_eff, 0x00000000, (u32)(char*)str_itemget_802f71ec, 0x0000000A, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_ITEM_MARIO_USE1_802f71f4,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000000, 0x0002005B, (u32)famicom_check,
+    0xFE363C80, 0x00020018, 0xFE363C80, 0x00000000, 0x0001005E, (u32)kime_pose,
+    0x00000020, 0x0001005E, (u32)kime_pose_famicom, 0x00000021, 0x0001000A, 0x000003E8,
+    0x0002005B, (u32)evt_item_delete, (u32)(char*)str_menu_dummy_802f71e0, 0x0005005B, (u32)evt_party_get_pos, 0x00000000,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_ITEM_RECOVERY_SH_802f7208,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000000, 0x000F005B, (u32)evt_eff64,
+    0x00000000, (u32)(char*)str_stardust2_n64_802f7224, 0x00000004, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000028, 0x00000028, 0x0000001E, 0x00000078, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x0001000A, 0x00000578, 0x0002005B, (u32)famicom_check,
+    0xFE363C80, 0x00020018, 0xFE363C80, 0x00000000, 0x0001005E, (u32)kime_pose2,
+    0x00000020, 0x0001005E, (u32)kime_pose_famicom, 0x00000021, 0x0001005B, (u32)itemUseFunc,
+    0x0001000A, 0x000005DC, 0x0001005B, (u32)itemUseFunc2, 0x0001005E, (u32)unk_evt_803781d0,
+    0x0001005B, (u32)evt_mario_set_normal_pose, 0x00000002, 0x00000021, 0x00000002, 0x00000001,
+};
+
+
+/* Exact same-TU Shift-JIS dependency required by evt_diary_read.
+ * ASCII-safe source identity is paired to target str_ゆうれい_802f729c by the
+ * transaction alias file; no hardcoded address is used. */
+__declspec(section ".rodata") const char str_sjis_0000014c[9] =
+    "\x82\xE4\x82\xA4\x82\xEA\x82\xA2";
+
+extern char str_BGM_EVT_STG5_GHOST1_802f72b4[];
+extern const char str_M_I_O_80423ff0[];
+extern const char str_M_L_2_80423fdc[];
+extern const char str_O_1_80423fe4[];
+extern const char str_O_2_80423fe8[];
+extern const char str_T_2_80423fec[];
+extern char str_c_ghost_k_802f72a8[];
+extern char str_lecture_badge_00_802f72dc[];
+extern char str_lecture_badge_01_802f72f0[];
+extern char str_lecture_badge_02_802f7304[];
+extern char str_lecture_badge_03_802f7318[];
+extern char str_lecture_badge_04_802f732c[];
+extern char str_lecture_badge_05_802f7340[];
+extern char str_lecture_badge_06_802f7354[];
+extern char str_lecture_badge_07_802f7368[];
+extern char str_stg6_rsh_diary_01_802f7234[];
+extern char str_stg6_rsh_diary_01_yn_802f7248[];
+extern char str_stg6_rsh_diary_02_802f7260[];
+extern char str_stg6_rsh_diary_03_802f7274[];
+extern char str_stg6_rsh_diary_04_802f7288[];
+extern char str_stg6_rsh_diary_05_802f72c8[];
+/* Remaining diary/lecture Event relocation dependencies. */
+extern const char str_M_I_O_80423ff0[];
+extern const char str_M_L_2_80423fdc[];
+extern const char str_M_S_1_80423fc4[];
+extern const char str_O_1_80423fe4[];
+extern const char str_O_2_80423fe8[];
+extern const char str_T_2_80423fec[];
+extern s32 evt_env_blur_on();
+extern s32 evt_fade_set_mapchange_type();
+extern s32 evt_mario_dispflag_onoff();
+extern s32 evt_msg_continue();
+extern s32 evt_msg_print();
+extern s32 evt_msg_print_add();
+extern s32 evt_msg_select();
+extern s32 evt_npc_check();
+extern s32 evt_npc_entry();
+extern s32 evt_npc_flag_onoff();
+extern s32 evt_npc_set_anim();
+extern s32 evt_npc_set_autotalkpose();
+extern s32 evt_npc_set_color();
+extern s32 evt_npc_set_position();
+extern s32 evt_npc_set_tribe();
+extern s32 evt_party_cont_onoff();
+extern s32 evt_seq_set_seq();
+extern s32 evt_snd_bgmoff();
+extern s32 evt_snd_bgmoff_f();
+extern s32 evt_snd_bgmon();
+extern s32 evt_snd_sfxon();
+extern s32 evt_sub_intpl_msec_get_value();
+extern s32 evt_sub_intpl_msec_init();
+
+u32 evt_diary_read[259] = {
+    0x00010063, 0x00000000, 0x0003005B, (u32)evt_party_cont_onoff, 0x00000000, 0x00000001,
+    0x00010009, 0x00000001, 0x0001005B, (u32)evt_mario_normalize, 0x0005005B, (u32)evt_msg_print,
+    0x00000000, (u32)(char*)str_stg6_rsh_diary_01_802f7234, 0x00000000, 0x00000000, 0x0003005B, (u32)evt_msg_select,
+    0x00000000, (u32)(char*)str_stg6_rsh_diary_01_yn_802f7248, 0x00020019, 0xFE363C80, 0x00000000, 0x0001005B,
+    (u32)evt_msg_continue, 0x0003005B, (u32)evt_party_cont_onoff, 0x00000000, 0x00000000, 0x00000002,
+    0x00000021, 0x0003005B, (u32)evt_msg_print_add, 0x00000000, (u32)(char*)str_stg6_rsh_diary_02_802f7260, 0x0003005B,
+    (u32)evt_msg_select, 0x00000000, (u32)(char*)str_stg6_rsh_diary_01_yn_802f7248, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0001005B, (u32)evt_msg_continue, 0x0003005B, (u32)evt_party_cont_onoff, 0x00000000, 0x00000000,
+    0x00000002, 0x00000021, 0x0003005B, (u32)evt_msg_print_add, 0x00000000, (u32)(char*)str_stg6_rsh_diary_03_802f7274,
+    0x0003005B, (u32)evt_msg_select, 0x00000000, (u32)(char*)str_stg6_rsh_diary_01_yn_802f7248, 0x00020019, 0xFE363C80,
+    0x00000000, 0x0001005B, (u32)evt_msg_continue, 0x0003005B, (u32)evt_party_cont_onoff, 0x00000000,
+    0x00000000, 0x00000002, 0x00000021, 0x0001005B, (u32)evt_msg_continue, 0x0003005B,
+    (u32)evt_snd_bgmoff_f, 0x00000200, 0x000007D0, 0x0003005B, (u32)evt_mario_dispflag_onoff, 0x00000001,
+    0x00000002, 0x0001005B, (u32)evt_mario_adjust_dir, 0x0002005B, (u32)evt_mario_set_pose, (u32)(char*)str_M_L_2_80423fdc,
+    0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg6_rsh_diary_04_802f7288, 0x00000000, 0x00000000,
+    0x0002005B, (u32)evt_mario_set_pose, (u32)(char*)str_M_S_1_80423fc4, 0x0003005B, (u32)evt_npc_check, (u32)(char*)str_sjis_0000014c,
+    0xFE363C80, 0x00020018, 0xFE363C80, 0x00000000, 0x0003005B, (u32)evt_npc_entry,
+    (u32)(char*)str_sjis_0000014c, (u32)(char*)str_c_ghost_k_802f72a8, 0x0005005B, (u32)evt_npc_set_position, (u32)(char*)str_sjis_0000014c, 0x00000000,
+    0xFFFFFC18, 0x00000000, 0x0003005B, (u32)evt_npc_set_tribe, (u32)(char*)str_sjis_0000014c, (u32)(char*)str_sjis_0000014c,
+    0x0003005B, (u32)evt_npc_set_anim, (u32)(char*)str_sjis_0000014c, (u32)(char*)str_O_1_80423fe4, 0x0004005B, (u32)evt_npc_set_autotalkpose,
+    (u32)(char*)str_sjis_0000014c, (u32)(char*)str_O_2_80423fe8, (u32)(char*)str_T_2_80423fec, 0x00000021, 0x0004005B, (u32)evt_npc_flag_onoff,
+    0x00000001, (u32)(char*)str_sjis_0000014c, 0x00040020, 0x0000006B, 0x00010005, 0x00000000,
+    0x0005005B, (u32)evt_sub_intpl_msec_init, 0x0000000B, 0x000000B4, 0x00000040, 0x000003E8,
+    0x00010003, 0x00000001, 0x0001005B, (u32)evt_sub_intpl_msec_get_value, 0x0006005B, (u32)evt_npc_set_color,
+    (u32)(char*)str_sjis_0000014c, 0x000000FF, 0x000000FF, 0x000000FF, 0xFE363C80, 0x00010009,
+    0x00000001, 0x00020018, 0xFE363C81, 0x00000001, 0x00010004, 0x00000001,
+    0x00000021, 0x0005005B, (u32)evt_sub_intpl_msec_init, 0x0000000B, 0x00000040, 0x000000B4,
+    0x000003E8, 0x00010003, 0x00000002, 0x0001005B, (u32)evt_sub_intpl_msec_get_value, 0x0006005B,
+    (u32)evt_npc_set_color, (u32)(char*)str_sjis_0000014c, 0x000000FF, 0x000000FF, 0x000000FF, 0xFE363C80,
+    0x00010009, 0x00000001, 0x00020018, 0xFE363C81, 0x00000001, 0x00010004,
+    0x00000002, 0x00000021, 0x00000006, 0x0000006D, 0x0003005B, (u32)evt_snd_bgmon,
+    0x00000200, (u32)(char*)str_BGM_EVT_STG5_GHOST1_802f72b4, 0x0005005B, (u32)evt_mario_get_pos, 0x00000000, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00020035, 0xFE363C81, 0x00000014, 0x00020035,
+    0xFE363C82, 0x00000014, 0x0005005B, (u32)evt_npc_set_position, (u32)(char*)str_sjis_0000014c, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x0006005B, (u32)evt_snd_sfxon_3d, 0x000206A5, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00000000, 0x0001000A, 0x000000C8, 0x0002005B,
+    (u32)evt_mario_set_pose, (u32)(char*)str_M_I_O_80423ff0, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg6_rsh_diary_05_802f72c8,
+    0x00000000, (u32)(char*)str_sjis_0000014c, 0x0001000A, 0x0000012C, 0x0002005B, (u32)evt_snd_bgmoff,
+    0x00000200, 0x0000006B, 0x0003005B, (u32)evt_env_blur_on, 0x00000000, 0x00000000,
+    0x0000006D, 0x0003005B, (u32)evt_snd_sfxon, 0x000206A2, 0xFE363C83, 0x0000006B,
+    0x0001005B, (u32)cam_r, 0x0000006D, 0x0001000A, 0x00000FA0, 0x0006005B,
+    (u32)evt_fade_set_mapchange_type, 0x00000001, 0xFFFFFFFF, 0x00000258, 0xFFFFFFFF, 0xFFFFFFFF,
+    0x0004005B, (u32)evt_seq_set_seq, 0x00000005, 0x00000000, 0x00000000, 0x00000002,
+    0x00000001,
+};
+
+u32 evt_lecture_msg[121] = {
+    0x0001000A, 0x000003E8, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_lecture_badge_00_802f72dc,
+    0x00000000, 0x00000000, 0x0002005B, (u32)unk_8017b864, 0x00000001, 0x0001005B,
+    (u32)evt_msg_continue, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_lecture_badge_01_802f72f0, 0x00000000,
+    0x00000000, 0x0002005B, (u32)unk_8017b864, 0x00000002, 0x0001005B, (u32)evt_msg_continue,
+    0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_lecture_badge_02_802f7304, 0x00000000, 0x00000000,
+    0x0001000A, 0x000001F4, 0x0002005B, (u32)unk_8017b864, 0x00000003, 0x0001000A,
+    0x000001F4, 0x0002005B, (u32)unk_8017b864, 0x00000004, 0x0001000A, 0x000001F4,
+    0x0002005B, (u32)unk_8017b864, 0x00000005, 0x0001000A, 0x000001F4, 0x0001005B,
+    (u32)evt_msg_continue, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_lecture_badge_03_802f7318, 0x00000000,
+    0x00000000, 0x0002005B, (u32)unk_8017b864, 0x00000006, 0x0001005B, (u32)evt_msg_continue,
+    0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_lecture_badge_04_802f732c, 0x00000000, 0x00000000,
+    0x0002005B, (u32)unk_8017b864, 0x00000007, 0x0001005B, (u32)evt_msg_continue, 0x0005005B,
+    (u32)evt_msg_print, 0x00000000, (u32)(char*)str_lecture_badge_05_802f7340, 0x00000000, 0x00000000, 0x0002005B,
+    (u32)unk_8017b864, 0x00000008, 0x0001005B, (u32)evt_msg_continue, 0x0005005B, (u32)evt_msg_print,
+    0x00000000, (u32)(char*)str_lecture_badge_06_802f7354, 0x00000000, 0x00000000, 0x0002005B, (u32)unk_8017b864,
+    0x00000009, 0x0001005B, (u32)evt_msg_continue, 0x0005005B, (u32)evt_msg_print, 0x00000000,
+    (u32)(char*)str_lecture_badge_07_802f7368, 0x00000000, 0x00000000, 0x0002005B, (u32)unk_8017b864, 0x0000000A,
+    0x0001005B, (u32)evt_msg_continue, 0x00010005, 0x00000000, 0x0002001D, 0xF5DE0180,
+    0x00000014, 0x00000007, 0x00000021, 0x00010009, 0x00000001, 0x00000006,
+    0x0001000A, 0x000001F4, 0x0001005B, (u32)unk_8017b84c, 0x00000002, 0x00000001,
+    0x00000000,
+};
+
+/* Exact US win_main small-data prefix before the compiler-literal scalar region.
+ * Definitions are intentionally late so executable consumers preserve their existing
+ * declaration-only source shape.  Alignment between short strings is natural; no gap
+ * object is authored. */
+__declspec(section ".sdata2") const s32 dat_80423f58 = -1;
+__declspec(section ".sdata2") const char str_jp_80423f5c[] = "jp";
+__declspec(section ".sdata2") const char str_us_80423f60[] = "us";
+__declspec(section ".sdata2") const char str_ge_80423f64[] = "ge";
+__declspec(section ".sdata2") const char str_fr_80423f68[] = "fr";
+__declspec(section ".sdata2") const char str_sp_80423f6c[] = "sp";
+__declspec(section ".sdata2") const char str_it_80423f70[] = "it";
+__declspec(section ".sdata2") const char str_I_1_80423f74[] = "I_1";
+__declspec(section ".sdata2") const char str_Y_1_80423f78[] = "Y_1";
+__declspec(section ".sdata2") const char str_R_2_80423f7c[] = "R_2";
+__declspec(section ".sdata2") const char str_R_3_80423f80[] = "R_3";
+__declspec(section ".sdata2") const char str_R_13_80423f84[] = "R_13";
+__declspec(section ".sdata2") const char str_R_5_80423f8c[] = "R_5";
+__declspec(section ".sdata2") const char str_R_6_80423f90[] = "R_6";
+__declspec(section ".sdata2") const char str_R_7_80423f94[] = "R_7";
+__declspec(section ".sdata2") const char str_R_8_80423f98[] = "R_8";
+__declspec(section ".sdata2") const char str_R_9_80423f9c[] = "R_9";
+__declspec(section ".sdata2") const char str_R_10_80423fa0[] = "R_10";
+__declspec(section ".sdata2") const char str_R_11_80423fa8[] = "R_11";
+__declspec(section ".sdata2") const char str_R_4_80423fb0[] = "R_4";
+__declspec(section ".sdata2") const char str_R_12_80423fb4[] = "R_12";
+__declspec(section ".sdata2") const char str_R_15_80423fbc[] = "R_15";
+__declspec(section ".sdata2") const char str_M_S_1_80423fc4[] = "M_S_1";
+__declspec(section ".sdata2") const char str_M_I_1_80423fcc[] = "M_I_1";
+__declspec(section ".sdata2") const char str_M_V_2_80423fd4[] = "M_V_2";
+__declspec(section ".sdata2") const char str_M_L_2_80423fdc[] = "M_L_2";
+__declspec(section ".sdata2") const char str_O_1_80423fe4[] = "O_1";
+__declspec(section ".sdata2") const char str_O_2_80423fe8[] = "O_2";
+__declspec(section ".sdata2") const char str_T_2_80423fec[] = "T_2";
+__declspec(section ".sdata2") const char str_M_I_O_80423ff0[] = "M_I_O";
+

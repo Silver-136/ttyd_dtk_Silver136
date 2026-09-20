@@ -28,6 +28,203 @@ s32 fall_data2[] = {
     16, 15, 11, 6, 0, 4, 3, 1, 0,
 };
 
+s32 N_evt_snd_bgm_unpause(void);
+extern s32 evt_mapobj_trans();
+extern s32 evt_mario_key_onoff();
+extern s32 evt_mario_normalize();
+extern s32 evt_mario_cont_onoff();
+extern s32 evt_mario_set_pos();
+extern s32 evt_cam_road_reset();
+extern s32 evt_party_cont_onoff();
+extern s32 evt_party_set_pos();
+extern s32 evt_mario_kill_party();
+extern s32 evt_mario_clear_party();
+extern s32 evt_mario_dispflag_onoff();
+extern s32 evt_mario_set_pose();
+extern s32 evt_mario_set_dir();
+extern s32 evt_mario_adjust_dir();
+extern s32 evt_sub_get_language();
+extern s32 evt_mapobj_flag_onoff();
+extern s32 evt_cam_ctrl_onoff();
+extern s32 evt_cam3d_evt_set();
+extern s32 evt_map_playanim();
+extern const char str_anm_hokori_802c2c00[];
+extern const char str_g_80420448[];
+extern const char str_a_8042044c[];
+extern const char str_m_80420450[];
+extern const char str_e_80420454[];
+extern const char str_o_80420458[];
+extern const char str_v_8042045c[];
+extern const char str_e2_80420460[];
+extern const char str_r_80420464[];
+extern const char str_f_80420468[];
+extern const char str_i_8042046c[];
+extern const char str_n_80420470[];
+extern const char str_d_80420474[];
+extern const char str_e3_80420478[];
+extern const char str_l_8042047c[];
+extern const char str_j_80420480[];
+extern const char str_u_80420484[];
+extern const char str_e4_80420488[];
+extern const char str_g1_8042048c[];
+extern const char str_o289_80420490[];
+extern const char str_M_D_2_80420498[];
+
+s32 _fall_char[] = {
+    0x0001003E, (s32)fall_data, 0x00010005, 0x0000001A,
+    0x0001003F, 0xFE363C81, 0x0006005B, (s32)evt_mapobj_trans,
+    0x00000001, 0xFE363C80, 0x00000000, 0xFE363C81,
+    0x00000000, 0x00010009, 0x00000001, 0x00000006,
+    0x00000002, 0x00000001,
+};
+
+s32 _fall_char_last[] = {
+    0x0001003E, (s32)fall_data2, 0x00010005, 0x00000013,
+    0x0001003F, 0xFE363C81, 0x0006005B, (s32)evt_mapobj_trans,
+    0x00000001, 0xFE363C80, 0x00000000, 0xFE363C81,
+    0x00000000, 0x00010009, 0x00000001, 0x00000006,
+    0x00000002, 0x00000001,
+};
+
+s32 fall_gameover[] = {
+    0x00020032, 0xFE363C80, (s32)(char*)str_g_80420448, 0x0001005C,
+    (s32)_fall_char, 0x0001000A, 0x000000A6, 0x00020032,
+    0xFE363C80, (s32)(char*)str_a_8042044c, 0x0001005C, (s32)_fall_char,
+    0x0001000A, 0x0000014D, 0x00020032, 0xFE363C80,
+    (s32)(char*)str_m_80420450, 0x0001005C, (s32)_fall_char, 0x0001000A,
+    0x000000A6, 0x00020032, 0xFE363C80, (s32)(char*)str_e_80420454,
+    0x0001005C, (s32)_fall_char, 0x0001000A, 0x000000A6,
+    0x00020032, 0xFE363C80, (s32)(char*)str_o_80420458, 0x0001005C,
+    (s32)_fall_char, 0x0001000A, 0x000000A6, 0x00020032,
+    0xFE363C80, (s32)(char*)str_v_8042045c, 0x0001005C, (s32)_fall_char,
+    0x0001000A, 0x000000A6, 0x00020032, 0xFE363C80,
+    (s32)(char*)str_e2_80420460, 0x0001005C, (s32)_fall_char, 0x0001000A,
+    0x000001F4, 0x00020032, 0xFE363C80, (s32)(char*)str_r_80420464,
+    0x0002005D, (s32)_fall_char_last, 0xFE363C8A, 0x00010005,
+    0x00000000, 0x0002006A, 0xFE363C8A, 0xFE363C8B,
+    0x00020018, 0xFE363C8B, 0x00000000, 0x00000007,
+    0x00000021, 0x00010009, 0x00000001, 0x00000006,
+    0x0001000A, 0x000003E8, 0x00000002, 0x00000001,
+};
+
+s32 unk_evt_8030c674[] = {
+    0x00020032, 0xFE363C80, (s32)(char*)str_f_80420468, 0x0001005C,
+    (s32)_fall_char, 0x0001000A, 0x00000085, 0x00020032,
+    0xFE363C80, (s32)(char*)str_i_8042046c, 0x0001005C, (s32)_fall_char,
+    0x0001000A, 0x000000E9, 0x00020032, 0xFE363C80,
+    (s32)(char*)str_n_80420470, 0x0001005C, (s32)_fall_char, 0x0001000A,
+    0x00000085, 0x00020032, 0xFE363C80, (s32)(char*)str_d_80420474,
+    0x0001005C, (s32)_fall_char, 0x0001000A, 0x00000085,
+    0x00020032, 0xFE363C80, (s32)(char*)str_e3_80420478, 0x0001005C,
+    (s32)_fall_char, 0x0001000A, 0x00000085, 0x00020032,
+    0xFE363C80, (s32)(char*)str_l_8042047c, 0x0001005C, (s32)_fall_char,
+    0x0001000A, 0x000000E9, 0x00020032, 0xFE363C80,
+    (s32)(char*)str_j_80420480, 0x0001005C, (s32)_fall_char, 0x0001000A,
+    0x00000085, 0x00020032, 0xFE363C80, (s32)(char*)str_u_80420484,
+    0x0001005C, (s32)_fall_char, 0x0001000A, 0x00000085,
+    0x00020032, 0xFE363C80, (s32)(char*)str_e4_80420488, 0x0001005C,
+    (s32)_fall_char, 0x0001000A, 0x00000085, 0x00020032,
+    0xFE363C80, (s32)(char*)str_g1_8042048c, 0x0001005C, (s32)_fall_char,
+    0x0001000A, 0x00000190, 0x00020032, 0xFE363C80,
+    (s32)(char*)str_o289_80420490, 0x0002005D, (s32)_fall_char_last, 0xFE363C8A,
+    0x00010005, 0x00000000, 0x0002006A, 0xFE363C8A,
+    0xFE363C8B, 0x00020018, 0xFE363C8B, 0x00000000,
+    0x00000007, 0x00000021, 0x00010009, 0x00000001,
+    0x00000006, 0x0001000A, 0x000003E8, 0x00000002,
+    0x00000001,
+};
+
+s32 evt_gameover[] = {
+    0x0002005B, (s32)evt_mario_key_onoff, 0x00000000, 0x0001005B,
+    (s32)evt_mario_normalize, 0x0002005B, (s32)evt_mario_cont_onoff, 0x00000000,
+    0x0004005B, (s32)evt_mario_set_pos, 0x00000000, 0x00000000,
+    0x00000000, 0x0001005B, (s32)evt_cam_road_reset, 0x0003005B,
+    (s32)evt_party_cont_onoff, 0x00000000, 0x00000000, 0x0005005B,
+    (s32)evt_party_set_pos, 0x00000000, 0x00000000, 0xFFFFFC18,
+    0x00000000, 0x0002005B, (s32)evt_mario_kill_party, 0x00000000,
+    0x0003005B, (s32)evt_party_cont_onoff, 0x00000001, 0x00000000,
+    0x0005005B, (s32)evt_party_set_pos, 0x00000001, 0x00000000,
+    0xFFFFFC18, 0x00000000, 0x0002005B, (s32)evt_mario_clear_party,
+    0x00000001, 0x00010009, 0x00000001, 0x0001005B,
+    (s32)N_evt_snd_bgm_unpause, 0x0003005B, (s32)evt_mario_dispflag_onoff, 0x00000001,
+    0x00000002, 0x0002005B, (s32)evt_mario_set_pose, (s32)(char*)str_M_D_2_80420498,
+    0x0004005B, (s32)evt_mario_set_dir, 0x000000B4, 0x00000000,
+    0x00000000, 0x0001005B, (s32)evt_mario_adjust_dir, 0x0002005B,
+    (s32)evt_sub_get_language, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0x00000004, 0x0005005B, (s32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (s32)(char*)str_g_80420448, 0x00000001, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_a_8042044c,
+    0x00000001, 0x0005005B, (s32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (s32)(char*)str_m_80420450, 0x00000001, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_e_80420454,
+    0x00000001, 0x0005005B, (s32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (s32)(char*)str_o_80420458, 0x00000001, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_v_8042045c,
+    0x00000001, 0x0005005B, (s32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (s32)(char*)str_e2_80420460, 0x00000001, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_r_80420464,
+    0x00000001, 0x0006005B, (s32)evt_mapobj_trans, 0x00000001,
+    (s32)(char*)str_f_80420468, 0x00000000, 0x000000C8, 0x00000000,
+    0x0006005B, (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_i_8042046c,
+    0x00000000, 0x000000C8, 0x00000000, 0x0006005B,
+    (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_n_80420470, 0x00000000,
+    0x000000C8, 0x00000000, 0x0006005B, (s32)evt_mapobj_trans,
+    0x00000001, (s32)(char*)str_d_80420474, 0x00000000, 0x000000C8,
+    0x00000000, 0x0006005B, (s32)evt_mapobj_trans, 0x00000001,
+    (s32)(char*)str_e3_80420478, 0x00000000, 0x000000C8, 0x00000000,
+    0x0006005B, (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_l_8042047c,
+    0x00000000, 0x000000C8, 0x00000000, 0x0006005B,
+    (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_j_80420480, 0x00000000,
+    0x000000C8, 0x00000000, 0x0006005B, (s32)evt_mapobj_trans,
+    0x00000001, (s32)(char*)str_u_80420484, 0x00000000, 0x000000C8,
+    0x00000000, 0x0006005B, (s32)evt_mapobj_trans, 0x00000001,
+    (s32)(char*)str_e4_80420488, 0x00000000, 0x000000C8, 0x00000000,
+    0x0006005B, (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_g1_8042048c,
+    0x00000000, 0x000000C8, 0x00000000, 0x0006005B,
+    (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_o289_80420490, 0x00000000,
+    0x000000C8, 0x00000000, 0x00000020, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_f_80420468,
+    0x00000001, 0x0005005B, (s32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (s32)(char*)str_i_8042046c, 0x00000001, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_n_80420470,
+    0x00000001, 0x0005005B, (s32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (s32)(char*)str_d_80420474, 0x00000001, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_e3_80420478,
+    0x00000001, 0x0005005B, (s32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (s32)(char*)str_l_8042047c, 0x00000001, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_j_80420480,
+    0x00000001, 0x0005005B, (s32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (s32)(char*)str_u_80420484, 0x00000001, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_e4_80420488,
+    0x00000001, 0x0005005B, (s32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000001, (s32)(char*)str_g1_8042048c, 0x00000001, 0x0005005B,
+    (s32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001, (s32)(char*)str_o289_80420490,
+    0x00000001, 0x0006005B, (s32)evt_mapobj_trans, 0x00000001,
+    (s32)(char*)str_g_80420448, 0x00000000, 0x000000C8, 0x00000000,
+    0x0006005B, (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_a_8042044c,
+    0x00000000, 0x000000C8, 0x00000000, 0x0006005B,
+    (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_m_80420450, 0x00000000,
+    0x000000C8, 0x00000000, 0x0006005B, (s32)evt_mapobj_trans,
+    0x00000001, (s32)(char*)str_e_80420454, 0x00000000, 0x000000C8,
+    0x00000000, 0x0006005B, (s32)evt_mapobj_trans, 0x00000001,
+    (s32)(char*)str_o_80420458, 0x00000000, 0x000000C8, 0x00000000,
+    0x0006005B, (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_v_8042045c,
+    0x00000000, 0x000000C8, 0x00000000, 0x0006005B,
+    (s32)evt_mapobj_trans, 0x00000001, (s32)(char*)str_e2_80420460, 0x00000000,
+    0x000000C8, 0x00000000, 0x0006005B, (s32)evt_mapobj_trans,
+    0x00000001, (s32)(char*)str_r_80420464, 0x00000000, 0x000000C8,
+    0x00000000, 0x00000021, 0x0003005B, (s32)evt_cam_ctrl_onoff,
+    0x00000004, 0x00000001, 0x0009005B, (s32)evt_cam3d_evt_set,
+    0x00000000, 0x000000D0, 0x0000028D, 0x00000000,
+    0x0000005B, 0xFFFFFFE2, 0x00000000, 0x0000000B,
+    0x00010009, 0x00000001, 0x0004005B, (s32)evt_map_playanim,
+    (s32)(char*)str_anm_hokori_802c2c00, 0x00000001, 0x00000000, 0x0002005B,
+    (s32)evt_sub_get_language, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0x00000004, 0x0001005E, (s32)unk_evt_8030c674, 0x00000020,
+    0x0001005E, (s32)fall_gameover, 0x00000021, 0x00000002,
+    0x00000001,
+};
+
 void seq_gameOverInit(void) {
     winReInit();
     L_camDispOn(4);
@@ -54,6 +251,8 @@ s32 N_evt_snd_bgm_unpause(void) {
     }
     return 2;
 }
+
+static void* wp;
 
 void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 param_5, u32 param_6) {
     extern void fadeEntry(s32 type, s32 duration, void* color);
@@ -84,7 +283,6 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
     extern u32 vec3_802c2c0c[3];
     extern char str_sys_00_802c2c18[];
     extern char zero_804204b8;
-    extern u8 evt_gameover[];
     extern void* wp;
     extern void* gp;
     void* gpLocal;
@@ -236,8 +434,8 @@ const char* const lbl_802C2C28[] = {
     str_nw_804204dc,
 };
 
-void* work;
-void** wp = &work;
+static void* work;
+static void* wp = &work;
 
 const char str_g_80420448[] = "g";
 const char str_a_8042044c[] = "a";

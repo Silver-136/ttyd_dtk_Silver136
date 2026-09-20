@@ -33,6 +33,8 @@ const char str_p_hikohki_802c0188[] = "p_hikohki";
 const char str_p_hune_802c0194[] = "p_hune";
 const char str_extparty_802c019c[] = "extparty";
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mapobj_trans(void* pEvt) {
     extern void mapObjTranslate(s32, f32, f32, f32);
     s32* args;
@@ -56,6 +58,8 @@ s32 evt_mapobj_trans(void* pEvt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mapobj_rotate(void* pEvt) {
     extern void mapObjRotate(s32, f32, f32, f32);
     s32* args;
@@ -79,6 +83,8 @@ s32 evt_mapobj_rotate(void* pEvt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mapobj_scale(void* pEvt) {
     extern void mapObjScale(s32, f32, f32, f32);
     s32* args;
@@ -102,6 +108,8 @@ s32 evt_mapobj_scale(void* pEvt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_map_set_fog(void* pEvt) {
     extern void mapSetFog(s32, f32, f32, unsigned char*);
     s32* args;
@@ -111,8 +119,8 @@ s32 evt_map_set_fog(void* pEvt) {
     s32 red;
     s32 green;
     s32 blue;
-    u32 scratch;
     u32 color;
+    u32 scratch;
 
     args = *(s32**)((s32)pEvt + 0x18);
     mode = evtGetValue(pEvt, args[0]);
@@ -121,7 +129,7 @@ s32 evt_map_set_fog(void* pEvt) {
     red = evtGetValue(pEvt, args[3]);
     green = evtGetValue(pEvt, args[4]);
     blue = evtGetValue(pEvt, args[5]);
-    scratch = dat_8041fa38;
+    scratch = *(volatile const u32*)&dat_8041fa38;
     ((u8*)&scratch)[0] = red;
     ((u8*)&scratch)[1] = green;
     ((u8*)&scratch)[2] = blue;
@@ -129,6 +137,8 @@ s32 evt_map_set_fog(void* pEvt) {
     mapSetFog(mode, start, end, (u8*)&color);
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_map_get_fog(void* pEvt) {
     extern f32 evtSetFloat(void*, s32, f32);
@@ -275,6 +285,8 @@ s32 evt_map_blend_set_flag(void* pEvt) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_map_blend_set_mobj_flag(void* pEvt) {
     extern void* mobjNameToPtr(char*);
     extern void animPoseSetMaterialFlagOn(s32, u32);
@@ -297,6 +309,8 @@ s32 evt_map_blend_set_mobj_flag(void* pEvt) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 s32 evt_mapobj_color(void* pEvt) {
     extern void mapObjSetColor(s32, u8*);
     extern void mapGrpSetColor(s32, u8*);
@@ -305,10 +319,10 @@ s32 evt_mapobj_color(void* pEvt) {
     s32* args;
     s32 group;
     s32 id;
-    s32 red;
-    s32 green;
-    s32 blue;
-    s32 alpha;
+    u8 red;
+    u8 green;
+    u8 blue;
+    u8 alpha;
 
     args = *(s32**)((s32)pEvt + 0x18);
     group = evtGetValue(pEvt, args[0]);
@@ -318,8 +332,8 @@ s32 evt_mapobj_color(void* pEvt) {
     blue = evtGetValue(pEvt, args[4]);
     alpha = evtGetValue(pEvt, args[5]);
     if (group == 0) {
-        u32 scratch = unk_80429558;
         u32 color;
+        u32 scratch = unk_80429558;
         ((u8*)&scratch)[0] = red;
         ((u8*)&scratch)[1] = green;
         ((u8*)&scratch)[2] = blue;
@@ -327,8 +341,8 @@ s32 evt_mapobj_color(void* pEvt) {
         color = scratch;
         mapObjSetColor(id, (u8*)&color);
     } else {
-        u32 scratch = unk_8042955c;
         u32 color;
+        u32 scratch = unk_8042955c;
         ((u8*)&scratch)[0] = red;
         ((u8*)&scratch)[1] = green;
         ((u8*)&scratch)[2] = blue;
@@ -435,6 +449,8 @@ USER_FUNC(evt_map_set_playrate) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mapobj_flag_onoff(void* pEvt) {
     extern void mapObjFlagOff(s32, s32);
     extern void mapObjFlagOn(s32, s32);
@@ -467,6 +483,8 @@ s32 evt_mapobj_flag_onoff(void* pEvt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mapobj_set_offscreen(void* pEvt) {
     extern void mapObjSetOffScreen(s32, s32);
     extern void mapGrpSetOffScreen(s32, s32);
@@ -504,6 +522,8 @@ USER_FUNC(evt_mapobj_clear_offscreen) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_mapobj_get_position(void* pEvt) {
     extern void mapObjGetPos(s32, float*);
     s32* args;
@@ -511,9 +531,9 @@ s32 evt_mapobj_get_position(void* pEvt) {
 
     args = *(s32**)((s32)pEvt + 0x18);
     mapObjGetPos(evtGetValue(pEvt, args[0]), pos);
-    evtSetValue(pEvt, args[1], (s32)(pos[0] * float_1024_8041fa48));
-    evtSetValue(pEvt, args[2], (s32)(pos[1] * float_1024_8041fa48));
-    evtSetValue(pEvt, args[3], (s32)(pos[2] * float_1024_8041fa48));
+    evtSetValue(pEvt, args[1], (s32)(pos[0] * float_1024_8041fa48) - 230000000);
+    evtSetValue(pEvt, args[2], (s32)(pos[1] * float_1024_8041fa48) - 230000000);
+    evtSetValue(pEvt, args[3], (s32)(pos[2] * float_1024_8041fa48) - 230000000);
     return 2;
 }
 #pragma no_register_save_helpers on
@@ -530,6 +550,8 @@ USER_FUNC(evt_map_set_tevcallback) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_map_set_flush_onoff(void* pEvt) {
     extern void mapObjFlushOn(s32);
     extern void mapObjFlushOff(s32);
@@ -542,8 +564,8 @@ s32 evt_map_set_flush_onoff(void* pEvt) {
 
     args = *(s32**)((s32)pEvt + 0x18);
     group = evtGetValue(pEvt, args[0]);
-    id = evtGetValue(pEvt, args[1]);
-    onoff = evtGetValue(pEvt, args[2]);
+    onoff = evtGetValue(pEvt, args[1]);
+    id = evtGetValue(pEvt, args[2]);
     if (group == 0) {
         if (onoff != 0) {
             mapObjFlushOn(id);
@@ -559,6 +581,8 @@ s32 evt_map_set_flush_onoff(void* pEvt) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_map_set_flush_color(void* pEvt) {
     extern void mapObjSetFlushColor(s32, u8, u8, u8, u8);
@@ -603,6 +627,8 @@ s32 evt_map_get_flush_color(void* pEvt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 check(void* pEvt) {
     s32* args;
     void* mario;
@@ -618,6 +644,8 @@ s32 check(void* pEvt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 check2(void* pEvt) {
     s32* args;
     void* mario;
@@ -689,6 +717,8 @@ s32 evt_map_entry_airport_harbor(void* pEvt) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_map_replace_mapobj(void* pEvt) {
     extern void mapObjGetPos(s32, f32*);
     extern void mapObjFlagOn(s32, u32);
@@ -716,6 +746,8 @@ s32 evt_map_replace_mapobj(void* pEvt) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 USER_FUNC(N_evt_mapdisp_onoff) {
     if (evtGetValue(event, event->args[0]) != 0) {

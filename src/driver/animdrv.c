@@ -237,6 +237,7 @@ void animPose_AllocBuffer(void* pPose) {
     s32 ret;
     s32 otherPose;
     s32 i;
+    s32 offset;
     u32 size;
 
 #define ALLOC_INLINE(destination, requestedSize) do { \
@@ -246,14 +247,18 @@ void animPose_AllocBuffer(void* pPose) {
     *(s32*)(wp + 0x108) += size; \
     if (*(s32*)(wp + 0x104) + 0x180000 <= *(s32*)(wp + 0x108)) { \
         initTestHeap(); \
-        otherPose = *(s32*)(wp + 0x10); \
-        for (i = 0; i < *(s32*)(wp + 0x14); i++, otherPose += 0x170) { \
+        i = 0; \
+        offset = 0; \
+        while (i < *(s32*)(wp + 0x14)) { \
+            otherPose = *(s32*)(wp + 0x10) + offset; \
             if (*(s32*)otherPose != 0 && \
                 (*(s32*)(wp + 0x10C) == 0 || *(s32*)(otherPose + 0xC) != 0) && \
                 (*(s32*)(wp + 0x10C) != 0 || *(s32*)(otherPose + 0xC) != 1)) { \
                 animPose_AllocBuffer((void*)otherPose); \
                 *(s32*)(otherPose + 0x3C) = -1; \
             } \
+            offset += 0x170; \
+            i++; \
         } \
         ret = *(s32*)(wp + 0x108); \
         if ((size & 0x1F) != 0) size += 0x20 - (size & 0x1F); \
@@ -589,10 +594,10 @@ s32 animEffectAsync(void* name, s32 mode) {
     extern s32 fileAsyncf(s32 type, s32 flags, char* fmt, char* ext, ...);
     extern s32 strcmp(const char*, const char*);
     extern s32 wp;
-    extern char str_PCTs_PCTs_8041fb34[];
+    extern char str_PCTs_PCTs_8041fb34[6];
     extern char str_PCTs_PCTs_802c1068[];
-    extern char str_a_8041fb3c[];
-    extern char zero_8041fb30[];
+    extern char str_a_8041fb3c[2];
+    extern char zero_8041fb30[1];
     s32 first;
     s32 second;
     s32 count;
@@ -613,9 +618,9 @@ s32 animEffectAsync(void* name, s32 mode) {
     }
 
     first = fileAsyncf(5, 0, str_PCTs_PCTs_8041fb34, str_a_8041fb3c, name);
-    entry = *(char**)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0));
-    count = *(s32*)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0) + 4);
     offset = 0;
+    count = *(s32*)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0) + 4);
+    entry = *(char**)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0));
     while (offset < count) {
         if (strcmp(entry, name) == 0) {
             found = entry + 0x20;
@@ -630,13 +635,13 @@ found_name:
     if (first == -1) {
         return 1;
     }
-    if (first == 0) {
+    else if ((u32)first == 0) {
         return 0;
     }
     if (second == -1) {
         return 1;
     }
-    if (second == 0) {
+    else if ((u32)second == 0) {
         return 0;
     }
     return 1;
@@ -693,7 +698,6 @@ void animPoseSetLocalTime(s32 poseId, f32 frame) {
     s32 pose;
     s64 local;
     s64 time;
-    s64 result;
     s32 paper;
 
     pose = *(s32*)(wp + 0x10) + poseId * 0x170;
@@ -705,13 +709,12 @@ void animPoseSetLocalTime(s32 poseId, f32 frame) {
         u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
         time = *(s64*)(gp + 0x38) / ticks;
     }
-    result = time - local;
-    *(s64*)(pose + 0x18) = result;
-    *(s64*)(pose + 0x88) = result;
+    *(s64*)(pose + 0x18) = time - local;
+    *(s64*)(pose + 0x88) = *(s64*)(pose + 0x18);
     if (*(s32*)(pose + 0x90) != -1) {
         paper = *(s32*)(wp + 0x10) + *(s32*)(pose + 0x90) * 0x170;
         if ((*(u32*)(paper + 4) & 2) == 0) {
-            *(s64*)(paper + 0x18) = result;
+            *(s64*)(paper + 0x18) = *(s64*)(pose + 0x18);
         }
     }
 }
@@ -904,8 +907,9 @@ void animPoseSetPaperAnim(s32 poseId, void* name, s32 enabled) {
     extern s32 wp;
     extern s32 gp;
     extern u8 animPoseMain(s32 poseIdx);
+    s32 work;
+    s32 poses;
     s32 pose;
-    s32 paper;
     s32 file;
     s32 data;
     s32 animCount;
@@ -913,26 +917,30 @@ void animPoseSetPaperAnim(s32 poseId, void* name, s32 enabled) {
     s32 offset;
     s64 time;
 
-    pose = *(s32*)(wp + 0x10) + poseId * 0x170;
-    paper = *(s32*)(wp + 0x10) + *(s32*)(pose + 0x90) * 0x170;
-    file = *(s32*)wp + (*(s32*)(paper + 0x10) << 4);
-    data = **(s32**)(*(s32*)(file + 8) + 0xA0);
-    animCount = *(s32*)(data + 0x148);
     animIdx = (s32)name;
+    work = wp;
+    poses = *(s32*)(work + 0x10);
+    pose = poses + poseId * 0x170;
+    file = *(s32*)work + (*(s32*)(poses + *(s32*)(pose + 0x90) * 0x170 + 0x10) << 4);
+    file = *(s32*)(file + 8);
+    data = **(s32**)(file + 0xA0);
+    animCount = *(s32*)(data + 0x148);
     if (animIdx < 0) {
         animIdx = 0;
-        offset = 0;
+        offset = animIdx;
         while (animIdx < animCount) {
             if (strcmp((char*)(*(s32*)(data + 0x1AC) + offset), name) == 0) {
-                break;
+                goto animation_found;
             }
             offset += 0x40;
             animIdx++;
         }
-    } else if (animIdx >= animCount) {
-        animIdx = 0;
+    } else if (animIdx < animCount) {
+        goto animation_found;
     }
+    animIdx = 0;
 
+animation_found:
     *(s32*)(pose + 0x94) = animIdx;
     if (*(s32*)(pose + 0xC) == 0) {
         u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
@@ -942,7 +950,8 @@ void animPoseSetPaperAnim(s32 poseId, void* name, s32 enabled) {
         time = *(s64*)(gp + 0x38) / ticks;
     }
     *(s64*)(pose + 0x88) = time;
-    if (*(s32*)(pose + 0x90) != -1 && (*(u32*)(paper + 4) & 2) == 0) {
+    if (*(s32*)(pose + 0x90) != -1 &&
+        (*(u32*)(poses + *(s32*)(pose + 0x90) * 0x170 + 4) & 2) == 0) {
         animPoseMain(*(s32*)(pose + 0x90));
     }
 }
@@ -1235,7 +1244,6 @@ u8 animPoseMain(s32 poseIdx) {
     s32 poseData;
     s32 animEntry;
     s32 animData;
-    s32 loopData;
     s32 frameData;
     s32 frame;
     s32 frameEnd;
@@ -1278,9 +1286,12 @@ u8 animPoseMain(s32 poseIdx) {
     work = wp;
     poses = *(s32*)(work + 0x10);
     pose = poses + poseIdx * 0x170;
-    file = *(s32*)(*(s32*)work + (*(s32*)(pose + 0x10) << 4) + 8);
+    file = *(s32*)work;
+    file += *(s32*)(pose + 0x10) << 4;
+    file = *(s32*)(file + 8);
     poseData = **(s32**)(file + 0xA0);
-    animEntry = *(s32*)(poseData + 0x1AC) + (*(s32*)(pose + 0x14) << 6);
+    animEntry = *(s32*)(poseData + 0x1AC);
+    animEntry += *(s32*)(pose + 0x14) << 6;
     animData = *(s32*)(animEntry + 0x3C);
 
     asm {
@@ -1298,12 +1309,12 @@ u8 animPoseMain(s32 poseIdx) {
         mtspr GQR5, r3
     }
 
-    if (*(s32*)(work + 0xE8) == 0) {
-        outPos = *(s32*)(pose + 0x4C);
-        outNrm = *(s32*)(pose + 0x54);
-    } else {
+    if (*(s32*)(work + 0xE8) != 0) {
         outPos = *(s32*)(work + 0xF8);
         outNrm = *(s32*)(work + 0xFC);
+    } else {
+        outPos = *(s32*)(pose + 0x4C);
+        outNrm = *(s32*)(pose + 0x54);
     }
 
     if ((*(s32*)(pose + 0x90) != -1) && ((*(u32*)(poses + *(s32*)(pose + 0x90) * 0x170 + 4) & 2U) == 0)) {
@@ -1314,8 +1325,7 @@ u8 animPoseMain(s32 poseIdx) {
         return;
     }
 
-    loopData = *(s32*)(animData + 0x24);
-    loopFlag = *(s32*)loopData;
+    loopFlag = **(s32**)(animData + 0x24);
 
     ticks = (*(u32*)0x800000F8 >> 2) / 1000;
     if (*(s32*)(pose + 0xC) == 0) {
@@ -1330,24 +1340,14 @@ u8 animPoseMain(s32 poseIdx) {
     cur *= *(f32*)(pose + 0x44);
     *(f32*)(pose + 0x20) = cur;
 
-    start = *(f32*)(loopData + 4);
-    end = *(f32*)(loopData + 8);
+    start = *(f32*)(*(s32*)(animData + 0x24) + 4);
+    end = *(f32*)(*(s32*)(animData + 0x24) + 8);
     duration = end - start;
 
     if (duration == float_0_8041fb28) {
         *(f32*)(pose + 0x84) = cur - start;
         cur = start;
-    } else if (loopFlag == 0) {
-        if (cur < start) {
-            *(f32*)(pose + 0x84) = float_0_8041fb28;
-            cur = start;
-        } else if (cur > end) {
-            *(f32*)(pose + 0x84) = (cur - start) / duration;
-            cur = end;
-        } else {
-            *(f32*)(pose + 0x84) = (cur - start) / duration;
-        }
-    } else {
+    } else if (loopFlag != 0) {
         if ((cur - start) >= float_0_8041fb28) {
             f32 loops = (cur - start) / duration;
             s32 whole = (s32)loops;
@@ -1356,6 +1356,16 @@ u8 animPoseMain(s32 poseIdx) {
         } else {
             *(f32*)(pose + 0x84) = float_0_8041fb28;
             cur = start;
+        }
+    } else {
+        if (cur < start) {
+            *(f32*)(pose + 0x84) = float_0_8041fb28;
+            cur = start;
+        } else if (cur > end) {
+            *(f32*)(pose + 0x84) = (cur - start) / duration;
+            cur = end;
+        } else {
+            *(f32*)(pose + 0x84) = (cur - start) / duration;
         }
     }
 
@@ -1406,7 +1416,7 @@ u8 animPoseMain(s32 poseIdx) {
     } else if ((loopFlag != 0) && (anim1 >= frameCount)) {
         anim1 = 0;
         *(s32*)(pose + 0x2C) = 0;
-        duration = *(f32*)(loopData + 8) - *(f32*)(frameData + anim0 * 0x2C);
+        duration = *(f32*)(*(s32*)(animData + 0x24) + 8) - *(f32*)(frameData + anim0 * 0x2C);
     } else {
         duration = *(f32*)(frameData + anim1 * 0x2C) - start;
     }
@@ -1724,6 +1734,9 @@ u8 pushGXModelMtx_TransformNode__(void* pNode) {
     Mtx centerA;
     Mtx centerB;
     Mtx centerC;
+    Mtx rotCenterA;
+    Mtx rotCenterB;
+    Mtx rotCenterC;
     Mtx* child;
     u32 flags;
     f32 tx;
@@ -1754,9 +1767,9 @@ u8 pushGXModelMtx_TransformNode__(void* pNode) {
     sx = *(f32*)((s32)pNode + 0x0C);
     sy = *(f32*)((s32)pNode + 0x10);
     sz = *(f32*)((s32)pNode + 0x14);
-    rx = *(f32*)((s32)pNode + 0x18);
-    ry = *(f32*)((s32)pNode + 0x1C);
-    rz = *(f32*)((s32)pNode + 0x20);
+    rx = 2.0f * *(f32*)((s32)pNode + 0x18);
+    ry = 2.0f * *(f32*)((s32)pNode + 0x1C);
+    rz = 2.0f * *(f32*)((s32)pNode + 0x20);
     rcx = *(f32*)((s32)pNode + 0x30);
     rcy = *(f32*)((s32)pNode + 0x34);
     rcz = *(f32*)((s32)pNode + 0x38);
@@ -1780,18 +1793,16 @@ u8 pushGXModelMtx_TransformNode__(void* pNode) {
         flags |= 2;
     }
     if (scx != 0.0f || scy != 0.0f || scz != 0.0f) {
-        if ((flags & 2) == 0) {
-            if (stx != 0.0f || sty != 0.0f || stz != 0.0f) {
-                PSMTXTrans(scale, (double)stx, (double)sty, (double)stz);
-                flags |= 2;
-            }
-        } else {
+        if (flags & 2) {
             PSMTXTrans(centerA, (double)-scx, (double)-scy, (double)-scz);
             PSMTXTrans(centerB, (double)scx, (double)scy, (double)scz);
             PSMTXTrans(centerC, (double)stx, (double)sty, (double)stz);
             PSMTXConcat(centerC, centerB, tmp);
             PSMTXConcat(tmp, scale, tmp);
             PSMTXConcat(tmp, centerA, scale);
+        } else if (stx != 0.0f || sty != 0.0f || stz != 0.0f) {
+            PSMTXTrans(scale, (double)stx, (double)sty, (double)stz);
+            flags |= 2;
         }
     }
 
@@ -1812,18 +1823,16 @@ u8 pushGXModelMtx_TransformNode__(void* pNode) {
         flags |= 4;
     }
     if (rcx != 0.0f || rcy != 0.0f || rcz != 0.0f) {
-        if ((flags & 4) == 0) {
-            if (rtx != 0.0f || rty != 0.0f || rtz != 0.0f) {
-                PSMTXTrans(rot, (double)rtx, (double)rty, (double)rtz);
-                flags |= 4;
-            }
-        } else {
-            PSMTXTrans(centerB, (double)-rcx, (double)-rcy, (double)-rcz);
-            PSMTXTrans(centerA, (double)rcx, (double)rcy, (double)rcz);
-            PSMTXTrans(centerC, (double)rtx, (double)rty, (double)rtz);
-            PSMTXConcat(centerC, centerA, tmp);
+        if (flags & 4) {
+            PSMTXTrans(rotCenterB, (double)-rcx, (double)-rcy, (double)-rcz);
+            PSMTXTrans(rotCenterA, (double)rcx, (double)rcy, (double)rcz);
+            PSMTXTrans(rotCenterC, (double)rtx, (double)rty, (double)rtz);
+            PSMTXConcat(rotCenterC, rotCenterA, tmp);
             PSMTXConcat(tmp, rot, rot);
-            PSMTXConcat(rot, centerB, rot);
+            PSMTXConcat(rot, rotCenterB, rot);
+        } else if (rtx != 0.0f || rty != 0.0f || rtz != 0.0f) {
+            PSMTXTrans(rot, (double)rtx, (double)rty, (double)rtz);
+            flags |= 4;
         }
     }
 
@@ -2052,7 +2061,7 @@ u8 animSetMaterial_Texture(s32 texCount, int* pTexIdRemap, void* pTexEntries, vo
     extern f32 float_deg2rad_8041fbb4;
     extern char str_Error_dispSetTevMode_802c10c4[];
     u8 texObj[32];
-    u32 tlutObj[4];
+    u32 tlutObj[3];
     Mtx trans;
     Mtx rot;
     Mtx scale;
@@ -2199,6 +2208,12 @@ u8 animSetMaterial_Texture(s32 texCount, int* pTexIdRemap, void* pTexEntries, vo
 }
 
 void materialProc(int shapeIdx) {
+    typedef struct Vec3Local {
+        u32 x;
+        u32 y;
+        u32 z;
+    } Vec3Local;
+
     extern s32 wp;
     extern s32 g_modeling_mtx;
     extern u32 vec3_802c1030[];
@@ -2231,19 +2246,14 @@ void materialProc(int shapeIdx) {
     s32 work;
     s32 pose;
     s32 poseData;
-    s32 shapes;
     s32 shape;
-    s32 draws;
     s32 draw;
     s32 drawCount;
-    s32 drawStart;
-    s32 dispMode;
-    s32 curDispMode;
     s32 i;
     f32 posMtx[3][4];
     f32 nrmMtx[3][4];
-    u32 tmpVec[3];
-    u32 lightVec[3];
+    Vec3Local tmpVec;
+    Vec3Local lightVec;
 
     if (shapeIdx == -1) {
         return;
@@ -2257,17 +2267,13 @@ void materialProc(int shapeIdx) {
 
     work = wp;
     poseData = *(s32*)(work + 0x20);
-    shapes = *(s32*)(poseData + 0x14C);
-    draws = *(s32*)(poseData + 0x19C);
-    shape = shapes + shapeIdx * 0xA8;
-    drawStart = *(s32*)(shape + 0x98);
+    shape = *(s32*)(poseData + 0x14C) + shapeIdx * 0xA8;
+    draw = *(s32*)(poseData + 0x19C) + *(s32*)(shape + 0x98) * 0x6C;
     drawCount = *(s32*)(shape + 0x9C);
-    dispMode = *(s32*)(shape + 0xA0);
-    curDispMode = *(s32*)(work + 0xE0);
     pose = *(s32*)(work + 0x18);
 
-    if (!((dispMode == 0 && curDispMode == 2) ||
-          (dispMode == curDispMode) ||
+    if (!((*(s32*)(shape + 0xA0) == 0 && *(s32*)(work + 0xE0) == 2) ||
+          (*(s32*)(shape + 0xA0) == *(s32*)(work + 0xE0)) ||
           (*(u8*)(pose + 0xF3) != 0xFF) ||
           (*(u8*)(pose + 0xF7) != 0xFF))) {
         return;
@@ -2278,7 +2284,6 @@ void materialProc(int shapeIdx) {
         GXSetCullMode(cull_table[*(s32*)(shape + 0xA4)]);
     }
 
-    draw = draws + drawStart * 0x6C;
     for (i = 0; i < drawCount; i++, draw += 0x6C) {
         s32 texCount = *(s32*)(draw + 0x0);
         s32 drawMode = *(s32*)(draw + 0x8);
@@ -2301,16 +2306,14 @@ void materialProc(int shapeIdx) {
             u32 color1;
             void* cam4;
 
-            tmpVec[0] = vec3_802c1030[0];
-            tmpVec[1] = vec3_802c1030[1];
-            tmpVec[2] = vec3_802c1030[2];
-            PSMTXMultVec((void*)g_modeling_mtx, tmpVec, tmpVec);
-            lightVec[0] = tmpVec[0];
-            lightVec[1] = tmpVec[1];
-            lightVec[2] = tmpVec[2];
+            tmpVec = *(Vec3Local*)vec3_802c1030;
+            PSMTXMultVec((void*)g_modeling_mtx, &tmpVec, &tmpVec);
+            lightVec = tmpVec;
 
-            mapSetMaterialLight(*(u32*)(pose + 0xEC), lightVec);
+            mapSetMaterialLight(*(u32*)(*(s32*)(wp + 0x18) + 0xEC), &lightVec);
 
+            work = wp;
+            pose = *(s32*)(work + 0x18);
             poseData = *(s32*)(work + 0x20);
             animSetMaterial_Texture(texCount,
                                     (int*)(draw + 0x10),
@@ -2320,19 +2323,19 @@ void materialProc(int shapeIdx) {
                                     (void*)*(s32*)(poseData + 0x198),
                                     (void*)(*(s32*)(work + 0x8) + (*(s32*)(*(s32*)work + (*(s32*)(pose + 0x10) * 0x10) + 0xC) * 0xC)));
 
-            color1 = *(u32*)(pose + 0xF4);
-            color0 = *(u32*)(pose + 0xF0);
-            mapSetMaterialLastStageBlend(*(u32*)(pose + 0xE8), &color0, &color1);
+            color1 = *(u32*)(*(s32*)(wp + 0x18) + 0xF4);
+            color0 = *(u32*)(*(s32*)(wp + 0x18) + 0xF0);
+            mapSetMaterialLastStageBlend(*(u32*)(*(s32*)(wp + 0x18) + 0xE8), &color0, &color1);
 
             cam4 = camGetPtr(4);
             if (camGetCurPtr() == cam4) {
                 mapSetMaterialFog();
             }
-            mapSetMaterialTev(texCount, drawMode, *(u32*)(pose + 0xE8), g_modeling_mtx);
+            mapSetMaterialTev(texCount, drawMode,
+                              *(u32*)(*(s32*)(wp + 0x18) + 0xE8), g_modeling_mtx);
         }
 
         foundFirst = 0;
-        foundAny = 0;
         work = wp;
         pose = *(s32*)(work + 0x18);
         if (*(u32*)(pose + 0x4) != 0) {
@@ -2365,11 +2368,11 @@ void materialProc(int shapeIdx) {
                         }
                     }
                     foundFirst = 1;
-                    foundAny = 1;
                     break;
                 }
             }
 
+            foundAny = foundFirst;
             if (!foundFirst) {
                 poseData = *(s32*)(work + 0x20);
                 texMtx = *(void**)(work + 0xD0);
@@ -2995,8 +2998,10 @@ void dispProc(int parentGroupIdx, int groupIdx, int animFrame0, int animFrame1, 
     extern void* g_modeling_mtx;
     extern s32 g_modeling_mtx_lv;
     extern u8 g_modeling_mtx_stack[];
-    extern const Vec3 vec3_802c1054;
+    extern const Vec3 vec3_802c1048;
     extern s32 vivihimoData;
+    extern f32 float_0_8041fb28;
+    extern f32 float_1_8041fb24;
     extern f32 float_0p5_8041fb44;
     extern f32 float_neg1_8041fb6c;
     extern f32 float_neg2_8041fb98;
@@ -3021,6 +3026,7 @@ void dispProc(int parentGroupIdx, int groupIdx, int animFrame0, int animFrame1, 
     f32* oldMtx;
     f32 himoZ;
     f32 himoW;
+    f32 interp;
     s32 vivianType;
     s32 mtxTop;
 
@@ -3035,13 +3041,13 @@ void dispProc(int parentGroupIdx, int groupIdx, int animFrame0, int animFrame1, 
             node = nodes + (*(s32*)(group + 0x50) << 2);
             if (*(s32*)(group + 0x54) != 0) {
                 if (parentGroupIdx == -1) {
-                    sz = 0.0f;
+                    sz = float_1_8041fb24;
                     sy = sz;
                     sx = sz;
                 } else {
                     parentGroup = groups + parentGroupIdx * 0x58;
                     if (*(s32*)(parentGroup + 0x54) == 0) {
-                        sz = 0.0f;
+                        sz = float_1_8041fb24;
                         sy = sz;
                         sx = sz;
                     } else {
@@ -3059,52 +3065,60 @@ void dispProc(int parentGroupIdx, int groupIdx, int animFrame0, int animFrame1, 
             pose = *(s32*)(work + 0x18);
             flags = *(s32*)pose;
             if ((flags & 0x40) != 0) {
-                temp = vec3_802c1054;
+                temp = vec3_802c1048;
                 temp.x = *(f32*)((s32)g_modeling_mtx + 0xC);
                 temp.y = *(f32*)((s32)g_modeling_mtx + 0x1C);
                 temp.z = *(f32*)((s32)g_modeling_mtx + 0x2C);
-                *(Vec3*)(*(s32*)(pose + 0x15C) + groupIdx * 0xC) = temp;
+                *(Vec3*)(*(s32*)(*(s32*)(pose + 0x15C)) + groupIdx * 0xC) = temp;
             }
             work = wp;
             pose = *(s32*)(work + 0x18);
             flags = *(s32*)pose;
             if ((flags & 0x80) != 0) {
-                PSMTXCopy(g_modeling_mtx, (void*)(*(s32*)(pose + 0x164) + groupIdx * 0x30));
+                PSMTXCopy(g_modeling_mtx, (void*)(*(s32*)(*(s32*)(pose + 0x164)) + groupIdx * 0x30));
             }
             work = wp;
             pose = *(s32*)(work + 0x18);
             flags = *(s32*)pose;
             if ((flags & 0x20) != 0 && groupIdx == **(s32**)(pose + 0x120)) {
                 vivianType = *(s32*)(pose + 0x11C);
-                himoZ = 0.0f;
-                himoW = 0.0f;
+                himoZ = float_0_8041fb28;
+                himoW = himoZ;
                 himoData = (f32*)(*((s32*)&vivihimoData + vivianType) +
                                   *(s32*)(pose + 0x14) * 8);
-                if (vivianType == 2) {
-                    himoZ = float_neg3_8041fb9c;
-                    himoW = float_0p5_8041fb44;
-                } else if (vivianType == 1) {
-                    himoZ = float_neg2_8041fb98;
-                    himoW = float_0p5_8041fb44;
-                } else if (vivianType == 3) {
-                    himoZ = float_neg1_8041fb6c;
-                    himoW = float_0p5_8041fb44;
+                switch (vivianType) {
+                    case 1:
+                        himoZ = float_neg2_8041fb98;
+                        himoW = float_0p5_8041fb44;
+                        break;
+                    case 2:
+                        himoZ = float_neg3_8041fb9c;
+                        himoW = float_0p5_8041fb44;
+                        break;
+                    case 3:
+                        himoZ = float_neg1_8041fb6c;
+                        himoW = float_0p5_8041fb44;
+                        break;
                 }
+                if (0) { }
+                if (0) { }
                 currentMtx = (f32*)g_modeling_mtx;
                 oldMtx = (f32*)(pose + 0x124);
                 materialProc(*(s32*)(group + 0x48));
                 vivihimo((double)himoData[0], (double)himoData[1],
                           (double)himoZ, (double)himoW, currentMtx, oldMtx);
-                *(s32*)pose &= ~0x20;
-                oldMtx[0] = float_0p04_8041fba0 * (currentMtx[0] - oldMtx[0]) + oldMtx[0];
-                oldMtx[1] = float_0p04_8041fba0 * (currentMtx[1] - oldMtx[1]) + oldMtx[1];
-                oldMtx[2] = float_0p04_8041fba0 * (currentMtx[2] - oldMtx[2]) + oldMtx[2];
-                oldMtx[4] = float_0p04_8041fba0 * (currentMtx[4] - oldMtx[4]) + oldMtx[4];
-                oldMtx[5] = float_0p04_8041fba0 * (currentMtx[5] - oldMtx[5]) + oldMtx[5];
-                oldMtx[6] = float_0p04_8041fba0 * (currentMtx[6] - oldMtx[6]) + oldMtx[6];
-                oldMtx[8] = float_0p04_8041fba0 * (currentMtx[8] - oldMtx[8]) + oldMtx[8];
-                oldMtx[9] = float_0p04_8041fba0 * (currentMtx[9] - oldMtx[9]) + oldMtx[9];
-                oldMtx[10] = float_0p04_8041fba0 * (currentMtx[10] - oldMtx[10]) + oldMtx[10];
+                work = wp;
+                interp = float_0p04_8041fba0;
+                *(s32*)(*(s32*)(work + 0x18)) &= ~0x20;
+                oldMtx[0] = interp * (currentMtx[0] - oldMtx[0]) + oldMtx[0];
+                oldMtx[1] = interp * (currentMtx[1] - oldMtx[1]) + oldMtx[1];
+                oldMtx[2] = interp * (currentMtx[2] - oldMtx[2]) + oldMtx[2];
+                oldMtx[4] = interp * (currentMtx[4] - oldMtx[4]) + oldMtx[4];
+                oldMtx[5] = interp * (currentMtx[5] - oldMtx[5]) + oldMtx[5];
+                oldMtx[6] = interp * (currentMtx[6] - oldMtx[6]) + oldMtx[6];
+                oldMtx[8] = interp * (currentMtx[8] - oldMtx[8]) + oldMtx[8];
+                oldMtx[9] = interp * (currentMtx[9] - oldMtx[9]) + oldMtx[9];
+                oldMtx[10] = interp * (currentMtx[10] - oldMtx[10]) + oldMtx[10];
             } else {
                 if (*(void**)(pose + 0x154) != 0) {
                     ((void (*)(void*, s32, void*))*(void**)(pose + 0x154))(
@@ -3168,7 +3182,7 @@ void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rotValue, do
     extern f32 float_180_8041fb8c;
     extern f32 float_neg180_8041fb90;
     extern f32 float_0p1_8041fb94;
-    extern f32 float_deg2rad_8041fbb4;
+    extern f32 float_deg2rad_8041fb2c;
     s32 work;
     s32 pose;
     s32 poses;
@@ -3255,7 +3269,7 @@ void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rotValue, do
 
     drawMtx = pMtx;
     if (((*(u32*)pose & 8) == 0) && (rotValue != (double)float_0_8041fb28)) {
-        PSMTXRotRad(rotMtx, (double)(float_deg2rad_8041fbb4 * (f32)rotValue), 'y');
+        PSMTXRotRad(rotMtx, (double)(float_deg2rad_8041fb2c * (f32)rotValue), 'y');
         PSMTXConcat(pMtx, rotMtx, tempMtx);
         drawMtx = tempMtx;
     } else if ((*(u32*)pose & 8) != 0) {
@@ -3317,7 +3331,7 @@ void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rotValue, do
             *(f32*)(pose + 0x74) += float_0p1_8041fb94 * delta;
         }
         if (*(f32*)(pose + 0x74) != float_0_8041fb28) {
-            PSMTXRotRad(rotMtx, (double)(float_deg2rad_8041fbb4 * *(f32*)(pose + 0x74)), 'y');
+            PSMTXRotRad(rotMtx, (double)(float_deg2rad_8041fb2c * *(f32*)(pose + 0x74)), 'y');
             PSMTXConcat(pMtx, rotMtx, tempMtx);
             drawMtx = tempMtx;
         }
@@ -3498,10 +3512,11 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
                 if (*(s32*)(drawPose + 0x90) != -1 && (*(u32*)drawPose & 2) != 0) {
                     *(u32*)drawPose |= 4;
                 }
-                ticks = (*(u32*)0x800000F8 >> 2) / 1000;
                 if (*(s32*)(drawPose + 0xC) == 0) {
+                    ticks = (*(u32*)0x800000F8 >> 2) / 1000;
                     time = *(s64*)(gp + 0x40) / ticks;
                 } else {
+                    ticks = (*(u32*)0x800000F8 >> 2) / 1000;
                     time = *(s64*)(gp + 0x38) / ticks;
                 }
                 *(s64*)(drawPose + 0x18) = time;
@@ -3512,10 +3527,11 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
             }
         }
 
-        ticks = (*(u32*)0x800000F8 >> 2) / 1000;
         if (*(s32*)(drawPose + 0xC) == 0) {
+            ticks = (*(u32*)0x800000F8 >> 2) / 1000;
             time = *(s64*)(gp + 0x40) / ticks;
         } else {
+            ticks = (*(u32*)0x800000F8 >> 2) / 1000;
             time = *(s64*)(gp + 0x38) / ticks;
         }
         *(s64*)(drawPose + 0x18) = time;
@@ -3804,6 +3820,7 @@ void animPaperPoseDisp(void) {
     }
 }
 
+#pragma opt_common_subs off
 void animPaperPoseDispSub(s32 cameraId, void* posePtr) {
     extern s32 wp;
     extern s32 gp;
@@ -3866,19 +3883,23 @@ void animPaperPoseDispSub(s32 cameraId, void* posePtr) {
     void* alloc;
     f32 invScale;
     (void)cameraId;
+    scale = float_8_8041fb50;
 
     if ((*(u32*)pose & 1) == 0) {
         return;
     }
 
     work = wp;
-    file = *(s32*)(*(s32*)work + (*(s32*)(pose + 0x10) << 4) + 8);
+    file = *(s32*)work + (*(s32*)(pose + 0x10) << 4);
+    file = *(s32*)(file + 8);
     data = *(s32*)(file + 0xA0);
     data = *(s32*)data;
     animTable = *(s32*)(data + 0x1AC);
-    animData = *(s32*)(animTable + (*(s32*)(pose + 0x14) << 6) + 0x3C);
+    animData = animTable + (*(s32*)(pose + 0x14) << 6);
+    animData = *(s32*)(animData + 0x3C);
 
-    scale = float_8_8041fb50 * (float_25p74_8041fb54 / (*(f32*)(animData + 0x54) - *(f32*)(animData + 0x48)));
+    scale *= float_25p74_8041fb54 /
+             (*(f32*)(animData + 0x54) - *(f32*)(animData + 0x48));
     renderMode = DEMOGetRenderModeObj();
     screen75 = float_0p75_8041fb48 * (f32)*(u16*)((s32)renderMode + 6);
 
@@ -3920,7 +3941,7 @@ void animPaperPoseDispSub(s32 cameraId, void* posePtr) {
     sysWaitDrawSync();
     GXReadBoundingBox(&left, &top, &right, &bottom);
 
-    if (right < left) {
+    if (left > right) {
         left = 0;
         top = 0;
         right = 0x10;
@@ -3950,38 +3971,18 @@ void animPaperPoseDispSub(s32 cameraId, void* posePtr) {
         top = 2;
     }
     renderMode = DEMOGetRenderModeObj();
-    if ((s32)(*(u16*)((s32)renderMode + 4) - 2) < (s32)(u32)right) {
+    if ((s32)(u32)right > (s32)(*(u16*)((s32)renderMode + 4) - 2)) {
         renderMode = DEMOGetRenderModeObj();
         right = *(u16*)((s32)renderMode + 4) - 2;
     }
     renderMode = DEMOGetRenderModeObj();
-    if ((s32)(*(u16*)((s32)renderMode + 6) - 2) < (s32)(u32)bottom) {
+    if ((s32)(u32)bottom > (s32)(*(u16*)((s32)renderMode + 6) - 2)) {
         renderMode = DEMOGetRenderModeObj();
         bottom = *(u16*)((s32)renderMode + 6) - 2;
     }
 
-    if ((*(u32*)pose & 2U) == 0) {
-        renderMode = DEMOGetRenderModeObj();
-        hpad = (s32)((*(u16*)((s32)renderMode + 4) >> 1) - (u32)left);
-        renderMode = DEMOGetRenderModeObj();
-        v0 = (s32)((u32)right - (*(u16*)((s32)renderMode + 4) >> 1));
-        if (hpad < v0) {
-            hpad = v0;
-        }
-        v1 = (s32)((u32)bottom - (u32)top);
-        v0 = (s32)(float_0p5_8041fb44 * (f32)hpad);
-        vpad = (s32)(float_0p14881_8041fb58 * (f32)v1);
-        renderMode = DEMOGetRenderModeObj();
-        *(u16*)(pose + 0x114) = (u16)(((*(u16*)((s32)renderMode + 4) >> 1) - hpad) - v0);
-        renderMode = DEMOGetRenderModeObj();
-        *(u16*)(pose + 0x116) = (u16)(hpad + (*(u16*)((s32)renderMode + 4) >> 1) + v0);
-        *(u16*)(pose + 0x118) = (u16)(top - vpad);
-        *(u16*)(pose + 0x11A) = (u16)(bottom + vpad);
-        invScale = float_8_8041fb50 / scale;
-        *(f32*)(pose + 0xF8) = invScale * ((f32)((s16)*(u16*)(pose + 0x116) - (s16)*(u16*)(pose + 0x114)) / float_150_8041fb5c);
-        *(f32*)(pose + 0xFC) = invScale * ((f32)((s16)*(u16*)(pose + 0x11A) - (s16)*(u16*)(pose + 0x118)) / float_215_8041fb60);
-        *(f32*)(pose + 0x100) = *(f32*)(animData + 0x48) + ((screen75 - (f32)(u32)bottom) / scale);
-    } else if ((*(u32*)pose & 4U) != 0) {
+    if ((*(u32*)pose & 2U) != 0) {
+        if ((*(u32*)pose & 4U) != 0) {
         renderMode = DEMOGetRenderModeObj();
         hpad = (s32)((*(u16*)((s32)renderMode + 4) >> 1) - (u32)left);
         renderMode = DEMOGetRenderModeObj();
@@ -4003,6 +4004,28 @@ void animPaperPoseDispSub(s32 cameraId, void* posePtr) {
         *(f32*)(pose + 0xFC) = invScale * ((f32)((s16)*(u16*)(pose + 0x11A) - (s16)*(u16*)(pose + 0x118)) / float_215_8041fb60);
         *(f32*)(pose + 0x100) = *(f32*)(animData + 0x48) + ((screen75 - (f32)(u32)bottom) / scale);
         *(u32*)pose &= ~4U;
+        }
+    } else {
+        renderMode = DEMOGetRenderModeObj();
+        hpad = (s32)((*(u16*)((s32)renderMode + 4) >> 1) - (u32)left);
+        renderMode = DEMOGetRenderModeObj();
+        v0 = (s32)((u32)right - (*(u16*)((s32)renderMode + 4) >> 1));
+        if (hpad < v0) {
+            hpad = v0;
+        }
+        v1 = (s32)((u32)bottom - (u32)top);
+        v0 = (s32)(float_0p5_8041fb44 * (f32)hpad);
+        vpad = (s32)(float_0p14881_8041fb58 * (f32)v1);
+        renderMode = DEMOGetRenderModeObj();
+        *(u16*)(pose + 0x114) = (u16)(((*(u16*)((s32)renderMode + 4) >> 1) - hpad) - v0);
+        renderMode = DEMOGetRenderModeObj();
+        *(u16*)(pose + 0x116) = (u16)(hpad + (*(u16*)((s32)renderMode + 4) >> 1) + v0);
+        *(u16*)(pose + 0x118) = (u16)(top - vpad);
+        *(u16*)(pose + 0x11A) = (u16)(bottom + vpad);
+        invScale = float_8_8041fb50 / scale;
+        *(f32*)(pose + 0xF8) = invScale * ((f32)((s16)*(u16*)(pose + 0x116) - (s16)*(u16*)(pose + 0x114)) / float_150_8041fb5c);
+        *(f32*)(pose + 0xFC) = invScale * ((f32)((s16)*(u16*)(pose + 0x11A) - (s16)*(u16*)(pose + 0x118)) / float_215_8041fb60);
+        *(f32*)(pose + 0x100) = *(f32*)(animData + 0x48) + ((screen75 - (f32)(u32)bottom) / scale);
     }
 
     left = (left - 2) - ((left - 2) & 1);
@@ -4032,6 +4055,7 @@ void animPaperPoseDispSub(s32 cameraId, void* posePtr) {
     GXInitTexObj((void*)(pose + 0xA0), *(void**)*(void***)(pose + 0x98), width, height, 5, 0, 0, 0);
     *(s32*)(pose + 0x9C) = 0;
 }
+#pragma opt_common_subs reset
 
 void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** outAlloc,
                                  s32* outLeft, s32* outTop, s32* outRight, s32* outBottom,
@@ -4077,7 +4101,9 @@ void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** ou
     s64 now;
     s64 local;
     u32 ticks;
-    s32 backup[0x5C];
+    struct PoseBackup {
+        s32 words[0x5C];
+    } backup;
     f32 mtx[3][4];
     u16 left;
     u16 top;
@@ -4098,14 +4124,13 @@ void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** ou
     void* alloc;
     s32 i;
 
-    work = wp;
-    poses = *(s32*)(work + 0x10);
     battleFlag = (*(s32*)(gp + 0x14) != 0);
 
     poseIdx = 0;
     offset = 0;
-    while (poseIdx < *(s32*)(work + 0x14)) {
-        pose = poses + offset;
+    while (poseIdx < *(s32*)(wp + 0x14)) {
+        work = wp;
+        pose = *(s32*)(work + 0x10) + offset;
         if ((*(u32*)pose & 1) != 0 && *(s32*)(pose + 0xC) == battleFlag) {
             fileIdx = *(s32*)(pose + 0x10);
             file = *(s32*)(*(s32*)work + (fileIdx << 4) + 8);
@@ -4119,6 +4144,7 @@ void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** ou
         poseIdx++;
     }
 
+    work = wp;
     if (poseIdx == *(s32*)(work + 0x14)) {
         poseIdx = -1;
     }
@@ -4126,17 +4152,8 @@ void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** ou
         return;
     }
 
-    pose = poses + poseIdx * 0x170;
-    {
-        s32* srcWords = (s32*)pose;
-        s32* dstWords = backup;
-        for (i = 0x2E; i > 0; i--) {
-            dstWords[0] = srcWords[0];
-            dstWords[1] = srcWords[1];
-            srcWords += 2;
-            dstWords += 2;
-        }
-    }
+    pose = *(s32*)(work + 0x10) + poseIdx * 0x170;
+    backup = *(struct PoseBackup*)pose;
 
     *(s32*)(pose + 0x90) = -1;
 
@@ -4154,30 +4171,31 @@ void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** ou
         nameOffset = 0;
         while (animIdx < animCount) {
             if (strcmp((const char*)(*(s32*)(data + 0x1AC) + nameOffset), (const char*)anim) == 0) {
-                break;
+                goto anim_found;
             }
             nameOffset += 0x40;
             animIdx++;
         }
-        if (animIdx >= animCount) {
-            animIdx = 0;
-        }
+        animIdx = 0;
     } else {
-        animIdx = (s32)anim;
-        if (animIdx >= animCount) {
+        if ((s32)anim < animCount) {
+            animIdx = (s32)anim;
+        } else {
             animIdx = 0;
         }
     }
 
+anim_found:
     if (animIdx != *(s32*)(pose + 0x14)) {
         *(s32*)(pose + 0x14) = animIdx;
         if (*(s32*)(pose + 0x90) != -1 && (*(u32*)pose & 2) != 0) {
             *(u32*)pose |= 4;
         }
-        ticks = (*(u32*)0x800000F8 >> 2) / 1000;
         if (*(s32*)(pose + 0xC) == 0) {
+            ticks = (*(u32*)0x800000F8 >> 2) / 1000;
             now = *(s64*)(gp + 0x40) / ticks;
         } else {
+            ticks = (*(u32*)0x800000F8 >> 2) / 1000;
             now = *(s64*)(gp + 0x38) / ticks;
         }
         *(s64*)(pose + 0x18) = now;
@@ -4187,10 +4205,11 @@ void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** ou
         *(f32*)(pose + 0x84) = float_0_8041fb28;
     }
 
-    ticks = (*(u32*)0x800000F8 >> 2) / 1000;
     if (*(s32*)(pose + 0xC) == 0) {
+        ticks = (*(u32*)0x800000F8 >> 2) / 1000;
         now = *(s64*)(gp + 0x40) / ticks;
     } else {
+        ticks = (*(u32*)0x800000F8 >> 2) / 1000;
         now = *(s64*)(gp + 0x38) / ticks;
     }
     *(s64*)(pose + 0x18) = now;
@@ -4199,11 +4218,16 @@ void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** ou
     *(s32*)(pose + 0x80) = 0;
     *(f32*)(pose + 0x84) = float_0_8041fb28;
 
+    work = wp;
+    poses = *(s32*)(work + 0x10);
+    pose = poses + poseIdx * 0x170;
+
     local = (u64)(float_16p667_8041fb40 * frame);
-    ticks = (*(u32*)0x800000F8 >> 2) / 1000;
     if (*(s32*)(pose + 0xC) == 0) {
+        ticks = (*(u32*)0x800000F8 >> 2) / 1000;
         now = *(s64*)(gp + 0x40) / ticks;
     } else {
+        ticks = (*(u32*)0x800000F8 >> 2) / 1000;
         now = *(s64*)(gp + 0x38) / ticks;
     }
     now = now - local;
@@ -4303,16 +4327,7 @@ void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** ou
     *outRight = (u32)right - (s32)centerX;
     *outBottom = (u32)bottom - (s32)centerY;
 
-    {
-        s32* srcWords = backup;
-        s32* dstWords = (s32*)pose;
-        for (i = 0x2E; i > 0; i--) {
-            dstWords[0] = srcWords[0];
-            dstWords[1] = srcWords[1];
-            srcWords += 2;
-            dstWords += 2;
-        }
-    }
+    *(struct PoseBackup*)pose = backup;
 }
 
 void animSetPaperTexMtx(void* param_1, void* param_2, void* param_3) {
@@ -4344,10 +4359,10 @@ s32 animGroupBaseAsync(void* name, s32 mode, s32 flags) {
     extern s32 fileAsyncf(s32 type, s32 flags, char* fmt, char* ext, ...);
     extern s32 strcmp(const char*, const char*);
     extern s32 wp;
-    extern char str_PCTs_PCTs_8041fb34[];
-    extern char str_PCTs_PCTs_802c1068[];
-    extern char str_a_8041fb3c[];
-    extern char zero_8041fb30[];
+    extern char str_PCTs_PCTs_8041fb34[6];
+    extern char str_PCTs_PCTs_802c1068[7];
+    extern char str_a_8041fb3c[2];
+    extern char zero_8041fb30[1];
     s32 first;
     s32 second;
     s32 count;
@@ -4368,8 +4383,8 @@ s32 animGroupBaseAsync(void* name, s32 mode, s32 flags) {
     }
 
     first = fileAsyncf(5, flags, str_PCTs_PCTs_8041fb34, str_a_8041fb3c, name);
-    entry = *(char**)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0));
     count = *(s32*)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0) + 4);
+    entry = *(char**)(*(s32*)(*(s32*)(wp + 0x100) + 0xA0));
     offset = 0;
     while (offset < count) {
         if (strcmp(entry, name) == 0) {
@@ -4385,7 +4400,7 @@ found_name:
     if (first == -1) {
         return 1;
     }
-    if (first == 0) {
+    if ((u32)first == 0) {
         return 0;
     }
     if (second == -1) {

@@ -2,43 +2,63 @@
 
 
 void* UnpackTexPalette(void* data) {
+    typedef struct LocalCLUTHeader {
+        u16 numEntries;
+        u8 unpacked;
+        u8 pad;
+        s32 format;
+        void* data;
+    } LocalCLUTHeader;
+    typedef struct LocalTEXHeader {
+        u16 height;
+        u16 width;
+        u32 format;
+        void* data;
+        s32 wrapS;
+        s32 wrapT;
+        s32 minFilter;
+        s32 magFilter;
+        f32 lodBias;
+        u8 edgeLODEnable;
+        u8 minLOD;
+        u8 maxLOD;
+        u8 unpacked;
+    } LocalTEXHeader;
+    typedef struct LocalTEXDescriptor {
+        LocalTEXHeader* textureHeader;
+        LocalCLUTHeader* clutHeader;
+    } LocalTEXDescriptor;
+    typedef struct LocalTEXPalette {
+        u32 versionNumber;
+        u32 numDescriptors;
+        LocalTEXDescriptor* descriptorArray;
+    } LocalTEXPalette;
     extern void OSPanic(char*, int, char*, ...);
-    void* table;
+    LocalTEXPalette* palette = data;
     u16 i;
 
-    if (*(u32*)data != 0x20AF30) {
+    if (palette->versionNumber != 0x20AF30) {
         OSPanic("texPalette.c", 0x24, "invalid version number for texture palette");
     }
-
-    table = *(void**)((s32)data + 8);
-    if ((u32)table <= 0x80000000) {
-        *(void**)((s32)data + 8) = (void*)((s32)data + (s32)table);
-        for (i = 0; i < *(u32*)((s32)data + 4); i++) {
-            void** pair;
-            void* tex;
-            void* pal;
-
-            table = *(void**)((s32)data + 8);
-            pair = (void**)((s32)table + i * 8);
-            tex = pair[0];
-            if (tex != 0) {
-                tex = (void*)((s32)data + (s32)tex);
-                pair[0] = tex;
-                if (*(u8*)((s32)tex + 0x23) == 0) {
-                    *(void**)((s32)tex + 8) = (void*)((s32)data + *(s32*)((s32)tex + 8));
-                    *(u8*)((s32)pair[0] + 0x23) = 1;
+    if ((u32)palette->descriptorArray <= 0x80000000) {
+        palette->descriptorArray = (LocalTEXDescriptor*)((u8*)palette + (u32)palette->descriptorArray);
+        for (i = 0; i < palette->numDescriptors; i++) {
+            if (palette->descriptorArray[i].textureHeader != 0) {
+                palette->descriptorArray[i].textureHeader =
+                    (LocalTEXHeader*)((u8*)palette + (u32)palette->descriptorArray[i].textureHeader);
+                if (palette->descriptorArray[i].textureHeader->unpacked == 0) {
+                    palette->descriptorArray[i].textureHeader->data =
+                        (u8*)palette + (u32)palette->descriptorArray[i].textureHeader->data;
+                    palette->descriptorArray[i].textureHeader->unpacked = 1;
                 }
             }
-
-            table = *(void**)((s32)data + 8);
-            pair = (void**)((s32)table + i * 8);
-            pal = pair[1];
-            if (pal != 0) {
-                pal = (void*)((s32)data + (s32)pal);
-                pair[1] = pal;
-                if (*(u8*)((s32)pal + 2) == 0) {
-                    *(void**)((s32)pal + 8) = (void*)((s32)data + *(s32*)((s32)pal + 8));
-                    *(u8*)((s32)pair[1] + 2) = 1;
+            if (palette->descriptorArray[i].clutHeader != 0) {
+                palette->descriptorArray[i].clutHeader =
+                    (LocalCLUTHeader*)((u8*)palette + (u32)palette->descriptorArray[i].clutHeader);
+                if (palette->descriptorArray[i].clutHeader->unpacked == 0) {
+                    palette->descriptorArray[i].clutHeader->data =
+                        (u8*)palette + (u32)palette->descriptorArray[i].clutHeader->data;
+                    palette->descriptorArray[i].clutHeader->unpacked = 1;
                 }
             }
         }
@@ -50,6 +70,8 @@ void* TEXGet(void* tpl, s32 id) {
     return (void*)((s32)*(void**)((s32)tpl + 8) + id * 8);
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id) {
     extern void GXInitTexObj(void*, void*, u16, u16, s32, s32, s32, u8);
     extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, u8, u8, s32);
@@ -83,3 +105,5 @@ void TEXGetGXTexObjFromPalette(void* palette, void* texObj, s32 id) {
                     0,
                     *(u8*)((s32)desc + 0x20));
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset

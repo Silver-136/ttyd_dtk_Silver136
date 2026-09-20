@@ -84,21 +84,21 @@ void BattleBreakSlot_Main(void) {
     extern f32 float_32767_804268bc;
     extern char str_SFX_BTL_SYS_BREAK1_802fe298[];
     extern char str_SFX_HP_RECOVER_BIG1_802fe2ac[];
-    extern u8 star_effect[];
-    extern u8 kinoko_effect[];
-    extern u8 flower_effect[];
-    extern u8 shine_effect[];
-    extern u8 doku_kinoko_effect[];
+    extern s32 star_effect[];
+    extern s32 kinoko_effect[];
+    extern s32 flower_effect[];
+    extern s32 shine_effect[];
+    extern s32 doku_kinoko_effect[];
     extern void* evtEntry(void*, s32, s32);
     extern s32 pouchGetMaxAP(void);
     extern s32 pouchGetAP(void);
     extern void pouchSetAP(s16);
     extern void* g_BattleWork;
-    extern u8 msg_hp_max[];
-    extern u8 msg_fp_max[];
-    extern u8 msg_star_max[];
-    extern u8 msg_super_max[];
-    extern u8 msg_fault[];
+    extern s32 msg_hp_max[];
+    extern s32 msg_fp_max[];
+    extern s32 msg_star_max[];
+    extern s32 msg_super_max[];
+    extern s32 msg_fault[];
     extern s32 BattleAudience_GetExist(s32);
     extern void* BattleAudienceGetPtr(s32);
     extern void BattleAudienceSoundStop(s32);
@@ -970,3 +970,209 @@ void item_appear_force(void* reel, s32 item) {
         offset += 4;
     }
 }
+
+/* Document-backed battle-break-slot data foundation. */
+extern s32 btlevtcmd_AnimeChangePoseFromTable();
+extern s32 btlevtcmd_AnnounceMessage();
+extern s32 btlevtcmd_CheckDamage();
+extern s32 btlevtcmd_CheckStatus();
+extern s32 btlevtcmd_GetBodyId();
+extern s32 btlevtcmd_GetMaxFp();
+extern s32 btlevtcmd_GetMaxHp();
+extern s32 btlevtcmd_GetPos();
+extern s32 btlevtcmd_GetUnitId();
+extern s32 btlevtcmd_RecoverFp();
+extern s32 btlevtcmd_RecoverHp();
+extern s32 evt_eff();
+extern s32 weaponGetFPPowerFPHalf();
+extern s32 weaponGetPowerHPHalf();
+extern const char str_msg_slot_FP_max_802fdff4[];
+extern const char str_msg_slot_HPFPSP_half_802fe028[];
+extern const char str_msg_slot_HPFPSP_max_802fe014[];
+extern const char str_msg_slot_HP_max_802fdfe4[];
+extern const char str_msg_slot_SP_max_802fe004[];
+extern const char str_recovery_802fdfd8[];
+extern const char zero_80426880;
+
+s32 kinoko_effect[107] = {
+    0x0003005B, (s32)btlevtcmd_GetUnitId, 0xFFFFFFFD, 0xFE363C83,
+    0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C83, 0xFE363C84,
+    0x0003005B, (s32)btlevtcmd_GetMaxHp, 0xFE363C83, 0xFE363C85,
+    0x0005005B, (s32)btlevtcmd_GetPos, 0xFE363C83, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00020035, 0xFE363C81,
+    0x00000032, 0x000F005B, (s32)evt_eff, (s32)(char*)&zero_80426880,
+    (s32)(char*)str_recovery_802fdfd8, 0x00000004, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0xFE363C85, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x0004005B, (s32)btlevtcmd_RecoverHp, 0xFE363C83,
+    0xFE363C84, 0xFE363C85, 0x0003005B, (s32)btlevtcmd_AnimeChangePoseFromTable,
+    0xFE363C83, 0xFE363C84, 0x0003005B, (s32)btlevtcmd_GetUnitId,
+    0xFFFFFFFC, 0xFE363C83, 0x00020019, 0xFE363C83,
+    0xFFFFFFFF, 0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C83,
+    0x0000001B, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0x00000000, 0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C83,
+    0xFE363C84, 0x0003005B, (s32)btlevtcmd_GetMaxHp, 0xFE363C83,
+    0xFE363C85, 0x0005005B, (s32)btlevtcmd_GetPos, 0xFE363C83,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00020035,
+    0xFE363C81, 0x00000032, 0x000F005B, (s32)evt_eff,
+    (s32)(char*)&zero_80426880, (s32)(char*)str_recovery_802fdfd8, 0x00000004, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0xFE363C85, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x0004005B, (s32)btlevtcmd_RecoverHp,
+    0xFE363C83, 0xFE363C84, 0xFE363C85, 0x0003005B,
+    (s32)btlevtcmd_AnimeChangePoseFromTable, 0xFE363C83, 0xFE363C84, 0x00000021,
+    0x00000021, 0x00000002, 0x00000001,
+};
+
+s32 flower_effect[44] = {
+    0x0003005B, (s32)btlevtcmd_GetUnitId, 0xFFFFFFFD, 0xFE363C83,
+    0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C83, 0xFE363C84,
+    0x0003005B, (s32)btlevtcmd_GetMaxFp, 0xFE363C83, 0xFE363C85,
+    0x0005005B, (s32)btlevtcmd_GetPos, 0xFE363C83, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00020035, 0xFE363C81,
+    0x00000032, 0x000F005B, (s32)evt_eff, (s32)(char*)&zero_80426880,
+    (s32)(char*)str_recovery_802fdfd8, 0x00000005, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0xFE363C85, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x0004005B, (s32)btlevtcmd_RecoverFp, 0xFE363C83,
+    0xFE363C84, 0xFE363C85, 0x00000002, 0x00000001,
+};
+
+s32 shine_effect[151] = {
+    0x0003005B, (s32)btlevtcmd_GetUnitId, 0xFFFFFFFD, 0xFE363C83,
+    0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C83, 0xFE363C84,
+    0x0003005B, (s32)btlevtcmd_GetMaxHp, 0xFE363C83, 0xFE363C85,
+    0x0005005B, (s32)btlevtcmd_GetPos, 0xFE363C83, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00020035, 0xFE363C81,
+    0x00000032, 0x000F005B, (s32)evt_eff, (s32)(char*)&zero_80426880,
+    (s32)(char*)str_recovery_802fdfd8, 0x00000004, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0xFE363C85, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x0004005B, (s32)btlevtcmd_RecoverHp, 0xFE363C83,
+    0xFE363C84, 0xFE363C85, 0x0003005B, (s32)btlevtcmd_AnimeChangePoseFromTable,
+    0xFE363C83, 0xFE363C84, 0x0003005B, (s32)btlevtcmd_GetUnitId,
+    0xFFFFFFFC, 0xFE363C83, 0x00020019, 0xFE363C83,
+    0xFFFFFFFF, 0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C83,
+    0x0000001B, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0x00000000, 0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C83,
+    0xFE363C84, 0x0003005B, (s32)btlevtcmd_GetMaxHp, 0xFE363C83,
+    0xFE363C85, 0x0005005B, (s32)btlevtcmd_GetPos, 0xFE363C83,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00020035,
+    0xFE363C81, 0x00000032, 0x000F005B, (s32)evt_eff,
+    (s32)(char*)&zero_80426880, (s32)(char*)str_recovery_802fdfd8, 0x00000004, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0xFE363C85, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x0004005B, (s32)btlevtcmd_RecoverHp,
+    0xFE363C83, 0xFE363C84, 0xFE363C85, 0x0003005B,
+    (s32)btlevtcmd_AnimeChangePoseFromTable, 0xFE363C83, 0xFE363C84, 0x00000021,
+    0x00000021, 0x00010009, 0x0000003C, 0x0003005B,
+    (s32)btlevtcmd_GetUnitId, 0xFFFFFFFD, 0xFE363C83, 0x0003005B,
+    (s32)btlevtcmd_GetBodyId, 0xFE363C83, 0xFE363C84, 0x0003005B,
+    (s32)btlevtcmd_GetMaxFp, 0xFE363C83, 0xFE363C85, 0x0005005B,
+    (s32)btlevtcmd_GetPos, 0xFE363C83, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x00020035, 0xFE363C81, 0x00000032,
+    0x000F005B, (s32)evt_eff, (s32)(char*)&zero_80426880, (s32)(char*)str_recovery_802fdfd8,
+    0x00000005, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0xFE363C85, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x0004005B, (s32)btlevtcmd_RecoverFp, 0xFE363C83, 0xFE363C84,
+    0xFE363C85, 0x00000002, 0x00000001,
+};
+
+u32 weapon_doku_kinoko[48] = {
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x64000000, 0x00000000, 0x00000000, (u32)weaponGetPowerHPHalf,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x02100160, 0x20000000, 0x00000302,
+    0x00000000, 0x00020048, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000064, 0x00000000, 0x00000000,
+};
+
+u32 weapon_doku_kinoko_fp[48] = {
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x64000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    (u32)weaponGetFPPowerFPHalf, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x02100160, 0x20000000, 0x00000302,
+    0x00000000, 0x00020048, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000064, 0x00000000, 0x00000000,
+};
+
+s32 doku_kinoko_effect[65] = {
+    0x0003005B, (s32)btlevtcmd_GetUnitId, 0xFFFFFFFD, 0xFE363C83,
+    0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C83, 0xFE363C84,
+    0x0007005B, (s32)btlevtcmd_CheckDamage, 0xFFFFFFFD, 0xFE363C83,
+    0xFE363C84, (s32)weapon_doku_kinoko, 0x00000000, 0xFE363C85,
+    0x0003005B, (s32)btlevtcmd_GetUnitId, 0xFFFFFFFC, 0xFE363C83,
+    0x00020019, 0xFE363C83, 0xFFFFFFFF, 0x0004005B,
+    (s32)btlevtcmd_CheckStatus, 0xFE363C83, 0x0000001B, 0xFE363C80,
+    0x00020018, 0xFE363C80, 0x00000000, 0x0003005B,
+    (s32)btlevtcmd_GetBodyId, 0xFE363C83, 0xFE363C84, 0x0007005B,
+    (s32)btlevtcmd_CheckDamage, 0xFFFFFFFD, 0xFE363C83, 0xFE363C84,
+    (s32)weapon_doku_kinoko, 0x00000100, 0xFE363C85, 0x00000021,
+    0x00000021, 0x00010009, 0x0000003C, 0x0003005B,
+    (s32)btlevtcmd_GetUnitId, 0xFFFFFFFD, 0xFE363C83, 0x0003005B,
+    (s32)btlevtcmd_GetBodyId, 0xFE363C83, 0xFE363C84, 0x0007005B,
+    (s32)btlevtcmd_CheckDamage, 0xFFFFFFFD, 0xFE363C83, 0xFE363C84,
+    (s32)weapon_doku_kinoko_fp, 0x00000100, 0xFE363C85, 0x00000002,
+    0x00000001,
+};
+
+u16 tex_id_list_small[5] = { 0x0041, 0x0043, 0x0045, 0x0044, 0x0042 };
+u16 tex_id_list_big[5] = { 0x0046, 0x0048, 0x004A, 0x0049, 0x0047 };
+
+s32 star_effect[2] = {
+    0x00000002, 0x00000001,
+};
+
+s32 msg_hp_max[9] = {
+    0x0006005B, (s32)btlevtcmd_AnnounceMessage, 0x00000000, 0x00000000,
+    0xFFFFFF33, (s32)(char*)str_msg_slot_HP_max_802fdfe4, 0x00000078, 0x00000002,
+    0x00000001,
+};
+
+s32 msg_fp_max[9] = {
+    0x0006005B, (s32)btlevtcmd_AnnounceMessage, 0x00000000, 0x00000000,
+    0xFFFFFF33, (s32)(char*)str_msg_slot_FP_max_802fdff4, 0x00000078, 0x00000002,
+    0x00000001,
+};
+
+s32 msg_star_max[9] = {
+    0x0006005B, (s32)btlevtcmd_AnnounceMessage, 0x00000000, 0x00000000,
+    0xFFFFFF33, (s32)(char*)str_msg_slot_SP_max_802fe004, 0x00000078, 0x00000002,
+    0x00000001,
+};
+
+s32 msg_super_max[9] = {
+    0x0006005B, (s32)btlevtcmd_AnnounceMessage, 0x00000000, 0x00000000,
+    0xFFFFFF33, (s32)(char*)str_msg_slot_HPFPSP_max_802fe014, 0x00000078, 0x00000002,
+    0x00000001,
+};
+
+s32 msg_fault[9] = {
+    0x0006005B, (s32)btlevtcmd_AnnounceMessage, 0x00000000, 0x00000000,
+    0xFFFFFF33, (s32)(char*)str_msg_slot_HPFPSP_half_802fe028, 0x00000078, 0x00000002,
+    0x00000001,
+};
+
+const char str_recovery_802fdfd8[] = "recovery";
+const char str_msg_slot_HP_max_802fdfe4[] = "msg_slot_HP_max";
+const char str_msg_slot_FP_max_802fdff4[] = "msg_slot_FP_max";
+const char str_msg_slot_SP_max_802fe004[] = "msg_slot_SP_max";
+const char str_msg_slot_HPFPSP_max_802fe014[] = "msg_slot_HPFPSP_max";
+const char str_msg_slot_HPFPSP_half_802fe028[] = "msg_slot_HPFPSP_half";
+
+const s32 R_slot_1_cards[8] = { 0, 1, 2, 1, 2, 0, 3, 4 };
+const s32 R_slot_2_cards[8] = { 3, 1, 0, 1, 4, 2, 0, 2 };
+const s32 R_slot_3_cards[5] = { 0, 1, 2, 3, 4 };

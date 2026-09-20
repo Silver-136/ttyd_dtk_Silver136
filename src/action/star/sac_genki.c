@@ -9,20 +9,220 @@ extern s32 irand(s32 max);
 extern s32 rand(void);
 extern f64 sin(f64 value);
 extern f64 cos(f64 value);
-void* get_ptr(void);
+static void* get_ptr(void);
 void main_star0(s32 index);
 void main_star1(void);
-void main_base(void);
+static void main_base(void);
 void main_mario(void);
 void main_target(void);
 void main_weapon(s32 index);
-void main_star(void);
-void disp_2D(void);
-void disp_3D(void);
-void disp_3D_alpha(void);
+static void main_star(void);
+static void disp_2D(void);
+static void disp_3D(void);
+static void disp_3D_alpha(void);
 void object_entry(void);
 s32 object_get_num(void);
 void weapon_entry(void);
+
+extern s32 btlevtcmd_GetUnitId();
+extern s32 btlevtcmd_GetBodyId();
+extern s32 btlevtcmd_CheckStatus();
+extern s32 btlevtcmd_reset_move_color_lv_all();
+extern s32 btlevtcmd_CommandPayWeaponCost();
+extern s32 main_genki();
+extern s32 sac_start_camera_evt();
+extern s32 sac_enemy_slide_go();
+extern s32 btlevtcmd_snd_se();
+extern char str_SFX_BTL_SAC_START1_80300d94[];
+extern s32 sac_mario_item_on_evt();
+extern char str_SFX_BTL_SAC_START2_80300da8[];
+extern s32 star_appear();
+static s32 star_stone_appear(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_start_stardust();
+extern char str_SFX_BTL_SAC_HEART_SH_80300dbc[];
+extern s32 evt_snd_sfxoff();
+extern s32 evt_btl_camera_set_mode();
+extern s32 sac_mario_item_on_end_evt();
+extern s32 btlevtcmd_AnimeChangePoseType();
+extern s32 btlevtcmd_SetMoveSpeed();
+extern s32 btlevtcmd_GetPos();
+extern s32 btlevtcmd_MovePosition();
+extern s32 btlevtcmd_AnimeChangePose();
+extern char str_M_I_Y_804282d4[];
+extern s32 sac_ac_help_on();
+static s32 start_game(EventEntry* event, BOOL isFirstCall);
+static s32 wait_game_end(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_ac_help_off();
+extern s32 get_score();
+extern s32 btlevtcmd_GetHomePos();
+extern s32 status_on();
+extern s32 evt_btl_camera_set_homing_unit();
+extern s32 evt_btl_camera_set_zoom();
+extern s32 evt_btl_camera_set_moveSpeedLv();
+extern s32 evt_btl_camera_set_zoomSpeedLv();
+extern s32 sac_wao();
+extern s32 evt_snd_sfxon();
+extern char str_SFX_HP_RECOVER_SHINE_80300dd8[];
+extern s32 btlevtcmd_RecoverHp();
+extern s32 evt_eff();
+extern f32 float_0_804282dc;
+extern char str_stardust_80300df0[];
+extern s32 btlevtcmd_StartWaitEvent();
+extern s32 btlevtcmd_RecoverFp();
+extern s32 sac_enemy_slide_return();
+extern s32 end_genki();
+extern s32 btlevtcmd_OnOffStatus();
+extern s32 recover_cmd_disable();
+extern s32 status_recover_evt[];
+
+s32 genki_evt_common[] = {
+    0x0003005B, (s32)btlevtcmd_GetUnitId, 0xFFFFFFFC, 0xFE363C8D,
+    0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C8D, 0xFE363C8E,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C8D, 0x0000001B,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x00020032, 0xFE363C8D, 0xFFFFFFFF, 0x00000021,
+    0x0001005B, (s32)btlevtcmd_reset_move_color_lv_all, 0x0002005B, (s32)btlevtcmd_CommandPayWeaponCost,
+    0xFFFFFFFE, 0x0000006E, 0x0003005B, (s32)main_genki,
+    0xFE363C8D, 0xFE363C8F, 0x00000070, 0x0001005E,
+    (s32)sac_start_camera_evt, 0x0001000A, 0x000001F4, 0x0001005B,
+    (s32)sac_enemy_slide_go, 0x0006005B, (s32)btlevtcmd_snd_se, 0xFFFFFFFE,
+    (s32)(char*)str_SFX_BTL_SAC_START1_80300d94, 0xF1194D80, 0x00000000, 0xF1194D80,
+    0x0001005E, (s32)sac_mario_item_on_evt, 0x0001000A, 0x000001F4,
+    0x0006005B, (s32)btlevtcmd_snd_se, 0xFFFFFFFE, (s32)(char*)str_SFX_BTL_SAC_START2_80300da8,
+    0xF1194D80, 0x00000000, 0xFE363C8B, 0x00020018,
+    0xFE363C8F, 0x00000000, 0x0001005B, (s32)star_appear,
+    0x00000020, 0x0001005B, (s32)star_stone_appear, 0x00000021,
+    0x0000006E, 0x0001005E, (s32)sac_start_stardust, 0x00000070,
+    0x00010009, 0x00000064, 0x0006005B, (s32)btlevtcmd_snd_se,
+    0xFFFFFFFE, (s32)(char*)str_SFX_BTL_SAC_HEART_SH_80300dbc, 0xF1194D80, 0x00000000,
+    0xFE363C8A, 0x0002005B, (s32)evt_snd_sfxoff, 0xFE363C8B,
+    0x0003005B, (s32)evt_btl_camera_set_mode, 0x00000000, 0x00000000,
+    0x00010009, 0x00000028, 0x0001005E, (s32)sac_mario_item_on_end_evt,
+    0x0004005B, (s32)btlevtcmd_AnimeChangePoseType, 0xFFFFFFFE, 0x00000001,
+    0x0000002A, 0x0003005B, (s32)btlevtcmd_SetMoveSpeed, 0xFFFFFFFE,
+    0xF24A8680, 0x0005005B, (s32)btlevtcmd_GetPos, 0xFFFFFFFE,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x0008005B,
+    (s32)btlevtcmd_MovePosition, 0xFFFFFFFE, 0xFFFFFFB5, 0xFE363C81,
+    0xFE363C82, 0x00000000, 0xFFFFFFFF, 0x00000000,
+    0x0004005B, (s32)btlevtcmd_AnimeChangePose, 0xFFFFFFFE, 0x00000001,
+    (s32)(char*)str_M_I_Y_804282d4, 0x00010009, 0x00000028, 0x0002005B,
+    (s32)evt_snd_sfxoff, 0xFE363C8A, 0x0001005B, (s32)sac_ac_help_on,
+    0x0001005B, (s32)start_game, 0x0001005B, (s32)wait_game_end,
+    0x0001005B, (s32)sac_ac_help_off, 0x0004005B, (s32)get_score,
+    0xFE363C8A, 0xFE363C8B, 0xFE363C8C, 0x00010009,
+    0x00000046, 0x0004005B, (s32)btlevtcmd_AnimeChangePoseType, 0xFFFFFFFE,
+    0x00000001, 0x0000002A, 0x0005005B, (s32)btlevtcmd_GetHomePos,
+    0xFFFFFFFE, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0003005B, (s32)btlevtcmd_SetMoveSpeed, 0xFFFFFFFE, 0xF24A8680,
+    0x0008005B, (s32)btlevtcmd_MovePosition, 0xFFFFFFFE, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00000000, 0xFFFFFFFF,
+    0x00000000, 0x0004005B, (s32)btlevtcmd_AnimeChangePoseType, 0xFFFFFFFE,
+    0x00000001, 0x0000002B, 0x0001005B, (s32)status_on,
+    0x0003005B, (s32)evt_btl_camera_set_mode, 0x00000000, 0x00000007,
+    0x0004005B, (s32)evt_btl_camera_set_homing_unit, 0x00000000, 0xFFFFFFFE,
+    0xFFFFFFFF, 0x0003005B, (s32)evt_btl_camera_set_zoom, 0x00000000,
+    0x000000C8, 0x0003005B, (s32)evt_btl_camera_set_moveSpeedLv, 0x00000000,
+    0x00000002, 0x0003005B, (s32)evt_btl_camera_set_zoomSpeedLv, 0x00000000,
+    0x00000002, 0x00020032, 0xFE363C8F, 0xFE363C8A,
+    0x00020035, 0xFE363C8F, 0xFE363C8B, 0x00020035,
+    0xFE363C8F, 0xFE363C8C, 0x0002001D, 0xFE363C8F,
+    0x00000001, 0x0001005B, (s32)sac_wao, 0x00000021,
+    0x00020019, 0xFE363C8D, 0xFFFFFFFF, 0x0003005B,
+    (s32)evt_snd_sfxon, (s32)(char*)str_SFX_HP_RECOVER_SHINE_80300dd8, 0x00000000, 0x00020032,
+    0xFE363C89, 0xFFFFFFFE, 0x0001005E, (s32)status_recover_evt,
+    0x0004005B, (s32)btlevtcmd_RecoverHp, 0xFFFFFFFE, 0x00000001,
+    0xFE363C8A, 0x0005005B, (s32)btlevtcmd_GetPos, 0xFFFFFFFE,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x000F005B,
+    (s32)evt_eff, (s32)&float_0_804282dc, (s32)(char*)str_stardust_80300df0, 0x00000002,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000032,
+    0x00000032, 0x00000032, 0x00000064, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00020032,
+    0xFE363C89, 0xFE363C8D, 0x0001005E, (s32)status_recover_evt,
+    0x0002005B, (s32)btlevtcmd_StartWaitEvent, 0xFE363C8D, 0x0004005B,
+    (s32)btlevtcmd_RecoverHp, 0xFE363C8D, 0xFE363C8E, 0xFE363C8B,
+    0x0005005B, (s32)btlevtcmd_GetPos, 0xFE363C8D, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x000F005B, (s32)evt_eff,
+    (s32)&float_0_804282dc, (s32)(char*)str_stardust_80300df0, 0x00000002, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00000032, 0x00000032,
+    0x00000032, 0x00000064, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x0004005B, (s32)btlevtcmd_RecoverFp,
+    0xFFFFFFFE, 0x00000001, 0xFE363C8C, 0x00000020,
+    0x0003005B, (s32)evt_snd_sfxon, (s32)(char*)str_SFX_HP_RECOVER_SHINE_80300dd8, 0x00000000,
+    0x00020032, 0xFE363C89, 0xFFFFFFFE, 0x0001005E,
+    (s32)status_recover_evt, 0x0004005B, (s32)btlevtcmd_RecoverHp, 0xFFFFFFFE,
+    0x00000001, 0xFE363C8A, 0x0005005B, (s32)btlevtcmd_GetPos,
+    0xFFFFFFFE, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x000F005B, (s32)evt_eff, (s32)&float_0_804282dc, (s32)(char*)str_stardust_80300df0,
+    0x00000002, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000032, 0x00000032, 0x00000032, 0x00000064,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x0004005B, (s32)btlevtcmd_RecoverFp, 0xFFFFFFFE, 0x00000001,
+    0xFE363C8C, 0x00000021, 0x0001000A, 0x000003E8,
+    0x0001005B, (s32)sac_enemy_slide_return, 0x0001000A, 0x000003E8,
+    0x0003005B, (s32)evt_btl_camera_set_mode, 0x00000000, 0x00000000,
+    0x0001000A, 0x000003E8, 0x0001005B, (s32)end_genki,
+    0x0002005B, (s32)btlevtcmd_StartWaitEvent, 0xFFFFFFFE, 0x00000002,
+    0x00000001,
+};
+
+s32 status_recover_evt[] = {
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x00000001,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x00000001,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x00000002,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x00000002,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x00000003,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x00000003,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x00000004,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x00000004,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x00000005,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x00000005,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x00000008,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x00000008,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x00000009,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x00000009,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x0000000D,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x0000000D,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x0000000B,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x0000000B,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x0000000F,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x0000000F,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckStatus, 0xFE363C89, 0x00000014,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0006005B, (s32)btlevtcmd_OnOffStatus, 0xFE363C89, 0x00000014,
+    0x00000000, 0x00000000, 0x00000000, 0x00000021,
+    0x0001005B, (s32)recover_cmd_disable, 0x00000002, 0x00000001,
+};
+
+s32 marioAttackEvent_Genki0[] = {
+    0x00020032, 0xFE363C8F, 0x00000000, 0x0001005E,
+    (s32)genki_evt_common, 0x00000002, 0x00000001,
+};
+
+s32 marioAttackEvent_Genki1[] = {
+    0x00020032, 0xFE363C8F, 0x00000001, 0x0001005E,
+    (s32)genki_evt_common, 0x00000002, 0x00000001,
+};
+
 
 /* stub-fill: main_genki | missing_definition | ghidra_signature */
 s32 main_genki(EventEntry* event, s32 isFirstCall) {
@@ -83,7 +283,7 @@ s32 main_genki(EventEntry* event, s32 isFirstCall) {
 }
 
 /* stub-fill: main_base | missing_definition | ghidra_signature */
-void main_base(void) {
+static void main_base(void) {
     u8* work = get_ptr();
     s32* table = *(s32**)(work + 0x5C);
     s32 i;
@@ -522,7 +722,7 @@ void main_object(u32 index) {
     }
 }
 
-void main_star(void) {
+static void main_star(void) {
     void* work = get_ptr();
     s32 i;
 
@@ -800,7 +1000,7 @@ USER_FUNC(end_genki) {
     return 2;
 }
 
-void disp_2D(void) {
+static void disp_2D(void) {
     ;
 }
 
@@ -809,7 +1009,7 @@ void disp_2D(void) {
 /* CHATGPT STUB FILL: main/action/star/sac_genki 20260624_184929 */
 
 /* stub-fill: disp_3D | missing_definition | ghidra_signature */
-void disp_3D(void) {
+static void disp_3D(void) {
     typedef struct Vec3 {
         f32 x;
         f32 y;
@@ -1172,11 +1372,11 @@ void disp_3D(void) {
     }
 }
 
-void disp_3D_alpha(void) {
+static void disp_3D_alpha(void) {
     ;
 }
 
-void* get_ptr(void) {
+static void* get_ptr(void) {
     return (void*)((s32)_battleWorkPointer + 0x1F4C);
 }
 
@@ -1270,7 +1470,7 @@ s32 object_get_num(void) {
     return count;
 }
 
-USER_FUNC(start_game) {
+static s32 start_game(EventEntry* event, BOOL isFirstCall) {
     void* wp;
 
     wp = get_ptr();
@@ -1279,7 +1479,7 @@ USER_FUNC(start_game) {
     return 2;
 }
 
-USER_FUNC(wait_game_end) {
+static s32 wait_game_end(EventEntry* event, BOOL isFirstCall) {
     s32 value = *(s32*)((s32)get_ptr() + 4);
     return value == 3 ? 2 : 0;
 }
@@ -1326,7 +1526,7 @@ USER_FUNC(star_appear) {
     return 2;
 }
 
-USER_FUNC(star_stone_appear) {
+static s32 star_stone_appear(EventEntry* event, BOOL isFirstCall) {
     void* work = get_ptr();
     *(s32*)((s32)work + 0x510) = 1;
     *(s32*)((s32)work + 0x518) = 1;
@@ -1346,3 +1546,11 @@ USER_FUNC(recover_cmd_disable) {
     }
     return 2;
 }
+
+const u32 dat_804282b8 = 0xFFFFFFFF;
+const u32 dat_804282bc = 0xFFFFFFFF;
+const u32 dat_804282c0 = 0xFFFFFFFF;
+const u32 dat_804282c4 = 0xFFFFFFFF;
+const u32 dat_804282c8 = 0xFFFFFFFF;
+const u32 dat_804282cc = 0xFFFFFFFF;
+const u32 dat_804282d0 = 0xFFFFFFFF;

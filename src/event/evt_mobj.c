@@ -54,24 +54,265 @@ extern s32 evtCheckID(s32 id);
 
 extern void* mapalloc_base_ptr;
 void* psw;
-extern f32 float_0_80420240;
-extern f32 float_300_80420248;
-extern f32 float_0p5_8042024c;
-extern f32 float_1_80420250;
-extern u32 dat_80420224;
 extern const char str_me_80420324[3];
+
+extern s32 evt_snd_sfxon_3d();
+extern s32 evt_snd_sfxoff();
+extern s32 evt_mario_key_onoff();
+extern s32 evt_msg_print();
+extern s32 evt_cam_letter_box_disable();
+extern s32 evt_cam_letter_box_onoff();
+extern s32 evt_mario_cont_onoff();
+extern s32 evt_mario_cam_y_on();
+extern s32 evt_mario_set_dir();
+extern s32 kpa_chg_pose();
+extern s32 evt_mario_get_pos();
+extern s32 evt_mario_set_pos();
+extern s32 evt_cam_get_pos();
+extern s32 evt_cam_get_at();
+extern s32 evt_cam3d_evt_set();
+extern s32 evt_cam3d_get_shift();
+extern s32 evt_cam3d_event_from_road();
+extern s32 evt_mario_set_mov_spd();
+extern s32 evt_cam3d_evt_off();
+extern s32 evt_mario_wait_landon();
+extern s32 evt_sub_get_mapname();
+extern s32 evt_mapobj_get_position();
+extern s32 evt_mario_mov_pos2();
+extern s32 evt_mario_dispflag_onoff();
+s32 kpa_disp_pole_init();
+s32 kpa_clear_jump_data();
+s32 kpa_get_hata_name();
+s32 evt_mobj_get_x_position();
+s32 kpa_get_width();
+s32 kpa_score_to_str();
+s32 evt_mobj_get_position();
+s32 kpa_disp_pole_score_main();
+s32 evt_mobj_get_y_position();
+s32 evt_mobj_set_y_position();
+s32 kpa_get_pole_name();
+s32 evt_mobj_get_z_position();
+s32 evt_mobj_set_position();
+s32 evt_mobj_set_scale();
+s32 kpa_get_level();
+extern s32 unk_evt_803bac3c[];
+extern const char str_KPA2_G_1_802c236c[];
+extern const char str_KPA2_S_1_802c23ec[];
+extern const char str_SFX_KUPPA_POST_JUMP1_802c2378[];
+extern const char str_SFX_KUPPA_POST_SLIDE_802c2390[];
+extern const char str_SFX_KUPPA_POST_THROW_802c23a8[];
+extern const char str_SFX_KUPPA_STRUGGLE1_802c23d8[];
+extern const char str_SFX_MOBJ_BLACKBOX_OP_802c2250[];
+extern const char str_SFX_MOBJ_BLACKBOX_SW_802c2234[];
+extern const char str_SFX_MOBJ_LOCK_SWING1_802c2190[];
+extern const char str_SFX_MOBJ_TREASURE_BO_802c21bc[];
+extern const char str_SFX_MOBJ_TREASURE_BO_802c21dc[];
+extern const char str_SFX_MOBJ_TREASURE_BO_802c21f8[];
+extern const char str_SFX_MOBJ_TREASURE_BO_802c2218[];
+extern const char str_SFX_MOBJ_UNLOCK1_802c21a8[];
+extern const char str_kpa_06_802c23c0[];
+extern const char str_save_first_hit_802c2280[];
+extern const char str_toride_802c23c8[];
+extern const char str_toride_802c23d0[];
 
 u8 evt_cam_shake(s32 evt, s32 init);
 s32 fire_func(void* evt, s32 init);
 
-s32 evt_shake[] = {
+static s32 evt_shake[] = {
     0x0005005B, (s32)evt_cam_shake, 0x00000004, 0xF24A7A80,
     0xF24A7A8A, 0x000000C8, 0x00000002, 0x00000001,
 };
 
-s32 evt_fire[] = {
-    0x0005005B, (s32)fire_func, 0xFE363C80, 0xFE363C81,
-    0xFE363C82, 0xFE363C83, 0x00000002, 0x00000001,
+s32 evt_lock_sound[] = {
+    0x0001000A, 0x00000064, 0x0006005B, (s32)evt_snd_sfxon_3d,
+    (s32)(char*)str_SFX_MOBJ_LOCK_SWING1_802c2190, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000000, 0x0001000A, 0x000000C8, 0x0006005B,
+    (s32)evt_snd_sfxon_3d, (s32)(char*)str_SFX_MOBJ_UNLOCK1_802c21a8, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x00000000, 0x00000002, 0x00000001,
+};
+
+s32 evt_box_sound1[] = {
+    0x0001000A, 0x00000064, 0x0006005B, (s32)evt_snd_sfxon_3d,
+    (s32)(char*)str_SFX_MOBJ_TREASURE_BO_802c21bc, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000000, 0x0001000A, 0x000000C8, 0x0006005B,
+    (s32)evt_snd_sfxon_3d, (s32)(char*)str_SFX_MOBJ_TREASURE_BO_802c21dc, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x00000000, 0x00000002, 0x00000001,
+};
+
+s32 evt_box_sound2[] = {
+    0x0001000A, 0x00000064, 0x0006005B, (s32)evt_snd_sfxon_3d,
+    (s32)(char*)str_SFX_MOBJ_TREASURE_BO_802c21f8, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000000, 0x0001000A, 0x000000C8, 0x0006005B,
+    (s32)evt_snd_sfxon_3d, (s32)(char*)str_SFX_MOBJ_TREASURE_BO_802c2218, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x00000000, 0x00000002, 0x00000001,
+};
+
+s32 evt_box_sound3[] = {
+    0x0001000A, 0x00000064, 0x0006005B, (s32)evt_snd_sfxon_3d,
+    (s32)(char*)str_SFX_MOBJ_BLACKBOX_SW_802c2234, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0xFE363C8F, 0x0001000A, 0x000000C8, 0x0002005B,
+    (s32)evt_snd_sfxoff, 0xFE363C8F, 0x0006005B, (s32)evt_snd_sfxon_3d,
+    (s32)(char*)str_SFX_MOBJ_BLACKBOX_OP_802c2250, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000000, 0x00000002, 0x00000001,
+};
+
+s32 mobj_save_blk_sysevt[] = {
+    0x00010063, 0x00000000, 0x0002005B, (s32)evt_mario_key_onoff,
+    0x00000000, 0x00020032, 0xFBD3E28A, 0x00000000,
+    0x00020018, 0xF8405C69, 0x00000000, 0x00020032,
+    0xF8405C69, 0x00000001, 0x0005005B, (s32)evt_msg_print,
+    0x00000000, (s32)(char*)str_save_first_hit_802c2280, 0x00000000, 0x00000000,
+    0x00020032, 0xFBD3E28A, 0x00000001, 0x00000021,
+    0x0002001D, 0xF5DE0180, 0x00000007, 0x00020032,
+    0xF8405C6C, 0x00000001, 0x00000021, 0x00020032,
+    0xFE363C80, 0x00000000, 0x0001005E, (s32)unk_evt_803bac3c,
+    0x0002005B, (s32)evt_mario_key_onoff, 0x00000001, 0x00000002,
+    0x00000001,
+};
+
+s32 kpa_pole[] = {
+    0x0002005B, (s32)evt_cam_letter_box_disable, 0x00000001, 0x0003005B,
+    (s32)evt_cam_letter_box_onoff, 0x00000000, 0x00000000, 0x0002005B,
+    (s32)evt_mario_cont_onoff, 0x00000000, 0x0001005B, (s32)evt_mario_cam_y_on,
+    0x0001005B, (s32)kpa_disp_pole_init, 0x0001005B, (s32)kpa_clear_jump_data,
+    0x0002005B, (s32)kpa_get_hata_name, 0xFE363C8F, 0x0004005B,
+    (s32)evt_mario_set_dir, 0x0000005A, 0x00000000, 0x00000000,
+    0x0002005B, (s32)kpa_chg_pose, (s32)(char*)str_KPA2_G_1_802c236c, 0x0005005B,
+    (s32)evt_mario_get_pos, 0x00000000, 0xFE363C81, 0xFE363C82,
+    0xFE363C83, 0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(char*)str_SFX_KUPPA_POST_JUMP1_802c2378,
+    0xFE363C81, 0xFE363C82, 0xFE363C83, 0x00000000,
+    0x0003005B, (s32)evt_mobj_get_x_position, 0xFE363C8F, 0xFE363C84,
+    0x0002005B, (s32)kpa_get_width, 0xFE363C85, 0x0002003C,
+    0xFE363C85, 0xF24A7CE6, 0x0002003B, 0xFE363C84,
+    0xFE363C85, 0x0004005B, (s32)evt_mario_set_pos, 0xFE363C84,
+    0xFE363C82, 0xFE363C83, 0x0002005B, (s32)kpa_score_to_str,
+    0xFE363C80, 0x00020034, 0xFE363C8E, 0xF24A8280,
+    0x00020034, 0xFE363C8D, 0xF24A8280, 0x00020034,
+    0xFE363C87, 0xF24B4280, 0x0000006B, 0x0005005B,
+    (s32)evt_mobj_get_position, 0xFE363C8F, 0xFE363C83, 0xFE363C84,
+    0xFE363C85, 0x0002003A, 0xFE363C83, 0xF24A9880,
+    0x0005005B, (s32)kpa_disp_pole_score_main, 0xFE363C83, 0xFE363C87,
+    0xFE363C85, 0xFE363C8D, 0x0000006D, 0x0005005B,
+    (s32)evt_mario_get_pos, 0x00000000, 0xFE363C81, 0xFE363C82,
+    0xFE363C83, 0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(char*)str_SFX_KUPPA_POST_SLIDE_802c2390,
+    0xFE363C81, 0xFE363C82, 0xFE363C83, 0xFE363C8A,
+    0x0001006C, 0xFE363C86, 0x00010005, 0x00000000,
+    0x0003005B, (s32)evt_mobj_get_y_position, 0xFE363C8F, 0xFE363C84,
+    0x0002003B, 0xFE363C84, 0xFE363C8E, 0x0003005B,
+    (s32)evt_mobj_set_y_position, 0xFE363C8F, 0xFE363C84, 0x00010009,
+    0x00000001, 0x0002001C, 0xFE363C84, 0x00000019,
+    0x0003005B, (s32)evt_mobj_set_y_position, 0xFE363C8F, 0xF24ADE80,
+    0x00000007, 0x00000021, 0x00000006, 0x0000006D,
+    0x00010005, 0x00000000, 0x0005005B, (s32)evt_mario_get_pos,
+    0x00000000, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0002003B, 0xFE363C81, 0xF24A8280, 0x0004005B,
+    (s32)evt_mario_set_pos, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0002001C, 0xFE363C81, 0xF24ADE80, 0x0004005B,
+    (s32)evt_mario_set_pos, 0xFE363C80, 0xF24ADE80, 0xFE363C82,
+    0x00000007, 0x00000021, 0x00010009, 0x00000001,
+    0x00000006, 0x00010005, 0x00000000, 0x0002006A,
+    0xFE363C86, 0xFE363C87, 0x00020018, 0xFE363C87,
+    0x00000000, 0x00000007, 0x00000021, 0x00010009,
+    0x00000001, 0x00000006, 0x0002005B, (s32)evt_snd_sfxoff,
+    0xFE363C8A, 0x0001000A, 0x000000C8, 0x0005005B,
+    (s32)evt_cam_get_pos, 0x00000004, 0xFE363C84, 0xFE363C85,
+    0xFE363C86, 0x0005005B, (s32)evt_cam_get_at, 0x00000004,
+    0xFE363C87, 0xFE363C88, 0xFE363C89, 0x0009005B,
+    (s32)evt_cam3d_evt_set, 0xFE363C84, 0xFE363C85, 0xFE363C86,
+    0xFE363C87, 0xFE363C88, 0xFE363C89, 0x00000000,
+    0x0000000B, 0x00010009, 0x00000001, 0x0002005B,
+    (s32)kpa_get_width, 0xFE363C83, 0x0005005B, (s32)evt_mario_get_pos,
+    0x00000000, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0002003C, 0xFE363C83, 0xF24A7F4C, 0x0002003A,
+    0xFE363C80, 0xFE363C83, 0x0005005B, (s32)evt_cam3d_get_shift,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0xFE363C83,
+    0x000B005B, (s32)evt_cam3d_event_from_road, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0xFE363C83, 0xFE363C84, 0xFE363C85,
+    0xFE363C86, 0xFE363C87, 0xFE363C88, 0xFE363C89,
+    0x0009005B, (s32)evt_cam3d_evt_set, 0xFE363C84, 0xFE363C85,
+    0xFE363C86, 0xFE363C87, 0xFE363C88, 0xFE363C89,
+    0x0000012C, 0x00000000, 0x0001000A, 0x000000C8,
+    0x0004005B, (s32)evt_mario_set_pos, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x0004005B, (s32)evt_mario_set_dir, 0x0000010E,
+    0x00000000, 0x00000000, 0x0002005B, (s32)evt_mario_set_mov_spd,
+    0x00000000, 0x0001000A, 0x000000C8, 0x00020035,
+    0xFE363C80, 0x00000014, 0x0004005B, (s32)evt_mario_set_pos,
+    0xFE363C80, 0x00000000, 0x0000000A, 0x00010009,
+    0x00000001, 0x0002005B, (s32)evt_mario_cont_onoff, 0x00000001,
+    0x0003005B, (s32)evt_cam3d_evt_off, 0x000000C8, 0x0000000B,
+    0x0001000A, 0x000000C8, 0x00000002, 0x00000001,
+};
+
+s32 kpa_pole_move[] = {
+    0x0002005B, (s32)evt_cam_letter_box_disable, 0x00000001, 0x0003005B,
+    (s32)evt_cam_letter_box_onoff, 0x00000000, 0x00000000, 0x0002005B,
+    (s32)evt_mario_key_onoff, 0x00000000, 0x0002005B, (s32)kpa_get_pole_name,
+    0xFE363C8E, 0x0002005B, (s32)kpa_get_hata_name, 0xFE363C8F,
+    0x0003005B, (s32)evt_mobj_get_x_position, 0xFE363C8E, 0xFE363C80,
+    0x0003005B, (s32)evt_mobj_get_y_position, 0xFE363C8E, 0xFE363C81,
+    0x0003005B, (s32)evt_mobj_get_z_position, 0xFE363C8E, 0xFE363C82,
+    0x00020034, 0xFE363C86, 0xF24A8280, 0x00020034,
+    0xFE363C87, 0xF24A9E80, 0x00020034, 0xFE363C88,
+    0xF24A91B3, 0x0003005B, (s32)evt_mobj_get_x_position, 0xFE363C8F,
+    0xFE363C83, 0x0003005B, (s32)evt_mobj_get_y_position, 0xFE363C8F,
+    0xFE363C84, 0x0003005B, (s32)evt_mobj_get_z_position, 0xFE363C8F,
+    0xFE363C85, 0x00020034, 0xFE363C89, 0xF24A8280,
+    0x00020034, 0xFE363C8B, 0xF24A91B3, 0x00020034,
+    0xFE363C8C, 0xF24A7E80, 0x0006005B, (s32)evt_snd_sfxon_3d,
+    (s32)(char*)str_SFX_KUPPA_POST_THROW_802c23a8, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0xFE363C8D, 0x00010005, 0x00000064, 0x0002003A,
+    0xFE363C80, 0xFE363C86, 0x0002003A, 0xFE363C81,
+    0xFE363C87, 0x0002003A, 0xFE363C82, 0xFE363C88,
+    0x0002003A, 0xFE363C83, 0xFE363C89, 0x00020034,
+    0xFE363C84, 0xF24D4A80, 0x0002003C, 0xFE363C84,
+    0xFE363C8C, 0x0002003A, 0xFE363C84, 0xFE363C81,
+    0x0002003A, 0xFE363C85, 0xFE363C8B, 0x0005005B,
+    (s32)evt_mobj_set_position, 0xFE363C8E, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x0005005B, (s32)evt_mobj_set_scale, 0xFE363C8E,
+    0xFE363C8C, 0xFE363C8C, 0xFE363C8C, 0x0005005B,
+    (s32)evt_mobj_set_position, 0xFE363C8F, 0xFE363C83, 0xFE363C84,
+    0xFE363C85, 0x0005005B, (s32)evt_mobj_set_scale, 0xFE363C8F,
+    0xFE363C8C, 0xFE363C8C, 0xFE363C8C, 0x0002003A,
+    0xFE363C86, 0xF24A7A80, 0x0002003A, 0xFE363C87,
+    0xF24A774D, 0x0002003A, 0xFE363C88, 0xF24A7A80,
+    0x0002003A, 0xFE363C89, 0xF24A7A80, 0x0002003A,
+    0xFE363C8B, 0xF24A7A80, 0x0002003A, 0xFE363C8C,
+    0xF24A7AA8, 0x0002001B, 0xFE363C8C, 0x00000003,
+    0x00020034, 0xFE363C8C, 0xF24A8680, 0x00000021,
+    0x00010009, 0x00000001, 0x00000006, 0x0002005B,
+    (s32)evt_snd_sfxoff, 0xFE363C8D, 0x0002005B, (s32)evt_mario_key_onoff,
+    0x00000001, 0x00000002, 0x00000001,
+};
+
+s32 kpa_move_to_toride[] = {
+    0x0002005B, (s32)evt_mario_key_onoff, 0x00000000, 0x0001005B,
+    (s32)evt_mario_wait_landon, 0x00020032, 0xF9718885, 0x00000001,
+    0x0002005B, (s32)evt_sub_get_mapname, 0xFE363C80, 0x0002000C,
+    0xFE363C80, (s32)(char*)str_kpa_06_802c23c0, 0x0005005B, (s32)evt_mapobj_get_position,
+    (s32)(char*)str_toride_802c23c8, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000020, 0x0005005B, (s32)evt_mapobj_get_position, (s32)(char*)str_toride_802c23d0,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000021,
+    0x0002005B, (s32)kpa_get_level, 0xFE363C86, 0x00010022,
+    0xFE363C86, 0x00010028, 0x00000001, 0x00020035,
+    0xFE363C80, 0x00000064, 0x00010024, 0x00000002,
+    0x0002005B, (s32)kpa_get_width, 0xFE363C87, 0x0002003C,
+    0xFE363C87, 0xF24A7F4C, 0x0002003B, 0xFE363C80,
+    0xFE363C87, 0x00010024, 0x00000003, 0x0002005B,
+    (s32)kpa_get_width, 0xFE363C87, 0x0002003C, 0xFE363C87,
+    0xF24A7F4C, 0x0002003B, 0xFE363C80, 0xFE363C87,
+    0x00000031, 0x0005005B, (s32)evt_mario_get_pos, 0x00000000,
+    0xFE363C83, 0xFE363C84, 0xFE363C85, 0x0004005B,
+    (s32)evt_mario_mov_pos2, 0xFE363C80, 0xFE363C85, 0x0000005A,
+    0x0002001D, 0xFE363C86, 0x00000002, 0x0005005B,
+    (s32)evt_mario_get_pos, 0x00000000, 0xFE363C81, 0xFE363C82,
+    0xFE363C83, 0x0006005B, (s32)evt_snd_sfxon_3d, (s32)(char*)str_SFX_KUPPA_STRUGGLE1_802c23d8,
+    0xFE363C81, 0xFE363C82, 0xFE363C83, 0xFE363C8A,
+    0x0003005B, (s32)evt_mario_dispflag_onoff, 0x00000001, 0x00000002,
+    0x0001000A, 0x000007D0, 0x0003005B, (s32)evt_mario_dispflag_onoff,
+    0x00000000, 0x00000002, 0x0002005B, (s32)evt_snd_sfxoff,
+    0xFE363C8A, 0x0002005B, (s32)kpa_chg_pose, (s32)(char*)str_KPA2_S_1_802c23ec,
+    0x00000021, 0x0002005B, (s32)evt_mario_key_onoff, 0x00000001,
+    0x00000002, 0x00000001,
 };
 
 s32 evt_mobj_entry(void* evt) {
@@ -430,6 +671,7 @@ s32 evt_mobj_set_anim(void* evt) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 evt_mobj_wait_animation_end(void* evt) {
+    extern f32 float_1_80420250;
     s32* args = *(s32**)((s32)evt + 0x18);
     s32 name = evtGetValue(evt, args[0]);
     void* mobj;
@@ -1172,6 +1414,7 @@ s32 mobj_jumpstand_red(void* pMobj) {
     extern const char str_MOBJ_RedJumpStand_802c20f8[];
     extern const char str_A_1_80420208[];
     extern const char str_S_1_8042021c[];
+    extern f32 float_1_80420250;
     void* mobj = pMobj;
     void* mario = marioGetPtr();
     s32 partyId = marioGetPartyId();
@@ -1243,7 +1486,7 @@ s32 mobj_jumpstand_red(void* pMobj) {
             }
             if (evtCheckID(*(s32*)((s32)mobj + 0x1CC)) != 1) {
                 *(u32*)((s32)gp + 0x18) &= ~0x10;
-                if (animPoseGetLoopTimes(*(s32*)((s32)mobj + 0x70)) >= 1.0f) {
+                if (animPoseGetLoopTimes(*(s32*)((s32)mobj + 0x70)) >= float_1_80420250) {
                     animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
                     *(s32*)((s32)mobj + 0x1DC) = 0;
                 }
@@ -1303,6 +1546,7 @@ s32 mobj_jumpstand_blue(void* pMobj) {
     extern const char str_MOBJ_BlueJumpStand_802c2128[];
     extern const char str_A_1_80420208[];
     extern const char str_S_1_8042021c[];
+    extern f32 float_1_80420250;
     void* mobj = pMobj;
     void* mario = marioGetPtr();
     s32 action = *(s32*)((s32)mobj + 0x1DC);
@@ -1358,7 +1602,7 @@ s32 mobj_jumpstand_blue(void* pMobj) {
                 *(s32*)((s32)mobj + 0x1DC) = 0;
             } else if (evtCheckID(*(s32*)((s32)mobj + 0x1CC)) != 1) {
                 *(u32*)((s32)gp + 0x18) &= ~0x10;
-                if (animPoseGetLoopTimes(*(s32*)((s32)mobj + 0x70)) >= 1.0f) {
+                if (animPoseGetLoopTimes(*(s32*)((s32)mobj + 0x70)) >= float_1_80420250) {
                     animPoseSetAnim(*(s32*)((s32)mobj + 0x70), str_S_1_8042021c, 1);
                     *(s32*)((s32)mobj + 0x1DC) = 0;
                 }
@@ -1450,6 +1694,7 @@ s32 mobj_lv_blk_evt(void* pMobj) {
     extern const char str_MOBJ_Lv2BigBigBlock_802c2960[];
     extern const u32 vec3_802c2178[];
     extern const u8 vec3_802c2058[];
+    extern f32 float_1_80420250;
     u32 offName[4];
     u32 imgName[4];
     char evtA[0x1B0];
@@ -1562,7 +1807,7 @@ s32 mobj_lv_blk_evt(void* pMobj) {
             break;
         case 11:
             img = imgNameToPtr((char*)imgName, heapType);
-            if (*(f32*)((s32)img + 0x118) >= 1.0f || (*(u32*)((s32)img + 0xCC) & 0x10000000) != 0) {
+            if (*(f32*)((s32)img + 0x118) >= float_1_80420250 || (*(u32*)((s32)img + 0xCC) & 0x10000000) != 0) {
                 *(s32*)((s32)pMobj + 0x1DC) = 12;
             }
             *(u32*)((s32)pMobj + 0x38) = *(const u32*)(base + 0x120);
@@ -2173,7 +2418,7 @@ s32 mobj_lock(void* pMobj) {
     extern u32 hitCheckFilter(f32, f32, f32, f32, f32, f32, s32, void*, void*, void*, void*, void*, void*, void*);
     extern u32 psndSFXOn_3D(s32, void*);
     extern void mobjDelete(char*);
-    extern void* evt_lock_sound;
+    extern s32 evt_lock_sound[20];
     extern const char str_sys_no_key_802c277c[];
     extern const char str_S_1_8042021c[];
     extern f32 float_0_80420240;
@@ -2390,9 +2635,9 @@ s32 mobj_itembox(void* pMobj) {
     extern void marioStSystemLevel(s32);
     extern void* evtEntryType(void*, s8, u32, u32);
     extern void evtSetValue(void*, s32, s32);
-    extern void* evt_box_sound1;
-    extern void* evt_box_sound2;
-    extern void* evt_box_sound3;
+    extern s32 evt_box_sound1[20];
+    extern s32 evt_box_sound2[20];
+    extern s32 evt_box_sound3[23];
     extern const u32 vec3_802c2058[];
     extern const char str_MOBJ_TreasureBox_802c26f8[];
     extern const char str_MOBJ_GrayTreasureBox_802c2720[];
@@ -2407,6 +2652,7 @@ s32 mobj_itembox(void* pMobj) {
     extern f32 float_1p4_804202f8;
     extern f32 float_1p2_804202fc;
     extern f32 float_1024_80420290;
+    extern f32 float_10_80420294;
     u32 action = *(u32*)((s32)pMobj + 0x1DC);
     void* evt;
     void* pose;
@@ -2509,7 +2755,7 @@ s32 mobj_itembox(void* pMobj) {
                 (double)*(f32*)&min[2]);
             PSVECAdd(max, min, (void*)((s32)pMobj + 0x190));
             PSVECScale(float_0p5_8042024c, (void*)((s32)pMobj + 0x190), (void*)((s32)pMobj + 0x190));
-            PSVECScale(10.0f, (void*)((s32)pMobj + 0x190), (void*)((s32)pMobj + 0x190));
+            PSVECScale(float_10_80420294, (void*)((s32)pMobj + 0x190), (void*)((s32)pMobj + 0x190));
             *(f32*)((s32)pMobj + 0x194) = float_0_80420240;
             *(f32*)((s32)pMobj + 0x188) *= float_1p4_804202f8;
             *(f32*)((s32)pMobj + 0x18C) *= float_1p2_804202fc;
@@ -3078,7 +3324,7 @@ s32 evt_mobj_save_blk(void* pEvt) {
     extern const char str_MOBJ_SaveBlock_802c267c[];
     extern const char str_S_1_8042021c[4];
     extern void mobj_save_blk(void);
-    extern void mobj_save_blk_sysevt(void);
+    extern s32 mobj_save_blk_sysevt[41];
     s32* args = *(s32**)((s32)pEvt + 0x18);
     char* name;
     f32 x;
@@ -3560,6 +3806,7 @@ s32 mobj_brickblk(void* pMobj) {
     extern f32 vec3_802c22b0;
     extern f32 DAT_802c22b4;
     extern f32 DAT_802c22b8;
+    extern f32 float_1_80420250;
     u32 offName[4];
     u32 imgName[4];
     char evtA[0x1B0];
@@ -3640,7 +3887,7 @@ s32 mobj_brickblk(void* pMobj) {
             break;
         case 11:
             img = imgNameToPtr((char*)imgName, heapType);
-            if (*(f32*)((s32)img + 0x118) >= 1.0f ||
+            if (*(f32*)((s32)img + 0x118) >= float_1_80420250 ||
                 (*(u32*)img & 0x10000000) != 0) {
                 *(s32*)((s32)pMobj + 0x1DC) = 12;
             }
@@ -5832,6 +6079,9 @@ s32 kpa_score_to_str(void* evt) {
 }
 
 void kpa_disp_pole_score(void) {
+    extern f32 float_300_80420248;
+    extern f32 float_0p5_8042024c;
+    extern u32 dat_80420224;
     f32 z = float_300_80420248;
     u32 color;
     f32 trans[12];
@@ -5877,6 +6127,7 @@ s32 kpa_disp_pole_score_main(void* evt, s32 isFirstCall) {
 }
 
 s32 kpa_disp_pole_init(void) {
+    extern f32 float_0_80420240;
     f32 zero;
     psw = _mapAlloc(mapalloc_base_ptr, 0x14);
     zero = float_0_80420240;
@@ -5898,9 +6149,9 @@ s32 mobj_koopa_pole_evt(void* pMobj) {
     extern void evtSetValue(void*, s32, s32);
     extern void marioKeyOff(void);
     extern void npcGroupDead(void*, s32);
-    extern void* kpa_pole;
-    extern void* kpa_pole_move;
-    extern void* kpa_move_to_toride;
+    extern s32 kpa_pole[280];
+    extern s32 kpa_pole_move[151];
+    extern s32 kpa_move_to_toride[110];
     extern f32 float_25_80420230;
     extern f32 float_50_8042023c;
     extern f32 float_100_80420238;
@@ -6155,3 +6406,83 @@ s32 evt_mobj_koopa_pole(void* pEvt) {
     }
     return 2;
 }
+
+extern const char str_A_1_80420208[];
+extern const char str_A_2_8042020c[];
+extern const char str_A_3_80420210[];
+extern const char str_A_4_80420214[];
+extern const char str_A_5_80420218[];
+extern const char str_S_1_8042021c[];
+
+const char* _switch_anim[] = {
+    str_A_1_80420208,
+    str_A_2_8042020c,
+    str_A_3_80420210,
+    str_A_4_80420214,
+    str_A_5_80420218,
+    str_S_1_8042021c,
+};
+
+s32 kpa_powerup_evt[] = {
+    0x0004005B, (s32)kpa_powerup, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x00000002, 0x00000001,
+};
+
+s32 evt_fire[] = {
+    0x0005005B, (s32)fire_func, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0xFE363C83, 0x00000002, 0x00000001,
+};
+
+const char str_A_1_80420208[] = "A_1";
+const char str_A_2_8042020c[] = "A_2";
+const char str_A_3_80420210[] = "A_3";
+const char str_A_4_80420214[] = "A_4";
+const char str_A_5_80420218[] = "A_5";
+const char str_S_1_8042021c[] = "S_1";
+const u32 dat_80420220 = 0xFFFFFFFF;
+const u32 dat_80420224 = 0xFFFFFFFF;
+const char str_h_80420228[] = "_h";
+const f32 float_180_8042022c = 180.0f;
+const f32 float_25_80420230 = 25.0f;
+const f32 float_170_80420234 = 170.0f;
+const f32 float_100_80420238 = 100.0f;
+const f32 float_50_8042023c = 50.0f;
+const f32 float_0_80420240 = 0.0f;
+const f32 float_230_80420244 = 230.0f;
+const f32 float_300_80420248 = 300.0f;
+const f32 float_0p5_8042024c = 0.5f;
+const f32 float_1_80420250 = 1.0f;
+const f32 float_175_80420254 = 175.0f;
+const char str_PCTsPCT2x_80420258[] = "%s%2x";
+const f32 float_150_80420260 = 150.0f;
+const f32 float_deg2rad_80420264 = 0.01745329238474369f;
+const f32 float_12p5_80420268 = 12.5f;
+const f32 float_neg1000_8042026c = -1000.0f;
+const f32 float_200_80420270 = 200.0f;
+const f32 float_6_80420274 = 6.0f;
+const f32 float_75_80420278 = 75.0f;
+const f32 float_4p8_8042027c = 4.8f;
+const f32 float_2_80420280 = 2.0f;
+const f32 float_0p04_80420284 = 0.04f;
+const f32 float_3_80420288 = 3.0f;
+const f32 float_0p2_8042028c = 0.2f;
+const f32 float_1024_80420290 = 1024.0f;
+const f32 float_10_80420294 = 10.0f;
+const f32 float_30_80420298 = 30.0f;
+const f32 float_60_8042029c = 60.0f;
+const f32 float_0p8_804202a0 = 0.8f;
+const f32 float_0p125_804202a4 = 0.125f;
+const f32 float_0p99_804202a8 = 0.99f;
+const f32 float_7p5_804202ac = 7.5f;
+const char str_S_2_804202b0[] = "S_2";
+const f32 float_0p45_804202b4 = 0.45f;
+const f32 float_0p7_804202b8 = 0.7f;
+const f32 float_500_804202bc = 500.0f;
+const f32 float_120_804202c0 = 120.0f;
+const f32 float_0p1_804202c4 = 0.1f;
+const f32 float_1E05_804202c8 = 100000.0f;
+const f32 float_42p42_804202cc = 42.42000198364258f;
+const f32 float_0p6_804202d0 = 0.6f;
+const f32 float_32767_804202d4 = 32767.0f;
+const char str_S_3_804202d8[] = "S_3";
+const f32 float_40_804202dc = 40.0f;

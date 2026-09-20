@@ -10,20 +10,210 @@ extern f32 float_0_80428424;
 extern f32 float_0p5_804283ec;
 extern f32 float_32767_80428404;
 extern void* memcpy(void* dst, const void* src, u32 size);
-void* get_ptr(void);
+static void* get_ptr(void);
 void main_timing(s32 index);
 void main_enemy(void);
-void disp_3D(void);
-void disp_3D_alpha(void);
+static void disp_3D(void);
+static void disp_3D_alpha(void);
 void yuka_init(void);
-void main_base(void);
+static void main_base(void);
 void main_gauge(void);
-void main_star(void);
+static void main_star(void);
 void yuka_main(void);
-void disp_2D(void);
+static void disp_2D(void);
 void yuka_capture(s32 cameraId);
 void create_timing(void);
 void main_enemy_sub(void* unit, s32* count);
+
+extern s32 btlevtcmd_GetUnitId();
+extern s32 btlevtcmd_GetBodyId();
+extern s32 btlevtcmd_CheckActStatus();
+extern s32 btlevtcmd_GetSelectEnemy();
+extern s32 btlevtcmd_AttackDeclare();
+extern s32 btlevtcmd_WaitGuardMove();
+extern s32 btlevtcmd_CommandPayWeaponCost();
+extern s32 btlevtcmd_CommandGetWeaponAddress();
+extern s32 btlevtcmd_WeaponAftereffect();
+extern s32 btlevtcmd_reset_move_color_lv_all();
+extern s32 main_deka();
+extern s32 sac_start_camera_evt();
+extern s32 btlevtcmd_snd_se();
+extern char str_SFX_BTL_SAC_START1_80300f8c[];
+extern s32 sac_mario_item_on_evt();
+extern char str_SFX_BTL_SAC_START2_80300fa0[];
+extern s32 star_stone_appear();
+extern s32 sac_start_stardust();
+extern char str_SFX_BTL_SAC_START3_80300fb4[];
+extern s32 evt_snd_sfxoff();
+extern s32 evt_btl_camera_set_mode();
+extern s32 sac_mario_item_on_end_evt();
+extern s32 btlevtcmd_SacBgsetMove();
+extern s32 sac_mario_back_home();
+extern s32 wait_star_stone_take_on();
+extern s32 btlevtcmd_AnimeChangePoseType();
+extern s32 get_ride_pos();
+extern s32 btlevtcmd_JumpSetting();
+extern s32 btlevtcmd_JumpPosition();
+extern s32 btlevtcmd_AnimeChangePose();
+extern const char str_M_I_Y_804283e4[];
+extern s32 btlevtcmd_GetUnitKind();
+extern s32 btlevtcmd_SetUnitWork();
+extern s32 btlevtcmd_GetPos();
+extern s32 btlevtcmd_SetPos();
+extern s32 sac_cheer();
+extern s32 sac_ac_help_on();
+extern s32 start_game();
+extern s32 wait_game_end();
+extern s32 sac_ac_help_off();
+extern s32 sac_cheer_end();
+extern s32 star_stone_attack();
+extern s32 btlevtcmd_GetHomePos();
+extern s32 btlevtcmd_StartWaitEvent();
+extern s32 yuka_end();
+extern s32 end_deka();
+extern s32 get_result();
+extern s32 btlevtcmd_CheckAttribute();
+extern s32 btlevtcmd_CheckPartsAttribute();
+extern s32 btlevtcmd_CommandCheckDamage();
+extern s32 btlevtcmd_GetSelectNextEnemy();
+extern s32 btlevtcmd_ACSuccessEffect();
+extern s32 dmg_evt[];
+
+s32 marioAttackEvent_Deka[] = {
+    0x0003005B, (s32)btlevtcmd_GetUnitId, 0xFFFFFFFC, 0xFE363C8E,
+    0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C8E, 0xFE363C8F,
+    0x0003005B, (s32)btlevtcmd_CheckActStatus, 0xFE363C8E, 0xFE363C80,
+    0x00020018, 0xFE363C80, 0x00000000, 0x00020032,
+    0xFE363C8E, 0xFFFFFFFF, 0x00000021, 0x0003005B,
+    (s32)btlevtcmd_GetSelectEnemy, 0xFE363C83, 0xFE363C84, 0x00020018,
+    0xFE363C83, 0xFFFFFFFF, 0x00010004, 0x00000063,
+    0x00000021, 0x0004005B, (s32)btlevtcmd_AttackDeclare, 0xFFFFFFFE,
+    0xFE363C83, 0xFE363C84, 0x0001005B, (s32)btlevtcmd_WaitGuardMove,
+    0x0002005B, (s32)btlevtcmd_CommandPayWeaponCost, 0xFFFFFFFE, 0x0003005B,
+    (s32)btlevtcmd_CommandGetWeaponAddress, 0xFFFFFFFE, 0xFE363C80, 0x0002005B,
+    (s32)btlevtcmd_WeaponAftereffect, 0xFE363C80, 0x0001005B, (s32)btlevtcmd_reset_move_color_lv_all,
+    0x0000006E, 0x0002005B, (s32)main_deka, 0xFE363C8E,
+    0x00000070, 0x0001005E, (s32)sac_start_camera_evt, 0x0001000A,
+    0x000001F4, 0x0006005B, (s32)btlevtcmd_snd_se, 0xFFFFFFFE,
+    (s32)(char*)str_SFX_BTL_SAC_START1_80300f8c, 0xF1194D80, 0x00000000, 0xF1194D80,
+    0x0001005E, (s32)sac_mario_item_on_evt, 0x0001000A, 0x000001F4,
+    0x0006005B, (s32)btlevtcmd_snd_se, 0xFFFFFFFE, (s32)(char*)str_SFX_BTL_SAC_START2_80300fa0,
+    0xF1194D80, 0x00000000, 0xFE363C8B, 0x0001005B,
+    (s32)star_stone_appear, 0x0000006E, 0x0001005E, (s32)sac_start_stardust,
+    0x00000070, 0x00010009, 0x00000064, 0x0006005B,
+    (s32)btlevtcmd_snd_se, 0xFFFFFFFE, (s32)(char*)str_SFX_BTL_SAC_START3_80300fb4, 0xF1194D80,
+    0x00000000, 0xF1194D80, 0x0002005B, (s32)evt_snd_sfxoff,
+    0xFE363C8B, 0x0003005B, (s32)evt_btl_camera_set_mode, 0x00000000,
+    0x00000000, 0x00010009, 0x00000028, 0x0001005E,
+    (s32)sac_mario_item_on_end_evt, 0x0002005B, (s32)btlevtcmd_SacBgsetMove, 0x00000000,
+    0x0001005E, (s32)sac_mario_back_home, 0x0001005B, (s32)wait_star_stone_take_on,
+    0x0000006E, 0x0004005B, (s32)btlevtcmd_AnimeChangePoseType, 0xFFFFFFFE,
+    0x00000001, 0x0000002C, 0x0005005B, (s32)get_ride_pos,
+    0x00000000, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0005005B, (s32)btlevtcmd_JumpSetting, 0xFFFFFFFE, 0x0000001E,
+    0x00000000, 0xF24A7C19, 0x0007005B, (s32)btlevtcmd_JumpPosition,
+    0xFFFFFFFE, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0000001E, 0xFFFFFFFF, 0x0004005B, (s32)btlevtcmd_AnimeChangePose,
+    0xFFFFFFFE, 0x00000001, (s32)(char*)str_M_I_Y_804283e4, 0x00000070,
+    0x0000006E, 0x00020019, 0xFE363C8E, 0xFFFFFFFF,
+    0x0003005B, (s32)btlevtcmd_GetUnitKind, 0xFFFFFFFC, 0xFE363C80,
+    0x00020018, 0xFE363C80, 0x000000E4, 0x00010005,
+    0x00000000, 0x0004005B, (s32)btlevtcmd_SetUnitWork, 0xFE363C8E,
+    0x00000003, 0x00000001, 0x0005005B, (s32)btlevtcmd_GetPos,
+    0xFE363C8E, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0004005B, (s32)btlevtcmd_SetUnitWork, 0xFE363C8E, 0x00000000,
+    0xFE363C80, 0x0004005B, (s32)btlevtcmd_SetUnitWork, 0xFE363C8E,
+    0x00000001, 0xFE363C81, 0x0004005B, (s32)btlevtcmd_SetUnitWork,
+    0xFE363C8E, 0x00000002, 0xFE363C82, 0x00010009,
+    0x00000001, 0x00000006, 0x00000021, 0x00000021,
+    0x00000070, 0x0000006E, 0x00020019, 0xFE363C8E,
+    0xFFFFFFFF, 0x0004005B, (s32)btlevtcmd_AnimeChangePoseType, 0xFE363C8E,
+    0xFE363C8F, 0x0000002C, 0x0005005B, (s32)get_ride_pos,
+    0x00000001, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0005005B, (s32)btlevtcmd_JumpSetting, 0xFE363C8E, 0x0000001E,
+    0x00000000, 0xF24A7C19, 0x0007005B, (s32)btlevtcmd_JumpPosition,
+    0xFE363C8E, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0000001E, 0xFFFFFFFF, 0x0004005B, (s32)btlevtcmd_AnimeChangePoseType,
+    0xFE363C8E, 0xFE363C8F, 0x0000002B, 0x00000021,
+    0x00000070, 0x00010009, 0x0000001E, 0x0001006F,
+    0xFE363C8D, 0x00010005, 0x00000000, 0x00010009,
+    0x00000001, 0x0005005B, (s32)get_ride_pos, 0x00000000,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00020035,
+    0xFE363C82, 0xF24A8E80, 0x0005005B, (s32)btlevtcmd_SetPos,
+    0xFFFFFFFE, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00020019, 0xFE363C8E, 0xFFFFFFFF, 0x0005005B,
+    (s32)get_ride_pos, 0x00000001, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x0005005B, (s32)btlevtcmd_SetPos, 0xFE363C8E,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000021,
+    0x00000006, 0x00000070, 0x0000006E, 0x0002005B,
+    (s32)sac_cheer, 0x00000000, 0x00000070, 0x0001005B,
+    (s32)sac_ac_help_on, 0x0001005B, (s32)start_game, 0x0001005B,
+    (s32)wait_game_end, 0x0001005B, (s32)sac_ac_help_off, 0x0001005B,
+    (s32)sac_cheer_end, 0x0001000A, 0x000003E8, 0x0001005B,
+    (s32)star_stone_attack, 0x00010003, 0x0000005A, 0x0001005F,
+    0xFE363C8D, 0x0000006B, 0x0001000A, 0x000003E8,
+    0x0001005E, (s32)dmg_evt, 0x0000006D, 0x0001000A,
+    0x000001F4, 0x0000006E, 0x0004005B, (s32)btlevtcmd_AnimeChangePoseType,
+    0xFFFFFFFE, 0x00000001, 0x0000002C, 0x0005005B,
+    (s32)btlevtcmd_GetHomePos, 0xFFFFFFFE, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x0005005B, (s32)btlevtcmd_JumpSetting, 0xFFFFFFFE,
+    0x0000001E, 0x00000000, 0xF24A7C19, 0x0007005B,
+    (s32)btlevtcmd_JumpPosition, 0xFFFFFFFE, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x0000001E, 0xFFFFFFFF, 0x0004005B,
+    (s32)btlevtcmd_AnimeChangePoseType, 0xFFFFFFFE, 0x00000001, 0x0000002B,
+    0x00000070, 0x0000006E, 0x00020019, 0xFE363C8E,
+    0xFFFFFFFF, 0x0004005B, (s32)btlevtcmd_AnimeChangePoseType, 0xFE363C8E,
+    0xFE363C8F, 0x0000002C, 0x0005005B, (s32)btlevtcmd_GetHomePos,
+    0xFE363C8E, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0005005B, (s32)btlevtcmd_JumpSetting, 0xFE363C8E, 0x0000001E,
+    0x00000000, 0xF24A7C19, 0x0007005B, (s32)btlevtcmd_JumpPosition,
+    0xFE363C8E, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x0000001E, 0xFFFFFFFF, 0x0002005B, (s32)btlevtcmd_StartWaitEvent,
+    0xFE363C8E, 0x00000021, 0x00000070, 0x00010009,
+    0x0000001E, 0x0003005B, (s32)evt_btl_camera_set_mode, 0x00000000,
+    0x00000000, 0x0002005B, (s32)btlevtcmd_SacBgsetMove, 0x00000001,
+    0x00020019, 0xFE363C8E, 0xFFFFFFFF, 0x0003005B,
+    (s32)btlevtcmd_GetUnitKind, 0xFFFFFFFC, 0xFE363C80, 0x00020018,
+    0xFE363C80, 0x000000E4, 0x0004005B, (s32)btlevtcmd_SetUnitWork,
+    0xFE363C8E, 0x00000003, 0x00000000, 0x00000021,
+    0x00000021, 0x0001005B, (s32)yuka_end, 0x0001005B,
+    (s32)end_deka, 0x00010003, 0x00000063, 0x0002005B,
+    (s32)btlevtcmd_StartWaitEvent, 0xFFFFFFFE, 0x00000002, 0x00000001,
+};
+
+s32 dmg_evt[] = {
+    0x0002005B, (s32)get_result, 0xFE363C8A, 0x0003005B,
+    (s32)btlevtcmd_GetSelectEnemy, 0xFE363C83, 0xFE363C84, 0x00010003,
+    0x0000000A, 0x00020018, 0xFE363C83, 0xFFFFFFFF,
+    0x00000002, 0x00000021, 0x0002001C, 0xFE363C8A,
+    0x00000001, 0x0004005B, (s32)btlevtcmd_CheckAttribute, 0xFE363C83,
+    0x00000002, 0xFE363C80, 0x00020019, 0xFE363C80,
+    0x00000000, 0x00010004, 0x0000001E, 0x00000021,
+    0x0004005B, (s32)btlevtcmd_CheckAttribute, 0xFE363C83, 0x00000004,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x0005005B, (s32)btlevtcmd_CheckPartsAttribute, 0xFE363C83, 0xFE363C84,
+    0x00200000, 0xFE363C80, 0x00020019, 0xFE363C80,
+    0x00000000, 0x00010004, 0x0000001E, 0x00000021,
+    0x00000021, 0x00010004, 0x00000014, 0x00000021,
+    0x0002001C, 0xFE363C8A, 0x00000003, 0x0004005B,
+    (s32)btlevtcmd_CheckAttribute, 0xFE363C83, 0x00000002, 0xFE363C80,
+    0x00020019, 0xFE363C80, 0x00000000, 0x00010004,
+    0x0000001E, 0x00000021, 0x00010004, 0x00000014,
+    0x00000021, 0x00010004, 0x00000014, 0x00010003,
+    0x00000014, 0x0005005B, (s32)btlevtcmd_CheckPartsAttribute, 0xFE363C83,
+    0xFE363C84, 0x00004000, 0xFE363C80, 0x00020018,
+    0xFE363C80, 0x00000000, 0x0006005B, (s32)btlevtcmd_CommandCheckDamage,
+    0xFFFFFFFD, 0xFE363C83, 0xFE363C84, 0x00000100,
+    0xFE363C85, 0x00000021, 0x00010003, 0x0000001E,
+    0x0003005B, (s32)btlevtcmd_GetSelectNextEnemy, 0xFE363C83, 0xFE363C84,
+    0x00010004, 0x0000000A, 0x00000002, 0x00000001,
+};
+
+static s32 nice_event[] = {
+    0x0005005B, (s32)btlevtcmd_ACSuccessEffect, 0xFE363C80, 0x00000000,
+    0x00000064, 0x00000000, 0x00000002, 0x00000001,
+};
+
 
 USER_FUNC(main_deka) {
     extern void* memset(void* dest, s32 value, u32 size);
@@ -244,7 +434,7 @@ USER_FUNC(yuka_end) {
 }
 
 /* stub-fill: main_base | prototype_only | source_prototype */
-void main_base(void) {
+static void main_base(void) {
     extern void* get_ptr(void);
     extern void create_timing(void);
     extern u32 psndSFXOn(const char* name);
@@ -255,7 +445,6 @@ void main_base(void) {
     extern void BattleAudienceSoundHandBeat(void);
     extern void BattleAudienceSoundBooing(void);
     extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
-    extern const s32 nice_event[];
     extern const char str_SFX_BTL_SAC_DOKKAN1__80301010[];
     extern const char str_SFX_BTL_SAC_DOKKAN2_80301028[];
     extern const char str_SFX_BTL_SAC_DOKKAN3_8030103c[];
@@ -496,7 +685,7 @@ void main_timing(s32 index) {
 }
 
 /* stub-fill: main_star | prototype_only | source_prototype */
-void main_star(void) {
+static void main_star(void) {
     typedef struct Vec { f32 x, y, z; } Vec;
     extern void* _battleWorkPointer;
     extern void* get_ptr(void);
@@ -899,7 +1088,7 @@ USER_FUNC(end_deka) {
 }
 
 /* stub-fill: disp_2D | prototype_only | source_prototype */
-void disp_2D(void) {
+static void disp_2D(void) {
     typedef f32 Mtx[3][4];
     typedef union {
         f64 value;
@@ -1037,11 +1226,11 @@ void disp_2D(void) {
     GXSetScissor(0, 0, *(u16*)(gp + 0x170), *(u16*)(gp + 0x172));
 }
 
-void disp_3D(void) {
+static void disp_3D(void) {
     ;
 }
 
-void disp_3D_alpha(void) {
+static void disp_3D_alpha(void) {
     ;
 }
 
@@ -1201,7 +1390,7 @@ void yuka_disp(s32 cameraId) {
     }
 }
 
-void* get_ptr(void) {
+static void* get_ptr(void) {
     return (void*)((s32)_battleWorkPointer + 0x1F4C);
 }
 
@@ -1352,7 +1541,7 @@ USER_FUNC(wait_star_stone_take_on) {
     return value == 4 ? 2 : 0;
 }
 
-USER_FUNC(start_game) {
+static s32 start_game(EventEntry* event, BOOL isFirstCall) {
     void* wp;
 
     wp = get_ptr();
@@ -1361,12 +1550,12 @@ USER_FUNC(start_game) {
     return 2;
 }
 
-USER_FUNC(wait_game_end) {
+static s32 wait_game_end(EventEntry* event, BOOL isFirstCall) {
     s32 value = *(s32*)((s32)get_ptr() + 0x30);
     return value == 5 ? 2 : 0;
 }
 
-USER_FUNC(star_stone_appear) {
+static s32 star_stone_appear(EventEntry* event, BOOL isFirstCall) {
     void* wp;
 
     wp = get_ptr();
@@ -1401,7 +1590,7 @@ USER_FUNC(get_ride_pos) {
     return 2;
 }
 
-USER_FUNC(star_stone_attack) {
+static s32 star_stone_attack(EventEntry* event, BOOL isFirstCall) {
     void* work = get_ptr();
     if (isFirstCall != 0) {
         *(s32*)((s32)work + 0x3F0) = 0xA;
@@ -1417,3 +1606,8 @@ USER_FUNC(get_result) {
     evtSetValue(event, event->args[0], *(s32*)((s32)work + 0x44));
     return 2;
 }
+
+const u32 dat_804283d8 = 0xFFFFFF00;
+const u32 dat_804283dc = 0xFFFFFF00;
+const u32 dat_804283e0 = 0xFFFFFF00;
+const char str_M_I_Y_804283e4[] = "M_I_Y";

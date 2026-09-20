@@ -26,7 +26,7 @@ extern f32 float_10_80428b28;
 extern f32 float_1_80428b3c;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-void* effMajinaiEntry(f32 x, f32 y, f32 z, s32 type) {
+void* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
     s32 typeCopy;
     void* entry;
     void* work;

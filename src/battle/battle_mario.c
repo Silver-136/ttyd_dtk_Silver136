@@ -739,7 +739,7 @@ s32 _battle_majinai_effect(void* evt, s32 first) {
         ((s32*)pos)[0] = ((s32*)vec3_802ef5d8)[0];
         ((s32*)pos)[1] = ((s32*)vec3_802ef5d8)[1];
         ((s32*)pos)[2] = ((s32*)vec3_802ef5d8)[2];
-        *(void**)((s32)evt + 0x78) = effMajinaiEntry(pos[0], pos[1], pos[2], 0);
+        *(void**)((s32)evt + 0x78) = effMajinaiEntry(0, pos[0], pos[1], pos[2]);
         effSetName(*(void**)((s32)evt + 0x78), str_mjef_coinup_802ef624);
     }
 

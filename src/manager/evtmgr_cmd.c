@@ -6,6 +6,10 @@ extern void* evtGetWork(void);
 extern void* evtEntryType(void*, s32, s32, s32);
 extern void* evtBrotherEntry(void*, void*, unsigned int);
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma opt_common_subs off
+
 s32 evt_while(void* event) {
     extern s32 evtGetValue(void*, s32);
     extern s32 evtSetValue(void*, s32, s32);
@@ -37,7 +41,11 @@ s32 evt_while(void* event) {
         *(unsigned char*)((int)event + 0xE) = *(unsigned char*)((int)event + 0xE) - 1;
     }
     return 2;
+#pragma opt_common_subs reset
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -66,7 +74,8 @@ s32 evt_wait_msec(void* event) {
     }
 
     tickDiff = (s32)time - *(s32*)((u8*)event + 0x80);
-    msecDiff = (s32)(tickDiff / ((*(u32*)0x800000F8 >> 2) / 1000));
+    msecDiff = (s32)(tickDiff /
+                     (__mulhwu(0x10624DD3, *(volatile u32*)0x800000F8 >> 2) >> 6));
     return msecDiff >= wait;
 }
 
@@ -77,40 +86,46 @@ s32 evt_wait_msec(void* event) {
 #pragma use_lmw_stmw off
 
 int evt_if_str_equal(void* pEvt) {
-    u8* event = pEvt;
-    s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(pEvt, args[0]);
-    char* right = (char*)evtGetValue(pEvt, args[1]);
+    u8* event = (u8*)pEvt;
+    s32* args;
+    char* left;
+    char* right;
+    s32 opcode;
+    s32 depth;
+    u32* ip;
+    u32 cmd;
 
+    args = *(s32**)(event + 0x18);
+    left = (char*)evtGetValue(pEvt, args[0]);
+    right = (char*)evtGetValue(pEvt, args[1]);
     if (left == 0) left = "";
     if (right == 0) right = "";
     if (strcmp(left, right)) {
-        s32 depth = 0;
-        s32* current = *(s32**)(event + 0x14);
-        while (1) {
-            s32 command = *current++;
-            s32 opcode = command & 0xFFFF;
-            current += command >> 16;
-
-            if (opcode == 0x20) {
-                if (depth == 0) {
-                    break;
-                }
-            } else if (opcode < 0x20) {
-                if (opcode == 1) {
-                    if (--depth < 0) {
-                        break;
-                    }
-                } else if (opcode >= 0xC) {
-                    depth++;
-                }
-            } else if (opcode < 0x22) {
-                if (--depth < 0) {
-                    break;
-                }
-            }
-        }
-        *(s32**)(event + 0x14) = current;
+        depth = 0;
+        ip = *(u32**)(event + 0x14);
+loop:
+        cmd = *ip++;
+        opcode = cmd & 0xFFFF;
+        ip += (s32)cmd >> 0x10;
+        if (opcode == 0x20) goto case_20;
+        if (opcode >= 0x20) goto high;
+        if (opcode == 1) goto decrement;
+        if (opcode < 1) goto loop;
+        if (opcode >= 0xC) goto increment;
+        goto loop;
+high:
+        if (opcode >= 0x22) goto loop;
+decrement:
+        if (--depth >= 0) goto loop;
+        goto found;
+increment:
+        depth++;
+        goto loop;
+case_20:
+        if (depth != 0) goto loop;
+found:
+        *(u32**)(event + 0x14) = ip;
+        return 2;
     }
     return 2;
 }
@@ -122,40 +137,46 @@ int evt_if_str_equal(void* pEvt) {
 #pragma use_lmw_stmw off
 
 int evt_if_str_not_equal(void* pEvt) {
-    u8* event = pEvt;
-    s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(pEvt, args[0]);
-    char* right = (char*)evtGetValue(pEvt, args[1]);
+    u8* event = (u8*)pEvt;
+    s32* args;
+    char* left;
+    char* right;
+    s32 opcode;
+    s32 depth;
+    u32* ip;
+    u32 cmd;
 
+    args = *(s32**)(event + 0x18);
+    left = (char*)evtGetValue(pEvt, args[0]);
+    right = (char*)evtGetValue(pEvt, args[1]);
     if (left == 0) left = "";
     if (right == 0) right = "";
     if (!strcmp(left, right)) {
-        s32 depth = 0;
-        s32* current = *(s32**)(event + 0x14);
-        while (1) {
-            s32 command = *current++;
-            s32 opcode = command & 0xFFFF;
-            current += command >> 16;
-
-            if (opcode == 0x20) {
-                if (depth == 0) {
-                    break;
-                }
-            } else if (opcode < 0x20) {
-                if (opcode == 1) {
-                    if (--depth < 0) {
-                        break;
-                    }
-                } else if (opcode >= 0xC) {
-                    depth++;
-                }
-            } else if (opcode < 0x22) {
-                if (--depth < 0) {
-                    break;
-                }
-            }
-        }
-        *(s32**)(event + 0x14) = current;
+        depth = 0;
+        ip = *(u32**)(event + 0x14);
+loop:
+        cmd = *ip++;
+        opcode = cmd & 0xFFFF;
+        ip += (s32)cmd >> 0x10;
+        if (opcode == 0x20) goto case_20;
+        if (opcode >= 0x20) goto high;
+        if (opcode == 1) goto decrement;
+        if (opcode < 1) goto loop;
+        if (opcode >= 0xC) goto increment;
+        goto loop;
+high:
+        if (opcode >= 0x22) goto loop;
+decrement:
+        if (--depth >= 0) goto loop;
+        goto found;
+increment:
+        depth++;
+        goto loop;
+case_20:
+        if (depth != 0) goto loop;
+found:
+        *(u32**)(event + 0x14) = ip;
+        return 2;
     }
     return 2;
 }
@@ -167,40 +188,46 @@ int evt_if_str_not_equal(void* pEvt) {
 #pragma use_lmw_stmw off
 
 int evt_if_str_small(void* pEvt) {
-    u8* event = pEvt;
-    s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(pEvt, args[0]);
-    char* right = (char*)evtGetValue(pEvt, args[1]);
+    u8* event = (u8*)pEvt;
+    s32* args;
+    char* left;
+    char* right;
+    s32 opcode;
+    s32 depth;
+    u32* ip;
+    u32 cmd;
 
+    args = *(s32**)(event + 0x18);
+    left = (char*)evtGetValue(pEvt, args[0]);
+    right = (char*)evtGetValue(pEvt, args[1]);
     if (left == 0) left = "";
     if (right == 0) right = "";
     if (strcmp(left, right) >= 0) {
-        s32 depth = 0;
-        s32* current = *(s32**)(event + 0x14);
-        while (1) {
-            s32 command = *current++;
-            s32 opcode = command & 0xFFFF;
-            current += command >> 16;
-
-            if (opcode == 0x20) {
-                if (depth == 0) {
-                    break;
-                }
-            } else if (opcode < 0x20) {
-                if (opcode == 1) {
-                    if (--depth < 0) {
-                        break;
-                    }
-                } else if (opcode >= 0xC) {
-                    depth++;
-                }
-            } else if (opcode < 0x22) {
-                if (--depth < 0) {
-                    break;
-                }
-            }
-        }
-        *(s32**)(event + 0x14) = current;
+        depth = 0;
+        ip = *(u32**)(event + 0x14);
+loop:
+        cmd = *ip++;
+        opcode = cmd & 0xFFFF;
+        ip += (s32)cmd >> 0x10;
+        if (opcode == 0x20) goto case_20;
+        if (opcode >= 0x20) goto high;
+        if (opcode == 1) goto decrement;
+        if (opcode < 1) goto loop;
+        if (opcode >= 0xC) goto increment;
+        goto loop;
+high:
+        if (opcode >= 0x22) goto loop;
+decrement:
+        if (--depth >= 0) goto loop;
+        goto found;
+increment:
+        depth++;
+        goto loop;
+case_20:
+        if (depth != 0) goto loop;
+found:
+        *(u32**)(event + 0x14) = ip;
+        return 2;
     }
     return 2;
 }
@@ -212,40 +239,46 @@ int evt_if_str_small(void* pEvt) {
 #pragma use_lmw_stmw off
 
 int evt_if_str_large(void* pEvt) {
-    u8* event = pEvt;
-    s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(pEvt, args[0]);
-    char* right = (char*)evtGetValue(pEvt, args[1]);
+    u8* event = (u8*)pEvt;
+    s32* args;
+    char* left;
+    char* right;
+    s32 opcode;
+    s32 depth;
+    u32* ip;
+    u32 cmd;
 
+    args = *(s32**)(event + 0x18);
+    left = (char*)evtGetValue(pEvt, args[0]);
+    right = (char*)evtGetValue(pEvt, args[1]);
     if (left == 0) left = "";
     if (right == 0) right = "";
     if (strcmp(left, right) <= 0) {
-        s32 depth = 0;
-        s32* current = *(s32**)(event + 0x14);
-        while (1) {
-            s32 command = *current++;
-            s32 opcode = command & 0xFFFF;
-            current += command >> 16;
-
-            if (opcode == 0x20) {
-                if (depth == 0) {
-                    break;
-                }
-            } else if (opcode < 0x20) {
-                if (opcode == 1) {
-                    if (--depth < 0) {
-                        break;
-                    }
-                } else if (opcode >= 0xC) {
-                    depth++;
-                }
-            } else if (opcode < 0x22) {
-                if (--depth < 0) {
-                    break;
-                }
-            }
-        }
-        *(s32**)(event + 0x14) = current;
+        depth = 0;
+        ip = *(u32**)(event + 0x14);
+loop:
+        cmd = *ip++;
+        opcode = cmd & 0xFFFF;
+        ip += (s32)cmd >> 0x10;
+        if (opcode == 0x20) goto case_20;
+        if (opcode >= 0x20) goto high;
+        if (opcode == 1) goto decrement;
+        if (opcode < 1) goto loop;
+        if (opcode >= 0xC) goto increment;
+        goto loop;
+high:
+        if (opcode >= 0x22) goto loop;
+decrement:
+        if (--depth >= 0) goto loop;
+        goto found;
+increment:
+        depth++;
+        goto loop;
+case_20:
+        if (depth != 0) goto loop;
+found:
+        *(u32**)(event + 0x14) = ip;
+        return 2;
     }
     return 2;
 }
@@ -257,40 +290,46 @@ int evt_if_str_large(void* pEvt) {
 #pragma use_lmw_stmw off
 
 int evt_if_str_small_equal(void* pEvt) {
-    u8* event = pEvt;
-    s32* args = *(s32**)(event + 0x18);
-    char* left = (char*)evtGetValue(pEvt, args[0]);
-    char* right = (char*)evtGetValue(pEvt, args[1]);
+    u8* event = (u8*)pEvt;
+    s32* args;
+    char* left;
+    char* right;
+    s32 opcode;
+    s32 depth;
+    u32* ip;
+    u32 cmd;
 
+    args = *(s32**)(event + 0x18);
+    left = (char*)evtGetValue(pEvt, args[0]);
+    right = (char*)evtGetValue(pEvt, args[1]);
     if (left == 0) left = "";
     if (right == 0) right = "";
     if (strcmp(left, right) > 0) {
-        s32 depth = 0;
-        s32* current = *(s32**)(event + 0x14);
-        while (1) {
-            s32 command = *current++;
-            s32 opcode = command & 0xFFFF;
-            current += command >> 16;
-
-            if (opcode == 0x20) {
-                if (depth == 0) {
-                    break;
-                }
-            } else if (opcode < 0x20) {
-                if (opcode == 1) {
-                    if (--depth < 0) {
-                        break;
-                    }
-                } else if (opcode >= 0xC) {
-                    depth++;
-                }
-            } else if (opcode < 0x22) {
-                if (--depth < 0) {
-                    break;
-                }
-            }
-        }
-        *(s32**)(event + 0x14) = current;
+        depth = 0;
+        ip = *(u32**)(event + 0x14);
+loop:
+        cmd = *ip++;
+        opcode = cmd & 0xFFFF;
+        ip += (s32)cmd >> 0x10;
+        if (opcode == 0x20) goto case_20;
+        if (opcode >= 0x20) goto high;
+        if (opcode == 1) goto decrement;
+        if (opcode < 1) goto loop;
+        if (opcode >= 0xC) goto increment;
+        goto loop;
+high:
+        if (opcode >= 0x22) goto loop;
+decrement:
+        if (--depth >= 0) goto loop;
+        goto found;
+increment:
+        depth++;
+        goto loop;
+case_20:
+        if (depth != 0) goto loop;
+found:
+        *(u32**)(event + 0x14) = ip;
+        return 2;
     }
     return 2;
 }
