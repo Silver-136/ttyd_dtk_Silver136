@@ -177,8 +177,19 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
     extern void BtlUnit_SetHomePos(BattleWorkUnit* unit, f32 x, f32 y, f32 z);
     extern f32 float_neg140_80422178;
     extern f32 float_5_8042217c;
-    void* setupRoot;
-    void* enemyList;
+    typedef struct EnemyGroupView {
+        s32 count;
+        BattleUnitSetup* entries;
+    } EnemyGroupView;
+    typedef struct SetupView {
+        u8 pad[0x18];
+        EnemyGroupView* group;
+        s32 heldItems[8];
+        void* dropTables[8];
+        s32 stolenItems[8];
+    } SetupView;
+    SetupView* setupRoot;
+    EnemyGroupView* enemyList;
     BattleUnitSetup* enemySetup;
     BattleWorkUnit* unit;
     BattleWorkUnit* mario;
@@ -189,10 +200,11 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
     s32 i;
     s32 offset;
     s16 badge;
+    s32 j;
     s32 partyId;
 
-    setupRoot = *(void**)(*(s32*)((s32)wp + 0x2738) + 0xC);
-    enemyList = *(void**)((s32)setupRoot + 0x18);
+    setupRoot = *(SetupView**)(*(s32*)((s32)wp + 0x2738) + 0xC);
+    enemyList = setupRoot->group;
     pouch = pouchGetPtr();
 
     *(s16*)((s32)wp + 0x8) = 2;
@@ -222,28 +234,28 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
         BtlUnit_SetParamFromPouch(unit);
     }
 
-    enemySetup = *(BattleUnitSetup**)((s32)enemyList + 4);
-    for (i = 0, offset = 0; i < *(s32*)enemyList; i++, offset += 4) {
+    enemySetup = enemyList->entries;
+    for (i = 0; i < enemyList->count; i++) {
         unit = BtlUnit_Entry(enemySetup);
         unit->groupId = i;
         *(s32*)((s32)unit + 0x308) = 0;
-        if (*(s32*)((s32)setupRoot + 0x5C + unit->groupId * 4) != 0) {
-            *(s32*)((s32)unit + 0x308) = *(s32*)((s32)setupRoot + 0x5C + unit->groupId * 4);
+        if (setupRoot->stolenItems[unit->groupId] != 0) {
+            *(s32*)((s32)unit + 0x308) = setupRoot->stolenItems[unit->groupId];
             unit->flags |= 0x40000000;
         } else {
-            *(s32*)((s32)unit + 0x308) = *(s32*)((s32)setupRoot + 0x1C + offset);
-            BtlUnit_EquipItem(unit, 1, *(s32*)((s32)setupRoot + 0x1C + offset));
+            *(s32*)((s32)unit + 0x308) = setupRoot->heldItems[i];
+            BtlUnit_EquipItem(unit, 1, setupRoot->heldItems[i]);
         }
-        *(s32*)((s32)unit + 0x30C) = *(s32*)((s32)setupRoot + 0x3C + offset);
-        enemySetup = (BattleUnitSetup*)((s32)enemySetup + 0x30);
+        *(s32*)((s32)unit + 0x30C) = (s32)setupRoot->dropTables[i];
+        enemySetup++;
         unit->currentHP = unit->currentMaxHP;
         unit->currentFP = unit->currentMaxFP;
     }
 
     *(s32*)((s32)wp + 0x420) = -1;
     *(s32*)((s32)wp + 0x163F4) = 0;
-    for (i = 0, offset = 0; i < 200; i++, offset += 2) {
-        badge = *(s16*)((s32)pouch + 0x38A + offset);
+    for (j = 0; j < 200; j++) {
+        badge = pouch->mEquippedBadges[j];
         switch (badge) {
             case 0x134:
                 *(s32*)((s32)wp + 0x163F4) |= 1;
@@ -260,7 +272,7 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
             case 0x138:
                 *(s32*)((s32)wp + 0x163F4) |= 0x10;
                 break;
-            case 0x13A:
+            case 0x139:
                 *(s32*)((s32)wp + 0x163F4) |= 0x80;
                 break;
             case 0x13B:
@@ -554,50 +566,44 @@ s32 BattleTransPartyIdToUnitKind(s32 partyId) {
     }
 }
 
-void BtlUnit_EquipItem(void* unit, u32 param_2, u32 item) {
+void BtlUnit_EquipItem(void* unit, u32 flags, u32 item) {
     extern void BtlUnit_ReviseHpFp(void*);
-    void* pouch;
-    void* unitLocal;
-    u32 flags;
-    u32 itemLocal;
+    PouchData* pouch = pouchGetPtr();
     s32 i;
-    s32 offset;
 
-    unitLocal = unit;
-    flags = param_2;
-    itemLocal = item;
-    pouch = pouchGetPtr();
-    if (unitLocal != NULL) {
+    if (unit) {
         if (flags & 1) {
             for (i = 0; i < 40; i++) {
-                *(u8*)((s32)unitLocal + 0x2E0 + i) = 0;
+                ((u8*)unit)[i + 0x2E0] = 0;
             }
         }
-        if (*(s32*)((s32)unitLocal + 8) != 0xDC) {
+        if (((BattleWorkUnit*)unit)->currentType != 0xDC) {
             if (flags & 6) {
-                itemLocal = 0;
-                flags &= ~1;
-                offset = itemLocal;
-                for (i = 0; i < 200; i++, offset += 2) {
-                    _EquipItem(unitLocal, flags, *(s16*)((s32)pouch + 0x38A + offset));
+                for (i = 0; i < 200; i++) {
+                    _EquipItem(unit, flags & ~1, pouch->mEquippedBadges[i]);
                 }
             } else {
-                _EquipItem(unitLocal, flags, itemLocal);
+                _EquipItem(unit, flags, item);
             }
-            BtlUnit_ReviseHpFp(unitLocal);
+            BtlUnit_ReviseHpFp(unit);
         }
     }
 }
 
 
-void _EquipItem(void* unit, u32 flags, u32 item) {
+void _EquipItem(void* unit, u32 flagBits, u32 itemValue) {
+    s32 flags = flagBits;
+    s32 item = itemValue;
+    s32 partner;
+    s32 mario;
     u8* data = unit;
     #define ADD_BADGE(value, offset) if (item == (value)) { data[offset]++; return; }
     if (item == 0) return;
     ADD_BADGE(0x131, 0x2FB)
     ADD_BADGE(0x144, 0x305)
     ADD_BADGE(0x145, 0x306)
-    if ((flags & 4) == 0) {
+    partner = flags & 4;
+    if (partner == 0) {
         ADD_BADGE(0x11C, 0x302)
         ADD_BADGE(0x11B, 0x301)
         ADD_BADGE(0x12B, 0x2E0)
@@ -630,7 +636,8 @@ void _EquipItem(void* unit, u32 flags, u32 item) {
         ADD_BADGE(0x102, 0x303)
         ADD_BADGE(0x146, 0x304)
     }
-    if ((flags & 2) == 0) {
+    mario = flags & 2;
+    if (mario == 0) {
         ADD_BADGE(0x12C, 0x2E0)
         ADD_BADGE(0x12E, 0x2E1)
         ADD_BADGE(0x130, 0x2E2)
@@ -656,21 +663,22 @@ void _EquipItem(void* unit, u32 flags, u32 item) {
         ADD_BADGE(0x103, 0x303)
         ADD_BADGE(0x14A, 0x304)
     }
-    if ((flags & 4) == 0) {
+    if (mario) {
+        if (item == 0xFE) {
+            data[0x2F3]++;
+            if (data[0x2F3] >= 2 && data[0x2F4] == 0) data[0x2F4]++;
+            return;
+        }
+        ADD_BADGE(0x149, 0x2F4)
         ADD_BADGE(0x121, 0x2FF)
         ADD_BADGE(0x122, 0x300)
     }
-    if ((flags & 2) == 0 && item == 0xFF) {
+    if (partner && item == 0xFF) {
         data[0x2F3]++;
-        if (data[0x2F3] >= 2 && data[0x2F4] == 0) data[0x2F4] = 1;
+        if (data[0x2F3] >= 2 && data[0x2F4] == 0) data[0x2F4]++;
         return;
     }
-    if ((flags & 4) == 0 && item == 0xFE) {
-        data[0x2F3]++;
-        if (data[0x2F3] >= 2 && data[0x2F4] == 0) data[0x2F4] = 1;
-        return;
-    }
-    if ((flags & 6) != 0) {
+    if (mario || partner) {
         ADD_BADGE(0x14B, 0x307)
     }
     #undef ADD_BADGE
@@ -679,15 +687,15 @@ void _EquipItem(void* unit, u32 flags, u32 item) {
 
 void BattlePartyInfoWorkInit(BattleWork* wp) {
     extern f32 float_1_80422174;
-    f32 size;
-    s32 type;
-    s32 zero;
     BattleWorkPartyInfo* info;
+    s32 type;
+    f32 size;
+    s32 zero;
 
     size = float_1_80422174;
     zero = 0;
     for (type = UNIT_GOOMBELLA; type < UNIT_MAX; type++) {
-        info = (BattleWorkPartyInfo*)((s32)wp + 0x162A0 + ((type - UNIT_GOOMBELLA) * sizeof(BattleWorkPartyInfo)));
+        info = &wp->partyInfo[type - UNIT_GOOMBELLA];
         info->sizeMultiplier = size;
         info->statusFlags = zero;
         memset(&info->statusEffects, zero, sizeof(BattleWorkStatus));
@@ -742,49 +750,41 @@ void BattleCheckUnitBroken(BattleWork* wp) {
 
 void BattleAfterReactionQueueInit(void) {
     s32 i;
-    s32 offset;
-    s32* base;
-    s32* entry;
+    s32 (*queue)[2];
 
-    offset = 0;
-    base = (s32*)((s32)_battleWorkPointer + 0x16F5C);
+    queue = (s32 (*)[2])((u8*)_battleWorkPointer + 0x16F5C);
     for (i = 0; i < 64; i++) {
-        entry = (s32*)((s32)base + offset);
-        offset += 8;
-        entry[0] = -1;
-        entry[1] = 0;
+        queue[i][0] = -1;
+        queue[i][1] = 0;
     }
 }
 
+#pragma opt_common_subs off
 void BattleAfterReactionEntry(s32 unitId, s32 arg) {
     s32 i;
     s32 count;
-    s32 offset;
-    s32* queue;
+    s32 (*queue)[2];
 
-    queue = (s32*)((s32)_battleWorkPointer + 0x16F5C);
-    offset = 0;
-    for (i = 0; i < 64; i++, offset += 8) {
-        s32 value = *(s32*)((s32)queue + offset);
-        if (value != -1 && value == unitId) {
+    queue = (s32 (*)[2])((u8*)_battleWorkPointer + 0x16F5C);
+    for (i = 0; i < 64; i++) {
+        s32 value = queue[i][0];
+        if (value != -1 && unitId == value) {
             return;
         }
     }
-
-    offset = 0;
     count = 0;
-    for (i = 0; i < 64; i++, offset += 8) {
-        if (*(s32*)((s32)queue + offset) == -1) {
+    for (i = 0; i < 64; i++) {
+        if (queue[i][0] == -1) {
             break;
         }
         count++;
     }
-
     if (count < 64) {
-        queue[count * 2] = unitId;
-        queue[count * 2 + 1] = arg;
+        queue[count][0] = unitId;
+        queue[count][1] = arg;
     }
 }
+#pragma opt_common_subs reset
 
 void BattleAfterReactionRelease(int param_1, int param_2) {
     s32 i;
@@ -996,6 +996,7 @@ s32 BattleStatusWindowCheck(void) {
 }
 
 
+#pragma opt_common_subs off
 void BattleConsumeReserveItem(void) {
     extern void pouchRemoveItem(s32 item);
     s32 i;
@@ -1020,6 +1021,7 @@ void BattleConsumeReserveItem(void) {
         offset += 4;
     } while (i < 4);
 }
+#pragma opt_common_subs reset
 
 //.sdata
 extern BattleUnitData unitdata_Mario;

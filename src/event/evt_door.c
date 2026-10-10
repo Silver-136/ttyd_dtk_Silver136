@@ -456,11 +456,11 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
     void* mapObj;
     u8 inv[0x30];
     u8 mtx[0x30];
-    Vec min;
-    Vec max;
-    Vec diff;
     Vec pos;
     Vec normal;
+    Vec max;
+    Vec min;
+    Vec diff;
     u8* mario;
     f32 inset;
     f32 side;
@@ -468,31 +468,33 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
 
     mapObj = ((void*(*)(char*))mapGetMapObj)(mapObjName);
     inset = float_10_80421b58;
-    side = float_40_80421b5c;
-    front = float_30_80421b60;
-    if (useMarioPos != 0) {
+    if (useMarioPos == 0) {
+        side = float_40_80421b5c;
+        front = float_30_80421b60;
+    } else {
         side = float_50_80421b64;
-        front = float_50_80421b64;
+        front = side;
     }
 
     if (mapObj != NULL) {
+        f32 width;
         PSMTXInverse((void*)((s32)mapObj + 0xAC), inv);
         PSMTXConcat((void*)((s32)mapObj + 0x1C), inv, mtx);
         PSMTXMultVec(mtx, (void*)(*(s32*)((s32)mapObj + 8) + 0x3C), &min);
         PSMTXMultVec(mtx, (void*)(*(s32*)((s32)mapObj + 8) + 0x48), &max);
         PSVECSubtract(&max, &min, &diff);
-        if (diff.x == float_0_80421b68) {
-            inset = diff.z * float_0p5_80421b6c;
+        if (diff.x != float_0_80421b68) {
+            width = (diff.x / (f32)cos((f32)atan(diff.z / diff.x))) * float_0p5_80421b6c;
         } else {
-            inset = (diff.x / (f32)cos((f32)atan(diff.z / diff.x))) * float_0p5_80421b6c;
+            width = diff.z * float_0p5_80421b6c;
         }
+        inset = width;
     }
 
-    if (kind == 2) {
-        if (hit1 == NULL) {
-            mario = marioGetPtr();
-            *(RawVec*)out1 = *(const RawVec*)(mario + 0x8C);
-        } else {
+    switch (kind) {
+    case 0:
+    case 1:
+        if (hit1 != NULL) {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit1, &pos);
             } else {
@@ -500,14 +502,14 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
                 *(RawVec*)&pos = *(const RawVec*)(mario + 0x8C);
             }
             hitObjGetNormal(hit1, &normal);
-            ((Vec*)out1)->x = normal.z * inset + normal.x * side + pos.x;
-            ((Vec*)out1)->z = -(normal.x * inset - (normal.z * side + pos.z));
+            ((Vec*)out1)->x = (normal.x * side + pos.x) - normal.z * inset;
+            ((Vec*)out1)->z = normal.x * inset + (normal.z * side + pos.z);
+        } else {
+            mario = marioGetPtr();
+            *(RawVec*)out1 = *(const RawVec*)(mario + 0x8C);
         }
 
-        if (hit0 == NULL) {
-            mario = marioGetPtr();
-            *(RawVec*)out0 = *(const RawVec*)(mario + 0x8C);
-        } else {
+        if (hit0 != NULL) {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit0, &pos);
             } else {
@@ -517,12 +519,13 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
             hitObjGetNormal(hit0, &normal);
             ((Vec*)out0)->x = normal.x * front + pos.x;
             ((Vec*)out0)->z = normal.z * front + pos.z;
-        }
-    } else if (kind >= 0 && kind < 2) {
-        if (hit1 == NULL) {
-            mario = marioGetPtr();
-            *(RawVec*)out1 = *(const RawVec*)(mario + 0x8C);
         } else {
+            mario = marioGetPtr();
+            *(RawVec*)out0 = *(const RawVec*)(mario + 0x8C);
+        }
+        break;
+    case 2:
+        if (hit1 != NULL) {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit1, &pos);
             } else {
@@ -530,14 +533,14 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
                 *(RawVec*)&pos = *(const RawVec*)(mario + 0x8C);
             }
             hitObjGetNormal(hit1, &normal);
-            ((Vec*)out1)->x = -(normal.z * inset - (normal.x * side + pos.x));
-            ((Vec*)out1)->z = normal.x * inset + normal.z * side + pos.z;
+            ((Vec*)out1)->x = normal.z * inset + (normal.x * side + pos.x);
+            ((Vec*)out1)->z = (normal.z * side + pos.z) - normal.x * inset;
+        } else {
+            mario = marioGetPtr();
+            *(RawVec*)out1 = *(const RawVec*)(mario + 0x8C);
         }
 
-        if (hit0 == NULL) {
-            mario = marioGetPtr();
-            *(RawVec*)out0 = *(const RawVec*)(mario + 0x8C);
-        } else {
+        if (hit0 != NULL) {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit0, &pos);
             } else {
@@ -547,12 +550,13 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
             hitObjGetNormal(hit0, &normal);
             ((Vec*)out0)->x = normal.x * front + pos.x;
             ((Vec*)out0)->z = normal.z * front + pos.z;
-        }
-    } else if (kind < 4) {
-        if (hit1 == NULL) {
-            mario = marioGetPtr();
-            *(RawVec*)out1 = *(const RawVec*)(mario + 0x8C);
         } else {
+            mario = marioGetPtr();
+            *(RawVec*)out0 = *(const RawVec*)(mario + 0x8C);
+        }
+        break;
+    case 3:
+        if (hit1 != NULL) {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit1, &pos);
             } else {
@@ -562,12 +566,12 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
             hitObjGetNormal(hit1, &normal);
             ((Vec*)out1)->x = normal.x * side + pos.x;
             ((Vec*)out1)->z = normal.z * side + pos.z;
+        } else {
+            mario = marioGetPtr();
+            *(RawVec*)out1 = *(const RawVec*)(mario + 0x8C);
         }
 
-        if (hit0 == NULL) {
-            mario = marioGetPtr();
-            *(RawVec*)out0 = *(const RawVec*)(mario + 0x8C);
-        } else {
+        if (hit0 != NULL) {
             if (useMarioPos == 0) {
                 hitObjGetPos(hit0, &pos);
             } else {
@@ -577,7 +581,11 @@ void door_position_sub(s32 kind, char* mapObjName, char* hit0, char* hit1, void*
             hitObjGetNormal(hit0, &normal);
             ((Vec*)out0)->x = normal.x * side + pos.x;
             ((Vec*)out0)->z = normal.z * side + pos.z;
+        } else {
+            mario = marioGetPtr();
+            *(RawVec*)out0 = *(const RawVec*)(mario + 0x8C);
         }
+        break;
     }
 }
 void door_dark_flag_sub(s32 flag, s32 npcNames, s32 mobjNames, s32 itemNames) {

@@ -43,67 +43,65 @@ u8 seq_loadExit(void) {
     wp[1] = 0;
 }
 
+#pragma optimize_for_size off
 u8 seq_loadMain(void* param_1) {
     extern char* dat_ptrarr_802edb88[];
     extern char str_PCTs_w_PCTs_name_tpl_802ee004[];
     extern u32 dat_80422010;
     extern s32 win_dt[];
-    extern void* evt_memcard_check;
+    extern s32 evt_memcard_check[];
     extern s32 getMarioStDvdRoot(void);
     extern s32 OSGetSoundMode(void);
-    char* names[6];
-    s32 state = *(s32*)((s32)param_1 + 4);
+    typedef struct NameCatalog { char* n0; char* n1; char* n2; char* n3; char* n4; char* n5; } NameCatalog;
+    extern u8 lbl_802EDB88[];
+    NameCatalog catalog;
 
-    switch (state) {
+
+    switch (*(s32*)((s32)param_1 + 4)) {
         case 0:
-            names[0] = dat_ptrarr_802edb88[0];
-            names[1] = dat_ptrarr_802edb88[1];
-            names[2] = dat_ptrarr_802edb88[2];
-            names[3] = dat_ptrarr_802edb88[3];
-            names[4] = dat_ptrarr_802edb88[4];
-            names[5] = dat_ptrarr_802edb88[5];
+            catalog = *(const NameCatalog*)lbl_802EDB88;
             if (fileAsyncf(4, 0, str_PCTs_w_PCTs_name_tpl_802ee004,
-                           getMarioStDvdRoot(), names[*(s32*)((s32)gp + 0x16C)]) != 0) {
+                           getMarioStDvdRoot(), ((char**)&catalog)[*(s32*)((s32)gp + 0x16C)]) != 0) {
                 wp[1] = (s32)fileAllocf(4, str_PCTs_w_PCTs_name_tpl_802ee004,
-                                        getMarioStDvdRoot(), names[*(s32*)((s32)gp + 0x16C)]);
-                *(s32*)((s32)param_1 + 4) = state + 1;
+                                        getMarioStDvdRoot(), ((char**)&catalog)[*(s32*)((s32)gp + 0x16C)]);
+                *(s32*)((s32)param_1 + 4) += 1;
             }
             break;
         case 1:
-            wp[0xF] = (s32)evtEntryType(&evt_memcard_check, 0, 0, 0);
+            wp[0xF] = (s32)evtEntryType(evt_memcard_check, 0, 0, 0);
             if ((*(u16*)wp & 0x80) != 0) {
                 *(u16*)wp &= ~0x80;
                 *(s32*)(wp[0xF] + 0xC4) = 1;
                 *(s32*)(wp[0xF] + 0x178) = wp[0x12];
             }
-            *(s32*)((s32)param_1 + 4) = state + 1;
+            *(s32*)((s32)param_1 + 4) += 1;
             break;
         case 2:
             if (!evtCheckID(*(s32*)(wp[0xF] + 0x15C))) {
                 if (evtGetValue(NULL, -90000000) == 1) {
                     wp[0xF] = 0;
-                    *(s32*)((s32)param_1 + 4) = state + 1;
+                    *(s32*)((s32)param_1 + 4) += 1;
                     wp[6] = 0;
                     wp[7] = cardGetCode();
                     *(u16*)wp &= ~0x40;
-                    if (OSGetSoundMode() == 0) {
+                    if ((u32)OSGetSoundMode() == 0) {
                         SoundSetOutputMode(0);
                         *(s32*)((s32)gp + 0x1274) = 0;
-                        *(s32*)((s32)wp + 0x24) = 0;
+                        *(s32*)((s32)wp + 0x40) = 0;
                     } else {
                         SoundSetOutputMode(1);
                         if (*(s32*)((s32)gp + 0x1274) == 0) {
-                            *(s32*)((s32)wp + 0x24) = 1;
+                            *(s32*)((s32)wp + 0x40) = 1;
                         } else {
-                            *(s32*)((s32)wp + 0x24) = 2;
+                            *(s32*)((s32)wp + 0x40) = 2;
                         }
                     }
-                    *(s32*)((s32)wp + 0x28) = (*(s32*)((s32)gp + 0x1270) == 0);
-                    *(s32*)((s32)wp + 0x2C) = *(s32*)((s32)wp + 0x24);
-                    *(s32*)((s32)wp + 0x30) = *(s32*)((s32)wp + 0x28);
-                    *(s32*)((s32)wp + 0x34) = *(s32*)((s32)gp + 0x11B8);
-                    *(f32*)((s32)wp + 8) = *(f32*)((s32)win_dt + *(s32*)((s32)wp + 0x34) * 0x1C);
-                    *(f32*)((s32)wp + 0xC) = *(f32*)((s32)win_dt + *(s32*)((s32)wp + 0x34) * 0x1C + 4);
+                    *(s32*)((s32)wp + 0x44) = (*(s32*)((s32)gp + 0x1294) == 0);
+                    *(s32*)((s32)wp + 0x24) = *(s32*)((s32)wp + 0x40);
+                    *(s32*)((s32)wp + 0x28) = *(s32*)((s32)wp + 0x44);
+                    *(s32*)((s32)wp + 0x20) = *(s32*)((s32)gp + 0x11B8);
+                    *(f32*)((s32)wp + 8) = *(f32*)((s32)win_dt + *(s32*)((s32)wp + 0x20) * 0x1C);
+                    *(f32*)((s32)wp + 0xC) = *(f32*)((s32)win_dt + *(s32*)((s32)wp + 0x20) * 0x1C + 4);
                 } else {
                     seqSetSeq(1, NULL, NULL);
                 }
@@ -113,7 +111,7 @@ u8 seq_loadMain(void* param_1) {
         {
             u32 color = dat_80422010;
             fadeEntry(0x1C, 0, &color);
-            *(s32*)((s32)param_1 + 4) = state + 1;
+            *(s32*)((s32)param_1 + 4) += 1;
             break;
         }
         case 4:
@@ -121,8 +119,9 @@ u8 seq_loadMain(void* param_1) {
             break;
     }
 }
+#pragma optimize_for_size reset
 
-
+#pragma optimize_for_size off
 u8 loadMain(void* param_1) {
     typedef struct LoadEntry {
         f32 x;
@@ -137,9 +136,6 @@ u8 loadMain(void* param_1) {
         u8 right;
     } LoadEntry;
     extern s32* wp;
-    extern LoadEntry win_dt[];
-    extern LoadEntry win_dt2[];
-    extern LoadEntry win_dt3[];
     extern u16 keyGetButtonTrg(s32);
     extern u16 keyGetButtonRep(s32);
     extern u32 keyGetDirRep(s32);
@@ -168,6 +164,7 @@ u8 loadMain(void* param_1) {
     extern void* evt_memcard_start;
     extern void* evt_memcard_copy;
     extern void* evt_continue;
+    extern void* evt_shake;
     extern u32 dat_8042202c;
     extern u32 dat_80422030;
     extern u32 dat_80422034;
@@ -198,6 +195,10 @@ u8 loadMain(void* param_1) {
     extern char str_msg_savefile_delete__802edfb4[];
     extern char str_msg_savefile_copy_se_802edfd0[];
     extern char str_msg_savefile_copy_po_802edfec[];
+    extern u8 lbl_802EDB88[];
+    extern u8 lbl_8034C3B8[];
+    u8* dataBase = lbl_8034C3B8;
+    u8* roBase = lbl_802EDB88;
     u16 buttons;
     u32 direction;
     s32 cardCode;
@@ -253,25 +254,29 @@ u8 loadMain(void* param_1) {
         *(u16*)wp |= 0x20;
     }
 
-    if (wp[6] == 0) {
-        wp[6] = 1;
-    }
-    if (wp[6] == 1) {
-        *(char**)&wp[14] = msgSearch(str_msg_savefile_select_802edfa0);
+    switch (wp[6]) {
+    case 0:
+        wp[6]++;
+    case 1: {
+        *(char**)&wp[14] = msgSearch((char*)(roBase + 0x418));
         oldSelection = wp[8];
         if ((direction & 0x1000) != 0) {
-            wp[8] = win_dt[oldSelection].up;
+            wp[8] = ((LoadEntry*)(dataBase + 0x40))[oldSelection].up;
         } else if ((direction & 0x2000) != 0) {
-            wp[8] = win_dt[oldSelection].down;
+            wp[8] = ((LoadEntry*)(dataBase + 0x40))[oldSelection].down;
         } else if ((direction & 0x4000) != 0) {
-            wp[8] = win_dt[oldSelection].left;
+            wp[8] = ((LoadEntry*)(dataBase + 0x40))[oldSelection].left;
         } else if ((direction & 0x8000) != 0) {
-            wp[8] = win_dt[oldSelection].right;
+            wp[8] = ((LoadEntry*)(dataBase + 0x40))[oldSelection].right;
         } else if ((buttons & 0x100) != 0) {
+            u8* file = (u8*)cardGetFilePtr();
             selection = wp[8];
-            fileFlags = *(u16*)((u8*)cardGetFilePtr() +
-                                selection * 0x4000 + 0x2000);
-            if (selection < 4) {
+            fileFlags = *(u16*)(file + selection * 0x4000 + 0x2000);
+            switch ((s32)selection) {
+            case 0:
+            case 1:
+            case 2:
+            case 3: {
                 if ((fileFlags & 2) != 0) {
                     psndSFXOn((char*)0x13);
                 } else if ((fileFlags & 1) == 0) {
@@ -281,7 +286,10 @@ u8 loadMain(void* param_1) {
                     wp[6] = 0x1E;
                     psndSFXOn((char*)0x12);
                 }
-            } else if (selection == 4 && (*(u16*)wp & 0x10) == 0) {
+                break;
+            }
+            case 4: {
+              if ((*(u16*)wp & 0x10) == 0) {
                 i = 0;
                 fileBase = 0;
                 do {
@@ -299,7 +307,11 @@ u8 loadMain(void* param_1) {
                 } else {
                     psndSFXOn((char*)0x13);
                 }
-            } else if (selection == 5 && (*(u16*)wp & 0x20) == 0) {
+              }
+                break;
+            }
+            case 5: {
+              if ((*(u16*)wp & 0x20) == 0) {
                 i = 0;
                 fileBase = 0;
                 do {
@@ -317,16 +329,25 @@ u8 loadMain(void* param_1) {
                 } else {
                     psndSFXOn((char*)0x13);
                 }
-            } else if (selection == 6) {
-                wp[6] = 10;
+              }
+                break;
+            }
+            case 6: {
                 psndSFXOn((char*)0x13);
-            } else if (selection == 7) {
+                wp[6] = 10;
+                break;
+            }
+            case 7: {
                 psndSFXOn((char*)0x12);
                 psndBGMOff(0x800);
                 wp[6] = 100;
-            } else if (selection == 8) {
+                break;
+            }
+            case 8: {
                 psndSFXOn((char*)0x12);
                 wp[6] = 200;
+                break;
+            }
             }
         } else if ((buttons & 0x200) != 0) {
             psndSFXOn((char*)0x13);
@@ -340,22 +361,30 @@ u8 loadMain(void* param_1) {
                 psndSFXOn((char*)5);
             }
         }
-        *(f32*)&wp[4] = win_dt[wp[8]].x + win_dt[wp[8]].cursorX;
-        *(f32*)&wp[5] = win_dt[wp[8]].y + win_dt[wp[8]].cursorY;
-    } else if (wp[6] == 10) {
+        *(f32*)&wp[4] = ((LoadEntry*)(dataBase + 0x40))[wp[8]].x + ((LoadEntry*)(dataBase + 0x40))[wp[8]].cursorX;
+        *(f32*)&wp[5] = ((LoadEntry*)(dataBase + 0x40))[wp[8]].y + ((LoadEntry*)(dataBase + 0x40))[wp[8]].cursorY;
+        break;
+    }
+    case 10: {
         u32 color = dat_8042202c;
         fadeEntry(0x1B, 0, &color);
         wp[6]++;
-    } else if (wp[6] == 11) {
+        break;
+    }
+    case 11: {
         if (fadeIsFinish() != 0) {
             seqSetSeq(1, NULL, NULL);
         }
-    } else if (wp[6] == 0x14) {
+        break;
+    }
+    case 0x14: {
         *(u16*)wp |= 0x40;
         wp[15] = (s32)evtEntryType(&evt_memcard_start, 0, 0, 0);
         *(s32*)(wp[15] + 0xC4) = wp[8];
         wp[6]++;
-    } else if (wp[6] == 0x15) {
+        break;
+    }
+    case 0x15: {
         if (evtCheckID(*(s32*)(wp[15] + 0x15C)) == 0) {
             *(u16*)wp &= ~0x40;
             if (evtGetValue(NULL, -50000000) == 1) {
@@ -364,47 +393,64 @@ u8 loadMain(void* param_1) {
                 wp[6] = 1;
             }
         }
-    } else if (wp[6] == 0x16) {
+        break;
+    }
+    case 0x16: {
         u32 color = dat_80422030;
         fadeEntry(0x1B, 0, &color);
         psndBGMOff_f_d(0x200, 2000, 0);
         wp[6]++;
-    } else if (wp[6] == 0x17) {
+        break;
+    }
+    case 0x17: {
         if (fadeIsFinish() != 0) {
             *(u16*)wp |= 0x40;
             wp[15] = (s32)evtEntryType(&evt_continue, 0, 0, 0);
             wp[6]++;
         }
-    } else if (wp[6] == 0x18) {
+        break;
+    }
+    case 0x18: {
         if (evtCheckID(*(s32*)(wp[15] + 0x15C)) == 0) {
             *(u16*)wp &= ~0x40;
             continueGame();
         }
-    } else if (wp[6] == 0x1E) {
+        break;
+    }
+    case 0x1E: {
         u32 color = dat_80422034;
         fadeEntry(0x1B, 0, &color);
         wp[6]++;
-    } else if (wp[6] == 0x1F) {
+        break;
+    }
+    case 0x1F: {
         if (fadeIsFinish() != 0) {
             wp[6]++;
         }
-    } else if (wp[6] == 0x20) {
+        break;
+    }
+    case 0x20: {
         if (nameEntPrepare() != 0) {
-            u32 color = dat_80422038;
+            u32 color;
             nameEntOn(0);
-            fadeEntry(0x1D, 0, &color);
+            color = dat_80422038;
+            fadeEntry(0x1C, 0, &color);
             wp[6]++;
         }
-    } else if (wp[6] == 0x21) {
+        break;
+    }
+    case 0x21: {
         if (fadeIsFinish() != 0 && nameEntWait() == 0) {
             u32 color = dat_8042203c;
-            fadeEntry(0x1B, 0, &color);
+            fadeEntry(0x18, 0, &color);
             if (nameEntIsCancel() == 0) {
                 psndBGMOff_f_d(0x200, 3000, 0);
             }
             wp[6]++;
         }
-    } else if (wp[6] == 0x22) {
+        break;
+    }
+    case 0x22: {
         if (fadeIsFinish() != 0) {
             nameEntOff();
             if (nameEntIsCancel() == 0) {
@@ -426,7 +472,7 @@ u8 loadMain(void* param_1) {
                     *(s32*)(wp[15] + 0x9C) = 0x17;
                     wp[6]++;
                 } else {
-                    seqSetSeq(3, str_aaa_00_802ede78, str_prologue_802ede80);
+                    seqSetSeq(3, (char*)(roBase + 0x2f0), (char*)(roBase + 0x2f8));
                 }
             } else {
                 u32 color = dat_80422040;
@@ -434,27 +480,31 @@ u8 loadMain(void* param_1) {
                 wp[6] = 1;
             }
         }
-    } else if (wp[6] == 0x23) {
+        break;
+    }
+    case 0x23: {
         if (evtCheckID(*(s32*)(wp[15] + 0x15C)) == 0) {
-            seqSetSeq(3, str_aaa_00_802ede78, str_prologue_802ede80);
+            seqSetSeq(3, (char*)(roBase + 0x2f0), (char*)(roBase + 0x2f8));
         }
-    } else if (wp[6] == 0x28) {
-        *(char**)&wp[14] = msgSearch(str_msg_savefile_delete__802edfb4);
+        break;
+    }
+    case 0x28: {
+        *(char**)&wp[14] = msgSearch((char*)(roBase + 0x42c));
         oldSelection = wp[8];
         if ((direction & 0x1000) != 0) {
-            wp[8] = win_dt2[oldSelection].up;
+            wp[8] = ((LoadEntry*)(dataBase + 0x13C))[oldSelection].up;
         } else if ((direction & 0x2000) != 0) {
-            wp[8] = win_dt2[oldSelection].down;
+            wp[8] = ((LoadEntry*)(dataBase + 0x13C))[oldSelection].down;
         } else if ((direction & 0x4000) != 0) {
-            wp[8] = win_dt2[oldSelection].left;
+            wp[8] = ((LoadEntry*)(dataBase + 0x13C))[oldSelection].left;
         } else if ((direction & 0x8000) != 0) {
-            wp[8] = win_dt2[oldSelection].right;
+            wp[8] = ((LoadEntry*)(dataBase + 0x13C))[oldSelection].right;
         } else if ((buttons & 0x200) != 0) {
             wp[8] = 4;
             wp[6] = 1;
             psndSFXOn((char*)0x13);
         } else if ((buttons & 0x100) != 0) {
-            if (oldSelection < 4) {
+            if ((s32)oldSelection < 4) {
                 fileFlags = *(u16*)((u8*)cardGetFilePtr() +
                                     wp[8] * 0x4000 + 0x2000);
                 if ((fileFlags & 2) == 0 && (fileFlags & 1) != 0) {
@@ -472,14 +522,18 @@ u8 loadMain(void* param_1) {
         if (oldSelection != (u32)wp[8] && wp[8] < 4) {
             psndSFXOn((char*)9);
         }
-        *(f32*)&wp[4] = win_dt2[wp[8]].x + win_dt2[wp[8]].cursorX;
-        *(f32*)&wp[5] = win_dt2[wp[8]].y + win_dt2[wp[8]].cursorY;
-    } else if (wp[6] == 0x29) {
+        *(f32*)&wp[4] = ((LoadEntry*)(dataBase + 0x13C))[wp[8]].x + ((LoadEntry*)(dataBase + 0x13C))[wp[8]].cursorX;
+        *(f32*)&wp[5] = ((LoadEntry*)(dataBase + 0x13C))[wp[8]].y + ((LoadEntry*)(dataBase + 0x13C))[wp[8]].cursorY;
+        break;
+    }
+    case 0x29: {
         *(u16*)wp |= 0x40;
         wp[15] = (s32)evtEntryType(&evt_memcard_delete, 0, 0, 0);
         *(s32*)(wp[15] + 0x9C) = wp[8];
         wp[6]++;
-    } else if (wp[6] == 0x2A) {
+        break;
+    }
+    case 0x2A: {
         if (evtCheckID(*(s32*)(wp[15] + 0x15C)) == 0) {
             if (evtGetValue(NULL, -90000000) != 0) {
                 *(u16*)wp |= 0x80;
@@ -490,47 +544,57 @@ u8 loadMain(void* param_1) {
             wp[8] = 4;
             wp[6] = 1;
         }
-    } else if (wp[6] == 0x32) {
-        *(char**)&wp[14] = msgSearch(str_msg_savefile_copy_se_802edfd0);
+        break;
+    }
+    case 0x32: {
+        *(char**)&wp[14] = msgSearch((char*)(roBase + 0x448));
         oldSelection = wp[8];
         if ((direction & 0x1000) != 0) {
-            wp[8] = win_dt2[oldSelection].up;
+            wp[8] = ((LoadEntry*)(dataBase + 0x13C))[oldSelection].up;
         } else if ((direction & 0x2000) != 0) {
-            wp[8] = win_dt2[oldSelection].down;
+            wp[8] = ((LoadEntry*)(dataBase + 0x13C))[oldSelection].down;
         } else if ((direction & 0x4000) != 0) {
-            wp[8] = win_dt2[oldSelection].left;
+            wp[8] = ((LoadEntry*)(dataBase + 0x13C))[oldSelection].left;
         } else if ((direction & 0x8000) != 0) {
-            wp[8] = win_dt2[oldSelection].right;
+            wp[8] = ((LoadEntry*)(dataBase + 0x13C))[oldSelection].right;
         } else if ((buttons & 0x200) != 0) {
             wp[8] = 5;
             wp[6] = 1;
             psndSFXOn((char*)0x13);
-        } else if ((buttons & 0x100) != 0 && oldSelection < 4) {
+        } else if ((buttons & 0x100) != 0) {
+          if ((s32)oldSelection < 4) {
             fileFlags = *(u16*)((u8*)cardGetFilePtr() + wp[8] * 0x4000 + 0x2000);
-            if ((fileFlags & 3) == 0) {
+            if ((fileFlags & 2) == 0 && (fileFlags & 1) == 0) {
                 wp[6] = 0x33;
                 wp[12] = wp[8];
                 wp[13] = (wp[12] + 1) % 4;
                 wp[8] = wp[13];
                 psndSFXOn((char*)0x12);
             }
+          } else {
+            wp[8] = 5;
+            wp[6] = 1;
+            psndSFXOn((char*)0x13);
+          }
         }
         if (oldSelection != (u32)wp[8] && wp[8] < 4) {
             psndSFXOn((char*)9);
         }
-        *(f32*)&wp[4] = win_dt2[wp[8]].x + win_dt2[wp[8]].cursorX;
-        *(f32*)&wp[5] = win_dt2[wp[8]].y + win_dt2[wp[8]].cursorY;
-    } else if (wp[6] == 0x33) {
-        *(char**)&wp[14] = msgSearch(str_msg_savefile_copy_po_802edfec);
+        *(f32*)&wp[4] = ((LoadEntry*)(dataBase + 0x13C))[wp[8]].x + ((LoadEntry*)(dataBase + 0x13C))[wp[8]].cursorX;
+        *(f32*)&wp[5] = ((LoadEntry*)(dataBase + 0x13C))[wp[8]].y + ((LoadEntry*)(dataBase + 0x13C))[wp[8]].cursorY;
+        break;
+    }
+    case 0x33: {
+        *(char**)&wp[14] = msgSearch((char*)(roBase + 0x464));
         oldSelection = wp[8];
         if ((direction & 0x1000) != 0) {
-            do wp[8] = win_dt3[wp[8]].up; while (wp[8] == wp[12]);
+            do wp[8] = ((LoadEntry*)(dataBase + 0x200))[wp[8]].up; while (wp[8] == wp[12]);
         } else if ((direction & 0x2000) != 0) {
-            do wp[8] = win_dt3[wp[8]].down; while (wp[8] == wp[12]);
+            do wp[8] = ((LoadEntry*)(dataBase + 0x200))[wp[8]].down; while (wp[8] == wp[12]);
         } else if ((direction & 0x4000) != 0) {
-            do wp[8] = win_dt3[wp[8]].left; while (wp[8] == wp[12]);
+            do wp[8] = ((LoadEntry*)(dataBase + 0x200))[wp[8]].left; while (wp[8] == wp[12]);
         } else if ((direction & 0x8000) != 0) {
-            do wp[8] = win_dt3[wp[8]].right; while (wp[8] == wp[12]);
+            do wp[8] = ((LoadEntry*)(dataBase + 0x200))[wp[8]].right; while (wp[8] == wp[12]);
         } else if ((buttons & 0x200) != 0) {
             wp[8] = wp[12];
             wp[6] = 0x32;
@@ -544,15 +608,19 @@ u8 loadMain(void* param_1) {
             psndSFXOn((char*)9);
         }
         wp[13] = wp[8];
-        *(f32*)&wp[4] = win_dt2[wp[8]].x + win_dt2[wp[8]].cursorX;
-        *(f32*)&wp[5] = win_dt2[wp[8]].y + win_dt2[wp[8]].cursorY;
-    } else if (wp[6] == 0x34) {
+        *(f32*)&wp[4] = ((LoadEntry*)(dataBase + 0x13C))[wp[8]].x + ((LoadEntry*)(dataBase + 0x13C))[wp[8]].cursorX;
+        *(f32*)&wp[5] = ((LoadEntry*)(dataBase + 0x13C))[wp[8]].y + ((LoadEntry*)(dataBase + 0x13C))[wp[8]].cursorY;
+        break;
+    }
+    case 0x34: {
         *(u16*)wp |= 0x40;
         wp[15] = (s32)evtEntryType(&evt_memcard_copy, 0, 0, 0);
         *(s32*)(wp[15] + 0x9C) = wp[12];
         *(s32*)(wp[15] + 0xA0) = wp[13];
         wp[6]++;
-    } else if (wp[6] == 0x35) {
+        break;
+    }
+    case 0x35: {
         if (evtCheckID(*(s32*)(wp[15] + 0x15C)) == 0) {
             if (evtGetValue(NULL, -90000000) != 0) {
                 *(u16*)wp |= 0x80;
@@ -563,9 +631,12 @@ u8 loadMain(void* param_1) {
             wp[8] = 5;
             wp[6] = 1;
         }
-    } else if (wp[6] == 100) {
-        s32 oldMode = wp[11];
+        break;
+    }
+    case 100: {
+        s32 oldMode;
         *(u16*)wp |= 1;
+        oldMode = wp[11];
         if ((direction & 0x1000) != 0) {
             wp[11]--;
             psndSFXOn((char*)5);
@@ -573,17 +644,28 @@ u8 loadMain(void* param_1) {
             wp[11]++;
             psndSFXOn((char*)5);
         } else if ((buttons & 0x100) != 0) {
-            if (wp[11] == 0) {
+            switch (oldMode) {
+            case 0: {
                 OSSetSoundMode(0);
                 *(s32*)((u8*)gp + 0x1274) = 0;
-            } else if (wp[11] == 1) {
+                break;
+            }
+            case 1: {
                 OSSetSoundMode(1);
                 *(s32*)((u8*)gp + 0x1274) = 0;
-            } else {
+                break;
+            }
+            case 2: {
                 OSSetSoundMode(1);
                 *(s32*)((u8*)gp + 0x1274) = 1;
+                break;
             }
-            SoundSetOutputMode(OSGetSoundMode() == 0 ? 0 : 1);
+            }
+            if ((u32)OSGetSoundMode() == 0) {
+                SoundSetOutputMode(0);
+            } else {
+                SoundSetOutputMode(1);
+            }
             psndSFXOn((char*)0x12);
             psndBGMOn(0xA0, NULL);
             psndENVOff(0x200);
@@ -595,20 +677,30 @@ u8 loadMain(void* param_1) {
             psndBGMOn(0xA0, NULL);
             psndENVOff(0x200);
             wp[11] = wp[9];
-            SoundSetOutputMode(OSGetSoundMode() == 0 ? 0 : 1);
+            if ((u32)OSGetSoundMode() == 0) {
+                SoundSetOutputMode(0);
+            } else {
+                SoundSetOutputMode(1);
+            }
             *(u16*)wp &= ~1;
             wp[6] = 1;
         }
         if (wp[11] > 2) wp[11] = 0;
         if (wp[11] < 0) wp[11] = 2;
         if (wp[11] != oldMode) {
-            SoundSetOutputMode(wp[11]);
+            switch (wp[11]) {
+            case 0: SoundSetOutputMode(0); break;
+            case 1: SoundSetOutputMode(1); break;
+            case 2: SoundSetOutputMode(2); break;
+            }
             psndENVOn(0x110, (char*)0x75);
         }
         *(f32*)&wp[4] = float_neg74_8042215c;
         *(f32*)&wp[5] = float_4_80422160 -
                          (float_50_80422154 * (f32)wp[11] - float_50_80422154);
-    } else if (wp[6] == 200) {
+        break;
+    }
+    case 200: {
         *(u16*)wp |= 1;
         if ((direction & 0x1000) != 0) {
             wp[12]--;
@@ -622,6 +714,9 @@ u8 loadMain(void* param_1) {
             wp[10] = wp[12];
             *(u16*)wp &= ~1;
             wp[6] = 1;
+            if (*(s32*)((u8*)gp + 0x1270) != 0) {
+                evtEntryType(&evt_shake, 0, 0, 0);
+            }
         } else if ((buttons & 0x200) != 0) {
             psndSFXOn((char*)0x13);
             wp[12] = wp[10];
@@ -634,6 +729,7 @@ u8 loadMain(void* param_1) {
         *(f32*)&wp[5] = float_4_80422160 -
                          (float_50_80422154 * (f32)wp[12] - float_30_80422114);
     }
+    }
 
     *(f32*)&wp[2] += (*(f32*)&wp[4] - *(f32*)&wp[2]) * 0.25f;
     *(f32*)&wp[3] += (*(f32*)&wp[5] - *(f32*)&wp[3]) * 0.25f;
@@ -641,6 +737,7 @@ u8 loadMain(void* param_1) {
     dispEntry(4, 0, loadDraw, 0, 1000.0f);
     return 0;
 }
+#pragma optimize_for_size reset
 
 u8 loadDraw(void) {
     typedef struct CameraCopy {
@@ -1294,8 +1391,6 @@ u8 loadDraw(void) {
                     char levelText[252];
                     u32 hours;
                     u32 minutes;
-                    char playText[252];
-                    char prefixText[252];
                     char* playFmt;
                     u32 fullWidth;
                     u32 prefixWidth;
@@ -1388,14 +1483,14 @@ u8 loadDraw(void) {
                     }
 
                     sprintf(
-                        playText,
+                        levelText,
                         playFmt,
                         msgSearch((char*)(roBase + 0x3E0)));
-                    strcat(playText, unk_JP_US_EU_40_801703e8(hours, 2));
-                    strcat(playText, str__80422124);
-                    strcat(playText, unk_JP_US_EU_40_801703e8(minutes, 2));
+                    strcat(levelText, unk_JP_US_EU_40_801703e8(hours, 2));
+                    strcat(levelText, str__80422124);
+                    strcat(levelText, unk_JP_US_EU_40_801703e8(minutes, 2));
 
-                    fullWidth = FontGetMessageWidth(playText);
+                    fullWidth = FontGetMessageWidth(levelText);
                     heightConv.words.hi = 0x43300000;
                     heightConv.words.lo = fullWidth & 0xFFFFU;
                     drawnWidth = (f32)(
@@ -1412,17 +1507,21 @@ u8 loadDraw(void) {
                         (f64)(slotEntry->x -
                             drawnWidth * float_0p5_804220f0[0]),
                         (f64)slotEntry->y,
-                        playText);
+                        levelText);
 
                     textScale = *(const LoadDrawVec3*)(roBase + 0x6C);
                     FontDrawScaleVec(&textScale);
 
+                    fullWidth = FontGetMessageWidth(levelText);
+                    heightConv.words.hi = 0x43300000;
+                    heightConv.words.lo = fullWidth & 0xFFFFU;
+                    drawnWidth = (f32)(heightConv.value - *(const f64*)(roBase + 0x408));
                     sprintf(
-                        prefixText,
+                        levelText,
                         playFmt,
                         msgSearch((char*)(roBase + 0x3E0)));
-                    strcat(prefixText, unk_JP_US_EU_40_801703e8(hours, 2));
-                    prefixWidth = FontGetMessageWidth(prefixText);
+                    strcat(levelText, unk_JP_US_EU_40_801703e8(hours, 2));
+                    prefixWidth = FontGetMessageWidth(levelText);
                     heightConv.words.hi = 0x43300000;
                     heightConv.words.lo = prefixWidth & 0xFFFFU;
                     iconOffset = (f32)(
@@ -1819,6 +1918,8 @@ u8 continueGame(void) {
     extern char str_aaa_00_802ede78[];
     extern char str_prologue_802ede80[];
     extern char str_next_8042209c[];
+    extern char* dat_ptrarr_802edb88[];
+    char* strings = (char*)dat_ptrarr_802edb88;
     void* player;
     s32 id;
 
@@ -1843,107 +1944,114 @@ u8 continueGame(void) {
             seqSetSeq(3, (void*)((s32)gp + 0x12C), NULL);
             break;
         case 1:
-        case 4:
-        case 7:
-        case 0x18:
             *(s32*)((s32)gp + 0x110) = 0x3D;
             *(s32*)((s32)gp + 0x108) = 0x38;
-            seqSetSeq(3, str_aji_10_802eddcc, NULL);
+            seqSetSeq(3, strings + 0x244, NULL);
             break;
         case 2:
             *(s32*)((s32)gp + 0x110) = 0x3E;
             *(s32*)((s32)gp + 0x108) = 0x3A;
-            seqSetSeq(3, str_kpa_00_802eddd4, NULL);
+            seqSetSeq(3, strings + 0x24c, NULL);
             break;
         case 3:
             *(s32*)((s32)gp + 0x110) = 0x3C;
             *(s32*)((s32)gp + 0x108) = 0x36;
-            seqSetSeq(3, str_nok_01_802edddc, str_nokotarou_802edde4);
+            seqSetSeq(3, strings + 0x254, strings + 0x25c);
+            break;
+        case 4:
+            *(s32*)((s32)gp + 0x110) = 0x3D;
+            *(s32*)((s32)gp + 0x108) = 0x38;
+            seqSetSeq(3, strings + 0x244, NULL);
             break;
         case 5:
             *(s32*)((s32)gp + 0x110) = 0x3E;
             *(s32*)((s32)gp + 0x108) = 0x3A;
-            seqSetSeq(3, str_hei_00_802eddf0, NULL);
+            seqSetSeq(3, strings + 0x268, NULL);
             break;
         case 6:
             *(s32*)((s32)gp + 0x110) = 0x3C;
             *(s32*)((s32)gp + 0x108) = 0x36;
-            seqSetSeq(3, str_mri_00_802eddf8, NULL);
+            seqSetSeq(3, strings + 0x270, NULL);
+            break;
+        case 7:
+            *(s32*)((s32)gp + 0x110) = 0x3D;
+            *(s32*)((s32)gp + 0x108) = 0x38;
+            seqSetSeq(3, strings + 0x244, NULL);
             break;
         case 8:
             *(s32*)((s32)gp + 0x110) = 0x3E;
             *(s32*)((s32)gp + 0x108) = 0x3A;
-            seqSetSeq(3, str_mri_01_802ede00, NULL);
+            seqSetSeq(3, strings + 0x278, NULL);
             break;
         case 9:
             *(s32*)((s32)gp + 0x110) = 0x3C;
             *(s32*)((s32)gp + 0x108) = 0x36;
-            seqSetSeq(3, str_tou_02_802ede08, NULL);
+            seqSetSeq(3, strings + 0x280, NULL);
             break;
         case 10:
             *(s32*)((s32)gp + 0x110) = 0;
             *(s32*)((s32)gp + 0x108) = 0x1C;
-            seqSetSeq(3, str_usu_00_802ede10, NULL);
+            seqSetSeq(3, strings + 0x288, NULL);
             break;
         case 0xB:
             *(s32*)((s32)gp + 0x110) = 0x3E;
             *(s32*)((s32)gp + 0x108) = 0x3A;
-            seqSetSeq(3, str_gor_04_802ede18, NULL);
+            seqSetSeq(3, strings + 0x290, NULL);
             break;
         case 0xC:
             *(s32*)((s32)gp + 0x110) = 0x3C;
             *(s32*)((s32)gp + 0x108) = 0x36;
-            seqSetSeq(3, str_usu_00_802ede10, NULL);
+            seqSetSeq(3, strings + 0x288, NULL);
             break;
         case 0xD:
             *(s32*)((s32)gp + 0x110) = 0;
             *(s32*)((s32)gp + 0x108) = 0x1C;
-            seqSetSeq(3, str_muj_12_802ede20, NULL);
+            seqSetSeq(3, strings + 0x298, NULL);
             break;
         case 0xE:
             *(s32*)((s32)gp + 0x110) = 0x3E;
             *(s32*)((s32)gp + 0x108) = 0x3A;
-            seqSetSeq(3, str_usu_00_802ede10, NULL);
+            seqSetSeq(3, strings + 0x288, NULL);
             break;
         case 0xF:
             *(s32*)((s32)gp + 0x110) = 0x3C;
             *(s32*)((s32)gp + 0x108) = 0x36;
-            seqSetSeq(3, str_muj_00_802ede28, NULL);
+            seqSetSeq(3, strings + 0x2a0, NULL);
             break;
         case 0x10:
             *(s32*)((s32)gp + 0x110) = 0;
             *(s32*)((s32)gp + 0x108) = 0x1C;
-            seqSetSeq(3, str_pik_03_802ede30, str_next_8042209c);
+            seqSetSeq(3, strings + 0x2a8, str_next_8042209c);
             break;
         case 0x11:
             *(s32*)((s32)gp + 0x110) = 0x3E;
             *(s32*)((s32)gp + 0x108) = 0x3A;
-            seqSetSeq(3, str_gor_01_802ede38, NULL);
+            seqSetSeq(3, strings + 0x2b0, NULL);
             break;
         case 0x12:
             *(s32*)((s32)gp + 0x110) = 0x3C;
             *(s32*)((s32)gp + 0x108) = 0x36;
-            seqSetSeq(3, str_gor_04_802ede18, str_resha_return_802ede40);
+            seqSetSeq(3, strings + 0x290, strings + 0x2b8);
             break;
         case 0x13:
             *(s32*)((s32)gp + 0x110) = 0x3E;
             *(s32*)((s32)gp + 0x108) = 0x3A;
-            seqSetSeq(3, str_pik_01_802ede50, NULL);
+            seqSetSeq(3, strings + 0x2c8, NULL);
             break;
         case 0x14:
             *(s32*)((s32)gp + 0x110) = 0x3C;
             *(s32*)((s32)gp + 0x108) = 0x36;
-            seqSetSeq(3, str_aji_18_802ede58, str_e_bero_802ede60);
+            seqSetSeq(3, strings + 0x2d0, strings + 0x2d8);
             break;
         case 0x15:
             *(s32*)((s32)gp + 0x110) = 0x3C;
             *(s32*)((s32)gp + 0x108) = 0x36;
-            seqSetSeq(3, str_gor_00_802ede68, NULL);
+            seqSetSeq(3, strings + 0x2e0, NULL);
             break;
         case 0x16:
             *(s32*)((s32)gp + 0x110) = 0;
             *(s32*)((s32)gp + 0x108) = 0x1C;
-            seqSetSeq(3, str_jin_04_802ede70, NULL);
+            seqSetSeq(3, strings + 0x2e8, NULL);
             break;
         case 0x17:
             stg0_00_init();
@@ -1956,7 +2064,12 @@ u8 continueGame(void) {
             *(s32*)((s32)gp + 0x108) = 0x11;
             swInit();
             swByteSet(0, 0);
-            seqSetSeq(3, str_aaa_00_802ede78, str_prologue_802ede80);
+            seqSetSeq(3, strings + 0x2f0, strings + 0x2f8);
+            break;
+        case 0x18:
+            *(s32*)((s32)gp + 0x110) = 0x3D;
+            *(s32*)((s32)gp + 0x108) = 0x38;
+            seqSetSeq(3, strings + 0x244, NULL);
             break;
     }
 }

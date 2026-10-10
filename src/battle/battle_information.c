@@ -59,16 +59,20 @@ void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
     s32 dropKind;
     s32 roll;
     s32 i;
+    s32 threshold;
+    typedef struct DropItems { u8 prefix[0x1C]; s32 items[8]; } DropItems;
+    typedef struct HogItems { s32 items[25]; } HogItems;
 
     percent = (*(s16*)((s32)mario + 0x10C) * 100) / *(s16*)((s32)mario + 0x108);
     if (percent > 100) {
         percent = 100;
     }
     *(s32*)((s32)info + 0x10) = 0;
-    while (hpTable[0] != 0) {
-        if (percent <= hpTable[0]) {
-            if (irand(100) < hpTable[1]) {
-                count = hpTable[2];
+    while ((threshold = hpTable[0]) != 0) {
+        if (percent <= threshold) {
+            roll = irand(100);
+            count = hpTable[2];
+            if (roll < hpTable[1]) {
                 while (count != 0) {
                     if (irand(100) < hpTable[3]) {
                         *(s32*)((s32)info + 0x10) = *(s32*)((s32)info + 0x10) + 1;
@@ -86,10 +90,11 @@ void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
         percent = 100;
     }
     *(s32*)((s32)info + 0x14) = 0;
-    while (fpTable[0] != 0) {
-        if (percent <= fpTable[0]) {
-            if (irand(100) < fpTable[1]) {
-                count = fpTable[2];
+    while ((threshold = fpTable[0]) != 0) {
+        if (percent <= threshold) {
+            roll = irand(100);
+            count = fpTable[2];
+            if (roll < fpTable[1]) {
                 while (count != 0) {
                     if (irand(100) < fpTable[3]) {
                         *(s32*)((s32)info + 0x14) = *(s32*)((s32)info + 0x14) + 1;
@@ -107,8 +112,8 @@ void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
     noDropWeight = *(s32*)((s32)setup + 0x10);
     dropKind = 0;
     if (evtGetValue(NULL, -170000000) <= 0x13) {
-        itemWeight = 0;
         coinWeight = 0;
+        itemWeight = 0;
         noDropWeight = 100;
     }
     count = pouchEquipCheckBadge(0x13A);
@@ -117,15 +122,16 @@ void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
         coinWeight *= count + 1;
     }
 
-    roll = irand(itemWeight + coinWeight + noDropWeight);
-    if (roll < coinWeight) {
+    roll = irand(coinWeight + (itemWeight + noDropWeight));
+    if ((roll -= coinWeight) < 0) {
         dropKind = 1;
-    } else if (roll - coinWeight < itemWeight) {
+    } else if ((roll -= itemWeight) < 0) {
         dropKind = 2;
     }
 
     *(s32*)((s32)info + 0xC) = 0;
-    if (dropKind == 1) {
+    switch (dropKind) {
+    case 1: {
         s32* table = *(s32**)((s32)*(void**)((s32)setup + 0x4) + 0x2C);
         if (table != 0) {
             s32 total = 0;
@@ -146,17 +152,19 @@ void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
                 }
             }
         }
-    } else if (dropKind == 2) {
+        break;
+    }
+    case 2: {
         count = 0;
         for (i = 0; i < 8; i++) {
-            if (*(s32*)((s32)info + 0x1C + i * 4) != 0) {
+            if (((DropItems*)info)->items[i] != 0) {
                 count++;
             }
         }
         if (count > 0) {
             roll = irand(count);
             for (i = 0; i < 8; i++) {
-                s32 item = *(s32*)((s32)info + 0x1C + i * 4);
+                s32 item = ((DropItems*)info)->items[i];
                 if (item != 0) {
                     roll--;
                     if (roll < 0) {
@@ -171,12 +179,11 @@ void BattleInformationSetDropMaterial(void* fbatBattleInfo) {
         }
     }
 
+    }
+
     if (*(s32*)((s32)info + 0xC) == 0 && pouchEquipCheckBadge(0x13A) >= 1) {
-        s32 hogItems[25];
-        for (i = 0; i < 25; i++) {
-            hogItems[i] = N_item_hog_table[i];
-        }
-        *(s32*)((s32)info + 0xC) = hogItems[irand(25)];
+        HogItems hogItems = *(const HogItems*)N_item_hog_table;
+        *(s32*)((s32)info + 0xC) = hogItems.items[irand(25)];
     }
 }
 

@@ -389,86 +389,119 @@ s32 evt_item_get_important_item(s32 pEvt, s32 param_2) {
     s32* args = *(s32**)(pEvt + 0x18);
     void* item = itemNameToPtr(evtGetValue((EventEntry*)pEvt, args[0]));
     void* mario = marioGetPtr();
+    f32 marioX;
     f32 marioY = *(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0x1BC);
-    f32 marioX = *(f32*)((s32)mario + 0x8C);
-    f32 marioZ = *(f32*)((s32)mario + 0x94);
+    f32 marioZ;
     f32 angle;
     f32 t;
     f32 t2;
     f32 value;
-    volatile f32 half = float_0p5_80421070;
+    f32 velocity;
+    f32 half = float_0p5_80421070;
+    f32 remaining;
     f32 sinA;
+    f32 speed;
+    f32 sinSub, one, cosCoeff, cosSub;
+
+    marioX = *(f32*)((s32)mario + 0x8C);
+    marioZ = *(f32*)((s32)mario + 0x94);
 
     if (param_2 != 0) {
-        t = distABf(marioX, marioZ, *(f32*)((s32)item + 0x3C), *(f32*)((s32)item + 0x44)) / half;
-        *(f32*)(pEvt + 0x78) = t;
-        *(f32*)(pEvt + 0x7C) = (float_0p1_80421074 * t) * half
-            + (marioY - *(f32*)((s32)item + 0x40)) / t;
-        *(f32*)(pEvt + 0x80) = half;
+        remaining = distABf(marioX, marioZ, *(f32*)((s32)item + 0x3C), *(f32*)((s32)item + 0x44)) / half;
+        *(u32*)(pEvt + 0x78) = *(u32*)&remaining;
+        velocity = (float_0p1_80421074 * remaining) * float_0p5_80421070
+            + (marioY - *(f32*)((s32)item + 0x40)) / remaining;
+        *(u32*)(pEvt + 0x7C) = *(u32*)&velocity;
+        *(u32*)(pEvt + 0x80) = *(u32*)&half;
         *(s32*)(pEvt + 0x84) = 0;
     }
 
+    remaining = *(f32*)(pEvt + 0x78);
+    velocity = *(f32*)(pEvt + 0x7C);
+    half = *(f32*)(pEvt + 0x80);
     angle = (float_6p2832_80421078 * angleABf(*(f32*)((s32)item + 0x3C),
                                                 *(f32*)((s32)item + 0x44),
                                                 marioX,
                                                 marioZ)) / float_360_8042107c;
     sinA = float_0p00761_80421080;
+    sinSub = float_0p16605_80421084;
+    one = float_1_80421088;
 
     if (angle <= float_3p1416_8042108c) {
         if (angle <= float_1p5708_80421090) {
             t = angle;
             t2 = t * t;
-            value = ((sinA * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t;
+            sinA = sinA * t2 - sinSub;
+            sinA = sinA * t2 + one;
+            sinA *= t;
         } else {
             t = float_1p5708_80421090 - (angle - float_1p5708_80421090);
             t2 = t * t;
-            value = ((sinA * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t;
+            sinA = sinA * t2 - sinSub;
+            sinA = sinA * t2 + one;
+            sinA *= t;
         }
-    } else if (angle >= float_4p7124_80421094) {
-        t = float_1p5708_80421090 - (angle - float_4p7124_80421094);
-        t2 = t * t;
-        value = -(((sinA * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t);
-    } else {
+    } else if (angle < float_4p7124_80421094) {
         t = angle - float_3p1416_8042108c;
         t2 = t * t;
-        value = -(((sinA * t2 - float_0p16605_80421084) * t2 + float_1_80421088) * t);
+        sinA = sinA * t2 - sinSub;
+        sinA = sinA * t2 + one;
+        sinA *= t;
+        sinA = -sinA;
+    } else {
+        t = float_1p5708_80421090 - (angle - float_4p7124_80421094);
+        t2 = t * t;
+        sinA = sinA * t2 - sinSub;
+        sinA = sinA * t2 + one;
+        sinA *= t;
+        sinA = -sinA;
     }
 
-    *(f32*)((s32)item + 0x3C) += *(f32*)(pEvt + 0x80) * value;
+    *(f32*)((s32)item + 0x3C) += half * sinA;
 
+    cosCoeff = float_0p03705_80421098;
+    cosSub = float_0p4967_8042109c;
+    one = float_1_80421088;
     if (angle <= float_3p1416_8042108c) {
         if (angle <= float_1p5708_80421090) {
             t = angle;
             t2 = t * t;
-            value = (float_0p03705_80421098 * t2 - float_0p4967_8042109c) * t2 + float_1_80421088;
+            cosCoeff = cosCoeff * t2 - cosSub;
+            cosCoeff = cosCoeff * t2 + one;
         } else {
             t = float_1p5708_80421090 - (angle - float_1p5708_80421090);
             t2 = t * t;
-            value = -((float_0p03705_80421098 * t2 - float_0p4967_8042109c) * t2 + float_1_80421088);
+            cosCoeff = cosCoeff * t2 - cosSub;
+            cosCoeff = cosCoeff * t2 + one;
+            cosCoeff = -cosCoeff;
         }
-    } else if (angle >= float_4p7124_80421094) {
-        t = float_1p5708_80421090 - (angle - float_4p7124_80421094);
-        t2 = t * t;
-        value = (float_0p03705_80421098 * t2 - float_0p4967_8042109c) * t2 + float_1_80421088;
-    } else {
+    } else if (angle < float_4p7124_80421094) {
         t = angle - float_3p1416_8042108c;
         t2 = t * t;
-        value = -((float_0p03705_80421098 * t2 - float_0p4967_8042109c) * t2 + float_1_80421088);
+        cosCoeff = cosCoeff * t2 - cosSub;
+            cosCoeff = cosCoeff * t2 + one;
+            cosCoeff = -cosCoeff;
+    } else {
+        t = float_1p5708_80421090 - (angle - float_4p7124_80421094);
+        t2 = t * t;
+        cosCoeff = cosCoeff * t2 - cosSub;
+            cosCoeff = cosCoeff * t2 + one;
     }
 
-    *(f32*)((s32)item + 0x44) -= *(f32*)(pEvt + 0x80) * value;
-    *(f32*)((s32)item + 0x40) += *(f32*)(pEvt + 0x7C);
+    *(f32*)((s32)item + 0x44) -= half * cosCoeff;
+    *(f32*)((s32)item + 0x40) += velocity;
 
-    *(f32*)(pEvt + 0x78) -= float_1_80421088;
-    if (*(f32*)(pEvt + 0x78) >= float_0_804210a0) {
-        *(f32*)(pEvt + 0x7C) -= float_0p1_80421074;
-        return 0;
+    remaining -= float_1_80421088;
+    velocity -= float_0p1_80421074;
+    if (remaining < float_0_804210a0) {
+        *(f32*)((s32)item + 0x3C) = marioX;
+        *(f32*)((s32)item + 0x40) = marioY;
+        *(f32*)((s32)item + 0x44) = marioZ;
+        return 2;
     }
-
-    *(f32*)((s32)item + 0x3C) = marioX;
-    *(f32*)((s32)item + 0x40) = marioY;
-    *(f32*)((s32)item + 0x44) = marioZ;
-    return 2;
+    *(u32*)(pEvt + 0x78) = *(u32*)&remaining;
+    *(u32*)(pEvt + 0x7C) = *(u32*)&velocity;
+    return 0;
 }
 
 const f32 float_0p5_80421070 = 0.5f;

@@ -94,6 +94,7 @@ void statusWinMain(void) {
     extern const f32 float_3p1416_80422bf0;
     extern const f32 float_0p5_80422bf8;
     extern const f32 float_500_80422c64;
+    typedef struct Position { f32 x, y, z; } Position;
     void* player;
     s32 seq;
     u16 flags;
@@ -176,9 +177,7 @@ void statusWinMain(void) {
             if (*(s32*)((s32)wp + 0x78) != 0) {
                 *(s32*)((s32)wp + 0x78) -= 1;
             }
-            *(f32*)((s32)wp + 0x68) = *(f32*)((s32)player + 0x8C);
-            *(f32*)((s32)wp + 0x6C) = *(f32*)((s32)player + 0x90);
-            *(f32*)((s32)wp + 0x70) = *(f32*)((s32)player + 0x94);
+            *(Position*)((s32)wp + 0x68) = *(Position*)((s32)player + 0x8C);
             if ((*(u16*)((s32)wp + 4) & 0x10) != 0) {
                 *(u16*)((s32)wp + 4) &= ~0xA;
             }
@@ -196,12 +195,15 @@ void statusWinMain(void) {
         *(f32*)((s32)wp + 0x14) = *(f32*)((s32)wp + 0x10);
         if ((*(u16*)((s32)wp + 4) & 0x44) != 0) {
             *(f32*)((s32)wp + 0x18) = float_1_80422bf4;
-            *(f32*)((s32)wp + 0x0C) = float_16_80422c48 / *(f32*)((s32)wp + 0x1C);
         } else {
             *(f32*)((s32)wp + 0x18) = float_0_80422be8;
-            *(f32*)((s32)wp + 0x0C) = float_28_80422c60 / *(f32*)((s32)wp + 0x1C);
         }
         *(f32*)((s32)wp + 0x08) = float_0_80422be8;
+        if ((*(u16*)((s32)wp + 4) & 0x44) == 0) {
+            *(f32*)((s32)wp + 0x0C) = float_28_80422c60 / *(f32*)((s32)wp + 0x1C);
+        } else {
+            *(f32*)((s32)wp + 0x0C) = float_16_80422c48 / *(f32*)((s32)wp + 0x1C);
+        }
         *(u16*)((s32)wp + 4) &= ~4;
         *(u16*)((s32)wp + 4) &= ~8;
         *(u16*)((s32)wp + 4) &= ~0x40;
@@ -246,14 +248,16 @@ u8 gaugeDisp(s32 value, f32 x, f32 y) {
     extern const f32 float_1_80422bf4;
     extern const f32 float_12_80422c58;
     s32 max;
-    s32 i;
-    s32 enabled;
+    u32 i;
+    u16 enabled;
     s32 full;
     s32 rest;
     s32 fill;
     s32 high;
     s32 product;
+    u16* background;
     LocalVec3 pos;
+    LocalVec3 backPos;
 
     max = 0;
     for (i = 0; i < 8; i++) {
@@ -270,10 +274,10 @@ u8 gaugeDisp(s32 value, f32 x, f32 y) {
 
     high = __mulhw(0x51EB851F, value);
     full = (high >> 5) + ((u32)(high >> 5) >> 31);
-    rest = value - (full * 100);
+    rest = value - (((high >> 5) + ((u32)(high >> 5) >> 31)) * 100);
     product = rest * 15;
     high = __mulhw(0xA57FA503, product);
-    fill = ((high + product) >> 6);
+    fill = (high + product) >> 6;
     fill += (u32)fill >> 31;
     if (rest != 0 && value != 0 && fill == 0) {
         fill = 1;
@@ -287,23 +291,28 @@ u8 gaugeDisp(s32 value, f32 x, f32 y) {
     }
 
     y += float_12_80422c58;
-    for (i = 0; i < 8; i++) {
-        if ((*(u16*)((s32)pouchGetPtr() + 0x8C) & (1 << i)) != 0) {
-            pos.x = x + (f32)(i << 5);
-            pos.y = y;
-            pos.z = float_0_80422be8;
-            if (i < full) {
-                enabled = gauge_back[i];
+    background = gauge_back;
+    for (i = 0; i < 8; i++, background++) {
+        if ((*(u16*)((s32)pouchGetPtr() + 0x8C) & (1 << i)) == 0) {
+            break;
+        }
+        {
+            backPos.y = y;
+            backPos.z = float_0_80422be8;
+            backPos.x = x + (f32)((s32)i << 5);
+            if ((s32)i < full) {
+                enabled = *background;
             } else {
                 enabled = 0x1C7;
             }
-            iconDispGx(&pos, 0x10, enabled, float_1_80422bf4);
+            iconDispGx(&backPos, 0x10, enabled, float_1_80422bf4);
         }
     }
     return 0;
 }
 
 
+#pragma optimize_for_size off
 void statusWinDisp(void) {
     extern void PSMTXTrans(f32 mtx[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXScale(f32 mtx[3][4], f32 x, f32 y, f32 z);
@@ -343,22 +352,46 @@ void statusWinDisp(void) {
     StatusIcon* icon;
     f32 trans[3][4];
     f32 scale[3][4];
+    f32 commandTrans[3][4];
+    f32 commandScale[3][4];
+    f32 hpTrans[3][4];
+    f32 maxHpTrans[3][4];
+    f32 fpTrans[3][4];
+    f32 maxFpTrans[3][4];
+    f32 expTrans[3][4];
+    f32 coinTrans[3][4];
+    f32 partyHpTrans[3][4];
+    f32 partyMaxHpTrans[3][4];
     f32 x;
     f32 y;
     u32 color;
+    u32 partyColor;
+    u32 commandColor;
+    u32 partyCommandColor;
+    u32 gearColor;
+    u32 badgeColor;
+    u32 journalColor;
+    u32 hpColor;
+    u32 maxHpColor;
+    u32 fpColor;
+    u32 maxFpColor;
+    u32 expColor;
+    u32 coinColor;
+    u32 partyHpColor;
+    u32 partyMaxHpColor;
     s32 blink;
     s32 party;
     s32 i;
     s32 iconId;
     s32 index;
-    f32 commandY;
+    f64 commandY;
 
     x = *(f32*)((char*)wp + 0x20);
     y = *(f32*)((char*)wp + 0x24);
     blink = 1;
     if (*(s32*)((char*)wp + 0x84) > 0) {
         *(s32*)((char*)wp + 0x84) -= 1;
-        blink = (((*(s32*)((char*)wp + 0x84) / 16) % 16) > 5);
+        blink = ((*(s32*)((char*)wp + 0x84) % 16) > 5);
     }
 
     icon = (StatusIcon*)alwaysDt;
@@ -380,28 +413,28 @@ void statusWinDisp(void) {
     }
 
     if (((*(u32*)((char*)wp + 0x80) & 1) == 0) || blink) {
-        PSMTXTrans(trans, ((120.0f + x) - 6.0f) - 10.0f, 2.0f + (y - 38.0f), 0.0f);
-        color = dat_80422bc8;
-        iconNumberDispGx(trans, *(s16*)((char*)wp + 0x50), 0, &color);
+        PSMTXTrans(hpTrans, ((120.0f + x) - 6.0f) - 10.0f, 2.0f + (y - 38.0f), 0.0f);
+        hpColor = dat_80422bc8;
+        iconNumberDispGx(hpTrans, *(s16*)((char*)wp + 0x50), 0, &hpColor);
     }
-    PSMTXTrans(trans, ((186.0f + x) - 6.0f) - 10.0f, 3.0f + (y - 38.0f), 0.0f);
-    color = dat_80422bc8;
-    iconNumberDispGx(trans, *(s16*)((char*)wp + 0x52), 1, &color);
+    PSMTXTrans(maxHpTrans, ((186.0f + x) - 6.0f) - 10.0f, 3.0f + (y - 38.0f), 0.0f);
+    maxHpColor = dat_80422bc8;
+    iconNumberDispGx(maxHpTrans, *(s16*)((char*)wp + 0x52), 1, &maxHpColor);
     if (((*(u32*)((char*)wp + 0x80) & 2) == 0) || blink) {
-        PSMTXTrans(trans, (292.0f + x) - 6.0f, 2.0f + (y - 38.0f), 0.0f);
-        color = dat_80422bc8;
-        iconNumberDispGx(trans, *(s16*)((char*)wp + 0x54), 0, &color);
+        PSMTXTrans(fpTrans, (292.0f + x) - 6.0f, 2.0f + (y - 38.0f), 0.0f);
+        fpColor = dat_80422bc8;
+        iconNumberDispGx(fpTrans, *(s16*)((char*)wp + 0x54), 0, &fpColor);
     }
-    PSMTXTrans(trans, (358.0f + x) - 6.0f, 3.0f + (y - 38.0f), 0.0f);
-    color = dat_80422bc8;
-    iconNumberDispGx(trans, *(s16*)((char*)wp + 0x56), 1, &color);
-    PSMTXTrans(trans, 462.0f + x, 2.0f + (y - 38.0f), 0.0f);
-    color = dat_80422bc8;
-    iconNumberDispGx(trans, *(s16*)((char*)wp + 0x5E), 0, &color);
+    PSMTXTrans(maxFpTrans, (358.0f + x) - 6.0f, 3.0f + (y - 38.0f), 0.0f);
+    maxFpColor = dat_80422bc8;
+    iconNumberDispGx(maxFpTrans, *(s16*)((char*)wp + 0x56), 1, &maxFpColor);
+    PSMTXTrans(expTrans, 462.0f + x, 2.0f + (y - 38.0f), 0.0f);
+    expColor = dat_80422bc8;
+    iconNumberDispGx(expTrans, *(s16*)((char*)wp + 0x5E), 0, &expColor);
     if (((*(u32*)((char*)wp + 0x80) & 0x10) == 0) || blink) {
-        PSMTXTrans(trans, 572.0f + x, 2.0f + (y - 38.0f), 0.0f);
-        color = dat_80422bc8;
-        iconNumberDispGx(trans, *(s16*)((char*)wp + 0x60), 0, &color);
+        PSMTXTrans(coinTrans, 572.0f + x, 2.0f + (y - 38.0f), 0.0f);
+        coinColor = dat_80422bc8;
+        iconNumberDispGx(coinTrans, *(s16*)((char*)wp + 0x60), 0, &coinColor);
     }
     if (((*(u32*)((char*)wp + 0x80) & 4) == 0) || blink) {
         gaugeDisp(260.0f + x, 4.0f + (y - 87.0f), *(s16*)((char*)wp + 0x62));
@@ -427,68 +460,77 @@ void statusWinDisp(void) {
                 PSMTXTrans(trans, x + (f32)icon->x, y - (f32)icon->y, 0.0f);
                 PSMTXScale(scale, icon->scale, icon->scale, icon->scale);
                 PSMTXConcat(trans, scale, trans);
-                color = dat_80422bd0;
-                iconDispGxCol(trans, 0x10, icon->iconId, &color);
+                partyColor = dat_80422bd0;
+                iconDispGxCol(trans, 0x10, icon->iconId, &partyColor);
             }
         }
         if (((*(u32*)((char*)wp + 0x80) & 8) == 0) || blink) {
-            PSMTXTrans(trans, ((120.0f + x) - 6.0f) - 10.0f,
+            PSMTXTrans(partyHpTrans, ((120.0f + x) - 6.0f) - 10.0f,
                         4.0f + 2.0f + (y - float_78_80422c34), 0.0f);
-            color = dat_80422bc8;
-            iconNumberDispGx(trans, *(s16*)((char*)wp + 0x5A), 0, &color);
+            partyHpColor = dat_80422bc8;
+            iconNumberDispGx(partyHpTrans, *(s16*)((char*)wp + 0x5A), 0, &partyHpColor);
         }
-        PSMTXTrans(trans, ((186.0f + x) - 6.0f) - 10.0f,
+        PSMTXTrans(partyMaxHpTrans, ((186.0f + x) - 6.0f) - 10.0f,
                     4.0f + 2.0f + (y - float_78_80422c34), 0.0f);
-        color = dat_80422bc8;
-        iconNumberDispGx(trans, *(s16*)((char*)wp + 0x5C), 1, &color);
+        partyMaxHpColor = dat_80422bc8;
+        iconNumberDispGx(partyMaxHpTrans, *(s16*)((char*)wp + 0x5C), 1, &partyMaxHpColor);
     }
 
     if ((*(u16*)((char*)wp + 4) & 0x100) != 0 &&
         *(s32*)((char*)gp + 0x14) == 0) {
         commandY = (*(f32*)((char*)wp + 0x34) - *(f32*)((char*)wp + 0x24)) + float_neg180_80422c38;
-        index = *(s32*)((char*)gp + 0x16C);
-
-        PSMTXTrans(trans, float_neg190_80422c3c, commandY, float_0_80422be8);
-        PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
-        PSMTXConcat(trans, scale, trans);
-        color = dat_80422bd4;
-        iconDispGxCol(trans, 0x10, 0x214, &color);
+        PSMTXTrans(commandTrans, float_neg190_80422c3c, commandY, float_0_80422be8);
+        PSMTXScale(commandScale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+        PSMTXConcat(commandTrans, commandScale, commandTrans);
+        commandColor = dat_80422bd4;
+        iconDispGxCol(commandTrans, 0x10, 0x214, &commandColor);
 
         if (swByteGet(0) >= 7 || partyChkJoin(1) != 0) {
-            PSMTXTrans(trans, float_neg250_80422c44, commandY + float_16_80422c48, float_0_80422be8);
-            PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
-            PSMTXConcat(trans, scale, trans);
-            color = dat_80422bd8;
+            PSMTXTrans(commandTrans, float_neg250_80422c44, commandY + float_16_80422c48, float_0_80422be8);
+            PSMTXScale(commandScale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+            PSMTXConcat(commandTrans, commandScale, commandTrans);
+            partyCommandColor = dat_80422bd8;
+            index = *(s32*)((char*)gp + 0x16C);
             iconId = party_icon_tbl[index];
-            iconDispGxCol(trans, 0x10, iconId, &color);
+            iconDispGxCol(commandTrans, 0x10, iconId, &partyCommandColor);
         }
 
-        PSMTXTrans(trans, float_neg190_80422c3c, commandY + float_50_80422c4c, float_0_80422be8);
-        PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
-        PSMTXConcat(trans, scale, trans);
-        color = dat_80422bdc;
+        PSMTXTrans(commandTrans, float_neg190_80422c3c, commandY + float_50_80422c4c, float_0_80422be8);
+        PSMTXScale(commandScale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+        PSMTXConcat(commandTrans, commandScale, commandTrans);
+        gearColor = dat_80422bdc;
+        index = *(s32*)((char*)gp + 0x16C);
         iconId = gear_icon_tbl[index];
-        iconDispGxCol(trans, 0x10, iconId, &color);
+        iconDispGxCol(commandTrans, 0x10, iconId, &gearColor);
 
         if (swByteGet(0) >= 20 || pouchGetHaveBadgeCnt() != 0) {
-            PSMTXTrans(trans, float_neg130_80422c50 + dat_802f3a30[index],
+            f32 badgeOffsets[4];
+            badgeOffsets[0] = dat_802f3a30[0];
+            badgeOffsets[1] = dat_802f3a30[1];
+            badgeOffsets[2] = dat_802f3a30[2];
+            badgeOffsets[3] = dat_802f3a30[3];
+            index = *(s32*)((char*)gp + 0x16C);
+            PSMTXTrans(commandTrans, float_neg130_80422c50 + badgeOffsets[index],
                        commandY + float_16_80422c48, float_0_80422be8);
-            PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
-            PSMTXConcat(trans, scale, trans);
-            color = dat_80422be0;
+            PSMTXScale(commandScale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+            PSMTXConcat(commandTrans, commandScale, commandTrans);
+            badgeColor = dat_80422be0;
+            index = *(s32*)((char*)gp + 0x16C);
             iconId = badge_icon_tbl[index];
-            iconDispGxCol(trans, 0x10, iconId, &color);
+            iconDispGxCol(commandTrans, 0x10, iconId, &badgeColor);
         }
 
-        PSMTXTrans(trans, float_neg190_80422c3c, commandY - float_25_80422c54, float_0_80422be8);
-        PSMTXScale(scale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
-        PSMTXConcat(trans, scale, trans);
-        color = dat_80422be4;
+        PSMTXTrans(commandTrans, float_neg190_80422c3c, commandY - float_25_80422c54, float_0_80422be8);
+        PSMTXScale(commandScale, float_0p75_80422c40, float_0p75_80422c40, float_0p75_80422c40);
+        PSMTXConcat(commandTrans, commandScale, commandTrans);
+        journalColor = dat_80422be4;
+        index = *(s32*)((char*)gp + 0x16C);
         iconId = journal_icon_tbl[index];
-        iconDispGxCol(trans, 0x10, iconId, &color);
+        iconDispGxCol(commandTrans, 0x10, iconId, &journalColor);
     }
 }
 
+#pragma optimize_for_size reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void statusGetValue(void* out) {
@@ -634,6 +676,7 @@ s32 valueCheck(void) {
     return changed;
 }
 
+#pragma optimize_for_size off
 void valueUpdate(void) {
     extern void psndSFXOn(const char*);
     extern const char str_SFX_COUNT_COIN1_802f3a50[];
@@ -656,11 +699,9 @@ void valueUpdate(void) {
     }
 
     diff = values[8] - *(s16*)((s32)wp + 0x60);
-    step = 0;
+    step = diff;
     if (diff != 0) {
-        step = __mulhw(0x66666667, diff);
-        step >>= 2;
-        step += (u32)step >> 31;
+        step = diff / 10;
         if (step == 0) {
             if (*(s16*)((s32)wp + 0x60) < values[8]) {
                 step = 1;
@@ -676,11 +717,9 @@ void valueUpdate(void) {
     target = values[0];
     current = *(s16*)((s32)wp + 0x50);
     diff = target - current;
-    step = 0;
+    step = diff;
     if (diff != 0) {
-        step = __mulhw(0x66666667, diff);
-        step >>= 2;
-        step += (u32)step >> 31;
+        step = diff / 10;
         if (step == 0) {
             step = current < target ? 1 : -1;
         }
@@ -690,11 +729,9 @@ void valueUpdate(void) {
     target = values[1];
     current = *(s16*)((s32)wp + 0x52);
     diff = target - current;
-    step = 0;
+    step = diff;
     if (diff != 0) {
-        step = __mulhw(0x66666667, diff);
-        step >>= 2;
-        step += (u32)step >> 31;
+        step = diff / 10;
         if (step == 0) {
             step = current < target ? 1 : -1;
         }
@@ -704,11 +741,9 @@ void valueUpdate(void) {
     target = values[2];
     current = *(s16*)((s32)wp + 0x54);
     diff = target - current;
-    step = 0;
+    step = diff;
     if (diff != 0) {
-        step = __mulhw(0x66666667, diff);
-        step >>= 2;
-        step += (u32)step >> 31;
+        step = diff / 10;
         if (step == 0) {
             step = current < target ? 1 : -1;
         }
@@ -718,7 +753,7 @@ void valueUpdate(void) {
     target = values[3];
     current = *(s16*)((s32)wp + 0x56);
     diff = target - current;
-    step = 0;
+    step = diff;
     if (diff != 0) {
         step = diff / 10;
         if (step == 0) {
@@ -730,7 +765,7 @@ void valueUpdate(void) {
     target = values[9];
     current = *(s16*)((s32)wp + 0x62);
     diff = target - current;
-    step = 0;
+    step = diff;
     if (diff != 0) {
         step = diff / 10;
         if (step == 0) {
@@ -742,7 +777,7 @@ void valueUpdate(void) {
     target = values[10];
     current = *(s16*)((s32)wp + 0x64);
     diff = target - current;
-    step = 0;
+    step = diff;
     if (diff != 0) {
         step = diff / 10;
         if (step == 0) {
@@ -754,7 +789,7 @@ void valueUpdate(void) {
     target = values[7];
     current = *(s16*)((s32)wp + 0x5E);
     diff = target - current;
-    step = 0;
+    step = diff;
     if (diff != 0) {
         step = diff / 10;
         if (step == 0) {
@@ -766,7 +801,7 @@ void valueUpdate(void) {
     target = values[8];
     current = *(s16*)((s32)wp + 0x60);
     diff = target - current;
-    step = 0;
+    step = diff;
     if (diff != 0) {
         step = diff / 10;
         if (step == 0) {
@@ -780,7 +815,7 @@ void valueUpdate(void) {
         target = values[5];
         current = *(s16*)((s32)wp + 0x5A);
         diff = target - current;
-        step = 0;
+        step = diff;
         if (diff != 0) {
             step = diff / 10;
             if (step == 0) {
@@ -792,7 +827,7 @@ void valueUpdate(void) {
         target = values[6];
         current = *(s16*)((s32)wp + 0x5C);
         diff = target - current;
-        step = 0;
+        step = diff;
         if (diff != 0) {
             step = diff / 10;
             if (step == 0) {
@@ -810,6 +845,7 @@ void valueUpdate(void) {
     }
 }
 
+#pragma optimize_for_size reset
 void statusWinOpen(void) {
     *(u16*)((s32)wp + 4) &= ~0xA;
     *(u16*)((s32)wp + 4) |= 5;

@@ -31,8 +31,8 @@ void evt_msg_init(void) {
 }
 
 
-#pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 param_5, char* param_6) {
     extern s32 msgWindow_Entry(char* msg, s32 type, s16 flags);
     extern void* evtNpcNameToPtr(void* evt, char* name);
@@ -40,10 +40,11 @@ s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 p
     extern void* marioGetPtr(void);
     extern s32 BattleTransID(void* evt, s32 id);
     extern void BtlUnit_GetTalkTogePos(s32 unitIdx, f32* x, f32* y, f32* z);
-    extern f32 getScreenPoint(f32* src, f32* dst);
+    extern void getScreenPoint(f32* src, f32* dst);
     extern f32 __fabsf(f32 value);
     extern const f32 float_300_80421874;
 
+    typedef struct MsgPosition { u32 x, y, z; } MsgPosition;
     void* evt;
     void* win;
     void* npc;
@@ -51,10 +52,10 @@ s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 p
     void* mario;
     char* searchMsg;
     char* displayMsg;
-    u32 mode;
+    s32 mode;
     s32 unitId;
-    f32 screenWin[5];
     f32 screenMario[3];
+    f32 screenWin[5];
 
     evt = param_1;
     npc = 0;
@@ -68,11 +69,11 @@ s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 p
             displayMsg = (char*)str_DIRECT_802cc71c;
         }
 
-        *(s32*)((s32)evt + 0x178) = msgWindow_Entry(searchMsg, param_5, *(s16*)((s32)evt + 0x190));
+        *(s32*)((s32)evt + 0x178) = msgWindow_Entry(searchMsg, param_5, (s16)*(s32*)((s32)evt + 0x190));
         *(s32*)((s32)evt + 0x190) = 0;
         win = windowGetPointer(*(s32*)((s32)evt + 0x178));
-        *(char**)(*(s32*)((s32)win + 0x28)) = displayMsg;
-        *(void**)(*(s32*)((s32)win + 0x28) + 0xF200) = evt;
+        *(char**)(*(s32*)*(s32*)((s32)win + 0x28)) = displayMsg;
+        *(void**)(*(s32*)*(s32*)((s32)win + 0x28) + 0xF200) = evt;
 
         if ((param_3 & 2) == 0) {
             if (*(u8*)((s32)evt + 0x10) == 6) {
@@ -82,124 +83,111 @@ s32 _evt_msg_print(void* param_1, int param_2, u32 param_3, char* param_4, s32 p
                 npc = evtNpcNameToPtr(evt, param_6);
             }
 
-            if ((s32)npc == -1) {
+            if (npc == (void*)-1) {
                 if ((*(u32*)((s32)evt + 0x180) & 0x1EFFFFFF) == 0) {
                     party = partyGetPtr(marioGetPartyId());
                     if (party == 0) {
                         mario = marioGetPtr();
-                        *(u32*)((s32)win + 0x30) = *(u32*)((s32)mario + 0x8C);
-                        *(u32*)((s32)win + 0x34) = *(u32*)((s32)mario + 0x90);
-                        *(u32*)((s32)win + 0x38) = *(u32*)((s32)mario + 0x94);
+                        *(MsgPosition*)((s32)win + 0x30) = *(MsgPosition*)((s32)mario + 0x8C);
                         mario = marioGetPtr();
                         *(f32*)((s32)win + 0x34) += *(f32*)((s32)mario + 0x1BC);
                     } else {
-                        *(u32*)((s32)win + 0x30) = *(u32*)((s32)party + 0x58);
-                        *(u32*)((s32)win + 0x34) = *(u32*)((s32)party + 0x5C);
-                        *(u32*)((s32)win + 0x38) = *(u32*)((s32)party + 0x60);
+                        *(MsgPosition*)((s32)win + 0x30) = *(MsgPosition*)((s32)party + 0x58);
                         *(f32*)((s32)win + 0x34) += *(f32*)((s32)party + 0xF0);
                     }
                 }
-                strcpy((char*)(*(s32*)((s32)win + 0x28) + 0xF204), param_6);
-            } else if ((s32)npc == -2) {
+                strcpy((char*)(*(s32*)*(s32*)((s32)win + 0x28) + 0xF204), param_6);
+            } else if (npc == (void*)-2) {
                 if ((*(u32*)((s32)evt + 0x180) & 0x1EFFFFFF) == 0) {
                     party = partyGetPtr(marioGetExtraPartyId());
                     if (party == 0) {
                         mario = marioGetPtr();
-                        *(u32*)((s32)win + 0x30) = *(u32*)((s32)mario + 0x8C);
-                        *(u32*)((s32)win + 0x34) = *(u32*)((s32)mario + 0x90);
-                        *(u32*)((s32)win + 0x38) = *(u32*)((s32)mario + 0x94);
+                        *(MsgPosition*)((s32)win + 0x30) = *(MsgPosition*)((s32)mario + 0x8C);
                         mario = marioGetPtr();
                         *(f32*)((s32)win + 0x34) += *(f32*)((s32)mario + 0x1BC);
                     } else {
-                        *(u32*)((s32)win + 0x30) = *(u32*)((s32)party + 0x58);
-                        *(u32*)((s32)win + 0x34) = *(u32*)((s32)party + 0x5C);
-                        *(u32*)((s32)win + 0x38) = *(u32*)((s32)party + 0x60);
+                        *(MsgPosition*)((s32)win + 0x30) = *(MsgPosition*)((s32)party + 0x58);
                         *(f32*)((s32)win + 0x34) += *(f32*)((s32)party + 0xF0);
                     }
                 }
-                strcpy((char*)(*(s32*)((s32)win + 0x28) + 0xF204), param_6);
-            } else if ((s32)npc == -3) {
+                strcpy((char*)(*(s32*)*(s32*)((s32)win + 0x28) + 0xF204), param_6);
+            } else if (npc == (void*)-3) {
                 if ((*(u32*)((s32)evt + 0x180) & 0x1EFFFFFF) == 0) {
                     mario = marioGetPtr();
-                    *(u32*)((s32)win + 0x30) = *(u32*)((s32)mario + 0x8C);
-                    *(u32*)((s32)win + 0x34) = *(u32*)((s32)mario + 0x90);
-                    *(u32*)((s32)win + 0x38) = *(u32*)((s32)mario + 0x94);
+                    *(MsgPosition*)((s32)win + 0x30) = *(MsgPosition*)((s32)mario + 0x8C);
                     mario = marioGetPtr();
                     *(f32*)((s32)win + 0x34) += *(f32*)((s32)mario + 0x1BC);
                 }
-                strcpy((char*)(*(s32*)((s32)win + 0x28) + 0xF204), param_6);
+                strcpy((char*)(*(s32*)*(s32*)((s32)win + 0x28) + 0xF204), param_6);
             } else if (npc != 0) {
                 if ((*(u32*)((s32)evt + 0x180) & 0x1EFFFFFF) == 0) {
-                    *(u32*)((s32)win + 0x30) = *(u32*)((s32)npc + 0x8C);
-                    *(u32*)((s32)win + 0x34) = *(u32*)((s32)npc + 0x90);
-                    *(u32*)((s32)win + 0x38) = *(u32*)((s32)npc + 0x94);
+                    *(MsgPosition*)((s32)win + 0x30) = *(MsgPosition*)((s32)npc + 0x8C);
                     *(f32*)((s32)win + 0x34) += *(f32*)((s32)npc + 0x150);
                 }
-                strcpy((char*)(*(s32*)((s32)win + 0x28) + 0xF204), (char*)((s32)npc + 8));
+                strcpy((char*)(*(s32*)*(s32*)((s32)win + 0x28) + 0xF204), (char*)((s32)npc + 8));
             }
         } else {
-            *(u32*)(*(s32*)((s32)win + 0x28) + 4) |= 8;
+            *(u32*)(*(s32*)*(s32*)((s32)win + 0x28) + 4) |= 8;
             unitId = BattleTransID(evt, (s32)param_6);
-            *(s32*)(*(s32*)((s32)win + 0x28) + 0xF224) = unitId;
-            BtlUnit_GetTalkTogePos(*(s32*)(*(s32*)((s32)win + 0x28) + 0xF224), (f32*)((s32)win + 0x30),
+            *(s32*)(*(s32*)*(s32*)((s32)win + 0x28) + 0xF224) = unitId;
+            BtlUnit_GetTalkTogePos(*(s32*)(*(s32*)*(s32*)((s32)win + 0x28) + 0xF224), (f32*)((s32)win + 0x30),
                                    (f32*)((s32)win + 0x34), (f32*)((s32)win + 0x38));
-            *(u16*)((s32)win + 0x2C) = 3;
+            *(s16*)((s32)win + 0x2C) = 3;
         }
 
         mode = *(u32*)((s32)evt + 0x180) & 0x1EFFFFFF;
-        if (mode == 2) {
-            *(u16*)((s32)win + 0x2C) = 7;
-            *(u32*)((s32)win + 0x30) = *(u32*)((s32)evt + 0x184);
-            *(u32*)((s32)win + 0x34) = *(u32*)((s32)evt + 0x188);
-            *(u32*)((s32)win + 0x38) = *(u32*)((s32)evt + 0x18C);
-        } else if (mode < 2) {
-            if (mode == 0) {
-                if (npc != 0) {
-                    marioGetPtr();
-                    getScreenPoint((f32*)((s32)win + 0x30), screenWin);
-                    if (*(s32*)((s32)win + 8) == 1) {
-                        *(u16*)((s32)win + 0x2C) = 7;
-                    } else if (__fabsf(screenWin[0]) >= float_300_80421874) {
-                        *(u16*)((s32)win + 0x2C) = 2;
+        switch (mode) {
+        case 0:
+            if (npc != 0) {
+                marioGetPtr();
+                getScreenPoint((f32*)((s32)win + 0x30), screenWin);
+                if (*(s32*)((s32)win + 8) == 1) {
+                    *(s16*)((s32)win + 0x2C) = 7;
+                } else if (__fabsf(screenWin[0]) >= float_300_80421874) {
+                    *(s16*)((s32)win + 0x2C) = 2;
+                } else {
+                    mario = marioGetPtr();
+                    getScreenPoint((f32*)((s32)mario + 0x8C), screenMario);
+                    if (screenWin[0] < screenMario[0]) {
+                        *(s16*)((s32)win + 0x2C) = 3;
                     } else {
-                        mario = marioGetPtr();
-                        getScreenPoint((f32*)((s32)mario + 0x8C), screenMario);
-                        if (screenMario[0] <= screenWin[0]) {
-                            *(u16*)((s32)win + 0x2C) = 7;
-                        } else {
-                            *(u16*)((s32)win + 0x2C) = 3;
-                        }
+                        *(s16*)((s32)win + 0x2C) = 7;
                     }
                 }
-            } else {
-                *(u16*)((s32)win + 0x2C) = 0;
             }
-        } else if (mode < 4) {
-            *(u16*)((s32)win + 0x2C) = 2;
-            *(u32*)((s32)win + 0x30) = *(u32*)((s32)evt + 0x184);
-            *(u32*)((s32)win + 0x34) = *(u32*)((s32)evt + 0x188);
-            *(u32*)((s32)win + 0x38) = *(u32*)((s32)evt + 0x18C);
+            break;
+        case 1:
+            *(s16*)((s32)win + 0x2C) = 0;
+            break;
+        case 2:
+            *(s16*)((s32)win + 0x2C) = 7;
+            *(MsgPosition*)((s32)win + 0x30) = *(MsgPosition*)((s32)evt + 0x184);
+            break;
+        case 3:
+            *(s16*)((s32)win + 0x2C) = 2;
+            *(MsgPosition*)((s32)win + 0x30) = *(MsgPosition*)((s32)evt + 0x184);
+            break;
         }
 
         if ((*(u32*)((s32)evt + 0x180) & 0x80000000) != 0) {
-            *(u16*)((s32)win + 0x2C) = 3;
+            *(s16*)((s32)win + 0x2C) = 3;
             if ((*(u32*)((s32)evt + 0x180) & 0x40000000) != 0) {
-                *(u16*)((s32)win + 0x2C) |= 4;
+                *(s16*)((s32)win + 0x2C) |= 4;
             }
             if ((*(u32*)((s32)evt + 0x180) & 0x20000000) != 0) {
-                *(u16*)((s32)win + 0x2C) |= 8;
+                *(s16*)((s32)win + 0x2C) |= 8;
             }
         }
         if ((*(u32*)((s32)evt + 0x180) & 0x01000000) != 0) {
-            *(u16*)((s32)win + 0x2C) |= 0x10;
+            *(s16*)((s32)win + 0x2C) |= 0x10;
         }
         *(u32*)((s32)evt + 0x180) = 0;
     }
 
-    if (windowCheckID(*(s32*)((s32)evt + 0x178)) == 0) {
-        return 2;
+    if (windowCheckID(*(s32*)((s32)evt + 0x178)) != 0) {
+        return 0;
     }
-    return 0;
+    return 2;
 }
 
 #pragma no_register_save_helpers off
@@ -225,14 +213,19 @@ s32 evt_msg_print(void* evtEntry, int param_2) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_msg_print_party(void* pEvt, int param_2) {
-    extern const char str_party_8042186c[];
+    extern const char str_party_8042186c[6];
     static char partyLabel[0x40];
-    EvtEntry* evt = pEvt;
-    s32 first = param_2;
-    void* party;
-    char* msg;
     s32 kind;
+    char* msg;
+    s32 first;
+    EvtEntry* evt;
+    void* party;
+
+    first = param_2;
+    evt = pEvt;
 
     msg = (char*)evtGetValue(evt, evt->args[0]);
     party = partyGetPtr(marioGetPartyId());
@@ -245,7 +238,11 @@ s32 evt_msg_print_party(void* pEvt, int param_2) {
     strcat(partyLabel, partyMsgStr[kind]);
     return _evt_msg_print(evt, first, 0, partyLabel, 0, (char*)str_party_8042186c);
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_msg_print_party_add(int param_1, int param_2) {
     static char partyLabel[0x40];
     EvtEntry* evt = (EvtEntry*)param_1;
@@ -271,10 +268,14 @@ s32 evt_msg_print_party_add(int param_1, int param_2) {
     }
     return 2;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_msg_print_battle_party(int param_1, int param_2) {
-    extern s32 BattleTransID(s32 id);
+    extern s32 BattleTransID(void* evt, s32 id);
     extern void* BattleGetUnitPtr(void* battleWork, s32 unitId);
     extern void* _battleWorkPointer;
     extern char* battlePartyMsgStr[7];
@@ -286,7 +287,7 @@ s32 evt_msg_print_battle_party(int param_1, int param_2) {
     void* unit;
 
     msg = (char*)evtGetValue(evt, evt->args[0]);
-    unitId = BattleTransID(-4);
+    unitId = BattleTransID(evt, -4);
     unit = BattleGetUnitPtr(_battleWorkPointer, unitId);
     if (unit == 0) {
         return 2;
@@ -295,6 +296,8 @@ s32 evt_msg_print_battle_party(int param_1, int param_2) {
     strcat(partyLabel, battlePartyMsgStr[*(s32*)((s32)unit + 8)]);
     return _evt_msg_print(evt, first, 2, partyLabel, 0, (char*)-4);
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 s32 evt_msg_print_insert(int param_1, int param_2) {
 
     s32 values[4];
@@ -468,30 +471,31 @@ s32 evt_msg_close(EvtEntry* evt) {
 s32 evt_msg_select(void* pEvt, int param_2) {
     extern s32 msgWindow_Entry(char* msg, s32 type, s32 flags);
     extern void windowDeleteID(s32 id);
-    EvtEntry* evt = pEvt;
     s32 first = param_2;
+    EvtEntry* evt = pEvt;
     s32* args = evt->args;
     s32 flags;
     char* msg;
+    char* entryMsg;
     char* displayMsg;
     void* window;
     void* selectWork;
 
     flags = evtGetValue(evt, args[0]);
     msg = (char*)evtGetValue(evt, args[1]);
-    displayMsg = msg;
     if (first != 0) {
         if (!(flags & 1)) {
-            msg = msgSearch(msg);
+            entryMsg = msgSearch(msg);
+            displayMsg = msg;
         } else {
+            entryMsg = msg;
             displayMsg = (char*)str_DIRECT_802cc71c;
         }
-        *(s32*)((s32)evt + 0x17C) = msgWindow_Entry(msg, 0, 0x14);
+        *(s32*)((s32)evt + 0x17C) = msgWindow_Entry(entryMsg, 0, 0x14);
         window = windowGetPointer(*(s32*)((s32)evt + 0x17C));
         selectWork = *(void**)((s32)window + 0x28);
-        *(char**)selectWork = displayMsg;
+        *(char**)*(void**)selectWork = displayMsg;
     }
-
     if (windowCheckID(*(s32*)((s32)evt + 0x17C)) != 0) {
         return 0;
     }
@@ -575,26 +579,11 @@ void unk_800d1364(char* dst, char* value) {
     extern char* strstr(const char*, const char*);
     extern u32 strlen(const char*);
     extern const char str_AN_80421844[];
-    extern const char str_AN_ITEM_802cc674[];
-    extern const char str_ITEM_802cc66c[];
     extern const char str_an_8042183c[];
     extern const char str_a_80421840[];
     extern const char str_M_8042184c[];
     extern const char str_F_80421850[];
     extern const char str_N_80421800[];
-    extern const char str_MPLdie_802cc680[];
-    extern const char str_FPLdie_802cc68c[];
-    extern const char str_NPLdie_802cc698[];
-    extern const char str_Einen_802cc6a4[];
-    extern const char str_Ein_ITEM_802cc6ac[];
-    extern const char str_ein_ITEM_802cc6b8[];
-    extern const char str_Einen_ITEM_802cc6c4[];
-    extern const char str_einen_ITEM_802cc6d4[];
-    extern const char str_PLles_802cc6e4[];
-    extern const char str_Un_ITEM_802cc6ec[];
-    extern const char str_un_ITEM_802cc6f8[];
-    extern const char str_PLunos_802cc704[];
-    extern const char str_PLunas_802cc710[];
     extern const char str_un_80421854[];
     extern const char str_MNA_8042185c[];
     extern const char str_FNA_80421864[];
@@ -606,17 +595,17 @@ void unk_800d1364(char* dst, char* value) {
     extern char* lbl_80416424[];
     extern char* lbl_80416430[];
     extern char* lbl_80416448[];
+    extern const char str_Einen_802cc608[];
+    const char* words = str_Einen_802cc608;
     char buffer[2572];
     char* marker;
     const char* article;
     u32 prefix;
     s32 form;
-    s32 language = *(s32*)((s32)gp + 0x11D8);
+    s32 language = *(s32*)((s32)gp + 0x16C);
 
-    if (language == 0) {
-        strcpy(buffer, dst);
-    } else if (language == 1 || language == 6) {
-        switch (*value) {
+    if (language == 1 || language == 6) {
+        switch ((s8)*value) {
         case 'A': case 'E': case 'I': case 'O': case 'U':
         case 'a': case 'e': case 'i': case 'o': case 'u': article = str_an_8042183c; break;
         default: article = str_a_80421840; break;
@@ -627,19 +616,20 @@ void unk_800d1364(char* dst, char* value) {
             strncpy(buffer, dst, prefix); buffer[prefix] = 0;
             strcat(buffer, article); strcat(buffer, marker + 4);
             strcpy(dst, buffer);
-        }
-        marker = strstr(dst, str_AN_ITEM_802cc674);
-        if (marker != 0) {
-            prefix = strlen(dst) - strlen(marker);
-            strncpy(buffer, dst, prefix); buffer[prefix] = 0;
-            strcat(buffer, article); strcat(buffer, value); strcat(buffer, marker + 9);
-        } else {
-            marker = strstr(dst, str_ITEM_802cc66c);
+            marker = strstr(dst, words + 0x64);
             if (marker != 0) {
                 prefix = strlen(dst) - strlen(marker);
                 strncpy(buffer, dst, prefix); buffer[prefix] = 0;
                 strcat(buffer, value); strcat(buffer, marker + 6);
             }
+        } else if ((marker = strstr(dst, words + 0x6C)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix); buffer[prefix] = 0;
+            strcat(buffer, article); strcat(buffer, value); strcat(buffer, marker + 9);
+        } else if ((marker = strstr(dst, words + 0x64)) != 0) {
+            prefix = strlen(dst) - strlen(marker);
+            strncpy(buffer, dst, prefix); buffer[prefix] = 0;
+            strcat(buffer, value); strcat(buffer, marker + 6);
         }
     } else if (language == 2) {
         form = 0;
@@ -649,14 +639,14 @@ void unk_800d1364(char* dst, char* value) {
             form = 1;
         } else if (strstr(value, str_N_80421800) != 0) {
             form = 2;
-        } else if (strstr(value, str_MPLdie_802cc680) != 0) {
+        } else if (strstr(value, (words + 0x78)) != 0) {
             form = 3;
-        } else if (strstr(value, str_FPLdie_802cc68c) != 0) {
+        } else if (strstr(value, (words + 0x84)) != 0) {
             form = 4;
-        } else if (strstr(value, str_NPLdie_802cc698) != 0) {
+        } else if (strstr(value, (words + 0x90)) != 0) {
             form = 5;
         }
-        marker = strstr(dst, str_Einen_802cc6a4);
+        marker = strstr(dst, (words + 0x9C));
         if (marker != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
@@ -664,7 +654,7 @@ void unk_800d1364(char* dst, char* value) {
             strcat(buffer, lbl_804163E8[form]);
             strcat(buffer, marker + 7);
             strcpy(dst, buffer);
-            marker = strstr(dst, str_ITEM_802cc66c);
+            marker = strstr(dst, (words + 0x64));
             if (marker != 0) {
                 prefix = strlen(dst) - strlen(marker);
                 strncpy(buffer, dst, prefix);
@@ -672,35 +662,35 @@ void unk_800d1364(char* dst, char* value) {
                 strcat(buffer, value);
                 strcat(buffer, marker + 6);
             }
-        } else if ((marker = strstr(dst, str_Ein_ITEM_802cc6ac)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0xA4))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
             strcat(buffer, lbl_804163B8[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 10);
-        } else if ((marker = strstr(dst, str_ein_ITEM_802cc6b8)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0xB0))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
             strcat(buffer, lbl_804163D0[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 10);
-        } else if ((marker = strstr(dst, str_Einen_ITEM_802cc6c4)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0xBC))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
             strcat(buffer, lbl_804163E8[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 12);
-        } else if ((marker = strstr(dst, str_einen_ITEM_802cc6d4)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0xCC))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
             strcat(buffer, lbl_80416400[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 12);
-        } else if ((marker = strstr(dst, str_ITEM_802cc66c)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0x64))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
@@ -713,7 +703,7 @@ void unk_800d1364(char* dst, char* value) {
             form = 0;
         } else if (strstr(value, str_F_80421850) != 0) {
             form = 1;
-        } else if (strstr(value, str_PLles_802cc6e4) != 0) {
+        } else if (strstr(value, (words + 0xDC)) != 0) {
             form = 2;
         }
         marker = strstr(dst, str_un_80421854);
@@ -724,7 +714,7 @@ void unk_800d1364(char* dst, char* value) {
             strcat(buffer, lbl_80416424[form]);
             strcat(buffer, marker + 4);
             strcpy(dst, buffer);
-            marker = strstr(dst, str_ITEM_802cc66c);
+            marker = strstr(dst, (words + 0x64));
             if (marker != 0) {
                 prefix = strlen(dst) - strlen(marker);
                 strncpy(buffer, dst, prefix);
@@ -732,21 +722,21 @@ void unk_800d1364(char* dst, char* value) {
                 strcat(buffer, value);
                 strcat(buffer, marker + 6);
             }
-        } else if ((marker = strstr(dst, str_Un_ITEM_802cc6ec)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0xE4))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
             strcat(buffer, lbl_80416418[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 9);
-        } else if ((marker = strstr(dst, str_un_ITEM_802cc6f8)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0xF0))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
             strcat(buffer, lbl_80416424[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 9);
-        } else if ((marker = strstr(dst, str_ITEM_802cc66c)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0x64))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
@@ -763,9 +753,9 @@ void unk_800d1364(char* dst, char* value) {
             form = 2;
         } else if (strstr(value, str_FNA_80421864) != 0) {
             form = 3;
-        } else if (strstr(value, str_PLunos_802cc704) != 0) {
+        } else if (strstr(value, (words + 0xFC)) != 0) {
             form = 4;
-        } else if (strstr(value, str_PLunas_802cc710) != 0) {
+        } else if (strstr(value, (words + 0x108)) != 0) {
             form = 5;
         }
         marker = strstr(dst, str_un_80421854);
@@ -776,7 +766,7 @@ void unk_800d1364(char* dst, char* value) {
             strcat(buffer, lbl_80416448[form]);
             strcat(buffer, marker + 4);
             strcpy(dst, buffer);
-            marker = strstr(dst, str_ITEM_802cc66c);
+            marker = strstr(dst, (words + 0x64));
             if (marker != 0) {
                 prefix = strlen(dst) - strlen(marker);
                 strncpy(buffer, dst, prefix);
@@ -784,21 +774,21 @@ void unk_800d1364(char* dst, char* value) {
                 strcat(buffer, value);
                 strcat(buffer, marker + 6);
             }
-        } else if ((marker = strstr(dst, str_Un_ITEM_802cc6ec)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0xE4))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
             strcat(buffer, lbl_80416430[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 9);
-        } else if ((marker = strstr(dst, str_un_ITEM_802cc6f8)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0xF0))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
             strcat(buffer, lbl_80416448[form]);
             strcat(buffer, value);
             strcat(buffer, marker + 9);
-        } else if ((marker = strstr(dst, str_ITEM_802cc66c)) != 0) {
+        } else if ((marker = strstr(dst, (words + 0x64))) != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
             buffer[prefix] = 0;
@@ -806,7 +796,7 @@ void unk_800d1364(char* dst, char* value) {
             strcat(buffer, marker + 6);
         }
     } else if (language == 5) {
-        marker = strstr(dst, str_ITEM_802cc66c);
+        marker = strstr(dst, (words + 0x64));
         if (marker != 0) {
             prefix = strlen(dst) - strlen(marker);
             strncpy(buffer, dst, prefix);
@@ -814,13 +804,8 @@ void unk_800d1364(char* dst, char* value) {
             strcat(buffer, value);
             strcat(buffer, marker + 6);
         }
-    } else {
-        marker = strstr(dst, str_ITEM_802cc66c);
-        if (marker != 0) {
-            prefix = strlen(dst) - strlen(marker);
-            strncpy(buffer, dst, prefix); buffer[prefix] = 0;
-            strcat(buffer, value); strcat(buffer, marker + 6);
-        } else strcpy(buffer, dst);
+    } else if (language == 0) {
+        strcpy(buffer, dst);
     }
     strcpy(dst, buffer);
 }
@@ -869,25 +854,32 @@ void unk_800d0a4c(char* dst, char* value) {
     extern const char str_S_804217f8[], str_s_804217fc[];
     extern const char str_N_80421800[], str_X_80421804[], str_x_80421808[];
     char number[16];
+    char* numericMarker;
     char* marker;
+    u32 numericPrefix;
+    const char* words;
+    extern const char str_Einen_802cc608[], str_NUM_804217ec[], str_PCTd_804217f4[];
     u32 prefix;
     s32 count = (s32)value;
-    s32 language = *(s32*)((s32)gp + 0x14);
+    s32 language;
+    words = str_Einen_802cc608;
 
-    marker = strstr(dst, "<NUM>");
-    if (marker == 0) {
+    numericMarker = strstr(dst, "<NUM>");
+    if (numericMarker == 0) {
         return;
     }
-    prefix = strlen(dst) - strlen(marker);
-    strncpy(unk_803de0c8, dst, prefix);
-    unk_803de0c8[prefix] = 0;
+    numericPrefix = strlen(dst) - strlen(numericMarker);
+    strncpy(unk_803de0c8, dst, numericPrefix);
+    unk_803de0c8[numericPrefix] = 0;
     sprintf(number, "%d", count);
     strcat(unk_803de0c8, number);
-    strcat(unk_803de0c8, marker + 5);
+    strcat(unk_803de0c8, numericMarker + 5);
 
-    if (language == 0) {
-            strcpy(unk_803dd6c8, dst);
-    } else if (language == 1 || language == 4 || language == 6) {
+    language = *(s32*)((s32)gp + 0x16C);
+    switch (language) {
+    case 1:
+    case 4:
+    case 6:
             marker = strstr(unk_803de0c8, str_S_804217f8);
             if (marker != 0) {
                 prefix = strlen(unk_803de0c8) - strlen(marker);
@@ -904,33 +896,8 @@ void unk_800d0a4c(char* dst, char* value) {
                     strcat(unk_803dd6c8, marker + 3);
                 }
             }
-    } else if (language == 2) {
-            marker = strstr(unk_803de0c8, str_COIN_802cc618);
-            if (marker != 0) {
-                prefix = strlen(unk_803de0c8) - strlen(marker);
-                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
-                unk_803dd6c8[prefix] = 0;
-                strcat(unk_803dd6c8, count == 1 ? "M\x81nze" : "M\x81nzen");
-                strcat(unk_803dd6c8, marker + 6);
-            } else if ((marker = strstr(unk_803de0c8, str_POINT_802cc628)) != 0) {
-                prefix = strlen(unk_803de0c8) - strlen(marker);
-                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
-                unk_803dd6c8[prefix] = 0;
-                strcat(unk_803dd6c8, count == 1 ? str_Punkt_80421814 : str_Punkte_802cc630);
-                strcat(unk_803dd6c8, marker + 7);
-            } else if ((marker = strstr(unk_803de0c8, str_S_804217f8)) != 0) {
-                prefix = strlen(unk_803de0c8) - strlen(marker);
-                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
-                unk_803dd6c8[prefix] = 0;
-                if (count != 1) strcat(unk_803dd6c8, str_s_804217fc);
-                strcat(unk_803dd6c8, marker + 3);
-            } else if ((marker = strstr(unk_803de0c8, str_N_80421800)) != 0) {
-                prefix = strlen(unk_803de0c8) - strlen(marker);
-                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
-                unk_803dd6c8[prefix] = 0;
-                strcat(unk_803dd6c8, marker + 3);
-            }
-    } else if (language == 3) {
+        break;
+    case 3:
             marker = strstr(unk_803de0c8, str_X_80421804);
             if (marker != 0) {
                 prefix = strlen(unk_803de0c8) - strlen(marker);
@@ -950,31 +917,22 @@ void unk_800d0a4c(char* dst, char* value) {
                 unk_803dd6c8[prefix] = 0;
                 strcat(unk_803dd6c8, marker + 3);
             }
-    } else if (language == 5) {
-            marker = strstr(unk_803de0c8, str_COIN_802cc618);
+        break;
+    case 2:
+            marker = strstr(unk_803de0c8, (words + 16));
             if (marker != 0) {
                 prefix = strlen(unk_803de0c8) - strlen(marker);
                 strncpy(unk_803dd6c8, unk_803de0c8, prefix);
                 unk_803dd6c8[prefix] = 0;
-                strcat(unk_803dd6c8, count == 1 ? str_moneta_802cc638 : str_monete_802cc640);
+                if (count == 1) strcat(unk_803dd6c8, "M\x81nze");
+                else strcat(unk_803dd6c8, "M\x81nzen");
                 strcat(unk_803dd6c8, marker + 6);
-            } else if ((marker = strstr(unk_803de0c8, str_point_802cc648)) != 0) {
+            } else if ((marker = strstr(unk_803de0c8, (words + 32))) != 0) {
                 prefix = strlen(unk_803de0c8) - strlen(marker);
                 strncpy(unk_803dd6c8, unk_803de0c8, prefix);
                 unk_803dd6c8[prefix] = 0;
-                strcat(unk_803dd6c8, count == 1 ? str_punto_8042181c : str_punti_80421824);
-                strcat(unk_803dd6c8, marker + 7);
-            } else if ((marker = strstr(unk_803de0c8, str_POINT_802cc628)) != 0) {
-                prefix = strlen(unk_803de0c8) - strlen(marker);
-                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
-                unk_803dd6c8[prefix] = 0;
-                strcat(unk_803dd6c8, count == 1 ? str_Punto_8042182c : str_Punti_80421834);
-                strcat(unk_803dd6c8, marker + 7);
-            } else if ((marker = strstr(unk_803de0c8, str_OGGETTO_802cc650)) != 0) {
-                prefix = strlen(unk_803de0c8) - strlen(marker);
-                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
-                unk_803dd6c8[prefix] = 0;
-                strcat(unk_803dd6c8, count == 1 ? str_oggetto_802cc65c : str_oggtti_802cc664);
+                if (count == 1) strcat(unk_803dd6c8, str_Punkt_80421814);
+                else strcat(unk_803dd6c8, (words + 40));
                 strcat(unk_803dd6c8, marker + 7);
             } else if ((marker = strstr(unk_803de0c8, str_S_804217f8)) != 0) {
                 prefix = strlen(unk_803de0c8) - strlen(marker);
@@ -988,6 +946,53 @@ void unk_800d0a4c(char* dst, char* value) {
                 unk_803dd6c8[prefix] = 0;
                 strcat(unk_803dd6c8, marker + 3);
             }
+        break;
+    case 5:
+            marker = strstr(unk_803de0c8, (words + 16));
+            if (marker != 0) {
+                prefix = strlen(unk_803de0c8) - strlen(marker);
+                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+                unk_803dd6c8[prefix] = 0;
+                if (count == 1) strcat(unk_803dd6c8, (words + 48));
+                else strcat(unk_803dd6c8, (words + 56));
+                strcat(unk_803dd6c8, marker + 6);
+            } else if ((marker = strstr(unk_803de0c8, (words + 64))) != 0) {
+                prefix = strlen(unk_803de0c8) - strlen(marker);
+                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+                unk_803dd6c8[prefix] = 0;
+                if (count == 1) strcat(unk_803dd6c8, str_punto_8042181c);
+                else strcat(unk_803dd6c8, str_punti_80421824);
+                strcat(unk_803dd6c8, marker + 7);
+            } else if ((marker = strstr(unk_803de0c8, (words + 32))) != 0) {
+                prefix = strlen(unk_803de0c8) - strlen(marker);
+                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+                unk_803dd6c8[prefix] = 0;
+                if (count == 1) strcat(unk_803dd6c8, str_Punto_8042182c);
+                else strcat(unk_803dd6c8, str_Punti_80421834);
+                strcat(unk_803dd6c8, marker + 7);
+            } else if ((marker = strstr(unk_803de0c8, (words + 72))) != 0) {
+                prefix = strlen(unk_803de0c8) - strlen(marker);
+                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+                unk_803dd6c8[prefix] = 0;
+                if (count == 1) strcat(unk_803dd6c8, (words + 84));
+                else strcat(unk_803dd6c8, (words + 92));
+                strcat(unk_803dd6c8, marker + 7);
+            } else if ((marker = strstr(unk_803de0c8, str_S_804217f8)) != 0) {
+                prefix = strlen(unk_803de0c8) - strlen(marker);
+                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+                unk_803dd6c8[prefix] = 0;
+                if (count != 1) strcat(unk_803dd6c8, str_s_804217fc);
+                strcat(unk_803dd6c8, marker + 3);
+            } else if ((marker = strstr(unk_803de0c8, str_N_80421800)) != 0) {
+                prefix = strlen(unk_803de0c8) - strlen(marker);
+                strncpy(unk_803dd6c8, unk_803de0c8, prefix);
+                unk_803dd6c8[prefix] = 0;
+                strcat(unk_803dd6c8, marker + 3);
+            }
+        break;
+    case 0:
+            strcpy(unk_803dd6c8, dst);
+        break;
     }
     strcpy(dst, unk_803dd6c8);
 }

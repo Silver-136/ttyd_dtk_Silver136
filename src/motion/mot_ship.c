@@ -129,30 +129,54 @@ void marioReInit_ship(void) {
     void* ship;
     void* eff;
     s32 camId;
+    s32 zero = 0;
+    s32 negOne = -1;
+    f32 zeroA;
+    f32 zeroB;
 
     *(u32*)((s32)mario + 0xC) &= ~1;
     ship = __memAlloc(0, 0x48);
     *(void**)((s32)marioGetPtr() + 0x294) = ship;
     memset(*(void**)((s32)marioGetPtr() + 0x294), 0, 0x48);
-    *(u16*)((s32)mario + 0x2E) = 0x19;
-    *(f32*)((s32)mario + 0x9C) = float_neg15_80420f28;
-    *(s32*)((s32)mario + 0x44) = 0x32;
-    *(f32*)((s32)mario + 0x1B8) = float_40_80420eb0;
-    *(f32*)((s32)mario + 0x1BC) = float_40_80420eb0;
+    {
+        f32 initNeg = float_neg15_80420f28;
+        f32 initForty;
+        *(u16*)((s32)mario + 0x2E) = 0x19;
+        initForty = float_40_80420eb0;
+        *(f32*)((s32)mario + 0x9C) = initNeg;
+        *(s32*)((s32)mario + 0x44) = 0x32;
+        *(f32*)((s32)mario + 0x1B8) = initForty;
+        *(f32*)((s32)mario + 0x1BC) = initForty;
+    }
     marioPaperOn(paper_ship[marioGetColor()]);
     marioChgPaper(str_PM_H_1A_802c42d0);
     marioChgPose(str_M_Z_1_80420f14);
     *(u32*)((s32)mario + 0x4) |= 8;
     *(s32*)((s32)mario + 0x2BC) = 0x58;
     marioSetPaperAnimeLocalTime(*(u32*)((s32)mario + 0x2BC));
-    *(s32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x38) = -1;
-    *(s32*)*(s32*)((s32)marioGetPtr() + 0x294) = 0;
-    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 4) = float_0_80420eb8;
-    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x14) = float_0_80420eb8;
-    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x18) = float_0_80420eb8;
-    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x1C) = float_0_80420eb8;
-    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x20) = float_0_80420eb8;
-    *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 8) = float_0_80420eb8;
+    *(s32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x38) = negOne;
+    {
+        void* work = *(void**)((s32)marioGetPtr() + 0x294);
+        zeroA = float_0_80420eb8;
+        *(s32*)work = zero;
+        work = *(void**)((s32)marioGetPtr() + 0x294);
+        zeroB = float_0_80420eb8;
+        *(f32*)((s32)work + 4) = zeroA;
+        work = *(void**)((s32)marioGetPtr() + 0x294);
+        zeroA = float_0_80420eb8;
+        *(f32*)((s32)work + 0x14) = zeroB;
+        work = *(void**)((s32)marioGetPtr() + 0x294);
+        zeroB = float_0_80420eb8;
+        *(f32*)((s32)work + 0x18) = zeroA;
+        work = *(void**)((s32)marioGetPtr() + 0x294);
+        zeroA = float_0_80420eb8;
+        *(f32*)((s32)work + 0x1C) = zeroB;
+        work = *(void**)((s32)marioGetPtr() + 0x294);
+        zeroB = float_0_80420eb8;
+        *(f32*)((s32)work + 0x20) = zeroA;
+        work = *(void**)((s32)marioGetPtr() + 0x294);
+        *(f32*)((s32)work + 8) = zeroB;
+    }
     *(f32*)(*(s32*)((s32)marioGetPtr() + 0x294) + 0xC) = float_4p25_80420efc;
     eff = effFunemizuEntry(float_0_80420eb8, float_0_80420eb8, float_0_80420eb8, float_0_80420eb8, float_0_80420eb8, 0);
     *(void**)(*(s32*)((s32)marioGetPtr() + 0x294) + 0x24) = eff;
@@ -276,6 +300,10 @@ void mot_ship(void) {
     s32 n;
     u32 attr;
     u32 flags;
+    f32 initZeroA;
+    f32 initZeroB;
+    f32 initFour;
+    s32 initSound;
 
 #define P8(o) (*(u8*)((s32)player + (o)))
 #define PH16(o) (*(s16*)((s32)player + (o)))
@@ -283,10 +311,11 @@ void mot_ship(void) {
 #define P32(o) (*(s32*)((s32)player + (o)))
 #define PU32(o) (*(u32*)((s32)player + (o)))
 #define PF(o) (*(f32*)((s32)player + (o)))
-#define WP(o) (*(void**)((s32)work + (o)))
-#define W32(o) (*(s32*)((s32)work + (o)))
-#define WU32(o) (*(u32*)((s32)work + (o)))
-#define WF(o) (*(f32*)((s32)work + (o)))
+#define WORK() (*(void**)((s32)marioGetPtr() + 0x294))
+#define WP(o) (*(void**)((s32)WORK() + (o)))
+#define W32(o) (*(s32*)((s32)WORK() + (o)))
+#define WU32(o) (*(u32*)((s32)WORK() + (o)))
+#define WF(o) (*(f32*)((s32)WORK() + (o)))
 #define EFF(o) (*(f32*)((s32)*(void**)((s32)eff + 0x0C) + (o)))
 
     player = marioGetPtr();
@@ -299,24 +328,23 @@ void mot_ship(void) {
         *(void**)((s32)current + 0x294) = work;
         current = marioGetPtr();
         memset(*(void**)((s32)current + 0x294), 0, 0x48);
+        initSound = -1;
+        initZeroA = float_0_80420eb8;
         current = marioGetPtr();
-        *(s32*)((s32)*(void**)((s32)current + 0x294) + 0x38) = -1;
+        *(s32*)((s32)*(void**)((s32)current + 0x294) + 0x38) = initSound;
+        initZeroB = float_0_80420eb8;
         current = marioGetPtr();
-        *(f32*)((s32)*(void**)((s32)current + 0x294) + 0x20) = 0.0f;
+        *(f32*)((s32)*(void**)((s32)current + 0x294) + 0x20) = initZeroA;
+        initFour = 4.25f;
         current = marioGetPtr();
-        *(f32*)((s32)*(void**)((s32)current + 0x294) + 0x08) = 0.0f;
+        *(f32*)((s32)*(void**)((s32)current + 0x294) + 0x08) = initZeroB;
         current = marioGetPtr();
-        *(f32*)((s32)*(void**)((s32)current + 0x294) + 0x0C) = 4.25f;
+        *(f32*)((s32)*(void**)((s32)current + 0x294) + 0x0C) = initFour;
         P32(0x44) = 0;
         if ((PU32(0x0C) & 4U) == 0) {
             cam = camGetPtr(8);
             *(u16*)cam |= 0x200;
         }
-    }
-
-    work = *(void**)((s32)player + 0x294);
-    if (work == 0) {
-        return;
     }
 
     state = P32(0x44);
@@ -610,7 +638,7 @@ void mot_ship(void) {
         /* fallthrough */
 
     case 0x28:
-        if (work != 0 && ((u32)(W32(0x38) + 0x10000) != 0xFFFFU)) {
+        if (WORK() != 0 && ((u32)(W32(0x38) + 0x10000) != 0xFFFFU)) {
             psndSFXOff(W32(0x38));
             W32(0x38) = -1;
         }
@@ -799,8 +827,8 @@ void mot_ship(void) {
             allPartyRideOff();
             N_marioSetBottomlessRespawnPosOnBeroEntry((f64)PF(0x8C), (f64)PF(0x90), (f64)PF(0x94));
             N_marioReloadMapOnBottomlessOff();
-            if (work != 0) {
-                __memFree(0, work);
+            if (WORK() != 0) {
+                __memFree(0, WORK());
                 *(void**)((s32)player + 0x294) = 0;
             }
             if ((PU32(0x0C) & 4U) == 0) {
@@ -887,7 +915,7 @@ void mot_ship(void) {
                 EFF(0x14) = PF(0x1AC);
             }
             if ((PU16(0x24C) & 0x0A00) != 0) {
-                if (checkHarbor((f32*)((s32)work + 0x3C)) != 0) {
+                if (checkHarbor((f32*)((s32)WORK() + 0x3C)) != 0) {
                     P32(0x44) = 0x1E;
                 }
             }
@@ -916,6 +944,7 @@ void mot_ship(void) {
 #undef P32
 #undef PU32
 #undef PF
+#undef WORK
 #undef WP
 #undef W32
 #undef WU32
@@ -976,20 +1005,21 @@ void shipMove(void) {
     extern f32 float_0p2_80420ee8;
     u8* player;
     u8* ship;
-    f64 stick;
+    f32 max;
+    f32 stick;
     f32 moveX;
     f32 moveZ;
-    f64 x;
-    f64 z;
-    f64 targetX;
-    f64 targetZ;
-    f64 len;
-    f64 max;
+    f32 x;
+    f32 z;
+    f32 targetX;
+    f32 targetZ;
+    f32 len;
     f32* data;
 
     player = marioGetPtr();
     stick = *(f32*)(player+0x194);
     moveX = float_0_80420eb8;
+    moveZ = float_0_80420eb8;
     if (*(s32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x30) != 0) {
         ship = *(u8**)((u8*)marioGetPtr()+0x294);
         *(s32*)(ship+0x30) -= 1;
@@ -1000,6 +1030,7 @@ void shipMove(void) {
         *(f32*)(ship+0x14) += moveX;
         ship = *(u8**)((u8*)marioGetPtr()+0x294);
         *(f32*)(ship+0x18) += moveZ;
+        data = shipData;
         if (*(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14) > data[4]) {
             *(f32*)(*(u8**)((u8*)marioGetPtr()+0x294)+0x14) = data[4];
         }

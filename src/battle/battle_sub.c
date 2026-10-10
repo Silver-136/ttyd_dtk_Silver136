@@ -61,7 +61,20 @@ void btlMovePos(f32 distance, f32 angle, f32* moveXPos, f32* moveZPos) {
 }
 
 
-f32 intpl_sub(f32 outStart, f32 outEnd, u32 intplType, u32 inStart, u32 inEnd) {
+#pragma opt_common_subs off
+/*
+ * Candidate attempt for main/battle/battle_sub::intpl_sub
+ * Attempt: 1
+ * Template: none
+ * Generated: 2026-10-06T16:49:56
+ * Source file: C:\Users\tjone\Desktop\TTYD_Decomp_Work\us_decomp\ttyd_dtk\src\battle\battle_sub.c
+ * Extraction: found normal
+ * Source lines: 64-147
+ * Existing parked entry: intpl_sub=57.963856
+ *
+ * Edit this candidate file only. Test with auto_decomp_agent_v1_12_codex.ps1.
+ */
+f32 intpl_sub(f32 outStart, f32 outEnd, u32 intplType, s32 inStart, s32 inEnd) {
     extern double cos(double);
     extern double sin(double);
     extern f32 float_4_80422674;
@@ -72,80 +85,56 @@ f32 intpl_sub(f32 outStart, f32 outEnd, u32 intplType, u32 inStart, u32 inEnd) {
     extern f32 float_1_80422684;
     extern f32 float_0p5_80422688;
     extern f32 float_1p5708_8042268c;
-    f32 delta;
-    f32 remain;
     f32 value;
-    f32 wave;
-
-    delta = outEnd - outStart;
     switch (intplType) {
-        case 0:
-            value = outStart + ((f32)inStart * delta) / (f32)inEnd;
-            break;
-        case 1:
-            value = outStart + (delta * (f32)(inStart * inStart)) / (f32)(inEnd * inEnd);
-            break;
-        case 2:
-            value = outStart + (delta * (f32)(inStart * inStart * inStart)) /
-                                  (f32)(inEnd * inEnd * inEnd);
-            break;
-        case 3:
-            value = outStart + (delta * (f32)(inStart * inStart * inStart * inStart)) /
-                                  (f32)(inEnd * inEnd * inEnd * inEnd);
-            break;
-        case 4:
-            remain = (f32)(inEnd - inStart);
-            value = outStart + delta - (delta * remain * remain) / (f32)(inEnd * inEnd);
-            break;
-        case 5:
-            remain = (f32)(inEnd - inStart);
-            value = outStart + delta - (delta * remain * remain * remain) /
-                                        (f32)(inEnd * inEnd * inEnd);
-            break;
-        case 6:
-            remain = (f32)(inEnd - inStart);
-            value = outStart + delta - (delta * remain * remain * remain * remain) /
-                                        (f32)(inEnd * inEnd * inEnd * inEnd);
-            break;
-        case 7:
-            remain = (f32)(inEnd - inStart);
-            wave = (f32)cos(float_4_80422674 * float_3p1416_80422678 *
-                            ((f32)inStart / (f32)inEnd));
-            value = outEnd - (remain * remain * delta * wave) / ((f32)inEnd * (f32)inEnd);
-            break;
-        case 8:
-            remain = (f32)(inEnd - inStart);
-            wave = (f32)cos((float_4_80422674 * float_3p1416_80422678 *
-                             ((f32)(inStart * inStart) / (f32)inEnd)) / float_15_8042267c);
-            value = outEnd - (remain * remain * delta * wave) / ((f32)inEnd * (f32)inEnd);
-            break;
-        case 10:
-            remain = (f32)(inEnd - inStart);
-            wave = (f32)cos((float_4_80422674 * float_3p1416_80422678 *
-                             ((f32)(inStart * inStart) / (f32)inEnd)) / float_40_80422670);
-            value = (remain * remain * wave) / ((f32)inEnd * (f32)inEnd);
-            if (value < float_0_80422680) value = -value;
-            value = -(value * delta - outEnd);
-            break;
-        case 11:
-            wave = (f32)cos((float_3p1416_80422678 * (f32)inStart) / (f32)inEnd);
-            value = delta * (float_1_80422684 - wave) * float_0p5_80422688 + outStart;
-            break;
-        case 12:
-            wave = (f32)sin((float_1p5708_8042268c * (f32)inStart) / (f32)inEnd);
-            value = delta * wave + outStart;
-            break;
-        case 13:
-            wave = (f32)cos((float_1p5708_8042268c * (f32)inStart) / (f32)inEnd);
-            value = delta * (float_1_80422684 - wave) + outStart;
-            break;
-        default:
-            value = float_0_80422680;
-            break;
+    case 0:
+        value = outStart + ((f32)inStart * (outEnd - outStart)) / (f32)inEnd;
+        break;
+    case 1:
+        value = outStart + ((outEnd - outStart) * (f32)(inStart * inStart)) / (f32)(inEnd * inEnd);
+        break;
+    case 2:
+        value = outStart + ((outEnd - outStart) * (f32)(inStart * inStart * inStart)) / (f32)(inEnd * inEnd * inEnd);
+        break;
+    case 3:
+        value = outStart + ((outEnd - outStart) * (f32)(inStart * inStart * inStart * inStart)) / (f32)(inEnd * inEnd * inEnd * inEnd);
+        break;
+    case 7:
+        value = outEnd - ((f32)(inEnd - inStart) * ((f32)(inEnd - inStart) * ((outEnd - outStart) * (f32)cos(float_4_80422674 * (float_3p1416_80422678 * ((f32)inStart / (f32)inEnd)))))) / ((f32)inEnd * (f32)inEnd);
+        break;
+    case 8:
+        value = outEnd - ((f32)(inEnd - inStart) * ((f32)(inEnd - inStart) * ((outEnd - outStart) * (f32)cos((float_4_80422674 * (float_3p1416_80422678 * ((f32)(inStart * inStart) / (f32)inEnd))) / float_15_8042267c)))) / ((f32)inEnd * (f32)inEnd);
+        break;
+    case 4:
+        value = (outStart + (outEnd - outStart)) - ((outEnd - outStart) * (f32)((inEnd - inStart) * (inEnd - inStart))) / (f32)(inEnd * inEnd);
+        break;
+    case 5:
+        value = (outStart + (outEnd - outStart)) - ((outEnd - outStart) * (f32)((inEnd - inStart) * (inEnd - inStart) * (inEnd - inStart))) / (f32)(inEnd * inEnd * inEnd);
+        break;
+    case 6:
+        value = (outStart + (outEnd - outStart)) - ((outEnd - outStart) * (f32)((inEnd - inStart) * (inEnd - inStart) * (inEnd - inStart) * (inEnd - inStart))) / (f32)(inEnd * inEnd * inEnd * inEnd);
+        break;
+    case 10:
+        value = ((f32)(inEnd - inStart) * ((f32)(inEnd - inStart) * (f32)cos((float_4_80422674 * (float_3p1416_80422678 * ((f32)(inStart * inStart) / (f32)inEnd))) / float_40_80422670))) / ((f32)inEnd * (f32)inEnd);
+        if (value < float_0_80422680) value = -value;
+        value = -(value * (outEnd - outStart) - outEnd);
+        break;
+    case 11:
+        value = (outEnd - outStart) * (float_1_80422684 - (f32)cos((float_3p1416_80422678 * (f32)inStart) / (f32)inEnd)) * float_0p5_80422688 + outStart;
+        break;
+    case 12:
+        value = (outEnd - outStart) * (f32)sin((float_1p5708_8042268c * (f32)inStart) / (f32)inEnd) + outStart;
+        break;
+    case 13:
+        value = (outEnd - outStart) * (float_1_80422684 - (f32)cos((float_1p5708_8042268c * (f32)inStart) / (f32)inEnd)) + outStart;
+        break;
+    default:
+        value = float_0_80422680;
+        break;
     }
     return value;
 }
-
+#pragma opt_common_subs reset
 
 s32 BtlCompForwardLv(f32 position, s32 direction) {
     s32 level;
@@ -197,18 +186,17 @@ s32 BattleTransID(EventEntry* event, s32 type) {
     return type;
 }
 
+#pragma opt_propagation off
 void btlsubResetMoveColorLvAll(void* battleWork) {
-    s32 i;
-    s32 color;
+    s32 i = 0;
+    void* work = battleWork;
     void* unit;
-
-    color = 0xFF;
-
-    for (i = 0; i < 0x40; i++) {
-        unit = BattleGetUnitPtr(battleWork, i);
+    do {
+        unit = BattleGetUnitPtr(work, i);
         if (unit != 0) {
-            *(u8*)((s32)unit + 0x311) = color;
+            *(u8*)((s32)unit + 0x311) = 0xFF;
         }
-    }
+        i++;
+    } while (i < 0x40);
 }
-
+#pragma opt_propagation reset

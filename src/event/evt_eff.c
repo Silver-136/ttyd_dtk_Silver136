@@ -809,7 +809,7 @@ u8 evt_eff_fukidashi(s32 pEvt) {
     extern s32 marioGetPartyId(void);
     extern s32 marioGetExtraPartyId(void);
     extern void* partyGetPtr(s32);
-    extern s32 effFukidashiEntry(f64, f64, f64, f64, f64, s32, s32, s32, s32);
+    extern s32 effFukidashiEntry(f32, f32, f32, f32, f32, s32, s32, s32, s32);
     extern const char str_me_80420334[];
     extern const char zero_8042033c[];
     extern f32 float_0_80420330;
@@ -832,43 +832,49 @@ u8 evt_eff_fukidashi(s32 pEvt) {
     f32 h;
     s32 eff = 0;
 
-    if (type == 0) {
+    switch (type) {
+    case 0:
         ptr = marioGetPtr();
-        h = *(f32*)((s32)ptr + 0x1B8);
+        h = *(f32*)((s32)ptr + 0x1BC);
         eff = effFukidashiEntry(float_0_80420330, (float_2_80420328 * h) / float_3_8042032c,
                                 float_0_80420330, h / float_3_8042032c, scale,
                                 kind, duration, -1, flags);
-    } else if (type == 1) {
+        break;
+    case 1:
         if (strcmp(target, str_me_80420334) == 0) {
-            ptr = *(void**)((s32)pEvt + 0x174);
+            ptr = *(void**)((s32)pEvt + 0x170);
         } else {
             ptr = npcNameToPtr(target);
         }
-        h = *(f32*)((s32)ptr + 0xA4);
+        h = *(f32*)((s32)ptr + 0x150);
         eff = effFukidashiEntry(float_0_80420330, (float_2_80420328 * h) / float_3_8042032c,
                                 float_0_80420330, h / float_3_8042032c, scale,
                                 kind, duration, (s32)ptr, flags);
-    } else if (type == 2) {
+        break;
+    case 2:
         eff = effFukidashiEntry(x, y, z, w, scale, kind, duration, 0, flags);
-    } else if (type == 3) {
+        break;
+    case 3:
         ptr = partyGetPtr(marioGetPartyId());
         if (ptr != 0) {
-            h = *(f32*)((s32)ptr + 0xA4);
+            h = *(f32*)((s32)ptr + 0xF0);
             y = (float_2_80420328 * h) / float_3_8042032c;
-            if (*(s32*)((s32)ptr + 0x10) == 2) {
+            if (*(u8*)((s32)ptr + 0x31) == 5) {
                 y = float_30_80420338;
             }
             eff = effFukidashiEntry(float_0_80420330, y, float_0_80420330,
                                     h / float_3_8042032c, scale, kind, duration, -2, flags);
         }
-    } else if (type == 4) {
+        break;
+    case 4:
         ptr = partyGetPtr(marioGetExtraPartyId());
         if (ptr != 0) {
-            h = *(f32*)((s32)ptr + 0xA4);
+            h = *(f32*)((s32)ptr + 0xF0);
             eff = effFukidashiEntry(float_0_80420330, (float_2_80420328 * h) / float_3_8042032c,
                                     float_0_80420330, h / float_3_8042032c, scale,
                                     kind, duration, -3, flags);
         }
+        break;
     }
     if ((name != 0) && (strcmp(name, zero_8042033c) != 0) && (eff != 0)) {
         effSetName(eff, name);

@@ -461,29 +461,20 @@ s32 pressCheck(int param_1) {
     extern s32 kpaGetLevel(void);
     s32* args = *(s32**)(param_1 + 0x18);
     void* npc = evtNpcNameToPtr((void*)param_1, str_me_80421f30);
-    f32 a;
-    f32 b;
-    f32 c;
-    f32 radius = float_5_80421f84;
-    f32 d;
-    f32 e;
-    f32 f;
+    f32 a, b, c, radius, d, e, f;
     void* hit;
-
     if (kpaGetLevel() == 0) {
         evtSetValue((void*)param_1, args[0], 0);
         return 2;
     }
+    radius = float_5_80421f84;
     hit = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C),
-                         *(f32*)((s32)npc + 0x90) + float_1_80421f88,
+                         float_1_80421f88 + *(f32*)((s32)npc + 0x90),
                          *(f32*)((s32)npc + 0x94), float_0_80421f8c,
                          float_neg1_80421f90, float_0_80421f8c,
                          &a, &b, &c, &radius, &d, &e, &f);
-    if (hit != NULL) {
-        evtSetValue((void*)param_1, args[0], 1);
-    } else {
-        evtSetValue((void*)param_1, args[0], 0);
-    }
+    if (hit != NULL) evtSetValue((void*)param_1, args[0], 1);
+    else evtSetValue((void*)param_1, args[0], 0);
     return 2;
 }
 #pragma use_lmw_stmw reset
@@ -493,11 +484,13 @@ s32 pressCheck(int param_1) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _2d_dead_jump(EventEntry* event, s32 first) {
+    typedef struct Position { f32 x, y, z; } Position;
     extern void* evtNpcNameToPtr(EventEntry* event, const void* name);
     extern void PSVECSubtract(void* a, void* b, void* out);
     extern f32 angleABf(f32 x0, f32 z0, f32 x1, f32 z1);
     extern double sin(double);
     extern double cos(double);
+    extern double __fabs(double);
     extern f32 float_1000_80421fd0;
     extern f32 float_6p2832_80421fdc;
     extern f32 float_360_80421fe0;
@@ -536,55 +529,51 @@ s32 _2d_dead_jump(EventEntry* event, s32 first) {
         *(f32*)((s32)npc + 0x164) = x;
         *(f32*)((s32)npc + 0x168) = y;
         *(f32*)((s32)npc + 0x16C) = z;
-        *(u32*)((s32)npc + 0x158) = *(u32*)((s32)npc + 0x8C);
-        *(u32*)((s32)npc + 0x15C) = *(u32*)((s32)npc + 0x90);
-        *(u32*)((s32)npc + 0x160) = *(u32*)((s32)npc + 0x94);
+        *(Position*)((s32)npc + 0x158) = *(Position*)((s32)npc + 0x8C);
         PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), diff);
-        *(f32*)((s32)npc + 0x1AC) = angleABf(float_0_80421f8c, float_0_80421f8c, diff[0], diff[2]);
-        if (time <= float_0_80421f8c) {
-            *(f32*)((s32)npc + 0x1B0) = speed;
+        if (diff[0] * diff[0] + diff[2] * diff[2] > float_0_80421f8c) {
+            *(f32*)((s32)npc + 0x1AC) = angleABf(float_0_80421f8c, float_0_80421f8c, diff[0], diff[2]);
         } else {
-            f32 dx = x - *(f32*)((s32)npc + 0x8C);
-            if (dx < float_0_80421f8c) {
-                dx = -dx;
-            }
-            *(f32*)((s32)npc + 0x1B0) = dx / time;
+            *(f32*)((s32)npc + 0x1AC) = angleABf(float_0_80421f8c, float_0_80421f8c, diff[0], diff[2]);
+        }
+        if (time > float_0_80421f8c) {
+            *(f32*)((s32)npc + 0x1B0) = __fabs(x - *(f32*)((s32)npc + 0x8C)) / time;
+        } else {
+            *(f32*)((s32)npc + 0x1B0) = speed;
         }
         *(f32*)((s32)npc + 0x1C0) = float_0_80421f8c;
         *(f32*)((s32)npc + 0x1B8) = float_0_80421f8c;
         *(f32*)((s32)npc + 0x1C4) = float_0_80421f8c;
         *(f32*)((s32)npc + 0x1C8) = float_1_80421f88;
         dy = *(f32*)((s32)npc + 0x168) - *(f32*)((s32)npc + 0x15C);
-        if (height == float_0_80421f8c) {
-            if (float_0_80421f8c <= dy) {
-                return 1;
-            }
-        } else {
-            if (float_0_80421f8c < dy) {
-                h = height + dy;
+        if (height != float_0_80421f8c) {
+            if (dy > float_0_80421f8c) {
+                h += dy;
             }
             *(f32*)((s32)npc + 0x1C4) = float_0_80421f8c;
-            if (time == float_0_80421f8c) {
+            if (float_0_80421f8c == time) {
                 *(f32*)((s32)npc + 0x1C4) = height;
             } else {
+                f32 gravity = float_neg980_80421fd8;
                 f32 half = float_0p5_80421fd4 * time;
-                f32 accel = -(time * float_neg980_80421fd8 * *(f32*)((s32)npc + 0x1CC) * time) / time;
                 f32 denom;
-                *(f32*)((s32)npc + 0x1C4) = accel;
-                denom = accel * half + half * float_neg980_80421fd8 * *(f32*)((s32)npc + 0x1CC) * half;
+                *(f32*)((s32)npc + 0x1C4) = -(gravity * *(f32*)((s32)npc + 0x1CC) * time * time) / time;
+                denom = *(f32*)((s32)npc + 0x1C4) * half + gravity * *(f32*)((s32)npc + 0x1CC) * half * half;
                 if (float_0_80421f8c != denom) {
                     *(f32*)((s32)npc + 0x1C8) = h / denom;
                 }
             }
+        } else {
+            if (dy >= float_0_80421f8c) return 1;
         }
         return 0;
     }
 
 update:
-    *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * *(f32*)((s32)npc + 0x1B0) *
-                                     (f32)sin((float_6p2832_80421fdc * *(f32*)((s32)npc + 0x1AC)) / float_360_80421fe0);
-    *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * *(f32*)((s32)npc + 0x1B0) *
-                                     -(f32)cos((float_6p2832_80421fdc * *(f32*)((s32)npc + 0x1AC)) / float_360_80421fe0);
+    *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) *
+                                     (f32)sin((float_6p2832_80421fdc * *(f32*)((s32)npc + 0x1AC)) / float_360_80421fe0));
+    *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) *
+                                     -(f32)cos((float_6p2832_80421fdc * *(f32*)((s32)npc + 0x1AC)) / float_360_80421fe0));
     if (*(f32*)((s32)npc + 0x90) < floorY) {
         *(f32*)((s32)npc + 0x1B0) = float_0_80421f8c;
         *(f32*)((s32)npc + 0x1C4) = float_0_80421f8c;
@@ -622,6 +611,8 @@ s32 _2d_get_dead_jump_offset(int param_1) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 killer_make_name(void* pEvt) {
     extern s32 strlen(const char* str);
     static char name[32];
@@ -760,89 +751,85 @@ USER_FUNC(kamec_fire_magic_delete) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
 s32 chain_main(EventEntry* event) {
+    typedef struct Position { f32 x, y, z; } Position;
+    Position p0, p1, p2;
     extern f32 float_0p25_80421fc0;
     extern f32 float_10_80421fc4;
     extern f32 float_300_80421fc8;
     extern double sqrt(double);
+    char* strings = str_kemuri_test_802ed438;
     void* npc = evtNpcNameToPtr(event, str_me_80421f30);
     void* tail = *(void**)((s32)npc + 0x33C);
     f32 dx = *(f32*)((s32)npc + 0x8C) - *(f32*)((s32)tail + 0x8C);
     f32 dy = *(f32*)((s32)npc + 0x90) - *(f32*)((s32)tail + 0x90);
     f32 dz = *(f32*)((s32)npc + 0x94) - *(f32*)((s32)tail + 0x94);
-    f32 len = (f32)sqrt(dx * dx + dy * dy + dz * dz);
-    f32 step = len * float_0p25_80421fc0;
+    f32 step = (f32)sqrt(dz * dz + (dx * dx + dy * dy)) * float_0p25_80421fc0;
     f32 fall;
     s32 i;
     void* base;
-
-    if (step < float_10_80421fc4) {
-        step = float_10_80421fc4;
-    }
+    if (step < float_10_80421fc4) step = float_10_80421fc4;
     fall = float_300_80421fc8 / (step * step);
-
     {
         void* seg = *(void**)((s32)npc + 0x330);
-        f32 x = *(f32*)((s32)seg + 0x8C);
         f32 y = *(f32*)((s32)seg + 0x90) - fall;
+        f32 x = *(f32*)((s32)seg + 0x8C);
         f32 z = *(f32*)((s32)seg + 0x94);
         f32 vx = *(f32*)((s32)npc + 0x8C) - x;
-        f32 vy = *(f32*)((s32)npc + 0x90) - y;
         f32 vz = *(f32*)((s32)npc + 0x94) - z;
-        f32 dist = (f32)sqrt(vx * vx + vy * vy + vz * vz);
+        f32 vy = *(f32*)((s32)npc + 0x90) - y;
+        f32 dist = (f32)sqrt(vz * vz + (vx * vx + vy * vy));
         f32 scale = float_1_80421f88 - step / dist;
         y += vy * scale;
-        if (y < *(f32*)((s32)npc + 0x200)) {
-            y = *(f32*)((s32)npc + 0x200);
-        }
-        *(f32*)((s32)seg + 0x8C) = x + vx * scale;
-        *(f32*)((s32)seg + 0x90) = y;
-        *(f32*)((s32)seg + 0x94) = z + vz * scale;
+        x += vx * scale;
+        z += vz * scale;
+        if (y < *(f32*)((s32)npc + 0x200)) y = *(f32*)((s32)npc + 0x200);
+        p0 = *(Position*)(strings + 0x4B4);
+        p0.x = x; p0.y = y; p0.z = z;
+        *(Position*)((s32)seg + 0x8C) = p0;
     }
-
     base = npc;
     for (i = 0; i < 2; i++, base = (void*)((s32)base + 4)) {
-        void* prev = *(void**)((s32)base + 0x330);
         void* seg = *(void**)((s32)base + 0x334);
-        f32 x = *(f32*)((s32)seg + 0x8C);
+        void* prev = *(void**)((s32)base + 0x330);
         f32 y = *(f32*)((s32)seg + 0x90) - fall;
+        f32 x = *(f32*)((s32)seg + 0x8C);
         f32 z = *(f32*)((s32)seg + 0x94);
         f32 vx = *(f32*)((s32)prev + 0x8C) - x;
-        f32 vy = *(f32*)((s32)prev + 0x90) - y;
         f32 vz = *(f32*)((s32)prev + 0x94) - z;
-        f32 dist = (f32)sqrt(vx * vx + vy * vy + vz * vz);
+        f32 vy = *(f32*)((s32)prev + 0x90) - y;
+        f32 dist = (f32)sqrt(vz * vz + (vx * vx + vy * vy));
         f32 scale = float_1_80421f88 - step / dist;
-        y += vy * scale;
-        if (y < *(f32*)((s32)npc + 0x200)) {
-            y = *(f32*)((s32)npc + 0x200);
-        }
-        *(f32*)((s32)seg + 0x8C) = x + vx * scale;
-        *(f32*)((s32)seg + 0x90) = y;
-        *(f32*)((s32)seg + 0x94) = z + vz * scale;
+        y += vy * scale; x += vx * scale; z += vz * scale;
+        if (y < *(f32*)((s32)npc + 0x200)) y = *(f32*)((s32)npc + 0x200);
+        p1 = *(Position*)(strings + 0x4C0);
+        p1.x = x; p1.y = y; p1.z = z;
+        *(Position*)((s32)seg + 0x8C) = p1;
     }
-
     base = (void*)((s32)npc + 0xC);
-    for (i = 3; i > 0; i--, base = (void*)((s32)base - 4)) {
+    for (i = 3; i >= 1; i--, base = (void*)((s32)base - 4)) {
         void* seg = *(void**)((s32)base + 0x32C);
         void* prev = *(void**)((s32)base + 0x330);
-        f32 x = *(f32*)((s32)seg + 0x8C);
         f32 y = *(f32*)((s32)seg + 0x90) - fall;
+        f32 x = *(f32*)((s32)seg + 0x8C);
         f32 z = *(f32*)((s32)seg + 0x94);
         f32 vx = *(f32*)((s32)prev + 0x8C) - x;
-        f32 vy = *(f32*)((s32)prev + 0x90) - y;
         f32 vz = *(f32*)((s32)prev + 0x94) - z;
-        f32 dist = (f32)sqrt(vx * vx + vy * vy + vz * vz);
+        f32 vy = *(f32*)((s32)prev + 0x90) - y;
+        f32 dist = (f32)sqrt(vz * vz + (vx * vx + vy * vy));
         f32 scale = float_1_80421f88 - step / dist;
-        y += vy * scale;
-        if (y < *(f32*)((s32)npc + 0x200)) {
-            y = *(f32*)((s32)npc + 0x200);
-        }
-        *(f32*)((s32)seg + 0x8C) = x + vx * scale;
-        *(f32*)((s32)seg + 0x90) = y;
-        *(f32*)((s32)seg + 0x94) = z + vz * scale;
+        y += vy * scale; x += vx * scale; z += vz * scale;
+        if (y < *(f32*)((s32)npc + 0x200)) y = *(f32*)((s32)npc + 0x200);
+        p2 = *(Position*)(strings + 0x4CC);
+        p2.x = x; p2.y = y; p2.z = z;
+        *(Position*)((s32)seg + 0x8C) = p2;
     }
     return 2;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -901,6 +888,8 @@ s32 cliffCheck(int param_1) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 upperCheck(int param_1) {
     extern void* hitCheckFilter(s32 flags, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz,
                                 f32* outX, f32* outY, f32* outZ, f32* radius,
@@ -920,18 +909,24 @@ s32 upperCheck(int param_1) {
     void* hit2;
 
     hit1 = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C) - float_15_80421fb0,
-                          *(f32*)((s32)npc + 0x90) + float_30_80421fb4,
+                          float_30_80421fb4 + *(f32*)((s32)npc + 0x90),
                           *(f32*)((s32)npc + 0x94), float_0_80421f8c,
                           float_2_80421fb8, float_0_80421f8c,
                           &a, &b, &c, &radius, &d, &e, &f);
-    hit2 = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C) + float_15_80421fb0,
-                          *(f32*)((s32)npc + 0x90) + float_30_80421fb4,
+    hit2 = hitCheckFilter(0, float_15_80421fb0 + *(f32*)((s32)npc + 0x8C),
+                          float_30_80421fb4 + *(f32*)((s32)npc + 0x90),
                           *(f32*)((s32)npc + 0x94), float_0_80421f8c,
                           float_2_80421fb8, float_0_80421f8c,
                           &a, &b, &c, &radius, &d, &e, &f);
-    evtSetValue((void*)param_1, args[0], hit1 != NULL || hit2 != NULL);
+    if (hit1 != NULL || hit2 != NULL) {
+        evtSetValue((void*)param_1, args[0], 1);
+    } else {
+        evtSetValue((void*)param_1, args[0], 0);
+    }
     return 2;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(getSpdWalk) {
@@ -965,19 +960,22 @@ s32 limitSpd(int param_1) {
 }
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
+#pragma opt_common_subs off
 s32 zakoEntryDokan(EventEntry* event) {
+    typedef struct Position { f32 x, y, z; } Position;
     extern void* npcNameToPtr(const char* name);
     extern void* evtEntry(void* script, s32 order, u32 flags);
     extern void* marioGetPtr(void);
     extern char* hitGetName(void* hit);
     extern u32 vec3_802ed9a8[];
     extern f32 float_35_80421fac;
+    Position position;
     void* owner;
     void* npc;
     void* child;
     char mobjName[32];
-    char names[56];
+    char names[48];
     char* name;
     char* strings;
     void* mario;
@@ -1022,12 +1020,12 @@ s32 zakoEntryDokan(EventEntry* event) {
             *(u32*)npc &= ~0x20;
             *(u32*)((s32)npc + 0x1D4) |= 0x1002;
             *(u32*)((s32)npc + 0x1D4) &= 0xEFAFFFFB;
-            *(u32*)((s32)npc + 0x8C) = *(u32*)((s32)owner + 0x8C);
-            *(f32*)((s32)npc + 0x90) = *(f32*)((s32)owner + 0x90) - float_35_80421fac;
-            *(u32*)((s32)npc + 0x94) = *(u32*)((s32)owner + 0x94);
-            *(u32*)((s32)npc + 0xEC) = vec3_802ed9a8[0];
-            *(u32*)((s32)npc + 0xF0) = vec3_802ed9a8[1];
-            *(u32*)((s32)npc + 0xF4) = vec3_802ed9a8[2];
+            position = *(Position*)(strings + 0x564);
+            position.x = *(f32*)((s32)owner + 0x8C);
+            position.y = *(f32*)((s32)owner + 0x90) - float_35_80421fac;
+            position.z = *(f32*)((s32)owner + 0x94);
+            *(Position*)((s32)npc + 0x8C) = position;
+            *(Position*)((s32)npc + 0xEC) = *(Position*)(strings + 0x570);
             *(s32*)((s32)npc + 0x304) = 1;
             if (*(void**)((s32)npc + 0x124) == NULL) {
                 return 2;
@@ -1045,14 +1043,16 @@ s32 zakoEntryDokan(EventEntry* event) {
     return 2;
 }
 
+#pragma opt_common_subs reset
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma opt_common_subs off
 s32 dokanCheck(int param_1) {
     extern void* mobjNameToPtrNoAssert(char* name);
-    extern char str_mobj9_80421fa4[];
+    extern const char str_mobj9_80421fa4[6];
     char name[32];
     char* strings = str_kemuri_test_802ed438;
     s32* args = *(s32**)(param_1 + 0x18);
@@ -1073,20 +1073,24 @@ s32 dokanCheck(int param_1) {
     }
     return 2;
 }
+#pragma opt_common_subs reset
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
+#pragma opt_common_subs off
 s32 zakoEntryFall(EventEntry* event) {
+    typedef struct Position { f32 x, y, z; } Position;
     extern void* npcNameToPtr_NoAssert(const char* name);
     extern void* evtEntry(void* script, s32 order, u32 flags);
     extern u32 vec3_802ed9c0[];
-    extern const char str_none_80421f98[];
+    extern const char str_none_80421f98[5];
+    Position position;
     void* owner;
     void* npc;
     void* child;
-    char names[56];
+    char names[48];
     char* name;
     char* strings;
     s32 i;
@@ -1117,12 +1121,12 @@ s32 zakoEntryFall(EventEntry* event) {
             *(u32*)npc &= ~0x20;
             *(u32*)((s32)npc + 0x1D4) |= 0x1002;
             *(u32*)((s32)npc + 0x1D4) &= 0xEF8FFFFB;
-            *(u32*)((s32)npc + 0x8C) = *(u32*)((s32)owner + 0x8C);
-            *(u32*)((s32)npc + 0x90) = *(u32*)((s32)owner + 0x90);
-            *(u32*)((s32)npc + 0x94) = *(u32*)((s32)owner + 0x94);
-            *(u32*)((s32)npc + 0xEC) = vec3_802ed9c0[0];
-            *(u32*)((s32)npc + 0xF0) = vec3_802ed9c0[1];
-            *(u32*)((s32)npc + 0xF4) = vec3_802ed9c0[2];
+            position = *(Position*)(strings + 0x57C);
+            position.x = *(f32*)((s32)owner + 0x8C);
+            position.y = *(f32*)((s32)owner + 0x90);
+            position.z = *(f32*)((s32)owner + 0x94);
+            *(Position*)((s32)npc + 0x8C) = position;
+            *(Position*)((s32)npc + 0xEC) = *(Position*)(strings + 0x588);
             *(s32*)((s32)npc + 0x304) = 2;
             if (*(void**)((s32)npc + 0x124) != NULL) {
                 if (*(s32*)((s32)npc + 0x11C) != 0) {
@@ -1138,6 +1142,7 @@ s32 zakoEntryFall(EventEntry* event) {
     }
     return 2;
 }
+#pragma opt_common_subs reset
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
@@ -1203,6 +1208,8 @@ USER_FUNC(set_bottle_flag_init) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 gesso_ground_check(int param_1) {
     extern void* hitCheckFilter(s32 flags, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz,
                                 f32* outX, f32* outY, f32* outZ, f32* radius,
@@ -1217,14 +1224,20 @@ s32 gesso_ground_check(int param_1) {
     f32 e;
     f32 f;
     void* hit = hitCheckFilter(0, *(f32*)((s32)npc + 0x8C),
-                               *(f32*)((s32)npc + 0x90) + float_1_80421f88,
+                               float_1_80421f88 + *(f32*)((s32)npc + 0x90),
                                *(f32*)((s32)npc + 0x94), float_0_80421f8c,
                                float_neg1_80421f90, float_0_80421f8c,
                                &a, &b, &c, &radius, &d, &e, &f);
 
-    evtSetValue((void*)param_1, args[0], hit != NULL);
+    if (hit != NULL) {
+        evtSetValue((void*)param_1, args[0], 1);
+    } else {
+        evtSetValue((void*)param_1, args[0], 0);
+    }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 const char str_mario_80421f34[] = "mario";
 const char zero_80421f3c[] = "";

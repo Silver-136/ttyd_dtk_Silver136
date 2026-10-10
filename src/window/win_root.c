@@ -25,8 +25,65 @@ u8 enemy_monoshiri_sort_table[231] = {
     0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6,
 };
 
+/* Room-prefix strings used by the tattle lookup directory. */
+extern const char str_nara_80423264[];
+extern const char str_gor_8042326c[];
+extern const char str_tik_80423270[];
+extern const char str_shiga_80423274[];
+extern const char str_hei_8042327c[];
+extern const char str_nok_80423280[];
+extern const char str_stn_80423284[];
+extern const char str_gon_80423288[];
+extern const char str_win_8042328c[];
+extern const char str_hou_80423290[];
+extern const char str_mri_80423294[];
+extern const char str_tou_80423298[];
+extern const char str_usu_8042329c[];
+extern const char str_gra_804232a0[];
+extern const char str_jin_804232a4[];
+extern const char str_muj_804232a8[];
+extern const char str_dou_804232ac[];
+extern const char str_hom_804232b0[];
+extern const char str_eki_804232b4[];
+extern const char str_rsh_804232b8[];
+extern const char str_pik_804232bc[];
+extern const char str_sin_804232c0[];
+extern const char str_bom_804232c4[];
+extern const char str_moo_804232c8[];
+extern const char str_aji_804232cc[];
+extern const char str_las_804232d0[];
+
+char* tbl_1614[26] = {
+    (char*)str_nara_80423264,
+    (char*)str_gor_8042326c,
+    (char*)str_tik_80423270,
+    (char*)str_shiga_80423274,
+    (char*)str_hei_8042327c,
+    (char*)str_nok_80423280,
+    (char*)str_stn_80423284,
+    (char*)str_gon_80423288,
+    (char*)str_win_8042328c,
+    (char*)str_hou_80423290,
+    (char*)str_mri_80423294,
+    (char*)str_tou_80423298,
+    (char*)str_usu_8042329c,
+    (char*)str_gra_804232a0,
+    (char*)str_jin_804232a4,
+    (char*)str_muj_804232a8,
+    (char*)str_dou_804232ac,
+    (char*)str_hom_804232b0,
+    (char*)str_eki_804232b4,
+    (char*)str_rsh_804232b8,
+    (char*)str_pik_804232bc,
+    (char*)str_sin_804232c0,
+    (char*)str_bom_804232c4,
+    (char*)str_moo_804232c8,
+    (char*)str_aji_804232cc,
+    (char*)str_las_804232d0,
+};
+
 extern f32 float_neg1000_804233a0;
-void* sort_data[8];
+extern void* sort_data[8];
 void qqsort(void* base, s32 count, s32 size, void* compare);
 s32 pouchGetHaveItemCnt(void);
 s32 pouchGetHaveBadgeCnt(void);
@@ -110,7 +167,6 @@ extern char _tmp_1042[];
 void* battleGetUnitMonosiriPtr(s32 id);
 s32 sprintf(char* str, const char* format, ...);
 s32 evtGetValue(void* evt, s32 value);
-extern char* tbl_1614[];
 extern char str_menu_monosiri_PCTs_802f4d00[];
 extern char str_btl_un_hatena_802f4ce0[];
 extern char str_btl_un_rampell_802f4cf0[];
@@ -121,14 +177,23 @@ extern char str_msg_menu_mochimono_802f47f8[];
 extern char str_msg_menu_badge_802f480c[];
 extern char str_msg_menu_kiroku_802f481c[];
 char* msgHelp[5] = {
-    str_msg_menu_mario_802f47d8,
-    str_msg_menu_nakama_802f47e8,
-    str_msg_menu_mochimono_802f47f8,
-    str_msg_menu_badge_802f480c,
-    str_msg_menu_kiroku_802f481c,
+    "msg_menu_mario",
+    "msg_menu_nakama",
+    "msg_menu_mochimono",
+    "msg_menu_badge",
+    "msg_menu_kiroku",
 };
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
+#pragma optimize_for_size off
+#pragma opt_common_subs off
 s32 winRootMain(void* pWin) {
+    typedef struct RootBodyRecord {
+        s32 type;
+        f32 x, y;
+        s32 state, timer;
+    } RootBodyRecord;
     extern char _tmp_1042[];
     extern f32 float_185_804234b0;
     extern f32 float_neg1000_804233a0;
@@ -184,6 +249,7 @@ s32 winRootMain(void* pWin) {
     s32 duration;
     s32 i;
     char* help;
+    BOOL updateHelp;
     u16 lineWidth[2];
     u8* entry;
 
@@ -194,45 +260,45 @@ s32 winRootMain(void* pWin) {
 
         entry = w + 0x48 + *(s32*)(w + 0x44) * 0x18;
         *(s32*)(entry + 0x00) = 0;
-        *(f32*)(entry + 0x04) = 1000.0f;
-        *(f32*)(entry + 0x08) = 1000.0f;
         *(s32*)(entry + 0x0C) = 0;
+        *(f32*)(entry + 0x08) = 1000.0f;
+        *(f32*)(entry + 0x04) = 1000.0f;
         *(char**)(entry + 0x14) = msgHelp[0];
         (*(s32*)(w + 0x44))++;
 
-        if (swByteGet(0) > 6 || partyChkJoin(1) != 0) {
+        if ((s32)swByteGet(0) > 6 || partyChkJoin(1) != 0) {
             entry = w + 0x48 + *(s32*)(w + 0x44) * 0x18;
             *(s32*)(entry + 0x00) = 1;
-            *(f32*)(entry + 0x04) = 1000.0f;
-            *(f32*)(entry + 0x08) = 1000.0f;
-            *(s32*)(entry + 0x0C) = 0;
+        *(s32*)(entry + 0x0C) = 0;
+        *(f32*)(entry + 0x08) = 1000.0f;
+        *(f32*)(entry + 0x04) = 1000.0f;
             *(char**)(entry + 0x14) = msgHelp[1];
             (*(s32*)(w + 0x44))++;
         }
 
         entry = w + 0x48 + *(s32*)(w + 0x44) * 0x18;
         *(s32*)(entry + 0x00) = 2;
-        *(f32*)(entry + 0x04) = 1000.0f;
-        *(f32*)(entry + 0x08) = 1000.0f;
         *(s32*)(entry + 0x0C) = 0;
+        *(f32*)(entry + 0x08) = 1000.0f;
+        *(f32*)(entry + 0x04) = 1000.0f;
         *(char**)(entry + 0x14) = msgHelp[2];
         (*(s32*)(w + 0x44))++;
 
-        if (swByteGet(0) > 0x13 || pouchGetHaveBadgeCnt() != 0) {
+        if ((s32)swByteGet(0) > 0x13 || pouchGetHaveBadgeCnt() != 0) {
             entry = w + 0x48 + *(s32*)(w + 0x44) * 0x18;
             *(s32*)(entry + 0x00) = 3;
-            *(f32*)(entry + 0x04) = 1000.0f;
-            *(f32*)(entry + 0x08) = 1000.0f;
-            *(s32*)(entry + 0x0C) = 0;
+        *(s32*)(entry + 0x0C) = 0;
+        *(f32*)(entry + 0x08) = 1000.0f;
+        *(f32*)(entry + 0x04) = 1000.0f;
             *(char**)(entry + 0x14) = msgHelp[3];
             (*(s32*)(w + 0x44))++;
         }
 
         entry = w + 0x48 + *(s32*)(w + 0x44) * 0x18;
         *(s32*)(entry + 0x00) = 4;
-        *(f32*)(entry + 0x04) = 1000.0f;
-        *(f32*)(entry + 0x08) = 1000.0f;
         *(s32*)(entry + 0x0C) = 0;
+        *(f32*)(entry + 0x08) = 1000.0f;
+        *(f32*)(entry + 0x04) = 1000.0f;
         *(char**)(entry + 0x14) = msgHelp[4];
         (*(s32*)(w + 0x44))++;
 
@@ -294,8 +360,13 @@ s32 winRootMain(void* pWin) {
         *(f32*)(w + 0x16C) = float_neg1000_804233a0;
         *(f32*)(w + 0x170) = float_neg1000_804233a0;
         help = *(char**)(w + 0x48 + *(s32*)(w + 0x40) * 0x18 + 0x14);
-        if (help != 0 &&
-            (*(char**)(w + 0x144) != help || strcmp(_tmp_1042, help) != 0)) {
+        updateHelp = FALSE;
+            if (help != 0) {
+                if (*(char**)(w + 0x144) == help) {
+                    if (strcmp(_tmp_1042, help) != 0) updateHelp = TRUE;
+                } else updateHelp = TRUE;
+            }
+            if (updateHelp) {
             *(s32*)(w + 0x138) = 0;
             *(char**)(w + 0x13C) = help;
             *(char**)(w + 0x140) = 0;
@@ -379,29 +450,13 @@ s32 winRootMain(void* pWin) {
                 *(s32*)(w + 0x40) = *(s32*)(w + 0x44) - 1;
             }
 
-            *(u32*)(w + 0x110) = *(u32*)(w + 0xFC);
-            *(u32*)(w + 0x114) = *(u32*)(w + 0x100);
-            *(u32*)(w + 0x118) = *(u32*)(w + 0x104);
-            *(u32*)(w + 0x11C) = *(u32*)(w + 0x108);
-            *(u32*)(w + 0x120) = *(u32*)(w + 0x10C);
+            *(RootBodyRecord*)(w + 0x110) = *(RootBodyRecord*)(w + 0xFC);
 
-            *(u32*)(w + 0xFC) = *(u32*)(w + 0xE8);
-            *(u32*)(w + 0x100) = *(u32*)(w + 0xEC);
-            *(u32*)(w + 0x104) = *(u32*)(w + 0xF0);
-            *(u32*)(w + 0x108) = *(u32*)(w + 0xF4);
-            *(u32*)(w + 0x10C) = *(u32*)(w + 0xF8);
+            *(RootBodyRecord*)(w + 0xFC) = *(RootBodyRecord*)(w + 0xE8);
 
-            *(u32*)(w + 0xE8) = *(u32*)(w + 0xD4);
-            *(u32*)(w + 0xEC) = *(u32*)(w + 0xD8);
-            *(u32*)(w + 0xF0) = *(u32*)(w + 0xDC);
-            *(u32*)(w + 0xF4) = *(u32*)(w + 0xE0);
-            *(u32*)(w + 0xF8) = *(u32*)(w + 0xE4);
+            *(RootBodyRecord*)(w + 0xE8) = *(RootBodyRecord*)(w + 0xD4);
 
-            *(u32*)(w + 0xD4) = *(u32*)(w + 0xC0);
-            *(u32*)(w + 0xD8) = *(u32*)(w + 0xC4);
-            *(u32*)(w + 0xDC) = *(u32*)(w + 0xC8);
-            *(u32*)(w + 0xE0) = *(u32*)(w + 0xCC);
-            *(u32*)(w + 0xE4) = *(u32*)(w + 0xD0);
+            *(RootBodyRecord*)(w + 0xD4) = *(RootBodyRecord*)(w + 0xC0);
 
             *(f32*)(w + 0xC8) = 1000.0f;
             *(f32*)(w + 0xC4) = 1000.0f;
@@ -409,8 +464,13 @@ s32 winRootMain(void* pWin) {
             *(s32*)(w + 0xC0) = *(s32*)(w + 0x48 + *(s32*)(w + 0x40) * 0x18);
             *(f32*)(w + 0x158) = (f32)(*(s32*)(w + 0x40) * 105 - 270);
             help = *(char**)(w + 0x48 + *(s32*)(w + 0x40) * 0x18 + 0x14);
-            if (help != 0 &&
-                (*(char**)(w + 0x144) != help || strcmp(_tmp_1042, help) != 0)) {
+            updateHelp = FALSE;
+            if (help != 0) {
+                if (*(char**)(w + 0x144) == help) {
+                    if (strcmp(_tmp_1042, help) != 0) updateHelp = TRUE;
+                } else updateHelp = TRUE;
+            }
+            if (updateHelp) {
                 *(s32*)(w + 0x138) = 0;
                 *(char**)(w + 0x13C) = help;
                 *(char**)(w + 0x140) = 0;
@@ -428,29 +488,13 @@ s32 winRootMain(void* pWin) {
                 *(s32*)(w + 0x40) = 0;
             }
 
-            *(u32*)(w + 0x110) = *(u32*)(w + 0xFC);
-            *(u32*)(w + 0x114) = *(u32*)(w + 0x100);
-            *(u32*)(w + 0x118) = *(u32*)(w + 0x104);
-            *(u32*)(w + 0x11C) = *(u32*)(w + 0x108);
-            *(u32*)(w + 0x120) = *(u32*)(w + 0x10C);
+            *(RootBodyRecord*)(w + 0x110) = *(RootBodyRecord*)(w + 0xFC);
 
-            *(u32*)(w + 0xFC) = *(u32*)(w + 0xE8);
-            *(u32*)(w + 0x100) = *(u32*)(w + 0xEC);
-            *(u32*)(w + 0x104) = *(u32*)(w + 0xF0);
-            *(u32*)(w + 0x108) = *(u32*)(w + 0xF4);
-            *(u32*)(w + 0x10C) = *(u32*)(w + 0xF8);
+            *(RootBodyRecord*)(w + 0xFC) = *(RootBodyRecord*)(w + 0xE8);
 
-            *(u32*)(w + 0xE8) = *(u32*)(w + 0xD4);
-            *(u32*)(w + 0xEC) = *(u32*)(w + 0xD8);
-            *(u32*)(w + 0xF0) = *(u32*)(w + 0xDC);
-            *(u32*)(w + 0xF4) = *(u32*)(w + 0xE0);
-            *(u32*)(w + 0xF8) = *(u32*)(w + 0xE4);
+            *(RootBodyRecord*)(w + 0xE8) = *(RootBodyRecord*)(w + 0xD4);
 
-            *(u32*)(w + 0xD4) = *(u32*)(w + 0xC0);
-            *(u32*)(w + 0xD8) = *(u32*)(w + 0xC4);
-            *(u32*)(w + 0xDC) = *(u32*)(w + 0xC8);
-            *(u32*)(w + 0xE0) = *(u32*)(w + 0xCC);
-            *(u32*)(w + 0xE4) = *(u32*)(w + 0xD0);
+            *(RootBodyRecord*)(w + 0xD4) = *(RootBodyRecord*)(w + 0xC0);
 
             *(f32*)(w + 0xC8) = 1000.0f;
             *(f32*)(w + 0xC4) = 1000.0f;
@@ -458,8 +502,13 @@ s32 winRootMain(void* pWin) {
             *(s32*)(w + 0xC0) = *(s32*)(w + 0x48 + *(s32*)(w + 0x40) * 0x18);
             *(f32*)(w + 0x158) = (f32)(*(s32*)(w + 0x40) * 105 - 270);
             help = *(char**)(w + 0x48 + *(s32*)(w + 0x40) * 0x18 + 0x14);
-            if (help != 0 &&
-                (*(char**)(w + 0x144) != help || strcmp(_tmp_1042, help) != 0)) {
+            updateHelp = FALSE;
+            if (help != 0) {
+                if (*(char**)(w + 0x144) == help) {
+                    if (strcmp(_tmp_1042, help) != 0) updateHelp = TRUE;
+                } else updateHelp = TRUE;
+            }
+            if (updateHelp) {
                 *(s32*)(w + 0x138) = 0;
                 *(char**)(w + 0x13C) = help;
                 *(char**)(w + 0x140) = 0;
@@ -504,8 +553,13 @@ s32 winRootMain(void* pWin) {
             *(s32*)(w + 0x24) = 10;
 
             help = *(char**)(w + 0x48 + *(s32*)(w + 0x40) * 0x18 + 0x14);
-            if (help != 0 &&
-                (*(char**)(w + 0x144) != help || strcmp(_tmp_1042, help) != 0)) {
+            updateHelp = FALSE;
+            if (help != 0) {
+                if (*(char**)(w + 0x144) == help) {
+                    if (strcmp(_tmp_1042, help) != 0) updateHelp = TRUE;
+                } else updateHelp = TRUE;
+            }
+            if (updateHelp) {
                 *(s32*)(w + 0x138) = 0;
                 *(char**)(w + 0x13C) = help;
                 *(char**)(w + 0x140) = 0;
@@ -567,46 +621,48 @@ s32 winRootMain(void* pWin) {
         break;
     }
 
-    for (i = 0; i < 5; i++) {
-        entry = w + 0x48 + i * 0x18;
-        switch (*(s32*)(entry + 0x0C)) {
+    entry = w;
+    for (i = 0; i < 5; i++, entry += 0x18) {
+        switch (*(s32*)(entry + 0x54)) {
             case 0:
-                *(f32*)(entry + 0x04) = (f32)(-205 + i * 105);
-                *(f32*)(entry + 0x08) = 300.0f;
-                *(s32*)(entry + 0x10) = i * 4;
-                *(s32*)(entry + 0x0C) = 1;
+                *(f32*)(entry + 0x4C) = (f32)(-205 + i * 105);
+                *(f32*)(entry + 0x50) = 300.0f;
+                *(s32*)(entry + 0x58) = i * 4;
+                *(s32*)(entry + 0x54) += 1;
                 break;
             case 1:
             case 0xB:
-                *(s32*)(entry + 0x10) -= 1;
-                if (*(s32*)(entry + 0x10) < 0) {
-                    *(s32*)(entry + 0x10) = 0;
-                    *(s32*)(entry + 0x0C) += 1;
+                *(s32*)(entry + 0x58) -= 1;
+                if (*(s32*)(entry + 0x58) < 0) {
+                    *(s32*)(entry + 0x58) = 0;
+                    *(s32*)(entry + 0x54) += 1;
                 }
                 break;
             case 2:
                 duration = (*(s32*)((s32)gp + 4) * 10) / 60;
-                *(f32*)(entry + 0x08) = (f32)intplGetValue(
-                    300.0, 185.0, 0xB, *(s32*)(entry + 0x10), duration);
-                *(s32*)(entry + 0x10) += 1;
+                *(f32*)(entry + 0x50) = (f32)intplGetValue(
+                    300.0, 185.0, 0xB, *(s32*)(entry + 0x58), duration);
+                *(s32*)(entry + 0x58) += 1;
                 duration = (*(s32*)((s32)gp + 4) * 10) / 60;
-                if (*(s32*)(entry + 0x10) > duration) {
-                    *(s32*)(entry + 0x0C) += 1;
+                if (*(s32*)(entry + 0x58) > duration) {
+                    *(s32*)(entry + 0x54) += 1;
                 }
                 break;
             case 10:
-                *(s32*)(entry + 0x10) = (4 - i) * 4;
-                *(s32*)(entry + 0x0C) = 0xB;
+                *(s32*)(entry + 0x58) = (4 - i) * 4;
+                *(s32*)(entry + 0x54) += 1;
                 break;
             case 0xC:
                 duration = (*(s32*)((s32)gp + 4) * 10) / 60;
-                *(f32*)(entry + 0x08) = (f32)intplGetValue(
-                    180.0, 300.0, 0xB, *(s32*)(entry + 0x10), duration);
-                *(s32*)(entry + 0x10) += 1;
+                *(f32*)(entry + 0x50) = (f32)intplGetValue(
+                    180.0, 300.0, 0xB, *(s32*)(entry + 0x58), duration);
+                *(s32*)(entry + 0x58) += 1;
                 duration = (*(s32*)((s32)gp + 4) * 10) / 60;
-                if (*(s32*)(entry + 0x10) > duration) {
-                    *(s32*)(entry + 0x0C) += 1;
+                if (*(s32*)(entry + 0x58) > duration) {
+                    *(s32*)(entry + 0x54) += 1;
                 }
+                break;
+            case 0xD:
                 break;
         }
     }
@@ -620,51 +676,52 @@ s32 winRootMain(void* pWin) {
     winSortMain(pWin);
 
     if (*(s32*)(w + 0x24) < 0x14) {
-        f32 step = (float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468;
-        *(f32*)(w + 0x150) += (*(f32*)(w + 0x158) - *(f32*)(w + 0x150)) / step;
         if ((*(u16*)w & 0x4000) == 0) {
+            *(f32*)(w + 0x150) += (*(f32*)(w + 0x158) - *(f32*)(w + 0x150)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
             *(f32*)(w + 0x154) +=
                 ((*(f32*)(w + 0x15C) +
                   (*(f32*)(w + 0x48 + *(s32*)(w + 0x40) * 0x18 + 8) - float_185_804234b0)) -
-                 *(f32*)(w + 0x154)) / step;
+                 *(f32*)(w + 0x154)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
         } else {
+            *(f32*)(w + 0x150) += (*(f32*)(w + 0x158) - *(f32*)(w + 0x150)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
             *(f32*)(w + 0x154) +=
-                (*(f32*)(w + 0x15C) - *(f32*)(w + 0x154)) / step;
+                (*(f32*)(w + 0x15C) - *(f32*)(w + 0x154)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
         }
     } else if (*(f32*)(w + 0x154) <= float_180_80423460) {
-        f32 step = (float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468;
         *(f32*)(w + 0x150) +=
             ((*(f32*)(w + 0x158) + *(f32*)(w + 0xC4)) -
-             *(f32*)(w + 0x150)) / step;
+             *(f32*)(w + 0x150)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
         *(f32*)(w + 0x154) +=
-            (*(f32*)(w + 0x15C) - *(f32*)(w + 0x154)) / step;
+            (*(f32*)(w + 0x15C) - *(f32*)(w + 0x154)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
     } else {
-        f32 step = (float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468;
         *(f32*)(w + 0x150) +=
-            (*(f32*)(w + 0x158) - *(f32*)(w + 0x150)) / step;
+            (*(f32*)(w + 0x158) - *(f32*)(w + 0x150)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
         *(f32*)(w + 0x154) +=
             ((*(f32*)(w + 0x15C) +
               (*(f32*)(w + 0x48 + *(s32*)(w + 0x40) * 0x18 + 8) - float_185_804234b0)) -
-             *(f32*)(w + 0x154)) / step;
+             *(f32*)(w + 0x154)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
     }
 
     {
-        double phase = (double)*(u32*)((u8*)gp + 0x1C) *
-                       (double)float_0p125_804233d8;
+        double phase = (double)((f32)*(u32*)((u8*)gp + 0x1C) *
+                       float_0p125_804233d8);
         f32 wave = (f32)sin(phase);
         wave *= float_2_80423360;
         *(f32*)(w + 0x150) += (f32)fabs((double)wave);
     }
 
     {
-        f32 step = (float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468;
-        *(f32*)(w + 0x164) += (*(f32*)(w + 0x16C) - *(f32*)(w + 0x164)) / step;
-        *(f32*)(w + 0x168) += (*(f32*)(w + 0x170) - *(f32*)(w + 0x168)) / step;
+        *(f32*)(w + 0x164) += (*(f32*)(w + 0x16C) - *(f32*)(w + 0x164)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
+        *(f32*)(w + 0x168) += (*(f32*)(w + 0x170) - *(f32*)(w + 0x168)) / ((float_4_8042334c * (f32)*(s32*)((s32)gp + 4)) / float_60_80423468);
     }
 
     dispEntry(8, 0, (void*)unk_80152bdc, pWin, 1000.0f);
     return 0;
 }
+#pragma opt_common_subs reset
+#pragma optimize_for_size reset
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void winRootDisp(s32 cameraId, void* pWin) {
@@ -786,12 +843,14 @@ void winRootDisp(s32 cameraId, void* pWin) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma optimize_for_size off
 void winBgMain(void* pWin) {
-    extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 time, s32 duration);
+    extern f32 intplGetValue(s32 type, s32 time, s32 duration, f32 start, f32 end);
     extern f32 float_800_804234a4;
     extern f32 float_640_804234a8;
     extern f32 float_neg640_804234ac;
 
+    f32 start, end;
     s32 i = 0;
     s32 state;
     s32 timer;
@@ -800,25 +859,18 @@ void winBgMain(void* pWin) {
     void* entry = pWin;
 
     do {
-        state = *(s32*)((s32)entry + 0xCC);
-        switch (state) {
+        switch (*(s32*)((s32)entry + 0xCC)) {
             case 0:
                 *(f32*)((s32)entry + 0xC4) = float_800_804234a4;
                 *(f32*)((s32)entry + 0xC8) = float_0_80423338;
                 *(s32*)((s32)entry + 0xD0) = 0;
-                *(s32*)((s32)entry + 0xCC) = state + 1;
+                (*(s32*)((s32)entry + 0xCC))++;
                 break;
             case 1:
-                timer = *(s32*)((s32)entry + 0xD0);
-                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                start = float_800_804234a4; end = float_0_80423338;
+                *(f32*)((s32)entry + 0xC4) = intplGetValue(0xB, (*(s32*)((s32)entry + 0xD0))++, (*(s32*)((s32)gp + 4) << 4) / 60, start, end);
                 scaled = *(s32*)((s32)gp + 4) << 4;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
-                *(f32*)((s32)entry + 0xC4) =
-                    intplGetValue(float_800_804234a4, float_0_80423338, 0xB, timer, duration);
-                scaled = *(s32*)((s32)gp + 4) << 4;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
+                duration = scaled / 60;
                 if (*(s32*)((s32)entry + 0xD0) > duration) {
                     *(s32*)((s32)entry + 0xCC) = 100;
                 }
@@ -826,19 +878,13 @@ void winBgMain(void* pWin) {
             case 10:
                 *(f32*)((s32)entry + 0xC8) = float_0_80423338;
                 *(s32*)((s32)entry + 0xD0) = 0;
-                *(s32*)((s32)entry + 0xCC) = state + 1;
+                (*(s32*)((s32)entry + 0xCC))++;
                 break;
             case 11:
-                timer = *(s32*)((s32)entry + 0xD0);
-                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                start = float_0_80423338; end = float_800_804234a4;
+                *(f32*)((s32)entry + 0xC4) = intplGetValue(0xB, (*(s32*)((s32)entry + 0xD0))++, (*(s32*)((s32)gp + 4) << 4) / 60, start, end);
                 scaled = *(s32*)((s32)gp + 4) << 4;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
-                *(f32*)((s32)entry + 0xC4) =
-                    intplGetValue(float_0_80423338, float_800_804234a4, 0xB, timer, duration);
-                scaled = *(s32*)((s32)gp + 4) << 4;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
+                duration = scaled / 60;
                 if (*(s32*)((s32)entry + 0xD0) > duration) {
                     *(s32*)((s32)entry + 0xCC) = -1;
                 }
@@ -846,19 +892,13 @@ void winBgMain(void* pWin) {
             case 20:
                 *(f32*)((s32)entry + 0xC8) = float_0_80423338;
                 *(s32*)((s32)entry + 0xD0) = 0;
-                *(s32*)((s32)entry + 0xCC) = state + 1;
+                (*(s32*)((s32)entry + 0xCC))++;
                 break;
             case 21:
-                timer = *(s32*)((s32)entry + 0xD0);
-                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                start = float_640_804234a8; end = float_0_80423338;
+                *(f32*)((s32)entry + 0xC4) = intplGetValue(0xB, (*(s32*)((s32)entry + 0xD0))++, (*(s32*)((s32)gp + 4) * 0x18) / 60, start, end);
                 scaled = *(s32*)((s32)gp + 4) * 0x18;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
-                *(f32*)((s32)entry + 0xC4) =
-                    intplGetValue(float_640_804234a8, float_0_80423338, 0xB, timer, duration);
-                scaled = *(s32*)((s32)gp + 4) * 0x18;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
+                duration = scaled / 60;
                 if (*(s32*)((s32)entry + 0xD0) > duration) {
                     *(s32*)((s32)entry + 0xCC) = 100;
                 }
@@ -866,19 +906,13 @@ void winBgMain(void* pWin) {
             case 30:
                 *(f32*)((s32)entry + 0xC8) = float_0_80423338;
                 *(s32*)((s32)entry + 0xD0) = 0;
-                *(s32*)((s32)entry + 0xCC) = state + 1;
+                (*(s32*)((s32)entry + 0xCC))++;
                 break;
             case 31:
-                timer = *(s32*)((s32)entry + 0xD0);
-                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                start = float_neg640_804234ac; end = float_0_80423338;
+                *(f32*)((s32)entry + 0xC4) = intplGetValue(0xB, (*(s32*)((s32)entry + 0xD0))++, (*(s32*)((s32)gp + 4) * 0x18) / 60, start, end);
                 scaled = *(s32*)((s32)gp + 4) * 0x18;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
-                *(f32*)((s32)entry + 0xC4) =
-                    intplGetValue(float_neg640_804234ac, float_0_80423338, 0xB, timer, duration);
-                scaled = *(s32*)((s32)gp + 4) * 0x18;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
+                duration = scaled / 60;
                 if (*(s32*)((s32)entry + 0xD0) > duration) {
                     *(s32*)((s32)entry + 0xCC) = 100;
                 }
@@ -886,19 +920,13 @@ void winBgMain(void* pWin) {
             case 40:
                 *(f32*)((s32)entry + 0xC8) = float_0_80423338;
                 *(s32*)((s32)entry + 0xD0) = 0;
-                *(s32*)((s32)entry + 0xCC) = state + 1;
+                (*(s32*)((s32)entry + 0xCC))++;
                 break;
             case 41:
-                timer = *(s32*)((s32)entry + 0xD0);
-                *(s32*)((s32)entry + 0xD0) = timer + 1;
+                start = float_0_80423338; end = float_neg640_804234ac;
+                *(f32*)((s32)entry + 0xC4) = intplGetValue(0xB, (*(s32*)((s32)entry + 0xD0))++, (*(s32*)((s32)gp + 4) * 0x18) / 60, start, end);
                 scaled = *(s32*)((s32)gp + 4) * 0x18;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
-                *(f32*)((s32)entry + 0xC4) =
-                    intplGetValue(float_0_80423338, float_neg640_804234ac, 0xB, timer, duration);
-                scaled = *(s32*)((s32)gp + 4) * 0x18;
-                duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-                duration += (u32)duration >> 31;
+                duration = scaled / 60;
                 if (*(s32*)((s32)entry + 0xD0) > duration) {
                     *(s32*)((s32)entry + 0xCC) = -1;
                 }
@@ -910,6 +938,7 @@ void winBgMain(void* pWin) {
         entry = (void*)((s32)entry + 0x14);
     } while (i < 5);
 }
+#pragma optimize_for_size reset
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
 
@@ -917,28 +946,33 @@ void winBgMain(void* pWin) {
 void winBgGX(f32 x,f32 y,void* pWin,s32 type){
     extern void GXSetTevColor(s32,void*);extern void GXSetBlendMode(s32,s32,s32,s32);extern void GXSetZCompLoc(s32);extern void GXSetAlphaCompare(s32,s32,s32,s32,s32);extern void GXSetZMode(s32,s32,s32);extern void GXSetFog(s32,f32,f32,f32,f32,void*);extern void GXSetNumChans(s32);extern void GXSetChanCtrl(s32,s32,s32,s32,s32,s32,s32);extern void GXSetNumTevStages(s32);extern void GXSetTevOrder(s32,s32,s32,s32);extern void GXSetTevColorOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevAlphaOp(s32,s32,s32,s32,s32,s32);extern void GXSetTevColorIn(s32,s32,s32,s32,s32);extern void GXSetTevAlphaIn(s32,s32,s32,s32,s32);extern void GXSetTevSwapMode(s32,s32,s32);
     extern void PSMTXTrans(void*,f32,f32,f32);extern void PSMTXConcat(void*,void*,void*);extern void PSMTXScale(void*,f32,f32,f32);extern void* camGetPtr(s32);extern void GXLoadPosMtxImm(void*,s32);extern void GXLoadTexMtxImm(void*,s32,s32);extern void GXSetCurrentMtx(s32);extern void GXSetCullMode(s32);extern void GXClearVtxDesc(void);extern void GXSetVtxDesc(s32,s32);extern void GXSetVtxAttrFmt(s32,s32,s32,s32,s32);
-    extern void TEXGetGXTexObjFromPalette(void*,void*,s32);extern void GXInitTexObjLOD(void*,s32,s32,f32,f32,f32,s32,s32,s32);extern void GXLoadTexObj(void*,s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern s32 GXGetTexObjHeight(void*);extern s32 GXGetTexObjWidth(void*);extern void GXBegin(s32,s32,s32);extern volatile f32 DAT_cc008000;
+    extern void TEXGetGXTexObjFromPalette(void*,void*,s32);extern void GXInitTexObjLOD(void*,s32,s32,f32,f32,f32,s32,s32,s32);extern void GXLoadTexObj(void*,s32);extern void GXSetNumTexGens(s32);extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);extern u16 GXGetTexObjHeight(void*);extern u16 GXGetTexObjWidth(void*);extern void GXBegin(s32,s32,s32);extern volatile f32 DAT_cc008000;
     extern u32 dat_804231b8,dat_804231bc,dat_804231c0,dat_804231c4,dat_804231c8,dat_804231cc,dat_804231d0,dat_804231d4,dat_804231d8,dat_804231dc,dat_804231e0,dat_804231e4,dat_804231e8,dat_804231ec,dat_804231f0,dat_804231f4;
     extern f32 float_288_80423440, float_285_80423498;
     extern f32 float_144_8042349c, float_neg144_804234a0;
+    extern f32 float_neg285_8042348c, float_160_80423490, float_neg160_80423494;
+    extern f32 float_18_80423484, float_570_80423488, float_320_80423344;
     u32 texObj[8];f32 mtx[3][4];void* cam;void* file;void* tpl;f32 w,h;
-    if(type==0){u32 c1=dat_804231b8,c2=dat_804231bc,c3=dat_804231c0;GXSetTevColor(1,&c1);GXSetTevColor(2,&c2);GXSetTevColor(3,&c3);}
-    else if(type==1){u32 c1=dat_804231c4,c2=dat_804231c8,c3=dat_804231cc;GXSetTevColor(1,&c1);GXSetTevColor(2,&c2);GXSetTevColor(3,&c3);}
-    else if(type==2){u32 c1=dat_804231d0,c2=dat_804231d4,c3=dat_804231d8;GXSetTevColor(1,&c1);GXSetTevColor(2,&c2);GXSetTevColor(3,&c3);}
-    else if(type==3){u32 c1=dat_804231dc,c2=dat_804231e0,c3=dat_804231e4;GXSetTevColor(1,&c1);GXSetTevColor(2,&c2);GXSetTevColor(3,&c3);}
-    else if(type==4){u32 c1=dat_804231e8,c2=dat_804231ec,c3=dat_804231f0;GXSetTevColor(1,&c1);GXSetTevColor(2,&c2);GXSetTevColor(3,&c3);}
-    GXSetBlendMode(0,1,0,0);GXSetZCompLoc(0);GXSetAlphaCompare(6,0x80,1,0,0);GXSetZMode(0,7,0);GXSetFog(0,0.0f,0.0f,0.0f,0.0f,&dat_804231f4);GXSetNumChans(0);GXSetChanCtrl(4,0,0,0,0,0,2);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,15,15,15,2);GXSetTevAlphaIn(0,7,7,7,4);GXSetTevSwapMode(0,0,0);
+    switch(type) {
+    case 0: {u32 c1,c2,c3;c1=dat_804231b8;GXSetTevColor(1,&c1);c2=dat_804231bc;GXSetTevColor(2,&c2);c3=dat_804231c0;GXSetTevColor(3,&c3);break;}
+    case 1: {u32 c1,c2,c3;c1=dat_804231c4;GXSetTevColor(1,&c1);c2=dat_804231c8;GXSetTevColor(2,&c2);c3=dat_804231cc;GXSetTevColor(3,&c3);break;}
+    case 2: {u32 c1,c2,c3;c1=dat_804231d0;GXSetTevColor(1,&c1);c2=dat_804231d4;GXSetTevColor(2,&c2);c3=dat_804231d8;GXSetTevColor(3,&c3);break;}
+    case 3: {u32 c1,c2,c3;c1=dat_804231dc;GXSetTevColor(1,&c1);c2=dat_804231e0;GXSetTevColor(2,&c2);c3=dat_804231e4;GXSetTevColor(3,&c3);break;}
+    case 4: {u32 c1,c2,c3;c1=dat_804231e8;GXSetTevColor(1,&c1);c2=dat_804231ec;GXSetTevColor(2,&c2);c3=dat_804231f0;GXSetTevColor(3,&c3);break;}
+    }
+    GXSetBlendMode(0,1,0,0);GXSetZCompLoc(0);GXSetAlphaCompare(6,0x80,1,0,0);GXSetZMode(0,7,0);{u32 fog=dat_804231f4;GXSetFog(0,0.0f,0.0f,0.0f,0.0f,&fog);}GXSetNumChans(0);GXSetChanCtrl(4,0,0,0,0,0,2);GXSetNumTevStages(1);GXSetTevOrder(0,0,0,0xFF);GXSetTevColorOp(0,0,0,0,1,0);GXSetTevAlphaOp(0,0,0,0,1,0);GXSetTevColorIn(0,15,15,15,2);GXSetTevAlphaIn(0,7,7,7,4);GXSetTevSwapMode(0,0,0);
     PSMTXTrans(mtx,x,y+18.0f,0.0f);cam=camGetPtr(8);PSMTXConcat((void*)((s32)cam+0x11C),mtx,mtx);GXLoadPosMtxImm(mtx,0);GXSetCurrentMtx(0);GXSetCullMode(0);GXClearVtxDesc();GXSetVtxDesc(9,1);GXSetVtxDesc(13,1);GXSetVtxAttrFmt(0,9,1,4,0);GXSetVtxAttrFmt(0,13,1,4,0);
     file=*(void**)((s32)pWin+0x28);tpl=**(void***)((s32)file+0xA0);TEXGetGXTexObjFromPalette(tpl,texObj,7);GXInitTexObjLOD(texObj,0,0,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);h=(f32)GXGetTexObjHeight(texObj);w=(f32)GXGetTexObjWidth(texObj);PSMTXScale(mtx,570.0f/w,320.0f/h,1.0f);GXLoadTexMtxImm(mtx,0x1E,1);
-    GXBegin(0x80,0,4);DAT_cc008000=-285.0f;DAT_cc008000=160.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=-285.0f;DAT_cc008000=-160.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;DAT_cc008000=-160.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;DAT_cc008000=160.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;
-    GXBegin(0x80,0,4);DAT_cc008000=0.0f;DAT_cc008000=160.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=-160.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=1.0f;DAT_cc008000=float_285_80423498;DAT_cc008000=-160.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=float_285_80423498;DAT_cc008000=160.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;
+    GXBegin(0x80,0,4);*(volatile f32*)0xCC008000=-285.0f;*(volatile f32*)0xCC008000=160.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=-285.0f;*(volatile f32*)0xCC008000=-160.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=-160.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=160.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=0.0f;
+    GXBegin(0x80,0,4);*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=160.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=-160.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=float_285_80423498;*(volatile f32*)0xCC008000=-160.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=float_285_80423498;*(volatile f32*)0xCC008000=160.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;
     TEXGetGXTexObjFromPalette(tpl,texObj,6);GXInitTexObjLOD(texObj,0,0,0.0f,0.0f,0.0f,0,0,0);GXLoadTexObj(texObj,0);GXSetNumTexGens(1);GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);h=(f32)GXGetTexObjHeight(texObj);w=(f32)GXGetTexObjWidth(texObj);PSMTXScale(mtx,570.0f/w,float_288_80423440/h,1.0f);GXLoadTexMtxImm(mtx,0x1E,1);
     GXSetTevColorIn(0,4,6,8,15);GXSetTevAlphaIn(0,7,7,7,3);
-    GXBegin(0x80,0,4);DAT_cc008000=-285.0f;DAT_cc008000=float_144_8042349c;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=-285.0f;DAT_cc008000=float_neg144_804234a0;DAT_cc008000=0.0f;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=float_285_80423498;DAT_cc008000=float_neg144_804234a0;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=1.0f;DAT_cc008000=float_285_80423498;DAT_cc008000=float_144_8042349c;DAT_cc008000=0.0f;DAT_cc008000=1.0f;DAT_cc008000=0.0f;
+    GXBegin(0x80,0,4);*(volatile f32*)0xCC008000=-285.0f;*(volatile f32*)0xCC008000=float_144_8042349c;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=-285.0f;*(volatile f32*)0xCC008000=float_neg144_804234a0;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=float_285_80423498;*(volatile f32*)0xCC008000=float_neg144_804234a0;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=float_285_80423498;*(volatile f32*)0xCC008000=float_144_8042349c;*(volatile f32*)0xCC008000=0.0f;*(volatile f32*)0xCC008000=1.0f;*(volatile f32*)0xCC008000=0.0f;
 }
 
-u8 winMsgMain(void* pWin) {
-    extern double intplGetValue(double start, double end, s32 type, s32 time, s32 duration);
+#pragma optimize_for_size off
+void winMsgMain(void* pWin) {
+    extern f32 intplGetValue(s32 type, s32 time, s32 duration, f32 start, f32 end);
     extern u32 keyGetDirTrg(s32 controller);
     extern f32 float_neg800_8042347c;
     extern f32 float_neg170_80423480;
@@ -949,22 +983,23 @@ u8 winMsgMain(void* pWin) {
     s32 max;
 
     switch (*(s32*)((s32)pWin + 0x130)) {
-        case 0:
-            *(f32*)((s32)pWin + 0x128) = float_neg800_8042347c;
-            *(f32*)((s32)pWin + 0x12C) = float_neg170_80423480;
+        case 0: {
+            f32 x = float_neg800_8042347c;
+            f32 y = float_neg170_80423480;
+            *(f32*)((s32)pWin + 0x128) = x;
+            *(f32*)((s32)pWin + 0x12C) = y;
             *(s32*)((s32)pWin + 0x134) = 0;
             (*(s32*)((s32)pWin + 0x130))++;
             break;
+        }
         case 1:
             timer = *(s32*)((s32)pWin + 0x134);
             (*(s32*)((s32)pWin + 0x134))++;
             scaled = *(s32*)((s32)gp + 4) << 4;
-            duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-            duration += (u32)duration >> 31;
-            *(f32*)((s32)pWin + 0x128) = intplGetValue(float_neg800_8042347c, float_0_80423338, 0xB, timer, duration);
+            duration = scaled / 60;
+            *(f32*)((s32)pWin + 0x128) = intplGetValue(0xB, timer, duration, float_neg800_8042347c, float_0_80423338);
             scaled = *(s32*)((s32)gp + 4) << 4;
-            duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-            duration += (u32)duration >> 31;
+            duration = scaled / 60;
             if (*(s32*)((s32)pWin + 0x134) > duration) {
                 (*(s32*)((s32)pWin + 0x130))++;
             }
@@ -992,23 +1027,30 @@ u8 winMsgMain(void* pWin) {
             *(s32*)((s32)pWin + 0x134) = 0;
             (*(s32*)((s32)pWin + 0x130))++;
             break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 12:
+            break;
         case 11:
             timer = *(s32*)((s32)pWin + 0x134);
             (*(s32*)((s32)pWin + 0x134))++;
             scaled = *(s32*)((s32)gp + 4) << 4;
-            duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-            duration += (u32)duration >> 31;
-            *(f32*)((s32)pWin + 0x128) = intplGetValue(float_0_80423338, float_neg800_8042347c, 0xB, timer, duration);
+            duration = scaled / 60;
+            *(f32*)((s32)pWin + 0x128) = intplGetValue(0xB, timer, duration, float_0_80423338, float_neg800_8042347c);
             scaled = *(s32*)((s32)gp + 4) << 4;
-            duration = (__mulhw(0x88888889, scaled) + scaled) >> 5;
-            duration += (u32)duration >> 31;
+            duration = scaled / 60;
             if (*(s32*)((s32)pWin + 0x134) > duration) {
                 (*(s32*)((s32)pWin + 0x130))++;
             }
             break;
     }
-    return 0;
 }
+#pragma optimize_for_size reset
 
 void winMsgDisp(double x, double y, void* pWin) {
     extern void winNameGX(f32, f32, f32, f32, void*, s32);
@@ -1120,36 +1162,28 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
     extern u32 dat_80423218;
     extern char str_msg_menu_badge_nokor_802f4da8[];
     extern s32 FontGetMessageWidth(char* msg);
-    u32 texObj[8];
-    f32 texMtx[3][4];
+    u32 texObj0[8], texObj1[8], texObj2[8], texObj3[8];
+    u32 texObj4[8], texObj5[8], texObj6[8], texObj7[8];
     u32 texObjB0[8];
-    f32 texMtxB0[3][4];
     u32 texObjB1[8];
-    f32 texMtxB1[3][4];
     u32 texObjB2[8];
-    f32 texMtxB2[3][4];
     u32 texObjB3[8];
-    f32 texMtxB3[3][4];
     u32 texObjB4[8];
-    f32 texMtxB4[3][4];
     u32 texObjB5[8];
-    f32 texMtxB5[3][4];
     u32 texObjB6[8];
-    f32 texMtxB6[3][4];
     u32 texObjB7[8];
-    f32 texMtxB7[3][4];
     u32 texObjB8[8];
-    f32 texMtxB8[3][4];
     u32 texObjB9[8];
-    f32 texMtxB9[3][4];
     u32 texObjB10[8];
-    f32 texMtxB10[3][4];
     u32 texObjB11[8];
-    f32 texMtxB11[3][4];
     u32 texObjB12[8];
-    f32 texMtxB12[3][4];
     u32 texObjB13[8];
-    f32 texMtxB13[3][4];
+    f32 texMtx0[3][4], texMtx1[3][4], texMtx2[3][4], texMtx3[3][4];
+    f32 texMtx4[3][4], texMtx5[3][4], texMtx6[3][4], texMtx7[3][4];
+    f32 texMtxB0[3][4], texMtxB1[3][4], texMtxB2[3][4], texMtxB3[3][4];
+    f32 texMtxB4[3][4], texMtxB5[3][4], texMtxB6[3][4], texMtxB7[3][4];
+    f32 texMtxB8[3][4], texMtxB9[3][4], texMtxB10[3][4], texMtxB11[3][4];
+    f32 texMtxB12[3][4], texMtxB13[3][4];
     u32 fog = dat_80423218;
     f32 fx;
     f32 fy;
@@ -1182,246 +1216,246 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
     GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0);
     GXSetCurrentMtx(0);
     if (style == 0) {
-        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj, 0xB);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj0, 0xB);
+        GXInitTexObjLOD(texObj0, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        GXLoadTexObj(texObj0, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj),
-                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        PSMTXScale(texMtx0,
+                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj0),
+                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj0), 1.0f);
+        GXLoadTexMtxImm(texMtx0, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj, 9);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = (f32)y;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj1, 9);
+        GXInitTexObjLOD(texObj1, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        GXLoadTexObj(texObj1, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   ((f32)w - float_16_804233b8) / (f32)GXGetTexObjWidth(texObj),
-                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        PSMTXScale(texMtx1,
+                   ((f32)w - float_16_804233b8) / (f32)GXGetTexObjWidth(texObj1),
+                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj1), 1.0f);
+        GXLoadTexMtxImm(texMtx1, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w - float_8_80423370;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w - float_8_80423370;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj, 0xD);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj2, 0xD);
+        GXInitTexObjLOD(texObj2, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        GXLoadTexObj(texObj2, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj),
-                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        PSMTXScale(texMtx2,
+                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj2),
+                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj2), 1.0f);
+        GXLoadTexMtxImm(texMtx2, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + (f32)w - float_8_80423370;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + (f32)w - float_8_80423370;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj, 10);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w;
+        (*(volatile f32*)0xCC008000) = (f32)y;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj3, 10);
+        GXInitTexObjLOD(texObj3, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        GXLoadTexObj(texObj3, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj),
-                   ((f32)h - float_16_804233b8) / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        PSMTXScale(texMtx3,
+                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj3),
+                   ((f32)h - float_16_804233b8) / (f32)GXGetTexObjHeight(texObj3), 1.0f);
+        GXLoadTexMtxImm(texMtx3, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj, 8);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj4, 8);
+        GXInitTexObjLOD(texObj4, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        GXLoadTexObj(texObj4, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   ((f32)w - float_8_80423370) / (f32)GXGetTexObjWidth(texObj),
-                   ((f32)h - float_16_804233b8) / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        PSMTXScale(texMtx4,
+                   ((f32)w - float_8_80423370) / (f32)GXGetTexObjWidth(texObj4),
+                   ((f32)h - float_16_804233b8) / (f32)GXGetTexObjHeight(texObj4), 1.0f);
+        GXLoadTexMtxImm(texMtx4, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj, 0xC);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w;
+        (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj5, 0xC);
+        GXInitTexObjLOD(texObj5, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        GXLoadTexObj(texObj5, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj),
-                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        PSMTXScale(texMtx5,
+                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj5),
+                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj5), 1.0f);
+        GXLoadTexMtxImm(texMtx5, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - (f32)h;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj, 8);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj6, 8);
+        GXInitTexObjLOD(texObj6, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        GXLoadTexObj(texObj6, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   ((f32)w - float_16_804233b8) / (f32)GXGetTexObjWidth(texObj),
-                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        PSMTXScale(texMtx6,
+                   ((f32)w - float_16_804233b8) / (f32)GXGetTexObjWidth(texObj6),
+                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj6), 1.0f);
+        GXLoadTexMtxImm(texMtx6, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w - float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w - float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj, 0xE);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), texObj7, 0xE);
+        GXInitTexObjLOD(texObj7, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        GXLoadTexObj(texObj7, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj),
-                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
+        PSMTXScale(texMtx7,
+                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj7),
+                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj7), 1.0f);
+        GXLoadTexMtxImm(texMtx7, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + (f32)w - float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + (f32)w - float_8_80423370;
-        DAT_cc008000 = (f32)y - (f32)h;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w;
-        DAT_cc008000 = (f32)y - (f32)h;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + (f32)w;
-        DAT_cc008000 = (f32)y - (f32)h + float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + (f32)w;
+        (*(volatile f32*)0xCC008000) = (f32)y - (f32)h + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
     } else {
         /*
          * Reconstruct the target's complete message-dependent style-1 frame.
@@ -1456,26 +1490,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB0, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = fx;
-        DAT_cc008000 = fy;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = fx;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = fy;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = fx;
+        (*(volatile f32*)0xCC008000) = fy;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = fx;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = fy;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1491,26 +1525,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB1, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = fy;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = fy;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = fy;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = fy;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1526,26 +1560,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB2, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = fy;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = fy;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = fy;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = fy;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1561,26 +1595,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB3, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = fx;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = fx;
-        DAT_cc008000 = innerBottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = innerBottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = fx;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = fx;
+        (*(volatile f32*)0xCC008000) = innerBottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = innerBottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1596,26 +1630,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB4, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = innerBottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = innerBottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = innerTop;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = innerBottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = innerBottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = innerTop;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1631,26 +1665,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB5, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = fx;
-        DAT_cc008000 = innerBottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = fx;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = innerBottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = fx;
+        (*(volatile f32*)0xCC008000) = innerBottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = fx;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = innerBottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1666,26 +1700,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB6, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = innerBottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = innerLeft;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = innerBottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = innerBottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = innerLeft;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = innerBottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1701,26 +1735,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB7, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = notchStart;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = notchStart;
-        DAT_cc008000 = bottom - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart;
+        (*(volatile f32*)0xCC008000) = bottom - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1736,26 +1770,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB8, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = bottom - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = bottom - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1771,26 +1805,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB9, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = notchStart + float_8_80423370;
-        DAT_cc008000 = bottom - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = notchStart + float_8_80423370;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1806,26 +1840,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB10, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = bottom - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = bottom - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1841,26 +1875,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB11, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = notchStart + float_8_80423370;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = notchStart + float_8_80423370;
-        DAT_cc008000 = bottom - float_16_804233b8 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_16_804233b8 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8 - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8 - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1876,26 +1910,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB12, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = notchStart + float_16_804233b8;
-        DAT_cc008000 = bottom - float_16_804233b8 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = bottom - float_16_804233b8 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = notchStart + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8 - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8 - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
         TEXGetGXTexObjFromPalette(
             **(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),
@@ -1911,26 +1945,26 @@ void winKirinukiGX(double x, double y, double w, double h, void* pWin, s32 style
         GXLoadTexMtxImm(texMtxB13, 0x1E, 1);
         GXBegin(0x80, 0, 4);
 
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = right - float_8_80423370;
-        DAT_cc008000 = bottom - float_16_804233b8 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = bottom - float_16_804233b8 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = bottom - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = right - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8 - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8 - float_8_80423370;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = bottom - float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
 
     }
 }
@@ -1941,19 +1975,23 @@ void winNameGX(double x, double y, double width, double unusedHeight, void* pWin
     extern f32 float_16_804233b8;
     extern f32 float_24_8042339c;
     extern f32 float_32_80423378;
-    u32 color = dat_8042321c;
+    extern f32 float_0_80423338, float_1_80423340;
+    extern const double double_16_802f4cd8, double_32_802f4d18, double_8_802f4d08, double_24_802f4cc8;
+
+    u32 color;
     u32 tex0[8], tex1[8], tex2[8], tex3[8], tex4[8], tex5[8];
     f32 mtx0[3][4], mtx1[3][4], mtx2[3][4], mtx3[3][4], mtx4[3][4], mtx5[3][4];
-    void* fileData = **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0);
     void* camera;
-    f32 split;
+    f32 split, texHeight, texWidth, scaleX, scaleY;
+    double sizeX, sizeY;
 
     (void)unusedHeight;
     GXSetBlendMode(0, 1, 0, 0);
     GXSetZCompLoc(0);
     GXSetAlphaCompare(6, 0x80, 1, 0, 0);
     GXSetZMode(0, 7, 0);
-    GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &color);
+    color = dat_8042321c;
+    GXSetFog(0, float_0_80423338, float_0_80423338, float_0_80423338, float_0_80423338, &color);
     GXSetNumChans(0);
     GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
     GXSetNumTevStages(1);
@@ -1970,58 +2008,83 @@ GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
     GXSetCurrentMtx(0);
 
     if (type == 0) {
-        TEXGetGXTexObjFromPalette(fileData, tex0, 0x13);
-        GXInitTexObjLOD(tex0, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), tex0, 0x13);
+        GXInitTexObjLOD(tex0, 1, 1, float_0_80423338, float_0_80423338, float_0_80423338, 0, 0, 0);
         GXLoadTexObj(tex0, 0);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(mtx0, ((f32)width - 16.0f) / (f32)GXGetTexObjWidth(tex0),
-                    32.0f / (f32)GXGetTexObjHeight(tex0), 1.0f);
+        sizeY = __fabs(double_32_802f4d18);
+        sizeX = __fabsf((f32)(width - (double)float_16_804233b8));
+        texHeight = (f32)(u16)GXGetTexObjHeight(tex0);
+        scaleY = (f32)sizeY / texHeight;
+        texWidth = (f32)(u16)GXGetTexObjWidth(tex0);
+        scaleX = (f32)sizeX / texWidth;
+        PSMTXScale(mtx0, scaleX, scaleY, float_1_80423340);
         GXLoadTexMtxImm(mtx0, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        split = (f32)(x + (double)((f32)width - 16.0f));
-        DAT_cc008000=(f32)x; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=0.0f;
-        DAT_cc008000=(f32)x; DAT_cc008000=(f32)(y-(double)float_32_80423378); DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)(y-(double)float_32_80423378); DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=0.0f;
-        TEXGetGXTexObjFromPalette(fileData, tex1, 0x14);
-        GXInitTexObjLOD(tex1, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        split = (f32)(x + (double)(f32)(width - (double)float_16_804233b8));
+        (*(volatile f32*)0xCC008000)=(f32)x; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338;
+        (*(volatile f32*)0xCC008000)=(f32)x; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_32_80423378); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_32_80423378); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_0_80423338;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), tex1, 0x14);
+        GXInitTexObjLOD(tex1, 1, 1, float_0_80423338, float_0_80423338, float_0_80423338, 0, 0, 0);
         GXLoadTexObj(tex1, 0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
-        PSMTXScale(mtx1, 16.0f/(f32)GXGetTexObjWidth(tex1), 32.0f/(f32)GXGetTexObjHeight(tex1), 1.0f);
+        sizeY = __fabs(double_32_802f4d18); sizeX = __fabs(double_16_802f4cd8);
+        texHeight = (f32)(u16)GXGetTexObjHeight(tex1);
+        scaleY = (f32)sizeY / texHeight;
+        texWidth = (f32)(u16)GXGetTexObjWidth(tex1);
+        PSMTXScale(mtx1, 16.0f/texWidth, scaleY, float_1_80423340);
         GXLoadTexMtxImm(mtx1,0x1E,1); GXBegin(0x80,0,4);
-        split=(f32)(x+width)-16.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=0.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)(y-(double)float_32_80423378); DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split+16.0f; DAT_cc008000=(f32)(y-(double)float_32_80423378); DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split+16.0f; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=0.0f;
+        split=(f32)(x+width)-float_16_804233b8;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_32_80423378); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split+float_16_804233b8; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_32_80423378); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split+float_16_804233b8; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_0_80423338;
     } else if (type == 1) {
-        TEXGetGXTexObjFromPalette(fileData, tex2, 0x15);
-        GXInitTexObjLOD(tex2,1,1,0.0f,0.0f,0.0f,0,0,0); GXLoadTexObj(tex2,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
-        PSMTXScale(mtx2,((f32)width-16.0f)/(f32)GXGetTexObjWidth(tex2),32.0f/(f32)GXGetTexObjHeight(tex2),1.0f);
-        GXLoadTexMtxImm(mtx2,0x1E,1); GXBegin(0x80,0,4); split=(f32)(x+(double)((f32)width-16.0f));
-        DAT_cc008000=(f32)x; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=0.0f;
-        DAT_cc008000=(f32)x; DAT_cc008000=(f32)(y-(double)float_32_80423378); DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)(y-(double)float_32_80423378); DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=0.0f;
-        TEXGetGXTexObjFromPalette(fileData,tex3,0x16); GXInitTexObjLOD(tex3,1,1,0.0f,0.0f,0.0f,0,0,0); GXLoadTexObj(tex3,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
-        PSMTXScale(mtx3,16.0f/(f32)GXGetTexObjWidth(tex3),32.0f/(f32)GXGetTexObjHeight(tex3),1.0f); GXLoadTexMtxImm(mtx3,0x1E,1); GXBegin(0x80,0,4); split=(f32)(x+width)-16.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=0.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)(y-(double)float_32_80423378); DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split+16.0f; DAT_cc008000=(f32)(y-(double)float_32_80423378); DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split+16.0f; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=0.0f;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0), tex2, 0x15);
+        GXInitTexObjLOD(tex2,1,1,float_0_80423338,float_0_80423338,float_0_80423338,0,0,0); GXLoadTexObj(tex2,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        sizeY = __fabs(double_32_802f4d18); sizeX = __fabsf((f32)(width-(double)float_16_804233b8));
+        texHeight = (f32)(u16)GXGetTexObjHeight(tex2);
+        scaleY = (f32)sizeY / texHeight;
+        texWidth = (f32)(u16)GXGetTexObjWidth(tex2);
+        PSMTXScale(mtx2,(f32)sizeX/texWidth,scaleY,float_1_80423340);
+        GXLoadTexMtxImm(mtx2,0x1E,1); GXBegin(0x80,0,4); split=(f32)(x+(double)(f32)(width-(double)float_16_804233b8));
+        (*(volatile f32*)0xCC008000)=(f32)x; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338;
+        (*(volatile f32*)0xCC008000)=(f32)x; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_32_80423378); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_32_80423378); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_0_80423338;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),tex3,0x16); GXInitTexObjLOD(tex3,1,1,float_0_80423338,float_0_80423338,float_0_80423338,0,0,0); GXLoadTexObj(tex3,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        sizeY = __fabs(double_32_802f4d18); sizeX = __fabs(double_16_802f4cd8);
+        texHeight = (f32)(u16)GXGetTexObjHeight(tex3);
+        scaleY = (f32)sizeY / texHeight;
+        texWidth = (f32)(u16)GXGetTexObjWidth(tex3);
+        PSMTXScale(mtx3,(f32)sizeX/texWidth,scaleY,float_1_80423340); GXLoadTexMtxImm(mtx3,0x1E,1); GXBegin(0x80,0,4); split=(f32)(x+width)-float_16_804233b8;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_32_80423378); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split+float_16_804233b8; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_32_80423378); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split+float_16_804233b8; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_0_80423338;
     } else if (type == 2) {
-        TEXGetGXTexObjFromPalette(fileData,tex4,0x78); GXInitTexObjLOD(tex4,1,1,0.0f,0.0f,0.0f,0,0,0); GXLoadTexObj(tex4,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
-        PSMTXScale(mtx4,((f32)width-8.0f)/(f32)GXGetTexObjWidth(tex4),24.0f/(f32)GXGetTexObjHeight(tex4),1.0f); GXLoadTexMtxImm(mtx4,0x1E,1); GXBegin(0x80,0,4); split=(f32)(x+(double)((f32)width-8.0f));
-        DAT_cc008000=(f32)x; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=0.0f;
-        DAT_cc008000=(f32)x; DAT_cc008000=(f32)(y-(double)float_24_8042339c); DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)(y-(double)float_24_8042339c); DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=0.0f;
-        TEXGetGXTexObjFromPalette(fileData,tex5,0x79); GXInitTexObjLOD(tex5,1,1,0.0f,0.0f,0.0f,0,0,0); GXLoadTexObj(tex5,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
-        PSMTXScale(mtx5,8.0f/(f32)GXGetTexObjWidth(tex5),24.0f/(f32)GXGetTexObjHeight(tex5),1.0f); GXLoadTexMtxImm(mtx5,0x1E,1); GXBegin(0x80,0,4); split=(f32)(x+width)-8.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=0.0f;
-        DAT_cc008000=split; DAT_cc008000=(f32)(y-(double)float_24_8042339c); DAT_cc008000=0.0f; DAT_cc008000=0.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split+8.0f; DAT_cc008000=(f32)(y-(double)float_24_8042339c); DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=1.0f;
-        DAT_cc008000=split+8.0f; DAT_cc008000=(f32)y; DAT_cc008000=0.0f; DAT_cc008000=1.0f; DAT_cc008000=0.0f;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),tex4,0x78); GXInitTexObjLOD(tex4,1,1,float_0_80423338,float_0_80423338,float_0_80423338,0,0,0); GXLoadTexObj(tex4,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        sizeY = __fabs(double_24_802f4cc8); sizeX = __fabsf((f32)(width-(double)float_8_80423370));
+        texHeight = (f32)(u16)GXGetTexObjHeight(tex4);
+        scaleY = (f32)sizeY / texHeight;
+        texWidth = (f32)(u16)GXGetTexObjWidth(tex4);
+        PSMTXScale(mtx4,(f32)sizeX/texWidth,scaleY,float_1_80423340); GXLoadTexMtxImm(mtx4,0x1E,1); GXBegin(0x80,0,4); split=(f32)(x+(double)(f32)(width-(double)float_8_80423370));
+        (*(volatile f32*)0xCC008000)=(f32)x; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338;
+        (*(volatile f32*)0xCC008000)=(f32)x; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_24_8042339c); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_24_8042339c); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_0_80423338;
+        TEXGetGXTexObjFromPalette(**(void***)((u8*)*(void**)((u8*)pWin + 0x28) + 0xA0),tex5,0x79); GXInitTexObjLOD(tex5,1,1,float_0_80423338,float_0_80423338,float_0_80423338,0,0,0); GXLoadTexObj(tex5,0); GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        sizeY = __fabs(double_24_802f4cc8); sizeX = __fabs(double_8_802f4d08);
+        texHeight = (f32)(u16)GXGetTexObjHeight(tex5);
+        scaleY = (f32)sizeY / texHeight;
+        texWidth = (f32)(u16)GXGetTexObjWidth(tex5);
+        PSMTXScale(mtx5,(f32)sizeX/texWidth,scaleY,float_1_80423340); GXLoadTexMtxImm(mtx5,0x1E,1); GXBegin(0x80,0,4); split=(f32)(x+width)-float_8_80423370;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338;
+        (*(volatile f32*)0xCC008000)=split; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_24_8042339c); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split+float_8_80423370; (*(volatile f32*)0xCC008000)=(f32)(y-(double)float_24_8042339c); (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_1_80423340;
+        (*(volatile f32*)0xCC008000)=split+float_8_80423370; (*(volatile f32*)0xCC008000)=(f32)y; (*(volatile f32*)0xCC008000)=float_0_80423338; (*(volatile f32*)0xCC008000)=float_1_80423340; (*(volatile f32*)0xCC008000)=float_0_80423338;
     }
 }
 
@@ -2080,26 +2143,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                    height / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = left;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = left;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = right;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = right;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
     }
     TEXGetGXTexObjFromPalette(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
                               texObj, 0x28);
@@ -2112,26 +2175,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
     GXLoadTexMtxImm(texMtx, 0x1E, 1);
     GXBegin(0x80, 0, 4);
-    DAT_cc008000 = (f32)x;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = (f32)x;
-    DAT_cc008000 = (f32)y - float_8_80423370;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8;
-    DAT_cc008000 = (f32)y - float_8_80423370;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
     TEXGetGXTexObjFromPalette(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0), texObj, 0x2C);
     GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
     GXLoadTexObj(texObj, 0);
@@ -2141,26 +2204,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
     GXLoadTexMtxImm(texMtx, 0x1E, 1);
     GXBegin(0x80, 0, 4);
-    DAT_cc008000 = (f32)x + float_16_804233b8;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8;
-    DAT_cc008000 = (f32)y - float_8_80423370;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c;
-    DAT_cc008000 = (f32)y - float_8_80423370;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
     TEXGetGXTexObjFromPalette(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0), texObj, 0x26);
     GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
     GXLoadTexObj(texObj, 0);
@@ -2170,26 +2233,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                float_16_804233b8 / (f32)GXGetTexObjHeight(texObj), 1.0f);
     GXLoadTexMtxImm(texMtx, 0x1E, 1);
     GXBegin(0x80, 0, 4);
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c;
-    DAT_cc008000 = (f32)y - float_16_804233b8;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0;
-    DAT_cc008000 = (f32)y - float_16_804233b8;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
     TEXGetGXTexObjFromPalette(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0), texObj, 0x2D);
     GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
     GXLoadTexObj(texObj, 0);
@@ -2199,26 +2262,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
     GXLoadTexMtxImm(texMtx, 0x1E, 1);
     GXBegin(0x80, 0, 4);
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0;
-    DAT_cc008000 = (f32)y - float_8_80423370;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c;
-    DAT_cc008000 = (f32)y - float_8_80423370;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
     TEXGetGXTexObjFromPalette(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0), texObj, 0x2A);
     GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
     GXLoadTexObj(texObj, 0);
@@ -2228,26 +2291,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
     GXLoadTexMtxImm(texMtx, 0x1E, 1);
     GXBegin(0x80, 0, 4);
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c;
-    DAT_cc008000 = (f32)y - float_8_80423370;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c + float_16_804233b8;
-    DAT_cc008000 = (f32)y - float_8_80423370;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c + float_16_804233b8;
-    DAT_cc008000 = (f32)y;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c + float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = (f32)y - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8 + float_184_8042344c + float_48_804233f0 + float_184_8042344c + float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
     {
         f32 pageOffset = page == 0 ? 0.0f : float_32_80423378;
         f32 height = float_256_80423438 - pageOffset;
@@ -2262,26 +2325,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                    height / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
     }
     {
         f32 pageOffset = page == 0 ? 0.0f : float_32_80423378;
@@ -2298,26 +2361,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                    height / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = left;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = left;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_16_804233b8;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_16_804233b8;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
     }
     {
         f32 pageOffset = page == 0 ? 0.0f : float_32_80423378;
@@ -2334,26 +2397,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                    height / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = left;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = left;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_8_80423370;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_8_80423370;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_8_80423370;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
     }
     {
         f32 pageOffset = page == 0 ? 0.0f : float_32_80423378;
@@ -2368,26 +2431,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                    float_16_804233b8 / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = (f32)x + float_16_804233b8;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
     }
     {
         f32 pageOffset = page == 0 ? 0.0f : float_32_80423378;
@@ -2403,26 +2466,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                    float_16_804233b8 / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = left;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = left;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_184_8042344c;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_184_8042344c;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_184_8042344c;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_184_8042344c;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
     }
     {
         f32 pageOffset = page == 0 ? 0.0f : float_32_80423378;
@@ -2438,26 +2501,26 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                    float_24_8042339c / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = left;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = left;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_48_804233f0;
-        DAT_cc008000 = bottom;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_48_804233f0;
-        DAT_cc008000 = top;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = left;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_48_804233f0;
+        (*(volatile f32*)0xCC008000) = bottom;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_48_804233f0;
+        (*(volatile f32*)0xCC008000) = top;
+        (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f;
     }
     {
         f32 pageOffset = page == 0 ? 0.0f : float_32_80423378;
@@ -2473,14 +2536,14 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                    float_16_804233b8 / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = left; DAT_cc008000 = top; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = left; DAT_cc008000 = bottom; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f; DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_184_8042344c; DAT_cc008000 = bottom; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f; DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_184_8042344c; DAT_cc008000 = top; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f; DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = left; (*(volatile f32*)0xCC008000) = top; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = left; (*(volatile f32*)0xCC008000) = bottom; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f; (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_184_8042344c; (*(volatile f32*)0xCC008000) = bottom; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f; (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_184_8042344c; (*(volatile f32*)0xCC008000) = top; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f; (*(volatile f32*)0xCC008000) = 0.0f;
     }
     {
         f32 pageOffset = page == 0 ? 0.0f : float_32_80423378;
@@ -2496,14 +2559,14 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                    float_16_804233b8 / (f32)GXGetTexObjHeight(texObj), 1.0f);
         GXLoadTexMtxImm(texMtx, 0x1E, 1);
         GXBegin(0x80, 0, 4);
-        DAT_cc008000 = left; DAT_cc008000 = top; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = left; DAT_cc008000 = bottom; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f; DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_16_804233b8; DAT_cc008000 = bottom; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f; DAT_cc008000 = 1.0f;
-        DAT_cc008000 = left + float_16_804233b8; DAT_cc008000 = top; DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f; DAT_cc008000 = 0.0f;
+        (*(volatile f32*)0xCC008000) = left; (*(volatile f32*)0xCC008000) = top; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = left; (*(volatile f32*)0xCC008000) = bottom; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 0.0f; (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_16_804233b8; (*(volatile f32*)0xCC008000) = bottom; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f; (*(volatile f32*)0xCC008000) = 1.0f;
+        (*(volatile f32*)0xCC008000) = left + float_16_804233b8; (*(volatile f32*)0xCC008000) = top; (*(volatile f32*)0xCC008000) = 0.0f;
+        (*(volatile f32*)0xCC008000) = 1.0f; (*(volatile f32*)0xCC008000) = 0.0f;
     }
     for (row = 0; row < 4; row++) {
         for (column = 0; column < 4; column++) {
@@ -2522,69 +2585,78 @@ GXLoadPosMtxImm((u8*)camGetPtr(8) + 0x11C, 0); GXSetCurrentMtx(0);
                     msgSearch(str_msg_menu_sort_narabi_802f4da8));
 }
 
-void winHalfBookGX(double x, double y, void* file, s32 side) {
-    volatile u8 stackShape[0x370];
-    extern u32 dat_80423230;
-    extern u32 dat_80423234;
-    extern void GXSetChanMatColor(s32 channel, void* color);
-    extern u32 dat_8042322c;
-    extern f32 float_neg8_8042342c;
-    f32 mtx[3][4];
-    void* camera;
-    extern f32 float_8_80423370;
-    extern f32 float_248_80423424;
-    extern f32 float_256_80423438;
-    extern f32 float_320_80423344;
+#pragma optimize_for_size off
+void winHalfBookGX(double x,double y,void* file,s32 side) {
+    extern f32 float_0_80423338;
     extern f32 float_16_804233b8;
-    extern f32 float_328_80423444;
-    extern f32 float_48_804233f0;
-    extern f32 float_24_8042339c;
-    extern f32 float_40_804233bc;
+    extern f32 float_1_80423340;
     extern f32 float_200_8042341c;
     extern f32 float_240_80423380;
-    extern f32 float_32_80423378;
+    extern f32 float_248_80423424;
+    extern f32 float_24_8042339c;
+    extern f32 float_256_80423438;
     extern f32 float_272_80423428;
     extern f32 float_288_80423440;
+    extern f32 float_320_80423344;
+    extern f32 float_328_80423444;
+    extern f32 float_32_80423378;
+    extern f32 float_40_804233bc;
+    extern f32 float_48_804233f0;
+    extern f32 float_8_80423370;
     extern f32 float_neg16_8042343c;
-    u32 texObj[8];
-    f32 texMtx[3][4];
-    u32 texObj32[8];
-    f32 texMtx32[3][4];
-    u32 texObj36[8];
-    f32 texMtx36[3][4];
-    u32 texObj3A[8];
-    f32 texMtx3A[3][4];
-    u32 texObj38A[8];
-    f32 texMtx38A[3][4];
-    u32 texObj38B[8];
-    f32 texMtx38B[3][4];
-    u32 texObj39[8];
-    f32 texMtx39[3][4];
-    u32 texObj38C[8];
-    f32 texMtx38C[3][4];
-    u32 texObj38D[8];
-    f32 texMtx38D[3][4];
-    u32 texObj38E[8];
-    f32 texMtx38E[3][4];
-    u32 texObj3C[8];
-    f32 texMtx3C[3][4];
-    u32 fog = dat_8042322c;
+    extern f32 float_neg8_8042342c;
+    extern const double double_16_802f4cd8;
+    extern const double double_240_802f4d60;
+    extern const double double_248_802f4d58;
+    extern const double double_24_802f4cc8;
+    extern const double double_320_802f4d70;
+    extern const double double_40_802f4cd0;
+    extern const double double_48_802f4d30;
+    extern const double double_8_802f4d20;
+    extern const double double_neg16_802f4d78;
+    extern u32 dat_8042322c,dat_80423230,dat_80423234;
+    extern double fabs(double);
+    extern void GXSetChanMatColor(s32,void*);
+    f32 mtx[3][4];
+    void* camera;
+    u32 fog=dat_8042322c,color0,color1;
     s32 pass;
-
-    f32 x8 = (f32)((double)float_8_80423370 + x);
-    f32 x16 = (f32)((double)float_16_804233b8 + x);
-    f32 x32 = (f32)((double)float_32_80423378 + x);
-    f32 x272 = (f32)((double)float_272_80423428 + x);
-    f32 x288 = (f32)((double)float_288_80423440 + x);
-    f32 x320 = (f32)((double)float_320_80423344 + x);
-    f32 x328 = (f32)((double)float_328_80423444 + x);
-    f32 y8 = (f32)(y - (double)float_8_80423370);
-    f32 y16 = (f32)(y - (double)float_16_804233b8);
-    f32 y200 = (f32)(y - (double)float_200_8042341c);
-    f32 y256 = (f32)(y - (double)float_256_80423438);
-
-    stackShape[0] = (u8)side;
-
+    f32 fVar1,fVar2,fVar3,fVar4,fVar5,fVar6,fVar7,fVar8,fVar9,fVar10,fVar11,fVar12,fVar13,fVar14,fVar15;
+    double dVar19,dVar20;
+    f32 local_200,local_204,local_208,local_20c,local_210,local_214,local_218,local_21c,local_220,local_224,local_228,local_22c,local_230,local_234,local_238;
+    double local_168,local_188,local_198,local_1a8,local_1b8,local_1d8,local_1e8,local_1f0,local_1f8;
+    u32 texObj0[8];
+    f32 texMtx0[3][4];
+    u32 texObj1[8];
+    f32 texMtx1[3][4];
+    u32 texObj2[8];
+    f32 texMtx2[3][4];
+    u32 texObj3[8];
+    f32 texMtx3[3][4];
+    u32 texObj4[8];
+    f32 texMtx4[3][4];
+    u32 texObj5[8];
+    f32 texMtx5[3][4];
+    u32 texObj6[8];
+    f32 texMtx6[3][4];
+    u32 texObj7[8];
+    f32 texMtx7[3][4];
+    u32 texObj8[8];
+    f32 texMtx8[3][4];
+    u32 texObj9[8];
+    f32 texMtx9[3][4];
+    u32 texObj10[8];
+    f32 texMtx10[3][4];
+    u32 texObj11[8];
+    f32 texMtx11[3][4];
+    u32 texObj12[8];
+    f32 texMtx12[3][4];
+    u32 texObj13[8];
+    f32 texMtx13[3][4];
+    u32 texObj14[8];
+    f32 texMtx14[3][4];
+    u32 texObj15[8];
+    f32 texMtx15[3][4];
     GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fog);
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
@@ -2595,9 +2667,51 @@ void winHalfBookGX(double x, double y, void* file, s32 side) {
     GXClearVtxDesc();
     GXSetVtxDesc(9,1); GXSetVtxDesc(13,1);
     GXSetVtxAttrFmt(0,9,1,4,0); GXSetVtxAttrFmt(0,13,1,4,0);
+  dVar19 = (double)float_16_804233b8;
+  dVar20 = (double)float_8_80423370;
+  fVar1 = (f32)(dVar19 + x);
+  fVar9 = (f32)(y - dVar20);
+  fVar10 = (f32)(y - dVar19);
+  fVar14 = fVar1 + float_248_80423424;
+  fVar2 = (f32)((double)float_32_80423378 + x);
+  fVar11 = (f32)(y - (double)float_256_80423438);
+  local_22c = (f32)(dVar20 + (double)fVar14);
+  local_1f8 = fabs(double_24_802f4cc8);
+  fVar3 = (f32)((double)float_320_80423344 + x);
+  local_230 = (f32)((double)float_272_80423428 + x);
+  fVar4 = (f32)(dVar20 + x);
+  fVar5 = (f32)((double)fVar14 + (double)float_48_804233f0);
+  local_234 = (f32)((double)float_288_80423440 + x);
+  local_200 = (f32)((double)fVar4 + (double)float_320_80423344);
+  local_1e8 = (double)(f32)(y - (double)float_200_8042341c);
+  local_238 = (f32)((double)float_328_80423444 + x);
+  local_1f0 = fabs(double_48_802f4d30);
+  fVar15 = fVar9 - float_248_80423424;
+  fVar12 = (f32)((double)fVar10 - (double)float_240_80423380);
+  local_214 = (f32)((double)fVar2 + (double)float_240_80423380);
+  fVar13 = (f32)((double)fVar11 - dVar20);
+  local_204 = fVar5 + float_24_8042339c;
+  fVar6 = (f32)fabs(double_248_802f4d58);
+  fVar7 = (f32)fabs(double_8_802f4d20);
+  local_218 = (f32)((double)local_230 + dVar19);
+  fVar8 = (f32)fabs(double_16_802f4cd8);
+  local_208 = (f32)((double)local_22c + dVar19);
+  local_21c = (f32)((double)local_234 + dVar19);
+  local_220 = (f32)((double)fVar3 + (double)float_neg16_8042343c);
+  local_20c = (f32)(local_1e8 - (double)float_40_804233bc);
+  local_224 = (f32)((double)fVar3 + dVar19);
+  local_210 = (f32)((double)fVar2 + (double)float_neg16_8042343c);
+  local_228 = (f32)((double)local_238 + dVar20);
+  local_1d8 = (double)(f32)fabs(double_320_802f4d70);
+  local_1b8 = (double)(f32)local_1f0;
+  local_1a8 = (double)(f32)local_1f8;
+  local_198 = (double)(f32)fabs(double_240_802f4d60);
+  local_188 = (double)(f32)fabs(double_40_802f4cd0);
+  local_168 = (double)(f32)fabs(double_neg16_802f4d78);
     for (pass = 0; pass < 2; pass++) {
         if (pass == 0) {
-            GXSetChanMatColor(4, &dat_80423230);
+            color0=dat_80423230;
+            GXSetChanMatColor(4, &color0);
             GXSetBlendMode(1, 4, 5, 0);
             GXSetZCompLoc(1);
             GXSetAlphaCompare(7, 0, 0, 7, 0);
@@ -2608,7 +2722,8 @@ void winHalfBookGX(double x, double y, void* file, s32 side) {
             GXLoadPosMtxImm(mtx, 0);
             GXSetCurrentMtx(0);
         } else {
-            GXSetChanMatColor(4, &dat_80423234);
+            color1=dat_80423234;
+            GXSetChanMatColor(4, &color1);
             GXSetBlendMode(0, 1, 0, 0);
             GXSetZCompLoc(0);
             GXSetAlphaCompare(6, 0x80, 1, 0, 0);
@@ -2617,528 +2732,457 @@ void winHalfBookGX(double x, double y, void* file, s32 side) {
             GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
             GXSetCurrentMtx(0);
         }
-        TEXGetGXTexObjFromPalette(file, texObj, 0x33);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        TEXGetGXTexObjFromPalette(file,texObj0,0x33);
+        GXInitTexObjLOD(texObj0,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj0,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_320_80423344 / (f32)GXGetTexObjWidth(texObj),
-                   float_248_80423424 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = x8;
-        DAT_cc008000 = y8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = x8;
-        DAT_cc008000 = y256;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = x328;
-        DAT_cc008000 = y256;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = x328;
-        DAT_cc008000 = y8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(file, texObj, 0x28);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx0,local_1d8/(f32)(u16)GXGetTexObjWidth(texObj0),fVar6/(f32)(u16)GXGetTexObjHeight(texObj0),1.0f);
+        GXLoadTexMtxImm(texMtx0,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = fVar4;
+    (*(volatile f32*)0xCC008000) = fVar9;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = fVar4;
+    (*(volatile f32*)0xCC008000) = fVar15;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_200;
+    (*(volatile f32*)0xCC008000) = fVar15;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_200;
+    (*(volatile f32*)0xCC008000) = fVar9;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj1,0x28);
+        GXInitTexObjLOD(texObj1,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj1,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_16_804233b8 / (f32)GXGetTexObjWidth(texObj),
-                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = x16;
-        DAT_cc008000 = y8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(file, texObj, 0x35);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx1,fVar8/(f32)(u16)GXGetTexObjWidth(texObj1),fVar7/(f32)(u16)GXGetTexObjHeight(texObj1),1.0f);
+        GXLoadTexMtxImm(texMtx1,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = (f32)x;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = (f32)x;
+    (*(volatile f32*)0xCC008000) = fVar9;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar1;
+    (*(volatile f32*)0xCC008000) = fVar9;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar1;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj2,0x35);
+        GXInitTexObjLOD(texObj2,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj2,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_248_80423424 / (f32)GXGetTexObjWidth(texObj),
-                   float_8_80423370 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(file, texObj, 0x26);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx2,fVar6/(f32)(u16)GXGetTexObjWidth(texObj2),fVar7/(f32)(u16)GXGetTexObjHeight(texObj2),1.0f);
+        GXLoadTexMtxImm(texMtx2,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = fVar1;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = fVar1;
+    (*(volatile f32*)0xCC008000) = fVar9;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar14;
+    (*(volatile f32*)0xCC008000) = fVar9;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar14;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj3,0x26);
+        GXInitTexObjLOD(texObj3,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj3,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_48_804233f0 / (f32)GXGetTexObjWidth(texObj),
-                   float_16_804233b8 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424;
-        DAT_cc008000 = (f32)y - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424 + float_48_804233f0;
-        DAT_cc008000 = (f32)y - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424 + float_48_804233f0;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(file, texObj, 0x3B);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx3,local_1b8/(f32)(u16)GXGetTexObjWidth(texObj3),fVar8/(f32)(u16)GXGetTexObjHeight(texObj3),1.0f);
+        GXLoadTexMtxImm(texMtx3,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = fVar14;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = fVar14;
+    (*(volatile f32*)0xCC008000) = fVar10;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar5;
+    (*(volatile f32*)0xCC008000) = fVar10;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar5;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj4,0x3b);
+        GXInitTexObjLOD(texObj4,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj4,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_24_8042339c / (f32)GXGetTexObjWidth(texObj),
-                   float_16_804233b8 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424 + float_48_804233f0;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424 + float_48_804233f0;
-        DAT_cc008000 = (f32)y - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424 + float_48_804233f0 + float_24_8042339c;
-        DAT_cc008000 = (f32)y - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 + float_248_80423424 + float_48_804233f0 + float_24_8042339c;
-        DAT_cc008000 = (f32)y;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        TEXGetGXTexObjFromPalette(file, texObj, 0x30);
-        GXInitTexObjLOD(texObj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx4,local_1a8/(f32)(u16)GXGetTexObjWidth(texObj4),fVar8/(f32)(u16)GXGetTexObjHeight(texObj4),1.0f);
+        GXLoadTexMtxImm(texMtx4,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = fVar5;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = fVar5;
+    (*(volatile f32*)0xCC008000) = fVar10;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_204;
+    (*(volatile f32*)0xCC008000) = fVar10;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_204;
+    (*(volatile f32*)0xCC008000) = (f32)y;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj5,0x30);
+        GXInitTexObjLOD(texObj5,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj5,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx,
-                   float_8_80423370 / (f32)GXGetTexObjWidth(texObj),
-                   float_248_80423424 / (f32)GXGetTexObjHeight(texObj), 1.0f);
-        GXLoadTexMtxImm(texMtx, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-        /*
-         * Continue the target's adjacent fixed primitive family after the
-         * retained 0x30 left edge: lower-right edge (0x32), center lower
-         * strip (0x36), and lower-left cap (0x3A).
-         */
-        TEXGetGXTexObjFromPalette(file, texObj32, 0x32);
-        GXInitTexObjLOD(texObj32, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj32, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx5,fVar7/(f32)(u16)GXGetTexObjWidth(texObj5),fVar6/(f32)(u16)GXGetTexObjHeight(texObj5),1.0f);
+        GXLoadTexMtxImm(texMtx5,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = (f32)x;
+    (*(volatile f32*)0xCC008000) = fVar9;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = (f32)x;
+    (*(volatile f32*)0xCC008000) = fVar15;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar4;
+    (*(volatile f32*)0xCC008000) = fVar15;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar4;
+    (*(volatile f32*)0xCC008000) = fVar9;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj6,0x32);
+        GXInitTexObjLOD(texObj6,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj6,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx32,
-                   float_16_804233b8 / (f32)(u16)GXGetTexObjWidth(texObj32),
-                   float_240_80423380 / (f32)(u16)GXGetTexObjHeight(texObj32),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx32, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_16_804233b8 +
-                       float_248_80423424 + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 +
-                       float_248_80423424 + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_16_804233b8 -
-                       float_240_80423380;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 +
-                       float_248_80423424 + float_8_80423370 +
-                       float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_16_804233b8 -
-                       float_240_80423380;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 +
-                       float_248_80423424 + float_8_80423370 +
-                       float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
-        TEXGetGXTexObjFromPalette(file, texObj36, 0x36);
-        GXInitTexObjLOD(texObj36, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj36, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx6,fVar8/(f32)(u16)GXGetTexObjWidth(texObj6),local_198/(f32)(u16)GXGetTexObjHeight(texObj6),1.0f);
+        GXLoadTexMtxImm(texMtx6,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = local_22c;
+    (*(volatile f32*)0xCC008000) = fVar10;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = local_22c;
+    (*(volatile f32*)0xCC008000) = fVar12;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_208;
+    (*(volatile f32*)0xCC008000) = fVar12;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_208;
+    (*(volatile f32*)0xCC008000) = fVar10;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj7,0x36);
+        GXInitTexObjLOD(texObj7,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj7,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx36,
-                   float_248_80423424 / (f32)(u16)GXGetTexObjWidth(texObj36),
-                   float_40_804233bc / (f32)(u16)GXGetTexObjHeight(texObj36),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx36, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = x16;
-        DAT_cc008000 = y200;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_200_8042341c -
-                       float_40_804233bc;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 +
-                       float_248_80423424;
-        DAT_cc008000 = (f32)y - float_200_8042341c -
-                       float_40_804233bc;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8 +
-                       float_248_80423424;
-        DAT_cc008000 = (f32)y - float_200_8042341c;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
-        TEXGetGXTexObjFromPalette(file, texObj3A, 0x3A);
-        GXInitTexObjLOD(texObj3A, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj3A, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx7,fVar6/(f32)(u16)GXGetTexObjWidth(texObj7),local_188/(f32)(u16)GXGetTexObjHeight(texObj7),1.0f);
+        GXLoadTexMtxImm(texMtx7,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = fVar1;
+    (*(volatile f32*)0xCC008000) = (f32)local_1e8;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = fVar1;
+    (*(volatile f32*)0xCC008000) = local_20c;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar14;
+    (*(volatile f32*)0xCC008000) = local_20c;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar14;
+    (*(volatile f32*)0xCC008000) = (f32)local_1e8;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj8,0x3a);
+        GXInitTexObjLOD(texObj8,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj8,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx3A,
-                   float_16_804233b8 / (f32)(u16)GXGetTexObjWidth(texObj3A),
-                   float_8_80423370 / (f32)(u16)GXGetTexObjHeight(texObj3A),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx3A, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x;
-        DAT_cc008000 = (f32)y - float_256_80423438 -
-                       float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438 -
-                       float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
-        /* Complete the target's remaining fixed bottom/right primitive family. */
-        TEXGetGXTexObjFromPalette(file, texObj38A, 0x38);
-        GXInitTexObjLOD(texObj38A, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj38A, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx8,fVar8/(f32)(u16)GXGetTexObjWidth(texObj8),fVar7/(f32)(u16)GXGetTexObjHeight(texObj8),1.0f);
+        GXLoadTexMtxImm(texMtx8,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = (f32)x;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = (f32)x;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar1;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = fVar1;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj9,0x38);
+        GXInitTexObjLOD(texObj9,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj9,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx38A,
-                   float_16_804233b8 / (f32)(u16)GXGetTexObjWidth(texObj38A),
-                   float_8_80423370 / (f32)(u16)GXGetTexObjHeight(texObj38A),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx38A, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = x32;
-        DAT_cc008000 = y256;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_32_80423378;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
-        TEXGetGXTexObjFromPalette(file, texObj38B, 0x38);
-        GXInitTexObjLOD(texObj38B, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj38B, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx9,fVar8/(f32)(u16)GXGetTexObjWidth(texObj9),fVar7/(f32)(u16)GXGetTexObjHeight(texObj9),1.0f);
+        GXLoadTexMtxImm(texMtx9,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = fVar2;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = fVar2;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_210;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_210;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj10,0x38);
+        GXInitTexObjLOD(texObj10,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj10,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx38B,
-                   float_240_80423380 / (f32)(u16)GXGetTexObjWidth(texObj38B),
-                   float_8_80423370 / (f32)(u16)GXGetTexObjHeight(texObj38B),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx38B, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_32_80423378;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_32_80423378;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_272_80423428;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = x272;
-        DAT_cc008000 = y256;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
-        TEXGetGXTexObjFromPalette(file, texObj39, 0x39);
-        GXInitTexObjLOD(texObj39, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj39, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx10,local_198/(f32)(u16)GXGetTexObjWidth(texObj10),fVar7/(f32)(u16)GXGetTexObjHeight(texObj10),1.0f);
+        GXLoadTexMtxImm(texMtx10,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = fVar2;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = fVar2;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_214;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_214;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj11,0x39);
+        GXInitTexObjLOD(texObj11,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj11,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx39,
-                   float_16_804233b8 / (f32)(u16)GXGetTexObjWidth(texObj39),
-                   float_8_80423370 / (f32)(u16)GXGetTexObjHeight(texObj39),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx39, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_272_80423428;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_272_80423428;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_272_80423428 + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_272_80423428 + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
-        TEXGetGXTexObjFromPalette(file, texObj38C, 0x38);
-        GXInitTexObjLOD(texObj38C, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj38C, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx11,fVar8/(f32)(u16)GXGetTexObjWidth(texObj11),fVar7/(f32)(u16)GXGetTexObjHeight(texObj11),1.0f);
+        GXLoadTexMtxImm(texMtx11,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = local_230;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = local_230;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_218;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_218;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj12,0x38);
+        GXInitTexObjLOD(texObj12,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj12,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx38C,
-                   float_16_804233b8 / (f32)(u16)GXGetTexObjWidth(texObj38C),
-                   float_8_80423370 / (f32)(u16)GXGetTexObjHeight(texObj38C),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx38C, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = x288;
-        DAT_cc008000 = y256;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_288_80423440;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_288_80423440 + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_288_80423440 + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
-        TEXGetGXTexObjFromPalette(file, texObj38D, 0x38);
-        GXInitTexObjLOD(texObj38D, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj38D, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx12,fVar8/(f32)(u16)GXGetTexObjWidth(texObj12),fVar7/(f32)(u16)GXGetTexObjHeight(texObj12),1.0f);
+        GXLoadTexMtxImm(texMtx12,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = local_234;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = local_234;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_21c;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_21c;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj13,0x38);
+        GXInitTexObjLOD(texObj13,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj13,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx38D,
-                   float_16_804233b8 / (f32)(u16)GXGetTexObjWidth(texObj38D),
-                   float_8_80423370 / (f32)(u16)GXGetTexObjHeight(texObj38D),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx38D, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = x320;
-        DAT_cc008000 = y256;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_320_80423344;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_320_80423344 + float_neg16_8042343c;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_320_80423344 + float_neg16_8042343c;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
-        TEXGetGXTexObjFromPalette(file, texObj38E, 0x38);
-        GXInitTexObjLOD(texObj38E, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj38E, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx13,fVar8/(f32)(u16)GXGetTexObjWidth(texObj13),fVar7/(f32)(u16)GXGetTexObjHeight(texObj13),1.0f);
+        GXLoadTexMtxImm(texMtx13,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = fVar3;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = fVar3;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_220;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_220;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj14,0x38);
+        GXInitTexObjLOD(texObj14,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj14,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx38E,
-                   float_16_804233b8 / (f32)(u16)GXGetTexObjWidth(texObj38E),
-                   float_8_80423370 / (f32)(u16)GXGetTexObjHeight(texObj38E),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx38E, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = (f32)x + float_320_80423344;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_320_80423344;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_320_80423344 + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438 - float_8_80423370;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_320_80423344 + float_16_804233b8;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
-        TEXGetGXTexObjFromPalette(file, texObj3C, 0x3C);
-        GXInitTexObjLOD(texObj3C, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
-        GXLoadTexObj(texObj3C, 0);
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx14,fVar8/(f32)(u16)GXGetTexObjWidth(texObj14),fVar7/(f32)(u16)GXGetTexObjHeight(texObj14),1.0f);
+        GXLoadTexMtxImm(texMtx14,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = fVar3;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = fVar3;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_224;
+    (*(volatile f32*)0xCC008000) = fVar13;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_224;
+    (*(volatile f32*)0xCC008000) = fVar11;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+        TEXGetGXTexObjFromPalette(file,texObj15,0x3c);
+        GXInitTexObjLOD(texObj15,1,1,0.0f,0.0f,0.0f,0,0,0);
+        GXLoadTexObj(texObj15,0);
         GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(texMtx3C,
-                   float_8_80423370 / (f32)(u16)GXGetTexObjWidth(texObj3C),
-                   float_240_80423380 / (f32)(u16)GXGetTexObjHeight(texObj3C),
-                   1.0f);
-        GXLoadTexMtxImm(texMtx3C, 0x1E, 1);
-        GXBegin(0x80, 0, 4);
-        DAT_cc008000 = x328;
-        DAT_cc008000 = y16;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = (f32)x + float_328_80423444;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_328_80423444 + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_256_80423438;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = (f32)x + float_328_80423444 + float_8_80423370;
-        DAT_cc008000 = (f32)y - float_16_804233b8;
-        DAT_cc008000 = 0.0f;
-        DAT_cc008000 = 1.0f;
-        DAT_cc008000 = 0.0f;
-
+        GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
+        PSMTXScale(texMtx15,fVar7/(f32)(u16)GXGetTexObjWidth(texObj15),local_198/(f32)(u16)GXGetTexObjHeight(texObj15),1.0f);
+        GXLoadTexMtxImm(texMtx15,0x1E,1);
+        GXBegin(0x80,0,4);
+    (*(volatile f32*)0xCC008000) = local_238;
+    (*(volatile f32*)0xCC008000) = fVar10;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = local_238;
+    (*(volatile f32*)0xCC008000) = fVar12;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_228;
+    (*(volatile f32*)0xCC008000) = fVar12;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = local_228;
+    (*(volatile f32*)0xCC008000) = fVar10;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
+    (*(volatile f32*)0xCC008000) = float_1_80423340;
+    (*(volatile f32*)0xCC008000) = float_0_80423338;
     }
 }
+#pragma optimize_for_size reset
 
 void winMailGX(double x, double y, void* pWin) {
     extern u32 dat_80423238;
@@ -3359,13 +3403,38 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
     f32 texMtx10[3][4];
     u32 texObj11[8];
     f32 texMtx11[3][4];
-    f32 pos[3];
-    f32 scale[3];
-    f32 fontPos[3];
-    f32 fontScale[3];
-    f32 iconPos[3];
-    f32 iconScale[3];
-    u32 white = 0xFFFFFFFF;
+    extern const Vec3 vec3_802f4994, vec3_802f49a0;
+    extern const u32 dat_80423240;
+    Vec3 helperPos0, helperScale0;
+    u32 helperColor0;
+    extern const Vec3 vec3_802f49ac, vec3_802f49b8;
+    extern const u32 dat_80423244;
+    Vec3 helperPos1, helperScale1;
+    u32 helperColor1;
+    extern const Vec3 vec3_802f49c4, vec3_802f49d0;
+    extern const u32 dat_80423248;
+    Vec3 helperPos2, helperScale2;
+    u32 helperColor2;
+    extern const Vec3 vec3_802f49dc, vec3_802f49e8;
+    extern const u32 dat_8042324c;
+    Vec3 helperPos3, helperScale3;
+    u32 helperColor3;
+    extern const Vec3 vec3_802f49f4, vec3_802f4a00;
+    extern const u32 dat_80423250;
+    Vec3 helperPos4, helperScale4;
+    u32 helperColor4;
+    extern const Vec3 vec3_802f4a0c, vec3_802f4a18;
+    extern const u32 dat_80423254;
+    Vec3 helperPos5, helperScale5;
+    u32 helperColor5;
+    extern const Vec3 vec3_802f4a24, vec3_802f4a30;
+    extern const u32 dat_80423258;
+    Vec3 helperPos6, helperScale6;
+    u32 helperColor6;
+    extern const Vec3 vec3_802f4a3c, vec3_802f4a48;
+    extern const u32 dat_8042325c;
+    Vec3 helperPos7, helperScale7;
+    u32 helperColor7;
     u32 fog = dat_8042323c;
     char* sortText;
     f32 scrollY;
@@ -3457,29 +3526,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
             GXLoadTexMtxImm(texMtx0, 0x1E, 1);
             GXBegin(0x80, 0, 4);
 
-            DAT_cc008000 = (f32)x;
-            DAT_cc008000 = pageTop;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x;
+            (*(volatile f32*)0xCC008000) = pageTop;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
-            DAT_cc008000 = (f32)x;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
             TEXGetGXTexObjFromPalette(
                 **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -3495,29 +3564,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
             GXLoadTexMtxImm(texMtx1, 0x1E, 1);
             GXBegin(0x80, 0, 4);
 
-            DAT_cc008000 = (f32)x;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
-            DAT_cc008000 = (f32)x;
-            DAT_cc008000 = pageTop - float_56_80423354 - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354 - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_8_80423370;
-            DAT_cc008000 = pageTop - float_56_80423354 - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354 - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_8_80423370;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
             TEXGetGXTexObjFromPalette(
                 **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -3533,29 +3602,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
             GXLoadTexMtxImm(texMtx2, 0x1E, 1);
             GXBegin(0x80, 0, 4);
 
-            DAT_cc008000 = (f32)x + float_8_80423370;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
-            DAT_cc008000 = (f32)x + float_8_80423370;
-            DAT_cc008000 = pageTop - float_56_80423354 - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354 - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop - float_56_80423354 - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354 - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
             TEXGetGXTexObjFromPalette(
                 **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -3571,29 +3640,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
             GXLoadTexMtxImm(texMtx3, 0x1E, 1);
             GXBegin(0x80, 0, 4);
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354 + float_8_80423370;
-            DAT_cc008000 = pageTop - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354 + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354 + float_8_80423370;
-            DAT_cc008000 = pageTop;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354 + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
             TEXGetGXTexObjFromPalette(
                 **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -3609,29 +3678,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
             GXLoadTexMtxImm(texMtx4, 0x1E, 1);
             GXBegin(0x80, 0, 4);
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354 + float_8_80423370;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354 + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354 + float_8_80423370;
-            DAT_cc008000 = pageTop - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354 + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
             TEXGetGXTexObjFromPalette(
                 **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -3647,29 +3716,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
             GXLoadTexMtxImm(texMtx5, 0x1E, 1);
             GXBegin(0x80, 0, 4);
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354;
-            DAT_cc008000 = pageTop - float_56_80423354 - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354 - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354 + float_8_80423370;
-            DAT_cc008000 = pageTop - float_56_80423354 - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354 + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354 - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_56_80423354 + float_8_80423370;
-            DAT_cc008000 = pageTop - float_56_80423354;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_56_80423354 + float_8_80423370;
+            (*(volatile f32*)0xCC008000) = pageTop - float_56_80423354;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
             } else {
                 for (column = 0; column < 7; column++) {
@@ -3695,29 +3764,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
                         GXLoadTexMtxImm(texMtx6, 0x1E, 1);
                         GXBegin(0x80, 0, 4);
 
-                        DAT_cc008000 = left;
-                        DAT_cc008000 = top;
-                        DAT_cc008000 = 0.0f;
-                        DAT_cc008000 = 0.0f;
-                        DAT_cc008000 = 0.0f;
+                        (*(volatile f32*)0xCC008000) = left;
+                        (*(volatile f32*)0xCC008000) = top;
+                        (*(volatile f32*)0xCC008000) = 0.0f;
+                        (*(volatile f32*)0xCC008000) = 0.0f;
+                        (*(volatile f32*)0xCC008000) = 0.0f;
 
-                        DAT_cc008000 = left;
-                        DAT_cc008000 = bottom;
-                        DAT_cc008000 = 0.0f;
-                        DAT_cc008000 = 0.0f;
-                        DAT_cc008000 = 1.0f;
+                        (*(volatile f32*)0xCC008000) = left;
+                        (*(volatile f32*)0xCC008000) = bottom;
+                        (*(volatile f32*)0xCC008000) = 0.0f;
+                        (*(volatile f32*)0xCC008000) = 0.0f;
+                        (*(volatile f32*)0xCC008000) = 1.0f;
 
-                        DAT_cc008000 = right;
-                        DAT_cc008000 = bottom;
-                        DAT_cc008000 = 0.0f;
-                        DAT_cc008000 = 1.0f;
-                        DAT_cc008000 = 1.0f;
+                        (*(volatile f32*)0xCC008000) = right;
+                        (*(volatile f32*)0xCC008000) = bottom;
+                        (*(volatile f32*)0xCC008000) = 0.0f;
+                        (*(volatile f32*)0xCC008000) = 1.0f;
+                        (*(volatile f32*)0xCC008000) = 1.0f;
 
-                        DAT_cc008000 = right;
-                        DAT_cc008000 = top;
-                        DAT_cc008000 = 0.0f;
-                        DAT_cc008000 = 1.0f;
-                        DAT_cc008000 = 0.0f;
+                        (*(volatile f32*)0xCC008000) = right;
+                        (*(volatile f32*)0xCC008000) = top;
+                        (*(volatile f32*)0xCC008000) = 0.0f;
+                        (*(volatile f32*)0xCC008000) = 1.0f;
+                        (*(volatile f32*)0xCC008000) = 0.0f;
 
                     }
                 }
@@ -3748,29 +3817,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
                     GXLoadTexMtxImm(texMtx7, 0x1E, 1);
                     GXBegin(0x80, 0, 4);
 
-                    DAT_cc008000 = left;
-                    DAT_cc008000 = top;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
+                    (*(volatile f32*)0xCC008000) = left;
+                    (*(volatile f32*)0xCC008000) = top;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
 
-                    DAT_cc008000 = left;
-                    DAT_cc008000 = bottom;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
+                    (*(volatile f32*)0xCC008000) = left;
+                    (*(volatile f32*)0xCC008000) = bottom;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
 
-                    DAT_cc008000 = left + float_8_80423370;
-                    DAT_cc008000 = bottom;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
-                    DAT_cc008000 = 1.0f;
+                    (*(volatile f32*)0xCC008000) = left + float_8_80423370;
+                    (*(volatile f32*)0xCC008000) = bottom;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
 
-                    DAT_cc008000 = left + float_8_80423370;
-                    DAT_cc008000 = top;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
-                    DAT_cc008000 = 0.0f;
+                    (*(volatile f32*)0xCC008000) = left + float_8_80423370;
+                    (*(volatile f32*)0xCC008000) = top;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
 
                     if ((column & 1) == 0) {
                         texId = texBase + 0x7E;
@@ -3791,29 +3860,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
                     GXLoadTexMtxImm(texMtx8, 0x1E, 1);
                     GXBegin(0x80, 0, 4);
 
-                    DAT_cc008000 = left + float_8_80423370;
-                    DAT_cc008000 = top;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
+                    (*(volatile f32*)0xCC008000) = left + float_8_80423370;
+                    (*(volatile f32*)0xCC008000) = top;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
 
-                    DAT_cc008000 = left + float_8_80423370;
-                    DAT_cc008000 = bottom;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
+                    (*(volatile f32*)0xCC008000) = left + float_8_80423370;
+                    (*(volatile f32*)0xCC008000) = bottom;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
 
-                    DAT_cc008000 = left + float_56_80423354;
-                    DAT_cc008000 = bottom;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
-                    DAT_cc008000 = 1.0f;
+                    (*(volatile f32*)0xCC008000) = left + float_56_80423354;
+                    (*(volatile f32*)0xCC008000) = bottom;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
 
-                    DAT_cc008000 = left + float_56_80423354;
-                    DAT_cc008000 = top;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
-                    DAT_cc008000 = 0.0f;
+                    (*(volatile f32*)0xCC008000) = left + float_56_80423354;
+                    (*(volatile f32*)0xCC008000) = top;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
 
                 }
 
@@ -3843,29 +3912,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
                     GXLoadTexMtxImm(texMtx9, 0x1E, 1);
                     GXBegin(0x80, 0, 4);
 
-                    DAT_cc008000 = left;
-                    DAT_cc008000 = top;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
+                    (*(volatile f32*)0xCC008000) = left;
+                    (*(volatile f32*)0xCC008000) = top;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
 
-                    DAT_cc008000 = left;
-                    DAT_cc008000 = top - float_8_80423370;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
+                    (*(volatile f32*)0xCC008000) = left;
+                    (*(volatile f32*)0xCC008000) = top - float_8_80423370;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
 
-                    DAT_cc008000 = right;
-                    DAT_cc008000 = top - float_8_80423370;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
-                    DAT_cc008000 = 1.0f;
+                    (*(volatile f32*)0xCC008000) = right;
+                    (*(volatile f32*)0xCC008000) = top - float_8_80423370;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
 
-                    DAT_cc008000 = right;
-                    DAT_cc008000 = top;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
-                    DAT_cc008000 = 0.0f;
+                    (*(volatile f32*)0xCC008000) = right;
+                    (*(volatile f32*)0xCC008000) = top;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
 
                     if ((row & 1) == 0) {
                         texId = texBase + 0x84;
@@ -3886,29 +3955,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
                     GXLoadTexMtxImm(texMtx10, 0x1E, 1);
                     GXBegin(0x80, 0, 4);
 
-                    DAT_cc008000 = left;
-                    DAT_cc008000 = top - float_8_80423370;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
+                    (*(volatile f32*)0xCC008000) = left;
+                    (*(volatile f32*)0xCC008000) = top - float_8_80423370;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
 
-                    DAT_cc008000 = left;
-                    DAT_cc008000 = top - float_56_80423354;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
+                    (*(volatile f32*)0xCC008000) = left;
+                    (*(volatile f32*)0xCC008000) = top - float_56_80423354;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
 
-                    DAT_cc008000 = right;
-                    DAT_cc008000 = top - float_56_80423354;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
-                    DAT_cc008000 = 1.0f;
+                    (*(volatile f32*)0xCC008000) = right;
+                    (*(volatile f32*)0xCC008000) = top - float_56_80423354;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
 
-                    DAT_cc008000 = right;
-                    DAT_cc008000 = top - float_8_80423370;
-                    DAT_cc008000 = 0.0f;
-                    DAT_cc008000 = 1.0f;
-                    DAT_cc008000 = 0.0f;
+                    (*(volatile f32*)0xCC008000) = right;
+                    (*(volatile f32*)0xCC008000) = top - float_8_80423370;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
+                    (*(volatile f32*)0xCC008000) = 1.0f;
+                    (*(volatile f32*)0xCC008000) = 0.0f;
 
                 }
             TEXGetGXTexObjFromPalette(
@@ -3925,29 +3994,29 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
             GXLoadTexMtxImm(texMtx11, 0x1E, 1);
             GXBegin(0x80, 0, 4);
 
-            DAT_cc008000 = (f32)x + float_392_804233e4;
-            DAT_cc008000 = pageBottom;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_392_804233e4;
+            (*(volatile f32*)0xCC008000) = pageBottom;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
-            DAT_cc008000 = (f32)x + float_392_804233e4;
-            DAT_cc008000 = pageBottom - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_392_804233e4;
+            (*(volatile f32*)0xCC008000) = pageBottom - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_400_804233e8;
-            DAT_cc008000 = pageBottom - float_8_80423370;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 1.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_400_804233e8;
+            (*(volatile f32*)0xCC008000) = pageBottom - float_8_80423370;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
 
-            DAT_cc008000 = (f32)x + float_400_804233e8;
-            DAT_cc008000 = pageBottom;
-            DAT_cc008000 = 0.0f;
-            DAT_cc008000 = 1.0f;
-            DAT_cc008000 = 0.0f;
+            (*(volatile f32*)0xCC008000) = (f32)x + float_400_804233e8;
+            (*(volatile f32*)0xCC008000) = pageBottom;
+            (*(volatile f32*)0xCC008000) = 0.0f;
+            (*(volatile f32*)0xCC008000) = 1.0f;
+            (*(volatile f32*)0xCC008000) = 0.0f;
 
             }
         }
@@ -3958,10 +4027,6 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
      * target panel family.  Their positions and filtering already follow the
      * target's 28-entry, 7x4 page layout.
      */
-    pos[2] = 0.0f;
-    scale[0] = 1.0f;
-    scale[1] = 1.0f;
-    scale[2] = 1.0f;
 
     winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
     for (page = 0; page < pageCount; page++) {
@@ -3976,14 +4041,17 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
                                      (type == 0 ? 0xEBC : 0xFBC) +
                                      index * 2) +
                               (type == 0 ? 0x80 : 0x41)) == 0) {
-                        pos[0] = float_4_8042334c +
+    helperPos0 = vec3_802f4994;
+    helperScale0 = vec3_802f49a0;
+    helperColor0 = dat_80423240;
+                        helperPos0.x = float_4_8042334c +
                                  float_24_8042339c +
                                  (f32)x +
                                  (f32)(column * 56);
-                        pos[1] = baseY -
+                        helperPos0.y = baseY -
                                  (f32)(row * 56) -
                                  float_28_804233f4;
-                        winTexSet(0x97, pos, scale, &white);
+                        winTexSet(0x97, &helperPos0, &helperScale0, &helperColor0);
                     }
                 }
             }
@@ -4011,14 +4079,17 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
                                              (itemId +
                                               (type == 0 ? 0xF0 : 0xB3)) *
                                                  0x28);
-                            pos[0] = float_4_8042334c +
+    helperPos1 = vec3_802f49ac;
+    helperScale1 = vec3_802f49b8;
+    helperColor1 = dat_80423244;
+                            helperPos1.x = float_4_8042334c +
                                      float_24_8042339c +
                                      (f32)x +
                                      (f32)(column * 56);
-                            pos[1] = baseY -
+                            helperPos1.y = baseY -
                                      (f32)(row * 56) -
                                      float_28_804233f4;
-                            winIconSet(iconId, pos, scale, &white);
+                            winIconSet(iconId, &helperPos1, &helperScale1, &helperColor1);
                         }
                     }
                 }
@@ -4030,24 +4101,38 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
 
     if (pageNum > 0) {
         winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-        pos[0] = (f32)x + float_395_804233f8;
-        pos[1] = (f32)y + float_15_804233fc;
-        winTexSet(0x17, pos, scale, &white);
+    helperPos2 = vec3_802f49c4;
+    helperScale2 = vec3_802f49d0;
+    helperColor2 = dat_80423248;
+        helperPos2.x = (f32)x + float_395_804233f8;
+        helperPos2.y = (f32)y + float_15_804233fc;
+        winTexSet(0x17, &helperPos2, &helperScale2, &helperColor2);
 
         winIconInit();
-        pos[1] = (f32)y;
-        winIconSet(0x86, pos, scale, &white);
+    helperPos3 = vec3_802f49dc;
+    helperScale3 = vec3_802f49e8;
+    helperColor3 = dat_8042324c;
+    helperPos3.x = (f32)(x + (double)float_395_804233f8);
+        helperPos3.y = (f32)y;
+        winIconSet(0x86, &helperPos3, &helperScale3, &helperColor3);
     }
 
     if (pageNum * 28 + 28 < count) {
         winTexInit(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0));
-        pos[0] = (f32)x + float_395_804233f8;
-        pos[1] = (f32)y - float_235_80423400;
-        winTexSet(0x17, pos, scale, &white);
+    helperPos4 = vec3_802f49f4;
+    helperScale4 = vec3_802f4a00;
+    helperColor4 = dat_80423250;
+        helperPos4.x = (f32)x + float_395_804233f8;
+        helperPos4.y = (f32)y - float_235_80423400;
+        winTexSet(0x17, &helperPos4, &helperScale4, &helperColor4);
 
         winIconInit();
-        pos[1] = (f32)y - float_220_80423404;
-        winIconSet(0x88, pos, scale, &white);
+    helperPos5 = vec3_802f4a0c;
+    helperScale5 = vec3_802f4a18;
+    helperColor5 = dat_80423254;
+    helperPos5.x = (f32)(x + (double)float_395_804233f8);
+        helperPos5.y = (f32)y - float_220_80423404;
+        winIconSet(0x88, &helperPos5, &helperScale5, &helperColor5);
     }
 
     /*
@@ -4061,22 +4146,20 @@ void winHakoGX(double x, double y, void* pWin, s32 type) {
                  (f32)(u16)FontGetMessageWidth(sortText));
 
     winFontInit();
-    fontPos[0] = sortX;
-    fontPos[1] = (f32)y - float_228_80423410;
-    fontPos[2] = 0.0f;
-    fontScale[0] = float_0p7_80423408;
-    fontScale[1] = float_0p7_80423408;
-    fontScale[2] = 1.0f;
-    winFontSet(fontPos, fontScale, &white, sortText);
+    helperPos6 = vec3_802f4a24;
+    helperScale6 = vec3_802f4a30;
+    helperColor6 = dat_80423258;
+    helperPos6.x = sortX;
+    helperPos6.y = (f32)y - float_228_80423410;
+    winFontSet(&helperPos6, &helperScale6, &helperColor6, sortText);
 
     winIconInit();
-    iconPos[0] = sortX - float_30_804233d4;
-    iconPos[1] = (f32)y - float_237_80423414;
-    iconPos[2] = 0.0f;
-    iconScale[0] = 1.0f;
-    iconScale[1] = 1.0f;
-    iconScale[2] = 1.0f;
-    winIconSet(0x219, iconPos, iconScale, &white);
+    helperPos7 = vec3_802f4a3c;
+    helperScale7 = vec3_802f4a48;
+    helperColor7 = dat_8042325c;
+    helperPos7.x = sortX - float_30_804233d4;
+    helperPos7.y = (f32)y - float_237_80423414;
+    winIconSet(0x219, &helperPos7, &helperScale7, &helperColor7);
 }
 
 #pragma no_register_save_helpers on
@@ -4170,29 +4253,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtx98, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx;
-    DAT_cc008000 = fy;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx;
+    (*(volatile f32*)0xCC008000) = fy;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = fy;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = fy;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4208,29 +4291,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtx9A, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = fy;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = fy;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth + topMidWidth;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth + topMidWidth;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth + topMidWidth;
-    DAT_cc008000 = fy;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth + topMidWidth;
+    (*(volatile f32*)0xCC008000) = fy;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4246,29 +4329,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtx9B, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx + fw - float_16_804233b8;
-    DAT_cc008000 = fy;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw - float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = fy;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx + fw - float_16_804233b8;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw - float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + fw;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + fw;
-    DAT_cc008000 = fy;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw;
+    (*(volatile f32*)0xCC008000) = fy;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4284,29 +4367,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtxA2, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4322,29 +4405,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtx9E1, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth + centerWidth;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth + centerWidth;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth + centerWidth;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth + centerWidth;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4360,29 +4443,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtxA11, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx + fw - float_8_80423370;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx + fw - float_8_80423370;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + fw;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + fw;
-    DAT_cc008000 = topY;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw;
+    (*(volatile f32*)0xCC008000) = topY;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4398,29 +4481,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtx9E2, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = lowerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = lowerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth + centerWidth;
-    DAT_cc008000 = lowerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth + centerWidth;
+    (*(volatile f32*)0xCC008000) = lowerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth + centerWidth;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth + centerWidth;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4436,29 +4519,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtxA12, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx + fw - float_8_80423370;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx + fw - float_8_80423370;
-    DAT_cc008000 = lowerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw - float_8_80423370;
+    (*(volatile f32*)0xCC008000) = lowerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + fw;
-    DAT_cc008000 = lowerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw;
+    (*(volatile f32*)0xCC008000) = lowerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + fw;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4474,29 +4557,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtx9C, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx;
-    DAT_cc008000 = finalBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx;
+    (*(volatile f32*)0xCC008000) = finalBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = finalBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = finalBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4512,29 +4595,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtx9F, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = lowerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = lowerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx + leftWidth;
-    DAT_cc008000 = finalBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth;
+    (*(volatile f32*)0xCC008000) = finalBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth + topMidWidth;
-    DAT_cc008000 = finalBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth + topMidWidth;
+    (*(volatile f32*)0xCC008000) = finalBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + leftWidth + topMidWidth;
-    DAT_cc008000 = lowerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + leftWidth + topMidWidth;
+    (*(volatile f32*)0xCC008000) = lowerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
     TEXGetGXTexObjFromPalette(
         **(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0),
@@ -4550,29 +4633,29 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
     GXLoadTexMtxImm(texMtx9D, 0x1E, 1);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = fx + fw - float_16_804233b8;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw - float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
-    DAT_cc008000 = fx + fw - float_16_804233b8;
-    DAT_cc008000 = finalBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw - float_16_804233b8;
+    (*(volatile f32*)0xCC008000) = finalBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + fw;
-    DAT_cc008000 = finalBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 1.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw;
+    (*(volatile f32*)0xCC008000) = finalBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
 
-    DAT_cc008000 = fx + fw;
-    DAT_cc008000 = innerBottom;
-    DAT_cc008000 = 0.0f;
-    DAT_cc008000 = 1.0f;
-    DAT_cc008000 = 0.0f;
+    (*(volatile f32*)0xCC008000) = fx + fw;
+    (*(volatile f32*)0xCC008000) = innerBottom;
+    (*(volatile f32*)0xCC008000) = 0.0f;
+    (*(volatile f32*)0xCC008000) = 1.0f;
+    (*(volatile f32*)0xCC008000) = 0.0f;
 
 }
 #pragma no_register_save_helpers off
@@ -4580,6 +4663,7 @@ void winWazaGX(double x, double y, double w, double h, void* pWin) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma optimize_for_size off
 void sort_1_1_func(void* pWin) {
     s32 item = *(s32*)((s32)pWin + 0x214);
     s32 type;
@@ -4595,12 +4679,14 @@ void sort_1_1_func(void* pWin) {
     *(s32*)((s32)pWin + 0x214) = 0;
     *(s32*)((s32)pWin + 0x21C) = *(s32*)((s32)pWin + 0x214) / 10;
 }
+#pragma optimize_for_size reset
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma optimize_for_size off
 void sort_1_2_func(void* pWin) {
     s32 item = *(s32*)((s32)pWin + 0x214);
     s32 type;
@@ -4616,11 +4702,13 @@ void sort_1_2_func(void* pWin) {
     *(s32*)((s32)pWin + 0x214) = 0;
     *(s32*)((s32)pWin + 0x21C) = *(s32*)((s32)pWin + 0x214) / 10;
 }
+#pragma optimize_for_size reset
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
 
+#pragma optimize_for_size off
 void sort_2_1_func(void* pWin) {
     s32 type = 9;
 
@@ -4633,7 +4721,9 @@ void sort_2_1_func(void* pWin) {
     *(s32*)((s32)pWin + 0x218) = 0;
     *(s32*)((s32)pWin + 0x220) = *(s32*)((s32)pWin + 0x218) / 10;
 }
+#pragma optimize_for_size reset
 
+#pragma optimize_for_size off
 void sort_2_2_func(void* pWin) {
     s32 type = 10;
 
@@ -4646,6 +4736,7 @@ void sort_2_2_func(void* pWin) {
     *(s32*)((s32)pWin + 0x218) = 0;
     *(s32*)((s32)pWin + 0x220) = *(s32*)((s32)pWin + 0x218) / 10;
 }
+#pragma optimize_for_size reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void sort_3_1_func(void* pWin) {
@@ -4718,29 +4809,37 @@ void sort_3_3_func(void* pWin) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 N_compare_func4_1(void* param_1, void* param_2) {
     char bufA[0x80];
     char bufB[0x80];
     s32 idxA = *(s32*)((s32)param_1 + 8);
-    s32 idxB = *(s32*)((s32)param_2 + 8);
+    s32 idxB = (s16)*(s32*)((s32)param_2 + 8);
     char** names = (char**)(itemDataTable + 4);
 
     unk_800d48b0(msgSearch(names[(s16)idxA * 0xA]), bufA);
     unk_800d48b0(msgSearch(names[(s16)idxB * 0xA]), bufB);
     return strcmp(bufA, bufB);
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 N_compare_func4_1_r(void* param_1, void* param_2) {
     char bufA[0x80];
     char bufB[0x80];
     s32 idxA = *(s32*)((s32)param_1 + 8);
-    s32 idxB = *(s32*)((s32)param_2 + 8);
+    s32 idxB = (s16)*(s32*)((s32)param_2 + 8);
     char** names = (char**)(itemDataTable + 4);
 
     unk_800d48b0(msgSearch(names[(s16)idxA * 0xA]), bufA);
     unk_800d48b0(msgSearch(names[(s16)idxB * 0xA]), bufB);
     return strcmp(bufB, bufA);
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 s32 N_compare_func4_2(void* param_1, void* param_2) {
     s32 idxA = *(s32*)((s32)param_1 + 8);
@@ -4798,83 +4897,76 @@ void sort_4_2_func(void* pWin) {
     *(s32*)((s32)pWin + 0x3F0) = *(s32*)((s32)pWin + 0x3E8) / 8;
 }
 
+#pragma optimize_for_size off
 u8 sort_4_3_func(void* pWin) {
+    typedef struct { s32 words[3]; } WindowRecord;
+    typedef struct { u8 prefix[0x12]; s16 value; u8 gap[8]; s8 rank; u8 tail[11]; } SortRecord;
+    SortRecord* recA;
+    SortRecord* recB;
+    WindowRecord temp;
     s32 i;
     s32 j;
-    s32* a;
-    s32* b;
-    s32 t0;
-    s32 t1;
-    s32 t2;
-    s32 t3;
+    char* a;
+    char* b;
     s32 swap;
     s32 idA;
     s32 idB;
 
     if (*(s32*)((s32)pWin + 0x180) == 0) {
-        for (i = 0; (u32)i < *(u32*)((s32)pWin + 0xD64) - 1U; i++) {
-            a = (s32*)((s32)pWin + 0x404 + (i * 0xC));
-            b = a + 3;
+        for (i = 0; i < *(s32*)((s32)pWin + 0xD64) - 1; i++) {
+            a = (char*)pWin + i * 12;
+            b = (char*)pWin + (i + 1) * 12;
             for (j = i + 1; j < *(s32*)((s32)pWin + 0xD64); j++) {
                 swap = 0;
-                idA = (s16)a[2];
-                idB = (s16)b[2];
-                if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] > *(s8*)&itemDataTable[idB * 0x28 + 0x1C]) {
+                idA = (s16)*(s32*)(a + 0x40C);
+                idB = (s16)*(s32*)(b + 0x40C);
+                recA = (SortRecord*)(itemDataTable + idA * 40);
+                recB = (SortRecord*)(itemDataTable + idB * 40);
+                if (recA->rank > recB->rank) {
                     swap = 1;
-                } else if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] == *(s8*)&itemDataTable[idB * 0x28 + 0x1C] &&
-                           *(s16*)&itemDataTable[idA * 0x28 + 0x12] > *(s16*)&itemDataTable[idB * 0x28 + 0x12]) {
+                } else if (recA->rank == recB->rank &&
+                           recA->value > recB->value) {
                     swap = 1;
                 }
                 if (swap != 0) {
-                    t0 = a[0];
-                    t1 = a[1];
-                    t2 = a[2];
-                    t3 = b[1];
-                    a[0] = b[0];
-                    a[1] = t3;
-                    a[2] = b[2];
-                    b[0] = t0;
-                    b[1] = t1;
-                    b[2] = t2;
+                    temp = *(WindowRecord*)(a + 0x404);
+                    *(WindowRecord*)(a + 0x404) = *(WindowRecord*)(b + 0x404);
+                    *(WindowRecord*)(b + 0x404) = temp;
                 }
-                b += 3;
+                b += 12;
             }
         }
     } else {
-        for (i = 0; (u32)i < *(u32*)((s32)pWin + 0xD64) - 1U; i++) {
-            a = (s32*)((s32)pWin + 0x404 + (i * 0xC));
-            b = a + 3;
+        for (i = 0; i < *(s32*)((s32)pWin + 0xD64) - 1; i++) {
+            a = (char*)pWin + i * 12;
+            b = (char*)pWin + (i + 1) * 12;
             for (j = i + 1; j < *(s32*)((s32)pWin + 0xD64); j++) {
                 swap = 0;
-                idA = (s16)a[2];
-                idB = (s16)b[2];
-                if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] < *(s8*)&itemDataTable[idB * 0x28 + 0x1C]) {
+                idA = (s16)*(s32*)(a + 0x40C);
+                idB = (s16)*(s32*)(b + 0x40C);
+                recA = (SortRecord*)(itemDataTable + idA * 40);
+                recB = (SortRecord*)(itemDataTable + idB * 40);
+                if (recA->rank < recB->rank) {
                     swap = 1;
-                } else if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] == *(s8*)&itemDataTable[idB * 0x28 + 0x1C] &&
-                           *(s16*)&itemDataTable[idA * 0x28 + 0x12] < *(s16*)&itemDataTable[idB * 0x28 + 0x12]) {
+                } else if (recA->rank == recB->rank &&
+                           recA->value < recB->value) {
                     swap = 1;
                 }
                 if (swap != 0) {
-                    t0 = a[0];
-                    t1 = a[1];
-                    t2 = a[2];
-                    t3 = b[1];
-                    a[0] = b[0];
-                    a[1] = t3;
-                    a[2] = b[2];
-                    b[0] = t0;
-                    b[1] = t1;
-                    b[2] = t2;
+                    temp = *(WindowRecord*)(a + 0x404);
+                    *(WindowRecord*)(a + 0x404) = *(WindowRecord*)(b + 0x404);
+                    *(WindowRecord*)(b + 0x404) = temp;
                 }
-                b += 3;
+                b += 12;
             }
         }
     }
     *(s32*)((s32)pWin + 0x180) = 1 - *(s32*)((s32)pWin + 0x180);
     *(s32*)((s32)pWin + 0xD68) = 0;
     *(s32*)((s32)pWin + 0xD6C) = *(s32*)((s32)pWin + 0xD68) / 8;
-    return 0;
+
 }
+#pragma optimize_for_size reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 compare_func5_1(void* param_1, void* param_2) {
@@ -4943,6 +5035,7 @@ s32 compare_func5_2_r(void* param_1, void* param_2) {
 }
 
 
+#pragma optimize_for_size off
 void sort_5_1_func(void* pWin) {
     if (*(s32*)((s32)pWin + 0x180) == 0) {
         qqsort((void*)((s32)pWin + 0xEBC), *(s32*)((s32)pWin + 0xE94), 2, compare_func5_1);
@@ -4953,8 +5046,10 @@ void sort_5_1_func(void* pWin) {
     *(s32*)((s32)pWin + 0xE9C) = 0;
     *(s32*)((s32)pWin + 0xEA0) = *(s32*)((s32)pWin + 0xE9C) / 28;
 }
+#pragma optimize_for_size reset
 
 
+#pragma optimize_for_size off
 void sort_5_2_func(void* pWin) {
     if (*(s32*)((s32)pWin + 0x180) == 0) {
         qqsort((void*)((s32)pWin + 0xEBC), *(s32*)((s32)pWin + 0xE94), 2, compare_func5_2);
@@ -4965,59 +5060,78 @@ void sort_5_2_func(void* pWin) {
     *(s32*)((s32)pWin + 0xE9C) = 0;
     *(s32*)((s32)pWin + 0xEA0) = *(s32*)((s32)pWin + 0xE9C) / 28;
 }
+#pragma optimize_for_size reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma optimize_for_size off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma optimize_for_size off
 u8 sort_5_3_func(void* pWin) {
+    typedef struct { u8 prefix[0x12]; s16 value; u8 gap[8]; s8 rank; u8 tail[11]; } SortRecord;
+    SortRecord* recA;
+    SortRecord* recB;
     s32 i;
     s32 j;
-    s16* a;
-    s16* b;
+    char* a;
+    char* b;
     s16 tmp;
+    s16 other;
     s32 swap;
     s32 idA;
     s32 idB;
 
     if (*(s32*)((s32)pWin + 0x180) == 0) {
         for (i = 0; i < *(s32*)((s32)pWin + 0xE94) - 1; i++) {
-            a = (s16*)((s32)pWin + 0xEBC + (i * 2));
-            b = a + 1;
+            a = (char*)pWin + i * 2;
+            b = (char*)pWin + (i + 1) * 2;
             for (j = i + 1; j < *(s32*)((s32)pWin + 0xE94); j++) {
-                tmp = *a;
+                tmp = *(s16*)(a + 0xEBC);
+                other = *(s16*)(b + 0xEBC);
                 swap = 0;
                 idA = (s16)(tmp + 0xF0);
-                idB = (s16)(*b + 0xF0);
-                if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] > *(s8*)&itemDataTable[idB * 0x28 + 0x1C]) {
+                idB = (s16)(other + 0xF0);
+                recA = (SortRecord*)(itemDataTable + idA * 0x28);
+                recB = (SortRecord*)(itemDataTable + idB * 0x28);
+                if (recA->rank > recB->rank) {
                     swap = 1;
-                } else if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] == *(s8*)&itemDataTable[idB * 0x28 + 0x1C] &&
-                           *(s16*)&itemDataTable[idA * 0x28 + 0x12] > *(s16*)&itemDataTable[idB * 0x28 + 0x12]) {
+                } else if (recA->rank == recB->rank &&
+                           recA->value > recB->value) {
                     swap = 1;
                 }
                 if (swap != 0) {
-                    *a = *b;
-                    *b = tmp;
+                    *(s16*)(a + 0xEBC) = other;
+                    *(s16*)(b + 0xEBC) = tmp;
                 }
-                b++;
+                b += 2;
             }
         }
     } else {
         for (i = 0; i < *(s32*)((s32)pWin + 0xE94) - 1; i++) {
-            a = (s16*)((s32)pWin + 0xEBC + (i * 2));
-            b = a + 1;
+            a = (char*)pWin + i * 2;
+            b = (char*)pWin + (i + 1) * 2;
             for (j = i + 1; j < *(s32*)((s32)pWin + 0xE94); j++) {
-                tmp = *a;
+                tmp = *(s16*)(a + 0xEBC);
+                other = *(s16*)(b + 0xEBC);
                 swap = 0;
                 idA = (s16)(tmp + 0xF0);
-                idB = (s16)(*b + 0xF0);
-                if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] < *(s8*)&itemDataTable[idB * 0x28 + 0x1C]) {
+                idB = (s16)(other + 0xF0);
+                recA = (SortRecord*)(itemDataTable + idA * 0x28);
+                recB = (SortRecord*)(itemDataTable + idB * 0x28);
+                if (recA->rank < recB->rank) {
                     swap = 1;
-                } else if (*(s8*)&itemDataTable[idA * 0x28 + 0x1C] == *(s8*)&itemDataTable[idB * 0x28 + 0x1C] &&
-                           *(s16*)&itemDataTable[idA * 0x28 + 0x12] < *(s16*)&itemDataTable[idB * 0x28 + 0x12]) {
+                } else if (recA->rank == recB->rank &&
+                           recA->value < recB->value) {
                     swap = 1;
                 }
                 if (swap != 0) {
-                    *a = *b;
-                    *b = tmp;
+                    *(s16*)(a + 0xEBC) = other;
+                    *(s16*)(b + 0xEBC) = tmp;
                 }
-                b++;
+                b += 2;
             }
         }
     }
@@ -5026,8 +5140,16 @@ u8 sort_5_3_func(void* pWin) {
     i = *(s32*)((s32)pWin + 0xE9C);
     j = i / 28 + (i >> 31);
     *(s32*)((s32)pWin + 0xEA0) = j - (j >> 31);
-    return 0;
+
 }
+#pragma optimize_for_size reset
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
+#pragma optimize_for_size reset
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 compare_func6_1(void* param_1, void* param_2) {
@@ -5098,6 +5220,7 @@ s32 compare_func6_2_r(void* param_1, void* param_2) {
 }
 
 
+#pragma optimize_for_size off
 void sort_6_1_func(void* pWin) {
     if (*(s32*)((s32)pWin + 0x180) == 0) {
         qqsort((void*)((s32)pWin + 0xFBC), *(s32*)((s32)pWin + 0xF94), 2, compare_func6_1);
@@ -5108,8 +5231,10 @@ void sort_6_1_func(void* pWin) {
     *(s32*)((s32)pWin + 0xF9C) = 0;
     *(s32*)((s32)pWin + 0xFA0) = *(s32*)((s32)pWin + 0xF9C) / 28;
 }
+#pragma optimize_for_size reset
 
 
+#pragma optimize_for_size off
 void sort_6_2_func(void* pWin) {
     if (*(s32*)((s32)pWin + 0x180) == 0) {
         qqsort((void*)((s32)pWin + 0xFBC), *(s32*)((s32)pWin + 0xF94), 2, compare_func6_2);
@@ -5120,6 +5245,7 @@ void sort_6_2_func(void* pWin) {
     *(s32*)((s32)pWin + 0xF9C) = 0;
     *(s32*)((s32)pWin + 0xFA0) = *(s32*)((s32)pWin + 0xF9C) / 28;
 }
+#pragma optimize_for_size reset
 
 s32 compare_func1(void* a, void* b) {
     if (*(u8*)a > *(u8*)b) {
@@ -5153,17 +5279,18 @@ void sort_7_1_func(void* pWin) {
 }
 
 
+#pragma optimize_for_size off
+#pragma opt_common_subs off
 s32 compare_func2(void* param_1, void* param_2) {
     char bufA[0x40];
     char bufB[0x40];
     void* unitA;
     void* unitB;
-    char** tblA;
-    char** tblB;
+    s32 idxA;
     char* nameA;
-    char* nameB;
-    u32 idxA;
-    u32 idxB;
+    s32 idxB;
+    char** tblB;
+    char** tblA;
 
     unitA = battleGetUnitMonosiriPtr(*(u8*)((s32)param_1 + 1));
     unitB = battleGetUnitMonosiriPtr(*(u8*)((s32)param_2 + 1));
@@ -5179,28 +5306,28 @@ s32 compare_func2(void* param_1, void* param_2) {
         }
         idxA++;
         tblB++;
-        if (idxA >= 0x1A) {
+        if ((u32)idxA >= 0x1A) {
             break;
         }
     }
-    if (idxA >= 0x1A) {
+    if ((u32)idxA >= 0x1A) {
         idxA = 0;
     }
 
-    nameB = *(char**)((s32)unitA + 0x14);
+    unitA = *(void**)((s32)unitA + 0x14);
     idxB = 0;
     while (1) {
         sprintf(bufB, str_menu_monosiri_PCTs_802f4d00, *tblA);
-        if (strcmp(bufB, nameB) == 0) {
+        if (strcmp(bufB, (char*)unitA) == 0) {
             break;
         }
         idxB++;
         tblA++;
-        if (idxB >= 0x1A) {
+        if ((u32)idxB >= 0x1A) {
             break;
         }
     }
-    if (idxB >= 0x1A) {
+    if ((u32)idxB >= 0x1A) {
         idxB = 0;
     }
     if (idxA > idxB) {
@@ -5211,17 +5338,20 @@ s32 compare_func2(void* param_1, void* param_2) {
     }
     return 0;
 }
+#pragma optimize_for_size reset
+#pragma opt_common_subs reset
+#pragma optimize_for_size off
+#pragma opt_common_subs off
 s32 compare_func2_r(void* param_1, void* param_2) {
     char bufA[0x40];
     char bufB[0x40];
     void* unitA;
     void* unitB;
-    char** tblA;
-    char** tblB;
+    s32 idxA;
     char* nameA;
-    char* nameB;
-    u32 idxA;
-    u32 idxB;
+    s32 idxB;
+    char** tblB;
+    char** tblA;
 
     unitA = battleGetUnitMonosiriPtr(*(u8*)((s32)param_1 + 1));
     unitB = battleGetUnitMonosiriPtr(*(u8*)((s32)param_2 + 1));
@@ -5237,28 +5367,28 @@ s32 compare_func2_r(void* param_1, void* param_2) {
         }
         idxA++;
         tblB++;
-        if (idxA >= 0x1A) {
+        if ((u32)idxA >= 0x1A) {
             break;
         }
     }
-    if (idxA >= 0x1A) {
+    if ((u32)idxA >= 0x1A) {
         idxA = 0;
     }
 
-    nameB = *(char**)((s32)unitA + 0x14);
+    unitA = *(void**)((s32)unitA + 0x14);
     idxB = 0;
     while (1) {
         sprintf(bufB, str_menu_monosiri_PCTs_802f4d00, *tblA);
-        if (strcmp(bufB, nameB) == 0) {
+        if (strcmp(bufB, (char*)unitA) == 0) {
             break;
         }
         idxB++;
         tblA++;
-        if (idxB >= 0x1A) {
+        if ((u32)idxB >= 0x1A) {
             break;
         }
     }
-    if (idxB >= 0x1A) {
+    if ((u32)idxB >= 0x1A) {
         idxB = 0;
     }
     if (idxA < idxB) {
@@ -5269,8 +5399,13 @@ s32 compare_func2_r(void* param_1, void* param_2) {
     }
     return 0;
 }
+#pragma optimize_for_size reset
+#pragma opt_common_subs reset
 
 
+#pragma opt_common_subs off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void sort_7_2_func(void* pWin) {
     if (*(s32*)((s32)pWin + 0x180) == 0) {
         qqsort((void*)((s32)pWin + 0x1058), *(s32*)((s32)pWin + 0x1040), 2, compare_func1);
@@ -5283,6 +5418,9 @@ void sort_7_2_func(void* pWin) {
     *(s32*)((s32)pWin + 0x1048) = 0;
     *(s32*)((s32)pWin + 0x104C) = *(s32*)((s32)pWin + 0x1048) / 16;
 }
+#pragma opt_common_subs reset
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 compare_func3(void* param_1, void* param_2) {
@@ -5354,6 +5492,9 @@ s32 compare_func3_r(void* param_1, void* param_2) {
 
 
 
+#pragma opt_common_subs off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void sort_7_3_func(void* pWin) {
     if (*(s32*)((s32)pWin + 0x180) == 0) {
         qqsort((void*)((s32)pWin + 0x1058), *(s32*)((s32)pWin + 0x1040), 2, compare_func1);
@@ -5366,7 +5507,12 @@ void sort_7_3_func(void* pWin) {
     *(s32*)((s32)pWin + 0x1048) = 0;
     *(s32*)((s32)pWin + 0x104C) = *(s32*)((s32)pWin + 0x1048) / 16;
 }
+#pragma opt_common_subs reset
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 compare_func4(void* param_1, void* param_2) {
     void* mailA;
     void* mailB;
@@ -5379,7 +5525,11 @@ s32 compare_func4(void* param_1, void* param_2) {
     msgB = msgSearch(*(char**)((s32)mailB + 8));
     return strcmp(msgA, msgB);
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 compare_func4_r(void* param_1, void* param_2) {
     void* mailA;
     void* mailB;
@@ -5392,8 +5542,11 @@ s32 compare_func4_r(void* param_1, void* param_2) {
     msgB = msgSearch(*(char**)((s32)mailB + 8));
     return strcmp(msgB, msgA);
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 
+#pragma optimize_for_size off
 void sort_8_1_func(void* pWin) {
     if (*(s32*)((s32)pWin + 0x180) == 0) {
         qqsort((void*)((s32)pWin + 0x26E), *(s32*)((s32)pWin + 0x254), 2, compare_func4);
@@ -5404,6 +5557,8 @@ void sort_8_1_func(void* pWin) {
     *(s32*)((s32)pWin + 0x258) = 0;
     *(s32*)((s32)pWin + 0x25C) = *(s32*)((s32)pWin + 0x258) / 5;
 }
+
+#pragma optimize_for_size reset
 
 s32 compare_func5(void* a, void* b) {
     if (*(u8*)a > *(u8*)b) {
@@ -5426,6 +5581,7 @@ s32 compare_func5_r(void* a, void* b) {
 }
 
 
+#pragma optimize_for_size off
 void sort_8_2_func(void* pWin) {
     if (*(s32*)((s32)pWin + 0x180) == 0) {
         qqsort((void*)((s32)pWin + 0x26E), *(s32*)((s32)pWin + 0x254), 2, compare_func5);
@@ -5436,6 +5592,10 @@ void sort_8_2_func(void* pWin) {
     *(s32*)((s32)pWin + 0x258) = 0;
     *(s32*)((s32)pWin + 0x25C) = *(s32*)((s32)pWin + 0x258) / 5;
 }
+#pragma optimize_for_size reset
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 winSortMain(void* pWin) {
     extern void FontGetMessageWidthLine(char* msg, u16* width);
     extern s32 strcmp(char* a, char* b);
@@ -5448,8 +5608,9 @@ u8 winSortMain(void* pWin) {
     extern f32 float_0p125_804233d8;
     u32 buttons;
     u32 dirs;
-    char* msg;
     s32 changed;
+    char* msg;
+    f32 targetValue,currentValue,interpolation;
     u16 width[4];
 
     buttons = *(u32*)((s32)pWin + 4);
@@ -5485,11 +5646,11 @@ u8 winSortMain(void* pWin) {
     }
 
     if (*(s32*)((s32)pWin + 0x17C) != 0) {
-        *(f32*)((s32)pWin + 0x158) = *(f32*)((s32)pWin + 0x16C) + float_30_804233d4;
+        changed = 0;
+        *(f32*)((s32)pWin + 0x158) = float_30_804233d4 + *(f32*)((s32)pWin + 0x16C);
         *(f32*)((s32)pWin + 0x15C) = (*(f32*)((s32)pWin + 0x170) - float_40_804233bc) - (f32)(*(s32*)((s32)pWin + 0x174) * 0x28);
         msg = *(char**)((s32)sort_data[*(s32*)((s32)pWin + 0x184)] + (*(s32*)((s32)pWin + 0x174) << 3));
         if (msg != 0) {
-            changed = 0;
             if (*(char**)((s32)pWin + 0x144) != msg) {
                 changed = 1;
             } else if (strcmp(_tmp_1042, msg) != 0) {
@@ -5508,10 +5669,16 @@ u8 winSortMain(void* pWin) {
         }
     }
 
-    *(f32*)((s32)pWin + 0x164) = ((*(f32*)((s32)pWin + 0x16C) - *(f32*)((s32)pWin + 0x164)) * float_0p125_804233d8) + *(f32*)((s32)pWin + 0x164);
-    *(f32*)((s32)pWin + 0x168) = ((*(f32*)((s32)pWin + 0x170) - *(f32*)((s32)pWin + 0x168)) * float_0p125_804233d8) + *(f32*)((s32)pWin + 0x168);
-    return 0;
+    targetValue=*(f32*)((s32)pWin+0x16C);
+    currentValue=*(f32*)((s32)pWin+0x164);
+    interpolation=float_0p125_804233d8;
+    *(f32*)((s32)pWin+0x164)=(targetValue-currentValue)*interpolation+currentValue;
+    targetValue=*(f32*)((s32)pWin+0x170);
+    currentValue=*(f32*)((s32)pWin+0x168);
+    *(f32*)((s32)pWin+0x168)=(targetValue-currentValue)*interpolation+currentValue;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 void winSortGX(void* pWin) {
     extern void GXSetScissor(u32 x, u32 y, u32 width, u32 height);
@@ -5862,12 +6029,12 @@ void winKageGX(f32 x, f32 y, f32 z, f32 scale, void* pWin, u32* colorPtr) {
     extern f32 float_neg0p5_804233b4;
 
     u32 fogColor = dat_804232e4;
-    u32 color = *colorPtr;
+    u32 color;
     u32 texObj[8];
+    f32 modelMtx[3][4];
     f32 transMtx[3][4];
     f32 scaleMtx[3][4];
     f32 rotMtx[3][4];
-    f32 modelMtx[3][4];
     f32 texH;
     f32 texW;
     void* cam;
@@ -5892,12 +6059,13 @@ void winKageGX(f32 x, f32 y, f32 z, f32 scale, void* pWin, u32* colorPtr) {
     TEXGetGXTexObjFromPalette(**(void***)((s32)*(void**)((s32)pWin + 0x28) + 0xA0), texObj, 0x7A);
     GXInitTexObjLOD(texObj, 1, 1, float_0_80423338, float_0_80423338, float_0_80423338, 0, 0, 0);
     GXLoadTexObj(texObj, 0);
+    color=*colorPtr;
     GXSetTevColor(1, &color);
 
     PSMTXTrans(transMtx, x, y, z);
-    texH = float_2_80423360 * (f32)(u16)GXGetTexObjHeight(texObj);
+    texH = scale * (float_2_80423360 * (f32)(u16)GXGetTexObjHeight(texObj));
     texW = float_2_80423360 * (f32)(u16)GXGetTexObjWidth(texObj);
-    PSMTXScale(scaleMtx, scale * texW, scale * texH, float_1_80423340);
+    PSMTXScale(scaleMtx, scale * texW, texH, float_1_80423340);
     PSMTXRotRad(rotMtx, 0x78, float_neg1p3963_804233b0);
     PSMTXConcat(transMtx, rotMtx, modelMtx);
     PSMTXConcat(modelMtx, scaleMtx, modelMtx);
@@ -5913,26 +6081,26 @@ void winKageGX(f32 x, f32 y, f32 z, f32 scale, void* pWin, u32* colorPtr) {
     GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
     GXBegin(0x80, 0, 4);
 
-    DAT_cc008000 = float_neg0p5_804233b4;
-    DAT_cc008000 = float_0p5_8042333c;
-    DAT_cc008000 = float_0_80423338;
-    DAT_cc008000 = float_0_80423338;
-    DAT_cc008000 = float_0_80423338;
-    DAT_cc008000 = float_neg0p5_804233b4;
-    DAT_cc008000 = float_neg0p5_804233b4;
-    DAT_cc008000 = float_0_80423338;
-    DAT_cc008000 = float_0_80423338;
-    DAT_cc008000 = float_1_80423340;
-    DAT_cc008000 = float_0p5_8042333c;
-    DAT_cc008000 = float_neg0p5_804233b4;
-    DAT_cc008000 = float_0_80423338;
-    DAT_cc008000 = float_1_80423340;
-    DAT_cc008000 = float_1_80423340;
-    DAT_cc008000 = float_0p5_8042333c;
-    DAT_cc008000 = float_0p5_8042333c;
-    DAT_cc008000 = float_0_80423338;
-    DAT_cc008000 = float_1_80423340;
-    DAT_cc008000 = float_0_80423338;
+    *(volatile f32*)0xCC008000 = float_neg0p5_804233b4;
+    *(volatile f32*)0xCC008000 = float_0p5_8042333c;
+    *(volatile f32*)0xCC008000 = float_0_80423338;
+    *(volatile f32*)0xCC008000 = float_0_80423338;
+    *(volatile f32*)0xCC008000 = float_0_80423338;
+    *(volatile f32*)0xCC008000 = float_neg0p5_804233b4;
+    *(volatile f32*)0xCC008000 = float_neg0p5_804233b4;
+    *(volatile f32*)0xCC008000 = float_0_80423338;
+    *(volatile f32*)0xCC008000 = float_0_80423338;
+    *(volatile f32*)0xCC008000 = float_1_80423340;
+    *(volatile f32*)0xCC008000 = float_0p5_8042333c;
+    *(volatile f32*)0xCC008000 = float_neg0p5_804233b4;
+    *(volatile f32*)0xCC008000 = float_0_80423338;
+    *(volatile f32*)0xCC008000 = float_1_80423340;
+    *(volatile f32*)0xCC008000 = float_1_80423340;
+    *(volatile f32*)0xCC008000 = float_0p5_8042333c;
+    *(volatile f32*)0xCC008000 = float_0p5_8042333c;
+    *(volatile f32*)0xCC008000 = float_0_80423338;
+    *(volatile f32*)0xCC008000 = float_1_80423340;
+    *(volatile f32*)0xCC008000 = float_0_80423338;
 }
 
 u8 winZClear(void) {
@@ -5983,11 +6151,12 @@ u8 winZClear(void) {
     return 0;
 }
 
+#pragma optimize_for_size off
 void winMailDisp(void* pWin) {
     extern s32 pouchCheckMail(s32 id);
-    extern void winMailGX(double x, double y, void* pWin);
+    extern void winMailGX(f32 x, f32 y, void* pWin);
     extern void GXSetScissor(s32 x, s32 y, s32 width, s32 height);
-    extern void winFontSetWidth(Vec3*, Vec3*, void*, f32, const char*);
+    extern void winFontSetWidth(Vec3*, Vec3*, void*, f32, const char*, ...);
     extern char str_msg_menu_mario_802f47d8[];
 
     extern u32 dat_804232e8;
@@ -6036,6 +6205,7 @@ void winMailDisp(void* pWin) {
     extern f32 float_neg240_80423348;
 
 
+    f32 c0, c1, c2, c3, c4, c5, c6, c7, c8, c9;
     Vec3 listBgBase;
     Vec3 listBgPos;
     Vec3 listBgScale;
@@ -6091,6 +6261,24 @@ void winMailDisp(void* pWin) {
     Vec3 scrollIndicatorPos;
     Vec3 scrollIndicatorScale;
 
+    u32 drawColor0;
+    u32 drawColor1;
+    u32 drawColor2;
+    u32 drawColor3;
+    u32 drawColor4;
+    u32 drawColor5;
+    u32 drawColor6;
+    u32 drawColor7;
+    u32 drawColor8;
+    u32 drawColor9;
+    u32 drawColor10;
+    u32 drawColor11;
+    u32 drawColor12;
+    u32 drawColor13;
+    u32 drawColor14;
+    u32 drawColor15;
+    u32 drawColor16;
+    u32 drawColor17;
     u32 listFontColor;
     u32 listBgColor;
     u32 listIconColor;
@@ -6126,6 +6314,16 @@ void winMailDisp(void* pWin) {
         winMailGX(*(f32*)(win + 0x244), *(f32*)(win + 0x24C), pWin);
 
         if (*(s32*)(win + 0x20C) != 0xCA) {
+            c0=float_4_8042334c;
+            c1=float_208_80423350;
+            c2=float_56_80423354;
+            c3=float_72_80423358;
+            c4=float_3_8042335c;
+            c5=float_2_80423360;
+            c6=float_88_80423364;
+            c7=float_104_80423368;
+            c8=float_120_8042336c;
+            c9=float_8_80423370;
             rowOffset = 0;
             rowPtr = win;
             count = *(s32*)(win + 0x254);
@@ -6150,50 +6348,59 @@ void winMailDisp(void* pWin) {
                 winTexInit(**(void***)((s32)*(void**)(win + 0x28) + 0xA0));
             listBgScale = *(Vec3*)(mailCatalog + 0x338);
             listBgBase = *(Vec3*)(mailCatalog + 0x32C);
-            listBgBase.x = *(f32*)(win + 0x244) + float_208_80423350 + float_4_8042334c;
-            listBgBase.y = *(f32*)(win + 0x260) + (*(f32*)(win + 0x24C) - float_56_80423354 - (f32)rowOffset);
+            listBgBase.x = c0 + (c1 + *(f32*)(win + 0x244));
+            listBgBase.y = *(f32*)(win + 0x260) + (*(f32*)(win + 0x24C) - c2 - (f32)rowOffset);
             listBgPos = listBgBase;
 
-                winTexSet(0x77, &listBgPos, &listBgScale, &listBgColor);
+                drawColor0=listBgColor;
+
+                winTexSet(0x77, &listBgPos, &listBgScale, &drawColor0);
 
                 listIconColor = dat_804232fc;
             listStatusScale = *(Vec3*)(mailCatalog + 0x350);
             listStatusBase = *(Vec3*)(mailCatalog + 0x344);
-            listStatusBase.x = *(f32*)(win + 0x244) + float_72_80423358;
-            listStatusBase.y = *(f32*)(win + 0x260) + (*(f32*)(win + 0x24C) - float_56_80423354 - (f32)rowOffset - float_3_8042335c);
+            listStatusBase.x = c3 + *(f32*)(win + 0x244);
+            listStatusBase.y = *(f32*)(win + 0x260) + (*(f32*)(win + 0x24C) - c2 - (f32)rowOffset - c4);
             listStatusPos = listStatusBase;
 
+                drawColor1=listIconColor;
+
                 winTexSet(pouchCheckMail(mailId) == 2 ? 0x5E : 0x5D,
-                          &listStatusPos, &listStatusScale, &listIconColor);
+                          &listStatusPos, &listStatusScale, &drawColor1);
 
             listTensScale = *(Vec3*)(mailCatalog + 0x368);
             listTensBase = *(Vec3*)(mailCatalog + 0x35C);
-            listTensBase.x = *(f32*)(win + 0x244) + float_88_80423364 + float_2_80423360;
-            listTensBase.y = *(f32*)(win + 0x260) + (*(f32*)(win + 0x24C) - float_56_80423354 - (f32)rowOffset - float_3_8042335c);
+            listTensBase.x = c5 + (c6 + *(f32*)(win + 0x244));
+            listTensBase.y = *(f32*)(win + 0x260) + (*(f32*)(win + 0x24C) - c2 - (f32)rowOffset - c4);
             listTensPos = listTensBase;
 
+                drawColor2=listIconColor;
+
                 winTexSet((displayNumber + 1) / 10 + 0x65,
-                          &listTensPos, &listTensScale, &listIconColor);
+                          &listTensPos, &listTensScale, &drawColor2);
 
             listOnesScale = *(Vec3*)(mailCatalog + 0x380);
             listOnesBase = *(Vec3*)(mailCatalog + 0x374);
-            listOnesBase.x = *(f32*)(win + 0x244) + float_104_80423368 + float_2_80423360;
-            listOnesBase.y = *(f32*)(win + 0x260) + (*(f32*)(win + 0x24C) - float_56_80423354 - (f32)rowOffset - float_3_8042335c);
+            listOnesBase.x = c5 + (c7 + *(f32*)(win + 0x244));
+            listOnesBase.y = *(f32*)(win + 0x260) + (*(f32*)(win + 0x24C) - c2 - (f32)rowOffset - c4);
             listOnesPos = listOnesBase;
 
+                drawColor3=listIconColor;
+
                 winTexSet((displayNumber + 1) % 10 + 0x65,
-                          &listOnesPos, &listOnesScale, &listIconColor);
+                          &listOnesPos, &listOnesScale, &drawColor3);
 
                 winFontInit();
             listSubjectScale = *(Vec3*)(mailCatalog + 0x398);
             listSubjectBase = *(Vec3*)(mailCatalog + 0x38C);
-            listSubjectBase.x = *(f32*)(win + 0x244) + float_120_8042336c;
-            listSubjectBase.y = *(f32*)(win + 0x260) + float_8_80423370 + (*(f32*)(win + 0x24C) - float_56_80423354 - (f32)rowOffset);
+            listSubjectBase.x = c8 + *(f32*)(win + 0x244);
+            listSubjectBase.y = *(f32*)(win + 0x260) + c9 + (*(f32*)(win + 0x24C) - c2 - (f32)rowOffset);
             listSubjectPos = listSubjectBase;
 
                 text = msgSearch(*(char**)(mail + 8));
+                drawColor15=listFontColor;
                 winFontSetWidth(&listSubjectPos, &listSubjectScale,
-                                &listFontColor, float_230_80423374, text);
+                                &drawColor15, float_230_80423374, text);
             }
 
             GXSetScissor(0, 0, 0x260, 0x1E0);
@@ -6220,48 +6427,57 @@ void winMailDisp(void* pWin) {
             winTexInit(**(void***)((s32)*(void**)(win + 0x28) + 0xA0));
             selBgScale = *(Vec3*)(mailCatalog + 0x3B0);
             selBgBase = *(Vec3*)(mailCatalog + 0x3A4);
-            selBgBase.x = *(f32*)(win + 0x244) + float_208_80423350 + float_4_8042334c;
+            selBgBase.x = float_4_8042334c + float_208_80423350 + *(f32*)(win + 0x244);
             selBgBase.y = *(f32*)(win + 0x24C) - float_56_80423354;
             selBgPos = selBgBase;
 
-            winTexSet(0x77, &selBgPos, &selBgScale, &selectedBgColor);
+            drawColor4=selectedBgColor;
+
+            winTexSet(0x77, &selBgPos, &selBgScale, &drawColor4);
 
             selStatusScale = *(Vec3*)(mailCatalog + 0x3C8);
             selStatusBase = *(Vec3*)(mailCatalog + 0x3BC);
-            selStatusBase.x = *(f32*)(win + 0x244) + float_72_80423358;
+            selStatusBase.x = float_72_80423358 + *(f32*)(win + 0x244);
             selStatusBase.y = *(f32*)(win + 0x24C) - float_56_80423354;
             selStatusPos = selStatusBase;
 
-            winTexSet(0x5E, &selStatusPos, &selStatusScale, &selectedNumberColor);
+            drawColor5=selectedNumberColor;
+
+            winTexSet(0x5E, &selStatusPos, &selStatusScale, &drawColor5);
 
             selTensScale = *(Vec3*)(mailCatalog + 0x3E0);
             selTensBase = *(Vec3*)(mailCatalog + 0x3D4);
-            selTensBase.x = *(f32*)(win + 0x244) + float_88_80423364 + float_2_80423360;
+            selTensBase.x = float_2_80423360 + float_88_80423364 + *(f32*)(win + 0x244);
             selTensBase.y = *(f32*)(win + 0x24C) - float_56_80423354 - float_3_8042335c;
             selTensPos = selTensBase;
 
+            drawColor6=selectedNumberColor;
+
             winTexSet((displayNumber + 1) / 10 + 0x65,
-                      &selTensPos, &selTensScale, &selectedNumberColor);
+                      &selTensPos, &selTensScale, &drawColor6);
 
             selOnesScale = *(Vec3*)(mailCatalog + 0x3F8);
             selOnesBase = *(Vec3*)(mailCatalog + 0x3EC);
-            selOnesBase.x = *(f32*)(win + 0x244) + float_104_80423368 + float_2_80423360;
+            selOnesBase.x = float_2_80423360 + float_104_80423368 + *(f32*)(win + 0x244);
             selOnesBase.y = *(f32*)(win + 0x24C) - float_56_80423354 - float_3_8042335c;
             selOnesPos = selOnesBase;
 
+            drawColor7=selectedNumberColor;
+
             winTexSet((displayNumber + 1) % 10 + 0x65,
-                      &selOnesPos, &selOnesScale, &selectedNumberColor);
+                      &selOnesPos, &selOnesScale, &drawColor7);
 
             winFontInit();
             selSubjectScale = *(Vec3*)(mailCatalog + 0x410);
             selSubjectBase = *(Vec3*)(mailCatalog + 0x404);
-            selSubjectBase.x = *(f32*)(win + 0x244) + float_120_8042336c;
+            selSubjectBase.x = float_120_8042336c + *(f32*)(win + 0x244);
             selSubjectBase.y = *(f32*)(win + 0x24C) - float_56_80423354 + float_8_80423370;
             selSubjectPos = selSubjectBase;
 
             text = msgSearch(*(char**)(mail + 8));
+            drawColor16=selectedSubjectColor;
             winFontSetWidth(&selSubjectPos, &selSubjectScale,
-                            &selectedSubjectColor, float_230_80423374, text);
+                            &drawColor16, float_230_80423374, text);
 
             GXSetScissor(
                 (u32)(*(f32*)(win + 0x244) +
@@ -6273,25 +6489,27 @@ void winMailDisp(void* pWin) {
             winTexInit(**(void***)((s32)*(void**)(win + 0x28) + 0xA0));
             bodyBgScale = *(Vec3*)(mailCatalog + 0x428);
             bodyBgBase = *(Vec3*)(mailCatalog + 0x41C);
-            bodyBgBase.x = *(f32*)(win + 0x244) + float_208_80423350 + float_4_8042334c;
+            bodyBgBase.x = float_4_8042334c + float_208_80423350 + *(f32*)(win + 0x244);
             bodyBgBase.y = *(f32*)(win + 0x24C) - float_56_80423354 - float_80_80423384;
             bodyBgPos = bodyBgBase;
 
             attachmentColor = selectedBgColor;
-            winTexSet(0x77, &bodyBgPos, &bodyBgScale, &attachmentColor);
+            drawColor8=attachmentColor;
+            winTexSet(0x77, &bodyBgPos, &bodyBgScale, &drawColor8);
 
             winFontInit();
             selectedBodyColor = dat_80423318;
             currentLine = *(s32*)(win + 0x268);
             bodyTextScale = *(Vec3*)(mailCatalog + 0x440);
             bodyTextBase = *(Vec3*)(mailCatalog + 0x434);
-            bodyTextBase.x = *(f32*)(win + 0x244) + float_80_80423384;
+            bodyTextBase.x = float_80_80423384 + *(f32*)(win + 0x244);
             bodyTextBase.y = *(f32*)(win + 0x24C) - float_80_80423384 + (f32)(currentLine * 0x15);
             bodyTextPos = bodyTextBase;
 
             text = msgSearch(*(char**)(mail + 0x0C));
+            drawColor17=selectedBodyColor;
             winFontSetWidth(&bodyTextPos, &bodyTextScale,
-                            &selectedBodyColor, float_280_80423388, text);
+                            &drawColor17, float_280_80423388, text);
 
             if ((flags & 0x1000) != 0) {
                 maxLines = *(u16*)(win + 0x26C);
@@ -6299,12 +6517,14 @@ void winMailDisp(void* pWin) {
                 attachmentColor = dat_8042331c;
             attachmentScale = *(Vec3*)(mailCatalog + 0x458);
             attachmentBase = *(Vec3*)(mailCatalog + 0x44C);
-            attachmentBase.x = *(f32*)(win + 0x244) + float_210_8042338c;
+            attachmentBase.x = float_210_8042338c + *(f32*)(win + 0x244);
             attachmentBase.y = float_7_80423390 + (*(f32*)(win + 0x24C) - (f32)((maxLines - 1) * 0x15)) + (f32)(currentLine * 0x15);
             attachmentPos = attachmentBase;
 
+                drawColor9=attachmentColor;
+
                 winTexSet(*(s32*)(mail + 0x10), &attachmentPos,
-                          &attachmentScale, &attachmentColor);
+                          &attachmentScale, &drawColor9);
             }
 
             GXSetScissor(0, 0, 0x260, 0x1E0);
@@ -6319,60 +6539,71 @@ void winMailDisp(void* pWin) {
                         arrowUpOnlyColor = dat_80423320;
             arrowUpOnlyScale = *(Vec3*)(mailCatalog + 0x470);
             arrowUpOnlyBase = *(Vec3*)(mailCatalog + 0x464);
-            arrowUpOnlyBase.x = *(f32*)(win + 0x244) + float_360_80423394;
+            arrowUpOnlyBase.x = float_360_80423394 + *(f32*)(win + 0x244);
             arrowUpOnlyBase.y = float_20_80423398 + (*(f32*)(win + 0x24C) - float_230_80423374) - float_24_8042339c;
             arrowUpOnlyPos = arrowUpOnlyBase;
 
+                        drawColor10=arrowUpOnlyColor;
+
                         winIconSet(0x1BE, &arrowUpOnlyPos,
-                                   &arrowUpOnlyScale, &arrowUpOnlyColor);
+                                   &arrowUpOnlyScale, &drawColor10);
                     }
                 } else if ((u32)(currentLine + 6) == (u32)maxLines) {
                     if (blink != 0) {
                         arrowDownOnlyColor = dat_80423324;
             arrowDownOnlyScale = *(Vec3*)(mailCatalog + 0x488);
             arrowDownOnlyBase = *(Vec3*)(mailCatalog + 0x47C);
-            arrowDownOnlyBase.x = *(f32*)(win + 0x244) + float_360_80423394;
+            arrowDownOnlyBase.x = float_360_80423394 + *(f32*)(win + 0x244);
             arrowDownOnlyBase.y = float_24_8042339c + float_20_80423398 + (*(f32*)(win + 0x24C) - float_230_80423374);
             arrowDownOnlyPos = arrowDownOnlyBase;
 
+                        drawColor11=arrowDownOnlyColor;
+
                         winIconSet(0x1BD, &arrowDownOnlyPos,
-                                   &arrowDownOnlyScale, &arrowDownOnlyColor);
+                                   &arrowDownOnlyScale, &drawColor11);
                     }
                 } else if (blink != 0) {
                     arrowDownBothColor = dat_80423328;
             arrowDownBothScale = *(Vec3*)(mailCatalog + 0x4A0);
             arrowDownBothBase = *(Vec3*)(mailCatalog + 0x494);
-            arrowDownBothBase.x = *(f32*)(win + 0x244) + float_360_80423394;
+            arrowDownBothBase.x = float_360_80423394 + *(f32*)(win + 0x244);
             arrowDownBothBase.y = float_24_8042339c + float_20_80423398 + (*(f32*)(win + 0x24C) - float_230_80423374);
             arrowDownBothPos = arrowDownBothBase;
 
+                    drawColor12=arrowDownBothColor;
+
                     winIconSet(0x1BD, &arrowDownBothPos,
-                               &arrowDownBothScale, &arrowDownBothColor);
+                               &arrowDownBothScale, &drawColor12);
 
                     arrowUpBothColor = dat_8042332c;
             arrowUpBothScale = *(Vec3*)(mailCatalog + 0x4B8);
             arrowUpBothBase = *(Vec3*)(mailCatalog + 0x4AC);
-            arrowUpBothBase.x = *(f32*)(win + 0x244) + float_360_80423394;
+            arrowUpBothBase.x = float_360_80423394 + *(f32*)(win + 0x244);
             arrowUpBothBase.y = float_20_80423398 + (*(f32*)(win + 0x24C) - float_230_80423374) - float_24_8042339c;
             arrowUpBothPos = arrowUpBothBase;
 
+                    drawColor13=arrowUpBothColor;
+
                     winIconSet(0x1BE, &arrowUpBothPos,
-                               &arrowUpBothScale, &arrowUpBothColor);
+                               &arrowUpBothScale, &drawColor13);
                 }
 
                 scrollIndicatorColor = dat_80423330;
             scrollIndicatorScale = *(Vec3*)(mailCatalog + 0x4D0);
             scrollIndicatorBase = *(Vec3*)(mailCatalog + 0x4C4);
-            scrollIndicatorBase.x = *(f32*)(win + 0x244) + float_360_80423394;
+            scrollIndicatorBase.x = float_360_80423394 + *(f32*)(win + 0x244);
             scrollIndicatorBase.y = float_20_80423398 + (*(f32*)(win + 0x24C) - float_230_80423374);
             scrollIndicatorPos = scrollIndicatorBase;
 
+                drawColor14=scrollIndicatorColor;
+
                 winIconSet(0x78, &scrollIndicatorPos,
-                           &scrollIndicatorScale, &scrollIndicatorColor);
+                           &scrollIndicatorScale, &drawColor14);
             }
             }
     }
 }
+#pragma optimize_for_size reset
 
 void unk_80152e80(s32 cameraId, void* win) {
     extern void GXSetTexCopySrc(s32 x, s32 y, s32 width, s32 height);
@@ -6458,3 +6689,257 @@ void unk_80152bdc(s32 cameraId, void* win) {
 }
 
 char _tmp_1042[64];
+
+/*
+ * Sort-label strings remain target-defined symbolic references in A2.
+ * The separate read-only catalog is not part of this transaction.
+ */
+extern const char str_msg_menu_sort_aiueo_802f4a54[];
+extern const char str_msg_menu_sort_kind_802f4a68[];
+extern const char str_msg_menu_sort_bp_802f4a7c[];
+extern const char str_msg_menu_sort_number_802f4a90[];
+extern const char str_msg_menu_sort_place_802f4aa8[];
+
+typedef struct WinRootSortOption {
+    const char* message;
+    void (*callback)(void*);
+} WinRootSortOption;
+
+WinRootSortOption sort_1[3] = {
+    { str_msg_menu_sort_aiueo_802f4a54, (void (*)(void*))sort_1_1_func },
+    { str_msg_menu_sort_kind_802f4a68, (void (*)(void*))sort_1_2_func },
+    { 0, 0 },
+};
+
+WinRootSortOption sort_2[3] = {
+    { str_msg_menu_sort_aiueo_802f4a54, (void (*)(void*))sort_2_1_func },
+    { str_msg_menu_sort_kind_802f4a68, (void (*)(void*))sort_2_2_func },
+    { 0, 0 },
+};
+
+WinRootSortOption sort_3[4] = {
+    { str_msg_menu_sort_aiueo_802f4a54, (void (*)(void*))sort_3_1_func },
+    { str_msg_menu_sort_kind_802f4a68, (void (*)(void*))sort_3_2_func },
+    { str_msg_menu_sort_bp_802f4a7c, (void (*)(void*))sort_3_3_func },
+    { 0, 0 },
+};
+
+WinRootSortOption sort_4[4] = {
+    { str_msg_menu_sort_aiueo_802f4a54, (void (*)(void*))sort_4_1_func },
+    { str_msg_menu_sort_kind_802f4a68, (void (*)(void*))sort_4_2_func },
+    { str_msg_menu_sort_bp_802f4a7c, (void (*)(void*))sort_4_3_func },
+    { 0, 0 },
+};
+
+WinRootSortOption sort_5[4] = {
+    { str_msg_menu_sort_aiueo_802f4a54, (void (*)(void*))sort_5_1_func },
+    { str_msg_menu_sort_kind_802f4a68, (void (*)(void*))sort_5_2_func },
+    { str_msg_menu_sort_bp_802f4a7c, (void (*)(void*))sort_5_3_func },
+    { 0, 0 },
+};
+
+WinRootSortOption sort_6[3] = {
+    { str_msg_menu_sort_aiueo_802f4a54, (void (*)(void*))sort_6_1_func },
+    { str_msg_menu_sort_kind_802f4a68, (void (*)(void*))sort_6_2_func },
+    { 0, 0 },
+};
+
+WinRootSortOption sort_7[4] = {
+    { str_msg_menu_sort_number_802f4a90, (void (*)(void*))sort_7_1_func },
+    { str_msg_menu_sort_place_802f4aa8, (void (*)(void*))sort_7_2_func },
+    { str_msg_menu_sort_aiueo_802f4a54, (void (*)(void*))sort_7_3_func },
+    { 0, 0 },
+};
+
+WinRootSortOption sort_8[3] = {
+    { str_msg_menu_sort_aiueo_802f4a54, (void (*)(void*))sort_8_1_func },
+    { str_msg_menu_sort_number_802f4a90, (void (*)(void*))sort_8_2_func },
+    { 0, 0 },
+};
+
+void* sort_data[8] = { sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8 };
+
+/*
+ * Data-pass A5: physical .sdata2 root-window color/control catalog.
+ * Retail places these 47 four-byte GLOBAL entries at +0x000..+0x0BB,
+ * immediately before the room-prefix string family at +0x0BC.
+ * Define them after all executable consumers to preserve declaration-only
+ * visibility in the earlier function bodies. No padding/pool objects.
+ */
+const u32 dat_804231a8 = 0xFFFFFFFF;
+const u32 dat_804231ac = 0x00000080;
+const u32 dat_804231b0 = 0xFFFFFFFE;
+const u32 dat_804231b4 = 0x808080FE;
+const u32 dat_804231b8 = 0xC86660FF;
+const u32 dat_804231bc = 0xE1A5A1FF;
+const u32 dat_804231c0 = 0xF0CDCBFF;
+const u32 dat_804231c4 = 0xC86B96FF;
+const u32 dat_804231c8 = 0xDBABC6FF;
+const u32 dat_804231cc = 0xECD1E1FF;
+/* Target auto-name implies float; physical value is packed RGBA. */
+const u32 float_neg0p0047648_804231d0 = 0xBB9C21FF;
+const u32 dat_804231d4 = 0xD7CD76FF;
+const u32 dat_804231d8 = 0xEAE5ADFF;
+const u32 dat_804231dc = 0x2FA530FF;
+const u32 dat_804231e0 = 0xA2D26EFF;
+const u32 dat_804231e4 = 0xCBE7A7FF;
+const u32 dat_804231e8 = 0x287EC5FF;
+const u32 dat_804231ec = 0x78B3D6FF;
+const u32 dat_804231f0 = 0xAFD6EAFF;
+const u32 dat_804231f4 = 0xFFFFFFFF;
+const u32 dat_804231f8 = 0xFFFFFFFF;
+const u32 dat_804231fc = 0x000000FF;
+const u32 dat_80423200 = 0xFFFFFFFF;
+const u32 dat_80423204 = 0xFFFFFFFF;
+const u32 dat_80423208 = 0xFFFFFFFF;
+const u32 dat_8042320c = 0xFFFFFFFF;
+const u32 dat_80423210 = 0xFFFFFFFF;
+const u32 dat_80423214 = 0xFFFFFFFF;
+const u32 dat_80423218 = 0xFFFFFFFF;
+const u32 dat_8042321c = 0xFFFFFFFF;
+const u32 dat_80423220 = 0xFFFFFFFF;
+const u32 dat_80423224 = 0x000000FF;
+const u32 dat_80423228 = 0x000000FF;
+const u32 dat_8042322c = 0xFFFFFFFF;
+const u32 dat_80423230 = 0x00000080;
+const u32 dat_80423234 = 0xFFFFFFFF;
+const u32 dat_80423238 = 0xFFFFFFFF;
+const u32 dat_8042323c = 0xFFFFFFFF;
+const u32 dat_80423240 = 0xFFFFFFFF;
+const u32 dat_80423244 = 0xFFFFFFFF;
+const u32 dat_80423248 = 0xFFFFFFFF;
+const u32 dat_8042324c = 0xFFFFFFFF;
+const u32 dat_80423250 = 0xFFFFFFFF;
+const u32 dat_80423254 = 0xFFFFFFFF;
+const u32 dat_80423258 = 0x000000FF;
+const u32 dat_8042325c = 0xFFFFFFFF;
+const u32 dat_80423260 = 0xFFFFFFFF;
+
+/* Read-only room prefixes referenced by the 26-entry tattle directory. */
+const char str_nara_80423264[] __attribute__((aligned(4))) = "nara";
+const char str_gor_8042326c[] __attribute__((aligned(4))) = "gor";
+const char str_tik_80423270[] __attribute__((aligned(4))) = "tik";
+const char str_shiga_80423274[] __attribute__((aligned(4))) = "shiga";
+const char str_hei_8042327c[] __attribute__((aligned(4))) = "hei";
+const char str_nok_80423280[] __attribute__((aligned(4))) = "nok";
+const char str_stn_80423284[] __attribute__((aligned(4))) = "stn";
+const char str_gon_80423288[] __attribute__((aligned(4))) = "gon";
+const char str_win_8042328c[] __attribute__((aligned(4))) = "win";
+const char str_hou_80423290[] __attribute__((aligned(4))) = "hou";
+const char str_mri_80423294[] __attribute__((aligned(4))) = "mri";
+const char str_tou_80423298[] __attribute__((aligned(4))) = "tou";
+const char str_usu_8042329c[] __attribute__((aligned(4))) = "usu";
+const char str_gra_804232a0[] __attribute__((aligned(4))) = "gra";
+const char str_jin_804232a4[] __attribute__((aligned(4))) = "jin";
+const char str_muj_804232a8[] __attribute__((aligned(4))) = "muj";
+const char str_dou_804232ac[] __attribute__((aligned(4))) = "dou";
+const char str_hom_804232b0[] __attribute__((aligned(4))) = "hom";
+const char str_eki_804232b4[] __attribute__((aligned(4))) = "eki";
+const char str_rsh_804232b8[] __attribute__((aligned(4))) = "rsh";
+const char str_pik_804232bc[] __attribute__((aligned(4))) = "pik";
+const char str_sin_804232c0[] __attribute__((aligned(4))) = "sin";
+const char str_bom_804232c4[] __attribute__((aligned(4))) = "bom";
+const char str_moo_804232c8[] __attribute__((aligned(4))) = "moo";
+const char str_aji_804232cc[] __attribute__((aligned(4))) = "aji";
+const char str_las_804232d0[] __attribute__((aligned(4))) = "las";
+
+/*
+ * Data-pass A9: complete target-backed root-menu Vec3/sorting-label catalog.
+ * Preserve the five A8 menu labels as natural msgHelp string literals: defining
+ * that common catalog base explicitly regressed winRootDisp/winMailDisp in A7.
+ * This late block contains only 88 real vectors and five sort-label strings;
+ * no function body, jump table, compiler pool or gap is hand-authored.
+ */
+const Vec3 vec3_802f482c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4838 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4844 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4850 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f485c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4868 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4874 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4880 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f488c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4898 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f48a4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f48b0 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f48bc = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f48c8 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f48d4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f48e0 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f48ec = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f48f8 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f4904 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4910 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f491c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4928 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f4934 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4940 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f494c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4958 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f4964 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4970 = { 0.8f, 0.8f, 0.8f };
+const Vec3 vec3_802f497c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4988 = { 0.8f, 0.8f, 0.8f };
+const Vec3 vec3_802f4994 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f49a0 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f49ac = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f49b8 = { 0.8f, 0.8f, 0.8f };
+const Vec3 vec3_802f49c4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f49d0 = { -1.0f, -1.0f, -1.0f };
+const Vec3 vec3_802f49dc = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f49e8 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f49f4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4a00 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4a0c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4a18 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f4a24 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4a30 = { 0.7f, 0.7f, 0.7f };
+const Vec3 vec3_802f4a3c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4a48 = { 0.6f, 0.6f, 0.6f };
+const char str_msg_menu_sort_aiueo_802f4a54[] __attribute__((aligned(4))) = "msg_menu_sort_aiueo";
+const char str_msg_menu_sort_kind_802f4a68[] __attribute__((aligned(4))) = "msg_menu_sort_kind";
+const char str_msg_menu_sort_bp_802f4a7c[] __attribute__((aligned(4))) = "msg_menu_sort_bp";
+const char str_msg_menu_sort_number_802f4a90[] __attribute__((aligned(4))) = "msg_menu_sort_number";
+const char str_msg_menu_sort_place_802f4aa8[] __attribute__((aligned(4))) = "msg_menu_sort_place";
+const Vec3 vec3_802f4abc = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4ac8 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4ad4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4ae0 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4aec = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4af8 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4b04 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4b10 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4b1c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4b28 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4b34 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4b40 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4b4c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4b58 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4b64 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4b70 = { 0.75f, 0.75f, 0.75f };
+const Vec3 vec3_802f4b7c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4b88 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4b94 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4ba0 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4bac = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4bb8 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4bc4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4bd0 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4bdc = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4be8 = { 0.75f, 0.75f, 0.75f };
+const Vec3 vec3_802f4bf4 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4c00 = { 1.0f, 7.5f, 1.0f };
+const Vec3 vec3_802f4c0c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4c18 = { 0.75f, 0.75f, 0.75f };
+const Vec3 vec3_802f4c24 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4c30 = { 1.0f, 1.0f, 1.0f };
+const Vec3 vec3_802f4c3c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4c48 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f4c54 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4c60 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f4c6c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4c78 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f4c84 = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4c90 = { 0.6f, 0.6f, 0.6f };
+const Vec3 vec3_802f4c9c = { 0.0f, 0.0f, 0.0f };
+const Vec3 vec3_802f4ca8 = { 0.6f, 0.6f, 0.6f };

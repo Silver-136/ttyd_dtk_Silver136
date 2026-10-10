@@ -40,19 +40,22 @@ extern f32 float_30_80423f48;
 extern s32 pouchGetCoin(void);
 
 /* fallback stub-fill: map=unk_8017b350 addr=0x8017b350 size=0x00000260 */
+#pragma opt_common_subs off
+#pragma optimize_for_size off
+#pragma opt_loop_invariants off
 int unk_8017b350(void) {
     extern s32 FontGetMessageWidth(char* msg);
     extern void FontDrawString(f64 x, f64 y, char* msg);
     extern void* camGetPtr(s32 camId);
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
-    extern s32 strlen(char* str);
+    extern u32 strlen(char* str);
     extern u32 dat_80423d0c;
     extern u32 dat_80423d10;
     extern f32 float_108_80423e34;
     extern f32 float_0p5_80423eb8;
     extern f32 float_12_80423f54;
-    extern char str_PCTd_80423f04[];
+    extern char str_PCTd_80423f04;
     void* work;
     char* msg;
     s32 i;
@@ -60,10 +63,11 @@ int unk_8017b350(void) {
     s32 itemOffset;
     void* flagPtr;
     void* cam;
-    u32 color;
-    f32 pos[3];
-    char buf[0x40];
     f32 mtx[3][4];
+    char buf[0x40];
+    f32 pos[3];
+    u32 titleColor;
+    u32 numberColor;
     s32 item;
 
     work = _wp;
@@ -72,8 +76,8 @@ int unk_8017b350(void) {
     if (winMgrAction(*(s32*)((s32)work + 0x60)) == 0) {
         FontDrawStart();
         FontDrawEdge();
-        color = dat_80423d0c;
-        FontDrawColor(&color);
+        titleColor = dat_80423d0c;
+        FontDrawColor(&titleColor);
         FontDrawString((f32)(-(s32)(FontGetMessageWidth(msg) & 0xFFFF) / 2), float_108_80423e34, msg);
         FontDrawEdgeOff();
     }
@@ -90,13 +94,14 @@ int unk_8017b350(void) {
             PSMTXMultVec((void*)((s32)cam + 0x11C), pos, pos);
             cam = camGetPtr(4);
             PSMTX44MultVec((void*)((s32)cam + 0x15C), pos, pos);
-            pos[0] = pos[0] * (f32)*(u16*)((s32)gp + 0x170) * float_0p5_80423eb8;
-            pos[1] = pos[1] * (f32)*(u16*)((s32)gp + 0x172) * float_0p5_80423eb8;
+            pos[0] = pos[0] * ((f32)*(u16*)((s32)gp + 0x170) * float_0p5_80423eb8);
+            pos[1] = pos[1] * ((f32)*(u16*)((s32)gp + 0x172) * float_0p5_80423eb8);
             item = *(s32*)(*(s32*)((s32)work + 8) + itemOffset);
-            sprintf(buf, str_PCTd_80423f04, *(u16*)((s32)itemDataTable + item * 0x28 + 0x16));
-            PSMTXTrans(mtx, pos[0] + float_12_80423f54 * (f32)(strlen(buf) - 1), pos[1], pos[2]);
-            color = dat_80423d10;
-            iconNumberDispGx(mtx, *(u16*)((s32)itemDataTable + item * 0x28 + 0x16), 0, &color);
+            sprintf(buf, &str_PCTd_80423f04, *(u16*)((s32)itemDataTable + item * 0x28 + 0x16));
+            PSMTXTrans(mtx, float_12_80423f54 * (f32)(strlen(buf) - 1) + pos[0], pos[1], pos[2]);
+            numberColor = dat_80423d10;
+            item = *(s32*)(*(s32*)((s32)work + 8) + itemOffset);
+            iconNumberDispGx(mtx, *(u16*)((s32)itemDataTable + item * 0x28 + 0x16), 0, &numberColor);
         }
         flagPtr = (void*)((s32)flagPtr + 2);
         mapOffset += 0xC;
@@ -105,6 +110,9 @@ int unk_8017b350(void) {
     }
 }
 
+#pragma opt_common_subs reset
+#pragma optimize_for_size reset
+#pragma opt_loop_invariants reset
 void unk_8017b330(void) {
     extern void winMgrHelpMain();
 
@@ -135,6 +143,9 @@ void unk_8017b2b0(void* pWin) {
 #pragma use_lmw_stmw on
 
 /* fallback stub-fill: map=unk_8017b0c4 addr=0x8017b0c4 size=0x000001ec */
+#pragma optimize_for_size off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 int unk_8017b0c4(u32* pWin) {
     extern void PSMTXScale(void* mtx, f32 x, f32 y, f32 z);
     extern void PSMTXConcat(void* a, void* b, void* out);
@@ -191,6 +202,9 @@ int unk_8017b0c4(u32* pWin) {
     }
     return 0;
 }
+#pragma optimize_for_size reset
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -281,6 +295,7 @@ s32 evt_unitwin_free(void* pEvt, s32 force) {
 #pragma use_lmw_stmw on
 
 
+#pragma opt_loop_invariants off
 s32 evt_unitwin_selltable_setup(int pEvt) {
     extern void mapObjFlagOn(void* obj, u32 flags);
     extern void iconEntry(char* name, u16 iconId);
@@ -314,17 +329,19 @@ s32 evt_unitwin_selltable_setup(int pEvt) {
     count = 0;
     *(s32*)((s32)work + 8) = itemTable;
     *(s32*)((s32)work + 0x18) = 0;
-    while (*(s32*)(*(s32*)((s32)work + 4) + mapOffset) != 0) {
+    while (*(u32*)(*(s32*)((s32)work + 4) + mapOffset) != 0) {
         *(s32*)((s32)work + 0x18) = *(s32*)((s32)work + 0x18) + 1;
         mapObjGetPos(*(void**)(*(s32*)((s32)work + 4) + mapOffset), pos);
         mapObjFlagOn(*(void**)(*(s32*)((s32)work + 4) + mapOffset), 0x4000);
-        if (*(s32*)(*(s32*)((s32)work + 8) + itemOffset) == 0) {
-            *(u16*)((s32)flagPtr + 0xC) |= 1;
-        } else {
+        if (*(s32*)(*(s32*)((s32)work + 8) + itemOffset) != 0) {
+            void* itemData;
             sprintf(name, &str_uwnPCTd_80423e18, count);
-            iconEntry(name, *(u16*)((s32)itemDataTable + *(s32*)(*(s32*)((s32)work + 8) + itemOffset) * 0x28 + 0x20));
-            iconSetPos(pos[0], pos[1] + float_6_80423f40, pos[2], name);
+            itemData = (void*)((s32)itemDataTable + *(s32*)(*(s32*)((s32)work + 8) + itemOffset) * 0x28);
+            iconEntry(name, *(u16*)((s32)itemData + 0x20));
+            iconSetPos(pos[0], float_6_80423f40 + pos[1], pos[2], name);
             iconFlagOn(name, 0x40);
+        } else {
+            *(u16*)((s32)flagPtr + 0xC) |= 1;
         }
         mapOffset += 0xC;
         itemOffset += 4;
@@ -345,6 +362,7 @@ s32 evt_unitwin_selltable_setup(int pEvt) {
     *(s32*)((s32)work + 0xE0) = -1;
     return 2;
 }
+#pragma opt_loop_invariants reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -378,9 +396,9 @@ u32 unitwincoin_wait(void) {
     pouchGetPtr();
     coin = pouchGetCoin();
     stored = *(s32*)((s32)work + 0x2C);
-    result = (stored - coin) | (coin - stored);
-    result >>= 31;
-    return 2 & ~result;
+    result = 2;
+    result &= ~(((stored - coin) | (coin - stored)) >> 31);
+    return result;
 }
 
 s32 unk_8017abf8(void* pEvt) {
@@ -445,6 +463,7 @@ int unk_8017a844(void* pEvt) {
     s32 found;
     s32 i;
     s32 offset;
+    u8* flagWork;
     char name[0x20];
 
     found = 0;
@@ -489,8 +508,8 @@ int unk_8017a844(void* pEvt) {
                     break;
                 }
             }
-            if (i < *(s32*)((s32)work + 0x18) &&
-                ((*(u16*)((s32)work + 0xC + i * 2) & 1) == 0)) {
+            if (((*(u16*)((s32)work + 0xC + i * 2) & 1) == 0) &&
+                i < *(s32*)((s32)work + 0x18)) {
                 if (*(s32*)((s32)work + 0xE0) != i) {
                     if (*(s32*)((s32)work + 0xE0) == -1) {
                         winMgrOpen(*(s32*)((s32)work + 0x60));
@@ -525,7 +544,7 @@ int unk_8017a844(void* pEvt) {
         }
     } else {
         if (evtCheckID(*(s32*)(*(s32*)((s32)work + 0x20) + 0x15C)) == 0) {
-            *(u16*)work &= 0xFFFD;
+            *(u16*)work &= ~2;
             marioKeyOn();
             if (*(s32*)((s32)work + 0xE4) != 0) {
                 *(u16*)((s32)work + 0xC + *(s32*)((s32)work + 0x24) * 2) |= 1;
@@ -533,18 +552,17 @@ int unk_8017a844(void* pEvt) {
         }
     }
 
-    for (i = 0, offset = 0; i < *(s32*)((s32)work + 0x18); i++, offset += 0xC) {
+    for (i = 0, offset = 0, flagWork = work;
+         i < *(s32*)((s32)work + 0x18); offset += 0xC, flagWork += 2, i++) {
         void* obj = mapGetMapObj(*(char**)(*(s32*)((s32)work + 4) + offset));
         if (obj != NULL) {
             sprintf(name, &str_uwnPCTd_80423e18, i);
-            if ((*(u16*)((s32)work + 0xC + i * 2) & 1) == 0) {
-                if ((*(u32*)obj & 1) == 0) {
-                    iconFlagOff(name, 2);
-                } else {
-                    iconFlagOn(name, 2);
-                }
-            } else {
+            if ((*(u16*)(flagWork + 0xC) & 1) != 0) {
                 iconFlagOn(name, 2);
+            } else if ((*(u32*)obj & 1) != 0) {
+                iconFlagOn(name, 2);
+            } else {
+                iconFlagOff(name, 2);
             }
         }
     }
@@ -630,6 +648,9 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
     extern void* camGetPtr(s32 cameraId);
     extern void GXSetProjection(void* matrix, s32 type);
     extern void GXGetProjectionv(f32* projection);
+    extern s32 unk_8041ec1c;
+    extern char str_SFX_COUNT_COIN1_802f6ecc[];
+    extern void psndSFXOn(char* name);
     void* pouch = pouchGetPtr();
     extern void GXGetViewportv(f32* viewport);
     extern void GXProject(f32 x, f32 y, f32 z, void* matrix,
@@ -644,11 +665,10 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
     s32 value;
     s32 i;
 
-    if ((flags & 1) == 0) return;
-    {
+    if ((*(u16*)work & 1) != 0) {
         s32 selected = *(s32*)((s32)work + 0x24);
         s32 item = *(s32*)(*(s32*)((s32)work + 8) + selected * 4);
-        char* itemName = *(char**)(itemDataTable + item * 0x28 + 4);
+        char* itemName = *(char**)(itemDataTable + item * 0x28);
         char* itemDescription = *(char**)(itemDataTable + item * 0x28 + 8);
 
         windowDispGX_Waku_col(-150.0f, 120.0f, 300.0f, 50.0f,
@@ -697,16 +717,16 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
             }
         }
     }
-    if ((flags & 0xD000) != 0) {
+    if ((*(u16*)work & 0xD000) != 0) {
         windowDispGX_Waku_col(-250.0f, -75.0f, 150.0f, 45.0f,
                               20.0f, 0, &white);
         PSMTXTrans(trans, -220.0f, -113.0f, 0.0f);
         PSMTXScale(scale, 0.7f, 0.7f, 0.7f);
         PSMTXConcat(trans, scale, trans);
-        if ((flags & 0x1000) != 0) {
+        if ((*(u16*)work & 0x1000) != 0) {
             iconDispGx2(trans, 0x10, 0x193);
             value = pouchGetCoin();
-        } else if ((flags & 0x4000) != 0) {
+        } else if ((*(u16*)work & 0x4000) != 0) {
             iconDispGx2(trans, 0x10, 0x10A);
             value = pouchGetSuperCoin();
         } else {
@@ -725,9 +745,17 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
                 statusWinForceUpdateCoin();
             }
             *(s32*)((s32)work + 0x5C) += 1;
+            *(s32*)((s32)work + 0x5C) %= 1200;
+            if (unk_8041ec1c == 0) {
+                psndSFXOn(str_SFX_COUNT_COIN1_802f6ecc);
+                unk_8041ec1c = 7;
+            }
+        }
+        if (unk_8041ec1c > 0) {
+            unk_8041ec1c--;
         }
     }
-    if ((flags & 0x2000) != 0) {
+    if ((*(u16*)work & 0x2000) != 0) {
         windowDispGX_Waku_col(-250.0f, -130.0f, 150.0f, 45.0f,
                               20.0f, 0, &white);
         PSMTXTrans(trans, -210.0f, -166.0f, 0.0f);
@@ -745,7 +773,7 @@ void evt_unitwin_disp_func(s32 cameraId, void* work) {
             *(s32*)((s32)work + 0x30) = shown + delta;
         }
     }
-    if ((flags & 0x100) != 0 && (*(u16*)lotteryGetPtr() & 2) != 0) {
+    if ((*(u16*)work & 0x100) != 0 && (*(u16*)lotteryGetPtr() & 2) != 0) {
         char digits[8];
         void* lottery = lotteryGetPtr();
 

@@ -7,7 +7,136 @@
 #include "mario/mario_pouch.h"
 #include "statuswindow.h"
 
-void* wp;
+/* Data pass A3: seven party suffixes and three stat suffixes.
+ * These are the ten exact target-owned .sdata2 strings at +0x00..+0x43.
+ * Target has seven 5-byte strings at 8-byte strides, then three 4-byte strings.
+ */
+const char str_kur_80427f18[5] __attribute__ ((aligned(8))) = "_kur";
+const char str_nok_80427f20[5] __attribute__ ((aligned(8))) = "_nok";
+const char str_win_80427f28[5] __attribute__ ((aligned(8))) = "_win";
+const char str_yos_80427f30[5] __attribute__ ((aligned(8))) = "_yos";
+const char str_viv_80427f38[5] __attribute__ ((aligned(8))) = "_viv";
+const char str_bom_80427f40[5] __attribute__ ((aligned(8))) = "_bom";
+const char str_chu_80427f48[5] __attribute__ ((aligned(8))) = "_chu";
+const char str_hp_80427f50[4] __attribute__ ((aligned(4))) = "_hp";
+const char str_fp_80427f54[4] __attribute__ ((aligned(4))) = "_fp";
+const char str_bp_80427f58[4] __attribute__ ((aligned(4))) = "_bp";
+
+/* A4: exact retail small-data menu/status label suffix.
+ * The three source-safe identifiers carry the original 5-byte Shift-JIS
+ * fullwidth strings. The target identities require separately reviewed
+ * same-unit aliases; do not duplicate owner storage. */
+const char str_sjis_fullwidth_HP_80427f5c[5] __attribute__ ((aligned(4))) = "\x82\x67\x82\x6f";
+const char str_sjis_fullwidth_FP_80427f64[5] __attribute__ ((aligned(4))) = "\x82\x65\x82\x6f";
+const char str_sjis_fullwidth_BP_80427f6c[5] __attribute__ ((aligned(4))) = "\x82\x61\x82\x6f";
+const char str_HP_80427f74[3] __attribute__ ((aligned(4))) = "HP";
+const char str_FP_80427f78[3] __attribute__ ((aligned(4))) = "FP";
+const char str_BP_80427f7c[3] __attribute__ ((aligned(4))) = "BP";
+const char str_KP_80427f80[3] __attribute__ ((aligned(4))) = "KP";
+const char str_OP_80427f84[3] __attribute__ ((aligned(4))) = "OP";
+const char str_PC_80427f88[3] __attribute__ ((aligned(4))) = "PC";
+const char str_PF_80427f8c[3] __attribute__ ((aligned(4))) = "PF";
+const char str_PB_80427f90[3] __attribute__ ((aligned(4))) = "PB";
+const char str_PM_80427f94[3] __attribute__ ((aligned(4))) = "PM";
+const char str_PV_80427f98[3] __attribute__ ((aligned(4))) = "PV";
+const char str_PT_80427f9c[3] __attribute__ ((aligned(4))) = "PT";
+
+/* Five target-local window-heading colors, immediately after the label block. */
+__declspec(section ".sdata2") u32 dat_80427fa0 = 0x2BA4FF00;
+__declspec(section ".sdata2") u32 dat_80427fa4 = 0x2BA4FF00;
+__declspec(section ".sdata2") u32 dat_80427fa8 = 0x2BA4FF00;
+__declspec(section ".sdata2") u32 dat_80427fac = 0x2BA4FF00;
+__declspec(section ".sdata2") u32 dat_80427fb0 = 0x2BA4FF00;
+
+
+/* Retail 40-byte window-manager selection record. */
+typedef struct WinMgrDescData {
+    s32 fadeMode;
+    s32 headingType;
+    s32 cameraId;
+    s32 x;
+    s32 y;
+    s32 width;
+    s32 height;
+    u32 color;
+    void* mainFunc;
+    void* dispFunc;
+} WinMgrDescData;
+
+typedef struct WinMgrSelectDescListData {
+    s16 numDescs;
+    u16 reserved;
+    WinMgrDescData* descs;
+} WinMgrSelectDescListData;
+
+/* The callbacks are defined below, in their existing source order. */
+void select_main(void* win);
+void select_disp(void* win);
+void select_disp2(void* win);
+void select_main3(void* win);
+void select_disp3(void* win);
+void select_disp_party(void* win);
+void select_disp_mario(void* win);
+void select_disp_luigi(void* win);
+void select_disp3_mario(void* win);
+void select_disp3_party(void* win);
+
+/* Exact retail selection descriptors: 16 records at 0x28 bytes per record. */
+WinMgrDescData select_desc[6] = {
+    {0, 1, 8, -24, 116, 300, 240, 0xFFFFFFFF, (void*)select_main, (void*)select_disp},
+    {2, 0, 8, -280, 120, 240, 45, 0xFFFFFFFF, 0, (void*)select_disp2},
+    {0, 0, 8, -240, -130, 500, 80, 0xFFFFFFFF, (void*)select_main3, (void*)select_disp3},
+    {0, 1, 8, -24, 116, 300, 240, 0xFFFFFFFF, (void*)select_main, (void*)select_disp},
+    {2, 0, 8, -280, 120, 240, 69, 0xFFFFFFFF, 0, (void*)select_disp2},
+    {0, 0, 8, -240, -130, 500, 80, 0xFFFFFFFF, (void*)select_main3, (void*)select_disp3},
+};
+
+WinMgrDescData select_party_desc[3] = {
+    {0, 4, 8, -24, 116, 300, 240, 0xFFFFFFFF, (void*)select_main, (void*)select_disp_party},
+    {2, 0, 8, -280, 120, 240, 69, 0xFFFFFFFF, 0, (void*)select_disp2},
+    {0, 0, 8, -240, -130, 500, 80, 0xFFFFFFFF, (void*)select_main3, (void*)select_disp3_party},
+};
+
+WinMgrDescData select_mario_desc[3] = {
+    {0, 5, 8, -24, 116, 300, 240, 0xFFFFFFFF, (void*)select_main, (void*)select_disp_mario},
+    {2, 0, 8, -280, 120, 240, 69, 0xFFFFFFFF, 0, (void*)select_disp2},
+    {0, 0, 8, -240, -130, 500, 80, 0xFFFFFFFF, (void*)select_main3, (void*)select_disp3_mario},
+};
+
+WinMgrDescData select_luigi_desc[2] = {
+    {0, 1, 8, -24, 116, 300, 240, 0xFFFFFFFF, (void*)select_main, (void*)select_disp_luigi},
+    {2, 0, 8, -280, 120, 240, 45, 0xFFFFFFFF, 0, (void*)select_disp2},
+};
+
+WinMgrDescData select_johoya_perfect_desc[2] = {
+    {0, 1, 8, -24, 116, 300, 240, 0xFFFFFFFF, (void*)select_main, (void*)select_disp_luigi},
+    {2, 0, 8, -280, 120, 240, 45, 0xFFFFFFFF, 0, (void*)select_disp2},
+};
+
+/* Each 8-byte list entry contains a count, reserved u16, and descriptor pointer. */
+WinMgrSelectDescListData select_desc_tbl[19] = {
+    {3, 0, select_desc},
+    {3, 0, select_desc},
+    {3, 0, select_desc},
+    {3, 0, select_desc},
+    {3, 0, select_desc},
+    {3, 0, select_desc},
+    {3, 0, select_party_desc},
+    {3, 0, select_party_desc},
+    {3, 0, select_party_desc},
+    {3, 0, select_mario_desc},
+    {3, 0, select_mario_desc},
+    {3, 0, select_desc},
+    {3, 0, select_desc},
+    {3, 0, &select_desc[3]},
+    {3, 0, select_desc},
+    {3, 0, select_desc},
+    {3, 0, &select_desc[3]},
+    {2, 0, select_johoya_perfect_desc},
+    {2, 0, select_luigi_desc},
+};
+
+static void* wp;
 void* __memAlloc(s32 heap, u32 size);
 void __memFree(s32 heap, void* ptr);
 extern u8 itemDataTable[];
@@ -18,7 +147,6 @@ extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
 extern void PSMTXScale(f32[3][4], f32, f32, f32);
 extern char str_msg_window_title_5_80300808[];
 extern char str_help_80428008[];
-extern char* mario_status_name_table[];
 extern void FontDrawStart(void);
 extern char name_party0[],name_party1[],name_party2[],name_party4[],name_party5[],name_party6[];
 extern void PSMTXTrans(f32[3][4], f32, f32, f32);
@@ -707,7 +835,6 @@ s32* winMgrSelectEntry(u32 selectType, s32 newItem, s32 isCancellable) {
         u8 pad1D[0x0B];
     } ItemDataMini;
 
-    extern u8 select_desc_tbl[];
     extern s16 L_pouchEquipBadge(s32);
     extern u32 partyChkJoin(s32);
     extern s32 evtGetValue(void*, s32);
@@ -1774,6 +1901,7 @@ void select_main(void* win) {
     }
 }
 
+#pragma optimize_for_size off
 void select_disp(void* win) {
     typedef struct Vec { f32 x,y,z; } Vec;
     extern void* wp; extern u8 itemDataTable[]; extern char* msgSearch(char*);
@@ -1808,15 +1936,37 @@ void select_disp(void* win) {
             winFontSetWidth(&pos,&scale,&color,185.0f,msgSearch(*(char**)(item+8)));
             {
                 s32 price;
-                s32 showPrice=1;
+                s32 showPrice=0;
                 s32 type=*(s32*)(sel+4);
-                if(type==3 || type==0xC) price=*(u16*)(item+0x1A);
-                else if(type==0xB) price=*(u16*)(item+0x14);
-                else if(type==0xD) price=*(u16*)(item+0x18);
-                else if(type==0xE) price=(*(u16*)(item+0x14)*12)/10;
-                else if(type==0xF) price=(*(u16*)(item+0x14)*(evtGetValue(0,-0xA21F957)+11))/10;
-                else if(type==0x10) price=(*(u16*)(item+0x14)*2+2)/3;
-                else showPrice=0;
+                switch (type) {
+                    case 0xB:
+                        price=*(u16*)(item+0x14);
+                        showPrice=1;
+                        break;
+                    case 3:
+                    case 0xC:
+                        price=*(u16*)(item+0x1A);
+                        showPrice=1;
+                        break;
+                    case 0xD:
+                        price=*(u16*)(item+0x18);
+                        showPrice=1;
+                        break;
+                    case 0xE:
+                        price=(*(u16*)(item+0x14)*12)/10;
+                        showPrice=1;
+                        break;
+                    case 0xF:
+                        price=(*(u16*)(item+0x14)*(evtGetValue(0,-0xA21F957)+11))/10;
+                        showPrice=1;
+                        break;
+                    case 0x10:
+                        price=(*(u16*)(item+0x14)*2+2)/3;
+                        showPrice=1;
+                        break;
+                    default:
+                        break;
+                }
                 if(showPrice) {
                     sprintf(priceText,"%d",price); width=(f32)FontGetMessageWidth(priceText);
                     if(width>30.0f) width=30.0f; winFontInit();
@@ -1881,6 +2031,9 @@ void select_disp(void* win) {
     }
 }
 
+#pragma optimize_for_size on
+
+#pragma optimize_for_size off
 void select_disp_party(void* win) {
     extern void* wp;
     extern char* pouchGetYoshiName(void);
@@ -1895,7 +2048,8 @@ void select_disp_party(void* win) {
     extern void winIconGrayInit(void);
     extern void winIconSet(s32, Vec*, Vec*, void*);
     extern s32 pouchGetPartyColor(s32);
-    extern s16 party_icon_table[], party_id_table[];
+    extern u16 party_icon_table[];
+    extern u16 party_id_table[];
     extern void winFontSetEdgeWidth(Vec*, Vec*, void*, f32, char*, ...);
     extern void iconDispGx(f64, Vec*, u16, u16);
     extern void* gpGlobals;
@@ -1942,7 +2096,7 @@ void select_disp_party(void* win) {
     GXColor titleBase = {0xFF, 0xFF, 0xFF, 0xFF};
 
     if ((*(u32*)(*(u8**)((u8*)wp + 4) + *(s32*)(sel + 0x2C) * 0x44) & 4) == 0) {
-        GXColor fog = {0xFF, 0xFF, 0xFF, 0xFF};
+        GXColor fog = {0xFF, 0xFF, 0xFF, 0xC0};
         GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, &fog);
 
         GXGetScissor(&oldX, &oldY, &oldW, &oldH);
@@ -2011,7 +2165,7 @@ void select_disp_party(void* win) {
                     Vec partyIconPos = {0.0f, 0.0f, 0.0f};
                     Vec partyIconScale = {1.0f, 1.0f, 1.0f};
                     GXColor partyIconColor;
-                    s16 icon;
+                    s32 icon;
 
                     partyIconColor = iconBase;
                     partyIconPos.x =
@@ -2021,7 +2175,7 @@ void select_disp_party(void* win) {
                     icon = party_icon_table[ROW_VALUE()];
 
                     if (icon == 0x160) {
-                        s32 partyColor = pouchGetPartyColor(4);
+                        u32 partyColor = (u32)pouchGetPartyColor(4);
                         switch (partyColor) {
                         case 0: icon = 0x160; break;
                         case 1: icon = 0x161; break;
@@ -2029,6 +2183,7 @@ void select_disp_party(void* win) {
                         case 3: icon = 0x163; break;
                         case 4: icon = 0x164; break;
                         case 5: icon = 0x165; break;
+                        case 6: icon = 0x166; break;
                         default: icon = 0x166; break;
                         }
                     }
@@ -2166,6 +2321,7 @@ void select_disp_party(void* win) {
 #undef GET_PARTY_NAME
 }
 
+#pragma optimize_for_size on
 void select_disp_mario(void* win) {
     extern void* wp;
     extern void* gp;
@@ -2571,6 +2727,10 @@ void select_disp_luigi(void* win) {
     extern Vec vec3_80300604;
     extern Vec vec3_80300610;
     extern Vec vec3_8030061c;
+    extern Vec vec3_80300628;
+    extern Vec vec3_80300634;
+    extern Vec vec3_80300640;
+    extern Vec vec3_8030064c;
 
     extern char str_msg_window_title_6_8030081c[];
     extern u8 _jdt[];
@@ -2598,6 +2758,7 @@ void select_disp_luigi(void* win) {
     char number[32];
     char* title;
     f32 titleWidth;
+    u32 titleOffset;
     s32 i;
 
     if ((*(u32*)(*(u8**)((u8*)wp + 4) + *(s32*)(select + 0x2C) * 0x44) & 4) != 0)
@@ -2609,9 +2770,10 @@ void select_disp_luigi(void* win) {
                  0x112 - *(s32*)(entry + 0x1C),
                  *(s32*)(entry + 0x20), *(s32*)(entry + 0x24) - 0x32);
     for (i = 0; i < *(s32*)(select + 0x34); i++) {
-        f32 y = *(f32*)(select + 0x1C) + (f32)(*(s32*)(entry + 0x1C) - 0x20 - i * 0x18);
-        if (y - 32.0f <= (f32)*(s32*)(entry + 0x1C) &&
-            y + 32.0f >= (f32)(*(s32*)(entry + 0x1C) - *(s32*)(entry + 0x24))) {
+        /* The retail clipping test uses y-0x2C; text is drawn at y-0x20. */
+        f32 clipY = *(f32*)(select + 0x1C) + (f32)(*(s32*)(entry + 0x1C) - 0x2C - i * 0x18);
+        if (clipY - 32.0f <= (f32)*(s32*)(entry + 0x1C) &&
+            clipY + 32.0f >= (f32)(*(s32*)(entry + 0x1C) - *(s32*)(entry + 0x24))) {
             u8* rowInfo = *(u8**)_jdt + i * 0x10;
             char* message = *(char**)(rowInfo + 4);
             s16 messageEnd = *(s16*)(rowInfo + 8);
@@ -2622,7 +2784,8 @@ void select_disp_luigi(void* win) {
             listPos = vec3_803005e0;
             listScale = vec3_803005ec;
             listPos.x = (f32)(*(s32*)(entry + 0x18) + 0x19);
-            listPos.y = y;
+            listPos.y = *(f32*)(select + 0x1C) +
+                (f32)(*(s32*)(entry + 0x1C) - 0x20 - i * 0x18);
             listPos.z = vec3_803005e0.z;
             winFontSetWidth(&listPos, &listScale, &listColor, 200.0f, message);
             message[messageEnd] = saved;
@@ -2633,7 +2796,8 @@ void select_disp_luigi(void* win) {
                 numberColor = (*(u16*)(*(u8**)(select + 0x30) + i * 4) & 1) ? disabled : normal;
                 numberScale = vec3_80300604;
                 numberPos.x = (f32)(*(s32*)(entry + 0x18) + 0xF5);
-                numberPos.y = y;
+                numberPos.y = *(f32*)(select + 0x1C) +
+                    (f32)(*(s32*)(entry + 0x1C) - 0x20 - i * 0x18);
                 numberPos.z = vec3_803005f8.z;
                 winFontSet(&numberPos, &numberScale, &numberColor, number);
             }
@@ -2654,7 +2818,9 @@ void select_disp_luigi(void* win) {
     winFontInit();
     titleDrawColor = titleColor;
     titleScale = vec3_8030061c;
-    titlePos.x = (f32)*(s32*)(entry + 0x18) + ((f32)*(s32*)(entry + 0x20) - titleWidth) * 0.5f;
+    /* PPC performs fctiwz then keeps the low 16 bits before adding X. */
+    titleOffset = (u32)(((f32)*(s32*)(entry + 0x20) - titleWidth) * 0.5f);
+    titlePos.x = (f32)(*(s32*)(entry + 0x18) + (u16)titleOffset);
     titlePos.y = (f32)(*(s32*)(entry + 0x1C) + 0xE);
     titlePos.z = vec3_80300610.z;
     winFontSetEdgeWidth(&titlePos, &titleScale, &titleDrawColor, 120.0f, title);
@@ -2666,26 +2832,26 @@ void select_disp_luigi(void* win) {
         PSMTXConcat(transMtx, scaleMtx, transMtx);
         iconColor = dat_80428004;
         iconDispGxCol(transMtx, 0x10, 0x213, &iconColor);
+        griftyPos = vec3_80300628;
         griftyPos.x = (f32)(*(s32*)(entry + 0x18) + 0x10C);
         griftyPos.y = (f32)(*(s32*)(entry + 0x1C) - 0xC);
-        griftyPos.z = 0.0f;
         iconDispGx((f64)iconScale.value, &griftyPos, 0x10, 0x193);
     }
+    cursorPos = vec3_80300634;
     cursorPos.x = *(f32*)(select + 0x14);
     cursorPos.y = *(f32*)(select + 0x18);
-    cursorPos.z = 0.0f;
     iconDispGx(1.0, &cursorPos, 0x14, 0x1F8);
     if (*(s32*)(select + 0x34) > 8 && ((*(u32*)((u8*)gpGlobals + 0x10) & 0x1F) < 0x14)) {
         if (*(s32*)(select + 0x10) != 0) {
+            upPos = vec3_80300640;
             upPos.x = (f32)*(s32*)(entry + 0x18) + (f32)*(s32*)(entry + 0x20) * 0.5f;
             upPos.y = (f32)(*(s32*)(entry + 0x1C) - 0x24);
-            upPos.z = 0.0f;
             iconDispGx(0.6, &upPos, 0x10, 0x1BD);
         }
         if (*(s32*)(select + 0x10) != *(s32*)(select + 0x34) - 8) {
+            downPos = vec3_8030064c;
             downPos.x = (f32)*(s32*)(entry + 0x18) + (f32)*(s32*)(entry + 0x20) * 0.5f;
             downPos.y = (f32)(*(s32*)(entry + 0x1C) - *(s32*)(entry + 0x24) - 0xC);
-            downPos.z = 0.0f;
             iconDispGx(0.6, &downPos, 0x10, 0x1BE);
         }
     }
@@ -2933,6 +3099,7 @@ void select_disp3_mario(void* win) {
     extern void* pouchGetPtr(void);
     extern s32 sprintf(char* str, const char* fmt, ...);
     extern char* msgSearch(char* msg);
+    extern char* mario_status_name_table[];
 
 
 
@@ -2972,6 +3139,16 @@ void select_disp3_mario(void* win) {
     }
 }
 
+/* Retail .sdata2 heading-color continuation: first six exact source-owned
+ * u32 records at offsets +0xB0..+0xC7. The seventh word (dat_80427fe0)
+ * is deliberately deferred to avoid an extra rebuilt scalar-pool tail. */
+const u32 dat_80427fc8 = 0xF0F0F0FF;
+const u32 dat_80427fcc = 0xF0F0F0FF;
+const u32 dat_80427fd0 = 0xF0F0F0FF;
+const u32 dat_80427fd4 = 0x000000FF;
+const u32 dat_80427fd8 = 0xA0A0A0FF;
+const u32 dat_80427fdc = 0xFFFFFFFF;
+
 /* select_disp_mario canonical .sdata2 scalars: intentionally late so the
  * existing compiler-owned literal pool keeps its accepted order/offsets. */
 const u32 dat_80427fe4 = 0x000000FF;
@@ -2988,3 +3165,127 @@ const f32 float_0p6_8042802c = 0.6f;
 const f32 float_100_80428030 = 100.0f;
 const f32 float_65_80428034 = 65.0f;
 const f32 float_85_80428038 = 85.0f;
+
+/* Data pass A3: global zero storage used by winMgrDisp.
+ * MWCC places an uninitialized small-data definition in .sbss2.
+ */
+__declspec(section ".sdata2") u32 unk_804298d8;
+
+/* Data pass A7: retail .rodata Vec catalog continuation.
+ * The first 14 anonymous compiler Vec records are already present in
+ * the retained object; these next 34 entries are target-owned named data.
+ * Existing function expressions and compiler-owned doubles are untouched.
+ */
+const Vec vec3_80300448 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300454 = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_80300460 = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_8030046c = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_80300478 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300484 = { 0.0f, 1.0f, 1.0f };
+const Vec vec3_80300490 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_8030049c = { 0.55f, 0.55f, 0.55f };
+const Vec vec3_803004a8 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_803004b4 = { 0.55f, 0.55f, 0.55f };
+const Vec vec3_803004c0 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_803004cc = { 1.0f, 1.0f, 1.0f };
+const Vec vec3_803004d8 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_803004e4 = { 1.0f, 1.0f, 1.0f };
+const Vec vec3_803004f0 = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_803004fc = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_80300508 = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_80300514 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300520 = { 1.0f, 1.0f, 1.0f };
+const Vec vec3_8030052c = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300538 = { 0.55f, 0.55f, 0.55f };
+const Vec vec3_80300544 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300550 = { 1.0f, 1.0f, 1.0f };
+const Vec vec3_8030055c = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300568 = { 1.0f, 1.0f, 1.0f };
+const Vec vec3_80300574 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300580 = { -0.55f, 0.55f, 0.55f };
+const Vec vec3_8030058c = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300598 = { 1.0f, 1.0f, 1.0f };
+const Vec vec3_803005a4 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_803005b0 = { 1.0f, 1.0f, 1.0f };
+const Vec vec3_803005bc = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_803005c8 = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_803005d4 = { 0.0f, 0.0f, 1.0f };
+
+/* Data pass A8: final ten target-owned Vec records (+0x240..+0x2B7).
+ * Extends A7 without changing the first 14 anonymous Vecs, any function,
+ * or the compiler-generated scalar/double pool.
+ */
+const Vec vec3_803005e0 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_803005ec = { 0.8f, 0.8f, 0.8f };
+const Vec vec3_803005f8 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300604 = { 1.0f, 1.0f, 1.0f };
+const Vec vec3_80300610 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_8030061c = { 1.0f, 1.0f, 1.0f };
+const Vec vec3_80300628 = { 0.0f, 0.0f, 0.0f };
+const Vec vec3_80300634 = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_80300640 = { 0.0f, 0.0f, 1.0f };
+const Vec vec3_8030064c = { 0.0f, 0.0f, 1.0f };
+
+/* Data pass A9: exact target-backed .rodata string prefix.
+ * Six party name keys, seven helper/format keys, twelve select messages.
+ * Natural four-byte per-object alignment yields +0x2B8..+0x457.
+ * Force .rodata for short labels that would otherwise be small consts.
+ * Keep compiler-generated conversion doubles and all consumers unchanged.
+ */
+__declspec(section ".rodata") const char str_name_party0_80300658[12] __attribute__ ((aligned(4))) = "name_party0";
+__declspec(section ".rodata") const char str_name_party1_80300664[12] __attribute__ ((aligned(4))) = "name_party1";
+__declspec(section ".rodata") const char str_name_party4_80300670[12] __attribute__ ((aligned(4))) = "name_party4";
+__declspec(section ".rodata") const char str_name_party5_8030067c[12] __attribute__ ((aligned(4))) = "name_party5";
+__declspec(section ".rodata") const char str_name_party2_80300688[12] __attribute__ ((aligned(4))) = "name_party2";
+__declspec(section ".rodata") const char str_name_party6_80300694[12] __attribute__ ((aligned(4))) = "name_party6";
+__declspec(section ".rodata") const char str_helperr2_803006a0[9] __attribute__ ((aligned(4))) = "helperr2";
+__declspec(section ".rodata") const char str_helperr_803006ac[8] __attribute__ ((aligned(4))) = "helperr";
+__declspec(section ".rodata") const char str_PCTs_levelupPCTs_803006b4[13] __attribute__ ((aligned(4))) = "%s_levelup%s";
+__declspec(section ".rodata") const char str_PCTs_leveldownPCTs_803006c4[15] __attribute__ ((aligned(4))) = "%s_leveldown%s";
+__declspec(section ".rodata") const char str_lankup_803006d4[7] __attribute__ ((aligned(4))) = "lankup";
+__declspec(section ".rodata") const char str_lankdown_803006dc[9] __attribute__ ((aligned(4))) = "lankdown";
+__declspec(section ".rodata") const char str_PCTs_PCTs_lankPCTdPC_803006e8[15] __attribute__ ((aligned(4))) = "%s_%s_lank%d%s";
+__declspec(section ".rodata") const char str_msg_window_select_1_803006f8[20] __attribute__ ((aligned(4))) = "msg_window_select_1";
+__declspec(section ".rodata") const char str_msg_window_select_2_8030070c[20] __attribute__ ((aligned(4))) = "msg_window_select_2";
+__declspec(section ".rodata") const char str_msg_window_select_3_80300720[20] __attribute__ ((aligned(4))) = "msg_window_select_3";
+__declspec(section ".rodata") const char str_msg_window_select_4_80300734[20] __attribute__ ((aligned(4))) = "msg_window_select_4";
+__declspec(section ".rodata") const char str_msg_window_select_11_80300748[21] __attribute__ ((aligned(4))) = "msg_window_select_11";
+__declspec(section ".rodata") const char str_msg_window_select_12_80300760[21] __attribute__ ((aligned(4))) = "msg_window_select_12";
+__declspec(section ".rodata") const char str_msg_window_select_9_80300778[20] __attribute__ ((aligned(4))) = "msg_window_select_9";
+__declspec(section ".rodata") const char str_msg_window_select_9__8030078c[22] __attribute__ ((aligned(4))) = "msg_window_select_9_1";
+__declspec(section ".rodata") const char str_msg_window_select_6_803007a4[20] __attribute__ ((aligned(4))) = "msg_window_select_6";
+__declspec(section ".rodata") const char str_msg_window_select_10_803007b8[21] __attribute__ ((aligned(4))) = "msg_window_select_10";
+__declspec(section ".rodata") const char str_msg_window_select_8_803007d0[20] __attribute__ ((aligned(4))) = "msg_window_select_8";
+__declspec(section ".rodata") const char str_msg_window_select_7_803007e4[20] __attribute__ ((aligned(4))) = "msg_window_select_7";
+
+/* Retail window-manager state: the initialized LOCAL wp pointer targets
+ * the 8-byte zero-initialized work record. Place the definition before the
+ * late LOCAL lookup tables to reproduce the target .sdata prefix. */
+typedef struct WinMgrWorkStorage {
+    s32 numEntries;
+    void* entries;
+} WinMgrWorkStorage;
+static WinMgrWorkStorage work;
+static void* wp = &work;
+
+static u16 party_id_table[8] = {1, 2, 5, 4, 6, 3, 7, 0};
+static u16 party_icon_table[7] = {349, 350, 359, 352, 360, 351, 361};
+static char* party_labelname_table[7] = {
+    (char*)str_kur_80427f18, (char*)str_nok_80427f20,
+    (char*)str_win_80427f28, (char*)str_yos_80427f30,
+    (char*)str_viv_80427f38, (char*)str_bom_80427f40,
+    (char*)str_chu_80427f48,
+};
+
+/* Retail Mario status selection lookup data, emitted after its consumers. */
+static s32 mario_status_icon_table[3] = {423, 424, 425};
+static char* mario_status_name_table[3] = {
+    (char*)str_hp_80427f50, (char*)str_fp_80427f54, (char*)str_bp_80427f58,
+};
+static s32 mario_status_henka_table[3] = {5, 5, 3};
+s32 mario_status_max_table[3] = {200, 200, 99};
+
+/* Retail LOCAL .sbss pointer slots for HP/FP/BP selection. Source order
+ * intentionally follows work; zero-storage emission/order is guarded by
+ * whole-object structural comparison. */
+static s16* mario_status_point_table[3];

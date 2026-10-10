@@ -254,10 +254,11 @@ s32 N_evt_snd_bgm_unpause(void) {
 
 static void* wp;
 
+#pragma use_lmw_stmw off
 void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 param_5, u32 param_6) {
     extern void fadeEntry(s32 type, s32 duration, void* color);
     extern s32 fadeIsFinish(void);
-    extern s32 mapPreLoad(void);
+    extern s32 mapPreLoad(char* map);
     extern void mapLoad(char* map);
     extern void _relUnLoad(void);
     extern void _unload(char* map, char* bero, s32 unk);
@@ -289,23 +290,24 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
     void* cam;
     void* mario;
     void* evt;
-    u32 color;
     s32 bgmId;
     u16* bgmTable;
 
     switch (*(s32*)((s32)param_1 + 4)) {
-        case 0:
+        case 0: {
+            u32 color;
             if (*(void**)((s32)param_1 + 8) == 0) {
                 color = dat_804204a0;
                 fadeEntry(2, 1000, &color);
-                gpLocal = gp;
-                *(s32*)((s32)gpLocal + 0x110) = 10;
-                *(s32*)((s32)gpLocal + 0x114) = 300;
+                *(s32*)((s32)gp + 0x110) = 10;
+                *(s32*)((s32)gp + 0x114) = 300;
             }
-            mapPreLoad();
+            mapPreLoad(str_sys_00_802c2c18);
             *(s32*)((s32)param_1 + 4) = *(s32*)((s32)param_1 + 4) + 1;
             break;
-        case 1:
+        }
+        case 1: {
+            f32 zero;
             if (fadeIsFinish() != 0) {
                 _relUnLoad();
                 gpLocal = gp;
@@ -315,13 +317,15 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
                 statusWinForceOff();
                 statusWinDispOff();
                 cam = camGetPtr(4);
-                *(f32*)((s32)cam + 0xFC) = float_0_804204b0;
-                *(f32*)((s32)cam + 0x100) = float_0_804204b0;
+                zero = float_0_804204b0;
+                *(f32*)((s32)cam + 0xFC) = zero;
+                *(f32*)((s32)cam + 0x100) = zero;
                 *(f32*)((s32)cam + 0x104) = (f32)*(u16*)((s32)gp + 0x170);
                 *(f32*)((s32)cam + 0x108) = (f32)*(u16*)((s32)gp + 0x172);
                 cam = camGetPtr(8);
-                *(f32*)((s32)cam + 0xFC) = float_0_804204b0;
-                *(f32*)((s32)cam + 0x100) = float_0_804204b0;
+                zero = float_0_804204b0;
+                *(f32*)((s32)cam + 0xFC) = zero;
+                *(f32*)((s32)cam + 0x100) = zero;
                 *(f32*)((s32)cam + 0x104) = (f32)*(u16*)((s32)gp + 0x170);
                 *(f32*)((s32)cam + 0x108) = (f32)*(u16*)((s32)gp + 0x172);
                 cam = camGetPtr(8);
@@ -338,8 +342,9 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
                 *(s32*)((s32)param_1 + 4) = *(s32*)((s32)param_1 + 4) + 1;
             }
             break;
+        }
         case 2:
-            if (mapPreLoad() != 0) {
+            if (mapPreLoad(str_sys_00_802c2c18) != 0) {
                 mapLoad(str_sys_00_802c2c18);
                 cam = camGetPtr(4);
                 mario = marioGetPtr();
@@ -360,12 +365,15 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
                 *(s32*)((s32)param_1 + 4) = *(s32*)((s32)param_1 + 4) + 1;
             }
             break;
-        case 3:
+        case 3: {
+            u32 color;
             color = dat_804204a4;
             fadeEntry(0x1F, 200, &color);
             *(s32*)((s32)param_1 + 4) = *(s32*)((s32)param_1 + 4) + 1;
             break;
-        case 4:
+        }
+        case 4: {
+            u32 color;
             if (fadeIsFinish() != 0) {
                 color = dat_804204a8;
                 fadeEntry(9, 1000, &color);
@@ -375,14 +383,16 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
                 bgmId = *(s32*)(psbgm + 4);
                 if ((u32)(bgmId + 0x10000) != 0xFFFF) {
                     bgmTable = *(u16**)(sound + 0x100);
-                    bgmTable[(bgmId * 0x138) / 2] |= 0x8000;
+                    *(u16*)((u8*)bgmTable + bgmId * 0x138) |= 0x8000;
                 }
                 evt = evtEntryType(evt_gameover, 0, 0, 0);
                 *(void**)wp = evt;
                 *(s32*)((s32)param_1 + 4) = *(s32*)((s32)param_1 + 4) + 1;
             }
             break;
-        case 5:
+        }
+        case 5: {
+            u32 color;
             if (evtCheckID(*(s32*)((s32)*(void**)wp + 0x15C)) == 0 || (keyGetButtonTrg(0) & 0x1100) != 0) {
                 color = dat_804204ac;
                 fadeEntry(0x24, 0, &color);
@@ -390,6 +400,7 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
                 *(s32*)((s32)param_1 + 4) = *(s32*)((s32)param_1 + 4) + 1;
             }
             break;
+        }
         case 6:
             if (fadeIsFinish() != 0) {
                 _relUnLoad();
@@ -409,6 +420,7 @@ void seq_gameOverMain(void* param_1, s32 param_2, s32 param_3, s32 param_4, u32 
             break;
     }
 }
+#pragma use_lmw_stmw on
 
 const char str_anm_hokori_802c2c00[] = "anm_hokori";
 const u32 vec3_802c2c0c[3] = { 0, 0, 0 };

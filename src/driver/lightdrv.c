@@ -16,22 +16,7 @@ s32 strcmp(const char* str1, const char* str2);
 void lightInit(void) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void strcpy(char* dst, const char* src);
-    extern const char str_PAPER_8041f8c4[];
-    extern const char str_PAPERI_802bf938[];
-    extern const char str_PAPERCRAFT_802bf940[];
-    extern const char str_BooBoo_802bf94c[];
-    extern Vec vec3_802bf870;
-    extern Vec vec3_802bf87c;
-    extern Vec vec3_802bf888;
-    extern Vec vec3_802bf894;
-    extern Vec vec3_802bf8a0;
-    extern Vec vec3_802bf8ac;
-    extern Vec vec3_802bf8b8;
-    extern Vec vec3_802bf8c4;
-    extern GXColor dat_8041f8b0;
-    extern GXColor dat_8041f8b4;
-    extern GXColor dat_8041f8b8;
-    extern GXColor dat_8041f8bc;
+    extern const char str_PAPER_8041f8c4[6];
     extern f32 float_0_8041f8cc;
     extern f32 float_1_8041f8d0;
     extern f32 float_3_8041f8d4;
@@ -46,35 +31,35 @@ void lightInit(void) {
 
     paperLight3D.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
     strcpy(paperLight3D.name, str_PAPER_8041f8c4);
-    paperLight3D.position = vec3_802bf870;
-    paperLight3D.rotation = vec3_802bf87c;
-    paperLight3D.color = dat_8041f8b0;
+    paperLight3D.position = (Vec){ 0.0f, 0.0f, 0.0f };
+    paperLight3D.rotation = (Vec){ 0.0f, 0.0f, 0.0f };
+    paperLight3D.color = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
     paperLight3D.spotAngle = float_0_8041f8cc;
     paperLight3D.attenAngle = float_1_8041f8d0;
 
     paperLight3DImg.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
-    strcpy(paperLight3DImg.name, str_PAPERI_802bf938);
-    paperLight3DImg.position = vec3_802bf888;
-    paperLight3DImg.rotation = vec3_802bf894;
-    paperLight3DImg.color = dat_8041f8b4;
+    strcpy(paperLight3DImg.name, "PAPERI");
+    paperLight3DImg.position = (Vec){ 0.0f, 0.0f, 1048576.0f };
+    paperLight3DImg.rotation = (Vec){ 0.0f, 0.0f, 0.0f };
+    paperLight3DImg.color = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
     paperLight3DImg.spotAngle = float_0_8041f8cc;
     paperLight3DImg.attenAngle = float_1_8041f8d0;
 
     paperCraft.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
-    strcpy(paperCraft.name, str_PAPERCRAFT_802bf940);
-    paperCraft.position = vec3_802bf8a0;
-    paperCraft.rotation = vec3_802bf8ac;
-    paperCraft.color = dat_8041f8b8;
+    strcpy(paperCraft.name, "PAPERCRAFT");
+    paperCraft.position = (Vec){ -200.0f, 100.0f, 100.0f };
+    paperCraft.rotation = (Vec){ 0.0f, 0.0f, 0.0f };
+    paperCraft.color = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
     paperCraft.spotAngle = float_0_8041f8cc;
     paperCraft.attenAngle = float_1_8041f8d0;
     PSMTXScale(scaleMtx, float_3_8041f8d4, float_3_8041f8d4, float_3_8041f8d4);
     PSMTXMultVec(scaleMtx, &paperCraft.position, &paperCraft.position);
 
     booLight.flags = LIGHT_POINT | LIGHT_NO_DIST_ATTEN;
-    strcpy(booLight.name, str_BooBoo_802bf94c);
-    booLight.position = vec3_802bf8b8;
-    booLight.rotation = vec3_802bf8c4;
-    booLight.color = dat_8041f8bc;
+    strcpy(booLight.name, "BooBoo");
+    booLight.position = (Vec){ 0.0f, 0.0f, 0.0f };
+    booLight.rotation = (Vec){ 0.0f, 0.0f, 0.0f };
+    booLight.color = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
     booLight.spotAngle = float_0_8041f8cc;
     booLight.attenAngle = float_10_8041f8d8;
 }
@@ -92,11 +77,9 @@ void lightMain(void) {
     typedef f32 Mtx[3][4];
     extern void* camGetPtr(s32 cameraId);
     extern void PSVECNormalize(Vec* src, Vec* dst);
-    extern u32 vec3_802bf870[];
     extern f32 float_1p0486E06_8041f8c0;
     extern LightEntry booLight;
     void* cam;
-    u32* constants;
     Vec direction;
     Mtx view;
     Vec out;
@@ -104,15 +87,14 @@ void lightMain(void) {
     Vec paperPos;
     Vec booPos;
 
-    constants = vec3_802bf870;
-    direction = *(Vec*)((u8*)constants + 0x60);
+    direction = (Vec){ 0.0f, 0.0f, 1.0f };
     cam = camGetPtr(4);
 
     *(Vec*)&view[1][0] = *(Vec*)((u8*)cam + 0x12C);
     *(Vec*)&view[0][0] = *(Vec*)((u8*)cam + 0x11C);
     *(Vec*)&view[2][0] = *(Vec*)((u8*)cam + 0x13C);
 
-    out = *(Vec*)((u8*)constants + 0x6C);
+    out = (Vec){ 0.0f, 0.0f, 0.0f };
     out.x = view[1][0] * direction.z
         + view[0][0] * direction.x
         + view[2][0] * direction.y;
@@ -126,13 +108,13 @@ void lightMain(void) {
     normalized = out;
     PSVECNormalize(&normalized, &normalized);
 
-    paperPos = *(Vec*)((u8*)constants + 0x78);
+    paperPos = (Vec){ 0.0f, 0.0f, 0.0f };
     paperPos.x = float_1p0486E06_8041f8c0 * normalized.x;
     paperPos.y = float_1p0486E06_8041f8c0 * normalized.y;
     paperPos.z = float_1p0486E06_8041f8c0 * normalized.z;
     paperLight3D.position = paperPos;
 
-    booPos = *(Vec*)((u8*)constants + 0x84);
+    booPos = (Vec){ 0.0f, 1000.0f, 0.0f };
     booLight.position = booPos;
 }
 
@@ -452,18 +434,6 @@ LightEntry* lightNumberToPtr(s32 index) {
     return 0;
 }
 
-const Vec vec3_802bf870 = { 0.0f, 0.0f, 0.0f };
-const Vec vec3_802bf87c = { 0.0f, 0.0f, 0.0f };
-const Vec vec3_802bf888 = { 0.0f, 0.0f, 1048576.0f };
-const Vec vec3_802bf894 = { 0.0f, 0.0f, 0.0f };
-const Vec vec3_802bf8a0 = { -200.0f, 100.0f, 100.0f };
-const Vec vec3_802bf8ac = { 0.0f, 0.0f, 0.0f };
-const Vec vec3_802bf8b8 = { 0.0f, 0.0f, 0.0f };
-const Vec vec3_802bf8c4 = { 0.0f, 0.0f, 0.0f };
-const Vec vec3_802bf8d0 = { 0.0f, 0.0f, 1.0f };
-const Vec vec3_802bf8dc = { 0.0f, 0.0f, 0.0f };
-const Vec vec3_802bf8e8 = { 0.0f, 0.0f, 0.0f };
-const Vec vec3_802bf8f4 = { 0.0f, 1000.0f, 0.0f };
 const Vec dat_802bf900[4] = {
     { 1.0f, 0.0f, 0.0f },
     { 0.0f, 0.1f, 0.0f },
@@ -471,9 +441,6 @@ const Vec dat_802bf900[4] = {
     { 0.0f, 0.0f, 0.01f },
 };
 const char str_PCTs_PCT04d_802bf930[] = "%s_%04d";
-const char str_PAPERI_802bf938[] = "PAPERI";
-const char str_PAPERCRAFT_802bf940[] = "PAPERCRAFT";
-const char str_BooBoo_802bf94c[] = "BooBoo";
 
 LightEntry paperLight3D;
 LightEntry paperLight3DImg;
@@ -482,10 +449,6 @@ LightEntry booLight;
 
 LightWorkSet work[2];
 
-const GXColor dat_8041f8b0 = { 0xFF, 0xFF, 0xFF, 0xFF };
-const GXColor dat_8041f8b4 = { 0xFF, 0xFF, 0xFF, 0xFF };
-const GXColor dat_8041f8b8 = { 0xFF, 0xFF, 0xFF, 0xFF };
-const GXColor dat_8041f8bc = { 0xFF, 0xFF, 0xFF, 0xFF };
 const f32 float_1p0486E06_8041f8c0 = 1048576.0f;
 const char str_PAPER_8041f8c4[] = "PAPER";
 const u16 gap_09_8041F8CA_sdata2 = 0;

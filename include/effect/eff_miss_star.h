@@ -2,4 +2,4 @@
 
 #include <dolphin/types.h>
 
-void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed);
+void* effMissStarEntry(f32 x, f32 y, f32 z, s32 count, s32 delay, s32 seed);

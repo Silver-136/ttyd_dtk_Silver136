@@ -74,17 +74,20 @@ void seq_battleExit(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 seq_battleMain(int param_1) {
     extern void fadeEntry(s32, s32, void*);
     extern s32 getMarioStDvdRoot(void);
     extern u32 fileAsyncf(s32, s32, const char*, s32, const char*, ...);
-    extern u32 fadeIsFinish(void);
+    extern s32 fadeIsFinish(void);
     extern void bmapLoad(const char*, char*);
     extern s32 battle_init(void);
-    extern u32 battleSeqEndCheck(void);
+    extern s32 battleSeqEndCheck(void);
     extern void psndSetPosDirListener(void*, f32);
     extern void seqSetSeq(s32, s32, s32);
-    u32 color;
+    u32 color1;
+    u32 color2;
     void* fbat;
     void* pouch;
     void* stageInfo;
@@ -92,12 +95,13 @@ u8 seq_battleMain(int param_1) {
     f32 listener[3];
     s32 keepWaiting;
     s32 type;
-    s16 rank;
+    s32 rank;
+    s32 elapsed;
 
     switch (*(s32*)(param_1 + 4)) {
         case 0:
-            color = dat_804203b0;
-            fadeEntry(0x16, 1000, &color);
+            color1 = dat_804203b0;
+            fadeEntry(0x16, 1000, &color1);
             *(s32*)(param_1 + 4) += 1;
             *(s32*)(param_1 + 0x10) = 0;
             break;
@@ -117,75 +121,74 @@ u8 seq_battleMain(int param_1) {
             pouchGetPtr();
             fbat = fbatGetPointer();
             type = *(s32*)((s32)fbat + 0x10);
-            if (type == 0x01000000 || type == 0x00800000) {
-                if (debug_battle_flag == 0) {
-                    *(u32*)marioGetPtr() &= ~1;
-                }
-            } else if (debug_battle_flag == 0) {
-                marioCtrlOff();
-                partyCtrlOff();
-                *(u32*)marioGetPtr() &= ~1;
-                padRumbleOff(0);
+            switch (type) {
+                case 0x01000000:
+                case 0x00800000:
+                    if (debug_battle_flag == 0) {
+                        *(u32*)marioGetPtr() &= ~1;
+                    }
+                    break;
+                default:
+                    if (debug_battle_flag == 0) {
+                        marioCtrlOff();
+                        partyCtrlOff();
+                        *(u32*)marioGetPtr() &= ~1;
+                        padRumbleOff(0);
+                    }
+                    break;
             }
             fbat = fbatGetPointer();
             *(s32*)((s32)fbat + 0x570) = 0;
             *(s32*)(param_1 + 4) += 1;
         case 3:
             fbat = fbatGetPointer();
-            stageInfo = *(void**)(*(s32*)(*(s32*)((s32)fbat + 8) + 0x230) + 4);
+            stageInfo = *(void**)(*(s32*)((s32)fbat + 8) + 0x230);
             pouch = pouchGetPtr();
-            keepWaiting = 0;
             if (*(s32*)((s32)fbat + 0x550) != 0) {
                 keepWaiting = 1;
-                if (*(s32*)((s32)fbat + 0x558) >= 1 && *(s32*)((s32)fbat + 0x558) < 3 &&
-                    *(s32*)((s32)fbat + 0x554) != 0) {
-                    keepWaiting = 0;
+                switch (*(s32*)((s32)fbat + 0x558)) {
+                    case 1:
+                    case 2:
+                        if (*(u32*)((s32)fbat + 0x554) != 0) {
+                            keepWaiting = 0;
+                        }
+                        break;
                 }
                 if (keepWaiting == 0) {
                     *(s32*)((s32)fbat + 0x570) += 1;
                     if (*(s32*)((s32)fbat + 0x570) < 200) {
                         keepWaiting = 1;
+                        goto done_waiting;
                     }
                 }
             }
-            if (keepWaiting == 0) {
                 rank = *(s16*)((s32)pouch + 0x88);
-                if (rank == 0) {
-                    bmapLoad(str_bti_01_802c2ac4, stageInfo);
-                } else if (rank == 1) {
-                    bmapLoad(str_bti_02_802c2acc, stageInfo);
-                } else if (rank == 2) {
-                    bmapLoad(str_bti_03_802c2ad4, stageInfo);
-                } else {
-                    bmapLoad(str_bti_04_802c2adc, stageInfo);
+                switch (rank) {
+                    case 0:
+                        bmapLoad(str_bti_01_802c2ac4, *(char**)((s32)stageInfo + 4));
+                        break;
+                    case 1:
+                        bmapLoad(str_bti_02_802c2acc, *(char**)((s32)stageInfo + 4));
+                        break;
+                    case 2:
+                        bmapLoad(str_bti_03_802c2ad4, *(char**)((s32)stageInfo + 4));
+                        break;
+                    case 3:
+                    default:
+                        bmapLoad(str_bti_04_802c2adc, *(char**)((s32)stageInfo + 4));
+                        break;
                 }
-                *(s32*)(param_1 + 4) += 1;
-                if (battle_init() == 0) {
-                    *(s32*)(param_1 + 4) += 1;
-                    if (battleSeqEndCheck() != 0) {
-                        *(s32*)(param_1 + 0x10) = 0;
-                        *(s32*)(param_1 + 4) += 1;
-                        if (*(s32*)((s32)gp + 0xC) != 0) {
-                            *(s32*)(param_1 + 4) = 0xB;
-                        }
-                    }
-                    marioGetPtr();
-                    camGetPtr(4);
-                    listener[0] = float_0_804203c4;
-                    listener[1] = float_0_804203c4;
-                    listener[2] = float_400_804203c8;
-                    if ((*(u32*)((s32)_battleWorkPointer + 0xEF4) & 0x100) != 0) {
-                        listener[2] = float_400_804203c8 + float_200_804203cc;
-                    }
-                    cam = camGetPtr(4);
-                    psndSetPosDirListener(listener, *(f32*)((s32)cam + 0x114));
-                }
+            keepWaiting = 0;
+done_waiting:
+            if (keepWaiting != 0) {
+                break;
             }
-            break;
+            *(s32*)(param_1 + 4) += 1;
         case 4:
-            if (battle_init() == 0) {
-                *(s32*)(param_1 + 4) += 1;
+            if (battle_init() != 0) {
+                break;
             }
+            *(s32*)(param_1 + 4) += 1;
         case 5:
             if (battleSeqEndCheck() != 0) {
                 *(s32*)(param_1 + 0x10) = 0;
@@ -206,8 +209,8 @@ u8 seq_battleMain(int param_1) {
             psndSetPosDirListener(listener, *(f32*)((s32)cam + 0x114));
             break;
         case 6:
-            *(s32*)(param_1 + 0x10) += 1;
-            if (*(s32*)(param_1 + 0x10) > 30) {
+            elapsed = ++*(s32*)(param_1 + 0x10);
+            if (elapsed > 30) {
                 if ((*(u32*)gp & 0x1000) != 0 && (*(u32*)gp & 0x2000) != 0) {
                     seqSetSeq(5, 1, 0);
                 } else {
@@ -216,8 +219,8 @@ u8 seq_battleMain(int param_1) {
             }
             break;
         case 10:
-            color = dat_804203b4;
-            fadeEntry(0x16, 200, &color);
+            color2 = dat_804203b4;
+            fadeEntry(0x16, 200, &color2);
             *(s32*)(param_1 + 4) += 1;
             break;
         case 11:
@@ -227,8 +230,10 @@ u8 seq_battleMain(int param_1) {
             }
             break;
     }
-    return 0;
+
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 s32 battle_init(void) {
     extern void msgLoad(const char*, s32);
@@ -248,7 +253,6 @@ s32 battle_init(void) {
     char* room;
     s32 partyMember;
     s32 partyKind;
-    s32 firstAttack;
     u32 hitFlags;
 
     fbat = fbatGetPointer();
@@ -287,44 +291,42 @@ s32 battle_init(void) {
     }
 
     if ((*(u32*)(fbat + 0x1C) & 1) != 0) {
-        firstAttack = 0;
+        BattleInformationSetFirstAttack(info, 0);
     } else {
         hitFlags = *(u32*)(fbat + 0x10);
         switch (hitFlags) {
             case 0x00020000:
-                firstAttack = 1;
+                BattleInformationSetFirstAttack(info, 1);
                 break;
             case 0x00040000:
-                firstAttack = 2;
+                BattleInformationSetFirstAttack(info, 2);
                 break;
             case 0x00080000:
-                firstAttack = 3;
+                BattleInformationSetFirstAttack(info, 3);
                 break;
             case 0x00100000:
-                firstAttack = 4;
+                BattleInformationSetFirstAttack(info, 4);
                 break;
             case 0x00200000:
-                firstAttack = 5;
+                BattleInformationSetFirstAttack(info, 5);
                 break;
             case 0x00400000:
-                firstAttack = 6;
+                BattleInformationSetFirstAttack(info, 6);
                 break;
             case 0x00800000:
-                firstAttack = 7;
+                BattleInformationSetFirstAttack(info, 7);
                 break;
             case 0x01000000:
-                firstAttack = 8;
+                BattleInformationSetFirstAttack(info, 8);
                 break;
             case 0x10000000:
-                firstAttack = *(s32*)(fbat + 0x14);
+                BattleInformationSetFirstAttack(info, *(s32*)(fbat + 0x14));
                 break;
             default:
-                firstAttack = 0;
+                BattleInformationSetFirstAttack(info, 0);
                 break;
         }
     }
-    BattleInformationSetFirstAttack(info, firstAttack);
-
     BattleInfomationSetBattleSetupInfo(info, npc + 0x230);
     info[0x18] = npc[0x2F4];
     info[0x1A] = npc[0x2F5];

@@ -37,7 +37,7 @@ void aramCallbackGarbage(void) {
 }
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 u8 aramMgrGarbage(void) {
     extern void __memFree(s32 heap, void* ptr);
     void* head;
@@ -48,6 +48,7 @@ u8 aramMgrGarbage(void) {
     s32 chunks;
     s32 i;
     u32 offset;
+    void* compactEntry;
 
     head = *(void**)((s32)wp + 0x34);
     entry = head;
@@ -85,16 +86,16 @@ u8 aramMgrGarbage(void) {
     *(void**)((s32)wp + 0x38) = prev;
 
     aramAddr = *(u32*)((s32)wp + 0x24);
-    entry = *(void**)((s32)wp + 0x34);
-    while (entry != 0) {
-        if (*(u32*)((s32)entry + 0x28) != aramAddr) {
+    compactEntry = *(void**)((s32)wp + 0x34);
+    while (compactEntry != 0) {
+        if (*(u32*)((s32)compactEntry + 0x28) != aramAddr) {
             *(u32*)((s32)wp + 0x64) = 0x8000;
             *(void**)((s32)wp + 0x60) = __memAlloc(0, *(u32*)((s32)wp + 0x64));
             offset = 0;
-            chunks = (*(u32*)((s32)entry + 0x24) + *(u32*)((s32)wp + 0x64) - 1) / *(u32*)((s32)wp + 0x64);
+            chunks = ((*(u32*)((s32)compactEntry + 0x24) + *(u32*)((s32)wp + 0x64)) - 1) / *(u32*)((s32)wp + 0x64);
             for (i = 0; i < chunks; i++) {
                 *(s32*)((s32)wp + 0x5C) = 1;
-                ARQPostRequest((void*)((s32)wp + 0x3C), 0x19751128, 1, 0, *(u32*)((s32)entry + 0x28) + offset, *(u32*)((s32)wp + 0x60), *(u32*)((s32)wp + 0x64), aramCallbackGarbage);
+                ARQPostRequest((void*)((s32)wp + 0x3C), 0x19751128, 1, 0, *(u32*)((s32)compactEntry + 0x28) + offset, *(u32*)((s32)wp + 0x60), *(u32*)((s32)wp + 0x64), aramCallbackGarbage);
                 while (*(volatile s32*)((s32)wp + 0x5C) != 0) {
                 }
                 *(s32*)((s32)wp + 0x5C) = 1;
@@ -106,12 +107,12 @@ u8 aramMgrGarbage(void) {
             __memFree(0, *(void**)((s32)wp + 0x60));
             *(void**)((s32)wp + 0x60) = 0;
         }
-        *(u32*)((s32)entry + 0x28) = aramAddr;
-        aramAddr = *(u32*)((s32)entry + 0x28) + *(u32*)((s32)entry + 0x24);
-        entry = *(void**)((s32)entry + 0x34);
+        *(u32*)((s32)compactEntry + 0x28) = aramAddr;
+        aramAddr = *(u32*)((s32)compactEntry + 0x28) + *(u32*)((s32)compactEntry + 0x24);
+        compactEntry = *(void**)((s32)compactEntry + 0x34);
     }
     *(u32*)((s32)wp + 0x20) = aramAddr;
-    return 0;
+
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on

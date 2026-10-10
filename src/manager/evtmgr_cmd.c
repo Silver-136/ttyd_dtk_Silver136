@@ -2570,18 +2570,20 @@ const char str_GW_PCT3d_PCTd_802c00ec[] = "GW:%3d:%d";
 const char str_LW_PCT3d_PCT08X_802c00fc[] = "LW:%3d:%08X";
 const char str_LW_PCT3d_PCT4_2f_802c010c[] = "LW:%3d:%4.2f";
 const char str_LW_PCT3d_PCTd_802c0120[] = "LW:%3d:%d";
-const char str_PCTd_802c0130[0xE] = "%d";
+const char str_PCTd_802c0130[0xE] = "         [%d]";
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evtmgrCmd(struct EventEntry* entry) {
     extern void evtDelete(void*);
     extern void* evtChildEntry(void*, void*, u32);
     extern void evtSetPri(void*, s32);
-    extern void evtSetSpeed(void*, s32);
+    extern void evtSetSpeed(void*, f32);
     extern void evtSetType(void*, s32);
     extern void* evtRestart(void*);
     extern void evtStopAll(u32);
@@ -2923,12 +2925,6 @@ found_case_end_switch:
             state = 2;
             break;
 
-        case 0x2B: state = evt_case_or(entry); break;
-        case 0x2C: state = evt_case_and((s32)entry); break;
-        case 0x2D: state = evt_case_flag((s32)entry); break;
-        case 0x2E: state = evt_case_end((s32)entry); break;
-        case 0x2F: state = evt_case_between((s32)entry); break;
-
         case 0x30:
             depth = 1;
             ip = *(u32**)(e + 0x14);
@@ -2953,6 +2949,12 @@ found_switch_break:
             *(s32*)(e + 0x14) = (s32)save;
             state = 2;
             break;
+
+        case 0x2B: state = evt_case_or(entry); break;
+        case 0x2E: state = evt_case_end((s32)entry); break;
+        case 0x2C: state = evt_case_and((s32)entry); break;
+        case 0x2D: state = evt_case_flag((s32)entry); break;
+        case 0x2F: state = evt_case_between((s32)entry); break;
 
         case 0x31:
             state = 2;
@@ -3071,39 +3073,51 @@ found_switch_break:
 
         case 0x40:
             args = *(s32**)(e + 0x18);
-            ip = *(u32**)(e + 0x150);
-            evtSetValue(entry, args[0], *ip++);
-            evtSetValue(entry, args[1], *ip++);
-            *(u32**)(e + 0x150) = ip;
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetValue(entry, args[0], *(s32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetValue(entry, args[1], *(s32*)ptr);
             state = 2;
             break;
 
         case 0x41:
             args = *(s32**)(e + 0x18);
-            ip = *(u32**)(e + 0x150);
-            evtSetValue(entry, args[0], *ip++);
-            evtSetValue(entry, args[1], *ip++);
-            evtSetValue(entry, args[2], *ip++);
-            *(u32**)(e + 0x150) = ip;
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetValue(entry, args[0], *(s32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetValue(entry, args[1], *(s32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetValue(entry, args[2], *(s32*)ptr);
             state = 2;
             break;
 
         case 0x42:
             args = *(s32**)(e + 0x18);
-            ip = *(u32**)(e + 0x150);
-            evtSetValue(entry, args[0], *ip++);
-            evtSetValue(entry, args[1], *ip++);
-            evtSetValue(entry, args[2], *ip++);
-            evtSetValue(entry, args[3], *ip++);
-            *(u32**)(e + 0x150) = ip;
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetValue(entry, args[0], *(s32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetValue(entry, args[1], *(s32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetValue(entry, args[2], *(s32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetValue(entry, args[3], *(s32*)ptr);
             state = 2;
             break;
 
         case 0x43:
             args = *(s32**)(e + 0x18);
-            ip = *(u32**)(e + 0x150);
-            v0 = evtGetValue(entry, args[1]);
-            evtSetValue(entry, args[0], *(s32*)((s32)ip + v0 * 4));
+            v0 = args[0];
+            v1 = evtGetValue(entry, args[1]);
+            evtSetValue(entry, v0, (*(s32**)(e + 0x150))[v1]);
             state = 2;
             break;
 
@@ -3123,38 +3137,51 @@ found_switch_break:
 
         case 0x46:
             args = *(s32**)(e + 0x18);
-            ip = *(u32**)(e + 0x150);
-            evtSetFloat(entry, args[0], *(f32*)ip++);
-            evtSetFloat(entry, args[1], *(f32*)ip++);
-            *(u32**)(e + 0x150) = ip;
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetFloat(entry, args[0], *(f32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetFloat(entry, args[1], *(f32*)ptr);
             state = 2;
             break;
 
         case 0x47:
             args = *(s32**)(e + 0x18);
-            ip = *(u32**)(e + 0x150);
-            evtSetFloat(entry, args[0], *(f32*)ip++);
-            evtSetFloat(entry, args[1], *(f32*)ip++);
-            evtSetFloat(entry, args[2], *(f32*)ip++);
-            *(u32**)(e + 0x150) = ip;
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetFloat(entry, args[0], *(f32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetFloat(entry, args[1], *(f32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetFloat(entry, args[2], *(f32*)ptr);
             state = 2;
             break;
 
         case 0x48:
             args = *(s32**)(e + 0x18);
-            ip = *(u32**)(e + 0x150);
-            evtSetFloat(entry, args[0], *(f32*)ip++);
-            evtSetFloat(entry, args[1], *(f32*)ip++);
-            evtSetFloat(entry, args[2], *(f32*)ip++);
-            evtSetFloat(entry, args[3], *(f32*)ip++);
-            *(u32**)(e + 0x150) = ip;
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetFloat(entry, args[0], *(f32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetFloat(entry, args[1], *(f32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetFloat(entry, args[2], *(f32*)ptr);
+            ptr = *(void**)(e + 0x150);
+            *(void**)(e + 0x150) = (u8*)ptr + 4;
+            evtSetFloat(entry, args[3], *(f32*)ptr);
             state = 2;
             break;
 
         case 0x49:
             args = *(s32**)(e + 0x18);
-            v0 = evtGetValue(entry, args[1]);
-            evtSetFloat(entry, args[0], (f32)*(s32*)(*(s32*)(e + 0x150) + v0 * 4));
+            v0 = args[0];
+            v1 = evtGetValue(entry, args[1]);
+            evtSetFloat(entry, v0, (*(s32**)(e + 0x150))[v1]);
             state = 2;
             break;
 
@@ -3173,16 +3200,24 @@ found_switch_break:
         case 0x4C:
             args = *(s32**)(e + 0x18);
             u0 = evtGetValue(entry, args[0]);
-            ptr = _mapAlloc(mapalloc_base_ptr, u0 << 2);
-            *(s32*)(e + 0x154) = (s32)ptr;
-            evtSetValue(entry, args[1], (s32)ptr);
+            v0 = args[1];
+            *(void**)(e + 0x154) = _mapAlloc(mapalloc_base_ptr, u0 << 2);
+            evtSetValue(entry, v0, *(s32*)(e + 0x154));
+            state = 2;
+            break;
+
+        case 0x5F:
+            args = *(s32**)(e + 0x18);
+            evtDeleteID(evtGetValue(entry, args[0]));
             state = 2;
             break;
 
         case 0x4D:
             args = *(s32**)(e + 0x18);
             v0 = args[0];
-            evtSetValue(entry, v0, evtGetValue(entry, v0) & evtGetValue(entry, args[1]));
+            v1 = evtGetValue(entry, args[1]);
+            v1 &= evtGetValue(entry, v0);
+            evtSetValue(entry, v0, v1);
             state = 2;
             break;
 
@@ -3196,7 +3231,9 @@ found_switch_break:
         case 0x4F:
             args = *(s32**)(e + 0x18);
             v0 = args[0];
-            evtSetValue(entry, v0, evtGetValue(entry, v0) | evtGetValue(entry, args[1]));
+            v1 = evtGetValue(entry, args[1]);
+            v1 |= evtGetValue(entry, v0);
+            evtSetValue(entry, v0, v1);
             state = 2;
             break;
 
@@ -3249,13 +3286,17 @@ found_switch_break:
 
         case 0x57:
             args = *(s32**)(e + 0x18);
-            evtSetValue(entry, evtGetValue(entry, args[0]), evtGetValue(entry, args[1]));
+            v0 = evtGetValue(entry, args[0]);
+            v1 = evtGetValue(entry, args[1]);
+            evtSetValue(entry, v0, v1);
             state = 2;
             break;
 
         case 0x58:
             args = *(s32**)(e + 0x18);
-            evtSetFloat(entry, evtGetValue(entry, args[0]), evtGetFloat(entry, args[1]));
+            v0 = evtGetValue(entry, args[0]);
+            f0 = evtGetFloat(entry, args[1]);
+            evtSetFloat(entry, v0, f0);
             state = 2;
             break;
 
@@ -3300,19 +3341,6 @@ found_switch_break:
             *(u8*)(e + 0x0A) = 0;
             break;
 
-        case 0x5F:
-            args = *(s32**)(e + 0x18);
-            evtDeleteID(evtGetValue(entry, args[0]));
-            state = 2;
-            break;
-
-        case 0x60:
-            args = *(s32**)(e + 0x18);
-            *(s32*)(e + 0x1A0) = evtGetValue(entry, args[0]);
-            evtRestart(entry);
-            state = 2;
-            break;
-
         case 0x61:
             args = *(s32**)(e + 0x18);
             evtSetPri(entry, evtGetValue(entry, args[0]));
@@ -3321,15 +3349,21 @@ found_switch_break:
 
         case 0x62:
             args = *(s32**)(e + 0x18);
-            u0 = args[0];
-            evtGetFloat(entry, u0);
-            evtSetSpeed(entry, u0);
+            f0 = evtGetFloat(entry, args[0]);
+            evtSetSpeed(entry, f0);
             state = 2;
             break;
 
         case 0x63:
             args = *(s32**)(e + 0x18);
             evtSetType(entry, evtGetValue(entry, args[0]));
+            state = 2;
+            break;
+
+        case 0x60:
+            args = *(s32**)(e + 0x18);
+            *(s32*)(e + 0x1A0) = evtGetValue(entry, args[0]);
+            evtRestart(entry);
             state = 2;
             break;
 
@@ -3377,12 +3411,12 @@ found_switch_break:
             break;
 
         case 0x6B: state = evt_inline_evt(entry); break;
-        case 0x6C: state = evt_inline_evt_id(entry); break;
-
         case 0x6D:
             evtDelete(entry);
             state = 0xFF;
             break;
+
+        case 0x6C: state = evt_inline_evt_id(entry); break;
 
         case 0x6E: state = evt_brother_evt(entry); break;
         case 0x6F: state = evt_brother_evt_id(entry); break;
@@ -3449,6 +3483,8 @@ finish:
     }
     goto restart;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 s32 evtGetValue(struct EventEntry* entry, s32 index) {
     extern s32 swByteGet(s32);

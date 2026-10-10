@@ -28,6 +28,7 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
     s32 index;
     s32 timer;
     s32 difficulty;
+    s32 elapsed;
     s32 i;
 
     extra = (StickKeepLeftExtra*)((s32)battleWork + 0x1F4C);
@@ -63,6 +64,8 @@ s32 battleAcMain_StickKeepLeft(void* battleWork) {
                 goto state_done;
             case 100:
                 goto state_100;
+            case 1000:
+                goto state_1000;
             case 1001:
                 goto state_1001;
             case 1003:
@@ -101,6 +104,7 @@ state_100:
         {
             extra->timer = 0x78;
             *(s32*)((s32)battleWork + 0x1C9C) = 1000;
+state_1000:
             if (((*(u32*)((s32)battleWork + 0x1C94) & 1) != 0) &&
                 ((*(u32*)((s32)*(void**)((s32)battleWork + 0x1C90) + 0x27C) & 0x10) != 0)) {
                 if (((*(u32*)((s32)battleWork + 0x1C94) & 2) == 0) ||
@@ -147,7 +151,7 @@ state_1001:
                 *(s32*)((s32)battleWork + 0x1CEC) = *(s32*)((s32)battleWork + 0x1CEC) + 1;
                 index = extra->index;
                 if (index < *(s32*)((s32)battleWork + 0x1CC8) + 2) {
-                    if ((u32)(index - 2) < (u32)(*(s32*)((s32)battleWork + 0x1CC8) - 1)) {
+                    if ((s32)(u32)(index - 2) < *(s32*)((s32)battleWork + 0x1CC8) - 1) {
                         if (extra->sound[index - 2] == -1) {
                             extra->sound[index - 2] = psndSFXOn(sfxPi);
                         }
@@ -169,8 +173,9 @@ state_1001:
             } else if (BattlePadCheckNow(0x40000) == 0 || autoCommand) {
                 success = 0;
                 if (extra->index == *(s32*)((s32)battleWork + 0x1CC8) + 1) {
+                    elapsed = *(s32*)((s32)battleWork + 0x1CCC) - extra->timer;
                     difficulty = BattleActionCommandGetDifficulty(battleWork);
-                    if (ac_stickkeepleft_ok_frame[difficulty] < *(s32*)((s32)battleWork + 0x1CCC) - extra->timer) {
+                    if (ac_stickkeepleft_ok_frame[difficulty] < elapsed) {
                         if ((*(u32*)((s32)battleWork + 0x1CC4) & 2) == 0) {
                             *(s32*)((s32)battleWork + 0x1CF0) = 1;
                         }
@@ -181,12 +186,19 @@ state_1001:
                 } else if ((*(u32*)((s32)battleWork + 0x1CC4) & 2) == 0) {
                     *(s32*)((s32)battleWork + 0x1CF0) = 1;
                 }
-                if (success) {
+                if (autoCommand) {
+                    if (success) {
+                        done = 1;
+                        *(s32*)((s32)battleWork + 0x1CB8) |= 2;
+                        *(s32*)((s32)battleWork + 0x1CB8) &= ~1;
+                        *(s32*)((s32)battleWork + 0x1C9C) = 1003;
+                    }
+                } else if (success) {
                     done = 1;
                     *(s32*)((s32)battleWork + 0x1CB8) |= 2;
                     *(s32*)((s32)battleWork + 0x1CB8) &= ~1;
                     *(s32*)((s32)battleWork + 0x1C9C) = 1003;
-                } else if (!autoCommand && ((*(u32*)((s32)battleWork + 0x1CC4) & 2) == 0)) {
+                } else if ((*(u32*)((s32)battleWork + 0x1CC4) & 2) == 0) {
                     done = 1;
                     *(s32*)((s32)battleWork + 0x1CB8) &= ~1;
                     *(s32*)((s32)battleWork + 0x1C9C) = 1003;
@@ -200,7 +212,7 @@ state_1003:
             index = extra->index;
             if (index - 2 >= 0) {
                 index--;
-                if (index - 1 >= 0) {
+                if (extra->index - 2 >= 0) {
                     do {
                         index--;
                     } while (index != 0);
@@ -245,6 +257,7 @@ s32 battleAcResult_StickKeepLeft(void* obj) {
     return *(s32*)((s32)obj + 0x1CB8);
 }
 
+#pragma opt_propagation off
 void battleAcDisp_StickKeepLeft(s32 param_1, void* battleWork) {
     typedef struct AcDisp {
         char pad_00[0x14];
@@ -260,32 +273,26 @@ void battleAcDisp_StickKeepLeft(s32 param_1, void* battleWork) {
     } AcData;
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
 
-    AcData* data = (AcData*)((s32)battleWork + 0x1F4C);
+    AcData* data;
     register AcDisp* disp = (AcDisp*)((s32)battleWork + 0x1F20);
-    s32 state = *(s32*)((s32)battleWork + 0x1C9C);
+    s32 state;
     s32 timer;
 
-    if (state == 1001) {
-        goto selected;
+    battleWork = (void*)((u8*)disp - 0x1F20);
+    data = (AcData*)((u8*)disp + 0x2C);
+    state = *(s32*)((u8*)disp - 0x284);
+
+    if (state == 1001) goto selected;
+    if (state < 1001) {
+        if (state < 101) {
+            if (state < 99) return;
+        } else if (state < 1000) return;
+        goto opening;
+    } else if (state < 1007) {
+        if (state < 1005) goto static_disp;
+        goto closing;
     }
-    if (state >= 1001) {
-        if (state >= 1007) {
-            return;
-        }
-        if (state >= 1005) {
-            goto closing;
-        }
-        goto static_disp;
-    }
-    if (state >= 101) {
-        if (state >= 1000) {
-            goto opening;
-        }
-        return;
-    }
-    if (state < 99) {
-        return;
-    }
+    return;
 
 opening:
     disp->icon = -1;
@@ -331,11 +338,14 @@ closing:
     }
 }
 
+#pragma opt_propagation reset
+
 void battleAcDelete_StickKeepLeft(void* obj) {
     *(s32*)((s32)obj + 0x1C9C) = 0x3ED;
 }
 
 
+#pragma opt_common_subs off
 void actionCommandDisp(s32 unused, f32 x, f32 y) {
     typedef struct Vec {
         f32 x;
@@ -349,7 +359,8 @@ void actionCommandDisp(s32 unused, f32 x, f32 y) {
     extern void iconDispGx(f32 scale, Vec* pos, s32 flags, s32 iconId);
     extern char str_AcSkl1_802f00d8[];
 
-    Vec pos;
+    Vec positions[13];
+    char* templates;
     void* battleWork;
     s32 state;
     s32 count;
@@ -361,6 +372,7 @@ void actionCommandDisp(s32 unused, f32 x, f32 y) {
 
     (void)unused;
 
+    templates = str_AcSkl1_802f00d8;
     battleWork = _battleWorkPointer;
     camGetPtr(8);
     state = *(s32*)((s32)battleWork + 0x1C9C);
@@ -369,37 +381,37 @@ void actionCommandDisp(s32 unused, f32 x, f32 y) {
 
     if (state < 0x65) {
         if (state == 0 || (state >= 0 && state >= 0x63)) {
-            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x28);
-            pos.x = -200.0f + x;
-            pos.y = 70.0f + y;
-            iconDispGx(1.0f, &pos, 0x10, 0x81);
+            positions[12] = *(Vec*)(templates + 0x28);
+            positions[12].x = -200.0f + x;
+            positions[12].y = 70.0f + y;
+            iconDispGx(1.0f, &positions[12], 0x10, 0x81);
             goto draw_meter;
         }
     } else if (state == 1000) {
         if ((*(u32*)((s32)gp + 0x1C) & 8) == 0) {
-            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x40);
-            pos.x = -200.0f + x;
-            pos.y = 70.0f + y;
-            iconDispGx(1.0f, &pos, 0x10, 0x81);
+            positions[11] = *(Vec*)(templates + 0x40);
+            positions[11].x = -200.0f + x;
+            positions[11].y = 70.0f + y;
+            iconDispGx(1.0f, &positions[11], 0x10, 0x81);
         } else {
-            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x34);
-            pos.x = -200.0f + x;
-            pos.y = 70.0f + y;
-            iconDispGx(1.0f, &pos, 0x10, 0x80);
+            positions[10] = *(Vec*)(templates + 0x34);
+            positions[10].x = -200.0f + x;
+            positions[10].y = 70.0f + y;
+            iconDispGx(1.0f, &positions[10], 0x10, 0x80);
         }
         goto draw_meter;
     }
 
     if (current < count) {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x4C);
-        pos.x = -200.0f + x;
-        pos.y = 70.0f + y;
-        iconDispGx(1.0f, &pos, 0x10, 0x80);
+        positions[9] = *(Vec*)(templates + 0x4C);
+        positions[9].x = -200.0f + x;
+        positions[9].y = 70.0f + y;
+        iconDispGx(1.0f, &positions[9], 0x10, 0x80);
     } else {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x58);
-        pos.x = -200.0f + x;
-        pos.y = 70.0f + y;
-        iconDispGx(1.0f, &pos, 0x10, 0x81);
+        positions[8] = *(Vec*)(templates + 0x58);
+        positions[8].x = -200.0f + x;
+        positions[8].y = 70.0f + y;
+        iconDispGx(1.0f, &positions[8], 0x10, 0x81);
     }
 
 draw_meter:
@@ -407,7 +419,7 @@ draw_meter:
     if (count > 3) {
         limit = count * 2 + 3;
         if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
-            limit += 2;
+            limit = count * 2 + 5;
         }
     }
 
@@ -417,22 +429,22 @@ draw_meter:
     }
     yPos = 25.0f + y;
 
-    pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x64);
-    pos.x = -288.0f + x;
-    pos.y = yPos;
-    iconDispGx(1.0f, &pos, 0x10, 0x97);
+    positions[7] = *(Vec*)(templates + 0x64);
+    positions[7].x = -288.0f + x;
+    positions[7].y = yPos;
+    iconDispGx(1.0f, &positions[7], 0x10, 0x97);
 
     for (i = 1; i < limit; i++) {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x70);
-        pos.x = x + (step * (f32)i + -288.0f);
-        pos.y = yPos;
-        iconDispGx(1.0f, &pos, 0x10, 0x96);
+        positions[6] = *(Vec*)(templates + 0x70);
+        positions[6].x = x + (step * (f32)i + -288.0f);
+        positions[6].y = yPos;
+        iconDispGx(1.0f, &positions[6], 0x10, 0x96);
     }
 
-    pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x7C);
-    pos.x = x + (step * (f32)i + -288.0f);
-    pos.y = yPos;
-    iconDispGx(1.0f, &pos, 0x10, 0x98);
+    positions[5] = *(Vec*)(templates + 0x7C);
+    positions[5].x = x + (step * (f32)i + -288.0f);
+    positions[5].y = yPos;
+    iconDispGx(1.0f, &positions[5], 0x10, 0x98);
 
     step = 33.0f;
     if ((*(u32*)((s32)battleWork + 0x1CC4) & 1) != 0) {
@@ -442,33 +454,35 @@ draw_meter:
     for (i = 0; i < count - 1; i++) {
         if (i < current) {
             if (i < 3) {
-                pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x88);
-                pos.x = x + (step * (f32)i + -258.0f);
-                pos.y = yPos;
-                iconDispGx(1.0f, &pos, 0x10, i + 0x9A);
+                positions[4] = *(Vec*)(templates + 0x88);
+                positions[4].x = x + (step * (f32)i + -258.0f);
+                positions[4].y = yPos;
+                iconDispGx(1.0f, &positions[4], 0x10, i + 0x9A);
             } else {
-                pos = *(Vec*)(str_AcSkl1_802f00d8 + 0x94);
-                pos.x = x + (step * (f32)i + -258.0f);
-                pos.y = yPos;
-                iconDispGx(1.0f, &pos, 0x10, 0x9C);
+                positions[3] = *(Vec*)(templates + 0x94);
+                positions[3].x = x + (step * (f32)i + -258.0f);
+                positions[3].y = yPos;
+                iconDispGx(1.0f, &positions[3], 0x10, 0x9C);
             }
         } else {
-            pos = *(Vec*)(str_AcSkl1_802f00d8 + 0xA0);
-            pos.x = x + (step * (f32)i + -258.0f);
-            pos.y = yPos;
-            iconDispGx(0.5f, &pos, 0x10, 0x99);
+            positions[2] = *(Vec*)(templates + 0xA0);
+            positions[2].x = x + (step * (f32)i + -258.0f);
+            positions[2].y = yPos;
+            iconDispGx(0.5f, &positions[2], 0x10, 0x99);
         }
     }
 
     if (current < count) {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0xAC);
-        pos.x = x + (step * (f32)i + -250.0f);
-        pos.y = yPos;
-        iconDispGx(1.0f, &pos, 0x10, 0x99);
+        positions[1] = *(Vec*)(templates + 0xAC);
+        positions[1].x = x + (step * (f32)i + -250.0f);
+        positions[1].y = yPos;
+        iconDispGx(1.0f, &positions[1], 0x10, 0x99);
     } else {
-        pos = *(Vec*)(str_AcSkl1_802f00d8 + 0xB8);
-        pos.x = x + (step * (f32)i + -250.0f);
-        pos.y = yPos;
-        iconDispGx(1.0f, &pos, 0x10, 0x9D);
+        positions[0] = *(Vec*)(templates + 0xB8);
+        positions[0].x = x + (step * (f32)i + -250.0f);
+        positions[0].y = yPos;
+        iconDispGx(1.0f, &positions[0], 0x10, 0x9D);
     }
 }
+
+#pragma opt_common_subs reset

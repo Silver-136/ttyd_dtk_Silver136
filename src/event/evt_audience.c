@@ -238,6 +238,7 @@ s32 evt_audience_move_position_speed(void* evt, s32 isFirstCall) {
     f32 dy;
     f32 dz;
     f32 dist;
+    s32 frames;
 
     if (isFirstCall != 0) {
         *(f32*)((s32)audience + 0x104) = x;
@@ -246,9 +247,8 @@ s32 evt_audience_move_position_speed(void* evt, s32 isFirstCall) {
         dy = y - *(f32*)((s32)audience + 0x4C);
         dx = x - *(f32*)((s32)audience + 0x48);
         dz = z - *(f32*)((s32)audience + 0x50);
-        dist = sqrt(dx * dx + dy * dy + dz * dz);
-        *(s32*)((s32)audience + 0xF8) = (s32)(dist / speed);
-        *(s32*)((s32)audience + 0xFC) = (s32)(dist / speed);
+        dist = sqrt(dy * dy + dx * dx + dz * dz);
+        frames = (s32)(dist / speed);
         if (float_0_80422b50 == dx) {
             *(f32*)((s32)audience + 0x118) = float_0_80422b50;
         } else {
@@ -264,7 +264,8 @@ s32 evt_audience_move_position_speed(void* evt, s32 isFirstCall) {
         } else {
             *(f32*)((s32)audience + 0x120) = speed * (dz / dist);
         }
-    }
+        *(s32*)((s32)audience + 0xF8) = frames;
+        *(s32*)((s32)audience + 0xFC) = frames;    }
 
     dx = *(f32*)((s32)audience + 0x118);
     if (dx > float_0_80422b50) {
@@ -310,17 +311,22 @@ s32 evt_audience_jump_position_firstsp(void* evt, s32 isFirstCall) {
     s32 frames = evtGetValue(evt, args[4]);
     f32 firstSpeed = evtGetFloat(evt, args[5]);
     void* audience = BattleAudienceGetPtr(id);
-    f32 framesF = (f32)frames;
+    f32 amountX;
+    f32 amountY;
+    f32 amountZ;
 
     if (isFirstCall != 0) {
+        amountX = (x - *(f32*)((s32)audience + 0x48)) / (f32)frames;
+        amountY = y - *(f32*)((s32)audience + 0x4C);
+        amountZ = z - *(f32*)((s32)audience + 0x50);
         *(f32*)((s32)audience + 0x104) = x;
         *(f32*)((s32)audience + 0x10C) = y;
         *(f32*)((s32)audience + 0x114) = z;
-        *(f32*)((s32)audience + 0x118) = (x - *(f32*)((s32)audience + 0x48)) / framesF;
+        *(f32*)((s32)audience + 0x118) = amountX;
         *(f32*)((s32)audience + 0x11C) = firstSpeed;
-        *(f32*)((s32)audience + 0x120) = (z - *(f32*)((s32)audience + 0x50)) / framesF;
+        *(f32*)((s32)audience + 0x120) = amountZ / (f32)frames;
         *(f32*)((s32)audience + 0x124) =
-            (float_2_80422b58 * -(firstSpeed * framesF - (y - *(f32*)((s32)audience + 0x4C)))) /
+            (float_2_80422b58 * -(firstSpeed * (f32)frames - amountY)) /
             (f32)(frames * frames);
         *(s32*)((s32)audience + 0xF8) = frames;
         *(s32*)((s32)audience + 0xFC) = frames;
@@ -332,7 +338,7 @@ s32 evt_audience_jump_position_firstsp(void* evt, s32 isFirstCall) {
         *(f32*)((s32)audience + 0x50) + *(f32*)((s32)audience + 0x120));
     *(f32*)((s32)audience + 0x11C) = *(f32*)((s32)audience + 0x11C) + *(f32*)((s32)audience + 0x124);
     *(s32*)((s32)audience + 0xF8) = *(s32*)((s32)audience + 0xF8) - 1;
-    if (*(s32*)((s32)audience + 0xF8) < 1) {
+    if (*(s32*)((s32)audience + 0xF8) <= 0) {
         BattleAudience_SetPosition(id,
             *(f32*)((s32)audience + 0x104),
             *(f32*)((s32)audience + 0x10C),
@@ -353,36 +359,54 @@ s32 evt_audience_jump_position_firstsp(void* evt, s32 isFirstCall) {
 s32 evt_audience_jump_position_gravity(void* evt, s32 isFirstCall) {
     extern const f32 float_0p5_80422b54;
     s32* args = *(s32**)((s32)evt + 0x18);
-    s32 id = evtGetValue(evt, args[0]);
-    f32 x = evtGetFloat(evt, args[1]);
-    f32 y = evtGetFloat(evt, args[2]);
-    f32 z = evtGetFloat(evt, args[3]);
-    s32 frames = evtGetValue(evt, args[4]);
-    f32 gravity = evtGetFloat(evt, args[5]);
-    void* audience = BattleAudienceGetPtr(id);
-    f32 framesF = (f32)frames;
+    void* audience;
+    f32 targetX;
+    f32 targetY;
+    f32 targetZ;
+    f32 amountX;
+    f32 amountY;
+    f32 amountZ;
+    s32 id;
+    s32 frames;
+    f32 gravity;
+    f32 deltaY;
+    f32 velocityY;
+    f32 velocityX;
+    f32 velocityZ;
 
+    id = evtGetValue(evt, args[0]);
+    targetX = evtGetFloat(evt, args[1]);
+    targetY = evtGetFloat(evt, args[2]);
+    targetZ = evtGetFloat(evt, args[3]);
+    frames = evtGetValue(evt, args[4]);
+    gravity = evtGetFloat(evt, args[5]);
+    audience = BattleAudienceGetPtr(id);
     if (isFirstCall != 0) {
-        *(f32*)((s32)audience + 0x104) = x;
-        *(f32*)((s32)audience + 0x10C) = y;
-        *(f32*)((s32)audience + 0x114) = z;
-        *(f32*)((s32)audience + 0x118) = (x - *(f32*)((s32)audience + 0x48)) / framesF;
-        *(f32*)((s32)audience + 0x11C) =
-            -((float_0p5_80422b54 * gravity) * framesF -
-            ((y - *(f32*)((s32)audience + 0x4C)) / framesF));
-        *(f32*)((s32)audience + 0x120) = (z - *(f32*)((s32)audience + 0x50)) / framesF;
+        amountX = targetX - *(f32*)((s32)audience + 0x48);
+        amountY = targetY - *(f32*)((s32)audience + 0x4C);
+        amountZ = targetZ - *(f32*)((s32)audience + 0x50);
+        deltaY = float_0p5_80422b54 * gravity;
+        velocityY = amountY / (f32)frames;
+        velocityX = amountX / (f32)frames;
+        velocityZ = amountZ / (f32)frames;
+        velocityY = -(deltaY * (f32)frames - velocityY);
+        *(f32*)((s32)audience + 0x104) = targetX;
+        *(f32*)((s32)audience + 0x10C) = targetY;
+        *(f32*)((s32)audience + 0x114) = targetZ;
+        *(f32*)((s32)audience + 0x118) = velocityX;
+        *(f32*)((s32)audience + 0x11C) = velocityY;
+        *(f32*)((s32)audience + 0x120) = velocityZ;
         *(f32*)((s32)audience + 0x124) = gravity;
         *(s32*)((s32)audience + 0xF8) = frames;
         *(s32*)((s32)audience + 0xFC) = frames;
     }
-
     BattleAudience_SetPosition(id,
         *(f32*)((s32)audience + 0x48) + *(f32*)((s32)audience + 0x118),
         *(f32*)((s32)audience + 0x4C) + *(f32*)((s32)audience + 0x11C),
         *(f32*)((s32)audience + 0x50) + *(f32*)((s32)audience + 0x120));
-    *(f32*)((s32)audience + 0x11C) = *(f32*)((s32)audience + 0x11C) + *(f32*)((s32)audience + 0x124);
-    *(s32*)((s32)audience + 0xF8) = *(s32*)((s32)audience + 0xF8) - 1;
-    if (*(s32*)((s32)audience + 0xF8) < 1) {
+    *(f32*)((s32)audience + 0x11C) += *(f32*)((s32)audience + 0x124);
+    *(s32*)((s32)audience + 0xF8) -= 1;
+    if (*(s32*)((s32)audience + 0xF8) <= 0) {
         BattleAudience_SetPosition(id,
             *(f32*)((s32)audience + 0x104),
             *(f32*)((s32)audience + 0x10C),

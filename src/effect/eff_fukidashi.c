@@ -1,5 +1,7 @@
 #include "effect/eff_fukidashi.h"
 
+#pragma optimize_for_size off
+#pragma use_lmw_stmw off
 u8 calc_pos(void* work, s32 flag) {
     typedef struct Vec {
         f32 x;
@@ -29,6 +31,7 @@ u8 calc_pos(void* work, s32 flag) {
     Vec axis;
     f32 mtx[3][4];
     s32 offset;
+    f32 heightBase;
 
     cam = camGetPtr(4);
     axis = vec3_802f3648;
@@ -43,45 +46,50 @@ u8 calc_pos(void* work, s32 flag) {
     target = *(void**)((s32)work + 0x44);
     if ((s32)target == -1) {
         base = marioGetPtr();
-        *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+        heightBase = float_16_804228e0;
+        *(f32*)((s32)work + 4) = mtx[0][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                   (*(f32*)((s32)base + 0x8C) + *(f32*)((s32)work + 0x10));
-        *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+        *(f32*)((s32)work + 8) = mtx[1][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                   (*(f32*)((s32)base + 0x90) + *(f32*)((s32)work + 0x14));
-        *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+        *(f32*)((s32)work + 0xC) = mtx[2][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                     (*(f32*)((s32)base + 0x94) + *(f32*)((s32)work + 0x18));
     } else if ((s32)target == -2) {
         base = partyGetPtr(marioGetPartyId());
         if (base != 0) {
-            *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+            heightBase = float_16_804228e0;
+            *(f32*)((s32)work + 4) = mtx[0][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                       (*(f32*)((s32)base + 0x58) + *(f32*)((s32)work + 0x10));
-            *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+            *(f32*)((s32)work + 8) = mtx[1][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                       (*(f32*)((s32)base + 0x5C) + *(f32*)((s32)work + 0x14));
-            *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+            *(f32*)((s32)work + 0xC) = mtx[2][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                         (*(f32*)((s32)base + 0x60) + *(f32*)((s32)work + 0x18));
         }
     } else if ((s32)target == -3) {
         base = partyGetPtr(marioGetExtraPartyId());
         if (base != 0) {
-            *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+            heightBase = float_16_804228e0;
+            *(f32*)((s32)work + 4) = mtx[0][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                       (*(f32*)((s32)base + 0x58) + *(f32*)((s32)work + 0x10));
-            *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+            *(f32*)((s32)work + 8) = mtx[1][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                       (*(f32*)((s32)base + 0x5C) + *(f32*)((s32)work + 0x14));
-            *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+            *(f32*)((s32)work + 0xC) = mtx[2][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                         (*(f32*)((s32)base + 0x60) + *(f32*)((s32)work + 0x18));
         }
     } else if (target != 0) {
-        *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+        heightBase = float_16_804228e0;
+        *(f32*)((s32)work + 4) = mtx[0][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                   (*(f32*)((s32)target + 0x8C) + *(f32*)((s32)work + 0x10));
-        *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+        *(f32*)((s32)work + 8) = mtx[1][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                   (*(f32*)((s32)target + 0x90) + *(f32*)((s32)work + 0x14));
-        *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+        *(f32*)((s32)work + 0xC) = mtx[2][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                     (*(f32*)((s32)target + 0x94) + *(f32*)((s32)work + 0x18));
     } else {
-        *(f32*)((s32)work + 4) = mtx[0][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+        heightBase = float_16_804228e0;
+        *(f32*)((s32)work + 4) = mtx[0][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                   *(f32*)((s32)work + 0x10);
-        *(f32*)((s32)work + 8) = mtx[1][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+        *(f32*)((s32)work + 8) = mtx[1][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                   *(f32*)((s32)work + 0x14);
-        *(f32*)((s32)work + 0xC) = mtx[2][1] * (float_16_804228e0 + *(f32*)((s32)work + 0x20)) +
+        *(f32*)((s32)work + 0xC) = mtx[2][1] * (heightBase + *(f32*)((s32)work + 0x20)) +
                                     *(f32*)((s32)work + 0x18);
     }
 
@@ -89,9 +97,12 @@ u8 calc_pos(void* work, s32 flag) {
     *(f32*)((s32)work + 0x2C) =
         float_0p5_8042291c * (*(f32*)((s32)work + 0x20) / float_12_80422954) + float_0p5_8042291c;
 }
+#pragma optimize_for_size reset
+#pragma use_lmw_stmw reset
+
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32 field3c, s32 target, s32 timer) {
     typedef struct Vec {
         f32 x;
@@ -101,7 +112,7 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
 
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
-    extern u8 effFukidashiMain(void* effect);
+    extern void effFukidashiMain(void* effect);
     extern u8 calc_pos(void* work, s32 flag);
     extern void* marioGetPtr(void);
     extern s32 marioGetPartyId(void);
@@ -119,6 +130,8 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
     extern f32 float_3_80422930;
     extern f32 float_neg450_8042294c;
 
+    extern const u8 vec3_802f3648[];
+    const u8* readonlyPool = vec3_802f3648;
     void* effect;
     void* work;
     void* base;
@@ -129,7 +142,7 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
     Vec npcQuestionPos;
 
     effect = effEntry();
-    *(char**)((s32)effect + 0x14) = str_Fukidashi_802f36b0;
+    *(char**)((s32)effect + 0x14) = (char*)(readonlyPool + 104);
     *(s32*)((s32)effect + 8) = 1;
     work = __memAlloc(3, 0x58);
     *(void**)((s32)effect + 0xC) = work;
@@ -188,14 +201,14 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
     if ((target == -2) || (target == -3)) {
         switch (kind) {
         case 0:
-            partyBikkuriPos = vec3_802f3654;
+            partyBikkuriPos = *(const Vec*)(readonlyPool + 12);
             partyBikkuriPos.x = x;
             partyBikkuriPos.y = y;
             partyBikkuriPos.z = z;
             psndSFXOn_3D((char*)0x5D, &partyBikkuriPos);
             break;
         case 1:
-            partyQuestionPos = vec3_802f3660;
+            partyQuestionPos = *(const Vec*)(readonlyPool + 24);
             partyQuestionPos.x = x;
             partyQuestionPos.y = y;
             partyQuestionPos.z = z;
@@ -205,18 +218,18 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
     } else if ((target != 0) && (target != -1)) {
         switch (kind) {
         case 0:
-            npcBikkuriPos = vec3_802f366c;
+            npcBikkuriPos = *(const Vec*)(readonlyPool + 36);
             npcBikkuriPos.x = x;
             npcBikkuriPos.y = y;
             npcBikkuriPos.z = z;
-            psndSFXOn_3D(str_SFX_EVT_NPC_BIKKURI__802f36bc, &npcBikkuriPos);
+            psndSFXOn_3D((char*)(readonlyPool + 116), &npcBikkuriPos);
             break;
         case 1:
-            npcQuestionPos = vec3_802f3678;
+            npcQuestionPos = *(const Vec*)(readonlyPool + 48);
             npcQuestionPos.x = x;
             npcQuestionPos.y = y;
             npcQuestionPos.z = z;
-            psndSFXOn_3D(str_SFX_EVT_NPC_QUESTION_802f36d8, &npcQuestionPos);
+            psndSFXOn_3D((char*)(readonlyPool + 144), &npcQuestionPos);
             break;
         }
     }
@@ -228,7 +241,8 @@ void* effFukidashiEntry(f32 x, f32 y, f32 z, f32 scale, f32 angle, s32 kind, s32
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
-u8 effFukidashiMain(void* effect) {
+#pragma optimize_for_size off
+void effFukidashiMain(void* effect) {
     typedef struct LocalVec3 {
         f32 x;
         f32 y;
@@ -240,8 +254,8 @@ u8 effFukidashiMain(void* effect) {
     extern u8 effFukidashiDisp(s32 camera, void* effect);
     extern u8 calc_pos(void* work, s32 flag);
     extern const LocalVec3 vec3_802f3684;
-    extern s8* anim_data_table[];
-    extern s8* anim_data_table_2[];
+    extern s8* anim_data_table[7];
+    extern s8* anim_data_table_2[7];
     extern f32 float_22p5_80422940;
     extern f32 float_0_804228c0;
     extern f32 float_9_80422944;
@@ -271,7 +285,7 @@ u8 effFukidashiMain(void* effect) {
     if (value < 0) {
         if (value == -1) {
             effDelete(effect);
-            return 0;
+            return;
         }
         *(s32*)((s32)work + 0x34) = (-10 - value) * 2;
         if (*(s32*)((s32)work + 0x40) == 0) {
@@ -296,7 +310,7 @@ u8 effFukidashiMain(void* effect) {
             *(f32*)((s32)work + 0x24) -= float_9_80422944;
             if (*(f32*)((s32)work + 0x24) <= float_neg90_80422948) {
                 effDelete(effect);
-                return 0;
+                return;
             }
             break;
         default:
@@ -309,7 +323,7 @@ u8 effFukidashiMain(void* effect) {
         }
         if (*(s32*)((s32)work + 0x30) < 0) {
             effDelete(effect);
-            return 0;
+            return;
         }
     }
 
@@ -321,28 +335,56 @@ u8 effFukidashiMain(void* effect) {
     } else {
         dispEntry(*(s32*)((s32)work + 0x4C), 8, effFukidashiDisp, effect, dispCalcZ(&dispPos));
     }
-    return 0;
+    return;
 }
+#pragma optimize_for_size reset
+
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
 
 
-void effFukidashiDisp(s32 cameraId, void* effect) {
-    typedef f32 Mtx[3][4];
-    typedef struct Tex { u32 data[8]; } Tex;
-    extern void* camGetPtr(s32);
+void effFukidashiDisp(s32 param_1, void* effect)
+
+{
+    extern f64 double_to_int_mask_802f36a8;
+    union { f64 number; u32 words[2]; } unsignedConversion;
+    #define FUKIDASHI_UNSIGNED_FLOAT(value) (unsignedConversion.words[0]=0x43300000, unsignedConversion.words[1]=(u32)(value), (f32)(unsignedConversion.number-double_to_int_mask_802f36a8))
+
+
+    typedef f32 MTX34[3][4];
+    typedef struct { f32 x,y,z; } Vec;
+    typedef struct { u8 r,g,b,a; } GXColor;
+    typedef struct { u32 data[8]; } GXTexObj;
+    typedef struct { u32 data[16]; } GXLightObj;
+    extern char* camGetPtr(s32);
+    extern u8* gp;
+    extern const Vec vec3_802f3690;
+    extern const f32 chuchu_dt[];
+    extern u8 moja_model_vertex_tbl[],moja_model_normal_tbl[],moja_model_color0_tbl[];
+    extern void* moja_model_dl_0_tbl[];
+    extern u8 moja_model_dl_0_size_tbl[];
+    extern char str_PCTd_80422918[];
+    extern f64 cos(f64),sin(f64);
+    extern s32 sprintf(char*,const char*,...);
+    extern u16 FontGetMessageWidth(char*);
+    extern void FontDrawStart_alpha(u8);
+    extern void FontDrawStringMtx(void*,char*);
+    extern void iconDispGxCol(void*,u16,u16,void*);
     extern void mapSetMaterialFog(void);
-    extern void PSMTXTrans(Mtx,f32,f32,f32);
-    extern void PSMTXRotRad(Mtx,f32,char);
-    extern void PSMTXScale(Mtx,f32,f32,f32);
-    extern void PSMTXConcat(Mtx,Mtx,Mtx);
-    extern void PSMTXIdentity(Mtx);
     extern void effGetTexObj(s32,void*);
+    extern void PSMTXTrans(void*,f32,f32,f32);
+    extern void PSMTXRotRad(void*,f32,char);
+    extern void PSMTXScale(void*,f32,f32,f32);
+    extern void PSMTXConcat(void*,void*,void*);
+    extern void PSMTXIdentity(void*);
+    extern void PSMTXMultVec(void*,void*,void*);
+    extern void PSMTXInvXpose(void*,void*);
+    extern void PSMTXTransApply(void*,void*,f32,f32,f32);
     extern void GXLoadTexObj(void*,s32);
     extern void GXSetCurrentMtx(s32);
     extern void GXSetCullMode(s32);
-    extern void GXLoadTexMtxImm(Mtx,s32,s32);
+    extern void GXLoadTexMtxImm(void*,s32,s32);
     extern void GXSetNumTevStages(s32);
     extern void GXSetTevOrder(s32,s32,s32,s32);
     extern void GXSetTevOp(s32,s32);
@@ -363,128 +405,731 @@ void effFukidashiDisp(s32 cameraId, void* effect) {
     extern void GXSetNumTexGens(s32);
     extern void GXSetTexCoordGen2(s32,s32,s32,s32,s32,s32);
     extern void GXSetChanMatColor(s32,void*);
-    extern void GXLoadPosMtxImm(Mtx,s32);
+    extern void GXSetChanAmbColor(s32,void*);
+    extern void GXLoadPosMtxImm(void*,s32);
+    extern void GXLoadNrmMtxImm(void*,s32);
     extern void GXBegin(s32,s32,s32);
-    extern u32 unk_804295a0;
-    extern u32 unk_804295a8;
-    extern u32 unk_804295a4;
+    extern void GXInitLightPos(void*,f32,f32,f32);
+    extern void GXInitLightColor(void*,void*);
+    extern void GXInitLightAttn(void*,f32,f32,f32,f32,f32,f32);
+    extern void GXLoadLightObjImm(void*,s32);
+    extern void GXSetArray(s32,void*,u8);
+    extern void GXCallDisplayList(void*,u32);
+    extern f32 float_0_804228c0;
+    extern f32 float_0p15_80422914;
+    extern f32 float_0p16667_804228ec;
+    extern f32 float_0p25_804228f0;
+    extern f32 float_0p43633_80422910;
+    extern f32 float_0p5_8042291c;
+    extern f32 float_0p7_8042293c;
+    extern f32 float_0p8_804228c8;
+    extern f32 float_10_80422908;
+    extern f32 float_13_804228dc;
+    extern f32 float_16_804228e0;
+    extern f32 float_1_804228cc;
+    extern f32 float_1p3_804228d0;
+    extern f32 float_22_80422924;
+    extern f32 float_2_804228e4;
+    extern f32 float_3_80422930;
+    extern f32 float_4_80422900;
+    extern f32 float_5_8042290c;
+    extern f32 float_7_80422938;
+    extern f32 float_8_804228fc;
+    extern f32 float_deg2rad_804228c4;
+    extern f32 float_neg10_80422920;
+    extern f32 float_neg16_804228d8;
+    extern f32 float_neg19_804228e8;
+    extern f32 float_neg1_804228f4;
+    extern f32 float_neg1p3_804228d4;
+    extern f32 float_neg3_8042292c;
+    extern f32 float_neg4_804228f8;
+    extern f32 float_neg7_80422934;
+    extern f32 float_neg8_80422904;
     extern u32 dat_80422898;
     extern u32 dat_8042289c;
-    Mtx trans,rot,scale,model,temp,texMtx;
-    Tex tex;
-    volatile f32* fifo=(volatile f32*)0xCC008000;
-    s32* work=*(s32**)((char*)effect+0xC);
-    char* camera=(char*)camGetPtr(cameraId);
-    u32 color;
-    s32 alpha=work[0x12];
-    s32 sides=1;
-    s32 side;
-    s32 layer;
-    s32 a;
-    s32 particle;
-
-    mapSetMaterialFog();
-    if ((f32)work[9] != 0.0f || work[0] == 2) sides=2;
-    for (side=0; side<sides; side++) {
-        PSMTXTrans(trans,(f32)work[1],(f32)work[2],(f32)work[3]);
-        camera=(char*)camGetPtr(cameraId);
-        PSMTXRotRad(rot,-0.017453292f**(f32*)(camera+0x114),'y');
-        PSMTXConcat(trans,rot,model);
-        PSMTXScale(scale,0.8f,0.8f,0.8f); PSMTXConcat(model,scale,model);
-        PSMTXScale(scale,1.0f,0.8f,1.0f);
-        PSMTXRotRad(rot,0.017453292f*(f32)work[10],'z');
-        PSMTXConcat(model,scale,temp); PSMTXConcat(temp,rot,model);
-        PSMTXConcat((f32(*)[4])(camera+0x48),model,model);
-        GXSetCurrentMtx(0); GXSetCullMode(side==0?2:1);
-        PSMTXIdentity(texMtx); GXLoadTexMtxImm(texMtx,0x1E,1);
-        GXSetNumTevStages(1); GXSetTevOrder(0,0,0,4); GXSetTevOp(0,0);
-        GXSetBlendMode(1,4,5,0); GXSetZCompLoc(1); GXSetAlphaCompare(7,0,0,7,0);
-        GXSetZMode(1,3,0); GXClearVtxDesc(); GXSetVtxDesc(9,1); GXSetVtxDesc(13,1);
-        GXSetVtxAttrFmt(0,9,1,4,0); GXSetVtxAttrFmt(0,13,1,4,0);
-        GXSetNumChans(1); GXSetChanCtrl(4,0,0,0,0,2,2);
-        GXSetNumTexGens(1); GXSetTexCoordGen2(0,1,4,0x1E,0,0x7D);
-        for (layer=0;layer<2;layer++) {
-            if (layer==0) {
-                effGetTexObj(5,&tex);
-                a=(alpha*0xB0)/0xFF;
-                color=(unk_804295a0&0xFFFFFF00)|(a&0xFF);
-                PSMTXTrans(temp,1.3f,-1.3f,0.0f);
-                PSMTXConcat(model,temp,temp);
-                PSMTXRotRad(rot,0.017453292f*(f32)work[9],'y');
-                PSMTXConcat(temp,rot,temp);
-            } else {
-                effGetTexObj(4,&tex);
-                a=(alpha*0xFF)/0xFF;
-                color=((side==0?dat_80422898:dat_8042289c)&0xFFFFFF00)|(a&0xFF);
-                PSMTXTrans(temp,0.0f,0.0f,0.0f);
-                PSMTXConcat(model,temp,temp);
-                PSMTXRotRad(rot,0.017453292f*(f32)work[9],'y');
-                PSMTXConcat(temp,rot,temp);
-            }
-            GXLoadTexObj(&tex,0); GXSetChanMatColor(4,&color);
-            GXLoadPosMtxImm(temp,0); GXSetCurrentMtx(0); GXBegin(0x80,0,4);
-            *fifo=-16.0f;*fifo=13.0f;*fifo=0.0f;*fifo=0.0f;*fifo=0.0f;
-            *fifo=16.0f;*fifo=13.0f;*fifo=0.0f;*fifo=2.0f;*fifo=0.0f;
-            *fifo=16.0f;*fifo=-19.0f;*fifo=0.0f;*fifo=2.0f;*fifo=1.0f;
-            *fifo=-16.0f;*fifo=-19.0f;*fifo=0.0f;*fifo=0.0f;*fifo=1.0f;
-        }
-        PSMTXScale(scale,1.3f,1.3f,1.3f);
-        PSMTXConcat(model,scale,model);
-        if (work[0] == 4) {
-            PSMTXIdentity(texMtx);
-            GXLoadTexMtxImm(texMtx,0x1E,1);
-            GXSetNumTevStages(1);
-            GXSetTevOrder(0,0,0,0xFF);
-            GXSetTevColorOp(0,0,0,0,1,0);
-            GXSetTevAlphaOp(0,0,0,0,1,0);
-            GXSetTevColorIn(0,15,15,15,15);
-            GXSetTevAlphaIn(0,7,1,4,7);
-            color=(unk_804295a8&0xFFFFFF00)|(alpha&0xFF);
-            GXSetTevColor(1,&color);
-            effGetTexObj(8,&tex);
-            GXLoadTexObj(&tex,0);
-            for (particle=0;particle<work[0xE];particle++) {
-                GXLoadPosMtxImm(model,0);
-                GXBegin(0x80,0,4);
-                *fifo=-3.0f;*fifo=3.0f;*fifo=0.0f;*fifo=0.0f;*fifo=0.0f;
-                *fifo=3.0f;*fifo=3.0f;*fifo=0.0f;*fifo=1.0f;*fifo=0.0f;
-                *fifo=3.0f;*fifo=-3.0f;*fifo=0.0f;*fifo=1.0f;*fifo=1.0f;
-                *fifo=-3.0f;*fifo=-3.0f;*fifo=0.0f;*fifo=0.0f;*fifo=1.0f;
-            }
-        } else if (work[0] >= 0 && work[0] < 2) {
-            GXSetNumTevStages(1);
-            GXSetTevOrder(0,0,0,0xFF);
-            GXSetTevColorOp(0,0,0,0,1,0);
-            GXSetTevAlphaOp(0,0,0,0,1,0);
-            GXSetTevColorIn(0,15,15,15,2);
-            GXSetTevAlphaIn(0,7,1,4,7);
-            if (work[0] == 1) {
-                effGetTexObj(7,&tex);
-                GXLoadTexObj(&tex,0);
-                PSMTXScale(scale,0.25f,1.0f,1.0f);
-            } else {
-                effGetTexObj(6,&tex);
-                GXLoadTexObj(&tex,0);
-                PSMTXScale(scale,0.16667f,1.0f,1.0f);
-            }
-            PSMTXTrans(texMtx,(f32)work[0xE],0.0f,0.0f);
-            PSMTXConcat(scale,texMtx,texMtx);
-            GXLoadTexMtxImm(texMtx,0x1E,1);
-            color=(unk_804295a4&0xFFFFFF00)|(alpha&0xFF);
-            GXSetTevColor(1,&color);
-            GXLoadPosMtxImm(model,0);
-            GXBegin(0x80,0,4);
-            if (work[0] == 0) {
-                *fifo=-4.0f;*fifo=8.0f;*fifo=0.0f;*fifo=0.0f;*fifo=0.0f;
-                *fifo=4.0f;*fifo=8.0f;*fifo=0.0f;*fifo=1.0f;*fifo=0.0f;
-                *fifo=4.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=1.0f;*fifo=1.0f;
-                *fifo=-4.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=0.0f;*fifo=1.0f;
-            } else {
-                *fifo=-8.0f;*fifo=16.0f;*fifo=0.0f;*fifo=0.0f;*fifo=0.0f;
-                *fifo=8.0f;*fifo=16.0f;*fifo=0.0f;*fifo=1.0f;*fifo=0.0f;
-                *fifo=8.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=1.0f;*fifo=1.0f;
-                *fifo=-8.0f;*fifo=-8.0f;*fifo=0.0f;*fifo=0.0f;*fifo=1.0f;
-            }
-        }
+    extern u32 dat_804228a0;
+    extern u32 dat_804228a4;
+    extern u32 dat_804228a8;
+    extern u32 dat_804228ac;
+    extern u32 dat_804228b0;
+    extern u32 dat_804228b4;
+    extern u32 dat_804228b8;
+    extern u32 unk_804295a0;
+    extern u32 unk_804295a4;
+    extern u32 unk_804295a8;
+    extern u32 unk_804295ac;
+    extern u32 unk_804295b0;
+  float fVar1;
+  float fVar2;
+  char *pcVar3;
+  char *pcVar4;
+  int iVar5;
+  void **ppuVar6;
+  u32 uVar7;
+  u8 *pbVar8;
+  int iVar9;
+  int iVar10;
+  int iVar11;
+  u8 bVar12;
+  int *piVar13;
+  u8 bVar14;
+  char cVar15;
+  double dVar16;
+  u32 local_380;
+  u32 local_37c;
+  u32 local_378;
+  u32 local_374;
+  u32 local_370;
+  u32 local_36c;
+  u32 local_368;
+  u32 local_364;
+  u32 local_360;
+  u32 local_35c;
+  u32 local_358;
+  u32 local_354;
+  u32 local_350;
+  u32 local_34c;
+  GXColor local_348;
+  GXColor local_344;
+  u32 local_340;
+  u32 local_33c;
+  u32 local_338;
+  u32 local_334;
+  u32 local_330;
+  u32 local_32c;
+  GXColor local_328;
+  GXColor local_324;
+  GXColor local_320;
+  GXColor local_31c;
+  GXColor local_318;
+  GXColor local_314;
+  float local_310;
+  float local_30c;
+  float local_308;
+  Vec local_304;
+  char acStack_2f8 [32];
+  GXTexObj GStack_2d8;
+  MTX34 MStack_2b8;
+  GXLightObj GStack_288;
+  u8 auStack_248 [48];
+  MTX34 MStack_218;
+  MTX34 MStack_1e8;
+  MTX34 MStack_1b8;
+  MTX34 MStack_188;
+  MTX34 MStack_158;
+  MTX34 MStack_128;
+  MTX34 MStack_f8;
+  MTX34 MStack_c8;
+  u32 uStack_94;
+  int iStack_8c;
+  u32 uStack_84;
+  
+  piVar13 = *(int **)((char*)effect + 0xc);
+  pcVar3 = camGetPtr(param_1);
+  iVar11 = piVar13[0x12];
+  iVar9 = 1;
+  mapSetMaterialFog();
+  fVar2 = float_deg2rad_804228c4;
+  if (float_0_804228c0 != *(f32*)(piVar13+9)) {
+    iVar9 = 2;
+  }
+  if (*piVar13 == 2) {
+    iVar9 = 2;
+  }
+  iVar5 = (iVar11 * 0xb0) / 0xff + (iVar11 * 0xb0 >> 0x1f);
+  iVar10 = (iVar11 * 0xff) / 0xff + (iVar11 * 0xff >> 0x1f);
+  cVar15 = (char)iVar5 - (char)(iVar5 >> 0x1f);
+  bVar14 = (char)iVar10 - (char)(iVar10 >> 0x1f);
+  for (iVar10 = 0; iVar10 < iVar9; iVar10 = iVar10 + 1) {
+    PSMTXTrans(&MStack_128, (double)*(f32*)(piVar13+1), (double)*(f32*)(piVar13+2),
+                    (double)*(f32*)(piVar13+3));
+    pcVar4 = camGetPtr(param_1);
+    PSMTXRotRad(&MStack_188, (double)(fVar2 * -*(f32*)(pcVar4+0x114)), 'y');
+    PSMTXConcat(&MStack_128, &MStack_188, &MStack_1e8);
+    PSMTXScale(&MStack_f8, float_0p8_804228c8, float_0p8_804228c8, float_0p8_804228c8);
+    PSMTXConcat(&MStack_1e8, &MStack_f8, &MStack_1e8);
+    PSMTXScale(&MStack_f8, float_1_804228cc, float_0p8_804228c8, float_1_804228cc);
+    PSMTXRotRad(&MStack_1b8, (double)(fVar2 * *(f32*)(piVar13+10)), 'z');
+    PSMTXConcat(&MStack_1e8, &MStack_f8, &MStack_f8);
+    PSMTXConcat(&MStack_f8, &MStack_1b8, &MStack_c8);
+    PSMTXConcat(pcVar3+0x48, &MStack_c8, &MStack_c8);
+    GXSetCurrentMtx(0);
+    if (iVar10 == 0) {
+      GXSetCullMode(2);
     }
+    else {
+      GXSetCullMode(1);
+    }
+    PSMTXIdentity(&MStack_128);
+    GXLoadTexMtxImm(&MStack_128, 0x1e, 1);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(0, 0, 0, 4);
+    GXSetTevOp(0, 0);
+    GXSetBlendMode(1, 4, 5, 0);
+    GXSetZCompLoc(1);
+    GXSetAlphaCompare(7, 0, 0, 7, 0);
+    GXSetZMode(1, 3, 0);
+    GXClearVtxDesc();
+    GXSetVtxDesc(9, 1);
+    GXSetVtxDesc(13, 1);
+    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
+    GXSetVtxAttrFmt(0, 13, 1, 4, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(4, 0, 0, 0, 0, 2, 2);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(0, 1, 4, 0x1e, 0, 0x7d);
+    iVar5 = 0;
+    do {
+      bVar12 = (u8)iVar11;
+      if (iVar5 == 0) {
+        effGetTexObj(5, (u32 *)&GStack_2d8);
+        GXLoadTexObj(&GStack_2d8, 0);
+        *(u32*)&local_318 = unk_804295a0;
+        local_318.a = bVar12;
+        local_314 = local_318;
+        GXSetChanMatColor(4, &local_314);
+        PSMTXTrans(&MStack_128, (double)float_1p3_804228d0, (double)float_neg1p3_804228d4,
+                        (double)float_0_804228c0);
+        PSMTXConcat(&MStack_c8, &MStack_128, &MStack_128);
+        PSMTXRotRad(&MStack_158, (double)(float_deg2rad_804228c4 * *(f32*)(piVar13+9)), 'y');
+        PSMTXConcat(&MStack_128, &MStack_158, &MStack_128);
+        GXLoadPosMtxImm(&MStack_128, 0);
+        GXSetCurrentMtx(0);
+      }
+      else {
+        effGetTexObj(4, (u32 *)&GStack_2d8);
+        GXLoadTexObj(&GStack_2d8, 0);
+        if (iVar10 == 0) {
+          *(u32*)&local_320 = dat_80422898;
+          local_320.a = bVar12;
+          local_31c = local_320;
+          GXSetChanMatColor(4, &local_31c);
+        }
+        else {
+          *(u32*)&local_328 = dat_8042289c;
+          local_328.a = bVar12;
+          local_324 = local_328;
+          GXSetChanMatColor(4, &local_324);
+        }
+        dVar16 = (double)float_0_804228c0;
+        PSMTXTrans(&MStack_128, dVar16, dVar16, dVar16);
+        PSMTXConcat(&MStack_c8, &MStack_128, &MStack_128);
+        PSMTXRotRad(&MStack_158, (double)(float_deg2rad_804228c4 * *(f32*)(piVar13+9)), 'y');
+        PSMTXConcat(&MStack_128, &MStack_158, &MStack_128);
+        GXLoadPosMtxImm(&MStack_128, 0);
+        GXSetCurrentMtx(0);
+      }
+      GXBegin(128, 0, 4);
+      iVar5 = iVar5 + 1;
+      *(volatile f32*)0xCC008000 = float_neg16_804228d8;
+      *(volatile f32*)0xCC008000 = float_13_804228dc;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_16_804228e0;
+      *(volatile f32*)0xCC008000 = float_13_804228dc;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_2_804228e4;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_16_804228e0;
+      *(volatile f32*)0xCC008000 = float_neg19_804228e8;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_2_804228e4;
+      *(volatile f32*)0xCC008000 = float_1_804228cc;
+      *(volatile f32*)0xCC008000 = float_neg16_804228d8;
+      *(volatile f32*)0xCC008000 = float_neg19_804228e8;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_1_804228cc;
+    } while (iVar5 < 2);
+    PSMTXScale(&MStack_218, float_1p3_804228d0, float_1p3_804228d0, float_1p3_804228d0);
+    PSMTXConcat(&MStack_c8, &MStack_218, &MStack_c8);
+    iVar5 = *piVar13;
+    switch (*piVar13) {
+case 0:
+case 1:
+
+          GXSetNumTevStages(1);
+          GXSetTevOrder(0, 0, 0, 0xFF);
+          GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+          GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+          GXSetTevColorIn(0, 15, 15, 15, 2);
+          GXSetTevAlphaIn(0, 7, 1, 4, 7);
+          iVar5 = *piVar13;
+          if (iVar5 == 1) {
+            effGetTexObj(7, (u32 *)&GStack_2d8);
+            GXLoadTexObj(&GStack_2d8, 0);
+            PSMTXScale(&MStack_f8, float_0p25_804228f0, float_1_804228cc, float_1_804228cc);
+            uStack_94 = piVar13[0xe] ^ 0x80000000;
+
+            PSMTXTrans(&MStack_128,
+                            (double)(f32)(s32)(uStack_94 ^ 0x80000000), (double)float_0_804228c0,
+                            (double)float_0_804228c0);
+            PSMTXConcat(&MStack_f8, &MStack_128, &MStack_128);
+            GXLoadTexMtxImm(&MStack_128, 0x1e, 1);
+          }
+          else if ((iVar5 < 1) && (iVar5 > -1)) {
+            effGetTexObj(6, (u32 *)&GStack_2d8);
+            GXLoadTexObj(&GStack_2d8, 0);
+            PSMTXScale(&MStack_f8, float_0p16667_804228ec, float_1_804228cc, float_1_804228cc);
+            uStack_94 = piVar13[0xe] ^ 0x80000000;
+
+            PSMTXTrans(&MStack_128,
+                            (double)(f32)(s32)(uStack_94 ^ 0x80000000), (double)float_0_804228c0,
+                            (double)float_0_804228c0);
+            PSMTXConcat(&MStack_f8, &MStack_128, &MStack_128);
+            GXLoadTexMtxImm(&MStack_128, 0x1e, 1);
+          }
+          local_330 = ((unk_804295a4 & 0xFFFFFF00) | (u8)cVar15);
+          local_32c = local_330;
+          GXSetTevColor(1, &local_32c);
+          PSMTXTransApply(&MStack_c8, &MStack_218, float_1_804228cc, float_neg1_804228f4, float_0_804228c0);
+          GXLoadPosMtxImm(&MStack_218, 0);
+          if (*piVar13 == 0) {
+            GXBegin(128, 0, 4);
+            *(volatile f32*)0xCC008000 = float_neg4_804228f8;
+            *(volatile f32*)0xCC008000 = float_8_804228fc;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_4_80422900;
+            *(volatile f32*)0xCC008000 = float_8_804228fc;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_4_80422900;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_neg4_804228f8;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+          }
+          else {
+            GXBegin(128, 0, 4);
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_16_804228e0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_8_804228fc;
+            *(volatile f32*)0xCC008000 = float_16_804228e0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_8_804228fc;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+          }
+          if (iVar10 == 0) {
+            local_338 = ((dat_804228a0 & 0xFFFFFF00) | (u8)bVar14);
+            local_334 = local_338;
+            GXSetTevColor(1, &local_334);
+          }
+          else {
+            local_340 = ((dat_804228a4 & 0xFFFFFF00) | (u8)bVar14);
+            local_33c = local_340;
+            GXSetTevColor(1, &local_33c);
+          }
+          GXLoadPosMtxImm(&MStack_c8, 0);
+          if (*piVar13 == 0) {
+            GXBegin(128, 0, 4);
+            *(volatile f32*)0xCC008000 = float_neg4_804228f8;
+            *(volatile f32*)0xCC008000 = float_8_804228fc;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_4_80422900;
+            *(volatile f32*)0xCC008000 = float_8_804228fc;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_4_80422900;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_neg4_804228f8;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+          }
+          else {
+            GXBegin(128, 0, 4);
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_16_804228e0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_8_804228fc;
+            *(volatile f32*)0xCC008000 = float_16_804228e0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_8_804228fc;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_neg8_80422904;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_0_804228c0;
+            *(volatile f32*)0xCC008000 = float_1_804228cc;
+          }
+        
+break;
+case 2:
+
+        GXSetNumTevStages(1);
+        GXSetTevOrder(0, 0xff, 0xff, 4);
+        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(0, 15, 15, 15, 10);
+        GXSetTevAlphaIn(0, 7, 7, 7, 5);
+        GXSetNumChans(1);
+        GXSetChanCtrl(4, 1, 0, 1, 1, 2, 2);
+        *(u32*)&local_348 = dat_804228a8;
+        local_348.a = bVar14;
+        local_344 = local_348;
+        GXSetChanAmbColor(4, &local_344);
+        uStack_94 = *(u32*)(gp+0x1C);
+
+        local_310 = vec3_802f3690.x;
+        local_30c = vec3_802f3690.y;
+        local_308 = vec3_802f3690.z;
+        dVar16 = cos
+                           ((double)(FUKIDASHI_UNSIGNED_FLOAT(uStack_94) / float_10_80422908));
+        local_30c = *(f32*)(piVar13+2);
+        iStack_8c = *(u32*)(gp+0x1C);
+
+        local_310 = float_10_80422908 * (float)dVar16 + *(f32*)(piVar13+1);
+        dVar16 = sin
+                           ((double)(FUKIDASHI_UNSIGNED_FLOAT(iStack_8c) / float_10_80422908));
+        local_308 = -(float_10_80422908 * (float)dVar16 - *(f32*)(piVar13+3));
+        local_304.x = local_310;
+        local_304.y = local_30c;
+        local_304.z = local_308;
+        pcVar4 = camGetPtr(param_1);
+        PSMTXMultVec(pcVar4+0x48, &local_304, &local_304);
+        GXInitLightPos(&GStack_288, local_304.x, local_304.y, local_304.z);
+        local_350 = ((dat_804228ac & 0xFFFFFF00) | (u8)bVar14);
+        local_34c = local_350;
+        GXInitLightColor(&GStack_288, &local_34c);
+        dVar16 = (double)float_0_804228c0;
+        GXInitLightAttn(&GStack_288, (double)float_1_804228cc, dVar16, dVar16,
+                            (double)float_1_804228cc, dVar16, dVar16);
+        GXLoadLightObjImm(&GStack_288, 1);
+        PSMTXTrans(&MStack_2b8, (double)float_5_8042290c, (double)float_neg8_80422904,
+                        (double)float_0_804228c0);
+        PSMTXConcat(&MStack_c8, &MStack_2b8, &MStack_218);
+        PSMTXRotRad(&MStack_2b8, (double)float_0p43633_80422910, 'z');
+        PSMTXConcat(&MStack_218, &MStack_2b8, &MStack_218);
+
+        uStack_84 = *(u32*)(gp+0x1C) * 10;
+        PSMTXRotRad(&MStack_2b8,
+                         (double)(float_deg2rad_804228c4 *
+                                 FUKIDASHI_UNSIGNED_FLOAT(uStack_84)), 'y');
+        PSMTXConcat(&MStack_218, &MStack_2b8, &MStack_218);
+        PSMTXScale(&MStack_2b8, float_0p15_80422914, float_0p15_80422914, float_0p15_80422914);
+        PSMTXConcat(&MStack_218, &MStack_2b8, &MStack_218);
+        GXLoadPosMtxImm(&MStack_218, 0);
+        PSMTXInvXpose(&MStack_218, auStack_248);
+        GXLoadNrmMtxImm(auStack_248, 0);
+        GXSetZMode(0, 3, 0);
+        GXClearVtxDesc();
+        GXSetVtxDesc(9, 2);
+        GXSetVtxAttrFmt(0, 9, 1, 3, 8);
+        GXSetArray(9, moja_model_vertex_tbl, 6);
+        GXSetVtxDesc(10, 2);
+        GXSetVtxAttrFmt(0, 10, 0, 1, 6);
+        GXSetArray(10, moja_model_normal_tbl, 3);
+        GXSetVtxDesc(11, 2);
+        GXSetVtxAttrFmt(0, 11, 1, 5, 0);
+        GXSetArray(11, moja_model_color0_tbl, 4);
+        ppuVar6 = moja_model_dl_0_tbl;
+        uVar7 = 0;
+        pbVar8 = moja_model_dl_0_size_tbl;
+        do {
+          GXCallDisplayList(*ppuVar6, (u32)*pbVar8 << 5);
+          uVar7 = uVar7 + 1;
+          ppuVar6 = ppuVar6 + 1;
+          pbVar8 = pbVar8 + 1;
+        } while (uVar7 < 0x15);
+      
+break;
+case 3:
+if (piVar13[0xF]>=0 && piVar13[0xF]<100) {
+        sprintf(acStack_2f8, str_PCTd_80422918, piVar13[0xF]);
+        uStack_84 = FontGetMessageWidth(acStack_2f8);
+        uStack_84 = uStack_84 & 0xffff;
+
+        fVar1 = float_10_80422908 +
+                FUKIDASHI_UNSIGNED_FLOAT(uStack_84);
+        PSMTXRotRad(&MStack_158, (double)(float_deg2rad_804228c4 * *(f32*)(piVar13+9)), 'y');
+        PSMTXScale(&MStack_f8, float_0p5_8042291c, float_0p5_8042291c, float_0p5_8042291c);
+        PSMTXTrans(&MStack_128, (double)(-fVar1 * float_0p5_8042291c),
+                        (double)float_neg10_80422920, (double)float_0_804228c0);
+        PSMTXConcat(&MStack_1e8, &MStack_158, &MStack_218);
+        PSMTXConcat(&MStack_218, &MStack_f8, &MStack_218);
+        PSMTXConcat(&MStack_218, &MStack_128, &MStack_218);
+        if (iVar10 == 0) {
+          local_358 = ((dat_804228b0 & 0xFFFFFF00) | (u8)bVar12);
+          local_354 = local_358;
+          iconDispGxCol(&MStack_218, 0x400, 0x193, &local_354);
+        }
+        else {
+          local_360 = ((dat_804228b4 & 0xFFFFFF00) | (u8)bVar12);
+          local_35c = local_360;
+          iconDispGxCol(&MStack_218, 0x800, 0x193, &local_35c);
+        }
+        PSMTXTrans(&MStack_128, (double)float_10_80422908, (double)float_22_80422924,
+                        (double)float_0_804228c0);
+        PSMTXConcat(&MStack_218, &MStack_128, &MStack_218);
+        FontDrawStart_alpha(bVar12);
+        GXSetZMode(1, 3, 0);
+        if (iVar10 == 0) {
+          GXSetCullMode(2);
+        }
+        else {
+          GXSetCullMode(1);
+        }
+        FontDrawStringMtx(&MStack_218, acStack_2f8);
+      }
+break;
+case 4:
+
+      PSMTXIdentity(&MStack_128);
+      GXLoadTexMtxImm(&MStack_128, 0x1e, 1);
+      GXSetNumTevStages(1);
+      GXSetTevOrder(0, 0, 0, 0xFF);
+      GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+      GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+      GXSetTevColorIn(0, 15, 15, 15, 15);
+      GXSetTevAlphaIn(0, 7, 1, 4, 7);
+      local_368 = ((unk_804295a8 & 0xFFFFFF00) | (u8)bVar14);
+      local_364 = local_368;
+      GXSetTevColor(1, &local_364);
+      effGetTexObj(8, (u32 *)&GStack_2d8);
+      GXLoadTexObj(&GStack_2d8, 0);
+      uVar7 = 0;
+      while ((int)uVar7 < piVar13[0xe]) {
+        uStack_84 = uVar7 ^ 0x80000000;
+
+        PSMTXTransApply(&MStack_c8, &MStack_218, float_neg3_8042292c * (f32)(s32)uVar7 + float_3_80422930, float_0_804228c0, float_0_804228c0);
+        GXLoadPosMtxImm(&MStack_218, 0);
+        GXBegin(128, 0, 4);
+        uVar7 = uVar7 + 1;
+        *(volatile f32*)0xCC008000 = float_neg3_8042292c;
+        *(volatile f32*)0xCC008000 = float_3_80422930;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_3_80422930;
+        *(volatile f32*)0xCC008000 = float_3_80422930;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_1_804228cc;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_3_80422930;
+        *(volatile f32*)0xCC008000 = float_neg3_8042292c;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_1_804228cc;
+        *(volatile f32*)0xCC008000 = float_1_804228cc;
+        *(volatile f32*)0xCC008000 = float_neg3_8042292c;
+        *(volatile f32*)0xCC008000 = float_neg3_8042292c;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_1_804228cc;
+      }
+    
+break;
+case 5:
+
+      GXSetNumTevStages(1);
+      GXSetTevOrder(0, 0, 0, 0xFF);
+      GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+      GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+      GXSetTevColorIn(0, 15, 15, 15, 15);
+      GXSetTevAlphaIn(0, 7, 1, 4, 7);
+      effGetTexObj(9, (u32 *)&GStack_2d8);
+      GXLoadTexObj(&GStack_2d8, 0);
+      PSMTXScale(&MStack_f8, float_0p25_804228f0, float_1_804228cc, float_1_804228cc);
+      uStack_84 = piVar13[0xe] ^ 0x80000000;
+
+      PSMTXTrans(&MStack_128,
+                      (double)(f32)(s32)(uStack_84 ^ 0x80000000), (double)float_0_804228c0,
+                      (double)float_0_804228c0);
+      PSMTXConcat(&MStack_f8, &MStack_128, &MStack_f8);
+      GXLoadTexMtxImm(&MStack_f8, 0x1e, 1);
+      local_370 = ((unk_804295ac & 0xFFFFFF00) | (u8)bVar14);
+      local_36c = local_370;
+      GXSetTevColor(1, &local_36c);
+      GXLoadPosMtxImm(&MStack_c8, 0);
+      GXBegin(128, 0, 4);
+      *(volatile f32*)0xCC008000 = float_neg7_80422934;
+      *(volatile f32*)0xCC008000 = float_7_80422938;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_7_80422938;
+      *(volatile f32*)0xCC008000 = float_7_80422938;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_1_804228cc;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_7_80422938;
+      *(volatile f32*)0xCC008000 = float_neg7_80422934;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_1_804228cc;
+      *(volatile f32*)0xCC008000 = float_1_804228cc;
+      *(volatile f32*)0xCC008000 = float_neg7_80422934;
+      *(volatile f32*)0xCC008000 = float_neg7_80422934;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_0_804228c0;
+      *(volatile f32*)0xCC008000 = float_1_804228cc;
+    
+break;
+case 6:
+
+      uVar7 = (u32)*(u32*)(gp+0x1C) % 0xf;
+      PSMTXIdentity(&MStack_128);
+      GXLoadTexMtxImm(&MStack_128, 0x1e, 1);
+      PSMTXTrans(&MStack_128, (double)float_0_804228c0, (double)(float)chuchu_dt[uVar7 * 3],
+                      (double)float_0_804228c0);
+      PSMTXScale(&MStack_f8, float_0p7_8042293c * (float)chuchu_dt[uVar7 * 3+1],
+                      float_0p7_8042293c * (float)chuchu_dt[uVar7 * 3+2], float_0p7_8042293c);
+      PSMTXRotRad(&MStack_158, (double)(float_deg2rad_804228c4 * *(f32*)(piVar13+9)), 'y');
+      PSMTXConcat(&MStack_128, &MStack_158, &MStack_128);
+      PSMTXConcat(&MStack_128, &MStack_f8, &MStack_128);
+      GXSetNumTevStages(1);
+      GXSetTevOrder(0, 0, 0, 0xFF);
+      GXSetTevColorOp(0, 0, 0, 0, 1, 0);
+      GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
+      GXSetTevColorIn(0, 15, 2, 8, 15);
+      GXSetTevAlphaIn(0, 7, 1, 4, 7);
+      effGetTexObj(10, (u32 *)&GStack_2d8);
+      GXLoadTexObj(&GStack_2d8, 0);
+      if (iVar10 == 0) {
+        local_378 = ((unk_804295b0 & 0xFFFFFF00) | (u8)cVar15);
+        local_374 = local_378;
+        GXSetTevColor(1, &local_374);
+        PSMTXTransApply(&MStack_c8, &MStack_218, float_1_804228cc, float_neg1_804228f4, float_0_804228c0);
+        PSMTXConcat(&MStack_218, &MStack_128, &MStack_218);
+        GXLoadPosMtxImm(&MStack_218, 0);
+        GXBegin(128, 0, 4);
+        *(volatile f32*)0xCC008000 = float_neg8_80422904;
+        *(volatile f32*)0xCC008000 = float_16_804228e0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_8_804228fc;
+        *(volatile f32*)0xCC008000 = float_16_804228e0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_2_804228e4;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_8_804228fc;
+        *(volatile f32*)0xCC008000 = float_neg8_80422904;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_2_804228e4;
+        *(volatile f32*)0xCC008000 = float_2_804228e4;
+        *(volatile f32*)0xCC008000 = float_neg8_80422904;
+        *(volatile f32*)0xCC008000 = float_neg8_80422904;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_2_804228e4;
+        local_380 = ((dat_804228b8 & 0xFFFFFF00) | (u8)bVar14);
+        local_37c = local_380;
+        GXSetTevColor(1, &local_37c);
+        PSMTXConcat(&MStack_c8, &MStack_128, &MStack_218);
+        GXLoadPosMtxImm(&MStack_218, 0);
+        GXBegin(128, 0, 4);
+        *(volatile f32*)0xCC008000 = float_neg8_80422904;
+        *(volatile f32*)0xCC008000 = float_16_804228e0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_8_804228fc;
+        *(volatile f32*)0xCC008000 = float_16_804228e0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_2_804228e4;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_8_804228fc;
+        *(volatile f32*)0xCC008000 = float_neg8_80422904;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_2_804228e4;
+        *(volatile f32*)0xCC008000 = float_2_804228e4;
+        *(volatile f32*)0xCC008000 = float_neg8_80422904;
+        *(volatile f32*)0xCC008000 = float_neg8_80422904;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_0_804228c0;
+        *(volatile f32*)0xCC008000 = float_2_804228e4;
+      }
+    
+break;
 }
+  }
+  return;
+}
+
+/* Exact object-owned target scalar/color catalog. */
+__declspec(section ".sdata2") u32 dat_80422898 = 0xffffff00;
+__declspec(section ".sdata2") u32 dat_8042289c = 0xa0a0a000;
+__declspec(section ".sdata2") u32 dat_804228a0 = 0xff000000;
+__declspec(section ".sdata2") u32 dat_804228a4 = 0xa0000000;
+__declspec(section ".sdata2") u32 dat_804228a8 = 0xe0e0e000;
+__declspec(section ".sdata2") u32 dat_804228ac = 0xffffff00;
+__declspec(section ".sdata2") u32 dat_804228b0 = 0xffffff00;
+__declspec(section ".sdata2") u32 dat_804228b4 = 0xa0a0a000;
+__declspec(section ".sdata2") u32 dat_804228b8 = 0xffcd2800;
+__declspec(section ".sdata2") u32 dat_804228bc = 0x7f661400;
+__declspec(section ".sdata2") const f32 float_0_804228c0 = 0.0f;
+__declspec(section ".sdata2") f32 float_deg2rad_804228c4 = 0.01745329238474369f;
+__declspec(section ".sdata2") f32 float_0p8_804228c8 = 0.800000011920929f;
+__declspec(section ".sdata2") f32 float_1_804228cc = 1.0f;
+__declspec(section ".sdata2") f32 float_1p3_804228d0 = 1.2999999523162842f;
+__declspec(section ".sdata2") f32 float_neg1p3_804228d4 = -1.2999999523162842f;
+__declspec(section ".sdata2") f32 float_neg16_804228d8 = -16.0f;
+__declspec(section ".sdata2") f32 float_13_804228dc = 13.0f;
+__declspec(section ".sdata2") f32 float_16_804228e0 = 16.0f;
+__declspec(section ".sdata2") f32 float_2_804228e4 = 2.0f;
+__declspec(section ".sdata2") f32 float_neg19_804228e8 = -19.0f;
+__declspec(section ".sdata2") f32 float_0p16667_804228ec = 0.1666666716337204f;
+__declspec(section ".sdata2") f32 float_0p25_804228f0 = 0.25f;
+__declspec(section ".sdata2") f32 float_neg1_804228f4 = -1.0f;
+__declspec(section ".sdata2") f32 float_neg4_804228f8 = -4.0f;
+__declspec(section ".sdata2") f32 float_8_804228fc = 8.0f;
+__declspec(section ".sdata2") f32 float_4_80422900 = 4.0f;
+__declspec(section ".sdata2") f32 float_neg8_80422904 = -8.0f;
+__declspec(section ".sdata2") f32 float_10_80422908 = 10.0f;
+__declspec(section ".sdata2") f32 float_5_8042290c = 5.0f;
+__declspec(section ".sdata2") f32 float_0p43633_80422910 = 0.4363323152065277f;
+__declspec(section ".sdata2") f32 float_0p15_80422914 = 0.15000000596046448f;
+__declspec(section ".sdata2") const u8 str_PCTd_80422918[3] = {0x25,0x64,0x00};
+__declspec(section ".sdata2") f32 float_0p5_8042291c = 0.5f;
+__declspec(section ".sdata2") f32 float_neg10_80422920 = -10.0f;
+__declspec(section ".sdata2") f32 float_22_80422924 = 22.0f;
+__declspec(section ".sdata2") f32 float_neg5_80422928 = -5.0f;
+__declspec(section ".sdata2") f32 float_neg3_8042292c = -3.0f;
+__declspec(section ".sdata2") f32 float_3_80422930 = 3.0f;
+__declspec(section ".sdata2") f32 float_neg7_80422934 = -7.0f;
+__declspec(section ".sdata2") f32 float_7_80422938 = 7.0f;
+__declspec(section ".sdata2") f32 float_0p7_8042293c = 0.699999988079071f;
+__declspec(section ".sdata2") f32 float_22p5_80422940 = 22.5f;
+__declspec(section ".sdata2") f32 float_9_80422944 = 9.0f;
+__declspec(section ".sdata2") f32 float_neg90_80422948 = -90.0f;
+__declspec(section ".sdata2") f32 float_neg450_8042294c = -450.0f;
+__declspec(section ".sdata2") f32 float_20_80422950 = 20.0f;
+__declspec(section ".sdata2") f32 float_12_80422954 = 12.0f;
+
+
+#undef FUKIDASHI_UNSIGNED_FLOAT

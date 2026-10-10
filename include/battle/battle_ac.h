@@ -9,7 +9,7 @@ void BattleActionCommandManager(BattleWork* wp);
 void BattleActionCommandSetup(BattleWork* battleWork, s32 param, BattleWorkUnit* unit, s32 rawArg, s32 value);
 void BattleActionCommandStart(BattleWork* battleWork);
 void BattleActionCommandStop(BattleWork* battleWork);
-void BattleActionCommandCheckDefence(BattleWorkUnit* unit, s32 value);
+s32 BattleActionCommandCheckDefence(BattleWorkUnit* unit, s32 value);
 s32 BattleActionCommandGetDefenceResult(void);
 s32 BattleActionCommandGetDifficulty(BattleWork* battleWork);
 void BattleActionCommandSetDifficulty(BattleWork* battleWork, BattleWorkUnit* unit, s32 difficulty);

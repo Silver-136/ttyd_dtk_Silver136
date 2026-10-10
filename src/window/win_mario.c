@@ -10,9 +10,16 @@ typedef struct Vec3 { f32 x, y, z; } Vec3;
 typedef struct WinMarioLinkEntry {
     s16 x;
     s16 y;
-    char pad_04[0x10];
+    char* pose;
+    char* unk_08;
+    char* paperPose;
+    u16 requiredItem;
+    u16 pad_12;
     char* msg;
-    char pad_18[4];
+    u8 up;
+    u8 down;
+    u8 left;
+    u8 right;
 } WinMarioLinkEntry;
 extern WinMarioLinkEntry linkDt[];
 extern char* hammer_help[4];
@@ -25,6 +32,7 @@ void winIconSet(s32 icon, Vec3* pos, Vec3* scale, void* color);
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma optimize_for_size off
 u8 winMarioInit(void* pWin) {
     extern void* marioGetPtr(void);
     extern s32 marioGetColor(void);
@@ -48,30 +56,22 @@ u8 winMarioInit(void* pWin) {
     if ((*(u16*)pWin & 0x2000) != 0) {
         name = str_S_1_80423890;
         color = marioGetColor();
-        if (color == 2) {
-            name = str_S_3_80423a20;
-        } else if (color < 2) {
-            if (color == 0) {
-                name = str_S_1_80423890;
-            } else if (color >= 0) {
-                name = str_S_2_80423a1c;
-            }
-        } else if (color < 4) {
-            name = str_S_4_80423a24;
+        switch (color) {
+            case 0: name = str_S_1_80423890; break;
+            case 1: name = str_S_2_80423a1c; break;
+            case 2: name = str_S_3_80423a20; break;
+            case 3: name = str_S_4_80423a24; break;
         }
         *(s32*)((s32)pWin + 0x188) = animPoseEntry(base + 0x848, 0);
         animPoseSetAnim(*(s32*)((s32)pWin + 0x188), name, 1);
     } else {
         name = base + 0x850;
         color = marioGetColor();
-        if (color == 2) {
-            name = base + 0x864;
-        } else if (color < 2) {
-            if (color >= 0 && color != 0) {
-                name = base + 0x858;
-            }
-        } else if (color < 4) {
-            name = base + 0x870;
+        switch (color) {
+            case 0: break;
+            case 1: name = base + 0x858; break;
+            case 2: name = base + 0x864; break;
+            case 3: name = base + 0x870; break;
         }
         *(s32*)((s32)pWin + 0x188) = animPoseEntry(name, 0);
         animPoseSetAnim(*(s32*)((s32)pWin + 0x188), str_M_S_1_80423888, 1);
@@ -86,34 +86,16 @@ u8 winMarioInit(void* pWin) {
     *(s32*)((s32)pWin + 0x190) = 0;
     *(s32*)((s32)pWin + 0x194) = 0;
     *(s32*)((s32)pWin + 0x198) = 0;
-    index = *(s32*)((s32)pWin + 0x198);
-    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
-        (*(s32*)((s32)pWin + 0x198))++;
-    index++;
-    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
-        (*(s32*)((s32)pWin + 0x198))++;
-    index++;
-    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
-        (*(s32*)((s32)pWin + 0x198))++;
-    index++;
-    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
-        (*(s32*)((s32)pWin + 0x198))++;
-    index++;
-    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
-        (*(s32*)((s32)pWin + 0x198))++;
-    index++;
-    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
-        (*(s32*)((s32)pWin + 0x198))++;
-    index++;
-    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
-        (*(s32*)((s32)pWin + 0x198))++;
-    index++;
-    if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0)
-        (*(s32*)((s32)pWin + 0x198))++;
+    for (index = 0; index < 8; index++) {
+        if ((*(u16*)((s32)pouch + 0x8C) & (1 << index)) != 0) {
+            (*(s32*)((s32)pWin + 0x198))++;
+        }
+    }
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma optimize_for_size reset
 void winMarioInit2(void* pWin) {
     s32 index;
     f32 value;
@@ -148,6 +130,9 @@ void winMarioExit(void* wp) {
     animPoseRelease(*(s32*)((s32)wp + 0x188));
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma opt_common_subs off
 s32 winMarioMain(void* pWin) {
     typedef struct WinMarioLinkFull {
         s16 x;
@@ -171,18 +156,18 @@ s32 winMarioMain(void* pWin) {
     extern s32 marioGetColor(void);
     extern s32 strcmp(const char*, const char*);
     extern char* hammer_pose[];
-    extern char str_S_1_80423890[];
-    extern char str_S_2_80423a1c[];
-    extern char str_S_3_80423a20[];
-    extern char str_S_4_80423a24[];
-    extern char str_R_1_8042389c[];
-    extern char str_R_15_80423a28[];
-    extern char str_R_17_80423a30[];
-    extern char str_R_18_80423a38[];
-    extern char str_M_S_1_80423888[];
+    extern char str_S_1_80423890[4];
+    extern char str_S_2_80423a1c[4];
+    extern char str_S_3_80423a20[4];
+    extern char str_S_4_80423a24[4];
+    extern char str_R_1_8042389c[4];
+    extern char str_R_15_80423a28[5];
+    extern char str_R_17_80423a30[5];
+    extern char str_R_18_80423a38[5];
+    extern char str_M_S_1_80423888[6];
     extern const f32 float_0p89_80423a40;
 
-    WinMarioLinkFull* links = (WinMarioLinkFull*)linkDt;
+    WinMarioLinkFull* links;
     WinMarioLinkFull* row;
     s32 open;
     s32 state;
@@ -194,14 +179,10 @@ s32 winMarioMain(void* pWin) {
     u32 dirs;
 
     open = *(s32*)((s32)pWin + 0x190);
-    if (open == 1) {
-        goto star_list;
-    }
-    if (open > 0) {
-        return 0;
-    }
-    if (open < 0) {
-        return 0;
+    switch (open) {
+        case 1: goto star_list;
+        case 0: break;
+        default: return 0;
     }
 
     buttons = *(u32*)((s32)pWin + 0x4);
@@ -222,29 +203,19 @@ s32 winMarioMain(void* pWin) {
         } else {
             if (strcmp(str_S_1_80423890, str_S_1_80423890) == 0) {
                 color = marioGetColor();
-                if (color == 2) {
-                    closePose = str_S_3_80423a20;
-                } else if (color < 2) {
-                    if (color == 0) {
-                        closePose = str_S_1_80423890;
-                    } else if (color >= 0) {
-                        closePose = str_S_2_80423a1c;
-                    }
-                } else if (color < 4) {
-                    closePose = str_S_4_80423a24;
+                switch (color) {
+                    case 0: closePose = str_S_1_80423890; break;
+                    case 1: closePose = str_S_2_80423a1c; break;
+                    case 2: closePose = str_S_3_80423a20; break;
+                    case 3: closePose = str_S_4_80423a24; break;
                 }
             } else {
                 color = marioGetColor();
-                if (color == 2) {
-                    closePose = str_R_17_80423a30;
-                } else if (color < 2) {
-                    if (color == 0) {
-                        closePose = str_R_1_8042389c;
-                    } else if (color >= 0) {
-                        closePose = str_R_15_80423a28;
-                    }
-                } else if (color < 4) {
-                    closePose = str_R_18_80423a38;
+                switch (color) {
+                    case 0: closePose = str_R_1_8042389c; break;
+                    case 1: closePose = str_R_15_80423a28; break;
+                    case 2: closePose = str_R_17_80423a30; break;
+                    case 3: closePose = str_R_18_80423a38; break;
                 }
             }
         }
@@ -260,89 +231,82 @@ s32 winMarioMain(void* pWin) {
     dirs = *(u32*)((s32)pWin + 0x10);
 
     if ((dirs & 0x1000) != 0) {
-        do {
-            state = *(s32*)((s32)pWin + 0x160);
-            state = links[state].up;
-            *(s32*)((s32)pWin + 0x160) = state;
-            row = &links[state];
-
-            if (state == 0xB || state == 0xC) {
-                available = *(s32*)((s32)pWin + 0x198);
+        links = (WinMarioLinkFull*)linkDt;
+        *(s32*)((s32)pWin + 0x160) = links[*(s32*)((s32)pWin + 0x160)].up;
+        row = &links[*(s32*)((s32)pWin + 0x160)];
+        while (1) {
+            if (*(s32*)((s32)pWin + 0x160) == 0xB || *(s32*)((s32)pWin + 0x160) == 0xC) {
+                if (*(s32*)((s32)pWin + 0x198) != 0) break;
             } else {
-                if (row->requiredItem == 0) {
-                    break;
-                }
-                available = pouchCheckItem(row->requiredItem);
+                if (row->requiredItem == 0) break;
+                if (pouchCheckItem(row->requiredItem) != 0) break;
             }
-        } while (available == 0);
+            *(s32*)((s32)pWin + 0x160) = row->up;
+            row = &links[*(s32*)((s32)pWin + 0x160)];
+        }
 
         psndSFXOn(0x20005);
         goto update_display;
     }
 
     if ((dirs & 0x2000) != 0) {
-        do {
-            state = *(s32*)((s32)pWin + 0x160);
-            state = links[state].down;
-            *(s32*)((s32)pWin + 0x160) = state;
-            row = &links[state];
-
-            if (state == 0xB || state == 0xC) {
-                available = *(s32*)((s32)pWin + 0x198);
+        links = (WinMarioLinkFull*)linkDt;
+        *(s32*)((s32)pWin + 0x160) = links[*(s32*)((s32)pWin + 0x160)].down;
+        row = &links[*(s32*)((s32)pWin + 0x160)];
+        while (1) {
+            if (*(s32*)((s32)pWin + 0x160) == 0xB || *(s32*)((s32)pWin + 0x160) == 0xC) {
+                if (*(s32*)((s32)pWin + 0x198) != 0) break;
             } else {
-                if (row->requiredItem == 0) {
-                    break;
-                }
-                available = pouchCheckItem(row->requiredItem);
+                if (row->requiredItem == 0) break;
+                if (pouchCheckItem(row->requiredItem) != 0) break;
             }
-        } while (available == 0);
+            *(s32*)((s32)pWin + 0x160) = row->down;
+            row = &links[*(s32*)((s32)pWin + 0x160)];
+        }
 
         psndSFXOn(0x20005);
         goto update_display;
     }
 
     if ((dirs & 0x4000) != 0) {
-        do {
-            state = *(s32*)((s32)pWin + 0x160);
-            state = links[state].left;
-            *(s32*)((s32)pWin + 0x160) = state;
-            row = &links[state];
-
-            if (state == 0xB || state == 0xC) {
-                available = *(s32*)((s32)pWin + 0x198);
+        links = (WinMarioLinkFull*)linkDt;
+        *(s32*)((s32)pWin + 0x160) = links[*(s32*)((s32)pWin + 0x160)].left;
+        row = &links[*(s32*)((s32)pWin + 0x160)];
+        while (1) {
+            if (*(s32*)((s32)pWin + 0x160) == 0xB || *(s32*)((s32)pWin + 0x160) == 0xC) {
+                if (*(s32*)((s32)pWin + 0x198) != 0) break;
             } else {
-                if (row->requiredItem == 0) {
-                    break;
-                }
-                available = pouchCheckItem(row->requiredItem);
+                if (row->requiredItem == 0) break;
+                if (pouchCheckItem(row->requiredItem) != 0) break;
             }
-        } while (available == 0);
+            *(s32*)((s32)pWin + 0x160) = row->left;
+            row = &links[*(s32*)((s32)pWin + 0x160)];
+        }
 
         psndSFXOn(0x20005);
         goto update_display;
     }
 
     if ((dirs & 0x8000) != 0) {
-        do {
-            state = *(s32*)((s32)pWin + 0x160);
-            state = links[state].right;
-            *(s32*)((s32)pWin + 0x160) = state;
-            row = &links[state];
-
-            if (state == 0xB || state == 0xC) {
-                available = *(s32*)((s32)pWin + 0x198);
+        links = (WinMarioLinkFull*)linkDt;
+        *(s32*)((s32)pWin + 0x160) = links[*(s32*)((s32)pWin + 0x160)].right;
+        row = &links[*(s32*)((s32)pWin + 0x160)];
+        while (1) {
+            if (*(s32*)((s32)pWin + 0x160) == 0xB || *(s32*)((s32)pWin + 0x160) == 0xC) {
+                if (*(s32*)((s32)pWin + 0x198) != 0) break;
             } else {
-                if (row->requiredItem == 0) {
-                    break;
-                }
-                available = pouchCheckItem(row->requiredItem);
+                if (row->requiredItem == 0) break;
+                if (pouchCheckItem(row->requiredItem) != 0) break;
             }
-        } while (available == 0);
+            *(s32*)((s32)pWin + 0x160) = row->right;
+            row = &links[*(s32*)((s32)pWin + 0x160)];
+        }
 
         psndSFXOn(0x20005);
     }
 
 update_display:
+    links = (WinMarioLinkFull*)linkDt;
     state = *(s32*)((s32)pWin + 0x160);
     row = &links[state];
 
@@ -355,29 +319,19 @@ update_display:
         } else {
             if (strcmp(row->paperPose, str_S_1_80423890) == 0) {
                 color = marioGetColor();
-                if (color == 2) {
-                    displayPose = str_S_3_80423a20;
-                } else if (color < 2) {
-                    if (color == 0) {
-                        displayPose = str_S_1_80423890;
-                    } else if (color >= 0) {
-                        displayPose = str_S_2_80423a1c;
-                    }
-                } else if (color < 4) {
-                    displayPose = str_S_4_80423a24;
+                switch (color) {
+                    case 0: displayPose = str_S_1_80423890; break;
+                    case 1: displayPose = str_S_2_80423a1c; break;
+                    case 2: displayPose = str_S_3_80423a20; break;
+                    case 3: displayPose = str_S_4_80423a24; break;
                 }
             } else {
                 color = marioGetColor();
-                if (color == 2) {
-                    displayPose = str_R_17_80423a30;
-                } else if (color < 2) {
-                    if (color == 0) {
-                        displayPose = str_R_1_8042389c;
-                    } else if (color >= 0) {
-                        displayPose = str_R_15_80423a28;
-                    }
-                } else if (color < 4) {
-                    displayPose = str_R_18_80423a38;
+                switch (color) {
+                    case 0: displayPose = str_R_1_8042389c; break;
+                    case 1: displayPose = str_R_15_80423a28; break;
+                    case 2: displayPose = str_R_17_80423a30; break;
+                    case 3: displayPose = str_R_18_80423a38; break;
                 }
             }
         }
@@ -405,29 +359,19 @@ update_display:
         } else {
             if (strcmp(row->paperPose, str_S_1_80423890) == 0) {
                 color = marioGetColor();
-                if (color == 2) {
-                    displayPose = str_S_3_80423a20;
-                } else if (color < 2) {
-                    if (color == 0) {
-                        displayPose = str_S_1_80423890;
-                    } else if (color >= 0) {
-                        displayPose = str_S_2_80423a1c;
-                    }
-                } else if (color < 4) {
-                    displayPose = str_S_4_80423a24;
+                switch (color) {
+                    case 0: displayPose = str_S_1_80423890; break;
+                    case 1: displayPose = str_S_2_80423a1c; break;
+                    case 2: displayPose = str_S_3_80423a20; break;
+                    case 3: displayPose = str_S_4_80423a24; break;
                 }
             } else {
                 color = marioGetColor();
-                if (color == 2) {
-                    displayPose = str_R_17_80423a30;
-                } else if (color < 2) {
-                    if (color == 0) {
-                        displayPose = str_R_1_8042389c;
-                    } else if (color >= 0) {
-                        displayPose = str_R_15_80423a28;
-                    }
-                } else if (color < 4) {
-                    displayPose = str_R_18_80423a38;
+                switch (color) {
+                    case 0: displayPose = str_R_1_8042389c; break;
+                    case 1: displayPose = str_R_15_80423a28; break;
+                    case 2: displayPose = str_R_17_80423a30; break;
+                    case 3: displayPose = str_R_18_80423a38; break;
                 }
             }
         }
@@ -484,6 +428,9 @@ star_list:
     return 0;
 }
 
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
+#pragma opt_common_subs reset
 void winMarioMain2(void) {
     ;
 }
@@ -503,7 +450,10 @@ char* unk_801703e8(s32 value, s32 width) {
     return unk_803e5f78;
 }
 
-void fukidashi(double x, double y, void* menu, s32 type) {
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma opt_common_subs off
+void fukidashi(f32 x, f32 y, void* menu, s32 type) {
     extern void GXSetTevColorIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     extern void GXSetTevAlphaIn(s32 stage, s32 a, s32 b, s32 c, s32 d);
     extern u8 itemDataTable[];
@@ -518,30 +468,30 @@ void fukidashi(double x, double y, void* menu, s32 type) {
     char* base = str_msg_menu_mario_lv_802f5e88;
     s32 level;
     u16 icon;
-    Vec3 h_src0, h_pos0, h_scale0;
-    Vec3 h_src1, h_pos1, h_scale1;
-    Vec3 h_src2, h_pos2, h_scale2;
-    u32 h_color0, h_color1, h_color2;
-    Vec3 j_src0, j_pos0, j_scale0;
-    Vec3 j_src1, j_pos1, j_scale1;
-    Vec3 j_src2, j_pos2, j_scale2;
-    u32 j_color0, j_color1, j_color2;
-    Vec3 p_src0, p_pos0, p_scale0;
-    Vec3 p_src1, p_pos1, p_scale1;
-    Vec3 p_src2, p_pos2, p_scale2;
-    u32 p_color0, p_color1, p_color2;
-    Vec3 a_src0, a_pos0, a_scale0;
-    Vec3 a_src1, a_pos1, a_scale1;
-    Vec3 a_src2, a_pos2, a_scale2;
-    u32 a_color0, a_color1, a_color2;
-    Vec3 b_src0, b_pos0, b_scale0;
-    Vec3 b_src1, b_pos1, b_scale1;
-    Vec3 b_src2, b_pos2, b_scale2;
-    u32 b_color0, b_color1, b_color2;
-    Vec3 t_src0, t_pos0, t_scale0;
-    Vec3 t_src1, t_pos1, t_scale1;
-    Vec3 t_src2, t_pos2, t_scale2;
-    u32 t_color0, t_color1, t_color2;
+    Vec3 h_scale2, h_src2, h_pos2;
+    Vec3 h_scale1, h_src1, h_pos1;
+    Vec3 h_scale0, h_src0, h_pos0;
+    u32 h_color2, h_color1, h_color0;
+    Vec3 j_scale2, j_src2, j_pos2;
+    Vec3 j_scale1, j_src1, j_pos1;
+    Vec3 j_scale0, j_src0, j_pos0;
+    u32 j_color2, j_color1, j_color0;
+    Vec3 p_scale2, p_src2, p_pos2;
+    Vec3 p_scale1, p_src1, p_pos1;
+    Vec3 p_scale0, p_src0, p_pos0;
+    u32 p_color2, p_color1, p_color0;
+    Vec3 a_scale2, a_src2, a_pos2;
+    Vec3 a_scale1, a_src1, a_pos1;
+    Vec3 a_scale0, a_src0, a_pos0;
+    u32 a_color2, a_color1, a_color0;
+    Vec3 b_scale2, b_src2, b_pos2;
+    Vec3 b_scale1, b_src1, b_pos1;
+    Vec3 b_scale0, b_src0, b_pos0;
+    u32 b_color2, b_color1, b_color0;
+    Vec3 t_scale2, t_src2, t_pos2;
+    Vec3 t_scale1, t_src1, t_pos1;
+    Vec3 t_scale0, t_src0, t_pos0;
+    u32 t_color2, t_color1, t_color0;
 
     switch (type) {
         case 2:
@@ -557,7 +507,8 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             h_src0 = *(Vec3*)(base + 0x1CC);
             h_src0.x = (f32)x - 230.0f + 5.0f;
-            h_src0.y = (f32)y + 72.0f - 5.0f;
+            y += 72.0f;
+            h_src0.y = y - 5.0f;
             h_pos0 = h_src0;
             h_scale0 = *(Vec3*)(base + 0x1D8);
             h_color0 = dat_804238c4;
@@ -565,7 +516,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             h_src1 = *(Vec3*)(base + 0x1E4);
             h_src1.x = (f32)x - 230.0f;
-            h_src1.y = (f32)y + 72.0f;
+            h_src1.y = y;
             h_pos1 = h_src1;
             h_scale1 = *(Vec3*)(base + 0x1F0);
             h_color1 = dat_804238c8;
@@ -575,7 +526,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             h_src2 = *(Vec3*)(base + 0x1FC);
             h_src2.x = (f32)x - 230.0f - 6.0f;
-            h_src2.y = (f32)y + 72.0f;
+            h_src2.y = y;
             h_pos2 = h_src2;
             h_scale2 = *(Vec3*)(base + 0x208);
             h_color2 = dat_804238cc;
@@ -595,7 +546,8 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             j_src0 = *(Vec3*)(base + 0x1CC);
             j_src0.x = (f32)x - 210.0f + 5.0f;
-            j_src0.y = (f32)y + 20.0f - 5.0f;
+            y += 20.0f;
+            j_src0.y = y - 5.0f;
             j_pos0 = j_src0;
             j_scale0 = *(Vec3*)(base + 0x1D8);
             j_color0 = dat_804238c4;
@@ -603,7 +555,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             j_src1 = *(Vec3*)(base + 0x1E4);
             j_src1.x = (f32)x - 210.0f;
-            j_src1.y = (f32)y + 20.0f;
+            j_src1.y = y;
             j_pos1 = j_src1;
             j_scale1 = *(Vec3*)(base + 0x1F0);
             j_color1 = dat_804238c8;
@@ -613,7 +565,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             j_src2 = *(Vec3*)(base + 0x1FC);
             j_src2.x = (f32)x - 210.0f - 6.0f;
-            j_src2.y = (f32)y + 20.0f;
+            j_src2.y = y;
             j_pos2 = j_src2;
             j_scale2 = *(Vec3*)(base + 0x208);
             j_color2 = dat_804238cc;
@@ -631,7 +583,8 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             p_src0 = *(Vec3*)(base + 0x184);
             p_src0.x = (f32)x - 80.0f + 5.0f;
-            p_src0.y = (f32)y + 90.0f - 5.0f;
+            y += 90.0f;
+            p_src0.y = y - 5.0f;
             p_pos0 = p_src0;
             p_scale0 = *(Vec3*)(base + 0x190);
             p_color0 = dat_804238b8;
@@ -639,7 +592,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             p_src1 = *(Vec3*)(base + 0x19C);
             p_src1.x = (f32)x - 80.0f;
-            p_src1.y = (f32)y + 90.0f;
+            p_src1.y = y;
             p_pos1 = p_src1;
             p_scale1 = *(Vec3*)(base + 0x1A8);
             p_color1 = dat_804238bc;
@@ -649,7 +602,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             p_src2 = *(Vec3*)(base + 0x1B4);
             p_src2.x = (f32)x - 80.0f + 6.0f;
-            p_src2.y = (f32)y + 90.0f;
+            p_src2.y = y;
             p_pos2 = p_src2;
             p_scale2 = *(Vec3*)(base + 0x1C0);
             p_color2 = dat_804238c0;
@@ -667,7 +620,8 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             a_src0 = *(Vec3*)(base + 0x184);
             a_src0.x = (f32)x - 80.0f + 5.0f;
-            a_src0.y = (f32)y + 20.0f - 5.0f;
+            y += 20.0f;
+            a_src0.y = y - 5.0f;
             a_pos0 = a_src0;
             a_scale0 = *(Vec3*)(base + 0x190);
             a_color0 = dat_804238b8;
@@ -675,7 +629,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             a_src1 = *(Vec3*)(base + 0x19C);
             a_src1.x = (f32)x - 80.0f;
-            a_src1.y = (f32)y + 20.0f;
+            a_src1.y = y;
             a_pos1 = a_src1;
             a_scale1 = *(Vec3*)(base + 0x1A8);
             a_color1 = dat_804238bc;
@@ -685,7 +639,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             a_src2 = *(Vec3*)(base + 0x1B4);
             a_src2.x = (f32)x - 80.0f + 6.0f;
-            a_src2.y = (f32)y + 20.0f;
+            a_src2.y = y;
             a_pos2 = a_src2;
             a_scale2 = *(Vec3*)(base + 0x1C0);
             a_color2 = dat_804238c0;
@@ -703,7 +657,8 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             b_src0 = *(Vec3*)(base + 0x184);
             b_src0.x = (f32)x - 30.0f + 5.0f;
-            b_src0.y = (f32)y + 130.0f - 5.0f;
+            y += 130.0f;
+            b_src0.y = y - 5.0f;
             b_pos0 = b_src0;
             b_scale0 = *(Vec3*)(base + 0x190);
             b_color0 = dat_804238b8;
@@ -711,7 +666,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             b_src1 = *(Vec3*)(base + 0x19C);
             b_src1.x = (f32)x - 30.0f;
-            b_src1.y = (f32)y + 130.0f;
+            b_src1.y = y;
             b_pos1 = b_src1;
             b_scale1 = *(Vec3*)(base + 0x1A8);
             b_color1 = dat_804238bc;
@@ -721,7 +676,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             b_src2 = *(Vec3*)(base + 0x1B4);
             b_src2.x = (f32)x - 30.0f + 6.0f;
-            b_src2.y = (f32)y + 130.0f;
+            b_src2.y = y;
             b_pos2 = b_src2;
             b_scale2 = *(Vec3*)(base + 0x1C0);
             b_color2 = dat_804238c0;
@@ -739,7 +694,8 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             t_src0 = *(Vec3*)(base + 0x184);
             t_src0.x = (f32)x - 30.0f + 5.0f;
-            t_src0.y = (f32)y + 60.0f - 5.0f;
+            y += 60.0f;
+            t_src0.y = y - 5.0f;
             t_pos0 = t_src0;
             t_scale0 = *(Vec3*)(base + 0x190);
             t_color0 = dat_804238b8;
@@ -747,7 +703,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             t_src1 = *(Vec3*)(base + 0x19C);
             t_src1.x = (f32)x - 30.0f;
-            t_src1.y = (f32)y + 60.0f;
+            t_src1.y = y;
             t_pos1 = t_src1;
             t_scale1 = *(Vec3*)(base + 0x1A8);
             t_color1 = dat_804238bc;
@@ -757,7 +713,7 @@ void fukidashi(double x, double y, void* menu, s32 type) {
 
             t_src2 = *(Vec3*)(base + 0x1B4);
             t_src2.x = (f32)x - 30.0f + 6.0f;
-            t_src2.y = (f32)y + 60.0f;
+            t_src2.y = y;
             t_pos2 = t_src2;
             t_scale2 = *(Vec3*)(base + 0x1C0);
             t_color2 = dat_804238c0;
@@ -765,7 +721,66 @@ void fukidashi(double x, double y, void* menu, s32 type) {
             break;
     }
 }
+#pragma opt_common_subs reset
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
+
+/*
+ * Data-pass A1r3: target .sdata order is
+ * hammer_help -> boots_help -> hammer_pose -> winMarioDisp::pri.
+ * Keep these definitions after their executable consumers but before winMarioDisp
+ * so MWCC emits the three source-owned globals ahead of the function-local static.
+ */
+extern char str_msg_hammer_1_802f5fb8[13];
+extern char str_msg_hammer_2_802f5fc8[13];
+extern char str_msg_hammer_3_802f5fd8[13];
+extern char str_msg_boots_1_802f5fe8[12];
+extern char str_msg_boots_2_802f5ff4[12];
+extern char str_msg_boots_3_802f6000[12];
+extern char str_M_H_1_80423894[6];
+extern char str_M_H_4_804238a8[6];
+extern char str_M_H_7_804238b0[6];
+
+__declspec(section ".sdata") char* hammer_help[4] = {
+    0, str_msg_hammer_1_802f5fb8, str_msg_hammer_2_802f5fc8, str_msg_hammer_3_802f5fd8
+};
+__declspec(section ".sdata") char* boots_help[4] = {
+    0, str_msg_boots_1_802f5fe8, str_msg_boots_2_802f5ff4, str_msg_boots_3_802f6000
+};
+__declspec(section ".sdata") char* hammer_pose[4] = {
+    0, str_M_H_1_80423894, str_M_H_4_804238a8, str_M_H_7_804238b0
+};
+
+
+/*
+ * Data-pass A6r: exact target .sdata2 prefix (+0x000..+0x04F),
+ * source-ordered immediately before winMarioDisp.
+ *
+ * All executable consumers of these identities occur earlier in the TU.
+ * Their existing declaration-only views are preserved.  Placing the definitions
+ * here tests whether this source-owned prefix emits ahead of winMarioDisp's
+ * anonymous status-string/compiler pool without A4's early-definition codegen.
+ */
+__declspec(section ".sdata2") char str_M_S_1_80423888[6] __attribute__ ((aligned(4))) = "M_S_1";
+__declspec(section ".sdata2") char str_S_1_80423890[4] __attribute__ ((aligned(4))) = "S_1";
+__declspec(section ".sdata2") char str_M_H_1_80423894[6] __attribute__ ((aligned(4))) = "M_H_1";
+__declspec(section ".sdata2") char str_R_1_8042389c[4] __attribute__ ((aligned(4))) = "R_1";
+__declspec(section ".sdata2") char str_M_R_1_804238a0[6] __attribute__ ((aligned(4))) = "M_R_1";
+__declspec(section ".sdata2") char str_M_H_4_804238a8[6] __attribute__ ((aligned(4))) = "M_H_4";
+__declspec(section ".sdata2") char str_M_H_7_804238b0[6] __attribute__ ((aligned(4))) = "M_H_7";
+
+__declspec(section ".sdata2") u32 dat_804238b8 = 0x00000080;
+__declspec(section ".sdata2") u32 dat_804238bc = 0xE1E1E1FE;
+__declspec(section ".sdata2") u32 dat_804238c0 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_804238c4 = 0x00000080;
+__declspec(section ".sdata2") u32 dat_804238c8 = 0xE1E1E1FE;
+__declspec(section ".sdata2") u32 dat_804238cc = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_804238d0 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_804238d4 = 0x000000FF;
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw on
 void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     extern void winBgGX(f32 x, f32 y, void* win, s32 type);
     extern void winNameGX(f32 x, f32 y, f32 w, f32 h, void* win, s32 type);
@@ -796,6 +811,7 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     extern void* superActionTable[];
     extern char unk_803e5f78[];
 
+    typedef struct { u8 r, g, b, a; } LocalColor;
     u8* w = (u8*)pWin;
     u8* pouch = (u8*)pouchGetPtr();
     f32 x = *(f32*)(w + 0xC4 + index * 0x14);
@@ -804,67 +820,112 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     s32 starCount = *(s32*)(w + 0x198);
     static s32 pri[6] = { 3, 2, 8, 10, 7, 9 };
 
-    Vec3 pNameRaw, pName, sName;
-    Vec3 pLevelIconRaw, pLevelIcon, sLevelIcon;
-    Vec3 pLevelLabelRaw, pLevelLabel, sLevelLabel;
-    Vec3 pLevelValueRaw, pLevelValue, sLevelValue;
-    Vec3 pRankIconRaw, pRankIcon, sRankIcon;
-    Vec3 pRankTextRaw, pRankText, sRankText;
-    Vec3 pStatusBgRaw, pStatusBg, sStatusBg;
-    Vec3 pStatusTextRaw, pStatusText, sStatusText;
-    Vec3 pStatusRubyRaw, pStatusRuby, sStatusRuby;
-    Vec3 pHpIconRaw, pHpIcon, sHpIcon;
-    Vec3 pFpIconRaw, pFpIcon, sFpIcon;
-    Vec3 pBpIconRaw, pBpIcon, sBpIcon;
-    Vec3 pHpRaw, pHp, sHp;
-    Vec3 pFpRaw, pFp, sFp;
-    Vec3 pBpRaw, pBp, sBp;
-    Vec3 pMaxHpRaw, pMaxHp, sMaxHp;
-    Vec3 pMaxFpRaw, pMaxFp, sMaxFp;
-    Vec3 pStarBoxRaw, pStarBox, sStarBox;
-    Vec3 pStarIconRaw, pStarIcon, sStarIcon;
-    Vec3 pSpLabelRaw, pSpLabel, sSpLabel;
-    Vec3 pSpecialTextRaw, pSpecialText, sSpecialText;
+    Vec3 pName, pNameRaw, sName;
+    Vec3 pLevelIcon, pLevelIconRaw, sLevelIcon;
+    Vec3 pLevelLabel, pLevelLabelRaw, sLevelLabel;
+    Vec3 pLevelValue, pLevelValueRaw, sLevelValue;
+    Vec3 pRankIcon, pRankIconRaw, sRankIcon;
+    Vec3 pRankText, pRankTextRaw, sRankText;
+    Vec3 pStatusBg, pStatusBgRaw, sStatusBg;
+    Vec3 pStatusText, pStatusTextRaw, sStatusText;
+    Vec3 pStatusRuby, pStatusRubyRaw, sStatusRuby;
+    Vec3 pHpIcon, pHpIconRaw, sHpIcon;
+    Vec3 pFpIcon, pFpIconRaw, sFpIcon;
+    Vec3 pBpIcon, pBpIconRaw, sBpIcon;
+    Vec3 pHp, pHpRaw, sHp;
+    Vec3 pFp, pFpRaw, sFp;
+    Vec3 pBp, pBpRaw, sBp;
+    Vec3 pMaxHp, pMaxHpRaw, sMaxHp;
+    Vec3 pMaxFp, pMaxFpRaw, sMaxFp;
+    Vec3 pStarBox, pStarBoxRaw, sStarBox;
+    Vec3 pStarIcon, pStarIconRaw, sStarIcon;
+    Vec3 pSpLabel, pSpLabelRaw, sSpLabel;
+    Vec3 pSpecialText, pSpecialTextRaw, sSpecialText;
 
-    Vec3 pInfoIcon0Raw, pInfoIcon0, sInfoIcon0;
-    Vec3 pInfoIcon1Raw, pInfoIcon1, sInfoIcon1;
-    Vec3 pInfoIcon2Raw, pInfoIcon2, sInfoIcon2;
-    Vec3 pInfoIcon3Raw, pInfoIcon3, sInfoIcon3;
-    Vec3 pInfoIcon4Raw, pInfoIcon4, sInfoIcon4;
-    Vec3 pInfoLabel0Raw, pInfoLabel0, sInfoLabel0;
-    Vec3 pInfoLabel1Raw, pInfoLabel1, sInfoLabel1;
-    Vec3 pInfoLabel2Raw, pInfoLabel2, sInfoLabel2;
-    Vec3 pInfoLabel3Raw, pInfoLabel3, sInfoLabel3;
-    Vec3 pInfoLabel4Raw, pInfoLabel4, sInfoLabel4;
-    Vec3 pInfoValue0Raw, pInfoValue0, sInfoValue0;
-    Vec3 pInfoValue1Raw, pInfoValue1, sInfoValue1;
-    Vec3 pInfoValue2Raw, pInfoValue2, sInfoValue2;
-    Vec3 pInfoValue3Raw, pInfoValue3, sInfoValue3;
-    Vec3 pInfoTimeHRaw, pInfoTimeH, sInfoTimeH;
-    Vec3 pInfoTimeMRaw, pInfoTimeM, sInfoTimeM;
-    Vec3 pDividerRaw, pDivider, sDivider;
-    Vec3 pDividerEndRaw, pDividerEnd, sDividerEnd;
+    Vec3 pInfoIcon0, pInfoIcon0Raw, sInfoIcon0;
+    Vec3 pInfoIcon1, pInfoIcon1Raw, sInfoIcon1;
+    Vec3 pInfoIcon2, pInfoIcon2Raw, sInfoIcon2;
+    Vec3 pInfoIcon3, pInfoIcon3Raw, sInfoIcon3;
+    Vec3 pInfoIcon4, pInfoIcon4Raw, sInfoIcon4;
+    Vec3 pInfoLabel0, pInfoLabel0Raw, sInfoLabel0;
+    Vec3 pInfoLabel1, pInfoLabel1Raw, sInfoLabel1;
+    Vec3 pInfoLabel2, pInfoLabel2Raw, sInfoLabel2;
+    Vec3 pInfoLabel3, pInfoLabel3Raw, sInfoLabel3;
+    Vec3 pInfoLabel4, pInfoLabel4Raw, sInfoLabel4;
+    Vec3 pInfoValue0, pInfoValue0Raw, sInfoValue0;
+    Vec3 pInfoValue1, pInfoValue1Raw, sInfoValue1;
+    Vec3 pInfoValue2, pInfoValue2Raw, sInfoValue2;
+    Vec3 pInfoValue3, pInfoValue3Raw, sInfoValue3;
+    Vec3 pInfoTimeH, pInfoTimeHRaw, sInfoTimeH;
+    Vec3 pInfoTimeM, pInfoTimeMRaw, sInfoTimeM;
+    Vec3 pDivider, pDividerRaw, sDivider;
+    Vec3 pDividerEnd, pDividerEndRaw, sDividerEnd;
 
-    Vec3 pWazaTitleRaw, pWazaTitle, sWazaTitle;
-    Vec3 pWazaApRaw, pWazaAp, sWazaAp;
-    Vec3 pWazaNameRaw, pWazaName, sWazaName;
-    Vec3 pWazaCostRaw, pWazaCost, sWazaCost;
-    Vec3 pWazaCostApRaw, pWazaCostAp, sWazaCostAp;
+    Vec3 pWazaTitle, pWazaTitleRaw, sWazaTitle;
+    Vec3 pWazaAp, pWazaApRaw, sWazaAp;
+    Vec3 pWazaName, pWazaNameRaw, sWazaName;
+    Vec3 pWazaCost, pWazaCostRaw, sWazaCost;
+    Vec3 pWazaCostAp, pWazaCostApRaw, sWazaCostAp;
 
     f32 marioMtx[3][4];
 
-    u32 white0 = 0xFFFFFFFF;
-    u32 white1 = 0xFFFFFFFF;
-    u32 white2 = 0xFFFFFFFF;
-    u32 white3 = 0xFFFFFFFF;
-    u32 white4 = 0xFFFFFFFF;
-    u32 white5 = 0xFFFFFFFF;
-    u32 white6 = 0xFFFFFFFF;
-    u32 white7 = 0xFFFFFFFF;
-    u32 white8 = 0xFFFFFFFF;
-    u32 white9 = 0xFFFFFFFF;
-    u32 black = 0x000000FF;
-    u32 shadowColor = 0x00000080;
+    LocalColor white0 = *(LocalColor*)&dat_804238d0;
+    LocalColor white1 = *(LocalColor*)&dat_804238d0;
+    LocalColor white2 = *(LocalColor*)&dat_804238d0;
+    LocalColor white3 = *(LocalColor*)&dat_804238d0;
+    LocalColor white4 = *(LocalColor*)&dat_804238d0;
+    LocalColor white5 = *(LocalColor*)&dat_804238d0;
+    LocalColor white6 = *(LocalColor*)&dat_804238d0;
+    LocalColor white7 = *(LocalColor*)&dat_804238d0;
+    LocalColor white8 = *(LocalColor*)&dat_804238d0;
+    LocalColor white9 = *(LocalColor*)&dat_804238d0;
+    LocalColor black = *(LocalColor*)&dat_804238d4;
+    LocalColor shadowColor = *(LocalColor*)&dat_804238b8;
+    LocalColor drawColor0;
+    LocalColor drawColor1;
+    LocalColor drawColor2;
+    LocalColor drawColor3;
+    LocalColor drawColor4;
+    LocalColor drawColor5;
+    LocalColor drawColor6;
+    LocalColor drawColor7;
+    LocalColor drawColor8;
+    LocalColor drawColor9;
+    LocalColor drawColor10;
+    LocalColor drawColor11;
+    LocalColor drawColor12;
+    LocalColor drawColor13;
+    LocalColor drawColor14;
+    LocalColor drawColor15;
+    LocalColor drawColor16;
+    LocalColor drawColor17;
+    LocalColor drawColor18;
+    LocalColor drawColor19;
+    LocalColor drawColor20;
+    LocalColor drawColor21;
+    LocalColor drawColor22;
+    LocalColor drawColor23;
+    LocalColor drawColor24;
+    LocalColor drawColor25;
+    LocalColor drawColor26;
+    LocalColor drawColor27;
+    LocalColor drawColor28;
+    LocalColor drawColor29;
+    LocalColor drawColor30;
+    LocalColor drawColor31;
+    LocalColor drawColor32;
+    LocalColor drawColor33;
+    LocalColor drawColor34;
+    LocalColor drawColor35;
+    LocalColor drawColor36;
+    LocalColor drawColor37;
+    LocalColor drawColor38;
+    LocalColor drawColor39;
+    LocalColor drawColor40;
+    LocalColor drawColor41;
+    LocalColor drawColor42;
+    LocalColor drawColor43;
+    LocalColor drawColor44;
     char levelText[260];
     char valueText[32];
     char* text;
@@ -934,7 +995,8 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     pName = pNameRaw;
     UNIT_SCALE(sName);
     text = msgSearch("name_mario");
-    winFontSetEdge(&pName, &sName, &white0, text);
+    drawColor0 = white0;
+    winFontSetEdge(&pName, &sName, &drawColor0, text);
 
     text = msgSearch("name_mario");
     width = (f32)FontGetMessageWidth(text);
@@ -944,7 +1006,8 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     SET_POS(pLevelIconRaw, nameX, y + 142.0f);
     pLevelIcon = pLevelIconRaw;
     UNIT_SCALE(sLevelIcon);
-    winIconSet(0x1A6, &pLevelIcon, &sLevelIcon, &white1);
+    drawColor1 = white1;
+    winIconSet(0x1A6, &pLevelIcon, &sLevelIcon, &drawColor1);
 
     nameX += 20.0f;
     winFontInit();
@@ -952,7 +1015,8 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     pLevelLabel = pLevelLabelRaw;
     UNIT_SCALE(sLevelLabel);
     text = msgSearch("msg_menu_mario_level");
-    winFontSetEdgeWidth(&pLevelLabel, &sLevelLabel, &white2, 45.0f, text);
+    drawColor2 = white2;
+    winFontSetEdgeWidth(&pLevelLabel, &sLevelLabel, &drawColor2, 45.0f, text);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x8A));
     sprintf(levelText, "%s", tmp2);
@@ -965,21 +1029,24 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     SET_POS(pLevelValueRaw, ((x - 265.0f) + 190.0f) - width - 10.0f, baseY);
     pLevelValue = pLevelValueRaw;
     UNIT_SCALE(sLevelValue);
-    winFontSetEdgeWidth(&pLevelValue, &sLevelValue, &white3, 20.0f, levelText);
+    drawColor3 = white3;
+    winFontSetEdgeWidth(&pLevelValue, &sLevelValue, &drawColor3, 20.0f, levelText);
 
     /* Rank icon + rank name. */
     winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
     SET_POS(pRankIconRaw, x - 255.0f, y + 112.0f);
     pRankIcon = pRankIconRaw;
     UNIT_SCALE(sRankIcon);
-    winTexSet(0xB0, &pRankIcon, &sRankIcon, &white4);
+    drawColor4 = white4;
+    winTexSet(0xB0, &pRankIcon, &sRankIcon, &drawColor4);
 
     winFontInit();
     SET_POS(pRankTextRaw, x - 240.0f, y + 124.0f);
     pRankText = pRankTextRaw;
     UNIT_SCALE(sRankText);
     text = msgSearch(BattleGetRankNameLabel(*(s16*)(pouch + 0x8A)));
-    winFontSetWidth(&pRankText, &sRankText, &black, 140.0f, text);
+    drawColor5 = black;
+    winFontSetWidth(&pRankText, &sRankText, &drawColor5, 140.0f, text);
 
     for (i = 0; i < 6; i++) {
         if (menuState != pri[i]) {
@@ -1039,7 +1106,8 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
         SET_POS(pStatusTextRaw, (x - 220.0f) - (f32)statusWidth * 0.5f, rowY + 12.0f);
         pStatusText = pStatusTextRaw;
         UNIT_SCALE(sStatusText);
-        winFontSet(&pStatusText, &sStatusText, &black, statusName);
+        drawColor6 = black;
+        winFontSet(&pStatusText, &sStatusText, &drawColor6, statusName);
 
         SET_POS(pStatusRubyRaw, (x - 220.0f) - (f32)rubyWidth * 0.25f, rowY + 21.0f);
         pStatusRuby = pStatusRubyRaw;
@@ -1054,17 +1122,20 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     SET_POS(pHpIconRaw, x - 160.0f, y - 34.0f);
     pHpIcon = pHpIconRaw;
     UNIT_SCALE(sHpIcon);
-    winIconSet(0x1A7, &pHpIcon, &sHpIcon, &white8);
+    drawColor7 = white8;
+    winIconSet(0x1A7, &pHpIcon, &sHpIcon, &drawColor7);
 
     SET_POS(pFpIconRaw, x - 160.0f, y - 68.0f);
     pFpIcon = pFpIconRaw;
     UNIT_SCALE(sFpIcon);
-    winIconSet(0x1A8, &pFpIcon, &sFpIcon, &white8);
+    drawColor8 = white8;
+    winIconSet(0x1A8, &pFpIcon, &sFpIcon, &drawColor8);
 
     SET_POS(pBpIconRaw, x - 160.0f, y - 102.0f);
     pBpIcon = pBpIconRaw;
     UNIT_SCALE(sBpIcon);
-    winIconSet(0x1A9, &pBpIcon, &sBpIcon, &white8);
+    drawColor9 = white8;
+    winIconSet(0x1A9, &pBpIcon, &sBpIcon, &drawColor9);
 
     /* Current HP / FP / BP values. */
     winFontInit();
@@ -1073,41 +1144,48 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     SET_POS(pHpRaw, x - 140.0f, y - 22.0f);
     pHp = pHpRaw;
     UNIT_SCALE(sHp);
-    winFontSetR(&pHp, &sHp, &black, "%s", tmp2);
+    drawColor10 = black;
+    winFontSetR(&pHp, &sHp, &drawColor10, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x74));
     SET_POS(pFpRaw, x - 140.0f, y - 56.0f);
     pFp = pFpRaw;
     UNIT_SCALE(sFp);
-    winFontSetR(&pFp, &sFp, &black, "%s", tmp2);
+    drawColor11 = black;
+    winFontSetR(&pFp, &sFp, &drawColor11, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x94));
     SET_POS(pBpRaw, x - 140.0f, y - 90.0f);
     pBp = pBpRaw;
     UNIT_SCALE(sBp);
-    winFontSetR(&pBp, &sBp, &black, "%s", tmp2);
+    drawColor12 = black;
+    winFontSetR(&pBp, &sBp, &drawColor12, "%s", tmp2);
 
     /* Target draws separator texture and maximum HP/FP values separately. */
     winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
     SET_POS(pStatusBgRaw, x - 80.0f, y - 34.0f);
     pStatusBg = pStatusBgRaw;
     UNIT_SCALE(sStatusBg);
-    winTexSet(0x10, &pStatusBg, &sStatusBg, &white6);
+    drawColor13 = white6;
+    winTexSet(0x10, &pStatusBg, &sStatusBg, &drawColor13);
     pStatusBg.y -= 34.0f;
-    winTexSet(0x10, &pStatusBg, &sStatusBg, &white6);
+    drawColor14 = white6;
+    winTexSet(0x10, &pStatusBg, &sStatusBg, &drawColor14);
 
     winFontInit();
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x72));
     SET_POS(pMaxHpRaw, x - 70.0f, y - 22.0f);
     pMaxHp = pMaxHpRaw;
     UNIT_SCALE(sMaxHp);
-    winFontSet(&pMaxHp, &sMaxHp, &black, "%s", tmp2);
+    drawColor15 = black;
+    winFontSet(&pMaxHp, &sMaxHp, &drawColor15, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x76));
     SET_POS(pMaxFpRaw, x - 70.0f, y - 56.0f);
     pMaxFp = pMaxFpRaw;
     UNIT_SCALE(sMaxFp);
-    winFontSet(&pMaxFp, &sMaxFp, &black, "%s", tmp2);
+    drawColor16 = black;
+    winFontSet(&pMaxFp, &sMaxFp, &drawColor16, "%s", tmp2);
 
     /* Star-power meter.  The target only emits this box when Mario owns at
        least one star power and fills icons according to current SP / 100. */
@@ -1118,19 +1196,22 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
         SET_POS(pStarBoxRaw, x + 50.0f, y + 106.0f);
         pStarBox = pStarBoxRaw;
         UNIT_SCALE(sStarBox);
-        winIconSet(0x212, &pStarBox, &sStarBox, &white0);
+        drawColor17 = white0;
+        winIconSet(0x212, &pStarBox, &sStarBox, &drawColor17);
 
         SET_POS(pSpLabelRaw, x + 50.0f, y + 70.0f);
         pSpLabel = pSpLabelRaw;
         UNIT_SCALE(sSpLabel);
-        winIconSet(0x19F, &pSpLabel, &sSpLabel, &white0);
+        drawColor18 = white0;
+        winIconSet(0x19F, &pSpLabel, &sSpLabel, &drawColor18);
 
         winFontInit();
         SET_POS(pSpecialTextRaw, x + 80.0f, y + 80.0f);
         pSpecialText = pSpecialTextRaw;
         UNIT_SCALE(sSpecialText);
         text = msgSearch("msg_menu_mario_speci");
-        winFontSetWidth(&pSpecialText, &sSpecialText, &black, 175.0f, text);
+        drawColor19 = black;
+        winFontSetWidth(&pSpecialText, &sSpecialText, &drawColor19, 175.0f, text);
 
         winIconInit();
         filledStars = *(s16*)(pouch + 0x7A) / 100;
@@ -1139,9 +1220,11 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
             pStarIcon = pStarIconRaw;
             UNIT_SCALE(sStarIcon);
             if (i < filledStars) {
-                winIconSet(0x1BF + i, &pStarIcon, &sStarIcon, &white1);
+                drawColor20 = white1;
+                winIconSet(0x1BF + i, &pStarIcon, &sStarIcon, &drawColor20);
             } else {
-                winIconSet(0x1C7, &pStarIcon, &sStarIcon, &white1);
+                drawColor21 = white1;
+                winIconSet(0x1C7, &pStarIcon, &sStarIcon, &drawColor21);
             }
         }
     }
@@ -1158,27 +1241,32 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     SET_POS(pInfoIcon0Raw, infoX, y + 10.0f);
     pInfoIcon0 = pInfoIcon0Raw;
     UNIT_SCALE(sInfoIcon0);
-    winIconSet(0x194, &pInfoIcon0, &sInfoIcon0, &white0);
+    drawColor22 = white0;
+    winIconSet(0x194, &pInfoIcon0, &sInfoIcon0, &drawColor22);
 
     SET_POS(pInfoIcon1Raw, infoX, y - 18.0f);
     pInfoIcon1 = pInfoIcon1Raw;
     UNIT_SCALE(sInfoIcon1);
-    winIconSet(0x193, &pInfoIcon1, &sInfoIcon1, &white0);
+    drawColor23 = white0;
+    winIconSet(0x193, &pInfoIcon1, &sInfoIcon1, &drawColor23);
 
     SET_POS(pInfoIcon2Raw, infoX, y - 46.0f);
     pInfoIcon2 = pInfoIcon2Raw;
     UNIT_SCALE(sInfoIcon2);
-    winIconSet(0x195, &pInfoIcon2, &sInfoIcon2, &white0);
+    drawColor24 = white0;
+    winIconSet(0x195, &pInfoIcon2, &sInfoIcon2, &drawColor24);
 
     SET_POS(pInfoIcon3Raw, infoX, y - 74.0f);
     pInfoIcon3 = pInfoIcon3Raw;
     UNIT_SCALE(sInfoIcon3);
-    winIconSet(0x10A, &pInfoIcon3, &sInfoIcon3, &white0);
+    drawColor25 = white0;
+    winIconSet(0x10A, &pInfoIcon3, &sInfoIcon3, &drawColor25);
 
     SET_POS(pInfoIcon4Raw, infoX, y - 102.0f);
     pInfoIcon4 = pInfoIcon4Raw;
     UNIT_SCALE(sInfoIcon4);
-    winIconSet(0x1AA, &pInfoIcon4, &sInfoIcon4, &white0);
+    drawColor26 = white0;
+    winIconSet(0x1AA, &pInfoIcon4, &sInfoIcon4, &drawColor26);
 
     winFontInit();
     labelX = x + 45.0f;
@@ -1187,31 +1275,36 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     pInfoLabel0 = pInfoLabel0Raw;
     UNIT_SCALE(sInfoLabel0);
     text = msgSearch("msg_menu_mario_num_sp");
-    winFontSetWidth(&pInfoLabel0, &sInfoLabel0, &black, 140.0f, text);
+    drawColor27 = black;
+    winFontSetWidth(&pInfoLabel0, &sInfoLabel0, &drawColor27, 140.0f, text);
 
     SET_POS(pInfoLabel1Raw, labelX, y - 6.0f);
     pInfoLabel1 = pInfoLabel1Raw;
     UNIT_SCALE(sInfoLabel1);
     text = msgSearch("msg_menu_mario_num_coin");
-    winFontSetWidth(&pInfoLabel1, &sInfoLabel1, &black, 140.0f, text);
+    drawColor28 = black;
+    winFontSetWidth(&pInfoLabel1, &sInfoLabel1, &drawColor28, 140.0f, text);
 
     SET_POS(pInfoLabel2Raw, labelX, y - 34.0f);
     pInfoLabel2 = pInfoLabel2Raw;
     UNIT_SCALE(sInfoLabel2);
     text = msgSearch("msg_menu_mario_num_hoshi");
-    winFontSetWidth(&pInfoLabel2, &sInfoLabel2, &black, 140.0f, text);
+    drawColor29 = black;
+    winFontSetWidth(&pInfoLabel2, &sInfoLabel2, &drawColor29, 140.0f, text);
 
     SET_POS(pInfoLabel3Raw, labelX, y - 62.0f);
     pInfoLabel3 = pInfoLabel3Raw;
     UNIT_SCALE(sInfoLabel3);
     text = msgSearch("msg_menu_mario_num_super_coin");
-    winFontSetWidth(&pInfoLabel3, &sInfoLabel3, &black, 140.0f, text);
+    drawColor30 = black;
+    winFontSetWidth(&pInfoLabel3, &sInfoLabel3, &drawColor30, 140.0f, text);
 
     SET_POS(pInfoLabel4Raw, labelX, y - 90.0f);
     pInfoLabel4 = pInfoLabel4Raw;
     UNIT_SCALE(sInfoLabel4);
     text = msgSearch("msg_menu_mario_num_playtime");
-    winFontSetWidth(&pInfoLabel4, &sInfoLabel4, &black, 125.0f, text);
+    drawColor31 = black;
+    winFontSetWidth(&pInfoLabel4, &sInfoLabel4, &drawColor31, 125.0f, text);
 
     infoX = x + 215.0f;
 
@@ -1219,25 +1312,29 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     SET_POS(pInfoValue0Raw, infoX, y + 22.0f);
     pInfoValue0 = pInfoValue0Raw;
     UNIT_SCALE(sInfoValue0);
-    winFontSetR(&pInfoValue0, &sInfoValue0, &black, "%s", tmp2);
+    drawColor32 = black;
+    winFontSetR(&pInfoValue0, &sInfoValue0, &drawColor32, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x78));
     SET_POS(pInfoValue1Raw, infoX, y - 6.0f);
     pInfoValue1 = pInfoValue1Raw;
     UNIT_SCALE(sInfoValue1);
-    winFontSetR(&pInfoValue1, &sInfoValue1, &black, "%s", tmp2);
+    drawColor33 = black;
+    winFontSetR(&pInfoValue1, &sInfoValue1, &drawColor33, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x9A));
     SET_POS(pInfoValue2Raw, infoX, y - 34.0f);
     pInfoValue2 = pInfoValue2Raw;
     UNIT_SCALE(sInfoValue2);
-    winFontSetR(&pInfoValue2, &sInfoValue2, &black, "%s", tmp2);
+    drawColor34 = black;
+    winFontSetR(&pInfoValue2, &sInfoValue2, &drawColor34, "%s", tmp2);
 
     sprintf(tmp2, "%d", *(s16*)(pouch + 0x9C));
     SET_POS(pInfoValue3Raw, infoX, y - 62.0f);
     pInfoValue3 = pInfoValue3Raw;
     UNIT_SCALE(sInfoValue3);
-    winFontSetR(&pInfoValue3, &sInfoValue3, &black, "%s", tmp2);
+    drawColor35 = black;
+    winFontSetR(&pInfoValue3, &sInfoValue3, &drawColor35, "%s", tmp2);
 
     /*
      * Play time.  The target first converts gp+0x20 tick time to seconds
@@ -1261,14 +1358,16 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     SET_POS(pInfoTimeHRaw, x + 168.0f, y - 90.0f);
     pInfoTimeH = pInfoTimeHRaw;
     UNIT_SCALE(sInfoTimeH);
-    winFontSetR(&pInfoTimeH, &sInfoTimeH, &black, "%s", unk_803e5f78);
+    drawColor36 = black;
+    winFontSetR(&pInfoTimeH, &sInfoTimeH, &drawColor36, "%s", unk_803e5f78);
 
     sprintf(minuteFmt, "%%0%dd", 2);
     sprintf(unk_803e5f78, minuteFmt, minutes);
     SET_POS(pInfoTimeMRaw, infoX, y - 90.0f);
     pInfoTimeM = pInfoTimeMRaw;
     UNIT_SCALE(sInfoTimeM);
-    winFontSetR(&pInfoTimeM, &sInfoTimeM, &black, "%s", unk_803e5f78);
+    drawColor37 = black;
+    winFontSetR(&pInfoTimeM, &sInfoTimeM, &drawColor37, "%s", unk_803e5f78);
 
     /* Four horizontal separator textures, then the lower end-cap. */
     winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
@@ -1276,13 +1375,15 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
     for (i = 0; i < 4; i++) {
         SET_POS(pDividerRaw, x + 200.0f, y + 10.0f - (f32)(i * 28));
         pDivider = pDividerRaw;
-        winTexSet(0x11, &pDivider, &sDivider, &white1);
+        drawColor38 = white1;
+        winTexSet(0x11, &pDivider, &sDivider, &drawColor38);
     }
 
     SET_POS(pDividerEndRaw, x + 220.0f, y - 102.0f);
     pDividerEnd = pDividerEndRaw;
     UNIT_SCALE(sDividerEnd);
-    winTexSet(0x12, &pDividerEnd, &sDividerEnd, &white0);
+    drawColor39 = white0;
+    winTexSet(0x12, &pDividerEnd, &sDividerEnd, &drawColor39);
 
     /*
      * Mario model preview.  The target advances the pose by current retrace
@@ -1323,13 +1424,15 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
         SET_POS(pWazaTitleRaw, (x - 270.0f) + (f32)titleOffset, 155.0f);
         pWazaTitle = pWazaTitleRaw;
         POINT8_SCALE(sWazaTitle);
-        winFontSetEdge(&pWazaTitle, &sWazaTitle, &white0, text);
+        drawColor40 = white0;
+        winFontSetEdge(&pWazaTitle, &sWazaTitle, &drawColor40, text);
 
         SET_POS(pWazaApRaw, x - 50.0f, 155.0f);
         pWazaAp = pWazaApRaw;
         POINT8_SCALE(sWazaAp);
         text = msgSearch("btl_cost_disp_AP");
-        winFontSetEdge(&pWazaAp, &sWazaAp, &white0, text);
+        drawColor41 = white0;
+        winFontSetEdge(&pWazaAp, &sWazaAp, &drawColor41, text);
 
         for (j = 0; j < starCount; j++) {
             void* action = superActionTable[j];
@@ -1339,7 +1442,8 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
             pWazaName = pWazaNameRaw;
             UNIT_SCALE(sWazaName);
             text = msgSearch(actionName);
-            winFontSetWidth(&pWazaName, &sWazaName, &black, 180.0f, text);
+            drawColor42 = black;
+            winFontSetWidth(&pWazaName, &sWazaName, &drawColor42, 180.0f, text);
 
             cost = *(u8*)((u8*)action + 0x12);
             sprintf(tmp2, "%d", cost);
@@ -1349,13 +1453,15 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
             SET_POS(pWazaCostRaw, x - 42.0f - (f32)(costWidth / 2), 130.0f - (f32)(j * 26));
             pWazaCost = pWazaCostRaw;
             UNIT_SCALE(sWazaCost);
-            winFontSet(&pWazaCost, &sWazaCost, &black, costText);
+            drawColor43 = black;
+            winFontSet(&pWazaCost, &sWazaCost, &drawColor43, costText);
 
             SET_POS(pWazaCostApRaw, x - 29.0f, 120.0f - (f32)(j * 26));
             pWazaCostAp = pWazaCostApRaw;
             HALF_SCALE(sWazaCostAp);
             text = msgSearch("btl_cost_disp_AP");
-            winFontSet(&pWazaCostAp, &sWazaCostAp, &black, text);
+            drawColor44 = black;
+            winFontSet(&pWazaCostAp, &sWazaCostAp, &drawColor44, text);
         }
     }
 
@@ -1364,5 +1470,75 @@ void winMarioDisp(s32 cameraId, void* pWin, s32 index) {
 #undef HALF_SCALE
 #undef POINT8_SCALE
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 char unk_803e5f78[0x100];
+
+extern char str_msg_menu_mario_lv_802f5e88[];
+extern char str_msg_menu_mario_star__802f5e9c[];
+extern char str_msg_menu_mario_hp_802f5eb4[];
+extern char str_msg_menu_mario_fp_802f5ec8[];
+extern char str_msg_menu_mario_bp_802f5edc[];
+extern char str_msg_slit_802f5ef0[];
+extern char str_msg_plane_802f5efc[];
+extern char str_msg_ship_802f5f08[];
+extern char str_msg_roll_802f5f14[];
+extern char str_msg_menu_star_power_802f5f20[];
+extern char str_msg_menu_mario_waza_802f5f34[];
+extern char str_msg_menu_mario_star__802f5f48[];
+extern char str_msg_menu_mario_coin_802f5f60[];
+extern char str_msg_menu_mario_kaker_802f5f74[];
+extern char str_msg_menu_mario_scoin_802f5f8c[];
+extern char str_msg_menu_mario_time_802f5fa4[];
+__declspec(section ".data") WinMarioLinkEntry linkDt[18] = {
+    { -268,  142, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_lv_802f5e88,        6,  1, 11,  9 },
+    { -268,  118, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_star__802f5e9c,    0,  2, 11,  7 },
+    { -272,   68, str_M_H_1_80423894, 0, str_R_1_8042389c, 9, 0, 0,                                      1,  3, 11,  7 },
+    { -242,   24, str_M_R_1_804238a0, 0, str_R_1_8042389c, 6, 0, 0,                                      2,  4, 11,  8 },
+    { -270,  -34, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_hp_802f5eb4,        3,  5, 13, 13 },
+    { -270,  -68, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_fp_802f5ec8,        4,  6, 13, 13 },
+    { -270, -102, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_bp_802f5edc,        5,  0, 13, 13 },
+    { -100,   90, str_M_S_1_80423888, str_M_S_1_80423888, str_S_1_80423890, 2, 0, str_msg_slit_802f5ef0, 9, 10,  2,  9 },
+    { -100,   20, str_M_S_1_80423888, str_M_S_1_80423888, str_S_1_80423890, 4, 0, str_msg_plane_802f5efc, 10,  4,  3, 10 },
+    {  -50,  130, str_M_S_1_80423888, str_M_S_1_80423888, str_S_1_80423890, 5, 0, str_msg_ship_802f5f08,  0,  7,  0, 11 },
+    {  -50,   60, str_M_S_1_80423888, str_M_S_1_80423888, str_S_1_80423890, 3, 0, str_msg_roll_802f5f14,  7,  8,  8, 12 },
+    {   20,  106, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_star_power_802f5f20,      17, 12,  9,  0 },
+    {   20,   70, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_waza_802f5f34,      11, 13, 10,  0 },
+    {    3,   10, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_star__802f5f48,     12, 14,  4,  4 },
+    {    3,  -18, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_coin_802f5f60,      13, 15,  4,  4 },
+    {    3,  -46, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_kaker_802f5f74,     14, 16,  4,  4 },
+    {    3,  -74, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_scoin_802f5f8c,     15, 17,  4,  4 },
+    {    3, -102, str_M_S_1_80423888, 0, str_S_1_80423890, 0, 0, str_msg_menu_mario_time_802f5fa4,      16, 11,  4,  4 },
+};
+
+/*
+ * Data-pass A3: exact target .rodata prefix (+0x000..+0x183), late-defined.
+ *
+ * Keep all executable consumers declaration-only. This tests whether MWCC emits
+ * the explicit source-owned string catalog ahead of compiler-generated .rodata
+ * while preserving the retained pre-A2 function source shape.
+ */
+__declspec(section ".rodata") char str_msg_menu_mario_lv_802f5e88[18] __attribute__ ((aligned(4))) = "msg_menu_mario_lv";
+__declspec(section ".rodata") char str_msg_menu_mario_star__802f5e9c[22] __attribute__ ((aligned(4))) = "msg_menu_mario_star_r";
+__declspec(section ".rodata") char str_msg_menu_mario_hp_802f5eb4[18] __attribute__ ((aligned(4))) = "msg_menu_mario_hp";
+__declspec(section ".rodata") char str_msg_menu_mario_fp_802f5ec8[18] __attribute__ ((aligned(4))) = "msg_menu_mario_fp";
+__declspec(section ".rodata") char str_msg_menu_mario_bp_802f5edc[18] __attribute__ ((aligned(4))) = "msg_menu_mario_bp";
+__declspec(section ".rodata") char str_msg_slit_802f5ef0[9] __attribute__ ((aligned(4))) = "msg_slit";
+__declspec(section ".rodata") char str_msg_plane_802f5efc[10] __attribute__ ((aligned(4))) = "msg_plane";
+__declspec(section ".rodata") char str_msg_ship_802f5f08[9] __attribute__ ((aligned(4))) = "msg_ship";
+__declspec(section ".rodata") char str_msg_roll_802f5f14[9] __attribute__ ((aligned(4))) = "msg_roll";
+__declspec(section ".rodata") char str_msg_menu_star_power_802f5f20[20] __attribute__ ((aligned(4))) = "msg_menu_star_power";
+__declspec(section ".rodata") char str_msg_menu_mario_waza_802f5f34[20] __attribute__ ((aligned(4))) = "msg_menu_mario_waza";
+__declspec(section ".rodata") char str_msg_menu_mario_star__802f5f48[22] __attribute__ ((aligned(4))) = "msg_menu_mario_star_p";
+__declspec(section ".rodata") char str_msg_menu_mario_coin_802f5f60[20] __attribute__ ((aligned(4))) = "msg_menu_mario_coin";
+__declspec(section ".rodata") char str_msg_menu_mario_kaker_802f5f74[22] __attribute__ ((aligned(4))) = "msg_menu_mario_kakera";
+__declspec(section ".rodata") char str_msg_menu_mario_scoin_802f5f8c[21] __attribute__ ((aligned(4))) = "msg_menu_mario_scoin";
+__declspec(section ".rodata") char str_msg_menu_mario_time_802f5fa4[20] __attribute__ ((aligned(4))) = "msg_menu_mario_time";
+__declspec(section ".rodata") char str_msg_hammer_1_802f5fb8[13] __attribute__ ((aligned(4))) = "msg_hammer_1";
+__declspec(section ".rodata") char str_msg_hammer_2_802f5fc8[13] __attribute__ ((aligned(4))) = "msg_hammer_2";
+__declspec(section ".rodata") char str_msg_hammer_3_802f5fd8[13] __attribute__ ((aligned(4))) = "msg_hammer_3";
+__declspec(section ".rodata") char str_msg_boots_1_802f5fe8[12] __attribute__ ((aligned(4))) = "msg_boots_1";
+__declspec(section ".rodata") char str_msg_boots_2_802f5ff4[12] __attribute__ ((aligned(4))) = "msg_boots_2";
+__declspec(section ".rodata") char str_msg_boots_3_802f6000[12] __attribute__ ((aligned(4))) = "msg_boots_3";
+

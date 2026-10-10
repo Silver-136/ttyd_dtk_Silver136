@@ -370,9 +370,13 @@ void hitMain(void) {
         hit = *(void**)((s32)group + 0x15C);
         for (hitIndex = 0; hitIndex < *(s32*)((s32)group + 0x158); hitIndex++, hit = (void*)((s32)hit + 0xE4)) {
             if (*(s32*)(*(s32*)((s32)hit + 8) + 0x5C) != 0 && (*(u16*)hit & 0x81) == 0) {
-                if (last == NULL) unk_8041e628 = hit;
-                else *(void**)((s32)last + 0xE0) = hit;
-                last = hit;
+                if (last == NULL) {
+                    unk_8041e628 = hit;
+                    last = hit;
+                } else {
+                    *(void**)((s32)last + 0xE0) = hit;
+                    last = hit;
+                }
             }
         }
     }
@@ -1532,6 +1536,7 @@ void hitReCalcMatrix2(void* hit, void* arg, s32 flag) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw on
 s32 hitCalcVtxPosition(void* hit) {
+    extern const f32 float_0_8041f838;
     extern void* mapGetWork(void);
     extern void PSMTXMultVec(void*, void*, void*);
     extern void PSVECSubtract(void*, void*, void*);
@@ -1583,11 +1588,13 @@ s32 hitCalcVtxPosition(void* hit) {
         if (joint != 0) {
             if (*(u8*)((s32)joint + 3) == 0) {
                 s32 index0;
-                s32 index1;
-                s32 index2;
-                s32 temp;
+                s16 index1;
+                s16 index2;
+                s16 temp;
                 s32* polyIter;
                 HitVectorCalcUnpacked* out;
+                s32 vertexBase;
+                BOOL even;
                 shape = joint;
                 for (shapeIndex = 0; shapeIndex < *(s32*)((s32)joint + 4); shapeIndex++) {
                     poly = *(s32**)((s32)shape + 0x10);
@@ -1596,22 +1603,24 @@ s32 hitCalcVtxPosition(void* hit) {
                     for (triIndex = 0; triIndex < *poly - 2; triIndex++) {
                         tri = (void*)((s32)entry->vectors + triOffset);
                         out = (HitVectorCalcUnpacked*)tri;
-                        index1 = *(s16*)((s32)polyIter + 0x1C);
-                        index2 = *(s16*)((s32)polyIter + 0x34);
+                        index1 = *(s16*)((s32)poly + (triIndex + 1) * 0x18 + 4);
+                        index2 = *(s16*)((s32)poly + (triIndex + 2) * 0x18 + 4);
                         count++;
                         triOffset += 0x54;
+                        vertexBase = **(s32**)((s32)joint + 0xC) + 4;
                         PSMTXMultVec(entry->worldMtx,
-                                     (void*)(**(s32**)((s32)joint + 0xC) + 4 +
+                                     (void*)(vertexBase +
                                              *(s16*)((s32)polyIter + 4) * 0xC), &out->v0);
+                        even = (triIndex & 1) == 0;
                         temp = index1;
-                        if ((triIndex & 1) == 0) temp = index2;
+                        if (even) temp = index2;
                         PSMTXMultVec(entry->worldMtx,
-                                     (void*)(**(s32**)((s32)joint + 0xC) + 4 + temp * 0xC),
+                                     (void*)(vertexBase + temp * 0xC),
                                      &out->v1);
                         temp = index2;
-                        if ((triIndex & 1) == 0) temp = index1;
+                        if (even) temp = index1;
                         PSMTXMultVec(entry->worldMtx,
-                                     (void*)(**(s32**)((s32)joint + 0xC) + 4 + temp * 0xC),
+                                     (void*)(vertexBase + temp * 0xC),
                                      &out->v2);
                         PSVECSubtract(&out->v2, &out->v0, &out->edge0);
                         PSVECSubtract(&out->v0, &out->v1, &out->edge1);
@@ -1623,10 +1632,12 @@ s32 hitCalcVtxPosition(void* hit) {
                 }
             } else {
                 s32 vertexCount;
-                s32 index0;
-                s32 index1;
-                s32 index2;
-                s32 temp;
+                u32 index0;
+                u32 index1;
+                u32 index2;
+                u16 temp;
+                BOOL even;
+                HitVectorCalcUnpacked* out;
                 void* map = mapGetWork();
                 u32 flags = *(u32*)((s32)joint + 8);
                 s32 bits = 0;
@@ -1656,54 +1667,59 @@ s32 hitCalcVtxPosition(void* hit) {
                         index1 = *(u16*)((s32)poly + stride * (triIndex + 1) + 3);
                         index2 = *(u16*)((s32)poly + stride * (triIndex + 2) + 3);
                         tri = (void*)((s32)entry->vectors + triOffset);
+                        out = (HitVectorCalcUnpacked*)tri;
+                        even = (triIndex & 1) == 0;
                         temp = index1;
-                        if ((triIndex & 1) == 0) temp = index2;
+                        if (even) temp = index2;
                         index1 = temp;
                         temp = index2;
-                        if ((triIndex & 1) == 0) temp = *(u16*)((s32)poly + stride * (triIndex + 1) + 3);
+                        if (even) temp = *(u16*)((s32)poly + stride * (triIndex + 1) + 3);
                         index2 = temp;
+                        index0 *= 3;
+                        index1 *= 3;
+                        index2 *= 3;
                         qreg = *(u32*)((s32)*(void**)((s32)map + entry->mapIndex * 0x178 + 0xA4) + 0x44);
                         qreg = (qreg << 8) | 7;
                         qreg |= qreg << 16;
                         asm { mtspr GQR5, qreg }
                         qbase = (u8*)vertexBase;
-                        qoffset = index0 * 6;
+                        qoffset = index0 * 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex0[0] = qvalue;
-                        qoffset += 2;
+                        qoffset = (index0 + 1) * 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex0[1] = qvalue;
-                        qoffset += 2;
+                        qoffset = (index0 + 2) * 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex0[2] = qvalue;
-                        qoffset = index1 * 6;
+                        qoffset = index1 * 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex1[0] = qvalue;
-                        qoffset += 2;
+                        qoffset = (index1 + 1) * 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex1[1] = qvalue;
-                        qoffset += 2;
+                        qoffset = (index1 + 2) * 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex1[2] = qvalue;
-                        qoffset = index2 * 6;
+                        qoffset = index2 * 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex2[0] = qvalue;
-                        qoffset += 2;
+                        qoffset = (index2 + 1) * 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex2[1] = qvalue;
-                        qoffset += 2;
+                        qoffset = (index2 + 2) * 2;
                         asm { psq_lx qvalue, qbase, qoffset, 1, 5 }
                         vertex2[2] = qvalue;
-                        PSMTXMultVec(entry->worldMtx, vertex0, tri);
-                        PSMTXMultVec(entry->worldMtx, vertex1, (void*)((s32)tri + 0xC));
-                        PSMTXMultVec(entry->worldMtx, vertex2, (void*)((s32)tri + 0x18));
-                        PSVECSubtract((void*)((s32)tri + 0x18), tri, (void*)((s32)tri + 0x24));
-                        PSVECSubtract(tri, (void*)((s32)tri + 0xC), (void*)((s32)tri + 0x30));
-                        PSVECSubtract((void*)((s32)tri + 0xC), (void*)((s32)tri + 0x18), (void*)((s32)tri + 0x3C));
-                        PSVECCrossProduct((void*)((s32)tri + 0x24), (void*)((s32)tri + 0x30), (void*)((s32)tri + 0x48));
-                        if (*(f32*)((s32)tri + 0x48) != 0.0f ||
-                            *(f32*)((s32)tri + 0x4C) != 0.0f ||
-                            *(f32*)((s32)tri + 0x50) != 0.0f) {
+                        PSMTXMultVec(entry->worldMtx, vertex0, &out->v0);
+                        PSMTXMultVec(entry->worldMtx, vertex1, &out->v1);
+                        PSMTXMultVec(entry->worldMtx, vertex2, &out->v2);
+                        PSVECSubtract(&out->v2, &out->v0, &out->edge0);
+                        PSVECSubtract(&out->v0, &out->v1, &out->edge1);
+                        PSVECSubtract(&out->v1, &out->v2, &out->edge2);
+                        PSVECCrossProduct(&out->edge0, &out->edge1, &out->normal);
+                        if (out->normal.x != float_0_8041f838 ||
+                            out->normal.y != float_0_8041f838 ||
+                            out->normal.z != float_0_8041f838) {
                             triOffset += 0x54;
                             baseOffset += 0x54;
                             count++;
@@ -2636,12 +2652,12 @@ void hitObjGetPos(char* name, f32* out) {
     Vec pos;
     s32 count;
     HitEntry* hit;
-    HitMapEntryInline* map;
-    HitMapEntryInline* wp;
+    int i;
     int j;
+    HitMapEntryInline* wp;
+    HitMapEntryInline* map;
     HitMapEntryInline* new_var;
     HitMapEntryInline* new_var2;
-    int i;
 
     count = 0;
     pos = *(Vec*)vec3_802bf7f4;
@@ -2757,132 +2773,131 @@ u32 hitGetAttr(void* hit) {
 
     return 0;
 }
-u8 hitDamageReturnSet(int param_1, s32 param_2, int param_3) {
-  u32 iVar3;
-  u32 iVar2;
-  u32 iVar1;
+void hitDamageReturnSet(HitEntry* param_1, void* param_2, BOOL param_3) {
+  HitEntry* iVar3;
+  HitEntry* iVar2;
+  HitEntry* iVar1;
 
-  *(u32 *)(param_1 + 4) = *(u32 *)(param_1 + 4) | 0x40000000;
-  *(s32 *)(param_1 + 0xb0) = param_2;
-  iVar3 = *(int *)(param_1 + 0xd8);
+  param_1->attributes = param_1->attributes | 0x40000000;
+  param_1->damage = param_2;
+  iVar3 = param_1->child;
   if (iVar3 != 0) {
-    *(u32 *)(iVar3 + 4) = *(u32 *)(iVar3 + 4) | 0x40000000;
-    *(s32 *)(iVar3 + 0xb0) = param_2;
-    iVar2 = *(int *)(iVar3 + 0xd8);
+    iVar3->attributes = iVar3->attributes | 0x40000000;
+    iVar3->damage = param_2;
+    iVar2 = iVar3->child;
     if (iVar2 != 0) {
-      *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
-      *(s32 *)(iVar2 + 0xb0) = param_2;
-      iVar1 = *(int *)(iVar2 + 0xd8);
+      iVar2->attributes = iVar2->attributes | 0x40000000;
+      iVar2->damage = param_2;
+      iVar1 = iVar2->child;
       if (iVar1 != 0) {
-        *(u32 *)(iVar1 + 4) = *(u32 *)(iVar1 + 4) | 0x40000000;
-        *(s32 *)(iVar1 + 0xb0) = param_2;
-        if (*(u32 *)(iVar1 + 0xd8) != 0) {
-          hitDamageReturnSet(*(int *)(iVar1 + 0xd8), param_2, 1);
+        iVar1->attributes = iVar1->attributes | 0x40000000;
+        iVar1->damage = param_2;
+        if (iVar1->child != 0) {
+          hitDamageReturnSet(iVar1->child, param_2, 1);
         }
-        if (*(u32 *)(iVar1 + 0xdc) != 0) {
-          hitDamageReturnSet(*(int *)(iVar1 + 0xdc), param_2, 1);
+        if (iVar1->sibling != 0) {
+          hitDamageReturnSet(iVar1->sibling, param_2, 1);
         }
       }
-      iVar2 = *(int *)(iVar2 + 0xdc);
+      iVar2 = iVar2->sibling;
       if (iVar2 != 0) {
-        *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
-        *(s32 *)(iVar2 + 0xb0) = param_2;
-        if (*(u32 *)(iVar2 + 0xd8) != 0) {
-          hitDamageReturnSet(*(int *)(iVar2 + 0xd8), param_2, 1);
+        iVar2->attributes = iVar2->attributes | 0x40000000;
+        iVar2->damage = param_2;
+        if (iVar2->child != 0) {
+          hitDamageReturnSet(iVar2->child, param_2, 1);
         }
-        if (*(u32 *)(iVar2 + 0xdc) != 0) {
-          hitDamageReturnSet(*(int *)(iVar2 + 0xdc), param_2, 1);
+        if (iVar2->sibling != 0) {
+          hitDamageReturnSet(iVar2->sibling, param_2, 1);
         }
       }
     }
-    iVar3 = *(int *)(iVar3 + 0xdc);
+    iVar3 = iVar3->sibling;
     if (iVar3 != 0) {
-      *(u32 *)(iVar3 + 4) = *(u32 *)(iVar3 + 4) | 0x40000000;
-      *(s32 *)(iVar3 + 0xb0) = param_2;
-      iVar2 = *(int *)(iVar3 + 0xd8);
+      iVar3->attributes = iVar3->attributes | 0x40000000;
+      iVar3->damage = param_2;
+      iVar2 = iVar3->child;
       if (iVar2 != 0) {
-        *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
-        *(s32 *)(iVar2 + 0xb0) = param_2;
-        if (*(u32 *)(iVar2 + 0xd8) != 0) {
-          hitDamageReturnSet(*(int *)(iVar2 + 0xd8), param_2, 1);
+        iVar2->attributes = iVar2->attributes | 0x40000000;
+        iVar2->damage = param_2;
+        if (iVar2->child != 0) {
+          hitDamageReturnSet(iVar2->child, param_2, 1);
         }
-        if (*(u32 *)(iVar2 + 0xdc) != 0) {
-          hitDamageReturnSet(*(int *)(iVar2 + 0xdc), param_2, 1);
+        if (iVar2->sibling != 0) {
+          hitDamageReturnSet(iVar2->sibling, param_2, 1);
         }
       }
-      iVar3 = *(int *)(iVar3 + 0xdc);
+      iVar3 = iVar3->sibling;
       if (iVar3 != 0) {
-        *(u32 *)(iVar3 + 4) = *(u32 *)(iVar3 + 4) | 0x40000000;
-        *(s32 *)(iVar3 + 0xb0) = param_2;
-        if (*(u32 *)(iVar3 + 0xd8) != 0) {
-          hitDamageReturnSet(*(int *)(iVar3 + 0xd8), param_2, 1);
+        iVar3->attributes = iVar3->attributes | 0x40000000;
+        iVar3->damage = param_2;
+        if (iVar3->child != 0) {
+          hitDamageReturnSet(iVar3->child, param_2, 1);
         }
-        if (*(u32 *)(iVar3 + 0xdc) != 0) {
-          hitDamageReturnSet(*(int *)(iVar3 + 0xdc), param_2, 1);
+        if (iVar3->sibling != 0) {
+          hitDamageReturnSet(iVar3->sibling, param_2, 1);
         }
       }
     }
   }
-  if ((param_3 != 0) && (iVar3 = *(int *)(param_1 + 0xdc), iVar3 != 0)) {
-    *(u32 *)(iVar3 + 4) = *(u32 *)(iVar3 + 4) | 0x40000000;
-    *(s32 *)(iVar3 + 0xb0) = param_2;
-    iVar2 = *(int *)(iVar3 + 0xd8);
+  if ((param_3 != 0) && (iVar3 = param_1->sibling, iVar3 != 0)) {
+    iVar3->attributes = iVar3->attributes | 0x40000000;
+    iVar3->damage = param_2;
+    iVar2 = iVar3->child;
     if (iVar2 != 0) {
-      *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
-      *(s32 *)(iVar2 + 0xb0) = param_2;
-      iVar1 = *(int *)(iVar2 + 0xd8);
+      iVar2->attributes = iVar2->attributes | 0x40000000;
+      iVar2->damage = param_2;
+      iVar1 = iVar2->child;
       if (iVar1 != 0) {
-        *(u32 *)(iVar1 + 4) = *(u32 *)(iVar1 + 4) | 0x40000000;
-        *(s32 *)(iVar1 + 0xb0) = param_2;
-        if (*(u32 *)(iVar1 + 0xd8) != 0) {
-          hitDamageReturnSet(*(int *)(iVar1 + 0xd8), param_2, 1);
+        iVar1->attributes = iVar1->attributes | 0x40000000;
+        iVar1->damage = param_2;
+        if (iVar1->child != 0) {
+          hitDamageReturnSet(iVar1->child, param_2, 1);
         }
-        if (*(u32 *)(iVar1 + 0xdc) != 0) {
-          hitDamageReturnSet(*(int *)(iVar1 + 0xdc), param_2, 1);
+        if (iVar1->sibling != 0) {
+          hitDamageReturnSet(iVar1->sibling, param_2, 1);
         }
       }
-      iVar2 = *(int *)(iVar2 + 0xdc);
+      iVar2 = iVar2->sibling;
       if (iVar2 != 0) {
-        *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
-        *(s32 *)(iVar2 + 0xb0) = param_2;
-        if (*(u32 *)(iVar2 + 0xd8) != 0) {
-          hitDamageReturnSet(*(int *)(iVar2 + 0xd8), param_2, 1);
+        iVar2->attributes = iVar2->attributes | 0x40000000;
+        iVar2->damage = param_2;
+        if (iVar2->child != 0) {
+          hitDamageReturnSet(iVar2->child, param_2, 1);
         }
-        if (*(u32 *)(iVar2 + 0xdc) != 0) {
-          hitDamageReturnSet(*(int *)(iVar2 + 0xdc), param_2, 1);
+        if (iVar2->sibling != 0) {
+          hitDamageReturnSet(iVar2->sibling, param_2, 1);
         }
       }
     }
-    iVar3 = *(int *)(iVar3 + 0xdc);
+    iVar3 = iVar3->sibling;
     if (iVar3 != 0) {
-      *(u32 *)(iVar3 + 4) = *(u32 *)(iVar3 + 4) | 0x40000000;
-      *(s32 *)(iVar3 + 0xb0) = param_2;
-      iVar2 = *(int *)(iVar3 + 0xd8);
+      iVar3->attributes = iVar3->attributes | 0x40000000;
+      iVar3->damage = param_2;
+      iVar2 = iVar3->child;
       if (iVar2 != 0) {
-        *(u32 *)(iVar2 + 4) = *(u32 *)(iVar2 + 4) | 0x40000000;
-        *(s32 *)(iVar2 + 0xb0) = param_2;
-        if (*(u32 *)(iVar2 + 0xd8) != 0) {
-          hitDamageReturnSet(*(int *)(iVar2 + 0xd8), param_2, 1);
+        iVar2->attributes = iVar2->attributes | 0x40000000;
+        iVar2->damage = param_2;
+        if (iVar2->child != 0) {
+          hitDamageReturnSet(iVar2->child, param_2, 1);
         }
-        if (*(u32 *)(iVar2 + 0xdc) != 0) {
-          hitDamageReturnSet(*(int *)(iVar2 + 0xdc), param_2, 1);
+        if (iVar2->sibling != 0) {
+          hitDamageReturnSet(iVar2->sibling, param_2, 1);
         }
       }
-      iVar3 = *(int *)(iVar3 + 0xdc);
+      iVar3 = iVar3->sibling;
       if (iVar3 != 0) {
-        *(u32 *)(iVar3 + 4) = *(u32 *)(iVar3 + 4) | 0x40000000;
-        *(s32 *)(iVar3 + 0xb0) = param_2;
-        if (*(u32 *)(iVar3 + 0xd8) != 0) {
-          hitDamageReturnSet(*(int *)(iVar3 + 0xd8), param_2, 1);
+        iVar3->attributes = iVar3->attributes | 0x40000000;
+        iVar3->damage = param_2;
+        if (iVar3->child != 0) {
+          hitDamageReturnSet(iVar3->child, param_2, 1);
         }
-        if (*(u32 *)(iVar3 + 0xdc) != 0) {
-          hitDamageReturnSet(*(int *)(iVar3 + 0xdc), param_2, 1);
+        if (iVar3->sibling != 0) {
+          hitDamageReturnSet(iVar3->sibling, param_2, 1);
         }
       }
     }
   }
-  return;
-  return 0;
+
 }
 
 void hitGrpDamageReturnSet(char* name, s32 value) {
@@ -2922,7 +2937,7 @@ next_hit:
 
 found:
     if (hit != NULL) {
-        hitDamageReturnSet((s32)hit, value, 0);
+        hitDamageReturnSet((HitEntry*)hit, (void*)value, 0);
     }
 }
 

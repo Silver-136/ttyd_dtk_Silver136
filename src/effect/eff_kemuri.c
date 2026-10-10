@@ -50,6 +50,8 @@ void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z) {
             count = 3;
             break;
         case 1:
+            count = 2;
+            break;
         case 2:
             count = 2;
             break;
@@ -117,7 +119,8 @@ void* effKemuriEntry(s32 kind, f32 x, f32 y, f32 z) {
 
 
 
-u8 effKemuri2Entry(f32 x, f32 y, f32 z, f32 vx, f32 vz) {
+#pragma use_lmw_stmw off
+void* effKemuri2Entry(f32 x, f32 y, f32 z, f32 vx, f32 vz) {
     extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
     extern void* camGetPtr(s32 cameraId);
     extern f32 reviseAngle(f32 angle);
@@ -135,8 +138,7 @@ u8 effKemuri2Entry(f32 x, f32 y, f32 z, f32 vx, f32 vz) {
     f32 sx;
     f32 sz;
     f32 angle;
-    f32 camAngle;
-    f32 rad;
+    f32 rise, turn, multiplier;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_Kemuri2_802f3720;
@@ -144,29 +146,36 @@ u8 effKemuri2Entry(f32 x, f32 y, f32 z, f32 vx, f32 vz) {
     work = __memAlloc(3, 0x8C);
     *(void**)((s32)entry + 0xC) = work;
     memset(work, 0, 0x8C);
-    *(void**)((s32)entry + 0x10) = effKemuri2Main;
 
-    sx = float_1000_804229f8 * vx;
-    sz = float_1000_804229f8 * vz;
+    multiplier = float_1000_804229f8;
+    sx = multiplier * vx;
+    *(void**)((s32)entry + 0x10) = effKemuri2Main;
+    sz = multiplier * vz;
     angle = (float_360_804229f4 * angleABf(float_0_804229a4, float_0_804229a4, sx, sz)) / float_6p2832_804229fc;
-    camAngle = *(f32*)((s32)camGetPtr(4) + 0x114);
-    *(f32*)((s32)work + 0x78) = reviseAngle(((float_360_804229f4 * angleABf(float_0_804229a4, float_0_804229a4, sx, sz)) / float_6p2832_804229fc) + camAngle);
+    multiplier = *(f32*)((s32)camGetPtr(4) + 0x114);
+    *(f32*)((s32)work + 0x78) = reviseAngle(((float_360_804229f4 * angleABf(float_0_804229a4, float_0_804229a4, sx, sz)) / float_6p2832_804229fc) + multiplier);
+    sz = float_5_80422a00 + z;
     *(s32*)((s32)work + 0x3C) = 0;
-    rad = (float_6p2832_804229fc * (f32)(s32)angle) / float_360_804229f4;
-    *(f32*)((s32)work + 0x30) = (f32)sin(rad);
-    *(f32*)((s32)work + 0x34) = (f32)cos(rad);
+    angle = (float_6p2832_804229fc * (f32)(s32)angle) / float_360_804229f4;
+    sx = float_1_80422998;
+    rise = float_0p7_80422a04;
+    turn = float_neg20_80422a08;
+    z = float_0_804229a4;
+    *(f32*)((s32)work + 0x30) = (f32)sin(angle);
+    *(f32*)((s32)work + 0x34) = (f32)cos(angle);
     *(f32*)((s32)work + 0x4) = x;
     *(f32*)((s32)work + 0x8) = y;
-    *(f32*)((s32)work + 0xC) = float_5_80422a00 + z;
-    *(f32*)((s32)work + 0x10) = float_1_80422998;
-    *(f32*)((s32)work + 0x20) = float_0p7_80422a04;
-    *(f32*)((s32)work + 0x64) = float_neg20_80422a08;
-    *(f32*)((s32)work + 0x68) = float_0_804229a4;
+    *(f32*)((s32)work + 0xC) = sz;
+    *(f32*)((s32)work + 0x10) = sx;
+    *(f32*)((s32)work + 0x20) = rise;
+    *(f32*)((s32)work + 0x64) = turn;
+    *(f32*)((s32)work + 0x68) = z;
     *(s32*)((s32)work + 0x6C) = 0xFF;
-    *(f32*)((s32)work + 0x70) = float_1_80422998;
-    *(f32*)((s32)work + 0x74) = float_1_80422998;
-    return 0;
+    *(f32*)((s32)work + 0x70) = sx;
+    *(f32*)((s32)work + 0x74) = sx;
+    return entry;
 }
+#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -179,7 +188,7 @@ void effKemuriMain(void* effEntry) {
 
     extern f32 dispCalcZ(Vec* pos);
     extern u8 effKemuriDisp(s32 cameraId, void* effEntry);
-    extern Vec vec3_802f36f8;
+    extern Vec vec3_802f36f8[];
     extern u8 touchdown_scale[];
     extern u8 heavy_scale[];
     extern f32 float_16_804229dc;
@@ -190,71 +199,71 @@ void effKemuriMain(void* effEntry) {
     extern f32 float_1p2_804229f0;
 
     void* work;
-    void* cur;
     Vec pos;
     Vec dispPos;
     s32 type;
     s32 i;
+    f32 frameScale;
 
     work = *(void**)((s32)effEntry + 0xC);
-    pos = vec3_802f36f8;
+    pos = vec3_802f36f8[0];
     pos.x = *(f32*)((s32)work + 4);
     pos.y = *(f32*)((s32)work + 8);
     pos.z = *(f32*)((s32)work + 0xC);
     dispPos = pos;
 
     type = *(s32*)work;
-    cur = (void*)((s32)work + 0x8C);
+    frameScale = float_16_804229dc;
     i = 1;
     while (i < *(s32*)((s32)effEntry + 8)) {
-        *(s32*)((s32)cur + 0x80) =
-            (s32)((float_16_804229dc * (f32)*(s32*)((s32)cur + 0x40)) /
-                  (f32)*(s32*)((s32)cur + 0x88));
-        *(s32*)((s32)cur + 0x84) =
-            (s32)((float_16_804229dc * (f32)(*(s32*)((s32)cur + 0x40) + 1)) /
-                  (f32)*(s32*)((s32)cur + 0x88));
-        if (*(s32*)((s32)cur + 0x84) > 0xF) {
-            *(s32*)((s32)cur + 0x84) = 0xF;
+        *(s32*)((s32)work + 0x10C) =
+            (s32)((frameScale * (f32)*(s32*)((s32)work + 0xCC)) /
+                  (f32)*(s32*)((s32)work + 0x114));
+        *(s32*)((s32)work + 0x110) =
+            (s32)((frameScale * (f32)(*(s32*)((s32)work + 0xCC) + 1)) /
+                  (f32)*(s32*)((s32)work + 0x114));
+        if (*(s32*)((s32)work + 0x110) > 0xF) {
+            *(s32*)((s32)work + 0x110) = 0xF;
         }
 
         switch (type) {
             case 0:
-                if (*(s32*)((s32)cur + 0x40) < 0x1E) {
-                    *(f32*)((s32)cur + 0x44) =
-                        (f32)touchdown_scale[*(s32*)((s32)cur + 0x40) * 2] * float_0p0078125_804229e0;
-                    *(f32*)((s32)cur + 0x48) =
-                        (f32)touchdown_scale[*(s32*)((s32)cur + 0x40) * 2 + 1] * float_0p0078125_804229e0;
+                if (*(s32*)((s32)work + 0xCC) < 0x1E) {
+                    *(f32*)((s32)work + 0xD0) =
+                        (f32)touchdown_scale[*(s32*)((s32)work + 0xCC) * 2] * float_0p0078125_804229e0;
+                    *(f32*)((s32)work + 0xD4) =
+                        (f32)touchdown_scale[*(s32*)((s32)work + 0xCC) * 2 + 1] * float_0p0078125_804229e0;
                 } else {
-                    *(f32*)((s32)cur + 0x44) = float_1p5_804229e4;
-                    *(f32*)((s32)cur + 0x48) = float_0p8_804229d8;
+                    *(f32*)((s32)work + 0xD0) = float_1p5_804229e4;
+                    *(f32*)((s32)work + 0xD4) = float_0p8_804229d8;
                 }
-                *(f32*)((s32)cur + 0x4C) *= float_0p85_804229e8;
-                *(f32*)((s32)cur + 0x58) += *(f32*)((s32)cur + 0x4C);
-                *(s32*)((s32)cur + 0x40) += 1;
+                *(f32*)((s32)work + 0xD8) *= float_0p85_804229e8;
+                *(f32*)((s32)work + 0xE4) += *(f32*)((s32)work + 0xD8);
+                *(s32*)((s32)work + 0xCC) += 1;
                 break;
             case 1:
-                *(s32*)((s32)cur + 0x40) += 1;
+                *(s32*)((s32)work + 0xCC) += 1;
                 break;
             case 2:
-                if (*(s32*)((s32)cur + 0x40) < 0x1E) {
-                    *(f32*)((s32)cur + 0x44) =
-                        (f32)heavy_scale[*(s32*)((s32)cur + 0x40) * 2] * float_0p0078125_804229e0;
-                    *(f32*)((s32)cur + 0x48) =
-                        (f32)heavy_scale[*(s32*)((s32)cur + 0x40) * 2 + 1] * float_0p0078125_804229e0;
+                if (*(s32*)((s32)work + 0xCC) < 0x1E) {
+                    *(f32*)((s32)work + 0xD0) =
+                        (f32)heavy_scale[*(s32*)((s32)work + 0xCC) * 2] * float_0p0078125_804229e0;
+                    *(f32*)((s32)work + 0xD4) =
+                        (f32)heavy_scale[*(s32*)((s32)work + 0xCC) * 2 + 1] * float_0p0078125_804229e0;
                 } else {
-                    *(f32*)((s32)cur + 0x44) = float_2_804229ec;
-                    *(f32*)((s32)cur + 0x48) = float_1p2_804229f0;
+                    *(f32*)((s32)work + 0xD0) = float_2_804229ec;
+                    *(f32*)((s32)work + 0xD4) = float_1p2_804229f0;
                 }
-                *(s32*)((s32)cur + 0x40) += 1;
+                *(s32*)((s32)work + 0xCC) += 1;
                 break;
         }
 
-        if (*(s32*)((s32)cur + 0x40) >= *(s32*)((s32)cur + 0x88)) {
+        if (*(s32*)((s32)work + 0xCC) >= *(s32*)((s32)work + 0x114)) {
             effDelete(effEntry);
             return;
         }
         i++;
-        cur = (void*)((s32)cur + 0x8C);
+        work = (void*)((s32)work + 0x8C);
     }
 
     dispEntry(4, 2, effKemuriDisp, effEntry, dispCalcZ(&dispPos));
@@ -272,7 +281,7 @@ u8 effKemuri2Main(void* effEntry) {
     } LocalVec3;
     extern f32 dispCalcZ(LocalVec3* pos);
     extern u8 effKemuri2Disp(s32 cameraId, void* effEntry);
-    extern LocalVec3 vec3_802f3704;
+    extern LocalVec3 vec3_802f3704[];
     extern f32 float_3p1416_804229c8;
     extern f32 float_30_804229cc;
     extern f32 float_0p9_804229d0;
@@ -280,12 +289,12 @@ u8 effKemuri2Main(void* effEntry) {
     LocalVec3 dispPos;
     LocalVec3 pos;
     void* work;
-    void* cur;
     s32 i;
     f32 wave;
+    f32 velocityDecay, rotationDecay;
 
     work = *(void**)((s32)effEntry + 0xC);
-    pos = vec3_802f3704;
+    pos = vec3_802f3704[0];
     pos.x = *(f32*)((s32)work + 0x4);
     pos.y = *(f32*)((s32)work + 0x8);
     pos.z = *(f32*)((s32)work + 0xC);
@@ -298,21 +307,22 @@ u8 effKemuri2Main(void* effEntry) {
         return 0;
     }
 
-    cur = work;
+    velocityDecay = float_0p9_804229d0;
+    rotationDecay = float_0p95_804229d4;
     i = 0;
     while (i < *(s32*)((s32)effEntry + 0x8)) {
-        *(f32*)((s32)cur + 0x4) += *(f32*)((s32)cur + 0x10) * *(f32*)((s32)cur + 0x30);
-        *(f32*)((s32)cur + 0xC) += *(f32*)((s32)cur + 0x10) * *(f32*)((s32)cur + 0x34);
-        *(f32*)((s32)cur + 0x20) *= float_0p9_804229d0;
-        *(f32*)((s32)cur + 0x8) += *(f32*)((s32)cur + 0x20);
-        *(f32*)((s32)cur + 0x64) *= float_0p95_804229d4;
-        *(f32*)((s32)cur + 0x68) += *(f32*)((s32)cur + 0x64);
-        *(f32*)((s32)cur + 0x70) = wave;
-        if (*(s32*)((s32)cur + 0x3C) > 15) {
-            *(s32*)((s32)cur + 0x6C) = (s32)((f32)*(s32*)((s32)cur + 0x6C) * float_0p8_804229d8);
+        *(f32*)((s32)work + 0x4) += *(f32*)((s32)work + 0x10) * *(f32*)((s32)work + 0x30);
+        *(f32*)((s32)work + 0xC) += *(f32*)((s32)work + 0x10) * *(f32*)((s32)work + 0x34);
+        *(f32*)((s32)work + 0x20) *= velocityDecay;
+        *(f32*)((s32)work + 0x8) += *(f32*)((s32)work + 0x20);
+        *(f32*)((s32)work + 0x64) *= rotationDecay;
+        *(f32*)((s32)work + 0x68) += *(f32*)((s32)work + 0x64);
+        *(f32*)((s32)work + 0x70) = wave;
+        if (*(s32*)((s32)work + 0x3C) > 15) {
+            *(s32*)((s32)work + 0x6C) = (s32)((f32)*(s32*)((s32)work + 0x6C) * float_0p8_804229d8);
         }
         i++;
-        cur = (void*)((s32)cur + 0x8C);
+        work = (void*)((s32)work + 0x8C);
     }
     dispEntry(4, 2, effKemuri2Disp, effEntry, dispCalcZ(&dispPos));
     return 0;
@@ -336,13 +346,12 @@ u8 effKemuriDisp(s32 cameraId, void* effEntry) {
     extern u32 dat_80422960;
     extern u32 dat_80422964;
     u8* work;
-    u8* part;
     void* cam;
     Tex tex;
-    Mtx trans, rot, scale, base, local;
+    Mtx trans, scale, rot, base, local;
     volatile f32* fifo;
-    u32 color;
-    f32 offset;
+    u32 color, colorTev, colorLeft, colorRight;
+    f32 offset, left, half, one, width;
     s32 type;
     s32 i;
     s32 side;
@@ -351,9 +360,10 @@ u8 effKemuriDisp(s32 cameraId, void* effEntry) {
     type = *(s32*)work;
     cam = camGetPtr(cameraId);
     if (type == 1) { effGetTexObj(0x24,&tex); GXLoadTexObj(&tex,0); }
-    else if ((type >= 0) && (type < 3)) { effGetTexObj(0x23,&tex); GXLoadTexObj(&tex,0); }
+    else if (type < 1) { if (type > -1) { effGetTexObj(0x23,&tex); GXLoadTexObj(&tex,0); } }
+    else if (type < 3) { effGetTexObj(0x23,&tex); GXLoadTexObj(&tex,0); }
     PSMTXTrans(trans,*(f32*)(work+4),*(f32*)(work+8),*(f32*)(work+0xC));
-    PSMTXRotRad(rot,0.017453292f * -*(f32*)((s32)cam+0x114),'y');
+    PSMTXRotRad(rot,0.017453292f * -*(f32*)((s32)camGetPtr(cameraId)+0x114),'y');
     PSMTXScale(scale,*(f32*)(work+0x74),*(f32*)(work+0x74),1.0f);
     PSMTXConcat(trans,rot,base);
     PSMTXConcat(base,scale,base);
@@ -366,8 +376,8 @@ u8 effKemuriDisp(s32 cameraId, void* effEntry) {
     GXSetTevOrder(0,0,0,0xFF); GXSetTevColorOp(0,0,0,0,1,0); GXSetTevAlphaOp(0,0,0,0,1,0);
     GXSetTevColorIn(0,0xF,0xF,0xF,8); GXSetTevAlphaIn(0,7,7,7,4);
     GXSetTevOrder(1,1,0,0xFF); GXSetTevColorOp(1,0,0,0,1,0); GXSetTevAlphaOp(1,0,0,0,1,0);
-    GXSetTevColorIn(1,0,8,2,0xF); GXSetTevAlphaIn(1,0,4,0,7);
-    color=dat_8042295c; GXSetTevColor(1,&color);
+    GXSetTevColorIn(1,0,8,2,0xF); GXSetTevAlphaIn(1,0,4,1,7);
+    colorTev=dat_8042295c; GXSetTevColor(1,&colorTev);
     GXSetTevOrder(2,0xFF,0xFF,4); GXSetTevColorOp(2,0,0,0,1,0); GXSetTevAlphaOp(2,0,0,0,1,0);
     GXSetTevColorIn(2,0xF,0,10,0xF); GXSetTevAlphaIn(2,7,0,5,7);
     GXSetNumTexGens(2);
@@ -376,27 +386,28 @@ u8 effKemuriDisp(s32 cameraId, void* effEntry) {
     GXClearVtxDesc(); GXSetVtxDesc(9,1); GXSetVtxDesc(0xD,1);
     GXSetVtxAttrFmt(0,9,1,4,0); GXSetVtxAttrFmt(0,0xD,1,4,0);
     fifo=(volatile f32*)0xCC008000;
-    part=work+0x8C;
-    for(i=1;i<*(s32*)((s32)effEntry+8);i++,part+=0x8C){
+    left=-1.0f * 0.5f;
+    half=0.5f; one=1.0f; width=20.0f;
+    for(i=1;i<*(s32*)((s32)effEntry+8);i++,work+=0x8C){
         for(side=0;side<2;side++){
-            color=(side==0)?dat_80422960:dat_80422964;
-            GXSetChanMatColor(4,&color);
+            if (side==0) { colorLeft=dat_80422960; GXSetChanMatColor(4,&colorLeft); }
+            else { colorRight=dat_80422964; GXSetChanMatColor(4,&colorRight); }
             offset=(f32)(1-side);
-            PSMTXTrans(trans,*(f32*)(part+0x58)+offset,-offset,0.0f);
-            PSMTXScale(scale,20.0f**(f32*)(part+0x44),20.0f**(f32*)(part+0x48),20.0f);
+            PSMTXTrans(trans,*(f32*)(work+0xE4)+(f32)(1-side),(f32)-(1-side),0.0f);
+            PSMTXScale(scale,width**(f32*)(work+0xD0),width**(f32*)(work+0xD4),width);
             PSMTXConcat(base,trans,local); PSMTXConcat(local,scale,local);
             GXLoadPosMtxImm(local,0);
             PSMTXScale(scale,0.0625f,1.0f,1.0f);
-            PSMTXTrans(trans,(f32)*(s32*)(part+0x80),-0.2f,0.0f);
+            PSMTXTrans(trans,(f32)*(s32*)(work+0x10C),-0.2f,0.0f);
             PSMTXConcat(scale,trans,trans); GXLoadTexMtxImm(trans,0x1E,1);
             PSMTXScale(scale,0.0625f,1.0f,1.0f);
-            PSMTXTrans(trans,(f32)*(s32*)(part+0x84),-0.2f,0.0f);
+            PSMTXTrans(trans,(f32)*(s32*)(work+0x110),-0.2f,0.0f);
             PSMTXConcat(scale,trans,trans); GXLoadTexMtxImm(trans,0x21,1);
             GXBegin(0x80,0,4);
-            *fifo=-0.5f; *fifo=1.0f; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f;
-            *fifo=0.5f; *fifo=1.0f; *fifo=0.0f; *fifo=1.0f; *fifo=0.0f;
-            *fifo=0.5f; *fifo=0.0f; *fifo=0.0f; *fifo=1.0f; *fifo=1.0f;
-            *fifo=-0.5f; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f; *fifo=1.0f;
+            *fifo=left; *fifo=one; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f;
+            *fifo=half; *fifo=one; *fifo=0.0f; *fifo=1.0f; *fifo=0.0f;
+            *fifo=half; *fifo=0.0f; *fifo=0.0f; *fifo=1.0f; *fifo=1.0f;
+            *fifo=left; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f; *fifo=1.0f;
         }
     }
     return 0;
@@ -404,6 +415,7 @@ u8 effKemuriDisp(s32 cameraId, void* effEntry) {
 u8 effKemuri2Disp(s32 cameraId, void* effEntry) {
     typedef f32 Mtx[3][4];
     typedef struct Tex { u32 data[8]; } Tex;
+    typedef struct Color { u8 r, g, b, a; } Color;
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void PSMTXRotRad(Mtx, f32, char);
     extern void PSMTXScale(Mtx, f32, f32, f32);
@@ -415,18 +427,14 @@ u8 effKemuri2Disp(s32 cameraId, void* effEntry) {
     extern void GXSetCullMode(s32);
     extern void mapSetMaterialFog(void);
     extern void GXLoadPosMtxImm(Mtx, s32);
-    extern u32 unk_804295b8;
-    extern u32 dat_80422968;
-    extern u32 unk_804295bc;
-    extern u32 dat_8042296c;
+    extern u32 unk_804295b8, dat_80422968, unk_804295bc, dat_8042296c;
     u8* work;
     void* cam;
     Tex tex;
-    Mtx trans, camRot, zRot, scale1, scale2, local;
+    Mtx trans, camRot, zRot, scale1, local, scale2;
     volatile f32* fifo;
-    u32 color;
+    f32 left, bottom, outerLeft, bound20, bound180, radians, outerRight;
     f32 offset;
-    f32 angle;
     s32 i;
 
     work = *(u8**)((s32)effEntry + 0xC);
@@ -442,7 +450,7 @@ u8 effKemuri2Disp(s32 cameraId, void* effEntry) {
     GXSetTevColorOp(0, 0, 0, 0, 1, 0);
     GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
     GXSetTevColorIn(0,0xF,2,8,0xF);
-    GXSetTevAlphaIn(0,7,0,4,7);
+    GXSetTevAlphaIn(0,7,1,4,7);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(0,1,4,0x3C,0,0x7D);
     GXSetCullMode(0);
@@ -453,17 +461,23 @@ u8 effKemuri2Disp(s32 cameraId, void* effEntry) {
     GXSetVtxAttrFmt(0,9,1,4,0);
     GXSetVtxAttrFmt(0,0xD,1,4,0);
     fifo = (volatile f32*)0xCC008000;
-    angle = *(f32*)(work + 0x78);
+    left = -12.0f;
+    bottom = -8.0f;
+    outerLeft = -12.8f * 0.5f;
+    bound20 = 20.0f;
+    bound180 = 180.0f;
+    radians = 0.017453292f;
+    outerRight = 6.4f;
 
     for (i = 0; i < 2; i++) {
-        offset = (f32)(1 - i);
-        if (((angle > 20.0f) && (angle < 160.0f)) || ((angle > 180.0f) && (angle < 340.0f))) {
-            PSMTXTrans(trans, *(f32*)(work+4)+offset, *(f32*)(work+8)-offset, *(f32*)(work+0xC));
-            PSMTXRotRad(camRot, 0.017453292f * -*(f32*)((s32)cam+0x114), 'y');
+        if (((*(f32*)(work+0x78) > bound20) && (*(f32*)(work+0x78) < 160.0f)) ||
+            ((*(f32*)(work+0x78) > bound180) && (*(f32*)(work+0x78) < 340.0f))) {
+            PSMTXTrans(trans, *(f32*)(work+4)+(f32)(1-i), *(f32*)(work+8)-(f32)(1-i), *(f32*)(work+0xC));
+            PSMTXRotRad(camRot, radians * -*(f32*)((s32)camGetPtr(cameraId)+0x114), 'y');
             PSMTXRotRad(zRot, 0.17453f, 'z');
             PSMTXScale(scale1, *(f32*)(work+0x70), *(f32*)(work+0x70), *(f32*)(work+0x70));
             PSMTXConcat(trans, camRot, local);
-            if (angle < 180.0f) {
+            if (*(f32*)(work+0x78) < bound180) {
                 PSMTXScale(scale2,-1.0f,1.0f,-1.0f);
                 PSMTXConcat(local,scale2,local);
             }
@@ -475,34 +489,53 @@ u8 effKemuri2Disp(s32 cameraId, void* effEntry) {
             PSMTXTrans(trans,6.0f,-4.0f,0.0f); PSMTXConcat(local,trans,local);
             GXLoadPosMtxImm(local,0); GXSetCurrentMtx(0);
             effGetTexObj(0xD,&tex); GXLoadTexObj(&tex,0);
-            color = (i == 0 ? unk_804295b8 : dat_80422968) & 0xFFFFFF00;
-            color |= *(u8*)(work+0x6F); GXSetTevColor(1,&color);
+            if (i == 0) {
+                Color color1;
+                color1 = *(Color*)&unk_804295b8;
+                color1.a = *(s32*)(work+0x6C);
+                ((void (*)(s32, Color))GXSetTevColor)(1,color1);
+            } else {
+                Color color2;
+                color2 = *(Color*)&dat_80422968;
+                color2.a = *(s32*)(work+0x6C);
+                ((void (*)(s32, Color))GXSetTevColor)(1,color2);
+            }
             GXBegin(0x80,0,4);
-            *fifo=-6.0f; *fifo=4.0f; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f;
+            *fifo=(left * 0.5f); *fifo=4.0f; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f;
             *fifo=6.0f; *fifo=4.0f; *fifo=0.0f; *fifo=1.0f; *fifo=0.0f;
-            *fifo=6.0f; *fifo=-4.0f; *fifo=0.0f; *fifo=1.0f; *fifo=1.0f;
-            *fifo=-6.0f; *fifo=-4.0f; *fifo=0.0f; *fifo=0.0f; *fifo=1.0f;
+            *fifo=6.0f; *fifo=(bottom * 0.5f); *fifo=0.0f; *fifo=1.0f; *fifo=1.0f;
+            *fifo=(left * 0.5f); *fifo=(bottom * 0.5f); *fifo=0.0f; *fifo=0.0f; *fifo=1.0f;
         }
-        PSMTXTrans(trans, *(f32*)(work+4)+offset, *(f32*)(work+8)-offset, *(f32*)(work+0xC));
-        PSMTXRotRad(camRot,0.017453292f * -*(f32*)((s32)cam+0x114),'y');
-        PSMTXRotRad(zRot,0.017453292f * *(f32*)(work+0x68),'z');
+        PSMTXTrans(trans, *(f32*)(work+4)+(f32)(1-i), *(f32*)(work+8)-(f32)(1-i), *(f32*)(work+0xC));
+        PSMTXRotRad(camRot,radians * -*(f32*)((s32)camGetPtr(cameraId)+0x114),'y');
+        PSMTXRotRad(zRot,radians * *(f32*)(work+0x68),'z');
         PSMTXScale(scale1,*(f32*)(work+0x70),*(f32*)(work+0x70),*(f32*)(work+0x70));
         PSMTXConcat(trans,camRot,local);
-        if (angle < 180.0f) { PSMTXScale(scale2,-1.0f,1.0f,-1.0f); PSMTXConcat(local,scale2,local); }
+        if (*(f32*)(work+0x78) < bound180) { PSMTXScale(scale2,-1.0f,1.0f,-1.0f); PSMTXConcat(local,scale2,local); }
         PSMTXTrans(scale2,10.0f,-6.0f,0.0f); PSMTXConcat(local,scale2,local);
         PSMTXScale(scale2,*(f32*)(work+0x74),*(f32*)(work+0x74),*(f32*)(work+0x74)); PSMTXConcat(local,scale2,local);
         PSMTXTrans(scale2,-10.0f,6.0f,0.0f); PSMTXConcat(local,scale2,local);
         PSMTXConcat(local,zRot,local); PSMTXConcat(local,scale1,local);
         PSMTXConcat((void*)((s32)cam+0x11C),local,local);
         GXLoadPosMtxImm(local,0); GXSetCurrentMtx(0);
-        effGetTexObj(i == 0 ? 0xC : 0xB,&tex); GXLoadTexObj(&tex,0);
-        color = (i == 0 ? unk_804295bc : dat_8042296c) & 0xFFFFFF00;
-        color |= *(u8*)(work+0x6F); GXSetTevColor(1,&color);
+        if (i == 0) {
+            Color color3;
+            effGetTexObj(0xC,&tex); GXLoadTexObj(&tex,0);
+                color3 = *(Color*)&unk_804295bc;
+            color3.a = *(s32*)(work+0x6C);
+            ((void (*)(s32, Color))GXSetTevColor)(1,color3);
+        } else {
+            Color color4;
+            effGetTexObj(0xB,&tex); GXLoadTexObj(&tex,0);
+                color4 = *(Color*)&dat_8042296c;
+            color4.a = *(s32*)(work+0x6C);
+            ((void (*)(s32, Color))GXSetTevColor)(1,color4);
+        }
         GXBegin(0x80,0,4);
-        *fifo=-6.4f; *fifo=6.4f; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f;
-        *fifo=6.4f; *fifo=6.4f; *fifo=0.0f; *fifo=1.0f; *fifo=0.0f;
-        *fifo=6.4f; *fifo=-6.4f; *fifo=0.0f; *fifo=1.0f; *fifo=1.0f;
-        *fifo=-6.4f; *fifo=-6.4f; *fifo=0.0f; *fifo=0.0f; *fifo=1.0f;
+        *fifo=outerLeft; *fifo=outerRight; *fifo=0.0f; *fifo=0.0f; *fifo=0.0f;
+        *fifo=outerRight; *fifo=outerRight; *fifo=0.0f; *fifo=1.0f; *fifo=0.0f;
+        *fifo=outerRight; *fifo=outerLeft; *fifo=0.0f; *fifo=1.0f; *fifo=1.0f;
+        *fifo=outerLeft; *fifo=outerLeft; *fifo=0.0f; *fifo=0.0f; *fifo=1.0f;
     }
     return 0;
 }

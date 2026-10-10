@@ -24,9 +24,16 @@ typedef struct PaperSoundEffect {
 STATIC_ASSERT_SIZEOF(PaperSoundEffect, 0x28);
 
 typedef struct PaperSoundEffectData {
-    u8 unk0[0x4 - 0x0];  //0x0
-    u32 unk4;            //0x4
-    u8 unk8[0x14 - 0x8]; //0x8
+    const void* name;  //0x0
+    u32 unk4;          //0x4 - runtime flags
+    const void* extra; //0x8
+    u8 volume;         //0xC
+    u8 pan;            //0xD
+    u8 specialFlag;    //0xE
+    u8 aux;            //0xF
+    u8 priority;       //0x10
+    u8 delay;          //0x11
+    u16 pitchRate;     //0x12
 } PaperSoundEffectData;
 STATIC_ASSERT_SIZEOF(PaperSoundEffectData, 0x14);
 

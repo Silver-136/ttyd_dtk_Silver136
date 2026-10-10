@@ -72,9 +72,11 @@ s32 evt_fade_entry(void* pEvt) {
 
 u32 evt_fade_end_wait(void) {
     s32 done = fadeIsFinish();
-    return 2 & ~((done - 1 | 1 - done) >> 31);
+    return (done - 1 | 1 - done) < 0 ? 0 : 2;
 }
 
+#pragma optimize_for_size off
+#pragma use_lmw_stmw off
 s32 evt_fade_set_spot_pos(int event) {
     extern s32 evtGetValue(void*, s32);
     extern void* camGetPtr(s32 cameraId);
@@ -86,9 +88,9 @@ s32 evt_fade_set_spot_pos(int event) {
     extern void GXSetProjectionv(f32* projection);
     s32* args;
     char* camera;
-    f32 oldProjection[7];
-    f32 viewport[6];
     f32 projection[7];
+    f32 viewport[6];
+    f32 oldProjection[7];
     f32 screenX;
     f32 screenY;
     f32 screenZ;
@@ -107,11 +109,13 @@ s32 evt_fade_set_spot_pos(int event) {
     GXGetViewportv(viewport);
     GXProject((f32)x, (f32)y, (f32)z, camera + 0x11C, projection, viewport,
               &screenX, &screenY, &screenZ);
-    fadeSetSpotPos(screenX + (f32)(-*(u16*)((char*)gp + 0x170) / 2),
+    fadeSetSpotPos((f32)(-*(u16*)((char*)gp + 0x170) / 2) + screenX,
                    (f32)(*(u16*)((char*)gp + 0x172) / 2) - screenY);
     GXSetProjectionv(oldProjection);
     return 2;
 }
+#pragma optimize_for_size reset
+#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off

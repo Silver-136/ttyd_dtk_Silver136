@@ -30,15 +30,25 @@ s32 evt_kinopio_setup(void* pEvt) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 msg_no(void* pEvt) {
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 index = evtGetValue(pEvt, args[0]);
-    void* data = *(void**)wp;
-
-    evtSetValue(pEvt, args[1], *(s32*)((s32)data + index * 4 + 0x58));
+    char* data = *(char**)wp;
+    index *= 4;
+    data += index;
+    {
+        s32 value = *(s32*)(data + 0x58);
+        evtSetValue(pEvt, args[1], value);
+    }
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 power_chk(void* pEvt) {
     extern void* pouchGetPtr(void);
     extern s32 pouchGetMaxHP(void);
@@ -75,18 +85,19 @@ s32 power_chk(void* pEvt) {
         }
         pouch = (void*)((s32)pouch + 0x38);
     }
-    if (pouchGetHP() != pouchGetMaxHP() || pouchGetFP() != pouchGetMaxFP() ||
-        pouchGetAP() != pouchGetMaxAP()) {
-        ok = 0;
-    }
-    if (ok != 0) {
+    if (pouchGetHP() == pouchGetMaxHP() && pouchGetFP() == pouchGetMaxFP() &&
+        pouchGetAP() == pouchGetMaxAP() && ok != 0) {
         evtSetValue(pEvt, args[0], 1);
     } else {
         evtSetValue(pEvt, args[0], 0);
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 coin_chk(void* pEvt) {
     extern s32 pouchGetCoin(void);
     s32* args = *(s32**)((s32)pEvt + 0x18);
@@ -98,6 +109,8 @@ s32 coin_chk(void* pEvt) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 USER_FUNC(get_ryoukin) {
     void* data = *(void**)wp;
@@ -195,6 +208,8 @@ USER_FUNC(get_from_bed_evt) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 paper_on(s32 pEvt, s32 isFirstCall) {
     extern void* gp;
     extern void* marioGetPtr(void);
@@ -203,23 +218,24 @@ u8 paper_on(s32 pEvt, s32 isFirstCall) {
     extern void marioChgPaper(void* name);
     extern s32 strcmp(void* a, void* b);
     extern char str_BGM_FF_GO_SLEEPING1_802ed368[];
-    extern char str_M_S_1_80421f24[];
+    extern char str_M_S_1_80421f24[6];
     extern f32 float_6p2832_80421f18;
     extern f32 float_360_80421f20;
     extern f32 float_0p2_80421f2c;
     s32* args = *(s32**)(pEvt + 0x18);
+    char* strings = str_BGM_FF_GO_SLEEPING1_802ed368;
     f32 angle = evtGetFloat((void*)pEvt, args[0]);
     void* mario = marioGetPtr();
-    f32 rad;
+    f64 rad;
 
     if (isFirstCall != 0) {
-        marioPaperOn(str_BGM_FF_GO_SLEEPING1_802ed368 + 0xBC);
+        marioPaperOn(strings + 0xBC);
         marioChgPose(str_M_S_1_80421f24);
-        marioChgPaper(str_BGM_FF_GO_SLEEPING1_802ed368 + 0xC4);
+        marioChgPaper(strings + 0xC4);
         *(s32*)(pEvt + 0x78) = 0;
     }
     if (*(s32*)(pEvt + 0x78) < 30) {
-        if (strcmp((void*)((s32)gp + 0x12C), str_BGM_FF_GO_SLEEPING1_802ed368 + 0x60) == 0) {
+        if (strcmp((void*)((s32)gp + 0x12C), strings + 0x60) == 0) {
             rad = (float_6p2832_80421f18 * angle) / float_360_80421f20;
             *(f32*)((s32)mario + 0x8C) -= float_0p2_80421f2c * (f32)cos(rad);
             *(f32*)((s32)mario + 0x94) -= float_0p2_80421f2c * (f32)sin(rad);
@@ -234,6 +250,8 @@ u8 paper_on(s32 pEvt, s32 isFirstCall) {
     *(f32*)((s32)mario + 0x1AC) = angle;
     return 0;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 USER_FUNC(paper_off) {
     marioPaperOff();
     return 2;

@@ -785,17 +785,17 @@ void battleCameraMoveTo(f32 posX, f32 posY, f32 posZ, f32 targetX, f32 targetY,
         Vec up;
     } LocalCamera;
     extern BattleWorkUnit* BattleGetMarioPtr(BattleWork* battleWork);
-    extern f32 float_0_8042273c;
-    extern f32 float_0p25_80422740;
-    extern f32 float_600_80422744;
-    extern f32 float_0p5_80422748;
-    extern f32 float_100_8042274c;
-    extern f32 float_neg100_80422750;
-    extern f32 float_1p5_80422754;
-    extern f32 float_1_80422758;
-    extern f32 float_15_8042275c;
-    extern f32 float_5_80422760;
-    extern f32 float_200_80422764;
+    extern const f32 float_0_8042273c;
+    extern const f32 float_0p25_80422740;
+    extern const f32 float_600_80422744;
+    extern const f32 float_0p5_80422748;
+    extern const f32 float_100_8042274c;
+    extern const f32 float_neg100_80422750;
+    extern const f32 float_1p5_80422754;
+    extern const f32 float_1_80422758;
+    extern const f32 float_15_8042275c;
+    extern const f32 float_5_80422760;
+    extern const f32 float_200_80422764;
     BattleWork* battleWork;
     BattleWorkCamera* cameraWork;
     BattleWorkUnit* mario;
@@ -822,11 +822,11 @@ void battleCameraMoveTo(f32 posX, f32 posY, f32 posZ, f32 targetX, f32 targetY,
         if (battleWork->flags & 0x100) {
             homeZ = mario->homePosition.z;
             posX += float_0_8042273c;
-            posY += float_0p25_80422740 * -homeZ;
             posZ += homeZ;
             targetX += float_0_8042273c;
-            targetY += float_0p25_80422740 * -homeZ;
             targetZ += homeZ;
+            posY += float_0p25_80422740 * -homeZ;
+            targetY += float_0p25_80422740 * -homeZ;
         }
         posX += cameraWork->offset.x;
         posY += cameraWork->offset.y;
@@ -842,10 +842,10 @@ void battleCameraMoveTo(f32 posX, f32 posY, f32 posZ, f32 targetX, f32 targetY,
     }
     if (clampX == 1) {
         upperLimit = float_100_8042274c + limitOffset;
-        lowerLimit = float_neg100_80422750 - limitOffset;
         if (posX > upperLimit) {
             posX = upperLimit;
         }
+        lowerLimit = float_neg100_80422750 - limitOffset;
         if (posX < lowerLimit) {
             posX = lowerLimit;
         }
@@ -1168,8 +1168,8 @@ s32 evt_btl_camera_set_homing_unit_audience(int event) {
     unitId = BattleTransID((void*)event, unitId);
     *(s32*)(work + 0x2764) = unitId;
     *(s32*)(work + 0x276C) = partId;
-    unit = BattleGetUnitPtr(work, unitId);
-    part = BattleGetUnitPartsPtr(unitId, partId);
+    unit = BattleGetUnitPtr(work, *(s32*)(work + 0x2764));
+    part = BattleGetUnitPartsPtr(*(s32*)(work + 0x2764), *(s32*)(work + 0x276C));
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     BtlUnit_GetHitPos(unit, part, &hit.x, &hit.y, &hit.z);
 

@@ -1,4 +1,16 @@
 #include "effect/n64/eff_shock_n64.h"
+
+typedef struct ShockN64Vertex {
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 s;
+    s16 t;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} ShockN64Vertex;
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 sx, f32 sy) {
@@ -159,6 +171,7 @@ void effShockDisp(s32 cameraId, s32 effectAddress) {
     extern void GXSetTevAlphaIn(s32, s32, s32, s32, s32);
     extern void GXLoadTexMtxImm(Mtx, s32, s32);
     extern void effSetVtxDescN64(void*);
+    extern ShockN64Vertex testsrc_shock_v[96];
     extern void tri2(s32, s32, s32, s32, s32, s32, s32, s32);
     extern void PSMTXTrans(Mtx, f32, f32, f32);
     extern void PSMTXRotRad(Mtx, f32, char);
@@ -169,6 +182,11 @@ void effShockDisp(s32 cameraId, s32 effectAddress) {
     extern void GXSetCullMode(s32);
     extern void GXBegin(s32, s32, s16);
     extern u32 dat_80425fd0;
+    extern f32 float_deg2rad_80425fd4;
+    extern f32 float_0_80425fd8;
+    extern f32 float_0p25_80425fdc;
+    extern f32 float_1_80425fe0;
+    extern f32 float_0p03125_80425fe4;
     extern u32 unk_80429804;
     u8* work = *(u8**)(effectAddress + 0xC);
     char* camera = camGetPtr(cameraId);
@@ -178,7 +196,7 @@ void effShockDisp(s32 cameraId, s32 effectAddress) {
     s32 type = *(s32*)work;
 
     PSMTXTrans(trans, *(f32*)(work + 4), *(f32*)(work + 8), *(f32*)(work + 0xC));
-    PSMTXRotRad(rot, -0.017453292f * *(f32*)((char*)camGetPtr(4) + 0x114), 'y');
+    PSMTXRotRad(rot, float_deg2rad_80425fd4 * -*(f32*)((char*)camGetPtr(4) + 0x114), 'y');
     PSMTXConcat(trans, rot, trans);
     PSMTXConcat(camera + 0x118, trans, model);
     color = (*(u8*)(work + 0x30) << 24) | (*(u8*)(work + 0x34) << 16) |
@@ -193,9 +211,9 @@ void effShockDisp(s32 cameraId, s32 effectAddress) {
             color = (dat_80425fd0 & 0xFFFFFF00) | *(u8*)(work + 0x14);
             GXSetTevColor(1, &color);
         }
-        PSMTXTrans(trans, 0.0f, *(f32*)(work + 0x2C), 0.0f);
-        PSMTXScale(scale, 0.25f * *(f32*)(work + 0x24),
-                   0.25f * *(f32*)(work + 0x24), 1.0f);
+        PSMTXTrans(trans, float_0_80425fd8, *(f32*)(work + 0x2C), float_0_80425fd8);
+        PSMTXScale(scale, float_0p25_80425fdc * *(f32*)(work + 0x24),
+                   float_0p25_80425fdc * *(f32*)(work + 0x24), float_1_80425fe0);
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(model, trans, trans);
         GXLoadPosMtxImm(trans, 0);
@@ -204,7 +222,7 @@ void effShockDisp(s32 cameraId, s32 effectAddress) {
         GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-        PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);
+        PSMTXScale(scale, float_0p03125_80425fe4, float_0p03125_80425fe4, float_0_80425fd8);
         GXLoadTexMtxImm(scale, 0x1E, 1);
         effGetTexObj(0x85, &tex);
         GXLoadTexObj(&tex, 0);
@@ -214,7 +232,7 @@ void effShockDisp(s32 cameraId, s32 effectAddress) {
         GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
         GXSetTevColorIn(0, 2, 8, 10, 15);
         GXSetTevAlphaIn(0, 7, 5, 4, 7);
-        effSetVtxDescN64((void*)0x803A8460);
+        effSetVtxDescN64(testsrc_shock_v);
         GXBegin(0x90, 0, 0x90);
         tri2(0x30,0x31,0x32,0,0x30,0x32,0x33,0); tri2(0x31,0x34,0x35,0,0x31,0x35,0x32,0);
         tri2(0x34,0x36,0x37,0,0x34,0x37,0x35,0); tri2(0x38,0x30,0x33,0,0x38,0x33,0x39,0);
@@ -242,6 +260,118 @@ void effShockDisp(s32 cameraId, s32 effectAddress) {
         tri2(38,37,47,0,38,47,44,0);
     }
 }
+
+const u32 dat_80425fd0 = 0xFFFF0000;
+const f32 float_deg2rad_80425fd4 = 0.01745329238474369f;
+const f32 float_0_80425fd8 = 0.0f;
+const f32 float_0p25_80425fdc = 0.25f;
+const f32 float_1_80425fe0 = 1.0f;
+const f32 float_0p03125_80425fe4 = 0.03125f;
+const f32 float_1p1_80425fe8 = 1.1f;
+const f32 float_0p05_80425fec = 0.05f;
+const f32 float_8_80425ff0 = 8.0f;
+const f32 float_0p9_80425ff4 = 0.9f;
+const f32 float_0p8_80425ff8 = 0.8f;
+const f32 float_0p5_80425ffc = 0.5f;
+
+ShockN64Vertex testsrc_shock_v[96] = {
+    { 242, -140, 0, 1800, 576, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 189, -51, 0, 1630, 862, 0x00, 0x00, 0x00, 0xFF },
+    { 174, -47, 0, 1581, 875, 0x00, 0x00, 0x00, 0xFF },
+    { 223, -129, 0, 1738, 612, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 280, 0, 0, 1920, 1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 258, 0, 0, 1848, 1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 189, 51, 0, 1630, 1186, 0x00, 0x00, 0x00, 0xFF },
+    { 174, 47, 0, 1581, 1173, 0x00, 0x00, 0x00, 0xFF },
+    { 139, -139, 0, 1467, 581, 0x00, 0x00, 0x00, 0xFF },
+    { 128, -128, 0, 1432, 616, 0x00, 0x00, 0x00, 0xFF },
+    { 140, -242, 0, 1472, 248, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 129, -223, 0, 1436, 310, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 51, -189, 0, 1186, 418, 0x00, 0x00, 0x00, 0xFF },
+    { 47, -174, 0, 1173, 467, 0x00, 0x00, 0x00, 0xFF },
+    { 0, -280, 0, 1024, 128, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 0, -258, 0, 1024, 200, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 242, 140, 0, 1800, 1472, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 223, 129, 0, 1738, 1436, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -51, 189, 0, 862, 1630, 0x00, 0x00, 0x00, 0xFF },
+    { -47, 174, 0, 875, 1581, 0x00, 0x00, 0x00, 0xFF },
+    { 0, 258, 0, 1024, 1848, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 0, 280, 0, 1024, 1920, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 47, 174, 0, 1173, 1581, 0x00, 0x00, 0x00, 0xFF },
+    { 51, 189, 0, 1186, 1630, 0x00, 0x00, 0x00, 0xFF },
+    { 140, 242, 0, 1472, 1800, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 129, 223, 0, 1436, 1738, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 139, 139, 0, 1467, 1467, 0x00, 0x00, 0x00, 0xFF },
+    { 128, 128, 0, 1432, 1432, 0x00, 0x00, 0x00, 0xFF },
+    { -51, -189, 0, 862, 418, 0x00, 0x00, 0x00, 0xFF },
+    { -47, -174, 0, 875, 467, 0x00, 0x00, 0x00, 0xFF },
+    { -139, 139, 0, 581, 1467, 0x00, 0x00, 0x00, 0xFF },
+    { -242, 140, 0, 248, 1472, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -189, 51, 0, 418, 1186, 0x00, 0x00, 0x00, 0xFF },
+    { -140, 242, 0, 576, 1800, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -280, 0, 0, 128, 1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -140, -242, 0, 576, 248, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -139, -139, 0, 581, 581, 0x00, 0x00, 0x00, 0xFF },
+    { -242, -140, 0, 248, 576, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -189, -51, 0, 418, 862, 0x00, 0x00, 0x00, 0xFF },
+    { -223, 129, 0, 310, 1436, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -128, 128, 0, 616, 1432, 0x00, 0x00, 0x00, 0xFF },
+    { -174, 47, 0, 467, 1173, 0x00, 0x00, 0x00, 0xFF },
+    { -258, 0, 0, 200, 1024, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -129, 223, 0, 612, 1738, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -174, -47, 0, 467, 875, 0x00, 0x00, 0x00, 0xFF },
+    { -129, -223, 0, 612, 310, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -128, -128, 0, 616, 616, 0x00, 0x00, 0x00, 0xFF },
+    { -223, -129, 0, 310, 612, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 279, -161, 0, 1916, -515, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 218, -58, 0, 1721, -187, 0x00, 0x00, 0x00, 0xFF },
+    { 139, -37, 0, 1470, -119, 0x00, 0x00, 0x00, 0xFF },
+    { 178, -103, 0, 1595, -330, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 322, 0, 0, 2054, 0, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 206, 0, 0, 1683, 0, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 218, 58, 0, 1721, 187, 0x00, 0x00, 0x00, 0xFF },
+    { 139, 37, 0, 1470, 119, 0x00, 0x00, 0x00, 0xFF },
+    { 159, -159, 0, 1534, -510, 0x00, 0x00, 0x00, 0xFF },
+    { 102, -102, 0, 1350, -326, 0x00, 0x00, 0x00, 0xFF },
+    { 161, -279, 0, 1539, -892, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 103, -178, 0, 1354, -571, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 58, -218, 0, 1211, -697, 0x00, 0x00, 0x00, 0xFF },
+    { 37, -139, 0, 1143, -446, 0x00, 0x00, 0x00, 0xFF },
+    { 0, -322, 0, 1024, -1030, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 0, -206, 0, 1024, -659, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 279, 161, 0, 1916, 515, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 178, 103, 0, 1595, 330, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -58, 218, 0, 837, 697, 0x00, 0x00, 0x00, 0xFF },
+    { -37, 139, 0, 905, 446, 0x00, 0x00, 0x00, 0xFF },
+    { 0, 206, 0, 1024, 659, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 0, 322, 0, 1024, 1030, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 37, 139, 0, 1143, 446, 0x00, 0x00, 0x00, 0xFF },
+    { 58, 218, 0, 1211, 697, 0x00, 0x00, 0x00, 0xFF },
+    { 161, 279, 0, 1539, 892, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 103, 178, 0, 1354, 571, 0xFF, 0xFF, 0xFF, 0xFF },
+    { 159, 159, 0, 1534, 510, 0x00, 0x00, 0x00, 0xFF },
+    { 102, 102, 0, 1350, 326, 0x00, 0x00, 0x00, 0xFF },
+    { -58, -218, 0, 837, -697, 0x00, 0x00, 0x00, 0xFF },
+    { -37, -139, 0, 905, -446, 0x00, 0x00, 0x00, 0xFF },
+    { -159, 159, 0, 514, 510, 0x00, 0x00, 0x00, 0xFF },
+    { -279, 161, 0, 132, 515, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -218, 58, 0, 327, 187, 0x00, 0x00, 0x00, 0xFF },
+    { -161, 279, 0, 509, 892, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -322, 0, 0, -6, 0, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -161, -279, 0, 509, -892, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -159, -159, 0, 514, -510, 0x00, 0x00, 0x00, 0xFF },
+    { -279, -161, 0, 132, -515, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -218, -58, 0, 327, -187, 0x00, 0x00, 0x00, 0xFF },
+    { -178, 103, 0, 453, 330, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -102, 102, 0, 698, 326, 0x00, 0x00, 0x00, 0xFF },
+    { -139, 37, 0, 578, 119, 0x00, 0x00, 0x00, 0xFF },
+    { -206, 0, 0, 365, 0, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -103, 178, 0, 694, 571, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -139, -37, 0, 578, -119, 0x00, 0x00, 0x00, 0xFF },
+    { -103, -178, 0, 694, -571, 0xFF, 0xFF, 0xFF, 0xFF },
+    { -102, -102, 0, 698, -326, 0x00, 0x00, 0x00, 0xFF },
+    { -178, -103, 0, 453, -330, 0xFF, 0xFF, 0xFF, 0xFF },
+};
 
 const f32 vec3_802fbef0[3] = { 0.0f, 0.0f, 0.0f };
 const char str_ShockN64_802fbf08[] = "ShockN64";

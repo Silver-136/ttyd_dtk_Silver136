@@ -6,7 +6,7 @@ void _btlSamplingEnemy(void* targetWork) {
     extern void* BtlUnit_GetPartsPtr(void*, s32);
     extern void* BattleGetUnitPartsPtr(s32, s32);
     extern void BtlUnit_GetPartsWorldPos(void*, f32*, f32*, f32*);
-    extern s32 BtlCompForwardLv(f32, s32);
+    extern s32 BtlCompForwardLv(f64, s32);
     extern void* battleGetUnitMonosiriPtr(s32);
 
     typedef struct TargetRecordRaw {
@@ -15,9 +15,12 @@ void _btlSamplingEnemy(void* targetWork) {
 
     s32 unitIdx;
     s32 partIdx;
+    s32 partCount;
+    u8* nextEntry;
     s32 filterIdx;
     s32 propertyIdx;
-    s8 count;
+    s32 count;
+    s8 enumerationCount;
     u8* target;
     void* unit;
     void* part;
@@ -32,8 +35,8 @@ void _btlSamplingEnemy(void* targetWork) {
     void* battleWork;
 
     battleWork = _battleWorkPointer;
-    count = 0;
-    target = (u8*)((s32)targetWork + 4);
+    enumerationCount = 0;
+    nextEntry = (u8*)((s32)targetWork + 4);
     if ((*(u32*)((s32)targetWork + 0xAC0) & 0x80000000) != 0) {
         *(s8*)((s32)targetWork + 0xA6C) = -1;
         return;
@@ -41,58 +44,67 @@ void _btlSamplingEnemy(void* targetWork) {
     {
         for (unitIdx = 0; unitIdx < 64; unitIdx++) {
             unit = BattleGetUnitPtr(battleWork, unitIdx);
-            if (unit == 0 || BtlUnit_CheckStatus(unit, 0x19) != 0 ||
+            if (unit == 0 || BtlUnit_CheckStatus(unit, 0x1B) != 0 ||
                 (*(u32*)((s32)unit + 0x104) & 0x40) != 0) {
                 continue;
             }
             part = *(void**)((s32)unit + 0x14);
-            for (partIdx = 0; partIdx < *(u8*)(*(s32*)((s32)unit + 0x10) + 0xB4);
+            partCount = *(u8*)(*(s32*)((s32)unit + 0x10) + 0xB4);
+            for (partIdx = 0; partIdx < partCount;
                  partIdx++, part = *(void**)part) {
-                if (part == 0 || (*(u32*)((s32)part + 0x1AC) & 0x100) != 0) {
+                if ((*(u32*)((s32)part + 0x1AC) & 0x10000) != 0) {
                     continue;
                 }
                 kindPart = *(void**)((s32)part + 4);
-                entry = target + count * 0x24;
+                entry = nextEntry;
                 {
-                s32 faceDirection = *(s8*)((s32)part + 0xBC);
-                s32 attackDirection = *(s8*)((s32)targetWork + 0xAC8);
+                s32 faceDirection = *(s8*)((s32)part + 0xBD);
                 s32 finalX;
+                f32 worldX;
+                f32 worldY;
+                f32 worldZ;
                 BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
-                if ((*(u32*)((s32)unit + 0x104) & 4) == 0) {
+                if ((*(u32*)((s32)unit + 0x104) & 2) == 0) {
                     y += *(f32*)((s32)part + 0x28) * *(f32*)((s32)unit + 0x114);
                 }
-                cursorX = x + (*(f32*)((s32)part + 0x188) + *(f32*)((s32)part + 0x194)) *
-                                  *(f32*)((s32)unit + 0x114) * faceDirection;
-                cursorY = y + (*(f32*)((s32)part + 0x18C) + *(f32*)((s32)part + 0x198)) *
-                                  *(f32*)((s32)unit + 0x114);
-                cursorZ = z + (*(f32*)((s32)part + 0x190) + *(f32*)((s32)part + 0x19C)) *
-                                  *(f32*)((s32)unit + 0x114);
+                worldX = x;
+                worldY = y;
+                worldZ = z + 5.0f;
+                x = (f32)faceDirection * (*(f32*)((s32)unit + 0x114) *
+                    (*(f32*)((s32)part + 0x188) + *(f32*)((s32)part + 0x194))) + worldX;
+                y = *(f32*)((s32)unit + 0x114) *
+                    (*(f32*)((s32)part + 0x18C) + *(f32*)((s32)part + 0x198)) + y;
+                z = *(f32*)((s32)unit + 0x114) *
+                    (*(f32*)((s32)part + 0x190) + *(f32*)((s32)part + 0x19C)) + z;
                 *(s16*)(entry + 0) = unitIdx;
                 *(s16*)(entry + 2) = *(s32*)kindPart;
-                *(s16*)(entry + 4) = (s32)cursorX;
-                *(s16*)(entry + 6) = (s32)cursorY;
-                *(s16*)(entry + 8) = (s32)cursorZ;
+                *(s16*)(entry + 4) = (s32)x;
+                *(s16*)(entry + 6) = (s32)y;
+                *(s16*)(entry + 8) = (s32)z;
                 *(s32*)(entry + 0x18) = 0;
                 *(s32*)(entry + 0x20) = -1;
                 if ((*(u32*)((s32)unit + 0x104) & 1) != 0 &&
                     (*(u32*)((s32)part + 0x1AC) & 0x20000) == 0) {
-                    *(s32*)(entry + 0x18) += attackDirection * 300;
+                    *(s32*)(entry + 0x18) += *(s8*)((s32)targetWork + 0xAC8) * 300;
                 }
                 *(s32*)(entry + 0x18) +=
                     *(s16*)((s32)part + 0x1A0) * faceDirection;
-                finalX = (s16)(x + (f32)*(s32*)(entry + 0x18));
+                finalX = (s16)(worldX + (f32)*(s32*)(entry + 0x18));
                 *(s32*)(entry + 0xC) = finalX;
-                *(s32*)(entry + 0x10) = (s16)y;
-                *(s32*)(entry + 0x14) = (s16)(z + 5.0f);
-                *(s8*)(entry + 0x1C) = BtlCompForwardLv((f32)finalX, attackDirection);
-                *(u8*)(entry + 0x1D) = z >= -30.0f;
+                *(s32*)(entry + 0x10) = (s16)worldY;
+                *(s32*)(entry + 0x14) = (s16)worldZ;
+                *(s8*)(entry + 0x1C) = BtlCompForwardLv((f32)finalX, *(s8*)((s32)targetWork + 0xAC8));
+                *(u8*)(entry + 0x1D) = *(s32*)(entry + 0x14) >= -30;
                 }
-                count++;
+                enumerationCount++;
+                nextEntry += 0x24;
             }
         }
     }
+    target = (u8*)((s32)targetWork + 4);
     *(u8*)((s32)targetWork + 0xAB7) = 0;
-    *(s8*)((s32)targetWork + 0xA6C) = count;
+    *(s8*)((s32)targetWork + 0xA6C) = enumerationCount;
+    count = *(s8*)((s32)targetWork + 0xA6C);
     for (filterIdx = 0; filterIdx < count; filterIdx++) {
         u8* filterEntry = (u8*)((s32)targetWork + 4 + filterIdx * 0x24);
         s32 filterUnitIdx = *(s16*)(filterEntry + 0);
@@ -105,54 +117,53 @@ void _btlSamplingEnemy(void* targetWork) {
         s8 attackerAlliance = *(s8*)((s32)targetWork + 0xABC);
         s32 valid = 1;
 
-        if ((classFlags & 0x10000) != 0 && kind != 0xDE) {
+        if ((classFlags & 0x80000000) != 0) valid = 0;
+        else if ((classFlags & 0x10000) != 0 && kind != 0xDE) {
             valid = 0;
         }
-        if ((classFlags & 0x20000) != 0 && (kind < 0xD8 || kind > 0xD9)) {
+        else if ((classFlags & 0x20000) != 0 && (kind < 0xD8 || kind > 0xD9)) {
             valid = 0;
         }
-        if ((classFlags & 0x1) != 0 && (kind == 0xDE || kind == 0xDF)) {
+        else if ((classFlags & 0x1) != 0 && (kind == 0xDE || kind == 0xDF)) {
             valid = 0;
         }
-        if ((classFlags & 0x2) != 0 && kind >= 0xE0 && kind <= 0xE6) {
+        else if ((classFlags & 0x2) != 0 && kind >= 0xE0 && kind <= 0xE6) {
             valid = 0;
         }
-        if ((classFlags & 0x10) != 0 && kind >= 1 && kind <= 0xD7) {
+        else if ((classFlags & 0x10) != 0 && kind >= 1 && kind <= 0xD7) {
             valid = 0;
         }
-        if ((classFlags & 0x40) != 0 && kind >= 0xDA && kind <= 0xDD) {
+        else if ((classFlags & 0x40) != 0 && kind >= 0xDA && kind <= 0xDD) {
             valid = 0;
         }
-        if ((classFlags & 0x20) != 0 && kind >= 0xD8 && kind <= 0xD9) {
+        else if ((classFlags & 0x20) != 0 && kind >= 0xD8 && kind <= 0xD9) {
             valid = 0;
         }
-        if ((classFlags & 0x1000) != 0 && attackerIdx == filterUnitIdx) {
+        else if ((classFlags & 0x1000) != 0 && attackerIdx == *(s32*)((s32)filterUnit + 4)) {
             valid = 0;
         }
-        if ((classFlags & 0x100) != 0 &&
+        else if ((classFlags & 0x100) != 0 &&
             attackerAlliance == *(s8*)((s32)filterUnit + 0xC)) {
             valid = 0;
         }
-        if ((classFlags & 0x200) != 0 &&
+        else if ((classFlags & 0x200) != 0 &&
             attackerAlliance != *(s8*)((s32)filterUnit + 0xC) &&
             *(s8*)((s32)filterUnit + 0xC) != 2) {
             valid = 0;
         }
-        if ((classFlags & 0x2000) != 0 && attackerIdx != filterUnitIdx) {
-            void* attacker = BattleGetUnitPtr(battleWork, attackerIdx);
-            if (*(s32*)((s32)attacker + 8) == kind) {
-                valid = 0;
-            }
-        }
-        if ((classFlags & 0x4000) != 0 && attackerIdx != filterUnitIdx) {
+        else if ((classFlags & 0x2000) != 0 && attackerIdx != *(s32*)((s32)filterUnit + 4) &&
+                 *(s32*)((s32)BattleGetUnitPtr(battleWork, attackerIdx) + 8) == kind) {
             valid = 0;
         }
-        if ((classFlags & 0x100000) != 0 &&
+        else if ((classFlags & 0x4000) != 0 && attackerIdx != *(s32*)((s32)filterUnit + 4)) {
+            valid = 0;
+        }
+        else if ((classFlags & 0x100000) != 0 &&
             !(((partAttrs & 1) != 0 || (partAttrs & 2) != 0) &&
               (partAttrs & 0x40000) == 0)) {
             valid = 0;
         }
-        if ((classFlags & 0x200000) != 0 &&
+        else if ((classFlags & 0x200000) != 0 &&
             !(((partAttrs & 1) != 0 || (partAttrs & 2) != 0 ||
                (partAttrs & 4) != 0) && (partAttrs & 0x10) == 0 &&
               (partAttrs & 0x40000) == 0)) {
@@ -160,9 +171,13 @@ void _btlSamplingEnemy(void* targetWork) {
         }
         if (!valid) {
             s32 moveIdx;
-            for (moveIdx = filterIdx; moveIdx < count - 1; moveIdx++) {
-                *(TargetRecordRaw*)((s32)targetWork + 4 + moveIdx * 0x24) =
-                    *(TargetRecordRaw*)((s32)targetWork + 4 + (moveIdx + 1) * 0x24);
+            for (moveIdx = filterIdx; moveIdx < count - 1U; moveIdx++) {
+                {
+                    u32* dst = (u32*)((s32)targetWork + 4 + moveIdx * 0x24);
+                    u32* src = (u32*)((s32)targetWork + 4 + (moveIdx + 1) * 0x24);
+                    s32 word;
+                    for (word = 0; word < 9; word++) *dst++ = *src++;
+                }
             }
             count--;
             filterIdx--;
@@ -195,45 +210,49 @@ void _btlSamplingEnemy(void* targetWork) {
             if ((propertyFlags & 0x4) != 0 && (unitAttrs & 2) != 0) {
                 valid = 0;
             }
-            if ((propertyFlags & 0x8) != 0 && (unitAttrs & 4) != 0) {
+            else if ((propertyFlags & 0x8) != 0 && (unitAttrs & 4) != 0) {
                 valid = 0;
             }
-            if ((propertyFlags & 0x10) != 0 &&
+            else if ((propertyFlags & 0x10) != 0 &&
                 (unitAttrs & (2 | 4)) == 0) {
                 valid = 0;
             }
-            if ((propertyFlags & 0x1000) != 0 &&
+            else if ((propertyFlags & 0x1000) != 0 &&
                 (partAttrs & 0x100000) != 0) {
                 valid = 0;
             }
-            if ((propertyFlags & 0x2000) != 0 &&
+            else if ((propertyFlags & 0x2000) != 0 &&
                 (partAttrs & 0x200000) != 0 &&
                 ((propertyFlags & 0x100000) == 0 ||
                  *(s32*)((s32)targetWork + 0xAB8) != *(s16*)(propertyEntry + 0))) {
                 valid = 0;
             }
-            if ((propertyFlags & 0x4000) != 0 &&
+            else if ((propertyFlags & 0x4000) != 0 &&
                 (partAttrs & 0x400000) != 0) {
                 valid = 0;
             }
-            if ((propertyFlags & 0x8000) != 0 &&
+            else if ((propertyFlags & 0x8000) != 0 &&
                 (partAttrs & 0x400000) == 0) {
                 valid = 0;
             }
-            if ((propertyFlags & 0x2000000) != 0 &&
+            else if ((propertyFlags & 0x2000000) != 0 &&
                 (unitAttrs & 0x20) != 0) {
                 valid = 0;
             }
-            if ((propertyFlags & 0x4000000) != 0 &&
+            else if ((propertyFlags & 0x4000000) != 0 &&
                 (partAttrs & 0x2000000) != 0) {
                 valid = 0;
             }
         }
         if (!valid) {
             s32 moveIdx;
-            for (moveIdx = propertyIdx; moveIdx < count - 1; moveIdx++) {
-                *(TargetRecordRaw*)((s32)targetWork + 4 + moveIdx * 0x24) =
-                    *(TargetRecordRaw*)((s32)targetWork + 4 + (moveIdx + 1) * 0x24);
+            for (moveIdx = propertyIdx; moveIdx < count - 1U; moveIdx++) {
+                {
+                    u32* dst = (u32*)((s32)targetWork + 4 + moveIdx * 0x24);
+                    u32* src = (u32*)((s32)targetWork + 4 + (moveIdx + 1) * 0x24);
+                    s32 word;
+                    for (word = 0; word < 9; word++) *dst++ = *src++;
+                }
             }
             count--;
             propertyIdx--;
@@ -272,11 +291,15 @@ void _btlSamplingEnemy(void* targetWork) {
 
             if (!valid) {
                 s32 moveIdx;
-                for (moveIdx = filterIdx; moveIdx < count - 1; moveIdx++) {
-                    *(TargetRecordRaw*)((s32)targetWork + 4 +
-                                         moveIdx * 0x24) =
-                        *(TargetRecordRaw*)((s32)targetWork + 4 +
+                for (moveIdx = filterIdx; moveIdx < count - 1U; moveIdx++) {
+                    {
+                    u32* dst = (u32*)((s32)targetWork + 4 +
+                                         moveIdx * 0x24);
+                    u32* src = (u32*)((s32)targetWork + 4 +
                                              (moveIdx + 1) * 0x24);
+                    s32 word;
+                    for (word = 0; word < 9; word++) *dst++ = *src++;
+                }
                 }
                 count--;
                 filterIdx--;
@@ -332,9 +355,13 @@ void _btlSamplingEnemy(void* targetWork) {
             }
             if (!valid) {
                 s32 moveIdx;
-                for (moveIdx = filterIdx; moveIdx < count - 1; moveIdx++) {
-                    *(TargetRecordRaw*)(target + moveIdx * 0x24) =
-                        *(TargetRecordRaw*)(target + (moveIdx + 1) * 0x24);
+                for (moveIdx = filterIdx; moveIdx < count - 1U; moveIdx++) {
+                    {
+                    u32* dst = (u32*)(target + moveIdx * 0x24);
+                    u32* src = (u32*)(target + (moveIdx + 1) * 0x24);
+                    s32 word;
+                    for (word = 0; word < 9; word++) *dst++ = *src++;
+                }
                 }
                 count--;
                 filterIdx--;
@@ -353,30 +380,8 @@ void _btlSamplingEnemy(void* targetWork) {
         s32 sortIdx;
         s32 compareIdx;
 
-        if (*(s8*)((s32)targetWork + 0xAC8) > 0) {
-            for (sortIdx = 0; sortIdx < count - 1; sortIdx++) {
-                for (compareIdx = sortIdx + 1;
-                     compareIdx < count;
-                     compareIdx++) {
-                    s8 leftIndex = targetIndices[sortIdx];
-                    s8 rightIndex = targetIndices[compareIdx];
-                    u8* leftEntry = target + leftIndex * 0x24;
-                    u8* rightEntry = target + rightIndex * 0x24;
-                    s32 leftKey =
-                        *(s16*)(leftEntry + 4) +
-                        *(s32*)(leftEntry + 0x18) * 10;
-                    s32 rightKey =
-                        *(s16*)(rightEntry + 4) +
-                        *(s32*)(rightEntry + 0x18) * 10;
-
-                    if (leftKey > rightKey) {
-                        targetIndices[sortIdx] = rightIndex;
-                        targetIndices[compareIdx] = leftIndex;
-                    }
-                }
-            }
-        } else {
-            for (sortIdx = 0; sortIdx < count - 1; sortIdx++) {
+        if (*(s8*)((s32)targetWork + 0xAC8) < 1) {
+            for (sortIdx = 0; sortIdx < count - 1U; sortIdx++) {
                 for (compareIdx = sortIdx + 1;
                      compareIdx < count;
                      compareIdx++) {
@@ -392,6 +397,28 @@ void _btlSamplingEnemy(void* targetWork) {
                         *(s32*)(rightEntry + 0x18) * 10;
 
                     if (leftKey <= rightKey) {
+                        targetIndices[sortIdx] = rightIndex;
+                        targetIndices[compareIdx] = leftIndex;
+                    }
+                }
+            }
+        } else {
+            for (sortIdx = 0; sortIdx < count - 1U; sortIdx++) {
+                for (compareIdx = sortIdx + 1;
+                     compareIdx < count;
+                     compareIdx++) {
+                    s8 leftIndex = targetIndices[sortIdx];
+                    s8 rightIndex = targetIndices[compareIdx];
+                    u8* leftEntry = target + leftIndex * 0x24;
+                    u8* rightEntry = target + rightIndex * 0x24;
+                    s32 leftKey =
+                        *(s16*)(leftEntry + 4) +
+                        *(s32*)(leftEntry + 0x18) * 10;
+                    s32 rightKey =
+                        *(s16*)(rightEntry + 4) +
+                        *(s32*)(rightEntry + 0x18) * 10;
+
+                    if (rightKey < leftKey) {
                         targetIndices[sortIdx] = rightIndex;
                         targetIndices[compareIdx] = leftIndex;
                     }
@@ -440,9 +467,11 @@ void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, in
     extern s32 BtlUnit_GetMaxFp(void*);
     extern s32 BtlUnit_GetFp(void*);
     extern u8 itemDataTable[];
-    u32 weights[74];
-    s8* order;
-    s8 count;
+    typedef struct TargetInfo { s16 unitIndex; s16 partIndex; u8 rest[32]; } TargetInfo;
+    typedef struct Targets { void* weapon; TargetInfo info[74]; s8 count; s8 order[74]; u8 flags; s32 attacker; } Targets;
+    Targets* tw = (Targets*)targetWork;
+    s32 weights[74];
+
     s32 i;
     s32 index;
     s32 itemId;
@@ -457,99 +486,107 @@ void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, in
     battleWork = _battleWorkPointer;
     *unitIdx = -1;
     *partIdx = 0;
-    count = *(u8*)((s32)targetWork + 0xA6C);
-    if (count > 0) {
+    if (tw->count > 0) {
 
-    attacker = BattleGetUnitPtr(battleWork, *(s32*)((s32)targetWork + 0xAB8));
-    order = (s8*)((s32)targetWork + 0xA6D);
-    *unitIdx = *(s16*)((s32)targetWork + 4 + order[0] * 0x24);
-    *partIdx = *(s16*)((s32)targetWork + 6 + order[0] * 0x24);
+    attacker = BattleGetUnitPtr(battleWork, tw->attacker);
+    *unitIdx = tw->info[tw->order[0]].unitIndex;
+    *partIdx = tw->info[tw->order[0]].partIndex;
 
     for (i = 0; i < 74; i++) {
         weights[i] = 0;
     }
-    weights[order[0]] += 10;
+    weights[tw->order[0]] += 10;
 
-    for (i = 0; i < count; i++) {
-        index = order[i];
+    for (i = 0; i < tw->count; i++) {
+        index = tw->order[i];
         unit = BattleGetUnitPtr(battleWork,
-                                *(s16*)((s32)targetWork + 4 + index * 0x24));
+                                tw->info[index].unitIndex);
         weights[index] += 100;
 
         if ((weighting & 1) && *(s32*)((s32)unit + 8) == 0xDE) {
-            weights[index] = (u32)(1.5f * (f32)weights[index]);
+            weights[index] = (s32)(1.5f * (f32)weights[index]);
         }
-        if ((weighting & 2) && *(s32*)((s32)unit + 8) > 0xDF &&
+        if ((weighting & 2) && *(s32*)((s32)unit + 8) >= 0xE0 &&
             *(s32*)((s32)unit + 8) < 0xE7) {
-            weights[index] = (u32)(1.5f * (f32)weights[index]);
+            weights[index] = (s32)(1.5f * (f32)weights[index]);
         }
         if (weighting & 4) {
-            weights[index] = (u32)((f32)weights[index] *
-                (0.1f + 0.4f * (f32)(count - i)));
+            weights[index] = (s32)((f32)weights[index] *
+                (0.1f + 0.4f * (f32)(tw->count - i)));
         }
         if (weighting & 8) {
-            weights[index] = (u32)((0.5f + 0.4f * (f32)i) *
+            weights[index] = (s32)((0.5f + 0.4f * (f32)i) *
                 (f32)weights[index]);
         }
         if ((weighting & 0x10) &&
             *(s8*)((s32)attacker + 0xC) == *(s8*)((s32)unit + 0xC)) {
-            weights[index] = (u32)(1.5f * (f32)weights[index]);
+            weights[index] = (s32)(1.5f * (f32)weights[index]);
         }
         if ((weighting & 0x20) &&
             *(s8*)((s32)attacker + 0xC) != *(s8*)((s32)unit + 0xC) &&
             *(s8*)((s32)unit + 0xC) != 2) {
-            weights[index] = (u32)(1.5f * (f32)weights[index]);
+            weights[index] = (s32)(1.5f * (f32)weights[index]);
         }
         if (weighting & 0x100) {
-            weights[index] = (u32)((2.0f -
+            weights[index] = (s32)((2.0f -
                 (f32)*(s16*)((s32)unit + 0x10C) /
                 (f32)*(s16*)((s32)unit + 0x108)) * (f32)weights[index]);
         }
         if (weighting & 0x200) {
-            weights[index] = (u32)((1.0f +
+            weights[index] = (s32)((1.0f +
                 (f32)*(s16*)((s32)unit + 0x10C) /
                 (f32)*(s16*)((s32)unit + 0x108)) * (f32)weights[index]);
         }
         if (weighting & 0x400) {
-            weights[index] = (u32)((1.5f - 0.05f *
-                (f32)*(s16*)((s32)unit + 0x10C)) * (f32)weights[index]);
+            weights[index] = (s32)((-(0.05f *
+                (f32)*(s16*)((s32)unit + 0x10C) - 1.5f)) * (f32)weights[index]);
         }
         if (weighting & 0x800) {
-            weights[index] = (u32)((1.0f + 0.05f *
+            weights[index] = (s32)((1.0f + 0.05f *
                 (f32)*(s16*)((s32)unit + 0x10C)) * (f32)weights[index]);
         }
         if ((weighting & 0x1000) &&
             *(s16*)((s32)unit + 0x10C) <=
             *(u8*)(*(s32*)((s32)unit + 0x10) + 0xD)) {
-            weights[index] = (u32)(1.5f * (f32)weights[index]);
+            weights[index] = (s32)(1.5f * (f32)weights[index]);
         }
 
-        weapon = *(void**)targetWork;
+        weapon = tw->weapon;
         if (weapon != 0) {
             if (*(u32*)((s32)unit + 0x104) & 0x20000) {
                 weights[index] = 1;
             }
             itemId = *(s32*)((s32)weapon + 8);
-            if (itemId == 0x8E) {
+            switch (itemId) {
+            case 0: break;
+            case 0x8E: {
                 if (BtlUnit_CanActStatus(unit) == 0 ||
                     BtlUnit_CheckStatus(unit, 0xA) != 0) {
                     weights[index] = 1;
                 }
-            } else if (itemId == 0x87) {
+            } break;
+            case 0x87: {
                 if (BtlUnit_CheckStatus(unit, 6)) weights[index] = 1;
-            } else if (itemId == 0x86) {
+            } break;
+            case 0x86: {
                 if (BtlUnit_CheckStatus(unit, 0x12)) weights[index] = 1;
-            } else if (itemId == 0x89) {
+            } break;
+            case 0x89: {
                 if (BtlUnit_CheckStatus(unit, 5)) weights[index] = 1;
-            } else if (itemId == 0x88) {
+            } break;
+            case 0x88: {
                 if (BtlUnit_CheckStatus(unit, 7)) weights[index] = 1;
-            } else if (itemId == 0x8F) {
+            } break;
+            case 0x8F: {
                 if (BtlUnit_CheckStatus(unit, 0xE)) weights[index] = 1;
-            } else if (itemId == 0x92) {
+            } break;
+            case 0x92: {
                 if (BtlUnit_CheckStatus(unit, 0xB)) weights[index] = 1;
-            } else if (itemId == 0x93) {
+            } break;
+            case 0x93: {
                 if (BtlUnit_CheckStatus(unit, 0xF)) weights[index] = 1;
-            } else if (itemId == 0x99) {
+            } break;
+            case 0x99: {
                 if (BtlUnit_CheckStatus(unit, 1) == 0 &&
                     BtlUnit_CheckStatus(unit, 2) == 0 &&
                     BtlUnit_CheckStatus(unit, 3) == 0 &&
@@ -562,16 +599,21 @@ void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, in
                     BtlUnit_CheckStatus(unit, 0x14) == 0) {
                     weights[index] = 1;
                 }
-            } else if (*(s8*)(itemDataTable + itemId * 0x28 + 0x1E) != 0) {
+            } break;
+            default: if (*(s8*)(itemDataTable + itemId * 0x28 + 0x1E) != 0) {
                 s32 maxFp = BtlUnit_GetMaxFp(unit);
                 s32 fp = BtlUnit_GetFp(unit);
                 if (fp < maxFp) {
-                    weights[index] = (u32)((0.1f * (f32)(maxFp - fp) + 1.0f) *
+                    weights[index] = (s32)((0.1f * (f32)(BtlUnit_GetMaxFp(unit) - BtlUnit_GetFp(unit)) + 1.0f) *
                                            (f32)weights[index]);
-                } else if (*(s8*)(itemDataTable + itemId * 0x28 + 0x1D) == 0 &&
-                           *(s8*)(itemDataTable + itemId * 0x28 + 0x1F) == 0) {
-                    weights[index] = 1;
+                } else {
+                    itemId = *(s32*)((s32)tw->weapon + 8);
+                    if (*(s8*)(itemDataTable + itemId * 0x28 + 0x1D) == 0 &&
+                        *(s8*)(itemDataTable + itemId * 0x28 + 0x1F) == 0) {
+                        weights[index] = 1;
+                    }
                 }
+            }
             }
         }
     }
@@ -600,8 +642,8 @@ void BattleChoiceSamplingEnemy(void* targetWork, u32 weighting, int* unitIdx, in
             }
         }
     }
-    *unitIdx = *(s16*)((s32)targetWork + 4 + selected * 0x24);
-    *partIdx = *(s16*)((s32)targetWork + 6 + selected * 0x24);
+    *unitIdx = tw->info[selected].unitIndex;
+    *partIdx = tw->info[selected].partIndex;
     }
 }
 
@@ -612,31 +654,26 @@ void BattleGetFirstAttackUnit(void* battleWork, void** part, void** unit) {
     void* otherUnit;
     s32 i;
     s32 mode;
-
     otherUnit = NULL;
     for (i = 0; i < 64; i++) {
         foundUnit = BattleGetUnitPtr(battleWork, i);
-        if (foundUnit != NULL && *(s8*)((s32)foundUnit + 0xC) == 1) {
-            break;
-        }
+        if (foundUnit != NULL && *(s8*)((s32)foundUnit + 0xC) == 1) break;
     }
-
     mode = *(s32*)(*(s32*)((s32)battleWork + 0x2738) + 8);
     switch (mode) {
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
+        case 1: case 2: case 3: case 4: case 5: case 6: {
+            void* next = BattleGetMarioPtr(battleWork);
             otherUnit = foundUnit;
-            foundUnit = BattleGetMarioPtr(battleWork);
+            foundUnit = next;
             break;
-        case 7:
-        case 8:
+        }
+        case 7: case 8: {
+            void* next = BattleGetPartnerPtr(battleWork, BattleGetMarioPtr(battleWork));
             otherUnit = foundUnit;
-            foundUnit = BattleGetPartnerPtr(battleWork, BattleGetMarioPtr(battleWork));
+            foundUnit = next;
             break;
+        }
+        case 9:
         default:
             otherUnit = BattleGetMarioPtr(battleWork);
             break;

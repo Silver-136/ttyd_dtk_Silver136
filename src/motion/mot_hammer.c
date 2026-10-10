@@ -344,6 +344,8 @@ s32 marioChkHammer2(void) {
 }
 
 
+#pragma opt_common_subs off
+#pragma use_lmw_stmw off
 void mot_hammer2(void) {
     extern void* marioGetPtr(void);
     extern s32 pouchGetHammerLv(void);
@@ -648,9 +650,11 @@ void mot_hammer2(void) {
                 DISP_FLAGS &= ~0x100;
                 SUBMOTION = 23;
                 TIMER = 1;
+            case 23:
                 TIMER--;
                 if (TIMER <= 0) {
                     TIMER = 1;
+                case 24:
                     TIMER--;
                     if (TIMER <= 0) {
                         DISP_FLAGS &= ~4;
@@ -685,6 +689,8 @@ void mot_hammer2(void) {
 #undef DISP_FLAGS
 #undef FLAGS
 }
+#pragma use_lmw_stmw reset
+#pragma opt_common_subs reset
 
 f32 marioGetAngleKaitenHammer(void) {
     extern f32 float_270_80420ac4;
@@ -744,6 +750,7 @@ void* hitEstimate(s32* outKind) {
     extern const f32 float_5_80420adc;
     extern const f32 float_26_80420ae0;
     extern const f32 float_0p7854_80420ae8;
+    extern const f32 float_36_80420aec;
     extern const f32 float_20_80420af0;
     extern const f32 float_34_80420af4;
     extern const f32 float_37_80420af8;
@@ -771,6 +778,7 @@ void* hitEstimate(s32* outKind) {
     f32 cosv;
     f32 angle;
     f32 side;
+    f32 dirY;
     f32 height;
     f32 dist;
     s32 i;
@@ -784,23 +792,25 @@ void* hitEstimate(s32* outKind) {
     mario = marioGetPtr();
     *outKind = 0;
 
-    side = float_0_80420ab8;
+    angle = *(f32*)((s32)mario + 0x1AC);
     if ((*(u32*)((s32)marioGetPtr() + 0x4) & 0x80000000) != 0) {
         side = float_neg20_80420abc;
+    } else {
+        side = float_0_80420ab8;
     }
 
-    if (*(f32*)((s32)mario + 0x1AC) >= float_90_80420ac0 &&
-        *(f32*)((s32)mario + 0x1AC) <= float_270_80420ac4) {
+    if (angle >= float_90_80420ac0 && angle <= float_270_80420ac4) {
         angle = toMovedir2(float_180_80420ac8, side);
     } else {
         angle = toMovedir2(float_0_80420ab8, side);
     }
-    sincosf(angle, &cosv, &sinv);
+    sincosf(angle, &sinv, &cosv);
 
     height = *(f32*)((s32)mario + 0x1BC);
+    dirY = -(f32)cos(float_3p1416_80420acc);
     direction1 = directions[1];
     direction1.x = cosv;
-    direction1.y = -(f32)cos(float_3p1416_80420acc);
+    direction1.y = dirY;
     direction1.z = sinv;
     position.x = *(f32*)((s32)mario + 0x8C);
     position.y = *(f32*)((s32)mario + 0x90) + height + float_4_80420ad0;
@@ -814,9 +824,10 @@ void* hitEstimate(s32* outKind) {
         return hit;
     }
 
+    dirY = -(f32)cos(float_1p2217_80420ad8);
     direction2 = directions[2];
     direction2.x = cosv;
-    direction2.y = -(f32)cos(float_1p2217_80420ad8);
+    direction2.y = dirY;
     direction2.z = sinv;
     position.x = cosv * float_5_80420adc + *(f32*)((s32)mario + 0x8C);
     position.y = *(f32*)((s32)mario + 0x90) + height;
@@ -826,17 +837,18 @@ void* hitEstimate(s32* outKind) {
     probe.radius = float_26_80420ae0;
     hit = hitCheckVecFilter(&probe, 0);
     if (hit != 0 && (hitGetAttr(hit) & 0x800005) == 0) {
-        if (*(f32*)((s32)&probe + 0x28) - *(f32*)((s32)mario + 0x90) <= float_30_80420ae4) {
-            *outKind = 5;
-        } else {
+        if (*(f32*)((s32)&probe + 0x28) - *(f32*)((s32)mario + 0x90) > float_30_80420ae4) {
             *outKind = 4;
+        } else {
+            *outKind = 5;
         }
         return hit;
     }
 
+    dirY = -(f32)cos(float_0p7854_80420ae8);
     direction3 = directions[3];
     direction3.x = cosv;
-    direction3.y = -(f32)cos(float_0p7854_80420ae8);
+    direction3.y = dirY;
     direction3.z = sinv;
     position.x = cosv * float_5_80420adc + *(f32*)((s32)mario + 0x8C);
     position.y = *(f32*)((s32)mario + 0x90) + height;
@@ -845,11 +857,7 @@ void* hitEstimate(s32* outKind) {
     probe.end = direction3;
     hit = hitCheckVecFilter(&probe, 0);
     if (hit != 0 && (hitGetAttr(hit) & 0x800005) == 0) {
-        if (*(f32*)((s32)&probe + 0x28) - *(f32*)((s32)mario + 0x90) <= float_30_80420ae4) {
-            *outKind = 5;
-        } else {
-            *outKind = 4;
-        }
+        *outKind = 5;
         return hit;
     }
 
@@ -857,11 +865,12 @@ void* hitEstimate(s32* outKind) {
     direction4.y = -(f32)cos(float_0_80420ab8);
     probe.end = direction4;
     for (i = 0; i < 2; i++) {
+        probe.radius = float_36_80420aec;
         dist = float_20_80420af0;
         if (i != 0) {
-            dist = float_34_80420af4;
+            probe.radius = float_34_80420af4;
             if ((*(u32*)((s32)mario + 0x4) & 0x80000000) != 0) {
-                dist = float_37_80420af8;
+                probe.radius = float_37_80420af8;
             }
         }
         position.x = cosv * dist + *(f32*)((s32)mario + 0x8C);
@@ -870,10 +879,10 @@ void* hitEstimate(s32* outKind) {
         probe.start = position;
         hit = hitCheckVecFilter(&probe, 0);
         if (hit != 0 && (hitGetAttr(hit) & 0x800005) == 0) {
-            if (*(f32*)((s32)&probe + 0x28) - *(f32*)((s32)mario + 0x90) <= float_13_80420afc) {
-                *outKind = 6;
-            } else {
+            if (*(f32*)((s32)&probe + 0x28) - *(f32*)((s32)mario + 0x90) > float_13_80420afc) {
                 *outKind = 5;
+            } else {
+                *outKind = 6;
             }
             return hit;
         }

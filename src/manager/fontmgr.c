@@ -203,23 +203,17 @@ void FontDrawColorIDX(s32 idx) {
     GXSetTevColor(1, &gxColor);
 }
 
+#pragma optimize_for_size off
 void FontDrawColor(void* colorPtr) {
     extern void GXSetTevColor(s32 reg, void* color);
     u32 color;
-    s32 product;
-    s32 quotient;
-    u8 alpha;
 
-    alpha = ((u8*)colorPtr)[3];
     fontColor = *(u32*)colorPtr;
-    product = alpha * fontAlpha;
-    quotient = __mulhw(0x80808081, product);
-    quotient = (quotient + product) >> 7;
-    quotient += (u32)quotient >> 31;
-    ((u8*)colorPtr)[3] = quotient;
+    ((u8*)colorPtr)[3] = (((u8*)colorPtr)[3] * fontAlpha) / 255;
     color = *(u32*)colorPtr;
     GXSetTevColor(1, &color);
 }
+#pragma optimize_for_size reset
 
 void FontDrawColor_(void) {
     typedef struct Color {
@@ -253,10 +247,11 @@ void FontDrawScale(f32 scale) {
     fontScale.z = scale;
 }
 
-void FontDrawScaleVec(Vec* scale) {
+void FontDrawScaleVec(Vec* __restrict scale) {
     fontScale = *scale;
 }
 
+#pragma optimize_for_size off
 void FontDrawCode(f64 x, f64 y, u16 code) {
     extern void PSMTXScale(void*, f32, f32, f32);
     extern void PSMTXTransApply(void*, void*, f32, f32, f32);
@@ -293,7 +288,9 @@ void FontDrawCode(f64 x, f64 y, u16 code) {
     }
     _JUTFont_DrawPos(code, 0, 0);
 }
+#pragma optimize_for_size reset
 
+#pragma optimize_for_size off
 void FontDrawCodeMtx(void* mtx, u16 code) {
 
     extern void PSMTXConcat(void*, void*, void*);
@@ -325,12 +322,13 @@ void FontDrawCodeMtx(void* mtx, u16 code) {
     }
     _JUTFont_DrawPos(code, 0, 0);
 }
+#pragma optimize_for_size reset
 
 void FontDrawString(f32 x, f32 y, s32 str) {
     extern void FontDrawStringVecPitch(void* pos, s32 str, f32 pitch);
     extern const u32 vec3_802c2b78[3];
-    u32 vec[3];
     u32 out[3];
+    u32 vec[3];
 
     vec[0] = vec3_802c2b78[0];
     vec[1] = vec3_802c2b78[1];
@@ -346,8 +344,8 @@ void FontDrawString(f32 x, f32 y, s32 str) {
 void FontDrawStringPitch(f32 x, f32 y, s32 str, f32 pitch) {
     extern void FontDrawStringVecPitch(void* pos, s32 str, f32 pitch);
     extern const u32 vec3_802c2b84[3];
-    u32 vec[3];
     u32 out[3];
+    u32 vec[3];
 
     vec[0] = vec3_802c2b84[0];
     vec[1] = vec3_802c2b84[1];
@@ -360,6 +358,7 @@ void FontDrawStringPitch(f32 x, f32 y, s32 str, f32 pitch) {
     FontDrawStringVecPitch(out, str, pitch);
 }
 
+#pragma optimize_for_size off
 void FontDrawStringVecPitch(Vec* pos, char* msg, f32 pitch) {
 
     extern void PSMTXScale(void*, f32, f32, f32);
@@ -370,15 +369,15 @@ void FontDrawStringVecPitch(Vec* pos, char* msg, f32 pitch) {
     extern char* msgGetCommand(char*, char*, char*);
     extern void GXSetTevColor(s32, void*);
 
-    f32 scaleMtx[3][4];
     f32 drawMtx[3][4];
+    f32 scaleMtx[3][4];
     char command[128];
     char argument[128];
     f32 x;
     f32 drawX;
     s32 glyph;
     void* entry;
-    s32 count;
+    u32 count;
     u8 width;
     u32 oldColor;
     u32 edgeColor;
@@ -444,14 +443,16 @@ void FontDrawStringVecPitch(Vec* pos, char* msg, f32 pitch) {
             GXSetTevColor(1, &gxColor);
         }
         _JUTFont_DrawPos((u16)glyph, 0, 0);
-        if (pitch < 0.0f) {
+        if (pitch < float_0_804203f8) {
             x += (f32)(width + charspace[*(s32*)((u8*)gp + 0x16C)]);
         } else {
             x += pitch;
         }
     }
 }
+#pragma optimize_for_size reset
 
+#pragma optimize_for_size off
 void FontDrawStringMtx(f32* mtx, void* string) {
 
     extern void PSMTXConcat(void* a, void* b, void* out);
@@ -539,7 +540,9 @@ void FontDrawStringMtx(f32* mtx, void* string) {
         x += (f32)(*(u8*)((s32)entry + 1) + charspace[*(s32*)((s32)gp + 0x16C)]);
     }
 }
+#pragma optimize_for_size reset
 
+#pragma optimize_for_size off
 void FontDrawStringCenterMtx(void* mtx, char* msg) {
 
     extern void PSMTXConcat(void*, void*, void*);
@@ -551,8 +554,8 @@ void FontDrawStringCenterMtx(void* mtx, char* msg) {
     f32 x;
     s32 glyph;
     void* entry;
-    u32 count;
-    u32 magic;
+    s32 count;
+    s32 magic;
     u32 oldColor;
     u32 edgeColor;
     u32 gxColor;
@@ -563,6 +566,7 @@ void FontDrawStringCenterMtx(void* mtx, char* msg) {
     PSMTXConcat((u8*)cam + 0x11C, mtx, drawMtx);
     GXLoadPosMtxImm(drawMtx, 0);
 
+    magic = 0x57494431;
     while (*msg != 0) {
         if (_ismbblead(*msg) != 0) {
             glyph = JUTFont_CodeToGlyph(*(u16*)msg);
@@ -590,9 +594,8 @@ void FontDrawStringCenterMtx(void* mtx, char* msg) {
         _JUTFont_DrawPos((u16)glyph, (s16)(s32)x, 0);
 
         entry = (u8*)pfh + 0x20;
-        magic = 0x57494431;
         count = *(s32*)((u8*)pfh + 0xC);
-        while (count != 0) {
+        while (count > 0) {
             if (*(u32*)entry == magic &&
                 (u16)glyph >= *(u16*)((u8*)entry + 8) &&
                 (u16)glyph <= *(u16*)((u8*)entry + 0xA)) {
@@ -609,7 +612,9 @@ void FontDrawStringCenterMtx(void* mtx, char* msg) {
         x += (f32)(*(u8*)((u8*)entry + 1) + charspace[*(s32*)((u8*)gp + 0x16C)]);
     }
 }
+#pragma optimize_for_size reset
 
+#pragma optimize_for_size off
 void FontDrawStringShake(double xIn, double yIn, char* str) {
 
     extern void PSMTXScale(f32 mtx[3][4], f32 x, f32 y, f32 z);
@@ -623,22 +628,23 @@ void FontDrawStringShake(double xIn, double yIn, char* str) {
     f32 scaleMtx[3][4];
     f32 drawMtx[3][4];
     char* p;
-    f32 x;
-    f32 y;
+    f32 drawX;
+    f32 drawY;
     s32 glyph;
     u32 count;
     void* entry;
     u32 magic;
     u32 edgeColor;
     u32 oldColor;
-    u32 gxColor;
+    volatile u32 alphaEdgeColor;
+    volatile u32 alphaOldColor;
+    volatile u32 gxEdgeColor;
+    volatile u32 gxOldColor;
     s32 jitterX;
     s32 jitterY;
     void* cam;
 
     p = str;
-    x = (f32)xIn;
-    y = (f32)yIn;
     cam = camGetCurPtr();
     PSMTXScale(scaleMtx, fontScale.x, fontScale.y, fontScale.z);
 
@@ -652,7 +658,9 @@ void FontDrawStringShake(double xIn, double yIn, char* str) {
         }
 
         jitterX = irand(10000) % 3;
+        drawX = (f32)(xIn + (fontScale.x * (f32)jitterX));
         jitterY = irand(10000) % 3;
+        drawY = (f32)(yIn + (fontScale.y * (f32)jitterY));
 
         entry = (void*)((s32)pfh + 0x20);
         magic = 0x57494431;
@@ -672,8 +680,8 @@ void FontDrawStringShake(double xIn, double yIn, char* str) {
 
     width_found:
         PSMTXTransApply(scaleMtx, drawMtx,
-                        x + (fontScale.x * (f32)jitterX),
-                        y + (fontScale.y * (f32)jitterY),
+                        drawX,
+                        drawY,
                         float_0_804203f8);
         PSMTXConcat((void*)((s32)cam + 0x11C), drawMtx, drawMtx);
         GXLoadPosMtxImm(drawMtx, 0);
@@ -682,26 +690,30 @@ void FontDrawStringShake(double xIn, double yIn, char* str) {
             edgeColor = fontColTbl[0];
             oldColor = fontColor;
             fontColor = edgeColor;
-            ((u8*)&edgeColor)[3] = (((u8*)&edgeColor)[3] * fontAlpha) / 255;
-            gxColor = edgeColor;
-            GXSetTevColor(1, &gxColor);
+            alphaEdgeColor = edgeColor;
+            ((u8*)&alphaEdgeColor)[3] = (((u8*)&alphaEdgeColor)[3] * fontAlpha) / 255;
+            gxEdgeColor = alphaEdgeColor;
+            GXSetTevColor(1, (void*)&gxEdgeColor);
 
-            _JUTFont_DrawPos((u16)glyph, -2, 0);
-            _JUTFont_DrawPos((u16)glyph, 2, 0);
-            _JUTFont_DrawPos((u16)glyph, 0, -2);
-            _JUTFont_DrawPos((u16)glyph, 0, 2);
+            _JUTFont_DrawPos(glyph, -2, 0);
+            _JUTFont_DrawPos(glyph, 2, 0);
+            _JUTFont_DrawPos(glyph, 0, -2);
+            _JUTFont_DrawPos(glyph, 0, 2);
 
             fontColor = oldColor;
-            ((u8*)&oldColor)[3] = (((u8*)&oldColor)[3] * fontAlpha) / 255;
-            gxColor = oldColor;
-            GXSetTevColor(1, &gxColor);
+            alphaOldColor = oldColor;
+            ((u8*)&alphaOldColor)[3] = (((u8*)&alphaOldColor)[3] * fontAlpha) / 255;
+            gxOldColor = alphaOldColor;
+            GXSetTevColor(1, (void*)&gxOldColor);
         }
 
-        _JUTFont_DrawPos((u16)glyph, 0, 0);
-        x += (f32)(*(u8*)((s32)entry + 1) + charspace[*(s32*)((s32)gp + 0x16C)]);
+        _JUTFont_DrawPos(glyph, 0, 0);
+        xIn += fontScale.x * (f32)(*(u8*)((s32)entry + 1) + charspace[*(s32*)((s32)gp + 0x16C)]);
     }
 }
+#pragma optimize_for_size reset
 
+#pragma optimize_for_size off
 void FontDrawMessage(s32 x0, s32 y0, char* msg) {
 
     extern u32 JUTFont_CodeToGlyph(u32 code);
@@ -718,21 +730,30 @@ void FontDrawMessage(s32 x0, s32 y0, char* msg) {
     u16 iconH;
     u16 iconW;
     u32 glyph;
-    u32 colorA;
-    u32 colorB;
-    u32 colorC;
-    u32 colorD;
-    u32 colorE;
-    u32 colorF;
-    u32 colorG;
-    u32 gxColorA;
-    u32 gxColorB;
-    u32 gxColorC;
-    u32 gxColorD;
-    u32 gxColorE;
-    u32 gxColorF;
-    u32 gxColorG;
-    u32 savedColor;
+    volatile u32 colorA;
+    volatile u32 colorB;
+    volatile u32 colorC;
+    volatile u32 colorCSource;
+    volatile u32 colorD;
+    volatile u32 colorE;
+    volatile u32 colorF;
+    volatile u32 colorG;
+    volatile u32 savedColor;
+    volatile u32 alphaColorA;
+    volatile u32 alphaColorB;
+    volatile u32 alphaColorC;
+    volatile u32 alphaColorD;
+    volatile u32 alphaColorF;
+    volatile u32 alphaColorG;
+    volatile u32 restoredAlphaColor;
+    volatile u32 gxColorA;
+    volatile u32 gxColorB;
+    volatile u32 gxColorC;
+    volatile u32 gxColorD;
+    volatile u32 gxColorE;
+    volatile u32 gxColorF;
+    volatile u32 gxColorG;
+    volatile u32 restoredGxColor;
     s32 iconId;
     s32 iconDx;
     s32 iconDy;
@@ -767,37 +788,38 @@ void FontDrawMessage(s32 x0, s32 y0, char* msg) {
                 if (strcmp(cmd, str_red_80420410) == 0) {
                     colorA = dat_804203d8;
                     fontColor = colorA;
-                    gxColorA = colorA;
-                    ((u8*)&gxColorA)[3] = (u8)((((u8*)&gxColorA)[3] * fontAlpha) / 255);
-                    GXSetTevColor(1, &gxColorA);
+                    alphaColorA = colorA;
+                    ((u8*)&alphaColorA)[3] = (u8)((((u8*)&alphaColorA)[3] * fontAlpha) / 255);
+                    gxColorA = alphaColorA;
+                    GXSetTevColor(1, (void*)&gxColorA);
                 } else if (strcmp(cmd, str_red_80420414) == 0) {
                     colorB = fontColTbl[0];
                     fontColor = colorB;
-                    gxColorB = colorB;
-                    ((u8*)&gxColorB)[3] = (u8)((((u8*)&gxColorB)[3] * fontAlpha) / 255);
-                    GXSetTevColor(1, &gxColorB);
+                    alphaColorB = colorB;
+                    ((u8*)&alphaColorB)[3] = (u8)((((u8*)&alphaColorB)[3] * fontAlpha) / 255);
+                    gxColorB = alphaColorB;
+                    GXSetTevColor(1, (void*)&gxColorB);
                 } else if (strcmp(cmd, str_col_80420420) == 0) {
                     sscanf(arg, str_PCTx_80420424, &colorC);
-                    fontColor = colorC;
-                    gxColorC = colorC;
-                    ((u8*)&gxColorC)[3] = (u8)((((u8*)&gxColorC)[3] * fontAlpha) / 255);
-                    GXSetTevColor(1, &gxColorC);
+                    colorCSource = colorC;
+                    fontColor = colorCSource;
+                    alphaColorC = colorCSource;
+                    ((u8*)&alphaColorC)[3] = (u8)((((u8*)&alphaColorC)[3] * fontAlpha) / 255);
+                    gxColorC = alphaColorC;
+                    GXSetTevColor(1, (void*)&gxColorC);
                 } else if (strcmp(cmd, str_col_80420428) == 0) {
                     colorD = fontColTbl[0];
                     fontColor = colorD;
-                    gxColorD = colorD;
-                    ((u8*)&gxColorD)[3] = (u8)((((u8*)&gxColorD)[3] * fontAlpha) / 255);
-                    GXSetTevColor(1, &gxColorD);
+                    alphaColorD = colorD;
+                    ((u8*)&alphaColorD)[3] = (u8)((((u8*)&alphaColorD)[3] * fontAlpha) / 255);
+                    gxColorD = alphaColorD;
+                    GXSetTevColor(1, (void*)&gxColorD);
                 } else if (strcmp(cmd, str_icon_80420408) == 0) {
                     camGetCurPtr();
 
                     iconScale = 1.0f;
-                    iconDx = 0;
-                    iconDy = 0;
-                    iconAdd = 0;
-                    iconId = 0;
 
-                    if (arg[0] >= '0' && arg[0] <= '9') {
+                    if ((s8)arg[0] >= '0' && (s8)arg[0] <= '9') {
                         sscanf(arg, paper + 0x8C, &iconId, &iconScale, &iconDx, &iconDy, &iconAdd);
                     } else {
                         sscanf(arg, paper + 0x98, iconName, &iconScale, &iconDx, &iconDy, &iconAdd);
@@ -816,26 +838,25 @@ void FontDrawMessage(s32 x0, s32 y0, char* msg) {
 
                     fontEdge = 0;
                     fontColor = fontColTbl[0];
-                    fontScale.x = *(f32*)(paper + 0x3C);
-                    fontScale.y = *(f32*)(paper + 0x40);
-                    fontScale.z = *(f32*)(paper + 0x44);
+                    fontScale = vec3_802c2b6c;
 
                     colorE = fontColTbl[0];
+                    ((u8*)&colorE)[3] = (u8)((((u8*)&colorE)[3] * fontAlpha) / 255);
                     gxColorE = colorE;
-                    ((u8*)&gxColorE)[3] = (u8)((((u8*)&gxColorE)[3] * fontAlpha) / 255);
-                    JUTFont_DrawStart(&gxColorE);
+                    JUTFont_DrawStart((void*)&gxColorE);
 
                     colorF = fontColor;
-                    gxColorF = colorF;
-                    ((u8*)&gxColorF)[3] = (u8)((((u8*)&gxColorF)[3] * fontAlpha) / 255);
-                    GXSetTevColor(1, &gxColorF);
+                    alphaColorF = colorF;
+                    ((u8*)&alphaColorF)[3] = (u8)((((u8*)&alphaColorF)[3] * fontAlpha) / 255);
+                    gxColorF = alphaColorF;
+                    GXSetTevColor(1, (void*)&gxColorF);
 
                     x = (s32)((f32)x + ((f32)iconW * iconScale) + (f32)iconAdd);
                 } else {
                     if (cmd[0] == 'R') {
-                        ;
-                    } else if (cmd[0] == '/' && cmd[1] == 'r') {
-                        ;
+                        goto message_glyph;
+                    } else if (cmd[0] == '/' && *(u16*)cmd == 0x2F72) {
+                        goto message_glyph;
                     }
                 }
 
@@ -852,40 +873,50 @@ void FontDrawMessage(s32 x0, s32 y0, char* msg) {
             }
         }
 
+message_glyph:
         if ((u16)glyph != 0xFFFF) {
             void* entry;
             u32 count;
             u32 magic;
+            u16 drawGlyph;
+            s16 drawX;
+            s16 drawY;
+
+            drawGlyph = (u16)glyph;
+            drawX = (s16)x;
+            drawY = (s16)y;
 
             if (fontEdge != 0) {
                 colorG = fontColTbl[0];
                 savedColor = fontColor;
                 fontColor = colorG;
-                gxColorG = colorG;
-                ((u8*)&gxColorG)[3] = (u8)((((u8*)&gxColorG)[3] * fontAlpha) / 255);
-                GXSetTevColor(1, &gxColorG);
+                alphaColorG = colorG;
+                ((u8*)&alphaColorG)[3] = (u8)((((u8*)&alphaColorG)[3] * fontAlpha) / 255);
+                gxColorG = alphaColorG;
+                GXSetTevColor(1, (void*)&gxColorG);
 
-                _JUTFont_DrawPos((u16)glyph, (s16)(x - 2), (s16)y);
-                _JUTFont_DrawPos((u16)glyph, (s16)(x + 2), (s16)y);
-                _JUTFont_DrawPos((u16)glyph, (s16)x, (s16)(y - 2));
-                _JUTFont_DrawPos((u16)glyph, (s16)x, (s16)(y + 2));
+                _JUTFont_DrawPos(drawGlyph, drawX - 2, drawY);
+                _JUTFont_DrawPos(drawGlyph, drawX + 2, drawY);
+                _JUTFont_DrawPos(drawGlyph, drawX, drawY - 2);
+                _JUTFont_DrawPos(drawGlyph, drawX, drawY + 2);
 
                 fontColor = savedColor;
-                gxColorG = savedColor;
-                ((u8*)&gxColorG)[3] = (u8)((((u8*)&gxColorG)[3] * fontAlpha) / 255);
-                GXSetTevColor(1, &gxColorG);
+                restoredAlphaColor = savedColor;
+                ((u8*)&restoredAlphaColor)[3] = (u8)((((u8*)&restoredAlphaColor)[3] * fontAlpha) / 255);
+                restoredGxColor = restoredAlphaColor;
+                GXSetTevColor(1, (void*)&restoredGxColor);
             }
 
-            _JUTFont_DrawPos((u16)glyph, (s16)x, (s16)y);
+            _JUTFont_DrawPos(drawGlyph, drawX, drawY);
 
             entry = (void*)((s32)pfh + 0x20);
             magic = 0x57494431;
             count = *(s32*)((s32)pfh + 0xC);
             while (count != 0) {
                 if (*(u32*)entry == magic &&
-                    (u16)glyph >= *(u16*)((s32)entry + 8) &&
-                    (u16)glyph <= *(u16*)((s32)entry + 0xA)) {
-                    entry = (void*)((s32)entry + (((u16)glyph - *(u16*)((s32)entry + 8)) * 2) + 0xC);
+                    drawGlyph >= *(u16*)((s32)entry + 8) &&
+                    drawGlyph <= *(u16*)((s32)entry + 0xA)) {
+                    entry = (void*)((s32)entry + ((drawGlyph - *(u16*)((s32)entry + 8)) * 2) + 0xC);
                     goto width_found;
                 }
                 entry = (void*)((s32)entry + *(s32*)((s32)entry + 4));
@@ -899,6 +930,7 @@ void FontDrawMessage(s32 x0, s32 y0, char* msg) {
         }
     }
 }
+#pragma optimize_for_size reset
 
 void FontDrawMessageMtx(f32 mtx[3][4], char* msg) {
     extern u32 JUTFont_CodeToGlyph(u32 code);
@@ -920,12 +952,18 @@ void FontDrawMessageMtx(f32 mtx[3][4], char* msg) {
     volatile u32 colorC;
     volatile u32 colorD;
     volatile u32 colorE;
+    volatile u32 savedColor;
+    volatile u32 alphaColorA;
+    volatile u32 alphaColorB;
+    volatile u32 alphaColorC;
+    volatile u32 alphaColorD;
+    volatile u32 alphaColorE;
+    volatile u32 restoredAlphaColor;
     volatile u32 gxColorA;
     volatile u32 gxColorB;
     volatile u32 gxColorC;
     volatile u32 gxColorD;
     volatile u32 gxColorE;
-    volatile u32 savedColor;
     s32 iconId;
     s32 iconDx;
     s32 iconDy;
@@ -938,10 +976,12 @@ void FontDrawMessageMtx(f32 mtx[3][4], char* msg) {
     char cmd[128];
     char arg[128];
     void* cam;
+    const u8* rodata;
     char* p;
     s32 x;
     s32 y;
 
+    rodata = (const u8*)str_papermarioset_JPN_802c2b30;
     cam = camGetCurPtr();
     p = msg;
     x = (s32)float_0_804203f8;
@@ -962,22 +1002,24 @@ void FontDrawMessageMtx(f32 mtx[3][4], char* msg) {
                 if (strcmp(cmd, str_red_80420410) == 0) {
                     colorA = dat_804203dc;
                     fontColor = colorA;
-                    gxColorA = colorA;
-                    ((u8*)&gxColorA)[3] = (u8)((((u8*)&gxColorA)[3] * fontAlpha) / 255);
+                    alphaColorA = colorA;
+                    ((u8*)&alphaColorA)[3] = (u8)((((u8*)&alphaColorA)[3] * fontAlpha) / 255);
+                    gxColorA = alphaColorA;
                     GXSetTevColor(1, (void*)&gxColorA);
                 } else if (strcmp(cmd, str_red_80420414) == 0) {
                     colorB = fontColTbl[0];
                     fontColor = colorB;
-                    gxColorB = colorB;
-                    ((u8*)&gxColorB)[3] = (u8)((((u8*)&gxColorB)[3] * fontAlpha) / 255);
+                    alphaColorB = colorB;
+                    ((u8*)&alphaColorB)[3] = (u8)((((u8*)&alphaColorB)[3] * fontAlpha) / 255);
+                    gxColorB = alphaColorB;
                     GXSetTevColor(1, (void*)&gxColorB);
                 } else if (strcmp(cmd, str_icon_80420408) == 0) {
                     camGetCurPtr();
 
-                    if (arg[0] >= '0' && arg[0] <= '9') {
-                        sscanf(arg, str_PCTdPCTfPCTdPCTdPCTd_802c2bbc, &iconId, &iconScale, &iconDx, &iconDy, &iconAdd);
+                    if ((s8)arg[0] >= '0' && (s8)arg[0] <= '9') {
+                        sscanf(arg, (const char*)(rodata + 0x8C), &iconId, &iconScale, &iconDx, &iconDy, &iconAdd);
                     } else {
-                        sscanf(arg, str_PCTsPCTfPCTdPCTdPCTd_802c2bc8, iconName, &iconScale, &iconDx, &iconDy, &iconAdd);
+                        sscanf(arg, (const char*)(rodata + 0x98), iconName, &iconScale, &iconDx, &iconDy, &iconAdd);
                         iconId = msgIconStr2ID(iconName);
                         if (iconId < 0) {
                             iconId = 0;
@@ -994,26 +1036,26 @@ void FontDrawMessageMtx(f32 mtx[3][4], char* msg) {
 
                     fontEdge = 0;
                     fontColor = fontColTbl[0];
-                    fontScale.x = vec3_802c2b6c.x;
-                    fontScale.y = vec3_802c2b6c.y;
-                    fontScale.z = vec3_802c2b6c.z;
+                    fontScale = *(Vec*)(rodata + 0x3C);
 
                     colorC = fontColTbl[0];
-                    gxColorC = colorC;
-                    ((u8*)&gxColorC)[3] = (u8)((((u8*)&gxColorC)[3] * fontAlpha) / 255);
+                    alphaColorC = colorC;
+                    ((u8*)&alphaColorC)[3] = (u8)((((u8*)&alphaColorC)[3] * fontAlpha) / 255);
+                    gxColorC = alphaColorC;
                     JUTFont_DrawStart((void*)&gxColorC);
 
                     colorD = fontColor;
-                    gxColorD = colorD;
-                    ((u8*)&gxColorD)[3] = (u8)((((u8*)&gxColorD)[3] * fontAlpha) / 255);
+                    alphaColorD = colorD;
+                    ((u8*)&alphaColorD)[3] = (u8)((((u8*)&alphaColorD)[3] * fontAlpha) / 255);
+                    gxColorD = alphaColorD;
                     GXSetTevColor(1, (void*)&gxColorD);
 
                     x = (s32)((f32)x + ((f32)iconW * iconScale) + (f32)iconAdd);
                 } else {
                     if (cmd[0] == 'R') {
-                        ;
-                    } else if (cmd[0] == '/' && cmd[1] == 'r') {
-                        ;
+                        goto message_mtx_glyph;
+                    } else if (cmd[0] == '/' && *(u16*)cmd == 0x2F72) {
+                        goto message_mtx_glyph;
                     }
                 }
 
@@ -1030,6 +1072,7 @@ void FontDrawMessageMtx(f32 mtx[3][4], char* msg) {
             }
         }
 
+message_mtx_glyph:
         if ((u16)glyph != 0xFFFF) {
             void* entry;
             s32 count;
@@ -1043,8 +1086,9 @@ void FontDrawMessageMtx(f32 mtx[3][4], char* msg) {
                 colorE = fontColTbl[0];
                 savedColor = fontColor;
                 fontColor = colorE;
-                gxColorE = colorE;
-                ((u8*)&gxColorE)[3] = (u8)((((u8*)&gxColorE)[3] * fontAlpha) / 255);
+                alphaColorE = colorE;
+                ((u8*)&alphaColorE)[3] = (u8)((((u8*)&alphaColorE)[3] * fontAlpha) / 255);
+                gxColorE = alphaColorE;
                 GXSetTevColor(1, (void*)&gxColorE);
 
                 _JUTFont_DrawPos((u16)glyph, -2, 0);
@@ -1053,8 +1097,9 @@ void FontDrawMessageMtx(f32 mtx[3][4], char* msg) {
                 _JUTFont_DrawPos((u16)glyph, 0, 2);
 
                 fontColor = savedColor;
-                gxColorE = savedColor;
-                ((u8*)&gxColorE)[3] = (u8)((((u8*)&gxColorE)[3] * fontAlpha) / 255);
+                restoredAlphaColor = savedColor;
+                ((u8*)&restoredAlphaColor)[3] = (u8)((((u8*)&restoredAlphaColor)[3] * fontAlpha) / 255);
+                gxColorE = restoredAlphaColor;
                 GXSetTevColor(1, (void*)&gxColorE);
             }
 
@@ -1088,56 +1133,56 @@ s32 kanjiSearch(s32 code) {
 
 u8 kanjiGetWidth(u16 code) {
     void* entry;
-    void* found;
-    u32 magic;
     u32 count;
-    s32 i;
+    u32 i;
 
-    entry = (void*)((s32)pfh + 0x20);
-    magic = 0x57494431;
-    count = *(s32*)((s32)pfh + 0xC);
-    found = 0;
+    entry = (u8*)pfh + 0x20;
+    count = *(u32*)((u8*)pfh + 0xC);
     for (i = 0; i < count; i++) {
-        if (*(u32*)entry == magic) {
-            u16 start = *(u16*)((s32)entry + 8);
-            if (code >= start && code <= *(u16*)((s32)entry + 0xA)) {
-                found = (void*)((s32)entry + ((code - start) * 2) + 0xC);
+        switch (*(u32*)entry) {
+            case 0x57494431: {
+                u16 start = *(u16*)((u8*)entry + 8);
+                if (code >= start && code <= *(u16*)((u8*)entry + 0xA)) {
+                    entry = (u8*)entry + ((code - start) * 2) + 0xC;
+                    goto found;
+                }
                 break;
             }
+            default:
+                break;
         }
-        entry = (void*)((s32)entry + *(s32*)((s32)entry + 4));
+        entry = (u8*)entry + *(s32*)((u8*)entry + 4);
     }
-    return *(u8*)((s32)found + 1);
+    entry = 0;
+found:
+    return *(u8*)((u8*)entry + 1);
 }
 
 u16 FontGetMessageWidthLine(const char* msg, s16* line) {
     extern s32 _ismbblead(s8 c);
     extern char* msgGetCommand(char* in, char* cmd, char* arg);
-
-
-
-
     extern void iconGetWidthHight(u16* w, u16* h, u16 id);
 
     s32 glyph;
-    u32 width;
-    u32 maxWidth;
+    u16 maxWidth;
+    u16 width;
     s16 lines;
     char cmd[128];
     char arg[128];
     char iconName[32];
-    f32 scale;
+    s32 iconId;
     s32 a;
     s32 b;
     s32 add;
-    s32 iconId;
+    f32 scale;
     u16 iconW;
     u16 iconH;
     void* entry;
-    s32 count;
+    u32 count;
+    u32 i;
 
-    width = 0;
     maxWidth = 0;
+    width = 0;
     lines = 0;
 
     while (*msg != 0) {
@@ -1147,43 +1192,45 @@ u16 FontGetMessageWidthLine(const char* msg, s16* line) {
             msg += 2;
         } else {
             switch ((s8)*msg) {
-            case '<':
-            msg = msgGetCommand((char*)msg + 1, cmd, arg);
-            if (strcmp(cmd, str_icon_80420408) == 0) {
-                camGetCurPtr();
-                if (arg[0] < '0' || arg[0] > '9') {
-                    sscanf(arg, str_PCTsPCTfPCTdPCTdPCTd_802c2bc8, iconName, &scale, &a, &b, &add);
-                    iconId = msgIconStr2ID(iconName);
-                    if (iconId < 0) {
-                        iconId = 0;
+                case '\n':
+                    if ((u16)maxWidth < (u16)width) {
+                        maxWidth = width;
                     }
-                } else {
-                    sscanf(arg, str_PCTdPCTfPCTdPCTdPCTd_802c2bbc, &iconId, &scale, &a, &b, &add);
-                }
-                iconGetWidthHight(&iconW, &iconH, (u16)iconId);
-                width = (u16)(((f32)(u16)iconW * scale) + (f32)add +
-                              (f32)(u16)width);
-            } else if (cmd[0] == 'R') {
-                glyph = 0xFFFF;
-            }
-            if (*msg == '\n') {
-                msg++;
-            }
-            break;
+                    width = 0;
+                    lines++;
+                    msg++;
+                    break;
 
-            case '\n':
-            if ((u16)maxWidth < (u16)width) {
-                maxWidth = width;
-            }
-            width = 0;
-            lines++;
-            msg++;
-            break;
+                case '<':
+                    msg = msgGetCommand((char*)msg + 1, cmd, arg);
+                    if (strcmp(cmd, str_icon_80420408) == 0) {
+                        camGetCurPtr();
+                        if ((s8)arg[0] >= '0' && (s8)arg[0] <= '9') {
+                            sscanf(arg, str_PCTdPCTfPCTdPCTdPCTd_802c2bbc,
+                                   &iconId, &scale, &a, &b, &add);
+                        } else {
+                            sscanf(arg, str_PCTsPCTfPCTdPCTdPCTd_802c2bc8,
+                                   iconName, &scale, &a, &b, &add);
+                            iconId = msgIconStr2ID(iconName);
+                            if (iconId < 0) {
+                                iconId = 0;
+                            }
+                        }
+                        iconGetWidthHight(&iconW, &iconH, (u16)iconId);
+                        width = (u16)(((f32)(u16)iconW * scale) + (f32)add +
+                                      (f32)(u16)width);
+                    } else if ((s8)cmd[0] == 'R' ||
+                               ((s8)cmd[0] == '/' && *(u16*)cmd == 0x2F72)) {
+                        break;
+                    }
+                    if ((s8)*msg == '\n') {
+                        msg++;
+                    }
+                    break;
 
-            default:
-            glyph = JUTFont_CodeToGlyph((u8)*msg);
-            msg++;
-            break;
+                default:
+                    glyph = JUTFont_CodeToGlyph((u8)*msg++);
+                    break;
             }
         }
 
@@ -1191,26 +1238,34 @@ u16 FontGetMessageWidthLine(const char* msg, s16* line) {
             continue;
         }
 
-        entry = (void*)((s32)pfh + 0x20);
-        count = *(s32*)((s32)pfh + 0xC);
-        while (count > 0) {
-            if (*(u32*)entry == 0x57494431 &&
-                (u16)glyph >= *(u16*)((s32)entry + 8) &&
-                (u16)glyph <= *(u16*)((s32)entry + 0xA)) {
-                entry = (void*)((s32)entry + (((u16)glyph - *(u16*)((s32)entry + 8)) * 2) + 0xC);
-                break;
+        entry = (u8*)pfh + 0x20;
+        count = *(u32*)((u8*)pfh + 0xC);
+        for (i = 0; i < count; i++) {
+            switch (*(u32*)entry) {
+                case 0x57494431:
+                    if ((u16)glyph >= *(u16*)((u8*)entry + 8) &&
+                        (u16)glyph <= *(u16*)((u8*)entry + 0xA)) {
+                        entry = (u8*)entry +
+                                (((u16)glyph - *(u16*)((u8*)entry + 8)) * 2) + 0xC;
+                        goto width_found;
+                    }
+                    break;
+                default:
+                    break;
             }
-            entry = (void*)((s32)entry + *(s32*)((s32)entry + 4));
-            count--;
+            entry = (u8*)entry + *(s32*)((u8*)entry + 4);
         }
-        width = (u16)(width + *(u8*)((s32)entry + 1) + charspace[*(s32*)((s32)gp + 0x16C)]);
+        entry = 0;
+width_found:
+        width = (u16)(*(u8*)((u8*)entry + 1) + width +
+                      charspace[*(s32*)((u8*)gp + 0x16C)]);
     }
 
     if ((u16)maxWidth < (u16)width) {
         maxWidth = width;
     }
     if ((u16)maxWidth != 0) {
-        maxWidth = (u16)(maxWidth - charspace[*(s32*)((s32)gp + 0x16C)]);
+        maxWidth = (u16)(maxWidth - charspace[*(s32*)((u8*)gp + 0x16C)]);
     }
     if (line != 0) {
         *line = lines;
@@ -1300,7 +1355,6 @@ void JUTFontSetup(s32 language) {
     extern void GXInitTexObj(void*, void*, u16, u16, s32, s32, s32, s32);
     extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
 
-
     char path[140];
     void* dvd;
     void* check;
@@ -1309,21 +1363,23 @@ void JUTFontSetup(s32 language) {
     s32 length;
     s32 maxLength;
     s32 checkLength;
-    s32 i;
+    u32 i;
     u16 glyph;
+    char** name;
 
     if (pfh != 0) {
         return;
     }
 
     sprintf(path, str_PCTs_f_PCTs_bfn_802c2ba0,
-            getMarioStDvdRoot(), fontname[language]);
+            getMarioStDvdRoot(), fontname[(u16)language]);
     dvd = DVDMgrOpen(path, 2, 0);
     length = DVDMgrGetLength(dvd);
     maxLength = length;
-    for (i = 0; i < 7; i++) {
+    name = fontname;
+    for (i = 0; i < 7; i++, name++) {
         sprintf(path, str_PCTs_font_PCTs_bfn_802c2bac,
-                getMarioStDvdRoot(), fontname[i]);
+                getMarioStDvdRoot(), *name);
         check = DVDMgrOpen(path, 2, 0);
         if (check != 0) {
             checkLength = DVDMgrGetLength(check);
@@ -1340,10 +1396,17 @@ void JUTFontSetup(s32 language) {
 
     entry = (u8*)pfh + 0x20;
     for (i = 0; i < *(s32*)((u8*)pfh + 0xC); i++) {
-        if (*(u32*)entry == 0x494E4631) {
-            pfi = entry;
-        } else if (*(u32*)entry == 0x474C5931) {
-            blockGlyph = entry;
+        switch (*(u32*)entry) {
+            case 0x494E4631:
+                pfi = entry;
+                break;
+            case 0x474C5931:
+                blockGlyph = entry;
+                break;
+            case 0x4D415031:
+            case 0x57494431:
+            default:
+                break;
         }
         entry = (u8*)entry + *(s32*)((u8*)entry + 4);
     }
@@ -1358,98 +1421,113 @@ void JUTFontSetup(s32 language) {
     entry = (u8*)pfh + 0x20;
     widthEntry = 0;
     for (i = *(s32*)((u8*)pfh + 0xC); i != 0; i--) {
-        if (*(u32*)entry == 0x57494431 &&
-            glyph >= *(u16*)((u8*)entry + 8) &&
-            glyph <= *(u16*)((u8*)entry + 0xA)) {
-            widthEntry = (u8*)entry + (glyph - *(u16*)((u8*)entry + 8)) * 2 + 0xC;
-            break;
+        switch (*(u32*)entry) {
+            case 0x57494431:
+                if (glyph >= *(u16*)((u8*)entry + 8) &&
+                    glyph <= *(u16*)((u8*)entry + 0xA)) {
+                    widthEntry = (u8*)entry + (glyph - *(u16*)((u8*)entry + 8)) * 2 + 0xC;
+                    goto width_20_found;
+                }
+                break;
+            default:
+                break;
         }
         entry = (u8*)entry + *(s32*)((u8*)entry + 4);
     }
+width_20_found:
     *(u8*)((u8*)widthEntry + 1) = 7;
 
     glyph = (u16)JUTFont_CodeToGlyph(0x8140);
     entry = (u8*)pfh + 0x20;
     widthEntry = 0;
     for (i = *(s32*)((u8*)pfh + 0xC); i != 0; i--) {
-        if (*(u32*)entry == 0x57494431 &&
-            glyph >= *(u16*)((u8*)entry + 8) &&
-            glyph <= *(u16*)((u8*)entry + 0xA)) {
-            widthEntry = (u8*)entry + (glyph - *(u16*)((u8*)entry + 8)) * 2 + 0xC;
-            break;
+        switch (*(u32*)entry) {
+            case 0x57494431:
+                if (glyph >= *(u16*)((u8*)entry + 8) &&
+                    glyph <= *(u16*)((u8*)entry + 0xA)) {
+                    widthEntry = (u8*)entry + (glyph - *(u16*)((u8*)entry + 8)) * 2 + 0xC;
+                    goto width_8140_found;
+                }
+                break;
+            default:
+                break;
         }
         entry = (u8*)entry + *(s32*)((u8*)entry + 4);
     }
+width_8140_found:
     *(u8*)((u8*)widthEntry + 1) = 9;
 }
 
 s32 JUTFont_CodeToGlyph(s32 code) {
+    typedef struct BinaryFontMapLocal {
+        u32 magic;
+        u32 size;
+        u16 mapping;
+        u16 firstchar;
+        u16 lastchar;
+        u16 count;
+        u16 table[1];
+    } BinaryFontMapLocal;
     extern void* pfh;
 
-    void* entry;
-    u16 c;
-    s32 count;
-    s32 glyph;
+    BinaryFontMapLocal* map;
+    u32 blockcount;
+    u16 glyph, basecode;
+    u8 sjis[2];
+    u32 lead, index;
+    s32 max, min;
+    u32 i;
 
-    c = code;
-    entry = (void*)((s32)pfh + 0x20);
-    count = *(s32*)((s32)pfh + 0xC);
-    glyph = *(u16*)((s32)pfi + 0x12);
-    while (count > 0) {
-        if (*(u32*)entry == 0x4D415031 &&
-            c >= *(u16*)((s32)entry + 0xA) &&
-            c <= *(u16*)((s32)entry + 0xC)) {
-            u16 kind = *(u16*)((s32)entry + 8);
-            switch (kind) {
-                case 0:
-                    glyph = (u16)(code - *(u16*)((s32)entry + 0xA));
-                    break;
-                case 1: {
-                    u16 hi;
-                    u16 lo;
-                    s32 offset;
-
-                    *(u16*)((s32)&lo) = code;
-                    hi = ((u8*)&lo)[1];
-                    lo = ((u8*)&lo)[0];
-                    if (hi >= 0x80) {
-                        offset = hi - 0x41;
-                    } else {
-                        offset = hi - 0x40;
-                    }
-                    if (*(u16*)((s32)entry + 0xE) == 0) {
-                        glyph = (u16)((lo - 0x88) * 0xBC + 0x2BE + offset);
-                    } else {
-                        glyph = (u16)((lo - 0x88) * 0xBC - 0x5E + *(u16*)((s32)entry + 0x10) + offset);
-                    }
-                    break;
-                }
-                case 2:
-                    glyph = *(u16*)((s32)entry + 0x10 + ((c - *(u16*)((s32)entry + 0xA)) * 2));
-                    break;
-                case 3: {
-                    s32 low = 0;
-                    s32 high = *(u16*)((s32)entry + 0xE);
-                    while (high >= low) {
-                        s32 mid = (low + high) / 2;
-                        u16 value = *(u16*)((s32)entry + 0x10 + mid * 4);
-                        if (c == value) {
-                            glyph = *(u16*)((s32)entry + 0x12 + mid * 4);
-                            break;
-                        }
-                        if (c < value) {
-                            high = mid - 1;
+    map = (BinaryFontMapLocal*)((u8*)pfh + 0x20);
+    glyph = *(u16*)((u8*)pfi + 0x12);
+    blockcount = *(u32*)((u8*)pfh + 0xC);
+    for (i = 0; i < blockcount; i++) {
+        if (map->magic == 0x4D415031) {
+            basecode = map->firstchar;
+            if ((u16)code >= basecode && (u16)code <= map->lastchar) {
+                switch (map->mapping) {
+                    case 0:
+                        glyph = (u16)(code - basecode);
+                        break;
+                    case 1:
+                        *(u16*)sjis = (u16)code;
+                        lead = sjis[0];
+                        index = sjis[1];
+                        if (sjis[1] >= 0x80) {
+                            index -= 65;
                         } else {
-                            low = mid + 1;
+                            index -= 64;
                         }
-                    }
-                    break;
+                        if (!map->count) {
+                            glyph = (u16)(((lead - 136) * 188) + index + 702);
+                        } else {
+                            glyph = (u16)(((lead - 136) * 188) + index - 94 + map->table[0]);
+                        }
+                        break;
+                    case 2:
+                        glyph = map->table[(u16)code - basecode];
+                        break;
+                    case 3:
+                        max = map->count;
+                        min = 0;
+                        while (max >= min) {
+                            s32 middle = (min + max) / 2;
+                            if ((u16)code == map->table[middle * 2]) {
+                                glyph = map->table[middle * 2 + 1];
+                                break;
+                            }
+                            if ((u16)code < map->table[middle * 2]) {
+                                max = middle - 1;
+                            } else {
+                                min = middle + 1;
+                            }
+                        }
+                        break;
                 }
+                break;
             }
-            break;
         }
-        entry = (void*)((s32)entry + *(s32*)((s32)entry + 4));
-        count--;
+        map = (BinaryFontMapLocal*)((u8*)map + map->size);
     }
     return glyph;
 }
@@ -1565,7 +1643,7 @@ void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
     f32 glyphW;
     f32 glyphH;
     f32 texU;
-    register f64 texWidth;
+    register f32 texWidth;
     volatile u16* fifo16;
     volatile u8* fifo8;
 
@@ -1581,71 +1659,47 @@ void _JUTFont_DrawPos(u16 param_1, s16 param_2, s16 param_3) {
                 if ((u32)param_1 > *(u16*)((s32)entry + 0xA)) {
                     break;
                 }
-
-                widthEntry =
-                    (u8*)((s32)entry +
-                          (((u32)param_1 - firstCode) * 2) + 0xC);
+                widthEntry = (u8*)((s32)entry + (((u32)param_1 - firstCode) * 2) + 0xC);
                 goto width_found;
-
             default:
                 break;
         }
-
         entry = (u8*)((s32)entry + *(s32*)((s32)entry + 4));
     }
-
     widthEntry = 0;
 
 width_found:
-
     code = (u16)param_1 - *(u16*)((s32)blockGlyph + 8);
     cellH = (f32)*(u16*)((s32)blockGlyph + 0xE);
     col = code / *(u16*)((s32)blockGlyph + 0x16);
     row = col / *(u16*)((s32)blockGlyph + 0x18);
     cellW = (f32)*(u16*)((s32)blockGlyph + 0xC);
-
     glyphW = (cellH - float_2_804203e8) * float_1_804203e4;
-    texU =
-        (f32)(code - col * *(u16*)((s32)blockGlyph + 0x16)) *
-            cellW +
-        (f32)widthEntry[0];
+    texU = (f32)(code - col * *(u16*)((s32)blockGlyph + 0x16)) * cellW + (f32)widthEntry[0];
     widthByte = widthEntry[1];
     glyphH = (f32)widthByte * float_1_804203e4;
-    texWidth = (f64)widthByte;
-
+    texWidth = (f32)widthByte;
     fifo16 = (volatile u16*)0xCC008000;
     fifo8 = (volatile u8*)0xCC008000;
-
     GXBegin(0x80, 0, 4);
     rndU = irand(0x40) & 0xFF;
     widthByte = irand(0x40) & 0xFF;
 
-    page =
-        col -
-        (col / *(u16*)((s32)blockGlyph + 0x18)) *
-            *(u16*)((s32)blockGlyph + 0x18);
-    v0 =
-        (s32)(float_2_804203e8 +
-              (f32)page * cellH);
+    page = col - row * *(u16*)((s32)blockGlyph + 0x18);
+    v0 = (s32)(float_2_804203e8 + (f32)page * cellH);
     x1 = (s32)((f32)param_2 + glyphH);
     y0 = param_3 - 2;
-
-    hueOffset =
-        (u8)param_2 -
-        (u8)(*(s32*)((s32)gp + 0x1C) << 1);
+    hueOffset = (u8)param_2 - (u8)(*(s32*)((s32)gp + 0x1C) << 1);
     hueLeft = (u8)((s32)param_2 + (s32)hueOffset);
 
     *fifo16 = (u16)param_2;
     *fifo16 = (u16)y0;
     *fifo16 = 0;
-
     hsvBase = dat_804203e0;
     ((u8*)&hsvBase)[0] = hueLeft;
     hsv0 = hsvBase;
     color = HSV2RGB(&hsv0);
-
     u0 = (s32)texU;
-
     *fifo8 = ((u8*)&color)[0];
     *fifo8 = ((u8*)&color)[1];
     *fifo8 = ((u8*)&color)[2];
@@ -1658,15 +1712,12 @@ width_found:
     *fifo16 = (u16)x1;
     *fifo16 = (u16)y0;
     *fifo16 = 0;
-
     hueRight = (u8)((s32)x1 + (s32)hueOffset);
     ((u8*)&hsvBase)[0] = hueRight;
     hsv1 = hsvBase;
     color = HSV2RGB(&hsv1);
-
-    u1 = (s32)(texU + (f32)texWidth);
+    u1 = (s32)(texU + texWidth);
     rndURight = (s32)((f32)(u8)rndU + glyphH);
-
     *fifo8 = ((u8*)&color)[0];
     *fifo8 = ((u8*)&color)[1];
     *fifo8 = ((u8*)&color)[2];
@@ -1677,20 +1728,14 @@ width_found:
     *fifo8 = (u8)widthByte;
 
     y1 = (s32)((f32)y0 - glyphW);
-
     *fifo16 = (u16)x1;
     *fifo16 = (u16)y1;
     *fifo16 = 0;
-
     ((u8*)&hsvBase)[0] = hueRight;
     hsv2 = hsvBase;
     color = HSV2RGB(&hsv2);
-
-    v1 =
-        (s32)((f32)(u16)v0 +
-              (cellH - float_2_804203e8));
+    v1 = (s32)((f32)(u16)v0 + (cellH - float_2_804203e8));
     rndVBottom = (s32)((f32)(u8)widthByte + glyphW);
-
     *fifo8 = ((u8*)&color)[0];
     *fifo8 = ((u8*)&color)[1];
     *fifo8 = ((u8*)&color)[2];
@@ -1703,11 +1748,9 @@ width_found:
     *fifo16 = (u16)param_2;
     *fifo16 = (u16)y1;
     *fifo16 = 0;
-
     ((u8*)&hsvBase)[0] = hueLeft;
     hsv3 = hsvBase;
     color = HSV2RGB(&hsv3);
-
     *fifo8 = ((u8*)&color)[0];
     *fifo8 = ((u8*)&color)[1];
     *fifo8 = ((u8*)&color)[2];

@@ -208,7 +208,7 @@ EffSetEntry eff_set_table[] = {
     { 80, 0, str_ultra_hammer_802c1f04 },
 };
 
-EffSetEntry gap_05_80309A30_data = { -1, 0, 0 };
+__declspec(section ".data") EffSetEntry gap_05_80309A30_data = { -1, 0, 0 };
 
 void __memFree(s32 heap, void* ptr);
 void UnpackTexPalette(void* tpl);
@@ -255,13 +255,13 @@ void effTexSetup(void) {
 
     wp->unk8 = 0;
     wp->unkC = 0;
-    wp->unk8 = arcOpen((const char*)0x802C1F38, 0, 0);
+    wp->unk8 = arcOpen("effect.tpl", 0, 0);
     if (wp->unk8 == 0) {
         lang = (char*)0x80420184;
         if (*(u32*)((s32)gp + 0x16C) == 0) {
             lang = (char*)0x80420180;
         }
-        sprintf(path, (const char*)0x802C1F44, getMarioStDvdRoot(), lang);
+        sprintf(path, "%s/e/%s/effect.tpl", getMarioStDvdRoot(), lang);
         dvd = DVDMgrOpen(path, 2, 0);
         len = (DVDMgrGetLength(dvd) + 0x1F) & ~0x1F;
         wp->unk8 = __memAlloc(0, len);
@@ -382,9 +382,9 @@ void effMain(void) {
             *(void**)((s32)wp + 0x10) = 0;
         }
         prefix = prefix_tbl[*(s32*)((s32)gp + 0x16C)];
-        if (fileAsyncf(4, 0, (const char*)0x802C1F20, getMarioStDvdRoot(), prefix, prefix) != 0) {
+        if (fileAsyncf(4, 0, "%s/e/%s/effect_%s.tpl", getMarioStDvdRoot(), prefix, prefix) != 0) {
             prefix = prefix_tbl[*(s32*)((s32)gp + 0x16C)];
-            *(void**)((s32)wp + 0x10) = fileAllocf(4, (const char*)0x802C1F20, getMarioStDvdRoot(), prefix, prefix);
+            *(void**)((s32)wp + 0x10) = fileAllocf(4, "%s/e/%s/effect_%s.tpl", getMarioStDvdRoot(), prefix, prefix);
             *(s32*)((s32)wp + 0x14) = *(s32*)((s32)gp + 0x16C);
         }
     }
@@ -462,9 +462,9 @@ void* effGetSet(char* name) {
 
 
 
-u8 effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4) {
-    extern void PSMTXTrans(void*, double, double, double);
-    extern void PSMTXRotRad(void*, double, char);
+void effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4) {
+    extern void PSMTXTrans(void*, f32, f32, f32);
+    extern void PSMTXRotRad(void*, char, f32);
     extern void PSMTXScale(void*, float, float, float);
     extern void PSMTXConcat(void*, void*, void*);
     extern f32 float_0_804201a0;
@@ -504,41 +504,40 @@ u8 effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4)
     register f32 prevOut;
     register f32 nextValue;
     register f32 nextIn;
-    register f32 nextOut;
-    volatile f32 retainedScale;
 
-    retainedScale = 1.0f / 250.0f;
+
     qreg = 0x06070607;
-    asm { mtspr GQR5, qreg }
-    time = *(f32*)(param_1 + 4);
+
     last = *param_2 - 1;
     for (i = 1; i < *param_2; i++) {
         next = (s16*)(param_2[1] + i * 0xB2);
         prev = (s16*)(param_2[1] + (i - 1) * 0xB2);
-        frameTime = (f32)*next;
-        if (time <= frameTime) {
+        asm { mtspr GQR5, qreg }
+        time = *(f32*)(param_1 + 4);
+        if (time <= (f32)*next) {
+            frameTime = time;
         } else if (i != last) {
             continue;
         } else {
-            time = frameTime;
+            frameTime = (f32)*next;
         }
-        for (j = 0; j < 22; j++) {
-            register s16* p = prev + j * 4;
-            register s16* n = next + j * 4;
+        {
+        register s16* p = prev;
+        register s16* n = next;
+        f32* dest = v;
+        for (j = 22; j > 0; j--, p += 4, n += 4, dest++) {
             asm { psq_l prevValue, 2(p), 1, 5 }
             asm { psq_l prevIn, 4(p), 1, 5 }
             asm { psq_l prevOut, 6(p), 1, 5 }
             asm { psq_l nextValue, 2(n), 1, 5 }
             asm { psq_l nextIn, 4(n), 1, 5 }
-            asm { psq_l nextOut, 6(n), 1, 5 }
+            asm { psq_l prevIn, 6(n), 1, 5 }
             if (*(s8*)((s32)p + 9) != 0) {
-                v[j] = prevValue;
+                *dest = prevValue;
             } else {
-                span = (f32)*next - (f32)*prev;
-                if (span == *(volatile f32*)&float_0_804201a0) {
-                    span = *(volatile f32*)&dat_804201a4;
-                }
-                t = (time - (f32)*prev) / span;
+                span = (f32)((s32)*next - (s32)*prev);
+                t = (frameTime - (f32)*prev) /
+                    (span == *(volatile f32*)&float_0_804201a0 ? *(volatile f32*)&dat_804201a4 : span);
                 t2 = t * t;
                 t3 = t2 * t;
                 {
@@ -546,24 +545,25 @@ u8 effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4)
                     f32 two = *(volatile f32*)&float_2_804201b4;
                     f32 three = *(volatile f32*)&float_3_804201a8;
                     f32 negTwo = *(volatile f32*)&float_neg2_804201ac;
-                    v[j] = prevValue * (one + (two * t3 - three * t2)) +
-                       nextValue * (negTwo * t3 + three * t2) +
+                    *dest = prevValue * (one + (two * t3 - three * t2)) +
                        prevOut * (span * (t + -(two * t2 - t3))) +
+                       nextValue * (negTwo * t3 + three * t2) +
                        nextIn * (span * (t3 - t2));
                 }
             }
         }
-        PSMTXTrans(m12, (double)v[0], (double)v[1], (double)v[2]);
-        PSMTXRotRad(m0, (double)v[3], 'x');
-        PSMTXRotRad(m1, (double)v[4], 'y');
-        PSMTXRotRad(m2, (double)v[5], 'z');
+        }
+        PSMTXTrans(m12, v[0], v[1], v[2]);
+        PSMTXRotRad(m0, 'x', v[3]);
+        PSMTXRotRad(m1, 'y', v[4]);
+        PSMTXRotRad(m2, 'z', v[5]);
         PSMTXScale(m11, v[6], v[7], v[8]);
-        PSMTXTrans(m5, (double)v[9], (double)v[10], (double)v[11]);
-        PSMTXTrans(m6, -(double)v[9], -(double)v[10], -(double)v[11]);
-        PSMTXTrans(m7, (double)v[12], (double)v[13], (double)v[14]);
-        PSMTXTrans(m3, (double)v[15], (double)v[16], (double)v[17]);
-        PSMTXTrans(m4, -(double)v[15], -(double)v[16], -(double)v[17]);
-        PSMTXTrans(m8, (double)v[18], (double)v[19], (double)v[20]);
+        PSMTXTrans(m5, v[9], v[10], v[11]);
+        PSMTXTrans(m6, -v[9], -v[10], -v[11]);
+        PSMTXTrans(m7, v[12], v[13], v[14]);
+        PSMTXTrans(m3, v[15], v[16], v[17]);
+        PSMTXTrans(m4, -v[15], -v[16], -v[17]);
+        PSMTXTrans(m8, v[18], v[19], v[20]);
         PSMTXConcat(m8, m3, m9);
         PSMTXConcat(m9, m11, m9);
         PSMTXConcat(m9, m4, m11);
@@ -574,16 +574,12 @@ u8 effCalcMayaAnimMatrix(int param_1, int* param_2, s32 param_3, float* param_4)
         PSMTXConcat(m9, m6, m10);
         PSMTXConcat(m12, m10, m9);
         PSMTXConcat(m9, m11, (void*)param_3);
-        if (v[21] > float_1_804201b0) {
-            *param_4 = float_1_804201b0;
-        } else if (v[21] < float_0_804201a0) {
-            *param_4 = float_0_804201a0;
-        } else {
-            *param_4 = v[21];
-        }
-        return 0;
+        *param_4 = v[21] > float_1_804201b0 ? float_1_804201b0
+                                                    : v[21] < float_0_804201a0
+                                                          ? float_0_804201a0 : v[21];
+        return;
     }
-    return 0;
+    return;
 }
 
 int* effMayaAnimAlloc(void* effData) {
@@ -620,46 +616,50 @@ void effPlayMayaAnim(void* anim) {
     *(u16*)anim |= 1;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 effCalcMayaAnim(void* anim) {
     extern s64 __div2i(s64 dividend, s64 divisor);
-    extern u8 effCalcMayaAnimMatrix(s32 anim, s32* data, s32 node, f32* matrix);
+    extern void effCalcMayaAnimMatrix(s32 anim, s32* data, s32 node, f32* matrix);
     extern f32 float_1000_8042019c;
+    EffGp* work;
     u64 now;
     u32 ticks;
-    s32 data;
     s32 i;
     u8* node;
 
     if ((*(u16*)anim & 1) != 0 && (*(u16*)anim & 2) == 0) {
+        work = gp;
         {
             u64 time;
-            if (*(s32*)((s32)gp + 0x14) != 0) {
-                time = *(u64*)((s32)gp + 0x38);
+            if (*(s32*)((s32)work + 0x14) != 0) {
+                time = *(u64*)((s32)work + 0x38);
             } else {
-                time = *(u64*)((s32)gp + 0x40);
+                time = *(u64*)((s32)work + 0x40);
             }
             ticks = (*(u32*)0x800000F8 >> 2) / 1000;
             now = (u64)__div2i((s64)time, (s64)(u32)ticks);
 
             *(f32*)((s32)anim + 4) =
-                ((f32)*(s32*)((s32)gp + 4) * (f32)(now - *(u64*)((s32)anim + 8))) /
+                ((f32)*(s32*)((s32)work + 4) * (f32)(now - *(u64*)((s32)anim + 8))) /
                 float_1000_8042019c;
-            data = *(s32*)((s32)anim + 0x10);
-            if (*(f32*)((s32)anim + 4) >= *(f32*)(data + 4)) {
-                *(f32*)((s32)anim + 4) = *(f32*)(data + 4);
+            if (*(f32*)((s32)anim + 4) >= *(f32*)(*(s32*)((s32)anim + 0x10) + 4)) {
+                *(f32*)((s32)anim + 4) = *(f32*)(*(s32*)((s32)anim + 0x10) + 4);
                 *(u16*)anim |= 2;
             }
         }
 
         node = (u8*)anim;
-        for (i = 0; i < **(s32**)(data + 8); i++, node += 0x34) {
+        for (i = 0; i < **(s32**)(*(s32*)((s32)anim + 0x10) + 8); i++, node += 0x34) {
             effCalcMayaAnimMatrix((s32)anim,
-                                  (s32*)(*(s32*)(*(s32*)(data + 8) + 4) + i * 0x10),
+                                  (s32*)(*(s32*)(*(s32*)(*(s32*)((s32)anim + 0x10) + 8) + 4) + i * 0x10),
                                   (s32)(node + 0x14),
                                   (f32*)(node + 0x44));
         }
     }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw on
@@ -719,3 +719,11 @@ void effDrawMayaPoly(void* data) {
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
+
+__declspec(section ".sdata2") const f32 float_1000_8042019c __attribute__((aligned(4))) = 1000.0f;
+__declspec(section ".sdata2") const f32 float_0_804201a0 __attribute__((aligned(4))) = 0.0f;
+__declspec(section ".sdata2") const f32 dat_804201a4 __attribute__((aligned(4))) = 1.0e-8f;
+__declspec(section ".sdata2") const f32 float_3_804201a8 __attribute__((aligned(4))) = 3.0f;
+__declspec(section ".sdata2") const f32 float_neg2_804201ac __attribute__((aligned(4))) = -2.0f;
+__declspec(section ".sdata2") const f32 float_1_804201b0 __attribute__((aligned(4))) = 1.0f;
+__declspec(section ".sdata2") const f32 float_2_804201b4 __attribute__((aligned(4))) = 2.0f;

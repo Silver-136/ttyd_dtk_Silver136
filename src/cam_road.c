@@ -99,8 +99,13 @@ const Vec3 vec3_802bf564 = {0.0f, -1.0f, 0.0f};
 const f64 double_1_802bf570 = 1.0;
 const f64 double_0p5_802bf578 = 0.5;
 const f64 double_3_802bf580 = 3.0;
-const f64 double_0_802bf588 = 0.0;
+__declspec(section ".rodata") f64 double_0_802bf588 = 0.0;
 const f64 double_to_int_802bf590 = 4503601774854144.0;
+const f64 double_0p0001_802bf598 = (f64)0.0001f;
+const f64 double_0p01_802bf5a0 = (f64)0.01f;
+const f64 double_neg1Eneg07_802bf5a8 = -1e-7;
+const f64 double_1_802bf5b0 = 1.0000001;
+__declspec(section ".rodata") const char str_PCTscam_PCTd_802bf5b8[] = "%scam = %d\n";
 
 extern s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e);
 extern s32 collisionCurve(s32 type, void* road, void* pos, void* result);
@@ -373,7 +378,7 @@ void calcCurrentCamState(void* out) {
 s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
     extern const Vec3 vec3_802bf564;
     extern const f32 float_0_8041f62c;
-    extern const f64 double_0_802bf588;
+    extern f64 double_0_802bf588;
 
     Vec3* pointPtr = (Vec3*)a;
     Vec3* v0Ptr = (Vec3*)b;
@@ -409,8 +414,8 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
      */
 #define CT_SUB3(dst_, lhs_, rhs_)                   \
     do {                                             \
-        Vec3 ct_lhs = (lhs_);                        \
         Vec3 ct_rhs = (rhs_);                        \
+        Vec3 ct_lhs = (lhs_);                        \
         Vec3 ct_out;                                 \
         ct_out.x = ct_lhs.x - ct_rhs.x;             \
         ct_out.y = ct_lhs.y - ct_rhs.y;             \
@@ -420,8 +425,8 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
 
 #define CT_CROSS3(dst_, lhs_, rhs_)                 \
     do {                                             \
-        Vec3 ct_lhs = (lhs_);                        \
         Vec3 ct_rhs = (rhs_);                        \
+        Vec3 ct_lhs = (lhs_);                        \
         Vec3 ct_out;                                 \
         ct_out.x = (ct_lhs.y * ct_rhs.z) -          \
                    (ct_lhs.z * ct_rhs.y);            \
@@ -434,8 +439,8 @@ s32 collisionTri_simple(void* a, void* b, void* c, void* d, void* e) {
 
 #define CT_DOT2(dst_, lhs_, rhs_)                   \
     do {                                             \
-        Vec3 ct_lhs = (lhs_);                        \
         Vec3 ct_rhs = (rhs_);                        \
+        Vec3 ct_lhs = (lhs_);                        \
         (dst_) = (ct_lhs.z * ct_rhs.z) +            \
                  (ct_lhs.x * ct_rhs.x) +            \
                  (ct_lhs.y * ct_rhs.y);              \
@@ -619,7 +624,7 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
 #define CC_SQRT(dst_, sq_)                                                        \
     do {                                                                          \
         f32 cc_sq = (sq_);                                                        \
-        f32 cc_result;                                                            \
+        f32 cc_result = cc_sq;                                                            \
         if (*(f64*)(curveRodata + 0x48) != (f64)cc_sq) {                         \
             if (cc_sq > float_0_8041f62c) {                                       \
                 f64 cc_value = (f64)cc_sq;                                        \
@@ -663,7 +668,7 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
                 else cc_result = cc_sq;                                           \
             }                                                                     \
         } else {                                                                  \
-            cc_result = float_0_8041f62c;                                         \
+            cc_result = cc_sq;                                         \
         }                                                                         \
         (dst_) = cc_result;                                                       \
     } while (0)
@@ -1117,26 +1122,40 @@ extern s32 collisionCurve(s32 type, void* road, void* pos, void* result) {
 }
 
 void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 checkWidth, void* out, void* prev) {
+    s32 i;
+    s32* firstIndexPtr;
+    s32 k;
+    void* triBase;
+    s32 polyCount;
+    void* vertexBase;
+    void* roadEntry;
+    s32 blockCount;
+    void* foundRoad;
+    void* road;
+    s32 tri;
+    s32 j;
+    s32* walkIndexPtr;
+    s32 indexCount;
     const char* volatile rodata;
     void* work0;
-    void* road;
-    void* foundRoad;
-    void* roadEntry;
     void* chosenRoad;
     f32 c2;
     f32 s2;
     Vec3 pos;
     Vec3 triPos;
+    Vec3 curvePos;
+    Vec3 sidePosA;
+    Vec3 sidePosB;
+    Vec3 magVecA;
+    Vec3 magVecB;
+    Vec3 sideAxis;
+    Vec3 forwardAxis;
+    Vec3 sideVecA;
+    Vec3 sideVecB;
     Vec3 p0;
     Vec3 p1;
     Vec3 p2;
     Vec3 p3;
-    Vec3 sidePosA;
-    Vec3 sidePosB;
-    Vec3 sideVecA;
-    Vec3 sideVecB;
-    Vec3 magVecA;
-    Vec3 magVecB;
     CurveResult hit;
     CurveResult sideHitA;
     CurveResult sideHitB;
@@ -1176,29 +1195,18 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
     u32 flags;
     u32 timeHi;
     u32 timeLo;
-    s32 i;
-    s32 j;
-    s32 k;
-    s32 tri;
-    s32 blockCount;
-    s32 polyCount;
-    s32 indexCount;
     s32 active;
     s32 hitAny;
     f32 softSpeed;
     f32 hardSpeed;
-    void* vertexBase;
-    void* triBase;
     void* indexBase;
     s32 idx0;
     s32 idx1;
     s32 idx2;
     f32 sideARefX;
     f32 sideARefZ;
-    s32* firstIndexPtr;
-    s32* walkIndexPtr;
-    Vec3 sideAxis;
-    Vec3 forwardAxis;
+    f32 sideBRefX;
+    f32 sideBRefZ;
     f32 compSide;
     f32 compForward;
     f32 negDirX;
@@ -1371,10 +1379,18 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
                 s32 classification;
                 switch (exponent) {
                     case 0x7f800000:
-                        classification = (bits & 0x7fffff) ? 1 : 2;
+                        if (bits & 0x7fffff) {
+                            classification = 1;
+                        } else {
+                            classification = 2;
+                        }
                         break;
                     case 0:
-                        classification = (bits & 0x7fffff) ? 5 : 3;
+                        if (bits & 0x7fffff) {
+                            classification = 5;
+                        } else {
+                            classification = 3;
+                        }
                         break;
                     default:
                         classification = 4;
@@ -1396,7 +1412,6 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
     }
 
     if (*(s32*)((s32)chosenRoad + 0xB4) != 0) {
-        Vec3 curvePos;
         Vec3 curveInput;
 
         curvePos.x = outX;
@@ -1471,13 +1486,13 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
                 sidePosA.z = sideHitA.z;
             }
         }
-        sideARefX = outX;
-        sideARefZ = outZ;
-
         if (hitAny != 0) {
-        sideARefX = sidePosA.x;
-     sideARefZ = sidePosA.z;
-     }
+            sideARefX = sidePosA.x;
+            sideARefZ = sidePosA.z;
+        } else {
+            sideARefX = outX;
+            sideARefZ = outZ;
+        }
         c2 = cos(curveAngle);
         s2 = sin(curveAngle);
         sideHitB.bestY = float_neg1E06_8041f680;
@@ -1521,8 +1536,8 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
         }
 
         if (active != 0) {
-            outX = sidePosB.x;
-            outZ = sidePosB.z;
+            sideBRefX = sidePosB.x;
+            sideBRefZ = sidePosB.z;
 
             if (((sideHitB.flags & 1) == 0) && ((*(u32*)((s32)prev + 8) & 1) != 0)) {
                 *(f32*)((s32)wp + 0x1AC) = float_0_8041f62c;
@@ -1530,15 +1545,18 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
             if (((sideHitB.flags & 2) == 0) && ((*(u32*)((s32)prev + 8) & 2) != 0)) {
                 *(f32*)((s32)wp + 0x1B0) = float_0_8041f62c;
             }
+        } else {
+            sideBRefX = outX;
+            sideBRefZ = outZ;
         }
 
         magVecA.x = sideARefX - *(f32*)((s32)prev + 0x28);
         magVecA.y = float_0_8041f62c;
         magVecA.z = sideARefZ - *(f32*)((s32)prev + 0x30);
 
-        magVecB.x = outX - *(f32*)((s32)prev + 0x28);
+        magVecB.x = sideBRefX - *(f32*)((s32)prev + 0x28);
         magVecB.y = float_0_8041f62c;
-        magVecB.z = outZ - *(f32*)((s32)prev + 0x30);
+        magVecB.z = sideBRefZ - *(f32*)((s32)prev + 0x30);
 
         magA = PSVECMag(&magVecA);
         PSVECMag(&magVecB);
@@ -1565,9 +1583,9 @@ void calcCamRoad(f32 x, f32 y, f32 z, f32 param4, f32 param5, f32 param6, f32 ch
         sideVecA.y = float_0_8041f62c;
         sideVecA.z = sideARefZ - *(f32*)((s32)prev + 0x30);
 
-        sideVecB.x = outX - *(f32*)((s32)prev + 0x28);
+        sideVecB.x = sideBRefX - *(f32*)((s32)prev + 0x28);
         sideVecB.y = float_0_8041f62c;
-        sideVecB.z = outZ - *(f32*)((s32)prev + 0x30);
+        sideVecB.z = sideBRefZ - *(f32*)((s32)prev + 0x30);
 
         negDirX = -dirX;
         
@@ -1611,8 +1629,8 @@ if (__fabsf(dirX) <= __fabsf(sideX)) {
     PSVECScale(&forwardAxis, &sideVecB, limitB * signB);
     }
 
-        outX = *(f32*)((s32)prev + 0x28) + sideVecA.x + sideVecB.x;
-        outZ = *(f32*)((s32)prev + 0x30) + sideVecA.z + sideVecB.z;
+        outX = *(f32*)((s32)prev + 0x28) + (sideVecA.x + sideVecB.x);
+        outZ = *(f32*)((s32)prev + 0x30) + (sideVecA.z + sideVecB.z);
     }
     }
 

@@ -1,6 +1,6 @@
 #include "effect/eff_mugi.h"
 
-void* effMugiKemuriEntry(f64 x, f64 y, f64 z, f64 angle) {
+void* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* memset(void* dst, s32 value, u32 size);
@@ -62,7 +62,7 @@ void* effMugiKemuriEntry(f64 x, f64 y, f64 z, f64 angle) {
         *(s32*)((s32)work + 0x58) = 0xFF;
         *(s32*)((s32)work + 0x54) = 0x3C;
         *(f32*)((s32)work + 0x14) = zero;
-        curAngle = angle + (f64)(i * 72);
+        curAngle = angle + (f32)(i * 72);
         *(f32*)((s32)work + 0x18) = curAngle;
         *(f32*)((s32)work + 0x1C) = zero;
         *(f32*)((s32)work + 0x3C) = rise;
@@ -80,7 +80,7 @@ void* effMugiKemuriEntry(f64 x, f64 y, f64 z, f64 angle) {
 }
 
 
-void* effMugiKemuri2Entry(f64 x, f64 y, f64 z, f64 angle, f64 dir, s32 arg5) {
+void* effMugiKemuri2Entry(f32 x, f32 y, f32 z, f32 angle, f32 dir, s32 arg5) {
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* memset(void* dst, s32 value, u32 size);
@@ -88,30 +88,21 @@ void* effMugiKemuri2Entry(f64 x, f64 y, f64 z, f64 angle, f64 dir, s32 arg5) {
     extern f32 reviseAngle(f32 angle);
     extern u8 effMugiKemuri2Main(void* effEntry);
     extern char str_MugiKemuri2_802f3af8[];
-    extern f32 float_0_80422d64;
-    extern f32 float_1_80422d7c;
-    extern f32 float_0p7_80422d84;
-    extern f32 float_5p4_80422d88;
-    extern f32 float_0p5_80422d8c;
-    extern f32 float_neg0p07_80422d90;
-    extern f32 float_0p003_80422d94;
-    extern f32 float_6p2832_80422d98;
-    extern f32 float_360_80422d9c;
+    extern const f32 float_0_80422d64;
+    extern const f32 float_1_80422d7c;
+    extern const f32 float_0p7_80422d84;
+    extern const f32 float_5p4_80422d88;
+    extern const f32 float_0p5_80422d8c;
+    extern const f32 float_neg0p07_80422d90;
+    extern const f32 float_0p003_80422d94;
+    extern const f32 float_6p2832_80422d98;
+    extern const f32 float_360_80422d9c;
     extern double sin(double x);
     extern double cos(double x);
     void* entry;
     void* work;
     s32 i;
     f32 rad;
-    f32 zero;
-    f32 scale;
-    f32 one;
-    f32 speed;
-    f32 half;
-    f32 accel;
-    f32 jerk;
-    f32 tau;
-    f32 degrees;
 
     entry = effEntry();
     *(char**)((s32)entry + 0x14) = str_MugiKemuri2_802f3af8;
@@ -121,40 +112,31 @@ void* effMugiKemuri2Entry(f64 x, f64 y, f64 z, f64 angle, f64 dir, s32 arg5) {
     memset(work, 0, 500);
     *(void**)((s32)entry + 0x10) = effMugiKemuri2Main;
     *(u32*)((s32)entry + 0x0) |= 2;
-    zero = float_0_80422d64;
-    scale = float_0p7_80422d84;
-    one = float_1_80422d7c;
-    speed = float_5p4_80422d88;
-    half = float_0p5_80422d8c;
-    accel = float_neg0p07_80422d90;
-    jerk = float_0p003_80422d94;
-    tau = float_6p2832_80422d98;
-    degrees = float_360_80422d9c;
 
     for (i = 0; i < 5; i++, work = (void*)((s32)work + 100)) {
         *(s32*)((s32)work + 0x0) = 1;
         *(s32*)((s32)work + 0x4) = arg5;
-        *(f32*)((s32)work + 0x38) = zero;
+        *(f32*)((s32)work + 0x38) = float_0_80422d64;
         *(f32*)((s32)work + 0x8) = x;
         *(f32*)((s32)work + 0xC) = y;
         *(f32*)((s32)work + 0x10) = z;
-        *(f32*)((s32)work + 0x20) = scale;
-        *(f32*)((s32)work + 0x24) = scale;
-        *(f32*)((s32)work + 0x28) = scale;
+        *(f32*)((s32)work + 0x20) = float_0p7_80422d84;
+        *(f32*)((s32)work + 0x24) = float_0p7_80422d84;
+        *(f32*)((s32)work + 0x28) = float_0p7_80422d84;
         *(s32*)((s32)work + 0x58) = 0xFF;
-        *(f32*)((s32)work + 0x34) = one;
-        *(f32*)((s32)work + 0x30) = speed;
-        *(f32*)((s32)work + 0x2C) = (dir == (f64)zero) ? 10 : -10;
-        *(f32*)((s32)work + 0x3C) = half;
-        *(f32*)((s32)work + 0x40) = accel;
-        *(f32*)((s32)work + 0x44) = jerk;
-        *(f32*)((s32)work + 0x48) = zero;
+        *(f32*)((s32)work + 0x34) = float_1_80422d7c;
+        *(f32*)((s32)work + 0x30) = float_5p4_80422d88;
+        *(f32*)((s32)work + 0x2C) = (dir == float_0_80422d64) ? 10 : -10;
+        *(f32*)((s32)work + 0x3C) = float_0p5_80422d8c;
+        *(f32*)((s32)work + 0x40) = float_neg0p07_80422d90;
+        *(f32*)((s32)work + 0x44) = float_0p003_80422d94;
+        *(f32*)((s32)work + 0x48) = float_0_80422d64;
         *(s32*)((s32)work + 0x54) = 0xF;
         *(f32*)((s32)work + 0x18) = angle;
-        *(f32*)((s32)work + 0x14) = zero;
-        *(f32*)((s32)work + 0x1C) = zero;
+        *(f32*)((s32)work + 0x14) = float_0_80422d64;
+        *(f32*)((s32)work + 0x1C) = float_0_80422d64;
         *(f32*)((s32)work + 0x5C) = ((rand() % 100) >> 4) & 1;
-        rad = (tau * reviseAngle(angle + (dir == (f64)zero ? 90 : -90))) / degrees;
+        rad = (float_6p2832_80422d98 * reviseAngle(angle + (f32)(dir == float_0_80422d64 ? 90 : -90))) / float_360_80422d9c;
         *(f32*)((s32)work + 0x4C) = (f32)sin(rad);
         *(f32*)((s32)work + 0x50) = (f32)cos(rad);
         *(s32*)((s32)work + 0x60) = -1;
@@ -304,7 +286,6 @@ u8 effMugiKemuri2Main(void* effEntry) {
     s32 fading;
 
     work = *(void**)((s32)effEntry + 0xC);
-    pos = vec3_802f3ab0;
     pos.x = *(f32*)((s32)work + 0x8);
     pos.y = *(f32*)((s32)work + 0xC);
     pos.z = *(f32*)((s32)work + 0x10);
@@ -346,8 +327,9 @@ u8 effMugiKemuri2Main(void* effEntry) {
                 *(s32*)((s32)cur + 0x0) = 0;
             } else {
                 alive = 1;
-                if (*(s32*)((s32)cur + 0x4) == 0 && *(f32*)((s32)cur + 0x34) != float_0_80422d64) {
-                    if (*(u16*)((s32)marioGetPtr() + 0x2E) == 0) {
+                {
+                    void* mario = marioGetPtr();
+                    if (*(s32*)((s32)cur + 0x4) == 0 && *(f32*)((s32)cur + 0x34) != float_0_80422d64 && *(u16*)((s32)mario + 0x2E) == 0) {
                         *(s32*)((s32)cur + 0x54) += 1;
                         continue;
                     }
@@ -356,8 +338,8 @@ u8 effMugiKemuri2Main(void* effEntry) {
                 *(f32*)((s32)cur + 0x40) += *(f32*)((s32)cur + 0x44);
                 *(f32*)((s32)cur + 0x3C) += *(f32*)((s32)cur + 0x40);
                 *(f32*)((s32)cur + 0x1C) += *(f32*)((s32)cur + 0x3C) * *(f32*)((s32)cur + 0x2C);
-                *(f32*)((s32)cur + 0x8) -= *(f32*)((s32)cur + 0x4C) * (*(f32*)((s32)cur + 0x3C) * *(f32*)((s32)cur + 0x30));
-                *(f32*)((s32)cur + 0x10) -= *(f32*)((s32)cur + 0x50) * (*(f32*)((s32)cur + 0x3C) * *(f32*)((s32)cur + 0x30));
+                *(f32*)((s32)cur + 0x8) -= (*(f32*)((s32)cur + 0x4C) * *(f32*)((s32)cur + 0x3C)) * *(f32*)((s32)cur + 0x30);
+                *(f32*)((s32)cur + 0x10) -= (*(f32*)((s32)cur + 0x50) * *(f32*)((s32)cur + 0x3C)) * *(f32*)((s32)cur + 0x30);
                 *(s32*)((s32)cur + 0x58) -= 12;
                 if (*(f32*)((s32)cur + 0x3C) < float_0_80422d64) {
                     *(f32*)((s32)cur + 0x34) = float_0_80422d64;

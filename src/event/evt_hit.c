@@ -58,21 +58,18 @@ s32 evt_hit_damage_return_set(void* event, s32 isFirstCall) {
 
     if (isFirstCall != 0) {
         count = 1;
-        entry = src;
-        while (entry->name != 0) {
-            entry++;
+        for (entry = src; entry->name != 0; entry++) {
             count++;
         }
         size = count * 0x10;
         hitDmgretPtr = _mapAlloc(mapalloc_base_ptr, size);
         entry = hitDmgretPtr;
         memcpy(entry, src, size);
-        while (entry->name != 0) {
+        for (; entry->name != 0; entry++) {
             if (entry->y == float_neg1000_804203d0) {
                 hitObjGetPos(entry->name, &entry->x);
             }
             hitGrpDamageReturnSet(entry->name, entry);
-            entry++;
         }
     }
     return 2;

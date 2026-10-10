@@ -67,6 +67,7 @@ s32 compare(u8* lhs, u8* rhs) {
 }
 
 
+#pragma opt_common_subs off
 void DVDMgrMain(void) {
     extern void qqsort(void* base, s32 count, s32 size, void* compare);
     extern s32 DVDReadPrio(void* info, void* dst, s32 size, s32 offset, s32 prio);
@@ -75,40 +76,44 @@ void DVDMgrMain(void) {
     extern void* _callback;
     u8 order[0x100];
     u8* out;
-    s32 count;
-    s32 i;
-    s32 index;
     void* entry;
     s32 didWork;
-    s32 readSize;
     s32 result;
+    s32 count;
+    s32 readSize;
+    s32 i;
+    s32 index;
     void (*cb)(s32 result, void* info);
     void (*globalCallback)(void);
 
-    memset(order, 0, 0x100);
     count = 0;
+    memset(order, 0, 0x100);
     out = order;
     entry = dvdq;
     index = 0;
     for (i = 0; i < 0x40; i++) {
         if ((*(u16*)((s32)entry + 0x90) & 0x8000) != 0) {
-            *out++ = (u8)index;
+            *out = (u8)index;
             count++;
+            out++;
         }
         index++;
         if ((*(u16*)((s32)entry + 0x128) & 0x8000) != 0) {
-            *out++ = (u8)index;
+            *out = (u8)index;
             count++;
+            out++;
         }
         index++;
         if ((*(u16*)((s32)entry + 0x1C0) & 0x8000) != 0) {
-            *out++ = (u8)index;
+            *out = (u8)index;
             count++;
+            out++;
         }
         index++;
         if ((*(u16*)((s32)entry + 0x258) & 0x8000) != 0) {
-            *out++ = (u8)index;
+            *out = (u8)index;
             count++;
+            out++;
         }
         index++;
         entry = (void*)((s32)entry + 0x260);
@@ -172,7 +177,10 @@ void DVDMgrMain(void) {
         globalCallback();
     }
 }
+#pragma opt_common_subs reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void* DVDMgrOpen(const char* path, s32 mode, s32 unk) {
     extern s32 DVDConvertPathToEntrynum(const char* path);
     extern s32 DVDOpen(const char* path, void* info);
@@ -185,7 +193,7 @@ void* DVDMgrOpen(const char* path, s32 mode, s32 unk) {
     }
 
     entry = dvdq;
-    for (i = 0; i < 0x100; i += 8) {
+    for (i = 0; i < 0x100; i++) {
         if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
         i++; entry = (void*)((s32)entry + 0x98);
         if ((*(u16*)((s32)entry + 0x90) & 0x8000) == 0) break;
@@ -219,14 +227,15 @@ void* DVDMgrOpen(const char* path, s32 mode, s32 unk) {
     *(s32*)((s32)entry + 0x88) = 0;
     *(u16*)((s32)entry + 0x90) |= 0x8000;
 
-    if (DVDOpen(path, (void*)((s32)entry + 0x40)) == 0) {
+    if (DVDOpen((char*)entry, (void*)((s32)entry + 0x40)) == 0) {
         memset(entry, 0, 0x98);
         return 0;
     }
 
     return entry;
 }
-
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 s32 DVDMgrRead(void* handle, void* dst, u32 size, s32 offset) {
     extern void OSYieldThread(void);

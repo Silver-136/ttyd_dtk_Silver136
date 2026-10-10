@@ -132,7 +132,7 @@ extern void FontDrawString(f32 x, f32 y, s32 str);
 void disp1(s32 cameraId);
 void disp2(s32 cameraId);
 void titleMain(void* seq);
-void pressStartGX(u8 alpha, f32 x, f32 y);
+void pressStartGX(s32 alpha, f32 x, f32 y);
 
 void* DbgBtlSel_GetMsgDataPtr(void) {
     return 0;
@@ -698,28 +698,42 @@ void disp1(s32 cameraId) {
 #pragma use_lmw_stmw on
 
 
+/* US title catalog prefix, before disp2's compiler-generated vector templates. */
+__declspec(section ".rodata") u32 vec3_802bf3f8[3] = {0, 0, 0};
+__declspec(section ".rodata") u32 vec3_802bf404[3] = {0x3F800000, 0x3F800000, 0x3F800000};
+__declspec(section ".rodata") const u32 dat_802bf410[6] = {21, 21, 22, 23, 24, 25};
+
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
+/*
+ * Candidate attempt for main/sequence/seq_title::disp2
+ * Attempt: 101
+ * Template: none
+ * Generated: 2026-10-05T13:52:42
+ * Source file: C:\Users\tjone\Desktop\TTYD_Decomp_Work\us_decomp\ttyd_dtk\src\sequence\seq_title.c
+ * Extraction: found normal
+ * Source lines: 704-872
+ * Existing parked entry: disp2=79.45872
+ * WARNING: source already has the save/restore pragma wrapper; avoid adding a second wrapper in manual edits.
+ *
+ * Edit this candidate file only. Test with auto_decomp_agent_v1_12_codex.ps1.
+ */
 void disp2(s32 cameraId) {
+    typedef struct { u32 words[0x98]; } CameraCopy;
+    typedef struct { f32 x, y, z; } TitleVector;
     void* cam8;
     void* cam;
     void* camAgain;
     s32 i;
-    u32 camBackup[0x9C];
-    f32 projBackup[6];
+    CameraCopy camBackup;
+    f32 projBackup[7];
     f32 viewportBackup[6];
-    u32* vec;
+    register u32* vec;
     u32 msgTbl[6];
     u32 color1;
     u32 color2;
     u32 fontColor;
-    u32 size1[3];
-    u32 basePos1[3];
-    u32 pos1[3];
-    u32 size2[3];
-    u32 basePos2[3];
-    u32 pos2[3];
     s32 lang;
     s32 counter;
     s32 alpha;
@@ -731,41 +745,21 @@ void disp2(s32 cameraId) {
     u32 copyA;
     u32 copyB;
     s32 copyCount;
-    u32* vecMsg;
     vec = vec3_802bf3f8;
     cam8 = camGetPtr(8);
-    vecMsg = vec;
 
-    msgTbl[0] = vecMsg[6];
-    msgTbl[1] = vecMsg[7];
-    msgTbl[2] = vecMsg[8];
-    msgTbl[3] = vecMsg[9];
-    msgTbl[4] = vecMsg[10];
-    msgTbl[5] = vecMsg[11];
+    msgTbl[0] = vec[6];
+    msgTbl[1] = vec[7];
+    msgTbl[2] = vec[8];
+    msgTbl[3] = vec[9];
+    msgTbl[4] = vec[10];
+    msgTbl[5] = vec[11];
 
     cam = camGetPtr(cameraId);
-    copySrc = (u32*)((s32)cam - 4);
-    copyDst = (u32*)((s32)&camBackup[4] - 4);
-    for (i = 0; i < 0x4C; i++) {
-        copyA = copySrc[1];
-        copySrc += 2;
-        copyB = copySrc[0];
-        copyDst[1] = copyA;
-        copyDst += 2;
-        copyDst[0] = copyB;
-    };
+    camBackup = *(CameraCopy*)cam;
 
     camAgain = camGetPtr(cameraId);
-    copySrc = (u32*)((s32)cam8 - 4);
-    copyDst = (u32*)((s32)camAgain - 4);
-    for (i = 0; i < 0x4C; i++) {
-        copyA = copySrc[1];
-        copySrc += 2;
-        copyB = copySrc[0];
-        copyDst[1] = copyA;
-        copyDst += 2;
-        copyDst[0] = copyB;
-    }
+    *(CameraCopy*)camAgain = *(CameraCopy*)cam8;
 
     GXGetProjectionv(projBackup);
     GXGetViewportv(viewportBackup);
@@ -782,45 +776,31 @@ void disp2(s32 cameraId) {
 
     winTexInit(**(s32**)(*(s32*)wp2 + 0xA0));
 
+    {
+    TitleVector pos1;
+    TitleVector basePos1 = {0.0f, 0.0f, 0.0f};
+    TitleVector size1 = {1.0f, 1.0f, 1.0f};
     color1 = dat_8041f588;
-
-    size1[0] = vec[15];
-    size1[1] = vec[16];
-    size1[2] = vec[17];
-
-    basePos1[0] = vec[12];
-    basePos1[1] = vec[13];
-    basePos1[2] = vec[14];
-
-    basePos1[0] = *(u32*)(wp2 + 0xC);
-    basePos1[1] = *(u32*)(wp2 + 0x10);
-    *(f32*)&basePos1[1] = *(f32*)&basePos1[1] - float_20_8041f5a8;
-
-    pos1[0] = basePos1[0];
-    pos1[1] = basePos1[1];
-    pos1[2] = basePos1[2];
+    basePos1.x = *(f32*)(wp2 + 0xC);
+    basePos1.y = *(f32*)(wp2 + 0x10) - float_20_8041f5a8;
+    pos1 = basePos1;
 
     lang = *(s32*)(gp + 0x16C);
-    unk_8017c9bc(msgTbl[lang], pos1, size1, &color1);
+    unk_8017c9bc(msgTbl[lang], &pos1, &size1, &color1);
 
+    }
+    {
+    TitleVector pos2;
+    TitleVector basePos2 = {0.0f, 0.0f, 0.0f};
+    TitleVector size2 = {1.0f, 1.0f, 1.0f};
     color2 = dat_8041f58c;
+    basePos2.x = *(f32*)(wp2 + 0x14);
+    basePos2.y = *(f32*)(wp2 + 0x18);
+    pos2 = basePos2;
 
-    size2[0] = vec[21];
-    size2[1] = vec[22];
-    size2[2] = vec[23];
+    winTexSet(*(s32*)(gp + 0x16C) + 9, &pos2, &size2, &color2);
 
-    basePos2[0] = vec[18];
-    basePos2[1] = vec[19];
-    basePos2[2] = vec[20];
-
-    basePos2[0] = *(u32*)(wp2 + 0x14);
-    basePos2[1] = *(u32*)(wp2 + 0x18);
-
-    pos2[0] = basePos2[0];
-    pos2[1] = basePos2[1];
-    pos2[2] = basePos2[2];
-
-    winTexSet(*(s32*)(gp + 0x16C) + 9, pos2, size2, &color2);
+    }
 
     *(s32*)(wp2 + 0x2C) = *(s32*)(wp2 + 0x2C) + 1;
     counter = *(s32*)(wp2 + 0x2C);
@@ -829,7 +809,7 @@ void disp2(s32 cameraId) {
     sineValue = sin(angle);
     sineF = (f32)sineValue;
 
-    alpha = (s32)(*(f32*)(wp2 + 0x1C) * float_459_8041f5b4 * sineF);
+    alpha = (s32)(*(f32*)(wp2 + 0x1C) * (float_459_8041f5b4 * sineF));
 
     if (alpha < 0) {
         alpha = 0;
@@ -856,9 +836,7 @@ void disp2(s32 cameraId) {
     }
 
     cam = camGetPtr(cameraId);
-    for (i = 0; i < 0x98; i++) {
-        ((u32*)cam)[i] = camBackup[i];
-    }
+    *(CameraCopy*)cam = camBackup;
 
     GXSetProjectionv(projBackup);
     GXSetViewport(
@@ -882,7 +860,7 @@ void disp2(s32 cameraId) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 
-void pressStartGX(u8 alpha, f32 x, f32 y) {
+void pressStartGX(s32 alpha, f32 x, f32 y) {
     void* cam;
     u8 tex0[0x20];
     u8 tex1[0x20];
@@ -1040,3 +1018,13 @@ const f32 float_1000_8041f5e4 = 1000.0f;
 const f32 float_neg1000_8041f5e8 = -1000.0f;
 #pragma use_lmw_stmw reset
 #pragma no_register_save_helpers reset
+
+/* US title catalog strings, following the local vector templates. */
+__declspec(section ".rodata") const char str_PCTs_demo_tpl_802bf458[] = "%s/demo.tpl";
+__declspec(section ".rodata") const char str_c_peach_802bf464[] = "c_peach";
+__declspec(section ".rodata") const char str_c_nazo_802bf46c[] = "c_nazo";
+__declspec(section ".rodata") const char str_MOBJ_GoldenTreasureB_802bf474[] = "MOBJ_GoldenTreasureBox";
+__declspec(section ".rodata") const char str_MOBJ_BigTreasureBox_802bf48c[] = "MOBJ_BigTreasureBox";
+__declspec(section ".rodata") const char str_c_roten_802bf4a0[] = "c_roten";
+__declspec(section ".rodata") const char str_c_kuribo_n_802bf4a8[] = "c_kuribo_n";
+__declspec(section ".rodata") const char str_c_tyusan_802bf4b4[] = "c_tyusan";

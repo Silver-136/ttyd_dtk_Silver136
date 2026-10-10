@@ -120,6 +120,7 @@ void effMarioBalloonDisp(s32 cameraId, void* effect) {
     extern u32 dat_80422d08;
     extern u32 dat_80422d0c;
     extern u32 dat_80422d10;
+    extern u32 dat_80422d14;
     extern f32 float_deg2rad_80422d18;
     extern f32 float_0p7_80422d1c;
     extern f32 float_1_80422d20;
@@ -156,7 +157,32 @@ void effMarioBalloonDisp(s32 cameraId, void* effect) {
     PSMTXConcat(trans,rotate,trans); PSMTXConcat(trans,scale,trans);
     camera=(char*)camGetPtr(cameraId); PSMTXConcat((f32(*)[4])(camera+0x48),trans,trans);
     GXSetCurrentMtx(0);
-    if (*(s32*)work==0) {
+    if (*(s32*)work==1) {
+        effGetTexObj(0x11,&tex); GXLoadTexObj(&tex,0);
+        GXSetTevColorIn(0,15,15,15,15); GXSetTevAlphaIn(0,7,7,7,4);
+        PSMTXTransApply(trans,model,float_1_80422d20,float_neg1_80422d24,float_0_80422d28);
+        GXLoadPosMtxImm(model,0);
+        GXSetBlendMode(1,4,5,0); GXSetZCompLoc(1); GXSetAlphaCompare(7,0,0,7,0);
+        GXSetZMode(0,3,0); GXSetCullMode(0); GXBegin(0x80,0,4);
+    *fifo=float_neg20_80422d3c;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_0_80422d28;
+    *fifo=float_20_80422d44;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_0_80422d28;
+    *fifo=float_20_80422d44;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_1_80422d20;
+    *fifo=float_neg20_80422d3c;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_1_80422d20;
+        effGetTexObj(0x10,&tex); GXLoadTexObj(&tex,0); color=dat_80422d10;
+        GXSetTevColor(1,&color); GXSetTevColorIn(0,15,2,8,15); GXSetTevAlphaIn(0,7,7,7,4);
+        GXLoadPosMtxImm(trans,0); PSMTXInvXpose(trans,normal); GXLoadNrmMtxImm(normal,0);
+        GXSetCurrentMtx(0); GXSetCullMode(2); GXBegin(0x80,0,4);
+        *fifo=float_neg20_80422d3c;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_0_80422d28;
+        *fifo=float_20_80422d44;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_0_80422d28;
+        *fifo=float_20_80422d44;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_1_80422d20;
+        *fifo=float_neg20_80422d3c;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_1_80422d20;
+        color=dat_80422d14; GXSetTevColor(1,&color); GXSetCullMode(1); GXBegin(0x80,0,4);
+        *fifo=float_neg20_80422d3c;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_0_80422d28;
+        *fifo=float_20_80422d44;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_0_80422d28;
+        *fifo=float_20_80422d44;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_1_80422d20;
+        *fifo=float_neg20_80422d3c;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_1_80422d20;
+    } else if (*(s32*)work==0) {
+
         effGetTexObj(0xF,&tex); GXLoadTexObj(&tex,0);
         GXSetTevColorIn(0,15,15,15,15); GXSetTevAlphaIn(0,7,7,7,4);
         PSMTXTransApply(trans,model,float_1_80422d20,float_neg1_80422d24,float_0_80422d28);
@@ -182,35 +208,6 @@ void effMarioBalloonDisp(s32 cameraId, void* effect) {
         *fifo=float_16_80422d34;*fifo=float_64_80422d30;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_2_80422d38;*fifo=float_0_80422d28;
         *fifo=float_16_80422d34;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_2_80422d38;*fifo=float_1_80422d20;
         *fifo=float_neg16_80422d2c;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_1_80422d20;
-        return;
-    }
-    if (*(s32*)work!=1) return;
-    if (*(s32*)work==1) {
-        effGetTexObj(0x11,&tex); GXLoadTexObj(&tex,0);
-        GXSetTevColorIn(0,15,15,15,15); GXSetTevAlphaIn(0,7,7,7,4);
-        PSMTXTransApply(trans,model,float_1_80422d20,float_neg1_80422d24,float_0_80422d28);
-        GXLoadPosMtxImm(model,0);
-        GXSetBlendMode(1,4,5,0); GXSetZCompLoc(1); GXSetAlphaCompare(7,0,0,7,0);
-        GXSetZMode(0,3,0); GXSetCullMode(0); GXBegin(0x80,0,4);
-    } else {
-        effGetTexObj(0x10,&tex); GXLoadTexObj(&tex,0); color=dat_80422d10;
-        GXSetTevColor(1,&color); GXSetTevColorIn(0,15,2,8,15); GXSetTevAlphaIn(0,7,7,7,4);
-        GXLoadPosMtxImm(trans,0); PSMTXInvXpose(trans,normal); GXLoadNrmMtxImm(normal,0);
-        GXSetCurrentMtx(0); GXSetCullMode(2); GXBegin(0x80,0,4);
-    }
-    *fifo=float_neg20_80422d3c;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_0_80422d28;
-    *fifo=float_20_80422d44;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_0_80422d28;
-    *fifo=float_20_80422d44;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_1_80422d20;
-    *fifo=float_neg20_80422d3c;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_1_80422d20;
-    if (*(s32*)work==1) {
-        effGetTexObj(0x10,&tex); GXLoadTexObj(&tex,0); color=dat_80422d10;
-        GXSetTevColor(1,&color); GXSetTevColorIn(0,15,2,8,15); GXSetTevAlphaIn(0,7,7,7,4);
-        GXLoadPosMtxImm(trans,0); PSMTXInvXpose(trans,normal); GXLoadNrmMtxImm(normal,0);
-        GXSetCurrentMtx(0); GXSetCullMode(2); GXBegin(0x80,0,4);
-        *fifo=float_neg20_80422d3c;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_0_80422d28;
-        *fifo=float_20_80422d44;*fifo=float_32_80422d40;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_0_80422d28;
-        *fifo=float_20_80422d44;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_1_80422d20;*fifo=float_1_80422d20;
-        *fifo=float_neg20_80422d3c;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_0_80422d28;*fifo=float_1_80422d20;*fifo=float_0_80422d28;*fifo=float_1_80422d20;
     }
 }
 

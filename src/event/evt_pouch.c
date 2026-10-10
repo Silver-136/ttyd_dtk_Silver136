@@ -287,20 +287,22 @@ USER_FUNC(evt_pouch_mario_recovery) {
     pouchSetAP(pouchGetMaxAP());
     return 2;
 }
+#pragma optimize_for_size off
 s32 evt_pouch_all_party_recovery(void) {
+    typedef struct PartyHP { s16 flags, maxHP, baseHP, currentHP; u8 other[6]; } PartyHP;
     extern void* pouchGetPtr(void);
-    void* pouch = pouchGetPtr();
-
-    *(s16*)((s32)pouch + 0x6) = *(s16*)((s32)pouch + 0x2);
-    *(s16*)((s32)pouch + 0x14) = *(s16*)((s32)pouch + 0x10);
-    *(s16*)((s32)pouch + 0x22) = *(s16*)((s32)pouch + 0x1E);
-    *(s16*)((s32)pouch + 0x30) = *(s16*)((s32)pouch + 0x2C);
-    *(s16*)((s32)pouch + 0x3E) = *(s16*)((s32)pouch + 0x3A);
-    *(s16*)((s32)pouch + 0x4C) = *(s16*)((s32)pouch + 0x48);
-    *(s16*)((s32)pouch + 0x5A) = *(s16*)((s32)pouch + 0x56);
-    *(s16*)((s32)pouch + 0x68) = *(s16*)((s32)pouch + 0x64);
+    PartyHP* p = (PartyHP*)pouchGetPtr();
+    p[0].currentHP = p[0].maxHP;
+    p[1].currentHP = p[1].maxHP;
+    p[2].currentHP = p[2].maxHP;
+    p[3].currentHP = p[3].maxHP;
+    p[4].currentHP = p[4].maxHP;
+    p[5].currentHP = p[5].maxHP;
+    p[6].currentHP = p[6].maxHP;
+    p[7].currentHP = p[7].maxHP;
     return 2;
 }
+#pragma optimize_for_size reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_pouch_get_haveitemcnt) {

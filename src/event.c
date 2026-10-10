@@ -323,12 +323,12 @@ void stg3_06_init(void) {
 
 
 void stg3_07_init__9(void) {
-
-
     extern void swByteSet(s32 byte, s32 value);
-
-    swSet(0x9B4);
-    swByteSet(0x1FB, 0x13);
+    s32 i;
+    for (i = 0; i < 1; i++) {
+        swSet(0x9B4 - i);
+    }
+    swByteSet(0x1FB, 0x14 - i);
     swClear(0x954);
     swSet(0x958);
     swSet(0x95B);
@@ -1258,14 +1258,611 @@ void N_stg9_02_init(void) {
     partyJoin(7);
 }
 
+typedef struct EventData {
+    u8 motionType;
+    u8 partner1;
+    u8 partner2;
+    u16 id;
+    const char* eventName;
+    const char* nameJp;
+    const char* nameEn;
+    const char* mapName;
+    const char* beroName;
+    void (*initEvent)(void);
+} EventData;
+
+typedef struct EventStage {
+    const char* nameJp;
+    const char* nameEn;
+    EventData* data;
+    s32 count;
+} EventStage;
+
+extern const char str_jp_80421d70[];
+extern const char str_Plaza_80421d78[];
+extern const char zero_80421d80[];
+extern const char str_dokan_80421d84[];
+extern const char str_stg_1_80421d8c[];
+extern const char str_Quiz_80421d94[];
+extern const char str_jp_80421d9c[];
+extern const char str_Key_80421da4[];
+extern const char str_jp_80421da8[];
+extern const char str_Lock_80421db0[];
+extern const char str_jp_80421db8[];
+extern const char str_Key_2_80421dc0[];
+extern const char str_Key_3_80421dc8[];
+extern const char str_Key_4_80421dd0[];
+extern const char str_event_80421dd8[];
+extern const char str_stg_2_80421de0[];
+extern const char str_start_80421de8[];
+extern const char str_Match_80421df0[];
+extern const char str_fall_80421df8[];
+extern const char str_stg_4_80421e00[];
+extern const char str_Dinge_80421e08[];
+extern const char str_jp_80421e10[];
+extern const char str_ana_80421e18[];
+extern const char str_stg_5_80421e1c[];
+extern const char str_Start_80421e24[];
+extern const char str_stg_6_80421e2c[];
+extern const char str_Bub_80421e34[];
+extern const char str_Day_2_80421e38[];
+extern const char str_stg_7_80421e40[];
+extern const char str_stg_8_80421e48[];
+extern const char str_jp_80421e50[];
+extern const char str_owari_80421e54[];
+extern const char str_jp_80421e5c[];
+extern const char str_Koops_80421e64[];
+extern const char str_jp_80421e6c[];
+extern const char str_Moon_80421e70[];
+extern EventStage event_dt[];
+
+
 void* eventStgDtPtr(s32 id) {
-    extern u8 event_dt[];
-    return &event_dt[id * 0x10];
+    return (void*)((u8*)event_dt + id * sizeof(EventStage));
 }
 
 s32 eventStgNum(void) {
     return 10;
 }
+
+EventData stage0_evt[] = {
+    {0, 0, 0, 0, "STG0_00", "プロローグ", "Prologue", "aaa_00", "prologue", stg0_00_init},
+    {0, 0, 0, 1, "STG0_01", str_jp_80421d70, str_Plaza_80421d78, "aaa_00", "prologue", 0},
+    {0, 0, 0, 2, "STG0_02", "マリオの家", "Mario's House", "aaa_00", "prologue", 0},
+    {0, 0, 0, 3, "STG0_03", "ゴロツキタウンへ", "To Rogueport", "sys_01", "prologue", 0},
+    {0, 0, 0, 3, "STG0_03", "ゴロツキタウン到着", "Rogueport (Arrival)", "gor_00", zero_80421d80, 0},
+    {0, 0, 0, 4, "STG0_04", "クリスチーヌ襲われる", "Goombella Assaulted", "gor_00", 0, 0},
+    {0, 0, 0, 5, "STG0_05", "軍団１０００体バトル前", "1000 X-Nauts (Before)", "gor_00", 0, stg0_05_init},
+    {0, 0, 0, 6, "STG0_06", "軍団１０００体バトル後", "1000 X-Nauts (After)", "gor_00", 0, 0},
+    {0, 0, 13, 7, "STG0_07", "クリスチーヌ仲間になる", "Goombella Joins", "gor_01", "s_bero", 0},
+    {0, 1, 0, 8, "STG0_08", "コインが盗まれる", "Stolen Coins", "gor_02", "w_bero", stg0_08_init},
+    {0, 1, 0, 9, "STG0_09", "クリハカセとの会話", "Prof. Frankly", "gor_02", "w_bero", 0},
+    {0, 1, 11, 10, "STG0_10", "柵をはずす", "Removing the Fence", "gor_02", "w_bero", 0},
+    {0, 1, 0, 11, "STG0_10_01", "クリハカセのレクチャー", "Frankly's Tutorial", "gor_02", "w_bero", 0},
+    {0, 1, 11, 12, "STG0_11", "ゴロツキ三人組", "3 Goomba Goons", "tik_01", "dokan_2", stg0_11_init},
+    {0, 1, 11, 13, "STG0_12", "プニとの遭遇", "Puni Encounter", "tik_04", str_dokan_80421d84, 0},
+    {0, 1, 11, 14, "STG0_12_01", "スイッチペラ階段", "Paper Stair Switch", "tik_04", str_dokan_80421d84, 0},
+    {0, 1, 11, 15, "STG0_12_02", "ペラ魔人１", "Paper Mage 1", "tik_19", "s_bero", stg0_12_02_init},
+    {0, 1, 11, 16, "STG0_13", "はじめての飛行", "First Flight", "tik_04", "n_bero_5", stg0_13_init00},
+    {0, 1, 11, 16, "STG0_13", "大きな扉", "Thousand-Year Door", "tik_05", "e_bero", 0},
+    {0, 1, 11, 17, "STG0_14", "魔方陣の前", "Front of the Pedestal", "tik_05", "e_bero", 0},
+    {0, 1, 11, 18, "STG0_15", "魔方陣", "The Pedestal", "tik_05", "e_bero", 0},
+    {0, 1, 0, 19, "STG0_16", "地図解読", "Frankly's House", "gor_02", 0, stg0_16_init},
+    {0, 1, 0, 20, "STG0_17", "レクチャー（バッジ編）", "Badge Tutorial", "gor_02", "w_bero", 0},
+    {0, 1, 0, 21, "STG0_19", "ゲッソーとバトル", "Blooper Battle", "tik_02", "w_bero_1", 0},
+    {0, 1, 0, 22, "STG0_END", "ステージ１へ", "To Stage 1", "tik_02", "w_bero_1", 0},
+};
+
+EventData stage1_evt[] = {
+    {0, 1, 0, 23, "STG1_00", "はじめてきた", "Petal Meadows", "sys_01", str_stg_1_80421d8c, 0},
+    {0, 1, 0, 24, "STG1_00_01", "ごんばばの影", "The Shadow of Hooktail", "hei_00", "dokan_2", 0},
+    {0, 1, 0, 25, "STG1_01", "スイッチで橋が出る", "The Flip-Bridge", "hei_01", "w_bero", 0},
+    {0, 1, 0, 26, "STG1_01a", "初めてのノコ村", "Petalburg (1st Time)", "nok_00", "w_bero", stg1_01a_init},
+    {0, 1, 0, 27, "STG1_02", "ノコ村村長と会話", "Talking with Kroop", "nok_01", "w_bero", 0},
+    {0, 1, 0, 28, "STG1_03", "ノコ村門番", "Petalburg Gatekeeper", "nok_01", "w_bero", stg1_03_init},
+    {0, 1, 0, 29, "STG1_04", "野原しんのすけ", "Bald Cleft", "hei_03", "w_bero", 0},
+    {0, 1, 0, 30, "STG1_05", "トゲダルマー", "Bristle", "hei_05", "w_bero", 0},
+    {0, 1, 0, 31, "STG1_06", "クイズ", str_Quiz_80421d94, "hei_07", "w_bero", 0},
+    {0, 1, 0, 32, "STG1_06_01", "ゴールドチョロボン", "Gold Fuzzy", "hei_10", "w_bero", stg1_06_01_init},
+    {0, 1, 0, 33, "STG1_07", "ノコタロウ仲間", "Koops Joins", "hei_01", "e_bero", 0},
+    {0, 2, 0, 34, "STG1_08", "ゴンババ入り口開く", "Opening the Path", "hei_00", "e_bero", stg1_08_init},
+    {0, 2, 0, 35, "STG1_09", "初めてのゴンババ城", "Hooktail Castle", "gon_01", "w_bero_1", stg1_09_init},
+    {0, 2, 0, 36, "STG1_09_01", str_jp_80421d9c, str_Key_80421da4, "gon_01", "w_bero_1", 0},
+    {0, 2, 0, 37, "STG1_09_02", str_jp_80421da8, str_Lock_80421db0, "gon_01", "w_bero_1", stg1_09_02_init},
+    {0, 2, 0, 38, "STG1_10", "父の手紙", "Father's Letter", "gon_03", "w_bero", stg1_10_init},
+    {0, 2, 0, 39, "STG1_11", "カロン１０００体", "1000 Dry Bones", "gon_03", "w_bero", 0},
+    {0, 2, 0, 40, "STG1_12", "ペラ階段", "Paper Stairs", "gon_04", "w_bero_1", 0},
+    {0, 2, 0, 41, "STG1_12_01", str_jp_80421db8, str_Key_80421da4, "gon_04", "w_bero_1", 0},
+    {0, 2, 0, 42, "STG1_12_02", str_jp_80421da8, str_Lock_80421db0, "gon_04", "w_bero_1", stg1_12_02_init},
+    {0, 2, 0, 43, "STG1_13", "つり天井", "A Suspicious Room", "gon_07", "w_bero", stg1_13_init},
+    {0, 2, 0, 44, "STG1_13_01", "つり天井から脱出", "50 Seconds to Escape", "gon_06", "e_bero", stg1_13_01_init},
+    {0, 2, 0, 45, "STG1_13_01_01", "ペラ魔人２", "Paper Mage 2", "gon_06", "e_bero", 0},
+    {0, 2, 0, 46, "STG1_13_02", "かぎ２", str_Key_2_80421dc0, "gon_03", "e_bero", stg1_13_02_init},
+    {0, 2, 0, 47, "STG1_13_03", "錠前２", "Lock 2", "gon_05", "w_bero_1", stg1_13_03_init},
+    {0, 2, 0, 48, "STG1_14", "ペラ橋（右）", "Paper Bridge (Right)", "gon_04", "e_bero_3", stg1_14_init},
+    {0, 2, 0, 49, "STG1_14_01", "ペラ橋（左）", "Paper Bridge (Left)", "gon_04", "e_bero_3", 0},
+    {0, 1, 0, 50, "STG1_15", "チュチュリーナ　クリ編", "Ms. Mowz (w/Goombella)", "gon_12", "e_bero", 0},
+    {0, 2, 0, 50, "STG1_15", "チュチュリーナ　ノコ編", "Ms. Mowz (w/Koops)", "gon_12", "e_bero", 0},
+    {0, 2, 0, 51, "STG1_15_01", "かぎ３", str_Key_3_80421dc8, "gon_12", "e_bero", 0},
+    {0, 2, 0, 52, "STG1_15_02", "錠前３", "Lock 3", "gon_08", "w_bero", stg1_15_02_init},
+    {0, 2, 0, 53, "STG1_15_03", "かぎ４", str_Key_4_80421dd0, "gon_05", "w_bero_4", stg1_15_03_init},
+    {0, 2, 0, 54, "STG1_15_04", "錠前４", "Lock 4", "gon_05", "w_bero_4", stg1_15_04_init},
+    {0, 2, 0, 55, "STG1_16", "ゴンババ遭遇", "Hooktail", "gon_11", "w_bero", stg1_16_init00},
+    {0, 2, 0, 55, "STG1_16", "ゴンババ倒れる", "Hooktail Defeated", "gon_11", 0, stg1_16_init01},
+    {0, 2, 0, 56, "STG1_17", "父との再会", "Father & Son Reunited", "gon_11", "w_bero", stg1_17_init},
+    {0, 0, 0, 57, "STG1_18", "ピーチ編：つかまったピーチ姫", "Peach: Caught", "aji_10", 0, 0},
+    {0, 0, 0, 58, "STG1_18_01", "ピーチ編：扉が開いた", "Peach: An Open Door", "aji_16", 0, 0},
+    {0, 0, 0, 59, "STG1_19", "ピーチ編：テックと出会う", "Peach: TEC", "aji_17", "w_bero", stg1_19_init},
+    {0, 0, 0, 60, "STG1_19_01", "クッパ編：クッパ城", "Bowser: Bowser Castle", "kpa_00", zero_80421d80, 0},
+    {0, 0, 0, 60, "STG1_19_01", "クッパ編：クッパ登場", "Bowser: Entrance", "kpa_01", zero_80421d80, 0},
+    {0, 0, 0, 61, "STG1_19_02", "クッパ編：クッパ城城内", "Bowser: Castle INT.", "kpa_01", "player", 0},
+    {0, 0, 0, 61, "STG1_19_02", "クッパ編：クッパ出発", "Bowser: Kammy Enters", "kpa_01", str_event_80421dd8, 0},
+    {0, 0, 0, 61, "STG1_19_02", "クッパ編：クッパ飛び立つ", "Bowser: Departure", "kpa_00", zero_80421d80, 0},
+    {0, 2, 0, 62, "STG1_20", "ノコタロウ旅立ち", "Koops Leaves", "nok_01", "nokotarou", stg1_20_init},
+    {0, 2, 0, 63, "STG1_21", "ピーチからのメール", "A Mail from Peach", "hei_01", "e_bero", 0},
+    {0, 1, 0, 64, "STG1_30", "ナンシーさん", "Zess T.", "gor_01", "e_bero", stg1_30_init},
+    {0, 1, 0, 64, "STG1_30", "大きな扉ステージ１後", "Thousand-Year Door", "tik_05", "e_bero", stg1_30_init01},
+    {0, 1, 0, 65, "STG1_31", "地図解読ステージ１後", "Frankly's House Stg.1", "gor_02", 0, 0},
+    {0, 1, 0, 66, "STG1_32", "再度プニとの遭遇", "Puni Encounter 2", "tik_04", str_dokan_80421d84, 0},
+    {0, 1, 0, 67, "STG1_33", "プニ助けを請う", "A Puni Plea for Help", "tik_03", "s_bero_3", 0},
+    {0, 1, 0, 68, "STG1_34", "プニ壁開ける", "Puni's Secret Passage", "tik_03", "s_bero_3", 0},
+    {0, 1, 0, 69, "STG1_35", "プニ仲間になる", "Puni Joins", "tik_03", "s_bero_3", stg1_35_init01},
+    {0, 1, 10, 70, "STG1_END", "ステージ２へ", "To Stage 2", "tik_03", "a_slit", 0},
+};
+
+EventData stage2_evt[] = {
+    {0, 2, 10, 71, "STG2_00", "不思議の森へご案内", "Boggly Woods", "sys_01", str_stg_2_80421de0, stg2_00_init},
+    {0, 2, 10, 72, "STG2_01", "魔女三人組もめる", "A Siren Argument", "win_00", "w_bero", 0},
+    {0, 2, 10, 73, "STG2_02", "ガイドが大樹へ", "To The Great Tree", "win_01", "w_bero", 0},
+    {0, 2, 0, 74, "STG2_03", "初めての大樹", "The Great Tree", "mri_00", "w_bero", 0},
+    {0, 2, 0, 75, "STG2_03_01", "大樹をふさぐもの", "Sealed Entrance", "mri_00", "w_bero", 0},
+    {0, 2, 0, 76, "STG2_03_02", "大樹をふさぐものその２", "Sealed Entrance 2", "mri_00", "w_bero", 0},
+    {0, 2, 10, 77, "STG2_03_03", "クラウダ登場", "Flurrie Intro", "win_03", zero_80421d80, stg2_03_03_init},
+    {0, 2, 10, 78, "STG2_03_04", "だいじなものをなくす", "She's Lost Her Precious", "win_03", zero_80421d80, 0},
+    {0, 2, 10, 79, "STG2_03_05", "ヒミツの入り口を知った後", "To Flurrie's Place", "win_01", "n_bero", 0},
+    {0, 2, 10, 80, "STG2_04", "のびる飛行機台", "Extending Plane Panel", "win_02", "w_bero", 0},
+    {0, 2, 10, 80, "STG2_04", "ケモノ道", "The Trail", "win_03", "w_bero", 0},
+    {0, 2, 10, 81, "STG2_05", "クラウダに会う", "A Shy Flurrie", "win_04", "w_bero", 0},
+    {0, 2, 10, 82, "STG2_05_01", "クラウダに会う：踊り場", "Flurrie: Living Room", "win_04", "w_bero", 0},
+    {0, 2, 10, 83, "STG2_05_02", "クラウダに会う：依頼", "Flurrie: Request", "win_04", "w_bero", 0},
+    {0, 2, 10, 84, "STG2_06", "魔女三人組似顔絵発見", "The Sketch", "win_00", zero_80421d80, 0},
+    {0, 2, 10, 85, "STG2_07", "マリオＶＳ魔女三人組", "Mario vs. Shadow Sirens", "win_00", "e_bero", 0},
+    {0, 2, 10, 86, "STG2_08", "負けた魔女三人組", "Shadow Sirens Lose", "win_00", zero_80421d80, 0},
+    {0, 2, 10, 87, "STG2_09", "クラウダ仲間になる", "Flurrie Joins", "win_04", "w_bero", stg2_09_init},
+    {0, 5, 10, 88, "STG2_10", "大樹への入り口出現", "Secret Entrance Revealed!", "mri_00", "w_bero", stg2_10_init},
+    {0, 5, 10, 89, "STG2_11", "大樹での初バトル", "X-Naut Battle", "mri_01", "w_bero", stg2_11_init},
+    {0, 5, 0, 90, "STG2_12", "ライバル登場", "Rival Arrival", "mri_01", zero_80421d80, 0},
+    {0, 5, 0, 91, "STG2_12_01", "黒い影", "A Dark Figure", "mri_04", zero_80421d80, stg2_12_01_init},
+    {0, 5, 0, 92, "STG2_12_02", "とらわれ長老", "Puni Elder Imprisoned", "mri_03", str_dokan_80421d84, 0},
+    {0, 5, 0, 93, "STG2_13", "チュチュリーナ遭遇", "Ms. Mowz", "mri_04", "e_bero", 0},
+    {0, 5, 0, 94, "STG2_14", "長老救出", "Puni Elder Freed", "mri_03", "w_bero", stg2_14_init},
+    {0, 5, 0, 95, "STG2_15", "ライバル改心", "11 Punies", "mri_01", str_dokan_80421d84, stg2_15_init},
+    {0, 5, 0, 96, "STG2_16", "長老の能力", "The Puni Elder's Powers", "mri_01", "w_bero", stg2_16_init00},
+    {0, 5, 0, 96, "STG2_16", "プニスイッチ", "Puni Switch", "mri_02", "dokan1", stg2_16_init01},
+    {0, 5, 0, 97, "STG2_17", "シャボン玉", "Bubbles", "mri_05", "dokan3", 0},
+    {0, 5, 0, 97, "STG2_17", "飛行機で？", "By Plane?", "mri_19", "dokan1", 0},
+    {0, 5, 0, 97, "STG2_17", "トゲ族と出会う", "Jabbi Encounter", "mri_06", "dokan1", 0},
+    {0, 5, 0, 98, "STG2_18", "ちびトゲ", "Jabble", "mri_07", "e_bero", 0},
+    {0, 5, 0, 98, "STG2_18", "プニ族ＶＳトゲ族１", "Punies vs. Jabbies", "mri_08", "w_bero", stg2_18_init01},
+    {0, 5, 0, 98, "STG2_18", "青い鍵入手", "Blue Key Obtained", "mri_09", "w_bero", stg2_18_init02},
+    {0, 5, 0, 99, "STG2_19", "青い牢屋の中の様子", "Inside the Blue Cell", "mri_03", zero_80421d80, stg2_19_init},
+    {0, 5, 0, 100, "STG2_19_01", "プニコ再会直前", "Punio & Petuni(Before)", "mri_03", str_dokan_80421d84, 0},
+    {0, 5, 0, 101, "STG2_20", "プニコ再会", "Punio & Petuni", "mri_03", str_dokan_80421d84, stg2_20_init},
+    {0, 5, 0, 102, "STG2_21", "シャボン玉２", "Bubbles 2", "mri_05", "dokan3", stg2_21_init00},
+    {0, 5, 0, 102, "STG2_21", "プニ族ＶＳトゲ族２", "Punies vs. Jabbies 2", "mri_11", "e_bero", 0},
+    {0, 5, 0, 102, "STG2_21", "ワナにはまる", "Trapped", "mri_17", "w_bero", stg2_21_init02},
+    {0, 5, 0, 103, "STG2_21_01", "なぞの像", "Mystery Pillar", "mri_17", "w_bero", stg2_21_01_init},
+    {0, 5, 0, 104, "STG2_21_02", "絵合わせ", "Matching the Patterns", "mri_09", "w_bero", stg2_21_02_init},
+    {0, 5, 0, 105, "STG2_21_03", "スーパーブーツ", "Super Boots", "mri_10", "s_bero", stg2_21_03_init},
+    {0, 5, 0, 106, "STG2_21_04", "ワナ脱出", "Escape", "mri_17", "w_bero", stg2_21_04_init},
+    {0, 5, 0, 107, "STG2_21_06", "水の仕掛け", "Water Switch", "mri_16", "dokan2", stg2_21_06_init00},
+    {0, 5, 0, 107, "STG2_21_06", "１０１匹スイッチ", "The 101 Puni Switch", "mri_13", str_dokan_80421d84, stg2_21_06_init01},
+    {0, 5, 0, 108, "STG2_22", "第三勢力幹部出現", "Lord Crump Appears", "mri_14", zero_80421d80, 0},
+    {0, 5, 0, 109, "STG2_23", "時限爆弾作動", "Time Bomb Activated", "mri_14", "w_bero", stg2_23_init},
+    {0, 5, 0, 110, "STG2_23_01", "第三勢力部下バトル", "X-Naut Battle", "mri_15", str_dokan_80421d84, stg2_23_01_init},
+    {0, 5, 0, 111, "STG2_24", "ボスバトル", "Boss Battle", "mri_01", "e_bero", 0},
+    {0, 5, 0, 112, "STG2_25", "ボスバトル後", "After the Boss Battle", "mri_01", zero_80421d80, stg2_25_init},
+    {0, 0, 0, 113, "STG2_25_01", "ピーチ編：首領と手下", "Peach: Crump & X-Nauts", "aji_10", zero_80421d80, 0},
+    {0, 0, 0, 113, "STG2_25_01", "ピーチ編：ドアが開いた２", "Peach: An Open Door 2", "aji_16", zero_80421d80, 0},
+    {0, 0, 0, 114, "STG2_25_02", "ピーチ編：テックのダンスミニゲーム", "Peach: Shall We Dance?", "aji_17", "w_bero", stg2_25_02_init},
+    {0, 0, 0, 115, "STG2_25_03", "クッパ編：平原", "Bowser: Meadows", "hei_00", zero_80421d80, 0},
+    {0, 0, 0, 116, "STG2_25_04", "クッパ編：アクションステージ１", "Bowser: Action Stage", "kpa_02", zero_80421d80, 0},
+    {0, 0, 0, 117, "STG2_25_05", "クッパ編：ノコ村", "Bowser: Petalburg", "nok_00", "w_bero", 0},
+    {0, 5, 0, 118, "STG2_26", "マリオ激励される", "Praise from the Puni", "mri_00", zero_80421d80, stg2_26_init},
+    {0, 5, 0, 119, "STG2_27", "ピーチからのメール", "A Mail from Peach", "win_01", "dokan1", 0},
+    {0, 5, 0, 120, "STG2_40", "大きな扉ステージ２後", "Thousand-Year Door", "tik_05", "e_bero", stg2_40_init},
+    {0, 5, 0, 121, "STG2_41", "地図解読ステージ２後", "Frankly's House Stg.2", "gor_02", 0, 0},
+    {0, 5, 0, 122, "STG2_44", "ボスに会う方法", "Finding Don Pianta", "gor_02", "w_bero", 0},
+    {0, 5, 0, 122, "STG2_44", "裏口へ", "Backdoor", "gor_03", "e_bero", 0},
+    {0, 5, 0, 122, "STG2_44", "マフィアのボス", "Mafia Boss", "gor_03", zero_80421d80, stg2_44_init},
+    {0, 5, 0, 123, "STG2_45", "娘発見", "Daughter Located", "gor_00", "n_bero", 0},
+    {0, 5, 0, 124, "STG2_46", "飛行船のチケットゲット", "Blimp Ticket", "gor_03", zero_80421d80, 0},
+    {0, 5, 0, 125, "STG2_47", "チケットゲット直後", "After Getting the Ticket", "gor_03", zero_80421d80, stg2_47_init},
+    {0, 5, 0, 126, "STG2_END", "ウーロン街へ", "To Glitzville", "gor_04", "s_bero", stg2_end_init},
+};
+
+EventData stage3_evt[] = {
+    {0, 1, 0, 127, "STG3_00", "初めてのウーロン街", "Welcome to Glitzville", "tou_20", str_start_80421de8, 0},
+    {0, 1, 0, 128, "STG3_01", "初めての闘技場（１Ｆ）", "Arena Intro (1F)", "tou_03", "s_bero_1", 0},
+    {0, 1, 0, 128, "STG3_01", "初めての闘技場（２Ｆ）", "Arena Intro (2F)", "tou_03", "s_bero_2", 0},
+    {0, 1, 0, 129, "STG3_02", "ガードマンどいた", "The Guard Backs Off", "tou_02", "s_bero", 0},
+    {0, 1, 0, 130, "STG3_03", "マリオ選手になる", "Grubba", "tou_05", "n_bero", 0},
+    {0, 1, 0, 131, "STG3_04", "選手になった", "Gonzales is Born", "tou_05", "n_bero", 0},
+    {0, 1, 0, 132, "STG3_05", "試合登録レクチャー", str_Match_80421df0, "tou_10", 0, 0},
+    {0, 1, 0, 133, "STG3_06", "第１試合", "1st Match", "tou_03", 0, stg3_06_init},
+    {0, 1, 0, 134, "STG3_07", "２部−９位", "Minors - 9th Pl.", "tou_10", "n_bero", stg3_07_init__9},
+    {0, 1, 0, 134, "STG3_07", "２部−８位", "Minors - 8th Pl.", "tou_10", "n_bero", stg3_07_init__8},
+    {0, 1, 0, 134, "STG3_07", "２部−７位", "Minors - 7th Pl.", "tou_10", "n_bero", stg3_07_init__7},
+    {0, 1, 0, 134, "STG3_07", "２部−６位", "Minors - 6th Pl.", "tou_10", "n_bero", stg3_07_init__6},
+    {0, 1, 0, 135, "STG3_10", "２部−５位（たまご）", "Minors - 5th Pl. (Egg)", "tou_01", "a_door_mon", stg3_10_init__5},
+    {0, 1, 0, 136, "STG3_11", "たまご逃げまくり", "Runaway Egg", "tou_01", "a_door_mon", 0},
+    {0, 1, 0, 137, "STG3_12", "ヨッシーのたまごゲット！", "The Mini-Yoshi Egg", "tou_01", "a_door_mon", 0},
+    {0, 1, 8, 137, "STG3_12", "２部−４位", "Minors - 4th Pl.", "tou_10", "n_bero", stg3_12_init__4},
+    {0, 1, 8, 137, "STG3_12", "２部−３位", "Minors - 3rd Pl.", "tou_10", "n_bero", stg3_12_init__3},
+    {0, 1, 8, 137, "STG3_12", "２部−２位", "Minors - 2nd Place", "tou_10", "n_bero", stg3_12_init__2},
+    {0, 1, 8, 137, "STG3_12", "２部−１位（アイアン戦）", "Minors - 1st Pl. (Iron)", "tou_10", "n_bero", stg3_12_init__1},
+    {0, 4, 0, 137, "STG3_12", "２部−１位（アイアン戦２）", "Minors - 1st Pl. (Iron 2)", "tou_10", "n_bero", stg3_12_2_init},
+    {0, 4, 0, 138, "STG3_20", "１部−１０位", "Majors - 10th Place", "tou_08", "n_bero", stg3_20_init_10},
+    {0, 4, 0, 138, "STG3_20", "１部−９位", "Majors - 9th Place", "tou_08", "n_bero", stg3_20_init_9},
+    {0, 4, 0, 139, "STG3_20_00", "１部−８位", "Majors - 8th Place", "tou_08", "n_bero", stg3_20_init_8},
+    {0, 4, 0, 140, "STG3_20_01", "ハンマーゲット", "Super Hammer", "tou_01", "a_door_mon", stg3_20_01_init},
+    {0, 4, 0, 141, "STG3_20_02", "再び２部リーグへ", "Back to the Minors", "tou_04", "e_bero", stg3_20_02_init},
+    {0, 4, 0, 142, "STG3_20_03", "壁破壊", "The Yellow Block", "tou_10", "n_bero", 0},
+    {0, 4, 0, 143, "STG3_20_04", "キノシコワに没収", "Confiscated", "tou_10", "n_bero", 0},
+    {0, 4, 0, 143, "STG3_20_04", "１部−７位（乱入・ケーキ）", "Majors - 7th Pl.(Raid/Cake)", "tou_08", "n_bero", stg3_20_init_7},
+    {0, 4, 0, 143, "STG3_20_04", "１部−６位（クッパ乱入）", "Majors - 6th Pl.(Bowser)", "tou_08", "n_bero", stg3_20_init_6},
+    {0, 4, 0, 143, "STG3_20_04", "１部−５位", "Majors - 5th Pl.", "tou_08", "n_bero", stg3_20_init_5},
+    {0, 4, 0, 144, "STG3_20_05", "１部−４位", "Majors - 4th Pl.", "tou_08", "n_bero", stg3_20_init_4},
+    {0, 4, 0, 145, "STG3_20_06", "ブレッドハート逃げる", "Rawk Hawk's Warning", "tou_04", "s_bero_6", stg3_20_06_init},
+    {0, 4, 0, 146, "STG3_20_07", "カギをゲット", "Storage Key", "tou_01", "a_door_mon", 0},
+    {0, 4, 0, 147, "STG3_20_07_00", "倉庫を開錠", "Storage Room Unlocked", "tou_04", "e_bero", stg3_20_07_00_init},
+    {0, 4, 0, 148, "STG3_20_08", "チュチュリーナ", "Ms. Mowz", "tou_06", "n_bero", stg3_20_08_init},
+    {0, 5, 0, 149, "STG3_20_09", "コンテナふきとばし", "Blowing Containers", "tou_06", "n_bero", stg3_20_09_init},
+    {0, 4, 0, 150, "STG3_20_10", "階段出現", "Hidden Stairway", "tou_06", "n_bero", 0},
+    {0, 4, 0, 151, "STG3_20_11", "床破壊", "Hole in the Floor", "tou_06", "n_bero", 0},
+    {0, 4, 0, 152, "STG3_20_12", "キノシコワ密談", "Jolene's Secret", "tou_05", str_fall_80421df8, stg3_20_12_init},
+    {0, 4, 0, 152, "STG3_20_12", "１部−３位（毒ケーキ）", "Majors - 3rd Pl.(Poison)", "tou_08", "n_bero", stg3_20_init_3},
+    {0, 4, 0, 152, "STG3_20_12", "１部−２位", "Majors - 2nd Pl.", "tou_08", "n_bero", stg3_20_init_2},
+    {0, 1, 0, 153, "STG3_20_13", "１部−１位", "Majors - 1st Pl.", "tou_08", "n_bero", stg3_20_init_1},
+    {0, 5, 0, 154, "STG3_20_14", "ロビーのポスター", "Lobby Poster", "tou_02", "n_bero_4", stg3_20_13_init},
+    {0, 1, 0, 155, "STG3_20_15", "カギをあける", "Unlocking the Door", "tou_06", "n_bero", stg3_20_14_init},
+    {0, 1, 0, 156, "STG3_20_16", "干物を発見", "Flattened", "tou_12", "w_bero", stg3_20_15_init},
+    {0, 1, 0, 157, "STG3_21", "チャンピョンに初挑戦つづき", "1st Match with Rawk Hawk", "tou_08", str_dokan_80421d84, stg3_21_init},
+    {0, 1, 0, 158, "STG3_30", "マリオチャンピョンになる", "A New Champion", "tou_08", 0, stg3_30_init},
+    {0, 1, 0, 158, "STG3_30", "マリオチャンピョン", "Champion's Room", "tou_07", "n_bero", stg3_31_00_init},
+    {0, 1, 0, 159, "STG3_30_01", "ダクト入口", "Air Duct Entrance", "tou_07", "n_bero", 0},
+    {0, 1, 0, 160, "STG3_30_02", "初めてのダクト", "Air Duct (1st Time)", "tou_13", "e_bero_", 0},
+    {0, 1, 0, 161, "STG3_30_03", "盗み聞き", "Eavesdropping", "tou_13", "e_bero_", 0},
+    {0, 1, 0, 162, "STG3_30_04", "ダクト出口", "Air Duct Exit", "tou_13", "e_bero_", 0},
+    {0, 1, 0, 163, "STG3_31", "ガンスの企み", "Grubba's Plans", "tou_05", "w_bero", stg3_31_init},
+    {0, 1, 0, 164, "STG3_32", "ＢＯＳＳ戦", "Boss Battle", "tou_03", "w_bero", stg3_32_init},
+    {0, 0, 0, 165, "STG3_33", "ピーチ編：影三姉妹の謁見", "Peach: The Secret Weapon", "aji_10", 0, stg3_33_init},
+    {0, 0, 0, 166, "STG3_33_01", "ピーチ編：テックの頼み１", "Peach: TEC's Request", "aji_17", "w_bero", 0},
+    {0, 0, 0, 167, "STG3_33_02", "ピーチ編：変装", "Peach: Incognito", "aji_09", "s_bero", 0},
+    {0, 0, 0, 168, "STG3_33_03", "ピーチ編：スパイ大作戦", "Peach: Grodus", "aji_10", "w_bero", stg3_33_03_init},
+    {0, 0, 0, 169, "STG3_33_04", "ピーチ編：世界征服の野望", "Peach: Back to TEC", "aji_17", "w_bero", stg3_33_04_init},
+    {0, 0, 0, 170, "STG3_33_05", "クッパ編：森", "Bowser: The Great Tree", "mri_01", 0, 0},
+    {0, 0, 0, 171, "STG3_33_06", "クッパ編：お宝はどこ？", "Bowser: Treasure?", "mri_01", "player", 0},
+    {0, 0, 0, 171, "STG3_33_06", "クッパ編：長老", "Bowser: Puni Elder", "mri_01", str_event_80421dd8, 0},
+    {0, 1, 0, 172, "STG3_34", "ゴロツキタウンにもどる", "Return to Rogueport", "tou_02", "after_peach", stg3_34_init},
+    {0, 1, 0, 173, "STG3_35", "ピーチからのメール", "A Mail from Peach", "gor_03", "n_bero", stg3_35_init},
+    {0, 5, 0, 174, "STG3_50", "大きな扉ステージ３後", "Thousand-Year Door", "tik_05", "e_bero", stg3_50_init},
+    {0, 5, 0, 175, "STG3_51", "地図解読ステージ３後", "Frankly's House Stg.3", "gor_02", 0, 0},
+    {0, 5, 0, 176, "STG3_52", "クラガリさん", "Darkly", "gor_02", "w_bero", stg3_52_init},
+    {0, 5, 0, 177, "STG3_END", "ステージ４へ", "To Stage 4", "tik_07", "e_bero", stg3_end_init},
+};
+
+EventData stage4_evt[] = {
+    {0, 1, 0, 178, "STG4_00", "ステージ４へようこそ", "Welcome to Stage 4", "sys_01", str_stg_4_80421e00, stage4_00_init},
+    {0, 1, 0, 179, "STG4_01_00", "門番と話した", "Gatekeeper Conversation", "usu_01", "w_bero", 0},
+    {0, 1, 0, 180, "STG4_01", "村長がブタに！！", "The Mayor's a Pig!", "usu_00", "e_bero", 0},
+    {0, 1, 0, 181, "STG4_02", "門番がブタに！！", str_Dinge_80421e08, "usu_01", "w_bero", 0},
+    {0, 1, 0, 182, "STG4_02_02", "ブタ門番を見て一言", "The Gatekeeper's a Pig!", "usu_01", "w_bero", 0},
+    {0, 1, 0, 183, "STG4_02_03", "門を開く", "Opening the Gate", "usu_01", "w_bero", 0},
+    {0, 1, 0, 184, "STG4_03", "倉庫のカギを入手", "Shop Key", "gra_02", "w_bero_1", 0},
+    {0, 1, 0, 185, "STG4_04", "倉庫を開ける", "Storage Room Unlocked", "usu_01", "e_bero", stage4_04_init},
+    {0, 1, 0, 187, "STG4_04_01", "ペラ魔人（ロール取得）", "Paper Mage (Tube Mod)", "usu_01", "e_bero", stage4_04_01_init},
+    {0, 1, 0, 188, "STG4_05", str_jp_80421e10, "Straw Tepee", "gra_02", "w_bero_1", stage4_05_init},
+    {0, 5, 0, 189, "STG4_06", "木の幹", "Tree Trunk", "gra_04", "e_bero", 0},
+    {0, 5, 0, 190, "STG4_06_01", "床を吹き飛ばす", "Blow the Floor", "gra_05", "w_bero", 0},
+    {0, 1, 0, 191, "STG4_06_02", "穴を開ける", "Through the Hole", "gra_05", "w_bero", 0},
+    {0, 1, 0, 192, "STG4_07", "岩の仕掛け", "Trick Rock", "gra_05", "w_bero", 0},
+    {0, 1, 0, 193, "STG4_08", "ダイム寺院のカメラ", "Steeple Demo (EXT.)", "gra_06", "sw_bero", 0},
+    {0, 1, 0, 194, "STG4_09", "ダイム寺院内のカメラ", "Steeple Demo (INT.)", "jin_00", "w_bero", 0},
+    {0, 1, 0, 195, "STG4_09_01", "台座を押す", "Push the Statue", "jin_00", "w_bero", 0},
+    {0, 1, 0, 196, "STG4_09_02", "テレサ箱", "Boo Box", "jin_07", "e_bero", 0},
+    {0, 1, 0, 197, "STG4_09_03", "１０００テレサ", "1000 Boos", "jin_00", str_ana_80421e18, 0},
+    {0, 1, 0, 198, "STG4_09_04", str_jp_80421db8, str_Key_80421da4, "jin_00", "e_bero_3", 0},
+    {0, 1, 0, 199, "STG4_09_05", "じょうまえ", str_Lock_80421db0, "jin_00", "e_bero_1", stage4_09_05_init},
+    {0, 1, 0, 200, "STG4_10", "ランペル遭遇", "Doopliss Battle", "jin_04", "s_bero", stage4_10_init},
+    {0, 1, 0, 201, "STG4_10_02", "入れ替わったマリオ", "Trading Places", "jin_04", 0, 0},
+    {0, 0, 0, 202, "STG4_11", "ｓｔｇ４魔女三人組", "Superbombbomb Lost", "usu_00", "evt_majo3", stg4_11_init},
+    {0, 0, 0, 203, "STG4_11_02", "待伏せランペル１", "Waiting Doopliss", "gra_00", "e_bero", 0},
+    {0, 0, 0, 204, "STG4_12", "ビビアン", "Vivian", "usu_00", "e_bero", 0},
+    {0, 0, 0, 205, "STG4_12_01", "イチコロリー玉発見", "Superbombbomb Found", "usu_00", "e_bero", 0},
+    {0, 0, 0, 206, "STG4_13", "ビビアン仲間", "Vivian Joins", "usu_00", "e_bero", stg4_13_init},
+    {0, 6, 0, 207, "STG4_13_02", "待伏せランペル２", "Waiting Doopliss 2", "gra_00", "w_bero", stg4_13_02_init},
+    {0, 6, 0, 208, "STG4_13_03", "床こわす", "Breaking the Floor", "jin_11", "s_bero", stg4_13_03_init},
+    {0, 6, 0, 209, "STG4_13_04", "「ん」の文字", "The Letter p", "jin_08", "e_bero_2", 0},
+    {0, 6, 0, 210, "STG4_14", "名前を言い当てる", "Name Guessing", "gra_00", "e_bero", stg4_14_init},
+    {0, 6, 0, 211, "STG4_15", "ランペルと最終バトル", "Doopliss Battle 2", "jin_04", "s_bero", stg4_15_init},
+    {0, 6, 0, 212, "STG4_15_02", "マリオ本当の姿を取り戻す", "Back to Normal", "jin_04", 0, 0},
+    {0, 6, 0, 213, "STG4_15_03", "ルビースター取得", "The Ruby Star", "jin_04", "s_bero", stg4_15_03_init},
+    {0, 6, 0, 214, "STG4_15_04", "魔女二人とランペル合流", "Shadow Sirens & Doopliss", "usu_00", "s_bero", 0},
+    {0, 0, 0, 215, "STG4_15_05", "ピーチ編：首領と手下", "Peach: X-Naut PhD Report", "aji_10", 0, 0},
+    {0, 0, 0, 215, "STG4_15_05", "ピーチ編：テックのクイズ", "Peach: TEC's Quiz", "aji_17", "w_bero", 0},
+    {0, 0, 0, 216, "STG4_15_06", "クッパ編：飛行船乗り場", "Bowser: Blimp Area", "gor_04", zero_80421d80, 0},
+    {0, 0, 0, 216, "STG4_15_06", "クッパ編：空の上", "Bowser: Flying", "tou_00", zero_80421d80, 0},
+    {0, 0, 0, 217, "STG4_15_07", "クッパ編：アクションステージ２", "Bowser: Action Stage", "kpa_03", zero_80421d80, 0},
+    {0, 0, 0, 218, "STG4_15_08", "クッパ編：ゴロツキ港", "Bowser: Rogueport Dock", "gor_00", zero_80421d80, 0},
+    {0, 6, 0, 219, "STG4_16", "ウスグラタウンを去る", "Leaving Twilight Town", "usu_00", 0, stg4_16_init},
+    {0, 6, 0, 220, "STG4_17", "ピーチからのメール", "A Mail from Peach", "tik_07", "n_bero", 0},
+    {0, 6, 0, 221, "STG4_30", "大きな扉ステージ４後", "Thousand-Year Door", "tik_05", "e_bero", stg4_30_init},
+    {0, 6, 0, 222, "STG4_31", "地図解読ステージ４後", "Frankly's House Stg.4", "gor_02", 0, 0},
+    {0, 6, 0, 223, "STG4_32", "マルコと意気投合", "Chatting with Flavio", "gor_01", "e_bero", 0},
+    {0, 6, 0, 224, "STG4_33", "サンダース紹介", "Meet Bobbery", "gor_00", "n_bero", 0},
+    {0, 6, 0, 225, "STG4_34", "サンダース断られる", "Bobbery Declines", "gor_02", "w_bero", 0},
+    {0, 6, 0, 226, "STG4_35", "マスターに相談", "Advice from Podley", "gor_01", "e_bero", stg4_35_init},
+    {0, 6, 0, 227, "STG4_36", "サンダースの決意", "Bobbery's Decision", "gor_02", "w_bero", stg4_36_init},
+    {0, 6, 15, 228, "STG4_37", "サンダース港へ", "To the Port", "gor_02", "w_bero", stg4_37_init},
+    {0, 6, 0, 229, "STG4_END", "船の出発", "Off to the Keys", "gor_00", "n_bero", stg4_end_init},
+};
+
+EventData stage5_evt[] = {
+    {0, 1, 0, 230, "STG5_00", "航海日誌", "Logbook", "sys_01", str_stg_5_80421e1c, 0},
+    {0, 1, 0, 231, "STG5_10", "怨霊襲撃", "Haunted", "muj_20", 0, 0},
+    {0, 1, 0, 232, "STG5_11", "無人島漂着", "Deserted Island", "muj_00", 0, 0},
+    {0, 2, 0, 233, "STG5_12", "仲間割れ", "Flavio & Pa-Patch", "muj_01", "w_bero", 0},
+    {0, 2, 0, 233, "STG5_12", "挙手願おう", "Flavio's Favor", "muj_01", zero_80421d80, stg5_12_init01},
+    {0, 2, 0, 234, "STG5_13", "サンダース孤軍奮闘", "Bobbery & the Bridge", "muj_04", "w_bero", 0},
+    {0, 2, 0, 235, "STG5_15", "にげる水夫たち", "Runaway Sailors", "muj_03", "e_bero", 0},
+    {0, 2, 0, 235, "STG5_15", "オドオドした水夫説得", "Flavio's Rescue Plan", "muj_01", "e_bero1", stg5_15_init01},
+    {0, 2, 0, 235, "STG5_15", "サンダース救出", "Saving Bobbery", "muj_05", "w_bero", stg5_15_init02},
+    {0, 4, 0, 236, "STG5_16", "マルコのワイン", "Flavio's Wine", "muj_01", "e_bero1", 0},
+    {0, 5, 0, 237, "STG5_17", "ワインゲット", "Wine Obtained", "muj_01", "e_bero1", stg5_17_init},
+    {0, 1, 0, 238, "STG5_18", "サンダース救出２", "Bobbery Rescue 2", "muj_05", "w_bero", stg5_18_init},
+    {0, 1, 0, 239, "STG5_18_01", "サンダース仲間", "Bobbery Joins", "muj_05", "w_bero", 0},
+    {0, 3, 0, 240, "STG5_18_02", "挙手願おうその２", "Flavio's Favor 2", "muj_01", "e_bero1", stg5_18_init_02},
+    {0, 3, 9, 241, "STG5_18_03", "マルコと宝石", "Marco's Jewel", "muj_05", "w_bero", 0},
+    {0, 3, 0, 242, "STG5_19", "宝石と洞窟と子守唄", "Gems and Jingles", "muj_05", "w_bero", stg5_19_init00},
+    {0, 3, 0, 242, "STG5_19", "ドクロ岩のなぞ", "The Skull Rock", "muj_05", "w_bero", stg5_19_init01},
+    {0, 3, 0, 242, "STG5_19", "ドクロ岩爆破", "Skull Rock Blast", "muj_05", "w_bero", stg5_19_init02},
+    {0, 3, 0, 243, "STG5_19_01", "洞窟突入", "Entering the Grotto", "dou_00", "w_bero", stg5_19_01_init},
+    {0, 3, 0, 244, "STG5_19_02", "コルテスの叫び声", "The Call of Cortez", "dou_01", "w_bero", 0},
+    {0, 3, 0, 244, "STG5_19_02", "動くトラップ１", "Spikes (Floor)", "dou_02", "w_bero_1", 0},
+    {0, 3, 0, 245, "STG5_20", "棚の上のスイッチ", "The Blue Block", "dou_05", "w_bero_1", 0},
+    {0, 3, 0, 246, "STG5_21", "カギツメのかぎ", "Grotto Key", "dou_04", "e_bero", stg5_21_init00},
+    {0, 3, 0, 246, "STG5_21", "動くトラップ２", "Spikes (Wall)", "dou_10", "n_bero", stg5_21_init01},
+    {0, 3, 0, 246, "STG5_21", "爆弾穴", "Ship Hole", "dou_09", "e_bero_2", 0},
+    {0, 3, 0, 246, "STG5_21", "ペラ魔人４", "Paper Mage 4", "dou_07", "s_bero", stg5_21_init03},
+    {0, 3, 0, 247, "STG5_21_01", "船変形ゲット", "Boat Mod Obtained", "dou_07", "s_bero", stg5_21_01_init00},
+    {1, 3, 0, 248, "STG5_22", "水門ハンドル", "Floodgate Handle", "dou_02", "e_bero_1", stg5_22_init00},
+    {0, 3, 0, 248, "STG5_22", "水門が開く", "Floodgate", "dou_03", "w_bero_2", stg5_22_init01},
+    {1, 3, 0, 249, "STG5_29", "波よけミニゲーム", "Wave-dodging", "dou_10", "w_bero_1", stg5_29_init},
+    {1, 3, 0, 250, "STG5_30", "取り残された水夫たち", "Shipwrecked Sailors", "dou_11", "w_bero", 0},
+    {0, 3, 0, 250, "STG5_30", "スイッチテスト", "Switch Test", "dou_11", "e_bero", stg5_30_init01},
+    {1, 3, 0, 250, "STG5_30", "水夫お礼", "Thankful Sailors", "dou_11", "w_bero", stg5_30_init02},
+    {0, 3, 0, 251, "STG5_31", "なぞの出現", "Four-Eyes", "muj_10", "w_bero", 0},
+    {0, 3, 0, 252, "STG5_32", "コルテスの警告", "Cortez's Warning", "muj_11", "w_bero", 0},
+    {0, 3, 0, 253, "STG5_33", "コルテスとお宝", "Cortez and the Treasure", "muj_12", "w_bero", 0},
+    {0, 3, 0, 254, "STG5_34", "海賊船追い出される", "Kicked Off", "muj_10", zero_80421d80, 0},
+    {0, 3, 0, 255, "STG5_35", "脱出口", "Escape Route", "dou_11", "e_bero", 0},
+    {0, 3, 0, 256, "STG5_36", "脱出口爆破", "Hole in the Wall", "dou_11", "e_bero", 0},
+    {0, 3, 0, 257, "STG5_40", "第三勢力襲来", "True Identity", "muj_00", "n_bero_02", 0},
+    {0, 3, 9, 258, "STG5_41", "再び洞窟へ", "Return to the Grotto", "muj_00", "e_bero", 0},
+    {0, 3, 9, 258, "STG5_41", "マルコ決死の交渉", "Flavio Makes a Deal", "muj_12", "w_bero", 0},
+    {0, 3, 9, 259, "STG5_41_01", "船員もやってきた", "All Aboard", "muj_10", "A_b_bero03", 0},
+    {0, 3, 0, 260, "STG5_42", "海賊船ＶＳ第三勢力", "Pirates vs. X-Nauts", "muj_00", zero_80421d80, 0},
+    {0, 3, 0, 261, "STG5_43", "第三勢力撃退後", "X-Nauts Retreat", "muj_00", zero_80421d80, stg5_43_init},
+    {0, 0, 0, 262, "STG5_44", "ピーチ編：テックの頼み２", "Peach: TEC's Request 2", "aji_10", zero_80421d80, 0},
+    {0, 0, 0, 263, "STG5_45", "ピーチ編：調合", "Peach: Potion Puzzle", "aji_06", "s_bero", 0},
+    {0, 0, 0, 264, "STG5_46", "ピーチ編：ディスクを探す", "Peach: Disk Search", "aji_11", "w_bero", 0},
+    {0, 0, 0, 265, "STG5_47", "ピーチ編：テックと会話", "Peach: TEC Talk", "aji_17", zero_80421d80, stg5_47_init},
+    {0, 0, 0, 266, "STG5_48", "クッパ編：ウスグラタウン到着", "Bowser: Twilight Town", "usu_00", zero_80421d80, 0},
+    {0, 0, 0, 267, "STG5_49", "クッパ編：ウスグラタウン", "Bowser: Twilight Town 2", "usu_00", "player", 0},
+    {0, 0, 0, 267, "STG5_49", "クッパ編：クッパVS第三勢力", "Bowser: Bowser vs. X-Nauts", "usu_00", str_event_80421dd8, 0},
+    {0, 3, 0, 268, "STG5_58", "島を去る", "Fair Winds!", "muj_00", zero_80421d80, stg5_58_init},
+    {0, 3, 0, 269, "STG5_59", "ゴロツキタウンへ帰還", "Rogueport Dock", "gor_00", zero_80421d80, 0},
+    {0, 3, 0, 270, "STG5_59_01", "ピーチからのメール", "A Mail from Peach", "gor_00", zero_80421d80, stg5_59_01_init},
+    {0, 3, 0, 271, "STG5_60", "いつでも無人島へ", "Return to Keelhaul", "gor_00", "n_bero", stg5_60_init},
+    {0, 6, 0, 271, "STG5_60", "大きな扉ステージ５後", "Thousand-Year Door", "tik_05", "e_bero", 0},
+    {0, 6, 0, 272, "STG5_61", "地図解読ステージ５後", "Frankly's House Stg.5", "gor_02", 0, 0},
+    {0, 5, 0, 273, "STG5_62", "手下の依頼", "An Ill Don Pianta", "gor_03", zero_80421d80, stg5_62_init},
+    {0, 5, 0, 274, "STG5_63", "再び無人島へ", "Keelhaul Anytime", "muj_00", 0, stg5_63_init},
+    {0, 5, 0, 275, "STG5_64", "結婚指輪をなくす", "Lost Wedding Ring", "muj_02", "w_bero", stg5_64_init},
+    {0, 5, 0, 276, "STG5_64_01", "結婚指輪をとどける", "Wedding Ring Delivery", "muj_02", "w_bero", stg5_64_01_init},
+    {0, 5, 0, 277, "STG5_64_02", "モニー＆ピートン乗船", "F & F Sail Off", "muj_00", "e_bero", stg5_64_02_init},
+    {0, 5, 0, 278, "STG5_64_03", "モニー＆ピートン帰還", "F & F Arrive", "gor_00", zero_80421d80, stg5_64_03_init},
+    {0, 5, 0, 279, "STG5_65", "列車のチケットゲット", "Train Ticket", "gor_03", zero_80421d80, stg5_65_init},
+    {0, 6, 0, 280, "STG5_66", "マジョリンに知られる", "Beldam Finds Out", "gor_03", zero_80421d80, stg5_66_init},
+    {0, 6, 0, 281, "STG5_END", "列車発車", "The Train Leaves", "gor_04", "s_bero", 0},
+};
+
+EventData stage6_evt[] = {
+    {0, 1, 0, 282, "STG6_00", "スタート", str_Start_80421e24, "sys_01", str_stg_6_80421e2c, stg6_00_init},
+    {0, 1, 0, 283, "STG6_01", "車掌と話す", "The Conductor", "rsh_04_a", "e_bero", 0},
+    {0, 1, 0, 284, "STG6_02", "ランチ紛失事件", "A Case of Lost Stew", "rsh_03_a", "w_bero", 0},
+    {0, 1, 0, 285, "STG6_03", "何かのあと", "Stained Carpet", "rsh_03_a", "e_bero", 0},
+    {0, 1, 0, 286, "STG6_04", "グルメキノピオ会話", "Grilling Heff T.", "rsh_02_a", "e_bero", 0},
+    {0, 1, 0, 287, "STG6_05", "チュボーのなべ発見", "Galley Kettle Discovered", "rsh_02_a", "e_bero", 0},
+    {0, 1, 0, 288, "STG6_06", "ポワン助手", "Pennington's Assistant", "rsh_04_a", "e_bero", stg6_06_init},
+    {0, 1, 0, 289, "STG6_07", "ナリキンママと話す", "Sylvia", "rsh_04_b", "e_bero", 0},
+    {0, 1, 0, 290, "STG6_08", "コナリキンと話す", str_Bub_80421e34, "rsh_04_b", "e_bero", 0},
+    {0, 1, 0, 291, "STG6_09", "コナリキン依頼", "Bub's Request", "rsh_04_b", "e_bero", 0},
+    {0, 1, 0, 292, "STG6_10", "車掌・トロンと話す", "The Conductor/Zip Toad", "rsh_04_b", "e_bero", 0},
+    {0, 1, 0, 293, "STG6_11", "サインもらう", "Obtain Autograph", "rsh_00_b", "w_bero", 0},
+    {0, 1, 0, 294, "STG6_12", "サインあげる", "Give Autograph", "rsh_04_b", "e_bero", stg6_12_init},
+    {0, 1, 0, 295, "STG6_13", "車掌と話す", "Talk to the Conductor", "rsh_04_c", "e_bero", stg6_13_init},
+    {0, 1, 0, 296, "STG6_14", "ゆうれい", "Ghost T.", "rsh_02_c", "w_bero", 0},
+    {0, 1, 0, 297, "STG6_15", "ゆうれい依頼", "Ghost Request", "rsh_02_c", "w_bero", 0},
+    {0, 1, 0, 298, "STG6_16", "貨物室の許可もらう", "The Baggage Car", "rsh_04_c", "e_bero", 0},
+    {0, 1, 0, 299, "STG6_17", "ゆうれいの日記", "Ghost Diary", "rsh_05_a", "e_bero", 0},
+    {0, 1, 0, 300, "STG6_18", "毛布とこうかん", "Blanket Exchange", "rsh_02_c", "w_bero", stg6_18_init},
+    {0, 1, 0, 301, "STG6_19", "車掌に毛布", "Give Blanket", "rsh_04_c", "e_bero", stg6_19_init},
+    {0, 1, 0, 302, "STG6_20", "１日目が終了", "End of Day 1", "rsh_02_c", "w_bero", stg6_20_init},
+    {0, 1, 0, 303, "STG6_21", "２日目スタート", str_Day_2_80421e38, "rsh_02_a", "w_bero", 0},
+    {0, 1, 0, 304, "STG6_22", "書類紛失事件", "Document", "rsh_04_a", "e_bero", stg6_22_init},
+    {0, 1, 0, 305, "STG6_23", "大事そうな紙", "Vital Paper", "rsh_01_a", "w_bero", 0},
+    {0, 1, 0, 306, "STG6_24", "大事なてがかり", "A Vital Clue", "rsh_04_a", "e_bero", stg6_24_init},
+    {0, 1, 0, 307, "STG6_24_02", "大事そうな紙を調べる", "Another Clue", "rsh_02_a", "w_bero", 0},
+    {0, 6, 0, 308, "STG6_25", "トロン出現", "Zip Toad Appears", "rsh_02_a", "w_bero", 0},
+    {0, 1, 0, 309, "STG6_26", "トロンほかく", "Zip Toad Caught", "rsh_02_a", "w_bero", 0},
+    {0, 1, 0, 310, "STG6_27", "途中駅に到着", "Riverside Station", "hom_00", "hom_touchaku", stg6_27_init},
+    {0, 1, 0, 311, "STG6_28", "駅の鍵もらう", "Station Key Obtained", "hom_00", "n_bero_1", 0},
+    {0, 1, 0, 312, "STG6_29", "駅の鍵あける", "Station Door Unlocked", "hom_00", "n_bero_1", stg6_29_init},
+    {0, 1, 0, 313, "STG6_30", "折り紙階段", "Origami Stairs", "eki_01", "w_dero", stg6_30_init},
+    {0, 1, 0, 314, "STG6_31", "錠前の鍵ゲット", str_Key_80421da4, "eki_02", "s_bero", 0},
+    {0, 1, 0, 315, "STG6_32", "錠前をあける", "Unlocking the Door", "eki_01", "w_dero", stg6_32_init},
+    {0, 1, 0, 316, "STG6_33", "ポスター飛ばす", "Blow the Poster", "eki_03", "w_bero_1", stg6_33_init},
+    {0, 1, 0, 317, "STG6_34", "スイッチのはこが開く", "3 Blue Blocks", "eki_06", "e_bero_1", stg6_34_init},
+    {0, 1, 0, 318, "STG6_35", "おりがみ階段", "Origami Stairs", "eki_06", "e_bero_1", 0},
+    {0, 1, 0, 319, "STG6_36", "じゃばらジャンプ", "Spring Jump", "eki_05", "w_bero_1", 0},
+    {0, 1, 0, 320, "STG6_37", "エレベータキー", "Elevator Key", "eki_05", "n_bero", stg6_37_init},
+    {0, 1, 0, 321, "STG6_38", "エレベータ動く", "Ride the Elevator", "eki_00", "e_bero", stg6_38_init},
+    {0, 1, 0, 322, "STG6_39", "初めてのモアモア", "Smorg (1st Encounter)", "eki_00", "e_bero", stg6_39_init},
+    {0, 1, 0, 323, "STG6_40", "モアモア追い払う", "Swatting Smorgs", "eki_00", "e_bero", 0},
+    {0, 1, 0, 324, "STG6_41", "おりがみ階段", "Origami Stairs", "eki_00", "e_bero", 0},
+    {0, 1, 0, 325, "STG6_42", "鉄橋が降りる", "Drawbridge Down", "eki_00", "e_bero", 0},
+    {0, 1, 0, 326, "STG6_43", "電車出発", "Conductor Appears", "hom_00", "n_bero_2", 0},
+    {0, 1, 0, 327, "STG6_44", "２日目終了", "End of Day 2", "rsh_02_c", "w_bero", stg6_44_init},
+    {0, 1, 0, 328, "STG6_45", "３日目スタート", "Day 3 Starts", "rsh_02_a", "w_bero", 0},
+    {0, 1, 0, 329, "STG6_46", "運転手", "Engineer", "rsh_00_a", "w_bero", stg6_47_00_init},
+    {0, 1, 0, 330, "STG6_47_00", "倉庫のモアモア", "Baggage Car Smorgs", "rsh_05_a", "e_bero", 0},
+    {0, 1, 0, 331, "STG6_47", "モアモアから救出", "Escaping the Smorgs", "rsh_05_a", "e_bero", 0},
+    {0, 1, 0, 332, "STG6_48", "グレートモアモア", "Smorg Miasma", "rsh_06_a", "w_bero", 0},
+    {0, 1, 0, 334, "STG6_49", "ピカリーヒルズ到着", "Poshley Heights", "rsh_01_a", "w_bero", 0},
+    {0, 1, 0, 335, "STG6_50", "ポワンが神官", "The Sanctum Manager", "pik_01", "nw_bero", 0},
+    {0, 1, 0, 336, "STG6_51", "ガーネットスター強奪", "3 Surprise Guests", "pik_02", "s_bero", 0},
+    {0, 1, 0, 337, "STG6_52", "ドカン出現", "The Hidden Pipe", "pik_02", "s_bero", 0},
+    {0, 1, 0, 338, "STG6_53", "ガーネットスター本物", "The Real Garnet Star", "pik_03", "s_bero", 0},
+    {0, 1, 0, 339, "STG6_54", "ただいま", "Welcome Back", "pik_02", "h_bero", stg6_54_init},
+    {0, 0, 0, 340, "STG6_55", "ピーチ編：総統と手下の会話", "Peach: Grodus & X-Naut", "aji_10", 0, 0},
+    {0, 0, 0, 341, "STG6_55_01", "ピーチ編：テック消去", "Peach: TEC Deleted", "aji_17", "w_bero", 0},
+    {0, 0, 0, 342, "STG6_55_02", "クッパ編：ゴロツキタウン", "Bowser: Rogueport", "gor_01", zero_80421d80, 0},
+    {0, 0, 0, 343, "STG6_55_03", "クッパ編：アクションステージ３", "Bowser: Action Stage", "kpa_05", zero_80421d80, 0},
+    {0, 0, 0, 344, "STG6_55_04", "クッパ編：ブレッドハート", "Bowser: Rawk Hawk", "kpa_07", zero_80421d80, 0},
+    {0, 1, 0, 345, "STG6_56", "帰りの電車", "Rogueport Station", "gor_04", "resha_return", stg6_56_init},
+    {0, 1, 0, 346, "STG6_57", "ピーチからのメール", "A Mail from Peach", "gor_04", "n_bero", 0},
+    {0, 6, 0, 347, "STG6_70", "大きな扉ステージ６後", "Thousand-Year Door", "tik_05", "e_bero", stg6_70_init},
+    {0, 6, 0, 348, "STG6_71", "地図解読ステージ６後", "Frankly's House Stg.6", "gor_02", 0, 0},
+    {0, 6, 0, 350, "STG6_72", "地図解読３分後", "3 Minutes Later", "gor_02", "w_bero", stg6_71_01_init},
+    {0, 6, 0, 350, "STG6_72", "月に行く方法", "A Way to the Moon", "gor_02", "w_bero", stg6_72_init},
+    {0, 6, 0, 351, "STG6_END", "ウルトラハンマーゲット", "Ultra Hammer", "gor_01", "e_bero", 0},
+    {0, 6, 0, 351, "STG6_END", "ストーンブロック破壊", "Stone Block Smash", "tik_07", "e_bero", stg6_end_init01},
+    {0, 6, 0, 351, "STG6_END", "ボム村へ", "To Fahr Outpost", "tik_07", "e_bero", stg6_end_init02},
+};
+
+EventData stage7_evt[] = {
+    {0, 1, 0, 352, "STG7_00", "STG7 スタート", str_Start_80421e24, "sys_01", str_stg_7_80421e40, 0},
+    {0, 1, 0, 353, "STG7_01", "初めてのボム村", "Fahr Outpost (1st Visit)", "bom_01", "w_bero", stg7_01_init},
+    {0, 3, 0, 354, "STG7_02", "村長と会話", "Mayor Bob", "bom_02", "w_bero", 0},
+    {0, 1, 0, 355, "STG7_03", "ナリキンパパ", "Goldbob", "pik_00", "se_bero", 0},
+    {0, 1, 0, 355, "STG7_03", "ホワイト居場所（ノコ村）", "Where's White?(Petalburg)", "nok_00", "w_bero", stg7_03_white_0},
+    {0, 1, 0, 355, "STG7_03", "ホワイト居場所（無人島）", "Where's White?(Keelhaul)", "muj_01", "w_bero", stg7_03_white_1},
+    {0, 1, 0, 355, "STG7_03", "ホワイト居場所（闘技場）", "Where's White?(Glitzville)", "tou_01", "n_bero", stg7_03_white_2},
+    {0, 1, 0, 355, "STG7_03", "ホワイト居場所（大樹）", "Where's White?(Great Tree)", "mri_01", "w_bero", stg7_03_white_3},
+    {0, 1, 0, 355, "STG7_03", "ホワイト居場所（ウスグラ）", "Where's White?(Twilight)", "usu_00", "e_bero", stg7_03_white_4},
+    {0, 1, 0, 355, "STG7_03", "ホワイト将軍目覚める", "Gen. White Awakens", "bom_02", "w_bero", stg7_03_white_5},
+    {0, 1, 0, 356, "STG7_04", "村長認める", "Back Online", "bom_02", "w_bero", stg7_04_init},
+    {0, 1, 0, 357, "STG7_05", "大砲発射", "The Cannon", "bom_01", "e_bero", 0},
+    {0, 1, 0, 358, "STG7_06", "月に到着", "To the Moon", "moo_00", 0, stg7_06_init},
+    {0, 3, 0, 359, "STG7_07", "ドカン出現", "A Pipe Appears", "moo_02", "w_bero", 0},
+    {0, 3, 0, 360, "STG7_07_01", "アジトの外", "Inside the Building", "aji_19", "w_bero", 0},
+    {0, 1, 0, 361, "STG7_08", "アジト潜入", "Elite X-Nauts", "aji_00", "w_bero", 0},
+    {0, 1, 0, 362, "STG7_09", "エレベータキーＡ（光る床）", "Elevator Key A(Lit Floor)", "aji_02", "w_bero", 0},
+    {0, 1, 0, 363, "STG7_10", "エレベータ始動", "Elevator Activated", "aji_01", "e_bero_1", stg7_10_init},
+    {0, 1, 0, 364, "STG7_11", "今日のあいことば", "Password for Today", "aji_09", "s_bero", stg7_11_init},
+    {0, 1, 0, 365, "STG7_12", "合言葉入力", "Password Entry", "aji_01", "w_bero_2", 0},
+    {0, 1, 0, 366, "STG7_13", "クイズクリア", "Quiz Cleared", "aji_04", "w_bero", 0},
+    {0, 1, 0, 367, "STG7_14", "エレベータキーＢ", "Elevator Key B", "aji_04", "w_bero", 0},
+    {0, 1, 0, 368, "STG7_15", "エレベータ始動２", "Elevator Activated 2", "aji_01", "n_bero_4", stg7_15_init},
+    {0, 1, 0, 368, "STG7_15", "ルームキーＡ", "Room Key A", "aji_05", "e_bero", stg7_15_room_A_init},
+    {0, 1, 0, 368, "STG7_15", "ルームキーＢ", "Room Key B", "aji_12", "e_bero", stg7_15_room_B_init},
+    {0, 1, 0, 368, "STG7_15", "ルームキーＣ", "Room Key C", "aji_10", "w_bero", stg7_15_room_C_init},
+    {0, 1, 0, 369, "STG7_16", "工場のドア", "Factory Door", "aji_18", "w_bero", stg7_16_init},
+    {0, 1, 0, 370, "STG7_17", "ベルトコンベア", "Conveyor Belt", "aji_13", "w_bero", stg7_17_init},
+    {0, 1, 0, 371, "STG7_18", "オフスクリーン階段", "Off-screen Stairs", "aji_13", "w_bero", 0},
+    {0, 1, 0, 372, "STG7_19", "ボス部屋への扉", "The Door to Lord Crump", "aji_13", "w_bero", stg7_19_init},
+    {0, 1, 0, 373, "STG7_20", "ボスを倒す", "Lord Crump Defeated", "aji_14", "w_bero", stg7_20_init},
+    {0, 0, 0, 374, "STG7_25_00", "クッパ編：ピカリーヒルズ", "Bowser: Poshley Heights", "pik_01", 0, stg7_25_00_init},
+    {0, 0, 0, 375, "STG7_25_00_1", "クッパ編：神殿へ", "Bowser: Poshley Sanctum", "pik_01", 0, 0},
+    {0, 0, 0, 375, "STG7_25_00_1", "クッパ編：スターストーンゲット！？", "Bowser: Crystal Star", "pik_02", 0, 0},
+    {0, 1, 0, 376, "STG7_25", "最後のメール", "The Last Mail", "aji_18", "e_bero", 0},
+    {0, 1, 0, 377, "STG7_26", "アジト爆発", "The Hideout Explodes", "aji_07", "s_bero", 0},
+    {0, 1, 0, 378, "STG7_50", "クリハカセと会う", "A Waiting Prof. Frankly ", "tik_00", 0, stg7_50_init},
+    {0, 6, 0, 379, "STG7_51", "大きな扉ステージ７後", "Thousand-Year Door", "tik_05", "e_bero", stg7_51_init},
+    {0, 6, 0, 380, "STG7_52", "魔方陣", "The Pedestal", "tik_05", "e_bero", stg7_52_init},
+    {0, 6, 0, 381, "STG7_END", "ラストダンジョンへ", "To the Last Dungeon", "tik_05", "e_bero", 0},
+};
+
+EventData stage8_evt[] = {
+    {0, 1, 0, 382, "STG8_00", "スタート", str_Start_80421e24, "sys_01", str_stg_8_80421e48, 0},
+    {0, 1, 0, 383, "STG8_01", "１０００体カロン", "1000 Dry Bones", "las_05", "w_bero", 0},
+    {0, 1, 0, 384, "STG8_01_01", str_jp_80421db8, str_Key_80421da4, "las_05", "w_bero", 0},
+    {0, 1, 0, 385, "STG8_01_02", "じょうまえ", str_Lock_80421db0, "las_05", "w_bero", stg8_01_02_init},
+    {0, 1, 0, 386, "STG8_02", "無限回廊", "Follow the Lit Torches", "las_08", "w_bero_1", stg8_02_init},
+    {0, 1, 0, 387, "STG8_03", "女王の庭", "The Palace Garden", "las_09", "w_bero", 0},
+    {0, 1, 0, 388, "STG8_04", "ボンババ", "Gloomtail", "las_26", "w_bero", 0},
+    {0, 1, 0, 389, "STG8_05", "鍵穴出現", "Star Key Slot", "las_10", "s_bero", stg8_05_init},
+    {0, 1, 0, 390, "STG8_06", "天球儀起動", "Moving Planets", "las_10", "tenkyugi_evt", stg8_06_init},
+    {0, 1, 0, 391, "STG8_07", "マジョリン御一行", "Beldam Confrontation", "las_09", "majyorin_evt", 0},
+    {0, 1, 0, 392, "STG8_08", "壁裏通路", "The New Path", "las_19", "w_bero", 0},
+    {0, 1, 0, 393, "STG8_09", str_jp_80421e50, str_Key_80421da4, "las_22", "s_bero", 0},
+    {0, 1, 0, 394, "STG8_10", str_jp_80421da8, str_Lock_80421db0, "las_22", "s_bero", stg8_10_init},
+    {0, 1, 0, 395, "STG8_11", "星の仕掛け", "Star Puzzle", "las_20", "e_bero", stg8_11_init},
+    {0, 1, 0, 396, "STG8_12", "ブロック", "Large Stone Block", "las_24", "w_bero", 0},
+    {0, 1, 0, 397, "STG8_13", str_jp_80421e50, str_Key_80421da4, "las_24", "s_bero_2", stg8_13_init},
+    {0, 1, 0, 398, "STG8_14", str_jp_80421da8, str_Lock_80421db0, "las_25", "w_bero", stg8_14_init},
+    {0, 1, 0, 399, "STG8_14_01", "玉座の間", "Queen's Chamber", "las_28", "w_bero", stg8_15_init},
+    {0, 1, 0, 400, "STG8_15", "シュリョー", "Grodus", "las_28", "w_bero", 0},
+    {0, 1, 0, 400, "STG8_15", "クッパ", "Bowser", "las_28", "koopa_evt", 0},
+    {0, 1, 0, 401, "STG8_16", "女王の墓所", "The Return of the Queen", "las_29", "w_bero", 0},
+    {0, 1, 0, 401, "STG8_16", "世界が闇に覆われる１", "End of the World 1", "gor_01", "sekai_yami1", 0},
+    {0, 1, 0, 401, "STG8_16", "カゲの女王", "The Shadow Queen", "las_29", "sekai_yami1", 0},
+    {0, 1, 0, 401, "STG8_16", "世界が闇に覆われる２", "End of the World 2", "usu_00", "sekai_yami2", 0},
+    {0, 1, 0, 401, "STG8_16", "ブラックピーチ", "Shadow Peach", "las_29", "sekai_yami2", 0},
+    {0, 1, 0, 401, "STG8_16", "スターストーンとびだす", "The Crystal Stars", "las_29", "starstone", 0},
+    {0, 1, 0, 401, "STG8_16", "みんなのこえ１", "Words of Support 1", "gor_01", "minnnanokoe", 0},
+    {0, 1, 0, 401, "STG8_16", "みんなのこえ２", "Words of Support 2", "usu_00", "minnnanokoe", 0},
+    {0, 1, 0, 401, "STG8_16", "みんなのこえ３", "Words of Support 3", "las_29", "minnnanokoe", 0},
+    {0, 1, 0, 402, "STG8_END", "バトル後", "After the Battle", "las_29", str_owari_80421e54, 0},
+};
+
+EventData stage9_evt[] = {
+    {0, 0, 0, 403, "STG9_00", "エピローグ", "Epilogue", "gor_11", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "ゴロツキ港", "Rogueport Dock", "gor_00", 0, 0},
+    {0, 0, 0, 403, "STG9_00", str_jp_80421e5c, "Sail Away", "muj_21", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "マリオの家", "Mario's House", "aaa_00", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "クリハカセ", "Professor Frankly", "gor_02", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "クリスチーヌ", "Goombella", "hei_00", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "ノコタロウ", str_Koops_80421e64, "nok_01", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "チビヨッシー", "Mini-Yoshi", "tou_08", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "ビビアン", "Vivian", "usu_00", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "サンダース", "Bobbery", "muj_20", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "チュチュリーナ", "Ms. Mowz", "gor_01", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "メガバッテン", "X-Nauts", "pik_04", 0, 0},
+    {0, 0, 0, 403, "STG9_00", str_jp_80421e6c, str_Moon_80421e70, "tik_00", 0, 0},
+    {0, 0, 0, 403, "STG9_00", "クリスチーヌ２", "Goombella 2", "gor_00", "epilogue2", 0},
+    {0, 0, 0, 403, "STG9_00", "マリオの家２", "Mario's House 2", "aaa_00", "epilogue2", 0},
+    {0, 1, 0, 404, "STG9_01", "スタッフロール", "End Credits", "end_00", zero_80421d80, 0},
+    {0, 1, 0, 405, "STG9_02", "クリア後（最初）", "Return to Rogueport", "gor_00", zero_80421d80, N_stg9_02_init},
+    {0, 1, 0, 406, "STG9_END", "クリア後", "Rogueport", "gor_00", "n_bero", 0},
+};
+
+EventStage event_dt[] = {
+    {"オープニング", "Opening", stage0_evt, sizeof(stage0_evt) / sizeof(EventData)},
+    {"ステージ１", "Stage 1", stage1_evt, sizeof(stage1_evt) / sizeof(EventData)},
+    {"ステージ２", "Stage 2", stage2_evt, sizeof(stage2_evt) / sizeof(EventData)},
+    {"ステージ３", "Stage 3", stage3_evt, sizeof(stage3_evt) / sizeof(EventData)},
+    {"ステージ４", "Stage 4", stage4_evt, sizeof(stage4_evt) / sizeof(EventData)},
+    {"ステージ５", "Stage 5", stage5_evt, sizeof(stage5_evt) / sizeof(EventData)},
+    {"ステージ６", "Stage 6", stage6_evt, sizeof(stage6_evt) / sizeof(EventData)},
+    {"ステージ７", "Stage 7", stage7_evt, sizeof(stage7_evt) / sizeof(EventData)},
+    {"ステージ８", "Stage 8", stage8_evt, sizeof(stage8_evt) / sizeof(EventData)},
+    {"エンディング", "Ending", stage9_evt, sizeof(stage9_evt) / sizeof(EventData)},
+};
+
+const char str_name_party3_802ed258[] = "name_party3";
 
 const char str_jp_80421d70[] = "広場";
 const char str_Plaza_80421d78[] = "Plaza";

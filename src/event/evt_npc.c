@@ -14,6 +14,11 @@
 
 void _npc_check_coin_group(void* group, s32* coin);
 
+/* Recovered target zero-Vec3 bases.  Keeping these as byte-addressable
+ * initialized objects preserves the existing common-base + offset consumers. */
+__declspec(section ".rodata") u8 vec3_802c1470[12] __attribute__((aligned(4))) = {0};
+__declspec(section ".rodata") u8 vec3_802c147c[12] __attribute__((aligned(4))) = {0};
+
 extern void* fbatGetPointer(void);
 extern f32 sqrtf(f32 x);
 extern s32 irand(s32 max);
@@ -47,46 +52,58 @@ s32 evt_npc_entry(void* pEvt) {
 }
 
 s32 evt_npc_slave_entry(void* pEvt) {
+    typedef struct BattleInfoView {
+        u8 data[0xC8];
+    } BattleInfoView;
+    typedef struct NpcSlaveView {
+        u32 flags;
+        u8 pad_004[4];
+        char description[0x20];
+        u8 pad_028[0x12C - 0x28];
+        void* deadEvent;
+        u8 pad_130[0x230 - 0x130];
+        BattleInfoView battleInfo;
+    } NpcSlaveView;
     extern s32 evtGetValue(void*, s32);
-    extern void* evtNpcNameToPtr(void*, s32);
-    extern void* npcNameToPtr(void*);
+    extern NpcSlaveView* evtNpcNameToPtr(void*, s32);
+    extern NpcSlaveView* npcNameToPtr(char*);
     extern void* memset(void*, s32, u32);
     extern s32 sprintf(char*, const char*, ...);
+    extern char* strcpy(char*, const char*);
     extern char* strcat(char*, const char*);
     extern s32 npcEntry(char*, s32);
-    extern void npcSetSlave(void*, void*, s32);
+    extern void npcSetSlave(NpcSlaveView*, NpcSlaveView*, s32);
     extern void evtSetValue(void*, s32, s32);
-    extern char str_sPCTd_8041fe08[];
-    s32* args;
-    void* parent;
+    extern const char str_sPCTd_8041fe08[5];
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name;
+    NpcSlaveView* npc;
+    s32 id;
+    s32 animName;
     s32 index;
-    s32 model;
-    s32 dst;
-    s32 interrupt;
-    void* slave;
-    char suffix[4];
-    char name[0xBC];
-    s32 i;
+    u8 sp2C[0xB8];
+    char slaveName[0x20];
+    char ident[4];
+    NpcSlaveView* slave;
+    void* deadEvent;
 
-    args = *(s32**)((s32)pEvt + 0x18);
-    parent = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
-    index = evtGetValue(pEvt, args[1]);
-    model = evtGetValue(pEvt, args[2]);
-    dst = args[3];
-    interrupt = evtGetValue(pEvt, args[4]);
-    memset(name, 0, 0xB8);
-    sprintf(suffix, str_sPCTd_8041fe08, index);
-    strcpy(name, (char*)((s32)parent + 8));
-    strcat(name, suffix);
-    npcEntry(name, model);
-    slave = npcNameToPtr(name);
-    *(u32*)slave |= 0x120018;
-    *(s32*)((s32)slave + 0x12C) = interrupt;
-    for (i = 0; i < 0x32; i++) {
-        ((s32*)((s32)slave + 0x230))[i] = ((s32*)((s32)parent + 0x230))[i];
-    }
-    npcSetSlave(parent, slave, index);
-    evtSetValue(pEvt, dst, (s32)slave + 8);
+    name = evtGetValue(pEvt, *args++);
+    npc = evtNpcNameToPtr(pEvt, name);
+    id = evtGetValue(pEvt, *args++);
+    animName = evtGetValue(pEvt, *args++);
+    index = *args++;
+    deadEvent = (void*)evtGetValue(pEvt, *args++);
+    memset(&sp2C, 0, sizeof(sp2C));
+    sprintf(ident, str_sPCTd_8041fe08, id);
+    strcpy(slaveName, npc->description);
+    strcat(slaveName, ident);
+    npcEntry(slaveName, animName);
+    slave = npcNameToPtr(slaveName);
+    slave->flags |= 0x120018;
+    slave->deadEvent = deadEvent;
+    slave->battleInfo = npc->battleInfo;
+    npcSetSlave(npc, slave, id);
+    evtSetValue(pEvt, index, (s32)&slave->description);
     return 2;
 }
 
@@ -228,7 +245,6 @@ s32 evt_npc_set_position(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern f32 evtGetFloat(void*, s32);
     extern void* evtNpcNameToPtr(void*, s32);
-    extern char vec3_802c1470[];
     s32* args;
     s32 name;
     f32 x;
@@ -315,20 +331,21 @@ s32 evt_npc_get_scale(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern void* evtNpcNameToPtr(void*, s32);
     extern void evtSetFloat(void*, s32, f32);
-    s32* args;
-    s32 dstX;
-    s32 dstY;
-    s32 dstZ;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name;
     void* npc;
+    s32 x;
+    s32 y;
+    s32 z;
 
-    args = *(s32**)((s32)pEvt + 0x18);
-    npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
-    dstX = args[1];
-    dstY = args[2];
-    dstZ = args[3];
-    evtSetFloat(pEvt, dstX, *(f32*)((s32)npc + 0xE0));
-    evtSetFloat(pEvt, dstY, *(f32*)((s32)npc + 0xE4));
-    evtSetFloat(pEvt, dstZ, *(f32*)((s32)npc + 0xE8));
+    name = evtGetValue(pEvt, args[0]);
+    x = args[1];
+    y = args[2];
+    z = args[3];
+    npc = evtNpcNameToPtr(pEvt, name);
+    evtSetFloat(pEvt, x, *(f32*)((s32)npc + 0xE0));
+    evtSetFloat(pEvt, y, *(f32*)((s32)npc + 0xE4));
+    evtSetFloat(pEvt, z, *(f32*)((s32)npc + 0xE8));
     return 2;
 }
 
@@ -336,20 +353,21 @@ s32 evt_npc_get_position(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern void* evtNpcNameToPtr(void*, s32);
     extern void evtSetFloat(void*, s32, f32);
-    s32* args;
-    s32 dstX;
-    s32 dstY;
-    s32 dstZ;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name;
     void* npc;
+    s32 x;
+    s32 y;
+    s32 z;
 
-    args = *(s32**)((s32)pEvt + 0x18);
-    npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
-    dstX = args[1];
-    dstY = args[2];
-    dstZ = args[3];
-    evtSetFloat(pEvt, dstX, *(f32*)((s32)npc + 0x8C));
-    evtSetFloat(pEvt, dstY, *(f32*)((s32)npc + 0x90));
-    evtSetFloat(pEvt, dstZ, *(f32*)((s32)npc + 0x94));
+    name = evtGetValue(pEvt, args[0]);
+    x = args[1];
+    y = args[2];
+    z = args[3];
+    npc = evtNpcNameToPtr(pEvt, name);
+    evtSetFloat(pEvt, x, *(f32*)((s32)npc + 0x8C));
+    evtSetFloat(pEvt, y, *(f32*)((s32)npc + 0x90));
+    evtSetFloat(pEvt, z, *(f32*)((s32)npc + 0x94));
     return 2;
 }
 
@@ -357,20 +375,21 @@ s32 evt_npc_get_home_position(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern void* evtNpcNameToPtr(void*, s32);
     extern void evtSetFloat(void*, s32, f32);
-    s32* args;
-    s32 dstX;
-    s32 dstY;
-    s32 dstZ;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name;
     void* npc;
+    s32 x;
+    s32 y;
+    s32 z;
 
-    args = *(s32**)((s32)pEvt + 0x18);
-    npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
-    dstX = args[1];
-    dstY = args[2];
-    dstZ = args[3];
-    evtSetFloat(pEvt, dstX, *(f32*)((s32)npc + 0x1FC));
-    evtSetFloat(pEvt, dstY, *(f32*)((s32)npc + 0x200));
-    evtSetFloat(pEvt, dstZ, *(f32*)((s32)npc + 0x204));
+    name = evtGetValue(pEvt, args[0]);
+    x = args[1];
+    y = args[2];
+    z = args[3];
+    npc = evtNpcNameToPtr(pEvt, name);
+    evtSetFloat(pEvt, x, *(f32*)((s32)npc + 0x1FC));
+    evtSetFloat(pEvt, y, *(f32*)((s32)npc + 0x200));
+    evtSetFloat(pEvt, z, *(f32*)((s32)npc + 0x204));
     return 2;
 }
 
@@ -401,27 +420,27 @@ s32 evt_npc_get_rotate(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern void* evtNpcNameToPtr(void*, s32);
     extern void evtSetFloat(void*, s32, f32);
-    s32* args;
-    s32 dstX;
-    s32 dstY;
-    s32 dstZ;
+    s32* args = *(s32**)((s32)pEvt + 0x18);
+    s32 name;
     void* npc;
+    s32 x;
+    s32 y;
+    s32 z;
 
-    args = *(s32**)((s32)pEvt + 0x18);
-    npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
-    dstX = args[1];
-    dstY = args[2];
-    dstZ = args[3];
-    evtSetFloat(pEvt, dstX, *(f32*)((s32)npc + 0xEC));
-    evtSetFloat(pEvt, dstY, *(f32*)((s32)npc + 0xF0));
-    evtSetFloat(pEvt, dstZ, *(f32*)((s32)npc + 0xF4));
+    name = evtGetValue(pEvt, args[0]);
+    x = args[1];
+    y = args[2];
+    z = args[3];
+    npc = evtNpcNameToPtr(pEvt, name);
+    evtSetFloat(pEvt, x, *(f32*)((s32)npc + 0xEC));
+    evtSetFloat(pEvt, y, *(f32*)((s32)npc + 0xF0));
+    evtSetFloat(pEvt, z, *(f32*)((s32)npc + 0xF4));
     return 2;
 }
 
 s32 evt_npc_set_rotate(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern void* evtNpcNameToPtr(void*, s32);
-    extern char vec3_802c147c[];
     s32* args;
     s32 name;
     f32 x;
@@ -479,148 +498,334 @@ s32 evt_npc_set_rotate_offset(void* pEvt) {
     f32 y = evtGetValue(pEvt, args[2]);
     f32 z = evtGetValue(pEvt, args[3]);
     u8* npc = evtNpcNameToPtr(pEvt, name);
-
-    *(f32*)(npc + 0xF8) = x;
-    *(f32*)(npc + 0xFC) = y;
-    *(f32*)(npc + 0x100) = z;
+    *(Vec*)(npc + 0xF8) = (Vec){ x, y, z };
     return 2;
 }
 
 s32 evt_npc_move_position(EventEntry* event, s32 isFirstCall) {
+    typedef struct NpcMoveView {
+        u32 flags;
+        u8 pad_004[0x8C - 4];
+        Vec position;
+        u8 pad_098[0x104 - 0x98];
+        s32 poseId;
+        s32 field_108;
+        u8 pad_10C[0x158 - 0x10C];
+        Vec jumpStartPos;
+        Vec jumpTargetPos;
+        u8 pad_170[0x188 - 0x170];
+        s64 field_188;
+        u8 pad_190[0x1A0 - 0x190];
+        f32 field_1A0;
+        f32 moveDt;
+        u8 pad_1A8[0x1AC - 0x1A8];
+        f32 moveDir;
+        f32 moveSpeed;
+        Vec moveOffset;
+        f32 moveTime;
+        f32 jumpVelY;
+        f32 jumpYScale;
+        f32 jumpGravity;
+        u8 pad_1D0[0x1D4 - 0x1D0];
+        u32 jumpFlags;
+        s16 footstepToggle;
+        u8 pad_1DA[2];
+        f32 footstepAccum;
+        const char* footstepSfxA;
+        const char* footstepSfxB;
+        u16 footstepStride;
+        u8 pad_1EA[0x2FC - 0x1EA];
+        s32 field_2FC;
+    } NpcMoveView;
+    typedef struct FbatView {
+        s16 mode;
+        u8 pad_002[6];
+        void* target;
+    } FbatView;
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern f64 __frsqrte(f64 x);
     extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
-    extern f32 float_0_8041fd84;
-    extern f32 float_1_8041fd88;
-    extern f32 float_20_8041fd9c;
-    extern f32 float_1000_8041fd94;
-    extern f32 float_0p1_8041fd98;
-    extern f32 float_6p2832_8041fda0;
-    extern f32 float_360_8041fda4;
-    extern f32 float_0p0005_8041fe04;
-    extern f32 __float_nan;
-
-    s32* args;
-    s32 npcName;
-    f32 targetX;
-    f32 targetZ;
-    f32 duration;
-    f32 speed;
-    u32 flags;
-    void* npc;
-    f32 delta[3];
+    extern s32 searchPSSFXList(const char* name);
+    extern int __float_nan[];
+    extern const f32 float_0_8041fd84;
+    extern const f32 float_1_8041fd88;
+    extern const f32 float_20_8041fd9c;
+    extern const f32 float_1000_8041fd94;
+    extern const f32 float_0p1_8041fd98;
+    extern const f32 float_6p2832_8041fda0;
+    extern const f32 float_360_8041fda4;
+    extern const f32 float_0p0005_8041fe04;
+    s32* args = event->args;
+    const u8* constBase = vec3_802c1470;
+    const char* npcName = (const char*)evtGetValue(event, *args++);
+    f32 targetX = evtGetFloat(event, *args++);
+    f32 targetZ = evtGetFloat(event, *args++);
+    f32 moveTime = (f32)evtGetValue(event, *args++) / float_1000_8041fd94;
+    f32 speed = evtGetFloat(event, *args++);
+    s32 moveFlags = args[0];
+    NpcMoveView* npc = evtNpcNameToPtr(event, (s32)npcName);
+    Vec diff;
     f32 dist;
     f32 distSq;
+    f32 step;
+    s32 sfxFlag;
+    f64 root;
+    f64 guess;
+    s32 bits;
+    s32 cls;
+    union { f32 f; s32 i; } bitsView;
+
+    npc->jumpFlags |= 0x10;
+    if (moveFlags & 2) {
+        npc->jumpFlags |= 0x1000;
+    }
+    if (isFirstCall) {
+        npc->field_188 = 0;
+        npc->field_108 = 0;
+        npc->jumpTargetPos.x = targetX;
+        npc->jumpTargetPos.y = npc->position.y;
+        npc->jumpTargetPos.z = targetZ;
+        npc->jumpStartPos = npc->position;
+        PSVECSubtract(&npc->jumpTargetPos, &npc->jumpStartPos, &diff);
+        distSq = diff.x * diff.x + diff.z * diff.z;
+        root = (f64)distSq;
+        if (root > (f64)float_0_8041fd84) {
+            guess = __frsqrte(root);
+            guess = *(const f64*)(constBase + 0x48) * guess *
+                    (*(const f64*)(constBase + 0x50) - guess * guess * root);
+            guess = *(const f64*)(constBase + 0x48) * guess *
+                    (*(const f64*)(constBase + 0x50) - guess * guess * root);
+            dist = (f32)(root * *(const f64*)(constBase + 0x48) * guess *
+                         (*(const f64*)(constBase + 0x50) - guess * guess * root));
+        } else if (root < *(const f64*)(constBase + 0x58)) {
+            dist = *(f32*)__float_nan;
+        } else {
+            bitsView.f = distSq;
+            bits = bitsView.i & 0x7F800000;
+            switch (bits) {
+            case 0x7F800000:
+                cls = (bitsView.i & 0x7FFFFF) ? 1 : 2;
+                break;
+            case 0:
+                cls = (bitsView.i & 0x7FFFFF) ? 5 : 3;
+                break;
+            default:
+                cls = 4;
+                break;
+            }
+            if (cls == 1) {
+                dist = *(f32*)__float_nan;
+            } else {
+                dist = distSq;
+            }
+        }
+        npc->moveDir = angleABf(float_0_8041fd84, float_0_8041fd84, diff.x, diff.z);
+        npc->moveSpeed = speed;
+        npc->moveTime = moveTime;
+        npc->moveOffset.y = float_0_8041fd84;
+        if (npc->moveSpeed <= float_0p1_8041fd98 && npc->moveTime == float_0_8041fd84) {
+            npc->moveSpeed = float_1_8041fd88;
+        }
+        if (npc->moveSpeed <= float_0p1_8041fd98) {
+            npc->moveSpeed = dist / npc->moveTime;
+            npc->moveTime = float_0_8041fd84;
+        }
+        npc->footstepAccum = float_0_8041fd84;
+        npc->footstepToggle = 1;
+        *(s32*)((u8*)event + 0x78) = 0;
+    }
+
+    (*(s32*)((u8*)event + 0x78))++;
+    if ((moveFlags & 4) && npc->field_2FC && *(s32*)((u8*)event + 0x78) > 5) {
+        return 2;
+    }
+    PSVECSubtract(&npc->jumpTargetPos, &npc->position, &diff);
+    distSq = diff.x * diff.x + diff.z * diff.z;
+    root = (f64)distSq;
+    if (root > (f64)float_0_8041fd84) {
+        guess = __frsqrte(root);
+        guess = *(const f64*)(constBase + 0x48) * guess *
+                (*(const f64*)(constBase + 0x50) - guess * guess * root);
+        guess = *(const f64*)(constBase + 0x48) * guess *
+                (*(const f64*)(constBase + 0x50) - guess * guess * root);
+        dist = (f32)(root * *(const f64*)(constBase + 0x48) * guess *
+                     (*(const f64*)(constBase + 0x50) - guess * guess * root));
+    } else if (root < *(const f64*)(constBase + 0x58)) {
+        dist = *(f32*)__float_nan;
+    } else {
+        bitsView.f = distSq;
+        bits = bitsView.i & 0x7F800000;
+        switch (bits) {
+        case 0x7F800000:
+            cls = (bitsView.i & 0x7FFFFF) ? 1 : 2;
+            break;
+        case 0:
+            cls = (bitsView.i & 0x7FFFFF) ? 5 : 3;
+            break;
+        default:
+            cls = 4;
+            break;
+        }
+        if (cls == 1) {
+            dist = *(f32*)__float_nan;
+        } else {
+            dist = distSq;
+        }
+    }
+    step = (float_20_8041fd9c * npc->moveSpeed) / float_1000_8041fd94;
+    if (npc->moveTime != float_0_8041fd84) {
+        if (npc->moveTime <= npc->field_1A0) {
+            npc->moveSpeed = float_0_8041fd84;
+            return 2;
+        }
+    } else {
+        if (npc->moveTime == float_0_8041fd84 && dist <= step) {
+            npc->moveSpeed = float_0_8041fd84;
+            return 2;
+        }
+        if (dist < float_0p0005_8041fe04) {
+            npc->moveSpeed = float_0_8041fd84;
+            return 2;
+        }
+    }
+    if ((npc->flags & 1) && !(npc->jumpFlags & 1)) {
+        npc->moveDir = angleABf(float_0_8041fd84, float_0_8041fd84, diff.x, diff.z);
+    }
+    if ((npc->jumpFlags & 2) && npc->moveSpeed > float_0p1_8041fd98) {
+        if (npc != ((FbatView*)fbatGetPointer())->target ||
+            (((FbatView*)fbatGetPointer())->mode != 5 && ((FbatView*)fbatGetPointer())->mode != 6)) {
+            npcTuningRy(npc, npc->moveDir);
+        }
+    }
+    if (!(npc->jumpFlags & 0x10000)) {
+        f32 temp = (f32)sin(npc->moveDir * float_6p2832_8041fda0 / float_360_8041fda4);
+        npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
+        temp = (f32)cos(npc->moveDir * float_6p2832_8041fda0 / float_360_8041fda4);
+        npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -temp);
+    }
+    sfxFlag = 0;
+    if (psndGetFlag() & 0x100) {
+        if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+            sfxFlag = 0x10000;
+        }
+    }
+    if (npc->footstepAccum > (f32)npc->footstepStride / npc->moveSpeed) {
+        if (npc->footstepToggle != 0) {
+            if (npc->footstepSfxA != 0) {
+                psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxA), &npc->position, 0xff, 0xff, 0, 8);
+            }
+        } else if (npc->footstepSfxB != 0) {
+            psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxB), &npc->position, 0xff, 0xff, 0, 8);
+        }
+        npc->footstepAccum = float_0_8041fd84;
+        npc->footstepToggle = (s8)(1 - npc->footstepToggle);
+    }
+    if (npc->footstepSfxB != 0 || npc->footstepToggle != 0) {
+        npc->footstepAccum += float_1000_8041fd94 * npc->moveDt;
+    }
+    return 0;
+}
+
+s32 evt_npc_jump_position(EventEntry* event, s32 isFirstCall) {
+    typedef struct NpcJumpView {
+        u32 flags;
+        u8 pad_004[0x8C - 4];
+        Vec position;
+        u8 pad_098[0x104 - 0x98];
+        s32 poseId;
+        s32 field_108;
+        u8 pad_10C[0x158 - 0x10C];
+        Vec jumpStartPos;
+        Vec jumpTargetPos;
+        u8 pad_170[0x178 - 0x170];
+        s64 field_178;
+        u8 pad_180[0x188 - 0x180];
+        s64 field_188;
+        u8 pad_190[0x1A4 - 0x190];
+        f32 moveDt;
+        u8 pad_1A8[0x1AC - 0x1A8];
+        f32 moveDir;
+        f32 moveSpeed;
+        Vec moveOffset;
+        f32 moveTime;
+        f32 jumpVelY;
+        f32 jumpYScale;
+        f32 jumpGravity;
+        u8 pad_1D0[0x1D4 - 0x1D0];
+        u32 jumpFlags;
+        u8 pad_1D8[0x1EC - 0x1D8];
+        const char* jumpSfx;
+        const char* landSfx;
+    } NpcJumpView;
+    typedef struct FbatView {
+        s16 mode;
+        u8 pad_002[6];
+        void* target;
+    } FbatView;
+    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
+    extern u32 animPoseGetMaterialFlag(s32 poseId);
+    extern s32 searchPSSFXList(const char* name);
+    extern f32 __float_nan;
+    extern const f32 float_0_8041fd84;
+    extern const f32 float_1_8041fd88;
+    extern const f32 float_0p5_8041fd90;
+    extern const f32 float_1000_8041fd94;
+    extern const f32 float_0p1_8041fd98;
+    extern const f32 float_6p2832_8041fda0;
+    extern const f32 float_360_8041fda4;
+    extern const f32 float_neg980_8041fe00;
+    const u8* constBase = vec3_802c1470;
+    s32* args = event->args;
+    const char* npcName = (const char*)evtGetValue(event, *args++);
+    f32 targetX = evtGetFloat(event, *args++);
+    f32 targetY = evtGetFloat(event, *args++);
+    f32 targetZ = evtGetFloat(event, *args++);
+    f32 moveTime = (f32)evtGetValue(event, *args++) / float_1000_8041fd94;
+    f32 speed = evtGetFloat(event, *args++);
+    f32 arcHeight = evtGetFloat(event, *args++);
+    s32 mode = evtGetValue(event, *args++);
+    NpcJumpView* npc = evtNpcNameToPtr(event, (s32)npcName);
+    f32 arcWork = arcHeight;
+    Vec diff;
+    f32 dist;
+    f32 dy;
+    f32 t;
+    f32 halfT;
+    f32 peak;
+    s32 sfxFlag;
+    f32 temp;
     f64 sqrtD;
     f64 inv;
     u32 bits;
     s32 cls;
     union { f32 f; u32 u; } bitsView;
-    f32 angle;
-    f32 s;
-    f32 c;
-    s32 soundMask;
-    s32 sfx;
 
-    args = event->args;
-    npcName = evtGetValue(event, args[0]);
-    targetX = evtGetFloat(event, args[1]);
-    targetZ = evtGetFloat(event, args[2]);
-    duration = (f32)evtGetValue(event, args[3]) / float_1000_8041fd94;
-    speed = evtGetFloat(event, args[4]);
-    flags = args[5];
+    npc->jumpFlags |= 0x10;
+    npc->jumpFlags |= 0x1000;
 
-    npc = evtNpcNameToPtr(event, npcName);
-    *(u32*)((s32)npc + 0x1D4) |= 0x10;
-    if ((flags & 2) != 0) {
-        *(u32*)((s32)npc + 0x1D4) |= 0x1000;
-    }
+    if (isFirstCall) {
+        npc->field_188 = 0;
+        npc->field_178 = 0;
+        npc->field_108 = 0;
+        npc->jumpTargetPos.x = targetX;
+        npc->jumpTargetPos.y = targetY;
+        npc->jumpTargetPos.z = targetZ;
+        npc->jumpStartPos = npc->position;
 
-    if (isFirstCall != 0) {
-        *(s32*)((s32)npc + 0x18C) = 0;
-        *(s32*)((s32)npc + 0x188) = 0;
-        *(s32*)((s32)npc + 0x108) = 0;
-
-        *(f32*)((s32)npc + 0x164) = targetX;
-        *(f32*)((s32)npc + 0x168) = *(f32*)((s32)npc + 0x90);
-        *(f32*)((s32)npc + 0x16C) = targetZ;
-
-        *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
-        *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
-        *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
-
-        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), delta);
-        distSq = delta[0] * delta[0] + delta[2] * delta[2];
-        sqrtD = (f64)distSq;
+        PSVECSubtract(&npc->jumpTargetPos, &npc->jumpStartPos, &diff);
+        dist = diff.x * diff.x + diff.z * diff.z;
+        sqrtD = (f64)dist;
         if (sqrtD > (f64)float_0_8041fd84) {
             inv = __frsqrte(sqrtD);
-            inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
-            inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
-            dist = (f32)(sqrtD * 0.5 * inv * -((sqrtD * inv * inv) - 3.0));
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            inv = *(const f64*)(constBase + 0x48) * inv *
+                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
+            dist = (f32)(sqrtD * *(const f64*)(constBase + 0x48) * inv *
+                         -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50)));
+        } else if (sqrtD < *(const f64*)(constBase + 0x58)) {
+            dist = __float_nan;
         } else {
-            if ((f64)float_0_8041fd84 <= sqrtD) {
-                bitsView.f = distSq;
-                bits = bitsView.u & 0x7F800000;
-                if (bits == 0x7F800000) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 2;
-                    } else {
-                        cls = 1;
-                    }
-                } else if ((bits < 0x7F800000) && (bits == 0)) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 3;
-                    } else {
-                        cls = 5;
-                    }
-                } else {
-                    cls = 4;
-                }
-                if (cls == 1) {
-                    dist = __float_nan;
-                } else {
-                    dist = distSq;
-                }
-            } else {
-                dist = __float_nan;
-            }
-        }
-        *(f32*)((s32)npc + 0x1AC) = angleABf(float_0_8041fd84, float_0_8041fd84, delta[0], delta[2]);
-
-        *(f32*)((s32)npc + 0x1B0) = speed;
-        *(f32*)((s32)npc + 0x1C0) = duration;
-        *(f32*)((s32)npc + 0x1B8) = float_0_8041fd84;
-
-        if ((*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) && (float_0_8041fd84 == *(f32*)((s32)npc + 0x1C0))) {
-            *(f32*)((s32)npc + 0x1B0) = float_1_8041fd88;
-        }
-        if (*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) {
-            *(f32*)((s32)npc + 0x1B0) = dist / *(f32*)((s32)npc + 0x1C0);
-            *(f32*)((s32)npc + 0x1C0) = float_0_8041fd84;
-        }
-
-        *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
-        *(s16*)((s32)npc + 0x1D8) = 1;
-        *(s32*)((s32)event + 0x78) = 0;
-    }
-
-    *(s32*)((s32)event + 0x78) = *(s32*)((s32)event + 0x78) + 1;
-    if (((flags & 4) != 0) && (*(s32*)((s32)npc + 0x2FC) != 0) && (*(s32*)((s32)event + 0x78) > 5)) {
-        return 2;
-    }
-
-    PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x8C), delta);
-    distSq = delta[0] * delta[0] + delta[2] * delta[2];
-    sqrtD = (f64)distSq;
-    if (sqrtD > (f64)float_0_8041fd84) {
-        inv = __frsqrte(sqrtD);
-        inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
-        inv = 0.5 * inv * -((sqrtD * inv * inv) - 3.0);
-        dist = (f32)(sqrtD * 0.5 * inv * -((sqrtD * inv * inv) - 3.0));
-    } else {
-        if ((f64)float_0_8041fd84 <= sqrtD) {
-            bitsView.f = distSq;
+            bitsView.f = dist;
             bits = bitsView.u & 0x7F800000;
             if (bits == 0x7F800000) {
                 if ((bitsView.u & 0x7FFFFF) == 0) {
@@ -639,394 +844,213 @@ s32 evt_npc_move_position(EventEntry* event, s32 isFirstCall) {
             }
             if (cls == 1) {
                 dist = __float_nan;
-            } else {
-                dist = distSq;
-            }
-        } else {
-            dist = __float_nan;
-        }
-    }
-
-    if (*(f32*)((s32)npc + 0x1C0) == float_0_8041fd84) {
-        if (dist <= (float_20_8041fd9c * *(f32*)((s32)npc + 0x1B0)) / float_1000_8041fd94) {
-            *(f32*)((s32)npc + 0x1B0) = float_0_8041fd84;
-            return 2;
-        }
-    } else if (*(f32*)((s32)npc + 0x1C0) <= *(f32*)((s32)npc + 0x1A0)) {
-        *(f32*)((s32)npc + 0x1B0) = float_0_8041fd84;
-        return 2;
-    }
-
-    if (dist < float_0p0005_8041fe04) {
-        *(f32*)((s32)npc + 0x1B0) = float_0_8041fd84;
-        return 2;
-    }
-
-    if (((*(u32*)((s32)npc + 0x0) & 1) != 0) && ((*(u32*)((s32)npc + 0x1D4) & 1) == 0)) {
-        *(f32*)((s32)npc + 0x1AC) = angleABf(float_0_8041fd84, float_0_8041fd84, delta[0], delta[2]);
-    }
-
-    if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98)) {
-        if ((npc != *(void**)((s32)fbatGetPointer() + 8)) ||
-            ((*(s16*)fbatGetPointer() != 5) && (*(s16*)fbatGetPointer() != 6))) {
-            npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
-        }
-    }
-
-    if ((*(u32*)((s32)npc + 0x1D4) & 0x10000) == 0) {
-        angle = *(f32*)((s32)npc + 0x1AC);
-        s = (f32)sin((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
-        *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * s);
-        c = (f32)cos((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
-        *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * -c);
-    }
-
-    soundMask = 0;
-    if ((psndGetFlag() & 0x100) != 0) {
-        if ((animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
-            soundMask = 0x10000;
-        }
-    }
-
-    if (((f32)*(u16*)((s32)npc + 0x1E8) / *(f32*)((s32)npc + 0x1B0)) < *(f32*)((s32)npc + 0x1DC)) {
-        if (*(s16*)((s32)npc + 0x1D8) != 0) {
-            if (*(s32*)((s32)npc + 0x1E0) != 0) {
-                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1E0));
-                psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
-            }
-        } else {
-            if (*(s32*)((s32)npc + 0x1E4) != 0) {
-                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1E4));
-                psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
             }
         }
-        *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
-        *(s16*)((s32)npc + 0x1D8) = (s16)(1 - *(s16*)((s32)npc + 0x1D8));
-    }
+        npc->moveDir = angleABf(float_0_8041fd84, float_0_8041fd84, diff.x, diff.z);
+        npc->moveSpeed = speed;
+        npc->moveTime = float_0_8041fd84;
+        npc->moveOffset.y = float_0_8041fd84;
 
-    if ((*(s32*)((s32)npc + 0x1E4) != 0) || (*(s16*)((s32)npc + 0x1D8) != 0)) {
-        *(f32*)((s32)npc + 0x1DC) += float_1000_8041fd94 * *(f32*)((s32)npc + 0x1B0);
-    }
-
-    return 0;
-}
-
-s32 evt_npc_jump_position(EventEntry* event, s32 isFirstCall) {
-    extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
-    extern f64 __frsqrte(f64 x);
-    extern f32 __float_nan;
-    extern const u8 vec3_802c1470[];
-    extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
-    extern f32 float_0_8041fd84;
-    extern f32 float_1_8041fd88;
-    extern f32 float_0p5_8041fd90;
-    extern f32 float_1000_8041fd94;
-    extern f32 float_0p1_8041fd98;
-    extern f32 float_6p2832_8041fda0;
-    extern f32 float_360_8041fda4;
-    extern f32 float_neg980_8041fe00;
-
-    s32* args;
-    s32 npcName;
-    f32 targetX;
-    f32 targetY;
-    f32 targetZ;
-    f32 duration;
-    f32 speed;
-    f32 height;
-    s32 mode;
-    void* npc;
-    void* fbat;
-    f32 diff[3];
-    f32 dist;
-    f32 dy;
-    f32 halfTime;
-    f32 denom;
-    f32 angle;
-    f32 s;
-    f32 c;
-    s32 soundMask;
-    s32 sfx;
-    f32 zero;
-    f32 one;
-    const u8* constBase;
-    f64 sqrtD;
-    f64 inv;
-    u32 bits;
-    s32 cls;
-    union { f32 f; u32 u; } bitsView;
-
-    constBase = vec3_802c1470;
-    args = event->args;
-    npcName = evtGetValue(event, args[0]);
-    targetX = evtGetFloat(event, args[1]);
-    targetY = evtGetFloat(event, args[2]);
-    targetZ = evtGetFloat(event, args[3]);
-    duration = (f32)evtGetValue(event, args[4]) / float_1000_8041fd94;
-    speed = evtGetFloat(event, args[5]);
-    height = evtGetFloat(event, args[6]);
-    mode = evtGetValue(event, args[7]);
-
-    npc = evtNpcNameToPtr(event, npcName);
-    *(u32*)((s32)npc + 0x1D4) |= 0x10;
-    *(u32*)((s32)npc + 0x1D4) |= 0x1000;
-
-    zero = float_0_8041fd84;
-    one = float_1_8041fd88;
-
-    if (isFirstCall != 0) {
-        *(s32*)((s32)npc + 0x18C) = 0;
-        *(s32*)((s32)npc + 0x188) = 0;
-        *(s32*)((s32)npc + 0x17C) = 0;
-        *(s32*)((s32)npc + 0x178) = 0;
-        *(s32*)((s32)npc + 0x108) = 0;
-
-        *(f32*)((s32)npc + 0x164) = targetX;
-        *(f32*)((s32)npc + 0x168) = targetY;
-        *(f32*)((s32)npc + 0x16C) = targetZ;
-
-        *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
-        *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
-        *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
-
-        PSVECSubtract((void*)((s32)npc + 0x164), (void*)((s32)npc + 0x158), diff);
-        dist = diff[0] * diff[0] + diff[2] * diff[2];
-        sqrtD = (f64)dist;
-        if (sqrtD > (f64)zero) {
-            inv = __frsqrte(sqrtD);
-            inv = *(const f64*)(constBase + 0x48) * inv *
-                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
-            inv = *(const f64*)(constBase + 0x48) * inv *
-                  -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50));
-            dist = (f32)(sqrtD * *(const f64*)(constBase + 0x48) * inv *
-                         -((sqrtD * inv * inv) - *(const f64*)(constBase + 0x50)));
-        } else {
-            if (*(const f64*)(constBase + 0x58) <= sqrtD) {
-                bitsView.f = dist;
-                bits = bitsView.u & 0x7F800000;
-                if (bits == 0x7F800000) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 2;
-                    } else {
-                        cls = 1;
-                    }
-                } else if ((bits < 0x7F800000) && (bits == 0)) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 3;
-                    } else {
-                        cls = 5;
-                    }
-                } else {
-                    cls = 4;
-                }
-                if (cls == 1) {
-                    dist = __float_nan;
-                }
-            } else {
-                dist = __float_nan;
-            }
+        sfxFlag = 0;
+        if (psndGetFlag() & 0x100 && !(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+            sfxFlag = 0x10000;
         }
-        *(f32*)((s32)npc + 0x1AC) = angleABf(zero, zero, diff[0], diff[2]);
-
-        *(f32*)((s32)npc + 0x1B0) = speed;
-        *(f32*)((s32)npc + 0x1C0) = zero;
-        *(f32*)((s32)npc + 0x1B8) = zero;
-
-        soundMask = 0;
-        if ((psndGetFlag() & 0x100) != 0) {
-            if ((animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
-                soundMask = 0x10000;
-            }
-        }
-        if (*(s32*)((s32)npc + 0x1EC) != 0) {
-            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1EC));
-            psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+        if (npc->jumpSfx != 0) {
+            psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->jumpSfx), &npc->position, 0xff, 0xff, 0, 8);
         }
 
-        *(f32*)((s32)npc + 0x1C4) = zero;
-        *(f32*)((s32)npc + 0x1C8) = one;
-
-        dy = targetY - *(f32*)((s32)npc + 0x15C);
-        if (height != zero) {
-            if (zero < dy) {
-                height += dy;
+        npc->jumpVelY = float_0_8041fd84;
+        npc->jumpYScale = float_1_8041fd88;
+        dy = npc->jumpTargetPos.y - npc->jumpStartPos.y;
+        if (arcHeight != float_0_8041fd84) {
+            if (dy > float_0_8041fd84) {
+                arcWork += dy;
             }
-            *(f32*)((s32)npc + 0x1C4) = zero;
+            npc->jumpVelY = float_0_8041fd84;
             switch (mode) {
                 case 0:
-                    if (duration == zero) {
-                        *(f32*)((s32)npc + 0x1C4) = height;
-                    } else {
-                        if (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98) {
-                            denom = dist / *(f32*)((s32)npc + 0x1B0);
-                            if (denom == zero) {
-                                denom = duration;
-                            }
-                        } else {
-                            *(f32*)((s32)npc + 0x1B0) = dist / duration;
-                            denom = duration;
-                        }
-                        if (denom == zero) {
-                            denom = one;
-                        }
-                        halfTime = float_0p5_8041fd90 * denom;
-                        *(f32*)((s32)npc + 0x1C4) = -(denom * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * denom)) / denom;
-                        denom = *(f32*)((s32)npc + 0x1C4) * halfTime + halfTime * float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * halfTime;
-                        if (denom != zero) {
-                            *(f32*)((s32)npc + 0x1C8) = height / denom;
-                        }
+                    if (moveTime == float_0_8041fd84) {
+                        npc->jumpVelY = arcHeight;
+                        goto end1;
                     }
-                    break;
+                    if (npc->moveSpeed > float_0p1_8041fd98) {
+                        t = dist / npc->moveSpeed;
+                        if (t == float_0_8041fd84) {
+                            t = moveTime;
+                        }
+                    } else {
+                        npc->moveSpeed = dist / moveTime;
+                        t = moveTime;
+                    }
+                    if (t == float_0_8041fd84) {
+                        t = float_1_8041fd88;
+                    }
+                    halfT = float_0p5_8041fd90 * t;
+                    npc->jumpVelY = -(float_neg980_8041fe00 * npc->jumpGravity * t * t) / t;
+                    peak = (npc->jumpVelY * halfT) + (float_neg980_8041fe00 * npc->jumpGravity * halfT * halfT);
+                    if (peak != float_0_8041fd84) {
+                        npc->jumpYScale = arcWork / peak;
+                    }
+                    goto end1;
                 case 1:
-                    if (duration == zero) {
-                        *(f32*)((s32)npc + 0x1C4) = height;
-                    } else {
-                        halfTime = float_0p5_8041fd90 * duration;
-                        *(f32*)((s32)npc + 0x1C4) = -(duration * (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * duration)) / duration;
-                        denom = *(f32*)((s32)npc + 0x1C4) * halfTime + halfTime * float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * halfTime;
-                        if (denom != zero) {
-                            *(f32*)((s32)npc + 0x1C8) = height / denom;
-                        }
+                    if (moveTime == float_0_8041fd84) {
+                        npc->jumpVelY = arcHeight;
+                        goto end1;
                     }
-                    break;
+                    halfT = float_0p5_8041fd90 * moveTime;
+                    npc->jumpVelY = -(float_neg980_8041fe00 * npc->jumpGravity * moveTime * moveTime) / moveTime;
+                    peak = (npc->jumpVelY * halfT) + (float_neg980_8041fe00 * npc->jumpGravity * halfT * halfT);
+                    if (peak != float_0_8041fd84) {
+                        npc->jumpYScale = arcWork / peak;
+                    }
+                    goto end1;
                 default:
                     return 1;
             }
         } else {
-            if (dy >= zero) {
+            if (dy >= float_0_8041fd84) {
                 return 1;
             }
             switch (mode) {
                 case 0:
-                    if (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98) {
-                        if (duration > zero) {
-                            denom = duration;
+                    if (npc->moveSpeed > float_0p1_8041fd98) {
+                        if (moveTime > float_0_8041fd84) {
+                            t = moveTime;
                         } else {
-                            denom = dist / *(f32*)((s32)npc + 0x1B0);
+                            t = dist / npc->moveSpeed;
                         }
-                        if (denom > zero) {
-                            *(f32*)((s32)npc + 0x1C8) = dy / (float_neg980_8041fe00 * *(f32*)((s32)npc + 0x1CC) * denom * denom);
+                        if (t > float_0_8041fd84) {
+                            npc->jumpYScale = dy / (float_neg980_8041fe00 * npc->jumpGravity * t * t);
                         } else {
-                            *(f32*)((s32)npc + 0x1C8) = one;
+                            npc->jumpYScale = float_1_8041fd88;
                         }
-                    } else if (duration > zero) {
-                        *(f32*)((s32)npc + 0x1CC) = (dy / (duration * duration)) / float_neg980_8041fe00;
+                    } else if (moveTime > float_0_8041fd84) {
+                        npc->jumpGravity = (dy / (moveTime * moveTime)) / float_neg980_8041fe00;
                     }
-                    break;
-                case 1:
-                    break;
+                    goto end1;
                 default:
                     return 1;
+                case 1:
+                end1:
+                    return 0;
             }
         }
+    }
+
+    if ((npc->jumpFlags & 2) && npc->moveSpeed > float_0p1_8041fd98) {
+        FbatView* fbat = fbatGetPointer();
+        if (npc != fbat->target || (fbat->mode != 5 && fbat->mode != 6)) {
+            npcTuningRy(npc, npc->moveDir);
+        }
+    }
+    temp = (f32)sin(npc->moveDir * float_6p2832_8041fda0 / float_360_8041fda4);
+    npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
+    temp = (f32)cos(npc->moveDir * float_6p2832_8041fda0 / float_360_8041fda4);
+    npc->moveOffset.z += npc->moveDt * (npc->moveSpeed * -temp);
+    if (npc->jumpFlags & 1) {
         return 0;
     }
 
-    if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) > float_0p1_8041fd98)) {
-        fbat = fbatGetPointer();
-        if ((npc != *(void**)((s32)fbat + 8)) || ((*(s16*)fbat != 5) && (*(s16*)fbat != 6))) {
-            npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
+    npc->moveSpeed = float_0_8041fd84;
+    npc->jumpVelY = float_0_8041fd84;
+    npc->jumpYScale = float_1_8041fd88;
+    npc->jumpGravity = float_1_8041fd88;
+    sfxFlag = 0;
+    if (psndGetFlag() & 0x100) {
+        if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+            sfxFlag = 0x10000;
         }
     }
-
-    angle = *(f32*)((s32)npc + 0x1AC);
-    s = (f32)sin((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
-    *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * s);
-    c = (f32)cos((f64)((float_6p2832_8041fda0 * angle) / float_360_8041fda4));
-    *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * -c);
-
-    if ((*(u32*)((s32)npc + 0x1D4) & 1) != 0) {
-        return 0;
-    }
-
-    *(f32*)((s32)npc + 0x1B0) = zero;
-    *(f32*)((s32)npc + 0x1C4) = zero;
-    *(f32*)((s32)npc + 0x1C8) = one;
-    *(f32*)((s32)npc + 0x1CC) = one;
-
-    soundMask = 0;
-    if ((psndGetFlag() & 0x100) != 0) {
-        if ((animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
-            soundMask = 0x10000;
-        }
-    }
-    if (*(s32*)((s32)npc + 0x1F0) != 0) {
-        sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1F0));
-        psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+    if (npc->landSfx != 0) {
+        psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->landSfx), &npc->position, 0xff, 0xff, 0, 8);
     }
     return 1;
 }
 
 s32 evt_npc_jump_position_nohit(EventEntry* event, s32 isFirstCall) {
+    typedef struct NpcJumpView {
+        u32 flags;
+        u8 pad_004[0x8C - 0x4];
+        Vec position;
+        u8 pad_098[0x104 - 0x98];
+        s32 poseId;
+        u8 pad_108[0x158 - 0x108];
+        Vec jumpStartPos;
+        u8 pad_164[0x1EC - 0x164];
+        const char* jumpSfx;
+        const char* landSfx;
+    } NpcJumpView;
+    typedef struct EventJumpView {
+        s64 lifetime;
+        u8 pad_008[0x18 - 0x8];
+        s32* args;
+        u8 pad_01C[0x78 - 0x1C];
+        f32 userdataf[3];
+        u32 field_84;
+        u8 pad_088[0x198 - 0x88];
+        s64 savedTime;
+    } EventJumpView;
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern u32 animPoseGetMaterialFlag(s32 poseId);
-    extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
-    extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 cur, s32 max);
-    extern u32 DAT_800000f8;
+    extern s32 searchPSSFXList(const char* name);
+    extern f32 intplGetValue(s32 mode, s32 currStep, s32 steps, f32 start, f32 end);
     extern f32 float_neg4_8041fdfc;
-    s32* args;
-    void* npc;
-    f32 x;
-    f32 y;
-    f32 z;
-    s32 duration;
-    f32 gravityArg;
+    s32* args = event->args;
+    const char* npcName = (const char*)evtGetValue(event, *args++);
+    NpcJumpView* npc = evtNpcNameToPtr(event, (s32)npcName);
+    f32 targetX = (f32)evtGetValue(event, *args++);
+    f32 targetY = (f32)evtGetValue(event, *args++);
+    f32 targetZ = (f32)evtGetValue(event, *args++);
+    s32 duration = evtGetValue(event, *args++);
+    f32 arcHeight = (f32)evtGetValue(event, *args++);
+    s32 sfxFlag;
+    u32 ticksPerMs;
     s32 elapsed;
     f32 t;
-    u32 soundFlag;
-    u32 savedFlags;
-    s32 sfxMask;
-    s32 sfx;
+    Vec endPos;
+    EventJumpView* evt = (EventJumpView*)event;
 
-    args = event->args;
-    npc = evtNpcNameToPtr(event, evtGetValue(event, args[0]));
-    x = (f32)evtGetValue(event, args[1]);
-    y = (f32)evtGetValue(event, args[2]);
-    z = (f32)evtGetValue(event, args[3]);
-    duration = evtGetValue(event, args[4]);
-    gravityArg = (f32)evtGetValue(event, args[5]);
-    if (isFirstCall != 0) {
-        *(s32*)((s32)event + 0x198) = *(s32*)((s32)event + 0);
-        *(s32*)((s32)event + 0x19C) = *(s32*)((s32)event + 4);
-        *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
-        *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
-        *(s32*)((s32)npc + 0x160) = *(s32*)((s32)npc + 0x94);
-        *(f32*)((s32)event + 0x7C) = float_neg4_8041fdfc * gravityArg;
-        *(f32*)((s32)event + 0x80) = (y - *(f32*)((s32)npc + 0x15C)) - *(f32*)((s32)event + 0x7C);
-        savedFlags = *(u32*)npc & 0x80000;
-        *(u32*)((s32)event + 0x84) = savedFlags;
-        *(u32*)npc &= ~0x80000;
-        sfxMask = 0;
-        soundFlag = psndGetFlag();
-        if ((soundFlag & 0x100) != 0 && (animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
-            sfxMask = 0x10000;
+    if (isFirstCall) {
+        sfxFlag = 0;
+        evt->savedTime = evt->lifetime;
+        npc->jumpStartPos = npc->position;
+        evt->userdataf[1] = float_neg4_8041fdfc * arcHeight;
+        evt->userdataf[2] = (targetY - npc->jumpStartPos.y) - evt->userdataf[1];
+        evt->field_84 = npc->flags & 0x80000;
+        npc->flags &= ~0x80000;
+
+        if (psndGetFlag() & 0x100) {
+            if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+                sfxFlag = 0x10000;
+            }
         }
-        if (*(s32*)((s32)npc + 0x300) != 0) {
-            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x300));
-            psndSFXOnEx_3D(sfxMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+        if (npc->jumpSfx != 0) {
+            psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->jumpSfx), &npc->position, 0xff, 0xff, 0, 8);
         }
     }
-    elapsed = (s32)((*(u32*)((s32)event + 0) - *(u32*)((s32)event + 0x198)) / (DAT_800000f8 / 4000));
+
+    ticksPerMs = (*(u32*)0x800000F8 >> 2) / 1000;
+    elapsed = (s32)((u32)evt->lifetime - (u32)evt->savedTime) / ticksPerMs;
+
     if (elapsed < duration) {
         t = (f32)elapsed / (f32)duration;
-        *(f32*)((s32)npc + 0x8C) = (f32)intplGetValue(*(f32*)((s32)npc + 0x158), x, 0, elapsed, duration);
-        *(f32*)((s32)npc + 0x94) = (f32)intplGetValue(*(f32*)((s32)npc + 0x160), z, 0, elapsed, duration);
-        *(f32*)((s32)npc + 0x90) = t * (*(f32*)((s32)event + 0x7C) * t + *(f32*)((s32)event + 0x80)) + *(f32*)((s32)npc + 0x15C);
+        npc->position.x = intplGetValue(0, elapsed, duration, npc->jumpStartPos.x, targetX);
+        npc->position.z = intplGetValue(0, elapsed, duration, npc->jumpStartPos.z, targetZ);
+        npc->position.y = npc->jumpStartPos.y + t * ((evt->userdataf[1] * t) + evt->userdataf[2]);
         return 0;
     }
-    *(f32*)((s32)npc + 0x8C) = x;
-    *(f32*)((s32)npc + 0x90) = y;
-    *(f32*)((s32)npc + 0x94) = z;
-    *(u32*)npc |= *(u32*)((s32)event + 0x84);
-    sfxMask = 0;
-    soundFlag = psndGetFlag();
-    if ((soundFlag & 0x100) != 0 && (animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
-        sfxMask = 0x10000;
+
+    npc->position = (Vec){ targetX, targetY, targetZ };
+    npc->flags |= evt->field_84;
+
+    sfxFlag = 0;
+    if (psndGetFlag() & 0x100) {
+        if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {
+            sfxFlag = 0x10000;
+        }
     }
-    if (*(s32*)((s32)npc + 0x2FC) != 0) {
-        sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2FC));
-        psndSFXOnEx_3D(sfxMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
+    if (npc->landSfx != 0) {
+        psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->landSfx), &npc->position, 0xff, 0xff, 0, 8);
     }
     return 2;
 }
@@ -1036,13 +1060,11 @@ s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
     extern f32 _intplGetFloat(f32 value, s32 kind);
     extern u32 animPoseGetMaterialFlag(s32 poseId);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
-    extern f64 __frsqrte(f64);
     extern f32 __float_nan;
-    extern const u8 vec3_802c1470[];
-    extern f32 float_0_8041fd84;
-    extern f32 float_0p1_8041fd98;
-    extern f32 float_1000_8041fd94;
-    extern f32 float_3p1416_8041fda8;
+    extern const f32 float_0_8041fd84;
+    extern const f32 float_0p1_8041fd98;
+    extern const f32 float_1000_8041fd94;
+    extern const f32 float_3p1416_8041fda8;
     s32* args;
     void* npc;
     void* fbat;
@@ -1065,10 +1087,11 @@ s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
     f32 dz;
     s32 soundMask;
     s32 sfx;
+    s32 finished;
     const u8* constBase;
     f64 sqrtD;
     f64 inv;
-    u32 bits;
+    s32 bits;
     s32 cls;
     union { f32 f; u32 u; } bitsView;
 
@@ -1114,20 +1137,16 @@ s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
             if (*(const f64*)(constBase + 0x58) <= sqrtD) {
                 bitsView.f = dist;
                 bits = bitsView.u & 0x7F800000;
-                if (bits == 0x7F800000) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 2;
-                    } else {
-                        cls = 1;
-                    }
-                } else if ((bits < 0x7F800000) && (bits == 0)) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 3;
-                    } else {
-                        cls = 5;
-                    }
-                } else {
+                switch (bits) {
+                case 0x7F800000:
+                    cls = (bitsView.u & 0x7FFFFF) ? 1 : 2;
+                    break;
+                case 0:
+                    cls = (bitsView.u & 0x7FFFFF) ? 5 : 3;
+                    break;
+                default:
                     cls = 4;
+                    break;
                 }
                 if (cls == 1) {
                     dist = __float_nan;
@@ -1145,68 +1164,68 @@ s32 evt_npc_glide_position(EventEntry* event, s32 isFirstCall) {
             }
             durationMs = dist / speed;
         }
-        *(f32*)((s32)npc + 0x178) = durationMs;
-        *(f32*)((s32)npc + 0x17C) = speed;
-        if (*(f32*)((s32)npc + 0x17C) <= float_0p1_8041fd98) {
-            *(f32*)((s32)npc + 0x17C) = dist / *(f32*)((s32)npc + 0x178);
+        *(f32*)((s32)npc + 0x1C0) = durationMs;
+        *(f32*)((s32)npc + 0x1B0) = speed;
+        if (*(f32*)((s32)npc + 0x1B0) <= float_0p1_8041fd98) {
+            *(f32*)((s32)npc + 0x1B0) = dist / *(f32*)((s32)npc + 0x1C0);
         }
-        *(f32*)((s32)npc + 0x198) = float_0_8041fd84;
-        *(s16*)((s32)npc + 0x1A6) = 1;
+        *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
+        *(s16*)((s32)npc + 0x1D8) = 1;
         return 0;
     }
-    if ((flags & 1) != 0 && *(s32*)((s32)npc + 0x18C) != 0) {
+    if ((flags & 1) != 0 && *(s32*)((s32)npc + 0x2FC) != 0) {
         return 2;
     }
     now = *(f32*)((s32)npc + 0x1A0);
-    denom = *(f32*)((s32)npc + 0x178);
-    speed = *(f32*)((s32)npc + 0x170);
+    denom = *(f32*)((s32)npc + 0x1C0);
+    speed = *(f32*)((s32)npc + 0x1A4);
+    finished = 0;
     if (denom <= now) {
+        finished = 1;
         if (denom < now) {
             speed -= denom - now;
             if (speed <= float_0_8041fd84) {
                 return 2;
             }
         }
-        old = _intplGetFloat((now - speed) / denom, mode);
-        now = _intplGetFloat(now / denom, mode);
-    } else {
-        old = _intplGetFloat((now - speed) / denom, mode);
-        now = _intplGetFloat(now / denom, mode);
     }
+    old = (now - speed) / denom;
+    now = _intplGetFloat(now / denom, mode);
+    old = _intplGetFloat(old, mode);
     dt = now - old;
     dx = *(f32*)((s32)npc + 0x164) - *(f32*)((s32)npc + 0x158);
     dz = *(f32*)((s32)npc + 0x16C) - *(f32*)((s32)npc + 0x160);
-    *(f32*)((s32)npc + 0x180) += dx * dt;
-    *(f32*)((s32)npc + 0x184) += dz * dt;
+    *(f32*)((s32)npc + 0x1B4) += dx * dt;
+    *(f32*)((s32)npc + 0x1BC) += dz * dt;
     if ((*(u32*)((s32)npc + 0x1D4) & 2) != 0 && (dx != float_0_8041fd84 || dz != float_0_8041fd84)) {
-        fbat = fbatGetPointer();
-        if (npc != *(void**)((s32)fbat + 8) || (*(s16*)fbat != 5 && *(s16*)fbat != 6)) {
-            npcTuningRy(npc, angleABf(float_0_8041fd84, float_0_8041fd84, dx, dz));
+        if (npc != *(void**)((s32)fbatGetPointer() + 8) ||
+            (*(s16*)fbatGetPointer() != 5 && *(s16*)fbatGetPointer() != 6)) {
+            npcTuningRy(npc, angleABf(float_0_8041fd84, float_0_8041fd84, dx, dx));
         }
     }
-    *(f32*)((s32)npc + 0x17C) += (*(f32*)((s32)npc + 0x168) - *(f32*)((s32)npc + 0x15C)) * dt;
-    *(f32*)((s32)npc + 0x17C) += arc * (f32)sin((double)(float_3p1416_8041fda8 * now)) - arc * (f32)sin((double)(float_3p1416_8041fda8 * old));
+    *(f32*)((s32)npc + 0x1B8) += (*(f32*)((s32)npc + 0x168) - *(f32*)((s32)npc + 0x15C)) * dt;
+    *(f32*)((s32)npc + 0x1B8) += arc * (f32)sin((double)(float_3p1416_8041fda8 * now)) - arc * (f32)sin((double)(float_3p1416_8041fda8 * old));
     soundMask = 0;
     if ((psndGetFlag() & 0x100) != 0 && (animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0) {
         soundMask = 0x10000;
     }
-    if ((f32)((f32)*(u16*)((s32)npc + 0x314) / *(f32*)((s32)npc + 0x17C)) < *(f32*)((s32)npc + 0x198)) {
-        if (*(s16*)((s32)npc + 0x1A6) == 0) {
-            if (*(s32*)((s32)npc + 0x2F0) != 0) {
-                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2F0));
+    if ((f32)((f32)*(u16*)((s32)npc + 0x1E8) / *(f32*)((s32)npc + 0x1B0)) < *(f32*)((s32)npc + 0x1DC)) {
+        if (*(s16*)((s32)npc + 0x1D8) == 0) {
+            if (*(s32*)((s32)npc + 0x1E4) != 0) {
+                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1E4));
                 psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
             }
-        } else if (*(s32*)((s32)npc + 0x2EC) != 0) {
-            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2EC));
+        } else if (*(s32*)((s32)npc + 0x1E0) != 0) {
+            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1E0));
             psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
         }
-        *(f32*)((s32)npc + 0x198) = float_0_8041fd84;
-        *(s16*)((s32)npc + 0x1A6) = (s16)(1 - *(s16*)((s32)npc + 0x1A6));
+        *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
+        *(s16*)((s32)npc + 0x1D8) = (s16)(1 - *(s16*)((s32)npc + 0x1D8));
     }
-    if (*(s32*)((s32)npc + 0x2F0) != 0 || *(s16*)((s32)npc + 0x1A6) != 0) {
-        *(f32*)((s32)npc + 0x198) += float_1000_8041fd94 * *(f32*)((s32)npc + 0x170);
+    if (*(s32*)((s32)npc + 0x1E4) != 0 || *(s16*)((s32)npc + 0x1D8) != 0) {
+        *(f32*)((s32)npc + 0x1DC) += float_1000_8041fd94 * *(f32*)((s32)npc + 0x1A4);
     }
-    if (denom <= *(f32*)((s32)npc + 0x1A0)) {
+    if (finished != 0) {
         return 1;
     }
     return 0;
@@ -1227,17 +1246,15 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern f32 compAngle(f32 a, f32 b);
     extern f32 reviseAngle(f32 a);
-    extern f64 __frsqrte(f64 x);
     extern f32 __float_nan;
     extern u32 animPoseGetMaterialFlag(s32 poseId);
     extern void psndSFXOnEx_3D(s32 id, void* pos, s32 a, s32 b, s32 c, s32 d);
-    extern f32 float_0_8041fd84;
-    extern f32 float_1000_8041fd94;
-    extern f32 float_60_8041fdf8;
-    extern f32 float_6p2832_8041fda0;
-    extern f32 float_360_8041fda4;
+    extern const f32 float_0_8041fd84;
+    extern const f32 float_1000_8041fd94;
+    extern const f32 float_60_8041fdf8;
+    extern const f32 float_6p2832_8041fda0;
+    extern const f32 float_360_8041fda4;
     extern char str_mario_8041fdd4[];
-    extern const u8 vec3_802c1470[];
 
     s32* args;
     s32 npcName;
@@ -1251,13 +1268,14 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
     void* target;
     void* fbat;
     f32 delta[3];
-    f32 dist;
+    f64 dist;
     f32 dx;
     f32 dz;
     f32 targetAngle;
     f32 angleDiff;
     f32 turnAmount;
     s32 soundMask;
+    s32 shouldStop;
     s32 sfx;
     s32 userBase;
     const u8* constBase;
@@ -1310,8 +1328,8 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
         *(f32*)((s32)npc + 0x1C0) = durationSec;
 
         if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) != float_0_8041fd84)) {
-            fbat = fbatGetPointer();
-            if ((npc != *(void**)((s32)fbat + 8)) || ((*(s16*)fbat != 5) && (*(s16*)fbat != 6))) {
+            if ((npc != *(void**)((s32)fbatGetPointer() + 8)) ||
+                ((*(s16*)fbatGetPointer() != 5) && (*(s16*)fbatGetPointer() != 6))) {
                 npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
             }
         }
@@ -1322,10 +1340,17 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
     }
 
     if ((*(u32*)((s32)npc + 0x1D4) & 1) == 0) {
-        target = *(void**)(userBase + 4);
-        *(f32*)((s32)npc + 0x164) = *(f32*)((s32)target + 0x8C);
-        *(f32*)((s32)npc + 0x168) = *(f32*)((s32)target + 0x90);
-        *(f32*)((s32)npc + 0x16C) = *(f32*)((s32)target + 0x94);
+        if (*(s32*)userBase == 0) {
+            target = *(void**)(userBase + 4);
+            *(f32*)((s32)npc + 0x164) = *(f32*)((s32)target + 0x8C);
+            *(f32*)((s32)npc + 0x168) = *(f32*)((s32)target + 0x90);
+            *(f32*)((s32)npc + 0x16C) = *(f32*)((s32)target + 0x94);
+        } else {
+            target = *(void**)(userBase + 4);
+            *(f32*)((s32)npc + 0x164) = *(f32*)((s32)target + 0x8C);
+            *(f32*)((s32)npc + 0x168) = *(f32*)((s32)target + 0x90);
+            *(f32*)((s32)npc + 0x16C) = *(f32*)((s32)target + 0x94);
+        }
 
         *(s32*)((s32)npc + 0x158) = *(s32*)((s32)npc + 0x8C);
         *(s32*)((s32)npc + 0x15C) = *(s32*)((s32)npc + 0x90);
@@ -1346,20 +1371,16 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
             if (*(const f64*)(constBase + 0x58) <= sqrtD) {
                 bitsView.f = dist;
                 bits = bitsView.u & 0x7F800000;
-                if (bits == 0x7F800000) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 2;
-                    } else {
-                        cls = 1;
-                    }
-                } else if ((bits < 0x7F800000) && (bits == 0)) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 3;
-                    } else {
-                        cls = 5;
-                    }
-                } else {
+                switch (bits) {
+                case 0x7F800000:
+                    cls = (bitsView.u & 0x7FFFFF) ? 1 : 2;
+                    break;
+                case 0:
+                    cls = (bitsView.u & 0x7FFFFF) ? 5 : 3;
+                    break;
+                default:
                     cls = 4;
+                    break;
                 }
                 if (cls == 1) {
                     dist = __float_nan;
@@ -1370,8 +1391,8 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
         }
         targetAngle = angleABf(float_0_8041fd84, float_0_8041fd84, delta[0], delta[2]);
         angleDiff = compAngle(*(f32*)((s32)npc + 0x1AC), targetAngle);
-        turnAmount = float_60_8041fdf8 * turnScale * *(f32*)((s32)npc + 0x1B0);
-        if (turnAmount < ((angleDiff < float_0_8041fd84) ? -angleDiff : angleDiff)) {
+        turnAmount = float_60_8041fdf8 * turnScale * *(f32*)((s32)npc + 0x1A4);
+        if (turnAmount < __fabsf(angleDiff)) {
             if (angleDiff <= float_0_8041fd84) {
                 *(f32*)((s32)npc + 0x1AC) -= turnAmount;
             } else {
@@ -1383,8 +1404,8 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
         }
 
         if (((*(u32*)((s32)npc + 0x1D4) & 2) != 0) && (*(f32*)((s32)npc + 0x1B0) != float_0_8041fd84)) {
-            fbat = fbatGetPointer();
-            if ((npc != *(void**)((s32)fbat + 8)) || ((*(s16*)fbat != 5) && (*(s16*)fbat != 6))) {
+            if ((npc != *(void**)((s32)fbatGetPointer() + 8)) ||
+                ((*(s16*)fbatGetPointer() != 5) && (*(s16*)fbatGetPointer() != 6))) {
                 npcTuningRy(npc, *(f32*)((s32)npc + 0x1AC));
             }
         }
@@ -1396,36 +1417,42 @@ s32 evt_npc_homing_target(EventEntry* event, s32 isFirstCall) {
     dx = delta[0];
     dz = delta[2];
 
-    if (((*(f32*)((s32)npc + 0x1C0) != float_0_8041fd84) && (*(f32*)((s32)npc + 0x1A0) >= *(f32*)((s32)npc + 0x1C0))) ||
-        ((stopDist > float_0_8041fd84) && (dist < stopDist)) ||
-        (((flags & 4) != 0) && (*(s32*)((s32)npc + 0x2FC) != 0))) {
+    shouldStop = 0;
+    if (*(f32*)((s32)npc + 0x1C0) != float_0_8041fd84 &&
+        *(f32*)((s32)npc + 0x1C0) <= *(f32*)((s32)npc + 0x1A0)) {
+        shouldStop = 1;
+    } else if (stopDist > float_0_8041fd84 && dist < stopDist) {
+        shouldStop = 1;
+    } else if ((flags & 4) != 0 && *(u32*)((s32)npc + 0x2FC) != 0) {
+        shouldStop = 1;
+    }
+    if (shouldStop) {
         *(f32*)((s32)npc + 0x1B0) = float_0_8041fd84;
         return 1;
     }
 
-    targetAngle = *(f32*)((s32)npc + 0x1AC);
-    *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1B0) * (f32)sin((f64)((float_6p2832_8041fda0 * targetAngle) / float_360_8041fda4));
-    *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1B0) * -(f32)cos((f64)((float_6p2832_8041fda0 * targetAngle) / float_360_8041fda4));
+    *(f32*)((s32)npc + 0x1B4) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * (f32)sin((f64)((float_6p2832_8041fda0 * *(f32*)((s32)npc + 0x1AC)) / float_360_8041fda4)));
+    *(f32*)((s32)npc + 0x1BC) += *(f32*)((s32)npc + 0x1A4) * (*(f32*)((s32)npc + 0x1B0) * -(f32)cos((f64)((float_6p2832_8041fda0 * *(f32*)((s32)npc + 0x1AC)) / float_360_8041fda4)));
 
     soundMask = 0;
     if (((psndGetFlag() & 0x100) != 0) && ((animPoseGetMaterialFlag(*(s32*)((s32)npc + 0x104)) & 0x1800) == 0)) {
         soundMask = 0x10000;
     }
-    if ((f32)((f32)*(u16*)((s32)npc + 0x314) / *(f32*)((s32)npc + 0x1B0)) < *(f32*)((s32)npc + 0x1DC)) {
+    if ((f32)((f32)*(u16*)((s32)npc + 0x1E8) / *(f32*)((s32)npc + 0x1B0)) < *(f32*)((s32)npc + 0x1DC)) {
         if (*(s16*)((s32)npc + 0x1D8) == 0) {
-            if (*(s32*)((s32)npc + 0x2F0) != 0) {
-                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2F0));
+            if (*(s32*)((s32)npc + 0x1E4) != 0) {
+                sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1E4));
                 psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
             }
-        } else if (*(s32*)((s32)npc + 0x2EC) != 0) {
-            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x2EC));
+        } else if (*(s32*)((s32)npc + 0x1E0) != 0) {
+            sfx = searchPSSFXList(*(s32*)((s32)npc + 0x1E0));
             psndSFXOnEx_3D(soundMask | sfx, (void*)((s32)npc + 0x8C), -1, -1, 0, 8);
         }
         *(f32*)((s32)npc + 0x1DC) = float_0_8041fd84;
-        *(s16*)((s32)npc + 0x1D8) = (s16)(1 - *(s16*)((s32)npc + 0x1D8));
+        *(s16*)((s32)npc + 0x1D8) = (s8)(1 - *(s16*)((s32)npc + 0x1D8));
     }
-    if ((*(s32*)((s32)npc + 0x2F0) != 0) || (*(s16*)((s32)npc + 0x1D8) != 0)) {
-        *(f32*)((s32)npc + 0x1DC) += float_1000_8041fd94 * *(f32*)((s32)npc + 0x1B0);
+    if ((*(s32*)((s32)npc + 0x1E4) != 0) || (*(s16*)((s32)npc + 0x1D8) != 0)) {
+        *(f32*)((s32)npc + 0x1DC) += float_1000_8041fd94 * *(f32*)((s32)npc + 0x1A4);
     }
 
     return 0;
@@ -2078,6 +2105,7 @@ s32 evt_npc_get_loiter_dir(void* pEvt) {
     f32 max;
     f32 base;
     f32 range;
+    f32 result;
 
     args = *(s32**)((s32)pEvt + 0x18);
     dst = args[0];
@@ -2086,10 +2114,11 @@ s32 evt_npc_get_loiter_dir(void* pEvt) {
     base = evtGetFloat(pEvt, dst);
     range = max - min;
     if (range <= float_0_8041fd84) {
-        evtSetFloat(pEvt, dst, reviseAngle(base + min));
+        result = base + min;
     } else {
-        evtSetFloat(pEvt, dst, reviseAngle(base + min + (f32)rand() / range));
+        result = base + (min + (f32)rand() / range);
     }
+    evtSetFloat(pEvt, dst, reviseAngle(result));
     return 2;
 }
 
@@ -2197,11 +2226,10 @@ s32 evt_npc_facedirection_add(void* pEvt) {
 
 void* evtNpcNameToPtr(void* event, s32 name) {
     extern void* npcNameToPtr(void*);
-    extern char vec3_802c1470[];
     extern char str_me_8041fd80[3];
     extern char str_party_8041fdcc[6];
     extern char str_mario_8041fdd4[6];
-    char* names = vec3_802c1470;
+    char* names = (char*)vec3_802c1470;
 
     if (strcmp((char*)name, str_me_8041fd80) == 0) {
         return *(void**)((s32)event + 0x170);
@@ -2238,11 +2266,10 @@ void* evtNpcNameToPtr(void* event, s32 name) {
 
 void* evtNpcNameToPtr_NoAssert(void* event, s32 name) {
     extern void* npcNameToPtr_NoAssert(void*);
-    extern char vec3_802c1470[];
     extern char str_me_8041fd80[3];
     extern char str_party_8041fdcc[6];
     extern char str_mario_8041fdd4[6];
-    char* names = vec3_802c1470;
+    char* names = (char*)vec3_802c1470;
 
     if (strcmp((char*)name, str_me_8041fd80) == 0) {
         return *(void**)((s32)event + 0x170);
@@ -2706,26 +2733,34 @@ USER_FUNC(evt_npc_set_unitwork) {
     return 2;
 }
 
-s32 evt_npc_wait_msec(void* pEvt, s32 isFirstCall) {
-    extern s32 evtGetValue(void* evt, s32 value);
-    extern void* evtNpcNameToPtr(void* evt, s32 name);
-    extern u32 __OSBusClock;
-    u8* evt = pEvt;
-    s32* args = *(s32**)(evt + 0x18);
-    u8* npc = evtNpcNameToPtr(pEvt, evtGetValue(pEvt, args[0]));
-    u64 now = *(u64*)evt;
-    u32 wait;
-    u32 elapsed;
+s32 evt_npc_wait_msec(EventEntry* event, s32 isFirstCall) {
+    extern s32 evtGetValue(void* event, s32 value);
+    extern void* evtNpcNameToPtr(void* event, s32 name);
+    s32* args = event->args;
+    s32* userdata = (s32*)((u8*)event + 0x78);
+    s32 npcName = evtGetValue(event, args[0]);
+    u8* npc = evtNpcNameToPtr(event, npcName);
+    s32 temp;
+    s64 lifetime = *(s64*)event;
 
     *(u32*)(npc + 0x1D4) |= 0x10;
-    if (isFirstCall != 0) {
-        *(u32*)(evt + 0x78) = evtGetValue(pEvt, args[1]);
-        *(u64*)(evt + 0x7C) = now;
+    if (isFirstCall) {
+        userdata[0] = evtGetValue(event, args[1]);
+        userdata[1] = ((u64)lifetime >> 32) & 0xFFFFFFFF;
+        userdata[2] = lifetime & 0xFFFFFFFF;
     }
-    wait = *(u32*)(evt + 0x78);
-    if (wait == 0) return 2;
-    elapsed = (u32)(now - *(u64*)(evt + 0x7C));
-    return elapsed / (__OSBusClock / 4000) >= wait;
+
+    temp = userdata[0];
+    if (!temp) {
+        return 2;
+    }
+
+    {
+        s32 now = lifetime;
+        u64 elapsed = now - userdata[2];
+        s32 ms = elapsed / ((*(u32*)0x800000F8 >> 2) / 1000);
+        return temp <= ms;
+    }
 }
 
 USER_FUNC(evt_npc_set_balloontype) {
@@ -2803,6 +2838,7 @@ s32 evt_npc_set_autotalkpose(void* pEvt) {
 }
 
 s32 evt_npc_majo_disp_on(EventEntry* event, s32 isFirstCall) {
+    extern f32 float_100_8041fde4;
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern s32 animGroupBaseAsync(void* name, s32 battle, s32 flags);
     extern s32 psndSFXOn_3D(s32 id, void* pos);
@@ -2815,87 +2851,100 @@ s32 evt_npc_majo_disp_on(EventEntry* event, s32 isFirstCall) {
     extern f32 float_3_8041fdbc;
     extern f32 float_10_8041fdc0;
     extern f32 float_0p66667_8041fdc8;
-    s32* args;
-    s32 name;
-    f32 x;
-    f32 y;
-    f32 z;
-    s32 skip;
-    s32 battle;
-    void* npc;
-    s32 state;
-    void* pose;
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+    typedef struct NpcLocal {
+        u8 pad_000[0x8C];
+        VecLocal position;
+        VecLocal prevPosition;
+        u8 pad_0A4[0x60];
+        s32 poseId;
+        u8 pad_108[0x4C];
+        f32 field_154;
+    } NpcLocal;
+    typedef struct PoseLocal {
+        u8 pad_00[0x90];
+        s32 paperId;
+    } PoseLocal;
+    s32* args = event->args;
+    s32 npcName = evtGetValue(event, *args++);
+    f32 prevX = evtGetFloat(event, *args++);
+    f32 prevY = evtGetFloat(event, *args++);
+    f32 prevZ = evtGetFloat(event, *args++);
+    s32 toggle = evtGetValue(event, *args++);
+    s32 group = (*(s32*)((u8*)gp + 0x14) != 0);
+    NpcLocal* npc = evtNpcNameToPtr(event, npcName);
+    s32* userdata = (s32*)((u8*)event + 0x78);
 
-    args = event->args;
-    name = evtGetValue(event, args[0]);
-    x = evtGetFloat(event, args[1]);
-    y = evtGetFloat(event, args[2]);
-    z = evtGetFloat(event, args[3]);
-    skip = evtGetValue(event, args[4]);
-    battle = (*(s32*)((s32)gp + 0x14) != 0);
-    npc = evtNpcNameToPtr(event, name);
-
-    if (isFirstCall != 0) {
-        *(s32*)((s32)event + 0x78) = -1;
-        *(s32*)((s32)event + 0x7C) = 0;
+    if (isFirstCall) {
+        userdata[0] = -1;
+        userdata[1] = 0;
     }
-    if (animGroupBaseAsync(str_p_bibi_802c14d8, battle, 0) == 0) {
+    if (!animGroupBaseAsync(str_p_bibi_802c14d8, group, 0)) {
         return 0;
     }
-    if (skip != 0) {
+    if (toggle) {
         return 0;
     }
 
-    state = *(s32*)((s32)event + 0x78);
-    switch (state) {
+    switch (userdata[0]) {
         case -1:
-            *(f32*)((s32)npc + 0x98) = x;
-            *(f32*)((s32)npc + 0x9C) = y;
-            *(f32*)((s32)npc + 0xA0) = z;
-            *(s32*)((s32)npc + 0x8C) = *(s32*)((s32)npc + 0x98);
-            *(s32*)((s32)npc + 0x90) = *(s32*)((s32)npc + 0x9C);
-            *(s32*)((s32)npc + 0x94) = *(s32*)((s32)npc + 0xA0);
-            animPoseSetEffect(*(s32*)((s32)npc + 0x104), str_p_bibi_802c14d8, 1);
-            animPoseSetEffectAnim(*(s32*)((s32)npc + 0x104), str_PM_B_2_802c14e8, 1);
-            animPosePaperPeraOn(*(s32*)((s32)npc + 0x104));
-            animPoseSetLocalTime(*(s32*)((s32)npc + 0x104), float_0_8041fd84);
-            *(s32*)((s32)event + 0x78) += 1;
-            psndSFXOn_3D(0x275, (void*)((s32)npc + 0x8C));
+            npc->position = npc->prevPosition = (VecLocal){ prevX, prevY, prevZ };
+            animPoseSetEffect(npc->poseId, str_p_bibi_802c14d8, 1);
+            animPoseSetEffectAnim(npc->poseId, str_PM_B_2_802c14e8, 1);
+            animPosePaperPeraOn(npc->poseId);
+            animPoseSetLocalTime(npc->poseId, float_0_8041fd84);
+            userdata[0]++;
+            psndSFXOn_3D(0x275, &npc->position);
             break;
+
+        default:
+            break;
+
         case 0:
-            *(f32*)((s32)npc + 0x154) += (float_3_8041fdbc - *(f32*)((s32)npc + 0x154)) / float_10_8041fdc0;
-            animPoseSetLocalTime(*(s32*)((s32)npc + 0x104), float_0_8041fd84);
-            *(s32*)((s32)event + 0x7C) += 1;
-            if (*(s32*)((s32)event + 0x7C) > 0x1E) {
-                *(s32*)((s32)event + 0x78) += 1;
-                *(s32*)((s32)event + 0x7C) = 0;
-                state = animPoseGetVivianType(*(s32*)((s32)npc + 0x104));
-                if (state == 1) {
-                    psndSFXOn_3D(0x937, (void*)((s32)npc + 0x8C));
-                } else if (state == 2) {
-                    psndSFXOn_3D(0x27B, (void*)((s32)npc + 0x8C));
-                } else if (state == 3) {
-                    psndSFXOn_3D(0x278, (void*)((s32)npc + 0x8C));
+            npc->field_154 += (float_3_8041fdbc - npc->field_154) / float_100_8041fde4;
+            animPoseSetLocalTime(npc->poseId, float_0_8041fd84);
+            userdata[1]++;
+            if (userdata[1] > 30) {
+                userdata[0]++;
+                userdata[1] = 0;
+                switch (animPoseGetVivianType(npc->poseId)) {
+                    case 0:
+                        break;
+                    case 1:
+                        psndSFXOn_3D(0x937, &npc->position);
+                        break;
+                    case 2:
+                        psndSFXOn_3D(0x27B, &npc->position);
+                        break;
+                    case 3:
+                        psndSFXOn_3D(0x278, &npc->position);
+                        break;
                 }
             }
             break;
+
         case 1:
-            animPoseSetEffect(*(s32*)((s32)npc + 0x104), str_p_bibi_802c14d8, 1);
-            animPoseSetEffectAnim(*(s32*)((s32)npc + 0x104), str_PM_B_2_802c14e8, 1);
-            animPosePaperPeraOn(*(s32*)((s32)npc + 0x104));
-            *(s32*)((s32)event + 0x78) += 1;
+            animPoseSetEffect(npc->poseId, str_p_bibi_802c14d8, 1);
+            animPoseSetEffectAnim(npc->poseId, str_PM_B_2_802c14e8, 1);
+            animPosePaperPeraOn(npc->poseId);
+            userdata[0]++;
             break;
+
         case 2:
-            pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
-            if (animPoseGetLoopTimes(*(s32*)((s32)pose + 0x90)) >= float_0p66667_8041fdc8) {
-                animPoseSetPaperAnimGroup(*(s32*)((s32)npc + 0x104), 0, 1);
-                *(s32*)((s32)event + 0x78) += 1;
+            if (animPoseGetLoopTimes(((PoseLocal*)animPoseGetAnimPosePtr(npc->poseId))->paperId) >= float_0p66667_8041fdc8) {
+                animPoseSetPaperAnimGroup(npc->poseId, 0, 1);
+                userdata[0]++;
             }
             break;
+
         case 3:
-            *(f32*)((s32)npc + 0x154) += (float_1_8041fd88 - *(f32*)((s32)npc + 0x154)) / float_10_8041fdc0;
-            *(s32*)((s32)event + 0x7C) += 1;
-            if (*(s32*)((s32)event + 0x7C) > 0x1E) {
+            npc->field_154 += (float_1_8041fd88 - npc->field_154) / float_10_8041fdc0;
+            userdata[1]++;
+            if (userdata[1] > 30) {
                 return 2;
             }
             break;
@@ -3067,9 +3116,7 @@ void _kamek_houki_kemuri(s32 npc, s32 mode) {
 s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
     extern void* evtNpcNameToPtr(EventEntry* event, s32 name);
     extern u8 _kamek_houki_kemuri(s32 npc, s32 animState);
-    extern f64 __frsqrte(f64 x);
     extern f32 __float_nan;
-    extern const u8 vec3_802c1470[];
     extern f32 float_0_8041fd84;
     extern f32 float_1_8041fd88;
     extern f32 float_0p1_8041fd98;
@@ -3150,20 +3197,16 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
             if (*(const f64*)(constBase + 0x58) <= sqrtD) {
                 bitsView.f = distSq;
                 bits = bitsView.u & 0x7F800000;
-                if (bits == 0x7F800000) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 2;
-                    } else {
-                        cls = 1;
-                    }
-                } else if ((bits < 0x7F800000) && (bits == 0)) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 3;
-                    } else {
-                        cls = 5;
-                    }
-                } else {
+                switch (bits) {
+                case 0x7F800000:
+                    cls = (bitsView.u & 0x7FFFFF) ? 1 : 2;
+                    break;
+                case 0:
+                    cls = (bitsView.u & 0x7FFFFF) ? 5 : 3;
+                    break;
+                default:
                     cls = 4;
+                    break;
                 }
                 if (cls == 1) {
                     totalDist = __float_nan;
@@ -3206,20 +3249,16 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
             if (*(const f64*)(constBase + 0x58) <= sqrtD) {
                 bitsView.f = distSq;
                 bits = bitsView.u & 0x7F800000;
-                if (bits == 0x7F800000) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 2;
-                    } else {
-                        cls = 1;
-                    }
-                } else if ((bits < 0x7F800000) && (bits == 0)) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 3;
-                    } else {
-                        cls = 5;
-                    }
-                } else {
+                switch (bits) {
+                case 0x7F800000:
+                    cls = (bitsView.u & 0x7FFFFF) ? 1 : 2;
+                    break;
+                case 0:
+                    cls = (bitsView.u & 0x7FFFFF) ? 5 : 3;
+                    break;
+                default:
                     cls = 4;
+                    break;
                 }
                 if (cls == 1) {
                     totalDist = __float_nan;
@@ -3243,20 +3282,16 @@ s32 evt_npc_kamek_move_position(EventEntry* event, s32 isFirstCall) {
             if (*(const f64*)(constBase + 0x58) <= sqrtD) {
                 bitsView.f = distSq;
                 bits = bitsView.u & 0x7F800000;
-                if (bits == 0x7F800000) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 2;
-                    } else {
-                        cls = 1;
-                    }
-                } else if ((bits < 0x7F800000) && (bits == 0)) {
-                    if ((bitsView.u & 0x7FFFFF) == 0) {
-                        cls = 3;
-                    } else {
-                        cls = 5;
-                    }
-                } else {
+                switch (bits) {
+                case 0x7F800000:
+                    cls = (bitsView.u & 0x7FFFFF) ? 1 : 2;
+                    break;
+                case 0:
+                    cls = (bitsView.u & 0x7FFFFF) ? 5 : 3;
+                    break;
+                default:
                     cls = 4;
+                    break;
                 }
                 if (cls == 1) {
                     remainDist = __float_nan;
@@ -3334,19 +3369,24 @@ s32 evt_npc_kamek_kemuri1(void* pEvt, s32 isFirstCall) {
     s32* args = *(s32**)((u8*)pEvt + 0x18);
     u8* npc = npcNameToPtr(evtGetValue(pEvt, args[0]));
 
-    if (isFirstCall == 0) {
-        if (*(f32*)(npc + 0x1C0) == float_0_8041fd84) {
-            if (*(f32*)(npc + 0x1B0) > float_0_8041fd84) {
-                _kamek_houki_kemuri((s32)npc, *(s32*)(npc + 0x108));
-                return 0;
-            }
-        } else if (*(f32*)(npc + 0x1A0) < *(f32*)(npc + 0x1C0)) {
+    if (isFirstCall) {
+        return 0;
+    }
+
+    if (*(f32*)(npc + 0x1C0) != float_0_8041fd84) {
+        if (*(f32*)(npc + 0x1C0) > *(f32*)(npc + 0x1A0)) {
             _kamek_houki_kemuri((s32)npc, *(s32*)(npc + 0x108));
             return 0;
         }
-        return 2;
+        goto block_7;
     }
-    return 0;
+
+    if (*(f32*)(npc + 0x1B0) > float_0_8041fd84) {
+        _kamek_houki_kemuri((s32)npc, *(s32*)(npc + 0x108));
+        return 0;
+    }
+block_7:
+    return 2;
 }
 
 s32 evt_npc_kamek_kemuri2(void* pEvt, s32 isFirstCall) {
@@ -3416,7 +3456,7 @@ s32 evt_fbat_trans_floor_position(void* pEvt) {
 s32 unk_8004d180(EventEntry* event) {
     extern f32 evtGetFloat(EventEntry* event, s32 index);
     extern void evtSetFloat(EventEntry* event, s32 index, f32 value);
-    extern s32 hitCheckFilter(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 flags, void* out0, f32* outY, void* out2, f32* out3, void* out4, void* out5, void* out6);
+    extern u32 hitCheckFilter(f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, s32 flags, void* out0, f32* outY, void* out2, f32* out3, void* out4, void* out5, void* out6);
     extern f32 float_0_8041fd84;
     extern f32 float_1_8041fd88;
     extern f32 float_neg1_8041fd8c;
@@ -3429,13 +3469,14 @@ s32 unk_8004d180(EventEntry* event) {
     f32 y;
     f32 z;
     f32 addY;
-    f32 out3;
+    f32 initialOut3;
     f32 width;
     f32 bestY;
-    f32 checkY;
     f32 halfWidth;
     s32 out0;
+    f32 checkY;
     s32 out2;
+    f32 out3;
     s32 out4;
     s32 out5;
     s32 out6;
@@ -3448,24 +3489,25 @@ s32 unk_8004d180(EventEntry* event) {
     zVar = args[2];
     z = evtGetFloat(event, zVar);
     addY = evtGetFloat(event, args[3]);
-    out3 = evtGetFloat(event, args[4]);
+    initialOut3 = evtGetFloat(event, args[4]);
     width = evtGetFloat(event, args[5]);
 
     bestY = y;
     y += float_1_8041fd88;
+    out3 = initialOut3;
     if (hitCheckFilter(x, y, z, float_0_8041fd84, float_neg1_8041fd8c, float_0_8041fd84, 0, &out0, &checkY, &out2, &out3, &out4, &out5, &out6) != 0) {
         bestY = checkY + addY;
     }
 
     halfWidth = float_0p5_8041fd90 * width;
     if (hitCheckFilter(x + halfWidth, y, z, float_0_8041fd84, float_neg1_8041fd8c, float_0_8041fd84, 0, &out0, &checkY, &out2, &out3, &out4, &out5, &out6) != 0) {
-        if (bestY < checkY + addY) {
+        if (checkY + addY > bestY) {
             bestY = checkY + addY;
         }
     }
 
     if (hitCheckFilter(x - halfWidth, y, z, float_0_8041fd84, float_neg1_8041fd8c, float_0_8041fd84, 0, &out0, &checkY, &out2, &out3, &out4, &out5, &out6) != 0) {
-        if (bestY < checkY + addY) {
+        if (checkY + addY > bestY) {
             bestY = checkY + addY;
         }
     }
@@ -3479,24 +3521,42 @@ s32 unk_8004d180(EventEntry* event) {
 s32 evt_npc_sound_data_reset(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern void* evtNpcNameToPtr(void*, s32);
-    extern f32 float_0_8041fd84;
-    s32 name;
-    void* npc;
-    void* tribe;
-    f32 zero;
+    extern const f32 float_0_8041fd84;
+    typedef struct TribeLocal {
+        u8 pad_00[0x40];
+        s32 footstepSfxA;
+        s32 footstepSfxB;
+        u16 footstepStride;
+        u8 pad_4A[2];
+        s32 jumpSfx;
+        s32 landSfx;
+    } TribeLocal;
+    typedef struct NpcLocal {
+        u8 pad_00[0x28];
+        TribeLocal* tribe;
+        u8 pad_2C[0x1AC];
+        u16 footstepToggle;
+        u8 pad_1DA[2];
+        f32 footstepAccum;
+        s32 footstepSfxA;
+        s32 footstepSfxB;
+        u16 footstepStride;
+        u8 pad_1EA[2];
+        s32 jumpSfx;
+        s32 landSfx;
+    } NpcLocal;
+    s32 name = evtGetValue(pEvt, *(s32*)*(void**)((s32)pEvt + 0x18));
+    NpcLocal* npc = evtNpcNameToPtr(pEvt, name);
+    TribeLocal* tribe = npc->tribe;
 
-    name = evtGetValue(pEvt, *(s32*)*(void**)((s32)pEvt + 0x18));
-    npc = evtNpcNameToPtr(pEvt, name);
-    tribe = *(void**)((s32)npc + 0x28);
     if (tribe != 0) {
-        zero = float_0_8041fd84;
-        *(s32*)((s32)npc + 0x1E0) = *(s32*)((s32)tribe + 0x40);
-        *(s32*)((s32)npc + 0x1E4) = *(s32*)((s32)tribe + 0x44);
-        *(s32*)((s32)npc + 0x1EC) = *(s32*)((s32)tribe + 0x4C);
-        *(s32*)((s32)npc + 0x1F0) = *(s32*)((s32)tribe + 0x50);
-        *(u16*)((s32)npc + 0x1E8) = *(u16*)((s32)tribe + 0x48);
-        *(u16*)((s32)npc + 0x1D8) = 1;
-        *(f32*)((s32)npc + 0x1DC) = zero;
+        npc->footstepSfxA = tribe->footstepSfxA;
+        npc->footstepSfxB = tribe->footstepSfxB;
+        npc->jumpSfx = tribe->jumpSfx;
+        npc->landSfx = tribe->landSfx;
+        npc->footstepStride = tribe->footstepStride;
+        npc->footstepToggle = 1;
+        npc->footstepAccum = float_0_8041fd84;
     }
     return 2;
 }
@@ -3610,3 +3670,27 @@ s32 npc_init_evt[] = {
     2,
     1,
 };
+
+
+/* Target-owned conversion and sqrt constants: .rodata+0x40..+0x5f. */
+__declspec(section ".rodata") const f64 double_to_int_802c14b0 __attribute__((aligned(8))) = 4503601774854144.0;
+__declspec(section ".rodata") const f64 double_0p5_802c14b8 __attribute__((aligned(8))) = 0.5;
+__declspec(section ".rodata") const f64 double_3_802c14c0 __attribute__((aligned(8))) = 3.0;
+__declspec(section ".rodata") const f64 double_0_802c14c8 __attribute__((aligned(8))) = 0.0;
+
+/* Recovered first evt_npc read-only string catalog; target .rodata+0x60..+0xBF. */
+__declspec(section ".rodata") char str_kpa_01_802c14d0[] __attribute__((aligned(4))) = "kpa_01";
+__declspec(section ".rodata") char str_p_bibi_802c14d8[] __attribute__((aligned(4))) = "p_bibi";
+__declspec(section ".rodata") char str_PM_B_1_802c14e0[] __attribute__((aligned(4))) = "PM_B_1";
+__declspec(section ".rodata") char str_PM_B_2_802c14e8[] __attribute__((aligned(4))) = "PM_B_2";
+__declspec(section ".rodata") char str_x_party_802c14f0[] __attribute__((aligned(4))) = "(^x^)party";
+__declspec(section ".rodata") char str_extparty_802c14fc[] __attribute__((aligned(4))) = "extparty";
+__declspec(section ".rodata") char str_master_802c1508[] __attribute__((aligned(4))) = "master";
+__declspec(section ".rodata") char str_slave_0_802c1510[] __attribute__((aligned(4))) = "slave_0";
+__declspec(section ".rodata") char str_slave_1_802c1518[] __attribute__((aligned(4))) = "slave_1";
+__declspec(section ".rodata") char str_slave_2_802c1520[] __attribute__((aligned(4))) = "slave_2";
+__declspec(section ".rodata") char str_slave_3_802c1528[] __attribute__((aligned(4))) = "slave_3";
+
+/* Target-owned unsigned conversion mask and double threshold: .rodata+0xc0..+0xcf. */
+__declspec(section ".rodata") const f64 double_to_int_mask_802c1530 __attribute__((aligned(8))) = 4503599627370496.0;
+__declspec(section ".rodata") const f64 double_0p1_802c1538 __attribute__((aligned(8))) = 0.1;

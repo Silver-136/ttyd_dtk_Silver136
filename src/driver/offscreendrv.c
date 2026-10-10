@@ -8,17 +8,15 @@ extern s32 strcmp(const char* a, const char* b);
 
 void offscreenInit(void) {
     void* base;
-
-    *(s32*)&work = 10;
-    *(void**)((s32)&work + 4) =
-        __memAlloc(0, *(s32*)&work * 0x50);
-    memset(*(void**)((s32)&work + 4), 0, *(s32*)&work * 0x50);
-
+    void* data;
+    s32 count;
+    data = __memAlloc(0, (work = 10) * 0x50);
+    count = work;
+    memset((*(void**)((s32)&work + 4) = data), 0, count * 0x50);
     base = &work;
-    *(s32*)((s32)base + 8) = 10;
-    *(void**)((s32)base + 0xC) =
-        __memAlloc(0, *(s32*)((s32)base + 8) * 0x50);
-    memset(*(void**)((s32)base + 0xC), 0, 0x320);
+    data = __memAlloc(0, (*(s32*)((s32)base + 8) = 10) * 0x50);
+    count = *(s32*)((s32)base + 8);
+    memset((*(void**)((s32)base + 0xC) = data), 0, count * 0x50);
 }
 
 void offscreenReset(s32 value) {
@@ -30,41 +28,31 @@ void offscreenReset(s32 value) {
     memset(*(void**)((s32)wp + 4), 0, *(s32*)wp * 0x50);
 }
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 s32 offscreenEntry(char* name) {
     extern char* strcpy(char* dst, const char* src);
     void* set = &work;
-    s32 count;
     s32 i;
+    s32 count;
     void* entry;
-    s32 ret;
 
     if (*(s32*)((s32)gp + 0x14) != 0) {
         set = (void*)((s32)set + 8);
     }
 
     count = *(s32*)set;
-    i = 0;
-    entry = *(void**)((s32)set + 4);
-    while (i < count) {
+    for (i = 0, entry = *(void**)((s32)set + 4); i < count;
+         i++, entry = (void*)((s32)entry + 0x50)) {
         if ((*(u32*)entry & 1) != 0 && strcmp((char*)((s32)entry + 4), name) == 0) {
             break;
         }
-        i++;
-        entry = (void*)((s32)entry + 0x50);
     }
 
-    entry = *(void**)((s32)set + 4);
-    ret = 0;
-    if (count > 0) {
-        do {
-            if ((*(u32*)entry & 1) == 0) {
-                break;
-            }
-            ret++;
-            entry = (void*)((s32)entry + 0x50);
-            count--;
-        } while (count != 0);
+    for (i = 0, entry = *(void**)((s32)set + 4); i < count;
+         i++, entry = (void*)((s32)entry + 0x50)) {
+        if ((*(u32*)entry & 1) == 0) {
+            break;
+        }
     }
 
     *(u32*)entry = 1;
@@ -79,13 +67,13 @@ s32 offscreenEntry(char* name) {
     *(u16*)((s32)entry + 0x4E) = 2;
     *(s32*)((s32)entry + 0x3C) = 5;
     *(s32*)((s32)entry + 0x40) = 5;
-    return ret;
+    return i;
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 void offscreenDisp(void) {
     extern void GXSetTexCopySrc(u16 x, u16 y, u16 wd, u16 ht);
     extern void GXSetTexCopyDst(u16 wd, u16 ht, s32 fmt, s32 mipmap);
@@ -96,8 +84,8 @@ void offscreenDisp(void) {
     extern void GXPixModeSync(void);
     extern void GXInitTexObj(void* obj, void* image_ptr, u16 wd, u16 ht, s32 fmt, s32 wrap_s, s32 wrap_t, s32 mipmap);
     void* set = &work;
-    s32 count;
     s32 i;
+    s32 count;
     void* entry;
 
     if (*(s32*)((s32)gp + 0x14) != 0) {
@@ -167,13 +155,13 @@ void offscreenMain(void) {
 }
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 void offscreenAddBoundingBox(s32 id, u16 x0, u16 y0, u16 x1, u16 y1) {
     extern void* DEMOGetRenderModeObj(void);
     void* set;
     void* entry;
-    u16 width;
-    u16 height;
+    s32 width;
+    s32 height;
 
     if (x1 <= x0) {
         return;

@@ -75,7 +75,7 @@ void marioBottomless(void) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
-    extern f32 vec3_802c3ea8[3];
+    extern const f32 vec3_802c3ea8[3];
     extern const f32 float_37_80420aa4;
     typedef struct Vec { f32 x, y, z; } Vec;
     void* mario = marioGetPtr();
@@ -92,7 +92,7 @@ void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void N_marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
-    extern f32 vec3_802c3eb4[3];
+    extern const f32 vec3_802c3eb4[3];
     typedef struct Vec { f32 x, y, z; } Vec;
     void* mario = marioGetPtr();
     Vec pos = *(Vec*)vec3_802c3eb4;
@@ -115,14 +115,21 @@ void N_marioReloadMapOnBottomlessOff(void) {
     *(s32*)((s32)mario + 0x2E0) = 0;
 }
 
+#pragma opt_common_subs off
+#pragma use_lmw_stmw off
 s32 marioSetDirEventMain(void) {
     extern s32 sysMsec2Frame(s32);
 
     void* mario;
     f32 target;
     f32 cur;
+    f32 dir;
     f32 view;
     f32 bias;
+    f32 start;
+    f32 delta;
+    f32 fraction;
+    f32 scale;
     s32 frames;
     s32 timer;
 
@@ -141,9 +148,11 @@ s32 marioSetDirEventMain(void) {
             target -= float_360_80420a68;
         }
 
-        cur = *(f32*)((s32)mario + 0x29C) +
-              (target - *(f32*)((s32)mario + 0x29C)) *
-              ((f32)*(s32*)((s32)mario + 0x2A8) / (f32)frames);
+        start = *(f32*)((s32)mario + 0x29C);
+        delta = target - start;
+        fraction = (f32)*(s32*)((s32)mario + 0x2A8) / (f32)frames;
+        delta *= fraction;
+        cur = start + delta;
         while (cur < float_0_80420a60) {
             cur += float_360_80420a68;
         }
@@ -154,13 +163,16 @@ s32 marioSetDirEventMain(void) {
         *(f32*)((s32)mario + 0x1AC) = cur;
         *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
 
-        view = (float_270_80420a90 - *(f32*)((s32)mario + 0x1AC)) +
+        dir = *(f32*)((s32)mario + 0x1AC);
+        view = (float_270_80420a90 - dir) +
                *(f32*)((s32)marioGetPtr() + 0x19C);
-        bias = float_neg0p5_80420a8c;
         if (view >= float_0_80420a60) {
             bias = float_0p5_80420a88;
+        } else {
+            bias = float_neg0p5_80420a8c;
         }
-        view = (f32)(s32)(view * float_1000_80420a94 + bias) / float_1000_80420a94;
+        scale = float_1000_80420a94;
+        view = (f32)(s32)(view * scale + bias) / scale;
         while (view < float_0_80420a60) {
             view += float_360_80420a68;
         }
@@ -189,13 +201,16 @@ s32 marioSetDirEventMain(void) {
     *(f32*)((s32)mario + 0x1AC) = target;
     *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
 
-    view = (float_270_80420a90 - *(f32*)((s32)mario + 0x1AC)) +
+    dir = *(f32*)((s32)mario + 0x1AC);
+    view = (float_270_80420a90 - dir) +
            *(f32*)((s32)marioGetPtr() + 0x19C);
-    bias = float_neg0p5_80420a8c;
     if (view >= float_0_80420a60) {
         bias = float_0p5_80420a88;
+    } else {
+        bias = float_neg0p5_80420a8c;
     }
-    view = (f32)(s32)(view * float_1000_80420a94 + bias) / float_1000_80420a94;
+    scale = float_1000_80420a94;
+    view = (f32)(s32)(view * scale + bias) / scale;
     while (view < float_0_80420a60) {
         view += float_360_80420a68;
     }
@@ -207,6 +222,8 @@ s32 marioSetDirEventMain(void) {
     *(u32*)((s32)mario + 4) &= ~0x8000;
     return 1;
 }
+#pragma opt_common_subs reset
+#pragma use_lmw_stmw reset
 
 f32 marioGetMoveRate(f32 angle) {
     void* mario = marioGetPtr();
@@ -234,6 +251,7 @@ void marioSetPeakYpos(void) {
     *(f32*)((s32)mario + 0x12C) = *(f32*)((s32)mario + 0x90);
 }
 
+#pragma opt_common_subs off
 void marioAdjustMoveDir(void) {
     extern const f32 float_90_80420a98;
 
@@ -243,8 +261,8 @@ void marioAdjustMoveDir(void) {
     f32 dir;
     f32 angle;
 
-    if (*(f32*)((s32)mario + 0x1AC) < float_90_80420a98 ||
-        *(f32*)((s32)mario + 0x1AC) > float_270_80420a90) {
+    if (!(*(f32*)((s32)mario + 0x1AC) >= float_90_80420a98 &&
+          *(f32*)((s32)mario + 0x1AC) <= float_270_80420a90)) {
         out = float_180_80420a70;
         mario2 = marioGetPtr();
         if ((*(u32*)((s32)mario2 + 0x0) & 0x100000) != 0) {
@@ -314,7 +332,9 @@ void marioAdjustMoveDir(void) {
         *(f32*)((s32)mario + 0x1B0) = float_0_80420a60;
     }
 }
+#pragma opt_common_subs reset
 
+#pragma opt_common_subs off
 f32 marioGetDispDir(void) {
     void* mario = marioGetPtr();
     f32 value = *(f32*)((s32)mario + 0x1AC) - float_90_80420a98 + *(f32*)((s32)mario + 0x19C);
@@ -326,6 +346,7 @@ f32 marioGetDispDir(void) {
     }
     return value;
 }
+#pragma opt_common_subs reset
 
 f32 revise360(f32 value) {
     while (value < float_0_80420a60) {
@@ -411,14 +432,14 @@ f32 toMovedirSimple(f32 angle) {
     void* mario = marioGetPtr();
     f32 value = (float_270_80420a90 - angle) + *(f32*)((s32)mario + 0x19C);
     s32 rounded = (s32)(value * float_1000_80420a94 + (value >= float_0_80420a60 ? float_0p5_80420a88 : float_neg0p5_80420a8c));
-    value = (f32)rounded / float_1000_80420a94;
-    while (value < float_0_80420a60) {
-        value += float_360_80420a68;
+    angle = (f32)rounded / float_1000_80420a94;
+    while (angle < float_0_80420a60) {
+        angle += float_360_80420a68;
     }
-    while (value >= float_360_80420a68) {
-        value -= float_360_80420a68;
+    while (angle >= float_360_80420a68) {
+        angle -= float_360_80420a68;
     }
-    return value;
+    return angle;
 }
 
 double toMovedir2(double angle, double add) {
@@ -426,14 +447,17 @@ double toMovedir2(double angle, double add) {
     void* mario = marioGetPtr();
     f32 dir;
     f32 diff;
+    f64 signedAdd;
 
     if ((*(u32*)((s32)mario + 0x0) & 0x100000) != 0) {
-        dir = *(f32*)((s32)mario + 0x1AC);
-        if ((double)float_280_80420a78 == (double)dir || (double)float_460_80420a7c == (double)dir) {
+        if ((double)float_280_80420a78 == (double)*(f32*)((s32)mario + 0x1AC) ||
+            (double)float_460_80420a7c == (double)*(f32*)((s32)mario + 0x1AC)) {
             angle = (double)float_0_80420a60;
-        } else if ((double)float_260_80420a80 == (double)dir || (double)float_440_80420a84 == (double)dir) {
+        } else if ((double)float_260_80420a80 == (double)*(f32*)((s32)mario + 0x1AC) ||
+                   (double)float_440_80420a84 == (double)*(f32*)((s32)mario + 0x1AC)) {
             angle = (double)float_180_80420a70;
         } else {
+            dir = *(f32*)((s32)mario + 0x1AC);
             while ((double)dir < (double)float_0_80420a60) {
                 dir = (f32)((double)dir + (double)float_360_80420a68);
             }
@@ -441,7 +465,7 @@ double toMovedir2(double angle, double add) {
                 dir = (f32)((double)dir - (double)float_360_80420a68);
             }
             angle = (double)float_180_80420a70;
-            if (angle <= (double)dir) {
+            if (dir >= (f32)angle) {
                 angle = (double)float_0_80420a60;
             }
         }
@@ -464,9 +488,11 @@ double toMovedir2(double angle, double add) {
         diff -= float_360_80420a68;
     }
     if (diff >= float_180_80420a70) {
-        add = -add;
+        signedAdd = -add;
+    } else {
+        signedAdd = add;
     }
-    angle = (double)dir + add;
+    angle = (double)dir + signedAdd;
     while ((double)(f32)angle < (double)float_0_80420a60) {
         angle = (double)(f32)angle + (double)float_360_80420a68;
     }
@@ -500,29 +526,26 @@ void marioForceMoveMain(void) {
     }
 }
 
+#pragma use_lmw_stmw off
 void marioSetForceMove(s16 time, f32 angle, f32 spd) {
+    u16 motion;
     void* mario = marioGetPtr();
     *(u32*)((s32)mario + 0x0) |= 0x20;
     *(f32*)((s32)mario + 0x1A0) = angle;
     *(f32*)((s32)mario + 0x1A4) = angle;
     *(s16*)((s32)mario + 0x4E) = time;
     *(f32*)((s32)mario + 0x180) = spd;
-    switch (*(u16*)((s32)mario + 0x2E)) {
-        case 0x15:
-        case 0x16:
-        case 0x19:
-        case 0x1A:
-            break;
-        default:
-            marioChgMot(spd >= *(f32*)((s32)mario + 0x188) ? 2 : 1);
-            *(f32*)((s32)mario + 0x1A0) = angle;
-            *(f32*)((s32)mario + 0x1A4) = angle;
-            *(s16*)((s32)mario + 0x4E) = time;
-            *(f32*)((s32)mario + 0x180) = spd;
-            break;
+    motion = *(u16*)((s32)mario + 0x2E);
+    if (motion != 0x19 && (u16)(motion - 0x15) > 1 && motion != 0x1A) {
+        marioChgMot(spd >= *(f32*)((s32)mario + 0x188) ? 2 : 1);
+        *(f32*)((s32)mario + 0x1A0) = angle;
+        *(f32*)((s32)mario + 0x1A4) = angle;
+        *(s16*)((s32)mario + 0x4E) = time;
+        *(f32*)((s32)mario + 0x180) = spd;
     }
 }
 
+#pragma use_lmw_stmw reset
 void marioUpdateKeyData(void) {
     extern s32 marioChkKey(void);
     extern s32 marioGetMotSlitCancel3(void);
@@ -607,11 +630,16 @@ void marioGetStick(float* param_1, float* param_2) {
         *param_2 = *(f32*)((s32)mario + 0x180);
     } else {
         s32 stickX = *(s8*)((s32)mario + 0x252);
+        s32 noStickY = 0;
         s32 stickY;
         f32 dist;
         f32 angle;
+        s32 isZero;
 
         if ((*(u32*)mario & 0x02000000) != 0 || kpaGetStageViewType() == 0) {
+            noStickY = 1;
+        }
+        if (noStickY != 0) {
             stickY = 0;
         } else {
             stickY = -*(s8*)((s32)mario + 0x253);
@@ -621,11 +649,13 @@ void marioGetStick(float* param_1, float* param_2) {
         }
         stickY = -stickY;
         dist = distABf(float_0_80420a60, float_0_80420a60, (f32)stickX, (f32)stickY);
-        if (dist > float_70_80420a64) {
+        if (dist >= float_70_80420a64) {
             dist = float_70_80420a64;
         }
         angle = angleABf(float_0_80420a60, float_0_80420a60, (f32)stickX, (f32)stickY);
-        if (dist == float_0_80420a60) {
+        isZero = (dist != float_0_80420a60);
+        isZero = !isZero;
+        if (isZero != 0) {
             angle = *(f32*)((s32)mario + 0x1A0);
         }
         angle += *(f32*)((s32)mario + 0x19C);
@@ -671,31 +701,37 @@ s32 chkRevolveDir(int* param_1, int* param_2) {
     extern s32 int32_t_803dc248;
     extern f32 __fabsf(f32);
 
+    u8* work = rubwork;
     s32 left = 0;
     s32 right = 0;
     s32 i;
     s32 offset = 0;
 
     for (i = 0; i < 10; i++) {
-        s32 idx = DAT_803dc234 + offset;
+        s32 idx = *(s32*)(work + 0xC) + offset;
         s32 prev;
         s32 a;
         s32 b;
         s32 diff;
+        f64 absDiff;
 
         while (idx < 0) {
             idx += 20;
         }
-        prev = DAT_803dc234 + offset - 1;
+        prev = *(s32*)(work + 0xC) + offset - 1;
         while (prev < 0) {
             prev += 20;
         }
         offset--;
-        a = DAT_803dc264[idx];
-        b = DAT_803dc264[prev];
+        a = *(s16*)(work + 0x3C + idx * 2);
+        b = *(s16*)(work + 0x3C + prev * 2);
         if (i != 0 || a != b) {
             diff = a - b;
-            if (__fabsf((f32)diff) > float_180_80420a70) {
+            absDiff = (f64)diff;
+            if (absDiff < float_0_80420a60) {
+                absDiff = -absDiff;
+            }
+            if (absDiff > float_180_80420a70) {
                 a += diff > 0 ? 0x168 : -0x168;
                 diff = a - b;
             }
@@ -708,20 +744,20 @@ s32 chkRevolveDir(int* param_1, int* param_2) {
         }
     }
     if (left == 0 && right >= 4) {
-        int32_t_803dc248 = 0;
+        *(s32*)(work + 0x20) = 0;
         *param_1 = 0;
         *param_2 = right;
         return 0;
     }
     if (right == 0 && left >= 4) {
-        int32_t_803dc248 = 1;
+        *(s32*)(work + 0x20) = 1;
         *param_1 = left;
         *param_2 = 0;
         return 1;
     }
     *param_1 = left;
     *param_2 = right;
-    int32_t_803dc248 = -1;
+    *(s32*)(work + 0x20) = -1;
     return -1;
 }
 

@@ -96,7 +96,9 @@ extern void* pouchGetPtr(void);
 extern s32 pouchGetPartyAttackLv(s32 partyId);
 void winMsgEntry(void* pWin, s32 param_2, char* msg, s32 param_4);
 
+#pragma opt_common_subs off
 void winPartyInit(void* pWin) {
+    extern char str_name_party0_802f4dd8[];
     extern s32 pouchGetPartyColor(s32 id);
     extern s32 animPoseEntry(char* name, s32 arg);
     extern void animPoseSetAnim(s32 poseId, char* anim, s32 loop);
@@ -127,6 +129,11 @@ void winPartyInit(void* pWin) {
     s32 groups;
     s32 currentParty;
     f32 angle;
+    char* roBase = str_name_party0_802f4dd8;
+    char** effectPtr;
+    char** animationPtr;
+    char** swapEffectPtr;
+    u16 flags;
 
     pouch = pouchGetPtr();
     dt = winPartyDt;
@@ -134,13 +141,15 @@ void winPartyInit(void* pWin) {
     i = 0;
     dtScan = dt;
     do {
-        partyId = *(s32*)dtScan;
+        effectPtr = (char**)((s32)dtScan + 0x10);
+        animationPtr = (char**)((s32)dtScan + 0x14);
+        swapEffectPtr = (char**)((s32)dtScan + 0x18);
         scan = pouch;
         j = 0;
         do {
-            if (j == partyId && (*(u16*)scan & 1) != 0 && (*(u16*)scan & 2) == 0) {
+            if (j == *(s32*)dtScan && ((flags = *(u16*)scan) & 1) != 0 && (flags & 2) == 0) {
                 if ((*(u16*)pWin & 0x2000) != 0) {
-                    eff = *(char**)((s32)dtScan + 0x18);
+                    eff = *swapEffectPtr;
                     color = pouchGetPartyColor(4);
                     switch (color) {
                         case 0: anim = (char*)str_R_5_804234c8; break;
@@ -155,19 +164,19 @@ void winPartyInit(void* pWin) {
                 } else if (j == 4) {
                     color = pouchGetPartyColor(4);
                     switch (color) {
-                        case 0: eff = str_EFF_m_yoshi_802f4e90; break;
-                        case 1: eff = str_EFF_m_yoshi2_802f51f0; break;
-                        case 2: eff = str_EFF_m_yoshi3_802f5200; break;
-                        case 3: eff = str_EFF_m_yoshi4_802f5210; break;
-                        case 4: eff = str_EFF_m_yoshi5_802f5220; break;
-                        case 5: eff = str_EFF_m_yoshi6_802f5230; break;
+                        case 0: eff = roBase + 0xB8; break;
+                        case 1: eff = roBase + 0x418; break;
+                        case 2: eff = roBase + 0x428; break;
+                        case 3: eff = roBase + 0x438; break;
+                        case 4: eff = roBase + 0x448; break;
+                        case 5: eff = roBase + 0x458; break;
                         case 6:
-                        default: eff = str_EFF_m_yoshi7_802f5240; break;
+                        default: eff = roBase + 0x468; break;
                     }
                     anim = (char*)str_W_1_804234b8;
                 } else {
-                    eff = *(char**)((s32)dtScan + 0x10);
-                    anim = *(char**)((s32)dtScan + 0x14);
+                    eff = *effectPtr;
+                    anim = *animationPtr;
                 }
                 poseId = animPoseEntry(eff, 0);
                 *(s32*)((s32)pWin + 0x1A0 + *(s32*)((s32)pWin + 0x1E0) * 4) = poseId;
@@ -245,6 +254,7 @@ void winPartyInit(void* pWin) {
     }
 }
 
+#pragma opt_common_subs reset
 void winPartyInit2(void* pWin) {
     f32 angle;
     f32 scale;
@@ -264,6 +274,8 @@ void winPartyInit2(void* pWin) {
 }
 
 
+#pragma use_lmw_stmw off
+#pragma opt_common_subs off
 u8 winPartyExit(void* pWin) {
     extern void animPoseRelease(s32 poseId);
     s32 i;
@@ -281,6 +293,9 @@ u8 winPartyExit(void* pWin) {
     }
 }
 
+#pragma use_lmw_stmw reset
+#pragma opt_common_subs reset
+#pragma opt_common_subs off
 s32 winPartyMain(void* pWin) {
     extern void psndSFXOn(s32 soundId);
     extern void winMsgEntry(void* pWin, s32 arg1, char* msg, s32 arg3);
@@ -449,6 +464,7 @@ s32 winPartyMain(void* pWin) {
     return 0;
 }
 
+#pragma opt_common_subs reset
 void winPartyMain2(void* work) {
     f32 target = *(f32*)((s32)work + 0x1E8);
     f32 current = *(f32*)((s32)work + 0x1E4);
@@ -456,6 +472,7 @@ void winPartyMain2(void* work) {
 
     *(f32*)((s32)work + 0x1E4) = (target - current) * rate + current;
 }
+#pragma optimize_for_size off
 void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
     typedef struct Vec3 { f32 x, y, z; } Vec3;
     typedef f32 Mtx[3][4];
@@ -562,43 +579,49 @@ void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
             (x - float_10_804234f8[0]) + float_45_8042350c[0];
         panelBaseY = y + float_110_80423514[0];
 
-        texColors[0] = *(u32*)(roBase + 0x150);
-        texColors[1] = *(u32*)(roBase + 0x154);
-        rowColors[0] = dat_804234ec[0];
-        rowColors[1] = gray;
-        primaryKeys[0] = *(char**)(roBase + 0x180);
-        primaryKeys[1] = *(char**)(roBase + 0x184);
-        secondaryKeys[0] = *(char**)(roBase + 0x1A0);
-        secondaryKeys[1] = *(char**)(roBase + 0x1A4);
-
         texColorPtr = texColors;
         rowColorPtr = rowColors;
         primaryKeyPtr = primaryKeys;
         secondaryKeyPtr = secondaryKeys;
 
         for (row = 0; row < 2; row++) {
-            f32 rowScale =
+            f32 rowScale;
+            u32 primaryWidth;
+            u32 secondaryWidth;
+            f32 primaryWidthF;
+            f32 secondaryWidthF;
+            f64 primaryWidthRaw;
+            f64 secondaryWidthRaw;
+            f32 secondaryHalf;
+            f32 rowY;
+            texColors[0] = *(u32*)(roBase + 0x150);
+            texColors[1] = *(u32*)(roBase + 0x154);
+            rowColors[0] = dat_804234ec[0];
+            rowColors[1] = gray;
+            primaryKeys[0] = *(char**)(roBase + 0x180);
+            primaryKeys[1] = *(char**)(roBase + 0x184);
+            secondaryKeys[0] = *(char**)(roBase + 0x1A0);
+            secondaryKeys[1] = *(char**)(roBase + 0x1A4);
+            rowScale =
                 (row == 0)
                     ? float_1_80423518[0]
                     : float_0p9_8042351c[0];
-            u32 primaryWidth =
+            primaryWidth =
                 FontGetMessageWidth(msgSearch(*primaryKeyPtr)) & 0xFFFF;
-            u32 secondaryWidth =
-                FontGetMessageWidth(msgSearch(*secondaryKeyPtr)) & 0xFFFF;
-            f32 primaryWidthF;
-            f32 secondaryWidthF;
-            f32 secondaryHalf;
-            f32 rowY = panelBaseY - (f32)rowOffset;
-
             widthBits.words.hi = 0x43300000;
             widthBits.words.lo = primaryWidth;
-            primaryWidthF =
-                (f32)(widthBits.value - *(const f64*)(roBase + 0x408));
+            primaryWidthRaw = widthBits.value;
+            secondaryWidth =
+                FontGetMessageWidth(msgSearch(*secondaryKeyPtr)) & 0xFFFF;
+            rowY = panelBaseY - (f32)rowOffset;
 
             widthBits.words.hi = 0x43300000;
             widthBits.words.lo = secondaryWidth;
+            secondaryWidthRaw = widthBits.value;
+            primaryWidthF =
+                (f32)(primaryWidthRaw - *(const f64*)(roBase + 0x408));
             secondaryWidthF =
-                (f32)(widthBits.value - *(const f64*)(roBase + 0x408));
+                (f32)(secondaryWidthRaw - *(const f64*)(roBase + 0x408));
             secondaryHalf =
                 float_0p5_80423520[0] * secondaryWidthF;
 
@@ -625,7 +648,7 @@ void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
             primaryScaleTmp.z = rowScale;
             primaryPosTmp.x =
                 panelBaseX -
-                primaryWidthF * rowScale *
+                rowScale * primaryWidthF *
                     float_0p5_80423520[0];
             primaryPosTmp.y =
                 rowY + float_12_80423528[0];
@@ -1388,4 +1411,4 @@ void winPartyDisp(s32 cameraId, void* pWin, s32 index) {
 
     (void)cameraId;
 }
-
+#pragma optimize_for_size reset

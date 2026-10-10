@@ -1,14 +1,14 @@
 #include "action/star/sac_muki.h"
 #include "event/evt_cmd.h"
 
-void* get_ptr(void);
-void main_base(void);
+static void* get_ptr(void);
+static void main_base(void);
 void main_cursor(void);
 void main_point(s32 index);
 void main_icon(s32 index);
-void main_star(void);
-void disp_2D(void);
-void disp_3D(void);
+static void main_star(void);
+static void disp_2D(void);
+static void disp_3D(void);
 static void disp_3D_alpha(void);
 
 extern void* _battleWorkPointer;
@@ -19,6 +19,9 @@ s32 irand(s32 max);
 void* memcpy(void* dest, const void* src, u32 size);
 
 extern f32 float_0_8042854c;
+
+/* Data-pass A1 forward declaration for the target-local BattleWeapon. */
+static u32 weapon[48];
 
 USER_FUNC(main_muki) {
     extern void dispEntry(s32 cameraId, s32 order, void* callback, f32 priority, void* param);
@@ -60,7 +63,7 @@ USER_FUNC(main_muki) {
 }
 
 /* stub-fill: main_base | prototype_only | source_prototype */
-void main_base(void) {
+static void main_base(void) {
     extern s32 BtlUnit_GetBodyPartsId(void* unit);
     extern void* BtlUnit_GetPartsPtr(void* unit, s32 partId);
     extern void BtlUnit_SetAnim(void* part, const char* name);
@@ -68,7 +71,7 @@ void main_base(void) {
     extern void* evtEntry(const void* code, s32 priority, u32 flags);
     extern const char str_M_X_1_804285d0[];
     extern const char str_M_S_1_804285d8[];
-    extern const s32 nice_event_pow[];
+    extern u32 nice_event_pow[];
 
     u8* work = get_ptr();
     void* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -577,7 +580,7 @@ void main_icon(s32 index) {
 }
 
 /* stub-fill: main_star | prototype_only | source_prototype */
-void main_star(void) {
+static void main_star(void) {
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern f64 intplGetValue(f64 start, f64 end, s32 type, s32 current, s32 max);
     extern u32 vec3_803010fc[];
@@ -697,9 +700,8 @@ USER_FUNC(end_muki) {
 }
 
 /* stub-fill: disp_2D | prototype_only | source_prototype */
-void disp_2D(void) {
+static void disp_2D(void) {
     typedef f32 Mtx[3][4];
-    extern void* get_ptr(void);
     extern void* camGetPtr(s32 camera);
     extern void btlGetScreenPoint(f32* in, f32* out);
     extern void PSMTXTrans(Mtx m, f32 x, f32 y, f32 z);
@@ -811,7 +813,7 @@ void disp_2D(void) {
 }
 
 /* stub-fill: disp_3D | prototype_only | source_prototype */
-void disp_3D(void) {
+static void disp_3D(void) {
     typedef f32 Mtx[3][4];
 
     extern void PSMTXScale(Mtx mtx, f32 x, f32 y, f32 z);
@@ -1053,13 +1055,11 @@ static void disp_3D_alpha(void) {
     } while (i < 9);
 }
 
-void* get_ptr(void) {
+static void* get_ptr(void) {
     return (void*)((s32)_battleWorkPointer + 0x1F4C);
 }
 
-USER_FUNC(set_weapon) {
-    extern u8 weapon[];
-
+static s32 set_weapon(EventEntry* event, BOOL isFirstCall) {
     void* work;
     s32* args;
     s32 type;
@@ -1086,7 +1086,7 @@ USER_FUNC(set_weapon) {
     return 2;
 }
 
-USER_FUNC(start_game) {
+static s32 start_game(EventEntry* event, BOOL isFirstCall) {
     void* wp;
 
     wp = get_ptr();
@@ -1095,7 +1095,7 @@ USER_FUNC(start_game) {
     return 2;
 }
 
-USER_FUNC(wait_game_end) {
+static s32 wait_game_end(EventEntry* event, BOOL isFirstCall) {
     void* work;
     s32* args;
 
@@ -1109,10 +1109,158 @@ USER_FUNC(wait_game_end) {
     return 0;
 }
 
-USER_FUNC(star_stone_appear) {
+static s32 star_stone_appear(EventEntry* event, BOOL isFirstCall) {
     void* wp;
 
     wp = get_ptr();
     *(s32*)((s32)wp + 0x3B4) = 1;
     return 2;
 }
+
+
+/* Data-pass A1: exact documented BattleWeapon + Event foundation. */
+extern u32 marioAttackEvent_Muki[254];
+extern u32 sac_mario_back_home[];
+extern u32 sac_mario_item_on_end_evt[];
+extern u32 sac_mario_item_on_evt[];
+extern u32 sac_start_camera_evt[];
+extern u32 sac_start_stardust[];
+extern char str_M_I_Y_80428530[];
+extern char str_SFX_BTL_SAC_START1_8030118c[];
+extern char str_SFX_BTL_SAC_START2_803011a0[];
+extern char str_SFX_BTL_SAC_START3_803011b4[];
+extern char str_btl_wn_sac_mukimuki__80301078[];
+extern char str_msg_mukimuki_body_80301094[];
+extern char str_msg_sac_4_803010a8[];
+extern s32 btlevtcmd_ACSuccessEffect(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_AnimeChangePose(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_AttackDeclare(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CheckDamage(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CheckStatus(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CommandGetWeaponAddress(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CommandPayWeaponCost(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_GetBodyId(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_GetSelectEnemy(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_GetUnitId(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_StartWaitEvent(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_WaitGuardMove(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_WeaponAftereffect(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_reset_move_color_lv_all(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_snd_se(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_set_homing_unit(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_set_mode(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_set_moveSpeedLv(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_set_zoom(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_set_zoomSpeedLv(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_snd_sfxoff(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_ac_help_off(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_ac_help_on(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_enemy_slide_go(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_enemy_slide_return(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_handbeat(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_handbeat_end(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_wao(EventEntry* event, BOOL isFirstCall);
+
+static u32 weapon[48] = {
+    (u32)(char*)str_btl_wn_sac_mukimuki__80301078, 0x01A20000, 0x00000000, (u32)(char*)str_msg_mukimuki_body_80301094,
+    0x64000300, 0x3F800000, 0x01056432, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x02100070, 0x10000000, 0x00000302,
+    (u32)(char*)str_msg_sac_4_803010a8, 0x00020008, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    (u32)marioAttackEvent_Muki, 0x00000064, 0x00000000, 0x00000000,
+};
+
+u32 marioAttackEvent_Muki[254] = {
+    0x0003005B, (u32)btlevtcmd_GetUnitId, 0xFFFFFFFC, 0xFE363C8E,
+    0x0003005B, (u32)btlevtcmd_GetBodyId, 0xFE363C8E, 0xFE363C8F,
+    0x0004005B, (u32)btlevtcmd_CheckStatus, 0xFE363C8E, 0x0000001B,
+    0xFE363C80, 0x00020019, 0xFE363C80, 0x00000000,
+    0x00020032, 0xFE363C8E, 0xFFFFFFFF, 0x00000021,
+    0x0003005B, (u32)btlevtcmd_GetSelectEnemy, 0xFE363C83, 0xFE363C84,
+    0x00020018, 0xFE363C83, 0xFFFFFFFF, 0x00010004,
+    0x00000063, 0x00000021, 0x0004005B, (u32)btlevtcmd_AttackDeclare,
+    0xFFFFFFFE, 0xFE363C83, 0xFE363C84, 0x0001005B,
+    (u32)btlevtcmd_WaitGuardMove, 0x0002005B, (u32)btlevtcmd_CommandPayWeaponCost, 0xFFFFFFFE,
+    0x0003005B, (u32)btlevtcmd_CommandGetWeaponAddress, 0xFFFFFFFE, 0xFE363C80,
+    0x0002005B, (u32)btlevtcmd_WeaponAftereffect, 0xFE363C80, 0x0001005B,
+    (u32)btlevtcmd_reset_move_color_lv_all, 0x0000006E, 0x0002005B, (u32)main_muki,
+    0xFE363C8E, 0x00000070, 0x0001005E, (u32)sac_start_camera_evt,
+    0x0001000A, 0x000001F4, 0x0001005B, (u32)sac_enemy_slide_go,
+    0x0006005B, (u32)btlevtcmd_snd_se, 0xFFFFFFFE, (u32)(char*)str_SFX_BTL_SAC_START1_8030118c,
+    0xF1194D80, 0x00000000, 0xF1194D80, 0x0001005E,
+    (u32)sac_mario_item_on_evt, 0x0001000A, 0x000001F4, 0x0006005B,
+    (u32)btlevtcmd_snd_se, 0xFFFFFFFE, (u32)(char*)str_SFX_BTL_SAC_START2_803011a0, 0xF1194D80,
+    0x00000000, 0xFE363C8B, 0x0001005B, (u32)star_stone_appear,
+    0x0000006E, 0x0001005E, (u32)sac_start_stardust, 0x00000070,
+    0x00010009, 0x00000064, 0x0006005B, (u32)btlevtcmd_snd_se,
+    0xFFFFFFFE, (u32)(char*)str_SFX_BTL_SAC_START3_803011b4, 0xF1194D80, 0x00000000,
+    0xF1194D80, 0x0002005B, (u32)evt_snd_sfxoff, 0xFE363C8B,
+    0x0003005B, (u32)evt_btl_camera_set_mode, 0x00000000, 0x00000000,
+    0x00010009, 0x00000028, 0x0001005E, (u32)sac_mario_item_on_end_evt,
+    0x0001005E, (u32)sac_mario_back_home, 0x0004005B, (u32)btlevtcmd_AnimeChangePose,
+    0xFFFFFFFE, 0x00000001, (u32)(char*)str_M_I_Y_80428530, 0x0001000A,
+    0x000003E8, 0x0000006E, 0x0001005B, (u32)sac_handbeat,
+    0x00000070, 0x0001005B, (u32)sac_ac_help_on, 0x0001005B,
+    (u32)start_game, 0x0003005B, (u32)wait_game_end, 0xFE363C80,
+    0xFE363C81, 0x0001005B, (u32)sac_ac_help_off, 0x0001005B,
+    (u32)sac_handbeat_end, 0x0001000A, 0x000001F4, 0x00020032,
+    0xFE363C82, 0xFE363C80, 0x00020035, 0xFE363C82,
+    0xFE363C81, 0x00020019, 0xFE363C82, 0x00000000,
+    0x0003005B, (u32)evt_btl_camera_set_mode, 0x00000000, 0x00000007,
+    0x0004005B, (u32)evt_btl_camera_set_homing_unit, 0x00000000, 0xFFFFFFFE,
+    0xFFFFFFFF, 0x0003005B, (u32)evt_btl_camera_set_zoom, 0x00000000,
+    0x000000C8, 0x0003005B, (u32)evt_btl_camera_set_moveSpeedLv, 0x00000000,
+    0x00000002, 0x0003005B, (u32)evt_btl_camera_set_zoomSpeedLv, 0x00000000,
+    0x00000002, 0x0001000A, 0x000003E8, 0x0001005B,
+    (u32)sac_wao, 0x0000006B, 0x0001000A, 0x000003E8,
+    0x0003005B, (u32)evt_btl_camera_set_mode, 0x00000000, 0x00000000,
+    0x0001005B, (u32)sac_enemy_slide_return, 0x0001005B, (u32)end_muki,
+    0x0000006D, 0x0000006B, 0x0001000A, 0x00000190,
+    0x00020019, 0xFE363C81, 0x00000000, 0x0004005B,
+    (u32)set_weapon, 0x00000001, 0xFE363C81, 0xFE363C89,
+    0x00020019, 0xFE363C8E, 0xFFFFFFFF, 0x0007005B,
+    (u32)btlevtcmd_CheckDamage, 0xFFFFFFFE, 0xFE363C8E, 0xFE363C8F,
+    0xFE363C89, 0x00000100, 0xFE363C85, 0x00000021,
+    0x0007005B, (u32)btlevtcmd_CheckDamage, 0xFFFFFFFE, 0xFFFFFFFE,
+    0x00000001, 0xFE363C89, 0x00000100, 0xFE363C85,
+    0x00000021, 0x0000006D, 0x00020019, 0xFE363C80,
+    0x00000000, 0x0004005B, (u32)set_weapon, 0x00000000,
+    0xFE363C80, 0xFE363C89, 0x00020019, 0xFE363C8E,
+    0xFFFFFFFF, 0x0007005B, (u32)btlevtcmd_CheckDamage, 0xFFFFFFFE,
+    0xFE363C8E, 0xFE363C8F, 0xFE363C89, 0x00000100,
+    0xFE363C85, 0x00000021, 0x0007005B, (u32)btlevtcmd_CheckDamage,
+    0xFFFFFFFE, 0xFFFFFFFE, 0x00000001, 0xFE363C89,
+    0x00000100, 0xFE363C85, 0x00000002, 0x00000021,
+    0x00000021, 0x0001005B, (u32)sac_enemy_slide_return, 0x0001000A,
+    0x000003E8, 0x0001005B, (u32)end_muki, 0x0001000A,
+    0x000003E8, 0x0002005B, (u32)btlevtcmd_StartWaitEvent, 0xFFFFFFFE,
+    0x00000002, 0x00000001,
+};
+
+u32 nice_event_pow[8] = {
+    0x0005005B, (u32)btlevtcmd_ACSuccessEffect, 0xFE363C80, 0xFFFFFF9C,
+    0x000000AF, 0x00000000, 0x00000002, 0x00000001,
+};
+
+
+/* Data-pass A5: safe target-backed .sdata2 prefix before the non-C-safe identity / scalar-pool boundary. */
+const u32 dat_804284e8 = 0xFFFFFFFF;
+const u32 dat_804284ec = 0xFFFFFFFF;
+const u32 dat_804284f0 = 0x0000FFFF;
+const u32 dat_804284f4 = 0xFF0000FF;
+const u32 dat_804284f8 = 0xFFFFFFFF;
+const u32 dat_804284fc = 0xE94A3FFF;
+const u32 dat_80428500 = 0xFEE63EFF;
+const u32 dat_80428504 = 0xFFFFFFFF;
+const u32 dat_80428508 = 0xFFFFFFFF;
+const u32 float_0p74966_8042850c = 0x3F3FE9FF;
+const u32 dat_80428510 = 0x74C9FFFF;
+const u32 dat_80428514 = 0xFFFFFFFF;
+const u32 dat_80428518 = 0xDEDEDEFF;
+

@@ -175,14 +175,14 @@ void winMain(void) {
     extern char str_PCTs_w_PCTs_win_tpl_802f7398[];
     extern char str_PCTs_w_PCTs_mail_tpl_802f73a8[];
     extern char str_PCTs_w_PCTs_PCTs_802f73bc[];
-    extern char str_jp_80423f5c[];
-    extern char str_us_80423f60[];
+    extern char str_jp_80423f5c[3];
+    extern char str_us_80423f60[3];
     extern char str_ge_80423f64[];
     extern char str_fr_80423f68[];
     extern char str_sp_80423f6c[];
     extern char str_it_80423f70[];
-    extern char str_yuu_80424028[];
-    extern char str_yuu_8042402c[];
+    extern char str_yuu_80424028[4];
+    extern char str_yuu_8042402c[4];
     extern f32 float_250_80424034;
     extern f32 float_500_80424038;
 #define win wp
@@ -206,50 +206,40 @@ void winMain(void) {
     state = *(s32*)((s32)win + 0x20);
     switch (state) {
     case 0: {
-        s32 openMenu = 0;
-        u32 buttons = *(u32*)((s32)win + 4);
-
         if ((*(u16*)win & 0x1000) != 0) {
             *(s32*)((u8*)win + 0x1C) = 0;
-            openMenu = 1;
-        } else if (*(u8*)((s32)player + 0x3C) == 2) {
-            if ((buttons & 0x1000) != 0) {
+        } else {
+            if (marioStGetSystemLevel() != 0 || marioCheckMenuDisable() != 0 ||
+                mobjCheckExec() != 0 || fadeIsFinish() == 0) goto win_main_done;
+            if (*(s8*)((s32)player + 0x3C) == 2) {
+                if ((*(u32*)((s32)win + 4) & 0x1000) == 0) goto win_main_done;
                 *(s32*)((s32)win + 0x1C) = 0;
-                openMenu = 1;
-            }
-        } else if ((buttons & 0x1000) != 0) {
+            } else if ((*(u32*)((s32)win + 4) & 0x1000) != 0) {
             *(s32*)((s32)win + 0x1C) = 0;
-            openMenu = 1;
-        } else if ((keyGetButton(0) & 0x10) == 0 &&
-                   strcmp((char*)gp + 0x13C, "yuu") != 0) {
-            if ((buttons & 1) != 0) {
-                if (swByteGet(0) >= 7 || partyChkJoin(1) == 0) {
+            } else {
+                if ((keyGetButton(0) & 0x10) != 0 ||
+                    strcmp((char*)gp + 0x13C, str_yuu_80424028) == 0) goto win_main_done;
+                if ((*(u32*)((s32)win + 4) & 1) != 0 &&
+                    (swByteGet(0) >= 7 || partyChkJoin(1) != 0)) {
                     *(s32*)((s32)win + 0x1C) = 1;
-                    openMenu = 1;
-                }
-            } else if ((buttons & 8) != 0) {
+                } else if ((*(u32*)((s32)win + 4) & 8) != 0) {
                 *(s32*)((s32)win + 0x1C) = 2;
-                openMenu = 1;
-            } else if ((buttons & 2) != 0 &&
+                } else if ((*(u32*)((s32)win + 4) & 2) != 0 &&
                        (swByteGet(0) >= 0x14 || pouchGetHaveBadgeCnt() != 0)) {
                 *(s32*)((s32)win + 0x1C) = 3;
-                openMenu = 1;
-            } else if ((buttons & 4) != 0) {
+                } else if ((*(u32*)((s32)win + 4) & 4) != 0) {
                 *(s32*)((s32)win + 0x1C) = 4;
-                openMenu = 1;
+                } else goto win_main_done;
             }
-        }
-        if (marioStGetSystemLevel() == 0 &&
-            marioCheckMenuDisable() == 0 &&
-            mobjCheckExec() == 0 && fadeIsFinish() != 0 &&
-            openMenu != 0) {
-            char* lang;
-            void* camera;
             if ((keyGetButton(0) & 0x40) != 0 ||
-                ((*(u32*)gp & 0x1000) != 0 && evtGetValue(0, -170000000) < 7)) {
-                goto win_main_done;
-            }
-            camera = camGetPtr(1);
+                ((*(u32*)gp & 0x1000) != 0 && evtGetValue(0, -170000000) < 7)) goto win_main_done;
+        }
+        {
+            char* lang;
+            char* mapName;
+            void* camera;
+            s32 i;
+            camera = camGetPtr(8);
             *(u16*)camera |= 0x200;
             if ((*(u32*)gp & 0x1000) != 0) {
                 *(s32*)((s32)win + 0x1C) = 1;
@@ -257,27 +247,28 @@ void winMain(void) {
             if ((*(u16*)win & 0x1000) == 0) marioStSystemLevel(4);
             else npcStopForEvent();
             fbatChangeMode(7);
-            if (*(u8*)((u8*)player + 0x3C) == 2 && kpaGetStageViewType() == 0) marioCtrlOff();
-            else marioCtrlOff2();
+            if (*(s8*)((u8*)player + 0x3C) == 2) {
+                if (kpaGetStageViewType() == 0) marioCtrlOff();
+                else marioCtrlOff2();
+            } else marioCtrlOff2();
             partyCtrlOff();
             psndSetFlag(0x80);
             if (*(u8*)((u8*)player + 0x3C) == 2) kpaPauseSE2();
-            if ((*(u32*)player & 0x8000000) == 0) *(u16*)win &= ~0x2000;
-            else *(u16*)win |= 0x2000;
-            padRumbleHardOff(0);
-            padRumbleHardOff(1);
-            padRumbleHardOff(2);
-            padRumbleHardOff(3);
+            if ((*(u32*)player & 0x80000000) != 0) *(u16*)win |= 0x2000;
+            else *(u16*)win &= ~0x2000;
+            for (i = 0; i < 4; i++) padRumbleHardOff(i);
             lang = (*(s32*)((u8*)gp + 0x16C) == 0) ? str_jp_80423f5c : str_us_80423f60;
             fileAsyncf(4, 0, str_PCTs_w_PCTs_mail_tpl_802f73a8,
                        getMarioStDvdRoot(), lang);
+            lang = (*(s32*)((u8*)gp + 0x16C) == 0) ? str_jp_80423f5c : str_us_80423f60;
+            mapName = winGetMapTplName();
             fileAsyncf(4, 0, str_PCTs_w_PCTs_PCTs_802f73bc,
-                       getMarioStDvdRoot(), lang, winGetMapTplName());
+                       getMarioStDvdRoot(), lang, mapName);
             *(s32*)((u8*)win + 0x24) = 0;
             if (strncmp((char*)gp + 0x12C, str_yuu_8042402c, 4) == 0) {
                 *(s32*)((u8*)win + 0x20) = 400;
             } else {
-                *(s32*)((u8*)win + 0x20) = 1;
+                (*(s32*)((u8*)win + 0x20))++;
             }
         }
         break;
@@ -300,15 +291,19 @@ void winMain(void) {
         break;
     }
     case 2: {
-        if (*(u8*)((u8*)player + 0x3C) == 0) {
+        if (*(s8*)((u8*)marioGetPtr() + 0x3C) == 0) {
             s32 result = winRootMain(win);
-            if (result == -2) {
+            switch (result) {
+            case -2:
                 *(s32*)((s32)win + 0x20) = 100;
-            } else if (result == -3) {
+                break;
+            case -3:
                 if (*(s32*)((u8*)win + 0x2D4) == 0x4E) *(s32*)((u8*)win + 0x20) = 300;
                 else *(s32*)((u8*)win + 0x20) = 200;
-            } else if (result < 0) {
+                break;
+            case -1:
                 (*(s32*)((s32)win + 0x20))++;
+                break;
             }
         } else if ((*(u32*)((u8*)win + 4) & 0x1000) != 0) {
             kpaPauseSE2();
@@ -317,10 +312,12 @@ void winMain(void) {
         break;
     }
     case 3: {
-        void* camera = camGetPtr(1);
+        void* camera = camGetPtr(8);
         *(u16*)camera &= ~0x200;
-        if (*(u8*)((u8*)player + 0x3C) == 2 && kpaGetStageViewType() == 0) marioCtrlOn();
-        else marioCtrlOn2();
+        if (*(s8*)((u8*)player + 0x3C) == 2) {
+            if (kpaGetStageViewType() == 0) marioCtrlOn();
+            else marioCtrlOn2();
+        } else marioCtrlOn2();
         partyCtrlOn();
         fbatChangeMode(1);
         psndClearFlag(0x80);
@@ -336,15 +333,13 @@ void winMain(void) {
         break;
     }
     case 100: {
-        s32 partyId = *(s32*)((s32)win + 0x1BC +
-                             *(s32*)((s32)win + 0x1DC) * 4);
         if (marioBgmodeChk() == 0) {
-            if (animGroupBaseAsync(*(char**)(partyDataTbl + partyId * 0x28),
+            if (animGroupBaseAsync(*(char**)(partyDataTbl + *(s32*)((s32)win + 0x1BC + *(s32*)((s32)win + 0x1DC) * 4) * 0x28),
                                    2, 0) != 0) {
                 (*(s32*)((s32)win + 0x20))++;
             }
         } else {
-            *(s8*)((u8*)player + 0x247) = (s8)partyId;
+            *(s8*)((u8*)marioGetPtr() + 0x247) = (s8)*(s32*)((s32)win + 0x1BC + *(s32*)((s32)win + 0x1DC) * 4);
             *(s32*)((s32)win + 0x20) = 3;
         }
         break;
@@ -363,7 +358,7 @@ void winMain(void) {
         break;
     }
     case 200: {
-        void* partyOrder[8];
+        void* partyOrder[7];
         void* evt;
         s32 currentParty;
         s32 partyCount = 0;
@@ -372,7 +367,7 @@ void winMain(void) {
         if (marioBgmodeChk() == 0) {
             currentParty = marioGetParty();
         } else {
-            currentParty = *(s8*)((u8*)player + 0x247);
+            currentParty = *(s8*)((u8*)marioGetPtr() + 0x247);
         }
         for (i = 0; i < 7; i++) {
             if (*(s32*)(winPartyDt + i * 0x24) == currentParty) {
@@ -394,7 +389,7 @@ void winMain(void) {
                 *(s32*)partyOrder[*(s32*)((u8*)win + 0x2DC) - 1];
         }
         psndClearFlag(0x80);
-        *(s32*)((u8*)win + 0x20) = 201;
+        (*(s32*)((u8*)win + 0x20))++;
         pouchRemoveItemIndex(*(s32*)((u8*)win + 0x2D4),
                              *(s32*)((u8*)win + 0x2D8));
         break;
@@ -408,7 +403,7 @@ void winMain(void) {
     }
     case 300: {
         *(void**)((u8*)win + 0x3C) = evtEntryType(evt_diary_read, 0, 0, 0);
-        *(s32*)((u8*)win + 0x20) = 301;
+        (*(s32*)((u8*)win + 0x20))++;
         break;
     }
     case 301: {
@@ -433,14 +428,17 @@ void winMain(void) {
 
 win_main_done:
     if (*(s32*)((u8*)win + 0x20) == 2) {
-        if (*(s8*)((u8*)player + 0x3C) == 0) {
+        switch (*(s8*)((u8*)marioGetPtr() + 0x3C)) {
+        case 0:
             if ((*(u16*)win & 0x1000) == 0) {
-                dispEntry(1, 0, winDisp, 0, float_250_80424034);
+                dispEntry(8, 0, winDisp, 0, float_250_80424034);
             } else {
-                dispEntry(1, 0, winDisp, 0, float_500_80424038);
+                dispEntry(8, 0, winDisp, 0, float_500_80424038);
             }
-        } else if (*(s8*)((u8*)player + 0x3C) == 2) {
-            dispEntry(1, 0, winDispKoopa, 0, float_250_80424034);
+            break;
+        case 2:
+            dispEntry(8, 0, winDispKoopa, 0, float_250_80424034);
+            break;
         }
     }
 #undef win
@@ -451,11 +449,12 @@ void winDisp(s32 cameraId) {
 }
 u8 winDispKoopa(void) {
     extern s32 dat_80423f58;
-    extern f32 vec3_802f7150[3];
-    extern f32 vec3_802f715c[3];
-    s32 color;
-    f32 size[3];
+    extern f32 vec3_802f7150[];
+    extern f32 vec3_802f715c[];
     f32 pos[3];
+    f32 size[3];
+    s32 color;
+    u32 sx, sy, sz, px, py, pz;
 
     winTexTpl = *(s32*)(*(s32*)(*(s32*)((s32)wp + 0x28) + 0xA0));
     GXSetCullMode(0);
@@ -479,12 +478,18 @@ u8 winDispKoopa(void) {
     GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
 
     color = dat_80423f58;
-    size[0] = vec3_802f715c[0];
-    size[1] = vec3_802f715c[1];
-    size[2] = vec3_802f715c[2];
-    pos[0] = vec3_802f7150[0];
-    pos[1] = vec3_802f7150[1];
-    pos[2] = vec3_802f7150[2];
+    sx = ((u32*)vec3_802f715c)[0];
+    sy = ((u32*)vec3_802f715c)[1];
+    sz = ((u32*)vec3_802f715c)[2];
+    px = ((u32*)vec3_802f7150)[0];
+    py = ((u32*)vec3_802f7150)[1];
+    pz = ((u32*)vec3_802f7150)[2];
+    ((u32*)size)[0] = sx;
+    ((u32*)size)[1] = sy;
+    ((u32*)size)[2] = sz;
+    ((u32*)pos)[0] = px;
+    ((u32*)pos)[1] = py;
+    ((u32*)pos)[2] = pz;
     winTexSet(0xB7, pos, size, &color);
 }
 
@@ -492,13 +497,13 @@ s32 itemUseFunc(void* pEvt, int param_2) {
     extern void* marioGetPtr(void);
     extern void* partyGetPtr(s32 slot);
     extern s32 pouchGetHP(void);
-    extern void pouchSetHP(s16 hp);
+    extern void pouchSetHP(s32 hp);
     extern s32 pouchGetFP(void);
-    extern void pouchSetFP(s16 fp);
+    extern void pouchSetFP(s32 fp);
     extern s32 pouchGetAP(void);
-    extern void pouchSetAP(s16 sp);
+    extern void pouchSetAP(s32 sp);
     extern s32 pouchGetPartyHP(s32 partyId);
-    extern void pouchSetPartyHP(s32 partyId, s16 hp);
+    extern void pouchSetPartyHP(s32 partyId, s32 hp);
     extern s32 effRecoveryEntry(f32 x, f32 y, f32 z, s32 type);
     extern u8 itemDataTable[];
     extern f32 float_0p5_80424000;
@@ -513,7 +518,6 @@ s32 itemUseFunc(void* pEvt, int param_2) {
     itemData = itemDataTable + itemId * 0x28;
     mario = marioGetPtr();
     party = partyGetPtr(0);
-    partyId = *(s32*)((s32)pEvt + 0xC8);
 
     if (param_2 != 0) {
         cnt = 0;
@@ -522,54 +526,54 @@ s32 itemUseFunc(void* pEvt, int param_2) {
     switch (cnt) {
     case 0:
         statusWinForceOpen();
-        if (partyId == 0) {
-            pouchSetHP((s16)(pouchGetHP() + *(u8*)((s32)itemData + 0x1D)));
-            pouchSetFP((s16)(pouchGetFP() + *(u8*)((s32)itemData + 0x1E)));
-            pouchSetAP((s16)(pouchGetAP() + *(u8*)((s32)itemData + 0x1F)));
+        if (*(s32*)((s32)pEvt + 0xC8) == 0) {
+            pouchSetHP(pouchGetHP() + *(u8*)((s32)itemData + 0x1D));
+            pouchSetFP(pouchGetFP() + *(u8*)((s32)itemData + 0x1E));
+            pouchSetAP(pouchGetAP() + *(u8*)((s32)itemData + 0x1F));
         } else {
-            pouchSetPartyHP(partyId, (s16)(pouchGetPartyHP(partyId) + *(u8*)((s32)itemData + 0x1D)));
-            pouchSetFP((s16)(pouchGetFP() + *(u8*)((s32)itemData + 0x1E)));
-            pouchSetAP((s16)(pouchGetAP() + *(u8*)((s32)itemData + 0x1F)));
+            pouchSetPartyHP(*(s32*)((s32)pEvt + 0xC8), pouchGetPartyHP(*(s32*)((s32)pEvt + 0xC8)) + *(u8*)((s32)itemData + 0x1D));
+            pouchSetFP(pouchGetFP() + *(u8*)((s32)itemData + 0x1E));
+            pouchSetAP(pouchGetAP() + *(u8*)((s32)itemData + 0x1F));
         }
         cnt++;
-        return 0;
+        break;
     case 1:
-        if (partyId != 0) {
+        if (*(s32*)((s32)pEvt + 0xC8) != 0) {
             cnt = 200;
-            return 0;
+            break;
         }
         if (*(u8*)((s32)itemData + 0x1D) == 0) {
             cnt = 100;
-            return 0;
+            break;
         }
         effRecoveryEntry(*(f32*)((s32)mario + 0x8C),
-                         *(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0xFC),
+                         *(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0x1BC),
                          *(f32*)((s32)mario + 0x94), 0);
         cnt++;
-        return 0;
+        break;
     case 0x1F:
-        cnt = 0x20;
-        return 0;
+        cnt++;
+        break;
     case 0x3C:
         cnt = 100;
-        return 0;
+        break;
     case 100:
         if (*(u8*)((s32)itemData + 0x1E) == 0) {
             cnt = 999;
-            return 0;
+            break;
         }
         effRecoveryEntry(*(f32*)((s32)mario + 0x8C),
-                         *(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0xFC),
+                         *(f32*)((s32)mario + 0x90) + *(f32*)((s32)mario + 0x1BC),
                          *(f32*)((s32)mario + 0x94), 1);
         cnt = 999;
-        return 0;
+        break;
     case 0x82:
         cnt = 999;
-        return 0;
+        break;
     case 200:
         if (*(u8*)((s32)itemData + 0x1D) == 0) {
             cnt = 300;
-            return 0;
+            break;
         }
         eff = effRecoveryEntry(*(f32*)((s32)party + 0x58),
                                *(f32*)((s32)party + 0x5C) + *(f32*)((s32)party + 0xF0),
@@ -577,34 +581,33 @@ s32 itemUseFunc(void* pEvt, int param_2) {
         *(f32*)(*(s32*)((s32)eff + 0xC) + 0x40) =
             -*(f32*)((s32)party + 0xF0) * float_0p5_80424000;
         cnt++;
-        return 0;
+        break;
     case 0xE6:
-        cnt = 0xE7;
-        return 0;
+        cnt++;
+        break;
     case 0x104:
         cnt = 300;
-        return 0;
+        break;
     case 300:
         if (*(u8*)((s32)itemData + 0x1E) == 0) {
             cnt = 999;
-            return 0;
+            break;
         }
         effRecoveryEntry(*(f32*)((s32)party + 0x58),
                          *(f32*)((s32)party + 0x5C) + *(f32*)((s32)party + 0xF0),
                          *(f32*)((s32)party + 0x60), 1);
         cnt++;
-        return 0;
+        break;
     case 0x14A:
         cnt = 999;
-        return 0;
+        break;
+    case 999:
+    case 1000:
+        return 2;
     default:
+        cnt++;
         break;
     }
-    if (cnt >= 999 && cnt < 0x3E9) {
-        return 2;
-    }
-
-    cnt++;
     return 0;
 }
 
@@ -668,6 +671,8 @@ void winFontInit(void) {
     FontDrawStart();
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void winFontSet(void* position, void* scale, void* color, char* format, ...) {
     typedef struct FontVaList {
         u32 regInfo;
@@ -681,10 +686,10 @@ void winFontSet(void* position, void* scale, void* color, char* format, ...) {
     f32 scaling[3][4];
     u32 drawColor;
 
-    args.regInfo = 0x04000000;
-    args.inputArgArea = (u8*)&args + 0x30;
-    args.regSaveArea = (u8*)&args - 0x60;
     if (strstr(format, &str_PCT_80424014) != 0) {
+        args.regInfo = 0x04000000;
+        args.inputArgArea = (u8*)&args + 0x108C;
+        args.regSaveArea = (u8*)&args - 0x64;
         vsprintf(text, format, &args);
         format = text;
     }
@@ -702,6 +707,8 @@ void winFontSet(void* position, void* scale, void* color, char* format, ...) {
     FontDrawColor(&drawColor);
     FontDrawMessageMtx(translation, format);
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -723,6 +730,7 @@ void winFontSetPitch(void* position, void* scale, void* color, f32 width, char* 
     LocalVec localScale;
     u32 localColor;
     f32 messageWidth;
+    u32 colorWord, sx, sy, sz, px, py, pz;
 
     if (strstr(format, &str_PCT_80424014) != 0) {
         args.regInfo = 0x04010000;
@@ -738,9 +746,20 @@ void winFontSetPitch(void* position, void* scale, void* color, f32 width, char* 
         *(f32*)((s32)scale + 0) *= width / messageWidth;
     }
 
-    localColor = *(u32*)color;
-    localScale = *(LocalVec*)scale;
-    localPosition = *(LocalVec*)position;
+    colorWord = *(u32*)color;
+    sx = ((u32*)scale)[0];
+    sy = ((u32*)scale)[1];
+    sz = ((u32*)scale)[2];
+    px = ((u32*)position)[0];
+    py = ((u32*)position)[1];
+    pz = ((u32*)position)[2];
+    localColor = colorWord;
+    ((u32*)&localScale)[0] = sx;
+    ((u32*)&localScale)[1] = sy;
+    ((u32*)&localScale)[2] = sz;
+    ((u32*)&localPosition)[0] = px;
+    ((u32*)&localPosition)[1] = py;
+    ((u32*)&localPosition)[2] = pz;
     winFontSet(&localPosition, &localScale, &localColor, format);
 }
 #pragma no_register_save_helpers off
@@ -756,7 +775,7 @@ void winFontSetR(void* position, void* scale, void* color, char* format, ...) {
         f64 value;
         u32 words[2];
     } WidthConversion;
-    extern char str_999_80424018[];
+    extern char str_999_80424018;
     extern f64 double_to_int_802f7380;
 
     FontVaList args;
@@ -769,23 +788,21 @@ void winFontSetR(void* position, void* scale, void* color, char* format, ...) {
     WidthConversion conversion;
     f32 offset;
 
-    args.regInfo = 0x04000000;
-    args.inputArgArea = (u8*)&args + 0x30;
-    args.regSaveArea = (u8*)&args - 0x60;
     if (strstr(format, &str_PCT_80424014) != 0) {
+        args.regInfo = 0x04000000;
+        args.inputArgArea = (u8*)&args + 0x109C;
+        args.regSaveArea = (u8*)&args - 0x64;
         vsprintf(text, format, &args);
         format = text;
     }
 
-    if (*(u32*)((s32)gp + 0x16C) == 0) {
-        fieldWidth = FontGetMessageWidth((char*)0x802F7390) & 0xFFFF;
+    if (*(u32*)((s32)gp + 0x16C) != 0) {
+        fieldWidth = FontGetMessageWidth(&str_999_80424018) & 0xFFFF;
     } else {
-        fieldWidth = FontGetMessageWidth(str_999_80424018) & 0xFFFF;
+        fieldWidth = FontGetMessageWidth((char*)0x802F7390) & 0xFFFF;
     }
     messageWidth = FontGetMessageWidth(format) & 0xFFFF;
-    conversion.words[0] = 0x43300000;
-    conversion.words[1] = (fieldWidth - messageWidth) ^ 0x80000000;
-    offset = (f32)(conversion.value - double_to_int_802f7380);
+    offset = (f32)(fieldWidth - messageWidth);
 
     PSMTXTrans(translation,
                *(f32*)((s32)position + 0) + *(f32*)((s32)scale + 0) * offset,
@@ -801,6 +818,8 @@ void winFontSetR(void* position, void* scale, void* color, char* format, ...) {
     FontDrawStringMtx(translation, format);
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void winFontSetEdge(void* position, void* scale, void* color, char* format, ...) {
     typedef struct FontVaList {
         u32 regInfo;
@@ -814,10 +833,10 @@ void winFontSetEdge(void* position, void* scale, void* color, char* format, ...)
     f32 scaling[3][4];
     u32 drawColor;
 
-    args.regInfo = 0x04000000;
-    args.inputArgArea = (u8*)&args + 0x30;
-    args.regSaveArea = (u8*)&args - 0x60;
     if (strstr(format, &str_PCT_80424014) != 0) {
+        args.regInfo = 0x04000000;
+        args.inputArgArea = (u8*)&args + 0x108C;
+        args.regSaveArea = (u8*)&args - 0x64;
         vsprintf(text, format, &args);
         format = text;
     }
@@ -837,6 +856,8 @@ void winFontSetEdge(void* position, void* scale, void* color, char* format, ...)
     FontDrawStringMtx(translation, format);
     FontDrawEdgeOff();
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 
 /* CHATGPT FALLBACK MISSING STUBS: main/window/win_main 20260624_191429 */
@@ -861,6 +882,7 @@ void unk_8017d10c(void* position, void* scale, void* color, f32 width, char* for
     LocalVec localScale;
     u32 localColor;
     f32 messageWidth;
+    u32 colorWord, sx, sy, sz, px, py, pz;
 
     if (strstr(format, &str_PCT_80424014) != 0) {
         args.regInfo = 0x04010000;
@@ -876,9 +898,20 @@ void unk_8017d10c(void* position, void* scale, void* color, f32 width, char* for
         *(f32*)((s32)scale + 0) *= width / messageWidth;
     }
 
-    localColor = *(u32*)color;
-    localScale = *(LocalVec*)scale;
-    localPosition = *(LocalVec*)position;
+    colorWord = *(u32*)color;
+    sx = ((u32*)scale)[0];
+    sy = ((u32*)scale)[1];
+    sz = ((u32*)scale)[2];
+    px = ((u32*)position)[0];
+    py = ((u32*)position)[1];
+    pz = ((u32*)position)[2];
+    localColor = colorWord;
+    ((u32*)&localScale)[0] = sx;
+    ((u32*)&localScale)[1] = sy;
+    ((u32*)&localScale)[2] = sz;
+    ((u32*)&localPosition)[0] = px;
+    ((u32*)&localPosition)[1] = py;
+    ((u32*)&localPosition)[2] = pz;
     winFontSetEdge(&localPosition, &localScale, &localColor, format);
 }
 #pragma no_register_save_helpers off
@@ -1318,9 +1351,9 @@ u8 winLectureKeyMask(void) {
             *(s32*)((s32)wp + 0x10) = 0;
         } else {
             state = *(s32*)((s32)work + 0x14);
-            if (state < 5) {
-                if (state < 2) {
-                    if (state >= 0) {
+            switch (state) {
+                case 0:
+                case 1:
                         *(s32*)((s32)work + 4) = 0;
                         *(s32*)((s32)wp + 8) = 0;
                         *(s32*)((s32)wp + 0xC) = 0;
@@ -1328,8 +1361,10 @@ u8 winLectureKeyMask(void) {
                         if ((keyGetButtonTrg(0) & 0x100) != 0) {
                             *(s32*)((s32)wp + 0x14) = *(s32*)((s32)wp + 0x14) + 1;
                         }
-                    }
-                } else {
+                    break;
+                case 2:
+                case 3:
+                case 4:
                     *(s32*)((s32)work + 4) = 0;
                     *(s32*)((s32)wp + 8) = 0;
                     *(s32*)((s32)wp + 0xC) &= 0x8000;
@@ -1337,16 +1372,11 @@ u8 winLectureKeyMask(void) {
                     if (*(s32*)((s32)wp + 0xC) != 0 || *(s32*)((s32)wp + 0x10) != 0) {
                         *(s32*)((s32)wp + 0x14) = *(s32*)((s32)wp + 0x14) + 1;
                     }
-                }
-            } else if (state == 9) {
-                *(s32*)((s32)work + 4) &= 0x1000;
-                *(s32*)((s32)wp + 8) &= 0x1000;
-                *(s32*)((s32)wp + 0xC) = 0;
-                *(s32*)((s32)wp + 0x10) = 0;
-                if (*(s32*)((s32)wp + 4) != 0 || *(s32*)((s32)wp + 8) != 0) {
-                    *(s32*)((s32)wp + 0x14) = *(s32*)((s32)wp + 0x14) + 1;
-                }
-            } else if (state < 9) {
+                    break;
+                case 5:
+                case 6:
+                case 7:
+                case 8:
                 *(s32*)((s32)work + 4) &= 0x100;
                 *(s32*)((s32)wp + 8) &= 0x100;
                 *(s32*)((s32)wp + 0xC) = 0;
@@ -1354,6 +1384,16 @@ u8 winLectureKeyMask(void) {
                 if (*(s32*)((s32)wp + 4) != 0 || *(s32*)((s32)wp + 8) != 0) {
                     *(s32*)((s32)wp + 0x14) = *(s32*)((s32)wp + 0x14) + 1;
                 }
+                    break;
+                case 9:
+                *(s32*)((s32)work + 4) &= 0x1000;
+                *(s32*)((s32)wp + 8) &= 0x1000;
+                *(s32*)((s32)wp + 0xC) = 0;
+                *(s32*)((s32)wp + 0x10) = 0;
+                if (*(s32*)((s32)wp + 4) != 0 || *(s32*)((s32)wp + 8) != 0) {
+                    *(s32*)((s32)wp + 0x14) = *(s32*)((s32)wp + 0x14) + 1;
+                }
+                    break;
             }
         }
     }

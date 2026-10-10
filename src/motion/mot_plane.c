@@ -139,6 +139,7 @@ void mot_plane(void) {
         u32 z;
     } VecBits;
 
+    u8* data = str_SFX_MARIO_AIRPLANE1_802c40d8;
     void* player = marioGetPtr();
     void* work;
     s32 state;
@@ -146,7 +147,6 @@ void mot_plane(void) {
     f32 target;
     f32 zero;
     f32 one;
-    u8* data;
     f32 groundY;
     u32 trig;
     void* hit;
@@ -163,7 +163,6 @@ void mot_plane(void) {
 #define WU32(o) (*(u32*)((s32)work + (o)))
 #define WF(o) (*(f32*)((s32)work + (o)))
 
-    data = str_SFX_MARIO_AIRPLANE1_802c40d8;
     trig = PU32(0x0C);
     if ((trig & 1) != 0) {
         PU32(0x0C) = trig & ~1U;
@@ -176,7 +175,8 @@ void mot_plane(void) {
 
     work = *(void**)((s32)player + 0x294);
     state = P32(0x44);
-    if (state == 0) {
+    switch (state) {
+    case 0: {
         void* p2 = marioGetPtr();
         *(f32*)((s32)p2 + 0x148) = 0.4f;
         *(f32*)((s32)p2 + 0x158) = 0.01f;
@@ -198,7 +198,7 @@ void mot_plane(void) {
         state = 1;
     }
 
-    if (state == 1) {
+    case 1:
         marioMakeJumpPara();
         work = *(void**)((s32)player + 0x294);
         target = (WU32(0x00) & 1) ? 30.0f : -30.0f;
@@ -224,7 +224,8 @@ void mot_plane(void) {
         if (PF(0x160) > float_0_80420d1c) {
             PF(0x90) += PF(0x160);
         }
-    } else if (state == 2) {
+        break;
+    case 2:
         animPoseSetLocalTime((f64)float_0_80420d1c, P32(0x240));
         animPoseSetLocalTime((f64)float_0_80420d1c, *(s32*)((s32)player + 0x22C + marioAnimeId() * 4));
         work = *(void**)((s32)player + 0x294);
@@ -243,7 +244,8 @@ void mot_plane(void) {
             P32(0x48) = 0x3C;
             P32(0x44) = 3;
         }
-    } else if (state == 3) {
+        break;
+    case 3:
         timer = P32(0x48) - 1;
         P32(0x48) = timer;
         if (timer < 1) {
@@ -275,6 +277,7 @@ void mot_plane(void) {
         } else if (timer == 0x28) {
             allPartyRidePlane();
         }
+        break;
     }
 
     target = float_90_80420d14;
@@ -586,7 +589,6 @@ void flyMain(void) {
     extern f32 float_neg80_80420d64;
 
     void* player = marioGetPtr();
-    void* work = *(void**)((s32)player + 0x294);
     s32 state;
     f32 sinDir;
     f32 cosDir;
@@ -600,6 +602,7 @@ void flyMain(void) {
     f32 tmp;
     f32 limit;
     s32 frameLimit;
+    s32 blocked;
     void* hit;
     s8 stick;
 
@@ -608,9 +611,9 @@ void flyMain(void) {
 #define PH16(o) (*(u16*)((s32)player + (o)))
 #define PS8(o) (*(s8*)((s32)player + (o)))
 #define PF(o) (*(f32*)((s32)player + (o)))
-#define W32(o) (*(s32*)((s32)work + (o)))
-#define WU32(o) (*(u32*)((s32)work + (o)))
-#define WF(o) (*(f32*)((s32)work + (o)))
+#define W32(o) (*(s32*)((s32)*(void**)((s32)player + 0x294) + (o)))
+#define WU32(o) (*(u32*)((s32)*(void**)((s32)player + 0x294) + (o)))
+#define WF(o) (*(f32*)((s32)*(void**)((s32)player + 0x294) + (o)))
 
     state = P32(0x44);
     if (state != 0x0D) {
@@ -631,7 +634,6 @@ state_0c:
         P32(0x44) = 0x0E;
     }
     player = marioGetPtr();
-    work = *(void**)((s32)player + 0x294);
     if ((u32)(W32(0x28) + 0x10000) == 0xFFFFU) {
         W32(0x28) = psndSFXOn_3D(0x17F, (void*)((s32)player + 0x8C));
     }
@@ -660,7 +662,6 @@ check_flying:
         return;
     }
 
-    work = *(void**)((s32)player + 0x294);
     WF(0x08) = (f32)revise360(WF(0x0C) * planeData[0x0E] + WF(0x08));
 
     if ((WU32(0x00) & 1) != 0) {
@@ -744,22 +745,23 @@ check_flying:
             if (lift <= planeData[0x1C]) {
                 lift = planeData[0x1C];
             }
+            blocked = 0;
             player = marioGetPtr();
             hit = *(void**)((s32)player + 0x1FC);
             if (hit != 0 && (hitGetAttr(hit) & 0x38) != 0) {
-                work = *(void**)((s32)player + 0x294);
+                blocked = 1;
+            }
+            if (blocked != 0) {
                 WF(0x04) += float_neg0p001_80420d58;
                 PF(0x180) += float_0p5_80420d5c;
                 if (PF(0x180) > float_2_80420d28) {
                     PF(0x180) = float_2_80420d28;
                 }
             } else {
-                work = *(void**)((s32)player + 0x294);
                 WF(0x1C) = lift;
                 WF(0x04) += WF(0x1C);
             }
         }
-        work = *(void**)((s32)player + 0x294);
         if (WF(0x04) <= planeData[0x04]) {
             WF(0x04) = planeData[0x04];
         }
@@ -802,7 +804,6 @@ check_flying:
                     blocked = 1;
                 }
                 if (blocked == 0) {
-                    work = *(void**)((s32)player + 0x294);
                     lift = planeData[0x19] *
                            (f32)sin((float_3p1416_80420d50 * speed *
                                     (float_90_80420d14 / planeData[0])) /
@@ -874,7 +875,6 @@ check_flying:
                     blocked = 1;
                 }
                 if (blocked == 0) {
-                    work = *(void**)((s32)player + 0x294);
                     WF(0x1C) += float_0p1_80420d40 * (float_1_80420d2c - WF(0x1C));
                     if (WF(0x1C) >= float_0_80420d1c) {
                         WF(0x1C) = float_0_80420d1c;
@@ -889,7 +889,6 @@ check_flying:
                 blocked = 1;
             }
 
-            work = *(void**)((s32)player + 0x294);
             if (blocked != 0) {
                 WF(0x24) = float_neg22_80420d68;
             } else {
@@ -957,8 +956,11 @@ check_flying:
             P32(0x44) = 0x28;
         } else {
             P32(0x44) = 0x32;
-            hit = *(void**)((s32)player + 0x1E4);
-            if (hit == 0) {
+            hit = 0;
+            if (*(void**)((s32)player + 0x1E4) != 0) {
+                hit = *(void**)((s32)player + 0x1E4);
+            }
+            if (*(void**)((s32)player + 0x1E8) != 0) {
                 hit = *(void**)((s32)player + 0x1E8);
             }
             if (hit != 0 && (hitGetAttr(hit) & 0x200) != 0) {
@@ -980,6 +982,8 @@ check_flying:
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 void mot_plane_post(void) {
     extern void psndSFXOff(s32 id);
@@ -1023,6 +1027,9 @@ void mot_plane_post(void) {
     }
     allPartyRideOff2();
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
 s32 chkCollision(s32* outAttr) {
     extern void sincosf(f32, f32*, f32*);
     extern void* marioHitCheck(f64, f64, f64, f64, f64, f64, void*, s32*, void*, f32*, void*, void*, void*);
@@ -1038,7 +1045,6 @@ s32 chkCollision(s32* outAttr) {
     typedef struct Vec { f32 x, y, z; } Vec;
 
     void* mario;
-    void* plane;
     void* hit;
     Vec start;
     Vec end;
@@ -1063,7 +1069,7 @@ s32 chkCollision(s32* outAttr) {
     f32 f28;
 
     mario = marioGetPtr();
-    plane = *(void**)((s32)mario + 0x294);
+#define plane (*(void**)((s32)mario + 0x294))
     hitAny = 0;
 
     sincosf(float_90_80420d14 + *(f32*)((s32)plane + 4), &sx1, &cx1);
@@ -1074,7 +1080,9 @@ s32 chkCollision(s32* outAttr) {
             *(f32*)((s32)mario + 0x98) + *(f32*)((s32)mario + 0xB0);
     end.z = float_4_80420d10 * cx2 * cx1 + *(f32*)((s32)mario + 0x94) +
             *(f32*)((s32)mario + 0xA0) + *(f32*)((s32)mario + 0xB8);
-    *(Vec*)((s32)plane + 0x3C) = end;
+    *(f32*)((s32)plane + 0x3C) = end.x;
+    *(f32*)((s32)plane + 0x40) = end.y;
+    *(f32*)((s32)plane + 0x44) = end.z;
 
     sincosf(*(f32*)((s32)plane + 0xC), &sx3, &cx3);
     sincosf(*(f32*)((s32)plane + 4), &sx1, &cx1);
@@ -1088,7 +1096,9 @@ s32 chkCollision(s32* outAttr) {
     start.x = f28 * (sx2 * -cx1) + px + (planeData[0x9C / 4] * cx1 * sx2 - planeData[0x9C / 4] * sx3 * cx2);
     start.y = planeData[0x9C / 4] * sx1 * cx3 + sx1 * f28 + py;
     start.z = f28 * (cx2 * -cx1) + pz + (planeData[0x9C / 4] * cx1 * cx2 - planeData[0x9C / 4] * sx3 * sx2);
-    *(Vec*)((s32)plane + 0x30) = start;
+    *(f32*)((s32)plane + 0x30) = start.x;
+    *(f32*)((s32)plane + 0x34) = start.y;
+    *(f32*)((s32)plane + 0x38) = start.z;
 
     radius = float_10_80420d18 + *(f32*)((s32)mario + 0x180);
     hit = marioHitCheck(-(float_10_80420d18 * sx2 - (*(Vec*)((s32)plane + 0x30)).x),
@@ -1165,6 +1175,7 @@ s32 chkCollision(s32* outAttr) {
         }
     }
 
+    #undef plane
     return hitAny;
 }
 

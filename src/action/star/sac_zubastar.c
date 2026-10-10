@@ -17,7 +17,44 @@ s32 zubastar_get_kouten(f32* outX, f32* outY, f32 x1, f32 y1, f32 x2, f32 y2, f3
 void zubastar_capture(void);
 void zubastar_disp_bomb(void);
 
-s32 star_stone_appear(void) {
+/* Data-pass A1: exact identities referenced by the weapon/Event foundation. */
+typedef struct EventEntry EventEntry;
+extern u32 marioAttackEvent_ZubaStar[177];
+extern u32 sac_mario_back_home[];
+extern u32 sac_mario_item_on_end_evt[];
+extern u32 sac_mario_item_on_evt[];
+extern u32 sac_start_camera_evt[];
+extern u32 sac_start_stardust[];
+extern const char str_M_I_Y_80427d20[];
+extern char str_SFX_BTL_SAC_START1_803000d8[];
+extern char str_SFX_BTL_SAC_START2_803000ec[];
+extern char str_SFX_BTL_SAC_START3_80300100[];
+extern char str_btl_wn_sac_zubastar_802fff70[];
+extern char str_msg_sac_8_802fff94[];
+extern char str_msg_zubastar_802fff84[];
+extern s32 btlevtcmd_ACSuccessEffect(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_AnimeChangePose(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CheckDamage(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CheckPartsAttribute(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CommandGetWeaponAddress(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CommandPayWeaponCost(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_GetSelectEnemy(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_GetSelectNextEnemy(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_StartWaitEvent(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_WaitGuardMove(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_WeaponAftereffect(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_snd_se(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_set_mode(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_shake_h(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_shake_w(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_fade_entry(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_snd_sfxoff(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_ac_help_off(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_ac_help_on(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_handbeat(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_handbeat_end(EventEntry* event, BOOL isFirstCall);
+
+static s32 star_stone_appear(void) {
     s32* ptr = GetZubaStarPtr();
 
     ptr[0x163] = 1;
@@ -29,7 +66,7 @@ s32 wait_star_stone_up(void) {
     return (value == 4) ? 2 : 0;
 }
 
-s32 main_star(void) {
+static s32 main_star(void) {
     typedef struct Vec { f32 x, y, z; } Vec;
 
     extern void* BattleGetMarioPtr(void* battleWork);
@@ -1272,6 +1309,11 @@ void zubastar_disp2D(s32 cameraId) {
     }
 }
 
+/* Data-pass A3: missing target-backed .sdata2 prefix before the existing exact float catalog. */
+const u32 dat_80427d18 = 0x000000FF;
+const u32 dat_80427d1c = 0xFFFFFF00;
+const char str_M_I_Y_80427d20[] = "M_I_Y";
+
 /* Target sac_zubastar .sdata2 float catalog; keep in target order. */
 const f32 float_200_80427d28 = 200.0f;
 const f32 float_60_80427d2c = 60.0f;
@@ -1315,3 +1357,68 @@ const f32 float_1Eneg05_80427dc0 = 0.00001f;
 const f32 float_37_80427dc4 = 37.0f;
 const f32 float_2160_80427dc8 = 2160.0f;
 const f32 float_1p5_80427dcc = 1.5f;
+
+/* Data-pass A1: target-exact weapon + complete Zuba Star Event family. */
+u32 weapon_zubastar[48] = {
+    (u32)(char*)str_btl_wn_sac_zubastar_802fff70, 0x01A30000, 0x00000000, (u32)(char*)str_msg_zubastar_802fff84,
+    0x64000600, 0x3F800000, 0x01056432, (u32)weaponGetPower_ZubaStar,
+    0x00000000, 0x00000003, 0x00000006, 0x00000009,
+    0x0000000C, 0x0000000F, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x02101260, 0x20000000, 0x00000302,
+    (u32)(char*)str_msg_sac_8_802fff94, 0x000200C8, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    (u32)marioAttackEvent_ZubaStar, 0x00000064, 0x00000000, 0x00000000,
+};
+
+u32 marioAttackEvent_ZubaStar[177] = {
+    0x0001005B, (u32)zubastar_init, 0x0000006E, 0x0001005B,
+    (u32)main_star, 0x00000070, 0x0001005E, (u32)sac_start_camera_evt,
+    0x0001000A, 0x000001F4, 0x0006005B, (u32)btlevtcmd_snd_se,
+    0xFFFFFFFE, (u32)(char*)str_SFX_BTL_SAC_START1_803000d8, 0xF1194D80, 0x00000000,
+    0xF1194D80, 0x0001005E, (u32)sac_mario_item_on_evt, 0x0001000A,
+    0x000001F4, 0x0006005B, (u32)btlevtcmd_snd_se, 0xFFFFFFFE,
+    (u32)(char*)str_SFX_BTL_SAC_START2_803000ec, 0xF1194D80, 0x00000000, 0xFE363C8B,
+    0x0001005B, (u32)star_stone_appear, 0x0000006E, 0x0001005E,
+    (u32)sac_start_stardust, 0x00000070, 0x00010009, 0x00000064,
+    0x0006005B, (u32)btlevtcmd_snd_se, 0xFFFFFFFE, (u32)(char*)str_SFX_BTL_SAC_START3_80300100,
+    0xF1194D80, 0x00000000, 0xF1194D80, 0x0002005B,
+    (u32)evt_snd_sfxoff, 0xFE363C8B, 0x0003005B, (u32)evt_btl_camera_set_mode,
+    0x00000000, 0x00000000, 0x00010009, 0x00000028,
+    0x0001005E, (u32)sac_mario_item_on_end_evt, 0x0001005E, (u32)sac_mario_back_home,
+    0x0001005B, (u32)wait_star_stone_up, 0x0004005B, (u32)btlevtcmd_AnimeChangePose,
+    0xFFFFFFFE, 0x00000001, (u32)(char*)str_M_I_Y_80427d20, 0x0001000A,
+    0x000001F4, 0x0000006E, 0x0001005B, (u32)sac_handbeat,
+    0x00000070, 0x0001005B, (u32)sac_ac_help_on, 0x0001005B,
+    (u32)zubastar_main, 0x0001005B, (u32)sac_ac_help_off, 0x0001005B,
+    (u32)sac_handbeat_end, 0x0000006E, 0x0006005B, (u32)evt_fade_entry,
+    0x00000011, 0x00000001, 0x000000FF, 0x000000FF,
+    0x000000FF, 0x0001000A, 0x00000064, 0x0006005B,
+    (u32)evt_fade_entry, 0x00000010, 0x000000FA, 0x000000FF,
+    0x000000FF, 0x000000FF, 0x00000070, 0x0000006B,
+    0x0006005B, (u32)evt_btl_camera_shake_h, 0x00000000, 0x0000000A,
+    0x00000000, 0x0000003C, 0x00000000, 0x00010005,
+    0x00000006, 0x0006005B, (u32)evt_btl_camera_shake_w, 0x00000000,
+    0x0000000A, 0x00000000, 0x0000000A, 0x00000000,
+    0x00010009, 0x0000000A, 0x00000006, 0x0000006D,
+    0x0001005B, (u32)btlevtcmd_WaitGuardMove, 0x0002005B, (u32)btlevtcmd_CommandPayWeaponCost,
+    0xFFFFFFFE, 0x0003005B, (u32)btlevtcmd_CommandGetWeaponAddress, 0xFFFFFFFE,
+    0xFE363C80, 0x0002005B, (u32)btlevtcmd_WeaponAftereffect, 0xFE363C80,
+    0x0003005B, (u32)btlevtcmd_GetSelectEnemy, 0xFE363C83, 0xFE363C84,
+    0x00010003, 0x0000005F, 0x00020018, 0xFE363C83,
+    0xFFFFFFFF, 0x00010004, 0x00000061, 0x00000021,
+    0x0005005B, (u32)btlevtcmd_CheckPartsAttribute, 0xFE363C83, 0xFE363C84,
+    0x00004000, 0xFE363C80, 0x00020018, 0xFE363C80,
+    0x00000000, 0x0007005B, (u32)btlevtcmd_CheckDamage, 0xFFFFFFFE,
+    0xFE363C83, 0xFE363C84, (u32)weapon_zubastar, 0x00000100,
+    0xFE363C85, 0x00000021, 0x0003005B, (u32)btlevtcmd_GetSelectNextEnemy,
+    0xFE363C83, 0xFE363C84, 0x00010004, 0x0000005F,
+    0x00010003, 0x00000061, 0x0001005B, (u32)zubastar_bomb,
+    0x0001005B, (u32)zubastar_end, 0x00010003, 0x00000063,
+    0x0002005B, (u32)btlevtcmd_StartWaitEvent, 0xFFFFFFFE, 0x00000002,
+    0x00000001,
+};
+

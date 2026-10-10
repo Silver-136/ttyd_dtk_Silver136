@@ -271,15 +271,14 @@ void marioClearSlitFloor(void) {
 }
 
 s32 marioGetSlitFloorPos(SlitVecCopy* out) {
-    void* mario = marioGetPtr();
-    if (*(s32*)((s32)mario + 0x26C) != 0) {
-        s32 x = *(s32*)((s32)mario + 0x270);
-        s32 y = *(s32*)((s32)mario + 0x274);
-        s32 z;
-        out->x = x;
-        out->y = y;
-        z = *(s32*)((s32)mario + 0x278);
-        out->z = z;
+    typedef struct LocalMarioWork {
+        u8 pad[0x26C];
+        s32 slitFloorValid;
+        SlitVecCopy slitFloorPos;
+    } LocalMarioWork;
+    LocalMarioWork* mario = marioGetPtr();
+    if (mario->slitFloorValid != 0) {
+        *out = mario->slitFloorPos;
         return 1;
     }
     return 0;
@@ -370,18 +369,19 @@ void marioSlitForceCancel(void) {
     void* mario = marioGetPtr();
     u32 flags = *(u32*)mario;
     if (flags & 0x100000) {
-        *(u32*)mario = flags & ~0x200000;
-        if (*(f32*)((s32)mario + 0x1A4) >= float_180_80420fa8) {
-            *(f32*)((s32)mario + 0x1AC) = float_0_80420f9c;
-        } else {
+        *(u32*)mario = flags & ~0x100000;
+        if (float_180_80420fa8 > *(f32*)((s32)mario + 0x1A4)) {
             *(f32*)((s32)mario + 0x1AC) = float_180_80420fa8;
+            *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
+        } else {
+            *(f32*)((s32)mario + 0x1AC) = float_0_80420f9c;
+            *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
         }
-        *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
-        *(u32*)((s32)mario + 0x4) &= 0xFEFFFFFE;
+        *(u32*)((s32)mario + 0x4) &= 0xFF00F3FF;
         *(u32*)mario &= ~0x400000;
-        *(u32*)mario &= ~0x100000;
+        *(u32*)mario &= ~0x200000;
         *(f32*)((s32)mario + 0x1B8) = float_10_80421000;
-        *(u32*)((s32)mario + 0x4) &= 0xFEFFFFFE;
+        *(u32*)((s32)mario + 0x4) &= 0xFF00F3FF;
         marioPaperOff();
         mapResetPaperAmbColor();
         *(u32*)((s32)mario + 0x4) &= ~0x4;
@@ -395,28 +395,30 @@ void marioSlitForceCancel(void) {
 
 void mot_slit_post(void) {
     extern void U_allPartySlitOffReq(void);
-
     void* mario = marioGetPtr();
     u16 motion;
 
-    motion = *(u16*)((s32)mario + 0x2E);
-    if (*(s16*)((s32)mario + 0x2F0) >= 10 &&
-        (motion == 0x15 || ((u16)(motion - 0x17) <= 1) || motion <= 0x14 || motion == 0x16)) {
-        return;
+    if (*(s16*)((s32)mario + 0x2F0) >= 10) {
+        motion = *(u16*)((s32)mario + 0x2E);
+        if (motion == 0x15 || (u16)(motion - 0xB) <= 1 || motion <= 7 || motion == 8) {
+            return;
+        }
     }
+
     if ((*(u32*)mario & 0x100000) == 0) {
         if ((*(u32*)((s32)mario + 4) & 0x1000000) == 0) {
             return;
         }
-        *(f32*)((s32)mario + 0x1B4) = float_20_80420ff4;
-        if (*(f32*)((s32)mario + 0x1A4) < float_180_80420fa8) {
+        *(f32*)((s32)mario + 0x1B8) = float_20_80420ff4;
+        if (float_180_80420fa8 > *(f32*)((s32)mario + 0x1A4)) {
             *(f32*)((s32)mario + 0x1AC) = float_180_80420fa8;
+            *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
         } else {
             *(f32*)((s32)mario + 0x1AC) = float_0_80420f9c;
+            *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
         }
-        *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
-        *(u32*)mario &= ~0x200000;
         *(u32*)mario &= ~0x400000;
+        *(u32*)mario &= ~0x200000;
         *(u32*)((s32)mario + 4) &= 0xFEFFF3FF;
         *(u32*)((s32)mario + 4) &= 0xFEFFF3FF;
         marioPaperOff();
@@ -424,27 +426,28 @@ void mot_slit_post(void) {
         *(u32*)((s32)mario + 4) &= ~4;
         marioAdjustMoveDir();
         allPartyForceSlitOff();
-    } else if (*(u16*)((s32)mario + 0x2E) != 2) {
+    } else if (*(u16*)((s32)mario + 0x2E) != 0xA) {
         *(u32*)mario &= ~0x100000;
-        *(f32*)((s32)mario + 0x1B4) = float_20_80420ff4;
-        if (*(f32*)((s32)mario + 0x1A4) < float_180_80420fa8) {
+        *(f32*)((s32)mario + 0x1B8) = float_20_80420ff4;
+        if (float_180_80420fa8 > *(f32*)((s32)mario + 0x1A4)) {
             *(f32*)((s32)mario + 0x1AC) = float_180_80420fa8;
+            *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
         } else {
             *(f32*)((s32)mario + 0x1AC) = float_0_80420f9c;
+            *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
         }
-        *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
-        *(u32*)mario &= ~0x200000;
         *(u32*)mario &= ~0x400000;
+        *(u32*)mario &= ~0x200000;
         *(u32*)((s32)mario + 4) &= 0xFEFFF3FF;
         *(u32*)((s32)mario + 4) &= 0xFEFFF3FF;
         marioPaperOff();
         mapResetPaperAmbColor();
         *(u32*)((s32)mario + 4) &= ~4;
         marioAdjustMoveDir();
-        if (*(u16*)((s32)mario + 0x2E) == 0x16) {
-            U_allPartySlitOffReq();
-        } else {
+        if (*(u16*)((s32)mario + 0x2E) != 0x16) {
             allPartyForceSlitOff();
+        } else {
+            U_allPartySlitOffReq();
         }
     }
 }
@@ -466,16 +469,23 @@ u8 marioForceSlitAnime(void) {
     *(u32*)((s32)mario + 4) |= 4;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 marioReInit_slit(void) {
+    typedef struct LocalColor {
+        u8 r, g, b, a;
+    } LocalColor;
     extern char vec3_802c42e8[];
-    extern void marioPaperOn(void* paper);
-    extern void marioChgPose(void* pose);
-    extern void marioChgPaper(void* paper);
+    extern void marioPaperOn(char* paper);
+    extern void marioChgPose(char* pose);
+    extern void marioChgPaper(char* paper);
     extern char str_M_S_1_80420fa0[6];
 
+    register char* paperBase = vec3_802c42e8;
     void* mario = marioGetPtr();
     void* mario2 = marioGetPtr();
-    u32 color;
+    LocalColor baseColor;
+    LocalColor color;
 
     *(f32*)((s32)mario2 + 0x2B8) = float_0_80420f9c;
     *(s32*)((s32)mario2 + 0x2BC) = 0;
@@ -488,16 +498,19 @@ u8 marioReInit_slit(void) {
     *(u32*)((s32)mario2 + 0x4) |= 0x1000000;
 
     if (*(s32*)((s32)mario2 + 0x240) == -1) {
-        color = dat_80420f98;
-        color = (color & 0xFF000000) | 0x00A8A8A8;
+        baseColor = *(LocalColor*)&dat_80420f98;
+        baseColor.r = 0xA8;
+        baseColor.g = 0xA8;
+        baseColor.b = 0xA8;
+        color = baseColor;
         mapSetPaperAmbColor(&color);
-        marioPaperOn(vec3_802c42e8 + 0x54);
+        marioPaperOn(paperBase + 0x54);
     }
 
     if (*(f32*)((s32)mario2 + 0x194) == float_0_80420f9c) {
         marioChgPose(str_M_S_1_80420fa0);
     }
-    marioChgPaper(vec3_802c42e8 + 0x5C);
+    marioChgPaper(paperBase + 0x5C);
 
     *(u32*)((s32)mario + 0xC) &= ~1;
     *(u16*)((s32)mario + 0x2E) = 0x15;
@@ -505,7 +518,7 @@ u8 marioReInit_slit(void) {
     *(f32*)((s32)mario + 0x1AC) = float_270_80420fb8;
     *(f32*)((s32)mario + 0x1B0) = *(f32*)((s32)mario + 0x1AC);
     marioChgPose(str_M_S_1_80420fa0);
-    marioChgPaper(vec3_802c42e8 + 0x64);
+    marioChgPaper(paperBase + 0x64);
     *(s16*)((s32)mario + 0x2F0) = 0xA;
     *(s16*)((s32)mario + 0x2CE) = 0;
     *(f32*)((s32)mario + 0x1B8) = float_6_80420fb4;
@@ -514,6 +527,8 @@ u8 marioReInit_slit(void) {
     allPartySlitOn();
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 

@@ -12,6 +12,7 @@ s32 priIDTbl[0x100];
 s32 evtID = 1;
 f32 evtSpd = 1.0f;
 
+s32 gap_08_8041E864_sbss;
 s32 evtMax;
 s32 priTblNum;
 s32 runMainF;
@@ -25,7 +26,8 @@ void* evtGetWork(void) {
 
 #pragma opt_common_subs off
 void make_pri_table(void) {
-    void* set;
+    typedef struct LocalWork { s32 count; u8 pad[0x8C]; void* entries; } LocalWork;
+    LocalWork* set;
     void* entry;
     s32* slotPtr;
     s32* idPtr;
@@ -42,17 +44,17 @@ void make_pri_table(void) {
     s32 i;
     s32 j;
 
-    set = work;
+    set = (LocalWork*)work;
     if (*(s32*)((s32)gp + 0x14) != 0) {
-        set = work + 0xA0;
+        set = (LocalWork*)(work + 0xA0);
     }
-    entry = *(void**)((s32)set + 0x90);
+    entry = set->entries;
     slotPtr = priTbl;
     idPtr = priIDTbl;
     slotWrite = slotPtr;
     idWrite = idPtr;
     count = 0;
-    for (n = 0; n < *(s32*)set; n++, entry = (void*)((s32)entry + 0x1B0)) {
+    for (n = 0; n < set->count; n++, entry = (void*)((s32)entry + 0x1B0)) {
         if ((*(u8*)((s32)entry + 8) & 1) != 0) {
             *slotWrite++ = n;
             *idWrite++ = *(s32*)((s32)entry + 0x15C);
@@ -68,8 +70,8 @@ void make_pri_table(void) {
         for (; j < count; j++, slotJPtr++, idJPtr++) {
             slotI = *slotPtr;
             slotJ = *slotJPtr;
-            if (*(u8*)((s32)*(void**)((s32)set + 0x90) + slotI * 0x1B0 + 0xB) <
-                *(u8*)((s32)*(void**)((s32)set + 0x90) + slotJ * 0x1B0 + 0xB)) {
+            if (*(u8*)((s32)set->entries + slotI * 0x1B0 + 0xB) <
+                *(u8*)((s32)set->entries + slotJ * 0x1B0 + 0xB)) {
                 idI = *idPtr;
                 idJ = *idJPtr;
                 *slotPtr = slotJ;
@@ -151,6 +153,8 @@ void evtEntryRunCheck(void) {
     }
 }
 
+#include "manager/evtmgr_restart_inline.h"
+
 void* evtEntry(void* script, s32 pri, s32 flags) {
     void* set;
     void* evt;
@@ -226,46 +230,8 @@ void* evtEntry(void* script, s32 pri, s32 flags) {
     *(s32*)((s32)evt + 0xE0) = 0;
     *(s32*)((s32)evt + 0xE4) = 0;
 
-    i = 0;
-    zero = i;
-    tableEntry = (u8*)evt;
-    for (n = 0; n < 2; n++) {
-        labelIds = (s8*)evt + i + 0x1C;
-        labelIds[0] = -1; *(u32**)(tableEntry + 0x2C) = (u32*)zero;
-        labelIds[1] = -1; *(u32**)(tableEntry + 0x30) = (u32*)zero;
-        labelIds[2] = -1; *(u32**)(tableEntry + 0x34) = (u32*)zero;
-        labelIds[3] = -1; *(u32**)(tableEntry + 0x38) = (u32*)zero;
-        labelIds[4] = -1; *(u32**)(tableEntry + 0x3C) = (u32*)zero;
-        labelIds[5] = -1; *(u32**)(tableEntry + 0x40) = (u32*)zero;
-        labelIds[6] = -1; *(u32**)(tableEntry + 0x44) = (u32*)zero;
-        labelIds[7] = -1; *(u32**)(tableEntry + 0x48) = (u32*)zero;
-        i += 8;
-        tableEntry += 0x20;
-    }
+    evtRestartMakeJumpTable(evt);
 
-    n = 0;
-    cmd = script;
-    while (1) {
-        word = *cmd;
-        opcode = word & 0xFFFF;
-        params = (s32)word >> 16;
-        cmd++;
-        label = *cmd;
-        cmd += params;
-        switch (opcode) {
-            case 1:
-                goto finished;
-            case 3:
-                *(s8*)((s32)evt + 0x1C + n) = (s8)label;
-                *(u32**)((s32)evt + 0x2C + n * 4) = cmd;
-                n++;
-        }
-        if (n >= 16) {
-            "unused";
-        }
-    }
-
-finished:
     if (runMainF != 0 && (*(u8*)((s32)evt + 8) & 0x20) != 0) {
         priTbl[priTblNum] = index;
         priIDTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
@@ -354,46 +320,8 @@ void* evtEntryType(void* script, s32 pri, s32 flags, s32 type) {
     *(s32*)((s32)evt + 0xE0) = 0;
     *(s32*)((s32)evt + 0xE4) = 0;
 
-    i = 0;
-    zero = i;
-    tableEntry = (u8*)evt;
-    for (n = 0; n < 2; n++) {
-        labelIds = (s8*)evt + i + 0x1C;
-        labelIds[0] = -1; *(u32**)(tableEntry + 0x2C) = (u32*)zero;
-        labelIds[1] = -1; *(u32**)(tableEntry + 0x30) = (u32*)zero;
-        labelIds[2] = -1; *(u32**)(tableEntry + 0x34) = (u32*)zero;
-        labelIds[3] = -1; *(u32**)(tableEntry + 0x38) = (u32*)zero;
-        labelIds[4] = -1; *(u32**)(tableEntry + 0x3C) = (u32*)zero;
-        labelIds[5] = -1; *(u32**)(tableEntry + 0x40) = (u32*)zero;
-        labelIds[6] = -1; *(u32**)(tableEntry + 0x44) = (u32*)zero;
-        labelIds[7] = -1; *(u32**)(tableEntry + 0x48) = (u32*)zero;
-        i += 8;
-        tableEntry += 0x20;
-    }
+    evtRestartMakeJumpTable(evt);
 
-    n = 0;
-    cmd = script;
-    while (1) {
-        word = *cmd;
-        opcode = word & 0xFFFF;
-        params = (s32)word >> 16;
-        cmd++;
-        label = *cmd;
-        cmd += params;
-        switch (opcode) {
-            case 1:
-                goto finished;
-            case 3:
-                *(s8*)((s32)evt + 0x1C + n) = (s8)label;
-                *(u32**)((s32)evt + 0x2C + n * 4) = cmd;
-                n++;
-        }
-        if (n >= 16) {
-            "unused";
-        }
-    }
-
-finished:
     if (runMainF != 0 && (*(u8*)((s32)evt + 8) & 0x20) != 0) {
         priTbl[priTblNum] = index;
         priIDTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
@@ -489,44 +417,8 @@ void* evtChildEntry(void* parentEvt, void* evtCode, s32 flags) {
     *(s32*)((s32)evt + 0xE0) = *(s32*)((s32)parentEvt + 0xE0);
     *(s32*)((s32)evt + 0xE4) = *(s32*)((s32)parentEvt + 0xE4);
 
-    i = 0;
-    zero = i;
-    tableEntry = (u8*)evt;
-    for (n = 0; n < 2; n++) {
-        labelIds = (s8*)evt + i + 0x1C;
-        labelIds[0] = -1; *(u32**)(tableEntry + 0x2C) = (u32*)zero;
-        labelIds[1] = -1; *(u32**)(tableEntry + 0x30) = (u32*)zero;
-        labelIds[2] = -1; *(u32**)(tableEntry + 0x34) = (u32*)zero;
-        labelIds[3] = -1; *(u32**)(tableEntry + 0x38) = (u32*)zero;
-        labelIds[4] = -1; *(u32**)(tableEntry + 0x3C) = (u32*)zero;
-        labelIds[5] = -1; *(u32**)(tableEntry + 0x40) = (u32*)zero;
-        labelIds[6] = -1; *(u32**)(tableEntry + 0x44) = (u32*)zero;
-        labelIds[7] = -1; *(u32**)(tableEntry + 0x48) = (u32*)zero;
-        i += 8;
-        tableEntry += 0x20;
-    }
+    evtRestartMakeJumpTable(evt);
 
-    n = 0;
-    cmd = evtCode;
-    while (1) {
-        word = *cmd;
-        opcode = word & 0xFFFF;
-        params = (s32)word >> 16;
-        cmd++;
-        label = *cmd;
-        cmd += params;
-        switch (opcode) {
-            case 1:
-                goto finished;
-            case 3:
-                *(s8*)((s32)evt + 0x1C + n) = (s8)label;
-                *(u32**)((s32)evt + 0x2C + n * 4) = cmd;
-                n++;
-        }
-        if (n >= 16) "unused";
-    }
-
-finished:
     if (runMainF != 0) {
         priTbl[priTblNum] = index;
         priIDTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
@@ -647,44 +539,8 @@ void* evtBrotherEntry(void* parentEvt, void* evtCode, u32 flags) {
     *(s32*)((s32)evt + 0xE0) = *(s32*)((s32)parentEvt + 0xE0);
     *(s32*)((s32)evt + 0xE4) = *(s32*)((s32)parentEvt + 0xE4);
 
-    i = 0;
-    zero = i;
-    tableEntry = (u8*)evt;
-    for (n = 0; n < 2; n++) {
-        labelIds = (s8*)evt + i + 0x1C;
-        labelIds[0] = minusOne; *(u32**)(tableEntry + 0x2C) = (u32*)zero;
-        labelIds[1] = minusOne; *(u32**)(tableEntry + 0x30) = (u32*)zero;
-        labelIds[2] = minusOne; *(u32**)(tableEntry + 0x34) = (u32*)zero;
-        labelIds[3] = minusOne; *(u32**)(tableEntry + 0x38) = (u32*)zero;
-        labelIds[4] = minusOne; *(u32**)(tableEntry + 0x3C) = (u32*)zero;
-        labelIds[5] = minusOne; *(u32**)(tableEntry + 0x40) = (u32*)zero;
-        labelIds[6] = minusOne; *(u32**)(tableEntry + 0x44) = (u32*)zero;
-        labelIds[7] = minusOne; *(u32**)(tableEntry + 0x48) = (u32*)zero;
-        i += 8;
-        tableEntry += 0x20;
-    }
+    evtRestartMakeJumpTable(evt);
 
-    n = 0;
-    cmd = evtCode;
-    while (1) {
-        word = *cmd;
-        opcode = word & 0xFFFF;
-        params = (s32)word >> 16;
-        cmd++;
-        label = *cmd;
-        cmd += params;
-        switch (opcode) {
-            case 1:
-                goto finished;
-            case 3:
-                *(s8*)((s32)evt + 0x1C + n) = (s8)label;
-                *(u32**)((s32)evt + 0x2C + n * 4) = cmd;
-                n++;
-        }
-        if (n >= 16) "unused";
-    }
-
-finished:
     if (runMainF != 0) {
         priTbl[priTblNum] = index;
         priIDTbl[priTblNum] = *(s32*)((s32)evt + 0x15C);
@@ -720,54 +576,8 @@ void* evtRestart(void* entry) {
     *(s32*)((u8*)entry + 4) = 0;
     *(s32*)entry = 0;
 
-    i = 0;
-    tableEntry = (u8*)entry;
-    for (n = 0; n < 2; n++) {
-        labelIds = (s8*)entry + i + 0x1C;
-        labelIds[0] = -1;
-        *(s32**)(tableEntry + 0x2C) = (s32*)zero;
-        labelIds[1] = -1;
-        *(s32**)(tableEntry + 0x30) = (s32*)zero;
-        labelIds[2] = -1;
-        *(s32**)(tableEntry + 0x34) = (s32*)zero;
-        labelIds[3] = -1;
-        *(s32**)(tableEntry + 0x38) = (s32*)zero;
-        labelIds[4] = -1;
-        *(s32**)(tableEntry + 0x3C) = (s32*)zero;
-        labelIds[5] = -1;
-        *(s32**)(tableEntry + 0x40) = (s32*)zero;
-        labelIds[6] = -1;
-        *(s32**)(tableEntry + 0x44) = (s32*)zero;
-        labelIds[7] = -1;
-        *(s32**)(tableEntry + 0x48) = (s32*)zero;
-        i += 8;
-        tableEntry += 0x20;
-    }
+    evtRestartMakeJumpTable(entry);
 
-    n = 0;
-    cmd = *(s32**)((u8*)entry + 0x14);
-    tableEntry = (u8*)entry;
-    while (1) {
-        opcode = *cmd & 0xFFFF;
-        params = *cmd++ >> 16;
-        label = *cmd;
-        cmd += params;
-
-        switch (opcode) {
-            case 1:
-                goto finished;
-            case 3:
-                *(s8*)((u8*)entry + 0x1C + n) = (s8)label;
-                *(s32**)(tableEntry + 0x2C) = cmd;
-                n++;
-                tableEntry += 4;
-        }
-        if (n >= 16) {
-            "unused";
-        }
-    }
-
-finished:
     evtEntryRunCheck();
     return entry;
 }

@@ -158,6 +158,7 @@ USER_FUNC(_get_present_target_id) {
 }
 
 void _get_item_announce_disp(void) {
+    typedef struct LocalItem { s32 id; char* name; u8 rest[32]; } LocalItem;
     extern char* msgSearch(char* msgId);
     extern int sprintf(char* str, const char* format, ...);
     extern char* strcpy(char* dst, const char* src);
@@ -171,24 +172,19 @@ void _get_item_announce_disp(void) {
     char buf[0x80];
     char* itemName;
     s32 width;
-    s32 halfWidth;
     f32 x;
-    u16 lineCount;
-
-    itemName = msgSearch(*(char**)(itemDataTable + BattleAudience_GetPresentItemNo() * 0x28 + 4));
-    if (*(void**)((s32)gp + 0x16C) == 0) {
+    itemName = msgSearch(((LocalItem*)itemDataTable)[BattleAudience_GetPresentItemNo()].name);
+    if (*(u32*)((s32)gp + 0x16C) == 0) {
         sprintf(buf, msgSearch(str_btl_msg_get_item_802f4288), itemName);
     } else {
         strcpy(buf, msgSearch(str_btl_msg_get_item_802f4288));
         unk_800d1364(buf, itemName);
     }
     width = (u16)FontGetMessageWidthLine(buf, lines);
-    halfWidth = width / 2;
-    lineCount = lines[0] + 1;
-    x = float_0_80422f9c - (f32)halfWidth;
-    lines[0] = lineCount;
+    lines[0]++;
     color = dat_80422f90;
-    windowDispGX_Waku_col(0, &color, x - float_10_80422fa0, float_34_80422fa4, width + 0x14, lineCount * 0x1D + 3, float_10_80422fa0);
+    x = float_0_80422f9c - (f32)(width / 2);
+    windowDispGX_Waku_col(0, &color, x - float_10_80422fa0, float_34_80422fa4, width + 0x14, lines[0] * 0x1D + 3, float_10_80422fa0);
     FontDrawStart();
     FontDrawMessage((s32)x, (s32)float_60_80422fa8 - 0x1D, buf);
 }

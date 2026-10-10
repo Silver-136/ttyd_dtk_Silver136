@@ -4,7 +4,7 @@ void* effEntry(void);
 void* __memAlloc(s32 heap, u32 size);
 void effMahornMain(void* entry);
 
-extern f32 float_0_804287f8;
+extern const f32 float_0_804287f8;
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -180,6 +180,10 @@ void effMahornDisp(s32 cameraId, void* effect) {
     extern void PSMTXRotRad(f32[3][4], s32, f32);
     extern void PSMTXConcat(f32[3][4], f32[3][4], f32[3][4]);
     extern f32 float_deg2rad_804287e8;
+    extern f32 float_8_804287ec;
+    extern f32 float_0p5_804287f0;
+    extern f32 float_4_804287f4;
+    extern f32 float_1_804287fc;
     extern u32 dat_804287e0;
     extern u32 dat_804287e4;
 
@@ -193,7 +197,7 @@ void effMahornDisp(s32 cameraId, void* effect) {
     void* camera;
     volatile f32* fifo = (volatile f32*)0xCC008000;
     f32 scale;
-    f32 halfWidth = -8.0f * 0.5f;
+    f32 halfWidth = -float_8_804287ec;
     s32 baseAlpha = *(s32*)(work + 0x18);
     s32 i;
 
@@ -242,10 +246,11 @@ void effMahornDisp(s32 cameraId, void* effect) {
             GXLoadPosMtxImm(trans, 0);
             GXSetCurrentMtx(0);
             GXBegin(0x80, 0, 4);
-            *fifo = halfWidth; *fifo = 4.0f; *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
-            *fifo = 4.0f; *fifo = 4.0f; *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
-            *fifo = 4.0f; *fifo = halfWidth; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
-            *fifo = halfWidth; *fifo = halfWidth; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
+            scale = halfWidth * float_0p5_804287f0;
+            *fifo = scale; *fifo = float_4_804287f4; *fifo = float_0_804287f8; *fifo = float_0_804287f8; *fifo = float_0_804287f8;
+            *fifo = float_4_804287f4; *fifo = float_4_804287f4; *fifo = float_0_804287f8; *fifo = float_1_804287fc; *fifo = float_0_804287f8;
+            *fifo = float_4_804287f4; *fifo = scale; *fifo = float_0_804287f8; *fifo = float_1_804287fc; *fifo = float_1_804287fc;
+            *fifo = scale; *fifo = scale; *fifo = float_0_804287f8; *fifo = float_0_804287f8; *fifo = float_1_804287fc;
         }
     }
 }
@@ -253,16 +258,26 @@ void effMahornDisp(s32 cameraId, void* effect) {
 const u32 vec3_80302950[] = { 0x00000000, 0x00000000, 0x00000000 };
 const char str_Mahorn_80302968[] = "Mahorn";
 
-u8 scale_dt[21] = {
+static u8 scale_dt[21] = {
     0, 7, 14, 22, 30, 38, 47, 55, 63, 71, 78,
     84, 90, 94, 98, 100, 100, 85, 51, 16, 0,
 };
 
-static u8 scale_dt_padding[3] = { 0 };
 
-u8 scale_dt2[21] = {
+static u8 scale_dt2[21] = {
     0, 19, 41, 63, 82, 95, 100, 99, 95, 89, 81,
     71, 61, 51, 40, 30, 20, 12, 6, 2, 0,
 };
 
-static u8 scale_dt2_padding[3] = { 0 };
+
+__declspec(section ".sdata2") u32 dat_804287e0 = 0xFDE83C00;
+__declspec(section ".sdata2") u32 dat_804287e4 = 0xFFFCE700;
+__declspec(section ".sdata2") f32 float_deg2rad_804287e8 = 0.01745329238474369f;
+__declspec(section ".sdata2") f32 float_8_804287ec = 8.0f;
+__declspec(section ".sdata2") f32 float_0p5_804287f0 = 0.5f;
+__declspec(section ".sdata2") f32 float_4_804287f4 = 4.0f;
+__declspec(section ".sdata2") const f32 float_0_804287f8 = 0.0f;
+__declspec(section ".sdata2") f32 float_1_804287fc = 1.0f;
+__declspec(section ".sdata2") f32 float_100_80428800 = 100.0f;
+__declspec(section ".sdata2") f32 float_20_80428804 = 20.0f;
+__declspec(section ".sdata2") f32 float_0p125_80428808 = 0.125f;

@@ -25,11 +25,12 @@ extern f32 BeroOZ;
 extern f32 BeroOY;
 extern s32 BeroID[];
 extern f32 BeroAT[];
-extern void camRoadMain(f64, f64, f64, f64, f64, f64, void*);
+extern void camRoadMain(f64, f64, f64, f64, f64, f64, f64, void*);
 extern f32 BeroPT[];
 extern s32 BeroNOWNUM;
 extern s32 default_entevt[];
 extern const char* const lbl_802C2C28[8];
+extern s32 default_outevt[];
 
 
 extern s32 strncmp(const char*, const char*, u32);
@@ -196,8 +197,10 @@ u32 evt_bero_exec_wait(int param_1) {
     EventEntry* event = (EventEntry*)param_1;
     s32 ret = EVT_RETURN_DONE;
     s32 mask = evtGetValue(event, event->args[0]);
-    s32 value = BeroEXEC & mask;
-    s32 result = (-value | value) >> 31;
+    s32 value = BeroEXEC;
+    s32 result;
+    value &= mask;
+    result = (-value | value) >> 31;
 
     return ret & result;
 }
@@ -271,11 +274,15 @@ s32 evt_bero_get_info_length(void* pEvt) {
     extern f32 float_60_80420520;
     EventEntry* event = pEvt;
     s32* args = event->args;
-    BeroInfo* info = BeroINFOARR[evtGetValue(event, args[0])];
+    BeroInfo* info;
+    s32 length;
     f32 value;
 
-    if (info->length != -1) {
-        evtSetFloat(event, args[1], (f32)info->length);
+    args = event->args;
+    info = BeroINFOARR[evtGetValue(event, args[0])];
+    length = info->length;
+    if (length != -1) {
+        evtSetFloat(event, args[1], (f32)length);
         return EVT_RETURN_DONE;
     }
     switch (info->kind & 0xFFF) {
@@ -285,7 +292,11 @@ s32 evt_bero_get_info_length(void* pEvt) {
             value = float_30_80420518;
             break;
         case 1:
+            value = float_60_80420520;
+            break;
         case 2:
+            value = float_60_80420520;
+            break;
         default:
             value = float_60_80420520;
             break;
@@ -419,6 +430,7 @@ fill:
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma opt_common_subs off
 s32 evt_bero_get_into_info(void* pEvt) {
     typedef struct BeroInfoLocal {
         char* hitName;
@@ -439,7 +451,6 @@ s32 evt_bero_get_into_info(void* pEvt) {
     BeroInfoLocal* first;
     s32 index = 0;
     s32 direction;
-    s32 i;
     const char** name;
     const char* namesA[8];
     const char* namesB[8];
@@ -460,12 +471,12 @@ scan:
 
 found:
     first = BeroINFOARR[0];
-    if (((*(u32*)gp & 2) == 0) || strcmp((char*)((u8*)gp + 0x11C), (char*)&float_0_8042051c) != 0) {
-        lw[1] = index;
+    if (((*(u32*)gp & 2) != 0) && strcmp((char*)((u8*)gp + 0x11C), (char*)&float_0_8042051c) == 0) {
+        lw[1] = 0;
         lw[2] = BeroNUM;
-        lw[3] = (s32)((u8*)gp + 0x11C);
-        lw[4] = info->type;
-        direction = info->direction;
+        lw[3] = (s32)first->hitName;
+        lw[4] = first->type;
+        direction = first->direction;
         namesA[0] = lbl_802C2C28[0];
         namesA[1] = lbl_802C2C28[1];
         namesA[2] = lbl_802C2C28[2];
@@ -477,30 +488,36 @@ found:
         if (direction == 20000) {
             if (direction == 10000) {
                 direction = 10000;
-            } else if ((info->type & 0xFFF) < 2) {
-                direction = 0;
-                name = namesA;
-                do {
-                    if (strncmp(*name, info->hitName, strlen(*name)) == 0) {
-                        break;
-                    }
-                    direction++;
-                    name++;
-                } while (direction < 8);
             } else {
-                direction = 10000;
+                switch (first->type & 0xFFF) {
+                    case 0:
+                    case 1:
+                        direction = 0;
+                        name = namesA;
+                        do {
+                            if (strncmp(*name, first->hitName, strlen(*name)) == 0) {
+                                break;
+                            }
+                            direction++;
+                            name++;
+                        } while ((u32)direction < 8);
+                        break;
+                    default:
+                        direction = 10000;
+                        break;
+                }
             }
         }
         lw[5] = direction;
-        lw[6] = (s32)&info->center[0];
-        lw[7] = (s32)(info->enterEvt != 0 ? info->enterEvt : &default_entevt);
+        lw[6] = (s32)&first->center[0];
+        lw[7] = (s32)(first->enterEvt != 0 ? first->enterEvt : &default_entevt);
         lw[8] = -0x10000;
     } else {
-        lw[1] = 0;
+        lw[1] = index;
         lw[2] = BeroNUM;
-        lw[3] = (s32)first->hitName;
-        lw[4] = first->type;
-        direction = first->direction;
+        lw[3] = (s32)((u8*)gp + 0x11C);
+        lw[4] = info->type;
+        direction = info->direction;
         namesB[0] = lbl_802C2C28[0];
         namesB[1] = lbl_802C2C28[1];
         namesB[2] = lbl_802C2C28[2];
@@ -512,26 +529,35 @@ found:
         if (direction == 20000) {
             if (direction == 10000) {
                 direction = 10000;
-            } else if ((first->type & 0xFFF) < 2) {
-                direction = 0;
-                for (i = 0; i < 8; i++) {
-                    if (strncmp(namesB[i], first->hitName, strlen(namesB[i])) == 0) {
-                        break;
-                    }
-                    direction++;
-                }
             } else {
-                direction = 10000;
+                switch (info->type & 0xFFF) {
+                    case 0:
+                    case 1:
+                        direction = 0;
+                        name = namesB;
+                        do {
+                            if (strncmp(*name, info->hitName, strlen(*name)) == 0) {
+                                break;
+                            }
+                            direction++;
+                            name++;
+                        } while ((u32)direction < 8);
+                        break;
+                    default:
+                        direction = 10000;
+                        break;
+                }
             }
         }
         lw[5] = direction;
-        lw[6] = (s32)&first->center[0];
-        lw[7] = (s32)(first->enterEvt != 0 ? first->enterEvt : &default_entevt);
+        lw[6] = (s32)&info->center[0];
+        lw[7] = (s32)(info->enterEvt != 0 ? info->enterEvt : &default_entevt);
         lw[8] = -0x10000;
     }
     return 2;
 }
 
+#pragma opt_common_subs reset
 #pragma use_lmw_stmw on
 #pragma no_register_save_helpers off
 
@@ -566,13 +592,19 @@ u32 evt_bero_read_mario_pera(int param_1, int param_2) {
 s32 evt_bero_id_filter(int param_1) {
     extern void* BeroINFOARR[];
     extern s32 strcmp(const char* a, const char* b);
-    EventEntry* event = (EventEntry*)param_1;
-    s32* args = event->args;
-    s32 filtered = evtGetValue(event, args[0]);
-    void** info = BeroINFOARR;
+    s32 original;
+    void** info;
+    s32* args;
+    EventEntry* event;
+    s32 filtered;
+
+    event = (EventEntry*)param_1;
+    args = event->args;
+    filtered = evtGetValue(event, args[0]);
+    info = BeroINFOARR;
 
     if (filtered < 0 || filtered >= 16) {
-        s32 original = filtered;
+        original = filtered;
         if (&filtered != NULL) {
             filtered = 0;
         }
@@ -614,7 +646,6 @@ s32 evt_bero_get_info_num(void* pEvt, s32 isFirstCall) {
     } BeroInfoLocal;
     extern s32 evtGetValue(void*, s32);
     extern BeroInfoLocal* BeroINFOARR[];
-    extern s32 default_outevt[];
     u8* event = pEvt;
     s32* args = *(s32**)(event + 0x18);
     s32* lw = (s32*)(event + 0x9C);
@@ -636,47 +667,75 @@ s32 evt_bero_get_info_num(void* pEvt, s32 isFirstCall) {
     names[6] = lbl_802C2C28[6];
     names[7] = lbl_802C2C28[7];
     if (direction == 20000) {
-        if ((info->type & 0xFFF) < 2) {
-            direction = 0;
-            name = names;
-            do {
-                if (strncmp(*name, info->hitName, strlen(*name)) == 0) {
-                    break;
-                }
-                direction++;
-                name++;
-            } while (direction < 8);
-        } else {
+        if (direction == 10000) {
             direction = 10000;
+        } else {
+            switch (info->type & 0xFFF) {
+                case 0:
+                case 1:
+                    direction = 0;
+                    name = names;
+                    do {
+                        if (strncmp(*name, info->hitName, strlen(*name)) == 0) {
+                            break;
+                        }
+                        direction++;
+                        name++;
+                    } while ((u32)direction < 8);
+                    break;
+                default:
+                    direction = 10000;
+                    break;
+            }
         }
     }
     lw[5] = direction;
     lw[6] = (s32)&info->center[0];
-    lw[7] = (s32)(info->enterEvt != 0 ? info->enterEvt : &default_entevt);
+    {
+        void* evtCode = info->enterEvt;
+        if (evtCode == 0) {
+            evtCode = &default_entevt;
+        }
+        lw[7] = (s32)evtCode;
+    }
     lw[8] = -0x10000;
     lw[9] = BeroSW[id];
     lw[10] = info->enterAnime;
     if (info->enterAnime == -1) {
-        type = info->type & 0xFFF;
-        if (type == 3) {
-            lw[10] = 7;
-        } else if (type == 1) {
-            lw[10] = 9;
-        } else if (type == 0) {
-            lw[10] = 10;
-        } else if (type < 3) {
-            lw[10] = 4;
-        } else if (type == 0xF00) {
-            lw[10] = 0;
+        switch (info->type & 0xFFF) {
+            case 0xF00:
+                lw[10] = 0;
+                break;
+            case 0:
+                lw[10] = 10;
+                break;
+            case 1:
+                lw[10] = 9;
+                break;
+            case 2:
+                lw[10] = 4;
+                break;
+            case 3:
+                lw[10] = 7;
+                break;
         }
     }
-    lw[11] = (s32)(info->exitEvt != 0 ? info->exitEvt : &default_outevt);
+    {
+        void* evtCode = info->exitEvt;
+        if (evtCode == 0) {
+            evtCode = &default_outevt;
+        }
+        lw[11] = (s32)evtCode;
+    }
     lw[12] = -0x10000;
     lw[13] = info->exitAnime;
     lw[14] = info->length;
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+#pragma opt_common_subs off
 u8 bero_get_position_normal(void* pEvt) {
     extern f32 float_0_804204e8;
     extern f32 float_30_80420518;
@@ -706,35 +765,35 @@ u8 bero_get_position_normal(void* pEvt) {
     f32 length = evtGetFloat(pEvt, args[1]);
     s32* posData = *(s32**)((s32)pEvt + 0xB4);
     s32 dirIndex = *(s32*)((s32)pEvt + 0xB0);
-    f32 start[3];
-    f32 end[3];
-    f32 base[3];
-    f32 hitPos[3];
-    f32 rayStart[3];
-    f32 hitDist;
-    f32 outA;
-    f32 outB;
+    Vec start;
+    volatile Vec end;
+    Vec rayStart;
+    Vec base;
     f32 outC;
+    f32 outB;
+    f32 outA;
+    f32 hitDist;
+    Vec hitPos;
     f32 angle;
     f32 rad;
     f32 s;
     f32 c;
 
-    start[0] = (f32)posData[0];
-    start[1] = (f32)posData[1];
-    start[2] = (f32)posData[2];
-    end[0] = (f32)posData[0];
-    end[1] = (f32)posData[1];
-    end[2] = (f32)posData[2];
+    start.x = (f32)posData[0];
+    start.y = (f32)posData[1];
+    start.z = (f32)posData[2];
+    end.x = (f32)posData[0];
+    end.y = (f32)posData[1];
+    end.z = (f32)posData[2];
 
     if (posData[0] == 100000) {
-        hitObjGetPos(*(char**)((s32)pEvt + 0xA8), start);
+        hitObjGetPos(*(char**)((s32)pEvt + 0xA8), &start.x);
     }
 
     if (float_0_804204e8 != length) {
-        hitPos[0] = float_0_804204e8;
-        hitPos[1] = float_0_804204e8;
-        hitPos[2] = float_0_804204e8;
+        hitPos.x = float_0_804204e8;
+        hitPos.y = float_0_804204e8;
+        hitPos.z = float_0_804204e8;
         hitDist = float_1E06_8042050c;
         outA = float_0_804204e8;
         outB = float_0_804204e8;
@@ -747,49 +806,50 @@ u8 bero_get_position_normal(void* pEvt) {
         rad = (float_6p2832_804204e0 * angle) / float_360_804204e4;
 
         s = (f32)sin(rad);
-        base[1] = start[1];
-        base[0] = start[0] - (float_30_80420518 * s);
+        base.y = start.y;
+        base.x = start.x - (float_30_80420518 * s);
 
         c = (f32)cos(rad);
-        base[2] = start[2] + (float_30_80420518 * c);
+        base.z = start.z + (float_30_80420518 * c);
 
-        if (hitCheckFilter(base[0], base[1], base[2],
+        if (hitCheckFilter(base.x, base.y, base.z,
                            float_0_804204e8, float_neg1_80420508, float_0_804204e8,
-                           0, &hitPos[2], &hitPos[1], &hitPos[0], &hitDist,
+                           0, &hitPos.z, &hitPos.y, &hitPos.x, &hitDist,
                            &outA, &outB, &outC) != 0) {
-            base[1] = hitPos[1];
+            base.y = hitPos.y;
         }
 
-        rayStart[0] = base[0];
-        rayStart[1] = base[1];
-        rayStart[2] = base[2];
+        rayStart = base;
 
         s = (f32)sin(rad);
         length += float_30_80420518;
-        end[0] = (length * s) + rayStart[0];
+        end.x = (length * s) + rayStart.x;
 
         c = (f32)cos(rad);
-        end[2] = (length * -c) + rayStart[2];
-        end[1] = rayStart[1];
+        end.z = (length * -c) + rayStart.z;
+        end.y = rayStart.y;
 
-        start[0] = base[0];
-        start[1] = base[1];
-        start[2] = base[2];
+        start = base;
     }
 
-    BeroSX = start[0];
-    BeroSY = start[1];
-    BeroSZ = start[2];
-    BeroEX = end[0];
-    BeroEY = end[1];
-    BeroEZ = end[2];
-    N_marioSetBottomlessRespawnPosOnBeroEntry(end[0], end[1], end[2]);
+    BeroSX = start.x;
+    BeroSY = start.y;
+    BeroSZ = start.z;
+    BeroEX = end.x;
+    BeroEY = end.y;
+    BeroEZ = end.z;
+    N_marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, end.z);
     if (*(u16*)((s32)mario + 0x2E) == 0x19) {
         N_marioReloadMapOnBottomlessOn();
     }
     return 2;
 }
+#pragma opt_common_subs reset
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void bero_get_position_pipe_sub(s32 side, u32 distance, char* hitName, s32 kind,
                                 f32* start, f32* end) {
     extern f32 float_0_804204e8;
@@ -806,15 +866,13 @@ void bero_get_position_pipe_sub(s32 side, u32 distance, char* hitName, s32 kind,
     s32 hitA;
     s32 hitB;
     s32 hitC;
-    f32 offset;
+    f32 offset = float_20_804204f8;
 
-    if (kind == 2 || kind == 6) {
-        if (kind == 6) {
-            distance = -distance;
-            offset = -float_20_804204f8;
-        } else {
-            offset = float_20_804204f8;
-        }
+    switch (kind) {
+    case 6:
+        distance = -distance;
+        offset = -offset;
+    case 2:
         if (side == 0) {
             hitObjGetPos(hitName, start);
             start[0] -= offset;
@@ -823,7 +881,7 @@ void bero_get_position_pipe_sub(s32 side, u32 distance, char* hitName, s32 kind,
             end[2] = start[2];
             hitCheckFilter(end[0], end[1], end[2], float_0_804204e8,
                            float_neg1_80420508, float_0_804204e8, 0,
-                           &hitZ, &hitY, &hitX, &hitDist, &hitA, &hitB, &hitC);
+                           &hitX, &hitY, &hitZ, &hitDist, &hitA, &hitB, &hitC);
         } else {
             hitObjGetPos(hitName, end);
             end[0] -= offset;
@@ -832,17 +890,14 @@ void bero_get_position_pipe_sub(s32 side, u32 distance, char* hitName, s32 kind,
             start[2] = end[2];
             hitCheckFilter(start[0], start[1], start[2], float_0_804204e8,
                            float_neg1_80420508, float_0_804204e8, 0,
-                           &hitZ, &hitY, &hitX, &hitDist, &hitA, &hitB, &hitC);
+                           &hitX, &hitY, &hitZ, &hitDist, &hitA, &hitB, &hitC);
         }
-        start[1] = hitY;
-        end[1] = hitY;
+        end[1] = start[1] = hitY;
         return;
-    }
 
-    if (kind == 8 || kind == 9) {
-        if (kind == 9) {
-            distance = -distance;
-        }
+    case 9:
+        distance = -distance;
+    case 8:
         if (side == 0) {
             hitObjGetPos(hitName, start);
             end[0] = start[0];
@@ -855,11 +910,19 @@ void bero_get_position_pipe_sub(s32 side, u32 distance, char* hitName, s32 kind,
             start[2] = end[2];
         }
         return;
-    }
 
-    hitObjGetPos(hitName, start);
-    hitObjGetPos(hitName, end);
+    case 10000:
+    default:
+        hitObjGetPos(hitName, start);
+        hitObjGetPos(hitName, end);
+        return;
+    }
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 bero_get_position_pipe_pure(void* pEvt) {
     extern s32 evtGetValue(void*, s32);
     extern f32 evtGetFloat(void*, s32);
@@ -869,6 +932,8 @@ s32 bero_get_position_pipe_pure(void* pEvt) {
     s32* args;
     f32 start[3];
     f32 end[3];
+    f32 startY;
+    f32 endY;
     s32 id;
     s32 distance;
     s32 kind;
@@ -881,20 +946,26 @@ s32 bero_get_position_pipe_pure(void* pEvt) {
     bero_get_position_pipe_sub(id, distance, *(void**)((u8*)event + 0xA8), kind, start, end);
     BeroSX = start[0];
     if (kind == 8) {
-        start[1] -= float_37p5_80420500;
+        startY = start[1] - float_37p5_80420500;
+    } else {
+        startY = start[1];
     }
+    BeroSY = startY;
     BeroSZ = start[2];
     BeroEX = end[0];
     if (kind == 8) {
-        end[1] -= float_37p5_80420500;
+        endY = end[1] - float_37p5_80420500;
+    } else {
+        endY = end[1];
     }
+    BeroEY = endY;
     BeroEZ = end[2];
-    BeroEY = end[1];
-    BeroSY = start[1];
-    N_marioSetBottomlessRespawnPosOnBeroEntry(end[0], end[1], end[2]);
+    N_marioSetBottomlessRespawnPosOnBeroEntry(end[0], endY, end[2]);
     return 2;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 bero_get_position_pipe2(s32 param) {
@@ -1135,6 +1206,8 @@ USER_FUNC(evt_bero_disppos_load) {
     return EVT_RETURN_DONE;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_bero_move_mario_speed(void* pEvt, s32 isFirstCall) {
     extern f32 float_0_804204e8;
     extern f32 float_360_804204e4;
@@ -1156,16 +1229,18 @@ s32 evt_bero_move_mario_speed(void* pEvt, s32 isFirstCall) {
     f32 sinv;
     f32 cosv;
     f32 elapsed;
+    f32 distance;
+    f32 value;
     f32 dx;
     f32 dy;
     s32 reachedX;
     s32 reachedY;
 
     step = evtGetFloat(pEvt, args[0]);
-    if (*(s32*)((u8*)gp + 0x14) == 0) {
-        now = *(u64*)((u8*)gp + 0x40);
-    } else {
+    if (*(s32*)((u8*)gp + 0x14) != 0) {
         now = *(u64*)((u8*)gp + 0x38);
+    } else {
+        now = *(u64*)((u8*)gp + 0x40);
     }
     if (isFirstCall != 0) {
         *(u64*)(event + 0x198) = now;
@@ -1180,36 +1255,62 @@ s32 evt_bero_move_mario_speed(void* pEvt, s32 isFirstCall) {
         (__mulhwu(0x10624DD3, *(volatile u32*)0x800000F8 >> 2) >> 6)));
     dx = step * sinv;
     dy = -(step * cosv);
+    distance = step * elapsed;
 
+    value = BeroSX + sinv * distance;
     player = marioGetPtr();
-    *(f32*)(player + 0x8C) = BeroSX + sinv * elapsed;
+    *(f32*)(player + 0x8C) = value;
+    value = BeroSY - cosv * distance;
     player = marioGetPtr();
-    *(f32*)(player + 0x90) = BeroSY - cosv * elapsed;
+    *(f32*)(player + 0x90) = value;
+    value = BeroSZ;
     player = marioGetPtr();
-    *(f32*)(player + 0x94) = BeroSZ;
+    *(f32*)(player + 0x94) = value;
 
     reachedX = 0;
-    if ((dx >= float_0_804204e8 && *(f32*)(player + 0x8C) >= BeroEX) ||
-        (dx < float_0_804204e8 && *(f32*)(player + 0x8C) <= BeroEX)) {
-        reachedX = 1;
+    if (dx >= float_0_804204e8) {
+        player = marioGetPtr();
+        if (*(f32*)(player + 0x8C) >= BeroEX) {
+            reachedX = 1;
+        }
+    }
+    if (dx < float_0_804204e8) {
+        player = marioGetPtr();
+        if (*(f32*)(player + 0x8C) <= BeroEX) {
+            reachedX = 1;
+        }
     }
     reachedY = 0;
-    if ((dy >= float_0_804204e8 && *(f32*)(player + 0x90) >= BeroEY) ||
-        (dy < float_0_804204e8 && *(f32*)(player + 0x90) <= BeroEY)) {
-        reachedY = 1;
+    if (dy >= float_0_804204e8) {
+        player = marioGetPtr();
+        if (*(f32*)(player + 0x90) >= BeroEY) {
+            reachedY = 1;
+        }
     }
-    if (reachedX + reachedY == 2) {
+    if (dy < float_0_804204e8) {
         player = marioGetPtr();
-        *(f32*)(player + 0x8C) = BeroEX;
+        if (*(f32*)(player + 0x90) <= BeroEY) {
+            reachedY = 1;
+        }
+    }
+    if (reachedX + reachedY != 2) {
+        return 0;
+    } else {
+        value = BeroEX;
         player = marioGetPtr();
-        *(f32*)(player + 0x90) = BeroEY;
+        *(f32*)(player + 0x8C) = value;
+        value = BeroEY;
         player = marioGetPtr();
-        *(f32*)(player + 0x94) = BeroEZ;
+        *(f32*)(player + 0x90) = value;
+        value = BeroEZ;
+        player = marioGetPtr();
+        *(f32*)(player + 0x94) = value;
         return 2;
     }
-    return 0;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 USER_FUNC(evt_bero_overwrite) {
@@ -1225,7 +1326,10 @@ USER_FUNC(evt_bero_overwrite) {
         if (&id != NULL) {
             id = 0;
         }
-        while (*(char**)*info != NULL && strcmp(*(char**)*info, name) != 0) {
+        for (;;) {
+            if (*(char**)*info == NULL || strcmp(*(char**)*info, name) == 0) {
+                break;
+            }
             info++;
             if (&id != NULL) {
                 id++;
@@ -1247,6 +1351,9 @@ USER_FUNC(evt_bero_cam3d_change) {
     extern void* camGetPtr(s32 camId);
     s32* args = event->args;
     void* cam = camGetPtr(4);
+    void* gpLocal;
+    u32 gp38;
+    u32 gp3C;
     s32 time = evtGetValue(event, args[0]);
     s32 type = evtGetValue(event, args[1]);
 
@@ -1257,17 +1364,20 @@ USER_FUNC(evt_bero_cam3d_change) {
     *(u32*)((s32)cam + 0x68) = *(u32*)((s32)cam + 0x1C);
     *(u32*)((s32)cam + 0x6C) = *(u32*)((s32)cam + 0x20);
 
-    *(u32*)((s32)cam + 0x40) = *(u32*)&BeroPT[0];
-    *(u32*)((s32)cam + 0x44) = *(u32*)&BeroPT[1];
-    *(u32*)((s32)cam + 0x48) = *(u32*)&BeroPT[2];
-    *(u32*)((s32)cam + 0x4C) = *(u32*)&BeroAT[0];
-    *(u32*)((s32)cam + 0x50) = *(u32*)&BeroAT[1];
-    *(u32*)((s32)cam + 0x54) = *(u32*)&BeroAT[2];
+    *(u32*)((s32)cam + 0x40) = *(volatile u32*)&BeroPT[0];
+    *(u32*)((s32)cam + 0x44) = *(volatile u32*)&BeroPT[1];
+    *(u32*)((s32)cam + 0x48) = *(volatile u32*)&BeroPT[2];
+    *(u32*)((s32)cam + 0x4C) = *(volatile u32*)&BeroAT[0];
+    *(u32*)((s32)cam + 0x50) = *(volatile u32*)&BeroAT[1];
+    *(u32*)((s32)cam + 0x54) = *(volatile u32*)&BeroAT[2];
 
-    *(u32*)((s32)cam + 0x70) = *(u32*)((s32)gp + 0x38);
-    *(u32*)((s32)cam + 0x74) = *(u32*)((s32)gp + 0x3C);
-    *(u32*)((s32)cam + 0x78) = 0;
+    gpLocal = gp;
+    gp38 = *(u32*)((s32)gpLocal + 0x38);
+    gp3C = *(u32*)((s32)gpLocal + 0x3C);
+    *(u32*)((s32)cam + 0x74) = gp3C;
+    *(u32*)((s32)cam + 0x70) = gp38;
     *(u32*)((s32)cam + 0x7C) = time * (__mulhwu(0x10624DD3, *(volatile u32*)0x800000F8 >> 2) >> 6);
+    *(u32*)((s32)cam + 0x78) = 0;
     *(u16*)((s32)cam + 0x04) = 3;
     *(u8*)((s32)cam + 0x80) = type;
     return EVT_RETURN_DONE;
@@ -1320,26 +1430,30 @@ USER_FUNC(evt_bero_1stcheck) {
 
 
 #pragma use_lmw_stmw off
+#pragma no_register_save_helpers on
 s32 evt_camera_change_event_from_road(void) {
     extern void* camGetPtr(s32);
     extern void camShiftMain(void*, void*, void*);
     extern const RoadVec vec3_802c2f10;
     extern const RoadVec vec3_802c2f1c;
-    u8 shiftWork[28];
     f32 road[9];
     u8* player;
     u8* cam;
-    f32 x;
-    f32 y;
-    f32 z;
 
-    player = marioGetPtr();
-    cam = camGetPtr(4);
-    camShiftMain(cam, player, shiftWork);
-    x = *(f32*)(player + 0x8C);
-    y = *(f32*)(cam + 0x98);
-    z = *(f32*)(player + 0x94);
-    camRoadMain(x, y, z, x, y, z, road);
+    {
+        u8 shiftWork[28];
+        f32 x;
+        f32 y;
+        f32 z;
+
+        player = marioGetPtr();
+        cam = camGetPtr(4);
+        camShiftMain(cam, player, shiftWork);
+        x = *(f32*)(player + 0x8C);
+        y = *(f32*)(cam + 0x98);
+        z = *(f32*)(player + 0x94);
+        camRoadMain(x, y, z, x, y, z, *(f32*)shiftWork, road);
+    }
     {
     RoadVec roadPos = vec3_802c2f10;
     RoadVec roadTarget = vec3_802c2f1c;
@@ -1367,6 +1481,7 @@ s32 evt_camera_change_event_from_road(void) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
 extern s32 evt_mario_key_onoff(void);

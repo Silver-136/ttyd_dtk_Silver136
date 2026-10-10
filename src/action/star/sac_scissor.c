@@ -12,6 +12,56 @@ extern f32 float_1_80427cb4;
 extern f32 float_neg1000_80427cfc;
 extern void* gp;
 extern void scissor_disp_region(void);
+
+/* Data-pass A1: exact initialized-data identities used by the reconstructed Event/weapon prefix. */
+extern u32 weapon_scissor[48];
+extern u32 weapon_scissor_finish[48];
+extern u32 marioAttackEvent_Scissor[300];
+extern u32 sac_start_camera_evt[];
+extern u32 sac_mario_item_on_evt[];
+extern u32 sac_start_stardust[];
+extern u32 sac_mario_item_on_end_evt[];
+extern u32 sac_mario_back_home[];
+extern const char str_btl_wn_sac_scissor_802ffe78[];
+extern const char str_msg_scissor_802ffe8c[];
+extern const char str_msg_sac_5_802ffe98[];
+extern const char str_SFX_BTL_SAC_START1_802ffee0[];
+extern const char str_SFX_BTL_SAC_START2_802ffef4[];
+extern const char str_SFX_BTL_SAC_START3_802fff08[];
+extern const char str_OFF_d_bom_802fff1c[];
+extern const char str_SFX_BTL_SAC_KAKONDEP_802fff28[];
+extern s32 btlevtcmd_snd_se(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_snd_sfxoff(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_set_mode(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_AnimeChangePose(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_btl_camera_set_moveto(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_cheer(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_ac_help_on(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_paper_entry(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_offscreen_entry(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_img_entry(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_img_set_paper(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_img_onoff(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_img_set_shadow(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_img_release(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_offscreen_delete(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_paper_delete(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_img_alloc_capture(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_snd_sfxon(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_ACSuccessEffect(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_img_set_paper_anim(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_img_clear_virtual_point(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_ac_help_off(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_cheer_end(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_GetSelectEnemy(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_WaitGuardMove(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CommandPayWeaponCost(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CommandGetWeaponAddress(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_WeaponAftereffect(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_GetTotalDamage(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_CheckDamage(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_GetSelectNextEnemy(EventEntry* event, BOOL isFirstCall);
+extern s32 btlevtcmd_StartWaitEvent(EventEntry* event, BOOL isFirstCall);
 extern void star_disp2D_sub(s32 id, s32 alpha);
 void smartFree(void* ptr);
 void tess(void* entries, s32 count);
@@ -390,14 +440,14 @@ s32 star_control(void) {
     extern f32 float_2160_80427d08;
     extern f32 float_300_80427cdc;
     extern f32 float_1p5_80427d0c;
-    extern char str_btl_wn_sac_scissor_802ffe78[];
+    extern const char str_btl_wn_sac_scissor_802ffe78[];
 
     void* work;
     void* mario;
     void* eff;
     void* effWork;
     f32* hist;
-    char* ro;
+    const char* ro;
     s32 state;
     s32 i;
     s32 offset;
@@ -562,7 +612,7 @@ void star_disp2D_sub(s32 id, s32 alpha) {
     extern void PSMTXRotRad(f32 mtx[3][4], s32 axis, f32 rad);
     extern void PSMTXConcat(f32 a[3][4], f32 b[3][4], f32 out[3][4]);
     extern void iconDispGxCol(f32 mtx[3][4], s32 size, s32 iconId, void* color);
-    extern u32 dat_80427c78;
+    extern const u32 dat_80427c78;
     extern f32 float_20_80427cf4;
     extern f32 float_deg2rad_80427cf8;
 
@@ -714,8 +764,6 @@ s32 scissor_control(s32 param_1, s32 reset) {
     extern f32 float_300_80427cdc;
     extern f32 float_neg200_80427ce0;
     extern f32 float_200_80427ce4;
-    extern f64 double_5_802fff48;
-    extern const char str_SFX_BTL_SAC_KAKONDEP_802fff50[];
     void* work;
     f32* points;
     s32 count;
@@ -783,7 +831,7 @@ s32 scissor_control(s32 param_1, s32 reset) {
             if (adx < float_0_80427c94) adx = -adx;
             ady = dy;
             if (ady < float_0_80427c94) ady = -ady;
-            if ((f64)adx >= double_5_802fff48 || (f64)ady >= double_5_802fff48) psndSFXOn(str_SFX_BTL_SAC_KAKONDEP_802fff50);
+            if ((f64)adx >= 5.0 || (f64)ady >= 5.0) psndSFXOn("SFX_BTL_SAC_KAKONDEPON1");
             count = *(s32*)((s32)work + 0x9C);
             points[count * 2] = *(f32*)((s32)work + 0xB4);
             points[count * 2 + 1] = *(f32*)((s32)work + 0xB8);
@@ -828,7 +876,6 @@ s32 scissor_damage(EventEntry* event) {
     extern void BattleAudienceSoundHandBeat(void);
     extern void BattleAudienceSoundSetVol(s32 kind, u8 volume, s32 frames);
     extern s32 evtSetValue(EventEntry* event, s32 target, s32 value);
-    extern void weapon_scissor;
 
     void* battleWork;
     void* mario;
@@ -1063,6 +1110,7 @@ USER_FUNC(scissor_capture) {
 
 /* stub-fill: scissor_disp_control | prototype_only | source_prototype */
 void scissor_disp_control(s32 cameraId) {
+    extern const u32 dat_80427c7c;
     extern f32 intplGetValue(f32 start, f32 end, s32 type, s32 current, s32 total);
     extern void GXSetCullMode(s32 mode);
     extern void GXClearVtxDesc(void);
@@ -1083,7 +1131,6 @@ void scissor_disp_control(s32 cameraId) {
     extern u32 HSV2RGB(void* hsv);
     extern void GXSetChanMatColor(s32 chan, void* color);
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
-    extern void* gpGlobals;
     extern f32 float_255_80427cac;
 
     void* work;
@@ -1129,7 +1176,8 @@ void scissor_disp_control(s32 cameraId) {
     offset = 0;
     hueAdd = 0;
     for (i = 0; i < *(s32*)((s32)work + 0x9C) - 1U; i++) {
-        hsv = (((*(u32*)((s32)gpGlobals + 0x1C) + hueAdd) % 0x7F) << 1) << 24;
+        hsv = dat_80427c7c;
+        ((u8*)&hsv)[0] = (u8)(((*(u32*)((s32)gp + 0x1C) + hueAdd) % 0x7F) << 1);
         color = HSV2RGB(&hsv);
         GXSetChanMatColor(4, &color);
         GXBegin(0xA8, 0, 2);
@@ -1187,7 +1235,7 @@ void scissor_disp_region(void) {
     extern f32 float_240_80427c9c;
     extern f32 float_neg304_80427ca0;
     extern f32 float_304_80427ca4;
-    extern char str_ofs_80427c88[];
+    extern const char str_ofs_80427c88[];
 
     void* work;
     void* texObj[8];
@@ -1256,7 +1304,7 @@ void scissor_disp_region(void) {
     } else {
         *(u32*)work |= 1;
     }
-    offscreenAddBoundingBox(offscreenNameToId(str_ofs_80427c88), left, top, right, bottom);
+    offscreenAddBoundingBox(offscreenNameToId((char*)str_ofs_80427c88), left, top, right, bottom);
 }
 
 USER_FUNC(scissor_init) {
@@ -1293,7 +1341,7 @@ USER_FUNC(scissor_end) {
     return 2;
 }
 
-USER_FUNC(star_stone_appear) {
+static s32 star_stone_appear(EventEntry* event, BOOL isFirstCall) {
     void* wp;
 
     wp = GetScissorPtr();
@@ -1305,3 +1353,137 @@ USER_FUNC(wait_star_standby) {
     s32 state = *(s32*)((s32)GetScissorPtr() + 0x11C);
     return (state == 5) ? 2 : 0;
 }
+
+
+
+/* Data-pass A4: coherent target-backed .rodata prefix through the first conversion-double boundary. */
+const char str_btl_wn_sac_scissor_802ffe78[] = "btl_wn_sac_scissor";
+const char str_msg_scissor_802ffe8c[] = "msg_scissor";
+const char str_msg_sac_5_802ffe98[] = "msg_sac_5";
+const f32 vec3_802ffea4[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802ffeb0[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802ffebc[3] = { 0.0f, 300.0f, 0.0f };
+const f32 vec3_802ffec8[3] = { 1.0f, 1.0f, 1.0f };
+const f32 vec3_802ffed4[3] = { 0.0f, 0.0f, 0.0f };
+const char str_SFX_BTL_SAC_START1_802ffee0[] = "SFX_BTL_SAC_START1";
+const char str_SFX_BTL_SAC_START2_802ffef4[] = "SFX_BTL_SAC_START2";
+const char str_SFX_BTL_SAC_START3_802fff08[] = "SFX_BTL_SAC_START3";
+const char str_OFF_d_bom_802fff1c[] = "OFF_d_bom";
+const char str_SFX_BTL_SAC_KAKONDEP_802fff28[] = "SFX_BTL_SAC_KAKONDEPON2";
+
+/* Data-pass A3: safe target-backed .sdata2 prefix before the function-coupled scalar pool. */
+const u32 dat_80427c78 = 0xFFFFFF00;
+const u32 dat_80427c7c = 0x00FFFFFF;
+const char str_M_I_Y_80427c80[] = "M_I_Y";
+const char str_ofs_80427c88[] = "ofs";
+const char str_img_80427c8c[] = "img";
+const char str_A_1_80427c90[] = "A_1";
+
+/* Data-pass A1: target-exact source-owned .data prefix; generated switch table intentionally omitted. */
+u32 weapon_scissor[48] = {
+    (u32)(char*)str_btl_wn_sac_scissor_802ffe78, 0x01A40000, 0x00000000, (u32)(char*)str_msg_scissor_802ffe8c,
+    0x64000400, 0x3F800000, 0x01056432, (u32)weaponGetPower_Scissor,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x02101260, 0x20000000, 0x00000302,
+    (u32)(char*)str_msg_sac_5_802ffe98, 0x000200C8, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    (u32)marioAttackEvent_Scissor, 0x00000064, 0x00000000, 0x00000000,
+};
+
+u32 weapon_scissor_finish[48] = {
+    (u32)(char*)str_btl_wn_sac_scissor_802ffe78, 0x00000000, 0x00000000, 0x00000000,
+    0x64000000, 0x3F800000, 0x01056432, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x02101260, 0x20000000, 0x001B0302,
+    0x00000000, 0x00020088, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000064, 0x00000000, 0x00000000,
+};
+
+u32 marioAttackEvent_Scissor[300] = {
+    0x0001005B, (u32)scissor_init, 0x0000006E, 0x0001005B,
+    (u32)star_control, 0x00000070, 0x0001005E, (u32)sac_start_camera_evt,
+    0x0001000A, 0x000001F4, 0x0006005B, (u32)btlevtcmd_snd_se,
+    0xFFFFFFFE, (u32)(char*)str_SFX_BTL_SAC_START1_802ffee0, 0xF1194D80, 0x00000000,
+    0xF1194D80, 0x0001005E, (u32)sac_mario_item_on_evt, 0x0001000A,
+    0x000001F4, 0x0006005B, (u32)btlevtcmd_snd_se, 0xFFFFFFFE,
+    (u32)(char*)str_SFX_BTL_SAC_START2_802ffef4, 0xF1194D80, 0x00000000, 0xFE363C8B,
+    0x0001005B, (u32)star_stone_appear, 0x0000006E, 0x0001005E,
+    (u32)sac_start_stardust, 0x00000070, 0x00010009, 0x00000064,
+    0x0006005B, (u32)btlevtcmd_snd_se, 0xFFFFFFFE, (u32)(char*)str_SFX_BTL_SAC_START3_802fff08,
+    0xF1194D80, 0x00000000, 0xF1194D80, 0x0002005B,
+    (u32)evt_snd_sfxoff, 0xFE363C8B, 0x0003005B, (u32)evt_btl_camera_set_mode,
+    0x00000000, 0x00000000, 0x00010009, 0x00000028,
+    0x0001005E, (u32)sac_mario_item_on_end_evt, 0x0001005E, (u32)sac_mario_back_home,
+    0x0004005B, (u32)btlevtcmd_AnimeChangePose, 0xFFFFFFFE, 0x00000001,
+    (u32)(char*)str_M_I_Y_80427c80, 0x0000006E, 0x00010009, 0x0000001E,
+    0x0003005B, (u32)evt_btl_camera_set_mode, 0x00000000, 0x00000003,
+    0x000A005B, (u32)evt_btl_camera_set_moveto, 0x00000000, 0x0000004B,
+    0x00000069, 0x00000258, 0x0000004B, 0x00000037,
+    0x00000000, 0x0000001E, 0x00000000, 0x00000070,
+    0x0001005B, (u32)wait_star_standby, 0x0000006E, 0x0001005B,
+    (u32)scissor_timer_main, 0x00000070, 0x0000006E, 0x0002005B,
+    (u32)sac_cheer, 0x00000001, 0x00000070, 0x0001005B,
+    (u32)sac_ac_help_on, 0x00010005, 0x00000000, 0x00020032,
+    0xFE363C8A, (u32)(char*)str_OFF_d_bom_802fff1c, 0x0002005B, (u32)evt_paper_entry,
+    0xFE363C8A, 0x0002005B, (u32)evt_offscreen_entry, (u32)(char*)str_ofs_80427c88,
+    0x0002005B, (u32)evt_img_entry, (u32)(char*)str_img_80427c8c, 0x0003005B,
+    (u32)evt_img_set_paper, (u32)(char*)str_img_80427c8c, 0xFE363C8A, 0x0003005B,
+    (u32)evt_img_onoff, (u32)(char*)str_img_80427c8c, 0x00000000, 0x0001005B,
+    (u32)scissor_control, 0x0002005B, (u32)scissor_timer_get, 0xFE363C80,
+    0x0002001C, 0xFE363C80, 0x0000003B, 0x0003005B,
+    (u32)evt_img_onoff, (u32)(char*)str_img_80427c8c, 0x00000000, 0x0003005B,
+    (u32)evt_img_set_shadow, (u32)(char*)str_img_80427c8c, 0x00000000, 0x0002005B,
+    (u32)evt_img_release, (u32)(char*)str_img_80427c8c, 0x0002005B, (u32)evt_offscreen_delete,
+    (u32)(char*)str_ofs_80427c88, 0x0002005B, (u32)evt_paper_delete, 0xFE363C8A,
+    0x00010004, 0x0000005A, 0x00000021, 0x00010009,
+    0x00000001, 0x0001005B, (u32)scissor_tess, 0x00010009,
+    0x00000001, 0x0001005B, (u32)scissor_offscreen, 0x0009005B,
+    (u32)evt_img_alloc_capture, (u32)(char*)str_img_80427c8c, 0x00000000, (u32)(char*)str_ofs_80427c88,
+    0x00000001, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00010009, 0x00000001, 0x0002005B,
+    (u32)scissor_ofscreen_ok, 0xFE363C80, 0x00020019, 0xFE363C80,
+    0x00000000, 0x0003005B, (u32)evt_snd_sfxon, (u32)(char*)str_SFX_BTL_SAC_KAKONDEP_802fff28,
+    0x00000000, 0x0003005B, (u32)evt_img_onoff, (u32)(char*)str_img_80427c8c,
+    0x00000001, 0x0003005B, (u32)evt_img_set_shadow, (u32)(char*)str_img_80427c8c,
+    0x00000002, 0x0002005B, (u32)scissor_damage, 0xFE363C80,
+    0x0002001D, 0xFE363C80, 0x00000002, 0x0005005B,
+    (u32)btlevtcmd_ACSuccessEffect, 0xFE363C80, 0x0000004B, 0x00000064,
+    0xFFFFFF9C, 0x00000021, 0x0003005B, (u32)evt_img_set_paper_anim,
+    (u32)(char*)str_img_80427c8c, (u32)(char*)str_A_1_80427c90, 0x0002005B, (u32)evt_img_clear_virtual_point,
+    (u32)(char*)str_img_80427c8c, 0x00010009, 0x0000003C, 0x00000021,
+    0x0003005B, (u32)evt_img_onoff, (u32)(char*)str_img_80427c8c, 0x00000000,
+    0x0003005B, (u32)evt_img_set_shadow, (u32)(char*)str_img_80427c8c, 0x00000000,
+    0x0002005B, (u32)evt_img_release, (u32)(char*)str_img_80427c8c, 0x0002005B,
+    (u32)evt_offscreen_delete, (u32)(char*)str_ofs_80427c88, 0x0002005B, (u32)evt_paper_delete,
+    0xFE363C8A, 0x0002005B, (u32)scissor_timer_get, 0xFE363C80,
+    0x0002001C, 0xFE363C80, 0x0000003B, 0x00010004,
+    0x0000005A, 0x00000021, 0x00000006, 0x00010003,
+    0x0000005A, 0x0001005B, (u32)sac_ac_help_off, 0x0001005B,
+    (u32)sac_cheer_end, 0x0003005B, (u32)btlevtcmd_GetSelectEnemy, 0xFE363C83,
+    0xFE363C84, 0x0001005B, (u32)btlevtcmd_WaitGuardMove, 0x0002005B,
+    (u32)btlevtcmd_CommandPayWeaponCost, 0xFFFFFFFE, 0x0003005B, (u32)btlevtcmd_CommandGetWeaponAddress,
+    0xFFFFFFFE, 0xFE363C80, 0x0002005B, (u32)btlevtcmd_WeaponAftereffect,
+    0xFE363C80, 0x00010003, 0x0000005F, 0x00020018,
+    0xFE363C83, 0xFFFFFFFF, 0x00010004, 0x00000061,
+    0x00000021, 0x0003005B, (u32)btlevtcmd_GetTotalDamage, 0xFE363C83,
+    0xFE363C80, 0x0002001D, 0xFE363C80, 0x00000001,
+    0x0007005B, (u32)btlevtcmd_CheckDamage, 0xFFFFFFFE, 0xFE363C83,
+    0xFE363C84, (u32)weapon_scissor_finish, 0x00000100, 0xFE363C85,
+    0x00000021, 0x0003005B, (u32)btlevtcmd_GetSelectNextEnemy, 0xFE363C83,
+    0xFE363C84, 0x00010004, 0x0000005F, 0x00010003,
+    0x00000061, 0x0003005B, (u32)evt_btl_camera_set_mode, 0x00000000,
+    0x00000000, 0x0001000A, 0x000003E8, 0x0001005B,
+    (u32)scissor_end, 0x00010003, 0x00000063, 0x0002005B,
+    (u32)btlevtcmd_StartWaitEvent, 0xFFFFFFFE, 0x00000002, 0x00000001,
+};

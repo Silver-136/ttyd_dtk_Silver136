@@ -137,6 +137,8 @@ void iconReInit(void) {
     );
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void iconMain(void) {
     extern void shadowEntry(f32 x, f32 y, f32 z, f32 size);
     extern f32 dispCalcZ(void* pos);
@@ -145,19 +147,35 @@ void iconMain(void) {
     extern f32 float_10_8041f874;
     extern f32 float_200_8041f8a8;
 
-    void* workSet;
-    u16* icon;
+    typedef struct IconMainEntry {
+        u16 flags;
+        u16 pad2;
+        f32 position[3];
+        f32 scale;
+        u32 color;
+        char name[16];
+        u16 iconId;
+        u16 width;
+        u16 height;
+        u16 numIcons;
+        u16 currIcon;
+        u16 tplId;
+        u16 frameDelay;
+        u16 pad36;
+    } IconMainEntry;
+    typedef struct IconMainWork { s32 count; IconMainEntry* entries; } IconMainWork;
     void* entry;
     void* bin;
+    IconMainWork* workSet;
+    IconMainEntry* icon;
     s32 i;
     s32 id;
-    u32 flags;
     u16 count;
     u16 frame;
 
-    workSet = &work;
+    workSet = (IconMainWork*)&work;
     if (*(s32*)((s32)gp + 0x14) != 0) {
-        workSet = (void*)((s32)workSet + 0x8);
+        workSet++;
     }
 
     if (icon_tpl_ok == 0) {
@@ -167,52 +185,47 @@ void iconMain(void) {
         return;
     }
 
-    icon = *(u16**)((s32)workSet + 0x4);
-    i = 0;
-    while (i < *(s32*)workSet) {
-        flags = icon[0];
-        if ((flags & 1) != 0) {
-            if ((flags & 0x2000) != 0) {
-                icon[0] = flags & ~0x2000;
+    for (icon = workSet->entries, i = 0; i < workSet->count; i++, icon++) {
+        if ((icon->flags & 1) != 0) {
+            if ((icon->flags & 0x2000) != 0) {
+                icon->flags = icon->flags & ~0x2000;
 
-                id = icon[0x14];
+                id = icon->iconId;
                 bin = icon_bin;
                 if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
                     entry = NULL;
                 } else {
                     id = (u16)id;
-                    if (id == 0x67) {
-                        id = ICON_SDA_U16_TABLE(unk_8041504c, *(s32*)((s32)gp + 0x16C));
-                    } else if (id < 0x67 && id == 0x49) {
-                        id = ICON_SDA_U16_TABLE(unk_80415040, *(s32*)((s32)gp + 0x16C));
+                    switch (id) {
+                    case 0x49: id = ICON_SDA_U16_TABLE(unk_80415040, *(s32*)((s32)gp + 0x16C)); break;
+                    case 0x67: id = ICON_SDA_U16_TABLE(unk_8041504c, *(s32*)((s32)gp + 0x16C)); break;
                     }
                     entry = (void*)((s32)bin + (((u16)id) << 1));
                     entry = (void*)((s32)bin + *(u16*)((s32)entry + 2));
                 }
 
-                icon[0x15] = *(u16*)((s32)entry + 0x2);
-                icon[0x16] = *(u16*)((s32)entry + 0x4);
-                icon[0x17] = *(u16*)((s32)entry + 0x6);
-                icon[0x18] = 0;
-                icon[0x19] = *(u16*)((s32)entry + 0x8);
-                icon[0x1A] = *(u16*)((s32)entry + 0xA);
+                icon->width = *(u16*)((s32)entry + 0x2);
+                icon->height = *(u16*)((s32)entry + 0x4);
+                icon->numIcons = *(u16*)((s32)entry + 0x6);
+                icon->currIcon = 0;
+                icon->tplId = *(u16*)((s32)entry + 0x8);
+                icon->frameDelay = *(u16*)((s32)entry + 0xA);
                 if ((*(u16*)entry & 1) != 0) {
-                    icon[0] |= 0x1000;
+                    icon->flags |= 0x1000;
                 }
             }
 
-            flags = icon[0];
-            if ((flags & 0x1000) != 0) {
-                if (icon[0x1A] != 0) {
-                    icon[0x1A]--;
+                if ((icon->flags & 0x1000) != 0) {
+                if (icon->frameDelay != 0) {
+                    icon->frameDelay--;
                 }
-                if (icon[0x1A] == 0) {
-                    icon[0x18]++;
-                    if (icon[0x18] >= icon[0x17]) {
-                        icon[0x18] = 0;
+                if (icon->frameDelay == 0) {
+                    icon->currIcon++;
+                    if (icon->currIcon >= icon->numIcons) {
+                        icon->currIcon = 0;
                     }
 
-                    id = icon[0x14];
+                    id = icon->iconId;
                     bin = icon_bin;
                     if (icon_tpl_ok == 0 || icon_bin_ok == 0) {
                         entry = NULL;
@@ -227,36 +240,35 @@ void iconMain(void) {
                         entry = (void*)((s32)bin + *(u16*)((s32)entry + 2));
                     }
 
-                    frame = icon[0x18];
-                    icon[0x19] = *(u16*)((s32)entry + (frame * 4) + 0x8);
-                    icon[0x1A] = *(u16*)((s32)entry + (frame * 4) + 0xA);
+                    frame = icon->currIcon;
+                    icon->tplId = *(u16*)((s32)entry + (frame * 4) + 0x8);
+                    icon->frameDelay = *(u16*)((s32)entry + (frame * 4) + 0xA);
                 }
             }
 
-            flags = icon[0];
-            if ((flags & 2) == 0) {
-                if ((flags & 0x10) != 0) {
+                if ((icon->flags & 2) == 0) {
+                if ((icon->flags & 0x10) != 0) {
                     dispEntry(8, 1, iconDisp, float_200_8041f8a8, icon);
-                } else if ((flags & 0x100) != 0) {
-                    shadowEntry(*(f32*)((s32)icon + 0x4), *(f32*)((s32)icon + 0x8), *(f32*)((s32)icon + 0xC), float_10_8041f874);
-                    dispEntry(5, 1, iconDisp, dispCalcZ((void*)((s32)icon + 0x4)), icon);
-                } else if ((flags & 0x200) != 0) {
-                    shadowEntry(*(f32*)((s32)icon + 0x4), *(f32*)((s32)icon + 0x8), *(f32*)((s32)icon + 0xC), float_10_8041f874);
-                    dispEntry(7, 1, iconDisp, dispCalcZ((void*)((s32)icon + 0x4)), icon);
+                } else if ((icon->flags & 0x100) != 0) {
+                    shadowEntry(icon->position[0], icon->position[1], icon->position[2], float_10_8041f874);
+                    dispEntry(5, 1, iconDisp, dispCalcZ(icon->position), icon);
+                } else if ((icon->flags & 0x200) != 0) {
+                    shadowEntry(icon->position[0], icon->position[1], icon->position[2], float_10_8041f874);
+                    dispEntry(7, 1, iconDisp, dispCalcZ(icon->position), icon);
                 } else {
-                    shadowEntry(*(f32*)((s32)icon + 0x4), *(f32*)((s32)icon + 0x8), *(f32*)((s32)icon + 0xC), float_10_8041f874);
-                    if (*(u8*)((s32)icon + 0x17) != 0xFF) {
-                        dispEntry(4, 2, iconDisp, dispCalcZ((void*)((s32)icon + 0x4)), icon);
+                    shadowEntry(icon->position[0], icon->position[1], icon->position[2], float_10_8041f874);
+                    if (((u8*)&icon->color)[3] != 0xFF) {
+                        dispEntry(4, 2, iconDisp, dispCalcZ(icon->position), icon);
                     } else {
-                        dispEntry(4, 1, iconDisp, dispCalcZ((void*)((s32)icon + 0x4)), icon);
+                        dispEntry(4, 1, iconDisp, dispCalcZ(icon->position), icon);
                     }
                 }
             }
         }
-        i++;
-        icon = (u16*)((s32)icon + 0x38);
     }
 }
+#pragma use_lmw_stmw reset
+#pragma no_register_save_helpers reset
 
 void iconEntry(char* name, u16 iconId) {
     extern void strcpy(char* dst, const char* src);
@@ -957,8 +969,8 @@ void iconGX(void* mtx, void* icon) {
     u32 blend;
     u32 blendCopy;
     u32 fogColor;
-    u16 width;
-    u16 height;
+    f32 width;
+    f32 height;
     f32 left;
     f32 top;
     f32 right;
@@ -1001,32 +1013,7 @@ void iconGX(void* mtx, void* icon) {
     }
 
     color = *(u32*)(data + 10);
-    if ((*data & 0x20) == 0) {
-        GXSetNumTevStages(2);
-        GXSetTevOrder(0, 0, 0, 0);
-        GXSetTevOp(0, 0);
-        GXSetTevSwapMode(0, 0, 0);
-        GXSetTevColor(1, &color);
-        GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
-        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(1, 0xF, 2, 0, 0xF);
-        GXSetTevAlphaIn(1, 7, 1, 0, 7);
-        if (((*data & 0x10) == 0) && ((*data & 0x40) == 0) && ((*data & 0x80) == 0) &&
-            ((*(u16*)((s32)mapGetWork() + 4) & 2) != 0)) {
-            mapGetBlend(&blend);
-            blendCopy = blend;
-            GXSetTevColor(2, &blendCopy);
-            GXSetNumTevStages(3);
-            GXSetTevOrder(2, 0xFF, 0xFF, 0xFF);
-            GXSetTevColorOp(2, 0, 0, 0, 1, 0);
-            GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
-            GXSetTevColorIn(2, 0xF, 0, 1, 0xF);
-            GXSetTevAlphaIn(2, 7, 0, 2, 7);
-        }
-        GXSetNumTexGens(1);
-        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
-    } else {
+    if ((*data & 0x20) != 0) {
         GXSetNumTevStages(3);
         GXSetTevSwapModeTable(1, 0, 0, 0, 3);
         GXSetTevSwapModeTable(2, 1, 1, 1, 3);
@@ -1052,7 +1039,32 @@ void iconGX(void* mtx, void* icon) {
         GXSetTevColorOp(2, 0, 0, 0, 1, 0);
         GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
         GXSetTevColorIn(2, 0xF, 2, 8, 0);
-        GXSetTevAlphaIn(2, 7, 1, 4, 7);
+        GXSetTevAlphaIn(2, 7, 2, 4, 7);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+    } else {
+        GXSetNumTevStages(2);
+        GXSetTevOrder(0, 0, 0, 4);
+        GXSetTevOp(0, 0);
+        GXSetTevSwapMode(0, 0, 0);
+        GXSetTevColor(1, &color);
+        GXSetTevOrder(1, 0xFF, 0xFF, 0xFF);
+        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
+        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
+        GXSetTevColorIn(1, 0xF, 2, 0, 0xF);
+        GXSetTevAlphaIn(1, 7, 1, 0, 7);
+        if (((*data & 0x10) == 0) && ((*data & 0x40) == 0) && ((*data & 0x80) == 0) &&
+            ((*(u16*)((s32)mapGetWork() + 4) & 2) != 0)) {
+            mapGetBlend(&blend);
+            blendCopy = blend;
+            GXSetTevColor(2, &blendCopy);
+            GXSetNumTevStages(3);
+            GXSetTevOrder(2, 0xFF, 0xFF, 0xFF);
+            GXSetTevColorOp(2, 0, 0, 0, 1, 0);
+            GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
+            GXSetTevColorIn(2, 0xF, 0, 4, 0xF);
+            GXSetTevAlphaIn(2, 7, 0, 2, 7);
+        }
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
     }
@@ -1086,16 +1098,17 @@ void iconGX(void* mtx, void* icon) {
     GXSetVtxAttrFmt(0, 9, 1, 4, 0);
     GXSetVtxAttrFmt(0, 13, 1, 4, 0);
 
-    width = data[0x15];
-    height = data[0x16];
-    if (width == 0 && height == 0) {
-        width = GXGetTexObjWidth(tex);
-        height = GXGetTexObjHeight(tex);
+    if (data[0x15] == 0 && data[0x16] == 0) {
+        width = (u16)GXGetTexObjWidth(tex);
+        height = (u16)GXGetTexObjHeight(tex);
+    } else {
+        width = data[0x15];
+        height = data[0x16];
     }
-    left = -(f32)width * 0.5f;
-    top = (f32)height;
-    right = left + (f32)width;
-    bottom = -top;
+    left = -width * 0.5f;
+    top = height;
+    right = width;
+    bottom = -height;
     if ((*data & 0x10) == 0) {
         left *= 0.6f;
         top *= 0.6f;
@@ -1105,19 +1118,21 @@ void iconGX(void* mtx, void* icon) {
             left *= 0.8f;
             top *= 0.8f;
             right *= 0.8f;
+            bottom *= 0.8f;
         } else if (data[0x14] == 0x195) {
             left *= 0.9f;
             top *= 0.9f;
             right *= 0.9f;
+            bottom *= 0.9f;
         }
     }
 
     fifo = (volatile f32*)0xCC008000;
     GXBegin(0x80, 0, 4);
     *fifo = left;  *fifo = top;    *fifo = 0.0f; *fifo = 0.0f; *fifo = 0.0f;
-    *fifo = right; *fifo = top;    *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
-    *fifo = right; *fifo = bottom; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
-    *fifo = left;  *fifo = bottom; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
+    *fifo = left + right; *fifo = top;    *fifo = 0.0f; *fifo = 1.0f; *fifo = 0.0f;
+    *fifo = left + right; *fifo = top + bottom; *fifo = 0.0f; *fifo = 1.0f; *fifo = 1.0f;
+    *fifo = left;  *fifo = top + bottom; *fifo = 0.0f; *fifo = 0.0f; *fifo = 1.0f;
 
     if ((*data & 0x20) != 0) {
         GXSetTevSwapMode(0, 0, 0);

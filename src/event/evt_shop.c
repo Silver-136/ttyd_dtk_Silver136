@@ -84,6 +84,7 @@ static u32 main_evt[] = {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma opt_common_subs off
 void name_disp(void) {
     extern void FontDrawString(void* msg, f32 x, f32 y);
     extern void mapObjGetPos(void* obj, void* pos);
@@ -146,6 +147,7 @@ void name_disp(void) {
         i++;
     }
 }
+#pragma opt_common_subs reset
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -266,6 +268,7 @@ void title_disp(void* win) {
 
 
 
+#pragma optimize_for_size off
 void list_disp(u32* win) {
     extern void* pouchGetPtr(void);
     extern char* msgSearch(const char* msg);
@@ -281,9 +284,12 @@ void list_disp(u32* win) {
     extern const f32 float_0p64_80421edc;
     extern const f32 float_60_80421ee0;
     extern const f32 float_38p4_80421ee4;
+    extern const f32 float_80_80421ec0, float_10_80421ec4;
+    extern const f32 float_0_80421ec8, float_1_80421ecc;
+    extern const f32 float_100_80421ed0, float_0p5_80421ed4;
+    extern char str_PCTs_80421ed8[];
     void* pouch;
     s32* list;
-    char buffer[256];
     char* text;
     u32 color;
     u32 labelColorOn;
@@ -294,6 +300,7 @@ void list_disp(u32* win) {
     u32 itemColorOff;
     f32 trans[3][4];
     f32 scale[3][4];
+    char buffer[256];
     f32 width;
     f32 scaledWidth;
     s32 row;
@@ -303,6 +310,7 @@ void list_disp(u32* win) {
         return;
     }
     pouch = pouchGetPtr();
+    index = 0;
     text = msgSearch(str_msg_shop_point_list5_802ed310);
     width = (f32)(u16)FontGetMessageWidth(text);
     FontDrawStart();
@@ -310,11 +318,11 @@ void list_disp(u32* win) {
     color = dat_80421e88;
     FontDrawColor(&color);
     if (width > 80.0f) {
-        PSMTXTrans(trans, (f32)(win[6] + 10), (f32)(win[7] + 13), 0.0f);
+        PSMTXTrans(trans, float_10_80421ec4 + (f32)(s32)(win[6] + 10), (f32)(s32)(win[7] + 13), 0.0f);
         PSMTXScale(scale, 80.0f / width, 1.0f, 1.0f);
     } else {
-        PSMTXTrans(trans, (f32)(win[6] + 10) + (100.0f - width) * 0.5f,
-                   (f32)(win[7] + 13), 0.0f);
+        PSMTXTrans(trans, (100.0f - width) * 0.5f + (f32)(s32)(win[6] + 10),
+                   (f32)(s32)(win[7] + 13), 0.0f);
         PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
     }
     PSMTXConcat(trans, scale, trans);
@@ -328,14 +336,13 @@ void list_disp(u32* win) {
     color = dat_80421e8c;
     FontDrawColor(&color);
     if (width > 80.0f) {
-        PSMTXTrans(trans, (f32)(win[6] + (s32)win[8] / 2 - 10),
-                   (f32)(win[7] + 13), 0.0f);
+        PSMTXTrans(trans, float_10_80421ec4 + (f32)(s32)(win[6] + ((s32)win[8] / 2 - 10)),
+                   (f32)(s32)(win[7] + 13), 0.0f);
         PSMTXScale(scale, 80.0f / width, 1.0f, 1.0f);
     } else {
         PSMTXTrans(trans,
-                   (f32)(win[6] + (s32)win[8] / 2 - 10) +
-                       (100.0f - width) * 0.5f,
-                   (f32)(win[7] + 13), 0.0f);
+                   (100.0f - width) * 0.5f + (f32)(s32)(win[6] + ((s32)win[8] / 2 - 10)),
+                   (f32)(s32)(win[7] + 13), 0.0f);
         PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
     }
     PSMTXConcat(trans, scale, trans);
@@ -344,11 +351,11 @@ void list_disp(u32* win) {
 
     FontDrawStart();
     row = 0;
-    index = 0;
     for (list = shopPointList; list[0] != -1; list += 2, index++) {
-        u32 bit = 1 << (index & 0x3F);
+        u32 bit;
         s32 item = list[1];
         FontDrawStart();
+        bit = 1 << (index & 0x3F);
         if ((*(u32*)((s32)pouch + 0x5B4) & bit) != 0) {
             pointColorOn = dat_80421e90;
             FontDrawColor(&pointColorOn);
@@ -373,13 +380,13 @@ void list_disp(u32* win) {
         }
 
         if (scaledWidth <= float_60_80421ee0) {
-            PSMTXTrans(trans, (f32)(win[6] + (s32)win[8] / 2 - 88),
-                       (f32)(win[7] - 28 - row), 0.0f);
+            PSMTXTrans(trans, (f32)(s32)(win[6] + (s32)win[8] / 2 - 88),
+                       (f32)(s32)(win[7] - 28 - row), 0.0f);
             PSMTXScale(scale, float_0p64_80421edc, float_0p64_80421edc,
                        float_0p64_80421edc);
         } else {
-            PSMTXTrans(trans, (f32)(win[6] + (s32)win[8] / 2 - 88),
-                       (f32)(win[7] - 28 - row), 0.0f);
+            PSMTXTrans(trans, (f32)(s32)(win[6] + (s32)win[8] / 2 - 88),
+                       (f32)(s32)(win[7] - 28 - row), 0.0f);
             PSMTXScale(scale, float_38p4_80421ee4 / scaledWidth,
                        float_0p64_80421edc, float_0p64_80421edc);
         }
@@ -395,8 +402,8 @@ void list_disp(u32* win) {
             itemColorOff = dat_80421ea4;
             FontDrawColor(&itemColorOff);
         }
-        PSMTXTrans(trans, (f32)(win[6] + (s32)win[8] / 2 - 10),
-                   (f32)(win[7] - 20 - row), 0.0f);
+        PSMTXTrans(trans, (f32)(s32)(win[6] + (s32)win[8] / 2 - 10),
+                   (f32)(s32)(win[7] - 20 - row), 0.0f);
         if ((u16)FontGetMessageWidth(text) > (s32)win[8] / 2 - 10) {
             PSMTXScale(scale,
                        (f32)((s32)win[8] / 2 - 10) /
@@ -410,6 +417,7 @@ void list_disp(u32* win) {
         row += 26;
     }
 }
+#pragma optimize_for_size reset
 
 u32 disp_list(void* evt, int param_2) {
     extern void* winMgrEntry(void* desc);
@@ -436,101 +444,74 @@ u32 disp_list(void* evt, int param_2) {
 }
 
 s32 evt_shop_setup(void* event) {
-    typedef struct Vec { f32 x; f32 y; f32 z; } Vec;
+    typedef struct Vec { f32 x, y, z; } Vec;
     extern void* mapalloc_base_ptr;
-    extern void* _mapAlloc(void* heap, s32 size);
-    extern void* memset(void* dst, s32 value, u32 size);
-    extern char* strncpy(char* dst, char* src, u32 count);
-    extern void mapObjGetPos(void* obj, Vec* pos);
-    extern void mapObjFlagOn(void* obj, u32 flag);
-    extern s32 sprintf(char* str, const char* fmt, ...);
-    extern void iconEntry(char* name, u16 icon);
-    extern void iconSetPos(f32 x, f32 y, f32 z, char* name);
-    extern s32 pouchCheckItem(s32 item);
-    extern void* npcNameToPtr(char* name);
-    extern void* evtEntryType(void* evtCode, s32 priority, u32 flags, u32 type);
-    extern s32 winMgrEntry(void* desc);
-    extern void evtRunCaseEntry(u16 type, s32 a, void* name, s32 b, void* evt, void* arg);
-    extern s32 evtGetValue(void* event, s32 value);
-    extern void* _wp;
-    extern char mapname[16];
-    extern u8 itemDataTable[];
-    extern u32 shopper_talk_evt[];
+    extern void* _mapAlloc(void*, s32);
+    extern void* memset(void*, s32, u32);
+    extern char* strncpy(char*, char*, u32);
+    extern void mapObjGetPos(void*, Vec*);
+    extern void mapObjFlagOn(void*, u32);
+    extern s32 sprintf(char*, const char*, ...);
+    extern void iconEntry(char*, u16);
+    extern void iconSetPos(f32, f32, f32, char*);
+    extern s32 pouchCheckItem(s32);
+    extern void* npcNameToPtr(char*);
+    extern void* evtEntryType(void*, s32, u32, u32);
+    extern s32 winMgrEntry(void*);
+    extern void evtRunCaseEntry(u16, s32, void*, s32, void*, void*);
+    extern s32 evtGetValue(void*, s32);
     extern char str_a_shop_keihin_802ed300[];
+    extern u32 shopper_talk_evt[];
     extern f32 float_6_80421ebc;
-
-    s32* args;
+    s32* args = *(s32**)((s32)event + 0x18);
+    void* objList = (void*)evtGetValue(event, args[0]);
+    void* buyList = (void*)evtGetValue(event, args[1]);
+    void* shopkeeperData = (void*)evtGetValue(event, args[2]);
+    void* tradeList = (void*)evtGetValue(event, args[3]);
     void* work;
-    void* objList;
-    void* buyList;
-    void* shopkeeperData;
-    void* tradeList;
-    Vec pos;
-    char name[48];
-    s32 i;
-    s32 off;
+    void* cursor;
+    void* desc;
     void* npc;
     void* evt;
-    void* desc;
-
-    args = *(s32**)((s32)event + 0x18);
-    objList = (void*)evtGetValue(event, args[0]);
-    buyList = (void*)evtGetValue(event, args[1]);
-    shopkeeperData = (void*)evtGetValue(event, args[2]);
-    tradeList = (void*)evtGetValue(event, args[3]);
-
+    Vec pos;
+    char name[48];
+    s32 i, off;
     work = _mapAlloc(mapalloc_base_ptr, 0xD8);
     memset(work, 0, 0xD8);
     _wp = work;
     strncpy(mapname, (char*)((s32)gp + 0x12C), 0xF);
-
-    *(void**)((s32)work + 0x04) = objList;
-    *(void**)((s32)work + 0x08) = buyList;
-    *(void**)((s32)work + 0x0C) = shopkeeperData;
+    *(void**)((s32)work + 4) = objList;
+    *(void**)((s32)work + 8) = buyList;
+    *(void**)((s32)work + 0xC) = shopkeeperData;
     *(void**)((s32)work + 0x10) = tradeList;
     *(s32*)((s32)work + 0x20) = 6;
-
     off = 0;
-    for (i = 0; i < *(s32*)((s32)work + 0x20); i++, off += 8) {
-        s32 item = *(s32*)((s32)buyList + off);
-        mapObjGetPos(*(void**)((s32)objList + off), &pos);
-        mapObjFlagOn(*(void**)((s32)objList + off), 0x4000);
+    cursor = work;
+    for (i = 0; i < *(s32*)((s32)work + 0x20); i++, off += 8, cursor = (void*)((s32)cursor + 2)) {
+        mapObjGetPos(*(void**)((s32)*(void**)((s32)work + 4) + off), &pos);
+        mapObjFlagOn(*(void**)((s32)*(void**)((s32)work + 4) + off), 0x4000);
         sprintf(name, str_shpPCTd_80421eb4, i);
-        iconEntry(name, *(u16*)(itemDataTable + item * 0x28 + 0x20));
-        iconSetPos(pos.x, pos.y + float_6_80421ebc, pos.z, name);
+        iconEntry(name, *(u16*)(itemDataTable + *(s32*)((s32)*(void**)((s32)work + 8) + off) * 0x28 + 0x20));
+        iconSetPos(pos.x, float_6_80421ebc + pos.y, pos.z, name);
         iconFlagOn(name, 0x40);
-        *(u16*)((s32)work + 0x14 + i * 2) = 0;
-        if (item == 0x33 && pouchCheckItem(0x33) != 0) {
-            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
-        }
-        if (item == 0x37 && pouchCheckItem(0x37) != 0) {
-            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
-        }
-        if (item == 0x38 && pouchCheckItem(0x38) != 0) {
-            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
-        }
-        if (item == 0x39 && pouchCheckItem(0x39) != 0) {
-            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
-        }
-        if (item == 0x3A && pouchCheckItem(0x3A) != 0) {
-            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
-        }
-        if (item == 0x3B && pouchCheckItem(0x3B) != 0) {
-            *(u16*)((s32)work + 0x14 + i * 2) |= 1;
-        }
+        *(u16*)((s32)cursor + 0x14) = 0;
+        if (*(s32*)((s32)*(void**)((s32)work + 8) + off) == 0x33 && pouchCheckItem(0x33)) *(u16*)((s32)cursor + 0x14) |= 1;
+        if (*(s32*)((s32)*(void**)((s32)work + 8) + off) == 0x37 && pouchCheckItem(0x37)) *(u16*)((s32)cursor + 0x14) |= 1;
+        if (*(s32*)((s32)*(void**)((s32)work + 8) + off) == 0x38 && pouchCheckItem(0x38)) *(u16*)((s32)cursor + 0x14) |= 1;
+        if (*(s32*)((s32)*(void**)((s32)work + 8) + off) == 0x39 && pouchCheckItem(0x39)) *(u16*)((s32)cursor + 0x14) |= 1;
+        if (*(s32*)((s32)*(void**)((s32)work + 8) + off) == 0x3A && pouchCheckItem(0x3A)) *(u16*)((s32)cursor + 0x14) |= 1;
+        if (*(s32*)((s32)*(void**)((s32)work + 8) + off) == 0x3B && pouchCheckItem(0x3B)) *(u16*)((s32)cursor + 0x14) |= 1;
     }
-
     npc = npcNameToPtr(*(char**)shopkeeperData);
     *(void**)((s32)npc + 0x228) = &shopper_talk_evt;
     evt = evtEntryType(&main_evt, 0, 0x20, 0);
     *(void**)((s32)work + 0x48) = evt;
     *(void**)((s32)evt + 0x9C) = work;
-
     desc = &window_desc;
-    for (i = 0; i < 3; i++) {
-        *(s32*)((s32)work + 0x50 + i * 4) = winMgrEntry((void*)((s32)desc + i * 0x28));
+    cursor = work;
+    for (i = 0; i < 3; i++, desc = (void*)((s32)desc + 0x28), cursor = (void*)((s32)cursor + 4)) {
+        *(s32*)((s32)cursor + 0x50) = winMgrEntry(desc);
     }
-
     *(s32*)((s32)work + 0xD0) = -1;
     evtRunCaseEntry(9, 1, str_a_shop_keihin_802ed300, 0, &evt_shoplist, NULL);
     return 2;
@@ -712,6 +693,8 @@ s32 exchange_shop_point(void) {
     return 2;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 shop_point_item(void* pEvt) {
     s32* args = *(s32**)((s32)pEvt + 0x18);
     s32 point = evtGetValue(pEvt, args[0]);
@@ -731,6 +714,8 @@ s32 shop_point_item(void* pEvt) {
     evtSetValue(pEvt, args[2], -1);
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 
 s32 shopper_name(void* event) {
@@ -925,7 +910,7 @@ s32 evt_shop_main_func(void* event) {
     void* mario;
     void* party;
     void* hit;
-    s32 buttons;
+    u16 buttons;
     s32 selected;
     s32 found;
     s32 i;
@@ -969,14 +954,13 @@ s32 evt_shop_main_func(void* event) {
     } else {
         if ((*(u16*)work & 2) == 0) {
             if (hit != NULL) {
-                char* hitName = hitGetName(hit);
                 off = 0;
                 for (i = 0; i < *(s32*)((s32)work + 0x20); i++, off += 8) {
-                    if (strcmp(*(char**)(*(s32*)((s32)work + 4) + off + 4), hitName) == 0) {
+                    if (strcmp(*(char**)(*(s32*)((s32)work + 4) + off + 4), hitGetName(hit)) == 0) {
                         break;
                     }
                 }
-                if (i < *(s32*)((s32)work + 0x20) && (*(u16*)((s32)work + 0x14 + i * 2) & 1) == 0) {
+                if ((*(u16*)((s32)work + 0x14 + i * 2) & 1) == 0 && i < *(s32*)((s32)work + 0x20)) {
                     if (*(s32*)((s32)work + 0xD0) != i) {
                         if (*(s32*)((s32)work + 0xD0) == -1) {
                             winMgrOpen(*(s32*)((s32)work + 0x50));
@@ -1012,16 +996,23 @@ s32 evt_shop_main_func(void* event) {
         } else if (evtCheckID(*(s32*)(*(s32*)((s32)work + 0x4C) + 0x15C)) == 0) {
             *(u16*)work &= ~2;
             marioKeyOn();
-            selected = *(s32*)((s32)work + 0x2C);
-            switch (*(s32*)((s32)work + 0x34)) {
-                case 0x33:
-                case 0x37:
-                case 0x38:
-                case 0x39:
-                case 0x3A:
-                case 0x3B:
-                    *(u16*)((s32)work + 0x14 + selected * 2) |= 1;
-                    break;
+            if (*(s32*)((s32)work + 0x34) == 0x33) {
+                *(u16*)((s32)work + 0x14 + *(s32*)((s32)work + 0x2C) * 2) |= 1;
+            }
+            if (*(s32*)((s32)work + 0x34) == 0x37) {
+                *(u16*)((s32)work + 0x14 + *(s32*)((s32)work + 0x2C) * 2) |= 1;
+            }
+            if (*(s32*)((s32)work + 0x34) == 0x38) {
+                *(u16*)((s32)work + 0x14 + *(s32*)((s32)work + 0x2C) * 2) |= 1;
+            }
+            if (*(s32*)((s32)work + 0x34) == 0x39) {
+                *(u16*)((s32)work + 0x14 + *(s32*)((s32)work + 0x2C) * 2) |= 1;
+            }
+            if (*(s32*)((s32)work + 0x34) == 0x3a) {
+                *(u16*)((s32)work + 0x14 + *(s32*)((s32)work + 0x2C) * 2) |= 1;
+            }
+            if (*(s32*)((s32)work + 0x34) == 0x3b) {
+                *(u16*)((s32)work + 0x14 + *(s32*)((s32)work + 0x2C) * 2) |= 1;
             }
         }
 

@@ -9,13 +9,181 @@ s32 bakuGamePartyExist(void* unit);
 void bakuGameDisp2D(void);
 void bakuGameDisp3D(void);
 
-extern char str_c_star_bom_802ff6c0[];
-extern f32 float_0_80427b70;
-extern f32 float_1_80427b60;
-extern f32 float_neg1_80427b5c;
-extern f32 float_100_80427b78;
-extern f32 float_90_80427b7c;
-const char str_Z_1_80427c20[] = "Z_1";
+typedef struct ButtonTable {
+    s32 values[9];
+} ButtonTable;
+
+typedef struct PatternTable {
+    s32 values[18];
+} PatternTable;
+
+extern const char str_btl_wn_sac_bakugame_802ff3a0[];
+extern const char str_msg_bakugame_802ff3b4[];
+extern const char str_msg_sac_3_802ff3c4[];
+extern const char str_SFX_BTL_SAC_START1_802ff5b0[];
+extern const char str_SFX_BTL_SAC_START2_802ff5c4[];
+extern const char str_SFX_BTL_SAC_START3_802ff5d8[];
+extern s32 marioAttackEvent_BakuGame[];
+extern s32 hitCheck_MarioTeam[];
+extern s32 hitCheck_EnemyTeam[];
+extern s32 hitCheck_AudienceTeam[];
+extern s32 btlevtcmd_WaitGuardMove();
+extern s32 btlevtcmd_CommandPayWeaponCost();
+extern s32 btlevtcmd_CommandGetWeaponAddress();
+extern s32 btlevtcmd_WeaponAftereffect();
+extern s32 btlevtcmd_reset_move_color_lv_all();
+extern s32 init_bakugame();
+static s32 main_star(void);
+extern s32 sac_start_camera_evt();
+extern s32 btlevtcmd_snd_se();
+extern s32 sac_mario_item_on_evt();
+static s32 star_stone_appear(EventEntry* event, BOOL isFirstCall);
+extern s32 sac_start_stardust();
+extern s32 evt_snd_sfxoff();
+extern s32 evt_btl_camera_set_mode();
+extern s32 sac_mario_item_on_end_evt();
+extern s32 sac_mario_back_home();
+extern s32 bakuGameBombEntry();
+extern s32 sac_ac_help_on();
+extern s32 bakuGameMain();
+extern s32 sac_ac_help_off();
+extern s32 end_bakugame();
+extern s32 bakuGameHeihoReturn();
+extern s32 bakuGameDecideWeapon();
+extern s32 btlevtcmd_StartWaitEvent();
+extern s32 btlevtcmd_GetUnitId();
+extern s32 btlevtcmd_CheckStatus();
+extern s32 btlevtcmd_GetBodyId();
+extern s32 btlevtcmd_GetHitPos();
+extern s32 btlevtcmd_ACSuccessEffect();
+extern s32 btlevtcmd_CheckDamage();
+extern s32 btlevtcmd_GetFaceDirection();
+extern s32 btlevtcmd_AddRotate();
+extern s32 btlevtcmd_AnimeChangePoseType();
+extern s32 btlevtcmd_ResetFaceDirection();
+extern s32 btlevtcmd_SetRotate();
+extern s32 btlevtcmd_GetSelectEnemy();
+extern s32 btlevtcmd_CheckPartsAttribute();
+extern s32 btlevtcmd_GetSelectNextEnemy();
+extern s32 evt_audience_abnormal_natural_all();
+
+static u32 weapon[48] = {
+    (u32)(char*)str_btl_wn_sac_bakugame_802ff3a0, 0x01A00000, 0x00000000, (u32)(char*)str_msg_bakugame_802ff3b4,
+    0x64000200, 0x3F800000, 0x01056432, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x02100060, 0x20000000, 0x00000302,
+    (u32)(char*)str_msg_sac_3_802ff3c4, 0x00020088, 0x000007FF, 0x00000000,
+    0x00006401, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    (u32)marioAttackEvent_BakuGame, 0x00000064, 0x00000000, 0x00000000,
+};
+
+s32 marioAttackEvent_BakuGame[119] = {
+    0x0001005B, (s32)btlevtcmd_WaitGuardMove, 0x0002005B, (s32)btlevtcmd_CommandPayWeaponCost,
+    0xFFFFFFFE, 0x0003005B, (s32)btlevtcmd_CommandGetWeaponAddress, 0xFFFFFFFE,
+    0xFE363C80, 0x0002005B, (s32)btlevtcmd_WeaponAftereffect, 0xFE363C80,
+    0x0001005B, (s32)btlevtcmd_reset_move_color_lv_all, 0x0001005B, (s32)init_bakugame,
+    0x0000006E, 0x0001005B, (s32)main_star, 0x00000070,
+    0x0001005E, (s32)sac_start_camera_evt, 0x0001000A, 0x000001F4,
+    0x0006005B, (s32)btlevtcmd_snd_se, 0xFFFFFFFE, (s32)(char*)str_SFX_BTL_SAC_START1_802ff5b0,
+    0xF1194D80, 0x00000000, 0xF1194D80, 0x0001005E,
+    (s32)sac_mario_item_on_evt, 0x0001000A, 0x000001F4, 0x0006005B,
+    (s32)btlevtcmd_snd_se, 0xFFFFFFFE, (s32)(char*)str_SFX_BTL_SAC_START2_802ff5c4, 0xF1194D80,
+    0x00000000, 0xFE363C8B, 0x0001005B, (s32)star_stone_appear,
+    0x0000006E, 0x0001005E, (s32)sac_start_stardust, 0x00000070,
+    0x00010009, 0x00000064, 0x0006005B, (s32)btlevtcmd_snd_se,
+    0xFFFFFFFE, (s32)(char*)str_SFX_BTL_SAC_START3_802ff5d8, 0xF1194D80, 0x00000000,
+    0xF1194D80, 0x0002005B, (s32)evt_snd_sfxoff, 0xFE363C8B,
+    0x0003005B, (s32)evt_btl_camera_set_mode, 0x00000000, 0x00000000,
+    0x00010009, 0x00000028, 0x0001005E, (s32)sac_mario_item_on_end_evt,
+    0x0001005E, (s32)sac_mario_back_home, 0x0001005B, (s32)bakuGameBombEntry,
+    0x0001005B, (s32)sac_ac_help_on, 0x0004005B, (s32)bakuGameMain,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x0001005B,
+    (s32)sac_ac_help_off, 0x0001005B, (s32)end_bakugame, 0x0000006B,
+    0x0001005B, (s32)bakuGameHeihoReturn, 0x0000006D, 0x0004005B,
+    (s32)bakuGameDecideWeapon, 0xFE363C81, 0xFE363C82, 0xFE363C89,
+    0x00010009, 0x00000005, 0x00010022, 0xFE363C80,
+    0x00010024, 0x00000000, 0x0001005E, (s32)hitCheck_MarioTeam,
+    0x0000002E, 0x00010024, 0x00000001, 0x0001005E,
+    (s32)hitCheck_EnemyTeam, 0x0000002E, 0x00010024, 0x00000002,
+    0x0001005E, (s32)hitCheck_AudienceTeam, 0x0000002E, 0x00000031,
+    0x00010003, 0x00000063, 0x0002005B, (s32)btlevtcmd_StartWaitEvent,
+    0xFFFFFFFE, 0x00000002, 0x00000001,
+};
+
+s32 hitCheck_MarioTeam[146] = {
+    0x0003005B, (s32)btlevtcmd_GetUnitId, 0xFFFFFFFC, 0xFE363C83,
+    0x00020018, 0xFE363C83, 0xFFFFFFFF, 0x00010004,
+    0x00000032, 0x00000021, 0x0004005B, (s32)btlevtcmd_CheckStatus,
+    0xFE363C83, 0x0000001B, 0xFE363C80, 0x00020019,
+    0xFE363C80, 0x00000000, 0x00010004, 0x00000032,
+    0x00000021, 0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C83,
+    0xFE363C84, 0x0006005B, (s32)btlevtcmd_GetHitPos, 0xFE363C83,
+    0xFE363C84, 0xFE363C8A, 0xFE363C8B, 0xFE363C8C,
+    0x0005005B, (s32)btlevtcmd_ACSuccessEffect, 0xFE363C82, 0xFE363C8A,
+    0xFE363C8B, 0xFE363C8C, 0x0007005B, (s32)btlevtcmd_CheckDamage,
+    0xFFFFFFFE, 0xFE363C83, 0xFE363C84, 0xFE363C89,
+    0x00000100, 0xFE363C85, 0x00010003, 0x00000032,
+    0x0003005B, (s32)btlevtcmd_GetUnitId, 0xFFFFFFFD, 0xFE363C83,
+    0x00020018, 0xFE363C83, 0xFFFFFFFF, 0x00010004,
+    0x00000063, 0x00000021, 0x0004005B, (s32)btlevtcmd_CheckStatus,
+    0xFE363C83, 0x0000001B, 0xFE363C80, 0x00020019,
+    0xFE363C80, 0x00000000, 0x00010004, 0x00000063,
+    0x00000021, 0x0003005B, (s32)btlevtcmd_GetBodyId, 0xFE363C83,
+    0xFE363C84, 0x0003005B, (s32)btlevtcmd_GetFaceDirection, 0xFE363C83,
+    0xFE363C80, 0x00020018, 0xFE363C80, 0xFFFFFFFF,
+    0x00010005, 0x00000005, 0x0005005B, (s32)btlevtcmd_AddRotate,
+    0xFE363C83, 0x00000000, 0x00000012, 0x00000000,
+    0x00010009, 0x00000001, 0x00000006, 0x0004005B,
+    (s32)btlevtcmd_AnimeChangePoseType, 0xFE363C83, 0xFE363C84, 0x00000027,
+    0x00010005, 0x00000005, 0x0005005B, (s32)btlevtcmd_AddRotate,
+    0xFE363C83, 0x00000000, 0x00000012, 0x00000000,
+    0x00010009, 0x00000001, 0x00000006, 0x0002005B,
+    (s32)btlevtcmd_ResetFaceDirection, 0xFE363C83, 0x0005005B, (s32)btlevtcmd_SetRotate,
+    0xFE363C83, 0x00000000, 0x00000000, 0x00000000,
+    0x00000021, 0x0006005B, (s32)btlevtcmd_GetHitPos, 0xFE363C83,
+    0xFE363C84, 0xFE363C8A, 0xFE363C8B, 0xFE363C8C,
+    0x00020019, 0xFE363C82, 0xFFFFFFFF, 0x0005005B,
+    (s32)btlevtcmd_ACSuccessEffect, 0xFE363C82, 0xFE363C8A, 0xFE363C8B,
+    0xFE363C8C, 0x00000021, 0x0007005B, (s32)btlevtcmd_CheckDamage,
+    0xFFFFFFFE, 0xFE363C83, 0xFE363C84, 0xFE363C89,
+    0x00000100, 0xFE363C85, 0x00010003, 0x00000063,
+    0x00000002, 0x00000001,
+};
+
+s32 hitCheck_EnemyTeam[53] = {
+    0x0003005B, (s32)btlevtcmd_GetSelectEnemy, 0xFE363C83, 0xFE363C84,
+    0x00010003, 0x0000000A, 0x0006005B, (s32)btlevtcmd_GetHitPos,
+    0xFE363C83, 0xFE363C84, 0xFE363C8A, 0xFE363C8B,
+    0xFE363C8C, 0x0005005B, (s32)btlevtcmd_CheckPartsAttribute, 0xFE363C83,
+    0xFE363C84, 0x00004000, 0xFE363C80, 0x00020018,
+    0xFE363C80, 0x00000000, 0x00020019, 0xFE363C82,
+    0xFFFFFFFF, 0x0005005B, (s32)btlevtcmd_ACSuccessEffect, 0xFE363C82,
+    0xFE363C8A, 0xFE363C8B, 0xFE363C8C, 0x00000021,
+    0x0007005B, (s32)btlevtcmd_CheckDamage, 0xFFFFFFFE, 0xFE363C83,
+    0xFE363C84, 0xFE363C89, 0x00000100, 0xFE363C85,
+    0x00000021, 0x0003005B, (s32)btlevtcmd_GetSelectNextEnemy, 0xFE363C83,
+    0xFE363C84, 0x00020019, 0xFE363C83, 0xFFFFFFFF,
+    0x00010004, 0x0000000A, 0x00000021, 0x00000002,
+    0x00000001,
+};
+
+s32 hitCheck_AudienceTeam[15] = {
+    0x0002005B, (s32)evt_audience_abnormal_natural_all, 0x00000064, 0x00020019,
+    0xFE363C82, 0xFFFFFFFF, 0x0005005B, (s32)btlevtcmd_ACSuccessEffect,
+    0xFE363C82, 0x00000000, 0x00000064, 0x00000000,
+    0x00000021, 0x00000002, 0x00000001,
+};
+
+extern const f32 float_1_80427b60;
+extern const f32 float_neg1_80427b5c;
+extern const f32 float_100_80427b78;
+extern const f32 float_90_80427b7c;
+extern const char str_Z_1_80427c20[];
 
 s32 BtlUnit_GetBodyPartsId(void* unit);
 void* BtlUnit_GetPartsPtr(void* unit, s32 partsId);
@@ -37,7 +205,7 @@ BakuGameWork* GetBakuGamePtr(void) {
     return (BakuGameWork*)((s32)_battleWorkPointer + 0x1F4C);
 }
 
-USER_FUNC(star_stone_appear) {
+static s32 star_stone_appear(EventEntry* event, BOOL isFirstCall) {
     BakuGameWork* wp;
 
     wp = GetBakuGamePtr();
@@ -45,7 +213,8 @@ USER_FUNC(star_stone_appear) {
     return 2;
 }
 
-s32 main_star(void) {
+static s32 main_star(void) {
+    extern f32 float_0_80427b70;
     extern void* BattleGetMarioPtr(void* battleWork);
     extern void* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
@@ -208,7 +377,6 @@ USER_FUNC(end_bakugame) {
 USER_FUNC(bakuGameDecideWeapon) {
     extern void* GetBakuGamePtr(void);
     extern void* memcpy(void* dst, const void* src, u32 size);
-    extern u8 weapon[0xC0];
 
     s32* args;
     u8* weaponWork;
@@ -239,15 +407,16 @@ USER_FUNC(bakuGameDecideWeapon) {
 
 USER_FUNC(bakuGameBombEntry) {
     BakuGameWork* work = GetBakuGamePtr();
-    if (animGroupBaseAsync(str_c_star_bom_802ff6c0, 2, 0) == 0) {
+    if (animGroupBaseAsync("c_star_bom", 2, 0) == 0) {
         return 0;
     }
-    work->poseId = animPoseEntry(str_c_star_bom_802ff6c0, 2);
+    work->poseId = animPoseEntry("c_star_bom", 2);
     animPoseSetAnim(work->poseId, str_Z_1_80427c20, 1);
     return 2;
 }
 
 s32 bakuGameMain(void* event, s32 isFirstCall) {
+    extern f32 float_0_80427b70;
     extern BattleWork* _battleWorkPointer;
     extern s32 BattleTransID(void*, s32);
     extern s32 BattleAudience_GetWaiting(s32);
@@ -262,12 +431,16 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
     extern void dispEntry(s32, s32, void*, void*, f32);
     extern void evtSetValue(void*, s32, s32);
     extern void evtSetFloat(void*, s32, f32);
-    extern u8 weapon[];
     extern const u32 dat_802ff408[3];
     extern const char str_btl_wn_sac_bakugame_802ff3a0[];
     extern f32 float_1p5_80427ba0;
     extern f32 float_neg0p3_80427ba4;
     extern f32 float_110_80427ba8;
+    extern f32 float_2p5_80427b90;
+    extern f32 float_33_80427b94;
+    extern f32 float_66_80427b98;
+    extern f32 float_300_80427b9c;
+    extern f32 float_900_80427c1c;
     extern const char str_SFX_BTL_SAC_TIME1_802ff628[];
     extern s32 psndSFXChk(u32 id);
     extern void psndSFXOff(s32 id);
@@ -322,8 +495,8 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
             u8* slot = (u8*)work + 0xC + i * 0x24;
             *(s32*)slot = 0;
             *(u32*)(slot + 8) = buttonMasks[i];
-            *(f32*)(slot + 0x10) = 100.0f;
-            *(f32*)(slot + 0x20) = 0.0f;
+            *(f32*)(slot + 0x10) = float_100_80427b78;
+            *(f32*)(slot + 0x20) = float_0_80427b70;
         }
         memcpy(work + 0x3E, weapon, 0xC0);
         for (i = 0; i < 0x40; i++) {
@@ -405,7 +578,7 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
                     for (i = 0; i < 3; i++) {
                         u8* slot = (u8*)work + 0xC + i * 0x24;
                         if (*(s32*)(slot + 0xC) == lane) {
-                            *(f32*)(slot + 0x10) -= 2.5f;
+                            *(f32*)(slot + 0x10) -= float_2p5_80427b90;
                         }
                     }
                 }
@@ -432,9 +605,9 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
             {
                 f32 value = *(f32*)((u8*)work + 0xD0);
                 s32 result = -1;
-                if (value > 0.0f && value < 33.0f) result = 2;
-                if (value >= 33.0f && value < 66.0f) result = 3;
-                if (value >= 66.0f) result = 4;
+                if (value > float_0_80427b70 && value < float_33_80427b94) result = 2;
+                if (value >= float_33_80427b94 && value < float_66_80427b98) result = 3;
+                if (value >= float_66_80427b98) result = 4;
                 if (result > 4) result = 4;
                 evtSetValue(evt, args[2], result);
             }
@@ -471,8 +644,8 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
             work[0x70] = 2;
             *(u8*)((u8*)work + 0x1CC) = 0xFF;
             work[0x80] = 0x5A;
-            *(f32*)(work + 0x74) = 300.0f;
-            *(f32*)(work + 0x77) = 300.0f;
+            *(f32*)(work + 0x74) = float_300_80427b9c;
+            *(f32*)(work + 0x77) = float_300_80427b9c;
             work[0x71] = 0;
             work[0x72] = 30;
         } else {
@@ -1347,7 +1520,7 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
             animPoseMain();
         }
 
-        dispEntry(8, 1, bakuGameDisp2D, 0, 900.0f);
+        dispEntry(8, 1, bakuGameDisp2D, 0, float_900_80427c1c);
         dispEntry(4, 1, bakuGameDisp3D, 0, float_0_80427b70);
         return 0;
     }
@@ -1355,6 +1528,7 @@ s32 bakuGameMain(void* event, s32 isFirstCall) {
 
 /* stub-fill: bakuGameHeihoReturn | missing_definition | ghidra_signature */
 s32 bakuGameHeihoReturn(s32 unused, s32 reset) {
+    extern f32 float_0_80427b70;
     extern void* GetBakuGamePtr(void);
     extern f32 intplGetValue(s32 type, s32 current, s32 total, f32 start, f32 end);
     extern void dispEntry(s32 cameraId, s32 layer, void* func, s32 param, f32 z);
@@ -1425,12 +1599,6 @@ s32 bakuGameHeihoReturn(s32 unused, s32 reset) {
 }
 
 void bakuGameDecideButton(s32 flag) {
-    typedef struct ButtonTable {
-        s32 values[9];
-    } ButtonTable;
-    typedef struct PatternTable {
-        s32 values[18];
-    } PatternTable;
     extern void* GetBakuGamePtr(void);
     extern const ButtonTable dat_802ff504;
     extern const PatternTable dat_802ff528;
@@ -1683,6 +1851,7 @@ void bakuGameDisp2D(void) {
 }
 
 void bakuGameDisp3D(void) {
+    extern f32 float_0_80427b70;
     typedef f32 Mtx[3][4];
     extern void* camGetPtr(s32 cameraId);
     extern void PSMTXScale(Mtx m, f32 x, f32 y, f32 z);
@@ -1710,7 +1879,7 @@ void bakuGameDisp3D(void) {
     extern void GXLoadPosMtxImm(void* mtx, s32 id);
     extern void GXBegin(s32 primitive, s32 vtxfmt, s32 nverts);
     extern u32 dat_80427b58;
-    extern u32 dat_802ff570[16];
+    extern const u32 dat_802ff570[16];
     extern f32 float_180_80427b64;
     extern f32 float_neg20_80427b68;
     extern f32 float_40_80427b6c;
@@ -1809,3 +1978,101 @@ void bakuGameDisp3D(void) {
 void bakuGameDispStar(void) {
     ;
 }
+
+const char str_btl_wn_sac_bakugame_802ff3a0[] = "btl_wn_sac_bakugame";
+const char str_msg_bakugame_802ff3b4[] = "msg_bakugame";
+const char str_msg_sac_3_802ff3c4[] = "msg_sac_3";
+const u32 vec3_802ff3d0[3] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802ff3dc[3] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 dat_802ff3e8[8] = { 0x00000000, 0x00000001, 0x00000002, 0x00000003, 0x00000004, 0x00000005, 0x00000006, 0x00000007 };
+const u32 dat_802ff408[3] = { 0x00000100, 0x00000200, 0x00000400 };
+const u32 vec3_802ff414[3] = { 0x00000000, 0xC47A0000, 0x00000000 };
+const u32 vec3_802ff420[3] = { 0x42FA0000, 0x00000000, 0xC1F00000 };
+const u32 vec3_802ff42c[3] = { 0x42FA0000, 0x00000000, 0x42C80000 };
+const u32 vec3_802ff438[3] = { 0x42FA0000, 0x00000000, 0x42C80000 };
+const u32 vec3_802ff444[3] = { 0x00000000, 0xC47A0000, 0x00000000 };
+const u32 vec3_802ff450[3] = { 0xC2FA0000, 0x43FA0000, 0xC1F00000 };
+const u32 vec3_802ff45c[3] = { 0xC2FA0000, 0x00000000, 0xC1F00000 };
+const u32 vec3_802ff468[3] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802ff474[3] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802ff480[3] = { 0xC2FA0000, 0x00000000, 0xC1F00000 };
+const u32 vec3_802ff48c[3] = { 0x42FA0000, 0x00000000, 0xC1F00000 };
+const u32 vec3_802ff498[3] = { 0x00000000, 0xC2480000, 0x43160000 };
+const u32 vec3_802ff4a4[3] = { 0xC2FA0000, 0x00000000, 0xC1F00000 };
+const u32 vec3_802ff4b0[3] = { 0x42FA0000, 0x00000000, 0xC1F00000 };
+const u32 vec3_802ff4bc[3] = { 0x42FA0000, 0x00000000, 0x42C80000 };
+const u32 vec3_802ff4c8[3] = { 0x00000000, 0xC2480000, 0x43160000 };
+const u32 vec3_802ff4d4[3] = { 0x00000000, 0xC2480000, 0x43160000 };
+const u32 vec3_802ff4e0[3] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802ff4ec[3] = { 0x00000000, 0x00000000, 0x00000000 };
+const u32 vec3_802ff4f8[3] = { 0x43960000, 0x00000000, 0x00000000 };
+const ButtonTable dat_802ff504 = { { (s32)0xC2FA0000, (s32)0x42480000, (s32)0x00000000, (s32)0x42FA0000, (s32)0x42480000, (s32)0x00000000, (s32)0x00000000, (s32)0x41200000, (s32)0x43160000 } };
+const PatternTable dat_802ff528 = { { 0, 1, 2, 0, 2, 1, 1, 0, 2, 1, 2, 0, 2, 0, 1, 2, 1, 0 } };
+const u32 dat_802ff570[16] = { 0x00000000, 0x00000000, 0x3F800000, 0x00000000, 0x3F800000, 0x3F800000, 0x00000000, 0x3F800000, 0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x3F800000, 0x3F800000, 0x3F800000 };
+const char str_SFX_BTL_SAC_START1_802ff5b0[] = "SFX_BTL_SAC_START1";
+const char str_SFX_BTL_SAC_START2_802ff5c4[] = "SFX_BTL_SAC_START2";
+const char str_SFX_BTL_SAC_START3_802ff5d8[] = "SFX_BTL_SAC_START3";
+const char str_PKR_D_1_802ff5ec[] = "PKR_D_1";
+const char str_PNK_T_2_802ff5f4[] = "PNK_T_2";
+const char str_PWD_D_1_802ff5fc[] = "PWD_D_1";
+const char str_PYS_D_1_802ff604[] = "PYS_D_1";
+const char str_PTR_H_1_802ff60c[] = "PTR_H_1";
+const char str_PBM_D_1_802ff614[] = "PBM_D_1";
+const char str_PCH_A2_3_802ff61c[] = "PCH_A2_3";
+const char str_SFX_BTL_SAC_TIME1_802ff628[] = "SFX_BTL_SAC_TIME1";
+const char str_SFX_BTL_SAC_TIME4_802ff63c[] = "SFX_BTL_SAC_TIME4";
+const char str_SFX_BTL_SAC_TIME2_802ff650[] = "SFX_BTL_SAC_TIME2";
+const char str_SFX_VOICE_MARIO_SURP_802ff664[] = "SFX_VOICE_MARIO_SURPRISED1";
+const char str_SFX_BTL_SAC_TIME3_802ff680[] = "SFX_BTL_SAC_TIME3";
+const u32 vec3_802ff694[3] = { 0x00000000, 0x00000000, 0x00000000 };
+const char str_SFX_BTL_SAC_TIME5_802ff6a0[] = "SFX_BTL_SAC_TIME5";
+
+const u32 dat_80427b58 = 0x000000FF;
+const f32 float_neg1_80427b5c = -1.0f;
+const f32 float_1_80427b60 = 1.0f;
+const f32 float_180_80427b64 = 180.0f;
+const f32 float_neg20_80427b68 = -20.0f;
+const f32 float_40_80427b6c = 40.0f;
+const f32 float_0_80427b70 = 0.0f;
+const f32 float_20_80427b74 = 20.0f;
+const f32 float_100_80427b78 = 100.0f;
+const f32 float_90_80427b7c = 90.0f;
+const f32 float_270_80427b80 = 270.0f;
+const char str_M_N_7_80427b84[] = "M_N_7";
+const f32 float_neg2_80427b8c = -2.0f;
+const f32 float_2p5_80427b90 = 2.5f;
+const f32 float_33_80427b94 = 33.0f;
+const f32 float_66_80427b98 = 66.0f;
+const f32 float_300_80427b9c = 300.0f;
+const f32 float_1p5_80427ba0 = 1.5f;
+const f32 float_neg0p3_80427ba4 = -0.3f;
+const f32 float_110_80427ba8 = 110.0f;
+const f32 float_4096_80427bac = 4096.0f;
+const f32 float_0p25_80427bb0 = 0.25f;
+const f32 float_2_80427bb4 = 2.0f;
+const f32 float_3_80427bb8 = 3.0f;
+const f32 float_4_80427bbc = 4.0f;
+const f32 float_5_80427bc0 = 5.0f;
+const f32 float_6_80427bc4 = 6.0f;
+const char str_S_1_80427bc8[] = "S_1";
+const char str_S_2_80427bcc[] = "S_2";
+const char str_S_3_80427bd0[] = "S_3";
+const f32 float_50_80427bd4 = 50.0f;
+const f32 float_neg1000_80427bd8 = -1000.0f;
+const f32 float_neg800_80427bdc = -800.0f;
+const f32 float_80_80427be0 = 80.0f;
+const f32 float_neg0p5_80427be4 = -0.5f;
+const f32 float_70_80427be8 = 70.0f;
+const f32 float_neg200_80427bec = -200.0f;
+const f32 float_0p1_80427bf0 = 0.1f;
+const f32 float_7_80427bf4 = 7.0f;
+const char str_M_W_1_80427bf8[] = "M_W_1";
+const char str_M_U_2_80427c00[] = "M_U_2";
+const f32 float_30_80427c08 = 30.0f;
+const f32 float_neg100_80427c0c = -100.0f;
+const f32 float_26_80427c10 = 26.0f;
+const char str_M_C_1_80427c14[] = "M_C_1";
+const f32 float_900_80427c1c = 900.0f;
+const char str_Z_1_80427c20[] = "Z_1";
+const f32 float_37_80427c24 = 37.0f;
+const f32 float_2160_80427c28 = 2160.0f;

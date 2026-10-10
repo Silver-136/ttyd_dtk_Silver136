@@ -101,6 +101,12 @@ const char str_name_mario_802f5e20[11] = "name_mario";
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void winMakeSkipList(void* pWin) {
+    typedef struct {
+        u8 prefix[0x2E8];
+        u16 keyItemIds[121];
+        s16 keyItemCount;
+    } KeyItemWindow;
+    KeyItemWindow* win = pWin;
     s32 i;
     u16 item;
     u16* skip;
@@ -109,7 +115,7 @@ void winMakeSkipList(void* pWin) {
     s32 count;
 
     i = 0;
-    *(u16*)((s32)pWin + 0x3DA) = 0;
+    win->keyItemCount = 0;
     while (i < 0x79) {
         item = pouchKeyItem(i);
         if (item != 0) {
@@ -117,37 +123,29 @@ void winMakeSkipList(void* pWin) {
             skip = menu_skip_list;
             for (loop = 0; loop < 2; loop++) {
                 if (item == *skip) break;
-                skip++;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
+                if (item == *++skip) break;
                 skip++;
                 skipIndex++;
             }
             if ((u32)skipIndex >= 0x12) {
-                count = *(s16*)((s32)pWin + 0x3DA);
-                *(u16*)((s32)pWin + 0x2E8 + count * 2) = item;
-                *(u16*)((s32)pWin + 0x3DA) = count + 1;
+                count = win->keyItemCount;
+                win->keyItemIds[count] = item;
+                win->keyItemCount = win->keyItemCount + 1;
             }
         }
         i++;
@@ -156,12 +154,14 @@ void winMakeSkipList(void* pWin) {
 #pragma no_register_save_helpers reset
 #pragma use_lmw_stmw reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 winItemInit(void* pWin) {
     extern const f32 float_0_804237b8[1];
-    extern void* window_desc;
+    extern u8 window_desc[0x50];
     extern void* gp;
-    extern char str_jp_80423870[];
-    extern char str_us_80423874[];
+    extern const char str_jp_80423870[3];
+    extern const char str_us_80423874[3];
     extern char str_PCTs_w_PCTs_mail_tpl_802f5e70[];
     extern s32 pouchCheckItem(s32 itemId);
     extern s32 pouchGetItem(s32 itemId);
@@ -170,16 +170,20 @@ u8 winItemInit(void* pWin) {
     extern s32 winMgrEntry(void* desc);
     extern void winMgrSetPriority(s32 entryId, s32 priority);
     extern s32 getMarioStDvdRoot(void);
-    extern u32 fileAsyncf(s32, s32, char*, s32, char*);
+    extern s32 fileAsyncf(s32, s32, const char*, ...);
+    f32 pos = float_320_8042382c;
+    f32 neg = float_neg240_804237f4;
     s32 i;
-    void* out;
+    u8* out;
     s32 count;
     u16 item;
     u16* skip;
     s32 skipIndex;
     s32 loop;
     s32 langRoot;
-    char* lang;
+    u8* pouch;
+    s32 mailIndex;
+    const char* lang;
 
     *(s32*)((s32)pWin + 0x20C) = 0;
     *(s32*)((s32)pWin + 0x210) = 0;
@@ -187,14 +191,14 @@ u8 winItemInit(void* pWin) {
     *(s32*)((s32)pWin + 0x21C) = 0;
     *(s32*)((s32)pWin + 0x218) = 0;
     *(s32*)((s32)pWin + 0x220) = 0;
-    *(f32*)((s32)pWin + 0x238) = float_320_8042382c;
-    *(f32*)((s32)pWin + 0x234) = float_320_8042382c;
-    *(f32*)((s32)pWin + 0x240) = float_neg240_804237f4;
-    *(f32*)((s32)pWin + 0x23C) = float_neg240_804237f4;
-    *(f32*)((s32)pWin + 0x248) = float_320_8042382c;
-    *(f32*)((s32)pWin + 0x244) = float_320_8042382c;
-    *(f32*)((s32)pWin + 0x250) = float_neg240_804237f4;
-    *(f32*)((s32)pWin + 0x24C) = float_neg240_804237f4;
+    *(f32*)((s32)pWin + 0x238) = pos;
+    *(f32*)((s32)pWin + 0x234) = pos;
+    *(f32*)((s32)pWin + 0x240) = neg;
+    *(f32*)((s32)pWin + 0x23C) = neg;
+    *(f32*)((s32)pWin + 0x248) = pos;
+    *(f32*)((s32)pWin + 0x244) = pos;
+    *(f32*)((s32)pWin + 0x250) = neg;
+    *(f32*)((s32)pWin + 0x24C) = neg;
 
     if (pouchCheckItem(0x36) == 0) {
         pouchGetItem(0x36);
@@ -206,13 +210,15 @@ u8 winItemInit(void* pWin) {
     *(f32*)((s32)pWin + 0x264) = float_0_804237b8[0];
     *(f32*)((s32)pWin + 0x260) = float_0_804237b8[0];
 
-    out = pWin;
+    out = (u8*)pWin;
     i = 0;
     while (i < *(s32*)((s32)pWin + 0x254)) {
         *(u8*)((s32)out + 0x26E) = (u8)(*(s32*)((s32)pWin + 0x254) - i - 1);
-        *(u8*)((s32)out + 0x26F) = *(u8*)((s32)pouchGetPtr() + (*(s32*)((s32)pWin + 0x254) - i) + 0x519);
+        pouch = pouchGetPtr();
+        mailIndex = *(s32*)((s32)pWin + 0x254) - i;
+        *(u8*)((s32)out + 0x26F) = pouch[mailIndex + 0x519];
         i++;
-        out = (void*)((s32)out + 2);
+        out += 2;
     }
 
     count = 0;
@@ -225,30 +231,22 @@ u8 winItemInit(void* pWin) {
             skip = menu_skip_list;
             for (loop = 0; loop < 2; loop++) {
                 if (item == *skip) break;
-                skip++;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
-                skip++;
+                if (item == *++skip) break;
                 skipIndex++;
-                if (item == *skip) break;
+                if (item == *++skip) break;
                 skip++;
                 skipIndex++;
             }
@@ -270,13 +268,14 @@ u8 winItemInit(void* pWin) {
     }
     langRoot = getMarioStDvdRoot();
     fileAsyncf(4, 0, str_PCTs_w_PCTs_mail_tpl_802f5e70, langRoot, lang);
-    return 0;
+    /* Target returns without a synthesized status value. */
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 void winItemInit2(void* pWin) {
-    char* msg = str_msg_menu_mochi_daiji_802f5e58;
     f32 scale = float_190_80423848;
     f32 pos = float_320_8042382c;
     f32 neg = float_neg240_804237f4;
@@ -301,10 +300,9 @@ void winItemInit2(void* pWin) {
     value = (f32)(*(s32*)((s32)pWin + 0x258) * 0xC8);
     *(f32*)((s32)pWin + 0x264) = value;
     *(f32*)((s32)pWin + 0x260) = value;
-    if (*(s32*)((s32)pWin + 0x210) == 0) {
-        msg = str_msg_menu_mochi_item_802f5e44;
-    }
-    winMsgEntry(pWin, 0, msg, 0);
+    winMsgEntry(pWin, 0,
+                *(s32*)((s32)pWin + 0x210) == 0 ? str_msg_menu_mochi_item_802f5e44 : str_msg_menu_mochi_daiji_802f5e58,
+                0);
     *(s32*)((s32)pWin + 0x2D4) = 0;
 }
 
@@ -407,7 +405,8 @@ s32 winItemMain(void* pWin) {
     void* mgr;
     IntDouble cvt1;
     IntDouble cvt2;
-    void* partyOrder[8];
+    void* partyOrder[10];
+    void** partyNext;
     f32 adjust;
 
 
@@ -424,12 +423,10 @@ s32 winItemMain(void* pWin) {
             *(s32*)((u8*)pWin + 0x210) = 1 - *(s32*)((u8*)pWin + 0x210);
             psndSFXOn(0x20005);
         } else if ((*(u32*)((u8*)pWin + 4)) & 0x100) {
-            if (*(s32*)((u8*)pWin + 0x210) == 0) {
-                if (pouchGetHaveItemCnt() == 0)
-                    return 0;
-            } else if (*(s16*)((u8*)pWin + 0x3DA) == 0) {
+            if (*(s32*)((u8*)pWin + 0x210) == 0 && pouchGetHaveItemCnt() == 0)
                 return 0;
-            }
+            if (*(s32*)((u8*)pWin + 0x210) == 1 && *(s16*)((u8*)pWin + 0x3DA) == 0)
+                return 0;
             *(s32*)((u8*)pWin + 0x20C) = 10;
             psndSFXOn(0x20012);
             return 0;
@@ -840,54 +837,53 @@ s32 winItemMain(void* pWin) {
                 else
                     party = *(s8*)((u8*)marioGetPtr() + 0x247);
 
-                count = 0;
+                partyNext = partyOrder;
                 if (*(s32*)(winPartyDt + 0x00) == party)
-                    partyOrder[count++] = winPartyDt + 0x00;
+                    *partyNext++ = winPartyDt + 0x00;
                 if (*(s32*)(winPartyDt + 0x24) == party)
-                    partyOrder[count++] = winPartyDt + 0x24;
+                    *partyNext++ = winPartyDt + 0x24;
                 if (*(s32*)(winPartyDt + 0x48) == party)
-                    partyOrder[count++] = winPartyDt + 0x48;
+                    *partyNext++ = winPartyDt + 0x48;
                 if (*(s32*)(winPartyDt + 0x6C) == party)
-                    partyOrder[count++] = winPartyDt + 0x6C;
+                    *partyNext++ = winPartyDt + 0x6C;
                 if (*(s32*)(winPartyDt + 0x90) == party)
-                    partyOrder[count++] = winPartyDt + 0x90;
+                    *partyNext++ = winPartyDt + 0x90;
                 if (*(s32*)(winPartyDt + 0xB4) == party)
-                    partyOrder[count++] = winPartyDt + 0xB4;
+                    *partyNext++ = winPartyDt + 0xB4;
                 if (*(s32*)(winPartyDt + 0xD8) == party)
-                    partyOrder[count++] = winPartyDt + 0xD8;
+                    *partyNext++ = winPartyDt + 0xD8;
 
                 if (*(s32*)(winPartyDt + 0x00) != party)
-                    partyOrder[count++] = winPartyDt + 0x00;
+                    *partyNext++ = winPartyDt + 0x00;
                 if (*(s32*)(winPartyDt + 0x24) != party)
-                    partyOrder[count++] = winPartyDt + 0x24;
+                    *partyNext++ = winPartyDt + 0x24;
                 if (*(s32*)(winPartyDt + 0x48) != party)
-                    partyOrder[count++] = winPartyDt + 0x48;
+                    *partyNext++ = winPartyDt + 0x48;
                 if (*(s32*)(winPartyDt + 0x6C) != party)
-                    partyOrder[count++] = winPartyDt + 0x6C;
+                    *partyNext++ = winPartyDt + 0x6C;
                 if (*(s32*)(winPartyDt + 0x90) != party)
-                    partyOrder[count++] = winPartyDt + 0x90;
+                    *partyNext++ = winPartyDt + 0x90;
                 if (*(s32*)(winPartyDt + 0xB4) != party)
-                    partyOrder[count++] = winPartyDt + 0xB4;
+                    *partyNext++ = winPartyDt + 0xB4;
                 if (*(s32*)(winPartyDt + 0xD8) != party)
-                    partyOrder[count++] = winPartyDt + 0xD8;
+                    *partyNext++ = winPartyDt + 0xD8;
 
-                item = *(s32*)((u8*)pWin + 0x2D4);
                 if (*(s32*)((u8*)pWin + 0x2DC) < 1) {
                     pouchSetHP((u16)(pouchGetHP() +
-                               *(u8*)(itemDataTable + item * 0x28 + 0x1D)));
+                               *(u8*)(itemDataTable + *(s32*)((u8*)pWin + 0x2D4) * 0x28 + 0x1D)));
                     pouchSetFP((u16)(pouchGetFP() +
-                               *(u8*)(itemDataTable + item * 0x28 + 0x1E)));
+                               *(u8*)(itemDataTable + *(s32*)((u8*)pWin + 0x2D4) * 0x28 + 0x1E)));
                     pouchSetAP((s16)(pouchGetAP() +
-                               *(u8*)(itemDataTable + item * 0x28 + 0x1F)));
+                               *(u8*)(itemDataTable + *(s32*)((u8*)pWin + 0x2D4) * 0x28 + 0x1F)));
                 } else {
                     id = *(s32*)partyOrder[
                         *(s32*)((u8*)pWin + 0x2DC) - 1];
                     pouchSetPartyHP(id, (u16)(pouchGetPartyHP(id) +
-                               *(u8*)(itemDataTable + item * 0x28 + 0x1D)));
+                               *(u8*)(itemDataTable + *(s32*)((u8*)pWin + 0x2D4) * 0x28 + 0x1D)));
                     pouchSetFP((u16)(pouchGetFP() +
-                               *(u8*)(itemDataTable + item * 0x28 + 0x1E)));
+                               *(u8*)(itemDataTable + *(s32*)((u8*)pWin + 0x2D4) * 0x28 + 0x1E)));
                     pouchSetAP((s16)(pouchGetAP() +
-                               *(u8*)(itemDataTable + item * 0x28 + 0x1F)));
+                               *(u8*)(itemDataTable + *(s32*)((u8*)pWin + 0x2D4) * 0x28 + 0x1F)));
                 }
                 *(s32*)((u8*)pWin + 0x2E0) = 0;
                 *(s32*)((u8*)pWin + 0x20C) = 301;
@@ -1014,8 +1010,9 @@ void winItemMain2(void* pWin) {
 }
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
+    typedef struct { u8 r, g, b, a; } LocalColor;
     typedef struct LocalVec {
         f32 x;
         f32 y;
@@ -1025,11 +1022,12 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
     extern void winBgGX(f32 x, f32 y, void* pWin, s32 type);
     extern void winKirinukiGX(f32 x, f32 y, f32 w, f32 h, void* pWin, s32 flag);
     extern void winTexInit_x2(void* tpl);
-    extern void winTexSet(s32 texId, LocalVec* pos, LocalVec* size, u32* color);
-    extern void winTexSet_x2(s32 texId0, s32 texId1, LocalVec* pos, LocalVec* size, u32* color);
+    extern void winTexSet(s32 texId, LocalVec* pos, LocalVec* size, void* color);
+    extern void winTexSet_x2(s32 texId0, s32 texId1, LocalVec* pos, LocalVec* size, void* color);
     extern u32 dat_80423748;
     extern u32 dat_8042374c;
     extern u32 dat_80423750;
+    extern u8 str_msg_luigi_book1_txt1_802f5520[];
     extern f32 float_20_804237e8;
     extern f32 float_105_804237fc;
     extern f32 float_120_80423834;
@@ -1045,30 +1043,32 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
     extern LocalVec vec3_802f5af0;
     extern LocalVec vec3_802f5afc;
 
+    u8* catalog;
+    f32 selectedX;
+    f32 selectedY;
+    f32 baseY;
     f32 x;
     f32 y;
-    f32 baseY;
-    f32 selectedY;
-    f32 selectedX;
-    s32 i;
     s32 yOffset;
-    u32 selectedColor;
-    LocalVec selectedRawPos;
+    s32 i;
+    LocalColor selectedColor;
     LocalVec selectedPos;
+    LocalVec selectedRawPos;
     LocalVec selectedSize;
-    u32 selectedBgColor;
-    LocalVec highlightRawPos;
+    LocalColor selectedBgColor;
     LocalVec highlightPos;
+    LocalVec highlightRawPos;
     LocalVec highlightSize;
-    u32 highlightColor;
-    LocalVec normalRawPos;
+    LocalColor highlightColor;
     LocalVec normalPos;
+    LocalVec normalRawPos;
     LocalVec normalSize;
-    u32 normalColor;
+    LocalColor normalColor;
 
+    selectedColor = *(LocalColor*)&dat_80423748;
+    catalog = (u8*)str_msg_luigi_book1_txt1_802f5520;
     x = *(f32*)((s32)pWin + param_3 * 0x14 + 0xC4);
     y = *(f32*)((s32)pWin + param_3 * 0x14 + 0xC8);
-    selectedColor = dat_80423748;
 
     winBgGX(x, y, pWin, 2);
     winKirinukiGX(x - float_150_80423830,
@@ -1085,9 +1085,9 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
     for (i = 0, yOffset = 0; i < 2; i++, yOffset += 0x32) {
         if (i == *(s32*)((s32)pWin + 0x210)) {
             winTexInit(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
-            selectedBgColor = dat_8042374c;
-            selectedSize = vec3_802f5acc;
-            selectedRawPos = vec3_802f5ac0;
+            selectedBgColor = *(LocalColor*)&dat_8042374c;
+            selectedSize = *(LocalVec*)(catalog + 0x5AC);
+            selectedRawPos = *(LocalVec*)(catalog + 0x5A0);
             selectedRawPos.x = x - float_215_80423840;
             selectedRawPos.y = float_20_804237e8 + (baseY - (f32)yOffset);
             selectedPos = selectedRawPos;
@@ -1095,17 +1095,17 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
 
             winTexInit_x2(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
             highlightColor = selectedColor;
-            highlightSize = vec3_802f5ae4;
-            highlightRawPos = vec3_802f5ad8;
+            highlightSize = *(LocalVec*)(catalog + 0x5C4);
+            highlightRawPos = *(LocalVec*)(catalog + 0x5B8);
             highlightRawPos.x = selectedX;
             highlightRawPos.y = float_20_804237e8 + (selectedY - (f32)yOffset);
             highlightPos = highlightRawPos;
             winTexSet_x2(i + 0x18, 0xB3, &highlightPos, &highlightSize, &highlightColor);
         } else {
             winTexInit_x2(*(void**)(*(s32*)(*(s32*)((s32)pWin + 0x28) + 0xA0)));
-            normalColor = dat_80423750;
-            normalSize = vec3_802f5afc;
-            normalRawPos = vec3_802f5af0;
+            normalColor = *(LocalColor*)&dat_80423750;
+            normalSize = *(LocalVec*)(catalog + 0x5DC);
+            normalRawPos = *(LocalVec*)(catalog + 0x5D0);
             normalRawPos.x = x - float_215_80423840;
             normalRawPos.y = float_20_804237e8 + (baseY - (f32)yOffset);
             normalPos = normalRawPos;
@@ -1114,12 +1114,13 @@ u8 winItemDisp(s32 param_1, void* pWin, s32 param_3) {
     }
 
     item_disp(x, y, pWin);
-    return 0;
+    /* Target callback does not materialize a return value. */
 }
 #pragma no_register_save_helpers reset
 #pragma use_lmw_stmw reset
 
 void item_disp(f32 x, f32 y, void* pWin) {
+    typedef struct { u8 r, g, b, a; } LocalColor;
     typedef struct Vec3 {
         f32 x;
         f32 y;
@@ -1156,49 +1157,50 @@ void item_disp(f32 x, f32 y, void* pWin) {
     f32 width;
     char* text;
 
-    u32 normalColor;
-    u32 disabledColor;
-    u32 iconColor0;
-    u32 iconColor1;
-    u32 iconColor2;
-    u32 iconColor3;
-    u32 fontColor;
-    u32* fontColorPtr;
-    u32 sortColor;
-    u32 sortIconColor;
+    LocalColor normalColor;
+    LocalColor disabledColor;
+    LocalColor iconColor0;
+    LocalColor iconColor1;
+    LocalColor iconColor2;
+    LocalColor iconColor3;
+    LocalColor fontColor;
+    LocalColor* fontColorPtr;
+    LocalColor sortColor;
+    LocalColor sortIconColor;
 
-    Vec3 itemScaleNormal;
-    Vec3 itemScaleKey;
-    Vec3 itemScale;
-    Vec3 itemPos;
-    Vec3 itemPosWork;
-    Vec3 itemFontScale;
-    Vec3 itemFontPos;
-    Vec3 itemFontPosWork;
-    Vec3 upTexScale;
-    Vec3 upTexPos;
-    Vec3 upTexPosWork;
-    Vec3 upIconScale;
-    Vec3 upIconPos;
-    Vec3 upIconPosWork;
-    Vec3 downTexScale;
-    Vec3 downTexPos;
-    Vec3 downTexPosWork;
-    Vec3 downIconScale;
-    Vec3 downIconPos;
-    Vec3 downIconPosWork;
-    Vec3 sortFontScale;
-    Vec3 sortFontPos;
-    Vec3 sortFontPosWork;
-    Vec3 sortIconScale;
-    Vec3 sortIconPos;
+    Vec3* selectedScale;
     Vec3 sortIconPosWork;
+    Vec3 sortIconPos;
+    Vec3 sortIconScale;
+    Vec3 sortFontPosWork;
+    Vec3 sortFontPos;
+    Vec3 sortFontScale;
+    Vec3 downIconPosWork;
+    Vec3 downIconPos;
+    Vec3 downIconScale;
+    Vec3 downTexPosWork;
+    Vec3 downTexPos;
+    Vec3 downTexScale;
+    Vec3 upIconPosWork;
+    Vec3 upIconPos;
+    Vec3 upIconScale;
+    Vec3 upTexPosWork;
+    Vec3 upTexPos;
+    Vec3 upTexScale;
+    Vec3 itemFontPosWork;
+    Vec3 itemFontPos;
+    Vec3 itemFontScale;
+    Vec3 itemPosWork;
+    Vec3 itemPos;
+    Vec3 itemScale;
+    Vec3 itemScaleKey;
+    Vec3 itemScaleNormal;
 
-    normalColor = dat_80423758;
-    disabledColor = dat_8042375c;
-    iconColor0 = dat_80423754;
-    iconColor1 = dat_80423754;
-    iconColor2 = dat_80423754;
+    normalColor = *(const LocalColor*)&dat_80423758;
+    disabledColor = *(const LocalColor*)&dat_8042375c;
+    iconColor0 = *(const LocalColor*)&dat_80423754;
+    iconColor1 = *(const LocalColor*)&dat_80423754;
+    iconColor2 = *(const LocalColor*)&dat_80423754;
 
     if (*(s32*)((u8*)pWin + 0x210) == 0) {
         count = pouchGetHaveItemCnt();
@@ -1256,10 +1258,10 @@ void item_disp(f32 x, f32 y, void* pWin) {
 
             if (*(s32*)((u8*)pWin + 0x210) == 0) {
                 itemScaleNormal = *(Vec3*)(catalog + 0x5F4);
-                itemScale = itemScaleNormal;
+                selectedScale = &itemScaleNormal;
             } else {
                 itemScaleKey = *(Vec3*)(catalog + 0x600);
-                itemScale = itemScaleKey;
+                selectedScale = &itemScaleKey;
             }
 
             column *= 0xCC;
@@ -1268,6 +1270,7 @@ void item_disp(f32 x, f32 y, void* pWin) {
             itemPosWork.y = drawY;
             itemPos = itemPosWork;
 
+            itemScale = *selectedScale;
             iconColor3 = iconColor2;
             winIconSet(
                 *(s16*)(itemDataTable + item * 0x28 + 0x20),
@@ -1375,7 +1378,7 @@ void item_disp(f32 x, f32 y, void* pWin) {
     sortIconPosWork.y = 20.0f + ((y - 100.0f) - 10.0f);
     sortIconPos = sortIconPosWork;
     sortIconScale = *(Vec3*)(catalog + 0x6A8);
-    sortIconColor = dat_80423754;
+    sortIconColor = *(const LocalColor*)&dat_80423754;
 
     winIconSet(0x219, &sortIconPos, &sortIconScale, &sortIconColor);
 
@@ -1391,6 +1394,7 @@ void item_disp(f32 x, f32 y, void* pWin) {
 
 
 void itemUseDisp(void* pWinMgr) {
+    typedef struct { u8 r, g, b, a; } LocalColor;
     extern s32 pouchGetHP(void);
     extern s32 pouchGetMaxHP(void);
     extern s32 pouchGetFP(void);
@@ -1428,31 +1432,31 @@ void itemUseDisp(void* pWinMgr) {
     f32 rowAdjust;
     f32 nameScale;
     const char* text;
-    u32 currentColor;
-    u32 baseWhite;
-    u32 tailWhite;
-    u32 marioIconColor;
-    u32 marioHpTexColor;
-    u32 marioFpTexColor;
-    u32 marioNameColor;
-    u32 marioHpLabelColor;
-    u32 marioHpCurrentColor;
-    u32 marioHpSlashColor;
-    u32 marioHpMaxColor;
-    u32 marioFpLabelColor;
-    u32 marioFpCurrentColor;
-    u32 marioFpSlashColor;
-    u32 marioFpMaxColor;
-    u32 partnerTexColor;
-    u32 partnerIconColor;
-    u32 partnerNameColor;
-    u32 partnerHpLabelColor;
-    u32 partnerHpCurrentColor;
-    u32 partnerHpSlashColor;
-    u32 partnerHpMaxColor;
-    u32 markerColor;
-    u32 cursorColorA;
-    u32 cursorColorB;
+    LocalColor currentColor;
+    LocalColor baseWhite;
+    LocalColor tailWhite;
+    LocalColor marioIconColor;
+    LocalColor marioHpTexColor;
+    LocalColor marioFpTexColor;
+    LocalColor marioNameColor;
+    LocalColor marioHpLabelColor;
+    LocalColor marioHpCurrentColor;
+    LocalColor marioHpSlashColor;
+    LocalColor marioHpMaxColor;
+    LocalColor marioFpLabelColor;
+    LocalColor marioFpCurrentColor;
+    LocalColor marioFpSlashColor;
+    LocalColor marioFpMaxColor;
+    LocalColor partnerTexColor;
+    LocalColor partnerIconColor;
+    LocalColor partnerNameColor;
+    LocalColor partnerHpLabelColor;
+    LocalColor partnerHpCurrentColor;
+    LocalColor partnerHpSlashColor;
+    LocalColor partnerHpMaxColor;
+    LocalColor markerColor;
+    LocalColor cursorColorA;
+    LocalColor cursorColorB;
 
     Vec3 marioIconScale;
     Vec3 marioIconPos;
@@ -1524,9 +1528,9 @@ void itemUseDisp(void* pWinMgr) {
     Vec3 cursorPosBWork;
 
     w = (u8*)winGetPtr();
-    currentColor = dat_8042378c[0];
-    baseWhite = dat_80423790[0];
-    tailWhite = dat_80423790[0];
+    currentColor = *(const LocalColor*)dat_8042378c;
+    baseWhite = *(const LocalColor*)dat_80423790;
+    tailWhite = *(const LocalColor*)dat_80423790;
 
     if (winMgrAction(*(s32*)(w + 0x1210)) == 0) {
         if (marioBgmodeChk() == 0) {
@@ -1579,9 +1583,9 @@ void itemUseDisp(void* pWinMgr) {
 
             if (*(s32*)(w + 0x2E0) != 0) {
                 if (i == *(s32*)(w + 0x2DC)) {
-                    currentColor = dat_80423794[0];
+                    currentColor = *(const LocalColor*)dat_80423794;
                 } else {
-                    currentColor = dat_80423798[0];
+                    currentColor = *(const LocalColor*)dat_80423798;
                 }
             }
 
@@ -1604,7 +1608,7 @@ void itemUseDisp(void* pWinMgr) {
                     GXSetTevColorIn(0, 15, 15, 15, 2);
                     GXSetTevAlphaIn(0, 7, 1, 4, 7);
 
-                    marioHpTexColor = dat_8042379c[0];
+                    marioHpTexColor = *(const LocalColor*)dat_8042379c;
                     marioHpTexScale = vec3_802f5bf8;
                     marioHpTexPosWork = vec3_802f5bec;
                     marioHpTexPosWork.x =
@@ -1615,7 +1619,7 @@ void itemUseDisp(void* pWinMgr) {
                     marioHpTexPos = marioHpTexPosWork;
                     winTexSet(0xAF, &marioHpTexPos, &marioHpTexScale, &marioHpTexColor);
 
-                    marioFpTexColor = dat_804237a0[0];
+                    marioFpTexColor = *(const LocalColor*)dat_804237a0;
                     marioFpTexScale = vec3_802f5c10;
                     marioFpTexPosWork = vec3_802f5c04;
                     marioFpTexPosWork.x =
@@ -1675,7 +1679,7 @@ void itemUseDisp(void* pWinMgr) {
                     if (*(u8*)(itemDataTable + *(s32*)(w + 0x2D4) * 0x28 + 0x26) != 0) {
                         if (((*(s32*)(w + 0x2E0)) % 20) > 15)
                             goto item_use_row_done;
-                        currentColor = dat_804237a4[0];
+                        currentColor = *(const LocalColor*)dat_804237a4;
                     }
 
                     winFontInit();
@@ -1727,7 +1731,7 @@ void itemUseDisp(void* pWinMgr) {
                     GXSetTevColorIn(0, 15, 15, 15, 2);
                     GXSetTevAlphaIn(0, 7, 1, 4, 7);
 
-                    partnerTexColor = dat_804237a8[0];
+                    partnerTexColor = *(const LocalColor*)dat_804237a8;
                     partnerTexScale = vec3_802f5d00;
                     partnerTexPosWork = vec3_802f5cf4;
                     partnerTexPosWork.x =
@@ -1831,7 +1835,7 @@ item_use_row_done:
 
     winTexInit(**(void***)((u8*)*(void**)(w + 0x28) + 0xA0));
 
-    cursorColorA = dat_804237ac[0];
+    cursorColorA = *(const LocalColor*)dat_804237ac;
     cursorScaleA = vec3_802f5dc0;
     cursorPosAWork = vec3_802f5db4;
     cursorPosAWork.x = float_2_804237e0[0] + *(f32*)(w + 0x150);
@@ -1856,32 +1860,38 @@ void itemUseDisp2(void* pWinMgr) {
         f32 y;
         f32 z;
     } LocalVec;
+    typedef struct { u8 r, g, b, a; } LocalColor;
     extern void* winGetPtr(void);
     extern s32 winMgrAction(s32 entryId);
     extern char* msgSearch(char* msg);
     extern u32 FontGetMessageWidthLine(char* msg, u16* width);
     extern void winMgrSetSize(s32 entryId, s32 x, s32 y, s32 width, s32 height);
     extern void winFontInit(void);
-    extern void winFontSetWidth(LocalVec* position, LocalVec* scale, u32* color, f32 width, char* msg, ...);
+    extern void winFontSetWidth(LocalVec* position, LocalVec* scale, LocalColor* color, f32 width, char* msg, ...);
     extern const u32 dat_804237b0[1];
     extern LocalVec vec3_802f5df0;
     extern LocalVec vec3_802f5de4;
     extern char str_msg_window_select_5_802f5dfc[];
     extern const f32 float_0p5_804237b4[1];
+    extern char str_msg_luigi_book1_txt1_802f5520[];
+    char* base;
     void* win;
     char* msg;
-    u16 width[2];
-    u32 color;
-    LocalVec scale;
     LocalVec position;
+    LocalVec templatePosition;
+    LocalVec scale;
+    LocalColor color;
+    LocalColor drawColor;
+    u16 width[2];
     u32 measuredWidth;
     f32 msgWidth;
     f32 maxWidth;
 
+    base = str_msg_luigi_book1_txt1_802f5520;
     win = winGetPtr();
-    color = dat_804237b0[0];
+    color = *(const LocalColor*)dat_804237b0;
     if (winMgrAction(*(s32*)((s32)win + 0x1214)) == 0) {
-        msg = msgSearch(str_msg_window_select_5_802f5dfc);
+        msg = msgSearch(base + 0x8DC);
         measuredWidth = FontGetMessageWidthLine(msg, width);
         msgWidth = (f32)(u16)measuredWidth;
         winMgrSetSize(
@@ -1892,19 +1902,17 @@ void itemUseDisp2(void* pWinMgr) {
             *(s32*)(*(s32*)((s32)pWinMgr + 0x28) + 0x18) + width[0] * 0x16
         );
         winFontInit();
-        maxWidth = (f32)(*(s32*)((s32)pWinMgr + 0x20) - 0x14);
-        if (maxWidth < msgWidth) {
-            msgWidth = maxWidth;
+        if (msgWidth > (f32)(*(s32*)((s32)pWinMgr + 0x20) - 0x14)) {
+            msgWidth = (f32)(*(s32*)((s32)pWinMgr + 0x20) - 0x14);
         }
-        color = dat_804237b0[0];
-        scale.x = vec3_802f5df0.x;
-        scale.y = vec3_802f5df0.y;
-        scale.z = vec3_802f5df0.z;
-        position.x = ((f32)*(s32*)((s32)pWinMgr + 0x20) - msgWidth) * float_0p5_804237b4[0]
+        drawColor = color;
+        scale = *(LocalVec*)(base + 0x8D0);
+        templatePosition = *(LocalVec*)(base + 0x8C4);
+        templatePosition.x = ((f32)*(s32*)((s32)pWinMgr + 0x20) - msgWidth) * float_0p5_804237b4[0]
             + (f32)*(s32*)((s32)pWinMgr + 0x18);
-        position.y = vec3_802f5de4.y;
-        position.z = vec3_802f5de4.z;
-        winFontSetWidth(&position, &scale, &color, maxWidth, msg);
+        position = templatePosition;
+        winFontSetWidth(&position, &scale, &drawColor,
+            (f32)(*(s32*)((s32)pWinMgr + 0x20) - 0x14), msg);
     }
 }
 #pragma no_register_save_helpers reset

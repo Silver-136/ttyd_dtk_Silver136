@@ -22,13 +22,9 @@ void GXTexModeSync(void);
 void PSMTXCopy(void* dst, void* src);
 
 void extInit(void) {
-    s32 wp = (s32)work;
-
-    if (gp->useAlt != 0) {
-        wp += 0x70;
-    }
-    *(s32*)wp = 0;
-    *(void**)(wp + 8) = 0;
+    ExtWork* wp = gp->useAlt ? &work[1] : &work[0];
+    wp->poseNum = 0;
+    wp->posePtr = NULL;
 }
 
 void extEntry(int param_1, int* param_2, void* initFunc, int param_4, int param_5) {
@@ -105,15 +101,16 @@ void extEntry(int param_1, int* param_2, void* initFunc, int param_4, int param_
 
 void extMakeTexture(s32 unused, s32* texInfo) {
     extern void* memcpy(void* dest, const void* src, u32 size);
-    extern void animPoseDisp_MakeExtTexture(f64 a, f64 b, s32 c, s32 d, s32* e, s32* f,
-                                            u32* g, s32* h, u32* i, s32* j);
+    extern void animPoseDisp_MakeExtTexture(char* name, void* anim, void* texObj, void** outAlloc,
+                                          s32* left, s32* top, s32* right, s32* bottom,
+                                          f32 frame, f32 scale);
     extern void GXBeginDisplayList(void* list, u32 size);
     extern void GXBegin(s32 primitive, s32 vtxFmt, s32 nverts);
     extern u32 GXEndDisplayList(void);
     extern ExtWork work[2];
     extern ExtGp* gp;
     extern s32 anim_ext_tex_size;
-    extern f32 queen_uv[4];
+    extern f32 queen_uv[];
     extern const f32 float_0_80421888;
     extern const f32 float_0p5_804218c0;
     extern const f32 float_4_804218bc;
@@ -126,60 +123,59 @@ void extMakeTexture(s32 unused, s32* texInfo) {
     s32 vtxOffset;
     s32 displayOffset;
     s32 sizeOffset;
-    u32 left;
+    s32 vertex;
+    s32 index;
+    s32 left;
     s32 top;
-    u32 right;
+    s32 right;
     s32 bottom;
     f32 uvSave[4];
     volatile u16* fifo;
 
     wp = (s32)work;
-    if (gp->useAlt != 0) {
-        wp += 0x70;
-    }
-
+    if (gp->useAlt != 0) wp += 0x70;
     anim_ext_tex_size = 0;
     tex = *(s32*)(wp + 0xC);
     memcpy(uvSave, queen_uv, 0x10);
+    vtxBase = 0;
+    vtxOffset = vtxBase;
+    displayOffset = vtxBase;
+    sizeOffset = vtxBase;
     queen_uv[0] = float_0_80421888;
     queen_uv[2] = float_0_80421888;
     queen_uv[1] = float_neg2_804218b4 / (f32)*(s32*)(wp + 4);
     queen_uv[3] = float_neg1_804218b8 / (f32)*(s32*)(wp + 4);
-
-    vtxBase = 0;
-    vtxOffset = 0;
-    displayOffset = 0;
-    sizeOffset = 0;
     fifo = (volatile u16*)0xCC008000;
-    for (i = 0; i < *(s32*)(wp + 4); i++) {
-        animPoseDisp_MakeExtTexture((f64)*(f32*)&texInfo[2], (f64)float_4_804218bc,
-                                    texInfo[0], texInfo[1], (s32*)(tex + 4),
-                                    (s32*)tex, &left, &top, &right, &bottom);
+    for (i = 0; i < *(s32*)(wp + 4); ) {
+        animPoseDisp_MakeExtTexture((char*)texInfo[0], (void*)texInfo[1], (void*)(tex + 4),
+                                  (void**)tex, &left, &top, &right, &bottom,
+                                  *(f32*)&texInfo[2], float_4_804218bc);
         *(f32*)(*(s32*)(wp + 0x14) + vtxOffset) = (f32)(s32)left * float_0p5_804218c0;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 1] = (f32)-top * float_0p5_804218c0;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 2] = float_0_80421888;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 3] = (f32)(s32)right * float_0p5_804218c0;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 4] = (f32)-top * float_0p5_804218c0;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 5] = float_0_80421888;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 6] = (f32)(s32)right * float_0p5_804218c0;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 7] = (f32)-bottom * float_0p5_804218c0;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 8] = float_0_80421888;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 9] = (f32)(s32)left * float_0p5_804218c0;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 10] = (f32)-bottom * float_0p5_804218c0;
-        ((f32*)*(s32*)(wp + 0x14))[vtxBase + 11] = float_0_80421888;
-
+        index = vtxBase + 1;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = (f32)-top * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = float_0_80421888;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = (f32)(s32)right * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = (f32)-top * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = float_0_80421888;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = (f32)(s32)right * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = (f32)-bottom * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = float_0_80421888;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = (f32)(s32)left * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[index++] = (f32)-bottom * float_0p5_804218c0;
+        ((f32*)*(s32*)(wp + 0x14))[index] = float_0_80421888;
         GXBeginDisplayList((void*)(*(s32*)(wp + 0x28) + displayOffset), 0x80);
         GXBegin(0x80, 0, 4);
-        *fifo = (u16)sizeOffset;
+        vertex = sizeOffset;
+        *fifo = (u16)vertex++;
         *fifo = 0;
-        *fifo = (u16)(sizeOffset + 1);
+        *fifo = (u16)vertex++;
         *fifo = 1;
-        *fifo = (u16)(sizeOffset + 2);
+        *fifo = (u16)vertex++;
         *fifo = 2;
-        *fifo = (u16)(sizeOffset + 3);
+        *fifo = (u16)vertex;
         *fifo = 3;
         *(u32*)(*(s32*)(wp + 0x2C) + sizeOffset) = GXEndDisplayList();
-
+        i++;
         texInfo += 3;
         tex += 0x34;
         vtxBase += 12;
@@ -187,7 +183,6 @@ void extMakeTexture(s32 unused, s32* texInfo) {
         displayOffset += 0x80;
         sizeOffset += 4;
     }
-
     memcpy(queen_uv, uvSave, 0x10);
 }
 
@@ -234,13 +229,11 @@ void extReset(void) {
 
 
 void extMain(void) {
-    extern s32 marioStGetSystemLevel(void);
+    extern u32 marioStGetSystemLevel(void);
     extern void* camGetPtr(s32 id);
     extern f64 atan2(f64 y, f64 x);
     extern void qqsort(void* base, u32 count, u32 width, void* compareFunc);
     extern s32 compare(void* a, void* b);
-    extern f32 sin(f32 x);
-    extern f32 cos(f32 x);
     extern ExtWork work[2];
     extern ExtGp* gp;
     extern const f32 float_rad2deg_8042188c;
@@ -259,6 +252,7 @@ void extMain(void) {
     s32 i;
     u32* pose;
     s32* entry;
+    u32 flags;
     void (*callback)(void);
     void* cam;
     f32 angle;
@@ -271,79 +265,57 @@ void extMain(void) {
     if (gp->useAlt != 0) {
         wp += 0x70;
     }
-
     if (marioStGetSystemLevel() == 0) {
         callback = *(void (**)(void))(wp + 0x30);
-        if (callback != 0) {
-            callback();
-        }
+        if (callback != 0) callback();
     }
     callback = *(void (**)(void))(wp + 0x34);
-    if (callback != 0) {
-        callback();
-    }
-
+    if (callback != 0) callback();
     pose = *(u32**)(wp + 8);
     entry = *(s32**)(wp + 0x24);
     cam = camGetPtr(4);
-    angle = float_rad2deg_8042188c *
-            (f32)atan2(-((f32*)((s32)cam + 0x18))[0] + ((f32*)((s32)cam + 0xC))[0],
-                       -((f32*)((s32)cam + 0x20))[0] + ((f32*)((s32)cam + 0x14))[0]);
-    while (angle >= float_360_80421890) {
-        angle -= float_360_80421890;
-    }
-    if (angle < float_0_80421888) {
-        angle += float_360_80421890;
-    }
+    angle = float_rad2deg_8042188c * (f32)atan2(
+        -(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
+        -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
+    while (angle >= float_360_80421890) angle -= float_360_80421890;
+    if (angle < float_0_80421888) angle += float_360_80421890;
     camGetPtr(4);
     camGetPtr(4);
-
     count = *(s32*)wp;
     target = float_180_80421894 + angle;
     for (i = count - 1; i >= 0; i--) {
+        flags = pose[0];
         entry[0] = i;
-        if ((pose[0] & 1) != 0) {
-            entry[1] = (s32)(f32)pose[4];
+        if ((flags & 1) != 0) {
+            *(f32*)&entry[1] = (f32)(s32)pose[4];
         }
-        if ((pose[0] & 2) != 0) {
+        if ((flags & 2) != 0) {
             diff = float_90_80421898 + (angle - *(f32*)&pose[1]);
-            while (diff < float_neg360_8042189c) {
-                diff += float_360_80421890;
-            }
-            while (diff >= float_360_80421890) {
-                diff -= float_360_80421890;
-            }
+            while (diff < float_neg360_8042189c) diff += float_360_80421890;
+            while (diff >= float_360_80421890) diff -= float_360_80421890;
             if ((float_90_80421898 < diff && diff <= float_270_804218a0) ||
                 (diff < float_neg90_804218a4 && float_neg270_804218a8 <= diff)) {
+                while (diff < float_neg360_8042189c) diff += float_360_80421890;
+                while (diff >= float_360_80421890) diff -= float_360_80421890;
                 *(f32*)&pose[7] = target;
             } else {
                 cam = camGetPtr(4);
-                diff = float_rad2deg_8042188c *
-                       (f32)atan2(-((f32*)((s32)cam + 0x18))[0] + ((f32*)((s32)cam + 0xC))[0],
-                                  -((f32*)((s32)cam + 0x20))[0] + ((f32*)((s32)cam + 0x14))[0]);
-                while (diff >= float_360_80421890) {
-                    diff -= float_360_80421890;
-                }
-                if (diff < float_0_80421888) {
-                    diff += float_360_80421890;
-                }
+                diff = float_rad2deg_8042188c * (f32)atan2(
+                    -(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
+                    -(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
+                while (diff >= float_360_80421890) diff -= float_360_80421890;
+                if (diff < float_0_80421888) diff += float_360_80421890;
                 *(f32*)&pose[7] = diff;
             }
-            while (float_180_80421894 < *(f32*)&pose[7] - *(f32*)&pose[5]) {
+            while (float_180_80421894 < *(f32*)&pose[7] - *(f32*)&pose[5])
                 *(f32*)&pose[5] += float_360_80421890;
-            }
-            while (*(f32*)&pose[7] - *(f32*)&pose[5] < float_neg180_804218ac) {
+            while (*(f32*)&pose[7] - *(f32*)&pose[5] < float_neg180_804218ac)
                 *(f32*)&pose[5] -= float_360_80421890;
-            }
             *(f32*)&pose[5] = ((*(f32*)&pose[7] - *(f32*)&pose[5]) * float_0p1_804218b0) +
                               *(f32*)&pose[5];
             diff = *(f32*)&pose[5];
-            while (diff < float_0_80421888) {
-                diff += float_360_80421890;
-            }
-            while (diff >= float_360_80421890) {
-                diff -= float_360_80421890;
-            }
+            while (diff < float_0_80421888) diff += float_360_80421890;
+            while (diff >= float_360_80421890) diff -= float_360_80421890;
             s = *(f32*)&sintbl[(s32)diff];
             c = *(f32*)&sintbl[(s32)diff + 90];
             *(f32*)pose[3] = c;
@@ -354,10 +326,7 @@ void extMain(void) {
         pose += 8;
         entry += 2;
     }
-
-    if (*(s32*)wp != 0) {
-        qqsort(*(void**)(wp + 0x24), *(s32*)wp, 8, compare);
-    }
+    if (*(s32*)wp != 0) qqsort(*(void**)(wp + 0x24), *(s32*)wp, 8, compare);
     *(s32*)(wp + 0x38) = -1;
     *(s32*)(wp + 0x6C) = 0;
 }
@@ -373,21 +342,23 @@ s32 compare(void* a, void* b) {
 }
 
 void* extGetPosePtr(void) {
-    s32 wp = (s32)work;
-
+    ExtWork* wp;
     if (gp->useAlt != 0) {
-        wp += 0x70;
+        wp = &work[1];
+    } else {
+        wp = &work[0];
     }
-    return *(void**)(wp + 8);
+    return wp->posePtr;
 }
 
 s32 extGetPoseNum(void) {
-    s32 wp = (s32)work;
-
+    ExtWork* wp;
     if (gp->useAlt != 0) {
-        wp += 0x70;
+        wp = &work[1];
+    } else {
+        wp = &work[0];
     }
-    return *(s32*)wp;
+    return wp->poseNum;
 }
 
 void extPoseDraw(s32 poseNo) {

@@ -159,7 +159,7 @@ extern const f32 float_100_8041f6d4;
 extern const f32 float_1p2667_8041f6d8;
 extern const f32 float_608_8041f6dc;
 extern const f32 float_480_8041f6e0;
-extern const double double_0p21817_802bf638;
+extern double double_0p21817_802bf638;
 
 typedef struct CamVecRaw {
     u32 x;
@@ -314,7 +314,7 @@ void camInit(void) {
         float_480_8041f6e0,
         float_0_8041f6b4,
         float_608_8041f6dc,
-        str_shadow_802bf648,
+        ((const char*)defaults + 0x70),
         w2,
         h2
     );
@@ -343,7 +343,7 @@ void camInit(void) {
 
     camPtrTbl[5] = camEntryPersp(
         (CamCallback)camEffMain,
-        str_3deff_A_802bf650,
+        ((const char*)defaults + 0x78),
         float_25_8041f6cc,
         float_1p2667_8041f6d8,
         float_100_8041f6d4,
@@ -363,14 +363,14 @@ void camInit(void) {
         float_1_8041f6c0
     );
 
-    z = float_24_8041f734 / (f32)tan(double_0p21817_802bf658);
+    z = float_24_8041f734 / (f32)tan((*(f64*)((s32)defaults + 0x80)));
     *(f32*)((s32)camPtrTbl[6] + 0x0C) = float_0_8041f6b4;
     *(f32*)((s32)camPtrTbl[6] + 0x10) = float_0_8041f6b4;
     *(f32*)((s32)camPtrTbl[6] + 0x14) = z;
 
     camPtrTbl[7] = camEntryPersp(
         (CamCallback)camEffMain,
-        str_3deff_B_802bf660,
+        ((const char*)defaults + 0x88),
         float_0_8041f6b4,
         float_1p2667_8041f6d8,
         float_100_8041f6d4,
@@ -390,7 +390,7 @@ void camInit(void) {
         float_0p2_8041f6f8
     );
 
-    z = float_240_8041f6bc / (f32)tan(double_0p21817_802bf658);
+    z = float_240_8041f6bc / (f32)tan((*(f64*)((s32)defaults + 0x80)));
     pos8 = *(VecRaw*)((s32)defaults + 0x48);
     *(f32*)&pos8.x = float_0_8041f6b4;
     *(f32*)&pos8.y = float_0_8041f6b4;
@@ -408,7 +408,7 @@ void camInit(void) {
         float_0p1_8041f738
     );
 
-    z = float_24_8041f734 / (f32)tan(double_0p21817_802bf658);
+    z = float_24_8041f734 / (f32)tan((*(f64*)((s32)defaults + 0x80)));
     pos9 = *(VecRaw*)((s32)defaults + 0x48);
     *(f32*)&pos9.x = float_0_8041f6b4;
     *(f32*)&pos9.y = float_0_8041f6b4;
@@ -426,7 +426,7 @@ void camInit(void) {
         float_0p1_8041f738
     );
 
-    z = float_24_8041f734 / (f32)tan(double_0p21817_802bf658);
+    z = float_24_8041f734 / (f32)tan((*(f64*)((s32)defaults + 0x80)));
     pos10 = *(VecRaw*)((s32)defaults + 0x48);
     *(f32*)&pos10.x = float_0_8041f6b4;
     *(f32*)&pos10.y = float_0_8041f6b4;
@@ -558,6 +558,13 @@ void* camEntryPersp(
     return cam;
 }
 
+__declspec(section ".rodata") VecRaw vec3_802bf608[] = {{0x00000000, 0x00000000, 0x00000000}};
+__declspec(section ".rodata") VecRaw vec3_802bf614[] = {{0x00000000, 0x00000000, 0x00000000}};
+__declspec(section ".rodata") VecRaw vec3_802bf620[] = {{0x00000000, 0x00000000, 0x00000000}};
+__declspec(section ".rodata") VecRaw vec3_802bf62c[] = {{0x00000000, 0x00000000, 0x00000000}};
+
+__declspec(section ".rodata") f64 double_0p21817_802bf638 = 0.21816615760326385;
+
 #pragma opt_common_subs off
 void camMain(void) {
     void* cam4;
@@ -578,8 +585,8 @@ void camMain(void) {
     f32 baseScale;
     f32 extentX;
     f32 extentY;
-    f32 offsetX;
-    f32 offsetY;
+
+
     f32 limit;
     f32 zoomScale;
 
@@ -693,26 +700,26 @@ void camMain(void) {
                 strength = float_0_8041f6b4;
             }
 
-            offsetX = float_0p5_8041f6f4 * *(f32*)&screen.x * strength;
-            offsetY = float_0p5_8041f6f4 * *(f32*)&screen.y * strength;
+            (*(f32*)&screen.x) = float_0p5_8041f6f4 * *(f32*)&screen.x * strength;
+            (*(f32*)&screen.y) = float_0p5_8041f6f4 * *(f32*)&screen.y * strength;
 
             limit = -extentX * float_0p2_8041f6f8;
-            if (offsetX < limit) {
-                offsetX = limit;
+            if ((*(f32*)&screen.x) < limit) {
+                (*(f32*)&screen.x) = limit;
             } else {
                 limit = extentX * float_0p2_8041f6f8;
-                if (offsetX > limit) {
-                    offsetX = limit;
+                if ((*(f32*)&screen.x) > limit) {
+                    (*(f32*)&screen.x) = limit;
                 }
             }
 
             limit = -extentY * float_0p2_8041f6f8;
-            if (offsetY < limit) {
-                offsetY = limit;
+            if ((*(f32*)&screen.y) < limit) {
+                (*(f32*)&screen.y) = limit;
             } else {
                 limit = extentY * float_0p2_8041f6f8;
-                if (offsetY > limit) {
-                    offsetY = limit;
+                if ((*(f32*)&screen.y) > limit) {
+                    (*(f32*)&screen.y) = limit;
                 }
             }
 
@@ -720,8 +727,8 @@ void camMain(void) {
 
             PSMTXTrans(
                 screenTransMtx,
-                -offsetX,
-                -offsetY,
+                -(*(f32*)&screen.x),
+                -(*(f32*)&screen.y),
                 float_0_8041f6b4
             );
 

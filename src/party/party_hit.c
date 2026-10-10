@@ -143,26 +143,25 @@ void partyHitCheck(void* pParty, unsigned int* param_2, unsigned int* param_3, f
     extern int chkfilterNokotaro(int param_1, int param_2);
     extern int chkfilter(int param_1, int param_2);
 
-    volatile RawVec inputCopy;
+    extern const f32 float_0_80421508;
+    extern const f32 float_0p5_80421504;
+    extern const f32 float_neg0p5_8042152c;
+    extern const f32 float_1000_80421530;
+
+    RawVec inputCopy;
     HitWork work;
     float value;
     float bias;
     int result;
 
-    inputCopy.x = param_3[0];
-    inputCopy.y = param_3[1];
-    inputCopy.z = param_3[2];
-    work.start.x = param_2[0];
-    work.start.y = param_2[1];
-    work.start.z = param_2[2];
-    work.end.x = inputCopy.x;
-    work.end.y = inputCopy.y;
-    work.end.z = inputCopy.z;
+    inputCopy = *(RawVec*)param_3;
+    work.start = *(RawVec*)param_2;
+    work.end = inputCopy;
     work.dist = *param_6;
 
     if (yoshiGetStatus() != 0) {
         result = hitCheckVecFilter(&work, chkfilterYoshi);
-    } else if (*(signed char*)((int)pParty + 0x31) == 2 && (*(unsigned int*)pParty & 0x100) != 0) {
+    } else if ((int)*(unsigned char*)((int)pParty + 0x31) == 2 && (*(unsigned int*)pParty & 0x100) != 0) {
         result = hitCheckVecFilter(&work, chkfilterNokotaro);
     } else {
         result = hitCheckVecFilter(&work, chkfilter);
@@ -170,32 +169,20 @@ void partyHitCheck(void* pParty, unsigned int* param_2, unsigned int* param_3, f
 
     if ((unsigned int)result != 0) {
         value = work.dist;
-        bias = -0.5f;
-        if (value >= 0.0f) {
-            bias = 0.5f;
-        }
-        *param_6 = (float)(int)(value * 1000.0f + bias) / 1000.0f;
+        bias = value >= float_0_80421508 ? float_0p5_80421504 : float_neg0p5_8042152c;
+        *param_6 = (float)(int)(float_1000_80421530 * value + bias) / float_1000_80421530;
 
         value = work.hitPos.x;
-        bias = -0.5f;
-        if (value >= 0.0f) {
-            bias = 0.5f;
-        }
-        param_4[0] = (float)(int)(value * 1000.0f + bias) / 1000.0f;
+        bias = value >= float_0_80421508 ? float_0p5_80421504 : float_neg0p5_8042152c;
+        param_4[0] = (float)(int)(float_1000_80421530 * value + bias) / float_1000_80421530;
 
         value = work.hitPos.y;
-        bias = -0.5f;
-        if (value >= 0.0f) {
-            bias = 0.5f;
-        }
-        param_4[1] = (float)(int)(value * 1000.0f + bias) / 1000.0f;
+        bias = value >= float_0_80421508 ? float_0p5_80421504 : float_neg0p5_8042152c;
+        param_4[1] = (float)(int)(float_1000_80421530 * value + bias) / float_1000_80421530;
 
         value = work.hitPos.z;
-        bias = -0.5f;
-        if (value >= 0.0f) {
-            bias = 0.5f;
-        }
-        param_4[2] = (float)(int)(value * 1000.0f + bias) / 1000.0f;
+        bias = value >= float_0_80421508 ? float_0p5_80421504 : float_neg0p5_8042152c;
+        param_4[2] = (float)(int)(float_1000_80421530 * value + bias) / float_1000_80421530;
 
         param_5[0] = work.hitNormal.x;
         param_5[1] = work.hitNormal.y;
@@ -223,7 +210,6 @@ u8 partyNrmToAngle(float* normal) {
     } view;
     f32 normalX;
     f32 normalZ;
-    f32 square;
     f32 length;
     f64 value;
     f64 inv;
@@ -234,17 +220,18 @@ u8 partyNrmToAngle(float* normal) {
     normalX = normal[0];
     constants = (const u8*)&vec3_802cb770;
     normalZ = normal[2];
-    square = normalX * normalX + normalZ * normalZ;
-    value = (f64)square;
+    length = (f32)(normalX * normalX) + (f32)(normalZ * normalZ);
+    value = (f64)length;
 
     if (value > (f64)float_0_80421508) {
         inv = __frsqrte(value);
         inv = *(const f64*)(constants + 0x110) * inv *
-              -((value * inv * inv) - *(const f64*)(constants + 0x118));
+              -((value * (inv * inv)) - *(const f64*)(constants + 0x118));
         inv = *(const f64*)(constants + 0x110) * inv *
-              -((value * inv * inv) - *(const f64*)(constants + 0x118));
-        length = (f32)(value * *(const f64*)(constants + 0x110) * inv *
-                       -((value * inv * inv) - *(const f64*)(constants + 0x118)));
+              -((value * (inv * inv)) - *(const f64*)(constants + 0x118));
+        inv = *(const f64*)(constants + 0x110) * inv *
+              -((value * (inv * inv)) - *(const f64*)(constants + 0x118));
+        length = (f32)(value * inv);
         goto have_length;
     }
 
@@ -253,16 +240,27 @@ u8 partyNrmToAngle(float* normal) {
         goto have_length;
     }
 
-    view.value = square;
+    view.value = length;
     exponent = view.bits & 0x7F800000;
-    length = square;
 
-    if (exponent == 0x7F800000) {
-        kind = (view.bits & 0x7FFFFF) != 0 ? 1 : 2;
-    } else if (exponent < 0x7F800000 && exponent == 0) {
-        kind = (view.bits & 0x7FFFFF) != 0 ? 5 : 3;
-    } else {
-        kind = 4;
+    switch (exponent) {
+        case 0x7F800000:
+            if ((view.bits & 0x7FFFFF) != 0) {
+                kind = 1;
+            } else {
+                kind = 2;
+            }
+            break;
+        case 0:
+            if ((view.bits & 0x7FFFFF) != 0) {
+                kind = 5;
+            } else {
+                kind = 3;
+            }
+            break;
+        default:
+            kind = 4;
+            break;
     }
     if (kind == 1) {
         length = __float_nan[0];
@@ -364,8 +362,6 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
     extern s32 chkfilter(s32, s32);
     extern s32 chkfilterNokotaro(s32, s32);
     extern s32 chkfilterYoshi(s32, s32);
-    extern f32 __fabsf(f32);
-    extern f64 __frsqrte(f64);
     extern f32 __float_nan;
     extern const VecBits vec3_802cb770;
     extern const f32 float_0_80421508;
@@ -394,8 +390,8 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
     VecBits direction;
     void* mario;
     void* hit;
+    void* probeHit;
     void* bestHit;
-    f32* pos;
     f32 riseAbs;
     f32 height;
     f32 angle;
@@ -413,7 +409,6 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
     f32 offZ;
     s32 i;
 
-    pos = (f32*)((u8*)party + 0x58);
     bestHit = 0;
 
     if ((*(u32*)party & 0x02000000) != 0) {
@@ -435,8 +430,7 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
         height = float_0p75_80421528 * partyGetHeight(party);
     }
 
-    baseY = pos[1];
-    *(f32*)((u8*)party + 0xE4) = baseY;
+    *(f32*)((u8*)party + 0xE4) = *(f32*)((u8*)party + 0x5C);
     *(f32*)((u8*)party + 0xE8) = float_neg1_8042153c;
 
     if (*(f32*)((u8*)party + 0x104) != float_0_80421508) {
@@ -446,12 +440,13 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
     }
 
     angle = float_3p1416_80421550 * angle / float_180_8042150c;
-    sideX = float_0p375_80421560 * *(f32*)((u8*)party + 0xF4) * (f32)sin(angle);
-    sideZ = float_0p375_80421560 * *(f32*)((u8*)party + 0xF4) * -(f32)cos(angle);
+    sideX = float_0p375_80421560 * (*(f32*)((u8*)party + 0xF4) * (f32)sin(angle));
+    sideZ = float_0p375_80421560 * (*(f32*)((u8*)party + 0xF4) * -(f32)cos(angle));
 
+    baseY = *(f32*)((u8*)party + 0x5C);
     direction = vecCatalog[1];
-    baseX = pos[0];
-    baseZ = pos[2];
+    baseX = *(f32*)((u8*)party + 0x58);
+    baseZ = *(f32*)((u8*)party + 0x60);
     startY = baseY + height;
     totalDist = height + riseAbs;
     best = float_neg10000_80421564;
@@ -469,7 +464,7 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
         } else if (i == 3) {
             offX = sideZ;
             offZ = -sideX;
-        } else {
+        } else if (i == 4) {
             offX = -sideX;
             offZ = -sideZ;
         }
@@ -482,33 +477,30 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
         work.dist = totalDist;
 
         if (yoshiGetStatus() != 0) {
-            hit = hitCheckVecFilter(&work, chkfilterYoshi);
+            probeHit = hitCheckVecFilter(&work, chkfilterYoshi);
         } else if (*(u8*)((u8*)party + 0x31) == 2 &&
                    (*(u32*)party & 0x100) != 0) {
-            hit = hitCheckVecFilter(&work, chkfilterNokotaro);
+            probeHit = hitCheckVecFilter(&work, chkfilterNokotaro);
         } else {
-            hit = hitCheckVecFilter(&work, chkfilter);
+            probeHit = hitCheckVecFilter(&work, chkfilter);
         }
 
         /*
          * Target has a first hit block that only rounds the hit Y and copies
          * the normal into a distinct stack Vec, followed by a second test.
          */
-        if (hit != 0) {
+        if (probeHit != 0) {
             f32 bias;
             s32 rounded;
 
             hitY = work.hitPos.y;
-            if (hitY >= float_0_80421508) {
-                bias = float_0p5_80421504;
-            } else {
-                bias = float_neg0p5_8042152c;
-            }
+            bias = hitY >= float_0_80421508 ? float_0p5_80421504 : float_neg0p5_8042152c;
             rounded = (s32)(float_1000_80421530 * hitY + bias);
             hitY = (f32)rounded / float_1000_80421530;
             normalA = work.normal;
         }
 
+        hit = probeHit;
         if (hit != 0) {
             union FloatBits view;
             f32 square;
@@ -541,21 +533,25 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
 
             if (value > (f64)float_0_80421508) {
                 inv = __frsqrte(value);
-                inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-                inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-                length = (f32)(value * 0.5 * inv *
-                               -((value * inv * inv) - 3.0));
+                inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+                inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+                inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+                length = (f32)(value * inv);
             } else if (value < 0.0) {
                 length = __float_nan;
             } else {
                 view.value = square;
                 exponent = view.bits & 0x7F800000;
-                if (exponent == 0x7F800000) {
-                    kind = (view.bits & 0x7FFFFF) == 0 ? 2 : 1;
-                } else if (exponent < 0x7F800000 && exponent == 0) {
-                    kind = (view.bits & 0x7FFFFF) == 0 ? 3 : 5;
-                } else {
-                    kind = 4;
+                switch (exponent) {
+                    case 0x7F800000:
+                        kind = (view.bits & 0x7FFFFF) != 0 ? 1 : 2;
+                        break;
+                    case 0:
+                        kind = (view.bits & 0x7FFFFF) != 0 ? 5 : 3;
+                        break;
+                    default:
+                        kind = 4;
+                        break;
                 }
                 length = kind == 1 ? __float_nan : square;
             }
@@ -610,21 +606,25 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
 
             if (value > (f64)float_0_80421508) {
                 inv = __frsqrte(value);
-                inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-                inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-                length = (f32)(value * 0.5 * inv *
-                               -((value * inv * inv) - 3.0));
+                inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+                inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+                inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+                length = (f32)(value * inv);
             } else if (value < 0.0) {
                 length = __float_nan;
             } else {
                 view.value = square;
                 exponent = view.bits & 0x7F800000;
-                if (exponent == 0x7F800000) {
-                    kind = (view.bits & 0x7FFFFF) == 0 ? 2 : 1;
-                } else if (exponent < 0x7F800000 && exponent == 0) {
-                    kind = (view.bits & 0x7FFFFF) == 0 ? 3 : 5;
-                } else {
-                    kind = 4;
+                switch (exponent) {
+                    case 0x7F800000:
+                        kind = (view.bits & 0x7FFFFF) != 0 ? 1 : 2;
+                        break;
+                    case 0:
+                        kind = (view.bits & 0x7FFFFF) != 0 ? 5 : 3;
+                        break;
+                    default:
+                        kind = 4;
+                        break;
                 }
                 length = kind == 1 ? __float_nan : square;
             }
@@ -636,24 +636,20 @@ s32 partySearchGround(f32 rise, f32 fall, void* party) {
                 -normalC.y);
             *(f32*)((u8*)party + 0xE0) = slopeAngle;
 
-            diff = hitY - baseY;
-            absDiff = __fabsf(diff);
-
-            if (hitY >= baseY || absDiff < float_2_80421554) {
-                if (absDiff <= float_11_80421534 && hitY > best) {
+            if (hitY < baseY && __fabsf(hitY - baseY) >= float_2_80421554) {
+                absDiff = __fabsf(hitY - baseY);
+                fallLimit = __fabsf(fall);
+                if (absDiff > fallLimit) {
+                    *(f32*)((u8*)party + 0xE8) =
+                        __fabsf(baseY - hitY);
+                } else if (hitY > best) {
                     best = hitY;
                     bestHit = hit;
                 }
             } else {
-                fallLimit = __fabsf(fall);
-                if (absDiff <= fallLimit) {
-                    if (hitY > best) {
-                        best = hitY;
-                        bestHit = hit;
-                    }
-                } else {
-                    *(f32*)((u8*)party + 0xE8) =
-                        __fabsf(baseY - hitY);
+                if (__fabsf(hitY - baseY) <= float_11_80421534 && hitY > best) {
+                    best = hitY;
+                    bestHit = hit;
                 }
             }
         }
@@ -703,8 +699,6 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
     extern s32 chkfilterNokotaro(s32 a, s32 b);
     extern s32 chkfilter(s32 a, s32 b);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern f32 __fabsf(f32);
-    extern f64 __frsqrte(f64);
     extern f32 __float_nan;
     extern const VecBits vec3_802cb770;
     extern f32 float_0_80421508;
@@ -725,6 +719,7 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
     Vec3 normalA;
     Vec3 normalB;
     void* hit;
+    void* probeHit;
     f32 partyHeight;
     f32 direction;
     f32 radians;
@@ -741,14 +736,15 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
     f32 square;
     f32 length;
     f32 yDiffAbs;
+    f32 scaledNormalY;
+
+    heightAdd += float_0p01_80421548;
 
     *(VecBits*)((u8*)pParty + 0xC4) = vecCatalog[2];
     *(f32*)((u8*)pParty + 0xE0) = float_0_80421508;
 
     partyHeight = partyGetHeight(pParty);
-    partyY = *(f32*)((u8*)pParty + 0x5C);
-    partyX = *(f32*)((u8*)pParty + 0x58);
-    *outY = partyY;
+    *outY = *(f32*)((u8*)pParty + 0x5C);
     *outDiff = float_neg1_8042153c;
 
     if (*(f32*)((u8*)pParty + 0x104) != float_0_80421508) {
@@ -762,6 +758,8 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
     widthOffset = float_0p265_8042154c * *(f32*)((u8*)pParty + 0xF4);
     sinDir = (f32)sin(radians);
     cosDir = (f32)cos(radians);
+    partyY = *(f32*)((u8*)pParty + 0x5C);
+    partyX = *(f32*)((u8*)pParty + 0x58);
     partyZ = *(f32*)((u8*)pParty + 0x60);
 
     *(VecBits*)&startPos = vecCatalog[3];
@@ -770,21 +768,18 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
     startPos.z = partyZ + widthOffset * -cosDir;
     work.start = startPos;
     *(VecBits*)&work.dir = vecCatalog[4];
-    work.dist = partyHeight + (heightAdd + float_0p01_80421548);
+    work.dist = partyHeight + heightAdd;
 
     if (yoshiGetStatus() != 0) {
-        hit = hitCheckVecFilter(&work, chkfilterYoshi);
-    } else if (*(s8*)((u8*)pParty + 0x31) == 2 &&
+        probeHit = hitCheckVecFilter(&work, chkfilterYoshi);
+    } else if ((s32)*(u8*)((u8*)pParty + 0x31) == 2 &&
                (*(u32*)pParty & 0x100) != 0) {
-        hit = hitCheckVecFilter(&work, chkfilterNokotaro);
+        probeHit = hitCheckVecFilter(&work, chkfilterNokotaro);
     } else {
-        hit = hitCheckVecFilter(&work, chkfilter);
+        probeHit = hitCheckVecFilter(&work, chkfilter);
     }
 
-    if (hit == 0) {
-        return 0;
-    }
-
+    if (probeHit != 0) {
     bias = work.hitPos.x >= float_0_80421508
                ? float_0p5_80421504
                : float_neg0p5_8042152c;
@@ -807,14 +802,20 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
         float_1000_80421530;
 
     normalA = work.normal;
+    }
+    hit = probeHit;
+    if (hit == 0) {
+        return 0;
+    }
     normalB = normalA;
+    scaledNormalY = float_100_80421520 * normalB.y;
 
     *(f32*)((u8*)pParty + 0xC4) =
         (f32)(s32)(angleABf(
             float_0_80421508,
             float_0_80421508,
             float_100_80421520 * normalB.z,
-            float_100_80421520 * normalB.y) -
+            scaledNormalY) -
                    float_180_8042150c);
     *(f32*)((u8*)pParty + 0xC8) = float_0_80421508;
     *(f32*)((u8*)pParty + 0xCC) =
@@ -822,10 +823,10 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
             float_0_80421508,
             float_0_80421508,
             float_100_80421520 * normalB.x,
-            float_100_80421520 * normalB.y) -
+            scaledNormalY) -
                    float_180_8042150c);
 
-    square = normalB.x * normalB.x + normalB.z * normalB.z;
+    square = normalB.z * normalB.z + normalB.x * normalB.x;
     {
         union FloatBits view;
         f64 value = (f64)square;
@@ -835,21 +836,25 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
 
         if (value > 0.0) {
             inv = __frsqrte(value);
-            inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-            inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-            length = (f32)(value * 0.5 * inv *
-                           -((value * inv * inv) - 3.0));
+            inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+            inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+            inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+            length = (f32)(value * inv);
         } else if (value < 0.0) {
             length = __float_nan;
         } else {
             view.value = square;
             exponent = view.bits & 0x7F800000;
-            if (exponent == 0x7F800000) {
-                kind = (view.bits & 0x7FFFFF) == 0 ? 2 : 1;
-            } else if (exponent < 0x7F800000 && exponent == 0) {
-                kind = (view.bits & 0x7FFFFF) == 0 ? 3 : 5;
-            } else {
-                kind = 4;
+            switch (exponent) {
+                case 0x7F800000:
+                    kind = (view.bits & 0x7FFFFF) != 0 ? 1 : 2;
+                    break;
+                case 0:
+                    kind = (view.bits & 0x7FFFFF) != 0 ? 5 : 3;
+                    break;
+                default:
+                    kind = 4;
+                    break;
             }
             length = kind == 1 ? __float_nan : square;
         }
@@ -862,12 +867,13 @@ s32 partyChkFrontStep(f32 heightAdd, void* pParty, f32* outY, f32* outDiff, f32*
             length,
             -normalB.y);
 
-    yDiffAbs = __fabsf(roundedY - partyY);
-
-    if (roundedY < partyY && yDiffAbs < float_2_80421554) {
+    if (roundedY < partyY) {
+        yDiffAbs = __fabsf(roundedY - partyY);
+        if (yDiffAbs < float_2_80421554) {
         *outDiff = partyY - roundedY;
         *outAngle = angleABf(partyX, partyZ, roundedX, roundedZ);
         return 0;
+        }
     }
 
     *outY = roundedY;
@@ -910,35 +916,34 @@ void* partySearchWallFront(f32 distance, f32 direction, void* pParty, f32* pos) 
     extern const VecBits vec3_802cb770;
 
     register const VecBits* vecCatalog = &vec3_802cb770;
-    f32 heights[4];
-    VecLocal dir;
-    VecLocal sideDir;
-    VecLocal posWork;
     VecLocal callPos;
     VecLocal callDir;
-    VecLocal normal;
-    VecLocal bestNormal;
     VecLocal hitPos;
+    VecLocal bestNormal;
+    VecLocal normal;
     VecLocal push;
+    f32 heights[4];
+    VecLocal dir;
+    VecLocal response;
+    VecLocal sideDir;
+    VecLocal secondDir;
     void* hit;
     void* bestHit;
     f32 width;
-    volatile f32 bestDist;
-    f32 dist;
     f32 dot;
     f32 dirX;
     f32 dirZ;
+    f32 sideX;
+    f32 sideZ;
+    volatile f32 bestDist;
+    f32 dist;
     f32* height;
     s32 count;
     s32 i;
     void* sideHit;
-    void* secondSideHit;
 
     *(VecBits*)&push = vecCatalog[6];
     sincosf(direction, &dirX, &dirZ);
-    *(VecBits*)&dir = vecCatalog[7];
-    dir.x = dirX;
-    dir.z = dirZ;
     count = 3;
     heights[0] = float_0p75_80421528 * partyGetHeight(pParty);
     heights[1] = float_0p5_80421504 * partyGetHeight(pParty);
@@ -957,23 +962,28 @@ void* partySearchWallFront(f32 distance, f32 direction, void* pParty, f32* pos) 
         }
     }
 
+    *(VecBits*)&dir = vecCatalog[7];
+    dir.x = dirX;
+    dir.z = dirZ;
+
     width = float_0p5_80421504 * *(f32*)((s32)pParty + 0xF4);
     bestDist = width + distance;
     bestHit = 0;
-    posWork.x = pos[0];
-    posWork.y = pos[1];
-    posWork.z = pos[2];
+    callPos = *(VecLocal*)pos;
+    callDir = dir;
     height = heights;
     for (i = 0; i < count; i++, height++) {
-        posWork.y = pos[1] + *height;
+        callPos.y = pos[1] + *height;
         dist = width + distance;
-        hit = marioHitCheckVec(&posWork, &dir, &hitPos, &normal, &dist);
+        hit = marioHitCheckVec(&callPos, &callDir, &hitPos, &normal, &dist);
         if (hit != 0) {
-            if (bestHit == 0) {
-                bestDist = dist;
-                bestNormal = normal;
-                bestHit = hit;
-            } else if (dist < bestDist) {
+            if (bestHit != 0) {
+                if (dist < bestDist) {
+                    bestDist = dist;
+                    bestNormal = normal;
+                    bestHit = hit;
+                }
+            } else {
                 bestDist = dist;
                 bestNormal = normal;
                 bestHit = hit;
@@ -981,56 +991,59 @@ void* partySearchWallFront(f32 distance, f32 direction, void* pParty, f32* pos) 
         }
     }
     if (bestHit != 0) {
-        normal = bestNormal;
-        dot = (distance * dir.x) * normal.x + (distance * dir.z) * normal.z;
-        push.x += float_0p5_80421504 * -(dot * normal.x - (distance * dir.x));
-        push.z += float_0p5_80421504 * -(dot * normal.z - (distance * dir.z));
+        response = bestNormal;
+        {
+            f32 zMove = dirZ * distance;
+            f32 xMove = dirX * distance;
+            f32 xResponse;
+            f32 zResponse;
+            dot = zMove * response.z + xMove * response.x;
+            xResponse = -(dot * response.x - xMove);
+            zResponse = -(dot * response.z - zMove);
+            push.x += float_0p5_80421504 * xResponse;
+            push.z += float_0p5_80421504 * zResponse;
+        }
     }
 
     sideHit = 0;
-    sincosf(direction + float_45_80421538, &dirX, &dirZ);
+    sincosf(direction + float_45_80421538, &sideX, &sideZ);
     *(VecBits*)&sideDir = vecCatalog[8];
-    sideDir.x = dirX;
-    sideDir.z = dirZ;
-    posWork.x = pos[0];
-    posWork.y = pos[1];
-    posWork.z = pos[2];
+    sideDir.x = sideX;
+    sideDir.z = sideZ;
+    callPos = *(VecLocal*)pos;
+    callDir = sideDir;
     height = heights;
     for (i = 0; i < count; i++, height++) {
-        posWork.y = pos[1] + *height;
-        callPos = posWork;
-        callDir = sideDir;
+        callPos.y = pos[1] + *height;
         dist = width;
         sideHit = marioHitCheckVec(&callPos, &callDir, 0, 0, &dist);
         if (sideHit != 0) {
             break;
         }
     }
-    secondSideHit = 0;
     if (sideHit != 0) {
-        sincosf(direction - float_45_80421538, &dirX, &dirZ);
-        height = heights;
-        for (i = 0; i < count; i++, height++) {
-            *(VecBits*)&sideDir = vecCatalog[9];
-            sideDir.x = dirX;
-            sideDir.z = dirZ;
-            posWork.y = pos[1] + *height;
-            callPos = posWork;
-            callDir = sideDir;
+        sideHit = 0;
+        sincosf(direction - float_45_80421538, &sideX, &sideZ);
+        for (i = 0; i < count; i++) {
+            *(VecBits*)&secondDir = vecCatalog[9];
+            secondDir.x = sideX;
+            secondDir.z = sideZ;
+            callPos.y = pos[1] + heights[i];
+                    callDir = secondDir;
             dist = width;
-            secondSideHit = marioHitCheckVec(&callPos, &callDir, 0, 0, &dist);
+            sideHit = marioHitCheckVec(&callPos, &callDir, 0, 0, &dist);
         }
     }
 
     if (bestHit != 0) {
-        if (secondSideHit == 0) {
+        if (sideHit == 0) {
             pos[0] += push.x;
             pos[2] += push.z;
         }
         return bestHit;
     }
 
-    if (secondSideHit == 0) {
+    if (sideHit == 0) {
         pos[0] += distance * dir.x;
         pos[2] += distance * dir.z;
     }
@@ -1075,7 +1088,6 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
     extern s32 hitCheckVecFilter(void*, void*);
     extern s32 chkfilterYoshi(s32, s32), chkfilterNokotaro(s32, s32), chkfilter(s32, s32);
     extern f32 angleABf(f32, f32, f32, f32);
-    extern f64 __frsqrte(f64);
     extern f32 __float_nan;
     extern const VecBits vec3_802cb770;
     extern f32 float_0_80421508, float_0p5_80421504, float_0p75_80421528;
@@ -1124,7 +1136,7 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
 
     if (yoshiGetStatus() != 0) {
         hit = hitCheckVecFilter(&work1, chkfilterYoshi);
-    } else if (*(s8*)((u8*)pParty + 0x31) == 2 &&
+    } else if ((s32)*(u8*)((u8*)pParty + 0x31) == 2 &&
                (*(u32*)pParty & 0x100) != 0) {
         hit = hitCheckVecFilter(&work1, chkfilterNokotaro);
     } else {
@@ -1134,29 +1146,31 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
     if (hit != 0) {
         s32 rounded;
 
-        bias = float_neg0p5_8042152c;
-        if (work1.dist >= float_0_80421508) {
-            bias = float_0p5_80421504;
-        }
+        bias = work1.dist >= float_0_80421508 ? float_0p5_80421504 : float_neg0p5_8042152c;
         rounded = (s32)(float_1000_80421530 * work1.dist + bias);
         roundedDist = (f32)rounded / float_1000_80421530;
         normal = *(Vec3*)work1.normal;
 
         *(f32*)((u8*)pParty + 0xEC) = roundedDist;
         response1 = normal;
-        dot = (distance * c) * response1.x +
-              (distance * s) * response1.z;
-        pos[0] += float_0p5_80421504 *
-                  -(dot * response1.x - distance * c);
-        pos[2] += float_0p5_80421504 *
-                  -(dot * response1.z - distance * s);
+        {
+            f32 zMove = s * distance;
+            f32 xMove = c * distance;
+            f32 xResponse;
+            f32 zResponse;
+            dot = zMove * response1.z + xMove * response1.x;
+            xResponse = -(dot * response1.x - xMove);
+            zResponse = -(dot * response1.z - zMove);
+            pos[0] += float_0p5_80421504 * xResponse;
+            pos[2] += float_0p5_80421504 * zResponse;
+        }
         return hit;
     }
 
     if (hit == 0) {
         f32 height = float_11_80421534;
 
-        if (*(s8*)((u8*)pParty + 0x31) == 3 &&
+        if ((s32)*(u8*)((u8*)pParty + 0x31) == 3 &&
             (*(u32*)pParty & 0x100) != 0) {
             height = float_1_8042151c;
         }
@@ -1170,7 +1184,7 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
 
         if (yoshiGetStatus() != 0) {
             hit = hitCheckVecFilter(&work2, chkfilterYoshi);
-        } else if (*(s8*)((u8*)pParty + 0x31) == 2 &&
+        } else if ((s32)*(u8*)((u8*)pParty + 0x31) == 2 &&
                    (*(u32*)pParty & 0x100) != 0) {
             hit = hitCheckVecFilter(&work2, chkfilterNokotaro);
         } else {
@@ -1180,10 +1194,7 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
         if (hit != 0) {
             s32 rounded;
 
-            bias = float_neg0p5_8042152c;
-            if (work2.dist >= float_0_80421508) {
-                bias = float_0p5_80421504;
-            }
+            bias = work2.dist >= float_0_80421508 ? float_0p5_80421504 : float_neg0p5_8042152c;
             rounded = (s32)(float_1000_80421530 * work2.dist + bias);
             roundedDist = (f32)rounded / float_1000_80421530;
             normal = *(Vec3*)work2.normal;
@@ -1198,26 +1209,30 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
             u32 exponent;
             s32 kind;
 
-            square = normal.x * normal.x + normal.z * normal.z;
+            square = normal.z * normal.z + normal.x * normal.x;
             value = (f64)square;
 
             if (value > (f64)float_0_80421508) {
                 inv = __frsqrte(value);
-                inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-                inv = 0.5 * inv * -((value * inv * inv) - 3.0);
-                length = (f32)(value * 0.5 * inv *
-                               -((value * inv * inv) - 3.0));
+                inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+                inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+                inv = 0.5 * inv * -((value * (inv * inv)) - 3.0);
+                length = (f32)(value * inv);
             } else if (value < 0.0) {
                 length = __float_nan;
             } else {
                 view.value = square;
                 exponent = view.bits & 0x7F800000;
-                if (exponent == 0x7F800000) {
-                    kind = (view.bits & 0x7FFFFF) == 0 ? 2 : 1;
-                } else if (exponent < 0x7F800000 && exponent == 0) {
-                    kind = (view.bits & 0x7FFFFF) == 0 ? 3 : 5;
-                } else {
-                    kind = 4;
+                switch (exponent) {
+                    case 0x7F800000:
+                        kind = (view.bits & 0x7FFFFF) != 0 ? 1 : 2;
+                        break;
+                    case 0:
+                        kind = (view.bits & 0x7FFFFF) != 0 ? 5 : 3;
+                        break;
+                    default:
+                        kind = 4;
+                        break;
                 }
                 length = kind == 1 ? __float_nan : square;
             }
@@ -1226,12 +1241,17 @@ s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos) {
                          length, -normal.y) >= float_45_80421538) {
                 *(f32*)((u8*)pParty + 0xEC) = roundedDist;
                 response2 = normal;
-                dot = (distance * c) * response2.x +
-                      (distance * s) * response2.z;
-                pos[0] += float_0p5_80421504 *
-                          -(dot * response2.x - distance * c);
-                pos[2] += float_0p5_80421504 *
-                          -(dot * response2.z - distance * s);
+                {
+            f32 zMove = s * distance;
+            f32 xMove = c * distance;
+            f32 xResponse;
+            f32 zResponse;
+            dot = zMove * response2.z + xMove * response2.x;
+            xResponse = -(dot * response2.x - xMove);
+            zResponse = -(dot * response2.z - zMove);
+            pos[0] += float_0p5_80421504 * xResponse;
+            pos[2] += float_0p5_80421504 * zResponse;
+        }
                 return hit;
             }
         }
@@ -1280,11 +1300,11 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     Vec3 probe1;
     Vec3 probe2;
     Vec3 probe3;
-    volatile struct {
-        Vec3 original;
-        f32 s;
-        f32 c;
-    } local;
+    f32 cosOut;
+    f32 sinOut;
+    volatile f32 originalX;
+    volatile f32 originalY;
+    volatile f32 originalZ;
 
     f32 d0;
     f32 o06;
@@ -1332,24 +1352,24 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     catalog = vec3_802cb770;
     width = float_0p3_80421524 * width;
 
-    sincosf(angle, (f32*)&local.c, (f32*)&local.s);
+    sincosf(angle, &cosOut, &sinOut);
 
-    local.original.x = pos[0];
-    local.original.y = pos[1];
-    local.original.z = pos[2];
+    originalX = pos[0];
+    originalY = pos[1];
+    originalZ = pos[2];
 
-    best = *dist;
-    dx = width * local.c;
-    dz = -width * local.s;
+    dx = width * cosOut;
+    dz = -width * sinOut;
 
     probe0 = catalog[12];
-    x = local.original.x + dx;
-    y = local.original.y;
-    z = local.original.z + dz;
+    x = originalX + dx;
+    z = originalZ + dz;
+    y = originalY;
     probe0.x = x;
     probe0.y = y;
     probe0.z = z;
     callPos = probe0;
+    best = *dist;
     d0 = best;
     hit = hitCheckFilter(
         callPos.x, callPos.y + float_10_80421510, callPos.z,
@@ -1363,9 +1383,9 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     }
 
     probe1 = catalog[13];
-    x = local.original.x - dx;
-    y = local.original.y;
-    z = local.original.z - dz;
+    x = originalX - dx;
+    z = originalZ - dz;
+    y = originalY;
     probe1.x = x;
     probe1.y = y;
     probe1.z = z;
@@ -1383,9 +1403,9 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     }
 
     probe2 = catalog[14];
-    x = local.original.x + dz;
-    y = local.original.y;
-    z = local.original.z + dx;
+    x = originalX + dz;
+    z = originalZ + dx;
+    y = originalY;
     probe2.x = x;
     probe2.y = y;
     probe2.z = z;
@@ -1403,9 +1423,9 @@ void partySearchHead(f32 angle, void* pParty, f32* pos, f32* dist) {
     }
 
     probe3 = catalog[15];
-    x = local.original.x - dz;
-    y = local.original.y;
-    z = local.original.z - dx;
+    x = originalX - dz;
+    z = originalZ - dx;
+    y = originalY;
     probe3.x = x;
     probe3.y = y;
     probe3.z = z;
@@ -1526,15 +1546,25 @@ s32 unk_800c2010(void* party, f32* pos) {
     f32 angle1;
     f32 angle2;
     f32 delta;
+    f32 normalX;
+    f32 normalZ;
     void* hit1;
     void* hit2;
 
-#define RUN_HIT(_work) \
-    (yoshiGetStatus() != 0 \
-         ? hitCheckVecFilter(&(_work), chkfilterYoshi) \
-         : ((*(s8*)((u8*)party + 0x31) == 2 && (*(u32*)party & 0x100) != 0) \
-                ? hitCheckVecFilter(&(_work), chkfilterNokotaro) \
-                : hitCheckVecFilter(&(_work), chkfilter)))
+#define RUN_HIT(_work, _out) \
+    { void* probeResult; \
+    if (yoshiGetStatus() != 0) { \
+        probeResult = hitCheckVecFilter(&(_work), chkfilterYoshi); \
+    } else if ((s32)*(u8*)((u8*)party + 0x31) == 2 && (*(u32*)party & 0x100) != 0) { \
+        probeResult = hitCheckVecFilter(&(_work), chkfilterNokotaro); \
+    } else { \
+        probeResult = hitCheckVecFilter(&(_work), chkfilter); \
+    } \
+    if (probeResult == 0) { (_out) = probeResult; } else { \
+        normalX = (_work).normal.x; \
+        (_out) = probeResult; \
+        normalZ = (_work).normal.z; \
+    } }
 
     radius = *(f32*)((u8*)party + 0xF4);
 
@@ -1563,13 +1593,13 @@ s32 unk_800c2010(void* party, f32* pos) {
     center1.dir = dir1;
     center1.dist = float_20_80421514;
 
-    hit1 = RUN_HIT(center1);
+    RUN_HIT(center1, hit1);
     if (hit1 != 0) {
         angle1 = angleABf(
             float_0_80421508,
             float_0_80421508,
-            center1.normal.x,
-            center1.normal.z);
+            normalX,
+            normalZ);
     }
 
     if (hit1 == 0) {
@@ -1581,13 +1611,13 @@ s32 unk_800c2010(void* party, f32* pos) {
         right1.dir = dir1;
         right1.dist = float_20_80421514;
 
-        hit1 = RUN_HIT(right1);
+        RUN_HIT(right1, hit1);
         if (hit1 != 0) {
             angle1 = angleABf(
                 float_0_80421508,
                 float_0_80421508,
-                right1.normal.x,
-                right1.normal.z);
+                normalX,
+                normalZ);
         }
     }
 
@@ -1600,13 +1630,13 @@ s32 unk_800c2010(void* party, f32* pos) {
         left1.dir = dir1;
         left1.dist = float_20_80421514;
 
-        hit1 = RUN_HIT(left1);
+        RUN_HIT(left1, hit1);
         if (hit1 != 0) {
             angle1 = angleABf(
                 float_0_80421508,
                 float_0_80421508,
-                left1.normal.x,
-                left1.normal.z);
+                normalX,
+                normalZ);
         }
     }
 
@@ -1625,13 +1655,13 @@ s32 unk_800c2010(void* party, f32* pos) {
     center2.dir = dir2;
     center2.dist = float_20_80421514;
 
-    hit2 = RUN_HIT(center2);
+    RUN_HIT(center2, hit2);
     if (hit2 != 0) {
         angle2 = angleABf(
             float_0_80421508,
             float_0_80421508,
-            center2.normal.x,
-            center2.normal.z);
+            normalX,
+            normalZ);
     }
 
     if (hit2 == 0) {
@@ -1643,13 +1673,13 @@ s32 unk_800c2010(void* party, f32* pos) {
         right2.dir = dir2;
         right2.dist = float_20_80421514;
 
-        hit2 = RUN_HIT(right2);
+        RUN_HIT(right2, hit2);
         if (hit2 != 0) {
             angle2 = angleABf(
                 float_0_80421508,
                 float_0_80421508,
-                right2.normal.x,
-                right2.normal.z);
+                normalX,
+                normalZ);
         }
     }
 
@@ -1662,28 +1692,24 @@ s32 unk_800c2010(void* party, f32* pos) {
         left2.dir = dir2;
         left2.dist = float_20_80421514;
 
-        hit2 = RUN_HIT(left2);
+        RUN_HIT(left2, hit2);
         if (hit2 != 0) {
             angle2 = angleABf(
                 float_0_80421508,
                 float_0_80421508,
-                left2.normal.x,
-                left2.normal.z);
+                normalX,
+                normalZ);
         }
     }
 
 #undef RUN_HIT
 
-    if (hit1 == 0 || hit2 == 0) {
-        return 0;
-    }
-
-    delta =
-        -(float_0p5_80421504 * (angle1 + angle2) - float_180_8042150c);
-    delta = __fabsf(delta);
-
-    if (delta <= float_10_80421510) {
-        return 1;
+    if (hit1 != 0 && hit2 != 0) {
+        delta = -(float_0p5_80421504 * (angle1 + angle2) - float_180_8042150c);
+        delta = __fabsf(delta);
+        if (delta <= float_10_80421510) {
+            return 1;
+        }
     }
     return 0;
 }

@@ -635,7 +635,6 @@ config.libs = [
                 "battle/battle_seq.c",
                 symbol_mappings={
                     "jumptable_80363C50": "@2067",
-                    "jumptable_80363C8C": "@2192",
                     "jumptable_80363CC8": "@2995",
                     "jumptable_80363E00": "@3160",
                     "jumptable_80363E3C": "@3172",
@@ -659,7 +658,6 @@ config.libs = [
             Object(
                 NonMatching,
                 "battle/battle_stage.c",
-                symbol_mappings={"double_to_int_mask_802f3828": "@684"},
             ),
             Object(
                 NonMatching,
@@ -1033,7 +1031,6 @@ config.libs = [
             Object(
                 NonMatching,
                 "motion/mot_damage.c",
-                symbol_mappings={"float_160_80422bac": "@374"},
             ),
             Object(NonMatching, "motion/mot_dokan.c"),
             Object(NonMatching, "motion/mot_hammer.c"),
@@ -1151,7 +1148,6 @@ config.libs = [
             Object(
                 NonMatching,
                 "window/win_mario.c",
-                symbol_mappings={"jumptable_803778E8": "@1369"},
             ),
             Object(NonMatching, "window/win_party.c"),
             Object(

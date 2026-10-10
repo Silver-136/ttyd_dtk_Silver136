@@ -401,10 +401,12 @@ s32 marioStGetSystemLevel(void) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 viPostCallback(s32 param_1) {
     extern s32 winCheck(void);
-    extern u32 battleDisableHResetCheck(void);
-    extern u32 OSGetResetButtonState(void);
+    extern s32 battleDisableHResetCheck(void);
+    extern s32 OSGetResetButtonState(void);
     extern u32 keyGetButton(s32);
     extern u8 gcRumbleCheck(void);
     extern void psndMainInt(void);
@@ -484,6 +486,8 @@ u8 viPostCallback(s32 param_1) {
     psndMainInt();
     return 0;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 void gcDvdCheckThread(void) {
     extern u32 VIGetRetraceCount(void);
@@ -491,20 +495,20 @@ void gcDvdCheckThread(void) {
     extern void SoundOpenCover(void);
     extern void DEMOBeforeRender(void);
     extern void DEMODoneRender(void);
-    extern char* romFontGetMessage(s32 id);
-    extern s32 romFontGetWidth(char* msg, ...);
+    extern const char* romFontGetMessage(s32 id);
+    extern s32 romFontGetWidth(const char* msg);
     extern void C_MTXPerspective(void* mtx, f32 fovY, f32 aspect, f32 nearZ, f32 farZ);
     extern void GXSetProjection(void* mtx, s32 type);
-    extern void romFontPrintGX(f32 x, f32 y, f32 scale, void* color, char* msg);
+    extern void romFontPrintGX(f32 x, f32 y, f32 scale, void* color, const char* msg, ...);
     f32 projection[4][4];
     u32 color;
-    char* message;
+    const char* message;
     s32 width;
     s32 status;
-    s32 messageId;
     s32 lastStatus = 0;
-    u32 lastRetrace = 0;
     s32 stableFrames = 0;
+    u32 lastRetrace = 0;
+    s32 messageId;
 
     for (;;) {
         messageId = 0;
@@ -513,24 +517,24 @@ void gcDvdCheckThread(void) {
             case 4:
             case 6:
                 messageId = 11;
-                *(s32*)((s32)gp + 0x1274) = 1;
+                *(s32*)((s32)gp + 0x10) = 1;
                 break;
             case 5:
                 messageId = 10;
-                *(s32*)((s32)gp + 0x1274) = 1;
+                *(s32*)((s32)gp + 0x10) = 1;
                 break;
             case 11:
                 messageId = 12;
-                *(s32*)((s32)gp + 0x1274) = 1;
+                *(s32*)((s32)gp + 0x10) = 1;
                 break;
             case -1:
                 messageId = 13;
-                *(s32*)((s32)gp + 0x1274) = 1;
+                *(s32*)((s32)gp + 0x10) = 1;
                 break;
             case 1:
                 break;
             default:
-                *(s32*)((s32)gp + 0x1274) = 0;
+                *(s32*)((s32)gp + 0x10) = 0;
                 break;
         }
 
@@ -546,19 +550,19 @@ void gcDvdCheckThread(void) {
             stableFrames = 0;
         }
 
-        if (*(s32*)((s32)gp + 0x1274) == 0) {
+        if (*(s32*)((s32)gp + 0x10) == 0) {
             SoundCloseCover();
         } else {
             SoundOpenCover();
         }
-        if (*(s32*)((s32)gp + 0x1274) != 0 && cardIsExec() != 0) {
-            *(s32*)((s32)gp + 0x1274) = 0;
+        if (*(s32*)((s32)gp + 0x10) != 0 && cardIsExec() != 0) {
+            *(s32*)((s32)gp + 0x10) = 0;
         }
-        if (*(s32*)((s32)gp + 0x1274) != 0 && stableFrames > 10) {
+        if (*(s32*)((s32)gp + 0x10) != 0 && stableFrames > 10) {
             DEMOBeforeRender();
             if (messageId != 0) {
                 message = romFontGetMessage(messageId);
-                width = romFontGetWidth(message);
+                width = (s32)(f32)romFontGetWidth(message);
                 C_MTXPerspective(projection, float_25_80420344, float_1p2667_80420348,
                                  float_1_8042034c, float_10000_80420350);
                 GXSetProjection(projection, 0);
@@ -575,62 +579,71 @@ void gcDvdCheckThread(void) {
     }
 }
 
+#pragma optimize_for_size off
 u8 gcRumbleCheck(void) {
     extern s64 OSGetTime(void);
     extern u32 padGetRumbleStatus(s32);
+    typedef struct GcRumbleWork {
+        u8 pad_0[0x12C0];
+        u8 active[4];
+        u8 pad_12C4[4];
+        s64 active_time[4];
+        u8 locked[4];
+        u8 triggered[4];
+        s64 lock_time[4];
+        u8 output[4];
+    } GcRumbleWork;
+    typedef struct RumbleFlags { s32 value[4]; } RumbleFlags;
     s32 local_flags[4];
     static s32 off_trg[4] = { 0 };
     static s64 off_time[4] = { 0 };
     s64 now;
-    s32* flag;
-    s32* trg;
-    s64* time;
-    s32 i;
     s32 timeOffset;
+    s64* time;
+    s32* trg;
+    s32* flag;
+    s32 i;
+    GcRumbleWork* current;
 
-    local_flags[0] = ((const u32*)vec3_802c2a70)[0];
-    local_flags[1] = ((const u32*)vec3_802c2a70)[1];
-    local_flags[2] = ((const u32*)vec3_802c2a70)[2];
-    local_flags[3] = ((const u32*)vec3_802c2a70)[3];
+    *(RumbleFlags*)local_flags = *(const RumbleFlags*)vec3_802c2a70;
     now = OSGetTime();
     flag = local_flags;
-    i = 0;
-    timeOffset = 0;
     trg = off_trg;
     time = off_time;
-    do {
-        if (*(u8*)((s32)gp + 0x12E8 + i) == 0) {
+    for (i = 0, timeOffset = 0; i < 4; i++, trg++, time++, flag++, timeOffset += 8) {
+        if (((GcRumbleWork*)gp)->locked[i] == 0) {
             if ((padGetRumbleStatus(i) & 0xFF) == 1) {
-                if (*(u8*)((s32)gp + 0x12C0 + i) == 0) {
-                    *(u8*)((s32)gp + 0x12C0 + i) = 1;
+                if (((GcRumbleWork*)gp)->active[i] == 0) {
+                    ((GcRumbleWork*)gp)->active[i] = 1;
                     *(s64*)((s32)gp + 0x12C8 + timeOffset) = now;
                 }
-                if (((now - *(s64*)((s32)gp + 0x12C8 + timeOffset)) /
-                     (u32)(((u64)(*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 38) > 30000) &&
-                    *(u8*)((s32)gp + 0x12EC + i) == 0) {
-                    *(u8*)((s32)gp + 0x12EC + i) = 1;
-                    *(u8*)((s32)gp + 0x12E8 + i) = 1;
+                current = (GcRumbleWork*)gp;
+                if (((s64)((s32)(u32)now - ((s32*)((s32)current + (timeOffset + 0x12C8)))[1]) /
+                     ((*(u32*)0x800000F8 >> 2) / 1000U) > 30000) &&
+                    current->triggered[i] == 0) {
+                    current->triggered[i] = 1;
+                    ((GcRumbleWork*)gp)->locked[i] = 1;
                     *(s64*)((s32)gp + 0x12F0 + timeOffset) = now;
                 }
                 *trg = 0;
-            } else if (*(u8*)((s32)gp + 0x12C0 + i) != 0) {
+            } else if (((GcRumbleWork*)gp)->active[i] != 0) {
                 if (*trg == 0) {
                     *time = now;
                     *trg = 1;
                 }
                 if (*trg != 0 &&
-                    (now - *time) /
-                        (u32)(((u64)(*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 38) > 100) {
+                    (s64)((s32)(u32)now - *(s32*)((u8*)time + 4)) /
+                        ((*(u32*)0x800000F8 >> 2) / 1000U) > 100) {
                     *trg = 0;
-                    *(u8*)((s32)gp + 0x12C0 + i) = 0;
+                    ((GcRumbleWork*)gp)->active[i] = 0;
                 }
             }
         } else {
-            if ((now - *(s64*)((s32)gp + 0x12F0 + timeOffset)) /
-                (u32)(((u64)(*(u32*)0x800000F8 >> 2) * 0x10624DD3U) >> 38) > 30000) {
-                *(u8*)((s32)gp + 0x12EC + i) = 0;
-                *(u8*)((s32)gp + 0x12E8 + i) = 0;
-                *(u8*)((s32)gp + 0x12C0 + i) = 0;
+            if ((s64)((s32)(u32)now - *(s32*)((s32)gp + 0x12F4 + timeOffset)) /
+                ((*(u32*)0x800000F8 >> 2) / 1000U) > 30000) {
+                ((GcRumbleWork*)gp)->triggered[i] = 0;
+                ((GcRumbleWork*)gp)->locked[i] = 0;
+                ((GcRumbleWork*)gp)->active[i] = 0;
             }
             *flag = 1;
         }
@@ -640,19 +653,15 @@ u8 gcRumbleCheck(void) {
         if (*(s32*)((s32)gp + 0x18) != 0) {
             *flag = 1;
         }
-        if (*flag == 0) {
-            *(u8*)((s32)gp + 0x1310 + i) = 0;
+        if (*flag != 0) {
+            ((GcRumbleWork*)gp)->output[i] = 1;
         } else {
-            *(u8*)((s32)gp + 0x1310 + i) = 1;
+            ((GcRumbleWork*)gp)->output[i] = 0;
         }
-        i++;
-        trg++;
-        time++;
-        flag++;
-        timeOffset += 8;
-    } while (i < 4);
+    }
     return 0;
 }
+#pragma optimize_for_size reset
 
 void L_gcResetCheck(void) {
     extern void VISetBlack(s32 black);
@@ -714,4 +723,4 @@ const f32 float_10000_80420350 = 10000.0f;
 const f32 float_0p5_80420354 = 0.5f;
 const f32 float_60_80420358 = 60.0f;
 const f32 float_0_8042035c = 0.0f;
-const u8 unk_80429568[4] = { 0, 0, 0, 0 };
+__declspec(section ".sdata2") const u8 unk_80429568[4];

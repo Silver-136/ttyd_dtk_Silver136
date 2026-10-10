@@ -78,7 +78,7 @@ void shadowInit(void) {
     extern u32 dat_8041f9c0;
     extern u32 dat_8041f9cc;
     extern u32 dat_8041f9d0;
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     extern f32 float_20_8041fa08;
     u8* tex8;
     u16* tex16;
@@ -135,7 +135,7 @@ void shadowMain(void) {
     extern void* dswp;
     extern void dispEntry(s32, s32, void*, s32, f32);
     extern void shadowDisp(s32, s32);
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
 
     dispEntry(0, 9, shadowDisp, 0, float_0_8041f9d4);
     dispEntry(7, 9, shadowDisp, 0, float_0_8041f9d4);
@@ -173,7 +173,7 @@ void shadowDisp(s32 param_1, s32 param_2) {
     extern f32 tmp_vp[6];
     extern f32 tmp_view[3][4];
     extern u8 color_tbl;
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     extern f32 float_1_8041f9e4;
     extern f32 float_1000_8041fa0c;
     extern f32 float_neg1_8041f9e8;
@@ -391,7 +391,7 @@ void shadowCharShadowDisp_Collision(void) {
     extern s32 hitCheckVecFilter(void* data, void* filter);
     extern s32 _filter(s32, int);
     extern void* cswp;
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     extern f32 float_1_8041f9e4;
     extern f32 float_1p5_8041fa04;
     extern f32 float_150_8041fa00;
@@ -462,7 +462,7 @@ u8 shadowCharShadowDisp_Projection(void) {
     extern u32 unk_80429538;
     extern u32 dat_8041f9c4;
     extern u32 dat_8041f9c8;
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     extern f32 float_0p2_8041f9ec;
     volatile f32* fifoF = (volatile f32*)0xCC008000;
     volatile u8* fifoB = (volatile u8*)0xCC008000;
@@ -617,7 +617,7 @@ void shadowCharShadowDisp_Polygon(s32 param_1) {
     extern void* cswp;
     extern u8 testKagePosArray[];
     extern u32 unk_80429538;
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     volatile u8* fifo = (volatile u8*)0xCC008000;
     f32 mtx[3][4];
     u32 matColor;
@@ -694,7 +694,7 @@ void shadowCharShadowDisp_Texture(s32 param_1) {
     extern void GXSetZMode(s32 enable, s32 func, s32 update);
     extern void* cswp;
     extern u32 unk_8042953c;
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     extern f32 float_0p5_8041f9d8;
     extern f32 float_1_8041f9e4;
     extern f32 float_1p25_8041f9fc;
@@ -776,7 +776,7 @@ void cylinder(void* param_1) {
     extern u8 color_tbl;
     extern u8 color_tbl_nodecay;
     extern u8 lbl_80304A20[];
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     extern f32 float_1_8041f9e4;
     extern f32 float_255_8041f9f4;
     f32 decay;
@@ -830,7 +830,7 @@ void cylinderShadowDraw(s32 param_1) {
     extern void* cswp;
     extern u32 unk_80429540;
     extern u32 unk_80429544;
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     extern u32 color_tbl_cube[];
     extern u8 cube_dl_top[];
     extern u8 cube_dl_bottom[];
@@ -1166,7 +1166,7 @@ void projShadowEnd(s32 param_1, u32* param_2) {
     extern f32 tmp_vp[6];
     extern u8 shadowConfig[];
     extern u16 ShadowSizeTbl[4];
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     extern f32 float_0p5_8041f9d8;
     f32 mtx[3][4];
     void* cam;
@@ -1230,7 +1230,7 @@ void depthShadowEnd(s32 param_1, u32* param_2) {
     extern f32 tmp_vp[6];
     extern u8 shadowConfig[];
     extern u16 ShadowSizeTbl[4];
-    extern f32 float_0_8041f9d4;
+    extern const f32 float_0_8041f9d4;
     extern f32 float_0p5_8041f9d8;
     extern f32 float_1_8041f9e4;
     extern f32 float_neg1_8041f9e8;
@@ -1338,6 +1338,7 @@ const char str_result_scene_16bit_d_802bfdec[] = "result scene (16bit depth)";
 const char str_actual_depth_from_th_802bfe08[] = "actual depth from the light (16bit depth)";
 const char str_projected_shadow_dep_802bfe34[] = "projected shadow depth map (16bit depth)";
 
+__declspec(section ".data") u32 gap_06_803C9F54_bss;
 u8 char_shadow_work[284];
 u8 proj_shadow_work[260];
 u8 depth_shadow_work[260];
@@ -1367,3 +1368,159 @@ u32 gap_07_8041514C_sdata[5] = { 0, 0, 0, 0, 0 };
 u32 color_tbl_nodecay[3] = { 0x6E, 0x6E, 0x6E };
 u32 gap_07_8041516C_sdata[5] = { 0, 0, 0, 0, 0 };
 u32 color_tbl_cube[3] = { 0x8E, 0, 0x16 };
+
+__declspec(section ".sdata2") u32 dat_8041f9c0 = 0x0000006E;
+__declspec(section ".sdata2") u32 dat_8041f9c4 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041f9c8 = 0x000000FF;
+__declspec(section ".sdata2") u32 dat_8041f9cc = 0x00000040;
+__declspec(section ".sdata2") u32 dat_8041f9d0 = 0x00000040;
+__declspec(section ".sdata2") const f32 float_0_8041f9d4 = 0.0f;
+__declspec(section ".sdata2") f32 float_0p5_8041f9d8 = 0.5f;
+__declspec(section ".sdata2") f32 float_256_8041f9dc = 256.0f;
+__declspec(section ".sdata2") f32 float_16_8041f9e0 = 16.0f;
+__declspec(section ".sdata2") f32 float_1_8041f9e4 = 1.0f;
+__declspec(section ".sdata2") f32 float_neg1_8041f9e8 = -1.0f;
+__declspec(section ".sdata2") f32 float_0p2_8041f9ec = 0.2f;
+__declspec(section ".sdata2") f32 float_0p4_8041f9f0 = 0.4f;
+__declspec(section ".sdata2") f32 float_255_8041f9f4 = 255.0f;
+__declspec(section ".sdata2") f32 float_2p5_8041f9f8 = 2.5f;
+__declspec(section ".sdata2") f32 float_1p25_8041f9fc = 1.25f;
+__declspec(section ".sdata2") f32 float_150_8041fa00 = 150.0f;
+__declspec(section ".sdata2") f32 float_1p5_8041fa04 = 1.5f;
+__declspec(section ".sdata2") f32 float_20_8041fa08 = 20.0f;
+__declspec(section ".sdata2") f32 float_1000_8041fa0c = 1000.0f;
+
+__declspec(section ".sdata2") u32 unk_80429544;
+__declspec(section ".sdata2") u32 unk_80429540;
+__declspec(section ".sdata2") u32 unk_8042953c;
+__declspec(section ".sdata2") u32 unk_80429538;
+
+
+/* Target-owned fixed catalogs; payloads verified from the US object. */
+__declspec(section ".data") u8 shadowConfig[144] = {
+    0x00, 0x00, 0x00, 0x00, 0xC2, 0xC8, 0x00, 0x00, 0x43, 0x80, 0x00, 0x00, 0x43, 0xA7, 0x80, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC1, 0xA0, 0x00, 0x00, 0x41, 0xA0, 0x00, 0x00,
+    0x43, 0xB2, 0x00, 0x00, 0x44, 0x39, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03,
+    0x00, 0x00, 0x00, 0x00, 0xC0, 0x8F, 0x0A, 0x3D, 0x00, 0x00, 0x00, 0x01, 0x43, 0x07, 0x00, 0x00,
+    0x42, 0x20, 0x00, 0x00, 0x42, 0x24, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xC3, 0x70, 0x00, 0x00, 0x43, 0x70, 0x00, 0x00, 0x42, 0xA0, 0x00, 0x00, 0x46, 0x1C, 0x40, 0x00,
+    0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+__declspec(section ".data") u8 testKagePosArray[72] = {
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xBF, 0x80, 0x00, 0x00, 0x3F, 0x66, 0x66, 0x66,
+    0x00, 0x00, 0x00, 0x00, 0xBF, 0x00, 0x00, 0x00, 0xBF, 0x66, 0x66, 0x66, 0x00, 0x00, 0x00, 0x00,
+    0xBF, 0x00, 0x00, 0x00, 0x3F, 0x66, 0x66, 0x66, 0x00, 0x00, 0x00, 0x00, 0x3F, 0x00, 0x00, 0x00,
+    0xBF, 0x66, 0x66, 0x66, 0x00, 0x00, 0x00, 0x00, 0x3F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00,
+};
+
+__declspec(section ".data") u8 cylinder_dl_top[64] = {
+    0xA0, 0x00, 0x10, 0x00, 0x00, 0x0F, 0x00, 0x0E, 0x00, 0x0D, 0x00, 0x0C, 0x00, 0x0B, 0x00, 0x0A,
+    0x00, 0x09, 0x00, 0x08, 0x00, 0x07, 0x00, 0x06, 0x00, 0x05, 0x00, 0x04, 0x00, 0x03, 0x00, 0x02,
+    0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+__declspec(section ".data") u8 cylinder_dl_bottom[64] = {
+    0xA0, 0x00, 0x10, 0x10, 0x01, 0x11, 0x01, 0x12, 0x01, 0x13, 0x01, 0x14, 0x01, 0x15, 0x01, 0x16,
+    0x01, 0x17, 0x01, 0x18, 0x01, 0x19, 0x01, 0x1A, 0x01, 0x1B, 0x01, 0x1C, 0x01, 0x1D, 0x01, 0x1E,
+    0x01, 0x1F, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+__declspec(section ".data") u8 cylinder_dl_side[64] = {
+    0x98, 0x00, 0x1E, 0x11, 0x01, 0x01, 0x02, 0x12, 0x01, 0x02, 0x02, 0x13, 0x01, 0x03, 0x02, 0x14,
+    0x01, 0x04, 0x02, 0x15, 0x01, 0x05, 0x02, 0x16, 0x01, 0x06, 0x02, 0x17, 0x01, 0x07, 0x02, 0x18,
+    0x01, 0x08, 0x02, 0x19, 0x01, 0x09, 0x02, 0x1A, 0x01, 0x0A, 0x02, 0x1B, 0x01, 0x0B, 0x02, 0x1C,
+    0x01, 0x0C, 0x02, 0x1D, 0x01, 0x0D, 0x02, 0x1E, 0x01, 0x0E, 0x02, 0x1F, 0x01, 0x0F, 0x02, 0x00,
+};
+
+__declspec(section ".data") u8 cylinder_dl_top_inside[64] = {
+    0xA0, 0x00, 0x10, 0x20, 0x00, 0x2F, 0x00, 0x2E, 0x00, 0x2D, 0x00, 0x2C, 0x00, 0x2B, 0x00, 0x2A,
+    0x00, 0x29, 0x00, 0x28, 0x00, 0x27, 0x00, 0x26, 0x00, 0x25, 0x00, 0x24, 0x00, 0x23, 0x00, 0x22,
+    0x00, 0x21, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+__declspec(section ".data") u8 cylinder_dl_top_outside[64] = {
+    0x98, 0x00, 0x1E, 0x01, 0x02, 0x21, 0x00, 0x02, 0x02, 0x22, 0x00, 0x03, 0x02, 0x23, 0x00, 0x04,
+    0x02, 0x24, 0x00, 0x05, 0x02, 0x25, 0x00, 0x06, 0x02, 0x26, 0x00, 0x07, 0x02, 0x27, 0x00, 0x08,
+    0x02, 0x28, 0x00, 0x09, 0x02, 0x29, 0x00, 0x0A, 0x02, 0x2A, 0x00, 0x0B, 0x02, 0x2B, 0x00, 0x0C,
+    0x02, 0x2C, 0x00, 0x0D, 0x02, 0x2D, 0x00, 0x0E, 0x02, 0x2E, 0x00, 0x0F, 0x02, 0x2F, 0x00, 0x00,
+};
+
+__declspec(section ".data") u8 cube_dl_top[64] = {
+    0x80, 0x00, 0x14, 0x30, 0x00, 0x31, 0x00, 0x32, 0x00, 0x33, 0x00, 0x34, 0x02, 0x35, 0x02, 0x31,
+    0x00, 0x30, 0x00, 0x31, 0x00, 0x35, 0x02, 0x36, 0x02, 0x32, 0x00, 0x33, 0x00, 0x32, 0x00, 0x36,
+    0x02, 0x37, 0x02, 0x34, 0x02, 0x30, 0x00, 0x33, 0x00, 0x37, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+__declspec(section ".data") f32 vertex_tbl[60][3] = {
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 1.0f },
+    { 0.43388399481773376f, 0.0f, 0.9009690284729004f },
+    { 0.7818319797515869f, 0.0f, 0.6234899759292603f },
+    { 0.9749280214309692f, 0.0f, 0.22252100706100464f },
+    { 0.9749280214309692f, 0.0f, -0.22252100706100464f },
+    { 0.7818310260772705f, 0.0f, -0.6234899759292603f },
+    { 0.43388399481773376f, 0.0f, -0.9009690284729004f },
+    { -0.0f, 0.0f, -1.0f },
+    { -0.43388399481773376f, 0.0f, -0.9009690284729004f },
+    { -0.7818319797515869f, 0.0f, -0.6234899759292603f },
+    { -0.9749280214309692f, 0.0f, -0.22252100706100464f },
+    { -0.9749280214309692f, 0.0f, 0.22252100706100464f },
+    { -0.7818319797515869f, 0.0f, 0.6234899759292603f },
+    { -0.43388399481773376f, 0.0f, 0.9009690284729004f },
+    { 0.0f, 0.0f, 1.0f },
+    { 0.0f, -1.0f, 0.0f },
+    { 0.0f, -1.0f, 1.0f },
+    { 0.43388399481773376f, -1.0f, 0.9009690284729004f },
+    { 0.7818319797515869f, -1.0f, 0.6234899759292603f },
+    { 0.9749280214309692f, -1.0f, 0.22252100706100464f },
+    { 0.9749280214309692f, -1.0f, -0.22252100706100464f },
+    { 0.7818310260772705f, -1.0f, -0.6234899759292603f },
+    { 0.43388399481773376f, -1.0f, -0.9009690284729004f },
+    { -0.0f, -1.0f, -1.0f },
+    { -0.43388399481773376f, -1.0f, -0.9009690284729004f },
+    { -0.7818319797515869f, -1.0f, -0.6234899759292603f },
+    { -0.9749280214309692f, -1.0f, -0.22252100706100464f },
+    { -0.9749280214309692f, -1.0f, 0.22252100706100464f },
+    { -0.7818319797515869f, -1.0f, 0.6234899759292603f },
+    { -0.43388399481773376f, -1.0f, 0.9009690284729004f },
+    { 0.0f, -1.0f, 1.0f },
+    { 0.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.6000000238418579f },
+    { 0.2603304088115692f, 0.0f, 0.540581464767456f },
+    { 0.4690991938114166f, 0.0f, 0.37409400939941406f },
+    { 0.5849568247795105f, 0.0f, 0.13351261615753174f },
+    { 0.5849568247795105f, 0.0f, -0.13351261615753174f },
+    { 0.46909862756729126f, 0.0f, -0.37409400939941406f },
+    { 0.2603304088115692f, 0.0f, -0.540581464767456f },
+    { 0.0f, 0.0f, -0.6000000238418579f },
+    { -0.2603304088115692f, 0.0f, -0.540581464767456f },
+    { -0.4690991938114166f, 0.0f, -0.37409400939941406f },
+    { -0.5849568247795105f, 0.0f, -0.13351261615753174f },
+    { -0.5849568247795105f, 0.0f, 0.13351261615753174f },
+    { -0.4690991938114166f, 0.0f, 0.37409400939941406f },
+    { -0.2603304088115692f, 0.0f, 0.540581464767456f },
+    { 0.0f, 0.0f, 0.6000000238418579f },
+    { -0.6000000238418579f, 0.0f, 0.6000000238418579f },
+    { -0.6000000238418579f, 0.0f, -0.6000000238418579f },
+    { 0.6000000238418579f, 0.0f, -0.6000000238418579f },
+    { 0.6000000238418579f, 0.0f, 0.6000000238418579f },
+    { -1.0f, 0.0f, 1.0f },
+    { -1.0f, 0.0f, -1.0f },
+    { 1.0f, 0.0f, -1.0f },
+    { 1.0f, 0.0f, 1.0f },
+    { -1.0f, -1.0f, 1.0f },
+    { -1.0f, -1.0f, -1.0f },
+    { 1.0f, -1.0f, -1.0f },
+    { 1.0f, -1.0f, 1.0f },
+};
+
+/* Named four-byte terminal storage from the US target object. */
+__declspec(section ".sdata") const u32 gap_07_8041518C_sdata = 0;

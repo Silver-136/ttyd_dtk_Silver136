@@ -18,4 +18,4 @@ void mobjCalcMtx2(void* mobj);
 s32 mobjGetHint(void* mobj);
 s32 mobjCheckExec(void);
 s32 mobjCheckItemboxOpen(void* mobj);
-u32* mobjNearDistCheck2(double x1, double z1, double x2, double z2, char** name);
+u32* mobjNearDistCheck2(f32 x1, f32 z1, f32 x2, f64 z2, char** name);

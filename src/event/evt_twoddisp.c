@@ -171,26 +171,34 @@ s32 evt_twoddisp_entry(void* pEvt) {
     extern char* strcpy(char* dst, const char* src);
     extern f32 float_0_80422f80;
     extern f32 float_1_80422f84;
-    s32* args = *(s32**)((s32)pEvt + 0x18);
-    char* name = (char*)evtGetValue(pEvt, args[0]);
-    s32 value = evtGetValue(pEvt, args[1]);
-    s32 i = 0;
-    s32 offset = 0;
-    void* entry;
-
+    register s32 value;
+    register s32 offset;
+    register s32 i;
+    register char* name;
+    register void* entry;
+    s32* args;
+    f32 zero;
+    f32 one;
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = (char*)evtGetValue(pEvt, args[0]);
+    value = evtGetValue(pEvt, args[1]);
+    i = 0;
+    offset = 0;
     while (i < 100) {
         entry = (void*)((s32)twodPtr + offset);
         strcmp((char*)entry, name);
         if (*(s8*)entry == 0) {
             strcpy((char*)entry, name);
             *(u16*)((s32)entry + 0x10) = 1;
+            zero = float_0_80422f80;
             *(u16*)((s32)entry + 0x12) = 0;
-            *(f32*)((s32)entry + 0x14) = float_0_80422f80;
-            *(f32*)((s32)entry + 0x1C) = float_0_80422f80;
-            *(f32*)((s32)entry + 0x18) = float_0_80422f80;
-            *(f32*)((s32)entry + 0x20) = float_0_80422f80;
+            one = float_1_80422f84;
+            *(f32*)((s32)entry + 0x14) = zero;
+            *(f32*)((s32)entry + 0x1C) = zero;
+            *(f32*)((s32)entry + 0x18) = zero;
+            *(f32*)((s32)entry + 0x20) = zero;
             *(s32*)((s32)entry + 0x24) = value;
-            *(f32*)((s32)entry + 0x28) = float_1_80422f84;
+            *(f32*)((s32)entry + 0x28) = one;
             break;
         }
         i++;
@@ -201,24 +209,24 @@ s32 evt_twoddisp_entry(void* pEvt) {
 
 
 s32 evt_twoddisp_set_position(int param_1) {
-    void* event = (void*)param_1;
-    s32* args = *(s32**)((s32)event + 0x18);
-    char* name = (char*)evtGetValue(event, args[0]);
-    s32 i = 0;
-    s32 offset = 0;
-    void* entry;
-
+    register void* entry;
+    register s32 i;
+    register s32 offset;
+    register s32* args;
+    register char* name;
+    register void* event;
+    event = (void*)param_1;
+    args = *(s32**)((s32)event + 0x18);
+    name = (char*)evtGetValue(event, args[0]);
+    i = 0;
+    offset = i;
     while (i < 100) {
         entry = (void*)((s32)twodPtr + offset);
-        if (strcmp((char*)entry, name) == 0) {
-            break;
-        }
+        if (strcmp((char*)entry, name) == 0) break;
         i++;
         offset += 0x34;
     }
-    if (i >= 100) {
-        entry = 0;
-    }
+    if (i >= 100) entry = 0;
     *(f32*)((s32)entry + 0x14) = evtGetFloat(event, args[1]);
     *(f32*)((s32)entry + 0x18) = evtGetFloat(event, args[2]);
     return 2;
@@ -226,48 +234,51 @@ s32 evt_twoddisp_set_position(int param_1) {
 
 
 s32 evt_twoddisp_set_base_position(void* pEvt) {
-    s32* args = *(s32**)((s32)pEvt + 0x18);
-    char* name = (char*)evtGetValue(pEvt, args[0]);
-    s32 i = 0;
-    s32 offset = 0;
-    void* entry;
-
-    while (i < 100) {
+    register void* entry;
+    register s32 i;
+    register s32 offset;
+    register s32* args;
+    register char* name;
+    args = *(s32**)((s32)pEvt + 0x18);
+    name = (char*)evtGetValue(pEvt, args[0]);
+    i = 0;
+    offset = i;
+    do {
         entry = (void*)((s32)twodPtr + offset);
-        if (strcmp((char*)entry, name) == 0) {
-            break;
-        }
+        if (strcmp((char*)entry, name) == 0) goto found;
         i++;
         offset += 0x34;
-    }
-    if (i >= 100) {
-        entry = 0;
-    }
+    } while (i < 100);
+    entry = 0;
+found:
     *(f32*)((s32)entry + 0x1C) = evtGetFloat(pEvt, args[1]);
     *(f32*)((s32)entry + 0x20) = evtGetFloat(pEvt, args[2]);
     return 2;
 }
 s32 evt_twoddisp_flag_onoff(int param_1) {
-    void* event = (void*)param_1;
-    s32* args = *(s32**)((s32)event + 0x18);
-    s32 onoff = evtGetValue(event, args[0]);
-    char* name = (char*)evtGetValue(event, args[1]);
-    s32 i = 0;
-    s32 offset = 0;
-    void* entry;
-
-    while (i < 100) {
+    register s32 onoff;
+    register void* entry;
+    register s32 i;
+    register s32 offset;
+    register s32* args;
+    register char* name;
+    register void* event;
+    event = (void*)param_1;
+    args = *(s32**)((s32)event + 0x18);
+    onoff = evtGetValue(event, args[0]);
+    name = (char*)evtGetValue(event, args[1]);
+    i = 0;
+    offset = i;
+    do {
         entry = (void*)((s32)twodPtr + offset);
         if (strcmp((char*)entry, name) == 0) {
-            break;
+            goto found;
         }
         i++;
         offset += 0x34;
-    }
-    if (i >= 100) {
-        entry = 0;
-    }
-
+    } while (i < 100);
+    entry = 0;
+found:
     if (onoff != 0) {
         *(u16*)((s32)entry + 0x10) |= evtGetValue(event, args[2]);
     } else {

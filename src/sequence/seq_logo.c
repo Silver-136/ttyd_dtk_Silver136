@@ -92,12 +92,13 @@ void seq_logoExit(void) {
     fileFree(*(void**)wp);
 }
 
+#pragma optimize_for_size off
 u8 seq_logoMain(int param_1) {
     extern void fadeEntry(s32 type, s32 time, void* color);
-    extern u32 fadeIsFinish(void);
+    extern s32 fadeIsFinish(void);
     extern void DVDMgrSetupCallback(void* callback);
     extern s32 psndPushGroup(void);
-    extern void dispEntry(s32 camera, s32 layer, void* callback, void* param, f32 order);
+    extern void dispEntry(s32 camera, f32 order, s32 layer, void* callback, void* param);
     extern void seqSetSeq(s32 seq, void* arg1, void* arg2);
     extern void dummy_draw(void);
     extern void progDisp(s32 camId);
@@ -116,18 +117,17 @@ u8 seq_logoMain(int param_1) {
     extern u32 dat_804207e4;
     extern char str_dmo_00_802c3b60[];
 
-    u32 color;
-    u64 now;
-    u64 elapsed;
+    u32 color0, color1, color2, color3, color4, color5, color6, color7, color8, color9;
+    s64 elapsed;
     s32* state = (s32*)(param_1 + 4);
 
-#define START_FADE(kind, data) do { color = (data); fadeEntry((kind), 500, &color); } while (0)
-#define SAVE_TIME() do { time_508 = *(u32*)((s32)gp + 0x18); DAT_8041ea7c = *(u32*)((s32)gp + 0x1C); } while (0)
-#define ELAPSED_MS() ((*(u64*)((s32)gp + 0x18) - *(u64*)&time_508) / (*(u32*)0x800000F8 / 4000))
+#define SAVE_TIME() do { *(s64*)&time_508 = *(s64*)((s32)gp + 0x38); } while (0)
+#define ELAPSED_MS() ((*(s64*)((s32)gp + 0x38) - *(s64*)&time_508) / ((*(u32*)0x800000F8 >> 2) / 1000))
 
     switch (*state) {
         case 0:
-            START_FADE(10, dat_804207c0);
+            color0 = dat_804207c0;
+            fadeEntry(9, 500, &color0);
             DVDMgrSetupCallback(psndPushGroup);
             (*state)++;
             break;
@@ -147,7 +147,8 @@ u8 seq_logoMain(int param_1) {
             }
             break;
         case 4:
-            START_FADE(10, dat_804207c4);
+            color1 = dat_804207c4;
+            fadeEntry(9, 500, &color1);
             (*state)++;
             *(s32*)((s32)wp + 4) = 0;
             break;
@@ -164,12 +165,14 @@ u8 seq_logoMain(int param_1) {
             }
             break;
         case 7:
-            START_FADE(9, dat_804207c8);
+            color2 = dat_804207c8;
+            fadeEntry(10, 500, &color2);
             (*state)++;
             break;
         case 8:
             if (fadeIsFinish()) {
-                START_FADE(10, dat_804207cc);
+                color3 = dat_804207cc;
+                fadeEntry(9, 500, &color3);
                 (*state)++;
                 *(s32*)((s32)wp + 4) = 2;
             }
@@ -182,13 +185,15 @@ u8 seq_logoMain(int param_1) {
             break;
         case 10:
             if (ELAPSED_MS() > 1000) {
-                START_FADE(9, dat_804207d0);
+                color4 = dat_804207d0;
+                fadeEntry(10, 500, &color4);
                 (*state)++;
             }
             break;
         case 11:
             if (fadeIsFinish()) {
-                START_FADE(10, dat_804207d4);
+                color5 = dat_804207d4;
+                fadeEntry(9, 500, &color5);
                 (*state)++;
                 *(s32*)((s32)wp + 4) = 3;
             }
@@ -201,13 +206,15 @@ u8 seq_logoMain(int param_1) {
             break;
         case 13:
             if (ELAPSED_MS() > 1000) {
-                START_FADE(9, dat_804207d8);
+                color6 = dat_804207d8;
+                fadeEntry(10, 500, &color6);
                 (*state)++;
             }
             break;
         case 14:
             if (fadeIsFinish()) {
-                START_FADE(10, dat_804207dc);
+                color7 = dat_804207dc;
+                fadeEntry(9, 500, &color7);
                 (*state)++;
                 *(s32*)((s32)wp + 4) = 4;
             }
@@ -220,7 +227,8 @@ u8 seq_logoMain(int param_1) {
             break;
         case 16:
             if (ELAPSED_MS() > 1000) {
-                START_FADE(9, dat_804207e0);
+                color8 = dat_804207e0;
+                fadeEntry(10, 500, &color8);
                 *(s32*)((s32)wp + 0x10) = 0;
                 (*state)++;
             }
@@ -232,10 +240,14 @@ u8 seq_logoMain(int param_1) {
             if (psndPushGroup() == 0) {
                 DVDMgrSetupCallback(0);
                 if (fadeIsFinish()) {
-                    VIConfigure((*(u32*)gp & 8) ? GXNtsc480ProgMarioSt : GXNtsc480IntDfMarioSt);
+                    if (*(u32*)gp & 8) {
+                        VIConfigure(GXNtsc480ProgMarioSt);
+                    } else {
+                        VIConfigure(GXNtsc480IntDfMarioSt);
+                    }
                     VIFlush();
                     VISetBlack(1);
-                    dispEntry(8, 0, dummy_draw, 0, float_0_80420824);
+                    dispEntry(3, float_0_80420824, 0, dummy_draw, 0);
                     (*state)++;
                 }
             }
@@ -244,14 +256,15 @@ u8 seq_logoMain(int param_1) {
             VISetBlack(0);
             VIWaitForRetrace();
             if (*(u32*)gp & 0x1000) {
-                seqSetSeq(6, 0, 0);
-                return 0;
+                seqSetSeq(7, 0, 0);
+                break;
             }
             if (*(s32*)((s32)wp + 0x10) == 0) {
                 seqSetSeq(3, str_dmo_00_802c3b60, 0);
-                return 0;
+                break;
             }
-            START_FADE(2, dat_804207e4);
+            color9 = dat_804207e4;
+            fadeEntry(17, 500, &color9);
             (*state)++;
             break;
         case 19:
@@ -261,18 +274,18 @@ u8 seq_logoMain(int param_1) {
             break;
     }
 
-    if (*state > 1 && *state < 4) {
-        dispEntry(4, 0, progDisp, 0, float_0_80420824);
+    if (*state >= 2 && *state < 4) {
+        dispEntry(8, float_0_80420824, 0, progDisp, 0);
     }
-    if (*state > 3 && *state < 18) {
-        dispEntry(4, 0, logoDisp, (void*)param_1, float_1_80420818);
+    if (*state >= 4 && *state < 18) {
+        dispEntry(8, float_1_80420818, 0, logoDisp, (void*)param_1);
     }
 
 #undef ELAPSED_MS
 #undef SAVE_TIME
-#undef START_FADE
     return 0;
 }
+#pragma optimize_for_size reset
 
 
 void logoDisp(void) {
@@ -334,18 +347,16 @@ void logoDisp(void) {
     extern u32 unk_80429588;
     extern u32 unk_8041ea68;
     extern f32 float_1p5708_80420840;
-    f32 projection[7];
-    f32 viewport[6];
+    u8* mode;
+    f32 width, x, height, y;
     f32 ortho[16];
     f32 model[12];
+    f32 projection[7];
+    f32 viewport[6];
     u8 texObj[32];
     u32 scissorX, scissorY, scissorW, scissorH;
     u32 color0, color1;
-    u8* mode;
-    void* palette;
     s32 state;
-    s32 texId;
-    f32 left, right, top, bottom, width, height;
 
 #define FIFO (*(volatile f32*)0xCC008000)
 #define VERTEX(px,py,s,t) do { FIFO=(px); FIFO=(py); FIFO=0.0f; FIFO=(s); FIFO=(t); } while (0)
@@ -378,9 +389,10 @@ void logoDisp(void) {
     GXGetProjectionv(projection);
     GXGetViewportv(viewport);
     GXGetScissor(&scissorX, &scissorY, &scissorW, &scissorH);
-    mode = sRMObjHReso_prog;
     if (OSGetProgressiveMode() != 1) {
         mode = sRMObjHReso;
+    } else {
+        mode = sRMObjHReso_prog;
     }
     GXSetPixelFmt(0, 0);
     GXSetDispCopySrc(0, 0, *(u16*)(mode + 4), *(u16*)(mode + 6));
@@ -391,10 +403,9 @@ void logoDisp(void) {
     GXSetScissor(0, 0, 608, 448);
     GXSetViewport(0.0f, 0.0f, 608.0f, 448.0f, -1.0f, 1.0f);
 
-    palette = (void*)**(u32**)((s32)*(void**)wp + 0xA0);
     state = *(s32*)((s32)wp + 4);
     if (state == 2) {
-        TEXGetGXTexObjFromPalette(palette, texObj, 0);
+        TEXGetGXTexObjFromPalette((void*)**(u32**)((s32)*(void**)wp + 0xA0), texObj, 0);
         GXLoadTexObj(texObj, 0);
         GXSetNumChans(0);
         color0 = dat_804207f0;
@@ -418,7 +429,7 @@ void logoDisp(void) {
         DRAW_QUAD(117.0f, 154.0f, 493.0f, 258.0f);
     } else if (state < 2) {
         if (state != -1 && state > -2) {
-        TEXGetGXTexObjFromPalette(palette, texObj, 7);
+        TEXGetGXTexObjFromPalette((void*)**(u32**)((s32)*(void**)wp + 0xA0), texObj, 7);
         GXLoadTexObj(texObj, 0);
         GXSetNumChans(0);
         color0 = dat_804207e8;
@@ -437,7 +448,7 @@ void logoDisp(void) {
         DRAW_QUAD(0.0f, 0.0f, 608.0f, 448.0f);
         }
     } else if (state == 4) {
-        TEXGetGXTexObjFromPalette(palette, texObj, 2);
+        TEXGetGXTexObjFromPalette((void*)**(u32**)((s32)*(void**)wp + 0xA0), texObj, 2);
         GXLoadTexObj(texObj, 0);
         GXSetNumChans(1);
         GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
@@ -454,7 +465,7 @@ void logoDisp(void) {
         DRAW_SETUP(0.0f);
         DRAW_QUAD(189.0f, 150.0f, 421.0f, 262.0f);
     } else if (state < 4) {
-        TEXGetGXTexObjFromPalette(palette, texObj, 1);
+        TEXGetGXTexObjFromPalette((void*)**(u32**)((s32)*(void**)wp + 0xA0), texObj, 1);
         GXLoadTexObj(texObj, 0);
         GXSetNumChans(0);
         GXSetNumTexGens(1);
@@ -465,11 +476,10 @@ void logoDisp(void) {
         DRAW_SETUP(0.0f);
         width = (f32)GXGetTexObjWidth(texObj);
         height = (f32)GXGetTexObjHeight(texObj);
-        left = (608.0f - width) * 0.5f;
-        right = left + width;
-        top = (448.0f - height) * 0.5f - 20.0f;
-        bottom = top + height;
-        DRAW_QUAD(left, top, right, bottom);
+        x = (608.0f - width) * 0.5f;
+        y = (448.0f - height) * 0.5f - 20.0f;
+        height += y;
+        DRAW_QUAD(x, y, x + width, height);
     }
 
     GXSetProjectionv(projection);
@@ -510,10 +520,10 @@ void dummy_draw(void) {
 
 void progDisp(s32 camId) {
     extern void* camGetPtr(s32 camId);
-    extern u64 OSGetTime(void);
+    extern s64 OSGetTime(void);
     extern u32 keyGetDirTrg(s32 pad);
     extern s32 romFontGetMessage(s32 id);
-    extern s32 romFontGetWidth(s32 msg, ...);
+    extern s32 romFontGetWidth();
     extern void romFontPrintGX();
     extern u32 dat_80420800;
     extern u32 dat_80420804;
@@ -523,13 +533,12 @@ void progDisp(s32 camId) {
     extern f32 float_neg80_80420814;
     extern f32 float_neg160_8042081c;
     extern f32 float_neg100_80420820;
-    u64 now;
+    s64 now;
     u32 buttons;
     s32 msg;
     s32 width;
     u32 color;
     f32 x;
-    s32 state;
 
     camGetPtr(camId);
 
@@ -537,29 +546,28 @@ void progDisp(s32 camId) {
         return;
     }
 
-    state = *(s32*)((s32)wp + 0x14);
-    switch (state) {
+    switch (*(s32*)((s32)wp + 0x14)) {
         case 0:
             *(u64*)((s32)wp + 8) = OSGetTime();
-            *(s32*)((s32)wp + 0x14) = state + 1;
+            *(s32*)((s32)wp + 0x14) += 1;
             break;
 
         case 1:
             buttons = keyGetButtonTrg(0);
-            if (*(u32*)((s32)gp + 0x1378) == 0 &&
-                *(u32*)((s32)gp + 0x1328) == 0 &&
-                *(s8*)((s32)gp + 0x13B8) == 0 &&
-                *(s8*)((s32)gp + 0x13BC) == 0 &&
-                *(s8*)((s32)gp + 0x13C0) == 0 &&
-                *(s8*)((s32)gp + 0x13C4) == 0 &&
-                *(u8*)((s32)gp + 0x13C8) == 0 &&
-                *(u8*)((s32)gp + 0x13CC) == 0) {
+            if (*(u32*)((s32)gp + 0x1378) != 0 ||
+                *(u32*)((s32)gp + 0x1328) != 0 ||
+                *(s8*)((s32)gp + 0x13B8) != 0 ||
+                *(s8*)((s32)gp + 0x13BC) != 0 ||
+                *(s8*)((s32)gp + 0x13C0) != 0 ||
+                *(s8*)((s32)gp + 0x13C4) != 0 ||
+                *(u8*)((s32)gp + 0x13C8) != 0 ||
+                *(u8*)((s32)gp + 0x13CC) != 0) {
+                *(u64*)((s32)wp + 8) = OSGetTime();
+            } else {
                 now = OSGetTime();
-                if ((now - *(u64*)((s32)wp + 8)) / (*(u32*)0x800000F8 >> 2) > 10) {
+                if ((now - *(s64*)((s32)wp + 8)) / (*(u32*)0x800000F8 >> 2) > 10) {
                     buttons = 0x100;
                 }
-            } else {
-                *(u64*)((s32)wp + 8) = OSGetTime();
             }
 
             if ((buttons & 3) != 0 || (keyGetDirTrg(0) & 0xC000) != 0) {
@@ -571,13 +579,13 @@ void progDisp(s32 camId) {
             msg = romFontGetMessage(0);
             width = romFontGetWidth(msg);
             color = dat_80420800;
-            romFontPrintGX(-((f32)width * float_0p5_80420810), float_neg80_80420814,
+            romFontPrintGX(-(f32)width * float_0p5_80420810, float_neg80_80420814,
                            float_1_80420818, &color, msg);
 
             msg = romFontGetMessage(1);
             width = romFontGetWidth(msg);
             color = dat_80420804;
-            romFontPrintGX(-((f32)width * float_0p5_80420810), float_neg160_8042081c,
+            romFontPrintGX(-(f32)width * float_0p5_80420810, float_neg160_8042081c,
                            float_1_80420818, &color, msg);
 
             msg = romFontGetMessage(2);
@@ -608,7 +616,7 @@ void progDisp(s32 camId) {
             break;
 
         case 3:
-            if ((*(u64*)((s32)gp + 0x18) - *(u64*)((s32)wp + 8)) / (*(u32*)0x800000F8 / 4000) > 2000) {
+            if ((*(s64*)((s32)gp + 0x18) - *(s64*)((s32)wp + 8)) / (*(u32*)0x800000F8 / 4000) > 2000) {
                 VISetBlack(0);
                 VIFlush();
                 *(u64*)((s32)wp + 8) = *(u64*)((s32)gp + 0x18);
@@ -617,16 +625,15 @@ void progDisp(s32 camId) {
             break;
 
         case 4:
-            if ((*(u64*)((s32)gp + 0x18) - *(u64*)((s32)wp + 8)) / (*(u32*)0x800000F8 / 4000) > 2000) {
+            if ((*(s64*)((s32)gp + 0x18) - *(s64*)((s32)wp + 8)) / (*(u32*)0x800000F8 / 4000) > 2000) {
                 *(s32*)((s32)wp + 0x18) = 0;
                 *(s32*)((s32)wp + 0x14) += 1;
             }
             msg = romFontGetMessage(*(s32*)((s32)wp + 0x1C) != 0 ? 4 : 3);
             width = romFontGetWidth(msg, wp);
             color = dat_8042080c;
-            romFontPrintGX(-((f32)width * float_0p5_80420810), float_neg100_80420820,
+            romFontPrintGX(-(f32)width * float_0p5_80420810, float_neg100_80420820,
                            float_1_80420818, &color, msg);
             break;
     }
 }
-

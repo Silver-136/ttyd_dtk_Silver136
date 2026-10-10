@@ -1,6 +1,6 @@
 #include "effect/eff_miss_star.h"
 
-void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed) {
+void* effMissStarEntry(f32 x, f32 y, f32 z, s32 count, s32 delay, s32 seed) {
     typedef union IntToDouble {
         f64 value;
         struct {
@@ -8,6 +8,13 @@ void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed) {
             u32 low;
         } words;
     } IntToDouble;
+    typedef struct Work {
+        f32 x,y,z,vx,vy,vz,ax,ay,az;
+        s32 tick,delay;
+        f32 angle,spin,viewAngle,scale;
+        s32 life;
+        f32 alpha;
+    } Work;
     extern void* effEntry(void);
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* camGetPtr(s32 cameraId);
@@ -24,7 +31,7 @@ void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed) {
     extern f32 float_255_80422e78;
     extern const f64 double_to_int_802f3ca8;
     void* entry;
-    void* work;
+    Work* work;
     void* cam;
     f32 speedScale;
     f32 rotScale;
@@ -44,7 +51,7 @@ void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed) {
     entry = effEntry();
     speedScale = float_0p8_80422e64;
     rotScale = float_1_80422e60;
-    if (count < 1) {
+    if (count <= 0) {
         count = 1;
         speedScale = float_0p4_80422e6c;
         rotScale = float_0p7_80422e70;
@@ -62,39 +69,40 @@ void* effMissStarEntry(f64 x, f64 y, f64 z, s32 count, s32 delay, s32 seed) {
     work = __memAlloc(3, count * 0x44);
     *(void**)((s32)entry + 0xC) = work;
     *(void**)((s32)entry + 0x10) = effMissStarMain;
-    dirBits = dir ^ 0x80000000;
-    spinBits = (dir * 107) ^ 0x80000000;
     retainedLiteral = 107.0f;
     two = float_2_80422e74;
     zero = float_0_80422e5c;
     alpha = float_255_80422e78;
 
-    for (i = 0; i < count; i++, work = (void*)((s32)work + 0x44), seed++) {
+    for (i = 0; i < count; i++, work++) {
+        dirBits = dir ^ 0x80000000;
         conv.words.high = 0x43300000;
         conv.words.low = (u32)dirBits;
         dirFloat = (f32)(conv.value - double_to_int_802f3ca8);
-        conv.words.low = (u32)spinBits;
-        spin = (f32)(conv.value - double_to_int_802f3ca8);
         idx = seed % 8;
         idx *= 3;
-        *(f32*)((s32)work + 0x0) = (f32)x;
-        *(f32*)((s32)work + 0x4) = (f32)y;
-        *(f32*)((s32)work + 0x8) = (f32)z;
-        *(f32*)((s32)work + 0x18) = rotScale * dirFloat * two * spd_tbl[idx + 0];
-        *(f32*)((s32)work + 0x1C) = rotScale * two * spd_tbl[idx + 1];
-        *(f32*)((s32)work + 0x20) = rotScale * two * spd_tbl[idx + 2];
-        *(f32*)((s32)work + 0xC) = rotScale * dirFloat * spd_tbl[idx + 0];
-        *(f32*)((s32)work + 0x10) = rotScale * spd_tbl[idx + 1];
-        *(f32*)((s32)work + 0x14) = rotScale * spd_tbl[idx + 2];
-        *(f32*)((s32)work + 0x38) = speedScale * scale_tbl[(i % 8) * 3];
-        *(f32*)((s32)work + 0x2C) = zero;
-        *(f32*)((s32)work + 0x30) = spin;
+        seed++;
+        work->x = (f32)x;
+        work->y = (f32)y;
+        work->z = (f32)z;
+        work->ax = rotScale * (dirFloat * (two * spd_tbl[idx + 0]));
+        work->ay = rotScale * (two * spd_tbl[idx + 1]);
+        work->az = rotScale * (two * spd_tbl[idx + 2]);
+        work->vx = rotScale * (dirFloat * spd_tbl[idx + 0]);
+        work->vy = rotScale * spd_tbl[idx + 1];
+        work->vz = rotScale * spd_tbl[idx + 2];
+        work->scale = speedScale * scale_tbl[(i % 8) * 3];
+        work->angle = zero;
+        spinBits = (dir * 107) ^ 0x80000000;
+        conv.words.low = (u32)spinBits;
+        spin = (f32)(conv.value - double_to_int_802f3ca8);
+        work->spin = spin;
         cam = camGetPtr(4);
-        *(f32*)((s32)work + 0x34) = -*(f32*)((s32)cam + 0x114);
-        *(s32*)((s32)work + 0x24) = 14;
-        *(s32*)((s32)work + 0x28) = delay;
-        *(s32*)((s32)work + 0x3C) = 10;
-        *(f32*)((s32)work + 0x40) = alpha;
+        work->viewAngle = -*(f32*)((s32)cam + 0x114);
+        work->tick = 14;
+        work->delay = delay;
+        work->life = 10;
+        work->alpha = alpha;
     }
     return entry;
 }
@@ -113,15 +121,21 @@ u8 effMissStarMain(void* effEntry) {
     extern u8 effMissStarDisp(void);
     extern f32 float_0p8_80422e64;
     extern f32 float_0p5_80422e68;
+    extern f32 vec3_802f3c90[];
+    LocalVec3 drawPos;
     LocalVec3 pos;
     void* work;
     void* cam;
     s32 i;
+    f32 friction, half;
 
     work = *(void**)((s32)effEntry + 0xC);
+    pos = *(LocalVec3*)vec3_802f3c90;
     pos.x = *(f32*)((s32)work + 0x0);
     pos.y = *(f32*)((s32)work + 0x4);
     pos.z = *(f32*)((s32)work + 0x8);
+    drawPos = pos;
+    friction = float_0p8_80422e64;
 
     i = 0;
     while (i < *(s32*)((s32)effEntry + 0x8)) {
@@ -132,7 +146,7 @@ u8 effMissStarMain(void* effEntry) {
             }
         }
 
-        if (*(s32*)((s32)work + 0x24) > -1) {
+        if (*(s32*)((s32)work + 0x24) >= 0) {
             *(f32*)((s32)work + 0x0) += *(f32*)((s32)work + 0x18);
             *(f32*)((s32)work + 0x4) += *(f32*)((s32)work + 0x1C);
             *(f32*)((s32)work + 0x8) += *(f32*)((s32)work + 0x20);
@@ -141,12 +155,13 @@ u8 effMissStarMain(void* effEntry) {
         *(f32*)((s32)work + 0x34) = -*(f32*)((s32)cam + 0x114);
         *(f32*)((s32)work + 0x2C) += *(f32*)((s32)work + 0x30);
         *(f32*)((s32)work + 0x2C) = reviseAngle(*(f32*)((s32)work + 0x2C));
-        *(f32*)((s32)work + 0x30) *= float_0p8_80422e64;
+        *(f32*)((s32)work + 0x30) *= friction;
 
         if (*(s32*)((s32)work + 0x24) < 10) {
-            *(f32*)((s32)work + 0xC) *= float_0p5_80422e68;
-            *(f32*)((s32)work + 0x10) *= float_0p5_80422e68;
-            *(f32*)((s32)work + 0x14) *= float_0p5_80422e68;
+            half = float_0p5_80422e68;
+            *(f32*)((s32)work + 0xC) *= half;
+            *(f32*)((s32)work + 0x10) *= half;
+            *(f32*)((s32)work + 0x14) *= half;
             *(f32*)((s32)work + 0x18) = *(f32*)((s32)work + 0xC);
             *(f32*)((s32)work + 0x1C) = *(f32*)((s32)work + 0x10);
             *(f32*)((s32)work + 0x20) = *(f32*)((s32)work + 0x14);
@@ -164,7 +179,7 @@ u8 effMissStarMain(void* effEntry) {
         work = (void*)((s32)work + 0x44);
     }
 
-    dispEntry(4, 1, effMissStarDisp, effEntry, dispCalcZ(&pos));
+    dispEntry(4, 1, effMissStarDisp, effEntry, dispCalcZ(&drawPos));
     return 0;
 }
 
@@ -201,14 +216,15 @@ u8 effMissStarDisp(s32 cameraId, void* effEntry) {
     extern f32 float_0_80422e5c;
     extern f32 float_1_80422e60;
     LocalMtx trans;
+    LocalMtx scale;
     LocalMtx rotY;
     LocalMtx rotZ;
-    LocalMtx scale;
     void* work;
     void* cam;
     u8 texObj[0x20];
     s32 i;
     volatile f32* fifo;
+    f32 deg;
 
     work = *(void**)((s32)effEntry + 0xC);
     effGetTexObj(0x18, texObj);
@@ -230,12 +246,13 @@ u8 effMissStarDisp(s32 cameraId, void* effEntry) {
     GXSetVtxDesc(0xD, 1);
     GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
 
+    deg = float_deg2rad_80422e50;
     for (i = 0; i < *(s32*)((s32)effEntry + 0x8); i++, work = (void*)((s32)work + 0x44)) {
         if (*(s32*)((s32)work + 0x28) == 0) {
             PSMTXTrans(trans, *(f32*)((s32)work + 0x0), *(f32*)((s32)work + 0x4), *(f32*)((s32)work + 0x8));
             cam = camGetPtr(4);
-            PSMTXRotRad(rotY, float_deg2rad_80422e50 * -*(f32*)((s32)cam + 0x114), 'y');
-            PSMTXRotRad(rotZ, float_deg2rad_80422e50 * *(f32*)((s32)work + 0x2C), 'z');
+            PSMTXRotRad(rotY, deg * -*(f32*)((s32)cam + 0x114), 'y');
+            PSMTXRotRad(rotZ, deg * *(f32*)((s32)work + 0x2C), 'z');
             PSMTXScale(scale, *(f32*)((s32)work + 0x38), *(f32*)((s32)work + 0x38), *(f32*)((s32)work + 0x38));
             PSMTXConcat(rotY, trans, trans);
             PSMTXConcat(trans, rotZ, trans);

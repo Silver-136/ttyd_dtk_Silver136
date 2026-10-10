@@ -85,88 +85,90 @@ s32 pre_kurio_use(void* pEvt) {
     }
     {
         void* hit = *(void**)((s32)player + 0x1F0);
-        if ((hit == 0 || (hitGetAttr(hit) & 0x80000000) == 0) &&
-            (hit = *(void**)((s32)player + 0x1E4),
-             hit == 0 || (hitGetAttr(hit) & 0x80000000) == 0) &&
-            (hit = *(void**)((s32)player + 0x1E8),
-             hit == 0 || (hitGetAttr(hit) & 0x80000000) == 0)) {
+        if (hit != 0 && (hitGetAttr(hit) & 0x80000000) != 0) goto found_hit;
+        hit = *(void**)((s32)player + 0x1E4);
+        if (hit != 0 && (hitGetAttr(hit) & 0x80000000) != 0) goto found_hit;
+        hit = *(void**)((s32)player + 0x1E8);
+        if (hit == 0 || (hitGetAttr(hit) & 0x80000000) == 0) {
             work[0] = (s32)(strings + 0x8);
-        } else {
-            void* mobj = mobjHitObjPtrToPtr(hit);
-            char* name = (char*)mobj + 0x15;
-            if (!strcmp(name, (strings + 0x18))) {
+            return 2;
+        }
+found_hit:
+        {
+            player = mobjHitObjPtrToPtr(hit);
+            if (!strcmp(((char*)player + 0x15), (strings + 0x18))) {
                 message = pouchGetHammerLv() < 1 ? (strings + 0x28) : (strings + 0x3C);
-            } else if (!strcmp(name, (strings + 0x50))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x50))) {
                 message = pouchGetHammerLv() < 1 ? (strings + 0x28) : (strings + 0x3C);
-            } else if (!strcmp(name, (strings + 0x64))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x64))) {
                 message = pouchGetHammerLv() < 1 ? (strings + 0x28) :
                           pouchGetHammerLv() < 2 ? (strings + 0x78) : (strings + 0x8C);
-            } else if (!strcmp(name, (strings + 0xA0)) || !strcmp(name, (strings + 0xB0))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0xA0)) || !strcmp(((char*)player + 0x15), (strings + 0xB0))) {
                 message = pouchGetHammerLv() < 1 ? (strings + 0xC4) :
                           pouchGetHammerLv() < 3 ? (strings + 0xD8) : (strings + 0xEC);
-            } else if (!strcmp(name, (strings + 0x100))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x100))) {
                 message = pouchGetHammerLv() < 1 ? (strings + 0xC4) :
                           pouchGetHammerLv() < 3 ? (strings + 0xD8) : (strings + 0x114);
-            } else if (!strcmp(name, (strings + 0x128)) ||
-                       !strcmp(name, (strings + 0x13C)) || !strcmp(name, (strings + 0x150))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x128)) ||
+                       !strcmp(((char*)player + 0x15), (strings + 0x13C)) || !strcmp(((char*)player + 0x15), (strings + 0x150))) {
                 message = (strings + 0x160);
-            } else if (!strcmp(name, (strings + 0x178)) || !strcmp(name, (strings + 0x184))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x178)) || !strcmp(((char*)player + 0x15), (strings + 0x184))) {
                 message = (strings + 0x194);
-            } else if (!strcmp(name, (strings + 0x1A8))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x1A8))) {
                 message = (strings + 0x1BC);
-            } else if (!strcmp(name, (strings + 0x1CC))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x1CC))) {
                 message = (strings + 0x1E0);
-            } else if (!strcmp(name, (strings + 0x1F0))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x1F0))) {
                 message = (strings + 0x200);
-            } else if (!strcmp(name, strings + 0x218) ||
-                       !strcmp(name, strings + 0x230) ||
-                       !strcmp(name, strings + 0x24C) ||
-                       !strcmp(name, strings + 0x268) ||
-                       !strcmp(name, strings + 0x280) ||
-                       !strcmp(name, strings + 0x29C) ||
-                       !strcmp(name, strings + 0x2B8) ||
-                       !strcmp(name, strings + 0x2D0) ||
-                       !strcmp(name, strings + 0x2EC)) {
+            } else if (!strcmp(((char*)player + 0x15), strings + 0x218) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x230) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x24C) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x268) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x280) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x29C) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x2B8) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x2D0) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x2EC)) {
                 message = strings + 0x308;
-            } else if (!strcmp(name, strings + 0x318) ||
-                       !strcmp(name, strings + 0x334) ||
-                       !strcmp(name, strings + 0x350)) {
+            } else if (!strcmp(((char*)player + 0x15), strings + 0x318) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x334) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x350)) {
                 message = strings + 0x36C;
-            } else if (!strcmp(name, strings + 0x384) ||
-                       !strcmp(name, strings + 0x39C)) {
+            } else if (!strcmp(((char*)player + 0x15), strings + 0x384) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x39C)) {
                 message = pouchGetJumpLv() < 2 ? strings + 0x3B4 : strings + 0x3CC;
-            } else if (!strcmp(name, (strings + 0x3E4)) ||
-                       !strcmp(name, (strings + 0x3F8)) ||
-                       !strcmp(name, (strings + 0x410))) {
-                message = mobjCheckItemboxOpen(mobj) == 2 ? (strings + 0x424) : (strings + 0x438);
-            } else if (!strcmp(name, (strings + 0x44C))) {
-                message = mobjCheckItemboxOpen(mobj) == 2 ? (strings + 0x464) : (strings + 0x478);
-            } else if (!strcmp(name, (strings + 0x48C)) ||
-                       !strcmp(name, (strings + 0x4A0)) ||
-                       !strcmp(name, (strings + 0x4B4)) ||
-                       !strcmp(name, (strings + 0x4C8)) ||
-                       !strcmp(name, (strings + 0x4DC))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x3E4)) ||
+                       !strcmp(((char*)player + 0x15), (strings + 0x3F8)) ||
+                       !strcmp(((char*)player + 0x15), (strings + 0x410))) {
+                message = mobjCheckItemboxOpen(player) == 2 ? (strings + 0x424) : (strings + 0x438);
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x44C))) {
+                message = mobjCheckItemboxOpen(player) == 2 ? (strings + 0x464) : (strings + 0x478);
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x48C)) ||
+                       !strcmp(((char*)player + 0x15), (strings + 0x4A0)) ||
+                       !strcmp(((char*)player + 0x15), (strings + 0x4B4)) ||
+                       !strcmp(((char*)player + 0x15), (strings + 0x4C8)) ||
+                       !strcmp(((char*)player + 0x15), (strings + 0x4DC))) {
                 message = (strings + 0x4F0);
-            } else if (!strcmp(name, (strings + 0x500)) || !strcmp(name, (strings + 0x514))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x500)) || !strcmp(((char*)player + 0x15), (strings + 0x514))) {
                 message = (strings + 0x52C);
-            } else if (!strcmp(name, (strings + 0x544)) || !strcmp(name, (strings + 0x554)) ||
-                       !strcmp(name, (strings + 0x564)) || !strcmp(name, (strings + 0x578))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x544)) || !strcmp(((char*)player + 0x15), (strings + 0x554)) ||
+                       !strcmp(((char*)player + 0x15), (strings + 0x564)) || !strcmp(((char*)player + 0x15), (strings + 0x578))) {
                 message = (strings + 0x58C);
-            } else if (!strcmp(name, strings + 0x59C) ||
-                       !strcmp(name, strings + 0x5B0) ||
-                       !strcmp(name, strings + 0x5C4)) {
+            } else if (!strcmp(((char*)player + 0x15), strings + 0x59C) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x5B0) ||
+                       !strcmp(((char*)player + 0x15), strings + 0x5C4)) {
                 message = strings + 0x5D8;
-            } else if (!strcmp(name, (strings + 0x5EC)) || !strcmp(name, (strings + 0x600))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x5EC)) || !strcmp(((char*)player + 0x15), (strings + 0x600))) {
                 message = pouchGetJumpLv() > 1 ? (strings + 0x62C) : (strings + 0x618);
-            } else if (!strcmp(name, (strings + 0x644))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x644))) {
                 message = (strings + 0x654);
-            } else if (!strcmp(name, (strings + 0x668))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x668))) {
                 message = (strings + 0x678);
-            } else if (!strcmp(name, (strings + 0x688))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x688))) {
                 message = (strings + 0x694);
-            } else if (!strcmp(name, (strings + 0x6A8))) {
+            } else if (!strcmp(((char*)player + 0x15), (strings + 0x6A8))) {
                 message = (strings + 0x6B4);
-            } else if (!strcmp(name, strings + 0x6C4)) {
+            } else if (!strcmp(((char*)player + 0x15), strings + 0x6C4)) {
                 message = strings + 0x8;
             } else {
                 message = strings + 0x8;
@@ -221,7 +223,7 @@ void kuribo_use(void* pParty) {
     extern f32 PSVECDistance(void* a, void* b);
     extern f32 angleABf(f32 ax, f32 az, f32 bx, f32 bz);
     extern f32 distABf(f32 ax, f32 az, f32 bx, f32 bz);
-    extern s32 partySearchFrontWall(f64 distance, f64 angle, void* pParty, f32* pos);
+    extern s32 partySearchFrontWall(f32 distance, f32 angle, void* pParty, f32* pos);
     extern s32 partyGetAppearPos3(void* party, void* pos);
     extern void* evtEntryType(void* evt, s32 priority, u32 flags, u32 type);
     extern void marioStSystemLevel(s32 level);
@@ -239,7 +241,6 @@ void kuribo_use(void* pParty) {
     VecLocal pos;
     s32 hit;
     s32 timer;
-    f32 denom;
 
     player = *(void**)((s32)pParty + 0x160);
     if ((*(u32*)((s32)pParty + 0x8) & 8) != 0) {
@@ -247,9 +248,7 @@ void kuribo_use(void* pParty) {
         if (PSVECDistance((void*)((s32)player + 0x8C), (void*)((s32)pParty + 0x58)) > float_125_80421578) {
             *(u8*)((s32)pParty + 0x39) = 0;
         } else {
-            pos.x = *(f32*)((s32)pParty + 0x58);
-            pos.y = *(f32*)((s32)pParty + 0x5C);
-            pos.z = *(f32*)((s32)pParty + 0x60);
+            pos = *(VecLocal*)((s32)pParty + 0x58);
             hit = partySearchFrontWall(float_150_8042157c,
                                        angleABf(*(f32*)((s32)pParty + 0x58),
                                                 *(f32*)((s32)pParty + 0x60),
@@ -289,10 +288,10 @@ void kuribo_use(void* pParty) {
             *(f32*)((s32)pParty + 0x100) = *(f32*)((s32)pParty + 0xFC);
             *(f32*)((s32)pParty + 0x10C) = *(f32*)((s32)player + 0x1AC);
             *(f32*)((s32)pParty + 0x110) = *(f32*)((s32)player + 0x1AC);
-            denom = (f32)*(s32*)((s32)pParty + 0x24);
             *(f32*)((s32)pParty + 0x104) =
                 distABf(*(f32*)((s32)pParty + 0x58), *(f32*)((s32)pParty + 0x60),
-                        *(f32*)((s32)pParty + 0x94), *(f32*)((s32)pParty + 0x9C)) / denom;
+                        *(f32*)((s32)pParty + 0x94), *(f32*)((s32)pParty + 0x9C)) /
+                (f32)*(s32*)((s32)pParty + 0x24);
             *(f32*)((s32)pParty + 0x114) = float_0_80421580;
             *(u8*)((s32)pParty + 0x39) = 1;
             break;
@@ -301,10 +300,9 @@ void kuribo_use(void* pParty) {
                 *(u32*)pParty |= 0x4000000;
                 *(u32*)pParty |= 0x2000000;
             }
-            denom = (f32)*(s32*)((s32)pParty + 0x24);
-            *(f32*)((s32)pParty + 0x58) += (*(f32*)((s32)pParty + 0x94) - *(f32*)((s32)pParty + 0x58)) / denom;
-            *(f32*)((s32)pParty + 0x5C) += (*(f32*)((s32)pParty + 0x98) - *(f32*)((s32)pParty + 0x5C)) / denom;
-            *(f32*)((s32)pParty + 0x60) += (*(f32*)((s32)pParty + 0x9C) - *(f32*)((s32)pParty + 0x60)) / denom;
+            *(f32*)((s32)pParty + 0x58) += (*(f32*)((s32)pParty + 0x94) - *(f32*)((s32)pParty + 0x58)) / (f32)*(s32*)((s32)pParty + 0x24);
+            *(f32*)((s32)pParty + 0x5C) += (*(f32*)((s32)pParty + 0x98) - *(f32*)((s32)pParty + 0x5C)) / (f32)*(s32*)((s32)pParty + 0x24);
+            *(f32*)((s32)pParty + 0x60) += (*(f32*)((s32)pParty + 0x9C) - *(f32*)((s32)pParty + 0x60)) / (f32)*(s32*)((s32)pParty + 0x24);
             timer = *(s32*)((s32)pParty + 0x24) - 1;
             *(s32*)((s32)pParty + 0x24) = timer;
             if (timer > 0) {

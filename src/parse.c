@@ -21,64 +21,48 @@ u32 parsePush(char* tagName) {
     s32 end = ends[depth];
     s32 nesting = 0;
     s32 state = 0;
-    s32 childStart = 0;
-    s32 childEnd = 0;
+    s32 childStart;
+    s32 childEnd;
     s32 i;
 
     for (i = begin; i < end; i++) {
         char* scan = input + i;
-        if (*scan == '<') {
-            if (scan[1] == '/') {
+        if ((s8)*scan == '<') {
+            if ((s8)scan[1] == '/') {
                 nesting--;
                 if (state == 1 && nesting == 0) {
-                    s32 remain = end - i;
-                    childEnd = i;
-                    if (i < end) {
-                        do {
-                            if (*scan == '>') {
-                                childEnd = i + 1;
-                                break;
-                            }
+                    for (; i < end; i++, scan++) {
+                        if ((s8)*scan == '>') {
                             i++;
-                            scan++;
-                            remain--;
-                        } while (remain != 0);
+                            break;
+                        }
                     }
+                    childEnd = i;
                     state = 2;
                     break;
                 }
             } else {
                 if (state == 0 && nesting == 0) {
-                    s32 remain = end - i;
                     char* dst = buf_405;
                     s32 length = 0;
-                    if (i < end) {
-                        do {
-                            s8 c = (s8)*scan;
-                            if (c != ' ' && c != '\t' && c != '\n' && c != '\r') {
-                                *dst++ = c;
-                                length++;
-                            }
-                            if (length >= 0x7F || *scan == '>') {
-                                break;
-                            }
-                            scan++;
-                            remain--;
-                        } while (remain != 0);
+                    s32 j;
+                    for (j = i; j < end; j++, scan++) {
+                        s8 c = (s8)*scan;
+                        if (c != ' ' && c != '\t' && c != '\n' && c != '\r') {
+                            *dst++ = c;
+                            length++;
+                        }
+                        if (length >= 0x7F || (s8)*scan == '>') {
+                            break;
+                        }
                     }
                     buf_405[length] = 0;
                     if (strcmp(buf_405, tagName) == 0) {
-                        remain = end - i;
                         scan = input + i;
-                        if (i < end) {
-                            do {
-                                if (*scan == '>') {
-                                    break;
-                                }
-                                i++;
-                                scan++;
-                                remain--;
-                            } while (remain != 0);
+                        for (; i < end; i++, scan++) {
+                            if ((s8)*scan == '>') {
+                                break;
+                            }
                         }
                         state = 1;
                         childStart = i + 1;
@@ -88,13 +72,15 @@ u32 parsePush(char* tagName) {
             }
         }
     }
-    if (state == 2) {
-        depth++;
-        *(s32*)(parse + 0x54) = depth;
-        starts[depth] = childStart;
-        ends[depth] = childEnd;
+    if (state != 2) {
+        return 0;
     }
-    return state == 2;
+
+    depth = *(volatile s32*)(parse + 0x54) + 1;
+    *(s32*)(parse + 0x54) = depth;
+    starts[depth] = childStart;
+    ends[depth] = childEnd;
+    return 1;
 }
 
 void parsePop(void) {
@@ -209,7 +195,7 @@ scalar:
         }
     }
 
-    if (found < 2) {
+    if (found <= 1) {
         return 0;
     }
 

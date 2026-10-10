@@ -2,8 +2,21 @@
 #include "battle/battle_status_effect.h"
 #include "effect/eff_fire.h"
 
-s8 _st_pri_data[0x19];
+s8 _st_pri_data[0x19] = {
+    0x10, 0x04, 0x01, 0x02, 0x03, 0x05, 0x06, 0x07,
+    0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+    0x00, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
+    -1
+};
 extern void* _battleWorkPointer;
+
+typedef struct BattleStatusChangeMsgData {
+    s8 status;
+    u8 pad[3];
+    const void* label;
+    const void* msg_on;
+    const void* msg_off;
+} BattleStatusChangeMsgData;
 
 void effDelete(void* effect);
 void effSoftDelete(void* effect);
@@ -37,7 +50,7 @@ void BSE_FreezeDelete(BattleWorkUnit* unit);
 void BSE_KagegakureDelete(BattleWorkUnit* unit);
 s32 BattleStatusChangeAnnouceMain_Unit(BattleWorkUnit* unit);
 
-extern f32 float_0_80424710;
+extern const f32 float_0_80424710;
 extern f32 float_20_80424714;
 extern f32 float_neg117_80424718;
 extern f32 float_10_8042471c;
@@ -646,8 +659,8 @@ int BattleStatusChangeMsgMain(void* battleWork) {
     extern char* msgSearch(char* msg);
     extern void* dispEntry(s32 cameraId, s32 order, void* callback, s32 param, f32 priority);
     extern void _st_chg_msg_disp(void);
-    extern u8 _st_chg_msg_data[];
-    extern char zero_80424708[];
+    extern BattleStatusChangeMsgData _st_chg_msg_data[];
+    extern const char zero_80424708[];
     extern f32 float_900_80424724;
     u8* work;
     u8* entry;
@@ -679,7 +692,7 @@ int BattleStatusChangeMsgMain(void* battleWork) {
                 }
             } else {
                 sprintf((char*)(work + 0x150), zero_80424708);
-                data = _st_chg_msg_data;
+                data = (u8*)_st_chg_msg_data;
                 offset = 0;
                 for (i = 0; i < 0x1C; i++) {
                     if ((s8)entry[0] == (s8)data[offset] || (s8)data[offset] == -1) {
@@ -741,3 +754,105 @@ void _st_chg_msg_disp(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+__declspec(section ".sdata2") const u8 str_sjis_sdata2_00000000[5] = {
+    0x82, 0xC7, 0x82, 0xAD, 0x00
+};
+
+__declspec(section ".sdata2") const char zero_80424708[1] __attribute__ ((aligned(4))) = {
+    0x00
+};
+
+__declspec(section ".sdata2") u32 dat_8042470c = 0xFFFFFFFF;
+__declspec(section ".sdata2") const f32 float_0_80424710 = 0.0f;
+__declspec(section ".sdata2") f32 float_20_80424714 = 20.0f;
+__declspec(section ".sdata2") f32 float_neg117_80424718 = -117.0f;
+__declspec(section ".sdata2") f32 float_10_8042471c = 10.0f;
+__declspec(section ".sdata2") f32 float_neg120_80424720 = -120.0f;
+__declspec(section ".sdata2") f32 float_900_80424724 = 900.0f;
+__declspec(section ".sdata2") f32 float_1_80424728 = 1.0f;
+__declspec(section ".sdata2") f32 float_5_8042472c = 5.0f;
+__declspec(section ".sdata2") f32 float_0p4_80424730 = 0.4000000059604645f;
+__declspec(section ".sdata2") f32 float_1p6_80424734 = 1.600000023841858f;
+__declspec(section ".sdata2") f32 float_neg1000_80424738 = -1000.0f;
+__declspec(section ".sdata2") f32 float_36_8042473c = 36.0f;
+__declspec(section ".sdata2") f32 float_neg1_80424740 = -1.0f;
+__declspec(section ".sdata2") f32 float_60_80424744 = 60.0f;
+__declspec(section ".sdata2") f32 float_0p5_80424748 = 0.5f;
+__declspec(section ".sdata2") f32 float_0p95_8042474c = 0.949999988079071f;
+
+extern const char str_msg_st_chg_allergy_802f995c[];
+extern const char str_msg_st_chg_big_802f98a4[];
+extern const char str_msg_st_chg_biribiri_802f9828[];
+extern const char str_msg_st_chg_bombcount_802f99f4[];
+extern const char str_msg_st_chg_charge3_802f978c[];
+extern const char str_msg_st_chg_charge_802f9778[];
+extern const char str_msg_st_chg_confusion_802f9804[];
+extern const char str_msg_st_chg_counter_802f99d0[];
+extern const char str_msg_st_chg_dodge_802f9848[];
+extern const char str_msg_st_chg_fire_802f9868[];
+extern const char str_msg_st_chg_freeze_802f9884[];
+extern const char str_msg_st_chg_guruguru_802f97e4[];
+extern const char str_msg_st_chg_hard_802f9920[];
+extern const char str_msg_st_chg_poison_802f9758[];
+extern const char str_msg_st_chg_quick_802f9998[];
+extern const char str_msg_st_chg_reg_fp_802f9a40[];
+extern const char str_msg_st_chg_reg_hp_802f9a1c[];
+extern const char str_msg_st_chg_sleep_802f97a8[];
+extern const char str_msg_st_chg_slow_802f99b4[];
+extern const char str_msg_st_chg_small_802f98c0[];
+extern const char str_msg_st_chg_soft_802f9940[];
+extern const char str_msg_st_chg_stan_802f97c8[];
+extern const char str_msg_st_chg_trans_802f997c[];
+extern const char str_msg_st_chg_tuyotuyo_802f98e0[];
+extern const char str_msg_st_chg_yowayowa_802f9900[];
+extern const u8 str_sjis_00000014[];
+extern const u8 str_sjis_00000048[];
+extern const u8 str_sjis_00000064[];
+extern const u8 str_sjis_00000080[];
+extern const u8 str_sjis_000000a0[];
+extern const u8 str_sjis_000000c4[];
+extern const u8 str_sjis_000000e4[];
+extern const u8 str_sjis_00000104[];
+extern const u8 str_sjis_00000120[];
+extern const u8 str_sjis_00000140[];
+extern const u8 str_sjis_0000015c[];
+extern const u8 str_sjis_0000017c[];
+extern const u8 str_sjis_0000019c[];
+extern const u8 str_sjis_000001bc[];
+extern const u8 str_sjis_000001d8[];
+extern const u8 str_sjis_000001f8[];
+extern const u8 str_sjis_00000218[];
+extern const u8 str_sjis_00000238[];
+extern const u8 str_sjis_00000254[];
+extern const u8 str_sjis_0000026c[];
+extern const u8 str_sjis_0000028c[];
+extern const u8 str_sjis_000002b4[];
+extern const u8 str_sjis_000002d8[];
+
+__declspec(section ".data") BattleStatusChangeMsgData _st_chg_msg_data[25] = {
+    { 4, { 0, 0, 0 }, (const void*)str_sjis_sdata2_00000000, (const void*)str_msg_st_chg_poison_802f9758, (const void*)str_msg_st_chg_poison_802f9758 },
+    { 16, { 0, 0, 0 }, (const void*)str_sjis_00000014, (const void*)str_msg_st_chg_charge_802f9778, (const void*)str_msg_st_chg_charge3_802f978c },
+    { 1, { 0, 0, 0 }, (const void*)str_sjis_00000048, (const void*)str_msg_st_chg_sleep_802f97a8, (const void*)str_msg_st_chg_sleep_802f97a8 },
+    { 2, { 0, 0, 0 }, (const void*)str_sjis_00000064, (const void*)str_msg_st_chg_stan_802f97c8, (const void*)str_msg_st_chg_stan_802f97c8 },
+    { 3, { 0, 0, 0 }, (const void*)str_sjis_00000080, (const void*)str_msg_st_chg_guruguru_802f97e4, (const void*)str_msg_st_chg_guruguru_802f97e4 },
+    { 5, { 0, 0, 0 }, (const void*)str_sjis_000000a0, (const void*)str_msg_st_chg_confusion_802f9804, (const void*)str_msg_st_chg_confusion_802f9804 },
+    { 6, { 0, 0, 0 }, (const void*)str_sjis_000000c4, (const void*)str_msg_st_chg_biribiri_802f9828, (const void*)str_msg_st_chg_biribiri_802f9828 },
+    { 7, { 0, 0, 0 }, (const void*)str_sjis_000000e4, (const void*)str_msg_st_chg_dodge_802f9848, (const void*)str_msg_st_chg_dodge_802f9848 },
+    { 8, { 0, 0, 0 }, (const void*)str_sjis_00000104, (const void*)str_msg_st_chg_fire_802f9868, (const void*)str_msg_st_chg_fire_802f9868 },
+    { 9, { 0, 0, 0 }, (const void*)str_sjis_00000120, (const void*)str_msg_st_chg_freeze_802f9884, (const void*)str_msg_st_chg_freeze_802f9884 },
+    { 10, { 0, 0, 0 }, (const void*)str_sjis_00000140, (const void*)str_msg_st_chg_big_802f98a4, (const void*)str_msg_st_chg_big_802f98a4 },
+    { 11, { 0, 0, 0 }, (const void*)str_sjis_0000015c, (const void*)str_msg_st_chg_small_802f98c0, (const void*)str_msg_st_chg_small_802f98c0 },
+    { 12, { 0, 0, 0 }, (const void*)str_sjis_0000017c, (const void*)str_msg_st_chg_tuyotuyo_802f98e0, (const void*)str_msg_st_chg_tuyotuyo_802f98e0 },
+    { 13, { 0, 0, 0 }, (const void*)str_sjis_0000019c, (const void*)str_msg_st_chg_yowayowa_802f9900, (const void*)str_msg_st_chg_yowayowa_802f9900 },
+    { 14, { 0, 0, 0 }, (const void*)str_sjis_000001bc, (const void*)str_msg_st_chg_hard_802f9920, (const void*)str_msg_st_chg_hard_802f9920 },
+    { 15, { 0, 0, 0 }, (const void*)str_sjis_000001d8, (const void*)str_msg_st_chg_soft_802f9940, (const void*)str_msg_st_chg_soft_802f9940 },
+    { 0, { 0, 0, 0 }, (const void*)str_sjis_000001f8, (const void*)str_msg_st_chg_allergy_802f995c, (const void*)str_msg_st_chg_allergy_802f995c },
+    { 18, { 0, 0, 0 }, (const void*)str_sjis_00000218, (const void*)str_msg_st_chg_trans_802f997c, (const void*)str_msg_st_chg_trans_802f997c },
+    { 19, { 0, 0, 0 }, (const void*)str_sjis_00000238, (const void*)str_msg_st_chg_quick_802f9998, (const void*)str_msg_st_chg_quick_802f9998 },
+    { 20, { 0, 0, 0 }, (const void*)str_sjis_00000254, (const void*)str_msg_st_chg_slow_802f99b4, (const void*)str_msg_st_chg_slow_802f99b4 },
+    { 21, { 0, 0, 0 }, (const void*)str_sjis_0000026c, (const void*)str_msg_st_chg_counter_802f99d0, (const void*)str_msg_st_chg_counter_802f99d0 },
+    { 22, { 0, 0, 0 }, (const void*)str_sjis_0000028c, (const void*)str_msg_st_chg_bombcount_802f99f4, (const void*)str_msg_st_chg_bombcount_802f99f4 },
+    { 23, { 0, 0, 0 }, (const void*)str_sjis_000002b4, (const void*)str_msg_st_chg_reg_hp_802f9a1c, (const void*)str_msg_st_chg_reg_hp_802f9a1c },
+    { 24, { 0, 0, 0 }, (const void*)str_sjis_000002d8, (const void*)str_msg_st_chg_reg_fp_802f9a40, (const void*)str_msg_st_chg_reg_fp_802f9a40 },
+    { -1, { 0, 0, 0 }, (const void*)zero_80424708, (const void*)zero_80424708, (const void*)zero_80424708 },
+};

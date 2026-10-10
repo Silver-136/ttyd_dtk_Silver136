@@ -127,7 +127,7 @@ u8 imgDisp(s32 param_1, void* param_2) {
     extern void animSetPaperTexMtx(void* m0, void* m1, void* m2);
     extern void animSetPaperTexObj(void* t0, void* t1, void* t2, void* d0, void* d1, void* d2, s32 flag0, s32 flag1);
     extern void animPoseSetAnim(s32 poseId, void* animName, s32 force);
-    extern void animPoseSetStartTime(s32 poseId, s32 mode, s32 start, s32 end);
+    extern void animPoseSetStartTime(s32 poseId, s64 startTime);
     extern void animPoseMain(s32 poseId);
     extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flag);
     extern f32 animPoseGetLoopTimes(s32 poseId);
@@ -154,35 +154,29 @@ u8 imgDisp(s32 param_1, void* param_2) {
     extern const f32 float_0p5_80420394;
     extern const f32 float_180_80420398;
 
-    u32* img;
     void* texObjPtrs[3];
     void* texDataPtrs[3];
     void* texMtxPtrs[3];
-    f32 viewVec[3];
     f32 camVec[3];
-    f32 texTrans[3][4];
-    f32 texScale[3][4];
-    f32 tmpMtx[3][4];
+    f32 viewVec[3];
     f32 drawMtx[3][4];
+    f32 tmpMtx[3][4];
+    f32 texScale[3][4];
+    f32 texTrans[3][4];
     f32 texMtx[3][3][4];
+    u32* part;
     void** texObjOut;
     void** texDataOut;
-    void** texMtxOut;
     f32 (*curTexMtx)[4];
-    u32* part;
+    void** texMtxOut;
     s32 firstPart;
     s32 i;
+    u32* img;
     u32 flags;
     f32 srcX;
     f32 srcY;
     f32 srcW;
     f32 srcH;
-    f32 partX;
-    f32 partY;
-    f32 partW;
-    f32 partH;
-    s32 poseId;
-    void* animName;
     void* camera;
     void* modeObj;
     f32 dist;
@@ -198,20 +192,20 @@ u8 imgDisp(s32 param_1, void* param_2) {
     f32 renderW;
     f32 renderH;
     u32* other;
-    s32 count;
+
     void* baseA;
     void* baseB;
 
     (void)param_1;
 
-    img = (u32*)param_2;
+    part = (u32*)param_2;
     texObjOut = texObjPtrs;
     texDataOut = texDataPtrs;
     curTexMtx = texMtx[0];
     texMtxOut = texMtxPtrs;
-    part = img;
     firstPart = -1;
     i = 0;
+    img = (u32*)param_2;
 
     do {
         flags = part[0];
@@ -234,12 +228,12 @@ u8 imgDisp(s32 param_1, void* param_2) {
                 srcH = (f32)*(u16*)((s32)img + 0xE6);
             }
 
-            partX = (f32)*(u16*)((s32)part + 8);
-            partY = (f32)*(u16*)((s32)part + 0xA);
-            partW = (f32)*(u16*)((s32)part + 0xC);
-            partH = (f32)*(u16*)((s32)part + 0xE);
-            PSMTXTrans(texTrans, -((partX - srcX) / partW), -((partY - srcY) / partH), float_0_80420370);
-            PSMTXScale(texScale, srcW / partW, srcH / partH, float_1_80420374);
+            PSMTXTrans(texTrans,
+                        (-((f32)*(u16*)((s32)part + 8) - srcX)) / (f32)*(u16*)((s32)part + 0xC),
+                        (-((f32)*(u16*)((s32)part + 0xA) - srcY)) / (f32)*(u16*)((s32)part + 0xE),
+                        float_0_80420370);
+            PSMTXScale(texScale, srcW / (f32)*(u16*)((s32)part + 0xC),
+                        srcH / (f32)*(u16*)((s32)part + 0xE), float_1_80420374);
             PSMTXConcat(texTrans, texScale, curTexMtx);
             *texObjOut = (void*)((s32)part + 0x1C);
             *texDataOut = *(void**)((s32)part + 0x3C);
@@ -269,20 +263,16 @@ u8 imgDisp(s32 param_1, void* param_2) {
         animSetPaperTexMtx(texMtxPtrs[0], texMtxPtrs[1], texMtxPtrs[2]);
         animSetPaperTexObj(texObjPtrs[0], texObjPtrs[1], texObjPtrs[2],
                            texDataPtrs[0], texDataPtrs[1], texDataPtrs[2],
-                           ((-((s32)img[4]) - 1) | ((s32)img[4] + 1)) >> 31,
-                           ((-((s32)img[0x15]) - 1) | ((s32)img[0x15] + 1)) >> 31);
+                           ((u32)(-((s32)img[4]) - 1) | (u32)((s32)img[4] + 1)) >> 31,
+                           ((u32)(-((s32)img[0x15]) - 1) | (u32)((s32)img[0x15] + 1)) >> 31);
 
-        poseId = (s32)img[0x41];
-        animName = (void*)img[0x42];
-        if (animName != 0) {
-            animPoseSetAnim(poseId, animName, 0);
-        } else {
-            animName = 0;
+        if (img[0x42] != 0) {
+            animPoseSetAnim((s32)img[0x41], (void*)img[0x42], 0);
         }
-        animPoseSetStartTime(poseId, (s32)animName, img[0x44], img[0x45]);
-        animPoseMain(poseId);
-        animPoseSetMaterialLightFlagOn(poseId, 1);
-        *(f32*)((s32)img + 0x118) = animPoseGetLoopTimes(poseId);
+        animPoseSetStartTime((s32)img[0x41], *(s64*)((s32)img + 0x110));
+        animPoseMain((s32)img[0x41]);
+        animPoseSetMaterialLightFlagOn((s32)img[0x41], 1);
+        *(f32*)((s32)img + 0x118) = animPoseGetLoopTimes((s32)img[0x41]);
 
         if ((img[0x33] & 8) != 0) {
             zFill();
@@ -306,13 +296,14 @@ u8 imgDisp(s32 param_1, void* param_2) {
             drawZ = baseDist - dist;
         }
 
-        part = img + (firstPart * 0x11);
         if ((img[0x33] & 4) != 0) {
+            part = img + (firstPart * 0x11);
             drawX = (f32)*(u16*)((s32)part + 8);
             drawY = (f32)*(u16*)((s32)part + 0xA);
             drawW = (f32)*(u16*)((s32)part + 0xC);
             drawH = (f32)*(u16*)((s32)part + 0xE);
         } else {
+            part = img + (firstPart * 0x11);
             drawX = (f32)*(u16*)((s32)part + 4);
             drawY = (f32)*(u16*)((s32)part + 6);
             drawW = (f32)*(u16*)((s32)img + 0xE4);
@@ -342,15 +333,14 @@ u8 imgDisp(s32 param_1, void* param_2) {
         PSMTXConcat(drawMtx, tmpMtx, drawMtx);
         PSMTXConcat((void*)((s32)img + 0x120), drawMtx, drawMtx);
 
-        animPoseDrawMtx(poseId, drawMtx, 1, float_0_80420370, drawScale);
-        animPoseDrawMtx(poseId, drawMtx, 2, float_0_80420370, drawScale);
-        animPoseDrawMtx(poseId, drawMtx, 3, float_0_80420370, drawScale);
+        animPoseDrawMtx((s32)img[0x41], drawMtx, 1, float_0_80420370, drawScale);
+        animPoseDrawMtx((s32)img[0x41], drawMtx, 2, float_0_80420370, drawScale);
+        animPoseDrawMtx((s32)img[0x41], drawMtx, 3, float_0_80420370, drawScale);
         animSetPaperTexMtx(0, 0, 0);
 
         other = *(u32**)((s32)wp + 4);
         i = 0;
-        count = *(s32*)wp;
-        while (i < count) {
+        while (i < *(s32*)wp) {
             flags = other[0x33];
             if ((flags & 1) != 0 && (s32)other[0x41] != -1 && (flags & 2) == 0 &&
                 strcmp((const char*)((s32)other + 0xD4), (const char*)((s32)img + 0xD4)) != 0) {
@@ -395,7 +385,7 @@ u8 imgDisp_ProjPlane(s32 param_1, int param_2) {
     extern const f32 float_24_80420384;
     extern const f32 float_32_80420388;
     extern const f32 float_neg24_8042038c;
-    u32 mode;
+    s32 mode;
     u32 flags;
     f32 mtx[3][4];
     f32 outMtx[3][4];
@@ -406,21 +396,23 @@ u8 imgDisp_ProjPlane(s32 param_1, int param_2) {
     void* cam;
 
     mode = *(s32*)(param_2 + 0x100);
-    if (mode == 1) {
-        flags = 0x20000;
-        PSMTXIdentity(mtx);
-        GXSetBlendMode(1, 4, 5, 0);
-    } else if ((s32)mode < 1) {
-        if ((s32)mode >= 0) {
+    switch (mode) {
+        case 0:
             return 0;
-        }
-        flags = 0;
-    } else if ((s32)mode < 3) {
-        flags = 0x40000;
-        PSMTXTrans(mtx, float_0_80420370, float_0_80420370, *(f32*)(param_2 + 0x11C));
-        GXSetBlendMode(3, 4, 5, 0);
-    } else {
-        flags = 0;
+        case 1:
+            flags = 0x20000;
+            PSMTXIdentity(mtx);
+            GXSetBlendMode(1, 4, 5, 0);
+            break;
+        case 2:
+            flags = 0x40000;
+            PSMTXTrans(mtx, float_0_80420370, float_0_80420370,
+                       *(f32*)(param_2 + 0x11C));
+            GXSetBlendMode(3, 4, 5, 0);
+            break;
+        default:
+            flags = 0;
+            break;
     }
 
     src[0] = vec3_802c2a98[0];
@@ -489,25 +481,27 @@ u8 imgCapture_Prim(int param_1, int param_2) {
     extern void* smartAlloc(u32, s32);
     extern void* memcpy(void*, void*, u32);
     extern void DCFlushRange(void*, u32);
-    extern void GXInitTexObj(void*, void*, u16, u16, s32, s32, s32, s32);
+    extern void GXInitTexObj(void*, void*, u32, u32, s32, s32, s32, s32);
     extern void GXInitTexObjLOD(void*, s32, s32, f32, f32, f32, s32, s32, s32);
     extern void offscreenGetBoundingBox(s32, void*, void*, void*, void*);
     extern void GXSetTexCopySrc(u32, u32, u32, u32);
-    extern void GXSetTexCopyDst(u16, u16, u32, u32);
+    extern void GXSetTexCopyDst(u32, u32, u32, u32);
     extern void GXSetZMode(s32, s32, s32);
     extern void GXCopyTex(void*, s32);
     extern void GXPixModeSync(void);
     extern const f32 float_0_80420370;
-    u32* part;
     u32* texObj;
     u32* imagePtr;
-    void* alloc;
-    u32 size;
+    u32* captureTexObj;
+    u32* captureImagePtr;
     s32 width;
     s32 height;
     s32 fmt;
-    s32 id;
+    u32 size;
+    register s32 id;
+    register u32* part;
     s32 storageType;
+    void* alloc;
 
     part = (u32*)(param_1 + param_2 * 0x44);
     if ((*part & 4) != 0) {
@@ -523,10 +517,10 @@ u8 imgCapture_Prim(int param_1, int param_2) {
                         height = GXGetTexObjHeight(texObj);
                         fmt = GXGetTexObjFmt(texObj);
                         size = GXGetTexBufferSize(width, height, fmt, 0, 0);
-                        if (part[0x10] == 1) {
+                        if ((s32)part[0x10] == 1) {
                             alloc = smartAlloc(size, 1);
                             part[15] = (u32)alloc;
-                        } else if (part[0x10] == 2) {
+                        } else if ((s32)part[0x10] == 2) {
                             alloc = smartAlloc(size, 0);
                             part[15] = (u32)alloc;
                         }
@@ -546,17 +540,17 @@ u8 imgCapture_Prim(int param_1, int param_2) {
                     *part &= ~0x10;
                 }
             } else {
-                offscreenGetTexObj(id, &texObj, &imagePtr);
-                if (texObj != 0) {
-                    part[7] = texObj[0];
-                    part[8] = texObj[1];
-                    part[9] = texObj[2];
-                    part[10] = texObj[3];
-                    part[11] = texObj[4];
-                    part[12] = texObj[5];
-                    part[13] = texObj[6];
-                    part[14] = texObj[7];
-                    part[15] = (u32)imagePtr;
+                offscreenGetTexObj(id, &captureTexObj, &captureImagePtr);
+                if (captureTexObj != 0) {
+                    part[7] = captureTexObj[0];
+                    part[8] = captureTexObj[1];
+                    part[9] = captureTexObj[2];
+                    part[10] = captureTexObj[3];
+                    part[11] = captureTexObj[4];
+                    part[12] = captureTexObj[5];
+                    part[13] = captureTexObj[6];
+                    part[14] = captureTexObj[7];
+                    part[15] = (u32)captureImagePtr;
                     offscreenGetBoundingBox(id, (void*)((s32)part + 8), (void*)((s32)part + 10),
                                             (void*)((s32)part + 12), (void*)((s32)part + 14));
                     *(u16*)((s32)part + 12) -= *(u16*)((s32)part + 8);
@@ -596,9 +590,9 @@ u8 imgCapture_Prim(int param_1, int param_2) {
                 GXSetTexCopySrc(*(u16*)((s32)part + 8), *(u16*)((s32)part + 10), width, height);
                 GXSetTexCopyDst(width, height, part[5], 0);
                 size = GXGetTexBufferSize(width, height, fmt, 0, 0);
-                if (part[0x10] == 1) {
+                if ((s32)part[0x10] == 1) {
                     alloc = smartAlloc(size, 1);
-                } else if (part[0x10] == 2) {
+                } else if ((s32)part[0x10] == 2) {
                     alloc = smartAlloc(size, 0);
                 } else {
                     alloc = smartAlloc(size, 3);
@@ -697,91 +691,76 @@ void imgAutoRelease(s32 value) {
 }
 
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 s32 imgEntry(s32 name, s32 flag) {
     extern s32 strcmp(const char* a, const char* b);
     extern char* strcpy(char* dst, const char* src);
     extern void PSMTXIdentity(void* mtx);
     extern const f32 float_0_80420370;
+    s32 i;
     s32 count;
     void* entry;
-    s32 i;
-    s32 ret;
-    s32 zero;
-    s32 negOne;
-    s32 six;
 
-    i = 0;
-    count = *(s32*)wp;
-    entry = *(void**)((s32)wp + 4);
-    while (i < count) {
+    for (i = 0, count = *(s32*)wp, entry = *(void**)((s32)wp + 4);
+         i < count;
+         i++, entry = (void*)((s32)entry + 0x158)) {
         if ((*(u32*)((s32)entry + 0xCC) & 1) != 0 &&
             *(s32*)((s32)entry + 0xD0) == flag &&
             strcmp((char*)((s32)entry + 0xD4), (char*)name) == 0) {
             break;
         }
-        i++;
-        entry = (void*)((s32)entry + 0x158);
     }
 
-    ret = 0;
-    entry = *(void**)((s32)wp + 4);
-    if (count > 0) {
-        do {
-            if ((*(u32*)((s32)entry + 0xCC) & 1) == 0) {
-                break;
-            }
-            ret++;
-            entry = (void*)((s32)entry + 0x158);
-            count--;
-        } while (count != 0);
+    for (i = 0, entry = *(void**)((s32)wp + 4);
+         i < count;
+         i++, entry = (void*)((s32)entry + 0x158)) {
+        if ((*(u32*)((s32)entry + 0xCC) & 1) == 0) {
+            break;
+        }
     }
 
     *(u32*)((s32)entry + 0xCC) = 9;
     *(s32*)((s32)entry + 0xD0) = flag;
     strcpy((char*)((s32)entry + 0xD4), (char*)name);
 
-    zero = 0;
-    negOne = -1;
-    six = 6;
-    *(s32*)((s32)entry + 0x104) = negOne;
-    *(s32*)((s32)entry + 0x108) = zero;
-    *(u16*)((s32)entry + 0xE4) = zero;
-    *(u16*)((s32)entry + 0xE6) = zero;
+    *(s32*)((s32)entry + 0x104) = -1;
+    *(s32*)((s32)entry + 0x108) = 0;
+    *(u16*)((s32)entry + 0xE4) = 0;
+    *(u16*)((s32)entry + 0xE6) = 0;
     *(f32*)((s32)entry + 0xE8) = float_0_80420370;
     *(f32*)((s32)entry + 0xEC) = float_0_80420370;
     *(f32*)((s32)entry + 0xFC) = float_0_80420370;
     *(f32*)((s32)entry + 0x118) = float_0_80420370;
-    *(s32*)((s32)entry + 0x100) = zero;
+    *(s32*)((s32)entry + 0x100) = 0;
     *(f32*)((s32)entry + 0x11C) = float_0_80420370;
     PSMTXIdentity((void*)((s32)entry + 0x120));
 
-    *(s32*)((s32)entry + 0x150) = six;
+    *(s32*)((s32)entry + 0x150) = 6;
     *(s32*)((s32)entry + 0x154) = 4;
-    *(s32*)((s32)entry + 0x0) = zero;
-    *(u16*)((s32)entry + 0x4) = zero;
-    *(u16*)((s32)entry + 0x6) = zero;
-    *(s32*)((s32)entry + 0x10) = negOne;
-    *(s32*)((s32)entry + 0x14) = six;
-    *(s32*)((s32)entry + 0x18) = six;
-    *(s32*)((s32)entry + 0x40) = zero;
-    *(s32*)((s32)entry + 0x44) = zero;
-    *(u16*)((s32)entry + 0x48) = zero;
-    *(u16*)((s32)entry + 0x4A) = zero;
-    *(s32*)((s32)entry + 0x54) = negOne;
-    *(s32*)((s32)entry + 0x58) = six;
-    *(s32*)((s32)entry + 0x5C) = six;
-    *(s32*)((s32)entry + 0x84) = zero;
-    *(s32*)((s32)entry + 0x88) = zero;
-    *(u16*)((s32)entry + 0x8C) = zero;
-    *(u16*)((s32)entry + 0x8E) = zero;
-    *(s32*)((s32)entry + 0x98) = negOne;
-    *(s32*)((s32)entry + 0x9C) = six;
-    *(s32*)((s32)entry + 0xA0) = six;
-    *(s32*)((s32)entry + 0xC8) = zero;
+    *(s32*)((s32)entry + 0x0) = 0;
+    *(u16*)((s32)entry + 0x4) = 0;
+    *(u16*)((s32)entry + 0x6) = 0;
+    *(s32*)((s32)entry + 0x10) = -1;
+    *(s32*)((s32)entry + 0x14) = 6;
+    *(s32*)((s32)entry + 0x18) = 6;
+    *(s32*)((s32)entry + 0x40) = 0;
+    *(s32*)((s32)entry + 0x44) = 0;
+    *(u16*)((s32)entry + 0x48) = 0;
+    *(u16*)((s32)entry + 0x4A) = 0;
+    *(s32*)((s32)entry + 0x54) = -1;
+    *(s32*)((s32)entry + 0x58) = 6;
+    *(s32*)((s32)entry + 0x5C) = 6;
+    *(s32*)((s32)entry + 0x84) = 0;
+    *(s32*)((s32)entry + 0x88) = 0;
+    *(u16*)((s32)entry + 0x8C) = 0;
+    *(u16*)((s32)entry + 0x8E) = 0;
+    *(s32*)((s32)entry + 0x98) = -1;
+    *(s32*)((s32)entry + 0x9C) = 6;
+    *(s32*)((s32)entry + 0xA0) = 6;
+    *(s32*)((s32)entry + 0xC8) = 0;
     *(s32*)((s32)entry + 0x9C) = 0x27;
     *(s32*)((s32)entry + 0xA0) = 1;
-    return ret;
+    return i;
 }
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -954,7 +933,7 @@ u8 imgShadowDisp(s32 param_1, void* param_2) {
     extern void animSetPaperTexMtx(void* m0, void* m1, void* m2);
     extern void animSetPaperTexObj(void* t0, void* t1, void* t2, void* d0, void* d1, void* d2, s32 flag0, s32 flag1);
     extern void animPoseSetAnim(s32 poseId, void* animName, s32 force);
-    extern void animPoseSetStartTime(s32 poseId, s32 mode, s32 start, s32 end);
+    extern void animPoseSetStartTime(s32 poseId, s64 startTime);
     extern void animPoseMain(s32 poseId);
     extern void animPoseSetMaterialLightFlagOn(s32 poseId, u32 flag);
     extern f32 animPoseGetLoopTimes(s32 poseId);
@@ -971,33 +950,38 @@ u8 imgShadowDisp(s32 param_1, void* param_2) {
     extern const f32 float_32_80420388;
     extern const f32 float_neg24_8042038c;
 
-    u32* img;
-    void* mtxPtrs[3];
-    void* texData[3];
+    typedef struct ImageShadowView {
+        u32 flags;
+        u16 x, y, captureX, captureY, width, height;
+        s32 field10, field14, field18;
+        u8 texObj[0x20];
+        void* texData;
+        s32 hasData;
+    } ImageShadowView;
+    typedef struct ImageEntryView {
+        ImageShadowView shadows[3];
+        u32 flags;
+        s32 type;
+        char name[16];
+        u16 width, height;
+        f32 x, y;
+        f32 point[3];
+        f32 order;
+        s32 shadowId, poseId;
+        void* animName;
+        s32 field10C;
+        s64 startTime;
+        f32 loopTimes;
+    } ImageEntryView;
     void* texObjs[3];
+    void* texData[3];
+    void* mtxPtrs[3];
     f32 drawMtx[3][4];
     f32 tmpMtx[3][4];
     f32 scaleMtx[3][4];
     f32 transMtx[3][4];
     f32 texMtx[3][3][4];
-    s32 firstPart;
-    s32 i;
-    u32* part;
-    void** texObjOut;
-    void** texDataOut;
-    void** mtxOut;
-    f32 (*curMtx)[4];
     u32 flags;
-    f32 partX;
-    f32 partY;
-    f32 partW;
-    f32 partH;
-    f32 srcX;
-    f32 srcY;
-    f32 srcW;
-    f32 srcH;
-    s32 poseId;
-    void* animName;
     void* modeObj;
     f32 one;
     f32 zero;
@@ -1011,19 +995,19 @@ u8 imgShadowDisp(s32 param_1, void* param_2) {
     f32 renderH;
     s32 shadowType;
 
+    s32 i = 0;
+    s32 firstPart = -1;
+    ImageEntryView* img = (ImageEntryView*)param_2;
+    void** mtxOut = mtxPtrs;
+    f32 (*curMtx)[4] = texMtx[0];
+    void** texDataOut = texData;
+    void** texObjOut = texObjs;
+    ImageShadowView* part = img->shadows;
+
     (void)param_1;
 
-    img = (u32*)param_2;
-    texObjOut = texObjs;
-    texDataOut = texData;
-    curMtx = texMtx[0];
-    part = img;
-    mtxOut = mtxPtrs;
-    firstPart = -1;
-    i = 0;
-
     do {
-        flags = part[0];
+        flags = part->flags;
         if ((flags & 4) == 0) {
             *texObjOut = 0;
             *texDataOut = 0;
@@ -1031,28 +1015,28 @@ u8 imgShadowDisp(s32 param_1, void* param_2) {
             *texObjOut = 0;
             *texDataOut = 0;
         } else {
-            if ((img[0x33] & 4) != 0) {
-                srcX = (f32)*(u16*)((s32)part + 8);
-                srcY = (f32)*(u16*)((s32)part + 0xA);
-                srcW = (f32)*(u16*)((s32)part + 0xC);
-                srcH = (f32)*(u16*)((s32)part + 0xE);
+            f32 srcH, srcW, srcY, srcX;
+            if ((img->flags & 4) != 0) {
+                srcX = (f32)part->captureX;
+                srcY = (f32)part->captureY;
+                srcW = (f32)part->width;
+                srcH = (f32)part->height;
             } else {
-                srcX = (f32)*(u16*)((s32)part + 4);
-                srcY = (f32)*(u16*)((s32)part + 6);
-                srcW = (f32)*(u16*)((s32)img + 0xE4);
-                srcH = (f32)*(u16*)((s32)img + 0xE6);
+                srcX = (f32)part->x;
+                srcY = (f32)part->y;
+                srcW = (f32)img->width;
+                srcH = (f32)img->height;
             }
 
-            partX = (f32)*(u16*)((s32)part + 8);
-            partY = (f32)*(u16*)((s32)part + 0xA);
-            partW = (f32)*(u16*)((s32)part + 0xC);
-            partH = (f32)*(u16*)((s32)part + 0xE);
-
-            PSMTXTrans(transMtx, -((partX - srcX) / partW), -((partY - srcY) / partH), float_0_80420370);
-            PSMTXScale(scaleMtx, srcW / partW, srcH / partH, float_1_80420374);
+            PSMTXTrans(transMtx,
+                        (-((f32)part->captureX - srcX)) / (f32)part->width,
+                        (-((f32)part->captureY - srcY)) / (f32)part->height,
+                        float_0_80420370);
+            PSMTXScale(scaleMtx, srcW / (f32)part->width,
+                        srcH / (f32)part->height, float_1_80420374);
             PSMTXConcat(transMtx, scaleMtx, curMtx);
-            *texObjOut = (void*)((s32)part + 0x1C);
-            *texDataOut = *(void**)((s32)part + 0x3C);
+            *texObjOut = part->texObj;
+            *texDataOut = part->texData;
         }
 
         if (*texObjOut != 0) {
@@ -1069,32 +1053,28 @@ u8 imgShadowDisp(s32 param_1, void* param_2) {
         texDataOut++;
         curMtx += 3;
         mtxOut++;
-        part += 0x11;
+        part++;
     } while (i < 3);
 
     if (firstPart == -1) {
-        img[0x33] |= 0x10000000;
+        img->flags |= 0x10000000;
     } else {
-        img[0x33] &= 0xEFFFFFFF;
+        img->flags &= 0xEFFFFFFF;
         animSetPaperTexMtx(mtxPtrs[0], mtxPtrs[1], mtxPtrs[2]);
         animSetPaperTexObj(texObjs[0], texObjs[1], texObjs[2],
                            texData[0], texData[1], texData[2],
-                           ((-((s32)img[4]) - 1) | ((s32)img[4] + 1)) >> 31,
-                           ((-((s32)img[0x15]) - 1) | ((s32)img[0x15] + 1)) >> 31);
+                           ((u32)(-img->shadows[0].field10 - 1) | (u32)(img->shadows[0].field10 + 1)) >> 31,
+                           ((u32)(-img->shadows[1].field10 - 1) | (u32)(img->shadows[1].field10 + 1)) >> 31);
 
-        poseId = (s32)img[0x41];
-        animName = (void*)img[0x42];
-        if (animName != 0) {
-            animPoseSetAnim(poseId, animName, 0);
-        } else {
-            animName = 0;
+        if (img->animName != 0) {
+            animPoseSetAnim(img->poseId, img->animName, 0);
         }
-        animPoseSetStartTime(poseId, (s32)animName, img[0x44], img[0x45]);
-        animPoseMain(poseId);
-        animPoseSetMaterialLightFlagOn(poseId, 1);
-        *(f32*)((s32)img + 0x118) = animPoseGetLoopTimes(poseId);
+        animPoseSetStartTime(img->poseId, img->startTime);
+        animPoseMain(img->poseId);
+        animPoseSetMaterialLightFlagOn(img->poseId, 1);
+        img->loopTimes = animPoseGetLoopTimes(img->poseId);
 
-        flags = img[0x33];
+        flags = img->flags;
         if ((flags & 8) != 0) {
             one = float_1_80420374;
             zero = float_0_80420370;
@@ -1103,26 +1083,27 @@ u8 imgShadowDisp(s32 param_1, void* param_2) {
             zero = float_0_80420370;
         }
 
-        part = img + (firstPart * 0x11);
         if ((flags & 4) != 0) {
-            drawX = (f32)*(u16*)((s32)part + 8);
-            drawY = (f32)*(u16*)((s32)part + 0xA);
-            drawW = (f32)*(u16*)((s32)part + 0xC);
-            drawH = (f32)*(u16*)((s32)part + 0xE);
+            ImageShadowView* drawPart = &img->shadows[firstPart];
+            drawX = (f32)drawPart->captureX;
+            drawY = (f32)drawPart->captureY;
+            drawW = (f32)drawPart->width;
+            drawH = (f32)drawPart->height;
         } else {
-            drawX = (f32)*(u16*)((s32)part + 4);
-            drawY = (f32)*(u16*)((s32)part + 6);
-            drawW = (f32)*(u16*)((s32)img + 0xE4);
-            drawH = (f32)*(u16*)((s32)img + 0xE6);
+            ImageShadowView* drawPart = &img->shadows[firstPart];
+            drawX = (f32)drawPart->x;
+            drawY = (f32)drawPart->y;
+            drawW = (f32)img->width;
+            drawH = (f32)img->height;
         }
 
         modeObj = DEMOGetRenderModeObj();
         renderH = (f32)*(u16*)((s32)modeObj + 6);
-        screenY = float_48_8042037c * (-(*(f32*)((s32)img + 0xEC) + drawY) / renderH);
+        screenY = float_48_8042037c * (-(img->y + drawY) / renderH);
 
         modeObj = DEMOGetRenderModeObj();
         renderW = (f32)*(u16*)((s32)modeObj + 4);
-        screenX = float_64_80420378 * ((*(f32*)((s32)img + 0xE8) + drawX) / renderW);
+        screenX = float_64_80420378 * ((img->x + drawX) / renderW);
 
         PSMTXTrans(drawMtx, screenX, screenY, zero);
         PSMTXTrans(tmpMtx, float_neg32_80420380, float_24_80420384, float_0_80420370);
@@ -1139,10 +1120,10 @@ u8 imgShadowDisp(s32 param_1, void* param_2) {
         PSMTXTrans(tmpMtx, float_32_80420388, float_neg24_8042038c, float_0_80420370);
         PSMTXConcat(drawMtx, tmpMtx, drawMtx);
 
-        animPoseDrawMtx(poseId, drawMtx, 1, float_0_80420370, one);
-        animPoseDrawMtx(poseId, drawMtx, 2, float_0_80420370, one);
+        animPoseDrawMtx(img->poseId, drawMtx, 1, float_0_80420370, one);
+        animPoseDrawMtx(img->poseId, drawMtx, 2, float_0_80420370, one);
 
-        shadowType = *(s32*)((s32)img + 0x100);
+        shadowType = img->shadowId;
         switch (shadowType) {
             case 1:
                 shadowProjShadowDrawCountUp();

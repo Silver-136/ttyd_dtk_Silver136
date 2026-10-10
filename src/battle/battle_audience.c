@@ -21,9 +21,67 @@ extern char* strcpy(char* dst, const char* src);
 extern void psndSFX_pit(s32 sfxId, s32 pitch);
 extern void* BattleGetUnitPartsPtr(s32 unitIdx, s32 partIdx);
 extern void* memcpy(void* dst, const void* src, u32 size);
+extern s32 weaponGetPowerDefault();
 
 extern const char str_btl_msg_audience_pun_802f9e28[];
+extern const char str_btl_msg_audience_pun_802f9e48[];
+extern const char str_btl_msg_audience_pan_802f9e68[];
+extern const char str_btl_msg_audience_hea_802f9e88[];
 extern s32 haiti_data[];
+
+typedef struct EntryVec { f32 x, y, z; } EntryVec;
+
+const char str_btl_msg_audience_pun_802f9e28[] = "btl_msg_audience_puni_escape";
+const char str_btl_msg_audience_pun_802f9e48[] = "btl_msg_audience_puni_meeting";
+const char str_btl_msg_audience_pan_802f9e68[] = "btl_msg_audience_pansy_sleep";
+const char str_btl_msg_audience_hea_802f9e88[] = "btl_msg_audience_heavybomb_dynamite";
+const f32 R_audience_delta_multiplier[65] = {
+    8.0f, 11.0f, 14.0f, 17.0f, 20.0f, 23.0f, 26.0f, 29.0f, 32.0f, 35.0f, 38.0f, 41.0f, 44.0f, 47.0f, 50.0f, 53.0f, 56.0f, 59.0f, 62.0f, 65.0f, 68.0f, 71.0f, 74.0f, 77.0f, 80.0f, 83.0f, 86.0f, 89.0f, 92.0f, 95.0f, 98.0f, 101.0f, 104.0f, 107.0f, 110.0f, 113.0f, 116.0f, 119.0f, 122.0f, 125.0f, 128.0f, 131.0f, 134.0f, 137.0f, 140.0f, 143.0f, 146.0f, 149.0f, 152.0f, 155.0f, 158.0f, 161.0f, 164.0f, 167.0f, 170.0f, 173.0f, 176.0f, 179.0f, 182.0f, 185.0f, 188.0f, 191.0f, 194.0f, 197.0f, 200.0f
+};
+const s32 R_num_audience_type_weights[11] = { 20, 40, 20, 5, 3, 2, 1, 1, 1, 1, 1 };
+const f32 vec3_802f9fdc[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9fe8[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802f9ff4[3] = { 0.899999976f, 0.899999976f, 0.899999976f };
+const f32 vec3_802fa000[3] = { 0.75f, 0.75f, 0.75f };
+const f32 vec3_802fa00c[3] = { -96.0f, 106.0f, 0.0f };
+const f32 vec3_802fa018[3] = { 0.0f, 0.0f, -1.0f };
+const f32 dat_802fa024[32] = {
+    0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.07500005f, 0.0f, 0.075000003f, 1.0f, 0.075000003f, 1.0f, 1.07500005f, 0.0f, 0.075000003f, 0.0f, 1.07500005f, 1.0f, 1.07500005f, 0.0f, 1.07500005f
+};
+const f32 vec3_802fa0a4[3] = { 0.0f, 0.0f, 0.0f };
+const EntryVec vec3_802fa0b0 = { 0.0f, 0.0f, 0.0f };
+const EntryVec vec3_802fa0bc = { 0.0f, 0.0f, -1.0f };
+const EntryVec vec3_802fa0c8 = { 0.0f, 0.0f, 0.0f };
+const EntryVec vec3_802fa0d4 = { 0.0f, 0.0f, 0.0f };
+const EntryVec vec3_802fa0e0 = { 1.0f, 1.0f, 1.0f };
+const EntryVec vec3_802fa0ec = { 1.0f, 1.0f, 1.0f };
+const EntryVec vec3_802fa0f8 = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802fa104[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802fa110[3] = { 0.0f, 0.0f, 0.0f };
+const f32 vec3_802fa11c[3] = { 1.0f, 1.0f, 1.0f };
+const f32 vec3_802fa128[3] = { 0.0f, 0.0f, 0.0f };
+
+extern void btlevtcmd_AnnounceMessage(void);
+
+u32 msg_puni_all_escape[9] = {
+    0x0006005B, (u32)btlevtcmd_AnnounceMessage, 0, 0, 0xFFFFFF1F,
+    (u32)(char*)str_btl_msg_audience_pun_802f9e28, 0x00000078, 0x00000002, 0x00000001,
+};
+
+u32 msg_puni_all_enter[9] = {
+    0x0006005B, (u32)btlevtcmd_AnnounceMessage, 0, 0, 0xFFFFFF1F,
+    (u32)(char*)str_btl_msg_audience_pun_802f9e48, 0x00000078, 0x00000002, 0x00000001,
+};
+
+u32 msg_pansy_sing[9] = {
+    0x0006005B, (u32)btlevtcmd_AnnounceMessage, 0, 0, 0xFFFFFF1F,
+    (u32)(char*)str_btl_msg_audience_pan_802f9e68, 0x00000078, 0x00000002, 0x00000001,
+};
+
+u32 msg_heavy_bomb_fire[9] = {
+    0x0006005B, (u32)btlevtcmd_AnnounceMessage, 0, 0, 0xFFFFFF1F,
+    (u32)(char*)str_btl_msg_audience_hea_802f9e88, 0x00000078, 0x00000002, 0x00000001,
+};
 
 extern void* pouchGetPtr(void);
 extern s32 unk_801a21e0(void);
@@ -286,7 +344,7 @@ void BattleAudience_ActInit(void) {
 }
 
 u8 BattleAudience_PerAct(void) {
-    extern void* msg_puni_all_escape;
+    extern u32 msg_puni_all_escape[9];
     extern const f32 float_neg5_80424a80;
     extern const f32 float_15_80424a64;
     extern const f32 float_neg15_80424a84;
@@ -496,10 +554,10 @@ void BattleAudience_PerPhase(int phaseId) {
     }
 }
 s32 BattleAudience_CheckReactionPerPhase(void) {
-    extern void* msg_heavy_bomb_fire;
-    extern void* msg_puni_all_escape;
-    extern void* msg_puni_all_enter;
-    extern void* msg_pansy_sing;
+    extern u32 msg_heavy_bomb_fire[9];
+    extern u32 msg_puni_all_escape[9];
+    extern u32 msg_puni_all_enter[9];
+    extern u32 msg_pansy_sing[9];
     u8* base;
     u8* member;
     s32* state;
@@ -1141,8 +1199,8 @@ void BattleAudienceSettingAudience(void) {
     extern void* memset(void*, s32, u32);
     extern void* memcpy(void*, const void*, u32);
     extern const u8 audience_kind[];
-    extern const f32 R_audience_delta_multiplier[];
-    extern const s32 R_num_audience_type_weights[];
+    extern const f32 R_audience_delta_multiplier[65];
+    extern const s32 R_num_audience_type_weights[11];
     extern f32 float_0p5_80424a78;
     u8* base;
     u8* pouch;
@@ -1651,10 +1709,10 @@ void BattleAudienceItemCtrlProcess(void) {
     extern void BattleAudience_SetPresentTargetUnitId(s32 unitId);
     extern void BattleAudience_SetPresentItemNo(s32 itemNo);
     extern s32 BattleAudience_GetPresentItemType(void);
-    extern const u8 weapon_data_akikan[];
-    extern const u8 weapon_data_brick[];
-    extern const u8 weapon_data_bone[];
-    extern const u8 weapon_data_hammer[];
+    extern u32 weapon_data_akikan[];
+    extern u32 weapon_data_brick[];
+    extern u32 weapon_data_bone[];
+    extern u32 weapon_data_hammer[];
     extern const f32 float_neg0p2_80424a74;
     extern const f32 float_1p5_804249e0;
     extern const u8 audience_kind[];
@@ -2100,8 +2158,8 @@ s32 BattleAudienceApSrcEntry(void) {
     typedef struct { f32 x, y, z; } EntryVec;
     extern void PSMTXMultVec(void* mtx, void* src, void* dst);
     extern void PSMTX44MultVec(void* mtx, void* src, void* dst);
-    extern const f32 vec3_802fa000[];
-    extern const f32 vec3_802fa00c[];
+    extern const f32 vec3_802fa000[3];
+    extern const f32 vec3_802fa00c[3];
     extern const f32 float_10_80424a04;
     extern const f32 float_240_80424a40;
     extern const f32 float_304_80424a3c;
@@ -2698,10 +2756,9 @@ s32 BattleAudience_Entry(s32 memberIdx, s32 audienceKind, s32 status) {
 
 
 u8 BattleAudience_Entry_Sub(u32 memberIdx, u32 audienceKind, u8 status) {
-    typedef struct EntryVec { f32 x, y, z; } EntryVec;
     extern void* PTR_audience_anim_kinopio_803b4de8[];
-    extern EntryVec vec3_802fa0b0, vec3_802fa0bc, vec3_802fa0c8;
-    extern EntryVec vec3_802fa0d4, vec3_802fa0e0, vec3_802fa0ec, vec3_802fa0f8;
+    extern const EntryVec vec3_802fa0b0, vec3_802fa0bc, vec3_802fa0c8;
+    extern const EntryVec vec3_802fa0d4, vec3_802fa0e0, vec3_802fa0ec, vec3_802fa0f8;
     u8* member;
     u8* stage;
     s32 index = (s32)memberIdx;
@@ -4540,7 +4597,7 @@ void BattleAudienceSoundZZZ(s32 kind) {
     sound = BattleAudienceSoundGetPtr(0x10);
     BattleAudienceSoundStop(0x10);
 
-    BattleAudienceSound2(str_SFX_AUDIENCE_ZZZ1_802fa3c4, kind);
+    BattleAudienceSound2("SFX_AUDIENCE_ZZZ1", kind);
 
     if (*(s32*)((s32)sound + 0x4) != -1) {
         BA_SOUND_INIT(sound, -1, 0);
@@ -4554,7 +4611,7 @@ void BattleAudienceSoundSing(s32 kind) {
     BattleAudienceSoundStop(0x11);
 
     *(s32*)((s32)sound + 0x4) = BattleAudienceSound2(
-        str_SFX_AUDIENCE_PANSY_S_802fa3a8,
+        "SFX_AUDIENCE_PANSY_SINGING1",
         kind
     );
 
@@ -4580,7 +4637,7 @@ void BattleAudienceSoundShell(s32 kind) {
     BattleAudienceSoundStop(soundId);
 
     *(s32*)((s32)sound + 0x4) = BattleAudienceSound2(
-        str_SFX_AUDIENCE_SHELL_T_802fa388,
+        "SFX_AUDIENCE_SHELL_TRANSFORM1",
         kind
     );
 
@@ -4596,7 +4653,7 @@ void BattleAudienceSoundBombIgnite(s32 kind, s32 start, s32 frames) {
     BattleAudienceSoundStop(0x14);
 
     *(s32*)((s32)sound + 0x4) = BattleAudienceSound2(
-        str_SFX_AUDIENCE_BOMB_RE_802fa36c,
+        "SFX_AUDIENCE_BOMB_READY1",
         kind
     );
 
@@ -4622,7 +4679,7 @@ void BattleAudienceSoundBombFire(s32 kind) {
     BattleAudienceSoundStop(soundId);
 
     *(s32*)((s32)sound + 0x4) = BattleAudienceSound2(
-        str_SFX_AUDIENCE_BOMB_BU_802fa350,
+        "SFX_AUDIENCE_BOMB_BURST1",
         kind
     );
 
@@ -4638,7 +4695,7 @@ void BattleAudienceSoundBombFire(s32 kind) {
     BattleAudienceSoundStop(0x17);
 
     *(s32*)((s32)sound + 0x4) = BattleAudienceSound2(
-        str_SFX_AUDIENCE_PAKU_EA_802fa338,
+        "SFX_AUDIENCE_PAKU_EAT1",
         kind
     );
 
@@ -5235,15 +5292,17 @@ void BattleAudience_Case_FallObject_Aud(int memberIdx, u8 objectType) {
     base = BattleAudienceBaseGetPtr();
     {
         const s32 nearOffsets[8][2] = {
-            {-1, -1}, {0, -1}, {1, -1}, {-1, 0},
-            {1, 0}, {-1, 1}, {0, 1}, {1, 1}
+            {-1, 1}, {0, 1}, {1, 1}, {-1, 0},
+            {1, 0}, {-1, -1}, {0, -1}, {1, -1}
         };
         const s32 wideOffsets[24][2] = {
-            {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2},
-            {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1},
-            {-2, 0}, {-1, 0}, {1, 0}, {2, 0},
+            {0, 3},
+            {-1, 2}, {0, 2}, {1, 2},
             {-2, 1}, {-1, 1}, {0, 1}, {1, 1}, {2, 1},
-            {-2, 2}, {-1, 2}, {0, 2}, {1, 2}, {2, 2}
+            {-3, 0}, {-2, 0}, {-1, 0}, {1, 0}, {2, 0}, {3, 0},
+            {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1},
+            {-1, -2}, {0, -2}, {1, -2},
+            {0, -3}
         };
 
         if (objectType == 6) {
@@ -5371,3 +5430,78 @@ void BattleAudience_SetPresentItemType(s32 itemType) {
 s32 BattleAudience_GetPresentItemType(void) {
     return *(s32*)((s32)BattleAudienceBaseGetPtr() + 0x137E8);
 }
+
+
+/* Target-backed audience item weapon records and seating-count tables. */
+u32 weapon_data_akikan[48] = {
+    0x00000000, 0x00000000, 0x000000EC, 0x00000000, 0x64000002, 0x00000000, 0x00000000, (u32)weaponGetPowerDefault,
+    0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x01100060, 0x20000000, 0x00000302, 0x00000000, 0x00000048, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000064, 0x00000000, 0x00000000,
+};
+
+u32 weapon_data_brick[48] = {
+    0x00000000, 0x00000000, 0x000000ED, 0x00000000, 0x64000002, 0x00000000, 0x00000000, (u32)weaponGetPowerDefault,
+    0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x01100060, 0x20000000, 0x00000302, 0x00000000, 0x00000048, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000064, 0x00000000, 0x00000000,
+};
+
+u32 weapon_data_bone[48] = {
+    0x00000000, 0x00000000, 0x000000EE, 0x00000000, 0x64000002, 0x00000000, 0x00000000, (u32)weaponGetPowerDefault,
+    0x00000001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x01100060, 0x20000000, 0x00000302, 0x00000000, 0x00000048, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000064, 0x00000000, 0x00000000,
+};
+
+u32 weapon_data_hammer[48] = {
+    0x00000000, 0x00000000, 0x000000EF, 0x00000000, 0x64000002, 0x00000000, 0x00000000, (u32)weaponGetPowerDefault,
+    0x00000002, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x01100060, 0x20000000, 0x00000302, 0x00000000, 0x00000048, 0x000007FF, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000064, 0x00000000, 0x00000000,
+};
+
+s32 haiti_data[40] = {
+    18, 16, 16, 0, 0, 0, 0, 0, 0, 0,
+    18, 18, 18, 16, 16, 14, 0, 0, 0, 0,
+    20, 20, 20, 20, 18, 18, 18, 16, 0, 0,
+    20, 20, 20, 20, 20, 20, 20, 20, 20, 20,
+};
+
+s32 unk_8039cc20[40] = {
+    12, 14, 14, 0, 0, 0, 0, 0, 0, 0,
+    12, 14, 14, 16, 16, 14, 0, 0, 0, 0,
+    12, 14, 14, 20, 18, 18, 18, 16, 0, 0,
+    12, 14, 14, 20, 20, 20, 20, 20, 20, 20,
+};
+
+/* Late target-backed .sdata2 prefix; consumers above retain their existing extern views. */
+const u32 dat_80424978 = 0xFFFFFF00;
+const u32 dat_8042497c = 0xFFFFFFCF;
+const u32 dat_80424980 = 0xFFFFFFFF;
+const f32 float_neg0p05_80424984 = -0.05f;
+const f32 float_0_80424988 = 0.0f;
+const f32 float_0p02_8042498c = 0.02f;
+const f32 float_1_80424990 = 1.0f;
+const f32 float_0p05_80424994 = 0.05f;
+const f32 float_0p01_80424998 = 0.01f;
+const f32 float_5_8042499c = 5.0f;
+const f32 float_0p15_804249a0 = 0.15f;
+const f32 float_neg0p1_804249a4 = -0.1f;
+const f32 float_neg0p2_804249a8 = -0.2f;
+const f32 float_0p25_804249ac = 0.25f;
+const f32 float_neg0p25_804249b0 = -0.25f;
+const f32 float_63_804249b4 = 63.0f;
+const f32 float_200_804249b8 = 200.0f;
+const f32 float_100_804249bc = 100.0f;
+const f32 float_26_804249c0 = 26.0f;
+const f32 float_250_804249c4 = 250.0f;
+const f32 float_75_804249c8 = 75.0f;

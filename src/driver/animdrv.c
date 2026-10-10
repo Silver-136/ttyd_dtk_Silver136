@@ -1,10 +1,234 @@
 #include "driver/animdrv.h"
 
+u32 gap_08_8041E8A4_sbss;
+void* g_modeling_mtx;
+s32 g_modeling_mtx_lv;
+
+/* Exact target-backed animdrv .sdata2 control-word prefix. */
+__declspec(section ".sdata2") u32 dat_8041fb08 = 0x0000002F;
+__declspec(section ".sdata2") u32 dat_8041fb0c = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041fb10 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041fb14 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041fb18 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041fb1c = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041fb20 = 0xFFFFFFFF;
+
+
+/* Exact target-backed Vivian / Smorg animation data foundation. */
+f32 _vivihimoData[768] = {
+    0.0f, 0.8f, 1.2f, 0.8f, 0.0f, 0.0f, 0.8f, 0.7f,
+    0.5f, 0.7f, 0.4f, 0.7f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.2f, 1.0f, 0.0f, 0.0f,
+    0.2f, 0.8f, 0.0f, 0.8f, 0.0f, 0.8f, 0.0f, 0.0f,
+    0.0f, 0.8f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.8f, 0.0f, 0.8f, 0.0f, 0.8f, 1.0f, 1.0f,
+    0.0f, 0.8f, 0.9f, 0.7f, 0.6f, 0.7f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f
+};
+
+const char str_joint_00_802c0d18[9] __attribute__ ((aligned(4))) = "joint_00";
+const char str_jointdai1_A01_802c0d24[14] __attribute__ ((aligned(4))) = "jointdai1_A01";
+const char str_jointdai1_A02_802c0d34[14] __attribute__ ((aligned(4))) = "jointdai1_A02";
+const char str_jointdai1_A03_802c0d44[14] __attribute__ ((aligned(4))) = "jointdai1_A03";
+const char str_jointdai1_A04_802c0d54[14] __attribute__ ((aligned(4))) = "jointdai1_A04";
+const char str_jointdai1_A05_802c0d64[14] __attribute__ ((aligned(4))) = "jointdai1_A05";
+const char str_jointdai1_B01_802c0d74[14] __attribute__ ((aligned(4))) = "jointdai1_B01";
+const char str_jointdai1_B02_802c0d84[14] __attribute__ ((aligned(4))) = "jointdai1_B02";
+const char str_jointdai1_B03_802c0d94[14] __attribute__ ((aligned(4))) = "jointdai1_B03";
+const char str_jointdai1_B04_802c0da4[14] __attribute__ ((aligned(4))) = "jointdai1_B04";
+const char str_jointdai1_B05_802c0db4[14] __attribute__ ((aligned(4))) = "jointdai1_B05";
+const char str_jointdai1_C01_802c0dc4[14] __attribute__ ((aligned(4))) = "jointdai1_C01";
+const char str_jointdai1_C02_802c0dd4[14] __attribute__ ((aligned(4))) = "jointdai1_C02";
+const char str_jointdai1_C03_802c0de4[14] __attribute__ ((aligned(4))) = "jointdai1_C03";
+const char str_jointdai1_C04_802c0df4[14] __attribute__ ((aligned(4))) = "jointdai1_C04";
+const char str_jointdai1_C05_802c0e04[14] __attribute__ ((aligned(4))) = "jointdai1_C05";
+const char str_jointdai2_01_802c0e14[13] __attribute__ ((aligned(4))) = "jointdai2_01";
+const char str_jointdai2_02_802c0e24[13] __attribute__ ((aligned(4))) = "jointdai2_02";
+const char str_jointdai2_03_802c0e34[13] __attribute__ ((aligned(4))) = "jointdai2_03";
+const char str_jointdai2_04_802c0e44[13] __attribute__ ((aligned(4))) = "jointdai2_04";
+const char str_jointdai2_05_802c0e54[13] __attribute__ ((aligned(4))) = "jointdai2_05";
+const char str_jointdai2_06_802c0e64[13] __attribute__ ((aligned(4))) = "jointdai2_06";
+const char str_jointdai2_07_802c0e74[13] __attribute__ ((aligned(4))) = "jointdai2_07";
+const char str_jointdai2_upper01_802c0e84[18] __attribute__ ((aligned(4))) = "jointdai2_upper01";
+const char str_jointdai2_upper02_802c0e98[18] __attribute__ ((aligned(4))) = "jointdai2_upper02";
+const char str_jointdai2_upper03_802c0eac[18] __attribute__ ((aligned(4))) = "jointdai2_upper03";
+const char str_jointdai2_upper04_802c0ec0[18] __attribute__ ((aligned(4))) = "jointdai2_upper04";
+const char str_jointdai2_lower01_802c0ed4[18] __attribute__ ((aligned(4))) = "jointdai2_lower01";
+const char str_jointdai2_lower02_802c0ee8[18] __attribute__ ((aligned(4))) = "jointdai2_lower02";
+const char str_jointdai2_lower03_802c0efc[18] __attribute__ ((aligned(4))) = "jointdai2_lower03";
+const char str_jointdai2_lower04_802c0f10[18] __attribute__ ((aligned(4))) = "jointdai2_lower04";
+const char str_jointasi_A01_802c0f24[13] __attribute__ ((aligned(4))) = "jointasi_A01";
+const char str_jointasi_A02_802c0f34[13] __attribute__ ((aligned(4))) = "jointasi_A02";
+const char str_jointasi_A03_802c0f44[13] __attribute__ ((aligned(4))) = "jointasi_A03";
+const char str_jointasi_A04_802c0f54[13] __attribute__ ((aligned(4))) = "jointasi_A04";
+const char str_jointasi_B01_802c0f64[13] __attribute__ ((aligned(4))) = "jointasi_B01";
+const char str_jointasi_B02_802c0f74[13] __attribute__ ((aligned(4))) = "jointasi_B02";
+const char str_jointasi_B03_802c0f84[13] __attribute__ ((aligned(4))) = "jointasi_B03";
+const char str_jointasi_B04_802c0f94[13] __attribute__ ((aligned(4))) = "jointasi_B04";
+const char str_jointasi_C01_802c0fa4[13] __attribute__ ((aligned(4))) = "jointasi_C01";
+const char str_jointasi_C02_802c0fb4[13] __attribute__ ((aligned(4))) = "jointasi_C02";
+const char str_jointasi_C03_802c0fc4[13] __attribute__ ((aligned(4))) = "jointasi_C03";
+const char str_jointasi_C04_802c0fd4[13] __attribute__ ((aligned(4))) = "jointasi_C04";
+const char str_jointasi_D01_802c0fe4[13] __attribute__ ((aligned(4))) = "jointasi_D01";
+const char str_jointasi_D02_802c0ff4[13] __attribute__ ((aligned(4))) = "jointasi_D02";
+const char str_jointasi_D03_802c1004[13] __attribute__ ((aligned(4))) = "jointasi_D03";
+const char str_jointasi_D04_802c1014[13] __attribute__ ((aligned(4))) = "jointasi_D04";
+const char str_joint_core_802c1024[11] __attribute__ ((aligned(4))) = "joint_core";
+
+typedef struct AnimMoamoaChainEntry {
+    const char* parent;
+    const char* child;
+} AnimMoamoaChainEntry;
+
+AnimMoamoaChainEntry g_moamoa_chain_tbl[47] = {
+    { str_joint_00_802c0d18, str_jointdai1_A01_802c0d24 },
+    { str_jointdai1_A01_802c0d24, str_jointdai1_A02_802c0d34 },
+    { str_jointdai1_A02_802c0d34, str_jointdai1_A03_802c0d44 },
+    { str_jointdai1_A03_802c0d44, str_jointdai1_A04_802c0d54 },
+    { str_jointdai1_A04_802c0d54, str_jointdai1_A05_802c0d64 },
+    { str_joint_00_802c0d18, str_jointdai1_B01_802c0d74 },
+    { str_jointdai1_B01_802c0d74, str_jointdai1_B02_802c0d84 },
+    { str_jointdai1_B02_802c0d84, str_jointdai1_B03_802c0d94 },
+    { str_jointdai1_B03_802c0d94, str_jointdai1_B04_802c0da4 },
+    { str_jointdai1_B04_802c0da4, str_jointdai1_B05_802c0db4 },
+    { str_joint_00_802c0d18, str_jointdai1_C01_802c0dc4 },
+    { str_jointdai1_C01_802c0dc4, str_jointdai1_C02_802c0dd4 },
+    { str_jointdai1_C02_802c0dd4, str_jointdai1_C03_802c0de4 },
+    { str_jointdai1_C03_802c0de4, str_jointdai1_C04_802c0df4 },
+    { str_jointdai1_C04_802c0df4, str_jointdai1_C05_802c0e04 },
+    { str_joint_00_802c0d18, str_jointdai2_01_802c0e14 },
+    { str_jointdai2_01_802c0e14, str_jointdai2_02_802c0e24 },
+    { str_jointdai2_02_802c0e24, str_jointdai2_03_802c0e34 },
+    { str_jointdai2_03_802c0e34, str_jointdai2_04_802c0e44 },
+    { str_jointdai2_04_802c0e44, str_jointdai2_05_802c0e54 },
+    { str_jointdai2_05_802c0e54, str_jointdai2_06_802c0e64 },
+    { str_jointdai2_06_802c0e64, str_jointdai2_07_802c0e74 },
+    { str_jointdai2_07_802c0e74, str_jointdai2_upper01_802c0e84 },
+    { str_jointdai2_upper01_802c0e84, str_jointdai2_upper02_802c0e98 },
+    { str_jointdai2_upper02_802c0e98, str_jointdai2_upper03_802c0eac },
+    { str_jointdai2_upper03_802c0eac, str_jointdai2_upper04_802c0ec0 },
+    { str_jointdai2_07_802c0e74, str_jointdai2_lower01_802c0ed4 },
+    { str_jointdai2_lower01_802c0ed4, str_jointdai2_lower02_802c0ee8 },
+    { str_jointdai2_lower02_802c0ee8, str_jointdai2_lower03_802c0efc },
+    { str_jointdai2_lower03_802c0efc, str_jointdai2_lower04_802c0f10 },
+    { str_joint_00_802c0d18, str_jointasi_A01_802c0f24 },
+    { str_jointasi_A01_802c0f24, str_jointasi_A02_802c0f34 },
+    { str_jointasi_A02_802c0f34, str_jointasi_A03_802c0f44 },
+    { str_jointasi_A03_802c0f44, str_jointasi_A04_802c0f54 },
+    { str_joint_00_802c0d18, str_jointasi_B01_802c0f64 },
+    { str_jointasi_B01_802c0f64, str_jointasi_B02_802c0f74 },
+    { str_jointasi_B02_802c0f74, str_jointasi_B03_802c0f84 },
+    { str_jointasi_B03_802c0f84, str_jointasi_B04_802c0f94 },
+    { str_joint_00_802c0d18, str_jointasi_C01_802c0fa4 },
+    { str_jointasi_C01_802c0fa4, str_jointasi_C02_802c0fb4 },
+    { str_jointasi_C02_802c0fb4, str_jointasi_C03_802c0fc4 },
+    { str_jointasi_C03_802c0fc4, str_jointasi_C04_802c0fd4 },
+    { str_joint_00_802c0d18, str_jointasi_D01_802c0fe4 },
+    { str_jointasi_D01_802c0fe4, str_jointasi_D02_802c0ff4 },
+    { str_jointasi_D02_802c0ff4, str_jointasi_D03_802c1004 },
+    { str_jointasi_D03_802c1004, str_jointasi_D04_802c1014 },
+    { str_joint_00_802c0d18, str_joint_core_802c1024 },
+};
+
+
 extern s32 wp;
 f32 __fabsf(f32 value);
 extern void PSMTXTrans(void* mtx, double x, double y, double z);
 void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double scaleValue);
 void animPaperPoseDispSub(s32 cameraId, void* posePtr);
+
+s32 tbl[4];
+s32 animdrv_dummy;
+s32 vivihimoTailGroupNo[4] = { 0, 2, -1, -1 };
+void* vivihimoData[4] = { 0, (u8*)_vivihimoData, (u8*)_vivihimoData + 0x400, (u8*)_vivihimoData + 0x800 };
 
 void* animGetPtr(void) {
     return (void*)wp;
@@ -162,8 +386,8 @@ void animInit(void) {
     extern const char str_a_vivian_bin_802c11d8[];
     extern const char str_a_ag2tg_bin_802c11e8[];
     extern f32 tanfTbl[];
-    extern s32 vivihimoData;
-    extern s32 vivihimoTailGroupNo;
+    extern void* vivihimoData[4];
+    extern s32 vivihimoTailGroupNo[4];
     s32 work;
     register f32* table;
     register s32 i;
@@ -372,6 +596,10 @@ void animPoseBattleInit(void) {
 }
 
 s32 animPoseEntry(void* name, s32 mode) {
+    typedef struct EntryFile { s32 active, refs; void* handle; s32 texId; } EntryFile;
+    typedef struct EntryTexture { s32 active, refs; void* handle; } EntryTexture;
+    typedef struct EntryPose { u32 flags; u8 rest[0x16C]; } EntryPose;
+    typedef struct EntryWork { EntryFile* files; s32 fileCount; EntryTexture* textures; s32 texCount; EntryPose* poses; s32 poseCount; } EntryWork;
     typedef f32 Mtx[3][4];
     extern s32 wp;
     extern void fileSetCurrentArchiveType(s32 type);
@@ -390,11 +618,12 @@ s32 animPoseEntry(void* name, s32 mode) {
     extern char str_c_vivian_802c11b4[];
     extern char str_c_maririn_802c11c0[];
     extern char str_c_majyorin_802c11cc[];
+    extern f32 float_1_8041fb24;
     extern u32 dat_8041fb0c;
     extern u32 dat_8041fb10;
-    extern s32 vivihimoTailGroupNo;
+    extern s32 vivihimoTailGroupNo[4];
     char path[256];
-    s32 work;
+    EntryWork* work;
     s32 poseIdx;
     s32 pose;
     s32 fileIdx;
@@ -402,39 +631,37 @@ s32 animPoseEntry(void* name, s32 mode) {
     s32 texIdx;
     s32 texFile;
     s32 i;
+    s32 count;
     void* file;
-    u64 time;
+    s64 time;
 
-    if (mode == 1) {
-        fileSetCurrentArchiveType(2);
-    } else if (mode >= 0 && mode < 1) {
-        fileSetCurrentArchiveType(1);
-    } else if (mode < 3) {
-        fileSetCurrentArchiveType(0);
+    switch (mode) {
+        case 0: fileSetCurrentArchiveType(1); break;
+        case 1: fileSetCurrentArchiveType(2); break;
+        case 2: fileSetCurrentArchiveType(0); break;
     }
 
-    work = wp;
-    pose = 0;
-    poseIdx = -1;
-    for (i = 0; i < *(s32*)(work + 0x14); i++) {
-        pose = *(s32*)(work + 0x10) + i * 0x170;
-        if (*(s32*)pose == 0) {
-            poseIdx = i;
-            break;
+    work = (EntryWork*)wp;
+    poseIdx = 0;
+    for (i = 0; i < work->poseCount; i++, poseIdx++) {
+        s32 temp = (s32)(work->poses + i);
+        if (*(s32*)temp == 0) {
+            pose = temp;
+            goto pose_found;
         }
     }
-    if (poseIdx < 0) {
-        pose = 0;
-    }
-
+    pose = 0;
+    poseIdx = -1;
+pose_found:
     *(u32*)pose |= 1;
     *(s32*)(pose + 4) = 0;
     *(s32*)(pose + 8) = 0;
 
     fileIdx = -1;
     animFile = 0;
-    for (i = 0; i < *(s32*)(work + 4); i++) {
-        animFile = *(s32*)work + i * 0x10;
+    count = ((EntryWork*)wp)->fileCount;
+    for (i = 0; i < count; i++) {
+        animFile = (s32)(((EntryWork*)wp)->files + i);
         if (*(s32*)animFile != 0 && strcmp((const char*)(**(s32***)(*(s32*)(animFile + 8) + 0xA0) + 4), name) == 0) {
             (*(s32*)(animFile + 4))++;
             fileIdx = i;
@@ -444,8 +671,9 @@ s32 animPoseEntry(void* name, s32 mode) {
 
     fileIdx = -1;
     animFile = 0;
-    for (i = 0; i < *(s32*)(work + 4); i++) {
-        animFile = *(s32*)work + i * 0x10;
+    count = ((EntryWork*)wp)->fileCount;
+    for (i = 0; i < count; i++) {
+        animFile = (s32)(((EntryWork*)wp)->files + i);
         if (*(s32*)animFile == 0) {
             fileIdx = i;
             break;
@@ -469,8 +697,9 @@ s32 animPoseEntry(void* name, s32 mode) {
         sprintf(path, str_PCTs_PCTs_802c1068, str_a_8041fb3c, **(s32***)((s32)file + 0xA0) + 0x44);
         texIdx = -1;
         texFile = 0;
-        for (i = 0; i < *(s32*)(work + 0xC); i++) {
-            texFile = *(s32*)(work + 8) + i * 0xC;
+        count = ((EntryWork*)wp)->texCount;
+        for (i = 0; i < count; i++) {
+            texFile = (s32)(((EntryWork*)wp)->textures + i);
             if (*(s32*)texFile != 0 && *(s32*)(texFile + 8) != 0 &&
                 strcmp((const char*)(*(s32*)(texFile + 8) + 0x20), path) == 0) {
                 (*(s32*)(texFile + 4))++;
@@ -480,8 +709,9 @@ s32 animPoseEntry(void* name, s32 mode) {
         }
         texIdx = -1;
         texFile = 0;
-        for (i = 0; i < *(s32*)(work + 0xC); i++) {
-            texFile = *(s32*)(work + 8) + i * 0xC;
+        count = ((EntryWork*)wp)->texCount;
+        for (i = 0; i < count; i++) {
+            texFile = (s32)(((EntryWork*)wp)->textures + i);
             if (*(s32*)texFile == 0) {
                 texIdx = i;
                 break;
@@ -502,31 +732,31 @@ file_done:
     } else {
         *(s32*)(pose + 0x14) = 0;
         if (mode == 0) {
-            time = *(u64*)((s32)gpGlobals + 0x18) / (*(u32*)0x800000F8 / 4000);
+            time = *(s64*)((s32)gpGlobals + 0x40) / ((*(u32*)0x800000F8 >> 2) / 1000);
         } else {
-            time = *(u64*)((s32)gpGlobals + 0x20) / (*(u32*)0x800000F8 / 4000);
+            time = *(s64*)((s32)gpGlobals + 0x38) / ((*(u32*)0x800000F8 >> 2) / 1000);
         }
         *(u64*)(pose + 0x18) = time;
-        *(s32*)(pose + 0x20) = -1;
-        *(f32*)(pose + 0x24) = 0.0f;
-        *(f32*)(pose + 0x80) = 0.0f;
-        *(f32*)(pose + 0x28) = 0.0f;
+        *(s32*)(pose + 0x3C) = -1;
+        *(f32*)(pose + 0x40) = 0.0f;
+        *(s32*)(pose + 0x80) = 0;
+        *(f32*)(pose + 0x84) = 0.0f;
         *(f32*)(pose + 0x70) = 0.0f;
         *(f32*)(pose + 0x74) = 0.0f;
         *(f32*)(pose + 0x7C) = 0.0f;
         *(s32*)(pose + 0x0C) = mode;
         *(s32*)(pose + 0x90) = -1;
         animPose_AllocBuffer((void*)pose);
+        *(s32*)(pose + 0xE0) = 0;
         *(s32*)(pose + 0xE4) = 0;
         *(s32*)(pose + 0xE8) = 0;
         *(s32*)(pose + 0xEC) = 0;
-        *(s32*)(pose + 0xF4) = 0;
         *(u32*)(pose + 0xF0) = dat_8041fb0c;
-        *(u32*)(pose + 0xF8) = dat_8041fb10;
-        *(f32*)(pose + 0xFC) = 0.0f;
+        *(u32*)(pose + 0xF4) = dat_8041fb10;
+        *(f32*)(pose + 0xFC) = float_1_8041fb24;
         *(f32*)(pose + 0x100) = 0.0f;
-        *(f32*)(pose + 0x104) = 0.0f;
-        *(f32*)(pose + 0x108) = 0.0f;
+        *(f32*)(pose + 0xF8) = float_1_8041fb24;
+        *(f32*)(pose + 0x44) = float_1_8041fb24;
         PSMTXIdentity((void*)(pose + 0x124));
         if (strcmp(name, str_tst_vivi_802c11a8) == 0) {
             *(s32*)(pose + 0x14C) = 1;
@@ -542,7 +772,7 @@ file_done:
             *(void**)(pose + 0x150) = ((s32*)&vivihimoTailGroupNo) + 3;
         } else {
             *(s32*)(pose + 0x14C) = 0;
-            *(s32*)(pose + 0x150) = 0;
+            *(void**)(pose + 0x150) = &animdrv_dummy;
         }
         *(s32*)(pose + 0x154) = 0;
         *(s32*)(pose + 0x158) = 0;
@@ -1050,65 +1280,92 @@ void animPoseSetEffect(s32 poseId, void* name, s32 flag) {
 }
 
 void animPoseSetEffectAnim(s32 poseId, void* anim, s32 force) {
+    typedef struct PoseLocal {
+        u32 flags;
+        u32 typeFlags;
+        s32 unknown8;
+        s32 heapType;
+        s32 fileIdx;
+        s32 animIdx;
+        s64 localTime;
+        u8 unknown20[0x1C];
+        s32 lastFrame;
+        f32 lastFrameTime;
+        u8 unknown44[0x3C];
+        s32 eventIdx;
+        f32 loopTime;
+        s64 initialTime;
+        s32 effectIdx;
+        u8 unknown94[0xDC];
+    } PoseLocal;
+
+    typedef struct AnimEntryLocal { char name[0x3C]; void* data; } AnimEntryLocal;
+    typedef struct PoseDataLocal {
+        u8 unknown0[0x148];
+        s32 animCount;
+        u8 unknown14C[0x60];
+        AnimEntryLocal* entries;
+    } PoseDataLocal;
+
     extern s32 strcmp(const char*, const char*);
     extern s32 gp;
     extern f32 float_0_8041fb28;
     s32 work;
     s32 poses;
-    s32 pose;
+    PoseLocal* pose;
     s32 effectPoseIdx;
     s32 file;
     s32 animCount;
-    s32 data;
+    PoseDataLocal* data;
     s32 nameOffset;
     s32 animIdx;
     s64 time;
-    register s32 offset = poseId * 0x170;
 
     work = wp;
     poses = *(s32*)(work + 0x10);
-    pose = poses + offset;
-    effectPoseIdx = *(s32*)(pose + 0x90);
+    pose = (PoseLocal*)poses + poseId;
+    effectPoseIdx = pose->effectIdx;
     if (effectPoseIdx != -1) {
         animIdx = (s32)anim;
-        pose = poses + effectPoseIdx * 0x170;
-        file = *(s32*)work + (*(s32*)(pose + 0x10) << 4);
+        pose = (PoseLocal*)poses + effectPoseIdx;
+        file = *(s32*)work + (pose->fileIdx << 4);
         file = *(s32*)(file + 8);
-        data = *(s32*)(file + 0xA0);
-        data = *(s32*)data;
-        animCount = *(s32*)(data + 0x148);
+        data = **(PoseDataLocal***)(file + 0xA0);
+        animCount = data->animCount;
 
         if (animIdx < 0) {
             animIdx = 0;
             nameOffset = animIdx;
             while (animIdx < animCount) {
-                if (strcmp((char*)(*(s32*)(data + 0x1AC) + nameOffset), (char*)anim) == 0) {
-                    break;
+                if (strcmp((char*)((s32)data->entries + nameOffset), (char*)anim) == 0) {
+                    goto found;
                 }
                 nameOffset += 0x40;
                 animIdx++;
             }
-        } else if (animIdx >= animCount) {
-            animIdx = 0;
+        } else if (animIdx < animCount) {
+            goto found;
         }
+        animIdx = 0;
+found:
 
-        if (force != 0 || animIdx != *(s32*)(pose + 0x14)) {
-            *(s32*)(pose + 0x14) = animIdx;
-            if (*(s32*)(pose + 0x90) != -1 && (*(u32*)pose & 2) != 0) {
-                *(u32*)pose |= 4;
+        if (force != 0 || animIdx != pose->animIdx) {
+            pose->animIdx = animIdx;
+            if (pose->effectIdx != -1 && (pose->flags & 2) != 0) {
+                pose->flags |= 4;
             }
-            if (*(s32*)(pose + 0xC) == 0) {
+            if (pose->heapType == 0) {
                 u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
                 time = *(s64*)(gp + 0x40) / ticks;
             } else {
                 u32 ticks = (*(u32*)0x800000F8 >> 2) / 1000;
                 time = *(s64*)(gp + 0x38) / ticks;
             }
-            *(s64*)(pose + 0x18) = time;
-            *(s32*)(pose + 0x3C) = -1;
-            *(f32*)(pose + 0x40) = float_0_8041fb28;
-            *(s32*)(pose + 0x80) = 0;
-            *(f32*)(pose + 0x84) = float_0_8041fb28;
+            pose->localTime = time;
+            pose->lastFrame = -1;
+            pose->lastFrameTime = float_0_8041fb28;
+            pose->eventIdx = 0;
+            pose->loopTime = float_0_8041fb28;
         }
     }
 }
@@ -1212,6 +1469,15 @@ u8 animPoseMain(s32 poseIdx) {
         f32 z;
     } Vec3Local;
 
+    typedef struct AnimDataLocal {
+        s32 size, loopCount, frameCount;
+        s32 posCount, nrmCount, texCount, visCount, nodeCount, eventCount;
+        s32 loopData;
+        s32 frames;
+        u8 *posUpdates, *nrmUpdates, *texUpdates, *visUpdates, *nodeUpdates;
+        s32 events;
+    } AnimDataLocal;
+
     extern s32 wp;
     extern s32 gp;
     extern void memcpy_as4(void* dst, void* src, u32 size);
@@ -1243,7 +1509,7 @@ u8 animPoseMain(s32 poseIdx) {
     s32 file;
     s32 poseData;
     s32 animEntry;
-    s32 animData;
+    AnimDataLocal* animData;
     s32 frameData;
     s32 frame;
     s32 frameEnd;
@@ -1292,7 +1558,7 @@ u8 animPoseMain(s32 poseIdx) {
     poseData = **(s32**)(file + 0xA0);
     animEntry = *(s32*)(poseData + 0x1AC);
     animEntry += *(s32*)(pose + 0x14) << 6;
-    animData = *(s32*)(animEntry + 0x3C);
+    animData = *(AnimDataLocal**)(animEntry + 0x3C);
 
     asm {
         li r3, 4
@@ -1325,7 +1591,7 @@ u8 animPoseMain(s32 poseIdx) {
         return;
     }
 
-    loopFlag = **(s32**)(animData + 0x24);
+    loopFlag = *(s32*)animData->loopData;
 
     ticks = (*(u32*)0x800000F8 >> 2) / 1000;
     if (*(s32*)(pose + 0xC) == 0) {
@@ -1337,11 +1603,12 @@ u8 animPoseMain(s32 poseIdx) {
     oldTime = *(u64*)(pose + 0x18);
     cur = (float)(now - oldTime);
     cur = (float_60_8041fba4 * cur) / float_1000_8041fba8;
-    cur *= *(f32*)(pose + 0x44);
     *(f32*)(pose + 0x20) = cur;
+    *(f32*)(pose + 0x20) *= *(f32*)(pose + 0x44);
+    cur = *(f32*)(pose + 0x20);
 
-    start = *(f32*)(*(s32*)(animData + 0x24) + 4);
-    end = *(f32*)(*(s32*)(animData + 0x24) + 8);
+    start = *(f32*)(animData->loopData + 4);
+    end = *(f32*)(animData->loopData + 8);
     duration = end - start;
 
     if (duration == float_0_8041fb28) {
@@ -1350,8 +1617,9 @@ u8 animPoseMain(s32 poseIdx) {
     } else if (loopFlag != 0) {
         if ((cur - start) >= float_0_8041fb28) {
             f32 loops = (cur - start) / duration;
-            s32 whole = (s32)loops;
+            s32 whole;
             *(f32*)(pose + 0x84) = loops;
+            whole = (s32)*(f32*)(pose + 0x84);
             cur -= (f32)whole * duration;
         } else {
             *(f32*)(pose + 0x84) = float_0_8041fb28;
@@ -1370,9 +1638,10 @@ u8 animPoseMain(s32 poseIdx) {
     }
 
     *(f32*)(pose + 0x24) = cur;
+    cur = *(f32*)(pose + 0x24);
 
-    frameData = *(s32*)(animData + 0x28);
-    frameCount = *(s32*)(animData + 8);
+    frameData = animData->frames;
+    frameCount = animData->frameCount;
     anim0 = 0;
     for (i = 0; i < frameCount; i++) {
         if (cur < *(f32*)(frameData + i * 0x2C)) {
@@ -1383,10 +1652,10 @@ u8 animPoseMain(s32 poseIdx) {
     *(s32*)(pose + 0x28) = anim0 - 1;
     *(s32*)(pose + 0x2C) = *(s32*)(pose + 0x28) + 1;
 
-    count = *(s32*)(animData + 0x20);
+    count = animData->eventCount;
     anim1 = 0;
     for (i = 0; i < count; i++) {
-        if (cur < *(f32*)(*(s32*)(animData + 0x40) + i * 8)) {
+        if (cur < *(f32*)(animData->events + i * 8)) {
             break;
         }
         anim1++;
@@ -1403,7 +1672,7 @@ u8 animPoseMain(s32 poseIdx) {
         }
     }
 
-    *(s32*)(pose + 0x80) = *(s32*)(*(s32*)(animData + 0x40) + *(s32*)(pose + 0x34) * 8 + 4);
+    *(s32*)(pose + 0x80) = *(s32*)(animData->events + *(s32*)(pose + 0x34) * 8 + 4);
 
     anim0 = *(s32*)(pose + 0x28);
     anim1 = *(s32*)(pose + 0x2C);
@@ -1416,7 +1685,7 @@ u8 animPoseMain(s32 poseIdx) {
     } else if ((loopFlag != 0) && (anim1 >= frameCount)) {
         anim1 = 0;
         *(s32*)(pose + 0x2C) = 0;
-        duration = *(f32*)(*(s32*)(animData + 0x24) + 8) - *(f32*)(frameData + anim0 * 0x2C);
+        duration = *(f32*)(animData->loopData + 8) - *(f32*)(frameData + anim0 * 0x2C);
     } else {
         duration = *(f32*)(frameData + anim1 * 0x2C) - start;
     }
@@ -1455,7 +1724,7 @@ u8 animPoseMain(s32 poseIdx) {
                     scale = float_0p0625_8041fbac;
 
                     vtx = (Vec3Local*)*(s32*)(pose + 0x48);
-                    upd = (u8*)(*(s32*)(animData + 0x2C) + *(s32*)(frame + 4) * 4);
+                    upd = (u8*)((s32)animData->posUpdates + *(s32*)(frame + 4) * 4);
                     updEnd = upd + *(s32*)(frame + 8) * 4;
                     while (upd < updEnd) {
                         vtx += upd[0];
@@ -1477,7 +1746,7 @@ u8 animPoseMain(s32 poseIdx) {
                     }
 
                     vtx = (Vec3Local*)*(s32*)(pose + 0x50);
-                    upd = (u8*)(*(s32*)(animData + 0x30) + *(s32*)(frame + 0xC) * 4);
+                    upd = (u8*)((s32)animData->nrmUpdates + *(s32*)(frame + 0xC) * 4);
                     updEnd = upd + *(s32*)(frame + 0x10) * 4;
                     while (upd < updEnd) {
                         vtx += upd[0];
@@ -1499,7 +1768,7 @@ u8 animPoseMain(s32 poseIdx) {
                     }
 
                     vis = (u8*)*(s32*)(pose + 0x58);
-                    upd = (u8*)(*(s32*)(animData + 0x38) + *(s32*)(frame + 0x1C) * 2);
+                    upd = (u8*)((s32)animData->visUpdates + *(s32*)(frame + 0x1C) * 2);
                     updEnd = upd + *(s32*)(frame + 0x20) * 2;
                     while (upd < updEnd) {
                         vis += upd[0];
@@ -1508,7 +1777,7 @@ u8 animPoseMain(s32 poseIdx) {
                     }
 
                     node = (f32*)*(s32*)(pose + 0x60);
-                    upd = (u8*)(*(s32*)(animData + 0x3C) + *(s32*)(frame + 0x24) * 4);
+                    upd = (u8*)((s32)animData->nodeUpdates + *(s32*)(frame + 0x24) * 4);
                     updEnd = upd + *(s32*)(frame + 0x28) * 4;
                     while (upd < updEnd) {
                         node += upd[0];
@@ -1517,7 +1786,7 @@ u8 animPoseMain(s32 poseIdx) {
                     }
 
                     tex = *(s32*)(pose + 0x68);
-                    upd = (u8*)(*(s32*)(animData + 0x34) + *(s32*)(frame + 0x14) * 0xC);
+                    upd = (u8*)((s32)animData->texUpdates + *(s32*)(frame + 0x14) * 0xC);
                     updEnd = upd + *(s32*)(frame + 0x18) * 0xC;
                     while (upd < updEnd) {
                         tex += upd[0] * 0x18;
@@ -1535,7 +1804,7 @@ u8 animPoseMain(s32 poseIdx) {
                     scale = float_0p0625_8041fbac;
 
                     vtx = (Vec3Local*)*(s32*)(pose + 0x48);
-                    upd = (u8*)(*(s32*)(animData + 0x2C) + *(s32*)(frame + 4) * 4);
+                    upd = (u8*)((s32)animData->posUpdates + *(s32*)(frame + 4) * 4);
                     updEnd = upd + *(s32*)(frame + 8) * 4;
                     while (upd < updEnd) {
                         vtx += upd[0];
@@ -1557,7 +1826,7 @@ u8 animPoseMain(s32 poseIdx) {
                     }
 
                     vtx = (Vec3Local*)*(s32*)(pose + 0x50);
-                    upd = (u8*)(*(s32*)(animData + 0x30) + *(s32*)(frame + 0xC) * 4);
+                    upd = (u8*)((s32)animData->nrmUpdates + *(s32*)(frame + 0xC) * 4);
                     updEnd = upd + *(s32*)(frame + 0x10) * 4;
                     while (upd < updEnd) {
                         vtx += upd[0];
@@ -1579,7 +1848,7 @@ u8 animPoseMain(s32 poseIdx) {
                     }
 
                     vis = (u8*)*(s32*)(pose + 0x58);
-                    upd = (u8*)(*(s32*)(animData + 0x38) + *(s32*)(frame + 0x1C) * 2);
+                    upd = (u8*)((s32)animData->visUpdates + *(s32*)(frame + 0x1C) * 2);
                     updEnd = upd + *(s32*)(frame + 0x20) * 2;
                     while (upd < updEnd) {
                         vis += upd[0];
@@ -1588,7 +1857,7 @@ u8 animPoseMain(s32 poseIdx) {
                     }
 
                     node = (f32*)*(s32*)(pose + 0x60);
-                    upd = (u8*)(*(s32*)(animData + 0x3C) + *(s32*)(frame + 0x24) * 4);
+                    upd = (u8*)((s32)animData->nodeUpdates + *(s32*)(frame + 0x24) * 4);
                     updEnd = upd + *(s32*)(frame + 0x28) * 4;
                     while (upd < updEnd) {
                         node += upd[0];
@@ -1597,7 +1866,7 @@ u8 animPoseMain(s32 poseIdx) {
                     }
 
                     tex = *(s32*)(pose + 0x68);
-                    upd = (u8*)(*(s32*)(animData + 0x34) + *(s32*)(frame + 0x14) * 0xC);
+                    upd = (u8*)((s32)animData->texUpdates + *(s32*)(frame + 0x14) * 0xC);
                     updEnd = upd + *(s32*)(frame + 0x18) * 0xC;
                     while (upd < updEnd) {
                         tex += upd[0] * 0x18;
@@ -1622,7 +1891,7 @@ u8 animPoseMain(s32 poseIdx) {
 
         if (posCount != 0) memcpy_as4((void*)outPos, *(void**)(pose + 0x48), posCount * 0xC);
         vtx = (Vec3Local*)outPos;
-        upd = (u8*)(*(s32*)(animData + 0x2C) + *(s32*)(frame + 4) * 4);
+        upd = (u8*)((s32)animData->posUpdates + *(s32*)(frame + 4) * 4);
         updEnd = upd + *(s32*)(frame + 8) * 4;
         while (upd < updEnd) {
             vtx += upd[0];
@@ -1645,7 +1914,7 @@ u8 animPoseMain(s32 poseIdx) {
 
         if (nrmCount != 0) memcpy_as4((void*)outNrm, *(void**)(pose + 0x50), nrmCount * 0xC);
         vtx = (Vec3Local*)outNrm;
-        upd = (u8*)(*(s32*)(animData + 0x30) + *(s32*)(frame + 0xC) * 4);
+        upd = (u8*)((s32)animData->nrmUpdates + *(s32*)(frame + 0xC) * 4);
         updEnd = upd + *(s32*)(frame + 0x10) * 4;
         while (upd < updEnd) {
             vtx += upd[0];
@@ -1667,7 +1936,7 @@ u8 animPoseMain(s32 poseIdx) {
         }
 
         if (nodeCount != 0) memcpy_as4(*(void**)(pose + 0x64), *(void**)(pose + 0x60), nodeCount << 2);
-        upd = (u8*)(*(s32*)(animData + 0x3C) + *(s32*)(frame + 0x24) * 4);
+        upd = (u8*)((s32)animData->nodeUpdates + *(s32*)(frame + 0x24) * 4);
         duration = *(f32*)(frameData + anim1 * 0x2C) - *(f32*)(frameData + anim0 * 0x2C);
         ftmp = blend * blend;
         node = (f32*)*(s32*)(pose + 0x64);
@@ -1693,27 +1962,24 @@ u8 animPoseMain(s32 poseIdx) {
     *(s32*)(pose + 0x3C) = anim0;
     *(f32*)(pose + 0x40) = blend;
 
-    work = wp;
-    pose = *(s32*)(work + 0x10) + poseIdx * 0x170;
     if ((*(u32*)pose & 8U) != 0) {
         cam = camGetPtr(4);
         angle = float_rad2deg_8041fb74 * (f32)atan2((double)-(*(f32*)((s32)cam + 0x18) - *(f32*)((s32)cam + 0xC)),
                                                    (double)-(*(f32*)((s32)cam + 0x20) - *(f32*)((s32)cam + 0x14)));
-        while (angle < float_360_8041fb78) angle += float_60_8041fba4;
-        while (float_60_8041fba4 <= angle) angle -= float_60_8041fba4;
-        if (angle < float_0_8041fb28) angle += float_60_8041fba4;
+        while (angle < float_neg360_8041fb7c) angle += float_360_8041fb78;
+        while (float_360_8041fb78 <= angle) angle -= float_360_8041fb78;
+        if (angle < float_0_8041fb28) angle += float_360_8041fb78;
         delta = angle - *(f32*)(pose + 0x74);
-        while (delta < float_360_8041fb78) delta += float_60_8041fba4;
-        while (float_60_8041fba4 <= delta) delta -= float_60_8041fba4;
-        if (((float_0_8041fb28 < delta) && (delta <= float_90_8041fb80)) ||
-            ((delta < float_90_8041fb80) && (float_270_8041fb84 <= delta))) {
-            *(f32*)(pose + 0x78) = float_1_8041fb24;
+        while (delta < float_neg360_8041fb7c) delta += float_360_8041fb78;
+        while (float_360_8041fb78 <= delta) delta -= float_360_8041fb78;
+        if (((float_90_8041fb80 < delta) && (delta <= float_270_8041fb84)) ||
+            ((delta < float_neg90_8041fb70) && (float_neg270_8041fb88 <= delta))) {
+            *(f32*)(pose + 0x78) = float_neg1_8041fb6c;
         } else {
-            *(f32*)(pose + 0x78) = float_0_8041fb28;
+            *(f32*)(pose + 0x78) = float_1_8041fb24;
         }
     }
 
-    return 0;
 }
 
 u8 pushGXModelMtx_TransformNode__(void* pNode) {
@@ -2215,7 +2481,7 @@ void materialProc(int shapeIdx) {
     } Vec3Local;
 
     extern s32 wp;
-    extern s32 g_modeling_mtx;
+    extern void* g_modeling_mtx;
     extern u32 vec3_802c1030[];
     extern char str_Error_animSetMateria_802c1078[];
 
@@ -2280,8 +2546,7 @@ void materialProc(int shapeIdx) {
     }
 
     {
-        static s32 cull_table[4] = { 0, 1, 2, 3 };
-        GXSetCullMode(cull_table[*(s32*)(shape + 0xA4)]);
+        GXSetCullMode(tbl[*(s32*)(shape + 0xA4)]);
     }
 
     for (i = 0; i < drawCount; i++, draw += 0x6C) {
@@ -2332,7 +2597,7 @@ void materialProc(int shapeIdx) {
                 mapSetMaterialFog();
             }
             mapSetMaterialTev(texCount, drawMode,
-                              *(u32*)(*(s32*)(wp + 0x18) + 0xE8), g_modeling_mtx);
+                              *(u32*)(*(s32*)(wp + 0x18) + 0xE8), (s32)g_modeling_mtx);
         }
 
         foundFirst = 0;
@@ -2374,6 +2639,8 @@ void materialProc(int shapeIdx) {
 
             foundAny = foundFirst;
             if (!foundFirst) {
+                work = wp;
+                pose = *(s32*)(work + 0x18);
                 poseData = *(s32*)(work + 0x20);
                 texMtx = *(void**)(work + 0xD0);
                 texData = *(void***)(work + 0x28);
@@ -2412,30 +2679,28 @@ void materialProc(int shapeIdx) {
                 texObj = *(void**)(work + 0x38);
                 if (texObj != 0) {
                     smartTexObj(texObj, *(void***)(work + 0x2C));
+                    work = wp;
                     if (*(s32*)(work + 0xE0) != 3) {
                         GXSetZMode(1, 3, 1);
                         GXSetBlendMode(0, 4, 5, 0);
                         GXSetZCompLoc(0);
                         GXSetAlphaCompare(6, 0x80, 1, 0, 0);
                     }
-                    if (foundFirst) {
-                        if (*(s32*)(work + 0x30) != 0) {
-                            GXLoadTexObj(*(void**)(work + 0x30), 0);
+                    {
+                        s32 textureIndex = foundFirst == 0;
+                        void* paperTexObj = *(void**)(wp + 0x30 + textureIndex * 4);
+                        if (paperTexObj != 0) {
+                            GXLoadTexObj(paperTexObj, 0);
                             GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-                            GXLoadTexMtxImm(*(void**)(work + 0xCC), 0x1E, 1);
-                        }
-                    } else {
-                        if (*(s32*)(work + 0x34) != 0) {
-                            GXLoadTexObj(*(void**)(work + 0x34), 0);
-                            GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D);
-                            GXLoadTexMtxImm(*(void**)(work + 0xD0), 0x1E, 1);
+                            GXLoadTexMtxImm(*(void**)(wp + 0xCC + (foundFirst == 0) * 4), 0x1E, 1);
                         }
                     }
                     GXLoadTexObj(texObj, 1);
                     GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
+                    work = wp;
                     GXLoadTexMtxImm(*(void**)(work + 0xD4), 0x21, 1);
-                    pose = *(s32*)(work + 0x18);
-                    mapSetMaterialTev(2, 0xC, *(u32*)(pose + 0xE8), g_modeling_mtx);
+                    pose = *(s32*)(wp + 0x18);
+                    mapSetMaterialTev(2, 0xC, *(u32*)(pose + 0xE8), (s32)g_modeling_mtx);
                 }
             }
         }
@@ -2485,7 +2750,7 @@ void renderProc(int shapeIdx, int animFrame0) {
         u32 z;
     } RenderRawVec;
     extern s32 wp;
-    extern s32 g_modeling_mtx;
+    extern void* g_modeling_mtx;
     extern void* camGetCurPtr(void);
     extern void PSMTXConcat(void*, void*, void*);
     extern void PSMTXInvXpose(void*, void*);
@@ -2562,7 +2827,7 @@ void renderProc(int shapeIdx, int animFrame0) {
         return;
     }
 
-    GXSetCullMode(*(s32*)(shape + 0xA4));
+    GXSetCullMode(tbl[*(s32*)(shape + 0xA4)]);
     texArrays[0] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x58) * 8;
     texArrays[1] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x60) * 8;
     texArrays[2] = *(s32*)(poseData + 0x18C) + *(s32*)(shape + 0x68) * 8;
@@ -2615,7 +2880,7 @@ void renderProc(int shapeIdx, int animFrame0) {
                 mapSetMaterialFog();
             }
             mapSetMaterialTev(texCount, *(s32*)(draw + 8), *(u32*)(pose + 0xE8),
-                              g_modeling_mtx);
+                              (s32)g_modeling_mtx);
         }
 
         {
@@ -2738,7 +3003,7 @@ void renderProc(int shapeIdx, int animFrame0) {
                         GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7D);
                         GXLoadTexMtxImm(*(void**)(work + 0xD4), 0x21, 1);
                         pose = *(s32*)(work + 0x18);
-                        mapSetMaterialTev(2, 0xC, *(u32*)(pose + 0xE8), g_modeling_mtx);
+                        mapSetMaterialTev(2, 0xC, *(u32*)(pose + 0xE8), (s32)g_modeling_mtx);
                     }
                 }
             }
@@ -2999,7 +3264,7 @@ void dispProc(int parentGroupIdx, int groupIdx, int animFrame0, int animFrame1, 
     extern s32 g_modeling_mtx_lv;
     extern u8 g_modeling_mtx_stack[];
     extern const Vec3 vec3_802c1048;
-    extern s32 vivihimoData;
+    extern void* vivihimoData[4];
     extern f32 float_0_8041fb28;
     extern f32 float_1_8041fb24;
     extern f32 float_0p5_8041fb44;
@@ -3204,7 +3469,7 @@ void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rotValue, do
     f32 angle;
     f32 targetAngle;
     f32 delta;
-    Mtx rotMtx;
+    Mtx rotMtx[2];
     Mtx scaleMtx;
     Mtx tempMtx;
 
@@ -3268,11 +3533,7 @@ void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rotValue, do
     }
 
     drawMtx = pMtx;
-    if (((*(u32*)pose & 8) == 0) && (rotValue != (double)float_0_8041fb28)) {
-        PSMTXRotRad(rotMtx, (double)(float_deg2rad_8041fb2c * (f32)rotValue), 'y');
-        PSMTXConcat(pMtx, rotMtx, tempMtx);
-        drawMtx = tempMtx;
-    } else if ((*(u32*)pose & 8) != 0) {
+    if ((*(u32*)pose & 8) != 0) {
         /* Preserve the TU's existing compiler-owned 90.0f pool entry. */
         *(f32*)(pose + 0x70) = (f32)rotValue + 90.0f;
         cam = camGetPtr(4);
@@ -3331,15 +3592,19 @@ void _animPoseDrawMtx(void* pPose, void* pMtx, int dispMode, double rotValue, do
             *(f32*)(pose + 0x74) += float_0p1_8041fb94 * delta;
         }
         if (*(f32*)(pose + 0x74) != float_0_8041fb28) {
-            PSMTXRotRad(rotMtx, (double)(float_deg2rad_8041fb2c * *(f32*)(pose + 0x74)), 'y');
-            PSMTXConcat(pMtx, rotMtx, tempMtx);
+            PSMTXRotRad(rotMtx[1], (double)(float_deg2rad_8041fb2c * *(f32*)(pose + 0x74)), 'y');
+            PSMTXConcat(pMtx, rotMtx[1], tempMtx);
             drawMtx = tempMtx;
         }
         if (*(f32*)(pose + 0x78) == float_neg1_8041fb6c) {
-            PSMTXScale(rotMtx, float_1_8041fb24, float_1_8041fb24, float_neg1_8041fb6c);
-            PSMTXConcat(drawMtx, rotMtx, tempMtx);
+            PSMTXScale(rotMtx[1], float_1_8041fb24, float_1_8041fb24, float_neg1_8041fb6c);
+            PSMTXConcat(drawMtx, rotMtx[1], tempMtx);
             drawMtx = tempMtx;
         }
+    } else if (rotValue != (double)float_0_8041fb28) {
+        PSMTXRotRad(rotMtx[0], (double)(float_deg2rad_8041fb2c * (f32)rotValue), 'y');
+        PSMTXConcat(pMtx, rotMtx[0], tempMtx);
+        drawMtx = tempMtx;
     }
     if (scaleValue != (double)float_1_8041fb24) {
         PSMTXScale(scaleMtx, (f32)scaleValue, (f32)scaleValue, (f32)scaleValue);
@@ -3426,11 +3691,11 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
     s64 time;
     u32 ticks;
     void* src;
+    Mtx tempMtx;
     Mtx rotMtx;
     Mtx scaleMtx;
-    Mtx tempMtx;
-    Mtx paperMtx;
     Mtx workMtx;
+    Mtx paperMtx;
     static Mtx paperDrawMtx;
 
     work = wp;
@@ -3491,6 +3756,10 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
 
         animIdx = *(s32*)(pose + 0x94);
         if (animIdx != -1) {
+            drawPose = *(s32*)(work + 0x10) + *(s32*)(pose + 0x90) * 0x170;
+            file = *(s32*)work + (*(s32*)(drawPose + 0x10) << 4);
+            file = *(s32*)(file + 8);
+            data = *(s32*)(*(s32*)(file + 0xA0));
             animCount = *(s32*)(data + 0x148);
             if (animIdx < 0) {
                 animIdx = 0;
@@ -3503,6 +3772,7 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
                     nameOffset += 0x40;
                     animIdx++;
                 }
+                if (animIdx >= animCount) animIdx = 0;
             } else if (animIdx >= animCount) {
                 animIdx = 0;
             }
@@ -3539,9 +3809,8 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
         *(f32*)(drawPose + 0x40) = float_0_8041fb28;
         *(s32*)(drawPose + 0x80) = 0;
         *(f32*)(drawPose + 0x84) = float_0_8041fb28;
-        *(s32*)(drawPose + 0x18) = *(s32*)(pose + 0x18);
-        *(s32*)(drawPose + 0x1C) = *(s32*)(pose + 0x1C);
-        animPoseMain(effectId);
+        *(s64*)(drawPose + 0x18) = *(s64*)(pose + 0x88);
+        animPoseMain(*(s32*)(pose + 0x90));
     }
 
     if (*(s32*)(pose + 0x98) != 0) {
@@ -3594,8 +3863,12 @@ void animPoseDrawMtx(s32 poseId, void* mtx, s32 mode, double rotValue, double sc
         PSMTXTrans(workMtx, (double)*(f32*)(pose + 0x104), (double)*(f32*)(pose + 0x108),
                    (double)float_0_8041fb28);
         PSMTXConcat(paperMtx, workMtx, paperMtx);
-        PSMTXCopy(paperMtx, (void*)(work + 0x3C));
-        *(s32*)(work + 0xCC) = work + 0x3C;
+        if (paperMtx == 0) {
+            *(s32*)(work + 0xCC) = 0;
+        } else {
+            PSMTXCopy(paperMtx, (void*)(work + 0x3C));
+            *(s32*)(work + 0xCC) = work + 0x3C;
+        }
         *(s32*)(work + 0xD0) = 0;
         *(s32*)(work + 0xD4) = 0;
 
@@ -4849,7 +5122,11 @@ char* animPoseGetGroupName(s32 poseIdx, s32 groupIdx) {
 }
 
 f32 tanfTbl[0xB2];
-u8 work[0x110];
+static u8 work[0x110];
 u8 g_modeling_mtx_stack[0x600];
 
-s32 wp = (s32)work;
+static s32 wp = (s32)work;
+s32 animdrv_dummy = -1;
+s32 tbl[4] = { 2, 1, 3, 0 };
+
+u32 anim_ext_tex_size;

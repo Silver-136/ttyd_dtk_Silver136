@@ -1,4 +1,5 @@
 #include "driver/mobjdrv.h"
+f64 __fabs(f64 value);
 #include "bowser/koopa_hit.h"
 #include "driver/dispdrv.h"
 
@@ -16,7 +17,7 @@ typedef struct MobjWork {
 
 u32 gap_08_8041E924_sbss;
 s32 koopaRunFlag;
-MobjWork work;
+static MobjWork work;
 
 u32 cubeMSJ[5] = {
     0x00010000, 0x00000000, 0x80000000, 0x00000000, 0x00000000,
@@ -112,63 +113,81 @@ void mobjDisp(s32 param_1, void* entry) {
 }
 
 void mobjDisp_OffscreenXLU(s32 param_1, void* entry) {
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
+    typedef struct EntryLocal {
+        u32 flags;
+        u8 pad4[0x38 - 4];
+        VecLocal position;
+        VecLocal scale;
+        VecLocal rotation;
+        u8 pad5c[0x70 - 0x5C];
+        s32 poseId;
+        u8 pad74[0x19C - 0x74];
+        s32 offscreenId;
+        u8 pad1a0[0x1E8 - 0x1A0];
+        u8 paperTexObj[0x20];
+        s32 unk208;
+        u8 paperTexMtx[0x30];
+    } EntryLocal;
     extern void sysWaitDrawSync(void);
     extern void GXClearBoundingBox(void);
-    extern void GXReadBoundingBox(u16* top, u16* bottom, u16* left, u16* right);
-    extern void offscreenAddBoundingBox(s32 id, u16 top, u16 bottom, u16 left, u16 right);
+    extern void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
+    extern void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom);
     extern void animSetPaperTexMtx(void* mtx, s32 a, s32 b);
     extern void animSetPaperTexObj(void* texObj, s32 a, s32 b, s32 texMap,
                                    s32 d, s32 e, s32 f, s32 g);
-    extern void animPoseDraw(s32 poseId, s32 mode, f32 x, f32 y, f32 z,
-                             f32 rotY, f32 scale);
+    extern void animPoseDraw(s32 poseId, f64 x, f64 y, f64 z, f64 rotY,
+                             f64 scale, s32 mode);
     extern f32 float_10_804201bc;
-    u16 top;
-    u16 bottom;
+    EntryLocal* pEntry = entry;
     u16 left;
+    u16 top;
     u16 right;
-    f32 scale;
+    u16 bottom;
 
     sysWaitDrawSync();
     GXClearBoundingBox();
-    if ((*(u32*)entry & 0x400) != 0) {
-        animSetPaperTexMtx((void*)((s32)entry + 0x20C), 0, 0);
-        animSetPaperTexObj((void*)((s32)entry + 0x1E8), 0, 0,
-                           *(s32*)((s32)entry + 0x208), 0, 0, 1, 1);
+    if ((pEntry->flags & 0x400) != 0) {
+        animSetPaperTexMtx(pEntry->paperTexMtx, 0, 0);
+        animSetPaperTexObj(pEntry->paperTexObj, 0, 0, pEntry->unk208,
+                           0, 0, 1, 1);
     }
 
-    scale = float_10_804201bc * *(f32*)((s32)entry + 0x44);
-    animPoseDraw(*(s32*)((s32)entry + 0x70), 1,
-                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
-    animPoseDraw(*(s32*)((s32)entry + 0x70), 2,
-                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
-    animPoseDraw(*(s32*)((s32)entry + 0x70), 3,
-                 *(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C),
-                 *(f32*)((s32)entry + 0x40), *(f32*)((s32)entry + 0x54), scale);
+    animPoseDraw(pEntry->poseId, pEntry->position.x, pEntry->position.y,
+                 pEntry->position.z, pEntry->rotation.y,
+                 float_10_804201bc * pEntry->scale.x, 1);
+    animPoseDraw(pEntry->poseId, pEntry->position.x, pEntry->position.y,
+                 pEntry->position.z, pEntry->rotation.y,
+                 float_10_804201bc * pEntry->scale.x, 2);
+    animPoseDraw(pEntry->poseId, pEntry->position.x, pEntry->position.y,
+                 pEntry->position.z, pEntry->rotation.y,
+                 float_10_804201bc * pEntry->scale.x, 3);
 
-    if ((*(u32*)entry & 0x400) != 0) {
+    if ((pEntry->flags & 0x400) != 0) {
         animSetPaperTexMtx(0, 0, 0);
         animSetPaperTexObj(0, 0, 0, 0, 0, 0, 1, 1);
     }
     sysWaitDrawSync();
-    GXReadBoundingBox(&top, &bottom, &left, &right);
-    offscreenAddBoundingBox(*(s32*)((s32)entry + 0x19C), top, bottom, left, right);
+    GXReadBoundingBox(&left, &top, &right, &bottom);
+    offscreenAddBoundingBox(pEntry->offscreenId, left, top, right, bottom);
 }
 
 void mobjInit(void) {
+    MobjSet* set = &work.normal;
     extern void* __memAlloc(s32 heap, u32 size);
-    s32 count;
 
-    count = 0x10;
-    work.normal.count = count;
-    work.normal.entries = __memAlloc(0, count * 0x23C);
-    memset(work.normal.entries, 0, work.normal.count * 0x23C);
+    set->count = 0x10;
+    set->entries = __memAlloc(0, set->count * 0x23C);
+    memset(set->entries, 0, set->count * 0x23C);
 
-    count = 8;
-    work.alt.count = count;
-    work.alt.entries = __memAlloc(0, count * 0x23C);
-    memset(work.alt.entries, 0, work.alt.count * 0x23C);
+    set = &work.alt;
+    set->count = 8;
+    set->entries = __memAlloc(0, set->count * 0x23C);
+    memset(set->entries, 0, set->count * 0x23C);
 
     koopaRunFlag = 0;
 }
@@ -183,6 +202,7 @@ void mobjReset(s32 alt) {
     koopaRunFlag = 0;
 }
 
+#pragma opt_common_subs off
 u8 mobjHitEntry(void* pMobj, int param_2) {
     typedef struct VecLocal {
         f32 x;
@@ -208,17 +228,19 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
     extern f32 float_deg2rad_804201cc;
     extern f32 float_2p5_804201d8;
     extern f32 float_0p5_804201f0;
-    extern const char str_HOBJ_804201d0[];
-    extern const char str_MOBJ_804201f4[];
-    extern const char str_MOBJ_804201fc[];
-    extern char headDJ[];
-    extern char cubeDJ[];
-    extern char frontDJ[];
-    extern char front2DJ[];
-    extern char cubeDVP[];
+    extern const char str_HOBJ_804201d0[6];
+    extern const char str_MOBJ_804201f4[6];
+    extern const char str_MOBJ_804201fc[6];
+    extern u32 headDJ[];
+    extern u32 cubeDJ[];
+    extern u32 frontDJ[];
+    extern u32 front2DJ[];
+    extern u32 cubeDVP[];
+    VecLocal bboxMin;
+    VecLocal bboxMax;
+    VecLocal pos;
     VecLocal min;
     VecLocal max;
-    VecLocal pos;
     f32 trans2[3][4];
     f32 scale2[3][4];
     f32 xrot2[3][4];
@@ -240,17 +262,21 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
     void* scan;
     s32 i;
     f32 diff;
-    char* dataBase = cubeDVP - 0x20;
+    f32 ten;
+    char* dataBase = (char*)cubeDVP - 0x20;
 
     poseData = animPoseGetAnimBaseDataPtr(*(s32*)((s32)pMobj + 0x70));
     min = *(VecLocal*)vec3_802c1f58;
-    max.x = *(f32*)vec3_802c1f64;
     min.x = *(f32*)((s32)poseData + 0xD0);
     min.y = *(f32*)((s32)poseData + 0xD4);
     min.z = *(f32*)((s32)poseData + 0xD8);
+    bboxMin = min;
+
+    max = *(VecLocal*)vec3_802c1f64;
     max.x = *(f32*)((s32)poseData + 0xDC);
     max.y = *(f32*)((s32)poseData + 0xE0);
     max.z = *(f32*)((s32)poseData + 0xE4);
+    bboxMax = max;
 
     scan = pMobj;
     for (i = 0; i < 2; i++, scan = (void*)((s32)scan + 0x88)) {
@@ -259,28 +285,20 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
         }
     }
 
-    PSVECAdd(&max, &min, (VecLocal*)((s32)pMobj + 0x190));
+    PSVECAdd(&bboxMax, &bboxMin, (VecLocal*)((s32)pMobj + 0x190));
     PSVECScale((VecLocal*)((s32)pMobj + 0x190), (VecLocal*)((s32)pMobj + 0x190), (double)float_0p5_804201f0);
     PSVECScale((VecLocal*)((s32)pMobj + 0x190), (VecLocal*)((s32)pMobj + 0x190), (double)float_10_804201bc);
     *(f32*)((s32)pMobj + 0x194) = float_0_804201b8;
-    diff = max.x - min.x;
-    if (diff < 0.0f) {
-        diff = -diff;
-    }
-    *(f32*)((s32)pMobj + 0x184) = float_10_804201bc * *(f32*)((s32)pMobj + 0x44) * diff;
-    diff = max.y;
-    if (diff < 0.0f) {
-        diff = -diff;
-    }
-    *(f32*)((s32)pMobj + 0x188) = float_10_804201bc * *(f32*)((s32)pMobj + 0x48) * diff;
-    diff = max.z - min.z;
-    if (diff < 0.0f) {
-        diff = -diff;
-    }
-    *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * *(f32*)((s32)pMobj + 0x4C) * diff;
-    if (strncmp((const char*)((s32)poseData + 0), str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
+    ten = float_10_804201bc;
+    diff = (f32)__fabs(bboxMax.x - bboxMin.x);
+    *(f32*)((s32)pMobj + 0x184) = ten * (*(f32*)((s32)pMobj + 0x44) * diff);
+    diff = (f32)__fabs(bboxMax.y);
+    *(f32*)((s32)pMobj + 0x188) = ten * (*(f32*)((s32)pMobj + 0x48) * diff);
+    diff = (f32)__fabs(bboxMax.z - bboxMin.z);
+    *(f32*)((s32)pMobj + 0x18C) = ten * (*(f32*)((s32)pMobj + 0x4C) * diff);
+    if (strncmp((const char*)((s32)poseData + 4), str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
         *(f32*)((s32)pMobj + 0x198) = float_0_804201b8;
-        *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C);
+        *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * (float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C));
     }
 
     switch (param_2) {
@@ -301,7 +319,7 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
         *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
         hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
         *(void**)((s32)pMobj + 0x74) = hit;
-        *(void**)((s32)hit + 0xD0) = pMobj;
+        *(void**)((s32)*(void**)((s32)pMobj + 0x74) + 0xD0) = pMobj;
         break;
     }
     case 0: {
@@ -321,7 +339,7 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
         *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
         hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
         *(void**)((s32)pMobj + 0x74) = hit;
-        *(void**)((s32)hit + 0xD0) = pMobj;
+        *(void**)((s32)*(void**)((s32)pMobj + 0x74) + 0xD0) = pMobj;
         break;
     }
     case 2: {
@@ -341,14 +359,14 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
         *(char**)((s32)pMobj + 0x90) = (char*)((s32)pMobj + 0x78);
         hit = hitEntryMOBJ((void*)((s32)pMobj + 0x90), result);
         *(void**)((s32)pMobj + 0x74) = hit;
-        *(void**)((s32)hit + 0xD0) = pMobj;
+        *(void**)((s32)*(void**)((s32)pMobj + 0x74) + 0xD0) = pMobj;
         memcpy((void*)((s32)pMobj + 0x118), dataBase + 0x18C0, 0x68);
         strcpy((char*)((s32)pMobj + 0x100), str_MOBJ_804201fc);
         strcat((char*)((s32)pMobj + 0x100), (char*)((s32)pMobj + 5));
         *(char**)((s32)pMobj + 0x118) = (char*)((s32)pMobj + 0x100);
         hit = hitEntryMOBJ((void*)((s32)pMobj + 0x118), result);
         *(void**)((s32)pMobj + 0xFC) = hit;
-        *(void**)((s32)hit + 0xD0) = pMobj;
+        *(void**)((s32)*(void**)((s32)pMobj + 0xFC) + 0xD0) = pMobj;
         break;
     }
     default:
@@ -356,14 +374,280 @@ u8 mobjHitEntry(void* pMobj, int param_2) {
     }
     return 0;
 }
+#pragma opt_common_subs reset
+
+/*
+ * Target-backed map-object collision geometry.
+ * The unresolved 0x40-byte compiler/static-local prefix is intentionally not
+ * hand-authored here.  All relocation-bearing fields below use symbolic
+ * target relationships rather than absolute addresses.
+ */
+u32 cubeDVP[103] = {
+    0x00000008, 0xBF000000, 0x00000000, 0x3F000000, 0x3F000000, 0x00000000, 0x3F000000, 0xBF000000,
+    0x3F800000, 0x3F000000, 0x3F000000, 0x3F800000, 0x3F000000, 0xBF000000, 0x3F800000, 0xBF000000,
+    0x3F000000, 0x3F800000, 0xBF000000, 0xBF000000, 0x00000000, 0xBF000000, 0x3F000000, 0x00000000,
+    0xBF000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+};
+
+u32 cubeDVN[55] = {
+    0x00000006, 0x00000000, 0x00000000, 0x3F800000, 0x00000000, 0x3F800000, 0x00000000, 0x00000000,
+    0x00000000, 0xBF800000, 0x00000000, 0xBF800000, 0x00000000, 0x3F800000, 0x00000000, 0x00000000,
+    0xBF800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+};
+
+u32 cubeDDT[26] = {
+    (u32)cubeDVP, (u32)cubeDVN, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000,
+};
+
+u32 cubeDN[1230] = {
+    0x00000004, 0x00000005, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00060005,
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00020005, 0xFFFFFFFF, 0xFFFFFFFF,
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00040005, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00070004, 0xFFFFFFFF,
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00010004, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    0xFFFFFFFF, 0xFFFFFFFF, 0x00050004, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    0x00030004, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000004, 0x00070003, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    0xFFFFFFFF, 0x00060003, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00010003,
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000003, 0xFFFFFFFF, 0xFFFFFFFF,
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004,
+    0x00050002, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00040002, 0xFFFFFFFF,
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00070002, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    0xFFFFFFFF, 0xFFFFFFFF, 0x00060002, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x00030001, 0xFFFFFFFF, 0xFFFFFFFF,
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00020001, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    0xFFFFFFFF, 0x00050001, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00040001,
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000004, 0x00010000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00030000, 0xFFFFFFFF,
+    0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00020000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+    0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+};
+
+u32 cubeDP[19] = {
+    0x00000000, 0x00000006, 0x00000000, (u32)cubeDDT, (u32)cubeDN, (u32)&cubeDN[205], (u32)&cubeDN[410], (u32)&cubeDN[615],
+    (u32)&cubeDN[820], (u32)&cubeDN[1025], 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000,
+};
+
+u32 cubeDJ[26] = {
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x3F800000, 0x3F800000,
+    0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xBF000000,
+    0x00000000, 0xBF000000, 0x3F000000, 0x3F800000, 0x3F000000, 0x00000000, (u32)cubeMSJ, 0x00000001,
+    0x00000000, (u32)cubeDP,
+};
+
+u32 headDP[19] = {
+    0x00000000, 0x00000001, 0x00000000, (u32)cubeDDT, (u32)&cubeDN[410], 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000,
+};
+
+u32 headDJ[26] = {
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x3F800000, 0x3F800000,
+    0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xBF000000,
+    0x00000000, 0xBF000000, 0x3F000000, 0x00000000, 0x3F000000, 0x00000000, (u32)cubeMSJ, 0x00000001,
+    0x00000000, (u32)headDP,
+};
+
+u32 frontDP[19] = {
+    0x00000000, 0x00000001, 0x00000000, (u32)cubeDDT, (u32)&cubeDN[1025], 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000,
+};
+
+u32 frontDJ[26] = {
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x3F800000, 0x3F800000,
+    0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xBF000000,
+    0x00000000, 0xBF000000, 0x3F000000, 0x3F800000, 0x3F000000, 0x00000000, (u32)cubeMSJ, 0x00000001,
+    0x00000000, (u32)frontDP,
+};
+
+u32 front2DP[19] = {
+    0x00000000, 0x00000005, 0x00000000, (u32)cubeDDT, (u32)cubeDN, (u32)&cubeDN[205], (u32)&cubeDN[410], (u32)&cubeDN[615],
+    (u32)&cubeDN[820], 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000,
+};
+
+u32 front2DJ[26] = {
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x3F800000, 0x3F800000,
+    0x3F800000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xBF000000,
+    0x00000000, 0xBF000000, 0x3F000000, 0x3F800000, 0x3F000000, 0x00000000, (u32)front2MSJ, 0x00000001,
+    0x00000000, (u32)front2DP,
+};
+
+typedef struct Vec3Local {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3Local;
 
 int mobjEntry(char* name, char* pAnimPoseName) {
-    typedef struct MobjEntryLocal {
+    typedef struct MapObjectEntryLocal {
         u32 flags;
         u8 camId;
         char name[16];
-        char animPoseName[16];
-    } MobjEntryLocal;
+        char animName[16];
+        u8 unk25[0x38 - 0x25];
+        Vec3Local position;
+        Vec3Local scale;
+        Vec3Local rotation;
+        Vec3Local unk5C;
+        f32 unk68;
+        f32 unk6C;
+        s32 poseId;
+        u8 unk74[0x19C - 0x74];
+        s32 offscreenId;
+        u8 unk1A0[0x23C - 0x1A0];
+    } MapObjectEntryLocal;
     extern MobjWork work;
     extern void* gp;
     extern s32 koopaRunFlag;
@@ -376,74 +660,52 @@ int mobjEntry(char* name, char* pAnimPoseName) {
     extern void mobjHitEntry(void* pMobj, s32 param_2);
     extern f32 float_1_804201c0;
     extern const char str_S_1_804201ec;
-    MobjSet* set;
-    MobjEntryLocal* entry;
-    s32 count;
-    s32 index;
-    s32 poseId;
-    s32 battle;
+    MobjSet* wp;
+    s32 entryCount;
+    s32 idx;
+    MapObjectEntryLocal* entry;
 
     if (koopaRunFlag != 0) {
-        set = &work.koopa;
+        wp = &work.koopa;
     } else {
-        set = &work.normal;
+        wp = &work.normal;
         if (*(s32*)((s32)gp + 0x14) != 0) {
-            set = &work.alt;
+            wp = &work.alt;
         }
     }
 
-    count = set->count;
-    index = 0;
-    entry = (MobjEntryLocal*)set->entries;
-    while (index < count) {
-        if ((entry->flags & 1) && strcmp(entry->name, name) == 0) {
+    entryCount = wp->count;
+    for (idx = 0, entry = wp->entries; idx < entryCount; idx++, entry++) {
+        if ((entry->flags & 1) && (strcmp(entry->name, name) == 0)) {
             break;
         }
-        index++;
-        entry = (MobjEntryLocal*)((s32)entry + 0x23C);
     }
 
-    entry = (MobjEntryLocal*)set->entries;
-    index = 0;
-    if (count > 0) {
-        do {
-            if ((entry->flags & 1) == 0) {
-                break;
-            }
-            index++;
-            entry = (MobjEntryLocal*)((s32)entry + 0x23C);
-            count--;
-        } while (count != 0);
+    for (idx = 0, entry = wp->entries; idx < entryCount; idx++, entry++) {
+        if ((entry->flags & 1) == 0) {
+            break;
+        }
     }
 
-    memset(entry, 0, 0x23C);
+    memset(entry, 0, sizeof(*entry));
     entry->flags |= 1;
     strcpy(entry->name, name);
-    *(u32*)((s32)entry + 0x38) = *(u32*)((s32)vec3_802c1f58 + 0x18);
-    *(u32*)((s32)entry + 0x3C) = *(u32*)((s32)vec3_802c1f58 + 0x1C);
-    *(u32*)((s32)entry + 0x40) = *(u32*)((s32)vec3_802c1f58 + 0x20);
-    *(u32*)((s32)entry + 0x44) = *(u32*)((s32)vec3_802c1f58 + 0x24);
-    *(u32*)((s32)entry + 0x48) = *(u32*)((s32)vec3_802c1f58 + 0x28);
-    *(u32*)((s32)entry + 0x4C) = *(u32*)((s32)vec3_802c1f58 + 0x2C);
-    *(u32*)((s32)entry + 0x50) = *(u32*)((s32)vec3_802c1f58 + 0x30);
-    *(u32*)((s32)entry + 0x54) = *(u32*)((s32)vec3_802c1f58 + 0x34);
-    *(u32*)((s32)entry + 0x58) = *(u32*)((s32)vec3_802c1f58 + 0x38);
-    *(u32*)((s32)entry + 0x5C) = *(u32*)((s32)vec3_802c1f58 + 0x3C);
-    *(u32*)((s32)entry + 0x60) = *(u32*)((s32)vec3_802c1f58 + 0x40);
-    *(u32*)((s32)entry + 0x64) = *(u32*)((s32)vec3_802c1f58 + 0x44);
-    *(f32*)((s32)entry + 0x68) = float_1_804201c0;
-    *(f32*)((s32)entry + 0x6C) = float_1_804201c0;
-    *(u8*)((s32)entry + 4) = 4;
-    battle = *(s32*)((s32)gp + 0x14);
-    poseId = animPoseEntry(pAnimPoseName, ((u32)(-battle) | (u32)battle) >> 31);
-    *(s32*)((s32)entry + 0x70) = poseId;
-    animPosePeraOff(*(s32*)((s32)entry + 0x70));
-    strcpy(entry->animPoseName, pAnimPoseName);
-    animPoseSetAnim(*(s32*)((s32)entry + 0x70), &str_S_1_804201ec, 1);
-    animPoseSetMaterialLightFlagOn(*(s32*)((s32)entry + 0x70), 2);
+
+    entry->position = *(Vec3Local*)vec3_802c1f70;
+    entry->scale = *(Vec3Local*)vec3_802c1f7c;
+    entry->rotation = *(Vec3Local*)vec3_802c1f88;
+    entry->unk5C = *(Vec3Local*)vec3_802c1f94;
+    entry->unk68 = float_1_804201c0;
+    entry->unk6C = float_1_804201c0;
+    entry->camId = 4;
+    entry->poseId = animPoseEntry(pAnimPoseName, *(s32*)((s32)gp + 0x14) != 0);
+    animPosePeraOff(entry->poseId);
+    strcpy(entry->animName, pAnimPoseName);
+    animPoseSetAnim(entry->poseId, &str_S_1_804201ec, 1);
+    animPoseSetMaterialLightFlagOn(entry->poseId, 2);
     mobjHitEntry(entry, 0);
-    *(s32*)((s32)entry + 0x19C) = -1;
-    return index;
+    entry->offscreenId = -1;
+    return idx;
 }
 
 void mobjDelete(char* name) {
@@ -451,6 +713,7 @@ void mobjDelete(char* name) {
     extern void marioResetHitObj(void* hitObj);
     extern void hitDelete(void* hitObj);
     MobjSet* set;
+    s32 entryCount;
     s32 i;
     s32 j;
     void* entry;
@@ -465,8 +728,9 @@ void mobjDelete(char* name) {
         }
     }
 
+    entryCount = set->count;
     entry = set->entries;
-    for (i = 0; i < set->count; i++, entry = (void*)((s32)entry + 0x23C)) {
+    for (i = 0; i < entryCount; i++, entry = (void*)((s32)entry + 0x23C)) {
         if ((*(u32*)entry & 1) && strcmp((char*)((s32)entry + 5), name) == 0) {
             hitObj = (void*)((s32)entry + 0x78);
             for (j = 0; j < 2; j++, hitObj = (void*)((s32)hitObj + 0x88)) {
@@ -512,6 +776,7 @@ void mobjSetPosition(f32 posX, f32 posY, f32 posZ, char* mobjName) {
 }
 
 
+#pragma opt_common_subs off
 void mobjMain(void) {
     typedef struct Vec3Local {
         f32 x;
@@ -546,9 +811,8 @@ void mobjMain(void) {
     extern s32 mobjCheckItemboxOpen(void* entry);
     extern void mobjCalcMtx(void* entry);
     extern void mobjCalcMtx2(void* entry);
-    extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 flags,
+    extern void* hitCheckFilter(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 flags,
                               void* out0, f32* outY, void* out2, f32* dist, void* out4, void* out5, void* out6);
-    extern f32 __fabsf(f32 value);
     extern void PSVECAdd(Vec3Local* a, Vec3Local* b, Vec3Local* out);
     extern void* animPoseGetAnimBaseDataPtr(s32 poseId);
     extern u32 strlen(const char* s);
@@ -597,7 +861,7 @@ void mobjMain(void) {
     extern f64 double_2_802c2040;
     extern f32 float_2p5_804201d8;
     extern f32 float_deg2rad_804201cc;
-    extern const char str_HOBJ_804201d0[];
+    extern const char str_HOBJ_804201d0[6];
 
     MobjSet* set;
     void* player;
@@ -605,18 +869,23 @@ void mobjMain(void) {
     void* fbat;
     void* newHeadHit;
     s32 partyUsing;
-    s32 fbatMode;
+    s16 fbatMode;
     s32 count;
     s32 i;
     void* entry;
     const char* dataBase = vec3_802c1f58;
+    Vec3Local clip;
+    Mtx34Local calcOut0;
+    Mtx34Local calcOut1;
+    Mtx34Local calcOut2;
 
     if (koopaRunFlag != 0) {
         set = &work.koopa;
     } else {
+        s32 battle = *(s32*)((s32)gp + 0x14);
         set = &work.normal;
-        if (*(s32*)((s32)gp + 0x14) != 0) {
-            set = &work.alt;
+        if (battle != 0) {
+            set++;
         }
     }
 
@@ -712,10 +981,9 @@ void mobjMain(void) {
 
     for (i = 0; i < count; i++, entry = (void*)((s32)entry + 0x23C)) {
         u32 flags = *(u32*)entry;
-        s32 skipDisplay = 0;
 
         if ((flags & 1) != 0) {
-            if (*(s32*)((s32)gp + 0x14) != 0 || fbatMode < 2 || fbatMode == 8 || (flags & 0x400) != 0) {
+            if (*(s32*)((s32)gp + 0x14) != 0 || (u32)fbatMode < 2 || fbatMode == 8 || (flags & 0x400) != 0) {
                 if ((flags & 4) != 0) {
                     s32 itemboxOpen = 0;
                     if (strcmp((char*)((s32)entry + 0x15), dataBase + 0x8C) == 0 ||
@@ -726,12 +994,11 @@ void mobjMain(void) {
                     }
                     if (itemboxOpen == 2) {
                             Vec3Local calcTrans;
-                            Mtx34Local calcTransMtx;
-                            Mtx34Local calcScaleMtx;
-                            Mtx34Local calcRotXMtx;
-                            Mtx34Local calcRotYMtx;
                             Mtx34Local calcRotZMtx;
-                            Mtx34Local calcOutMtx;
+                            Mtx34Local calcRotYMtx;
+                            Mtx34Local calcRotXMtx;
+                            Mtx34Local calcScaleMtx;
+                            Mtx34Local calcTransMtx;
                             s32 calcI;
                             void* calcEntry;
 
@@ -744,39 +1011,51 @@ void mobjMain(void) {
                             PSMTXConcat(calcTransMtx, calcRotZMtx, calcTransMtx);
                             PSMTXConcat(calcTransMtx, calcRotYMtx, calcTransMtx);
                             PSMTXConcat(calcTransMtx, calcRotXMtx, calcTransMtx);
-                            PSMTXConcat(calcTransMtx, calcScaleMtx, calcOutMtx);
+                            PSMTXConcat(calcTransMtx, calcScaleMtx, calcOut0);
 
                             calcEntry = entry;
                             for (calcI = 0; calcI < 2; calcI++) {
                                 if (*(void**)((s32)calcEntry + 0x74) != 0) {
-                                    hitReCalcMatrix(*(void**)((s32)calcEntry + 0x74), calcOutMtx);
+                                    hitReCalcMatrix(*(void**)((s32)calcEntry + 0x74), calcOut0);
                                 }
                                 calcEntry = (void*)((s32)calcEntry + 0x88);
                             }
                         } else {
-                            Vec3Local calcTrans;
-                            Mtx34Local calcTransMtx;
-                            Mtx34Local calcScaleMtx;
-                            Mtx34Local calcRotXMtx;
-                            Mtx34Local calcRotYMtx;
                             Mtx34Local calcRotZMtx;
-                            Mtx34Local calcOutMtx;
+                            Mtx34Local calcRotYMtx;
+                            Mtx34Local calcRotXMtx;
+                            Mtx34Local calcScaleMtx;
+                            Mtx34Local calcTransMtx;
                             AnimBaseLocal* calcBase;
+                            Vec3Local calcMax;
+                            Vec3Local calcMin;
+                            Vec3Local calcBBoxMax;
+                            Vec3Local calcBBoxMin;
+                            Vec3Local calcTrans;
+                            f32 calcTen;
                             s32 calcI;
                             void* calcEntry;
 
                             PSVECAdd((Vec3Local*)((s32)entry + 0x38), (Vec3Local*)((s32)entry + 0x190), &calcTrans);
                             calcBase = animPoseGetAnimBaseDataPtr(*(s32*)((s32)entry + 0x70));
-                            *(f32*)((s32)entry + 0x184) = float_10_804201bc * *(f32*)((s32)entry + 0x44) *
-                                                          __fabsf(calcBase->bboxMax.x - calcBase->bboxMin.x);
-                            *(f32*)((s32)entry + 0x188) = float_10_804201bc * *(f32*)((s32)entry + 0x48) *
-                                                          __fabsf(calcBase->bboxMax.y);
-                            *(f32*)((s32)entry + 0x18C) = float_10_804201bc * *(f32*)((s32)entry + 0x4C) *
-                                                          __fabsf(calcBase->bboxMax.z - calcBase->bboxMin.z);
+                            calcMin = *(Vec3Local*)(dataBase + 0x48);
+                            calcMin.x = calcBase->bboxMin.x;
+                            calcMin.y = calcBase->bboxMin.y;
+                            calcMin.z = calcBase->bboxMin.z;
+                            calcBBoxMin = calcMin;
+                            calcMax = *(Vec3Local*)(dataBase + 0x54);
+                            calcMax.x = calcBase->bboxMax.x;
+                            calcMax.y = calcBase->bboxMax.y;
+                            calcMax.z = calcBase->bboxMax.z;
+                            calcBBoxMax = calcMax;
+                            calcTen = float_10_804201bc;
+                            *(f32*)((s32)entry + 0x184) = calcTen * (*(f32*)((s32)entry + 0x44) * (f32)__fabs(calcBBoxMax.x - calcBBoxMin.x));
+                            *(f32*)((s32)entry + 0x188) = calcTen * (*(f32*)((s32)entry + 0x48) * (f32)__fabs(calcBBoxMax.y));
+                            *(f32*)((s32)entry + 0x18C) = calcTen * (*(f32*)((s32)entry + 0x4C) * (f32)__fabs(calcBBoxMax.z - calcBBoxMin.z));
 
                             if (strncmp(calcBase->fileName, str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
                                 *(f32*)((s32)entry + 0x198) = float_0_804201b8;
-                                *(f32*)((s32)entry + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)entry + 0x4C);
+                                *(f32*)((s32)entry + 0x18C) = float_10_804201bc * (float_2p5_804201d8 * *(f32*)((s32)entry + 0x4C));
                             }
 
                             PSMTXTrans(calcTransMtx, calcTrans.x, calcTrans.y, calcTrans.z);
@@ -787,12 +1066,12 @@ void mobjMain(void) {
                             PSMTXConcat(calcTransMtx, calcRotZMtx, calcTransMtx);
                             PSMTXConcat(calcTransMtx, calcRotYMtx, calcTransMtx);
                             PSMTXConcat(calcTransMtx, calcRotXMtx, calcTransMtx);
-                            PSMTXConcat(calcTransMtx, calcScaleMtx, calcOutMtx);
+                            PSMTXConcat(calcTransMtx, calcScaleMtx, calcOut1);
 
                             calcEntry = entry;
                             for (calcI = 0; calcI < 2; calcI++) {
                                 if (*(void**)((s32)calcEntry + 0x74) != 0) {
-                                    hitReCalcMatrix(*(void**)((s32)calcEntry + 0x74), calcOutMtx);
+                                    hitReCalcMatrix(*(void**)((s32)calcEntry + 0x74), calcOut1);
                                 }
                                 calcEntry = (void*)((s32)calcEntry + 0x88);
                             }
@@ -804,54 +1083,66 @@ void mobjMain(void) {
                 if ((flags & 0x40) != 0) {
                     f32 velY = *(f32*)((s32)entry + 0x60);
                     if (velY < float_0_804201b8) {
-                        u32 out0;
-                        f32 outY;
-                        u32 out2;
-                        f32 checkDist;
-                        u32 out4;
-                        u32 out5;
                         u32 out6;
-                        checkDist = float_10_804201bc + float_1_804201c0 + __fabsf(velY);
+                        u32 out5;
+                        u32 out4;
+                        f32 checkDist;
+                        u32 out2;
+                        f32 outY;
+                        u32 out0;
+                        checkDist = float_10_804201bc + (float_1_804201c0 + (f32)__fabs(velY));
                         if (hitCheckFilter(*(f32*)((s32)entry + 0x38), float_10_804201bc + *(f32*)((s32)entry + 0x3C),
                                            *(f32*)((s32)entry + 0x40), float_0_804201b8, float_neg1_804201c4,
                                            float_0_804201b8, 0, &out0, &outY, &out2, &checkDist, &out4, &out5, &out6) != 0) {
                             *(f32*)((s32)entry + 0x3C) = outY;
-                            *(f32*)((s32)entry + 0x60) = float_neg0p5_804201c8 * *(f32*)((s32)entry + 0x6C) * velY;
-                            if ((f64)__fabsf(*(f32*)((s32)entry + 0x60)) <= double_2_802c2040) {
+                            *(f32*)((s32)entry + 0x60) = float_neg0p5_804201c8 * (*(f32*)((s32)entry + 0x6C) * *(f32*)((s32)entry + 0x60));
+                            if (__fabs(*(f32*)((s32)entry + 0x60)) <= double_2_802c2040) {
                                 *(f32*)((s32)entry + 0x60) = float_0_804201b8;
                             }
                         } else {
-                            *(f32*)((s32)entry + 0x3C) += velY;
-                            *(f32*)((s32)entry + 0x60) = velY - *(f32*)((s32)entry + 0x68);
+                            *(f32*)((s32)entry + 0x3C) += *(f32*)((s32)entry + 0x60);
+                            *(f32*)((s32)entry + 0x60) = *(f32*)((s32)entry + 0x60) - *(f32*)((s32)entry + 0x68);
                         }
                     } else {
-                        *(f32*)((s32)entry + 0x3C) += velY;
-                        *(f32*)((s32)entry + 0x60) = velY - *(f32*)((s32)entry + 0x68);
+                        *(f32*)((s32)entry + 0x3C) += *(f32*)((s32)entry + 0x60);
+                        *(f32*)((s32)entry + 0x60) = *(f32*)((s32)entry + 0x60) - *(f32*)((s32)entry + 0x68);
                     }
 {
-                                        Vec3Local calcTrans;
-                    Mtx34Local calcTransMtx;
-                    Mtx34Local calcScaleMtx;
-                    Mtx34Local calcRotXMtx;
-                    Mtx34Local calcRotYMtx;
                     Mtx34Local calcRotZMtx;
-                    Mtx34Local calcOutMtx;
+                    Mtx34Local calcRotYMtx;
+                    Mtx34Local calcRotXMtx;
+                    Mtx34Local calcScaleMtx;
+                    Mtx34Local calcTransMtx;
                     AnimBaseLocal* calcBase;
+                    Vec3Local calcMax;
+                    Vec3Local calcMin;
+                    Vec3Local calcBBoxMax;
+                    Vec3Local calcBBoxMin;
+                                        Vec3Local calcTrans;
+                            f32 calcTen;
                     s32 calcI;
                     void* calcEntry;
 
                     PSVECAdd((Vec3Local*)((s32)entry + 0x38), (Vec3Local*)((s32)entry + 0x190), &calcTrans);
                     calcBase = animPoseGetAnimBaseDataPtr(*(s32*)((s32)entry + 0x70));
-                    *(f32*)((s32)entry + 0x184) = float_10_804201bc * *(f32*)((s32)entry + 0x44) *
-                                                  __fabsf(calcBase->bboxMax.x - calcBase->bboxMin.x);
-                    *(f32*)((s32)entry + 0x188) = float_10_804201bc * *(f32*)((s32)entry + 0x48) *
-                                                  __fabsf(calcBase->bboxMax.y);
-                    *(f32*)((s32)entry + 0x18C) = float_10_804201bc * *(f32*)((s32)entry + 0x4C) *
-                                                  __fabsf(calcBase->bboxMax.z - calcBase->bboxMin.z);
+                    calcMin = *(Vec3Local*)(dataBase + 0x48);
+                    calcMin.x = calcBase->bboxMin.x;
+                    calcMin.y = calcBase->bboxMin.y;
+                    calcMin.z = calcBase->bboxMin.z;
+                    calcBBoxMin = calcMin;
+                    calcMax = *(Vec3Local*)(dataBase + 0x54);
+                    calcMax.x = calcBase->bboxMax.x;
+                    calcMax.y = calcBase->bboxMax.y;
+                    calcMax.z = calcBase->bboxMax.z;
+                    calcBBoxMax = calcMax;
+                    calcTen = float_10_804201bc;
+                    *(f32*)((s32)entry + 0x184) = calcTen * (*(f32*)((s32)entry + 0x44) * (f32)__fabs(calcBBoxMax.x - calcBBoxMin.x));
+                    *(f32*)((s32)entry + 0x188) = calcTen * (*(f32*)((s32)entry + 0x48) * (f32)__fabs(calcBBoxMax.y));
+                    *(f32*)((s32)entry + 0x18C) = calcTen * (*(f32*)((s32)entry + 0x4C) * (f32)__fabs(calcBBoxMax.z - calcBBoxMin.z));
 
                     if (strncmp(calcBase->fileName, str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
                                             *(f32*)((s32)entry + 0x198) = float_0_804201b8;
-                        *(f32*)((s32)entry + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)entry + 0x4C);
+                        *(f32*)((s32)entry + 0x18C) = float_10_804201bc * (float_2p5_804201d8 * *(f32*)((s32)entry + 0x4C));
                     }
 
                     PSMTXTrans(calcTransMtx, calcTrans.x, calcTrans.y, calcTrans.z);
@@ -862,12 +1153,12 @@ void mobjMain(void) {
                     PSMTXConcat(calcTransMtx, calcRotZMtx, calcTransMtx);
                     PSMTXConcat(calcTransMtx, calcRotYMtx, calcTransMtx);
                     PSMTXConcat(calcTransMtx, calcRotXMtx, calcTransMtx);
-                    PSMTXConcat(calcTransMtx, calcScaleMtx, calcOutMtx);
+                    PSMTXConcat(calcTransMtx, calcScaleMtx, calcOut2);
 
                     calcEntry = entry;
                     for (calcI = 0; calcI < 2; calcI++) {
                                             if (*(void**)((s32)calcEntry + 0x74) != 0) {
-                                                hitReCalcMatrix(*(void**)((s32)calcEntry + 0x74), calcOutMtx);
+                                                hitReCalcMatrix(*(void**)((s32)calcEntry + 0x74), calcOut2);
                         }
                         calcEntry = (void*)((s32)calcEntry + 0x88);
                     }
@@ -878,47 +1169,46 @@ void mobjMain(void) {
                 if ((flags & 0x8) == 0) {
                     void* hit = *(void**)((s32)entry + 0x74);
                     s32 activated = 0;
-                    u32 activation = 0;
 
                     if (*(s8*)((s32)player + 0x3C) != 2) {
                         if ((flags & 0x00010000) != 0 && *(void**)((s32)player + 0x200) == hit &&
                             *(f32*)((s32)marioGetPtr() + 0x90) <= float_5_804201dc + *(f32*)((s32)entry + 0x3C)) {
                             activated = 1;
-                            activation = 0x00010000;
+                            *(u32*)((s32)entry + 0x1E0) = 0x00010000;
                         } else if ((flags & 0x00400000) != 0 && newHeadHit == hit) {
                             activated = 1;
-                            activation = 0x00400000;
+                            *(u32*)((s32)entry + 0x1E0) = 0x00400000;
                         } else if ((flags & 0x00200000) != 0 && *(void**)((s32)player + 0x1E8) == hit) {
                             activated = 1;
-                            activation = 0x00200000;
+                            *(u32*)((s32)entry + 0x1E0) = 0x00200000;
                         } else if ((flags & 0x01000000) != 0 && *(void**)((s32)player + 0x1E8) == hit && marioChkHipBump() != 0) {
                             activated = 1;
-                            activation = 0x01000000;
+                            *(u32*)((s32)entry + 0x1E0) = 0x01000000;
                         } else if (unk_8005ca2c() != 0 && (flags & 0x00040000) != 0 && *(void**)((s32)player + 0x1E4) == hit &&
                                    (*(u16*)((s32)player + 0x24C) & 0x100) != 0 && partyUsing == 0) {
                             activated = 1;
-                            activation = 0x00040000;
+                            *(u32*)((s32)entry + 0x1E0) = 0x00040000;
                         } else if ((flags & 0x00800000) != 0 && party != 0) {
                             void* partyHit = *(void**)((s32)party + 0x130);
                             if (partyHit == hit) {
                                 activated = 1;
-                                activation = 0x00800000;
+                                *(u32*)((s32)entry + 0x1E0) = 0x00800000;
                             } else if (partyHit != 0 && *(u8*)((s32)party + 0x31) == 3 &&
                                        PSVECDistance((void*)((s32)party + 0x58), (void*)((s32)entry + 0x38)) <
                                            *(f32*)((s32)*(void**)((s32)entry + 0x74) + 0xCC) + *(f32*)((s32)party + 0xF4)) {
                                 activated = 1;
-                                activation = 0x00800000;
+                                *(u32*)((s32)entry + 0x1E0) = 0x00800000;
                             }
                         } else if ((flags & 0x02000000) != 0 && party != 0 && *(u8*)((s32)party + 0x31) == 3) {
                             void* partyHit = *(void**)((s32)party + 0x130);
                             if (partyHit == hit) {
                                 activated = 1;
-                                activation = 0x02000000;
+                                *(u32*)((s32)entry + 0x1E0) = 0x02000000;
                             } else if (partyHit != 0 &&
                                        PSVECDistance((void*)((s32)party + 0x58), (void*)((s32)entry + 0x38)) <
                                            *(f32*)((s32)*(void**)((s32)entry + 0x74) + 0xCC) + *(f32*)((s32)party + 0xF4)) {
                                 activated = 1;
-                                activation = 0x00800000;
+                                *(u32*)((s32)entry + 0x1E0) = 0x00800000;
                             }
                         }
                     } else {
@@ -927,37 +1217,36 @@ void mobjMain(void) {
                             for (j = 0; j < 10; j++) {
                                 if (kpaGetHitobjHead(j) == hit) {
                                     activated = 1;
-                                    activation = 0x04000000;
+                                    *(u32*)((s32)entry + 0x1E0) = 0x04000000;
                                     break;
                                 }
                             }
                         }
-                        if (!activated && (flags & 0x10000000) != 0) {
-                            for (j = 0; j < 10; j++) {
+                        if ((flags & 0x10000000) != 0) {
+                            for (j = 0; j < 10 && !activated; j++) {
                                 if (kpaGetHitobjRide(j) == hit && kpaHipAttackCheck() != 0) {
                                     activated = 1;
-                                    activation = 0x10000000;
+                                    *(u32*)((s32)entry + 0x1E0) = 0x10000000;
                                     break;
                                 }
                             }
                         }
-                        if (!activated && (flags & 0x08000000) != 0 && kpaGetHitobj() == hit && kpaGetLevel() == 3) {
+                        if ((flags & 0x08000000) != 0 && kpaGetHitobj() == hit && kpaGetLevel() == 3) {
                             activated = 1;
-                            activation = 0x08000000;
-                        } else if (!activated && (flags & 0x20000000) != 0 && kpaGetHitFlame() == hit) {
+                            *(u32*)((s32)entry + 0x1E0) = 0x08000000;
+                        } else if ((flags & 0x20000000) != 0 && kpaGetHitFlame() == hit) {
                             activated = 1;
-                            activation = 0x20000000;
-                        } else if (!activated && (flags & 0x00080000) != 0 && *(void**)((s32)player + 0x1E4) == hit) {
+                            *(u32*)((s32)entry + 0x1E0) = 0x20000000;
+                        } else if ((flags & 0x00080000) != 0 && *(void**)((s32)player + 0x1E4) == hit) {
                             activated = 1;
-                            activation = 0x00080000;
-                        } else if (!activated && (flags & 0x00200000) != 0 && *(void**)((s32)player + 0x1E8) == hit) {
+                            *(u32*)((s32)entry + 0x1E0) = 0x00080000;
+                        } else if ((flags & 0x00200000) != 0 && *(void**)((s32)player + 0x1E8) == hit) {
                             activated = 1;
-                            activation = 0x00200000;
+                            *(u32*)((s32)entry + 0x1E0) = 0x00200000;
                         }
                     }
 
                     if (activated != 0) {
-                        *(u32*)((s32)entry + 0x1E0) = activation;
                         *(u32*)entry |= 0x8;
                     }
                 }
@@ -978,31 +1267,30 @@ void mobjMain(void) {
                 if (*(void**)((s32)entry + 0x1D0) != 0) {
                     MobjMainFunc fn = *(MobjMainFunc*)((s32)entry + 0x1D0);
                     if (fn(entry) == -1) {
-                        skipDisplay = 1;
+                        goto next_entry;
                     }
                 }
             }
 
-            if (!skipDisplay && (*(u32*)entry & 1) != 0) {
+            if ((*(u32*)entry & 1) != 0) {
                 u32 materialColor;
                 if (koopaRunFlag == 0 && ((*(u32*)entry & 0x802) == 0)) {
                     void* map = mapGetWork();
                     u32 blend;
                     u32 blend2;
-                    s32 allowShadow = 1;
                     mapGetBlend(&blend);
                     mapGetBlend2(&blend2);
                     if ((*(u16*)((s32)map + 4) & 2) != 0) {
                         if ((animPoseGetMaterialFlag(*(s32*)((s32)entry + 0x70)) & 0x800) == 0 && ((u8*)&blend)[3] != 0xFF) {
-                            allowShadow = 0;
+                            goto shadow_done;
                         }
                     }
-                    if (allowShadow && ((*(u16*)((s32)map + 4) & 4) != 0)) {
+                    if ((*(u16*)((s32)map + 4) & 4) != 0) {
                         if ((animPoseGetMaterialFlag(*(s32*)((s32)entry + 0x70)) & 0x1000) == 0 && ((u8*)&blend2)[3] != 0xFF) {
-                            allowShadow = 0;
+                            goto shadow_done;
                         }
                     }
-                    if (allowShadow) {
+                    {
                         s32 shadowId = shadowEntry(*(f32*)((s32)entry + 0x38), *(f32*)((s32)entry + 0x3C), *(f32*)((s32)entry + 0x40),
                                                   (float_10_804201bc * *(f32*)((s32)entry + 0x44) * *(f32*)((s32)entry + 0x184)) / float_25_804201e0);
                         if ((*(u32*)entry & 0x00400000) != 0) {
@@ -1012,28 +1300,26 @@ void mobjMain(void) {
                     }
                 }
 
+shadow_done:
                 animPoseMain(*(s32*)((s32)entry + 0x70));
                 materialColor = animPoseGetMaterialEvtColor(*(s32*)((s32)entry + 0x70));
 
                 if ((*(u32*)entry & 0x4000) == 0) {
-                    s32 visible = 1;
                     if ((*(u32*)entry & 0x80) == 0) {
-                        Vec3Local clip;
                         void* cam = camGetPtr(4);
                         PSMTXMultVec((void*)((s32)cam + 0x11C), (void*)((s32)entry + 0x38), &clip);
                         cam = camGetPtr(4);
                         PSMTX44MultVec((void*)((s32)cam + 0x15C), &clip, &clip);
-                        if ((f64)__fabsf(clip.x) > double_1p5_802c2048 ||
-                            (f64)__fabsf(clip.y) > double_1p5_802c2048 ||
-                            (f64)__fabsf(clip.z) > double_1_802c2050) {
-                            visible = 0;
+                        if (__fabs(clip.x) > double_1p5_802c2048 ||
+                            __fabs(clip.y) > double_1p5_802c2048 ||
+                            __fabs(clip.z) > double_1_802c2050) {
+                            goto next_entry;
                         }
                     }
-                    if (visible && (((*(u32*)entry & 0x2000) == 0) || (((*(u32*)((s32)gp + 0x1C) >> 3) & 1) == 0))) {
-                        u32 matFlags = animPoseGetMaterialFlag(*(s32*)((s32)entry + 0x70));
-                        s32 xlu = ((matFlags & 0x40) != 0 && ((u8*)&materialColor)[3] != 0xFF);
+                    if (((*(u32*)entry & 0x2000) == 0) || (((*(u32*)((s32)gp + 0x1C) >> 3) & 1) == 0)) {
                         if (*(s32*)((s32)entry + 0x19C) == -1) {
-                            if (xlu) {
+                            u32 matFlags = animPoseGetMaterialFlag(*(s32*)((s32)entry + 0x70));
+                            if ((matFlags & 0x40) != 0 && ((u8*)&materialColor)[3] != 0xFF) {
                                 dispEntry(*(u8*)((s32)entry + 4), 2, mobjDispXLU, entry, dispCalcZ((void*)((s32)entry + 0x38)));
                             } else {
                                 dispEntry(*(u8*)((s32)entry + 4), 0, mobjDisp, entry, dispCalcZ((void*)((s32)entry + 0x38)));
@@ -1041,7 +1327,8 @@ void mobjMain(void) {
                                 dispEntry(*(u8*)((s32)entry + 4), 2, mobjDisp, entry, dispCalcZ((void*)((s32)entry + 0x38)));
                             }
                         } else {
-                            if (xlu) {
+                            u32 matFlags = animPoseGetMaterialFlag(*(s32*)((s32)entry + 0x70));
+                            if ((matFlags & 0x40) != 0 && ((u8*)&materialColor)[3] != 0xFF) {
                                 dispEntry(1, 2, mobjDisp_OffscreenXLU, entry, dispCalcZ((void*)((s32)entry + 0x38)));
                             } else {
                                 dispEntry(1, 0, mobjDisp_OffscreenXLU, entry, dispCalcZ((void*)((s32)entry + 0x38)));
@@ -1053,8 +1340,11 @@ void mobjMain(void) {
                 }
             }
         }
+next_entry:
+        ;
     }
 }
+#pragma opt_common_subs reset
 
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
@@ -1184,37 +1474,46 @@ void mobjCalcMtx(void* pMobj) {
     extern void PSMTXRotRad(Mtx34 m, char axis, f32 rad);
     extern void PSMTXConcat(Mtx34 a, Mtx34 b, Mtx34 out);
     extern void hitReCalcMatrix(void* hitEntry, Mtx34 mtx);
-    extern f64 __fabs(f64 value);
     extern f32 float_10_804201bc;
     extern f32 float_0_804201b8;
     extern f32 float_2p5_804201d8;
     extern f32 float_deg2rad_804201cc;
-    extern const char str_HOBJ_804201d0[];
+    extern const char str_HOBJ_804201d0[6];
     Vec3 trans;
     Vec3 bboxMin;
     Vec3 bboxMax;
-    Mtx34 transMtx;
-    Mtx34 scaleMtx;
-    Mtx34 rotXMtx;
-    Mtx34 rotYMtx;
-    Mtx34 rotZMtx;
+    Vec3 min;
+    Vec3 max;
     Mtx34 outMtx;
+    Mtx34 rotZMtx;
+    Mtx34 rotYMtx;
+    Mtx34 rotXMtx;
+    Mtx34 scaleMtx;
+    Mtx34 transMtx;
     AnimBaseLocal* base;
     s32 i;
+    f32 ten;
 
     PSVECAdd((Vec3*)((s32)pMobj + 0x38), (Vec3*)((s32)pMobj + 0x190), &trans);
     base = animPoseGetAnimBaseDataPtr(*(s32*)((s32)pMobj + 0x70));
-    bboxMin = *(Vec3*)vec3_802c1fa0;
-    bboxMax = *(Vec3*)vec3_802c1fac;
-    bboxMin = base->bboxMin;
-    bboxMax = base->bboxMax;
-    *(f32*)((s32)pMobj + 0x184) = float_10_804201bc * *(f32*)((s32)pMobj + 0x44) * (f32)__fabs((f64)(bboxMax.x - bboxMin.x));
-    *(f32*)((s32)pMobj + 0x188) = float_10_804201bc * *(f32*)((s32)pMobj + 0x48) * (f32)__fabs((f64)bboxMax.y);
-    *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * *(f32*)((s32)pMobj + 0x4C) * (f32)__fabs((f64)(bboxMax.z - bboxMin.z));
+    min = *(Vec3*)vec3_802c1fa0;
+    min.x = base->bboxMin.x;
+    min.y = base->bboxMin.y;
+    min.z = base->bboxMin.z;
+    bboxMin = min;
+    max = *(Vec3*)vec3_802c1fac;
+    max.x = base->bboxMax.x;
+    max.y = base->bboxMax.y;
+    max.z = base->bboxMax.z;
+    bboxMax = max;
+    ten = float_10_804201bc;
+    *(f32*)((s32)pMobj + 0x184) = ten * (*(f32*)((s32)pMobj + 0x44) * (f32)__fabs(bboxMax.x - bboxMin.x));
+    *(f32*)((s32)pMobj + 0x188) = ten * (*(f32*)((s32)pMobj + 0x48) * (f32)__fabs(bboxMax.y));
+    *(f32*)((s32)pMobj + 0x18C) = ten * (*(f32*)((s32)pMobj + 0x4C) * (f32)__fabs(bboxMax.z - bboxMin.z));
 
     if (strncmp(base->fileName, str_HOBJ_804201d0, strlen(str_HOBJ_804201d0)) == 0) {
         *(f32*)((s32)pMobj + 0x198) = float_0_804201b8;
-        *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C);
+        *(f32*)((s32)pMobj + 0x18C) = float_10_804201bc * (float_2p5_804201d8 * *(f32*)((s32)pMobj + 0x4C));
     }
 
     PSMTXTrans(transMtx, trans.x, trans.y, trans.z);
@@ -1308,17 +1607,24 @@ s32 mobjCheckExec(void) {
 }
 s32 mobjCheckItemboxOpen(void* entry) {
     extern s32 strcmp(const char* a, const char* b);
+    typedef struct Entry {
+        u8 pad0[0x15];
+        char animName[16];
+        u8 pad25[0x1B7];
+        s32 itemStatus;
+    } Entry;
+    Entry* work = entry;
 
-    if (strcmp((char*)((s32)entry + 0x15), str_MOBJ_TreasureBox_802c1fe4) == 0 ||
-        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BigTreasureBox_802c1ff8) == 0 ||
-        strcmp((char*)((s32)entry + 0x15), str_MOBJ_GrayTreasureBox_802c200c) == 0 ||
-        strcmp((char*)((s32)entry + 0x15), str_MOBJ_BlackTreasureBo_802c2024) == 0) {
-        return (*(s32*)((s32)entry + 0x1DC) == 99) + 1;
+    if (strcmp(work->animName, str_MOBJ_TreasureBox_802c1fe4) == 0 ||
+        strcmp(work->animName, str_MOBJ_BigTreasureBox_802c1ff8) == 0 ||
+        strcmp(work->animName, str_MOBJ_GrayTreasureBox_802c200c) == 0 ||
+        strcmp(work->animName, str_MOBJ_BlackTreasureBo_802c2024) == 0) {
+        return (work->itemStatus == 99) + 1;
     }
     return 0;
 }
 
-u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double param_4, char** param_5) {
+u32* mobjNearDistCheck2(f32 param_1, f32 param_2, f32 param_3, f64 param_4, char** param_5) {
     typedef struct Vec3 {
         f32 x;
         f32 y;
@@ -1356,9 +1662,6 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
     Vec3 diff;
     u8* rodata;
     f32 dist;
-    s32 check;
-    void* item;
-    u32 value;
 
     rodata = (u8*)vec3_802c1f58;
     if (koopaRunFlag != 0) {
@@ -1389,17 +1692,29 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
                         strcmp(entry->animName, (char*)(rodata + 0xA0)) == 0 ||
                         strcmp(entry->animName, (char*)(rodata + 0xB4)) == 0 ||
                         strcmp(entry->animName, (char*)(rodata + 0xCC)) == 0) {
-                        strcmp(entry->animName, (char*)(rodata + 0x8C));
-                        if (entry->itemStatus == 99) {
-                            check = 2;
+                        s32 check;
+
+                        if (strcmp(entry->animName, (char*)(rodata + 0x8C)) == 0 ||
+                            strcmp(entry->animName, (char*)(rodata + 0xA0)) == 0 ||
+                            strcmp(entry->animName, (char*)(rodata + 0xB4)) == 0 ||
+                            strcmp(entry->animName, (char*)(rodata + 0xCC)) == 0) {
+                            if (entry->itemStatus == 99) {
+                                check = 2;
+                            } else {
+                                check = 1;
+                            }
                         } else {
-                            check = 1;
+                            check = 0;
                         }
                         if (check != 1) {
                             list++;
                             continue;
                         }
                     } else if (strcmp(entry->animName, (char*)(rodata + 0x78)) == 0) {
+                        s32 check;
+                        void* item;
+                        u32 value;
+
                         check = 0;
                         if (strcmp(entry->animName, (char*)(rodata + 0x78)) == 0) {
                             item = itemNameToPtr(entry->name);
@@ -1436,3 +1751,27 @@ u32* mobjNearDistCheck2(double param_1, double param_2, double param_3, double p
     }
     return best;
 }
+
+/* Late-defined exact mobjdrv small-data catalog. */
+const f32 float_0_804201b8 = 0.0f;
+const f32 float_10_804201bc = 10.0f;
+const f32 float_1_804201c0 = 1.0f;
+const f32 float_neg1_804201c4 = -1.0f;
+const f32 float_neg0p5_804201c8 = -0.5f;
+const f32 float_deg2rad_804201cc = 0.017453292f;
+const char str_HOBJ_804201d0[] = "HOBJ_";
+const f32 float_2p5_804201d8 = 2.5f;
+const f32 float_5_804201dc = 5.0f;
+const f32 float_25_804201e0 = 25.0f;
+const f32 float_20_804201e4 = 20.0f;
+const f32 float_0p1_804201e8 = 0.1f;
+const char str_S_1_804201ec[] = "S_1";
+const f32 float_0p5_804201f0 = 0.5f;
+const char str_MOBJ_804201f4[] = "MOBJ_";
+const char str_MOBJ_804201fc[] = "MOBJ~";
+
+/* Late-defined exact mobjdrv read-only double tail. */
+const f64 double_2_802c2040 = 2.0;
+const f64 double_1p5_802c2048 = 1.5;
+const f64 double_1_802c2050 = 1.0;
+

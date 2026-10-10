@@ -1,4 +1,5 @@
 #include "event/evt_sub.h"
+#include "event/evt_sub_trig.h"
 #include "countdown.h"
 #include "effect/eff_stageclear.h"
 
@@ -156,8 +157,8 @@ s32 evt_sub_intpl_msec_init(void* event) {
 s32 evt_sub_intpl_msec_get_value(void* event) {
     extern f32 intplGetValue(s32 type, f32 start, f32 end, s32 time, s32 duration);
     u32 bus = *(u32*)0x800000F8 >> 2;
-    u32 ticks = ((u64)bus * 0x10624DD3U) >> 38;
-    u64 elapsed = *(u64*)event - *(u64*)((s32)event + 0x198);
+    u32 ticks = __mulhwu(0x10624DD3, bus) >> 6;
+    u64 elapsed = *(s32*)((s32)event + 4) - *(s32*)((s32)event + 0x19C);
     u32 msec = elapsed / ticks;
     if ((s32)msec < *(s32*)((s32)event + 0xD8)) {
         s32 start = *(s32*)((s32)event + 0xCC);
@@ -174,6 +175,8 @@ s32 evt_sub_intpl_msec_get_value(void* event) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_sub_intpl_msec_get_value_para(void* event) {
     extern f32 intplGetValue(s32, f32, f32, s32, s32);
     extern void evtSetFloat(void*, s32, f32);
@@ -187,10 +190,10 @@ s32 evt_sub_intpl_msec_get_value_para(void* event) {
     s32 end;
 
     bus = *(u32*)0x800000F8 >> 2;
-    ticks = ((u64)bus * 0x10624DD3U) >> 38;
-    elapsed = *(u64*)event - *(u64*)((s32)event + 0x198);
-    msec = elapsed / ticks;
+    ticks = __mulhwu(0x10624DD3, bus) >> 6;
     args = *(s32**)((s32)event + 0x18);
+    elapsed = *(s32*)((s32)event + 4) - *(s32*)((s32)event + 0x19C);
+    msec = elapsed / ticks;
     if ((s32)msec < *(s32*)((s32)event + 0xD8)) {
         start = *(s32*)((s32)event + 0xCC);
         end = *(s32*)((s32)event + 0xD0);
@@ -202,6 +205,8 @@ s32 evt_sub_intpl_msec_get_value_para(void* event) {
     }
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_sub_spline_init(void* event) {
     extern s32 evtGetValue(void*, s32);
@@ -417,6 +422,8 @@ s32 evt_sub_get_stopwatch(void* event) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 evt_sub_area_check(EventEntry* event) {
     extern s32 evtGetValue(EventEntry* event, s32 index);
     extern f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
@@ -438,25 +445,32 @@ s32 evt_sub_area_check(EventEntry* event) {
     targetX = (f32)evtGetValue(event, args[4]);
     targetZ = (f32)evtGetValue(event, args[5]);
 
-    if (type == 1) {
-        result = ((x - radius) <= targetX);
-        if ((x + radius) < targetX) {
-            result = 0;
-        }
-        if (targetZ < (z - radius)) {
-            result = 0;
-        }
-        if ((z + radius) < targetZ) {
-            result = 0;
-        }
-    } else if (type == 0) {
-        if (distABf(x, z, targetX, targetZ) <= radius) {
+    switch (type) {
+        case 0:
+            if (distABf(x, z, targetX, targetZ) <= radius) {
+                result = 1;
+            } else {
+                result = 0;
+            }
+            break;
+        case 1:
             result = 1;
-        } else {
+            if ((x - radius) > targetX) {
+                result = 0;
+            }
+            if ((x + radius) < targetX) {
+                result = 0;
+            }
+            if ((z - radius) > targetZ) {
+                result = 0;
+            }
+            if ((z + radius) < targetZ) {
+                result = 0;
+            }
+            break;
+        default:
             result = 0;
-        }
-    } else {
-        result = 0;
+            break;
     }
 
     evtSetValue(event, args[6], result);
@@ -617,7 +631,7 @@ s32 evt_sub_load_progresstime(void* event) {
     u8 time[8];
     u32 bus;
     u32 ticks;
-    s32 value;
+    s64 value;
     time[0] = swByteGet(base + 0xA220000 - 0x180);
     time[1] = swByteGet(base + 0xA220000 - 0x17F);
     time[2] = swByteGet(base + 0xA220000 - 0x17E);
@@ -627,8 +641,8 @@ s32 evt_sub_load_progresstime(void* event) {
     time[6] = swByteGet(base + 0xA220000 - 0x17A);
     time[7] = swByteGet(base + 0xA220000 - 0x179);
     bus = *(u32*)0x800000F8 >> 2;
-    ticks = ((u64)bus * 0x10624DD3U) >> 38;
-    value = (s32)((*(s64*)((s32)gp + 0x20) - *(s64*)time) / ticks);
+    ticks = __mulhwu(0x10624DD3, bus) >> 6;
+    value = (*(s64*)((s32)gp + 0x20) - *(s64*)time) / ticks;
     if (value > 86400000) {
         value = 86400000;
     }
@@ -653,10 +667,12 @@ s32 evt_sub_animgroup_async(int param_1) {
     s32 mode = *(s32*)(gp + 0x14);
     mode = (u32)(-mode | mode) >> 31;
 
-    if (animGroupBaseAsync(name, mode, 0) == 0) {
-        return 0;
+    switch (animGroupBaseAsync(name, mode, 0)) {
+        case 0:
+            return 0;
+        default:
+            return 2;
     }
-    return 2;
 }
 
 #pragma no_register_save_helpers on
@@ -707,12 +723,15 @@ USER_FUNC(evt_sub_countdown_set_restart_time) {
     countDownSetRestartTime(evtGetValue(event, event->args[0]));
     return 2;
 }
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+
 void coingetDisp(void* work) {
     extern void* gp;
     extern char* msgSearch(char* name);
     extern s32 sprintf(char* dst, const char* format, ...);
     extern char* strcpy(char* dst, const char* src);
-    extern void unk_US_EU_06_800d0a4c(char* text, s32 value);
+    extern void unk_800d0a4c(char* text, s32 value);
     extern u32 FontGetMessageWidthLine(char* text, u16* lines);
     extern void FontDrawStart(void);
     extern void FontDrawColor(void* color);
@@ -722,30 +741,39 @@ void coingetDisp(void* work) {
     extern u32 dat_8041fe10;
     u8* data = work;
     s32* params = *(s32**)(data + 0x2C);
-    u16 lines[2];
     u32 color;
+    u16 lines[2];
     char text[0x408];
-    u32 width;
+    s32 width;
 
     if (params[1] == 0) return;
-    if (*(s32*)((u8*)gp + 0x124) == 0) {
+    if (*(u32*)((u8*)gp + 0x16C) == 0) {
         sprintf(text, msgSearch(str_msg_window_coin_get_802c1888), params[0]);
     } else {
         strcpy(text, msgSearch(str_msg_window_coin_get_802c1888));
-        unk_US_EU_06_800d0a4c(text, params[0]);
+        unk_800d0a4c(text, params[0]);
     }
     width = FontGetMessageWidthLine(text, lines) & 0xFFFF;
-    if (*(s32*)(data + 0x20) < (s32)width + 20) {
+    if (width + 20 > *(s32*)(data + 0x20)) {
         *(s32*)(data + 0x20) = width + 20;
-        *(s32*)(data + 0x18) = -*(s32*)(data + 0x20) / 2;
+        width = -*(s32*)(data + 0x20);
+        *(s32*)(data + 0x18) = (width + ((u32)width >> 31)) >> 1;
     }
     *(u32*)(data + 0x24) = *(s32*)(*(u8**)(data + 0x28) + 0x18) + lines[0] * 24;
     FontDrawStart();
     color = dat_8041fe10;
     FontDrawColor(&color);
     width = FontGetMessageWidth(text) & 0xFFFF;
-    FontDrawMessage(-(s32)width / 2, *(s32*)(data + 0x1C) - 8, text);
+    width = -width;
+    FontDrawMessage((width + ((u32)width >> 31)) >> 1,
+                    *(s32*)(data + 0x1C) - 8, text);
 }
+
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
+
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 
 s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     extern s32 evtGetValue(EventEntry* event, s32 value);
@@ -810,47 +838,12 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
 
     coins = evtGetValue(event, event->args[0]);
     mario = marioGetPtr();
-    positions[0] = *(LocalVec*)((s32)mario + 0x8C);
-    positions[1] = positions[0];
+    positions[0] = positions[1] = *(LocalVec*)((s32)mario + 0x8C);
     cam = camGetPtr(4);
     angle = reviseAngle((float_100_8041fe44 * *(f32*)((s32)cam + 0x114) + float_5_8041fe40) / float_100_8041fe44);
     angle = float_6p2832_8041fe48 * angle / float_360_8041fe4c;
-    if (angle <= float_3p1416_8041fe5c) {
-        if (angle <= float_1p5708_8041fe60) {
-            sx = ((float_0p00761_8041fe50 * angle * angle - float_0p16605_8041fe54) * angle * angle + float_1_8041fe58) * angle;
-        } else {
-            sx = float_1p5708_8041fe60 - (angle - float_1p5708_8041fe60);
-            sx = ((float_0p00761_8041fe50 * sx * sx - float_0p16605_8041fe54) * sx * sx + float_1_8041fe58) * sx;
-        }
-    } else {
-        if (angle < float_4p7124_8041fe64) {
-            sx = angle - float_3p1416_8041fe5c;
-            sx = -(((float_0p00761_8041fe50 * sx * sx - float_0p16605_8041fe54) * sx * sx + float_1_8041fe58) * sx);
-        } else {
-            sx = float_1p5708_8041fe60 - (angle - float_4p7124_8041fe64);
-            sx = -(((float_0p00761_8041fe50 * sx * sx - float_0p16605_8041fe54) * sx * sx + float_1_8041fe58) * sx);
-        }
-    }
-    sx *= float_10_8041fe68;
-    if (angle <= float_3p1416_8041fe5c) {
-        if (angle <= float_1p5708_8041fe60) {
-            cz = (float_0p03705_8041fe6c * angle * angle - float_0p4967_8041fe70) * angle * angle + float_1_8041fe58;
-        } else {
-            cz = float_1p5708_8041fe60 - (angle - float_1p5708_8041fe60);
-            cz *= cz;
-            cz = -((float_0p03705_8041fe6c * cz - float_0p4967_8041fe70) * cz + float_1_8041fe58);
-        }
-    } else {
-        if (angle < float_4p7124_8041fe64) {
-            cz = (angle - float_3p1416_8041fe5c) * (angle - float_3p1416_8041fe5c);
-            cz = -((float_0p03705_8041fe6c * cz - float_0p4967_8041fe70) * cz + float_1_8041fe58);
-        } else {
-            cz = float_1p5708_8041fe60 - (angle - float_4p7124_8041fe64);
-            cz *= cz;
-            cz = (float_0p03705_8041fe6c * cz - float_0p4967_8041fe70) * cz + float_1_8041fe58;
-        }
-    }
-    cz *= float_10_8041fe68;
+    sx = evtSubSin(angle) * float_10_8041fe68;
+    cz = evtSubCos(angle) * float_10_8041fe68;
     positions[0].x += sx;
     positions[0].y += float_62_8041fe74;
     positions[0].z -= cz;
@@ -867,7 +860,8 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
     state = *(s32*)((s32)event + 0x78);
     eff = *(void**)((s32)event + 0x7C);
     param = *(s32**)((s32)event + 0x88);
-    if (state == 0) {
+    switch (state) {
+    case 0:
         iconEntry(str_iraiCoin_802c1868, 0x193);
         iconSetPos(positions[1].x, positions[1].y, positions[1].z, str_iraiCoin_802c1868);
         iconFlagOn(str_iraiCoin_802c1868, 0x102);
@@ -882,35 +876,31 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
         psndBGMOff(0x3800);
         psndBGMOn(0x201, str_BGM_FF_GET_ITEM1_802c1874);
         *(s32*)((s32)event + 0x80) = 200;
-        *(s32*)((s32)event + 0x198) = *(s32*)((s32)gp + 0x10);
+        *(u64*)((s32)event + 0x198) = *(u64*)((s32)gp + 0x38);
         *(s32*)((s32)event + 0x78) = 1;
         return 0;
-    }
-    if (state == 1) {
-        elapsed = (*(s32*)((s32)gp + 0x10) - *(s32*)((s32)event + 0x198)) / (DAT_800000f8 / 4000);
+    case 1:
+        elapsed = (*(u32*)((s32)gp + 0x3C) - *(u32*)((s32)event + 0x19C)) / ((*(u32*)0x800000F8 >> 2) / 1000);
         if (*(s32*)((s32)event + 0x80) < elapsed) {
             iconFlagOff(str_iraiCoin_802c1868, 2);
             param[1] = 1;
             *(s32*)((s32)event + 0x80) = 500;
-            *(s32*)((s32)event + 0x198) = *(s32*)((s32)gp + 0x10);
+            *(u64*)((s32)event + 0x198) = *(u64*)((s32)gp + 0x38);
             *(s32*)((s32)event + 0x78) = 2;
         }
         return 0;
-    }
-    if (state == 2) {
-        elapsed = (*(s32*)((s32)gp + 0x10) - *(s32*)((s32)event + 0x198)) / (DAT_800000f8 / 4000);
+    case 2:
+        elapsed = (*(u32*)((s32)gp + 0x3C) - *(u32*)((s32)event + 0x19C)) / ((*(u32*)0x800000F8 >> 2) / 1000);
         if (*(s32*)((s32)event + 0x80) < elapsed) {
             *(s32*)((s32)event + 0x78) = 10;
         }
         return 0;
-    }
-    if (state == 10) {
+    case 10:
         if ((keyGetButtonTrg(0) & 0x100) != 0) {
             *(s32*)((s32)event + 0x78) = 100;
         }
         return 0;
-    }
-    if (state == 100) {
+    case 100:
         pouchAddCoin((s16)coins);
         effSoftDelete(eff);
         iconDelete(str_iraiCoin_802c1868);
@@ -921,16 +911,19 @@ s32 evt_sub_get_coin(EventEntry* event, s32 isFirstCall) {
         param[1] = 0;
         *(s32*)((s32)event + 0x78) = 101;
         return 2;
-    }
-    if (state == 101) {
+    case 101:
         if (winMgrAction(*(s32*)((s32)event + 0x84)) == 0) {
             _mapFree(mapalloc_base_ptr, param);
             return 2;
         }
         return 0;
+    default:
+        return 2;
     }
-    return 2;
 }
+
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
@@ -941,10 +934,14 @@ s32 stone_ry(void* event) {
     s32* args = *(s32**)((s32)event + 0x18);
     s32 item = evtGetValue(event, args[0]);
     s32 angle = evtGetValue(event, args[1]);
-    void* itemp = itemNameToPtr(item);
-    void* a = *(void**)((s32)itemp + 0x1C);
-    void* b = *(void**)((s32)a + 0xC);
-    *(u16*)((s32)b + 4) &= 0xFFFD;
+    void* b;
+    void* a = *(void**)((s32)itemNameToPtr(item) + 0x1C);
+    u32 flags;
+
+    b = *(void**)((s32)a + 0xC);
+    flags = *(u16*)((s32)b + 4);
+    flags &= ~4U;
+    *(u16*)((s32)b + 4) = (u16)flags;
     b = *(void**)((s32)a + 0xC);
     *(f32*)((s32)b + 0x1C) = (f32)(angle % 360);
     return 2;
@@ -960,7 +957,8 @@ s32 stone_bg(void* event) {
     extern void* itemNameToPtr(s32);
     extern void* npcNameToPtr_NoAssert(const char*);
     extern void marioSetCamId(s32);
-    extern char str_sub_bg_802c162c[];
+    extern const char str_sub_bg_802c162c[];
+    extern const char str_sjis_00000140[];
     s32* args;
     s32 item;
     void* ptr;
@@ -970,9 +968,9 @@ s32 stone_bg(void* event) {
     *(s32*)((s32)camGetPtr(8) + 0x1E8) = 5;
     *(s32*)((s32)*(void**)((s32)effNameToPtr(str_sub_bg_802c162c) + 0xC) + 0x38) = 5;
     *(s32*)((s32)*(void**)((s32)*(void**)((s32)itemNameToPtr(item) + 0x1C) + 0xC) + 0x38) = 5;
-    ptr = npcNameToPtr_NoAssert((const char*)0x802C15B0);
+    ptr = npcNameToPtr_NoAssert(str_sjis_00000140);
     if (ptr != 0 && evtGetValue(event, 0xF5DE0180) < 0xD3) {
-        *(s32*)((s32)npcNameToPtr_NoAssert((const char*)0x802C15B0) + 0x1F4) = 5;
+        *(s32*)((s32)npcNameToPtr_NoAssert(str_sjis_00000140) + 0x1F4) = 5;
     } else {
         marioSetCamId(5);
     }
@@ -1019,6 +1017,8 @@ USER_FUNC(bgm_start_wait) {
 
 /* CHATGPT FALLBACK MISSING STUBS: main/event/evt_sub 20260624_191429 */
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 /* fallback stub-fill: map=unk_80053f10 addr=0x80053f10 size=0x000000c8 */
 s32 unk_80053f10(void* event) {
     extern f32 evtGetFloat(void*, s32);
@@ -1031,21 +1031,21 @@ s32 unk_80053f10(void* event) {
     f32 x;
     f32 y;
     f32 scale;
-    volatile f32 scaledX;
-    volatile f32 scaledY;
 
     args = *(s32**)((s32)event + 0x18);
     xArg = args[0];
-    yArg = args[1];
     x = evtGetFloat(event, xArg);
+    yArg = args[1];
     y = evtGetFloat(event, yArg);
     scale = float_60_8041fe3c / (f32)*(s32*)((s32)gp + 4);
-    scaledX = x * scale;
-    scaledY = y * scale;
-    evtSetFloat(event, xArg, scaledX);
-    evtSetFloat(event, yArg, scaledY);
+    x *= scale;
+    y *= scale;
+    evtSetFloat(event, xArg, x);
+    evtSetFloat(event, yArg, y);
     return 2;
 }
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 
 s32 evt_sub_check_intersect(EventEntry* event) {
     extern f32 evtGetFloat(EventEntry* event, s32 index);
@@ -1073,36 +1073,37 @@ s32 evt_sub_check_intersect(EventEntry* event) {
     targetX1 = evtGetFloat(event, args[6]);
     targetZ1 = evtGetFloat(event, args[7]);
 
-    if (startX < endX) {
-        if (((endX < targetX0) && (endX < targetX1)) || ((targetX0 < startX) && (targetX1 < startX))) {
+    if (startX >= endX) {
+        if (((startX < targetX0) && (startX < targetX1)) || ((targetX0 < endX) && (targetX1 < endX))) {
             evtSetValue(event, args[8], 0);
             return 2;
         }
-    } else if (((startX < targetX0) && (startX < targetX1)) || ((targetX0 < endX) && (targetX1 < endX))) {
+    } else if (((endX < targetX0) && (endX < targetX1)) || ((targetX0 < startX) && (targetX1 < startX))) {
         evtSetValue(event, args[8], 0);
         return 2;
     }
 
-    if (startZ < endZ) {
-        if (((endZ < targetZ0) && (endZ < targetZ1)) || ((targetZ0 < startZ) && (targetZ1 < startZ))) {
+    if (startZ >= endZ) {
+        if (((startZ < targetZ0) && (startZ < targetZ1)) || ((targetZ0 < endZ) && (targetZ1 < endZ))) {
             evtSetValue(event, args[8], 0);
             return 2;
         }
-    } else if (((startZ < targetZ0) && (startZ < targetZ1)) || ((targetZ0 < endZ) && (targetZ1 < endZ))) {
+    } else if (((endZ < targetZ0) && (endZ < targetZ1)) || ((targetZ0 < startZ) && (targetZ1 < startZ))) {
         evtSetValue(event, args[8], 0);
         return 2;
     }
 
-    a = ((startX - endX) * (targetZ0 - startZ)) + ((startZ - endZ) * (startX - targetX0));
-    b = ((startX - endX) * (targetZ1 - startZ)) + ((startZ - endZ) * (startX - targetX1));
+    a = ((startZ - endZ) * (startX - targetX0)) + ((startX - endX) * (targetZ0 - startZ));
+    b = ((startZ - endZ) * (startX - targetX1)) + ((startX - endX) * (targetZ1 - startZ));
+    if (a * b > float_0_8041fe38) {
+        evtSetValue(event, args[8], 0);
+        return 2;
+    }
+
+    a = ((targetZ0 - targetZ1) * (targetX0 - startX)) + ((targetX0 - targetX1) * (startZ - targetZ0));
+    b = ((targetZ0 - targetZ1) * (targetX0 - endX)) + ((targetX0 - targetX1) * (endZ - targetZ0));
     if (a * b <= float_0_8041fe38) {
-        a = ((targetX0 - targetX1) * (startZ - targetZ0)) + ((targetZ0 - targetZ1) * (targetX0 - startX));
-        b = ((targetX0 - targetX1) * (endZ - targetZ0)) + ((targetZ0 - targetZ1) * (targetX0 - endX));
-        if (a * b <= float_0_8041fe38) {
-            evtSetValue(event, args[8], 1);
-        } else {
-            evtSetValue(event, args[8], 0);
-        }
+        evtSetValue(event, args[8], 1);
     } else {
         evtSetValue(event, args[8], 0);
     }
@@ -1112,7 +1113,7 @@ s32 evt_sub_check_intersect(EventEntry* event) {
 s32 irai_mail_check(EventEntry* event) {
     extern s32 evtGetValue(EventEntry* event, s32 value);
     extern void evtSetValue(EventEntry* event, s32 dst, s32 value);
-    extern u32 swGet(u32 flag);
+    extern s32 swGet(u32 flag);
     extern u32 swByteGet(s32 index);
     extern void swSet(u32 flag);
     extern void pouchReceiveMail(u32 mail);
@@ -1134,8 +1135,8 @@ s32 irai_mail_check(EventEntry* event) {
             bytes[i] = (u8)swByteGet((byteBase) + i); \
         } \
         saved = *(u64*)bytes; \
-        now = *(u64*)((s32)gp + 0x10); \
-        if ((s64)(now - saved) / (DAT_800000f8 >> 2) > 7200) { \
+        now = *(u64*)((s32)gp + 0x20); \
+        if ((s64)(now - saved) / (*(u32*)0x800000F8 >> 2) > 7200) { \
             value = 1; \
             if (enabled != 0) { \
                 swSet(receivedFlag); \
@@ -1234,6 +1235,74 @@ s32 coinget_window_desc[] = {
 };
 
 /* Recovered evt_sub safe-event dependencies. */
+extern s32 evt_bero_mapchange();
+extern s32 evt_cam3d_evt_set_npc_rel();
+extern s32 evt_cam3d_evt_set_rel();
+extern s32 evt_eff();
+extern s32 evt_eff_delete();
+extern s32 evt_eff_softdelete();
+extern s32 evt_fade_end_wait();
+extern s32 evt_fade_entry();
+extern s32 evt_fade_reset();
+extern s32 evt_fade_set_mapchange_type();
+extern s32 evt_item_delete();
+extern s32 evt_item_get_position();
+extern s32 evt_item_set_position();
+extern s32 evt_mapobj_flag_onoff();
+extern s32 evt_mario_adjust_dir();
+extern s32 evt_mario_init_camid();
+extern s32 evt_mario_set_pose();
+extern s32 evt_npc_get_position();
+extern s32 evt_npc_set_anim();
+extern s32 evt_npc_set_camid();
+extern s32 evt_party_init_camid();
+extern s32 evt_party_stop();
+extern s32 evt_pouch_add_item();
+extern s32 evt_pouch_get_starstone();
+extern s32 evt_snd_bgmoff_f();
+extern s32 evt_snd_envoff();
+extern s32 evt_snd_envoff_f();
+extern s32 evt_snd_sfx_all_stop();
+extern s32 evt_snd_sfxon();
+extern const char str_BGM_EVT_STAGE_CLEAR1_802c16b4[];
+extern const char str_BGM_FF_GET_STARSTONE_802c15bc[];
+extern const char str_EM_I_1_802c1608[];
+extern const char str_SFX_EVT_STARSTONE_WH_802c1594[];
+extern const char str_SFX_SE2_EVT_STARSTON_802c15d4[];
+extern const char str_SFX_VOICE_MARIO_HAPP_802c15f0[];
+extern const char str_SFX_VOICE_MARIO_HAPP_802c1704[];
+extern const char str_S_aji_14_802c16e0[];
+extern const char str_S_jin04_802c16d8[];
+extern const char str_aji_10_802c1798[];
+extern const char str_gon_11_S_802c16cc[];
+extern const char str_itemget_802c1634[];
+extern const char str_muj_12_802c17a8[];
+extern const char str_pik_01_802c17b8[];
+extern const char str_pik_03_802c17b0[];
+extern const char str_radiation_n64_802c161c[];
+extern const char str_stageclear_802c16f8[];
+extern const char str_sub_bg_802c162c[];
+extern const char str_sub_clear_802c16ec[];
+extern const char str_stg1_gon_33_18_802c163c[];
+extern const char str_stg1_gon_34_802c171c[];
+extern const char str_stg2_mri_e25_03_802c164c[];
+extern const char str_stg2_mri_e25_04_802c1728[];
+extern const char str_stg3_tou_475_01_802c1738[];
+extern const char str_stg3_tou_475_802c165c[];
+extern const char str_stg4_jin_10_02_802c16a4[];
+extern const char str_stg4_jin_10_03_802c1788[];
+extern const char str_stg4_jin_39_01_802c1748[];
+extern const char str_stg4_jin_39_802c166c[];
+extern const char str_stg5_dou_29_01_802c1678[];
+extern const char str_stg5_dou_29_02_802c1758[];
+extern const char str_stg6_pik_20_01_802c1768[];
+extern const char str_stg6_pik_20_802c1688[];
+extern const char str_stg7_aji_42_02_802c1694[];
+extern const char str_stg7_aji_42_03_802c1778[];
+extern const char str_sub_hikari_802c1610[];
+extern const char str_usu_00_802c17a0[];
+extern const char str_sjis_00000140[];
+extern u32 unk_evt_803bac3c[];
 extern s32 evt_eff64();
 extern s32 evt_mapobj_get_position();
 extern s32 evt_mapobj_rotate();
@@ -1384,6 +1453,191 @@ u32 evt_sub_kusa_access_entry[26] = {
     0x00000004, 0x00000007, 0x00000021, 0x0007005B, (u32)evt_run_case_evt, 0x00000009,
     0x00000001, 0xFE363C81, 0x00000000, (u32)kusa_evt, 0x00000000, 0x00000006,
     0x00000002, 0x00000001
+};
+
+/* Recovered target evt_sub Star Stone event; cross-object Shift-JIS dependency uses the reviewed C-safe linker identity. */
+u32 evt_sub_starstone[1084] = {
+    0x0002005B, (u32)evt_mario_key_onoff, 0x00000000, 0x0002005B, (u32)evt_party_stop, 0x00000000,
+    0x00010022, 0xFE363C80, 0x00010024, 0x00000001, 0x0002005B, (u32)evt_pouch_get_starstone,
+    0x00000001, 0x0003005B, (u32)evt_pouch_add_item, 0x00000072, 0xFE363C82, 0x00010024,
+    0x00000002, 0x0002005B, (u32)evt_pouch_get_starstone, 0x00000002, 0x0003005B, (u32)evt_pouch_add_item,
+    0x00000073, 0xFE363C82, 0x00010024, 0x00000003, 0x0002005B, (u32)evt_pouch_get_starstone,
+    0x00000003, 0x0003005B, (u32)evt_pouch_add_item, 0x00000074, 0xFE363C82, 0x00010024,
+    0x00000004, 0x0002005B, (u32)evt_pouch_get_starstone, 0x00000004, 0x0003005B, (u32)evt_pouch_add_item,
+    0x00000075, 0xFE363C82, 0x00010024, 0x00000005, 0x0002005B, (u32)evt_pouch_get_starstone,
+    0x00000005, 0x0003005B, (u32)evt_pouch_add_item, 0x00000076, 0xFE363C82, 0x00010024,
+    0x00000006, 0x0002005B, (u32)evt_pouch_get_starstone, 0x00000006, 0x0003005B, (u32)evt_pouch_add_item,
+    0x00000077, 0xFE363C82, 0x00010024, 0x00000007, 0x0002005B, (u32)evt_pouch_get_starstone,
+    0x00000007, 0x0003005B, (u32)evt_pouch_add_item, 0x00000078, 0xFE363C82, 0x00010024,
+    0xFFFFFFFF, 0x00000031, 0x00020018, 0xFE363C80, 0x00000001, 0x00020032,
+    0xFBD3E281, 0x00000001, 0x00000021, 0x00020018, 0xFE363C80, 0x00000002,
+    0x00020032, 0xFBD3E282, 0x00000001, 0x00000021, 0x00020018, 0xFE363C80,
+    0x00000003, 0x00020032, 0xFBD3E283, 0x00000001, 0x00000021, 0x00020018,
+    0xFE363C80, 0x00000004, 0x00020032, 0xFBD3E284, 0x00000001, 0x00000021,
+    0x00020018, 0xFE363C80, 0x00000005, 0x00020032, 0xFBD3E285, 0x00000001,
+    0x00000021, 0x00020018, 0xFE363C80, 0x00000006, 0x00020032, 0xFBD3E286,
+    0x00000001, 0x00000021, 0x00020018, 0xFE363C80, 0x00000007, 0x00020032,
+    0xFBD3E287, 0x00000001, 0x00000021, 0x00020018, 0xFE363C80, 0xFFFFFFFF,
+    0x00020032, 0xFBD3E288, 0x00000001, 0x00000021, 0x0002005B, (u32)set_stop,
+    0x00000000, 0x0000006B, 0x0001000A, 0x000025E4, 0x0002005B, (u32)set_stop,
+    0x00000001, 0x0000006D, 0x0003005B, (u32)evt_snd_sfxon, (u32)(char*)str_SFX_EVT_STARSTONE_WH_802c1594, 0x00000000,
+    0x0006005B, (u32)evt_fade_entry, 0x0000000A, 0x0000012C, 0x000000FF, 0x000000FF,
+    0x000000FF, 0x0001005B, (u32)evt_fade_end_wait, 0x00020018, 0xFBD3E288, 0x00000001,
+    0x0005005B, (u32)evt_npc_get_position, (u32)(char*)str_sjis_00000140, 0xFE363C82, 0xFE363C83, 0xFE363C84,
+    0x00000020, 0x0005005B, (u32)evt_mario_get_pos, 0x00000000, 0xFE363C82, 0xFE363C83,
+    0xFE363C84, 0x00000021, 0x0004005B, (u32)evt_sub_get_sincos, 0x00000000, 0xFE363C85,
+    0xFE363C86, 0x0002003C, 0xFE363C85, 0xF24B1A80, 0x0002003C, 0xFE363C86,
+    0xF24B1A80, 0x0002003A, 0xFE363C85, 0xFE363C82, 0x0002003A, 0xFE363C86,
+    0xFE363C84, 0x0005005B, (u32)evt_item_set_position, 0xFE363C81, 0xFE363C85, 0xFE363C83,
+    0xFE363C86, 0x0001005B, (u32)evt_mario_adjust_dir, 0x0001000A, 0x000001F4, 0x00020018,
+    0xFBD3E288, 0x00000000, 0x0002005B, (u32)evt_mario_set_pose, (u32)(char*)str_M_N_3_8041fe14, 0x00000021,
+    0x0002005B, (u32)evt_snd_bgmoff, 0x00000400, 0x0003005B, (u32)evt_snd_bgmon, 0x00000001,
+    (u32)(char*)str_BGM_FF_GET_STARSTONE_802c15bc, 0x0001005B, (u32)bgm_start_wait, 0x0006005B, (u32)evt_fade_entry, 0x00000009,
+    0x0000012C, 0x000000FF, 0x000000FF, 0x000000FF, 0x00020018, 0xFBD3E288,
+    0x00000001, 0x000A005B, (u32)evt_cam3d_evt_set_npc_rel, (u32)(char*)str_sjis_00000140, 0x00000000, 0x00000032,
+    0x0000018D, 0x00000000, 0x00000046, 0x00000019, 0x000007D0, 0x0000000B,
+    0x00000020, 0x0009005B, (u32)evt_cam3d_evt_set_rel, 0x00000000, 0x00000032, 0x0000018D,
+    0x00000000, 0x00000046, 0x00000019, 0x000007D0, 0x0000000B, 0x00000021,
+    0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_SE2_EVT_STARSTON_802c15d4, 0xFE363C85, 0xFE363C83, 0xFE363C86,
+    0x00000000, 0x00020032, 0xFE363C87, 0xFE363C81, 0x00020034, 0xFE363C88,
+    0xF24B0680, 0x00020034, 0xFE363C89, 0xFE363C83, 0x0005005B, (u32)evt_sub_intpl_msec_init,
+    0x00000004, 0x00000000, 0x00000E10, 0x00000B11, 0x00010005, 0x00000000,
+    0x0001005B, (u32)evt_sub_intpl_msec_get_value, 0x00020018, 0xFBD3E288, 0x00000001, 0x0005005B,
+    (u32)evt_npc_get_position, (u32)(char*)str_sjis_00000140, 0xFE363C82, 0xFE363C83, 0xFE363C84, 0x00000020,
+    0x0005005B, (u32)evt_mario_get_pos, 0x00000000, 0xFE363C82, 0xFE363C83, 0xFE363C84,
+    0x00000021, 0x0004005B, (u32)evt_sub_get_sincos, 0xFE363C80, 0xFE363C85, 0xFE363C86,
+    0x0002003C, 0xFE363C85, 0xFE363C88, 0x0002003C, 0xFE363C86, 0xFE363C88,
+    0x0002003A, 0xFE363C85, 0xFE363C82, 0x0002003A, 0xFE363C86, 0xFE363C84,
+    0x0005005B, (u32)evt_item_set_position, 0xFE363C87, 0xFE363C85, 0xFE363C89, 0xFE363C86,
+    0x0003005B, (u32)stone_ry, 0xFE363C87, 0xFE363C80, 0x00020034, 0xFE363C82,
+    0xF24A7B52, 0x00020034, 0xFE363C83, 0xF24A7BA1, 0x0003005B, (u32)unk_80053f10,
+    0xFE363C82, 0xFE363C83, 0x0002003B, 0xFE363C88, 0xFE363C82, 0x0002003A,
+    0xFE363C89, 0xFE363C83, 0x00010009, 0x00000001, 0x00020018, 0xFE363C81,
+    0x00000000, 0x00000007, 0x00000021, 0x00000006, 0x00020018, 0xFBD3E288,
+    0x00000001, 0x0005005B, (u32)evt_npc_get_position, (u32)(char*)str_sjis_00000140, 0xFE363C82, 0xFE363C83,
+    0xFE363C84, 0x00000020, 0x0005005B, (u32)evt_mario_get_pos, 0x00000000, 0xFE363C82,
+    0xFE363C83, 0xFE363C84, 0x00000021, 0x00020035, 0xFE363C83, 0x00000030,
+    0x0005005B, (u32)evt_item_set_position, 0xFE363C87, 0xFE363C82, 0xFE363C83, 0xFE363C84,
+    0x00020019, 0xFBD3E288, 0x00000001, 0x0005005B, (u32)evt_mario_get_pos, 0x00000000,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_VOICE_MARIO_HAPP_802c15f0,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000000, 0x00000021, 0x00020018,
+    0xFBD3E288, 0x00000001, 0x0003005B, (u32)evt_npc_set_anim, (u32)(char*)str_sjis_00000140, (u32)(char*)str_EM_I_1_802c1608,
+    0x00000020, 0x0002005B, (u32)evt_mario_set_pose, (u32)(char*)str_M_P_2_8041fe1c, 0x00000021, 0x0005005B,
+    (u32)evt_item_get_position, 0xFE363C87, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00020035,
+    0xFE363C81, 0x00000010, 0x000F005B, (u32)evt_eff64, (u32)(char*)str_sub_hikari_802c1610, (u32)(char*)str_radiation_n64_802c161c,
+    0x0000000C, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0xF24A7E80, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00020035, 0xFE363C82, 0xFFFFFFF6, 0x000F005B, (u32)evt_eff, (u32)(char*)str_sub_bg_802c162c,
+    (u32)(char*)str_itemget_802c1634, 0x00000000, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x0002005B, (u32)stone_bg, 0xFE363C87, 0x00020018, 0xFBD3E281,
+    0x00000001, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg1_gon_33_18_802c163c, 0x00000000,
+    0x00000000, 0x00000021, 0x00020018, 0xFBD3E282, 0x00000001, 0x0005005B,
+    (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg2_mri_e25_03_802c164c, 0x00000000, 0x00000000, 0x00000021,
+    0x00020018, 0xFBD3E283, 0x00000001, 0x0005005B, (u32)evt_msg_print, 0x00000000,
+    (u32)(char*)str_stg3_tou_475_802c165c, 0x00000000, 0x00000000, 0x00000021, 0x00020018, 0xFBD3E284,
+    0x00000001, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg4_jin_39_802c166c, 0x00000000,
+    0x00000000, 0x00000021, 0x00020018, 0xFBD3E285, 0x00000001, 0x0005005B,
+    (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg5_dou_29_01_802c1678, 0x00000000, 0x00000000, 0x00000021,
+    0x00020018, 0xFBD3E286, 0x00000001, 0x0005005B, (u32)evt_msg_print, 0x00000000,
+    (u32)(char*)str_stg6_pik_20_802c1688, 0x00000000, 0x00000000, 0x00000021, 0x00020018, 0xFBD3E287,
+    0x00000001, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg7_aji_42_02_802c1694, 0x00000000,
+    0x00000000, 0x00000021, 0x00020018, 0xFBD3E288, 0x00000001, 0x0005005B,
+    (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg4_jin_10_02_802c16a4, 0x00000000, 0x00000000, 0x00000021,
+    0x00010005, 0x00000000, 0x0002005B, (u32)get_stop, 0xFE363C80, 0x00020018,
+    0xFE363C80, 0x00000001, 0x00000007, 0x00000021, 0x00010009, 0x00000001,
+    0x00000006, 0x0002005B, (u32)evt_snd_bgmoff, 0x00000201, 0x0003005B, (u32)evt_snd_bgmon,
+    0x00000120, 0x00000000, 0x0003005B, (u32)evt_snd_bgmon, 0x00000200, (u32)(char*)str_BGM_EVT_STAGE_CLEAR1_802c16b4,
+    0x0002005B, (u32)evt_snd_envoff, 0x00000200, 0x0002005B, (u32)evt_eff_softdelete, (u32)(char*)str_sub_hikari_802c1610,
+    0x0002005B, (u32)stone_bg_open, 0xFE363C87, 0x0000006B, 0x00020018, 0xFBD3E281,
+    0x00000001, 0x00020032, 0xFE363C80, (u32)(char*)str_gon_11_S_802c16cc, 0x00000021, 0x00020018,
+    0xFBD3E282, 0x00000001, 0x00020032, 0xFE363C80, (u32)(char*)str_S_8041fe24, 0x00000021,
+    0x00020018, 0xFBD3E283, 0x00000001, 0x00020032, 0xFE363C80, (u32)(char*)str_S_8041fe24,
+    0x00000021, 0x00020018, 0xFBD3E284, 0x00000001, 0x00020032, 0xFE363C80,
+    (u32)(char*)str_S_jin04_802c16d8, 0x00000021, 0x00020018, 0xFBD3E285, 0x00000001, 0x00020032,
+    0xFE363C80, (u32)(char*)str_S_8041fe24, 0x00000021, 0x00020018, 0xFBD3E286, 0x00000001,
+    0x00020032, 0xFE363C80, (u32)(char*)str_S_8041fe24, 0x00000021, 0x00020018, 0xFBD3E287,
+    0x00000001, 0x00020032, 0xFE363C80, (u32)(char*)str_S_aji_14_802c16e0, 0x00000021, 0x00020018,
+    0xFBD3E288, 0x00000001, 0x00020032, 0xFE363C80, (u32)(char*)str_S_jin04_802c16d8, 0x00000021,
+    0x00010009, 0x0000000A, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001, 0x00000001,
+    0xFE363C80, 0x00000001, 0x0000006D, 0x0006005B, (u32)evt_fade_entry, 0x00000022,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x0001005B, (u32)evt_fade_end_wait,
+    0x0001000A, 0x000003E8, 0x000F005B, (u32)evt_eff, (u32)(char*)str_sub_clear_802c16ec, (u32)(char*)str_stageclear_802c16f8,
+    0x0000000A, 0x00000000, 0x00000064, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x0001005B, (u32)stageclear_wait, 0x00020019, 0xFBD3E288, 0x00000001, 0x0005005B,
+    (u32)evt_mario_get_pos, 0x00000000, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0x0006005B,
+    (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_VOICE_MARIO_HAPP_802c1704, 0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000000,
+    0x00000021, 0x0001000A, 0x000007D0, 0x0006005B, (u32)evt_fade_entry, 0x0000001E,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x0001005B, (u32)evt_fade_end_wait,
+    0x0002005B, (u32)evt_item_delete, 0xFE363C87, 0x0001000A, 0x000003E8, 0x00020018,
+    0xFBD3E281, 0x00000001, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg1_gon_34_802c171c,
+    0x00000000, 0x00000000, 0x00000021, 0x00020018, 0xFBD3E282, 0x00000001,
+    0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg2_mri_e25_04_802c1728, 0x00000000, 0x00000000,
+    0x00000021, 0x00020018, 0xFBD3E283, 0x00000001, 0x0005005B, (u32)evt_msg_print,
+    0x00000000, (u32)(char*)str_stg3_tou_475_01_802c1738, 0x00000000, 0x00000000, 0x00000021, 0x00020018,
+    0xFBD3E284, 0x00000001, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg4_jin_39_01_802c1748,
+    0x00000000, 0x00000000, 0x00000021, 0x00020018, 0xFBD3E285, 0x00000001,
+    0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg5_dou_29_02_802c1758, 0x00000000, 0x00000000,
+    0x00000021, 0x00020018, 0xFBD3E286, 0x00000001, 0x0005005B, (u32)evt_msg_print,
+    0x00000000, (u32)(char*)str_stg6_pik_20_01_802c1768, 0x00000000, 0x00000000, 0x00000021, 0x00020018,
+    0xFBD3E287, 0x00000001, 0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg7_aji_42_03_802c1778,
+    0x00000000, 0x00000000, 0x00000021, 0x00020018, 0xFBD3E288, 0x00000001,
+    0x0005005B, (u32)evt_msg_print, 0x00000000, (u32)(char*)str_stg4_jin_10_03_802c1788, 0x00000000, 0x00000000,
+    0x00000021, 0x0001000A, 0x000003E8, 0x00020018, 0xFBD3E281, 0x00000001,
+    0x00020032, 0xFE363C80, 0x00000001, 0x00000021, 0x00020018, 0xFBD3E282,
+    0x00000001, 0x00020032, 0xFE363C80, 0x00000004, 0x00000021, 0x00020018,
+    0xFBD3E283, 0x00000001, 0x00020032, 0xFE363C80, 0x00000007, 0x00000021,
+    0x00020018, 0xFBD3E284, 0x00000001, 0x00020032, 0xFE363C80, 0x0000000A,
+    0x00000021, 0x00020018, 0xFBD3E285, 0x00000001, 0x00020032, 0xFE363C80,
+    0x0000000D, 0x00000021, 0x00020018, 0xFBD3E286, 0x00000001, 0x00020032,
+    0xFE363C80, 0x00000010, 0x00000021, 0x00020018, 0xFBD3E287, 0x00000001,
+    0x00020032, 0xFE363C80, 0x00000013, 0x00000021, 0x00020018, 0xFBD3E288,
+    0x00000001, 0x00020032, 0xFE363C80, 0x00000016, 0x00000021, 0x00020032,
+    0xFBD3E28A, 0x00000000, 0x0001005E, (u32)unk_evt_803bac3c, 0x0001005B, (u32)evt_mario_init_camid,
+    0x0002005B, (u32)evt_party_init_camid, 0x00000000, 0x0002005B, (u32)evt_party_init_camid, 0x00000001,
+    0x00020018, 0xFBD3E281, 0x00000001, 0x0003005B, (u32)evt_snd_bgmoff_f, 0x00000200,
+    0x000007D0, 0x0003005B, (u32)evt_snd_envoff_f, 0x00000200, 0x000007D0, 0x0001005B,
+    (u32)evt_snd_sfx_all_stop, 0x0006005B, (u32)evt_fade_entry, 0x00000011, 0x000003E8, 0x00000000,
+    0x00000000, 0x00000000, 0x0001005B, (u32)evt_fade_end_wait, 0x0001000A, 0x000007D0,
+    0x0006005B, (u32)evt_fade_set_mapchange_type, 0x00000001, 0x00000037, 0x00000000, 0x00000036,
+    0x00000000, 0x0003005B, (u32)evt_bero_mapchange, (u32)(char*)str_aji_10_802c1798, 0x00000000, 0x00000021,
+    0x00020018, 0xFBD3E282, 0x00000001, 0x0003005B, (u32)evt_snd_bgmoff_f, 0x00000200,
+    0x000007D0, 0x0003005B, (u32)evt_snd_envoff_f, 0x00000200, 0x000007D0, 0x0001005B,
+    (u32)evt_snd_sfx_all_stop, 0x0006005B, (u32)evt_fade_entry, 0x00000011, 0x000003E8, 0x00000000,
+    0x00000000, 0x00000000, 0x0001005B, (u32)evt_fade_end_wait, 0x0001000A, 0x000007D0,
+    0x0006005B, (u32)evt_fade_set_mapchange_type, 0x00000001, 0x00000037, 0x00000000, 0x00000036,
+    0x00000000, 0x0003005B, (u32)evt_bero_mapchange, (u32)(char*)str_aji_10_802c1798, 0x00000000, 0x00000021,
+    0x00020018, 0xFBD3E283, 0x00000001, 0x0003005B, (u32)evt_snd_bgmoff_f, 0x00000200,
+    0x000007D0, 0x0003005B, (u32)evt_snd_envoff_f, 0x00000200, 0x000007D0, 0x0001005B,
+    (u32)evt_snd_sfx_all_stop, 0x0006005B, (u32)evt_fade_entry, 0x00000011, 0x000003E8, 0x00000000,
+    0x00000000, 0x00000000, 0x0001005B, (u32)evt_fade_end_wait, 0x0001000A, 0x000007D0,
+    0x0006005B, (u32)evt_fade_set_mapchange_type, 0x00000001, 0x00000037, 0x00000000, 0x00000036,
+    0x00000000, 0x0003005B, (u32)evt_bero_mapchange, (u32)(char*)str_aji_10_802c1798, 0x00000000, 0x00000021,
+    0x00020018, 0xFBD3E284, 0x00000001, 0x0006005B, (u32)evt_fade_set_mapchange_type, 0x00000001,
+    0x00000011, 0x00000320, 0x00000010, 0x00000320, 0x0003005B, (u32)evt_bero_mapchange,
+    (u32)(char*)str_usu_00_802c17a0, 0x00000000, 0x00000021, 0x00020018, 0xFBD3E285, 0x00000001,
+    0x0006005B, (u32)evt_fade_set_mapchange_type, 0x00000001, 0x00000011, 0x00000320, 0x00000010,
+    0x00000320, 0x0003005B, (u32)evt_bero_mapchange, (u32)(char*)str_muj_12_802c17a8, 0x00000000, 0x00000021,
+    0x00020018, 0xFBD3E286, 0x00000001, 0x0006005B, (u32)evt_fade_set_mapchange_type, 0x00000000,
+    0x00000011, 0x00000320, 0x00000010, 0x00000320, 0x0003005B, (u32)evt_bero_mapchange,
+    (u32)(char*)str_pik_03_802c17b0, (u32)(char*)str_next_8041fe28, 0x00000021, 0x00020018, 0xFBD3E287, 0x00000001,
+    0x0003005B, (u32)evt_snd_bgmoff_f, 0x00000200, 0x000007D0, 0x0003005B, (u32)evt_snd_envoff_f,
+    0x00000200, 0x000007D0, 0x0001005B, (u32)evt_snd_sfx_all_stop, 0x0006005B, (u32)evt_fade_entry,
+    0x00000011, 0x000003E8, 0x00000000, 0x00000000, 0x00000000, 0x0001005B,
+    (u32)evt_fade_end_wait, 0x0001000A, 0x000007D0, 0x0006005B, (u32)evt_fade_set_mapchange_type, 0x00000001,
+    0x00000037, 0x00000000, 0x00000036, 0x00000000, 0x0003005B, (u32)evt_bero_mapchange,
+    (u32)(char*)str_pik_01_802c17b8, 0x00000000, 0x00000021, 0x00020018, 0xFBD3E288, 0x00000001,
+    0x0003005B, (u32)evt_snd_bgmoff_f, 0x00000200, 0x000007D0, 0x0003005B, (u32)evt_snd_envoff_f,
+    0x00000200, 0x000007D0, 0x0001005B, (u32)evt_snd_sfx_all_stop, 0x0006005B, (u32)evt_fade_entry,
+    0x00000011, 0x000003E8, 0x00000000, 0x00000000, 0x00000000, 0x0001005B,
+    (u32)evt_fade_end_wait, 0x0001000A, 0x000007D0, 0x0002005B, (u32)evt_eff_delete, (u32)(char*)str_sub_bg_802c162c,
+    0x0002005B, (u32)evt_eff_delete, (u32)(char*)str_sub_clear_802c16ec, 0x0005005B, (u32)evt_mapobj_flag_onoff, 0x00000001,
+    0x00000000, (u32)(char*)str_S_jin04_802c16d8, 0x00000001, 0x0002005B, (u32)evt_fade_reset, 0x00000001,
+    0x0003005B, (u32)evt_npc_set_camid, (u32)(char*)str_sjis_00000140, 0x00000004, 0x0002005B, (u32)evt_mario_set_pose,
+    (u32)(char*)str_M_D_2_8041fe30, 0x0006005B, (u32)evt_fade_entry, 0x00000010, 0x000003E8, 0x00000000,
+    0x00000000, 0x00000000, 0x0001005B, (u32)evt_fade_end_wait, 0x00000021, 0x0002005B,
+    (u32)evt_mario_key_onoff, 0x00000001, 0x00000002, 0x00000001
 };
 
 u32 evt_sub_mail_vibration[26] = {

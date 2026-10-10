@@ -62,20 +62,22 @@ void BattleActionCommandDeclareACResult(void* battleWork, void* unit, s32 result
     extern f32 float_0p25_804221a4;
     extern f32 float_0p5_804221a0;
     void* base;
+    f32 multiplier;
 
     base = (void*)((s32)battleWork + 0x20000);
-    if (result == -1) {
-        goto bad;
+    switch (result) {
+        case -1: goto bad;
+        default: goto good;
     }
-    goto good;
 
 bad:
     BattleAudience_Case_ActionCommandBad(unit);
     return;
 
 good:
+    multiplier = float_0p25_804221a4 * (f32)result + float_0p5_804221a0;
     *(void**)((s32)base - 0x7004) = unit;
-    *(f32*)((s32)base - 0x7000) = (f32)result * float_0p25_804221a4 + float_0p5_804221a0;
+    *(f32*)((s32)base - 0x7000) = multiplier;
     *(u8*)((s32)base - 0x6FFB) = *(u8*)((s32)unit + 0x19);
     *(u8*)((s32)base - 0x6FFA) = *(u8*)((s32)unit + 0x1A);
     BattleAudience_Case_ActionCommandGood(unit);
@@ -136,11 +138,12 @@ void BattleActionCommandStop(BattleWork* work) {
     }
 }
 
-void BattleActionCommandCheckDefence(BattleWorkUnit* unit, s32 value) {
+s32 BattleActionCommandCheckDefence(BattleWorkUnit* unit, s32 value) {
     extern u8 N_normal_guard_frames[];
     extern u8 N_superguard_frames[];
-    u8 normalFrames[7];
-    u8 superFrames[7];
+    typedef struct { u8 bytes[7]; } GuardFrames;
+    GuardFrames normalFrames;
+    GuardFrames superFrames;
     void* work;
     void* padWork;
     s32 guarded;
@@ -150,20 +153,8 @@ void BattleActionCommandCheckDefence(BattleWorkUnit* unit, s32 value) {
     s32 count;
     s32 i;
 
-    normalFrames[0] = N_normal_guard_frames[0];
-    normalFrames[1] = N_normal_guard_frames[1];
-    normalFrames[2] = N_normal_guard_frames[2];
-    normalFrames[3] = N_normal_guard_frames[3];
-    normalFrames[4] = N_normal_guard_frames[4];
-    normalFrames[5] = N_normal_guard_frames[5];
-    normalFrames[6] = N_normal_guard_frames[6];
-    superFrames[0] = N_superguard_frames[0];
-    superFrames[1] = N_superguard_frames[1];
-    superFrames[2] = N_superguard_frames[2];
-    superFrames[3] = N_superguard_frames[3];
-    superFrames[4] = N_superguard_frames[4];
-    superFrames[5] = N_superguard_frames[5];
-    superFrames[6] = N_superguard_frames[6];
+    normalFrames = *(const GuardFrames*)N_normal_guard_frames;
+    superFrames = *(const GuardFrames*)N_superguard_frames;
 
     work = _battleWorkPointer;
     padWork = (void*)((s32)work + 0x1D1C);
@@ -178,8 +169,8 @@ void BattleActionCommandCheckDefence(BattleWorkUnit* unit, s32 value) {
         difficulty = 6;
     }
 
-    superCount = superFrames[difficulty];
-    normalCount = normalFrames[difficulty];
+    superCount = superFrames.bytes[difficulty];
+    normalCount = normalFrames.bytes[difficulty];
 
     if (*(u8*)(value + 0x13) != 0 && *(s16*)((s32)unit + 0x10C) > 0) {
         if (*(s16*)((s32)work + 0x1D18) > 0) {
@@ -247,6 +238,7 @@ void BattleActionCommandCheckDefence(BattleWorkUnit* unit, s32 value) {
     }
 
     BtlPad_WorkInit(padWork);
+    return *(s32*)((s32)work + 0x1CB0);
 }
 
 s32 BattleACPadCheckRecordTrigger(s32 id, u32 mask) {
@@ -430,6 +422,7 @@ s32 BattleACGetButtonIcon(int button, int pressed) {
     return icon;
 }
 
+#pragma opt_common_subs off
 void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
                        s32 param_5, s32 bar1EndPercent, s32 bar2EndPercent,
                        s32 bar3EndPercent, s32 flags) {
@@ -438,10 +431,13 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
     extern void GXLoadPosMtxImm(void*, s32);
     extern void btlDispGXInit2DRasta(void);
     extern void btlDispGXQuads2DRasta(f32, f32, f32, f32, u8, u8, u8, u8);
+    extern const Vec vec3_802ee028;
     extern const u32 dat_80422180;
     extern const u32 dat_80422184;
     extern const f32 float_0_80422188;
     extern const f32 float_100_8042218c;
+    extern const f32 float_1_80422198;
+    extern const f32 float_2_8042219c;
     BattleWork* work;
     void* camera;
     Vec position;
@@ -452,32 +448,34 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
     f32 bottom;
     f32 filled;
     f32 segmentEnd;
+    s32 boundary;
 
     color = dat_80422180;
     work = _battleWorkPointer;
     camera = camGetPtr(8);
+    position = vec3_802ee028;
     position.x = x - 200;
     position.y = y + 25;
-    position.z = 0.0f;
-    iconDispGx(1.0f, &position, 0x10, 0x94);
+    iconDispGx(float_1_80422198, &position, 0x10, 0x94);
 
-    if (param_5 > 1) {
+    if (param_5 >= 2) {
         left = x - 289;
-        right = x + innerBarWidth * bar1EndPercent / 100 - 289;
+        boundary = x + innerBarWidth * bar1EndPercent / 100 - 289;
+        right = boundary;
         top = y + 32;
         bottom = y + 50;
-        if (left <= right) {
+        if (right >= left) {
             btlDispGXInit2DRasta();
             GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
             btlDispGXQuads2DRasta(left, top, right, bottom,
                                   0x21, 0x21, 0x75, 0xFF);
         }
         if (bar2EndPercent - bar1EndPercent > 0) {
-            left = right;
+            left = boundary;
             right = x + innerBarWidth * bar2EndPercent / 100 - 289;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom,
@@ -489,7 +487,7 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
             right = x + innerBarWidth * bar3EndPercent / 100 - 289;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom,
@@ -498,10 +496,10 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         }
         if (100 - bar3EndPercent > 0) {
             left = x + innerBarWidth * bar3EndPercent / 100 - 289;
-            right = x + innerBarWidth - 289;
+            right = x + innerBarWidth * 100 / 100 - 289;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom,
@@ -510,9 +508,9 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         }
     }
 
-    if (param_5 > 1) {
+    if (param_5 >= 2) {
         left = x - 289;
-        right = x + innerBarWidth - 289;
+        right = x + innerBarWidth * 100 / 100 - 289;
         btlDispGXInit2DRasta();
         GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
         top = y + 32;
@@ -522,10 +520,10 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
 
         if (bar1EndPercent > 0) {
             right = x + innerBarWidth * bar1EndPercent / 100 - 289;
-            left = right - 2.0f;
+            left = right - float_2_8042219c;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom,
@@ -534,10 +532,10 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         }
         if (bar2EndPercent - bar1EndPercent > 0) {
             right = x + innerBarWidth * bar2EndPercent / 100 - 289;
-            left = right - 2.0f;
+            left = right - float_2_8042219c;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom,
@@ -546,10 +544,10 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         }
         if (bar3EndPercent - bar2EndPercent > 0) {
             right = x + innerBarWidth * bar3EndPercent / 100 - 289;
-            left = right - 2.0f;
+            left = right - float_2_8042219c;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom,
@@ -558,7 +556,7 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         }
     }
 
-    if (ratioFilled < float_0_80422188) {
+    if (!(ratioFilled >= float_0_80422188)) {
         return;
     }
 
@@ -576,15 +574,15 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
             color = dat_80422184;
         }
 
-        if (ratioFilled <= float_0_80422188) {
+        if (!(ratioFilled > float_0_80422188)) {
             return;
         }
 
         left = x - 289;
-        right = left + innerBarWidth * ratioFilled;
+        right = left + (f32)innerBarWidth * ratioFilled;
         top = y + 32;
         bottom = y + 50;
-        if (left <= right) {
+        if (right >= left) {
             btlDispGXInit2DRasta();
             GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
             btlDispGXQuads2DRasta(
@@ -598,39 +596,48 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
     if (ratioFilled > float_0_80422188) {
         filled = float_100_8042218c * ratioFilled;
 
-        segmentEnd = filled < bar1EndPercent ? filled : bar1EndPercent;
+        segmentEnd = filled;
+        if ((f32)bar1EndPercent < filled) {
+            segmentEnd = (f32)bar1EndPercent;
+        }
         if (segmentEnd > float_0_80422188) {
             left = x - 289;
-            right = left + innerBarWidth * segmentEnd / float_100_8042218c;
+            right = left + (f32)innerBarWidth * segmentEnd / float_100_8042218c;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom, 0, 0xE4, 0x86, 0xFF);
             }
         }
 
-        segmentEnd = filled < bar2EndPercent ? filled : bar2EndPercent;
+        segmentEnd = filled;
+        if ((f32)bar2EndPercent < filled) {
+            segmentEnd = (f32)bar2EndPercent;
+        }
         if (segmentEnd - bar1EndPercent > float_0_80422188) {
             left = x + innerBarWidth * bar1EndPercent / 100 - 289;
-            right = (x - 289) + innerBarWidth * segmentEnd / float_100_8042218c;
+            right = (x - 289) + (f32)innerBarWidth * segmentEnd / float_100_8042218c;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom, 0x2E, 0xB4, 0xF2, 0xFF);
             }
         }
 
-        segmentEnd = filled < bar3EndPercent ? filled : bar3EndPercent;
+        segmentEnd = filled;
+        if ((f32)bar3EndPercent < filled) {
+            segmentEnd = (f32)bar3EndPercent;
+        }
         if (segmentEnd - bar2EndPercent > float_0_80422188) {
             left = x + innerBarWidth * bar2EndPercent / 100 - 289;
-            right = (x - 289) + innerBarWidth * segmentEnd / float_100_8042218c;
+            right = (x - 289) + (f32)innerBarWidth * segmentEnd / float_100_8042218c;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom, 0x75, 0x70, 0xFF, 0xFF);
@@ -642,10 +649,10 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
         }
         if (filled - bar3EndPercent > float_0_80422188) {
             left = x + innerBarWidth * bar3EndPercent / 100 - 289;
-            right = (x - 289) + innerBarWidth * filled / float_100_8042218c;
+            right = (x - 289) + (f32)innerBarWidth * filled / float_100_8042218c;
             top = y + 32;
             bottom = y + 50;
-            if (left <= right) {
+            if (right >= left) {
                 btlDispGXInit2DRasta();
                 GXLoadPosMtxImm((u8*)camera + 0x11C, 0);
                 btlDispGXQuads2DRasta(left, top, right, bottom, 0xF3, 4, 0xBC, 0xFF);
@@ -655,6 +662,7 @@ void BattleAcDrawGauge(f64 ratioFilled, s32 x, s32 y, s32 innerBarWidth,
     return;
 }
 
+#pragma opt_common_subs reset
 void BattleAcGaugeSeInit(void) {
     void* work;
 
@@ -716,3 +724,4 @@ const f32 float_2_8042219c = 2.0f;
 const f32 float_0p5_804221a0 = 0.5f;
 const f32 float_0p25_804221a4 = 0.25f;
 const f32 float_900_804221a8 = 900.0f;
+const u32 gap_09_804221AC_sdata2 = 0;

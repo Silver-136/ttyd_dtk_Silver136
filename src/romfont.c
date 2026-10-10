@@ -1,6 +1,167 @@
 #include "romfont.h"
 
-extern char** msg_tbl[6];
+typedef struct RomFontWorkData {
+    void* glyphs;
+    s32 uniqueChars;
+    s32 language;
+} RomFontWorkData;
+
+static RomFontWorkData work;
+static void* wp = &work;
+
+char* msg_jp[21] = {
+    "\203v\203\215\203O\203\214\203b\203V\203u\203\202\201[\203h\202\305\225\\\216\246\202\265\202\334\202\267\202\251\201H",
+    "\202\315\201@\202\242\201@\201@\201@\201@\201@\201@\202\242\202\242\202\246",
+    "\201y\201@\201@\201@\201@\201z",
+    "\211\346\226\312\225\\\216\246\203\202\201[\203h\202\315\203v\203\215\203O\203\214\203b\203V\203u\203\202\201[\203h\202\311\203Z\203b\203g\202\263\202\352\202\334\202\265\202\275\201B",
+    "\211\346\226\312\225\\\216\246\203\202\201[\203h\202\315\203C\203\223\203^\201[\203\214\201[\203X\203\202\201[\203h\202\311\203Z\203b\203g\202\263\202\352\202\334\202\265\202\275\201B",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "\203f\203B\203X\203N\203J\203o\201[\202\252\212J\202\242\202\304\202\242\202\334\202\267\201B\n\n\203Q\201[\203\200\202\360\221\261\202\257\202\351\217\352\215\207\202\315\201A\n\203f\203B\203X\203N\203J\203o\201[\202\360\225\302\202\337\202\304\202\255\202\276\202\263\202\242\201B",
+    "\203y\201[\203p\201[\203}\203\212\203I\202q\202o\202f\202\314\n\203f\203B\203X\203N\202\360\203Z\203b\203g\202\265\202\304\202\255\202\276\202\263\202\242\201B",
+    "\203f\203B\203X\203N\202\360\223\307\202\337\202\334\202\271\202\361\202\305\202\265\202\275\201B\n\n\202\255\202\355\202\265\202\255\202\315\201A\226{\221\314\202\314\216\346\210\265\220\340\226\276\217\221\202\360\n\202\250\223\307\202\335\202\255\202\276\202\263\202\242\201B",
+    "\203G\203\211\201[\202\252\224\255\220\266\202\265\202\334\202\265\202\275\201B\n\n\226{\221\314\202\314\203p\203\217\201[\203{\203^\203\223\202\360\211\237\202\265\202\304\223d\214\271\202\360OFF\202\311\202\265\201A\n\226{\221\314\202\314\216\346\210\265\220\340\226\276\217\221\202\314\216w\216\246\202\311\217]\202\301\202\304\202\255\202\276\202\263\202\242\201B",
+    "English",
+    "Deutsch",
+    "Fran\347ais",
+    "Espa\361ol",
+    "Italiano",
+    "[           ]",
+    0,
+};
+
+char* msg_us[21] = {
+    "Would you like to display\nin Progressive Mode?",
+    "Yes              N o",
+    "[    ]",
+    "Progressive Mode\nhas been turned on.",
+    "Progressive Mode\nhas been turned off.",
+    "This game is compatible with 60Hz mode.\nPlease select mode.\n\nIf your television does not display\ncorrectly in 60Hz mode,\nplease select 50Hz mode.",
+    "60Hz mode      50Hz mode",
+    "[             ]",
+    "Screen display has been set to\n60Hz mode.",
+    "Screen display has been set to\n50Hz mode.",
+    "The Disc Cover is open.\nIf you want to continue the game,\nplease close the Disc Cover.",
+    "Please insert\nthe \"Paper Mario: The\nThousand-Year Door\"\nGame Disc.",
+    "The Game Disc could not be read.\nPlease read the Nintendo GameCube\nInstruction Booklet\nfor more information.",
+    "An error has occurred.\nTurn the power off and refer to\nthe Nintendo GameCube\nInstruction Booklet\nfor further instructions.",
+    "English",
+    "Deutsch",
+    "Fran\347ais",
+    "Espa\361ol",
+    "Italiano",
+    "[           ]",
+    0,
+};
+
+char* msg_lang3[21] = {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "Dieses Spiel unterst\374tzt den 60Hz-Modus.\nBitte Modus auswahlen.\n\nSollte das TV-Gerat im 60Hz-Modus kein\neinwandfreies Bild darstellen,\nbitte den 50Hz-Modus auswahlen.",
+    "60Hz-Modus     50Hz-Modus",
+    "[               ]",
+    "Die Bildschirmdarstellung erfolgt im\n60Hz-Modus.",
+    "Die Bildschirmdarstellung erfolgt im\n50Hz-Modus.",
+    "Der Disc-Deckel ist ge\366ffnet.\nBitte den Disc-Deckel schlie\337en,\num mit dem Spiel fortzufahren.",
+    "Bitte legen Sie die \"Paper Mario\" Disc ein.",
+    "Diese Game Disc kann\nnicht gelesen werden.\nBitte lesen Sie die\nBedienungsanleitung des\nNintendo GameCube, um weitere\nInformationen zu erhalten.",
+    "Ein Fehler ist aufgetreten.\nBitte schalten Sie den\nNintendo GameCube aus und lesen\nSie die Bedienungsanleitung,\num weitere Informationen zu erhalten.",
+    "English",
+    "Deutsch",
+    "Fran\347ais",
+    "Espa\361ol",
+    "Italiano",
+    "[           ]",
+    0,
+};
+
+char* msg_lang4[21] = {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "Ce jeu est compatible\navec le mode 60 Hz.\nVeuillez choisir un mode.\n\nSi votre televiseur n'affiche pas\ncorrectement le mode 60 Hz,\nchoisissez le mode 50 Hz.",
+    "Mode 60 Hz     Mode 50 Hz",
+    "[               ]",
+    "L'affichage est en mode 60 Hz.",
+    "L'affichage est en mode 50 Hz.",
+    "Le couvercle est ouvert.\nPour continuer \340 jouer,\nveuillez fermer le couvercle.",
+    "Veuillez ins\351rer le disque \"Paper Mario\".",
+    "La lecture du disque a echoue.\nVeuillez vous r\351f\351rer\nau manuel d'instructions\nNintendo GameCube pour\nde plus amples informations.",
+    "Une erreur est survenue.\nEteignez la console et r\351f\351rez-vous\nau manuel d'instructions\nNintendo GameCube pour\nde plus amples informations.",
+    "English",
+    "Deutsch",
+    "Fran\347ais",
+    "Espa\361ol",
+    "Italiano",
+    "[           ]",
+    0,
+};
+
+char* msg_lang5[21] = {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "Este juego es compatible\ncon el modo 60 Hz.\n\277Quieres verlo en ese modo?\n\nSi tu televisor no reproduce\ncorrectamente el modo 60 Hz,\nselecciona el modo 50 Hz.",
+    "Modo 60 Hz     Modo 50 Hz",
+    "[               ]",
+    "La pantalla se ha configurado en\nmodo 60 Hz.",
+    "La pantalla se ha configurado en\nmodo 50 Hz.",
+    "La tapa est\341 abierta.\nSi quieres seguir jugando,\ndebes cerrar la tapa.",
+    "Coloca el disco de \"Paper Mario\".",
+    "No se puede leer el disco.\nConsulta el manual\nde instrucciones de\nNintendo GameCube para\nobtener mas informacion.",
+    "Se ha producido un error.\nApaga la consola y consulta\nel manual de instrucciones de\nNintendo GameCube para\nobtener m\341s informaci\363n.",
+    "English",
+    "Deutsch",
+    "Fran\347ais",
+    "Espa\361ol",
+    "Italiano",
+    "[           ]",
+    0,
+};
+
+char* msg_lang6[21] = {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "Questo gioco pu\362 essere\nvisualizzato in modalit\340 60Hz.\nSeleziona la modalit\340.\n\nSe il televisore non dovesse visualizzare\ncorrettamente la modalit\340 60Hz,\nseleziona la modalit\340 50Hz.",
+    "Modalit\340 60Hz  Modalit\340 50Hz",
+    "[                ]",
+    "Visualizzazione impostata a 60Hz.",
+    "Visualizzazione impostata a 50Hz.",
+    "Il coperchio del disco \350 aperto.\nSe vuoi proseguire nel gioco,\nchiudi il coperchio del disco.",
+    "Inserisci il disco di gioco \"Paper Mario\".",
+    "Impossibile leggere il disco di gioco.\nPer ulteriori indicazioni consulta\nil manuale di istruzioni del\nNintendo GameCube.",
+    "Si \350 verificato un errore.\nSpegni e consulta il manuale\ndi istruzioni del\nNintendo GameCube per\nulteriori indicazioni.",
+    "English",
+    "Deutsch",
+    "Fran\347ais",
+    "Espa\361ol",
+    "Italiano",
+    "[           ]",
+    0,
+};
+
+static char** msg_tbl[6] = {
+    msg_jp,
+    msg_us,
+    msg_lang3,
+    msg_lang4,
+    msg_lang5,
+    msg_lang6,
+};
+
 void romFontMake(void);
 
 char* romFontGetMessage(s32 messageId) {
@@ -376,7 +537,7 @@ glyph_ready:
 
 /* stub-fill: romFontGetWidth | missing_definition | ghidra_signature */
 int romFontGetWidth(s32 message, s32 entry) {
-    extern u8* wp;
+    extern void* wp;
     u8* font = wp;
     s32 width = 0;
     s32 index = 0;

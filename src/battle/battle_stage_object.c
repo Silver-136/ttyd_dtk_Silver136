@@ -93,6 +93,7 @@ void BattleStageObjectInit(void) {
     extern u32 _entry_tree_data[12];
     extern u32 _entry_switch_data[12];
 
+    typedef struct LocalVec { u32 x, y, z; } LocalVec;
     u8* battle;
     u8* stageInfo;
     u8* objectData;
@@ -189,7 +190,7 @@ void BattleStageObjectInit(void) {
         while (objectCount != 0) {
             offset = 0;
             for (j = 0; j < 0x20; j++, offset += 0x7C) {
-                slot = objectWork + offset;
+                slot = battle + offset + 0x1715C;
                 if (*(s32*)slot < 1) {
                     break;
                 }
@@ -221,38 +222,27 @@ void BattleStageObjectInit(void) {
                     break;
             }
 
-            if (layer < 4) {
-                if (layer < 2) {
-                    *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
-                    *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
-                    *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
-                } else {
-                    *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
-                    *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
-                    *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
-                }
-            } else if (layer < 8 && layer >= 6) {
-                *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
-                *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
-                *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+            switch (layer) {
+            case 0:
+            case 1:
+            case 6:
+            case 7:
+                *(LocalVec*)(slot + 0x04) = *(LocalVec*)(objectData + 0x08);
+                break;
+            case 2:
+            case 3:
+                *(LocalVec*)(slot + 0x04) = *(LocalVec*)(objectData + 0x08);
+                break;
             }
 
             *(f32*)(slot + 0x24) = zero;
             *(f32*)(slot + 0x20) = zero;
             *(f32*)(slot + 0x1C) = zero;
 
-            *(u32*)(slot + 0x34) = *(u32*)(vecBase + 0x00);
-            *(u32*)(slot + 0x38) = *(u32*)(vecBase + 0x04);
-            *(u32*)(slot + 0x3C) = *(u32*)(vecBase + 0x08);
-            *(u32*)(slot + 0x40) = *(u32*)(vecBase + 0x0C);
-            *(u32*)(slot + 0x44) = *(u32*)(vecBase + 0x10);
-            *(u32*)(slot + 0x48) = *(u32*)(vecBase + 0x14);
-            *(u32*)(slot + 0x4C) = *(u32*)(vecBase + 0x18);
-            *(u32*)(slot + 0x50) = *(u32*)(vecBase + 0x1C);
-            *(u32*)(slot + 0x54) = *(u32*)(vecBase + 0x20);
-            *(u32*)(slot + 0x58) = *(u32*)(vecBase + 0x24);
-            *(u32*)(slot + 0x5C) = *(u32*)(vecBase + 0x28);
-            *(u32*)(slot + 0x60) = *(u32*)(vecBase + 0x2C);
+            *(LocalVec*)(slot + 0x34) = *(LocalVec*)(vecBase + 0x00);
+            *(LocalVec*)(slot + 0x40) = *(LocalVec*)(vecBase + 0x0C);
+            *(LocalVec*)(slot + 0x4C) = *(LocalVec*)(vecBase + 0x18);
+            *(LocalVec*)(slot + 0x58) = *(LocalVec*)(vecBase + 0x24);
 
             mapGrpFlagOff(*(char**)(*(u8**)(slot + 0x64)), 1);
 
@@ -297,7 +287,7 @@ void BattleStageObjectInit(void) {
         for (i = 0; i < 3; i++, objectData += 0x18) {
             offset = 0;
             for (j = 0; j < 0x20; j++, offset += 0x7C) {
-                slot = objectWork + offset;
+                slot = battle + offset + 0x1715C;
                 if (*(s32*)slot < 1) {
                     break;
                 }
@@ -310,26 +300,16 @@ void BattleStageObjectInit(void) {
             *(s32*)(slot + 0x00) = id;
             *(s32*)(slot + 0x6C) = -1;
 
-            *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
-            *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
-            *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+            *(LocalVec*)(slot + 0x04) = *(LocalVec*)(objectData + 0x08);
 
             *(f32*)(slot + 0x24) = zero;
             *(f32*)(slot + 0x20) = zero;
             *(f32*)(slot + 0x1C) = zero;
 
-            *(u32*)(slot + 0x34) = *(u32*)(vecBase + 0x30);
-            *(u32*)(slot + 0x38) = *(u32*)(vecBase + 0x34);
-            *(u32*)(slot + 0x3C) = *(u32*)(vecBase + 0x38);
-            *(u32*)(slot + 0x40) = *(u32*)(vecBase + 0x3C);
-            *(u32*)(slot + 0x44) = *(u32*)(vecBase + 0x40);
-            *(u32*)(slot + 0x48) = *(u32*)(vecBase + 0x44);
-            *(u32*)(slot + 0x4C) = *(u32*)(vecBase + 0x48);
-            *(u32*)(slot + 0x50) = *(u32*)(vecBase + 0x4C);
-            *(u32*)(slot + 0x54) = *(u32*)(vecBase + 0x50);
-            *(u32*)(slot + 0x58) = *(u32*)(vecBase + 0x54);
-            *(u32*)(slot + 0x5C) = *(u32*)(vecBase + 0x58);
-            *(u32*)(slot + 0x60) = *(u32*)(vecBase + 0x5C);
+            *(LocalVec*)(slot + 0x34) = *(LocalVec*)(vecBase + 0x30);
+            *(LocalVec*)(slot + 0x40) = *(LocalVec*)(vecBase + 0x3C);
+            *(LocalVec*)(slot + 0x4C) = *(LocalVec*)(vecBase + 0x48);
+            *(LocalVec*)(slot + 0x58) = *(LocalVec*)(vecBase + 0x54);
 
             mapGrpFlagOff(*(char**)(*(u8**)(slot + 0x64)), 1);
             id++;
@@ -338,7 +318,7 @@ void BattleStageObjectInit(void) {
 
     offset = 0;
     for (j = 0; j < 0x20; j++, offset += 0x7C) {
-        slot = objectWork + offset;
+        slot = battle + offset + 0x1715C;
         if (*(s32*)slot < 1) {
             break;
         }
@@ -348,9 +328,7 @@ void BattleStageObjectInit(void) {
     *(void**)(slot + 0x64) = objectData;
     *(s32*)(slot + 0x00) = id;
     *(s32*)(slot + 0x6C) = -1;
-    *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
-    *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
-    *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+    *(LocalVec*)(slot + 0x04) = *(LocalVec*)(objectData + 0x08);
 
     stage = (u8*)BattleStageGetPtr();
     *(f32*)(slot + 0x08) = *(f32*)(stage + 0xB28);
@@ -360,18 +338,10 @@ void BattleStageObjectInit(void) {
     *(f32*)(slot + 0x20) = zero;
     *(f32*)(slot + 0x1C) = zero;
 
-    *(u32*)(slot + 0x34) = *(u32*)(vecBase + 0x60);
-    *(u32*)(slot + 0x38) = *(u32*)(vecBase + 0x64);
-    *(u32*)(slot + 0x3C) = *(u32*)(vecBase + 0x68);
-    *(u32*)(slot + 0x40) = *(u32*)(vecBase + 0x6C);
-    *(u32*)(slot + 0x44) = *(u32*)(vecBase + 0x70);
-    *(u32*)(slot + 0x48) = *(u32*)(vecBase + 0x74);
-    *(u32*)(slot + 0x4C) = *(u32*)(vecBase + 0x78);
-    *(u32*)(slot + 0x50) = *(u32*)(vecBase + 0x7C);
-    *(u32*)(slot + 0x54) = *(u32*)(vecBase + 0x80);
-    *(u32*)(slot + 0x58) = *(u32*)(vecBase + 0x84);
-    *(u32*)(slot + 0x5C) = *(u32*)(vecBase + 0x88);
-    *(u32*)(slot + 0x60) = *(u32*)(vecBase + 0x8C);
+    *(LocalVec*)(slot + 0x34) = *(LocalVec*)(vecBase + 0x60);
+    *(LocalVec*)(slot + 0x40) = *(LocalVec*)(vecBase + 0x6C);
+    *(LocalVec*)(slot + 0x4C) = *(LocalVec*)(vecBase + 0x78);
+    *(LocalVec*)(slot + 0x58) = *(LocalVec*)(vecBase + 0x84);
 
     mapGrpFlagOn(*(char**)(*(u8**)(slot + 0x64)), 1);
     *(u32*)(slot + 0x68) |= 1;
@@ -385,7 +355,7 @@ void BattleStageObjectInit(void) {
 
         i = 0;
         for (j = 0; j < 0x20; j++, i += 0x7C) {
-            slot = objectWork + i;
+            slot = battle + i + 0x1715C;
             if (*(s32*)slot < 1) {
                 break;
             }
@@ -395,26 +365,16 @@ void BattleStageObjectInit(void) {
         *(s32*)(slot + 0x00) = id;
         *(s32*)(slot + 0x6C) = -1;
 
-        *(u32*)(slot + 0x04) = *(u32*)(objectData + 0x08);
-        *(u32*)(slot + 0x08) = *(u32*)(objectData + 0x0C);
-        *(u32*)(slot + 0x0C) = *(u32*)(objectData + 0x10);
+        *(LocalVec*)(slot + 0x04) = *(LocalVec*)(objectData + 0x08);
 
         *(f32*)(slot + 0x24) = zero;
         *(f32*)(slot + 0x20) = zero;
         *(f32*)(slot + 0x1C) = zero;
 
-        *(u32*)(slot + 0x34) = *(u32*)(vecBase + 0x90);
-        *(u32*)(slot + 0x38) = *(u32*)(vecBase + 0x94);
-        *(u32*)(slot + 0x3C) = *(u32*)(vecBase + 0x98);
-        *(u32*)(slot + 0x40) = *(u32*)(vecBase + 0x9C);
-        *(u32*)(slot + 0x44) = *(u32*)(vecBase + 0xA0);
-        *(u32*)(slot + 0x48) = *(u32*)(vecBase + 0xA4);
-        *(u32*)(slot + 0x4C) = *(u32*)(vecBase + 0xA8);
-        *(u32*)(slot + 0x50) = *(u32*)(vecBase + 0xAC);
-        *(u32*)(slot + 0x54) = *(u32*)(vecBase + 0xB0);
-        *(u32*)(slot + 0x58) = *(u32*)(vecBase + 0xB4);
-        *(u32*)(slot + 0x5C) = *(u32*)(vecBase + 0xB8);
-        *(u32*)(slot + 0x60) = *(u32*)(vecBase + 0xBC);
+        *(LocalVec*)(slot + 0x34) = *(LocalVec*)(vecBase + 0x90);
+        *(LocalVec*)(slot + 0x40) = *(LocalVec*)(vecBase + 0x9C);
+        *(LocalVec*)(slot + 0x4C) = *(LocalVec*)(vecBase + 0xA8);
+        *(LocalVec*)(slot + 0x58) = *(LocalVec*)(vecBase + 0xB4);
 
         mapGrpFlagOn(*(char**)(*(u8**)(slot + 0x64)), 1);
         *(u32*)(slot + 0x68) |= 1;
@@ -541,40 +501,57 @@ void BattleStageObjectMain(void) {
         }
 
         data = *(void**)((s32)obj + 0x64);
-        if (*(u16*)((s32)data + 0x6) == 2) {
+        switch (*(u16*)((s32)data + 0x6)) {
+        case 2:
             if (*(f32*)((s32)base - 0x7F20) != *(f32*)((s32)base - 0x7F14) ||
                 *(f32*)((s32)base - 0x7F1C) != *(f32*)((s32)base - 0x7F10) ||
                 *(f32*)((s32)base - 0x7F18) != *(f32*)((s32)base - 0x7F0C)) {
                 changed = 1;
                 *(RawVec3*)((s32)base - 0x7F14) = *(RawVec3*)((s32)base - 0x7F20);
             }
+            break;
         }
 
-        layer = *(u16*)((s32)data + 0x6);
-        name = *(char**)data;
-        x = *(f32*)((s32)obj + 0x28) + (*(f32*)((s32)obj + 0x4) + *(f32*)((s32)obj + 0x10));
-        y = *(f32*)((s32)obj + 0x2C) + (*(f32*)((s32)obj + 0x8) + *(f32*)((s32)obj + 0x14));
-        z = *(f32*)((s32)obj + 0x30) + (*(f32*)((s32)obj + 0xC) + *(f32*)((s32)obj + 0x18));
-
-        if (layer == 3) {
+        switch (*(u16*)((s32)*(void**)((s32)obj + 0x64) + 6)) {
+        case 0:
+        case 1:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
             if (changed != 0) {
-                mapObjTranslate(x, y, z, name);
-                mapObjTranslate(float_0_80422fd0, -*(f32*)((s32)obj + 0x8), float_0_80422fd0, *(char**)*(s32*)((s32)obj + 0x64));
+                mapObjTranslate(
+                    *(f32*)((s32)obj + 0x28) + (*(f32*)((s32)obj + 0x4) + *(f32*)((s32)obj + 0x10)),
+                    *(f32*)((s32)obj + 0x2C) + (*(f32*)((s32)obj + 0x8) + *(f32*)((s32)obj + 0x14)),
+                    *(f32*)((s32)obj + 0x30) + (*(f32*)((s32)obj + 0xC) + *(f32*)((s32)obj + 0x18)),
+                    *(char**)*(s32*)((s32)obj + 0x64));
                 mapObjRotate(*(f32*)((s32)obj + 0x1C), *(f32*)((s32)obj + 0x20), *(f32*)((s32)obj + 0x24), *(char**)*(s32*)((s32)obj + 0x64));
-                mapObjTranslate(float_0_80422fd0, *(f32*)((s32)obj + 0x8), float_0_80422fd0, *(char**)*(s32*)((s32)obj + 0x64));
             }
-        } else if (layer == 2) {
+                    break;
+        case 2:
             if (changed != 0) {
-                mapObjTranslate(x, y, z, name);
+                mapObjTranslate(
+                    *(f32*)((s32)obj + 0x28) + (*(f32*)((s32)obj + 0x4) + *(f32*)((s32)obj + 0x10)),
+                    *(f32*)((s32)obj + 0x2C) + (*(f32*)((s32)obj + 0x8) + *(f32*)((s32)obj + 0x14)),
+                    *(f32*)((s32)obj + 0x30) + (*(f32*)((s32)obj + 0xC) + *(f32*)((s32)obj + 0x18)),
+                    *(char**)*(s32*)((s32)obj + 0x64));
                 mapObjTranslate(float_0_80422fd0, -*(f32*)((s32)obj + 0x14), float_0_80422fd0, *(char**)*(s32*)((s32)obj + 0x64));
                 mapObjRotate(*(f32*)((s32)base - 0x7F20), *(f32*)((s32)base - 0x7F1C), *(f32*)((s32)base - 0x7F18), *(char**)*(s32*)((s32)obj + 0x64));
                 mapObjTranslate(float_0_80422fd0, *(f32*)((s32)obj + 0x14), float_0_80422fd0, *(char**)*(s32*)((s32)obj + 0x64));
             }
-        } else if ((u32)layer < 8) {
+                    break;
+        case 3:
             if (changed != 0) {
-                mapObjTranslate(x, y, z, name);
+                mapObjTranslate(
+                    *(f32*)((s32)obj + 0x28) + (*(f32*)((s32)obj + 0x4) + *(f32*)((s32)obj + 0x10)),
+                    *(f32*)((s32)obj + 0x2C) + (*(f32*)((s32)obj + 0x8) + *(f32*)((s32)obj + 0x14)),
+                    *(f32*)((s32)obj + 0x30) + (*(f32*)((s32)obj + 0xC) + *(f32*)((s32)obj + 0x18)),
+                    *(char**)*(s32*)((s32)obj + 0x64));
+                mapObjTranslate(float_0_80422fd0, -*(f32*)((s32)obj + 0x8), float_0_80422fd0, *(char**)*(s32*)((s32)obj + 0x64));
                 mapObjRotate(*(f32*)((s32)obj + 0x1C), *(f32*)((s32)obj + 0x20), *(f32*)((s32)obj + 0x24), *(char**)*(s32*)((s32)obj + 0x64));
+                mapObjTranslate(float_0_80422fd0, *(f32*)((s32)obj + 0x8), float_0_80422fd0, *(char**)*(s32*)((s32)obj + 0x64));
             }
+                    break;
         }
 
         if ((*(u32*)((s32)obj + 0x68) & 1) != 0) {
@@ -666,6 +643,7 @@ u32 _set_mobj_rotate_x(void* event, s32 isFirstCall) {
     extern f32 float_0_80422fd0;
     extern f32 float_90_80422fd4;
     s32 type;
+    char* strings;
     void* battleWork;
     void* base;
     char* snd0;
@@ -678,21 +656,19 @@ u32 _set_mobj_rotate_x(void* event, s32 isFirstCall) {
     s32 timer;
     f32 angle;
     s32 value;
-    f32 pos[3];
-    char* strings;
+    typedef struct LocalVec { f32 x, y, z; } LocalVec;
+    LocalVec pos;
 
     strings = vec3_802f42b8;
-    type = evtGetValue(event, **(s32**)((s32)event + 0x18));
     battleWork = _battleWorkPointer;
     base = (void*)((s32)battleWork + 0x20000);
     active = 0;
+    type = evtGetValue(event, **(s32**)((s32)event + 0x18));
 
     if (isFirstCall != 0) {
-        if (type == 2) {
-            *(s32*)((s32)event + 0x7C) = 0;
-            *(s32*)((s32)event + 0x80) = 0x3C;
-            *(s32*)((s32)event + 0x84) = 0;
-        } else if (type >= 0 && type < 2) {
+        switch (type) {
+        case 0:
+        case 1:
             offset = 0;
             for (i = 0; i < 0x20; i++) {
                 obj = (void*)((s32)battleWork + offset + 0x1715C);
@@ -702,10 +678,18 @@ u32 _set_mobj_rotate_x(void* event, s32 isFirstCall) {
                 }
                 offset += 0x7C;
             }
+            break;
+        case 2:
+            *(s32*)((s32)event + 0x7C) = 0;
+            *(s32*)((s32)event + 0x80) = 0x3C;
+            *(s32*)((s32)event + 0x84) = 0;
+            break;
         }
     }
 
-    if (type >= 0 && type < 2) {
+    switch (type) {
+    case 0:
+    case 1:
         snd0 = strings + 0x240;
         snd1 = strings + 0x258;
         offset = 0;
@@ -729,24 +713,23 @@ u32 _set_mobj_rotate_x(void* event, s32 isFirstCall) {
                     angle = intpl_sub(2, *(f32*)((s32)obj + 0x78), float_90_80422fd4,
                                       *(u8*)((s32)obj + 0x71), *(u8*)((s32)data + 0x15));
                     *(f32*)((s32)obj + 0x1C) = angle;
-                    if (*(u8*)((s32)obj + 0x71) < *(u8*)((s32)data + 0x15)) {
+                    if (*(u8*)((s32)obj + 0x71) < *(u8*)((s32)*(void**)((s32)obj + 0x64) + 0x15)) {
                         active = 1;
                     }
                 }
             }
             offset += 0x7C;
         }
-    } else if (type == 2) {
+        break;
+    case 2:
         timer = *(s32*)((s32)event + 0x7C);
         if (timer != 0) {
             *(s32*)((s32)event + 0x7C) = timer - 1;
             active = 1;
         } else {
             if (*(s32*)((s32)event + 0x84) == 0) {
-                pos[0] = *(f32*)(strings + 0xFC);
-                pos[1] = *(f32*)(strings + 0x100);
-                pos[2] = *(f32*)(strings + 0x104);
-                psndSFXOn_3D(strings + 0x270, pos);
+                pos = *(LocalVec*)(strings + 0xFC);
+                psndSFXOn_3D(strings + 0x270, &pos);
             }
             *(s32*)((s32)event + 0x84) += 1;
             value = (s32)intpl_sub(2, float_0_80422fd0, float_90_80422fd4,
@@ -758,7 +741,7 @@ u32 _set_mobj_rotate_x(void* event, s32 isFirstCall) {
         }
     }
 
-    return ((u32)(-active) | (u32)active) >> 31 ? 0 : 2;
+    return active ? 0 : 2;
 }
 
 s32 _mobj_set_alpha(void* event) {
@@ -1035,16 +1018,19 @@ void BattleStage_NozzleDirChangeCheck(void) {
 }
 
 
+#pragma opt_common_subs off
 void _Nozzle_Change_Check(u32 nozzleIdx, u8* turnWeights) {
     extern s32 irand(s32 max);
     void* work = (void*)((s32)_battleWorkPointer + 0x20000 - 0x7F24);
     u32 idx = nozzleIdx & 0xFF;
+    u32 directionOffset = idx + 0x1C4;
     u8* weights;
     s32 total;
     s32 i;
     s32 roll;
     u8 direction;
     s32 evtId;
+    u8* indexedWork;
     void* evt;
 
     total = 0;
@@ -1054,31 +1040,34 @@ void _Nozzle_Change_Check(u32 nozzleIdx, u8* turnWeights) {
     }
 
     roll = irand(total);
+    weights = turnWeights;
     direction = 0;
     while ((u8)direction < 4) {
-        roll -= *turnWeights;
+        roll -= *weights;
         if (roll < 0) {
             break;
         }
-        turnWeights++;
+        weights++;
         direction++;
     }
 
-    if ((u8)direction != *(u8*)((s32)work + idx + 0x1C4)) {
-        evtId = *(s32*)((s32)work + idx * 4 + 0x1CC);
+    if ((u8)direction != *(u8*)((s32)work + directionOffset)) {
+        indexedWork = (u8*)work + idx * 4;
+        evtId = *(s32*)((s32)indexedWork + 0x1CC);
         if (evtId != 0 && evtCheckID(evtId) == 0) {
-            *(s32*)((s32)work + idx * 4 + 0x1CC) = 0;
+            *(s32*)((s32)indexedWork + 0x1CC) = 0;
         }
-        if (*(s32*)((s32)work + idx * 4 + 0x1CC) == 0) {
+        if (*(s32*)((s32)indexedWork + 0x1CC) == 0) {
             *(u8*)((s32)work + idx + 0x1C7) = direction;
             evt = evtEntry(&_nozzle_turn_event, 0xA, 0);
-            *(s32*)((s32)work + idx * 4 + 0x1CC) = *(s32*)((s32)evt + 0x15C);
+            *(s32*)((s32)indexedWork + 0x1CC) = *(s32*)((s32)evt + 0x15C);
             if (evt != 0) {
                 *(s32*)((s32)evt + 0x160) = nozzleIdx & 0xFF;
             }
         }
     }
 }
+#pragma opt_common_subs reset
 
 s32 _nozzle_turn(void* event, s32 isFirstCall) {
     extern void* _battleWorkPointer;
@@ -1634,6 +1623,7 @@ s32 BattleFogForceStop(void) {
     return 1;
 }
 
+#pragma opt_common_subs off
 s32 _nozzle_work_attack_set(void) {
     extern void* memset(void* ptr, s32 value, u32 size);
     void* work = (void*)((s32)_battleWorkPointer + 0x20000 - 0x7F24);
@@ -1665,6 +1655,7 @@ s32 _nozzle_work_attack_set(void) {
     }
     return 2;
 }
+#pragma opt_common_subs reset
 
 
 int _get_nozzle_attack_index(u8 nozzleIdx) {
@@ -1918,20 +1909,13 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
 
     s32 partChoice;
     s32 unitChoice;
-    f32 niceX;
-    f32 niceY;
-    f32 niceZ;
-    f32 hitX;
-    f32 hitY;
-    f32 hitZ;
-    f32 posX;
-    f32 posY;
-    f32 posZ;
-    f32 fallX;
-    f32 fallY;
-    f32 fallZ;
-    u8 runtimeTargets[0xACC];
+    typedef struct LocalVec { f32 x, y, z; } LocalVec;
+    LocalVec fallPos;
+    LocalVec position;
+    LocalVec hitPos;
+    LocalVec nicePos;
     u8 initialTargets[0xACC];
+    u8 runtimeTargets[0xACC];
     u32 convA[2];
     u32 convB[2];
     u32 convC[2];
@@ -2143,8 +2127,6 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
 
         guardCount = 0;
         done = 0;
-        unit = 0;
-        parts = 0;
         weapon = entry + 0x28;
 
         if (*(s32*)(entry + 4) == 0) {
@@ -2160,48 +2142,53 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
             }
 
             mode = *(s32*)(entry + 4);
-            if (mode == 0) {
-                BtlUnit_GetHitPos(unit, parts, &posX, &posY, &posZ);
+            switch (mode) {
+            case 0: {
+                BtlUnit_GetHitPos(unit, parts, &position.x, &position.y, &position.z);
                 widthInt = BtlUnit_GetWidth(unit);
                 convA[1] = ((u32)widthInt) ^ 0x80000000;
                 convA[0] = 0x43300000;
                 width = (f32)(*(f64*)convA - *(f64*)(rodata + 0x180));
-            } else if (mode == 1) {
+                break;
+            }
+            case 1: {
                 unitChoice = *(s32*)(entry + 8);
                 convA[0] = 0x43300000;
                 convA[1] = ((u32)((unitChoice % 20) * 25 - 230)) ^ 0x80000000;
-                posX = (f32)(*(f64*)convA - *(f64*)(rodata + 0x180));
+                position.x = (f32)(*(f64*)convA - *(f64*)(rodata + 0x180));
 
                 stage = BattleStageGetPtr();
-                posY = *(f32*)((u8*)stage + 0xB34);
+                position.y = *(f32*)((u8*)stage + 0xB34);
 
                 convB[0] = 0x43300000;
                 convC[0] = 0x43300000;
                 convB[1] = ((u32)(unitChoice % 20)) ^ 0x80000000;
                 convC[1] = ((u32)((unitChoice / 20) * 30 + 115)) ^ 0x80000000;
-                posZ = float_0p1_80422fcc *
+                position.z = float_0p1_80422fcc *
                            (f32)(*(f64*)convB - *(f64*)(rodata + 0x180)) +
                        (f32)(*(f64*)convC - *(f64*)(rodata + 0x180));
 
                 btl_camera_set_mode(0, 6);
                 btl_camera_set_moveSpeedLv(0, 2);
                 width = float_0_80422fd0;
-            } else {
-                *(u32*)&posX = *(u32*)(rodata + 0x124);
-                *(u32*)&posY = *(u32*)(rodata + 0x128);
-                *(u32*)&posZ = *(u32*)(rodata + 0x12C);
+                break;
+            }
+            default: {
+                *(u32*)&position.x = *(u32*)(rodata + 0x124);
+                *(u32*)&position.y = *(u32*)(rodata + 0x128);
+                *(u32*)&position.z = *(u32*)(rodata + 0x12C);
                 width = float_0_80422fd0;
+                break;
+            }
             }
 
-            *(u32*)&fallX = *(u32*)&posX;
-            *(u32*)&fallY = *(u32*)&posY;
-            *(u32*)&fallZ = *(u32*)&posZ;
-            fallY = BattleGetFloorHeight(battle, posX, posY, posZ);
-            angle = (posX >= float_0_80422fd0) ? float_90_80422fd4 : float_270_80422fd8;
+            fallPos = position;
+            fallPos.y = BattleGetFloorHeight(battle, position.x, position.y, position.z);
+            angle = (position.x >= float_0_80422fd0) ? float_90_80422fd4 : float_270_80422fd8;
 
             precheck = *(s32*)(entry + 0x1C);
             if ((precheck >= 2 && precheck < 5) || precheck == 6) {
-                posY = fallY;
+                position.y = fallPos.y;
             }
 
             *(s32*)(entry + 0x20) = -1;
@@ -2209,51 +2196,51 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
             type = (s8)entry[1];
             switch (type) {
                 case 0:
-                    *(s32*)(entry + 0x24) = effFallEntry(4, 1, 90, fallX, fallY, fallZ,
-                                                        width, posY - fallY, angle);
+                    *(s32*)(entry + 0x24) = effFallEntry(4, 1, 90, fallPos.x, fallPos.y, fallPos.z,
+                                                        width, position.y - fallPos.y, angle);
                     break;
                 case 1:
-                    *(s32*)(entry + 0x24) = effFallEntry(5, 1, 90, fallX, fallY, fallZ,
-                                                        width, posY - fallY, angle);
+                    *(s32*)(entry + 0x24) = effFallEntry(5, 1, 90, fallPos.x, fallPos.y, fallPos.z,
+                                                        width, position.y - fallPos.y, angle);
                     break;
                 case 2:
-                    *(s32*)(entry + 0x24) = effFallEntry(0, 100, 90, fallX, fallY, fallZ,
-                                                        width, posY - fallY, angle);
+                    *(s32*)(entry + 0x24) = effFallEntry(0, 100, 90, fallPos.x, fallPos.y, fallPos.z,
+                                                        width, position.y - fallPos.y, angle);
                     break;
                 case 3:
-                    *(s32*)(entry + 0x24) = effFallEntry(1, 1, 90, fallX, fallY, fallZ,
-                                                        width, posY - fallY, angle);
+                    *(s32*)(entry + 0x24) = effFallEntry(1, 1, 90, fallPos.x, fallPos.y, fallPos.z,
+                                                        width, position.y - fallPos.y, angle);
                     break;
                 case 4:
-                    *(s32*)(entry + 0x24) = effFallEntry(2, 1, 90, fallX, fallY,
-                                                        fallZ + float_5_80422fdc, width,
-                                                        posY - fallY, angle);
+                    *(s32*)(entry + 0x24) = effFallEntry(2, 1, 90, fallPos.x, fallPos.y,
+                                                        fallPos.z + float_5_80422fdc, width,
+                                                        position.y - fallPos.y, angle);
                     break;
                 case 8:
-                    *(s32*)(entry + 0x24) = effFallEntry(8, 1, 90, fallX, fallY, fallZ,
-                                                        width, posY - fallY, angle);
+                    *(s32*)(entry + 0x24) = effFallEntry(8, 1, 90, fallPos.x, fallPos.y, fallPos.z,
+                                                        width, position.y - fallPos.y, angle);
                     break;
                 case 5:
-                    *(s32*)(entry + 0x24) = effFallEntry(3, 1, 90, fallX, fallY, fallZ,
-                                                        width, posY - fallY, angle);
+                    *(s32*)(entry + 0x24) = effFallEntry(3, 1, 90, fallPos.x, fallPos.y, fallPos.z,
+                                                        width, position.y - fallPos.y, angle);
                     break;
                 case 6:
                     if ((s8)BtlUnit_GetBelong(unit) == 0) {
                         *(s32*)(entry + 0x24) = effFallEntry(
-                            6, 1, 180, float_neg300_80422fe0, fallY,
-                            fallZ + float_15_80422fe4, float_0_80422fd0,
+                            6, 1, 180, float_neg300_80422fe0, fallPos.y,
+                            fallPos.z + float_15_80422fe4, float_0_80422fd0,
                             float_0_80422fd0, angle);
                     } else {
                         *(s32*)(entry + 0x24) = effFallEntry(
-                            6, 1, 180, float_300_80422fe8, fallY,
-                            fallZ + float_15_80422fe4, float_0_80422fd0,
+                            6, 1, 180, float_300_80422fe8, fallPos.y,
+                            fallPos.z + float_15_80422fe4, float_0_80422fd0,
                             float_0_80422fd0, angle);
                     }
                     break;
                 case 7:
-                    *(s32*)(entry + 0x24) = effFallEntry(7, 1, 180, fallX, fallY,
-                                                        fallZ + float_5_80422fdc, width,
-                                                        posY - fallY, angle);
+                    *(s32*)(entry + 0x24) = effFallEntry(7, 1, 180, fallPos.x, fallPos.y,
+                                                        fallPos.z + float_5_80422fdc, width,
+                                                        position.y - fallPos.y, angle);
                     break;
             }
             continue;
@@ -2266,19 +2253,19 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
         if (*(s32*)(entry + 4) == 1) {
             BattleAudience_Case_FallObject_Aud(*(s32*)(entry + 8), entry[1]);
             psndSFXOff(*(s32*)(entry + 0x20));
-            BattleAudience_GetHomePosition(*(s32*)(entry + 8), &hitX, &hitY, &hitZ);
+            BattleAudience_GetHomePosition(*(s32*)(entry + 8), &hitPos.x, &hitPos.y, &hitPos.z);
             type = (s8)entry[1];
             if (type != 5) {
                 if (type >= 0 && type < 2) {
-                    psndSFXOn_3D(sfxDamage, &hitX);
+                    psndSFXOn_3D(sfxDamage, &hitPos.x);
                 } else {
-                    psndSFXOn_3D(sfxDamageAlt, &hitX);
+                    psndSFXOn_3D(sfxDamageAlt, &hitPos.x);
                 }
             }
         } else {
             BattleAudience_Case_FallObject_Stage();
             if ((*(u32*)(weapon + 0x64) & 0x01000000) != 0) {
-                BtlUnit_GetHitPos(unit, parts, &hitX, &hitY, &hitZ);
+                BtlUnit_GetHitPos(unit, parts, &hitPos.x, &hitPos.y, &hitPos.z);
                 flags = 0;
                 if (entry[0x14] != 0) {
                     flags |= 0x100;
@@ -2286,24 +2273,32 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
                 psndSFXOff(*(s32*)(entry + 0x20));
                 precheck = *(s32*)(entry + 0x1C);
 
-                if (precheck == 1) {
+                switch (precheck) {
+                case 1:
                     type = (s8)entry[1];
                     if (type == 5) {
-                        psndSFXOn_3D(sfxRest, &hitX);
+                        psndSFXOn_3D(sfxRest, &hitPos.x);
                     } else if (type >= 0 && type < 2) {
-                        psndSFXOn_3D(sfxDamage, &hitX);
+                        psndSFXOn_3D(sfxDamage, &hitPos.x);
                     } else {
-                        psndSFXOn_3D(sfxDamageAlt, &hitX);
+                        psndSFXOn_3D(sfxDamageAlt, &hitPos.x);
                     }
                     if (BtlUnit_GetACPossibility(unit) != 0) {
                         BattleActionCommandCheckDefence(unit, weapon);
                     }
                     BattleCheckDamage(BattleGetSystemPtr(battle), unit, parts, weapon, flags);
-                } else if ((precheck >= 2 && precheck < 5) || precheck == 6) {
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                case 6:
                     type = (s8)entry[1];
                     if (type >= 0 && type < 2) {
-                        psndSFXOn_3D(sfxDamage, &hitX);
+                        psndSFXOn_3D(sfxDamage, &hitPos.x);
                     }
+                    break;
+                default:
+                    break;
                 }
             } else {
                 psndSFXOff(*(s32*)(entry + 0x20));
@@ -2312,8 +2307,8 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
                                     *(u32*)(weapon + 0x64), *(u32*)(weapon + 0x68),
                                     (s8)(-(s32)battle[0x12]));
 
-                while (*(s8*)(runtimeTargets + 0xA6C) > 0 &&
-                       *(s8*)(runtimeTargets + 0xAB7) < *(s8*)(runtimeTargets + 0xA6C)) {
+                if (*(s8*)(runtimeTargets + 0xA6C) > 0) {
+                while (*(s8*)(runtimeTargets + 0xAB7) < *(s8*)(runtimeTargets + 0xA6C)) {
                     targetIndex = (s8)runtimeTargets[0xA6D + *(s8*)(runtimeTargets + 0xAB7)];
                     targetRec = runtimeTargets + 4 + targetIndex * 0x24;
                     unit = BattleGetUnitPtr(battle, *(s16*)(targetRec + 0));
@@ -2322,22 +2317,25 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
                     precheck = BattlePreCheckDamage(BattleGetSystemPtr(battle), unit, parts,
                                                     weapon, 0x100);
 
-                    if (precheck == 3) {
-                        BtlUnit_GetPos(unit, &niceX, &niceY, &niceZ);
-                        if (niceY < float_85_80422fec) {
-                            niceY += float_50_80422ff0;
+                    switch (precheck) {
+                    case 3:
+                        BtlUnit_GetPos(unit, &nicePos.x, &nicePos.y, &nicePos.z);
+                        if (nicePos.y < float_85_80422fec) {
+                            nicePos.y += float_50_80422ff0;
                         } else {
-                            niceY += float_neg50_80422ff4;
+                            nicePos.y += float_neg50_80422ff4;
                         }
-                        niceX -= float_45_80422ff8;
-                        nice = effNiceEntry(6, niceX, niceY, niceZ);
+                        nicePos.x -= float_45_80422ff8;
+                        nice = effNiceEntry(6, nicePos.x, nicePos.y, nicePos.z);
                         *(f32*)(*(u8**)(nice + 0x0C) + 0x1C) = float_0p75_80422ffc;
                         *(s32*)((u8*)unit + 0x274) = 0;
                         BattleRunHitEvent(unit, 0x126);
-                    } else if (precheck == 6) {
+                        break;
+                    case 6:
                         *(s32*)((u8*)unit + 0x274) = 0;
                         BattleRunHitEvent(unit, 0x127);
-                    } else if (precheck == 1) {
+                        break;
+                    case 1:
                         if (BtlUnit_GetACPossibility(unit) != 0 && guardCount < 1) {
                             BattleActionCommandCheckDefence(unit, weapon);
                             guardCount++;
@@ -2345,9 +2343,15 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
                         parts = BattleGetUnitPartsPtr(*(s16*)(targetRec + 0),
                                                       *(s16*)(targetRec + 2));
                         BattleCheckDamage(BattleGetSystemPtr(battle), unit, parts, weapon, 0x100);
+                        break;
+                    case 2:
+                    case 4:
+                    default:
+                        break;
                     }
 
                     (*(s8*)(runtimeTargets + 0xAB7))++;
+                }
                 }
             }
         }
@@ -2356,7 +2360,7 @@ s32 _object_fall_attack(void* evt, s32 firstCall) {
     }
 
     if (done) {
-        BattleFree(work);
+        BattleFree(*(void**)((u8*)evt + 0x78));
         evtSetValue(evt, resultArg, *(s32*)((u8*)evt + 0x7C));
         return 2;
     }

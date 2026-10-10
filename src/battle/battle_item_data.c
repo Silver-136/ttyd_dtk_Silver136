@@ -223,48 +223,48 @@ extern f32 float_0_80422804;
 void _nancy_disp(void* unused, void* work);
 
 s32 _sampling_random_target(void* event) {
-    extern s32 BattleSamplingEnemy(void* targetWork, void* weapon, s32 attackerIdx, s32 enemyBelong,
-                                   u32 targetClassFlags, u32 targetPropertyFlags, s32 direction);
-    extern s32 evtSetValue(void* event, s32 arg, s32 value);
-    extern s32 irand(s32 max);
-
+    extern s32 BattleSamplingEnemy(void*, void*, s32, s32, u32, u32, s32);
+    extern s32 evtSetValue(void*, s32, s32);
+    extern s32 irand(s32);
+    typedef struct SampleEntry { s16 unit; s16 part; u8 rest[0x20]; } SampleEntry;
+    typedef struct SampleWork {
+        u32 head;
+        SampleEntry entries[74];
+        s8 count;
+        s8 indices[74];
+        u8 rest[0x15];
+    } SampleWork;
+    SampleWork storage;
+    SampleWork* targets;
     s32* args;
     void* battleWork;
     void* weapon;
-    s32 outUnitArg;
-    s32 outPartArg;
+    s32 outUnit;
+    s32 outPart;
     s32 belong;
-    s32 attackerIdx;
+    s32 attacker;
     s32 index;
-    s32 entryIndex;
-    u8 targetWork[0xA74];
-
     args = *(s32**)((s32)event + 0x18);
     battleWork = _battleWorkPointer;
     weapon = (void*)evtGetValue(event, args[0]);
-    outUnitArg = args[1];
-    outPartArg = args[2];
+    outUnit = args[1];
+    outPart = args[2];
     belong = (s8)evtGetValue(event, args[3]);
-    attackerIdx = BattleTransID(event, -2);
-
-    BattleSamplingEnemy(targetWork,
-                        weapon,
-                        attackerIdx,
-                        belong,
+    targets = &storage;
+    attacker = BattleTransID(event, -2);
+    BattleSamplingEnemy(targets, weapon, attacker, belong,
                         *(u32*)((s32)weapon + 0x64),
                         *(u32*)((s32)weapon + 0x68),
-                        -(s8)*(u8*)((s32)battleWork + belong * 8 + 0xA));
-
-    if ((s8)targetWork[0xA6C] < 1) {
-        evtSetValue(event, outUnitArg, -1);
-        evtSetValue(event, outPartArg, -1);
+                        (s8)-*(u8*)((u8*)battleWork + belong * 8 + 0xA));
+    if (targets->count <= 0) {
+        evtSetValue(event, outUnit, -1);
+        evtSetValue(event, outPart, -1);
     } else {
-        index = irand((s8)targetWork[0xA6C]);
-        entryIndex = (s8)targetWork[index + 0xA6D];
-        evtSetValue(event, outUnitArg, *(s16*)&targetWork[entryIndex * 0x24 + 4]);
-        evtSetValue(event, outPartArg, *(s16*)&targetWork[entryIndex * 0x24 + 6]);
+        index = irand(targets->count);
+        index = targets->indices[index];
+        evtSetValue(event, outUnit, targets->entries[index].unit);
+        evtSetValue(event, outPart, targets->entries[index].part);
     }
-
     return 2;
 }
 
@@ -402,9 +402,7 @@ u32 _naniga_okorukana_check(void* event, s32 isFirstCall) {
     s32 count;
     u8* attackingCount;
     u8* nonAttackingCount;
-    f32 x;
-    f32 y;
-    f32 z;
+    struct { f32 x, y, z; } pos;
     u32 flags;
     s32 kind;
 
@@ -413,14 +411,14 @@ u32 _naniga_okorukana_check(void* event, s32 isFirstCall) {
     id = evtGetValue(event, args[0]);
     outArg = args[1];
     unit = BattleGetUnitPtr(battleWork, BattleTransID(event, id));
-    BtlUnit_GetPos(unit, &x, &y, &z);
+    BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
 
     flags = *(u32*)((s32)unit + 0x104);
     if ((flags & 0x10) == 0) {
         if ((flags & 2) != 0) {
-            y -= float_5_80422820;
+            pos.y -= float_5_80422820;
         } else {
-            y += (f32)(BtlUnit_GetHeight(unit) + 20);
+            pos.y += (f32)(BtlUnit_GetHeight(unit) + 20);
         }
     }
 
@@ -431,7 +429,7 @@ u32 _naniga_okorukana_check(void* event, s32 isFirstCall) {
         }
 
         item = R_mystery_item_table[irand(count)];
-        *(void**)((s32)event + 0x78) = effNanigaEntry(x, y, z, 0, R_mystery_item_table, item);
+        *(void**)((s32)event + 0x78) = effNanigaEntry(pos.x, pos.y, pos.z, 0, R_mystery_item_table, item);
         effSetName(*(void**)((s32)event + 0x78), str_effNaniga_802f0748);
         evtSetValue(event, outArg, item);
 
@@ -443,20 +441,21 @@ u32 _naniga_okorukana_check(void* event, s32 isFirstCall) {
             attackingCount = (u8*)((s32)battleWork + 0x16F43);
             nonAttackingCount = (u8*)((s32)battleWork + 0x16F44);
         } else {
-            attackingCount = 0;
-            nonAttackingCount = 0;
+            goto done;
         }
 
-        if (attackingCount != 0) {
-            if (item == 0x84 || (item >= 0x80 && item < 0x83) || item == 0x8C) {
-                *attackingCount += 1;
-            } else {
-                *nonAttackingCount += 1;
-            }
+        switch (item) {
+        case 0x80: case 0x81: case 0x82: case 0x84: case 0x8C:
+            *attackingCount += 1;
+            break;
+        default:
+            *nonAttackingCount += 1;
+            break;
         }
     }
 
-    return effNameToPtr(str_effNaniga_802f0748) != 0 ? 0 : 2;
+done:
+    return (s32)effNameToPtr(str_effNaniga_802f0748) != 0 ? 0 : 2;
 }
 s32 _get_throw_first_pos(void* event) {
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
@@ -503,6 +502,8 @@ s32 _get_throw_first_pos(void* event) {
 }
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 _throw_item_icon(void* event, s32 isFirstCall) {
     typedef struct Vec {
         f32 x;
@@ -557,6 +558,7 @@ u8 _throw_item_icon(void* event, s32 isFirstCall) {
     if (isFirstCall != 0) {
         work = BattleAlloc(0x7C);
         *(ThrowItemWork**)((s32)event + 0x78) = work;
+        work = *(ThrowItemWork**)((s32)event + 0x78);
         work->end.x = endX;
         work->end.y = endY;
         work->end.z = endZ;
@@ -568,17 +570,22 @@ u8 _throw_item_icon(void* event, s32 isFirstCall) {
         dist = distABf(work->start.x, work->start.z, work->end.x, work->end.z);
         work->frames = (s32)(dist / 15.0f) + 30;
         work->gravity = 0.5f;
-        work->velocity = work->gravity * (f32)-work->frames * 0.5f +
-                         (work->end.y - work->start.y) / (f32)-work->frames;
+        work->velocity = work->gravity * (f32)work->frames * 0.5f +
+                         (work->end.y - work->start.y) / (f32)work->frames;
         work->moveDist = distABf(work->start.x, work->start.z, work->end.x, work->end.z) /
-                         (f32)-work->frames;
+                         (f32)work->frames;
         *(s32*)((s32)event + 0x7C) = item;
         *(s32*)((s32)event + 0x80) = 0;
         *(s32*)((s32)event + 0x84) = psndSFXOn_3D(str_SFX_ITEM_COOKING_THR_802f0730, &pos);
     }
 
     work = *(ThrowItemWork**)((s32)event + 0x78);
-    if (*(s32*)((s32)event + 0x80) == 0) {
+    if (*(s32*)((s32)event + 0x80) != 0) {
+        psndSFXOff(*(s32*)((s32)event + 0x84));
+        BattleFree(work);
+        return 2;
+    }
+    {
         work->current.y += work->velocity;
         work->velocity -= work->gravity;
         if (work->velocity < 0.0f && work->current.y < work->end.y) {
@@ -588,7 +595,7 @@ u8 _throw_item_icon(void* event, s32 isFirstCall) {
                    angleABf(work->start.x, work->start.z, work->end.x, work->end.z),
                    &work->current.x, &work->current.z);
         work->frames--;
-        if (work->frames < 1) {
+        if (work->frames <= 0) {
             *(s32*)((s32)event + 0x80) = 1;
             work->current = work->end;
         }
@@ -596,27 +603,17 @@ u8 _throw_item_icon(void* event, s32 isFirstCall) {
         return 0;
     }
 
-    psndSFXOff(*(s32*)((s32)event + 0x84));
-    BattleFree(work);
-    return 2;
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 void _disp_item_icon(void* unused, void* work) {
-    extern u8 itemDataTable[];
-    extern f32 float_1_80422800;
+    typedef struct { u8 prefix[0x20]; u16 icon; u8 suffix[6]; } IconItem;
+    extern IconItem itemDataTable[];
+    extern const f32 float_1_80422800;
     extern void iconDispGx(void* pos, s32 flags, s32 iconId, f32 scale);
-
-    void* pos = (void*)((s32)*(void**)((s32)work + 0x78) + 0xC);
-    s32 item = *(s32*)((s32)work + 0x7C);
-    s32 offset;
-    u8* data = itemDataTable;
-    s32 icon;
-    f32 scale = float_1_80422800;
-
-    offset = item * 0x28;
-    data += offset;
-    icon = *(u16*)(data + 0x20);
-    iconDispGx(pos, 0, icon, scale);
+    iconDispGx((u8*)*(void**)((u8*)work + 0x78) + 0xC, 0,
+               itemDataTable[*(s32*)((u8*)work + 0x7C)].icon, float_1_80422800);
 }
 
 #pragma no_register_save_helpers on
@@ -670,6 +667,8 @@ s32 _nancy_mirage(void* event, s32 isFirstCall) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void _nancy_disp(void* unused, void* work) {
     extern void PSMTXTrans(f32 m[3][4], f32 x, f32 y, f32 z);
     extern void PSMTXScale(f32 m[3][4], f32 x, f32 y, f32 z);
@@ -683,35 +682,30 @@ void _nancy_disp(void* unused, void* work) {
     extern f32 float_1_80422800;
     extern f32 float_2_80422808;
     extern u32 dat_804227ec;
-
     f32 scale;
-    s32 alpha;
+    u8 alpha;
     s32 frames;
-    f32 transMtx[3][4];
-    f32 scaleMtx[3][4];
     f32 drawMtx[3][4];
+    f32 scaleMtx[3][4];
+    f32 transMtx[3][4];
     u32 color;
     u32 materialColor;
-
     if (*(s32*)((s32)work + 0x78) < 30) {
         frames = 30 - *(s32*)((s32)work + 0x78);
-        alpha = (s8)(frames * -4 - 128);
+        alpha = 128 - frames * 4;
         scale = float_0p05_804227fc * (f32)frames + float_4_804227f8;
     } else {
-        alpha = -128;
+        alpha = 128;
         scale = float_4_804227f8;
     }
-
-    PSMTXTrans(transMtx,
-               (f32)*(s32*)((s32)work + 0x84),
-               (f32)*(s32*)((s32)work + 0x88),
-               (f32)*(s32*)((s32)work + 0x8C));
+    PSMTXTrans(transMtx, (f32)*(s32*)((s32)work + 0x84),
+               (f32)*(s32*)((s32)work + 0x88), (f32)*(s32*)((s32)work + 0x8C));
     PSMTXScale(scaleMtx, scale, scale, float_1_80422800);
     PSMTXIdentity(drawMtx);
     PSMTXConcat(scaleMtx, drawMtx, drawMtx);
     PSMTXConcat(transMtx, drawMtx, drawMtx);
-
-    color = (dat_804227ec & 0xFFFFFF00) | (u8)alpha;
+    color = dat_804227ec;
+    ((u8*)&color)[3] = alpha;
     materialColor = color;
     animPoseSetMaterialEvtColor(*(s32*)((s32)work + 0x7C), &materialColor);
     animPoseSetMaterialFlagOn(*(s32*)((s32)work + 0x7C), 0x40);
@@ -719,6 +713,8 @@ void _nancy_disp(void* unused, void* work) {
     animPoseDrawMtx(*(s32*)((s32)work + 0x7C), drawMtx, 2, float_0_80422804, float_2_80422808);
     animPoseDrawMtx(*(s32*)((s32)work + 0x7C), drawMtx, 3, float_0_80422804, float_2_80422808);
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
 s32 _full_ap_recover(void* event) {

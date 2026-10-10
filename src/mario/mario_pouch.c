@@ -25,6 +25,7 @@ PouchData* pouchGetPtr(void) {
     return (PouchData*)mpp;
 }
 
+#pragma optimize_for_size off
 void pouchInit(void) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* memset(void* dest, int ch, u32 count);
@@ -34,33 +35,11 @@ void pouchInit(void) {
     s32 i;
     s32 offset;
     s32 count;
-    PouchPartyData* party;
 
     mpp = (s32)__memAlloc(0, 0x5D4);
     memset((void*)mpp, 0, 0x5D4);
 
-    i = 0;
-    offset = 0;
-    for (count = 0; count < 0xF; count++) {
-        *(s16*)((u8*)mpp + 0xA0 + offset) = 0;
-        *(s16*)((u8*)mpp + 0xA2 + offset) = 0;
-        *(s16*)((u8*)mpp + 0xA4 + offset) = 0;
-        *(s16*)((u8*)mpp + 0xA6 + offset) = 0;
-        *(s16*)((u8*)mpp + 0xA8 + offset) = 0;
-        *(s16*)((u8*)mpp + 0xAA + offset) = 0;
-        *(s16*)((u8*)mpp + 0xAC + offset) = 0;
-        *(s16*)((u8*)mpp + 0xAE + offset) = 0;
-        i += 8;
-        offset += 0x10;
-    }
-    count = 0x79 - i;
-    if (i < 0x79) {
-        do {
-            *(s16*)((u8*)mpp + 0xA0 + offset) = 0;
-            offset += 2;
-            count--;
-        } while (count != 0);
-    }
+    for (i = 0; i < 121; i++) ((PouchData*)mpp)->mKeyItems[i] = 0;
     *(s16*)(mpp + 0x192) = 0;
     *(s16*)(mpp + 0x194) = 0;
     *(s16*)(mpp + 0x196) = 0;
@@ -146,10 +125,8 @@ void pouchInit(void) {
     *(s8*)(mpp + 0x98) = 0;
     *(s8*)(mpp + 0x99) = 0;
 
-    offset = 0;
-    i = 0;
-    for (count = 0; count < 2; count++) {
-        party = (PouchPartyData*)(mpp + offset);
+    for (i = 0; i < 8; i++) {
+        PouchPartyData* party = &((PouchData*)mpp)->partyData[i];
         if (i != 0) {
             party->flags = 0;
             party->baseMaxHP = 10;
@@ -158,47 +135,11 @@ void pouchInit(void) {
             party->attackLevel = 0;
             party->techLevel = 0;
         }
-        i++;
-        offset += 0xE;
-        party = (PouchPartyData*)(mpp + offset);
-        if (i != 0) {
-            party->flags = 0;
-            party->baseMaxHP = 10;
-            party->currentMaxHP = party->baseMaxHP;
-            party->currentHP = party->baseMaxHP;
-            party->attackLevel = 0;
-            party->techLevel = 0;
-        }
-        i++;
-        offset += 0xE;
-
-        party = (PouchPartyData*)(mpp + offset);
-        if (i != 0) {
-            party->flags = 0;
-            party->baseMaxHP = 10;
-            party->currentMaxHP = party->baseMaxHP;
-            party->currentHP = party->baseMaxHP;
-            party->attackLevel = 0;
-            party->techLevel = 0;
-        }
-        i++;
-        offset += 0xE;
-
-        party = (PouchPartyData*)(mpp + offset);
-        if (i != 0) {
-            party->flags = 0;
-            party->baseMaxHP = 10;
-            party->currentMaxHP = party->baseMaxHP;
-            party->currentHP = party->baseMaxHP;
-            party->attackLevel = 0;
-            party->techLevel = 0;
-        }
-        i++;
-        offset += 0xE;
     }
 
     strcpy((char*)(mpp + 0x5C0), msgSearch(str_name_party3_802cc728));
 }
+#pragma optimize_for_size reset
 
 s16 pouchKeyItem(s32 index) {
     return *(s16*)(mpp + 0xA0 + index * 2);
@@ -267,44 +208,16 @@ s32 pouchGetHaveItemCnt(void) {
     return count;
 }
 
+#pragma optimize_for_size off
 int pouchGetKeepItemCnt(void) {
-    PouchData* pouch;
-    s32 count;
-    s32 loops;
-
-    pouch = (PouchData*)mpp;
-    count = 0;
-    loops = 4;
-    do {
-        if (*(s16*)((s32)pouch + 0x1BA) != 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1BC) != 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1BE) != 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C0) != 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C2) != 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C4) != 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C6) != 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C8) != 0) {
-            count++;
-        }
-        pouch = (PouchData*)((s32)pouch + 0x10);
-        loops--;
-    } while (loops != 0);
+    s32 i, count;
+    for (i = 0, count = 0; i < 32; i++) {
+        if (((PouchData*)mpp)->mStoredItems[i] != 0) count++;
+    }
     return count;
 }
+#pragma optimize_for_size reset
+
 s32 pouchGetHaveBadgeCnt(void) {
     PouchData* pouch;
     s32 count;
@@ -424,45 +337,19 @@ s32 pouchGetEmptyHaveItemCnt(void) {
     return empty;
 }
 
+#pragma optimize_for_size off
 int pouchGetEmptyKeepItemCnt(void) {
-    PouchData* pouch;
-    s32 count;
-    s32 loops;
-
-    pouch = (PouchData*)mpp;
-    count = 0;
-    loops = 4;
-    do {
-        if (*(s16*)((s32)pouch + 0x1BA) == 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1BC) == 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1BE) == 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C0) == 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C2) == 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C4) == 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C6) == 0) {
-            count++;
-        }
-        if (*(s16*)((s32)pouch + 0x1C8) == 0) {
-            count++;
-        }
-        pouch = (PouchData*)((s32)pouch + 0x10);
-        loops--;
-    } while (loops != 0);
+    s32 i, count;
+    for (i = 0, count = 0; i < 32; i++) {
+        if (((PouchData*)mpp)->mStoredItems[i] == 0) count++;
+    }
     return count;
 }
+#pragma optimize_for_size reset
 
+#pragma optimize_for_size off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 pouchGetItem(s32 itemNo) {
     extern void* yuwp;
     extern s32 marioGetParty(void);
@@ -475,6 +362,7 @@ s32 pouchGetItem(s32 itemNo) {
     s32 j;
     s32 partyId;
     s32 offset;
+    s32 valid;
 
     if (itemNo == 0x79) {
         if (*(s16*)(mpp + 0x78) < 999) {
@@ -516,61 +404,58 @@ s32 pouchGetItem(s32 itemNo) {
         return 1;
     }
 
-    switch (itemNo) {
-    case 6:
-        *(s8*)(mpp + 0x98) = 1;
-        break;
-    case 7:
-        *(s8*)(mpp + 0x98) = 2;
-        break;
-    case 8:
-        *(s8*)(mpp + 0x98) = 3;
-        break;
-    case 9:
-        *(s8*)(mpp + 0x99) = 1;
-        break;
-    case 10:
-        *(s8*)(mpp + 0x99) = 2;
-        break;
-    case 11:
-        *(s8*)(mpp + 0x99) = 3;
-        break;
+    if (itemNo == 6 || itemNo == 7 || itemNo == 8) {
+        switch (itemNo) {
+        case 6: *(s8*)(mpp + 0x98) = 1; break;
+        case 7: *(s8*)(mpp + 0x98) = 2; break;
+        case 8: *(s8*)(mpp + 0x98) = 3; break;
+        }
+    } else if (itemNo == 9 || itemNo == 10 || itemNo == 11) {
+        switch (itemNo) {
+        case 9: *(s8*)(mpp + 0x99) = 1; break;
+        case 10: *(s8*)(mpp + 0x99) = 2; break;
+        case 11: *(s8*)(mpp + 0x99) = 3; break;
+        }
+    } else {
+        if (itemNo == 0x59) return 1;
+        if (itemNo >= 0xF0 && itemNo < 0x153) swSet(itemNo - 0x70);
     }
 
-    if (itemNo == 0x59) {
-        return 1;
-    } else if (itemNo >= 0xF0 && itemNo < 0x153) {
-        swSet(itemNo - 0x70);
-    }
-
+    count = 0;
     list = 0;
     equipped = 0;
-    count = 0;
     if (itemNo >= 0x79 && itemNo < 0xEC) {
-        list = (s16*)(mpp + 0x192);
+        list = ((PouchData*)mpp)->mItems;
         if (pouchCheckItem(1) == 0) {
             count = 10;
         } else {
             count = 20;
         }
+        valid = 1;
     } else if (itemNo >= 1 && itemNo < 0x79) {
-        list = (s16*)(mpp + 0xA0);
+        list = ((PouchData*)mpp)->mKeyItems;
+        equipped = 0;
         count = 0x79;
+        valid = 1;
     } else if (itemNo >= 0xF0 && itemNo < 0x153) {
-        list = (s16*)(mpp + 0x1FA);
-        equipped = (s16*)(mpp + 0x38A);
+        list = ((PouchData*)mpp)->mBadges;
+        equipped = ((PouchData*)mpp)->mEquippedBadges;
         count = 200;
+        valid = 1;
     } else {
-        return 0;
+        valid = 0;
     }
+    if (!valid) return 0;
 
     for (i = count - 1; i >= 0; i--) {
         if (list[i] == 0) {
-            for (j = i; j > 0; j--) {
-                list[j] = list[j - 1];
-                if (equipped != 0) {
+            if (equipped) {
+                for (j = i; j > 0; j--) {
+                    list[j] = list[j - 1];
                     equipped[j] = equipped[j - 1];
                 }
+            } else {
+                for (j = i; j > 0; j--) list[j] = list[j - 1];
             }
             list[0] = itemNo;
             if (equipped != 0) {
@@ -582,6 +467,9 @@ s32 pouchGetItem(s32 itemNo) {
 
     return 0;
 }
+#pragma optimize_for_size reset
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 s32 pouchCheckItem(s32 itemId) {
     s32 count;
@@ -693,99 +581,48 @@ s32 pouchCheckItem(s32 itemId) {
     return 0;
 }
 
-s32 pouchRemoveItem(s32 item) {
-    s16* list;
-    s16* equipped;
-    s32 count;
+#pragma optimize_for_size off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
+s32 pouchRemoveItem(s32 itemType) {
+    s32 count = 0;
+    s16* list = NULL;
+    s16* equipped = NULL;
     s32 valid;
-    s32 i;
-    s16* scan;
-    s16* itemPtr;
-    s16* equippedPtr;
-    u32 remaining;
-    u32 groups;
-
-    count = 0;
-    list = NULL;
-    equipped = NULL;
-    if (item >= 0x79 && item < 0xEC) {
+    s32 i, j;
+    if ((s32)itemType >= 0x79 && (s32)itemType < 0xEC) {
+        list = ((PouchData*)mpp)->mItems;
         equipped = NULL;
-        list = (s16*)(mpp + 0x192);
-        count = 10;
-        if (pouchCheckItem(ITEM_STRANGE_SACK) != 0) {
-            count = 20;
-        }
-        valid = TRUE;
-    } else if (item >= 1 && item < 0x79) {
+        if (pouchCheckItem(1)) count = 20;
+        else count = 10;
+        valid = 1;
+    } else if ((s32)itemType >= 1 && (s32)itemType < 0x79) {
         equipped = NULL;
         count = 0x79;
-        valid = TRUE;
-        list = (s16*)(mpp + 0xA0);
-    } else if (item >= 0xF0 && item < 0x153) {
+        valid = 1;
+        list = ((PouchData*)mpp)->mKeyItems;
+    } else if ((s32)itemType >= 0xF0 && (s32)itemType < 0x153) {
         count = 200;
-        valid = TRUE;
-        list = (s16*)(mpp + 0x1FA);
-        equipped = (s16*)(mpp + 0x38A);
-    } else {
-        valid = FALSE;
-    }
-
-    if (valid) {
-        scan = list;
-        for (i = 0; i < count; i++, scan++) {
-            if (item != *scan) {
-                continue;
-            }
+        valid = 1;
+        list = ((PouchData*)mpp)->mBadges;
+        equipped = ((PouchData*)mpp)->mEquippedBadges;
+    } else valid = 0;
+    if (!valid) return 0;
+    for (i = 0; i < count; i++) {
+        if (list[i] == (s32)itemType) {
             list[i] = 0;
-            if (equipped != NULL) {
-                equipped[i] = 0;
-            }
-
-            itemPtr = list + i;
-            equippedPtr = equipped + i;
-            count--;
-            if (equipped != NULL) {
-                remaining = count - i;
-                if (i < count) {
-                    groups = remaining >> 2;
-                    while (groups != 0) {
-                        itemPtr[0] = itemPtr[1]; itemPtr[1] = 0;
-                        equippedPtr[0] = equippedPtr[1]; equippedPtr[1] = 0;
-                        itemPtr[1] = itemPtr[2]; itemPtr[2] = 0;
-                        equippedPtr[1] = equippedPtr[2]; equippedPtr[2] = 0;
-                        itemPtr[2] = itemPtr[3]; itemPtr[3] = 0;
-                        equippedPtr[2] = equippedPtr[3]; equippedPtr[3] = 0;
-                        itemPtr[3] = itemPtr[4]; itemPtr += 4; itemPtr[0] = 0;
-                        equippedPtr[3] = equippedPtr[4]; equippedPtr += 4; equippedPtr[0] = 0;
-                        groups--;
-                    }
-                    remaining &= 3;
-                    while (remaining != 0) {
-                        itemPtr[0] = itemPtr[1]; itemPtr++; itemPtr[0] = 0;
-                        equippedPtr[0] = equippedPtr[1]; equippedPtr++; equippedPtr[0] = 0;
-                        remaining--;
-                    }
+            if (equipped) equipped[i] = 0;
+            if (equipped) {
+                for (j = i; j < count - 1; j++) {
+                    list[j] = list[j + 1];
+                    list[j + 1] = 0;
+                    equipped[j] = equipped[j + 1];
+                    equipped[j + 1] = 0;
                 }
             } else {
-                remaining = count - i;
-                if (i < count) {
-                    groups = remaining >> 3;
-                    while (groups != 0) {
-                        itemPtr[0] = itemPtr[1]; itemPtr[1] = 0;
-                        itemPtr[1] = itemPtr[2]; itemPtr[2] = 0;
-                        itemPtr[2] = itemPtr[3]; itemPtr[3] = 0;
-                        itemPtr[3] = itemPtr[4]; itemPtr[4] = 0;
-                        itemPtr[4] = itemPtr[5]; itemPtr[5] = 0;
-                        itemPtr[5] = itemPtr[6]; itemPtr[6] = 0;
-                        itemPtr[6] = itemPtr[7]; itemPtr[7] = 0;
-                        itemPtr[7] = itemPtr[8]; itemPtr += 8; itemPtr[0] = 0;
-                        groups--;
-                    }
-                    remaining &= 7;
-                    while (remaining != 0) {
-                        itemPtr[0] = itemPtr[1]; itemPtr++; itemPtr[0] = 0;
-                        remaining--;
-                    }
+                for (j = i; j < count - 1; j++) {
+                    list[j] = list[j + 1];
+                    list[j + 1] = 0;
                 }
             }
             return 1;
@@ -793,109 +630,68 @@ s32 pouchRemoveItem(s32 item) {
     }
     return 0;
 }
+#pragma optimize_for_size reset
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
+#pragma optimize_for_size off
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 pouchRemoveItemIndex(u32 itemType, int itemIndex) {
-    s16* list;
-    s16* equipped;
-    s32 count;
+    s16* list = NULL;
+    s16* equipped = NULL;
+    s32 count = 0;
     s32 valid;
-    s32 i;
-    s32 remaining;
-    s32 groups;
-    s16* itemPtr;
-    s16* equippedPtr;
-
-    list = 0;
-    equipped = 0;
-    count = 0;
-    if ((s32)itemType >= 0x79 && (s32)itemType <= 0xEB) {
-        list = (s16*)(mpp + 0x192);
-        equipped = 0;
-        count = 10;
-        if (pouchCheckItem(0x80) != 0) {
-            count = 20;
-        }
+    s32 i, j;
+    if ((s32)itemType >= 0x79 && (s32)itemType < 0xEC) {
+        list = ((PouchData*)mpp)->mItems;
+        equipped = NULL;
+        if (pouchCheckItem(1)) count = 20;
+        else count = 10;
         valid = 1;
-    } else if ((s32)itemType >= 1 && (s32)itemType <= 0x78) {
-        list = (s16*)(mpp + 0xA0);
-        equipped = 0;
+    } else if ((s32)itemType >= 1 && (s32)itemType < 0x79) {
+        equipped = NULL;
         count = 0x79;
         valid = 1;
-    } else if ((s32)itemType >= 0xF0 && (s32)itemType <= 0x152) {
-        list = (s16*)(mpp + 0x1FA);
-        equipped = (s16*)(mpp + 0x38A);
+        list = ((PouchData*)mpp)->mKeyItems;
+    } else if ((s32)itemType >= 0xF0 && (s32)itemType < 0x153) {
         count = 200;
         valid = 1;
-    } else {
-        valid = 0;
-    }
-
-    if (!valid) {
-        return 0;
-    }
-    itemPtr = list + itemIndex;
-    if ((s32)*itemPtr != (s32)itemType) {
-        return 0;
-    }
+        list = ((PouchData*)mpp)->mBadges;
+        equipped = ((PouchData*)mpp)->mEquippedBadges;
+    } else valid = 0;
+    if (!valid) return 0;
+    if (list[itemIndex] != (s32)itemType) return 0;
     for (i = itemIndex; i < count; i++) {
-        if ((s32)*itemPtr == (s32)itemType) {
+        if (list[i] == (s32)itemType) {
             list[i] = 0;
-            if (equipped != 0) {
-                equipped[i] = 0;
-            }
-            itemPtr = list + i;
-            equippedPtr = equipped + i;
-            count--;
-            remaining = count - i;
-            if (equipped != 0) {
-                if (i < count) {
-                    groups = remaining >> 2;
-                    while (groups != 0) {
-                        itemPtr[0] = itemPtr[1]; itemPtr[1] = 0;
-                        equippedPtr[0] = equippedPtr[1]; equippedPtr[1] = 0;
-                        itemPtr[1] = itemPtr[2]; itemPtr[2] = 0;
-                        equippedPtr[1] = equippedPtr[2]; equippedPtr[2] = 0;
-                        itemPtr[2] = itemPtr[3]; itemPtr[3] = 0;
-                        equippedPtr[2] = equippedPtr[3]; equippedPtr[3] = 0;
-                        itemPtr[3] = itemPtr[4]; itemPtr += 4; itemPtr[0] = 0;
-                        equippedPtr[3] = equippedPtr[4]; equippedPtr += 4; equippedPtr[0] = 0;
-                        groups--;
-                    }
-                    remaining &= 3;
-                    while (remaining != 0) {
-                        itemPtr[0] = itemPtr[1]; itemPtr++; itemPtr[0] = 0;
-                        equippedPtr[0] = equippedPtr[1]; equippedPtr++; equippedPtr[0] = 0;
-                        remaining--;
-                    }
+            if (equipped) equipped[i] = 0;
+            if (equipped) {
+                for (j = i; j < count - 1; j++) {
+                    list[j] = list[j + 1];
+                    list[j + 1] = 0;
+                    equipped[j] = equipped[j + 1];
+                    equipped[j + 1] = 0;
                 }
-            } else if (i < count) {
-                groups = remaining >> 3;
-                while (groups != 0) {
-                    itemPtr[0] = itemPtr[1]; itemPtr[1] = 0;
-                    itemPtr[1] = itemPtr[2]; itemPtr[2] = 0;
-                    itemPtr[2] = itemPtr[3]; itemPtr[3] = 0;
-                    itemPtr[3] = itemPtr[4]; itemPtr[4] = 0;
-                    itemPtr[4] = itemPtr[5]; itemPtr[5] = 0;
-                    itemPtr[5] = itemPtr[6]; itemPtr[6] = 0;
-                    itemPtr[6] = itemPtr[7]; itemPtr[7] = 0;
-                    itemPtr[7] = itemPtr[8]; itemPtr += 8; itemPtr[0] = 0;
-                    groups--;
-                }
-                remaining &= 7;
-                while (remaining != 0) {
-                    itemPtr[0] = itemPtr[1]; itemPtr++; itemPtr[0] = 0;
-                    remaining--;
+            } else {
+                for (j = i; j < count - 1; j++) {
+                    list[j] = list[j + 1];
+                    list[j + 1] = 0;
                 }
             }
             return 1;
         }
-        itemPtr++;
     }
     return 0;
 }
+#pragma optimize_for_size reset
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 void unk_800d48b0(u16* src, u16* dst) {
-    extern s32 strlen(const char* str);
+    extern u32 strlen(const char* str);
     extern char* strcpy(char* dst, const char* src);
     s32 count;
     s32 i;
@@ -903,21 +699,29 @@ void unk_800d48b0(u16* src, u16* dst) {
 
     count = strlen((const char*)src) >> 1;
     if (*(u32*)((s32)gp + 0x16C) == 0) {
+        u16* read = src;
+        u16* write = dst;
         for (i = 0; i < count; i++) {
-            value = src[i];
+            value = *read;
             if (value >= 0x829F && value < 0x82DE) {
                 value += 0xA1;
             } else if (value >= 0x82DE && value <= 0x82F1) {
                 value += 0xA2;
             }
-            dst[i] = value;
+            *write = value;
+            read++;
+            write++;
         }
         *(u8*)((s32)dst + i * 2) = 0;
     } else {
         strcpy((char*)dst, (const char*)src);
     }
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 comp_aiueo(short* param_1, short* param_2) {
     extern char* msgSearch(char* msg);
     extern u32 strlen(char* str);
@@ -928,50 +732,49 @@ s32 comp_aiueo(short* param_1, short* param_2) {
     u16 name2[64];
     u16* src;
     u16* dst;
-    u32 count;
+    s32 count;
     u16 value;
     s32 i;
 
-    src = (u16*)msgSearch(*(char**)(itemDataTable + *param_1 * 0x28 + 4));
+    s32 id1 = *param_1;
+    char** names = (char**)(itemDataTable + 4);
+    s32 id2 = *param_2;
+    src = (u16*)msgSearch(names[id1 * 10]);
     count = strlen((char*)src) >> 1;
     if (*(u32*)((s32)gp + 0x16C) == 0) {
         dst = name1;
-        i = 0;
-        while (count != 0) {
+        for (i = 0; i < count; i++) {
             value = *src;
-            if (value >= 0x829F && value <= 0x82DD) {
+            if (value >= 0x829F && value < 0x82DE) {
                 value += 0xA1;
-            } else if (value > 0x82DD && value < 0x82F2) {
+            } else if (value >= 0x82DE && value <= 0x82F1) {
                 value += 0xA2;
             }
             *dst = value;
             src++;
             dst++;
-            i++;
-            count--;
+
         }
         *(u8*)(name1 + i) = 0;
     } else {
         strcpy((char*)name1, (char*)src);
     }
 
-    src = (u16*)msgSearch(*(char**)(itemDataTable + *param_2 * 0x28 + 4));
+    src = (u16*)msgSearch(names[id2 * 10]);
     count = strlen((char*)src) >> 1;
     if (*(u32*)((s32)gp + 0x16C) == 0) {
         dst = name2;
-        i = 0;
-        while (count != 0) {
+        for (i = 0; i < count; i++) {
             value = *src;
-            if (value >= 0x829F && value <= 0x82DD) {
+            if (value >= 0x829F && value < 0x82DE) {
                 value += 0xA1;
-            } else if (value > 0x82DD && value < 0x82F2) {
+            } else if (value >= 0x82DE && value <= 0x82F1) {
                 value += 0xA2;
             }
             *dst = value;
             src++;
             dst++;
-            i++;
-            count--;
+
         }
         *(u8*)(name2 + i) = 0;
     } else {
@@ -979,22 +782,20 @@ s32 comp_aiueo(short* param_1, short* param_2) {
     }
     return strcmp((char*)name1, (char*)name2);
 }
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 int comp_kind(short* param_1, short* param_2) {
-    s16 kind1;
-    s16 kind2;
-
-    kind1 = *(s16*)(itemDataTable + (*param_1 * 0x28) + 0x12);
-    kind2 = *(s16*)(itemDataTable + (*param_2 * 0x28) + 0x12);
-    if (kind1 > kind2) {
-        return 1;
-    }
-    if (kind1 < kind2) {
-        return -1;
-    }
+    s16* kinds = (s16*)(itemDataTable + 0x12);
+    s32 kind1 = kinds[*param_1 * 20];
+    s32 kind2 = kinds[*param_2 * 20];
+    if (kind1 > kind2) return 1;
+    if (kind1 < kind2) return -1;
     return 0;
 }
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 s32 comp_aiueo_r(short* param_1, short* param_2) {
     extern char* msgSearch(char* msg);
     extern u32 strlen(char* str);
@@ -1005,50 +806,49 @@ s32 comp_aiueo_r(short* param_1, short* param_2) {
     u16 name2[64];
     u16* src;
     u16* dst;
-    u32 count;
+    s32 count;
     u16 value;
     s32 i;
 
-    src = (u16*)msgSearch(*(char**)(itemDataTable + *param_1 * 0x28 + 4));
+    s32 id1 = *param_1;
+    char** names = (char**)(itemDataTable + 4);
+    s32 id2 = *param_2;
+    src = (u16*)msgSearch(names[id1 * 10]);
     count = strlen((char*)src) >> 1;
     if (*(u32*)((s32)gp + 0x16C) == 0) {
         dst = name1;
-        i = 0;
-        while (count != 0) {
+        for (i = 0; i < count; i++) {
             value = *src;
-            if (value >= 0x829F && value <= 0x82DD) {
+            if (value >= 0x829F && value < 0x82DE) {
                 value += 0xA1;
-            } else if (value > 0x82DD && value < 0x82F2) {
+            } else if (value >= 0x82DE && value <= 0x82F1) {
                 value += 0xA2;
             }
             *dst = value;
             src++;
             dst++;
-            i++;
-            count--;
+
         }
         *(u8*)(name1 + i) = 0;
     } else {
         strcpy((char*)name1, (char*)src);
     }
 
-    src = (u16*)msgSearch(*(char**)(itemDataTable + *param_2 * 0x28 + 4));
+    src = (u16*)msgSearch(names[id2 * 10]);
     count = strlen((char*)src) >> 1;
     if (*(u32*)((s32)gp + 0x16C) == 0) {
         dst = name2;
-        i = 0;
-        while (count != 0) {
+        for (i = 0; i < count; i++) {
             value = *src;
-            if (value >= 0x829F && value <= 0x82DD) {
+            if (value >= 0x829F && value < 0x82DE) {
                 value += 0xA1;
-            } else if (value > 0x82DD && value < 0x82F2) {
+            } else if (value >= 0x82DE && value <= 0x82F1) {
                 value += 0xA2;
             }
             *dst = value;
             src++;
             dst++;
-            i++;
-            count--;
+
         }
         *(u8*)(name2 + i) = 0;
     } else {
@@ -1056,24 +856,20 @@ s32 comp_aiueo_r(short* param_1, short* param_2) {
     }
     return strcmp((char*)name2, (char*)name1);
 }
-
+#pragma no_register_save_helpers reset
+#pragma use_lmw_stmw reset
 
 int comp_kind_r(short* param_1, short* param_2) {
-    s16 kind1;
-    s16 kind2;
-
-    kind1 = *(s16*)(itemDataTable + (*param_1 * 0x28) + 0x12);
-    kind2 = *(s16*)(itemDataTable + (*param_2 * 0x28) + 0x12);
-    if (kind1 < kind2) {
-        return 1;
-    }
-    if (kind1 > kind2) {
-        return -1;
-    }
+    s16* kinds = (s16*)(itemDataTable + 0x12);
+    s32 kind1 = kinds[*param_1 * 20];
+    s32 kind2 = kinds[*param_2 * 20];
+    if (kind1 < kind2) return 1;
+    if (kind1 > kind2) return -1;
     return 0;
 }
 
 
+#pragma optimize_for_size off
 void pouchSortItem(u32 sortType) {
     extern void qqsort(void* base, u32 count, u32 width, void* compare);
     extern void* memcpy(void* dst, const void* src, u32 size);
@@ -1085,8 +881,9 @@ void pouchSortItem(u32 sortType) {
     extern s32 comp_kind_r(short* a, short* b);
     s16 items[20];
     s16 keys[122];
-    s16 badges[208];
+    s16 badges[200];
     s16 equipped[200];
+    PouchData* pouch = (PouchData*)mpp;
     s16* src;
     s16* dst;
     s16* equipSrc;
@@ -1097,27 +894,12 @@ void pouchSortItem(u32 sortType) {
     s32 remain;
     s32 type = (s32)sortType;
 
-    if (type < 2 || type == 7 || type == 8) {
-        src = (s16*)(mpp + 0x192);
-        dst = items;
+    if (sortType < 2 || type == 7 || type == 8) {
         count = 0;
-        for (i = 0; i < 4; i++, src += 5) {
-            if (src[0] != 0) { *dst++ = src[0]; count++; }
-            if (src[1] != 0) { *dst++ = src[1]; count++; }
-            if (src[2] != 0) { *dst++ = src[2]; count++; }
-            if (src[3] != 0) { *dst++ = src[3]; count++; }
-            if (src[4] != 0) { *dst++ = src[4]; count++; }
+        for (i = 0; i < 20; i++) {
+            if (pouch->mItems[i] != 0) items[count++] = pouch->mItems[i];
         }
-        remain = 20 - count;
-        while (remain >= 8) {
-            dst[0] = 0; dst[1] = 0; dst[2] = 0; dst[3] = 0;
-            dst[4] = 0; dst[5] = 0; dst[6] = 0; dst[7] = 0;
-            dst += 8;
-            remain -= 8;
-        }
-        while (remain-- != 0) {
-            *dst++ = 0;
-        }
+        for (i = count; i < 20; i++) items[i] = 0;
         if (type == 0) {
             qqsort(items, count, 2, comp_aiueo);
         } else if (type == 1) {
@@ -1127,29 +909,15 @@ void pouchSortItem(u32 sortType) {
         } else if (type == 8) {
             qqsort(items, count, 2, comp_kind_r);
         }
-        memcpy((void*)(mpp + 0x192), items, 0x28);
+        memcpy(pouch->mItems, items, 0x28);
     }
 
     if ((u32)(type - 2) < 2 || type == 9 || type == 10) {
-        src = (s16*)(mpp + 0xA0);
-        dst = keys;
         count = 0;
-        for (i = 0; i < 0x79; i++, src++) {
-            if (*src != 0) {
-                *dst++ = *src;
-                count++;
-            }
+        for (i = 0; i < 121; i++) {
+            if (pouch->mKeyItems[i] != 0) keys[count++] = pouch->mKeyItems[i];
         }
-        remain = 0x79 - count;
-        while (remain >= 8) {
-            dst[0] = 0; dst[1] = 0; dst[2] = 0; dst[3] = 0;
-            dst[4] = 0; dst[5] = 0; dst[6] = 0; dst[7] = 0;
-            dst += 8;
-            remain -= 8;
-        }
-        while (remain-- != 0) {
-            *dst++ = 0;
-        }
+        for (i = count; i < 121; i++) keys[i] = 0;
         if (type == 2) {
             qqsort(keys, count, 2, comp_aiueo);
         } else if (type == 3) {
@@ -1159,80 +927,73 @@ void pouchSortItem(u32 sortType) {
         } else if (type == 10) {
             qqsort(keys, count, 2, comp_kind_r);
         }
-        memcpy((void*)(mpp + 0xA0), keys, 0xF2);
+        memcpy(pouch->mKeyItems, keys, 0xF2);
     }
 
     if ((u32)(type - 4) > 2 && (u32)(type - 11) > 1 && type != 13) {
         return;
     }
-    src = (s16*)(mpp + 0x1FA);
-    equipSrc = (s16*)(mpp + 0x38A);
     dst = badges;
     equipDst = equipped;
     count = 0;
-    for (i = 0; i < 40; i++, src += 5, equipSrc += 5) {
-        if (src[0] != 0) { *dst++ = src[0]; *equipDst++ = equipSrc[0]; count++; }
-        if (src[1] != 0) { *dst++ = src[1]; *equipDst++ = equipSrc[1]; count++; }
-        if (src[2] != 0) { *dst++ = src[2]; *equipDst++ = equipSrc[2]; count++; }
-        if (src[3] != 0) { *dst++ = src[3]; *equipDst++ = equipSrc[3]; count++; }
-        if (src[4] != 0) { *dst++ = src[4]; *equipDst++ = equipSrc[4]; count++; }
+    for (i = 0; i < 200; i++) {
+        if (pouch->mBadges[i] != 0) {
+            *dst++ = pouch->mBadges[i];
+            count++;
+            *equipDst++ = pouch->mEquippedBadges[i];
+        }
     }
-    remain = 200 - count;
-    while (remain >= 8) {
-        dst[0] = 0; equipDst[0] = 0; dst[1] = 0; equipDst[1] = 0;
-        dst[2] = 0; equipDst[2] = 0; dst[3] = 0; equipDst[3] = 0;
-        dst[4] = 0; equipDst[4] = 0; dst[5] = 0; equipDst[5] = 0;
-        dst[6] = 0; equipDst[6] = 0; dst[7] = 0; equipDst[7] = 0;
-        dst += 8;
-        equipDst += 8;
-        remain -= 8;
-    }
-    while (remain-- != 0) {
-        *dst++ = 0;
-        *equipDst++ = 0;
+    for (i = count; i < 200; i++) {
+        badges[i] = 0;
+        equipped[i] = 0;
     }
 
     dst = badges;
     equipDst = equipped;
     for (i = 0; i < count - 1; i++, dst++, equipDst++) {
-        src = dst + 1;
-        equipSrc = equipDst + 1;
-        for (j = i + 1; j < count; j++, src++, equipSrc++) {
+        j = i + 1;
+        src = badges + j;
+        equipSrc = equipped + j;
+        for (; j < count; j++, src++, equipSrc++) {
             s16 a = *dst;
             s16 b = *src;
-            s8 bpA = *(s8*)(itemDataTable + a * 0x28 + 0x15);
-            s8 bpB = *(s8*)(itemDataTable + b * 0x28 + 0x15);
-            s32 orderA = *(s32*)(itemDataTable + a * 0x28 + 0x20);
-            s32 orderB = *(s32*)(itemDataTable + b * 0x28 + 0x20);
+            u8* recordA = itemDataTable + a * 0x28;
+            char* nameA = msgSearch(*(char**)(recordA + 4));
+            u8* recordB = itemDataTable + b * 0x28;
+            char* nameB = msgSearch(*(char**)(recordB + 4));
+            s8 bpA = *(s8*)(recordA + 0x1C);
+            s8 bpB = *(s8*)(recordB + 0x1C);
             s32 swap = 0;
             if (type == 4) {
-                swap = strcmp(msgSearch(*(char**)(itemDataTable + a * 0x28 + 4)),
-                              msgSearch(*(char**)(itemDataTable + b * 0x28 + 4))) > 0;
+                if (strcmp(nameA, nameB) > 0) swap = 1;
             } else if (type == 11) {
-                swap = strcmp(msgSearch(*(char**)(itemDataTable + a * 0x28 + 4)),
-                              msgSearch(*(char**)(itemDataTable + b * 0x28 + 4))) < 0;
+                if (strcmp(nameA, nameB) < 0) swap = 1;
             } else if (type == 5) {
-                swap = orderB < orderA;
+                if (*(s16*)(recordB + 0x12) < *(s16*)(recordA + 0x12)) swap = 1;
             } else if (type == 12) {
-                swap = orderA < orderB;
+                if (*(s16*)(recordA + 0x12) < *(s16*)(recordB + 0x12)) swap = 1;
             } else if (type == 6) {
-                swap = bpB < bpA || (bpA == bpB && orderB < orderA);
+                if (bpB < bpA) swap = 1;
+                else if (bpA == bpB && *(s16*)(recordB + 0x12) < *(s16*)(recordA + 0x12)) swap = 1;
             } else if (type == 13) {
-                swap = bpA < bpB || (bpA == bpB && orderA < orderB);
+                if (bpA < bpB) swap = 1;
+                else if (bpA == bpB && *(s16*)(recordA + 0x12) < *(s16*)(recordB + 0x12)) swap = 1;
             }
             if (swap) {
                 s16 temp = *dst;
+                s16 equipTemp = *equipDst;
+                s16 otherEquip = *equipSrc;
                 *dst = *src;
+                *equipDst = otherEquip;
                 *src = temp;
-                temp = *equipDst;
-                *equipDst = *equipSrc;
-                *equipSrc = temp;
+                *equipSrc = equipTemp;
             }
         }
     }
-    memcpy((void*)(mpp + 0x1FA), badges, 400);
-    memcpy((void*)(mpp + 0x38A), equipped, 400);
+    memcpy(pouch->mBadges, badges, 400);
+    memcpy(pouch->mEquippedBadges, equipped, 400);
 }
+#pragma optimize_for_size reset
 
 s32 pouchGetCoin(void) {
     return ((PouchData*)mpp)->mCoins;
@@ -1465,167 +1226,40 @@ done:
 s32 pouchGetPartyAttackLv(s32 partyId) {
     return ((PouchData*)mpp)->partyData[partyId].attackLevel;
 }
+#pragma optimize_for_size off
 s32 pouchAddKeepItem(s16 item) {
-   s16* scan;
-    s32 scanCount;
-    u32 index;
-    u32 remainder;
-    s32 offset;
-    u32 chunks;
-    s32 addr;
-
-    scan = &((PouchData*)mpp)->partyData[4].currentHP;
-    scanCount = 0x20;
-    index = 0x1F;
-    for (; scanCount > 0; scanCount--) {
-        if (scan[0xDD] != 0) {
-            goto scan_next;
-        }
-
-        offset = index * 2;
-        remainder = index;
-
-        if ((s32)index > 0) {
-            chunks = index >> 3;
-
-            if (chunks != 0) {
-                for (; chunks != 0; chunks--) {
-                    addr = (s32)mpp + offset;
-                    offset -= 2;
-                    *(s16*)(addr + 0x1BA) = *(s16*)(addr + 0x1B8);
-
-                    addr = (s32)mpp + offset;
-                    offset -= 2;
-                    *(s16*)(addr + 0x1BA) = *(s16*)(addr + 0x1B8);
-
-                    addr = (s32)mpp + offset;
-                    offset -= 2;
-                    *(s16*)(addr + 0x1BA) = *(s16*)(addr + 0x1B8);
-
-                    addr = (s32)mpp + offset;
-                    offset -= 2;
-                    *(s16*)(addr + 0x1BA) = *(s16*)(addr + 0x1B8);
-
-                    addr = (s32)mpp + offset;
-                    offset -= 2;
-                    *(s16*)(addr + 0x1BA) = *(s16*)(addr + 0x1B8);
-
-                    addr = (s32)mpp + offset;
-                    offset -= 2;
-                    *(s16*)(addr + 0x1BA) = *(s16*)(addr + 0x1B8);
-
-                    addr = (s32)mpp + offset;
-                    offset -= 2;
-                    *(s16*)(addr + 0x1BA) = *(s16*)(addr + 0x1B8);
-
-                    addr = (s32)mpp + offset;
-                    offset -= 2;
-                    *(s16*)(addr + 0x1BA) = *(s16*)(addr + 0x1B8);
-                }
-
-                remainder &= 7;
-
-                if (remainder == 0) {
-                    goto done_shift;
-                }
+    int i, j;
+    for (i = 31; i >= 0; i--) {
+        if (((PouchData*)mpp)->mStoredItems[i] == 0) {
+            for (j = i; j > 0; j--) {
+                ((PouchData*)mpp)->mStoredItems[j] = ((PouchData*)mpp)->mStoredItems[j - 1];
             }
-
-            do {
-    addr = (s32)mpp + offset;
-    offset -= 2;
-    *(s16*)(addr + 0x1BA) = *(s16*)(addr + 0x1B8);
-    remainder--;
-} while (remainder != 0);
+            ((PouchData*)mpp)->mStoredItems[0] = item;
+            return 1;
         }
-
-done_shift:
-        *(s16*)((s32)mpp + 0x1BA) = item;
-        return 1;
-
-scan_next:
-        scan--;
-        index--;
     }
-
     return 0;
 }
+#pragma optimize_for_size reset
+
+#pragma optimize_for_size off
 s32 pouchRemoveKeepItem(s32 item, s32 index) {
-    s16* scan;
-    s32 count;
-    s32 offset;
-    s32 nextOffset;
-    u32 remaining;
-    u32 chunks;
+    int i, j;
     s16* items = ((PouchData*)mpp)->mStoredItems;
-
-    if (items[index] != item) {
-        return 0;
-    }
-
-    count = 0x20 - index;
-    scan = (s16*)(mpp + index * 2);
-
-    if (index < 0x20) {
-        for (; count != 0; count--) {
-            if ((s16)scan[0xDD] == item) {
-                offset = index * 2;
-
-                items[index] = 0;
-
-                remaining = 0x1F - index;
-
-                if (index < 0x1F) {
-                    chunks = remaining >> 2;
-
-                    if (chunks != 0) {
-                        for (; chunks != 0; chunks--) {
-                            *(s16*)((s32)mpp + offset + 0x1BA) =
-                                *(s16*)((s32)mpp + offset + 0x1BC);
-                            *(s16*)((s32)mpp + offset + 0x1BC) = 0;
-
-                            *(s16*)((s32)mpp + offset + 0x1BC) =
-                                *(s16*)((s32)mpp + offset + 0x1BE);
-                            *(s16*)((s32)mpp + offset + 0x1BE) = 0;
-
-                            *(s16*)((s32)mpp + offset + 0x1BE) =
-                                *(s16*)((s32)mpp + offset + 0x1C0);
-                            *(s16*)((s32)mpp + offset + 0x1C0) = 0;
-
-                            nextOffset = offset + 8;
-
-                            *(s16*)((s32)mpp + offset + 0x1C0) =
-                                *(s16*)((s32)mpp + offset + 0x1C2);
-                            *(s16*)((s32)mpp + offset + 0x1C2) = 0;
-
-                            offset = nextOffset;
-                        }
-
-                        remaining = remaining & 3;
-
-                        if (remaining == 0) {
-                            return 1;
-                        }
-                    }
-
-                    for (; remaining != 0; remaining--) {
-                        *(s16*)((s32)mpp + offset + 0x1BA) =
-                            *(s16*)((s32)mpp + offset + 0x1BC);
-                        *(s16*)((s32)mpp + offset + 0x1BC) = 0;
-
-                        offset += 2;
-                    }
-                }
-
-                return 1;
+    if (items[index] != item) return 0;
+    for (i = index; i < 32; i++) {
+        if (((PouchData*)mpp)->mStoredItems[i] == item) {
+            items[i] = 0;
+            for (j = i; j < 31; j++) {
+                ((PouchData*)mpp)->mStoredItems[j] = ((PouchData*)mpp)->mStoredItems[j + 1];
+                ((PouchData*)mpp)->mStoredItems[j + 1] = 0;
             }
-
-            scan++;
-            index++;
+            return 1;
         }
     }
-
     return 0;
 }
+#pragma optimize_for_size reset
 
 void pouchReviseMarioParam(void) {
     PouchData* pouch;
@@ -1792,110 +1426,24 @@ badge1_done:
         offset += 0x10;
     }
 }
+#pragma optimize_for_size off
 void pouchRevisePartyParam(void) {
-    PouchData* pouch;
-    s32 loops;
-    s32 hpPlusPCount;
-    s32 pairOffset;
-    s32 tableOffset;
-    s32 partyCheck;
-    s16 hpLevel;
-    s16 maxHP;
-    u8* table;
-
-    hpPlusPCount = 0;
-    loops = 0x14;
-    pouch = (PouchData*)mpp;
-
-    for (; loops > 0; loops--) {
-        if (pouch->mEquippedBadges[0] == 0x117) {
-            hpPlusPCount++;
-        }
-        if (pouch->mEquippedBadges[1] == 0x117) {
-            hpPlusPCount++;
-        }
-        if (pouch->mEquippedBadges[2] == 0x117) {
-            hpPlusPCount++;
-        }
-        if (pouch->mEquippedBadges[3] == 0x117) {
-            hpPlusPCount++;
-        }
-        if (pouch->mEquippedBadges[4] == 0x117) {
-            hpPlusPCount++;
-        }
-        if (pouch->mEquippedBadges[5] == 0x117) {
-            hpPlusPCount++;
-        }
-        if (pouch->mEquippedBadges[6] == 0x117) {
-            hpPlusPCount++;
-        }
-        if (pouch->mEquippedBadges[7] == 0x117) {
-            hpPlusPCount++;
-        }
-        if (pouch->mEquippedBadges[8] == 0x117) {
-            hpPlusPCount++;
-        }
-        if (pouch->mEquippedBadges[9] == 0x117) {
-            hpPlusPCount++;
-        }
-
-        pouch = (PouchData*)((s32)pouch + 0x14);
+    PouchPartyData* party;
+    int i, count;
+    for (i = 0, count = 0; i < 200; i++) {
+        if (((PouchData*)mpp)->mEquippedBadges[i] == 0x117) count++;
     }
-
-    table = _party_max_hp_table;
-    loops = 4;
-    partyCheck = 0;
-    hpPlusPCount = hpPlusPCount * 5;
-    pairOffset = 0;
-
-    for (; loops > 0; loops--) {
-        if (partyCheck != 0) {
-            pouch = (PouchData*)mpp;
-
-            hpLevel = *(s16*)((s32)pouch + pairOffset + 0x8);
-            tableOffset = hpLevel * 2;
-
-            *(s16*)((s32)pouch + pairOffset + 0x4) =
-                *(s16*)((s32)table + tableOffset);
-
-            *(s16*)((s32)pouch + pairOffset + 0x2) =
-                *(s16*)((s32)pouch + pairOffset + 0x4) + hpPlusPCount;
-
-            maxHP = *(s16*)((s32)pouch + pairOffset + 0x2);
-
-            if (*(s16*)((s32)pouch + pairOffset + 0x6) > maxHP) {
-                *(s16*)((s32)pouch + pairOffset + 0x6) = maxHP;
-            }
+    for (i = 0; i < 8; i++) {
+        if (i != 0) {
+            party = &((PouchData*)mpp)->partyData[i];
+            party->baseMaxHP = ((s16 (*)[4])_party_max_hp_table)[i][party->hpLevel];
+            party->currentMaxHP = (s16)(party->baseMaxHP + count * 5);
+            if (party->currentHP > party->currentMaxHP) party->currentHP = party->currentMaxHP;
         }
-
-        partyCheck++;
-        table += 8;
-        pairOffset += 0xE;
-
-        if (partyCheck != 0) {
-            pouch = (PouchData*)mpp;
-
-            hpLevel = *(s16*)((s32)pouch + pairOffset + 0x8);
-            tableOffset = hpLevel * 2;
-
-            *(s16*)((s32)pouch + pairOffset + 0x4) =
-                *(s16*)((s32)table + tableOffset);
-
-            *(s16*)((s32)pouch + pairOffset + 0x2) =
-                *(s16*)((s32)pouch + pairOffset + 0x4) + hpPlusPCount;
-
-            maxHP = *(s16*)((s32)pouch + pairOffset + 0x2);
-
-            if (*(s16*)((s32)pouch + pairOffset + 0x6) > maxHP) {
-                *(s16*)((s32)pouch + pairOffset + 0x6) = maxHP;
-            }
-        }
-
-        pairOffset += 0xE;
-        table += 8;
-        partyCheck++;
     }
 }
+#pragma optimize_for_size reset
+
 s32 pouchGetStarPoint(void) {
     return ((PouchData*)mpp)->starPoints;
 }
@@ -2104,65 +1652,41 @@ void pouchGetStarStone(s32 id) {
     }
 }
 
+#pragma optimize_for_size off
 int pouchReceiveMailCount(void) {
-    s32 i;
-    s32 count;
-    s32 base;
-    s32 loops;
-    u32 mask;
-
-    count = 0;
-    i = 0;
-    base = mpp;
-    mask = 1;
-    for (loops = 0; loops < 0x21; loops++) {
-        if (*(u32*)(base + 0x580 + (i / 32) * 4) & (mask << (i % 32))) {
-            count++;
-        }
-        i++;
-        if (*(u32*)(base + 0x580 + (i / 32) * 4) & (mask << (i % 32))) {
-            count++;
-        }
-        i++;
-        if (*(u32*)(base + 0x580 + (i / 32) * 4) & (mask << (i % 32))) {
-            count++;
-        }
-        i++;
+    typedef struct MailFlagsView { u8 pad[0x580]; u32 received[4]; } MailFlagsView;
+    s32 i, count;
+    for (i = 0, count = 0; i < 99; i++) {
+        if (((MailFlagsView*)mpp)->received[i / 32] & (1 << (i % 32))) count++;
     }
     return count;
 }
+#pragma optimize_for_size reset
 
+#pragma optimize_for_size off
 void pouchReceiveMail(s32 mail) {
     typedef struct MailPouchView {
         u8 pad[0x51A];
         u8 mailIds[0x66];
         u32 received[4];
     } MailPouchView;
-    MailPouchView* pouch = (MailPouchView*)mpp;
-    s32 word = mail / 32;
-    s32 bit = mail % 32;
-    s32 count = 0;
-    s32 i = 0;
-    s32 loops;
+    s32 count;
+    s32 i;
+    MailPouchView* pouch;
+    s32 index;
+    s32 shift;
 
-    for (loops = 0x21; loops != 0; loops--) {
-        if (pouch->received[i / 32] & (1 << (i % 32))) {
-            count++;
-        }
-        i++;
-        if (pouch->received[i / 32] & (1 << (i % 32))) {
-            count++;
-        }
-        i++;
-        if (pouch->received[i / 32] & (1 << (i % 32))) {
-            count++;
-        }
-        i++;
+    shift = mail % 32;
+    index = mail / 32;
+    count = 0;
+    pouch = (MailPouchView*)mpp;
+    for (i = count; i < 99; i++) {
+        if (pouch->received[i / 32] & (1 << (i % 32))) count++;
     }
-
-    pouch->received[word] |= 1 << bit;
-    pouch->mailIds[count] = mail;
+    pouch->received[index] |= 1 << shift;
+    ((MailPouchView*)mpp)->mailIds[count] = (u8)mail;
 }
+#pragma optimize_for_size reset
 
 void pouchOpenMail(s32 mail) {
     s32 word = mail / 32;
@@ -2171,16 +1695,19 @@ void pouchOpenMail(s32 mail) {
 }
 
 s32 pouchCheckMail(s32 mail) {
-    register s32 word = mail / 32;
-    s32 bit = mail % 32;
-    u32 mask = 1 << bit;
+    typedef struct MailFlagsView {
+        u8 pad[0x580];
+        u32 received[4];
+        u32 read[4];
+    } MailFlagsView;
+    s32 mask = 1 << (mail % 32);
     u32 value;
-
-    if (*(u32*)(mpp + 0x590 + word * 4) & mask) {
+    if (((MailFlagsView*)mpp)->read[mail / 32] & mask) {
         return 2;
+    } else {
+        value = ((MailFlagsView*)mpp)->received[mail / 32] & mask;
+        return (-value | value) >> 31;
     }
-    value = *(u32*)(mpp + 0x580 + word * 4) & mask;
-    return ((u32)(-value) | value) >> 31;
 }
 
 s32 pouchGetPartyColor(s32 partyId) {

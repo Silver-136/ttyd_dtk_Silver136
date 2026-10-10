@@ -31,7 +31,7 @@ typedef struct BattleWorkUnitPartBlur {
 } BattleWorkUnitPartBlur;
 
 extern void PSMTXCopy(void* src, void* dst);
-void _partsBlurControl(f64 rotation, void* part, u32 flags, void* orientation, void* color);
+void _partsBlurControl(f32 rotation, void* part, u32 flags, void* orientation, void* color);
 void _pose_def(void* part);
 void _pose_one_pattern(void* part);
 void _pose_two_pattern(void* part);
@@ -218,6 +218,7 @@ void btlDispTexPlainGX(s32 texId, u8* color0, u8* color1, u8* color2, u8* color3
     extern void GXSetTevOrder(s32, s32, s32, s32);
     extern void GXSetTevOp(s32, s32);
     extern void GXBegin(s32, s32, s32);
+    typedef struct BtlDispColor { u8 r, g, b, a; } BtlDispColor;
     u8 texObj[32];
     volatile f32* fifoF = (volatile f32*)0xCC008000;
     volatile u8* fifoB = (volatile u8*)0xCC008000;
@@ -225,30 +226,33 @@ void btlDispTexPlainGX(s32 texId, u8* color0, u8* color1, u8* color2, u8* color3
     f32 halfWidth;
     f32 halfHeight;
 
-    TEXGetGXTexObjFromPalette(**(void***)((s32)work + 0x163F8 + 0xA0), texObj, texId);
+    TEXGetGXTexObjFromPalette(**(void***)((s32)*(void**)((s32)work + 0x163F8) + 0xA0), texObj, texId);
     GXLoadTexObj(texObj, 0);
-    if (GXGetTexObjFmt(texObj) == 0) {
+    switch (GXGetTexObjFmt(texObj)) {
+    case 0:
         GXSetNumTevStages(1);
         GXSetTevColorOp(0, 0, 0, 0, 1, 0);
         GXSetTevColorIn(0, 0xF, 0xF, 0xF, 0xA);
         GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
         GXSetTevAlphaIn(0, 7, 5, 4, 7);
         GXSetTevOrder(0, 0, 0, 4);
-    } else {
+        break;
+    default:
         GXSetNumTevStages(1);
         GXSetTevColorOp(0, 0, 0, 0, 1, 0);
         GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
         GXSetTevOrder(0, 0, 0, 4);
         GXSetTevOp(0, 0);
+        break;
     }
 
-    halfWidth = (f32)GXGetTexObjWidth(texObj) * float_0p5_80422234;
-    halfHeight = (f32)GXGetTexObjHeight(texObj) * float_0p5_80422234;
+    halfWidth = float_0p5_80422234 * (f32)GXGetTexObjWidth(texObj);
+    halfHeight = float_0p5_80422234 * (f32)GXGetTexObjHeight(texObj);
     GXBegin(0x80, 0, 4);
 
 #define EMIT_VERTEX(px, py, color, ts, tt) \
     fifoF[0] = (px); fifoF[0] = (py); fifoF[0] = float_0_80422240; \
-    fifoB[0] = (color)[0]; fifoB[0] = (color)[1]; fifoB[0] = (color)[2]; fifoB[0] = (color)[3]; \
+    fifoB[0] = ((const BtlDispColor*)(color))->r; fifoB[0] = ((const BtlDispColor*)(color))->g; fifoB[0] = ((const BtlDispColor*)(color))->b; fifoB[0] = ((const BtlDispColor*)(color))->a; \
     fifoF[0] = (ts); fifoF[0] = (tt)
     EMIT_VERTEX(-halfWidth, halfHeight, color0, float_0_80422240, float_0_80422240);
     EMIT_VERTEX(halfWidth, halfHeight, color1, float_1_8042224c, float_0_80422240);
@@ -430,11 +434,12 @@ void btlDispMain(void) {
     s32 flags;
     s32 effectFlag;
     const char* poseName;
-    u8 shown, target;
+    s32 shown, target;
     s8 turns, strength;
     f32 x, y, z, ox, oy, oz, floor;
     f32 worldX, worldY, worldZ;
     Vec dispPos;
+    Vec renderPos;
     f32 shadowX, shadowY, shadowZ;
     f32 partnerX, partnerY, partnerZ;
     f32 shadowFloor, shadowScale, shadowSize;
@@ -454,15 +459,31 @@ void btlDispMain(void) {
                 BtlUnit_GetPos(owner, &ox, &oy, &oz);
                 oz += 7.0f;
                 floor = BattleGetFloorHeight(battleWork, ox, oy, oz);
-                if (*(s32*)(unit + 0x220) == 3) {
-                    if (__fabs(x - ox) >= 1.0f) x += ox <= x ? -1.0f : 1.0f;
-                    else { x = ox; *(s32*)(unit + 0x220) = 1; }
-                    BtlUnit_SetPos(unit, x, floor, oz);
-                } else if (*(s32*)(unit + 0x220) == 2) {
-                    if (__fabs(x - ox) > 10.0f) x += ox <= x ? -((x - ox) - 10.0f) : ((ox - x) - 10.0f);
+                switch (*(s32*)(unit + 0x220)) {
+                case 3:
+                    if (__fabs(x - ox) >= 1.0) {
+                        if (ox <= x) {
+                            x += -1.0f;
+                            BtlUnit_SetPos(unit, x, floor, oz);
+                        } else {
+                            x += 1.0f;
+                            BtlUnit_SetPos(unit, x, floor, oz);
+                        }
+                    } else {
+                        BtlUnit_SetPos(unit, ox, floor, oz);
+                        *(s32*)(unit + 0x220) = 1;
+                    }
+                    break;
+                case 2:
+                    if (__fabs(x - ox) > 10.0) {
+                        if (ox <= x) x -= (x - ox) - 10.0f;
+                        else x += (ox - x) - 10.0f;
+                    }
                     BtlUnit_SetPos(unit, x, oy, oz);
-                } else {
+                    break;
+                default:
                     BtlUnit_SetPos(unit, ox, floor, oz);
+                    break;
                 }
             }
         }
@@ -527,7 +548,8 @@ void btlDispMain(void) {
                 }
                 if (*(u32*)(part + 0x204) & 1) {
                     effectFlag = 0;
-                    flags = *(u32*)(part + 0x204) & ~0x201;
+                    *(u32*)(part + 0x204) &= ~1;
+                    flags = *(u32*)(part + 0x204) & ~0x200;
                     *(u32*)(part + 0x204) = flags;
                     animPoseSetAnim(*(s32*)(part + 0x1C0), poseName, flags != 0);
                     part[0x214] = 0;
@@ -569,6 +591,7 @@ void btlDispMain(void) {
                 dispPos.x = worldX;
                 dispPos.y = worldY;
                 dispPos.z = worldZ + *(f32*)(part + 0x4F8);
+                renderPos = dispPos;
                 part[0x4F7] = *(s16*)(*(u8**)(part + 4) + 0x34);
                 if (BtlUnit_CheckStatus(unit, 0x12) ||
                     (*(u32*)(unit + 0x104) & 8) != 0) {
@@ -586,11 +609,11 @@ void btlDispMain(void) {
                             animPoseTestXLU(*(s32*)(part + 0x1C0)) == 0) {
                             if ((*(u32*)(part + 0x204) & 0x100) == 0) {
                                 dispEntry(4, 1, btlUnitPartsDisp,
-                                          dispCalcZ(&dispPos), part);
+                                          dispCalcZ(&renderPos), part);
                             }
                         } else if ((*(u32*)(part + 0x204) & 0x100) == 0) {
                             dispEntry(4, 2, btlUnitPartsDisp,
-                                      dispCalcZ(&dispPos), part);
+                                      dispCalcZ(&renderPos), part);
                         }
                     }
                     if ((*(u32*)(part + 0x1AC) & 0x4000000) != 0) {
@@ -1293,16 +1316,15 @@ void btlUnitItemDisp(s32 param_1, void* unit) {
     extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
     extern void iconDispGx(f64 scale, f32* pos, u16 flags, u16 iconId);
     s32 iconItem;
-    s32 height;
+    f32 height;
     f32 pos[3];
+    void* battleWork = _battleWorkPointer;
 
-    height = BtlUnit_GetHeight(unit);
+    height = (f32)BtlUnit_GetHeight(unit);
     iconItem = BtlUnit_EnemyItemCanUseCheck(*(s32*)((s32)unit + 0x308));
-    if ((*(u32*)((s32)_battleWorkPointer + 0xEF4) & 0x20000) != 0 &&
-        iconItem == 0) {
+    if ((*(u32*)((s32)battleWork + 0xEF4) & 0x20000) != 0 && iconItem == 0) {
         iconItem = 0x94;
     }
-
     if (iconItem != 0) {
         BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
         pos[0] += *(f32*)((s32)unit + 0xB4);
@@ -1350,23 +1372,27 @@ done:
 }
 
 void btlUnitStolenItemDisp(s32 param_1, void* unit) {
+    typedef struct UnitView {
+        u8 pad0[0x114];
+        f32 size;
+        u8 pad1[0x1F0];
+        s32 stolenItem;
+    } UnitView;
     extern f32 float_5_80422254;
-    extern void BtlUnit_GetPos(void* unit, f32* x, f32* y, f32* z);
-    extern s32 BtlUnit_GetHeight(void* unit);
-    extern void iconDispGx(f64 scale, f32* pos, u16 flags, u16 iconId);
-    s32 item;
-    s32 height;
+    extern void BtlUnit_GetPos(void*, f32*, f32*, f32*);
+    extern s32 BtlUnit_GetHeight(void*);
+    extern void iconDispGx(f64, f32*, u16, u16);
+    UnitView* work = (UnitView*)unit;
     f32 pos[3];
-
-    item = *(s32*)((s32)unit + 0x308);
-    BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
-    height = BtlUnit_GetHeight(unit);
-    pos[1] += *(f32*)((s32)unit + 0x114) * (f32)height + float_5_80422254;
-    iconDispGx(float_1_8042224c, pos, 0,
-               *(u16*)(itemDataTable + item * 0x28 + 0x20));
+    s32 item = work->stolenItem;
+    s32 height;
+    BtlUnit_GetPos(work, pos, pos + 1, pos + 2);
+    height = BtlUnit_GetHeight(work);
+    pos[1] += work->size * (f32)height + float_5_80422254;
+    iconDispGx(float_1_8042224c, pos, 0, *(u16*)(itemDataTable + item * 0x28 + 0x20));
 }
 
-void btlUnitPartsBlurControl(f64 rotation, void* part, s32 a3, void* orientation, s32* color) {
+void btlUnitPartsBlurControl(f32 rotation, void* part, s32 a3, void* orientation, s32* color) {
     s32 local;
     if ((*(u32*)((s32)part + 0x1AC) & 0x04000000) != 0) {
         local = *color;
@@ -1377,24 +1403,25 @@ void btlUnitPartsBlurControl(f64 rotation, void* part, s32 a3, void* orientation
     }
 }
 
-void _partsBlurControl(f64 rotation, void* part, u32 flags, void* orientation, void* color) {
-    BattleWorkUnitPartBlur* blurWork;
-    u32* blurFlags;
+void _partsBlurControl(f32 rotation, void* part, u32 flags, void* orientation, void* color) {
+    typedef struct BlurPool {
+        u32 flags;
+        u32 colors[2];
+        BattleWorkUnitPartBlur work[10];
+    } BlurPool;
+    BlurPool* blur = (BlurPool*)((u8*)part + 0x21C);
     s32 i;
-
-    blurFlags = (u32*)((u8*)part + 0x21C);
-    blurWork = (BattleWorkUnitPartBlur*)((u8*)part + 0x228);
     for (i = 9; i > 0; i--) {
-        blurWork[i] = blurWork[i - 1];
+        blur->work[i] = blur->work[i - 1];
     }
-    blurWork[0].flags = flags;
-    PSMTXCopy(orientation, blurWork[0].orientation);
-    blurWork[0].rotation = (f32)rotation;
-    blurWork[0].baseColor = *(u32*)color;
-    blurWork[0].blurColors[0] = *(u32*)((u8*)part + 0x220);
-    blurWork[0].blurColors[1] = *(u32*)((u8*)part + 0x224);
-    if (((*blurFlags & 1) != 0) && ((blurWork[1].flags & 1) != 0)) {
-        blurWork[0].flags &= ~1;
+    blur->work[0].flags = flags;
+    PSMTXCopy(orientation, blur->work[0].orientation);
+    blur->work[0].rotation = (f32)rotation;
+    blur->work[0].baseColor = *(u32*)color;
+    blur->work[0].blurColors[0] = blur->colors[0];
+    blur->work[0].blurColors[1] = blur->colors[1];
+    if ((blur->flags & 1) && (blur->work[1].flags & 1)) {
+        blur->work[0].flags &= ~1;
     }
 }
 
@@ -1703,7 +1730,19 @@ void _pose_two_pattern(void* part) {
         case 2:
             switch (*(u8*)((s32)part + 0x215)) {
                 case 4:
+                    *(u16*)((s32)part + 0x216) = *(u16*)((s32)part + 0x216) - 1;
+                    if (*(u16*)((s32)part + 0x216) == 0) {
+                        *(u8*)((s32)part + 0x214) = 0;
+                        _pose_two_pattern(part);
+                    }
+                    break;
                 case 5:
+                    *(u16*)((s32)part + 0x216) = *(u16*)((s32)part + 0x216) - 1;
+                    if (*(u16*)((s32)part + 0x216) == 0) {
+                        *(u8*)((s32)part + 0x214) = 0;
+                        _pose_two_pattern(part);
+                    }
+                    break;
                 case 6:
                     *(u16*)((s32)part + 0x216) = *(u16*)((s32)part + 0x216) - 1;
                     if (*(u16*)((s32)part + 0x216) == 0) {
@@ -2110,32 +2149,28 @@ void _btlStockExpDisp(void) {
     extern f32 float_16_80422230;
     extern f32 float_0p5_80422234;
     extern f32 float_4_80422224;
-    extern f32 vec3_802ee3dc[3];
-    extern f32 vec3_802ee3e8[3];
+    extern f32 vec3_802ee3dc[];
+    extern f32 vec3_802ee3e8[];
     extern void iconDispGx(f64 scale, f32* pos, u16 flags, u16 iconId);
     s32 value;
+    s32 original;
     s32 tens;
     s32 ones;
     s32 i;
-    Vec pos;
     static f32 x;
     static f32 y;
-    f32 c13;
-    f32 c308;
-    f32 c3p5;
-    f32 c220;
-    f32 c4;
-    f32 c20;
-    f32 c10;
-    f32 c16;
 
-    value = *(s32*)((s32)_battleWorkPointer + 0xF04);
-    if (value > 0) {
+    original = *(s32*)((s32)_battleWorkPointer + 0xF04);
+    if (original > 0) {
+        value = original;
         if (value > 100) {
             value = 100;
         }
         tens = value / 10;
         ones = value - tens * 10;
+        {
+        Vec pos;
+        f32 c13, c308, c3p5, c220;
         c13 = float_13_80422218;
         c308 = float_308_80422210;
         c3p5 = float_3p5_80422214;
@@ -2146,15 +2181,22 @@ void _btlStockExpDisp(void) {
             pos.y = y - c220;
             iconDispGx(float_0p35_80422220, (f32*)&pos, 0x10, 0x194);
         }
+        }
+        {
+        Vec pos;
+        f32 c4, c20, c308, c10, c16, c220;
         c4 = float_4_80422224;
         c20 = float_20_8042222c;
+        c308 = float_308_80422210;
         c10 = float_10_80422228;
         c16 = float_16_80422230;
+        c220 = float_220_8042221c;
         for (i = 0; i < tens; i++) {
             pos = *(Vec*)vec3_802ee3e8;
-            pos.x = c4 + (c308 + x - c10) - c20 * (f32)i;
+            pos.x = c4 + ((c308 + x - c10) - c20 * (f32)i);
             pos.y = c16 + (y - c220);
             iconDispGx(float_0p5_80422234, (f32*)&pos, 0x10, 0x194);
+        }
         }
     }
 }

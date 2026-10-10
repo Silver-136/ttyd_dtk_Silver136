@@ -8,7 +8,7 @@ extern u32 vec3_80302838[];
 extern u32 dat_80428790;
 extern u32 dat_80428794;
 extern u32 dat_80428798;
-extern f32 float_0_804287b4;
+extern const f32 float_0_804287b4;
 extern f32 float_4_804287b8;
 
 typedef struct BSITriplet {
@@ -23,6 +23,27 @@ typedef struct BSIVec {
     f32 z;
 } BSIVec;
 
+typedef s32 (*BSIStatusIconFunc)(BattleWorkUnit*, s32*, s32*);
+
+__declspec(section ".sdata2") u32 dat_80428788 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8042878c = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_80428790 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_80428794 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_80428798 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8042879c = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_804287a0 = 0xED145BFF;
+__declspec(section ".sdata2") u32 dat_804287a4 = 0xFFEA05FF;
+__declspec(section ".sdata2") u32 float_0p10207_804287a8 = 0x3DD109FF;
+__declspec(section ".sdata2") u32 dat_804287ac = 0x61E9E7FF;
+__declspec(section ".sdata2") u32 dat_804287b0 = 0x000000FF;
+
+typedef struct BSIStatusIconDesc {
+    s32 status;
+    BSIStatusIconFunc callback;
+    s32 icon;
+    s32 flags;
+} BSIStatusIconDesc;
+
 extern BSITriplet vec3_80302844;
 extern BSITriplet vec3_80302850;
 extern BSITriplet vec3_8030285c;
@@ -34,6 +55,29 @@ extern BSITriplet vec3_80302898;
 extern BSITriplet vec3_803028a4;
 extern BSITriplet vec3_803028b0;
 extern BSITriplet vec3_803028bc;
+
+__declspec(section ".rodata") u32 vec3_80302838[3] = { 0x3F800000, 0x3F800000, 0x3F800000 };
+__declspec(section ".rodata") BSITriplet vec3_80302844 = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_80302850 = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_8030285c = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_80302868 = { 0x3F800000, 0x3F800000, 0x3F800000 };
+__declspec(section ".rodata") BSITriplet vec3_80302874 = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_80302880 = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_8030288c = { 0x00000000, 0x40800000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_80302898 = { 0x3F800000, 0x3F800000, 0x3F800000 };
+__declspec(section ".rodata") BSITriplet vec3_803028a4 = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_803028b0 = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_803028bc = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_803028c8 = { 0x3F800000, 0x3F800000, 0x3F800000 };
+__declspec(section ".rodata") BSITriplet vec3_803028d4 = { 0x3F800000, 0x3F800000, 0x3F800000 };
+__declspec(section ".rodata") BSITriplet vec3_803028e0 = { 0x3F4CCCCD, 0x3F4CCCCD, 0x3F800000 };
+__declspec(section ".rodata") BSITriplet vec3_803028ec = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_803028f8 = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_80302904 = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_80302910 = { 0x3F800000, 0x3F800000, 0x3F800000 };
+__declspec(section ".rodata") BSITriplet vec3_8030291c = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_80302928 = { 0x00000000, 0x00000000, 0x00000000 };
+__declspec(section ".rodata") BSITriplet vec3_80302934 = { 0x00000000, 0x00000000, 0x00000000 };
 
 void BattleStatusIconInit(BattleWorkUnit* unit) {
     memset((void*)((s32)unit + 0x348), 0, 0x7A0);
@@ -139,6 +183,11 @@ void BattleStatusIconDisp(s32 cameraId, void* unit) {
     extern void iconNumberDispGx(f32 matrix[3][4], s32 number, s32 flags, const u32* color);
     extern u32 dat_80428788;
     extern u32 dat_8042878c;
+    extern f32 float_0p8_804287bc;
+    extern f32 float_neg0p8_804287c0;
+    extern f32 float_deg2rad_804287c4;
+    extern f32 float_21p6_804287c8;
+    extern f32 float_16_804287cc;
 
     u8* work = (u8*)unit + 0x348;
     f32 screen[3];
@@ -181,10 +230,10 @@ void BattleStatusIconDisp(s32 cameraId, void* unit) {
         if ((flags & 1) == 0) {
             if ((*(u32*)(work + 0x1C) & 1) == 0) {
                 backgroundColorA = baseColor;
-                btlDispTexPlane(0x30, &backgroundColorA, 0, x, y, z, 0.8f, 0.8f);
+                btlDispTexPlane(0x30, &backgroundColorA, 0, x, y, z, float_0p8_804287bc, float_0p8_804287bc);
             } else {
                 backgroundColorB = baseColor;
-                btlDispTexPlane(0x30, &backgroundColorB, 0, x, y, z, 0.8f, -0.8f);
+                btlDispTexPlane(0x30, &backgroundColorB, 0, x, y, z, float_0p8_804287bc, float_neg0p8_804287c0);
             }
         }
 
@@ -197,8 +246,8 @@ void BattleStatusIconDisp(s32 cameraId, void* unit) {
                            y + *(f32*)(entry + 0x34),
                            z + *(f32*)(entry + 0x38));
                 PSMTXScale(scaling,
-                           0.8f * *(f32*)(entry + 0xC),
-                           0.8f * *(f32*)(entry + 0x10),
+                           float_0p8_804287bc * *(f32*)(entry + 0xC),
+                           float_0p8_804287bc * *(f32*)(entry + 0x10),
                            *(f32*)(entry + 0x14));
                 PSMTXTrans(negativePivot,
                            -*(f32*)(entry + 0x18),
@@ -209,11 +258,11 @@ void BattleStatusIconDisp(s32 cameraId, void* unit) {
                            *(f32*)(entry + 0x1C),
                            *(f32*)(entry + 0x20));
                 PSMTXRotRad(rotateX, 'x',
-                            0.017453292f * *(f32*)(entry + 0x24));
+                            float_deg2rad_804287c4 * *(f32*)(entry + 0x24));
                 PSMTXRotRad(rotateY, 'y',
-                            0.017453292f * *(f32*)(entry + 0x28));
+                            float_deg2rad_804287c4 * *(f32*)(entry + 0x28));
                 PSMTXRotRad(rotateZ, 'z',
-                            0.017453292f * *(f32*)(entry + 0x2C));
+                            float_deg2rad_804287c4 * *(f32*)(entry + 0x2C));
 
                 PSMTXIdentity(matrix);
                 PSMTXConcat(rotateZ, scaling, matrix);
@@ -228,7 +277,7 @@ void BattleStatusIconDisp(s32 cameraId, void* unit) {
 
             if (*(s32*)(entry + 4) != 0) {
                 PSMTXIdentity(numberMatrix);
-                PSMTXTrans(position, x + 21.6f, y - 16.0f, z);
+                PSMTXTrans(position, x + float_21p6_804287c8, y - float_16_804287cc, z);
                 PSMTXConcat(position, numberMatrix, numberMatrix);
                 numberColor = dat_8042878c;
                 iconNumberDispGx(numberMatrix, *(s32*)(entry + 4), 1, &numberColor);
@@ -477,3 +526,121 @@ s32 _bsi_regeneration(BattleWorkUnit* unit, s32* desc, s32* out) {
     return 1;
 }
 
+BSIStatusIconDesc _disp_table[23] = {
+    { 0x1, _bsi_default_turn, 0x16, 0x1 },
+    { 0x4, _bsi_default_turn, 0x14, 0x1 },
+    { 0x15, _bsi_default_turn, 0x15, 0x1 },
+    { 0x2, _bsi_default_turn, 0x17, 0x1 },
+    { 0x8, _bsi_default_turn, 0x18, 0x1 },
+    { 0x9, _bsi_default_turn, 0x19, 0x1 },
+    { 0x13, _bsi_default_turn, 0x1A, 0x1 },
+    { 0x14, _bsi_default_turn, 0x1B, 0x1 },
+    { 0xE, _bsi_default_turn, 0x1C, 0x1 },
+    { 0xF, _bsi_default_turn, 0x1D, 0x1 },
+    { 0x7, _bsi_default_turn, 0x29, 0x1 },
+    { 0xA, _bsi_default_turn, 0x2A, 0x1 },
+    { 0xB, _bsi_default_turn, 0x2B, 0x1 },
+    { 0x5, _bsi_default_turn, 0x2C, 0x1 },
+    { 0xC, _bsi_default_turn, 0x2D, 0x1 },
+    { 0xD, _bsi_default_turn, 0x2E, 0x1 },
+    { 0x12, _bsi_default_turn, 0x2F, 0x1 },
+    { 0x3, _bsi_guruguru, 0x27, 0x0 },
+    { 0x6, _bsi_biribiri, 0x26, 0x0 },
+    { 0x0, _bsi_allergy, 0x28, 0x0 },
+    { 0x17, _bsi_regeneration, 0x1E, 0x0 },
+    { 0x18, _bsi_regeneration, 0x1F, 0x0 },
+    { -1, 0, 0x0, 0x0 },
+};
+
+BSIStatusIconDesc _disp_table_2[23] = {
+    { 0x1, _bsi_default_turn, 0x16, 0x1 },
+    { 0x4, _bsi_default_turn, 0x14, 0x1 },
+    { 0x15, _bsi_default_turn, 0x15, 0x1 },
+    { 0x2, _bsi_default_turn, 0x17, 0x1 },
+    { 0x8, _bsi_default_turn, 0x18, 0x1 },
+    { 0x9, _bsi_default_turn, 0x19, 0x1 },
+    { 0x13, _bsi_default_turn, 0x1A, 0x1 },
+    { 0x14, _bsi_default_turn, 0x1B, 0x1 },
+    { 0xE, _bsi_default_turn, 0x1C, 0x1 },
+    { 0xF, _bsi_default_turn, 0x1D, 0x1 },
+    { 0x7, _bsi_default_turn, 0x29, 0x1 },
+    { 0xA, _bsi_default_turn, 0x2A, 0x1 },
+    { 0xB, _bsi_default_turn, 0x2B, 0x1 },
+    { 0x5, _bsi_default_turn, 0x2C, 0x1 },
+    { 0xC, _bsi_default_turn, 0x2D, 0x1 },
+    { 0xD, _bsi_default_turn, 0x2E, 0x1 },
+    { 0x12, _bsi_default_turn, 0x2F, 0x1 },
+    { 0x3, _bsi_guruguru, 0x27, 0x0 },
+    { 0x6, _bsi_biribiri, 0x26, 0x0 },
+    { 0x0, _bsi_allergy, 0x28, 0x0 },
+    { 0x17, _bsi_regeneration, 0x20, 0x0 },
+    { 0x18, _bsi_regeneration, 0x21, 0x0 },
+    { -1, 0, 0x0, 0x0 },
+};
+
+BSIStatusIconDesc _disp_table_3[23] = {
+    { 0x1, _bsi_default_turn, 0x16, 0x1 },
+    { 0x4, _bsi_default_turn, 0x14, 0x1 },
+    { 0x15, _bsi_default_turn, 0x15, 0x1 },
+    { 0x2, _bsi_default_turn, 0x17, 0x1 },
+    { 0x8, _bsi_default_turn, 0x18, 0x1 },
+    { 0x9, _bsi_default_turn, 0x19, 0x1 },
+    { 0x13, _bsi_default_turn, 0x1A, 0x1 },
+    { 0x14, _bsi_default_turn, 0x1B, 0x1 },
+    { 0xE, _bsi_default_turn, 0x1C, 0x1 },
+    { 0xF, _bsi_default_turn, 0x1D, 0x1 },
+    { 0x7, _bsi_default_turn, 0x29, 0x1 },
+    { 0xA, _bsi_default_turn, 0x2A, 0x1 },
+    { 0xB, _bsi_default_turn, 0x2B, 0x1 },
+    { 0x5, _bsi_default_turn, 0x2C, 0x1 },
+    { 0xC, _bsi_default_turn, 0x2D, 0x1 },
+    { 0xD, _bsi_default_turn, 0x2E, 0x1 },
+    { 0x12, _bsi_default_turn, 0x2F, 0x1 },
+    { 0x3, _bsi_guruguru, 0x27, 0x0 },
+    { 0x6, _bsi_biribiri, 0x26, 0x0 },
+    { 0x0, _bsi_allergy, 0x28, 0x0 },
+    { 0x17, _bsi_regeneration, 0x22, 0x0 },
+    { 0x18, _bsi_regeneration, 0x23, 0x0 },
+    { -1, 0, 0x0, 0x0 },
+};
+
+BSIStatusIconDesc _disp_table_4[23] = {
+    { 0x1, _bsi_default_turn, 0x16, 0x1 },
+    { 0x4, _bsi_default_turn, 0x14, 0x1 },
+    { 0x15, _bsi_default_turn, 0x15, 0x1 },
+    { 0x2, _bsi_default_turn, 0x17, 0x1 },
+    { 0x8, _bsi_default_turn, 0x18, 0x1 },
+    { 0x9, _bsi_default_turn, 0x19, 0x1 },
+    { 0x13, _bsi_default_turn, 0x1A, 0x1 },
+    { 0x14, _bsi_default_turn, 0x1B, 0x1 },
+    { 0xE, _bsi_default_turn, 0x1C, 0x1 },
+    { 0xF, _bsi_default_turn, 0x1D, 0x1 },
+    { 0x7, _bsi_default_turn, 0x29, 0x1 },
+    { 0xA, _bsi_default_turn, 0x2A, 0x1 },
+    { 0xB, _bsi_default_turn, 0x2B, 0x1 },
+    { 0x5, _bsi_default_turn, 0x2C, 0x1 },
+    { 0xC, _bsi_default_turn, 0x2D, 0x1 },
+    { 0xD, _bsi_default_turn, 0x2E, 0x1 },
+    { 0x12, _bsi_default_turn, 0x2F, 0x1 },
+    { 0x3, _bsi_guruguru, 0x27, 0x0 },
+    { 0x6, _bsi_biribiri, 0x26, 0x0 },
+    { 0x0, _bsi_allergy, 0x28, 0x0 },
+    { 0x17, _bsi_regeneration, 0x24, 0x0 },
+    { 0x18, _bsi_regeneration, 0x25, 0x0 },
+    { -1, 0, 0x0, 0x0 },
+};
+
+
+__declspec(section ".sdata2") const f32 float_0_804287b4 = 0.0f;
+__declspec(section ".sdata2") f32 float_4_804287b8 = 4.0f;
+
+__declspec(section ".sdata2") const f32 float_0p8_804287bc = 0.800000011920929f;
+__declspec(section ".sdata2") const f32 float_neg0p8_804287c0 = -0.800000011920929f;
+__declspec(section ".sdata2") const f32 float_deg2rad_804287c4 = 0.01745329238474369f;
+__declspec(section ".sdata2") const f32 float_21p6_804287c8 = 21.600000381469727f;
+__declspec(section ".sdata2") const f32 float_16_804287cc = 16.0f;
+
+const f32 float_13p44_804287d0 = 13.440000534057617f;
+const f32 float_25p6_804287d4 = 25.600000381469727f;
+const f32 float_19p2_804287d8 = 19.200000762939453f;
+const f32 float_901_804287dc = 901.0f;

@@ -347,74 +347,67 @@ void fadeEntry(s32 type, s32 time, void* data) {
         time = 1000;
     }
 
-    reset = 0;
     if (type < 0x29) {
         if (type < 9) {
-            if ((type > 6) || (type < 1)) {
-                return;
-            }
-        } else {
-            if (type > 0x15) {
-                slot = 1;
-                entry = (s32)wp + 0xB0;
-                goto entry_selected;
-            }
-            if (type > 0xF) {
-                return;
-            }
+            if (type >= 7 || type < 1) goto entry_selected;
+            goto select_zero;
         }
-        slot = 0;
-        reset = (s32)wp + 0x158;
-        entry = (s32)wp + 8;
-        RESET_SELECTED_ENTRY();
-        switch (type) {
-            case 1:
-            case 3:
-            case 5:
-            case 9:
-            case 11:
-            case 14:
-                if (time != 0) {
-                    *(s32*)((s32)wp + 0xAC) = 2;
-                }
-                break;
-            default:
-                break;
-        }
-    } else {
-        if (type == 0x33) {
-            slot = 1;
-            entry = (s32)wp + 0xB0;
-            goto entry_selected;
-        }
-        if (type < 0x33) {
-            if (type < 0x31) {
-                slot = 2;
-                reset = (s32)wp + 8;
-                entry = (s32)wp + 0x158;
-                RESET_SELECTED_ENTRY();
-            } else {
-                slot = 3;
-                entry = (s32)wp + 0x200;
-            }
-        } else {
-            if (type >= 0x41) {
-                return;
-            }
-            if (type >= 0x3F) {
-                slot = 4;
-                entry = (s32)wp + 0x2A8;
-                goto entry_selected;
-            }
-            slot = 3;
-            entry = (s32)wp + 0x200;
-        }
-        if ((type == 0x32) || (type == 0x35) || (type == 0x36) ||
-            (type == 0x38) || (type == 0x3A)) {
-            reset = (s32)wp + 8;
-            RESET_SELECTED_ENTRY();
-        }
+        if (type >= 0x16) goto select_one;
+        if (type >= 0x10) goto entry_selected;
+        goto select_zero;
     }
+    if (type == 0x33) goto select_one;
+    if (type < 0x33) {
+        if (type >= 0x31) goto select_three;
+        goto select_two;
+    }
+    if (type >= 0x41) goto entry_selected;
+    if (type >= 0x3F) goto select_four;
+    goto select_three;
+
+select_zero:
+    slot = 0;
+    reset = (s32)wp + 0x158;
+    entry = (s32)wp + 8;
+    RESET_SELECTED_ENTRY();
+    *(s32*)(entry + 0xA4) = 0;
+    switch (type) {
+    case 1: case 3: case 5: case 9: case 11: case 14:
+        if (time != 0) *(s32*)(entry + 0xA4) = 2;
+        break;
+    default:
+        break;
+    }
+    goto entry_selected;
+
+select_one:
+    slot = 1;
+    entry = (s32)wp + 0xB0;
+    goto entry_selected;
+
+select_two:
+    slot = 2;
+    reset = (s32)wp + 8;
+    entry = (s32)wp + 0x158;
+    RESET_SELECTED_ENTRY();
+    goto entry_selected;
+
+select_three:
+    slot = 3;
+    entry = (s32)wp + 0x200;
+    switch (type) {
+    case 0x32: case 0x35: case 0x36: case 0x38: case 0x3A:
+        reset = (s32)wp + 8;
+        RESET_SELECTED_ENTRY();
+        break;
+    default:
+        break;
+    }
+    goto entry_selected;
+
+select_four:
+    slot = 4;
+    entry = (s32)wp + 0x2A8;
 
 entry_selected:
     *(u16*)entry = 0;
@@ -439,59 +432,14 @@ entry_selected:
     }
 
     switch (type) {
-        case 0x16:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
+        case 0x2B:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
             *(const char**)(entry + 0x64) = str_A_1_8041f824;
             *(s32*)(entry + 0x68) = 2;
             break;
-        case 0x17:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
+        case 0x2C:
+            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            *(s32*)(entry + 0x68) = 2;
-            break;
-        case 0x18:
-        case 0x1A:
-        case 0x40:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            *(s32*)(entry + 0x68) = 2;
-            break;
-        case 0x19:
-        case 0x1B:
-        case 0x3F:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            *(s32*)(entry + 0x68) = 2;
-            break;
-        case 0x1C:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
-            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
-            *(s32*)(entry + 0x68) = 2;
-            break;
-        case 0x1D:
-        case 0x25:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            *(s32*)(entry + 0x68) = 2;
-            break;
-        case 0x1E:
-        case 0x26:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            *(s32*)(entry + 0x68) = 2;
-            break;
-        case 0x1F:
-        case 0x21:
-        case 0x27:
-        case 0x28:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
-            *(const char**)(entry + 0x64) = str_Z_2_8041f82c;
-            *(s32*)(entry + 0x68) = 2;
-            break;
-        case 0x20:
-        case 0x24:
-            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
-            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
             *(s32*)(entry + 0x68) = 2;
             break;
         case 0x29:
@@ -501,16 +449,6 @@ entry_selected:
             break;
         case 0x2A:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_up_802bf6c4;
-            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
-            *(s32*)(entry + 0x68) = 2;
-            break;
-        case 0x2B:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
-            *(const char**)(entry + 0x64) = str_A_1_8041f824;
-            *(s32*)(entry + 0x68) = 2;
-            break;
-        case 0x2C:
-            *(const char**)(entry + 0x60) = str_OFF_d_dokan_down_802bf6b0;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
             *(s32*)(entry + 0x68) = 2;
             break;
@@ -532,6 +470,61 @@ entry_selected:
         case 0x30:
             *(const char**)(entry + 0x60) = str_OFF_d_dokan_right_802bf6e8;
             *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x16:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x17:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_up_down_802bf6fc;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x18:
+        case 0x1B:
+        case 0x3F:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x1A:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
+            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x19:
+        case 0x1C:
+        case 0x40:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_left_righ_802bf710;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x1D:
+        case 0x23:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_A_1_8041f824;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x1E:
+        case 0x24:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_A_2_8041f80c;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x1F:
+        case 0x22:
+        case 0x25:
+        case 0x28:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_Z_2_8041f82c;
+            *(s32*)(entry + 0x68) = 2;
+            break;
+        case 0x20:
+        case 0x26:
+            *(const char**)(entry + 0x60) = str_OFF_d_maku_center_802bf728;
+            *(const char**)(entry + 0x64) = str_Z_1_8041f828;
             *(s32*)(entry + 0x68) = 2;
             break;
         case 0x31:
@@ -597,8 +590,9 @@ entry_selected:
             *(s32*)(entry + 0x68) = 2;
             break;
         default:
-            return;
+            break;
     }
+
 #undef str_OFF_d_maku_up_down_802bf6fc
 #undef str_OFF_d_maku_left_righ_802bf710
 #undef str_OFF_d_maku_center_802bf728
@@ -720,6 +714,31 @@ void fadeMain(void) {
     extern const f32 float_3_8041f814;
     extern const f32 float_1p5_8041f818;
 
+    extern s32 animPaperPoseEntry(char*, u32);
+    extern s32 animPaperPoseGetId(char*, u32);
+    extern s64 animTimeGetTime(s32);
+    extern s32 imgEntry(const char*, s32);
+    extern void* imgNameToPtr(const char*, s32);
+    extern void imgClearVirtualPoint(void*);
+    extern s32 evt_img_alloc_capture(void*, s32);
+    extern s32 offscreenEntry(const char*);
+    extern void offscreenDelete(const char*);
+    extern const char str_A_2_8041f80c[4];
+    typedef struct CaptureEvent {
+        u8 prefix[0x18];
+        u32* args;
+        u8 suffix[0x1B0 - 0x1C];
+    } CaptureEvent;
+    u32 args4[10], args3[10], args2[10], args1[10], args0[10];
+    CaptureEvent event4, event3, event2, event1, event0;
+    const char* base = (const char*)&vec3_802bf668;
+    const char* pipeName = base + 0x18;
+    const char* imageName = base + 0x24;
+    const char* offscreenName = base + 0x30;
+    FadeDoubleConv fpsConv;
+    s32 frames;
+    s32 counter;
+    void* image;
     u8* work;
     u8* entry;
     s32 i;
@@ -731,79 +750,291 @@ void fadeMain(void) {
     f32 value;
     u16 flags;
 
-    work = (u8*)wp;
-    entry = work + 8;
+    entry = (u8*)wp + 8;
 
     for (i = 0; i < 5; i++, entry += 0xA8) {
         if ((*(u16*)entry & 1) != 0) {
             type = *(s32*)(entry + 4);
-            state = *(s32*)(entry + 8);
 
             switch (type) {
                 case 1:
                 case 3:
                 case 5:
-                case 7:
                 case 9:
                 case 11:
-                    if (state == 0) {
+                case 14:
+                    if (*(s32*)(entry + 8) == 0) {
                         if ((*(s32*)(entry + 0x10) == 0) && (*(s32*)(entry + 0x14) == 0)) {
                             *(f32*)(entry + 0x24) = float_0_8041f7a8;
                             *(u16*)entry |= 2;
-                            *(s32*)(entry + 8) = state + 1;
+                            *(s32*)(entry + 8) = *(s32*)(entry + 8) + 1;
                         } else {
                             if (*(s32*)(entry + 0xA4) == 0) {
+                                fpsConv.words.hi = 0x43300000;
+                                fpsConv.words.lo = *(u32*)((s32)gp + 4) ^ 0x80000000;
                                 *(f32*)(entry + 0x5C) = *(f32*)(entry + 0x5C) +
-                                    (float_1000_8041f804 / (f32)*(u32*)((s32)gp + 4));
+                                    (float_1000_8041f804 / (f32)(fpsConv.value - *(const f64*)(base + 0x40)));
                             } else {
                                 *(s32*)(entry + 0xA4) = *(s32*)(entry + 0xA4) - 1;
                             }
 
                             total = __cvt_sll_flt(*(u32*)(entry + 0x10), *(u32*)(entry + 0x14));
-                            value = (f32)((f64)*(f32*)(entry + 0x5C) / total);
-                            *(f32*)(entry + 0x24) = float_1_8041f7ac - value;
+                            *(f32*)(entry + 0x24) = (f32)((f64)*(f32*)(entry + 0x5C) / total);
+                            *(f32*)(entry + 0x24) = float_1_8041f7ac - *(f32*)(entry + 0x24);
                             *(f32*)(entry + 0x28) = *(f32*)(entry + 0x28) + float_10_8041f808;
                             if (*(f32*)(entry + 0x24) < float_0_8041f7a8) {
                                 *(f32*)(entry + 0x24) = float_0_8041f7a8;
                                 *(u16*)entry |= 2;
-                                *(s32*)(entry + 8) = state + 1;
+                                *(s32*)(entry + 8) = *(s32*)(entry + 8) + 1;
                             }
                         }
                     }
                     break;
 
-                case 0:
                 case 2:
                 case 4:
                 case 6:
-                case 8:
                 case 10:
                 case 12:
                 case 13:
-                case 14:
                 case 15:
-                    if (state == 0) {
+                    if (*(s32*)(entry + 8) == 0) {
                         if ((*(s32*)(entry + 0x10) == 0) && (*(s32*)(entry + 0x14) == 0)) {
                             *(f32*)(entry + 0x24) = float_1_8041f7ac;
                             *(u16*)entry |= 2;
-                            *(s32*)(entry + 8) = state + 1;
+                            *(s32*)(entry + 8) = *(s32*)(entry + 8) + 1;
                         } else {
+                            fpsConv.words.hi = 0x43300000;
+                            fpsConv.words.lo = *(u32*)((s32)gp + 4) ^ 0x80000000;
                             *(f32*)(entry + 0x5C) = *(f32*)(entry + 0x5C) +
-                                (float_1000_8041f804 / (f32)*(u32*)((s32)gp + 4));
+                                (float_1000_8041f804 / (f32)(fpsConv.value - *(const f64*)(base + 0x40)));
                             total = __cvt_sll_flt(*(u32*)(entry + 0x10), *(u32*)(entry + 0x14));
                             *(f32*)(entry + 0x24) = (f32)((f64)*(f32*)(entry + 0x5C) / total);
                             *(f32*)(entry + 0x28) = *(f32*)(entry + 0x28) - float_10_8041f808;
                             if (float_1_8041f7ac < *(f32*)(entry + 0x24)) {
                                 *(f32*)(entry + 0x24) = float_1_8041f7ac;
                                 *(u16*)entry |= 2;
-                                *(s32*)(entry + 8) = state + 1;
+                                *(s32*)(entry + 8) = *(s32*)(entry + 8) + 1;
                             }
                         }
                     }
                     break;
 
+
+                case 0x29:
+                case 0x2A:
+                case 0x2B:
+                case 0x2C:
+                case 0x2D:
+                case 0x2E:
+                case 0x2F:
+                case 0x30:
+                    switch (*(s32*)(entry + 8)) {
+                    case 0:
+                        if (animGroupBaseAsync(*(char**)(entry + 0x60), *(s32*)(entry + 0x68), 0) == 0) {
+                            if (*(s32*)(entry + 0x70) < 0) {
+                                if (*(s32*)(entry + 4) == 0x2A || *(s32*)(entry + 4) == 0x2C ||
+                                    *(s32*)(entry + 4) == 0x2E || *(s32*)(entry + 4) == 0x30) {
+                                    *(u16*)wp |= 0x8000;
+                                }
+                            }
+                            break;
+                        }
+                        *(u16*)wp &= 0x7FFF;
+                        if (*(s32*)(entry + 0x70) >= 0) {
+                            imgRelease(*(s32*)(entry + 0x8C), *(void**)(entry + 0x68));
+                            animPaperPoseRelease(*(s32*)(entry + 0x70));
+                            *(s32*)(entry + 0x70) = -1;
+                            *(void**)(entry + 0x8C) = 0;
+                        }
+                        poseId = animPaperPoseEntry(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
+                        *(s32*)(entry + 0x70) = poseId;
+                        imgEntry(pipeName, *(s32*)(entry + 0x68));
+                        image = imgNameToPtr(pipeName, *(s32*)(entry + 0x68));
+                        *(void**)(entry + 0x8C) = image;
+                        poseId = animPaperPoseGetId(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
+                        *(s32*)((s32)*(void**)(entry + 0x8C) + 0x104) = poseId;
+                        *(s64*)((s32)*(void**)(entry + 0x8C) + 0x110) = animTimeGetTime(*(s32*)(entry + 0x68));
+                        *(char**)((s32)*(void**)(entry + 0x8C) + 0x108) = *(char**)(entry + 0x64);
+                        imgClearVirtualPoint(*(void**)(entry + 0x8C));
+                        event4.args = args4;
+                        args4[0] = (u32)pipeName;
+                        args4[1] = 0;
+                        args4[2] = (u32)0;
+                        args4[3] = 0;
+                        args4[4] = 0;
+                        args4[5] = 0;
+                        args4[6] = 608;
+                        args4[7] = 480;
+                        evt_img_alloc_capture(&event4, 1);
+                        switch (*(s32*)(entry + 4)) {
+                        case 0x2D: *(s32*)(entry + 0x98) = psndSFXOn(0x403AB); break;
+                        case 0x2F: *(s32*)(entry + 0x98) = psndSFXOn(0x403AC); break;
+                        case 0x29: *(s32*)(entry + 0x98) = psndSFXOn(0x403AD); break;
+                        case 0x2B: *(s32*)(entry + 0x98) = psndSFXOn(0x403AE); break;
+                        case 0x2E: *(s32*)(entry + 0x98) = psndSFXOn(0x403AF); break;
+                        case 0x30: *(s32*)(entry + 0x98) = psndSFXOn(0x403B0); break;
+                        case 0x2A: *(s32*)(entry + 0x98) = psndSFXOn(0x403B1); break;
+                        case 0x2C: *(s32*)(entry + 0x98) = psndSFXOn(0x403B2); break;
+                        }
+                        *(s32*)(entry + 8) += 1;
+                        break;
+                    case 1:
+                        if (*(f32*)((s32)*(void**)(entry + 0x8C) + 0x118) >= float_1_8041f7ac) {
+                            *(u16*)entry |= 2;
+                            switch (*(s32*)(entry + 4)) {
+                            case 0x2A: case 0x2C: case 0x2E: case 0x30:
+                                imgRelease(*(s32*)(entry + 0x8C), *(void**)(entry + 0x68));
+                            animPaperPoseRelease(*(s32*)(entry + 0x70));
+                            *(s32*)(entry + 0x70) = -1;
+                            *(void**)(entry + 0x8C) = 0;
+                                break;
+                            }
+                            *(s32*)(entry + 8) += 1;
+                        }
+                        break;
+                    }
+                    break;
+
+                case 0x31: case 0x34: case 0x37: case 0x39:
+                case 0x3B: case 0x3C: case 0x3D: case 0x3E:
+                    switch (*(s32*)(entry + 8)) {
+                    case 0:
+                        if (animGroupBaseAsync(*(char**)(entry + 0x60), *(s32*)(entry + 0x68), 0) == 0) break;
+                        if (*(s32*)(entry + 0x70) >= 0) {
+                            imgRelease(*(s32*)(entry + 0x8C), *(void**)(entry + 0x68));
+                            animPaperPoseRelease(*(s32*)(entry + 0x70));
+                            *(s32*)(entry + 0x70) = -1;
+                            *(void**)(entry + 0x8C) = 0;
+                        }
+                        poseId = animPaperPoseEntry(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
+                        *(s32*)(entry + 0x70) = poseId;
+                        animPoseSetMaterialFlagOn(*(s32*)(entry + 0x70), 0x1800);
+                        imgEntry(imageName, *(s32*)(entry + 0x68));
+                        image = imgNameToPtr(imageName, *(s32*)(entry + 0x68));
+                        *(void**)(entry + 0x8C) = image;
+                        poseId = animPaperPoseGetId(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
+                        *(s32*)((s32)*(void**)(entry + 0x8C) + 0x104) = poseId;
+                        *(s64*)((s32)*(void**)(entry + 0x8C) + 0x110) = animTimeGetTime(*(s32*)(entry + 0x68));
+                        *(char**)((s32)*(void**)(entry + 0x8C) + 0x108) = *(char**)(entry + 0x64);
+                        imgClearVirtualPoint(*(void**)(entry + 0x8C));
+                        switch (*(s32*)(entry + 4)) {
+                        case 0x34:
+                            offscreenEntry(offscreenName);
+                            event3.args = args3;
+                        args3[0] = (u32)imageName;
+                        args3[1] = 0;
+                        args3[2] = (u32)offscreenName;
+                        args3[3] = 0;
+                        args3[4] = 0;
+                        args3[5] = 0;
+                        args3[6] = 608;
+                        args3[7] = 480;
+                        evt_img_alloc_capture(&event3, 1);
+                            break;
+                        case 0x37: case 0x39: case 0x3B:
+                            event2.args = args2;
+                        args2[0] = (u32)imageName;
+                        args2[1] = 0;
+                        args2[2] = (u32)0;
+                        args2[3] = 2;
+                        args2[4] = 0;
+                        args2[5] = 0;
+                        args2[6] = 608;
+                        args2[7] = 480;
+                        evt_img_alloc_capture(&event2, 1);
+                            *(s32*)((s32)*(void**)(entry + 0x8C) + 0x150) = 10;
+                            *(s32*)((s32)*(void**)(entry + 0x8C) + 0x154) = 10;
+                            psndSFXOn(0x403B4);
+                            break;
+                        case 0x3C: case 0x3D: case 0x3E:
+                            event1.args = args1;
+                        args1[0] = (u32)imageName;
+                        args1[1] = 0;
+                        args1[2] = (u32)0;
+                        args1[3] = 2;
+                        args1[4] = 0;
+                        args1[5] = 0;
+                        args1[6] = 608;
+                        args1[7] = 480;
+                        evt_img_alloc_capture(&event1, 1);
+                            *(s32*)((s32)*(void**)(entry + 0x8C) + 0x150) = 9;
+                            *(s32*)((s32)*(void**)(entry + 0x8C) + 0x154) = 9;
+                            break;
+                        default:
+                            event0.args = args0;
+                        args0[0] = (u32)imageName;
+                        args0[1] = 0;
+                        args0[2] = (u32)0;
+                        args0[3] = 2;
+                        args0[4] = 0;
+                        args0[5] = 0;
+                        args0[6] = 608;
+                        args0[7] = 480;
+                        evt_img_alloc_capture(&event0, 1);
+                            break;
+                        }
+                        *(s32*)(entry + 8) += 1;
+                        break;
+                    case 1:
+                        if (*(f32*)((s32)*(void**)(entry + 0x8C) + 0x118) >= float_1_8041f7ac) {
+                            if (type == 0x39 ||
+                                (type < 0x39 && type == 0x37) ||
+                                (type >= 0x39 && type < 0x3F && type > 0x3A)) {
+                                *(s64*)((s32)*(void**)(entry + 0x8C) + 0x110) = animTimeGetTime(*(s32*)(entry + 0x68));
+                                *(const char**)((s32)*(void**)(entry + 0x8C) + 0x108) = str_A_2_8041f80c;
+                            } else {
+                                *(u16*)entry |= 2;
+                            }
+                            *(s32*)(entry + 8) += 1;
+                        }
+                        break;
+                    case 2:
+                        if (*(f32*)((s32)*(void**)(entry + 0x8C) + 0x118) >= float_1_8041f7ac) {
+                            *(u16*)entry |= 2;
+                            *(s32*)(entry + 8) += 1;
+                        }
+                        break;
+                    }
+                    break;
+
+                case 0x32: case 0x35: case 0x36: case 0x38: case 0x3A:
+                    switch (*(s32*)(entry + 8)) {
+                    case 0:
+                        image = imgNameToPtr(imageName, *(s32*)(entry + 0x68));
+                        *(void**)(entry + 0x8C) = image;
+                        poseId = animPaperPoseGetId(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
+                        *(s32*)((s32)*(void**)(entry + 0x8C) + 0x104) = poseId;
+                        *(s64*)((s32)*(void**)(entry + 0x8C) + 0x110) = animTimeGetTime(*(s32*)(entry + 0x68));
+                        *(char**)((s32)*(void**)(entry + 0x8C) + 0x108) = *(char**)(entry + 0x64);
+                        imgClearVirtualPoint(*(void**)(entry + 0x8C));
+                        switch (*(s32*)(entry + 4)) {
+                        case 0x36: case 0x38: case 0x3A:
+                            psndSFXOn(0x403B5);
+                            break;
+                        case 0x32: case 0x35:
+                            psndSFXOn(0x40365);
+                            break;
+                        }
+                        *(s32*)(entry + 8) += 1;
+                        break;
+                    case 1:
+                        if (*(f32*)((s32)*(void**)(entry + 0x8C) + 0x118) >= float_1_8041f7ac) {
+                            *(u16*)entry |= 2;
+                            imgRelease(*(s32*)(entry + 0x8C), *(void**)(entry + 0x68));
+                            animPaperPoseRelease(*(s32*)(entry + 0x70));
+                            *(s32*)(entry + 0x70) = -1;
+                            *(void**)(entry + 0x8C) = 0;
+                            if (*(s32*)(entry + 4) == 0x35) offscreenDelete(offscreenName);
+                            *(s32*)(entry + 8) += 1;
+                        }
+                        break;
+                    }
+                    break;
+
+
                 case 0x16:
-                    if (state == 0) {
+                    if (*(s32*)(entry + 8) == 0) {
                         if (animGroupBaseAsync(*(char**)(entry + 0x60), *(s32*)(entry + 0x68), 0) != 0) {
                             if (*(s32*)(entry + 0x6C) > -1) animPoseRelease(*(s32*)(entry + 0x6C));
                             poseId = animPoseEntry(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
@@ -813,22 +1044,21 @@ void fadeMain(void) {
                             *(u32*)(entry + 0x74) = dat_8041f790;
                             animPoseSetMaterialFlagOff(poseId, 0x40);
                             *(s32*)(entry + 8) = 1;
-                            state = 1;
                         }
                     }
-                    if (state == 1) {
+                    if (*(s32*)(entry + 8) == 1) {
                         animPoseMain(*(s32*)(entry + 0x6C));
                         if (animPoseGetLoopTimes(*(s32*)(entry + 0x6C)) >= (f64)float_1_8041f7ac) {
                             *(u16*)entry |= 2;
                             *(s32*)(entry + 8) += 1;
                         }
-                    } else if (state == 2) {
+                    } else if (*(s32*)(entry + 8) == 2) {
                         animPoseMain(*(s32*)(entry + 0x6C));
                     }
                     break;
 
                 case 0x17:
-                    if (state == 0) {
+                    if (*(s32*)(entry + 8) == 0) {
                         if (animGroupBaseAsync(*(char**)(entry + 0x60), *(s32*)(entry + 0x68), 0) == 0) break;
                         if (*(s32*)(entry + 0x6C) > -1) animPoseRelease(*(s32*)(entry + 0x6C));
                         poseId = animPoseEntry(*(char**)(entry + 0x60), *(u32*)(entry + 0x68));
@@ -871,37 +1101,35 @@ void fadeMain(void) {
                 case 0x1E:
                 case 0x1F:
                 case 0x20:
-                case 0x21:
                 case 0x22:
                 case 0x23:
                 case 0x24:
                 case 0x25:
                 case 0x26:
-                case 0x27:
                 case 0x28:
                 case 0x33:
                 case 0x3F:
                 case 0x40:
-                    if (state == 0) {
+                    if (*(s32*)(entry + 8) == 0) {
                         if (animGroupBaseAsync(*(char**)(entry + 0x60), *(s32*)(entry + 0x68), 0) != 0) {
-                            switch (type) {
+                            switch (*(s32*)(entry + 4)) {
+                                case 0x1D:
+                                case 0x23:
+                                    *(s32*)(entry + 0x98) = psndSFXOn(0x40321);
+                                    break;
+                                case 0x1E:
+                                case 0x24:
+                                    *(s32*)(entry + 0x98) = psndSFXOn(0x40322);
+                                    break;
                                 case 0x18:
                                 case 0x1B:
-                                case 0x28:
+                                case 0x3F:
                                     *(s32*)(entry + 0x98) = psndSFXOn(0x40325);
                                     break;
                                 case 0x19:
                                 case 0x1C:
                                 case 0x40:
                                     *(s32*)(entry + 0x98) = psndSFXOn(0x40326);
-                                    break;
-                                case 0x1D:
-                                case 0x22:
-                                    *(s32*)(entry + 0x98) = psndSFXOn(0x40321);
-                                    break;
-                                case 0x1E:
-                                case 0x23:
-                                    *(s32*)(entry + 0x98) = psndSFXOn(0x40322);
                                     break;
                             }
                             if (*(s32*)(entry + 0x6C) > -1) {
@@ -913,17 +1141,16 @@ void fadeMain(void) {
                             animPoseSetAnim(*(s32*)(entry + 0x6C), *(char**)(entry + 0x64), 1);
                             animPoseSetMaterialFlagOff(*(s32*)(entry + 0x6C), 0x40);
                             *(s32*)(entry + 8) = 1;
-                            state = 1;
-                            if (type == 0x21 || type == 0x26) {
+                            if (*(s32*)(entry + 4) == 0x22 || *(s32*)(entry + 4) == 0x28) {
                                 *(f32*)(entry + 0x90) = float_3_8041f814;
                                 *(s32*)(entry + 0x94) = 0;
                             }
                         }
                     }
-                    if ((state == 1) || (state == 2)) {
+                    if ((*(s32*)(entry + 8) == 1) || (*(s32*)(entry + 8) == 2)) {
                         if (*(s32*)(entry + 0x6C) > -1) {
                             animPoseMain(*(s32*)(entry + 0x6C));
-                            if (type == 0x21 || type == 0x26) {
+                            if (*(s32*)(entry + 4) == 0x22 || *(s32*)(entry + 4) == 0x28) {
                                 s32 frames;
                                 s32 counter;
                                 if ((*(u16*)entry & 8) == 0) {
@@ -949,7 +1176,7 @@ void fadeMain(void) {
                             loops = animPoseGetLoopTimes(*(s32*)(entry + 0x6C));
                             if (loops >= (f64)float_1_8041f7ac) {
                                 s32 canFinish = 1;
-                                if (type == 0x21 || type == 0x26) {
+                                if (*(s32*)(entry + 4) == 0x22 || *(s32*)(entry + 4) == 0x28) {
                                     s32 frames = ((*(u16*)entry & 8) == 0) ?
                                         (*(s32*)((s32)gp + 4) * 180) / 60 :
                                         (*(s32*)((s32)gp + 4) * 90) / 60;
@@ -958,7 +1185,7 @@ void fadeMain(void) {
                                 if (canFinish) {
                                     *(u16*)entry |= 2;
                                     *(s32*)(entry + 8) = *(s32*)(entry + 8) + 1;
-                                    if ((type == 0x19) || (type == 0x1C) || (type == 0x40)) {
+                                    if ((*(s32*)(entry + 4) == 0x19) || (*(s32*)(entry + 4) == 0x1C) || (*(s32*)(entry + 4) == 0x40)) {
                                         psndSFXOff(*(s32*)(entry + 0x98));
                                         animPoseRelease(*(s32*)(entry + 0x6C));
                                         *(s32*)(entry + 0x6C) = -1;
@@ -969,10 +1196,42 @@ void fadeMain(void) {
                     }
                     break;
 
+                case 0x21: case 0x27:
+                    if (*(s32*)(entry + 8) == 0) {
+                        *(f32*)(entry + 0x90) = float_1_8041f7ac;
+                        *(s32*)(entry + 0x94) = 0;
+                        *(s32*)(entry + 8) += 1;
+                    } else if (*(s32*)(entry + 8) != 1) {
+                        break;
+                    }
+                    animPoseMain(*(s32*)(entry + 0x6C));
+                    frames = (*(s32*)((s32)gp + 4) * 120) / 60;
+                    if (*(s32*)(entry + 0x94) < frames) {
+                        counter = *(s32*)(entry + 0x94) + 1;
+                        *(s32*)(entry + 0x94) = counter;
+                        *(f32*)(entry + 0x90) = (f32)intplGetValue((f64)float_1_8041f7ac, (f64)float_3_8041f814, 12, counter, frames);
+                    } else {
+                        *(u16*)entry |= 2;
+                        *(s32*)(entry + 8) += 1;
+                        animPoseRelease(*(s32*)(entry + 0x6C));
+                        *(s32*)(entry + 0x6C) = -1;
+                    }
+                    break;
+
+                case 0:
+                case 7:
+                case 8:
+                case 0x10:
+                case 0x11:
+                case 0x12:
+                case 0x13:
+                case 0x14:
+                case 0x15:
                 default:
                     break;
             }
 
+            type = *(s32*)(entry + 4);
             if (type < 0x1D) {
                 if (type < 0x10) {
                     if (type < 0x0B) {
@@ -1013,9 +1272,7 @@ void fadeMain(void) {
                         }
                     } else {
                         if (type < 0x31) {
-                            if ((*(s32*)(entry + 0x70) > -1) && (*(void**)(entry + 0x9C) != NULL)) {
-                                dispEntry(1, 0, *(void**)(entry + 0x9C), *(void**)(entry + 0xA0), float_0_8041f7a8);
-                            }
+                            continue;
                         }
                     }
                 } else {
@@ -1033,7 +1290,7 @@ void fadeMain(void) {
         }
     }
 
-    flags = *(u16*)work;
+    flags = *(u16*)wp;
     if ((flags & 0x3000) != 0) {
         dispEntry(8, 0, disp_tec, wp, float_999_8041f81c);
     }
@@ -1069,6 +1326,7 @@ void disp_texture(void) {
     f32 value;
     f32 radius;
     f32 negSize;
+    f32 size;
     s32 alpha;
 
     cam = camGetPtr(8);
@@ -1126,9 +1384,9 @@ draw_texture:
     GXSetVtxAttrFmt(0, 9, 1, 4, 0);
     GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
 
-    if (*(s32*)((s32)fade + 0xC) < 9) {
-        if (*(s32*)((s32)fade + 0xC) < 3) {
-            if (*(s32*)((s32)fade + 0xC) > 0) {
+    switch (*(s32*)((s32)fade + 0xC)) {
+    case 1:
+    case 2:
                 GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
                 GXSetCurrentMtx(0);
 
@@ -1152,8 +1410,11 @@ draw_texture:
                 } else if (*(s32*)((s32)fade + 0xC) == 2) {
                     PSMTXTrans((void*)((s32)fade + 0x34), float_1_8041f7ac, float_1_8041f7ac, float_0_8041f7a8);
                 }
-            }
-        } else if (*(s32*)((s32)fade + 0xC) < 7) {
+        break;
+    case 3:
+    case 4:
+    case 5:
+    case 6:
             GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
             GXSetCurrentMtx(0);
 
@@ -1186,14 +1447,13 @@ draw_texture:
             } else if (*(s32*)((s32)fade + 0xC) == 4 || *(s32*)((s32)fade + 0xC) == 6) {
                 PSMTXTrans((void*)((s32)fade + 0x34), float_1_8041f7ac, float_1_8041f7ac, float_0_8041f7a8);
             }
-        }
-    } else if (*(s32*)((s32)fade + 0xC) == 13) {
-        GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
-        GXSetCurrentMtx(0);
-        GXInitTexObj(texObj, &i4tex, 1, 1, 0, 0, 0, 0);
-        GXLoadTexObj(texObj, 0);
-        PSMTXIdentity((void*)((s32)fade + 0x34));
-    } else if (*(s32*)((s32)fade + 0xC) < 16) {
+        break;
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 14:
+    case 15:
         GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
         GXSetCurrentMtx(0);
         GXInitTexObj(texObj, &i4tex, 1, 1, 0, 0, 0, 0);
@@ -1202,6 +1462,18 @@ draw_texture:
 
         alpha = (s32)(float_255_8041f7b4 * *(f32*)((s32)fade + 0x2C));
         *(u8*)((s32)fade + 0x23) = (u8)alpha;
+
+        break;
+    case 13:
+        GXLoadPosMtxImm((void*)((s32)cam + 0x11C), 0);
+        GXSetCurrentMtx(0);
+        GXInitTexObj(texObj, &i4tex, 1, 1, 0, 0, 0, 0);
+        GXLoadTexObj(texObj, 0);
+        PSMTXIdentity((void*)((s32)fade + 0x34));
+
+        break;
+    default:
+        break;
     }
 
     GXLoadTexMtxImm((void*)((s32)fade + 0x34), 0x1E, 1);
@@ -1212,21 +1484,22 @@ draw_texture:
 
     GXBegin(0x80, 0, 4);
 
-    negSize = -READ_F32_FADE(float_304_8041f800);
+    size = float_304_8041f800;
+    negSize = -size;
 
     FIFO_F32_FADE = negSize;
-    FIFO_F32_FADE = READ_F32_FADE(float_304_8041f800);
+    FIFO_F32_FADE = size;
     FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
     FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
     FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
 
-    FIFO_F32_FADE = READ_F32_FADE(float_304_8041f800);
-    FIFO_F32_FADE = READ_F32_FADE(float_304_8041f800);
+    FIFO_F32_FADE = size;
+    FIFO_F32_FADE = size;
     FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
     FIFO_F32_FADE = READ_F32_FADE(float_1_8041f7ac);
     FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
 
-    FIFO_F32_FADE = READ_F32_FADE(float_304_8041f800);
+    FIFO_F32_FADE = size;
     FIFO_F32_FADE = negSize;
     FIFO_F32_FADE = READ_F32_FADE(float_0_8041f7a8);
     FIFO_F32_FADE = READ_F32_FADE(float_1_8041f7ac);

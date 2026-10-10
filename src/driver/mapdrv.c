@@ -316,28 +316,34 @@ u8 mapBuildTexture(void* objectRaw, int palette, int* names) {
     s32 textureIndex;
     s32 nameIndex;
     s32 format;
+    s32 partOffset;
+    u8* materialPtr;
+    int* namePtr;
 
     object = objectRaw;
-    joint = *(u8**)(object + 8);
-    for (partIndex = 0; partIndex < *(s32*)(joint + 0x5C); partIndex++) {
-        material = *(u8**)(joint + 0x64 + partIndex * 8);
-        for (textureIndex = 0; textureIndex < material[0xB]; textureIndex++) {
-            texture = *(u8**)(material + 0xC + textureIndex * 4);
+    for (partIndex = 0, partOffset = 0; joint = *(u8**)(object + 8), partIndex < *(s32*)(joint + 0x5C); partIndex++, partOffset += 8) {
+        material = *(u8**)(joint + 0x60 + partOffset);
+        for (textureIndex = 0, materialPtr = material; textureIndex < material[0xB]; textureIndex++, materialPtr += 4) {
+            texture = *(u8**)(materialPtr + 0xC);
             name = *(char**)*(u32*)texture;
-            for (nameIndex = 0; nameIndex < names[0]; nameIndex++) {
-                if (strcmp((char*)names[nameIndex + 1], name) == 0) {
-                    break;
+            for (nameIndex = 0, namePtr = names; nameIndex < names[0]; nameIndex++, namePtr++) {
+                if (strcmp((char*)namePtr[1], name) != 0) {
+                    continue;
+                } else {
+                    goto name_found;
                 }
             }
-            if (nameIndex == names[0]) {
+            nameIndex = -1;
+name_found:;
+            if (nameIndex == -1) {
                 nameIndex = 0;
             }
             descriptor = TEXGet(palette, nameIndex);
-            header = *(u8**)descriptor;
-            *(void**)(*(u8**)texture + 0xC) = *(void**)(header + 8);
-            *(u16*)(*(u8**)texture + 8) = *(u16*)(header + 2);
-            *(u16*)(*(u8**)texture + 10) = *(u16*)header;
-            format = *(s32*)(header + 4);
+
+            *(void**)(*(u8**)texture + 0xC) = *(void**)(*(u8**)descriptor + 8);
+            *(u16*)(*(u8**)texture + 8) = *(u16*)(*(u8**)descriptor + 2);
+            *(u16*)(*(u8**)texture + 10) = **(u16**)descriptor;
+            format = *(s32*)(*(u8**)descriptor + 4);
             switch (format) {
                 case 0:  (*(u8**)texture)[4] = 4; break;
                 case 1:  (*(u8**)texture)[4] = 5; break;
@@ -359,7 +365,7 @@ u8 mapBuildTexture(void* objectRaw, int palette, int* names) {
     if (*(void**)(object + 0xE8) != 0) {
         mapBuildTexture(*(void**)(object + 0xE8), palette, names);
     }
-    return 0;
+
 }
 
 void* _mapEnt(u8* joint, void* parent, void* parentMtx, int entryIdx) {
@@ -370,6 +376,7 @@ void* _mapEnt(u8* joint, void* parent, void* parentMtx, int entryIdx) {
     extern void OSPanic(char*, s32, char*);
     extern char str_mapdrv_c_802bfcd0[];
     extern f32 float_20000_8041f9b8;
+    typedef struct EntVec { f32 x,y,z; } EntVec;
     u8* entry;
     u8* object;
     u8* drawMode;
@@ -380,6 +387,10 @@ void* _mapEnt(u8* joint, void* parent, void* parentMtx, int entryIdx) {
     s32 punchthroughCount;
     s32 i;
     s32 j;
+    s32 partOffset;
+    s32 layerOffset;
+    u8* scanJoint;
+    s32 partCount;
     f32 trans[3][4];
     f32 scale[3][4];
     f32 rotX[3][4];
@@ -418,89 +429,53 @@ void* _mapEnt(u8* joint, void* parent, void* parentMtx, int entryIdx) {
     *(void**)(object + 0xE8) = 0;
     drawMode = *(u8**)(joint + 0x58);
     if (drawMode != 0) {
-        if ((drawMode[2] & 1) != 0) {
+        if (((*(u8**)(joint + 0x58))[2] & 1) != 0) {
             *(u32*)object |= 8;
         }
-        if (drawMode[0] == 2) {
-            *(u8*)(object + 4) = (*(u32*)object & 8) ? 4 : 1;
-        } else if (drawMode[0] < 2) {
-            if (drawMode[0] == 0) {
+        switch ((*(u8**)(joint + 0x58))[0]) {
+            case 0:
                 translucentCount = 0;
                 punchthroughCount = 0;
-                for (i = 0; i < *(s32*)(joint + 0x5C); i++) {
-                    material = *(u8**)(joint + 0x60 + i * 8);
-                    if (*(s8*)(material + 0xA) == 2) {
+                scanJoint = *(u8**)(object + 8);
+                partCount = *(s32*)(scanJoint + 0x5C);
+                for (i = 0, partOffset = 0; i < partCount; i++, partOffset += 8) {
+                    material = *(u8**)(scanJoint + 0x60 + partOffset);
+                    if (*(u8*)(material + 0xA) == 2) {
                         translucentCount++;
-                    } else if (*(s8*)(material + 0xA) == 1) {
+                    } else if (*(u8*)(material + 0xA) == 1) {
                         punchthroughCount++;
                     }
-                    for (j = 0; j < 2; j++) {
-                        layer = *(u8**)(*(u8**)(joint + 0x60 + i * 8) +
-                                        0xC + j * 0x10);
-                        if (layer == 0) {
-                            goto layers_done;
-                        }
-                        if (*(s8*)(layer + 0xA) == 2) {
-                            translucentCount++;
-                        } else if (*(s8*)(layer + 0xA) == 1) {
-                            punchthroughCount++;
-                        }
-                        layer = *(u8**)(*(u8**)(joint + 0x60 + i * 8) +
-                                        0x10 + j * 0x10);
-                        if (layer == 0) {
-                            goto layers_done;
-                        }
-                        if (*(s8*)(layer + 0xA) == 2) {
-                            translucentCount++;
-                        } else if (*(s8*)(layer + 0xA) == 1) {
-                            punchthroughCount++;
-                        }
-                        layer = *(u8**)(*(u8**)(joint + 0x60 + i * 8) +
-                                        0x14 + j * 0x10);
-                        if (layer == 0) {
-                            goto layers_done;
-                        }
-                        if (*(s8*)(layer + 0xA) == 2) {
-                            translucentCount++;
-                        } else if (*(s8*)(layer + 0xA) == 1) {
-                            punchthroughCount++;
-                        }
-                        layer = *(u8**)(*(u8**)(joint + 0x60 + i * 8) +
-                                        0x18 + j * 0x10);
-                        if (layer == 0) {
-                            goto layers_done;
-                        }
-                        if (*(s8*)(layer + 0xA) == 2) {
-                            translucentCount++;
-                        } else if (*(s8*)(layer + 0xA) == 1) {
-                            punchthroughCount++;
-                        }
+                    for (j = 0; j < 8; j++) {
+                        layer = *(u8**)(*(u8**)(scanJoint + 0x60 + partOffset) + 0xC + j * 4);
+                        if (layer == 0) break;
+                        if (layer[0xA] == 2) translucentCount++;
+                        else if (layer[0xA] == 1) punchthroughCount++;
                     }
 layers_done:
                     ;
                 }
-                if (translucentCount == 0) {
-                    *(u8*)(object + 4) = punchthroughCount == 0 ? 0 : 1;
+                if (translucentCount != 0) {
+                    object[4] = 2;
+                } else if (punchthroughCount != 0) {
+                    object[4] = 1;
                 } else {
-                    *(u8*)(object + 4) = 2;
+                    object[4] = 0;
                 }
-            } else {
-                *(u8*)(object + 4) = (*(u32*)object & 8) ? 3 : 0;
-            }
-        } else if (drawMode[0] < 4) {
-            *(u8*)(object + 4) = (*(u32*)object & 8) ? 5 : 2;
+                break;
+            case 1: object[4] = (*(u32*)object & 8) ? 3 : 0; break;
+            case 2: object[4] = (*(u32*)object & 8) ? 4 : 1; break;
+            case 3: object[4] = (*(u32*)object & 8) ? 5 : 2; break;
         }
-        if ((drawMode[2] & 2) != 0) {
+        if (((*(u8**)(joint + 0x58))[2] & 2) != 0) {
             *(u32*)object |= 0x10;
-            if ((drawMode[2] & 0x10) != 0) {
+            if (((*(u8**)(joint + 0x58))[2] & 0x10) != 0) {
                 *(u32*)object |= 0x8000;
             }
-            if (drawMode[0] == 2) {
-                *(u8*)(object + 4) = 1;
-            } else if (drawMode[0] < 2) {
-                *(u8*)(object + 4) = drawMode[0] == 0 ? 2 : 0;
-            } else {
-                *(u8*)(object + 4) = 2;
+            switch ((*(u8**)(joint + 0x58))[0]) {
+                case 0: object[4] = 2; break;
+                case 1: object[4] = 0; break;
+                case 2: object[4] = 1; break;
+                default: object[4] = 2; break;
             }
         }
         if ((*(u32*)object & 0x10) == 0) {
@@ -515,19 +490,17 @@ layers_done:
                    ((*(u32*)parent & 0x10) != 0 || (*(u32*)parent & 0x20) != 0)) {
             *(u32*)object &= ~0x10;
         }
-        if ((drawMode[2] & 4) != 0) {
+        if (((*(u8**)(joint + 0x58))[2] & 4) != 0) {
             *(u32*)object |= 4;
         }
     } else {
         OSPanic(str_mapdrv_c_802bfcd0, 0x2E5, (char*)0x802BFCDC);
     }
-    if (*(s32*)(joint + 0x5C) == 0) {
-        *(f32*)(object + 0x10) = *(f32*)(joint + 0x30);
-        *(f32*)(object + 0x14) = *(f32*)(joint + 0x34);
-        *(f32*)(object + 0x18) = *(f32*)(joint + 0x38);
-    } else {
+    if (*(s32*)(joint + 0x5C) != 0) {
         PSVECAdd(joint + 0x3C, joint + 0x48, object + 0x10);
         PSVECScale(object + 0x10, object + 0x10, 0.5f);
+    } else {
+        *(EntVec*)(object + 0x10) = *(EntVec*)(joint + 0x30);
     }
     if (*(s32*)(joint + 0x5C) != 0) {
         PSMTXMultVec(object + 0x1C, object + 0x10, center);
@@ -677,23 +650,23 @@ u8 makeDisplayList(int entryIdx) {
     writePtr = 0;
     for (pass = 0; pass < 2; pass++) {
         object = *(u8**)(entry + 0x154);
+        *(void**)(object + 0xF4) = 0;
+        *(u32*)(object + 0x114) = 0;
+        *(void**)(object + 0xF8) = 0;
+        *(u32*)(object + 0x118) = 0;
+        *(void**)(object + 0xFC) = 0;
+        *(u32*)(object + 0x11C) = 0;
+        *(void**)(object + 0x100) = 0;
+        *(u32*)(object + 0x120) = 0;
+        *(void**)(object + 0x104) = 0;
+        *(u32*)(object + 0x124) = 0;
+        *(void**)(object + 0x108) = 0;
+        *(u32*)(object + 0x128) = 0;
+        *(void**)(object + 0x10C) = 0;
+        *(u32*)(object + 0x12C) = 0;
+        *(void**)(object + 0x110) = 0;
+        *(u32*)(object + 0x130) = 0;
         for (objectIndex = 0; objectIndex < *(s32*)(entry + 0x150); objectIndex++, object += 0x134) {
-            *(void**)(object + 0xF4) = 0;
-            *(u32*)(object + 0x114) = 0;
-            *(void**)(object + 0xF8) = 0;
-            *(u32*)(object + 0x118) = 0;
-            *(void**)(object + 0xFC) = 0;
-            *(u32*)(object + 0x11C) = 0;
-            *(void**)(object + 0x100) = 0;
-            *(u32*)(object + 0x120) = 0;
-            *(void**)(object + 0x104) = 0;
-            *(u32*)(object + 0x124) = 0;
-            *(void**)(object + 0x108) = 0;
-            *(u32*)(object + 0x128) = 0;
-            *(void**)(object + 0x10C) = 0;
-            *(u32*)(object + 0x12C) = 0;
-            *(void**)(object + 0x110) = 0;
-            *(u32*)(object + 0x130) = 0;
             if (*(s32*)(*(u8**)(object + 8) + 0x5C) >= 1 &&
                 *(s32*)(*(u8**)(object + 8) + 0x5C) <= 8 &&
                 ((*(u8*)(*(u8**)(*(u8**)(object + 8) + 0x58) + 2) & 8) == 0) &&
@@ -717,9 +690,9 @@ u8 makeDisplayList(int entryIdx) {
                             total += *(u32*)(dlWork + 0x114);
                         } else {
                             *(void**)(dlWork + 0xF4) = writePtr;
+                            writePtr += *(u32*)(dlWork + 0x114);
                             memcpy(*(void**)(dlWork + 0xF4), scratch,
                                    *(u32*)(dlWork + 0x114));
-                            writePtr += *(u32*)(dlWork + 0x114);
                             DCFlushRange(*(void**)(dlWork + 0xF4),
                                          *(u32*)(dlWork + 0x114));
                         }
@@ -1106,7 +1079,7 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
     MapHeaderL* header;
     u8* activeEntry;
     u8* entry;
-    char str1[128];
+    char str1[132];
     char str2[128];
     char str3[128];
     void* file;
@@ -1121,7 +1094,7 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
     u8* object;
     u8* joint;
     u32 animCount;
-    u32 objectIndex;
+    s32 objectIndex;
     u8* lightTable;
     u8* light;
     f32 lightPosition[3];
@@ -1267,9 +1240,10 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
         *(void**)(entry + 0xAC) = hitEntry(hitJoint, matrix, idx);
     }
 
-    lightTable = *(u8**)(entry + 0x98);
-    for (i = 0; i < *(u32*)lightTable; i++) {
-        light = *(u8**)(lightTable + 4 + i * 4);
+    for (i = 0, offset = 0;
+         lightTable = *(u8**)(entry + 0x98), (s32)i < *(s32*)lightTable;
+         i++, offset += 4) {
+        light = *(u8**)(lightTable + 4 + offset);
         lightType = 1;
         lightFlags = 0;
         PSVECScale(light + 8, lightPosition, 10.0f);
@@ -1360,7 +1334,7 @@ void _mapLoad(void* pWork, int idx, char* pMapName) {
     makeDisplayList(idx);
     activeEntry = (u8*)(mapWork + activeGroup * 0x2F4 + idx * 0x178);
     object = *(u8**)(activeEntry + 0x154);
-    for (objectIndex = 0; objectIndex < *(u32*)(activeEntry + 0x150); objectIndex++, object += 0x134) {
+    for (objectIndex = 0; objectIndex < *(s32*)(activeEntry + 0x150); objectIndex++, object += 0x134) {
         joint = *(u8**)(object + 8);
         if (*(s32*)(joint + 0x5C) > 0 && *(s32*)(joint + 0x5C) < 9 &&
             ((*(u8*)(*(u8**)(joint + 0x58) + 2) & 8) == 0) &&
@@ -1653,10 +1627,7 @@ void mapCalcAnimMatrix(void* pDstMtx, void* pParentMtx, void* pEntry, void* pTra
         previous = (f32*)(track + (frameIndex - 1) * 0x1A8 + 0x5C);
         next = (f32*)(nextBase + 0x5C);
         frame = *(f32*)((u8*)pEntry + 0x10);
-        if (frame <= next[0] || frameIndex == frameCount - 1) {
-            if (frameIndex == frameCount - 1 && next[0] < frame) {
-                frame = next[0];
-            }
+        if (frame <= next[0] || (frame = next[0], frameIndex == frameCount - 1)) {
 
             previousComponent = previous;
             nextComponent = next;
@@ -1664,7 +1635,8 @@ void mapCalcAnimMatrix(void* pDstMtx, void* pParentMtx, void* pEntry, void* pTra
                 if (*(s32*)(previousComponent + 5) == 0) {
                     firstFrame = previous[0];
                     span = next[0] - firstFrame;
-                    denominator = span != float_0_8041f930 ? span : dat_8041f998;
+                    denominator = span;
+                    if (!span) denominator = dat_8041f998;
                     t = (frame - firstFrame) / denominator;
                     t2 = t * t;
                     t3 = t2 * t;
@@ -2110,7 +2082,7 @@ void mapMain(void) {
                                         t1 = F(nextKeyBase, 0x14);
                                         span = t1 - t0;
                                         den = span;
-                                        if (span == zero) den = eps;
+                                        if (!span) den = eps;
                                         u = (frame - t0) / den;
                                         u2 = u * u;
                                         u3 = u2 * u;
@@ -2159,7 +2131,7 @@ void mapMain(void) {
                                 for (component = 0; component < 5; component++) {
                                     outOffset = W(track, 4) * 0x1C + 0x2C + component * 4;
                                     if (W(keyBase, 0x28 + component * 0x14) == 0) {
-                                        t0 = F(keyBase, 0x14); t1 = F(nextKeyBase, 0x14); span = t1 - t0; den = span; if (span == zero) den = eps;
+                                        t0 = F(keyBase, 0x14); t1 = F(nextKeyBase, 0x14); span = t1 - t0; den = span; if (!span) den = eps;
                                         u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                         curValue = F(keyBase, 0x18 + component * 0x14); nextValue = F(nextKeyBase, 0x18 + component * 0x14);
                                         tan0 = F(keyBase, 0x20 + component * 0x14); tan1 = F(nextKeyBase, 0x1C + component * 0x14);
@@ -2204,7 +2176,7 @@ void mapMain(void) {
                                 for (component = 0; component < 5; component++) {
                                     outOffset = W(track, 4) * 0x1C + 0x2C + component * 4;
                                     if (W(keyBase, 0x28 + component * 0x14) == 0) {
-                                        t0 = F(keyBase, 0x14); t1 = F(nextKeyBase, 0x14); span = t1 - t0; den = span; if (span == zero) den = eps;
+                                        t0 = F(keyBase, 0x14); t1 = F(nextKeyBase, 0x14); span = t1 - t0; den = span; if (!span) den = eps;
                                         u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                         curValue = F(keyBase, 0x18 + component * 0x14); nextValue = F(nextKeyBase, 0x18 + component * 0x14);
                                         tan0 = F(keyBase, 0x20 + component * 0x14); tan1 = F(nextKeyBase, 0x1C + component * 0x14);
@@ -2249,7 +2221,7 @@ void mapMain(void) {
                                     frame = F(nextKeyBase, 8);
                                 }
                                 if (W(keyBase, 0x1C) == 0) {
-                                    t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
+                                    t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (!span) den = eps;
                                     u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                     curValue = F(keyBase, 0x0C); nextValue = F(nextKeyBase, 0x0C);
                                     tan0 = F(keyBase, 0x14); tan1 = F(nextKeyBase, 0x10);
@@ -2285,7 +2257,7 @@ void mapMain(void) {
                                     frame = F(nextKeyBase, 8);
                                 }
                                 if (W(keyBase, 0x1C) == 0) {
-                                    t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
+                                    t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (!span) den = eps;
                                     u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                     curValue = F(keyBase, 0x0C); nextValue = F(nextKeyBase, 0x0C); tan0 = F(keyBase, 0x14); tan1 = F(nextKeyBase, 0x10);
                                     value = tan1 * span * (u3 - u2) + nextValue * (negTwo * u3 + three * u2) + curValue * (one + (two * u3 - three * u2)) + tan0 * span * (u - (two * u2 - u3));
@@ -2318,7 +2290,7 @@ void mapMain(void) {
                                     frame = F(nextKeyBase, 8);
                                 }
                                 if (W(keyBase, 0x1C) == 0) {
-                                    t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
+                                    t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (!span) den = eps;
                                     u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                     curValue = F(keyBase, 0x0C); nextValue = F(nextKeyBase, 0x0C); tan0 = F(keyBase, 0x14); tan1 = F(nextKeyBase, 0x10);
                                     value = tan1 * span * (u3 - u2) + nextValue * (negTwo * u3 + three * u2) + curValue * (one + (two * u3 - three * u2)) + tan0 * span * (u - (two * u2 - u3));
@@ -2347,7 +2319,7 @@ void mapMain(void) {
                                 }
                                 for (component = 0; component < 9; component++) {
                                     if (W(keyBase, 0x1C + component * 0x14) == 0) {
-                                        t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
+                                        t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (!span) den = eps;
                                         u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                         curValue = F(keyBase, 0x0C + component * 0x14); nextValue = F(nextKeyBase, 0x0C + component * 0x14);
                                         tan0 = F(keyBase, 0x14 + component * 0x14); tan1 = F(nextKeyBase, 0x10 + component * 0x14);
@@ -2385,7 +2357,7 @@ void mapMain(void) {
                                 }
                                 for (component = 0; component < 5; component++) {
                                     if (W(keyBase, 0x1C + component * 0x14) == 0) {
-                                        t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (span == zero) den = eps;
+                                        t0 = F(keyBase, 8); t1 = F(nextKeyBase, 8); span = t1 - t0; den = span; if (!span) den = eps;
                                         u = (frame - t0) / den; u2 = u * u; u3 = u2 * u;
                                         curValue = F(keyBase, 0x0C + component * 0x14); nextValue = F(nextKeyBase, 0x0C + component * 0x14);
                                         tan0 = F(keyBase, 0x14 + component * 0x14); tan1 = F(nextKeyBase, 0x10 + component * 0x14);
@@ -2468,8 +2440,8 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
     extern void GXSetTevDirect(s32);
     extern void GXSetNumIndStages(s32);
     extern u32 culling[];
-    u8* obj;
     u8* camera;
+    u8* obj;
     u8* currentCamera;
     u8* drawMode;
     void* material;
@@ -2480,8 +2452,8 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
     s32 j;
     s32 partOffset;
     u32 fogColor;
-    u32 initialMaterialColor;
-    u32 initialObjectColor;
+    Color initialMaterialColor;
+    Color initialObjectColor;
     u32 initialFlags;
     s32 forceBlend;
     Color tevColor;
@@ -2490,8 +2462,8 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
     Color outputColor2;
     Color objectColor;
     Color objectColor2;
-    u32 materialColor;
-    u32 materialColor2;
+    Color materialColor;
+    Color materialColor2;
     u32 loopFlags;
     Color* blendColor;
     f32 projection[7];
@@ -2502,17 +2474,17 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
     Mtx normal;
     Mtx model;
 
-    obj = mapObj;
     camera = camGetPtr(cameraId);
-    current_mp = mapObj;
+    obj = mapObj;
+    current_mp = obj;
     if ((*(u32*)obj & 0x20) != 0) {
         if ((*(u32*)obj & 0x8000) != 0) {
             siblingCount = 0;
             sibling = *(u8**)(obj + 8);
-            do {
-                drawMode = sibling;
-                sibling = *(u8**)(drawMode + 0x14);
-            } while (*(u8**)(drawMode + 0x14) != 0);
+            drawMode = sibling;
+            while (*(u8**)(drawMode + 0x14) != 0) {
+                drawMode = *(u8**)(drawMode + 0x14);
+            }
             while (drawMode != *(u8**)(obj + 8)) {
                 drawMode = *(u8**)(drawMode + 0x10);
                 siblingCount++;
@@ -2520,8 +2492,8 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
             siblingScale = float_0p01_8041f994 * (f32)siblingCount;
             GXGetProjectionv(projection);
             projection[5] *= float_1_8041f940
-                + (siblingScale * float_neg2_8041f980
-                    * *(f32*)(camera + 0x34) * *(f32*)(camera + 0x30))
+                + (siblingScale * (float_neg2_8041f980
+                    * *(f32*)(camera + 0x34) * *(f32*)(camera + 0x30)))
                     / (float_1_8041f940
                         * (*(f32*)(camera + 0x34) + *(f32*)(camera + 0x30))
                         * (float_1_8041f940 + siblingScale));
@@ -2531,10 +2503,10 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
         if (*(s32*)(*(u8**)(obj + 8) + 0x5C) > 0) {
             material = *(void**)(*(u8**)(obj + 8) + 0x60);
             initialFlags = *(u32*)obj;
-            initialObjectColor = *(u32*)(obj + 0x0C);
-            initialMaterialColor = *(u32*)((u8*)material + 0x10C);
-            if (((initialFlags & 0x40) == 0) || ((initialObjectColor & 0xFF) == 0xFF)) {
-                if ((s8)(initialMaterialColor & 0xFF) == -1) {
+            initialObjectColor = *(Color*)(obj + 0x0C);
+            initialMaterialColor = *(Color*)((u8*)material + 0x10C);
+            if (((initialFlags & 0x40) == 0) || (initialObjectColor.a == 0xFF)) {
+                if (initialMaterialColor.a == 0xFF) {
                     if (((initialFlags & 0x800) == 0)
                         && ((*(u16*)(mapWork + activeGroup * 0x2F4 + 4) & 2) != 0)
                         && (*(u8*)(mapWork + activeGroup * 0x2F4 + 0x19) != 0xFF)) {
@@ -2641,7 +2613,7 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
                 mesh = *(u8**)(*(u8**)(obj + 8) + 0x64 + partOffset);
                 mapSetTextureMatrix(material);
                 loopFlags = *(u32*)obj;
-                materialColor = *(u32*)((u8*)material + 0x10C);
+                materialColor = *(Color*)((u8*)material + 0x10C);
                 objectColor = *(Color*)(obj + 0x0C);
                 *(u32*)&tevColor = dat_8041f8fc;
                 if ((loopFlags & 0x40) != 0) {
@@ -2650,8 +2622,8 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
                     tevColor.b = (tevColor.b * objectColor.b) / 0xFF;
                     tevColor.a = (tevColor.a * objectColor.a) / 0xFF;
                 }
-                if ((materialColor >> 24) != 0xFF) {
-                    tevColor.a = (tevColor.a * (materialColor >> 24)) / 0xFF;
+                if (materialColor.r != 0xFF) {
+                    tevColor.a = (tevColor.a * materialColor.r) / 0xFF;
                 }
                 if (((*(u16*)(mapWork + activeGroup * 0x2F4 + 4) & 2) != 0) && ((loopFlags & 0x800) == 0)) {
                     blendColor = (Color*)(mapWork + activeGroup * 0x2F4 + 0x16);
@@ -2688,7 +2660,7 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
                 mesh = *(u8**)(*(u8**)(obj + 8) + 0x64 + partOffset);
                 mapSetTextureMatrix(material);
                 loopFlags = *(u32*)obj;
-                materialColor2 = *(u32*)((u8*)material + 0x10C);
+                materialColor2 = *(Color*)((u8*)material + 0x10C);
                 objectColor2 = *(Color*)(obj + 0x0C);
                 *(u32*)&tevColor2 = dat_8041f8fc;
                 if ((loopFlags & 0x40) != 0) {
@@ -2697,8 +2669,8 @@ void _mapDispMapObj(s32 cameraId, void* mapObj) {
                     tevColor2.b = (tevColor2.b * objectColor2.b) / 0xFF;
                     tevColor2.a = (tevColor2.a * objectColor2.a) / 0xFF;
                 }
-                if ((materialColor2 >> 24) != 0xFF) {
-                    tevColor2.a = (tevColor2.a * (materialColor2 >> 24)) / 0xFF;
+                if (materialColor2.r != 0xFF) {
+                    tevColor2.a = (tevColor2.a * materialColor2.r) / 0xFF;
                 }
                 if (((*(u16*)(mapWork + activeGroup * 0x2F4 + 4) & 2) != 0) && ((loopFlags & 0x800) == 0)) {
                     blendColor = (Color*)(mapWork + activeGroup * 0x2F4 + 0x16);
@@ -3538,6 +3510,7 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
     extern void* shadowGetProjShadowProjTexMtx(void);
     extern u32 shadowGetProjShadowColor(void);
     extern void* shadowGetProjShadowConfig(void);
+    typedef struct TevColor { u8 r, g, b, a; } TevColor;
     u32 stages;
     s32 i;
     f32 texMtx[3][4];
@@ -3717,16 +3690,16 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
                 break;
             case 8: {
                 GXColor tevColor;
+                GXColor colorArgument;
                 f32 angle = (float_6p2832_8041f958 *
                              (f32)(*(u32*)((s32)gpGlobals + 0x1C) << 1)) /
                             float_360_8041f95c;
-                s32 pulse = (s32)(float_127_8041f960 * (f32)sin((f64)angle) +
-                                  float_127_8041f960);
-                tevColor.r = 0;
+                f32 wave = (f32)sin((f64)angle);
+                s32 pulse = (s32)(float_127_8041f960 * wave + float_127_8041f960);
+                *(u32*)&tevColor = unk_80429528;
                 tevColor.g = (u8)pulse;
-                tevColor.b = 0;
-                tevColor.a = 0;
-                GXSetTevColor(1, &tevColor);
+                colorArgument = tevColor;
+                GXSetTevColor(1, &colorArgument);
                 GXSetTevOrder(0, 0, 0, 0);
                 GXSetTevColorOp(0, 0, 0, 0, 1, 0);
                 GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
@@ -3850,7 +3823,7 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
         GXSetTevColorIn(stages, 0, 0xE, 8, 0xF);
         GXSetTevAlphaIn(stages, 7, 7, 7, 0);
         GXSetTevSwapMode(stages, 0, 0);
-        GXSetTevKColor(1, &shadowColor);
+        { TevColor argument = *(TevColor*)&shadowColor; GXSetTevKColor(1, &argument); }
         GXSetTevKColorSel(stages, 0xD);
         stages++;
         texCount++;
@@ -3891,7 +3864,8 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
     void* depthMtxPtr;
     void* depthProjMtx;
     u8* depthConfig;
-    u32 depthColor, colorCopy3, colorCopy0, color1, color2, color4, color5;
+    u32 depthColor, color1, color2, color4, color5;
+    TevColor colorCopy3, colorCopy0;
     u32 nextStage, nextTex;
   if (((materialFlag & 0x10000) != 0) &&
      (depthTexObj = shadowGetDepthShadowTexObj(), depthTexObj != 0)) {
@@ -3934,7 +3908,7 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
       GXSetTevOrder(nextStage, 0xff, 0xff, 0);
       GXSetTevColorIn(nextStage, 15, 14, 0, 2);
       GXSetTevColorOp(nextStage, 1, 0, 0, 1, 0);
-      colorCopy3 = depthColor;
+      colorCopy3 = *(TevColor*)&depthColor;
       GXSetTevKColor(1, &colorCopy3);
       GXSetTevKColorSel(nextStage, 0xd);
       GXSetTevAlphaIn(nextStage, 7, 7, 7, 1);
@@ -3992,7 +3966,7 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
           GXSetTevOrder(nextStage, 0xff, 0xff, 0xFF);
           GXSetTevColorIn(nextStage, 15, 14, 0, 2);
           GXSetTevColorOp(nextStage, 1, 0, 0, 1, 0);
-          colorCopy0 = depthColor;
+          colorCopy0 = *(TevColor*)&depthColor;
           GXSetTevKColor(1, &colorCopy0);
           GXSetTevKColorSel(nextStage, 0xd);
           GXSetTevAlphaIn(nextStage, 7, 7, 7, 1);
@@ -4071,7 +4045,7 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
         GXLoadTexObj(shadowTexObj, texCount);
         PSMTXConcat(shadowProjMtx, (void*)pMtx, depthMtx);
         GXLoadTexMtxImm(depthMtx, texmtx_tbl[texCount], 0);
-        GXSetTevKColor(1, &shadowColor);
+        { TevColor argument = *(TevColor*)&shadowColor; GXSetTevKColor(1, &argument); }
         GXSetTevKColorSel(stages, 0xD);
         GXSetTevKAlphaSel(stages, 0x1D);
         stages++;
@@ -4124,7 +4098,7 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
             GXSetTevAlphaIn(nextStage, 7, 7, 7, 6);
             GXSetTevAlphaOp(nextStage, 0, 0, 0, 1, 0);
             GXSetTevSwapMode(nextStage, 0, 0);
-            GXSetTevKColor(1, &depthColor);
+            { TevColor argument = *(TevColor*)&depthColor; GXSetTevKColor(1, &argument); }
             GXSetTevKColorSel(nextStage, 0xD);
             GXSetTevKAlphaSel(nextStage, 0x1D);
             stages += 3;
@@ -4170,7 +4144,7 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
             GXSetTevAlphaIn(nextStage, 7, 7, 7, 6);
             GXSetTevAlphaOp(nextStage, 0, 0, 0, 1, 0);
             GXSetTevSwapMode(nextStage, 0, 0);
-            GXSetTevKColor(1, &depthColor);
+            { TevColor argument = *(TevColor*)&depthColor; GXSetTevKColor(1, &argument); }
             GXSetTevKColorSel(nextStage, 0xD);
             GXSetTevKAlphaSel(nextStage, 0x1D);
             stages += 3;
@@ -4186,13 +4160,14 @@ void mapSetMaterialTev(u32 texCount, int drawMode, u32 materialFlag, s32 pMtx) {
         u8 tevColor[4];
 
         if ((materialFlag & 0x100000) == 0) {
+            f32 wave;
             red = 0xF0;
             green = 0xF0;
             blue = 100;
-            intensity = (u32)(float_64_8041f974 *
-                (1.0f - (f32)cos((f64)((float_1p5708_8041f96c *
-                (f32)(*(u32*)((s32)gpGlobals + 0x1C))) / float_20_8041f970))) *
-                0.5f + float_64_8041f974) & 0xFF;
+            wave = (f32)cos((f64)((float_1p5708_8041f96c *
+                (f32)(*(u32*)((s32)gpGlobals + 0x1C))) / float_20_8041f970));
+            intensity = (u32)(s32)(float_64_8041f974 *
+                (1.0f - wave) * 0.5f + float_64_8041f974) & 0xFF;
         } else {
             red = *(u8*)((s32)current_mp + 0xC);
             green = *(u8*)((s32)current_mp + 0xD);
@@ -4387,19 +4362,19 @@ void mapSetTextureMatrix(void* param_1) {
     f32 scaleMtx[3][4];
 
     f32 one;
+    f32 negRot;
     f32 scaleX;
     f32 scaleY;
     f32 transX;
     f32 negTransY;
-    f32 negRot;
     f32 centerX;
     f32 centerY;
     f32 zero;
-    void* work;
-    s32 coord;
     s32 index;
     s32 countIndex;
     s32* texMtx;
+    s32 coord;
+    void* work;
     s32 texCount;
 
     one = float_1_8041f940;
@@ -4418,13 +4393,11 @@ void mapSetTextureMatrix(void* param_1) {
         transX = *(f32*)((s32)work + 0x2C);
         negTransY = -*(f32*)((s32)work + 0x30);
 
-        if (one == scaleX &&
+        if (!(one == scaleX &&
             one == scaleY &&
             float_0_8041f930 == transX &&
             float_0_8041f930 == negTransY &&
-            float_0_8041f930 == negRot) {
-            GXSetTexCoordGen2(coord, 1, (*(u8*)((s32)param_1 + 0x0B) + 3) - countIndex, 0x3C, 0, 0x7D);
-        } else {
+            float_0_8041f930 == negRot)) {
             zero = float_0_8041f930;
             if (negRot != zero) {
                 centerX = (float_0p5_8041f934 * *(f32*)((s32)work + 0x40)) * scaleX;
@@ -4469,7 +4442,9 @@ void mapSetTextureMatrix(void* param_1) {
 
             GXLoadTexMtxImm(outMtx, *texMtx, 1);
             GXSetTexCoordGen2(coord, 1, (*(u8*)((s32)param_1 + 0x0B) + 3) - countIndex, *texMtx, 0, 0x7D);
-        }
+                } else {
+            GXSetTexCoordGen2(coord, 1, (*(u8*)((s32)param_1 + 0x0B) + 3) - countIndex, 0x3C, 0, 0x7D);
+                }
 
         coord++;
         countIndex++;
@@ -4524,8 +4499,9 @@ void mapSetMaterial(void* param_1, void* param_2) {
 
     void* ambientPtr;
     void* drawModePtr;
-    u32 ambientColor;
-    u32 materialColor;
+    typedef struct MaterialColor { u8 r, g, b, a; } MaterialColor;
+    MaterialColor ambientColor;
+    MaterialColor ambientDefault;
     u32 texCount;
     int drawMode;
     u32 materialFlag;
@@ -4537,22 +4513,16 @@ void mapSetMaterial(void* param_1, void* param_2) {
     s32 lightAttn;
     s32 lightEnable;
     u8 chanMode;
-    void* lightList[16];
     s32 lightIndex;
     void** lightEntryPtr;
     u32* lightId;
     u16 lightFlags;
-    u8 lightObj[0x40];
-    f32 lightPos[3];
-    u32 lightColor;
+    u32 lightColor0;
+    u32 lightColor1;
+    u32 lightColor2;
     void* cam;
-    u8 mtxX[0x30];
-    u8 mtxY[0x30];
-    u8 mtxZ[0x30];
-    f32 baseDir[3];
 
     /* texture-loop locals */
-    u8 texObj[0x20];
     s32 texIndex;
     s32 loadedTexCount;
     s32 groupBase;
@@ -4568,34 +4538,60 @@ void mapSetMaterial(void* param_1, void* param_2) {
     void* tplDesc;
     void* texHeader;
     s32 mipmap;
+    void** texSlotPtr;
+    s32* texCursor;
+    u32* wrapTable;
 
+    u8 lightObj[0x40];
+    f32 mtxX[3][4];
+    f32 mtxY[3][4];
+    f32 mtxZ[3][4];
+    void* lightList[8];
+    u8 texObj[0x20];
+    f32 lightPos[3];
+    f32 baseDir[3];
+    typedef struct MaterialVector { f32 x, y, z; } MaterialVector;
+    typedef struct MaterialConstants {
+        u8 prefix[0xEC]; u32 wrap[3]; u8 pad0[8]; u32 lightId[8]; u8 pad1[0x24]; MaterialVector direction;
+    } MaterialConstants;
+    MaterialConstants* constants;
+    void* lightEntry;
+
+    MaterialColor ambientArgument;
+    MaterialColor materialArgument;
+
+    ambientDefault = *(MaterialColor*)&dat_8041f908;
+    lightAttn = 2;
+    constants = (MaterialConstants*)vec3_802bf958;
     lightCount = mapSetLight(param_1, lightList);
     lightMask = 0;
     lightEntryPtr = lightList;
-    lightId = lightid_tbl;
+    lightId = constants->lightId;
 
     for (lightIndex = 0; lightIndex < lightCount; lightIndex++) {
-        lightFlags = *(u16*)*lightEntryPtr;
+        *(MaterialVector*)baseDir = constants->direction;
+        lightEntry = *lightEntryPtr;
+        lightFlags = *(u16*)lightEntry;
 
         if ((lightFlags & 0x1000) != 0) {
             cam = camGetCurPtr();
 
             PSMTXMultVec(
                 (void*)((s32)cam + 0x11C),
-                (void*)((s32)*lightEntryPtr + 0x24),
+                (void*)((s32)lightEntry + 0x24),
                 lightPos
             );
 
             GXInitLightPos(lightObj, lightPos[0], lightPos[1], lightPos[2]);
 
-            lightColor = *(u32*)((s32)*lightEntryPtr + 0x48);
-            GXInitLightColor(lightObj, &lightColor);
+            lightColor0 = *(u32*)((s32)*lightEntryPtr + 0x48);
+            GXInitLightColor(lightObj, &lightColor0);
 
             GXInitLightAttn(
                 lightObj,
                 *(f32*)((s32)*lightEntryPtr + 0x50),
-                0.0f,
-                0.0f,
+                float_0_8041f930,
+                float_0_8041f930,
                 *(f32*)((s32)*lightEntryPtr + 0x54),
                 *(f32*)((s32)*lightEntryPtr + 0x58),
                 *(f32*)((s32)*lightEntryPtr + 0x5C)
@@ -4604,14 +4600,11 @@ void mapSetMaterial(void* param_1, void* param_2) {
             GXLoadLightObjImm(lightObj, *lightId);
             lightAttn = 1;
         } else if ((lightFlags & 0x2000) != 0) {
-            baseDir[0] = *(f32*)((s32)vec3_802bf958 + 0x144);
-            baseDir[1] = *(f32*)((s32)vec3_802bf958 + 0x148);
-            baseDir[2] = *(f32*)((s32)vec3_802bf958 + 0x14C);
 
             PSMTXRotRad(
                 mtxX,
                 0x78,
-                float_deg2rad_8041f948 * *(f32*)((s32)*lightEntryPtr + 0x30)
+                float_deg2rad_8041f948 * *(f32*)((s32)lightEntry + 0x30)
             );
             PSMTXRotRad(
                 mtxY,
@@ -4640,17 +4633,17 @@ void mapSetMaterial(void* param_1, void* param_2) {
 
             GXInitLightPos(lightObj, lightPos[0], lightPos[1], lightPos[2]);
 
-            lightColor = *(u32*)((s32)*lightEntryPtr + 0x48);
-            GXInitLightColor(lightObj, &lightColor);
+            lightColor1 = *(u32*)((s32)*lightEntryPtr + 0x48);
+            GXInitLightColor(lightObj, &lightColor1);
 
             GXInitLightAttn(
                 lightObj,
                 *(f32*)((s32)*lightEntryPtr + 0x50),
-                0.0f,
-                0.0f,
-                0.0f,
-                0.0f,
-                1.0f
+                float_0_8041f930,
+                float_0_8041f930,
+                float_0_8041f930,
+                float_0_8041f930,
+                float_1_8041f940
             );
 
             GXLoadLightObjImm(lightObj, *lightId);
@@ -4662,10 +4655,6 @@ void mapSetMaterial(void* param_1, void* param_2) {
         (void*)((s32)*lightEntryPtr + 0x24),
         lightPos
     );
-
-    baseDir[0] = *(f32*)((s32)vec3_802bf958 + 0x144);
-    baseDir[1] = *(f32*)((s32)vec3_802bf958 + 0x148);
-    baseDir[2] = *(f32*)((s32)vec3_802bf958 + 0x14C);
 
     PSMTXRotRad(
         mtxX,
@@ -4710,8 +4699,8 @@ void mapSetMaterial(void* param_1, void* param_2) {
         0
     );
 
-    lightColor = *(u32*)((s32)*lightEntryPtr + 0x48);
-    GXInitLightColor(lightObj, &lightColor);
+    lightColor2 = *(u32*)((s32)*lightEntryPtr + 0x48);
+    GXInitLightColor(lightObj, &lightColor2);
 
     GXLoadLightObjImm(lightObj, *lightId);
     lightAttn = 1;
@@ -4723,18 +4712,15 @@ void mapSetMaterial(void* param_1, void* param_2) {
     }
 
     ambientPtr = lightGetAmbient();
-    if (ambientPtr != 0) {
-        ambientColor = *(u32*)((s32)ambientPtr + 0x48);
-    } else {
-        ambientColor = dat_8041f908;
-    }
+    ambientColor = ambientPtr != 0 ? *(MaterialColor*)((s32)ambientPtr + 0x48) : ambientDefault;
 
     GXSetNumChans(1);
 
-    GXSetChanAmbColor(4, &ambientColor);
+    ambientArgument = ambientColor;
+    GXSetChanAmbColor(4, &ambientArgument);
 
-    materialColor = *(u32*)((s32)param_2 + 4);
-    GXSetChanMatColor(4, &materialColor);
+    materialArgument = *(MaterialColor*)((s32)param_2 + 4);
+    GXSetChanMatColor(4, &materialArgument);
 
     lightEnable = lightCount != 0;
     chanMode = *(u8*)((s32)param_2 + 8);
@@ -4756,9 +4742,11 @@ void mapSetMaterial(void* param_1, void* param_2) {
 
     loadedTexCount = 0;
     texIndex = *(u8*)((s32)param_2 + 0xB) - 1;
+    texSlotPtr = (void**)((s32)param_2 + texIndex * 4);
+    wrapTable = constants->wrap;
 
     while (texIndex >= 0) {
-        texSlot = *(void**)((s32)param_2 + 0xC + texIndex * 4);
+        texSlot = texSlotPtr[3];
         texName = *(char**)(*(s32*)texSlot);
 
         entryIndex = *(s16*)((s32)param_1 + 0xDE);
@@ -4766,27 +4754,23 @@ void mapSetMaterial(void* param_1, void* param_2) {
         entryBase = groupBase + entryIndex * 0x178;
 
         texTableAddr = *(s32*)(entryBase + 0x94);
-        texSearchCount = *(s32*)texTableAddr;
-        texSearchIndex = 0;
-
-        while (texSearchIndex < texSearchCount) {
-            texTableEntry = *(s32*)(texTableAddr + 4 + texSearchIndex * 4);
-            if (strcmp((char*)texTableEntry, texName) == 0) {
-                break;
+        texCursor = (s32*)texTableAddr;
+        texId = 0;
+        while (texId < *(s32*)texTableAddr) {
+            if (strcmp((char*)texCursor[1], texName) != 0) {
+                texCursor++;
+                texId++;
+            } else {
+                goto texture_found;
             }
-            texSearchIndex++;
         }
-
-        if (texSearchIndex >= texSearchCount) {
-            texId = -1;
-        } else {
-            texId = texSearchIndex;
-        }
-
-        tplDesc = TEXGet(*(s32*)(entryBase + 0x84), texId);
+        texId = -1;
+texture_found:
+        tplDesc = TEXGet(*(s32*)(groupBase + *(s16*)((s32)param_1 + 0xDE) * 0x178 + 0x84), texId);
         texHeader = *(void**)tplDesc;
 
-        mipmap = (*(u8*)((s32)texHeader + 0x21) != *(u8*)((s32)texHeader + 0x22));
+        if (*(u8*)((s32)texHeader + 0x21) == *(u8*)((s32)texHeader + 0x22)) mipmap = 0;
+        else mipmap = 1;
 
         GXInitTexObj(
             texObj,
@@ -4794,11 +4778,12 @@ void mapSetMaterial(void* param_1, void* param_2) {
             *(u16*)((s32)texHeader + 0x2),
             *(u16*)((s32)texHeader + 0x0),
             *(s32*)((s32)texHeader + 0x4),
-            texwrap_tbl[*(u8*)((s32)texSlot + 0x8)],
-            texwrap_tbl[*(u8*)((s32)texSlot + 0x9)],
+            wrapTable[*(u8*)((s32)texSlot + 0x8)],
+            wrapTable[*(u8*)((s32)texSlot + 0x9)],
             mipmap
         );
 
+        texHeader = *(void**)tplDesc;
         GXInitTexObjLOD(
             texObj,
             1,
@@ -4815,6 +4800,7 @@ void mapSetMaterial(void* param_1, void* param_2) {
 
         loadedTexCount++;
         texIndex--;
+        texSlotPtr--;
     }
 
     texCount = *(u8*)((s32)param_2 + 0xB);
@@ -5051,14 +5037,14 @@ void mapSetPolygon(int param_1, int param_2) {
     extern void GXSetVtxAttrFmtv(s32 vtxfmt, void* fmtv);
     extern void GXBegin(s32 prim, s32 vtxfmt, s32 nverts);
 
+    s32 i;
     s32 obj;
     s32 poly;
-    s32 groupBase;
     s32 texCount;
     s32 posArray;
     s32 nrmArray;
+    s32 groupBase;
     s32 flags;
-    s32 i;
     s32 offset;
     s32 listCursor;
     s32 prim;
@@ -5121,37 +5107,11 @@ void mapSetPolygon(int param_1, int param_2) {
                 *fifo = S16_AT(vtx, 8);
 
                 if (texCount > 0) {
-                    k = texCount;
                     texPtr = vtx + 4;
-
-                    q = (u32)k >> 2;
-                    if (q != 0) {
-                        do {
-                            idx = S16_AT(texPtr, 8);
-                            *fifo = SAFE_IDX(idx);
-
-                            idx = S16_AT(texPtr, 0xA);
-                            *fifo = SAFE_IDX(idx);
-
-                            idx = S16_AT(texPtr, 0xC);
-                            *fifo = SAFE_IDX(idx);
-
-                            idx = S16_AT(texPtr, 0xE);
-                            *fifo = SAFE_IDX(idx);
-
-                            texPtr += 8;
-                            q--;
-                        } while (q != 0);
-                    }
-
-                    k &= 3;
-                    if (k != 0) {
-                        do {
-                            idx = S16_AT(texPtr, 8);
-                            texPtr += 2;
-                            *fifo = SAFE_IDX(idx);
-                            k--;
-                        } while (k != 0);
+                    for (k = texCount; k > 0; k--) {
+                        idx = S16_AT(texPtr, 8);
+                        texPtr += 2;
+                        *fifo = SAFE_IDX(idx);
                     }
                 }
 
@@ -7142,7 +7102,7 @@ u8 setColor(void* param_1, u32* param_2, int param_3) {
     u32 local_30;
     u32 local_2c;
     u32 local_28;
-    u32 local_24;
+    volatile u32 local_24;
 
     if (param_1 != 0) {
         color = *param_2;
@@ -7393,10 +7353,10 @@ void mapGrpSetColor(s32 param_1, void* param_2) {
     extern u8 setColor(void* param_1, u32* param_2, int param_3);
 
     MapObjShape* obj;
-    MapGroupShape* group;
-    MapGroupShape* groupBase;
-    s32 objIndex;
     s32 groupIndex;
+    s32 objIndex;
+    MapGroupShape* groupBase;
+    MapGroupShape* group;
     u32 color;
 
     color = *(u32*)param_2;
@@ -7413,11 +7373,12 @@ void mapGrpSetColor(s32 param_1, void* param_2) {
         obj = group->objects;
         objIndex = 0;
         while (objIndex < group->objectCount) {
-            if (strcmp(obj->joint->name, (const char*)param_1) == 0) {
+            if (strcmp(obj->joint->name, (const char*)param_1) != 0) {
+                objIndex++;
+                obj++;
+            } else {
                 goto done;
             }
-            objIndex++;
-            obj++;
         }
         group++;
         groupIndex++;
@@ -7441,10 +7402,11 @@ void mapSetProjMtx(void* mtx) {
     PSMTXCopy(mtx, projMtx);
 }
 
+#pragma opt_common_subs off
 void spline_maketable(s32 count, f32* points, f32* table, f32* out) {
-    extern f64 __frsqrte(f64);
-    extern f32 __float_nan;
+    extern f32 __float_nan[];
     extern u8 vec3_802bf958[];
+    u8* constantBase;
     f32* h;
     f32* work;
     f32 total;
@@ -7456,64 +7418,66 @@ void spline_maketable(s32 count, f32* points, f32* table, f32* out) {
     s32 i;
     s32 last;
 
+    constantBase = vec3_802bf958;
     h = (f32*)_mapAlloc(mapalloc_base_ptr, count * 4);
     work = (f32*)_mapAlloc(mapalloc_base_ptr, count * 12);
     table[0] = 0.0f;
     {
-        f32* pointPos = points;
-        f32* tablePos = table;
-        s32 remaining = count - 1;
-        if (count > 1) {
-            do {
-                f64 value;
+        f32* pointPos = points + 3;
+        f32* tablePos = table + 1;
+        {
+            for (i = 1; i < count; i++) {
                 f64 estimate;
                 f64 square;
                 f64 half;
                 f64 three;
                 u32 bits;
-                u32 exponent;
+                s32 exponent;
+                f32 classifyValue;
                 s32 valueClass;
-                dx = pointPos[3] - pointPos[0];
-                dy = pointPos[4] - pointPos[1];
-                dz = pointPos[5] - pointPos[2];
-                len = dz * dz + dx * dx + dy * dy;
-                value = (f64)len;
+                dx = pointPos[0] - pointPos[-3];
+                dy = pointPos[1] - pointPos[-2];
+                dz = pointPos[2] - pointPos[-1];
+                len = dx * dx + dy * dy + dz * dz;
                 if (len > 0.0f) {
-                    half = *(f64*)(vec3_802bf958 + 0x2A8);
-                    three = *(f64*)(vec3_802bf958 + 0x2B0);
-                    estimate = __frsqrte(value);
+                    half = *(f64*)(constantBase + 0x2A8);
+                    three = *(f64*)(constantBase + 0x2B0);
+                    estimate = __frsqrte(len);
                     square = estimate * estimate;
-                    estimate = half * estimate * (three - value * square);
+                    estimate = half * estimate * (three - (f64)len * square);
                     square = estimate * estimate;
-                    estimate = half * estimate * (three - value * square);
+                    estimate = half * estimate * (three - (f64)len * square);
                     square = estimate * estimate;
-                    estimate = half * estimate * (three - value * square);
-                    len = (f32)(value * estimate);
-                } else if (value < *(f64*)(vec3_802bf958 + 0x2B8)) {
-                    len = __float_nan;
+                    estimate = half * estimate * (three - (f64)len * square);
+                    len = (f32)((f64)len * estimate);
+                } else if ((f64)len < *(f64*)(constantBase + 0x2B8)) {
+                    len = __float_nan[0];
                 } else {
-                    bits = *(u32*)&len;
+                    classifyValue = len;
+                    bits = *(u32*)&classifyValue;
                     exponent = bits & 0x7F800000;
-                    if (exponent == 0x7F800000) {
-                        valueClass = ((bits & 0x007FFFFF) == 0) ? 2 : 1;
-                    } else if (exponent < 0x7F800000 && exponent == 0) {
-                        valueClass = ((bits & 0x007FFFFF) == 0) ? 3 : 5;
-                    } else {
-                        valueClass = 4;
+                    switch (exponent) {
+                        case 0x7F800000:
+                            if (bits & 0x007FFFFF) valueClass = 1;
+                            else valueClass = 2;
+                            break;
+                        case 0:
+                            if (bits & 0x007FFFFF) valueClass = 5;
+                            else valueClass = 3;
+                            break;
+                        default: valueClass = 4; break;
                     }
-                    if (valueClass == 1) len = __float_nan;
+                    if (valueClass == 1) len = __float_nan[0];
                 }
-                tablePos[1] = tablePos[0] + len;
+                tablePos[0] = tablePos[-1] + len;
                 pointPos += 3;
                 tablePos++;
-                remaining--;
-            } while (remaining != 0);
+            }
         }
     }
 
-    total = table[count - 1];
     for (i = 1; i < count; i++) {
-        table[i] /= total;
+        table[i] /= table[count - 1];
     }
 
     last = count - 1;
@@ -7580,13 +7544,12 @@ void spline_maketable(s32 count, f32* points, f32* table, f32* out) {
                 ratio0 = step / workPos[3];
                 ratio1 = step / workPos[4];
                 ratio2 = step / workPos[5];
-                span = 2.0f * (tablePos[2] - tablePos[0]);
                 outPos[6] = (workPos[9] - workPos[6]) - ratio0 * outPos[3];
                 outPos[7] = (workPos[10] - workPos[7]) - ratio1 * outPos[4];
                 outPos[8] = (workPos[11] - workPos[8]) - ratio2 * outPos[5];
-                workPos[6] = span - ratio0 * *hPos;
-                workPos[7] = span - ratio1 * *hPos;
-                workPos[8] = span - ratio2 * *hPos;
+                workPos[6] = 2.0f * (tablePos[2] - tablePos[0]) - ratio0 * *hPos;
+                workPos[7] = 2.0f * (tablePos[2] - tablePos[0]) - ratio1 * *hPos;
+                workPos[8] = 2.0f * (tablePos[2] - tablePos[0]) - ratio2 * *hPos;
                 workPos += 3;
                 outPos += 3;
                 remaining--;
@@ -7646,6 +7609,7 @@ spline_done:
     _mapFree(mapalloc_base_ptr, work);
     _mapFree(mapalloc_base_ptr, h);
 }
+#pragma opt_common_subs reset
 
 void spline_getvalue(float time, float* out, int count, float* values, int timesRaw, int slopesRaw) {
     f32* times = (f32*)timesRaw;
@@ -8033,3 +7997,93 @@ u32 fog_type[5] = { 2, 4, 5, 6, 7 };
 u32 gap_07_804150D4_sdata[3] = { 0, 0, 0 };
 
 const f32 mapdrv_float_1000_owned = 1000.0f;
+
+/* Packed RGBA colors in US target order. */
+__declspec(section ".sdata2") u32 dat_8041f8e0 = 0x000000FF;
+__declspec(section ".sdata2") u32 dat_8041f8e4 = 0xFF000000;
+__declspec(section ".sdata2") u32 dat_8041f8e8 = 0xFF000000;
+__declspec(section ".sdata2") u32 dat_8041f8ec = 0xFFFF0000;
+__declspec(section ".sdata2") u32 dat_8041f8f0 = 0xFFFF0000;
+__declspec(section ".sdata2") u32 dat_8041f8f4 = 0x000000FF;
+__declspec(section ".sdata2") u32 dat_8041f8f8 = 0x000000FF;
+__declspec(section ".sdata2") u32 dat_8041f8fc = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041f900 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041f904 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041f908 = 0x000000FF;
+__declspec(section ".sdata2") u32 dat_8041f90c = 0x707070FF;
+__declspec(section ".sdata2") u32 dat_8041f910 = 0x707070FF;
+__declspec(section ".sdata2") u32 dat_8041f914 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041f918 = 0x000000FF;
+__declspec(section ".sdata2") u32 dat_8041f91c = 0x000000FF;
+__declspec(section ".sdata2") u32 dat_8041f920 = 0xFFFFFFFF;
+__declspec(section ".sdata2") u32 dat_8041f924 = 0xFFFFFFFF;
+
+/* Persistent zero colors; MWCC emits these declarations in reverse order. */
+__declspec(section ".sdata2") u32 gap_10_80429534_sbss2;
+__declspec(section ".sdata2") s32 unk_80429530;
+__declspec(section ".sdata2") u32 unk_8042952c;
+__declspec(section ".sdata2") u32 unk_80429528;
+__declspec(section ".sdata2") u32 unk_80429524;
+__declspec(section ".sdata2") u32 unk_80429520;
+
+/* Fixed GX lookup tables from the US target. */
+__declspec(section ".rodata") s32 culling[4] = {
+    1, 2, 3, 0,
+};
+__declspec(section ".rodata") s32 texmtx_tbl[10] = {
+    30, 33, 36, 39, 42, 45, 48, 51, 54, 57,
+};
+__declspec(section ".rodata") u32 texfmt_tbl[11] = { 0x4, 0x5, 0x6, 0xE, 0x0, 0x1, 0x2, 0x3, 0x8, 0x9, 0xA };
+
+__declspec(section ".rodata") u32 texwrap_tbl[3] = {
+    0, 1, 2,
+};
+/* Target-owned GX palette and light lookup tables. */
+__declspec(section ".rodata") u32 palfmt_tbl[2] = { 0x1, 0x2 };
+
+__declspec(section ".rodata") u32 lightid_tbl[8] = { 0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80 };
+
+__declspec(section ".rodata") s32 attr_fmt[48] = {
+    9, 1, 4, 0,
+    10, 0, 4, 0,
+    11, 1, 5, 0,
+    13, 1, 4, 0,
+    14, 1, 4, 0,
+    15, 1, 4, 0,
+    16, 1, 4, 0,
+    17, 1, 4, 0,
+    18, 1, 4, 0,
+    19, 1, 4, 0,
+    20, 1, 4, 0,
+    255, 0, 0, 0,
+};
+
+/* Fixed I8 texture payload from the US mapdrv target object. */
+u8 texture_0[256] __attribute__((aligned(32))) = {
+    0xEB, 0x88, 0xE2, 0x28, 0x55, 0xFF, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xF5, 0x28, 0xEC, 0x08, 0x55, 0xFF, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xFE, 0xE8, 0xF5, 0xA8, 0x55, 0xFF, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xFF, 0x47, 0xD6, 0xE8, 0x00, 0xAA, 0xFF, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xBE, 0xA8, 0x86, 0x0A, 0x00, 0xAA, 0xFF, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x7D, 0xEA, 0x0D, 0x8B, 0x00, 0xAA, 0xFF, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x05, 0x6B, 0x05, 0x4A, 0x00, 0xAA, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x05, 0x6B, 0x05, 0x4E, 0x00, 0x00, 0xAA, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x05, 0xBA, 0x05, 0x70, 0x55, 0xFF, 0xAA, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x05, 0xDE, 0x05, 0xBA, 0x55, 0xFF, 0xAA, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x05, 0xBD, 0x05, 0x1B, 0x00, 0x00, 0xAA, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x13, 0x76, 0x04, 0x9A, 0x55, 0xFF, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x33, 0x15, 0x42, 0x53, 0x00, 0xAA, 0x55, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x6A, 0x33, 0x3A, 0x53, 0xFF, 0xFF, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xB1, 0xF2, 0x82, 0x12, 0x55, 0xFF, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0xE9, 0xF2, 0xC2, 0x12, 0x55, 0xFF, 0xAA, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+/* Target-owned signed unit pair; generated tables still leave layout debt. */
+__declspec(section ".data") f32 lbl_80304A20[2] __attribute__((aligned(32))) = { -1.0f, 1.0f };
+
+/* Named map-loading strings decoded from the US target object. */
+__declspec(section ".rodata") char str_animation_table_802bfbe4[16] = "animation_table";
+__declspec(section ".rodata") char str_ambientLight_802bfc88[13] = "ambientLight";
+__declspec(section ".rodata") char str_pointLight_802bfc98[11] = "pointLight";
+__declspec(section ".rodata") char str_directionalLight_802bfca4[17] = "directionalLight";
+__declspec(section ".rodata") char str_spotLight_802bfcb8[10] = "spotLight";

@@ -17,7 +17,7 @@ typedef struct NPCWork2 {
     NPCWork battle; //0x14
 } NPCWork2;
 
-NPCWork2 work;
+static NPCWork2 work;
 void* release_wp;
 s32 npcMainCount;
 s32 dbg_battleskip;
@@ -39,6 +39,7 @@ extern char* animPoseGetCurrentAnim(s32 poseId);
 void mtx_setup(void* npc, f32 (*mtx)[4], s32 historyIndex);
 extern f64 atan2(f64 y, f64 x);
 extern f64 sqrt(f64 value);
+extern f64 __frsqrte(f64 value);
 extern void sincosf(f32 angle, f32* outSin, f32* outCos);
 extern char* strcpy(char* dest, const char* src);
 extern void animPoseRelease(s32 poseId);
@@ -67,6 +68,58 @@ extern void marioChgPose(char* poseName);
 extern s32 marioGetPartyId(void);
 extern s32 marioGetExtraPartyId(void);
 extern void* partyGetPtr(s32 partyId);
+
+/* Data-pass A1: exact external identities used by restored npcdrv initialized data. */
+__declspec(section ".sdata2") char str_Z_1_8041fbb8[4] __attribute__ ((aligned(4))) = "Z_1";
+__declspec(section ".sdata2") char str_Z_1R_8041fbbc[5] __attribute__ ((aligned(4))) = "Z_1R";
+__declspec(section ".sdata2") char str_S_1_8041fbc4[4] __attribute__ ((aligned(4))) = "S_1";
+__declspec(section ".sdata2") char str_S_1R_8041fbc8[5] __attribute__ ((aligned(4))) = "S_1R";
+__declspec(section ".sdata2") char str_W_1_8041fbd0[4] __attribute__ ((aligned(4))) = "W_1";
+__declspec(section ".sdata2") char str_W_1R_8041fbd4[5] __attribute__ ((aligned(4))) = "W_1R";
+__declspec(section ".sdata2") char str_R_1_8041fbdc[4] __attribute__ ((aligned(4))) = "R_1";
+__declspec(section ".sdata2") char str_R_1R_8041fbe0[5] __attribute__ ((aligned(4))) = "R_1R";
+__declspec(section ".sdata2") char str_T_1_8041fbe8[4] __attribute__ ((aligned(4))) = "T_1";
+__declspec(section ".sdata2") char str_T_1R_8041fbec[5] __attribute__ ((aligned(4))) = "T_1R";
+__declspec(section ".sdata2") char str_J_1A_8041fbf4[5] __attribute__ ((aligned(4))) = "J_1A";
+__declspec(section ".sdata2") char str_J_1RR_8041fbfc[6] __attribute__ ((aligned(4))) = "J_1RR";
+__declspec(section ".sdata2") char str_J_1B_8041fc04[5] __attribute__ ((aligned(4))) = "J_1B";
+__declspec(section ".sdata2") char str_J_1BR_8041fc0c[6] __attribute__ ((aligned(4))) = "J_1BR";
+__declspec(section ".sdata2") char str_Z_2_8041fc14[4] __attribute__ ((aligned(4))) = "Z_2";
+__declspec(section ".sdata2") char str_Z_2R_8041fc18[5] __attribute__ ((aligned(4))) = "Z_2R";
+__declspec(section ".sdata2") char str_S_2_8041fc20[4] __attribute__ ((aligned(4))) = "S_2";
+__declspec(section ".sdata2") char str_S_2R_8041fc24[5] __attribute__ ((aligned(4))) = "S_2R";
+__declspec(section ".sdata2") char str_T_2_8041fc2c[4] __attribute__ ((aligned(4))) = "T_2";
+__declspec(section ".sdata2") char str_T_2R_8041fc30[5] __attribute__ ((aligned(4))) = "T_2R";
+__declspec(section ".sdata2") char str_L_1_8041fc38[4] __attribute__ ((aligned(4))) = "L_1";
+__declspec(section ".sdata2") char str_L_1R_8041fc3c[5] __attribute__ ((aligned(4))) = "L_1R";
+__declspec(section ".sdata2") char str_L_2_8041fc44[4] __attribute__ ((aligned(4))) = "L_2";
+__declspec(section ".sdata2") char str_L_2R_8041fc48[5] __attribute__ ((aligned(4))) = "L_2R";
+__declspec(section ".sdata2") char str_L_3_8041fc50[4] __attribute__ ((aligned(4))) = "L_3";
+__declspec(section ".sdata2") char str_L_3R_8041fc54[5] __attribute__ ((aligned(4))) = "L_3R";
+__declspec(section ".sdata2") char str_I_1_8041fc5c[4] __attribute__ ((aligned(4))) = "I_1";
+__declspec(section ".sdata2") char str_I_1R_8041fc60[5] __attribute__ ((aligned(4))) = "I_1R";
+__declspec(section ".sdata2") s32 dat_8041fc68 = -256;
+__declspec(section ".sdata2") s32 dat_8041fc6c = -1;
+__declspec(section ".sdata2") s32 dat_8041fc70 = -8355585;      /* 0xFF8080FF */
+__declspec(section ".sdata2") s32 dat_8041fc74 = -2139029505;  /* 0x8080FFFF */
+__declspec(section ".sdata2") u32 dat_8041fc78 = 0xFFFFFFFF;
+
+extern char str_SFX_EVT_BTL_INCANT_C_802c12e4[];
+extern char str_SFX_EVT_BTL_INCANT_C_802c1300[];
+extern char str_SFX_EVT_BTL_INCANT_C_802c131c[];
+extern char str_SFX_EVT_BTL_INCANT_C_802c1338[];
+extern char str_SFX_EVT_BTL_INCANT_C_802c1354[];
+extern char str_SFX_EVT_FLD_INCANT_C_802c1258[];
+extern char str_SFX_EVT_FLD_INCANT_C_802c1274[];
+extern char str_SFX_EVT_FLD_INCANT_C_802c1290[];
+extern char str_SFX_EVT_FLD_INCANT_C_802c12ac[];
+extern char str_SFX_EVT_FLD_INCANT_C_802c12c8[];
+extern char str_msg_mj_coin_up_802c1370[];
+extern char str_msg_mj_last_802c1380[];
+extern s32 btlevtcmd_ftomsec(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_msg_print(EventEntry* event, BOOL isFirstCall);
+extern s32 evt_snd_sfxon_3d(EventEntry* event, BOOL isFirstCall);
 
 NPCWork* npcGetWorkPtr(void) {
     return gp->inBattle ? &work.battle : &work.field;
@@ -544,7 +597,7 @@ void npcDisp_offscreen_xlu(s32 cameraId, void* npc) {
     offscreenAddBoundingBox(*(s32*)((s32)npc + 0x110), x0, y0, x1, y1);
 }
 
-u8 npcDisp_offscreen(s32 cameraId, void* npc) {
+void npcDisp_offscreen(s32 cameraId, void* npc) {
     extern f32 reviseAngle(f32);
     extern const f32 float_0_8041fc7c;
     extern const f32 float_360_8041fcc0;
@@ -583,18 +636,17 @@ u8 npcDisp_offscreen(s32 cameraId, void* npc) {
         r = *(u8*)((s32)&color + 0);
         g = *(u8*)((s32)&color + 1);
         b = *(u8*)((s32)&color + 2);
-        *(u8*)((s32)&color + 0) = r >> 1;
-        *(u8*)((s32)&color + 1) = g >> 1;
-        *(u8*)((s32)&color + 2) = b >> 1;
+        *(u8*)((s32)&color + 0) = (s32)(r + ((u32)r >> 31)) >> 1;
+        *(u8*)((s32)&color + 1) = (s32)(g + ((u32)g >> 31)) >> 1;
+        *(u8*)((s32)&color + 2) = (s32)(b + ((u32)b >> 31)) >> 1;
         color2 = color;
         animPoseSetMaterialEvtColor(*(s32*)((s32)npc + 0x104), &color2);
         animPoseSetMaterialFlagOn(*(s32*)((s32)npc + 0x104), 0x40);
     }
 
     disp = dispGetCurWork();
-    if (*(u8*)((s32)disp + 1) == 1) {
-        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
-    } else if (*(u8*)((s32)disp + 1) == 0) {
+    switch (*(u8*)((s32)disp + 1)) {
+    case 0:
         if ((*(u32*)npc & 0x800000) != 0) {
             animPoseGetCurrentAnim(*(s32*)((s32)npc + 0x104));
             pose = animPoseGetAnimPosePtr(*(s32*)((s32)npc + 0x104));
@@ -638,13 +690,17 @@ u8 npcDisp_offscreen(s32 cameraId, void* npc) {
         }
         animPoseMain(*(s32*)((s32)npc + 0x104));
         animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 1, rot, float_2_8041fd34);
-    } else if (*(u8*)((s32)disp + 1) < 3) {
+        break;
+    case 1:
+        animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 2, rot, float_2_8041fd34);
+        break;
+    case 2:
         animPoseDrawMtx(*(s32*)((s32)npc + 0x104), mtx, 3, rot, float_2_8041fd34);
+        break;
     }
     sysWaitDrawSync();
     GXReadBoundingBox(&x0, &y0, &x1, &y1);
     offscreenAddBoundingBox(*(s32*)((s32)npc + 0x110), x0, y0, x1, y1);
-    return 0;
 }
 
 void npcDisp_blur(s32 cameraId, void* npc) {
@@ -764,25 +820,25 @@ void npcDisp_blur(s32 cameraId, void* npc) {
 void npcInit(void) {
     extern void* __memAlloc(s32 heap, u32 size);
     extern void* release_wp;
-    extern s32 g_npcMainCount;
     u8* field = (u8*)&work;
-    u8* battle = field + 0x14;
     void* fbat;
 
     *(u32*)(field + 4) = 0x24;
-    *(void**)(field + 0xC) = __memAlloc(0, 0x7500);
-    memset(*(void**)(field + 0xC), 0, *(u32*)(field + 4) * 0x340);
+    *(void**)((u8*)&work + 0xC) = __memAlloc(0, *(u32*)(field + 4) * 0x340);
+    memset(*(void**)((u8*)&work + 0xC), 0, *(u32*)(field + 4) * 0x340);
     release_wp = __memAlloc(0, *(u32*)(field + 4) * 0x94);
 
-    *(u32*)(battle + 4) = 0x10;
-    *(void**)(battle + 0xC) = __memAlloc(0, 0x3400);
-    memset(*(void**)(battle + 0xC), 0, *(u32*)(battle + 4) * 0x340);
+    *(u32*)((u8*)&work + 0x18) = 0x10;
+    *(void**)((u8*)&work + 0x20) =
+        __memAlloc(0, *(u32*)((u8*)&work + 0x18) * 0x340);
+    memset(*(void**)((u8*)&work + 0x20), 0,
+           *(u32*)((u8*)&work + 0x18) * 0x340);
 
     fbat = __memAlloc(0, 0x580);
     *(void**)((u8*)gp + 0x168) = fbat;
-    memset(fbat, 0, 0x580);
+    memset(*(void**)((u8*)gp + 0x168), 0, 0x580);
     *(s16*)fbat = 0;
-    g_npcMainCount = 0;
+    npcMainCount = 0;
 }
 
 void npcReset(s32 battle) {
@@ -822,6 +878,11 @@ s32 npcEntry(char* name, char* modelName) {
     extern const f32 float_1_8041fc94;
     extern const f32 float_0_8041fc7c;
     extern s32 dat_8041fc6c;
+    typedef struct VecLocal {
+        f32 x;
+        f32 y;
+        f32 z;
+    } VecLocal;
     s32 wp;
     s32 max;
     s32 npc;
@@ -847,17 +908,9 @@ s32 npcEntry(char* name, char* modelName) {
     }
 
     npc = *(s32*)(data + 0xC);
-    i = 0;
-    if (max > 0) {
-        for (;;) {
-            if ((*(u32*)npc & 1) == 0) {
-                break;
-            }
-            i++;
-            npc += 0x340;
-            if (i >= max) {
-                break;
-            }
+    for (i = 0; i < max; i++, npc += 0x340) {
+        if ((*(u32*)npc & 1) == 0) {
+            break;
         }
     }
 
@@ -869,17 +922,11 @@ s32 npcEntry(char* name, char* modelName) {
         *(s32*)(npc + 0x104) = animPoseEntry(&str_hoshi_8041fd6c, (*(s32*)((s32)gp + 0x14) != 0));
     }
     animPosePeraOn(*(s32*)(npc + 0x104));
-    *(s32*)(npc + 0x8C) = *(s32*)wp;
-    *(s32*)(npc + 0x90) = *(s32*)(wp + 4);
-    *(s32*)(npc + 0x94) = *(s32*)(wp + 8);
-    *(s32*)(npc + 0x98) = *(s32*)(npc + 0x8C);
-    *(s32*)(npc + 0x9C) = *(s32*)(npc + 0x90);
-    *(s32*)(npc + 0xA0) = *(s32*)(npc + 0x94);
+    *(VecLocal*)(npc + 0x8C) = *(VecLocal*)wp;
+    *(VecLocal*)(npc + 0x98) = *(VecLocal*)(npc + 0x8C);
     *(f32*)(npc + 0x14C) = animPoseGetHeight(*(s32*)(npc + 0x104));
     *(f32*)(npc + 0x150) = animPoseGetRadius(*(s32*)(npc + 0x104));
-    *(s32*)(npc + 0xE0) = *(s32*)(wp + 0xC);
-    *(s32*)(npc + 0xE4) = *(s32*)(wp + 0x10);
-    *(s32*)(npc + 0xE8) = *(s32*)(wp + 0x14);
+    *(VecLocal*)(npc + 0xE0) = *(VecLocal*)(wp + 0xC);
     *(f32*)(npc + 0x154) = float_1_8041fc94;
     *(s32*)(npc + 0x108) = 0;
     *(char**)(npc + 0x10C) = &str_M_I_2_8041fd74;
@@ -922,8 +969,6 @@ void* npcGetTribe(const char* name) {
 void npcDelete(void* npc) {
     u8* entry = npc;
     s32 i;
-    u8* prev;
-    u8* next;
     s32 wp;
 
     for (i = 0; i < 4; i++) {
@@ -934,15 +979,15 @@ void npcDelete(void* npc) {
         *(void**)(entry + 0x330 + i * 4) = 0;
     }
 
-    prev = *(u8**)(entry + 0x324);
-    next = *(u8**)(entry + 0x328);
-    if (prev == 0) {
-        if (next != 0) *(void**)(next + 0x324) = 0;
-    } else if (next == 0) {
-        *(void**)(prev + 0x328) = 0;
-    } else {
-        *(void**)(prev + 0x328) = next;
-        *(void**)(next + 0x324) = prev;
+    if (*(u8**)(entry + 0x324) != 0) {
+        if (*(u8**)(entry + 0x328) != 0) {
+            *(void**)(*(u8**)(entry + 0x324) + 0x328) = *(u8**)(entry + 0x328);
+            *(void**)(*(u8**)(entry + 0x328) + 0x324) = *(u8**)(entry + 0x324);
+        } else {
+            *(void**)(*(u8**)(entry + 0x324) + 0x328) = 0;
+        }
+    } else if (*(u8**)(entry + 0x328) != 0) {
+        *(void**)(*(u8**)(entry + 0x328) + 0x324) = 0;
     }
 
     *(u32*)entry &= ~2;
@@ -1118,7 +1163,7 @@ void npcMain(void) {
     extern void animPoseSetMaterialFlagOff(s32 poseId, u32 flag);
     extern void animPoseSetMaterialEvtColor(s32 poseId, void* color);
     extern void dispEntry(s32 cameraId, s32 renderMode, void* callback, void* param, f32 order);
-    extern u8 _fbatFirstAttackAnnouceDisp(s32 cameraId, void* info);
+    extern void _fbatFirstAttackAnnouceDisp(s32 cameraId, void* info);
     extern void npcDisp(s32 cameraId, void* npc);
     extern void npcDisp_xlu(s32 cameraId, void* npc);
     extern void npcDisp_blur(s32 cameraId, void* npc);
@@ -1142,7 +1187,6 @@ void npcMain(void) {
     extern f64 compAngle(f64 a, f64 b);
     extern f64 reviseAngle(f64 angle);
     extern f64 sqrt(f64 value);
-    extern f64 __frsqrte(f64 value);
     extern f32 __float_nan[];
     extern const f64 double_0p5_802c13c8;
     extern const f64 double_3_802c13d0;
@@ -1169,6 +1213,7 @@ void npcMain(void) {
     extern f32 float_600_8041fce8;
     extern f32 float_100_8041fcf0;
     extern f32 float_0p25_8041fd58;
+    extern f32 float_0p05_8041fd54;
     extern f32 float_neg2_8041fd5c;
     extern f32 float_2_8041fd34;
     extern f32 float_5000_8041fd60;
@@ -1207,7 +1252,10 @@ void npcMain(void) {
     f32 moveZ;
     f32 speed;
     f32 speedRatio;
-    f32 tmpVec[23];
+    struct NpcMotionVec { f32 x, y, z; } cloudPos, breathTop, breathMiddle, breathBottom;
+    f32 motionVec[3];
+    f32 eventVec[3];
+    f32 territoryVec[3];
     f32 projVec[3];
     f32 outX;
     f32 outZ;
@@ -1383,7 +1431,7 @@ void npcMain(void) {
                 npcCheckHitMarioSide((s32)npc);
             }
 
-            PSVECSubtract((void*)((s32)npc + 0x8C), (void*)((s32)npc + 0x98), tmpVec);
+            PSVECSubtract((void*)((s32)npc + 0x8C), (void*)((s32)npc + 0x98), motionVec);
             if (((*(u32*)npc & 0x400) != 0) && (*(f32*)((s32)npc + 0x1A4) > float_0_8041fc7c)) {
                 {
                     f32 speedSq;
@@ -1393,7 +1441,7 @@ void npcMain(void) {
                     u32 exp;
                     s32 kind;
 
-                    speedSq = tmpVec[0] * tmpVec[0] + tmpVec[2] * tmpVec[2];
+                    speedSq = motionVec[0] * motionVec[0] + motionVec[2] * motionVec[2];
                     d = (f64)speedSq;
 
                     if (speedSq > float_0_8041fc7c) {
@@ -1465,25 +1513,28 @@ void npcMain(void) {
                 evt = evtGetPtrID(*(s32*)((s32)npc + 0x11C));
                 if (evt != 0 && ((*(u32*)((s32)evt + 0) & 2) == 0)) {
                     if (*(void**)((s32)npc + 0x13C) != 0 && ((*(u32*)npc & 0x20000000) == 0) && ((*(u32*)npc & 0x20) == 0)) {
-                        tmpVec[0] = *(f32*)((s32)npc + 0x8C);
-                        tmpVec[1] = *(f32*)((s32)npc + 0x90);
-                        tmpVec[2] = *(f32*)((s32)npc + 0x94);
-                        if (cloudGetBreathPower(*(f32*)((s32)npc + 0x14C), tmpVec) > float_0_8041fc7c) {
+                        cloudPos.x = *(f32*)((s32)npc + 0x8C);
+                        cloudPos.y = *(f32*)((s32)npc + 0x90);
+                        cloudPos.z = *(f32*)((s32)npc + 0x94);
+                        breathTop = cloudPos;
+                        if (cloudGetBreathPower(*(f32*)((s32)npc + 0x14C), &breathTop) > float_0_8041fc7c) {
                             *(u32*)((s32)npc + 0x140) |= 8;
                         } else {
-                            tmpVec[0] = *(f32*)((s32)npc + 0x8C);
-                            tmpVec[1] = *(f32*)((s32)npc + 0x90) -
+                            cloudPos.x = *(f32*)((s32)npc + 0x8C);
+                            cloudPos.y = *(f32*)((s32)npc + 0x90) -
                                         (*(f32*)((s32)npc + 0x150) * float_0p5_8041fc80);
-                            tmpVec[2] = *(f32*)((s32)npc + 0x94);
-                            if (cloudGetBreathPower(*(f32*)((s32)npc + 0x14C), tmpVec) >
+                            cloudPos.z = *(f32*)((s32)npc + 0x94);
+                            breathMiddle = cloudPos;
+                            if (cloudGetBreathPower(*(f32*)((s32)npc + 0x14C), &breathMiddle) >
                                 float_0_8041fc7c) {
                                 *(u32*)((s32)npc + 0x140) |= 8;
                             } else {
-                                tmpVec[0] = *(f32*)((s32)npc + 0x8C);
-                                tmpVec[1] = *(f32*)((s32)npc + 0x90) -
+                                cloudPos.x = *(f32*)((s32)npc + 0x8C);
+                                cloudPos.y = *(f32*)((s32)npc + 0x90) -
                                             *(f32*)((s32)npc + 0x150);
-                                tmpVec[2] = *(f32*)((s32)npc + 0x94);
-                                if (cloudGetBreathPower(*(f32*)((s32)npc + 0x14C), tmpVec) >
+                                cloudPos.z = *(f32*)((s32)npc + 0x94);
+                                breathBottom = cloudPos;
+                                if (cloudGetBreathPower(*(f32*)((s32)npc + 0x14C), &breathBottom) >
                                     float_0_8041fc7c) {
                                     *(u32*)((s32)npc + 0x140) |= 8;
                                 }
@@ -1558,6 +1609,48 @@ void npcMain(void) {
                         dx = *(f32*)((s32)player + 0x8C) - *(f32*)((s32)npc + 0x8C);
                         y = *(f32*)((s32)player + 0x90) - *(f32*)((s32)npc + 0x90);
                         dz = *(f32*)((s32)player + 0x94) - *(f32*)((s32)npc + 0x94);
+                        PSVECSubtract((void*)((s32)npc + 0x98),
+                                      (void*)((s32)npc + 0x8C), eventVec);
+                        eventAngle = *(f32*)((s32)npc + 0x144);
+                        if ((*(u32*)((s32)npc + 0x1D4) & 2) != 0) {
+                            f32 speedSq = eventVec[0] * eventVec[0] + eventVec[2] * eventVec[2];
+                            f64 speedD = (f64)speedSq;
+                            f64 inv;
+                            u32 bits;
+                            u32 exp;
+                            s32 kind;
+
+                            if (speedSq > float_0_8041fc7c) {
+                                inv = __frsqrte(speedD);
+                                inv = double_0p5_802c13c8 * inv *
+                                      -(speedD * inv * inv - double_3_802c13d0);
+                                inv = double_0p5_802c13c8 * inv *
+                                      -(speedD * inv * inv - double_3_802c13d0);
+                                speed = (f32)(speedD * double_0p5_802c13c8 * inv *
+                                              -(speedD * inv * inv - double_3_802c13d0));
+                            } else if (speedD < double_0_802c13d8) {
+                                speed = __float_nan[0];
+                            } else {
+                                bits = *(u32*)&speedSq;
+                                exp = bits & 0x7F800000;
+                                if (exp >= 0x7F800000) {
+                                    if (exp == 0x7F800000) {
+                                        kind = (bits & 0x7FFFFF) != 0 ? 1 : 2;
+                                    } else {
+                                        kind = 4;
+                                    }
+                                } else if (exp == 0) {
+                                    kind = (bits & 0x7FFFFF) != 0 ? 5 : 3;
+                                } else {
+                                    kind = 4;
+                                }
+                                speed = kind == 1 ? __float_nan[0] : speedSq;
+                            }
+                            if (speed > float_0p05_8041fd54) {
+                                eventAngle = *(f32*)((s32)npc + 0x1AC);
+                            }
+                        }
+                        player = marioGetPtr();
                         {
                             f32 distanceSq = dx * dx + dz * dz;
                             f64 distanceD = (f64)distanceSq;
@@ -1605,7 +1698,7 @@ void npcMain(void) {
                             (distance <= *(f32*)((s32)npc + 0x228)) &&
                             (y <= *(f32*)((s32)npc + 0x20C)) &&
                             (-y <= *(f32*)((s32)npc + 0x218))) {
-                            eventAngle = (f32)compAngle(*(f32*)((s32)npc + 0x144),
+                            eventAngle = (f32)compAngle(eventAngle,
                                                        (f32)angleABf(float_0_8041fc7c,
                                                                    float_0_8041fc7c, dx, dz));
                             if ((eventAngle <= float_0p5_8041fc80 *
@@ -1672,10 +1765,13 @@ void npcMain(void) {
                                 distance = float_0_8041fc7c;
                             }
                         }
+                        PSVECSubtract((void*)((s32)npc + 0x98),
+                                      (void*)((s32)npc + 0x8C), territoryVec);
                         eventAngle = float_270_8041fcc4;
                         if (reviseAngle(*(f32*)((s32)npc + 0x144)) < float_180_8041fccc) {
                             eventAngle = float_90_8041fcb0;
                         }
+                        player = marioGetPtr();
                         interrupt = 0;
                         if (((*(u32*)player & 0x82000000) == 0) &&
                             ((*(u32*)((s32)player + 8) & 1) == 0) &&
@@ -1739,7 +1835,7 @@ void npcMain(void) {
                                         distance = kind == 1 ? __float_nan[0] : distanceSq;
                                     }
                                 }
-                                if (distance > float_0p75_8041fcd4 *
+                                if (distance > 0.75 *
                                                *(f32*)((s32)npc + 0x214)) {
                                     interrupt = 0;
                                 }
@@ -1995,9 +2091,7 @@ void npcSetMarioAutoTalkPose(const char* stay, const char* talk) {
 }
 
 void npcSetTalkPose(char* talkPose) {
-    extern char str_x_party_802c1444[];
     extern char str_party_8041fd40[];
-    extern char str_extparty_802c1450[];
     extern char str_mario_8041fd48[];
     s32 wp;
     s32 count;
@@ -2005,7 +2099,7 @@ void npcSetTalkPose(char* talkPose) {
     void* npc;
     void* party;
 
-    if (*talkPose == 0 || strcmp(talkPose, str_x_party_802c1444) == 0) {
+    if (*talkPose == 0 || strcmp(talkPose, "(^x^)party") == 0) {
         return;
     }
     if (strcmp(talkPose, str_party_8041fd40) == 0) {
@@ -2015,7 +2109,7 @@ void npcSetTalkPose(char* talkPose) {
         }
         return;
     }
-    if (strcmp(talkPose, str_extparty_802c1450) == 0) {
+    if (strcmp(talkPose, "extparty") == 0) {
         party = partyGetPtr(marioGetExtraPartyId());
         if (party != 0) {
             partyChgPoseId(party, 7);
@@ -2046,9 +2140,7 @@ void npcSetTalkPose(char* talkPose) {
 }
 
 void npcSetStayPose(char* stayPose) {
-    extern char str_x_party_802c1444[];
     extern char str_party_8041fd40[];
-    extern char str_extparty_802c1450[];
     extern char str_mario_8041fd48[];
     s32 wp;
     s32 count;
@@ -2056,7 +2148,7 @@ void npcSetStayPose(char* stayPose) {
     void* npc;
     void* party;
 
-    if (*stayPose == 0 || strcmp(stayPose, str_x_party_802c1444) == 0) {
+    if (*stayPose == 0 || strcmp(stayPose, "(^x^)party") == 0) {
         return;
     }
     if (strcmp(stayPose, str_party_8041fd40) == 0) {
@@ -2066,7 +2158,7 @@ void npcSetStayPose(char* stayPose) {
         }
         return;
     }
-    if (strcmp(stayPose, str_extparty_802c1450) == 0) {
+    if (strcmp(stayPose, "extparty") == 0) {
         party = partyGetPtr(marioGetExtraPartyId());
         if (party != 0) {
             partyChgPoseId(party, 1);
@@ -2096,11 +2188,11 @@ void npcSetStayPose(char* stayPose) {
     }
 }
 
+#pragma opt_common_subs off
 u8 npcCheckHitMarioSide(s32 pNpc) {
     extern f32 angleABf(f32, f32, f32, f32);
     extern f32 compAngle(f32, f32);
-    extern f32 __fabsf(f32);
-    extern f64 __frsqrte(f64);
+
     extern f32 __float_nan[];
     extern s32 marioChkWallAround(void*, s32, f32, f32, f32, f32);
     extern const u8 vec3_802c11f8[];
@@ -2122,6 +2214,8 @@ u8 npcCheckHitMarioSide(s32 pNpc) {
     extern const f32 float_2_8041fd34;
     extern const f32 float_160_8041fd38;
     extern const f32 float_20_8041fd3c;
+    extern const f32 float_5_8041fd08;
+    extern const f32 float_0p5_8041fc80;
 
     const u8* constBase;
     void* mario;
@@ -2143,9 +2237,6 @@ u8 npcCheckHitMarioSide(s32 pNpc) {
     f32 threshold;
     f64 d;
     f64 inv;
-    f64 half;
-    f64 three;
-    f64 zeroD;
     u32 bits;
     u32 exp;
     s32 kind;
@@ -2168,13 +2259,8 @@ u8 npcCheckHitMarioSide(s32 pNpc) {
 
     dist = PSVECDistance(pos, (void*)(pNpc + 0x8C));
 
-    /*
-     * Keep these two literals compiler-owned for now.  They are the two
-     * objects whose removal made the preserved 43.8771 candidate shrink the
-     * TU-wide .sdata2 pool from 48 to 40 bytes.
-     */
-    radius = (5.0f + (*(f32*)((s32)mario + 0x1B8) +
-              *(f32*)(pNpc + 0x14C))) * 0.5f;
+    radius = (float_5_8041fd08 + (*(f32*)((s32)mario + 0x1B8) +
+              *(f32*)(pNpc + 0x14C))) * float_0p5_8041fc80;
 
     if (dist > radius) {
         return 0;
@@ -2188,7 +2274,7 @@ u8 npcCheckHitMarioSide(s32 pNpc) {
         return 0;
     }
 
-    *(void**)((s32)mario + 0x2A0) = (void*)pNpc;
+    *(void**)((s32)mario + 0x1DC) = (void*)pNpc;
 
     angle = angleABf(
         *(f32*)((s32)mario + 0x8C),
@@ -2376,38 +2462,22 @@ u8 npcCheckHitMarioSide(s32 pNpc) {
     d = (f64)lenSq;
 
     if (lenSq > float_0_8041fc7c) {
-        half = *(const f64*)(constBase + 0x1D0);
-        three = *(const f64*)(constBase + 0x1D8);
-
         inv = __frsqrte(d);
-        inv = half * inv * -(d * inv * inv - three);
-        inv = half * inv * -(d * inv * inv - three);
-        len = (f32)(d * half * inv * -(d * inv * inv - three));
+        inv = *(const f64*)(constBase + 0x1D0) * inv *
+              (*(const f64*)(constBase + 0x1D8) - d * inv * inv);
+        inv = *(const f64*)(constBase + 0x1D0) * inv *
+              (*(const f64*)(constBase + 0x1D8) - d * inv * inv);
+        len = (f32)(d * *(const f64*)(constBase + 0x1D0) * inv *
+                    (*(const f64*)(constBase + 0x1D8) - d * inv * inv));
     } else {
-        zeroD = *(const f64*)(constBase + 0x1E0);
-
-        if (d < zeroD) {
+        if (d < *(const f64*)(constBase + 0x1E0)) {
             len = __float_nan[0];
         } else {
             bits = *(u32*)&lenSq;
             exp = bits;
             exp &= 0x7F800000;
 
-            if (exp == 0x7F800000) {
-                if ((bits & 0x7FFFFF) != 0) {
-                    kind = 1;
-                } else {
-                    kind = 2;
-                }
-            } else if ((exp < 0x7F800000) && (exp == 0)) {
-                if ((bits & 0x7FFFFF) != 0) {
-                    kind = 5;
-                } else {
-                    kind = 3;
-                }
-            } else {
-                kind = 4;
-            }
+            switch (exp) { case 0x7F800000: if (bits & 0x7FFFFF) kind = 1; else kind = 2; break; case 0: if (bits & 0x7FFFFF) kind = 5; else kind = 3; break; default: kind = 4; break; }
 
             if (kind == 1) {
                 len = __float_nan[0];
@@ -2435,16 +2505,26 @@ u8 npcCheckHitMarioSide(s32 pNpc) {
     marioChkWallAround(
         (void*)((s32)mario + 0x8C),
         0,
-        0.0f,
-        160.0f + angle,
+        float_0_8041fc7c,
+        float_160_8041fd38 + angle,
         float_20_8041fd3c,
         *(f32*)((s32)mario + 0x1BC));
 
     return 1;
 }
+#pragma opt_common_subs reset
 
 void npcMoveG(void* pNpc) {
     extern void* hitCheckFilter(double, double, double, double, double, double, s32, void*, void*, void*, void*, void*, void*, void*);
+    extern f32 float_0_8041fc7c;
+    extern f32 float_neg1_8041fcd8;
+    extern f32 float_0p5_8041fc80;
+    extern f32 float_0p8_8041fc90;
+    extern f32 float_0p4_8041fcf4;
+    extern f32 float_neg980_8041fcfc;
+    extern f32 float_0p15_8041fd00;
+    extern f32 float_neg1000_8041fd04;
+    extern f64 fabs(f64 value);
     f32 oldYVel;
     f32 addY;
     f32 walking;
@@ -2463,30 +2543,30 @@ void npcMoveG(void* pNpc) {
     u32 dampedJump;
 
     oldYVel = *(f32*)((s32)pNpc + 0x1B8);
-    *(f32*)((s32)pNpc + 0x1B8) = 0.0f;
+    *(f32*)((s32)pNpc + 0x1B8) = float_0_8041fc7c;
     jumpFlags = *(u32*)((s32)pNpc + 0x1D4);
     dampedJump = jumpFlags & 0x100000;
     if (dampedJump != 0 && (jumpFlags & 0x10000000) == 0) {
-        oldYVel *= 0.5f;
+        oldYVel *= float_0p5_8041fc80;
     }
 
-    addY = 0.0f;
+    addY = float_0_8041fc7c;
     if ((*(u32*)pNpc & 0x20000) != 0) {
         remain = *(f32*)((s32)pNpc + 0x180);
         walking = *(f32*)((s32)pNpc + 0x1A4);
         if (dampedJump == 0 || (jumpFlags & 0x10000000) != 0) {
             addY = *(f32*)((s32)pNpc + 0x1C4) * walking +
-                   -980.0f * *(f32*)((s32)pNpc + 0x1CC) * (remain * remain - (remain - walking) * (remain - walking));
+                   float_neg980_8041fcfc * *(f32*)((s32)pNpc + 0x1CC) * (remain * remain - (remain - walking) * (remain - walking));
         } else {
-            addY = 0.4f * *(f32*)((s32)pNpc + 0x1C4) * walking +
-                   0.15f * -980.0f * *(f32*)((s32)pNpc + 0x1CC) * (remain * remain - (remain - walking) * (remain - walking));
+            addY = float_0p4_8041fcf4 * *(f32*)((s32)pNpc + 0x1C4) * walking +
+                   float_0p15_8041fd00 * float_neg980_8041fcfc * *(f32*)((s32)pNpc + 0x1CC) * (remain * remain - (remain - walking) * (remain - walking));
         }
         addY *= *(f32*)((s32)pNpc + 0x1C8);
-        if (*(f32*)((s32)pNpc + 0x1D0) > 0.0f) {
+        if (*(f32*)((s32)pNpc + 0x1D0) > float_0_8041fc7c) {
             if (dampedJump == 0) {
                 minAdd = -*(f32*)((s32)pNpc + 0x1D0) * walking;
             } else {
-                minAdd = 0.5f * -*(f32*)((s32)pNpc + 0x1D0) * walking;
+                minAdd = float_0p5_8041fc80 * -*(f32*)((s32)pNpc + 0x1D0) * walking;
             }
             if (addY < minAdd) {
                 addY = minAdd;
@@ -2494,28 +2574,23 @@ void npcMoveG(void* pNpc) {
         }
     }
 
-    addY += oldYVel;
+    oldYVel += addY;
     if ((*(u32*)pNpc & 0x10) == 0) {
-        *(f32*)((s32)pNpc + 0x90) += addY;
-        if (*(f32*)((s32)pNpc + 0x90) < -1000.0f) {
-            *(f32*)((s32)pNpc + 0x90) = -1000.0f;
+        *(f32*)((s32)pNpc + 0x90) += oldYVel;
+        if (*(f32*)((s32)pNpc + 0x90) < float_neg1000_8041fd04) {
+            *(f32*)((s32)pNpc + 0x90) = float_neg1000_8041fd04;
         }
-    } else if (addY != 0.0f) {
-        if (addY > 0.0f) {
+    } else if (oldYVel != float_0_8041fc7c) {
+        if (oldYVel > float_0_8041fc7c) {
             *(u32*)((s32)pNpc + 0x1D4) |= 1;
-            *(f32*)((s32)pNpc + 0x90) += addY;
+            *(f32*)((s32)pNpc + 0x90) += oldYVel;
         } else {
-            heightPart = 0.8f * *(f32*)((s32)pNpc + 0x150);
-            hitDist = heightPart;
-            if (addY < 0.0f) {
-                hitDist += -addY;
-            } else {
-                hitDist += addY;
-            }
+            heightPart = float_0p8_8041fc90 * *(f32*)((s32)pNpc + 0x150);
+            hitDist = heightPart + (f32)fabs((f64)oldYVel);
             hit = hitCheckFilter((double)*(f32*)((s32)pNpc + 0x8C),
                                  (double)(*(f32*)((s32)pNpc + 0x90) + heightPart),
                                  (double)*(f32*)((s32)pNpc + 0x94),
-                                 0.0, -1.0, 0.0, 0,
+                                 float_0_8041fc7c, float_neg1_8041fcd8, float_0_8041fc7c, 0,
                                  &hitTmp, &hitY, &hitA, &hitDist, &hitB, &hitC, &hitD);
             *(void**)((s32)pNpc + 0x300) = hit;
             if (hit != 0) {
@@ -2526,10 +2601,10 @@ void npcMoveG(void* pNpc) {
                 return;
             }
 
-            hit = hitCheckFilter((double)(0.5f * *(f32*)((s32)pNpc + 0x14C) + *(f32*)((s32)pNpc + 0x8C)),
+            hit = hitCheckFilter((double)(float_0p5_8041fc80 * *(f32*)((s32)pNpc + 0x14C) + *(f32*)((s32)pNpc + 0x8C)),
                                  (double)(*(f32*)((s32)pNpc + 0x90) + heightPart),
                                  (double)*(f32*)((s32)pNpc + 0x94),
-                                 0.0, -1.0, 0.0, 0,
+                                 float_0_8041fc7c, float_neg1_8041fcd8, float_0_8041fc7c, 0,
                                  &hitTmp, &hitY, &hitA, &hitDist, &hitB, &hitC, &hitD);
             *(void**)((s32)pNpc + 0x300) = hit;
             if (hit != 0) {
@@ -2540,10 +2615,10 @@ void npcMoveG(void* pNpc) {
                 return;
             }
 
-            hit = hitCheckFilter((double)(*(f32*)((s32)pNpc + 0x8C) - 0.5f * *(f32*)((s32)pNpc + 0x14C)),
+            hit = hitCheckFilter((double)(*(f32*)((s32)pNpc + 0x8C) - float_0p5_8041fc80 * *(f32*)((s32)pNpc + 0x14C)),
                                  (double)(*(f32*)((s32)pNpc + 0x90) + heightPart),
                                  (double)*(f32*)((s32)pNpc + 0x94),
-                                 0.0, -1.0, 0.0, 0,
+                                 float_0_8041fc7c, float_neg1_8041fcd8, float_0_8041fc7c, 0,
                                  &hitTmp, &hitY, &hitA, &hitDist, &hitB, &hitC, &hitD);
             *(void**)((s32)pNpc + 0x300) = hit;
             if (hit != 0) {
@@ -2555,7 +2630,7 @@ void npcMoveG(void* pNpc) {
             }
 
             *(u32*)((s32)pNpc + 0x1D4) |= 1;
-            *(f32*)((s32)pNpc + 0x90) += addY;
+            *(f32*)((s32)pNpc + 0x90) += oldYVel;
         }
     }
     return;
@@ -2578,17 +2653,17 @@ f32 npcTransRytoFaceDir(void* npc) {
     return float_270_8041fcc4;
 }
 
+#pragma opt_common_subs off
 s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* outAngle) {
-    extern f64 angleABf(f64 x1, f64 z1, f64 x2, f64 z2);
-    extern void sincosf(f64 angle, f32* sinOut, f32* cosOut);
-    extern f64 reviseAngle(f64 angle);
+    extern f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
+    extern void sincosf(f32 angle, f32* sinOut, f32* cosOut);
+    extern f32 reviseAngle(f32 angle);
     extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 flags,
                               void* outA, void* outB, void* outC, void* dist,
                               void* outNX, void* outNY, void* outNZ);
     extern s32 hitCheckAttr(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 attr,
                             void* outA, void* outB, void* outC, void* dist,
                             void* outNX, void* outNY, void* outNZ);
-    extern f64 __frsqrte(f64 x);
     extern f32 __float_nan[];
     extern const u8 vec3_802c11f8[];
 
@@ -2606,14 +2681,16 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
     f32 cosDir;
     f32 lenSq;
     f32 moveLen;
-    f32 dist;
     f32 nyAdd;
-    f32 nx;
-    f32 ny;
-    f32 nz;
-    s32 outA;
-    s32 outB;
-    s32 outC;
+    struct {
+        f32 nz;
+        f32 ny;
+        f32 nx;
+        f32 dist;
+        s32 outC;
+        s32 outB;
+        s32 outA;
+    } hitOut;
     s32 hit;
     f32 dot;
     f32 normalLenSq;
@@ -2651,24 +2728,14 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
         u32 bits = *(u32*)&lenSq;
         u32 exponent = bits & 0x7F800000;
         s32 kind;
-        if (exponent >= 0x7F800000) {
-            if (exponent == 0x7F800000) {
-                if ((bits & 0x7FFFFF) != 0) {
-                    kind = 1;
-                } else {
-                    kind = 2;
-                }
-            } else {
-                kind = 4;
-            }
-        } else if (exponent == 0) {
-            if ((bits & 0x7FFFFF) != 0) {
-                kind = 5;
-            } else {
-                kind = 3;
-            }
-        } else {
-            kind = 4;
+        switch (exponent) {
+        case 0x7F800000:
+            if (bits & 0x7FFFFF) kind = 1; else kind = 2;
+            break;
+        case 0:
+            if (bits & 0x7FFFFF) kind = 5; else kind = 3;
+            break;
+        default: kind = 4; break;
         }
         moveLen = lenSq;
         if (kind == 1) {
@@ -2676,7 +2743,7 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
         }
     }
 
-    dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
+    hitOut.dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
     nyAdd = float_0p2_8041fcec * *(f32*)((s32)npc + 0x150);
     if (nyAdd > float_10_8041fc98) {
         nyAdd = float_10_8041fc98;
@@ -2686,18 +2753,20 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
         hit = hitCheckAttr(*(f32*)((s32)npc + 0x8C),
                            *(f32*)((s32)npc + 0x90) + nyAdd,
                            *(f32*)((s32)npc + 0x94), sinDir, float_0_8041fc7c, cosDir, 4,
-                           &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+                           &hitOut.outA, &hitOut.outB, &hitOut.outC, &hitOut.dist,
+                           &hitOut.nx, &hitOut.ny, &hitOut.nz);
     } else {
         hit = hitCheckFilter(*(f32*)((s32)npc + 0x8C),
                              *(f32*)((s32)npc + 0x90) + nyAdd,
                              *(f32*)((s32)npc + 0x94), sinDir, float_0_8041fc7c, cosDir, 0,
-                             &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+                             &hitOut.outA, &hitOut.outB, &hitOut.outC, &hitOut.dist,
+                             &hitOut.nx, &hitOut.ny, &hitOut.nz);
     }
 
     if (hit != 0) {
-        dot = moveX * nx + moveZ * nz;
-        *outX += float_0p5_8041fc80 * -(dot * nx - moveX);
-        *outZ += float_0p5_8041fc80 * -(dot * nz - moveZ);
+        dot = moveX * hitOut.nx + moveZ * hitOut.nz;
+        *outX += float_0p5_8041fc80 * -(dot * hitOut.nx - moveX);
+        *outZ += float_0p5_8041fc80 * -(dot * hitOut.nz - moveZ);
 
         if (*(u32*)npc & 0x10000) {
             f32 baseAngle;
@@ -2705,8 +2774,8 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
             f32 delta;
             baseAngle = reviseAngle(float_180_8041fccc + *outAngle);
             normalAngle = reviseAngle(angleABf(float_0_8041fc7c, float_0_8041fc7c,
-                                               float_100_8041fcf0 * nx,
-                                               float_100_8041fcf0 * nz));
+                                               float_100_8041fcf0 * hitOut.nx,
+                                               float_100_8041fcf0 * hitOut.nz));
             delta = reviseAngle(normalAngle - baseAngle);
             *outAngle = (f32)(s32)reviseAngle(normalAngle + delta);
         }
@@ -2730,47 +2799,39 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
         u32 bits = *(u32*)&lenSq;
         u32 exponent = bits & 0x7F800000;
         s32 kind;
-        if (exponent >= 0x7F800000) {
-            if (exponent == 0x7F800000) {
-                if ((bits & 0x7FFFFF) != 0) {
-                    kind = 1;
-                } else {
-                    kind = 2;
-                }
-            } else {
-                kind = 4;
-            }
-        } else if (exponent == 0) {
-            if ((bits & 0x7FFFFF) != 0) {
-                kind = 5;
-            } else {
-                kind = 3;
-            }
-        } else {
-            kind = 4;
+        switch (exponent) {
+        case 0x7F800000:
+            if (bits & 0x7FFFFF) kind = 1; else kind = 2;
+            break;
+        case 0:
+            if (bits & 0x7FFFFF) kind = 5; else kind = 3;
+            break;
+        default: kind = 4; break;
         }
         moveLen = lenSq;
         if (kind == 1) {
             moveLen = __float_nan[0];
         }
     }
-    dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
+    hitOut.dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
     nyAdd = float_0p4_8041fcf4 * *(f32*)((s32)npc + 0x150);
 
     if (*(u32*)npc & 0x2000) {
         hit = hitCheckAttr(*(f32*)((s32)npc + 0x8C),
                            *(f32*)((s32)npc + 0x90) + nyAdd,
                            *(f32*)((s32)npc + 0x94), sinDir, float_0_8041fc7c, cosDir, 4,
-                           &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+                           &hitOut.outA, &hitOut.outB, &hitOut.outC, &hitOut.dist,
+                           &hitOut.nx, &hitOut.ny, &hitOut.nz);
     } else {
         hit = hitCheckFilter(*(f32*)((s32)npc + 0x8C),
                              *(f32*)((s32)npc + 0x90) + nyAdd,
                              *(f32*)((s32)npc + 0x94), sinDir, float_0_8041fc7c, cosDir, 0,
-                             &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+                             &hitOut.outA, &hitOut.outB, &hitOut.outC, &hitOut.dist,
+                             &hitOut.nx, &hitOut.ny, &hitOut.nz);
     }
 
     if (hit != 0) {
-        normalLenSq = nx * nx + nz * nz;
+        normalLenSq = hitOut.nx * hitOut.nx + hitOut.nz * hitOut.nz;
         if (normalLenSq > float_0_8041fc7c) {
             d = (f64)normalLenSq;
             inv = __frsqrte(d);
@@ -2787,24 +2848,14 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
             u32 bits = *(u32*)&normalLenSq;
             u32 exponent = bits & 0x7F800000;
             s32 kind;
-            if (exponent >= 0x7F800000) {
-                if (exponent == 0x7F800000) {
-                    if ((bits & 0x7FFFFF) != 0) {
-                        kind = 1;
-                    } else {
-                        kind = 2;
-                    }
-                } else {
-                    kind = 4;
-                }
-            } else if (exponent == 0) {
-                if ((bits & 0x7FFFFF) != 0) {
-                    kind = 5;
-                } else {
-                    kind = 3;
-                }
-            } else {
-                kind = 4;
+            switch (exponent) {
+            case 0x7F800000:
+                if (bits & 0x7FFFFF) kind = 1; else kind = 2;
+                break;
+            case 0:
+                if (bits & 0x7FFFFF) kind = 5; else kind = 3;
+                break;
+            default: kind = 4; break;
             }
             normalLen = normalLenSq;
             if (kind == 1) {
@@ -2812,11 +2863,11 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
             }
         }
 
-        slopeAngle = angleABf(float_0_8041fc7c, float_0_8041fc7c, normalLen, -ny);
+        slopeAngle = angleABf(float_0_8041fc7c, float_0_8041fc7c, normalLen, -hitOut.ny);
         if (slopeAngle >= float_45_8041fcf8) {
-            dot = moveX * nx + moveZ * nz;
-            *outX += float_0p5_8041fc80 * -(dot * nx - moveX);
-            *outZ += float_0p5_8041fc80 * -(dot * nz - moveZ);
+            dot = moveX * hitOut.nx + moveZ * hitOut.nz;
+            *outX += float_0p5_8041fc80 * -(dot * hitOut.nx - moveX);
+            *outZ += float_0p5_8041fc80 * -(dot * hitOut.nz - moveZ);
 
             if (*(u32*)npc & 0x10000) {
                 f32 baseAngle;
@@ -2824,8 +2875,8 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
                 f32 delta;
                 baseAngle = reviseAngle(float_180_8041fccc + *outAngle);
                 normalAngle = reviseAngle(angleABf(float_0_8041fc7c, float_0_8041fc7c,
-                                                   float_100_8041fcf0 * nx,
-                                                   float_100_8041fcf0 * nz));
+                                                   float_100_8041fcf0 * hitOut.nx,
+                                                   float_100_8041fcf0 * hitOut.nz));
                 delta = reviseAngle(normalAngle - baseAngle);
                 *outAngle = (f32)(s32)reviseAngle(normalAngle + delta);
             }
@@ -2837,53 +2888,48 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
     if (lenSq > float_0_8041fc7c) {
         d = (f64)lenSq;
         inv = __frsqrte(d);
-        inv = 0.5 * inv * (3.0 - d * inv * inv);
-        inv = 0.5 * inv * (3.0 - d * inv * inv);
-        inv = 0.5 * inv * (3.0 - d * inv * inv);
+        inv = *(f64*)(constBase + 0x1D0) * inv *
+              (*(f64*)(constBase + 0x1D8) - d * inv * inv);
+        inv = *(f64*)(constBase + 0x1D0) * inv *
+              (*(f64*)(constBase + 0x1D8) - d * inv * inv);
+        inv = *(f64*)(constBase + 0x1D0) * inv *
+              (*(f64*)(constBase + 0x1D8) - d * inv * inv);
         moveLen = (f32)(d * inv);
-    } else if (lenSq < float_0_8041fc7c) {
+    } else if ((f64)lenSq < *(f64*)(constBase + 0x1E0)) {
         moveLen = __float_nan[0];
     } else {
         u32 bits = *(u32*)&lenSq;
         u32 exponent = bits & 0x7F800000;
         s32 kind;
-        if (exponent >= 0x7F800000) {
-            if (exponent == 0x7F800000) {
-                if ((bits & 0x7FFFFF) != 0) {
-                    kind = 1;
-                } else {
-                    kind = 2;
-                }
-            } else {
-                kind = 4;
-            }
-        } else if (exponent == 0) {
-            if ((bits & 0x7FFFFF) != 0) {
-                kind = 5;
-            } else {
-                kind = 3;
-            }
-        } else {
-            kind = 4;
+        switch (exponent) {
+        case 0x7F800000:
+            if (bits & 0x7FFFFF) kind = 1; else kind = 2;
+            break;
+        case 0:
+            if (bits & 0x7FFFFF) kind = 5; else kind = 3;
+            break;
+        default: kind = 4; break;
         }
         moveLen = lenSq;
         if (kind == 1) {
             moveLen = __float_nan[0];
         }
     }
-    dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
+    hitOut.dist = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x14C) + moveLen;
     nyAdd = float_0p75_8041fcd4 * *(f32*)((s32)npc + 0x150);
 
     if (*(u32*)npc & 0x2000) {
         hit = hitCheckAttr(*(f32*)((s32)npc + 0x8C),
                            *(f32*)((s32)npc + 0x90) + nyAdd,
                            *(f32*)((s32)npc + 0x94), sinDir, float_0_8041fc7c, cosDir, 4,
-                           &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+                           &hitOut.outA, &hitOut.outB, &hitOut.outC, &hitOut.dist,
+                           &hitOut.nx, &hitOut.ny, &hitOut.nz);
     } else {
         hit = hitCheckFilter(*(f32*)((s32)npc + 0x8C),
                              *(f32*)((s32)npc + 0x90) + nyAdd,
                              *(f32*)((s32)npc + 0x94), sinDir, float_0_8041fc7c, cosDir, 0,
-                             &outA, &outB, &outC, &dist, &nx, &ny, &nz);
+                             &hitOut.outA, &hitOut.outB, &hitOut.outC, &hitOut.dist,
+                             &hitOut.nx, &hitOut.ny, &hitOut.nz);
     }
 
     if (hit == 0) {
@@ -2892,9 +2938,9 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
         return 0;
     }
 
-    dot = moveX * nx + moveZ * nz;
-    *outX += float_0p5_8041fc80 * -(dot * nx - moveX);
-    *outZ += float_0p5_8041fc80 * -(dot * nz - moveZ);
+    dot = moveX * hitOut.nx + moveZ * hitOut.nz;
+    *outX += float_0p5_8041fc80 * -(dot * hitOut.nx - moveX);
+    *outZ += float_0p5_8041fc80 * -(dot * hitOut.nz - moveZ);
 
     if (*(u32*)npc & 0x10000) {
         f32 baseAngle;
@@ -2902,18 +2948,20 @@ s32 npcHitCheckSide(void* npc, f32 moveX, f32 moveZ, f32* outX, f32* outZ, f32* 
         f32 delta;
         baseAngle = reviseAngle(float_180_8041fccc + *outAngle);
         normalAngle = reviseAngle(angleABf(float_0_8041fc7c, float_0_8041fc7c,
-                                           float_100_8041fcf0 * nx,
-                                           float_100_8041fcf0 * nz));
+                                           float_100_8041fcf0 * hitOut.nx,
+                                           float_100_8041fcf0 * hitOut.nz));
         delta = reviseAngle(normalAngle - baseAngle);
         *outAngle = (f32)(s32)reviseAngle(normalAngle + delta);
     }
 
     return hit;
 }
+#pragma opt_common_subs reset
 
 void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 radius) {
     extern f32 __float_nan[];
     extern const u8 vec3_802c11f8[];
+    extern const f32 float_0_8041fc7c;
     u8* workPtr;
     s32 count;
     s32 i;
@@ -2924,18 +2972,16 @@ void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 radius) {
     constBase = vec3_802c11f8;
 
     workPtr = (u8*)&work;
-    found = 0;
-
     if (gp->inBattle != 0) {
         workPtr += 0x14;
     }
 
     count = *(s32*)(workPtr + 4);
+    found = 0;
     npc = *(u8**)(workPtr + 0xC);
 
-    if (count > 0) {
-        for (i = 0; i < count; i++) {
-            if ((*(u32*)npc & 1) != 0) {
+    for (i = 0; i < count; i++) {
+        if ((*(u32*)npc & 1) != 0) {
                 f32 dx;
                 f32 dy;
                 f32 dz;
@@ -2951,7 +2997,7 @@ void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 radius) {
                 dzSq = dz * dz;
                 xzSq = dxSq + dzSq;
 
-                if (xzSq > 0.0f) {
+                if (xzSq > float_0_8041fc7c) {
                     f64 value;
                     f64 inv;
 
@@ -2971,24 +3017,14 @@ void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 radius) {
                     u32 exponent = bits & 0x7F800000;
                     s32 kind;
 
-                    if (exponent >= 0x7F800000) {
-                        if (exponent == 0x7F800000) {
-                            if ((bits & 0x7FFFFF) != 0) {
-                                kind = 1;
-                            } else {
-                                kind = 2;
-                            }
-                        } else {
-                            kind = 4;
-                        }
-                    } else if (exponent == 0) {
-                        if ((bits & 0x7FFFFF) != 0) {
-                            kind = 5;
-                        } else {
-                            kind = 3;
-                        }
-                    } else {
-                        kind = 4;
+                    switch (exponent) {
+                    case 0x7F800000:
+                        if (bits & 0x7FFFFF) kind = 1; else kind = 2;
+                        break;
+                    case 0:
+                        if (bits & 0x7FFFFF) kind = 5; else kind = 3;
+                        break;
+                    default: kind = 4; break;
                     }
                     if (kind == 1) {
                         xzDist = __float_nan[0];
@@ -2997,13 +3033,12 @@ void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 radius) {
                     }
                 }
 
-                if (xzDist < radius) {
-                    found = npc;
-                }
+            if ((dxSq + dy * dy + dzSq) >= float_0_8041fc7c && xzDist < radius) {
+                found = npc;
             }
-
-            npc += 0x340;
         }
+
+        npc += 0x340;
     }
 
     return found;
@@ -3018,8 +3053,6 @@ void fbatChangeMode(s16 mode) {
 }
 
 u8 fbatSetAttackAnnounce(s32 flag) {
-    extern char str_fb_sensei_shita_802c13e8[];
-    extern char str_fb_sensei_sareta_802c13f8[];
     extern s32 dat_8041fc70;
     extern s32 dat_8041fc74;
     s32 data;
@@ -3038,12 +3071,12 @@ u8 fbatSetAttackAnnounce(s32 flag) {
         case 0x800000:
         case 0x1000000:
         case 0x2000000:
-            *(char**)(data + 0x568) = str_fb_sensei_shita_802c13e8;
+            *(char**)(data + 0x568) = "fb_sensei_shita";
             *(s32*)(data + 0x558) = 2;
             *(s32*)(data + 0x56C) = dat_8041fc70;
             break;
         case 0x10000000:
-            *(char**)(data + 0x568) = str_fb_sensei_sareta_802c13f8;
+            *(char**)(data + 0x568) = "fb_sensei_sareta";
             *(s32*)(data + 0x558) = 1;
             *(s32*)(data + 0x56C) = dat_8041fc74;
             break;
@@ -3057,7 +3090,7 @@ void fbatSetAttackAnnounceEnable(void) {
     *(s32*)((s32)*(void**)((s32)gp + 0x168) + 0x550) = 1;
 }
 
-u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
+void _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
     extern char* msgSearch(char*);
     extern u32 FontGetMessageWidthLine(char*, u16*);
     extern void windowDispGX_Waku_col(double, double, double, double, double, u16, u32*);
@@ -3069,19 +3102,23 @@ u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
     extern const f32 float_0p1_8041fcdc;
     extern const f32 float_1_8041fc94;
     extern const f32 float_3_8041fce0;
+    extern const f32 float_10_8041fc98;
     extern u32 dat_8041fc78;
     char lines[512];
-    u16 lineCount[2];
     u32 color;
     u32 fontColor;
+    u16 lineCount[2];
     char* msg;
     char* out;
     char* dst;
     s32 i;
     s32 j;
     s32 height;
-    u32 width;
-    u32 halfWidth;
+    s32 yOffset;
+    s32 width;
+    s32 halfWidth;
+    f32 windowX;
+    f32 windowY;
     f32 x;
     f32 y;
     s8 c;
@@ -3092,8 +3129,8 @@ u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
     width = FontGetMessageWidthLine(msg, lineCount);
     lineCount[0]++;
     height = lineCount[0] * 0x1D + 3;
-    x += (f32)(irand(10000) % 5);
-    y += (f32)(irand(10000) % 5);
+    windowX = x + (f32)(irand(10000) % 5);
+    windowY = y + (f32)(irand(10000) % 5);
     if (lineCount[0] > 4) {
         lineCount[0] = 4;
     }
@@ -3101,20 +3138,22 @@ u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
     dst = out;
     for (i = 0; i < lineCount[0]; i++, dst += 0x80) {
         for (j = 0; j < 0x80; j++) {
-            c = *msg++;
+            c = *msg;
             if (c == 0 || c == '\n') {
                 dst[j] = 0;
+                msg++;
                 break;
             }
             dst[j] = c;
+            msg++;
         }
     }
 
     halfWidth = (width >> 1) & 0x7FFF;
     color = *(u32*)((s32)param_2 + 0x1C);
     windowDispGX_Waku_col(
-        (double)(float_0p1_8041fcdc * ((x - 10.0f) - (f32)halfWidth)),
-        (double)(y * float_0p1_8041fcdc),
+        (double)(float_0p1_8041fcdc * ((windowX - float_10_8041fc98) - (f32)halfWidth)),
+        (double)(windowY * float_0p1_8041fcdc),
         (double)((f32)((width & 0xFFFF) + 0x14) * float_0p1_8041fcdc),
         (double)((f32)height * float_0p1_8041fcdc),
         (double)float_1_8041fc94,
@@ -3127,11 +3166,15 @@ u8 _fbatFirstAttackAnnouceDisp(s32 param_1, void* param_2) {
     FontDrawScale(float_0p1_8041fcdc);
     x = float_0p1_8041fcdc * (x - (f32)halfWidth);
     out = lines;
-    for (i = 0; i < lineCount[0]; i++) {
-        FontDrawStringShake((double)x, (double)(float_0p1_8041fcdc * ((y + (f32)(-i * 0x1D)) - float_3_8041fce0)), out);
+    yOffset = 0;
+    for (i = 0; i < lineCount[0]; i++, yOffset -= 0x1D) {
+        FontDrawStringShake((double)x,
+                            (double)(float_0p1_8041fcdc *
+                                     ((y + (f32)yOffset) - float_3_8041fce0)),
+                            out);
         out += 0x80;
     }
-    return 0;
+    return;
 }
 
 void fbatEncountCheck(void) {
@@ -3144,6 +3187,9 @@ void fbatEncountCheck(void) {
     extern f32 reviseAngle(f64 angle);
     extern void effSmallStarEntry();
     extern f32 marioGetDispDir(void);
+    extern f64 __frsqrte(f64 value);
+    extern f32 __float_nan[];
+    extern const u8 vec3_802c11f8[];
     extern s32 hitCheckFilter(f64 x, f64 y, f64 z, f64 dx, f64 dy, f64 dz, s32 flags,
                               void* outX, void* outY, void* outZ, void* dist,
                               void* outNX, void* outNY, void* outNZ);
@@ -3165,8 +3211,6 @@ void fbatEncountCheck(void) {
     extern f32 float_180_8041fccc;
     extern f32 float_neg180_8041fcd0;
     extern f32 float_neg1_8041fcd8;
-    extern char str_SFX_BTL_FLD_ENEMY_DA_802c140c[];
-    extern char str_SFX_BTL_FLD_MARIO_DA_802c1428[];
 
     void* npcWork;
     void* player;
@@ -3188,19 +3232,12 @@ void fbatEncountCheck(void) {
     u32 flags;
     f32 bestDist;
     f32 dist;
-    f32 px;
-    f32 py;
-    f32 pz;
     f32 nx;
     f32 ny;
     f32 nz;
-    f32 nw;
-    f32 npcX;
-    f32 npcY;
-    f32 npcZ;
-    f32 width;
-    f32 height;
-    f32 radius;
+    f32 outNX;
+    f32 outNY;
+    f32 outNZ;
     f32 angle;
     f32 dispDir;
     f32 camDir;
@@ -3210,9 +3247,9 @@ void fbatEncountCheck(void) {
     f32 sinv;
     f32 cosv;
     f32 localPos[3];
-    f32 localDir[3];
-    f32 localOut[4];
+    const u8* constBase;
 
+    constBase = vec3_802c11f8;
     npcWork = (void*)&work;
     if (*(s32*)((s32)gp + 0x14) != 0) {
         npcWork = (void*)((s32)npcWork + 0x14);
@@ -3244,6 +3281,7 @@ void fbatEncountCheck(void) {
     npc = ((void* (*)(s32, void*))fbatHitCheck)(0x13F1, hitInfo);
 
     if (npc != 0 && *(s16*)fbatData == 1) {
+        fbatData = *(void**)((s32)gp + 0x168);
         if (*(s16*)fbatData == 1) {
             *(s16*)fbatData = 5;
             *(u8*)((s32)fbatData + 2) = 0;
@@ -3261,6 +3299,8 @@ void fbatEncountCheck(void) {
         flags = *(u32*)hitInfo;
 
         switch (flags) {
+            case 0x10000:
+                break;
             case 0x20000:
             case 0x40000:
             case 0x80000:
@@ -3272,7 +3312,15 @@ void fbatEncountCheck(void) {
             case 0x100000:
             case 0x200000:
             case 0x400000:
+                if (dbg_battleskip != 1) {
+                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), *(void**)(*(s32*)((s32)npc + 0x28) + 0x20), 1);
+                }
+                break;
             case 0x800000:
+                if (dbg_battleskip != 1) {
+                    animPoseSetAnim(*(s32*)((s32)npc + 0x104), *(void**)(*(s32*)((s32)npc + 0x28) + 0x20), 1);
+                }
+                break;
             case 0x1000000:
                 if (dbg_battleskip != 1) {
                     animPoseSetAnim(*(s32*)((s32)npc + 0x104), *(void**)(*(s32*)((s32)npc + 0x28) + 0x20), 1);
@@ -3340,16 +3388,33 @@ void fbatEncountCheck(void) {
             case 0x1000000:
                 effSmallStarEntry(3, 3, *(f32*)((s32)npc + 0x8C),
                                   *(f32*)((s32)npc + 0x90) + *(f32*)((s32)npc + 0x150),
-                                  *(f32*)((s32)npc + 0x94), float_0_8041fc7c, float_neg1_8041fcd8);
-                if (npc != 0) {
-                    psndSFXOn_3D(str_SFX_BTL_FLD_ENEMY_DA_802c140c, (void*)((s32)npc + 0x8C));
-                }
+                                  *(f32*)((s32)npc + 0x94), float_0_8041fc7c,
+                                  float_neg1_8041fcd8, float_0_8041fc7c);
                 break;
             case 0x10000000:
                 effSmallStarEntry(3, 3, *(f32*)((s32)player + 0x8C),
                                   *(f32*)((s32)player + 0x90) + *(f32*)((s32)player + 0x1BC),
-                                  *(f32*)((s32)player + 0x94), float_0_8041fc7c, float_neg1_8041fcd8);
-                psndSFXOn_3D(str_SFX_BTL_FLD_MARIO_DA_802c1428, (void*)((s32)player + 0x8C));
+                                  *(f32*)((s32)player + 0x94), float_0_8041fc7c,
+                                  float_neg1_8041fcd8, float_0_8041fc7c);
+                break;
+        }
+
+        flags = *(u32*)hitInfo;
+        switch (flags) {
+            case 0x20000:
+            case 0x40000:
+            case 0x80000:
+            case 0x100000:
+            case 0x200000:
+            case 0x400000:
+            case 0x800000:
+            case 0x1000000:
+                if (npc != 0) {
+                    psndSFXOn_3D("SFX_BTL_FLD_ENEMY_DAMAGED1", (void*)((s32)npc + 0x8C));
+                }
+                break;
+            case 0x10000000:
+                psndSFXOn_3D("SFX_BTL_FLD_MARIO_DAMAGED1", (void*)((s32)player + 0x8C));
                 break;
         }
         return;
@@ -3365,37 +3430,48 @@ void fbatEncountCheck(void) {
             if ((*(u32*)npcEntry & 2) != 0 &&
                 (*(u32*)npcEntry & 8) == 0 &&
                 *(void**)((s32)npcEntry + 0x128) != 0) {
-                px = *(f32*)((s32)player + 0x8C);
-                py = *(f32*)((s32)player + 0x90);
-                pz = *(f32*)((s32)player + 0x94);
-                npcX = *(f32*)((s32)npcEntry + 0x8C);
-                npcY = *(f32*)((s32)npcEntry + 0x90);
-                npcZ = *(f32*)((s32)npcEntry + 0x94);
-                width = *(f32*)((s32)npcEntry + 0x14C);
-                height = *(f32*)((s32)npcEntry + 0x150);
                 talkable = 0;
 
-                if (npcY <= py + *(f32*)((s32)player + 0xFC) && py <= npcY + height) {
-                    localPos[0] = px;
-                    localPos[1] = npcY;
-                    localPos[2] = pz;
+                if (*(f32*)((s32)npcEntry + 0x90) <=
+                        *(f32*)((s32)player + 0x90) + *(f32*)((s32)player + 0x1BC) &&
+                    *(f32*)((s32)player + 0x90) <=
+                        *(f32*)((s32)npcEntry + 0x90) + *(f32*)((s32)npcEntry + 0x150)) {
+                    localPos[0] = *(f32*)((s32)player + 0x8C);
+                    localPos[1] = *(f32*)((s32)npcEntry + 0x90);
+                    localPos[2] = *(f32*)((s32)player + 0x94);
                     dist = PSVECDistance(localPos, (void*)((s32)npcEntry + 0x8C));
-                    radius = float_0p5_8041fc80 * (*(f32*)((s32)player + 0xF8) + width) + float_10_8041fc98;
-                    if (dist <= radius && dist < bestDist) {
+                    if (dist <= float_0p5_8041fc80 *
+                                    (*(f32*)((s32)player + 0x1B8) +
+                                     *(f32*)((s32)npcEntry + 0x14C)) +
+                                    float_10_8041fc98 &&
+                        dist < bestDist) {
                         nearestNpc = npcEntry;
                     }
 
                     facing = 0;
-                    dispDir = reviseAngle(marioGetDispDir() - *(f32*)((s32)camGetPtr(4) + 0x114));
+                    cam = camGetPtr(4);
+                    camDir = *(f32*)((s32)cam + 0x114);
+                    dispDir = reviseAngle(marioGetDispDir() - camDir);
                     for (hit = 0; hit < 3; hit++) {
-                        if (hit == 0) {
-                            angle = angleABf(px, pz, npcX, npcZ);
-                        } else if (hit == 1) {
-                            angle = angleABf(px, pz, npcX + float_0p5_8041fc80 * width, npcZ);
+                        if (hit == 1) {
+                            cam = camGetPtr(4);
+                            camDir = *(f32*)((s32)cam + 0x114);
+                            angle = angleABf(*(f32*)((s32)player + 0x8C), *(f32*)((s32)player + 0x94),
+                                             *(f32*)((s32)npcEntry + 0x8C) + float_0p5_8041fc80 * *(f32*)((s32)npcEntry + 0x14C),
+                                             *(f32*)((s32)npcEntry + 0x94));
+                        } else if (hit < 1 && hit >= 0) {
+                            cam = camGetPtr(4);
+                            camDir = *(f32*)((s32)cam + 0x114);
+                            angle = angleABf(*(f32*)((s32)player + 0x8C), *(f32*)((s32)player + 0x94),
+                                             *(f32*)((s32)npcEntry + 0x8C), *(f32*)((s32)npcEntry + 0x94));
                         } else {
-                            angle = angleABf(px, pz, npcX - float_0p5_8041fc80 * width, npcZ);
+                            cam = camGetPtr(4);
+                            camDir = *(f32*)((s32)cam + 0x114);
+                            angle = angleABf(*(f32*)((s32)player + 0x8C), *(f32*)((s32)player + 0x94),
+                                             *(f32*)((s32)npcEntry + 0x8C) - float_0p5_8041fc80 * *(f32*)((s32)npcEntry + 0x14C),
+                                             *(f32*)((s32)npcEntry + 0x94));
                         }
-                        angle = reviseAngle(angle - *(f32*)((s32)camGetPtr(4) + 0x114));
+                        angle = reviseAngle(angle - camDir);
                         if ((float_180_8041fccc <= angle && float_180_8041fccc <= dispDir) ||
                             (angle < float_180_8041fccc && dispDir <= float_180_8041fccc)) {
                             facing = 1;
@@ -3404,23 +3480,57 @@ void fbatEncountCheck(void) {
                     }
 
                     if (facing != 0) {
-                        localPos[0] = px;
-                        localPos[1] = npcY;
-                        localPos[2] = pz;
+                        localPos[0] = *(f32*)((s32)player + 0x8C);
+                        localPos[1] = *(f32*)((s32)npcEntry + 0x90);
+                        localPos[2] = *(f32*)((s32)player + 0x94);
                         dist = PSVECDistance(localPos, (void*)((s32)npcEntry + 0x8C));
-                        if (dist <= radius) {
-                            angle = angleABf(float_0_8041fc7c, float_0_8041fc7c, npcX - px, npcZ - pz);
+                        if (dist <= float_0p5_8041fc80 * (*(f32*)((s32)player + 0x1B8) + *(f32*)((s32)npcEntry + 0x14C)) + float_10_8041fc98) {
+                            f32 dx = *(f32*)((s32)npcEntry + 0x8C) - *(f32*)((s32)player + 0x8C);
+                            f32 dz = *(f32*)((s32)npcEntry + 0x94) - *(f32*)((s32)player + 0x94);
+                            f32 distanceSq;
+                            f32 hitDistance;
+
+                            angle = angleABf(float_0_8041fc7c, float_0_8041fc7c, dx, dz);
                             sincosf(angle, &sinv, &cosv);
-                            localOut[0] = 0.0f;
-                            localOut[1] = 0.0f;
-                            localOut[2] = 0.0f;
-                            localOut[3] = dist;
-                            hit = hitCheckFilter(px,
-                                                 py + float_0p75_8041fcd4 * *(f32*)((s32)player + 0xFC),
-                                                 pz,
+                            distanceSq = dz * dz + dx * dx;
+                            if (distanceSq > float_0_8041fc7c) {
+                                f64 value = (f64)distanceSq;
+                                f64 inv = __frsqrte(value);
+
+                                inv = *(f64*)(constBase + 0x1D0) * inv *
+                                      (*(f64*)(constBase + 0x1D8) - value * inv * inv);
+                                inv = *(f64*)(constBase + 0x1D0) * inv *
+                                      (*(f64*)(constBase + 0x1D8) - value * inv * inv);
+                                inv = *(f64*)(constBase + 0x1D0) * inv *
+                                      (*(f64*)(constBase + 0x1D8) - value * inv * inv);
+                                hitDistance = (f32)(value * inv);
+                            } else if ((f64)distanceSq < *(f64*)(constBase + 0x1E0)) {
+                                hitDistance = __float_nan[0];
+                            } else {
+                                u32 bits = *(u32*)&distanceSq;
+                                u32 exponent = bits & 0x7F800000;
+                                s32 kind;
+
+                                switch (exponent) {
+                                case 0x7F800000:
+                                    if (bits & 0x7FFFFF) kind = 1; else kind = 2;
+                                    break;
+                                case 0:
+                                    if (bits & 0x7FFFFF) kind = 5; else kind = 3;
+                                    break;
+                                default: kind = 4; break;
+                                }
+                                hitDistance = distanceSq;
+                                if (kind == 1) {
+                                    hitDistance = __float_nan[0];
+                                }
+                            }
+                            hit = hitCheckFilter(*(f32*)((s32)player + 0x8C),
+                                                 *(f32*)((s32)player + 0x90) + float_0p75_8041fcd4 * *(f32*)((s32)player + 0x1BC),
+                                                 *(f32*)((s32)player + 0x94),
                                                  sinv, float_0_8041fc7c, cosv, 0,
-                                                 &nx, &ny, &nz, &localOut[3],
-                                                 &localDir[0], &localDir[1], &localDir[2]);
+                                                 &nx, &ny, &nz, &hitDistance,
+                                                 &outNX, &outNY, &outNZ);
                             if (hit == 0 && dist < bestDist) {
                                 *(void**)((s32)npcWork + 0x10) = npcEntry;
                                 bestDist = dist;
@@ -3496,6 +3606,7 @@ void fbatEncountCheck(void) {
         *(u32*)((s32)npc + 0x318) = flags;
     }
 
+    flags = *(u32*)hitInfo;
     switch (flags) {
         case 0x20000:
         case 0x40000:
@@ -3503,7 +3614,10 @@ void fbatEncountCheck(void) {
             marioChgMotJump2();
             break;
     }
-    effSmallStarEntry();
+    effSmallStarEntry(3, 3, *(f32*)((s32)npc + 0x8C),
+                      *(f32*)((s32)npc + 0x90) + *(f32*)((s32)npc + 0x150),
+                      *(f32*)((s32)npc + 0x94), float_0_8041fc7c,
+                      float_neg1_8041fcd8, float_0_8041fc7c);
 }
 
 void fbatTalkMode(void) {
@@ -3532,13 +3646,16 @@ void fbatTalkMode(void) {
             }
             marioKeyOff();
             partyKeyOff();
-            if (*(s16*)fbatData == 3) {
-                entry = evtEntry(*(void**)(npc + 0x12C), 0, 0);
-                *(u8*)((s32)entry + 0x10) = 6;
-            } else {
-                entry = evtEntry(*(void**)(npc + 0x128), 0, 0);
-                *(u8*)((s32)entry + 0x10) = 6;
-                marioChgTalkMotion();
+            switch (*(s16*)fbatData) {
+                case 3:
+                    entry = evtEntry(*(void**)(npc + 0x12C), 0, 0);
+                    *(u8*)((s32)entry + 0x10) = 6;
+                    break;
+                default:
+                    entry = evtEntry(*(void**)(npc + 0x128), 0, 0);
+                    *(u8*)((s32)entry + 0x10) = 6;
+                    marioChgTalkMotion();
+                    break;
             }
             *(s32*)((s32)entry + 0x170) = npc;
             *(s32*)(fbatData + 0xC) = *(s32*)((s32)entry + 0x15C);
@@ -3582,7 +3699,7 @@ void fbatBattleMode(void) {
     extern f32 float_0_8041fc7c;
     extern f32 float_1_8041fc94;
     extern s32 dbg_battleskip;
-    extern s32 _evt_majinai_coin_up_effect[];
+    extern u32 _evt_majinai_coin_up_effect[31];
 
     void* fbatData;
     void* npc;
@@ -3761,14 +3878,23 @@ case0_flags_done:
             battleInfo = (void*)((s32)fbatData + 0x20);
             result = BattleInformationGetResult(battleInfo);
             hasItems = 0;
-            if (*(s32*)((s32)npc + 0x28C) != 0) hasItems = 1;
-            if (*(s32*)((s32)npc + 0x290) != 0) hasItems = 1;
-            if (*(s32*)((s32)npc + 0x294) != 0) hasItems = 1;
-            if (*(s32*)((s32)npc + 0x298) != 0) hasItems = 1;
-            if (*(s32*)((s32)npc + 0x29C) != 0) hasItems = 1;
-            if (*(s32*)((s32)npc + 0x2A0) != 0) hasItems = 1;
-            if (*(s32*)((s32)npc + 0x2A4) != 0) hasItems = 1;
-            if (*(s32*)((s32)npc + 0x2A8) != 0) hasItems = 1;
+            if (*(s32*)((s32)npc + 0x28C) != 0) {
+                hasItems = 1;
+            } else if (*(s32*)((s32)npc + 0x290) != 0) {
+                hasItems = 1;
+            } else if (*(s32*)((s32)npc + 0x294) != 0) {
+                hasItems = 1;
+            } else if (*(s32*)((s32)npc + 0x298) != 0) {
+                hasItems = 1;
+            } else if (*(s32*)((s32)npc + 0x29C) != 0) {
+                hasItems = 1;
+            } else if (*(s32*)((s32)npc + 0x2A0) != 0) {
+                hasItems = 1;
+            } else if (*(s32*)((s32)npc + 0x2A4) != 0) {
+                hasItems = 1;
+            } else if (*(s32*)((s32)npc + 0x2A8) != 0) {
+                hasItems = 1;
+            }
 
             *(s16*)fbatData = 1;
             if (result == 1 || result == 2) {
@@ -3998,9 +4124,15 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
         u32 unknownFlags;
     } FbatHitWork;
     extern f32 float_1000_8041fca8;
+    extern f32 float_0_8041fc7c;
     extern f32 float_0p5_8041fc80;
-    extern char str_fb_sensei_shita_802c13e8[];
-    extern char str_fb_sensei_sareta_802c13f8[];
+    extern f32 float_12_8041fca0;
+    extern f32 float_15_8041fca4;
+    extern f32 float_30_8041fcb4;
+    extern f32 __float_nan[];
+    extern const f64 double_0p5_802c13c8;
+    extern const f64 double_3_802c13d0;
+    extern const f64 double_0_802c13d8;
     extern s32 dat_8041fc70;
     extern s32 dat_8041fc74;
     s32 npcWork;
@@ -4011,15 +4143,15 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
     s32 bestNpc = 0;
     FbatHitWork hitWork;
 
-    hitWork.hitFlags = 0;
-    hitWork.bestDistance = float_1000_8041fca8;
-    hitWork.unknownFlags &= ~1;
 
     npcWork = (s32)&work.field;
     if (gp->inBattle != 0) {
         npcWork += 0x14;
     }
     player = (s32)marioGetPtr();
+    hitWork.hitFlags = 0;
+    hitWork.bestDistance = float_1000_8041fca8;
+    hitWork.unknownFlags &= ~1;
 
     if ((flags & 0x2000) != 0) {
         hitWork.unknownFlags |= 1;
@@ -4033,25 +4165,26 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
         ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1)) {
         s32 checkPlayer = (s32)marioGetPtr();
         s32 checkNpcWork = (s32)&work.field;
+        s32 canCheck;
 
         if (gp->inBattle != 0) {
             checkNpcWork += 0x14;
         }
-        if ((*(u32*)checkPlayer & 0x82000000) != 0 ||
-            ((*(u32*)(checkNpcWork + 8) & 1) == 0 &&
-             (*(u32*)checkPlayer & 0xA) != 0) ||
-            *(s32*)((s32)gp + 0x164) != 0 || seqGetSeq() != 2 ||
-            *(u16*)(checkPlayer + 0x2E) == 0x19 || vivianGetStatus() != 0 ||
-            *(u16*)(checkPlayer + 0x2E) == 0x1F ||
-            *(u16*)(checkPlayer + 0x2E) == 0x20 ||
-            *(u16*)(npc + 0x320) != 0) {
-            goto skip_jump_check;
-        }
+        if ((*(u32*)checkPlayer & 0x82000000) != 0) { canCheck = 0; }
+        else if ((*(u32*)(checkNpcWork + 8) & 1) == 0 && (*(u32*)checkPlayer & 0xA) != 0) { canCheck = 0; }
+        else if (*(s32*)((s32)gp + 0x164) != 0) { canCheck = 0; }
+        else if (seqGetSeq() != 2) { canCheck = 0; }
+        else if (*(u16*)(checkPlayer + 0x2E) == 0x19) { canCheck = 0; }
+        else if (vivianGetStatus() != 0) { canCheck = 0; }
+        else if (*(u16*)(checkPlayer + 0x2E) == 0x1F || *(u16*)(checkPlayer + 0x2E) == 0x20) { canCheck = 0; }
+        else if (*(u16*)(npc + 0x320) != 0) { canCheck = 0; }
+        else { canCheck = 1; }
+        if (!canCheck) goto skip_jump_check;
         for (i = 0; i < count; i++, npc += 0x340) {
             u32 npcFlags;
             f32 dx;
             f32 dz;
-            f32 distance;
+            f64 distance;
 
             if (npc == 0) {
                 continue;
@@ -4060,7 +4193,7 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
             if ((npcFlags & 2) == 0) {
                 continue;
             }
-            if ((flags & 0x1000) == 0) {
+            if ((flags & 0x1000) != 0) {
                 if ((npcFlags & 8) == 0) {
                     continue;
                 }
@@ -4086,391 +4219,588 @@ void* fbatHitCheck(u32 flags, void* hitInfo) {
 
             dx = *(f32*)(player + 0x8C) - *(f32*)(npc + 0x8C);
             dz = *(f32*)(player + 0x94) - *(f32*)(npc + 0x94);
-            distance = (f32)sqrt((f64)(dx * dx + dz * dz));
-            if (distance < float_0p5_8041fc80 *
+            {
+                f32 distanceSq;
+                f64 distanceD;
+                f64 inv;
+                u32 bits;
+                u32 exp;
+                s32 kind;
+
+                distanceSq = dx * dx + dz * dz;
+                distanceD = (f64)distanceSq;
+                if (distanceSq > float_0_8041fc7c) {
+                    inv = __frsqrte(distanceD);
+                    inv = double_0p5_802c13c8 * inv *
+                          -(distanceD * inv * inv - double_3_802c13d0);
+                    inv = double_0p5_802c13c8 * inv *
+                          -(distanceD * inv * inv - double_3_802c13d0);
+                    distance = (f32)(
+                        distanceD * double_0p5_802c13c8 * inv *
+                        -(distanceD * inv * inv - double_3_802c13d0));
+                } else if (distanceD < double_0_802c13d8) {
+                    distance = __float_nan[0];
+                } else {
+                    bits = *(u32*)&distanceSq;
+                    exp = bits & 0x7F800000;
+                    switch (exp) {
+                    case 0x7F800000:
+                        if (bits & 0x7FFFFF) kind = 1; else kind = 2;
+                        break;
+                    case 0:
+                        if (bits & 0x7FFFFF) kind = 5; else kind = 3;
+                        break;
+                    default: kind = 4; break;
+                    }
+                    distance = kind == 1 ? __float_nan[0] : distanceSq;
+                }
+            }
+            if (distance <= float_0p5_8041fc80 *
                                (*(f32*)(player + 0x1B8) + *(f32*)(npc + 0x14C)) &&
                 distance < hitWork.bestDistance) {
-                hitWork.bestDistance = distance;
-                bestNpc = npc;
                 if ((flags & 0x10) != 0 &&
-                    (*(u32*)(npc + 0x1D4) & 0x10000) == 0) {
-                    if (*(s32*)(npc + 0x2F8) != 0 &&
-                        evtGetPtrID(*(s32*)(npc + 0x11C)) != 0) {
-                            hitWork.attackMode = *(u32*)(npc + 0x2F8);
-                    }
-                    hitWork.hitFlags = pouchEquipCheckBadge(0x1D) == 0 ?
-                                   0x10000000 : 0x10000;
-                    if ((flags & 0x2000) == 0) {
-                        s32 announceData;
+                    (*(u32*)(npc + 0x1D4) & 0x10000) == 0 &&
+                    *(s16*)(player + 0x4C) < 1) {
+                    if (*(s32*)(npc + 0x2F8) != 0) {
+                        s32 isNpcEvent = 0;
 
-                        announceData = *(s32*)((s32)gp + 0x168);
-                        *(s32*)(announceData + 0x550) = 0;
-                        *(s32*)(announceData + 0x554) = hitWork.hitFlags;
-                        *(s32*)(announceData + 0x55C) = 0;
-                        switch (*(s32*)(announceData + 0x554)) {
-                            case 0x20000:
-                            case 0x40000:
-                            case 0x80000:
-                            case 0x100000:
-                            case 0x200000:
-                            case 0x400000:
-                            case 0x800000:
-                            case 0x1000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_shita_802c13e8;
-                                *(s32*)(announceData + 0x558) = 2;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
-                                break;
-                            case 0x10000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_sareta_802c13f8;
-                                *(s32*)(announceData + 0x558) = 1;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
-                                break;
-                            default:
-                                *(s32*)(announceData + 0x558) = 0;
-                                break;
+                        if (evtGetPtrID(*(s32*)(npc + 0x11C)) != 0) {
+                            isNpcEvent =
+                                *(u8*)((s32)evtGetPtrID(*(s32*)(npc + 0x11C)) + 0x10) == 5;
+                        }
+                        if (isNpcEvent == 0) {
+                            if (pouchEquipCheckBadge(0x140) == 0) {
+                                hitWork.hitFlags = 0x10000000;
+                                hitWork.bestDistance = distance;
+                                if ((flags & 0x2000) == 0) {
+                                    {
+                                        s32 announceData;
+
+                                        announceData = *(s32*)((s32)gp + 0x168);
+                                        *(s32*)(announceData + 0x550) = 0;
+                                        *(s32*)(announceData + 0x554) = 0x10000000;
+                                        *(s32*)(announceData + 0x55C) = 0;
+                                        switch (*(s32*)(announceData + 0x554)) {
+                                            case 0x20000:
+                                            case 0x40000:
+                                            case 0x80000:
+                                            case 0x100000:
+                                            case 0x200000:
+                                            case 0x400000:
+                                            case 0x800000:
+                                            case 0x1000000:
+                                                *(char**)(announceData + 0x568) =
+                                                    "fb_sensei_shita";
+                                                *(s32*)(announceData + 0x558) = 2;
+                                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                                break;
+                                            case 0x10000000:
+                                                *(char**)(announceData + 0x568) =
+                                                    "fb_sensei_sareta";
+                                                *(s32*)(announceData + 0x558) = 1;
+                                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                                break;
+                                            default:
+                                                *(s32*)(announceData + 0x558) = 0;
+                                                break;
+                                        }
+                                    }
+                                }
+                                hitWork.attackMode = *(u32*)(npc + 0x2F8);
+                                bestNpc = npc;
+                                goto jump_attack_done;
+                            }
+
+                            hitWork.hitFlags = 0x10000;
+                            hitWork.bestDistance = distance;
+                            bestNpc = npc;
+                            if ((flags & 0x2000) == 0) {
+                                {
+                                    s32 announceData;
+
+                                    announceData = *(s32*)((s32)gp + 0x168);
+                                    *(s32*)(announceData + 0x550) = 0;
+                                    *(s32*)(announceData + 0x554) = 0x10000;
+                                    *(s32*)(announceData + 0x55C) = 0;
+                                    switch (*(s32*)(announceData + 0x554)) {
+                                        case 0x20000:
+                                        case 0x40000:
+                                        case 0x80000:
+                                        case 0x100000:
+                                        case 0x200000:
+                                        case 0x400000:
+                                        case 0x800000:
+                                        case 0x1000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_shita";
+                                            *(s32*)(announceData + 0x558) = 2;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                            break;
+                                        case 0x10000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_sareta";
+                                            *(s32*)(announceData + 0x558) = 1;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                            break;
+                                        default:
+                                            *(s32*)(announceData + 0x558) = 0;
+                                            break;
+                                    }
+                                }
+                            }
+                            goto jump_attack_done;
+                        }
+                    }
+
+                    if ((npcFlags & 0x20000000) != 0) {
+                        continue;
+                    }
+                    hitWork.hitFlags = 0x10000;
+                    hitWork.bestDistance = distance;
+                    bestNpc = npc;
+                    if ((flags & 0x2000) == 0) {
+                        {
+                            s32 announceData;
+
+                            announceData = *(s32*)((s32)gp + 0x168);
+                            *(s32*)(announceData + 0x550) = 0;
+                            *(s32*)(announceData + 0x554) = 0x10000;
+                            *(s32*)(announceData + 0x55C) = 0;
+                            switch (*(s32*)(announceData + 0x554)) {
+                                case 0x20000:
+                                case 0x40000:
+                                case 0x80000:
+                                case 0x100000:
+                                case 0x200000:
+                                case 0x400000:
+                                case 0x800000:
+                                case 0x1000000:
+                                    *(char**)(announceData + 0x568) =
+                                        "fb_sensei_shita";
+                                    *(s32*)(announceData + 0x558) = 2;
+                                    *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                    break;
+                                case 0x10000000:
+                                    *(char**)(announceData + 0x568) =
+                                        "fb_sensei_sareta";
+                                    *(s32*)(announceData + 0x558) = 1;
+                                    *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                    break;
+                                default:
+                                    *(s32*)(announceData + 0x558) = 0;
+                                    break;
+                            }
                         }
                     }
                 }
-                if ((flags & 0x20) != 0 &&
-                    marioGetJabaraState() == 6 &&
-                    (npcFlags & 0x20000000) == 0) {
-                    s32 announceData;
 
-                    hitWork.hitFlags = 0x20000;
-                    if ((flags & 0x2000) == 0) {
-                        announceData = *(s32*)((s32)gp + 0x168);
-                        *(s32*)(announceData + 0x550) = 0;
-                        *(s32*)(announceData + 0x554) = 0x20000;
-                        *(s32*)(announceData + 0x55C) = 0;
-                        switch (*(s32*)(announceData + 0x554)) {
-                            case 0x20000:
-                            case 0x40000:
-                            case 0x80000:
-                            case 0x100000:
-                            case 0x200000:
-                            case 0x400000:
-                            case 0x800000:
-                            case 0x1000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_shita_802c13e8;
-                                *(s32*)(announceData + 0x558) = 2;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
-                                break;
-                            case 0x10000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_sareta_802c13f8;
-                                *(s32*)(announceData + 0x558) = 1;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
-                                break;
-                            default:
-                                *(s32*)(announceData + 0x558) = 0;
-                                break;
+jump_attack_done:
+                if ((flags & 0x20) != 0) {
+                    if ((*(u32*)player & 0x20000) == 0 ||
+                        (*(u32*)player & 0x10000) != 0 ||
+                        (npcFlags & 0x20000000) != 0) {
+                        if (marioGetJabaraState() == 6 &&
+                            (npcFlags & 0x20000000) == 0) {
+                            hitWork.hitFlags = 0x20000;
+                            hitWork.bestDistance = distance;
+                            bestNpc = npc;
+                            if ((flags & 0x2000) == 0) {
+                                {
+                                    s32 announceData;
+
+                                    announceData = *(s32*)((s32)gp + 0x168);
+                                    *(s32*)(announceData + 0x550) = 0;
+                                    *(s32*)(announceData + 0x554) = 0x20000;
+                                    *(s32*)(announceData + 0x55C) = 0;
+                                    switch (*(s32*)(announceData + 0x554)) {
+                                        case 0x20000:
+                                        case 0x40000:
+                                        case 0x80000:
+                                        case 0x100000:
+                                        case 0x200000:
+                                        case 0x400000:
+                                        case 0x800000:
+                                        case 0x1000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_shita";
+                                            *(s32*)(announceData + 0x558) = 2;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                            break;
+                                        case 0x10000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_sareta";
+                                            *(s32*)(announceData + 0x558) = 1;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                            break;
+                                        default:
+                                            *(s32*)(announceData + 0x558) = 0;
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        hitWork.bestDistance = distance;
+                        if (marioGetJabaraState() == 6) {
+                            hitWork.hitFlags = 0x20000;
+                            bestNpc = npc;
+                            if ((flags & 0x2000) == 0) {
+                                {
+                                    s32 announceData;
+
+                                    announceData = *(s32*)((s32)gp + 0x168);
+                                    *(s32*)(announceData + 0x550) = 0;
+                                    *(s32*)(announceData + 0x554) = 0x20000;
+                                    *(s32*)(announceData + 0x55C) = 0;
+                                    switch (*(s32*)(announceData + 0x554)) {
+                                        case 0x20000:
+                                        case 0x40000:
+                                        case 0x80000:
+                                        case 0x100000:
+                                        case 0x200000:
+                                        case 0x400000:
+                                        case 0x800000:
+                                        case 0x1000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_shita";
+                                            *(s32*)(announceData + 0x558) = 2;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                            break;
+                                        case 0x10000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_sareta";
+                                            *(s32*)(announceData + 0x558) = 1;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                            break;
+                                        default:
+                                            *(s32*)(announceData + 0x558) = 0;
+                                            break;
+                                    }
+                                }
+                            }
+                        } else if (*(u16*)(player + 0x2E) == 0x10) {
+                            hitWork.hitFlags = 0x40000;
+                            bestNpc = npc;
+                            if ((flags & 0x2000) == 0) {
+                                {
+                                    s32 announceData;
+
+                                    announceData = *(s32*)((s32)gp + 0x168);
+                                    *(s32*)(announceData + 0x550) = 0;
+                                    *(s32*)(announceData + 0x554) = 0x40000;
+                                    *(s32*)(announceData + 0x55C) = 0;
+                                    switch (*(s32*)(announceData + 0x554)) {
+                                        case 0x20000:
+                                        case 0x40000:
+                                        case 0x80000:
+                                        case 0x100000:
+                                        case 0x200000:
+                                        case 0x400000:
+                                        case 0x800000:
+                                        case 0x1000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_shita";
+                                            *(s32*)(announceData + 0x558) = 2;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                            break;
+                                        case 0x10000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_sareta";
+                                            *(s32*)(announceData + 0x558) = 1;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                            break;
+                                        default:
+                                            *(s32*)(announceData + 0x558) = 0;
+                                            break;
+                                    }
+                                }
+                            }
+                        } else {
+                            hitWork.hitFlags = 0x20000;
+                            bestNpc = npc;
+                            if ((flags & 0x2000) == 0) {
+                                {
+                                    s32 announceData;
+
+                                    announceData = *(s32*)((s32)gp + 0x168);
+                                    *(s32*)(announceData + 0x550) = 0;
+                                    *(s32*)(announceData + 0x554) = 0x20000;
+                                    *(s32*)(announceData + 0x55C) = 0;
+                                    switch (*(s32*)(announceData + 0x554)) {
+                                        case 0x20000:
+                                        case 0x40000:
+                                        case 0x80000:
+                                        case 0x100000:
+                                        case 0x200000:
+                                        case 0x400000:
+                                        case 0x800000:
+                                        case 0x1000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_shita";
+                                            *(s32*)(announceData + 0x558) = 2;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                            break;
+                                        case 0x10000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_sareta";
+                                            *(s32*)(announceData + 0x558) = 1;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                            break;
+                                        default:
+                                            *(s32*)(announceData + 0x558) = 0;
+                                            break;
+                                    }
+                                }
+                            }
                         }
                     }
-                } else if ((flags & 0x20) != 0 &&
-                           (*(u32*)player & 0x20000) != 0 &&
-                           (*(u32*)player & 0x10000) == 0 &&
-                           (npcFlags & 0x20000000) == 0 &&
-                           *(u16*)(player + 0x2E) == 0x10) {
-                    s32 announceData;
-
-                    hitWork.hitFlags = 0x40000;
-                    if ((flags & 0x2000) == 0) {
-                        announceData = *(s32*)((s32)gp + 0x168);
-                        *(s32*)(announceData + 0x550) = 0;
-                        *(s32*)(announceData + 0x554) = 0x40000;
-                        *(s32*)(announceData + 0x55C) = 0;
-                        switch (*(s32*)(announceData + 0x554)) {
-                            case 0x20000:
-                            case 0x40000:
-                            case 0x80000:
-                            case 0x100000:
-                            case 0x200000:
-                            case 0x400000:
-                            case 0x800000:
-                            case 0x1000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_shita_802c13e8;
-                                *(s32*)(announceData + 0x558) = 2;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
-                                break;
-                            case 0x10000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_sareta_802c13f8;
-                                *(s32*)(announceData + 0x558) = 1;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
-                                break;
-                            default:
-                                *(s32*)(announceData + 0x558) = 0;
-                                break;
-                        }
-                    }
-                } else if ((flags & 0x20) != 0 &&
-                           (*(u32*)player & 0x20000) != 0 &&
-                           (*(u32*)player & 0x10000) == 0 &&
-                           (npcFlags & 0x20000000) == 0) {
-                    s32 announceData;
-
-                    hitWork.hitFlags = 0x20000;
-                    if ((flags & 0x2000) == 0) {
-                        announceData = *(s32*)((s32)gp + 0x168);
-                        *(s32*)(announceData + 0x550) = 0;
-                        *(s32*)(announceData + 0x554) = 0x20000;
-                        *(s32*)(announceData + 0x55C) = 0;
-                        switch (*(s32*)(announceData + 0x554)) {
-                            case 0x20000:
-                            case 0x40000:
-                            case 0x80000:
-                            case 0x100000:
-                            case 0x200000:
-                            case 0x400000:
-                            case 0x800000:
-                            case 0x1000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_shita_802c13e8;
-                                *(s32*)(announceData + 0x558) = 2;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
-                                break;
-                            case 0x10000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_sareta_802c13f8;
-                                *(s32*)(announceData + 0x558) = 1;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
-                                break;
-                            default:
-                                *(s32*)(announceData + 0x558) = 0;
-                                break;
-                        }
-                    }
-                }
-                if ((flags & 0x2000) != 0) {
-                    continue;
                 }
             }
         }
     }
 skip_jump_check:
 
-    if ((flags & 0x40) != 0 && bestNpc == 0 &&
-        ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1) &&
-        (*(u32*)player & 0x82000000) == 0 &&
-        ((*(u32*)(npcWork + 8) & 1) != 0 || (*(u32*)player & 0xA) == 0) &&
-        *(s32*)((s32)gp + 0x164) == 0 &&
-        seqGetSeq() == 2 &&
-        *(u16*)(player + 0x2E) != 0x19 &&
-        vivianGetStatus() == 0 &&
-        *(u16*)(player + 0x2E) != 0x1F &&
-        *(u16*)(player + 0x2E) != 0x20 &&
-        *(u16*)(*(s32*)(npcWork + 0xC) + 0x320) == 0 &&
-        (flags & 1) == 0) {
-        extern f64 reviseAngle(f64 angle);
-        extern const f32 float_1p5_8041fcac;
-        extern const f32 float_90_8041fcb0;
-        f32 radius = float_1p5_8041fcac * *(f32*)(player + 0x1B8);
-        f64 angle = reviseAngle(*(f32*)(player + 0x1AC) -
-                                float_90_8041fcb0 +
-                                *(f32*)((s32)camGetPtr(4) + 0x114));
+    if ((flags & 0x40) != 0 && bestNpc == 0) {
+        if ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1) {
+            s32 checkPlayer = (s32)marioGetPtr();
+            s32 checkNpcWork = (s32)&work.field;
+            s32 canCheck;
 
-        npc = *(s32*)(npcWork + 0xC);
-        for (i = 0; i < count; i++, npc += 0x340) {
-            f32 distance;
-            u32 npcFlags;
+            if (gp->inBattle != 0) {
+                checkNpcWork += 0x14;
+            }
+            if ((*(u32*)checkPlayer & 0x82000000) != 0) {
+                canCheck = 0;
+            } else if (((*(u32*)(checkNpcWork + 8) & 1) == 0) &&
+                       ((*(u32*)checkPlayer & 0xA) != 0)) {
+                canCheck = 0;
+            } else if (*(s32*)((s32)gp + 0x164) != 0) {
+                canCheck = 0;
+            } else if (seqGetSeq() != 2) {
+                canCheck = 0;
+            } else if (*(u16*)(checkPlayer + 0x2E) == 0x19) {
+                canCheck = 0;
+            } else if (vivianGetStatus() != 0) {
+                canCheck = 0;
+            } else if (*(u16*)(checkPlayer + 0x2E) == 0x1F ||
+                       *(u16*)(checkPlayer + 0x2E) == 0x20) {
+                canCheck = 0;
+            } else if (*(u16*)(npc + 0x320) != 0) {
+                canCheck = 0;
+            } else {
+                canCheck = 1;
+            }
 
-            if (npc == 0) {
-                continue;
-            }
-            npcFlags = *(u32*)npc;
-            if ((npcFlags & 2) == 0) {
-                continue;
-            }
-            if ((flags & 0x1000) == 0) {
-                if ((npcFlags & 8) == 0) {
-                    continue;
-                }
-            } else if ((npcFlags & 8) != 0) {
-                continue;
-            }
-            if ((flags & 0x2000) != 0 &&
-                (*(u32*)(npc + 4) & 2) == 0) {
-                continue;
-            }
-            if ((npcFlags & 0x20000000) != 0 ||
-                (npcFlags & 0x20) != 0 ||
-                (*(u32*)(npc + 0x1D4) & 4) != 0 ||
-                (npcFlags & 0x08000000) != 0) {
-                continue;
-            }
-            if (_npcHitCheckHammerAllMotion(radius, angle, npc, &distance) != 0 &&
-                distance < hitWork.bestDistance) {
-                hitWork.bestDistance = distance;
-                bestNpc = npc;
-                hitWork.hitFlags = 0x100000;
-                if ((flags & 0x2000) != 0) {
-                    continue;
-                }
+            if (canCheck != 0) {
+                if ((flags & 1) != 0) {
+                    if (*(u16*)(player + 0x2E) == 0x12) {
+                        extern f64 reviseAngle(f64 angle);
+                        extern s32 marioAnimeId(void);
+                        extern const f32 float_1p5_8041fcac;
+                        extern const f32 float_90_8041fcb0;
+                        extern const f32 float_0_8041fc7c;
+                        extern const f32 float_10_8041fc98;
+                        extern const f32 float_11_8041fc9c;
+                        extern const f32 float_12_8041fca0;
+                        f32 radius = float_1p5_8041fcac * *(f32*)(player + 0x1B8);
+                        f64 angle = reviseAngle(*(f32*)(player + 0x1AC) -
+                                                float_90_8041fcb0 +
+                                                *(f32*)((s32)camGetPtr(4) + 0x114));
+                        f32 sinBase;
+                        f32 cosBase;
+                        f32 sinFrame;
+                        f32 cosFrame;
+                        s32 frameIndex;
+                        f32 frame;
+                        f32 hitX;
+                        f32 hitY;
+                        f32 hitZ;
+                        s32 hammerPlayer;
 
-                {
-                    s32 announceData;
+                        hammerPlayer = (s32)marioGetPtr();
+                        animPoseGetAnimPosePtr(*(s32*)(hammerPlayer + 0x22C + marioAnimeId() * 4));
+                        frameIndex = *(s32*)(hammerPlayer + 0x48);
+                        if (frameIndex > 20) {
+                            frameIndex = 10;
+                        }
+                        frame = (f32)frameIndex;
+                        hammerPlayer = (s32)marioGetPtr();
+                        {
+                            typedef struct HammerStepTable {
+                                s32 value[11];
+                            } HammerStepTable;
+                            extern const HammerStepTable dat_802c122c;
+                            HammerStepTable steps = dat_802c122c;
 
-                    announceData = *(s32*)((s32)gp + 0x168);
-                    *(s32*)(announceData + 0x550) = 0;
-                    *(s32*)(announceData + 0x554) = 0x100000;
-                    *(s32*)(announceData + 0x55C) = 0;
-                    switch (*(s32*)(announceData + 0x554)) {
-                        case 0x20000:
-                        case 0x40000:
-                        case 0x80000:
-                        case 0x100000:
-                        case 0x200000:
-                        case 0x400000:
-                        case 0x800000:
-                        case 0x1000000:
-                            *(char**)(announceData + 0x568) =
-                                str_fb_sensei_shita_802c13e8;
-                            *(s32*)(announceData + 0x558) = 2;
-                            *(s32*)(announceData + 0x56C) = dat_8041fc70;
-                            break;
-                        case 0x10000000:
-                            *(char**)(announceData + 0x568) =
-                                str_fb_sensei_sareta_802c13f8;
-                            *(s32*)(announceData + 0x558) = 1;
-                            *(s32*)(announceData + 0x56C) = dat_8041fc74;
-                            break;
-                        default:
-                            *(s32*)(announceData + 0x558) = 0;
-                            break;
+                            if (frame < float_0_8041fc7c) {
+                                frame = float_0_8041fc7c;
+                            }
+                            if (frame >= float_11_8041fc9c) {
+                                frame = float_10_8041fc98;
+                            }
+                            sincosf((f32)angle, &sinBase, &cosBase);
+                            sincosf((f32)steps.value[(s32)frame], &sinFrame, &cosFrame);
+                            hitX = sinFrame * sinBase * radius + *(f32*)(hammerPlayer + 0x8C);
+                            hitY = radius * cosFrame + *(f32*)(hammerPlayer + 0x90);
+                            hitZ = sinFrame * cosBase * radius + *(f32*)(hammerPlayer + 0x94);
+
+                            npc = *(s32*)(npcWork + 0xC);
+                            for (i = 0; i < count; i++, npc += 0x340) {
+                                f32 distance;
+                                u32 npcFlags;
+
+                                if (npc == 0) {
+                                    continue;
+                                }
+                                npcFlags = *(u32*)npc;
+                                if ((npcFlags & 2) == 0) {
+                                    continue;
+                                }
+                                if ((flags & 0x1000) != 0) {
+                                    if ((npcFlags & 8) == 0) {
+                                        continue;
+                                    }
+                                } else if ((npcFlags & 8) != 0) {
+                                    continue;
+                                }
+                                if ((flags & 0x2000) != 0 && (*(u32*)(npc + 4) & 2) == 0) {
+                                    continue;
+                                }
+                                if ((npcFlags & 0x20000000) != 0 ||
+                                    (npcFlags & 0x20) != 0 ||
+                                    (*(u32*)(npc + 0x1D4) & 4) != 0 ||
+                                    (npcFlags & 0x08000000) != 0) {
+                                    continue;
+                                }
+                                if (_npcHitCheckSphere(hitX, hitY, hitZ, float_12_8041fca0,
+                                                       npc, &distance) != 0 &&
+                                    distance < hitWork.bestDistance) {
+                                    s32 announceData;
+
+                                    hitWork.bestDistance = distance;
+                                    bestNpc = npc;
+                                    hitWork.hitFlags = 0x100000;
+                                    if ((flags & 0x2000) != 0) {
+                                        break;
+                                    }
+                                    announceData = *(s32*)((s32)gp + 0x168);
+                                    *(s32*)(announceData + 0x550) = 0;
+                                    *(s32*)(announceData + 0x554) = 0x100000;
+                                    *(s32*)(announceData + 0x55C) = 0;
+                                    switch (*(s32*)(announceData + 0x554)) {
+                                        case 0x20000:
+                                        case 0x40000:
+                                        case 0x80000:
+                                        case 0x100000:
+                                        case 0x200000:
+                                        case 0x400000:
+                                        case 0x800000:
+                                        case 0x1000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_shita";
+                                            *(s32*)(announceData + 0x558) = 2;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                            break;
+                                        case 0x10000000:
+                                            *(char**)(announceData + 0x568) =
+                                                "fb_sensei_sareta";
+                                            *(s32*)(announceData + 0x558) = 1;
+                                            *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                            break;
+                                        default:
+                                            *(s32*)(announceData + 0x558) = 0;
+                                            break;
+                                    }
+                                    break;
+                                }
+                            }
+
+                        }
                     }
+                } else {
+                    extern f64 reviseAngle(f64 angle);
+                    extern const f32 float_1p5_8041fcac;
+                    extern const f32 float_90_8041fcb0;
+                    f32 radius = float_1p5_8041fcac * *(f32*)(player + 0x1B8);
+                    f64 angle = reviseAngle(*(f32*)(player + 0x1AC) -
+                                            float_90_8041fcb0 +
+                                            *(f32*)((s32)camGetPtr(4) + 0x114));
+
+                    npc = *(s32*)(npcWork + 0xC);
+                    for (i = 0; i < count; i++, npc += 0x340) {
+                        f32 distance;
+                        u32 npcFlags;
+
+                        if (npc == 0) {
+                            continue;
+                        }
+                        npcFlags = *(u32*)npc;
+                        if ((npcFlags & 2) == 0) {
+                            continue;
+                        }
+                        if ((flags & 0x1000) != 0) {
+                            if ((npcFlags & 8) == 0) {
+                                continue;
+                            }
+                        } else if ((npcFlags & 8) != 0) {
+                            continue;
+                        }
+                        if ((flags & 0x2000) != 0 &&
+                            (*(u32*)(npc + 4) & 2) == 0) {
+                            continue;
+                        }
+                        if ((npcFlags & 0x20000000) != 0 ||
+                            (npcFlags & 0x20) != 0 ||
+                            (*(u32*)(npc + 0x1D4) & 4) != 0 ||
+                            (npcFlags & 0x08000000) != 0) {
+                            continue;
+                        }
+                        if (_npcHitCheckHammerAllMotion(radius, angle, npc, &distance) != 0 &&
+                            distance < hitWork.bestDistance) {
+                            hitWork.bestDistance = distance;
+                            bestNpc = npc;
+                            hitWork.hitFlags = 0x100000;
+                            if ((flags & 0x2000) != 0) {
+                                continue;
+                            }
+
+                            {
+                                s32 announceData;
+
+                                announceData = *(s32*)((s32)gp + 0x168);
+                                *(s32*)(announceData + 0x550) = 0;
+                                *(s32*)(announceData + 0x554) = 0x100000;
+                                *(s32*)(announceData + 0x55C) = 0;
+                                switch (*(s32*)(announceData + 0x554)) {
+                                    case 0x20000:
+                                    case 0x40000:
+                                    case 0x80000:
+                                    case 0x100000:
+                                    case 0x200000:
+                                    case 0x400000:
+                                    case 0x800000:
+                                    case 0x1000000:
+                                        *(char**)(announceData + 0x568) =
+                                            "fb_sensei_shita";
+                                        *(s32*)(announceData + 0x558) = 2;
+                                        *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                        break;
+                                    case 0x10000000:
+                                        *(char**)(announceData + 0x568) =
+                                            "fb_sensei_sareta";
+                                        *(s32*)(announceData + 0x558) = 1;
+                                        *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                        break;
+                                    default:
+                                        *(s32*)(announceData + 0x558) = 0;
+                                        break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+
                 }
-                break;
-            }
-        }
-    }
-
-    if ((flags & 0x40) != 0 && bestNpc == 0 &&
-        ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1) &&
-        (*(u32*)player & 0x82000000) == 0 &&
-        ((*(u32*)(npcWork + 8) & 1) != 0 || (*(u32*)player & 0xA) == 0) &&
-        *(s32*)((s32)gp + 0x164) == 0 &&
-        seqGetSeq() == 2 &&
-        *(u16*)(player + 0x2E) != 0x19 &&
-        vivianGetStatus() == 0 &&
-        *(u16*)(player + 0x2E) != 0x1F &&
-        *(u16*)(player + 0x2E) != 0x20 &&
-        *(u16*)(*(s32*)(npcWork + 0xC) + 0x320) == 0 &&
-        (flags & 1) != 0 && *(u16*)(player + 0x2E) == 0x12) {
-        extern f64 reviseAngle(f64 angle);
-        extern s32 marioAnimeId(void);
-        extern s32 dat_802c122c[];
-        extern const f32 float_1p5_8041fcac;
-        extern const f32 float_90_8041fcb0;
-        extern const f32 float_0_8041fc7c;
-        extern const f32 float_10_8041fc98;
-        extern const f32 float_11_8041fc9c;
-        extern const f32 float_12_8041fca0;
-        f32 radius = float_1p5_8041fcac * *(f32*)(player + 0x1B8);
-        f64 angle = reviseAngle(*(f32*)(player + 0x1AC) -
-                                float_90_8041fcb0 +
-                                *(f32*)((s32)camGetPtr(4) + 0x114));
-        f32 sinBase;
-        f32 cosBase;
-        f32 sinFrame;
-        f32 cosFrame;
-        s32 frameIndex;
-        f32 frame;
-        f32 hitX;
-        f32 hitY;
-        f32 hitZ;
-
-        player = (s32)marioGetPtr();
-        animPoseGetAnimPosePtr(*(s32*)(player + 0x22C + marioAnimeId() * 4));
-        frameIndex = *(s32*)(player + 0x48);
-        if (frameIndex > 20) {
-            frameIndex = 10;
-        }
-        frame = (f32)frameIndex;
-        player = (s32)marioGetPtr();
-        if (frame < float_0_8041fc7c) {
-            frame = float_0_8041fc7c;
-        }
-        if (frame >= float_11_8041fc9c) {
-            frame = float_10_8041fc98;
-        }
-        sincosf((f32)angle, &sinBase, &cosBase);
-        sincosf((f32)dat_802c122c[(s32)frame], &sinFrame, &cosFrame);
-        hitX = sinFrame * sinBase * radius + *(f32*)(player + 0x8C);
-        hitY = radius * cosFrame + *(f32*)(player + 0x90);
-        hitZ = sinFrame * cosBase * radius + *(f32*)(player + 0x94);
-
-        npc = *(s32*)(npcWork + 0xC);
-        for (i = 0; i < count; i++, npc += 0x340) {
-            f32 distance;
-            u32 npcFlags;
-
-            if (npc == 0) {
-                continue;
-            }
-            npcFlags = *(u32*)npc;
-            if ((npcFlags & 2) == 0) {
-                continue;
-            }
-            if ((flags & 0x1000) == 0) {
-                if ((npcFlags & 8) == 0) {
-                    continue;
-                }
-            } else if ((npcFlags & 8) != 0) {
-                continue;
-            }
-            if ((flags & 0x2000) != 0 && (*(u32*)(npc + 4) & 2) == 0) {
-                continue;
-            }
-            if ((npcFlags & 0x20000000) != 0 ||
-                (npcFlags & 0x20) != 0 ||
-                (*(u32*)(npc + 0x1D4) & 4) != 0 ||
-                (npcFlags & 0x08000000) != 0) {
-                continue;
-            }
-            if (_npcHitCheckSphere(hitX, hitY, hitZ, float_12_8041fca0,
-                                   npc, &distance) != 0 &&
-                distance < hitWork.bestDistance) {
-                s32 announceData;
-
-                hitWork.bestDistance = distance;
-                bestNpc = npc;
-                hitWork.hitFlags = 0x100000;
-                if ((flags & 0x2000) != 0) {
-                    break;
-                }
-                announceData = *(s32*)((s32)gp + 0x168);
-                *(s32*)(announceData + 0x550) = 0;
-                *(s32*)(announceData + 0x554) = 0x100000;
-                *(s32*)(announceData + 0x55C) = 0;
-                switch (*(s32*)(announceData + 0x554)) {
-                    case 0x20000:
-                    case 0x40000:
-                    case 0x80000:
-                    case 0x100000:
-                    case 0x200000:
-                    case 0x400000:
-                    case 0x800000:
-                    case 0x1000000:
-                        *(char**)(announceData + 0x568) =
-                            str_fb_sensei_shita_802c13e8;
-                        *(s32*)(announceData + 0x558) = 2;
-                        *(s32*)(announceData + 0x56C) = dat_8041fc70;
-                        break;
-                    case 0x10000000:
-                        *(char**)(announceData + 0x568) =
-                            str_fb_sensei_sareta_802c13f8;
-                        *(s32*)(announceData + 0x558) = 1;
-                        *(s32*)(announceData + 0x56C) = dat_8041fc74;
-                        break;
-                    default:
-                        *(s32*)(announceData + 0x558) = 0;
-                        break;
-                }
-                break;
             }
         }
     }
@@ -4493,20 +4823,20 @@ skip_jump_check:
                 extern const f32 float_1p5_8041fcac;
                 f32 hammerAngle = marioGetAngleKaitenHammer();
 
-                if (hammerAngle >= 0.0f) {
+                if (hammerAngle >= float_0_8041fc7c) {
                     f32 radius = float_1p5_8041fcac * *(f32*)(player + 0x1B8);
                     f32 sinAngle;
                     f32 cosAngle;
                     f32 hitX;
                     f32 hitY;
                     f32 hitZ;
+                    u8* hammerPlayer = marioGetPtr();
 
                     sincosf(hammerAngle, &sinAngle, &cosAngle);
-                    hitX = sinAngle * radius + *(f32*)(player + 0x8C);
-                    hitY = *(f32*)(player + 0x90) + 15.0f;
-                    hitZ = cosAngle * radius + *(f32*)(player + 0x94);
-
+                    hitX = sinAngle * radius + *(f32*)(hammerPlayer + 0x8C);
+                    hitZ = cosAngle * radius + *(f32*)(hammerPlayer + 0x94);
                     npc = *(s32*)(npcWork + 0xC);
+                    hitY = *(f32*)(hammerPlayer + 0x90) + float_15_8041fca4;
                     for (i = 0; i < count; i++, npc += 0x340) {
                         f32 distance;
                         u32 npcFlags;
@@ -4518,7 +4848,7 @@ skip_jump_check:
                         if ((npcFlags & 2) == 0) {
                             continue;
                         }
-                        if ((flags & 0x1000) == 0) {
+                        if ((flags & 0x1000) != 0) {
                             if ((npcFlags & 8) == 0) {
                                 continue;
                             }
@@ -4536,7 +4866,7 @@ skip_jump_check:
                             continue;
                         }
                         if (_npcHitCheckSphere(
-                                hitX, hitY, hitZ, 12.0, npc, &distance) != 0 &&
+                                hitX, hitY, hitZ, float_12_8041fca0, npc, &distance) != 0 &&
                             distance < hitWork.bestDistance) {
                             hitWork.bestDistance = distance;
                             bestNpc = npc;
@@ -4563,14 +4893,14 @@ skip_jump_check:
                                     case 0x800000:
                                     case 0x1000000:
                                         *(char**)(announceData + 0x568) =
-                                            str_fb_sensei_shita_802c13e8;
+                                            "fb_sensei_shita";
                                         *(s32*)(announceData + 0x558) = 2;
                                         *(s32*)(announceData + 0x56C) =
                                             dat_8041fc70;
                                         break;
                                     case 0x10000000:
                                         *(char**)(announceData + 0x568) =
-                                            str_fb_sensei_sareta_802c13f8;
+                                            "fb_sensei_sareta";
                                         *(s32*)(announceData + 0x558) = 1;
                                         *(s32*)(announceData + 0x56C) =
                                             dat_8041fc74;
@@ -4607,7 +4937,7 @@ skip_jump_check:
                 if ((npcFlags & 2) == 0) {
                     continue;
                 }
-                if ((flags & 0x1000) == 0) {
+                if ((flags & 0x1000) != 0) {
                     if ((npcFlags & 8) == 0) {
                         continue;
                     }
@@ -4650,13 +4980,13 @@ skip_jump_check:
                             case 0x800000:
                             case 0x1000000:
                                 *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_shita_802c13e8;
+                                    "fb_sensei_shita";
                                 *(s32*)(announceData + 0x558) = 2;
                                 *(s32*)(announceData + 0x56C) = dat_8041fc70;
                                 break;
                             case 0x10000000:
                                 *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_sareta_802c13f8;
+                                    "fb_sensei_sareta";
                                 *(s32*)(announceData + 0x558) = 1;
                                 *(s32*)(announceData + 0x56C) = dat_8041fc74;
                                 break;
@@ -4671,104 +5001,136 @@ skip_jump_check:
             }
     }
 
-    if ((flags & 0x100) != 0 && bestNpc == 0 &&
-        ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1) &&
-        (*(u32*)player & 0x82000000) == 0 &&
-        ((*(u32*)(npcWork + 8) & 1) != 0 || (*(u32*)player & 0xA) == 0) &&
-        *(s32*)((s32)gp + 0x164) == 0 &&
-        seqGetSeq() == 2 &&
-        *(u16*)(player + 0x2E) != 0x19 &&
-        vivianGetStatus() == 0 &&
-        *(u16*)(player + 0x2E) != 0x1F &&
-        *(u16*)(player + 0x2E) != 0x20 &&
-        *(u16*)(*(s32*)(npcWork + 0xC) + 0x320) == 0) {
+    if ((flags & 0x100) != 0) {
         s32 party = (s32)partyGetPtr(marioGetPartyId());
 
-        if (party != 0 && (flags & 1) != 0 &&
-            *(u8*)(party + 0x33) == 2 && (*(u32*)party & 0x100) != 0) {
-            s32 koopsStatus = nokonokoGetStatus((void*)party);
+        if (bestNpc == 0 &&
+            ((flags & 0x10) == 0 || *(s16*)(player + 0x4C) < 1)) {
+            s32 checkPlayer = (s32)marioGetPtr();
+            s32 checkNpcWork = (s32)&work.field;
+            s32 canCheck;
 
-            if (koopsStatus >= 2 && koopsStatus <= 5) {
-                f32 partyX = *(f32*)(party + 0x58);
-                f32 partyY = *(f32*)(party + 0x5C);
-                f32 partyZ = *(f32*)(party + 0x60);
-                f32 partyRadius = float_0p5_8041fc80 * *(f32*)(party + 0xF4);
-                f32 partyHalfHeight = float_0p5_8041fc80 * *(f32*)(party + 0xF0);
-
-            npc = *(s32*)(npcWork + 0xC);
-            for (i = 0; i < count; i++, npc += 0x340) {
-                f32 distance;
-                u32 npcFlags;
-
-                if (npc == 0) {
-                    continue;
-                }
-                npcFlags = *(u32*)npc;
-                if ((npcFlags & 2) == 0) {
-                    continue;
-                }
-                if ((flags & 0x1000) == 0) {
-                    if ((npcFlags & 8) == 0) {
-                        continue;
-                    }
-                } else if ((npcFlags & 8) != 0) {
-                    continue;
-                }
-                if ((flags & 0x2000) != 0 &&
-                    (*(u32*)(npc + 4) & 4) == 0) {
-                    continue;
-                }
-                if ((npcFlags & 0x20000000) != 0 ||
-                    (npcFlags & 0x20) != 0 ||
-                    (*(u32*)(npc + 0x1D4) & 4) != 0 ||
-                    (npcFlags & 0x08000000) != 0) {
-                    continue;
-                }
-                if (_npcHitCheckSphere(partyX, partyY + partyHalfHeight,
-                                       partyZ, partyRadius, npc, &distance) != 0 &&
-                    distance < hitWork.bestDistance) {
-                    hitWork.bestDistance = distance;
-                    bestNpc = npc;
-                    hitWork.hitFlags = 0x800000;
-                    if ((flags & 0x2000) != 0) {
-                        continue;
-                    }
-
-                    {
-                        s32 announceData;
-
-                        announceData = *(s32*)((s32)gp + 0x168);
-                        *(s32*)(announceData + 0x550) = 0;
-                        *(s32*)(announceData + 0x554) = 0x800000;
-                        *(s32*)(announceData + 0x55C) = 0;
-                        switch (*(s32*)(announceData + 0x554)) {
-                            case 0x20000:
-                            case 0x40000:
-                            case 0x80000:
-                            case 0x100000:
-                            case 0x200000:
-                            case 0x400000:
-                            case 0x800000:
-                            case 0x1000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_shita_802c13e8;
-                                *(s32*)(announceData + 0x558) = 2;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
-                                break;
-                            case 0x10000000:
-                                *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_sareta_802c13f8;
-                                *(s32*)(announceData + 0x558) = 1;
-                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
-                                break;
-                            default:
-                                *(s32*)(announceData + 0x558) = 0;
-                                break;
-                        }
-                    }
-                    break;
-                }
+            if (gp->inBattle != 0) {
+                checkNpcWork += 0x14;
             }
+            if ((*(u32*)checkPlayer & 0x82000000) == 0) {
+                if (((*(u32*)(checkNpcWork + 8) & 1) == 0) &&
+                    ((*(u32*)checkPlayer & 0xA) != 0)) {
+                    canCheck = 0;
+                } else if (*(s32*)((s32)gp + 0x164) == 0) {
+                    if (seqGetSeq() == 2) {
+                        if (*(u16*)(checkPlayer + 0x2E) == 0x19) {
+                            canCheck = 0;
+                        } else if (vivianGetStatus() == 0) {
+                            if (*(u16*)(checkPlayer + 0x2E) == 0x1F ||
+                                *(u16*)(checkPlayer + 0x2E) == 0x20) {
+                                canCheck = 0;
+                            } else if (*(u16*)(*(s32*)(checkNpcWork + 0xC) + 0x320) == 0) {
+                                canCheck = 1;
+                            } else {
+                                canCheck = 0;
+                            }
+                        } else {
+                            canCheck = 0;
+                        }
+                    } else {
+                        canCheck = 0;
+                    }
+                } else {
+                    canCheck = 0;
+                }
+            } else {
+                canCheck = 0;
+            }
+
+            if (canCheck != 0) {
+                if (party != 0 && (flags & 1) != 0 &&
+                            *(u8*)(party + 0x33) == 2 && (*(u32*)party & 0x100) != 0) {
+                            s32 koopsStatus = nokonokoGetStatus((void*)party);
+
+                            if (koopsStatus >= 2 && koopsStatus <= 5) {
+                                f32 partyX = *(f32*)(party + 0x58);
+                                f32 partyY = *(f32*)(party + 0x5C);
+                                f32 partyZ = *(f32*)(party + 0x60);
+                                f32 partyRadius = float_0p5_8041fc80 * *(f32*)(party + 0xF4);
+                                f32 partyHalfHeight = float_0p5_8041fc80 * *(f32*)(party + 0xF0);
+
+                            npc = *(s32*)(npcWork + 0xC);
+                            for (i = 0; i < count; i++, npc += 0x340) {
+                                f32 distance;
+                                u32 npcFlags;
+
+                                if (npc == 0) {
+                                    continue;
+                                }
+                                npcFlags = *(u32*)npc;
+                                if ((npcFlags & 2) == 0) {
+                                    continue;
+                                }
+                                if ((flags & 0x1000) != 0) {
+                                    if ((npcFlags & 8) == 0) {
+                                        continue;
+                                    }
+                                } else if ((npcFlags & 8) != 0) {
+                                    continue;
+                                }
+                                if ((flags & 0x2000) != 0 &&
+                                    (*(u32*)(npc + 4) & 4) == 0) {
+                                    continue;
+                                }
+                                if ((npcFlags & 0x20000000) != 0 ||
+                                    (npcFlags & 0x20) != 0 ||
+                                    (*(u32*)(npc + 0x1D4) & 4) != 0 ||
+                                    (npcFlags & 0x08000000) != 0) {
+                                    continue;
+                                }
+                                if (_npcHitCheckSphere(partyX, partyY + partyHalfHeight,
+                                                       partyZ, partyRadius, npc, &distance) != 0 &&
+                                    distance < hitWork.bestDistance) {
+                                    hitWork.bestDistance = distance;
+                                    bestNpc = npc;
+                                    hitWork.hitFlags = 0x800000;
+                                    if ((flags & 0x2000) != 0) {
+                                        continue;
+                                    }
+
+                                    {
+                                        s32 announceData;
+
+                                        announceData = *(s32*)((s32)gp + 0x168);
+                                        *(s32*)(announceData + 0x550) = 0;
+                                        *(s32*)(announceData + 0x554) = 0x800000;
+                                        *(s32*)(announceData + 0x55C) = 0;
+                                        switch (*(s32*)(announceData + 0x554)) {
+                                            case 0x20000:
+                                            case 0x40000:
+                                            case 0x80000:
+                                            case 0x100000:
+                                            case 0x200000:
+                                            case 0x400000:
+                                            case 0x800000:
+                                            case 0x1000000:
+                                                *(char**)(announceData + 0x568) =
+                                                    "fb_sensei_shita";
+                                                *(s32*)(announceData + 0x558) = 2;
+                                                *(s32*)(announceData + 0x56C) = dat_8041fc70;
+                                                break;
+                                            case 0x10000000:
+                                                *(char**)(announceData + 0x568) =
+                                                    "fb_sensei_sareta";
+                                                *(s32*)(announceData + 0x558) = 1;
+                                                *(s32*)(announceData + 0x56C) = dat_8041fc74;
+                                                break;
+                                            default:
+                                                *(s32*)(announceData + 0x558) = 0;
+                                                break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                            }
+                        }
             }
         }
     }
@@ -4806,7 +5168,7 @@ skip_jump_check:
                 if ((npcFlags & 2) == 0) {
                     continue;
                 }
-                if ((flags & 0x1000) == 0) {
+                if ((flags & 0x1000) != 0) {
                     if ((npcFlags & 8) == 0) {
                         continue;
                     }
@@ -4824,7 +5186,7 @@ skip_jump_check:
                     continue;
                 }
                 if (_npcHitCheckSphere(partyX, partyY + partyHalfHeight,
-                                       partyZ, 30.0, npc, &distance) != 0 &&
+                                       partyZ, float_30_8041fcb4, npc, &distance) != 0 &&
                     distance < hitWork.bestDistance) {
                     hitWork.bestDistance = distance;
                     bestNpc = npc;
@@ -4850,13 +5212,13 @@ skip_jump_check:
                             case 0x800000:
                             case 0x1000000:
                                 *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_shita_802c13e8;
+                                    "fb_sensei_shita";
                                 *(s32*)(announceData + 0x558) = 2;
                                 *(s32*)(announceData + 0x56C) = dat_8041fc70;
                                 break;
                             case 0x10000000:
                                 *(char**)(announceData + 0x568) =
-                                    str_fb_sensei_sareta_802c13f8;
+                                    "fb_sensei_sareta";
                                 *(s32*)(announceData + 0x558) = 1;
                                 *(s32*)(announceData + 0x56C) = dat_8041fc74;
                                 break;
@@ -4928,20 +5290,16 @@ s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius, s32 npc, f32* outDist) {
         u32 exponent = bits & 0x7F800000;
         s32 kind;
 
-        if (exponent == 0x7F800000) {
-            if ((bits & 0x7FFFFF) == 0) {
-                kind = 2;
-            } else {
-                kind = 1;
-            }
-        } else if (exponent < 0x7F800000 && exponent == 0) {
-            if ((bits & 0x7FFFFF) == 0) {
-                kind = 3;
-            } else {
-                kind = 5;
-            }
-        } else {
-            kind = 4;
+        switch (exponent) {
+            case 0x7F800000:
+                if (bits & 0x7FFFFF) { kind = 1; } else { kind = 2; }
+                break;
+            case 0:
+                if (bits & 0x7FFFFF) { kind = 5; } else { kind = 3; }
+                break;
+            default:
+                kind = 4;
+                break;
         }
         distance = distSq;
         if (kind == 1) {
@@ -4956,26 +5314,51 @@ s32 _npcHitCheckSphere(f64 x, f64 y, f64 z, f64 radius, s32 npc, f32* outDist) {
     return 0;
 }
 
+/*
+ * Target-backed npcdrv .rodata leading prefix.
+ *
+ * A12/A13 proved this exact 0x34-byte placement puts the naturally emitted,
+ * A11-corrected hammer table at target +0x34. These objects remain non-const
+ * so executable consumers keep their target-like load behavior.
+ */
+__declspec(section ".rodata") f32 vec3_802c11f8[3] __attribute__ ((aligned(4))) = {
+    0.0f, 0.0f, 0.0f
+};
+__declspec(section ".rodata") f32 vec3_802c1204[3] __attribute__ ((aligned(4))) = {
+    1.0f, 1.0f, 1.0f
+};
+__declspec(section ".rodata") f32 dat_802c1210[3] __attribute__ ((aligned(4))) = {
+    0.0f, 0.0f, 30.0f
+};
+__declspec(section ".rodata") f32 dat_802c121c[4] __attribute__ ((aligned(4))) = {
+    100.0f, 0.0f, 0.0f, 0.0f
+};
+
 s32 _npcHitCheckHammerAllMotion(f32 radius, f64 angle, s32 npc, f32* outDist) {
     extern f32 __float_nan[];
     extern void sincosf(f64 angle, f32* outSin, f32* outCos);
     extern const f64 double_0_802c13d8;
     extern const f64 double_0p5_802c13c8;
     extern const f64 double_3_802c13d0;
+    extern const f32 float_0_8041fc7c;
+    extern const f32 float_0p5_8041fc80;
+    extern const f32 float_12_8041fca0;
     f32 cosB;
     f32 sinB;
     f32 cosA;
     f32 sinA;
-    f32 distance = 0.0f;
+    f32 distance;
     s32 result = npc;
     extern const f32 float_1_8041fc94;
     extern const f32 float_10_8041fc98;
     extern const f32 float_11_8041fc9c;
     f32 i;
 
-    for (i = 0.0f; i <= float_11_8041fc9c; i += float_1_8041fc94) {
+    for (i = float_0_8041fc7c; i <= float_11_8041fc9c; i += float_1_8041fc94) {
+        distance = float_0_8041fc7c;
+        {
         u8* player = marioGetPtr();
-        s32 steps[11] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+        s32 steps[11] = {0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101};
         f32 sampleY;
         f32 dx;
         f32 dy;
@@ -4984,8 +5367,8 @@ s32 _npcHitCheckHammerAllMotion(f32 radius, f64 angle, s32 npc, f32* outDist) {
         f32 topY;
         f32 index = i;
 
-        if (index < 0.0f) {
-            index = 0.0f;
+        if (index < float_0_8041fc7c) {
+            index = float_0_8041fc7c;
         }
         if (index >= float_11_8041fc9c) {
             index = float_10_8041fc98;
@@ -4997,20 +5380,21 @@ s32 _npcHitCheckHammerAllMotion(f32 radius, f64 angle, s32 npc, f32* outDist) {
         dx = (f32)(sinB * (sinA * radius) + *(f32*)(player + 0x8C)) - *(f32*)(npc + 0x8C);
         dz = (f32)(sinB * (cosA * radius) + *(f32*)(player + 0x94)) - *(f32*)(npc + 0x94);
         baseY = *(f32*)(npc + 0x90);
-        topY = baseY + *(f32*)(npc + 0x150);
         dy = sampleY - baseY;
         if (sampleY != baseY) {
-            if (sampleY >= baseY && sampleY <= topY) {
-                dy = 0.0f;
-            }
-            if (sampleY > topY) {
-                dy = sampleY - topY;
+            if (sampleY >= baseY && sampleY <= baseY + *(f32*)(npc + 0x150)) {
+                dy = float_0_8041fc7c;
+            } else {
+                topY = baseY + *(f32*)(npc + 0x150);
+                if (sampleY > topY) {
+                    dy = sampleY - topY;
+                }
             }
         }
         {
-            f32 distSq = dx * dx + dz * dz + dy * dy;
+            f32 distSq = dz * dz + dx * dx + dy * dy;
 
-            if (distSq > 0.0f) {
+            if (distSq > float_0_8041fc7c) {
                 f64 value;
                 f64 inv;
                 value = (f64)distSq;
@@ -5029,22 +5413,30 @@ s32 _npcHitCheckHammerAllMotion(f32 radius, f64 angle, s32 npc, f32* outDist) {
                 u32 exponent = bits & 0x7F800000;
                 s32 kind;
 
-                if (exponent == 0x7F800000) {
-                    kind = (bits & 0x7FFFFF) != 0 ? 1 : 2;
-                } else if (exponent < 0x7F800000 && exponent == 0) {
-                    kind = (bits & 0x7FFFFF) != 0 ? 5 : 3;
-                } else {
-                    kind = 4;
+                switch (exponent) {
+                    case 0x7F800000:
+                        if (bits & 0x7FFFFF) { kind = 1; } else { kind = 2; }
+                        break;
+                    case 0:
+                        if (bits & 0x7FFFFF) { kind = 5; } else { kind = 3; }
+                        break;
+                    default:
+                        kind = 4;
+                        break;
                 }
-                distance = kind == 1 ? __float_nan[0] : distSq;
+                distance = distSq;
+                if (kind == 1) {
+                    distance = __float_nan[0];
+                }
             }
         }
         result = npc;
-        if (distance >= 0.5f * *(f32*)(npc + 0x14C) + 12.0f) {
+        if (distance >= float_0p5_8041fc80 * *(f32*)(npc + 0x14C) + float_12_8041fca0) {
             result = 0;
         }
         if (result != 0) {
             break;
+        }
         }
     }
     *outDist = distance;
@@ -5813,3 +6205,173 @@ s32 N_fbatPreventMarioEventChk(void) {
 ok:
     return 0;
 }
+
+/* Data-pass A1: target-backed .data prefix required by the complete npcdrv Event family. */
+char* luigi_pose[28] = {
+    str_Z_1_8041fbb8, str_Z_1R_8041fbbc, str_S_1_8041fbc4, str_S_1R_8041fbc8,
+    str_W_1_8041fbd0, str_W_1R_8041fbd4, str_R_1_8041fbdc, str_R_1R_8041fbe0,
+    str_T_1_8041fbe8, str_T_1R_8041fbec, str_J_1A_8041fbf4, str_J_1RR_8041fbfc,
+    str_J_1B_8041fc04, str_J_1BR_8041fc0c, str_Z_2_8041fc14, str_Z_2R_8041fc18,
+    str_S_2_8041fc20, str_S_2R_8041fc24, str_T_2_8041fc2c, str_T_2R_8041fc30,
+    str_L_1_8041fc38, str_L_1R_8041fc3c, str_L_2_8041fc44, str_L_2R_8041fc48,
+    str_L_3_8041fc50, str_L_3R_8041fc54, str_I_1_8041fc5c, str_I_1R_8041fc60,
+};
+
+
+u32 evt_majinai_effect_se_fld[67] = {
+    0x0003005B, (u32)btlevtcmd_ftomsec, 0x0000001D, 0xFE363C8A,
+    0x0001000A, 0xFE363C8A, 0x0006005B, (u32)evt_snd_sfxon_3d,
+    (u32)(char*)str_SFX_EVT_FLD_INCANT_C_802c1258, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000000, 0x0003005B, (u32)btlevtcmd_ftomsec, 0x000000C8,
+    0xFE363C8A, 0x0001000A, 0xFE363C8A, 0x0006005B,
+    (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_EVT_FLD_INCANT_C_802c1274, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x00000000, 0x0003005B, (u32)btlevtcmd_ftomsec,
+    0x0000005A, 0xFE363C8A, 0x0001000A, 0xFE363C8A,
+    0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_EVT_FLD_INCANT_C_802c1290, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00000000, 0x0003005B,
+    (u32)btlevtcmd_ftomsec, 0x00000050, 0xFE363C8A, 0x0001000A,
+    0xFE363C8A, 0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_EVT_FLD_INCANT_C_802c12ac,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000000,
+    0x0003005B, (u32)btlevtcmd_ftomsec, 0x00000005, 0xFE363C8A,
+    0x0001000A, 0xFE363C8A, 0x0006005B, (u32)evt_snd_sfxon_3d,
+    (u32)(char*)str_SFX_EVT_FLD_INCANT_C_802c12c8, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000000, 0x00000002, 0x00000001,
+};
+
+u32 evt_majinai_effect_se_btl[67] = {
+    0x0003005B, (u32)btlevtcmd_ftomsec, 0x0000001D, 0xFE363C8A,
+    0x0001000A, 0xFE363C8A, 0x0006005B, (u32)evt_snd_sfxon_3d,
+    (u32)(char*)str_SFX_EVT_BTL_INCANT_C_802c12e4, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000000, 0x0003005B, (u32)btlevtcmd_ftomsec, 0x000000C8,
+    0xFE363C8A, 0x0001000A, 0xFE363C8A, 0x0006005B,
+    (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_EVT_BTL_INCANT_C_802c1300, 0xFE363C80, 0xFE363C81,
+    0xFE363C82, 0x00000000, 0x0003005B, (u32)btlevtcmd_ftomsec,
+    0x0000005A, 0xFE363C8A, 0x0001000A, 0xFE363C8A,
+    0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_EVT_BTL_INCANT_C_802c131c, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x00000000, 0x0003005B,
+    (u32)btlevtcmd_ftomsec, 0x00000050, 0xFE363C8A, 0x0001000A,
+    0xFE363C8A, 0x0006005B, (u32)evt_snd_sfxon_3d, (u32)(char*)str_SFX_EVT_BTL_INCANT_C_802c1338,
+    0xFE363C80, 0xFE363C81, 0xFE363C82, 0x00000000,
+    0x0003005B, (u32)btlevtcmd_ftomsec, 0x00000005, 0xFE363C8A,
+    0x0001000A, 0xFE363C8A, 0x0006005B, (u32)evt_snd_sfxon_3d,
+    (u32)(char*)str_SFX_EVT_BTL_INCANT_C_802c1354, 0xFE363C80, 0xFE363C81, 0xFE363C82,
+    0x00000000, 0x00000002, 0x00000001,
+};
+
+u32 _evt_majinai_coin_up_effect[31] = {
+    0x0005005B, (u32)evt_mario_get_pos, 0x00000000, 0xFE363C80,
+    0xFE363C81, 0xFE363C82, 0x0001005C, (u32)evt_majinai_effect_se_fld,
+    0x0001005B, (u32)_majinai_effect, 0x0005005B, (u32)evt_msg_print,
+    0x00000000, (u32)(char*)str_msg_mj_coin_up_802c1370, 0x00000000, 0x00000000,
+    0x0002005B, (u32)_check, 0xFE363C80, 0x00020019,
+    0xFE363C80, 0x00000000, 0x0005005B, (u32)evt_msg_print,
+    0x00000000, (u32)(char*)str_msg_mj_last_802c1380, 0x00000000, 0x00000000,
+    0x00000021, 0x00000002, 0x00000001,
+};
+
+/*
+ * Target-backed npcdrv read-only string catalog.
+ *
+ * A9r2 previously authenticated these exact native identities.  A16 adds
+ * only the strings now that the leading 0x60-byte target prefix is banked;
+ * no executable expression or compiler-generated numeric pool is authored.
+ */
+__declspec(section ".rodata") char str_SFX_EVT_FLD_INCANT_C_802c1258[25] __attribute__ ((aligned(4))) = "SFX_EVT_FLD_INCANT_CUBE1";
+__declspec(section ".rodata") char str_SFX_EVT_FLD_INCANT_C_802c1274[25] __attribute__ ((aligned(4))) = "SFX_EVT_FLD_INCANT_CUBE2";
+__declspec(section ".rodata") char str_SFX_EVT_FLD_INCANT_C_802c1290[25] __attribute__ ((aligned(4))) = "SFX_EVT_FLD_INCANT_CUBE3";
+__declspec(section ".rodata") char str_SFX_EVT_FLD_INCANT_C_802c12ac[25] __attribute__ ((aligned(4))) = "SFX_EVT_FLD_INCANT_CUBE4";
+__declspec(section ".rodata") char str_SFX_EVT_FLD_INCANT_C_802c12c8[25] __attribute__ ((aligned(4))) = "SFX_EVT_FLD_INCANT_CUBE5";
+__declspec(section ".rodata") char str_SFX_EVT_BTL_INCANT_C_802c12e4[25] __attribute__ ((aligned(4))) = "SFX_EVT_BTL_INCANT_CUBE1";
+__declspec(section ".rodata") char str_SFX_EVT_BTL_INCANT_C_802c1300[25] __attribute__ ((aligned(4))) = "SFX_EVT_BTL_INCANT_CUBE2";
+__declspec(section ".rodata") char str_SFX_EVT_BTL_INCANT_C_802c131c[25] __attribute__ ((aligned(4))) = "SFX_EVT_BTL_INCANT_CUBE3";
+__declspec(section ".rodata") char str_SFX_EVT_BTL_INCANT_C_802c1338[25] __attribute__ ((aligned(4))) = "SFX_EVT_BTL_INCANT_CUBE4";
+__declspec(section ".rodata") char str_SFX_EVT_BTL_INCANT_C_802c1354[25] __attribute__ ((aligned(4))) = "SFX_EVT_BTL_INCANT_CUBE5";
+__declspec(section ".rodata") char str_msg_mj_coin_up_802c1370[15] __attribute__ ((aligned(4))) = "msg_mj_coin_up";
+__declspec(section ".rodata") char str_msg_mj_last_802c1380[12] __attribute__ ((aligned(4))) = "msg_mj_last";
+__declspec(section ".rodata") char str_a_magu_802c138c[7] __attribute__ ((aligned(4))) = "a_magu";
+__declspec(section ".rodata") char str_kpa_03_802c1394[7] __attribute__ ((aligned(4))) = "kpa_03";
+__declspec(section ".rodata") char str_SFX_KUPPA_3RD_WATER__802c139c[26] __attribute__ ((aligned(4))) = "SFX_KUPPA_3RD_WATER_FALL1";
+__declspec(section ".rodata") char str_mjef_coinup_802c13b8[12] __attribute__ ((aligned(4))) = "mjef_coinup";
+/*
+ * Target-backed npcdrv named double family.
+ *
+ * Natural 8-byte alignment after the retained string catalog places these at
+ * target +0x1D0, +0x1D8, and +0x1E0. The compiler-generated conversion
+ * double remains natural at target +0x1E8.
+ */
+__declspec(section ".rodata") const f64 double_0p5_802c13c8
+    __attribute__ ((aligned(8))) = 0.5;
+__declspec(section ".rodata") const f64 double_3_802c13d0
+    __attribute__ ((aligned(8))) = 3.0;
+__declspec(section ".rodata") const f64 double_0_802c13d8
+    __attribute__ ((aligned(8))) = 0.0;
+
+/*
+ * Data-pass A39: complete target-backed npcdrv .sdata2 catalog.
+ *
+ * Definitions intentionally appear after all executable consumers so functions
+ * retain declaration-only views.  The six remaining private literal producers
+ * above are expressed through these target identities, eliminating the
+ * anonymous pool that previously occupied +0xC4..+0xF3.
+ */
+__declspec(section ".sdata2") const f32 float_0_8041fc7c = 0.0f;
+__declspec(section ".sdata2") const f32 float_0p5_8041fc80 = 0.5f;
+__declspec(section ".sdata2") const f32 float_60_8041fc84 = 60.0f;
+__declspec(section ".sdata2") const f32 float_365_8041fc88 = 365.0f;
+__declspec(section ".sdata2") const f32 float_16_8041fc8c = 16.0f;
+__declspec(section ".sdata2") const f32 float_0p8_8041fc90 = 0.800000011920929f;
+__declspec(section ".sdata2") const f32 float_1_8041fc94 = 1.0f;
+__declspec(section ".sdata2") const f32 float_10_8041fc98 = 10.0f;
+__declspec(section ".sdata2") const f32 float_11_8041fc9c = 11.0f;
+__declspec(section ".sdata2") const f32 float_12_8041fca0 = 12.0f;
+__declspec(section ".sdata2") const f32 float_15_8041fca4 = 15.0f;
+__declspec(section ".sdata2") const f32 float_1000_8041fca8 = 1000.0f;
+__declspec(section ".sdata2") const f32 float_1p5_8041fcac = 1.5f;
+__declspec(section ".sdata2") const f32 float_90_8041fcb0 = 90.0f;
+__declspec(section ".sdata2") const f32 float_30_8041fcb4 = 30.0f;
+__declspec(section ".sdata2") const f32 float_neg90_8041fcb8 = -90.0f;
+__declspec(section ".sdata2") const f32 float_rad2deg_8041fcbc = 57.29579162597656f;
+__declspec(section ".sdata2") const f32 float_360_8041fcc0 = 360.0f;
+__declspec(section ".sdata2") const f32 float_270_8041fcc4 = 270.0f;
+__declspec(section ".sdata2") const f32 float_neg270_8041fcc8 = -270.0f;
+__declspec(section ".sdata2") const f32 float_180_8041fccc = 180.0f;
+__declspec(section ".sdata2") const f32 float_neg180_8041fcd0 = -180.0f;
+__declspec(section ".sdata2") const f32 float_0p75_8041fcd4 = 0.75f;
+__declspec(section ".sdata2") const f32 float_neg1_8041fcd8 = -1.0f;
+__declspec(section ".sdata2") const f32 float_0p1_8041fcdc = 0.10000000149011612f;
+__declspec(section ".sdata2") const f32 float_3_8041fce0 = 3.0f;
+__declspec(section ".sdata2") const f32 float_neg600_8041fce4 = -600.0f;
+__declspec(section ".sdata2") const f32 float_600_8041fce8 = 600.0f;
+__declspec(section ".sdata2") const f32 float_0p2_8041fcec = 0.20000000298023224f;
+__declspec(section ".sdata2") const f32 float_100_8041fcf0 = 100.0f;
+__declspec(section ".sdata2") const f32 float_0p4_8041fcf4 = 0.4000000059604645f;
+__declspec(section ".sdata2") const f32 float_45_8041fcf8 = 45.0f;
+__declspec(section ".sdata2") const f32 float_neg980_8041fcfc = -980.0f;
+__declspec(section ".sdata2") const f32 float_0p15_8041fd00 = 0.15000000596046448f;
+__declspec(section ".sdata2") const f32 float_neg1000_8041fd04 = -1000.0f;
+__declspec(section ".sdata2") const f32 float_5_8041fd08 = 5.0f;
+__declspec(section ".sdata2") const f32 float_40_8041fd0c = 40.0f;
+__declspec(section ".sdata2") const f32 float_6p2832_8041fd10 = 6.2831854820251465f;
+__declspec(section ".sdata2") const f32 float_0p00761_8041fd14 = 0.00761000020429492f;
+__declspec(section ".sdata2") const f32 float_0p16605_8041fd18 = 0.1660500019788742f;
+__declspec(section ".sdata2") const f32 float_3p1416_8041fd1c = 3.1415927410125732f;
+__declspec(section ".sdata2") const f32 float_1p5708_8041fd20 = 1.5707963705062866f;
+__declspec(section ".sdata2") const f32 float_4p7124_8041fd24 = 4.71238899230957f;
+__declspec(section ".sdata2") const f32 float_0p03705_8041fd28 = 0.037050001323223114f;
+__declspec(section ".sdata2") const f32 float_0p4967_8041fd2c = 0.4966999888420105f;
+__declspec(section ".sdata2") const f32 float_4_8041fd30 = 4.0f;
+__declspec(section ".sdata2") const f32 float_2_8041fd34 = 2.0f;
+__declspec(section ".sdata2") const f32 float_160_8041fd38 = 160.0f;
+__declspec(section ".sdata2") const f32 float_20_8041fd3c = 20.0f;
+__declspec(section ".sdata2") char str_party_8041fd40[6] __attribute__ ((aligned(4))) = "party";
+__declspec(section ".sdata2") char str_mario_8041fd48[6] __attribute__ ((aligned(4))) = "mario";
+__declspec(section ".sdata2") const f32 float_1E06_8041fd50 = 1000000.0f;
+__declspec(section ".sdata2") const f32 float_0p05_8041fd54 = 0.05000000074505806f;
+__declspec(section ".sdata2") const f32 float_0p25_8041fd58 = 0.25f;
+__declspec(section ".sdata2") const f32 float_neg2_8041fd5c = -2.0f;
+__declspec(section ".sdata2") const f32 float_5000_8041fd60 = 5000.0f;
+__declspec(section ".sdata2") const f32 float_10000_8041fd64 = 10000.0f;
+__declspec(section ".sdata2") const f32 float_1p33_8041fd68 = 1.3300000429153442f;
+__declspec(section ".sdata2") char str_hoshi_8041fd6c[6] __attribute__ ((aligned(4))) = "hoshi";
+__declspec(section ".sdata2") char str_M_I_2_8041fd74[6] __attribute__ ((aligned(4))) = "M_I_2";
+__declspec(section ".sdata2") const f32 float_deg2rad_8041fd7c = 0.01745329238474369f;

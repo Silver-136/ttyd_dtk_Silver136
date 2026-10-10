@@ -165,6 +165,8 @@ USER_FUNC(evt_party_set_camid) {
 
 #pragma no_register_save_helpers on
 #pragma use_lmw_stmw off
+#pragma opt_loop_invariants off
+#pragma opt_common_subs off
 s32 evt_party_force_reset_outofscreen(EventEntry* event) {
     typedef struct RawVec { u32 x; u32 y; u32 z; } RawVec;
     extern void marioGetScreenPos(float* pos, float* x, float* y, float* z);
@@ -173,7 +175,7 @@ s32 evt_party_force_reset_outofscreen(EventEntry* event) {
 
 
     extern void* partyHitCheck(void* party, float* pos, float* dir, float* hitPos, float* out, float* dist);
-    extern f32 vec3_802e7bf0[3];
+    extern f32 vec3_802e7bf0[];
     extern f32 float_1_80421d40;
     extern f32 float_100_80421d64;
     extern f32 float_50_80421d68;
@@ -181,16 +183,18 @@ s32 evt_party_force_reset_outofscreen(EventEntry* event) {
     void* party;
     void* work;
     s32* args = event->args;
+    f32 hitPos[3];
+    f32 dir[3];
+    f32 out[3];
+    f32 pos[3];
     f32 initialPos[3];
     f32 screenPos[3];
-    f32 pos[3];
-    f32 dir[3];
-    f32 hitPos[3];
-    f32 out[3];
-    f32 dist;
     f32 sx;
     f32 sy;
     f32 sz;
+    f32 dist;
+    f32 limit;
+    f32 raise;
     s32 partyId = 1;
 
     if (args[0] == 0) {
@@ -202,24 +206,26 @@ s32 evt_party_force_reset_outofscreen(EventEntry* event) {
     }
     *(RawVec*)initialPos = *(RawVec*)((s32)party + 0x58);
     marioGetScreenPos(initialPos, &sx, &sy, &sz);
-    if (marioChkInScreen((s32)sy, (s32)sx) != 0) {
+    if (marioChkInScreen((s32)sx, (s32)sy) != 0) {
         return 2;
     }
     partyClearFootmark();
     work = *(void**)((s32)party + 0x160);
+    limit = float_100_80421d64;
+    raise = float_50_80421d68;
     *(RawVec*)dir = *(RawVec*)vec3_802e7bf0;
     do {
         *(RawVec*)screenPos = *(RawVec*)((s32)party + 0x58);
         marioGetScreenPos(screenPos, &sx, &sy, &sz);
-        if (marioChkInScreen((s32)sy, (s32)sx) != 0) {
+        if (marioChkInScreen((s32)sx, (s32)sy) != 0) {
             break;
         }
         movePos((f32*)((s32)party + 0x58), (f32*)((s32)party + 0x60), float_1_80421d40,
                 angleABf(*(f32*)((s32)party + 0x58), *(f32*)((s32)party + 0x60),
                          *(f32*)((s32)work + 0x8C), *(f32*)((s32)work + 0x94)));
-        dist = float_100_80421d64;
+        dist = limit;
         *(RawVec*)hitPos = *(RawVec*)((s32)party + 0x58);
-        hitPos[1] += float_50_80421d68;
+        hitPos[1] += raise;
         if (partyHitCheck(party, hitPos, dir, out, pos, &dist) != NULL) {
             *(f32*)((s32)party + 0x5C) = out[1];
         } else {
@@ -228,6 +234,8 @@ s32 evt_party_force_reset_outofscreen(EventEntry* event) {
     } while (1);
     return 2;
 }
+#pragma opt_common_subs reset
+#pragma opt_loop_invariants reset
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -349,28 +357,32 @@ s32 evt_party_set_dir(EventEntry* event, s32 first) {
     s32* args = event->args;
     f32 dir;
     s32 frames;
+    s32 frameArg;
     s32 partyId;
 
     if (first != 0) {
+        void* initialParty;
         partyId = 1;
         if (args[0] == 0) {
             partyId = partyCtrlNo;
         }
         args++;
         *(s32*)((s32)event + 0x78) = partyId;
-        party = partyGetPtr(*(s32*)((s32)event + 0x78));
-        if (party == NULL) {
+        initialParty = partyGetPtr(*(s32*)((s32)event + 0x78));
+        if (initialParty == NULL) {
             return 2;
         }
         *(s32*)((s32)event + 0x80) = 0;
-        *(f32*)((s32)event + 0x7C) = *(f32*)((s32)party + 0x10C);
+        *(f32*)((s32)event + 0x7C) = *(f32*)((s32)initialParty + 0x10C);
     } else {
         args++;
     }
     dir = evtGetFloat(event, args[0]);
-    frames = evtGetValue(event, args[1]);
-    if (frames >= 0) {
-        frames = sysMsec2Frame(frames);
+    frameArg = evtGetValue(event, args[1]);
+    if (frameArg >= 0) {
+        frames = sysMsec2Frame(frameArg);
+    } else {
+        frames = frameArg;
     }
     party = partyGetPtr(*(s32*)((s32)event + 0x78));
     if (party == NULL) {
@@ -381,7 +393,8 @@ s32 evt_party_set_dir(EventEntry* event, s32 first) {
         f32 start = *(f32*)((s32)event + 0x7C);
         f32 delta = target - start;
         f32 ratio = (f32)*(s32*)((s32)event + 0x80) / (f32)frames;
-        *(f32*)((s32)party + 0x10C) = revise360(start + (delta * ratio));
+        delta *= ratio;
+        *(f32*)((s32)party + 0x10C) = revise360(start + delta);
         *(f32*)((s32)party + 0x110) = *(f32*)((s32)party + 0x10C);
         *(f32*)((s32)party + 0x100) = toMovedirSimple(*(f32*)((s32)party + 0x110));
         *(s32*)((s32)event + 0x80) = *(s32*)((s32)event + 0x80) + 1;
@@ -722,6 +735,7 @@ s32 evt_party_jump_pos(EventEntry* event, s32 first) {
 
     extern void partyChgPoseId(void* party, s32 poseId);
     extern s32 searchUnder2(f32 x, f32 y, f32 z, f32* out);
+    extern f64 fabs(f64);
 
     extern void* partySearchGround(f64 a, f64 b, void* party);
     extern void unk_800bc660(void* party);
@@ -750,6 +764,7 @@ s32 evt_party_jump_pos(EventEntry* event, s32 first) {
     result = 0;
 
     if (first != 0) {
+        void* initialParty;
         firstArg = args[0];
         partyId = 1;
         args = args + 1;
@@ -757,16 +772,16 @@ s32 evt_party_jump_pos(EventEntry* event, s32 first) {
             partyId = partyCtrlNo;
         }
         *(s32*)((s32)event + 0x78) = partyId;
-        party = partyGetPtr(*(s32*)((s32)event + 0x78));
-        if (party == NULL) {
+        initialParty = partyGetPtr(*(s32*)((s32)event + 0x78));
+        if (initialParty == NULL) {
             return 2;
         }
-        if (*(u8*)((s32)party + 0x34) == 0xB) {
+        if (*(u8*)((s32)initialParty + 0x34) == 0xB) {
             return 2;
         }
         *(s32*)((s32)event + 0x84) = 0;
-        partyChgMot(party, 8);
-        partyChgRunMode(party, 9);
+        partyChgMot(initialParty, 8);
+        partyChgRunMode(initialParty, 9);
     } else {
         args = args + 1;
     }
@@ -814,20 +829,16 @@ state_0:
     {
         f32 height = y - *(f32*)((s32)party + 0x5C);
         f32 half = float_0p5_80421d44 * framef;
-        f32 accelBase = apex;
         f32 accel;
         f32 under[2];
-        if (height >= float_1_80421d40 || height <= -float_1_80421d40) {
-            if (height < float_0_80421d4c) {
-                accelBase = height;
-                if (searchUnder2(x, y, z, under) != 0) {
-                    accelBase = apex;
-                }
-            } else {
-                accelBase = height + float_37_80421d50;
-            }
+        if (fabs(height) < float_1_80421d40) {
+            height = apex;
+        } else if (height >= float_0_80421d4c) {
+            height += float_37_80421d50;
+        } else if (searchUnder2(x, y, z, under) != 0) {
+            height = apex;
         }
-        accel = (accelBase + accelBase) / (half * half - half);
+        accel = (height + height) / (half * half - half);
         *(f32*)((s32)party + 0x114) = accel * half;
         *(f32*)((s32)party + 0x174) = -accel;
         *(s32*)((s32)event + 0x80) = (s32)(float_0p5_80421d44 + half);
@@ -857,7 +868,7 @@ state_2:
     *(f32*)((s32)party + 0x114) += *(f32*)((s32)party + 0x174);
     {
         f32 vy = *(f32*)((s32)party + 0x114);
-        f32 avy = vy < float_0_80421d4c ? -vy : vy;
+        f64 avy = fabs(vy);
         void* hit = partySearchGround(avy, avy, party);
         s32 landed = 0;
         if (hit != NULL && (*(f32*)((s32)party + 0x5C) + vy) <= *(f32*)((s32)party + 0xE4)) {

@@ -5,13 +5,52 @@ extern f64 sin(f64 x);
 extern f64 cos(f64 x);
 extern s32 gp;
 extern u8 DemoPad[];
-extern f32 angleABTBL[];
+static f32 angleABTBL[91] = {
+    1.0f, 1.273187f, 1.27303f, 1.272768f, 1.272402f, 1.271932f,
+    1.271358f, 1.270681f, 1.269902f, 1.269021f, 1.268038f, 1.266956f,
+    1.265774f, 1.264494f, 1.263116f, 1.261643f, 1.260075f, 1.258413f,
+    1.256659f, 1.254815f, 1.252881f, 1.250859f, 1.248752f, 1.24656f,
+    1.244285f, 1.241929f, 1.239494f, 1.236981f, 1.234393f, 1.231731f,
+    1.228997f, 1.226192f, 1.22332f, 1.220382f, 1.217379f, 1.214315f,
+    1.211189f, 1.208006f, 1.204766f, 1.201471f, 1.198124f, 1.194727f,
+    1.191281f, 1.187787f, 1.18425f, 1.180669f, 1.177047f, 1.173386f,
+    1.169687f, 1.165952f, 1.162184f, 1.158384f, 1.154553f, 1.150693f,
+    1.146806f, 1.142893f, 1.138957f, 1.134998f, 1.131018f, 1.127019f,
+    1.123002f, 1.118969f, 1.11492f, 1.110858f, 1.106783f, 1.102697f,
+    1.098601f, 1.094496f, 1.090384f, 1.086266f, 1.082142f, 1.078014f,
+    1.073883f, 1.06975f, 1.065616f, 1.061482f, 1.057348f, 1.053216f,
+    1.049087f, 1.04496f, 1.040838f, 1.036721f, 1.03261f, 1.028504f,
+    1.024406f, 1.020316f, 1.016234f, 1.01216f, 1.008097f, 1.004043f,
+    1.0f
+};
 extern void DEMOPadRead(void);
 extern void U_PADControlMotor(s32 controller, s32 command);
 extern f32 fabsf(f32 x);
 extern void* memcpy(void* dst, const void* src, u32 size);
 extern void fsort(void** table, u32 count);
 typedef f32 (*IntplCallback)(s32 current, s32 total, f32 start, f32 end);
+
+/* Target-backed system build/interpolation read-only prefix. */
+const char R_build_date[] = "Sep  9 2004";
+const char R_build_time[] = "09:34:02";
+const char str_LINEAR_802bf178[] = "LINEAR";
+const char str_DOUBLE_ACCEL_802bf180[] = "DOUBLE_ACCEL";
+const char str_TRIPLE_ACCEL_802bf190[] = "TRIPLE_ACCEL";
+const char str_DOUBLE_DECEL_802bf1a0[] = "DOUBLE_DECEL";
+const char str_TRIPLE_DECEL_802bf1b0[] = "TRIPLE_DECEL";
+const char str_GEMINI_802bf1c0[] = "GEMINI";
+const char str_BURURUN_802bf1c8[] = "BURURUN";
+const char str_BURURUN_DECEL_802bf1d0[] = "BURURUN_DECEL";
+const char str_SIN_ACCEL_802bf1e0[] = "SIN_ACCEL";
+const char str_SIN_DECEL_802bf1ec[] = "SIN_DECEL";
+__declspec(section ".rodata") f64 double_0p5_802bf1f8 = 0.5;
+const f64 double_3_802bf200 = 3.0;
+const f64 double_0_802bf208 = 0.0;
+const char str_PCT8s_PCT_4d_PCTs_802bf210[] = "[%8s:% 4d] %s";
+
+const char* dat_ptr_80414f20 = R_build_date;
+const char* dat_ptr_80414f24 = R_build_time;
+
 
 extern const u32 dat_8041f440;
 extern const f32 float_1_8041f444;
@@ -36,12 +75,11 @@ extern const f32 float_90_8041f48c;
 extern const f32 float_270_8041f490;
 extern const char str__8041f494[];
 
-static void* tmp0[256];
-static u8 tmp1[0x400];
+void* tmp0[3072];
+u8 tmp1[0x100];
 static QSortCompareFunc comp;
 extern f64 fmod(f64 x, f64 y);
 extern const f64 double_360_802bf240;
-extern const f64 double_0p5_802bf1f8;
 extern const f64 double_3_802bf200;
 extern const f64 double_0_802bf208;
 extern f32 __float_nan[];
@@ -723,10 +761,8 @@ void makeKey(void) {
     s32 byteOfs;
     s32 count;
     s32 slow;
-    s32 status;
     u32 value;
     u32 rumbleIndex;
-    u8 rumbleStatus;
 
     DEMOPadRead();
 
@@ -840,19 +876,18 @@ void makeKey(void) {
             if (*(u8*)(gp + rumbleIndex + 0x1310) != 0) {
                 U_PADControlMotor(rumbleIndex, 2);
             } else {
-                rumbleStatus = *(u8*)(gp + rumbleIndex + 0x13D0);
-
-                if (*(u8*)(gp + rumbleIndex + 0x13D4) != rumbleStatus) {
-                    status = rumbleStatus;
-
-                    if (status == 1) {
-                        U_PADControlMotor(rumbleIndex, 1);
-                    } else if (status >= 1) {
-                        if (status < 3) {
+                if (*(u8*)(gp + rumbleIndex + 0x13D4) !=
+                    *(u8*)(gp + rumbleIndex + 0x13D0)) {
+                    switch (*(u8*)(gp + rumbleIndex + 0x13D0)) {
+                        case 0:
+                            U_PADControlMotor(rumbleIndex, 0);
+                            break;
+                        case 1:
+                            U_PADControlMotor(rumbleIndex, 1);
+                            break;
+                        case 2:
                             U_PADControlMotor(rumbleIndex, 2);
-                        }
-                    } else if (status >= 0) {
-                        U_PADControlMotor(rumbleIndex, 0);
+                            break;
                     }
 
                     *(u8*)(gp + rumbleIndex + 0x13D4) = *(u8*)(gp + rumbleIndex + 0x13D0);

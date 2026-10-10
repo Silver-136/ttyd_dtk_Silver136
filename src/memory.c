@@ -21,6 +21,7 @@ s32 size_table[5][2] = {
 	{0, 0x64}
 };
 
+__declspec(section ".data") u32 gap_06_803D842C_bss;
 u32 smartWork[0x3807];
 u32* wp = smartWork;
 
@@ -308,10 +309,12 @@ void _mapFree(void* base, void* ptr) {
     *(u16*)((s32)block + 8) = 0;
 }
 
+#pragma opt_common_subs off
 void smartInit(void) {
     u32 size;
     u32* alloc;
-    u32* p;
+    typedef struct SmartLink { u32 payload[5]; struct SmartLink* next; struct SmartLink* prev; } SmartLink;
+    SmartLink* p;
     s32 i;
 
     size = (u32)heapEnd[4] - (u32)heapStart[4] - 0x20;
@@ -326,28 +329,11 @@ void smartInit(void) {
     wp[0x3801] = (u32)heapEnd[4] - (u32)heapStart[4] - 0x20;
     memset((void*)wp[0], 0, (u32)heapEnd[4] - (u32)heapStart[4] - 0x20);
     memset(wp + 1, 0, 0xE000);
-    p = wp + 1;
-    i = 0x100;
-    do {
-        p[5] = (u32)(p + 7);
-        p[6] = (u32)(p - 7);
-        p[0xC] = (u32)(p + 0xE);
-        p[0xD] = (u32)p;
-        p[0x13] = (u32)(p + 0x15);
-        p[0x14] = (u32)(p + 7);
-        p[0x1A] = (u32)(p + 0x1C);
-        p[0x1B] = (u32)(p + 0xE);
-        p[0x21] = (u32)(p + 0x23);
-        p[0x22] = (u32)(p + 0x15);
-        p[0x28] = (u32)(p + 0x2A);
-        p[0x29] = (u32)(p + 0x1C);
-        p[0x2F] = (u32)(p + 0x31);
-        p[0x30] = (u32)(p + 0x23);
-        p[0x36] = (u32)(p + 0x38);
-        p[0x37] = (u32)(p + 0x2A);
-        p += 0x38;
-        i--;
-    } while (i != 0);
+    p = (SmartLink*)(wp + 1);
+    for (i = 0; i < 0x800; i++, p++) {
+        p->next = p + 1;
+        p->prev = p - 1;
+    }
     wp[0x3804] = (u32)(wp + 1);
     *(u32*)(wp[0x3804] + 0x18) = 0;
     wp[0x3805] = (u32)(wp + 0x37FA);
@@ -355,6 +341,7 @@ void smartInit(void) {
     wp[0x3806] = 0;
     g_bFirstSmartAlloc = 0;
 }
+#pragma opt_common_subs reset
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
@@ -364,8 +351,10 @@ void smartInit(void) {
 #pragma no_register_save_helpers off
 #pragma use_lmw_stmw on
 
+#pragma opt_common_subs off
 void L_smartReInit(void) {
-    u32* p;
+    typedef struct SmartLink { u32 payload[5]; struct SmartLink* next; struct SmartLink* prev; } SmartLink;
+    SmartLink* p;
     s32 i;
 
     wp[0x3802] = 0;
@@ -374,35 +363,18 @@ void L_smartReInit(void) {
     memset((void*)wp[0], 0, (u32)heapEnd[4] - (u32)heapStart[4] - 0x20);
     memset(wp + 1, 0, 0xE000);
 
-    p = wp + 1;
-    i = 0x100;
-    do {
-        p[5] = (u32)(p + 7);
-        p[6] = (u32)(p - 7);
-        p[0xC] = (u32)(p + 0xE);
-        p[0xD] = (u32)p;
-        p[0x13] = (u32)(p + 0x15);
-        p[0x14] = (u32)(p + 7);
-        p[0x1A] = (u32)(p + 0x1C);
-        p[0x1B] = (u32)(p + 0xE);
-        p[0x21] = (u32)(p + 0x23);
-        p[0x22] = (u32)(p + 0x15);
-        p[0x28] = (u32)(p + 0x2A);
-        p[0x29] = (u32)(p + 0x1C);
-        p[0x2F] = (u32)(p + 0x31);
-        p[0x30] = (u32)(p + 0x23);
-        p[0x36] = (u32)(p + 0x38);
-        p[0x37] = (u32)(p + 0x2A);
-        p += 0x38;
-        i--;
-    } while (i != 0);
-
+    p = (SmartLink*)(wp + 1);
+    for (i = 0; i < 0x800; i++, p++) {
+        p->next = p + 1;
+        p->prev = p - 1;
+    }
     wp[0x3804] = (u32)(wp + 1);
     *(u32*)(wp[0x3804] + 0x18) = 0;
     wp[0x3805] = (u32)(wp + 0x37FA);
     *(u32*)(wp[0x3805] + 0x14) = 0;
     g_bFirstSmartAlloc = 0;
 }
+#pragma opt_common_subs reset
 
 
 void smartAutoFree(s32 kind) {
@@ -692,3 +664,6 @@ void* smartTexObj(void* texObj, void** data) {
     }
     return texObj;
 }
+
+/* Named four-byte terminal storage from the US target object. */
+__declspec(section ".sdata") const u32 gap_07_804151E4_sdata = 0;

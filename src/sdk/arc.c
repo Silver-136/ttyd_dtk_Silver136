@@ -64,125 +64,91 @@ u32 ARCConvertPathToEntrynum(int param_1, char* param_2) {
         u32 next;
     } ARCEntry;
     extern u8 __lower_map[];
-    ARCHandle* handle = (ARCHandle*)param_1;
-    u32 entryNum = handle->currDir;
-    ARCEntry* entries = (ARCEntry*)handle->FSTStart;
-    u8* path = (u8*)param_2;
+    ARCHandle* handle;
+    u32 dir;
+    ARCEntry* entries;
+    u32 i;
+    u8* path;
+    u8* ptr;
+    u8* p;
+    u8* name;
+    u32 length;
+    BOOL isDir;
+    BOOL match;
     u8 c;
+    s32 a;
+    s32 b;
+
+    handle = (ARCHandle*)param_1;
+    dir = handle->currDir;
+    entries = (ARCEntry*)handle->FSTStart;
+    path = (u8*)param_2;
 
     while (TRUE) {
-        while (TRUE) {
-            c = *path;
-            if ((s8)c == 0) {
-                return entryNum;
-            }
-            if ((s8)c != '/') {
-                break;
-            }
-            entryNum = 0;
+        if ((s8)*path == 0) {
+            return dir;
+        } else if ((s8)*path == '/') {
+            dir = 0;
             path++;
-        }
-
-        if ((s8)c == '.') {
-            c = path[1];
-            if ((s8)c == '.') {
-                c = path[2];
-                if (c == '/') {
-                    entryNum = entries[entryNum].location;
+            continue;
+        } else if ((s8)*path == '.') {
+            if ((s8)path[1] == '.') {
+                if (path[2] == '/') {
+                    dir = entries[dir].location;
                     path += 3;
                     continue;
+                } else if ((s8)path[2] == 0) {
+                    return entries[dir].location;
                 }
-                if ((s8)c == 0) {
-                    return entries[entryNum].location;
-                }
-            } else {
-                if ((s8)c == '/') {
-                    path += 2;
-                    continue;
-                }
-                if ((s8)c == 0) {
-                    return entryNum;
-                }
+            } else if ((s8)path[1] == '/') {
+                path += 2;
+                continue;
+            } else if ((s8)path[1] == 0) {
+                return dir;
             }
         }
 
-        {
-            u8* end = path;
-            u8 endChar;
-            u32 parent;
-            u32 stop;
-            u32 hasRest;
+        for (ptr = path; (s8)*ptr != 0 && (s8)*ptr != '/'; ptr++) {
+        }
+        isDir = ((u32)(-(s32)(s8)*ptr) | (u32)(s8)*ptr) >> 31;
+        length = ptr - path;
+        p = path;
 
-            while ((endChar = *end, (s8)endChar != 0) && (s8)endChar != '/') {
-                end++;
+        for (i = dir + 1; i < entries[dir].next;
+             i = (entries[i].flags & 0xFF000000) ? entries[i].next : i + 1) {
+            if ((entries[i].flags & 0xFF000000) == 0 && isDir) {
+                continue;
             }
-
-            parent = entryNum;
-            stop = entries[parent].next;
-            hasRest = (((u32)(-(s32)(s8)endChar) | (u32)(s8)endChar) >> 31);
-            entryNum++;
-
-            while (entryNum < stop) {
-                ARCEntry* ent = &entries[entryNum];
-                u32 flags = ent->flags;
-                u32 isDir = flags & 0xFF000000;
-
-                if (isDir != 0 || hasRest == 0) {
-                    u8* name = (u8*)(handle->FSTStringStart + (flags & 0xFFFFFF));
-                    u8* p = path;
-                    BOOL match;
-
-                    while (TRUE) {
-                        u32 a;
-                        u32 b;
-                        c = *name;
-                        if ((s8)c == 0) {
-                            c = *p;
-                            if (c == '/' || (s8)c == 0) {
-                                match = TRUE;
-                            } else {
-                                match = FALSE;
-                            }
-                            break;
-                        }
-                        name++;
-                        if ((s8)c == -1) {
-                            a = 0xFFFFFFFF;
-                        } else {
-                            a = __lower_map[c];
-                        }
-                        c = *p;
-                        p++;
-                        if ((s8)c == -1) {
-                            b = 0xFFFFFFFF;
-                        } else {
-                            b = __lower_map[c];
-                        }
-                        if (b != a) {
-                            match = FALSE;
-                            break;
-                        }
-                    }
-
-                    if (match) {
-                        if (hasRest == 0) {
-                            return entryNum;
-                        }
-                        path = end + 1;
-                        break;
-                    }
+            name = (u8*)(handle->FSTStringStart + (entries[i].flags & 0xFFFFFF));
+            p = path;
+            while (TRUE) {
+                c = *name;
+                if ((s8)c == 0) {
+                    c = *p;
+                    match = (c == '/' || (s8)c == 0) ? TRUE : FALSE;
+                    break;
                 }
-                if (isDir == 0) {
-                    entryNum++;
-                } else {
-                    entryNum = ent->next;
+                name++;
+                a = ((s8)c == -1) ? -1 : __lower_map[c];
+                c = *p++;
+                b = ((s8)c == -1) ? -1 : __lower_map[c];
+                if (b != a) {
+                    match = FALSE;
+                    break;
                 }
             }
-
-            if (entryNum >= stop) {
-                return 0xFFFFFFFF;
+            if (match == TRUE) {
+                goto next_hier;
             }
         }
+        return 0xFFFFFFFF;
+
+    next_hier:
+        if (!isDir) {
+            return i;
+        }
+        dir = i;
+        path += length + 1;
     }
 }
 
@@ -203,7 +169,7 @@ u32 myStrncpy(char* dst, char* src, u32 maxlen) {
     return maxlen - len;
 }
 #pragma no_register_save_helpers on
-#pragma use_lmw_stmw off
+#pragma use_lmw_stmw on
 int entryToPath(ARCHandle* handle, u32 entryNum, char* path, u32 maxlen) {
     typedef struct ARCEntry {
         u32 flags;
@@ -212,9 +178,9 @@ int entryToPath(ARCHandle* handle, u32 entryNum, char* path, u32 maxlen) {
     } ARCEntry;
     ARCEntry* entries;
     char* stringStart;
-    char* name0;
     char* name1;
     char* name2;
+    char* name0;
     char* name3;
     u32 parent;
     u32 len;

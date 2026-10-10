@@ -196,14 +196,20 @@ void windowDispGX_Kanban(f32 x, f32 y, f32 width, f32 height, s32 type, u8 alpha
     extern u32 dat_8042052c;
 
     void* cam;
-    u32 fogColor;
+    u32 tevColorCopy;
     u32 tevColor;
+    u32 fogColor;
     f32 posMtx[3][4];
     f32 scaleMtx[3][4];
-    f32 tileMtx0[3][4];
-    f32 tileMtx1[3][4];
-    f32 tileMtx2[3][4];
-    f32 tileMtx3[3][4];
+    f32 woodMtx0[3][4];
+    f32 woodMtx1[3][4];
+    f32 woodMtx2[3][4];
+    f32 woodMtx3[3][4];
+    f32 lineMtx0[3][4];
+    f32 lineMtx1[3][4];
+    f32 lineMtx2[3][4];
+    f32 lineMtx3[3][4];
+    f32 letterMtx[3][4];
 
 #define FIFO_F32(v) (*(volatile f32*)0xCC008000 = (v))
 #define EMIT_VTX(px, py, tu, tv) \
@@ -220,8 +226,8 @@ void windowDispGX_Kanban(f32 x, f32 y, f32 width, f32 height, s32 type, u8 alpha
         GXSetNumTexGens(1); \
         GXSetTexCoordGen2(0, 1, 4, 0x1E, 0, 0x7D); \
         PSMTXScale((mtx), \
-                   (drawW) / (f32)GXGetTexObjWidth((void*)((s32)wakuTexObj + (texOff))), \
-                   (drawH) / (f32)GXGetTexObjHeight((void*)((s32)wakuTexObj + (texOff))), \
+                   __fabsf(drawW) / (f32)GXGetTexObjWidth((void*)((s32)wakuTexObj + (texOff))), \
+                   __fabsf(drawH) / (f32)GXGetTexObjHeight((void*)((s32)wakuTexObj + (texOff))), \
                    float_1_80420548); \
         GXLoadTexMtxImm((mtx), 0x1E, 1); \
         GXLoadTexObj((void*)((s32)wakuTexObj + (texOff)), 0); \
@@ -263,7 +269,8 @@ void windowDispGX_Kanban(f32 x, f32 y, f32 width, f32 height, s32 type, u8 alpha
 
     tevColor = dat_8042052c;
     ((u8*)&tevColor)[3] = alpha;
-    GXSetTevColor(1, &tevColor);
+    tevColorCopy = tevColor;
+    GXSetTevColor(1, &tevColorCopy);
 
     PSMTXTrans(posMtx, x, y, float_0_80420538);
     PSMTXScale(scaleMtx, width / float_560_8042054c, height / float_176_80420550, float_1_80420548);
@@ -275,29 +282,29 @@ void windowDispGX_Kanban(f32 x, f32 y, f32 width, f32 height, s32 type, u8 alpha
     switch (type) {
         case 2:
         case 4:
-            DRAW_TILE(tileMtx0, 0x3A0, float_72_80420554, float_176_80420550,
+            DRAW_TILE(woodMtx0, 0x3A0, float_72_80420554, float_176_80420550,
                       float_0_80420538, float_0_80420538, float_72_80420554, float_neg176_80420558);
-            DRAW_TILE(tileMtx1, 0x3E0, float_416_8042055c, float_136_80420560,
+            DRAW_TILE(woodMtx1, 0x3E0, float_416_8042055c, float_136_80420560,
                       float_72_80420554, float_0_80420538, float_488_80420564, float_neg136_80420568);
-            DRAW_TILE(tileMtx2, 0x3C0, float_72_80420554, float_176_80420550,
+            DRAW_TILE(woodMtx2, 0x3C0, float_72_80420554, float_176_80420550,
                       float_488_80420564, float_0_80420538, float_560_8042054c, float_neg176_80420558);
-            DRAW_TILE(tileMtx3, 0x400, float_416_8042055c, float_40_8042056c,
+            DRAW_TILE(woodMtx3, 0x400, float_416_8042055c, float_40_8042056c,
                       float_72_80420554, float_neg136_80420568, float_488_80420564, float_neg176_80420558);
             break;
 
         case 10:
-            DRAW_TILE(tileMtx0, 0x320, float_72_80420554, float_176_80420550,
+            DRAW_TILE(lineMtx0, 0x320, float_72_80420554, float_176_80420550,
                       float_0_80420538, float_0_80420538, float_72_80420554, float_neg176_80420558);
-            DRAW_TILE(tileMtx1, 0x360, float_416_8042055c, float_136_80420560,
+            DRAW_TILE(lineMtx1, 0x360, float_416_8042055c, float_136_80420560,
                       float_72_80420554, float_0_80420538, float_488_80420564, float_neg136_80420568);
-            DRAW_TILE(tileMtx2, 0x340, float_72_80420554, float_176_80420550,
+            DRAW_TILE(lineMtx2, 0x340, float_72_80420554, float_176_80420550,
                       float_488_80420564, float_0_80420538, float_560_8042054c, float_neg176_80420558);
-            DRAW_TILE(tileMtx3, 0x380, float_416_8042055c, float_40_8042056c,
+            DRAW_TILE(lineMtx3, 0x380, float_416_8042055c, float_40_8042056c,
                       float_72_80420554, float_neg136_80420568, float_488_80420564, float_neg176_80420558);
             break;
 
         case 7:
-            DRAW_TILE(tileMtx0, 0x0C0, float_560_8042054c, float_176_80420550,
+            DRAW_TILE(letterMtx, 0x0C0, float_560_8042054c, float_176_80420550,
                       float_0_80420538, float_0_80420538, float_560_8042054c, float_neg176_80420558);
             break;
 
@@ -1253,6 +1260,8 @@ void windowDispGX_Waku_col(double x, double y, double width, double height, doub
     f32 y1;
     f32 y2;
     f32 y3;
+    f32 texOneThird;
+    f32 texTwoThirds;
 
 #define FIFO_F32 (*(volatile f32*)0xCC008000)
 #define EMIT_VERTEX(px, py, s, t) \
@@ -1325,6 +1334,11 @@ void windowDispGX_Waku_col(double x, double y, double width, double height, doub
     x0 = (f32)x;
     y0 = (f32)y;
 
+    texOneThird = float_0p33333_80420540;
+    texTwoThirds = float_0p66667_80420544;
+#define float_0p33333_80420540 texOneThird
+#define float_0p66667_80420544 texTwoThirds
+
     EMIT_QUAD(x0, y0, float_0_80420538, float_0_80420538,
               x1, y0, float_0p33333_80420540, float_0_80420538,
               x1, y1, float_0p33333_80420540, float_0p33333_80420540,
@@ -1362,6 +1376,8 @@ void windowDispGX_Waku_col(double x, double y, double width, double height, doub
               x3, y3, float_1_80420548, float_1_80420548,
               x2, y3, float_0p66667_80420544, float_1_80420548);
 
+#undef float_0p66667_80420544
+#undef float_0p33333_80420540
 #undef EMIT_QUAD
 #undef EMIT_VERTEX
 #undef FIFO_F32
@@ -1385,6 +1401,8 @@ void windowDispGX2_Waku_col(f32 x, f32 y, f32 width, f32 height, f32 curve, void
     f32 y1;
     f32 y2;
     f32 y3;
+    f32 texOneThird;
+    f32 texTwoThirds;
 
 
     cam = camGetCurPtr();
@@ -1443,6 +1461,11 @@ void windowDispGX2_Waku_col(f32 x, f32 y, f32 width, f32 height, f32 curve, void
     x2 = x3 - curve;
     y2 = y3 + curve;
 
+    texOneThird = float_0p33333_80420540;
+    texTwoThirds = float_0p66667_80420544;
+#define float_0p33333_80420540 texOneThird
+#define float_0p66667_80420544 texTwoThirds
+
     *(volatile f32*)0xCC008000 = x0;
     *(volatile f32*)0xCC008000 = y0;
     *(volatile f32*)0xCC008000 = float_0_80420538;
@@ -1631,6 +1654,9 @@ void windowDispGX2_Waku_col(f32 x, f32 y, f32 width, f32 height, f32 curve, void
     *(volatile f32*)0xCC008000 = float_0_80420538;
     *(volatile f32*)0xCC008000 = float_0p66667_80420544;
     *(volatile f32*)0xCC008000 = float_1_80420548;
+
+#undef float_0p66667_80420544
+#undef float_0p33333_80420540
 
 }
 

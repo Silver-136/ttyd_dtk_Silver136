@@ -46,6 +46,8 @@ s32 marioChkDeepSleep(void) {
 #pragma use_lmw_stmw on
 
 
+#pragma no_register_save_helpers on
+#pragma use_lmw_stmw off
 u8 mot_stay(void) {
     extern void peach_stay(void);
     extern void marioClearJumpPara(void);
@@ -71,6 +73,7 @@ u8 mot_stay(void) {
     extern void marioChgMot2(s32 motion);
     extern u32 psndSFXOn_3D(s32 id, void* position);
     extern s32 strcmp(char* left, char* right);
+    extern void* gp;
     extern f32 float_0_80421010;
     extern char str_M_S_1_80421008;
     extern char str_M_I_S_80421014;
@@ -123,8 +126,8 @@ u8 mot_stay(void) {
     }
 
     if ((PAUSE_BUTTONS & 0x100) == 0) {
-        TRIG_FLAGS &= ~0x00100000;
         TRIG_FLAGS &= ~0x00200000;
+        TRIG_FLAGS &= ~0x00400000;
     }
 
     if ((TRIG_FLAGS & 1) != 0) {
@@ -140,7 +143,7 @@ u8 mot_stay(void) {
         } else {
             MOTION_TIMER = ((TRIG_FLAGS & 0x100000) != 0) ? 10 : 0;
         }
-        TRIG_FLAGS &= ~0x80000;
+        TRIG_FLAGS &= ~0x100000;
         JUMP_POS[0] = POS[0];
         JUMP_POS[1] = POS[1];
         JUMP_POS[2] = POS[2];
@@ -151,9 +154,9 @@ u8 mot_stay(void) {
         marioSoundInit();
         marioResetCamFollowRate();
 
-        if ((FLAGS & 0x1000000) == 0) {
-            if ((FLAGS & 0x800000) == 0) {
-                if ((DISP_FLAGS & 0x20000000) != 0) {
+        if ((FLAGS & 0x80000000) == 0) {
+            if ((FLAGS & 0x100000) == 0) {
+                if ((DISP_FLAGS & 0x01000000) != 0) {
                     marioChgMot2(0x15);
                     motSlitCancel();
                 }
@@ -161,12 +164,12 @@ u8 mot_stay(void) {
                 motSlitContinue();
             }
 
-            if ((FLAGS & 0x400000) == 0) {
+            if ((FLAGS & 0x2000) == 0) {
                 hp = pouchGetHP();
                 if (hp == 0) {
                     marioChgPose(&str_M_I_S_80421014);
                     psndSFXOn_3D(0x173, POS);
-                } else if (pouchGetHP() >= 6 && marioChkKey() != 0) {
+                } else if (pouchGetHP() > 5 && marioChkKey() != 0) {
                     DISP_FLAGS |= 0x4000000;
                     marioChgPose(&str_M_S_3_8042101c);
                     LOW_HP_TIMER = 0;
@@ -178,12 +181,18 @@ u8 mot_stay(void) {
             }
         } else {
             marioChgPose(&str_M_S_1_80421008);
+            if ((FLAGS & 0x20) == 0) {
+                BASE_SPEED = float_0_80421010;
+            }
+            FLAGS &= ~0x8000;
         }
-        BASE_SPEED = float_0_80421010;
-        FLAGS &= ~0x200000;
+        if ((FLAGS & 0x20) == 0) {
+            BASE_SPEED = float_0_80421010;
+        }
+        FLAGS &= ~0x8000;
     }
 
-    if ((FLAGS & 0x1000000) != 0) {
+    if ((FLAGS & 0x80000000) != 0) {
         marioChkJump();
         if (STICK_SENS > float_0_80421010) {
             if (STICK_X * STICK_X + STICK_Y * STICK_Y < 0xBD2 ||
@@ -198,9 +207,9 @@ u8 mot_stay(void) {
 
     stayFrames = sysMsec2Frame(1000);
     STAY_TIMER++;
-    if (STAY_TIMER > stayFrames && (FLAGS & 0x400000) == 0 && marioChkKey() != 0) {
+    if (STAY_TIMER > stayFrames && (FLAGS & 0x2000) == 0 && marioChkKey() != 0) {
         hp = pouchGetHP();
-        if (hp >= 6) {
+        if (hp > 5) {
             if (strcmp(ANIM_NAME, &str_M_S_3_8042101c) != 0) {
                 LOW_HP_TIMER = 0;
             }
@@ -212,7 +221,22 @@ u8 mot_stay(void) {
         }
     }
 
-    if ((FLAGS & 0x400000) != 0) {
+    if (strcmp(ANIM_NAME, &str_M_S_3_8042101c) == 0 && marioChkKey() != 0) {
+        void* current = marioGetPtr();
+        (*(s16*)((s32)current + 0x58))++;
+        if (*(s16*)((s32)current + 0x58) >= *(s32*)((s32)gp + 4) * 4) {
+            *(s16*)((s32)current + 0x58) = 0;
+            *(s16*)((s32)current + 0x28) = 0;
+        }
+        if (*(s16*)((s32)current + 0x58) == 0) {
+            *(s32*)((s32)current + 0x27C) = psndSFXOn_3D(0xE1, (void*)((s32)current + 0x8C));
+        }
+        if (*(s16*)((s32)current + 0x58) == *(s32*)((s32)gp + 4) * 2) {
+            *(s32*)((s32)current + 0x27C) = psndSFXOn_3D(0xE2, (void*)((s32)current + 0x8C));
+        }
+    }
+
+    if ((FLAGS & 0x2000) != 0) {
         if (STICK_SENS > float_0_80421010) {
             marioChgMot(1);
         }
@@ -242,7 +266,7 @@ u8 mot_stay(void) {
             marioChkJump();
             marioChkTransform();
 
-            if (STICK_SENS != float_0_80421010 && (TRIG_FLAGS & 0x100000) == 0) {
+            if (STICK_SENS != float_0_80421010 && (TRIG_FLAGS & 0x400000) == 0) {
                 if (STICK_X * STICK_X + STICK_Y * STICK_Y < 0xBD2 ||
                     pouchEquipCheckBadge(0x143) != 0) {
                     marioChgMot(1);
@@ -251,48 +275,65 @@ u8 mot_stay(void) {
                 }
             }
 
-            if ((FLAGS & 0x20000) == 0 && (DISP_FLAGS & 0x10000000) == 0 && pouchGetHP() < 6) {
-                submotion = SUBMOTION;
-                if (submotion == 0) {
-                    TIMER++;
-                    if (TIMER >= sysMsec2Frame(50000)) {
-                        SUBMOTION = 1;
-                    }
-                } else if (submotion == 1) {
-                    marioChgEvtPose(&str_M_I_5_80421034);
-                    marioAdjustMoveDir();
-                    STAY_SFX = psndSFXOn_3D(0xEF, POS);
-                    TIMER = 50;
-                    SUBMOTION = 2;
-                } else if (submotion == 2) {
-                    TIMER--;
-                    if (TIMER < 0) {
-                        marioChgPose(&str_M_S_1_80421008);
-                        TIMER = 100;
-                        SUBMOTION = 3;
-                    }
-                } else if (submotion == 3) {
-                    TIMER--;
-                    if (TIMER < 0) {
-                        marioChgEvtPose(&str_M_N_5A_802c43a0);
-                        POSE_TIME = 0;
-                        TIMER = 0;
-                        SUBMOTION = 4;
-                        SLEEP_TIMER = 0;
-                        STAY_SFX = psndSFXOn_3D(0xE4, POS);
-                    }
-                } else if (submotion == 4) {
-                    if (SLEEP_TIMER < sysMsec2Frame(10000)) {
-                        SLEEP_TIMER++;
-                    }
-                    TIMER++;
-                    if (TIMER >= 120) {
-                        TIMER = 0;
-                        STAY_SFX = psndSFXOn_3D(0xE4, POS);
-                    }
+            if ((FLAGS & 8) != 0 || (DISP_FLAGS & 0x40000000) != 0) {
+                if (SUBMOTION > 0 && strcmp(ANIM_NAME, &str_M_S_1_80421008) != 0 &&
+                    strcmp(ANIM_NAME, &str_M_S_1R_802c4398) != 0) {
+                    marioChgPose(&str_M_S_1_80421008);
+                    SUBMOTION = 0;
                 }
-            } else if (SUBMOTION > 0 && strcmp(ANIM_NAME, &str_M_S_1_80421008) != 0 &&
-                       strcmp(ANIM_NAME, &str_M_S_1R_802c4398) != 0) {
+                return 0;
+            }
+            if (pouchGetHP() <= 5) {
+                return 0;
+            }
+
+            submotion = SUBMOTION;
+            if (submotion == 0) {
+                if (++TIMER >= sysMsec2Frame(50000)) {
+                    SUBMOTION = 1;
+                }
+            } else if (submotion == 1) {
+                void* current;
+                marioChgEvtPose(&str_M_I_5_80421034);
+                marioAdjustMoveDir();
+                current = marioGetPtr();
+                *(s32*)((s32)current + 0x27C) =
+                    psndSFXOn_3D(0xEF, (void*)((s32)current + 0x8C));
+                TIMER = 50;
+                SUBMOTION = 2;
+            } else if (submotion == 2) {
+                if (--TIMER < 0) {
+                    marioChgPose(&str_M_S_1_80421008);
+                    TIMER = 100;
+                    SUBMOTION = 3;
+                }
+            } else if (submotion == 3) {
+                if (--TIMER < 0) {
+                    void* current;
+                    marioChgEvtPose(&str_M_N_5A_802c43a0);
+                    POSE_TIME = 0;
+                    TIMER = 0;
+                    SUBMOTION = 4;
+                    SLEEP_TIMER = 0;
+                    current = marioGetPtr();
+                    *(s32*)((s32)current + 0x27C) =
+                        psndSFXOn_3D(0xE4, (void*)((s32)current + 0x8C));
+                }
+            } else if (submotion == 4) {
+                SLEEP_TIMER++;
+                if (SLEEP_TIMER >= sysMsec2Frame(10000)) {
+                    SLEEP_TIMER = sysMsec2Frame(10000);
+                }
+                if (++TIMER >= *(s32*)((s32)gp + 4) * 2) {
+                    void* current;
+                    TIMER = 0;
+                    current = marioGetPtr();
+                    *(s32*)((s32)current + 0x27C) =
+                        psndSFXOn_3D(0xE4, (void*)((s32)current + 0x8C));
+                }
+            }
+
+            if ((FLAGS & 8) != 0 || pouchGetHP() <= 5) {
                 marioChgPose(&str_M_S_1_80421008);
                 SUBMOTION = 0;
             }
@@ -326,6 +367,8 @@ u8 mot_stay(void) {
     return 0;
 }
 
+#pragma no_register_save_helpers off
+#pragma use_lmw_stmw on
 void marioChgMotAuto(void) {
     extern s32 pouchEquipCheckBadge(s32 badge);
 
