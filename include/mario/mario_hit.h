@@ -14,7 +14,8 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd);
 void marioSearchFrontWall_staying(f32 dz);
 HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h);
 HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h);
-HitEntry* marioSearchHead_jabara(Vec* pos, f32* h, HitEntry** out, f32 d);
+HitEntry* marioSearchHead_jabara(Vec* pos, f32* h, s32* side, f32 d);
+f32 marioChkOverheadJabara(s32* sideOut, f32* distOut);
 HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d);
 HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w);
 
