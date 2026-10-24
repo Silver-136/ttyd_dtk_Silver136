@@ -4,7 +4,6 @@
 float sqrtf(float x);
 static void vec_pool_order(f32* o) { o[0] = 0.0f; o[1] = 0.5f; o[2] = 3.0f; o[3] = 2.0f; }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_VECAdd(const Vec* a, const Vec* b, Vec* ab) {
     ASSERTMSGLINE(108, a, "VECAdd():  NULL VecPtr 'a' ");
     ASSERTMSGLINE(109, b, "VECAdd():  NULL VecPtr 'b' ");
@@ -13,7 +12,6 @@ void C_VECAdd(const Vec* a, const Vec* b, Vec* ab) {
     ab->y = a->y + b->y;
     ab->z = a->z + b->z;
 }
-#endif
 
 asm void PSVECAdd(const register Vec* a, const register Vec* b, register Vec* ab) {
     psq_l f2, Vec.x(a), 0, 0
@@ -26,7 +24,6 @@ asm void PSVECAdd(const register Vec* a, const register Vec* b, register Vec* ab
     psq_st f7, Vec.z(ab), 1, 0
 }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_VECSubtract(const Vec* a, const Vec* b, Vec* a_b) {
     ASSERTMSGLINE(177, a, "VECSubtract():  NULL VecPtr 'a' ");
     ASSERTMSGLINE(178, b, "VECSubtract():  NULL VecPtr 'b' ");
@@ -35,7 +32,6 @@ void C_VECSubtract(const Vec* a, const Vec* b, Vec* a_b) {
     a_b->y = a->y - b->y;
     a_b->z = a->z - b->z;
 }
-#endif
 
 asm void PSVECSubtract(const register Vec* a, const register Vec* b, register Vec* a_b) {
     psq_l f2, Vec.x(a), 0, 0
@@ -48,7 +44,6 @@ asm void PSVECSubtract(const register Vec* a, const register Vec* b, register Ve
     psq_st f7, Vec.z(a_b), 1, 0
 }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_VECScale(const Vec* src, Vec* dst, f32 scale) {
     ASSERTMSGLINE(247, src, "VECScale():  NULL VecPtr 'src' ");
     ASSERTMSGLINE(248, dst, "VECScale():  NULL VecPtr 'dst' ");
@@ -56,7 +51,6 @@ void C_VECScale(const Vec* src, Vec* dst, f32 scale) {
     dst->y = (src->y * scale);
     dst->z = (src->z * scale);
 }
-#endif
 
 void PSVECScale(const register Vec* src, register Vec* dst, register f32 scale) {
     register f32 vxy, vz, rxy, rz;
@@ -71,7 +65,6 @@ void PSVECScale(const register Vec* src, register Vec* dst, register f32 scale) 
     }
 }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_VECNormalize(const Vec* src, Vec* unit) {
     f32 mag;
 
@@ -86,7 +79,6 @@ void C_VECNormalize(const Vec* src, Vec* unit) {
     unit->y = src->y * mag;
     unit->z = src->z * mag;
 }
-#endif
 
 void PSVECNormalize(const register Vec* src, register Vec* unit) {
     register float c_half = 0.5f;
@@ -118,7 +110,6 @@ void PSVECNormalize(const register Vec* src, register Vec* unit) {
     }
 }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 f32 C_VECSquareMag(const Vec* v) {
     f32 sqmag;
 
@@ -127,7 +118,6 @@ f32 C_VECSquareMag(const Vec* v) {
     sqmag = v->z * v->z + ((v->x * v->x) + (v->y * v->y));
     return sqmag;
 }
-#endif
 
 f32 PSVECSquareMag(const register Vec* v) {
     register f32 vxy, vzz, sqmag;
@@ -143,11 +133,9 @@ f32 PSVECSquareMag(const register Vec* v) {
     return sqmag;
 }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 f32 C_VECMag(const Vec* v) {
     return sqrtf(C_VECSquareMag(v));
 }
-#endif
 
 f32 PSVECMag(const register Vec* v) {
     register f32 vxy, vzz;
@@ -183,7 +171,6 @@ f32 PSVECMag(const register Vec* v) {
     return sqmag;
 }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 f32 C_VECDotProduct(const Vec* a, const Vec* b) {
     f32 dot;
 
@@ -192,7 +179,6 @@ f32 C_VECDotProduct(const Vec* a, const Vec* b) {
     dot = (a->z * b->z) + ((a->x * b->x) + (a->y * b->y));
     return dot;
 }
-#endif
 
 asm f32 PSVECDotProduct(const register Vec* a, const register Vec* b) {
     psq_l f2, Vec.y(a), 0, 0
@@ -204,7 +190,6 @@ asm f32 PSVECDotProduct(const register Vec* a, const register Vec* b) {
     ps_sum0 f1, f3, f2, f2
 }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_VECCrossProduct(const Vec* a, const Vec* b, Vec* axb) {
     Vec vTmp;
 
@@ -219,7 +204,6 @@ void C_VECCrossProduct(const Vec* a, const Vec* b, Vec* axb) {
     axb->y = vTmp.y;
     axb->z = vTmp.z;
 }
-#endif
 
 asm void PSVECCrossProduct(const register Vec* a, const register Vec* b, register Vec* axb) {
     psq_l f1, Vec.x(b), 0, 0
@@ -288,7 +272,6 @@ void C_VECReflect(const Vec* src, const Vec* normal, Vec* dst) {
     VECNormalize(dst, dst);
 }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 f32 C_VECSquareDistance(const Vec* a, const Vec* b) {
     Vec diff;
 
@@ -297,7 +280,6 @@ f32 C_VECSquareDistance(const Vec* a, const Vec* b) {
     diff.z = a->z - b->z;
     return (diff.z * diff.z) + ((diff.x * diff.x) + (diff.y * diff.y));
 }
-#endif
 
 f32 PSVECSquareDistance(const register Vec* a, const register Vec* b) {
     register f32 v0yz, v1yz, v0xy, v1xy, dyz, dxy;
@@ -318,11 +300,9 @@ f32 PSVECSquareDistance(const register Vec* a, const register Vec* b) {
     return sqdist;
 }
 
-#ifdef VEC_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 f32 C_VECDistance(const Vec* a, const Vec* b) {
     return sqrtf(C_VECSquareDistance(a, b));
 }
-#endif
 
 f32 PSVECDistance(const register Vec* a, const register Vec* b) {
     register f32 v0yz, v1yz, v0xy, v1xy, dyz, dxy;

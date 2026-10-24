@@ -1031,7 +1031,6 @@ void PSMTXQuat(register Mtx m, const register Quaternion* q) {
 	}
 }
 
-#ifdef MTX_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTXReflect(Mtx m, const Vec* p, const Vec* n) {
     f32 vxy;
     f32 vxz;
@@ -1055,7 +1054,6 @@ void C_MTXReflect(Mtx m, const Vec* p, const Vec* n) {
     m[2][2] = (1 - (2 * n->z * n->z));
     m[2][3] = (pdotn * n->z);
 }
-#endif
 
 void PSMTXReflect(register Mtx m, const register Vec* p, const register Vec* n) {
     register f32 c_one;

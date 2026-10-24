@@ -161,7 +161,6 @@ next_hier:
     }
 }
 
-#ifdef DVDFS_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep .data layout
 BOOL DVDFastOpen(s32 entrynum, DVDFileInfo* fileInfo) {
     ASSERTMSGLINE(455, fileInfo, "DVDFastOpen(): null pointer is specified to file info address  ");
     ASSERTMSG1LINE(458, (entrynum >= 0) && ((u32) entrynum < (u32) MaxEntryNum), "DVDFastOpen(): specified entry number '%d' is out of range  ", entrynum);
@@ -178,7 +177,6 @@ BOOL DVDFastOpen(s32 entrynum, DVDFileInfo* fileInfo) {
     
     return TRUE;
 }
-#endif
 
 BOOL DVDOpen(const char* fileName, DVDFileInfo* fileInfo) {
     s32 entry;
@@ -280,7 +278,6 @@ BOOL DVDGetCurrentDir(char* path, u32 maxlen) {
     return DVDConvertEntrynumToPath((s32)currentDirectory, path, maxlen);
 }
 
-#ifdef DVDFS_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep .data layout
 BOOL DVDChangeDir(const char* dirName) {
     s32 entry;
     char currentDir[128];
@@ -298,9 +295,7 @@ BOOL DVDChangeDir(const char* dirName) {
     
     return TRUE;
 }
-#endif
 
-#ifdef DVDFS_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep .data layout
 BOOL DVDReadAsyncPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, DVDCallback callback, s32 prio) {
     ASSERTMSGLINE(736, fileInfo, "DVDReadAsync(): null pointer is specified to file info address  ");
     ASSERTMSGLINE(737, addr, "DVDReadAsync(): null pointer is specified to addr  ");
@@ -331,7 +326,6 @@ static void cbForReadAsync(s32 result, DVDCommandBlock* block) {
         (fileInfo->callback)(result, fileInfo);
     }
 }
-#endif
 
 s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 prio) {
     int result;
@@ -379,7 +373,6 @@ static void cbForReadSync(s32 result, DVDCommandBlock* block) {
     OSWakeupThread(&__DVDThreadQueue);
 }
 
-#ifdef DVDFS_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep .data layout
 int DVDSeekAsyncPrio(DVDFileInfo* fileInfo, s32 offset, DVDCallback callback, s32 prio) {
     ASSERTMSGLINE(898, fileInfo, "DVDSeek(): null pointer is specified to file info address  ");
     ASSERTMSGLINE(902, !(offset & 3), "DVDSeek(): offset must be multiple of 4 byte  ");
@@ -635,4 +628,3 @@ s32 DVDGetTransferredSize(DVDFileInfo* fileinfo) {
 
     return bytes;
 }
-#endif

@@ -91,7 +91,6 @@ void C_MTXOrtho(Mtx44 m, f32 t, f32 b, f32 l, f32 r, f32 n, f32 f) {
     m[3][3] = 1;
 }
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44Identity(Mtx44 m) {
     ASSERTMSGLINE(324, m != 0, "MTX44Identity():  NULL Mtx44 'm' ");
 
@@ -112,9 +111,7 @@ void C_MTX44Identity(Mtx44 m) {
     m[3][2] = 0.0f;
     m[3][3] = 1.0f;
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void PSMTX44Identity(register Mtx44 m) {
     register f32 c1 = 1.0f;
     register f32 c0 = 0.0f;
@@ -132,9 +129,7 @@ void PSMTX44Identity(register Mtx44 m) {
         stfs c1, 0x3c(m)
     }
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44Copy(const Mtx44 src, Mtx44 dst) {
     ASSERTMSGLINE(382, src != 0, "MTX44Copy():  NULL Mtx44Ptr 'src' ");
     ASSERTMSGLINE(383, dst != 0, "MTX44Copy():  NULL Mtx44Ptr 'dst' ");
@@ -158,7 +153,6 @@ void C_MTX44Copy(const Mtx44 src, Mtx44 dst) {
         dst[3][3] = src[3][3];
     }
 }
-#endif
 
 asm void PSMTX44Copy(const register Mtx44 src, register Mtx44 dst) {
     nofralloc
@@ -181,7 +175,6 @@ asm void PSMTX44Copy(const register Mtx44 src, register Mtx44 dst) {
     blr
 }
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44Concat(const Mtx44 a, const Mtx44 b, Mtx44 ab) {
     Mtx44 mTmp;
     Mtx44Ptr m;
@@ -220,7 +213,6 @@ void C_MTX44Concat(const Mtx44 a, const Mtx44 b, Mtx44 ab) {
         C_MTX44Copy(mTmp, ab);
     }
 }
-#endif
 
 asm void PSMTX44Concat(const register Mtx44 a, const register Mtx44 b, register Mtx44 ab) {
     nofralloc
@@ -291,7 +283,6 @@ asm void PSMTX44Concat(const register Mtx44 a, const register Mtx44 b, register 
     blr
 }
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44Transpose(const Mtx44 src, Mtx44 xPose) {
     Mtx44 mTmp;
     Mtx44Ptr m;
@@ -326,9 +317,7 @@ void C_MTX44Transpose(const Mtx44 src, Mtx44 xPose) {
         MTX44Copy(mTmp, xPose);
     }
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 asm void PSMTX44Transpose(const register Mtx44 src, register Mtx44 xPose) {
     nofralloc
     psq_l f0, 0x0(src), 0, 0
@@ -357,7 +346,6 @@ asm void PSMTX44Transpose(const register Mtx44 src, register Mtx44 xPose) {
     psq_st f5, 0x38(xPose), 0, 0
     blr
 }
-#endif
 
 #define SWAP(a, b) \
     {              \
@@ -367,7 +355,6 @@ asm void PSMTX44Transpose(const register Mtx44 src, register Mtx44 xPose) {
         b = tmp;   \
     }
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 u32 C_MTX44Inverse(const Mtx44 src, Mtx44 inv) {
     Mtx44 gjm;
     s32 i;
@@ -426,9 +413,7 @@ u32 C_MTX44Inverse(const Mtx44 src, Mtx44 inv) {
 
     return 1;
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44Trans(Mtx44 m, f32 xT, f32 yT, f32 zT) {
     ASSERTMSGLINE(835, m, "MTX44Trans():  NULL Mtx44Ptr 'm' ");
 
@@ -452,7 +437,6 @@ void C_MTX44Trans(Mtx44 m, f32 xT, f32 yT, f32 zT) {
     m[3][2] = 0.0f;
     m[3][3] = 1.0f;
 }
-#endif
 
 void PSMTX44Trans(register Mtx44 m, register f32 xT, register f32 yT, register f32 zT) {
     register f32 c_zero = 0.0f;
@@ -475,7 +459,6 @@ void PSMTX44Trans(register Mtx44 m, register f32 xT, register f32 yT, register f
     }
 }
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44TransApply(const Mtx44 src, Mtx44 dst, f32 xT, f32 yT, f32 zT) {
     ASSERTMSGLINE(899, src, "MTX44TransApply(): NULL Mtx44Ptr 'src' ");
     ASSERTMSGLINE(900, dst, "MTX44TransApply(): NULL Mtx44Ptr 'src' "); //! wrong assert string
@@ -504,9 +487,7 @@ void C_MTX44TransApply(const Mtx44 src, Mtx44 dst, f32 xT, f32 yT, f32 zT) {
     dst[1][3] = (src[1][3] + yT);
     dst[2][3] = (src[2][3] + zT);
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 asm void PSMTX44TransApply(const register Mtx44 src, register Mtx44 dst, register f32 xT, register f32 yT, register f32 zT) {
     nofralloc
     psq_l f4, 0x0(src), 0, 0
@@ -533,9 +514,7 @@ asm void PSMTX44TransApply(const register Mtx44 src, register Mtx44 dst, registe
     psq_st f6, 0x38(dst), 0, 0
     blr
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44Scale(Mtx44 m, f32 xS, f32 yS, f32 zS) {
     ASSERTMSGLINE(976, m, "MTX44Scale():  NULL Mtx44Ptr 'm' ");
     m[0][0] = xS;
@@ -558,7 +537,6 @@ void C_MTX44Scale(Mtx44 m, f32 xS, f32 yS, f32 zS) {
     m[3][2] = 0.0f;
     m[3][3] = 1.0f;
 }
-#endif
 
 void PSMTX44Scale(register Mtx44 m, register f32 xS, register f32 yS, register f32 zS) {
     register f32 c_zero = 0.0f;
@@ -578,7 +556,6 @@ void PSMTX44Scale(register Mtx44 m, register f32 xS, register f32 yS, register f
     }
 }
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44ScaleApply(const Mtx44 src, Mtx44 dst, f32 xS, f32 yS, f32 zS) {
     ASSERTMSGLINE(1036, src, "MTX44ScaleApply(): NULL Mtx44Ptr 'src' ");
     ASSERTMSGLINE(1037, dst, "MTX44ScaleApply(): NULL Mtx44Ptr 'dst' ");
@@ -603,9 +580,7 @@ void C_MTX44ScaleApply(const Mtx44 src, Mtx44 dst, f32 xS, f32 yS, f32 zS) {
     dst[3][2] = src[3][2];
     dst[3][3] = src[3][3];
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 asm void PSMTX44ScaleApply(const register Mtx44 src, register Mtx44 dst, register f32 xS, register f32 yS, register f32 zS) {
     nofralloc
     psq_l f4, 0x0(src), 0, 0
@@ -635,9 +610,7 @@ asm void PSMTX44ScaleApply(const register Mtx44 src, register Mtx44 dst, registe
     psq_st f11, 0x38(dst), 0, 0
     blr
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44RotRad(Mtx44 m, char axis, f32 rad) {
     f32 sinA;
     f32 cosA;
@@ -647,9 +620,7 @@ void C_MTX44RotRad(Mtx44 m, char axis, f32 rad) {
     cosA = cosf(rad);
     C_MTX44RotTrig(m, axis, sinA, cosA);
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void PSMTX44RotRad(Mtx44 m, char axis, f32 rad) {
     f32 sinA;
     f32 cosA;
@@ -658,9 +629,7 @@ void PSMTX44RotRad(Mtx44 m, char axis, f32 rad) {
     cosA = cosf(rad);
     PSMTX44RotTrig(m, axis, sinA, cosA);
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44RotTrig(Mtx44 m, char axis, f32 sinA, f32 cosA) {
     ASSERTMSGLINE(1163, m, "MTX44RotTrig():  NULL Mtx44Ptr 'm' ");
 
@@ -725,9 +694,7 @@ void C_MTX44RotTrig(Mtx44 m, char axis, f32 sinA, f32 cosA) {
         break;
     }
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void PSMTX44RotTrig(register Mtx44 m, register char axis, register f32 sinA, register f32 cosA) {
     register f32 ftmp0;
     register f32 ftmp1;
@@ -795,9 +762,7 @@ void PSMTX44RotTrig(register Mtx44 m, register char axis, register f32 sinA, reg
     L_00001B54:    
     }
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void C_MTX44RotAxisRad(Mtx44 m, const Vec* axis, f32 rad) {
     Vec vN;
     f32 s;
@@ -847,9 +812,7 @@ void C_MTX44RotAxisRad(Mtx44 m, const Vec* axis, f32 rad) {
     m[3][2] = 0.0f;
     m[3][3] = 1.0f;
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 static void __PSMTX44RotAxisRadInternal(register Mtx44 m, const register Vec* axis, register f32 sT, register f32 cT) {
     register f32 tT;
     register f32 fc0;
@@ -914,9 +877,7 @@ static void __PSMTX44RotAxisRadInternal(register Mtx44 m, const register Vec* ax
         psq_st tmp5, 0x28(m), 0, 0
     }
 }
-#endif
 
-#ifdef MTX44_UNUSED_FUNCS // FAKE: dead-stripped in the original binary; excluded to keep data layout
 void PSMTX44RotAxisRad(Mtx44 m, const Vec* axis, f32 rad) {
     f32 sinT, cosT;
 
@@ -925,4 +886,3 @@ void PSMTX44RotAxisRad(Mtx44 m, const Vec* axis, f32 rad) {
 
     __PSMTX44RotAxisRadInternal(m, axis, sinT, cosT);
 }
-#endif
