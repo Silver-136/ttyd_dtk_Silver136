@@ -1323,8 +1323,6 @@ static EVT_BEGIN(party_win_reaction)
     RETURN
 EVT_END()
 
-#pragma force_active on
-#pragma force_active reset
 
 
 USER_FUNC(_clauda_make_extra_work_area) {

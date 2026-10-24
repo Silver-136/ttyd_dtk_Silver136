@@ -279,7 +279,6 @@ static s32 bgm_start_wait(EventEntry* event, BOOL isFirstCall) {
 
 
 
-#pragma force_active on
 f32 fd_aji_17_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
 f32 fd_aji_17_neg_one_382 = -1.0f;
@@ -310,7 +309,6 @@ f32 fd_aji_17___local_PIO2_367 = 1.5707964f;
 
 f32 fd_aji_17_one_364 = 1.0f;
 
-#pragma force_active reset
 
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -3383,8 +3381,6 @@ EVT_END()
 #endif
 
 // target .data tail pad word
-#pragma force_active on
-#pragma force_active reset
 
 s32 noise(EventEntry* event, BOOL isFirstCall) {
     EvtWord alpha = evtGetValue(event, event->args[0]);

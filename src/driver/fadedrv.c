@@ -27,7 +27,6 @@ const f32 float_0_8041f774 = 0.0f;
 double tan(double);
 s32 evt_img_alloc_capture(EventEntry* event, BOOL isFirstCall);
 
-#pragma force_active on
 u32 gap_fd_sbss;
 static FadeWork* wp;
 
@@ -1293,4 +1292,3 @@ void fadeSetNarrowFast(void) {
 
 u32 gap_fd_sdata2[7] = {0};
 
-#pragma force_active reset

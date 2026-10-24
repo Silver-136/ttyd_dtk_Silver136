@@ -3231,5 +3231,3 @@ void _prolog(void) {
 }
 
 
-#pragma force_active on
-#pragma force_active reset

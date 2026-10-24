@@ -697,7 +697,6 @@ USER_FUNC(evt_nannpc_set_color) {
     return 2;
 }
 
-#pragma force_active on
 #pragma explicit_zero_data on
 USER_FUNC(evt_nannpcwork_flag_onoff) {
     EvtWord* args = event->args;
@@ -712,12 +711,9 @@ USER_FUNC(evt_nannpcwork_flag_onoff) {
     return 2;
 }
 #pragma explicit_zero_data reset
-#pragma force_active reset
 
-#pragma force_active on
 #pragma explicit_zero_data on
 #pragma explicit_zero_data reset
-#pragma force_active reset
 
 #pragma force_active reset
 

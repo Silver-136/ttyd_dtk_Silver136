@@ -756,11 +756,9 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 }
 
 
-#pragma force_active on
 static __declspec(section ".rodata") const u32 gap_04_802FDD34_rodata[1] = {0};
 #ifndef VERSION_G8ME01
 __declspec(section ".data") u8 gap_05_803AC064_data[28] = {0};
 #endif
-#pragma force_active reset
 
 

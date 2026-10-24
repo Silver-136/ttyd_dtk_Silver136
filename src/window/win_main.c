@@ -80,8 +80,6 @@ EvtWord evt_diary_read[];
 //.data
 
 //.sbss
-#pragma force_active on
-#pragma force_active reset
 static s32 cnt;
 TEXPalette* winTexTpl;
 static WindowWork* wp;
@@ -173,7 +171,6 @@ typedef struct { const char* s[2]; } WinLangTbl;
 #endif
 static const WinLangTbl winLangTbl;
 
-#pragma force_active on
 #pragma explicit_zero_data on
 void winMain(void) {
     MarioWork* mario;
@@ -487,7 +484,6 @@ void winMain(void) {
     }
 }
 #pragma explicit_zero_data reset
-#pragma force_active reset
 
 void winDisp(CameraId camId, void* param) {
     winRootDisp(camId, wp);
@@ -1516,10 +1512,8 @@ BOOL winLectureCheck(void) {
     return FALSE;
 }
 
-#pragma force_active on
 
 const volatile f32 float_0p5_8041dc98 __attribute__((aligned(8))) = 0.5f;
-#pragma force_active reset
 
 void winMainStrippedPool(f32* f, s32 i) {
     *f = (f32)i;

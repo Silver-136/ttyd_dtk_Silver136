@@ -460,5 +460,3 @@ void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-#pragma force_active on
-#pragma force_active reset

@@ -1761,9 +1761,7 @@ __declspec(section ".data") s32 evt_sub_mail_event_end[] = {
 
 #pragma explicit_zero_data on
 USER_FUNC(evt_sub_intpl_init) {
-#pragma force_active on
     static const u32 gap_09_80419DAC_sdata2 = 0;
-#pragma force_active reset
 	EvtWord* args = event->args;
 	s32 mode = evtGetValue(event, args[0]);
 	s32 start = evtGetValue(event, args[1]);
@@ -2493,7 +2491,6 @@ USER_FUNC(irai_mail_check) {
 	return EVT_RETURN_DONE;
 }
 
-#pragma force_active on
 #pragma explicit_zero_data on
 USER_FUNC(mail_evt_gor_04_keyoff_check) {
 	EvtWord* args = event->args;
@@ -2504,10 +2501,7 @@ USER_FUNC(mail_evt_gor_04_keyoff_check) {
 	return EVT_RETURN_DONE;
 }
 #pragma explicit_zero_data reset
-#pragma force_active reset
 
-#pragma force_active on
-#pragma force_active reset
 
 #pragma explicit_zero_data on
 #pragma explicit_zero_data reset

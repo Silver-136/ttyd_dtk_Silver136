@@ -1709,5 +1709,3 @@ void monosiri_disp(CameraId camera, void* param) {
     }
 }
 
-#pragma force_active on
-#pragma force_active reset

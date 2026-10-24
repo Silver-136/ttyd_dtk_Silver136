@@ -2061,8 +2061,6 @@ EVT_BEGIN(eki_00_init_evt)
 EVT_END()
 
 // target pad words (G5: section sizes must match or later DOL addresses shift)
-#pragma force_active on
-#pragma force_active reset
 
 
 

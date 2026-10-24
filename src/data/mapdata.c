@@ -472,9 +472,7 @@ WorldData world_data = { "MarioSt", "マリオの世界\0\0\0", { &area_kwb, &ar
                                                       &area_dmo, &area_dig, &area_end } };
 
 #ifdef VERSION_G8ME01
-#pragma force_active on
 __declspec(section ".data") u32 gap_mapdata_data[5] = {0, 0, 0, 0, 0};
-#pragma force_active reset
 #endif
 
 /*

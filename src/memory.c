@@ -18,9 +18,7 @@ struct MapAllocEntry {
 };
 
 //.bss
-#pragma force_active on
 SmartWork smartWork;
-#pragma force_active reset
 
 //.sdata
 //flag, size / 0x400 (>> 10)

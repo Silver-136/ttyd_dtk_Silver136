@@ -149,9 +149,7 @@ WinMgrSelectTbl select_desc_tbl[] = {
 };
 
 //.sbss
-#pragma force_active on
 
-#pragma force_active reset
 
 static const char name_party0[12];
 static const char name_party1[12];

@@ -48,7 +48,6 @@ const char str_802C4F00[8] = "\120\115\137\103\137\062\102";
 #ifdef VERSION_G8ME01
 #endif
 // target .bss/.sbss pad (uninitialised objects are emitted in reverse order, so this sits last)
-#pragma force_active on
 
 #define WIN_STATE(w) (*(u16*)(w)->state)
 

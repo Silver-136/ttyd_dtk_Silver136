@@ -31,8 +31,6 @@ Vec pos_tbl[7] = {
     { -11.1931f, 0.0f, -9.0435f },
 };
 
-#pragma force_active on
-#pragma force_active reset
 
 
 static void callback(MapTevCallbackInfo* info) {

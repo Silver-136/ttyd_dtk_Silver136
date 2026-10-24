@@ -35,7 +35,6 @@ extern void partyPaperOff(PartyEntry* party);
 extern void partyChgRunMode(PartyEntry* party, s32 mode);
 extern char* partyChgPoseId(PartyEntry* party, s32 index);
 
-#pragma force_active on
 #pragma explicit_zero_data reset
 s32 vivian_cancel_req;
 
@@ -533,7 +532,5 @@ void vivian_use(PartyEntry* party) {
 
 
 
-#pragma force_active on
 #pragma explicit_zero_data on
 #pragma explicit_zero_data reset
-#pragma force_active reset

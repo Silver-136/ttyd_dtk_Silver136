@@ -1444,7 +1444,6 @@ s32 windowCheckID(s32 id) {
 	return windowGetPointer(id)->flags & 2;
 }
 
-#pragma force_active on
 WindowEntry* windowGetPointer(s32 id) {
 	return &WinObjects[id];
 }
@@ -1455,4 +1454,3 @@ GXTexObj* getWakuTexObj(s32 id) {
 
 
 
-#pragma force_active reset

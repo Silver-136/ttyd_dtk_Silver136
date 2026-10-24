@@ -2322,8 +2322,6 @@ EVT_BEGIN(evt_continue)
     CALL(evt_sub_animgroup_async, STRING("OFF_f_in_out_peach"))
     RETURN
 EVT_END()
-#pragma force_active on
-#pragma force_active on
 #pragma defer_codegen off
 void continueGame(void) {
     cardCopy2Main(wp->slot);

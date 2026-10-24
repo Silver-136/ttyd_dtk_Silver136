@@ -4027,9 +4027,7 @@ static void mapStrippedPool(const char** str, f32* val) {
 	str[8] = "curve_table";
 }
 
-#pragma force_active on
 #pragma explicit_zero_data on
 #pragma explicit_zero_data reset
-#pragma force_active reset
 
 

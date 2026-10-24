@@ -565,7 +565,6 @@ static inline s32 partyGetFreeSlot2(void) {
     return -1;
 }
 
-#pragma force_active on
 char* yoshigroup[7] = {
         "c_babyyoshi",
         "c_babyyoshi2",

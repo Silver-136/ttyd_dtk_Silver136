@@ -16,7 +16,6 @@
 
 //.data
 // static data from an inlined header function
-#pragma force_active on // FAKE: keep asm-only-referenced data from being dead-stripped
 __declspec(section ".data") f32 envdrv_negone_one_a[] = {-1.0f, 1.0f};
 __declspec(section ".data") static f32 negone_one$374[] = {-1.0f, 1.0f};
 __declspec(section ".data") f32 envdrv_one_negone_a[] = {1.0f, -1.0f};

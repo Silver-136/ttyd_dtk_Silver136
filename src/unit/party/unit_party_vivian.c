@@ -1902,5 +1902,3 @@ USER_FUNC(_disp_heart_entry_stop_check) {
 }
 
 
-#pragma force_active on
-#pragma force_active reset

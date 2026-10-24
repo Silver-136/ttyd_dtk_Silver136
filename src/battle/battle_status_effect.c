@@ -634,7 +634,5 @@ void _st_chg_msg_disp(void) {
 	FontDrawMessage(x, (s32)y + (lines - 1) * 29, (const char*)st->text);
 }
 
-#pragma force_active on
 #pragma explicit_zero_data on
 #pragma explicit_zero_data reset
-#pragma force_active reset
