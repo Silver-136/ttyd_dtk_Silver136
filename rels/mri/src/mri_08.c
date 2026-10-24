@@ -6,7 +6,6 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 
-#pragma force_active on
 
 void togeMakeRetsu(Vec* pos, s32 leader, s32 start, s32 end);
 

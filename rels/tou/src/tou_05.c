@@ -6,7 +6,6 @@
 #include "evt/evt_npc.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_entername);

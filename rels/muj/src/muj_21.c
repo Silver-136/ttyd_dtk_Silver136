@@ -2,7 +2,6 @@
 #include "eff/eff_funemizu.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "driver/effdrv.h"
 #include "mario/mariost.h"
 #include "muj.h"

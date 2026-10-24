@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 #include "stdio.h"
 #include "string.h"
 #include "evt/evt_npc.h"

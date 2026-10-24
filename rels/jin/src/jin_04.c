@@ -1,7 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "mario/mario_pouch.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"

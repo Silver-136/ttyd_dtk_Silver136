@@ -4,7 +4,6 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 #include "string.h"
 #include "mario/mariost.h"
 #include "dolphin/os.h"

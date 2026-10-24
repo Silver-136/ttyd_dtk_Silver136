@@ -332,7 +332,6 @@ EvtWord evt_kyaku_check[105];
 #endif
 EvtWord tou_03_init_evt[VERSION_PICK(370, 372)];
 
-#pragma force_active on
 f32 fd_tou_03_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
 f32 fd_tou_03_neg_one_382 = -1.0f;
@@ -364,7 +363,6 @@ f32 fd_tou_03_one_364 = 1.0f;
 f64 fd_tou_03__three_localstatic4_sqrtf = 3.0;
 
 f64 fd_tou_03__half_localstatic3_sqrtf = 0.5;
-#pragma force_active reset
 
 ExtTexInfo ext_kyaku_data[] = {
     {("c_kinopio"), ("KNP_S_1"), 0.0f},
@@ -4173,9 +4171,7 @@ static f32 cosf(f32 x) {
 }
 #pragma dont_inline reset
 
-#pragma force_active on
 static const Vec item_jump_zero = {0.0f, 0.0f, 0.0f};
-#pragma force_active reset
 static inline s32 item_jump_sub(EventEntry* event, BOOL isFirstCall, f32 speed, f32 g) {
     EvtWord* args = event->args;
     f32 z;

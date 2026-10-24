@@ -1,7 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_get_entername);
 USER_FUNC(evt_bero_mapchange);

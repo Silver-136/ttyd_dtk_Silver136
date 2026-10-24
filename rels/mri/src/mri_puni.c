@@ -14,8 +14,6 @@
 
 #include "driver/swdrv.h"
 
-// FAKE: the original REL kept every function; force_active stops the linker dead-stripping unreferenced ones
-#pragma force_active on
 #include "evt/evt_seq.h"
 #include "evt/evt_npc.h"
 #include "pmario_sound.h"

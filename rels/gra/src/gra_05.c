@@ -3,7 +3,6 @@
 #include "evt/evt_bero.h"
 #include "gra.h"
 
-#pragma force_active on
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(camera_curve_off);

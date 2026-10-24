@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
 
-#pragma force_active on
 
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
 USER_FUNC(btlevtcmd_GetUnitWork);

@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "hom.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam3d_evt_set);

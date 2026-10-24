@@ -5,7 +5,6 @@
 #include "evt/evt_movefloor.h"
 #include "driver/hitdrv.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_hit_damage_return_set);

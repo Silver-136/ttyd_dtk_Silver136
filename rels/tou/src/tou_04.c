@@ -1,7 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "evt/evt_npc.h"
 #include "driver/msgdrv.h"
 #include "memory.h"

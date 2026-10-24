@@ -35,9 +35,6 @@
 USER_FUNC(evt_msg_pri);
 #endif
 
-// FAKE: force_active keeps what the original REL kept: the functions every caller inlines (jump, jump_minnnanokoe, pose_init/main/change, drawNum), the fd_ tables and the unreferenced message strings
-#pragma force_active on
-
 // math-inline function-local statics (negone_one$374 ...) the target keeps at the start of .data
 f32 fd_bom_01_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 

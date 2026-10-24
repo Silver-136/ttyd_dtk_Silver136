@@ -3,7 +3,6 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
 #include "driver/icondrv.h"

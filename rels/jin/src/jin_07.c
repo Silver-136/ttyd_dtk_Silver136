@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 
 #pragma defer_codegen on
-#pragma force_active on
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
 #include "dolphin/mtx.h"

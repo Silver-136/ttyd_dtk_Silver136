@@ -10,7 +10,6 @@
 #include "unit/party/unit_party_vivian.h"
 #include "battle/battle_database_common.h"
 
-#pragma force_active on
 
 typedef struct MajoSortEntry { s32 id; s32 value; } MajoSortEntry;
 

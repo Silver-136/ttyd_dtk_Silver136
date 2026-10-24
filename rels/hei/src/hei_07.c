@@ -4,7 +4,6 @@
 #include "evt/evt_cmd.h"
 #include "driver/msgdrv.h"
 
-#pragma force_active on
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 #include "string.h"

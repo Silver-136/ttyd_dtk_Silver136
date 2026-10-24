@@ -4,7 +4,6 @@
 #include "evt/evt_damage.h"
 #include "driver/hitdrv.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_dou_normal_puka);

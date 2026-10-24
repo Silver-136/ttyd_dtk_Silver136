@@ -28,7 +28,6 @@
 #include "mario/mariost.h"
 #include "data/npc_data.h"
 
-#pragma force_active on
 
 typedef struct RankEntry {
     u16 flags;
@@ -1241,4 +1240,3 @@ void _prolog(void) {
     rankingInit();
 }
 
-#pragma force_active reset

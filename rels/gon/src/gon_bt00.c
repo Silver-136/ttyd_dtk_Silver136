@@ -1,7 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 
 
 f32 fd_gon_bt00_negone_one_374[2] __attribute__((aligned(8)));

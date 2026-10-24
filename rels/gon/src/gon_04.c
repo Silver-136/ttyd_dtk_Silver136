@@ -5,7 +5,6 @@
 #include "data_tables.h"
 typedef struct KemuriPos { s32 x; s32 z; } KemuriPos;
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cam3d_evt_off);

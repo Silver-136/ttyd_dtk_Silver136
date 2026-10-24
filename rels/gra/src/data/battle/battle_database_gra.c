@@ -7,7 +7,6 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-#pragma force_active on
 
 f32 fd_battle_database_gra_negone_one_374[2] __attribute__((aligned(8)));
 f32 fd_battle_database_gra_neg_one_382;

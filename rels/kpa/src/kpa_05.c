@@ -5,7 +5,6 @@
 #include "evt/evt_npc.h"
 #include "kpa_stage_data.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_road_reset);

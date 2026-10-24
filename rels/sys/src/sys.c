@@ -3,7 +3,6 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 #include "data/mapdata.h"
 #include "pmario_sound.h"
 #include "dolphin/gx.h"

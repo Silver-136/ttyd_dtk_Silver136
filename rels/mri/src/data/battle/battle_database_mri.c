@@ -7,7 +7,6 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_mapobj_flag_onoff);
 extern BattleUnitKind unit_barriern;

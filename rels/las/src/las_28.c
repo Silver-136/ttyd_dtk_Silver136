@@ -2,7 +2,6 @@
 #include "eff/n64/eff_guruguru_n64.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "driver/npcdrv.h"
 #include "driver/effdrv.h"
 #include "eff/eff_syuryou.h"

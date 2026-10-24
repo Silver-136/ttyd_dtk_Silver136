@@ -3,7 +3,6 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 #include "mario/mario.h"
 #include "driver/animdrv.h"
 #include "pmario_sound.h"

@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 #include "driver/mapdrv.h"
 #include "mario/mario.h"
 #include "evt/evt_bero.h"

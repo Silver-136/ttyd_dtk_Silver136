@@ -3,7 +3,6 @@
 #include "eff/eff_puniballoon.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "mario/mario.h"
 #include "mario/mario_motion.h"
 #include "driver/effdrv.h"

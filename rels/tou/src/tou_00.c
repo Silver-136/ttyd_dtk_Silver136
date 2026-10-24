@@ -3,7 +3,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "driver/camdrv.h"
 #include "dolphin/os.h"
 #include "driver/npcdrv.h"

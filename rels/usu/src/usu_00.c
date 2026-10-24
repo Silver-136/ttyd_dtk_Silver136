@@ -3,7 +3,6 @@
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "mario/mario_pouch.h"
 #include "party.h"
 #include "driver/animdrv.h"

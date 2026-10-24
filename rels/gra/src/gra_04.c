@@ -4,7 +4,6 @@
 #include "gra.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(evt_bero_get_info);

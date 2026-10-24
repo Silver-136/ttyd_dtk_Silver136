@@ -2,7 +2,6 @@
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
 #include "driver/effdrv.h"

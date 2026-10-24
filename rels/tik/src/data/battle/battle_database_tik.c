@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 #include "battle/battle_stage_object.h"
 #include "system.h"
 #include "battle/battle_weapon_power.h"

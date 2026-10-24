@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 #include "seq/seq_demo.h"
 #include "memory.h"
 #include "manager/fontmgr.h"

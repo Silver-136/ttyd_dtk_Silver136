@@ -2,7 +2,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "driver/animdrv.h"
 #include "driver/npcdrv.h"
 #include "driver/dispdrv.h"

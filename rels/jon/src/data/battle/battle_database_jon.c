@@ -7,7 +7,6 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-#pragma force_active on
 
 extern BattleUnitKind unit_hyper_jyugem;
 extern BattleUnitKind unit_jyugem;

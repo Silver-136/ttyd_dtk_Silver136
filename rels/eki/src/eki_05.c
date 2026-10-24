@@ -3,7 +3,6 @@
 #include "evt/evt_bero.h"
 #include "eki.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_exit_case_evt);

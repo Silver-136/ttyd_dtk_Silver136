@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "driver/msgdrv.h"
 
-#pragma force_active on
 #include "mario/mario.h"
 #include "mario/mariost.h"
 #include "driver/npcdrv.h"

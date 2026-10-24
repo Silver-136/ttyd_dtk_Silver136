@@ -9,7 +9,6 @@
 #include "unit/party/unit_party_nokotarou.h"
 #include "battle/battle_database_common.h"
 
-#pragma force_active on
 
 USER_FUNC(btlevtcmd_AddRotate);
 USER_FUNC(btlevtcmd_AnimeChangePose);

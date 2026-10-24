@@ -1,7 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "mario/mario.h"
 #include "pmario_sound.h"
 #include "eff/n64/eff_akari_charge_n64.h"

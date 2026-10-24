@@ -5,7 +5,6 @@
 #include "driver/hitdrv.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 
 u16 toge_flag;
 

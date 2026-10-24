@@ -4,7 +4,6 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_sub.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_ctrl_onoff);

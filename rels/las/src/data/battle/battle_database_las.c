@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#pragma force_active on
 #include "driver/effdrv.h"
 #include "battle/battle.h"
 #include "battle/battle_stage_object.h"

@@ -2,7 +2,6 @@
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
 #include "driver/itemdrv.h"

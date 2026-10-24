@@ -7,7 +7,6 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-#pragma force_active on
 
 extern BattleUnitKind unit_boss_kanbu1;
 extern BattleUnitKind unit_lecture_christine;

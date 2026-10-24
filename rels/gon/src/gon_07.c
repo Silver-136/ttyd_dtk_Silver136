@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 
-#pragma force_active on
 
 USER_FUNC(evt_bero_exec_get);
 USER_FUNC(evt_bero_get_info);

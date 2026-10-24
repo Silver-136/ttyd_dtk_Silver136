@@ -2,7 +2,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
-#pragma force_active on
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
 #include "evt/evt_bero.h"

@@ -293,6 +293,9 @@ cflags_rel = with_game_msl([
 ])
 
 config.linker_version = "GC/2.6"
+# RELs are linked without -strip_partial: the original RELs keep unreferenced code and data (the MSL math
+# constants in every unit, functions no caller references), which a stripping link would drop.
+config.rel_strip_partial = False
 
 
 # Helper function for Dolphin libraries
