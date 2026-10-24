@@ -10,9 +10,8 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
 #include <string.h>
+#include "pmario_sound.h"
 
-s32 psndSFXOff(s32 id);
-s32 psndSFXOn(const char* name);
 
 //.sdata2
 static const GXColor sWhite = {255, 255, 255, 255};

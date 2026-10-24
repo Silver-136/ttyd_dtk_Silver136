@@ -42,7 +42,7 @@ int rand(void);
 double tan(double);
 
 #define INTPL(mode, cur, steps, a, b) (((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps))
-#define SFXON(name) (((s32(*)(const char*))psndSFXOn)(name))
+#define SFXON(name) (psndSFXOn(name))
 #define TEXPLANE(m, id, col) (((void (*)(Mtx, u32, GXColor, s32))btlDispTexPlane2)(m, id, col, 0))
 
 typedef struct DekaTiming {

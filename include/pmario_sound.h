@@ -146,7 +146,7 @@ void psndSFXAllOff(void);
 
 #include "sfx_name_word.h"
 
-void psndSFXOn(const char* name);
+s32 psndSFXOn(const char* name);
 s32 psndSFXOn_3D(const char* name, Vec* position);
 s32 psndSFXOnEx_3D(const char* name, Vec* position, u8 vol, u8 pan, u16 pitch, u16 dist);
 

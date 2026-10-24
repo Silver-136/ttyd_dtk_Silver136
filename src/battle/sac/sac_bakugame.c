@@ -25,6 +25,7 @@
 #include "party/party_motion.h"
 #include "battle/sac/sac_bakugame.h"
 #include "battle/battle_database_common.h"
+#include "pmario_sound.h"
 
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
@@ -41,7 +42,6 @@ void BtlUnit_SetBodyAnimType(BattleUnit* unit, s32 type);
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);
 void psndSFX_pit(s32 id, s32 pitch);
 s32 psndSFXChk(s32 id);
-s32 psndSFXOn(const char* name);
 void psndSFXOff(s32 id);
 void animPoseRelease(s32 poseId);
 void animPoseMain(s32 poseId);

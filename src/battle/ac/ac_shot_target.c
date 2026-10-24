@@ -85,7 +85,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
             case 100:
                 cw->frame = work->actionCommands.params[2];
                 ac->mAcState = 1000;
-                cw->sfxId = ((s32(*)(const char*))psndSFXOn)(sfxName);
+                cw->sfxId = psndSFXOn(sfxName);
             case 1000:
                 if (work->actionCommands.countdown > 0) {
                     (work->actionCommands.countdown)--;

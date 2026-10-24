@@ -169,7 +169,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
           gw->hit = 1;
           if (gw->sfx[i] == (-1))
           {
-            gw->sfx[i] = ((s32 (*)(const char *)) psndSFXOn)(sfxNames[1]);
+            gw->sfx[i] = psndSFXOn(sfxNames[1]);
           }
         }
       }

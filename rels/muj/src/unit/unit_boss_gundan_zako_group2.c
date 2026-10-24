@@ -9,6 +9,7 @@
 #include "battle/battle_event_default.h"
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_weapon_power.h"
+#include "pmario_sound.h"
 f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);
 s32 irand(s32 scalar);
 #include "dolphin/mtx.h"
@@ -28,7 +29,6 @@ typedef struct ZakoGunWork { s32 flag; s32 targetId; u8 field_0x8[ZAKOGUNWORK_PA
 #endif
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
-s32 psndSFXOn(const char* name);
 void psndSFXOff(s32 id);
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 BattleUnit* zakogun_get_ptr(void);

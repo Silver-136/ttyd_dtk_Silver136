@@ -5,6 +5,7 @@
 #include "driver/icondrv.h"
 #include "system.h"
 #include <string.h>
+#include "pmario_sound.h"
 
 #ifdef VERSION_G8ME01
 #define AC_ICON_OFS 8
@@ -20,7 +21,6 @@ void btlDispTex4(s32 id, Vec pos, Vec scale, Vec rot, GXColor color);
 void btlGetScreenPoint(Vec* in, Vec* out);
 f32 sinfd(f32 degrees);
 f32 cosfd(f32 degrees);
-s32 psndSFXOn(const char* name);
 void psndSFXOff(s32 id);
 
 typedef struct ShotWork {

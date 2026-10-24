@@ -155,7 +155,7 @@ USER_FUNC(evt_snd_sfxon) {
     if (!out) {
         psndSFXOn(name);
     } else {
-        evtSetValue(event, out, ((s32 (*)(const char*))psndSFXOn)(name));
+        evtSetValue(event, out, psndSFXOn(name));
     }
     return EVT_RETURN_DONE;
 }
@@ -167,7 +167,7 @@ USER_FUNC(evt_snd_sfxon__) {
     if (!out) {
         psndSFXOn(name);
     } else {
-        evtSetValue(event, out, ((s32 (*)(const char*))psndSFXOn)(name));
+        evtSetValue(event, out, psndSFXOn(name));
     }
     return EVT_RETURN_DONE;
 }

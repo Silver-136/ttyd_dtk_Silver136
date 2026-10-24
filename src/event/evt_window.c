@@ -11,8 +11,8 @@
 #include "win/win_main.h"
 #include <dolphin/mtx.h>
 #include <string.h>
+#include "pmario_sound.h"
 
-void psndSFXOn(s32 id);
 s32 psndSFXOn_3D(const char* name, Vec* position);
 void statusWinForceUpdateCoin(void);
 void nameEntOff(void);
@@ -301,7 +301,7 @@ static void coin_disp(WinMgrEntry* entry) {
 		w->timer++;
 		w->timer = w->timer % 1200;
 		if (coinwin_se_wait == 0) {
-			psndSFXOn(0x2005B);
+			psndSFXOn(SFX_NAME_WORD(0x2005B));
 			coinwin_se_wait = 7;
 		}
 	}

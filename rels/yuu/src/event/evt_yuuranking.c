@@ -17,6 +17,7 @@
 #include "system.h"
 #include "mario/mariost.h"
 #include "evt/evt_yuugijou.h"
+#include "pmario_sound.h"
 
 const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
 void FontDrawMessageMtx(Mtx mtx, const char* msg);
@@ -31,7 +32,6 @@ static s32 snd_id; // was a function-local static; file scope (declared before _
 static YuuRankingWork* _wp;
 void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* str);
 void FontDrawScale(f32 scale);
-s32 psndSFXOn(const char* name);
 void psndSFXOff(s32 id);
 
 static USER_FUNC(evt_yuuranking_main_func);

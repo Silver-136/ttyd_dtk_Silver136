@@ -376,7 +376,7 @@ void psndSFX_pit(s32 id, s32 pitch);
 void BattleAudienceSoundCallKind(s32 kind);
 void BattleAudienceSoundWhistleKind(s32 kind);
 void btl_camera_shake_h(s32 a, f32 b, f32 c, s32 d, s32 e);
-#define SFXON(s) ((s32 (*)(const char*))psndSFXOn)(s)
+#define SFXON(s) psndSFXOn(s)
 
 USER_FUNC(zubastar_main) {
 	ZubaStarWork* w = GetZubaStarPtr();

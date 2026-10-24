@@ -2350,7 +2350,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
         w->timer = 0.0f;
         event->userdata[0] = 0;
         { Vec tmp; tmp.x = (f32)id; }
-        event->userdata[1] = ((s32 (*)(const char*))psndSFXOn)("SFX_BTL_YOSHI_TAIGUN1");
+        event->userdata[1] = psndSFXOn("SFX_BTL_YOSHI_TAIGUN1");
     } else {
         w = (YoshiGundanWork*)unit->countersetWeapon;
     }

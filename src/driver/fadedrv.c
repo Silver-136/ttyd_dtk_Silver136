@@ -426,7 +426,7 @@ static inline void fadeCapture(const char* name, const char* off, s32 mode) {
 }
 
 #define FADE_DURATION(e) (*(s64*)&(e)->durationHi)
-#define SFX_ON(id) ((s32 (*)(s32))psndSFXOn)(id)
+#define SFX_ON(id) psndSFXOn(SFX_NAME_WORD(id))
 
 void fadeMain(void) {
 	FadeEntry* entry;

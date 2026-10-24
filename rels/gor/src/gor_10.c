@@ -14,6 +14,7 @@
 #include "manager/filemgr.h"
 #include "string.h"
 #include "win/win_main.h"
+#include "pmario_sound.h"
 static inline f32 dd_sin(f32 x) {
     f32 a = 0.00761f;
     f32 b = 0.16605f;
@@ -55,7 +56,6 @@ static inline f32 dd_cos(f32 x) {
 }
 
 double sin(double x);
-s32 psndSFXOn(const char* name);
 void mabutaDisp(CameraId camera, void* param);
 static void depthDisp(CameraId camera, void* param);
 typedef struct TegamiWork { s32 alpha; FileEntry* tpl; } TegamiWork;

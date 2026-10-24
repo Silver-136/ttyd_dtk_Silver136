@@ -6377,8 +6377,8 @@ s32 psndSFXOn_(const char* name) {
 	return __psndSFXOn(name, 0xFF, 0xFF, 0, NULL, 0, 0x10, 1);
 }
 
-void psndSFXOn(const char* name) {
-	__psndSFXOn(name, 0xFF, 0xFF, 0, NULL, 0, 0x10, 0);
+s32 psndSFXOn(const char* name) {
+	return __psndSFXOn(name, 0xFF, 0xFF, 0, NULL, 0, 0x10, 0);
 }
 
 s32 psndSFXOnVol(const char* name, u8 vol) {

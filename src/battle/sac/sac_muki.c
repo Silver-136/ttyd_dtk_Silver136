@@ -22,6 +22,7 @@
 #include "battle/sac/sac_common.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "pmario_sound.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -37,7 +38,6 @@ void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 void BattleAudienceSoundHandBeat(void);
 void BattleAudienceSoundCallKind(s32 kind);
 void BattleAudienceSoundBooingKind(s32 kind);
-void psndSFXOn(const char* name);
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 EffectEntry* effHitEntry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale);
 

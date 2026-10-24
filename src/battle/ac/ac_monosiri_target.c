@@ -80,7 +80,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             break;
         case 100:
             cw->frame = 0;
-            cw->sfxId = ((s32(*)(const char*))psndSFXOn)("SFX_AC_CURSOR_MOVE1");
+            cw->sfxId = psndSFXOn("SFX_AC_CURSOR_MOVE1");
             work->actionCommands.mAcState = 1000;
         case 1000:
             cw->frame++;

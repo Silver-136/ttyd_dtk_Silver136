@@ -7,8 +7,8 @@
 #include "battle/battle_disp.h"
 #include "battle/battle_unit.h"
 #include "icon_ids.h"
+#include "pmario_sound.h"
 
-s32 psndSFXOn(const char* name);
 void psndSFXOff(s32 id);
 void psndSFX_pit(s32 id, s32 pitch);
 void BattleAudience_Case_ActionCommandBad(BattleWeapon* weapon);

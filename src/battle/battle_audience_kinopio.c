@@ -950,7 +950,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index) {
         m->velocity.y = 0.0f;
         m->accel.y = 0.0f;
         m->velocity.z = 5.0f * (dz / d);
-        intrudeSound = ((s32 (*)(const char*))psndSFXOn)("SFX_AUDIENCE_HEIHO_MOVE1");
+        intrudeSound = psndSFXOn("SFX_AUDIENCE_HEIHO_MOVE1");
     case 5:
         if (m->position.z <= 110.0f) {
             m->step = 10;
@@ -978,7 +978,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index) {
             m->velocity.z = 5.0f * (dz / d);
             btl_camera_set_mode(0, 3);
             btl_camera_set_moveto(0, 30, 698.0f * m->counterF, 100.0f, 0.0f, 0.0f, 60.0f, 0.0f, 4);
-            intrudeSound = ((s32 (*)(const char*))psndSFXOn)("SFX_AUDIENCE_HEIHO_MOVE1");
+            intrudeSound = psndSFXOn("SFX_AUDIENCE_HEIHO_MOVE1");
         }
         break;
     case 15:
@@ -1038,7 +1038,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index) {
         m->velocity.y = 0.0f;
         m->accel.y = 0.0f;
         m->velocity.z = 5.0f * (dz / d);
-        intrudeSound = ((s32 (*)(const char*))psndSFXOn)("SFX_AUDIENCE_HEIHO_MOVE1");
+        intrudeSound = psndSFXOn("SFX_AUDIENCE_HEIHO_MOVE1");
     case 55:
         if (m->position.z <= 110.0f) {
             m->step = 60;
@@ -1059,7 +1059,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index) {
             m->velocity.y = 0.0f;
             m->accel.y = 0.0f;
             m->velocity.z = 0.0f;
-            intrudeSound = ((s32 (*)(const char*))psndSFXOn)("SFX_AUDIENCE_HEIHO_MOVE1");
+            intrudeSound = psndSFXOn("SFX_AUDIENCE_HEIHO_MOVE1");
         }
         break;
     case 65:

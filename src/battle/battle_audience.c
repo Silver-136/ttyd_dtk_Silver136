@@ -1823,7 +1823,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
 			(base->starPowerGain)--;
 		}
 		if (cnt == 0 && psndSFXChk(base->apStarSfxId) == -1) {
-			base->apStarSfxId = ((s32 (*)(const char*))psndSFXOn)("SFX_BTL_SYS_AP_STAR1");
+			base->apStarSfxId = psndSFXOn("SFX_BTL_SYS_AP_STAR1");
 		}
 	} else {
 		for (k = 0, i = 0; i < 100; i++) {
@@ -3993,7 +3993,7 @@ void BattleAudienceSoundStop(s32 index) {
 
 //@@ BattleAudienceSound0
 s32 BattleAudienceSound0(const char* name) {
-	return ((s32 (*)(const char*))psndSFXOn)(name);
+	return psndSFXOn(name);
 }
 
 //@@ BattleAudienceSound1

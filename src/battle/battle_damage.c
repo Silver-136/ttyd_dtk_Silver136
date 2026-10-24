@@ -14,6 +14,7 @@
 #include <string.h>
 #include "battle/battle_mario.h"
 #include "system.h"
+#include "pmario_sound.h"
 
 typedef struct CounterWork {
     s32 field_0x0;  // 0x0
@@ -51,7 +52,6 @@ void BattleActionCommandStop(BattleWork* work);
 void BattleAcHelpSetDispType(s32 type);
 EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z);
 EffectEntry* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
-void psndSFXOn(const char* name);
 s32 psndSFXOn_3D(const char* name, Vec* position);
 void BattleAudience_Case_GuardGood(void);
 void BattleAudience_Case_GuardBad(void);

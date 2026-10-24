@@ -9,10 +9,10 @@
 #include "mario/mariost.h"
 #include "icon_ids.h"
 #include "libc_decls.h"
+#include "pmario_sound.h"
 
 extern ItemData itemDataTable[];
 
-void psndSFXOn(s32 id);
 void winTexInit_x2(TEXPalette* tpl);
 void winTexSet_x2(u32 a, u32 b, Vec translate, Vec scale, GXColor color);
 void winIconInit(void);
@@ -130,7 +130,7 @@ s32 winBadgeMain(WindowWork* w) {
     switch (w->badge.state) {
     case 0:
         if (w->buttonTrg & 0x200) {
-            psndSFXOn(0x20013);
+            psndSFXOn(SFX_NAME_WORD(0x20013));
             return -1;
         }
         if (w->buttonTrg & 0x1000) {
@@ -138,7 +138,7 @@ s32 winBadgeMain(WindowWork* w) {
         }
         if (w->dirRep & 0x3000) {
             w->badge.tab = 1 - w->badge.tab;
-            psndSFXOn(0x20005);
+            psndSFXOn(SFX_NAME_WORD(0x20005));
             if (w->badge.tab) {
                 winMakeEquipList(w);
             }
@@ -149,7 +149,7 @@ s32 winBadgeMain(WindowWork* w) {
             if (w->badge.tab == 1 && w->badge.count == 0) {
                 break;
             }
-            psndSFXOn(0x20012);
+            psndSFXOn(SFX_NAME_WORD(0x20012));
             w->badge.state = 10;
             break;
         } else if (w->buttonTrg & 0x10) {
@@ -161,7 +161,7 @@ s32 winBadgeMain(WindowWork* w) {
             }
             winSortEntry(p, m, -310.0f, 150.0f);
             w->savedState = w->badge.state;
-            psndSFXOn(0x20012);
+            psndSFXOn(SFX_NAME_WORD(0x20012));
             w->badge.state = 1000;
         }
         w->helpTgtX = -270.0f;
@@ -180,13 +180,13 @@ s32 winBadgeMain(WindowWork* w) {
             if (tab == 0) {
                 s32 idx = w->badge.sel[tab];
                 if (pouchEquipCheckBadgeIndex(idx)) {
-                    psndSFXOn(0x20039);
+                    psndSFXOn(SFX_NAME_WORD(0x20039));
                     pouchUnEquipBadgeIndex(idx);
                 } else if (pouch->availableBP >= itemDataTable[pouchHaveBadge(idx)].bp_cost) {
-                    psndSFXOn(0x20038);
+                    psndSFXOn(SFX_NAME_WORD(0x20038));
                     pouchEquipBadgeIndex(idx);
                 } else {
-                    psndSFXOn(0x20014);
+                    psndSFXOn(SFX_NAME_WORD(0x20014));
                 }
                 pouchReviseMarioParam();
                 pouchRevisePartyParam();
@@ -196,11 +196,11 @@ s32 winBadgeMain(WindowWork* w) {
                 WindowWork* wt = (WindowWork*)((s32*)w + tab);
                 s32 idx = w->badge.list[wt->badge.sel[0]].idx;
                 if (w->badge.list[wt->badge.sel[0]].equipped) {
-                    psndSFXOn(0x20039);
+                    psndSFXOn(SFX_NAME_WORD(0x20039));
                     pouchUnEquipBadgeIndex(idx);
                     w->badge.list[wt->badge.sel[0]].equipped = 0;
                 } else if (pouch->availableBP >= itemDataTable[pouchHaveBadge(idx)].bp_cost) {
-                    psndSFXOn(0x20038);
+                    psndSFXOn(SFX_NAME_WORD(0x20038));
                     pouchEquipBadgeIndex(idx);
                     w->badge.list[wt->badge.sel[0]].equipped = 1;
                 }
@@ -209,7 +209,7 @@ s32 winBadgeMain(WindowWork* w) {
                 mario_change(w, pouchHaveBadge(idx));
             }
         } else if (w->buttonTrg & 0x200) {
-            psndSFXOn(0x20013);
+            psndSFXOn(SFX_NAME_WORD(0x20013));
             w->badge.state = 0;
         } else if (w->buttonTrg & 0x1000) {
             return -2;
@@ -219,20 +219,20 @@ s32 winBadgeMain(WindowWork* w) {
                 w->badge.page[tab] = 0;
             }
             w->badge.sel[tab] = w->badge.page[tab] * 8;
-            psndSFXOn(0x20035);
+            psndSFXOn(SFX_NAME_WORD(0x20035));
         } else if (w->buttonRep & 0x20) {
             w->badge.page[tab]++;
             if (w->badge.page[tab] >= pages) {
                 w->badge.page[tab] = pages - 1;
             }
             w->badge.sel[tab] = w->badge.page[tab] * 8;
-            psndSFXOn(0x20035);
+            psndSFXOn(SFX_NAME_WORD(0x20035));
         } else if (w->dirRep & 0x1000) {
             w->badge.sel[tab]--;
-            psndSFXOn(0x20035);
+            psndSFXOn(SFX_NAME_WORD(0x20035));
         } else if (w->dirRep & 0x2000) {
             w->badge.sel[tab]++;
-            psndSFXOn(0x20035);
+            psndSFXOn(SFX_NAME_WORD(0x20035));
         } else if (w->buttonTrg & 0x10) {
             // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
             void* p = w;
@@ -242,7 +242,7 @@ s32 winBadgeMain(WindowWork* w) {
             }
             winSortEntry(p, m, -310.0f, 150.0f);
             w->savedState = w->badge.state;
-            psndSFXOn(0x20012);
+            psndSFXOn(SFX_NAME_WORD(0x20012));
             w->badge.state = 1000;
         }
         if (w->badge.sel[tab] < 0) {

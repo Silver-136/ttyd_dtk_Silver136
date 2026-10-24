@@ -708,12 +708,12 @@ void winMsgMain(WindowWork* wp) {
                 if (wp->msgLine < 0) {
                     wp->msgLine = 0;
                 } else {
-                    ((void (*)(s32))psndSFXOn)(0x20006);
+                    psndSFXOn(SFX_NAME_WORD(0x20006));
                 }
             } else if (keyGetDirTrg(0) & 0x200) {
                 if (wp->msgLine / 2 < (wp->msgLines + 1) / 2 - 1) {
                     wp->msgLine += 2;
-                    ((void (*)(s32))psndSFXOn)(0x20006);
+                    psndSFXOn(SFX_NAME_WORD(0x20006));
                 }
             }
             break;
@@ -2215,23 +2215,23 @@ void winSortMain(WindowWork* wp) {
     } else
 #endif
     if (trg & 0x200) {
-        ((void (*)(s32))psndSFXOn)(0x20013);
+        psndSFXOn(SFX_NAME_WORD(0x20013));
         wp->sortActive = 0;
         wp->sortTgtX = -600.0f;
     } else if (rep & 0x1000) {
-        ((void (*)(s32))psndSFXOn)(0x20005);
+        psndSFXOn(SFX_NAME_WORD(0x20005));
         wp->sortSel--;
         if (wp->sortSel < 0) {
             wp->sortSel = wp->sortNum - 1;
         }
     } else if (rep & 0x2000) {
-        ((void (*)(s32))psndSFXOn)(0x20005);
+        psndSFXOn(SFX_NAME_WORD(0x20005));
         wp->sortSel++;
         if (wp->sortSel >= wp->sortNum) {
             wp->sortSel = 0;
         }
     } else if (trg & 0x100) {
-        ((void (*)(s32))psndSFXOn)(0x20012);
+        psndSFXOn(SFX_NAME_WORD(0x20012));
         sort_data[wp->sortType][wp->sortSel].func(wp);
     }
 #ifndef VERSION_G8ME01

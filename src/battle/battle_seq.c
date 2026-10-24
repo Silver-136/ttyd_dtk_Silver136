@@ -501,7 +501,7 @@ void btlseqFirstAct(BattleWork* wp) {
 			{
 				fadeEntry(0x17, 200, c);
 			}
-			wp->curtainSfxId = ((s32 (*)(const char*))psndSFXOn)("SFX_OFF_BTL_START_CURTAIN_UP1");
+			wp->curtainSfxId = psndSFXOn("SFX_OFF_BTL_START_CURTAIN_UP1");
 			BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000002);
 
 		case 0x2000002:

@@ -8,6 +8,7 @@
 #include "system.h"
 #include <string.h>
 #include "icon_ids.h"
+#include "pmario_sound.h"
 
 #pragma optimize_for_size on
 
@@ -22,7 +23,6 @@ typedef struct SklWork {
 #define SKL_W(w) ((SklWork*)(w)->actionCommands.work)
 #define SKL_D(w) (&(w)->actionCommands.disp)
 
-s32 psndSFXOn(const char* name);
 
 s32 ac_stickkeepleft_ok_frame[7] = {80, 70, 60, 40, 20, 10, 5};
 

@@ -6385,7 +6385,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             if (data->counter >= 15) {
                 data->counter = 0;
                 data->phase++;
-                data->sfxId = ((s32 (*)(const char*))psndSFXOn)("SFX_EVT_GAME_SLOT_ROUND1");
+                data->sfxId = psndSFXOn("SFX_EVT_GAME_SLOT_ROUND1");
             } else {
                 data->counter++;
                 data->reberAngle += 4.0f;

@@ -10428,7 +10428,7 @@ USER_FUNC(_tatsumaki_effect) {
         ud[4] = (s32) * &unit->mPosition.z;
         ud[5] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
         ud[6] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
-        ud[7] = ((s32(*)(const char*))psndSFXOn)("SFX_BTL_JUMP_TATUMAKI2");
+        ud[7] = psndSFXOn("SFX_BTL_JUMP_TATUMAKI2");
         v.x = ud[2];
         v.y = ud[3];
         v.z = ud[4];

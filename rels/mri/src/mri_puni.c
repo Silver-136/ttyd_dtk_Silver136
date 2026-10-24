@@ -4872,15 +4872,15 @@ void puniSound(void)
     switch (Punigp->togeMoveLevel)
     {
       case 1:
-        Punigp->sfx468 = ((s32 (*)(const char *)) psndSFXOn)("SFX_STG2_TOGE_MOVE1");
+        Punigp->sfx468 = psndSFXOn("SFX_STG2_TOGE_MOVE1");
         break;
 
       case 2:
-        Punigp->sfx468 = ((s32 (*)(const char *)) psndSFXOn)("SFX_STG2_TOGE_MOVE2");
+        Punigp->sfx468 = psndSFXOn("SFX_STG2_TOGE_MOVE2");
         break;
 
       case 3:
-        Punigp->sfx468 = ((s32 (*)(const char *)) psndSFXOn)("SFX_STG2_TOGE_MOVE3");
+        Punigp->sfx468 = psndSFXOn("SFX_STG2_TOGE_MOVE3");
         break;
 
     }
