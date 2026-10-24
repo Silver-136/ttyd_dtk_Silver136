@@ -5998,38 +5998,6 @@ static inline s32 sfxvol(PaperSoundEffect* s) {
 }
 #define SFX_VOL(s) sfxvol(s)
 
-// FAKE: static inline copy of psndSFXOff (defined later in the file, so not inlinable there); the target inlines it at the three fade-out stop sites
-static inline void psndSFXOffI(s32 id) {
-    PaperSoundEffect* sfx;
-    SoundEffectEntry* entry;
-
-    if (id == 0xFFFFFFFF) {
-        return;
-    }
-    sfx = &pssfx[id & 0xFF];
-    if (sfx->listId == 0xFFFFFFFF) {
-        return;
-    }
-    if (sfx->flags & 1) {
-        sfx->listId = -1;
-        sfx->channel = -1;
-        return;
-    }
-    entry = &pssfxlist[sfx->listId & 0x1FFF];
-    if (sfx->channel != 0xFFFFFFFF) {
-        if (entry->fxId & 0x80000000) {
-            SoundSSStopCh(sfx->channel);
-        }
-        else if (entry->fxId & 0x40000000) {
-            SoundSongStopCh(sfx->channel);
-        }
-        else {
-            SoundEfxStop(sfx->channel);
-        }
-    }
-    sfx->listId = -1;
-    sfx->channel = -1;
-}
 
 #pragma dont_inline off
 void psndSFXMain(void) {
@@ -6224,19 +6192,19 @@ sgfound:
 				r = (u8)SoundSSGetVolCh(sfx[0]->channel); r = (r * fade) / 127;
 				SoundSSSetVolCh(sfx[0]->channel, r);
 				if (r == 0) {
-					psndSFXOffI(i);
+					psndSFXOff(i);
 				}
 			} else if (f & 0x40000000) {
 				r = (u8)SoundSongGetVolCh(sfx[0]->channel); r = (r * fade) / 127;
 				SoundSongSetVolCh(sfx[0]->channel, r);
 				if (r == 0) {
-					psndSFXOffI(i);
+					psndSFXOff(i);
 				}
 			} else {
 				r = (u8)SoundEfxGetVolume(sfx[0]->channel); r = (r * fade) / 127;
 				SoundEfxSetVolume(sfx[0]->channel, r);
 				if (r == 0) {
-					psndSFXOffI(i);
+					psndSFXOff(i);
 				}
 			}
 		}
@@ -6269,9 +6237,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
   PaperSoundEffect *sfx = (void *) 0;
   SoundEffectEntry *entry;
   s32 idx = 0;
-  PaperSoundEffect* o;
   s32 delay;
-  SoundEffectEntry* le;
   u16 * new_var ;
   s32 i;
   s32 id;
@@ -6329,31 +6295,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
       }
       if (s->priority > entry->priority)
       {
-        // FAKE: psndSFXOff(i) expanded by hand with named locals o/le (the inlined copy's @ temps colour in the wrong order)
-        {
-          if (k != 0xFFFFFFFF) {
-            o = &pssfx[k & 0xFF];
-            if (o->listId != 0xFFFFFFFF) {
-              if (o->flags & 1) {
-                o->listId = -1;
-                o->channel = -1;
-              } else {
-                le = &pssfxlist[o->listId & 0x1FFF];
-                if (o->channel != 0xFFFFFFFF) {
-                  if (le->fxId & 0x80000000) {
-                    SoundSSStopCh(o->channel);
-                  } else if (le->fxId & 0x40000000) {
-                    SoundSongStopCh(o->channel);
-                  } else {
-                    SoundEfxStop(o->channel);
-                  }
-                }
-                o->listId = -1;
-                o->channel = -1;
-              }
-            }
-          }
-        }
+        psndSFXOff(k);
         sfx = s;
         idx = k;
         break;
