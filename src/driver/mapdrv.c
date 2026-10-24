@@ -2175,7 +2175,7 @@ s32 mapSetLight(MapObject* obj, LightEntry** lights) {
 				light = lightNameToPtr(mapWork[activeGroup].entries[obj->groupIndex].lightTable->lights[i]->name);
 				if (!(light->flags & 0x8000)) {
 					lights[count] = light;
-						count++;
+					count++;
 					if (count >= 8) {
 						break;
 					}
@@ -2184,7 +2184,7 @@ s32 mapSetLight(MapObject* obj, LightEntry** lights) {
 		}
 	}
 	else {
-		count = 0; // FAKE: redundant (count is already 0); the target emits this else branch
+		count = 0;
 	}
 	return count;
 }
