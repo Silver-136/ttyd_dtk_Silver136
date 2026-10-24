@@ -12,10 +12,10 @@
 #define pouchGetHP pouchGetHP_hdr
 #define pouchEquipCheckBadge pouchEquipCheckBadge_hdr
 #include "mario/mariost.h"
-#include "mario/mario_sbr.h"
 #undef pouchGetHP
 #undef pouchEquipCheckBadge
 #endif
+#include "mario/mario_sbr.h"
 s32 pouchGetHP(void);
 s32 pouchEquipCheckBadge(s32 badgeId);
 void kpa_stay(void);

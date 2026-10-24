@@ -22,9 +22,9 @@
 #include "eff/eff_magic1_n64.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
+#endif
 #include "battle/battle_ac_help.h"
 #include "pmario_sound.h"
-#endif
 
 //s32* eventId
 USER_FUNC(btlevtcmd_WaitEventEnd) {

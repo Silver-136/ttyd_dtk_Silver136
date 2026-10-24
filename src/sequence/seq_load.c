@@ -2,6 +2,7 @@
 #include "evt/evt_sub.h"
 #include "seq/seq_load.h"
 #include "sdk_decls.h"
+#include "win/win_mario.h"
 
 #ifdef VERSION_G8ME01
 // US version: all functions exact (loadDraw needs the two FAKE spellings marked inside it).
@@ -31,7 +32,6 @@
 #include "driver/icondrv.h"
 #include "win/win_main.h"
 #include "sdk/texPalette.h"
-#include "win/win_mario.h"
 typedef struct LoadWork {
     u16 flags;          // 0x0
     FileEntry* file;    // 0x4
@@ -1321,7 +1321,6 @@ void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
 void winTexSetRot(u32 id, Vec translate, Vec scale, GXColor color, f32 rot);
 void nameMaskGX(f32 alpha);
-const char* winZenkakuStrPad(s32 num, s32 digits);
 void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* str);
 void FontDrawEdge(void);
@@ -1442,7 +1441,6 @@ int __mod2u();
 int sprintf(char *s, const char *format, ...);
 char *strcpy(char *dest, const char *src);
 size_t strlen(const char *s);
-int winZenkakuStr();
 void seq_loadMain(SequenceWork* seq) {
     switch (seq->state) {
         case 0:

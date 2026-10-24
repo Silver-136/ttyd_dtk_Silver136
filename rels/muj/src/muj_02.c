@@ -14,11 +14,11 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include "manager/evtmgr_cmd.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #include "evt/evt_npc.h"
 #include "driver/hitdrv.h"
-#include "manager/evtmgr_cmd.h"
 void FontDrawString(f32 x, f32 y, const char* str);
 #endif
 
