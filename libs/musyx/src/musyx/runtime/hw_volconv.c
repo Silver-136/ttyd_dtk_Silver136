@@ -1,4 +1,3 @@
-#define MATH_NO_SQRTF 1
 #include "musyx/sal.h"
 #include "musyx/synth_dbtab.h"
 

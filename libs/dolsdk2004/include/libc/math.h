@@ -35,13 +35,9 @@ double floor(double x);
 double fmod(double x, double y);
 double pow(double x, double y);
 
-#ifndef MATH_NO_SQRTF
-#ifndef MATH_SQRTF_LINKAGE
-#define MATH_SQRTF_LINKAGE extern
-#endif
-MATH_SQRTF_LINKAGE inline float sqrtf(float x) {
-    static const double _half = .5;
-    static const double _three = 3.0;
+extern inline float sqrtf(float x) {
+    const double _half = .5;
+    const double _three = 3.0;
     volatile float y;
     if (x > 0.0f) {
 #ifdef __MWERKS__
@@ -58,31 +54,6 @@ MATH_SQRTF_LINKAGE inline float sqrtf(float x) {
     }
     return x;
 }
-
-#endif
-
-#if !defined(MATH_NO_SQRT_HACK) && !defined(MATH_NO_SQRTF)
-// TODO: this isn't correct! It's just to generate sdata2 in GXDraw.o
-extern inline float sqrt(float x) {
-    static const double _half = .5;
-    static const double _three = 3.0;
-    volatile float y;
-    if (x > 0.0f) {
-#ifdef __MWERKS__
-        double guess = __frsqrte((double)x); // returns an approximation to
-#else
-        double guess;
-        asm("frsqrte %0, %1" : "=f"(guess) : "f"(x));
-#endif
-        guess = _half * guess * (_three - guess * guess * x); // now have 12 sig bits
-        guess = _half * guess * (_three - guess * guess * x); // now have 24 sig bits
-        guess = _half * guess * (_three - guess * guess * x); // now have 32 sig bits
-        y = (float)(x * guess);
-        return y;
-    }
-    return x;
-}
-#endif
 
 #ifdef __MWERKS__
 #define fabs(x) __fabs(x)

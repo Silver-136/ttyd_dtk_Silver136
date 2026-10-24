@@ -1,6 +1,4 @@
-#define MATH_NO_SQRTF 1
 #include <math.h>
-float sqrtf(float x);
 #include <dolphin/gx.h>
 #include <dolphin/os.h>
 

@@ -1,4 +1,3 @@
-#define MATH_NO_SQRTF 1 // FAKE: sound.h reaches math.h; keep its sqrtf inline statics out of this unit's .rodata (never calls sqrt)
 #include "seq/seq_title.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"

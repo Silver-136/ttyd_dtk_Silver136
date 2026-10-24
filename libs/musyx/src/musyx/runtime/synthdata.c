@@ -1,4 +1,3 @@
-#define MATH_NO_SQRTF 1
 #include "musyx/synthdata.h"
 #include "musyx/assert.h"
 #include "musyx/hardware.h"

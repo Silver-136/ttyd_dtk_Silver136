@@ -1,4 +1,3 @@
-#define MATH_NO_SQRTF 1
 #include "musyx/musyx.h"
 #include "musyx/platform.h"
 #include "musyx/snd.h"

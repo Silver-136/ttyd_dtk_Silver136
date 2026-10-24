@@ -1,7 +1,6 @@
 // NOTE: in G8MJ01 the event/evt_snd.c split (0x80077EC4..0x80077F88) actually holds
 // the tail of seq_gameover.c (seq_gameOverExit/Init); the real evt_snd functions
 // live at 0x8014C488 inside the party/party_motion.c split.
-#define MATH_NO_SQRTF 1 // FAKE: sound.h reaches math.h; keep its sqrtf inline statics out of this unit's .rodata (never calls sqrt)
 #include "evt/evt_snd.h"
 #include "driver/camdrv.h"
 #include "driver/seqdrv.h"

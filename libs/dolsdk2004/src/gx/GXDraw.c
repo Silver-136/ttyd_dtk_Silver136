@@ -1,12 +1,9 @@
-#define MATH_NO_SQRTF 1
 #include <math.h>
-float sqrtf(float x);
 
 #include <dolphin/gx.h>
 #include <dolphin/os.h>
 
 #include "__gx.h"
-static void gxdraw_pool_order(f32* o, f64* d) { o[0] = 0.0f; o[1] = 1.0f; o[2] = 3.1415927f; o[3] = -1.0f; d[0] = 4503601774854144.0; d[1] = 4503599627370496.0; o[4] = 6.2831855f; o[5] = 0.57735026f; }
 
 static GXVtxDescList vcd[27];
 static GXVtxAttrFmtList vat[27];

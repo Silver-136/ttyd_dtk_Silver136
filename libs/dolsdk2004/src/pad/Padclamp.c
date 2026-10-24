@@ -1,4 +1,3 @@
-#define MATH_NO_SQRTF 1
 #include <math.h>
 #include <dolphin.h>
 #include <dolphin/pad.h>

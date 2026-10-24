@@ -1,5 +1,3 @@
-#define MATH_NO_SQRT_HACK 1
-#define MATH_SQRTF_LINKAGE static
 #include <math.h>
 #include "musyx/musyx.h"
 

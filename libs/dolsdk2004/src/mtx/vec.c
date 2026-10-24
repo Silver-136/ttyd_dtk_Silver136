@@ -1,8 +1,6 @@
-#define MATH_NO_SQRTF 1
+#include <math.h>
 #include <dolphin.h>
 #include <dolphin/mtx.h>
-float sqrtf(float x);
-static void vec_pool_order(f32* o) { o[0] = 0.0f; o[1] = 0.5f; o[2] = 3.0f; o[3] = 2.0f; }
 
 void C_VECAdd(const Vec* a, const Vec* b, Vec* ab) {
     ASSERTMSGLINE(108, a, "VECAdd():  NULL VecPtr 'a' ");

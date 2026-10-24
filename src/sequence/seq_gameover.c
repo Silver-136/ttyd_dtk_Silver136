@@ -2,7 +2,6 @@
 // event/evt_snd.c split (0x80077EC4..0x80077F88), which is really the tail of this TU.
 // mapdrv.h declares mapPreLoad(void), but this version takes the map name
 #define mapPreLoad mapPreLoad_unused
-#define MATH_NO_SQRTF 1 // FAKE: sound.h reaches math.h; keep its sqrtf inline statics out of this unit's .rodata (never calls sqrt)
 #include "driver/camdrv.h"
 #include "driver/fadedrv.h"
 #include "driver/seqdrv.h"

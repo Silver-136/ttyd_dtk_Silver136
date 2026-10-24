@@ -1,4 +1,3 @@
-#define MATH_NO_SQRT_HACK 1
 #define _MATH_H_
 #define SND3D_LISTENER_NO_ROOM 1
 #define SND3D_EMITTER_NO_ROOM 1
