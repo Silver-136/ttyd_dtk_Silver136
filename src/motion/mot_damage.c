@@ -311,7 +311,7 @@ void mot_damage(void) {
         if (mario->characterId == 0) {
             pouchAddHP(-1);
         }
-        if (((s32(*)(void))pouchGetHP)() <= 0) {
+        if (pouchGetHP() <= 0) {
             mario->currSubMotionId = 33;
             marioUpdateCamPos();
             break;
@@ -468,7 +468,7 @@ void mot_damageToge(void) {
             break;
         }
         pouchAddHP(-1);
-        if (((s32(*)(void))pouchGetHP)() <= 0) {
+        if (pouchGetHP() <= 0) {
             mario->currSubMotionId = 33;
             marioUpdateCamPos();
             break;

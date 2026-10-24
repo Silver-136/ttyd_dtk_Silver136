@@ -136,8 +136,8 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
                             }
                         }
                     } else {
-                        if (!((s32(*)(s32))BattlePadCheckNow)(pw->button)) {
-                            if (((s32(*)(s32))BattlePadCheckUp)(pw->button)) {
+                        if (!BattlePadCheckNow(pw->button)) {
+                            if (BattlePadCheckUp(pw->button)) {
                                 pw->phase = 2;
                             }
                         }

@@ -92,8 +92,8 @@ f32 toMovedir(f32 angle);
 s32 psndSFXOn_3D(s32 id, Vec* position);
 void* marioChkLandon(f32* y, f32 spd);
 s16 pouchAddHP(s16 points);
-s16 pouchGetHP(void);
-#define PCHK(x) ((s32 (*)(s32))pouchCheckItem)(x)
+s32 pouchGetHP(void);
+#define PCHK(x) pouchCheckItem(x)
 void marioDmgRetQuakeOn(void);
 void marioUpdateCamPos(void);
 s32 kpaGetBodyStatus(void);
@@ -1213,7 +1213,7 @@ void mot_bottomless(void) {
 				break;
 			}
 			pouchAddHP(-1);
-			if (((s32 (*)(void))pouchGetHP)() <= 0) {
+			if (pouchGetHP() <= 0) {
 				mario->currSubMotionId = 13;
 				marioUpdateCamPos();
 				break;

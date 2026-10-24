@@ -57,7 +57,7 @@ typedef struct RepeatWork {
 static void actionCommandDisp(f32 x, f32 y);
 void battleAcDelete_Repeatedly(BattleWork* work);
 
-#define PadNow(m) (((s32(*)(s32))BattlePadCheckNow)(m))
+#define PadNow(m) (BattlePadCheckNow(m))
 
 static s32 _power_table[] = {55, 50, 45, 40, 35, 30, 25};
 

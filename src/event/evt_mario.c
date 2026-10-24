@@ -2084,7 +2084,7 @@ USER_FUNC(evt_mario_check_key_item) {
     EvtWord* args = event->args;
     s32 item = evtGetValue(event, args[0]);
     s32 id = args[1];
-    if (((s32(*)(s32))pouchCheckItem)(item)) {
+    if (pouchCheckItem(item)) {
         evtSetValue(event, id, 1);
     } else {
         evtSetValue(event, id, 0);

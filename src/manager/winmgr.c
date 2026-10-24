@@ -809,7 +809,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 a2, BOOL a3) {
                 m = (s16)badgeShop_get(bdsw->starmaniac_table, i + 240);
                 if (m - badgeShop_ThrowCheck(i + 240) > 0) {
                     sel->items[sel->numItems].id = i + 240;
-                    if (itemDataTable[i + 240].star_piece_price > ((s32 (*)(void))pouchGetStarPiece)()) {
+                    if (itemDataTable[i + 240].star_piece_price > pouchGetStarPiece()) {
                         sel->items[sel->numItems].flags |= 3;
                     }
                     sel->numItems++;

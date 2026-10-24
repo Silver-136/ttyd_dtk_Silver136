@@ -19,7 +19,7 @@
 #endif
 #include "driver/swdrv.h"
 
-#define CHECK_ITEM(id) ((s32 (*)(s32))pouchCheckItem)(id)
+#define CHECK_ITEM(id) pouchCheckItem(id)
 
 extern ItemData itemDataTable[];
 
@@ -322,7 +322,7 @@ BOOL pouchGetItem(ItemType type)
   if ((type >= 0x79) && (type < 0xEC))
   {
     itemLists[0] = mpp->heldItems;
-    size = (((s32 (*)(s32)) pouchCheckItem)(1)) ? (20) : (10);
+    size = (pouchCheckItem(1)) ? (20) : (10);
     ok = 1;
   }
   else
@@ -353,7 +353,7 @@ BOOL pouchGetItem(ItemType type)
 }
 
 
-u32 pouchCheckItem(u32 itemId) {
+s32 pouchCheckItem(u32 itemId) {
 	s32 id = itemId;
 	s32 i;
 	u32 itemCnt;
@@ -418,7 +418,7 @@ BOOL pouchRemoveItem(ItemType type)
   {
     table1 = mpp->heldItems;
     table2 = (void *) 0;
-    maximum = (((s32 (*)(s32)) pouchCheckItem)(ITEM_STRANGE_SACK)) ? (20) : (10);
+    maximum = (pouchCheckItem(ITEM_STRANGE_SACK)) ? (20) : (10);
     valid = 1;
   }
   else
@@ -837,7 +837,7 @@ s16 pouchSetSuperCoin(s16 count) {
 	return mpp->mShineSpriteCount;
 }
 
-s16 pouchGetStarPiece(void) {
+s32 pouchGetStarPiece(void) {
 	return mpp->mStarPieceCount;
 }
 
@@ -857,7 +857,7 @@ s16 pouchAddHP(s32 points) {
 	return mpp->currentHP;
 }
 
-s16 pouchGetHP(void) {
+s32 pouchGetHP(void) {
 	return mpp->currentHP;
 }
 
@@ -891,7 +891,7 @@ void pouchSetPartyHP(PartyId partnerId, s16 points) {
 	}
 }
 
-s16 pouchGetFP(void) {
+s32 pouchGetFP(void) {
 	return mpp->currentFP;
 }
 
@@ -911,7 +911,7 @@ void pouchSetMaxFP(s16 points) {
 	mpp->baseMaxFP = mpp->maximumFP;
 }
 
-s16 pouchGetAP(void) {
+s32 pouchGetAP(void) {
 	return mpp->currentSP;
 }
 
@@ -1279,20 +1279,20 @@ f32 pouchGetAudienceNum(void);
 s16 pouchGetMaxAP(void);
 void pouchSetAP(s16 points);
 void pouchAddAP(s16 points);
-s16 pouchGetAP(void);
+s32 pouchGetAP(void);
 void pouchSetMaxFP(s16 points);
 void pouchSetFP(s16 points);
 s16 pouchGetMaxFP(void);
-s16 pouchGetFP(void);
+s32 pouchGetFP(void);
 void pouchSetPartyHP(PartyId partnerId, s16 points);
 s16 pouchGetPartyHP(PartyId partnerId);
 void pouchSetMaxHP(s16 points);
 void pouchSetHP(s16 points);
 s16 pouchGetMaxHP(void);
-s16 pouchGetHP(void);
+s32 pouchGetHP(void);
 s16 pouchAddHP(s32 points);
 s16 pouchAddStarPiece(s16 count);
-s16 pouchGetStarPiece(void);
+s32 pouchGetStarPiece(void);
 s16 pouchSetSuperCoin(s16 count);
 s16 pouchGetSuperCoin(void);
 s32 pouchSetCoin(s32 coins);
@@ -1306,7 +1306,7 @@ s32 comp_aiueo(const void* a, const void* b);
 void pouchHiraToKata(const char* src, char* dst);
 BOOL pouchRemoveItemIndex(ItemType type, s32 index);
 BOOL pouchRemoveItem(ItemType type);
-u32 pouchCheckItem(u32 itemId);
+s32 pouchCheckItem(u32 itemId);
 BOOL pouchGetItem(ItemType type);
 s32 pouchGetEmptyKeepItemCnt(void);
 s32 pouchGetEmptyHaveItemCnt(void);

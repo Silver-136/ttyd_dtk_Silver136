@@ -1532,7 +1532,7 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
 				break;
 			}
 		}
-		if (((s32 (*)(s32))BattlePadCheckNow)(-1)) {
+		if (BattlePadCheckNow(-1)) {
 			cmd->idleTimer = 0;
 			btl_camera_set_mode(0, 0);
 		} else if (++cmd->idleTimer >= 900) {

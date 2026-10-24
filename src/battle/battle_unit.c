@@ -1850,7 +1850,7 @@ BOOL BtlUnit_CheckWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {
     if (fp < BtlUnit_GetWeaponCost(unit, weapon)) {
         return FALSE;
     }
-    return ((s32 (*)(void))pouchGetAP)() >= (u8)weapon->baseSpCost * 100;
+    return pouchGetAP() >= (u8)weapon->baseSpCost * 100;
 }
 
 void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {

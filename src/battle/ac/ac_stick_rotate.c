@@ -43,7 +43,7 @@ typedef struct StickRotateWork {
 #define AC_WORK(bw) ((StickRotateWork*)((BattleActions*)&(bw)->actionCommands)->work)
 #define AC_DISP(w) ((BattleACDispParams*)&(w)->actionCommands.disp)
 
-#define PAD(m) (((s32(*)(s32))BattlePadCheckNow)(m))
+#define PAD(m) (BattlePadCheckNow(m))
 
 static void actionCommandDisp(f32 x, f32 y);
 void actionCommandDisp2(f32 x, f32 y);

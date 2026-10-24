@@ -567,7 +567,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 			coin = ((s32 (*)(void))pouchGetSuperCoin)();
 		} else {
 			iconDispGx2(mtx, 0x10, ICON_18D);
-			coin = ((s32 (*)(void))pouchGetStarPiece)();
+			coin = pouchGetStarPiece();
 		}
 		PSMTXTrans(mtx, -192.0f, -113.0f, 0.0f);
 		iconDispGx2(mtx, 0x10, ICON_1D6);
@@ -805,7 +805,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 				item = &itemDataTable[id];
 				if (id) {
 					s32 ty;
-					if (wp->field_0x50 == 13 && item->star_piece_price > ((s32 (*)(void))pouchGetStarPiece)()) {
+					if (wp->field_0x50 == 13 && item->star_piece_price > pouchGetStarPiece()) {
 						color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
 						flag = 0x20;
 					}

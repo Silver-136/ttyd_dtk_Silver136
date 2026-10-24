@@ -152,7 +152,7 @@ void winMarioExit(WindowWork* w) {
     while (1) {                                                       \
         if (w->marioSel == 11 || w->marioSel == 12) {                           \
             if (w->mario.f198 != 0) break;                                  \
-        } else if (p->item == 0 || ((s32(*)(u32))pouchCheckItem)(p->item) != 0) {    \
+        } else if (p->item == 0 || pouchCheckItem(p->item) != 0) {    \
             break;                                                    \
         }                                                             \
         w->marioSel = p->links[n];                                         \
@@ -362,22 +362,22 @@ void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
             }
             break;
         case 7:
-            if (((s32(*)(u32))pouchCheckItem)(2)) {
+            if (pouchCheckItem(2)) {
                 fukiKey(w, itemDataTable[2].icon_id, x - 80.0f, y + 90.0f);
             }
             break;
         case 8:
-            if (((s32(*)(u32))pouchCheckItem)(4)) {
+            if (pouchCheckItem(4)) {
                 fukiKey(w, itemDataTable[4].icon_id, x - 80.0f, y + 20.0f);
             }
             break;
         case 9:
-            if (((s32(*)(u32))pouchCheckItem)(5)) {
+            if (pouchCheckItem(5)) {
                 fukiKey(w, itemDataTable[5].icon_id, x - 30.0f, y + 130.0f);
             }
             break;
         case 10:
-            if (((s32(*)(u32))pouchCheckItem)(3)) {
+            if (pouchCheckItem(3)) {
                 fukiKey(w, itemDataTable[3].icon_id, x - 30.0f, y + 60.0f);
             }
             break;

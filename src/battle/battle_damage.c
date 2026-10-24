@@ -33,7 +33,7 @@ typedef struct CounterWork {
 
 BOOL BtlUnit_CanGuardStatus(BattleUnit* unit);
 void btlDispPoseAnime(BattleUnitPart* part);
-u32 pouchCheckItem(u32 itemId);
+s32 pouchCheckItem(u32 itemId);
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
 s32 pouchEquipCheckBadge(s32 badgeId);

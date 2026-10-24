@@ -451,7 +451,7 @@ s32 pouchGetEmptyHaveItemCnt(void);
 s32 pouchGetEmptyKeepItemCnt(void);
 BOOL pouchGetItem(ItemType type);
 
-u32 pouchCheckItem(u32 itemId);
+s32 pouchCheckItem(u32 itemId);
 
 BOOL pouchRemoveItem(ItemType type);
 
@@ -460,20 +460,20 @@ s16 pouchAddCoin(s16 coins);
 s32 pouchSetCoin(s32 coins);
 s16 pouchGetSuperCoin(void);
 s16 pouchSetSuperCoin(s16 count);
-s16 pouchGetStarPiece(void);
+s32 pouchGetStarPiece(void);
 s16 pouchAddStarPiece(s16 count);
 s16 pouchAddHP(s16 points);
-s16 pouchGetHP(void);
+s32 pouchGetHP(void);
 s16 pouchGetMaxHP(void);
 void pouchSetHP(s16 points);
 void pouchSetMaxHP(s16 points);
 s16 pouchGetPartyHP(PartyId partnerId);
 void pouchSetPartyHP(PartyId partnerId, s16 points);
-s16 pouchGetFP(void);
+s32 pouchGetFP(void);
 s16 pouchGetMaxFP(void);
 void pouchSetFP(s16 points);
 void pouchSetMaxFP(s16 points);
-s16 pouchGetAP(void);
+s32 pouchGetAP(void);
 void pouchAddAP(s16 points);
 void pouchSetAP(s16 points);
 s16 pouchGetMaxAP(void);

@@ -248,7 +248,7 @@ void titleMain(SequenceWork* work) {
 			}
 			if (fadeIsFinish()) {
 				fadeReset(1);
-				if (((s32 (*)(void))pouchGetHP)() <= 0) {
+				if (pouchGetHP() <= 0) {
 					pouchSetHP(1);
 				}
 				gp->areaFadeInType = 10;

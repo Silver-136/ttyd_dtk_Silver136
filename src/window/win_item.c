@@ -168,7 +168,7 @@ void winItemInit(WindowWork* w) {
     w->item.bookY = w->item.bookTgtY = -240.0f;
     w->item.mailX = w->item.mailTgtX = 320.0f;
     w->item.mailY = w->item.mailTgtY = -240.0f;
-    if (!((s32 (*)(s32))pouchCheckItem)(0x36)) {
+    if (!pouchCheckItem(0x36)) {
         pouchGetItem(0x36);
     }
     w->item.mailNum = pouchReceiveMailCount();
@@ -581,14 +581,14 @@ s32 winItemMain(WindowWork* w) {
                 }
             }
             if (w->item.useTarget < 1) {
-                ((void (*)(s32))pouchSetHP)(((s32 (*)(void))pouchGetHP)() + itemDataTable[w->item.useItem].hp_restored);
-                ((void (*)(s32))pouchSetFP)(((s32 (*)(void))pouchGetFP)() + itemDataTable[w->item.useItem].fp_restored);
-                ((void (*)(s32))pouchSetAP)(((s32 (*)(void))pouchGetAP)() + itemDataTable[w->item.useItem].sp_restored);
+                ((void (*)(s32))pouchSetHP)(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
+                ((void (*)(s32))pouchSetFP)(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
+                ((void (*)(s32))pouchSetAP)(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
             } else {
                 party = list[w->item.useTarget - 1]->partyId;
                 ((void (*)(s32, s32))pouchSetPartyHP)(party, ((s32 (*)(s32))pouchGetPartyHP)(party) + itemDataTable[w->item.useItem].hp_restored);
-                ((void (*)(s32))pouchSetFP)(((s32 (*)(void))pouchGetFP)() + itemDataTable[w->item.useItem].fp_restored);
-                ((void (*)(s32))pouchSetAP)(((s32 (*)(void))pouchGetAP)() + itemDataTable[w->item.useItem].sp_restored);
+                ((void (*)(s32))pouchSetFP)(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
+                ((void (*)(s32))pouchSetAP)(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
             }
             w->item.blink = 0;
             w->item.state = 301;
@@ -879,7 +879,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 winFontInit();
                 winFontSet((Vec){entry->x + 50, entry->y - 8 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("name_mario"));
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
-                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", ((s32 (*)(void))pouchGetHP)());
+                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetHP());
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
                 winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", ((s32 (*)(void))pouchGetMaxHP)());
                 if (itemDataTable[w->item.useItem].fp_restored) {
@@ -890,7 +890,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 }
                 winFontInit();
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_FP_NAME);
-                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", ((s32 (*)(void))pouchGetFP)());
+                winFontSetR((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetFP());
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
                 winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", ((s32 (*)(void))pouchGetMaxFP)());
             } else {

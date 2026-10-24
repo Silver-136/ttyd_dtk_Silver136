@@ -123,13 +123,13 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
                         }
                         break;
                     case -1:
-                        if (((s32(*)(s32))BattlePadCheckUp)(tw->button)) {
+                        if (BattlePadCheckUp(tw->button)) {
                             pressed = 1;
                         }
                         break;
                     case 0:
                     default:
-                        if (!((s32(*)(s32))BattlePadCheckNow)(tw->button)) {
+                        if (!BattlePadCheckNow(tw->button)) {
                             pressed = 1;
                         }
                         break;

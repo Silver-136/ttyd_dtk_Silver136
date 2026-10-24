@@ -100,7 +100,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     }
                     return 0;
                 }
-                if (!((s32(*)(s32))BattlePadCheckNow)(0x40000) && (&(work)->actionCommands)->countdown <= 0 && autoCommand == 0) {
+                if (!BattlePadCheckNow(0x40000) && (&(work)->actionCommands)->countdown <= 0 && autoCommand == 0) {
                     if (--cw->timer <= 0) {
                         work->actionCommands.result = 0;
                         loop = 1;
@@ -149,7 +149,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     }
                     cw->timer = SKL_P(work)->params[1];
                 } else {
-                    if (((s32(*)(s32))BattlePadCheckNow)(0x40000) && autoCommand == 0) {
+                    if (BattlePadCheckNow(0x40000) && autoCommand == 0) {
                         break;
                     }
                     ok = 0;

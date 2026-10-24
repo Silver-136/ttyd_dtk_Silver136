@@ -809,7 +809,7 @@ void marioInit(void) {
 	marioResetCamShift();
 	marioResetCamShiftRate();
 	marioResetCamFollowRate();
-	if (!((s32 (*)(s32))pouchCheckItem)(9)) {
+	if (!pouchCheckItem(9)) {
 		pouchGetItem(9);
 	}
 	partyInit();
@@ -938,7 +938,7 @@ void marioReInit(void) {
 	marioResetCamShift();
 	marioResetCamShiftRate();
 	marioResetCamFollowRate();
-	if (!((s32 (*)(s32))pouchCheckItem)(9)) {
+	if (!pouchCheckItem(9)) {
 		pouchGetItem(9);
 	}
 	wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
@@ -975,7 +975,7 @@ static inline void marioMainBlur(MarioWork* wp) {
 static inline void marioMainEnd(MarioWork* wp) {
 	wp->prevAirTimer = wp->airTimer;
 	wp->prevHitobjStandOn = wp->hitobjStandOn;
-	if (((s32 (*)(void))pouchGetHP)() <= 0) {
+	if (pouchGetHP() <= 0) {
 		seqSetSeq(SEQ_GAME_OVER, NULL, NULL);
 	}
 	wp->basePos = wp->position;

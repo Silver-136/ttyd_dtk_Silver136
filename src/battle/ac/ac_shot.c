@@ -210,7 +210,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     } else {
                         ac->mAcState = 1000;
                     }
-                } else if (!((s32 (*)(s32))BattlePadCheckNow)(0x100)) {
+                } else if (!BattlePadCheckNow(0x100)) {
                     SH_OUT(ac)[1] = (s32)(sw->maxV * sw->speed / 100.0f);
                     if ((f32)SH_OUT(ac)[1] < sw->minV) {
                         SH_OUT(ac)[1] = (s32)sw->minV;
