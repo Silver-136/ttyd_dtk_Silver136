@@ -46,7 +46,6 @@ USER_FUNC(evt_nannpc_set_position);
 USER_FUNC(evt_nannpc_set_subfunc);
 USER_FUNC(evt_nannpc_init);
 
-s32 gap_08_8041899C_sbss;
 NanNPCWork* nanNPCWork;
 char makestring[16];
 
@@ -722,10 +721,3 @@ USER_FUNC(evt_nannpcwork_flag_onoff) {
 
 #pragma force_active reset
 
-#ifdef VERSION_G8ME01
-#pragma force_active on
-u32 gap_07_804113E8_sdata[4] = {0}; /* US pad is 0x10 */ /* FAKE: kept (MWLD strips it in the US link) */
-#pragma force_active reset
-#else
-u32 gap_07_804113E8_sdata[6] = {0};
-#endif

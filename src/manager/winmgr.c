@@ -150,13 +150,7 @@ WinMgrSelectTbl select_desc_tbl[] = {
 
 //.sbss
 #pragma force_active on
-u32 gap_08_80418B74_sbss;
-#pragma force_active reset
-#pragma force_active on
 
-#ifndef VERSION_G8ME01
-u32 gap_07_8041799C_sdata[1] = {0};
-#endif
 #pragma force_active reset
 
 static const char name_party0[12];

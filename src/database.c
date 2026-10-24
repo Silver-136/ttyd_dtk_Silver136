@@ -420,4 +420,3 @@ MapAttrEntry _map_attr_data[] = {
 	{ NULL, -1, 0 },
 };
 
-__declspec(section ".data") u32 gap_05_8030E58C_data[1] = {0};

@@ -40,7 +40,6 @@ void mapObjGetPos(const char* name, Vec* pos);
 void suifu100taikikan_seq01(NanNPC* npc);
 void suifu100taikikan_seq00(NanNPC* npc);
 typedef struct KaitenParam { Vec pos; Vec target; f32 angle; f32 dist; } KaitenParam;
-u32 gap_05_0000001C_bss;
 static u8* _ap;
 static s32* itemsel_table_ram;
 static KaitenParam* ckp0;
@@ -280,7 +279,6 @@ f32 negone_one$374[2] __attribute__((aligned(8)));
 f32 neg_one$382;
 f32 __local_PI$383;
 f32 __local_3PIO2$385;
-u32 gap_04_0000086C_data[1];
 f32 one_negone$373[2] __attribute__((aligned(8)));
 f32 __local_PIO2$384;
 f32 one$381;
@@ -288,7 +286,6 @@ f32 negone_one$360[2] __attribute__((aligned(8)));
 f32 neg_one$365;
 f32 __local_PI$366;
 f32 __local_3PIO2$368;
-u32 gap_04_00000894_data[1];
 f32 one_negone$359[2] __attribute__((aligned(8)));
 f32 __local_PIO2$367;
 f32 one$364;
@@ -426,7 +423,6 @@ f32 __local_PI$383 = 3.1415927f;
 
 f32 __local_3PIO2$385 = 4.712389f;
 
-u32 gap_04_0000086C_data[1] = {0};
 
 f32 one_negone$373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
@@ -442,7 +438,6 @@ f32 __local_PI$366 = 3.1415927f;
 
 f32 __local_3PIO2$368 = 4.712389f;
 
-u32 gap_04_00000894_data[1] = {0};
 
 f32 one_negone$359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
@@ -7099,4 +7094,3 @@ EVT_BEGIN(gor_00_init_evt)
 EVT_END()
 #endif
 
-u32 gap_04_0000F75C_data[1] = {0};

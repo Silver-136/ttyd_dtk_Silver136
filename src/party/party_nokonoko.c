@@ -17,7 +17,6 @@ extern s32 partyGoodbyeMain(PartyEntry* party);
 extern void partyChgRunMode(PartyEntry* party, s32 mode);
 
 
-static u8 gap_08_804188DC_sbss[4];  // .sbss pad after nokoSe
 static s32 nokoSe;
 double sin(double);
 double cos(double);

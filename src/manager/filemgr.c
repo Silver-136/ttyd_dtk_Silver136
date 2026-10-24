@@ -19,9 +19,6 @@ FileManagerWork fileWork;
 
 //.sdata
 FileManagerWork* afp = &fileWork;
-#pragma force_active on
-u32 gap_07_804125DC_sdata[1] = {0};
-#pragma force_active reset
 
 //local prototypes
 void fileGarbageDataAdrClear(FileEntry* entry);

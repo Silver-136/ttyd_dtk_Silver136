@@ -599,13 +599,4 @@ EVT_BEGIN(evt_memcard_save_wrapper)
     RETURN
 EVT_END()
 
-// trailing 16-byte padding before eff_ultra_hammer .data
-#pragma force_active on
-__declspec(section ".data") u32 gap_05_803BAC70_data[4] = {0, 0, 0, 0};
-#pragma force_active reset
-#else
-// trailing 12-byte padding before eff_ultra_hammer .data (keep active so the linker does not strip it)
-#pragma force_active on
-__declspec(section ".data") u32 gap_05_803B70B4_data[3] = {0, 0, 0};
-#pragma force_active reset
 #endif

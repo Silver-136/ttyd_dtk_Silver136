@@ -14,7 +14,6 @@ void effMahojinMain(EffectEntry* effect);
 void effMahojinDisp(CameraId cameraId, EffectEntry* effect);
 
 
-s32 gap_08_80418B4C_sbss;
 s32 mahojin_rate;
 
 static const char* name_tbl[] = {
@@ -33,11 +32,6 @@ Vec pos_tbl[7] = {
 };
 
 #pragma force_active on
-#ifdef VERSION_G8ME01
-__declspec(section ".data") u32 gap_05_803B1718_data[2] = {0, 0};
-#else
-__declspec(section ".data") u32 gap_05_803AE248_data[6] = {0, 0, 0, 0, 0, 0};
-#endif
 #pragma force_active reset
 
 

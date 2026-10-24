@@ -18,7 +18,6 @@ struct MapAllocEntry {
 };
 
 //.bss
-__declspec(section ".data") u8 gap_06_803D48AC_bss[4];
 #pragma force_active on
 SmartWork smartWork;
 #pragma force_active reset
@@ -49,9 +48,6 @@ s32 size_table[HEAP_COUNT][2] = {
 };
 #endif
 static SmartWork* wp = &smartWork;
-#pragma force_active on
-u32 gap_07_8040F50C_sdata[1] = {0};
-#pragma force_active reset
 
 //.sbss
 OSHeapHandle heapHandle[HEAP_COUNT];

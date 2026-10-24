@@ -27,7 +27,6 @@ USER_FUNC(yuuminigame_window_end);
 PiantaParlorWork yuugijouwork;
 
 //.sbss
-s32 gap_08_80418B5C_sbss;
 PiantaParlorWork* yuwp;
 s32 yuu_window_evt;
 

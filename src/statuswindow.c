@@ -63,9 +63,6 @@ s16 journal_icon_tbl[6] = { 0x218, 0x239, 0x239, 0x239, 0x23A, 0x23B };
 #endif
 
 
-#pragma force_active on
-u16 gap_07_804118FC_sdata[2] = { 0, 0 };
-#pragma force_active reset
 
 //.sbss
 static SWork* wp;

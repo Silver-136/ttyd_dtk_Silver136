@@ -267,6 +267,3 @@ void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-#pragma force_active on
-u8 gap_07_80413A4C_sdata[4] = {0};
-#pragma force_active reset

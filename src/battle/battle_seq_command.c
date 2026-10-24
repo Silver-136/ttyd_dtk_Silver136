@@ -2936,4 +2936,3 @@ s32 _check_weapon_type_attack(BattleWeapon* weapon) {
 	return 0;
 }
 
-__declspec(section ".sdata") u32 gap_07_8041102C_sdata[1] = {0};

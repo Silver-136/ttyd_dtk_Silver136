@@ -31,15 +31,12 @@ const char str_802CCCAC[0x12] = "%2d/%2d save data";
 const char str_802CCC94[0x18] = "ペーパーマリオＲＰＧ";
 const char str_802CCCAC[0x20] = "%2d月%2d日のセーブデータです";
 #endif
-__declspec(section ".rodata") const u32 gap_04_802CCCCC_rodata[1] = {0};
 
 //.sbss
 static CardWork* wp;
-u32 gap_08_8041889C_sbss;
 
 //.sdata
 const char* version = VERSION_PICK("009", "010");
-u32 gap_07_80410584_sdata[1] = {0};
 
 //local prototypes
 static inline void check_sum(CardSaveSlot* save);

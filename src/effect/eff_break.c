@@ -32,9 +32,6 @@ typedef struct TexIdEntry {
 static TexIdEntry texid_tbl[] = {
     { tex_jp, 6 }, { tex_us, 6 }, { tex_lang3, 6 }, { tex_lang4, 6 }, { tex_lang5, 7 }, { tex_lang6, 6 },
 };
-#pragma force_active on
-u32 gap_07_8041BE74_sdata[3] = {0, 0, 0};
-#pragma force_active reset
 #else
 static s32 tex_jp[] = { 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2 };
 static s32 tex_us[] = { 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6 };

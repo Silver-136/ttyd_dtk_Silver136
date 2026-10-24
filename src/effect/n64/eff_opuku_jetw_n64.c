@@ -141,9 +141,6 @@ effN64Vtx size6x22_tex32x32_vtx[] = {
 
 
 static s32 jetw_ry_tbl[] = {0, 40, 55, 190, 20, 130, 270, 300};
-#pragma force_active on
-__declspec(section ".data") u32 gap_05_803A382C_data[1] = {0};
-#pragma force_active reset
 
 
 void effOpukuJetwMain(EffectEntry* effect);

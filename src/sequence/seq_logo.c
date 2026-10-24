@@ -44,7 +44,6 @@ static LogoWork work;
 
 //.sdata
 static LogoWork* wp = &work;
-u32 gap_07_804103FC_sdata[1] = {0};
 
 #define OSIsRestart() ((OSGetResetCode() & 0x80000000) ? TRUE : FALSE)
 

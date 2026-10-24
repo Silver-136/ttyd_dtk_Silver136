@@ -152,7 +152,6 @@ static f32 vertex_tbl[180] ATTRIBUTE_ALIGN(32) = {
 
 
 //.bss
-__declspec(section ".data") u32 gap_06_803C63D4_bss;
 CharShadowWork char_shadow_work;
 ProjShadowWork proj_shadow_work;
 DepthShadowWork depth_shadow_work;

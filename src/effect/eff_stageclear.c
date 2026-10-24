@@ -410,7 +410,6 @@ s32 effStageClearEndChk(EffectEntry* effect) {
 #pragma force_active on
 #ifdef VERSION_G8ME01
 __declspec(section ".data") u32 gap_05_803B114C_data[5] = {0, 0, 0, 0, 0};
-u8 gap_07_8041BCDB_sdata[4] = {0, 0, 0, 0};
 #else
 __declspec(section ".data") u32 gap_05_803ADD14_data[3] = {0, 0, 0};
 u32 gap_07_80415C34_sdata[3] = {0, 0, 0};

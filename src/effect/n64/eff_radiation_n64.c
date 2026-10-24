@@ -45,9 +45,6 @@ s16 size300x40_tex32x32[] = {
 };
 
 
-#pragma force_active on
-u32 gap_07_80413CCC_sdata[1] = {0};
-#pragma force_active reset
 
 EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;

@@ -34,7 +34,6 @@ typedef struct Fan { u16 flags; s16 state; s16 animIdx; u8 pad_0x6[2]; u64 time;
 typedef struct FanAnim { char name[16]; char anim[8]; s16 loop; f32 rate; s32 start; s32 count; } FanAnim;
 typedef struct FanWork { s32 num; Fan* fans; s32 animNum; FanAnim anim[32]; s32 hammerTimer; s32 count; s32 sfxId; u8 vol; } FanWork;
 typedef struct FanData { const char* name; const char* anim; f32 rate; } FanData;
-u32 gap_05_00000024_bss;
 FanWork* fan_wp;
 static void pose_init(void);
 static void pose_init(void);
@@ -155,7 +154,6 @@ static f32 negone_one$374[2] __attribute__((aligned(8)));
 static f32 neg_one$382;
 static f32 __local_PI$383;
 static f32 __local_3PIO2$385;
-u32 gap_04_0001116C_data[1];
 static f32 one_negone$373[2] __attribute__((aligned(8)));
 static f32 __local_PIO2$384;
 static f32 one$381;
@@ -163,7 +161,6 @@ static f32 negone_one$360[2] __attribute__((aligned(8)));
 static f32 neg_one$365;
 static f32 __local_PI$366;
 static f32 __local_3PIO2$368;
-u32 gap_04_00011194_data[1];
 static f32 one_negone$359[2] __attribute__((aligned(8)));
 static f32 __local_PIO2$367;
 static f32 one$364;
@@ -332,7 +329,6 @@ static f32 __local_PI$383 = 3.1415927f;
 
 static f32 __local_3PIO2$385 = 4.712389f;
 
-u32 gap_04_0001116C_data[1] = {0};
 
 static f32 one_negone$373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
@@ -348,7 +344,6 @@ static f32 __local_PI$366 = 3.1415927f;
 
 static f32 __local_3PIO2$368 = 4.712389f;
 
-u32 gap_04_00011194_data[1] = {0};
 
 static f32 one_negone$359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 

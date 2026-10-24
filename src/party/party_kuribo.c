@@ -23,7 +23,6 @@
 s32 mobjCheckItemboxOpen(void* mobj);
 
 //.sbss
-u32 gap_08_804188C4_sbss;
 u32 msg_ep; //unknown since it only gets written to once and never used
 
 BOOL christineGetStatus(void) {

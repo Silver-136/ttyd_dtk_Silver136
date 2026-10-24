@@ -32,10 +32,6 @@ typedef struct DanceData { u16 flags; u8 step; u8 movePos; f32 cx; f32 cy; f32 r
 double sin(double x);
 double cos(double x);
 typedef struct HorogramWork { void* buf0; void* buf1; GXTexObj tex0; GXTexObj tex1; u16 ready; u16 flags; } HorogramWork;
-// target .bss pad (uninitialised objects are emitted in reverse order, so this sits last)
-#pragma force_active on
-u32 gap_05_0000014C_bss[1];
-#pragma force_active reset
 HorogramWork* horogram_wp;
 DanceData dance_dt;
 void peach_capture(CameraId cameraId, void* param);
@@ -292,7 +288,6 @@ f32 fd_aji_17___local_PI_383 = 3.1415927f;
 
 f32 fd_aji_17___local_3PIO2_385 = 4.712389f;
 
-u32 gap_04_0001E124_data[1] = {0};
 
 f32 fd_aji_17_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
@@ -308,7 +303,6 @@ f32 fd_aji_17___local_PI_366 = 3.1415927f;
 
 f32 fd_aji_17___local_3PIO2_368 = 4.712389f;
 
-u32 gap_04_0001E14C_data[1] = {0};
 
 f32 fd_aji_17_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 

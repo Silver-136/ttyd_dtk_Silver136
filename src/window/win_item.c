@@ -952,7 +952,6 @@ void itemUseDisp2(WinMgrEntry* entry) {
 }
 
 
-__declspec(section ".data") u32 gap_05_80374D0C_data[1] = {0};
 
 
 

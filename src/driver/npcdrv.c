@@ -73,9 +73,6 @@ char MarioTalkPose[32] = "KPA_T_1";
 BOOL dbg_battleskip = 0;
 u32 npcMainCount = 0;
 NpcFieldEntry* release_wp = NULL;
-#pragma force_active on
-u32 gap_08_804186C4_sbss;
-#pragma force_active reset
 static NpcWork2 work;
 
 // local prototypes
@@ -3369,9 +3366,6 @@ BOOL N_fbatPreventMarioEventChk(void) {
     return FALSE;
 }
 
-#pragma force_active on
-__declspec(section ".data") u32 gap_05_8030543C_data[1] = {0};
-#pragma force_active reset
 
 // prototypes for asm stopgap forward references
 BOOL N_fbatPreventMarioEventChk(void);

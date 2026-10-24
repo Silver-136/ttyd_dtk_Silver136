@@ -636,6 +636,5 @@ void _st_chg_msg_disp(void) {
 
 #pragma force_active on
 #pragma explicit_zero_data on
-__declspec(section ".sdata") u32 gap_07_8041270C_sdata = 0;
 #pragma explicit_zero_data reset
 #pragma force_active reset

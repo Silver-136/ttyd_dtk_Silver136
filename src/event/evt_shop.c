@@ -41,7 +41,6 @@ BOOL N_itemPickUpFromFieldCheck(void);
 BOOL winGhostDiaryChk(void);
 
 //.sbss
-static s32 gap_08_80418944_sbss;
 static ShopWork* _wp;
 char mapname[16];
 

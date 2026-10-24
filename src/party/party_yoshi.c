@@ -70,9 +70,6 @@ f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.433f, 0
 void yoshi_damageToge(PartyEntry* party);
 
 
-#pragma force_active on
-u32 gap_08_804188AC_sbss;
-#pragma force_active reset
 f32 evt_yoshi_spd;
 s32 evt_yoshi_frm;
 f32 jumpheight;

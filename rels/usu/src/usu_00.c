@@ -31,7 +31,6 @@
 #include "driver/extdrv.h"
 
 typedef struct KpaSen { s8 state; u8 field_0x1; u16 wait; f32 t; Vec start; Vec end; u8 pose99Lo; u8 pose99Hi; u8 pose1Lo; u8 pose1Hi; } KpaSen;
-static s32 kpaSen_pad;
 KpaSen* kpaSen;
 s32 calcPose(s32 i, s32 lo, s32 hi, s32 flag);
 void kpaSen_ext_disp(CameraId camera, void* param);

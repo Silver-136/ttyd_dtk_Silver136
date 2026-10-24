@@ -40,8 +40,6 @@ void countDownFlagOff(u16);
 void evtMsgFmtInt(char* buf, s32 value);
 void statusWinForceUpdate(void);
 #endif
-#ifdef VERSION_G8ME01
-#endif
 
 int rand(void);
 double sin(double);
@@ -55,9 +53,6 @@ double cos(double);
 		return EVT_RETURN_DONE;                               \
 	}
 
-#pragma force_active on
-u32 gap_08_804186D4_sbss;
-#pragma force_active reset
 s32 stop;
 
 typedef struct SplineWork {
@@ -2515,7 +2510,4 @@ USER_FUNC(mail_evt_gor_04_keyoff_check) {
 #pragma force_active reset
 
 #pragma explicit_zero_data on
-#pragma force_active on
-u32 gap_07_804101EC_sdata[1] = {0};
-#pragma force_active reset
 #pragma explicit_zero_data reset

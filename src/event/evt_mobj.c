@@ -182,8 +182,6 @@ static inline BOOL isAnimA13(const s8* a) {
 
 extern void* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 id, s32 mode, s32 collect, void* script);
 extern void itemForceGet(void* item);
-#ifdef VERSION_G8ME01
-#endif
 s32 mobj_recovery_blk(MapObjectEntry* mobj);
 
 extern void npcKoopaModeMobjBoundDeadCheck(void* hit);
@@ -3078,7 +3076,6 @@ typedef struct KpaPoleScoreWork {
     f32 z;
 } KpaPoleScoreWork;
 
-static u32 gap_08_80418714_sbss;
 static KpaPoleScoreWork* psw;
 
 void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
@@ -4762,4 +4759,3 @@ USER_FUNC(evt_mobj_koopa_pole) {
     return EVT_RETURN_DONE;
 }
 
-u32 gap_07_80410304_sdata[1] = {0};

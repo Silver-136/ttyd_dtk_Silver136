@@ -10,9 +10,6 @@
 #include "libc_decls.h"
 
 //.sbss
-#pragma force_active on
-u32 gap_08_8041880C_sbss;
-#pragma force_active reset
 WindowEntry* WinObjects;
 GXTexObj* wakuTexObj;
 

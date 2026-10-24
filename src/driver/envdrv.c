@@ -74,9 +74,6 @@ EnvironmentGlare envGlare3 = {
 };
 
 //.bss
-#ifndef VERSION_G8ME01
-__declspec(section ".data") u32 gap_06_803E10D8_bss[2];
-#endif
 static EnvironmentWork work[2];
 
 //.sbss

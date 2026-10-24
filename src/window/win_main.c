@@ -1517,9 +1517,6 @@ BOOL winLectureCheck(void) {
 }
 
 #pragma force_active on
-#ifndef VERSION_G8ME01
-__declspec(section ".data") u32 gap_05_8037631C_data[1] = {0};
-#endif
 
 const volatile f32 float_0p5_8041dc98 __attribute__((aligned(8))) = 0.5f;
 #pragma force_active reset

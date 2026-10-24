@@ -466,6 +466,3 @@ static void actionCommandDisp(f32 x, f32 y) {
     d->frame2++;
 }
 
-#pragma force_active on
-u32 gap_07_804117CC_sdata[5] = {0};
-#pragma force_active reset

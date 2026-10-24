@@ -38,11 +38,6 @@ u8 y_scale[] = { 0, 13, 40, 69, 98, 126, 149, 166, 175, 165, 136, 100, 67, 50, 7
 #endif
 
 #pragma force_active on
-#ifdef VERSION_G8ME01
-__declspec(section ".data") u32 gap_05_803B15C4_data[1] = {0};
-#else
-__declspec(section ".data") u32 gap_05_803AE0F4_data[1] = {0};
-#endif
 #pragma force_active reset
 
 static EVT_BEGIN(evt_shake)
@@ -297,6 +292,3 @@ void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-#pragma force_active on
-u32 gap_07_80415D84_sdata[1] = {0};
-#pragma force_active reset

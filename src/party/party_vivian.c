@@ -36,7 +36,6 @@ extern void partyChgRunMode(PartyEntry* party, s32 mode);
 extern char* partyChgPoseId(PartyEntry* party, s32 index);
 
 #pragma force_active on
-s32 gap_08_80418A34_sbss;
 #pragma explicit_zero_data reset
 s32 vivian_cancel_req;
 

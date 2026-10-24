@@ -26,9 +26,6 @@ typedef struct CaseWork {
 //.sbss
 static CaseWork work;
 static CaseWork* wp = &work;
-#pragma force_active on
-u32 gap_07_8041030C_sdata[1] = {0};
-#pragma force_active reset
 
 
 void caseInit(void) {

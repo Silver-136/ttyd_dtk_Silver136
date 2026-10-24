@@ -15,10 +15,6 @@ double sin(double);
 double cos(double);
 static inline f32 sinf(f32 x) { return sin(x); }
 #include <string.h>
-// target .bss/.sbss pad (uninitialised objects are emitted in reverse order, so this sits last)
-#pragma force_active on
-u32 gap_08_804184BC_sbss[1];
-#pragma force_active reset
 void envReInit(void);
 
 void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx);
@@ -4033,7 +4029,6 @@ static void mapStrippedPool(const char** str, f32* val) {
 
 #pragma force_active on
 #pragma explicit_zero_data on
-__declspec(section ".sdata") u32 gap_07_8040F3F4_sdata[3] = {0};
 #pragma explicit_zero_data reset
 #pragma force_active reset
 

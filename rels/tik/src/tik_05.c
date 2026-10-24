@@ -195,7 +195,6 @@ f32 negone_one$374[2] __attribute__((aligned(8)));
 f32 neg_one$382;
 f32 __local_PI$383;
 f32 __local_3PIO2$385;
-u32 gap_04_0000B154_data[1];
 f32 one_negone$373[2] __attribute__((aligned(8)));
 f32 __local_PIO2$384;
 f32 one$381;
@@ -203,7 +202,6 @@ f32 negone_one$360[2] __attribute__((aligned(8)));
 f32 neg_one$365;
 f32 __local_PI$366;
 f32 __local_3PIO2$368;
-u32 gap_04_0000B17C_data[1];
 f32 one_negone$359[2] __attribute__((aligned(8)));
 f32 __local_PIO2$367;
 f32 one$364;
@@ -258,7 +256,6 @@ f32 __local_PI$383 = 3.1415927f;
 
 f32 __local_3PIO2$385 = 4.712389f;
 
-u32 gap_04_0000B154_data[1] = {0};
 
 f32 one_negone$373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
@@ -3873,6 +3870,3 @@ EVT_END()
 #endif
 
 
-#pragma force_active on
-static u32 gap_04_000116AC_data[1] = {0};
-#pragma force_active reset
