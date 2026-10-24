@@ -9,6 +9,7 @@
 #include <dolphin/mtx.h>
 #include "memory.h"
 #include <string.h>
+#include "koopa_hit.h"
 
 void kpaSetSpec(void);
 void kpa2DMain(void);
@@ -46,12 +47,9 @@ void kpaFall(void);
 void* kpaFlameHitCheck(f32, f32, f32, f32);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 extern f32 marioJumpData[];
-void kpaClearHitobjRide(void);
-void* kpaChkHitobjRide(void);
 f32 marioGetFallSpd(void);
 void* marioChkLandon(f32* outY, f32 y);
 void marioLandOn(void);
-s32 hitGetAttr(void* hit);
 s32 marioKeyOffChk(void);
 s32 marioCtrlOffChk(void);
 
@@ -504,7 +502,6 @@ f32 kpaSetJumpPara(void) {
     return JP(mp, new_var);
 }
 
-f32 kpaSetFallPara(void);
 f32 kpaSetFallPara(void) {
     MarioWork* mp = marioGetPtr();
     if ((mp->buttonHold & 0x100)) {
@@ -634,7 +631,6 @@ void kpaStrippedFallPool(f32* f) {
     f[7] = -0.01f;
 }
 
-f32 kpaSetFallPara(void);
 s32 kpaFireAttackCheck(void) {
     s32 m;
     MarioWork* mp = marioGetPtr();

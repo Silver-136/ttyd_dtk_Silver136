@@ -13,6 +13,7 @@
 #include "driver/animdrv.h"
 #include "koopa_motion.h"
 #include "evt/evt_cmd.h"
+#include "koopa_hit.h"
 
 #ifdef VERSION_G8ME01
 // US exports this as the global kpa_fall (mot_jump calls it by that name)
@@ -20,9 +21,7 @@
 #endif
 
 extern s32 kpaFireAttackCheck(void);
-extern void kpaClearHitobjRide(void);
 extern void kpaCamFollow(void);
-extern void kpaSetFallPara(void);
 extern f32 marioMakeJumpPara(void);
 extern void marioChgMot2(s32 id);
 extern void* marioChkLandon(f32* outY, f32 y);
@@ -51,7 +50,6 @@ EVT_END()
 
 extern void* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle);
 extern void* kpaGetHitobjHead2(void);
-extern void* kpaChkHitobjRide(void);
 void kpaSetSpec(void);
 
 static inline void kpa_hip_launch(MarioWork* m) {

@@ -204,11 +204,11 @@ static int UnlockSram(int commit, u32 offset) {
 }
 
 int __OSUnlockSram(int commit) {
-    UnlockSram(commit, 0);
+    return UnlockSram(commit, 0);
 }
 
 int __OSUnlockSramEx(int commit) {
-    UnlockSram(commit, sizeof(OSSram));
+    return UnlockSram(commit, sizeof(OSSram));
 }
 
 int __OSSyncSram(void) {

@@ -29,7 +29,6 @@
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
-extern void kpaClearHitobjRide(void);
 extern BOOL marioChgMot(s32 mot);
 extern HitEntry* kpaSearchGround(f32* a, f32* b, f32* c, f32 d);
 extern BOOL kpaFireAttackCheck(void);

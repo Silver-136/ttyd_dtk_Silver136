@@ -63,3 +63,4 @@ typedef struct KpaWork {
     s32 fireSfxId;                // 0x14C, kpaFireSEOn/Off, -1 when off
     s32 swimSplashTimer;          // 0x150, kpa_swim_splash
 } KpaWork;                  // size 0x154
+f32 kpaSetFallPara(void);

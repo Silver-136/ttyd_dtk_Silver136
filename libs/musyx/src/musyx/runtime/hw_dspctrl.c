@@ -107,9 +107,9 @@ bool salInitDspCtrl(u8 numVoices, u8 numStudios, u32 defaultStudioDPL2) {
             memset(dspVoice[i].pb, 0, sizeof(_PB));
             dspVoice[i].patchData = salMallocPhysical(0x80);
             dspVoice[i].pb->currHi = ((u32)dspVoice[i].pb >> 16);
-            dspVoice[i].pb->currLo = (u16)dspVoice[i].pb;
+            dspVoice[i].pb->currLo = (u16)(u32)dspVoice[i].pb;
             dspVoice[i].pb->update.dataHi = ((u32)dspVoice[i].patchData >> 16);
-            dspVoice[i].pb->update.dataLo = ((u16)dspVoice[i].patchData);
+            dspVoice[i].pb->update.dataLo = ((u16)(u32)dspVoice[i].patchData);
             dspVoice[i].pb->itd.bufferHi = ((u32)itdPtr >> 16);
             dspVoice[i].pb->itd.bufferLo = ((u16)itdPtr);
             dspVoice[i].itdBuffer = (void*)itdPtr;

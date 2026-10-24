@@ -318,7 +318,7 @@ int DEMORFPrintf(s16 x, s16 y, s16 z, char* fmt, ...) {
 
     va_start(vlist, fmt);
     vsprintf(buf, fmt, vlist);
-    DEMORFPuts(x, y, z, buf);
+    return DEMORFPuts(x, y, z, buf);
 }
 
 char* DEMODumpROMFont(char* string) {

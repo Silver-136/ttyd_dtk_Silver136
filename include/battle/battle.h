@@ -16,7 +16,6 @@
 #include "battle/battle_seq_end.h"
 #include "mario/mario_pouch.h"
 
-typedef struct BattleWork BattleWork;
 typedef struct BattleAlliance BattleAlliance;
 
 typedef enum BattleFlags { BATTLE_SEQ_END = 0x80000000 } BattleFlags;

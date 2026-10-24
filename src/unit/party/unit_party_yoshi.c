@@ -32,7 +32,7 @@ void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
-typedef struct YoshiGundanPart {
+struct YoshiGundanPart {
     f32 x, y, z;
     f32 vx, vy, vz;
     u8 pad18[0xC];
@@ -41,7 +41,7 @@ typedef struct YoshiGundanPart {
     u8 pad26[2];
     s32 delay;
     s32 state;
-} YoshiGundanPart;
+};
 
 typedef struct YoshiGundanWork {
     s32 state;
