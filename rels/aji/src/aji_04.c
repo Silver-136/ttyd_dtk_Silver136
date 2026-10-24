@@ -780,7 +780,6 @@ EVT_BEGIN(sekizou_init)
     RETURN
 EVT_END()
 
-void psndBGMOff(u32 flags);
 
 static void callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;

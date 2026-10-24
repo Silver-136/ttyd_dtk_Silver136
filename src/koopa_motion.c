@@ -26,7 +26,6 @@ extern void kpaSetFallPara(void);
 extern f32 marioMakeJumpPara(void);
 extern void marioChgMot2(s32 id);
 extern void* marioChkLandon(f32* outY, f32 y);
-extern void marioChgMotSub(s32 a, s32 b);
 f32 kpaStickSpd(s32 dash);
 
 typedef struct V3 {

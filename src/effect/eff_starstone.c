@@ -13,10 +13,9 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "driver/shadowdrv.h"
 
 extern double __fabs(double);
-extern void* shadowEntry();
-extern void U_shadowSetMode();
 extern void psndSFX_pos();
 EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a);
 void effStardustN64SetColor(EffectEntry* effect, f32 r, f32 g, f32 b);

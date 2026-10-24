@@ -19,7 +19,6 @@ f32 revise360(f32 angle);
 f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
 void partyChgMot(PartyEntry* party, s32 mot);
 void partyPaperOff(PartyEntry* party);
-void partyChgPoseId(PartyEntry* party, s32 pose);
 void partyChgMotSlitFloor(PartyEntry* party);
 void sincosf(f32* ret_sin, f32* ret_cos, f32 degree);
 
@@ -91,7 +90,6 @@ s32 psndSFXOn_(const char* name);
 void psndBGMScope(s32 a, s32 b);
 void psndBGM_rate(s32 a, u16 b);
 BOOL psndBGMOn_f_d(s32 a, s32 b, s32 c, s32 d, s32 e);
-BOOL psndBGMOff(s32 a);
 void psndBGMOn_f(s32 a, s32 b, s32 c, s32 d);
 
 USER_FUNC(evt_snd_bgmon) {

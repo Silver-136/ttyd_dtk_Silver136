@@ -1,6 +1,7 @@
 #pragma once
 
 #include <dolphin/types.h>
+#include "driver/camdrv.h"
 
 s32 marioGetCamId(void);
 void marioCamZoomOffReq2(s32);
@@ -21,3 +22,5 @@ void marioCamZoomOffReq(void);
 BOOL marioCamZoomOff(void);
 BOOL marioCamZoomUp(void);
 BOOL marioCamZoomUpLevelMain(void);
+
+void marioSetCamId(CameraId camId);

@@ -58,7 +58,6 @@ void BattleAudience_Case_GuardBad(void);
 void BattleAudience_Case_EnemyNoDamage(void);
 void BattleAudience_Case_EnemyDamage(s32 damage);
 void BattleAudience_Case_Countered(void);
-void BattleFogForceStop(void);
 void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 
 EffectEntry* effIceN64Entry(s32 type, f32 x, f32 y, f32 z);

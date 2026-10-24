@@ -21,7 +21,6 @@
 #endif
 
 s32 mobjCheckItemboxOpen(void* mobj);
-void partyChgPoseId(PartyEntry* party, s32 id);
 
 //.sbss
 u32 gap_08_804188C4_sbss;
@@ -195,7 +194,6 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* pos);
 s32 fbatNpcTalkCheck(void);
 void partyChgMoveMode(PartyEntry* party, s32 mode);
 void partyChgMot(PartyEntry* party, s32 mot);
-void partyChgPoseId(PartyEntry* party, s32 id);
 void partyChkGnd(PartyEntry* party);
 f32 angleABf(f32, f32, f32, f32);
 f32 distABf(f32, f32, f32, f32);

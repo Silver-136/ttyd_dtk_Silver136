@@ -72,3 +72,7 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type);
 MapObjectEntry* mobjHitObjPtrToPtr(HitEntry* hitObj);
 
 extern const char kururinName[];
+
+BOOL mobjCheckExec();
+void mobjReset(BOOL inBattle);
+void mobjSetPosition(const char* name, f32 x, f32 y, f32 z);

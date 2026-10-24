@@ -376,3 +376,5 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale);
 extern u32 anim_ext_tex_size;
 
 extern const s32 g_moamoa_chain_num;
+
+void animPoseAutoRelease(s32 type);

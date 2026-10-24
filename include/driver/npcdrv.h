@@ -320,3 +320,8 @@ extern EvtWord evt_majinai_effect_se_btl[];
 void fbatSandersBombTriggerOn(void);
 
 extern EvtWord _evt_majinai_coin_up_effect[];
+
+s32 npcCalcScore(NpcEntry* npc);
+void npcGetBackItemEntry(NpcEntry* npc);
+void npcSetMarioAutoTalkPose(const char* stayPose, const char* talkPose);
+void npcTuningRy(NpcEntry* npc, f32 angle);

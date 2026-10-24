@@ -56,3 +56,5 @@ extern EvtWord msg_star_max[];
 extern EvtWord msg_super_max[];
 extern EvtWord shine_effect[];
 extern EvtWord star_effect[];
+
+void BattleBreakSlot_HideReel(void);

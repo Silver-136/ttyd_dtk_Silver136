@@ -19,6 +19,8 @@
 #include <string.h>
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
+#include "mario/mario_motion.h"
+#include "statuswindow.h"
 
 // TODO: move all this into other TUs
 typedef enum winTexMode {

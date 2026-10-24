@@ -109,3 +109,5 @@ void camRoadMain(CamRoadOut* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 
 
 f32 camRoadGetCurrentShiftXRate(void);
 void camRoadReset(void);
+
+s32 camRoadSetup(const char* name);

@@ -46,7 +46,6 @@ void psndBGMOn_f(u32 a, u32 b, u32 c, u32 d);
 BOOL psndBGMOff(u32 flags);
 BOOL psndENVOn(u32 a, char* b);
 void mobjReset(BOOL inBattle);
-void animPoseAutoRelease(BOOL inBattle);
 
 s32 debug_battle_flag;
 s32 seq_battle_unk_8041874c;

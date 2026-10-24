@@ -52,3 +52,7 @@ void statusWinMain(void);
 
 void statusWinForceOff(void);
 void statusWinForceOpen(void);
+
+void statusWinDispOff(void);
+void statusWinDispOn(void);
+void statusWinForceUpdate(void);

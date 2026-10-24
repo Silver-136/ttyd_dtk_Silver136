@@ -282,3 +282,11 @@ s32 BattleTransPartyId(BattleUnitType kind);
 
 BOOL battleDisableHResetCheck(void);
 
+void BattleConsumeReserveItem(void);
+s32 BattleGetStockExp(BattleWork* wp);
+void BattleMajinaiDone(void);
+void BattleMajinaiEndCheck(void);
+void BattleStatusWindowAPRecoveryOff(void);
+void BattleStatusWindowEventOn(void);
+void BattleStatusWindowSystemOff(void);
+void BattleStatusWindowSystemOn(void);

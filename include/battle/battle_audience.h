@@ -257,3 +257,8 @@ extern const Vec vec3_802f972c[];
 extern const Vec vec3_802f9738[];
 extern const Vec vec3_802f9750[];
 extern const Vec vec3_802f975c[];
+
+void BattleAudienceSoundClap(s32 duration, s32 fade);
+void BattleAudienceSoundSetVolAll(u8 vol, s32 length);
+void BattleAudienceSoundStop(s32 index);
+void BattleAudienceSoundWhistle(void);

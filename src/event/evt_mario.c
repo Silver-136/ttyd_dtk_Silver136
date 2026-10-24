@@ -49,7 +49,6 @@ void kpaAttackStart(void);
 BOOL marioChkSlitThrouhEnd(void);
 void marioBalloonOn(s32 type);
 void marioBalloonOff(void);
-void marioSetCamId(s32 id);
 void marioChgTalkMotion(void);
 void marioRollTryCancel(void);
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
@@ -144,7 +143,6 @@ BOOL marioGetMotSlitCancel3(void);
 void* marioSearchGroundRoll(f32* y, f32* a, f32* b, f32 h, f32 vy);
 void* marioSearchGround(f32* y, f32* a, f32* b, f32 h, f32 vy);
 void marioClearJumpPara(void);
-void marioMakeJumpPara(void);
 void quake_kpaHipAttack(void);
 void kpaChgPose(const char* a, const char* b);
 

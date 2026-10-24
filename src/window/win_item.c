@@ -39,7 +39,6 @@ void winFontSetR(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 void psndSFXOn(s32 id);
 s32 marioRollCancelDisable(void);
 BOOL U_marioSlitContinueChk(void);
-BOOL pouchRemoveItemIndex(s32 id, s32 index);
 
 static const char* luigi_book_1[] = {
     "msg_luigi_book1_txt1\000\000\000",

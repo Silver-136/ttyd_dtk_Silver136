@@ -19,7 +19,6 @@
 
 extern void partyChgRunMode(PartyEntry* party, s32 mode);
 extern void partyChgPose();
-extern void partyChgPoseId();
 extern void partySetForceMove(PartyEntry* party, s32 a2, f32 a3, f32 a4);
 extern void partyMoveBesideMario();
 extern void partyMoveBehindMario();
@@ -33,7 +32,6 @@ extern void vivianUnhold(PartyEntry* party);
 extern void L_partyVivianTailStart();
 extern void L_partyVivianTailStop();
 extern void marioGetoffYoshi();
-extern void evt_set_yoshi_spd();
 extern void evt_set_yoshi_frm();
 extern s32 cloudGetStatus();
 

@@ -65,3 +65,7 @@ USER_FUNC(evt_btl_camera_set_zoomSpeedLv);
 USER_FUNC(evt_btl_camera_shake_h);
 USER_FUNC(evt_btl_camera_shake_w);
 USER_FUNC(evt_btl_camera_wait_move_end);
+
+void battleCameraMain(void);
+void btl_camera_set_mode(s32 pri, s32 mode);
+void btl_camera_set_moveSpeedLv(s32 pri, s32 lv);

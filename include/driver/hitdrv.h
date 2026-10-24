@@ -78,3 +78,5 @@ s32 hitGetAttr(HitEntry* hit);
 void hitGrpDamageReturnSet(const char* name, HitDamageReturn* damage);
 Vec* hitGetDamageReturnPos(HitEntry* hit);
 void hitBindMapObj(const char* hitName, const char* mapobjName);
+
+void hitDelete(const char* name);

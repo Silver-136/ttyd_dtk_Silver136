@@ -31,6 +31,7 @@
 #include "evt/evt_bero.h"
 #include "libc_decls.h"
 #include "evt/evt_npc.h"
+#include "mario/mario_cam.h"
 
 double sin(double);
 double cos(double);

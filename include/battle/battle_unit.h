@@ -918,3 +918,7 @@ void BtlUnit_SetParamFromPouch(BattleUnit* unit);
 s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s32 pan);
 BattleUnit* BtlUnit_GetGuardKouraPtr(BattleUnit* unit);
 
+BOOL BtlUnit_CanActStatus(BattleUnit* unit);
+void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type);
+void BtlUnit_SetBodyAnim(BattleUnit* unit, const char* name);
+void BtlUnit_SetBodyAnimType(BattleUnit* unit, s32 type);

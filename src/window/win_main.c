@@ -15,6 +15,7 @@
 #include <demo/DEMOPad.h>
 #include <string.h>
 #include <stdarg.h>
+#include "evt/evt_yuugijou.h"
 #ifdef VERSION_G8ME01
 char* strstr(const char* str, const char* sub);
 #endif

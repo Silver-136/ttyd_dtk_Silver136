@@ -55,3 +55,7 @@ ItemEntry* itemNameToPtr(char*);
 
 void itemNokoForceGet(ItemEntry* entry);
 void itemPickUp(ItemEntry* entry);
+
+void itemDelete(const char* name);
+void itemFlagOn(ItemEntry* entry, u16 flags);
+void itemModeChange(ItemEntry* entry, s32 mode);

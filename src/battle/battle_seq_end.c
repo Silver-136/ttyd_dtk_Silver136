@@ -35,6 +35,9 @@
 #include <string.h>
 #include "battle/battle_mario.h"
 #include "eff/eff_recovery.h"
+#include "battle/battle_actrecord.h"
+#include "battle/battle_camera.h"
+#include "battle/battle_seq.h"
 
 #ifdef VERSION_G8ME01
 #define EXP_ICON 0x194

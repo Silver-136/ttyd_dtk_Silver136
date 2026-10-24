@@ -23,7 +23,6 @@ HitEntry* marioChkLandon(f32* outY, f32 y);
 f32 marioGetFallSpd(void);
 void marioLandOn(void);
 void marioClearJumpPara(void);
-void marioChgMotSub(s32 a, s32 b);
 void marioGetRubInit(void);
 void allPartyRideShip(void);
 void allPartyRideOff(void);

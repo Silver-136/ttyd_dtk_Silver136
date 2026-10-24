@@ -96,8 +96,6 @@ f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
 f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
 void movePos(float* ret_sin, float* ret_cos, f32 a3, f32 degree);
 double __fabs(double);
-void marioMakeJumpPara();
-void N_marioSetBottomlessRespawnPosOnBeroEntry();
 HitEntry* marioChkLandon(f32, f32*);
 
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)

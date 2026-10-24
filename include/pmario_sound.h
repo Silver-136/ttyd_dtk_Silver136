@@ -160,3 +160,7 @@ void psndClearFlag(s32 flag);
 void psndSetPosDirListener(Vec* position, f32 direction);
 
 extern PaperSoundBGM psbgm[2];
+
+BOOL psndBGMOff(u32 flags);
+s32 psndGetFlag(void);
+void psndSFX_pos(s32 id, Vec* position);

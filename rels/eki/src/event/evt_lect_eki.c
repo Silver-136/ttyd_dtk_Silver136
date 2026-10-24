@@ -30,6 +30,7 @@
 #include "evt/evt_lecture.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "mario/mario_cam.h"
 
 static OSTime wwstart;
 void statusWinForceClose(void);

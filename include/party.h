@@ -292,3 +292,6 @@ void party_force_ride_yoshi(PartyEntry* party);
 void party_ride_yoshi_force_move(void);
 
 extern char* yoshigroup[7];
+
+char* partyChgPoseId(PartyEntry* party, s32 index);
+void partyUsePost(PartyEntry* party);

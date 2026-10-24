@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "evt/evt_lottery.h"
+#include "database.h"
+#include "driver/mobjdrv.h"
 
 //.sbss
 char _next_area[0x20];

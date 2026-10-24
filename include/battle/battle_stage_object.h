@@ -110,3 +110,5 @@ extern EvtWord _object_turn_event_B[];
 extern EvtWord _object_turn_event_core[];
 extern BattleStageObjectData _object_wall_data;
 extern void* jumptable_80374848[];
+
+BOOL BattleFogForceStop(void);

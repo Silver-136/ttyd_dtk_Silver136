@@ -23,7 +23,6 @@ void kpa_jumpNpc(void);
 void kpaChgPose(const char* a, const char* b);
 void clear_hitobj_ride(void);
 void marioSetJumpPara(void);
-void marioMakeJumpPara(void);
 void marioSetPeakYpos(void);
 void marioClearJumpPara(void);
 void marioChgMot2(MarioMotion);

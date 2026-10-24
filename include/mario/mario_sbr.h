@@ -14,3 +14,5 @@ void marioSetPeakYpos(void);
 f32 partyToMovedir(PartyEntry* party, f32 angle);
 f32 toMovedir2(f32 angle, f32 ofs);
 f32 toMovedirSimple(f32 angle);
+
+void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z);

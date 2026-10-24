@@ -3539,7 +3539,6 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
 void* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
 void itemDelete(const char* name);
 void btlMovePos(f32 speed, f32 angle, f32* x, f32* z);
-BOOL pouchRemoveItemIndex(s32 id, s32 index);
 #include "eff/n64/eff_coin_n64.h"
 s16 pouchAddCoin(s16 coins);
 static inline void bec_coin(BattleUnit* unit, s32 item) {

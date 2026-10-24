@@ -368,3 +368,5 @@ void mapGrpFlagOn(const char* name, u32 flags);
 
 extern const GXCullMode culling[4];
 extern s32 fog_type[5];
+
+void mapGrpFlagOff(const char* name, u32 flags);

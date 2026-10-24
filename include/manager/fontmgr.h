@@ -93,3 +93,7 @@ void FontDrawColor(GXColor color);
 
 u16 kanjiSearch(u32 code);
 u16 kanjiGetWidth(u16 code);
+
+void FontDrawEdge(void);
+void FontDrawEdgeOff(void);
+void FontDrawMessageMtx(Mtx mtx, const char* msg);

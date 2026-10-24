@@ -27,6 +27,7 @@
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_party.h"
+#include "mario/mario_cam.h"
 
 static OSTime wwstart;
 void statusWinForceClose(void);

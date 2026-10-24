@@ -182,7 +182,6 @@ static inline BOOL isAnimA13(const s8* a) {
 
 extern void* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 id, s32 mode, s32 collect, void* script);
 extern void itemForceGet(void* item);
-extern void itemFlagOn(void* item, u32 flag);
 #ifdef VERSION_G8ME01
 #endif
 s32 mobj_recovery_blk(MapObjectEntry* mobj);
@@ -214,7 +213,6 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj);
 #include "system.h"
 extern void test_kururing_mapdisp(s32 camId);
 #include "driver/npcdrv.h"
-extern void mobjSetPosition();
 extern void strcat();
 s32 mobj_kururing_floor(MapObjectEntry* mobj);
 s32 mobj_lock(MapObjectEntry* mobj);

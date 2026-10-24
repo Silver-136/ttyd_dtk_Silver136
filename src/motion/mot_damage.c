@@ -25,7 +25,6 @@ void nokonoko_use_cancel(void);
 void bomhei_use_cancel2(void);
 void mario_simple_kemuri(void);
 void marioSetFallPara(void);
-void marioMakeJumpPara(void);
 
 
 static EVT_BEGIN(quake_evt)

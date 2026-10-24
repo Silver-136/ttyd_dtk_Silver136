@@ -25,7 +25,6 @@ f32 toMovedir2(f32 angle, f32 off);
 USER_FUNC(evt_cam_shake);
 HitEntry* hitEstimate(s32* out);
 static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32* hy, f32* hz, f32* nx, f32* ny, f32* nz);
-void marioChgMotSub(s32 a, s32 b);
 s32 marioGetRub(s32 mask, s32* a, s32* b, f32* c);
 
 

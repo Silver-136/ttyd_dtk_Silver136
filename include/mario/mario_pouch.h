@@ -508,3 +508,6 @@ s32 pouchGetPartyColor(PartyId partnerId);
 void pouchSetPartyColor(PartyId partnerId, s32 color);
 void pouchSetYoshiName(char* name);
 char* pouchGetYoshiName(void);
+
+BOOL pouchRemoveItemIndex(ItemType type, s32 index);
+void pouchSortItem(s32 mode);

@@ -32,7 +32,6 @@ s32 marioKeyOffChk(void);
 void animPoseSetLocalTime(s32 poseId, f32 localTimeFrames);
 s32 marioAnimeId(void);
 s32 sysMsec2Frame(s32 msec);
-void marioMakeJumpPara(void);
 void marioSetFallPara(void);
 void marioPreJump(void);
 void marioChkOverhead(void);

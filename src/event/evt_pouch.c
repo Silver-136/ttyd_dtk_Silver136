@@ -3,7 +3,6 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 
-BOOL pouchRemoveItemIndex(s32 id, s32 index);
 
 typedef s32 (*GetFn)(void);
 typedef s32 (*SetFn)(s32);

@@ -865,7 +865,6 @@ void partyHitStrippedPool(f32* f, s32 i) {
 }
 
 #ifdef VERSION_G8ME01
-extern void marioChkWallAround(Vec* pos, s32 a1, f32 a2, f32 angle, f32 radius, f32 height);
 
 /* FAKE: inline add keeps the original fadds operand order (pos.y, 10.0f) */
 static inline f32 party_addf(f32 a, f32 b) { return a + b; }
