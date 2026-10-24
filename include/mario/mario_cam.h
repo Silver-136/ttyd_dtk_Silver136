@@ -13,6 +13,7 @@ void marioInitCamId(void);
 void marioSetCamFollowRate(f32 followRate);
 void marioPreCamera(void);
 void marioCamMain(void);
+void marioUpdateCamCollision(Vec collision);
 void marioUpdateCam(void);
 void marioUpdateCamPos(void);
 void marioNoUpdateCamPos(void);

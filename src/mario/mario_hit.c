@@ -651,7 +651,6 @@ void marioChkGnd2(void) {
     }
 }
 
-extern void marioUpdateCamCollision(Vec pos);
 
 HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     f32 dist;

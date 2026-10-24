@@ -169,9 +169,11 @@ BOOL marioChkJabara(void) {
 	}
 }
 
-static inline void jabaraHitPos(HitEntry* hit, Vec* v) {
+static inline f32 jabaraHitPosZ(HitEntry* hit) {
+	Vec v;
 	marioGetPtr();
-	hitObjGetPos(hitGetName(hit), v);
+	hitObjGetPos(hitGetName(hit), &v);
+	return v.z;
 }
 
 static inline void jabaraLand(f32 y_, void* h_) {
@@ -225,8 +227,6 @@ void mot_jabara(void) {
 	MarioWork* mario = marioGetPtr();
 	Vec v74;
 	Vec v68;
-	Vec v5c;
-	Vec v50;
 	s32 rubCount;
 	s32 rubDir;
 	s32 rubMag;
@@ -410,8 +410,7 @@ void mot_jabara(void) {
 			mario->multiTimer = 10;
 			mario->mot.jabara.floorY = (s32)(hitY + mario->wPlayerCollisionBox.y);
 			{
-				jabaraHitPos(mario->hitobjHead, &v50);
-				mario->position.z = (s32)((100.0f * v50.z + 0.5f) / 100.0f);
+				mario->position.z = (s32)((100.0f * jabaraHitPosZ(mario->hitobjHead) + 0.5f) / 100.0f);
 				mario->position.y = (f32)mario->mot.jabara.floorY - mario->wPlayerCollisionBox.y - 3.5f;
 				mario->rotOfs.y = 9.0f + mario->wPlayerCollisionBox.y;
 			}
@@ -684,10 +683,7 @@ void mot_jabara(void) {
 						}
 					}
 				}
-				{
-					v5c = mario->position;
-					marioUpdateCamCollision(&v5c);
-				}
+				marioUpdateCamCollision(mario->position);
 			}
 		}
 		break;

@@ -19,7 +19,6 @@ void marioChkWallAround(Vec* pos, s32 a1, f32 a2, f32 angle, f32 radius, f32 hei
 
 void marioClearJumpPara(void);
 void marioPaperOff(void);
-void marioUpdateCamCollision(Vec pos);
 void allPartyRideOff2(void);
 void allPartyRidePlane(void);
 void marioSetSplash(s32 kind, Vec* pos);

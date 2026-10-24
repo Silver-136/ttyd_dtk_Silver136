@@ -28,7 +28,6 @@ void allPartyRideShip(void);
 void allPartyRideOff(void);
 void allPartyForceRideOn(void);
 s32 marioSlitChkWallAround(void);
-void marioUpdateCamCollision(Vec* pos);
 void camFollowYOff(void);
 void camFollowYOn(void);
 void marioOfsRotReset(void);
@@ -882,10 +881,7 @@ void mot_roll(void) {
                 camFollowYOff();
             }
         }
-        {
-            Vec pv = mario->position;
-            marioUpdateCamCollision(&pv);
-        }
+        marioUpdateCamCollision(mario->position);
         mario->airTimer = 0;
     }
     if (mario->flags & 0x30000) {
