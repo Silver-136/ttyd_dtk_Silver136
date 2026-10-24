@@ -347,7 +347,7 @@ void effPokopiPchargeDisp(CameraId cameraId, EffectEntry* effect) {
             case 2:
                 effSetVtxDescN64(size10x10_tex32x32_vtx);
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-                ((void (*)())tri2)(type * 4, type * 4 + 1, type * 4 + 2, 0, type * 4, type * 4 + 2, type * 4 + 3, 0);
+                tri2(type * 4, type * 4 + 1, type * 4 + 2, 0, type * 4, type * 4 + 2, type * 4 + 3, 0);
                 break;
             case 3:
             case 4:
@@ -355,7 +355,7 @@ void effPokopiPchargeDisp(CameraId cameraId, EffectEntry* effect) {
                 effSetVtxDescN64(size10x10_tex32x32_2_vtx);
                 type -= 3;
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-                ((void (*)())tri2)(type * 4, type * 4 + 1, type * 4 + 2, 0, type * 4, type * 4 + 2, type * 4 + 3, 0);
+                tri2(type * 4, type * 4 + 1, type * 4 + 2, 0, type * 4, type * 4 + 2, type * 4 + 3, 0);
                 break;
             case 6:
             case 7:
@@ -363,18 +363,18 @@ void effPokopiPchargeDisp(CameraId cameraId, EffectEntry* effect) {
             case 11:
                 effSetVtxDescN64(size128x10_tex32x32_vtx);
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-                ((void (*)())tri2)(0, 1, 2, 0, 0, 2, 3, 0);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
                 break;
             case 9:
             case 12:
                 effSetVtxDescN64(&size10x10_tex32x32_2_vtx[8]);
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-                ((void (*)())tri2)(0, 1, 2, 0, 0, 2, 3, 0);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
                 break;
             case 10:
                 effSetVtxDescN64(size128x10_tex32x32_2_vtx);
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-                ((void (*)())tri2)(0, 1, 2, 0, 0, 2, 3, 0);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
                 break;
         }
     }

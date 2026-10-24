@@ -328,7 +328,7 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
             break;
         }
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-        ((void (*)())tri2)(0, 1, 2, 0, 0, 2, 3, 0);
+        tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }
 }
 
@@ -397,6 +397,6 @@ void effWaterDamageDisp2(CameraId cameraId, EffectEntry* effect) {
             break;
         }
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-        ((void (*)())tri2)(0, 1, 2, 0, 0, 2, 3, 0);
+        tri2(0, 1, 2, 0, 0, 2, 3, 0);
     }
 }

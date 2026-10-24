@@ -455,18 +455,18 @@ void effSnowDustDisp(CameraId cameraId, EffectEntry* effect) {
             case 6:
                 effSetVtxDescN64(size4x4_tex64x64_vtx);
                 GXBegin(0x90, 0, 6);
-                ((void (*)())tri2)(0, 1, 2, 0, 0, 2, 3, 0);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
                 break;
             case 1:
                 effSetVtxDescN64(size8x8_tex64x64_vtx);
                 GXBegin(0x90, 0, 6);
-                ((void (*)())tri2)(0, 1, 2, 0, 0, 2, 3, 0);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
                 break;
             case 2:
             case 3:
                 effSetVtxDescN64(size12x12_tex64x64_vtx);
                 GXBegin(0x90, 0, 6);
-                ((void (*)())tri2)(0, 1, 2, 0, 0, 2, 3, 0);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
                 break;
             case 4:
             case 5:
@@ -490,7 +490,7 @@ void effSnowDustDisp(CameraId cameraId, EffectEntry* effect) {
                 GXSetTevKColorSel(2, 0xc);
                 effSetVtxDescN64(size16x16_tex64x64_vtx);
                 GXBegin(0x90, 0, 6);
-                ((void (*)())tri2)(0, 1, 2, 0, 0, 2, 3, 0);
+                tri2(0, 1, 2, 0, 0, 2, 3, 0);
                 GXSetNumChans(1);
                 GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
                 GXSetNumTevStages(1);
@@ -502,8 +502,8 @@ void effSnowDustDisp(CameraId cameraId, EffectEntry* effect) {
                 GXSetTevKAlphaSel(0, 0x1c);
                 effSetVtxDescN64(size32x32_tex32x32_vtx);
                 GXBegin(0x90, 0, 12);
-                ((void (*)())tri2)(0, 1, 4, 0, 1, 2, 4, 0);
-                ((void (*)())tri2)(0, 4, 3, 0, 4, 2, 3, 0);
+                tri2(0, 1, 4, 0, 1, 2, 4, 0);
+                tri2(0, 4, 3, 0, 4, 2, 3, 0);
                 break;
         }
     }

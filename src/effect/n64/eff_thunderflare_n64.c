@@ -207,7 +207,7 @@ void effThunderflareDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetCurrentMtx(GX_PNMTX0);
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             a = (i & 1) * 4;
-            ((void (*)())tri2)(a, a + 1, a + 2, 0, a, a + 2, a + 3, 0);
+            tri2(a, a + 1, a + 2, 0, a, a + 2, a + 3, 0);
         }
     }
 }

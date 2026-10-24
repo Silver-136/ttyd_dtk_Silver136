@@ -371,7 +371,7 @@ void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
         GXInvalidateVtxCache();
         for (j = first, k = first * 2; j < 29; k += 2, j++) {
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-            ((void (*)())tri2)(k, k + 2, k + 1, k, k + 1, k + 2, k + 3, k);
+            tri2(k, k + 2, k + 1, k, k + 1, k + 2, k + 3, k);
         }
     }
 }
