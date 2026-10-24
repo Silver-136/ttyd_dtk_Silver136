@@ -4947,7 +4947,7 @@ BOOL _psndPushGroup_trg = 0;
 void stub_fn(void);
 #define STUB_BODY stub_fn();
 
-u16 SoundSSCheck(s32 chan);
+u32 SoundSSCheck(s32 chan);
 void SoundSSStopCh(s32 chan);
 void SoundSSSetPlayFreqCh(s32 chan, u16 freq);
 
@@ -5393,13 +5393,13 @@ void psndBGMMain(void) {
 			if (bgm->listId == -1) {
 				alive = 0;
 			} else if (psbgmlist[bgm->listId].flags & 0x80000000) {
-				if (((u32(*)(s32))SoundSSCheck)(bgm->streamId)) {
+				if (SoundSSCheck(bgm->streamId)) {
 					alive = 1;
 				} else {
 					alive = 0;
 				}
 			} else 
-				if (((u32(*)(s32))SoundSongCheck)(bgm->streamId) == 0) {
+				if (SoundSongCheck(bgm->streamId) == 0) {
 					alive = 0;
 				} else {
 					alive = 1;
@@ -5509,7 +5509,7 @@ static inline s32 psndSSFindCh(void) {
   u32 ch;
   for (ch = 0; ch < 3; ch++)
   {
-    if (!((u32 (*)(s32)) SoundSSCheck)(ch))
+    if (!SoundSSCheck(ch))
     {
       return ch;
     }
@@ -5523,7 +5523,7 @@ static inline s32 psndSSFindCh(void) {
   }
   for (ch = 0; ch < 3; ch++)
   {
-    if (!((u32 (*)(s32)) SoundSSCheck)(ch))
+    if (!SoundSSCheck(ch))
     {
       return ch;
     }
@@ -5534,7 +5534,7 @@ static inline s32 psndSongFindCh(void) {
   u32 ch;
   for (ch = 0; ch < 4; ch++)
   {
-    if (!((u32 (*)(s32)) SoundSongCheck)(ch))
+    if (!SoundSongCheck(ch))
     {
       return ch;
     }
@@ -6026,12 +6026,12 @@ void psndSFXMain(void) {
 		if ((base->listId != 0xFFFFFFFF) && ( !(base->flags & 1) )) {
 			f = pssfxlist[base->listId & 0x1FFF].fxId;
 			if (f & 0x80000000) {
-				if (!((u32(*)(s32))SoundSSCheck)(base->channel)) {
+				if (!SoundSSCheck(base->channel)) {
 					base->listId = none;
 					base->channel = none;
 				}
 			} else { r = f & 0x40000000; if (r) {
-				if (!((u32(*)(s32))SoundSongCheck)(base->channel)) {
+				if (!SoundSongCheck(base->channel)) {
 					base->listId = none;
 					base->channel = -1;
 				}
@@ -6079,15 +6079,15 @@ void psndSFXMain(void) {
 			f = e->fxId;
 			if (f & 0x80000000) {
 				for (j = 0; j < 3; j++) {
-					if (!((u32(*)(s32))SoundSSCheck)(j)) { ch[0] = j; goto ssfound; }
+					if (!SoundSSCheck(j)) { ch[0] = j; goto ssfound; }
 				}
 				for (j = 0; j < 3; j++) {
-					if (((u32(*)(s32))SoundSSCheck)(j) & 0x20) {
+					if (SoundSSCheck(j) & 0x20) {
 						SoundSSStopCh(j);
 					}
 				}
 				for (j = 0; j < 3; j++) {
-					if (!((u32(*)(s32))SoundSSCheck)(j)) { ch[0] = j; goto ssfound; }
+					if (!SoundSSCheck(j)) { ch[0] = j; goto ssfound; }
 				}
 				ch[0] = none;
 ssfound:
@@ -6099,7 +6099,7 @@ ssfound:
 				}
 			} else if (f & 0x40000000) {
 				for (j = 0; j < 4; j++) {
-					if (!((u32(*)(s32))SoundSongCheck)(j)) { ch[0] = j; goto sgfound; }
+					if (!SoundSongCheck(j)) { ch[0] = j; goto sgfound; }
 				}
 				ch[0] = none;
 sgfound:
