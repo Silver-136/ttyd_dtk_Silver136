@@ -15,6 +15,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_npc.h"
 #include "data_tables.h"
+#include "manager/evtmgr_cmd.h"
 
 static void draw(CameraId camera, void* param);
 typedef struct AaaWork { FileEntry* tpl; s32 alpha; } AaaWork;

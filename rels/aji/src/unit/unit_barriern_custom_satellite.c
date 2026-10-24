@@ -6,6 +6,7 @@
 #include "battle/battle_unit.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_event_default.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(btlevtcmd_AnimeChangePose);
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);

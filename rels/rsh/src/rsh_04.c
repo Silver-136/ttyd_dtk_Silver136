@@ -10,6 +10,7 @@
 #include "evt/evt_npc.h"
 #include "rsh.h"
 #include "mario/mario_pouch.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(evt_bero_get_entername);
 USER_FUNC(evt_bero_get_info);

@@ -10,6 +10,7 @@
 #include "evt/evt_damage.h"
 #include "driver/hitdrv.h"
 #include "mario/mario_pouch.h"
+#include "manager/evtmgr_cmd.h"
 
 static u8* _ap;
 

@@ -13,6 +13,7 @@
 #include <string.h>
 #include "party/party_hit.h"
 #include "party/party_move.h"
+#include "manager/evtmgr_cmd.h"
 
 typedef struct ChuchuParty {
     u32 flags;                 // 0x0

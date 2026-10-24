@@ -11,6 +11,7 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 f32 intplGetValue(f32 start, f32 end, s32 mode, s32 currStep, s32 steps);
 

@@ -97,6 +97,7 @@ static WindowWork* wp;
 #include "pmario_sound.h"
 #include "statuswindow.h"
 #include "data/party_data.h"
+#include "manager/evtmgr_cmd.h"
 s32 winRootMain(WindowWork* wp);
 void winRootDisp(CameraId camId, WindowWork* wp);
 const char* winGetMapTplName(void);

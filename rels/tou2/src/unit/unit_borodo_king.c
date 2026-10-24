@@ -18,6 +18,7 @@
 #include "evt/evt_sub.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 extern ItemData itemDataTable[];
 void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);

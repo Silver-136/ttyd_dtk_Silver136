@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "tou.h"
 #include "evt/evt_npc.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_info);

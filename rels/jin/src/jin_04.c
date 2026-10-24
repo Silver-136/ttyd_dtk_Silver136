@@ -7,6 +7,7 @@
 #include "evt/evt_sub.h"
 #include "jin.h"
 #include "evt/evt_npc.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(L_evt_party_dokan);
 USER_FUNC(evt_bero_get_info);

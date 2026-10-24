@@ -4,6 +4,7 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_item.h"
 #include "evt/evt_npc.h"
+#include "manager/evtmgr_cmd.h"
 
 #pragma force_active on
 

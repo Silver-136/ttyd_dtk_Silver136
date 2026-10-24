@@ -3,6 +3,7 @@
 #include "evt/evt_cmd.h"
 #include "mario/mario_pouch.h"
 #include "system.h"
+#include "manager/evtmgr_cmd.h"
 
 #pragma auto_inline off
 #pragma optimize_for_size on

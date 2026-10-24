@@ -9,6 +9,7 @@
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(btlevtcmd_AddScale);
 USER_FUNC(btlevtcmd_AnimeChangePose);

@@ -17,6 +17,7 @@
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
 #include "driver/extdrv.h"
+#include "manager/evtmgr_cmd.h"
 
 typedef struct AtmTeresa { u8 state; u8 flag; s32 anim; s32 wait; s32 timer; Vec vel; Vec start; Vec target; u8 mode; } AtmTeresa;
 AtmTeresa* teresa;

@@ -15,6 +15,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_sub.h"
 #include "aji.h"
+#include "manager/evtmgr_cmd.h"
 
 void mapGrpFlagOn(const char* name, u32 flags);
 void mapGrpFlagOff(const char* name, u32 flags);

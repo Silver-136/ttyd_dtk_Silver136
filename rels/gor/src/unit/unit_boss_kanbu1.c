@@ -12,6 +12,7 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
 USER_FUNC(btlevtcmd_EnemyItemUseCheck);

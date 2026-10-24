@@ -3,6 +3,7 @@
 #include "mario/mariost.h"
 #include <dolphin/os.h>
 #include "libc_decls.h"
+#include "manager/evtmgr_cmd.h"
 
 //.sbss
 BOOL dbg_lotteryinfo;

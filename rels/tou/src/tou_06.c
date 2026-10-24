@@ -9,6 +9,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_npc.h"
 #include "mario/mario_pouch.h"
+#include "manager/evtmgr_cmd.h"
 
 s32* tbl;
 

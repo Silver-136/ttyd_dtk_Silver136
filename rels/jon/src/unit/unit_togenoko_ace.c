@@ -10,6 +10,7 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
 USER_FUNC(btlevtcmd_CheckSpace);

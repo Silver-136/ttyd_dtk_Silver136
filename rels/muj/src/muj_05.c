@@ -12,6 +12,7 @@
 #include "muj.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include "manager/evtmgr_cmd.h"
 
 s32* command_work;
 

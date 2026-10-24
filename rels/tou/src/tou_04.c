@@ -10,6 +10,7 @@
 #include "evt/evt_bero.h"
 #include "party/party_motion.h"
 #include "mario/mario_pouch.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_entername);

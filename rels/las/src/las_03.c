@@ -3,6 +3,7 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_damage.h"
 #include "driver/hitdrv.h"
+#include "manager/evtmgr_cmd.h"
 
 #pragma force_active on
 
@@ -269,8 +270,8 @@ EVT_END()
 USER_FUNC(get_toge_name) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], toge_data[idx * 2]);
-    evtSetValue(event, args[2], toge_data[idx * 2 + 1]);
+    evtSetValue(event, args[1], (EvtWord)toge_data[idx * 2]);
+    evtSetValue(event, args[2], (EvtWord)toge_data[idx * 2 + 1]);
     return EVT_RETURN_DONE;
 }
 USER_FUNC(toge_check_flag) {

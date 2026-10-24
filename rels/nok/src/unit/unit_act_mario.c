@@ -12,6 +12,7 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
 #include "unit/party/unit_party_christine.h"
+#include "manager/evtmgr_cmd.h"
 
 EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 arg5, f32 arg6, f32 scale);
 

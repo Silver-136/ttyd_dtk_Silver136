@@ -7,6 +7,7 @@
 #include "evt/evt_mobj.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "manager/evtmgr_cmd.h"
 
 static char name[8];
 

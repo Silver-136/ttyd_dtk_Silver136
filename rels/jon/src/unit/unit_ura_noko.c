@@ -13,6 +13,7 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
 USER_FUNC(btlevtcmd_SetEventAttack);

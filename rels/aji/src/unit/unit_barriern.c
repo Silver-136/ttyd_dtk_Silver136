@@ -15,6 +15,7 @@
 #include "battle/battle_weapon_power.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 s32 irand(s32 scalar);
 EffectEntry* effGlassN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);

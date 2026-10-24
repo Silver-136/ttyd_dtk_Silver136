@@ -6,6 +6,7 @@
 #include "driver/hitdrv.h"
 #include "driver/effdrv.h"
 #include "evt/evt_bero.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_info);

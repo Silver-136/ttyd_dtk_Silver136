@@ -14,6 +14,7 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 static EffectEntry* eff;
 static EffectEntry* eff2[10];

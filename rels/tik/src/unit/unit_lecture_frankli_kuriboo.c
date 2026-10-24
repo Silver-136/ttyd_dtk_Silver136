@@ -4,6 +4,7 @@
 #pragma force_active on
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
+#include "manager/evtmgr_cmd.h"
 
 static USER_FUNC(_battle_set_lecture_unit_id);
 USER_FUNC(btlevtcmd_AnimeChangePose);

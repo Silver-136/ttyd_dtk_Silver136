@@ -11,6 +11,7 @@
 #include "npc_event.h"
 #include "mri.h"
 #include "data_tables.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(bero_get_position_normal);

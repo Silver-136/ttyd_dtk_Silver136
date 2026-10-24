@@ -17,6 +17,7 @@
 #include "party/party_motion.h"
 #include "hom.h"
 #include "mario/mario_pouch.h"
+#include "manager/evtmgr_cmd.h"
 
 double sin(double x);
 static smartEntry* ind_lp;

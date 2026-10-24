@@ -7,6 +7,7 @@
 #include "mario/mariost.h"
 #include "system.h"
 #include "evt/evt_bero.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(evt_bero_get_info);

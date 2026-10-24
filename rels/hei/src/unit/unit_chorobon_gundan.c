@@ -18,6 +18,7 @@
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
 #include "driver/extdrv.h"
+#include "manager/evtmgr_cmd.h"
 
 typedef struct Chorogun { u8 flags; u8 state; u8 pad_2[2]; Vec vel; f32 speed; Vec pos; s32 timer; Vec target; } Chorogun;
 Chorogun* chorogun;

@@ -9,6 +9,7 @@
 #include "battle/battle_event_subset.h"
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(btlevtcmd_AddPartsRotate);
 USER_FUNC(btlevtcmd_AnimeChangePose);

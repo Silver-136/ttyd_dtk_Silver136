@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "las.h"
+#include "manager/evtmgr_cmd.h"
 
 #pragma force_active on
 
@@ -538,7 +539,7 @@ EVT_END()
 USER_FUNC(get_hosi_name) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
-    evtSetValue(event, args[1], hosi_name[idx * 2]);
-    evtSetValue(event, args[2], hosi_name[idx * 2 + 1]);
+    evtSetValue(event, args[1], (EvtWord)hosi_name[idx * 2]);
+    evtSetValue(event, args[2], (EvtWord)hosi_name[idx * 2 + 1]);
     return EVT_RETURN_DONE;
 }

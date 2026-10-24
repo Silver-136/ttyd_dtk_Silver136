@@ -4,6 +4,7 @@
 #pragma force_active on
 #include "stdio.h"
 #include "evt/evt_bero.h"
+#include "manager/evtmgr_cmd.h"
 
 static char name[8];
 

@@ -15,6 +15,7 @@
 #include "battle/battle_weapon_power.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 #ifdef VERSION_G8ME01
 #define BARRIERN_ALLOC(size) BattleAlloc(size)
 #define BARRIERN_FREE(p) BattleFree(p)

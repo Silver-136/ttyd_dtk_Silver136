@@ -9,6 +9,7 @@
 #include "evt/evt_sub.h"
 #include "mri.h"
 #include "data_tables.h"
+#include "manager/evtmgr_cmd.h"
 
 PuniData* puniGetPunidat(void);
 

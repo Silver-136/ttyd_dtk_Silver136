@@ -13,6 +13,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 double sqrt(double x);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);

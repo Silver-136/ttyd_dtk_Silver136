@@ -19,6 +19,7 @@
 #include <string.h>
 #include "koopa.h"
 #include "driver/shadowdrv.h"
+#include "manager/evtmgr_cmd.h"
 
 
 

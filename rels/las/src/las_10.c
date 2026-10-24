@@ -6,6 +6,7 @@
 #include "party.h"
 #include "driver/camdrv.h"
 #include "evt/evt_bero.h"
+#include "manager/evtmgr_cmd.h"
 
 void mapGrpFlagOn(const char* name, u32 flags);
 void mapGrpFlagOff(const char* name, u32 flags);

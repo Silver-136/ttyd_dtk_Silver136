@@ -14,6 +14,7 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
+#include "manager/evtmgr_cmd.h"
 
 BOOL BattlePartyAnimeLoad(s32 id);
 typedef struct FakerStatus { s16 data[15]; } FakerStatus;

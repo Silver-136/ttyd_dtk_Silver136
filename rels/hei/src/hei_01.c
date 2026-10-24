@@ -10,6 +10,7 @@
 #include "evt/evt_npc.h"
 #include "driver/hitdrv.h"
 #include "data_tables.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_info);
