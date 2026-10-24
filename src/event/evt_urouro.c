@@ -132,12 +132,12 @@ USER_FUNC(urouro_main_func) {
             if (npc->footstepAccum > (f32)npc->footstepStride / npc->moveSpeed) {
                 if (npc->footstepToggle != 0) {
                     if (npc->footstepSfxA != 0) {
-                        psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxA), &npc->position, 0xff, 0xff, 0, 8);
+                        psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
                     }
                 }
                 else {
                     if (npc->footstepSfxB != 0) {
-                        psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxB), &npc->position, 0xff, 0xff, 0, 8);
+                        psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
                     }
                 }
                 npc->footstepAccum = 0.0f;

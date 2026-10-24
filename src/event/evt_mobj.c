@@ -30,6 +30,7 @@
 #include "statuswindow.h"
 #include "evt/evt_mobj.h"
 #include "libc_decls.h"
+#include "pmario_sound.h"
 s32 mobj_koopa_pole_evt(MapObjectEntry* mobj);
 void kpa_disp_pole_score(CameraId camId, void* param);
 static USER_FUNC(kpa_get_level);
@@ -162,7 +163,6 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};
 
-extern s32 psndSFXOn(const char* name);
 
 s32 mobj_lv_blk_evt(MapObjectEntry* mobj);
 
@@ -3128,7 +3128,6 @@ void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
 extern void* itemHitCheck(f32 x, f32 y, f32 z, f32 r);
 extern void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 r);
 extern void* itemNearDistCheck(f32 x, f32 y, f32 z, f32 r);
-extern s32 psndSFXOnEx_3D(const char* name, Vec* pos, s32 a, s32 b, s32 c, s32 d);
 
 static inline BOOL kururing_in_box(f32 x, f32 z, f32 px, f32 pz, f32 r) {
     if (x - r <= px && px <= x + r && z - r <= pz && pz <= z + r) {
@@ -3195,7 +3194,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         }
         if (mode == 1) {
             animPoseSetAnim(mobj->poseId, "A_1", 1);
-            psndSFXOnEx_3D((const char*)0x1ee, &mobj->position, 0xff, 0xff, 100, 0x10);
+            psndSFXOnEx_3D(SFX_NAME_WORD(0x1ee), &mobj->position, 0xff, 0xff, 100, 0x10);
             mobj->state = 10;
         } else if (mode == 2) {
             animPoseSetAnim(mobj->poseId, "A_2", 1);

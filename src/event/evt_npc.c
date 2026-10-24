@@ -595,11 +595,11 @@ USER_FUNC(evt_npc_move_position) {
     if (npc->footstepAccum > (f32)npc->footstepStride / npc->moveSpeed) {
         if (npc->footstepToggle != 0) {
             if (npc->footstepSfxA != 0) {
-                psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxA), &npc->position, 0xff, 0xff, 0, 8);
+                psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
             }
         } else {
             if (npc->footstepSfxB != 0) {
-                psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxB), &npc->position, 0xff, 0xff, 0, 8);
+                psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
             }
         }
         npc->footstepAccum = 0.0f;
@@ -661,7 +661,7 @@ USER_FUNC(evt_npc_jump_position) {
             sfxFlag = 0x10000;
         }
         if (npc->jumpSfx != 0) {
-            psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->jumpSfx), &npc->position, 0xff, 0xff, 0, 8);
+            psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->jumpSfx)), &npc->position, 0xff, 0xff, 0, 8);
         }
 
         npc->jumpVelY = 0.0f;
@@ -774,7 +774,7 @@ USER_FUNC(evt_npc_jump_position) {
         }
     }
     if (npc->landSfx != 0) {
-        psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->landSfx), &npc->position, 0xff, 0xff, 0, 8);
+        psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->landSfx)), &npc->position, 0xff, 0xff, 0, 8);
     }
     return EVT_RETURN_YIELD;
 }
@@ -811,7 +811,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
             }
         }
         if (npc->jumpSfx != 0) {
-            psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->jumpSfx), &npc->position, 0xff, 0xff, 0, 8);
+            psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->jumpSfx)), &npc->position, 0xff, 0xff, 0, 8);
         }
     }
 
@@ -835,7 +835,7 @@ USER_FUNC(evt_npc_jump_position_nohit) {
         }
     }
     if (npc->landSfx != 0) {
-        psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->landSfx), &npc->position, 0xff, 0xff, 0, 8);
+        psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->landSfx)), &npc->position, 0xff, 0xff, 0, 8);
     }
 
     return EVT_RETURN_DONE;
@@ -958,11 +958,11 @@ USER_FUNC(evt_npc_glide_position) {
     if (npc->footstepAccum > (f32)npc->footstepStride / npc->moveSpeed) {
         if (npc->footstepToggle != 0) {
             if (npc->footstepSfxA != 0) {
-                psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxA), &npc->position, 0xff, 0xff, 0, 8);
+                psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
             }
         } else {
             if (npc->footstepSfxB != 0) {
-                psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxB), &npc->position, 0xff, 0xff, 0, 8);
+                psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
             }
         }
         npc->footstepAccum = 0.0f;
@@ -1130,11 +1130,11 @@ USER_FUNC(evt_npc_homing_target) {
     if (npc->footstepAccum > (f32)npc->footstepStride / npc->moveSpeed) {
         if (npc->footstepToggle != 0) {
             if (npc->footstepSfxA != 0) {
-                psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxA), &npc->position, 0xff, 0xff, 0, 8);
+                psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxA)), &npc->position, 0xff, 0xff, 0, 8);
             }
         } else {
             if (npc->footstepSfxB != 0) {
-                psndSFXOnEx_3D(sfxFlag | searchPSSFXList(npc->footstepSfxB), &npc->position, 0xff, 0xff, 0, 8);
+                psndSFXOnEx_3D(SFX_NAME_WORD(sfxFlag | searchPSSFXList(npc->footstepSfxB)), &npc->position, 0xff, 0xff, 0, 8);
             }
         }
         npc->footstepAccum = 0.0f;
