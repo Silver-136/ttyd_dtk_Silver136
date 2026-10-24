@@ -5,6 +5,7 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/n64/eff_rothammer_success_n64.h"
 
 double sin(double);
 double cos(double);

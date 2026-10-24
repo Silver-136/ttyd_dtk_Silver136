@@ -16,6 +16,7 @@
 #include <string.h>
 #include "evt/evt_mario.h"
 #include "party/party_vivian.h"
+#include "mario/mario_hit.h"
 
 
 void mario_plane_cancel(void);
@@ -140,13 +141,10 @@ void marioRollCancel(void);
 void motSlitCancel2(void);
 BOOL marioGetMotSlitCancel3(void);
 
-void* marioSearchGroundRoll(f32* y, f32* a, f32* b, f32 h, f32 vy);
-void* marioSearchGround(f32* y, f32* a, f32* b, f32 h, f32 vy);
 void marioClearJumpPara(void);
 void quake_kpaHipAttack(void);
 void kpaChgPose(const char* a, const char* b);
 
-void* searchUnder2(f32 x, f32 y, f32 z, f32* out);
 void rollEvtJumpSetup(void);
 void setRollEvtFlag(void);
 void clrRollEvtFlag(void);
@@ -1293,7 +1291,7 @@ USER_FUNC(evt_mario_jump_pos) {
                     } else {
                         dy = 0.5f * mp->wPlayerCollisionBox.y + dy;
                     }
-                } else if (searchUnder2(x, y, z, &tmp)) {
+                } else if (searchUnder2(&tmp, x, y, z)) {
                     dy = h;
                 } else {
                     dy = h;

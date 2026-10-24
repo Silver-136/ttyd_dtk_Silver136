@@ -6,6 +6,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <stdlib.h>
+#include "eff/n64/eff_rothammer_success_n64.h"
 
 typedef struct EffFireFlowerN64Work {
     s32 type;     // 0x0
@@ -65,7 +66,6 @@ static s8 scale_data[] = "27<AFKPUZ_dgigd";
 
 void effFireFlowerMain(EffectEntry* effect);
 void effFireFlowerDisp(CameraId cameraId, EffectEntry* effect);
-EffectEntry* effRotHammerSuccessN64Entry();
 
 EffectEntry* effFireFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) {
     EffectEntry* effect;

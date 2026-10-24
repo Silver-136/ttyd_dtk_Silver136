@@ -53,7 +53,6 @@ void mapSetMaterial(MapObject* obj, void* material);
 void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
 void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);
 void setColor(MapObject* obj, GXColor color, BOOL doNext);
-int strcat();
 void mapDispMapGrp(CameraId cam, MapObject* obj);
 void mapDispMapGrp_bbox(CameraId cam, MapObject* obj);
 void mapDispMapGrp_off(CameraId cam, MapObject* obj);

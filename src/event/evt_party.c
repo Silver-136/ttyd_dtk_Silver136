@@ -13,6 +13,7 @@
 #include "party/party_yoshi.h"
 #include "party/party_vivian.h"
 #include "mario/mario_sbr.h"
+#include "mario/mario_hit.h"
 
 #define GETPARTY(args) partyGetPtr((args)[0] == 0 ? partyCtrlNo : 1)
 #define PARTY_ID(args) ((args)[0] == 0 ? partyCtrlNo : 1)
@@ -25,7 +26,6 @@ extern void partyMoveBehindMario();
 extern void partySetCamId();
 extern void* partySearchGround();
 extern void* partyHitCheck();
-extern void* searchUnder2();
 extern s32 nokonokoGetStatus();
 extern s32 bomheiGetStatus();
 extern void vivianUnhold(PartyEntry* party);

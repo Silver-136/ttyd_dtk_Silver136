@@ -20,3 +20,4 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w);
 
 void marioChkGnd(void);
 BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h);
+HitEntry* searchUnder2(f32* out, f32 x, f32 y, f32 z);

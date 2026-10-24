@@ -12,6 +12,7 @@
 #include <dolphin/gx.h>
 #include <string.h>
 #include "libc_decls.h"
+#include "win/win_mario.h"
 
 extern ItemData itemDataTable[];
 void winIconInit(void);

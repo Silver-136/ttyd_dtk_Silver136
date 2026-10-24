@@ -12,6 +12,8 @@
 
 #include "party.h"
 #include "mario/mario.h"
+
+static BOOL partyChkMarioFollowY(MarioWork* mario);
 PartyEntry* partyGetPtr(s32 index);
 s32 marioGetPartyId(void);
 s32 marioGetExtraPartyId(void);

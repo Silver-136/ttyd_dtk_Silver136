@@ -213,7 +213,6 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj);
 #include "system.h"
 extern void test_kururing_mapdisp(s32 camId);
 #include "driver/npcdrv.h"
-extern void strcat();
 s32 mobj_kururing_floor(MapObjectEntry* mobj);
 s32 mobj_lock(MapObjectEntry* mobj);
 

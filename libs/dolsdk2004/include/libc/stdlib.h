@@ -8,6 +8,9 @@
 
 void srand(unsigned int seed);
 int rand(void);
+
+typedef int (*_compare_function)(const void*, const void*);
+void qsort(void* table_base, size_t num_members, size_t member_size, _compare_function compare_members);
 void abort(void);
 void exit(int status);
 size_t wcstombs(char *dest, const wchar_t *src, size_t max);
