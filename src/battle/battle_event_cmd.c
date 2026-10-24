@@ -5754,24 +5754,30 @@ USER_FUNC(btlevtcmd_ClearAllStatus) {
 }
 
 USER_FUNC(btlevtcmd_OnStatusFlag) {
+    BattleUnit* unit;
     EvtWord* args = event->args;
     s32 id;
+    EvtWord flags;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
-    args = (EvtWord*)args[1]; // FAKE: the flags word reuses the args register (one saved register, as in the target)
-    BtlUnit_OnStatusFlag(BattleGetUnitPtr(_battleWorkPointer, id), (EvtWord)args);
+    flags = args[1];
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BtlUnit_OnStatusFlag(unit, flags);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(btlevtcmd_OffStatusFlag) {
+    BattleUnit* unit;
     EvtWord* args = event->args;
     s32 id;
+    EvtWord flags;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
-    args = (EvtWord*)args[1]; // FAKE: the flags word reuses the args register (one saved register, as in the target)
-    BtlUnit_OffStatusFlag(BattleGetUnitPtr(_battleWorkPointer, id), (EvtWord)args);
+    flags = args[1];
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BtlUnit_OffStatusFlag(unit, flags);
     return EVT_RETURN_DONE;
 }
 
@@ -5822,26 +5828,30 @@ USER_FUNC(btlevtcmd_CheckUnitFlag) {
 }
 
 USER_FUNC(btlevtcmd_OnUnitFlag) {
+    BattleUnit* unit;
     EvtWord* args = event->args;
     s32 id;
-    s32 flags;
+    EvtWord flags;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
-    args = (EvtWord*)args[1]; // FAKE: the flags word reuses the args register (one saved register, as in the target)
-    BtlUnit_OnUnitFlag(BattleGetUnitPtr(_battleWorkPointer, id), (EvtWord)args);
+    flags = args[1];
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BtlUnit_OnUnitFlag(unit, flags);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(btlevtcmd_OffUnitFlag) {
+    BattleUnit* unit;
     EvtWord* args = event->args;
     s32 id;
-    s32 flags;
+    EvtWord flags;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
-    args = (EvtWord*)args[1]; // FAKE: the flags word reuses the args register (one saved register, as in the target)
-    BtlUnit_OffUnitFlag(BattleGetUnitPtr(_battleWorkPointer, id), (EvtWord)args);
+    flags = args[1];
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    BtlUnit_OffUnitFlag(unit, flags);
     return EVT_RETURN_DONE;
 }
 
