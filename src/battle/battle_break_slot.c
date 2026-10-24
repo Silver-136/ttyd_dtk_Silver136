@@ -298,7 +298,6 @@ void BattleAudienceSoundCheer(s32 a, s32 b);
 void BattleAudienceSoundBooing(void);
 double sin(double);
 
-#define SFX_ON ((s32 (*)(const char*))psndSFXOn)
 
 void BattleBreakSlot_Main(void) {
 	static f32 updown;
@@ -371,7 +370,7 @@ void BattleBreakSlot_Main(void) {
 						reel->state = 7;
 					}
 				}
-				slot->startSfxId = SFX_ON("SFX_BTL_SLOT_START1");
+				slot->startSfxId = psndSFXOn("SFX_BTL_SLOT_START1");
 			}
 			break;
 		case 3:
@@ -411,7 +410,7 @@ void BattleBreakSlot_Main(void) {
 				}
 				if (count >= 2) {
 					slot->phase = 5;
-					SFX_ON("SFX_BTL_SLOT_SUCCESS1");
+					psndSFXOn("SFX_BTL_SLOT_SUCCESS1");
 					reel = BattleBreakSlotReelGetPtr(0);
 					for (i = 3; i != 0; i--, reel++) {
 						reel->state = 11;
@@ -419,7 +418,7 @@ void BattleBreakSlot_Main(void) {
 					}
 				} else {
 					slot->phase = 7;
-					SFX_ON("SFX_BTL_SYS_BREAK_FAILRE1");
+					psndSFXOn("SFX_BTL_SYS_BREAK_FAILRE1");
 					reel = BattleBreakSlotReelGetPtr(0);
 					for (i = 3; i != 0; i--, reel++) {
 						reel->state = 12;
@@ -453,7 +452,7 @@ void BattleBreakSlot_Main(void) {
 			}
 			if (slot->phaseTimer == 20 || slot->phaseTimer == 40 || slot->phaseTimer == 60 || slot->phaseTimer == 80 ||
 			    slot->phaseTimer == 100 || slot->phaseTimer == 120) {
-				SFX_ON("SFX_BTL_SYS_BREAK1");
+				psndSFXOn("SFX_BTL_SYS_BREAK1");
 				btl_camera_shake_h(0, 5.0f, 0.0f, 10, 0);
 			}
 			if (slot->phaseTimer == 120) {
@@ -474,7 +473,7 @@ void BattleBreakSlot_Main(void) {
 					case 2:
 						evtEntry(star_effect, 0, 0x20);
 						pouchSetAP(pouchGetMaxAP());
-						SFX_ON("SFX_HP_RECOVER_BIG1");
+						psndSFXOn("SFX_HP_RECOVER_BIG1");
 						slot->breakTurn = 4;
 						slot->spMultiplier = 2.0f;
 						break;

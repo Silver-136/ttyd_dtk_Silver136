@@ -37,8 +37,6 @@ typedef struct RepeatedlyLvWork {
     s32 endTimer; // 0x30
 } RepeatedlyLvWork;
 
-#define RL_PadNow ((s32(*)(s32))BattlePadCheckNow)
-#define RL_PadUp ((s32(*)(s32))BattlePadCheckUp)
 #define RL_IconDisp ((void (*)(Vec*, s16, s32, f32))iconDispGx)
 
 static void _init_param(BattleWork* work) {
@@ -146,7 +144,7 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
             break;
         case 100:
             if (!((ac->setupFlags & 1) && (ac->mAcUnit->mTokenFlags & kConfusedAction))) {
-                if (p->maxMask != 0 && !RL_PadNow(p->maxMask) && !autoCmd) {
+                if (p->maxMask != 0 && !BattlePadCheckNow(p->maxMask) && !autoCmd) {
                     p->s22++;
                     if (p->s22 < 150) {
                         break;
@@ -200,7 +198,7 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
             }
             if (p->u27) {
                 if (ac->acFlags & 0x20) {
-                    if (RL_PadNow(p->mask)) {
+                    if (BattlePadCheckNow(p->mask)) {
                         hit = 1;
                         p->s1c++;
                     }
@@ -211,7 +209,7 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                     }
                 }
             } else {
-                if (RL_PadUp(p->mask)) {
+                if (BattlePadCheckUp(p->mask)) {
                     hit = 1;
                     p->s1c++;
                 }
@@ -263,7 +261,7 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
                 p->s18++;
             }
             ac->outputParams[2] = p->s18;
-            if (p->maxMask != 0 && !RL_PadNow(p->maxMask)) {
+            if (p->maxMask != 0 && !BattlePadCheckNow(p->maxMask)) {
                 p->s20 = 0;
             }
             BattleAcGaugeSeUpdate(p->gauge);

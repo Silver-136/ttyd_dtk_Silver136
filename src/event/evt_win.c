@@ -564,7 +564,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 			coin = pouchGetCoin();
 		} else if (wp->flags & 0x4000) {
 			iconDispGx2(mtx, 0x10, ICON_102);
-			coin = ((s32 (*)(void))pouchGetSuperCoin)();
+			coin = pouchGetSuperCoin();
 		} else {
 			iconDispGx2(mtx, 0x10, ICON_18D);
 			coin = pouchGetStarPiece();

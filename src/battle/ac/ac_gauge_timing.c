@@ -59,8 +59,6 @@ typedef struct GaugeWork {
     s32 endTimer; // 0x28
 } GaugeWork;
 
-#define PadNow ((s32(*)(s32))BattlePadCheckNow)
-#define PadUp ((s32(*)(s32))BattlePadCheckUp)
 #define GAC(work) ((GaugeAC*)&(work)->actionCommands)
 
 s32 battleAcMain_GaugeTiming(BattleWork* work) {
@@ -149,7 +147,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             cw->frame++;
             switch (cw->phase) {
                 case 0:
-                    if (!cw->hold && PadNow(cw->button)) {
+                    if (!cw->hold && BattlePadCheckNow(cw->button)) {
                         cw->phase = 1;
                         work->actionCommands.mAcState = 1001;
                         cw->frame = 0;
@@ -162,7 +160,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                             cw->phase = 2;
                         }
                     } else {
-                        if (!PadNow(cw->button) && PadUp(cw->button)) {
+                        if (!BattlePadCheckNow(cw->button) && BattlePadCheckUp(cw->button)) {
                             cw->phase = 2;
                         }
                     }

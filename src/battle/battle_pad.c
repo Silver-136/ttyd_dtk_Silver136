@@ -175,7 +175,7 @@ u32 BattlePadMultiCheckUp(s32 chan, s32 mask) {
 	return history[0] & mask;
 }
 
-u32 BattlePadCheckRepeat(s32 mask) {
+s32 BattlePadCheckRepeat(s32 mask) {
 	return BattlePadMultiCheckRepeat(0, mask);
 }
 

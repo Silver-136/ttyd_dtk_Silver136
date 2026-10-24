@@ -828,7 +828,7 @@ s32 pouchSetCoin(s32 coins) {
 	return mpp->coins;
 }
 
-s16 pouchGetSuperCoin(void) {
+s32 pouchGetSuperCoin(void) {
 	return mpp->mShineSpriteCount;
 }
 
@@ -877,7 +877,7 @@ void pouchSetMaxHP(s16 points) {
 	mpp->baseMaxHP = mpp->maximumHP;
 }
 
-s16 pouchGetPartyHP(PartyId partnerId) {
+s32 pouchGetPartyHP(PartyId partnerId) {
 	return mpp->partyData[partnerId].currentHP;
 }
 
@@ -1285,7 +1285,7 @@ void pouchSetFP(s16 points);
 s16 pouchGetMaxFP(void);
 s32 pouchGetFP(void);
 void pouchSetPartyHP(PartyId partnerId, s16 points);
-s16 pouchGetPartyHP(PartyId partnerId);
+s32 pouchGetPartyHP(PartyId partnerId);
 void pouchSetMaxHP(s16 points);
 void pouchSetHP(s16 points);
 s16 pouchGetMaxHP(void);
@@ -1294,7 +1294,7 @@ s16 pouchAddHP(s32 points);
 s16 pouchAddStarPiece(s16 count);
 s32 pouchGetStarPiece(void);
 s16 pouchSetSuperCoin(s16 count);
-s16 pouchGetSuperCoin(void);
+s32 pouchGetSuperCoin(void);
 s32 pouchSetCoin(s32 coins);
 s16 pouchAddCoin(s16 coins);
 s32 pouchGetCoin(void);

@@ -36,5 +36,5 @@ BOOL BattlePadMultiCheckNow(s32 chan, s32 mask);
 s32 BattlePadCheckUp(s32 mask);
 u32 BattlePadMultiCheckUp(s32 chan, s32 mask);
 
-u32 BattlePadCheckRepeat(s32 mask);
+s32 BattlePadCheckRepeat(s32 mask);
 u32 BattlePadMultiCheckRepeat(s32 chan, s32 mask);

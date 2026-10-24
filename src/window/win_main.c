@@ -831,7 +831,7 @@ USER_FUNC(itemUseFunc) {
                 ((void (*)(s32))pouchSetFP)(pouchGetFP() + item->fp_restored);
                 ((void (*)(s32))pouchSetAP)(pouchGetAP() + item->sp_restored);
             } else {
-                ((void (*)(s32, s32))pouchSetPartyHP)(event->lwData[11], ((s32 (*)(s32))pouchGetPartyHP)(event->lwData[11]) + item->hp_restored);
+                ((void (*)(s32, s32))pouchSetPartyHP)(event->lwData[11], pouchGetPartyHP(event->lwData[11]) + item->hp_restored);
                 ((void (*)(s32))pouchSetFP)(pouchGetFP() + item->fp_restored);
                 ((void (*)(s32))pouchSetAP)(pouchGetAP() + item->sp_restored);
             }

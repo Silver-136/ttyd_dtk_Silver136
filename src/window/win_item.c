@@ -586,7 +586,7 @@ s32 winItemMain(WindowWork* w) {
                 ((void (*)(s32))pouchSetAP)(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
             } else {
                 party = list[w->item.useTarget - 1]->partyId;
-                ((void (*)(s32, s32))pouchSetPartyHP)(party, ((s32 (*)(s32))pouchGetPartyHP)(party) + itemDataTable[w->item.useItem].hp_restored);
+                ((void (*)(s32, s32))pouchSetPartyHP)(party, pouchGetPartyHP(party) + itemDataTable[w->item.useItem].hp_restored);
                 ((void (*)(s32))pouchSetFP)(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
                 ((void (*)(s32))pouchSetAP)(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
             }

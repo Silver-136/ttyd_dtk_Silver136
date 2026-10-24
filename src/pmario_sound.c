@@ -6110,7 +6110,7 @@ sgfound:
 				}
 			} else {
 				if (sfx[0]->flags & 2) {
-					*((u32*)b) = ((u32 (*)(s32, Vec*, u8, u16))calc3D)(sfx[0]->listId, &sfx[0]->position, SFX_VOL(sfx[0]), sfx[0]->dist);
+					*((u32*)b) = calc3D(sfx[0]->listId, &sfx[0]->position, SFX_VOL(sfx[0]), sfx[0]->dist);
 					sfx[0]->channel = SoundEfxPlayEx(e->fxId & 0xFFFF, 0, b[0], b[1]);
 					if (sfx[0]->channel != ( -1) ) {
 						SoundEfxSetVolume(sfx[0]->channel, b[0]);
@@ -6142,7 +6142,7 @@ sgfound:
 			sfx[0]->flags &= ~1;
 		}
 		if (sfx[0]->flags & 2) {
-			*((u32*)b) = ((u32 (*)(s32, Vec*, u8, u16))calc3D)(sfx[0]->listId, &sfx[0]->position, SFX_VOL(sfx[0]), sfx[0]->dist);
+			*((u32*)b) = calc3D(sfx[0]->listId, &sfx[0]->position, SFX_VOL(sfx[0]), sfx[0]->dist);
 			f = e->fxId;
 			if (f & 0x80000000) {
 				SoundSSSetPanCh(sfx[0]->channel, b[1]);

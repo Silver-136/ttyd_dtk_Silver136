@@ -115,7 +115,7 @@ void btlDispGXQuads2DRasta(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 
 void btlDispTexPlane(u32 id, GXColor color, f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY);
 f32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color);
 f32 intplGetValue(s32 mode, s32 currStep, s32 steps, f32 start, f32 end);
-#define PADREP(x) (((s32 (*)(s32))BattlePadCheckRepeat)(x))
+#define PADREP(x) (BattlePadCheckRepeat(x))
 void _btlcmd_MakeActClassTable(BattleWork* wp) {
 	PouchData* pouch;
 	BattleUnit* unit;
@@ -1800,7 +1800,7 @@ s32 BattleCommandDisplay_WeaponMultiItemCancelCheckMain(BattleWork* wp) {
 		return 0;
 	}
 	if (cursor->absPos < cursor->count - 1) {
-		if (((s32(*)(s32))BattlePadCheckRepeat)(0x20000)) {
+		if (BattlePadCheckRepeat(0x20000)) {
 			cursor->absPos++;
 			psndSFXOn("SFX_BTL_CURSOR_MOVE2");
 			goto check;
@@ -1813,7 +1813,7 @@ s32 BattleCommandDisplay_WeaponMultiItemCancelCheckMain(BattleWork* wp) {
 		}
 	}
 	if (cursor->absPos > 0) {
-		if (((s32(*)(s32))BattlePadCheckRepeat)(0x10000)) {
+		if (BattlePadCheckRepeat(0x10000)) {
 			cursor->absPos--;
 			psndSFXOn("SFX_BTL_CURSOR_MOVE2");
 		}
