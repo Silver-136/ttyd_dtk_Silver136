@@ -57,8 +57,8 @@ USER_FUNC(evt_cam_get_at) {
 // CameraId id, f32 x, f32 y, s32 msec
 USER_FUNC(evt_cam_shake) {
     EvtWord* args = event->args;
-    int new_var;
-    int new_var2;
+    int shift;
+    int camId;
     CameraId id;
     u64 now;
     s32 msec;
@@ -69,7 +69,7 @@ USER_FUNC(evt_cam_shake) {
 
     id = evtGetValue(event, args[0]);
     x = evtGetFloat(event, args[1]);
-    new_var2 = id;
+    camId = id;
     y = evtGetFloat(event, args[2]);
     msec = evtGetValue(event, args[3]);
     now = *(u64*)&event->lifetime;
@@ -84,12 +84,12 @@ USER_FUNC(evt_cam_shake) {
     event->userdata[0]++;
     event->userdata[0] %= 4;
     if (event->userdata[0] < 2) {
-        PSMTX44Trans(camGetPtr(new_var2)->projAdjust, x, y, 0.0f);
+        PSMTX44Trans(camGetPtr(camId)->projAdjust, x, y, 0.0f);
     }
     else {
-        PSMTX44Trans(camGetPtr(new_var2)->projAdjust, -x, -y, 0.0f);
+        PSMTX44Trans(camGetPtr(camId)->projAdjust, -x, -y, 0.0f);
     }
-    camGetPtr(new_var2)->flags |= 8;
+    camGetPtr(camId)->flags |= 8;
     if (msec) {
         if ((u64)msec < OSTicksToMilliseconds(now - *(u64*)&event->userdata[1])) {
             camGetPtr(id)->flags &= ~8;
@@ -113,9 +113,9 @@ USER_FUNC(evt_cam_shake) {
         if (!event->userWork[3]) {
             padRumbleOn(0);
             if (onTime < OSTicksToMilliseconds(now - last)) {
-                new_var = 32;
+                shift = 32;
                 event->userWork[3] = 1 - event->userWork[3];
-                ((u32*)&event->wInterpRelatedTime)[0] = (now >> new_var) & 0xFFFFFFFF;
+                ((u32*)&event->wInterpRelatedTime)[0] = (now >> shift) & 0xFFFFFFFF;
                 ((u32*)&event->wInterpRelatedTime)[1] = now & 0xFFFFFFFF;
             }
         }

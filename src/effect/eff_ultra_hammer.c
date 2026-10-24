@@ -518,7 +518,7 @@ inline Vec initializeVec(Vec* input) {
 
 void effUltraHammerDisp(enum CameraId camId, void *param)
 {
-  u32 new_var2[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
+  u32 fmtLoop[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
   CameraEntry *cam;
   EffUltraHammerData *data;
   s32 i;
@@ -581,8 +581,8 @@ void effUltraHammerDisp(enum CameraId camId, void *param)
       GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_TEX_ST, GX_RGBA4, 10);
       GXSetArray(GX_VA_POS, &wakka_vertex_tbl, 6);
       GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-      new_var2[0] = GX_VTXFMT0;
-      GXSetVtxAttrFmt(new_var2[0], GX_VA_NRM, GX_TEX_S, GX_RGB8, 6);
+      fmtLoop[0] = GX_VTXFMT0;
+      GXSetVtxAttrFmt(fmtLoop[0], GX_VA_NRM, GX_TEX_S, GX_RGB8, 6);
       GXSetArray(GX_VA_NRM, &wakka_normal_tbl, 3);
       GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
       GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_TEX_ST, GX_RGBA8, 0);
@@ -590,9 +590,9 @@ void effUltraHammerDisp(enum CameraId camId, void *param)
       GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
       GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_RGBA4, 13);
       GXSetArray(GX_VA_TEX0, &wakka_texcoord0_tbl, 4);
-      for (new_var2[1] = 0; new_var2[1] < 20; new_var2[1]++)
+      for (fmtLoop[1] = 0; fmtLoop[1] < 20; fmtLoop[1]++)
       {
-        GXCallDisplayList(wakka_dl_0_tbl[new_var2[1]], wakka_dl_0_size_tbl[new_var2[1]] << 5);
+        GXCallDisplayList(wakka_dl_0_tbl[fmtLoop[1]], wakka_dl_0_size_tbl[fmtLoop[1]] << 5);
       }
 
     }

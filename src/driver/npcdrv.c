@@ -1205,7 +1205,7 @@ void npcSetStayPose(char* name) {
 }
 
 BOOL npcCheckHitMarioSide(NpcEntry* npc) {
-    MarioWork* mario; float new_var ; // FAKE: temp needed for 100% (99.97 without)
+    MarioWork* mario; float reach ; // FAKE: temp needed for 100% (99.97 without)
     Vec marioPos;
     f32 dist;
     f32 range;
@@ -1227,7 +1227,7 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     marioPos.z = mario->position.z;
     marioPos.y = npc->position.y;
     dist = PSVECDistance(&marioPos, &npc->position);
-    new_var = 5.0f + (mario->wPlayerCollisionBox.x + npc->width); range = new_var ;
+    reach = 5.0f + (mario->wPlayerCollisionBox.x + npc->width); range = reach ;
     range *= 0.5f;
     if (dist > range) {
         return FALSE;

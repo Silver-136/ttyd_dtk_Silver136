@@ -6238,7 +6238,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
   SoundEffectEntry *entry;
   s32 idx = 0;
   s32 delay;
-  u16 * new_var ;
+  u16 * delayPtr ;
   s32 i;
   s32 id;
   id = searchPSSFXList(name);
@@ -6270,8 +6270,8 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     PaperSoundEffect *t = pssfx + i;
     if ((((((u32) t->listId) != 0xFFFFFFFF) && (((u32) (t->listId & 0x1FFF)) == ((u32) sid))) && (t->flags & 0x100)) && (delay == 0))
     {
-      new_var = (u16 *) (& psnd.sfxDelay);
-      delay = (*new_var += 8);
+      delayPtr = (u16 *) (& psnd.sfxDelay);
+      delay = (*delayPtr += 8);
     }
     if (((u32) t->listId) == 0xFFFFFFFF)
     {

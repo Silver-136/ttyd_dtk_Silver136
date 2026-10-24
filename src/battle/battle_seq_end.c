@@ -950,8 +950,8 @@ void _MarioExpDisp(CameraId camId, void* param) {
 }
 
 void _LvupParamConfirmDisp(CameraId camId, void* param) {
-    Vec pos; f32 zero = 0.0f; u32 len; s32 *new_var; f32 w; char buf[0x14]; SeqEndWork* work = SEW((BattleWork*)param);
-    new_var = &work->cursor; // FAKE: pointer to the field; direct work->cursor differs
+    Vec pos; f32 zero = 0.0f; u32 len; s32 *cursorPtr; f32 w; char buf[0x14]; SeqEndWork* work = SEW((BattleWork*)param);
+    cursorPtr = &work->cursor; // FAKE: pointer to the field; direct work->cursor differs
     pouchGetPtr();
     sprintf(buf, msgSearch("btl_msg_lvup_ok"));
     len = strlen(buf); ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 6.25f * len), 30.0f, 12.5f * len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -961,7 +961,7 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
     FontDrawString(-20.0f, -13.0f, msgSearch("btl_msg_lvup_yes"));
     FontDrawString(-20.0f, -38.0f, msgSearch("btl_msg_lvup_no"));
     pos.x = -40.0f;
-    pos.y = -50 - (*new_var) * 25;
+    pos.y = -50 - (*cursorPtr) * 25;
     pos.z = 0.0f;
     iconDispGx(&pos, 0x10, EXP_ICON, 1.0f);
 }
@@ -1037,14 +1037,14 @@ void _GetExpIcon_Init(SeqEndWork* work) {
 }
 
 void _GetExpIcon_Main(BattleWork* wp) {
-    s32 new_var[2]; // FAKE: register-promoted array (tens, ones); two scalars differ
+    s32 digits[2]; // FAKE: register-promoted array (tens, ones); two scalars differ
     SeqEndWork* work = SEW(wp);
     s32 exp = work->expDisp;
     s32 i;
     f32 ofs;
 
-    new_var[1] = exp / 10;
-    for (i = 0; i < new_var[1]; i++) {
+    digits[1] = exp / 10;
+    for (i = 0; i < digits[1]; i++) {
         iconFlagOff(work->icons[i]->name, 2);
         if (work->alpha[i] <= 0) {
             work->alpha[i] = 0x40;
@@ -1064,8 +1064,8 @@ void _GetExpIcon_Main(BattleWork* wp) {
         work->alpha[i] = 0;
         work->counter[i] = 0;
     }
-    new_var[0] = exp % 10;
-    for (i = 10; i - 10 < new_var[0]; i++) {
+    digits[0] = exp % 10;
+    for (i = 10; i - 10 < digits[0]; i++) {
         iconFlagOff(work->icons[i]->name, 2);
         if (work->alpha[i] <= 0) {
             work->alpha[i] = 0x40;

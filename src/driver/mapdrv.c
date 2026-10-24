@@ -3902,14 +3902,14 @@ void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl) {
 	s32 lo;
 	s32 hi;
 	s32 mid;
-	f32 new_var;
+	f32 y0;
 	f32 u;
 	f32 h;
 
 	if (n == 2) {
 		out->x = t * (pts[1].x - pts[0].x) + pts[0].x;
-		new_var = pts[0].y;
-		out->y = t * (pts[1].y - new_var) + new_var;
+		y0 = pts[0].y;
+		out->y = t * (pts[1].y - y0) + y0;
 		out->z = t * (pts[1].z - pts[0].z) + pts[0].z;
 		return;
 	}

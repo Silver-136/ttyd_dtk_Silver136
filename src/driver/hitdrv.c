@@ -1224,8 +1224,6 @@ HitEntry* hitNameToPtr(const char* name) { // 1:1
     MapEntry* map;
     MapWork* wp = mapGetWork();
     int j;
-    MapEntry* new_var;
-    MapEntry* new_var2;
     int i;
     HitEntry* hit;
 

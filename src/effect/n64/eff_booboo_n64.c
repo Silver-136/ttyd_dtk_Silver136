@@ -466,13 +466,13 @@ void effBoobooDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx scl;
     Mtx rot;
     CameraEntry* camera;
-    s32 new_var[2]; // FAKE: register-promoted array (anim id + time*30); separate scalars differ
+    s32 animPhase[2]; // FAKE: register-promoted array (anim id + time*30); separate scalars differ
     EffBoobooN64Work* work;
     s32 i;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
-    new_var[1] = work->time * 30;
+    animPhase[1] = work->time * 30;
     for (i = 0; i < 11; i++) {
         if (!(work->flags[i] & 1)) {
             continue;
@@ -489,13 +489,13 @@ void effBoobooDisp(CameraId cameraId, EffectEntry* effect) {
             continue;
         }
         if (work->type[i] == 8 || work->type[i] == 9) {
-            f32 s = (f32)sin(6.2831855f * (f32)(new_var[1] + i * 20) / 360.0f);
+            f32 s = (f32)sin(6.2831855f * (f32)(animPhase[1] + i * 20) / 360.0f);
             s32 v = (s32)(63.0f * s + 63.0f);
             GXSetTevColor(GX_TEVREG0, (GXColor){v, v, v});
         }
-        new_var[0] = work->anim[i];
+        animPhase[0] = work->anim[i];
         GXSetCullMode(GX_CULL_BACK);
-        switch (new_var[0]) {
+        switch (animPhase[0]) {
         case 0:
             boo_polygon_0();
             break;

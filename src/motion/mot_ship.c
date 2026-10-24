@@ -907,7 +907,7 @@ void shipMove(void)
 {
   MarioWork *m = marioGetPtr();
   f32 len;
-  unsigned long long new_var;
+  unsigned long long rateIdx;
   f32 spd;
   f32 tz;
   f32 vx;
@@ -950,7 +950,7 @@ void shipMove(void)
   }
   vx = marioGetPtr()->motShip->dispX;
   vz = marioGetPtr()->motShip->dispY;
-  new_var = 3;
+  rateIdx = 3;
   if (m->controlStickSensitivity)
   {
     tx = spd * ((f32) sin((3.1415927f * (m->controlStickAngle)) / 180.0f));
@@ -966,7 +966,7 @@ void shipMove(void)
   {
     if (tx > vx)
     {
-      vx += ((1.0f + tx) - vx) * shipData[new_var];
+      vx += ((1.0f + tx) - vx) * shipData[rateIdx];
       if (vx >= max)
       {
         vx = max;
@@ -974,7 +974,7 @@ void shipMove(void)
     }
     else
     {
-      vx += ((tx - 1.0f) - vx) * shipData[new_var];
+      vx += ((tx - 1.0f) - vx) * shipData[rateIdx];
       if (vx <= (-max))
       {
         vx = -max;
@@ -982,7 +982,7 @@ void shipMove(void)
     }
     if (tz > vz)
     {
-      vz += ((1.0f + tz) - vz) * shipData[new_var];
+      vz += ((1.0f + tz) - vz) * shipData[rateIdx];
       if (vz >= max)
       {
         vz = max;
@@ -990,7 +990,7 @@ void shipMove(void)
     }
     else
     {
-      vz += ((tz - 1.0f) - vz) * shipData[new_var];
+      vz += ((tz - 1.0f) - vz) * shipData[rateIdx];
       if (vz <= (-max))
       {
         vz = -max;

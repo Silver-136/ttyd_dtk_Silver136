@@ -892,7 +892,7 @@ static void ext_main(void) {
     f32 z;
     f32 speed;
     f32 gravity;
-    f32 new_var2;
+    f32 val;
     f32 dist;
     f32 angle;
     f32 rad;
@@ -908,7 +908,7 @@ static void ext_main(void) {
 
         switch ((s8)wp->bom[i].state) {
             case 0:
-                new_var2 = PSVECDistance(&center, &pos) ; if (new_var2 > 280.0f) {
+                val = PSVECDistance(&center, &pos) ; if (val > 280.0f) {
                     PSVECSubtract(&center, &pos, &dir);
                     PSVECNormalize(&dir, &dir);
                     PSVECScale(&dir, &move, 3.0f);
@@ -973,7 +973,7 @@ static void ext_main(void) {
                     (*pose->mtx)[1][3] = (*pose->mtx)[1][3] - 2.0f;
                     pose->flags &= ~2;
                     PSMTXTrans(m1, 0.0f, -20.0f, 0.0f);
-                    new_var2 = (f32)sin((i + gp->retraceCount) / 100.0f); PSMTXRotRad(m2, 'z', 0.017453292f * (10.0f * new_var2));
+                    val = (f32)sin((i + gp->retraceCount) / 100.0f); PSMTXRotRad(m2, 'z', 0.017453292f * (10.0f * val));
                     PSMTXTrans(m3, 0.0f, 20.0f, 0.0f);
                     PSMTXConcat(m1, m2, m2);
                     PSMTXConcat(m2, m3, m3);

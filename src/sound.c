@@ -1786,7 +1786,7 @@ void SoundSSPlayCh(s32 chan, const char* name) {
 void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
     SoundStream* stream;
     int i;
-    const char* new_var2 [2]; // FAKE: alias array needed for 100% (a plain str/root form is 5 rows off)
+    const char* paths [2]; // FAKE: alias array needed for 100% (a plain str/root form is 5 rows off)
 
     stream = &sound.streams[chan];
     if (stream->flags) {
@@ -1814,13 +1814,13 @@ void SoundSSPlayChEx(s32 chan, const char* name, s32 aram) {
     if (aram) {
         stream->flags |= 0x400;
     }
-    new_var2 [1] = getMarioStDvdRoot ();
-    sprintf(str, "%s/%s%s", new_var2 [1], name, ".stm");
-    if (!(stream->entries[0].dvd = DVDMgrOpen(new_var2 [0] = str, 0, 0))) {
+    paths [1] = getMarioStDvdRoot ();
+    sprintf(str, "%s/%s%s", paths [1], name, ".stm");
+    if (!(stream->entries[0].dvd = DVDMgrOpen(paths [0] = str, 0, 0))) {
         stream->flags = 0;
         return;
     }
-    if (!(stream->entries[1].dvd = DVDMgrOpen(new_var2 [0], 0, 0))) {
+    if (!(stream->entries[1].dvd = DVDMgrOpen(paths [0], 0, 0))) {
         stream->flags = 0;
         return;
     }

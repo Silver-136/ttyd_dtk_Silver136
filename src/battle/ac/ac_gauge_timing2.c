@@ -48,7 +48,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
   BOOL pressed;
   const char *sfxNg;
   BOOL allDone;
-  const char *new_var[2]; // FAKE: register-promoted array of the two SFX names; separate scalars swap regs
+  const char *sfxNames[2]; // FAKE: register-promoted array of the two SFX names; separate scalars swap regs
   BOOL found;
   s32 i3;
   s32 i4;
@@ -148,20 +148,20 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
       gw->frame2++;
       gw->cursor = (100.0f * ((f32) gw->frame2)) / ((f32) gw->totalFrames);
     {
-      new_var[0] = "SFX_AC_COMMAND_NG1";
+      sfxNames[0] = "SFX_AC_COMMAND_NG1";
       for (i3 = 0; i3 < work->actionCommands.params[2]; i3++)
       {
         if ((!gw->state[i3]) && (gw->cursor > (6.0f + gw->targets[i3])))
         {
           gw->state[i3] = -1;
-          psndSFXOn(new_var[0]);
+          psndSFXOn(sfxNames[0]);
         }
       }
 
     }
       gw->hit = 0;
     {
-      new_var[1] = "SFX_AC_PONE1";
+      sfxNames[1] = "SFX_AC_PONE1";
       for (i = 0; i < work->actionCommands.params[2]; i++)
       {
         if ((!gw->state[i]) && (__fabs(gw->cursor - gw->targets[i]) <= 6.0))
@@ -169,7 +169,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
           gw->hit = 1;
           if (gw->sfx[i] == (-1))
           {
-            gw->sfx[i] = ((s32 (*)(const char *)) psndSFXOn)(new_var[1]);
+            gw->sfx[i] = ((s32 (*)(const char *)) psndSFXOn)(sfxNames[1]);
           }
         }
       }

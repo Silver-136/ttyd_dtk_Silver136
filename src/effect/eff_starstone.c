@@ -629,7 +629,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
   EffStarStoneWork *w = effect->userdata;
   CameraEntry *cam = camGetPtr(cameraId);
   s32 type = w->type;
-  int new_var2[4]; // FAKE: four loop counters as one register-promoted array; one counter / four scalars differ
+  int dlIdx[4]; // FAKE: four loop counters as one register-promoted array; one counter / four scalars differ
   mapSetMaterialFog();
   GXSetArray(11, color_tbl[w->type], 4);
   GXSetNumChans(1);
@@ -674,11 +674,11 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
   GXSetVtxDesc(13, 2);
   GXSetVtxAttrFmt(0, 13, 1, 3, 14);
   GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
-  for (new_var2[0] = 0; new_var2[0] < 19U; new_var2[0]++)
+  for (dlIdx[0] = 0; dlIdx[0] < 19U; dlIdx[0]++)
   {
-    if ((w->flags & 1) || (new_var2[0] != 0))
+    if ((w->flags & 1) || (dlIdx[0] != 0))
     {
-      GXCallDisplayList(diamond_2_2_dl_0_tbl[new_var2[0]], diamond_2_2_dl_0_size_tbl[new_var2[0]] << 5);
+      GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[0]], diamond_2_2_dl_0_size_tbl[dlIdx[0]] << 5);
     }
   }
 
@@ -706,11 +706,11 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
   GXSetVtxDesc(13, 2);
   GXSetVtxAttrFmt(0, 13, 1, 3, 14);
   GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
-  for (new_var2[1] = 0; new_var2[1] < 19U; new_var2[1]++)
+  for (dlIdx[1] = 0; dlIdx[1] < 19U; dlIdx[1]++)
   {
-    if ((w->flags & 1) || (new_var2[1] != 0))
+    if ((w->flags & 1) || (dlIdx[1] != 0))
     {
-      GXCallDisplayList(diamond_2_2_dl_1_tbl[new_var2[1]], diamond_2_2_dl_1_size_tbl[new_var2[1]] << 5);
+      GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[1]], diamond_2_2_dl_1_size_tbl[dlIdx[1]] << 5);
     }
   }
 
@@ -769,11 +769,11 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
   GXSetVtxDesc(13, 2);
   GXSetVtxAttrFmt(0, 13, 1, 3, 14);
   GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
-  for (new_var2[2] = 0; new_var2[2] < 19U; new_var2[2]++)
+  for (dlIdx[2] = 0; dlIdx[2] < 19U; dlIdx[2]++)
   {
-    if ((w->flags & 1) || (new_var2[2] != 0))
+    if ((w->flags & 1) || (dlIdx[2] != 0))
     {
-      GXCallDisplayList(diamond_2_2_dl_0_tbl[new_var2[2]], diamond_2_2_dl_0_size_tbl[new_var2[2]] << 5);
+      GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[2]], diamond_2_2_dl_0_size_tbl[dlIdx[2]] << 5);
     }
   }
 
@@ -801,11 +801,11 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
   GXSetVtxDesc(13, 2);
   GXSetVtxAttrFmt(0, 13, 1, 3, 14);
   GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
-  for (new_var2[3] = 0; new_var2[3] < 19U; new_var2[3]++)
+  for (dlIdx[3] = 0; dlIdx[3] < 19U; dlIdx[3]++)
   {
-    if ((w->flags & 1) || (new_var2[3] != 0))
+    if ((w->flags & 1) || (dlIdx[3] != 0))
     {
-      GXCallDisplayList(diamond_2_2_dl_1_tbl[new_var2[3]], diamond_2_2_dl_1_size_tbl[new_var2[3]] << 5);
+      GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[3]], diamond_2_2_dl_1_size_tbl[dlIdx[3]] << 5);
     }
   }
 

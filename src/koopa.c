@@ -246,7 +246,7 @@ s32 kpaCamFollow(void) {
 }
 
 void kpaPreInit(void) {
-    s32* new_var;
+    s32* sfxIdPtr;
     MarioWork* mp = marioGetPtr();
     if (KPW(mp) == NULL) {
         KPW(mp) = (KpaWork*)__memAlloc(0, sizeof(KpaWork));
@@ -256,8 +256,8 @@ void kpaPreInit(void) {
     KPW(mp)->walkRate = 1;
     KPW(mp)->fireCount = 0;
     KPW(mp)->fireRate = 1;
-    new_var = &KPW(marioGetPtr())->fireSfxId; // FAKE: address temp; direct store differs
-    *new_var = -1;
+    sfxIdPtr = &KPW(marioGetPtr())->fireSfxId; // FAKE: address temp; direct store differs
+    *sfxIdPtr = -1;
     mp = marioGetPtr();
     if (strcmp(gp->currentMapName, "kpa_02") == 0 || strcmp(gp->currentMapName, "kpa_03") == 0 ||
         strcmp(gp->currentMapName, "kpa_04") == 0 || strcmp(gp->currentMapName, "kpa_05") == 0 ||
@@ -478,28 +478,28 @@ void kpa3DMain(void) {
 
 #define SETPV(m, v, a, b, c, d) do { JP(m, v) = (a); JP(m, 1) = (b); JP(m, 2) = (c); JP(m, 3) = (d); } while (v)
 f32 kpaSetJumpPara(void) {
-    int new_var;
+    int slot;
     f32* jd = marioJumpData;
     MarioWork* mp = marioGetPtr();
-    new_var = 0; // FAKE: register-held 0 for SETPV/JP index and the dead empty if below; literal 0 differs
-    SETPV(mp, new_var, jd[new_var], jd[1], jd[2], jd[3]);
+    slot = 0; // FAKE: register-held 0 for SETPV/JP index and the dead empty if below; literal 0 differs
+    SETPV(mp, slot, jd[slot], jd[1], jd[2], jd[3]);
     switch (KPW(mp)->level) {
     case 0:
-        SETPV(mp, new_var, 7.0f, -0.4f, 0.08f, -0.02f);
+        SETPV(mp, slot, 7.0f, -0.4f, 0.08f, -0.02f);
         break;
     case 1:
-        SETPV(mp, new_var, 8.1f, -0.3f, 0.08f, -0.02f);
+        SETPV(mp, slot, 8.1f, -0.3f, 0.08f, -0.02f);
         break;
     case 2:
-        SETPV(mp, new_var, 8.4f, -0.1f, 0.08f, -0.018f);
+        SETPV(mp, slot, 8.4f, -0.1f, 0.08f, -0.018f);
         break;
-        if (!new_var) {
+        if (!slot) {
         }
     case 3:
-        SETPV(mp, new_var, 10.5f, -0.12f, 0.08f, -0.018f);
+        SETPV(mp, slot, 10.5f, -0.12f, 0.08f, -0.018f);
         break;
     }
-    return JP(mp, new_var);
+    return JP(mp, slot);
 }
 
 f32 kpaSetFallPara(void) {

@@ -2564,7 +2564,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale)
   AnimationPoseData *data;
   AnimationPose *pose;
   AnimationPose *p2;
-  s32 new_var[2];
+  s32 scratchNum[2];
   AnimationPoseData *pd;
   pose = &wp->poses[poseId];
   if (pose->paperId != (-1))
@@ -2582,9 +2582,9 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale)
     }
     if (paper->typeFlags & 2)
     {
-      new_var[1] = pd->mBufferPosNum;
-      new_var[0] = pd->mBufferNrmNum;
-      apdScratchN(new_var[1], new_var[0]);
+      scratchNum[1] = pd->mBufferPosNum;
+      scratchNum[0] = pd->mBufferNrmNum;
+      apdScratchN(scratchNum[1], scratchNum[0]);
       name = ANIM_INDEX_NAME(pose->paperAnimIdx);
       if (ANIM_NAME_INDEX(name) != -1)
       {

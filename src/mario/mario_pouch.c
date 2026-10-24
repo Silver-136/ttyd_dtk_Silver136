@@ -212,7 +212,7 @@ static inline BOOL pouchAdd(s16 *t1, s16 *t2, s32 size, ItemType type)
 }
 BOOL pouchGetItem(ItemType type)
 {
-  s16 *new_var[2];
+  s16 *itemLists[2];
   s32 size;
   BOOL ok;
   if (type == ITEM_COIN)
@@ -253,7 +253,7 @@ BOOL pouchGetItem(ItemType type)
     {
       mpp->currentFP++;
       // FAKE: dead store (function returns right after); steers register allocation
-      new_var[1] = (void *) 0;
+      itemLists[1] = (void *) 0;
     }
     return 1;
   }
@@ -317,29 +317,29 @@ BOOL pouchGetItem(ItemType type)
     swSet(type - 0x70);
   }
   size = 0;
-  new_var[0] = (void *) 0;
-  new_var[1] = (void *) 0;
+  itemLists[0] = (void *) 0;
+  itemLists[1] = (void *) 0;
   if ((type >= 0x79) && (type < 0xEC))
   {
-    new_var[0] = mpp->heldItems;
+    itemLists[0] = mpp->heldItems;
     size = (((s32 (*)(s32)) pouchCheckItem)(1)) ? (20) : (10);
     ok = 1;
   }
   else
     if ((type >= 1) && (type < 0x79))
   {
-    new_var[1] = (void *) 0;
+    itemLists[1] = (void *) 0;
     size = 0x79;
     ok = 1;
-    new_var[0] = mpp->keyItems;
+    itemLists[0] = mpp->keyItems;
   }
   else
     if ((type >= 0xF0) && (type < 0x153))
   {
     size = 200;
     ok = 1;
-    new_var[0] = mpp->badges;
-    new_var[1] = mpp->equippedBadges;
+    itemLists[0] = mpp->badges;
+    itemLists[1] = mpp->equippedBadges;
   }
   else
   {
@@ -349,7 +349,7 @@ BOOL pouchGetItem(ItemType type)
   {
     return 0;
   }
-  return pouchAdd(new_var[0], new_var[1], size, type);
+  return pouchAdd(itemLists[0], itemLists[1], size, type);
 }
 
 

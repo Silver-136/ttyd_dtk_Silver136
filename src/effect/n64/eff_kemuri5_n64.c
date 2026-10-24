@@ -52,7 +52,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     s32 ang;
     EffectEntry* effect;
     EffKemuri5N64Work* work;
-    f32 new_var;
+    f32 angF;
     s32 i;
     f32 rad;
     f32 a = angle;
@@ -78,12 +78,12 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->baseScaleY = 0.03f * (f32)(rand() % 11) + 1.7f;
         work->angle = (f32)(rand() % 61);
         work->timer = 30;
-        new_var = (f32)ang; // FAKE: early float conversion temp; (f32)ang / implicit int at use both differ
+        angF = (f32)ang; // FAKE: early float conversion temp; (f32)ang / implicit int at use both differ
         work->velY = 0.5f;
         work->accelY = -0.02f;
         work->accelY2 = 0.00005f;
         work->speed = -3.9f;
-        rad = 6.2831855f * reviseAngle(a + new_var) / 360.0f;
+        rad = 6.2831855f * reviseAngle(a + angF) / 360.0f;
         work->dirX = (f32)sin(rad);
         work->dirZ = (f32)cos(rad);
         ang += 45;

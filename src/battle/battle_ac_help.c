@@ -35,7 +35,7 @@ void BattleAcHelpMain(void) {
 void _ac_help_disp(CameraId cameraId, void *param)
 {
   u16 lines;
-  const char *new_var3[2]; // FAKE: register-promoted array; one msg pointer differs
+  const char *msgs[2]; // FAKE: register-promoted array; one msg pointer differs
   BattleWork *wp = _battleWorkPointer;
   s32 width;
   u8 alpha;
@@ -47,19 +47,19 @@ void _ac_help_disp(CameraId cameraId, void *param)
   {
     alpha = 0x80;
   }
-  new_var3[0] = msgSearch(*help);
-  if (!new_var3[0])
+  msgs[0] = msgSearch(*help);
+  if (!msgs[0])
   {
-    new_var3[0] = (0, "めっせーじがみつかりません");
+    msgs[0] = (0, "めっせーじがみつかりません");
   }
-  new_var3[1] = new_var3[0];
-  width = FontGetMessageWidthLine(new_var3[1], &lines);
+  msgs[1] = msgs[0];
+  width = FontGetMessageWidthLine(msgs[1], &lines);
   lines++;
   y = 0.0f;
   windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, alpha}, (x = y - (width / 2)) - 20.0f, (-145.0f) + ((lines - 1) * 29), width + 40, (lines * 29) + 1, 10.0f);
   y = -148.0f;
   FontDrawStart_alpha(alpha);
-  FontDrawMessage(x, ((s32) y) + ((lines - 1) * 29), new_var3[1]);
+  FontDrawMessage(x, ((s32) y) + ((lines - 1) * 29), msgs[1]);
 }
 
 

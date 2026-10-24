@@ -413,15 +413,15 @@ BOOL _areacheck(f32 x, f32 z, f32 r, f32 px, f32 pz) {
         if (t > 0.5f) {                           \
             u = (t - 0.5f) / 0.5f;                \
         } else {                                  \
-            u = new_var;                             \
+            u = floorY;                             \
         }                                         \
         p->pos.y = 10.0f * u + (base);            \
     }
 
 void _ymode_mri_09(PuniData* p) {
-    float new_var;
-    new_var = 0.0f;
-    if (p->pos.x <= 400.0f && p->pos.x > 200.0f && p->pos.y <= 100.0f && p->pos.y >= new_var) {
+    float floorY;
+    floorY = 0.0f;
+    if (p->pos.x <= 400.0f && p->pos.x > 200.0f && p->pos.y <= 100.0f && p->pos.y >= floorY) {
         if (p->pos.z <= -55.0f) {
             p->pos.y = 100.0f;
         } else YSTEP(-35.0f, 90.0f)
@@ -433,9 +433,9 @@ void _ymode_mri_09(PuniData* p) {
         else YSTEP(85.0f, 30.0f)
         else YSTEP(105.0f, 20.0f)
         else YSTEP(125.0f, 10.0f)
-        else YSTEP(145.0f, new_var)
+        else YSTEP(145.0f, floorY)
         else {
-            p->pos.y = new_var;
+            p->pos.y = floorY;
         }
     }
     if (p->pos.x >= -170.0f && p->pos.x <= 170.0f && p->pos.z >= -80.0f && p->pos.z <= 140.0f) {

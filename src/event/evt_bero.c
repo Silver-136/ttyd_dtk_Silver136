@@ -583,14 +583,14 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
   EvtWord *args = event->args;
   MarioWork *wp = marioGetPtr();
   s32 dir = evtGetValue(event, args[0]);
-  float new_var3;
-  f32 new_var2;
+  float halfTurn;
+  f32 respawnZ;
   f32 len = evtGetFloat(event, args[1]);
   s32 *pos = (s32 *) event->lwData[6];
   const char *name = (const char *) event->lwData[3];
   s32 angle = event->lwData[5];
   Vec start;
-  f32 *new_var;
+  f32 *hxPtr;
   Vec end;
   start.x = pos[0];
   start.y = pos[1];
@@ -619,10 +619,10 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
     dist = 1000000.0f;
     deg = 0.125f;
     deg = (angle * 360.0f) * deg;
-    new_var3 = 180.0f;
+    halfTurn = 180.0f;
     if (dir == 1)
     {
-      deg += new_var3;
+      deg += halfTurn;
     }
     rad = (6.2831855f * deg) / 360.0f;
     tmp.x = start.x - (30.0f * ((f32) sin((6.2831855f * deg) / 360.0f)));
@@ -632,8 +632,8 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
       tmp.z = start.z - (30.0f * (-c0));
     }
     dist = 1000000.0f;
-    new_var = &hx;
-    if (hitCheckFilter((void *) 0, new_var, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f))
+    hxPtr = &hx;
+    if (hitCheckFilter((void *) 0, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f))
     {
       tmp.y = hy;
     }
@@ -647,10 +647,10 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
   BeroSY = start.y;
   BeroSZ = start.z;
   BeroEX = end.x;
-  new_var2 = end.z;
+  respawnZ = end.z;
   BeroEY = end.y;
   BeroEZ = end.z;
-  N_marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, new_var2);
+  N_marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, respawnZ);
   if (wp->currMotionId == 0x19)
   {
     N_marioReloadMapOnBottomlessOn();

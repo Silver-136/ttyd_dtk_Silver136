@@ -3733,7 +3733,7 @@ USER_FUNC(evt_mobj_koopa_badgeblk) {
     s32 item;
     EvtWord* args = event->args;
     s32 arg6;
-    int new_var; // FAKE: separate inBattle temp needed for the target register allocation
+    int battleFlag; // FAKE: separate inBattle temp needed for the target register allocation
     const char* name;
     MapObjectEntry* mobj;
     const char* anim;
@@ -3745,10 +3745,10 @@ USER_FUNC(evt_mobj_koopa_badgeblk) {
     item = evtGetValue(event, args[4]);
     val = evtGetValue(event, args[5]);
     arg6 = args[6];
-    new_var = gp->inBattle;
-    new_var = new_var != 0;
+    battleFlag = gp->inBattle;
+    battleFlag = battleFlag != 0;
     anim = "MOBJ_HatenaBlock";
-    if (animGroupBaseAsync(anim, new_var, NULL) == 0) {
+    if (animGroupBaseAsync(anim, battleFlag, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);

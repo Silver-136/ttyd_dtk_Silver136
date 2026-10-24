@@ -684,7 +684,7 @@ HitEntry *hitEstimate(s32 *out)
   f32 c;
   f32 cy;
   f32 a;
-  Vec new_var;
+  Vec dir4Copy;
   f32 h;
   s32 i;
   f32 k5 = 5.0f;
@@ -764,9 +764,9 @@ HitEntry *hitEstimate(s32 *out)
   {
     Vec dir4 = {0.0f, 0.0f, 0.0f};
     dir4.y = -cy;
-    new_var = dir4; // FAKE: Vec copy through a temp; Vec dir4b = dir4 differs
+    dir4Copy = dir4; // FAKE: Vec copy through a temp; Vec dir4b = dir4 differs
     {
-      Vec dir4b = new_var;
+      Vec dir4b = dir4Copy;
       for (i = 0; i < 2; i++)
       {
         f32 m;
