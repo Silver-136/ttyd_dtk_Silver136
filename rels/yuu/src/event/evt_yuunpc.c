@@ -18,6 +18,7 @@
 #include "pmario_sound.h"
 #include "yuu.h"
 #include "data_tables.h"
+#include <math.h>
 
 typedef struct YuuNpcPose { char name[16]; char anim[8]; u16 field_0x18; f32 frames; f32 jump; s32 start; s32 count; u16 flags; f32 field_0x30; } YuuNpcPose;
 typedef struct YuuNpc { u16 id; u16 flags; s16 state; f32 field_0x8; Vec goal; Vec dest; Vec pos; Vec dir; f32 speed; f32 vy; f32 field_0x44; f32 zofs; s32 field_0x4c; s32 field_0x50; s16 poseId; s16 poses[4]; u8 field_0x5e[2]; NpcEntry* npc; f32 animSpeed; u64 time; } YuuNpc;
@@ -1071,17 +1072,6 @@ s32 yuunpc_juni(Vec* pos) {
     return n;
 }
 
-static inline f32 yuu_sqrtf(f32 x) {
-    if (x > 0.0f) {
-        double guess = __frsqrte((double)x);
-        guess = 0.5 * guess * (3.0 - guess * guess * x);
-        guess = 0.5 * guess * (3.0 - guess * guess * x);
-        guess = 0.5 * guess * (3.0 - guess * guess * x);
-        return (f32)(x * guess);
-    }
-    return x;
-}
-
 void ext_yuunpc_minigame4_init_sub(void) {
     f32 ytbl[4] = {45.0f, 5.0f, -34.0f, -74.0f};
     f32 ztbl[8] = {-7.0f, -1.0f, 5.0f, -5.0f, 1.0f, 7.0f, -3.0f, 3.0f};
@@ -1194,7 +1184,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
 
             npc->flags |= 2;
             m = i - 200;
-            cols = yuu_sqrtf(700.0f);
+            cols = sqrtf(700.0f);
             row = m / cols;
             col = m % cols;
             for (j2 = 0; j2 < 3; j2++) {

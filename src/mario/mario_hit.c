@@ -23,8 +23,7 @@
 #include "mario/mario_hit.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
-
-
+#include <math.h>
 
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
@@ -97,9 +96,6 @@ static inline BOOL marioChkBeroSub6(s32 attr) {
     }
 }
 
-static inline s32 hit_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 hit_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (hit_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
-
 static inline f32 marioHitNrmAngle(Vec* nrm) {
     f32 nz = nrm->z;
     f32 ny = nrm->y;
@@ -109,7 +105,7 @@ static inline f32 marioHitNrmAngle(Vec* nrm) {
     mp->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, y100) - 180.0f) + 0.5f) / 100.0f;
     mp->groundRot.y = 0.0f;
     mp->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nx, y100) - 180.0f) + 0.5f) / 100.0f;
-    return angleABf(0.0f, 0.0f, hit_sqrtf(nx * nx + nz * nz), -ny);
+    return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
 }
 
 static inline f32 marioHitNrmAnglePtr(Vec* nrm) {
@@ -117,7 +113,7 @@ static inline f32 marioHitNrmAnglePtr(Vec* nrm) {
     mp->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nrm->z, 100.0f * nrm->y) - 180.0f) + 0.5f) / 100.0f;
     mp->groundRot.y = 0.0f;
     mp->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nrm->x, 100.0f * nrm->y) - 180.0f) + 0.5f) / 100.0f;
-    return angleABf(0.0f, 0.0f, hit_sqrtf(nrm->x * nrm->x + nrm->z * nrm->z), -nrm->y);
+    return angleABf(0.0f, 0.0f, sqrtf(nrm->x * nrm->x + nrm->z * nrm->z), -nrm->y);
 }
 
 void marioHitCheckWidth(void) {
@@ -397,7 +393,7 @@ static inline void marioChkGndRoll(MarioWork* w) {
             if (hit) {
                 gx = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.z, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
                 gz = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * outNrm.x, 100.0f * outNrm.y) - 180.0f) + 0.5f) / 100.0f;
-                angleABf(0.0f, 0.0f, hit_sqrtf(outNrm.x * outNrm.x + outNrm.z * outNrm.z), -outNrm.y);
+                angleABf(0.0f, 0.0f, sqrtf(outNrm.x * outNrm.x + outNrm.z * outNrm.z), -outNrm.y);
             }
             if (hit) {
                 roll_grx = gx;
@@ -970,7 +966,7 @@ static inline f32 landonNrmAngle(f32 nx, f32 ny, f32 nz) {
     mp->groundRot.x = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nz, y100) - 180.0f) + 0.5f) / 100.0f;
     mp->groundRot.y = 0.0f;
     mp->groundRot.z = (s32)(100.0f * (angleABf(0.0f, 0.0f, 100.0f * nx, y100) - 180.0f) + 0.5f) / 100.0f;
-    return angleABf(0.0f, 0.0f, hit_sqrtf(nx * nx + nz * nz), -ny);
+    return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
 }
 
 static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm, f32* dist) {

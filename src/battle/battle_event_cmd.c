@@ -25,6 +25,7 @@
 #endif
 #include "battle/battle_ac_help.h"
 #include "pmario_sound.h"
+#include <math.h>
 
 //s32* eventId
 USER_FUNC(btlevtcmd_WaitEventEnd) {
@@ -204,7 +205,7 @@ USER_FUNC(btlevtcmd_SpawnUnit) {
     BattleUnitSetup* setup;
     BattleUnit* unit;
     s32 index;
-    
+
     index = args[0];
     setup = (BattleUnitSetup*)evtGetValue(event, args[1]);
     unit = BtlUnit_Spawn(setup, args[2]);
@@ -3112,47 +3113,6 @@ USER_FUNC(btlevtcmd_GetMoveFrame) {
     return EVT_RETURN_DONE;
 }
 
-static inline s32 bec_fpclassifyf(f32 x) {
-    switch (*(s32*)&x & 0x7F800000) {
-    case 0x7F800000:
-        if (*(s32*)&x & 0x007FFFFF) {
-            return 1;
-        }
-        else {
-            return 2;
-        }
-        break;
-    case 0:
-        if (*(s32*)&x & 0x007FFFFF) {
-            return 5;
-        }
-        else {
-            return 3;
-        }
-        break;
-    default:
-        return 4;
-    }
-}
-
-static inline f32 bec_sqrtf(f32 x) {
-    f32 r = x;
-    if (x > 0.0f) {
-        f64 guess = __frsqrte(x);
-        guess = 0.5 * guess * (3.0 - guess * guess * x);
-        guess = 0.5 * guess * (3.0 - guess * guess * x);
-        guess = 0.5 * guess * (3.0 - guess * guess * x);
-        r = x * guess;
-    }
-    else if (x < 0.0) {
-        r = *(f32*)__float_nan;
-    }
-    else if (bec_fpclassifyf(x) == 1) {
-        r = *(f32*)__float_nan;
-    }
-    return r;
-}
-
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
 f32 sinfd(f32 degrees);
 f32 cosfd(f32 degrees);
@@ -3191,7 +3151,7 @@ USER_FUNC(btlevtcmd_DivePosition) {
         BtlUnit_SetMoveTargetPos(unit, tx, ty, tz);
         {
             f32 dx = x - tx, dy = y - ty, dz = z - tz;
-            unit->mMoveDistance = bec_sqrtf(dx * dx + dy * dy + dz * dz);
+            unit->mMoveDistance = sqrtf(dx * dx + dy * dy + dz * dz);
         }
         if (unit->moveFrames == 0) {
             unit->moveFrames = unit->mMoveDistance / unit->mMoveSpeedXZ;
@@ -3230,7 +3190,7 @@ USER_FUNC(btlevtcmd_DivePosition) {
     }
     if (type == 0) {
         f32 dx = unit->mMoveTargetPos.x - unit->mMoveCurrentPos.x, dy = unit->mMoveTargetPos.y - unit->mMoveCurrentPos.y, dz = unit->mMoveTargetPos.z - unit->mMoveCurrentPos.z;
-        f32 d = bec_sqrtf(dx * dx + dy * dy + dz * dz);
+        f32 d = sqrtf(dx * dx + dy * dy + dz * dz);
         if (d == 0.0f) {
             d = 1.0f;
         }
@@ -3252,7 +3212,7 @@ USER_FUNC(btlevtcmd_DivePosition) {
     else {
         f32 dx = unit->mMoveTargetPos.x - unit->mMoveCurrentPos.x, dy = unit->mMoveTargetPos.y - unit->mMoveCurrentPos.y, dz = unit->mMoveTargetPos.z - unit->mMoveCurrentPos.z;
         s32 neg;
-        f32 d = bec_sqrtf(dx * dx + dy * dy + dz * dz);
+        f32 d = sqrtf(dx * dx + dy * dy + dz * dz);
         if (unit->mMoveTargetPos.x - unit->mMoveStartPos.x > 0.0f) {
             neg = 1;
         }
@@ -3323,7 +3283,7 @@ USER_FUNC(btlevtcmd_EllipseMovePosition) {
         BtlUnit_SetMoveTargetPos(unit, tx, ty, tz);
         {
             f32 dx = x - tx, dy = y - ty, dz = z - tz;
-            unit->mMoveDistance = bec_sqrtf(dx * dx + dy * dy + dz * dz);
+            unit->mMoveDistance = sqrtf(dx * dx + dy * dy + dz * dz);
         }
         if (unit->moveFrames == 0) {
             unit->moveFrames = unit->mMoveDistance / unit->mMoveSpeedXZ;
@@ -3347,7 +3307,7 @@ USER_FUNC(btlevtcmd_EllipseMovePosition) {
         f32 dx = unit->mMoveTargetPos.x - unit->mMoveStartPos.x, dz = unit->mMoveTargetPos.z - unit->mMoveStartPos.z;
         cx = (unit->mMoveStartPos.x + unit->mMoveTargetPos.x) / 2.0f;
         cz = (unit->mMoveStartPos.z + unit->mMoveTargetPos.z) / 2.0f;
-        r = 0.5f * bec_sqrtf(dx * dx + dz * dz);
+        r = 0.5f * sqrtf(dx * dx + dz * dz);
     }
     w = (f32)width;
     ang = angleABf(cx, cz, unit->mMoveStartPos.x, unit->mMoveStartPos.z);
@@ -4815,7 +4775,7 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
         BtlUnit_SetPartsMoveTargetPos(unit, tx, ty, tz);
         {
             f32 dx = x - tx, dy = y - ty, dz = z - tz;
-            unit->moveDistance = bec_sqrtf(dx * dx + dy * dy + dz * dz);
+            unit->moveDistance = sqrtf(dx * dx + dy * dy + dz * dz);
         }
         if (unit->moveTotalFrames == 0) {
             unit->moveTotalFrames = unit->moveDistance / unit->mMoveSpeedXZ;
@@ -4854,7 +4814,7 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
     }
     if (type == 0) {
         f32 dx = unit->mMoveTargetPos.x - unit->mMoveCurrentPos.x, dy = unit->mMoveTargetPos.y - unit->mMoveCurrentPos.y, dz = unit->mMoveTargetPos.z - unit->mMoveCurrentPos.z;
-        f32 d = bec_sqrtf(dx * dx + dy * dy + dz * dz);
+        f32 d = sqrtf(dx * dx + dy * dy + dz * dz);
         if (d == 0.0f) {
             d = 1.0f;
         }
@@ -4876,7 +4836,7 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
     else {
         f32 dx = unit->mMoveTargetPos.x - unit->mMoveCurrentPos.x, dy = unit->mMoveTargetPos.y - unit->mMoveCurrentPos.y, dz = unit->mMoveTargetPos.z - unit->mMoveCurrentPos.z;
         s32 neg;
-        f32 d = bec_sqrtf(dx * dx + dy * dy + dz * dz);
+        f32 d = sqrtf(dx * dx + dy * dy + dz * dz);
         if (unit->mMoveTargetPos.x - unit->mMoveStartPos.x > 0.0f) {
             neg = 1;
         }

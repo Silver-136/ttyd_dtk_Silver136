@@ -11,6 +11,7 @@
 #include <dolphin/os.h>
 #include "libc_decls.h"
 #include "cam_road.h"
+#include <math.h>
 
 void camRoadReset(void);
 void camShiftReset(void);
@@ -18,9 +19,6 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out);
 void OSReport(const char* msg, ...);
 double sin(double);
 double cos(double);
-
-static inline s32 cam_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 cam_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (cam_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
 
 // CameraId id, BOOL on
 USER_FUNC(evt_cam_ctrl_onoff) {
@@ -99,7 +97,7 @@ USER_FUNC(evt_cam_shake) {
             return EVT_RETURN_DONE;
         }
     }
-    len = cam_sqrtf(x * x + y * y);
+    len = sqrtf(x * x + y * y);
     onTime = 13000.0f * len;
     offTime = 50.0f * (1.0f - len);
     last = event->wInterpRelatedTime;

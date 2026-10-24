@@ -6,6 +6,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
+#include <math.h>
 
 typedef struct EffKumokumoChipN64Work {
     s32 type;      // 0x0
@@ -23,10 +24,6 @@ typedef struct EffKumokumoChipN64Work {
     s32 a2;        // 0x40
     f32 scale;     // 0x44
 } EffKumokumoChipN64Work;
-
-static inline s32 kk_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 kk_sqrtf(f32 x) { if (x == 0.0f) { return x; } else if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (kk_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
-
 
 static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, 0, 0, 0, 0, 0, 0, 0, 255},
@@ -58,7 +55,7 @@ EffectEntry* effKumokumoChipN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 
     dy = ty - y;
     dz = tz - z;
     dist = dx * dx + dy * dy + dz * dz;
-    { f32 zero = 0.0f; if (dist != zero) { f32 r; if (dist > zero) { f64 guess = __frsqrte(dist); guess = 0.5 * guess * (3.0 - guess * guess * dist); guess = 0.5 * guess * (3.0 - guess * guess * dist); guess = 0.5 * guess * (3.0 - guess * guess * dist); r = dist * guess; } else if (dist < 0.0) { r = *(f32*)__float_nan; } else if (kk_fpclassifyf(dist) == 1) { r = *(f32*)__float_nan; } else { r = dist; } dist = r; } }
+    { f32 zero = 0.0f; if (dist != zero) { f32 r; if (dist > zero) { f64 guess = __frsqrte(dist); guess = 0.5 * guess * (3.0 - guess * guess * dist); guess = 0.5 * guess * (3.0 - guess * guess * dist); guess = 0.5 * guess * (3.0 - guess * guess * dist); r = dist * guess; } else if (dist < 0.0) { r = NAN; } else if (isnan(dist)) { r = NAN; } else { r = dist; } dist = r; } }
     if (speed > 0.0f) {
         lifetime = dist / speed;
     } else {

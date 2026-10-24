@@ -9,6 +9,7 @@
 #include "pmario_sound.h"
 #include <string.h>
 #include "libc_decls.h"
+#include <math.h>
 
 f32 revise360(f32);
 f32 distABf(f32, f32, f32, f32);
@@ -55,42 +56,6 @@ s32 roll_flyout_flag2;
 static __declspec(section ".rodata") Vec rollOfs = {0.0f, 40.0f, 0.0f};
 
 f32 rollData[] = {3.0f, -0.05f, -0.5f, 0.5f, 7.0f, 180.0f, 140.0f, 10.0f, 1.2f, 2.0f, 0.8f};
-
-static inline s32 roll_fpclassifyf(f32 x) {
-    switch (*(s32*)&x & 0x7F800000) {
-    case 0x7F800000:
-        if (*(s32*)&x & 0x007FFFFF) {
-            return 1;
-        } else {
-            return 2;
-        }
-        break;
-    case 0:
-        if (*(s32*)&x & 0x007FFFFF) {
-            return 5;
-        } else {
-            return 3;
-        }
-        break;
-    default:
-        return 4;
-    }
-}
-
-static inline f32 roll_sqrtf(f32 x) {
-    if (x > 0.0f) {
-        f64 guess = __frsqrte(x);
-        guess = 0.5 * guess * (3.0 - guess * guess * x);
-        guess = 0.5 * guess * (3.0 - guess * guess * x);
-        guess = 0.5 * guess * (3.0 - guess * guess * x);
-        return x * guess;
-    } else if (x < 0.0) {
-        return *(f32*)__float_nan;
-    } else if (roll_fpclassifyf(x) == 1) {
-        return *(f32*)__float_nan;
-    }
-    return x;
-}
 
 static inline f32 trunc10(f32 x) {
     s32 i = (s32)(10.0f * x);
@@ -1267,7 +1232,7 @@ static inline void marioRollCan(void) {
         pos.y = pos.y + mario->wPlayerCollisionBox.y;
         dir = (Vec){0.0f, -1.0f, 0.0f};
         if (marioHitCheckVec(&pos, &dir, &out, &nrm, &dist)) {
-            f32 sq = roll_sqrtf(nrm.x * nrm.x + nrm.z * nrm.z);
+            f32 sq = sqrtf(nrm.x * nrm.x + nrm.z * nrm.z);
             f32 ang = angleABf(0.0f, 0.0f, sq, -nrm.y);
             f32 r = (f32)(s32)(0.5f + ang);
             if (rabs(ang) < 45.0) {
@@ -1310,7 +1275,7 @@ void marioRollStrippedPool(void) {
     mario->rot.z = 10.0f;
     mario->scale.x = 135.0f;
     mario->scale.y = 1.2f;
-    mario->scale.z = roll_sqrtf(mario->fallStartPos.x);
+    mario->scale.z = sqrtf(mario->fallStartPos.x);
     mario->fallStartPos.y = __fabsf(mario->fallStartPos.z) < 45.0;
 }
 

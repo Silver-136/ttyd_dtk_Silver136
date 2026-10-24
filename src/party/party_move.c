@@ -20,7 +20,7 @@
 #include "party/party_move.h"
 #include "driver/mobjdrv.h"
 #include "libc_decls.h"
-
+#include <math.h>
 
 typedef struct Footmark {
     u8 flag;    // 0x0
@@ -937,9 +937,6 @@ void partyMoveCheckWall(PartyEntry* party) {
 
 s16 partyMarioHosei(PartyEntry* party);
 
-static inline s32 pm_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 pm_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (pm_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
-
 void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
     MarioWork* mario = party->playerPtr;
     s32 hosei;
@@ -979,7 +976,7 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
     z = party->floorMoveZ + party->pushVelZ + party->moveSpeed * c;
     *dir = angleABf(0.0f, 0.0f, x, z);
     mul = (party->flags & 0x80) ? 0.75f : 1.0f;
-    *spd = mul * pm_sqrtf(x * x + z * z);
+    *spd = mul * sqrtf(x * x + z * z);
 }
 
 s16 partyMarioHosei(PartyEntry* party) {

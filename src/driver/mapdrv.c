@@ -11,6 +11,7 @@
 #include "driver/lightdrv.h"
 #include "driver/shadowdrv.h"
 #include "gxsub.h"
+#include <math.h>
 double sin(double);
 double cos(double);
 static inline f32 sinf(f32 x) { return sin(x); }
@@ -1439,7 +1440,7 @@ static inline void mapMainLight_ll(MapAnim* anim, LightEntry* lp, MapAnimLightDa
 	int n, c;
 	f32 cur;
 
-						
+
 						for (n = 1; n < d->keyCount; n++) {
 							MapAnimKey9* k0 = &d->keys[n - 1];
 							MapAnimKey9* k1 = &d->keys[n];
@@ -1473,7 +1474,7 @@ static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightDa
 	int n, c;
 	f32 cur;
 
-						
+
 						for (n = 1; n < d->keyCount; n++) {
 							MapAnimKey5* k0 = &d->keys[n - 1];
 							MapAnimKey5* k1 = &d->keys[n];
@@ -2224,7 +2225,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
 	map = (GXTexMapID)texCount;
 	coord = (GXTexCoordID)texCount;
 	indStages = 0;
-	
+
 	if ((s32)texCount > 0) {
 		switch (drawMode) {
 			case 0:
@@ -3836,10 +3837,6 @@ void mapSetProjMtx(Mtx mtx) {
 	MTXCopy(mtx, projMtx);
 }
 
-extern int __float_nan[];
-static inline s32 sp_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 sp_sqrtf(f32 x) { const f64 _half = .5; const f64 _three = 3.0; if (x > 0.0f) { f64 guess = __frsqrte(x); guess = _half * guess * (_three - guess * guess * x); guess = _half * guess * (_three - guess * guess * x); guess = _half * guess * (_three - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (sp_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
-
 void spline_maketable(s32 n, Vec* pts, f32* t, Vec* out) {
 	f32* h;
 	Vec* w;
@@ -3854,7 +3851,7 @@ void spline_maketable(s32 n, Vec* pts, f32* t, Vec* out) {
 		dx = pts[i].x - pts[i - 1].x;
 		dy = pts[i].y - pts[i - 1].y;
 		dz = pts[i].z - pts[i - 1].z;
-		t[i] = t[i - 1] + sp_sqrtf(dx * dx + dy * dy + dz * dz);
+		t[i] = t[i - 1] + sqrtf(dx * dx + dy * dy + dz * dz);
 	}
 	for (i = 1; i < n; i++) {
 		t[i] /= t[n - 1];

@@ -12,6 +12,7 @@
 #include "memory.h"
 #include "sdk/texPalette.h"
 #include "libc_decls.h"
+#include <math.h>
 #define EXT_LIT(sym, val) (val)
 
 //.data
@@ -139,7 +140,7 @@ void envCapture(CameraId camId, void* param) { //1:1
     EnvironmentWork* wp = envGetWork();
     u16 var0, var1, var2, var3;
     u32 size;
-    
+
     var0 = gp->fbWidth;
     var1 = gp->efbHeight;
     var2 = (u16)(((u32)var0 & 0xFFFF) / 2);
@@ -796,10 +797,6 @@ void envGlareFilterZ(f32 zscale) {
 }
 
 int rand(void);
-static inline s32
-env_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32
-env_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * (0.5 * guess * (3.0 - guess * guess * x)); } else if (x < 0.0) { return *(f32*)__float_nan; } else if (env_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
@@ -834,7 +831,7 @@ void envDisp_FF(void) {
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-        r = env_sqrtf(gp->fbWidth / 2 * gp->fbWidth / 2 + gp->efbHeight / 2 * gp->efbHeight / 2);
+        r = sqrtf(gp->fbWidth / 2 * gp->fbWidth / 2 + gp->efbHeight / 2 * gp->efbHeight / 2);
         GXBegin(GX_LINES, GX_VTXFMT0, 2000);
         for (i = 0; i < 1000; i++) {
             angle = 6.2831855f * i / 1000.0f;

@@ -7,6 +7,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
+#include <math.h>
 
 double log(double);
 
@@ -83,10 +84,6 @@ GXColor hibana_col[32] = {
 
 s32 seed = 1;
 
-
-static inline s32 pt_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 pt_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (pt_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
-
 static inline f32 pt_frand(void) {
     seed = seed * 0x5EEDF715 + 0x1B0CB173;
     return (f32)(u32)seed * 2.3283064e-10f;
@@ -112,7 +109,7 @@ static inline f32 pt_gauss(void) {
             w = x1 * x1 + x2 * x2;
         } while (w > 1.0f);
         w = (-2.0f * (f32)log(w)) / w;
-        w = pt_sqrtf(w);
+        w = sqrtf(w);
         y1 = x1 * w;
         y2 = x2 * w;
         use_last = 1;
@@ -141,7 +138,7 @@ void ParticleEmit(EffectEntry* effect, ParticleItem* p, ParticleEmitter* emitter
     p->vel.x *= 0.5f;
     p->vel.z *= 0.5f;
     w *= 0.25f;
-    p->vel.y = pt_sqrtf(1.0f - w);
+    p->vel.y = sqrtf(1.0f - w);
     PSVECScale(&p->vel, &p->vel, work->speed);
     PSMTXMultVec(emitter->mtx, &p->vel, &p->vel);
     PSVECScale(&p->vel, &p->pos, 2.5f);

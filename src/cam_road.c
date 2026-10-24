@@ -8,6 +8,7 @@
 #include "libc_decls.h"
 #include "cam_road.h"
 #include "addr_word.h"
+#include <math.h>
 typedef struct CamRoadHit {
     f32 t;                 // 0x00
     f32 f_04;              // 0x04
@@ -21,8 +22,6 @@ double sin(double);
 double cos(double);
 double acos(double);
 double atan2(double, double);
-static inline s32 cr_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 cr_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (cr_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
 static const Vec unk_vec0 = {0.0f, 1.0f, 0.0f};
 static const Vec unk_vec1 = {90.0f, 110.0f, 13.0f};
 static const Vec unk_vec2 = {-110.0f, -70.0f, -190.0f};
@@ -236,7 +235,7 @@ s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
  static inline f32 crLen2(f32 x, f32 z) {
     f32 l = x * x + z * z;
     if (l != 0.0) {
-        l = cr_sqrtf(l);
+        l = sqrtf(l);
     }
     return l;
 }
@@ -326,19 +325,19 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
             r0x = x0 - cx;
             r0 = r0x * r0x + r0z * r0z;
             if (r0 != 0.0) {
-                r0 = cr_sqrtf(r0);
+                r0 = sqrtf(r0);
             }
             dpz = pos.z - cz;
             dpx = pos.x - cx;
             rp = dpx * dpx + dpz * dpz;
             if (rp != 0.0) {
-                rp = cr_sqrtf(rp);
+                rp = sqrtf(rp);
             }
             r1z = z1 - cz;
             r1x = x1 - cx;
             r1 = r1x * r1x + r1z * r1z;
             if (r1 != 0.0) {
-                r1 = cr_sqrtf(r1);
+                r1 = sqrtf(r1);
             }
             c0 = (r0x * dpx + r0z * dpz) / (r0 * rp);
             c1 = (r1x * dpx + r1z * dpz) / (r1 * rp);
@@ -521,7 +520,7 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
             yy = s * (nrm[i + 1].y - nrm[i].y) + nrm[i].y;
             dist = dx2 * dx2 + dz2 * dz2;
             if (dist > 0.0) {
-                dist = cr_sqrtf(dist);
+                dist = sqrtf(dist);
             }
             if (dist >= minDist) {
                 continue;
@@ -793,7 +792,7 @@ void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32
         flags = hit.flags;
         ny = hit.dir.y;
         if (len2 != 0.0) {
-            len = cr_sqrtf(len2);
+            len = sqrtf(len2);
             nx = nx / len;
             ny = 0.0f;
             nz = nz / len;
@@ -856,7 +855,7 @@ void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32
                 qx = x;
                 qz = z;
             }
-            
+
             cs2 = (f32)cos(fov);
             sn = (f32)sin(fov);
             w = 0.01f * (g * (zoom * (640.0f * (dist * sn / cs2) / 480.0f)));
@@ -1062,9 +1061,9 @@ u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
             guess = 0.5 * guess * (3.0 - guess * guess * dist);
             dist = dist * guess;
         } else if (dist < 0.0) {
-            dist = *(f32*)__float_nan;
-        } else if (cr_fpclassifyf(dist) == 1) {
-            dist = *(f32*)__float_nan;
+            dist = NAN;
+        } else if (isnan(dist)) {
+            dist = NAN;
         }
     } else {
         dist = 0.0f;

@@ -244,8 +244,15 @@ cflags_runtime = [
     "-inline auto",
 ]
 
+
+def with_game_msl(flags: List[str]) -> List[str]:
+    # Game code was built with the MSL headers of its own CodeWarrior, searched before the SDK's older libc headers
+    i = flags.index("-i libs/dolsdk2004/include/libc")
+    return [*flags[:i], "-i libs/msl/include", *flags[i:]]
+
+
 # DOL flags
-cflags_static = [
+cflags_static = with_game_msl([
     *cflags_base,
     "-once",
     "-fp_contract on",
@@ -257,7 +264,7 @@ cflags_static = [
     "-DMUSY_VERSION_MAJOR=2",
     "-DMUSY_VERSION_MINOR=0",
     "-DMUSY_VERSION_PATCH=3",
-]
+])
 
 # TRK flags
 cflags_trk = [
@@ -273,7 +280,7 @@ cflags_trk = [
 ]
 
 # REL flags
-cflags_rel = [
+cflags_rel = with_game_msl([
     *cflags_base,
     "-O4,s",
     "-use_lmw_stmw on",
@@ -283,7 +290,7 @@ cflags_rel = [
     "-sdata2 0",
     "-pool off",
     "-fp_contract on",
-]
+])
 
 config.linker_version = "GC/2.6"
 

@@ -19,6 +19,7 @@
 #include "las.h"
 #include "libc_decls.h"
 #include "driver/hitdrv.h"
+#include <math.h>
 
 typedef struct FirebarBall { s32 pose; Vec pos; } FirebarBall;
 typedef struct FirebarSetup { u8 type; u8 count; u8 field_0x2[2]; Vec pos; f32 spacing; f32 field_0x14; f32 speed; void* callback; f32 field_0x20; f32 radius; } FirebarSetup;
@@ -39,8 +40,6 @@ void _firebar_rot(FirebarWork* wp);
 void _firebar_trans(FirebarWork* wp);
 double cos(double x);
 s32 _firebar_hitCheck2(FirebarWork* wp);
-static inline s32 fb_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 fb_sqrtf(f32 x) { const f64 _half = .5; const f64 _three = 3.0; if (x > 0.0f) { f64 guess = __frsqrte(x); guess = _half * guess * (_three - guess * guess * x); guess = _half * guess * (_three - guess * guess * x); guess = _half * guess * (_three - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (fb_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
 
 USER_FUNC(coin_entry);
 USER_FUNC(evt_bero_get_info);
@@ -381,7 +380,7 @@ s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
     } else if (__fabsf(dy) < mario->wPlayerCollisionBox.y) {
         near = TRUE;
     }
-    if (near && fb_sqrtf(dx * dx + dz * dz) <= mario->wPlayerCollisionBox.x / 2.0f / 2.0f + wp->spacing / 2.0f * wp->scale &&
+    if (near && sqrtf(dx * dx + dz * dz) <= mario->wPlayerCollisionBox.x / 2.0f / 2.0f + wp->spacing / 2.0f * wp->scale &&
         vivianGetStatus() != 1 && vivianGetStatus() != 2) {
         return 1;
     }

@@ -26,6 +26,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "driver/extdrv.h"
+#include <math.h>
 
 int rand(void);
 s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz);
@@ -33,8 +34,6 @@ void npcTuningRy(NpcEntry* npc, f32 ry);
 double sin(double x);
 double cos(double x);
 s32 psndSFXOn_3D(const char* name, Vec* position);
-static inline s32 k_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 k_sqrtf(f32 x) { const f64 _half = .5; const f64 _three = 3.0; if (x > 0.0f) { f64 guess = __frsqrte(x); guess = _half * guess * (_three - guess * guess * x); guess = _half * guess * (_three - guess * guess * x); guess = _half * guess * (_three - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (k_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
 s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario);
 void _kurokaron_next_move_index(void);
 typedef struct Senkaron { s8 state; u16 area; s32 timer; f32 vx; f32 vy; f32 vz; u32 flags; } Senkaron;
@@ -365,7 +364,7 @@ USER_FUNC(kurokaron_move_position) {
         npc->jumpTargetPos.z = z;
         npc->jumpStartPos = npc->position;
         PSVECSubtract(&npc->jumpTargetPos, &npc->jumpStartPos, &diff);
-        dist = k_sqrtf(diff.x * diff.x + diff.z * diff.z);
+        dist = sqrtf(diff.x * diff.x + diff.z * diff.z);
         npc->moveDir = angleABf(0.0f, 0.0f, diff.x, diff.z);
         npc->moveSpeed = speed;
         npc->moveOffset.y = 0.0f;
@@ -377,10 +376,10 @@ USER_FUNC(kurokaron_move_position) {
     }
     mario = marioGetPtr();
     PSVECSubtract(&npc->jumpTargetPos, &npc->position, &diff);
-    dist = k_sqrtf(diff.x * diff.x + diff.z * diff.z);
+    dist = sqrtf(diff.x * diff.x + diff.z * diff.z);
     step = (20.0f * npc->moveSpeed) / 1000.0f;
     PSVECSubtract(&mario->position, &npc->position, &diff);
-    marioDist = k_sqrtf(diff.x * diff.x + diff.z * diff.z);
+    marioDist = sqrtf(diff.x * diff.x + diff.z * diff.z);
     if (marioDist < 80.0f && kurokaron_vivian_prev_sts == 3 && vivianGetStatus() == 0) {
         kurokaron_stop_cnt = 60;
     }
@@ -984,9 +983,9 @@ static void senkaron_ext_main(void) {
                         guess = .5 * guess * (3.0 - guess * guess * d2);
                         d2 = d2 * guess;
                     } else if (d2 < 0.0) {
-                        d2 = *(f32*)__float_nan;
-                    } else if (k_fpclassifyf(d2) == 1) {
-                        d2 = *(f32*)__float_nan;
+                        d2 = NAN;
+                    } else if (isnan(d2)) {
+                        d2 = NAN;
                     }
 
                     s->vx = push + 3.0f * dx / d2;
@@ -1115,9 +1114,9 @@ static void senkaron_ext_main(void) {
             guess = .5 * guess * (3.0 - guess * guess * dist);
             dist = dist * guess;
         } else if (dist < 0.0) {
-            dist = *(f32*)__float_nan;
-        } else if (k_fpclassifyf(dist) == 1) {
-            dist = *(f32*)__float_nan;
+            dist = NAN;
+        } else if (isnan(dist)) {
+            dist = NAN;
         }
 
         switch (mario->currMotionId) {

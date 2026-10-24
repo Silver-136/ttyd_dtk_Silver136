@@ -3,6 +3,7 @@
 #include "data/npc_data.h"
 #include "libc_decls.h"
 #include "pmario_sound.h"
+#include <math.h>
 #undef npcCheckInterrupt
 BOOL npcCheckInterrupt(NpcEntry* npc);
 #include "dolphin/gx/GXStruct.h"
@@ -48,8 +49,6 @@ void FontDrawStringShake(f32 x, f32 y, const char* message);
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
 
 #define NPC_RAD2DEG(r) ((r) * 57.29579f)
-static inline s32 npc_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 npc_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * (0.5 * guess * (3.0 - guess * guess * x)); } else if (x < 0.0) { return *(f32*)__float_nan; } else if (npc_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
 USER_FUNC(btlevtcmd_ftomsec);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_msg_print);
@@ -767,10 +766,10 @@ void npcMain(void) {
                             npcCheckHitMarioSide(entry);
                         }
                         {
-                            
+
                             PSVECSubtract(&entry->position, &entry->prevPosition, &dv);
                             if (entry->flags & 0x400 && entry->moveDt > 0.0f) {
-                                f32 spd = npc_sqrtf(dv.x * dv.x + dv.z * dv.z) / entry->moveDt;
+                                f32 spd = sqrtf(dv.x * dv.x + dv.z * dv.z) / entry->moveDt;
                                 if (spd < 0.1f) {
                                     if (entry->moveAnimState != 1) {
                                         animPoseSetAnim(entry->poseId, entry->tribe->stayAnim, TRUE);
@@ -809,7 +808,7 @@ void npcMain(void) {
                             if (entry->territoryType == 1) {
                                 f32 tz = entry->territoryBase.z - entry->position.z;
                                 f32 tx = entry->territoryBase.x - entry->position.x;
-                                f32 d = npc_sqrtf(tx * tx + tz * tz);
+                                f32 d = sqrtf(tx * tx + tz * tz);
                                 if (d > (st == 2 ? entry->territoryHoming.x : entry->territoryHoming.x)) {
                                     trig = 1;
                                 }
@@ -844,7 +843,7 @@ void npcMain(void) {
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv2);
                             dir = entry->direction;
                             if (entry->jumpFlags & 2) {
-                                if (npc_sqrtf(dv2.x * dv2.x + dv2.z * dv2.z) > 0.05f) {
+                                if (sqrtf(dv2.x * dv2.x + dv2.z * dv2.z) > 0.05f) {
                                     dir = entry->moveDir;
                                 }
                             }
@@ -852,7 +851,7 @@ void npcMain(void) {
                             { s32 ok_; NPC_CHKMARIO(ok_); if (!ok_) {
                                 trig = 1;
                             } else {
-                                dist = npc_sqrtf(dx * dx + dz * dz);
+                                dist = sqrtf(dx * dx + dz * dz);
                                 if (dist > 0.25f * entry->homingRange) {
                                     if (dy > entry->territoryLoiter.y) {
                                         trig = 1;
@@ -885,7 +884,7 @@ void npcMain(void) {
                             dy = m->position.y - entry->position.y;
 #ifdef VERSION_G8ME01
                             // US: in the Bowser levels the search range shrinks with kpaGetLevel()
-                            dist = npc_sqrtf(dx * dx + dz * dz);
+                            dist = sqrtf(dx * dx + dz * dz);
                             sd = dist;
                             if (entry->flags & 0x8000000) {
                                 f32 kpaRange[4] = {0.0f, 0.0f, 30.0f, 100.0f};
@@ -905,7 +904,7 @@ void npcMain(void) {
                                     if (sd > entry->searchRange) {
 #else
                             dist = dx * dx + dz * dz;
-                            npc_sqrtf(dist);
+                            sqrtf(dist);
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
                             dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
                             trig = 1;
@@ -913,7 +912,7 @@ void npcMain(void) {
                                 trig = 0;
                             } else {
                                 f32 a14;
-                                dist = npc_sqrtf(dist);
+                                dist = sqrtf(dist);
                                 if (dist > 0.25f * entry->searchRange) {
                                     if (dist > entry->searchRange) {
 #endif
@@ -934,7 +933,7 @@ void npcMain(void) {
                                         if (entry->territoryType == 1) {
                                             f32 tz = entry->territoryBase.z - entry->position.z;
                                             f32 tx = entry->territoryBase.x - entry->position.x;
-                                            f32 d = npc_sqrtf(tx * tx + tz * tz);
+                                            f32 d = sqrtf(tx * tx + tz * tz);
                                             if (d > 0.75 * entry->territoryHoming.x) {
                                                 trig = 0;
                                             }
@@ -1250,7 +1249,7 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
         dx = (npc->position.x - ( range * npc_sin(rad) )) - mario->position.x;
         dz = (npc->position.z + ( range * npc_cos(rad) )) - mario->position.z;
     }
-    len = npc_sqrtf(( dx * dx ) + ( dz * dz) );
+    len = sqrtf(( dx * dx ) + ( dz * dz) );
     if (len > ( (mario->wPlayerCollisionBox.z > 4.0f ) ? ( 3.0f ) : ( 1.5f))) { if (1 ) {
         scale = 2.0f / len;
         dx *= scale;
@@ -1389,7 +1388,7 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
     }
     sincosf(&s, &c, angleABf(0.0f, 0.0f, dx, dz));
 
-    dist = npc_sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
+    dist = sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
     height = 0.2f * npc->height;
     if (height > 10.0f) {
         height = 10.0f;
@@ -1409,14 +1408,14 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
         return hit;
     }
 
-    dist = npc_sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
+    dist = sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
     height = 0.4f * npc->height;
     if (npc->flags & 0x2000) {
         hit = hitCheckAttr(4, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     } else {
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
     }
-    if (hit && angleABf(0.0f, 0.0f, npc_sqrtf(nx * nx + nz * nz), -ny) >= 45.0f) {
+    if (hit && angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny) >= 45.0f) {
         npcSideSlide(outX, outZ, dx, dz, nx, nz);
         if (npc->flags & 0x10000) {
             f32 a = reviseAngle(180.0f + *angle);
@@ -1426,7 +1425,7 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
         return hit;
     }
 
-    dist = npc_sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
+    dist = sqrtf(dx * dx + dz * dz) + 0.75f * npc->width;
     height = 0.75f * npc->height;
     if (npc->flags & 0x2000) {
         hit = hitCheckAttr(4, &hx, &hy, &hz, &dist, &nx, &ny, &nz, npc->position.x, npc->position.y + height, npc->position.z, s, 0.0f, c);
@@ -1465,8 +1464,8 @@ NpcEntry* npcNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
             dx = x - entry->position.x;
             dz = z - entry->position.z;
             dy = y - entry->position.y;
-            dist = npc_sqrtf(dx * dx + dz * dz);
-            npc_sqrtf(dx * dx + dy * dy + dz * dz);
+            dist = sqrtf(dx * dx + dz * dz);
+            sqrtf(dx * dx + dy * dy + dz * dz);
             if (dist < range) {
                 found = entry;
             }
@@ -1905,7 +1904,7 @@ void fbatEncountCheck(void)
             f32 ny;
             f32 nz;
             sincosf(&s, &c, angleABf(0.0f, 0.0f, dx, dz));
-            len = npc_sqrtf((dx * dx) + (dz * dz));
+            len = sqrtf((dx * dx) + (dz * dz));
             if (!hitCheckFilter((void *) 0, &hx, &hy, &hz, &len, &nx, &ny, &nz, mario->position.x, mario->position.y + (0.75f * mario->wPlayerCollisionBox.y), mario->position.z, s, 0.0f, c))
             {
               hit = 1;
@@ -2446,7 +2445,7 @@ void* fbatHitCheck(u32 flags, void* a1) {
                     if (mario->position.y + mario->wPlayerCollisionBox.y <= (*(f32*)&((NpcEntry*)npc)->position.y)) continue;
                     dz = mario->position.z - npc->position.z;
                     dx = mario->position.x - (*(f32*)&((NpcEntry*)npc)->position.x);
-                    dist = npc_sqrtf(dx * dx + dz * dz);
+                    dist = sqrtf(dx * dx + dz * dz);
                     if (dist > 0.5f * (mario->wPlayerCollisionBox.x + (*(f32*)&((NpcEntry*)npc)->width))) continue;
                     if (dist >= res.dist) continue;
                     if (noJump && !((*(u32*)&((NpcEntry*)npc)->jumpFlags) & 0x10000) && mario->mutekiTimer <= 0) {
@@ -2689,7 +2688,7 @@ NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 
             dy = y - (npc->position.y + npc->height);
         }
     }
-    *dist = npc_sqrtf(dx * dx + dy * dy + dz * dz);
+    *dist = sqrtf(dx * dx + dy * dy + dz * dz);
     if (*dist < 0.5f * npc->width + r) {
         return npc;
     }

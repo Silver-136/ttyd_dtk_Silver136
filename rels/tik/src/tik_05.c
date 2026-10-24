@@ -32,6 +32,7 @@
 #include "libc_decls.h"
 #include "evt/evt_npc.h"
 #include "mario/mario_cam.h"
+#include <math.h>
 
 double sin(double);
 double cos(double);
@@ -50,8 +51,6 @@ static KaitenParam* ckp1;
 static KaitenParam* ckpw;
 BrokenWork broken_work;
 s32 select;
-static inline s32 tb_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 tb_sqrtf(f32 x) { const f64 _half = .5; const f64 _three = 3.0; if (x > 0.0f) { f64 guess = __frsqrte(x); guess = _half * guess * (_three - guess * guess * x); guess = _half * guess * (_three - guess * guess * x); return x * (_half * guess * (_three - guess * guess * x)); } else if (x < 0.0) { return *(f32*)__float_nan; } else if (tb_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
 static inline f32 tb_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
 static inline f32 tb_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
 void tiz_broken_draw(CameraId cameraId, void* param);
@@ -1113,7 +1112,7 @@ USER_FUNC(tiz_broken) {
                 }
                 if (dx || dy) {
 #ifdef VERSION_G8ME01
-                    // FAKE: tb_sqrtf(dx * dx + dy * dy) expanded by hand with the
+                    // FAKE: sqrtf(dx * dx + dy * dy) expanded by hand with the
                     // value and Newton guess in function-scope locals (sq, guess);
                     // same instructions, but the temps of the inline colour differently in US.
                     sq = dx * dx + dy * dy;
@@ -1123,15 +1122,15 @@ USER_FUNC(tiz_broken) {
                         guess = .5 * guess * (3.0 - guess * guess * sq);
                         sq = sq * (.5 * guess * (3.0 - guess * guess * sq));
                     } else if (sq < 0.0) {
-                        sq = *(f32*)__float_nan;
-                    } else if (tb_fpclassifyf(sq) == 1) {
-                        sq = *(f32*)__float_nan;
+                        sq = NAN;
+                    } else if (isnan(sq)) {
+                        sq = NAN;
                     }
                     nx = dx / sq;
                     ny = dy / sq;
                     len = sq;
 #else
-                    len = tb_sqrtf(dx * dx + dy * dy);
+                    len = sqrtf(dx * dx + dy * dy);
                     inv = dx / len; // FAKE: copy temp; plain nx = dx / len changes regalloc (+4 B)
                     nx = inv;
                     ny = dy / len;

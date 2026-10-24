@@ -32,6 +32,7 @@
 #include <string.h>
 #include "evt/evt_lecture.h"
 #include "libc_decls.h"
+#include <math.h>
 
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
@@ -52,9 +53,6 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
     v.z = z;
     return v;
 }
-
-static inline s32 item_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 item_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (item_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
 
 extern ItemData itemDataTable[];
 void iconEntry(const char* name, u16 iconId);
@@ -768,8 +766,8 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
 		if (entry->mode == 2) continue;
 		dx = x - entry->position.x; dy = y - entry->position.y;
 		dz = z - entry->position.z;
-		xzdist = item_sqrtf(dx * dx + dz * dz);
-		dist = item_sqrtf(dx * dx + dy * dy + dz * dz);
+		xzdist = sqrtf(dx * dx + dz * dz);
+		dist = sqrtf(dx * dx + dy * dy + dz * dz);
 		if (xzdist < range && marioItemGetOk() && marioGetJabaraState() != 1 &&
 			marioGetJabaraState() != 4 && marioGetJabaraState() != 5)
 		{
@@ -1711,7 +1709,7 @@ HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 d
 	}
 	sincosf(&sin, &cos, angleABf(0.0f, 0.0f, dx, dz));
 	h = 15.0f;
-	hitDist = 10.0f + item_sqrtf(dx * dx + dz * dz);
+	hitDist = 10.0f + sqrtf(dx * dx + dz * dz);
 	hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
 		entry->position.x, entry->position.y + h, entry->position.z, sin, 0.0f, cos);
 	if (hit) {
@@ -1726,7 +1724,7 @@ HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 d
 		return hit;
 	}
 	h = 15.0f;
-	hitDist = 10.0f + item_sqrtf(dx * dx + dz * dz);
+	hitDist = 10.0f + sqrtf(dx * dx + dz * dz);
 	hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
 		entry->position.x, entry->position.y + h, entry->position.z, sin, 0.0f, cos);
 	if (hit) {

@@ -14,6 +14,7 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 #include "koopa_hit.h"
+#include <math.h>
 s32 kpaEnemyFireHitChk(f32 x, f32 y, f32 z, f32 h, f32 w);
 void _restfpr_28(void);
 void _savefpr_28(void);
@@ -29,11 +30,8 @@ extern s32 kpaFireAttackCheck(void);
 #define KRIDE(i) (KPW->rideHit[i])
 #define KRIDED(i) (KPW->rideDist[i])
 
-static inline s32 party_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 party_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (party_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
-
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
-    return angleABf(0.0f, 0.0f, party_sqrtf(x * x + z * z), -y);
+    return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
 }
 
 static inline f32 kpa_nrmSet(MarioWork* m, f32 x, f32 y, f32 z) {

@@ -1,6 +1,7 @@
 #include "libc_decls.h"
 #include "driver/seqdrv.h"
 #include "system.h"
+#include <math.h>
 
 #define _MATH_H_
 double cos(double);
@@ -5042,9 +5043,6 @@ static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
 	return v13;
 }
 
-static inline s32 ps_fpclassifyf(f32 x) { switch (*(s32*)&x & 0x7F800000) { case 0x7F800000: if (*(s32*)&x & 0x007FFFFF) { return 1; } else { return 2; } break; case 0: if (*(s32*)&x & 0x007FFFFF) { return 5; } else { return 3; } break; default: return 4; } }
-static inline f32 ps_sqrtf(f32 x) { if (x > 0.0f) { f64 guess = __frsqrte(x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); guess = 0.5 * guess * (3.0 - guess * guess * x); return x * guess; } else if (x < 0.0) { return *(f32*)__float_nan; } else if (ps_fpclassifyf(x) == 1) { return *(f32*)__float_nan; } return x; }
-
 //calc3D, returns the first bit of SND_3DINFO (vol, pan, span, unused)
 u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
 	static u8 PAN[4];
@@ -5095,9 +5093,9 @@ u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
 			guess = 0.5 * guess * (3.0 - guess * guess * d);
 			d = d * guess;
 		} else if (d < 0.0) {
-			d = *(f32*)__float_nan;
-		} else if (ps_fpclassifyf(d) == 1) {
-			d = *(f32*)__float_nan;
+			d = NAN;
+		} else if (isnan(d)) {
+			d = NAN;
 		}
 	}
 	{
@@ -5407,7 +5405,7 @@ void psndBGMMain(void) {
 				} else {
 					alive = 1;
 				}
-			
+
 			if (!alive) {
 				bgm->listId = -1;
 				continue;
