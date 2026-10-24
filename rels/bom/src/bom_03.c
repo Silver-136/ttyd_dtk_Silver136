@@ -118,7 +118,7 @@ EVT_BEGIN(bom_03_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_BOM1"))
     CALL(evt_snd_envon, 272, STRING("ENV_STG7_BOM1"))
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -405, 60, 25, 0, GSWF(5566), 0)
-    CALL(evt_item_entry, STRING("item00\0"), 125, 45, 5, 120, 16, GSWF(5662), 0)
+    CALL(evt_item_entry, STRING("item00"), 125, 45, 5, 120, 16, GSWF(5662), 0)
     RETURN
 EVT_END()
 

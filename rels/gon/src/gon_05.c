@@ -865,7 +865,7 @@ EVT_BEGIN(gon_05_init_evt)
     END_IF
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 0, 60, 0, 0, 0)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -200, 1950, -150, 0, GSWF(5539), 0)
-    CALL(evt_map_playanim, STRING("hokori\0"), 1, 0)
+    CALL(evt_map_playanim, STRING("hokori"), 1, 0)
     RETURN
 EVT_END()
 

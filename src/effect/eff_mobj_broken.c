@@ -132,7 +132,7 @@ EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
         count = 9;
         break;
     }
-    effect->type = "MObjBroken\0";
+    effect->type = "MObjBroken";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(EffMObjBrokenWork));
     effect->userdata = work;

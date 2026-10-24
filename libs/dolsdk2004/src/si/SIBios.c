@@ -790,7 +790,7 @@ char* SIGetTypeString(u32 type) {
     case SI_GC_KEYBOARD:
         return "Keyboard";
     case SI_GC_STEERING:
-        return "Steering\0\0\0";
+        return "Steering";
     case SI_ERROR_UNKNOWN:
     default:
         return "Unknown";

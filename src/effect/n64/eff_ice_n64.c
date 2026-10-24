@@ -58,7 +58,7 @@ EffectEntry* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     s32 i;
 
     effect = effEntry();
-    effect->type = "IceN64\0";
+    effect->type = "IceN64";
     effect->count = 9;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffIceN64Work));
     effect->userdata = work;

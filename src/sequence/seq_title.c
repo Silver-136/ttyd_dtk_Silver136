@@ -107,7 +107,7 @@ void L_titleInit(SequenceWork* work) {
 			}
 		}
 		else {
-			psndBGMOn(0x200, "BGM_TITLE1\0");
+			psndBGMOn(0x200, "BGM_TITLE1");
 			if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
 				sound.streams[psbgm[0].streamId].flags |= 0x8000;
 			}

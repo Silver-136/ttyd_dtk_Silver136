@@ -190,7 +190,7 @@ void effTexSetupN64(void) {
 		lang = (u32)gp->language == 0 ? "jp" : "us";
 		sprintf(path, "%s/e/%s/effect_n64.tpl", getMarioStDvdRoot(), lang);
 #else
-		sprintf(path, "%s/e/jp/effect_n64.tpl\0", getMarioStDvdRoot());
+		sprintf(path, "%s/e/jp/effect_n64.tpl", getMarioStDvdRoot());
 #endif
 		entry = DVDMgrOpen(path, 2, 0);
 		length = OSRoundUp32B(DVDMgrGetLength(entry));

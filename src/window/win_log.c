@@ -251,7 +251,7 @@ void winLogInit(WindowWork* w) {
     if (!strncmp(gp->currentMapName, "hom", 3)) area = "eki";
     if (!strncmp(gp->currentMapName, "jon", 3)) area = "tik";
     if (!strcmp(gp->currentMapName, "gra_06")) area = "jin";
-    if (!strcmp(gp->currentMapName, "muj_10") || !strcmp(gp->currentMapName, "muj_11") || !strcmp(gp->currentMapName, "muj_12\0")) area = "dou";
+    if (!strcmp(gp->currentMapName, "muj_10") || !strcmp(gp->currentMapName, "muj_11") || !strcmp(gp->currentMapName, "muj_12")) area = "dou";
 
     {
         for (k = 0; k < 93; k++) {

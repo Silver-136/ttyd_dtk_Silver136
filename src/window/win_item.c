@@ -42,81 +42,81 @@ BOOL U_marioSlitContinueChk(void);
 
 static const char* luigi_book_1[] = {
     "msg_luigi_book1_txt1\000\000\000",
-    "msg_luigi_book1_txt2\000\000\000",
-    "msg_luigi_book1_txt3\000\000\000",
-    "msg_luigi_book1_txt4\000\000\000",
-    "msg_luigi_book1_txt5\000\000\000",
-    "msg_luigi_book1_txt6\000\000\000",
-    "msg_luigi_book1_txt7\000\000\000",
-    "msg_luigi_book1_txt8\000\000\000",
-    "msg_luigi_book1_txt9\000\000\000",
-    "msg_luigi_book1_txt10\000\000",
-    "msg_luigi_book1_txt11\000\000",
-    "msg_luigi_book1_txt12\000\000",
+    "msg_luigi_book1_txt2",
+    "msg_luigi_book1_txt3",
+    "msg_luigi_book1_txt4",
+    "msg_luigi_book1_txt5",
+    "msg_luigi_book1_txt6",
+    "msg_luigi_book1_txt7",
+    "msg_luigi_book1_txt8",
+    "msg_luigi_book1_txt9",
+    "msg_luigi_book1_txt10",
+    "msg_luigi_book1_txt11",
+    "msg_luigi_book1_txt12",
     NULL,
 };
 
 static const char* luigi_book_2[] = {
     "msg_luigi_book2_txt1\000\000\000",
-    "msg_luigi_book2_txt2\000\000\000",
-    "msg_luigi_book2_txt3\000\000\000",
-    "msg_luigi_book2_txt4\000\000\000",
-    "msg_luigi_book2_txt5\000\000\000",
-    "msg_luigi_book2_txt6\000\000\000",
-    "msg_luigi_book2_txt7\000\000\000",
-    "msg_luigi_book2_txt8\000\000\000",
-    "msg_luigi_book2_txt9\000\000\000",
-    "msg_luigi_book2_txt10\000\000",
-    "msg_luigi_book2_txt11\000\000",
-    "msg_luigi_book2_txt12\000\000",
+    "msg_luigi_book2_txt2",
+    "msg_luigi_book2_txt3",
+    "msg_luigi_book2_txt4",
+    "msg_luigi_book2_txt5",
+    "msg_luigi_book2_txt6",
+    "msg_luigi_book2_txt7",
+    "msg_luigi_book2_txt8",
+    "msg_luigi_book2_txt9",
+    "msg_luigi_book2_txt10",
+    "msg_luigi_book2_txt11",
+    "msg_luigi_book2_txt12",
     NULL,
 };
 
 static const char* luigi_book_3[] = {
     "msg_luigi_book3_txt1\000\000\000",
-    "msg_luigi_book3_txt2\000\000\000",
-    "msg_luigi_book3_txt3\000\000\000",
-    "msg_luigi_book3_txt4\000\000\000",
-    "msg_luigi_book3_txt5\000\000\000",
-    "msg_luigi_book3_txt6\000\000\000",
-    "msg_luigi_book3_txt7\000\000\000",
-    "msg_luigi_book3_txt8\000\000\000",
-    "msg_luigi_book3_txt9\000\000\000",
-    "msg_luigi_book3_txt10\000\000",
-    "msg_luigi_book3_txt11\000\000",
-    "msg_luigi_book3_txt12\000\000",
+    "msg_luigi_book3_txt2",
+    "msg_luigi_book3_txt3",
+    "msg_luigi_book3_txt4",
+    "msg_luigi_book3_txt5",
+    "msg_luigi_book3_txt6",
+    "msg_luigi_book3_txt7",
+    "msg_luigi_book3_txt8",
+    "msg_luigi_book3_txt9",
+    "msg_luigi_book3_txt10",
+    "msg_luigi_book3_txt11",
+    "msg_luigi_book3_txt12",
     NULL,
 };
 
 static const char* luigi_book_4[] = {
     "msg_luigi_book4_txt1\000\000\000",
-    "msg_luigi_book4_txt2\000\000\000",
-    "msg_luigi_book4_txt3\000\000\000",
-    "msg_luigi_book4_txt4\000\000\000",
-    "msg_luigi_book4_txt5\000\000\000",
-    "msg_luigi_book4_txt6\000\000\000",
-    "msg_luigi_book4_txt7\000\000\000",
-    "msg_luigi_book4_txt8\000\000\000",
-    "msg_luigi_book4_txt9\000\000\000",
-    "msg_luigi_book4_txt10\000\000",
-    "msg_luigi_book4_txt11\000\000",
-    "msg_luigi_book4_txt12\000\000",
+    "msg_luigi_book4_txt2",
+    "msg_luigi_book4_txt3",
+    "msg_luigi_book4_txt4",
+    "msg_luigi_book4_txt5",
+    "msg_luigi_book4_txt6",
+    "msg_luigi_book4_txt7",
+    "msg_luigi_book4_txt8",
+    "msg_luigi_book4_txt9",
+    "msg_luigi_book4_txt10",
+    "msg_luigi_book4_txt11",
+    "msg_luigi_book4_txt12",
     NULL,
 };
 
 static const char* luigi_book_5[] = {
     "msg_luigi_book5_txt1\000\000\000",
-    "msg_luigi_book5_txt2\000\000\000",
-    "msg_luigi_book5_txt3\000\000\000",
-    "msg_luigi_book5_txt4\000\000\000",
-    "msg_luigi_book5_txt5\000\000\000",
-    "msg_luigi_book5_txt6\000\000\000",
-    "msg_luigi_book5_txt7\000\000\000",
-    "msg_luigi_book5_txt8\000\000\000",
-    "msg_luigi_book5_txt9\000\000\000",
-    "msg_luigi_book5_txt10\000\000",
-    "msg_luigi_book5_txt11\000\000",
-    "msg_luigi_book5_txt12\000\000",
+    "msg_luigi_book5_txt2",
+    "msg_luigi_book5_txt3",
+    "msg_luigi_book5_txt4",
+    "msg_luigi_book5_txt5",
+    "msg_luigi_book5_txt6",
+    "msg_luigi_book5_txt7",
+    "msg_luigi_book5_txt8",
+    "msg_luigi_book5_txt9",
+    "msg_luigi_book5_txt10",
+    "msg_luigi_book5_txt11",
+    "msg_luigi_book5_txt12",
     NULL,
 };
 
@@ -188,7 +188,7 @@ void winItemInit(WindowWork* w) {
 #ifdef VERSION_G8ME01
     fileAsyncf(4, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us");
 #else
-    fileAsyncf(4, 0, "%s/w/jp/mail.tpl\000\000\000", getMarioStDvdRoot());
+    fileAsyncf(4, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
 }
 
@@ -202,7 +202,7 @@ void winItemInit2(WindowWork* w) {
     w->item.mailX = w->item.mailTgtX = 320.0f;
     w->item.mailY = w->item.mailTgtY = -240.0f;
     w->item.mailScroll = w->item.mailScrollTgt = (f32)(w->item.mailSel * 200);
-    winMsgEntry(w, 0, w->item.mode == 0 ? "msg_menu_mochi_item" : "msg_menu_mochi_daiji\000\000\000", 0);
+    winMsgEntry(w, 0, w->item.mode == 0 ? "msg_menu_mochi_item" : "msg_menu_mochi_daiji", 0);
     w->item.useItem = 0;
 }
 
@@ -266,7 +266,7 @@ s32 winItemMain(WindowWork* w) {
         }
         w->helpTgtX = -275.0f;
         w->helpTgtY = (f32)(125 - w->item.mode * VERSION_PICK(40, 50));
-        winMsgEntry(w, 0, w->item.mode == 0 ? "msg_menu_mochi_item" : "msg_menu_mochi_daiji\000\000\000", 0);
+        winMsgEntry(w, 0, w->item.mode == 0 ? "msg_menu_mochi_item" : "msg_menu_mochi_daiji", 0);
         break;
     case 10:
         if (w->item.mode == 0) {
@@ -496,13 +496,13 @@ s32 winItemMain(WindowWork* w) {
 #ifdef VERSION_G8ME01
             w->mailRes = (FileEntry*)fileAsyncf(4, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us");
 #else
-            w->mailRes = (FileEntry*)fileAsyncf(4, 0, "%s/w/jp/mail.tpl\000\000\000", getMarioStDvdRoot());
+            w->mailRes = (FileEntry*)fileAsyncf(4, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
             if (w->mailRes) {
 #ifdef VERSION_G8ME01
                 w->mailRes = fileAllocf(4, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us");
 #else
-                w->mailRes = fileAllocf(4, "%s/w/jp/mail.tpl\000\000\000", getMarioStDvdRoot());
+                w->mailRes = fileAllocf(4, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
                 w->item.state++;
             }
@@ -877,7 +877,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME)  / 2, entry->y - 19 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0x8C, 0xA2, 0xFE});
                 winTexSet(0xAF, (Vec){entry->x + 220 + 0.9f * FontGetMessageWidth(WI_HP_NAME)  / 2, entry->y - 19 - (off3 = (i + 1) * 22), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xCB, 0xBE, 0x89, 0xFE});
                 winFontInit();
-                winFontSet((Vec){entry->x + 50, entry->y - 8 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("name_mario\000"));
+                winFontSet((Vec){entry->x + 50, entry->y - 8 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("name_mario"));
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
                 winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", ((s32 (*)(void))pouchGetHP)());
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);

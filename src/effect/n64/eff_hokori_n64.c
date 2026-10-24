@@ -53,7 +53,7 @@ EffectEntry* effHokoriN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
 
     effect = effEntry();
     count = 4 + (type <= 1);
-    effect->type = "HokoriN64\0\0";
+    effect->type = "HokoriN64";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffHokoriN64Work));
     effect->userdata = work;

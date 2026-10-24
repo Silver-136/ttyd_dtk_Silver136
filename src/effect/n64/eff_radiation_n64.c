@@ -68,7 +68,7 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     if (type <= 1) {
         count = 9;
     }
-    effect->type = "RadiationN64\0\0\0";
+    effect->type = "RadiationN64";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffRadiationN64Work));
     effect->userdata = work;

@@ -13,7 +13,7 @@ dou.c:
 
 dou_00.c:
 	.text       start:0x0000023C end:0x0000025C
-	.rodata     start:0x00000088 end:0x00000104
+	.rodata     start:0x00000088 end:0x00000108
 	.data       start:0x00000278 end:0x000005E0
 
 dou_01.c:
@@ -21,7 +21,7 @@ dou_01.c:
 	.data       start:0x000005E0 end:0x000008D0
 
 dou_02.c:
-	.rodata     start:0x000001B8 end:0x00000344
+	.rodata     start:0x000001B8 end:0x00000348
 	.data       start:0x000008D0 end:0x00001260
 
 dou_03.c:
@@ -69,7 +69,7 @@ dou_11.c:
 data/battle/battle_database_dou.c:
 	.text       start:0x000017F8 end:0x00001990
 	.rodata     start:0x00001B18 end:0x00001EE8
-	.data       start:0x0000E878 end:0x00011094
+	.data       start:0x0000E878 end:0x00011098
 
 unit/unit_kuriboo.c:
 	.text       start:0x00001990 end:0x00001AA8
@@ -83,13 +83,13 @@ unit/unit_bubble.c:
 	.bss        start:0x00000008 end:0x00000060
 
 unit/unit_killer.c:
-	.rodata     start:0x00002230 end:0x00002374
+	.rodata     start:0x00002230 end:0x00002378
 	.data       start:0x000136C8 end:0x00014150
 
 unit/unit_killer_cannon.c:
 	.text       start:0x00001F78 end:0x000020E8
-	.rodata     start:0x00002378 end:0x0000251C
-	.data       start:0x00014150 end:0x000159B4
+	.rodata     start:0x00002378 end:0x00002520
+	.data       start:0x00014150 end:0x000159B8
 
 unit/unit_heavy_bom.c:
 	.text       start:0x000020E8 end:0x00002248
@@ -103,7 +103,7 @@ unit/unit_hermos.c:
 	.bss        start:0x00000060 end:0x000000B8
 
 dou_13.c:
-	.rodata     start:0x00002970 end:0x000029FC
+	.rodata     start:0x00002970 end:0x00002A00
 	.data       start:0x00018C70 end:0x00018E28
 
 dou_12.c:
@@ -111,7 +111,7 @@ dou_12.c:
 	.data       start:0x00018E28 end:0x000190B0
 
 unit/unit_patamet.c:
-	.rodata     start:0x00002AB0 end:0x00002DBC
+	.rodata     start:0x00002AB0 end:0x00002DC0
 	.data       start:0x000190B0 end:0x0001B9E8
 
 event/evt_lect_dou.c:

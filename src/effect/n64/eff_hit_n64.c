@@ -67,7 +67,7 @@ EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) 
 
     effect = effEntry();
     count = (size * 5 + 20) / 3 + 1;
-    effect->type = "HitN64\0";
+    effect->type = "HitN64";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffHitN64Work));
     effect->userdata = work;

@@ -29,7 +29,7 @@ EffectEntry* effAkariChargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
     s32 i;
 
     effect = effEntry();
-    effect->type = "AkariChargeN64\0";
+    effect->type = "AkariChargeN64";
     effect->count = 22;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffAkariChargeN64Work));
     effect->userdata = work;

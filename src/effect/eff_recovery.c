@@ -229,7 +229,7 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
         amount = 11;
         break;
     }
-    effect->type = "Recovery\0\0\0";
+    effect->type = "Recovery";
     effect->count = amount + 1;
     size = effect->count * sizeof(RecoveryWork);
     work = __memAlloc(HEAP_EFFECT, size);

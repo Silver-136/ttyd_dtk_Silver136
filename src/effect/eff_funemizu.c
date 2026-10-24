@@ -133,7 +133,7 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
     if (count > 10) {
         count = 10;
     }
-    effect->type = "funemizu\0\0\0";
+    effect->type = "funemizu";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(EffFunemizuWork));
     effect->userdata = work;

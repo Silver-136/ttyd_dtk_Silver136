@@ -349,7 +349,7 @@ EVT_BEGIN(tou_09_init_evt)
     CALL(evt_run_case_evt, 9, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)
     CALL(evt_run_case_evt, 9, 1, STRING("t_door_2"), 0, PTR(evt_toile), 0)
     CALL(evt_run_case_evt, 9, 1, STRING("t_door_3"), 0, PTR(evt_toile2), 0)
-    CALL(evt_hitobj_onoff, STRING("a_door_9_ura\0\0\0"), 1, 0)
+    CALL(evt_hitobj_onoff, STRING("a_door_9_ura"), 1, 0)
     RETURN
 EVT_END()
 

@@ -85,7 +85,7 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 camera, f32 x, f32 y,
     f32 nm;
 
     effect = effEntry();
-    effect->type = "Stardust2N64\0\0\0";
+    effect->type = "Stardust2N64";
     effect->count = count + 1;
     w = __memAlloc(HEAP_EFFECT, sizeof(EffStardust2N64Work) * (count + 1));
     effect->userdata = w;

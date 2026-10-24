@@ -321,10 +321,10 @@ EVT_BEGIN(eki_01_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF(3753), 0)
-        CALL(evt_cloud_ent, 0, STRING("kami_6"), STRING("a_kami_6\0\0\0"), PTR(evt_kami_6))
+        CALL(evt_cloud_ent, 0, STRING("kami_6"), STRING("a_kami_6"), PTR(evt_kami_6))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_6"), 1)
-        CALL(evt_hitobj_onoff, STRING("a_kami_6\0\0\0"), 1, 0)
+        CALL(evt_hitobj_onoff, STRING("a_kami_6"), 1, 0)
     END_IF
     RETURN
 EVT_END()

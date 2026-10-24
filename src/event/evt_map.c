@@ -214,7 +214,7 @@ USER_FUNC(evt_map_blend_set_flag) {
         } else {
             animPoseSetMaterialFlagOff(party->paperAnimGroup, flags);
         }
-    } else if (strcmp(name, "extparty\0\0\0") == 0) {
+    } else if (strcmp(name, "extparty") == 0) {
         PartyEntry* party = partyGetPtr(marioGetExtraPartyId());
         if (on == 1) {
             animPoseSetMaterialFlagOn(party->paperAnimGroup, flags);

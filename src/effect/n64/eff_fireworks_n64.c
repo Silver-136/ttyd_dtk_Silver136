@@ -84,7 +84,7 @@ EffectEntry* effFireworksN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f
     EffFireworksN64Work* work;
 
     effect = effEntry();
-    effect->type = "FireworksN64\0\0\0";
+    effect->type = "FireworksN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffFireworksN64Work));
     effect->userdata = work;

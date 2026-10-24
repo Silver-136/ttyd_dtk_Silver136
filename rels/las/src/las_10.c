@@ -1331,7 +1331,7 @@ USER_FUNC(temae_kesu) {
     if (idx >= 2 && idx <= 4) {
         mapGrpFlagOn("S14_hashira", 1);
         mapGrpFlagOn("S115_hashira", 1);
-        mapGrpFlagOn("S116_hashira\0\0\0", 1);
+        mapGrpFlagOn("S116_hashira", 1);
     }
     return EVT_RETURN_DONE;
 }

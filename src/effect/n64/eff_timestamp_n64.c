@@ -60,7 +60,7 @@ EffectEntry* effTimestampN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 
     s32 i;
 
     effect = effEntry();
-    effect->type = "TimestampN64\0\0\0";
+    effect->type = "TimestampN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffTimestampN64Work));
     effect->userdata = work;

@@ -363,7 +363,7 @@ EVT_BEGIN(mri_07_init_evt)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_MRI1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI1"))
     END_SWITCH
-    CALL(evt_mobj_recovery_blk, STRING("mobj_recover\0\0\0"), 8, 290, 82, 120, 0, 0)
+    CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 8, 290, 82, 120, 0, 0)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     RETURN

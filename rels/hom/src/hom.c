@@ -39,7 +39,7 @@ void _prolog(void) {
     relSetEvtAddr("hom_00", hom_00_init_evt);
     relSetEvtAddr("hom_10", hom_10_init_evt);
     relSetEvtAddr("hom_11", hom_11_init_evt);
-    relSetEvtAddr("hom_12\0", hom_12_init_evt);
+    relSetEvtAddr("hom_12", hom_12_init_evt);
 }
 
 f32 fd_hom_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};

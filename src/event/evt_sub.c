@@ -2220,9 +2220,9 @@ void coingetDisp(WinMgrEntry* entry) {
 		s32 w;
 
 		if ((u32)gp->language == 0) {
-			sprintf(buf, msgSearch("msg_window_coin_get\0\0\0\0"), work[0]);
+			sprintf(buf, msgSearch("msg_window_coin_get"), work[0]);
 		} else {
-			strcpy(buf, msgSearch("msg_window_coin_get\0\0\0\0"));
+			strcpy(buf, msgSearch("msg_window_coin_get"));
 			evtMsgFmtInt(buf, work[0]);
 		}
 		w = FontGetMessageWidthLine(buf, &lines) + 20;

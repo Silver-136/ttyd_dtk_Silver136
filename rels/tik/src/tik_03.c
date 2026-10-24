@@ -562,7 +562,7 @@ EVT_BEGIN(tik_03_init_evt)
         SPAWN_EVENT(PTR(puni_nakama))
     END_IF
     CALL(evt_item_entry, STRING("item_00"), 276, -450, -50, -50, 16, GSWF(1356), 0)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 325, -50, 0, STRING("kakoi\0\0"), 125, GSWF(5590))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 325, -50, 0, STRING("kakoi"), 125, GSWF(5590))
     IF_INT_LESS(GSW(0), 71)
         SET_VALUE(LW(0), STRING("dokan"))
         CALL_CHILD(PTR(bero_case_switch_off))

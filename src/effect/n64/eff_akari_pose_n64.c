@@ -68,7 +68,7 @@ EffectEntry* effAkariPoseN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
     s32 i;
 
     effect = effEntry();
-    effect->type = "AkariPoseN64\0\0\0";
+    effect->type = "AkariPoseN64";
     effect->count = count + 1;
     work = __memAlloc(HEAP_EFFECT, (count + 1) * sizeof(EffAkariPoseN64Work));
     effect->userdata = work;

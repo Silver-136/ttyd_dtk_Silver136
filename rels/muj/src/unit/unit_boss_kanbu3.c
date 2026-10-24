@@ -1267,9 +1267,9 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("A_1C"))
         WAIT_FRAMES(25)
         BEGIN_SIBLING_EVENT
-            CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_HIP_ATTACK2\0"), -250000000, 0, -250000000)
+            CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_HIP_ATTACK2"), -250000000, 0, -250000000)
             WAIT_FRAMES(7)
-            CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_HIP_ATTACK2\0"), -250000000, 0, -250000000)
+            CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_HIP_ATTACK2"), -250000000, 0, -250000000)
         END_SIBLING_EVENT
         CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("D_1"))
         WAIT_FRAMES(15)

@@ -1079,7 +1079,7 @@ EVT_BEGIN(gon_11_init_evt)
         CASE_DEFAULT
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_GON1"))
     END_SWITCH
-    CALL(evt_snd_envon, 272, STRING("ENV_STG1_GON4\0\0"))
+    CALL(evt_snd_envon, 272, STRING("ENV_STG1_GON4"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ父"), 1536)
     CALL(evt_npc_change_fbat_mode, 1)

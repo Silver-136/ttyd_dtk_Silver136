@@ -695,7 +695,7 @@ USER_FUNC(zubastar_main) {
 			if (psndSFXChk(w->sfx) == 0) psndSFXOff(w->sfx);
 		}
 		if (w->gauge > 0.0f) {
-			if (psndSFXChk(w->sfx) == -1) w->sfx = SFXON("SFX_BTL_SAC_ZUBA_STAR1\0");
+			if (psndSFXChk(w->sfx) == -1) w->sfx = SFXON("SFX_BTL_SAC_ZUBA_STAR1");
 		}
 		if (psndSFXChk(w->sfx) == 0) {
 			psndSFX_pit(w->sfx, 683.0f * w->level + 4096.0f * w->gauge / 100.0f);

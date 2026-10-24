@@ -81,7 +81,7 @@ EffectEntry* effOpukuWgunN64Entry(s32 type, s32 lifetime, f32 x1, f32 y1, f32 z1
     s32 k;
 
     effect = effEntry();
-    effect->type = "OpukuWgunN64\0\0\0";
+    effect->type = "OpukuWgunN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffOpukuWgunN64Work));
     effect->userdata = work;

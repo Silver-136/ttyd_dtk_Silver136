@@ -37,7 +37,7 @@ void _prolog(void) {
     for (ctor = _ctors; *ctor != NULL; ctor++) {
         (*ctor)();
     }
-    relSetEvtAddr("aaa_00\0", aaa_00_init_evt);
+    relSetEvtAddr("aaa_00", aaa_00_init_evt);
 }
 
 f32 fd_aaa_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};

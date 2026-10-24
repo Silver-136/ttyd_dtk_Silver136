@@ -50,7 +50,7 @@ EffectEntry* effKemuriEntry(s32 int2, f32 float3, f32 float4, f32 float5) {
 			numEffects = 2;
 			break;
 	}
-	entry->type = "Kemuri\0";
+	entry->type = "Kemuri";
 	entry->count = numEffects;
 	data = (effKemuriData*)__memAlloc(HEAP_EFFECT, sizeof(effKemuriData) * numEffects);
 	entry->userdata = data;

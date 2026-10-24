@@ -71,7 +71,7 @@ int TRKTestForPacket(void) {
         id = -1;
     }
 
-    MWTRACE(1, "TestForPacket returning %ld\n\0\0\0", id);
+    MWTRACE(1, "TestForPacket returning %ld\n", id);
     return id;
 }
 

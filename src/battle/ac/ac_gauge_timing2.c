@@ -197,7 +197,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work)
       if (pressed || doAuto)
     {
       sfxNg = "SFX_AC_COMMAND_NG1";
-      sfxOk = "SFX_AC_COMMAND_OK1\0";
+      sfxOk = "SFX_AC_COMMAND_OK1";
       found = 0;
       for (i4 = 0; i4 < work->actionCommands.params[2]; i4++)
       {

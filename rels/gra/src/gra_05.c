@@ -533,14 +533,14 @@ EVT_END()
 void camRoadCurveOff(const char* name);
 
 USER_FUNC(camera_curve_off) {
-    camRoadCurveOff("|MarioSt_CameraRoad|curve2\0");
+    camRoadCurveOff("|MarioSt_CameraRoad|curve2");
     return EVT_RETURN_DONE;
 }
 
 void camRoadCurveOn(const char* name);
 
 USER_FUNC(camera_curve_on) {
-    camRoadCurveOn("|MarioSt_CameraRoad|curve2\0");
+    camRoadCurveOn("|MarioSt_CameraRoad|curve2");
     return EVT_RETURN_DONE;
 }
 

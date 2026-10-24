@@ -16,7 +16,7 @@ void effRippleSetCamId(EffectEntry* effect, s32 cameraId) {
 }
 
 void effRippleSetPosition(EffectEntry* effect, f32 x, f32 y, f32 z) {
-    if (strcmp(effect->type, "RippleN64\0\0") == 0) {
+    if (strcmp(effect->type, "RippleN64") == 0) {
         ((EffRippleN64Work*)effect->userdata)->position.x = x;
         ((EffRippleN64Work*)effect->userdata)->position.y = y;
         ((EffRippleN64Work*)effect->userdata)->position.z = z;

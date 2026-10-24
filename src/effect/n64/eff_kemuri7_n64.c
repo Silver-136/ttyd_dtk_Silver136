@@ -50,7 +50,7 @@ EffectEntry* effKemuri7N64Entry(f32 x, f32 y, f32 z, f32 angle, f32 side) {
     f32 rad;
 
     effect = effEntry();
-    effect->type = "Kemuri7N64\0";
+    effect->type = "Kemuri7N64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffKemuri7N64Work));
     effect->userdata = work;

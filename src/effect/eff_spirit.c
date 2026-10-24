@@ -37,7 +37,7 @@ EffectEntry* effSpiritEntry(s32 type, s32 time, f32 x1, f32 y1, f32 z1, f32 x2, 
     EffSpiritWork* work;
 
     effect = effEntry();
-    effect->type = "Spirit\0";
+    effect->type = "Spirit";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffSpiritWork));
     effect->userdata = work;

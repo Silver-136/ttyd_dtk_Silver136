@@ -2021,7 +2021,7 @@ USER_FUNC(yoshi_original_color_anim_set) {
         name = "c_babyyoshi6";
         break;
     case 6:
-        name = "c_babyyoshi7\0\0\0"; // FAKE: explicit padding; without it the string pool tail shifts
+        name = "c_babyyoshi7";
         break;
     case 0:
     default:

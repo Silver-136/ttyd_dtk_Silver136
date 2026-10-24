@@ -99,7 +99,7 @@ EffectEntry* effRubbleN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 
     EffRubbleN64Work* work;
 
     effect = effEntry();
-    effect->type = "RubbleN64\0\0";
+    effect->type = "RubbleN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffRubbleN64Work));
     effect->userdata = work;

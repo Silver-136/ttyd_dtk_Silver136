@@ -525,7 +525,7 @@ USER_FUNC(evt_bero_read_mario_pera) {
 			}
 			break;
 		case 1:
-			if (animGroupBaseAsync("p_dokan_y\0\0", 0, NULL)) {
+			if (animGroupBaseAsync("p_dokan_y", 0, NULL)) {
 				event->userdata[0] = 100;
 			}
 			break;

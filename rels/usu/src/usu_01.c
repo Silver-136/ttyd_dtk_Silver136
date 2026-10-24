@@ -2626,7 +2626,7 @@ USER_FUNC(sleep_voice) {
         loops = animPoseGetLoopTimes(mario->paperAnimGroupId[marioAnimeId()]);
         if (loops != event->userdata[0]) {
             event->userdata[0] = loops;
-            evtSetValue(event, GW(10), psndSFXOn_3D("SFX_VOICE_MARIO_SLEEP1\0", &mario->position));
+            evtSetValue(event, GW(10), psndSFXOn_3D("SFX_VOICE_MARIO_SLEEP1", &mario->position));
         }
     }
     return EVT_RETURN_BLOCK;

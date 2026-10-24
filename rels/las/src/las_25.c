@@ -290,7 +290,7 @@ EVT_BEGIN(las_25_init_evt)
     CALL(evt_mobj_flag_onoff, 0, STRING("jump"), 64)
     CALL(evt_item_entry, STRING("item02"), 151, 225, -350, 0, 16, GSWF(4379), 0)
     CALL(evt_item_entry, STRING("item03"), 130, 375, -450, 0, 16, GSWF(4392), 0)
-    CALL(evt_mobj_save_blk, STRING("mobj_save\0\0"), 600, 60, -75, 0, 0)
+    CALL(evt_mobj_save_blk, STRING("mobj_save"), 600, 60, -75, 0, 0)
     RETURN
 EVT_END()
 

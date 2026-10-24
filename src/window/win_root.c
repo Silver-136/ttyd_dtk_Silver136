@@ -799,7 +799,7 @@ void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     }
     if (wp->msg != NULL) {
         GXSetScissor(0, (u32)(240.0f - (by -= 14.0f)), 0x260, 0x38);
-        if (strcmp(wp->msg, "msg_lottery_number\0") == 0) {
+        if (strcmp(wp->msg, "msg_lottery_number") == 0) {
             n = lotteryGetPtr()->number;
             sprintf(buf, msgSearch(wp->msg), n);
             winFontInit();

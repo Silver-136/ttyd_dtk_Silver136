@@ -219,7 +219,7 @@ EVT_BEGIN(las_16_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_ana_before"), 1, 0)
     END_IF
     CALL(evt_mobj_itembox, STRING("box"), 150, 0, 0, 0, 0, PTR(box_evt), GSWF(4367))
-    CALL(evt_run_case_evt, 9, 1, STRING("A_pure\0"), 0, PTR(hint_plate), 0)
+    CALL(evt_run_case_evt, 9, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
     RETURN
 EVT_END()
 

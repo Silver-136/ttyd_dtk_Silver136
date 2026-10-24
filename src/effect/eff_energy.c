@@ -37,7 +37,7 @@ EffectEntry* effEnergyEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 siz
     EffEnergyWork* work;
 
     effect = effEntry();
-    effect->type = "Energy\0";
+    effect->type = "Energy";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffEnergyWork) * effect->count);
     effect->userdata = work;

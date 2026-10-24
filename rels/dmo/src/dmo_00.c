@@ -143,8 +143,8 @@ USER_FUNC(demo_init) {
         statusWinDispOff();
         psndSetFlag(4);
     }
-    if (fileAsyncf(4, NULL, "%s/demo.tpl\0\0\0\0", getMarioStDvdRoot()) != 0U) {
-        wp->tpl = fileAllocf(4, "%s/demo.tpl\0\0\0\0", getMarioStDvdRoot());
+    if (fileAsyncf(4, NULL, "%s/demo.tpl", getMarioStDvdRoot()) != 0U) {
+        wp->tpl = fileAllocf(4, "%s/demo.tpl", getMarioStDvdRoot());
         gp->areaFadeOutType = 9;
         gp->areaFadeOutDuration = 500;
         return EVT_RETURN_DONE;

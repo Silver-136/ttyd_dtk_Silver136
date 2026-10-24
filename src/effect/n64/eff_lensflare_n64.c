@@ -61,7 +61,7 @@ EffectEntry* effLensflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     s32 i;
 
     effect = effEntry();
-    effect->type = "LensflareN64\0\0\0";
+    effect->type = "LensflareN64";
     effect->count = 6;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffLensflareN64Elem) * 6);
     effect->userdata = work;

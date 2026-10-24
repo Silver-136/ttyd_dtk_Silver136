@@ -67,7 +67,7 @@ EffectEntry* effOpukuJetwrainN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, 
     s32 j;
 
     effect = effEntry();
-    effect->type = "OpukuJetwrainN64\0\0\0";
+    effect->type = "OpukuJetwrainN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffOpukuJetwrainWork));
     effect->userdata = work;

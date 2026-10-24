@@ -620,7 +620,7 @@ static EVT_BEGIN(dekadeka_event)
     WAIT_FRAMES(120)
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(5)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_3RD1_BOTTLE5\0\0\0"), -250000000, 0, -250000000)
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_3RD1_BOTTLE5"), -250000000, 0, -250000000)
         WAIT_FRAMES(55)
         CALL(evt_btl_camera_set_mode, 0, 0)
     END_INLINE_EVENT

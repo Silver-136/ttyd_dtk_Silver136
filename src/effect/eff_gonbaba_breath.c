@@ -255,7 +255,7 @@ EffectEntry* effGonbabaBreathEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 
             count = 65;
             break;
     }
-    effect->type = "GonbabaBreath\0\0";
+    effect->type = "GonbabaBreath";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffGonbabaBreathWork));
     effect->userdata = work;

@@ -179,7 +179,7 @@ EVT_END()
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 
-    sprintf(name, "hi%d\0\0\0", evtGetValue(event, args[0]));
+    sprintf(name, "hi%d", evtGetValue(event, args[0]));
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }

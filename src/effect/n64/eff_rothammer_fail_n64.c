@@ -41,7 +41,7 @@ EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
 
 
     effect = effEntry();
-    effect->type = "RotHammerFailN64\0\0\0";
+    effect->type = "RotHammerFailN64";
     effect->count = 2;
     effect->userdata = work = __memAlloc(HEAP_EFFECT, sizeof(EffRotHammerFailN64Work) * 2);
     zero = 0.0f;

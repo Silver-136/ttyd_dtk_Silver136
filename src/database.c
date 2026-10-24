@@ -23,7 +23,7 @@ void setupDataLoad(const char* mapName) {
 
 	ptr = NULL;
 	sprintf(path, "%s/m/%s/s", getMarioStDvdRoot(), mapName);
-	if (strcmp(mapName, "muj_20\0") || evtGetValue(NULL, (s32)0xF5DE0180) != 2) {
+	if (strcmp(mapName, "muj_20") || evtGetValue(NULL, (s32)0xF5DE0180) != 2) {
 		arcOpen(path, &ptr, &size);
 		if (!ptr) {
 			dvd = DVDMgrOpen(path, 2, 0);

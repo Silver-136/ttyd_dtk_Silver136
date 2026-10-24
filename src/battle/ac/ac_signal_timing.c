@@ -99,7 +99,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work)
   sfxPi = "SFX_AC_PI1";
   sfxPone = "SFX_AC_PONE1";
   sfxOk = "SFX_AC_COMMAND_OK1";
-  sfxNg2 = sfxNg = "SFX_AC_COMMAND_NG1\0";
+  sfxNg2 = sfxNg = "SFX_AC_COMMAND_NG1";
   do
   {
     loop = 0;

@@ -1673,7 +1673,7 @@ void ext_fan_init(void) {
             fan->vel = (Vec){0.0f, 0.0f, 0.0f};
         }
     }
-    fan_wp->sfxId = psndSFXOn_3D("SFX_STG3_AUDIENCE_FAN1\0", &(Vec){0.0f, 0.0f, 0.0f});
+    fan_wp->sfxId = psndSFXOn_3D("SFX_STG3_AUDIENCE_FAN1", &(Vec){0.0f, 0.0f, 0.0f});
     fan_wp->vol = psndSFX_get_vol(fan_wp->sfxId);
 }
 

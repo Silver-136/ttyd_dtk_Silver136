@@ -113,7 +113,7 @@ EVT_END()
 
 EVT_BEGIN(tik_14_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK1\0\0"))
+    CALL(evt_snd_envon, 272, STRING("ENV_STG0_TIK1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

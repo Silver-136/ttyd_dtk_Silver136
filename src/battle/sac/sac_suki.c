@@ -221,7 +221,7 @@ USER_FUNC(main_suki) {
         strcpy(w->names[2], "sac_suki_img2");
         strcpy(w->names[3], "sac_suki_img3");
         strcpy(w->names[4], "sac_suki_img4");
-        strcpy(w->names[5], "sac_suki_img5\0\0");
+        strcpy(w->names[5], "sac_suki_img5");
         w->pos = (Vec){0.0f, -1000.0f, 0.0f};
     }
     main_base();

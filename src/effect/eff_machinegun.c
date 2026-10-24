@@ -24,7 +24,7 @@ EffectEntry* effMachinegunEntry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 sp
     EffMachinegunWork* work;
 
     effect = effEntry();
-    effect->type = "Machinegun\0";
+    effect->type = "Machinegun";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, 0x28);
     effect->userdata = work;

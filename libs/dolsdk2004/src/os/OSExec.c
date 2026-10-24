@@ -228,7 +228,7 @@ static void* LoadDol(const OSExecParams* params, AppLoaderCallback getInterface)
 }
 
 static BOOL IsNewApploader(AppLoaderStruct* header) {
-    return strncmp(header->date, "2004/02/01\0", 10) > 0 ? TRUE : FALSE;
+    return strncmp(header->date, "2004/02/01", 10) > 0 ? TRUE : FALSE;
 }
 
 void __OSBootDolSimple(u32 doloffset, u32 restartCode, void* regionStart, void* regionEnd, BOOL argsUseDefault, s32 argc, char** argv) {

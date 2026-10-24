@@ -67,7 +67,7 @@ void SISetSamplingRate(u32 msec) {
 #ifdef VERSION_G8ME01
         OSReport("SISetSamplingRate: unknown TV format. Use default.");
 #else
-        OSReport("SISetSamplingRate: unknown TV format. Use default.\0");
+        OSReport("SISetSamplingRate: unknown TV format. Use default.");
 #endif
         msec = 0;
         xy = XYNTSC;

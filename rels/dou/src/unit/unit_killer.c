@@ -344,7 +344,7 @@ static EVT_BEGIN(attack_event)
     ADD(LW(2), 10)
     ADD(LW(1), 30)
     CALL(_add_star_point_disp_offset, LW(10), LW(3), LW(1), LW(2))
-    CALL(evt_eff, STRING(""), STRING("star_point\0"), 0, LW(3), LW(1), LW(2), LW(0), 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff, STRING(""), STRING("star_point"), 0, LW(3), LW(1), LW(2), LW(0), 0, 0, 0, 0, 0, 0, 0)
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         LOOP(LW(0))
         END_LOOP

@@ -721,7 +721,7 @@ EVT_BEGIN(mri_11_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_hati"), 1, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_patolight1"), 1)
     END_IF
-    CALL(evt_hitobj_onoff, STRING("A_sunomae\0\0"), 1, 0)
+    CALL(evt_hitobj_onoff, STRING("A_sunomae"), 1, 0)
     RETURN
 EVT_END()
 

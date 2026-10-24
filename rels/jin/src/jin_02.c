@@ -223,7 +223,7 @@ EVT_BEGIN(jin_02_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
-    CALL(evt_mobj_switch_red, 0, STRING("mobj_switch1\0\0\0"), 485, 30, -10, PTR(evt_kaidan_temae), 0)
+    CALL(evt_mobj_switch_red, 0, STRING("mobj_switch1"), 485, 30, -10, PTR(evt_kaidan_temae), 0)
     RETURN
 EVT_END()
 

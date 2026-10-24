@@ -358,10 +358,10 @@ s32 bakuGameDecideWeapon(EventEntry *event, BOOL isFirstCall)
 
 USER_FUNC(bakuGameBombEntry) {
     BakuWork* w = GetBakuGamePtr();
-    if (!animGroupBaseAsync("c_star_bom\0", 2, NULL)) {
+    if (!animGroupBaseAsync("c_star_bom", 2, NULL)) {
         return 0;
     }
-    w->poseId = animPoseEntry("c_star_bom\0", 2);
+    w->poseId = animPoseEntry("c_star_bom", 2);
     animPoseSetAnim(w->poseId, "Z_1", 1);
     return 2;
 }

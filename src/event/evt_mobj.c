@@ -134,11 +134,11 @@ extern void kpaPowUp(void);
 extern void hitGrpFlagOff(const char* name, u32 flag);
 
 static inline MapObjectEntry* MOBJ_PTR(EventEntry* event, const char* name) {
-    return strcmp(name, "me\0") ? mobjNameToPtr(name) : event->thisMapObj;
+    return strcmp(name, "me") ? mobjNameToPtr(name) : event->thisMapObj;
 }
 
 static inline MapObjectEntry* MOBJ_PTR2(EventEntry* event, const char* name) {
-    return !strcmp(name, "me\0") ? event->thisMapObj : mobjNameToPtr(name);
+    return !strcmp(name, "me") ? event->thisMapObj : mobjNameToPtr(name);
 }
 
 __declspec(section ".data") f32 fd_evt_mobj_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};

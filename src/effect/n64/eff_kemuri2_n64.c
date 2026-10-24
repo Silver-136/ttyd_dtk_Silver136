@@ -35,7 +35,7 @@ EffectEntry* effKemuri2N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dirX, f32 dir
     EffKemuri2N64Work* work;
 
     effect = effEntry();
-    effect->type = "Kemuri2N64\0";
+    effect->type = "Kemuri2N64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffKemuri2N64Work));
     effect->userdata = work;

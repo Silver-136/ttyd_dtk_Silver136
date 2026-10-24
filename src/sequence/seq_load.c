@@ -1393,8 +1393,8 @@ void seq_loadExit(SequenceWork* seq) {
 }
 
 static inline BOOL loadStart(void) {
-    if (fileAsyncf(4, NULL, "%s/w/jp/name.tpl\0\0\0", getMarioStDvdRoot()) != 0U) {
-        wp->file = fileAllocf(4, "%s/w/jp/name.tpl\0\0\0", getMarioStDvdRoot());
+    if (fileAsyncf(4, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
+        wp->file = fileAllocf(4, "%s/w/jp/name.tpl", getMarioStDvdRoot());
         return TRUE;
     }
     return FALSE;

@@ -17,7 +17,7 @@ aji_01.c:
 
 aji_02.c:
 	.text       start:0x000000C8 end:0x000007B4
-	.rodata     start:0x00000BC8 end:0x00000CD4
+	.rodata     start:0x00000BC8 end:0x00000CD8
 	.data       start:0x00006590 end:0x00006D98
 	.bss        start:0x00000000 end:0x00000078
 
@@ -34,7 +34,7 @@ aji_04.c:
 
 aji_05.c:
 	.text       start:0x00000E78 end:0x000013C4
-	.rodata     start:0x00001530 end:0x00001614
+	.rodata     start:0x00001530 end:0x00001618
 	.data       start:0x0000B908 end:0x0000BE30
 	.bss        start:0x000000B8 end:0x00000118
 
@@ -92,13 +92,13 @@ aji_15.c:
 
 aji_16.c:
 	.text       start:0x000043A4 end:0x000043E8
-	.rodata     start:0x00003CD0 end:0x00003F4C
+	.rodata     start:0x00003CD0 end:0x00003F50
 	.data       start:0x0001CDD0 end:0x0001E110
 
 aji_17.c:
 	.text       start:0x000043E8 end:0x00006144
 	.rodata     start:0x00003F50 end:0x000051E0
-	.data       start:0x0001E110 end:0x000271D4
+	.data       start:0x0001E110 end:0x000271D8
 	.bss        start:0x00000138 end:0x00000150
 
 aji.c:
@@ -119,7 +119,7 @@ data/battle/battle_database_aji.c:
 
 aji_18.c:
 	.text       start:0x000081BC end:0x000082D0
-	.rodata     start:0x00005D20 end:0x00005EDC
+	.rodata     start:0x00005D20 end:0x00005EE0
 	.data       start:0x0002D738 end:0x0002E480
 	.bss        start:0x00000190 end:0x000001A0
 
@@ -129,7 +129,7 @@ aji_19.c:
 	.data       start:0x0002E480 end:0x0002E848
 
 unit/unit_gundan_zako.c:
-	.rodata     start:0x00005FB8 end:0x000061D4
+	.rodata     start:0x00005FB8 end:0x000061D8
 	.data       start:0x0002E848 end:0x0002FE38
 
 unit/unit_barriern_z_satellite.c:
@@ -144,17 +144,17 @@ unit/unit_barriern_z.c:
 	.bss        start:0x000001A0 end:0x000001B8
 
 unit/unit_gundan_zako_elite.c:
-	.rodata     start:0x00006658 end:0x0000687C
+	.rodata     start:0x00006658 end:0x00006880
 	.data       start:0x00033498 end:0x00034A88
 
 unit/unit_gundan_zako_magician.c:
 	.text       start:0x0000B1E0 end:0x0000B298
-	.rodata     start:0x00006880 end:0x00006AB4
+	.rodata     start:0x00006880 end:0x00006AB8
 	.data       start:0x00034A88 end:0x00036E38
 
 event/evt_shuryolight.c:
 	.text       start:0x0000B298 end:0x0000BCF4
-	.rodata     start:0x00006AB8 end:0x00006C34
+	.rodata     start:0x00006AB8 end:0x00006C38
 	.data       start:0x00036E38 end:0x00037180
 	.bss        start:0x000001B8 end:0x000001C0
 

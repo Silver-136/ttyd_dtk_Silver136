@@ -109,7 +109,7 @@ EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
 
     effect = effEntry();
     count = n_data[type];
-    effect->type = "PokopiPchargeN64\0\0\0";
+    effect->type = "PokopiPchargeN64";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffPokopiPchargeN64Elem));
     effect->userdata = work;

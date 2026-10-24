@@ -76,7 +76,7 @@ USER_FUNC(evt_batstage_light_set_player_on) {
     s32 sel = evtGetValue(event, *args++);
     s32 i;
     s32 idx;
-    char names[3][32] = {"sys_activeUnit_1", "sys_activeUnit_2", "sys_activeUnit_3\0\0\0"};
+    char names[3][32] = {"sys_activeUnit_1", "sys_activeUnit_2", "sys_activeUnit_3"};
     Vec pos[3] = {{100.0f, 250.0f, 70.0f}, {-300.0f, 250.0f, 70.0f}, {-120.0f, 250.0f, -70.0f}};
     Vec tg[3] = {{100.0f, 0.0f, -70.0f}, {-300.0f, 0.0f, -70.0f}, {-120.0f, 0.0f, -70.0f}};
     Vec tu[3] = {{15.0f, 0.0f, 15.0f}, {-15.0f, 0.0f, 15.0f}, {0.0f, 0.0f, -15.0f}};
@@ -129,7 +129,7 @@ USER_FUNC(evt_batstage_light_set_player_off) {
     if (idx != -1) {
         BattleStageLightRelease(idx, 30, 0);
     }
-    idx = BattleStageGetLightNumberByName("sys_activeUnit_3\0\0\0");
+    idx = BattleStageGetLightNumberByName("sys_activeUnit_3");
     if (idx != -1) {
         BattleStageLightRelease(idx, 30, 0);
     }

@@ -946,7 +946,7 @@ EVT_BEGIN(mri_14_init_evt)
         SET_VALUE(LW(0), STRING("dokan"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
-    SET_VALUE(LW(0), STRING("S_sui\0\0"))
+    SET_VALUE(LW(0), STRING("S_sui"))
     SET_RAW_VALUE(LW(1), GW(0))
     SET_VALUE(LW(2), 100)
     SPAWN_EVENT(PTR(mri_hikari_color))

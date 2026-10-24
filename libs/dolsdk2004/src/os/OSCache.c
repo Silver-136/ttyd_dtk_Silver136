@@ -639,5 +639,5 @@ void __OSCacheInit() {
     }
 
     OSSetErrorHandler(OS_ERROR_MACHINE_CHECK, DMAErrorHandler);
-    DBPrintf("Locked cache machine check handler installed\n\0\0");
+    DBPrintf("Locked cache machine check handler installed\n");
 }

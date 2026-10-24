@@ -366,7 +366,7 @@ void BattleAudience_Init(void) {
 	}
 	BattleAudienceSettingAudience();
 	audience->normalTex = tplRead("battle/audience/audience_normal.tpl");
-	BattleAudienceGuestTPLRead(0, AUDIENCE_LUIGI, "audience_luigi.tpl\0");
+	BattleAudienceGuestTPLRead(0, AUDIENCE_LUIGI, "audience_luigi.tpl");
 	BattleAudienceSetThrowItemMax();
 
 	audience->mTurnEndPhaseEventChance = 0;

@@ -150,7 +150,7 @@ void effTexSetup(void) {
 #ifdef VERSION_G8ME01
 		sprintf(path, "%s/e/%s/effect.tpl", getMarioStDvdRoot(), gp->language == 0U ? "jp" : "us");
 #else
-		sprintf(path, "%s/e/jp/effect.tpl\0", getMarioStDvdRoot());
+		sprintf(path, "%s/e/jp/effect.tpl", getMarioStDvdRoot());
 #endif
 		entry = DVDMgrOpen(path, 2, 0);
 		size = OSRoundUp32B(DVDMgrGetLength(entry));

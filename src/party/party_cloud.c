@@ -433,7 +433,7 @@ void N__cloud_use(PartyEntry* party) {
 #ifdef VERSION_G8ME01
         if (mario->currMotionId == 0x1B)
 #endif
-        marioChgPose("M_A_2B\0");
+        marioChgPose("M_A_2B");
         party->useMotionId = 12;
     case 12:
         cloudCalcPos(party);

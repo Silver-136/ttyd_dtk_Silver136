@@ -59,7 +59,7 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
 	int i;
 
 	effect = effEntry();
-	effect->type = "ExpBomN64\0\0";
+	effect->type = "ExpBomN64";
 	effect->count = 10;
 	data = __memAlloc(HEAP_EFFECT, sizeof(effExpBomData) * 10);
 	effect->userdata = data;

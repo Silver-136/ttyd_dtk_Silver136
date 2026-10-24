@@ -473,7 +473,7 @@ EVT_BEGIN(mri_02_init_evt)
         END_INLINE_EVENT
     END_IF
     CALL(evt_npc_change_fbat_mode, 1)
-    SET_VALUE(LW(0), STRING("S_sui_l_02\0"))
+    SET_VALUE(LW(0), STRING("S_sui_l_02"))
     SET_RAW_VALUE(LW(1), GW(0))
     SET_VALUE(LW(2), 9)
     SPAWN_EVENT(PTR(mri_hikari_color))

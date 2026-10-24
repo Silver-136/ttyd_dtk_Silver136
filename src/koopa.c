@@ -261,7 +261,7 @@ void kpaPreInit(void) {
     mp = marioGetPtr();
     if (strcmp(gp->currentMapName, "kpa_02") == 0 || strcmp(gp->currentMapName, "kpa_03") == 0 ||
         strcmp(gp->currentMapName, "kpa_04") == 0 || strcmp(gp->currentMapName, "kpa_05") == 0 ||
-        strcmp(gp->currentMapName, "kpa_06\0") == 0) {
+        strcmp(gp->currentMapName, "kpa_06") == 0) {
         mp->stageFlags |= 1;
     } else {
         mp->stageFlags &= ~1;

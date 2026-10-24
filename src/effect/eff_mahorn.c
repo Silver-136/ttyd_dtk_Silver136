@@ -36,7 +36,7 @@ EffectEntry* effMahornEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32
     s32 i, num;
 
     effect = effEntry();
-    effect->type = "Mahorn\0";
+    effect->type = "Mahorn";
     num = count + 1;
     effect->count = num;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffMahornWork) * num);

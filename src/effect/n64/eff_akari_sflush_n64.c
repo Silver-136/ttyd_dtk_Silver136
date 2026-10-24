@@ -41,7 +41,7 @@ EffectEntry* effAkariSflushN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
     EffAkariSflushN64Work* work;
 
     effect = effEntry();
-    effect->type = "AkariSflushN64\0";
+    effect->type = "AkariSflushN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffAkariSflushN64Work));
     effect->userdata = work;

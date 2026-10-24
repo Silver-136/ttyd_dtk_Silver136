@@ -817,7 +817,7 @@ EVT_BEGIN(cortez_weapon_break_event)
 EVT_END()
 
 EVT_BEGIN(cortez_weapon_blow_dead_event)
-    CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3\0\0"), 0)
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, -2, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), 39)
     BEGIN_SIBLING_EVENT

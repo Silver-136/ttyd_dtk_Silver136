@@ -369,7 +369,7 @@ s32 sw_main(MapObjectEntry* mobj) {
             mobjNameToPtr("MOBJ_eki_06_su3")->flags |= 2;
             if (strcmp(mobj->name, "MOBJ_eki_06_su1") == 0) {
                 if (sw_cnt(mobj) == 1) {
-                    animPoseSetAnim(mobj->poseId, "ANIM_3\0", 1);
+                    animPoseSetAnim(mobj->poseId, "ANIM_3", 1);
                 } else {
                     animPoseSetAnim(mobj->poseId, "ANIM_1", 1);
                 }

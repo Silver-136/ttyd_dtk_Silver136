@@ -172,7 +172,7 @@ BOOL parseGet1Next(s32 type, void* data) {
 		*posp = stop;
 		break;
 	case 2:
-		sscanf((char*)&p[start], "%f\0", data);
+		sscanf((char*)&p[start], "%f", data);
 		*posp = stop;
 		break;
 	}

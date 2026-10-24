@@ -302,7 +302,7 @@ void seq_mapChangeMain(SequenceWork* work) {
                     extraParty->position.z += 30.0f * (f32)sin(camGetPtr(4)->viewYaw);
                 }
                 if (!strcmp(gp->currentMapName, "dou_05") || !strcmp(gp->currentMapName, "gor_01") ||
-                    !strcmp(gp->currentMapName, "muj_10") || !strcmp(gp->currentMapName, "tik_07\0")) {
+                    !strcmp(gp->currentMapName, "muj_10") || !strcmp(gp->currentMapName, "tik_07")) {
                     mario->position.x -= 5.0f;
                     if (party) {
                         party->position = mario->position;

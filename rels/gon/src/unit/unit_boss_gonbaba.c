@@ -1548,7 +1548,7 @@ EVT_BEGIN(firebreath_attack_event)
         CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_GNB_BREATH_FIRE1"), -250000000, 0, -250000000)
         ADD(LW(11), 45)
         SUBTRACT(LW(8), 10)
-        CALL(evt_eff, 0, STRING("gonbaba_breath\0"), 0, LW(6), LW(7), LW(8), FLOAT(3.0f), LW(11), 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff, 0, STRING("gonbaba_breath"), 0, LW(6), LW(7), LW(8), FLOAT(3.0f), LW(11), 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(12), -250000000, -250000000)
     SUBTRACT(LW(12), LW(6))

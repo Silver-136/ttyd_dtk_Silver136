@@ -1781,7 +1781,7 @@ EVT_BEGIN(mri_00_init_evt)
     IF_INT_LESS_OR_EQUAL(GSW(0), 87)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_non"), 1)
         CALL(evt_mri_cloud_init)
-        CALL(evt_mri_cloud_ent, PTR(&capturemap), STRING("A_kaze\0"), PTR(open_bigtree))
+        CALL(evt_mri_cloud_ent, PTR(&capturemap), STRING("A_kaze"), PTR(open_bigtree))
         SET_VALUE(LW(0), STRING("ne_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE

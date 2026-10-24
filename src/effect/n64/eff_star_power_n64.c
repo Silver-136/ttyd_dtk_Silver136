@@ -40,7 +40,7 @@ EffectEntry* effStarPowerN64Entry(s32 id, s32 lifetime, f32 x, f32 y, f32 z, f32
     EffStarPowerN64Work* work;
 
     effect = effEntry();
-    effect->type = "StarPowerN64\0\0\0";
+    effect->type = "StarPowerN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffStarPowerN64Work));
     effect->userdata = work;

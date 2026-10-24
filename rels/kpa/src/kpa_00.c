@@ -262,7 +262,7 @@ static NpcSetupInfo npcEnt[] = {
 
 EVT_BEGIN(kpa_00_init_evt)
     CALL(evt_mario_set_mode, 2)
-    CALL(evt_snd_envon, 272, STRING("ENV_KOOPA_KPA1\0"))
+    CALL(evt_snd_envon, 272, STRING("ENV_KOOPA_KPA1"))
     CALL(evt_npc_setup, PTR(npcEnt))
     SWITCH(GSW(0))
         CASE_EQUAL(59)

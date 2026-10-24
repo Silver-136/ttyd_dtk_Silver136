@@ -93,7 +93,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
         break;
     }
 #endif
-    effect->type = "miniGame\0\0\0";
+    effect->type = "miniGame";
     effect->count = n;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(MiniGameWork));
     effect->userdata = work;

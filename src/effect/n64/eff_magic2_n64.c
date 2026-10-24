@@ -104,7 +104,7 @@ EffectEntry* effMagic2N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scal
     EffMagic2N64Work* w;
 
     effect = effEntry();
-    effect->type = "Magic2N64\0\0";
+    effect->type = "Magic2N64";
     effect->count = 1;
     w = __memAlloc(HEAP_EFFECT, sizeof(EffMagic2N64Work));
     effect->userdata = w;

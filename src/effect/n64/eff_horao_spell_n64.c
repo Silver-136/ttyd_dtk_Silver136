@@ -82,7 +82,7 @@ EffectEntry* effHoraoSpellN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, 
     EffHoraoSpellN64Work* work;
 
     effect = effEntry();
-    effect->type = "HoraoSpellN64\0\0";
+    effect->type = "HoraoSpellN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffHoraoSpellN64Work));
     effect->userdata = work;

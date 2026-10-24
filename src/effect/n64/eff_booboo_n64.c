@@ -294,7 +294,7 @@ EffectEntry* effBoobooN64Entry(void) {
     s32 i;
 
     effect = effEntry();
-    effect->type = "BoobooN64\0\0";
+    effect->type = "BoobooN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffBoobooN64Work));
     effect->userdata = work;

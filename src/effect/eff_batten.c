@@ -33,7 +33,7 @@ EffectEntry* effBattenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 sca
 
     effect = effEntry();
     count = (type == 0) ? 4 : 1;
-    effect->type = "Batten\0";
+    effect->type = "Batten";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffBattenWork));
     effect->userdata = work;

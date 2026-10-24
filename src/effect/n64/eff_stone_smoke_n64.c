@@ -24,7 +24,7 @@ EffectEntry* effStoneSmokeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, 
     EffStoneSmokeN64Work* work;
 
     effect = effEntry();
-    effect->type = "StoneSmokeN64\0\0";
+    effect->type = "StoneSmokeN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffStoneSmokeN64Work));
     effect->userdata = work;

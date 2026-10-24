@@ -107,7 +107,7 @@ USER_FUNC(tegami) {
         wp = _mapAlloc(sizeof(TegamiWork));
         memset(wp, 0, sizeof(TegamiWork));
         wp->alpha = 0;
-        wp->tpl = fileAllocf(4, "%s/mariost.tpl\0", getMarioStDvdRoot());
+        wp->tpl = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
     }
     wp->alpha += 2;
     if (wp->alpha > 128) {

@@ -560,7 +560,7 @@ EVT_BEGIN(dou_09_init_evt)
     CALL(evt_run_case_evt, 0, 1, STRING("a09_fune_ata1"), 0, PTR(dou_puka_event_3), 0)
     CALL(evt_run_case_evt, 1, 1, STRING("a09_fune_ata1"), 0, PTR(dou_puka_event_rev_3), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), 500, 140, -100, 0, GSWF(5557), 0)
-    CALL(evt_mobj_brick, STRING("hblk1\0\0"), 500, 50, -100, 0, 13, 0, GSWF(2994))
+    CALL(evt_mobj_brick, STRING("hblk1"), 500, 50, -100, 0, 13, 0, GSWF(2994))
     SPAWN_EVENT(PTR(bombwall_init))
     RETURN
 EVT_END()

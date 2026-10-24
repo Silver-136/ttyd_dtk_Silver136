@@ -436,7 +436,7 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
         count = 4;
         break;
     }
-    effect->type = "KemuTest\0\0\0";
+    effect->type = "KemuTest";
     effect->count = count;
     work = __memAlloc(3, effect->count * sizeof(KemuTestWork));
     effect->userdata = work;

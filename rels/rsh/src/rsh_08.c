@@ -151,7 +151,7 @@ EVT_BEGIN(rsh_08_a_init_evt)
     END_IF
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    CALL(evt_map_playanim, STRING("yure\0\0\0"), 1, 0)
+    CALL(evt_map_playanim, STRING("yure"), 1, 0)
     RETURN
 EVT_END()
 

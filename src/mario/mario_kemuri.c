@@ -125,7 +125,7 @@ void mario_kemuri_landon(void) {
     MarioWork* mario = marioGetPtr();
     s32 type = 0;
 
-    if (strcmp(gp->currentMapName, "mri_05\0") == 0) {
+    if (strcmp(gp->currentMapName, "mri_05") == 0) {
         type = 10;
     }
     if (mario->currMotionId == 3 && mario->airTimer == 1 && cnt2 == 10) {

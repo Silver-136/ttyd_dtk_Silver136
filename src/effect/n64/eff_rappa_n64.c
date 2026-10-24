@@ -55,7 +55,7 @@ EffectEntry* effRappaN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 pitch,
     if (num == 0) {
         return NULL;
     }
-    effect->type = "RappaN64\0\0\0";
+    effect->type = "RappaN64";
     effect->count = num + 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffRappaN64Work) * (num + 1));
     effect->userdata = work;

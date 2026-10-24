@@ -13,6 +13,6 @@ void MWTRACE(unsigned char level, char* fmt, ...);
 
 DSError TRKMessageSend(MessageBuffer* b) {
     DSError write_err = TRKWriteUARTN(b->fData, b->fLength);
-    MWTRACE(1, "MessageSend : cc_write returned %ld\n\0\0\0", write_err);
+    MWTRACE(1, "MessageSend : cc_write returned %ld\n", write_err);
     return 0;
 }

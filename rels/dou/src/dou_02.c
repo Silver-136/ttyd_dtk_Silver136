@@ -363,7 +363,7 @@ EVT_BEGIN(dou_02_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk1"), -300, 145, -130, 0, GSWF(5554), 0)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
-    CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change\0\0"), STRING("Ship_Change"))
+    CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change"), STRING("Ship_Change"))
     RETURN
 EVT_END()
 

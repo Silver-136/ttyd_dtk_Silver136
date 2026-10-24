@@ -23,7 +23,7 @@ EffectEntry* effCloudN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 s
     EffCloudN64Work* work;
 
     effect = effEntry();
-    effect->type = "CloudN64\0\0\0";
+    effect->type = "CloudN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffCloudN64Work));
     effect->userdata = work;

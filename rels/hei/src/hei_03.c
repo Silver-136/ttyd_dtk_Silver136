@@ -334,7 +334,7 @@ EVT_BEGIN(hei_03_init_evt)
             SET_RAW_VALUE(LW(0), STRING("シンノスケ2"))
             SET_RAW_VALUE(LW(1), STRING("シンノスケ1"))
             SET_VALUE(LW(2), 1)
-            CALL(evt_run_case_evt, 9, 1, STRING("a_hasira_2\0"), 0, PTR(hashira_evt), GW(1))
+            CALL(evt_run_case_evt, 9, 1, STRING("a_hasira_2"), 0, PTR(hashira_evt), GW(1))
             SET_VALUE(GF(1), 1)
         END_IF
         BEGIN_INLINE_EVENT

@@ -10,11 +10,11 @@ usu.c:
 	.text       start:0x00000000 end:0x00000174
 	.rodata     start:0x00000000 end:0x00000010
 	.data       start:0x00000000 end:0x00000060
-	.bss        start:0x00000000 end:0x00000004
+	.bss        start:0x00000000 end:0x00000008
 
 usu_00.c:
 	.text       start:0x00000174 end:0x000011B8
-	.rodata     start:0x00000010 end:0x000018D4
+	.rodata     start:0x00000010 end:0x000018D8
 	.data       start:0x00000060 end:0x00009590
 	.bss        start:0x00000008 end:0x00000010
 

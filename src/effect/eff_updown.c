@@ -35,7 +35,7 @@ EffectEntry* effUpdownEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 timer
     EffUpdownWork* work;
 
     effect = effEntry();
-    effect->type = "Updown\0";
+    effect->type = "Updown";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffUpdownWork));
     effect->userdata = work;

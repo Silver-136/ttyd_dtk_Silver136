@@ -150,7 +150,7 @@ EVT_BEGIN(muj_11_init_evt)
         CALL(evt_snd_envoff, 512)
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ9\0\0"))
+        CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ9"))
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

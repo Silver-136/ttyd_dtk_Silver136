@@ -12,7 +12,7 @@ gra_00.c:
 	.data       start:0x00000000 end:0x00001AF0
 
 gra_01.c:
-	.rodata     start:0x00000340 end:0x0000044C
+	.rodata     start:0x00000340 end:0x00000450
 	.data       start:0x00001AF0 end:0x00001F78
 
 gra_02.c:
@@ -21,28 +21,28 @@ gra_02.c:
 	.data       start:0x00001F78 end:0x000024A8
 
 gra_03.c:
-	.rodata     start:0x00000540 end:0x0000059C
+	.rodata     start:0x00000540 end:0x000005A0
 	.data       start:0x000024A8 end:0x00002650
 
 gra_04.c:
 	.text       start:0x0000046C end:0x000004B4
-	.rodata     start:0x000005A0 end:0x0000068C
+	.rodata     start:0x000005A0 end:0x00000690
 	.data       start:0x00002650 end:0x00002D90
 
 gra_05.c:
 	.text       start:0x000004B4 end:0x0000050C
-	.rodata     start:0x00000690 end:0x0000084C
+	.rodata     start:0x00000690 end:0x00000850
 	.data       start:0x00002D90 end:0x00003E38
 
 gra_06.c:
-	.rodata     start:0x00000850 end:0x00000A0C
+	.rodata     start:0x00000850 end:0x00000A10
 	.data       start:0x00003E38 end:0x00004EE8
 
 gra.c:
 	.text       start:0x0000050C end:0x00000700
-	.rodata     start:0x00000A10 end:0x00000A4C
+	.rodata     start:0x00000A10 end:0x00000A50
 	.data       start:0x00004EE8 end:0x00004F38
-	.bss        start:0x00000000 end:0x00000004
+	.bss        start:0x00000000 end:0x00000008
 
 event/evt_kagemario.c:
 	.text       start:0x00000700 end:0x00000B0C

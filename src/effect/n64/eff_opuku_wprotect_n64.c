@@ -56,7 +56,7 @@ EffectEntry* effOpukuWprotectN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     EffOpukuWprotectN64Work* work;
 
     effect = effEntry();
-    effect->type = "OpukuWprotectN64\0\0\0";
+    effect->type = "OpukuWprotectN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffOpukuWprotectN64Work));
     effect->userdata = work;

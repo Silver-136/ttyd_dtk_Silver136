@@ -193,7 +193,7 @@ void bomhei_use_post(PartyEntry* party) {
         } else if (player->currMotionId == 2) {
             name = "M_R_1";
         } else if (player->flags & (1 << 16)) {
-            name = "M_J_1B\0";
+            name = "M_J_1B";
         } else {
             name = "M_S_1";
         }

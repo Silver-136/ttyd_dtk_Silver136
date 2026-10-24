@@ -78,7 +78,7 @@ USER_FUNC(evt_npc_slave_entry) {
     index = *args++;
     deadEvent = (void*)evtGetValue(event, *args++);
     memset(&slaveBuf, 0, sizeof(slaveBuf));
-    sprintf(ident, "_s%d\0", id);
+    sprintf(ident, "_s%d", id);
     strcpy(slaveName, npc->description);
     strcat(slaveName, ident);
     npcEntry(slaveName, animName);

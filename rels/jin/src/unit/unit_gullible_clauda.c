@@ -330,7 +330,7 @@ static EVT_BEGIN(attack_event_clauda)
         WAIT_FRAMES(30)
         GOTO(95)
     END_IF
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_CLAUD_ATTACK2\0\0"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_CLAUD_ATTACK2"), -250000000, 0, -250000000)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(12), 256, LW(5))
     CALL(btlevtcmd_JumpContinue, -2)

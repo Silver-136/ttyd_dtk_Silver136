@@ -564,7 +564,7 @@ USER_FUNC(rou_hikari_front_onoff) {
     func = on ? mapGrpFlagOn : mapGrpFlagOff;
     scale = on ? 0.0f : 0.5f;
     for (i = 39; i <= 62; i++) {
-        sprintf(name, "S_rou%02d\0\0", i);
+        sprintf(name, "S_rou%02d", i);
         func(name, 1);
         sprintf(name, "hi%d", i);
         eff = effNameToPtr(name);

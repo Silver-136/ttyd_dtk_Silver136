@@ -76,7 +76,7 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
         radius = 42.0f;
         break;
     }
-    effect->type = "Kemuri8N64\0";
+    effect->type = "Kemuri8N64";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffKemuri8N64Work) * count);
     effect->userdata = work;

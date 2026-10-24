@@ -196,11 +196,11 @@ EVT_BEGIN(mri_19_init_evt)
     CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
     IF_INT_EQUAL(GSWF(2874), 0)
         CALL(evt_cloud_init)
-        CALL(evt_cloud_ent, 0, STRING("S_f2_isk"), STRING("A_f2_isk\0\0\0"), PTR(cloud_wind_event))
+        CALL(evt_cloud_ent, 0, STRING("S_f2_isk"), STRING("A_f2_isk"), PTR(cloud_wind_event))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("a_hi"), 16)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_f2_isk"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_f2_isk\0\0\0"), 1, 0)
+        CALL(evt_hitobj_onoff, STRING("A_f2_isk"), 1, 0)
         CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
         CALL(evt_map_entry_airport_harbor, 0, STRING("hikou1"), STRING("a_hi1"))
     END_IF

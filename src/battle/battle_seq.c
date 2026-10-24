@@ -296,7 +296,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL a2) { //1:1, needs stmw forc
 			if (wp->alertTick <= 0) {
 				wp->alertTick = 60;
 				if (wp->commandMenu.flags & 1) {
-					psndSFXOn("SFX_BTL_PINCH1\0");
+					psndSFXOn("SFX_BTL_PINCH1");
 				}
 			}
 		}

@@ -118,7 +118,7 @@ EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     EffShockN64Work* w;
 
     effect = effEntry();
-    effect->type = "ShockN64\0\0\0";
+    effect->type = "ShockN64";
     effect->count = 1;
     w = __memAlloc(HEAP_EFFECT, sizeof(EffShockN64Work));
     effect->userdata = w;

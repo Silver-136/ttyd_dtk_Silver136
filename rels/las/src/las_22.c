@@ -477,7 +477,7 @@ EVT_BEGIN(las_22_init_evt)
         CALL(evt_item_entry, STRING("key"), 47, -25, -80, -100, 16, -1, PTR(key_evt))
     END_IF
     IF_INT_LESS(GSW(0), 394)
-        CALL(evt_mobj_lock, STRING("lock\0\0\0"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF(4355))
+        CALL(evt_mobj_lock, STRING("lock"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF(4355))
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF

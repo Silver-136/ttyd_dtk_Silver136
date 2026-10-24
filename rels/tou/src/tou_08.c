@@ -1313,12 +1313,12 @@ EVT_BEGIN(tou_08_init_evt)
         CASE_DEFAULT
         SWITCH(GSW(0))
             CASE_BETWEEN(127, 137)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2\0\0"))
+            CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
             CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
             CALL(evt_snd_bgmoff, 26624)
             CASE_GREATER_OR_EQUAL(165)
             IF_INT_NOT_EQUAL(GSW(0), 402)
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2\0\0"))
+                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
                 CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, 26624)
             END_IF
@@ -1327,7 +1327,7 @@ EVT_BEGIN(tou_08_init_evt)
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
                 ELSE
-                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2\0\0"))
+                CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
                 CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, 26624)
             END_IF

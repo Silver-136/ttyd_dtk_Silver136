@@ -29,20 +29,20 @@ unit/unit_boss_champion.c:
 
 tou2.c:
 	.text       start:0x000029DC end:0x00004FEC
-	.rodata     start:0x000024D0 end:0x0000360C
+	.rodata     start:0x000024D0 end:0x00003610
 	.data       start:0x000162C8 end:0x00016B10
 	.bss        start:0x00000018 end:0x00000030
 
 unit/unit_basabasa.c:
-	.rodata     start:0x00003610 end:0x0000374C
+	.rodata     start:0x00003610 end:0x00003750
 	.data       start:0x00016B10 end:0x00017BF8
 
 unit/unit_bomhei.c:
-	.rodata     start:0x00003750 end:0x00003934
+	.rodata     start:0x00003750 end:0x00003938
 	.data       start:0x00017BF8 end:0x000190D8
 
 unit/unit_boomerang_bros.c:
-	.rodata     start:0x00003938 end:0x00003A84
+	.rodata     start:0x00003938 end:0x00003A88
 	.data       start:0x000190D8 end:0x0001AEA0
 
 unit/unit_borodo.c:
@@ -51,7 +51,7 @@ unit/unit_borodo.c:
 	.data       start:0x0001AEA0 end:0x0001C7B8
 
 unit/unit_chorobon.c:
-	.rodata     start:0x00003C40 end:0x00003DFC
+	.rodata     start:0x00003C40 end:0x00003E00
 	.data       start:0x0001C7B8 end:0x0001DDF0
 
 unit/unit_dark_keeper.c:
@@ -60,11 +60,11 @@ unit/unit_dark_keeper.c:
 
 unit/unit_fire_bros.c:
 	.text       start:0x000052D0 end:0x00005458
-	.rodata     start:0x00003F88 end:0x000040AC
+	.rodata     start:0x00003F88 end:0x000040B0
 	.data       start:0x0001F090 end:0x000210E8
 
 unit/unit_flower_chorobon.c:
-	.rodata     start:0x000040B0 end:0x0000429C
+	.rodata     start:0x000040B0 end:0x000042A0
 	.data       start:0x000210E8 end:0x00022E08
 
 unit/unit_green_chorobon.c:
@@ -75,14 +75,14 @@ unit/unit_green_chorobon.c:
 unit/unit_hammer_bros.c:
 	.text       start:0x0000556C end:0x000056F4
 	.rodata     start:0x000044B8 end:0x000045E8
-	.data       start:0x000249C0 end:0x0002643C
+	.data       start:0x000249C0 end:0x00026440
 
 unit/unit_hennya.c:
-	.rodata     start:0x000045E8 end:0x00004704
+	.rodata     start:0x000045E8 end:0x00004708
 	.data       start:0x00026440 end:0x00027000
 
 unit/unit_hinnya.c:
-	.rodata     start:0x00004708 end:0x00004824
+	.rodata     start:0x00004708 end:0x00004828
 	.data       start:0x00027000 end:0x00027BB8
 
 unit/unit_honenoko.c:
@@ -102,8 +102,8 @@ unit/unit_iron_sinemon2.c:
 
 unit/unit_jyugem.c:
 	.text       start:0x0000596C end:0x00005A0C
-	.rodata     start:0x00004E18 end:0x00004FF4
-	.data       start:0x0002B628 end:0x0002D364
+	.rodata     start:0x00004E18 end:0x00004FF8
+	.data       start:0x0002B628 end:0x0002D368
 
 unit/unit_kurikuri.c:
 	.text       start:0x00005A0C end:0x00005B24
@@ -116,11 +116,11 @@ unit/unit_piders.c:
 	.data       start:0x0002E0F0 end:0x00030230
 
 unit/unit_sambo.c:
-	.rodata     start:0x00005330 end:0x00005674
+	.rodata     start:0x00005330 end:0x00005678
 	.data       start:0x00030230 end:0x00034948
 
 unit/unit_togedaruma.c:
-	.rodata     start:0x00005678 end:0x0000586C
+	.rodata     start:0x00005678 end:0x00005870
 	.data       start:0x00034948 end:0x00035B80
 
 unit/unit_togezo.c:
@@ -138,7 +138,7 @@ unit/unit_ura_pata.c:
 	.data       start:0x000392D8 end:0x0003BF18
 
 unit/unit_hannya.c:
-	.rodata     start:0x00005FD8 end:0x000060F4
+	.rodata     start:0x00005FD8 end:0x000060F8
 	.data       start:0x0003BF18 end:0x0003CAD8
 
 unit/unit_hyper_sinnosuke.c:
@@ -172,8 +172,8 @@ unit/unit_burst_wanwan.c:
 
 unit/unit_hyper_jyugem.c:
 	.text       start:0x000083AC end:0x0000844C
-	.rodata     start:0x000070C8 end:0x000072CC
-	.data       start:0x0004C960 end:0x0004E984
+	.rodata     start:0x000070C8 end:0x000072D0
+	.data       start:0x0004C960 end:0x0004E988
 
 unit/unit_hyper_togezo.c:
 	.rodata     start:0x000072D0 end:0x00007548
@@ -191,7 +191,7 @@ unit/unit_boss_koopa_tou.c:
 
 unit/unit_borodo_king.c:
 	.text       start:0x00008FAC end:0x00009290
-	.rodata     start:0x000079E8 end:0x00007BA4
+	.rodata     start:0x000079E8 end:0x00007BA8
 	.data       start:0x00052A08 end:0x00054320
 
 unit/unit_nokonoko_fighter.c:
@@ -207,7 +207,7 @@ unit/unit_crimson_togemet.c:
 	.data       start:0x00057A38 end:0x000599B8
 
 unit/unit_monochrome_kurokumorn.c:
-	.rodata     start:0x00008240 end:0x000083FC
+	.rodata     start:0x00008240 end:0x00008400
 	.data       start:0x000599B8 end:0x0005B178
 
 unit/unit_monochrome_pakkun.c:

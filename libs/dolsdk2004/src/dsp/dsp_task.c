@@ -331,7 +331,7 @@ void __DSP_add_task(DSPTaskInfo* task) {
     }
 
     task->state = 0;
-    __DSP_debug_printf("__DSP_add_task() : Added task    : 0x%08X\n\0", (u32)task);
+    __DSP_debug_printf("__DSP_add_task() : Added task    : 0x%08X\n", (u32)task);
 }
 
 void __DSP_remove_task(DSPTaskInfo* task) {

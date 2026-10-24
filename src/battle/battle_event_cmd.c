@@ -3677,7 +3677,7 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
         } else if (kind >= 0xE0 && kind < 0xE7) {
             psndSFXOn_3D("SFX_ITEM_PARTY_USE1", &pos);
         } else {
-            psndSFXOn_3D("SFX_ENM_ITEM_USE1\0\0", &pos);
+            psndSFXOn_3D("SFX_ENM_ITEM_USE1", &pos);
         }
         return EVT_RETURN_BLOCK;
     }

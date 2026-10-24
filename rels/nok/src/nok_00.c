@@ -1509,7 +1509,7 @@ USER_FUNC(pposter_init) {
     poster->shape = animPoseGetShapeIdx(npcNameToPtr("poster")->poseId, "pPlaneShape2");
     // ノコノコA
     npc = npcNameToPtr("\x83\x6D\x83\x52\x83\x6D\x83\x52\x41");
-    poster->group = animPoseGetGroupIdx(npc->poseId, "locator7\0\0\0");
+    poster->group = animPoseGetGroupIdx(npc->poseId, "locator7");
     animPoseSetDispCallBack(npc->poseId, draw_poster, NULL);
     return EVT_RETURN_DONE;
 }

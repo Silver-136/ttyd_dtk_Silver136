@@ -40,7 +40,7 @@ EffectEntry* effHagetakaFlushN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) 
     EffHagetakaFlushN64Work* work;
 
     effect = effEntry();
-    effect->type = "HagetakaFlushN64\0\0\0";
+    effect->type = "HagetakaFlushN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffHagetakaFlushN64Work));
     effect->userdata = work;

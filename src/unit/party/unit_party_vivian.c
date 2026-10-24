@@ -338,7 +338,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
                 unit->mPosition = v;
             }
             animPoseSetEffect(pose, "p_bibi", 1);
-            animPoseSetEffectAnim(pose, "PM_B_2\0", 1);
+            animPoseSetEffectAnim(pose, "PM_B_2", 1);
             event->userdata[0]++;
             break;
         case 2:

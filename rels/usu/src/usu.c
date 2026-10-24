@@ -50,7 +50,7 @@ void _prolog(void) {
         (*ctor)();
     }
     relSetEvtAddr("usu_00", usu_00_init_evt);
-    relSetEvtAddr("usu_01\0", usu_01_init_evt);
+    relSetEvtAddr("usu_01", usu_01_init_evt);
     pose_buf = _mapAlloc(sizeof(partyPoseTbl[6]));
     memcpy(pose_buf, partyPoseTbl[6], sizeof(partyPoseTbl[6]));
 }

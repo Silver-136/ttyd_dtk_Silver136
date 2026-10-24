@@ -34,7 +34,7 @@ EffectEntry* effBomheiN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 
     EffBomheiN64Work* work;
 
     effect = effEntry();
-    effect->type = "BomheiN64\0\0";
+    effect->type = "BomheiN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffBomheiN64Work));
     effect->userdata = work;

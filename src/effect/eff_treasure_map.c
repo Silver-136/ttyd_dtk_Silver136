@@ -10,7 +10,7 @@ EffectEntry* effTreasureMapEntry(s32 type, f32 x, f32 y, f32 z) {
     EffTreasureMapWork* work;
 
     effect = effEntry();
-    effect->type = "Treasure_Map\0\0\0";
+    effect->type = "Treasure_Map";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffTreasureMapWork));
     effect->userdata = work;

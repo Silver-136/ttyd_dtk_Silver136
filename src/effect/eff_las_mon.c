@@ -20,7 +20,7 @@ EffectEntry* effLasMonEntry(s32 type, f32 x, f32 y, f32 z) {
     EffLasMonWork* work;
 
     effect = effEntry();
-    effect->type = "LasMon\0";
+    effect->type = "LasMon";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffLasMonWork) * effect->count);
     effect->userdata = work;

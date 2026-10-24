@@ -292,7 +292,7 @@ void _prolog(void) {
     relSetEvtAddr("kpa_04", kpa_04_init_evt);
     relSetEvtAddr("kpa_05", kpa_05_init_evt);
     relSetEvtAddr("kpa_06", kpa_06_init_evt);
-    relSetEvtAddr("kpa_07\0", kpa_07_init_evt);
+    relSetEvtAddr("kpa_07", kpa_07_init_evt);
 }
 
 void _epilog(void) {

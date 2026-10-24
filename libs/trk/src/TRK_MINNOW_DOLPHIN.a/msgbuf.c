@@ -72,7 +72,7 @@ DSError TRKGetFreeBuffer(int* msgID, TRKBuffer** outMsg) {
     }
 
     if (error == 0x300)
-        usr_puts_serial("ERROR : No buffer available\n\0\0\0");
+        usr_puts_serial("ERROR : No buffer available\n");
 
     return error;
 }

@@ -75,7 +75,7 @@ USER_FUNC(evt_iwamove_main) {
             } else {
                 wk->state--;
                 mario->dispFlags &= ~2;
-                marioChgPose("M_S_1\0\0");
+                marioChgPose("M_S_1");
                 marioKeyOn();
                 partyKeyOn();
                 statusWinForceOff();

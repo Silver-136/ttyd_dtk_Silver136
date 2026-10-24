@@ -18,7 +18,7 @@ EffectEntry* effMarioBalloonEntry(s32 type, MarioWork* mario) {
     MarioBalloonWork* work;
 
     effect = effEntry();
-    effect->type = "MarioBalloon\0\0\0";
+    effect->type = "MarioBalloon";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(MarioBalloonWork));
     effect->userdata = work;

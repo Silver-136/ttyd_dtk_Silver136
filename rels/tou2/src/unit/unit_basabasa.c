@@ -333,8 +333,8 @@ static BattleWeapon weapon_basabasa_attack = {
 
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"BSA_S_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
-    {"BSA_W_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1\0", 0, 1},
-    {"BSA_R_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1\0", 0, 1},
+    {"BSA_W_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, 1},
+    {"BSA_R_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, 1},
     {"BSA_T_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
     {"BSA_A_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
     {"BSA_N_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},

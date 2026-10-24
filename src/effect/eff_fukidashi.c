@@ -232,7 +232,7 @@ EffectEntry* effFukidashiEntry(s32 type, s32 number, NpcEntry* npc, f32 x, f32 y
                 pos.x = x;
                 pos.y = y;
                 pos.z = z;
-                psndSFXOn_3D("SFX_EVT_NPC_QUESTION_MARK1\0", &pos);
+                psndSFXOn_3D("SFX_EVT_NPC_QUESTION_MARK1", &pos);
                 break;
             }
         }

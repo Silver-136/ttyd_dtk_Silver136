@@ -75,7 +75,7 @@ EffectEntry* effDogabonAttackN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     f32 ang;
 
     effect = effEntry();
-    effect->type = "DogabonAttackN64\0\0\0";
+    effect->type = "DogabonAttackN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffDogabonAttackN64Work));
     effect->userdata = work;

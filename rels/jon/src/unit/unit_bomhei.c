@@ -594,7 +594,7 @@ static EVT_BEGIN(wait_event_spark)
     CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
     CALL(btlevtcmd_GetUnitWork, -2, 0, LW(15))
     IF_INT_EQUAL(LW(15), -1)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_BOMB_WAIT1\0"), -250000000, 0, LW(15))
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_BOMB_WAIT1"), -250000000, 0, LW(15))
         CALL(btlevtcmd_SetUnitWork, -2, 0, LW(15))
     END_IF
     RETURN

@@ -55,7 +55,7 @@ EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y,
 
     effect = effEntry();
     count = (type == 2) ? 8 : 1;
-    effect->type = "PacknBfireN64\0\0";
+    effect->type = "PacknBfireN64";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffPacknBfireWork));
     effect->userdata = work;

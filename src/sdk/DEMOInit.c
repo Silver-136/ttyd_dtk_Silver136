@@ -220,7 +220,7 @@ static void __NoHangRetraceCallback(u32 count) {
 		ovFrameCount++;
 		if (ovFrameCount >= FrameMissThreshold) {
 			__DEMODiagnoseHang();
-			strcpy(__GXErrorMessage, "---------WARNING : HANG AT HIGH WATERMARK----------\n\0\0\0");
+			strcpy(__GXErrorMessage, "---------WARNING : HANG AT HIGH WATERMARK----------\n");
 		}
 	}
 	else {
@@ -287,7 +287,7 @@ static void __DEMODiagnoseHang(void) {
 		strcat(fullmsg, newmsg);
 	}
 	else {
-		sprintf(newmsg, "GP is in unknown state.\n\0\0\0");
+		sprintf(newmsg, "GP is in unknown state.\n");
 		strcat(fullmsg, newmsg);
 	}
 	strcpy(__GXErrorMessage, newmsg);

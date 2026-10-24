@@ -50,7 +50,7 @@ EffectEntry* effFireSparkN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
     s32 i;
 
     effect = effEntry();
-    effect->type = "FireSparkN64\0\0\0";
+    effect->type = "FireSparkN64";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffFireSparkN64Work) * count);
     effect->userdata = work;

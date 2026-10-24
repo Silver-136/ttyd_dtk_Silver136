@@ -8589,7 +8589,7 @@ NpcTerritoryInfo btl_jon_setup_no_tbl[] = {
     {"BTLNO_JON_93", 48},
     {"BTLNO_JON_94", 49},
     {"BTLNO_JON_95", 50},
-    {"BTLNO_JON_100_ZONBABA\0\0", 51},
+    {"BTLNO_JON_100_ZONBABA", 51},
     {0},
 };
 

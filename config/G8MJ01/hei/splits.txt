@@ -26,7 +26,7 @@ hei_02.c:
 	.data       start:0x00005408 end:0x00005970
 
 hei_03.c:
-	.rodata     start:0x00000EB0 end:0x00000FDC
+	.rodata     start:0x00000EB0 end:0x00000FE0
 	.data       start:0x00005970 end:0x000063B0
 
 hei_04.c:
@@ -34,7 +34,7 @@ hei_04.c:
 	.data       start:0x000063B0 end:0x00006768
 
 hei_05.c:
-	.rodata     start:0x000011A8 end:0x000012BC
+	.rodata     start:0x000011A8 end:0x000012C0
 	.data       start:0x00006768 end:0x00007120
 
 hei_06.c:
@@ -53,7 +53,7 @@ hei_08.c:
 
 hei_09.c:
 	.text       start:0x000011E4 end:0x00001204
-	.rodata     start:0x00001AE8 end:0x00001B34
+	.rodata     start:0x00001AE8 end:0x00001B38
 	.data       start:0x00009928 end:0x00009AE0
 
 hei_10.c:
@@ -63,7 +63,7 @@ hei_10.c:
 	.bss        start:0x00000000 end:0x00000008
 
 hei_11.c:
-	.rodata     start:0x00001D78 end:0x00001DC4
+	.rodata     start:0x00001D78 end:0x00001DC8
 	.data       start:0x0000A468 end:0x0000A620
 
 hei_12.c:
@@ -83,7 +83,7 @@ data/battle/battle_database_hei.c:
 	.data       start:0x0000AF38 end:0x0000E950
 
 unit/unit_chorobon.c:
-	.rodata     start:0x00002448 end:0x00002604
+	.rodata     start:0x00002448 end:0x00002608
 	.data       start:0x0000E950 end:0x0000FF88
 
 unit/unit_chorobon_gundan.c:
@@ -117,11 +117,11 @@ unit/unit_patapata.c:
 
 unit/unit_togekuri.c:
 	.text       start:0x0000453C end:0x00004854
-	.rodata     start:0x000031F0 end:0x000033AC
-	.data       start:0x00017618 end:0x000186B4
+	.rodata     start:0x000031F0 end:0x000033B0
+	.data       start:0x00017618 end:0x000186B8
 
 unit/unit_sinemon.c:
-	.rodata     start:0x000033B0 end:0x00003554
+	.rodata     start:0x000033B0 end:0x00003558
 	.data       start:0x000186B8 end:0x00019740
 
 unit/unit_sinnosuke.c:
@@ -129,7 +129,7 @@ unit/unit_sinnosuke.c:
 	.data       start:0x00019740 end:0x0001A738
 
 unit/unit_togedaruma.c:
-	.rodata     start:0x000036F0 end:0x000038E4
+	.rodata     start:0x000036F0 end:0x000038E8
 	.data       start:0x0001A738 end:0x0001B970
 
 unit/unit_monochrome_sinemon.c:

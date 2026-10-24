@@ -86,7 +86,7 @@ EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
     s32 i;
 
     effect = effEntry();
-    effect->type = "BrokenBarrierN64\0\0\0";
+    effect->type = "BrokenBarrierN64";
     effect->count = 61;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffBrokenBarrierN64Work) * 61);
     effect->userdata = work;

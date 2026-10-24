@@ -45,7 +45,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
 			m = msgSearch(msg);
 		} else {
 			m = msg;
-			msg = "DIRECT\0";
+			msg = "DIRECT";
 		}
 		event->printWindowId = msgWindow_Entry(m, a3, (s16)event->msgPriority);
 		event->msgPriority = 0;
@@ -442,7 +442,7 @@ USER_FUNC(evt_msg_select) {
 			m = msgSearch(msg);
 		} else {
 			m = msg;
-			msg = "DIRECT\0";
+			msg = "DIRECT";
 		}
 		event->selectWindowId = msgWindow_Entry(m, 0, 0x14);
 		MSGW(windowGetPointer(event->selectWindowId))->tag = msg;

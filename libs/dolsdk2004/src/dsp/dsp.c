@@ -8,7 +8,7 @@
 #if DEBUG
 #define BUILD_TIME "03:56:49"
 #else
-#define BUILD_TIME "04:15:32\0\0\0"
+#define BUILD_TIME "04:15:32"
 #endif
 
 #ifdef DEBUG

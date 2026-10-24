@@ -9,7 +9,7 @@ Sections:
 tik.c:
 	.text       start:0x00000000 end:0x000003B8
 	.rodata     start:0x00000000 end:0x000000D0
-	.data       start:0x00000000 end:0x000001F4
+	.data       start:0x00000000 end:0x000001F8
 
 tik_00.c:
 	.text       start:0x000003B8 end:0x000011C0
@@ -27,11 +27,11 @@ tik_02.c:
 	.data       start:0x00007320 end:0x00008DB8
 
 tik_03.c:
-	.rodata     start:0x00001790 end:0x00001A5C
+	.rodata     start:0x00001790 end:0x00001A60
 	.data       start:0x00008DB8 end:0x0000A3A0
 
 tik_04.c:
-	.rodata     start:0x00001A60 end:0x00001CCC
+	.rodata     start:0x00001A60 end:0x00001CD0
 	.data       start:0x0000A3A0 end:0x0000B140
 
 tik_05.c:
@@ -57,7 +57,7 @@ tik_09.c:
 	.data       start:0x00013180 end:0x000133E0
 
 tik_10.c:
-	.rodata     start:0x00002B78 end:0x00002BF4
+	.rodata     start:0x00002B78 end:0x00002BF8
 	.data       start:0x000133E0 end:0x00013658
 
 tik_13.c:
@@ -83,10 +83,10 @@ unit/unit_boss_gesso.c:
 data/battle/battle_database_tik.c:
 	.text       start:0x0000558C end:0x00005724
 	.rodata     start:0x00003528 end:0x00003980
-	.data       start:0x00017E70 end:0x0001B134
+	.data       start:0x00017E70 end:0x0001B138
 
 tik_14.c:
-	.rodata     start:0x00003980 end:0x000039D4
+	.rodata     start:0x00003980 end:0x000039D8
 	.data       start:0x0001B138 end:0x0001B340
 
 unit/unit_boss_gesso_right_arm.c:
@@ -95,7 +95,7 @@ unit/unit_boss_gesso_right_arm.c:
 	.data       start:0x0001B340 end:0x0001C3A0
 
 unit/unit_boss_gesso_left_arm.c:
-	.rodata     start:0x00003B88 end:0x00003C64
+	.rodata     start:0x00003B88 end:0x00003C68
 	.data       start:0x0001C3A0 end:0x0001CBA8
 
 unit/unit_kuriboo.c:
@@ -104,7 +104,7 @@ unit/unit_kuriboo.c:
 	.data       start:0x0001CBA8 end:0x0001D740
 
 tik_21.c:
-	.rodata     start:0x00003DC0 end:0x00003E64
+	.rodata     start:0x00003DC0 end:0x00003E68
 	.data       start:0x0001D740 end:0x0001DAF8
 
 tik_15.c:
@@ -112,7 +112,7 @@ tik_15.c:
 	.data       start:0x0001DAF8 end:0x0001DF28
 
 tik_16.c:
-	.rodata     start:0x00004000 end:0x00004174
+	.rodata     start:0x00004000 end:0x00004178
 	.data       start:0x0001DF28 end:0x0001E660
 
 tik_17.c:
@@ -129,15 +129,15 @@ tik_19.c:
 	.data       start:0x0001F208 end:0x0001FEF8
 
 tik_20.c:
-	.rodata     start:0x000046D0 end:0x00004784
+	.rodata     start:0x000046D0 end:0x00004788
 	.data       start:0x0001FEF8 end:0x000201D0
 
 unit/unit_hannya.c:
-	.rodata     start:0x00004788 end:0x000048A4
+	.rodata     start:0x00004788 end:0x000048A8
 	.data       start:0x000201D0 end:0x00020D90
 
 unit/unit_hinnya.c:
-	.rodata     start:0x000048A8 end:0x000049C4
+	.rodata     start:0x000048A8 end:0x000049C8
 	.data       start:0x00020D90 end:0x00021948
 
 unit/unit_patakuri.c:
@@ -147,13 +147,13 @@ unit/unit_patakuri.c:
 
 unit/unit_togekuri.c:
 	.text       start:0x00005AE0 end:0x00005DF8
-	.rodata     start:0x00004C00 end:0x00004DBC
-	.data       start:0x00023000 end:0x0002409C
+	.rodata     start:0x00004C00 end:0x00004DC0
+	.data       start:0x00023000 end:0x000240A0
 
 unit/unit_hammer_bros.c:
 	.text       start:0x00005DF8 end:0x0000600C
 	.rodata     start:0x00004DC0 end:0x00004EF0
-	.data       start:0x000240A0 end:0x00025B1C
+	.data       start:0x000240A0 end:0x00025B20
 
 unit/unit_kamec.c:
 	.text       start:0x0000600C end:0x00006800

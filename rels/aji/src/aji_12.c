@@ -384,7 +384,7 @@ static USER_FUNC(hikaru_off) {
         sprintf(name, "A_hikaru_%02d", i);
         hitGrpAttrOff(name, 0x800);
     }
-    hitGrpAttrOff("A_no1\0\0", 0x800);
+    hitGrpAttrOff("A_no1", 0x800);
     return EVT_RETURN_DONE;
 }
 

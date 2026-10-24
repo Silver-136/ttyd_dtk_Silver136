@@ -203,7 +203,7 @@ EVT_BEGIN(tou_13_init_evt)
         CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU7"))
         CALL(evt_snd_bgmoff, 26624)
         CASE_DEFAULT
-        CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1\0\0"))
+        CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU7"))
         CALL(evt_snd_set_rev_mode, 2)
     END_SWITCH

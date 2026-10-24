@@ -587,7 +587,7 @@ EVT_BEGIN(mri_04_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW(0), 93)
         CALL(evt_item_entry, STRING("item_key"), 16, 60, 0, 0, 14, GSWF(2839), 0)
     END_IF
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S\0\0"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 2)
     RETURN
 EVT_END()
 

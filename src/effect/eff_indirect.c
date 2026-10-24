@@ -27,7 +27,7 @@ EffectEntry* effIndirectEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffIndirectWork* work;
 
     effect = effEntry();
-    effect->type = "Indirect\0\0\0";
+    effect->type = "Indirect";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffIndirectWork));
     effect->userdata = work;

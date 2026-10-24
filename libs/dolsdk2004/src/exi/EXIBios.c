@@ -863,7 +863,7 @@ char* EXIGetTypeString(u32 type) {
     case EXI_STREAM_HANGER:
         return "Stream Hanger";
     case EXI_IS_VIEWER:
-        return "IS-DOL-VIEWER\0\0";
+        return "IS-DOL-VIEWER";
     default:
         return "Unknown";
     }

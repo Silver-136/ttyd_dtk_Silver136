@@ -56,7 +56,7 @@ tou_08.c:
 	.data       start:0x00022BF8 end:0x00026028
 
 tou_09.c:
-	.rodata     start:0x00006BC0 end:0x00006CFC
+	.rodata     start:0x00006BC0 end:0x00006D00
 	.data       start:0x00026028 end:0x00026B00
 
 tou_10.c:
@@ -77,7 +77,7 @@ tou_13.c:
 	.data       start:0x0002CA60 end:0x0002D168
 
 tou_20.c:
-	.rodata     start:0x00007B98 end:0x00007C4C
+	.rodata     start:0x00007B98 end:0x00007C50
 	.data       start:0x0002D168 end:0x0002DA00
 
 event/evt_lect_tou.c:

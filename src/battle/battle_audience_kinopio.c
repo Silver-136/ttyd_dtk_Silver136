@@ -616,7 +616,7 @@ void BattleAudienceCtrlProcessKinopioDamage(s32 index) {
             m->timer = 0;
             if (BattleAudience_GetEscapeChangeOK(index) == 1) {
                 BattleAudience_ChangeStatus(index, 12);
-                psndSFXOn_3D("SFX_AUDIENCE_PANIC_SCREAM2\0", &m->position);
+                psndSFXOn_3D("SFX_AUDIENCE_PANIC_SCREAM2", &m->position);
             } else {
                 BattleAudience_ChangeStatus(index, 0);
             }

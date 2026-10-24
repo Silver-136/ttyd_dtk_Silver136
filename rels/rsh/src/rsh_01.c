@@ -1046,7 +1046,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
         CALL(evt_snd_bgmoff, 26624)
         ELSE
         IF_INT_EQUAL(GSWF(3461), 1)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1\0\0"))
+            CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_GOR1"))
             CALL(evt_snd_envoff, 512)
             CALL(evt_snd_bgmoff, 26624)
             ELSE

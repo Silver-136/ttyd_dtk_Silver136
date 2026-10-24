@@ -298,7 +298,7 @@ void _prolog(void) {
     relSetEvtAddr("tou_11", tou_11_init_evt);
     relSetEvtAddr("tou_12", tou_12_init_evt);
     relSetEvtAddr("tou_13", tou_13_init_evt);
-    relSetEvtAddr("tou_20\0", tou_20_init_evt);
+    relSetEvtAddr("tou_20", tou_20_init_evt);
     rankingInit();
 }
 

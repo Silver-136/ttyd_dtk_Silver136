@@ -25,7 +25,7 @@ EffectEntry* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
 
     effect = effEntry();
-    effect->type = "Queen2\0";
+    effect->type = "Queen2";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffQueen2Work) * effect->count);
     effect->userdata = work;

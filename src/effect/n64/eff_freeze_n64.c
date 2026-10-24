@@ -52,7 +52,7 @@ EffectEntry* effFreezeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 
     EffFreezeN64Work* work;
 
     effect = effEntry();
-    effect->type = "FreezeN64\0\0";
+    effect->type = "FreezeN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffFreezeN64Work));
     effect->userdata = work;

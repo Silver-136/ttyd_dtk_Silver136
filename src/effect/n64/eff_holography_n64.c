@@ -1352,7 +1352,7 @@ EffectEntry* effHolographyN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, 
     EffHolographyN64Work* work;
 
     effect = effEntry();
-    effect->type = "HolographyN64\0\0";
+    effect->type = "HolographyN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffHolographyN64Work));
     effect->userdata = work;

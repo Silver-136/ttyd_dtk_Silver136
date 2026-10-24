@@ -197,7 +197,7 @@ EVT_BEGIN(tik_08_init_evt)
             CALL_CHILD(PTR(bero_case_switch_on))
         END_IF
     END_IF
-    CALL(evt_mobj_signboard, STRING("board\0\0"), 85, 0, 0, PTR(evt_kanban), 0)
+    CALL(evt_mobj_signboard, STRING("board"), 85, 0, 0, PTR(evt_kanban), 0)
     RETURN
 EVT_END()
 

@@ -575,7 +575,7 @@ EVT_BEGIN(evt_memcard_save)
     IF_INT_EQUAL(LW(10), 21)
         CALL(evt_msg_select, 0, STRING("msg_mcard_yesno_ending"))
         ELSE
-        CALL(evt_msg_select, 0, STRING("msg_mcard_yesno3\0\0\0"))
+        CALL(evt_msg_select, 0, STRING("msg_mcard_yesno3"))
     END_IF
     IF_INT_EQUAL(LW(0), 0)
         IF_INT_EQUAL(LW(10), 23)

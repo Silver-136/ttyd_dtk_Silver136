@@ -47,12 +47,12 @@ const char* build_date_ptr = R_build_date;
 const char* build_time_ptr = R_build_time;
 
 const char* systemStrippedPool0(void) {
-    return "assertion \"%s\" failed.\n \"%s\"\n\0\0";
+    return "assertion \"%s\" failed.\n \"%s\"\n";
 }
 
 
 const char* getMarioStDvdRoot(void) {
-    return ".\0\0";
+    return ".";
 }
 
 f32 reviseAngle(f32 angle) {

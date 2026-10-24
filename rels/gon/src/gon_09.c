@@ -437,7 +437,7 @@ EVT_BEGIN(gon_09_init_evt)
     CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 588, -50, 138, STRING("blk_0"), 2, PTR(main_0), LSWF(1))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_boxS"), 1)
     CALL(evt_map_playanim, STRING("hokori"), 1, 0)
-    CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi\0\0\0"))
+    CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))
     RETURN
 EVT_END()
 

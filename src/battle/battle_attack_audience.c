@@ -78,7 +78,7 @@ s32 _attack_aud(EventEntry* event, BOOL isFirstCall) {
     pos[1] += 32.0f;
     if (mode != 1) {
         effHitEntry(0, 3, pos[0], pos[1], pos[2], 1.0f);
-        sfx = "SFX_BTL_DAMAGED_PLIABLE1\0\0\0";
+        sfx = "SFX_BTL_DAMAGED_PLIABLE1";
     }
     BattleAudience_GetPosition(no, &pos[0], &pos[1], &pos[2]);
     if (sfx) {

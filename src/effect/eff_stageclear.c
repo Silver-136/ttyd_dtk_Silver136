@@ -121,7 +121,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
         n = 7;
     }
 #endif
-    effect->type = "StageClear\0";
+    effect->type = "StageClear";
     effect->count = n;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(StageClearWork));
     effect->userdata = work;

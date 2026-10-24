@@ -655,7 +655,7 @@ EVT_BEGIN(tik_01_init_evt)
     SPAWN_EVENT(PTR(moving_floor))
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
     IF_INT_LESS(GSW(0), 19)
-        CALL(evt_npc_check_delete, STRING("トゲクリボー\0\0\0"))
+        CALL(evt_npc_check_delete, STRING("トゲクリボー"))
     END_IF
     IF_INT_LESS_OR_EQUAL(GSW(0), 11)
         SPAWN_EVENT(PTR(gorotuki_sanninngumi))

@@ -261,7 +261,7 @@ static const char* window_tbl[] = {
     "mado_uturi_1",
     "mado_uturi_2",
     "mado_uturi_3",
-    "mado_uturi_4\0\0\0",
+    "mado_uturi_4",
     NULL,
 };
 

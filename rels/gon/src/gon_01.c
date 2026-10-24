@@ -458,7 +458,7 @@ EVT_BEGIN(gon_01_init_evt)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou1"), STRING("a_hi1"))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasj"), 2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_l"), 2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_r\0"), 2)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_r"), 2)
     IF_INT_LESS(GSW(0), 37)
         SET_VALUE(GSW(0), 37)
     END_IF

@@ -428,7 +428,7 @@ static EVT_BEGIN(evt_attack)
     IF_INT_EQUAL(LF(0), 0)
         CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MOA_G_ARM_MOVE3"), -250000000, 0, -250000000)
     ELSE
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MOA_G_ARM_MOVE3_2\0"), -250000000, 0, -250000000)
+        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MOA_G_ARM_MOVE3_2"), -250000000, 0, -250000000)
     END_IF
     IF_INT_EQUAL(LW(15), 0)
         LOOP(0)

@@ -79,7 +79,7 @@ BattleUnitKind unit_system = {
     "SFX_BTL_DAMAGE1",
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1\0\0\0",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
     0x52003000,
     &regist,
     1,

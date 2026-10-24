@@ -53,7 +53,7 @@ EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 li
     s32 i;
 
     effect = effEntry();
-    effect->type = "WhirlwindN64\0\0\0";
+    effect->type = "WhirlwindN64";
     effect->count = 5;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffWhirlwindN64Work) * 5);
     effect->userdata = work;

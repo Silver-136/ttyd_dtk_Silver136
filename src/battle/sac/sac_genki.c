@@ -375,7 +375,7 @@ void main_mario(void) {
         } else {
             w->marioCnt--;
             if (w->marioCnt == 2) {
-                BtlUnit_SetAnim(part, "M_C_2B\0");
+                BtlUnit_SetAnim(part, "M_C_2B");
             }
             if (w->marioCnt <= 0 && w->mode == 1) {
                 w->marioCnt = 10;

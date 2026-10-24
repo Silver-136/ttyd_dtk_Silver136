@@ -225,7 +225,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 }
             }
             if (fpDamage > 0 && BtlUnit_GetBelong(target) == 0) {
-                psndSFXOn_3D("SFX_MARIO_DAMAGE_FP1\0\0\0", &pos);
+                psndSFXOn_3D("SFX_MARIO_DAMAGE_FP1", &pos);
             }
         }
     }

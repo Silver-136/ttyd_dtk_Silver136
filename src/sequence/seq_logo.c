@@ -60,7 +60,7 @@ static s32 logoAsyncFirst(void);
 #ifndef VERSION_G8ME01
 void seq_logoInit(SequenceWork* work) {
 	memset(wp, 0, sizeof(LogoWork));
-	wp->texture = fileAllocf(4, "%s/mariost.tpl\0", getMarioStDvdRoot());
+	wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
 	if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
 		if (VIGetDTVStatus()) {
 			if (OSGetProgressiveMode() == 1) {

@@ -104,7 +104,7 @@ EffectEntry* effGarekiN64Entry(f32 x, f32 y, f32 z, f32 groundY) {
     EffGarekiN64Work* piece;
 
     effect = effEntry();
-    effect->type = "GarekiN64\0\0";
+    effect->type = "GarekiN64";
     effect->count = 9;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffGarekiN64Work) * 9);
     effect->userdata = work;

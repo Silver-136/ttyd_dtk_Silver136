@@ -82,10 +82,10 @@ void OutputData(u8* data, int length) {
     for (i = 0; i < length; i++) {
         MWTRACE(8, "%02x ", data[i]);
         if (i % 16 == 15)
-            MWTRACE(8, "\n\0\0");
+            MWTRACE(8, "\n");
     }
 
-    MWTRACE(8, "\n\0\0");
+    MWTRACE(8, "\n");
 }
 
 BOOL GetTRKConnected(void) {

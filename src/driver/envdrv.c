@@ -123,7 +123,7 @@ void envTexSetup(void) { //1:1
     tpl = arcOpen("env.tpl", 0, 0);
     env_tpl = tpl;
     if (!tpl) {
-        sprintf(path, EXT_LIT(str_802F93D0, "%s/env.tpl\0\0\0\0\0"), getMarioStDvdRoot());
+        sprintf(path, EXT_LIT(str_802F93D0, "%s/env.tpl"), getMarioStDvdRoot());
         entry = DVDMgrOpen(path, 2, 0);
         size = DVDMgrGetLength(entry);
         env_tpl = __memAlloc(HEAP_DEFAULT, OSRoundUp32B(size));

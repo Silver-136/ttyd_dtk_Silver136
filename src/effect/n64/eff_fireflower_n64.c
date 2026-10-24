@@ -74,7 +74,7 @@ EffectEntry* effFireFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) 
     s32 i;
 
     effect = effEntry();
-    effect->type = "FireFlowerN64\0\0";
+    effect->type = "FireFlowerN64";
     effect->count = 31;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffFireFlowerN64Work) * 31);
     effect->userdata = work;

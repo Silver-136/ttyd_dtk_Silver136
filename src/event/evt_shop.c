@@ -1134,7 +1134,7 @@ void title_disp(WinMgrEntry* entry) {
 		return;
 	}
 #ifdef VERSION_G8ME01
-	msg = msgSearch("msg_shop_point_list4\0\0\0");
+	msg = msgSearch("msg_shop_point_list4");
 	w = FontGetMessageWidth(msg);
 	FontDrawStart();
 	FontDrawEdge();
@@ -1150,7 +1150,7 @@ void title_disp(WinMgrEntry* entry) {
 	FontDrawMessageMtx(m, msg);
 	FontDrawEdgeOff();
 #else
-	msg = msgSearch("msg_shop_point_list4\0\0\0");
+	msg = msgSearch("msg_shop_point_list4");
 	FontDrawStart();
 	FontDrawEdge();
 	FontDrawColor(shop_title_color);

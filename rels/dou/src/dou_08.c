@@ -189,7 +189,7 @@ EVT_BEGIN(dou_08_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_hibi"), 1)
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("Ship_Change_01"))
-    CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_02\0\0\0"), STRING("Ship_Change_02"))
+    CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_02"), STRING("Ship_Change_02"))
     RETURN
 EVT_END()
 

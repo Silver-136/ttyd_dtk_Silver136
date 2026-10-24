@@ -189,7 +189,7 @@ static void oneMessageDisp(WinMgrEntry* entry) {
 	if (winMgrAction(w->id) == 0) {
 		switch (w->type) {
 		case 0:
-			msg = msgSearch("msg_you_gotta_mail\0");
+			msg = msgSearch("msg_you_gotta_mail");
 			break;
 		}
 		FontDrawStart();

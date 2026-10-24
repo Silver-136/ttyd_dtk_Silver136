@@ -845,7 +845,7 @@ static void _fire_point_callback(BattleUnitPart* part, s32 group) {
     }
     if (strcmp(name, animPoseGetGroupName(poseId, group)) == 0) {
         s32 shapePose = BtlUnit_GetPartsPtr(unit, 2)->poseId;
-        s32 shape = animPoseGetShapeIdx(shapePose, "pPlaneShape3\0\0\0");
+        s32 shape = animPoseGetShapeIdx(shapePose, "pPlaneShape3");
         animPoseDrawShape(shapePose, shape);
     }
 }

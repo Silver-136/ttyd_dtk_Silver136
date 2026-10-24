@@ -85,7 +85,7 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
         n2 = 10;
         break;
     }
-    effect->type = "splash\0";
+    effect->type = "splash";
     effect->count = n1 + n2 + 1;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(EffSplashWork));
     effect->userdata = work;

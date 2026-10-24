@@ -2100,7 +2100,7 @@ EVT_BEGIN(evt_nidome_bed)
         CALL(evt_bero_mapchange, STRING("hom_11"), 0)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("rsh_02_c"))
-        CALL(evt_bero_mapchange, STRING("hom_12\0"), 0)
+        CALL(evt_bero_mapchange, STRING("hom_12"), 0)
     END_IF
     RETURN
 EVT_END()

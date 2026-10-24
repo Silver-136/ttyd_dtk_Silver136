@@ -42,7 +42,7 @@ EffectEntry* effWangFlushN64Entry(s32 type, f32 x, f32 y, f32 z, s32 timer) {
     EffWangFlushN64Work* work;
 
     effect = effEntry();
-    effect->type = "WangflushN64\0\0\0";
+    effect->type = "WangflushN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffWangFlushN64Work));
     effect->userdata = work;

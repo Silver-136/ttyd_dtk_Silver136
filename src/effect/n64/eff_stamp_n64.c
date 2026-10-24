@@ -28,7 +28,7 @@ EffectEntry* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     f32 one = 1.0f;
 
     effect = effEntry();
-    effect->type = "StampN64\0\0\0";
+    effect->type = "StampN64";
     effect->count = 8;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffStampN64Work) * 8);
     effect->userdata = work;

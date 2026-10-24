@@ -46,7 +46,7 @@ gor_door.c:
 
 event/evt_keijiban.c:
 	.text       start:0x00009D88 end:0x0000A1B4
-	.rodata     start:0x00009F50 end:0x00009F61
+	.rodata     start:0x00009F50 end:0x00009F68
 	.data       start:0x0003FE28 end:0x0003FE90
 
 data/battle/battle_database_gor.c:
@@ -63,7 +63,7 @@ unit/unit_monban.c:
 	.data       start:0x00041258 end:0x00042600
 
 unit/unit_gundan_zako.c:
-	.rodata     start:0x0000A3A8 end:0x0000A5C4
+	.rodata     start:0x0000A3A8 end:0x0000A5C8
 	.data       start:0x00042600 end:0x00043BF0
 
 unit/unit_boss_kanbu1.c:
@@ -94,7 +94,7 @@ gor_10.c:
 	.bss        start:0x00000140 end:0x00000150
 
 unit/unit_npc_christine.c:
-	.rodata     start:0x0000B778 end:0x0000B7F4
+	.rodata     start:0x0000B778 end:0x0000B7F8
 	.data       start:0x00046300 end:0x00046570
 
 unit/unit_lecture_christine.c:
@@ -103,7 +103,7 @@ unit/unit_lecture_christine.c:
 	.data       start:0x00046570 end:0x00047540
 
 unit/unit_lecture_frankli.c:
-	.rodata     start:0x0000B948 end:0x0000BC64
+	.rodata     start:0x0000B948 end:0x0000BC68
 	.data       start:0x00047540 end:0x00049A98
 
 unit/unit_lecture_frankli_sac.c:

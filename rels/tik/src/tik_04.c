@@ -431,7 +431,7 @@ EVT_BEGIN(tik_04_init_evt)
         CALL(evt_npc_check_delete, STRING("トゲノコ"))
         ELSE
         CALL(evt_npc_check_delete, STRING("ヒンニャー１"))
-        CALL(evt_npc_check_delete, STRING("ヒンニャー２\0\0\0"))
+        CALL(evt_npc_check_delete, STRING("ヒンニャー２"))
     END_IF
     RETURN
 EVT_END()

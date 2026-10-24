@@ -716,7 +716,7 @@ static EVT_BEGIN(friend_event)
     END_IF
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("JGM_A_3"))
     WAIT_FRAMES(2)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_JUGEM_THROW2\0\0\0"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_JUGEM_THROW2"), -250000000, 0, -250000000)
     CALL(btlevtcmd_OffPartsAttribute, -2, 2, 50331648)
     CALL(btlevtcmd_GetPos, -2, LW(10), LW(11), LW(12))
     ADD(LW(11), 35)

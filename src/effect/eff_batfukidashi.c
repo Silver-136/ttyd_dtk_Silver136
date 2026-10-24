@@ -30,7 +30,7 @@ EffectEntry* effCoinFukidashiEntry(s32 type, s32 number, s32 duration, f32 x, f3
     EffCoinFukidashiWork* work;
 
     effect = effEntry();
-    effect->type = "CoinFukidashi\0\0";
+    effect->type = "CoinFukidashi";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffCoinFukidashiWork) * effect->count);
     effect->userdata = work;

@@ -170,7 +170,7 @@ EVT_BEGIN(win_05_init_evt)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -45, 0, -75, 0, 0, PTR(item_get00), GSWF(2684))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 64, 0, 118, STRING("S_yukaA"), 125, GSWF(5611))
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG2_WIN1"))
-    CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN2\0\0"))
+    CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN2"))
     IF_INT_EQUAL(GSW(0), 76)
         SPAWN_EVENT(PTR(cloud_toujou))
     END_IF

@@ -112,7 +112,7 @@ void seq_battleMain(BattleSeqWork* work) {
             if (!loadTpl("battle/audience/audience_normal.tpl")) {
                 break;
             }
-            if (!loadTpl("battle/audience/audience_luigi.tpl\0")) {
+            if (!loadTpl("battle/audience/audience_luigi.tpl")) {
                 break;
             }
             work->counter++;

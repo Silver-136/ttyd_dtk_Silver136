@@ -105,7 +105,7 @@ EVT_BEGIN(dou_13_init_evt)
     END_IF
     CALL(evt_npc_check, STRING("キラー大砲３"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_npc_set_link, STRING("キラー大砲３"), STRING("キラー大砲４\0\0\0"))
+        CALL(evt_npc_set_link, STRING("キラー大砲３"), STRING("キラー大砲４"))
     END_IF
     RETURN
 EVT_END()

@@ -4326,16 +4326,16 @@ USER_FUNC(zakoEntryDokan) {
     NpcEntry* me = evtNpcNameToPtr(event, "me");
     NpcEntry* zako;
     s32 i;
-    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202P\000\000\000")) {
-        strcpy(names[0], "\214R\222c\203U\203R\223y\212\307\202P\000");
-        strcpy(names[1], "\214R\222c\203U\203R\223y\212\307\202Q\000");
-        strcpy(names[2], "\214R\222c\203U\203R\223y\212\307\202R\000");
+    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202P")) {
+        strcpy(names[0], "\214R\222c\203U\203R\223y\212\307\202P");
+        strcpy(names[1], "\214R\222c\203U\203R\223y\212\307\202Q");
+        strcpy(names[2], "\214R\222c\203U\203R\223y\212\307\202R");
         strcpy(nm3, "MOBJ_mobj9");
     }
-    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202Q\000\000\000")) {
-        strcpy(names[0], "\214R\222c\203U\203R\223y\212\307\202S\000");
-        strcpy(names[1], "\214R\222c\203U\203R\223y\212\307\202T\000");
-        strcpy(names[2], "\214R\222c\203U\203R\223y\212\307\202U\000");
+    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202Q")) {
+        strcpy(names[0], "\214R\222c\203U\203R\223y\212\307\202S");
+        strcpy(names[1], "\214R\222c\203U\203R\223y\212\307\202T");
+        strcpy(names[2], "\214R\222c\203U\203R\223y\212\307\202U");
         strcpy(nm3, "MOBJ_mobj14");
     }
     {
@@ -4383,10 +4383,10 @@ USER_FUNC(dokanCheck) {
     EvtWord* args = event->args;
     char name[32];
     NpcEntry* me = evtNpcNameToPtr(event, "me");
-    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202P\000\000\000")) {
+    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202P")) {
         strcpy(name, "mobj9");
     }
-    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202Q\000\000\000")) {
+    if (!strcmp(me->description, "\214R\222c\203U\203R\202\252\202\305\202\351\223y\212\307\202Q")) {
         strcpy(name, "mobj14");
     }
     if (mobjNameToPtrNoAssert(name)) {
@@ -4403,20 +4403,20 @@ USER_FUNC(zakoEntryFall) {
     NpcEntry* me = evtNpcNameToPtr(event, "me");
     NpcEntry* zako;
     s32 i;
-    if (!strcmp(me->description, "\214R\222c\203U\203R\215~\211\272\222n\223_\202P\000")) {
-        strcpy(names[0], "\214R\222c\203U\203R\215~\211\272\202P\000");
+    if (!strcmp(me->description, "\214R\222c\203U\203R\215~\211\272\222n\223_\202P")) {
+        strcpy(names[0], "\214R\222c\203U\203R\215~\211\272\202P");
         strcpy(names[1], "\202\310\202\265");
         strcpy(names[2], "\202\310\202\265");
     }
-    if (!strcmp(me->description, "\214R\222c\203U\203R\215~\211\272\222n\223_\202Q\201Q\202P\000")) {
-        strcpy(names[0], "\214R\222c\203U\203R\215~\211\272\202P\000");
-        strcpy(names[1], "\214R\222c\203U\203R\215~\211\272\202Q\000");
-        strcpy(names[2], "\214R\222c\203U\203R\215~\211\272\202R\000");
+    if (!strcmp(me->description, "\214R\222c\203U\203R\215~\211\272\222n\223_\202Q\201Q\202P")) {
+        strcpy(names[0], "\214R\222c\203U\203R\215~\211\272\202P");
+        strcpy(names[1], "\214R\222c\203U\203R\215~\211\272\202Q");
+        strcpy(names[2], "\214R\222c\203U\203R\215~\211\272\202R");
     }
-    if (!strcmp(me->description, "\214R\222c\203U\203R\215~\211\272\222n\223_\202Q\201Q\202Q\000")) {
-        strcpy(names[0], "\214R\222c\203U\203R\215~\211\272\202S\000");
-        strcpy(names[1], "\214R\222c\203U\203R\215~\211\272\202T\000");
-        strcpy(names[2], "\214R\222c\203U\203R\215~\211\272\202U\000");
+    if (!strcmp(me->description, "\214R\222c\203U\203R\215~\211\272\222n\223_\202Q\201Q\202Q")) {
+        strcpy(names[0], "\214R\222c\203U\203R\215~\211\272\202S");
+        strcpy(names[1], "\214R\222c\203U\203R\215~\211\272\202T");
+        strcpy(names[2], "\214R\222c\203U\203R\215~\211\272\202U");
     }
     for (i = 0; i < 3; i++) {
         zako = npcNameToPtr_NoAssert(names[i]);
@@ -4717,7 +4717,7 @@ EVT_BEGIN(zakoM2D_init_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), 1024)
     CALL(evt_npc_status_onoff, 0, STRING("me"), 4)
     CALL(limitSpd, FLOAT(400.0f))
-    CALL(evt_npc_slave_entry, STRING("me"), 0, STRING("c_zako_km\000\000"), LW(0), PTR(enemy_slave_common_dead_event))
+    CALL(evt_npc_slave_entry, STRING("me"), 0, STRING("c_zako_km"), LW(0), PTR(enemy_slave_common_dead_event))
     CALL(evt_npc_set_position, STRING("slave_0"), 0, -1000, 0)
     CALL(set_bottle_flag_init)
     RETURN

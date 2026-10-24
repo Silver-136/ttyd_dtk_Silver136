@@ -202,14 +202,14 @@ USER_FUNC(main_deka) {
 
 static void yuka_init(void) {
     DekaWork* w = get_ptr();
-    MapObject* mo = mapGetMapObj("stg_b_yuka\0");
+    MapObject* mo = mapGetMapObj("stg_b_yuka");
     YukaMesh* m;
     s32 i;
     s32 r;
     f32 x;
     f32 z;
 
-    mapGrpFlagOn("stg_b_yuka\0", 0x400001);
+    mapGrpFlagOn("stg_b_yuka", 0x400001);
     PSMTXMultVec(mo->modelWorldMtx, &mo->joints->bboxMin, &w->min);
     PSMTXMultVec(mo->modelWorldMtx, &mo->joints->bboxMax, &w->max);
     w->w0 = w->texW = w->max.x - w->min.x;
@@ -331,7 +331,7 @@ USER_FUNC(yuka_end) {
     w->tex->address = NULL;
     smartFree(w->mesh);
     w->mesh->address = NULL;
-    mapGrpFlagOff("stg_b_yuka\0", 0x400001);
+    mapGrpFlagOff("stg_b_yuka", 0x400001);
     return 2;
 }
 

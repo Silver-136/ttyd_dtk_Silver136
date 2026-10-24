@@ -28,7 +28,7 @@ eki_02.c:
 
 eki_03.c:
 	.text       start:0x000059D0 end:0x00005DF0
-	.rodata     start:0x00000838 end:0x00000A4C
+	.rodata     start:0x00000838 end:0x00000A50
 	.data       start:0x00003008 end:0x00003CC0
 	.bss        start:0x00000008 end:0x00000010
 
@@ -42,7 +42,7 @@ eki_05.c:
 
 eki_06.c:
 	.text       start:0x00005DF0 end:0x000073A0
-	.rodata     start:0x00000BB8 end:0x00000DB4
+	.rodata     start:0x00000BB8 end:0x00000DB8
 	.data       start:0x00004570 end:0x00004EF0
 	.bss        start:0x00000010 end:0x00000018
 
@@ -56,19 +56,19 @@ unit/unit_kuriboo.c:
 	.data       start:0x00006968 end:0x00007500
 
 unit/unit_sambo.c:
-	.rodata     start:0x000011C8 end:0x0000150C
+	.rodata     start:0x000011C8 end:0x00001510
 	.data       start:0x00007500 end:0x0000BC18
 
 unit/unit_sambo_mummy.c:
-	.rodata     start:0x00001510 end:0x0000185C
+	.rodata     start:0x00001510 end:0x00001860
 	.data       start:0x0000BC18 end:0x00010330
 
 unit/unit_patatogemet.c:
-	.rodata     start:0x00001860 end:0x00001B64
+	.rodata     start:0x00001860 end:0x00001B68
 	.data       start:0x00010330 end:0x00012E20
 
 unit/unit_kurokumorn.c:
-	.rodata     start:0x00001B68 end:0x00001D14
+	.rodata     start:0x00001B68 end:0x00001D18
 	.data       start:0x00012E20 end:0x000145E0
 
 event/evt_lect_eki.c:

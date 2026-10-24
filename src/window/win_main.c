@@ -305,7 +305,7 @@ void winMain(void) {
                     fileAsyncf(4, 0, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us", winGetMapTplName());
 #else
                     const char* name = winGetMapTplName();
-                    fileAsyncf(4, 0, "%s/w/jp/%s\0", getMarioStDvdRoot(), name);
+                    fileAsyncf(4, 0, "%s/w/jp/%s", getMarioStDvdRoot(), name);
 #endif
                 }
                 wp->active = 0;

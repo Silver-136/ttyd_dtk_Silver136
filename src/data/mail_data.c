@@ -44,7 +44,7 @@ MailData mail_data[44] = {
 	{0x2, 0, 39, "irai_af_mail_02", "irai_mail_02", 0},
 	{0x2, 0, 40, "irai_af_mail_03", "irai_mail_03", 0},
 	{0x2, 0, 41, "irai_af_mail_04", "irai_mail_04", 0},
-	{0x2, 0, 42, "irai_af_mail_05", "irai_mail_05\0\0\0", 0},
+	{0x2, 0, 42, "irai_af_mail_05", "irai_mail_05", 0},
 };
 
 MailData* mailGetPtr(s32 id) {

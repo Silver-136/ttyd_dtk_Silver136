@@ -2333,7 +2333,7 @@ EVT_END()
 USER_FUNC(get_password) {
     EvtWord* args = event->args;
 
-    evtSetValue(event, args[0], (EvtWord)msgSearch("stg7_aji_password\0\0"));
+    evtSetValue(event, args[0], (EvtWord)msgSearch("stg7_aji_password"));
     return EVT_RETURN_DONE;
 }
 

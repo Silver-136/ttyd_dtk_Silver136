@@ -536,7 +536,7 @@ EVT_BEGIN(aji_16_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_door1_1"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_door1_2"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_door2_1"), 1, 0)
-    CALL(evt_hitobj_onoff, STRING("A_door2_2\0\0"), 1, 0)
+    CALL(evt_hitobj_onoff, STRING("A_door2_2"), 1, 0)
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()

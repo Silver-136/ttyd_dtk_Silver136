@@ -34,7 +34,7 @@ EffectEntry* effExplosionN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f
     EffExplosionN64Work* work;
 
     effect = effEntry();
-    effect->type = "ExplosionN64\0\0\0";
+    effect->type = "ExplosionN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffExplosionN64Work));
     effect->userdata = work;

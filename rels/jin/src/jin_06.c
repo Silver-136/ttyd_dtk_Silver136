@@ -206,10 +206,10 @@ EVT_BEGIN(jin_06_init_evt)
     END_INLINE_EVENT
     IF_INT_EQUAL(GSWF(2229), 0)
         CALL(evt_cloud_init)
-        CALL(evt_cloud_ent, 0, STRING("mekure"), STRING("a_mekure\0\0\0"), PTR(jin_06_wall_open_evt))
+        CALL(evt_cloud_ent, 0, STRING("mekure"), STRING("a_mekure"), PTR(jin_06_wall_open_evt))
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mekure"), 1)
-        CALL(evt_hitobj_onoff, STRING("a_mekure\0\0\0"), 0, 0)
+        CALL(evt_hitobj_onoff, STRING("a_mekure"), 0, 0)
     END_IF
     IF_INT_LESS(GSW(0), 195)
         SET_VALUE(GSW(0), 195)

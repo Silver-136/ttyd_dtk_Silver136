@@ -64,7 +64,7 @@ void lightInit(void) {
 	MTXMultVec(scale, &paperCraft.position, &paperCraft.position);
 
 	booLight.flags = LIGHT_NO_DIST_ATTEN | LIGHT_POINT;
-	strcpy(booLight.name, "BooBoo\0");
+	strcpy(booLight.name, "BooBoo");
 	booLight.position = (Vec){0.0f, 0.0f, 0.0f};
 	booLight.rotation = (Vec){0.0f, 0.0f, 0.0f};
 	booLight.color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};

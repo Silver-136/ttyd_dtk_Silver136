@@ -79,7 +79,7 @@ void windowTexSetup(void) {
 	tpl_loaded = FALSE;
 	winTpl = arcOpen("font/msgWindow.tpl", NULL, NULL);
 	if (!winTpl) {
-		sprintf(path, "%s/f/msgWindow.tpl\0", getMarioStDvdRoot());
+		sprintf(path, "%s/f/msgWindow.tpl", getMarioStDvdRoot());
 		entry = DVDMgrOpen(path, 2, 0);
 		size = OSRoundUp32B(DVDMgrGetLength(entry));
 		winTpl = __memAlloc(HEAP_DEFAULT, size);

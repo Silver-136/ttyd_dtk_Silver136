@@ -541,7 +541,7 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
 
     if (!(entry->flags & 4)) {
         GXSetScissor(0, 384, 608, 56);
-        if (!strcmp(entry->msg, msgSearch("msg_lottery_number\0"))) {
+        if (!strcmp(entry->msg, msgSearch("msg_lottery_number"))) {
             sprintf(buf, entry->msg, lotteryGetPtr()->number);
             FontDrawStart();
             FontDrawMessage(-210, -144.0f + 28.0f * entry->scroll, buf);

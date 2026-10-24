@@ -252,7 +252,7 @@ static USER_FUNC(make_name) {
     EvtWord* args = event->args;
     static char name[16];
 
-    sprintf(name, "S_shan_rou_0%d\0", evtGetValue(event, args[0]));
+    sprintf(name, "S_shan_rou_0%d", evtGetValue(event, args[0]));
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }

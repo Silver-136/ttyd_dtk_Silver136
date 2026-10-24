@@ -184,7 +184,7 @@ EVT_BEGIN(mri_18_init_evt)
     CALL(evt_map_playanim, STRING("mizu_01"), 1, 0)
     CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)
     CALL(evt_map_playanim, STRING("awa_01"), 1, 0)
-    CALL(evt_map_playanim, STRING("awa_02\0"), 1, 0)
+    CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
     RETURN
 EVT_END()
 

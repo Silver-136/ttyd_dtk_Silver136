@@ -368,7 +368,7 @@ EVT_BEGIN(aji_07_init_evt)
         CALL(evt_item_entry, STRING("haguruma"), 85, -65, 100, -120, 16, -1, PTR(evt_haguruma))
     END_IF
     CALL(evt_bero_get_entername, LW(0))
-    IF_STR_EQUAL(LW(0), STRING("tenjo\0\0"))
+    IF_STR_EQUAL(LW(0), STRING("tenjo"))
         CALL(evt_cam_letter_box_disable, 1)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_cont_onoff, 0)

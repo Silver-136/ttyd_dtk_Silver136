@@ -9,11 +9,11 @@ Sections:
 las.c:
 	.text       start:0x00000000 end:0x00000460
 	.rodata     start:0x00000000 end:0x000001A0
-	.data       start:0x00000000 end:0x00000604
+	.data       start:0x00000000 end:0x00000608
 
 las_00.c:
 	.text       start:0x00000460 end:0x000004C8
-	.rodata     start:0x000001A0 end:0x0000025C
+	.rodata     start:0x000001A0 end:0x00000260
 	.data       start:0x00000608 end:0x00000C88
 	.bss        start:0x00000000 end:0x00000010
 
@@ -29,7 +29,7 @@ las_02.c:
 
 las_03.c:
 	.text       start:0x00000530 end:0x00000674
-	.rodata     start:0x00000398 end:0x00000544
+	.rodata     start:0x00000398 end:0x00000548
 	.data       start:0x00001348 end:0x000019E0
 	.bss        start:0x00000018 end:0x00000020
 
@@ -66,11 +66,11 @@ las_09.c:
 
 las_10.c:
 	.text       start:0x00004B20 end:0x00004E2C
-	.rodata     start:0x00001380 end:0x00001AAC
+	.rodata     start:0x00001380 end:0x00001AB0
 	.data       start:0x000074F8 end:0x0000A0E0
 
 las_11.c:
-	.rodata     start:0x00001AB0 end:0x00001B94
+	.rodata     start:0x00001AB0 end:0x00001B98
 	.data       start:0x0000A0E0 end:0x0000A588
 
 las_12.c:
@@ -89,7 +89,7 @@ las_14.c:
 	.bss        start:0x00000058 end:0x00000060
 
 las_15.c:
-	.rodata     start:0x00001DD0 end:0x00001EB4
+	.rodata     start:0x00001DD0 end:0x00001EB8
 	.data       start:0x0000B330 end:0x0000B7D8
 
 las_16.c:
@@ -120,7 +120,7 @@ las_21.c:
 	.data       start:0x0000E940 end:0x0000F8B0
 
 las_22.c:
-	.rodata     start:0x00002A28 end:0x00002DFC
+	.rodata     start:0x00002A28 end:0x00002E00
 	.data       start:0x0000F8B0 end:0x00010788
 
 las_23.c:
@@ -154,7 +154,7 @@ las_28.c:
 
 las_29.c:
 	.text       start:0x00006034 end:0x00007690
-	.rodata     start:0x00004088 end:0x00004E24
+	.rodata     start:0x00004088 end:0x00004E28
 	.data       start:0x00017B78 end:0x0001FC08
 	.bss        start:0x00000070 end:0x00000098
 
@@ -162,7 +162,7 @@ data/battle/battle_database_las.c:
 	.text       start:0x00007690 end:0x00007974
 	.rodata     start:0x00004E28 end:0x00005750
 	.data       start:0x0001FC08 end:0x00024AB8
-	.bss        start:0x00000098 end:0x000000B4
+	.bss        start:0x00000098 end:0x000000B8
 
 unit/unit_boss_koopa.c:
 	.text       start:0x00007974 end:0x00007E30
@@ -197,7 +197,7 @@ unit/unit_karon.c:
 
 las_30.c:
 	.text       start:0x0000C040 end:0x0000C0A8
-	.rodata     start:0x00007320 end:0x000073DC
+	.rodata     start:0x00007320 end:0x000073E0
 	.data       start:0x00041AA0 end:0x00041FE8
 	.bss        start:0x00000240 end:0x00000248
 
@@ -219,13 +219,13 @@ unit/unit_boss_bunbaba.c:
 	.data       start:0x00047B08 end:0x0004A6F0
 
 unit/unit_super_killer.c:
-	.rodata     start:0x00007CE8 end:0x00007E34
+	.rodata     start:0x00007CE8 end:0x00007E38
 	.data       start:0x0004A6F0 end:0x0004B178
 
 unit/unit_super_killer_cannon.c:
 	.text       start:0x0000F298 end:0x0000F408
 	.rodata     start:0x00007E38 end:0x00007FE0
-	.data       start:0x0004B178 end:0x0004C9DC
+	.data       start:0x0004B178 end:0x0004C9E0
 
 unit/unit_super_mahorn.c:
 	.text       start:0x0000F408 end:0x0000FE20
@@ -238,12 +238,12 @@ unit/unit_wanwan.c:
 	.data       start:0x00050DA8 end:0x00052880
 
 unit/unit_basabasa_chururu.c:
-	.rodata     start:0x000084C8 end:0x00008634
+	.rodata     start:0x000084C8 end:0x00008638
 	.data       start:0x00052880 end:0x00053D10
 
 event/evt_shuryolight.c:
 	.text       start:0x00010588 end:0x00010FE4
-	.rodata     start:0x00008638 end:0x000087B4
+	.rodata     start:0x00008638 end:0x000087B8
 	.data       start:0x00053D10 end:0x00054058
 	.bss        start:0x000002F8 end:0x00000300
 
@@ -269,7 +269,7 @@ unit/unit_red_honenoko.c:
 	.data       start:0x00058C40 end:0x0005A680
 
 unit/unit_boss_marilyn_las.c:
-	.rodata     start:0x00009130 end:0x00009334
+	.rodata     start:0x00009130 end:0x00009338
 	.data       start:0x0005A680 end:0x0005BA18
 
 unit/unit_boss_majolyne_las.c:

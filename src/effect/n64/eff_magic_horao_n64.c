@@ -54,7 +54,7 @@ EffectEntry* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, s32 b, 
     EffMagicHoraoN64Work* work;
 
     effect = effEntry();
-    effect->type = "MagicHoraoN64\0\0";
+    effect->type = "MagicHoraoN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffMagicHoraoN64Work));
     effect->userdata = work;

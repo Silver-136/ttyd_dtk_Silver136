@@ -38,7 +38,7 @@ void _prolog(void) {
     for (ctor = _ctors; *ctor != NULL; ctor++) {
         (*ctor)();
     }
-    relSetEvtAddr("dig_00\0", dig_00_init_evt);
+    relSetEvtAddr("dig_00", dig_00_init_evt);
     dig_thpInit();
 }
 

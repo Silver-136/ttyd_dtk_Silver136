@@ -156,7 +156,7 @@ void winPartyInit(WindowWork* wp) {
                             break;
                         case 6:
                         default:
-                            poseName = "EFF_m_yoshi7\0\0\0";
+                            poseName = "EFF_m_yoshi7";
                             break;
                     }
                     animName = "W_1";

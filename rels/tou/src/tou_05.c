@@ -1461,7 +1461,7 @@ EVT_BEGIN(tou_05_init_evt)
         END_IF
     END_IF
     CALL(evt_hitobj_onoff, STRING("haiku_kabe"), 1, 0)
-    CALL(evt_hitobj_onoff, STRING("kore\0\0\0"), 1, 0)
+    CALL(evt_hitobj_onoff, STRING("kore"), 1, 0)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), 4)
     RETURN
 EVT_END()

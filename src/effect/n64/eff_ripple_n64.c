@@ -143,7 +143,7 @@ EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset) {
     EffRippleN64Work* work;
 
     effect = effEntry();
-    effect->type = "RippleN64\0\0";
+    effect->type = "RippleN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffRippleN64Work));
     effect->userdata = work;

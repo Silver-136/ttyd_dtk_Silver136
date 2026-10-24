@@ -188,7 +188,7 @@ EffectEntry* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
     s32 sub;
 
     effect = effEntry();
-    effect->type = "ReleaseN64\0";
+    effect->type = "ReleaseN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffReleaseN64Work));
     effect->userdata = work;

@@ -595,7 +595,7 @@ EffectEntry* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     EffThunderN64Work* work;
 
     effect = effEntry();
-    effect->type = "ThunderN64\0";
+    effect->type = "ThunderN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffThunderN64Work));
     effect->userdata = work;

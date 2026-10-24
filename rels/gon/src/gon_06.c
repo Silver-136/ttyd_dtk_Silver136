@@ -578,7 +578,7 @@ EVT_BEGIN(gon_06_init_evt)
     CALL(evt_sub_rumble_onoff, 1, 0)
     WAIT_FRAMES(1)
     CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_map_playanim, STRING("hokori\0"), 1, 0)
+    CALL(evt_map_playanim, STRING("hokori"), 1, 0)
     IF_INT_GREATER_OR_EQUAL(GSW(0), 45)
         SET_VALUE(GSWF(1493), 1)
     END_IF

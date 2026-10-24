@@ -144,7 +144,7 @@ EVT_BEGIN(gon_10_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -460, 1010, -145, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 6, -400, 1010, -146, 0, 0)
     IF_INT_GREATER_OR_EQUAL(GSW(0), 55)
-        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("en\0"), 1)
+        CALL(evt_mapobj_flag_onoff, 0, 1, STRING("en"), 1)
     END_IF
     RETURN
 EVT_END()

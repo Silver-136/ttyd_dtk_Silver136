@@ -573,7 +573,7 @@ EVT_BEGIN(moving_floor_bero_check)
     END_IF
     LOOP(0)
         CALL(evt_bero_exec_wait, 65536)
-        DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\203`\203F\203b\203N\221\322\202\277\000\000\000"))
+        DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\203`\203F\203b\203N\221\322\202\277"))
         CALL(evt_bero_exec_wait, 1)
         CALL(evt_bero_get_now_number, LW(10))
         CALL(evt_bero_get_info_nextarea, LW(10), LW(3), LW(4))
@@ -581,7 +581,7 @@ EVT_BEGIN(moving_floor_bero_check)
             BREAK_LOOP
         END_IF
     END_LOOP
-    DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\212\256\227\271\000\000\000"))
+    DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\212\256\227\271"))
     CALL(moving_floor_stop_se, LW(9))
     CALL(moving_floor_halt_se, LW(9))
     RETURN
@@ -839,7 +839,7 @@ EVT_BEGIN(ridedown_floor)
         ELSE
             IF_INT_EQUAL(LW(9), 0)
                 CALL(evt_mapobj_get_position, LW(0), LW(11), LW(12), LW(13))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_TIK_FLOOR_MOVE1\000\000\000"), LW(11), LW(12), LW(13), LW(9))
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_TIK_FLOOR_MOVE1"), LW(11), LW(12), LW(13), LW(9))
             END_IF
         END_IF
         WAIT_FRAMES(1)

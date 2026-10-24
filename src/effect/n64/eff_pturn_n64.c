@@ -98,7 +98,7 @@ EffectEntry* effPturnN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     PturnElem* work;
 
     effect = effEntry();
-    effect->type = "PturnN64\0\0\0";
+    effect->type = "PturnN64";
     effect->count = 2;
     work = __memAlloc(HEAP_EFFECT, sizeof(PturnElem) * 2);
     effect->userdata = work;

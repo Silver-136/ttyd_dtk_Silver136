@@ -118,7 +118,7 @@ void battleMenuDispInit(void) {
     BattleWork* wp = _battleWorkPointer;
     char path[256];
 
-    sprintf(path, "%s/battle/common/battle_common.tpl\0", getMarioStDvdRoot());
+    sprintf(path, "%s/battle/common/battle_common.tpl", getMarioStDvdRoot());
     wp->menuTex = fileAlloc(path, 4);
 }
 

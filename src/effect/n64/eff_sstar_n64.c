@@ -92,7 +92,7 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
     s32 i;
 
     effect = effEntry();
-    effect->type = "SstarN64\0\0\0";
+    effect->type = "SstarN64";
     effect->count = 1;
     w = __memAlloc(HEAP_EFFECT, sizeof(EffSstarN64Work));
     effect->userdata = w;

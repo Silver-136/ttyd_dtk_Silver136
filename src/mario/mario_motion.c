@@ -608,7 +608,7 @@ void marioFall(void) {
 	f32 y;
 	void* hit;
 
-	if (!strcmp(gp->currentMapName, "kpa_03\0") && mario->characterId == 2) {
+	if (!strcmp(gp->currentMapName, "kpa_03") && mario->characterId == 2) {
 		mario->hitobjStandOn = NULL;
 		kpaClearHitobjRide();
 		spd = marioGetFallSpd();

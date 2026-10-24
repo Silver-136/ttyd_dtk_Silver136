@@ -73,7 +73,7 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
         return NULL;
     }
     inv = 1.0f / sqrtf(len);
-    effect->type = "SmallStarN64\0\0\0";
+    effect->type = "SmallStarN64";
     effect->count = count;
     px *= inv;
     py *= inv;

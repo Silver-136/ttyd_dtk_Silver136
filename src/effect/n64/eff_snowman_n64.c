@@ -43,7 +43,7 @@ EffectEntry* effSnowmanN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
     EffSnowmanN64Work* work;
 
     effect = effEntry();
-    effect->type = "SnowmanN64\0";
+    effect->type = "SnowmanN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffSnowmanN64Work));
     effect->userdata = work;

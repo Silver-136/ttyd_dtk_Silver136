@@ -246,7 +246,7 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
     effect->flags |= 2;
     // FAKE: comma temps are coloured in assignment order (ia r30 above sfxName r29)
     ia = (0, (s32)width);
-    sfxName = (0, "SFX_BTL_STAGE_FALL_WATER1\0\0");
+    sfxName = (0, "SFX_BTL_STAGE_FALL_WATER1");
     w->type = type;
     w->pos.x = x;
     w->pos.y = y;
@@ -499,7 +499,7 @@ void effFallMain(EffectEntry* effect) {
                             e->pos.y = y;
                             e->timer = 0;
                             e->state++;
-                            psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_FORK1\0"), &sndPos);
+                            psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_FORK1"), &sndPos);
                         }
                         break;
                     case 1:
@@ -585,19 +585,19 @@ void effFallMain(EffectEntry* effect) {
                 switch (e->state) {
                     case 0:
                         if (type == 5) {
-                            if (!animGroupBaseAsync("EFF_Baketu\0", group, 0)) {
+                            if (!animGroupBaseAsync("EFF_Baketu", group, 0)) {
                                 break;
                             }
                             if (e->pose0 == -1) {
-                                e->pose0 = animPoseEntry("EFF_Baketu\0", group);
+                                e->pose0 = animPoseEntry("EFF_Baketu", group);
                                 animPoseSetAnim(e->pose0, "Z_1", 1);
                             }
                         } else {
-                            if (!animGroupBaseAsync("EFF_Tarai\0\0", group, 0)) {
+                            if (!animGroupBaseAsync("EFF_Tarai", group, 0)) {
                                 break;
                             }
                             if (e->pose0 == -1) {
-                                e->pose0 = animPoseEntry("EFF_Tarai\0\0", group);
+                                e->pose0 = animPoseEntry("EFF_Tarai", group);
                                 animPoseSetAnim(e->pose0, "Z_1", 1);
                             }
                         }
@@ -680,13 +680,13 @@ void effFallMain(EffectEntry* effect) {
             case 6:
                 switch (e->state) {
                     case 0:
-                        if (!animGroupBaseAsync("EFF_koopa\0\0", group, 0)) {
+                        if (!animGroupBaseAsync("EFF_koopa", group, 0)) {
                             break;
                         }
                         if (e->pose0 == -1) {
-                            e->pose0 = animPoseEntry("EFF_koopa\0\0", group);
+                            e->pose0 = animPoseEntry("EFF_koopa", group);
                             animPoseSetAnim(e->pose0, "Z_1", 1);
-                            psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_KOOPA1\0\0"), &sndPos);
+                            psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_KOOPA1"), &sndPos);
                         }
                         e->pos.x += e->vel.x;
                         e->pos.y += e->vel.y;
@@ -711,7 +711,7 @@ void effFallMain(EffectEntry* effect) {
                             e->state++;
                         }
                         if (e->timer == 100) {
-                            psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_KOOPA1\0\0"), &sndPos);
+                            psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_KOOPA1"), &sndPos);
                         }
                         break;
                     case 2:
@@ -727,7 +727,7 @@ void effFallMain(EffectEntry* effect) {
                             done++;
                         }
                         if (e->timer == 70) {
-                            psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_KOOPA1\0\0"), &sndPos);
+                            psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_KOOPA1"), &sndPos);
                         }
                         break;
                 }
@@ -738,16 +738,16 @@ void effFallMain(EffectEntry* effect) {
             case 7:
                 switch (e->state) {
                     case 0:
-                        if (!animGroupBaseAsync("EFF_inseki\0", group, 0)) {
+                        if (!animGroupBaseAsync("EFF_inseki", group, 0)) {
                             break;
                         }
-                        psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_METEOR1\0"), &sndPos);
+                        psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_FALL_METEOR1"), &sndPos);
                         if (e->pose0 == -1) {
-                            e->pose0 = animPoseEntry("EFF_inseki\0", group);
+                            e->pose0 = animPoseEntry("EFF_inseki", group);
                             animPoseSetAnim(e->pose0, "Z_1", 1);
                         }
                         if (e->pose1 == -1) {
-                            e->pose1 = animPoseEntry("EFF_inseki\0", group);
+                            e->pose1 = animPoseEntry("EFF_inseki", group);
                             animPoseSetAnim(e->pose1, "Z_2", 1);
                         }
                     case 2:
@@ -784,7 +784,7 @@ void effFallMain(EffectEntry* effect) {
                             e->pos.z = e->vel.z;
                             e->state++;
                             if (e->state == 2) {
-                                e->sfx = psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_METEOR2\0\0\0"), &sndPos);
+                                e->sfx = psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_METEOR2"), &sndPos);
                             }
                             if (e->state != 8) {
                                 effKemuri1N64Entry(4, sndPos.x + e->pos.x, sndPos.y + e->pos.y - 40.0f, sndPos.z + e->pos.z, 0.0f);
@@ -815,10 +815,10 @@ void effFallMain(EffectEntry* effect) {
             case 8:
                 switch (e->state) {
                     case 0:
-                        if (!animGroupBaseAsync("EFF_light\0\0", group, 0)) {
+                        if (!animGroupBaseAsync("EFF_light", group, 0)) {
                             break;
                         }
-                        e->pose0 = animPoseEntry("EFF_light\0\0", group);
+                        e->pose0 = animPoseEntry("EFF_light", group);
                         animPoseSetAnim(e->pose0, "Z_1", 1);
                         e->state++;
                         break;

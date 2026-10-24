@@ -114,7 +114,7 @@ void seq_e3Init(SequenceWork* seq) {
     psndStopAllFadeOut();
     psndBGMOn(0x200, "BGM_FILE_MENU1");
     seq->state = 0;
-    animGroupBaseAsync("OFF_d_meku\0", 0, NULL);
+    animGroupBaseAsync("OFF_d_meku", 0, NULL);
 }
 
 void seq_e3Exit(SequenceWork* seq) {

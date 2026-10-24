@@ -386,7 +386,7 @@ EVT_BEGIN(gon_12_init_evt)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), -175, 0, 50, 0, 0, PTR(item_get02), GSWF(1509))
     CALL(evt_mobj_itembox, STRING("mobj_box03"), -150, 0, 20, 0, 0, 0, 1)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -150, 60, -25, 0, GSWF(5540), 0)
-    CALL(evt_map_playanim, STRING("hokori\0"), 1, 0)
+    CALL(evt_map_playanim, STRING("hokori"), 1, 0)
     RETURN
 EVT_END()
 

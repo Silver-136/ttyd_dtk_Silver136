@@ -17,7 +17,7 @@ EffectEntry* effCrystalN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
     EffCrystalN64Work* work;
 
     effect = effEntry();
-    effect->type = "CrystalN64\0";
+    effect->type = "CrystalN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffCrystalN64Work));
     effect->userdata = work;

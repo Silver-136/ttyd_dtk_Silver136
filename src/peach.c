@@ -169,7 +169,7 @@ void peachChgPose(const char* name) {
         else if (strcmp(name, "P_S_1") == 0) name = "P_S_8";
         else if (strcmp(name, "P_W_1") == 0) name = "P_W_8";
         else if (strcmp(name, "P_R_1") == 0) name = "P_R_8";
-        else if (strcmp(name, "P_T_1") == 0) name = "P_T_14\0";
+        else if (strcmp(name, "P_T_1") == 0) name = "P_T_14";
     }
     if (mp->animName == NULL || strcmp(mp->animName, name) != 0) {
         mp->animName = name;

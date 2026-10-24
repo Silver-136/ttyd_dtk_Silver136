@@ -506,8 +506,8 @@ EVT_BEGIN(las_21_init_evt)
         CALL(evt_mobj_switch_float_blk, STRING("21switch1"), 175, -480, -67, STRING("21blk1"), 1, PTR(floatblk21_1_evt), 0)
         CALL(evt_mobj_switch_float_blk, STRING("21switch2"), 300, -30, 15, STRING("21blk2"), 3, PTR(floatblk21_2_evt), 0)
     END_IF
-    CALL(evt_mobj_jumpstand_blue, 0, STRING("jump\0\0\0"), 700, -650, -580, 75, 0, 0)
-    CALL(evt_mobj_flag_onoff, 0, STRING("jump\0\0\0"), 64)
+    CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 700, -650, -580, 75, 0, 0)
+    CALL(evt_mobj_flag_onoff, 0, STRING("jump"), 64)
     RETURN
 EVT_END()
 

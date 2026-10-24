@@ -8,9 +8,9 @@ Sections:
 
 jin.c:
 	.text       start:0x00000000 end:0x00000258
-	.rodata     start:0x00000000 end:0x00000064
+	.rodata     start:0x00000000 end:0x00000068
 	.data       start:0x00000000 end:0x00000060
-	.bss        start:0x00000000 end:0x00000004
+	.bss        start:0x00000000 end:0x00000008
 
 jin_00.c:
 	.text       start:0x00000258 end:0x00003E6C
@@ -63,7 +63,7 @@ jin_10.c:
 	.data       start:0x0000A328 end:0x0000AC20
 
 jin_11.c:
-	.rodata     start:0x00001338 end:0x000013A4
+	.rodata     start:0x00001338 end:0x000013A8
 	.data       start:0x0000AC20 end:0x0000AEA0
 
 event/evt_kagemario.c:
@@ -77,11 +77,11 @@ unit/unit_gullible_christine.c:
 	.data       start:0x0000AFA8 end:0x0000C0C8
 
 unit/unit_gullible_clauda.c:
-	.rodata     start:0x00001528 end:0x0000168C
+	.rodata     start:0x00001528 end:0x00001690
 	.data       start:0x0000C0C8 end:0x0000CD40
 
 unit/unit_gullible_nokotarou.c:
-	.rodata     start:0x00001690 end:0x0000185C
+	.rodata     start:0x00001690 end:0x00001860
 	.data       start:0x0000CD40 end:0x0000E628
 
 unit/unit_gullible_yoshi.c:
@@ -109,7 +109,7 @@ unit/unit_boss_rampell.c:
 	.data       start:0x00016B88 end:0x00019FA0
 
 unit/unit_met.c:
-	.rodata     start:0x000028F8 end:0x00002B44
+	.rodata     start:0x000028F8 end:0x00002B48
 	.data       start:0x00019FA0 end:0x0001BE70
 
 unit/unit_togemet.c:
@@ -117,7 +117,7 @@ unit/unit_togemet.c:
 	.data       start:0x0001BE70 end:0x0001DDF0
 
 unit/unit_basabasa.c:
-	.rodata     start:0x00002D80 end:0x00002EBC
+	.rodata     start:0x00002D80 end:0x00002EC0
 	.data       start:0x0001DDF0 end:0x0001EED8
 
 unit/unit_teresa.c:

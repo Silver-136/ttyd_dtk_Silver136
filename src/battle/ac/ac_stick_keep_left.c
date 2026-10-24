@@ -54,7 +54,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
         }
     }
     sfx[0] = "SFX_AC_PI1";
-    sfx[1] = "SFX_AC_PONE1\0\0\0";
+    sfx[1] = "SFX_AC_PONE1";
     do {
         loop = 0;
         if (SKL_P(work)->params[3] != 0) {

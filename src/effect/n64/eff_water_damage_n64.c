@@ -102,7 +102,7 @@ EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
         count = 11;
         break;
     }
-    effect->type = "WaterDamageN64\0";
+    effect->type = "WaterDamageN64";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffWaterDamageN64Work));
     effect->userdata = work;

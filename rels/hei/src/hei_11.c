@@ -103,10 +103,10 @@ EVT_BEGIN(hei_11_init_evt)
     CALL(evt_snd_envon, 272, STRING("ENV_STG1_HEI3"))
     CALL(evt_snd_set_rev_mode, 1)
     CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_map_playanim, STRING("mizu\0\0\0"), 1, 0)
+    CALL(evt_map_playanim, STRING("mizu"), 1, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))
-    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("mizu\0\0\0"), 16777216)
-    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("mizu\0\0\0"), 256)
+    CALL(evt_mapobj_flag_onoff, 0, 1, STRING("mizu"), 16777216)
+    CALL(evt_mapobj_flag_onoff, 0, 0, STRING("mizu"), 256)
     RETURN
 EVT_END()
 

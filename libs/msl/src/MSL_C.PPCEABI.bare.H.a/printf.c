@@ -572,7 +572,7 @@ static char* double2hex(long double num, char* buff, print_format format) {
             if (format.conversion_char == 'A') {
                 strcpy(p, "NAN");
             } else {
-                strcpy(p, "nan\0\0\0");
+                strcpy(p, "nan");
             }
         }
 
@@ -751,7 +751,7 @@ static char* float2str(long double num, char* buff, print_format format) {
             if (isupper(format.conversion_char)) {
                 strcpy(p, "NAN");
             } else {
-                strcpy(p, "nan\0\0\0");
+                strcpy(p, "nan");
             }
         }
         return p;

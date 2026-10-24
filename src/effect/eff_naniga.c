@@ -63,7 +63,7 @@ EffectEntry* effNanigaEntry(s32 type, f32 x, f32 y, f32 z, s32* list, s32 item) 
 
     effect = effEntry();
     inBattle = gp->inBattle != 0;
-    effect->type = "Naniga\0";
+    effect->type = "Naniga";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffNanigaWork));
     effect->userdata = work;

@@ -219,7 +219,7 @@ EffectEntry* effButterflyN64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffButterflyN64Work* work;
 
     effect = effEntry();
-    effect->type = "ButterflyN64\0\0\0";
+    effect->type = "ButterflyN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffButterflyN64Work));
     effect->userdata = work;

@@ -736,7 +736,7 @@ EVT_BEGIN(mri_06_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_nisekabe"), 1, 0)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_oku_ha"), 2)
-    CALL(evt_hitobj_onoff, STRING("A_futa\0"), 1, 0)
+    CALL(evt_hitobj_onoff, STRING("A_futa"), 1, 0)
     RETURN
 EVT_END()
 

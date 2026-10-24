@@ -120,7 +120,7 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
         if (johoya_get(table, wp->info[i].storyId) == 0) {
             if (target == n) {
                 sprintf((char*)wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
-                sprintf(tmp, "jketi_title_%04d\0\0\0", wp->info[i].storyId);
+                sprintf(tmp, "jketi_title_%04d", wp->info[i].storyId);
                 msg = msgSearch(tmp);
                 evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
                 evtSetValue(event, args[2], (EvtWord)msg);

@@ -97,7 +97,7 @@ void pouchInit(void) {
 #ifdef VERSION_G8ME01
 	strcpy(mpp->yoshiName, msgSearch("name_party3"));
 #else
-	strcpy(mpp->yoshiName, "チビヨッシー\0\0\0");
+	strcpy(mpp->yoshiName, "チビヨッシー");
 #endif
 }
 

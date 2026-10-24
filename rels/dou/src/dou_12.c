@@ -150,7 +150,7 @@ EVT_BEGIN(dou_12_init_evt)
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_npc_check, STRING("キラー大砲１"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_npc_set_link, STRING("キラー大砲１"), STRING("キラー大砲２\0\0\0"))
+        CALL(evt_npc_set_link, STRING("キラー大砲１"), STRING("キラー大砲２"))
     END_IF
     RETURN
 EVT_END()

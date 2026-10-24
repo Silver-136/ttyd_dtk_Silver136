@@ -296,11 +296,11 @@ void mot_stay(void) {
 		case 3:
 			if ((s32)--mario->multiTimer < 0) {
 #ifdef VERSION_G8ME01
-				marioChgEvtPose("M_N_5A\0");
+				marioChgEvtPose("M_N_5A");
 				mario->poseTime = 0;
 				mario->multiTimer = 0;
 #else
-				marioChgEvtPose("M_N_5A\0");
+				marioChgEvtPose("M_N_5A");
 				mario->multiTimer = 0;
 #endif
 				mario->currSubMotionId = 4;

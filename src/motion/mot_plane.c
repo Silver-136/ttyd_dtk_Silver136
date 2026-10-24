@@ -349,7 +349,7 @@ void mot_plane(void) {
 			break;
 		}
 		planeReset();
-		marioChgPose("M_J_1C\0");
+		marioChgPose("M_J_1C");
 		mp->position.y = 1.0f + (mp->mot.plane.groundY - 37.0f);
 		mp->baseSpeed = 0.0f;
 		marioSetFallPara();

@@ -1220,7 +1220,7 @@ NpcTerritoryInfo btl_mri_setup_no_tbl[] = {
 };
 
 EVT_BEGIN(stg_02_1_init_evt)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ueki\0"), 1)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ueki"), 1)
     RETURN
 EVT_END()
 

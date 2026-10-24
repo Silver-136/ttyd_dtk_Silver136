@@ -696,7 +696,7 @@ static EVT_BEGIN(charge_attack_event)
     CALL(evt_btl_camera_set_zoom, 0, 400)
     WAIT_MS(300)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("MRR_A3_1"))
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MARI_CHARGE1\0\0"), -250000000, 0, LW(15))
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MARI_CHARGE1"), -250000000, 0, LW(15))
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)

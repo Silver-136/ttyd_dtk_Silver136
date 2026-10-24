@@ -297,7 +297,7 @@ EVT_BEGIN(tik_16_init_evt)
     SPAWN_EVENT(PTR(moving_floor))
     CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch00"), -125, 0, 0, PTR(evt_switch_00), GSWF(1345))
     CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch01"), 125, 0, 0, PTR(evt_switch_01), GSWF(1346))
-    CALL(evt_mobj_powerupblk, STRING("pblk1\0\0"), 125, 160, -100, 0, GSWF(5534), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), 125, 160, -100, 0, GSWF(5534), 0)
     RETURN
 EVT_END()
 

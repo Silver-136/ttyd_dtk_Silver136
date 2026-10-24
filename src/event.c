@@ -549,7 +549,7 @@ EventData stage9_evt[] = {
 	{0, 0, 0, 403, "STG9_00", "サンダース" NAME_EN("Bobbery"), "muj_20", NULL, NULL},
 	{0, 0, 0, 403, "STG9_00", "チュチュリーナ" NAME_EN("Ms. Mowz"), "gor_01", NULL, NULL},
 	{0, 0, 0, 403, "STG9_00", "メガバッテン" NAME_EN("X-Nauts"), "pik_04", NULL, NULL},
-	{0, 0, 0, 403, "STG9_00", "月\0" NAME_EN("Moon"), "tik_00", NULL, NULL},
+	{0, 0, 0, 403, "STG9_00", "月" NAME_EN("Moon"), "tik_00", NULL, NULL},
 	{0, 0, 0, 403, "STG9_00", "クリスチーヌ２" NAME_EN("Goombella 2"), "gor_00", "epilogue2", NULL},
 	{0, 0, 0, 403, "STG9_00", "マリオの家２" NAME_EN("Mario's House 2"), "aaa_00", "epilogue2", NULL},
 	{0, 1, 0, 404, "STG9_01", "スタッフロール" NAME_EN("End Credits"), "end_00", "", NULL},

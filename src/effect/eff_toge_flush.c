@@ -31,7 +31,7 @@ EffectEntry* effTogeFlushEntry(s32 type, f32 x, f32 y, f32 z, s32 life) {
     EffTogeFlushWork* work;
 
     effect = effEntry();
-    effect->type = "TogeFlush\0\0";
+    effect->type = "TogeFlush";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffTogeFlushWork));
     effect->userdata = work;

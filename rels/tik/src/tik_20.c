@@ -118,7 +118,7 @@ EVT_BEGIN(tik_20_init_evt)
     CALL(evt_item_entry, STRING("item_01"), 274, 180, 100, -125, 16, GSWF(1367), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), -50, 60, -75, 0, GSWF(5535), 0)
     CALL(evt_mobj_powerupblk, STRING("pblk02"), 0, 100, -25, 0, GSWF(5536), 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk03\0"), 50, 60, -75, 0, GSWF(5537), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk03"), 50, 60, -75, 0, GSWF(5537), 0)
     RETURN
 EVT_END()
 

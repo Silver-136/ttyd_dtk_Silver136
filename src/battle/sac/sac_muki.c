@@ -492,7 +492,7 @@ void main_cursor(void) {
         w->t3c = 0;
         w->cfrom = w->cpos;
         w->cto = w->o3d[w->idx].pos;
-        psndSFXOn("SFX_BTL_SAC_BODY3\0\0");
+        psndSFXOn("SFX_BTL_SAC_BODY3");
     case 4:
         w->t3c++;
         w->col74 = (GXColor){0x0, 0x0, 0xFF, 0xFF};

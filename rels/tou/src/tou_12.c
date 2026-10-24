@@ -361,7 +361,7 @@ EVT_BEGIN(tou_12_init_evt)
                 ADD(LW(0), 3000)
                 WAIT_MS(LW(0))
                 CALL(evt_mapobj_get_position, STRING("gor_hae"), LW(0), LW(1), LW(2))
-                CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FLY1\0\0"), LW(0), LW(1), LW(2), 0)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_FLY1"), LW(0), LW(1), LW(2), 0)
             END_LOOP
         END_INLINE_EVENT
     END_IF

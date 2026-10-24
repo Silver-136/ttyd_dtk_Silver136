@@ -63,13 +63,13 @@ void effLaserMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    if (!animGroupBaseAsync("MOBJ_EFF_laser\0", inBattle, NULL)) {
+    if (!animGroupBaseAsync("MOBJ_EFF_laser", inBattle, NULL)) {
         return;
     }
     switch (work->state) {
         case 0:
             if (work->poseId == -1) {
-                work->poseId = animPoseEntry("MOBJ_EFF_laser\0", (u32)inBattle);
+                work->poseId = animPoseEntry("MOBJ_EFF_laser", (u32)inBattle);
                 animPoseSetAnim(work->poseId, "S_1", TRUE);
                 animPoseSetLocalTimeRate(work->poseId, 0.5f);
             }

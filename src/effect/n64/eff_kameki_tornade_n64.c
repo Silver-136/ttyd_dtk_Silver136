@@ -60,7 +60,7 @@ EffectEntry* effKamekiTornadeN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
     s32 k;
 
     effect = effEntry();
-    effect->type = "KamekiTornadeN64\0\0\0";
+    effect->type = "KamekiTornadeN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffKamekiTornadeN64Work));
     effect->userdata = work;

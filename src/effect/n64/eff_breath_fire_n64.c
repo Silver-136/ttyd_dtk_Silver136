@@ -29,7 +29,7 @@ EffectEntry* effBreathFireN64Entry(s32 type, s32 count, s32 seed, s32 lifetime, 
     EffBreathFireN64Work* work;
 
     effect = effEntry();
-    effect->type = "BreathFireN64\0\0";
+    effect->type = "BreathFireN64";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, sizeof(EffBreathFireN64Work));
     effect->userdata = work;

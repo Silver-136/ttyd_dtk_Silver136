@@ -266,7 +266,7 @@ USER_FUNC(evt_shuryolight_init) {
     npc->flags |= 0xA0;
     lights[4].npc = npc;
     lights[4].anims = (const char**)red_light_anim;
-    lights[4].group = animPoseGetGroupIdx(base->poseId, "locator5\0\0\0");
+    lights[4].group = animPoseGetGroupIdx(base->poseId, "locator5");
     lights[4].shape = animPoseGetShapeIdx(npc->poseId, "pPlaneShape36");
     shuryolightSetAnim(4, 1);
     animPoseSetDispCallBack(base->poseId, shuryolight_callback, lights);

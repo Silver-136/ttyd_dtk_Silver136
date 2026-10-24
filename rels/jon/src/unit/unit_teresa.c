@@ -793,7 +793,7 @@ static EVT_BEGIN(move_event_sub)
             CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("T_1"))
         END_IF
     END_SIBLING_EVENT
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_TELESA_MOVE1\0\0\0"), -250000000, 0, -250000000)
+    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_TELESA_MOVE1"), -250000000, 0, -250000000)
     CALL(btlevtcmd_GetPartsPos, LW(3), 1, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 40)
     CALL(btlevtcmd_DivePosition, LW(3), LW(0), LW(1), LW(2), 60, 10, 4, 0, -1)

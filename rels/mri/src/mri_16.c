@@ -498,7 +498,7 @@ EVT_BEGIN(mri_16_init_evt)
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_item_entry, STRING("item_00"), 141, -115, 0, -25, 0, GSWF(2869), 0)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -125, 0, 125, 0, 0, PTR(mobj_box00), GSWF(2885))
-    CALL(evt_mobj_powerupblk, STRING("pblk1\0\0"), 65, -260, -70, 0, GSWF(5544), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), 65, -260, -70, 0, GSWF(5544), 0)
     RETURN
 EVT_END()
 

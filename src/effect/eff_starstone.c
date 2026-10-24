@@ -339,7 +339,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     f32 d;
 
     effect = effEntry();
-    effect->type = "StarStone\0\0";
+    effect->type = "StarStone";
     effect->count = 1;
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(EffStarStoneWork));
     effect->userdata = work;
@@ -427,7 +427,7 @@ void effStarStoneMain(EffectEntry* effect) {
     if (w->flags & 4) {
         if (!(w->flags & 8)) {
             w->flags |= 8;
-            w->sfx = psndSFXOn_3D("SFX_EVT_STARSTONE_SHINE1\0\0\0", &pos);
+            w->sfx = psndSFXOn_3D("SFX_EVT_STARSTONE_SHINE1", &pos);
         }
         if (w->flags & 8) {
             psndSFX_pos(w->sfx, &pos);

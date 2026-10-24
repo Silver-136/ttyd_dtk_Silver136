@@ -27,7 +27,7 @@ kpa_01.c:
 	.bss        start:0x00000040 end:0x00000048
 
 kpa_06.c:
-	.rodata     start:0x000008B0 end:0x000008B9
+	.rodata     start:0x000008B0 end:0x000008C0
 	.data       start:0x000050E8 end:0x00005480
 
 kpa_03.c:
@@ -35,12 +35,12 @@ kpa_03.c:
 	.data       start:0x00005480 end:0x00005CA0
 
 kpa_04.c:
-	.rodata     start:0x000008E8 end:0x000008F1
+	.rodata     start:0x000008E8 end:0x000008F8
 	.data       start:0x00005CA0 end:0x00006070
 
 kpa_05.c:
 	.text       start:0x00000F78 end:0x00000FBC
-	.rodata     start:0x000008F8 end:0x00000934
+	.rodata     start:0x000008F8 end:0x00000938
 	.data       start:0x00006070 end:0x00006740
 
 kpa_07.c:

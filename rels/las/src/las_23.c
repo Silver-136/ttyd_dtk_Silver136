@@ -264,7 +264,7 @@ EVT_BEGIN(las_23_init_evt)
 #endif
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), 1)
-        CALL(evt_hitobj_onoff, STRING("A_be\0\0\0"), 1, 0)
+        CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_bero_overwrite, STRING("w_bero"), PTR(w_bero_mapchg))

@@ -85,7 +85,7 @@ void winMarioInit(WindowWork* w) {
             case 0: name = "a_mario"; break;
             case 1: name = "a_mario_l"; break;
             case 2: name = "a_mario_w"; break;
-            case 3: name = "a_mario_wl\0\0\0\0\0"; break;
+            case 3: name = "a_mario_wl"; break;
         }
         w->mario.poseId = animPoseEntry(name, 0);
         animPoseSetAnim(w->mario.poseId, "M_S_1", 1);

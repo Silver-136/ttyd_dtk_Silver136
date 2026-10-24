@@ -151,7 +151,7 @@ BOOL nameEntPrepare(void) {
 	const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
 	return fileAsyncf(4, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0;
 #else
-	return fileAsyncf(4, NULL, "%s/w/jp/name.tpl\0\0\0", getMarioStDvdRoot()) != 0;
+	return fileAsyncf(4, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0;
 #endif
 }
 
@@ -278,12 +278,12 @@ static inline BOOL nameEntLoad(void) {
 #ifdef VERSION_G8ME01
 	if (fileAsyncf(4, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
 #else
-	if (fileAsyncf(4, NULL, "%s/w/jp/name.tpl\0\0\0", getMarioStDvdRoot()) != 0U) {
+	if (fileAsyncf(4, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
 #endif
 #ifdef VERSION_G8ME01
 		wp->tplFile = fileAllocf(4, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #else
-		wp->tplFile = fileAllocf(4, "%s/w/jp/name.tpl\0\0\0", getMarioStDvdRoot());
+		wp->tplFile = fileAllocf(4, "%s/w/jp/name.tpl", getMarioStDvdRoot());
 #endif
 		return TRUE;
 	}
