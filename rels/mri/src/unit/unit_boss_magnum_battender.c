@@ -23,7 +23,7 @@
 #include "battle/battle_sub.h"
 
 static EffectEntry* eff_charge;
-EffectEntry* effHokoriN64Entry(s32 type, s32 arg1, f32 x, f32 y, f32 z);
+EffectEntry* effHokoriN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z);
 typedef struct ArmWork { Vec prevPos; Vec pos; f32 rot; f32 targetRot; EffectEntry* eff; } ArmWork;
 static ArmWork* work[2];
 EffectEntry* effBattenEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);

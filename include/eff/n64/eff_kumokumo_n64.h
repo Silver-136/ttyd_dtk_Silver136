@@ -33,4 +33,4 @@ typedef struct EffKumokumoN64Particle {
     s32 camera;     // 0x60
 } EffKumokumoN64Particle;
 
-EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 arg6, f32 scale);
+EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 unused, f32 scale);

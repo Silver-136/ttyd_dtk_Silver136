@@ -1200,7 +1200,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-struct EffectEntry* effKemuri9N64Entry(s32 type, s32 arg1, s32 arg2, f32 x, f32 y, f32 z, f32 arg6, f32 arg7);
+struct EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32 z, f32 radiusEnd, f32 angle);
 
 static USER_FUNC(_leg_smoke_effect) {
     EvtWord* args = event->args;

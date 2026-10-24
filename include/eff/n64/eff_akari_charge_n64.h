@@ -26,4 +26,4 @@ typedef struct EffAkariChargeN64Work {
     EffAkariChargeN64Elem elem[22];
 } EffAkariChargeN64Work;
 
-EffectEntry* effAkariChargeN64Entry(s32 type, s32 arg1, f32 x, f32 y, f32 z, f32 scale);
+EffectEntry* effAkariChargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale);

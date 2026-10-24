@@ -194,7 +194,7 @@ typedef struct MapObject {
 
 typedef struct MapError {
     char name[32]; // 0x0, map object name that was not found
-    s32 type;      // 0x20, mapErrorEntry arg0 (0 for missing objects)
+    s32 type;      // 0x20, mapErrorEntry type (0 for missing objects)
 } MapError;
 
 // "animation_table" entry in map.dat (SPM MapFileAnimData)
@@ -322,7 +322,7 @@ typedef struct MapWork {
 // tpl ARAM copy of a map entry: stored in the word after it (the next entry's count slot, or lastTplAram)
 #define MAPENT_TPLARAM(entry) ((entry) + 1)->prevTplAram
 
-void mapErrorEntry(s32 arg0, const char* arg1);
+void mapErrorEntry(s32 type, const char* name);
 const char* getMapDataDvdRoot(void);
 void N_mapDispOff(void);
 void N_mapDispOn(void);

@@ -173,7 +173,7 @@ u8 rz_tbl[] = {0x00, 0x09, 0x12, 0x1C, 0x25, 0x2F, 0x39, 0x43, 0x4D, 0x57, 0x61,
 void effKumokumoMain(EffectEntry* effect);
 void effKumokumoDisp(CameraId cameraId, EffectEntry* effect);
 
-EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 arg6, f32 scale) {
+EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 unused, f32 scale) {
     EffectEntry* effect;
     EffKumokumoN64Particle* work;
     EffKumokumoN64Particle* p;

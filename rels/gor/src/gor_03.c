@@ -64,7 +64,7 @@ typedef struct SlotDrum { const char* drum[3]; const char* reber; const char* an
 void mapObjRotate(const char* name, f32 x, f32 y, f32 z);
 void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel);
 #define UPSIDEGARA ((s32(*)[3][8])upsidegara)
-void mapPlayAnimationLv(const char* name, s32 a, s32 b);
+void mapPlayAnimationLv(const char* name, s32 mode, s32 level);
 void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel);
 #define SLOTGARA ((s32(*)[3][8])slotgara)
 s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);

@@ -15,7 +15,7 @@ typedef struct EffPacknBfireWork {
     s32 type;     // 0x0
     Vec pos;      // 0x4
     Vec tgt;      // 0x10
-    s32 arg1;     // 0x1c
+    s32 frames;   // 0x1c
     s32 life;     // 0x20
     s32 frame;    // 0x24
     s32 color[8]; // 0x28
@@ -32,8 +32,8 @@ typedef struct EffPacknBfireWork {
     f32 drot;     // 0x78
 } EffPacknBfireWork;
 
-EffectEntry* effPacknBfireN64Entry(s32 type, s32 arg1, s32 life, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz,
-                                   f32 arg7);
+EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz,
+                                   f32 scale);
 void effPacknBfireMain(EffectEntry* effect);
 void effPacknBfireDisp(CameraId cameraId, EffectEntry* effect);
 
@@ -44,8 +44,8 @@ static effN64Vtx size64x64_tex32x32_vtx[] = {
     {-32, 32, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-EffectEntry* effPacknBfireN64Entry(s32 type, s32 arg1, s32 life, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz,
-                                   f32 arg7) {
+EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz,
+                                   f32 scale) {
     s32 count;
     EffectEntry* effect;
     EffPacknBfireWork* work;
@@ -68,7 +68,7 @@ EffectEntry* effPacknBfireN64Entry(s32 type, s32 arg1, s32 life, f32 x, f32 y, f
     }
     work->type = type;
     work->frame = 0;
-    work->arg1 = arg1;
+    work->frames = frames;
     work->color[3] = 0;
     work->pos.x = x;
     work->pos.y = y;
@@ -76,10 +76,10 @@ EffectEntry* effPacknBfireN64Entry(s32 type, s32 arg1, s32 life, f32 x, f32 y, f
     work->tgt.x = tx;
     work->tgt.y = ty;
     work->tgt.z = tz;
-    work->vel.x = (work->tgt.x - work->pos.x) / (f32)arg1;
-    work->vel.y = (work->tgt.y - work->pos.y) / (f32)arg1;
-    work->vel.z = (work->tgt.z - work->pos.z) / (f32)arg1;
-    work->scaleArg = arg7;
+    work->vel.x = (work->tgt.x - work->pos.x) / (f32)frames;
+    work->vel.y = (work->tgt.y - work->pos.y) / (f32)frames;
+    work->vel.z = (work->tgt.z - work->pos.z) / (f32)frames;
+    work->scaleArg = scale;
     switch (type) {
     case 0:
         break;
@@ -165,7 +165,7 @@ void effPacknBfireMain(EffectEntry* effect) {
         switch (type) {
         case 0:
             if ((frame & 3) == 0) {
-                effPacknBfireN64Entry(1, work->arg1, work->arg1, work->pos.x, work->pos.y, work->pos.z,
+                effPacknBfireN64Entry(1, work->frames, work->frames, work->pos.x, work->pos.y, work->pos.z,
                                       work->tgt.x, work->tgt.y, work->tgt.z, 1.0f);
             }
             break;

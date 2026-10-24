@@ -44,11 +44,11 @@ typedef struct EffFallVtx {
 typedef struct EffFallElem {
     s32 type;         // 0x0
     Vec pos;          // 0x4
-    f32 arg4;         // 0x10
-    f32 arg5;         // 0x14
+    f32 width;        // 0x10
+    f32 drop;         // 0x14
     f32 rotY;         // 0x18
-    s32 arg7;         // 0x1C
-    s32 arg8;         // 0x20
+    s32 num;          // 0x1C
+    s32 duration;     // 0x20
     s32 timer;        // 0x24
     s32 scroll;       // 0x28
     f32 scale;        // 0x2C
@@ -176,7 +176,7 @@ static inline f32 fall_cosf(f32 x) {
     return a;
 }
 
-EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 arg4, f32 arg5, f32 arg6, s32 arg7, s32 arg8);
+EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration);
 void DCFlushRange(void* addr, u32 nBytes);
 void GXBegin(GXPrimitive type, GXVtxFmt vtxfmt, u16 nverts);
 void GXCallDisplayList(void* list, u32 nbytes);
@@ -209,7 +209,7 @@ void PSMTXRotAxisRad(Mtx m, const Vec* axis, f32 rad);
 void PSMTXRotRad(Mtx m, char axis, f32 rad);
 void PSMTXScale(Mtx m, f32 xS, f32 yS, f32 zS);
 void PSMTXTrans(Mtx m, f32 xT, f32 yT, f32 zT);
-EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 arg4, f32 arg5, f32 arg6, s32 arg7, s32 arg8) {
+EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration) {
     const char* sfxName;
     EffectEntry* effect;
     EffFallElem* e;
@@ -221,10 +221,10 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 arg4, f32 arg5, f32
     f32 r;
 
     effect = effEntry();
-    count = arg7 + 1;
+    count = num + 1;
     switch (type) {
     case 0:
-        count = arg7 + 1;
+        count = num + 1;
         break;
     case 1:
     case 2:
@@ -234,7 +234,7 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 arg4, f32 arg5, f32
     case 6:
     case 7:
     case 8:
-        arg7 = 1;
+        num = 1;
         count = 2;
         break;
     }
@@ -245,19 +245,19 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 arg4, f32 arg5, f32
     effect->callback = effFallMain;
     effect->flags |= 2;
     // FAKE: comma temps are coloured in assignment order (ia r30 above sfxName r29)
-    ia = (0, (s32)arg4);
+    ia = (0, (s32)width);
     sfxName = (0, "SFX_BTL_STAGE_FALL_WATER1\0\0");
     w->type = type;
     w->pos.x = x;
     w->pos.y = y;
     w->pos.z = z;
-    w->arg4 = arg4;
-    w->arg5 = arg5;
-    w->rotY = arg6;
-    w->arg7 = arg7;
+    w->width = width;
+    w->drop = drop;
+    w->rotY = dir;
+    w->num = num;
     w->timer = 0;
     w->scroll = 0;
-    w->arg8 = arg8;
+    w->duration = duration;
     w->pose0 = -1;
     w->pose1 = -1;
     for (i = 1, e = w + 1; i < effect->count; i++, e++) {
@@ -377,14 +377,14 @@ void effFallMain(EffectEntry* effect) {
     EffFallElem* e;
     s32 i;
     s32 type;
-    s32 arg8;
+    s32 duration;
     s32 played;
     s32 done;
     s32 group;
     f32 y;
     f32 angle;
     f32 top;
-    f32 arg4;
+    f32 width;
     f32 ground;
     f32 a;
     s32 j;
@@ -398,11 +398,11 @@ void effFallMain(EffectEntry* effect) {
         sndPos = v;
     }
     played = 0;
-    ground = y + e->arg5;
+    ground = y + e->drop;
     type = e->type;
-    arg4 = e->arg4;
+    width = e->width;
     rotY = e->rotY;
-    arg8 = e->arg8;
+    duration = e->duration;
     group = gp->inBattle != 0;
     if (effect->flags & 4) {
         effect->flags &= ~4;
@@ -438,7 +438,7 @@ void effFallMain(EffectEntry* effect) {
                         }
                         e->pos.y += e->f34;
                         e->f34 -= e->f30;
-                        if (distABf(e->pos.x, e->pos.z, 0.0f, 0.0f) < arg4 / 2.0f) {
+                        if (distABf(e->pos.x, e->pos.z, 0.0f, 0.0f) < width / 2.0f) {
                             if (e->pos.y < ground) {
                                 e->pos.y = ground;
                                 e->f34 *= -0.3f;
@@ -564,7 +564,7 @@ void effFallMain(EffectEntry* effect) {
                             effWaterDamageN64Entry(4, 20, sndPos.x, sndPos.y, sndPos.z, 1.0f);
                         }
                         e->timer++;
-                        if (e->timer > arg8) {
+                        if (e->timer > duration) {
                             e->state++;
                         }
                         break;
@@ -611,7 +611,7 @@ void effFallMain(EffectEntry* effect) {
                     case 1:
                         e->pos.y += e->f34;
                         e->f34 -= e->f30;
-                        if (distABf(e->pos.x, e->pos.z, 0.0f, 0.0f) < arg4 / 2.0f) {
+                        if (distABf(e->pos.x, e->pos.z, 0.0f, 0.0f) < width / 2.0f) {
                             if (e->pos.y < ground) {
                                 e->pos.y = ground;
                                 e->f34 *= -0.3f;
@@ -844,7 +844,7 @@ void effFallMain(EffectEntry* effect) {
                             break;
                         }
                         e->timer++;
-                        if (e->timer > e->arg8) {
+                        if (e->timer > e->duration) {
                             e->state++;
                         }
                         break;

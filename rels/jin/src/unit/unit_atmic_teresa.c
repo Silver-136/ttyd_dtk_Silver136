@@ -24,7 +24,7 @@ typedef struct AtmTeresa { u8 state; u8 flag; s32 anim; s32 wait; s32 timer; Vec
 AtmTeresa* teresa;
 #define ATMIC_TERESA_SCALE atmic_teresa_scale
 s32 teresa_count;
-s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, u32 flags, s32 arg3, Vec* pos);
+s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, u32 flags, s32 pitch, Vec* pos);
 s32 irand(s32 scalar);
 f32 intplGetValue(s32 mode, f32 start, f32 end, s32 cur, s32 steps);
 s32 irand(s32 scalar);

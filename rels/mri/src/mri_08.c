@@ -8,7 +8,7 @@
 
 #pragma force_active on
 
-void togeMakeRetsu(Vec* pos, s32 arg1, s32 arg2, s32 arg3);
+void togeMakeRetsu(Vec* pos, s32 leader, s32 start, s32 end);
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_mapchange);

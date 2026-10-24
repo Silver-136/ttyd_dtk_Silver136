@@ -12,13 +12,13 @@
 #include "mario/mario_pouch.h"
 
 
-void marioWalkDashSe(HitEntry* hitObj, u32 arg1) {
+void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
     s32 hitAttr;
     MarioWork* mario;
 
     mario = marioGetPtr();
     hitAttr = hitGetAttr(hitObj);
-    if ((mario->multiTimer % arg1) == 0) {
+    if ((mario->multiTimer % interval) == 0) {
         if (hitAttr & 0x100) {
             psndSFXOn_3D((char*)0x143, &mario->position);
             return;
@@ -46,7 +46,7 @@ void marioWalkDashSe(HitEntry* hitObj, u32 arg1) {
         psndSFXOn_3D((char*)0x141, &mario->position);
         return;
     }
-    if ((mario->multiTimer % (arg1 >> 1U)) == 0) {
+    if ((mario->multiTimer % (interval >> 1U)) == 0) {
         if (hitAttr & 0x100) {
             psndSFXOn_3D((char*)0x142, &mario->position);
             return;

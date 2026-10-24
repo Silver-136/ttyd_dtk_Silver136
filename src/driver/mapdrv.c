@@ -106,12 +106,12 @@ void makeDisplayList(BOOL group);
 //anim functions?
 void _mapLoad(MapWork* wp, BOOL group, const char* map);
 
-void mapErrorEntry(s32 arg0, const char* arg1) { //1:1
+void mapErrorEntry(s32 type, const char* name) { //1:1
 	MapError* error = error_data;
 
 	error += error_count;
-	error->type = arg0;
-	strncpy(error->name, arg1, sizeof(error->name) - 1);
+	error->type = type;
+	strncpy(error->name, name, sizeof(error->name) - 1);
 	error_flag = TRUE;
 	error_count++;
 	error_count %= 32;
@@ -543,7 +543,7 @@ void mapCheckAnimation(const char* animName, BOOL* valid, f32* a3) {
 	}
 }
 
-void mapPlayAnimationLv(const char* name, s32 a, s32 b) {
+void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
 	MapAnim* anim = NULL;
 	MapWork* wp;
 	MapEntry* entry;
@@ -568,7 +568,7 @@ void mapPlayAnimationLv(const char* name, s32 a, s32 b) {
 	}
 	if (found) {
 		anim->flags = 0;
-		switch (b) {
+		switch (level) {
 			case 0:
 				break;
 			case 1:
@@ -606,10 +606,10 @@ void mapPlayAnimationLv(const char* name, s32 a, s32 b) {
 		anim->time = 0.0f;
 		anim->rate = 1.0f;
 		anim->flags |= 1;
-		if (a == 1) {
+		if (mode == 1) {
 			anim->flags |= 4;
 		}
-		if (a == 2) {
+		if (mode == 2) {
 			anim->startTime -= (u64)(1000.0f * anim->anim->length / gp->framerate);
 		}
 	}

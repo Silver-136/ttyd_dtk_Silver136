@@ -245,7 +245,7 @@ EVT_BEGIN(muj_21_init_evt)
     RETURN
 EVT_END()
 
-EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 arg4, f32 arg5);
+EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);
 EffectEntry* effWaterDamageN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale);
 void mapObjGetPos(const char* name, Vec* pos);
 

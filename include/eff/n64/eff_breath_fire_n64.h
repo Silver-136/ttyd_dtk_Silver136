@@ -25,5 +25,5 @@ typedef struct EffBreathFireN64Work {
     s32 color[6];   // 0x64
 } EffBreathFireN64Work;
 
-EffectEntry* effBreathFireN64Entry(s32 type, s32 arg1, s32 arg2, s32 arg3, f32 x, f32 y, f32 z,
-                                   f32 arg7, f32 arg8, f32 arg9);
+EffectEntry* effBreathFireN64Entry(s32 type, s32 count, s32 seed, s32 lifetime, f32 x, f32 y, f32 z,
+                                   f32 endX, f32 endY, f32 endZ);

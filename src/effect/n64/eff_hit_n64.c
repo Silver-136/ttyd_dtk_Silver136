@@ -57,7 +57,7 @@ void effHitMain(EffectEntry* effect);
 void effHitDisp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx mtx);
 
-EffectEntry* effHitN64Entry(s32 type, s32 arg1, f32 x, f32 y, f32 z, f32 arg5) {
+EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffHitN64Work* work;
     EffHitN64Work* p;
@@ -66,7 +66,7 @@ EffectEntry* effHitN64Entry(s32 type, s32 arg1, f32 x, f32 y, f32 z, f32 arg5) {
     f32 r;
 
     effect = effEntry();
-    count = (arg1 * 5 + 20) / 3 + 1;
+    count = (size * 5 + 20) / 3 + 1;
     effect->type = "HitN64\0";
     effect->count = count;
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffHitN64Work));
@@ -114,7 +114,7 @@ EffectEntry* effHitN64Entry(s32 type, s32 arg1, f32 x, f32 y, f32 z, f32 arg5) {
         work->color[5] = 230;
         break;
     }
-    work->scale = arg5;
+    work->scale = scale;
     p = work + 1;
     for (i = 1; i < count; i++, p++) {
         r = rand() % 360;

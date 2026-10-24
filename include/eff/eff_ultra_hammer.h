@@ -4,7 +4,7 @@
 #include "driver/effdrv.h"
 
 typedef struct EffUltraHammerData {
-    BOOL mode; //0x0, effUltraHammerEntry arg0
+    BOOL mode; //0x0, effUltraHammerEntry mode
     Vec position; //0x4
     f32 scale; //0x10
     f32 offsetX; //0x14
@@ -15,4 +15,4 @@ typedef struct EffUltraHammerData {
     s32 update; //0x28, how long until scroll updates
 } EffUltraHammerData;
 
-EffectEntry* effUltraHammerEntry(BOOL arg0, s32 counter, f32 x, f32 y, f32 z, f32 scale);
+EffectEntry* effUltraHammerEntry(BOOL mode, s32 counter, f32 x, f32 y, f32 z, f32 scale);

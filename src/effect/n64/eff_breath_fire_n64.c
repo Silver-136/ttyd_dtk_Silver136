@@ -23,8 +23,8 @@ static effN64Vtx stg_fire_breath_v[] = {
     {-100, -100, 5, 0, 0, 0, 0, 0, 255},
 };
 
-EffectEntry* effBreathFireN64Entry(s32 type, s32 arg1, s32 arg2, s32 arg3, f32 x, f32 y, f32 z, f32 arg7,
-                                   f32 arg8, f32 arg9) {
+EffectEntry* effBreathFireN64Entry(s32 type, s32 count, s32 seed, s32 lifetime, f32 x, f32 y, f32 z, f32 endX,
+                                   f32 endY, f32 endZ) {
     EffectEntry* effect;
     EffBreathFireN64Work* work;
 
@@ -35,38 +35,38 @@ EffectEntry* effBreathFireN64Entry(s32 type, s32 arg1, s32 arg2, s32 arg3, f32 x
     effect->userdata = work;
     effect->callback = effBreathFireMain;
     work->type = type;
-    work->count = arg1;
-    work->unk8 = arg2;
+    work->count = count;
+    work->unk8 = seed;
     work->pos.x = x;
     work->pos.y = y;
     work->pos.z = z;
     work->start.x = x;
     work->start.y = y;
     work->start.z = z;
-    work->end.x = arg7;
-    work->end.y = arg8;
-    work->end.z = arg9;
+    work->end.x = endX;
+    work->end.y = endY;
+    work->end.z = endZ;
     if (type == 0) {
         work->scale = 0.05f;
     } else {
         work->scale = 0.040000003f;
     }
     work->unk30 = work->scale;
-    work->lifetime = arg3;
-    work->remaining = arg3;
+    work->lifetime = lifetime;
+    work->remaining = lifetime;
     work->frame = 0;
     work->alpha = 255;
     work->unk5c = 0.0f;
     work->unk3c = 0.1f;
     work->unk34 = work->unk30;
     if (type == 0) {
-        work->vel.x = 0.2f * (0.2f * (arg7 - x) * (f32)((s32)effTblRandN64(10, arg2) - 5));
-        work->vel.y = 0.2f * (0.2f * (arg8 - y) * (f32)((s32)effTblRandN64(10, arg2 + 1) - 5));
-        work->vel.z = 0.2f * (0.2f * (arg9 - z) * (f32)((s32)effTblRandN64(10, arg2 + 2) - 5));
+        work->vel.x = 0.2f * (0.2f * (endX - x) * (f32)((s32)effTblRandN64(10, seed) - 5));
+        work->vel.y = 0.2f * (0.2f * (endY - y) * (f32)((s32)effTblRandN64(10, seed + 1) - 5));
+        work->vel.z = 0.2f * (0.2f * (endZ - z) * (f32)((s32)effTblRandN64(10, seed + 2) - 5));
     } else {
-        work->vel.x = 0.2f * (arg7 - x) * (f32)((s32)effTblRandN64(10, arg2 + 3) - 5);
-        work->vel.y = 0.2f * (arg8 - y) * (f32)((s32)effTblRandN64(10, arg2 + 4) - 5);
-        work->vel.z = 0.2f * (arg9 - z) * (f32)((s32)effTblRandN64(10, arg2 + 5) - 5);
+        work->vel.x = 0.2f * (endX - x) * (f32)((s32)effTblRandN64(10, seed + 3) - 5);
+        work->vel.y = 0.2f * (endY - y) * (f32)((s32)effTblRandN64(10, seed + 4) - 5);
+        work->vel.z = 0.2f * (endZ - z) * (f32)((s32)effTblRandN64(10, seed + 5) - 5);
     }
     work->velY = 0.0f;
     work->color[0] = 255;

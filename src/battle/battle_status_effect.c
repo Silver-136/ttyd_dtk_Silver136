@@ -15,7 +15,7 @@
 #define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i)) /* cast keeps the 0x18D88 displacement folded into each access */
 
 BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit);
-void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 arg2);
+void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed);
 void BattleStatusChangeInfoWorkInit(BattleUnit* unit);
 void _st_chg_msg_disp(void);
 
@@ -413,7 +413,7 @@ s32 _get_pri(s8 type) {
 }
 
 #pragma optimize_for_size on
-void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 arg2, s32 arg3) {
+void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, s32 changed) {
 	StChgInfo* e = &unit->statusChangeInfo[0];
 	StChgInfo tmp, swap;
 	s8 pri = _get_pri(type);
@@ -427,8 +427,8 @@ void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 arg2, s32 
 	}
 	if (i >= 6) return;
 	tmp.type = type;
-	tmp.strength = arg2;
-	tmp.changed = arg3;
+	tmp.strength = strength;
+	tmp.changed = changed;
 	if (type == e[i].type) {
 		e[i] = tmp;
 	}
@@ -497,14 +497,14 @@ void BattleStatusChangeMsgWorkInit(void) {
 }
 #pragma optimize_for_size reset
 
-void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 arg2) {
+void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
 	StChgMsg* msg = ST_CHG_MSG(index);
 	s32 id;
 
 	msg->unitId = unit->unitId;
 	msg->type = index;
 	msg->timer = 0;
-	msg->changed = arg2;
+	msg->changed = changed;
 	id = unit->currentKind;
 	if (id == 0xDE) {
 		msg->flags |= 1;

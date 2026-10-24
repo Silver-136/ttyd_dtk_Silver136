@@ -65,7 +65,7 @@ void effConfettiN64SetCamId(EffectEntry* effect, s32 camId) {
     w->camId = camId;
 }
 
-EffectEntry* effConfettiN64Entry(s32 type, s32 arg1, f32 x, f32 y, f32 z, f32 scale) {
+EffectEntry* effConfettiN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     s32 mod;
     EffectEntry* effect;
     EffConfettiN64Work* w;
@@ -128,7 +128,7 @@ EffectEntry* effConfettiN64Entry(s32 type, s32 arg1, f32 x, f32 y, f32 z, f32 sc
     w[0].position.y = y;
     w[0].position.z = z;
     w[0].frame = 0;
-    w[0].life = arg1;
+    w[0].life = life;
     w[0].type = type;
     w[0].count = n;
     w[0].alpha = 0xFF;

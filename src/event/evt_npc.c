@@ -2413,14 +2413,14 @@ USER_FUNC(evt_npc_calc_score) {
 }
 
 #pragma dont_inline on
-void _kamek_houki_kemuri(NpcEntry* npc, s32 arg1) {
+void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
     static u8 cnt;
     f32 a2, a5;
     u8 mask;
     EffectEntry* effect;
 
     cnt += 1;
-    switch (arg1) {
+    switch (animState) {
         case 3:
             mask = 0x7;
             break;
@@ -2622,12 +2622,12 @@ USER_FUNC(evt_fbat_trans_floor_position) {
     f32 distance;
     f32 hitNX, hitNY, hitNZ;
 
-    s32 arg0 = *args++;
-    f32 x = evtGetFloat(event, arg0);
-    s32 arg1 = *args++;
-    f32 y = evtGetFloat(event, arg1);
-    s32 arg2 = *args++;
-    f32 z = evtGetFloat(event, arg2);
+    s32 xArg = *args++;
+    f32 x = evtGetFloat(event, xArg);
+    s32 yArg = *args++;
+    f32 y = evtGetFloat(event, yArg);
+    s32 zArg = *args++;
+    f32 z = evtGetFloat(event, zArg);
     f32 floor = evtGetFloat(event, *args++);
 
     distance = evtGetFloat(event, *args++);
@@ -2636,9 +2636,9 @@ USER_FUNC(evt_fbat_trans_floor_position) {
         y = (hitY + floor);
     }
 
-    evtSetFloat(event, arg0, x);
-    evtSetFloat(event, arg1, y);
-    evtSetFloat(event, arg2, z);
+    evtSetFloat(event, xArg, x);
+    evtSetFloat(event, yArg, y);
+    evtSetFloat(event, zArg, z);
     return EVT_RETURN_DONE;
 }
 
@@ -2652,12 +2652,12 @@ USER_FUNC(evt_fbat_trans_floor_position_wide) {
     f32 hitNX, hitNY, hitNZ;
     f32 half, h;
 
-    s32 arg0 = *args++;
-    f32 x = evtGetFloat(event, arg0);
-    s32 arg1 = *args++;
-    f32 y = evtGetFloat(event, arg1);
-    s32 arg2 = *args++;
-    f32 z = evtGetFloat(event, arg2);
+    s32 xArg = *args++;
+    f32 x = evtGetFloat(event, xArg);
+    s32 yArg = *args++;
+    f32 y = evtGetFloat(event, yArg);
+    s32 zArg = *args++;
+    f32 z = evtGetFloat(event, zArg);
     f32 floor = evtGetFloat(event, *args++);
     f32 dist = evtGetFloat(event, *args++);
     f32 width = evtGetFloat(event, *args++);
@@ -2683,9 +2683,9 @@ USER_FUNC(evt_fbat_trans_floor_position_wide) {
         }
     }
 
-    evtSetFloat(event, arg0, x);
-    evtSetFloat(event, arg1, y2);
-    evtSetFloat(event, arg2, z);
+    evtSetFloat(event, xArg, x);
+    evtSetFloat(event, yArg, y2);
+    evtSetFloat(event, zArg, z);
     return EVT_RETURN_DONE;
 }
 #endif
@@ -2712,30 +2712,30 @@ USER_FUNC(evt_npc_sound_data_set) {
     const char* npcName = (const char*)evtGetValue(event, *args++);
     NpcEntry* npc = evtNpcNameToPtr(event, npcName);
 
-    s32 arg1 = *args++;
-    const char* footstepSfxA = (const char*)evtGetValue(event, arg1);
-    s32 arg2 = *args++;
-    const char* footstepSfxB = (const char*)evtGetValue(event, arg2);
-    s32 arg3 = *args++;
-    u16 footstepStride = evtGetValue(event, arg3);
-    s32 arg4 = *args++;
-    const char* jumpSfx = (const char*)evtGetValue(event, arg4);
-    s32 arg5 = *args++;
-    const char* landSfx = (const char*)evtGetValue(event, arg5);
+    s32 footstepSfxAArg = *args++;
+    const char* footstepSfxA = (const char*)evtGetValue(event, footstepSfxAArg);
+    s32 footstepSfxBArg = *args++;
+    const char* footstepSfxB = (const char*)evtGetValue(event, footstepSfxBArg);
+    s32 footstepStrideArg = *args++;
+    u16 footstepStride = evtGetValue(event, footstepStrideArg);
+    s32 jumpSfxArg = *args++;
+    const char* jumpSfx = (const char*)evtGetValue(event, jumpSfxArg);
+    s32 landSfxArg = *args++;
+    const char* landSfx = (const char*)evtGetValue(event, landSfxArg);
 
-    if (arg1 != -250000000) {
+    if (footstepSfxAArg != -250000000) {
         npc->footstepSfxA = footstepSfxA;
     }
-    if (arg2 != -250000000) {
+    if (footstepSfxBArg != -250000000) {
         npc->footstepSfxB = footstepSfxB;
     }
-    if (arg4 != -250000000) {
+    if (jumpSfxArg != -250000000) {
         npc->jumpSfx = jumpSfx;
     }
-    if (arg5 != -250000000) {
+    if (landSfxArg != -250000000) {
         npc->landSfx = landSfx;
     }
-    if (arg3 != -250000000) {
+    if (footstepStrideArg != -250000000) {
         npc->footstepStride = footstepStride;
     }
     npc->footstepToggle = TRUE;

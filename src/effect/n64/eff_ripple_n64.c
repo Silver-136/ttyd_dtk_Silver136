@@ -138,7 +138,7 @@ void effRippleMain(EffectEntry* effect) {
     dispEntry(work->cameraId, dispCalcZ(&position), 2, (DispCallback)effRippleDisp, effect);
 }
 
-EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 arg4) {
+EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset) {
     EffectEntry* effect;
     EffRippleN64Work* work;
 
@@ -177,6 +177,6 @@ EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 arg4) {
     }
     work->lifetime = 32;
     work->offset = rand() % 32;
-    work->unk28 = y + arg4;
+    work->unk28 = y + yOffset;
     return effect;
 }

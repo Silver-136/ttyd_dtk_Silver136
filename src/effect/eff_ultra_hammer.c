@@ -433,7 +433,7 @@ u8 wakka_dl_0_size_tbl[] = {
 void effUltraHammerMain(EffectEntry* effect);
 void effUltraHammerDisp(enum CameraId camId, void *param);
 
-EffectEntry* effUltraHammerEntry(BOOL arg0, s32 counter, f32 x, f32 y, f32 z, f32 scale) {
+EffectEntry* effUltraHammerEntry(BOOL mode, s32 counter, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffUltraHammerData* data;
     s32 i;
@@ -444,7 +444,7 @@ EffectEntry* effUltraHammerEntry(BOOL arg0, s32 counter, f32 x, f32 y, f32 z, f3
     data = __memAlloc(HEAP_EFFECT, sizeof(EffUltraHammerData) * 4);
     effect->userdata = data;
     effect->callback = effUltraHammerMain;
-    data->mode = arg0;
+    data->mode = mode;
     data->position.x = x;
     data->position.y = y;
     data->position.z = z;

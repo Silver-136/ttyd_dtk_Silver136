@@ -731,12 +731,12 @@ static USER_FUNC(effect_stardust) {
     f32 x = evtGetFloat(event, args[1]);
     f32 y = evtGetFloat(event, args[2]);
     f32 z = evtGetFloat(event, args[3]);
-    f32 arg6 = evtGetFloat(event, args[4]);
-    f32 arg7 = evtGetFloat(event, args[5]);
-    s32 arg1 = evtGetValue(event, args[6]);
-    s32 arg2 = evtGetValue(event, args[7]);
+    f32 vx = evtGetFloat(event, args[4]);
+    f32 vy = evtGetFloat(event, args[5]);
+    s32 count = evtGetValue(event, args[6]);
+    s32 camera = evtGetValue(event, args[7]);
 
-    effStardustEntry(type, arg1, arg2, x, y, z, arg6, arg7);
+    effStardustEntry(type, count, camera, x, y, z, vx, vy);
     return EVT_RETURN_DONE;
 }
 

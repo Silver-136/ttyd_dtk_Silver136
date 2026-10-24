@@ -42,8 +42,8 @@ typedef struct effMugiKemuriData {
 void effMugiKemuriMain(EffectEntry* effect);
 void effMugiKemuriDisp(CameraId camId, void* param);
 
-inline f32 inline_fn(effMugiKemuriData *arg0) {
-	return 6.2831855f * reviseAngle(arg0->rot.y);
+inline f32 inline_fn(effMugiKemuriData *data) {
+	return 6.2831855f * reviseAngle(data->rot.y);
 }
 
 EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {

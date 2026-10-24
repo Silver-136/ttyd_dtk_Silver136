@@ -44,7 +44,7 @@ void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId) {
     ((EffKemuri8N64Work*)effect->userdata)->camId = camId;
 }
 
-inline float inline_fn(f32 arg0, f32 arg1) { return arg0 * (-arg1); }
+inline float inline_fn(f32 a, f32 b) { return a * (-b); }
 
 #pragma opt_propagation off
 EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {

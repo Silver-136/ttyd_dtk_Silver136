@@ -115,7 +115,7 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     return effect;
 }
 
-inline float inline_fn(s32 arg0, float arg1) { return ((f32)arg0) * arg1; }
+inline float inline_fn(s32 i, float step) { return ((f32)i) * step; }
 
 void effPokopiThunderMain(EffectEntry* effect) {
     EffPokopiThunderN64Work* work = effect->userdata;

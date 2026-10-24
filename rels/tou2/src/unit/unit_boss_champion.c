@@ -19,7 +19,7 @@
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
 
-EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 arg4, f32 arg5, f32 arg6, s32 arg7, s32 arg8);
+EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration);
 BOOL effFallCheckHit(EffectEntry* effect);
 
 USER_FUNC(btlevtcmd_AnimeChangePose);

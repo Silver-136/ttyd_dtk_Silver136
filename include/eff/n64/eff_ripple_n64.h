@@ -19,5 +19,5 @@ typedef struct EffRippleN64Work {
     s32 cameraId; // 0x34, dispEntry camera
 } EffRippleN64Work;
 
-EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 arg4);
+EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset);
 void effRippleN64SetRxRz(EffectEntry* effect, f32 rx, f32 rz);

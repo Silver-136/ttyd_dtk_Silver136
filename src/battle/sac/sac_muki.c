@@ -39,7 +39,7 @@ void BattleAudienceSoundCallKind(s32 kind);
 void BattleAudienceSoundBooingKind(s32 kind);
 void psndSFXOn(const char* name);
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
-EffectEntry* effHitEntry(s32 type, s32 arg1, f32 x, f32 y, f32 z, f32 arg5);
+EffectEntry* effHitEntry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale);
 
 #define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 

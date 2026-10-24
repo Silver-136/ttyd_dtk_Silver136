@@ -216,8 +216,8 @@ USER_FUNC(evt_party_get_pos) {
 	return EVT_RETURN_DONE;
 }
 
-inline float inline_fn(f32 arg0, f32 arg1, f32 arg2, s32 arg3) {
-	return (arg0 - arg1) * (arg2 / (f32)arg3);
+inline float inline_fn(f32 a, f32 b, f32 c, s32 n) {
+	return (a - b) * (c / (f32)n);
 }
 
 USER_FUNC(evt_party_set_dir) {

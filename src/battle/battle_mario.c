@@ -10324,14 +10324,14 @@ USER_FUNC(_whirlwind_effect) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
-    s32 arg1 = evtGetValue(event, args[1]);
+    s32 life = evtGetValue(event, args[1]);
     BattleUnit* unit;
     EffectEntry* eff;
     f32 pos[3];
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
-    eff = effWhirlwindN64Entry(unit->faceDirection < 0, NULL, unit->mSizeMultiplier, arg1);
+    eff = effWhirlwindN64Entry(unit->faceDirection < 0, NULL, unit->mSizeMultiplier, life);
     ((EffWhirlwindN64Work*)eff->userdata)->position.x = pos[0];
     ((EffWhirlwindN64Work*)eff->userdata)->position.y = pos[1];
     ((EffWhirlwindN64Work*)eff->userdata)->position.z = pos[2];

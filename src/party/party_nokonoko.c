@@ -28,8 +28,8 @@ double cos(double);
 #include "mario/mariost.h"
 void effKemuTestDrawCam();
 EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
-EffectEntry* effSmallStarN64Entry(s32 type, s32 arg1, f32 x, f32 y, f32 z, f32 arg5, f32 arg6,
-                                  f32 arg7);
+EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy,
+                                  f32 dz);
 HitEntry* hitCheckFilter(HitFilterCallback callback, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
                          f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz);
 s32 hitGetAttr(HitEntry* hit);

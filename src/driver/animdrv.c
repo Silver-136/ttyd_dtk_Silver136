@@ -390,7 +390,7 @@ int strcmp(const char *s1, const char *s2);
 void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f32 scale);
 void animPose_AllocBuffer(AnimationPose* pose);
 void animSetMaterial_Texture(s32 texCount, s32 *texIdRemap, AnimPoseTexEntry *pTexEntries, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile);
-void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 arg3, f32 arg4);
+void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend);
 void materialProc(s32 shapeId, s32 xluStage);
 void vivihimo(Mtx a, Mtx b, f32 speed, f32 scale, f32 offA, f32 offB);
 void animInit(void) {
@@ -2238,7 +2238,7 @@ void renderProc(s32 shapeId, s32 unused) {
 void materialProc(s32 shapeId, s32 xluStage);
 void vivihimo(Mtx a, Mtx b, f32 speed, f32 scale, f32 offA, f32 offB);
 
-void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 arg3, f32 arg4) {
+void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
     AnimPoseGroup* group;
     AnimPoseGroup* parent;
     AnimPoseNode* node;
@@ -2328,12 +2328,12 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 arg3, f32 arg4) {
                 ((void (*)(void*, s32, Mtx*))pose->dispCallback)(pose->dispUserDataCallback, groupId, g_modeling_mtx);
             }
             renderProc(group->shapeId, xluStage);
-            dispProc(groupId, group->childGroupId, xluStage, arg3, arg4);
+            dispProc(groupId, group->childGroupId, xluStage, nextKeyframe, blend);
         }
         g_modeling_mtx_lv--;
         g_modeling_mtx = &g_modeling_mtx_stack[g_modeling_mtx_lv];
     }
-    dispProc(groupId, group->brotherGroupId, xluStage, arg3, arg4);
+    dispProc(groupId, group->brotherGroupId, xluStage, nextKeyframe, blend);
 }
 
 void animPoseDraw(s32 poseId, f32 x, f32 y, f32 z, f32 rotY, f32 scale, s32 xluMode) {
@@ -2373,15 +2373,15 @@ void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f3
     GXColor col2;
     AnimationPoseData* data;
     AnimData* anim;
-    s32 arg3, arg4;
-    f32 argf;
+    s32 keyframeIdx, nextKeyframeIdx;
+    f32 keyframeBlend;
     f32 diff;
     s32 mode;
 
     data = animPoseGetBaseData(pose);
-    arg3 = pose->keyframeIdx;
-    arg4 = pose->nextKeyframeIdx;
-    argf = pose->keyframeBlend;
+    keyframeIdx = pose->keyframeIdx;
+    nextKeyframeIdx = pose->nextKeyframeIdx;
+    keyframeBlend = pose->keyframeBlend;
     anim = data->mpAnims[pose->animId].data;
     if (anim == NULL) {
         return;
@@ -2490,7 +2490,7 @@ void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f3
         DCFlushRange(pose->mpVtxArrayNrm, animPoseGetBaseData(pose)->mBufferNrmNum * sizeof(Vec));
     }
     GXInvalidateVtxCache();
-    dispProc(-1, data->groupCount - 1, arg3, arg4, argf);
+    dispProc(-1, data->groupCount - 1, keyframeIdx, nextKeyframeIdx, keyframeBlend);
 }
 
 
