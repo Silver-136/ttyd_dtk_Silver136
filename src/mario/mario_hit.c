@@ -1368,14 +1368,13 @@ f32 marioChkOverhead(void) {
 
 f32 marioChkOverheadJabara(s32* sideOut, f32* distOut) {
     Vec pos;
-    f32 margin; // FAKE: constant temp needed for 100%
+    f32 margin = 5.0f;
     f32 h;
     MarioWork* w;
     w = marioGetPtr();
     *sideOut = 0;
     *distOut = -1.0f;
     pos = w->position;
-    margin = 5.0f;
     h = w->wPlayerCollisionBox.y;
     if (w->currMotionId == 8) {
         return pos.y;
@@ -1384,7 +1383,7 @@ f32 marioChkOverheadJabara(s32* sideOut, f32* distOut) {
         h += margin;
         w->hitobjHead = marioSearchHead_jabara(&pos, &h, sideOut, 0.0f);
         if (!w->hitobjHead) {
-            { f32 t = w->wPlayerCollisionBox.y; h = t + margin; }
+            h = w->wPlayerCollisionBox.y + margin;
             w->hitobjHead = marioSearchHead(&pos, &h, 0.0f);
         }
     }
