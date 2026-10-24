@@ -204,7 +204,6 @@ void effRecoveryDisp2(CameraId cameraId, EffectEntry* effect);
 void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect);
 void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect);
 
-#pragma opt_propagation off
 #pragma opt_lifetimes off
 EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -340,7 +339,6 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     }
     return effect;
 }
-#pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
 void effRecoveryMain(EffectEntry* effect) {

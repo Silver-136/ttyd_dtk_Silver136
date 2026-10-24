@@ -262,7 +262,6 @@ void battleAcDelete_TimingWide(BattleWork* work) {
     work->actionCommands.mAcState = 0x3EC;
 }
 
-#pragma dont_inline on
 #define ICON(id)                            \
     {                                       \
         Vec pos = {0.0f, 0.0f, 0.0f};       \

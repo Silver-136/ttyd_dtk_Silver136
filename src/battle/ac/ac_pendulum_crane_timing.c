@@ -250,7 +250,6 @@ void battleAcDelete_PendulumCraneTiming(BattleWork* work) {
     work->actionCommands.mAcState = 1002;
 }
 
-#pragma dont_inline on
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     CameraEntry* cam;
@@ -284,7 +283,6 @@ static void actionCommandDisp(f32 x, f32 y) {
         iconDispGx(&pos2, 0x10, ICON_096, 1.0f);
     }
 }
-#pragma dont_inline reset
 
 s32 _get_angle_rate(f32 angle) {
     s32 r;

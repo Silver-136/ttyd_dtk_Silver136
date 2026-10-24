@@ -385,8 +385,6 @@ USER_FUNC(evt_eff) {
 	return EVT_RETURN_DONE;
 }
 
-#pragma push
-#pragma optimization_level 2
 s32 evt_eff64(EventEntry *event, BOOL isFirstCall)
 {
   EvtWord *args;
@@ -889,7 +887,6 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall)
   return 2;
 }
 
-#pragma pop
 
 USER_FUNC(evt_eff_softdelete) {
 	effSoftDelete(effNameToPtr((const char*)evtGetValue(event, *event->args)));

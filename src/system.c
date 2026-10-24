@@ -19,7 +19,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-#pragma pool_data on
 
 #define HALF_PI 1.570796f
 #define PI 3.141592653589793f
@@ -1010,4 +1009,3 @@ void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
 }
 #endif
 
-#pragma pool_data off

@@ -550,7 +550,6 @@ static inline f32 hitDequant(s16* base, s32 idx) {
     return __OSs16tof32(base + idx);
 }
 
-#pragma dont_inline on
 s32 hitCalcVtxPosition(HitEntry* hit) {
     s32 i;
     Vec a;
@@ -669,7 +668,6 @@ s32 hitCalcVtxPosition(HitEntry* hit) {
     }
     return count;
 }
-#pragma dont_inline reset
 
 inline BOOL tempfunc(HitCheckQuery* query, HitVector* vector) {
     Vec toV0;

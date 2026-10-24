@@ -147,7 +147,6 @@ void effBalloonMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBalloonDisp, effect);
 }
 
-#pragma opt_dead_assignments off
 void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffBalloonN64Work* work = effect->userdata;
@@ -251,4 +250,3 @@ void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
-#pragma opt_dead_assignments reset

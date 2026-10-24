@@ -4555,8 +4555,6 @@ void puniMoveMain(PuniData* p) {
     }
 }
 
-#pragma push
-#pragma dont_inline on
 void puniOption(void) {
     PuniData* p;
     PuniData* q;
@@ -4697,7 +4695,6 @@ void puniCollideAll(void) {
         }
     }
 }
-#pragma pop
 
 
 void psndSFX_pos(s32 id, Vec* pos);
@@ -6494,7 +6491,6 @@ USER_FUNC(evt_puni_force_se_off) {
 
 static const Vec puni_save_zero = { 0.0f, 0.0f, 0.0f };
 #pragma push
-#pragma opt_dead_assignments off
 static const Vec puni_fall_dir;
 // FAKE: the zero-position branch of evt_puni_all_save inlines its own copy of puni_exit_swset with another local
 // declaration order (register colouring only)

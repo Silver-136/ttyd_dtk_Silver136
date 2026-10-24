@@ -74,7 +74,6 @@ static effN64Vtx eff_snowfall_v[] = {
     {37, -44, -57, 2048, 0, 0xFF, 0xFF, 0xFF, 0xFF},
     {27, -44, -57, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF},};
 
-#pragma dont_inline on
 void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 cx, cy, cz, py, pz;
@@ -119,7 +118,6 @@ void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
     }
 }
 
-#pragma dont_inline reset
 
 EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     EffectEntry* effect;

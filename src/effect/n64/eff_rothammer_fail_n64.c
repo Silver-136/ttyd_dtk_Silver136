@@ -7,7 +7,6 @@
 #include <dolphin/mtx.h>
 
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 
 double sin(double);
 double cos(double);
@@ -34,7 +33,6 @@ static effN64Vtx size24x24_tex32x32_vtx[] = {
 void effRotHammerFailMain(EffectEntry* effect);
 void effRotHammerFailDisp(CameraId cameraId, EffectEntry* effect);
 
-#pragma opt_lifetimes reset
 EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffRotHammerFailN64Work* child;
@@ -68,7 +66,6 @@ EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-#pragma opt_lifetimes off
 void effRotHammerFailMain(EffectEntry* effect) {
     EffRotHammerFailN64Work* work = effect->userdata;
     Vec position;

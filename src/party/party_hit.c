@@ -91,9 +91,7 @@ BOOL chkfilterNokotaro(HitCheckQuery* query, HitEntry* entry) {
     return TRUE;
 }
 
-#pragma fp_contract off
 static inline f32 party_sumsq(f32 x, f32 z) { return x * x + z * z; }
-#pragma fp_contract reset
 
 static inline HitEntry* partyHitCheckInl(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;

@@ -180,7 +180,6 @@ static inline BOOL crVecIsZero(Vec a) {
     }
     return FALSE;
 }
-#pragma dont_inline on
 s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
     Vec dir = {0.0f, -1.0f, 0.0f};
     Vec nz;
@@ -978,7 +977,6 @@ void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32
     out->f_58 = g;
     out->shiftXRate = curve->f_7c;
 }
-#pragma dont_inline reset
 static inline f32 crSq(f32 x) { return x * x; }
 u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     u32 flags = 0;

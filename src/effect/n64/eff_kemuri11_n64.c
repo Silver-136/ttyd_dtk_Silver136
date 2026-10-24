@@ -414,8 +414,6 @@ void effKemuri11Disp(CameraId cameraId, EffectEntry* effect) {
     main_dl(effect, mtx);
 }
 
-#pragma opt_propagation off
-#pragma opt_lifetimes off
 static void main_dl(EffectEntry* effect, Mtx camMtx) {
     EffKemuri11N64Work* work = effect->userdata;
     s32 i;

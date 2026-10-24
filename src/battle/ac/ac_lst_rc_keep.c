@@ -256,7 +256,6 @@ void battleAcDelete_LstRcKeep(BattleWork* work) {
     work->actionCommands.mAcState = 1005;
 }
 
-#pragma dont_inline on
 #pragma optimize_for_size on
 static void actionCommandDisp(f32 x, f32 y, s32 n) {
     s32 off;
@@ -319,5 +318,4 @@ static void actionCommandDisp(f32 x, f32 y, s32 n) {
     }
 }
 #pragma optimize_for_size reset
-#pragma dont_inline reset
 

@@ -1081,7 +1081,6 @@ void windowDispGX_Message(s32 type, s32 a2, u8 alpha, f32 x, f32 y, f32 height, 
 	}
 }
 
-#pragma opt_propagation off
 void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve) {
 	CameraEntry* camera = camGetCurPtr();
 	Mtx mtx;
@@ -1256,9 +1255,7 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
 		GXTexCoord2f32(twothirds, 1.0f);
 	}
 }
-#pragma opt_propagation reset
 
-#pragma opt_propagation off
 void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve) {
 	CameraEntry* camera = camGetCurPtr();
 	Mtx mtx2;
@@ -1438,7 +1435,6 @@ void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y
 		GXTexCoord2f32(twothirds, 1.0f);
 	}
 }
-#pragma opt_propagation reset
 
 s32 windowCheckID(s32 id) {
 	return windowGetPointer(id)->flags & 2;

@@ -168,7 +168,6 @@ s32 cardGetCode(void) {
 	return wp->result;
 }
 
-#pragma opt_propagation off //needed for memcard_probe
 void cardMain(void) {
 	s32 inserted;
 
@@ -473,8 +472,6 @@ static inline void memcard_probe(void) {
     }
     wp->flags &= ~1;
 }
-#pragma opt_propagation on
-#pragma opt_propagation on //needed for memcard_probe? TODO fix
 void write_main(void) {
     if (wp->result) {
         wp->op = 8;
@@ -564,7 +561,6 @@ void write_main(void) {
         wp->flags &= ~1;
     }
 }
-#pragma opt_propagation on
 
 void cardWriteHeader(void) {
     if (!(wp->flags & 2)) {
@@ -579,7 +575,6 @@ void cardWriteHeader(void) {
     }
 }
 
-#pragma opt_propagation off
 void write_header_main(void) {
     if (wp->result) {
         wp->op = 8;
@@ -626,9 +621,7 @@ void write_header_main(void) {
         wp->flags &= ~1;
     }
 }
-#pragma opt_propagation on
 
-#pragma opt_propagation on //needed for memcard_probe? TODO fix
 void read_main(void) {
     s32 saveType; //invalid = -1, main = 0, backup = 1
 
@@ -717,7 +710,6 @@ void read_main(void) {
         wp->flags &= ~1;
     }
 }
-#pragma opt_propagation on
 
 void cardReadAll(void) {
     if (!(wp->flags & 2)) {
@@ -731,7 +723,6 @@ void cardReadAll(void) {
     }
 }
 
-#pragma opt_propagation on //needed for memcard_probe? TODO fix
 void read_all_main(void) {
     s32 saveType; //invalid = -1, main = 0, backup = 1
 
@@ -829,7 +820,6 @@ void read_all_main(void) {
         wp->flags &= ~1;
     }
 }
-#pragma opt_propagation on
 
 void cardCreate(void) {
     if (!(wp->flags & 2)) {
@@ -843,9 +833,6 @@ void cardCreate(void) {
     }
 }
 
-#pragma opt_propagation on //needed for memcard_probe? TODO fix
-#pragma push
-#pragma opt_dead_code off
 void create_main(void) {
     if (wp->result) {
         wp->op = 8;
@@ -916,8 +903,6 @@ void create_main(void) {
         wp->flags &= ~1;
     }
 }
-#pragma opt_propagation on
-#pragma pop
 
 void cardFormat(void) {
     if (!(wp->flags & 2)) {

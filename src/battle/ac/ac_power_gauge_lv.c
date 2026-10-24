@@ -174,7 +174,6 @@ void battleAcDelete_PowerGaugeLv(BattleWork* work) {
     work->actionCommands.mAcState = 1003;
 }
 
-#pragma dont_inline on
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -247,4 +246,3 @@ Vec pos2 = {0.0f, 0.0f, 0.0f};
             break;
     }
 }
-#pragma dont_inline reset

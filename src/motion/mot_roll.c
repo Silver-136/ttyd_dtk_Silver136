@@ -244,7 +244,6 @@ static inline s32 makeVec(f32 half) {
 void roll_upstairs(void);
 static inline void marioRollCan(void);
 
-#pragma inline_max_size(20000)
 #pragma inline_max_total_size(200000)
 
 void marioRollFixOn(void) {

@@ -1277,7 +1277,6 @@ void effFallDispWater(CameraId cameraId, EffectEntry *effect) {
     }
 }
 
-#pragma opt_propagation off
 s32 effFallCheckHit(EffectEntry* effect) {
     EffFallWork* w = effect->userdata;
     switch (w->type) {

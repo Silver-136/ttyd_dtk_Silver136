@@ -254,7 +254,6 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
 	}
 }
 
-#pragma dont_inline on
 MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 	MapWork* wp = &mapWork[activeGroup];
 	MapObject* obj;
@@ -367,7 +366,6 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 	return obj;
 }
 
-#pragma dont_inline reset
 MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isRoot, s32 index) {
 	MapObject* obj = _mapEnt(joint, parent, mtx, index);
 	if (joint->child) {

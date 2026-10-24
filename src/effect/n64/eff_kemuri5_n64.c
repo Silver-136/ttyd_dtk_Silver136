@@ -48,7 +48,6 @@ static inline GXColor mkc(u8 a) {
 void effKemuri5Disp(CameraId cameraId, EffectEntry* effect);
 
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     s32 ang;
     EffectEntry* effect;
@@ -138,7 +137,6 @@ void effKemuri5Main(EffectEntry* effect) {
 }
 
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 void effKemuri5Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);

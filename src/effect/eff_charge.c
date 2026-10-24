@@ -178,7 +178,6 @@ void effChargeMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effChargeDisp, effect);
 }
 
-#pragma opt_strength_reduction off
 EffectEntry* effChargeEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffChargeWork* work;
@@ -234,4 +233,3 @@ EffectEntry* effChargeEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 sca
     }
     return effect;
 }
-#pragma opt_strength_reduction reset

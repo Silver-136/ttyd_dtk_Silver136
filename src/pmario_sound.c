@@ -5355,7 +5355,6 @@ void psndBGM_rate(s32 id, u16 rate) {
 	}
 }
 
-#pragma dont_inline on
 void psndBGMMain(void) {
 	PaperSoundBGM* bgm;
 	PaperSoundFade* fade;
@@ -5496,7 +5495,6 @@ void psndBGMMain(void) {
 		}
 	}
 }
-#pragma dont_inline reset
 
 BOOL psndBGMOn(u32 r3, char* bgm_name) {
 	return psndBGMOn_f_d(r3, bgm_name, 1000, 750, 0);
@@ -5506,7 +5504,6 @@ BOOL psndBGMOn_f(u32 r3, char* bgm_name, u32 fadetime, s32 r6) {
 	return psndBGMOn_f_d(r3, bgm_name, fadetime, 750, r6);
 }
 
-#pragma dont_inline on
 #pragma dont_inline off
 static inline s32 psndSSFindCh(void) {
   u32 ch;
@@ -5544,7 +5541,6 @@ static inline s32 psndSongFindCh(void) {
   }
   return -1;
 }
-#pragma dont_inline on
 static inline s32 psndBGMSearch(char* name) {
   SoundBGMEntry* entry;
   s32 i;
@@ -5866,13 +5862,11 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
 
   return 1;
 }
-#pragma dont_inline reset
 
 BOOL psndBGMOff(u32 flags) {
 	return psndBGMOff_f_d(flags, 1000, FALSE);
 }
 
-#pragma dont_inline on
 BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch) {
 	PaperSoundBGM* bgm = &psbgm[flags & 0xF];
 	s32 silent = silent_tbl[(flags >> 12) & 0xF];
@@ -5942,7 +5936,6 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch) {
 	return TRUE;
 }
 
-#pragma dont_inline reset
 
 s32 psndBGMChk(s32 id) {
 	return psbgm[id & 0xF].listId == 0xFFFFFFFF ? -1 : 0;
@@ -6005,7 +5998,6 @@ static inline s32 sfxvol(PaperSoundEffect* s) {
 }
 #define SFX_VOL(s) sfxvol(s)
 
-#pragma dont_inline on
 // FAKE: static inline copy of psndSFXOff (defined later in the file, so not inlinable there); the target inlines it at the three fade-out stop sites
 static inline void psndSFXOffI(s32 id) {
     PaperSoundEffect* sfx;
@@ -6267,10 +6259,7 @@ sgfound:
 	psnd.sfxActiveCount[0] = cnt;
 	psnd.sfxDelay = 0;
 }
-#pragma dont_inline on
-#pragma dont_inline reset
 
-#pragma dont_inline on
 
 s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u16 dist, s32 r10)
 {
@@ -6441,7 +6430,6 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
   return idx;
 }
 
-#pragma dont_inline reset
 
 s32 psndSFXOn_(const char* name) {
 	return __psndSFXOn(name, 0xFF, 0xFF, 0, NULL, 0, 0x10, 1);
@@ -6590,7 +6578,6 @@ u8 psndSFX_get_vol(s32 id) {
 	return sfx->volume;
 }
 
-#pragma dont_inline off
 void psndENV_stop(u32 id) {
 	s32 i;
 	PaperSoundEnv* e;
@@ -6626,11 +6613,9 @@ void psndENV_stop(u32 id) {
 		}
 	}
 }
-#pragma dont_inline reset
 
 #define ENVVOL(e, p, out) 	{ 		PaperSoundFade* f = NULL; 		s16 v; 		if ((p)->envId[0] == (e)->id) f = &(p)->fade[0]; 		if ((p)->envId[1] == (e)->id) f = &(p)->fade[1]; 		if (f == NULL) out = (e)->volume * (p)->envVolume / 100; 		else { 			if (f->dipState == 0) v = 0x7f; else v = f->dipTime * 0x7f / f->dipTimeMax; 			if (f->state == 0) out = (p)->envVolume * ((e)->volume * v / 127) / 100; 			else { 				{ s16 w = f->timeMax * ((e)->volume * v / 127) / f->time; out = w * (p)->envVolume / 100; } 			} 		} 	}
 #define ENVDONE(e) 	{ 		(e)->sfx = -1; 		(e)->state = 0; 		(e)->timer = 0; 		switch ((e)->type) { 		case 0: (e)->timer = (e)->interval * PSND_FPS; (e)->timer += irand((e)->intervalRand) * PSND_FPS; break; case 2: (e)->timer = (e)->interval * PSND_FPS; (e)->timer += irand((e)->intervalRand) * PSND_FPS; break; case 3: break; 		} 	}
-#pragma dont_inline on
 void psndENVMain(void) {
 	char* B = (char*)_buf;
 	char* base = B;
@@ -6771,13 +6756,11 @@ void psndENVMain(void) {
 }
 #define psnd psnd
 #undef psnd
-#pragma dont_inline reset
 
 BOOL psndENVOn(u32 flags, const char* name) {
 	return psndENVOn_f_d(flags, name, 1000, 0);
 }
 
-#pragma dont_inline on
 typedef struct PairU32_ { u32 a, b; } PairU32_;
 static inline s32 psndENVSearch(const char** names, const char* name) {
 	s32 id;
@@ -6907,7 +6890,6 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6) {
 end:
 	return TRUE;
 }
-#pragma dont_inline reset
 
 #ifndef VERSION_G8ME01
 #pragma dont_inline on
@@ -6919,7 +6901,6 @@ BOOL psndENVOff(u32 flags) {
 }
 #pragma dont_inline reset
 
-#pragma dont_inline on
 #pragma dont_inline on
 BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5) {
 	u16* env;
@@ -6967,7 +6948,6 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5) {
 	}
 	return TRUE;
 }
-#pragma dont_inline reset
 
 #pragma dont_inline reset
 

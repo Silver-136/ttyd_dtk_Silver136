@@ -229,7 +229,6 @@ void battleAcDelete_PowerGaugeLv2(BattleWork* work) {
     }
 }
 
-#pragma dont_inline on
 #define ICON ((void (*)(Vec*, s32, s32, f32))iconDispGx)
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
@@ -325,7 +324,6 @@ static void actionCommandDisp(f32 x, f32 y) {
         ICON(&pos, 0x10, id, 1.0f);
     }
 }
-#pragma dont_inline reset
 
 #pragma force_active on
 u32 gap_07_804179E8_sdata[6] = {0};

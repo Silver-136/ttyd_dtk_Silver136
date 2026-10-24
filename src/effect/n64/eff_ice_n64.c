@@ -84,7 +84,6 @@ EffectEntry* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
-#pragma opt_propagation off
 #pragma opt_lifetimes off
 static void effIceMain(EffectEntry* effect) {
     EffIceN64Work* work = effect->userdata;
@@ -136,7 +135,6 @@ static void effIceMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 2, (DispCallback)effIceDisp, effect);
 }
 
-#pragma opt_propagation reset
 static void effIceDisp(CameraId cameraId, EffectEntry* effect) {
 
     EffIceN64Work* work;

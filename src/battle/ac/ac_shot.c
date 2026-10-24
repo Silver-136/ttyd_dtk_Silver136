@@ -313,7 +313,6 @@ static void _ac_disp_init(BattleWork* work) {
 }
 #pragma dont_inline reset
 
-#pragma dont_inline on
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -357,7 +356,6 @@ static void actionCommandDisp(f32 x, f32 y) {
         iconDispGxCol(m3, 0x10, 0x8d + AC_ICON_OFS, (GXColor){disp->color.r, disp->color.g, disp->color.b, disp->color.a});
     }
 }
-#pragma dont_inline reset
 
 #pragma dont_inline on
 static void _draw_target_mark(GXColor color, f32 x, f32 y, f32 z, f32 angle) {

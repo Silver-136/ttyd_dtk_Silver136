@@ -140,8 +140,6 @@ EffectEntry* effFireworksN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f
     return effect;
 }
 
-#pragma push
-#pragma opt_unroll_instr_count 16
 void effFireworksMain(EffectEntry* effect) {
     EffFireworksN64Work* work = effect->userdata;
     Vec position2;
@@ -207,7 +205,6 @@ void effFireworksMain(EffectEntry* effect) {
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position2), 2, (DispCallback)effFireworksDisp, effect);
 }
-#pragma pop
 
 void effFireworksDisp(CameraId cameraId, EffectEntry* effect) {
     static s32 salpha;

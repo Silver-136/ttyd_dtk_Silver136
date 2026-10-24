@@ -705,7 +705,6 @@ void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type) {
 	}
 }
 
-#pragma dont_inline on
 s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon) {
 	BattleWorkWeaponTargets targets;
 
@@ -725,7 +724,6 @@ s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon*
 	}
 	return targets.numTargets;
 }
-#pragma dont_inline reset
 
 void _btlcmd_MakeOperationTable(BattleWork* wp) {
 	PouchData* pouch;
@@ -1105,7 +1103,6 @@ void BattleAcHelpSetDispType(s32 type);
 void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd);
 
 
-#pragma dont_inline on
 s32 BattleCommandInput(BattleWork* work) {
 	const char* sfxA;
 	const char* sfxB;
@@ -1130,7 +1127,6 @@ s32 BattleCommandInput(BattleWork* work) {
 		return 1;
 	}
 	_btlcmd_GetCursorPtr(cmd, 0xe, &cursor);
-#pragma dont_inline on
 	if (_check_present_item()) {
 		BattleAcHelpSetDispType(0);
 	}
@@ -1412,7 +1408,6 @@ s32 BattleCommandInput(BattleWork* work) {
 	}
 	return 0;
 }
-#pragma dont_inline reset
 
 #pragma dont_inline reset
 
@@ -1507,7 +1502,6 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
 	BattleCursor* cursor;
 
 	_btlcmd_GetCursorPtr(cmd, 14, &cursor);
-#pragma dont_inline on
 	if (BattlePadCheckTrigger(0x800) && BattleCommandCheckChangePositionEnable(wp)) {
 		psndSFXOn((const char*)0x9d8);
 		BattleCommandDisplay_ActMenuEnd(wp);
@@ -1628,7 +1622,6 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
 	BattleMenuDisp_ActSelect_Main(wp);
 	return ret;
 }
-#pragma dont_inline reset
 
 BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp) {
 	BattleUnit* unit;
@@ -2084,12 +2077,10 @@ void BattleCommandDisplay_MultiItemMenuEnd(BattleWork* wp) {
 }
 #pragma dont_inline reset
 
-#pragma dont_inline on
 void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp) {
 	BattleMenuDisp_ChangePartySelect_Init(wp);
 	wp->commandMenu.flags |= 0x1001000;
 }
-#pragma dont_inline reset
 
 void BattleMenuDisp_ChangePartySelect_Main(BattleWork* wp);
 BOOL BattleMenuKeyOKInACT(BattleWork* wp);

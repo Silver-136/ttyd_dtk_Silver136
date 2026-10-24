@@ -226,7 +226,6 @@ EVT_END()
 
 
 
-#pragma dont_inline on
 RankUpData* _get_rank_data(s32 level) {
     RankUpData* rank;
 
@@ -237,7 +236,6 @@ RankUpData* _get_rank_data(s32 level) {
     }
     return rank;
 }
-#pragma dont_inline reset
 
 const char* BattleGetRankNameLabel(s32 level) {
     RankUpData* found = NULL;
@@ -1007,7 +1005,6 @@ void L__LvupParamHelpMsgDisp(CameraId camId, void* param) {
     FontDrawMessage(zero - width / 2, (s32)y + (lines - 1) * 29, msg);
 }
 
-#pragma dont_inline on
 void _GetExpIcon_Init(SeqEndWork* work) {
     s32 i;
     char name[16];
@@ -1090,7 +1087,6 @@ void _GetExpIcon_Main(BattleWork* wp) {
     }
 }
 
-#pragma dont_inline reset
 void _GetExpIcon_Disp(CameraId camId, void* param) {
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0x80}, -76.899994f, 21.0f, 165.79999f, 24.199999f, 10.0f);
 }
@@ -1963,7 +1959,6 @@ USER_FUNC(_lvup_select_object_init) {
     return 2;
 }
 
-#pragma dont_inline on
 s32 _keta_get(s32 n) {
 
     s32 k = 0;
@@ -2095,9 +2090,7 @@ void _lvup_select_object_disp(CameraId camId, void* param) {
         }
     }
 }
-#pragma dont_inline reset
 #pragma auto_inline reset
-#pragma dont_inline on
 void _check_audience_battle_end_exec(void) {
     BattleWork* wp = _battleWorkPointer;
     SeqEndGroup* group = (SeqEndGroup*)wp->fbatInfo->setup->groupSetup;
@@ -2166,7 +2159,6 @@ void _BattleMarioKouraDelete(void) {
 
     evt->unitId = mario->unitId;
 }
-#pragma dont_inline reset
 
 USER_FUNC(_check_guard_koura) {
     BattleWork* wp = _battleWorkPointer;

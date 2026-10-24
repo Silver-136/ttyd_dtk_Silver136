@@ -290,7 +290,6 @@ s32 battleAcResult_GaugeTiming2(BattleWork* work) {
     return work->actionCommands.result;
 }
 
-#pragma opt_propagation off
 void battleAcDisp_GaugeTiming2(CameraId cameraId, BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
@@ -320,14 +319,12 @@ void battleAcDisp_GaugeTiming2(CameraId cameraId, BattleWork* work) {
     }
 }
 
-#pragma opt_propagation reset
 void battleAcDelete_GaugeTiming2(BattleWork* work) {
     if (!(work->actionCommands.doneFlags & 1)) {
         work->actionCommands.mAcState = 1003;
     }
 }
 
-#pragma dont_inline on
 #pragma opt_loop_invariants off
 static void actionCommandDisp(f32 x, f32 y) {
     BattleActions* ac = &_battleWorkPointer->actionCommands;
@@ -461,4 +458,3 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
 }
 #pragma opt_loop_invariants reset
-#pragma dont_inline reset

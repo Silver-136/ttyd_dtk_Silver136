@@ -303,8 +303,6 @@ void effFlameMain(EffectEntry* effect) {
     }
 }
 
-#pragma push
-#pragma opt_dead_assignments off
 void effFlameDisp(CameraId cameraId, EffectEntry* effect) {
     s32 alpha;
     s32 type;
@@ -488,4 +486,3 @@ void effFlameDisp(CameraId cameraId, EffectEntry* effect) {
         break;
     }
 }
-#pragma pop

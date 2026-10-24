@@ -207,7 +207,6 @@ USER_FUNC(main_genki) {
     return 0;
 }
 
-#pragma dont_inline on
 static void main_base(void) {
     GenkiWork* w = get_ptr();
     s32 i;
@@ -345,9 +344,7 @@ static void main_base(void) {
         break;
     }
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 void main_mario(void) {
     GenkiWork* w = get_ptr();
     s32 stick = keyGetStickX(0);
@@ -413,7 +410,6 @@ void main_mario(void) {
         break;
     }
 }
-#pragma dont_inline reset
 
 #pragma dont_inline on
 void main_target(void) {
@@ -456,7 +452,6 @@ void main_target(void) {
 }
 #pragma dont_inline reset
 
-#pragma dont_inline on
 void main_weapon(s32 idx) {
     GenkiWork* w = get_ptr();
     GenkiWeapon* wp = &w->weapon[idx];
@@ -657,9 +652,7 @@ void main_weapon(s32 idx) {
         ew->alpha = 255 - (i + 1) * 50;
     }
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 void main_object(s32 idx) {
     GenkiWork* w = get_ptr();
     GenkiObject* o = &w->object[idx];
@@ -741,7 +734,6 @@ void main_object(s32 idx) {
         break;
     }
 }
-#pragma dont_inline reset
 
 #pragma dont_inline on
 static void main_star(void) {
@@ -757,7 +749,6 @@ static void main_star(void) {
 }
 #pragma dont_inline reset
 
-#pragma dont_inline on
 void main_star0(s32 idx) {
     GenkiWork* w = get_ptr();
     GenkiStar* s = &w->star[idx];
@@ -858,9 +849,7 @@ void main_star0(s32 idx) {
         ew->scale = 1.5f * s->scale.x;
     }
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 void main_star1(void) {
     GenkiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -953,7 +942,6 @@ void main_star1(void) {
         ew->scale = 1.5f * w->star[0].scale.x;
     }
 }
-#pragma dont_inline reset
 
 USER_FUNC(end_genki) {
     GenkiWork* w = get_ptr();
@@ -986,14 +974,11 @@ USER_FUNC(end_genki) {
     return 2;
 }
 
-#pragma dont_inline on
 static void disp_2D(CameraId cam, void* param) {
 }
-#pragma dont_inline reset
 
 #define genki_blink(t) ((t) % 12 >= 0 && (t) % 12 <= 5)
 
-#pragma dont_inline on
 static void disp_3D(CameraId cam, void* param) {
     GenkiWork* w;
     GenkiObject* o;
@@ -1192,12 +1177,9 @@ static void disp_3D(CameraId cam, void* param) {
                     (GXColor){255, 255, 255, 255});
     }
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 static void disp_3D_alpha(CameraId cam, void* param) {
 }
-#pragma dont_inline reset
 
 static USER_FUNC(start_game);
 

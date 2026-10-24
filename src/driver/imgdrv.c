@@ -259,8 +259,6 @@ void imgDisp_ProjPlane(CameraId camId, void* param) {
 	GXColor4u8(0, 0, 0, 0);
 }
 
-#pragma push
-#pragma dont_inline on
 
 static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
 	s32 fmt, dstFmt, alloc;
@@ -351,7 +349,6 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
 	}
 }
 
-#pragma pop
 void imgCapture(CameraId camId, void* param) {
 	s32 type = gp->inBattle != 0;
 	int i, count;

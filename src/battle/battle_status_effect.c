@@ -464,7 +464,6 @@ Ld:;
 }
 
 #pragma optimize_for_size reset
-#pragma dont_inline on
 #pragma optimize_for_size on
 BOOL BattleStatusChangeAnnouceMain(BattleWork* wp) {
 	s32 i;
@@ -485,7 +484,6 @@ BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit) {
 	return FALSE;
 }
 #pragma optimize_for_size reset
-#pragma dont_inline reset
 
 #pragma optimize_for_size on
 void BattleStatusChangeMsgWorkInit(void) {
@@ -519,7 +517,6 @@ void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 arg2) {
 	}
 }
 
-#pragma dont_inline on
 #pragma optimize_for_size on
 void BattleStatusChangeMsgAdjust(BattleWork* wp) {
 	s32 t;
@@ -615,7 +612,6 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
 	return ret;
 }
 
-#pragma dont_inline reset
 
 
 typedef void (*WakuColByRefFunc)(u16, GXColor*, f32, f32, f32, f32, f32);

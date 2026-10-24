@@ -125,7 +125,6 @@ EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
     return effect;
 }
 
-#pragma opt_propagation off
 void effBrokenBarrierMain(EffectEntry* effect) {
     s32 w;
     s32 h;
@@ -254,7 +253,6 @@ void effBrokenBarrierMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBrokenBarrierDisp, effect);
 }
 
-#pragma opt_propagation reset
 
 void effBrokenBarrierDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx trans;

@@ -23,7 +23,6 @@
 extern char* strcat(char* dest, const char* src);
 
 #pragma optimize_for_size on
-#pragma pool_data on
 
 #ifdef __MWERKS__
 #define fabs(x) __fabs(x)

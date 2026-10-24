@@ -47,7 +47,6 @@ void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId) {
 inline float inline_fn(f32 arg0, f32 arg1) { return arg0 * (-arg1); }
 
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffKemuri8N64Work* work;
@@ -126,7 +125,6 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 void effKemuri8Main(EffectEntry* effect) {
     EffKemuri8N64Work* work = effect->userdata;
     s32 i;

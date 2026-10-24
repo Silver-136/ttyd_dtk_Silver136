@@ -484,7 +484,6 @@ void FontDrawScaleVec(Vec scale);
 void FontDrawCode(f32 x, f32 y, u16 code);
 void FontDrawCodeMtx(Mtx mtx, u16 code);
 
-#pragma dont_inline on
 BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y);
 BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
 	s32 al;
@@ -738,7 +737,6 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
 	}
 	return ret;
 }
-#pragma dont_inline reset
 
 void msgDispKeyWait_render(s32 wXluStage) {
 	AnimationWork* wp = animGetPtr();
