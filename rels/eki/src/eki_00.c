@@ -343,8 +343,7 @@ static void moamoa_pose_init(void) {
         wp->defs[wp->numDefs].count = i - start + 1;
         wp->defs[wp->numDefs].speed = data->speed;
         wp->defs[wp->numDefs].loop = 1;
-        // FAKE: "J" padded to the target's 4-byte .rodata string (strncmp reads 1 byte)
-        if (!strncmp(anim, (char*)"J\0\0", 1)) {
+        if (!strncmp(anim, "J", 1)) {
             wp->defs[wp->numDefs].loop = 0;
         }
         i++;
