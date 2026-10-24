@@ -4,7 +4,7 @@
 
 #include "__dvd.h"
 
-static u8 bb2Buf[64]; // FAKE: one extra byte to match the original symbol size (OSRoundUp32B pointer, never indexed past 63)
+static u8 bb2Buf[OSRoundUp32B(sizeof(DVDBB2)) + 31];
 
 static u32 status;
 static DVDBB2* bb2;

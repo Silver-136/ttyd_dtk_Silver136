@@ -67,7 +67,7 @@ effN64Vtx size128x128_tex32x32_vtx[] = {
     {0, 0, 0, 0, 0, 255, 255, 255, 255},
 };
 
-struct { effN64Vtx v[10]; u8 pad[4]; } shooting_dust_vtx = { { // FAKE: padded to the original symbol size (trailing zero bytes, never read)
+effN64Vtx shooting_dust_vtx[10] = {
     {0, 8, 0, 0, 0, 0, 0, 0, 191},
     {0, -8, 0, 0, 2048, 0, 0, 0, 191},
     {0, 9, 0, 512, 0, 0, 0, 0, 191},
@@ -78,7 +78,7 @@ struct { effN64Vtx v[10]; u8 pad[4]; } shooting_dust_vtx = { { // FAKE: padded t
     {0, -10, 0, 768, 2048, 0, 0, 0, 191},
     {0, 11, 0, 896, 0, 0, 0, 0, 191},
     {0, -11, 0, 896, 2048, 0, 0, 0, 191},
-}, {0} };
+};
 
 void effSstarMain(EffectEntry* effect);
 void effSstarDisp(CameraId cameraId, EffectEntry* effect);
@@ -317,7 +317,7 @@ void effSstarDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXRotRad(rot, 'z', 0.017453292f * w->rotZ);
         PSMTXConcat(mtx, rot, w->mtx[w->idx]);
         for (i = 0; i < 5; i++) {
-            memcpy(&w->vtx[i * 2], &shooting_dust_vtx.v[i * 2], sizeof(effN64Vtx));
+            memcpy(&w->vtx[i * 2], &shooting_dust_vtx[i * 2], sizeof(effN64Vtx));
             OSInitFastCast();
             OSs16tof32(&w->vtx[i * 2].x, &v0.x);
             OSs16tof32(&w->vtx[i * 2].y, &v0.y);
@@ -327,7 +327,7 @@ void effSstarDisp(CameraId cameraId, EffectEntry* effect) {
             OSf32tos16(&v0.x, &w->vtx[i * 2].x);
             OSf32tos16(&v0.y, &w->vtx[i * 2].y);
             OSf32tos16(&v0.z, &w->vtx[i * 2].z);
-            memcpy(&w->vtx[i * 2 + 1], &shooting_dust_vtx.v[i * 2 + 1], sizeof(effN64Vtx));
+            memcpy(&w->vtx[i * 2 + 1], &shooting_dust_vtx[i * 2 + 1], sizeof(effN64Vtx));
             OSInitFastCast();
             OSs16tof32((s16*)&w->vtx[i * 2 + 1], &v1.x);
             OSs16tof32((s16*)&w->vtx[i * 2 + 1] + 1, &v1.y);

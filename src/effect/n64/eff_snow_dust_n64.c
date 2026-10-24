@@ -54,13 +54,13 @@ static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, 8, 0, 0, 2048, 0, 0, 0, 255},
 };
 
-static struct { effN64Vtx v[5]; u8 pad[2]; } size32x32_tex32x32_vtx = { { // FAKE: padded to the original symbol size (trailing zero bytes, never read)
+static effN64Vtx size32x32_tex32x32_vtx[5] = {
     {-32, 0, 0, 0, 0, 255, 255, 255, 0},
     {0, -32, 0, 1024, 0, 255, 255, 255, 0},
     {32, 0, 0, 1024, 1024, 255, 255, 255, 0},
     {0, 32, 0, 0, 1024, 255, 255, 255, 0},
     {0, 0, 0, 0, 0, 255, 255, 255, 255},
-}, {0} };
+};
 
 static u8 scale_data[] = {
     2, 4, 8, 13, 15, 13, 9, 6, 4, 3, 2, 4, 8, 13, 15, 13, 9, 6, 4, 3, 2, 4, 8, 13, 15, 13, 9, 6, 4, 3,
@@ -72,7 +72,7 @@ static u8 scale_data2[] = {
 
 static u8 a_data[] = {
     200, 250, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 250, 200, 0, 0 // FAKE: trailing zero padding to the original symbol size (never read)
+    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 250, 200
 };
 
 EffectEntry* effSnowDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 w, f32 h, f32 scale) {
@@ -500,7 +500,7 @@ void effSnowDustDisp(CameraId cameraId, EffectEntry* effect) {
                 GXSetTevColorIn(0, 0xf, 0xf, 0xf, 0xc);
                 GXSetTevAlphaIn(0, 7, 5, 6, 7);
                 GXSetTevKAlphaSel(0, 0x1c);
-                effSetVtxDescN64(size32x32_tex32x32_vtx.v);
+                effSetVtxDescN64(size32x32_tex32x32_vtx);
                 GXBegin(0x90, 0, 12);
                 ((void (*)())tri2)(0, 1, 4, 0, 1, 2, 4, 0);
                 ((void (*)())tri2)(0, 4, 3, 0, 4, 2, 3, 0);

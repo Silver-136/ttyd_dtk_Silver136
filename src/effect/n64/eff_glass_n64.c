@@ -16,13 +16,13 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-static struct { effN64Vtx v[5]; u8 pad[2]; } size48x48_tex32x32_vtx = { { // FAKE: padded to the original symbol size (trailing zero bytes, never read)
+static effN64Vtx size48x48_tex32x32_vtx[5] = {
     {-32, 0, 0, 0, 0, 255, 255, 255, 0},
     {0, -32, 0, 1024, 0, 255, 255, 255, 0},
     {32, 0, 0, 1024, 1024, 255, 255, 255, 0},
     {0, 32, 0, 0, 1024, 255, 255, 255, 0},
     {0, 0, 0, 0, 0, 255, 255, 255, 200},
-}, {0} };
+};
 
 void effGlassDisp(CameraId cameraId, EffectEntry* effect);
 void effGlassMain(EffectEntry* effect);
@@ -205,7 +205,7 @@ void effGlassDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_RASA, GX_CA_ZERO);
-        effSetVtxDescN64(size48x48_tex32x32_vtx.v);
+        effSetVtxDescN64(size48x48_tex32x32_vtx);
         GXLoadPosMtxImm(viewMtx, 0);
         GXSetCurrentMtx(0);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 12);
