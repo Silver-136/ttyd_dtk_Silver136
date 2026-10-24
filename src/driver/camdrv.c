@@ -11,6 +11,7 @@
 #include "pmario_sound.h"
 #include "system.h"
 #include "libc_decls.h"
+#include "cam_road.h"
 
 // NOTE: this is ~roughly 12.5 degrees in radians, ideally it should be MTXDegToRad(12.5) or 5PI/72
 #define DEG_TO_RAD_12_5__1 0.21816612780094147
@@ -27,13 +28,6 @@ Vec camUpDefault = { 0.0f, 1.0f, 0.0f };
 //.sbss
 CameraId currentCamNo;
 
-typedef struct CameraParams {
-    f32 fovY;   // 0x00
-    f32 aspect; // 0x04
-    f32 far;    // 0x08
-    Vec pos;    // 0x0C
-    Vec at;     // 0x18
-} CameraParams;
 
 // forward declarations
 CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 near, f32 far, f32 nearZ, f32 farZ,
@@ -545,7 +539,7 @@ void cam3dMain(CameraEntry* camera) {
                             f32 oldx, oldy, oldz;
 
                             camShiftMain(camera, mario, &bank);
-                            camRoadMain(&work2.fovY, camera->blendPos.x, camera->blendPos.y, camera->blendPos.z,
+                            camRoadMain(&work2, camera->blendPos.x, camera->blendPos.y, camera->blendPos.z,
                                         camera->blendAt.x, camera->blendAt.y, camera->blendAt.z, bank);
                             /// ???
                             dolly = camera->dollyPercent;

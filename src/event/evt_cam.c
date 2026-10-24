@@ -10,14 +10,8 @@
 #include "system.h"
 #include <dolphin/os.h>
 #include "libc_decls.h"
+#include "cam_road.h"
 
-typedef struct CamRoadOut {
-    Vec f_0;
-    Vec pos; // 0xc
-    Vec at;  // 0x18
-} CamRoadOut;
-
-void camRoadMain(CamRoadOut* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g);
 void camRoadReset(void);
 void camShiftReset(void);
 void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out);
@@ -478,7 +472,7 @@ USER_FUNC(evt_cam3d_evt_set_now) {
 USER_FUNC(evt_cam3d_event_from_road) {
     EvtWord* args = event->args;
     f32 x, y, z, w;
-    CamRoadOut out;
+    CameraParams out;
 
     x = evtGetFloat(event, args[0]);
     y = evtGetFloat(event, args[1]);

@@ -77,11 +77,14 @@ typedef struct CamRoadState {
     f32 f_58;              // 0x58
     f32 shiftXRate;        // 0x5c
 } CamRoadState;
-typedef struct CamRoadOut {
-    Vec f_0;
+/* camera parameters a camera road produces (camdrv blends them into the live camera) */
+typedef struct CameraParams {
+    f32 fovY;              // 0x0
+    f32 aspect;            // 0x4
+    f32 far;               // 0x8
     Vec pos;               // 0xc
     Vec at;                // 0x18
-} CamRoadOut;
+} CameraParams;
 typedef struct CamRoadWork {
     CamRoadMap* map;       // 0x0
     u8 pad0[4];
@@ -105,7 +108,7 @@ typedef struct CamRoadWork {
 } CamRoadWork;
 
 CamRoadWork* camRoadGetWorkPtr(void);
-void camRoadMain(CamRoadOut* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g);
+void camRoadMain(CameraParams* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g);
 
 f32 camRoadGetCurrentShiftXRate(void);
 void camRoadReset(void);

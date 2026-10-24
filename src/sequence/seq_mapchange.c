@@ -24,6 +24,7 @@
 #include "evt/evt_lottery.h"
 #include "database.h"
 #include "driver/mobjdrv.h"
+#include "cam_road.h"
 
 //.sbss
 char _next_area[0x20];
@@ -55,7 +56,6 @@ void npcExecAllInitEvt(void);
 BOOL npcWaitAllInitEvtEnd(void);
 void npcExecAllReglEvt(void);
 void statusWinForceUpdate(void);
-void camRoadMain(void* out, f32 x0, f32 y0, f32 z0, f32 x1, f32 y1, f32 z1, f32 w);
 double cos(double);
 double sin(double);
 
@@ -379,7 +379,7 @@ void _unload(const char* prevMap, const char* nextMap, const char* bero) {
 void _load(const char* prevMapName, const char* newMapName, const char* beroName) {
     MapData* map;
     char mapFile[64];
-    u8 roadOut[0x24];
+    CameraParams roadOut;
     MarioWork* mw;
     CameraEntry* cam;
 
@@ -475,7 +475,7 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
     camRoadReset();
     camShiftReset();
     if (cam->flags & 4) {
-        camRoadMain(roadOut, 1.0f + cam->marioPos.x, 1.0f + cam->marioPos.y, 1.0f + cam->marioPos.z,
+        camRoadMain(&roadOut, 1.0f + cam->marioPos.x, 1.0f + cam->marioPos.y, 1.0f + cam->marioPos.z,
                     1.0f + cam->marioAt.x, 1.0f + cam->marioAt.y, 1.0f + cam->marioAt.z, 0.0f);
     }
 }

@@ -29,7 +29,7 @@ static const Vec unk_vec2 = {-110.0f, -70.0f, -190.0f};
 static CamRoadWork work;
 static CamRoadWork* wp = &work;
 void OSReport(const char* msg, ...);
-void calcCurrentCamState(CamRoadOut* out);
+void calcCurrentCamState(CameraParams* out);
 void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g);
 u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* speed);
 void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t);
@@ -96,7 +96,7 @@ s32 camRoadSetup(const char* name) {
     }
     return 1;
 }
-void calcCurrentCamState(CamRoadOut* out) {
+void calcCurrentCamState(CameraParams* out) {
     Mtx m;
     Vec v;
     Vec res;
@@ -105,9 +105,9 @@ void calcCurrentCamState(CamRoadOut* out) {
     CamRoadState* s;
     Vec* p;
     p = wp->map->f_e8;
-    out->f_0.x = p->x;
-    out->f_0.y = p->y;
-    out->f_0.z = p->z;
+    out->fovY = p->x;
+    out->aspect = p->y;
+    out->far = p->z;
     s = &wp->cur;
     if (!s->on) {
         out->pos.x = 0.0f;
@@ -1158,7 +1158,7 @@ void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadSta
             wp->hokanType = 0;                                                                                \
         }                                                                                                     \
     }
-void camRoadMain(CamRoadOut* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
+void camRoadMain(CameraParams* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
     u32 flags;
     wp->in[0] = a;
     wp->in[1] = b;
@@ -1277,5 +1277,5 @@ u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed);
 void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g);
 s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit);
 s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist);
-void calcCurrentCamState(CamRoadOut* out);
+void calcCurrentCamState(CameraParams* out);
 s32 camRoadSetup(const char* name);

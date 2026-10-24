@@ -25,6 +25,8 @@
 #include "evt/evt_npc.h"
 #include "mario/mario_pouch.h"
 #include "data_tables.h"
+#include "cam_road.h"
+#include "cam_shift.h"
 typedef struct SharinData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat speed; } SharinData;
 typedef struct ClankData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat x; EvtFloat y; } ClankData;
 
@@ -2197,11 +2199,6 @@ USER_FUNC(pik_00_statuswin_force_off) {
 }
 #endif
 
-#ifdef VERSION_G8ME01
-typedef struct CamRoadOutUS { Vec f_0; Vec pos; Vec at; } CamRoadOutUS;
-void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out);
-void camRoadMain(CamRoadOutUS* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g);
-#endif
 static USER_FUNC(zoom) {
     EvtWord* args = event->args;
     // ナリキンパパ
@@ -2210,7 +2207,7 @@ static USER_FUNC(zoom) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     Vec v;
 #ifdef VERSION_G8ME01
-    CamRoadOutUS out;
+    CameraParams out;
     f32 bank = 0.0f;
 
     camShiftMain(cam, mario, &bank);

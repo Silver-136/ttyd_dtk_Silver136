@@ -13,7 +13,6 @@
 #include <string.h>
 #include "driver/camdrv.h"
 #include "driver/animdrv.h"
-#include "cam_road.h"
 #include "cam_shift.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
@@ -733,7 +732,7 @@ USER_FUNC(bero_get_position_pipe2) {
 	s32 id = evtGetValue(event, args[0]);
 	s32 a = evtGetFloat(event, args[1]);
 	Vec start, end;
-	CamRoadOut out;
+	CameraParams out;
 	bero_get_position_pipe_sub(id, a, event->lwData[3], event->lwData[5], &start, &end);
 	end.y += 1.0f;
 	camRoadReset();
@@ -1275,7 +1274,7 @@ USER_FUNC(evt_camera_change_event_from_road) {
 	MarioWork* mario = marioGetPtr();
 	CameraEntry* cam = camGetPtr(4);
 	f32 bank;
-	CamRoadOut out;
+	CameraParams out;
 	camShiftMain(cam, mario, &bank);
 	camRoadMain(&out, mario->position.x, cam->marioPos.y, mario->position.z, mario->position.x, cam->marioPos.y, mario->position.z, bank);
 	{

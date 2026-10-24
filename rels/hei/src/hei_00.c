@@ -18,13 +18,12 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include "cam_road.h"
 
 typedef struct GonbabaProj { GXTexObj obj; smartEntry* tex; } GonbabaProj;
 void mapSetProjTexObj(GXTexObj* obj, smartEntry* tex);
 void make_gonbaba_projection(CameraId camera, void* param);
 void mapSetProjMtx(Mtx mtx);
-typedef struct CamRoadOut { Vec unk0; Vec target; Vec pos; } CamRoadOut;
-void camRoadMain(CamRoadOut* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g);
 
 USER_FUNC(cam_test);
 USER_FUNC(dist_check);
@@ -417,18 +416,18 @@ USER_FUNC(cam_test) {
     CameraEntry* camera = camGetPtr(4);
     f32 cx = (mario->position.x + party->position.x) / 2;
     f32 cz = (mario->position.z + party->position.z) / 2;
-    CamRoadOut road;
+    CameraParams road;
     Vec dir;
 
     camRoadMain(&road, 0.0f, 25.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f);
-    dir = (Vec){road.target.x - road.pos.x, road.target.y - road.pos.y, road.target.z - road.pos.z};
+    dir = (Vec){road.pos.x - road.at.x, road.pos.y - road.at.y, road.pos.z - road.at.z};
     PSVECNormalize(&dir, &dir);
-    event->lwData[0] = cx + road.pos.x + 250.0f * dir.x;
-    event->lwData[1] = road.pos.y + 250.0f * dir.y;
-    event->lwData[2] = cz + road.pos.z + 250.0f * dir.z;
-    event->lwData[3] = cx + road.pos.x;
-    event->lwData[4] = road.pos.y;
-    event->lwData[5] = cz + road.pos.z;
+    event->lwData[0] = cx + road.at.x + 250.0f * dir.x;
+    event->lwData[1] = road.at.y + 250.0f * dir.y;
+    event->lwData[2] = cz + road.at.z + 250.0f * dir.z;
+    event->lwData[3] = cx + road.at.x;
+    event->lwData[4] = road.at.y;
+    event->lwData[5] = cz + road.at.z;
     return EVT_RETURN_DONE;
 }
 
@@ -438,18 +437,18 @@ USER_FUNC(cam_test2) {
     CameraEntry* camera = camGetPtr(4);
     f32 cx = (mario->position.x + party->position.x) / 2;
     f32 cz = (mario->position.z + party->position.z) / 2;
-    CamRoadOut road;
+    CameraParams road;
     Vec dir;
 
     camRoadMain(&road, 0.0f, 75.0f, 0.0f, 0.0f, 75.0f, 0.0f, 0.0f);
-    dir = (Vec){road.target.x - road.pos.x, road.target.y - road.pos.y, road.target.z - road.pos.z};
+    dir = (Vec){road.pos.x - road.at.x, road.pos.y - road.at.y, road.pos.z - road.at.z};
     PSVECNormalize(&dir, &dir);
-    event->lwData[0] = cx + road.pos.x + 270.0f * dir.x;
-    event->lwData[1] = road.pos.y + 270.0f * dir.y;
-    event->lwData[2] = cz + road.pos.z + 270.0f * dir.z;
-    event->lwData[3] = cx + road.pos.x;
-    event->lwData[4] = road.pos.y;
-    event->lwData[5] = cz + road.pos.z;
+    event->lwData[0] = cx + road.at.x + 270.0f * dir.x;
+    event->lwData[1] = road.at.y + 270.0f * dir.y;
+    event->lwData[2] = cz + road.at.z + 270.0f * dir.z;
+    event->lwData[3] = cx + road.at.x;
+    event->lwData[4] = road.at.y;
+    event->lwData[5] = cz + road.at.z;
     return EVT_RETURN_DONE;
 }
 
