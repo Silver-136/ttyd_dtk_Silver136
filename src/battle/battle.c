@@ -15,6 +15,7 @@
 #include "manager/evtmgr.h"
 #include "unit/unit_mario.h"
 #include "unit/unit_system.h"
+#include "driver/animdrv.h"
 
 typedef enum EquipFlags {
     EQUIP_RESET = 1 << 0,   // 0x1, clear/reset equipped badges
@@ -794,8 +795,6 @@ f32 BattleGetFloorHeight(f32 x, f32 y, f32 z) {
     }
     return stage->audienceSizeY;
 }
-
-#include "driver/animdrv.h"
 
 void BattleCheckUnitBroken(BattleWork* wp) {
     s32 i;
