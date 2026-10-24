@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "icon_ids.h"
+#include "mario/mario_party.h"
 
 extern ItemData itemDataTable[];
 

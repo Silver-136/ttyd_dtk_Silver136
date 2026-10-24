@@ -12,6 +12,7 @@
 #include "pmario_sound.h"
 #include "system.h"
 #include <string.h>
+#include "driver/animdrv.h"
 
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 void allPartyRideOff(void);

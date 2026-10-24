@@ -14,6 +14,7 @@
 #include "dolphin/mtx.h"
 #include "dolphin/os.h"
 #include "manager/dvdmgr.h"
+#include "dolphin/thp.h"
 
 typedef struct THPHeader {
     char magic[4];             // 0x0

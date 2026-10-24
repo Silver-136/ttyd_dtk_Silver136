@@ -1,4 +1,6 @@
 #include "libc_decls.h"
+#include "driver/seqdrv.h"
+#include "system.h"
 
 #define _MATH_H_
 double cos(double);

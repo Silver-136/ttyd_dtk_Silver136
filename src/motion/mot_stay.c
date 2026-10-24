@@ -12,6 +12,7 @@
 #define pouchGetHP pouchGetHP_hdr
 #define pouchEquipCheckBadge pouchEquipCheckBadge_hdr
 #include "mario/mariost.h"
+#include "mario/mario_sbr.h"
 #undef pouchGetHP
 #undef pouchEquipCheckBadge
 #endif

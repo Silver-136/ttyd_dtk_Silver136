@@ -7,6 +7,7 @@
 #include "mario/mario_sbr.h"
 #include "party.h"
 #include "party/party_cloud.h"
+#include "system.h"
 
 void marioResetCamShift(void) {
     MarioWork* mario = marioGetPtr();

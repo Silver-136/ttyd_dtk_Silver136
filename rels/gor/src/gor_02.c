@@ -29,6 +29,7 @@
 #include "gor.h"
 #include "driver/hitdrv.h"
 #include "data_tables.h"
+#include "pmario_sound.h"
 
 
 f32 reviseAngle(f32 angle);

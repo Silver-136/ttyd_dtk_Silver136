@@ -7,6 +7,8 @@
 #include "musyx/dsp_import.h"
 #include "musyx/hardware.h"
 #include "musyx/sal.h"
+#include "dolphin/ai.h"
+#include "dolphin/base/PPCArch.h"
 
 static DSPTaskInfo dsp_task ATTRIBUTE_ALIGN(8);
 static u16 dram_image[4096] ATTRIBUTE_ALIGN(32);

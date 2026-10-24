@@ -11,6 +11,7 @@
 #include <string.h>
 #include "seq/seq_title.h"
 #include "libc_decls.h"
+#include "dolphin/base/PPCArch.h"
 
 extern void* DemoCurrentBuffer, * DemoFrameBuffer1, * DemoFrameBuffer2;
 

@@ -23,6 +23,7 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_sub.h"
 
 typedef struct ArmWork { Vec prevPos; Vec pos; f32 rot; f32 targetRot; EffectEntry* eff; } ArmWork;
 double atan(double x);

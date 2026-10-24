@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "battle/battle_mario.h"
+#include "eff/eff_recovery.h"
 
 #ifdef VERSION_G8ME01
 #define EXP_ICON 0x194

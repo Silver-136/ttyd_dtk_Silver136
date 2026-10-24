@@ -19,6 +19,8 @@
 #include "battle/battle_event_default.h"
 #include "battle/battle_event_subset.h"
 #include "battle/battle_item_data.h"
+#include "battle/battle_ac_help.h"
+#include "battle/battle_menu_disp.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);

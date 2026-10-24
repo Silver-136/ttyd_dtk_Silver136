@@ -17,6 +17,7 @@
 #include <string.h>
 #include "eff/n64/eff_kemuri10_n64.h"
 #include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 extern char* strcat(char* dest, const char* src);
 

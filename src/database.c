@@ -10,6 +10,7 @@
 #include <string.h>
 #include "libc_decls.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/animdrv.h"
 
 //.sbss
 void* ptr; //but why

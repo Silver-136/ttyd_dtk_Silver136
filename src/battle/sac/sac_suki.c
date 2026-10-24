@@ -23,6 +23,7 @@
 #include "battle/sac/sac_common.h"
 #include "battle/sac/sac_suki.h"
 #include "battle/battle_database_common.h"
+#include "pmario_sound.h"
 
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 size);

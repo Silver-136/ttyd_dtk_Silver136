@@ -2,6 +2,7 @@
 #include "driver/npcdrv.h"
 #include "data/npc_data.h"
 #include "libc_decls.h"
+#include "pmario_sound.h"
 #undef npcCheckInterrupt
 BOOL npcCheckInterrupt(NpcEntry* npc);
 #include "dolphin/gx/GXStruct.h"

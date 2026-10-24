@@ -20,6 +20,7 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_sub.h"
 
 static EffectEntry* eff_charge;
 EffectEntry* effHokoriN64Entry(s32 type, s32 arg1, f32 x, f32 y, f32 z);

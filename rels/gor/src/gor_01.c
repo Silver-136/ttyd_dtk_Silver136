@@ -35,6 +35,7 @@
 #include "gor.h"
 #include "evt/evt_shop.h"
 #include "data_tables.h"
+#include "driver/msgdrv.h"
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);

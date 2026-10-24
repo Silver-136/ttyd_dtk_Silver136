@@ -15,6 +15,7 @@
 #include "system.h"
 #include <string.h>
 #include "evt/evt_mario.h"
+#include "party/party_vivian.h"
 
 
 void mario_plane_cancel(void);

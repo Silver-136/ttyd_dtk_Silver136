@@ -7,6 +7,7 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "libc_decls.h"
 
 typedef struct EffFireSmokeWork {
     s32 unk0;       // 0x0

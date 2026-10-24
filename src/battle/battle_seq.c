@@ -28,6 +28,7 @@
 #include "unit/party/unit_party_nokotarou.h"
 #include "unit/party/unit_party_sanders.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/fadedrv.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)

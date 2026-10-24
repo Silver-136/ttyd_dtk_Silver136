@@ -30,6 +30,8 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 #include "evt/evt_cmd.h"
+#include "driver/animdrv.h"
+#include "eff/eff_n64.h"
 void PuniDokuritsu(PuniData* p);
 void puniHagurePos(PuniData* p);
 void puniMapdata_MRI_06_getidx(f32 x, f32 z, s32* bx, s32* bz);

@@ -27,6 +27,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_sub.h"
 #include "las.h"
+#include "mario/mario_party.h"
 
 double sin(double);
 double cos(double);

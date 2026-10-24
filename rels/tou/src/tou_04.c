@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
+#include "manager/fontmgr.h"
 
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_entername);

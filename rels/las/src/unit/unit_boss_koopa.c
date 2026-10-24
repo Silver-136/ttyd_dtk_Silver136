@@ -18,6 +18,7 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_sub.h"
 
 void btlMovePos(f32 speed, f32 angle, f32* x, f32* z);
 typedef struct IconJumpWork { Vec start; Vec pos; Vec end; s32 frames; f32 speed; f32 gravity; f32 vy; u8 pad[0x7C - 0x34]; } IconJumpWork;

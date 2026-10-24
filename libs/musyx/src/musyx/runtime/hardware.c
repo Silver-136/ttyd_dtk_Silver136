@@ -7,6 +7,7 @@
 #include "musyx/snd.h"
 #include "musyx/stream.h"
 #include "musyx/synth.h"
+#include "dolphin/os/OSCache.h"
 
 static volatile const u16 itdOffTab[128] = {
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,

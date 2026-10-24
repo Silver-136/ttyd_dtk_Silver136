@@ -8,6 +8,7 @@
 #include "mario/mariost.h"
 #include <string.h>
 #include "data/party_data.h"
+#include "pmario_sound.h"
 
 //.data
 

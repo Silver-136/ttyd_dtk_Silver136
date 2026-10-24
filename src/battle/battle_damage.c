@@ -13,6 +13,7 @@
 #include "eff/n64/eff_kemuri12_n64.h"
 #include <string.h>
 #include "battle/battle_mario.h"
+#include "system.h"
 
 typedef struct CounterWork {
     s32 field_0x0;  // 0x0

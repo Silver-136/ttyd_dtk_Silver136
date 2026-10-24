@@ -16,6 +16,7 @@
 #include <string.h>
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
+#include "driver/swdrv.h"
 #endif
 
 #define CHECK_ITEM(id) ((s32 (*)(s32))pouchCheckItem)(id)
