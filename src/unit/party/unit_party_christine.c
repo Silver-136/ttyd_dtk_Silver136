@@ -2387,13 +2387,14 @@ USER_FUNC(_monosiri_flag_on) {
 
 USER_FUNC(_dictionary) {
     EvtWord* args = event->args;
+    s32 selfId;
     s32 state;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
-    s32 selfId, targetId;
+    s32 targetId;
     void* work;
 
-    selfId = (0, BattleTransID(event, -2)); // FAKE: comma expression; plain call changes codegen
+    selfId = BattleTransID(event, -2);
     targetId = evtGetValue(event, args[0]);
     targetId = BattleTransID(event, targetId);
     evtGetValue(event, args[1]);
