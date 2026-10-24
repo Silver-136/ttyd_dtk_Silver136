@@ -21,6 +21,10 @@
 #include "eff/eff_magic1_n64.h"
 #include "mario/mario_motion.h"
 #include "statuswindow.h"
+#include "win/win_main.h"
+#include "manager/fontmgr.h"
+#include "driver/msgdrv.h"
+#include "driver/windowdrv.h"
 
 // TODO: move all this into other TUs
 typedef enum winTexMode {
@@ -30,9 +34,6 @@ typedef enum winTexMode {
     MODE_8 = 8,
     MODE_11 = 11,
 } winTexMode;
-
-void winTexSet(winTexMode mode, Vec pos, Vec scale, GXColor color);
-void windowDispGX_Waku_col(s32 r3, GXColor r4, f32 f1, f32 f2, f32 f3, f32 f4, f32 f5);
 
 typedef struct seq_e3_entry {
     s32 id; // 0x0
@@ -461,9 +462,8 @@ void e3Disp(CameraId cameraId, void* param) {
 
                 // Centered Label
                 FontDrawStart();
-                FontDrawColor(&(GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-                msgSearch(keys[i]);
-                MTXTrans(mtx, ((f32)step + e3_tbl[i].x) - 0.7f * (f32)(s32)((FontGetMessageWidth() >> 1) & 0x7FFF),
+                FontDrawColor((GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+                MTXTrans(mtx, ((f32)step + e3_tbl[i].x) - 0.7f * (f32)(s32)((FontGetMessageWidth(msgSearch(keys[i])) >> 1) & 0x7FFF),
                          (((e3_tbl[i].y - (f32)step) - 60.0f) - 8.0f), 0.0f);
                 MTXScale(mtxScale, 0.7f, 1.0f, 1.0f);
                 MTXConcat(mtx, mtxScale, mtx);
