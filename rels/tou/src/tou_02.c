@@ -1688,7 +1688,7 @@ void fan_disp(CameraId camera, void* param) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
-static __declspec(section ".rodata") Vec fan_zero;
+static Vec fan_zero;
 void ext_fan_main(void) {
     MarioWork* mario = marioGetPtr();
     Fan* fan;

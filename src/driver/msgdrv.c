@@ -113,7 +113,7 @@ s32 msgWindowOpen_SE_Data[] = {
 MessageWork msgWork;
 BOOL msgSEflag; //msgSEInit and related functions are unused
 void* msgSortDvdData; //TODO: re-type
-__declspec(section ".sdata") u16 g5_active_s772;
+u16 g5_active_s772;
 
 //.sdata
 MessageWork* msgw = &msgWork;
@@ -123,7 +123,7 @@ const char* ErrMessage[7] = {R_no_messages_JP, R_no_messages_US, R_no_messages_D
 #else
 const char* ErrMessage[2] = {R_no_messages_JP, R_no_messages_US};
 #endif
-__declspec(section ".sdata") const char* paperPoseTbl[6] = {
+const char* paperPoseTbl[6] = {
 	str_802C4ED8, str_802C4EE0, str_802C4EE8,
 	str_802C4EF0, str_802C4EF8, str_802C4F00
 };

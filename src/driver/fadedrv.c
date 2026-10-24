@@ -1291,6 +1291,6 @@ void fadeSetNarrowFast(void) {
 	wp->entries[1].flags |= 8;
 }
 
-__declspec(section ".sdata") u32 gap_fd_sdata2[7] = {0};
+u32 gap_fd_sdata2[7] = {0};
 
 #pragma force_active reset

@@ -18,7 +18,7 @@ double atan2(double y, double x);
 
 static ExtdrvWork work[2];
 static u8 shadow_dl[32];
-__declspec(section ".sdata") static f32 shadow_vtx[16];
+static f32 shadow_vtx[16];
 static f32 shadow_coord[8];
 
 #define extGetWork() (gp->inBattle ? &work[1] : &work[0])
