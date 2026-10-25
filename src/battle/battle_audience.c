@@ -332,7 +332,7 @@ void BattleAudience_Init(void) {
             int index = (i * 20) + j + 10;
             if (AUD_U8CALL(BattleAudience_GetExist, index) == (1 & 0xFFFF)) {
                 status = BattleAudienceGetPtr(index)->status;
-                if (status != 12 && status != 11) { //TODO: add status enum
+                if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
                     audience->mCurrentAudienceIntCountRight++;
                 }
             }
@@ -344,7 +344,7 @@ void BattleAudience_Init(void) {
             s32 index = i * 20 + j;
             if (AUD_U8CALL(BattleAudience_GetExist, index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
-                if (status != 12 && status != 11) {
+                if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
                     audience->mCurrentAudienceIntCountLeft++;
                 }
             }
@@ -517,12 +517,12 @@ void BattleAudience_PerPhase(u32 value) {
     if (value == 0x4000002 && !(audience->flags & 0x40000)) {
         for (i = 0; i < 200; i++) {
             member = BattleAudienceGetPtr(i);
-            if ((u8)BattleAudience_GetExist(i) == 1 && member->status == 7) {
+            if ((u8)BattleAudience_GetExist(i) == 1 && member->status == AUDIENCE_STATUS_ITEM_ON) {
                 if (member->itemId != -1) {
                     BattleAudienceItemGetPtr(member->itemId)->flags = 0;
                 }
                 member->itemId = -1;
-                BattleAudience_ChangeStatus(i, 0);
+                BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_WAIT);
             }
         }
         for (i = 0; i < 100; i++) {
@@ -567,8 +567,8 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
             for (counter = 0, i = 0; i < 200; i++) {
                 member = BattleAudienceGetPtr(i);
                 if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == AUDIENCE_BULKY_BOBOMB &&
-                        member->status == 18 && (member->statusTimer--, member->statusTimer <= 0)) {
-                    BattleAudience_ChangeStatus(i, 19);
+                        member->status == AUDIENCE_STATUS_IGNITE && (member->statusTimer--, member->statusTimer <= 0)) {
+                    BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_FIRE);
                     counter++;
                 }
             }
@@ -584,7 +584,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
             for (i = 0; i < 200; i++) {
                 member = BattleAudienceGetPtr(i);
                 if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == AUDIENCE_BULKY_BOBOMB &&
-                        member->status == 19) {
+                        member->status == AUDIENCE_STATUS_FIRE) {
                     break;
                 }
             }
@@ -636,7 +636,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                         break;
                     case 1:
                         for (i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 8) && BattleAudienceGetPtr(i)->status != 17) { BattleAudienceAddPhaseEvtList(1); break; }
+                            if (check_exe_phase_evt_status(i, 8) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_SHELL) { BattleAudienceAddPhaseEvtList(1); break; }
                         }
                         break;
                     case 2:
@@ -692,7 +692,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                     case 11:
                         if (!(audience->flags & 0x4000)) {
                             for (i = 0; i <= 59; i++) {
-                                if (check_exe_phase_evt_status(i, 9) && BattleAudienceGetPtr(i)->status != 18) { BattleAudienceAddPhaseEvtList(11); break; }
+                                if (check_exe_phase_evt_status(i, 9) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_IGNITE) { BattleAudienceAddPhaseEvtList(11); break; }
                             }
                         }
                         break;
@@ -732,8 +732,8 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                     }
                     case 1:
                         for (i = 0; i < 200; i++) {
-                            if (check_exe_phase_evt_status(i, 8) && BattleAudienceGetPtr(i)->status != 17) {
-                                BattleAudience_ChangeStatus(i, 17);
+                            if (check_exe_phase_evt_status(i, 8) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_SHELL) {
+                                BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_SHELL);
                                 BattleAudienceGetPtr(i)->statusTimer = 5;
                             }
                         }
@@ -753,7 +753,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                                 break;
                             case 5:
                                 for (i = 0; i < 200; i++) {
-                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == 11) break;
+                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_ENTER) break;
                                 }
                                 if (i == 200) { SUB = 10; }
                                 break;
@@ -777,7 +777,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                                 SUB = 5;
                             case 5:
                                 for (i = 0; i <= 59; i++) {
-                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == 14) break;
+                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_TRANS_EVT) break;
                                 }
                                 if (i == 60) { CLR }
                                 break;
@@ -812,7 +812,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                                 SUB = 5;
                             case 5:
                                 for (i = 0; i <= 59; i++) {
-                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == 15) break;
+                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_INTRUDE) break;
                                 }
                                 if (i == 60) { CLR }
                                 break;
@@ -826,7 +826,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                                 SUB = 5;
                             case 5:
                                 for (i = 0; i <= 59; i++) {
-                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == 16) break;
+                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_SING) break;
                                 }
                                 if (i == 60) { SUB = 10; }
                                 break;
@@ -844,14 +844,14 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                         break;
                     case 11:
                         for (counter = 0, i = 0; i <= 59; i++) {
-                            if (check_exe_phase_evt_status(i, 9) && BattleAudienceGetPtr(i)->status != 18) {
+                            if (check_exe_phase_evt_status(i, 9) && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_IGNITE) {
                                 list[counter] = i;
                                 counter++;
                             }
                         }
                         k = list[irand(counter)];
                         member = BattleAudienceGetPtr(k);
-                        BattleAudience_ChangeStatus(k, 18);
+                        BattleAudience_ChangeStatus(k, AUDIENCE_STATUS_IGNITE);
                         member->statusTimer = 5;
                         CLR
                         break;
@@ -868,7 +868,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                                 SUB = 5;
                             case 5:
                                 for (i = 0; i <= 59; i++) {
-                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == 20) break;
+                                    if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_EAT) break;
                                 }
                                 if (i == 60) { CLR }
                                 break;
@@ -892,15 +892,15 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
         case 15:
             for (i = 0; i < 200; i++) {
                 member = BattleAudienceGetPtr(i);
-                if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->status == 13 &&
+                if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->status == AUDIENCE_STATUS_SLEEP &&
                         (member->statusDelay--, member->statusDelay <= 0)) {
-                    BattleAudience_ChangeStatus(i, 3);
+                    BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_WAIT_JUMP);
                     member->statusDelay = 0;
                 }
             }
             for (i = 0; i < 200; i++) {
                 member = BattleAudienceGetPtr(i);
-                if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == 8 && member->status == 17 &&
+                if ((u8)BattleAudience_GetSysCtrl(i) == 1 && member->type == 8 && member->status == AUDIENCE_STATUS_SHELL &&
                         (member->statusTimer--, member->statusTimer <= 0)) {
                     member->step = 4;
                 }
@@ -1174,9 +1174,9 @@ void BattleAudienceSettingAudience(void) {
     case 2:
         while ((n = BattleAudience_NoUsedHaitiRand()) != -1) {
             if (n % 20 <= 9) {
-                BattleAudience_Entry(n, AUDIENCE_PUNI, 0);
+                BattleAudience_Entry(n, AUDIENCE_PUNI, AUDIENCE_STATUS_WAIT);
             } else {
-                BattleAudience_Entry(n, AUDIENCE_XNAUT, 0);
+                BattleAudience_Entry(n, AUDIENCE_XNAUT, AUDIENCE_STATUS_WAIT);
             }
         }
         break;
@@ -1236,7 +1236,7 @@ void BattleAudienceCtrlProcess(void) {
             index = (i * 20) + j + 10;
             if (AUD_U8CALL(BattleAudience_GetExist, index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
-                if (status != 12 && status != 11) {
+                if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
                     audience->mCurrentAudienceIntCountRight++;
                 }
             }
@@ -1248,7 +1248,7 @@ void BattleAudienceCtrlProcess(void) {
             index = (i * 20) + j;
             if (AUD_U8CALL(BattleAudience_GetExist, index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
-                if (status != 12 && status != 11) {
+                if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
                     audience->mCurrentAudienceIntCountLeft++;
                 }
             }
@@ -1355,7 +1355,7 @@ BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems) {
                 item->state = 0;
                 item->audienceId = index;
                 item->mItemType = itemId;
-                BattleAudience_ChangeStatus(index, 7);
+                BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_ITEM_ON);
                 member->itemId = i;
                 return TRUE;
             }
@@ -1453,7 +1453,7 @@ void BattleAudienceItemCtrlProcess(void) {
         }
         aud = (u8*)BattleAudienceGetPtr(it->audienceId);
         kd = &audience_kind[((BattleAudienceMember*)aud)->type];
-        if (((BattleAudienceMember*)aud)->status == 13 || ((BattleAudienceMember*)aud)->status == 19 || ((BattleAudienceMember*)aud)->status == 21 || ((BattleAudienceMember*)aud)->status == 12 ||
+        if (((BattleAudienceMember*)aud)->status == AUDIENCE_STATUS_SLEEP || ((BattleAudienceMember*)aud)->status == AUDIENCE_STATUS_FIRE || ((BattleAudienceMember*)aud)->status == 21 || ((BattleAudienceMember*)aud)->status == AUDIENCE_STATUS_ESCAPE ||
             !(u8)BattleAudience_GetExist(it->audienceId)) {
             goto kill;
         }
@@ -1557,7 +1557,7 @@ void BattleAudienceItemCtrlProcess(void) {
                 it->mode = 0;
             }
             if (it->timer == 20) {
-                BattleAudience_ChangeStatus(it->audienceId, 0);
+                BattleAudience_ChangeStatus(it->audienceId, AUDIENCE_STATUS_WAIT);
             }
             if (it->timer == 0) {
                 it->state++;
@@ -1709,7 +1709,7 @@ void BattleAudienceItemCtrlProcess(void) {
             BattleAudienceSoundStop(11);
             if (it->audienceId != -1) {
                 BattleAudienceGetPtr(it->audienceId);
-                BattleAudience_ChangeStatus(it->audienceId, 0);
+                BattleAudience_ChangeStatus(it->audienceId, AUDIENCE_STATUS_WAIT);
             }
         kill:
             it->flags = 0;
@@ -2330,7 +2330,7 @@ void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
         m->mHomePosition.z += 0.2f;
         m->position.z += 0.2f;
     }
-    if (m->status == 11) {
+    if (m->status == AUDIENCE_STATUS_ENTER) {
         m->position.y = -2000.0f;
     }
     m->accel = (Vec){0.0f, 0.0f, 0.0f};
@@ -2529,10 +2529,10 @@ void BattleAudience_SetTarget(s32 index) {
     for (i = 0; i < 200; i++) {
         if (i != index && (u8)BattleAudience_GetExist(i)) {
             member = BattleAudienceGetPtr(i);
-            if (member->status == 7) {
+            if (member->status == AUDIENCE_STATUS_ITEM_ON) {
                 BattleAudienceItemGetPtr(member->itemId)->flags = 0;
                 member->itemId = -1;
-                BattleAudience_ChangeStatus(i, 0);
+                BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_WAIT);
             }
         }
     }
@@ -2641,19 +2641,19 @@ BOOL BattleAudience_GetEscapeChangeOK(s32 index) {
     if (member->flags & 0x200) {
         return FALSE;
     }
-    if (member->status == 13) {
+    if (member->status == AUDIENCE_STATUS_SLEEP) {
         return FALSE;
     }
-    if (member->status == 17) {
+    if (member->status == AUDIENCE_STATUS_SHELL) {
         return FALSE;
     }
-    if (member->status == 18) {
+    if (member->status == AUDIENCE_STATUS_IGNITE) {
         return FALSE;
     }
-    if (member->status == 14) {
+    if (member->status == AUDIENCE_STATUS_TRANS_EVT) {
         return FALSE;
     }
-    if (member->status == 15) {
+    if (member->status == AUDIENCE_STATUS_INTRUDE) {
         return FALSE;
     }
     if (member->status == 21) {
@@ -2662,7 +2662,7 @@ BOOL BattleAudience_GetEscapeChangeOK(s32 index) {
     if (member->status == 22) {
         return FALSE;
     }
-    return member->status != 12;
+    return member->status != AUDIENCE_STATUS_ESCAPE;
 }
 
 s32 BattleAudience_GetAudienceNoFromOffset(s32 index, s32 column, s32 row) {
@@ -2882,10 +2882,10 @@ BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id) {
     if (member->status >= 13 && member->status <= 13) {
         return FALSE;
     }
-    if (member->status == 17) {
+    if (member->status == AUDIENCE_STATUS_SHELL) {
         return FALSE;
     }
-    return member->status != 12;
+    return member->status != AUDIENCE_STATUS_ESCAPE;
 }
 
 void BattleAudience_ApRecoveryBuild(StarPowerInfo* info) {
@@ -2971,7 +2971,7 @@ s32 BattleAudienceNumToTargetSub(void) {
     BattleAudienceBaseGetPtr();
     count = 0;
     for (i = 0; i < 200; i++) {
-        if (AUD_U8CALL(BattleAudience_GetExist, i) == TRUE && BattleAudienceGetPtr(i)->status != 12) {
+        if (AUD_U8CALL(BattleAudience_GetExist, i) == TRUE && BattleAudienceGetPtr(i)->status != AUDIENCE_STATUS_ESCAPE) {
             count++;
         }
     }
@@ -3095,7 +3095,7 @@ s32 BattleAudienceAddAudienceNum(s32 num) {
             if (id == -1) {
                 break;
             }
-            if (BattleAudience_Entry(id, type, 11) == TRUE) {
+            if (BattleAudience_Entry(id, type, AUDIENCE_STATUS_ENTER) == TRUE) {
                 added++;
                 BattleAudienceGetPtr(id)->counter = added;
             }
@@ -3110,7 +3110,7 @@ s32 BattleAudienceAddAudienceNum(s32 num) {
             }
             if (count >= 1) {
                 id = list[irand(count)];
-                BattleAudience_ChangeStatus(id, 12);
+                BattleAudience_ChangeStatus(id, AUDIENCE_STATUS_ESCAPE);
                 added--;
                 BattleAudienceGetPtr(id)->counter = -added;
             }
@@ -3130,7 +3130,7 @@ void BattleAudiencePuniAllEscape(void) {
     for (i = 0; i < 200; i++) {
         member = BattleAudienceGetPtr(i);
         if (AUD_U8CALL(BattleAudience_GetEscapeChangeOK, i) && member->type == 7) {
-            BattleAudience_ChangeStatus(i, 12);
+            BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_ESCAPE);
             audience->mAddedAudienceCount -= 1.0f;
             count++;
         }
@@ -3152,7 +3152,7 @@ void BattleAudienceAddPuni(s32 num) {
             if (id == -1) {
                 return;
             }
-            if (BattleAudience_Entry(id, AUDIENCE_PUNI, 11) == TRUE) {
+            if (BattleAudience_Entry(id, AUDIENCE_PUNI, AUDIENCE_STATUS_ENTER) == TRUE) {
                 audience->mAddedAudienceCount += 1.0f;
             }
         }
@@ -3257,7 +3257,7 @@ void BattleAudienceJoy_Sub(s32 a, s32 b, s32 c, s32 type) {
             continue;
         }
         if (member->type == 11) {
-            BattleAudience_ChangeStatus(i, 4);
+            BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_JOY_RAISE_ARM);
             if (type == 3) {
                 member->counterF = 3.0f;
             } else {
@@ -3266,16 +3266,16 @@ void BattleAudienceJoy_Sub(s32 a, s32 b, s32 c, s32 type) {
         } else {
             r = irand(total);
             if (r < a) {
-                BattleAudience_ChangeStatus(i, 4);
+                BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_JOY_RAISE_ARM);
                 if (type == 3) {
                     member->counterF = 3.0f;
                 } else {
                     member->counterF = 2.0f;
                 }
             } else if (r < (ab = a + (s32)b)) {
-                BattleAudience_ChangeStatus(i, 5);
+                BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_JOY_JUMP);
             } else if (r < ab + c) {
-                BattleAudience_ChangeStatus(i, 6);
+                BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_JOY_JUMP2);
             }
         }
     }
@@ -4177,42 +4177,42 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
         case 4:
         case 5:
         case 8:
-            if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != 15) {
-                BattleAudience_ChangeStatus(index, 10);
+            if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {
+                BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
             }
             for (i = 0; i < 8; i++) {
                 no = BattleAudience_GetAudienceNoFromOffset(index, near[i][0], near[i][1]);
                 if (no != -1 && (u8)BattleAudience_GetEscapeChangeOK(no)) {
-                    BattleAudience_ChangeStatus(no, 12);
+                    BattleAudience_ChangeStatus(no, AUDIENCE_STATUS_ESCAPE);
                     audience->mTargetAudienceCount -= 1.0f;
                 }
             }
             break;
         case 7:
-            if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != 15) {
-                BattleAudience_ChangeStatus(index, 10);
+            if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {
+                BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
             }
             for (i = 0; i < 24; i++) {
                 no = BattleAudience_GetAudienceNoFromOffset(index, far[i][0], far[i][1]);
                 if (no != -1 && (u8)BattleAudience_GetEscapeChangeOK(no)) {
-                    BattleAudience_ChangeStatus(no, 12);
+                    BattleAudience_ChangeStatus(no, AUDIENCE_STATUS_ESCAPE);
                     audience->mTargetAudienceCount -= 1.0f;
                 }
             }
             break;
         case 6:
-            if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != 15) {
-                BattleAudience_ChangeStatus(index, 10);
+            if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {
+                BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
             }
             for (i = 0; i < 200; i++) {
                 if ((u8)BattleAudience_GetEscapeChangeOK(i)) {
-                    BattleAudience_ChangeStatus(i, 12);
+                    BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_ESCAPE);
                     audience->mTargetAudienceCount -= 1.0f;
                 }
             }
         default:
-            if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != 15) {
-                BattleAudience_ChangeStatus(index, 10);
+            if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {
+                BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
             }
             audience->mTargetAudienceCount -= 1.0f;
             break;

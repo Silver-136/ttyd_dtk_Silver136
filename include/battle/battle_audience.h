@@ -35,6 +35,32 @@ typedef struct StarPowerInfo {
     s8 pad_0B;                    // 0xB, never accessed
 } StarPowerInfo;
 
+// BattleAudienceMember.status: one handler per state, BattleAudienceCtrlProcessKinopio<Name> for every member
+// type (the names follow those original handler symbols)
+typedef enum BattleAudienceStatus {
+    AUDIENCE_STATUS_WAIT, // 0
+    AUDIENCE_STATUS_WAIT_HURIMUKI, // 1
+    AUDIENCE_STATUS_WAIT_KUBI_KATAMUKE, // 2
+    AUDIENCE_STATUS_WAIT_JUMP, // 3
+    AUDIENCE_STATUS_JOY_RAISE_ARM, // 4
+    AUDIENCE_STATUS_JOY_JUMP, // 5
+    AUDIENCE_STATUS_JOY_JUMP2, // 6
+    AUDIENCE_STATUS_ITEM_ON, // 7
+    AUDIENCE_STATUS_ITEM_THROW, // 8
+    AUDIENCE_STATUS_BOOING, // 9
+    AUDIENCE_STATUS_DAMAGE, // 10
+    AUDIENCE_STATUS_ENTER, // 11
+    AUDIENCE_STATUS_ESCAPE, // 12
+    AUDIENCE_STATUS_SLEEP, // 13
+    AUDIENCE_STATUS_TRANS_EVT, // 14
+    AUDIENCE_STATUS_INTRUDE, // 15
+    AUDIENCE_STATUS_SING, // 16
+    AUDIENCE_STATUS_SHELL, // 17
+    AUDIENCE_STATUS_IGNITE, // 18
+    AUDIENCE_STATUS_FIRE, // 19
+    AUDIENCE_STATUS_EAT, // 20
+} BattleAudienceStatus;
+
 typedef struct BattleAudienceMember {
     s32 flags;                 // 0x0
     s32 step;                  // 0x4, sub-step of the current status handler
@@ -84,7 +110,7 @@ typedef struct BattleAudienceMember {
     struct BattleUnit* targetUnit; // 0xEC, the unit the member targets
     s16 targetMemberId;        // 0xF0, index of another member it interacts with
     u8 pad_F2[0xF4 - 0xF2];    // 0xF2, never accessed
-    s32 statusDelay;           // 0xF4, countdown before status 13 -> 3
+    s32 statusDelay;           // 0xF4, countdown before AUDIENCE_STATUS_SLEEP -> AUDIENCE_STATUS_WAIT_JUMP
     s32 interpFramesLeft;      // 0xF8
     s32 interpFramesTotal;     // 0xFC
     f32 startPosX;             // 0x100
@@ -97,7 +123,7 @@ typedef struct BattleAudienceMember {
     f32 interpGravity;         // 0x124
     s32 interpType;            // 0x128
     union {
-        s32 statusTimer;       // 0x12C, set to 5 and counted down while status == 18
+        s32 statusTimer;       // 0x12C, set to 5 and counted down while status == AUDIENCE_STATUS_IGNITE
         f32 bobAngle;          // 0x12C, kinopio bob phase (radians)
     };
     f32 bobOffset;             // 0x130, type 2: 5 * sin(phase) added to the drawn y
