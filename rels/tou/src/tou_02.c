@@ -76,7 +76,6 @@ typedef struct FanWork {
     s32 sfxId;
     u8 vol;
 } FanWork;
-typedef struct FanData { const char* name; const char* anim; f32 rate; } FanData;
 FanWork* fan_wp;
 static void pose_init(void);
 static void pose_change(Fan* fan, const char* name, const char* anim);
@@ -186,7 +185,7 @@ int __cvt_ull_flt();
 static void pose_init(void) {
     char name[32];
     char anim[32];
-    FanData* d = (FanData*)ext_fan_data;
+    ExtTexInfo* d = ext_fan_data;
     s32 i = 0;
     s32 start;
 
@@ -194,8 +193,8 @@ static void pose_init(void) {
     strcpy(anim, "");
     fan_wp->animNum = -1;
     do {
-        if (strcmp(d->name, name) != 0) {
-            strcpy(name, d->name);
+        if (strcmp(d->group, name) != 0) {
+            strcpy(name, d->group);
             strcpy(anim, "");
         }
         if (strcmp(d->anim, anim) != 0) {
@@ -207,11 +206,11 @@ static void pose_init(void) {
         strcpy(fan_wp->anim[fan_wp->animNum].anim, anim);
         fan_wp->anim[fan_wp->animNum].start = start;
         fan_wp->anim[fan_wp->animNum].count = i - start + 1;
-        fan_wp->anim[fan_wp->animNum].rate = d->rate;
+        fan_wp->anim[fan_wp->animNum].rate = d->frame;
         fan_wp->anim[fan_wp->animNum].loop = 1;
         i++;
         d++;
-    } while (d->name != NULL);
+    } while (d->group != NULL);
     fan_wp->animNum++;
 }
 

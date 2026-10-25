@@ -89,7 +89,6 @@ typedef struct KyakuWork {
     s32 animNum;
     KyakuAnim anim[32];
 } KyakuWork;
-typedef struct KyakuData { const char* name; const char* anim; f32 rate; } KyakuData;
 static s32 tou_03_bss_0xC;
 KyakuWork* kyaku_wp;
 static ScreenWork* screen_wp;
@@ -376,7 +375,7 @@ s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall) {
 static void pose_init(void) {
     char name[32];
     char anim[32];
-    KyakuData* d = (KyakuData*)ext_kyaku_data;
+    ExtTexInfo* d = ext_kyaku_data;
     s32 i = 0;
     s32 start;
 
@@ -384,8 +383,8 @@ static void pose_init(void) {
     strcpy(anim, "");
     kyaku_wp->animNum = -1;
     do {
-        if (strcmp(d->name, name) != 0) {
-            strcpy(name, d->name);
+        if (strcmp(d->group, name) != 0) {
+            strcpy(name, d->group);
             strcpy(anim, "");
         }
         if (strcmp(d->anim, anim) != 0) {
@@ -397,11 +396,11 @@ static void pose_init(void) {
         strcpy(kyaku_wp->anim[kyaku_wp->animNum].anim, anim);
         kyaku_wp->anim[kyaku_wp->animNum].start = start;
         kyaku_wp->anim[kyaku_wp->animNum].count = i - start + 1;
-        kyaku_wp->anim[kyaku_wp->animNum].rate = d->rate;
+        kyaku_wp->anim[kyaku_wp->animNum].rate = d->frame;
         kyaku_wp->anim[kyaku_wp->animNum].loop = 1;
         i++;
         d++;
-    } while (d->name != NULL);
+    } while (d->group != NULL);
     kyaku_wp->animNum++;
 }
 #pragma dont_inline reset

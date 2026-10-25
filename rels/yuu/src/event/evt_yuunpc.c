@@ -72,7 +72,6 @@ typedef struct YuuNpcWork {
     YuuNpcPose pose[32];
 } YuuNpcWork;
 static YuuNpcWork* yuunpc_wp;
-typedef struct YuuNpcData { const char* name; const char* anim; f32 frames; } YuuNpcData;
 s32 yuunpc_pose_check(const char* name, const char* anim);
 void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame);
 f32 yuusintbl[450];
@@ -103,7 +102,7 @@ void ext_yuunpc_minigame2_init(void);
 void ext_yuunpc_minigame1_init(void);
 void yuunpc_set_jump_pose(const char* name, const char* anim, f32 jump);
 void yuunpc_pose_change2(YuuNpc* npc, const char* name, const char* anim, f32 speed);
-void yuunpc_pose_init(YuuNpcData* data);
+void yuunpc_pose_init(ExtTexInfo* data);
 void yuunpc_maphit_init(void);
 
 ExtTexInfo ext_yuunpc_minigame1_data[6];
@@ -324,7 +323,7 @@ void yuunpc_maphit_init(void) {
     }
 }
 
-void yuunpc_pose_init(YuuNpcData* data) {
+void yuunpc_pose_init(ExtTexInfo* data) {
     char name[32];
     char anim[32];
     s32 n = 0;
@@ -335,8 +334,8 @@ void yuunpc_pose_init(YuuNpcData* data) {
     strcpy(anim, "");
     yuunpc_wp->numPoses = -1;
     do {
-        if (strcmp(data->name, name) != 0) {
-            strcpy(name, data->name);
+        if (strcmp(data->group, name) != 0) {
+            strcpy(name, data->group);
             strcpy(anim, "");
         }
         if (strcmp(data->anim, anim) != 0) {
@@ -354,16 +353,16 @@ void yuunpc_pose_init(YuuNpcData* data) {
         yuunpc_wp->pose[yuunpc_wp->numPoses].jump = 0.0f;
         yuunpc_wp->pose[yuunpc_wp->numPoses].walkAnimSpeed = 2.0f;
         data++;
-    } while (data->name != NULL);
+    } while (data->group != NULL);
     data++;
     yuunpc_wp->numPoses++;
     yuunpc_wp->basePoseNum = yuunpc_wp->numPoses;
-    while (data->name != NULL) {
-        strcpy(yuunpc_wp->pose[yuunpc_wp->numPoses].name, data->name);
+    while (data->group != NULL) {
+        strcpy(yuunpc_wp->pose[yuunpc_wp->numPoses].name, data->group);
         strcpy(yuunpc_wp->pose[yuunpc_wp->numPoses].anim, data->anim);
         yuunpc_wp->pose[yuunpc_wp->numPoses].start = start;
         yuunpc_wp->pose[yuunpc_wp->numPoses].count = 1;
-        yuunpc_wp->pose[yuunpc_wp->numPoses].frames = data->frames;
+        yuunpc_wp->pose[yuunpc_wp->numPoses].frames = data->frame;
         data++;
         yuunpc_wp->pose[yuunpc_wp->numPoses].field_0x18 = 1;
         yuunpc_wp->pose[yuunpc_wp->numPoses].jump = 0.0f;
@@ -557,7 +556,7 @@ void ext_yuunpc_minigame1_init(void) {
     yuunpc_wp->numNpc = extGetPoseNum();
     yuunpc_wp->npcs = _mapAlloc(yuunpc_wp->numNpc * sizeof(YuuNpc));
     memset(yuunpc_wp->npcs, 0, yuunpc_wp->numNpc * sizeof(YuuNpc));
-    yuunpc_pose_init((YuuNpcData*)ext_yuunpc_minigame1_data);
+    yuunpc_pose_init(ext_yuunpc_minigame1_data);
     ext = extGetPosePtr();
     npc = yuunpc_wp->npcs;
     for (i = 0; i < yuunpc_wp->numNpc; i++, ext++, npc++) {
@@ -666,7 +665,7 @@ void ext_yuunpc_minigame2_init(void) {
     yuunpc_wp->numNpc = extGetPoseNum();
     yuunpc_wp->npcs = _mapAlloc(yuunpc_wp->numNpc * sizeof(YuuNpc));
     memset(yuunpc_wp->npcs, 0, yuunpc_wp->numNpc * sizeof(YuuNpc));
-    yuunpc_pose_init((YuuNpcData*)ext_yuunpc_minigame2_data);
+    yuunpc_pose_init(ext_yuunpc_minigame2_data);
     ext = extGetPosePtr();
     npc = yuunpc_wp->npcs;
     for (i = 0; i < yuunpc_wp->numNpc; i++, ext++, npc++) {
@@ -783,7 +782,7 @@ void ext_yuunpc_minigame3_init(void) {
     yuunpc_wp->numNpc = extGetPoseNum();
     yuunpc_wp->npcs = _mapAlloc(yuunpc_wp->numNpc * sizeof(YuuNpc));
     memset(yuunpc_wp->npcs, 0, yuunpc_wp->numNpc * sizeof(YuuNpc));
-    yuunpc_pose_init((YuuNpcData*)ext_yuunpc_minigame3_data);
+    yuunpc_pose_init(ext_yuunpc_minigame3_data);
     ext = extGetPosePtr();
     npc = yuunpc_wp->npcs;
     for (i = 0; i < yuunpc_wp->numNpc; i++, ext++, npc++) {
@@ -1075,7 +1074,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
     yuunpc_wp->numNpc = extGetPoseNum();
     yuunpc_wp->npcs = npc;
     memset(yuunpc_wp->npcs, 0, yuunpc_wp->numNpc * sizeof(YuuNpc));
-    yuunpc_pose_init((YuuNpcData*)ext_yuunpc_minigame4_data);
+    yuunpc_pose_init(ext_yuunpc_minigame4_data);
     yuunpc_set_jump_pose("c_kinopio", "KNP_R_1", 5.0f);
     yuunpc_set_jump_pose("c_bom_n", "R_1", 5.0f);
     yuunpc_set_jump_pose("c_tyusan", "CHU_R_1", 4.0f);

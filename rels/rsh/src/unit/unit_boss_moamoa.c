@@ -66,7 +66,6 @@ typedef struct MoamoaWork {
     f32 targetScale;
     f32 scale;
 } MoamoaWork;
-typedef struct MoamoaExtData { const char* anim; const char* pose; f32 speed; } MoamoaExtData;
 static MoamoaWork* wp;
 void moamoa_mainUnitIdClear(void);
 static f32 randf(f32 min, f32 max);
@@ -998,7 +997,7 @@ USER_FUNC(moamoa_on) {
     s32 i;
     s32 j;
     Moamoa* elem;
-    MoamoaExtData* d;
+    ExtTexInfo* d;
     AnimationPose* ap;
     Vec* p;
     s32 start;
@@ -1075,18 +1074,18 @@ USER_FUNC(moamoa_on) {
             }
         }
     }
-    d = (MoamoaExtData*)ext_moamoa_data;
+    d = ext_moamoa_data;
     j = 0;
     strcpy(anim, "");
     strcpy(pose, "");
     wp->numGroups = -1;
     do {
-        if (strcmp(d->anim, anim) != 0) {
-            strcpy(anim, d->anim);
+        if (strcmp(d->group, anim) != 0) {
+            strcpy(anim, d->group);
             strcpy(pose, "");
         }
-        if (strcmp(d->pose, pose) != 0) {
-            strcpy(pose, d->pose);
+        if (strcmp(d->anim, pose) != 0) {
+            strcpy(pose, d->anim);
             start = j;
             wp->numGroups++;
         }
@@ -1097,10 +1096,10 @@ USER_FUNC(moamoa_on) {
         if (elem->type >= 2 && elem->type != 10) {
             wp->groups[wp->numGroups].speed = 12.0f;
         } else {
-            wp->groups[wp->numGroups].speed = d->speed;
+            wp->groups[wp->numGroups].speed = d->frame;
         }
         j++;
-    } while ((++d)->anim != NULL);
+    } while ((++d)->group != NULL);
     wp->numGroups++;
     for (i = 0; i < wp->numGroups; i++) {
     }

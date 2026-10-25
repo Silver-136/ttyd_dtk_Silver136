@@ -56,7 +56,6 @@ typedef struct MoamoaWork {
     s32 numDefs;
     MoamoaPoseDef defs[32];
 } MoamoaWork;
-typedef struct MoamoaData { const char* model; const char* anim; f32 speed; } MoamoaData;
 static MoamoaWork* wp;
 static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
@@ -180,7 +179,7 @@ ExtTexInfo moamoa_data[] = {
 
 #pragma dont_inline on
 static void moamoa_pose_init(void) {
-    MoamoaData* data = (MoamoaData*)moamoa_data;
+    ExtTexInfo* data = moamoa_data;
     s32 i = 0;
     s32 start;
     char model[32];
@@ -190,8 +189,8 @@ static void moamoa_pose_init(void) {
     strcpy(anim, "");
     wp->numDefs = -1;
     do {
-        if (strcmp(data->model, model)) {
-            strcpy(model, data->model);
+        if (strcmp(data->group, model)) {
+            strcpy(model, data->group);
             strcpy(anim, "");
         }
         if (strcmp(data->anim, anim)) {
@@ -203,13 +202,13 @@ static void moamoa_pose_init(void) {
         strcpy(wp->defs[wp->numDefs].anim, anim);
         wp->defs[wp->numDefs].start = start;
         wp->defs[wp->numDefs].count = i - start + 1;
-        wp->defs[wp->numDefs].speed = data->speed;
+        wp->defs[wp->numDefs].speed = data->frame;
         wp->defs[wp->numDefs].loop = 1;
         if (!strncmp(anim, "J", 1)) {
             wp->defs[wp->numDefs].loop = 0;
         }
         i++;
-    } while ((++data)->model != NULL);
+    } while ((++data)->group != NULL);
     wp->numDefs++;
 }
 
