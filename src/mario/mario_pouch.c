@@ -763,7 +763,7 @@ s32 pouchGetCoin(void) {
     return mpp->coins;
 }
 
-s16 pouchAddCoin(s16 coins) {
+s32 pouchAddCoin(s32 coins) {
     mpp->coins += coins;
     if (mpp->coins < 0) {
         mpp->coins = 0;
@@ -818,11 +818,11 @@ s32 pouchGetHP(void) {
     return mpp->currentHP;
 }
 
-s16 pouchGetMaxHP(void) {
+s32 pouchGetMaxHP(void) {
     return mpp->maximumHP;
 }
 
-void pouchSetHP(s16 points) {
+void pouchSetHP(s32 points) {
     mpp->currentHP = points;
     if (mpp->currentHP > mpp->maximumHP) {
         mpp->currentHP = mpp->maximumHP;
@@ -838,7 +838,7 @@ s32 pouchGetPartyHP(PartyId partnerId) {
     return mpp->partyData[partnerId].currentHP;
 }
 
-void pouchSetPartyHP(PartyId partnerId, s16 points) {
+void pouchSetPartyHP(s32 partnerId, s32 points) {
     PouchPartyData* party;
 
     mpp->partyData[partnerId].currentHP = points;
@@ -852,11 +852,11 @@ s32 pouchGetFP(void) {
     return mpp->currentFP;
 }
 
-s16 pouchGetMaxFP(void) {
+s32 pouchGetMaxFP(void) {
     return mpp->maximumFP;
 }
 
-void pouchSetFP(s16 points) {
+void pouchSetFP(s32 points) {
     mpp->currentFP = points;
     if (mpp->currentFP > mpp->maximumFP) {
         mpp->currentFP = mpp->maximumFP;
@@ -872,7 +872,7 @@ s32 pouchGetAP(void) {
     return mpp->currentSP;
 }
 
-void pouchAddAP(s16 points) {
+void pouchAddAP(s32 points) {
     mpp->currentSP += points;
     if (mpp->currentSP < 0) {
         mpp->currentSP = 0;
@@ -882,7 +882,7 @@ void pouchAddAP(s16 points) {
     }
 }
 
-void pouchSetAP(s16 points) {
+void pouchSetAP(s32 points) {
     mpp->currentSP = points;
     if (mpp->currentSP < 0) {
         mpp->currentSP = 0;
@@ -892,7 +892,7 @@ void pouchSetAP(s16 points) {
     }
 }
 
-s16 pouchGetMaxAP(void) {
+s32 pouchGetMaxAP(void) {
     return mpp->maximumSP;
 }
 
@@ -1105,7 +1105,7 @@ s32 pouchGetKpaCoin(void) {
     return mpp->mSuperBowserCoins;
 }
 
-BOOL pouchAddKpaCoin(u8 coins) {
+BOOL pouchAddKpaCoin(s32 coins) {
     BOOL ret = FALSE;
     mpp->mSuperBowserCoins += coins;
     if (mpp->mSuperBowserCoins >= 100) {
@@ -1230,26 +1230,26 @@ s32 pouchGetHammerLv(void);
 s32 pouchGetJumpLv(void);
 void pouchSetAudienceNum(f32 num);
 f32 pouchGetAudienceNum(void);
-s16 pouchGetMaxAP(void);
-void pouchSetAP(s16 points);
-void pouchAddAP(s16 points);
+s32 pouchGetMaxAP(void);
+void pouchSetAP(s32 points);
+void pouchAddAP(s32 points);
 s32 pouchGetAP(void);
 void pouchSetMaxFP(s16 points);
-void pouchSetFP(s16 points);
-s16 pouchGetMaxFP(void);
+void pouchSetFP(s32 points);
+s32 pouchGetMaxFP(void);
 s32 pouchGetFP(void);
-void pouchSetPartyHP(PartyId partnerId, s16 points);
+void pouchSetPartyHP(s32 partnerId, s32 points);
 s32 pouchGetPartyHP(PartyId partnerId);
 void pouchSetMaxHP(s16 points);
-void pouchSetHP(s16 points);
-s16 pouchGetMaxHP(void);
+void pouchSetHP(s32 points);
+s32 pouchGetMaxHP(void);
 s32 pouchGetHP(void);
 s16 pouchAddStarPiece(s16 count);
 s32 pouchGetStarPiece(void);
 s16 pouchSetSuperCoin(s16 count);
 s32 pouchGetSuperCoin(void);
 s32 pouchSetCoin(s32 coins);
-s16 pouchAddCoin(s16 coins);
+s32 pouchAddCoin(s32 coins);
 s32 pouchGetCoin(void);
 void pouchSortItem(s32 mode);
 s32 comp_kind_r(s16* a, s16* b);

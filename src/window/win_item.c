@@ -578,14 +578,14 @@ s32 winItemMain(WindowWork* w) {
                 }
             }
             if (w->item.useTarget < 1) {
-                ((void (*)(s32))pouchSetHP)(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
-                ((void (*)(s32))pouchSetFP)(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
-                ((void (*)(s32))pouchSetAP)(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
+                pouchSetHP(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
+                pouchSetFP(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
+                pouchSetAP(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
             } else {
                 party = list[w->item.useTarget - 1]->partyId;
-                ((void (*)(s32, s32))pouchSetPartyHP)(party, pouchGetPartyHP(party) + itemDataTable[w->item.useItem].hp_restored);
-                ((void (*)(s32))pouchSetFP)(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
-                ((void (*)(s32))pouchSetAP)(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
+                pouchSetPartyHP(party, pouchGetPartyHP(party) + itemDataTable[w->item.useItem].hp_restored);
+                pouchSetFP(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
+                pouchSetAP(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
             }
             w->item.blink = 0;
             w->item.state = 301;
@@ -878,7 +878,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
                 winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetHP());
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", ((s32 (*)(void))pouchGetMaxHP)());
+                winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxHP());
                 if (itemDataTable[w->item.useItem].fp_restored) {
                     if (w->item.blink % 20 > 15) {
                         continue;
@@ -889,7 +889,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_FP_NAME);
                 winFontSetR((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetFP());
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
-                winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", ((s32 (*)(void))pouchGetMaxFP)());
+                winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxFP());
             } else {
                 name = list[i - 1]->partyId != 4 ? msgSearch(list[i - 1]->name) : pouchGetYoshiName();
                 if (w->item.blink % 20 > 15 && i == w->item.useTarget) {

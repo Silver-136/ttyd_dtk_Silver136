@@ -81,7 +81,7 @@ USER_FUNC(kpa_score_disp_init) {
 
 void kpaAddCoin(s32 coins) {
     s32 score;
-    if (((s32 (*)(s32))pouchAddKpaCoin)(coins)) {
+    if (pouchAddKpaCoin(coins)) {
         pouchAddKpaScore(1000);
     }
     score = coins * 500;
@@ -127,7 +127,7 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
 
 void kpaAddCoinPos(s32 coins, Vec* pos) {
     s32 score;
-    if (((s32 (*)(s32))pouchAddKpaCoin)(coins)) {
+    if (pouchAddKpaCoin(coins)) {
         pouchAddKpaScore(1000);
     }
     score = coins * 500;

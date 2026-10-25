@@ -1771,7 +1771,7 @@ USER_FUNC(evt_sub_get_coin) {
         }
         return EVT_RETURN_BLOCK;
     case 100:
-        ((s16 (*)(s32))pouchAddCoin)(coin);
+        pouchAddCoin(coin);
         effSoftDelete(eff);
         iconDelete("iraiCoin");
         marioChgStayMotion();

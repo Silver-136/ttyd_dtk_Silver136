@@ -3426,7 +3426,7 @@ static inline void bec_coin(BattleUnit* unit, s32 item) {
     if (unit->badgesEquipped.Refund) {
         coins = (s32)((f32)(unit->badgesEquipped.Refund * 5 + 70) * (f32)itemDataTable[item].sell_price / 100.0f);
         if (coins > 0) {
-            ((void (*)(s32))pouchAddCoin)(coins);
+            pouchAddCoin(coins);
             BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
             ((void (*)(s32, s32, f32, f32, f32, f32))effCoinN64Entry)(0, 0, pos.x, pos.y, pos.z, 1.0f);
         }
@@ -3659,7 +3659,7 @@ USER_FUNC(btlevtcmd_ConsumeItemReserve) {
         if (unit->badgesEquipped.Refund) {
             coins = (s32)((f32)(unit->badgesEquipped.Refund * 5 + 70) * (f32)itemDataTable[item].sell_price / 100.0f);
             if (coins > 0) {
-                ((void (*)(s32))pouchAddCoin)(coins);
+                pouchAddCoin(coins);
                 BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
                 ((void (*)(s32, s32, f32, f32, f32, f32))effCoinN64Entry)(0, 0, pos.x, pos.y, pos.z, 1.0f);
             }

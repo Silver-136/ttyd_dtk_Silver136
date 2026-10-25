@@ -25,7 +25,7 @@ typedef s32 (*SetFn)(s32);
     }
 
 GETTER(evt_pouch_get_coin, pouchGetCoin)
-SETTER(evt_pouch_add_coin, RAW_SET(pouchAddCoin))
+SETTER(evt_pouch_add_coin, pouchAddCoin)
 SETTER(evt_pouch_set_coin, pouchSetCoin)
 GETTER(evt_pouch_get_supercoin, RAW_GET(pouchGetSuperCoin))
 SETTER(evt_pouch_set_supercoin, RAW_SET(pouchSetSuperCoin))
@@ -98,9 +98,9 @@ USER_FUNC(evt_pouch_check_item) {
 }
 
 GETTER(L_evt_pouch_get_hp, RAW_GET(pouchGetHP))
-SETTER(L_evt_pouch_set_hp, RAW_SET(pouchSetHP))
-GETTER(evt_pouch_get_max_ap, RAW_GET(pouchGetMaxAP))
-SETTER(evt_pouch_set_ap, RAW_SET(pouchSetAP))
+SETTER(L_evt_pouch_set_hp, pouchSetHP)
+GETTER(evt_pouch_get_max_ap, pouchGetMaxAP)
+SETTER(evt_pouch_set_ap, pouchSetAP)
 SETTER(evt_pouch_party_join, partyJoin)
 SETTER(evt_pouch_party_left, partyLeft)
 

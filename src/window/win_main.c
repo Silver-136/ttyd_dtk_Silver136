@@ -789,13 +789,13 @@ USER_FUNC(itemUseFunc) {
         case 0:
             statusWinForceOpen();
             if (event->lwData[11] == 0) {
-                ((void (*)(s32))pouchSetHP)(pouchGetHP() + item->hp_restored);
-                ((void (*)(s32))pouchSetFP)(pouchGetFP() + item->fp_restored);
-                ((void (*)(s32))pouchSetAP)(pouchGetAP() + item->sp_restored);
+                pouchSetHP(pouchGetHP() + item->hp_restored);
+                pouchSetFP(pouchGetFP() + item->fp_restored);
+                pouchSetAP(pouchGetAP() + item->sp_restored);
             } else {
-                ((void (*)(s32, s32))pouchSetPartyHP)(event->lwData[11], pouchGetPartyHP(event->lwData[11]) + item->hp_restored);
-                ((void (*)(s32))pouchSetFP)(pouchGetFP() + item->fp_restored);
-                ((void (*)(s32))pouchSetAP)(pouchGetAP() + item->sp_restored);
+                pouchSetPartyHP(event->lwData[11], pouchGetPartyHP(event->lwData[11]) + item->hp_restored);
+                pouchSetFP(pouchGetFP() + item->fp_restored);
+                pouchSetAP(pouchGetAP() + item->sp_restored);
             }
             cnt++;
             break;

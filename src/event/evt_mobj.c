@@ -2142,7 +2142,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
                     party->currentHP = party->maximumHP;
                 }
             }
-            ((s32 (*)(s32))pouchAddCoin)(-kind);
+            pouchAddCoin(-kind);
         }
         mobj->timer--;
         if (mobj->timer <= 0) {

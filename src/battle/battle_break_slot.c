@@ -457,7 +457,7 @@ void BattleBreakSlot_Main(void) {
                         break;
                     case 4:
                         evtEntry(doku_kinoko_effect, 0, EVENT_START_IMMEDIATE);
-                        ((void (*)(s32))pouchSetAP)(pouchGetAP() / 2);
+                        pouchSetAP(pouchGetAP() / 2);
                         break;
                 }
             }

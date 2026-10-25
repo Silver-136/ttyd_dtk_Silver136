@@ -1861,7 +1861,7 @@ void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {
         BtlActRec_AddPoint(&wp->actRecord.partnerFpSpent, cost);
         BtlActRec_AddCount(&wp->actRecord.partnerFpMoves);
     }
-    ((void (*)(s32))pouchAddAP)(-(u8)weapon->baseSpCost * 100);
+    pouchAddAP(-(u8)weapon->baseSpCost * 100);
 }
 
 BattleUnit* BtlUnit_GetGuardKouraPtr(BattleUnit* unit) {
