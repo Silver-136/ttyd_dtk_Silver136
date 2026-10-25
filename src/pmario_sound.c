@@ -6539,9 +6539,9 @@ void psndENVMain(void) {
     {                                                                                        \
         u8 vol;                                                                              \
         u16 lpf;                                                                             \
-        ENVVOL(e, &psnd, vol)                                                                \
+        ENVVOL(ent, &psnd, vol)                                                                \
         {                                                                                    \
-            s32 id = *(s32*)&e->sfx;                                                         \
+            s32 id = *(s32*)&ent->sfx;                                                         \
             PaperSoundEffect* sfx;                                                           \
             if (id != 0xFFFFFFFF) {                                                          \
                 sfx = &pssfx[id & 0xFF];                                                     \
@@ -6551,10 +6551,10 @@ void psndENVMain(void) {
             }                                                                                \
         }                                                                                    \
         lpf = 0;                                                                             \
-        if (psnd.envId[0] == e->id) lpf = psnd.envLpf[0];                                    \
-        if (psnd.envId[1] == e->id) lpf = psnd.envLpf[1];                                    \
+        if (psnd.envId[0] == ent->id) lpf = psnd.envLpf[0];                                    \
+        if (psnd.envId[1] == ent->id) lpf = psnd.envLpf[1];                                    \
         {                                                                                    \
-            s32 id = e->sfx;                                                                 \
+            s32 id = ent->sfx;                                                                 \
             PaperSoundEffect* sfx;                                                           \
             if (id != 0xFFFFFFFF) {                                                          \
                 sfx = &pssfx[id & 0xFF];                                                     \
@@ -6574,17 +6574,15 @@ void psndENVMain(void) {
         }                                                                                    \
     }
     for (i = 0; i < 16; i++) {
-#define e ent
         ent = &psenv[i];
-        if (e->id == 0 || e->sfx == -1) continue;
-        switch (e->type) {
-        case 0: switch (e->state) { case 2: ENVAPPLY } break;
-        case 1: switch (e->state) { case 1: ENVAPPLY } break;
-        case 2: switch (e->state) { case 2: ENVAPPLY } break;
-        case 3: switch (e->state) { case 1: ENVAPPLY } break;
+        if (ent->id == 0 || ent->sfx == -1) continue;
+        switch (ent->type) {
+        case 0: switch (ent->state) { case 2: ENVAPPLY } break;
+        case 1: switch (ent->state) { case 1: ENVAPPLY } break;
+        case 2: switch (ent->state) { case 2: ENVAPPLY } break;
+        case 3: switch (ent->state) { case 1: ENVAPPLY } break;
         }
     }
-#undef e
 #undef ENVAPPLY
     { s32 j;
     for (i = 0; i < 2; i++) {
@@ -6615,8 +6613,6 @@ void psndENVMain(void) {
     }
     }
 }
-#define psnd psnd
-#undef psnd
 
 BOOL psndENVOn(u32 flags, const char* name) {
     return psndENVOn_f_d(flags, name, 1000, 0);

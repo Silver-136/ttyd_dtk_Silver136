@@ -72,7 +72,6 @@ typedef struct MonteTable {
 } MonteTable;
 static void* yuunpc_wp;
 static Monte* monte_p;
-#define MONTETABLE (montetable)
 static void monte_disp(CameraId camera, void* param);
 
 USER_FUNC(eff_call_minigame);
@@ -1151,8 +1150,8 @@ static USER_FUNC(fall_rtn) {
             exists = TRUE;
         }
         total = 0;
-        for (i = 0; MONTETABLE[i].num; i++) {
-            total += MONTETABLE[i].num;
+        for (i = 0; montetable[i].num; i++) {
+            total += montetable[i].num;
         }
         monte_p = _mapAlloc(total * sizeof(Monte));
         memset(monte_p, 0, total * sizeof(Monte));
@@ -1165,21 +1164,21 @@ static USER_FUNC(fall_rtn) {
             sub = &monte_p[i].sub;
             sub->pos.z = 0.0f;
             do {
-                if (MONTETABLE[t].x0 < MONTETABLE[t].x1) {
-                    lo = MONTETABLE[t].x0;
-                    hi = MONTETABLE[t].x1;
+                if (montetable[t].x0 < montetable[t].x1) {
+                    lo = montetable[t].x0;
+                    hi = montetable[t].x1;
                 } else {
-                    lo = MONTETABLE[t].x1;
-                    hi = MONTETABLE[t].x0;
+                    lo = montetable[t].x1;
+                    hi = montetable[t].x0;
                 }
                 hi -= lo;
                 sub->pos.x = lo + randRange(hi);
-                if (MONTETABLE[t].y0 < MONTETABLE[t].y1) {
-                    lo = MONTETABLE[t].y0;
-                    hi = MONTETABLE[t].y1;
+                if (montetable[t].y0 < montetable[t].y1) {
+                    lo = montetable[t].y0;
+                    hi = montetable[t].y1;
                 } else {
-                    lo = MONTETABLE[t].y1;
-                    hi = MONTETABLE[t].y0;
+                    lo = montetable[t].y1;
+                    hi = montetable[t].y0;
                 }
                 hi -= lo;
                 sub->pos.y = lo + randRange(hi);
@@ -1190,7 +1189,7 @@ static USER_FUNC(fall_rtn) {
                     }
                 }
             } while (j != k);
-            if (++k >= MONTETABLE[t].num) {
+            if (++k >= montetable[t].num) {
                 k = 0;
                 t++;
             }

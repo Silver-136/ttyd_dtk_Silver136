@@ -63,7 +63,6 @@ USER_FUNC(evt_msg_fmt_str);
 typedef struct FuwaTable { f32 v[40]; } FuwaTable;
 static const FuwaTable fuwa_table = {{0.0f, 0.5f, 1.0f, 1.4f, 1.8f, 2.0f, 2.3f, 2.5f, 2.6f, 2.7f, 2.7f, 2.7f, 2.6f, 2.5f, 2.3f, 2.0f, 1.8f, 1.4f, 1.0f, 0.5f, -0.0f, -0.5f, -1.0f, -1.4f, -1.8f, -2.0f, -2.3f, -2.5f, -2.6f, -2.7f, -2.7f, -2.7f, -2.6f, -2.5f, -2.3f, -2.0f, -1.8f, -1.4f, -1.0f, -0.5f}};
 typedef struct ExchangeRyokin { s32 ryokin; s32 medal; } ExchangeRyokin;
-#define RYOKIN_TBL ((ExchangeRyokin(*)[3])exchange_ryokin_medal_tbl)
 s32 exchange_ret_tbl_no(void);
 s32 yuugijou_montemedal_keep(EventEntry* event, BOOL isFirstCall);
 void monteCountDisp(void);
@@ -129,9 +128,7 @@ typedef struct SlotDrum {
     const char* neon[3];
 } SlotDrum;
 void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel);
-#define UPSIDEGARA ((s32(*)[3][8])upsidegara)
 void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel);
-#define SLOTGARA ((s32(*)[3][8])slotgara)
 s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);
 void slot_neon_sub(GoryuuWork* wp, SlotWork* data);
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
@@ -294,7 +291,7 @@ EvtWord exchange_keep_sub[VERSION_PICK(111, 132)];
 EvtWord gor_03_dokan_init_evt[35];
 EvtWord gor_03_dokan_up_evt[60];
 EvtWord gor_03_dokan_down_evt[63];
-s32 exchange_ryokin_medal_tbl[54];
+ExchangeRyokin exchange_ryokin_medal_tbl[9][3];
 EvtWord bteresa_talk_sub_minigame[245];
 EvtWord bteresa_talk_sub_keihin[VERSION_PICK(220, 242)];
 EvtWord bteresa_table_talk[437];
@@ -311,8 +308,8 @@ EvtWord slot1_set[7];
 EvtWord slot2_set[7];
 SlotDrum drumname[2];
 EvtWord* slotevttbl[2];
-s32 slotgara[48];
-s32 upsidegara[48];
+s32 slotgara[2][3][8];
+s32 upsidegara[2][3][8];
 EvtWord ranking_set[65];
 EvtWord exchange_set[VERSION_PICK(195, 210)];
 EvtWord roten_4_init[13];
@@ -476,13 +473,11 @@ s32 exchange_ret_tbl_no(void) {
 
 USER_FUNC(exchange_ryokin_medal) {
     EvtWord* args = event->args;
-    ExchangeRyokin (*tbl)[3];
     s32 idx = evtGetValue(event, args[0]);
     s32 no = exchange_ret_tbl_no();
 
-    evtSetValue(event, args[1], RYOKIN_TBL[no][idx].ryokin);
-    tbl = RYOKIN_TBL; // FAKE: table pointer reloaded right before use; direct RYOKIN_TBL[no][idx] is 12 B shorter
-    evtSetValue(event, args[2], tbl[no][idx].medal);
+    evtSetValue(event, args[1], exchange_ryokin_medal_tbl[no][idx].ryokin);
+    evtSetValue(event, args[2], exchange_ryokin_medal_tbl[no][idx].medal);
     return EVT_RETURN_DONE;
 }
 
@@ -509,12 +504,12 @@ USER_FUNC(evt_exchange_msg_set) {
 
 #ifdef VERSION_G8ME01
     if ((u32)gp->language == 0) {
-        sprintf(exchange_msgp, msg, value, exchange_ryokin_medal_tbl[n * 6 + 1], exchange_ryokin_medal_tbl[n * 6], exchange_ryokin_medal_tbl[n * 6 + 3], exchange_ryokin_medal_tbl[n * 6 + 2], exchange_ryokin_medal_tbl[n * 6 + 5], exchange_ryokin_medal_tbl[n * 6 + 4]);
+        sprintf(exchange_msgp, msg, value, exchange_ryokin_medal_tbl[n][0].medal, exchange_ryokin_medal_tbl[n][0].ryokin, exchange_ryokin_medal_tbl[n][1].medal, exchange_ryokin_medal_tbl[n][1].ryokin, exchange_ryokin_medal_tbl[n][2].medal, exchange_ryokin_medal_tbl[n][2].ryokin);
     } else {
         sprintf(exchange_msgp, msg, value);
     }
 #else
-    sprintf(exchange_msgp, msg, value, exchange_ryokin_medal_tbl[n * 6 + 1], exchange_ryokin_medal_tbl[n * 6], exchange_ryokin_medal_tbl[n * 6 + 3], exchange_ryokin_medal_tbl[n * 6 + 2], exchange_ryokin_medal_tbl[n * 6 + 5], exchange_ryokin_medal_tbl[n * 6 + 4]);
+    sprintf(exchange_msgp, msg, value, exchange_ryokin_medal_tbl[n][0].medal, exchange_ryokin_medal_tbl[n][0].ryokin, exchange_ryokin_medal_tbl[n][1].medal, exchange_ryokin_medal_tbl[n][1].ryokin, exchange_ryokin_medal_tbl[n][2].medal, exchange_ryokin_medal_tbl[n][2].ryokin);
 #endif
     evtSetValue(event, args[2], (EvtWord)exchange_msgp);
     return EVT_RETURN_DONE;
@@ -2209,14 +2204,16 @@ EVT_BEGIN(gor_03_dokan_down_evt)
     RETURN
 EVT_END()
 
-s32 exchange_ryokin_medal_tbl[] = {
-    3, 1, 15, 5, 30, 10, 3, 1,
-    15, 5, 30, 10, 3, 1, 15, 5,
-    30, 10, 3, 1, 15, 5, 30, 10,
-    3, 1, 15, 5, 30, 10, 3, 1,
-    15, 5, 30, 10, 3, 1, 15, 5,
-    30, 10, 3, 1, 15, 5, 30, 10,
-    3, 1, 15, 5, 30, 10,
+ExchangeRyokin exchange_ryokin_medal_tbl[][3] = {
+    {{3, 1}, {15, 5}, {30, 10}},
+    {{3, 1}, {15, 5}, {30, 10}},
+    {{3, 1}, {15, 5}, {30, 10}},
+    {{3, 1}, {15, 5}, {30, 10}},
+    {{3, 1}, {15, 5}, {30, 10}},
+    {{3, 1}, {15, 5}, {30, 10}},
+    {{3, 1}, {15, 5}, {30, 10}},
+    {{3, 1}, {15, 5}, {30, 10}},
+    {{3, 1}, {15, 5}, {30, 10}},
 };
 
 EVT_BEGIN(bteresa_talk_sub_minigame)
@@ -2806,22 +2803,30 @@ EvtWord* slotevttbl[] = {
     slot1_set, slot2_set,
 };
 
-s32 slotgara[] = {
-    0, 0, 2, 0, 1, 1, 0, 1,
-    0, 1, 0, 1, 0, 1, 0, 2,
-    1, 0, 0, 2, 0, 0, 1, 0,
-    0, 0, 2, 0, 1, 1, 0, 1,
-    0, 1, 0, 1, 0, 1, 0, 2,
-    1, 0, 0, 2, 0, 0, 1, 0,
+s32 slotgara[2][3][8] = {
+    {
+        {0, 0, 2, 0, 1, 1, 0, 1},
+        {0, 1, 0, 1, 0, 1, 0, 2},
+        {1, 0, 0, 2, 0, 0, 1, 0},
+    },
+    {
+        {0, 0, 2, 0, 1, 1, 0, 1},
+        {0, 1, 0, 1, 0, 1, 0, 2},
+        {1, 0, 0, 2, 0, 0, 1, 0},
+    },
 };
 
-s32 upsidegara[] = {
-    0, 0, 2, 0, 1, 1, 0, 1,
-    0, 1, 0, 1, 0, 1, 0, 2,
-    1, 0, 0, 2, 0, 0, 1, 0,
-    0, 0, 2, 0, 1, 1, 0, 1,
-    0, 1, 0, 1, 0, 1, 0, 2,
-    1, 0, 0, 2, 0, 0, 1, 0,
+s32 upsidegara[2][3][8] = {
+    {
+        {0, 0, 2, 0, 1, 1, 0, 1},
+        {0, 1, 0, 1, 0, 1, 0, 2},
+        {1, 0, 0, 2, 0, 0, 1, 0},
+    },
+    {
+        {0, 0, 2, 0, 1, 1, 0, 1},
+        {0, 1, 0, 1, 0, 1, 0, 2},
+        {1, 0, 0, 2, 0, 0, 1, 0},
+    },
 };
 
 typedef struct I3 { s32 v[3]; } I3;
@@ -5594,7 +5599,7 @@ USER_FUNC(goryuugijo_door_init_slot) {
             }
             data->angle[i][j] = 45.0f * irand(8);
             mapObjRotate(drumname[i].drum[j], 0.0f, 0.0f, data->angle[i][j]);
-            data->face[i][j] = UPSIDEGARA[i][j][irand(8)];
+            data->face[i][j] = upsidegara[i][j][irand(8)];
             goryuugijo_upsidewindow_disp_sub(i, j);
         }
     }
@@ -5627,10 +5632,10 @@ void slot_neon_sub(GoryuuWork* wp, SlotWork* data) {
         if (data->neonCount & 1) {
             for (i = 0; i < 3; i++) {
                 r = irand(8);
-                while (data->face[data->nowSlot][i] == UPSIDEGARA[data->nowSlot][i][r]) {
+                while (data->face[data->nowSlot][i] == upsidegara[data->nowSlot][i][r]) {
                     r = (r + 1) & 7;
                 }
-                data->face[data->nowSlot][i] = UPSIDEGARA[data->nowSlot][i][r];
+                data->face[data->nowSlot][i] = upsidegara[data->nowSlot][i][r];
                 if (data->flags & 2) {
                     goryuugijo_upsidewindow_disp_sub(data->nowSlot, i);
                 } else {
@@ -5880,7 +5885,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             if (data->counter == 0) {
                 for (i = 0; i < 3; i++) {
                     r = data->angle[data->nowSlot][i] / 45.0f;
-                    gara[i] = SLOTGARA[data->nowSlot][i][r];
+                    gara[i] = slotgara[data->nowSlot][i][r];
                 }
                 if (gara[0] == gara[1] && gara[1] == gara[2]) {
                     data->phase = 6;
@@ -5916,7 +5921,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                     s32 f = data->angle[data->nowSlot][j] / 45.0f;
 
                     for (k = 0; k < 3; k++) {
-                        tbl[k][j] = SLOTGARA[data->nowSlot][j][(f + k - 1) & 7];
+                        tbl[k][j] = slotgara[data->nowSlot][j][(f + k - 1) & 7];
                     }
                 }
                 for (i = 0; i < 3; i++) {
@@ -5987,7 +5992,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             break;}
         case 6:
             for (i = 0; i < 3; i++) {
-                gara2[i] = SLOTGARA[data->nowSlot][i][(s32)(data->angle[data->nowSlot][i] / 45.0f)];
+                gara2[i] = slotgara[data->nowSlot][i][(s32)(data->angle[data->nowSlot][i] / 45.0f)];
             }
             if (gara2[0] == gara2[1] && gara2[1] == gara2[2]) {
                 data->counter = 0;

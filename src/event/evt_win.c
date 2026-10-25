@@ -137,8 +137,10 @@ void unitwin_name_disp(WinMgrEntry* entry) {
     }
 }
 
-#define UNITWIN_UNUSED_INLINE(fn) static void fn(char* buf, const char* name, s32 n) { sprintf(buf, ("%s_%04d"), name, n); }
-UNITWIN_UNUSED_INLINE(unitwin_fmt)
+// never called: the linker strips it, its "%s_%04d" string stays in this object's .rodata (name descriptive)
+static void unitwin_fmt(char* buf, const char* name, s32 n) {
+    sprintf(buf, "%s_%04d", name, n);
+}
 
 void unitwin_help_main(WinMgrEntry* entry) {
     winMgrHelpMain(entry);

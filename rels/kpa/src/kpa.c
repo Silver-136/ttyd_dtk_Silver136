@@ -35,7 +35,6 @@ void kpa_stageclear_disp(CameraId camera, void* param);
 void FontDrawString(f32 x, f32 y, const char* message);
 void kpa_status_disp(CameraId camera, void* param);
 void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
-#define NUMERIC_ID ((u16*)numeric_id)
 s32 kpaMutekiCheck(void);
 f32 kpaGetWidth(s32 type);
 void kpaFireDelete(void);
@@ -63,7 +62,7 @@ EvtWord kpa_dead[168];
 EvtWord kpa_fall_sub[37];
 EvtWord kpa_bgm_change[180];
 EvtWord kpa_stage_start[168];
-s32 numeric_id[5];
+u16 numeric_id[10];
 EvtWord kpa_status_main_evt[9];
 EvtWord kpa_time[88];
 EvtWord kpa_stage_clear[35];
@@ -483,11 +482,11 @@ EVT_BEGIN(kpa_stage_start)
     RETURN
 EVT_END()
 
-s32 numeric_id[] = {
+u16 numeric_id[] = {
 #ifdef VERSION_G8ME01
-    31523299, 31785447, 32047595, 32309743, 32571891,
+    0x1E1, 0x1E3, 0x1E5, 0x1E7, 0x1E9, 0x1EB, 0x1ED, 0x1EF, 0x1F1, 0x1F3,
 #else
-    30999003, 31261151, 31523299, 31785447, 32047595,
+    0x1D9, 0x1DB, 0x1DD, 0x1DF, 0x1E1, 0x1E3, 0x1E5, 0x1E7, 0x1E9, 0x1EB,
 #endif
 };
 
@@ -615,7 +614,7 @@ void kpa_status_disp(CameraId camera, void* param) {
     digit[4] = n / 10;
     digit[5] = n % 10;
     for (i = 0; i < 6; i++) {
-        iconDispGx(1.0f, &pos, 0x10, NUMERIC_ID[digit[i]]);
+        iconDispGx(1.0f, &pos, 0x10, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
     pos.x += 20.0f;
@@ -628,12 +627,12 @@ void kpa_status_disp(CameraId camera, void* param) {
     digit[1] = n % 10;
     pos.x += 20.0f;
     for (i = 0; i < 2; i++) {
-        iconDispGx(1.0f, &pos, 0x10, NUMERIC_ID[digit[i]]);
+        iconDispGx(1.0f, &pos, 0x10, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
 
     pos.x = 50.0f;
-    iconDispGx(1.0f, &pos, 0x10, NUMERIC_ID[kwp->stage]);
+    iconDispGx(1.0f, &pos, 0x10, numeric_id[kwp->stage]);
     pos.x += 20.0f;
     iconDispGx(1.0f, &pos, 0x10, 0x1EE + KPA_ICON_OFS);
 
@@ -642,7 +641,7 @@ void kpa_status_disp(CameraId camera, void* param) {
     digit[1] = n % 10;
     pos.x += 20.0f;
     for (i = digit[0] == 0; i < 2; i++) {
-        iconDispGx(1.0f, &pos, 0x10, NUMERIC_ID[digit[i]]);
+        iconDispGx(1.0f, &pos, 0x10, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
 
@@ -653,7 +652,7 @@ void kpa_status_disp(CameraId camera, void* param) {
     digit[1] = n / 10;
     digit[2] = n % 10;
     for (i = 0; i < 3; i++) {
-        iconDispGx(1.0f, &pos, 0x10, NUMERIC_ID[digit[i]]);
+        iconDispGx(1.0f, &pos, 0x10, numeric_id[digit[i]]);
         pos.x += 20.0f;
     }
 }

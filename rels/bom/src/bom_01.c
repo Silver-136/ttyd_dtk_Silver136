@@ -78,7 +78,6 @@ extern BomSoundWork sound;
 void drawBG(s32 id, f32 x, f32 y, f32 sx, f32 sy, f32 rot);
 void drawNum(s32 num, s32 digits, f32 x, f32 y, f32 scale);
 void disp_sight(CameraId camera, void* param);
-typedef struct ExtAnimDef { const char* file; const char* name; f32 time; } ExtAnimDef;
 typedef struct BomAnim {
     char name[8];
     f32 time;
@@ -109,7 +108,6 @@ typedef struct BomWork {
     Bom bom[1000];
 } BomWork;
 smartEntry* lp;
-#define EXT_DATA ((ExtAnimDef*)ext_data)
 static void pose_change(s32 i, const char* name);
 static ExtTexInfo ext_data[31];
 static inline f32 chb_sin(f32 x) {
@@ -548,18 +546,18 @@ s32 bom_fall(EventEntry* event, BOOL isFirstCall) {
 
 static void pose_init(void) {
     BomWork* wp;
-    ExtAnimDef* def;
+    ExtTexInfo* def;
     char buf[32];
     s32 i;
     s32 start;
     i = 0;
     wp = lp->address;
-    def = EXT_DATA;
+    def = ext_data;
     strcpy(buf, "");
     wp->animCount = -1;
     do {
-        if (strcmp(def->name, buf) != 0) {
-            strcpy(buf, def->name);
+        if (strcmp(def->anim, buf) != 0) {
+            strcpy(buf, def->anim);
             wp->animCount++;
             start = i;
         }
@@ -567,8 +565,8 @@ static void pose_init(void) {
         wp->anims[wp->animCount].start = start;
         wp->anims[wp->animCount].count = i - start + 1;
         i++;
-        wp->anims[wp->animCount].time = def->time;
-    } while ((++def)->file != NULL);
+        wp->anims[wp->animCount].time = def->frame;
+    } while ((++def)->group != NULL);
     wp->animCount++;
 }
 
@@ -612,16 +610,16 @@ s32 make_ext_table(EventEntry* event, BOOL isFirstCall) {
 
     memset(ext_data, 0, sizeof(ext_data));
     for (i = 0; i < 10; i++) {
-        EXT_DATA[i].file = "c_bom_sen";
-        EXT_DATA[i].name = "R_1";
-        EXT_DATA[i].time = 2.0f * i;
+        ext_data[i].group = "c_bom_sen";
+        ext_data[i].anim = "R_1";
+        ext_data[i].frame = 2.0f * i;
     }
     for (i = 0; i < 20; i++) {
-        EXT_DATA[10 + i].file = "c_bom_sen";
-        EXT_DATA[10 + i].name = "S_2";
-        EXT_DATA[10 + i].time = 6.0f * i;
+        ext_data[10 + i].group = "c_bom_sen";
+        ext_data[10 + i].anim = "S_2";
+        ext_data[10 + i].frame = 6.0f * i;
     }
-    EXT_DATA[30].file = NULL;
+    ext_data[30].group = NULL;
     return EVT_RETURN_DONE;
 }
 
@@ -2324,16 +2322,16 @@ s32 make_ext_table_minnnanokoe(EventEntry* event, BOOL isFirstCall) {
 
     memset(ext_data, 0, sizeof(ext_data));
     for (i = 0; i < 10; i++) {
-        EXT_DATA[i].file = "c_bom_sen";
-        EXT_DATA[i].name = "S_1";
-        EXT_DATA[i].time = 4.0f * i;
+        ext_data[i].group = "c_bom_sen";
+        ext_data[i].anim = "S_1";
+        ext_data[i].frame = 4.0f * i;
     }
     for (i = 0; i < 20; i++) {
-        EXT_DATA[10 + i].file = "c_bom_sen";
-        EXT_DATA[10 + i].name = "R_1";
-        EXT_DATA[10 + i].time = 2.0f * i;
+        ext_data[10 + i].group = "c_bom_sen";
+        ext_data[10 + i].anim = "R_1";
+        ext_data[10 + i].frame = 2.0f * i;
     }
-    EXT_DATA[30].file = NULL;
+    ext_data[30].group = NULL;
     return EVT_RETURN_DONE;
 }
 

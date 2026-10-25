@@ -25,9 +25,7 @@
 void FontDrawString(f32 x, f32 y, const char* str);
 void movie_draw(CameraId camera, void* param);
 typedef struct DigAnim { const char* name; u32 mask; s32 anim; } DigAnim;
-#define ANIM_TBL (anim_tbl)
 static s32 work[1];
-#define DIG_WP (wp[0])
 
 USER_FUNC(evt_action_sub);
 USER_FUNC(evt_npc_set_walk_anim);
@@ -86,12 +84,12 @@ void movie_draw(CameraId camera, void* param) {
         FontDrawStart();
         FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         FontDrawString(-FontGetMessageWidth(msg) / 2, 0.0f, msg);
-        (*DIG_WP)++;
+        (*wp[0])++;
     } else {
         width = gp->fbWidth;
         height = gp->efbHeight;
         if (THPSimpleDecode(0) != 1) {
-            *DIG_WP = THPSimpleDrawCurrentFrame(DEMOGetRenderModeObj(), 0, 0, width, height);
+            *wp[0] = THPSimpleDrawCurrentFrame(DEMOGetRenderModeObj(), 0, 0, width, height);
         }
     }
 }
@@ -100,15 +98,15 @@ USER_FUNC(movie) {
     u32 type;
 
     if (isFirstCall) {
-        memset(DIG_WP, 0, 4);
+        memset(wp[0], 0, 4);
         evtSetValue(event, GF(0), FALSE);
     }
     EXIGetType(0, 2, &type);
     if (type != 0x05070000) {
-        if ((u32)*DIG_WP >= THPSimpleGetTotalFrame() - 2) {
+        if ((u32)*wp[0] >= THPSimpleGetTotalFrame() - 2) {
             evtSetValue(event, GF(0), TRUE);
         }
-    } else if (*DIG_WP >= 300) {
+    } else if (*wp[0] >= 300) {
         evtSetValue(event, GF(0), TRUE);
     }
     dispEntry(CAMERA_3D, 0.0f, 3, movie_draw, NULL);
@@ -142,8 +140,8 @@ USER_FUNC(evt_action_sub) {
     rand();
     do {
         idx = (u32)rand() % 48;
-    } while (evtNpcNameToPtr_NoAssert(event, ANIM_TBL[idx].name) != NULL);
-    maskp = &ANIM_TBL[idx].mask;
+    } while (evtNpcNameToPtr_NoAssert(event, anim_tbl[idx].name) != NULL);
+    maskp = &anim_tbl[idx].mask;
     mask = *maskp;
     n = 0;
     for (i = 0; i < 6; i++) {
@@ -160,7 +158,7 @@ USER_FUNC(evt_action_sub) {
             }
         }
     }
-    name = ANIM_TBL[idx].name;
+    name = anim_tbl[idx].name;
     bit = 1 << i;
     EXIGetType(0, 2, &type);
     if (type != 0x05070000) {
@@ -171,7 +169,7 @@ USER_FUNC(evt_action_sub) {
         evtSetValue(event, *args++, (EvtWord)"\202\311\202\271\203}\203\212\203I\202Q");
     }
     evtSetValue(event, *args++, bit);
-    evtSetValue(event, *args++, ANIM_TBL[idx].anim);
+    evtSetValue(event, *args++, anim_tbl[idx].anim);
     return EVT_RETURN_DONE;
 }
 

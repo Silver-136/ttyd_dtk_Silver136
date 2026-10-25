@@ -54,7 +54,6 @@
 
 f32 reviseAngle(f32 angle);
 typedef struct MonosiriFollow { s32 seq; s32* list; s32 count; } MonosiriFollow;
-#define FOLLOW (follow)
 
 typedef struct DoorColorWork { GXColor color; GXColor color2; } DoorColorWork;
 DoorColorWork* _door;
@@ -3893,7 +3892,7 @@ USER_FUNC(monosiri_check) {
     s32 seq = evtGetValue(event, GSW_STORY_PROGRESS);
     u32 i;
     s32 j;
-    MonosiriFollow* f = FOLLOW;
+    MonosiriFollow* f = follow;
 
     for (i = 0; i < sizeof(follow) / sizeof(MonosiriFollow); i++, f++) {
         if (seq < f->seq) {

@@ -28,13 +28,8 @@
 typedef struct YukaAnimData { u16 flags; u8 field_0x2[6]; OSTime time; f32 frame; f32 speed; struct { u8 field_0x0[8]; f32 length; }* data; } YukaAnimData;
 typedef struct YukaAnim { YukaAnimData* anim; u32 flags; } YukaAnim;
 #define YUKA_NOW() OSTicksToMilliseconds(gp->inBattle ? gp->renderTime : gp->renderFieldTime)
-#define KUSURI_COL (*(GXColor*)g_Kusuri_Col)
-#define KUSURI_SRC ((GXColor*)g_Kusuri_Src_Col)
-#define KUSURI4_NO g_Kusuri4_No[0]
-#define KUSURI3_NO g_Kusuri3_No[0]
-#define KUSURI2_NO g_Kusuri2_No[0]
 YukaAnim yuka_anim;
-s32 g_Kusuri1_No[1];
+s32 g_Kusuri1_No;
 s32 g_Kusuri_B;
 s32 g_Kusuri_G;
 s32 g_Kusuri_R;
@@ -67,11 +62,11 @@ static EvtWord s_door_close[22];
 static BeroEntry bero_entry_data[2];
 static EvtWord bero_peach_evt[31];
 static BeroEntry bero_peach_data[2];
-s32 g_Kusuri_Col[1];
-s32 g_Kusuri_Src_Col[4];
-EvtWord g_Kusuri2_No[1];
-s32 g_Kusuri3_No[1];
-s32 g_Kusuri4_No[1];
+GXColor g_Kusuri_Col;
+GXColor g_Kusuri_Src_Col[4];
+s32 g_Kusuri2_No;
+s32 g_Kusuri3_No;
+s32 g_Kusuri4_No;
 EvtWord peach_evt_kaihei_open[51];
 EvtWord peach_evt_kaihei_open_all[28];
 EvtWord peach_evt_kaihei_close[46];
@@ -196,24 +191,20 @@ static BeroEntry bero_peach_data[] = {
     {0},
 };
 
-s32 g_Kusuri_Col[] = {
-    255,
+GXColor g_Kusuri_Col = {0, 0, 0, 255};
+
+GXColor g_Kusuri_Src_Col[] = {
+    {255, 0, 0, 255},
+    {0, 0, 255, 255},
+    {255, 255, 0, 255},
+    {0, 255, 0, 255},
 };
 
-s32 g_Kusuri_Src_Col[] = {
-    -16776961, 65535, -65281, 16711935,
-};
+s32 g_Kusuri2_No = 1;
 
-EVT_BEGIN(g_Kusuri2_No)
-EVT_END()
+s32 g_Kusuri3_No = 2;
 
-s32 g_Kusuri3_No[] = {
-    2,
-};
-
-s32 g_Kusuri4_No[] = {
-    3,
-};
+s32 g_Kusuri4_No = 3;
 
 EVT_BEGIN(peach_evt_kaihei_open)
     SET_VALUE(LW(5), LW(0))
@@ -478,7 +469,7 @@ EVT_BEGIN(peach_evt_kaihei1)
             END_IF
             SET_VALUE(LW(0), LSW(1))
             SUBTRACT(LW(0), 1)
-            POKE_INT(LW(0), PTR(g_Kusuri1_No))
+            POKE_INT(LW(0), PTR(&g_Kusuri1_No))
             CALL_CHILD(PTR(peach_evt_check_all_kusuri_set))
             CALL(evt_map_set_flush_onoff, 0, 1, STRING("S_mizu1"))
             CALL(evt_map_set_flush_color, 0, STRING("S_mizu1"), 255, 0, 0, 255)
@@ -549,7 +540,7 @@ EVT_BEGIN(peach_evt_kaihei2)
             END_IF
             SET_VALUE(LW(0), LSW(2))
             SUBTRACT(LW(0), 1)
-            POKE_INT(LW(0), PTR(g_Kusuri2_No))
+            POKE_INT(LW(0), PTR(&g_Kusuri2_No))
             CALL_CHILD(PTR(peach_evt_check_all_kusuri_set))
             ELSE
             SET_VALUE(LW(0), LSW(2))
@@ -618,7 +609,7 @@ EVT_BEGIN(peach_evt_kaihei3)
             END_IF
             SET_VALUE(LW(0), LSW(3))
             SUBTRACT(LW(0), 1)
-            POKE_INT(LW(0), PTR(g_Kusuri3_No))
+            POKE_INT(LW(0), PTR(&g_Kusuri3_No))
             CALL_CHILD(PTR(peach_evt_check_all_kusuri_set))
             ELSE
             SET_VALUE(LW(0), LSW(3))
@@ -687,7 +678,7 @@ EVT_BEGIN(peach_evt_kaihei4)
             END_IF
             SET_VALUE(LW(0), LSW(4))
             SUBTRACT(LW(0), 1)
-            POKE_INT(LW(0), PTR(g_Kusuri4_No))
+            POKE_INT(LW(0), PTR(&g_Kusuri4_No))
             CALL_CHILD(PTR(peach_evt_check_all_kusuri_set))
             ELSE
             SET_VALUE(LW(0), LSW(4))
@@ -1888,7 +1879,7 @@ void kusuri_4_color_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
     GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, KUSURI_SRC[KUSURI4_NO]);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri4_No]);
     info->tevStage++;
 }
 
@@ -1900,7 +1891,7 @@ void kusuri_3_color_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
     GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, KUSURI_SRC[KUSURI3_NO]);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri3_No]);
     info->tevStage++;
 }
 
@@ -1912,7 +1903,7 @@ void kusuri_2_color_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
     GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, KUSURI_SRC[KUSURI2_NO]);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri2_No]);
     info->tevStage++;
 }
 
@@ -1924,7 +1915,7 @@ void kusuri_1_color_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaOp(stage, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(stage, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
     GXSetTevAlphaIn(stage, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, KUSURI_SRC[g_Kusuri1_No[0]]);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Src_Col[g_Kusuri1_No]);
     info->tevStage++;
 }
 
@@ -1934,7 +1925,7 @@ void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_RASA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, KUSURI_COL);
+    GXSetTevColor(GX_TEVREG0, g_Kusuri_Col);
     info->tevStage = 1;
     info->texCoord = 0;
     info->texMap = 0;
@@ -1943,9 +1934,9 @@ void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
 USER_FUNC(kusuri_color_get) {
     EvtWord* args = event->args;
 
-    evtSetValue(event, args[0], KUSURI_COL.r);
-    evtSetValue(event, args[1], KUSURI_COL.g);
-    evtSetValue(event, args[2], KUSURI_COL.b);
+    evtSetValue(event, args[0], g_Kusuri_Col.r);
+    evtSetValue(event, args[1], g_Kusuri_Col.g);
+    evtSetValue(event, args[2], g_Kusuri_Col.b);
     return EVT_RETURN_DONE;
 }
 
@@ -1955,9 +1946,9 @@ USER_FUNC(kusuri_color_set_rgb) {
     s32 g = evtGetValue(event, args[1]);
     s32 b = evtGetValue(event, args[2]);
 
-    KUSURI_COL.r = r;
-    KUSURI_COL.g = g;
-    KUSURI_COL.b = b;
+    g_Kusuri_Col.r = r;
+    g_Kusuri_Col.g = g;
+    g_Kusuri_Col.b = b;
     return EVT_RETURN_DONE;
 }
 
@@ -1973,7 +1964,7 @@ USER_FUNC(kusuri_color_set) {
 
     if (isFirstCall) {
         event->lwData[8] = frames;
-        event->lwData[9] = (KUSURI_COL.r << 16) | (KUSURI_COL.g << 8) | KUSURI_COL.b;
+        event->lwData[9] = (g_Kusuri_Col.r << 16) | (g_Kusuri_Col.g << 8) | g_Kusuri_Col.b;
         event->userdata[0] = ((u64)now >> 32) & 0xFFFFFFFF;
         event->userdata[1] = now & 0xFFFFFFFF;
     }
@@ -1985,27 +1976,27 @@ USER_FUNC(kusuri_color_set) {
         done = TRUE;
         t = 1.0f;
     }
-    r = t * KUSURI_SRC[no - 1].r + g_Kusuri_R;
-    g = t * KUSURI_SRC[no - 1].g + g_Kusuri_G;
-    b = t * KUSURI_SRC[no - 1].b + g_Kusuri_B;
+    r = t * g_Kusuri_Src_Col[no - 1].r + g_Kusuri_R;
+    g = t * g_Kusuri_Src_Col[no - 1].g + g_Kusuri_G;
+    b = t * g_Kusuri_Src_Col[no - 1].b + g_Kusuri_B;
     if (r > g) {
         if (r > b) {
-            KUSURI_COL.r = 255;
-            KUSURI_COL.g = 255.0f * ((f32)g / (f32)r);
-            KUSURI_COL.b = 255.0f * ((f32)b / (f32)r);
+            g_Kusuri_Col.r = 255;
+            g_Kusuri_Col.g = 255.0f * ((f32)g / (f32)r);
+            g_Kusuri_Col.b = 255.0f * ((f32)b / (f32)r);
         } else {
-            KUSURI_COL.r = 255.0f * ((f32)r / (f32)b);
-            KUSURI_COL.g = 255.0f * ((f32)g / (f32)b);
-            KUSURI_COL.b = 255;
+            g_Kusuri_Col.r = 255.0f * ((f32)r / (f32)b);
+            g_Kusuri_Col.g = 255.0f * ((f32)g / (f32)b);
+            g_Kusuri_Col.b = 255;
         }
     } else if (g > b) {
-        KUSURI_COL.r = 255.0f * ((f32)r / (f32)g);
-        KUSURI_COL.g = 255;
-        KUSURI_COL.b = 255.0f * ((f32)b / (f32)g);
+        g_Kusuri_Col.r = 255.0f * ((f32)r / (f32)g);
+        g_Kusuri_Col.g = 255;
+        g_Kusuri_Col.b = 255.0f * ((f32)b / (f32)g);
     } else {
-        KUSURI_COL.r = 255.0f * ((f32)r / (f32)b);
-        KUSURI_COL.g = 255.0f * ((f32)g / (f32)b);
-        KUSURI_COL.b = 255;
+        g_Kusuri_Col.r = 255.0f * ((f32)r / (f32)b);
+        g_Kusuri_Col.g = 255.0f * ((f32)g / (f32)b);
+        g_Kusuri_Col.b = 255;
     }
     if (done) {
         g_Kusuri_R = r;
@@ -2019,9 +2010,9 @@ USER_FUNC(kusuri_color_set) {
 }
 
 USER_FUNC(kusuri_color_init) {
-    KUSURI_COL.r = 0;
-    KUSURI_COL.g = 0;
-    KUSURI_COL.b = 0;
+    g_Kusuri_Col.r = 0;
+    g_Kusuri_Col.g = 0;
+    g_Kusuri_Col.b = 0;
     g_Kusuri_R = 0;
     g_Kusuri_G = 0;
     g_Kusuri_B = 0;

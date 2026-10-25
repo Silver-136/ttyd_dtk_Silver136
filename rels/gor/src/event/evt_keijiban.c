@@ -17,7 +17,6 @@ typedef struct KeijibanData {
     s32 current;
     s32 maxEvtNo;
 } KeijibanData;
-#define KJDT (_kjdt)
 
 s32 keijiban_data_make(const char* prefix, BOOL fill);
 USER_FUNC(keijiban_joho_makelabel);
@@ -30,7 +29,7 @@ KeijibanData _kjdt[1];
 s32 keijiban_data_make(const char* prefix, BOOL fill) {
     char name[64];
     char buf[64];
-    KeijibanData* kj = KJDT;
+    KeijibanData* kj = _kjdt;
     s32 gsw = evtGetValue(NULL, GSW_STORY_PROGRESS);
     s32 i;
     s32 len;
@@ -122,7 +121,7 @@ s32 keijiban_data_make(const char* prefix, BOOL fill) {
 USER_FUNC(keijiban_joho_makelabel) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
-    KeijibanData* kj = KJDT;
+    KeijibanData* kj = _kjdt;
 
     if (idx >= 0 && idx < kj->count) {
         sprintf(kj->label, "%s_%04d", kj->prefix, kj->entries[idx].index);
@@ -136,12 +135,12 @@ USER_FUNC(keijiban_joho_makelabel) {
 }
 
 USER_FUNC(keijiban_joho_check) {
-    evtSetValue(event, event->args[0], KJDT->count);
+    evtSetValue(event, event->args[0], _kjdt->count);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(keijiban_data_free) {
-    KeijibanData* kj = KJDT;
+    KeijibanData* kj = _kjdt;
 
     if (kj->entries == NULL) {
         return EVT_RETURN_DONE;
@@ -156,12 +155,12 @@ USER_FUNC(keijiban_data_free) {
 }
 
 USER_FUNC(keijiban_data_alloc) {
-    KJDT->prefix = (const char*)evtGetValue(event, event->args[0]);
-    KJDT->count = keijiban_data_make(KJDT->prefix, FALSE);
-    KJDT->entries = _mapAlloc(KJDT->count * sizeof(KeijibanEntry) + 0x40);
-    memset(KJDT->entries, 0, KJDT->count * sizeof(KeijibanEntry) + 0x40);
-    KJDT->label = (char*)&KJDT->entries[KJDT->count];
-    keijiban_data_make(KJDT->prefix, TRUE);
+    _kjdt->prefix = (const char*)evtGetValue(event, event->args[0]);
+    _kjdt->count = keijiban_data_make(_kjdt->prefix, FALSE);
+    _kjdt->entries = _mapAlloc(_kjdt->count * sizeof(KeijibanEntry) + 0x40);
+    memset(_kjdt->entries, 0, _kjdt->count * sizeof(KeijibanEntry) + 0x40);
+    _kjdt->label = (char*)&_kjdt->entries[_kjdt->count];
+    keijiban_data_make(_kjdt->prefix, TRUE);
     return EVT_RETURN_DONE;
 }
 

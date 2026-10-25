@@ -35,7 +35,6 @@ typedef struct AtmTeresa {
     u8 mode;
 } AtmTeresa;
 AtmTeresa* teresa;
-#define ATMIC_TERESA_SCALE atmic_teresa_scale
 s32 teresa_count;
 s32 irand(s32 scalar);
 
@@ -943,17 +942,17 @@ void teresa_ext_main(void) {
         BtlUnit_GetPos(unit, &x, &y, &z);
         y += 40.0f;
         BtlUnit_GetScale(unit, &sx, &sy, &sz);
-        if (sx > ATMIC_TERESA_SCALE) {
+        if (sx > atmic_teresa_scale) {
             sx -= 0.005f;
-            if (sx <= ATMIC_TERESA_SCALE) {
-                sx = ATMIC_TERESA_SCALE;
+            if (sx <= atmic_teresa_scale) {
+                sx = atmic_teresa_scale;
             }
             BtlUnit_SetScale(unit, sx, sx, sz);
         }
-        if (sx < ATMIC_TERESA_SCALE) {
+        if (sx < atmic_teresa_scale) {
             sx += 0.005f;
-            if (sx >= ATMIC_TERESA_SCALE) {
-                sx = ATMIC_TERESA_SCALE;
+            if (sx >= atmic_teresa_scale) {
+                sx = atmic_teresa_scale;
             }
             BtlUnit_SetScale(unit, sx, sx, sz);
         }
@@ -1022,7 +1021,7 @@ void teresa_ext_main(void) {
             case 5:
                 t->timer--;
                 if (t->timer == 25) {
-                    ATMIC_TERESA_SCALE -= 0.05f;
+                    atmic_teresa_scale -= 0.05f;
                     if (i % 2 == 0) {
                         Vec pos = {0.0f, 0.0f, 0.0f};
                         pos.x = (*pose->mtx)[0][3];
@@ -1177,7 +1176,7 @@ void teresa_ext_main(void) {
                 t->mode = modes[irand(7)];
                 break;
             case 53:
-                ATMIC_TERESA_SCALE -= 0.015f;
+                atmic_teresa_scale -= 0.015f;
                 t->state = 55;
                 break;
             case 55:
@@ -1289,7 +1288,7 @@ USER_FUNC(teresa_wait_bikkuri2) {
     for (i = 0; i < 8; i++) {
         teresa[i].state = 31;
     }
-    ATMIC_TERESA_SCALE = 1.0f;
+    atmic_teresa_scale = 1.0f;
     return EVT_RETURN_DONE;
 }
 
@@ -1331,6 +1330,6 @@ USER_FUNC(teresa_wait_breath2) {
     for (i = 0; i < 30; i++) {
         teresa[i].state = 71;
     }
-    ATMIC_TERESA_SCALE = 1.0f;
+    atmic_teresa_scale = 1.0f;
     return EVT_RETURN_DONE;
 }
