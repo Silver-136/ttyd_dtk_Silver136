@@ -267,6 +267,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
                 s32 k, n2 = 0, n1 = 0;
                 for (i = 0; i < obj->joints->partCount; i++) {
                     u8 t = obj->joints->parts[i].material->blendMode;
+                    // FAKE: the empty `if (!obj) { }` and `if (1) { }` blocks keep the target block layout of the blend-mode count
                     if (t == 2) { n2++; if (!obj) { } }
                     else if (t == 1) { if (1) { } n1++; }
                     for (k = 0; k < 8; k++) {

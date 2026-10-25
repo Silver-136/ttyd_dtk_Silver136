@@ -493,7 +493,7 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId)
         }
 
         t = ((s32) gp->retraceCount) % total;
-        for (i = i * 0; i < data->numIcons; i++)
+        for (i = 0; i < data->numIcons; i++)
         {
             if (t < data->frames[i].delay)
             {

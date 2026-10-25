@@ -37,6 +37,7 @@ void mario_kemuri_80130474(void) {
     if (marioStGetSystemLevel() == 0) {
       if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         if (mario->currMotionId == MARIO_MOTION_DOKAN) {
+            // FAKE: no-op self-assignment as the then-branch; without it the branch is laid out differently
             s = s;
         } else {
         if (mario->currMotionId != MARIO_MOTION_JUMP) {

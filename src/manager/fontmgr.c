@@ -683,6 +683,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                         pos.y = d2 + (cy - h * scale);
                         pos.z = 0.0f;
                         PSMTXMultVec(mtx, &pos, &pos);
+                        // FAKE: no-op self-assignment before the icon draw; without it the scale load moves
                         scale = scale;
                         iconDispGxAlpha(&pos, 0x10, id, fontAlpha, scale);
                         FontDrawStart_alpha(fontAlpha);
@@ -820,7 +821,7 @@ GXColor HSV2RGB(GXColor hsv) {
     p = v * (1.0f - s);
     q = v * (1.0f - s * f);
     switch (i) {
-        case 0: if (!v) {} r = v; g = q; b = p; break;
+        case 0: r = v; g = q; b = p; break;
         case 1: r = q; g = v; b = p; break;
         case 2: r = p; g = v; b = q; break;
         case 3: r = p; g = q; b = v; break;

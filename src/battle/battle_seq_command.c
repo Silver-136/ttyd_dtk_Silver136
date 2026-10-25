@@ -2841,6 +2841,7 @@ USER_FUNC(_get_msg) {
     switch (wp->commandMenu.disableReason) {
         case 1:
             msg = "btl_msg_cmderror_no_fp";
+            // FAKE: empty if that only reads event->args (twice); without it case 1 is scheduled differently
             if (!event->args && !event->args) {}
             break;
         case 2:
