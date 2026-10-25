@@ -18,6 +18,7 @@
 #include "evt/evt_snd.h"
 #include "mot/mot_ship.h"
 #include "evt/evt_yuugijou.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -52,7 +53,6 @@ typedef struct FuneWork {
 } FuneWork;
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
-void mapObjGetPos(const char* name, Vec* pos);
 typedef struct MonteSub {
     s32 unk0;
     Vec pos;

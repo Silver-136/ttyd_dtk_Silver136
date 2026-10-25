@@ -33,7 +33,6 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-void mapGrpSetColor(const char* name, GXColor color);
 typedef struct HSV {
     u8 h;
     u8 s;

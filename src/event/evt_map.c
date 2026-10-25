@@ -17,15 +17,11 @@
 #include "eff/eff_torch.h"
 
 
-void mapObjGetPos(const char* name, Vec* pos);
 void mapObjSetOffScreen(const char* name, s32 val);
 void mapGrpSetOffScreen(const char* name, s32 val);
 void mapObjSetColor(const char* name, GXColor color);
-void mapGrpSetColor(const char* name, GXColor color);
 void mapSetBlend(GXColor color);
 void mapSetBlend2(GXColor color);
-void mapGetFog(s32* type, f32* start, f32* end, GXColor* color);
-void mapSetFog(s32 type, f32 start, f32 end, GXColor color);
 
 static USER_FUNC(check);
 

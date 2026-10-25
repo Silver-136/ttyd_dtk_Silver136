@@ -37,7 +37,6 @@ static char tmp[32];
 Vec camPt;
 Vec camAt;
 EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
-void mapObjGetPos(const char* name, Vec* pos);
 
 USER_FUNC(evt_mario_flag_onoff);
 USER_FUNC(evt_win_item_select);

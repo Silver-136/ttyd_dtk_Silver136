@@ -42,7 +42,6 @@
 #include "las.h"
 #include "mario/mario_party.h"
 
-void mapObjGetPos(const char* name, Vec* pos);
 void _hikariEntry(const char* name, s32 type, f32 scale);
 typedef struct HikariData { s32 key; s32 id; } HikariData;
 typedef struct HikariList40 { HikariData entries[40]; s32 endKey; } HikariList40;

@@ -51,7 +51,6 @@
 #ifdef VERSION_G8ME01
 #endif
 
-void mapGrpSetColor(const char* name, GXColor color);
 typedef struct UranaiWork {
     s32 lwData[16];
     s32 gwData[32];

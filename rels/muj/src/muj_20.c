@@ -62,7 +62,6 @@ typedef struct MapAnimRate {
 } MapAnimRate;
 MapAnimRate mapAnimRate;
 static u8* _ap;
-void mapObjGetPos(const char* name, Vec* pos);
 typedef struct LogoWork {
     FileEntry* tpl;
     f32 y;

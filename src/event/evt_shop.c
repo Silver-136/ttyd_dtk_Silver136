@@ -41,7 +41,6 @@
 
 extern ItemData itemDataTable[];
 void FontDrawString(f32 x, f32 y, const char* str);
-void mapObjGetPos(const char* name, Vec* pos);
 
 //.sbss
 static ShopWork* _wp;

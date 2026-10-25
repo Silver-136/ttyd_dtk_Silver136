@@ -43,7 +43,6 @@ USER_FUNC(evt_msg_togelr);
 #endif
 #undef GXSetTexCoordGen
 static void callback(MapTevCallbackInfo* info);
-void mapObjGetPos(const char* name, Vec* pos);
 static f32 cosf(f32 x);
 static f32 sinf(f32 x);
 double cos(double x);

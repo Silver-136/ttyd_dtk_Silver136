@@ -3,6 +3,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_map.h"
+#include "driver/mapdrv.h"
 
 #include "driver/effdrv.h"
 #include "battle/battle.h"
@@ -16,7 +17,6 @@
 EffectEntry* hi_fire_eff[6];
 s8 hi_fire_end_flag[4];
 EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
-void mapObjGetPos(const char* name, Vec* pos);
 
 USER_FUNC(_gear_rotate);
 USER_FUNC(check_battle_end);

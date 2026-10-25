@@ -47,9 +47,7 @@
 #include "mario/mario_pouch.h"
 
 typedef struct ShadowWork { GXTexObj obj; smartEntry* tex; } ShadowWork;
-void mapSetProjTexObj(GXTexObj* obj, smartEntry* tex);
 void make_shadow_disp(CameraId camera, void* param);
-void mapSetProjMtx(Mtx mtx);
 void envSetYamiView(Mtx mtx);
 
 static USER_FUNC(anim_tevcallback);

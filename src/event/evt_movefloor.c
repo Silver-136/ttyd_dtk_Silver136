@@ -17,7 +17,6 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_movefloor.h"
 
-void mapObjGetPos();
 
 typedef struct MovingFloor {
     u32 flags;       // 0x0

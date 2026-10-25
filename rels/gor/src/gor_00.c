@@ -53,7 +53,6 @@
 #include "driver/hitdrv.h"
 #include "driver/msgdrv.h"
 
-void mapObjGetPos(const char* name, Vec* pos);
 void suifu100taikikan_seq01(NanNPC* npc);
 void suifu100taikikan_seq00(NanNPC* npc);
 typedef struct KaitenParam {

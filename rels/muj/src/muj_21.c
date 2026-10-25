@@ -15,6 +15,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "driver/mapdrv.h"
 
 #include "driver/effdrv.h"
 #include "mario/mariost.h"
@@ -180,7 +181,6 @@ EVT_BEGIN(muj_21_init_evt)
     RETURN
 EVT_END()
 
-void mapObjGetPos(const char* name, Vec* pos);
 
 static USER_FUNC(fune_eff) {
     EffectEntry* eff1;

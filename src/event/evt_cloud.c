@@ -38,7 +38,6 @@ typedef struct CloudWork {
 } CloudWork;
 
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
-void mapObjGetPos(const char* name, Vec* pos);
 
 static CloudWork cloud[16];
 static u8 cloud_once_flag;

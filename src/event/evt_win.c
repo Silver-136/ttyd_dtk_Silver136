@@ -32,7 +32,6 @@
 
 extern ItemData itemDataTable[];
 
-void mapObjGetPos(const char* name, Vec* pos);
 void FontDrawString(f32 x, f32 y, const char* str);
 
 typedef struct UnitWinEntry {

@@ -36,7 +36,6 @@ void mapFlgOff(MapObject* obj, u32 flags, BOOL doNext);
 void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext);
 void mapGetBoundingBox(Vec* min, Vec* max);
 void mapGetJointsSub(MapFileJoint* joint, s32* numJoints);
-void mapGrpSetColor(const char* name, GXColor color);
 void mapObjGetPosSub(MapObject* obj, Vec* sum, s32* count, BOOL doNext);
 void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force);
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);

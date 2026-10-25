@@ -19,6 +19,7 @@
 #include "evt/evt_telop.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/mapdrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -39,9 +40,7 @@
 #include "cam_road.h"
 
 typedef struct GonbabaProj { GXTexObj obj; smartEntry* tex; } GonbabaProj;
-void mapSetProjTexObj(GXTexObj* obj, smartEntry* tex);
 void make_gonbaba_projection(CameraId camera, void* param);
-void mapSetProjMtx(Mtx mtx);
 
 USER_FUNC(cam_test);
 USER_FUNC(dist_check);

@@ -27,7 +27,6 @@
 
 typedef struct MonitorWork { void* buf; s32 ready; s32 kanbu; } MonitorWork;
 static MonitorWork* monitor_wp;
-void mapObjGetPos(const char* name, Vec* pos);
 void monitor_cap_capture(CameraId cameraId, void* param);
 
 USER_FUNC(evt_npc_set_stay_anim);

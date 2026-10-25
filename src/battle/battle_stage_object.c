@@ -38,7 +38,6 @@
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
 
-void mapGrpSetColor(const char* name, GXColor color);
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
 void FontDrawString(f32 x, f32 y, const char* str);
 EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 lifetime);

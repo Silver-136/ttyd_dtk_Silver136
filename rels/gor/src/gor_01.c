@@ -22,6 +22,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
 #include "evt/evt_pouch.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -64,7 +65,6 @@ typedef struct ShopSel {
     u8 field_0xC[0x24 - 0xC];
     s32 sel;
 } ShopSel;
-void mapGrpSetColor(const char* name, GXColor color);
 NpcEntry* fbatNpcTalkCheck(MarioWork* mario);
 EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 s32 search_evt_moji(s32 id);

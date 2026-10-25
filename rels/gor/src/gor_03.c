@@ -133,7 +133,6 @@ void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel);
 #define SLOTGARA ((s32(*)[3][8])slotgara)
 s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);
 void slot_neon_sub(GoryuuWork* wp, SlotWork* data);
-void mapObjGetPos(const char* name, Vec* pos);
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 
 USER_FUNC(desk_talk_func);
