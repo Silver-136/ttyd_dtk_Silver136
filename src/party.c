@@ -2664,7 +2664,6 @@ void partySetCamId(PartyEntry* party, s32 cameraId) {
 /* @@DISP@@ */
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
-void shadowSetCamId(s32 id, s32 camId);
 BOOL N_vivianDisplayTailCheck(PartyEntry* party);
 void animPoseVivianMain(s32 poseId, Vec* pos);
 struct HitEntry* partyHitCheck(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);

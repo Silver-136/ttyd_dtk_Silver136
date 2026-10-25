@@ -359,7 +359,7 @@ void BattleStageDispLight(CameraId camId, void* param) {
 void BattleStageOnLightInCommand(void) {
 }
 
-void BattleStageOffLightInCommand(void) {
+void BattleStageOffLightInCommand(s32 a, s32 b) {
 }
 
 void BattleStageOnLightFriendInCommand(void) {

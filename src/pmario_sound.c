@@ -5935,7 +5935,7 @@ s32 psndBGMChk(s32 id) {
     return psbgm[id & 0xF].listId == 0xFFFFFFFF ? -1 : 0;
 }
 
-BOOL psndBGMChkSilent(s32 id) {
+u32 psndBGMChkSilent(s32 id) {
     PaperSoundBGM* bgm = &psbgm[id & 0xF];
 
     if (bgm->listId == 0xFFFFFFFF) {

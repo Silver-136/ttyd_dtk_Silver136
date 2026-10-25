@@ -129,3 +129,4 @@ void BattleStageLightSetTarget(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode);
 void BattleStageLightSetTargetByUnit(s32 idx, s32 unitId, f32 x, f32 y, f32 z, s32 time, u8 mode);
 void BattleStageLightSetUpVec(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode);
 void BattleStageLightSetWidth(s32 idx, s32 width, s32 time, u8 mode);
+void BattleStageOffLightInCommand(s32 a, s32 b);

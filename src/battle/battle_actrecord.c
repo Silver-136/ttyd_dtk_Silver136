@@ -12,7 +12,7 @@ void BtlActRec_AddCount(u8* count) {
     }
 }
 
-void BtlActRec_AddPoint(u8* point, s32 amount) {
+void BtlActRec_AddPoint(u8* point, u8 amount) {
     *point += amount;
     if (*point > 100) {
         *point = 100;

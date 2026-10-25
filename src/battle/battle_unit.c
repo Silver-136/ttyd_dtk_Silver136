@@ -18,7 +18,6 @@
 double pow(double, double);
 void btlDispChangeAnime(BattleUnitPart* part, const char* name, s32 mode);
 void btlDispPoseAnime(BattleUnitPart* part);
-void BtlActRec_AddPoint(u8* rec, u8 points);
 void psndSFX_pit(s32 id, s16 pitch);
 void psndSFX_vol(s32 id, u8 vol);
 

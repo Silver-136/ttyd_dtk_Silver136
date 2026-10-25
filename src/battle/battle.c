@@ -427,10 +427,10 @@ BattleUnit* BattleGetPartnerPtr(BattleWork* wp, BattleUnit* unit) {
     return BattleGetMarioPtr(wp);
 }
 
-void BattlePartyAnimeLoad(s32 partyId) {
-    BattleUnitSetup* setup = &entryunit_party[partyId - 0xE0];
+BOOL BattlePartyAnimeLoad(s32 partyId) {
+    BattleUnitSetup* setup = &entryunit_party[partyId - TYPE_PARTNER_MIN];
 
-    animEffectAsync(setup->mUnitKindParams->mParts->modelName, 1);
+    return animEffectAsync(setup->mUnitKindParams->mParts->modelName, 1);
 }
 
 

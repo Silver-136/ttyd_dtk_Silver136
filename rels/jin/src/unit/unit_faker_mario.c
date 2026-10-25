@@ -17,7 +17,6 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 
-BOOL BattlePartyAnimeLoad(s32 id);
 typedef struct FakerStatus { s16 data[15]; } FakerStatus;
 #ifdef VERSION_G8ME01
 typedef struct FakerParam { f32 size; FakerStatus status; s32 statusFlags; u16 commandDisabled[2]; s16 currentHp; s16 maxHp; s16 currentFp; s16 maxFp; } FakerParam;

@@ -817,7 +817,7 @@ void shadowSetSize(s32 id, f32 size) {
     entry->size = size;
 }
 
-void shadowSetCamId(s32 id, s16 camId) {
+void shadowSetCamId(s32 id, s32 camId) {
     ShadowEntry* entry = &cswp->entries[id];
     entry->camId = camId;
 }

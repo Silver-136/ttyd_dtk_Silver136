@@ -20,7 +20,6 @@
 #include "party/party_motion.h"
 
 
-BOOL BattlePartyAnimeLoad(s32 id);
 s32 BattleDamageDirect(s32 attackerId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage,
                        u32 flags, s32 code, u32 counter);
 

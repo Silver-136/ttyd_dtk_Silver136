@@ -180,3 +180,4 @@ void psndSetReverb(s32 mode);
 s32 psndBGMChk(s32 id);
 BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5);
 BOOL psndENV_LPF(s32 id, u16 freq);
+u32 psndBGMChkSilent(s32 id);

@@ -38,7 +38,6 @@
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
 void BattleMenuDisp_WeaponSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandWeapon* weapons, s32 a);
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
-void BattleStageOffLightInCommand(s32 a, s32 b);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 void _btlcmd_MakeMultiItemTable(BattleWork* wp);
 void _btlcmd_MakeOperationTable(BattleWork* wp);
@@ -2298,7 +2297,6 @@ void BattleCommandDisplay_AllEnd(BattleWork* wp) {
 }
 #pragma dont_inline reset
 
-void* btlataudGetMoveEventPtr(s32 id);
 s32 _check_weapon_type_attack(BattleWeapon* weapon);
 #define UEVT(u) ((u)->attackEventCode)
 #define UEVTMODE(u) ((u)->attackEventFlags)
