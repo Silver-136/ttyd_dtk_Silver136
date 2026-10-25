@@ -115,9 +115,9 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)n_bero_in, // enterEvent
+        n_bero_in, // enterEvent
         5, // caseType
-        (s32*)n_bero_out, // exitEvent
+        n_bero_out, // exitEvent
         "aji_00", // nextMapName
         "w_bero", // nextBeroName
         1, // enterAnimeType

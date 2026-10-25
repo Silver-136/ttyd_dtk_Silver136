@@ -161,7 +161,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)bero_custom, // enterEvent
+        bero_custom, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "muj_11", // nextMapName

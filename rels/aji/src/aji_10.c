@@ -165,7 +165,7 @@ static BeroEntry bero_peach_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)bero_peach_evt, // exitEvent
+        bero_peach_evt, // exitEvent
         "aji_11", // nextMapName
         "w_bero", // nextBeroName
         5, // enterAnimeType

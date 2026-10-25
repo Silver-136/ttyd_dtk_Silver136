@@ -97,7 +97,7 @@ static BeroEntry bero_data[] = {
         45, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)evt_train_door, // exitEvent
+        evt_train_door, // exitEvent
         "rsh_01_b", // nextMapName
         "s_bero", // nextBeroName
         1, // enterAnimeType
@@ -137,7 +137,7 @@ BeroEntry bero_data_nidome[] = {
         45, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)evt_train_nidome, // exitEvent
+        evt_train_nidome, // exitEvent
         "rsh_01_b", // nextMapName
         "s_bero", // nextBeroName
         1, // enterAnimeType

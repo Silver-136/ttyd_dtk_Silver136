@@ -852,7 +852,7 @@ static BeroEntry bero_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)resha_noru, // exitEvent
+        resha_noru, // exitEvent
         "rsh_01_a", // nextMapName
         "s_bero", // nextBeroName
         1, // enterAnimeType

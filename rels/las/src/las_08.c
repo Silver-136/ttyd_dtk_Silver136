@@ -132,7 +132,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)door_matigai_evt, // exitEvent
+        door_matigai_evt, // exitEvent
         "las_07", // nextMapName
         "e_bero_1", // nextBeroName
         5, // enterAnimeType
@@ -150,7 +150,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)door_seikai_evt, // exitEvent
+        door_seikai_evt, // exitEvent
         "las_09", // nextMapName
         "w_bero", // nextBeroName
         5, // enterAnimeType
@@ -168,7 +168,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)door_matigai_evt, // exitEvent
+        door_matigai_evt, // exitEvent
         "las_07", // nextMapName
         "e_bero_2", // nextBeroName
         5, // enterAnimeType
@@ -186,7 +186,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)door_matigai_evt, // exitEvent
+        door_matigai_evt, // exitEvent
         "las_07", // nextMapName
         "w_bero_2", // nextBeroName
         5, // enterAnimeType
@@ -208,7 +208,7 @@ BeroEntry e_bero_1_matigai[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)door_matigai_evt, // exitEvent
+        door_matigai_evt, // exitEvent
         "las_07", // nextMapName
         "w_bero_1", // nextBeroName
         5, // enterAnimeType
@@ -229,7 +229,7 @@ BeroEntry e_bero_1_seikai[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)door_seikai_evt, // exitEvent
+        door_seikai_evt, // exitEvent
         "las_08", // nextMapName
         "w_bero_1", // nextBeroName
         5, // enterAnimeType
@@ -250,7 +250,7 @@ BeroEntry e_bero_2_seikai[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)door_seikai_evt, // exitEvent
+        door_seikai_evt, // exitEvent
         "las_08", // nextMapName
         "w_bero_2", // nextBeroName
         5, // enterAnimeType

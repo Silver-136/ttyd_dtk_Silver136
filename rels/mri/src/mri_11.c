@@ -266,7 +266,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)patolight_sound_off, // exitEvent
+        patolight_sound_off, // exitEvent
         "mri_12", // nextMapName
         "e_bero", // nextBeroName
         1, // enterAnimeType
@@ -282,7 +282,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)patolight_sound_off, // exitEvent
+        patolight_sound_off, // exitEvent
         "mri_06", // nextMapName
         "w_bero02", // nextBeroName
         1, // enterAnimeType

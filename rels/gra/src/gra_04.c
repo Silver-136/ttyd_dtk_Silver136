@@ -149,9 +149,9 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)in_evt, // enterEvent
+        in_evt, // enterEvent
         -1, // caseType
-        (s32*)out_evt, // exitEvent
+        out_evt, // exitEvent
         "gra_04", // nextMapName
         "w_bero_2", // nextBeroName
         1, // enterAnimeType
@@ -166,9 +166,9 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)in_evt, // enterEvent
+        in_evt, // enterEvent
         0, // caseType
-        (s32*)out_evt2, // exitEvent
+        out_evt2, // exitEvent
         "gra_04", // nextMapName
         "w_bero_1", // nextBeroName
         1, // enterAnimeType

@@ -1742,7 +1742,7 @@ BeroEntry bero_boss[] = {
         -1, // length
         NULL, // enterEvent
         10, // caseType
-        (s32*)floor_clear, // exitEvent
+        floor_clear, // exitEvent
         "tik_06", // nextMapName
         "dokan_3", // nextBeroName
         1, // enterAnimeType
@@ -1785,7 +1785,7 @@ BeroEntry bero_return[] = {
         -1, // length
         NULL, // enterEvent
         10, // caseType
-        (s32*)floor_clear, // exitEvent
+        floor_clear, // exitEvent
         "tik_06", // nextMapName
         "dokan_3", // nextBeroName
         1, // enterAnimeType
@@ -1802,7 +1802,7 @@ BeroEntry bero_return[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_00", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType
@@ -1823,7 +1823,7 @@ BeroEntry bero_return2[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_01", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType
@@ -1844,7 +1844,7 @@ BeroEntry bero_return3[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_02", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType
@@ -1929,7 +1929,7 @@ BeroEntry bero_prev_return[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_03", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType
@@ -1950,7 +1950,7 @@ BeroEntry bero_prev_return2[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_04", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType
@@ -1971,7 +1971,7 @@ BeroEntry bero_prev_return3[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_05", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType
@@ -1992,7 +1992,7 @@ BeroEntry bero_prev_return4[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_06", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType
@@ -2058,7 +2058,7 @@ BeroEntry bero_normal[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_00", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType
@@ -2079,7 +2079,7 @@ BeroEntry bero_normal2[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_01", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType
@@ -2100,7 +2100,7 @@ BeroEntry bero_normal3[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)floor_inc, // exitEvent
+        floor_inc, // exitEvent
         "jon_02", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType

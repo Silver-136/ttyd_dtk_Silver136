@@ -111,7 +111,7 @@ static BeroEntry bero_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)n_bero_match_reset, // exitEvent
+        n_bero_match_reset, // exitEvent
         "tou_04", // nextMapName
         "s_bero_5", // nextBeroName
         5, // enterAnimeType
@@ -126,7 +126,7 @@ static BeroEntry bero_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)evt_dakuto, // enterEvent
+        evt_dakuto, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "tou_13", // nextMapName

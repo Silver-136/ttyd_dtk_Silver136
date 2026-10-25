@@ -591,7 +591,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)first_evt_dokan, // enterEvent
+        first_evt_dokan, // enterEvent
         6, // caseType
         NULL, // exitEvent
         "tik_02", // nextMapName

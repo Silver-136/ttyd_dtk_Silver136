@@ -483,7 +483,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)gor_02_event_00, // enterEvent
+        gor_02_event_00, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "gor_01", // nextMapName
@@ -502,7 +502,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)gor_02_event_01, // exitEvent
+        gor_02_event_01, // exitEvent
         "tik_01", // nextMapName
         "dokan_2", // nextBeroName
         1, // enterAnimeType

@@ -2565,7 +2565,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)christine_nakama_before, // enterEvent
+        christine_nakama_before, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "gor_00", // nextMapName

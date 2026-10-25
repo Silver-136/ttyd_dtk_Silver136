@@ -122,7 +122,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)evt_sound, // exitEvent
+        evt_sound, // exitEvent
         "gon_10", // nextMapName
         "w_bero", // nextBeroName
         5, // enterAnimeType

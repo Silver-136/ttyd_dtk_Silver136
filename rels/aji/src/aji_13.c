@@ -166,7 +166,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)evt_snd_stop, // exitEvent
+        evt_snd_stop, // exitEvent
         "aji_18", // nextMapName
         "e_bero", // nextBeroName
         5, // enterAnimeType
@@ -184,7 +184,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)evt_snd_stop, // exitEvent
+        evt_snd_stop, // exitEvent
         "aji_14", // nextMapName
         "w_bero", // nextBeroName
         5, // enterAnimeType
@@ -280,7 +280,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)evt_haikei_in, // enterEvent
+        evt_haikei_in, // enterEvent
         6, // caseType
         NULL, 0, // exitEvent..nextMapName
         "dokan_1", // nextBeroName
@@ -296,7 +296,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)evt_haikei_in, // enterEvent
+        evt_haikei_in, // enterEvent
         6, // caseType
         NULL, 0, // exitEvent..nextMapName
         "dokan_2", // nextBeroName
@@ -312,7 +312,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)evt_haikei_in, // enterEvent
+        evt_haikei_in, // enterEvent
         6, // caseType
         NULL, 0, // exitEvent..nextMapName
         "dokan_3", // nextBeroName
@@ -328,7 +328,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)evt_haikei_in, // enterEvent
+        evt_haikei_in, // enterEvent
         6, // caseType
         NULL, 0, // exitEvent..nextMapName
         "dokan_4", // nextBeroName
@@ -344,7 +344,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)evt_haikei_in, // enterEvent
+        evt_haikei_in, // enterEvent
         6, // caseType
         NULL, 0, // exitEvent..nextMapName
         "dokan_5", // nextBeroName

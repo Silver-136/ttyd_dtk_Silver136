@@ -149,9 +149,9 @@ static BeroEntry bero_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         100, // length
-        (s32*)toile_in, // enterEvent
+        toile_in, // enterEvent
         6, // caseType
-        (s32*)toile_out, // exitEvent
+        toile_out, // exitEvent
         "tou_04", // nextMapName
         "toire2", // nextBeroName
         1, // enterAnimeType

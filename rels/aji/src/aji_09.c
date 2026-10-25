@@ -116,7 +116,7 @@ BeroEntry bero_data_peach1[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)peach_evt_bero_out1, // exitEvent
+        peach_evt_bero_out1, // exitEvent
         "aji_01", // nextMapName
         "n_bero_4", // nextBeroName
         5, // enterAnimeType
@@ -150,7 +150,7 @@ BeroEntry bero_data_peach2[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)peach_evt_bero_out2, // exitEvent
+        peach_evt_bero_out2, // exitEvent
         "aji_17", // nextMapName
         "w_bero", // nextBeroName
         5, // enterAnimeType

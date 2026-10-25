@@ -695,7 +695,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)debug_event, // enterEvent
+        debug_event, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "gor_04", // nextMapName
@@ -711,7 +711,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)debug_event, // enterEvent
+        debug_event, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "gor_01", // nextMapName
@@ -728,7 +728,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)debug_event, // enterEvent
+        debug_event, // enterEvent
         6, // caseType
         NULL, // exitEvent
         "tik_07", // nextMapName
@@ -745,9 +745,9 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)debug_event, // enterEvent
+        debug_event, // enterEvent
         -1, // caseType
-        (s32*)gor_03_down_evt, // exitEvent
+        gor_03_down_evt, // exitEvent
         "tik_07", // nextMapName
         NULL, // nextBeroName
         1, // enterAnimeType

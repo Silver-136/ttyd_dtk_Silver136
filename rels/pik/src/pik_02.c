@@ -254,9 +254,9 @@ BeroEntry s_bero_peach[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         80, // length
-        (s32*)haikei_off, // enterEvent
+        haikei_off, // enterEvent
         -1, // caseType
-        (s32*)out_room, // exitEvent
+        out_room, // exitEvent
         "aji_10", // nextMapName
         NULL, // nextBeroName
         5, // enterAnimeType

@@ -63,7 +63,7 @@ static BeroEntry bero_entry_data[] = {
         77, // centerPositionZ
         -1, // length
         NULL, 0, // enterEvent..caseType
-        (s32*)jin_11_ana, // exitEvent
+        jin_11_ana, // exitEvent
         "jin_07", // nextMapName
         NULL, // nextBeroName
         4, // enterAnimeType

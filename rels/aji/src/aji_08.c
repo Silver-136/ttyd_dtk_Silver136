@@ -95,7 +95,7 @@ static BeroEntry bero_entry_data[] = {
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, // enterEvent..caseType
-        (s32*)evt_slit0, // exitEvent
+        evt_slit0, // exitEvent
         "aji_06", // nextMapName
         "tenjo", // nextBeroName
         1, // enterAnimeType
@@ -111,7 +111,7 @@ static BeroEntry bero_entry_data[] = {
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, // enterEvent..caseType
-        (s32*)evt_slit1, // exitEvent
+        evt_slit1, // exitEvent
         "aji_07", // nextMapName
         "tenjo", // nextBeroName
         1, // enterAnimeType
@@ -127,7 +127,7 @@ static BeroEntry bero_entry_data[] = {
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, // enterEvent..caseType
-        (s32*)evt_slit2, // exitEvent
+        evt_slit2, // exitEvent
         "aji_09", // nextMapName
         "tenjo", // nextBeroName
         1, // enterAnimeType

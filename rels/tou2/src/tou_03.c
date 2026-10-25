@@ -781,9 +781,9 @@ static BeroEntry bero_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)w_open, // enterEvent
+        w_open, // enterEvent
         -1, // caseType
-        (s32*)w_close, // exitEvent
+        w_close, // exitEvent
         "tou_04", // nextMapName
         ("n_bero_2"), // nextBeroName
         5, // enterAnimeType
@@ -799,9 +799,9 @@ static BeroEntry bero_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)e_open, // enterEvent
+        e_open, // enterEvent
         -1, // caseType
-        (s32*)e_close, // exitEvent
+        e_close, // exitEvent
         "tou_04", // nextMapName
         ("n_bero_1"), // nextBeroName
         5, // enterAnimeType
@@ -817,9 +817,9 @@ static BeroEntry bero_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)s1_open, // enterEvent
+        s1_open, // enterEvent
         -1, // caseType
-        (s32*)s1_close, // exitEvent
+        s1_close, // exitEvent
         "tou_02", // nextMapName
         ("n_bero_1"), // nextBeroName
         5, // enterAnimeType
@@ -835,9 +835,9 @@ static BeroEntry bero_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)s2_open, // enterEvent
+        s2_open, // enterEvent
         -1, // caseType
-        (s32*)s2_close, // exitEvent
+        s2_close, // exitEvent
         "tou_02", // nextMapName
         ("n_bero_2"), // nextBeroName
         5, // enterAnimeType

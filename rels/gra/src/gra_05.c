@@ -269,9 +269,9 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)in_evt, // enterEvent
+        in_evt, // enterEvent
         0, // caseType
-        (s32*)out_evt, // exitEvent
+        out_evt, // exitEvent
         "gra_05", // nextMapName
         "ana_2", // nextBeroName
         4, // enterAnimeType
@@ -286,9 +286,9 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)in_evt, // enterEvent
+        in_evt, // enterEvent
         0, // caseType
-        (s32*)out_evt2, // exitEvent
+        out_evt2, // exitEvent
         "gra_05", // nextMapName
         "ana_1", // nextBeroName
         4, // enterAnimeType
@@ -303,9 +303,9 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)gra_05_in_01, // enterEvent
+        gra_05_in_01, // enterEvent
         0, // caseType
-        (s32*)gra_05_out_01, // exitEvent
+        gra_05_out_01, // exitEvent
         0, NULL, // nextMapName..nextBeroName
         4, // enterAnimeType
         4, // exitAnimeType
@@ -319,9 +319,9 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)gra_05_in_01, // enterEvent
+        gra_05_in_01, // enterEvent
         0, // caseType
-        (s32*)gra_05_out_02, // exitEvent
+        gra_05_out_02, // exitEvent
         0, NULL, // nextMapName..nextBeroName
         4, // enterAnimeType
         4, // exitAnimeType

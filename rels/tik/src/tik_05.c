@@ -205,7 +205,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)look_large_door, // enterEvent
+        look_large_door, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "tik_04", // nextMapName

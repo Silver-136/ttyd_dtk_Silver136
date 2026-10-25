@@ -103,7 +103,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)bero_02_into_event, // enterEvent
+        bero_02_into_event, // enterEvent
         10, // caseType
         NULL, 0, // exitEvent..nextMapName
         "dokan1", // nextBeroName

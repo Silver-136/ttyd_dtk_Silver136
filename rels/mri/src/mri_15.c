@@ -80,7 +80,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)evt_dokan, // exitEvent
+        evt_dokan, // exitEvent
         "mri_14", // nextMapName
         "dokan", // nextBeroName
         1, // enterAnimeType

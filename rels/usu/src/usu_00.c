@@ -2055,7 +2055,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)dokan_1_evt, // enterEvent
+        dokan_1_evt, // enterEvent
         6, // caseType
         NULL, // exitEvent
         "tik_08", // nextMapName
@@ -2106,7 +2106,7 @@ static BeroEntry bero_oshimodo[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)oshimodo_event, // exitEvent
+        oshimodo_event, // exitEvent
         0, // nextMapName
         "dokan_1", // nextBeroName
         1, // enterAnimeType
@@ -2153,7 +2153,7 @@ BeroEntry bero_koopa_dokan[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)koopa_dokan_evt, // exitEvent
+        koopa_dokan_evt, // exitEvent
         0, NULL, // nextMapName..nextBeroName
         1, // enterAnimeType
         1, // exitAnimeType

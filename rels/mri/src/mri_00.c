@@ -678,7 +678,7 @@ BeroEntry bero_lostitem[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)out_w_bero, // exitEvent
+        out_w_bero, // exitEvent
         "win_03", // nextMapName
         "", // nextBeroName
         1, // enterAnimeType
@@ -695,7 +695,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)first_time_w_bero, // enterEvent
+        first_time_w_bero, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "win_01", // nextMapName
@@ -714,7 +714,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)out_ne_bero, // exitEvent
+        out_ne_bero, // exitEvent
         "mri_01", // nextMapName
         "w_bero", // nextBeroName
         4, // enterAnimeType
@@ -732,7 +732,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)out_dokan_1, // exitEvent
+        out_dokan_1, // exitEvent
         "tik_16", // nextMapName
         "dokan_1", // nextBeroName
         1, // enterAnimeType

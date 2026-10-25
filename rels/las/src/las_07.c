@@ -103,7 +103,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)door_matigai_evt, // enterEvent
+        door_matigai_evt, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "las_06", // nextMapName
@@ -121,7 +121,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)door_matigai_evt, // enterEvent
+        door_matigai_evt, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "las_08", // nextMapName
@@ -139,7 +139,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)door_matigai_evt, // enterEvent
+        door_matigai_evt, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "las_08", // nextMapName
@@ -157,7 +157,7 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
-        (s32*)door_matigai_evt, // enterEvent
+        door_matigai_evt, // enterEvent
         -1, // caseType
         NULL, // exitEvent
         "las_08", // nextMapName

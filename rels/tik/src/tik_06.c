@@ -80,7 +80,7 @@ static BeroEntry bero_entry_data[] = {
         -1, // length
         NULL, // enterEvent
         6, // caseType
-        (s32*)oshimodo_event, // exitEvent
+        oshimodo_event, // exitEvent
         0, // nextMapName
         "dokan_3", // nextBeroName
         1, // enterAnimeType

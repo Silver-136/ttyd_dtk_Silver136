@@ -132,7 +132,7 @@ BeroEntry bero_witchtrio[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-        (s32*)out_w_bero, // exitEvent
+        out_w_bero, // exitEvent
         "win_00", // nextMapName
         "", // nextBeroName
         4, // enterAnimeType
