@@ -201,7 +201,7 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
 
     partyId = wp->fbatInfo->party;
     if (partyId) {
-        party = BtlUnit_Entry(&entryunit_party[partyId - 0xE0]);
+        party = BtlUnit_Entry(&entryunit_party[partyId - TYPE_PARTNER_MIN]);
         BtlUnit_GetHomePos(party, &x, &y, &z);
         BtlUnit_SetHomePos(party, -140.0, y, 5.0);
         BtlUnit_SetPos(party, -140.0, y, 5.0);
@@ -442,10 +442,10 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
     s32 i;
     f32 dummy, x, y, z;
 
-    if (kind < 0xE0 || kind >= 0xE7) {
+    if (kind < TYPE_PARTNER_MIN || kind >= TYPE_PARTNER_MAX) {
         return NULL;
     }
-    unit = BtlUnit_Spawn(&entryunit_party[kind - 0xE0], 1);
+    unit = BtlUnit_Spawn(&entryunit_party[kind - TYPE_PARTNER_MIN], 1);
     for (i = 0; i < 64; i++) {
         s32 id = wp->movePriorityQueue[i];
         if (id != -1) {
@@ -477,29 +477,57 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
 
 s32 BattleTransPartyId(BattleUnitType kind) {
     switch (kind) {
-    case 0x50: case 0x89: case 0xE0: return 1;
-    case 0x51: case 0x8A: case 0xE1: return 2;
-    case 0x52: case 0x8B: case 0xE2: return 4;
-    case 0x53: case 0x8C: case 0xE3: return 5;
-    case 0x8D: case 0xE4: return 6;
-    case 0x8E: case 0xE5: return 3;
-    case 0x8F: case 0xE6: return 7;
-    case 0: return 0;
-    default: return 0;
+    case UNIT_GOOMBELLA_CHAPTER4:
+    case UNIT_DOOPLISS_CHAPTER8_GOOMBELLA:
+    case UNIT_GOOMBELLA:
+        return PARTNER_GOOMBELLA;
+    case UNIT_KOOPS_CHAPTER4:
+    case UNIT_DOOPLISS_CHAPTER8_KOOPS:
+    case UNIT_KOOPS:
+        return PARTNER_KOOPS;
+    case UNIT_YOSHI_CHAPTER4:
+    case UNIT_DOOPLISS_CHAPTER8_YOSHI:
+    case UNIT_YOSHI:
+        return PARTNER_YOSHI;
+    case UNIT_FLURRIE_CHAPTER4:
+    case UNIT_DOOPLISS_CHAPTER8_FLURRIE:
+    case UNIT_FLURRIE:
+        return PARTNER_FLURRIE;
+    case UNIT_DOOPLISS_CHAPTER8_VIVIAN:
+    case UNIT_VIVIAN:
+        return PARTNER_VIVIAN;
+    case UNIT_DOOPLISS_CHAPTER8_BOBBERY:
+    case UNIT_BOBBERY:
+        return PARTNER_BOBBERY;
+    case UNIT_DOOPLISS_CHAPTER8_MS_MOWZ:
+    case UNIT_MS_MOWZ:
+        return PARTNER_MSMOWZ;
+    case 0:
+        return PARTNER_NONE;
+    default:
+        return PARTNER_NONE;
     }
 }
 
 
 BattleUnitType BattleTransPartyIdToUnitKind(s32 partyId) {
     switch (partyId) {
-    case 1: return 0xE0;
-    case 2: return 0xE1;
-    case 4: return 0xE2;
-    case 5: return 0xE3;
-    case 6: return 0xE4;
-    case 3: return 0xE5;
-    case 7: return 0xE6;
-    default: return 0;
+    case PARTNER_GOOMBELLA:
+        return UNIT_GOOMBELLA;
+    case PARTNER_KOOPS:
+        return UNIT_KOOPS;
+    case PARTNER_YOSHI:
+        return UNIT_YOSHI;
+    case PARTNER_FLURRIE:
+        return UNIT_FLURRIE;
+    case PARTNER_VIVIAN:
+        return UNIT_VIVIAN;
+    case PARTNER_BOBBERY:
+        return UNIT_BOBBERY;
+    case PARTNER_MSMOWZ:
+        return UNIT_MS_MOWZ;
+    default:
+        return 0;
     }
 }
 
@@ -753,9 +781,8 @@ void BattlePartyInfoWorkInit(BattleWork* wp) {
     BattleWorkPartyInfo* partyInfo;
     int i;
 
-    // TODO: add macros for Party IDs
-    for (i = 0xE0; i < 0xE7; i++) {
-        partyInfo = &wp->partyInfo[i - 0xE0];
+    for (i = TYPE_PARTNER_MIN; i < TYPE_PARTNER_MAX; i++) {
+        partyInfo = &wp->partyInfo[i - TYPE_PARTNER_MIN];
         partyInfo->sizeMultiplier = 1.0;
         partyInfo->statusFlags = 0;
         memset(&partyInfo->statusTurns, 0, sizeof(partyInfo->statusTurns));

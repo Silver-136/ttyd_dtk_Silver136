@@ -39,7 +39,7 @@ USER_FUNC(evt_badgeShop_bottakuru_dec);
 USER_FUNC(evt_badgeShop_throw_get_kind_cnt);
 USER_FUNC(evt_badgeShop_starmaniac_get_kind_cnt);
 USER_FUNC(evt_badgeShop_bottakuru_get_kind_cnt);
-USER_FUNC(U_evt_badgeShop_get_special_zaiko); //TODO: unknown name
+USER_FUNC(U_evt_badgeShop_get_special_zaiko);
 USER_FUNC(evt_badgeShop_bteresa_get_kind_cnt);
 s32 badgeShop_ThrowCheck(s32 itemId);
 s32 U_badgeShop_SpecialCheck(void);

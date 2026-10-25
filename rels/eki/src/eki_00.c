@@ -64,6 +64,8 @@ static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim)
 extern const char* g_moamoa_chain_tbl[][2];
 static void ext_moamoa_main(void);
 #pragma inline_max_total_size(100000)
+// Same body as polySinf/polyCosf (poly_trig.h), kept as a second pair: using the shared pair for these calls too
+// changes the code, so this unit inlined two distinct copies.
 static inline f32 moa_sin(f32 x) {
     f32 a = 0.00761f;
     f32 b = 0.16605f;

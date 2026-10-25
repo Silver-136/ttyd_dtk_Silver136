@@ -178,9 +178,9 @@ typedef struct BattleAudience {
     f32 mAudienceDeltaMultiplier;      // 0x13778
     f32 mTargetAudienceCount;          // 0x1377C
     f32 mAddedAudienceCount;           // 013780
-    s32 mCurrentAudienceIntCount;      // 0x13784, TODO verify name
-    s32 mCurrentAudienceIntCountRight; // 0x13788, TODO verify name
-    s32 mCurrentAudienceIntCountLeft;  // 0x1378C, TODO verify name
+    s32 mCurrentAudienceIntCount;      // 0x13784
+    s32 mCurrentAudienceIntCountRight; // 0x13788
+    s32 mCurrentAudienceIntCountLeft;  // 0x1378C
     s32 mMaxAudience;                  // 0x13790
     s32 typeWeights[12];               // 0x13794, per-type audience weights (BattleAudienceSettingAudience)
     s32 starPowerGain;                 // 0x137C4, star power gained this action
@@ -189,7 +189,7 @@ typedef struct BattleAudience {
     s32 crowdDispleasedStreak;         // 0x137D0, consecutive bad actions, capped at 5
     s32 mNumStylishCommandsThisAttack; // 0x137D4
     u8 pad_137D8[0x137DC - 0x137D8];   // 0x137D8, never accessed
-    s32 mCheckPhaseReactionState;      // 0x137DC, TODO: rename
+    s32 mCheckPhaseReactionState;      // 0x137DC
     s32 phaseSub;                      // 0x137E0, phase sub-state
     s32 presentItemNo;                 // 0x137E4
     s32 presentItemType;               // 0x137E8
@@ -198,11 +198,11 @@ typedef struct BattleAudience {
     s32 itemThrowMax;                  // 0x137F4, throw limit rolled at battle start (0-3; 10000 when forced)
     s32 presentHitCount;               // 0x137F8, thrown items that landed, capped at 3; adds to presentWeapon damage
     BattleWeapon presentWeapon;        // 0x137FC, BattleWeapon copy (0xC0) for a thrown hazard item, passed to BattleCheckDamage
-    s32 mItemOnMemberId;               // 0x138BC, TODO better name
-    Vec mItemOnMemberPos;              // 0x138C0, TODO better name?
+    s32 mItemOnMemberId;               // 0x138BC
+    Vec mItemOnMemberPos;              // 0x138C0
     s32 phaseList[14];                 // 0x138CC
     s32 phaseListCount;                // 0x13904
-    s32 mTurnEndPhaseEventChance;      // 0x13908, TODO verify name
+    s32 mTurnEndPhaseEventChance;      // 0x13908
     s32 joyLevel;                      // 0x1390C, audience joy level
     BOOL excited;                      // 0x13910, if toads are cheering
 } BattleAudience;

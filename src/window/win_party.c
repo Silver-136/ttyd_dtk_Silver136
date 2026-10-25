@@ -104,7 +104,7 @@ void winPartyInit(WindowWork* wp) {
     pouch = pouchGetPtr();
     wp->party.count = 0;
     for (i = 0; i < 7; i++) {
-        for (j = 0; j < 8; j++) {
+        for (j = 0; j < PARTNER_COUNT; j++) {
             if (j == winPartyDt[i].partyId && (pouch->partyData[j].flags & 1) &&
                 !(pouch->partyData[j].flags & 2)) {
                 if (wp->flags & 0x2000) {

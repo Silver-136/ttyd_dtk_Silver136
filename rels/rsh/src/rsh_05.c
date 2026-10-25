@@ -58,6 +58,8 @@ static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
 static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
+// Same body as polySinf/polyCosf (poly_trig.h), kept as a second pair: using the shared pair for these calls too
+// changes the code, so this unit inlined two distinct copies.
 static inline f32 moa_sin(f32 x) {
     f32 a = 0.00761f;
     f32 b = 0.16605f;

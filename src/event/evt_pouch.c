@@ -114,7 +114,7 @@ USER_FUNC(evt_pouch_mario_recovery) {
 USER_FUNC(evt_pouch_all_party_recovery) {
     PouchData* pouch = pouchGetPtr();
     int i;
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < PARTNER_COUNT; i++) {
         pouch->partyData[i].currentHP = pouch->partyData[i].maximumHP;
     }
     return EVT_RETURN_DONE;

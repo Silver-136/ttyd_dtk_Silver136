@@ -10,7 +10,7 @@ typedef struct NpcSetupInfo {
     s32 flags; //0x4
     s32 reactionFlags; //0x8
     void* initEvent; //0xC
-    void* regularEvent; //0x10, TODO: rename?
+    void* regularEvent; //0x10
     void* talkEvent; //0x14
     void* deadEvent; //0x18
     void* findEvent; //0x1C
@@ -24,7 +24,7 @@ typedef struct NpcSetupInfo {
     f32 searchAngle; //0x4C
     f32 homingRange; //0x50
     f32 homingAngle; //0x54
-    s32 battleInfoId; //0x58, TODO: rename?
+    s32 battleInfoId; //0x58
 } NpcSetupInfo;
 
 USER_FUNC(evt_npc_entry);

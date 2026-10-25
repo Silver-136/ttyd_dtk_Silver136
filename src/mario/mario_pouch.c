@@ -75,7 +75,7 @@ void pouchInit(void) {
     mpp->level = 1;
     mpp->jumpLevel = 0;
     mpp->hammerLevel = 0;
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < PARTNER_COUNT; i++) {
         PouchPartyData* party = &mpp->partyData[i];
         if (i != PARTNER_NONE) {
             party->flags = 0;
@@ -1012,7 +1012,7 @@ void pouchRevisePartyParam(void) {
 
     count = pouchEquipCheckBadge(ITEM_HP_PLUS_P);
 
-    for (i = 0; i < 8; i++) { //TODO: NUM_PARTNERS macro
+    for (i = 0; i < PARTNER_COUNT; i++) {
         if (i != PARTNER_NONE) {
             party = &mpp->partyData[i];
             party->baseMaxHP = _party_max_hp_table[i][party->HPLevel];

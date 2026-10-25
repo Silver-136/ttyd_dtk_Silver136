@@ -139,8 +139,8 @@ typedef struct MapFileJoint {
 typedef struct MapFileHeader {
     s32 fileSize;     // 0x0
     s32 dataSize;     // 0x4
-    s32 relCount;     // 0x8, TODO: rename?
-    s32 chunkCount;   // 0xC, TODO: rename?
+    s32 relCount;     // 0x8
+    s32 chunkCount;   // 0xC
     s32 unused;       // 0x10
     u8 reserved[0xC]; // 0x14
 } MapFileHeader;
@@ -301,8 +301,8 @@ typedef struct MapEntry {
     struct HitEntry* rootHitObj;     // 0xAC
     Vec bbox[8];                   // 0xB0
     void* tevCallbacks[16];        // 0x110
-    s32 numJoints;                 // 0x150, TODO: rename? see: hitNumJoints
-    MapObject* objects;            // 0x154, TODO: rename? see: hitNumJoints
+    s32 numJoints;                 // 0x150
+    MapObject* objects;            // 0x154
     s32 hitNumJoints;              // 0x158
     struct HitEntry* hitEntries;     // 0x15C
     s32 numAnims;                  // 0x160

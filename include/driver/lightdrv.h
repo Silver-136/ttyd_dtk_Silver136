@@ -8,7 +8,7 @@
 #pragma enumsalwaysint off
 typedef enum LightEntryFlags {
     LIGHT_ENABLED = 1 << 0,
-    LIGHT_NO_DIST_ATTEN = 1 << 6, //TODO: rename?
+    LIGHT_NO_DIST_ATTEN = 1 << 6,
     LIGHT_CHARA = 1 << 7,
     LIGHT_POINT = 1 << 12,
     LIGHT_SPOT = 1 << 13,

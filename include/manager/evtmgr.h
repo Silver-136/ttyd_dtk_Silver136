@@ -226,7 +226,7 @@ struct EventEntry {
     s32 eventId;                // 0x15C, validated
     s32 unitId;                 // 0x160
     f32 timescale;              // 0x164, number of instructions per frame
-    f32 commandsLeft;           // 0x168, TODO rename/retype
+    f32 commandsLeft;           // 0x168
     s32 caseId;                 // 0x16C
     NpcEntry* ownerNPC;         // 0x170, verified
     MapObjectEntry* thisMapObj; // 0x174, verified
@@ -245,7 +245,7 @@ struct EventEntry {
     };
     u32 msgPriority;            // 0x190
     u32 field_0x194;            // 0x194
-    OSTime savedTime;           // 0x198, TODO rename
+    OSTime savedTime;           // 0x198
     void* restartFrom;          // 0x1A0, validated
     const char* name;           // 0x1A4
     void* currCommand;          // 0x1A8

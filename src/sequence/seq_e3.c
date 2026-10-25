@@ -332,7 +332,7 @@ void seq_e3Main(SequenceWork* seq) {
             pouchSetMaxFP(20);
             pouchSetFP(20);
 
-            for (i = 0; i < 8; i++) {
+            for (i = 0; i < PARTNER_COUNT; i++) {
                 pouchGetPtr()->partyData[i].currentHP = 20;
                 pouchGetPtr()->partyData[i].HPLevel = 1;
             }

@@ -37,7 +37,7 @@ typedef struct StreamHeader {
     SND_ADPCMSTREAM_INFO coef1;   // 0xBC, type 2: channel 1 DSP header (at 0xA0) coefficients
 } StreamHeader;
 
-typedef struct SoundGroup {  // TODO: rename
+typedef struct SoundGroup {
     u16 flags;               // 0x0
     u16 index;               // 0x2, position in the group list (SoundSongGetGroup lookup key)
     SND_GROUPID groupId;     // 0x4

@@ -59,6 +59,8 @@ extern const char* g_moamoa_chain_tbl[][2];
 void evalOn(void);
 static void ext_moamoa_main(void);
 #pragma inline_max_total_size(100000)
+// moa_sin/moa_cos and moa_sinx/moa_cosx: two copies of the polySinf/polyCosf bodies (poly_trig.h); one shared
+// pair changes the code, so this unit inlined distinct copies.
 static inline f32 moa_sin(f32 x) {
     f32 a = 0.00761f;
     f32 b = 0.16605f;

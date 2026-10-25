@@ -7,7 +7,7 @@
 typedef struct BattleWorkIcon {
     u16 flags; //0x0
     u16 iconId; //0x2
-    s32 index; //0x4, TODO: rename?
+    s32 index; //0x4
     Vec position; //0x8
     f32 scale; //0x14, init 1.0; iconSetScale(scale * scaleMul)
     f32 scaleMul; //0x18, init 1.0

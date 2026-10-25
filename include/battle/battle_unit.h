@@ -15,7 +15,6 @@ typedef enum BattleUnitAlliance {
     ALLIANCE_NEUTRAL, // stage objects
 } BattleUnitAlliance;
 
-// TODO: better name
 typedef enum BattleUnitToken_Flags {
     kChargeExpended = (1 << 3),     // 0x8
     kConfusedAction = (1 << 4),     // 0x10
@@ -315,16 +314,14 @@ typedef enum BattleUnitType {
 } BattleUnitType;
 
 typedef struct BattleDataEntry {
-    s32 tag;    // 0x0, TODO: rename?
-    void* data; // 0x4, TODO: rename?
+    s32 tag;    // 0x0
+    void* data; // 0x4
 } BattleDataEntry;
 
-// TODO: move/rename?
 typedef struct BattleUnitDefense {
     s8 defenses[5]; // 0x0
 } BattleUnitDefense;
 
-// TODO: move/rename?
 typedef struct BattleUnitDefenseAttr {
     s8 defenseAttrs[5]; // 0x0
 } BattleUnitDefenseAttr;
@@ -363,8 +360,8 @@ typedef struct BattleUnitKindPart {
     s32 partNum;                                   // 0x0
     const char* partName;                          // 0x4
     const char* modelName;                         // 0x8
-    Vec positionOffset;                            // 0xC, TODO: shorter name?
-    Vec hitBaseOffset;                             // 0x18, TODO: better name?
+    Vec positionOffset;                            // 0xC
+    Vec hitBaseOffset;                             // 0x18
     Vec hitCursorBaseOffset;                       // 0x24
     s16 shadowSize;                                // 0x30, -> BattleWorkUnitPart.shadowSize
     s16 reserved_32;                               // 0x32, -> BattleWorkUnitPart.reserved_1A4, never read

@@ -375,7 +375,8 @@ typedef enum MarioPartner {
     PARTNER_YOSHI,
     PARTNER_FLURRIE,
     PARTNER_VIVIAN,
-    PARTNER_MSMOWZ
+    PARTNER_MSMOWZ,
+    PARTNER_COUNT
 } PartyId;
 
 typedef struct PouchPartyData {
@@ -389,7 +390,7 @@ typedef struct PouchPartyData {
 } PouchPartyData;
 
 typedef struct PouchData {
-    PouchPartyData partyData[8];       // 0x0
+    PouchPartyData partyData[PARTNER_COUNT]; // 0x0
     s16 currentHP;                     // 0x70
     s16 maximumHP;                     // 0x72, includes HP Plus boost
     s16 currentFP;                     // 0x74

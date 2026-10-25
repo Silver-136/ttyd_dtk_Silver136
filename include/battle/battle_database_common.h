@@ -54,7 +54,7 @@ typedef struct BattleWeapon {
     s8 reserved_1B;                   // 0x1B, 1 (50 on player moves), never read
     void* hpDamageFn;                 // 0x1C
     u32 hpDamageWork[8];              // 0x20
-    void* fpDamageFn;                 // 0x40, TODO rename
+    void* fpDamageFn;                 // 0x40
     u32 fpDamageWork[8];              // 0x44
     u32 targetClassFlags;             // 0x64
     u32 targetPropertyFlags;          // 0x68

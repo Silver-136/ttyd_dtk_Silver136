@@ -89,9 +89,9 @@ typedef struct {
 CardData* cardGetFilePtr(void);
 void cardBufReset(void);
 void cardInit(void);
-void cardInsertWatchStart(void); //called by evt_memcard, TODO: rename
-void cardInsertWatchEnd(void); //called by evt_memcard, TODO: rename
-BOOL cardInsertChanged(void); //called by evt_memcard, TODO: rename
+void cardInsertWatchStart(void); //called by evt_memcard
+void cardInsertWatchEnd(void); //called by evt_memcard
+BOOL cardInsertChanged(void); //called by evt_memcard
 BOOL cardIsExec(void);
 s32 cardGetCode(void);
 void cardMain(void);

@@ -214,10 +214,10 @@ typedef struct NpcFieldEntry {
     char mModelName[64];                // 0x0
     char mAnimName[64];                 // 0x40
     u32 mFlags;                         // 0x80
-    f32 wCurrentRenderRotationMinus90Y; // 0x84, TODO better name
-    f32 wRotationY;                     // 0x88, TODO better name
-    f32 wScaleZ_flip;                   // 0x8C, TODO better name
-    f32 wInitToZero4;                   // 0x90, TODO better name
+    f32 wCurrentRenderRotationMinus90Y; // 0x84
+    f32 wRotationY;                     // 0x88
+    f32 wScaleZ_flip;                   // 0x8C
+    f32 wInitToZero4;                   // 0x90
 } NpcFieldEntry;
 
 typedef struct NpcWork {
