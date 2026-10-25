@@ -127,10 +127,7 @@ USER_FUNC(white_off);
 USER_FUNC(white_on);
 static USER_FUNC(yami_view);
 void kpaSen_ext_dispent(void);
-void kpaSen_ext_shadow_disp(CameraId camera, void* param);
-void kpaSen_ext_disp(CameraId camera, void* param);
 void kpaSen_ext_main(void);
-s32 calcPose(s32 i, s32 lo, s32 hi, s32 flag);
 void kpaSen_ext_init(void);
 void kpa_stg5_009_7_cb(s32 type, smartEntry* smart);
 USER_FUNC(party_tev);
@@ -289,7 +286,6 @@ void kpa_stg5_009_7_cb(s32 type, smartEntry* smart) {
     }
 }
 
-static USER_FUNC(booboo_main);
 static USER_FUNC(booboo_main) {
     u32 i;
 
@@ -2514,7 +2510,6 @@ EVT_BEGIN(kanbu_regl)
     RETURN
 EVT_END()
 
-void kpaSen_ext_dispent(void);
 
 void kpaSen_ext_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, kpaSen_ext_disp, NULL);
@@ -3142,7 +3137,6 @@ static USER_FUNC(anim_tevcallback) {
     return EVT_RETURN_DONE;
 }
 
-static USER_FUNC(delete_npc_regl_evt);
 static USER_FUNC(delete_npc_regl_evt) {
     NpcEntry* npc = npcNameToPtr_NoAssert((const char*)evtGetValue(event, event->args[0]));
 

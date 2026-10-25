@@ -489,7 +489,6 @@ s32 BattleTransPartyId(BattleUnitType kind) {
     }
 }
 
-f32 BattleGetFloorHeight(f32 x, f32 y, f32 z);
 
 BattleUnitType BattleTransPartyIdToUnitKind(s32 partyId) {
     switch (partyId) {

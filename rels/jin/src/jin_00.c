@@ -78,17 +78,9 @@ USER_FUNC(senteresa_tikaduku_stop);
 USER_FUNC(senteresa_get_random_position);
 USER_FUNC(senteresa_get_seq);
 static void senteresa_ext_shadow_disp(void);
-static void senteresa_ext_disp(CameraId camera, void* param);
-void senteresa_loadTev(void);
-void senteresa_loadRenderMode(void);
 static void senteresa_ext_dispent(void);
 static void senteresa_ext_main(void);
 static void senteresa_ext_init(void);
-static void computePos(Teresa* ter, Vec* out);
-s32 computeAlpha(Teresa* ter, MarioWork* mp, f32 angle);
-void computeMtx(ExtdrvPose* pose, f32 angle);
-f32 computeAngle(ExtdrvPose* pose, MarioWork* mp);
-static f32 randf(f32 min, f32 max);
 s32 randn(s32 min, s32 max);
 
 static EvtWord w_open[22];

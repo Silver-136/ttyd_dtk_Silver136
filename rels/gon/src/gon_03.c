@@ -55,12 +55,9 @@ static USER_FUNC(senkaronGetMarioPushedFlag);
 static USER_FUNC(senkaronToEscape);
 USER_FUNC(leader_touch_check);
 void nokotaro_callback(s32 type);
-static f32 randf(f32 min, f32 max);
 static void senkaron_ext_init(void);
 static void senkaron_ext_main(void);
 static void senkaron_ext_dispent(void);
-static void senkaron_ext_disp(CameraId camera, void* param);
-static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 
 static NpcSetupInfo npcEnt[4];
 static EvtWord door01_close[12];

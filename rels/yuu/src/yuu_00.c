@@ -78,7 +78,6 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
 void yuuminigame_disp_1hikoki(CameraId camera, void* param);
 void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall);
-static void monte_disp(CameraId camera, void* param);
 
 static MonteTable montetable[4];
 static EvtWord minigame_view_monte[4];

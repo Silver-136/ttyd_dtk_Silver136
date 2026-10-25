@@ -245,7 +245,6 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
-f32 hypotf(f32 x, f32 y);
 
 static u16 krb_comp_dir(f32 x, f32 z) {
     f32 dist = hypotf(x, z);

@@ -39,7 +39,6 @@ void BtlUnit_SetAnim(BattleUnitPart* part, s32 anim);
 
 #include "battle/battle_unit.h"
 #include "battle/battle_database_common.h"
-static USER_FUNC(_get_mario_hammer_lv);
 
 
 USER_FUNC(_battle_majinai_effect);

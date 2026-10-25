@@ -77,18 +77,13 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuunpc_go);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
-BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, SlitWork* data);
 void yuuminigame_disp_4slit(CameraId camera, void* param);
 void yuuminigame_main_4slit(EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall);
 USER_FUNC(evt_ryushi_init);
-static f32 randf(f32 min, f32 max);
-void ryushi_disp(CameraId camera, void* param);
-static void polygon(f32 x, f32 y, f32 w, f32 h, f32 u, f32 v);
 static USER_FUNC(evt_nomal_cange);
 USER_FUNC(evt_slit_cancel);
 USER_FUNC(yuu_03_icon_monte_restart);
-void yuu_03_icon_monte_disp(CameraId camera, void* param);
 
 EvtWord yuu_03_icon_monte_entry_evt[4];
 EvtWord ryushi_event[25];

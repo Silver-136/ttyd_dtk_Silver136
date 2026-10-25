@@ -145,7 +145,6 @@ EVT_END()
 const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};
 
 
-s32 mobj_lv_blk_evt(MapObjectEntry* mobj);
 
 // FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi
 static inline EvtWord blkHitCheck(MapObjectEntry* m) {
@@ -162,14 +161,10 @@ static inline BOOL isAnimA13(const s8* a) {
 }
 
 extern void* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 id, s32 mode, s32 collect, void* script);
-s32 mobj_recovery_blk(MapObjectEntry* mobj);
 
 extern void npcKoopaModeMobjBoundDeadCheck(void* hit);
 extern void effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z);
-s32 mobj_koopa_brickblk(MapObjectEntry* mobj);
-s32 mobj_koopa_badgeblk(MapObjectEntry* mobj);
 
-s32 mobj_brickblk(MapObjectEntry* mobj);
 
 s32 kpa_powerup(EventEntry* event, BOOL isFirstCall);
 s32 fire_func(EventEntry* event, BOOL isFirstCall);
@@ -182,16 +177,12 @@ EVT_BEGIN(evt_fire)
     RETURN
 EVT_END()
 
-s32 mobj_koopa_sango_evt(MapObjectEntry* mobj);
-s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj);
 #include "driver/imgdrv.h"
 #include "driver/offscreendrv.h"
 #include "driver/camdrv.h"
 #include "system.h"
 extern void test_kururing_mapdisp(s32 camId);
 #include "driver/npcdrv.h"
-s32 mobj_kururing_floor(MapObjectEntry* mobj);
-s32 mobj_lock(MapObjectEntry* mobj);
 
 USER_FUNC(evt_cam_get_pos);
 USER_FUNC(evt_cam_letter_box_disable);
@@ -209,7 +200,6 @@ USER_FUNC(kpa_get_pole_name);
 USER_FUNC(kpa_get_width);
 USER_FUNC(kpa_powerup);
 USER_FUNC(kpa_score_to_str);
-static USER_FUNC(kpa_get_level);
 
 // ---- BEGIN tail (defined in reverse of target order) ----
 
@@ -1861,7 +1851,6 @@ static inline void mobj_itemb(MapObjectEntry* mobj) { \
     mobj->scale2.z *= 1.2f; \
     mobjCalcMtx2(mobj); \
 }
-s32 mobj_itembox(MapObjectEntry* mobj);
 
 s32 mobj_itembox(MapObjectEntry* mobj) {
     EventEntry* ev;
@@ -2071,7 +2060,6 @@ void mobj_sign(void) {
 }
 
 extern EffectEntry* effCoinFukidashiEntry(f32 x, f32 y, f32 z, s32 type, s32 number, s32 duration);
-extern s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
 
 // case 3 heal sequence; case 4 spells the same steps out inline (only this split reproduces the target registers)
 static inline void recoveryHeal(void) {

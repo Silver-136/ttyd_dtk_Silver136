@@ -963,11 +963,6 @@ void zubastar_disp2D(CameraId cam, void* param) {
     }
 }
 
-s32 star_stone_appear(void);
-s32 wait_star_stone_up(void);
-s32 main_star(void);
-s32 zubastar_init(void);
-s32 zubastar_end(void);
 USER_FUNC(zubastar_main);
 
 

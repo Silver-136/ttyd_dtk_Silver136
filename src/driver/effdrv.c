@@ -509,9 +509,3 @@ void effDrawMayaPoly(MayaPoly* poly) {
 }
 
 // forward declarations: these functions are defined further down
-void effDrawMayaPoly(MayaPoly* poly);
-void effCalcMayaAnim(MayaAnim* anim);
-void effPlayMayaAnim(MayaAnim* anim);
-void effDeleteMayaAnim(MayaAnim* anim);
-MayaAnim* effMayaAnimAlloc(MayaAnimData* data);
-void effCalcMayaAnimMatrix(MayaAnim* anim, MayaKeyList* list, f32* mtx, f32* alpha);

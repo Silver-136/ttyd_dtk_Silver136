@@ -168,7 +168,6 @@ USER_FUNC(evt_msg_print) {
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
 
-s32 msgWindow_Entry(const char* msg, s32 a2, s32 a3);
 
 const char* partyMsgStr[] = {"", "_kur", "_nok", "_bom", "_yos", "_win", "_viv", "_chu", "_jug", "_tel", "_lui"};
 const char* battlePartyMsgStr[] = {"_kur", "_nok", "_yos", "_win", "_viv", "_bom", "_chu"};

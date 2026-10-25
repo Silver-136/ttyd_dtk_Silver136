@@ -21,7 +21,6 @@ USER_FUNC(evt_goryuugijo_main_func);
 USER_FUNC(eff_call_yuugijo);
 USER_FUNC(evt_goryuugijo_free);
 USER_FUNC(evt_goryuugijo_alloc);
-void evt_goryuugijo_disp_func(CameraId camera, void* param);
 
 static EvtWord main_evt[4];
 

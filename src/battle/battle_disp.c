@@ -289,19 +289,9 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
 }
 
 typedef void (*PartsDispCb)(BattleUnitPart*, s32);
-void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part);
-void BattleCommandDisplay(BattleWork* wp);
-void BattleStockExpDisp(void);
-void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed);
-void gravityOffsetControl(BattleUnitPart* part);
-void floatOffsetControl(BattleUnitPart* part);
-void statusPoseControl(BattleUnitPart* part);
-f32 getGravityDispOffset(BattleUnitPart* part);
-f32 getFloatDispOffset(BattleUnitPart* part);
 void btlUnitPartsBlurDisp(CameraId camId, BattleUnitPart* part);
 void btlUnitItemDisp2(CameraId camId, BattleUnit* unit);
 void btlUnitStolenItemDisp(CameraId camId, void* param);
-void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation);
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* part);
 
 void btlDispMain(void) {

@@ -54,8 +54,6 @@ USER_FUNC(evt_twoddisp_set_base_position);
 USER_FUNC(evt_twoddisp_set_position);
 USER_FUNC(kpa_chg_pose);
 USER_FUNC(kpa_score_disp_init);
-void kpa_stageclear_disp(CameraId camera, void* param);
-void kpa_status_disp(CameraId camera, void* param);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

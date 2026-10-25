@@ -2506,7 +2506,6 @@ void puniModeAwayjump(PuniData* p) {
     }
 }
 
-int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist);
 
 static const Vec puni_away_zero0 = {0.0f, 0.0f, 0.0f};
 #pragma dont_inline on
@@ -2882,7 +2881,6 @@ void puniModeDead(PuniData* p) {
     }
 }
 
-int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist);
 int puniModeWind_sub(PuniData* p) {
     Vec dir;
     Vec start;
@@ -4161,24 +4159,6 @@ void puni_puni_init(void) {
     memset(Punimap, 0, 0x24);
 }
 
-void puniModePiyori(PuniData* p);
-void puniModeEscape(PuniData* p);
-void puniModeHagure(PuniData* p);
-void puniModeFunbari(PuniData* p);
-void puniModeWater(PuniData* p);
-void puniModeTrap(PuniData* p);
-void puniModeEnter(PuniData* p);
-void puniModeExit(PuniData* p);
-void puniModeSearch(PuniData* p);
-void puniModeParent(PuniData* p);
-void puniModeMass(PuniData* p);
-void puniModeAwayjump(PuniData* p);
-void puniModeAway(PuniData* p);
-void puniModeDamage(PuniData* p);
-void puniModeRecover(PuniData* p);
-void puniModeWind(PuniData* p);
-void puniModeFall(PuniData* p);
-void puniModeUpdraft(PuniData* p);
 
 
 void puniModeMain(PuniData* p);
@@ -5097,7 +5077,6 @@ USER_FUNC(evt_puni_mem_init) {
     return EVT_RETURN_DONE;
 }
 
-void puniAnimationInit2(void);
 // FAKE: second copy of puniAnimationInit in its natural form (puniAnimCount for both tables); evt_puni_init
 // inlines it and reaches 100%, while the out-of-line puniAnimationInit above only matches with its hand-written
 // second loop. Same effect as the old open-coded loops (count up to the first -1/-2, store it in end[i]).
@@ -5474,7 +5453,6 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall)
   return 2;
 }
 
-extern double fabs(double);
 USER_FUNC(evt_puni_setup) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();

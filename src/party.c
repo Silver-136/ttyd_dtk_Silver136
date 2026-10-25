@@ -2292,7 +2292,6 @@ void party_ride_yoshi_force_move(void) {
     }
 }
 
-void partyGetAppearPos(PartyEntry* party, Vec* pos);
 
 s32 partyRideYoshiMain(PartyEntry* party) {
     Vec pos;
@@ -2354,7 +2353,6 @@ s32 partyRideYoshiMain(PartyEntry* party) {
     return 0;
 }
 
-void vivianShadow(PartyEntry* party);
 
 void party_damage_return(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -2567,8 +2565,6 @@ PartyEntry* partyPtrTbl[2];
 PartyData* party_dp;
 s32 partyCtrlNo;
 
-s32 partyEntryMain(s32 memberId);
-void partyGetAppearPos2(PartyEntry* party, Vec* pos);
 
 //.sdata
 
@@ -3004,19 +3000,3 @@ void partySetFamicomMode(PartyEntry* party, s32 mode) {
 }
 
 // forward declarations: these functions are defined further down
-void partyDisp(CameraId cam, void* param);
-void partyPreDisp(PartyEntry* party);
-void partyMakeDispDir(PartyEntry* party);
-void party_damage_return(PartyEntry* party);
-s32 partyRideYoshiMain(PartyEntry* party);
-void partyRideMain(PartyEntry *party);
-void getRidePos(PartyEntry* party, Vec* pos);
-s32 partyDokanMain(PartyEntry* party);
-s32 partyDokanInit(PartyEntry* party);
-s32 partyHelloMain(PartyEntry* party);
-void driveParty(PartyEntry* party);
-void N_partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub);
-void N__partyChgRunMode(PartyEntry* party, s32 prev, s32 mode);
-s32 partyEntryMain(s32 memberId);
-void partySetForceMove(PartyEntry* party, s16 a2, f32 a3, f32 a4);
-void partyChgPose(PartyEntry* party, char* pose);

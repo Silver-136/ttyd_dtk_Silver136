@@ -65,10 +65,6 @@ static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 static USER_FUNC(sysflag);
 static USER_FUNC(yami_view);
-static void _img_alloc_capture(EvtWord a0, EvtWord a1, EvtWord a2, EvtWord a3, EvtWord a4, EvtWord a5, EvtWord a6, EvtWord a7);
-static s32 _ofs_get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
-static void _mapsetofs_all(CloudWork* wp);
-static void _mapclsofs_all(CloudWork* wp);
 extern s32 envSetYami[];
 
 static s16 puni_rand_position[196];

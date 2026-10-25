@@ -65,7 +65,6 @@ static USER_FUNC(x_flag_set);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 static USER_FUNC(x_flag_add);
 static USER_FUNC(x_flag_wait);
-static void lecture_button_disp(CameraId camera, void* param);
 static USER_FUNC(lecture_button_set_alpha);
 static USER_FUNC(lecture_button_get_icon_id);
 static void lect_map_cam_chg_sub(MapObject* obj, s32 camId, BOOL siblings);

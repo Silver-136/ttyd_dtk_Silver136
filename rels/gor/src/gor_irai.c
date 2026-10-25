@@ -45,9 +45,6 @@ USER_FUNC(irai_end_func);
 USER_FUNC(irai_init_func);
 USER_FUNC(irai_main_func);
 USER_FUNC(irai_start_func);
-void irai_window_disp(CameraId camera, void* param);
-void irai_flag_disp(void);
-void irai_flag_clear(void);
 
 const char* irai_msg_client[30];
 const char* irai_msg_contents[30];

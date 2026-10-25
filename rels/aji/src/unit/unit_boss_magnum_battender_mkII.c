@@ -72,8 +72,6 @@ static USER_FUNC(eff_dead);
 USER_FUNC(aud_target_mark);
 USER_FUNC(aud_fire_no_hit);
 USER_FUNC(aud_fire_hit);
-void aud_fire_eff(f32 x, f32 y, f32 z);
-void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z);
 USER_FUNC(aud_scream_fadeout);
 USER_FUNC(aud_suikomi);
 USER_FUNC(aud_jet_end);

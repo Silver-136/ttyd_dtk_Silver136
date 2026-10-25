@@ -1264,4 +1264,3 @@ void marioRollStrippedPool(void) {
 }
 
 // forward declarations: these functions are defined further down
-void roll_upstairs(void);

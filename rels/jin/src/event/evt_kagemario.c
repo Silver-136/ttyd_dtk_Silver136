@@ -17,8 +17,6 @@ static USER_FUNC(check);
 static USER_FUNC(test);
 USER_FUNC(evt_kagemario_change);
 USER_FUNC(evt_kagemario_init);
-static s32 color_change_evt(s32 on);
-static void callback(MapTevCallbackInfo* info);
 
 static EvtWord evt_check[4];
 EvtWord evt_usu_kagemario_party_kill[42];

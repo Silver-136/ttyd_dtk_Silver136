@@ -1229,7 +1229,6 @@ extern HitEntry* kpaSearchHead(Vec* pos, f32* h, f32 d);
 extern s32 kpaGetBodyStatus(void);
 extern void marioClearJumpPara(void);
 extern void marioChgStayMotion(void);
-extern void marioSetFallPara(void);
 extern s32 psndSFXOn_3D(const char* name, Vec* position);
 
 typedef struct { u8 pad[0x15]; char name[16]; } MobjNameView;
@@ -2587,23 +2586,3 @@ void marioCheckWallShip(f32 dx, f32 dz) {
 }
 
 // forward declarations: these functions are defined further down
-void marioCheckWallShip(f32 dx, f32 dz);
-BOOL marioSlitChkWallAround(void);
-HitEntry* N_dou10_yoko_yari3(void);
-HitEntry* dou10_yoko_yari2(f32* out);
-HitEntry* marioChkFront(f32* out, const Vec* pos, f32 angle, f32 dist);
-void marioCheckWall_roll(f32 dx, f32 dz);
-void marioCheckWall(f32 dx, f32 dz);
-HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd);
-f32 marioChkOverhead(void);
-HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs);
-HitEntry* marioChkLandon(f32* a, f32 d);
-void marioChkToge(void);
-void marioChkGnd2(void);
-HitEntry* marioSearchUnder(void);
-void clear_hitobj_ride(void);
-BOOL chkfilterVecVivian(HitCheckQuery* query, HitEntry* entry);
-BOOL chkfilterVecRoll(HitCheckQuery* query, HitEntry* entry);
-BOOL chkfilterVec(HitCheckQuery* query, HitEntry* entry);
-BOOL chkFilterAttr2(HitCheckQuery* query, HitEntry* entry);
-void marioHitCheckWidth(void);

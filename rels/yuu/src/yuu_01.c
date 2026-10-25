@@ -72,7 +72,6 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
 void yuuminigame_disp_2fune(CameraId camera, void* param);
 void yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_2fune(EventEntry* event, BOOL isFirstCall);
-static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
 
 const char* s_nametbl[21];

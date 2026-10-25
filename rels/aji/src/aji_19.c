@@ -21,7 +21,6 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 
 static USER_FUNC(mario_chk);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
-static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

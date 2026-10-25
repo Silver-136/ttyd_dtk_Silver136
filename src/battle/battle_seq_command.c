@@ -1466,7 +1466,6 @@ void BattleCommandDisplay_ActMenuSetup(BattleWork* wp, u32 a) {
         return FALSE; \
     }
 
-void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp);
 
 s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
@@ -1646,7 +1645,6 @@ void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a)
 #pragma dont_inline reset
 
 void BattleCommandDisplay_WeaponSelectMenuEnd(BattleWork* wp);
-void BattleCommandDisplay_TargetSelectMenuSetup(BattleWork* wp);
 
 s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type) {
     BattleCommand* cmd = &wp->commandMenu;

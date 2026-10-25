@@ -1569,7 +1569,6 @@ void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
 
 #include "sdk/texPalette.h"
 
-void animSetMaterial_Texture(s32 texCount, s32 *texIdRemap, AnimPoseTexEntry *pTexEntries, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile);
 void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *pTexEntries_, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile)
 {
   s32 texCount;
@@ -2190,8 +2189,6 @@ void renderProc(s32 shapeId, s32 unused) {
 
 // dispProc
 
-void materialProc(s32 shapeId, s32 xluStage);
-void vivihimo(Mtx a, Mtx b, f32 speed, f32 scale, f32 offA, f32 offB);
 
 void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
     AnimPoseGroup* group;
@@ -2715,7 +2712,6 @@ void animPaperPoseDisp(CameraId camId, void* param) {
 }
 
 #include "sdk/DEMOInit.h"
-void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f32 scale);
 void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     AnimationPose* pose;
     AnimData* d;
@@ -2864,7 +2860,6 @@ void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     pose->paperCapture1 = 0;
 }
 
-void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f32 scale);
 #include "sdk/DEMOInit.h"
 // target .bss/.sbss pad (uninitialised objects are emitted in reverse order, so this sits last)
 

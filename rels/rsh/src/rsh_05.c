@@ -56,26 +56,17 @@ typedef struct MoamoaWork { u16 flags; u8 field_0x2[2]; s32 count; Moamoa* moa; 
 typedef struct MoamoaData { const char* model; const char* anim; f32 speed; } MoamoaData;
 static MoamoaWork* wp;
 static f32 randf(f32 min, f32 max);
-static f32 randf(f32 min, f32 max);
-static void moamoa_pose_init(void);
 static void moamoa_pose_init(void);
 static void moamoa_pose_main(void);
-static void moamoa_pose_main(void);
-static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
 static inline f32 moa_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
 static inline f32 moa_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
 static inline f32 moa_sinx(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { x = 1.5707964f - (x - 1.5707964f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } } else if (x < 4.712389f) { x = x - 3.1415927f; x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; a = -a; } else { x = 1.5707964f - (x - 4.712389f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; a = -a; } return a; }
 static inline f32 moa_cosx(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { x = 1.5707964f - (x - 1.5707964f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { x = x - 3.1415927f; x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = -a; } else { x = 1.5707964f - (x - 4.712389f); x2 = x * x; a = a * x2 - b; a = a * x2 + c; } return a; }
 static void ext_moamoa_main(void);
-static void ext_moamoa_main(void);
-static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
 static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
-static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void ext_disp(CameraId camera, void* param);
-static void ext_disp(CameraId camera, void* param);
-static void ext_shadow_disp(CameraId camera, void* param);
 static void ext_shadow_disp(CameraId camera, void* param);
 
 s32 evt_cam3d_evt_set_at(EventEntry* event, BOOL isFirstCall);
@@ -86,39 +77,18 @@ s32 evt_item_get_item(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_flag_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall);
 s32 evt_npc_set_tribe(EventEntry* event, BOOL isFirstCall);
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall);
-static s32 npc_jump(EventEntry* event, BOOL isFirstCall);
 static void ext_moamoa_dispent(void);
-static void ext_moamoa_dispent(void);
-static void ext_moamoa_main(void);
-static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
-static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
-static void ext_shadow_disp(CameraId camera, void* param);
-static void ext_disp(CameraId camera, void* param);
 static void ext_moamoa_init(void);
-static void ext_moamoa_init(void);
-static f32 randf(f32 min, f32 max);
-static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall);
-static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
-static void moamoa_pose_main(void);
-static void moamoa_pose_init(void);
 
 static ExtTexInfo ext_moamoa_data[47];
 static EvtWord evt_moamoa_init[57];

@@ -119,9 +119,6 @@ typedef struct IconEffWork {
 
 static void disp_3D_alpha(CameraId cam, void* param);
 static void disp_3D(CameraId cam, void* param);
-static void disp_3D(CameraId cam, void* param);
-static void disp_3D(CameraId cam, void* param);
-static void disp_3D(CameraId cam, void* param);
 static void disp_2D(CameraId cam, void* param);
 static MukiWork* get_ptr(void);
 static void main_star(void);

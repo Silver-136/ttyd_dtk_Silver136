@@ -73,7 +73,6 @@ static USER_FUNC(lecture_button_flag_on_off);
 static USER_FUNC(lecture_button_set_alpha);
 static USER_FUNC(lecture_button_set_icon_id);
 static USER_FUNC(lecture_button_rtn);
-static void lecture_button_disp(CameraId camera, void* param);
 static USER_FUNC(x_flag_get);
 static USER_FUNC(x_flag_add);
 static USER_FUNC(lect_status_on);

@@ -3451,7 +3451,6 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 #include <string.h>
 #include "data/item_data.h"
 s32 BattleEnemyUseItemCheck(BattleUnit* unit);
-f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 BattleWeapon* BattleGetSelectWeapon(BattleWork* wp);
 extern ItemData itemDataTable[];
@@ -4243,7 +4242,6 @@ USER_FUNC(btlevtcmd_GetConfuseActEvent) {
     return EVT_RETURN_DONE;
 }
 
-void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, s32 n, s32* id, s32* pno);
 
 USER_FUNC(btlevtcmd_MarioJumpParam) {
     EvtWord* args = event->args;

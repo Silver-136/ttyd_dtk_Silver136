@@ -80,10 +80,7 @@ USER_FUNC(tobikakaru_end);
 USER_FUNC(tobikakaru_init);
 #ifdef VERSION_G8ME01
 #endif
-void tobikakari_seq00(NanNPC* npc);
-NanNPC* random_choice_target(s32 type);
 void suifu_kyorokyoro_init(NanNPC* npc);
-void suifu_kyorokyoro(NanNPC* npc);
 static void alpha_tev(MapTevCallbackInfo* info);
 
 static ExtTexInfo ext_entry_data[59];

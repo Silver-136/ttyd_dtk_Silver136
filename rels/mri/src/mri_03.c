@@ -44,7 +44,6 @@ USER_FUNC(puni_parent);
 static void alpha_tev(MapTevCallbackInfo* info);
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
-void puniModeEventparent(PuniData* puni);
 
 EvtWord jail_alpha_mario_check[24];
 EvtWord jail_alpha[220];

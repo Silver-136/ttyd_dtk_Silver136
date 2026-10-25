@@ -79,18 +79,9 @@ static USER_FUNC(senkaronGetMarioPushedFlag);
 static USER_FUNC(senkaronToEscape);
 USER_FUNC(set_mario_y_pos);
 static USER_FUNC(set_party_y_pos);
-static void senkaron_ext_shadow_disp(CameraId camera, void* param);
-static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_dispent(void);
 static void senkaron_ext_main(void);
-s32 party_hit_check(f32 x, f32 z, f32* dir);
-void calc_area(s32 i, f32 x, f32 z);
-void move_check(ExtdrvPose* pose, s32 idx);
 static void senkaron_ext_init(void);
-static f32 randf(f32 min, f32 max);
-void _kurokaron_next_move_index(void);
-s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario);
-s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

@@ -47,7 +47,6 @@ USER_FUNC(flower_pos_report);
 USER_FUNC(ss_ch_check);
 USER_FUNC(ss_ch_set);
 static f32 randf(f32 min, f32 max);
-void flower_disp(CameraId camera, void* param);
 void mirror_ball(void* param);
 
 EvtWord win_04w_door_open[10];

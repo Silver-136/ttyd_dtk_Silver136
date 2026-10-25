@@ -16,8 +16,6 @@ static f32 camGetRy(void);
 static s32 compare(const void* a, const void* b);
 
 void puniEntry(s32 poseNum, PunidrvTexInfo* texInfo, void (*initFunc)(void), void (*mainFunc)(void), void (*mainFunc2)(void));
-static s32 compare(const void* a, const void* b);
-static f32 camGetRy(void);
 
 static f32 sintbl[450];
 static u8 shadow_dl[32];

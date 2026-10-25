@@ -36,9 +36,6 @@ static USER_FUNC(piders_renzoku_attack_set_target);
 static USER_FUNC(piders_yarn_init);
 static void piders_get_next_target(s32* unitIdx, s32* partIdx);
 static void piders_get_target(s32* unitIdx, s32* partIdx);
-static void piders_draw_yarn_sub(CameraId camera, void* param);
-void GXEnd_(void);
-void GXPosition3f32_(f32 x, f32 y, f32 z);
 
 BattleUnitKind unit_piders;
 static BattleUnitDefense defence;

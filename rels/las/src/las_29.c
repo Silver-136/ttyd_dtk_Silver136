@@ -79,7 +79,6 @@ USER_FUNC(eff_b_peach_ripple);
 USER_FUNC(radiation_set_pos);
 void b_peach_msgcb(s32 type, void* param);
 void map_color_tev(MapTevCallbackInfo* info);
-void _hikariEntry(const char* name, s32 type, f32 scale);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

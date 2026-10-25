@@ -17,7 +17,6 @@ void FontDrawString(f32 x, f32 y, const char* str);
 USER_FUNC(evt_yuutitle_main_func);
 USER_FUNC(evt_yuutitle_free);
 USER_FUNC(evt_yuutitle_alloc);
-void evt_yuutitle_disp_func(CameraId camera, void* param);
 
 static EvtWord main_evt[4];
 

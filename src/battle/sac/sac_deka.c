@@ -136,7 +136,6 @@ void yuka_disp(CameraId cam, void* param);
 void yuka_capture(CameraId cam, void* param);
 static void disp_3D_alpha(CameraId cam, void* param);
 static void disp_3D(CameraId cam, void* param);
-static void disp_3D(CameraId cam, void* param);
 static void disp_2D(CameraId cam, void* param);
 USER_FUNC(end_deka);
 void main_enemy_sub(BattleUnit* unit, s32* n);

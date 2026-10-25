@@ -51,7 +51,6 @@ USER_FUNC(pposter_nok_on);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
 void nok_stg2_013_cb(s32 type, void** work);
-void draw_poster(void* userdata, s32 group);
 
 EvtWord nokonoko_A_init[27];
 EvtWord nokonoko_A_regl[2];

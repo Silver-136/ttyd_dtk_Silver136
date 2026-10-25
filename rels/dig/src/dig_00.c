@@ -34,7 +34,6 @@ USER_FUNC(gravity_scale);
 USER_FUNC(movie);
 USER_FUNC(sound_fade);
 static USER_FUNC(z);
-void movie_draw(CameraId camera, void* param);
 void dig_thpStop(void);
 void dig_thpInit(void);
 

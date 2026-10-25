@@ -84,8 +84,6 @@ static u8 color_rotation_data[] = {
 void effPeachDustMain(EffectEntry* effect);
 void effPeachDustDisp(CameraId cameraId, EffectEntry* effect);
 
-void effPeachDustMain(EffectEntry* effect);
-void effPeachDustDisp(CameraId cameraId, EffectEntry* effect);
 
 EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32 scale) {
     char* base;

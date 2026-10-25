@@ -18,7 +18,6 @@
 extern double __fabs(double);
 
 void effStarStoneDraw(CameraId cameraId, EffectEntry* effect);
-void effStarStoneDraw(CameraId cameraId, EffectEntry* effect);
 void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect);
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect);
 void effStarStoneMain(EffectEntry* effect);

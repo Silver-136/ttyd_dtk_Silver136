@@ -76,26 +76,10 @@ MapWork* mapWork; //allocates two entries
 
 typedef MapEntryAnimData MapAnim;
 
-void mapGetJointsSub(MapFileJoint* joint, s32* numJoints);
 #define lightGetNearObj(pos, out, count, flags) ((s32 (*)(Vec*, LightEntry**, s32, LightEntryFlags))lightGetNearObj)(pos, out, count, flags)
 
 //local prototypes
-void mapGetJointsSub(MapFileJoint* joint, s32* numJoints);
-void mapGetBoundingBox(Vec* min, Vec* max);
-void mapGetBoundingBox(Vec* min, Vec* max);
-void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table);
-void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table);
-MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index);
-MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index);
-MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isRoot, s32 index);
-MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isRoot, s32 index);
-MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index);
-MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index);
-void _mapLoad(MapWork* wp, BOOL group, const char* map);
-void makeDisplayList(BOOL group);
-void makeDisplayList(BOOL group);
 //anim functions?
-void _mapLoad(MapWork* wp, BOOL group, const char* map);
 
 void mapErrorEntry(s32 type, const char* name) { //1:1
     MapError* error = error_data;
@@ -392,8 +376,6 @@ GXTexObj* shadowGetRamp16TexObj(void);
 GXTexObj* shadowGetProjShadowTexObj(void);
 f32 (*shadowGetProjShadowProjTexMtx(void))[4];
 GXColor shadowGetProjShadowColor(void);
-void mapSetMaterial(MapObject* obj, void* material);
-void mapSetMaterial(MapObject* obj, void* material);
 static inline void mapResetPaperCraftAmbColor(void);
 
 void makeDisplayList(BOOL group) {
@@ -652,8 +634,6 @@ void mapSetPlayRate(const char* name, f32 rate) {
 }
 
 struct HitEntry* hitEntry(MapFileJoint* root, Mtx rootMtx, s32 mapIndex);
-MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
-MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
 
 static inline void* mapSearchChunk(MapHeader* header, const char* name) {
     u32 k;
@@ -1673,19 +1653,8 @@ void mapMain(void) {
 
 void mapSetTextureMatrix(MapMaterial* mat);
 
-void _mapDispMapObj(CameraId cam, MapObject *obj);
-void _mapDispMapObj(CameraId cam, MapObject* obj);
 static inline void mapSetObjFog(MapObject* obj);
-void _mapDispMapGrp(CameraId cam, MapObject* obj);
-void _mapDispMapGrp(CameraId cam, MapObject* obj);
-void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj);
-void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj);
-void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
-void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
-void mapSetTextureMatrix(MapMaterial* mat);
 void mapSetTextureMatrix(struct MapMaterial* mat);
-void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);
-void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);
 
 static inline BOOL mapObjIsTranslucent(u32 flags, GXColor objColor, GXColor matColor) {
     if ((flags & 0x40) && objColor.a != 0xFF) {

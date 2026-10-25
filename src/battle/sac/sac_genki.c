@@ -1177,10 +1177,8 @@ static void disp_3D(CameraId cam, void* param) {
 static void disp_3D_alpha(CameraId cam, void* param) {
 }
 
-static USER_FUNC(start_game);
 
 
-static GenkiWork* get_ptr(void);
 EVT_BEGIN(marioAttackEvent_Genki0)
     SET_VALUE(LW(15), 0)
     CALL_CHILD(genki_evt_common)

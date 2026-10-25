@@ -46,11 +46,8 @@ s32 wait_anim_end(EventEntry* event, BOOL isFirstCall);
 s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall);
 static void ext_dispent(void);
 static void ext_main(void);
-void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void ext_shadow_disp(CameraId camera, void* param);
-static void ext_disp(CameraId camera, void* param);
 static void ext_init(void);
-static f32 randf(f32 min, f32 max);
 extern s32 hei_test_water_tev[];
 
 static BeroEntry bero_entry_data[4];

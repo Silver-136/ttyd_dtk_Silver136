@@ -37,7 +37,6 @@ USER_FUNC(hammer_on);
 static USER_FUNC(lecture_init);
 void spot_square_disp(CameraId cameraId, void* param);
 void Quads2D(f32 x0, f32 y0, f32 x1, f32 y1);
-void Quads2D(f32 x0, f32 y0, f32 x1, f32 y1);
 
 BattleUnitKind unit_lecture_frankli_sac;
 static BattleUnitDefense defence;

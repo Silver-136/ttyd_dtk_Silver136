@@ -24,9 +24,6 @@ void replace_callback(BattleUnitPart* part, s32 type);
 void replace_disp(CameraId camera, void* param);
 
 USER_FUNC(replace_evt);
-void replace_callback(BattleUnitPart* part, s32 type);
-void replace_disp(CameraId camera, void* param);
-static f32 tanf(f32 x);
 
 BattleUnitKind unit_wanawana;
 static BattleUnitDefense defence;

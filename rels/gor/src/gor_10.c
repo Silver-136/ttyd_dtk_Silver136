@@ -79,10 +79,7 @@ USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(mabuta);
 USER_FUNC(tegami);
-void mabutaDisp(CameraId camera, void* param);
-static void depthDisp(CameraId camera, void* param);
 void tegami_delete(void);
-static void draw(CameraId camera, void* param);
 
 static void draw(CameraId camera, void* param) {
     winTexInit(*(TEXPalette**)wp->tpl->data);

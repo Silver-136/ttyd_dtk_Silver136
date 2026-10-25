@@ -131,10 +131,7 @@ USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
 USER_FUNC(wait_mahojin);
 static USER_FUNC(yami_view);
-s32 chk_cook_eff_type(s32 item);
 BOOL chkCookItem(s32 item);
-s32 itemNameToID(const char* name);
-s32 naniga_okorukana_cook(void);
 static s32 npc_process(void);
 extern s32 envSetYami[];
 

@@ -50,25 +50,18 @@ typedef struct FanWork { s32 num; Fan* fans; s32 animNum; FanAnim anim[32]; s32 
 typedef struct FanData { const char* name; const char* anim; f32 rate; } FanData;
 FanWork* fan_wp;
 static void pose_init(void);
-static void pose_init(void);
 static void pose_change(Fan* fan, const char* name, const char* anim);
-static void pose_change(Fan* fan, const char* name, const char* anim);
-static f32 randf(f32 min, f32 max);
 static f32 randf(f32 min, f32 max);
 static inline f32 fan_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
 static inline f32 fan_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
 s32 check_hammer(Fan* fan);
-s32 check_hammer(Fan* fan);
 void psndSFX_vol(s32 id, u8 vol);
 static void pose_main(void);
-static void pose_main(void);
-void fan_disp(CameraId camera, void* param);
 void fan_disp(CameraId camera, void* param);
 
 s32 N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos(EventEntry* event, BOOL isFirstCall);
 s32 evt_cloud_ent(EventEntry* event, BOOL isFirstCall);
 s32 evt_cloud_init(EventEntry* event, BOOL isFirstCall);
-s32 evt_end_count(EventEntry* event, BOOL isFirstCall);
 s32 evt_end_count(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_entry(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_get_item_end_wait(EventEntry* event, BOOL isFirstCall);
@@ -89,18 +82,9 @@ s32 evt_pouch_open_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_receive_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_remove_item(EventEntry* event, BOOL isFirstCall);
 s32 evt_tou_get_ranking(EventEntry* event, BOOL isFirstCall);
-s32 check_hammer(Fan* fan);
-void ext_fan_dispent(void);
 void ext_fan_dispent(void);
 void ext_fan_main(void);
-void ext_fan_main(void);
-void fan_disp(CameraId camera, void* param);
 void ext_fan_init(void);
-void ext_fan_init(void);
-static f32 randf(f32 min, f32 max);
-static void pose_change(Fan* fan, const char* name, const char* anim);
-static void pose_main(void);
-static void pose_init(void);
 
 static EvtWord s_door_open[58];
 static EvtWord s_door_close[58];

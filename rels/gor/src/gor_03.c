@@ -193,18 +193,11 @@ USER_FUNC(yuuranking_wait_button);
 void kuji_bomb_055_callback(s32 type, KujiMsgWork** work);
 void goryuugijo_disp_slot(CameraId camera, void* param);
 void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall);
-s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);
-void slot_neon_sub(GoryuuWork* wp, SlotWork* data);
 void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall);
-void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel);
-void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel);
-static void monte_disp(CameraId camera, void* param);
-static BOOL get_monte_check(Vec* a, Vec* b);
 USER_FUNC(evt_goryuugijo_get_caseid);
 void goryuugijo_disp_montemedal(CameraId camera, void* param);
 void goryuugijo_main_montemedal(EventEntry* event, BOOL isFirstCall);
 void goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall);
-s32 exchange_ret_tbl_no(void);
 
 EvtWord debug_event[16];
 EvtWord gor_03_down_evt[8];

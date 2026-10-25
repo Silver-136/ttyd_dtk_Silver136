@@ -56,7 +56,6 @@ USER_FUNC(shake);
 USER_FUNC(shake_reset);
 USER_FUNC(hei_00_mario_keyoff_check);
 USER_FUNC(cam_test2);
-void make_gonbaba_projection(CameraId camera, void* param);
 
 EvtWord make_proj_evt[4];
 EvtWord evt_gonbaba_shadow[161];

@@ -26,7 +26,6 @@ static void _disp_icon(CameraId camera, void* param);
 
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-static void _disp_icon(CameraId camera, void* param);
 static USER_FUNC(_icon_jump_icon);
 static USER_FUNC(party_cannot_use_command);
 static USER_FUNC(mario_cannot_use_command);

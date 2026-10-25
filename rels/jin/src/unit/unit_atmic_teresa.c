@@ -29,8 +29,6 @@ s32 teresa_count;
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, u32 flags, s32 pitch, Vec* pos);
 s32 irand(s32 scalar);
 f32 intplGetValue(s32 mode, f32 start, f32 end, s32 cur, s32 steps);
-s32 irand(s32 scalar);
-f32 intplGetValue(s32 mode, f32 start, f32 end, s32 cur, s32 steps);
 double cos(double x);
 double sin(double x);
 void teresa_ext_disp(CameraId camera, void* param);
@@ -43,7 +41,6 @@ USER_FUNC(teresa_wait_bikkuri2);
 USER_FUNC(teresa_wait_bikkuri);
 USER_FUNC(teresa_appear_bikkuri);
 USER_FUNC(target_id_set);
-void teresa_ext_disp(CameraId camera, void* param);
 void teresa_ext_main(void);
 void teresa_ext_init(void);
 

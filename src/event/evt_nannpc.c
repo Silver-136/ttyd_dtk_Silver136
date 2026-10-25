@@ -29,12 +29,6 @@ s32 nannpc_zcompare(NanNPCSort* a, NanNPCSort* b);
 NanNPCWork* nanNPCWork;
 char makestring[16];
 
-void nannpc_ext_disp();
-void nannpc_ext_shadow_disp();
-void nannpc_ext_dispent();
-void nannpc_ext_main();
-void nannpc_ext_main_sub();
-void nannpc_ext_init();
 
 static inline NanNPC* nanNPCSearch(char* name) {
     s32 i;

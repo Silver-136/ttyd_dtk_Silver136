@@ -35,7 +35,6 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuminigame_get_dataadr);
 USER_FUNC(evt_yuuminigame_free);
 USER_FUNC(evt_yuuminigame_alloc);
-void evt_yuuminigame_disp_func(CameraId camera, void* param);
 
 static EvtWord main_evt[4];
 

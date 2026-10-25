@@ -42,10 +42,6 @@ static void _img_alloc_capture(EvtWord a0, EvtWord a1, EvtWord a2, EvtWord a3, E
 static USER_FUNC(evt_cloud_main);
 USER_FUNC(evt_las_cloud_ent);
 USER_FUNC(evt_las_cloud_init);
-static void _mapclsofs_all(CloudWork* wp);
-static void _mapsetofs_all(CloudWork* wp);
-static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
-static void _img_alloc_capture(EvtWord a0, EvtWord a1, EvtWord a2, EvtWord a3, EvtWord a4, EvtWord a5, EvtWord a6, EvtWord a7);
 
 static EvtWord w_door_close[12];
 static EvtWord w_door_open[12];

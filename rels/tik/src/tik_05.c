@@ -103,7 +103,6 @@ USER_FUNC(starstone_setting);
 USER_FUNC(tiz_broken);
 USER_FUNC(tiz_stone);
 USER_FUNC(map_disp_onoff);
-void tiz_broken_draw(CameraId cameraId, void* param);
 static void alpha_tev(MapTevCallbackInfo* info);
 USER_FUNC(starstone_set_scale);
 

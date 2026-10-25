@@ -31,7 +31,6 @@ void yuucounter_set_data(s32 data);
 s32 yuucounter_get_data(void);
 USER_FUNC(evt_yuucounter_free);
 USER_FUNC(evt_yuucounter_alloc);
-void evt_yuucounter_disp_func(CameraId camera, void* param);
 
 static EvtWord main_evt[4];
 EvtWord yuucounter_window_disp_evt[6];

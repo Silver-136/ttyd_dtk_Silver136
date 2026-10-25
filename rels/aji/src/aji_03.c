@@ -31,7 +31,6 @@ USER_FUNC(evt_key_get_button);
 USER_FUNC(evt_sousa_icon);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(item_chk);
-void icon_disp(CameraId camera, void* param);
 USER_FUNC(evt_itemNameToItemID);
 
 static EvtWord e_door_close[22];

@@ -46,10 +46,6 @@ USER_FUNC(coin_entry);
 USER_FUNC(firebar_disp_evt);
 USER_FUNC(firebar_entry);
 void firebar_cb(FirebarWork* wp, s32 type);
-void firebar_disp(CameraId camera, void* param);
-void _firebar_trans(FirebarWork* wp);
-void _firebar_rot(FirebarWork* wp);
-s32 _firebar_hitCheck2(FirebarWork* wp);
 s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball);
 
 static EvtWord w_door_close[22];

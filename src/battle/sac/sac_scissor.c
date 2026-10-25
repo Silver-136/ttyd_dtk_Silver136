@@ -556,7 +556,6 @@ s32 scissor_tess(void) {
     return 2;
 }
 
-s32 scissor_cross(Pt* a, Pt* b, Pt* pts, s32 n);
 void tess(Pt* pts, s32 n) {
     ScissorWork* w = GetScissorPtr();
     s32 i, j, k;
@@ -856,8 +855,6 @@ s32 scissor_timer_main(void) {
 }
 
 GXColor HSV2RGB(GXColor);
-void scissor_disp_control(CameraId camera, void* param);
-void scissor_disp_region(CameraId camera, void* param);
 
 s32 scissor_control(EventEntry* evt, BOOL first) {
     ScissorWork* w = GetScissorPtr();

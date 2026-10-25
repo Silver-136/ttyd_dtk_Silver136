@@ -36,7 +36,6 @@ USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(mapdraw);
 void mapdelete(void);
-static void draw(CameraId camera, void* param);
 
 static NpcSetupInfo npcEnt[3];
 static EvtWord evt_door[15];

@@ -43,7 +43,6 @@ static USER_FUNC(peach_set_pose);
 static USER_FUNC(viewport);
 
 void monitor_cap_tev(MapTevCallbackInfo* info);
-void monitor_cap_capture(CameraId cameraId, void* param);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

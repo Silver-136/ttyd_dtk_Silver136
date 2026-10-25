@@ -32,7 +32,6 @@ static USER_FUNC(piders_get_num);
 static USER_FUNC(piders_get_zyun);
 static USER_FUNC(piders_renzoku_attack_set_target);
 static USER_FUNC(piders_yarn_init);
-static void piders_draw_yarn_sub(CameraId camera, void* param);
 static void piders_get_target(s32* unitIdx, s32* partIdx);
 static void piders_get_next_target(s32* unitIdx, s32* partIdx);
 

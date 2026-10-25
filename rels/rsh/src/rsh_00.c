@@ -47,12 +47,7 @@ USER_FUNC(evt_moamoa_set_one);
 USER_FUNC(evt_moamoa_set_seq_all);
 void moamoa_dispent(void);
 void moamoa_main(void);
-static void ext_disp(CameraId camera, void* param);
 void moamoa_init(void);
-static f32 randf(f32 min, f32 max);
-static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
-static void moamoa_pose_main(void);
-static void moamoa_pose_init(void);
 
 ExtTexInfo moamoa_data[81];
 static EvtWord evt_moamoa[324];

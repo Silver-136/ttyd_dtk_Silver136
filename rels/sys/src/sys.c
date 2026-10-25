@@ -57,7 +57,6 @@ USER_FUNC(init);
 USER_FUNC(sys_01_start_end_wait);
 #endif
 USER_FUNC(start);
-void display_func(CameraId cameraId, void* param);
 #ifdef VERSION_G8ME01
 void sys_01_msg_tex_capture_func(CameraId cameraId, void* param);
 #endif

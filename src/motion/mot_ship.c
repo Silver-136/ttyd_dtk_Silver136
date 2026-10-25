@@ -1069,6 +1069,3 @@ BOOL checkHarbor(Vec* out) {
 }
 
 // forward declarations: these functions are defined further down
-BOOL checkHarbor(Vec* out);
-void shipMove(void);
-BOOL marioChkShipPlace(HitEntry* hit);

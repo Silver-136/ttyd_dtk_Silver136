@@ -53,10 +53,6 @@ USER_FUNC(evt_iri_16_cloud_init);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_snd_sfxon_3d_ex);
 static USER_FUNC(gonbaba_wait_landon);
-static void _img_alloc_capture(const char* a0, s32 a1, const char* a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
-static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
-static void _mapsetofs_all(CloudWork* wp);
-static void _mapclsofs_all(CloudWork* wp);
 
 EvtWord evt_sound[8];
 static EvtWord door01_close[22];

@@ -1569,7 +1569,6 @@ void capture(CameraId camera, void* param) {
 }
 
 void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y);
-void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 
 void monosiri_disp(CameraId camera, void* param) {
     MonosiriWork* m = param;

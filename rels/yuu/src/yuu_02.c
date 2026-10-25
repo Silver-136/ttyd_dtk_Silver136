@@ -78,9 +78,6 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
 void yuuminigame_disp_3roll(CameraId camera, void* param);
 void yuuminigame_main_3roll(EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_3roll(EventEntry* event, BOOL isFirstCall);
-static void monte_disp(CameraId camera, void* param);
-static BOOL get_monte_check(Vec* a, Vec* b);
-void yuu_02_icon_monte_disp(CameraId camera, void* param);
 USER_FUNC(yuu_02_icon_monte_onoff);
 void yuu_02_icon_monte_off(s32 idx);
 void yuu_02_icon_monte_on(s32 idx);

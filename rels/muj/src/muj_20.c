@@ -71,7 +71,6 @@ USER_FUNC(splash_eff);
 USER_FUNC(fune_curve_pos);
 USER_FUNC(urouro_func);
 USER_FUNC(urouro_fuwafuwa_func);
-static void draw(CameraId camera, void* param);
 static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y);
 void elmos1000tai_seq00(NanNPC* npc);
 USER_FUNC(elmos1000tai_start);

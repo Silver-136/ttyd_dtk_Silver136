@@ -102,7 +102,6 @@ USER_FUNC(uranaisi_table_clear);
 USER_FUNC(mario_key_onoff_wait);
 USER_FUNC(card_xlu);
 void card_tev(MapTevCallbackInfo* info);
-void uranai_cap(CameraId cameraId, void* param);
 static USER_FUNC(ss_check);
 
 static BeroEntry bero_entry_data[4];

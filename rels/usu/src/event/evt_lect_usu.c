@@ -90,7 +90,6 @@ static USER_FUNC(effitemgetchange_cam_ptr);
 static USER_FUNC(lect_map_cam_chg);
 static void lect_map_cam_chg_sub(MapObject* obj, s32 camId, BOOL siblings);
 static USER_FUNC(lecture_button_get_icon_id);
-static void lecture_button_disp(CameraId camera, void* param);
 static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_get);
 static USER_FUNC(x_flag_add);

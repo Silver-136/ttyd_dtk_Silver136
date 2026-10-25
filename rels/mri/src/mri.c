@@ -47,7 +47,6 @@ void _unresolved(void);
 BOOL toge_searchParent(PuniData* self, s16 group);
 void togeModeParent(PuniData* puni);
 void togeMoveParent(PuniData* puni);
-void puniModeWinjump(PuniData* puni);
 void togeMakeRetsu(Vec* pos, s16 leader, s16 start, s16 end);
 
 void _prolog(void) {

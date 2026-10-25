@@ -84,7 +84,6 @@ USER_FUNC(yami_oowareru_check);
 USER_FUNC(tou_01_kanban_moji_flag_sync);
 #endif
 static USER_FUNC(yami_view);
-void make_shadow_disp(CameraId camera, void* param);
 extern s32 envSetYami[];
 
 static EvtWord n_door_open[60];

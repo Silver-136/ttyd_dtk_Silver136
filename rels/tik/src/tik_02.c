@@ -39,7 +39,6 @@ USER_FUNC(mario_hosei_all);
 USER_FUNC(ripple_scale_func);
 USER_FUNC(tik_npc_buruburu);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
-static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 
 static BeroEntry bero_entry_data[7];
 static BeroEntry bero_entry_data2[2];
