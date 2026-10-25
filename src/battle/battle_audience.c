@@ -2114,7 +2114,9 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
         rot[0][0] = cy * cz - t0 * sz;
         rot[0][1] = -cy * sz - t0 * cz;
         rot[0][2] = -cx * sy;
-        rot[0][3] = 0.0f; rot[1][3] = 0.0f; rot[2][3] = 0.0f;
+        rot[0][3] = 0.0f;
+        rot[1][3] = 0.0f;
+        rot[2][3] = 0.0f;
         rot[1][0] = cx * sz;
         rot[1][1] = cx * cz;
         rot[1][2] = -sx;
@@ -2145,7 +2147,10 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
     };
         off = 0;
         front = BattleAudience_GetFront(i);
-        cr = m->colorR; cg = m->colorG; cb = m->colorB; ca = m->colorA;
+        cr = m->colorR;
+        cg = m->colorG;
+        cb = m->colorB;
+        ca = m->colorA;
                 if (m->animStart == m->animTable[9]) off = 8;
         t0 = m->angle;
         if (t0 >= 360.0f) {

@@ -427,13 +427,17 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                 if (cross > 0.0) {
                     if (sgn < 0.0f) {
                         if (d > limA) {
-                            dpx /= rp; dpz /= rp; fl |= 2;
+                            dpx /= rp;
+                            dpz /= rp;
+                            fl |= 2;
                             rp += d - limA;
                             dpx *= rp; dpz *= rp;
                         }
                     } else {
                         if (d > limB) {
-                            dpx /= rp; dpz /= rp; fl |= 2;
+                            dpx /= rp;
+                            dpz /= rp;
+                            fl |= 2;
                             rp -= d - limB;
                             dpx *= rp; dpz *= rp;
                         }
@@ -441,13 +445,17 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                 } else {
                     if (sgn < 0.0f) {
                         if (d > limB) {
-                            dpx /= rp; dpz /= rp; fl |= 2;
+                            dpx /= rp;
+                            dpz /= rp;
+                            fl |= 2;
                             rp += d - limB;
                             dpx *= rp; dpz *= rp;
                         }
                     } else {
                         if (d > limA) {
-                            dpx /= rp; dpz /= rp; fl |= 2;
+                            dpx /= rp;
+                            dpz /= rp;
+                            fl |= 2;
                             rp -= d - limA;
                             dpx *= rp; dpz *= rp;
                         }
@@ -457,13 +465,17 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
             } else if (isGrp) {
                 if (cross > 0.0) {
                     if (!(sgn < 0.0f) && d > 0.0f) {
-                        dpx /= rp; dpz /= rp; fl = 3;
+                        dpx /= rp;
+                        dpz /= rp;
+                        fl = 3;
                         rp -= d;
                         dpx *= rp; dpz *= rp;
                     }
                 } else {
                     if (sgn < 0.0f && d > 0.0f) {
-                        dpx /= rp; dpz /= rp; fl = 3;
+                        dpx /= rp;
+                        dpz /= rp;
+                        fl = 3;
                         rp += d;
                         dpx *= rp; dpz *= rp;
                     }

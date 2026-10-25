@@ -801,7 +801,11 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
         tex = screen_wp->tex;
         for (i = 0; i < 64; i++) {
             for (j = 0; j < 64; j++) {
-                b = i / 4; k = i % 4; idx = j / 8; o = j % 8; tex[((idx << 5) + (b << 8)) + (o + k * 8)] = (i & 1) ? 0xFF : 0;
+                b = i / 4;
+                k = i % 4;
+                idx = j / 8;
+                o = j % 8;
+                tex[((idx << 5) + (b << 8)) + (o + k * 8)] = (i & 1) ? 0xFF : 0;
             }
             n = rand() % 100 + 100;
             for (l = 0; l < n; l++) {
@@ -809,7 +813,11 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
                 s = rand() % (65 - w);
                 c = rand() % 256;
                 for (j = s; j < s + w; j++) {
-                    b = i / 4; k = i % 4; idx = j / 8; o = j % 8; tex[((idx << 5) + (b << 8)) + (o + k * 8)] = c;
+                    b = i / 4;
+                    k = i % 4;
+                    idx = j / 8;
+                    o = j % 8;
+                    tex[((idx << 5) + (b << 8)) + (o + k * 8)] = c;
                 }
             }
         }

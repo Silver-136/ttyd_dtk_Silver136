@@ -990,9 +990,17 @@ void nokoStrippedPool(f32* p) { p[0] = 10.0f; p[1] = 30.0f; p[2] = 100.0f; p[3] 
 u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     Vec p[4];
     f32 dist;
-    f32 hx; f32 hy; f32 hz; f32 nx; f32 ny; f32 nz;
+    f32 hx;
+    f32 hy;
+    f32 hz;
+    f32 nx;
+    f32 ny;
+    f32 nz;
     f32 rad;
-    f32 x; f32 y; f32 z; f32 c;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 c;
     f32 w;
     HitEntry* h0;
     HitEntry* h1;
@@ -1051,24 +1059,42 @@ u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     if (h1) flags |= 2;
     if (h0) {
         if (h1 && h2 && h3) {
-        out->x = 0.5f * (p[3].x + p[1].x); out->z = 0.5f * (p[3].z + p[1].z); out->y = p[3].y; return flags;
+        out->x = 0.5f * (p[3].x + p[1].x);
+        out->z = 0.5f * (p[3].z + p[1].z);
+        out->y = p[3].y;
+        return flags;
         }
         if (h1) {
-        out->x = 0.5f * (p[3].x + p[2].x); out->z = 0.5f * (p[3].z + p[2].z); out->y = pos.y; return flags;
+        out->x = 0.5f * (p[3].x + p[2].x);
+        out->z = 0.5f * (p[3].z + p[2].z);
+        out->y = pos.y;
+        return flags;
         }
         if (h2) {
-        out->x = 0.5f * (p[3].x + p[1].x); out->z = 0.5f * (p[3].z + p[1].z); out->y = p[3].y; return flags;
+        out->x = 0.5f * (p[3].x + p[1].x);
+        out->z = 0.5f * (p[3].z + p[1].z);
+        out->y = p[3].y;
+        return flags;
         }
         if (h3) {
-        out->x = 0.5f * (p[3].x + p[0].x); out->z = 0.5f * (p[3].z + p[0].z); out->y = p[3].y; return flags;
+        out->x = 0.5f * (p[3].x + p[0].x);
+        out->z = 0.5f * (p[3].z + p[0].z);
+        out->y = p[3].y;
+        return flags;
         }
         *out = p[3];
     } else if (h3) {
         if (h1) {
-        out->x = 0.5f * (p[0].x + p[2].x); out->z = 0.5f * (p[0].z + p[2].z); out->y = p[0].y; return flags;
+        out->x = 0.5f * (p[0].x + p[2].x);
+        out->z = 0.5f * (p[0].z + p[2].z);
+        out->y = p[0].y;
+        return flags;
         }
         if (h2) {
-        out->x = 0.5f * (p[1].x + p[2].x); out->z = 0.5f * (p[1].z + p[2].z); out->y = p[1].y; return flags;
+        out->x = 0.5f * (p[1].x + p[2].x);
+        out->z = 0.5f * (p[1].z + p[2].z);
+        out->y = p[1].y;
+        return flags;
         }
         *out = p[0];
     } else {

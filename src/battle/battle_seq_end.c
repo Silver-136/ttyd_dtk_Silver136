@@ -910,7 +910,13 @@ void _MarioExpDisp(CameraId camId, void* param) {
 }
 
 void _LvupParamConfirmDisp(CameraId camId, void* param) {
-    Vec pos; f32 zero = 0.0f; u32 len; s32 *cursorPtr; f32 w; char buf[0x14]; SeqEndWork* work = SEW((BattleWork*)param);
+    Vec pos;
+    f32 zero = 0.0f;
+    u32 len;
+    s32 *cursorPtr;
+    f32 w;
+    char buf[0x14];
+    SeqEndWork* work = SEW((BattleWork*)param);
     cursorPtr = &work->cursor; // FAKE: pointer to the field; direct work->cursor differs
     pouchGetPtr();
     sprintf(buf, msgSearch("btl_msg_lvup_ok"));

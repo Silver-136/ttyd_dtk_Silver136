@@ -1033,7 +1033,9 @@ static void ext_moamoa_main(void) {
                 z0 = (*pose->mtx)[2][3] - ( 5.0f * moa_cosx(rr) );
                 }
                 {
-                    f32 k1; f32 k2; f32 r1 = rand() / 32767.0f;
+                    f32 k1;
+                    f32 k2;
+                    f32 r1 = rand() / 32767.0f;
                     f32 r2 = rand() / 32767.0f;
                     moamoa_jump(pose, m, m->state, 0, x0, 215.0f, z0, (r1 * (k1 = 0.5f - 0.3f)) + 0.3f, (r2 * (k2 = 0.8f - 0.5f)) + 0.5f);
                 }
@@ -1091,7 +1093,10 @@ static void ext_moamoa_main(void) {
                 m->state++;
                 m->timer = 0;
       case 52: {
-        f32 tx; f32 ty; f32 tz; f32 s;
+        f32 tx;
+        f32 ty;
+        f32 tz;
+        f32 s;
         s = (m->timer < 200) ? (1.0f) : ((800 - m->timer) / 600.0f);
         if (s < 0.0f)
       {
@@ -1262,7 +1267,9 @@ static void ext_moamoa_main(void) {
         if (!sndFlag)
       {
         Vec pos = {0.0f, 0.0f, 0.0f};
-        pos.x = (*pose->mtx)[0][3]; pos.y = (*pose->mtx)[1][3]; pos.z = (*pose->mtx)[2][3];
+        pos.x = (*pose->mtx)[0][3];
+        pos.y = (*pose->mtx)[1][3];
+        pos.z = (*pose->mtx)[2][3];
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG6_MOAMOA_DAMAGED1), &pos);
         sndFlag = 1;
       }

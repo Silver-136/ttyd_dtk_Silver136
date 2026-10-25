@@ -432,7 +432,9 @@ static inline void slitInit(void) {
     m->dispFlags |= 0x1000000;
     if (m->paperPoseId == -1) {
         GXColor tmp; GXColor col = {0, 0, 0, 255};
-        col.r = 0xa8; col.g = 0xa8; col.b = 0xa8;
+        col.r = 0xa8;
+        col.g = 0xa8;
+        col.b = 0xa8;
         tmp = col; ((void (*)(GXColor*))mapSetPaperAmbColor)(&tmp);
         marioPaperOn("p_slit");
     }
@@ -957,7 +959,9 @@ void mot_slit(void) {
             SPEEDCHK_IF(m, 1)
 #endif
         }
-        m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED; m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS; m->dispFlags &= CLR_DISP;
+        m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+        m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+        m->dispFlags &= CLR_DISP;
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~4;
@@ -1000,7 +1004,9 @@ void mot_slit(void) {
         m->slitState = 0x70;
         break;
     case 0x70:
-        m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED; m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS; m->dispFlags &= CLR_DISP;
+        m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+        m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+        m->dispFlags &= CLR_DISP;
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~4;

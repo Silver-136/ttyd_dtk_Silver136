@@ -176,9 +176,15 @@ void imgDisp(CameraId camId, void* param) {
     }
     {
         if (entry->flags & 4) {
-            fl = entry->shadows[first].rect.left; ft = entry->shadows[first].rect.top; fr = entry->shadows[first].rect.width; fb = entry->shadows[first].rect.height;
+            fl = entry->shadows[first].rect.left;
+            ft = entry->shadows[first].rect.top;
+            fr = entry->shadows[first].rect.width;
+            fb = entry->shadows[first].rect.height;
         } else {
-            fl = entry->shadows[first].x; ft = entry->shadows[first].y; fr = entry->width; fb = entry->height;
+            fl = entry->shadows[first].x;
+            ft = entry->shadows[first].y;
+            fr = entry->width;
+            fb = entry->height;
         }
     }
     PSMTXTrans(m3, 64.0f * ((entry->offsetX + fl) / (f32)((GXRenderModeObj*)DEMOGetRenderModeObj())->fbWidth), 48.0f * (-(entry->offsetY + ft) / (f32)((GXRenderModeObj*)DEMOGetRenderModeObj())->efbHeight), zoff);
@@ -614,7 +620,10 @@ void imgShadowDisp(CameraId camId, void* param) {
             sc = 1.0f; z = 0.0f;
         }
         if (entry->flags & 4) {
-            x0 = entry->shadows[first].rect.left; y0 = entry->shadows[first].rect.top; w = entry->shadows[first].rect.width; h = entry->shadows[first].rect.height;
+            x0 = entry->shadows[first].rect.left;
+            y0 = entry->shadows[first].rect.top;
+            w = entry->shadows[first].rect.width;
+            h = entry->shadows[first].rect.height;
         } else {
             x0 = entry->shadows[first].x;
             y0 = entry->shadows[first].y;

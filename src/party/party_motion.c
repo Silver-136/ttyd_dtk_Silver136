@@ -1611,7 +1611,9 @@ void party_motion_behind_mario(PartyEntry* party) {
             {
             f32 t;
             if (!(party->trigFlags & 0x10000)) {
-                t = partyGetFollowDir(party); t += 180.0f; t = revise360(t);
+                t = partyGetFollowDir(party);
+                t += 180.0f;
+                t = revise360(t);
             } else {
                 party->trigFlags &= ~0x10000;
                 t = revise360(180.0f + angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z));
@@ -1890,7 +1892,9 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
             {
             f32 t;
             if (!(party->trigFlags & 0x10000)) {
-                t = partyGetFollowDir(party); t += 180.0f; t = revise360(t);
+                t = partyGetFollowDir(party);
+                t += 180.0f;
+                t = revise360(t);
             } else {
                 party->trigFlags &= ~0x10000;
                 t = revise360(angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z) + 180.0f);
@@ -1905,7 +1909,9 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
         }
     }
     if (!(party->trigFlags & 0x100000) && marioKeyOffChk()) {
-        f32 t2 = partyGetFollowDir(party); t2 += 180.0f; party->homeDir = revise360(t2);
+        f32 t2 = partyGetFollowDir(party);
+        t2 += 180.0f;
+        party->homeDir = revise360(t2);
     }
     angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
     if (mario->baseSpeed > 1.0f) {
@@ -2001,7 +2007,9 @@ void party_motion_beside_mario(PartyEntry* party) {
 
     if (party->trigFlags & 2) {
         party->trigFlags &= ~2;
-        t = partyGetFollowDir(party); t += 90.0f; party->homeDir = revise360(t);
+        t = partyGetFollowDir(party);
+        t += 90.0f;
+        party->homeDir = revise360(t);
         sp = 1.5f * mario->wPlayerCollisionBox.x;
         x = mario->position.x;
         z = mario->position.z;
@@ -2012,7 +2020,9 @@ void party_motion_beside_mario(PartyEntry* party) {
         }
     }
     if (marioKeyOffChk()) {
-        t = partyGetFollowDir(party); t += 90.0f; party->homeDir = revise360(t);
+        t = partyGetFollowDir(party);
+        t += 90.0f;
+        party->homeDir = revise360(t);
     }
     sp = 1.5f * mario->wPlayerCollisionBox.x;
     x = mario->position.x;

@@ -212,7 +212,9 @@ f32 _GetGaugeDecValue(void) {
         case 4: base = 0.44f; t = _table_4; break;
         case 5: base = 0.47f; t = _table_5; break;
         case 6:
-        default: t = _table_6; base = 0.5f; break;
+        default: t = _table_6;
+        base = 0.5f;
+        break;
     }
     while (pw->hold > t->frame) {
         t++;

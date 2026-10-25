@@ -231,7 +231,10 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
         rad = partyToMovedir(party, party->displayDirection);
     }
     rad = 3.1415927f * rad / 180.0f;
-    nsz = (f32)sin(rad); sx = 0.375f * (party->width * nsz); nsz = (f32)cos(rad); sz = 0.375f * (party->width * -nsz);
+    nsz = (f32)sin(rad);
+    sx = 0.375f * (party->width * nsz);
+    nsz = (f32)cos(rad);
+    sz = 0.375f * (party->width * -nsz);
     nsx = -sx;
     nsz = -sz;
     baseY = party->position.y;

@@ -1228,7 +1228,10 @@ void btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, GXColor color) {
     u16 width, height;
     f32 hw, hh;
     Vec off;
-    Vec unused; unused.x = 0.0f; unused.y = 0.0f; unused.z = 0.0f;
+    Vec unused;
+    unused.x = 0.0f;
+    unused.y = 0.0f;
+    unused.z = 0.0f;
 
     off.z = 0.0f;
 

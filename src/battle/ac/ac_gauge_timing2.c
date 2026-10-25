@@ -329,8 +329,21 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleACDispParams* disp = &ac->disp;
     GT2Work* gw;
     CameraEntry* cam;
-    f32 x0; f32 y0; f32 y1; f32 x1; f32 y2; f32 y3; f32 ratio; f32 t;
-    s32 q; s32 r; s32 v; s32 i; s32 icon; s32 pressedIcon; s32 id;
+    f32 x0;
+    f32 y0;
+    f32 y1;
+    f32 x1;
+    f32 y2;
+    f32 y3;
+    f32 ratio;
+    f32 t;
+    s32 q;
+    s32 r;
+    s32 v;
+    s32 i;
+    s32 icon;
+    s32 pressedIcon;
+    s32 id;
     s32 cnt;
     Vec pos;
     Vec d0; Vec d1;
@@ -447,7 +460,9 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
 
     {
-        Mtx m3; Mtx m1; Mtx m2;
+        Mtx m3;
+        Mtx m1;
+        Mtx m2;
         s32 num = ac->outputParams[0] + ac->params[3];
         PSMTXTrans(m1, -200.0f + x + ((f32)gw->width) - 60.0f, y1, 0.0f);
         PSMTXScale(m2, 1.0f, 1.0f, 1.0f);

@@ -196,7 +196,9 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
         break;
     }
     r2b = 2.0f * r2 - 0.05f;
-    rad = 3.1415927f * deg; bd = h + range; yh = py + h;
+    rad = 3.1415927f * deg;
+    bd = h + range;
+    yh = py + h;
     r3 = 3.0f * r2 - 0.05f;
     for (i = 0; i < n; i++) {
         switch (i) {

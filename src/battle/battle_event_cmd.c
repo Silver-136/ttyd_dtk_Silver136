@@ -413,7 +413,9 @@ USER_FUNC(btlevtcmd_SetPartsPos) {
     }
     else {
         BtlUnit_GetPos(unit, &currX, &currY, &currZ);
-        x -= currX; y -= currY; z -= currZ;
+        x -= currX;
+        y -= currY;
+        z -= currZ;
         BtlUnit_SetPartsOffsetPos(part, x, y, z);
     }
     return EVT_RETURN_DONE;
@@ -2013,7 +2015,9 @@ USER_FUNC(btlevtcmd_CheckSpace) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
             BtlUnit_GetHomePos(unit, &x, &y, &z);
-            ix = x; iy = y; iz = z;
+            ix = x;
+            iy = y;
+            iz = z;
             if (boundX) {
                 if (abs(ix - baseX) < boundX) {
                     found = TRUE;

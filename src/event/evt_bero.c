@@ -1200,10 +1200,14 @@ USER_FUNC(evt_camera_change_event_from_road) {
     camRoadMain(&out, mario->position.x, cam->marioPos.y, mario->position.z, mario->position.x, cam->marioPos.y, mario->position.z, bank);
     {
     Vec pt = {0.0f, 0.0f, 0.0f};
-    pt.x = out.pos.x; pt.y = out.pos.y; pt.z = out.pos.z;
+    pt.x = out.pos.x;
+    pt.y = out.pos.y;
+    pt.z = out.pos.z;
     {
     Vec at = {0.0f, 0.0f, 0.0f};
-    at.x = out.at.x; at.y = out.at.y; at.z = out.at.z;
+    at.x = out.at.x;
+    at.y = out.at.y;
+    at.z = out.at.z;
     cam->presetPos = cam->cameraPos;
     cam->presetAt = cam->cameraAt;
     cam->storedPos = pt;

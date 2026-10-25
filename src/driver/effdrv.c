@@ -370,7 +370,17 @@ static inline void effMayaKeyInterp(MayaKey* prev, MayaKey* curr, f32 t, f32* bu
     pb = (s8*)curr;
     out = buf;
     for (i = 0; i < 22; i++) {
-        register f32 qd0; register f32 qm1; f32 u; register f32 qv1; register f32 qm0; register f32 qv0; f32 dt; f32 s; f32 s3; f32 s2; f32 div;
+        register f32 qd0;
+        register f32 qm1;
+        f32 u;
+        register f32 qv1;
+        register f32 qm0;
+        register f32 qv0;
+        f32 dt;
+        f32 s;
+        f32 s3;
+        f32 s2;
+        f32 div;
         qv0 = __OSs16tof32((s16*)(pa + 2));
         qd0 = __OSs16tof32((s16*)(pa + 4));
         qm0 = __OSs16tof32((s16*)(pa + 6));
@@ -403,7 +413,19 @@ static inline void effMayaSetGQR(void) {
 
 void effCalcMayaAnimMatrix(MayaAnim* anim, MayaKeyList* list, f32* mtx, f32* alpha) {
     f32 buf[22];
-    Mtx trans; Mtx scale; Mtx tmp2; Mtx pivot2; Mtx pivot2Inv; Mtx trans3; Mtx pivot1; Mtx pivot1Inv; Mtx trans2; Mtx rotX; Mtx rotY; Mtx rotZ; Mtx tmp;
+    Mtx trans;
+    Mtx scale;
+    Mtx tmp2;
+    Mtx pivot2;
+    Mtx pivot2Inv;
+    Mtx trans3;
+    Mtx pivot1;
+    Mtx pivot1Inv;
+    Mtx trans2;
+    Mtx rotX;
+    Mtx rotY;
+    Mtx rotZ;
+    Mtx tmp;
 
     s32 n = list->count;
     s32 k;

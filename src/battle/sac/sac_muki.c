@@ -761,9 +761,15 @@ static void disp_2D(CameraId cam, void* param) {
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
         d = w->f14 - w->f18;
         if (d != 0.0f) {
-            r = 0xFF; g = 0xB4; b = 0xB4; a = 0xFF;
+            r = 0xFF;
+            g = 0xB4;
+            b = 0xB4;
+            a = 0xFF;
         } else {
-            r = 0xF0; g = 0xA0; b = 0xA0; a = 0xFF;
+            r = 0xF0;
+            g = 0xA0;
+            b = 0xA0;
+            a = 0xFF;
         }
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
         t = w->t24 % 12;
@@ -808,9 +814,15 @@ static void disp_2D(CameraId cam, void* param) {
         btlDispGXInit2DRasta();
         GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
         if (d != 0.0f) {
-            r = 0xB4; g = 0xB4; b = 0xFF; a = 0xFF;
+            r = 0xB4;
+            g = 0xB4;
+            b = 0xFF;
+            a = 0xFF;
         } else {
-            r = 0xA0; g = 0xA0; b = 0xF0; a = 0xFF;
+            r = 0xA0;
+            g = 0xA0;
+            b = 0xF0;
+            a = 0xFF;
         }
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
         t = w->t28 % 12;

@@ -48,7 +48,9 @@ static u8 scale_dt[] = {
 void effFireMain(EffectEntry* effect);
 static inline void effFireQuad(s32 iw, s32 ih) {
     f32 w, h;
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4); w = iw; h = ih;
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    w = iw;
+    h = ih;
     GXPosition3f32(-w / 2.0f, h, 0.0f);
     GXColor4u8(0xFF, 0xFF, 0xFF, 0xFF);
     GXTexCoord2f32(0.0f, 0.0f);

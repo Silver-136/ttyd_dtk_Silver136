@@ -1177,7 +1177,9 @@ static void ext_moamoa_main(void) {
         if (!sfx)
       {
         Vec pos = {0.0f, 0.0f, 0.0f};
-        pos.x = (*pose->mtx)[0][3]; pos.y = (*pose->mtx)[1][3]; pos.z = (*pose->mtx)[2][3];
+        pos.x = (*pose->mtx)[0][3];
+        pos.y = (*pose->mtx)[1][3];
+        pos.z = (*pose->mtx)[2][3];
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG6_MOAMOA_DAMAGED1), &pos);
         sfx = 1;
       }
@@ -1409,8 +1411,12 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
         Vec a;
         Vec b;
 
-        b = vb; b.x = npc->position.x; b.z = npc->position.z;
-        a = va; a.x = x; a.z = z;
+        b = vb;
+        b.x = npc->position.x;
+        b.z = npc->position.z;
+        a = va;
+        a.x = x;
+        a.z = z;
         dist = PSVECDistance(&a, &b);
         dy = y - npc->position.y;
         if (t == 0.0f) {

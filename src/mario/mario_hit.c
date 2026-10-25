@@ -1113,8 +1113,12 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
             dz = noz;
         }
         ray = *(volatile LandonRay*)&zv0; // FAKE: copies a 24-byte zero template; a real (LandonRay){0} adds a .rodata object and shifts every pool
-        ray.pos.x = px + dx; ray.pos.y = ystart; ray.pos.z = pz + dz;
-        ray.dir.x = zero; ray.dir.y = mone; ray.dir.z = zero;
+        ray.pos.x = px + dx;
+        ray.pos.y = ystart;
+        ray.pos.z = pz + dz;
+        ray.dir.x = zero;
+        ray.dir.y = mone;
+        ray.dir.z = zero;
         dist = top;
         hit = landonHitCheck(&ray, &hp, &nrm, &dist);
         hy = hp.y;

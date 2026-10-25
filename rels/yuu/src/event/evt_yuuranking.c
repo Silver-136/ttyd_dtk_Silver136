@@ -53,7 +53,12 @@ static s32 fontlenpitch(const char* str, s32 pitch) {
 
     if (pitch != 0) {
         for (n = 0, i = 0; ((const s8*)str)[i] != 0; i++) {
-            if (_ismbblead(((const s8*)str)[i])) { n++; i++; } else { n++; }
+            if (_ismbblead(((const s8*)str)[i])) {
+                n++;
+                i++;
+            } else {
+                n++;
+            }
         }
         return n * pitch;
     }

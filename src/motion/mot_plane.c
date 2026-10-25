@@ -808,8 +808,12 @@ BOOL chkCollision(f32* outY) {
     sincosf(&s0, &c0, 90.0f + mp->motPlane->pitch);
     sincosf(&s1, &c1, mp->motPlane->yaw);
     {
-        x = mp->rotOfs.x + (mp->position.x + mp->dispOfs.x); y = mp->rotOfs.y + (mp->position.y + mp->dispOfs.y); z = mp->rotOfs.z + (mp->position.z + mp->dispOfs.z);
-        x += s1 * c0 * r; y += -s0 * r; z += c1 * c0 * r;
+        x = mp->rotOfs.x + (mp->position.x + mp->dispOfs.x);
+        y = mp->rotOfs.y + (mp->position.y + mp->dispOfs.y);
+        z = mp->rotOfs.z + (mp->position.z + mp->dispOfs.z);
+        x += s1 * c0 * r;
+        y += -s0 * r;
+        z += c1 * c0 * r;
         v = (Vec){x, y, z};
     }
     mp->motPlane->tipPos = v;

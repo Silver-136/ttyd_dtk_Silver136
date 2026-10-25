@@ -659,7 +659,9 @@ void npcMain(void) {
     int total;
     f32 dir;
     f32 prio;
-    f32 dist; Vec dv; Vec dv2;
+    f32 dist;
+    Vec dv;
+    Vec dv2;
     s32 fire, jump;
 
     npcwork = gp->inBattle ? &work.battle : &work.field;

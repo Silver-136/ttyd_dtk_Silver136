@@ -187,7 +187,10 @@ void effHokoriDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(base, mtx, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-        if (type <= 1) { if (i & 1) vtx = size16x32_tex32x64_vtx; else vtx = size16x16_tex32x32_vtx; } else vtx = size8x8_tex32x32_vtx;
+        if (type <= 1) {
+            if (i & 1) vtx = size16x32_tex32x64_vtx;
+            else vtx = size16x16_tex32x32_vtx;
+        } else vtx = size8x8_tex32x32_vtx;
  effSetVtxDescN64(vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);

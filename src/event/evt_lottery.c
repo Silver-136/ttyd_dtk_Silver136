@@ -174,8 +174,12 @@ USER_FUNC(evt_lottery) {
         OSTicksToCalendarTime(lot->buyTime, &e);
         bt = lot->buyTime; OSTicksToCalendarTime(bt + (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[0], &e);
         bt = lot->buyTime; OSTicksToCalendarTime(bt + (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[1], &e);
-        bt = lot->buyTime; bt += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[2]; OSTicksToCalendarTime(bt, &e);
-        bt = lot->buyTime; bt += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[3]; OSTicksToCalendarTime(bt, &e);
+        bt = lot->buyTime;
+        bt += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[2];
+        OSTicksToCalendarTime(bt, &e);
+        bt = lot->buyTime;
+        bt += (OSTime)OS_TIMER_CLOCK * 86400 * lot->days[3];
+        OSTicksToCalendarTime(bt, &e);
     }
     return EVT_RETURN_DONE;
 }

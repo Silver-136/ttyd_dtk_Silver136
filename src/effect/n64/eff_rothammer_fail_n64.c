@@ -47,7 +47,9 @@ EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
     zero = 0.0f;
     effect->callback = effRotHammerFailMain;
     work->lifetime = time;
-    child = work++; child = work; work--;
+    child = work++;
+    child = work;
+    work--;
     work->frame = 0;
     work->total = time;
     work->progress = zero;

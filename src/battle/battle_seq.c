@@ -2853,7 +2853,10 @@ BOOL BattleWaitAllActiveEvtEnd(BattleWork* wp) {
 }
 
 BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
-    void* w; BattleUnit* unit; BOOL done; int i;
+    void* w;
+    BattleUnit* unit;
+    BOOL done;
+    int i;
     done = TRUE;
     w = (void*)wp;
     for (i = 0; i < 0x40; i++) {

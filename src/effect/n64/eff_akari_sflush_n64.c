@@ -150,7 +150,9 @@ void effAkariSflushDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(size16x16_tex32x32_vtx);
     for (i = 0; i < work->count + 1; i++) {
-        s = (f32)cos(6.2831855f * (f32)(frame * 8 + (i * 180) / (work->count + 1)) / 360.0f); s = 0.1f * s + (f32)(i + 1); s *= work->scale;
+        s = (f32)cos(6.2831855f * (f32)(frame * 8 + (i * 180) / (work->count + 1)) / 360.0f);
+        s = 0.1f * s + (f32)(i + 1);
+        s *= work->scale;
         PSMTXRotRad(rot, 'z', 0.017453292f * (f32)(i * 36));
         PSMTXScale(scale, s, s, s);
         PSMTXConcat(rot, scale, m44);

@@ -283,7 +283,9 @@ static void actionCommandDisp(f32 x, f32 y) {
         case 0x800: b = ICON_06B; a = ICON_06A; break;
         case 0x40000: b = ICON_078; a = ICON_079; break;
         case 0x80000: b = ICON_07A; a = ICON_079; break;
-        default: b = ICON_078; a = ICON_079; break;
+        default: b = ICON_078;
+        a = ICON_079;
+        break;
     }
     switch (tw->state) {
         case 0:

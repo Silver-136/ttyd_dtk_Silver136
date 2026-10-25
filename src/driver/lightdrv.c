@@ -258,7 +258,9 @@ s32 lightGetNearObj(Vec position, LightEntry** out, s32 count, LightEntryFlags f
     mask = flags;
     found = 0;
     for (i = 0; i < n; i++, tp++) {
-        u32 fl; LightEntry* e = tp->entry; fl = e->flags;
+        u32 fl;
+        LightEntry* e = tp->entry;
+        fl = e->flags;
         if (!(fl & LIGHT_AMBIENT) && (!mask || (mask & fl))) {
             *op++ = e;
             found++;

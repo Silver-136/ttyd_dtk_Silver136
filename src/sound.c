@@ -1905,9 +1905,21 @@ void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
             }
         }
         size = sndStreamAllocLength(0xE00, 0);
-        { u8* p = (u8*)stream->entries[0].buffer; u32 n; for (n = size; n != 0; n--) { *p++ = 0; } }
+        {
+            u8* p = (u8*)stream->entries[0].buffer;
+            u32 n;
+            for (n = size; n != 0; n--) {
+                *p++ = 0;
+            }
+        }
         if (stream->count == 2) {
-            { u8* p = (u8*)stream->entries[1].buffer; u32 n; for (n = size; n != 0; n--) { *p++ = 0; } }
+            {
+                u8* p = (u8*)stream->entries[1].buffer;
+                u32 n;
+                for (n = size; n != 0; n--) {
+                    *p++ = 0;
+                }
+            }
         }
         pan = 0;
         if (stream->count == 1) {

@@ -379,7 +379,10 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
     BattleCursor* cursor = menu->cursor;
     f32 frac;
     u8 alpha;
-    u8 r; u8 g; u8 b; u8 a;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
     Mtx scl;
     Mtx trn;
     Mtx out;

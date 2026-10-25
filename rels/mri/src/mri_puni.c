@@ -220,17 +220,49 @@ void puniAnimationInit(s16** a, s16** b) {
 void puniAnimationInit2(void) {
     char (*n)[16];
     n = (char (*)[16])&Punigp->animNames[0];
-    strcpy(n[0], "S_1"); strcpy(n[1], "W_1"); strcpy(n[2], "R_1"); strcpy(n[3], "D_1"); strcpy(n[4], "D_2");
-    strcpy(n[5], "F_1"); strcpy(n[6], "Z_1"); strcpy(n[7], "J_1A"); strcpy(n[8], "J_1B"); strcpy(n[9], "B_1");
+    strcpy(n[0], "S_1");
+    strcpy(n[1], "W_1");
+    strcpy(n[2], "R_1");
+    strcpy(n[3], "D_1");
+    strcpy(n[4], "D_2");
+    strcpy(n[5], "F_1");
+    strcpy(n[6], "Z_1");
+    strcpy(n[7], "J_1A");
+    strcpy(n[8], "J_1B");
+    strcpy(n[9], "B_1");
     n = (char (*)[16])&Punigp->animNames[160];
-    strcpy(n[0], "S_1"); strcpy(n[1], "W_1"); strcpy(n[2], "R_1"); strcpy(n[3], "D_1"); strcpy(n[4], "D_2");
-    strcpy(n[5], "F_1"); strcpy(n[6], "Z_1"); strcpy(n[7], "J_1A"); strcpy(n[8], "J_1B"); strcpy(n[9], "B_1");
+    strcpy(n[0], "S_1");
+    strcpy(n[1], "W_1");
+    strcpy(n[2], "R_1");
+    strcpy(n[3], "D_1");
+    strcpy(n[4], "D_2");
+    strcpy(n[5], "F_1");
+    strcpy(n[6], "Z_1");
+    strcpy(n[7], "J_1A");
+    strcpy(n[8], "J_1B");
+    strcpy(n[9], "B_1");
     n = (char (*)[16])&Punigp->animNames[320];
-    strcpy(n[0], "S_1"); strcpy(n[1], "W_1"); strcpy(n[2], "R_1"); strcpy(n[3], "D_1"); strcpy(n[4], "D_2");
-    strcpy(n[5], "F_1"); strcpy(n[6], "Z_1"); strcpy(n[7], "J_1A"); strcpy(n[8], "J_1B"); strcpy(n[9], "B_1");
+    strcpy(n[0], "S_1");
+    strcpy(n[1], "W_1");
+    strcpy(n[2], "R_1");
+    strcpy(n[3], "D_1");
+    strcpy(n[4], "D_2");
+    strcpy(n[5], "F_1");
+    strcpy(n[6], "Z_1");
+    strcpy(n[7], "J_1A");
+    strcpy(n[8], "J_1B");
+    strcpy(n[9], "B_1");
     n = (char (*)[16])&Punigp->animNames[480];
-    strcpy(n[0], "S_1"); strcpy(n[1], "W_1"); strcpy(n[2], "R_1"); strcpy(n[3], "D_2"); strcpy(n[4], "D_2");
-    strcpy(n[5], "F_1"); strcpy(n[6], "Z_1"); strcpy(n[7], "J_1A"); strcpy(n[8], "J_1B"); strcpy(n[9], "B_1");
+    strcpy(n[0], "S_1");
+    strcpy(n[1], "W_1");
+    strcpy(n[2], "R_1");
+    strcpy(n[3], "D_2");
+    strcpy(n[4], "D_2");
+    strcpy(n[5], "F_1");
+    strcpy(n[6], "Z_1");
+    strcpy(n[7], "J_1A");
+    strcpy(n[8], "J_1B");
+    strcpy(n[9], "B_1");
 }
 
 
@@ -5011,7 +5043,9 @@ void puni_puni_main(void) {
         puniCollideAll();
     }
     if (Punigp->flags & 0x20) {
-        s32 ii; PuniData* q; PunidrvPose* ps; 
+        s32 ii;
+        PuniData* q;
+        PunidrvPose* ps;
         ps = puniGetPosePtr();
         
         for (ii = 1, q = Punidat + 1; ii < 211; ii++, ps++, q++) {
@@ -5024,7 +5058,9 @@ void puni_puni_main(void) {
             }
         }
     } else {
-        s32 ii; PuniData* q; PunidrvPose* ps; 
+        s32 ii;
+        PuniData* q;
+        PunidrvPose* ps;
         ps = puniGetPosePtr();
         
         for (ii = 1, q = Punidat + 1; ii <= 109; ii++, ps++, q++) {

@@ -2108,8 +2108,40 @@ void marioDispBlur(CameraId camId, void* param) {
     f32 angle;
     flag = animPoseGetMaterialFlag(wp->paperAnimGroupId[marioAnimeId()]);
     angle = wp->targetYaw * 6.2831855f / 360.0f;
-    if (angle <= 3.1415927f) { if (angle <= 1.5707964f) { s = angle; sg = 1.0f; sy = s * s; } else { s = angle - 1.5707964f; sg = 1.0f; sy = s * s; } } else if (angle < 4.712389f) { s = angle - 3.1415927f; sg = -1.0f; sy = s * s; } else { s = angle - 4.712389f; sg = -1.0f; sy = s * s; }
-    if (angle <= 3.1415927f) { if (angle <= 1.5707964f) { c = angle; cg = 1.0f; } else { c = angle - 1.5707964f; cg = 1.0f; } } else if (angle < 4.712389f) { c = angle - 3.1415927f; cg = -1.0f; } else { c = angle - 4.712389f; cg = -1.0f; }
+    if (angle <= 3.1415927f) {
+        if (angle <= 1.5707964f) {
+            s = angle;
+            sg = 1.0f;
+            sy = s * s;
+        } else {
+            s = angle - 1.5707964f;
+            sg = 1.0f;
+            sy = s * s;
+        }
+    } else if (angle < 4.712389f) {
+        s = angle - 3.1415927f;
+        sg = -1.0f;
+        sy = s * s;
+    } else {
+        s = angle - 4.712389f;
+        sg = -1.0f;
+        sy = s * s;
+    }
+    if (angle <= 3.1415927f) {
+        if (angle <= 1.5707964f) {
+            c = angle;
+            cg = 1.0f;
+        } else {
+            c = angle - 1.5707964f;
+            cg = 1.0f;
+        }
+    } else if (angle < 4.712389f) {
+        c = angle - 3.1415927f;
+        cg = -1.0f;
+    } else {
+        c = angle - 4.712389f;
+        cg = -1.0f;
+    }
     s = s * sg * c * cg * sy;
     for (i = 7; i > 0; i--) {
         marioDispBlurSub(mtx, i);

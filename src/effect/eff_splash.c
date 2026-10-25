@@ -339,7 +339,10 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     u32 u;
 
     f32 nw;
-    u32 k2; u8* sz; u8** dl; s32 kb;
+    u32 k2;
+    u8* sz;
+    u8** dl;
+    s32 kb;
 
 
     cam = camGetPtr(cameraId);

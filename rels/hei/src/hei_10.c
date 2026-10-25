@@ -471,8 +471,12 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
         Vec a;
         Vec b;
 
-        b = vb; b.x = npc->position.x; b.z = npc->position.z;
-        a = va; a.x = x; a.z = z;
+        b = vb;
+        b.x = npc->position.x;
+        b.z = npc->position.z;
+        a = va;
+        a.x = x;
+        a.z = z;
         dist = PSVECDistance(&a, &b);
         dy = y - npc->position.y;
         if (t == 0.0f) {

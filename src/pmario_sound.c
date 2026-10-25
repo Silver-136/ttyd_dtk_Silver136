@@ -5067,7 +5067,9 @@ u32 calc3D(s32 id, Vec* pos, u8 vol, u16 dist) {
     span = t;
 
     {
-        f32 dx = v.x - wp->position.x; f32 dy = v.y - wp->position.y; f32 dz = v.z - wp->position.z;
+        f32 dx = v.x - wp->position.x;
+        f32 dy = v.y - wp->position.y;
+        f32 dz = v.z - wp->position.z;
         d = dx * dx + dy * dy + dz * dz;
         if (d > 0.0f) {
             f64 guess = __frsqrte(d);
@@ -6584,7 +6586,9 @@ void psndENVMain(void) {
                 if (e->timer == 0) e->state++;
                 break;
             case 1:
-                e->position.x = 0.0f; e->position.y = 0.0f; e->position.z = 0.0f;
+                e->position.x = 0.0f;
+                e->position.y = 0.0f;
+                e->position.z = 0.0f;
                 ang = irand(360);
                 rr = irand(e->radiusRange * 10) + e->radiusMin * 10;
                 a2 = 6.2831855f * ang / 360.0f;

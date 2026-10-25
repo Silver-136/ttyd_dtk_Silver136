@@ -402,7 +402,9 @@ USER_FUNC(evt_party_move_pos2) {
         spd = evtGetFloat(event, args[3]);
         dist = distABf(p->position.x, p->position.z, x, z);
         p->targetDir = angleABf(p->position.x, p->position.z, x, z);
-        dist = gp->framerate * (dist / spd); spd = spd / gp->framerate; partySetForceMove(p, dist, p->targetDir, spd);
+        dist = gp->framerate * (dist / spd);
+        spd = spd / gp->framerate;
+        partySetForceMove(p, dist, p->targetDir, spd);
     }
     if (p->forceMoveFrames == 0) {
         return EVT_RETURN_DONE;

@@ -1963,8 +1963,12 @@ static USER_FUNC(zoom) {
 
         at = zoom_zero_b;
         pos = zoom_zero_a;
-        at.x = out.at.x; at.y = out.at.y; at.z = out.at.z;
-        pos.x = out.pos.x; pos.y = out.pos.y; pos.z = out.pos.z;
+        at.x = out.at.x;
+        at.y = out.at.y;
+        at.z = out.at.z;
+        pos.x = out.pos.x;
+        pos.y = out.pos.y;
+        pos.z = out.pos.z;
         PSVECSubtract(&pos, &at, &v);
     }
 #else

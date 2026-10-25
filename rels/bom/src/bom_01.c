@@ -555,7 +555,18 @@ static void pose_main(void) {
 }
 
 static void pose_change(s32 i, const char* name) {
-    BomWork* wp = lp->address; s32 j = 0; BomAnim* a; for (a = wp->anims; j < wp->animCount; j++, a++) { if (strcmp(a->name, name) == 0) { break; } } if (j < wp->animCount && wp->bom[i].anim != j) { wp->bom[i].anim = (s16)j; wp->bom[i].time = gp->renderTime + rand(); }
+    BomWork* wp = lp->address;
+    s32 j = 0;
+    BomAnim* a;
+    for (a = wp->anims; j < wp->animCount; j++, a++) {
+        if (strcmp(a->name, name) == 0) {
+            break;
+        }
+    }
+    if (j < wp->animCount && wp->bom[i].anim != j) {
+        wp->bom[i].anim = (s16)j;
+        wp->bom[i].time = gp->renderTime + rand();
+    }
 }
 
 s32 make_ext_table(EventEntry* event, BOOL isFirstCall) {

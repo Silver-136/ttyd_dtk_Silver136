@@ -672,7 +672,9 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
         wp->bounceCount = 0;
     }
     if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->field_0x40 > 10) {
-        f32 r2; f32 t; cam = camGetPtr(CAMERA_3D);
+        f32 r2;
+        f32 t;
+        cam = camGetPtr(CAMERA_3D);
         t = cam->viewYaw; r2 = 6.2831855f * reviseAngle((f32)(mario->displayDirection - 90.0f) + t) / 360.0f;
         angle = 35.0f * moa_sin(r2) + mario->position.x;
         dist = mario->position.z - 35.0f * moa_cos(r2);
@@ -899,7 +901,9 @@ static void ext_moamoa_main(void)
     if ((((wp->flags & 1) && (!(moa->flags & 0x444))) && (i == (gp->retraceCount % wp->count))) && (irand(1000) < 200))
     {
       Vec tmp = {0.0f, 0.0f, 0.0f};
-      tmp.x = (*pose->mtx)[0][3]; tmp.y = (*pose->mtx)[1][3]; tmp.z = (*pose->mtx)[2][3];
+      tmp.x = (*pose->mtx)[0][3];
+      tmp.y = (*pose->mtx)[1][3];
+      tmp.z = (*pose->mtx)[2][3];
       sp = tmp;
       psndSFXOn_3D(SFX_NAME_WORD("SFX_STG6_MOAMOA_VOICE1"), &sp); // FAKE: integer cast hoists the literal as an @ temp
     }
@@ -1151,7 +1155,9 @@ static void ext_moamoa_main(void)
         if (!sndFlag)
       {
         Vec pos = {0.0f, 0.0f, 0.0f};
-        pos.x = (*pose->mtx)[0][3]; pos.y = (*pose->mtx)[1][3]; pos.z = (*pose->mtx)[2][3];
+        pos.x = (*pose->mtx)[0][3];
+        pos.y = (*pose->mtx)[1][3];
+        pos.z = (*pose->mtx)[2][3];
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG6_MOAMOA_DAMAGED1), &pos);
         sndFlag = 1;
       }

@@ -1444,14 +1444,18 @@ void itemseq_Bound(ItemEntry* entry) {
                         r = NULL;
                     }
                     else {
-                        x = entry->position.x; y = 20.0f + entry->position.y; z = entry->position.z;
+                        x = entry->position.x;
+                        y = 20.0f + entry->position.y;
+                        z = entry->position.z;
                         { f64 d = __fabs(dy); hitDist = 20.0 + d; }
                         if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
                             entry->position.y = hitY - 20.0f - 4.0f;
                             r = h;
                         }
                         else {
-                            x = entry->position.x; y = entry->position.y; z = entry->position.z;
+                            x = entry->position.x;
+                            y = entry->position.y;
+                            z = entry->position.z;
                             { f64 d = __fabs(dy); hitDist = 20.0 + d; }
                             if (h = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
                                 entry->position.y = hitY - 20.0f;
@@ -1723,13 +1727,17 @@ itemHitCheckUp(ItemEntry* entry, f32 vy) {
     if (vy <= 0.0f) {
         return NULL;
     }
-    x = entry->position.x; y = 20.0f + entry->position.y; z = entry->position.z;
+    x = entry->position.x;
+    y = 20.0f + entry->position.y;
+    z = entry->position.z;
     { f64 d = __fabs(vy); hitDist = 20.0 + d; } // FAKE: f64 local keeps 20.0 on the left of the fadd
     if (hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
         entry->position.y = hitY - 20.0f - 4.0f;
         return hit;
     }
-    x = entry->position.x; y = entry->position.y; z = entry->position.z;
+    x = entry->position.x;
+    y = entry->position.y;
+    z = entry->position.z;
     { f64 d = __fabs(vy); hitDist = 20.0 + d; } // FAKE: f64 local keeps 20.0 on the left of the fadd
     if (hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, x, y, z, 0.0f, 1.0f, 0.0f)) {
         entry->position.y = hitY - 20.0f;

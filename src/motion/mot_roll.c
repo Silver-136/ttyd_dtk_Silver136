@@ -378,7 +378,19 @@ void mot_roll_post(void) {
     m->camShiftRate.z = 0.004f;
     {
         f32 d = revise360(mario->directionView - mario->targetYaw);
-        do { if (d >= 180.0f) { mario->displayDirection = 0.0f; mario->displayDirectionTarget = 0.0f; mario->moveDirection = 270.0f; mario->directionView = 270.0f; } else { mario->displayDirection = 180.0f; mario->displayDirectionTarget = 180.0f; mario->moveDirection = 90.0f; mario->directionView = 90.0f; } } while (0);
+        do {
+            if (d >= 180.0f) {
+                mario->displayDirection = 0.0f;
+                mario->displayDirectionTarget = 0.0f;
+                mario->moveDirection = 270.0f;
+                mario->directionView = 270.0f;
+            } else {
+                mario->displayDirection = 180.0f;
+                mario->displayDirectionTarget = 180.0f;
+                mario->moveDirection = 90.0f;
+                mario->directionView = 90.0f;
+            }
+        } while (0);
     }
     marioSetSpec();
     mario->rollFlags = 0;
