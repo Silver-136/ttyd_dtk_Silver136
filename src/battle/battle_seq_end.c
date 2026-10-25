@@ -110,14 +110,6 @@ typedef struct SeqEndGroup {
     SeqEndUnitSetup* units; // 0x4
 } SeqEndGroup;
 
-typedef struct SeqEndSpot {
-    u16 flags;               // 0x0
-    u8 pad_02[0x4 - 0x2]; // 0x2
-    Vec pos;                 // 0x4
-    Vec rot;                 // 0x10
-    Vec scale;               // 0x1C
-    GXColor color;           // 0x28
-} SeqEndSpot;
 
 void _GetExpIcon_Main(BattleWork* wp);
 void _LvupParamConfirmDisp(CameraId camId, void* param);
@@ -1526,11 +1518,11 @@ USER_FUNC(_lvup_spot_on) {
     BattleSpotWork* spot = BatSpotGetPtr();
     EvtWord* args = event->args;
     s32 n;
-    SeqEndSpot* e;
+    BattleSpotEntry* e;
 
     spot->skipRender = 1;
     n = evtGetValue(event, args[0]);
-    e = (SeqEndSpot*)spot->entries + n;
+    e = spot->entries + n;
     switch (n) {
     case 0: {
         Vec v = {0.0f, 25.0f, -50.0f};
@@ -1574,7 +1566,7 @@ USER_FUNC(_lvup_spot_on) {
 USER_FUNC(_lvup_spot_move) {
     BattleSpotWork* spot = BatSpotGetPtr();
     s32 n = evtGetValue(event, event->args[0]);
-    SeqEndSpot* e = (SeqEndSpot*)spot->entries + n;
+    BattleSpotEntry* e = spot->entries + n;
     f32 s;
 
     if (isFirstCall) {
@@ -1638,18 +1630,18 @@ USER_FUNC(_lvup_spot_move) {
 USER_FUNC(_lvup_spot_off) {
     BattleSpotWork* spot = BatSpotGetPtr();
     EvtWord* args = event->args;
-    SeqEndSpot* e;
+    BattleSpotEntry* e;
     s32 i;
 
     if (isFirstCall) {
         event->userdata[0] = evtGetValue(event, args[0]);
         event->userdata[1] = event->userdata[0];
-        event->userdata[2] = ((SeqEndSpot*)spot->entries)->color.a;
+        event->userdata[2] = spot->entries->color.a;
     }
     event->userdata[1]--;
     for (i = 0; i < 5; i++) {
         GXColor c = {0xFF, 0xFF, 0xFF, 0x00};
-        e = (SeqEndSpot*)spot->entries + i;
+        e = spot->entries + i;
         c.a = intplGetValue(2, 0.0f, event->userdata[2], event->userdata[1], event->userdata[0]);
 
         e->color = c;

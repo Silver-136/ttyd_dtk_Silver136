@@ -29,21 +29,17 @@
 #include "driver/itemdrv.h"
 #include "statuswindow.h"
 #include "win/win_main.h"
+#include "data_tables.h"
 
 extern ItemData itemDataTable[];
 
 void FontDrawString(f32 x, f32 y, const char* str);
 
-typedef struct UnitWinEntry {
-    const char* mapObj; // 0x0
-    const char* hitName; // 0x4
-    void* evt;          // 0x8
-} UnitWinEntry;
 
 typedef struct UnitWinWork {
     u16 flags;             // 0x0
     u16 pad2;              // 0x2
-    UnitWinEntry* entries; // 0x4
+    UnitWinSell* entries; // 0x4
     s32* goods;            // 0x8
     u16 itemFlags[6];      // 0xC
     s32 goodsMax;          // 0x18
@@ -245,7 +241,7 @@ USER_FUNC(evt_unitwin_free) {
 USER_FUNC(evt_unitwin_selltable_setup) {
     s32 i;
     EvtWord* args = event->args;
-    UnitWinEntry* tbl = (UnitWinEntry*)evtGetValue(event, args[0]);
+    UnitWinSell* tbl = (UnitWinSell*)evtGetValue(event, args[0]);
     s32* goods = (s32*)evtGetValue(event, args[1]);
     UnitWinWork* wp = _wp;
     char name[32];
