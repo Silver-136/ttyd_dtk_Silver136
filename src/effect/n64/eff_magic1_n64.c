@@ -101,7 +101,6 @@ void effMagic1Main(EffectEntry* effect) {
 
 static void main_dl(EffectEntry* effect, Mtx base) {
     u8* a;
-    f32 yr;
 
     EffMagic1N64Work* w = effect->userdata;
     s32 type = w->type;

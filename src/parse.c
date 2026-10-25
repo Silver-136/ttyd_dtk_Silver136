@@ -96,7 +96,6 @@ void parsePopNext(void) {
 
 BOOL parseGet1Next(s32 type, void* data) {
     s32* posp;
-    char* dst;
     s32 i;
     s32 end;
     s8* p;
@@ -105,7 +104,6 @@ BOOL parseGet1Next(s32 type, void* data) {
     BOOL result = TRUE;
     s32* posStack;
     s32 state;
-    s32 j;
     s32 n;
     s8 c;
 

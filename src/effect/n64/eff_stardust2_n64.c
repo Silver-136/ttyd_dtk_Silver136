@@ -76,7 +76,6 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 camera, f32 x, f32 y,
     EffStardust2N64Work* w;
     EffStardust2N64Work* p;
     s32 i;
-    f32 step, stepY;
     f32 a, sn, cs, b, fy;
     s32 r;
     f32 tx, ty;

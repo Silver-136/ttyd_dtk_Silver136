@@ -25,7 +25,6 @@ EffectEntry* effKamekiTornadeN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
     EffectEntry* effect;
     EffKamekiTornadeN64Work* work;
     s32 i;
-    s32 k;
 
     effect = effEntry();
     effect->type = "KamekiTornadeN64";
@@ -75,7 +74,6 @@ void effKamekiTornadeMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 i;
-    s32 k;
     s32 life;
     s32 frame;
     f32 scale;

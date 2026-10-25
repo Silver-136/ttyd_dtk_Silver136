@@ -797,11 +797,8 @@ static void ext_moamoa_main(void) {
     s32 sndFlag;
     s32 i;
     s32 ret;
-    s32 idx;
     ExtdrvPose *pose;
-    ExtdrvPose *other;
     Moamoa *moa;
-    Moamoa *m;
     f32 a2;
     f32 rad;
     f32 angle;
@@ -821,7 +818,6 @@ static void ext_moamoa_main(void) {
     s32 hit;
     f32 a;
     f32 d;
-    f32 t;
     f32 r;
     f32 s;
     hit = 0;

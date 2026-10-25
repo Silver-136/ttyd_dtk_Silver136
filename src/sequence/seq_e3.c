@@ -371,7 +371,6 @@ void e3Disp(CameraId cameraId, void* param) {
     f32 viewportBackup[GX_VIEWPORT_SZ];
     CameraEntry camBackup;
 #ifdef VERSION_G8ME01
-    char* keys[4];
 #else
     char* keys[3];
 #endif
@@ -381,8 +380,6 @@ void e3Disp(CameraId cameraId, void* param) {
     s32 px, py;
     s32 row, col;
     s32 inset, pass, step;
-    f32 t, dx, dy;
-    s32 mode;
 
     active = wp->curScreen;
     if (cameraId == CAMERA_OFFSCREEN2) {

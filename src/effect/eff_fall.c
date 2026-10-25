@@ -795,7 +795,7 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
     s32 type;
     f32 angle;
     s32 j;
-    f32 hw, hh, s;
+    f32 hw, hh;
 
     e = effect->userdata;
     cam = camGetPtr(cameraId);
@@ -1033,7 +1033,6 @@ void effFallDispWater(CameraId cameraId, EffectEntry *effect) {
     Mtx rot;
     Mtx mtx;
     GXTexObj tex;
-    GXColor color;
     CameraEntry *cam;
     EffFallWork *w;
     f32 hw;

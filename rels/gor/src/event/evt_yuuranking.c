@@ -239,7 +239,6 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
     s32 iy;
     Mtx mtx;
     f32 scale;
-    const char* msg;
 
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -196.0f + wp->x, 112.0f + wp->y, 392.0f, 224.0f, 20.0f);
     switch (wp->mode) {

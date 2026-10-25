@@ -132,8 +132,6 @@ void effVaporMain(EffectEntry* effect) {
 }
 
 void effVaporDisp(CameraId cameraId, EffectEntry* effect) {
-    GXColor color2;
-    GXColor color;
     EffVaporN64Work* work;
     s32 frame;
     CameraEntry* camera;

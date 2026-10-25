@@ -236,9 +236,7 @@ void effReleaseMain(EffectEntry* effect) {
     f32 sn;
     f32 v;
     s32 i;
-    s32 step;
     s32 val;
-    AnimeEntry* e;
 
     tmp.x = work->position.x;
     tmp.y = work->position.y;
@@ -398,8 +396,6 @@ void effReleaseMain(EffectEntry* effect) {
 }
 
 void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {
-    GXColor c0;
-    GXColor c1;
     CameraEntry* camera;
     EffReleaseN64Work* work;
     GXTexObj texObj;

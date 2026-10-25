@@ -270,7 +270,6 @@ void party_kemuri(PartyEntry* party) {
                             if (party->moveSpeed < 2.0f) {
                             } else if (party->kemuriTimer++ > 6) {
                                 {
-                                    f32 x, y, z;
                                     f32 c, s;
                                     party->kemuriTimer = 0;
                                     sincosf(&s, &c, 6.2831855f * reviseAngle(-party->targetDir) / 360.0f);
@@ -287,7 +286,6 @@ void party_kemuri(PartyEntry* party) {
                             if (party->moveSpeed < 2.0f) {
                             } else if (party->kemuriTimer++ > 6) {
                                 {
-                                    f32 x, y, z;
                                     f32 c, s;
                                     party->kemuriTimer = 0;
                                     sincosf(&s, &c, 6.2831855f * reviseAngle(-party->targetDir) / 360.0f);

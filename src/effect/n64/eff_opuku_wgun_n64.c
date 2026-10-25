@@ -171,7 +171,6 @@ void effOpukuWgunMain(EffectEntry* effect) {
 
 static u8 a_data[12] = {255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 128, 32};
 void effOpukuWgunDisp(CameraId cameraId, EffectEntry* effect) {
-    s32 k;
     CameraEntry* camera;
     EffOpukuWgunN64Work* work;
     Mtx scale;

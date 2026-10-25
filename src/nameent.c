@@ -304,7 +304,6 @@ s32 nameMain(void) {
     s32 len;
     s32 j;
     s32 off;
-    s32 o2;
     s32 idx;
     f32 dist;
 
@@ -657,7 +656,6 @@ void nameEntDisp(CameraId cameraId, void* param) {
     GXColor white;
     GXColor unused = {0xFF, 0xFF, 0xFF, 0xFF};
     const char* str;
-    s32 k;
     s32 n;
     s32 j;
     s32 i;
@@ -669,7 +667,6 @@ void nameEntDisp(CameraId cameraId, void* param) {
     const char* ok;
     const char* yes;
     const char* no;
-    u16 width;
     f32 w;
 
     white = unused;
@@ -856,7 +853,6 @@ static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
     Mtx i;
     double aw;
     double ah;
-    f32 sy;
 
     TEXGetGXTexObjFromPalette(*wp->tplFile->data, &obj, id);
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);

@@ -420,11 +420,9 @@ BOOL SoundSLibLoadDVD(const char* path) {
     u32 length3;
     SoundGroup* iter;
     SoundGroup* group;
-    SoundGroup* tmp;
     u32 blockSize;
     u32* cursor;
     u16 id;
-    void* val;
     DVDEntry* entry;
     u32 length;
     void* pointer;
@@ -1218,7 +1216,6 @@ inline void SoundDVDSetPanCh(s32 chan, u8 pan) { // I think this is the correct 
 
 void SoundDVDMain(void) {
     u32 i;
-    SoundDVD* dvd;
 
     for (i = 0; (int)i < 2; i++) {
         SoundDVD* dvd = &sound.dvds[i];

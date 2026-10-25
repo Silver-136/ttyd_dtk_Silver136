@@ -294,8 +294,6 @@ void npcDisp(CameraId camId, void* param) {
     Mtx mtx;
     GXColor color;
     f32 rotY;
-    AnimTableEntry* anim;
-    const char* nm;
 
     rotY = reviseAngle(-entry->direction);
     mtx_setup(entry, mtx, -1);
@@ -344,7 +342,6 @@ void npcDisp_offscreen_xlu(CameraId camId, void* param) {
     NpcEntry* entry = param; // cast to proper type
     u16 left, top, right, bottom;
     Mtx mtx;
-    GXColor color;
     f32 rotY;
 
     sysWaitDrawSync();
@@ -370,7 +367,6 @@ void npcDisp_offscreen(CameraId camId, void* param) {
     NpcEntry* entry = param; // cast to proper type
     u16 left, top, right, bottom;
     Mtx mtx;
-    GXColor color;
     f32 rotY;
 
     sysWaitDrawSync();
@@ -662,7 +658,6 @@ void npcMain(void) {
     f32 dist;
     Vec dv;
     Vec dv2;
-    s32 fire, jump;
 
     npcwork = gp->inBattle ? &work.battle : &work.field;
     marioGetPtr()->targetNpc = NULL;
@@ -1267,7 +1262,6 @@ void npcMoveG(NpcEntry* npc) {
     f32 tp;
     f32 limit;
     f32 hitX, hitY, hitZ, dist, hitNX, hitNY, hitNZ;
-    f32 h;
 
     dy = npc->moveOffset.y;
     npc->moveOffset.y = 0.0f;
@@ -1371,7 +1365,7 @@ static inline void npcSideSlide(f32* outX, f32* outZ, f32 dx, f32 dz, f32 nx, f3
 
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz) {
     f32 hx, hy, hz, dist, nx, ny, nz;
-    f32 lenSq, d, height;
+    f32 height;
     HitEntry* hit;
     f32 s, c;
 

@@ -163,7 +163,6 @@ void effRecoverHeartMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 i;
-    s32 k;
     f32 ang;
     f32 fade;
 

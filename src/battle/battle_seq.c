@@ -2194,7 +2194,6 @@ BOOL BattlePhaseEndCheck(void) {
 void btlseqAct(BattleWork* wp) {
     BattleUnit* unit;
     EventEntry* evt;
-    BOOL cantMove;
     BOOL decrement;
 
     switch (BattleGetSeq(wp, SEQ_ACT)) {
@@ -2555,7 +2554,6 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 count) {
 void battleMakePhaseEvtTable(BattleWork* wp) {
     BattlePhaseEvtEntry* table;
     int i;
-    BattlePhaseEvtEntry* entry;
     BattleUnit* unit;
     BattlePhaseEvtEntry tmp;
     f32 x, y, z;

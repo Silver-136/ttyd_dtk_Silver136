@@ -54,7 +54,6 @@ static void callback(MapTevCallbackInfo* info) {
 EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffMahojinWork* work;
-    s32 i;
     EffMahojinWork* p;
     s32 n;
 

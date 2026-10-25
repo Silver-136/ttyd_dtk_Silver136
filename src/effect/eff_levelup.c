@@ -112,7 +112,6 @@ void effLevelupMain(EffectEntry* effect) {
     Vec position = { 0.0f, 0.0f, 0.0f };
     s32 limit;
     s32 i;
-    EffLevelupWork* w;
     s32 done = 0;
 
     position.x = work->x;

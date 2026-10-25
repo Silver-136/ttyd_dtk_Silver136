@@ -367,7 +367,6 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     s32 gray;
     f32 scroll;
     f32 width;
-    s32 tw;
 
     if (w->badge.tab == 0) {
         cnt = pouchGetHaveBadgeCnt();

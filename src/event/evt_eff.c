@@ -421,8 +421,6 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
     f32 float13;
     f32 float14;
     EffectEntry *effect;
-    s32 u0a;
-    s32 u0b;
     s32 u1a;
     s32 u1b;
     args = event->args;

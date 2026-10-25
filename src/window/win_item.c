@@ -204,18 +204,13 @@ void winItemExit(WindowWork* w) {
 
 s32 winItemMain(WindowWork* w) {
     s32 cnt;
-    s32 col;
-    f32 width;
 
-    f32 scroll;
     s32 mode;
     s32 pages;
     s32 id;
-    ItemData* item;
     s32 c;
     s32 old;
     s32 ok;
-    s32 gray;
     const char** book;
     WinMgrEntry* entry;
     MarioWork* mp;
@@ -701,7 +696,6 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
     GXColor white3;
     GXColor white4;
     f32 yBase;
-    ItemData* item;
     s32 row;
     WindowWork* p;
     s32 col;
@@ -711,13 +705,11 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
     s32 ok;
     s32 id;
     s32 cnt;
-    s32 gray;
     f32 scroll;
     f32 width;
     f32 w2;
     f32 w3;
     f32 w4;
-    f32 w5;
 
     white4 = white;
     white2 = white4;

@@ -1935,7 +1935,6 @@ void marioDispBlurSub(Mtx unused, s32 blurId) {
     Mtx scaleMtx;
     f32 scale;
     f32 angle;
-    f32 angle2;
     f32 yofs = 0.0f;
 
     scale = marioGetScale();
@@ -2064,7 +2063,6 @@ void marioDisp(CameraId camId, void* param) {
     Mtx scaleMtx;
     f32 scale;
     f32 angle;
-    f32 angle2;
 
     scale = marioGetScale();
     MTXScale(mtx, wp->scale.x * scale, wp->scale.y * scale, wp->scale.z * scale);

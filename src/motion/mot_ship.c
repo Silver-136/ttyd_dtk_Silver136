@@ -453,7 +453,6 @@ void mot_ship(void) {
         f32 fz, fx;
 
         HitEntry* hit;
-        s32 attr;
         m->dispFlags &= ~0x100;
         m->displayDirection = revise360(m->displayDirection);
         m->wPlayerCollisionBox.x = 40.0f;

@@ -840,7 +840,6 @@ void loadDraw(CameraId camera, void* param) {
     Mtx m;
     Mtx s;
     f32 x;
-    f32 y;
     f32 w;
     u64 sec;
 #ifdef VERSION_G8ME01

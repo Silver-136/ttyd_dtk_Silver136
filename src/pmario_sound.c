@@ -5335,7 +5335,6 @@ void psndBGM_rate(s32 id, u16 rate) {
 void psndBGMMain(void) {
     PaperSoundBGM* bgm;
     PaperSoundFade* fade;
-    s32 id;
     s32 i;
     s32 maxv = 100;
     PaperSoundFade* fade2;
@@ -5546,7 +5545,6 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
     PaperSoundBGM *bgm;
     s32 idx;
     PaperSoundFade *fade2;
-    u32 ch;
     SoundBGMEntry *entry;
     u8 vol;
     s32 i;
@@ -6447,7 +6445,6 @@ void psndENVMain(void) {
     s32 i;
     PaperSoundEnv* e;
     s32 lim = 100;
-    char* ch;
     f32 ang, r, a2; s32 rr;
     PaperSoundEnv* ent;
     if ((psnd.flags & 0x20) && !(psnd.flags & 0x40)) lim = 80;
@@ -6656,7 +6653,6 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6) {
     s32 o;
     PaperSoundEnv* e;
     s32 id;
-    s32 i;
     SoundEnvList* list;
     list = psenvlist;
     id = psndENVSearch(psenvlistname, name);
@@ -6761,7 +6757,6 @@ BOOL psndENVOff(u32 flags) {
 }
 
 BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5) {
-    u16* env;
     s32 silent = silent_tbl[(flags >> 12) & 0xF];
     PaperSoundFade* fade;
 

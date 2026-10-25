@@ -265,12 +265,10 @@ void effConfettiDisp(CameraId cameraId, EffectEntry* effect) {
     s32 anm;
     s32 type;
     EffConfettiN64Work* w;
-    u8* seq;
     s32 i;
     s32 alpha;
     s32 count;
     CameraEntry* camera;
-    s32 frm;
     s32 off;
     Mtx tmp;
     Mtx scale;

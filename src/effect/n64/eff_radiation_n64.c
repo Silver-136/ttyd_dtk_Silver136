@@ -295,8 +295,6 @@ void effRadiationDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx trans;
     effN64Vtx* vtx;
     s32 i;
-    s32 k;
-    s32 lf;
     s32 type;
     f32 a;
     f32 sx;

@@ -157,7 +157,6 @@ void unitwin_help_disp(WinMgrEntry* entry) {
 void unitwin_point_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
-    s32 mode;
     Mtx trans;
     Mtx scale;
     s32 d;
@@ -491,7 +490,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
     s32 mode;
     s32 row;
     s32 i;
-    char fbuf[64];
     s32 flag;
     s32 lv;
 
@@ -796,7 +794,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 }
                 item = &itemDataTable[id];
                 if (id) {
-                    s32 ty;
                     if (wp->mode == 13 && item->star_piece_price > pouchGetStarPiece()) {
                         color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
                         flag = 0x20;
@@ -907,7 +904,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 char buf[32];
                 GXColor color;
                 char c;
-                s32 ty;
                 if (johoya_get(tbl, info->storyId)) {
                     sprintf(buf, "");
                     color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
@@ -1049,7 +1045,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             s32 lv;
             s32 bob;
             s32 row = 0;
-            s32 iy;
             s32 v;
             s32 ty;
             GXColor color;
@@ -1310,7 +1305,6 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         char text[136];
         char* line1;
         char* line2 = NULL;
-        s8* p;
         s32 k;
         s32 lines;
         s32 w2;

@@ -102,7 +102,6 @@ void imgDisp(CameraId camId, void* param) {
     MtxPtr mp[3];
     Mtx m3, m4, m2, m1;
     Vec v1, v2;
-    CameraEntry* cam;
     int i;
     int first = -1;
     f32 fh, fw, fy, fx, scale, zoff, fl, ft, fr, fb;
@@ -295,9 +294,8 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
     ImageShadow* sh = &entry->shadows[id];
     s32 offId;
     u16 w, h;
-    s32 alloc, fmt, dstFmt;
+    s32 fmt;
     u32 size;
-    smartEntry* data;
     GXTexObj* obj;
     smartEntry* buf;
     if (!(sh->flags & 4)) return;
@@ -556,8 +554,6 @@ void imgShadowDisp(CameraId camId, void* param) {
     int first = -1;
     int i;
     f32 y0, x0, h, w;
-    f32 sx, sy, ox, oy;
-    f32 s0, s1;
     Mtx t, m2, m1, m;
 
     for (i = 0; i < 3; i++) {
@@ -611,7 +607,6 @@ void imgShadowDisp(CameraId camId, void* param) {
     {
         f32 x0, y0, w, h; f32 sc, z;
         typedef struct { u16 p, q, w, h; } RM;
-        RM* rm;
         if (entry->flags & 8) {
             sc = 1.0f; z = 0.0f;
         } else {

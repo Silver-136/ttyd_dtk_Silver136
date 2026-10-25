@@ -832,7 +832,6 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
     static f32 z;
     BattleUnit* unit;
     BattleUnitPart* parts;
-    s32 partsId;
     s8 st1;
     s8 st0;
     switch (m->step) {
@@ -1318,7 +1317,6 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
     BattleStage* stage;
     BattleAudienceMember* t;
     s32 list[60];
-    f32 px;
     f32 pz;
     s32 i;
     s32 cnt;

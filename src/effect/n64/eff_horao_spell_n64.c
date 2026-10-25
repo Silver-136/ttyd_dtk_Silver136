@@ -158,7 +158,6 @@ void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
 
 
-    GXColor white;
     f32 s;
     camera = camGetPtr(cameraId);
     work = effect->userdata;

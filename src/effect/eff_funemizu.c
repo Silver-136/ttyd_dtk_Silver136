@@ -211,7 +211,6 @@ void effFunemizuMain(EffectEntry* effect) {
             effFunemizuEntry(1, work->position.x - 14.0f * c, work->position.y, work->position.z - 14.0f * s, work->f10, work->f14);
         }
     } else {
-        EffFunemizuWork* p;
         work->f18 = 1.0f;
         for (i = 1, work++; i < effect->count; i++, work++) {
             if (work->position.y < 0.0f) {
@@ -403,7 +402,6 @@ void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     s32 i;
     f32 w = 3.0f;
     f32 nw;
-    f32 h, p;
 
     cam = camGetPtr(cameraId);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);

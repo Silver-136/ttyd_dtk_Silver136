@@ -396,7 +396,6 @@ static void actionCommandDisp(f32 x, f32 y) {
     s32 next;
     s32 n;
     s32 num;
-    s32 num2;
     f32 yb;
     f32 yd;
     f32 fx;

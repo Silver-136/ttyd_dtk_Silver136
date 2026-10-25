@@ -2643,11 +2643,7 @@ void puniModeAway(PuniData* p) {
 }
 
 void puniModeAttack(PuniData* p) {
-    PuniData* best;
     Vec d;
-    f32 m;
-    s32 i;
-    PuniData* q;
     switch (p->modeStep) {
         case 0:
             p->anim = 1;
@@ -3247,12 +3243,7 @@ void puniModeUpdraft(PuniData *p) {
     Vec d;
     Vec save;
     Vec savev;
-    Vec dir;
     f32 mag;
-    f32 fx;
-    f32 fz;
-    s32 a;
-    s32 b;
     s32 t;
     if (p->modeStep == 0) {
         {
@@ -4609,8 +4600,6 @@ void puniOption(void) {
 void puniCollideAll(void) {
     PuniData* p;
     PuniData* q;
-    PuniData* start;
-    PuniData* end;
     Vec diff;
     f32 dist, r2, r;
 
@@ -4835,9 +4824,7 @@ void puni_puni_main(void) {
     MarioWork* mario;
     PuniData* p;
     PuniData* t;
-    PunidrvPose* pose;
     Vec diff;
-    Vec v;
 
     mario = marioGetPtr();
     t = Punigp->marioPuni;

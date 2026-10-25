@@ -716,7 +716,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 #pragma opt_lifetimes off
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     MarioWork* mario = marioGetPtr();
-    CameraEntry* cam;
     f32 range;
     f32 dist;
     f32 angle;
@@ -830,7 +829,6 @@ static void ext_moamoa_main(void) {
     f32 ty;
     f32 a;
     f32 d;
-    f32 t;
     f32 r;
     f32 s;
     Mtx m1;

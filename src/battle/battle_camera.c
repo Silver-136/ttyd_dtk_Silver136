@@ -67,7 +67,7 @@ void battleCameraMain(void) {
     BattleUnit* party;
     BattleUnitPart* part2;
     BattleUnit* unit;
-    f32 w, w2, zz, y, ofs, t, d, yy, atX, atY, atZ;
+    f32 w, zz, y, ofs, t, d, yy, atX, atY, atZ;
     s16 moveLv, zoomLv;
     s32 phase;
     s16 moveLv2, zoomLv2;

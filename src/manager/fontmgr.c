@@ -1027,7 +1027,7 @@ void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     s16 y1;
     u16 v0;
     GXColor hsv;
-    s32 idx, cell, col;
+    s32 col;
     BinaryFontGlyph* glyph;
     f32 cellh, cellw, tu, w, h, tw;
     FontWidthEntry* entry;
@@ -1036,7 +1036,6 @@ void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     u8 t0, t1;
     f32 tv;
     f32 scale;
-    u8 ew;
     u8 kern;
     entry = fontGetWidth(code);
     kern = entry->kerning;

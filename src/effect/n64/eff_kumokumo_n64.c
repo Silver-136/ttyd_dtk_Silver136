@@ -440,8 +440,6 @@ void effKumokumoDisp(CameraId cameraId, EffectEntry* effect) {
     s32 alpha;
     s32 type;
     CameraEntry* camera;
-    EffKumokumoN64Particle* p;
-    u32 i;
     s32 k;
     s32 j;
     f32 w;

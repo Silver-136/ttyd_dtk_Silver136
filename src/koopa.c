@@ -825,7 +825,6 @@ void kpaFireMain(void) {
     if (fireefp && (f32)flag == 0.0f) {
         f32 dir;
         f32 scale;
-        f32 x;
         f32 y;
         f32 z;
         s32 t;

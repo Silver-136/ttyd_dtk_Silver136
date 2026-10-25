@@ -504,7 +504,6 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
 #define KEYFR(n) (n)
 #endif
 void makeKey(void) {
-    s32 delay;
     u16 button;
     u16 dirs;
     int i;

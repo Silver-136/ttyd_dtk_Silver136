@@ -115,8 +115,6 @@ void effOpukuWcurtainDisp(CameraId cameraId, EffectEntry* effect) {
     effN64Vtx* p;
     s32 j;
     s32 frame;
-    s32 m;
-    s32 n;
     s32 t;
 
     camera = camGetPtr(cameraId);

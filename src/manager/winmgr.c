@@ -577,9 +577,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
     WinMgrDesc* desc;
     WinMgrSelect* sel;
     InformantWork* jdt;
-    u16* p;
     PouchData* pouch;
-    WinMgrSelectTbl* table;
     u16 id;
     s32 i, j;
     s32 m;
@@ -1430,12 +1428,10 @@ void select_disp_party(WinMgrEntry* entry) {
     GXColor iconcol;
     GXColor tmp;
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
-    GXColor* col;
     s32 i;
     s32 j;
     const char* msg;
     u16 w;
-    f32 sx;
     f32 ofs;
     tmp = white;
     iconcol = tmp;

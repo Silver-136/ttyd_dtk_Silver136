@@ -149,7 +149,6 @@ void bgDisp(CameraId camId, void* param) {
     GXColor blend;
     GXTexObj texobj;
     Mtx trans, scale;
-    f32 sy;
     if (bgwork->flags & BG_RENDERING) {
         GXSetAlphaUpdate(GX_FALSE);
         GXSetCullMode(GX_CULL_BACK);

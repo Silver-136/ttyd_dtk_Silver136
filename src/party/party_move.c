@@ -646,7 +646,6 @@ void partyChgStayPose(PartyEntry* party) {
 }
 
 void partyChgWalkPose(PartyEntry* party, f32 spd) {
-    f32 g;
     f32 a;
     f32 b;
 

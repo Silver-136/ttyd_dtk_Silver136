@@ -479,7 +479,6 @@ s32 chkRevolveDir(s32* cw, s32* ccw) {
 
 s32 checkOneRevolution(s32 dir) {
     RubWork* rw;
-    s32 idx;
     s32 j;
     s32 cur;
     s32 v;

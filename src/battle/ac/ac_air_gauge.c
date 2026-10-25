@@ -202,7 +202,6 @@ f32 _GetGaugeDecValue(void) {
     AirPw* pw = (AirPw*)ac->work;
     GaugeKey* t;
     f32 base;
-    u32 frame;
 
     switch ((u32)ac->params[7]) {
         case 0: base = 0.3f; t = _table_0; break;
@@ -275,7 +274,6 @@ static void actionCommandDisp(f32 x, f32 y) {
     BattleACDispParams* disp = &ac->disp;
     AirPw* pw;
     f32 ratio;
-    f32 cur;
 
     camGetPtr(CAMERA_2D);
     pw = (AirPw*)ac->work;

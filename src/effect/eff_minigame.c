@@ -438,7 +438,6 @@ void effMiniGameDisp(CameraId cameraId, EffectEntry* effect) {
     f32 yoff;
     f32 size;
     f32 half;
-    u8* t;
     Mtx mc8;
     Mtx m98;
     Mtx m68;

@@ -217,7 +217,7 @@ void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
     effN64Vtx* v;
     s32 c;
     s32 idx;
-    f32 zero, ang, a1, a2, diff, x, y, z, w, sn, cs;
+    f32 zero, ang, a1, a2, x, y, z, w, sn, cs;
 
 
 

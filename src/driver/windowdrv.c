@@ -166,7 +166,6 @@ void windowMain(void) {
 }
 
 void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 height, f32 width) {
-    GXColor color;
     CameraEntry* camera;
     Mtx trans, scale;
     Mtx wood_mtx1, wood_mtx2, wood_mtx3, wood_mtx4; //+0x104, for case 2/4
@@ -414,7 +413,6 @@ void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 height, f32 width
     f32 x2, y2;
     Mtx trans2, scale2;
     f32 y3, y4;
-    f32 zz;
     Mtx trans3, scale3;
     f32 x3, x4;
     Mtx trans4, scale4;

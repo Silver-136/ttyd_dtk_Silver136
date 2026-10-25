@@ -784,7 +784,6 @@ void party_motion_homing_walk(PartyEntry* party) {
     PartyEntry* other;
     s32 i;
     Footmark* fm;
-    MarioWork* m3;
     u32 attr;
     f32 lim;
     f32 lim2;
@@ -800,20 +799,13 @@ void party_motion_homing_walk(PartyEntry* party) {
     Vec hp;
     Vec p2;
     Vec p3;
-    Vec u;
     f32 sp;
     f32 dir;
     f32 s4;
     f32 c4;
     f32 rx, ry, rz;
     f32 fsy, fsa, fsb;
-    f32 c, s;
-    f32 s2, c2;
-    f32 c3, s3;
     f32 hh;
-    HitCheckQuery q;
-    HitCheckQuery q2;
-    HitCheckQuery q3;
 
     id = partyGetFootmarkId(party);
     mario = party->playerPtr;
@@ -1247,7 +1239,6 @@ void party_motion_homing_fly(PartyEntry* party) {
     f32 hh;
     f32 hd;
     void* head;
-    f32 u1;
 #endif
 
     id = partyGetFootmarkId(party);
@@ -1985,7 +1976,6 @@ void party_motion_beside_mario(PartyEntry* party) {
     HitEntry* hit;
     f32 x, z;
     f32 y;
-    f32 nz, ny, nx, dist, hz, hy, hx;
     f32 thr;
     f32 sp;
     f32 t;
@@ -2828,9 +2818,7 @@ BOOL party_slit(PartyEntry* party) {
 
 BOOL party_roll(PartyEntry* party) {
     BOOL ret = TRUE;
-    f32 d;
     f32 x;
-    f32 t;
 
     if (party->slitOn != 2) {
         return TRUE;

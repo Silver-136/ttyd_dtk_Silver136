@@ -83,7 +83,6 @@ void effSnowmanMain(EffectEntry* effect) {
     EffSnowmanN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
-    f32 y;
     f32 spd;
     f32 zero;
     f32 sx;

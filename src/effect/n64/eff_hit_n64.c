@@ -139,7 +139,6 @@ void effHitMain(EffectEntry* effect) {
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 i;
     s32 idx;
-    EffHitN64Work* p;
     s32 frame;
     s32 type;
 

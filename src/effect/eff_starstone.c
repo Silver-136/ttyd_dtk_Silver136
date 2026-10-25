@@ -326,7 +326,6 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffStarStoneWork* work;
     u8* c;
-    f32 d;
 
     effect = effEntry();
     effect->type = "StarStone";
@@ -536,7 +535,6 @@ void effStarStoneMain(EffectEntry* effect) {
 #define LOOPK2(tbl, sz, n) { u8* s2; u8** d2; s32 kk; kk = 0; d2 = tbl; s2 = sz; for (; kk < n##U; kk++, s2++, d2++) { GXCallDisplayList(*d2, *s2 << 5); } }
 #define LOOPK(tbl, sz, n) k = 0; dq = tbl; sq = sz; for (; k < n##U; k++, sq++, dq++) { GXCallDisplayList(*dq, *sq << 5); }
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
-    s32 q;
     Mtx m;
     Mtx s;
     Mtx r;

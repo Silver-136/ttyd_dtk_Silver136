@@ -289,10 +289,6 @@ void cloud_init(PartyEntry* party) {
 
 void cloud_use(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
-    u16 mot;
-    s32 flag;
-    f32 dir;
-    u8* m;
 
     N__cloud_use(party);
     if (mario->currMotionId == MARIO_MOTION_CLOUD || mario->currMotionId <= 1 || mario->currMotionId == MARIO_MOTION_DASH) {

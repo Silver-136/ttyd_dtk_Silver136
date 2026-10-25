@@ -2885,7 +2885,7 @@ void BattleAudience_ApRecoveryBuild(StarPowerInfo* info) {
     BattleUnit* mario;
     BattleUnit* party;
     f32 sum, root, a, b, cnt, mm, pm, scale = 1.0f;
-    s32 j, i;
+    s32 i;
 
     if (audience->impendingBonuses == NULL) {
         audience->impendingBonuses = BattleAlloc(0xC);

@@ -441,7 +441,6 @@ static void moamoa_pose_main(void) {
     f32 t;
     u64 now;
     s32 i;
-    s32 sndFlag;
     ExtdrvPose* pose;
     Moamoa* moa;
     MoamoaPoseDef* def;
@@ -974,14 +973,10 @@ static void ext_moamoa_main(void) {
     f32 z;
     f32 z0;
     f32 x1;
-    f32 z1;
     f32 dist;
-    f32 grav;
     f32 s;
     f32 x0;
     f32 tx;
-    f32 ty;
-    f32 tz;
     Vec sp;
     Vec jv;
     Vec pv;
@@ -989,7 +984,6 @@ static void ext_moamoa_main(void) {
     f32 cnt = 0.0f;
     f32 a;
     f32 d;
-    f32 t;
     f32 r;
 
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
@@ -1416,7 +1410,6 @@ static void ext_moamoa_main(void) {
             if ((*pose->mtx)[0][3] > 100.0f) {
                 { // FAKE: hand-inlined randf(0.0f, 5.0f) (same rand() call, same r*5+0 then +c), so the constant is reloaded after the call as in the target
                     f32 k;
-                    f32 mn;
                     f32 r = rand() / 32767.0f;
                     (*pose->mtx)[0][3] = 100.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f));
                 }
@@ -1424,7 +1417,6 @@ static void ext_moamoa_main(void) {
             if ((*pose->mtx)[0][3] < -1870.0f) {
                 {
                     f32 k;
-                    f32 mn;
                     f32 r = rand() / 32767.0f;
                     (*pose->mtx)[0][3] = -1870.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f));
                 }
@@ -1433,7 +1425,6 @@ static void ext_moamoa_main(void) {
                 if ((*pose->mtx)[2][3] > 45.0f) {
                     {
                         f32 k;
-                        f32 mn;
                         f32 r = rand() / 32767.0f;
                         (*pose->mtx)[2][3] = 45.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f));
                     }
@@ -1441,7 +1432,6 @@ static void ext_moamoa_main(void) {
                 if ((*pose->mtx)[2][3] < -45.0f) {
                     {
                         f32 k;
-                        f32 mn;
                         f32 r = rand() / 32767.0f;
                         (*pose->mtx)[2][3] = -45.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f));
                     }

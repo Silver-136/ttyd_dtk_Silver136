@@ -748,10 +748,7 @@ static void senkaron_ext_main(void) {
     f32 range;
     f32 near;
     f32 scale;
-    f32 dx;
-    f32 dz;
     f32 dist;
-    f32 speed;
 
     pose = extGetPosePtr();
     mario = marioGetPtr();

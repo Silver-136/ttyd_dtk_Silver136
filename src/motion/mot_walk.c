@@ -123,7 +123,6 @@ f32 marioGetDashSpd(void) {
 }
 
 void mot_walk(void) {
-    f32 walkSpeed;
     s32 trigFlags;
     s32 flags;
     BOOL pushCaseActive;
@@ -237,7 +236,6 @@ void mot_walk(void) {
 }
 
 void mot_dash(void) {
-    f32 dashSpeed;
     u32 trigFlags;
     BOOL pushCaseActive;
     s32 seInterval;

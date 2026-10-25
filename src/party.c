@@ -312,7 +312,6 @@ BOOL partyGoodbye(s32 id) {
 s32 partyKill(s32 id) {
     PartyEntry* party;
     MarioWork* player;
-    PartyEntry* other;
 
     party = partyGetPtr(id);
     if (party == NULL) {

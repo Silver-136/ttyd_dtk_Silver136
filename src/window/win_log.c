@@ -1573,16 +1573,12 @@ void monosiri_disp(CameraId camera, void* param) {
     f32 y;
     f32 s;
     f32 w;
-    f32 xx;
     s32 mtx;
     s32 i;
     s32 id;
     TattleEntry* te;
     u16 tw;
     u16 th;
-    s32 d;
-    GXColor c0;
-    GXColor c;
 
     x = m->curX;
     y = m->curY;

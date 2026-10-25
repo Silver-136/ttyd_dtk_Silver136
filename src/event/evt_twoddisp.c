@@ -153,7 +153,6 @@ s32 evt_twoddisp_set_position(EventEntry* evt, BOOL isFirstCall) {
     EvtWord* args = evt->args;
     char* name = (char*)evtGetValue(evt, args[0]);
     TwodEntry* p;
-    s32 i;
 
     p = twod_find(name);
     p->x = evtGetFloat(evt, args[1]);
@@ -165,7 +164,6 @@ s32 evt_twoddisp_set_base_position(EventEntry* evt, BOOL isFirstCall) {
     EvtWord* args = evt->args;
     char* name = (char*)evtGetValue(evt, args[0]);
     TwodEntry* p;
-    s32 i;
 
     p = twod_find(name);
     p->baseX = evtGetFloat(evt, args[1]);
@@ -176,7 +174,6 @@ s32 evt_twoddisp_set_base_position(EventEntry* evt, BOOL isFirstCall) {
 s32 evt_twoddisp_flag_onoff(EventEntry* evt, BOOL isFirstCall) {
     s32 onoff;
     TwodEntry* p;
-    s32 i;
     EvtWord* args;
     char* name;
 

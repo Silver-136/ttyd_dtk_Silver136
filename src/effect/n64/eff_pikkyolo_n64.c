@@ -143,7 +143,6 @@ void effPikkyoloDisp(CameraId cameraId, EffectEntry* effect) {
     EffPikkyoloN64Work* work;
     s32 i;
     s32 alpha;
-    s32 n;
     Mtx mtx;
     Mtx scaleMtx;
     Mtx rot;

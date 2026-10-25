@@ -254,8 +254,6 @@ void zubastar_bunkatu(Vec* p0, Vec* p1) {
     f32 oy;
     s32 nhit;
     s32 j;
-    s32 iy;
-    s32 ix;
     s32 k;
     s32 count = w->count;
     for (i = 0; i < count; i++) {

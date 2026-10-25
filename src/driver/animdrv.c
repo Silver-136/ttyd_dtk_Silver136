@@ -976,7 +976,6 @@ void animPoseMain(s32 poseId) {
     u8* q;
     f32 key;
     u8* v;
-    u8* d;
     f32 x;
     f32 y;
     AnimationPose* pose;
@@ -993,7 +992,6 @@ void animPoseMain(s32 poseId) {
     f32 len;
     f32 tm;
     f32 dt;
-    u8* e;
     f32 s;
     f32 t2;
     f32 t3;
@@ -1875,7 +1873,6 @@ void renderProc(s32 shapeId, s32 unused) {
     BOOL texChange1, check1, texChange2, check2;
     Vec *posVtxPtr, *nrmVtxPtr;
 
-    u16 *posIndexPtr, *nrmIndexPtr, *clr0IndexPtr, *texIndexPtr;
 
     int j, k, l, k2, jj;
 
@@ -2411,16 +2408,10 @@ static inline void apdEval(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale)
 void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
     Mtx m1;
     static Mtx mtx;
-    s32 animId;
     Mtx m2;
     const char *name;
-    Mtx scl;
-    Mtx rot;
-    Mtx tmp;
     AnimationPose *paper;
-    AnimationPoseData *data;
     AnimationPose *pose;
-    AnimationPose *p2;
     s32 scratchNum[2];
     AnimationPoseData *pd;
     pose = &wp->poses[poseId];
@@ -3118,7 +3109,6 @@ void animPoseDrawShape(s32 poseId, s32 shapeId) {
     AnimationPoseData* curPoseData;
     u32 d8;
     u32 dc;
-    s32 id;
 
     pose = &wp->poses[poseId];
     curPose = wp->mpCurPose;

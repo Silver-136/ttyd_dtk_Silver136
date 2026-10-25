@@ -19,7 +19,6 @@ EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     EffectEntry* effect;
     s32 smth;
     effSleepData* data;
-    s32 alpha;
     f32 radians;
     int i;
     f32 r;

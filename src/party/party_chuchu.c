@@ -331,11 +331,6 @@ static inline int chuchu_findTreasure(ChuchuParty* cpp, f32 range) {
 BOOL chuchu_searchObject(void) {
     ChuchuParty* cp = (ChuchuParty*)partyGetPtr(marioGetPartyId());
     MarioWork* player = cp->player;
-    ChuchuTreasure* tbl;
-    MarioWork* player2;
-    int found;
-    u32 i;
-    f32 minDist;
 
     if (itemNearDistCheck(player->position.x, player->position.y, player->position.z, 150.0f)) {
         return TRUE;

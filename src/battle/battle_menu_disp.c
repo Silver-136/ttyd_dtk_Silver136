@@ -1061,7 +1061,6 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
     f32 ang;
     f32 s;
     s32 sw;
-    s32 nn;
 
     if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == UNIT_MARIO) {
         mainCursor = &wp->commandMenu.cursor[0];

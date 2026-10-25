@@ -36,7 +36,6 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     EffKemuri9N64Work* work;
     EffKemuri9N64Work* p;
     s32 i;
-    s32 ir;
     f32 twoPi;
     f32 zero;
     f32 ang;

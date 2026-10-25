@@ -332,7 +332,7 @@ void effItemUseDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx m68;
     Mtx m38;
     GXTexObj texObj;
-    f32 d, a, b, h, w;
+    f32 h, w;
     s32 i;
     s32 pass;
 

@@ -451,7 +451,6 @@ void chorogun_ext_main(void) {
     f32 dz;
     f32 dx;
     f32 tz;
-    f32 tx;
     f32 dx2;
     f32 dz2;
     f32 x, y, z;

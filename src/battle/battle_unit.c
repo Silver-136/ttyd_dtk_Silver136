@@ -2105,7 +2105,6 @@ void BtlUnit_HpGaugeInit(BattleUnit* unit) {
 
 void BtlUnit_HpGaugeMain(BattleUnit* unit) {
     BattleWorkHpGauge* gauge = &unit->hpGauge;
-    f32 t;
     s16 maxHp;
 
     if (gauge->drainTimer > 0) {

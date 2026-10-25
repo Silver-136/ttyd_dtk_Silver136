@@ -34,7 +34,6 @@ void effRippleDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx mtx;
     Mtx scale;
     Mtx rotX;
-    Mtx rotZ;
     GXTexObj texObj;
 
     camera = camGetPtr(cameraId);

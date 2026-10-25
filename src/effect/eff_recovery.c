@@ -207,7 +207,6 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     s32 delay;
     RecoveryWork* pp;
     s32 size;
-    f32 ang;
     f32 zero;
     s32 i;
 
@@ -726,10 +725,8 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
     Mtx tmp;
     Mtx base;
     f32 w;
-    f32 nw;
     f32 left;
     f32 right;
-    f32 half;
     f32 top;
     f32 bot;
 

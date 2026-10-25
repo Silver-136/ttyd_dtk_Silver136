@@ -780,7 +780,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
     s32 i;
     s32 j;
     s32 k;
-    s32 k2;
     s32 half;
     s32 total;
     s32 ww;
@@ -1463,7 +1462,6 @@ char* msgGetCommand(char* msg, char* cmd, char* arg) {
 }
 
 s32 msgIconStr2ID(const char* str) {
-    MsgIcon* icon;
     u32 i;
 
     for (i = 0; i < 18; i++) {
@@ -1900,7 +1898,6 @@ void msgWindow_Disp(CameraId camId, void* param) {
     BOOL ret = FALSE;
     WindowEntry* window = param;
     Vec pos;
-    f32  y;
     f32 w;
     f32 h;
     f32 ex; f32 ey;

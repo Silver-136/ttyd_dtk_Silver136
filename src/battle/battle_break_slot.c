@@ -280,7 +280,6 @@ void BattleBreakSlot_Main(void) {
     BreakSlotReel* reel;
     BreakSlotReel* rr;
     s32 count;
-    s32 item;
     s32 k;
     s32 i;
     f32 y;
@@ -782,7 +781,6 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
     Mtx m;
     s32 idx;
     u16 next;
-    s32 j;
     BreakSlotReel* reel;
     u16* tex;
     s32 i;

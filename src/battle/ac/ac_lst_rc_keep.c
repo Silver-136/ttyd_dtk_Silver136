@@ -28,7 +28,6 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     LstRcWork* lw = LR_WORK(ac);
     BattleACDispParams* disp = (BattleACDispParams*)&ac->disp;
-    const char** p;
     s32 loop;
     s32 off;
     s32 autoCmd = 0;

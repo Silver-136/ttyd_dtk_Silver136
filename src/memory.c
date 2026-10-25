@@ -76,7 +76,6 @@ u32 count;
 void smartGarbage(void);
 
 void memInit(void) {
-    MapAllocEntry* entry;
     void* arenaLo;
     void* arenaHi;
     u32 restSize;
@@ -578,7 +577,6 @@ smartEntry* smartAlloc(u32 size, u8 type) {
 void smartGarbage(void) {
     u8* addr;
     u8* ptr;
-    u32 total;
     smartEntry* entry;
     smartEntry* prev;
 

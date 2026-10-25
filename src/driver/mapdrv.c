@@ -721,16 +721,12 @@ found:
 
 void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
-    u32 datSize, k;
     int i;
-    u32 r4, r7, r0;
-    u32 sizeCheck;
     char str1[128];
     char str2[128];
     char str3[128];
     DVDEntry* dvd;
     MapWork* wo; // FAKE: alias of wp; the chunk-table stores go through it to keep the original address reloads
-    u8 *data;
     MapHeader* header;
 
     wo = wp;
@@ -779,10 +775,6 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         MapFileJoint* mapJoint = mapSearchDmdJoint(info->joint, info->mapName);
         MapFileJoint* hitJoint = mapSearchDmdJoint(info->joint, info->hitName);
         Mtx scale;
-        u32 n;
-        u32* animTbl;
-        MapEntry* e2;
-        MapWork* w;
         if (strcmp(info->version, "ver1.02") == 0) {
             wp->entries[group].flags |= 0x8000;
         } else {
@@ -1153,7 +1145,7 @@ void mapCalcAnimMatrix(Mtx out, Mtx in, MapAnim* anim, MapAnimJoint* joint) {
     Mtx mZ;
     Mtx m;
     f32 dx, dy, dz, rx, ry, sx, sy, sz, rz;
-    f32 cur, t, t2, t3, dt;
+    f32 cur;
     int c;
     int i;
     MapAnimKey* k0;
@@ -1465,11 +1457,7 @@ static inline u8* mapMainFindTbl_(const char* nm_) {
 
 void mapMain(void) {
     int i_, j_;
-    MapEntry* e_;
-    MapWork* w_;
     MapObject* o;
-    MapObject* o_;
-    s32 c, n;
     f32 cur;
     MapWork* wp = &mapWork[activeGroup];
     MapEntry* entry;
@@ -1620,7 +1608,6 @@ static inline void callPackedLists(MapFileMesh* mesh) {
 
 void _mapDispMapObj(CameraId cam, MapObject *obj) {
     CameraEntry *camera;
-    CameraEntry *cur;
     MapFileJoint *joint;
     f32 scale;
     s32 n;
@@ -1632,8 +1619,6 @@ void _mapDispMapObj(CameraId cam, MapObject *obj) {
     f32 proj[7];
     MapFileMesh *mesh;
     int i;
-    MapWork *wp;
-    int j;
     void *material;
     camera = camGetPtr(cam);
     current_mp = obj;
@@ -2911,11 +2896,8 @@ void mapSetMaterial(MapObject* obj, void* material) {
     s32 attnFn;
     s32 i;
     LightEntry* light;
-    LightEntry** lp;
     MapWork* wp;
     MapMatSampler* sampler;
-    MapTexTable* table;
-    char* name;
     s32 k;
     TEXDescriptor* desc;
     GXBool mip;

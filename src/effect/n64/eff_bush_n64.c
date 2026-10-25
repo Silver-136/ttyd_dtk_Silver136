@@ -146,7 +146,6 @@ void effBushDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx rot;
     Mtx viewMtx;
     GXTexObj texObj;
-    GXColor color;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;

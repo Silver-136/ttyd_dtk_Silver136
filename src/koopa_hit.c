@@ -145,12 +145,11 @@ static inline void kpa_headClear(void) {
 HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     s32 n, i;
     MarioWork* m;
-    MarioWork* m2;
     HitEntry* hit;
     HitEntry* best;
     Vec zero = {0.0f, 0.0f, 0.0f};
     f32 hx, hy, hz, dist, nx, ny, nz, nv;
-    f32 h, deg, ex, ez, fx, fz, ang;
+    f32 h, deg, ang;
     f32 rad, r2b, r3, bd, yh, r2, px, py, pz, ox, oz;
 
     m = marioGetPtr();
@@ -274,13 +273,13 @@ HitEntry* kpaSearchHead(f32 hgt, f32* outA, f32* outB) {
     static s32 _ofs3[] = {13, 170, 194, 1, 145, 204, 0, 120, 232, 0, 95, 227, 0, 70, 232, 0, 55, 232, 0,
                           30, 194, 0, 5, 187, 0, -20, 210, 0, -45, 201, 0, -70, 181, 0, -95, 153, 0, -120, 56, 0};
     static s32* headchkofs[] = {_ofs0, _ofs1, _ofs2, _ofs3};
-    s32 i, j, n;
+    s32 i, n;
     s32* tbl;
     HitEntry* hit;
     HitEntry* best;
     MarioWork* m;
     f32 deg, rad, off, c, s_, x, y, z, hx, hy, hz, nx, ny, nz, d;
-    f32 oy, oz, mode;
+    f32 oy, oz;
     s32 md;
 
     m = marioGetPtr();
@@ -505,7 +504,7 @@ HitEntry* kpaHitCheck(void) {
     s32 n;
     MarioWork* m;
     HitEntry* best;
-    f32 rad, x, y, z, r, sn;
+    f32 x, y, z, r, sn;
 
     best = NULL;
     m = marioGetPtr();

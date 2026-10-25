@@ -335,7 +335,6 @@ static void ext_main(void) {
     f32 speed;
     f32 x;
     f32 z;
-    f32 gravity;
     f32 angle;
     f32 y;
     Vec pos;

@@ -368,7 +368,6 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     KemuTestWork* work;
     s32 i;
     s32 count;
-    s32 n;
 
     effect = effEntry();
     count = 1;

@@ -2605,7 +2605,6 @@ void _light_point_callback(BattleUnitPart* part, s32 group) {
     BattleUnit* unit;
     s32 poseId;
     s32 idx;
-    s32 shape;
 
     poseId = part->poseId;
     unit = part->mOwner;

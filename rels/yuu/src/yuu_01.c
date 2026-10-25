@@ -702,7 +702,6 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
     f32 angle;
     s32 i;
     s32 j;
-    s32 rnd;
 
     if (data->index == 0x15) {
         if ((mario->position.x <= -700.0f && mario->position.z <= 0.0f) || yuucounter_get_data() < 0) {

@@ -146,7 +146,6 @@ void effKemuri5Disp(CameraId cameraId, EffectEntry* effect) {
     Mtx scaleMtx;
     Mtx rot;
     GXTexObj texObj;
-    GXColor color;
 
     GXSetNumChans(0);
     GXSetNumTexGens(1);

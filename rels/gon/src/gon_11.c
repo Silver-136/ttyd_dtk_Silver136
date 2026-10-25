@@ -695,7 +695,6 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     HitEntry *hit3;
     MarioWork *mario;
     CloudWork *wp;
-    PartyEntry *party;
     PartyEntry *ptmp;
     HitEntry *hit;
     OffscreenEntry *off;

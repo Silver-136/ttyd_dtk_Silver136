@@ -408,7 +408,6 @@ void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, 
     StChgInfo tmp, swap;
     s8 pri = _get_pri(type);
     s32 i, j, n;
-    s32 z;
     u8 u, t;
 
     for (i = 0; i < 6; i++) {
@@ -553,7 +552,6 @@ void BattleStatusChangeMsgAdjust(BattleWork* wp) {
 BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
     StChgWork* base = &wp->announce.stChg;
     StChgMsg* msg;
-    s8* p;
     BOOL ret = FALSE;
     s32 i;
 

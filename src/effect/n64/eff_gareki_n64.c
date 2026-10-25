@@ -143,7 +143,6 @@ void effGarekiMain(EffectEntry* effect) {
     EffGarekiN64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
-    EffGarekiN64Work* piece;
     s32 i;
 
     tmp.x = work->position.x;

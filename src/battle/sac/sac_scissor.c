@@ -1020,7 +1020,6 @@ void scissor_damage_sub(BattleUnit* unit, s32* out) {
     hh = 0.5f * -h;
     hw = 0.5f * w;
     for (i = 0; i < 10; i++) {
-        f32 fx;
         for (j = 0; j < 10; j++) {
             p.x = pos.x - hw + ((f32)i * w) / 9.0f;
             p.y = sign * (hh + ((f32)j * h) / 9.0f) + pos.y;

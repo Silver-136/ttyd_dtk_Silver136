@@ -154,7 +154,6 @@ s32 winRootMain(WindowWork* w) {
     static char* msg_help[] = {
         "msg_menu_mario", "msg_menu_nakama", "msg_menu_mochimono", "msg_menu_badge", "msg_menu_kiroku",
     };
-    s32 x;
     s32 i;
     s32 ret;
 
@@ -833,7 +832,6 @@ void winMsgEntry(WindowWork* wp, s32 item, const char* msg, const char* name) {
 static inline void winRootTexQuad(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
     Mtx m;
-    f32 sy;
     double aw;
     double ah;
 
@@ -1248,8 +1246,6 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
     s32 j;
     s32 i;
     s32 py;
-    s32 k;
-    s32 idx;
     s32 id;
     f32 yy;
     const char* msg;
@@ -2159,7 +2155,6 @@ void sort_8_2_func(WindowWork* wp) {
 void winSortMain(WindowWork* wp) {
     u32 trg = wp->buttonTrg;
     u32 rep = wp->dirRep;
-    const char* msg;
 
     if (!wp->sortActive) {
         trg = 0;

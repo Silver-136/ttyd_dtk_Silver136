@@ -145,7 +145,6 @@ void _get_item_announce_disp(s32 cameraId, void* param) {
     s32 no;
     f32 x;
     f32 y;
-    GXColor col;
 
     no = BattleAudience_GetPresentItemNo();
     itemName = msgSearch(itemDataTable[no].name);

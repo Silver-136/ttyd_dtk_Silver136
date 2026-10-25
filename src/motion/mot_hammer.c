@@ -112,7 +112,6 @@ s32 marioGetHammerLevel(void) {
 
 void mot_hammer(void) {
     MarioWork* mario = marioGetPtr();
-    Vec* unused;
     s32 snd;
     s32 kind;
     f32 px, pz;

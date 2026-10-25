@@ -666,7 +666,6 @@ void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32
     s32 k;
     s32* idx;
     f32 pz, qz, qx;
-    CamRoadState** pp;
     f32 cs2;
     f32 angle;
     f32 rot;
@@ -994,7 +993,7 @@ u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     u32 flags = 0;
     s32 d;
     s32 n;
-    f32 dot, ang, speed, t, dx, dy, dz, d2, dist;
+    f32 dot, ang, speed, t, dx, dy, dz, dist;
     if (!b->on) {
         return 0;
     }

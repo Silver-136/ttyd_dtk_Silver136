@@ -423,7 +423,6 @@ void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect) {
 
             case 7:
                 for (j = 0; j < 3; j++) {
-                f32 w;
                 col_tbl[type % 10][j].a = (work->alpha * alpha) / 255;
                 GXSetChanMatColor(GX_COLOR0A0, col_tbl[type % 10][j]);
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);

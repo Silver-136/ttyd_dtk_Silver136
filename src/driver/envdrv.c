@@ -511,7 +511,6 @@ void envDisp_Blur(void) {
     s32 msec;
     f32 t;
     u8 alpha;
-    GXColor c;
 
     if ((wp->flags & 0x40000000) && (wp->flags & 8)) {
         cam = camGetPtr(CAMERA_2D);
@@ -605,14 +604,11 @@ void envGlare(EnvironmentGlare* glare) {
     u32 texMtxId;
     s16 sy;
     s32 doneCount;
-    u32 kc0;
-    u32 kc1;
     s32 batchCount;
     void* texBuf;
     u16 y0;
     u16 x0;
     u16 height;
-    u16 tmp;
 
     u32 size;
     Mtx44 projMtx;
@@ -846,7 +842,7 @@ void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxTy
     Mtx m0, m2, m1, m3, m4, m5, m6, m7;
     Mtx44 m9;
     Mtx m10, m11, m8;
-    f32 s, dot;
+    f32 dot;
 
     switch (type) {
         case 0:

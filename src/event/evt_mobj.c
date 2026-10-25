@@ -1373,10 +1373,7 @@ static inline s32 switchAnimIdx(s32 poseId) {
 }
 
 s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
-    s32 i;
-    s32 idx;
     const s8* cur;
-    const char** p;
     s32 anim;
     BOOL a;
     switch (mobj->state) {
@@ -2065,7 +2062,6 @@ static inline void recoveryHeal(void) {
 
 s32 mobj_recovery_blk(MapObjectEntry* mobj) {
     MarioWork* mario;
-    PouchData* pouch;
     PouchPartyData* party;
     s32 i;
     s32 kind;
@@ -3020,7 +3016,6 @@ void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
     Vec min, max;
     s32 h, w;
     s32 ww, hh;
-    smartEntry* e;
     f32 t;
     memcpy(saved, camGetPtr(camId), 0x260);
     data = animPoseGetAnimBaseDataPtr(mobj->poseId);
@@ -3076,7 +3071,6 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     f32 dist;
     void* item;
     void* p;
-    void* cur2;
     party = partyGetPtr(marioGetPartyId());
     switch (mobj->state) {
     case 0:

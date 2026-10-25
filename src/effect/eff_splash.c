@@ -51,7 +51,6 @@ static u8 geso_shibuki_dl_0_size_tbl[] = { 1, 1, 1, 1, 1};
 EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;
     EffSplashWork* work;
-    EffSplashWork* p;
     s32 i;
     s32 n1;
     s32 n2;
@@ -59,7 +58,6 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
     f32 r;
     f32 s;
     f32 c;
-    f32 yaw;
 
     effect = effEntry();
     n1 = 0;
@@ -194,7 +192,6 @@ void effSplashMain(EffectEntry* effect) {
     EffSplashWork* work = effect->userdata;
     Vec position;
     Vec v = {0.0f, 0.0f, 0.0f};
-    EffSplashWork* p;
     s32 type;
     s32 i;
     u32 t;
@@ -336,9 +333,7 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     f32 r0, g0, b0, r1, g1, b1;
     f32 ang, sn, cs;
     f32 w;
-    u32 u;
 
-    f32 nw;
     u32 k2;
     u8* sz;
     u8** dl;
