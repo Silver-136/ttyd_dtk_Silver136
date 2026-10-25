@@ -1,4 +1,3 @@
-#pragma dollar_identifiers on
 #include "eff/eff_ultra_hammer.h"
 #include "driver/dispdrv.h"
 #include "memory.h"

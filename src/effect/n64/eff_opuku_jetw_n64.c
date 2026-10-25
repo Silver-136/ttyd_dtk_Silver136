@@ -1,4 +1,3 @@
-#pragma dollar_identifiers on
 #include "eff/n64/eff_opuku_jetw_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

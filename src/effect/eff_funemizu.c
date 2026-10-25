@@ -1,4 +1,3 @@
-#pragma dollar_identifiers on
 #include "eff/eff_funemizu.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

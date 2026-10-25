@@ -1,4 +1,3 @@
-#pragma dollar_identifiers on
 #include "eff/n64/eff_snow_dust_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"

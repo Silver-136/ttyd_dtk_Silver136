@@ -1,4 +1,3 @@
-#pragma dollar_identifiers on
 #include "driver/envdrv.h"
 #include "driver/arcdrv.h"
 #include "driver/dispdrv.h"

@@ -1,5 +1,4 @@
 #include "version.h"
-#pragma dollar_identifiers on
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_stage.h"
