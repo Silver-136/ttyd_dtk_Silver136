@@ -90,6 +90,42 @@ typedef enum BattleWeaponSpecialFlags {
     SPECIAL_CONTACTS_CLONES = 0x40000, // hits clone parts (PartsAttribute 0x4000) instead of passing through
 } BattleWeaponSpecialFlags;
 
+// BattleWeapon.damagePattern / BattleUnit.damagePattern: the target's reaction to the hit. The names are the
+// ATTACKPATTERN_* constants of the 2024 remake (see docs/NAME_PROVENANCE.md); every value used here matches the
+// weapon that carries it (YoshiNomikomi_Spew 5, gonbaba_fumituke 11, gesso_ikasumi 13, KaitenHammer 14,
+// ChuchurinaNormalAttackLeft 21, ...) and the default damage event's subset_ultra_hammer_acrobat (18) and
+// subsetevt_binta_damage_left/right (21/22).
+typedef enum BattleDamagePattern {
+    ATTACKPATTERN_NULL,
+    ATTACKPATTERN_DAMAGE_SURPRISE,
+    ATTACKPATTERN_DAMAGE_MOTION,
+    ATTACKPATTERN_DAMAGE_MOTION_BLOW,
+    ATTACKPATTERN_SWALLOW_FAILED,
+    ATTACKPATTERN_SWALLOW_SPEW,
+    ATTACKPATTERN_SWALLOW_SHOT,
+    ATTACKPATTERN_SWALLOW_SAMBO_BODY,
+    ATTACKPATTERN_SHELL_ATTACK,
+    ATTACKPATTERN_ROTATE_SHELL_ATTACK,
+    ATTACKPATTERN_PRESS,
+    ATTACKPATTERN_PRESS_GONBABA,
+    ATTACKPATTERN_PRESS_BATTENDER,
+    ATTACKPATTERN_IKASUMI,
+    ATTACKPATTERN_KAITEN_HAMMER,
+    ATTACKPATTERN_KAITEN_HAMMER_INVOLVED,
+    ATTACKPATTERN_ULTRA_HAMMER,
+    ATTACKPATTERN_ULTRA_HAMMER_INVOLVED,
+    ATTACKPATTERN_ULTRA_HAMMER_ACROBAT,
+    ATTACKPATTERN_ULTRA_HAMMER_FINISH,
+    ATTACKPATTERN_CHUCHURINA_ITEMSTEAL,
+    ATTACKPATTERN_CHUCHURINA_BINTA_L,
+    ATTACKPATTERN_CHUCHURINA_BINTA_R,
+    ATTACKPATTERN_CHUCHURINA_BINTA_L_LAST,
+    ATTACKPATTERN_CHUCHURINA_BINTA_R_LAST,
+    ATTACKPATTERN_BLOW,
+    ATTACKPATTERN_BG_FALL_DOWN,
+    ATTACKPATTERN_NO_DAMAGE_FINISH,
+} BattleDamagePattern;
+
 // BattleWeapon.element (weapon tables: Ice Storm and blizzards 2, bombs and dynamite 3, thunder items 4)
 typedef enum BattleWeaponElement {
     ELEMENT_NORMAL,

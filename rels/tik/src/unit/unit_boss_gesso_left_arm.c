@@ -162,7 +162,7 @@ EVT_BEGIN(gesso_left_arm_damage_event)
     CALL(btlevtcmd_OnUnitFlag, LW(10), 1)
     SET_VALUE(LW(14), 39)
     SET_VALUE(LW(15), -1)
-    CALL(btlevtcmd_CheckDamagePattern, LW(10), 1, LW(0))
+    CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_DAMAGE_SURPRISE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), 38)
     END_IF
@@ -215,7 +215,7 @@ BattleWeapon weapon_gesso_left_arm_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg

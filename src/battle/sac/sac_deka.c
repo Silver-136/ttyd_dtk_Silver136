@@ -774,7 +774,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                     }
                     effSmallStarEntry(0, 2, xc, unit->mPosition.y, unit->mPosition.z, 0.0f, -1.0f, 0.0f);
                     BtlUnit_snd_se(unit, unit->mKindParams->damageSfxName, EVT_NULLPTR, 0);
-                    if (unit->mAttributeFlags & 0x200000) {
+                    if (unit->mAttributeFlags & kUnitNoSpin) {
                         continue;
                     }
                     if (unit->mAttributeFlags & kInactive) {

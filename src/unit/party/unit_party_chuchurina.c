@@ -259,7 +259,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
-    21, // damagePattern
+    ATTACKPATTERN_CHUCHURINA_BINTA_L, // damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
@@ -305,7 +305,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
-    22, // damagePattern
+    ATTACKPATTERN_CHUCHURINA_BINTA_R, // damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
@@ -351,7 +351,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
-    23, // damagePattern
+    ATTACKPATTERN_CHUCHURINA_BINTA_L_LAST, // damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
@@ -397,7 +397,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
-    24, // damagePattern
+    ATTACKPATTERN_CHUCHURINA_BINTA_R_LAST, // damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
@@ -447,7 +447,7 @@ BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_madowaseru", // acHelpMsg
@@ -492,7 +492,7 @@ BattleWeapon partyWeapon_ChuchurinaItemSteal = {
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
-    20, // damagePattern
+    ATTACKPATTERN_CHUCHURINA_ITEMSTEAL, // damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_heart_catch", // acHelpMsg
@@ -534,7 +534,7 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     TARGET_PROP_SAME_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_chuchurina_kiss", // acHelpMsg

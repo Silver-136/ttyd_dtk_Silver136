@@ -532,7 +532,7 @@ BattleWeapon weapon_gesso_ikasumi_attack = {
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
-    13, // damagePattern
+    ATTACKPATTERN_IKASUMI, // damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg

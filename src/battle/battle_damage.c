@@ -64,9 +64,9 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         part = target->currentTarget = BtlUnit_GetPartsPtr(target, BtlUnit_GetBodyPartsId(target));
     }
     target->damagePattern = pattern;
-    if (target->mAttributeFlags & 0x200000) {
-        if ((u32)target->damagePattern == 0x15 || (u32)target->damagePattern == 0x16 ||
-            (u32)target->damagePattern == 0x17 || (u32)target->damagePattern == 0x18) {
+    if (target->mAttributeFlags & kUnitNoSpin) {
+        if ((u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L || (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R ||
+            (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L_LAST || (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R_LAST) {
             target->damagePattern = 0;
         }
     }
@@ -277,7 +277,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 result |= 0x400;
                 _checkDamageCode_EmergencyRevival(target, &result);
             }
-            if ((u32)target->damagePattern == 0x19) {
+            if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
                 s32 b = 1;
                 if ((result & 0x400) && !(result & 0x800) && (result & 0x100) && target->vulnStatus->galeForceRate) {
                     b = 0;
@@ -296,7 +296,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 }
             }
         }
-    } else if ((u32)target->damagePattern == 0x19) {
+    } else if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
         target->damagePattern = 0;
     }
     target->mTokenFlags |= 1;
@@ -1639,7 +1639,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if ((result & 0xFF) == 0x1E && pierce) {
             result = flags | 0x17;
         }
-        if ((result & 0xFF) == 0x1E && (weapon->damagePattern == 0x13 || weapon->damagePattern == 0x1B)) {
+        if ((result & 0xFF) == 0x1E && (weapon->damagePattern == ATTACKPATTERN_ULTRA_HAMMER_FINISH || weapon->damagePattern == ATTACKPATTERN_NO_DAMAGE_FINISH)) {
             result = flags | 0x17;
         }
         if ((result & 0xFF) == 0x1E && status) {
@@ -1672,7 +1672,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         }
         if (!status && !damage && !fpDamage && !pierce) {
             ret = 19;
-            if (target->currentKind >= UNIT_GOOMBA && target->currentKind < UNIT_UNUSED_TREE && weapon->damagePattern != 0x1B) {
+            if (target->currentKind >= UNIT_GOOMBA && target->currentKind < UNIT_UNUSED_TREE && weapon->damagePattern != ATTACKPATTERN_NO_DAMAGE_FINISH) {
                 BattleAudience_Case_EnemyNoDamage();
             }
         } else {

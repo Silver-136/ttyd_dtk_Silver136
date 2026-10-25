@@ -2118,7 +2118,9 @@ renaming: `@740`, `__local_PI$366`, `monte_p`, `one$381`, `partyGetTargetDistY`,
 ## Names added in this fork
 
 Descriptive names given after the adoption (not original either); same rule: replace with an original name when
-one turns up.
+one turns up. Exception: `ATTACKPATTERN_*` are the constant names of the 2024 remake (user reference sheet "TTYD
+Switch Flag Comparison"); every value checkable here matches its weapon (original symbols such as
+YoshiNomikomi_Spew, gonbaba_fumituke, gesso_ikasumi, KaitenHammer), so they are probably the original names.
 
 | Kind | Unit | Name | Replaced placeholder | Date |
 | --- | --- | --- | --- | --- |
@@ -2128,3 +2130,4 @@ one turns up.
 | inline | include/poly_trig.h | `polySinf`, `polyCosf` (polynomial sine/cosine shared by many units) | private copies `npc_sin`, `moa_sin`, `item_sin`, `coin_sin`, `_sinf`, ... | 2026-10-25 |
 | type | include/party/party_move.h | `FOOTMARK_FLAG_JUMP`, `FOOTMARK_FLAG_SLIT` | literal 1, 4 | 2026-10-25 |
 | type | include/battle/battle_damage.h | `CounterWork` fields (attackHits, payback, burnStatus, ..., hitEvent) | `field_0x0` .. `field_0x2C` | 2026-10-25 |
+| enum | include/battle/battle_database_common.h | `ATTACKPATTERN_*` (BattleDamagePattern, 0-27) | numbers 0-27 | 2026-10-25 |
