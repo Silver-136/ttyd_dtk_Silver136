@@ -1062,7 +1062,7 @@ void driveParty(PartyEntry* party) {
     case 5:
     case 6:
     case 7:
-        partyHello_inl(party);
+        partyHello(party);
         break;
     case 8:
         party_dp = &partyDataTbl[party->currentMemberId];
@@ -1380,56 +1380,12 @@ s32 partyGoodbyeMain(PartyEntry* party) {
 
 void L_partyVivianTailStop(PartyEntry* party);
 
-static inline void partyPaperOn_inl(PartyEntry* party, const char* animGroup) {
-    BOOL v4;
-    BOOL v5;
-
-    if (party->paperPoseId >= 0) {
-        animPaperPoseRelease(party->paperPoseId);
-        party->paperPoseId = -1;
-    }
-    party->flags2 |= 0x4000000;
-    party->paperPoseId = animPaperPoseEntry(animGroup, 2);
-    v4 = FALSE;
-    if (!strcmp(animGroup, "p_roll") || !strcmp(animGroup, "p_plane") || !strcmp(animGroup, "p_dokan_x") ||
-        !strcmp(animGroup, "p_dokan_y")) {
-        v4 = TRUE;
-    }
-    v5 = !v4;
-    if (!strcmp(animGroup, "p_slit")) {
-        v5 = party->currentMemberId == PARTY_MEMBER_FLURRIE;
-    }
-    animPoseSetPaperAnimGroup(party->paperAnimGroup, animGroup, v5);
-}
 
 static inline void partyChgRunM(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
 }
 #ifdef VERSION_G8ME01
-static inline void partyChgPaper_inl(PartyEntry* party, char* paper) {
-    if (!(party->flags2 & 2)) {
-        if (party->paperAnimName == 0 || strcmp(party->paperAnimName, paper)) {
-            party->paperAnimName = paper;
-            party->poseTime = 0;
-            party->trigFlags |= 0x4000;
-        }
-    }
-}
 
-static inline void partyPaperOff_inl(PartyEntry* party) {
-    s32 paperPoseId;
-
-    if ((party->flags2 & 0x4000000) && party->paperAnimName) {
-        animPoseSetPaperAnimGroup(party->paperAnimGroup, NULL, FALSE);
-        party->paperAnimName = 0;
-        party->flags2 &= ~0x4000000;
-        paperPoseId = party->paperPoseId;
-        if (paperPoseId >= 0) {
-            animPaperPoseRelease(paperPoseId);
-            party->paperPoseId = -1;
-        }
-    }
-}
 
 #endif
 #ifdef VERSION_G8ME01
@@ -1483,7 +1439,7 @@ s32 partyDokanInit(PartyEntry* party) {
     case 2:
     case 3:
         DOKAN_PAPER_ON("p_dokan_y")
-        partyChgPaper_inl(party, "PM_D_1A");
+        partyChgPaper(party, "PM_D_1A");
         DOKAN_POSE()
         party->spinSpeed = 30.0f;
         party->motionStep = 0;
@@ -1498,7 +1454,7 @@ s32 partyDokanInit(PartyEntry* party) {
         animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
     case 1:
         DOKAN_PAPER_ON("p_dokan_y")
-        partyChgPaper_inl(party, "PM_D_1A");
+        partyChgPaper(party, "PM_D_1A");
         DOKAN_POSE()
         party->spinSpeed = 30.0f;
         party->motionStep = 0;
@@ -1510,7 +1466,7 @@ s32 partyDokanInit(PartyEntry* party) {
         break;
     case 5:
         DOKAN_PAPER_ON("p_dokan_x")
-        partyChgPaper_inl(party, "PM_D_1A");
+        partyChgPaper(party, "PM_D_1A");
         DOKAN_POSE()
         party->spinSpeed = 26.0f;
         party->motionStep = 10;
@@ -1522,7 +1478,7 @@ s32 partyDokanInit(PartyEntry* party) {
     case 4:
         party->displayDirectionTarget = mario->displayDirection;
         DOKAN_PAPER_ON("p_dokan_x")
-        partyChgPaper_inl(party, "PM_D_1A");
+        partyChgPaper(party, "PM_D_1A");
         DOKAN_POSE()
         party->motionStep = 10;
         party->rotOfsY = 10.0f;
@@ -1556,25 +1512,25 @@ s32 partyDokanInit(PartyEntry* party) {
     switch (mario->dokanType) {
     case 2:
     case 3:
-        partyPaperOn_inl(party, "p_dokan_y");
+        partyPaperOn(party, "p_dokan_y");
         party->spinSpeed = 30.0f;
         party->motionStep = 0;
         break;
     case 0:
         party->scale = (Vec){0.0f, 0.0f, 0.0f};
     case 1:
-        partyPaperOn_inl(party, "p_dokan_y");
+        partyPaperOn(party, "p_dokan_y");
         party->spinSpeed = 30.0f;
         party->motionStep = 0;
         break;
     case 5:
-        partyPaperOn_inl(party, "p_dokan_x");
+        partyPaperOn(party, "p_dokan_x");
         party->spinSpeed = 26.0f;
         party->motionStep = 10;
         party->rotOfsY = 10.0f;
         break;
     case 4:
-        partyPaperOn_inl(party, "p_dokan_x");
+        partyPaperOn(party, "p_dokan_x");
         party->spinSpeed = -26.0f;
         party->motionStep = 10;
         party->rotOfsY = 10.0f;
@@ -1625,7 +1581,7 @@ s32 partyDokanMain(PartyEntry* party) {
         switch (party->dirKind) {
         case 0:
         case 1:
-            partyChgPaper_inl(party, "PM_D_1B");
+            partyChgPaper(party, "PM_D_1B");
             party->moveFrames = 18;
             party->motionStep = 101;
             party->flags2 |= 8;
@@ -1636,7 +1592,7 @@ s32 partyDokanMain(PartyEntry* party) {
             party->rot.x = 0.0f;
             party->flags2 &= ~8;
             party->displayDirectionTarget = party->displayDirection;
-            partyChgPaper_inl(party, "PM_D_1B");
+            partyChgPaper(party, "PM_D_1B");
             party->moveFrames = 18;
             party->motionStep = 101;
             break;
@@ -1662,7 +1618,7 @@ s32 partyDokanMain(PartyEntry* party) {
         party->displayDirection = party->displayDirectionTarget;
         party->targetDir = mario->directionView;
         party->moveDir = mario->directionView;
-        partyPaperOff_inl(party);
+        partyPaperOff(party);
         animPoseSetMaterialLightFlagOn(party->paperAnimGroup, 1);
         party->flags2 &= ~8;
         party->flags2 &= ~0x10;
