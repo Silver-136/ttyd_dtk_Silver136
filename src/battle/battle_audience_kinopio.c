@@ -890,7 +890,7 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index) {
 
 s32 intrudeSound;
 
-__declspec(section ".rodata") static Vec v0 = {0.0f, 0.0f, 0.0f};
+static const Vec v0 = {0.0f, 0.0f, 0.0f};
 void BattleAudienceCtrlProcessKinopioIntrude(s32 index) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudienceMember* m;
