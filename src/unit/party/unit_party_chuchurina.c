@@ -2893,7 +2893,7 @@ USER_FUNC(_chuchu_item_steal) {
     if ((u16)(s32)item >= 0xF0 && (u16)(s32)item < 0x153) {
         if (unit->currentKind == UNIT_MARIO) {
             BtlUnit_EquipItem(unit, 3, 0);
-        } else if (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {
+        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
             BtlUnit_EquipItem(unit, 5, 0);
         } else {
             BtlUnit_EquipItem(unit, 1, 0);

@@ -1604,9 +1604,9 @@ USER_FUNC(_disable_enemy_unit_disp) {
         if (!unit) continue;
         if (unit->flags & 0x80000000) continue;
         kind = unit->currentKind;
-        if (kind == 0xDC) continue;
-        if (kind == 0xDE) continue;
-        if (kind >= 0xE0 && kind < 0xE7 && unit->mAlliance == 0 && kind != 0xE5) continue;
+        if (kind == UNIT_SYSTEM) continue;
+        if (kind == UNIT_MARIO) continue;
+        if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER && kind != UNIT_BOBBERY) continue;
         data = BtlUnit_GetData(unit, 0x42);
         if (data) {
             evt = evtEntry(data, 10, 0);

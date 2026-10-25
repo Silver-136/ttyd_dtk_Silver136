@@ -296,7 +296,7 @@ BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     if (_battleWorkPointer->flags & 0x10000) {
         if (type != 1 && !((BOOL(*)(BattleUnit*, s8))BtlUnit_CheckStatus)(unit, disp->id)) return FALSE;
         kind = (s32)unit->currentKind;
-        if (!((kind >= 1 && kind < 0xd8) || (kind >= 0xde && kind < 0xe0) || (kind >= 0xe0 && kind < 0xe7))) return FALSE;
+        if (!((kind >= UNIT_GOOMBA && kind < UNIT_UNUSED_TREE) || (kind >= UNIT_MARIO && kind < TYPE_PARTNER_MIN) || (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX))) return FALSE;
     } else if (!((BOOL(*)(BattleUnit*, s8))BtlUnit_CheckStatus)(unit, disp->id)) {
         return FALSE;
     }

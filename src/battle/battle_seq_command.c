@@ -2672,7 +2672,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     if (unit->mAlliance) {
         return subsetevt_confuse_flustered;
     }
-    if (unit->currentKind != UNIT_MARIO && (unit->currentKind < 0xe0 || unit->currentKind >= 0xe7)) {
+    if (unit->currentKind != UNIT_MARIO && (unit->currentKind < TYPE_PARTNER_MIN || unit->currentKind >= TYPE_PARTNER_MAX)) {
         return subsetevt_confuse_flustered;
     }
 #ifdef VERSION_G8ME01

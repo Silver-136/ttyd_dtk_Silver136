@@ -272,7 +272,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         if (target->currentKind == UNIT_MARIO) {
             BtlActRec_AddCount(&wp->actRecord.marioHitsTaken);
             BtlActRec_AddPoint(&wp->actRecord.marioDamageTaken, damage);
-        } else if (target->currentKind >= 0xe0 && target->currentKind < 0xe7) {
+        } else if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
             BtlActRec_AddCount(&wp->actRecord.partnerHitsTaken);
             BtlActRec_AddPoint(&wp->actRecord.partnerDamageTaken, damage);
         }
@@ -318,10 +318,10 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 }
             }
             if (result & 0x400) {
-                if (target->currentKind >= 0xe0 && target->currentKind < 0xe7) {
+                if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
                     BattleAudience_Case_PartyDown();
                 }
-                if (target->currentKind >= 1 && target->currentKind < 0xd8) {
+                if (target->currentKind >= UNIT_GOOMBA && target->currentKind < UNIT_UNUSED_TREE) {
                     BattleAudience_Case_KillEnemy(target->mLevel);
                     BattleAudience_Case_FinalAttack();
                 }
@@ -1524,14 +1524,14 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
 
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
     s32 kind = unit->currentKind;
-    if (kind == 0xDE) {
+    if (kind == UNIT_MARIO) {
         if ((s32)pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
             *flags |= 0x800;
             return 1;
         }
         return 0;
     }
-    if (kind >= 0xE0 && kind < 0xE7) {
+    if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
         if ((s32)pouchCheckItem(ITEM_LIFE_SHROOM) > 0) {
             *flags |= 0x800;
             return 1;
@@ -1704,12 +1704,12 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         }
         if (!status && !damage && !fpDamage && !pierce) {
             ret = 19;
-            if (target->currentKind >= 1 && target->currentKind < 0xD8 && weapon->damagePattern != 0x1B) {
+            if (target->currentKind >= UNIT_GOOMBA && target->currentKind < UNIT_UNUSED_TREE && weapon->damagePattern != 0x1B) {
                 BattleAudience_Case_EnemyNoDamage();
             }
         } else {
             ret = 18;
-            if (target->currentKind >= 1 && target->currentKind < 0xD8 && (damage > 0 || status)) {
+            if (target->currentKind >= UNIT_GOOMBA && target->currentKind < UNIT_UNUSED_TREE && (damage > 0 || status)) {
                 BattleAudience_Case_EnemyDamage(damage);
             }
         }

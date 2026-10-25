@@ -1848,7 +1848,7 @@ static USER_FUNC(kamec_get_live_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->mAlliance == 1 && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && unit->mAlliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             num++;
         }
     }

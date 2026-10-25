@@ -95,7 +95,7 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     unit->groupSetupId = -1;
     unit->mAlliance = setup->alliance;
     unit->mLevel = unit->mKindParams->mLevel;
-    if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7)) {
+    if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX)) {
         unit->mLevel = pouchGetPtr()->level;
     }
     unit->attackPhase = setup->attackPhase;
@@ -1491,14 +1491,14 @@ void BtlUnit_GetTalkTogePos(s32 unitId, f32* x, f32* y, f32* z) {
     *z = posZ;
 }
 
-BOOL BtlUnit_GetEnemyBelong(BattleUnit* unit) {
+s32 BtlUnit_GetEnemyBelong(BattleUnit* unit) {
     s32 belong = unit->mAlliance;
     switch (belong) {
-        case 0:
-            belong = 1;
+        case ALLIANCE_PLAYER:
+            belong = ALLIANCE_ENEMY;
             break;
-        case 1:
-            belong = 0;
+        case ALLIANCE_ENEMY:
+            belong = ALLIANCE_PLAYER;
             break;
     }
     return belong;

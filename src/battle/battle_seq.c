@@ -384,7 +384,7 @@ void btlseqFirstAct(BattleWork* wp) {
                 for (i = 0; i < 64; i++) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit && unit->entryEventCode) {
-                        if ((((NpcBattleInfo*)info)->battleFlags & 0x100000) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7))) {
+                        if ((((NpcBattleInfo*)info)->battleFlags & 0x100000) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX))) {
                             continue;
                         }
                         if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == UNIT_MARIO) {

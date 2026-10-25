@@ -509,7 +509,7 @@ void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
     if (id == 0xDE) {
         msg->flags |= 1;
     }
-    else if (id >= 0xE0 && id < 0xE7 && unit->mAlliance == 0) {
+    else if (id >= TYPE_PARTNER_MIN && id < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER) {
         msg->flags |= 2;
     }
     else {

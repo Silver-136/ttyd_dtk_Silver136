@@ -125,7 +125,7 @@ s32 _get_present_item(EventEntry* event, BOOL isFirstCall) {
     s32 id = BattleAudience_GetPresentTargetUnitId();
     BattleUnit* unit = BattleGetUnitPtr(wp, id);
 
-    if (unit->mAlliance == 0) {
+    if (unit->mAlliance == ALLIANCE_PLAYER) {
         pouchGetItem(item);
     } else if (unit->heldItem == ITEM_NULL) {
         unit->heldItem = item;

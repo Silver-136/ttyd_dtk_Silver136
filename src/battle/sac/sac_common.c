@@ -229,7 +229,7 @@ USER_FUNC(sac_enemy_slide_go) {
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && unit->mAlliance == 1) {
+        if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
             evt = evtEntry(enemy_slide_go_evt, 0, 0x20);
             evt->unitId = i;
         }
@@ -245,7 +245,7 @@ USER_FUNC(sac_enemy_slide_return) {
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && unit->mAlliance == 1) {
+        if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
             evt = evtEntry(enemy_slide_return_evt, 0, 0x20);
             evt->unitId = i;
         }

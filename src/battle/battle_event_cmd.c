@@ -2003,7 +2003,7 @@ USER_FUNC(btlevtcmd_CheckSpace) { //TODO: probably wrong
     for (i = 0; i < 64; ++i) {
         found = FALSE;
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && UNIT_ALLIANCE_PARTY) {
+        if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
             BtlUnit_GetHomePos(unit, &x, &y, &z);
             ix = x; iy = y; iz = z;
             if (boundX) {
@@ -3646,7 +3646,7 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
         cmd = &wp->commandMenu;
         unit = BattleGetUnitPtr(wp, id);
         kind = unit->currentKind;
-        if (kind == 0xDE || (kind >= 0xE0 && kind < 0xE7)) {
+        if (kind == UNIT_MARIO || (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX)) {
             item = cmd->weapon[cmd->cursor[11].absPos].itemId;
         } else {
             item = unit->heldItem;
@@ -3663,9 +3663,9 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
         }
         event->userdatap[1] = itemEntry(NULL, item, 0x11, -1, 0, pos.x, pos.y, pos.z);
         effItemGetEntry(10, pos.x, 12.0f + pos.y, pos.z - 5.0f);
-        if (kind == 0xDE) {
+        if (kind == UNIT_MARIO) {
             psndSFXOn_3D("SFX_ITEM_MARIO_USE1", &pos);
-        } else if (kind >= 0xE0 && kind < 0xE7) {
+        } else if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
             psndSFXOn_3D("SFX_ITEM_PARTY_USE1", &pos);
         } else {
             psndSFXOn_3D("SFX_ENM_ITEM_USE1", &pos);
@@ -3690,7 +3690,7 @@ USER_FUNC(btlevtcmd_ConsumeItem) {
     id = evtGetValue(event, event->args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
-    if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7)) {
+    if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX)) {
         BattleCommand* cmd = &wp->commandMenu;
         item = cmd->weapon[cmd->cursor[11].absPos].itemId;
         idx = cmd->weapon[cmd->cursor[11].absPos].index;
@@ -3718,7 +3718,7 @@ USER_FUNC(btlevtcmd_ConsumeItemReserve) {
     item = evtGetValue(event, args[1]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
-    if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7)) {
+    if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX)) {
         if (itemDataTable[item].usable_locations & 1) {
             for (i = 0; i < 4; i++) {
                 if ((s32)wp->reserveItems[i] == item) {
@@ -5921,7 +5921,7 @@ USER_FUNC(btlevtcmd_CommandGetWeaponAddress) {
     index = args[1];
     unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id));
     kind = (s32)unit->currentKind;
-    if (kind == 0xDE || (kind >= 0xE0 && kind < 0xE7)) {
+    if (kind == UNIT_MARIO || (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX)) {
         weapon = BattleGetSelectWeapon(wp);
     }
     else {

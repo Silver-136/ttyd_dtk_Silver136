@@ -4368,7 +4368,7 @@ USER_FUNC(_hpfp_change_declare_1) {
     if (unit) {
         if (unit->currentKind == UNIT_MARIO) {
             BattleStatusWindowSystemOn();
-        } else if (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {
+        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
             BattleStatusWindowSystemOn();
         }
     }
@@ -4385,7 +4385,7 @@ USER_FUNC(_hpfp_change_declare_2) {
             N_statusClearBlink();
             statusMarioHPBlink(120);
             statusFPBlink(120);
-        } else if (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {
+        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
             N_statusClearBlink();
             statusPartyHPBlink(120);
             statusFPBlink(120);
@@ -4425,7 +4425,7 @@ USER_FUNC(_naniga_okorukana_check) {
         if (unit->currentKind == UNIT_MARIO) {
             a = &wp->actRecord.marioAttackItems;
             b = &wp->actRecord.marioSupportItems;
-        } else if (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {
+        } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
             a = &wp->actRecord.partnerAttackItems;
             b = &wp->actRecord.partnerSupportItems;
         } else {

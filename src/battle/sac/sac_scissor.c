@@ -613,7 +613,7 @@ s32 weaponGetPower_Scissor(void* a, void* b, BattleUnit* unit) {
     if (unit == NULL) {
         return 0;
     }
-    if ((s32)(u8)unit->mAlliance == 1) {
+    if ((s32)(u8)unit->mAlliance == ALLIANCE_ENEMY) {
         for (i = 0; i < 16; i++) {
             if (w->unitIds[i] == BtlUnit_GetUnitId(unit)) {
                 return w->power[i];

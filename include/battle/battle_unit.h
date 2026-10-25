@@ -8,8 +8,12 @@
 #include "driver/effdrv.h"
 #include "mario/mario_pouch.h"
 
-#define UNIT_ALLIANCE_ENEMY (unit->mAlliance == 0)
-#define UNIT_ALLIANCE_PARTY (unit->mAlliance == 1)
+// BattleUnit.mAlliance: the side a unit fights on.
+typedef enum BattleUnitAlliance {
+    ALLIANCE_PLAYER,  // Mario and his partners
+    ALLIANCE_ENEMY,
+    ALLIANCE_NEUTRAL, // stage objects
+} BattleUnitAlliance;
 
 // TODO: better name
 typedef enum BattleUnitToken_Flags {
@@ -306,7 +310,7 @@ typedef enum BattleUnitType {
     UNIT_VIVIAN,                          // 0xE4
     UNIT_BOBBERY,                         // 0xE5
     UNIT_MS_MOWZ,                         // 0xE6
-#define TYPE_PARTNER_MAX UNIT_MS_MOWZ + 1 // 0xE7
+#define TYPE_PARTNER_MAX (UNIT_MS_MOWZ + 1) // 0xE7
     UNIT_MAX,                             // 0xE7
 } BattleUnitType;
 
@@ -912,7 +916,7 @@ s32 BtlUnit_GetHitDamage(BattleUnit* unit);
 s32 BtlUnit_GetTotalHitDamage(BattleUnit* unit);
 void* BtlUnit_GetData(BattleUnit* unit, s32 tag);
 BOOL BtlUnit_CheckData(BattleUnit* unit, s32 tag);
-BOOL BtlUnit_GetEnemyBelong(BattleUnit* unit);
+s32 BtlUnit_GetEnemyBelong(BattleUnit* unit);
 void BtlUnit_ReviseHpFp(BattleUnit* unit);
 void BtlUnit_SetParamFromPouch(BattleUnit* unit);
 s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s32 pan);

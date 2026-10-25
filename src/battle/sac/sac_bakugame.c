@@ -399,7 +399,7 @@ USER_FUNC(bakuGameMain) {
         flag = 1;
         for (i = 0; i < 64; i++) {
             u = BattleGetUnitPtr(bw, i);
-            if (u != NULL && u->mAlliance == 1) {
+            if (u != NULL && u->mAlliance == ALLIANCE_ENEMY) {
                 if ((f32)u->mWidth >= 100.0f) {
                     flag = 1;
                     break;
@@ -842,7 +842,7 @@ state_end:
                 for (i = 0; i < 64; i++) {
                     u = BattleGetUnitPtr(bw, i);
                     if (u != NULL && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
-                        u->mAlliance == 1 && BtlUnit_CanActStatus(u)) {
+                        u->mAlliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u)) {
                         if (w->s80 == 0) {
                             BtlUnit_SetBodyAnimType(u, 0x41);
                         }
@@ -1047,7 +1047,7 @@ state_end:
             if (!(w->flags & 1)) {
                 for (i = 0; i < 64; i++) {
                     u = BattleGetUnitPtr(bw, i);
-                    if (u != NULL && u->mAlliance == 1 && BtlUnit_CanActStatus(u) &&
+                    if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u) &&
                         !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
                         !(u->mAttributeFlags & 4) && !(u->mAttributeFlags & 2)) {
                         BtlUnit_GetHomePos(u, &hx, &hy, &hz);
@@ -1251,7 +1251,7 @@ void bakuGameEnemySurpriseReset(void) {
 
     for (i = 0; i < 64; i++) {
         u = BattleGetUnitPtr(wp, i);
-        if (u != NULL && u->mAlliance == 1 && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
+        if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
         }
     }
@@ -1308,7 +1308,7 @@ void bakuGameEnemySurprise(void) {
 
     for (i = 0; i < 64; i++) {
         u = BattleGetUnitPtr(wp, i);
-        if (u != NULL && u->mAlliance == 1 && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
+        if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
             BtlUnit_SetBodyAnimType(u, 0x27);
         }
     }

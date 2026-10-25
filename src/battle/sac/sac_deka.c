@@ -738,7 +738,7 @@ void main_enemy(void) {
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(bw, i);
-        if (unit && unit->mAlliance == 1) {
+        if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
             main_enemy_sub(unit, &n);
         }
     }

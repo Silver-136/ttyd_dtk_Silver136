@@ -109,7 +109,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (flags & 0x20000) {
-                if (unit->currentKind < 0xD8 || unit->currentKind >= 0xDA) {
+                if (unit->currentKind < UNIT_UNUSED_TREE || unit->currentKind >= UNIT_UNUSED_TESTNPC) {
                     { ok = FALSE; break; }
                 }
             }
@@ -119,22 +119,22 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (flags & 2) {
-                if (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {
+                if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
                     { ok = FALSE; break; }
                 }
             }
             if (flags & 0x10) {
-                if (unit->currentKind >= 1 && unit->currentKind < 0xD8) {
+                if (unit->currentKind >= UNIT_GOOMBA && unit->currentKind < UNIT_UNUSED_TREE) {
                     { ok = FALSE; break; }
                 }
             }
             if (flags & 0x40) {
-                if (unit->currentKind >= 0xDA && unit->currentKind < 0xDE) {
+                if (unit->currentKind >= UNIT_UNUSED_TESTNPC && unit->currentKind < UNIT_MARIO) {
                     { ok = FALSE; break; }
                 }
             }
             if (flags & 0x20) {
-                if (unit->currentKind >= 0xD8 && unit->currentKind < 0xDA) {
+                if (unit->currentKind >= UNIT_UNUSED_TREE && unit->currentKind < UNIT_UNUSED_TESTNPC) {
                     { ok = FALSE; break; }
                 }
             }
@@ -149,7 +149,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (flags & 0x200) {
-                if (d->belong != unit->mAlliance && unit->mAlliance != 2) {
+                if (d->belong != unit->mAlliance && unit->mAlliance != ALLIANCE_NEUTRAL) {
                     { ok = FALSE; break; }
                 }
             }
@@ -440,7 +440,7 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
             if ((flags & 1) && unit->currentKind == UNIT_MARIO) {
                 w[id] = 1.5f * w[id];
             }
-            if ((flags & 2) && unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {
+            if ((flags & 2) && unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
                 w[id] = 1.5f * w[id];
             }
             if ((flags & 4)) {
@@ -454,7 +454,7 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
             if ((flags & 0x10) && active->mAlliance == unit->mAlliance) {
                 w[id] = 1.5f * w[id];
             }
-            if ((flags & 0x20) && active->mAlliance != unit->mAlliance && unit->mAlliance != 2) {
+            if ((flags & 0x20) && active->mAlliance != unit->mAlliance && unit->mAlliance != ALLIANCE_NEUTRAL) {
                 w[id] = 1.5f * w[id];
             }
             if ((flags & 0x100)) {
@@ -583,7 +583,7 @@ void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** a, BattleUnit** b) {
     s32 i;
     for (i = 0; i < 64; i++) {
         found = BattleGetUnitPtr(wp, i);
-        if (found && found->mAlliance == 1) {
+        if (found && found->mAlliance == ALLIANCE_ENEMY) {
             break;
         }
     }

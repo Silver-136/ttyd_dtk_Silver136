@@ -243,7 +243,7 @@ USER_FUNC(evt_msg_print_battle_party) {
         return EVT_RETURN_DONE;
     }
     strcpy(partyLabel, msg);
-    strcat(partyLabel, battlePartyMsgStr[(s32)unit->currentKind - 0xE0]);
+    strcat(partyLabel, battlePartyMsgStr[(s32)unit->currentKind - TYPE_PARTNER_MIN]);
     return _evt_msg_print(event, isFirstCall, 2, partyLabel, 0, -4);
 }
 

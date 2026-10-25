@@ -443,7 +443,7 @@ next:
             poseName = PART_POSENAME(part);
             if (!(PART_ANIMFLAGS(part) & 2)) {
                 type = _GetStatusPoseType(unit);
-                if (unit->currentKind >= 1 && unit->currentKind < 0xD8) {
+                if (unit->currentKind >= UNIT_GOOMBA && unit->currentKind < UNIT_UNUSED_TREE) {
                     poseName = searchPoseTbl(part->poseTable, type);
                 }
                 else {

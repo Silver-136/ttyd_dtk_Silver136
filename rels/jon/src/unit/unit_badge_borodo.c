@@ -170,7 +170,7 @@ static USER_FUNC(_steal_item) {
             if (item >= 240 && item < 339) {
                 if (target->currentKind == UNIT_MARIO) {
                     BtlUnit_EquipItem(target, 3, 0);
-                } else if (target->currentKind >= 224 && target->currentKind < 231) {
+                } else if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
                     BtlUnit_EquipItem(target, 5, 0);
                 }
                 pouchReviseMarioParam();
