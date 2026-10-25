@@ -338,7 +338,7 @@ EVT_END()
 static NpcSetupInfo npc_data[] = {
     {
         /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan, // initEvent
         NULL, // regularEvent
@@ -350,7 +350,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"マジョリン"*/"\x83\x7D\x83\x57\x83\x87\x83\x8A\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_majo, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -360,7 +360,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"マリリン"*/"\x83\x7D\x83\x8A\x83\x8A\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_mari, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -370,7 +370,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ramp, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -380,7 +380,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"パタクリ"*/"\x83\x70\x83\x5E\x83\x4E\x83\x8A", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         patakuri_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -390,7 +390,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ババ"*/"\x83\x6F\x83\x6F", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         baba_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -622,9 +622,9 @@ EVT_BEGIN(evt_garnet)
     CALL(evt_msg_print, 0, STRING("stg6_pik_14"), 0, STRING("ランペル"))
     CALL(evt_cam3d_evt_set, 0, 54, -568, -230, 30, -930, 2900, 11)
     CALL(evt_npc_status_onoff, 1, STRING("ランペル"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), 131120)
+    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
     CALL(evt_npc_move_position, STRING("ランペル"), -105, -845, 0, FLOAT(100.0f), 1)
-    CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), 131088)
+    CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_move_position, STRING("ランペル"), -185, -795, 0, FLOAT(100.0f), 1)
     WAIT_MS(500)
     CALL(evt_npc_jump_position_nohit, STRING("ランペル"), -250, 0, -795, FLOAT(300.0f), 40)
@@ -633,7 +633,7 @@ EVT_BEGIN(evt_garnet)
     CALL(evt_snd_bgmoff_f, 512, 3000)
     CALL(evt_snd_envoff, 513)
     CALL(evt_snd_envon, 288, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_party_set_pos, 0, -90, 0, 450)
     CALL(evt_mario_set_pos, -70, 0, 490)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -120, 0, 490)
@@ -826,7 +826,7 @@ EVT_BEGIN(pik_02_koopa_evt)
         CALL(set_starstone_pos, STRING("nise"), LW(0), LW(1), LW(2))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 131088)
+        CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
         CALL(evt_npc_move_position, STRING("ババ"), 111, -781, 1750, 0, 0)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos, 60, -800, 1750)
@@ -901,9 +901,9 @@ EVT_BEGIN(pik_02_koopa_evt)
         WAIT_FRAMES(2)
     END_LOOP
     CALL(evt_eff_softdelete, STRING("nise"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("ババ"), -13, -792, 0, FLOAT(90.0f), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("ババ"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_NO_HIT)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("kpa_stg7_026"), 0, STRING("ババ"))
     WAIT_MS(500)
@@ -989,7 +989,7 @@ EVT_BEGIN(pik_02_koopa_evt)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(2)
     END_IF
-    CALL(evt_npc_flag_onoff, 0, STRING("パタクリ"), 1024)
+    CALL(evt_npc_flag_onoff, 0, STRING("パタクリ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("パタクリ"), STRING("PTK_A_1"))
     CALL(evt_npc_get_position, STRING("パタクリ"), LW(2), LW(3), LW(4))
     CALL(evt_sub_intpl_msec_init, 4, LW(3), 30, 1200)
@@ -1033,7 +1033,7 @@ EVT_BEGIN(pik_02_koopa_evt)
         CALL(evt_npc_move_position, STRING("ババ"), LW(0), -400, 0, FLOAT(90.0f), 0)
     END_INLINE_EVENT
     WAIT_MS(800)
-    CALL(evt_npc_flag_onoff, 1, STRING("パタクリ"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("パタクリ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_get_position, STRING("パタクリ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_glide_position, STRING("パタクリ"), LW(0), LW(1), -400, 0, FLOAT(90.0f), FLOAT(30.0f), 1, 0)
     CALL(evt_cam3d_evt_set, -65, 60, -563, -65, 40, -762, 800, 11)

@@ -21,6 +21,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_party.h"
+#include "driver/npcdrv.h"
 
 #ifdef VERSION_G8ME01
 #endif
@@ -401,7 +402,7 @@ EVT_BEGIN(get_blue_jail_key)
     CALL_CHILD(PTR(mri_guide_goryu))
     CALL(evt_puni_flag_onoff, 1, 0, 262144)
     CALL(evt_puni_set_mode, 1, 30)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_get_position, STRING("ガイドsp"), LW(10), LW(11), LW(12))

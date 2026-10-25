@@ -257,7 +257,7 @@ EVT_BEGIN(evt_nabe)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), 265, 0, -175)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_set_dir_to_target, STRING("ポワン探偵"), STRING("グルメキノピオ"))
     CALL(evt_set_dir_to_target, STRING("グルメキノピオ"), STRING("ポワン探偵"))
     CALL(evt_cam3d_evt_zoom_in, 25, 0, 20, 11)
@@ -277,11 +277,11 @@ EVT_BEGIN(evt_nabe)
     CALL(evt_set_dir_to_target, STRING("ポワン探偵"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_60_01"), 0, STRING("ポワン探偵"))
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), 131088)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_move_position, STRING("ポワン探偵"), 252, 0, 0, FLOAT(40.0f), 1)
     WAIT_MS(500)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), 0, -1000, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), 131088)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
     SET_VALUE(LSWF(3), 0)
@@ -301,7 +301,7 @@ static EVT_BEGIN(init_gurume)
     END_SWITCH
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(1), 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 131072)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
     END_IF
     RETURN
 EVT_END()
@@ -387,7 +387,7 @@ EVT_BEGIN(init_yuurei)
         CALL(evt_npc_set_position, STRING("me"), 30, 0, -170)
     END_SWITCH
     CALL(evt_npc_set_color, STRING("ゆうれい"), 255, 255, 255, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ゆうれい"), 262176)
+    CALL(evt_npc_flag_onoff, 1, STRING("ゆうれい"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_change_interrupt, STRING("ゆうれい"), 6, 0)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(GSWF(3445), 0)
@@ -657,7 +657,7 @@ static EVT_BEGIN(init_toron)
     END_SWITCH
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(1), 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 131072)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
     END_IF
     RETURN
 EVT_END()
@@ -675,7 +675,7 @@ EVT_END()
 static NpcSetupInfo npc_data[] = {
     {
         /*"グルメキノピオ"*/"\x83\x4F\x83\x8B\x83\x81\x83\x4C\x83\x6D\x83\x73\x83\x49", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gurume, // initEvent
         NULL, // regularEvent
@@ -687,7 +687,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_powan, // talkEvent
         NULL, NULL, NULL, NULL, NULL, 0, // deadEvent..territoryType
@@ -697,7 +697,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ゆうれい"*/"\x82\xE4\x82\xA4\x82\xEA\x82\xA2", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_yuurei, // initEvent
         NULL, // regularEvent
@@ -709,7 +709,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"トロン"*/"\x83\x67\x83\x8D\x83\x93", // name
-        0x40000608, // flags
+        NPC_FLAG_ENEMY | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_toron, // initEvent
         NULL, // regularEvent
@@ -721,7 +721,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_sarary, // talkEvent
         NULL, NULL, NULL, NULL, NULL, 0, // deadEvent..territoryType
@@ -959,8 +959,8 @@ EVT_BEGIN(evt_toron_catch)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), 32)
-    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRON_DAMAGED1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_anim, STRING("トロン"), STRING("C_1"))
@@ -998,13 +998,13 @@ EVT_BEGIN(evt_toron_catch2)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -190, 0, -170)
     CALL(evt_npc_set_position, STRING("トロン"), -225, 0, -160)
     CALL(evt_npc_set_position, STRING("サラリーマン"), -260, 0, -135)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 131088)
-    CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+    CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 270, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), 32768)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 32768)
-    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, -215, 140, 200, -215, 40, -180, 0, 11)
     WAIT_FRAMES(1)
     BEGIN_INLINE_EVENT
@@ -1063,7 +1063,7 @@ EVT_BEGIN(evt_toron_catch2)
     WAIT_MS(500)
     CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_191"), 0, STRING("ポワン探偵"))
-    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), 8)
+    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_ENEMY)
     CALL(evt_pouch_remove_item, 80, LW(0))
     SET_VALUE(GSW_STORY_PROGRESS, 309)
     WAIT_MS(750)
@@ -1114,7 +1114,7 @@ EVT_BEGIN(evt_toron_appear)
     IF_INT_LESS(LW(0), 300)
         GOTO(100)
     END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_NO_HIT)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(0), -200)
         CALL(evt_npc_set_position, STRING("トロン"), -130, -50, -278)
@@ -1221,7 +1221,7 @@ EVT_BEGIN(evt_toron_appear)
     WAIT_MS(500)
     CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
     CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_NO_HIT)
     SET_VALUE(GSW_STORY_PROGRESS, 308)
     CALL(evt_del_case_evt, 0, GW(11))
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG3_EGG1"))

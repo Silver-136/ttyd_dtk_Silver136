@@ -891,7 +891,7 @@ EVT_BEGIN(tyuou_teresa_init)
         CALL(evt_npc_set_position, STRING("me"), 70, 0, 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 197)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_set_color, STRING("me"), 255, 255, 255, 0)
         CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     END_IF
@@ -1001,8 +1001,8 @@ EVT_BEGIN(tyuou_teresa_talk)
         END_IF
         CALL(evt_npc_set_color, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 255, 255, 255, 0)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 32)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), -2147483648)
+    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_change_interrupt, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 6, 0)
     SPAWN_EVENT(senteresa_evt)
     CALL(senteresa_wait_end_seq)
@@ -1038,7 +1038,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"テレサ"*/"\x83\x65\x83\x8C\x83\x54", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -1047,7 +1047,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         tyuou_teresa_init, // initEvent
         NULL, // regularEvent
@@ -1059,7 +1059,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"奥扉テレサ"*/"\x89\x9C\x94\xE0\x83\x65\x83\x8C\x83\x54", // name
-        0x40000620, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         oku_teresa_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1069,7 +1069,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"手前扉テレサ"*/"\x8E\xE8\x91\x4F\x94\xE0\x83\x65\x83\x8C\x83\x54", // name
-        0x40000620, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         temae_teresa_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1079,7 +1079,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54", // name
-        0x400A0, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, // reactionFlags
         atomic_teresa_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1089,7 +1089,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"1001テレサ"*/"\x31\x30\x30\x31\x83\x65\x83\x8C\x83\x54", // name
-        0x400A0, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -1098,7 +1098,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"1002テレサ"*/"\x31\x30\x30\x32\x83\x65\x83\x8C\x83\x54", // name
-        0x400A0, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -1107,7 +1107,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"1003テレサ"*/"\x31\x30\x30\x33\x83\x65\x83\x8C\x83\x54", // name
-        0x400A0, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -1116,7 +1116,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"1004テレサ"*/"\x31\x30\x30\x34\x83\x65\x83\x8C\x83\x54", // name
-        0x400A0, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -1125,7 +1125,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"1005テレサ"*/"\x31\x30\x30\x35\x83\x65\x83\x8C\x83\x54", // name
-        0x400A0, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -1134,7 +1134,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"1006テレサ"*/"\x31\x30\x30\x36\x83\x65\x83\x8C\x83\x54", // name
-        0x400A0, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_SHADOW, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -1940,7 +1940,7 @@ EVT_BEGIN(senteresa_evt)
     ADD(LW(1), 60)
     CALL(evt_npc_set_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_scale, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 1, 1, 1)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), -2147483648)
+    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_TALK_BALLOON)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
@@ -1997,8 +1997,8 @@ EVT_BEGIN(senteresa_evt)
     CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(1), 25)
     CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_jin_62"), 0, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"))
     CALL(evt_cam3d_evt_off, 400, 11)
@@ -2106,7 +2106,7 @@ EVT_BEGIN(senteresa_evt)
     CALL(evt_item_flag_on, STRING("item_99"), 256)
     SET_VALUE(GSWF(2242), 1)
     CALL(senteresa_huttobu)
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
     LOOP(0)
         PEEK_INT(LW(0), PTR(g_nNumEndProc))
         IF_INT_EQUAL(LW(0), 200)

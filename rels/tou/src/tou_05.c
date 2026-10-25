@@ -22,6 +22,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 void gans_msg_callback(s32 type, void** work);
@@ -155,7 +156,7 @@ EVT_BEGIN(evt_takurami)
     WAIT_MS(300)
     CALL(evt_snd_bgmoff_f, 512, 2000)
     CALL(evt_npc_set_position, STRING("ガンス"), 0, 0, -160)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -167,7 +168,7 @@ EVT_BEGIN(evt_takurami)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_move_position, STRING("ガンス"), 0, -80, 0, FLOAT(80.0f), 1)
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
@@ -465,7 +466,7 @@ static EVT_BEGIN(talk_kinoshikowa)
             CALL(evt_msg_print, 0, STRING("irai_23_01"), 0, 0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
-            CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
             BEGIN_INLINE_EVENT
                 WAIT_MS(800)
@@ -496,7 +497,7 @@ static EVT_BEGIN(talk_kinoshikowa)
             WAIT_FRAMES(1)
             CALL(evt_npc_wait_pera, STRING("me"))
             WAIT_MS(300)
-            CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
             WAIT_MS(200)
             CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
@@ -520,7 +521,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガンス"*/"\x83\x4B\x83\x93\x83\x58", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gans, // initEvent
         NULL, // regularEvent
@@ -532,7 +533,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kinoshikowa, // initEvent
         NULL, // regularEvent
@@ -655,7 +656,7 @@ static EVT_BEGIN(evt_sensyu)
     CALL(evt_msg_print, 0, STRING("stg3_tou_45"), 0, STRING("ガンス"))
     CALL(evt_msg_select, 0, STRING("stg3_tou_45_yn"))
     CALL(evt_msg_print_add, 0, STRING("stg3_tou_46_00"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_status_onoff, 1, STRING("ガンス"), 2)
     CALL(evt_npc_move_position, STRING("ガンス"), 120, -70, 0, FLOAT(50.0f), 1)
     CALL(evt_cam3d_evt_set, -30, 114, 386, -30, 45, -8, 2000, 11)
@@ -936,9 +937,9 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("キノシコワ"))
         CALL(evt_npc_set_position, STRING("キノシコワ"), 20, 0, 0)
         CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("ガンス"))
-        CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_status_onoff, 1, STRING("ガンス"), 2)
-        CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
     END_IF
     CALL(evt_cam3d_evt_set, 0, 145, 534, 0, 50, -8, 2000, 11)

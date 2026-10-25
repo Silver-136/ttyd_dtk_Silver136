@@ -322,7 +322,7 @@ EVT_BEGIN(init_cook)
     END_SWITCH
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(1), 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 131072)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
     END_IF
     RETURN
 EVT_END()
@@ -471,7 +471,7 @@ static EVT_BEGIN(init_waitless)
     END_SWITCH
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(1), 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 131072)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
     END_IF
     RETURN
 EVT_END()
@@ -648,7 +648,7 @@ EVT_END()
 static NpcSetupInfo npc_data[] = {
     {
         /*"コック"*/"\x83\x52\x83\x62\x83\x4E", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_cook, // initEvent
         NULL, // regularEvent
@@ -660,7 +660,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ウェイトレス"*/"\x83\x45\x83\x46\x83\x43\x83\x67\x83\x8C\x83\x58", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_waitless, // initEvent
         move_waitless, // regularEvent
@@ -672,7 +672,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"店員"*/"\x93\x58\x88\xF5", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -723,7 +723,7 @@ EVT_BEGIN(evt_lanch_missing)
     CALL(evt_set_dir_to_target, STRING("コック"), STRING("ポワン探偵"))
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
     CALL(evt_snd_envoff, 1024)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 0, -135, FLOAT(70.0f))
         CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
@@ -782,10 +782,10 @@ EVT_BEGIN(evt_lanch_missing)
         CALL(evt_snd_bgmoff, 513)
         CALL(evt_snd_bgmon, 288, 0)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), 512)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_TALK_POSE)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_25"), 0, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_TALK_POSE)
     LOOP(0)
         IF_INT_EQUAL(GF(0), 1)
             BREAK_LOOP
@@ -805,10 +805,10 @@ EVT_BEGIN(evt_lanch_missing)
         CALL(evt_snd_bgmoff, 513)
         CALL(evt_snd_bgmon, 288, 0)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), 512)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_TALK_POSE)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_27"), 0, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_TALK_POSE)
     CALL(evt_cam3d_evt_set, 45, 75, 75, 45, 40, -122, 200, 11)
     WAIT_MS(200)
     SET_VALUE(LW(0), STRING("ポワン探偵"))
@@ -834,10 +834,10 @@ EVT_BEGIN(evt_lanch_missing)
         END_LOOP
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), 512)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_TALK_POSE)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_29"), 0, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_TALK_POSE)
     WAIT_MS(300)
     LOOP(0)
         IF_INT_EQUAL(GF(0), 1)
@@ -886,10 +886,10 @@ EVT_BEGIN(evt_lanch_missing)
         CALL(evt_snd_bgmoff, 513)
         CALL(evt_snd_bgmon, 288, 0)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), 512)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_TALK_POSE)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_33"), 0, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_TALK_POSE)
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("O_1"))
     CALL(evt_npc_set_autotalkpose, STRING("ウェイトレス"), STRING("O_1"), STRING("T_3"))
@@ -912,7 +912,7 @@ EVT_BEGIN(evt_lanch_missing)
     CALL(evt_run_case_evt, 5, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), 0)
     CALL(evt_snd_envoff, 513)
     CALL(evt_snd_envon, 288, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
     CALL(evt_party_run, 0)
     SET_VALUE(GF(10), 0)
     RETURN
@@ -972,7 +972,7 @@ EVT_END()
 NpcSetupInfo npc_data_lunch[] = {
     {
         /*"コック"*/"\x83\x52\x83\x62\x83\x4E", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_cook, // talkEvent
         NULL, NULL, NULL, NULL, NULL, 0, // deadEvent..territoryType
@@ -982,7 +982,7 @@ NpcSetupInfo npc_data_lunch[] = {
     },
     {
         /*"ウェイトレス"*/"\x83\x45\x83\x46\x83\x43\x83\x67\x83\x8C\x83\x58", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_waitless, // talkEvent
         NULL, NULL, NULL, NULL, NULL, 0, // deadEvent..territoryType
@@ -992,7 +992,7 @@ NpcSetupInfo npc_data_lunch[] = {
     },
     {
         /*"店員"*/"\x93\x58\x88\xF5", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -1001,7 +1001,7 @@ NpcSetupInfo npc_data_lunch[] = {
     },
     {
         /*"トロン"*/"\x83\x67\x83\x8D\x83\x93", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_toron, // talkEvent
         NULL, NULL, NULL, NULL, NULL, 0, // deadEvent..territoryType
@@ -1011,7 +1011,7 @@ NpcSetupInfo npc_data_lunch[] = {
     },
     {
         /*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_sarary, // talkEvent
         NULL, NULL, NULL, NULL, NULL, 0, // deadEvent..territoryType
@@ -1021,7 +1021,7 @@ NpcSetupInfo npc_data_lunch[] = {
     },
     {
         /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, // reactionFlags..regularEvent
         talk_powan, // talkEvent
         NULL, NULL, NULL, NULL, NULL, 0, // deadEvent..territoryType
@@ -1115,8 +1115,8 @@ EVT_BEGIN(evt_shop_moamoa_talk)
         IF_INT_EQUAL(GSWF(3442), 0)
             CALL(evt_npc_set_anim, STRING("店員"), STRING("O_1"))
             WAIT_MS(500)
-            CALL(evt_npc_flag_onoff, 0, STRING("店員"), 16777216)
-            CALL(evt_npc_flag_onoff, 1, STRING("店員"), 1536)
+            CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_NO_TALK_TURN)
+            CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_236_01"), 0, STRING("店員"))
             SET_VALUE(GSWF(3442), 1)
         END_IF
@@ -1202,7 +1202,7 @@ USER_FUNC(npc_alpha_except_tenin) {
 
     for (i = 0, npc = wp->entries; i < wp->total; i++, npc++) {
         // 店員
-        if ((npc->flags & 1) && (npc->flags & 2) && strcmp(npc->description, "\x93\x58\x88\xF5") != 0) {
+        if ((npc->flags & NPC_FLAG_IN_USE) && (npc->flags & NPC_FLAG_READY) && strcmp(npc->description, "\x93\x58\x88\xF5") != 0) {
             npcSetColor(npc->description, (GXColor){0xFF, 0xFF, 0xFF, alpha});
         }
     }
@@ -1529,8 +1529,8 @@ EVT_BEGIN(rsh_03_init_evt)
             IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 328)
                 IF_INT_LESS(GSW_STORY_PROGRESS, 332)
                     IF_INT_EQUAL(GSWF(3442), 0)
-                        CALL(evt_npc_flag_onoff, 1, STRING("店員"), 16777216)
-                        CALL(evt_npc_flag_onoff, 0, STRING("店員"), 1536)
+                        CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_NO_TALK_TURN)
+                        CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                         CALL(evt_npc_set_anim, STRING("店員"), STRING("D_1"))
                     END_IF
                 END_IF

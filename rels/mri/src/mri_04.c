@@ -82,7 +82,7 @@ EVT_END()
 
 static EVT_BEGIN(chibitoge_talk)
     CALL(evt_msg_toge, 1, 0, 0, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_jump_position_nohit, STRING("me"), -60, 67, -40, 500, 80)
@@ -112,7 +112,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ちびトゲ"*/"\x82\xBF\x82\xD1\x83\x67\x83\x51", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         chibitoge_init, // initEvent
         NULL, // regularEvent
@@ -199,8 +199,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_snd_bgmoff, 1024)
     CALL(evt_snd_bgmon, 1, STRING("BGM_EVT_CYUCYURINA1"))
     CALL(evt_snd_envoff, 512)
-    CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1"), LW(0), LW(1), LW(2), 0)
@@ -281,7 +281,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_get_position, STRING("チュチュリーナ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CHURINA_ESCAPE1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 135, -200, 300, 10)
-    CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_DRAW)
     WAIT_MS(700)
     CALL(evt_snd_bgmoff, 513)
     CALL(evt_snd_bgmon, 288, 0)
@@ -301,8 +301,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_set_ry, STRING("第三勢力部下"), 90)
     WAIT_MS(500)
     CALL(evt_eff_fukidashi, 1, STRING(""), STRING("第三勢力部下"), 0, 0, 0, 0, 0, 0, 0, 60)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下"), 512)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e13_07"), 0, STRING("第三勢力部下"))
     CALL(evt_npc_set_anim, STRING("第三勢力部下"), STRING("R_1"))
@@ -338,12 +338,12 @@ EVT_BEGIN(black_shadow)
     SET_VALUE(LW(8), STRING("チュチュリーナ"))
     CALL(evt_npc_set_ry, LW(8), 90)
     CALL(evt_npc_set_position, LW(8), 0, -1000, 0)
-    CALL(evt_npc_flag_onoff, 1, LW(8), 1073743392)
+    CALL(evt_npc_flag_onoff, 1, LW(8), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_color, LW(8), 20, 20, 20, 255)
     SET_VALUE(LW(9), STRING("第三勢力部下"))
     CALL(evt_npc_set_ry, LW(9), 270)
     CALL(evt_npc_set_position, LW(9), 0, 0, 40)
-    CALL(evt_npc_flag_onoff, 1, LW(9), 1536)
+    CALL(evt_npc_flag_onoff, 1, LW(9), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_puni_wait_systemmode, 2)
     SET_VALUE(LW(10), 1)
     LOOP(0)
@@ -394,7 +394,7 @@ EVT_BEGIN(black_shadow)
     BEGIN_INLINE_EVENT
         CALL(mri_npc_buruburu, LW(9), 0, FLOAT(1.0f), 100, 300)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 0, LW(9), 1536)
+    CALL(evt_npc_flag_onoff, 0, LW(9), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, LW(9), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_3RD_DOWN1"), LW(0), LW(1), LW(2), 0)

@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_pouch.h"
 #include "driver/mobjdrv.h"
+#include "driver/npcdrv.h"
 
 #include "stdio.h"
 #include "memory.h"
@@ -258,7 +259,7 @@ EVT_BEGIN(evt_chuchu)
     CALL(evt_msg_print, 0, STRING("stg3_tou_312"), 0, STRING("チュチュリーナ"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 4, 67, 224, 4, 38, -8, 1000, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), -65, -60, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -10, 0, -60, 300, 30)
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), 0, -60, 0, FLOAT(80.0f), 1)
@@ -442,7 +443,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"チュチュリーナ"*/"\x83\x60\x83\x85\x83\x60\x83\x85\x83\x8A\x81\x5B\x83\x69", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase

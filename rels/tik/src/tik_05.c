@@ -30,6 +30,7 @@
 #include "eff/n64/eff_stardust2_n64.h"
 #include "eff/n64/eff_stardust_n64.h"
 #include "poly_trig.h"
+#include "driver/npcdrv.h"
 
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
@@ -259,7 +260,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"クリハカセ"*/"\x83\x4E\x83\x8A\x83\x6E\x83\x4A\x83\x5A", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         kurihakase_init, // initEvent
         NULL, // regularEvent

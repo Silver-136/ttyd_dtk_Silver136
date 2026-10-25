@@ -1543,16 +1543,16 @@ EVT_END()
 
 EVT_BEGIN(evt_moamoa_help)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 0, LW(0), 512)
+        CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_TALK_POSE)
         IF_STR_EQUAL(LW(0), STRING("\x8e\xd4\x8f\xb6"))
             CALL(evt_msg_print, 0, STRING("stg6_rsh_249_00"), 0, LW(0))
             ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_249_01"), 0, LW(0))
         END_IF
-        CALL(evt_npc_flag_onoff, 1, LW(0), 512)
+        CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_TALK_POSE)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, LW(0), 32)
-    CALL(evt_npc_flag_onoff, 0, LW(0), 1024)
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_AUTO_MOVE_ANIM)
     SET_VALUE(LW(10), LW(0))
     CALL(evt_npc_get_position, LW(0), LW(1), LW(2), LW(3))
     CALL(evt_sub_random, 1000, LW(4))
@@ -1579,8 +1579,8 @@ EVT_BEGIN(evt_moamoa_help)
     ADD_FLOAT(LW(1), LW(5))
     SUBTRACT_FLOAT(LW(3), LW(6))
     CALL(npc_jump, LW(0), LW(1), LW(2), LW(3), FLOAT(0.0f), FLOAT(0.19921875f), 100)
-    CALL(evt_npc_flag_onoff, 1, LW(0), 1024)
-    CALL(evt_npc_flag_onoff, 0, LW(0), 32)
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_NO_HIT)
     IF_STR_EQUAL(LW(10), STRING("\x8e\xd4\x8f\xb6"))
         CALL(evt_npc_set_anim, LW(10), STRING("O_1"))
         ELSE
@@ -1616,7 +1616,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_cam3d_evt_xyz_off, 0, 11)
     WAIT_FRAMES(1)
     CALL(evt_party_stop, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 32)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_status_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), 2)
@@ -1663,7 +1663,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_cam3d_evt_off, 500, 11)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("\x8e\xd4\x8f\xb6"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 32)
     CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
     CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
@@ -1832,7 +1832,7 @@ static BeroEntry bero_data_c[] = {
 static NpcSetupInfo npc_data[] = {
     {
         /*"車掌"*/"\x8e\xd4\x8f\xb6", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_syashou, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1842,7 +1842,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ウェイトレス"*/"\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_waitless, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType

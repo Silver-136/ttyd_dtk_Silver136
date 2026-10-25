@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
+#include "driver/npcdrv.h"
 
 #include "manager/evtmgr.h"
 #include "driver/msgdrv.h"
@@ -566,8 +567,8 @@ EVT_BEGIN(kuizu_sekizou)
 #ifdef VERSION_G8ME01
                 CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 200, -50)
                 CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 200, 50)
-                CALL(evt_npc_flag_onoff, 1, STRING("バリアーン１"), 32768)
-                CALL(evt_npc_flag_onoff, 1, STRING("バリアーン２"), 32768)
+                CALL(evt_npc_flag_onoff, 1, STRING("バリアーン１"), NPC_FLAG_INSTANT_TURN)
+                CALL(evt_npc_flag_onoff, 1, STRING("バリアーン２"), NPC_FLAG_INSTANT_TURN)
                 CALL(evt_npc_set_stay_anim, STRING("バリアーン１"))
                 CALL(evt_npc_set_stay_anim, STRING("バリアーン２"))
                 WAIT_FRAMES(10)
@@ -611,8 +612,8 @@ EVT_BEGIN(kuizu_sekizou)
                 WAIT_MS(300)
                 WAIT_MS(500)
 #ifdef VERSION_G8ME01
-                CALL(evt_npc_flag_onoff, 0, STRING("バリアーン１"), 32768)
-                CALL(evt_npc_flag_onoff, 0, STRING("バリアーン２"), 32768)
+                CALL(evt_npc_flag_onoff, 0, STRING("バリアーン１"), NPC_FLAG_INSTANT_TURN)
+                CALL(evt_npc_flag_onoff, 0, STRING("バリアーン２"), NPC_FLAG_INSTANT_TURN)
 #endif
                 CALL(evt_msg_toge, 2, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))

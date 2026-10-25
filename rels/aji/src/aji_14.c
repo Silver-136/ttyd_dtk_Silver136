@@ -125,10 +125,10 @@ USER_FUNC(waku) {
 
 EVT_BEGIN(evt_robot_waku)
     CALL(evt_npc_entry, STRING("枠"), STRING("c_mb_robo_2a"))
-    CALL(evt_npc_flag_onoff, 1, STRING("枠"), 786432)
+    CALL(evt_npc_flag_onoff, 1, STRING("枠"), NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_anim, STRING("枠"), STRING("L_1"))
     CALL(evt_npc_entry, STRING("枠２"), STRING("c_mb_robo_2a"))
-    CALL(evt_npc_flag_onoff, 1, STRING("枠２"), 786432)
+    CALL(evt_npc_flag_onoff, 1, STRING("枠２"), NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_anim, STRING("枠２"), STRING("L_1"))
     BEGIN_INLINE_EVENT
         SET_TYPE(0)
@@ -143,8 +143,8 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_npc_set_position, STRING("ロボット"), 260, 60, 0)
     CALL(evt_npc_set_ry, STRING("幹部"), 270)
     CALL(evt_npc_set_ry, STRING("ロボット"), 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), 33554432)
-    CALL(evt_npc_flag_onoff, 0, STRING("ロボット"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), NPC_FLAG_NO_VIEW_CORRECTION)
+    CALL(evt_npc_flag_onoff, 0, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_pera_onoff, STRING("ロボット"), 0)
     CALL(evt_npc_set_anim, STRING("ロボット"), STRING("Z_1"))
     CALL(evt_cam3d_evt_set, 375, 420, 935, -225, -30, 0, 0, 11)
@@ -163,8 +163,8 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(1300)
     CALL(evt_cam3d_evt_set, 10, 190, 275, 175, 60, -142, 1000, 11)
     WAIT_MS(1000)
-    CALL(evt_npc_flag_onoff, 1, STRING("幹部"), 32768)
-    CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("幹部"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_msg_print, 0, STRING("stg7_aji_37"), 0, STRING("幹部"))
     WAIT_MS(300)
     CALL(evt_party_stop, 0)
@@ -189,8 +189,8 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_msg_print, 0, STRING("stg7_aji_39"), 0, STRING("幹部"))
     WAIT_MS(300)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("幹部"), 32768)
-    CALL(evt_npc_flag_onoff, 0, STRING("ロボット"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("幹部"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 0, STRING("ロボット"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 250, 124, 545, 250, 140, -105, 500, 11)
     WAIT_MS(500)
     CALL(evt_set_dir_to_target, STRING("幹部"), STRING("ロボット"))
@@ -224,9 +224,9 @@ static EVT_BEGIN(evt_boss)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 165, 183, 285, 281, 193, -98, 1000, 11)
     WAIT_MS(1000)
-    CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg7_aji_41"), 0, STRING("ロボット"))
-    CALL(evt_npc_flag_onoff, 0, STRING("ロボット"), 1536)
+    CALL(evt_npc_flag_onoff, 0, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_cam3d_evt_set, 250, 124, 545, 250, 140, -105, 300, 11)
     WAIT_MS(300)
     WAIT_MS(2000)
@@ -311,7 +311,7 @@ static EVT_BEGIN(evt_boss)
     END_INLINE_EVENT
     WAIT_MS(3000)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 0, STRING("幹部"), 1536)
+        CALL(evt_npc_flag_onoff, 0, STRING("幹部"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_anim, STRING("幹部"), STRING("D_1"))
         CALL(evt_npc_set_position, STRING("幹部"), 0, 70, 0)
         CALL(evt_npc_jump_position_nohit, STRING("幹部"), -200, 200, 100, 1000, FLOAT(80.0f))
@@ -380,7 +380,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"幹部"*/"\x8A\xB2\x95\x94", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -389,7 +389,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ロボット"*/"\x83\x8D\x83\x7B\x83\x62\x83\x67", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase

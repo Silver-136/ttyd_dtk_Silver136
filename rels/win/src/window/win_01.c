@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
@@ -186,7 +187,7 @@ EVT_BEGIN(guide_bigtree)
     CALL(evt_npc_set_position, STRING("ガイド"), FLOAT(-158.7998f), FLOAT(-30.0f), FLOAT(-500.0f))
     WAIT_MS(200)
     CALL(evt_npc_set_position, STRING("ガイド"), FLOAT(-158.7998f), FLOAT(-0.5595703f), FLOAT(-448.0f))
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073873936)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION)
     WAIT_MS(300)
     SPAWN_EVENT_GET_ID(PTR(win_puni_walk_se), LW(10))
     CALL(evt_npc_move_position, STRING("ガイド"), -83, -450, 0, 100, 0)
@@ -217,7 +218,7 @@ EVT_BEGIN(guide_bigtree)
     CALL(evt_npc_move_position, STRING("ガイド"), 244, -450, 0, 100, 0)
     DELETE_EVENT(LW(10))
     CALL(evt_npc_set_position, STRING("ガイド"), 0, -1000, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), 132112)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
 

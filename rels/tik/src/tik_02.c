@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_mobj.h"
+#include "driver/npcdrv.h"
 
 #include "evt/evt_npc.h"
 #include "party.h"
@@ -523,9 +524,9 @@ EVT_END()
 EVT_BEGIN(geso_battle)
     CALL(evt_npc_set_position, STRING("ゲッソー"), -385, -60, 0)
     CALL(evt_npc_set_anim, STRING("ゲッソー"), STRING("GSO_S_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ゲッソー"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ゲッソー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("ゲッソーのゲソ"), -444, 0, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ゲッソーのゲソ"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("ゲッソーのゲソ"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_set_width, STRING("ゲッソーのゲソ"), 60)
     CALL(evt_npc_set_height, STRING("ゲッソーのゲソ"), 5)
     CALL(evt_npc_set_balloontype, STRING("ゲッソーのゲソ"), 0)
@@ -615,7 +616,7 @@ EVT_BEGIN(geso_battle)
     END_LOOP
     CALL(evt_cam3d_evt_set, -635, 52, 302, -385, 75, 24, 50, 11)
     WAIT_MS(50)
-    CALL(evt_npc_flag_onoff, 1, STRING("ゲッソー"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ゲッソー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_battle_info, STRING("ゲッソー"), 3)
     CALL(evt_npc_battle_start, STRING("ゲッソー"))
     CALL(evt_npc_wait_battle_end)
@@ -628,7 +629,7 @@ EVT_BEGIN(geso_battle)
     CALL(evt_cam3d_evt_set, -300, 213, 647, -300, 100, 7, 0, 11)
     CALL(evt_npc_set_position, STRING("ゲッソー"), -250, -86, -60)
     WAIT_MS(1000)
-    CALL(evt_npc_flag_onoff, 0, STRING("ゲッソー"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("ゲッソー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_msg_print, 0, STRING("mac_0_126"), 0, STRING("ゲッソー"))
     BEGIN_INLINE_EVENT
         WAIT_MS(500)

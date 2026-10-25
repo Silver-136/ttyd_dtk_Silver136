@@ -8,6 +8,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_seq.h"
 #include "evt/evt_sub.h"
+#include "driver/npcdrv.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -113,7 +114,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"めがね水夫"*/"\x82\xDF\x82\xAA\x82\xCB\x90\x85\x95\x76", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         megane_init, // initEvent
         NULL, // regularEvent
@@ -246,8 +247,8 @@ EVT_BEGIN(nazo_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), 1536)
-    CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), 65536)
+    CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), NPC_FLAG_WALL_BOUNCE)
     CALL(evt_npc_set_position, STRING("めがね水夫"), -540, 25, 0)
     CALL(evt_npc_set_ry, STRING("めがね水夫"), 90)
     CALL(evt_cam3d_evt_set, FLOAT(-382.69922f), FLOAT(158.0f), FLOAT(527.7998f), FLOAT(-382.69922f), FLOAT(62.5f), FLOAT(-13.799805f), 500, 11)
@@ -496,26 +497,26 @@ EVT_BEGIN(senin_event)
     CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
     CALL(evt_npc_set_position, STRING("コルテス"), 0, -1000, 0)
     CALL(evt_npc_set_ry, STRING("コルテス"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), 819200)
+    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_position, STRING("水夫D"), -158, 44, -160)
     CALL(evt_npc_set_ry, STRING("水夫D"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), 688656)
-    CALL(evt_npc_flag_onoff, 0, STRING("水夫D"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+    CALL(evt_npc_flag_onoff, 0, STRING("水夫D"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("モニー"), -159, 44, -257)
     CALL(evt_npc_set_ry, STRING("モニー"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), 688656)
-    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("ピートン"), -195, 44, -264)
     CALL(evt_npc_set_ry, STRING("ピートン"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), 688656)
-    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("ガラの悪い水夫"), -45, 120, -289)
     CALL(evt_npc_set_ry, STRING("ガラの悪い水夫"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), 688656)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("オドオド水夫"), -18, 120, -179)
-    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), 688656)
-    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
+    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
 #ifndef VERSION_G8ME01
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, 11)
     CALL(evt_bero_exec_wait, 65536)

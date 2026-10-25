@@ -14,6 +14,7 @@
 #include "mri_puni.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "driver/npcdrv.h"
 
 
 static ShopObj obj_list[6];
@@ -76,7 +77,7 @@ EVT_BEGIN(chibitoge_nakama)
     CALL(evt_npc_jump_position_nohit, STRING("me"), -167, 44, 41, 400, 50)
     CALL_CHILD(PTR(mri_guide_goryu))
     CALL(evt_puni_flag_onoff, 1, 0, 262144)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg2_mri_f01_00"), 0, STRING("ガイドsp"))
     CALL(evt_cam3d_evt_set, 211, 151, 548, 211, 56, 7, 0, 11)
     CALL(evt_npc_set_ry_lr, STRING("プニ店員"), 0)
@@ -93,7 +94,7 @@ EVT_BEGIN(chibitoge_nakama)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_TOGETTI_JUMP1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_npc_jump_position_nohit, STRING("ちびトゲ"), -138, 0, 72, 300, 30)
         WAIT_MS(200)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 1073741856)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_TOGETTI_MOVE1"), LW(0), LW(1), LW(2), LW(9))
         ADD(LW(0), 200)
@@ -108,10 +109,10 @@ EVT_BEGIN(chibitoge_nakama)
         WAIT_FRAMES(1)
         ELSE
         CALL(evt_msg_print_party, STRING("stg2_mri_f01_05"))
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 512)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
         CALL(evt_msg_toge, 1, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg2_mri_f01_06"), 0, 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 512)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_TOGETTI_JUMP1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_npc_jump_position_nohit, STRING("me"), -138, 0, 72, 300, 30)
@@ -127,7 +128,7 @@ EVT_BEGIN(chibitoge_nakama)
     END_IF
     CALL(evt_puni_flag_onoff, 1, 1, 262144)
     CALL(evt_puni_set_mode, 1, 1)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガイドsp"), 1536)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_party_run, 0)
     RETURN
 EVT_END()
@@ -213,7 +214,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ちびトゲ"*/"\x82\xBF\x82\xD1\x83\x67\x83\x51", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         chibitoge_init, // initEvent
         NULL, // regularEvent
@@ -225,7 +226,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ店員"*/"\x83\x76\x83\x6A\x93\x58\x88\xF5", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         punishop_init, // initEvent
         NULL, // regularEvent
@@ -237,7 +238,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ情報屋"*/"\x83\x76\x83\x6A\x8F\xEE\x95\xF1\x89\xAE", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         puniinfo_init, // initEvent
         NULL, // regularEvent

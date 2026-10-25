@@ -16,6 +16,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -454,7 +455,7 @@ EVT_BEGIN(kuribo_talk)
                     CALL(evt_party_dispflg_onoff, 0, 16, 0)
                     SET_VALUE(GF(0), 0)
                 END_INLINE_EVENT
-                CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+                CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
                 CALL(evt_npc_move_position, STRING("me"), -175, 86, 0, 40, 0)
                 WAIT_WHILE(GF(0))
                 WAIT_MS(500)
@@ -645,7 +646,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"クリチェロ"*/"\x83\x4E\x83\x8A\x83\x60\x83\x46\x83\x8D", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         kuribo_init, // initEvent
         NULL, // regularEvent

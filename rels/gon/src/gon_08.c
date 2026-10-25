@@ -16,6 +16,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
 #include "driver/mobjdrv.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
@@ -404,7 +405,7 @@ EVT_BEGIN(nokkosu_init)
 EVT_END()
 
 EVT_BEGIN(nokkosu_talk)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #ifdef VERSION_G8ME01
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -206, -147, FLOAT(120.0f))
@@ -490,7 +491,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ノッコス"*/"\x83\x6D\x83\x62\x83\x52\x83\x58", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         nokkosu_init, // initEvent
         NULL, // regularEvent
@@ -516,8 +517,8 @@ EVT_BEGIN(gon_08_init_evt)
     CALL(evt_npc_set_rotate, STRING("\"カロン00\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン00\""), STRING("KRN_Z_2"))
     CALL(evt_npc_pera_onoff, STRING("\"カロン00\""), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("\"カロン00\""), 1048576)
-    CALL(evt_npc_flag_onoff, 1, STRING("\"カロン00\""), 33554432)
+    CALL(evt_npc_flag_onoff, 0, STRING("\"カロン00\""), NPC_FLAG_UPDATE_BY_EVENT)
+    CALL(evt_npc_flag_onoff, 1, STRING("\"カロン00\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン00\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン00\""), 7)
     CALL(evt_npc_entry, STRING("\"カロン01\""), STRING("c_karon_g"))
@@ -525,8 +526,8 @@ EVT_BEGIN(gon_08_init_evt)
     CALL(evt_npc_set_rotate, STRING("\"カロン01\""), 0, 180, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン01\""), STRING("KRN_Z_2"))
     CALL(evt_npc_pera_onoff, STRING("\"カロン01\""), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("\"カロン01\""), 1048576)
-    CALL(evt_npc_flag_onoff, 1, STRING("\"カロン01\""), 33554432)
+    CALL(evt_npc_flag_onoff, 0, STRING("\"カロン01\""), NPC_FLAG_UPDATE_BY_EVENT)
+    CALL(evt_npc_flag_onoff, 1, STRING("\"カロン01\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン01\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン01\""), 7)
     CALL(evt_npc_entry, STRING("\"カロン02\""), STRING("c_karon_g"))
@@ -534,8 +535,8 @@ EVT_BEGIN(gon_08_init_evt)
     CALL(evt_npc_set_rotate, STRING("\"カロン02\""), 0, 0, 0)
     CALL(evt_npc_set_anim, STRING("\"カロン02\""), STRING("KRN_Z_2"))
     CALL(evt_npc_pera_onoff, STRING("\"カロン02\""), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("\"カロン02\""), 1048576)
-    CALL(evt_npc_flag_onoff, 1, STRING("\"カロン02\""), 33554432)
+    CALL(evt_npc_flag_onoff, 0, STRING("\"カロン02\""), NPC_FLAG_UPDATE_BY_EVENT)
+    CALL(evt_npc_flag_onoff, 1, STRING("\"カロン02\""), NPC_FLAG_NO_VIEW_CORRECTION)
     CALL(evt_npc_set_width, STRING("\"カロン02\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン02\""), 7)
     CALL(evt_npc_change_fbat_mode, 1)

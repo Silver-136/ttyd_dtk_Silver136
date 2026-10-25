@@ -13,6 +13,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/npcdrv.h"
 
 #include "driver/itemdrv.h"
 #include "mario/mariost.h"
@@ -357,8 +358,8 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("コルテス"), 46, 35, 25)
-    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), 1107296800)
-    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_VIEW_CORRECTION | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_set_ry, STRING("コルテス"), 0)
     CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
     CALL(evt_bero_exec_wait, 65536)
@@ -522,7 +523,7 @@ EVT_BEGIN(korutesu_event_after)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_npc_set_position, STRING("コルテス"), 46, 35, 25)
-    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), 1107296800)
+    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_VIEW_CORRECTION | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, STRING("コルテス"), 0)
     CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
     CALL(evt_cam3d_evt_set, -20, 125, 505, -20, 80, 7, 0, 11)
@@ -558,8 +559,8 @@ EVT_BEGIN(kosho_event)
     CALL(evt_snd_bgmoff, 1024)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("コルテス"), 46, 35, 25)
-    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), 1107296800)
-    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_VIEW_CORRECTION | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_DRAW)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_cam3d_evt_set, 20, 157, 337, 20, 90, -6, 500, 11)
     WAIT_MS(1000)

@@ -15,6 +15,7 @@
 #include "evt/evt_lecture.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -65,7 +66,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"エルモス"*/"\x83\x47\x83\x8B\x83\x82\x83\x58", // name
-        0x608, // flags
+        NPC_FLAG_ENEMY | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         bubble_init_event, // initEvent
         bubble_move_event, // regularEvent

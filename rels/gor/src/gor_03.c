@@ -925,9 +925,9 @@ EVT_BEGIN(maffiaboss_ticket_check)
     CALL(evt_msg_print, 0, STRING("mac_2_117"), 0, STRING("マフィアボス"))
     IF_INT_EQUAL(LW(5), 0)
 #ifdef VERSION_G8ME01
-        CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), 1073741856)
+        CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #else
-        CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), 1073741824)
+        CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_WALL_COLLISION)
 #endif
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_get_position, STRING("マフィアボス"), LW(10), LW(11), LW(12))
@@ -937,9 +937,9 @@ EVT_BEGIN(maffiaboss_ticket_check)
         CALL(evt_msg_print, 0, STRING("mac_2_118"), 0, STRING("マフィアボス"))
         CALL(evt_npc_move_position, STRING("マフィアボス"), LW(10), LW(12), 0, FLOAT(60.0f), 0)
 #ifdef VERSION_G8ME01
-        CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), 1073741856)
+        CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #else
-        CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), 1073741824)
+        CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), NPC_FLAG_NO_WALL_COLLISION)
 #endif
         ELSE
         CALL_CHILD(PTR(maffiaboss_ticket_put))
@@ -963,7 +963,7 @@ EVT_BEGIN(maffiaboss_init)
             SPAWN_EVENT(PTR(maffiaboss_ticket_check))
         END_IF
         CASE_BETWEEN(268, 278)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 1090781184)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_SHADOW | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_set_position, STRING("me"), -200, 170, -152)
         CALL(evt_npc_set_rotate_offset, STRING("me"), 0, 20, 0)
         CALL(evt_npc_set_rotate, STRING("me"), 90, 0, 0)
@@ -996,8 +996,8 @@ EVT_BEGIN(maffiaboss_maffiaboss)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     SET_VALUE(LSWF(3), 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -210, -165, FLOAT(120.0f))
@@ -1090,8 +1090,8 @@ EVT_BEGIN(maffiaboss_maffiaboss)
     WAIT_MS(800)
     CALL(evt_msg_print, 0, STRING("mac_2_068"), 0, STRING("マフィアボス"))
     CALL(evt_cam3d_evt_off, 500, 11)
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GSW_STORY_PROGRESS, 122)
     SET_VALUE(LSWF(3), 0)
     CALL(evt_party_run, 0)
@@ -1118,11 +1118,11 @@ EVT_BEGIN(maffiaboss_airship_ticket)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     SET_VALUE(LSWF(3), 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("mac_2_088"), 0, STRING("マフィアボス"))
     CALL(evt_msg_select, 0, STRING("mac_2_088_yesno"))
     CALL(evt_msg_continue)
@@ -1253,11 +1253,11 @@ EVT_BEGIN(maffiaboss_airship_ticket)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GSWF(1236), 1)
     SET_VALUE(GF(15), 0)
     SPAWN_EVENT(PTR(maffiaboss_ticket_check))
@@ -1352,9 +1352,9 @@ EVT_END()
 EVT_BEGIN(maffiaboss_train_ticket)
     CALL(evt_set_dir_to_target, STRING("モニー"), STRING("マフィアボス"))
     CALL(evt_set_dir_to_target, STRING("ピートン"), STRING("マフィアボス"))
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("mac_5_046"), 0, STRING("マフィアボス"))
     CALL(evt_npc_set_anim, STRING("マフィアボス"), STRING("A_1"))
     WAIT_MS(500)
@@ -1393,7 +1393,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
     CALL(evt_msg_print, 0, STRING("mac_5_051"), 0, STRING("マフィアボス"))
     CALL(evt_npc_set_rotate, STRING("マフィアボス"), 0, 0, 0)
     CALL(evt_npc_jump_position_nohit, STRING("マフィアボス"), -250, 155, -120, 400, 20)
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), 262144)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_set_ry, STRING("マフィアボス"), 0)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, -485, 244, -125, -189, 195, -125, 500, 11)
@@ -1529,8 +1529,8 @@ EVT_BEGIN(maffiaboss_train_ticket)
     CALL(evt_msg_print, 0, STRING("mac_5_082"), 0, STRING("ピートン"))
     CALL(evt_msg_print, 0, STRING("mac_5_083"), 0, STRING("マフィア１"))
     CALL(evt_msg_print, 0, STRING("mac_5_084"), 0, STRING("マフィア２"))
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_off, 500, 11)
     SET_VALUE(GSW_STORY_PROGRESS, 279)
     BEGIN_INLINE_EVENT
@@ -1603,7 +1603,7 @@ EVT_BEGIN(maffiaboss_desk_talk)
         SET_VALUE(GF(10), 0)
 #endif
     END_INLINE_EVENT
-    CALL(evt_npc_flag_check, STRING("マフィアボス"), 16777216, LW(0))
+    CALL(evt_npc_flag_check, STRING("マフィアボス"), NPC_FLAG_NO_TALK_TURN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         BEGIN_INLINE_EVENT
             CALL(evt_set_dir_to_target, STRING("マフィアボス"), STRING("mario"))
@@ -1882,14 +1882,14 @@ EVT_BEGIN(peton_talk_common)
                     CALL(evt_item_get_item, STRING("mg3"))
                     CALL(evt_item_get_item_end_wait, STRING("mg3"))
                     CALL(evt_msg_print, 0, STRING("irai_19_04"), 0, STRING("ピートン"))
-                    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), 32)
+                    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT)
                     CALL(evt_npc_set_ry, STRING("ピートン"), 270)
                     WAIT_FRAMES(1)
                     CALL(evt_npc_wait_pera, STRING("ピートン"))
                     CALL(evt_msg_print, 0, STRING("irai_19_05"), 0, STRING("ピートン"))
                     CALL(evt_npc_move_position, STRING("ピートン"), 224, 478, 0, 150, 0)
                     CALL(evt_npc_move_position, STRING("ピートン"), -20, 478, 0, 150, 0)
-                    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), 32)
+                    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT)
                     SWITCH(GSW_STORY_PROGRESS)
                         CASE_BETWEEN(279, 281)
                         CALL(evt_npc_set_position, STRING("ピートン"), -290, 155, -80)
@@ -1947,7 +1947,7 @@ EVT_BEGIN(peton_desk_talk)
         WAIT_MS(800)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
     END_INLINE_EVENT
-    CALL(evt_npc_flag_check, STRING("ピートン"), 16777216, LW(0))
+    CALL(evt_npc_flag_check, STRING("ピートン"), NPC_FLAG_NO_TALK_TURN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         BEGIN_INLINE_EVENT
             CALL(evt_set_dir_to_target, STRING("ピートン"), STRING("mario"))
@@ -2010,7 +2010,7 @@ EVT_END()
 NpcSetupInfo cherryEnt[] = {
     {
         /*"チェリー"*/"\x83\x60\x83\x46\x83\x8A\x81\x5B", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         cherry_init, // initEvent
         NULL, // regularEvent
@@ -2937,7 +2937,7 @@ EVT_END()
 
 EVT_BEGIN(roten_4_init)
     CALL(evt_npc_set_position, STRING("me"), 0, -5, 335)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
 
@@ -2999,7 +2999,7 @@ EVT_END()
 
 static EVT_BEGIN(kinopiko_b_init)
     CALL(evt_npc_set_position, STRING("me"), 155, 0, -50)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
 
@@ -3121,7 +3121,7 @@ EVT_END()
 
 EVT_BEGIN(kokinopio_b_init)
     CALL(evt_npc_set_position, STRING("me"), 35, -5, 300)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
 
@@ -3211,7 +3211,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"マフィアボス"*/"\x83\x7D\x83\x74\x83\x42\x83\x41\x83\x7B\x83\x58", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         maffiaboss_init, // initEvent
         NULL, // regularEvent
@@ -3223,7 +3223,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マフィアボスカジノ"*/"\x83\x7D\x83\x74\x83\x42\x83\x41\x83\x7B\x83\x58\x83\x4A\x83\x57\x83\x6D", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         maffiaboss_casino_init, // initEvent
         NULL, // regularEvent
@@ -3235,7 +3235,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マフィア１"*/"\x83\x7D\x83\x74\x83\x42\x83\x41\x82\x50", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         maffia1_init, // initEvent
         NULL, // regularEvent
@@ -3247,7 +3247,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マフィア２"*/"\x83\x7D\x83\x74\x83\x42\x83\x41\x82\x51", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         maffia2_init, // initEvent
         NULL, // regularEvent
@@ -3259,7 +3259,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マフィア３"*/"\x83\x7D\x83\x74\x83\x42\x83\x41\x82\x52", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         maffia3_init, // initEvent
         NULL, // regularEvent
@@ -3271,7 +3271,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"モニー"*/"\x83\x82\x83\x6A\x81\x5B", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         mony_init, // initEvent
         NULL, // regularEvent
@@ -3283,7 +3283,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ピートン"*/"\x83\x73\x81\x5B\x83\x67\x83\x93", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         peton_init, // initEvent
         NULL, // regularEvent
@@ -3295,7 +3295,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"グルメボム兵"*/"\x83\x4F\x83\x8B\x83\x81\x83\x7B\x83\x80\x95\xBA", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gurume, // initEvent
         NULL, // regularEvent
@@ -3307,7 +3307,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         luigi_init, // initEvent
         NULL, // regularEvent
@@ -3319,7 +3319,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"バニーテレサ"*/"\x83\x6F\x83\x6A\x81\x5B\x83\x65\x83\x8C\x83\x54", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         bteresa_init, // initEvent
         NULL, // regularEvent
@@ -3331,7 +3331,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"客１"*/"\x8B\x71\x82\x50", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kyaku1_init, // initEvent
         NULL, // regularEvent
@@ -3343,7 +3343,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"客４"*/"\x8B\x71\x82\x53", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kyaku4_init, // initEvent
         NULL, // regularEvent
@@ -3355,7 +3355,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"店員"*/"\x93\x58\x88\xF5", // name
-        0x200, // flags
+        NPC_FLAG_TALK_POSE, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -3364,7 +3364,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ロテン４"*/"\x83\x8D\x83\x65\x83\x93\x82\x53", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         roten_4_init, // initEvent
         roten_4_regl, // regularEvent
@@ -3376,7 +3376,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピオ女Ａ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x82\x60", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kinopiko_a_init, // initEvent
         NULL, // regularEvent
@@ -3388,7 +3388,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピオ女Ｂ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x82\x61", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kinopiko_b_init, // initEvent
         kinopiko_b_regl, // regularEvent
@@ -3400,7 +3400,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピオＡ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x82\x60", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kinopio_a_init, // initEvent
         NULL, // regularEvent
@@ -3412,7 +3412,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピオ子供Ａ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x8B\x9F\x82\x60", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kokinopio_a_init, // initEvent
         NULL, // regularEvent
@@ -3424,7 +3424,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピオ子供Ｂ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x8B\x9F\x82\x61", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kokinopio_b_init, // initEvent
         kokinopio_b_regl, // regularEvent
@@ -3436,7 +3436,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ノコノコＡ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x82\x60", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         nokonoko_a_init, // initEvent
         NULL, // regularEvent
@@ -3448,7 +3448,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"クリボー１"*/"\x83\x4E\x83\x8A\x83\x7B\x81\x5B\x82\x50", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuribo_1_init, // initEvent
         NULL, // regularEvent
@@ -3546,22 +3546,22 @@ EVT_BEGIN(evt_door_01_1_open)
     CALL(evt_hitobj_onoff, STRING("A_kabe_01"), 1, 1)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_03_soto"), 1)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_04_soto"), 1)
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィア３"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("マフィアボスカジノ"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("グルメボム兵"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("バニーテレサ"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("客１"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("客４"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("ロテン４"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("キノピオ女Ａ"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("キノピオ女Ｂ"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("キノピオＡ"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("キノピオ子供Ａ"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("キノピオ子供Ｂ"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("ノコノコＡ"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("クリボー１"), 128)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィア３"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("マフィアボスカジノ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("グルメボム兵"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("バニーテレサ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("客１"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("客４"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("ロテン４"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("キノピオ女Ａ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("キノピオ女Ｂ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("キノピオＡ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("キノピオ子供Ａ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("キノピオ子供Ｂ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("ノコノコＡ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("クリボー１"), NPC_FLAG_NO_DRAW)
     CALL(evt_snd_bgmoff, 18432)
     CALL(evt_snd_envoff, 18432)
     CALL(evt_snd_env_lpf, 0, 800)
@@ -3578,22 +3578,22 @@ EVT_BEGIN(evt_door_01_1_close)
     CALL(evt_hitobj_onoff, STRING("A_kabe_01"), 1, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_03_soto"), 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_04_soto"), 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィア３"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("マフィアボスカジノ"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("グルメボム兵"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("バニーテレサ"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("客１"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("客４"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("ロテン４"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノピオ女Ａ"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノピオ女Ｂ"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノピオＡ"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノピオ子供Ａ"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノピオ子供Ｂ"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("ノコノコＡ"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィア３"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("マフィアボスカジノ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("グルメボム兵"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("バニーテレサ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("客１"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("客４"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("ロテン４"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノピオ女Ａ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノピオ女Ｂ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノピオＡ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノピオ子供Ａ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノピオ子供Ｂ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("ノコノコＡ"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), NPC_FLAG_NO_DRAW)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_doa_m"), 6144)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_doa_o"), 6144)
     CALL(evt_snd_bgmon, 160, 0)
@@ -4263,7 +4263,7 @@ EVT_END()
 
 EVT_BEGIN(uraguchi_tenin)
     CALL(evt_npc_move_position, STRING("店員"), -490, 24, 0, FLOAT(60.0f), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("店員"), 1024)
+    CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("店員"), STRING("S_1"))
     CALL(evt_npc_set_ry, STRING("店員"), 0)
     RETURN
@@ -4279,7 +4279,7 @@ EVT_BEGIN(uraguchi_event)
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING("店員"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("mac_2_041"), 0, STRING("店員"))
     CALL(evt_msg_select, 0, STRING("mac_2_041_select"))
     CALL(evt_msg_continue)
@@ -4288,7 +4288,7 @@ EVT_BEGIN(uraguchi_event)
     CALL(evt_msg_continue)
     IF_INT_NOT_EQUAL(LW(0), 2)
         CALL(evt_msg_print, 0, STRING("mac_2_044"), 0, STRING("店員"))
-        CALL(evt_npc_flag_onoff, 0, STRING("店員"), 1073741856)
+        CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         SET_VALUE(GW(10), 0)
         SET_VALUE(GW(11), 0)
         CALL(evt_mario_key_onoff, 1)
@@ -4330,7 +4330,7 @@ EVT_BEGIN(uraguchi_event)
         END_LOOP
         CALL(evt_party_set_dir, 0, 270, 200)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING("店員"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("店員"), 2)
     CALL(evt_npc_move_position, STRING("店員"), -486, -195, 0, FLOAT(60.0f), 0)
     WAIT_FRAMES(1)
@@ -4351,8 +4351,8 @@ EVT_BEGIN(uraguchi_event)
     SET_VALUE(LW(0), PTR(&door_data_01_1))
     CALL_CHILD(PTR(evt_door_01_entry))
     SET_VALUE(GSWF(1230), 1)
-    CALL(evt_npc_flag_onoff, 0, STRING("店員"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("店員"), 4194304)
+    CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("店員"), NPC_FLAG_RESUME_AFTER_TALK)
     CALL(evt_npc_get_reglid, STRING("店員"), LW(0))
     DELETE_EVENT(LW(0))
     CALL(evt_npc_change_interrupt, STRING("店員"), 1, PTR(uraguchi_tenin))
@@ -4427,7 +4427,7 @@ static ShopperData35 shopper_data = {
 
 EVT_BEGIN(majorin_nusumigiki)
     CALL(evt_npc_set_ry_lr, STRING("マジョリン"), 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_TALK_POSE)
     SET_FLOAT_VALUE(GW(9), FLOAT(1.0f))
     BEGIN_INLINE_EVENT
         CALL(dummy_shadow, -250, 0, 125, GW(9))
@@ -4888,7 +4888,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     END_LOOP
     CALL(viewport, 0, 0, 1, 1)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("グルメボム兵"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("グルメボム兵"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_3"), STRING("T_3"))
     CALL(evt_npc_set_anim, STRING("グルメボム兵"), STRING("S_3"))
     WAIT_MS(3000)
@@ -5030,7 +5030,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
             CALL(evt_cam3d_evt_set, -150, 120, 890, -150, 50, 470, 800, 11)
             WAIT_MS(800)
             IF_INT_LESS_OR_EQUAL(LW(0), 1)
-                CALL(evt_npc_flag_onoff, 0, STRING("グルメボム兵"), 1536)
+                CALL(evt_npc_flag_onoff, 0, STRING("グルメボム兵"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                 CALL(evt_npc_set_anim, STRING("グルメボム兵"), STRING("B_1"))
             END_IF
             CALL(evt_msg_print, 0, STRING("kuji_bomb_023_1"), 0, STRING("グルメボム兵"))
@@ -5039,7 +5039,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
                 CALL_CHILD(PTR(kuzi_bomb_bomb))
                 SET_VALUE(LW(0), GW(0))
             END_IF
-            CALL(evt_npc_flag_onoff, 1, STRING("グルメボム兵"), 1536)
+            CALL(evt_npc_flag_onoff, 1, STRING("グルメボム兵"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
             SWITCH(LW(0))
                 CASE_EQUAL(0)
                 SET_VALUE(LW(1), STRING("kuji_bomb_024"))
@@ -6247,7 +6247,7 @@ void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
                     break;
                 case 0x2B7:
                 case 0x2B8:
-                    npc->flags &= ~0x200;
+                    npc->flags &= ~NPC_FLAG_TALK_POSE;
                     animPoseSetAnim(npc->poseId, "B_1", 1);
                     break;
             }

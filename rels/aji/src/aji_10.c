@@ -626,7 +626,7 @@ static EVT_BEGIN(peach_evt_stg1)
         CALL(evt_mario_mov_pos2, -90, 0, 60)
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING("手下２"), -120, 0, 0, 60, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("手下３"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("手下３"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(PTR(monitor_off))
     WAIT_MS(700)
     CALL(evt_msg_print, 0, STRING("peach_aji_17"), 0, STRING("シュリョー"))
@@ -634,9 +634,9 @@ static EVT_BEGIN(peach_evt_stg1)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("peach_aji_17_01"), 0, STRING("シュリョー"))
     CALL(evt_msg_print, 0, STRING("peach_aji_18"), 0, STRING("カンブー"))
-    CALL(evt_npc_flag_onoff, 1, STRING("カンブー"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("カンブー"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_move_position, STRING("カンブー"), -150, -150, 0, 100, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("カンブー"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("カンブー"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_set_position, STRING("シュリョー"), 200, 30, 0)
     CALL(evt_cam3d_evt_set, 200, 130, 283, 200, 78, -13, 0, 11)
     WAIT_FRAMES(1)
@@ -673,7 +673,7 @@ static EVT_BEGIN(peach_evt_stg1)
     WAIT_MS(800)
     CALL(evt_npc_set_anim, STRING("手下２"), STRING("S_1"))
     CALL(evt_npc_move_position, STRING("手下２"), -30, 0, 1000, 0, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("手下２"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("手下２"), NPC_FLAG_NO_DRAW)
     WAIT_MS(1000)
     LABEL(100)
     CALL(evt_msg_toge, 1, 0, 0, 0)
@@ -730,12 +730,12 @@ static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_npc_set_ry, STRING("シュリョー"), 270)
     CALL(evt_npc_set_position, STRING("研究員"), 60, 0, 0)
     CALL(evt_npc_set_ry, STRING("研究員"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("研究員"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("研究員"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 273, 972, 0, 100, -13, 0, 11)
     CALL(evt_seq_wait, 2)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_fade_end_wait)
-    CALL(evt_npc_flag_onoff, 0, STRING("研究員"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("研究員"), NPC_FLAG_INSTANT_TURN)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, 200, 130, 283, 200, 78, -13, 0, 11)
     WAIT_FRAMES(1)
@@ -840,19 +840,19 @@ static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_npc_set_ry, STRING("シュリョー"), 270)
     CALL(evt_npc_set_position, STRING("マジョリン"), 60, 0, 0)
     CALL(evt_npc_set_ry, STRING("マジョリン"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_position, STRING("マリリン"), 30, 0, -30)
     CALL(evt_npc_set_ry, STRING("マリリン"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_position, STRING("ビビアン"), 20, 0, 30)
     CALL(evt_npc_set_ry, STRING("ビビアン"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 273, 972, 0, 100, -13, 0, 11)
     CALL(evt_seq_wait, 2)
     CALL(evt_fade_end_wait)
-    CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), 32768)
-    CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), 32768)
-    CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), NPC_FLAG_INSTANT_TURN)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, 200, 130, 283, 200, 78, -13, 0, 11)
     WAIT_FRAMES(1)
@@ -921,7 +921,7 @@ EVT_END()
 EVT_BEGIN(peach_evt_stg3_syuryo_talk)
     CALL(evt_snd_bgmoff, 512)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("シュリョー"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("シュリョー"), NPC_FLAG_NO_HIT)
     CALL_CHILD(PTR(peach_move))
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(300)
@@ -960,12 +960,12 @@ static EVT_BEGIN(peach_evt_stg4)
     CALL(evt_npc_set_ry, STRING("シュリョー"), 270)
     CALL(evt_npc_set_position, STRING("研究員"), 60, 0, 0)
     CALL(evt_npc_set_ry, STRING("研究員"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("研究員"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("研究員"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 273, 972, 0, 100, -13, 0, 11)
     CALL(evt_seq_wait, 2)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_fade_end_wait)
-    CALL(evt_npc_flag_onoff, 0, STRING("研究員"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("研究員"), NPC_FLAG_INSTANT_TURN)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, 200, 130, 283, 200, 78, -13, 0, 11)
     WAIT_FRAMES(1)
@@ -1075,11 +1075,11 @@ static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_npc_set_ry, STRING("シュリョー"), 270)
     CALL(evt_npc_set_position, STRING("手下１"), 60, 0, 0)
     CALL(evt_npc_set_ry, STRING("手下１"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("手下１"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("手下１"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 273, 972, 0, 100, -13, 0, 11)
     CALL(evt_seq_wait, 2)
     CALL(evt_fade_end_wait)
-    CALL(evt_npc_flag_onoff, 0, STRING("手下１"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("手下１"), NPC_FLAG_INSTANT_TURN)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, 200, 130, 283, 200, 78, -13, 0, 11)
     WAIT_FRAMES(1)
@@ -1107,7 +1107,7 @@ static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_cam3d_evt_set, 190, 150, 354, 190, 75, -13, 1200, 11)
     CALL(evt_npc_move_position, STRING("手下１"), 115, 0, 0, FLOAT(95.0f), 4)
     CALL(evt_npc_get_position, STRING("手下１"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 1, STRING("手下１"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("手下１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     LOOP(5)
         ADD(LW(0), 2)
         ADD(LW(1), 2)
@@ -1115,10 +1115,10 @@ static EVT_BEGIN(peach_evt_stg6)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_npc_set_position, STRING("手下１"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 0, STRING("手下１"), 1073741824)
+    CALL(evt_npc_flag_onoff, 0, STRING("手下１"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_move_position, STRING("手下１"), 145, -5, 0, FLOAT(95.0f), 4)
     CALL(evt_npc_get_position, STRING("手下１"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 1, STRING("手下１"), 1073741824)
+    CALL(evt_npc_flag_onoff, 1, STRING("手下１"), NPC_FLAG_NO_WALL_COLLISION)
     LOOP(5)
         ADD(LW(0), 2)
         ADD(LW(1), 2)
@@ -1185,7 +1185,7 @@ static EVT_BEGIN(syuryo_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 167)
         CALL(evt_npc_set_position, STRING("me"), -100, 0, 0)
         CALL(evt_npc_change_interrupt, STRING("me"), 6, PTR(peach_evt_stg3_syuryo_talk))
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
     END_IF
     RETURN
 EVT_END()
@@ -1202,7 +1202,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"手下２"*/"\x8E\xE8\x89\xBA\x82\x51", // name
-        0x20, // flags
+        NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         teshita2_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1212,7 +1212,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"手下３"*/"\x8E\xE8\x89\xBA\x82\x52", // name
-        0x20, // flags
+        NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         teshita3_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1222,7 +1222,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"カンブー"*/"\x83\x4A\x83\x93\x83\x75\x81\x5B", // name
-        0x20, // flags
+        NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         kanbu_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1232,7 +1232,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"シュリョー"*/"\x83\x56\x83\x85\x83\x8A\x83\x87\x81\x5B", // name
-        0x20, // flags
+        NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         syuryo_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1297,7 +1297,7 @@ EVT_BEGIN(aji_10_init_evt)
         CALL(evt_npc_entry, STRING("研究員"), STRING("c_zako_m"))
         CALL(evt_npc_set_tribe, STRING("研究員"), STRING("第三勢力研究員"))
         CALL(evt_npc_set_stay_anim, STRING("研究員"))
-        CALL(evt_npc_flag_onoff, 1, STRING("研究員"), 1536)
+        CALL(evt_npc_flag_onoff, 1, STRING("研究員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         SPAWN_EVENT(PTR(peach_evt_stg2))
         CASE_EQUAL(164)
         CALL(evt_mario_set_mode, 1)
@@ -1309,7 +1309,7 @@ EVT_BEGIN(aji_10_init_evt)
         CALL(evt_npc_entry, STRING("研究員"), STRING("c_zako_m"))
         CALL(evt_npc_set_tribe, STRING("研究員"), STRING("第三勢力研究員"))
         CALL(evt_npc_set_stay_anim, STRING("研究員"))
-        CALL(evt_npc_flag_onoff, 1, STRING("研究員"), 1536)
+        CALL(evt_npc_flag_onoff, 1, STRING("研究員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         SPAWN_EVENT(PTR(peach_evt_stg4))
         CASE_EQUAL(261)
         CALL(evt_mario_set_mode, 1)
@@ -1322,7 +1322,7 @@ EVT_BEGIN(aji_10_init_evt)
         CALL(evt_npc_set_tribe, STRING("みはり"), STRING("バリアーンカスタム"))
         CALL(evt_npc_set_position, STRING("みはり"), 370, 60, -65)
         CALL(evt_npc_set_ry, STRING("みはり"), 270)
-        CALL(evt_npc_flag_onoff, 1, STRING("みはり"), 1536)
+        CALL(evt_npc_flag_onoff, 1, STRING("みはり"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         BEGIN_INLINE_EVENT
             CALL(evt_bero_exec_wait, 65536)
             SET_VALUE(LW(0), STRING("e_bero"))

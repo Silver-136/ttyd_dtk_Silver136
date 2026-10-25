@@ -825,7 +825,7 @@ EVT_BEGIN(talk_sakaba)
         CASE_LESS(131)
         CALL(evt_msg_print, 0, STRING("stg3_tou_05"), 0, 0)
         CASE_EQUAL(139)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_set_ry, STRING("me"), 90)
         BEGIN_INLINE_EVENT
             CALL(evt_mario_mov_pos2, 650, 45, FLOAT(80.0f))
@@ -893,7 +893,7 @@ EVT_BEGIN(talk_sakaba)
         CALL(evt_pouch_receive_mail, 8)
         CALL(evt_pouch_open_mail, 8)
         SET_VALUE(GSW_STORY_PROGRESS, 140)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
         CASE_EQUAL(140)
         CALL(evt_msg_print, 0, STRING("stg3_tou_297_09"), 0, 0)
         CASE_BETWEEN(354, 354)
@@ -938,7 +938,7 @@ EVT_BEGIN(talk_mise)
 EVT_END()
 
 EVT_BEGIN(init_hot)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 262144)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_set_position, STRING("me"), -400, 20, -125)
     RETURN
 EVT_END()
@@ -1546,7 +1546,7 @@ EVT_END()
 
 static EVT_BEGIN(talk_sarary)
     IF_INT_EQUAL(GSW(1420), 24)
-        CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_NO_HIT)
         BEGIN_INLINE_EVENT
             CALL(evt_party_move_pos2, 0, -160, -95, 60)
             CALL(evt_party_set_dir_npc, 0, STRING("サラリーマン"))
@@ -1557,7 +1557,7 @@ static EVT_BEGIN(talk_sarary)
         WAIT_FRAMES(1)
         CALL(evt_npc_wait_pera, STRING("サラリーマン"))
         WAIT_MS(300)
-        CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), 32)
+        CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), NPC_FLAG_NO_HIT)
         IF_INT_EQUAL(GSWF(5405), 0)
             CALL(evt_msg_print, 0, STRING("irai_24_001"), 0, 0)
             CALL(evt_msg_print_add, 0, STRING("irai_24_002"))
@@ -1599,11 +1599,11 @@ static EVT_BEGIN(talk_sarary)
                 WAIT_MS(500)
                 CALL(evt_mario_set_dir, 270, 300, 0)
             END_INLINE_EVENT
-            CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
             CALL(evt_npc_move_position, STRING("me"), -353, -54, 0, FLOAT(60.0f), 0)
             CALL(evt_npc_status_onoff, 0, STRING("me"), 2)
-            CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
             WAIT_FRAMES(1)
             CALL(evt_msg_print, 0, STRING("irai_24_022"), 0, 0)
             CALL(evt_msg_print, 0, STRING("irai_24_023"), 0, STRING("ホットドッグ"))
@@ -1704,7 +1704,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"飛空船"*/"\x94\xF2\x8B\xF3\x91\x44", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_hikuu, // initEvent
         NULL, // regularEvent
@@ -1716,7 +1716,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"酒場店主"*/"\x8E\xF0\x8F\xEA\x93\x58\x8E\xE5", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_sakaba, // initEvent
         NULL, // regularEvent
@@ -1728,7 +1728,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"店員"*/"\x93\x58\x88\xF5", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_mise, // initEvent
         NULL, // regularEvent
@@ -1740,7 +1740,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ホットドッグ"*/"\x83\x7A\x83\x62\x83\x67\x83\x68\x83\x62\x83\x4F", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_hot, // initEvent
         NULL, // regularEvent
@@ -1752,7 +1752,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"たまご"*/"\x82\xBD\x82\xDC\x82\xB2", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -1761,7 +1761,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"パパ"*/"\x83\x70\x83\x70", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_papa, // initEvent
         NULL, // regularEvent
@@ -1773,7 +1773,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ママ"*/"\x83\x7D\x83\x7D", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_mama, // initEvent
         NULL, // regularEvent
@@ -1785,7 +1785,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"コナリキン"*/"\x83\x52\x83\x69\x83\x8A\x83\x4C\x83\x93", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_konari, // initEvent
         NULL, // regularEvent
@@ -1797,7 +1797,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"３人娘１"*/"\x82\x52\x90\x6C\x96\xBA\x82\x50", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_musume_1, // initEvent
         NULL, // regularEvent
@@ -1809,7 +1809,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"３人娘２"*/"\x82\x52\x90\x6C\x96\xBA\x82\x51", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_musume_2, // initEvent
         NULL, // regularEvent
@@ -1821,7 +1821,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"３人娘３"*/"\x82\x52\x90\x6C\x96\xBA\x82\x52", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_musume_3, // initEvent
         NULL, // regularEvent
@@ -1833,7 +1833,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピオ1"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x31", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino_1, // initEvent
         reg_kino_1, // regularEvent
@@ -1845,7 +1845,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピオ2"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x32", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino_2, // initEvent
         NULL, // regularEvent
@@ -1857,7 +1857,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ロテン2"*/"\x83\x8D\x83\x65\x83\x93\x32", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_roten_2, // initEvent
         NULL, // regularEvent
@@ -1869,7 +1869,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ジュゲム1"*/"\x83\x57\x83\x85\x83\x51\x83\x80\x31", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_jugem_1, // initEvent
         NULL, // regularEvent
@@ -1881,7 +1881,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ジュゲム2"*/"\x83\x57\x83\x85\x83\x51\x83\x80\x32", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_jugem_2, // initEvent
         NULL, // regularEvent
@@ -1893,7 +1893,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"美女"*/"\x94\xFC\x8F\x97", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_bijyo, // initEvent
         NULL, // regularEvent
@@ -1905,7 +1905,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キザ野郎"*/"\x83\x4C\x83\x55\x96\xEC\x98\x59", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kiza, // initEvent
         NULL, // regularEvent
@@ -1917,7 +1917,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         init_sarary, // initEvent
         NULL, // regularEvent
@@ -2053,10 +2053,10 @@ EVT_BEGIN(dummy)
 EVT_END()
 
 EVT_BEGIN(hot_move_evt)
-    CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), 262144)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), 1073741824)
+    CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_status_onoff, 1, STRING("ホットドッグ"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     LABEL(0)
     CALL(evt_npc_get_position, STRING("たまご"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("ホットドッグ"), LW(3), LW(4), LW(5))
@@ -2073,8 +2073,8 @@ EVT_BEGIN(hot_move_evt)
 EVT_END()
 
 EVT_BEGIN(hot_move_evt2)
-    CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), 262144)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), 1536)
+    CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_move_position, STRING("ホットドッグ"), -288, -110, 0, FLOAT(60.0f), 1)
     CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("たまご"))
     RETURN
@@ -2082,11 +2082,11 @@ EVT_END()
 
 EVT_BEGIN(evt_oyaji_move)
     WAIT_MS(1000)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), 1073741824)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_status_onoff, 1, STRING("ホットドッグ"), 2)
     CALL(evt_npc_move_position, STRING("ホットドッグ"), -470, -95, 0, FLOAT(100.0f), 1)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), 262144)
+    CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_set_position, STRING("ホットドッグ"), -333, 10, -258)
     CALL(evt_npc_move_position, STRING("ホットドッグ"), -238, -180, 0, FLOAT(100.0f), 1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_242"), 0, STRING("ホットドッグ"))
@@ -2178,7 +2178,7 @@ s32 yoshi_data[] = {
 };
 
 EVT_BEGIN(evt_tamago_move)
-    CALL(evt_npc_flag_onoff, 1, STRING("たまご"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("たまご"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("たまご"), -400, 10, -135)
     SET_VALUE(LW(3), 600)
     CALL(evt_npc_jump_position_nohit, STRING("たまご"), -400, 40, -60, LW(3), 60)
@@ -2260,7 +2260,7 @@ EVT_BEGIN(evt_tamago_move)
     CALL(evt_npc_change_interrupt, STRING("ホットドッグ"), 1, PTR(hot_move_evt2))
     CALL(evt_npc_restart_regular_event, STRING("ホットドッグ"))
     CALL(evt_npc_change_interrupt, STRING("たまご"), 6, PTR(talk_tamago))
-    CALL(evt_npc_flag_onoff, 0, STRING("たまご"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("たまご"), NPC_FLAG_NO_HIT)
     CALL(evt_snd_bgmon_f, 768, STRING("BGM_STG3_URN1"), 2000)
     CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU1"))
     CALL(evt_mario_key_onoff, 1)
@@ -2372,8 +2372,8 @@ EVT_BEGIN(talk_tamago)
     END_LOOP
     SET_VALUE(LW(3), 400)
     SPAWN_EVENT(PTR(evt_tamago_scale2))
-    CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), 131088)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), 262144)
+    CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_set_position, STRING("ホットドッグ"), -400, 20, -125)
     CALL(evt_run_case_evt, 9, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
     CALL(evt_npc_get_position, STRING("たまご"), LW(0), LW(1), LW(2))
@@ -2510,7 +2510,7 @@ EVT_BEGIN(evt_gondora2)
     END_IF
     BEGIN_INLINE_EVENT
         CALL(evt_npc_status_onoff, 1, STRING("飛空船"), 2)
-        CALL(evt_npc_flag_onoff, 1, STRING("飛空船"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("飛空船"), NPC_FLAG_NO_HIT)
     END_INLINE_EVENT
     WAIT_MS(1000)
     CALL(evt_mario_mov_pos2, 20, 490, FLOAT(80.0f))
@@ -2700,11 +2700,11 @@ static EVT_BEGIN(sekai_yami_npc_init)
     CALL(evt_npc_set_tribe, STRING("キノシコワ"), STRING("キノシコワ"))
     CALL(evt_npc_set_position, STRING("キノシコワ"), 4, 0, 420)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_set_position, STRING("飛空船"), -170, 0, -20)
     CALL(evt_npc_set_position, STRING("ジュゲム1"), 50, 0, 200)
     CALL(evt_npc_set_position, STRING("ロテン2"), -130, 0, 220)
-    CALL(evt_npc_flag_onoff, 0, STRING("ロテン2"), 2048)
+    CALL(evt_npc_flag_onoff, 0, STRING("ロテン2"), NPC_FLAG_HIDE)
     CALL(evt_npc_set_position, STRING("パパ"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("ママ"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("コナリキン"), 0, -1000, 0)
@@ -2812,39 +2812,39 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_tribe, STRING("キノシコワ"), STRING("キノシコワ"))
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, 350)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), 33280)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_entry, STRING("ブレッドハート"), STRING("c_bred_h"))
     CALL(evt_npc_set_tribe, STRING("ブレッドハート"), STRING("ブレッドハート"))
     CALL(evt_npc_set_position, STRING("ブレッドハート"), -50, 0, 250)
     CALL(evt_npc_set_ry, STRING("ブレッドハート"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ブレッドハート"), 33280)
+    CALL(evt_npc_flag_onoff, 1, STRING("ブレッドハート"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_entry, STRING("シンエモンＡ"), STRING("c_sinemon_a"))
     CALL(evt_npc_set_tribe, STRING("シンエモンＡ"), STRING("アイアンシンエモン"))
     CALL(evt_npc_set_position, STRING("シンエモンＡ"), 50, 0, 375)
     CALL(evt_npc_set_ry, STRING("シンエモンＡ"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), 33280)
+    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_scale, STRING("シンエモンＡ"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     CALL(evt_npc_entry, STRING("シンエモンＢ"), STRING("c_sinemon_m"))
     CALL(evt_npc_set_tribe, STRING("シンエモンＢ"), STRING("アイアンシンエモン2"))
     CALL(evt_npc_set_position, STRING("シンエモンＢ"), -50, 0, 400)
     CALL(evt_npc_set_ry, STRING("シンエモンＢ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), 33280)
+    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_scale, STRING("シンエモンＢ"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
     CALL(evt_npc_entry, STRING("レポーター"), STRING("c_report"))
     CALL(evt_npc_set_tribe, STRING("レポーター"), STRING("リポーター"))
     CALL(evt_npc_set_position, STRING("レポーター"), 75, 0, 350)
     CALL(evt_npc_set_ry, STRING("レポーター"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("レポーター"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("レポーター"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_entry, STRING("カメラマン"), STRING("c_kinopio_b"))
     CALL(evt_npc_set_tribe, STRING("カメラマン"), STRING("キノピオ青"))
     CALL(evt_npc_set_position, STRING("カメラマン"), 100, 0, 375)
     CALL(evt_npc_set_ry, STRING("カメラマン"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("カメラマン"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("カメラマン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_entry, STRING("ウラノコ"), STRING("c_uranoko"))
     CALL(evt_npc_set_tribe, STRING("ウラノコ"), STRING("ウラノコ"))
     CALL(evt_npc_set_position, STRING("ウラノコ"), -100, 0, 300)
     CALL(evt_npc_set_ry, STRING("ウラノコ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ウラノコ"), 33280)
+    CALL(evt_npc_flag_onoff, 1, STRING("ウラノコ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     RETURN
 EVT_END()
 
@@ -3497,7 +3497,7 @@ EVT_BEGIN(tou_01_init_evt)
                 CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_URN1"))
                 CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU1"))
                 CALL(evt_snd_bgmon, 160, 0)
-                CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), 262144)
+                CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
                 CALL(evt_npc_set_position, STRING("たまご"), -400, 110, -120)
                 CALL(evt_npc_set_position, STRING("ホットドッグ"), -288, 10, -110)
                 CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("たまご"))

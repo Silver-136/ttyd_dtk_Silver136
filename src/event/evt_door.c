@@ -1694,9 +1694,9 @@ USER_FUNC(npc_hide_onoff) {
         NpcEntry* npc = npcNameToPtr_NoAssert(list[i]);
         if (npc) {
             if (on) {
-                npc->flags |= 0x800;
+                npc->flags |= NPC_FLAG_HIDE;
             } else {
-                npc->flags &= ~0x800;
+                npc->flags &= ~NPC_FLAG_HIDE;
             }
         }
     }

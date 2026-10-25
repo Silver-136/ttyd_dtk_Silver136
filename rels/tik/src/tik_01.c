@@ -18,6 +18,7 @@
 #include "evt/evt_case.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_npc_set_damage_anim);
 USER_FUNC(evt_npc_set_run_anim);
@@ -254,9 +255,9 @@ EVT_BEGIN(gorotuki_sanninngumi)
     CALL(evt_npc_set_position, STRING("クリボー１"), 110, 75, 65)
     CALL(evt_npc_set_position, STRING("クリボー２"), 140, 95, 35)
     CALL(evt_npc_set_position, STRING("クリボー３"), 155, 75, 85)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), 1073742368)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリボー２"), 1073742368)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリボー３"), 1073742368)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリボー２"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリボー３"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(0), -100)
@@ -349,7 +350,7 @@ EVT_BEGIN(gorotuki_sanninngumi)
     CALL(evt_npc_set_damage_anim, STRING("クリボー３"))
     CALL(evt_cam3d_evt_set, -120, 150, 588, -120, 55, 37, 0, 11)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("クリボー１"), 512)
+    CALL(evt_npc_flag_onoff, 0, STRING("クリボー１"), NPC_FLAG_TALK_POSE)
     CALL(evt_msg_print, 0, STRING("mac_0_093"), 0, STRING("クリボー１"))
     SET_VALUE(GF(0), 1)
     SET_VALUE(GF(1), 1)

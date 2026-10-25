@@ -2142,7 +2142,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"村長"*/"\221\272\222\267", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_soncho, // initEvent
         NULL, // regularEvent
@@ -2154,7 +2154,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ニトロ"*/"\203j\203g\203\215", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_nitoro, // initEvent
         NULL, // regularEvent
@@ -2166,7 +2166,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ペントリット"*/("\203y\203\223\203g\203\212\203b\203g"), // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_pentrit, // initEvent
         NULL, // regularEvent
@@ -2178,7 +2178,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"スラリー"*/("\203X\203\211\203\212\201["), // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_surary, // initEvent
         NULL, // regularEvent
@@ -2190,7 +2190,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ボムヘイD"*/"\203{\203\200\203w\203CD", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_d, // initEvent
         NULL, // regularEvent
@@ -2202,7 +2202,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ホワイト"*/("\203z\203\217\203C\203g"), // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_white, // initEvent
         NULL, // regularEvent

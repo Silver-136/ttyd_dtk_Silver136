@@ -17,6 +17,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 #include "driver/msgdrv.h"
 #include "mario/mario.h"
@@ -1778,12 +1779,12 @@ EVT_BEGIN(peach_evt_ele_2)
         CALL(evt_msg_print, 0, STRING("peach_aji_128"), 0, 0)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("peach_aji_129"), 0, STRING("mario"))
-        CALL(evt_npc_flag_onoff, 0, STRING("手下１"), 128)
+        CALL(evt_npc_flag_onoff, 0, STRING("手下１"), NPC_FLAG_NO_DRAW)
         CALL(evt_npc_set_position, STRING("手下１"), 700, 1000, 0)
         CALL(evt_npc_set_ry, STRING("手下１"), 270)
         CALL(evt_npc_move_position, STRING("手下１"), 300, 0, 0, 70, 0)
         CALL(evt_npc_set_position, STRING("手下１"), 0, -1000, 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("手下１"), 128)
+        CALL(evt_npc_flag_onoff, 1, STRING("手下１"), NPC_FLAG_NO_DRAW)
         WAIT_MS(2000)
         CALL(evt_msg_print, 0, STRING("peach_aji_131"), 0, 0)
     END_IF
@@ -1977,7 +1978,7 @@ EVT_BEGIN(peach_evt_init)
             CALL(evt_npc_set_ry, STRING("見張り"), 90)
             CALL(evt_npc_set_width, STRING("見張り"), 30)
             CALL(evt_npc_set_height, STRING("見張り"), 33)
-            CALL(evt_npc_flag_onoff, 1, STRING("見張り"), 1536)
+            CALL(evt_npc_flag_onoff, 1, STRING("見張り"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
             CALL(evt_npc_set_stay_anim, STRING("見張り"))
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, 2)
@@ -2022,7 +2023,7 @@ EVT_END()
 
 static EVT_BEGIN(teshita1_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 268435456)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(167)
@@ -2030,7 +2031,7 @@ static EVT_BEGIN(teshita1_init)
         RETURN
         CASE_DEFAULT
         CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 160)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW)
     END_SWITCH
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     RETURN
@@ -2045,7 +2046,7 @@ EVT_END()
 
 static EVT_BEGIN(teshita2_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 268435456)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(167)
@@ -2055,7 +2056,7 @@ static EVT_BEGIN(teshita2_init)
         CALL(evt_npc_set_position, STRING("me"), 0, 1000, -15)
         CASE_DEFAULT
         CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 160)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW)
     END_SWITCH
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     RETURN
@@ -2093,7 +2094,7 @@ static EVT_BEGIN(teshita3_init)
         CALL(evt_npc_set_position, STRING("me"), 750, 1000, 20)
         CASE_DEFAULT
         CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 160)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW)
     END_SWITCH
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     RETURN

@@ -96,7 +96,7 @@ USER_FUNC(bress) {
         event->userdata[2] = irand(60) + 60;
     }
     for (i = 0, npc = npcWork->entries; i < npcWork->total; i++, npc++) {
-        if ((npc->flags & 1) && timers[i] == 0) {
+        if ((npc->flags & NPC_FLAG_IN_USE) && timers[i] == 0) {
             AnimationPose* pose = animPoseGetAnimPosePtr(npc->poseId);
             effMistEntry(4, 30, npc->position.x, npc->height / 2 + npc->position.y, npc->position.z,
                          270.0f - pose->peraTargetRotY);

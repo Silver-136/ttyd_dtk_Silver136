@@ -199,7 +199,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"テレサ"*/"\x83\x65\x83\x8C\x83\x54", // name
-        0x40000620, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -494,7 +494,7 @@ EVT_BEGIN(evt_teresa_box_open)
     WAIT_MS(1200)
     CALL(evt_npc_set_position, STRING("テレサ"), 0, 6, 80)
     CALL(evt_npc_set_ry, STRING("テレサ"), 90)
-    CALL(evt_npc_flag_onoff, 0, STRING("テレサ"), 128)
+    CALL(evt_npc_flag_onoff, 0, STRING("テレサ"), NPC_FLAG_NO_DRAW)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(14), 0)
         SET_VALUE(LW(15), 0)

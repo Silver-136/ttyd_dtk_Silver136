@@ -19,6 +19,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "rels/mri/include/mri.h"
+#include "driver/npcdrv.h"
 
 
 USER_FUNC(urouro_init_func);
@@ -206,7 +207,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"トゲ族１"*/"\x83\x67\x83\x51\x91\xB0\x82\x50", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_1_init, // initEvent
         NULL, // regularEvent
@@ -218,7 +219,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"トゲ族２"*/"\x83\x67\x83\x51\x91\xB0\x82\x51", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_2_init, // initEvent
         NULL, // regularEvent
@@ -230,7 +231,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"トゲ族３"*/"\x83\x67\x83\x51\x91\xB0\x82\x52", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_3_init, // initEvent
         NULL, // regularEvent
@@ -242,7 +243,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"トゲ族４"*/"\x83\x67\x83\x51\x91\xB0\x82\x53", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_4_init, // initEvent
         NULL, // regularEvent
@@ -254,7 +255,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"トゲ族５"*/"\x83\x67\x83\x51\x91\xB0\x82\x54", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_5_init, // initEvent
         toge_5_regl, // regularEvent
@@ -266,7 +267,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"トゲ族６"*/"\x83\x67\x83\x51\x91\xB0\x82\x55", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         toge_6_init, // initEvent
         NULL, // regularEvent
@@ -380,7 +381,7 @@ static EVT_BEGIN(puni_win)
     CALL(evt_cam3d_evt_set, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9), 500, 11)
     WAIT_MS(500)
     CALL(evt_puni_flag_onoff, 1, 0, 131072)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE)
     CALL(evt_puni_get_flag, 1, LW(0))
     AND(LW(0), 16384)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -568,7 +569,7 @@ static EVT_BEGIN(puni_vs_toge)
     WAIT_FRAMES(1)
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_puni_flag_onoff, 1, 0, 262144)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_set_ry_lr, STRING("ガイドsp"), 1)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG2_PUNITOGE1"))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e17_00"), 0, STRING("ガイドsp"))

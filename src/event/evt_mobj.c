@@ -3217,7 +3217,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             NpcWork* wp = npcGetWorkPtr();
             NpcEntry* npc = wp->entries;
             for (i = 0; i < wp->total; i++, npc++) {
-                if ((u32)npc->flags & 1) {
+                if ((u32)npc->flags & NPC_FLAG_IN_USE) {
                     if (kururing_in_box(mobj->position.x, mobj->position.z, npc->position.x, npc->position.z, 42.420002f)) {
                         npc->position.y = *(f32*)joint;
                     }
@@ -4236,7 +4236,7 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
         sprintf(buf, "%s%2x", name, i);
         npcEntry(buf, "c_fireber");
         npc = npcNameToPtr(buf);
-        npc->flags |= 0x8000000;
+        npc->flags |= NPC_FLAG_2D;
         npc->hazardFlags |= 0xf;
         npc->position.x = x;
         npc->position.y = 25.0f + y + 25.0f * i;
@@ -4246,7 +4246,7 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
         npc->position.z = 175.0f + z;
 #endif
         animPoseSetAnim(npc->poseId, "FRB_S_1", 1);
-        npc->flags |= 0x40000;
+        npc->flags |= NPC_FLAG_NO_SHADOW;
     }
     return EVT_RETURN_DONE;
 }

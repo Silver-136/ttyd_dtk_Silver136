@@ -10,6 +10,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_snd_envoff_f);
 #ifdef VERSION_G8ME01
@@ -43,7 +44,7 @@ EVT_END()
 EVT_BEGIN(kpa_00_fly_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 262144)
+    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("飛クッパ"), 0, 30, -15)
     CALL(evt_npc_set_scale, STRING("飛クッパ"), FLOAT(0.099609375f), FLOAT(0.099609375f), FLOAT(0.099609375f))
@@ -176,7 +177,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ババ"*/"\x83\x6F\x83\x6F", // name
-        0x20, // flags
+        NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -186,7 +187,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"飛クッパ"*/"\x94\xF2\x83\x4E\x83\x62\x83\x70", // name
-        0x20, // flags
+        NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType

@@ -14,6 +14,7 @@
 #include "evt/evt_cam.h"
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
+#include "driver/npcdrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_motion.h"
@@ -109,7 +110,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"プニ族４"*/"\x83\x76\x83\x6A\x91\xB0\x82\x53", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         puni_4_init, // initEvent
         NULL, // regularEvent
@@ -121,7 +122,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ族５"*/"\x83\x76\x83\x6A\x91\xB0\x82\x54", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         puni_5_init, // initEvent
         NULL, // regularEvent

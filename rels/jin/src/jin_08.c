@@ -15,6 +15,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(evt_win_item_select);
@@ -272,7 +273,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"オウム"*/"\x83\x49\x83\x45\x83\x80", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         oumu_init, // initEvent
         NULL, // regularEvent

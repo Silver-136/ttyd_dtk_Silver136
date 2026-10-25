@@ -17,6 +17,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_win_item_select);
 
@@ -278,7 +279,7 @@ static EVT_BEGIN(init_toron)
     END_SWITCH
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(1), 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 131072)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
     END_IF
     RETURN
 EVT_END()
@@ -319,7 +320,7 @@ static EVT_BEGIN(init_madam)
     END_SWITCH
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(1), 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 131072)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
     END_IF
     RETURN
 EVT_END()
@@ -421,7 +422,7 @@ EVT_END()
 static NpcSetupInfo npc_data[] = {
     {
         /*"トロン"*/"\x83\x67\x83\x8D\x83\x93", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_toron, // initEvent
         NULL, // regularEvent
@@ -433,7 +434,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"マダム"*/"\x83\x7D\x83\x5F\x83\x80", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_madam, // initEvent
         NULL, // regularEvent
@@ -445,7 +446,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -454,7 +455,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"車掌"*/"\x8E\xD4\x8F\xB6", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -463,7 +464,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"コック"*/"\x83\x52\x83\x62\x83\x4E", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -472,7 +473,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ウェイトレス"*/"\x83\x45\x83\x46\x83\x43\x83\x67\x83\x8C\x83\x58", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -485,7 +486,7 @@ static NpcSetupInfo npc_data[] = {
 NpcSetupInfo npc_data_2[] = {
     {
         /*"トロン"*/"\x83\x67\x83\x8D\x83\x93", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_toron, // initEvent
         NULL, // regularEvent
@@ -497,7 +498,7 @@ NpcSetupInfo npc_data_2[] = {
     },
     {
         /*"マダム"*/"\x83\x7D\x83\x5F\x83\x80", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_madam, // initEvent
         NULL, // regularEvent
@@ -532,10 +533,10 @@ EVT_BEGIN(evt_pikary_arrival)
     CALL(evt_mario_set_dir_npc, STRING("ウェイトレス"))
     CALL(evt_party_set_pos, 0, -50, 0, 20)
     CALL(evt_party_set_dir_npc, 0, STRING("ウェイトレス"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 131088)
-    CALL(evt_npc_flag_onoff, 1, STRING("車掌"), 131088)
-    CALL(evt_npc_flag_onoff, 1, STRING("コック"), 131088)
-    CALL(evt_npc_flag_onoff, 1, STRING("ウェイトレス"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+    CALL(evt_npc_flag_onoff, 1, STRING("車掌"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+    CALL(evt_npc_flag_onoff, 1, STRING("コック"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+    CALL(evt_npc_flag_onoff, 1, STRING("ウェイトレス"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, 2)
@@ -993,7 +994,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
     CALL_CHILD(PTR(evt_rsh_01_rnd_npc_entry))
     IF_INT_EQUAL(GSWF(3578), 1)
         CALL(evt_npc_set_position, STRING("車掌"), 395, 0, -90)
-        CALL(evt_npc_flag_onoff, 1, STRING("車掌"), 1073874448)
+        CALL(evt_npc_flag_onoff, 1, STRING("車掌"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_set_ry, STRING("車掌"), 270)
         CALL(evt_npc_change_interrupt, STRING("車掌"), 6, PTR(talk_syasyou))
         SET_VALUE(LW(0), STRING("e_bero"))

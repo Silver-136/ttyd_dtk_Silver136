@@ -1018,7 +1018,7 @@ EVT_BEGIN(talk_ekiin)
                 CALL(evt_item_delete, STRING("ticket"))
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_msg_print, 0, STRING("train_04"), 0, 0)
-                CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+                CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
                 CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
                 CALL(evt_npc_move_position, STRING("me"), -260, -335, 0, FLOAT(120.0f), 1)
                 CALL(evt_npc_set_ry, STRING("me"), 90)
@@ -1289,7 +1289,7 @@ static EVT_BEGIN(talk_mama)
                         WAIT_MS(500)
                         CALL(evt_party_set_dir_npc, 0, STRING("ナリキンママ"))
                     END_INLINE_EVENT
-                    CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+                    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
                     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
                     CALL(evt_npc_move_position, STRING("me"), 115, 330, 0, 150, 0)
                     WAIT_MS(1000)
@@ -1305,7 +1305,7 @@ static EVT_BEGIN(talk_mama)
                     END_INLINE_EVENT
                     CALL(evt_npc_move_position, STRING("me"), -133, 330, 0, 60, 0)
                     CALL(evt_npc_status_onoff, 0, STRING("me"), 2)
-                    CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+                    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
                     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
                     WAIT_MS(300)
                     CALL(evt_msg_print, 0, STRING("irai_29_17"), 0, 0)
@@ -1480,7 +1480,7 @@ EVT_END()
 static NpcSetupInfo npc_data[] = {
     {
         /*"駅員"*/"\x89\x77\x88\xF5", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ekiin, // initEvent
         NULL, // regularEvent
@@ -1492,7 +1492,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_mama, // initEvent
         NULL, // regularEvent
@@ -1504,7 +1504,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_papa, // initEvent
         NULL, // regularEvent
@@ -1516,7 +1516,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"コナリキン"*/"\x83\x52\x83\x69\x83\x8A\x83\x4C\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_konari, // initEvent
         NULL, // regularEvent
@@ -1528,7 +1528,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"マダム"*/"\x83\x7D\x83\x5F\x83\x80", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_madam, // initEvent
         NULL, // regularEvent
@@ -1540,7 +1540,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_sarary, // initEvent
         NULL, // regularEvent

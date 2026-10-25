@@ -155,13 +155,13 @@ void setupDataBase(const char* areaName, const char* mapName) {
                 npc = npcNameToPtr(npcName);
                 npc->setupIndex = k;
                 ai = npc_ai_type_table;
-                npc->flags |= 4;
+                npc->flags |= NPC_FLAG_RECORD_DEFEAT;
                 npc->position = pos;
                 npc->direction = dir;
                 npc->tribe = tribe;
                 npc->width = tribe->width;
                 npc->height = tribe->height;
-                npc->flags &= ~2;
+                npc->flags &= ~NPC_FLAG_READY;
                 for (;;) {
                     if (!ai->description) break;
                     if (strcmp(ai->description, aiType) != 0) {

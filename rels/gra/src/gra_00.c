@@ -13,6 +13,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -256,8 +257,8 @@ EVT_BEGIN(name_seikai)
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
     SET_VALUE(GF(2), 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("にせマリオ"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("にせマリオ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("にせマリオ"), 2)
     CALL(evt_npc_set_anim, STRING("にせマリオ"), STRING("EM_R_3"))
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
@@ -497,7 +498,7 @@ EVT_BEGIN(evt_machibuse)
     IF_INT_LESS(LW(10), LW(0))
         CALL(evt_cam3d_evt_set, -225, 134, 534, -225, 39, -8, 0, 11)
         WAIT_FRAMES(1)
-        CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_NO_HIT)
         BEGIN_INLINE_EVENT
             CALL(evt_mario_mov_pos2, -385, 0, FLOAT(200.0f))
         END_INLINE_EVENT
@@ -509,7 +510,7 @@ EVT_BEGIN(evt_machibuse)
         ELSE
         CALL(evt_cam3d_evt_set, 186, 149, 534, 186, 54, -8, 0, 11)
         WAIT_FRAMES(1)
-        CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_NO_HIT)
         BEGIN_INLINE_EVENT
             CALL(evt_mario_mov_pos2, 385, 0, FLOAT(200.0f))
         END_INLINE_EVENT
@@ -561,7 +562,7 @@ static BeroEntry bero_entry_data[] = {
 static NpcSetupInfo npcEnt[] = {
     {
         /*"にせマリオ"*/"\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase

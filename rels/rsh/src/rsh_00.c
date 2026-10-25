@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
+#include "driver/npcdrv.h"
 
 #include "string.h"
 #include "dolphin/os.h"
@@ -460,7 +461,7 @@ static EVT_BEGIN(evt_moamoa)
     CALL(evt_snd_bgmoff_f, 512, 120)
     CALL(evt_cam3d_evt_set, -70, 113, 373, 126, 38, -13, 500, 11)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 1, STRING("運転手"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("運転手"), NPC_FLAG_NO_HIT)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 85, -110, FLOAT(80.0f))
         CALL(evt_party_set_dir, 0, 90, 200)
@@ -469,7 +470,7 @@ static EVT_BEGIN(evt_moamoa)
     CALL(evt_mario_set_dir, 90, 200, 0)
     CALL(evt_set_dir_to_target, STRING("運転手"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_231"), 0, STRING("me"))
-    CALL(evt_npc_flag_onoff, 0, STRING("運転手"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("運転手"), NPC_FLAG_NO_HIT)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_MOAMOA_VOICE1"), 265, 25, -145, 0)
     CALL(evt_moamoa_set_one, 0, 265, 25, -145)
     CALL(evt_moamoa_set_one, 1, 265, 35, -230)
@@ -500,7 +501,7 @@ static EVT_BEGIN(evt_moamoa)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, 0, STRING("a"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff_fukidashi, 3, STRING("b"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 1536)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("me"), STRING("B_1"))
     CALL(evt_mario_set_pose, STRING("M_I_N"))
     WAIT_MS(1000)
@@ -751,7 +752,7 @@ EVT_END()
 static EVT_BEGIN(init_unten)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(329, 331)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 1536)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_anim, STRING("me"), STRING("B_2"))
     END_SWITCH
     RETURN
@@ -831,7 +832,7 @@ EVT_END()
 static NpcSetupInfo npc_data[] = {
     {
         /*"運転手"*/"\x89\x5E\x93\x5D\x8E\xE8", // name
-        0x40020610, // flags
+        NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_unten, // initEvent
         regu_unten, // regularEvent

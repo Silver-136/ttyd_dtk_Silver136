@@ -14,6 +14,7 @@
 #include "evt/evt_lecture.h"
 #include "mot/mot_slit.h"
 #include "mot/mot_roll.h"
+#include "driver/npcdrv.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -545,8 +546,8 @@ EVT_BEGIN(slit_majin_lecture)
     END_SIBLING_EVENT
     WAIT_FRAMES(1)
     CALL(lecture_button_set_pos, 0, FLOAT(-200.0f), FLOAT(-25.0f), FLOAT(0.0f))
-    CALL(evt_npc_flag_onoff, 1, STRING("ペラ魔人"), 1536)
-    CALL(evt_npc_flag_onoff, 1, STRING("ペラ魔人"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ペラ魔人"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("ペラ魔人"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_camid, STRING("ペラ魔人"), 7)
     WAIT_FRAMES(1)
     BEGIN_SIBLING_EVENT

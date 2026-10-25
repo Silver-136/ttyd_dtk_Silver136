@@ -15,6 +15,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_telop.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 
@@ -185,7 +186,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"手下１"*/"\x8E\xE8\x89\xBA\x82\x50", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -194,7 +195,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"手下２"*/"\x8E\xE8\x89\xBA\x82\x51", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase

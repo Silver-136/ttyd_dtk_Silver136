@@ -307,7 +307,7 @@ static USER_FUNC(booboo_main) {
 }
 
 EVT_BEGIN(villagerA_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("村人Ａ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("村人Ａ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(200)
         CALL(evt_npc_set_position, STRING("村人Ａ"), 0, -2000, 0)
@@ -319,7 +319,7 @@ EVT_BEGIN(villagerA_init)
 EVT_END()
 
 EVT_BEGIN(villagerA_pig_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ａ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ａ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(200)
         CASE_DEFAULT
@@ -349,7 +349,7 @@ EVT_BEGIN(villagerA_talk)
 EVT_END()
 
 EVT_BEGIN(villagerB_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｂ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｂ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
@@ -372,7 +372,7 @@ EVT_BEGIN(villagerB_talk)
 EVT_END()
 
 EVT_BEGIN(villagerC_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｃ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｃ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
@@ -395,7 +395,7 @@ EVT_BEGIN(villagerC_talk)
 EVT_END()
 
 EVT_BEGIN(villagerD_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｄ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｄ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(200)
         CALL(evt_npc_set_position, STRING("村人Ｄ"), 0, -2000, 0)
@@ -405,7 +405,7 @@ EVT_BEGIN(villagerD_init)
 EVT_END()
 
 EVT_BEGIN(villagerD_pig_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｄ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｄ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(200)
         CASE_DEFAULT
@@ -442,7 +442,7 @@ EVT_BEGIN(villagerD_talk)
 EVT_END()
 
 EVT_BEGIN(villagerE_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｅ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｅ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(200)
         CALL(evt_npc_set_position, STRING("村人Ｅ"), 0, -2000, 0)
@@ -452,7 +452,7 @@ EVT_BEGIN(villagerE_init)
 EVT_END()
 
 EVT_BEGIN(villagerE_pig_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｅ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｅ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(200)
         CASE_DEFAULT
@@ -482,7 +482,7 @@ EVT_BEGIN(villagerE_talk)
 EVT_END()
 
 EVT_BEGIN(villagerK_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｋ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｋ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(200)
         CALL(evt_npc_set_position, STRING("村人Ｋ"), 0, -2000, 0)
@@ -492,7 +492,7 @@ EVT_BEGIN(villagerK_init)
 EVT_END()
 
 EVT_BEGIN(villagerK_pig_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｋ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｋ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(200)
         CASE_DEFAULT
@@ -522,7 +522,7 @@ EVT_BEGIN(villagerK_talk)
 EVT_END()
 
 EVT_BEGIN(village_chief_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("村長"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(179)
         CASE_LESS(202)
@@ -532,7 +532,7 @@ EVT_BEGIN(village_chief_init)
 EVT_END()
 
 EVT_BEGIN(village_chief_pig_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村長"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村長"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(179)
         CALL(evt_npc_set_position, STRING("ブタ村長"), 0, -2000, 0)
@@ -634,11 +634,11 @@ EVT_BEGIN(chief_mario_talk_init)
     CALL(evt_npc_set_tribe, STRING("ノコタロウ"), STRING("ノコタロウ"))
     CALL(evt_npc_set_tribe, STRING("クラウダ"), STRING("クラウダ"))
     CALL(evt_npc_set_tribe, STRING("チビヨッシー"), STRING("ヨッシー"))
-    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), 1074267648)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), 1074267648)
-    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), 1074267648)
-    CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), 1074267648)
-    CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), 1074267648)
+    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("にせマリオ"), -3, 0, -388)
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), -34, 0, -347)
     CALL(evt_npc_set_position, STRING("ノコタロウ"), -75, 0, -316)
@@ -678,7 +678,7 @@ EVT_BEGIN(chief_mario_talk)
 EVT_END()
 
 static EVT_BEGIN(vivian_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), 525824)
+    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(203, 205)
         CALL(evt_npc_set_tribe, STRING("ビビアン"), STRING("ビビアンべそ"))
@@ -761,7 +761,7 @@ EVT_BEGIN(crow_e_init)
 EVT_END()
 
 static EVT_BEGIN(urouro_move)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 1073741824)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(50.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -771,7 +771,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"村人Ａ"*/"\x91\xBA\x90\x6C\x82\x60", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerA_init, // initEvent
         NULL, // regularEvent
@@ -783,7 +783,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"村人Ｂ"*/"\x91\xBA\x90\x6C\x82\x61", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerB_init, // initEvent
         NULL, // regularEvent
@@ -795,7 +795,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"村人Ｃ"*/"\x91\xBA\x90\x6C\x82\x62", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerC_init, // initEvent
         urouro_move, // regularEvent
@@ -807,7 +807,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"村人Ｄ"*/"\x91\xBA\x90\x6C\x82\x63", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerD_init, // initEvent
         NULL, // regularEvent
@@ -819,7 +819,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"村人Ｅ"*/"\x91\xBA\x90\x6C\x82\x64", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerE_init, // initEvent
         urouro_move, // regularEvent
@@ -831,7 +831,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"村人Ｋ"*/"\x91\xBA\x90\x6C\x82\x6A", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         villagerK_init, // initEvent
         NULL, // regularEvent
@@ -843,7 +843,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"村長"*/"\x91\xBA\x92\xB7", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         village_chief_init, // initEvent
         NULL, // regularEvent
@@ -855,7 +855,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ビビアン"*/"\x83\x72\x83\x72\x83\x41\x83\x93", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         vivian_init, // initEvent
         NULL, // regularEvent
@@ -867,7 +867,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -877,7 +877,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ブタ村人Ａ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x60", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerA_pig_init, // initEvent
         urouro_move, // regularEvent
@@ -889,7 +889,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ブタ村人Ｄ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x63", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerD_pig_init, // initEvent
         urouro_move, // regularEvent
@@ -901,7 +901,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ブタ村人Ｅ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x64", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerE_pig_init, // initEvent
         urouro_move, // regularEvent
@@ -913,7 +913,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ブタ村人Ｋ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x6A", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         villagerK_pig_init, // initEvent
         urouro_move, // regularEvent
@@ -925,7 +925,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ブタ村長"*/"\x83\x75\x83\x5E\x91\xBA\x92\xB7", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         village_chief_pig_init, // initEvent
         urouro_move, // regularEvent
@@ -937,7 +937,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"カラスＡ"*/"\x83\x4A\x83\x89\x83\x58\x82\x60", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_a_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -947,7 +947,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"カラスＢ"*/"\x83\x4A\x83\x89\x83\x58\x82\x61", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_b_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -957,7 +957,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"カラスＣ"*/"\x83\x4A\x83\x89\x83\x58\x82\x62", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_c_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -967,7 +967,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"カラスＤ"*/"\x83\x4A\x83\x89\x83\x58\x82\x63", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_d_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -977,7 +977,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"カラスＥ"*/"\x83\x4A\x83\x89\x83\x58\x82\x64", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         crow_e_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -1089,9 +1089,9 @@ EVT_BEGIN(usu00_stage4_coming_event)
         CALL(evt_npc_move_position, STRING("ブタ村人Ａ"), -276, -14, 0, FLOAT(40.0f), 0)
         CALL(evt_npc_restart_regular_event, STRING("ブタ村人Ａ"))
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ａ"), 32)
-    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｄ"), 32)
-    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｋ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ａ"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｄ"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｋ"), NPC_FLAG_NO_HIT)
     CALL(evt_msg_print_party, STRING("stg4_usu_07"))
     WAIT_MS(1000)
     CALL(evt_npc_get_position, STRING("村長"), LW(0), LW(1), LW(2))
@@ -1199,9 +1199,9 @@ EVT_BEGIN(usu00_stage4_coming_event)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("ブタ村人Ａ"), 32)
-    CALL(evt_npc_flag_onoff, 0, STRING("ブタ村人Ｄ"), 32)
-    CALL(evt_npc_flag_onoff, 0, STRING("ブタ村人Ｋ"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("ブタ村人Ａ"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 0, STRING("ブタ村人Ｄ"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 0, STRING("ブタ村人Ｋ"), NPC_FLAG_NO_HIT)
     RETURN
 EVT_END()
 
@@ -1212,9 +1212,9 @@ EVT_BEGIN(usu00_3witch_init)
     CALL(evt_npc_set_tribe, STRING("マリリン"), STRING("マリリン"))
     CALL(evt_npc_set_tribe, STRING("マジョリン"), STRING("マジョリン"))
     CALL(evt_npc_set_tribe, STRING("ランペル"), STRING("ランペル"))
-    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), 1074267648)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 1074267648)
-    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), 1074267648)
+    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
     RETURN
 EVT_END()
 
@@ -1289,12 +1289,12 @@ EVT_BEGIN(gra00_2witch_find_ranpel_event)
     CALL(evt_npc_set_ry, STRING("ランペル"), 270)
     CALL(evt_npc_set_ry, STRING("マリリン"), 90)
     CALL(evt_npc_set_ry, STRING("マジョリン"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), 1074266144)
-    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), 1074266144)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 1074266144)
-    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_INSTANT_TURN)
     WAIT_FRAMES(1)
-    CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_seq_wait, 2)
     CALL(evt_fade_end_wait)
     CALL(evt_msg_print, 0, STRING("stg4_usu_151"), 0, STRING("マジョリン"))
@@ -1304,7 +1304,7 @@ EVT_BEGIN(gra00_2witch_find_ranpel_event)
         CALL(evt_npc_get_position, STRING("ランペル"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_LANPEL_ESCAPE1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_npc_set_anim, STRING("ランペル"), STRING("R_2"))
-        CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), 1024)
+        CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_move_position, STRING("ランペル"), -131, 385, 1200, 0, 0)
     END_INLINE_EVENT
     WAIT_MS(400)
@@ -1343,14 +1343,14 @@ EVT_END()
 
 EVT_BEGIN(usu00_vivian_joinup_event)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT)
     CALL(evt_msg_print, 0, STRING("stg4_usu_110"), 0, STRING("ビビアン"))
     CALL(evt_npc_get_position, STRING("ビビアン"), LW(0), LW(1), LW(2))
     ADD(LW(0), -40)
     CALL(evt_mario_mov_pos, LW(0), LW(2), 500)
     CALL(evt_mario_set_dir, 90, 200, 0)
     CALL(evt_npc_set_ry, STRING("ビビアン"), 270)
-    CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), NPC_FLAG_NO_HIT)
     CALL(evt_cam3d_evt_set_rel, 0, 52, 296, 20, 43, 26, 500, 11)
     WAIT_MS(500)
     CALL(evt_mario_dispflag_onoff, 1, 2)
@@ -1447,7 +1447,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     CALL(evt_msg_print, 0, STRING("stg4_usu_121"), 0, STRING("ビビアン"))
     CALL(evt_npc_get_position, STRING("ビビアン"), LW(0), LW(1), LW(2))
     ADD(LW(0), -15)
-    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("ビビアン"), LW(0), LW(2), 0, 60, 0)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -1464,7 +1464,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
     WAIT_MS(400)
     CALL(evt_npc_set_anim, STRING("ビビアン"), STRING("PTR_A4_1"))
-    CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), 1024)
+    CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 0, STRING("ビビアン"), 2)
     SUBTRACT(LW(0), -15)
     CALL(evt_npc_move_position, STRING("ビビアン"), LW(0), LW(2), 0, 20, 0)
@@ -2615,7 +2615,7 @@ static EVT_BEGIN(koopa_npc_entry)
     CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ"))
     CALL(evt_npc_set_position, STRING("ババ"), 0, -1000, 0)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("ババ"), 2)
     CALL(evt_npc_change_interrupt, STRING("ババ"), 6, PTR(baba_talk))
     CALL(evt_npc_set_width, STRING("ババ"), 30)
@@ -2624,7 +2624,7 @@ static EVT_BEGIN(koopa_npc_entry)
     CALL(evt_npc_set_tribe, STRING("カンブー"), STRING("第三勢力幹部"))
     CALL(evt_npc_set_position, STRING("カンブー"), 100, 0, 200)
     CALL(evt_npc_set_ry, STRING("カンブー"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("カンブー"), 16778752)
+    CALL(evt_npc_flag_onoff, 1, STRING("カンブー"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_TALK_TURN)
     CALL(evt_npc_status_onoff, 1, STRING("カンブー"), 2)
     CALL(evt_npc_change_interrupt, STRING("カンブー"), 6, PTR(kanbu_talk))
     CALL(evt_npc_set_width, STRING("カンブー"), 30)
@@ -2647,7 +2647,7 @@ EVT_BEGIN(usu_00_koopa_first_evt)
     CALL(evt_mario_flag_onoff, 1, 1024)
     CALL(evt_npc_set_position, STRING("ババ"), -400, 25, 100)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_set, -50, 213, 677, -50, 100, 37, 0, 11)
     CALL(evt_seq_wait, 2)
     CALL(evt_npc_get_reglid, STRING("村人Ｃ"), LW(0))
@@ -2684,7 +2684,7 @@ EVT_BEGIN(usu_00_koopa_first_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg5_002"), 0, STRING("mario"))
     CALL(evt_mario_set_dir, 90, 300, 0)
     CALL(evt_mario_flag_onoff, 0, 1024)
-    CALL(evt_npc_flag_onoff, 0, STRING("ババ"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_off, 800, 11)
     WAIT_MS(800)
     CALL(evt_npc_restart_regular_event, STRING("村人Ｃ"))
@@ -2721,7 +2721,7 @@ EVT_BEGIN(murabito_out)
     CALL(delete_npc_regl_evt, STRING("村人Ｃ"))
     CALL(delete_npc_regl_evt, STRING("村人Ｅ"))
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("村人Ｄ"), 1073741824)
+        CALL(evt_npc_flag_onoff, 1, STRING("村人Ｄ"), NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_status_onoff, 1, STRING("村人Ｄ"), 2)
         CALL(evt_npc_set_ry, STRING("村人Ｄ"), 90)
         WAIT_MS(300)
@@ -2729,7 +2729,7 @@ EVT_BEGIN(murabito_out)
         CALL(evt_npc_set_position, STRING("村人Ｄ"), 0, -1000, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("村人Ｃ"), 1073741824)
+        CALL(evt_npc_flag_onoff, 1, STRING("村人Ｃ"), NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_status_onoff, 1, STRING("村人Ｃ"), 2)
         CALL(evt_npc_set_ry, STRING("村人Ｃ"), 90)
         WAIT_MS(300)
@@ -2737,14 +2737,14 @@ EVT_BEGIN(murabito_out)
         CALL(evt_npc_set_position, STRING("村人Ｃ"), 0, -1000, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("村人Ｅ"), 1073741824)
+        CALL(evt_npc_flag_onoff, 1, STRING("村人Ｅ"), NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_status_onoff, 1, STRING("村人Ｅ"), 2)
         CALL(evt_npc_move_position, STRING("村人Ｅ"), 440, 200, 0, 180, 0)
         CALL(evt_npc_set_position, STRING("村人Ｅ"), 0, -1000, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("村人Ａ"), 1073741824)
+        CALL(evt_npc_flag_onoff, 1, STRING("村人Ａ"), NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_status_onoff, 1, STRING("村人Ａ"), 2)
         CALL(evt_npc_set_ry, STRING("村人Ａ"), 90)
         WAIT_MS(300)
@@ -2752,7 +2752,7 @@ EVT_BEGIN(murabito_out)
         CALL(evt_npc_set_position, STRING("村人Ａ"), 0, -1000, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("村人Ｋ"), 1073741824)
+        CALL(evt_npc_flag_onoff, 1, STRING("村人Ｋ"), NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_status_onoff, 1, STRING("村人Ｋ"), 2)
         CALL(evt_npc_set_ry, STRING("村人Ｋ"), 90)
         WAIT_MS(300)
@@ -2811,17 +2811,17 @@ EVT_BEGIN(usu_00_koopa_second_evt)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_HIT)
         WAIT_MS(500)
         CALL(evt_npc_kamek_move_position, STRING("ババ"), -15, 240, 8, 1500, 0, 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("ババ"), 32)
+        CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_NO_HIT)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 75, 116, 612, 75, 50, 268, 1500, 11)
-    CALL(evt_npc_flag_onoff, 1, STRING("カンブー"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("カンブー"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("カンブー"), 75, 275, 1500, 0, 4)
     WAIT_MS(300)
-    CALL(evt_npc_flag_onoff, 0, STRING("カンブー"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("カンブー"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_get_position, STRING("カンブー"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("カンブー"), LW(0), LW(1), LW(2), 300, 20)
     WAIT_MS(500)
@@ -3316,22 +3316,22 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_tribe, STRING("おばさん"), STRING("ウスグラおばさん"))
     CALL(evt_npc_set_position, STRING("おばさん"), -120, 0, -90)
     CALL(evt_npc_set_ry, STRING("おばさん"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("おばさん"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("おばさん"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_entry, STRING("子供１"), STRING("c_f_child_a"))
     CALL(evt_npc_set_tribe, STRING("子供１"), STRING("ウスグラ子供A"))
     CALL(evt_npc_set_position, STRING("子供１"), -80, 0, -25)
     CALL(evt_npc_set_ry, STRING("子供１"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("子供１"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("子供１"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_entry, STRING("子供２"), STRING("c_f_child_b"))
     CALL(evt_npc_set_tribe, STRING("子供２"), STRING("ウスグラ子供B"))
     CALL(evt_npc_set_position, STRING("子供２"), -50, 0, 0)
     CALL(evt_npc_set_ry, STRING("子供２"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("子供２"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("子供２"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_entry, STRING("子供３"), STRING("c_f_child_c"))
     CALL(evt_npc_set_tribe, STRING("子供３"), STRING("ウスグラ子供C"))
     CALL(evt_npc_set_position, STRING("子供３"), -100, 0, 10)
     CALL(evt_npc_set_ry, STRING("子供３"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("子供３"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("子供３"), NPC_FLAG_TALK_POSE)
     RETURN
 EVT_END()
 
@@ -3413,10 +3413,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_29"), 0, STRING("子供１"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_30"), 0, STRING("子供２"))
     CALL(evt_msg_print, 0, STRING("stg8_las_148_31"), 0, STRING("子供３"))
-    CALL(evt_npc_flag_onoff, 1, STRING("子供１"), 32768)
-    CALL(evt_npc_flag_onoff, 1, STRING("子供２"), 32768)
-    CALL(evt_npc_flag_onoff, 1, STRING("子供３"), 32768)
-    CALL(evt_npc_flag_onoff, 1, STRING("おばさん"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("子供１"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("子供２"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("子供３"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("おばさん"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, -75, 92, 313, -75, 52, -35, 0, 11)
     WAIT_FRAMES(1)
     WAIT_MS(1000)
@@ -3478,10 +3478,10 @@ static EVT_BEGIN(evt_after_peach)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_npc_restart_regular_event, STRING("村人Ｃ"))
-    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｃ"), 268435456)
+    CALL(evt_npc_flag_onoff, 1, STRING("村人Ｃ"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL(evt_npc_start_for_event)
-    CALL(evt_npc_flag_onoff, 0, STRING("村人Ｃ"), 268435456)
+    CALL(evt_npc_flag_onoff, 0, STRING("村人Ｃ"), NPC_FLAG_STOP_FOR_EVENT)
     RETURN
 EVT_END()
 
@@ -3491,11 +3491,11 @@ static USER_FUNC(npc_process) {
     s32 i;
 
     for (i = 0; i < wp->total; i++, npc++) {
-        if (npc->flags & 1) {
+        if (npc->flags & NPC_FLAG_IN_USE) {
             if (npc->position.y <= -1000.0f) {
-                npc->flags |= 0x800;
+                npc->flags |= NPC_FLAG_HIDE;
             } else {
-                npc->flags &= ~0x800;
+                npc->flags &= ~NPC_FLAG_HIDE;
             }
         }
     }

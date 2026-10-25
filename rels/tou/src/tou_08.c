@@ -368,7 +368,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガンス"*/"\x83\x4B\x83\x93\x83\x58", // name
-        0x40000620, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -377,7 +377,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -386,7 +386,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ガードマン"*/"\x83\x4B\x81\x5B\x83\x68\x83\x7D\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -395,7 +395,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"トゲノコエース"*/"\x83\x67\x83\x51\x83\x6D\x83\x52\x83\x47\x81\x5B\x83\x58", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_togenoko, // initEvent
         NULL, // regularEvent
@@ -407,7 +407,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ウラノコ"*/"\x83\x45\x83\x89\x83\x6D\x83\x52", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_uranoko, // initEvent
         NULL, // regularEvent
@@ -419,7 +419,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"チャンピョン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x87\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -449,7 +449,7 @@ EVT_END()
 
 EVT_BEGIN(evt_1st_sub)
     SET_VALUE(LW(8), LW(0))
-    CALL(evt_npc_flag_onoff, 1, LW(8), 32)
+    CALL(evt_npc_flag_onoff, 1, LW(8), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, LW(8), 0, -130, 0, FLOAT(80.0f), 1)
     CALL(evt_mario_set_dir_npc, LW(8))
     SET_VALUE(LW(1), 0)
@@ -842,14 +842,14 @@ EVT_BEGIN(evt_champion_win)
     CALL(evt_cam3d_evt_set, -75, 91, 266, -75, 57, -11, 0, 11)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), 32768)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_seq_wait, 2)
     WAIT_MS(1000)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), 32768)
-    CALL(evt_npc_flag_onoff, 0, STRING("キノシコワ"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 0, STRING("キノシコワ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_msg_print, 0, STRING("stg3_tou_445"), 0, STRING("ガンス"))
     WAIT_MS(300)
     CALL(evt_npc_move_position, STRING("ガンス"), -60, -95, 0, FLOAT(80.0f), 1)
@@ -966,7 +966,7 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_set_tribe, STRING("チビヨッシー"), STRING("ヨッシー"))
     CALL(evt_npc_set_position, STRING("チビヨッシー"), -30, 0, -50)
     CALL(evt_npc_set_ry, STRING("チビヨッシー"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), 1073742880)
+    CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     RETURN
 EVT_END()
 
@@ -1086,10 +1086,10 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("cake_tukue"), 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("チビヨッシー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 100, 337, 0, 45, -9, 0, 11)
     CALL(evt_seq_wait, 2)
-    CALL(evt_npc_flag_onoff, 0, STRING("チビヨッシー"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("チビヨッシー"), NPC_FLAG_INSTANT_TURN)
     SPAWN_EVENT(PTR(epilogue_evt_sub))
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)

@@ -806,7 +806,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"パワーダウン屋"*/"\x83\x70\x83\x8F\x81\x5B\x83\x5F\x83\x45\x83\x93\x89\xAE", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         powerdownya_init, // initEvent
         NULL, // regularEvent

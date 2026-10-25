@@ -117,8 +117,44 @@ typedef struct NpcTribeInfo {
     const char* landSfx;          // 0x50
 } NpcTribeInfo;
 
+// NpcEntry.flags (also NpcSetupInfo.flags and NpcAiInfo.flags, copied in), named from npcMain, the npcdrv
+// helpers and the original AI type names in npc_data.c. 0x1000 and 0x2000 (wall probes through hitCheckAttr(4))
+// are not named.
+typedef enum NpcFlags {
+    NPC_FLAG_IN_USE = (1 << 0),                // 0x1, slot in use (npcEntry; npcDelete clears it)
+    NPC_FLAG_READY = (1 << 1),                 // 0x2, initialised: updated, drawn, talkable, hittable
+    NPC_FLAG_RECORD_DEFEAT = (1 << 2),         // 0x4, _npcDead records it in the map's dead mask (no respawn)
+    NPC_FLAG_ENEMY = (1 << 3),                 // 0x8, field enemy: not talkable, enemy side of fbatHitCheck
+    NPC_FLAG_FLOOR_COLLISION = (1 << 4),       // 0x10, npcMoveG lands it on the floor
+    NPC_FLAG_NO_HIT = (1 << 5),                // 0x20, intangible: no push, no field hit check, not blown
+    NPC_FLAG_NO_CULL = (1 << 6),               // 0x40, drawn without the view volume check
+    NPC_FLAG_NO_DRAW = (1 << 7),               // 0x80, model, shadow and blur not drawn
+    NPC_FLAG_BLUR = (1 << 8),                  // 0x100, motion blur (npcBlurOn)
+    NPC_FLAG_TALK_POSE = (1 << 9),             // 0x200, uses its talk/stay animations in conversations
+    NPC_FLAG_AUTO_MOVE_ANIM = (1 << 10),       // 0x400, stay/walk/run animation picked from its speed
+    NPC_FLAG_HIDE = (1 << 11),                 // 0x800, whole display skipped (npc_hide_onoff)
+    NPC_FLAG_NO_PUSH_MARIO = (1 << 14),        // 0x4000, does not push Mario out of its body
+    NPC_FLAG_INSTANT_TURN = (1 << 15),         // 0x8000, paper turn snaps (pose flag 0x100)
+    NPC_FLAG_WALL_BOUNCE = (1 << 16),          // 0x10000, move direction mirrored at walls
+    NPC_FLAG_GRAVITY = (1 << 17),              // 0x20000, falls
+    NPC_FLAG_NO_SHADOW = (1 << 18),            // 0x40000
+    NPC_FLAG_SHADOW_NO_FLOOR = (1 << 19),      // 0x80000, shadow not projected to the floor
+    NPC_FLAG_UPDATE_BY_EVENT = (1 << 20),      // 0x100000, movement step only when an evt_npc move function asks
+    NPC_FLAG_NO_FIND = (1 << 21),              // 0x200000, no find/lost/return interrupts
+    NPC_FLAG_RESUME_AFTER_TALK = (1 << 22),    // 0x400000, resumes its stopped event after the talk-range pause
+    NPC_FLAG_LUIGI_POSE_FLIP = (1 << 23),      // 0x800000, set by npcEntry for c_luigi
+    NPC_FLAG_NO_TALK_TURN = (1 << 24),         // 0x1000000, does not turn to face Mario
+    NPC_FLAG_NO_VIEW_CORRECTION = (1 << 25),   // 0x2000000, no camera-angle turn in mtx_setup
+    NPC_FLAG_VIVIAN_TYPE = (1 << 26),          // 0x4000000, animPoseGetVivianType draw path
+    NPC_FLAG_2D = (1 << 27),                   // 0x8000000, Bowser side-scrolling NPC
+    NPC_FLAG_STOP_FOR_EVENT = (1 << 28),       // 0x10000000, frozen by npcStopForEvent (set with battle info)
+    NPC_FLAG_NO_PLAYER_ATTACK = (1 << 29),     // 0x20000000, Mario cannot hit it; its own attack still lands
+    NPC_FLAG_NO_WALL_COLLISION = (1 << 30),    // 0x40000000
+    NPC_FLAG_NO_TALK_BALLOON = (1 << 31),      // 0x80000000, Mario's talk balloon not shown
+} NpcFlags;
+
 typedef struct NpcEntry {
-    s32 flags;                      // 0x0
+    s32 flags;                      // 0x0, NpcFlags
     u32 reactionFlags;              // 0x4
     char description[32];           // 0x8
     NpcTribeInfo* tribe;            // 0x28

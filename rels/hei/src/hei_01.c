@@ -15,6 +15,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
+#include "driver/npcdrv.h"
 
 #include "party.h"
 #include "evt/evt_bero.h"
@@ -291,11 +292,11 @@ EVT_BEGIN(bridge_evt)
 EVT_END()
 
 EVT_BEGIN(nokotaro_get)
-    CALL(evt_npc_flag_onoff, 0, STRING("ノコタロウ"), 512)
+    CALL(evt_npc_flag_onoff, 0, STRING("ノコタロウ"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_set_anim, STRING("ノコタロウ"), STRING("PNK_Y_2"))
     CALL(evt_msg_print_add, 0, STRING("stg1_hei_07"))
     CALL(evt_npc_set_anim, STRING("ノコタロウ"), STRING("PNK_S_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), NPC_FLAG_TALK_POSE)
     WAIT_MS(500)
 #ifdef VERSION_G8ME01
     BEGIN_INLINE_EVENT
@@ -417,7 +418,7 @@ EVT_BEGIN(nokotaro_nakama)
 EVT_END()
 
 static EVT_BEGIN(nokotarou_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
@@ -449,7 +450,7 @@ EVT_END()
 EVT_BEGIN(nokorin_pose)
     CALL(evt_npc_get_position, STRING("ノコリン"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_NOKORIN_MOVE1"), LW(0), LW(1), LW(2), LW(3))
-    CALL(evt_npc_flag_onoff, 0, STRING("ノコリン"), 1024)
+    CALL(evt_npc_flag_onoff, 0, STRING("ノコリン"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_pera_onoff, STRING("ノコリン"), 0)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), 0)
@@ -735,7 +736,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ノコリン"*/"\x83\x6D\x83\x52\x83\x8A\x83\x93", // name
-        0x40000620, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase

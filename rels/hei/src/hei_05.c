@@ -10,6 +10,7 @@
 #include "evt/evt_mario.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/npcdrv.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -163,7 +164,7 @@ static EVT_BEGIN(shake_evt)
 EVT_END()
 
 static EVT_BEGIN(hashira_evt_sub)
-    CALL(evt_npc_flag_onoff, 0, LW(0), 32768)
+    CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_get_position, LW(0), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_TOGEDA_JUMP1"), LW(10), LW(11), LW(12), 0)
     IF_INT_LESS(LW(10), 0)
@@ -240,7 +241,7 @@ EVT_BEGIN(hei_05_init_evt)
             CALL(evt_npc_set_anim, STRING("シンエモン1"), STRING("KUR_Z_1"))
             CALL(evt_npc_set_position, STRING("シンエモン1"), -119, 65, -77)
             CALL(evt_npc_set_ry, STRING("シンエモン1"), 90)
-            CALL(evt_npc_flag_onoff, 1, STRING("シンエモン1"), 32768)
+            CALL(evt_npc_flag_onoff, 1, STRING("シンエモン1"), NPC_FLAG_INSTANT_TURN)
             SET_RAW_VALUE(LW(0), STRING("シンエモン1"))
             SET_RAW_VALUE(LW(1), STRING("シンエモン2"))
             SET_VALUE(LW(2), 0)
@@ -251,7 +252,7 @@ EVT_BEGIN(hei_05_init_evt)
             CALL(evt_npc_set_anim, STRING("シンエモン2"), STRING("KUR_Z_1"))
             CALL(evt_npc_set_position, STRING("シンエモン2"), 120, 62, -77)
             CALL(evt_npc_set_ry, STRING("シンエモン2"), 270)
-            CALL(evt_npc_flag_onoff, 1, STRING("シンエモン2"), 32768)
+            CALL(evt_npc_flag_onoff, 1, STRING("シンエモン2"), NPC_FLAG_INSTANT_TURN)
             SET_RAW_VALUE(LW(0), STRING("シンエモン2"))
             SET_RAW_VALUE(LW(1), STRING("シンエモン1"))
             SET_VALUE(LW(2), 1)

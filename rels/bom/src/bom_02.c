@@ -346,7 +346,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_msg_print, 0, STRING("stg7_bom_61"), 0, STRING("me"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 50, 152, 800, 50, 57, 260, 3000, 11)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     CALL(evt_npc_move_position, STRING("me"), -45, 270, 0, FLOAT(60.0f), 1)
     WAIT_MS(300)
@@ -361,7 +361,7 @@ static EVT_BEGIN(evt_taihou)
     WAIT_MS(300)
     CALL(evt_npc_move_position, STRING("me"), -140, 200, 0, FLOAT(60.0f), 1)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 131088)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     SET_VALUE(GSW_STORY_PROGRESS, 356)
     CALL(evt_cam3d_evt_off, 500, 11)
     RETURN
@@ -394,7 +394,7 @@ EVT_BEGIN(urotuku_white)
             GOTO(1)
         END_IF
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 132624)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY)
     CALL(evt_npc_status_onoff, 1, STRING("ホワイト"), 2)
     CALL(evt_npc_move_position, STRING("ホワイト"), 200, -85, 0, FLOAT(60.0f), 1)
     BEGIN_INLINE_EVENT
@@ -416,7 +416,7 @@ EVT_BEGIN(urotuku_white)
         END_IF
         CALL(evt_npc_set_position, STRING("ホワイト"), 380, 45, -150)
         CALL(evt_npc_set_ry, STRING("ホワイト"), 270)
-        CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), 1536)
+        CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_anim, STRING("ホワイト"), STRING("N_1"))
     END_INLINE_EVENT
     CALL(evt_mario_set_pose, STRING("M_I_2"))
@@ -437,7 +437,7 @@ static EVT_BEGIN(init_soncho)
 EVT_END()
 
 static EVT_BEGIN(talk_soncho)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(349)
         CALL(evt_msg_print, 0, STRING("stg7_bom_20_00"), 0, STRING("me"))
@@ -454,7 +454,7 @@ static EVT_BEGIN(talk_soncho)
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21"), 0, STRING("me"))
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
-                CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
                 RETURN
             END_IF
             WAIT_MS(300)
@@ -557,7 +557,7 @@ static EVT_BEGIN(talk_soncho)
         CASE_LESS(356)
         CALL_CHILD(PTR(evt_taihou))
     END_SWITCH
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
     RETURN
 EVT_END()
 
@@ -594,7 +594,7 @@ static EVT_BEGIN(talk_murabito_e)
 #ifdef VERSION_G8ME01
             END_IF
 #endif
-                CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+                CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
                 SET_VALUE(GF(0), 1)
                 BEGIN_INLINE_EVENT
                     CALL(evt_party_move_pos2, 0, 175, 45, 60)
@@ -605,7 +605,7 @@ static EVT_BEGIN(talk_murabito_e)
                 CALL(evt_mario_mov_pos2, 145, 45, 60)
                 CALL(evt_mario_set_dir_npc, STRING("me"))
                 WAIT_WHILE(GF(0))
-                CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
                 CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
                 WAIT_FRAMES(1)
                 CALL(evt_npc_wait_pera, STRING("me"))
@@ -819,8 +819,8 @@ static EVT_BEGIN(init_white)
                 CALL(evt_npc_set_position, STRING("ホワイト"), 380, 45, -150)
                 CALL(evt_npc_set_ry, STRING("ホワイト"), 270)
                 IF_INT_EQUAL(GSWF(5410), 1)
-                    CALL(evt_npc_flag_onoff, 0, STRING("me"), 16777216)
-                    CALL(evt_npc_flag_onoff, 1, STRING("me"), 1536)
+                    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_TALK_TURN)
+                    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                     ELSE
                     CALL(evt_npc_set_anim, STRING("ホワイト"), STRING("N_1"))
                     CALL(evt_npc_set_width, STRING("ホワイト"), 10)
@@ -845,14 +845,14 @@ EVT_END()
 EVT_BEGIN(mario_jump)
     CALL(evt_mario_cam_keep_on)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
-    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_get_position, STRING("ホワイト"), LW(0), LW(1), LW(2))
 #else
 /* JP: the script continues in mario_jump_tail (separate symbol); its last CALL is split across the two */
 EvtWord mario_jump[] = {
     CALL(evt_mario_cam_keep_on)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
-    CALL(evt_npc_flag_onoff, 1, STRING(/*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING(/*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_get_position, STRING(/*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67"), LW(0), LW(1), LW(2))
 #endif
     ADD(LW(1), 20)
@@ -896,7 +896,7 @@ EvtWord mario_jump[] = {
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, 335, 30, -130, 500, 2, -1000)
 #ifdef VERSION_G8ME01
-    CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), NPC_FLAG_NO_HIT)
     CALL(evt_mario_cam_keep_off)
     RETURN
 EVT_END()
@@ -946,8 +946,8 @@ static EVT_BEGIN(talk_white)
                 END_INLINE_EVENT
                 CALL(evt_npc_set_width, STRING("ホワイト"), 40)
                 CALL(evt_npc_status_onoff, 1, STRING("ホワイト"), 2)
-                CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 32)
-                CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 131088)
+                CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_NO_HIT)
+                CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
                 CALL(evt_npc_jump_position_nohit, STRING("ホワイト"), 245, 30, -110, 500, 80)
                 CALL(evt_npc_move_position, STRING("ホワイト"), 170, -55, 0, FLOAT(80.0f), 1)
                 CALL(evt_npc_set_position, STRING("ホワイト"), 0, -1000, 0)
@@ -1062,7 +1062,7 @@ EVT_BEGIN(iri_25_white_bed)
     WAIT_MS(1900)
     CALL(evt_npc_set_anim, STRING("ホワイト"), STRING("O_2"))
     WAIT_MS(1200)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("irai_25_15"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
@@ -1091,7 +1091,7 @@ EVT_BEGIN(evt_white_bed)
         GOTO(0)
     END_IF
     CALL(evt_msg_continue)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_NO_HIT)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("ホワイト"), LW(3), LW(4), LW(5))
     CALL(evt_sub_get_dir, LW(3), LW(5), LW(0), LW(2), LW(6))
@@ -1102,7 +1102,7 @@ EVT_BEGIN(evt_white_bed)
     END_IF
     CALL(evt_mario_mov_pos2, 330, -120, 60)
     WAIT_FRAMES(1)
-    CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), NPC_FLAG_NO_HIT)
     CALL(evt_mario_get_dispdir, LW(0))
     IF_INT_LESS(LW(0), 180)
         CALL(evt_mario_set_dir, 90, 200, 0)
@@ -1199,7 +1199,7 @@ EVT_BEGIN(evt_white_bed)
     WAIT_MS(1900)
     CALL(evt_npc_set_anim, STRING("ホワイト"), STRING("O_2"))
     WAIT_MS(1200)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg7_bom_56"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1225,8 +1225,8 @@ EVT_BEGIN(evt_white_bed)
         CALL(evt_party_set_dir_npc, 0, STRING("ホワイト"))
     END_INLINE_EVENT
     CALL(evt_npc_status_onoff, 1, STRING("ホワイト"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 32)
-    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_jump_position_nohit, STRING("ホワイト"), 245, 30, -110, 500, 80)
     CALL(evt_npc_move_position, STRING("ホワイト"), 170, -55, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_set_position, STRING("ホワイト"), 0, -1000, 0)
@@ -1264,7 +1264,7 @@ static EVT_BEGIN(kiza_entry)
     CALL(evt_npc_set_tribe, STRING("キザ野郎"), STRING("キザ野郎"))
     CALL(evt_npc_set_position, STRING("キザ野郎"), -190, 5, -130)
     CALL(evt_npc_set_ry, STRING("キザ野郎"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_change_interrupt, STRING("キザ野郎"), 6, PTR(kiza_talk))
     RETURN
 EVT_END()
@@ -1272,7 +1272,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"村長"*/"\x91\xBA\x92\xB7", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_soncho, // initEvent
         NULL, // regularEvent
@@ -1284,7 +1284,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ボムヘイE"*/"\x83\x7B\x83\x80\x83\x77\x83\x43\x45", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_e, // initEvent
         NULL, // regularEvent
@@ -1296,7 +1296,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ボムヘイF"*/"\x83\x7B\x83\x80\x83\x77\x83\x43\x46", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_f, // initEvent
         NULL, // regularEvent
@@ -1308,7 +1308,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ボムヘイG"*/"\x83\x7B\x83\x80\x83\x77\x83\x43\x47", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_g, // initEvent
         NULL, // regularEvent
@@ -1320,7 +1320,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ボムヘイH"*/"\x83\x7B\x83\x80\x83\x77\x83\x43\x48", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_h, // initEvent
         NULL, // regularEvent
@@ -1332,7 +1332,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ボムヘイI"*/"\x83\x7B\x83\x80\x83\x77\x83\x43\x49", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_murabito_i, // initEvent
         NULL, // regularEvent
@@ -1344,7 +1344,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"店員"*/"\x93\x58\x88\xF5", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_tenin, // initEvent
         NULL, // regularEvent
@@ -1356,7 +1356,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67", // name
-        0x41000000, // flags
+        NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_white, // initEvent
         NULL, // regularEvent
@@ -1569,7 +1569,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("村長"), 50, 0, 200)
     CALL(evt_npc_set_ry, STRING("村長"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("村長"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_position, STRING("ボムヘイE"), -250, 0, 150)
     CALL(evt_npc_set_ry, STRING("ボムヘイE"), 90)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイE"), 2)
@@ -1584,7 +1584,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_cam3d_evt_set, 50, 218, 1025, 50, 70, 188, 0, 11)
     CALL(evt_seq_wait, 2)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("村長"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("村長"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 30, 92, 484, 30, 40, 188, 2000, 11)
     CALL(evt_npc_move_position, STRING("ボムヘイE"), 0, 150, 2000, 0, 0)
     WAIT_MS(300)

@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
+#include "driver/npcdrv.h"
 
 
 EvtWord bero_05_custom_in[30];
@@ -143,7 +144,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガイド"*/"\x83\x4B\x83\x43\x83\x68", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         guide_init, // initEvent
         NULL, // regularEvent
@@ -223,7 +224,7 @@ EVT_BEGIN(puni_soguu_3)
         CALL(evt_mario_mov_pos2, LW(0), 10, FLOAT(120.0f))
     END_IF
     CALL(evt_mario_set_dir_npc, STRING("ガイド"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, STRING("ガイド"), 90)
     CALL(evt_eff_fukidashi, 1, STRING(""), STRING("ガイド"), 0, 0, 0, 0, 0, 0, 0, 30)
     CALL(evt_npc_set_anim, STRING("ガイド"), STRING("S_1"))
@@ -319,7 +320,7 @@ EVT_BEGIN(puni_soguu_3)
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
     WAIT_MS(200)
     CALL(evt_msg_print, 0, STRING("mac_1_029_00"), 0, STRING("ガイド"))
-    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     WAIT_MS(800)
     CALL(evt_cam3d_evt_off, 0, 11)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG0_TIK1"))
@@ -373,7 +374,7 @@ EVT_BEGIN(puni_switch)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("mac_1_029_01"), 0, STRING("me"))
     CALL(evt_npc_set_ry, STRING("me"), 90)
     SPAWN_EVENT_GET_ID(PTR(puni_walk_se), LW(10))
@@ -393,7 +394,7 @@ EVT_BEGIN(puni_switch)
     CALL(evt_hitobj_onoff, STRING("a_para_d1"), 1, 0)
     CALL_CHILD(PTR(anm_para_snd))
     CALL(evt_npc_set_position, STRING("me"), 230, -50, 80)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_party_run, 0)
     SET_VALUE(GSW_STORY_PROGRESS, 68)
     CALL(evt_mario_key_onoff, 1)

@@ -197,7 +197,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_party_set_dir, 0, 90, -1)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
-        CALL(evt_npc_flag_onoff, 1, STRING("ボンババ"), 131088)
+        CALL(evt_npc_flag_onoff, 1, STRING("ボンババ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
         CALL(bonbaba_wait_landon)
         CALL(evt_npc_set_anim, STRING("ボンババ"), STRING("GNB_H_2"))
     END_INLINE_EVENT
@@ -298,7 +298,7 @@ EVT_BEGIN(bonbaba_evt)
     WAIT_MS(1000)
     SET_VALUE(GSW_STORY_PROGRESS, 388)
     CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("ボンババ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ボンババ"), NPC_FLAG_NO_HIT)
     CALL_CHILD(PTR(bero_case_entry))
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
@@ -320,7 +320,7 @@ EVT_BEGIN(bonbaba_init)
             CALL(evt_npc_pera_onoff, STRING("me"), 0)
             CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(1.2998047f))
             CALL(evt_npc_set_anim, STRING("me"), STRING("GNB_H_3"))
-            CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         END_IF
     END_SWITCH
     RETURN
@@ -334,7 +334,7 @@ USER_FUNC(bonbaba_wait_landon) {
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ボンババ"*/"\x83\x7B\x83\x93\x83\x6F\x83\x6F", // name
-        0x2000240, // flags
+        NPC_FLAG_NO_CULL | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_VIEW_CORRECTION, // flags
         0, // reactionFlags
         bonbaba_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -356,7 +356,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_set_tribe, STRING("クリハカセ"), STRING("クリハカセ"))
     CALL(evt_npc_set_position, STRING("クリハカセ"), -58, 0, -280)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_TALK_POSE)
     CALL(evt_seq_wait, 2)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CEILING_BREAK1"), LW(10))

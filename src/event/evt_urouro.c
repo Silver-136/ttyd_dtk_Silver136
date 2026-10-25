@@ -54,7 +54,7 @@ USER_FUNC(urouro_init_func) {
     work->z = z;
     work->radius = radius;
     npc->moveSpeed = speed;
-    npc->flags |= 0x400000;
+    npc->flags |= NPC_FLAG_RESUME_AFTER_TALK;
     return EVT_RETURN_DONE;
 }
 

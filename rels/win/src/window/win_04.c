@@ -15,6 +15,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "driver/npcdrv.h"
 
 #include "driver/dispdrv.h"
 #include "stdlib.h"
@@ -502,7 +503,7 @@ static s32 item_list[] = {
 };
 
 EVT_BEGIN(clouda_nakama)
-    CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
@@ -674,8 +675,8 @@ EVT_BEGIN(clouda_nakama)
     WAIT_MS(1500)
     CALL(evt_cam3d_evt_set, 272, 75, 175, 272, 75, -1, 0, 11)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), 1073741824)
-        CALL(evt_npc_flag_onoff, 0, STRING("クラウダ"), 1536)
+        CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), NPC_FLAG_NO_WALL_COLLISION)
+        CALL(evt_npc_flag_onoff, 0, STRING("クラウダ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_move_position, STRING("クラウダ"), 270, 0, 0, FLOAT(30.0f), 0)
         SET_VALUE(LW(8), STRING("S_doa_e_l"))
         SET_VALUE(LW(9), STRING("S_doa_e_r"))
@@ -731,7 +732,7 @@ EVT_BEGIN(clouda_nakama)
     WAIT_MS(700)
     CALL(evt_eff_fukidashi, 1, STRING(""), STRING("クラウダ"), 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
-    CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg2_win_e09_02"), 0, STRING("クラウダ"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -763,8 +764,8 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_mario_set_pose, STRING("M_N_7"))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_entry, STRING("dummy1"), STRING("c_pguide"))
-        CALL(evt_npc_flag_onoff, 1, STRING("dummy1"), 32)
-        CALL(evt_npc_flag_onoff, 1, STRING("dummy1"), 128)
+        CALL(evt_npc_flag_onoff, 1, STRING("dummy1"), NPC_FLAG_NO_HIT)
+        CALL(evt_npc_flag_onoff, 1, STRING("dummy1"), NPC_FLAG_NO_DRAW)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_set_position, STRING("dummy1"), LW(0), LW(1), LW(2))
         CALL(evt_party_cont_onoff, 0, 0)
@@ -808,8 +809,8 @@ EVT_BEGIN(clouda_nakama)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_npc_entry, STRING("dummy2"), STRING("c_pguide"))
-        CALL(evt_npc_flag_onoff, 1, STRING("dummy2"), 32)
-        CALL(evt_npc_flag_onoff, 1, STRING("dummy2"), 128)
+        CALL(evt_npc_flag_onoff, 1, STRING("dummy2"), NPC_FLAG_NO_HIT)
+        CALL(evt_npc_flag_onoff, 1, STRING("dummy2"), NPC_FLAG_NO_DRAW)
         CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
         CALL(evt_npc_set_position, STRING("dummy2"), LW(0), LW(1), LW(2))
         CALL(evt_party_cont_onoff, 1, 0)
@@ -871,7 +872,7 @@ EVT_BEGIN(clouda_nakama)
         CALL(ss_ch_set, 2, 1)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, FLOAT(165.19922f), FLOAT(143.0f), FLOAT(292.0f), FLOAT(165.19922f), FLOAT(90.0f), FLOAT(-3.0f), 500, 11)
-    CALL(evt_npc_flag_onoff, 0, STRING("クラウダ"), 1536)
+    CALL(evt_npc_flag_onoff, 0, STRING("クラウダ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_jump_position_nohit, STRING("クラウダ"), 205, 50, 0, 500, 1)
     CALL(evt_npc_set_anim, STRING("クラウダ"), STRING("PWD_S_1"))
     LOOP(0)
@@ -881,7 +882,7 @@ EVT_BEGIN(clouda_nakama)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("クラウダ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg2_win_e09_06"), 0, STRING("クラウダ"))
     CALL(evt_mario_set_pose, STRING("M_U_3"))
     WAIT_MS(650)

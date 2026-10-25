@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 
@@ -137,17 +138,17 @@ EVT_END()
 EVT_BEGIN(dai3_battle_init)
     CALL(evt_npc_set_position, STRING("第三勢力部下Ａ"), -119, 0, 29)
     CALL(evt_npc_set_ry, STRING("第三勢力部下Ａ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), 1536)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("第三勢力部下Ｂ"), -129, 0, 66)
     CALL(evt_npc_set_ry, STRING("第三勢力部下Ｂ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), 1536)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     IF_INT_EQUAL(GSWF(2866), 0)
         CALL(evt_npc_set_position, STRING("第三勢力幹部"), -5, 0, 29)
         CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 270)
-        CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), 1536)
-        CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), 1073741856)
+        CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+        CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     END_IF
     RETURN
 EVT_END()

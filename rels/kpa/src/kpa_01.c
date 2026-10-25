@@ -12,6 +12,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/npcdrv.h"
 
 #include "stdio.h"
 #include "manager/evtmgr_cmd.h"
@@ -468,13 +469,13 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_044"), 0, STRING("mario"))
     CALL(evt_cam3d_evt_set, 430, 180, 517, 430, 90, 0, 1500, 11)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_HIT)
         WAIT_MS(900)
         CALL(evt_npc_get_position, STRING("ババ"), LW(0), LW(1), LW(2))
         SUBTRACT(LW(2), 30)
         CALL(evt_npc_jump_position_nohit, STRING("ババ"), LW(0), LW(1), LW(2), 200, 20)
         WAIT_MS(1100)
-        CALL(evt_npc_flag_onoff, 0, STRING("ババ"), 32)
+        CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_move_position, STRING("ババ"), 325, 0, 0, 40, 0)
         WAIT_MS(100)
         CALL(evt_npc_set_anim, STRING("ババ"), STRING("P_1"))
@@ -650,7 +651,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_snd_sfxoff, LW(15))
-    CALL(evt_npc_flag_onoff, 1, STRING("飛クッパ"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("飛クッパ"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ"))
     CALL(evt_sub_get_sincos, 132, LW(2), LW(3))
     MULTIPLY_FLOAT(LW(3), FLOAT(60.0f))
@@ -766,7 +767,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         GOTO(11)
     END_IF
     SET_VALUE(GF(0), 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_DRAW)
     WAIT_MS(500)
     CALL(evt_bero_mapchange, STRING("kpa_00"), STRING(""))
     CALL(evt_mario_key_onoff, 1)
@@ -834,7 +835,7 @@ EVT_END()
 
 EVT_BEGIN(togenoko_C_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -842,7 +843,7 @@ EVT_END()
 EVT_BEGIN(hammer_AB_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
     IF_INT_EQUAL(GSWF(4775), 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 16777216)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
     END_IF
     RETURN
 EVT_END()
@@ -870,8 +871,8 @@ EVT_BEGIN(hammer_AB_talk_evt)
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
         CALL(evt_msg_print, 0, STRING("kpa_stg1_009"), 0, STRING("mario"))
         SET_VALUE(GSWF(4775), 1)
-        CALL(evt_npc_flag_onoff, 0, STRING("ハンマーＡ"), 16777216)
-        CALL(evt_npc_flag_onoff, 0, STRING("ハンマーＢ"), 16777216)
+        CALL(evt_npc_flag_onoff, 0, STRING("ハンマーＡ"), NPC_FLAG_NO_TALK_TURN)
+        CALL(evt_npc_flag_onoff, 0, STRING("ハンマーＢ"), NPC_FLAG_NO_TALK_TURN)
         ELSE
         CALL(evt_set_dir_to_target, STRING("ハンマーＡ"), STRING("mario"))
         CALL(evt_set_dir_to_target, STRING("ハンマーＢ"), STRING("mario"))
@@ -1042,7 +1043,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"飛クッパ"*/"\x94\xF2\x83\x4E\x83\x62\x83\x70", // name
-        0x20, // flags
+        NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         hkoopa_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType

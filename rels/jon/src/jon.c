@@ -304,7 +304,7 @@ u8 enemy_100[] = {
 NpcSetupInfo npcEnt_kuriboo[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         kuriboo_init_event, // initEvent
         kuriboo_move_event, // regularEvent
@@ -329,7 +329,7 @@ NpcSetupInfo npcEnt_kuriboo[] = {
 NpcSetupInfo npcEnt_patakuri[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         patakuri_init_event, // initEvent
         patakuri_move_event, // regularEvent
@@ -354,7 +354,7 @@ NpcSetupInfo npcEnt_patakuri[] = {
 NpcSetupInfo npcEnt_hannya[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         hannya_init_event, // initEvent
         hannya_move_event, // regularEvent
@@ -379,7 +379,7 @@ NpcSetupInfo npcEnt_hannya[] = {
 NpcSetupInfo npcEnt_chorobon[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         chorobon_init_event, // initEvent
         chorobon_move_event, // regularEvent
@@ -404,7 +404,7 @@ NpcSetupInfo npcEnt_chorobon[] = {
 NpcSetupInfo npcEnt_sinnosuke[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         sinnosuke_init_event, // initEvent
         sinnosuke_move_event, // regularEvent
@@ -429,7 +429,7 @@ NpcSetupInfo npcEnt_sinnosuke[] = {
 NpcSetupInfo npcEnt_sinemon[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         sinemon_init_event, // initEvent
         sinemon_move_event, // regularEvent
@@ -454,7 +454,7 @@ NpcSetupInfo npcEnt_sinemon[] = {
 NpcSetupInfo npcEnt_nokonoko[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         nokonoko_init_event, // initEvent
         nokonoko_move_event, // regularEvent
@@ -479,7 +479,7 @@ NpcSetupInfo npcEnt_nokonoko[] = {
 NpcSetupInfo npcEnt_patapata[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         patapata_init_event, // initEvent
         patapata_move_event, // regularEvent
@@ -504,7 +504,7 @@ NpcSetupInfo npcEnt_patapata[] = {
 NpcSetupInfo npcEnt_met[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         met_init_event, // initEvent
         met_move_event, // regularEvent
@@ -529,7 +529,7 @@ NpcSetupInfo npcEnt_met[] = {
 NpcSetupInfo npcEnt_patamet[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         patamet_init_event, // initEvent
         patamet_move_event, // regularEvent
@@ -554,7 +554,7 @@ NpcSetupInfo npcEnt_patamet[] = {
 NpcSetupInfo npcEnt_sambo[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         sambo_init_event, // initEvent
         sambo_move_event, // regularEvent
@@ -579,7 +579,7 @@ NpcSetupInfo npcEnt_sambo[] = {
 NpcSetupInfo npcEnt_honenoko[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         honenoko2_init_event, // initEvent
         honenoko2_move_event, // regularEvent
@@ -604,7 +604,7 @@ NpcSetupInfo npcEnt_honenoko[] = {
 NpcSetupInfo npcEnt_karon[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         karon_init_event, // initEvent
         karon_move_event, // regularEvent
@@ -629,7 +629,7 @@ NpcSetupInfo npcEnt_karon[] = {
 NpcSetupInfo npcEnt_dokugassun[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         dokugassun_init_event, // initEvent
         dokugassun_move_event, // regularEvent
@@ -654,7 +654,7 @@ NpcSetupInfo npcEnt_dokugassun[] = {
 NpcSetupInfo npcEnt_piders[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         piders_init_event, // initEvent
         piders_move_event, // regularEvent
@@ -678,7 +678,7 @@ NpcSetupInfo npcEnt_piders[] = {
 NpcSetupInfo npcEnt_teresa[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         teresa_init_event, // initEvent
         teresa_move_event, // regularEvent
@@ -703,7 +703,7 @@ NpcSetupInfo npcEnt_teresa[] = {
 NpcSetupInfo npcEnt_hbom[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         hbom_init_event, // initEvent
         hbom_move_event, // regularEvent
@@ -728,7 +728,7 @@ NpcSetupInfo npcEnt_hbom[] = {
 NpcSetupInfo npcEnt_bubble[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         bubble_init_event, // initEvent
         bubble_move_event, // regularEvent
@@ -753,7 +753,7 @@ NpcSetupInfo npcEnt_bubble[] = {
 NpcSetupInfo npcEnt_wanwan[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         wanwan_init_event, // initEvent
         wanwan_move_event, // regularEvent
@@ -777,7 +777,7 @@ NpcSetupInfo npcEnt_wanwan[] = {
 NpcSetupInfo npcEnt_mahoon[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         mahoon_init_event, // initEvent
         mahoon_move_event, // regularEvent
@@ -802,7 +802,7 @@ NpcSetupInfo npcEnt_mahoon[] = {
 NpcSetupInfo npcEnt_pakkun[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         pakkun_init_event, // initEvent
         pakkun_move_event, // regularEvent
@@ -827,7 +827,7 @@ NpcSetupInfo npcEnt_pakkun[] = {
 NpcSetupInfo npcEnt_togenoko[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         togenoko_init_event, // initEvent
         togenoko_move_event, // regularEvent
@@ -852,7 +852,7 @@ NpcSetupInfo npcEnt_togenoko[] = {
 NpcSetupInfo npcEnt_basabasa2[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         basabasa2_init_event, // initEvent
         basabasa2_move_event, // regularEvent
@@ -877,7 +877,7 @@ NpcSetupInfo npcEnt_basabasa2[] = {
 NpcSetupInfo npcEnt_togedaruma[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         togedaruma_init_event, // initEvent
         togedaruma_move_event, // regularEvent
@@ -902,7 +902,7 @@ NpcSetupInfo npcEnt_togedaruma[] = {
 NpcSetupInfo npcEnt_pansy[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, // reactionFlags
         pansy_init_event, // initEvent
         pansy_move_event, // regularEvent
@@ -927,7 +927,7 @@ NpcSetupInfo npcEnt_pansy[] = {
 NpcSetupInfo npcEnt_zonbaba[] = {
     {
         /*"敵"*/"\x93\x47", // name
-        0x1000000A, // flags
+        NPC_FLAG_READY | NPC_FLAG_ENEMY | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, NULL, NULL, NULL, // reactionFlags..talkEvent
         enemy_common_dead_event, // deadEvent
         NULL, NULL, NULL, NULL, // findEvent..blowEvent
@@ -1247,7 +1247,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_zonbaba))
         CALL(evt_npc_set_position, STRING("敵"), 0, 0, 0)
         CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_H_3"))
-        CALL(evt_npc_flag_onoff, 1, STRING("敵"), 33554496)
+        CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_CULL | NPC_FLAG_NO_VIEW_CORRECTION)
         CALL(evt_npc_pera_onoff, STRING("敵"), 0)
         CALL(evt_npc_set_ry, STRING("敵"), 0)
         SPAWN_EVENT(PTR(zonbaba_first_event))
@@ -1298,7 +1298,7 @@ EVT_BEGIN(evt_open_box)
 EVT_END()
 
 static EVT_BEGIN(move_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 132112)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     CALL(evt_sub_random, 360, LW(3))
     LABEL(0)
@@ -1422,7 +1422,7 @@ EVT_END()
 NpcSetupInfo npcEnt_idouya[] = {
     {
         /*"移動屋"*/"\x88\xDA\x93\xAE\x89\xAE", // name
-        0x10000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, NULL, // reactionFlags..initEvent
         move_event, // regularEvent
         talk_idouya, // talkEvent
@@ -1553,7 +1553,7 @@ EVT_END()
 NpcSetupInfo npcEnt_gyousyou[] = {
     {
         /*"行商人"*/"\x8D\x73\x8F\xA4\x90\x6C", // name
-        0x10000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_STOP_FOR_EVENT, // flags
         0, NULL, // reactionFlags..initEvent
         move_event, // regularEvent
         talk_gyousyou, // talkEvent
@@ -2143,7 +2143,7 @@ EVT_BEGIN(iri_12_dokan_in_sub)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_ry, STRING("マッキノ"), 90)
     CALL(evt_npc_jump_position_nohit, STRING("マッキノ"), 0, 29, 0, 400, 29)
     WAIT_MS(200)
@@ -2162,7 +2162,7 @@ EVT_BEGIN(iri_12_dokan_in_sub)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_npc_pera_onoff, STRING("マッキノ"), 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 33816576)
+        CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_SHADOW | NPC_FLAG_NO_VIEW_CORRECTION)
         CALL(evt_paper_entry, STRING("p_dokan_y"))
         CALL(evt_npc_set_paper, STRING("マッキノ"), STRING("p_dokan_y"))
         CALL(evt_npc_set_paper_anim, STRING("マッキノ"), STRING("PM_D_1A"))
@@ -2230,14 +2230,14 @@ EVT_BEGIN(iri_12_makkino_return_dokan)
     CALL(evt_npc_set_ry, STRING("マッキノ"), 90)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("マッキノ"))
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 33816576)
-    CALL(evt_npc_flag_onoff, 0, STRING("マッキノ"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_SHADOW | NPC_FLAG_NO_VIEW_CORRECTION)
+    CALL(evt_npc_flag_onoff, 0, STRING("マッキノ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_paper_entry, STRING("p_dokan_x"))
     CALL(evt_npc_set_paper, STRING("マッキノ"), STRING("p_dokan_x"))
     CALL(evt_npc_set_paper_anim, STRING("マッキノ"), STRING("PM_D_1A"))
     CALL(iri_12_paper_init)
     CALL(evt_npc_set_ry, STRING("マッキノ"), 180)
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 1073741824)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_get_position, STRING("マッキノ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(2), 3)
     CALL(evt_npc_set_position, STRING("マッキノ"), LW(0), LW(1), LW(2))
@@ -2289,7 +2289,7 @@ EVT_BEGIN(iri_12_makkino_return_dokan)
 EVT_END()
 
 EVT_BEGIN(iri_12_makkino_return)
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("マッキノ"), 72, 0, 0, 120, 4)
     CALL(evt_msg_print, 0, STRING("irai_12_011"), 0, STRING("マッキノ"))
     CALL(evt_npc_move_position, STRING("マッキノ"), 98, -123, 0, 120, 4)
@@ -2298,7 +2298,7 @@ EVT_BEGIN(iri_12_makkino_return)
 EVT_END()
 
 EVT_BEGIN(iri_12_makkino_return_b100)
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("マッキノ"), -205, -75, 0, 120, 4)
     CALL(evt_msg_print, 0, STRING("irai_12_011"), 0, STRING("マッキノ"))
     CALL(evt_mario_key_onoff, 1)
@@ -2309,7 +2309,7 @@ EVT_BEGIN(iri_12_makkino_return_b100)
 EVT_END()
 
 EVT_BEGIN(iri_12_makkino_return_zonbaba)
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("マッキノ"), -337, -124, 0, 120, 4)
     CALL(evt_msg_print, 0, STRING("irai_12_011"), 0, STRING("マッキノ"))
@@ -2340,9 +2340,9 @@ EVT_BEGIN(iri_12_makkino_move_dokan_side)
             CALL(evt_mario_mov_pos2, -40, -40, 60)
         END_IF
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("マッキノ"), -40, 0, 0, 150, 4)
-    CALL(evt_npc_flag_onoff, 0, STRING("マッキノ"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(wait_landon)
     CALL(evt_npc_change_interrupt, STRING("マッキノ"), 6, PTR(iri_12_makkino_talk))
     CALL(evt_npc_set_unitwork, STRING("マッキノ"), 0, 0)
@@ -2390,8 +2390,8 @@ EVT_BEGIN(iri_12_makkino_okiru)
     CALL(evt_npc_set_anim, STRING("マッキノ"), STRING("O_1"))
     CALL(evt_npc_wait_anim, STRING("マッキノ"), 1)
     CALL(evt_npc_set_balloontype, STRING("マッキノ"), 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 1536)
-    CALL(evt_npc_flag_onoff, 0, STRING("マッキノ"), 16777216)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("マッキノ"), NPC_FLAG_NO_TALK_TURN)
     CALL(evt_npc_status_onoff, 1, STRING("マッキノ"), 2)
     CALL(evt_set_dir_to_target, STRING("マッキノ"), STRING("mario"))
     RETURN
@@ -2422,10 +2422,10 @@ EVT_BEGIN(iri_12_makkino_fall)
     CALL(evt_seq_wait, 2)
     CALL(evt_bero_exec_wait, 2)
     CALL(evt_bero_get_start_position, LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_position, STRING("マッキノ"), LW(0), LW(1), LW(2))
     CALL(evt_bero_exec_wait, 65536)
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 131120)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
     CALL(wait_landon)
     CALL(evt_npc_check, STRING("敵"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -2439,7 +2439,7 @@ EVT_BEGIN(iri_12_makkino_fall)
         END_IF
     END_IF
     CALL(evt_npc_change_interrupt, STRING("マッキノ"), 6, PTR(iri_12_makkino_talk))
-    CALL(evt_npc_flag_onoff, 0, STRING("マッキノ"), 131088)
+    CALL(evt_npc_flag_onoff, 0, STRING("マッキノ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
 
@@ -2448,10 +2448,10 @@ EVT_BEGIN(iri_12_makkino_fall_return)
     CALL(evt_seq_wait, 2)
     CALL(evt_bero_exec_wait, 2)
     CALL(evt_bero_get_start_position, LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_position, STRING("マッキノ"), LW(0), LW(1), LW(2))
     CALL(evt_bero_exec_wait, 65536)
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 131120)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
     CALL(wait_landon)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
         IF_INT_EQUAL(GSWF(5085), 1)
@@ -2473,7 +2473,7 @@ EVT_END()
 EVT_BEGIN(iri_12_init_fall)
     CALL(evt_npc_entry, STRING("マッキノ"), STRING("c_suifu_k"))
     CALL(evt_npc_set_tribe, STRING("マッキノ"), STRING("水夫"))
-    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("マッキノ"), 2)
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
@@ -2495,7 +2495,7 @@ static EVT_BEGIN(iri_12_init)
                 CALL(evt_npc_set_tribe, STRING("マッキノ"), STRING("水夫"))
                 CALL(evt_npc_set_position, STRING("マッキノ"), -50, 0, -120)
                 CALL(evt_npc_set_ry, STRING("マッキノ"), 90)
-                CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 16777216)
+                CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_TALK_TURN)
                 CALL(evt_npc_change_interrupt, STRING("マッキノ"), 6, PTR(iri_12_makkino_talk))
                 CALL(evt_npc_set_anim, STRING("マッキノ"), STRING("D_2"))
                 CALL(evt_npc_set_balloontype, STRING("マッキノ"), 0)
@@ -2642,7 +2642,7 @@ EVT_END()
 EVT_BEGIN(zonbaba_first_event)
     IF_INT_EQUAL(GSWF(5085), 1)
         CALL(evt_npc_set_position, STRING("敵"), 0, -1000, 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("敵"), 131096)
+        CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 200, 1, 0, PTR(evt_open_box), GSWF(5084))
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         RETURN
@@ -2702,7 +2702,7 @@ EVT_BEGIN(zonbaba_first_event)
     SPAWN_EVENT(PTR(gonbaba_down_shake))
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
-        CALL(evt_npc_flag_onoff, 1, STRING("敵"), 131088)
+        CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
         CALL(gonbaba_wait_landon)
         CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_H_2"))
     END_INLINE_EVENT
@@ -2798,8 +2798,8 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_eff_fukidashi, 3, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("oFF_jon_06"), 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("敵"), 32)
-    CALL(evt_npc_flag_onoff, 0, STRING("敵"), 8)
+    CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY)
     SET_VALUE(GSWF(5085), 1)
     IF_INT_EQUAL(GSW(1420), 12)
         IF_INT_EQUAL(GSWF(5406), 1)
@@ -2834,7 +2834,7 @@ USER_FUNC(wait_landon) {
     // マッキノ
     NpcEntry* npc = npcNameToPtr("\203}\203b\203L\203m");
 
-    if (!(npc->flags & 0x10) || npc->groundHit != NULL) {
+    if (!(npc->flags & NPC_FLAG_FLOOR_COLLISION) || npc->groundHit != NULL) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

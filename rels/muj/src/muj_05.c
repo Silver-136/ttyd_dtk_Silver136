@@ -14,6 +14,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 #include "string.h"
 #include "memory.h"
@@ -160,7 +161,7 @@ EVT_BEGIN(sanders_nakama)
     CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダース"))
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_THUNDERS_HIT1"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("stg5_muj_55"), 0, STRING("me"))
     CALL(evt_cam3d_evt_set, -117, 125, 357, -117, 63, 6, 500, 11)
@@ -219,7 +220,7 @@ static EVT_BEGIN(sanders_init)
         CALL(evt_npc_change_interrupt, STRING("me"), 8, PTR(sanders_nakama))
         CALL(evt_npc_set_position, STRING("me"), -114, 22, 22)
         CALL(evt_npc_set_tribe, STRING("me"), STRING("サンダースねむる"))
-        CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), 512)
+        CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), NPC_FLAG_TALK_POSE)
     END_SWITCH
     RETURN
 EVT_END()
@@ -240,7 +241,7 @@ EVT_BEGIN(sanders_talk_sub)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), 512)
+    CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_reaction_flag_onoff, 1, STRING("me"), 2)
     CALL(evt_npc_change_interrupt, STRING("me"), 8, PTR(sanders_nakama))
     SET_VALUE(GSW_STORY_PROGRESS, 238)
@@ -387,7 +388,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         sanders_init, // initEvent
         NULL, // regularEvent
@@ -399,7 +400,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         marco_init, // initEvent
         NULL, // regularEvent
@@ -411,7 +412,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"エルモス１"*/"\x83\x47\x83\x8B\x83\x82\x83\x58\x82\x50", // name
-        0x608, // flags
+        NPC_FLAG_ENEMY | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
         erumosu_regl, // regularEvent
@@ -428,7 +429,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"エルモス２"*/"\x83\x47\x83\x8B\x83\x82\x83\x58\x82\x51", // name
-        0x608, // flags
+        NPC_FLAG_ENEMY | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
         erumosu_regl, // regularEvent
@@ -449,7 +450,7 @@ static NpcSetupInfo npcEnt[] = {
 NpcSetupInfo npcEnt_after[] = {
     {
         /*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         sanders_init, // initEvent
         NULL, // regularEvent
@@ -461,7 +462,7 @@ NpcSetupInfo npcEnt_after[] = {
     },
     {
         /*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         marco_init, // initEvent
         NULL, // regularEvent
@@ -556,8 +557,8 @@ EVT_BEGIN(sanders_kyushutsu_sub)
         END_INLINE_EVENT
     END_IF
     CALL(evt_hitobj_onoff, STRING("A_ki_02_02"), 0, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("サンダース"), 131088)
-    CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("サンダース"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+    CALL(evt_npc_flag_onoff, 0, STRING("サンダース"), NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_THUNDERS_FALL1"), 85, 40, 23, LW(10))
         LOOP(0)
@@ -581,7 +582,7 @@ EVT_BEGIN(sanders_kyushutsu_sub)
     WAIT_MS(1500)
     CALL(evt_npc_set_anim, STRING("サンダース"), STRING("S_1"))
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 1, STRING("サンダース"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("サンダース"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_ORGEL1"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_34"), 0, STRING("サンダース"))
     CALL(evt_cam3d_evt_set, -105, 120, 324, -105, 62, 3, 500, 11)
@@ -799,9 +800,9 @@ EVT_BEGIN(penalty_event)
     CALL(evt_mario_key_onoff, 0)
     DELETE_EVENT(GW(2))
     CALL(evt_msg_close, STRING("stg5_muj_93_02_00"))
-    CALL(evt_npc_flag_onoff, 1, STRING("エルモスA"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("エルモスB"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("エルモスC"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("エルモスA"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("エルモスB"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("エルモスC"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     BEGIN_INLINE_EVENT
         ADD(LW(0), -23)
         ADD(LW(2), -20)
@@ -1078,7 +1079,7 @@ EVT_BEGIN(dokuroiwa_bomb)
     CALL(evt_npc_set_ry, STRING("マルコ"), 90)
     CALL(evt_cam3d_evt_set, 280, 115, 333, 280, 55, -11, 500, 11)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 1, STRING("マルコ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("マルコ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_get_position, STRING("マルコ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("マルコ"), LW(0), LW(1), LW(2), 225, 30)
     CALL(evt_npc_jump_position_nohit, STRING("マルコ"), LW(0), LW(1), LW(2), 225, 30)

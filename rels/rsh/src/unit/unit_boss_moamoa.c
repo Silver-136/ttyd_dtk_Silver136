@@ -5,6 +5,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"
+#include "driver/npcdrv.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -1127,14 +1128,14 @@ static EVT_BEGIN(evt_moamoa)
     CALL(evt_npc_set_position, STRING("papa"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("mama"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("konari"), 0, -1000, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("kinopio"), 2048)
-    CALL(evt_npc_flag_onoff, 1, STRING("cook"), 2048)
-    CALL(evt_npc_flag_onoff, 1, STRING("powan"), 2048)
-    CALL(evt_npc_flag_onoff, 1, STRING("sarary"), 2048)
-    CALL(evt_npc_flag_onoff, 1, STRING("rose"), 2048)
-    CALL(evt_npc_flag_onoff, 1, STRING("papa"), 2048)
-    CALL(evt_npc_flag_onoff, 1, STRING("mama"), 2048)
-    CALL(evt_npc_flag_onoff, 1, STRING("konari"), 2048)
+    CALL(evt_npc_flag_onoff, 1, STRING("kinopio"), NPC_FLAG_HIDE)
+    CALL(evt_npc_flag_onoff, 1, STRING("cook"), NPC_FLAG_HIDE)
+    CALL(evt_npc_flag_onoff, 1, STRING("powan"), NPC_FLAG_HIDE)
+    CALL(evt_npc_flag_onoff, 1, STRING("sarary"), NPC_FLAG_HIDE)
+    CALL(evt_npc_flag_onoff, 1, STRING("rose"), NPC_FLAG_HIDE)
+    CALL(evt_npc_flag_onoff, 1, STRING("papa"), NPC_FLAG_HIDE)
+    CALL(evt_npc_flag_onoff, 1, STRING("mama"), NPC_FLAG_HIDE)
+    CALL(evt_npc_flag_onoff, 1, STRING("konari"), NPC_FLAG_HIDE)
     CALL(moamoa_on)
     CALL(evt_ext_entry, 750, PTR(ext_moamoa_data), PTR(ext_moamoa_init), PTR(ext_moamoa_main), 0)
     RETURN

@@ -10,6 +10,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "driver/npcdrv.h"
 
 #include "driver/itemdrv.h"
 #include "mario/mariost.h"
@@ -60,7 +61,7 @@ EvtWord iri_28_init[60];
 EvtWord win_00_init_evt[85];
 
 static EVT_BEGIN(vivian_init)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 268435456)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(72, 83)
         CALL(evt_npc_set_position, STRING("me"), -535, 0, -30)
@@ -78,7 +79,7 @@ static EVT_BEGIN(vivian_talk)
 EVT_END()
 
 static EVT_BEGIN(maririn_init)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 268435456)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(72, 85)
         CALL(evt_npc_set_position, STRING("me"), -495, 0, -60)
@@ -92,7 +93,7 @@ EVT_BEGIN(maririn_talk)
 EVT_END()
 
 EVT_BEGIN(majorin_init)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 268435456)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(72, 85)
         CALL(evt_npc_set_position, STRING("me"), -455, 0, -30)
@@ -146,14 +147,14 @@ static EVT_BEGIN(kizayarou_init)
     CALL(evt_npc_change_interrupt, LW(0), 1, PTR(kizayarou_regl))
     CALL(evt_npc_set_position, LW(0), -450, 0, -25)
     CALL(evt_npc_set_ry, LW(0), 270)
-    CALL(evt_npc_flag_onoff, 1, LW(0), 1536)
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ビビアン"*/"\x83\x72\x83\x72\x83\x41\x83\x93", // name
-        0x200, // flags
+        NPC_FLAG_TALK_POSE, // flags
         0, // reactionFlags
         vivian_init, // initEvent
         NULL, // regularEvent
@@ -165,7 +166,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マリリン"*/"\x83\x7D\x83\x8A\x83\x8A\x83\x93", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         maririn_init, // initEvent
         NULL, // regularEvent
@@ -177,7 +178,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マジョリン"*/"\x83\x7D\x83\x57\x83\x87\x83\x8A\x83\x93", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         majorin_init, // initEvent
         NULL, // regularEvent
@@ -189,7 +190,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ファビオ"*/"\x83\x74\x83\x40\x83\x72\x83\x49", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         fabio_init, // initEvent
         NULL, // regularEvent
@@ -245,9 +246,9 @@ EVT_BEGIN(witchtrio_momeru)
     CALL(evt_npc_set_ry, STRING("ビビアン"), 90)
     CALL(evt_npc_set_ry, STRING("マリリン"), 90)
     CALL(evt_npc_set_ry, STRING("マジョリン"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_normalize)
@@ -436,9 +437,9 @@ EVT_BEGIN(witchtrio_momeru)
     WAIT_MS(300)
     CALL(evt_snd_bgmoff, 513)
     CALL(evt_snd_bgmon, 288, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_off, 500, 11)
     SET_VALUE(GSW_STORY_PROGRESS, 72)
     CALL(evt_party_run, 0)
@@ -475,9 +476,9 @@ EVT_BEGIN(witchtrio_picture)
     CALL(evt_npc_set_ry, STRING("ビビアン"), 90)
     CALL(evt_npc_set_ry, STRING("マリリン"), 270)
     CALL(evt_npc_set_ry, STRING("マジョリン"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), 1140850720)
-    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), 1140850720)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 1140850720)
+    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT | NPC_FLAG_VIVIAN_TYPE | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_NO_HIT | NPC_FLAG_VIVIAN_TYPE | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_VIVIAN_TYPE | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_seq_wait, 2)
     WAIT_MS(1000)
     CALL(evt_npc_change_fbat_mode, 7)
@@ -569,9 +570,9 @@ EVT_END()
 
 EVT_BEGIN(mario_vs_witchtrio)
     CALL(evt_npc_set_ry, STRING("マジョリン"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 1073741920)
+    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_CULL | NPC_FLAG_NO_WALL_COLLISION)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(0), -325)
@@ -689,7 +690,7 @@ EVT_BEGIN(mario_vs_witchtrio)
         CALL(evt_npc_move_position, STRING("マリリン"), LW(0), LW(2), 0, 200, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT_GET_ID(LW(12))
-        CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), 1024)
+        CALL(evt_npc_flag_onoff, 0, STRING("ビビアン"), NPC_FLAG_AUTO_MOVE_ANIM)
         WAIT_FRAMES(1)
         CALL(evt_npc_set_anim, STRING("ビビアン"), STRING("PTR_R_3"))
         CALL(evt_npc_get_position, STRING("ビビアン"), LW(0), LW(1), LW(2))
@@ -777,9 +778,9 @@ EVT_BEGIN(witchtrio_lose)
     CALL(evt_npc_set_ry, STRING("ビビアン"), 90)
     CALL(evt_npc_set_ry, STRING("マリリン"), 90)
     CALL(evt_npc_set_ry, STRING("マジョリン"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mario_set_pos, -335, 0, -50)
     CALL(evt_party_set_pos, 0, -287, 0, -50)
     CALL(evt_party_set_pos, 1, -310, 0, -40)
@@ -788,8 +789,8 @@ EVT_BEGIN(witchtrio_lose)
     CALL(evt_party_set_dir, 1, 270, -1)
     CALL(evt_npc_entry, STRING("ダミー"), STRING("c_majyorin"))
     CALL(evt_npc_set_position, STRING("ダミー"), 0, -1000, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_set_autotalkpose, STRING("ビビアン"), STRING("PTR_S_4"), STRING("PTR_T_4"))
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_WITCH1"))
     CALL(evt_cam3d_evt_set, -375, 144, 533, -375, 40, -58, 0, 11)
@@ -934,7 +935,7 @@ EVT_BEGIN(iri_28_enemy_all_dead)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("irai_28_005"), 0, STRING("ファビオ"))
     WAIT_MS(200)
-    CALL(evt_npc_flag_onoff, 1, STRING("ファビオ"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ファビオ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
         CALL(evt_mario_set_dir, 90, 300, 0)

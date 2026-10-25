@@ -53,7 +53,7 @@ EVT_BEGIN(shopmaster_talk)
 EVT_END()
 
 static EVT_BEGIN(urouro_move)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 1073741824)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(50.0f), FLOAT(30.0f), 0)
     CALL(urouro_main_func, STRING("me"))
@@ -63,7 +63,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ブタお店の主人"*/"\x83\x75\x83\x5E\x82\xA8\x93\x58\x82\xCC\x8E\xE5\x90\x6C", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         shopmaster_pig_init, // initEvent
         urouro_move, // regularEvent

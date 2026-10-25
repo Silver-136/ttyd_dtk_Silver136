@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"
@@ -239,9 +240,9 @@ EVT_BEGIN(elder_rescue)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_cam3d_evt_set, 105, 82, 92, 105, 30, -203, 1000, 11)
-    CALL(evt_npc_flag_onoff, 1, STRING("プニ族長老"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("プニ族長老"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL_CHILD(PTR(mri_guide_goryu))
     CALL(evt_puni_set_mode, 1, 30)
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
@@ -512,7 +513,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         elder_init, // initEvent
         NULL, // regularEvent
@@ -524,7 +525,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ガイド妹"*/"\x83\x4B\x83\x43\x83\x68\x96\x85", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         sister_init, // initEvent
         sister_regl, // regularEvent
@@ -536,7 +537,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ガイド"*/"\x83\x4B\x83\x43\x83\x68", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         guide_init, // initEvent
         NULL, // regularEvent
@@ -548,7 +549,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ族３"*/"\x83\x76\x83\x6A\x91\xB0\x82\x52", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         puni_3_init, // initEvent
         NULL, // regularEvent
@@ -781,7 +782,7 @@ EVT_BEGIN(evt_check01)
             CALL(evt_puni_get_lsw_index, LSW(0), 0, LW(0), LW(1), LW(2), LW(3))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_puni_flag_onoff, 1, 0, 262144)
-                CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), 1536)
+                CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                 CALL(evt_msg_print, 0, STRING("stg2_mri_e14_16"), 0, STRING("ガイドsp"))
                 CALL(evt_puni_flag_onoff, 1, 1, 262144)
                 CALL(evt_msg_print, 0, STRING("stg2_mri_e14_17"), 0, STRING("ガイド妹"))
@@ -835,12 +836,12 @@ EVT_BEGIN(bluejail_event)
     CALL_CHILD(PTR(bluejail_alpha))
     CALL(evt_npc_set_position, STRING("ガイド妹"), -192, 0, -120)
     CALL(evt_npc_set_ry_lr, STRING("ガイド妹"), 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド妹"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド妹"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_puni_set_position, 14, 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("プニ族"), -114, 0, -120)
     CALL(evt_npc_set_ry_lr, STRING("プニ族"), 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_cam3d_evt_set, -160, 160, 540, -160, 60, 0, 0, 11)
     CALL(evt_seq_wait, 2)
     BEGIN_INLINE_EVENT
@@ -1100,8 +1101,8 @@ EVT_BEGIN(guide_sister)
     SPAWN_EVENT(PTR(mario_kirimomi_event))
     SPAWN_EVENT(PTR(party_kirimomi_event))
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_NOKO_SAIKAI1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド妹"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド妹"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     WAIT_MS(2000)
     CALL(evt_npc_get_reglid, STRING("ガイド妹"), LW(0))
     DELETE_EVENT(LW(0))
@@ -1306,7 +1307,7 @@ EVT_BEGIN(toraware_elder)
     END_IF
     CALL(evt_puni_flag_onoff, 1, 0, 262144)
     CALL(evt_puni_set_anim, 1, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), 1073743392)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, STRING("ガイドsp"), 270)
     SET_VALUE(LW(0), STRING("ガイドsp"))
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
@@ -1325,7 +1326,7 @@ EVT_BEGIN(toraware_elder)
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
     SET_VALUE(LW(10), STRING("プニ族長老"))
-    CALL(evt_npc_flag_onoff, 1, LW(10), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, LW(10), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, LW(10), 90)
     SET_VALUE(LW(0), LW(10))
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
@@ -1415,7 +1416,7 @@ EVT_BEGIN(guide_sister_before)
     SET_VALUE(GSWF(2836), 1)
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073743392)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e19_04_01"), 0, STRING("ガイド"))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_change_interrupt, STRING("ガイド"), 6, 0)
@@ -1423,7 +1424,7 @@ EVT_BEGIN(guide_sister_before)
         SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
         CALL(evt_npc_move_position, STRING("ガイド"), -145, -60, 0, FLOAT(120.0f), 0)
         DELETE_EVENT(LW(9))
-        CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), 1073741856)
+        CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_change_interrupt, STRING("ガイド"), 6, PTR(guide_talk))
     END_INLINE_EVENT
     SET_VALUE(GSW_STORY_PROGRESS, 100)

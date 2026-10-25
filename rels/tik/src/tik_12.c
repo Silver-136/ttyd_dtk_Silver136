@@ -375,7 +375,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"まじない師"*/"\x82\xDC\x82\xB6\x82\xC8\x82\xA2\x8E\x74", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         majinaisi_init, // initEvent
         NULL, // regularEvent

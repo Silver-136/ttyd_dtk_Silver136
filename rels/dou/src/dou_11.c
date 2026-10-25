@@ -19,6 +19,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_mobj.h"
+#include "driver/npcdrv.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -307,7 +308,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"水夫C"*/"\x90\x85\x95\x76\x43", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_c_init, // initEvent
         NULL, // regularEvent
@@ -319,7 +320,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"水夫D"*/"\x90\x85\x95\x76\x44", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_d_init, // initEvent
         NULL, // regularEvent
@@ -331,7 +332,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"水夫E"*/"\x90\x85\x95\x76\x45", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         suifu_e_init, // initEvent
         NULL, // regularEvent
@@ -343,7 +344,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"モニー"*/"\x83\x82\x83\x6A\x81\x5B", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         mony_init, // initEvent
         NULL, // regularEvent
@@ -355,7 +356,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ピートン"*/"\x83\x73\x81\x5B\x83\x67\x83\x93", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         peton_init, // initEvent
         NULL, // regularEvent
@@ -785,13 +786,13 @@ EVT_BEGIN(ukishima_watari_run)
         CALL(evt_nannpc_ppflag_onoff, 97, 0, 4)
         CALL(evt_npc_set_position, STRING("水夫C"), 825, 100, -125)
         CALL(evt_npc_set_ry, STRING("水夫C"), 270)
-        CALL(evt_npc_flag_onoff, 0, STRING("水夫C"), 1073741856)
+        CALL(evt_npc_flag_onoff, 0, STRING("水夫C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CASE_EQUAL(98)
         CALL(evt_nannpc_set_position, 98, 0, -1000, 0)
         CALL(evt_nannpc_ppflag_onoff, 98, 0, 4)
         CALL(evt_npc_set_position, STRING("水夫D"), 775, 50, 50)
         CALL(evt_npc_set_ry, STRING("水夫D"), 270)
-        CALL(evt_npc_flag_onoff, 0, STRING("水夫D"), 1073741856)
+        CALL(evt_npc_flag_onoff, 0, STRING("水夫D"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CASE_EQUAL(99)
         CALL(evt_nannpc_set_position, 99, 0, -1000, 0)
         CALL(evt_nannpc_ppflag_onoff, 99, 0, 4)
@@ -801,7 +802,7 @@ EVT_BEGIN(ukishima_watari_run)
         CALL(evt_npc_set_position, STRING("水夫E"), 750, 50, -25)
 #endif
         CALL(evt_npc_set_ry, STRING("水夫E"), 270)
-        CALL(evt_npc_flag_onoff, 0, STRING("水夫E"), 1073741856)
+        CALL(evt_npc_flag_onoff, 0, STRING("水夫E"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CASE_DEFAULT
         SET_INT_READ_ADDR(PTR(suifudata_after))
         SET_VALUE(LW(10), LW(0))
@@ -1194,12 +1195,12 @@ EVT_BEGIN(torinoko_suifu_sakebu)
 EVT_END()
 
 EVT_BEGIN(torinoko_suifu_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫E"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫E"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_change_interrupt, STRING("モニー"), 6, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_change_interrupt, STRING("ピートン"), 6, 0)
     CALL(evt_nannpc_init, PTR(ext_entry_data), 0, 0, 0, 101)
     CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
@@ -1328,8 +1329,8 @@ EVT_BEGIN(suifu_orei)
     DELETE_EVENT(GW(10))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
@@ -1388,9 +1389,9 @@ EVT_BEGIN(suifu_orei)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg5_dou_16_06"), 0, STRING("モニー"))
-    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_change_interrupt, STRING("モニー"), 6, PTR(mony_talk))
-    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_change_interrupt, STRING("ピートン"), 6, PTR(peton_talk))
     SET_VALUE(GSW_STORY_PROGRESS, 250)
     CALL(evt_party_run, 0)
@@ -1427,7 +1428,7 @@ EVT_BEGIN(escapeway_event)
 EVT_END()
 
 EVT_BEGIN(bombwall_escape_move)
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     BEGIN_INLINE_EVENT
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS(LW(1), 100)
@@ -1641,11 +1642,11 @@ EVT_BEGIN(bombwall_after)
         ELSE
         CALL(evt_mario_set_dir, 270, 200, 0)
     END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("水夫E"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("水夫E"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_set, 742, 233, 429, 742, 147, -63, 500, 11)
     CALL(evt_npc_move_position, STRING("水夫C"), 780, -135, 0, FLOAT(180.0f), 0)
     CALL(evt_set_dir_to_target, STRING("水夫C"), STRING("mario"))

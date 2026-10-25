@@ -44,7 +44,7 @@ EvtWord kpa_07_init_evt[52];
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ババ"*/"\x83\x6F\x83\x6F", // name
-        0x20, // flags
+        NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -54,7 +54,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ブレッドハート"*/"\x83\x75\x83\x8C\x83\x62\x83\x68\x83\x6E\x81\x5B\x83\x67", // name
-        0x20, // flags
+        NPC_FLAG_NO_HIT, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -104,7 +104,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     CALL(evt_mario_dispflag_onoff, 1, 1)
-    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_DRAW)
     CALL(starstone_entry, STRING("nise"), 9, 180, 55, 0, FLOAT(0.75f))
     CALL(set_starstone_ry, STRING("nise"), 270)
     CALL(evt_cam3d_evt_set, 158, 190, 441, -109, 90, -61, 0, 11)
@@ -113,7 +113,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL(evt_cam3d_evt_set, 158, 160, 441, -109, 60, -61, 1500, 11)
     WAIT_MS(1500)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 0, STRING("ババ"), 128)
+        CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_NO_DRAW)
         CALL(evt_npc_move_position, STRING("ババ"), -168, 0, 0, FLOAT(60.0f), 0)
     END_INLINE_EVENT
     CALL(evt_mario_dispflag_onoff, 0, 1)
@@ -414,7 +414,7 @@ EVT_BEGIN(kpa_07_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_entry, STRING("belt"), STRING("c_bred_h"))
     CALL(evt_npc_set_tribe, STRING("belt"), STRING("ブレッドハート"))
-    CALL(evt_npc_flag_onoff, 1, STRING("belt"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("belt"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_pera_onoff, STRING("belt"), 0)
     CALL(evt_npc_set_anim, STRING("belt"), STRING("C_1"))
     CALL(evt_npc_set_ry, STRING("belt"), 80)

@@ -11,6 +11,7 @@
 #include "mario/mario.h"
 #include "driver/icondrv.h"
 #include "evt/evt_sub.h"
+#include "driver/npcdrv.h"
 
 #include "driver/swdrv.h"
 
@@ -3724,7 +3725,7 @@ void puniModeTrap_sub(PuniData* p) {
         n = npcNameToPtr("\203K\203C\203h");
         p->flags &= ~0x800;
         p->flags |= 0x100000;
-        n->flags &= ~0x20;
+        n->flags &= ~NPC_FLAG_NO_HIT;
         n->position.x = 0.0f;
         n->position.y = -1000.0f;
         n->position.z = 0.0f;
@@ -3733,7 +3734,7 @@ void puniModeTrap_sub(PuniData* p) {
         n = npcNameToPtr("\203K\203C\203h\226\205");
         p->flags &= ~0x800;
         p->flags |= 0x100000;
-        n->flags &= ~0x20;
+        n->flags &= ~NPC_FLAG_NO_HIT;
         n->position.x = 0.0f;
         n->position.y = -1000.0f;
         n->position.z = 0.0f;
@@ -3742,7 +3743,7 @@ void puniModeTrap_sub(PuniData* p) {
         n = npcNameToPtr("\203\211\203C\203o\203\213");
         p->flags &= ~0x800;
         p->flags |= 0x100000;
-        n->flags &= ~0x20;
+        n->flags &= ~NPC_FLAG_NO_HIT;
         n->position.x = 0.0f;
         n->position.y = -1000.0f;
         n->position.z = 0.0f;
@@ -3757,14 +3758,14 @@ void puniModeTrap_sub(PuniData* p) {
         n->position.y = p->pos.y;             \
         n->position.z = p->pos.z;             \
         n->direction = p->dir;                   \
-        n->flags |= 0x20;                     \
+        n->flags |= NPC_FLAG_NO_HIT;                     \
     }
 #define TRAP_HIDE(name)                       \
     {                                         \
         n = npcNameToPtr(name);               \
         p->flags &= ~0x800;                    \
         p->flags |= 0x100000;                  \
-        n->flags &= ~0x20;                    \
+        n->flags &= ~NPC_FLAG_NO_HIT;                    \
         n->position.x = 0.0f;                 \
         n->position.y = -1000.0f;             \
         n->position.z = 0.0f;                 \
@@ -6505,7 +6506,7 @@ s32 puni_piders_check_func(EventEntry *event, BOOL isFirstCall) {
     }
     k = 2;
     for (i = 0; i < count; i++, npc++) {
-        if ((npc->flags & 1) && (npc->flags & 2) && npc->tribe != NULL && strcmp(npc->tribe->nameJp, "\203p\203C\203_\201[\203X") == 0) {
+        if ((npc->flags & NPC_FLAG_IN_USE) && (npc->flags & NPC_FLAG_READY) && npc->tribe != NULL && strcmp(npc->tribe->nameJp, "\203p\203C\203_\201[\203X") == 0) {
             Vec v;
             BOOL found = 0;
             v = npc->position;
@@ -6773,12 +6774,12 @@ EVT_BEGIN(mri_puni_init_dvd)
     CALL(evt_npc_set_position, STRING("\203K\203C\203h\226\205sp"), 0, 4294966296, 0)
     CALL(evt_npc_set_position, STRING("\202\277\202\321\203g\203Qsp"), 0, 4294966296, 0)
     CALL(evt_npc_set_position, STRING("\203\211\203C\203o\203\213sp"), 0, 4294966296, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203v\203jsp"), 1074266144)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203g\203Qsp"), 1074266144)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203K\203C\203hsp"), 1074266144)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203K\203C\203h\226\205sp"), 1074266144)
-    CALL(evt_npc_flag_onoff, 1, STRING("\202\277\202\321\203g\203Qsp"), 1074266144)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203\211\203C\203o\203\213sp"), 1074266144)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203v\203jsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203g\203Qsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203K\203C\203hsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203K\203C\203h\226\205sp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("\202\277\202\321\203g\203Qsp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203\211\203C\203o\203\213sp"), NPC_FLAG_NO_HIT | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
     RETURN
 EVT_END()
 

@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "driver/mobjdrv.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -114,7 +115,7 @@ EVT_END()
 EVT_BEGIN(puni_soguu_1)
     CALL(evt_npc_set_position, STRING("ガイド"), -155, 25, -80)
     CALL(evt_npc_set_ry, STRING("ガイド"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(0), -275)
@@ -147,7 +148,7 @@ EVT_END()
 EVT_BEGIN(puni_soguu_2)
     CALL(evt_npc_set_position, STRING("ガイド"), -155, 25, -80)
     CALL(evt_npc_set_ry, STRING("ガイド"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_GREATER_OR_EQUAL(LW(0), -275)

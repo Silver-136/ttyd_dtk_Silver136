@@ -9,6 +9,7 @@
 #include "evt/evt_cam.h"
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
+#include "driver/npcdrv.h"
 
 
 static EvtWord oshimodo_event[32];
@@ -125,7 +126,7 @@ EVT_BEGIN(iri_12_kino_makkino_talk)
             ADD(LW(6), 45)
             CALL(evt_npc_add_dirdist, LW(3), LW(5), LW(6), 20)
             CALL(evt_npc_status_onoff, 0, STRING("マッキノ"), 2)
-            CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 32)
+            CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_move_position, STRING("マッキノ"), LW(3), LW(5), 0, 70, 0)
             WAIT_FRAMES(1)
             CALL(evt_npc_status_onoff, 1, STRING("マッキノ"), 2)
@@ -136,7 +137,7 @@ EVT_BEGIN(iri_12_kino_makkino_talk)
     CALL(evt_npc_get_position, STRING("キーノ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_get_dir, LW(0), LW(2), LW(3), LW(5), LW(6))
     CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(6), 20)
-    CALL(evt_npc_flag_onoff, 1, STRING("キーノ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("キーノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("キーノ"), LW(0), LW(2), 0, 60, 0)
     CALL(evt_mario_set_dir_npc, STRING("キーノ"))
     WAIT_MS(500)
@@ -206,7 +207,7 @@ static EVT_BEGIN(iri_12_init)
             ELSE
             CALL(evt_npc_set_ry, STRING("キーノ"), 90)
         END_IF
-        CALL(evt_npc_flag_onoff, 1, STRING("キーノ"), 1536)
+        CALL(evt_npc_flag_onoff, 1, STRING("キーノ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_status_onoff, 1, STRING("キーノ"), 2)
         CALL(evt_npc_change_interrupt, STRING("キーノ"), 6, PTR(iri_12_kino_talk))
         IF_INT_EQUAL(GSWF(5407), 1)
@@ -214,7 +215,7 @@ static EVT_BEGIN(iri_12_init)
             CALL(evt_npc_set_tribe, STRING("マッキノ"), STRING("水夫"))
             CALL(evt_npc_set_position, STRING("マッキノ"), 90, 0, -70)
             CALL(evt_npc_set_ry, STRING("マッキノ"), 90)
-            CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), 1536)
+            CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
             CALL(evt_npc_status_onoff, 1, STRING("マッキノ"), 2)
             CALL(evt_npc_change_interrupt, STRING("マッキノ"), 6, PTR(iri_12_makkino_talk))
         END_IF

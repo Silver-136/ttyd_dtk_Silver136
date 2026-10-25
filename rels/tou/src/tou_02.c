@@ -1211,7 +1211,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガードマン１"*/"\203K\201[\203h\203}\203\223\202P", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gard1, // initEvent
         NULL, // regularEvent
@@ -1223,7 +1223,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ガードマン２"*/"\203K\201[\203h\203}\203\223\202Q", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gard2, // initEvent
         NULL, // regularEvent
@@ -1235,7 +1235,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マダム"*/"\203}\203_\203\200", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_madam, // initEvent
         NULL, // regularEvent
@@ -1247,7 +1247,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"レポーター"*/"\203\214\203|\201[\203^\201[", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_repo, // initEvent
         NULL, // regularEvent
@@ -1259,7 +1259,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"カメラマン１"*/"\203J\203\201\203\211\203}\203\223\202P", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_cam1, // initEvent
         NULL, // regularEvent
@@ -1271,7 +1271,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"カメラマン２"*/"\203J\203\201\203\211\203}\203\223\202Q", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_cam2, // initEvent
         NULL, // regularEvent
@@ -1283,7 +1283,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピオ４"*/"\203L\203m\203s\203I\202S", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino4, // initEvent
         reg_kino4, // regularEvent
@@ -1295,7 +1295,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピオ５"*/"\203L\203m\203s\203I\202T", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino5, // initEvent
         NULL, // regularEvent
@@ -1307,7 +1307,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノピコ"*/"\203L\203m\203s\203R", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kinopiko, // initEvent
         NULL, // regularEvent
@@ -1319,7 +1319,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"バッジ屋"*/"\203o\203b\203W\211\256", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_chu, // initEvent
         NULL, // regularEvent
@@ -1331,7 +1331,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_champ, // initEvent
         NULL, // regularEvent
@@ -1343,7 +1343,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノシコワ"*/"\203L\203m\203V\203R\203\217", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_shikowa, // initEvent
         NULL, // regularEvent
@@ -1355,7 +1355,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ウラノコ"*/"\203E\203\211\203m\203R", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_uranoko, // initEvent
         NULL, // regularEvent
@@ -1367,7 +1367,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"アイアンＡ"*/"\203A\203C\203A\203\223\202`", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ironA, // initEvent
         NULL, // regularEvent
@@ -1379,7 +1379,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"アイアンＢ"*/"\203A\203C\203A\203\223\202a", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_ironB, // initEvent
         NULL, // regularEvent
@@ -1391,7 +1391,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ボロドー"*/"\203{\203\215\203h\201[", // name
-        0x40080600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_borodo, // initEvent
         NULL, // regularEvent

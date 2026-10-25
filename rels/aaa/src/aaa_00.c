@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "rels/aaa/include/aaa.h"
+#include "driver/npcdrv.h"
 
 #include "driver/camdrv.h"
 #include "win/win_main.h"
@@ -70,7 +71,7 @@ EvtWord aaa_00_init_evt[81];
 static NpcSetupInfo npcEnt[] = {
     {
         /*"パレッタ"*/"\x83\x70\x83\x8C\x83\x62\x83\x5E", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -79,7 +80,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -249,7 +250,7 @@ static EVT_BEGIN(evt_prologue)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_move_position, STRING("ルイージ"), 195, 0, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING("ルイージ"), 225, -75, 0, FLOAT(80.0f), 1)
     WAIT_MS(500)
@@ -264,11 +265,11 @@ static EVT_BEGIN(evt_prologue)
     WAIT_MS(340)
     CALL(evt_npc_set_anim, STRING("ルイージ"), STRING("L_5"))
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), 1024)
+    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("ルイージ"), STRING("L_11"))
     CALL(evt_npc_move_position, STRING("ルイージ"), 195, 0, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING("ルイージ"), 63, -110, 0, FLOAT(80.0f), 1)
-    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), 131088)
+    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_set_anim, STRING("ルイージ"), STRING("L_5"))
     CALL(evt_mapobj_get_position, STRING("S_ie_door"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN1"), LW(0), LW(1), LW(2), 0)
@@ -372,12 +373,12 @@ EVT_BEGIN(evt_prologue2)
     CALL(evt_mario_adjust_dir)
 #endif
     CALL(evt_party_stop, 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), 1024)
+    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("ルイージ"), STRING("L_8"))
     CALL(evt_npc_set_autotalkpose, STRING("ルイージ"), STRING("L_8"), STRING("L_9"))
     CALL(evt_npc_set_position, STRING("ルイージ"), -52, 30, -275)
     CALL(evt_npc_set_ry, STRING("ルイージ"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, -376, 154, 65, -63, 75, -247, 0, 11)
     CALL(evt_seq_wait, 2)
 #ifdef VERSION_G8ME01
@@ -485,7 +486,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_set_dir, 90, 0, 0)
 #endif
     CALL(evt_cam3d_evt_set, -307, 117, 9, -58, 58, -244, 1200, 11)
-    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_jump_position_nohit, STRING("ルイージ"), -68, 30, -149, 400, 20)
     CALL(evt_npc_move_position, STRING("ルイージ"), -107, -166, 800, 0, 0)
     CALL(evt_mario_set_pose, STRING("M_N_9"))
@@ -507,14 +508,14 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_set_tribe, STRING("ピーチ姫"), STRING("ピーチ姫（普通）"))
     CALL(evt_npc_set_position, STRING("ピーチ姫"), 0, -1000, 0)
     CALL(evt_npc_set_ry, STRING("ピーチ姫"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), 1073743392)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_map_blend_set_flag, 1, STRING("ピーチ姫"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("ピーチ姫"), 4096)
     CALL(evt_npc_entry, STRING("キノじい"), STRING("c_kino_ji"))
     CALL(evt_npc_set_tribe, STRING("キノじい"), STRING("キノじい"))
     CALL(evt_npc_set_position, STRING("キノじい"), 0, -1000, 0)
     CALL(evt_npc_set_ry, STRING("キノじい"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノじい"), 1073743392)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノじい"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_map_blend_set_flag, 1, STRING("キノじい"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("キノじい"), 4096)
     RETURN
@@ -530,7 +531,7 @@ static EVT_BEGIN(epilogue_evt2)
     CALL(evt_mario_adjust_dir)
     CALL(evt_npc_set_position, STRING("ルイージ"), -107, 30, -166)
     CALL(evt_npc_set_ry, STRING("ルイージ"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_seq_wait, 2)
     CALL(evt_mario_set_pose, STRING("M_N_10"))
     SET_VALUE(LW(0), PTR(&door_1))
@@ -539,7 +540,7 @@ static EVT_BEGIN(epilogue_evt2)
     WAIT_FRAMES(1)
     CALL(evt_fade_end_wait)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_msg_print, 0, STRING("ep_47"), 0, 0)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_MARIO_HOUSE2"))
     CALL(evt_snd_bgm_scope, 0, 1)

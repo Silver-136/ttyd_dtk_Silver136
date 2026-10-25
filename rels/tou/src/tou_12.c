@@ -13,6 +13,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "driver/mobjdrv.h"
+#include "driver/npcdrv.h"
 
 
 static EvtWord w_door_open[12];
@@ -144,7 +145,7 @@ static EVT_BEGIN(init_brots)
     IF_INT_LESS(GSW_STORY_PROGRESS, 164)
         CALL(evt_npc_set_position, STRING("ブロッツ"), 110, 3, -60)
         CALL(evt_npc_set_rotate, STRING("ブロッツ"), -70, 0, -80)
-        CALL(evt_npc_flag_onoff, 0, STRING("ブロッツ"), 1536)
+        CALL(evt_npc_flag_onoff, 0, STRING("ブロッツ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_anim, STRING("ブロッツ"), STRING("S_1"))
         IF_INT_EQUAL(GSWF(2518), 1)
             CALL(evt_npc_set_anim, STRING("ブロッツ"), STRING("X_1"))
@@ -171,15 +172,15 @@ static EVT_BEGIN(talk_brots)
             ELSE
             CALL(evt_party_set_dir, 0, 90, 200)
         END_IF
-        CALL(evt_npc_flag_onoff, 1, STRING("ブロッツ"), 1536)
+        CALL(evt_npc_flag_onoff, 1, STRING("ブロッツ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_msg_print, 0, STRING("stg3_tou_307_12"), 0, 0)
-        CALL(evt_npc_flag_onoff, 0, STRING("ブロッツ"), 1536)
+        CALL(evt_npc_flag_onoff, 0, STRING("ブロッツ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_anim, STRING("ブロッツ"), STRING("X_1"))
         CALL(evt_msg_print_party, STRING("stg3_tou_307_13"))
         SET_VALUE(GSWF(2518), 1)
         CALL(evt_party_cont_onoff, 0, 1)
         ELSE
-        CALL(evt_npc_flag_onoff, 0, STRING("ブロッツ"), 1536)
+        CALL(evt_npc_flag_onoff, 0, STRING("ブロッツ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_set_anim, STRING("ブロッツ"), STRING("S_1"))
         CALL(evt_msg_print, 0, STRING("stg3_tou_307_14"), 0, 0)
         CALL(evt_npc_set_anim, STRING("ブロッツ"), STRING("X_1"))
@@ -198,7 +199,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"マイケル"*/"\x83\x7D\x83\x43\x83\x50\x83\x8B", // name
-        0x41000020, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_michel, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -208,7 +209,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ブロッツ"*/"\x83\x75\x83\x8D\x83\x62\x83\x63", // name
-        0x41000620, // flags
+        NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_brots, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -218,7 +219,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マイケルダミー"*/"\x83\x7D\x83\x43\x83\x50\x83\x8B\x83\x5F\x83\x7E\x81\x5B", // name
-        0x41000080, // flags
+        NPC_FLAG_NO_DRAW | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_michel_dummy, // initEvent
         NULL, // regularEvent
@@ -230,7 +231,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ブロッツダミー"*/"\x83\x75\x83\x8D\x83\x62\x83\x63\x83\x5F\x83\x7E\x81\x5B", // name
-        0x41000080, // flags
+        NPC_FLAG_NO_DRAW | NPC_FLAG_NO_TALK_TURN | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_brots_dummy, // initEvent
         NULL, // regularEvent
@@ -242,7 +243,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kinoshikowa, // initEvent
         NULL, // regularEvent

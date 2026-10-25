@@ -191,7 +191,7 @@ EVT_BEGIN(nokonoko_I_talk)
 EVT_END()
 
 EVT_BEGIN(open_gate)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
     CALL(evt_msg_print, 0, STRING("stg1_nok_28"), 0, STRING("me"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_hitobj_onoff, STRING("A_mon"), 1, 0)
@@ -238,7 +238,7 @@ EVT_BEGIN(open_gate)
     CALL(evt_npc_set_ry, STRING("ノコタロウ"), 270)
     CALL(evt_npc_move_position, STRING("ノコタロウ"), 165, -14, 0, FLOAT(100.0f), 0)
     CALL(evt_npc_set_position, STRING("ノコタロウ"), -30, 65, -472)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
     CALL(evt_party_stop, 0)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("stg1_nok_30_01"), 0, STRING("party"))
@@ -369,12 +369,12 @@ EVT_BEGIN(boss_noko_open_gate)
     CALL(evt_msg_print, 0, STRING("stg1_nok_37"), 0, STRING("me"))
     CALL(evt_mario_dispflag_onoff, 1, 2)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_set_pose, STRING("M_N_7"))
         CALL(evt_mario_jump_pos, -310, 110, -318, 200, 1, -1000)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
         CALL(evt_mario_set_dir, 270, 0, 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
@@ -423,7 +423,7 @@ static s32 iri_17_item_tbl[] = {
 
 EVT_BEGIN(boss_noko_talk)
     IF_INT_EQUAL(GSW(1420), 8)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         BEGIN_INLINE_EVENT
             CALL(evt_party_move_pos2, 1, -250, -320, 40)
             CALL(evt_party_set_dir, 1, 270, 300)
@@ -437,7 +437,7 @@ EVT_BEGIN(boss_noko_talk)
         CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
         WAIT_FRAMES(1)
         CALL(evt_npc_wait_pera, STRING("me"))
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 32)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
         SET_VALUE(GF(0), 1)
         BEGIN_INLINE_EVENT
             WAIT_WHILE(GF(0))
@@ -461,7 +461,7 @@ EVT_BEGIN(boss_noko_talk)
             ELSE
             CALL(evt_msg_print_add, 0, STRING("irai_08_003_1"))
             CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
-            CALL(evt_npc_flag_onoff, 1, STRING("me"), 1073741856)
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
             CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
             CALL(evt_npc_move_position, STRING("me"), -317, -350, 0, 40, 0)
             WAIT_MS(300)
@@ -471,7 +471,7 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
             WAIT_FRAMES(1)
             CALL(evt_npc_wait_pera, STRING("me"))
-            CALL(evt_npc_flag_onoff, 0, STRING("me"), 1073741856)
+            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         END_IF
         CALL(evt_msg_print, 0, STRING("irai_08_004"), 0, STRING("me"))
         SET_VALUE(GSW(1420), 0)
@@ -574,9 +574,9 @@ EVT_BEGIN(nokorin_talk)
                 CALL(evt_msg_print, 0, STRING("stg1_nok_67"), 0, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_nok_68"), 0, 0)
                 CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
-                CALL(evt_npc_flag_onoff, 1, STRING("me"), 131120)
+                CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
                 CALL(evt_npc_move_position, STRING("me"), -85, -300, 0, FLOAT(60.0f), 1)
-                CALL(evt_npc_flag_onoff, 0, STRING("me"), 131120)
+                CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg1_nok_70"), 0, 0)
             END_IF
@@ -651,7 +651,7 @@ static EVT_BEGIN(odoriko_1_init)
     CALL(evt_npc_entry, LW(0), STRING("c_dance_r"))
     CALL(evt_npc_set_tribe, LW(0), STRING("踊り子"))
     CALL(evt_npc_change_interrupt, LW(0), 6, PTR(odoriko_1_talk))
-    CALL(evt_npc_flag_onoff, 1, LW(0), 1536)
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_ry, LW(0), 270)
     CALL(evt_npc_set_position, LW(0), 27, 0, 370)
     RETURN
@@ -676,7 +676,7 @@ static EVT_BEGIN(odoriko_2_init)
     CALL(evt_npc_entry, LW(0), STRING("c_dance_p"))
     CALL(evt_npc_set_tribe, LW(0), STRING("踊り子ピンク"))
     CALL(evt_npc_change_interrupt, LW(0), 6, PTR(odoriko_2_talk))
-    CALL(evt_npc_flag_onoff, 1, LW(0), 1536)
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_ry, LW(0), 270)
     CALL(evt_npc_set_position, LW(0), 67, 0, 340)
     RETURN
@@ -701,7 +701,7 @@ static EVT_BEGIN(odoriko_3_init)
     CALL(evt_npc_entry, LW(0), STRING("c_dance_k"))
     CALL(evt_npc_set_tribe, LW(0), STRING("踊り子黄緑"))
     CALL(evt_npc_change_interrupt, LW(0), 6, PTR(odoriko_3_talk))
-    CALL(evt_npc_flag_onoff, 1, LW(0), 1536)
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_ry, LW(0), 270)
     CALL(evt_npc_set_position, LW(0), 85, 0, 390)
     RETURN
@@ -754,7 +754,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"村長"*/"\x91\xBA\x92\xB7", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -766,7 +766,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"門番ノコノコ"*/"\x96\xE5\x94\xD4\x83\x6D\x83\x52\x83\x6D\x83\x52", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         monban_init, // initEvent
         NULL, // regularEvent
@@ -778,7 +778,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ノコタロウ"*/"\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         nokotarou_init, // initEvent
         NULL, // regularEvent
@@ -790,7 +790,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ノコタロウ父"*/"\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45\x95\x83", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         nokopapa_init, // initEvent
         NULL, // regularEvent
@@ -802,7 +802,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ノコリン"*/"\x83\x6D\x83\x52\x83\x8A\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         nokorin_init, // initEvent
         NULL, // regularEvent
@@ -1000,16 +1000,16 @@ EVT_BEGIN(nokotarou_tabidachi)
     WAIT_MS(400)
     CALL(evt_msg_print, 0, STRING("stg1_nok_90"), 0, STRING("ノコタロウ"))
     CALL(evt_npc_status_onoff, 1, STRING("ノコタロウ"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), 1073743360)
+    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_move_position, STRING("ノコタロウ"), -25, -60, 0, FLOAT(60.0f), 1)
     WAIT_MS(200)
-    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), NPC_FLAG_TALK_POSE)
     CALL(evt_msg_print, 0, STRING("stg1_nok_91"), 0, STRING("ノコタロウ"))
     CALL(evt_npc_status_onoff, 1, STRING("クリスチーヌ"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), 1073743392)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_move_position, STRING("クリスチーヌ"), -65, -40, 0, FLOAT(60.0f), 1)
     WAIT_MS(200)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_TALK_POSE)
     CALL(evt_msg_print, 0, STRING("stg1_nok_92"), 0, STRING("クリスチーヌ"))
     CALL(evt_cam3d_evt_set, -40, 100, 264, -40, 40, -86, 400, 11)
     WAIT_MS(400)
@@ -1061,12 +1061,12 @@ EVT_BEGIN(nokotarou_tabidachi_init)
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), -100, 0, -65)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_mario_set_pos, -60, 0, -60)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_npc_set_position, STRING("ノコタロウ"), 0, 0, -60)
     CALL(evt_npc_set_ry, STRING("ノコタロウ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_position, STRING("ノコタロウ父"), 40, 0, -70)
     CALL(evt_npc_set_ry, STRING("ノコタロウ父"), 270)
     CALL(evt_npc_set_position, STRING("ノコリン"), 65, 0, -60)
@@ -1270,7 +1270,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(1200)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_03"), 0, STRING("村長"))
     CALL(evt_cam3d_evt_set, 211, 133, 145, 0, 50, -50, 2000, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("村長"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_move_position, STRING("村長"), -50, -50, 2000, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_04"), 0, STRING("村長"))
     CALL(evt_npc_move_position, STRING("ノコタロウ父"), 25, -75, 2000, 0, 0)
@@ -1362,7 +1362,7 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), -200, 0, -65)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), 1056)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_position, STRING("ノコノコH"), 0, -1000, 0)
     RETURN
 EVT_END()
@@ -1406,7 +1406,7 @@ static EVT_BEGIN(epilogue_evt_sub)
         WAIT_MS(1000)
         CALL(evt_npc_move_position, STRING("ノコタロウ父"), 100, -100, 0, 40, 0)
         WAIT_MS(1000)
-        CALL(evt_npc_flag_onoff, 1, STRING("村長"), 131088)
+        CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
         CALL(evt_npc_move_position, STRING("村長"), -113, -172, 0, 40, 0)
         CALL(evt_npc_move_position, STRING("村長"), -90, -50, 0, 40, 0)
     END_INLINE_EVENT
@@ -1433,19 +1433,19 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_dispflag_onoff, 1, 1)
     CALL(evt_npc_set_position, STRING("ノコタロウ"), 75, 0, -70)
     CALL(evt_npc_set_ry, STRING("ノコタロウ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), 32800)
+    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), NPC_FLAG_NO_HIT | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_position, STRING("ノコリン"), 110, 0, -50)
     CALL(evt_npc_set_ry, STRING("ノコリン"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ノコリン"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ノコリン"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_position, STRING("ノコタロウ父"), 200, 0, -100)
     CALL(evt_npc_set_ry, STRING("ノコタロウ父"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ父"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ父"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_position, STRING("村長"), -250, 75, -190)
     CALL(evt_npc_set_ry, STRING("村長"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("村長"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_NO_HIT)
     CALL(evt_cam3d_evt_set, 0, 133, 517, 0, 50, -77, 0, 11)
     CALL(evt_seq_wait, 2)
-    CALL(evt_npc_flag_onoff, 0, STRING("ノコタロウ"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("ノコタロウ"), NPC_FLAG_INSTANT_TURN)
     SPAWN_EVENT(PTR(epilogue_evt_sub))
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)

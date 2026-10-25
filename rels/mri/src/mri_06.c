@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -214,7 +215,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ライバル"*/"\x83\x89\x83\x43\x83\x6F\x83\x8B", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         rival_init, // initEvent
         NULL, // regularEvent
@@ -226,7 +227,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ族６"*/"\x83\x76\x83\x6A\x91\xB0\x82\x55", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_6_init, // initEvent
         NULL, // regularEvent
@@ -238,7 +239,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ族７"*/"\x83\x76\x83\x6A\x91\xB0\x82\x56", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_7_init, // initEvent
         NULL, // regularEvent
@@ -250,7 +251,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ族８"*/"\x83\x76\x83\x6A\x91\xB0\x82\x57", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_8_init, // initEvent
         NULL, // regularEvent
@@ -262,7 +263,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ族９"*/"\x83\x76\x83\x6A\x91\xB0\x82\x58", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_9_init, // initEvent
         NULL, // regularEvent
@@ -274,7 +275,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ族１０"*/"\x83\x76\x83\x6A\x91\xB0\x82\x50\x82\x4F", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_10_init, // initEvent
         puni_10_regl, // regularEvent
@@ -286,7 +287,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ族１１"*/"\x83\x76\x83\x6A\x91\xB0\x82\x50\x82\x50", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         puni_11_init, // initEvent
         puni_11_regl, // regularEvent
@@ -514,7 +515,7 @@ static EVT_BEGIN(puni_lose)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_bero_exec_wait, 65536)
         CALL(evt_puni_flag_onoff, 1, 0, 131072)
-        CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), 512)
+        CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE)
         CALL(evt_puni_count, 0, LW(0))
         IF_INT_EQUAL(GSWF(2856), 0)
             CALL(evt_msg_print, 0, STRING("stg2_mri_e17_03"), 0, STRING("ガイドsp"))
@@ -543,7 +544,7 @@ EVT_BEGIN(apper_toge)
     SET_VALUE(LW(11), STRING("ガイドsp"))
     CALL(evt_npc_set_position, LW(10), 375, 0, -50)
     CALL(evt_npc_set_ry, LW(10), 270)
-    CALL(evt_npc_flag_onoff, 1, LW(10), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, LW(10), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_bero_exec_wait, 65536)
     CALL_CHILD(PTR(mri_guide_goryu))
     CALL(evt_party_stop, 0)
@@ -575,7 +576,7 @@ EVT_BEGIN(apper_toge)
     CALL(evt_puni_flag_onoff, 1, 0, 262144)
     CALL(evt_puni_set_mode, 1, 30)
     CALL(evt_npc_set_ry, LW(11), 270)
-    CALL(evt_npc_flag_onoff, 1, LW(11), 1073743392)
+    CALL(evt_npc_flag_onoff, 1, LW(11), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_set, 290, 100, 232, 290, 45, -63, 500, 11)
     SET_VALUE(LW(0), LW(11))
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
@@ -616,14 +617,14 @@ EVT_BEGIN(mri_06_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_flag_onoff, 1, STRING("トゲ族"), 524288)
+    CALL(evt_npc_flag_onoff, 1, STRING("トゲ族"), NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_check, STRING("パイダース2F_2"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("パイダース2F_2"), 524288)
+        CALL(evt_npc_flag_onoff, 1, STRING("パイダース2F_2"), NPC_FLAG_SHADOW_NO_FLOOR)
     END_IF
     CALL(evt_npc_check, STRING("パイダース2F_3"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("パイダース2F_3"), 524288)
+        CALL(evt_npc_flag_onoff, 1, STRING("パイダース2F_3"), NPC_FLAG_SHADOW_NO_FLOOR)
     END_IF
     SPAWN_EVENT(PTR(puni_disp_info))
     SPAWN_EVENT(PTR(mri_countdown))

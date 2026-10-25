@@ -249,7 +249,7 @@ static f32 spline_dt[] = {
 EVT_BEGIN(seal_bigtree)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_move_beside_mario, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e03_00"), 0, STRING("me"))
     CALL(evt_cam3d_evt_set, FLOAT(142.19922f), FLOAT(160.09961f), FLOAT(440.0996f), FLOAT(142.19922f), FLOAT(64.59961f), FLOAT(-50.799805f), 500, 11)
     WAIT_MS(500)
@@ -275,7 +275,7 @@ EVT_BEGIN(seal_bigtree)
     WAIT_MS(700)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e03_04"), 0, STRING("ガイド"))
     WAIT_MS(300)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_status_onoff, 1, STRING("ガイド"), 2)
     CALL(evt_npc_change_interrupt, STRING("ガイド"), 6, 0)
     BEGIN_INLINE_EVENT
@@ -289,7 +289,7 @@ EVT_BEGIN(seal_bigtree)
         IF_INT_EQUAL(LW(6), 1)
             GOTO(0)
         END_IF
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 1073741856)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_change_interrupt, STRING("ガイド"), 6, PTR(guide_talk))
     END_INLINE_EVENT
     WAIT_MS(1000)
@@ -305,7 +305,7 @@ EVT_END()
 EVT_BEGIN(seal_bigtree2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e03_06"), 0, STRING("me"))
     WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg2_mri_e03_07"))
@@ -345,11 +345,11 @@ EVT_END()
 static EVT_BEGIN(guide_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(73, 74)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 16777216)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
         CALL(evt_npc_set_position, STRING("me"), 135, 0, -70)
         CALL(evt_npc_set_ry, STRING("me"), 90)
         CASE_EQUAL(75)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 16777216)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
         CALL(evt_npc_set_position, STRING("me"), 10, 155, -220)
         CALL(evt_npc_set_ry, STRING("me"), 90)
         CASE_EQUAL(88)
@@ -489,7 +489,7 @@ static EVT_BEGIN(odoriko_1_init)
     CALL(evt_npc_entry, LW(0), STRING("c_dance_r"))
     CALL(evt_npc_set_tribe, LW(0), STRING("踊り子"))
     CALL(evt_npc_change_interrupt, LW(0), 6, PTR(odoriko_1_talk))
-    CALL(evt_npc_flag_onoff, 1, LW(0), 525824)
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_ry, LW(0), 270)
     CALL(evt_npc_set_position, LW(0), 90, 0, 400)
     RETURN
@@ -507,7 +507,7 @@ static EVT_BEGIN(odoriko_2_init)
     CALL(evt_npc_entry, LW(0), STRING("c_dance_p"))
     CALL(evt_npc_set_tribe, LW(0), STRING("踊り子ピンク"))
     CALL(evt_npc_change_interrupt, LW(0), 6, PTR(odoriko_2_talk))
-    CALL(evt_npc_flag_onoff, 1, LW(0), 525824)
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_ry, LW(0), 270)
     CALL(evt_npc_set_position, LW(0), 120, 0, 370)
     RETURN
@@ -525,7 +525,7 @@ static EVT_BEGIN(odoriko_3_init)
     CALL(evt_npc_entry, LW(0), STRING("c_dance_k"))
     CALL(evt_npc_set_tribe, LW(0), STRING("踊り子黄緑"))
     CALL(evt_npc_change_interrupt, LW(0), 6, PTR(odoriko_3_talk))
-    CALL(evt_npc_flag_onoff, 1, LW(0), 525824)
+    CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_set_ry, LW(0), 270)
     CALL(evt_npc_set_position, LW(0), 150, 0, 420)
     RETURN
@@ -534,7 +534,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガイド"*/"\x83\x4B\x83\x43\x83\x68", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         guide_init, // initEvent
         NULL, // regularEvent
@@ -546,7 +546,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ライバル"*/"\x83\x89\x83\x43\x83\x6F\x83\x8B", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         rival_init, // initEvent
         NULL, // regularEvent
@@ -558,7 +558,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ちびトゲ"*/"\x82\xBF\x82\xD1\x83\x67\x83\x51", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         chibitoge_init, // initEvent
         NULL, // regularEvent
@@ -570,7 +570,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ガイド妹"*/"\x83\x4B\x83\x43\x83\x68\x96\x85", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         sister_init, // initEvent
         NULL, // regularEvent
@@ -582,7 +582,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         elder_init, // initEvent
         NULL, // regularEvent
@@ -594,7 +594,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ファビオ"*/"\x83\x74\x83\x40\x83\x72\x83\x49", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         fabio_init, // initEvent
         NULL, // regularEvent
@@ -1035,7 +1035,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_npc_jump_position_nohit, STRING("ガイド"), 54, 143, -202, 200, 20)
     CALL(evt_cam3d_evt_set, 187, 288, 213, 187, 205, -216, 2000, 11)
     CALL(evt_npc_set_anim, STRING("ガイド"), STRING("W_1"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_sub_spline_init, 1, 11, PTR(guide_move_data), 5, 0, 2000)
     LOOP(0)
         CALL(evt_sub_spline_get_value, LW(0), LW(1), LW(2), LW(3))
@@ -1053,7 +1053,7 @@ EVT_BEGIN(open_bigtree)
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
     CALL(evt_npc_move_position, STRING("ガイド"), 216, -214, 0, FLOAT(120.0f), 0)
     DELETE_EVENT(LW(9))
-    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_set, -26, 275, 213, -26, 192, -216, 0, 11)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_01"), 0, STRING("party"))
@@ -1067,7 +1067,7 @@ EVT_BEGIN(open_bigtree)
     WAIT_MS(1000)
     CALL(evt_npc_set_position, STRING("ガイド"), 226, 0, -225)
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_02"), 0, STRING("ガイド"))
     CALL(evt_cam3d_evt_set, 140, 90, 193, 140, 45, -154, 500, 11)
     WAIT_MS(1000)
@@ -1095,7 +1095,7 @@ EVT_BEGIN(open_bigtree)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_04"), 0, STRING("party"))
     CALL(evt_cam3d_evt_off, 500, 11)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), 1073741856)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     SET_VALUE(GSW_STORY_PROGRESS, 88)
     SET_VALUE(LW(0), STRING("ne_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))

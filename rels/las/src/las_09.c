@@ -17,6 +17,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "driver/npcdrv.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -633,19 +634,19 @@ EVT_BEGIN(goikkou_talk)
 EVT_END()
 
 EVT_BEGIN(majyorin_init)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 268435456)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(maririn_init)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 268435456)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
 
 EVT_BEGIN(ranpel_init)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), 268435456)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -653,7 +654,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"マジョリン"*/"\x83\x7D\x83\x57\x83\x87\x83\x8A\x83\x93", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         majyorin_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -663,7 +664,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マリリン"*/"\x83\x7D\x83\x8A\x83\x8A\x83\x93", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         maririn_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -673,7 +674,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         ranpel_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -687,7 +688,7 @@ static NpcSetupInfo npcEnt[] = {
 EVT_BEGIN(majyorin_evt_npc_entry)
     CALL(evt_npc_entry, STRING("にせ"), STRING("c_kuri_h"))
     CALL(evt_npc_set_tribe, STRING("にせ"), STRING("クリハカセ"))
-    CALL(evt_npc_flag_onoff, 1, STRING("にせ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("にせ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("にせ"), 2)
     CALL(evt_npc_set_position, STRING("にせ"), 0, -1000, 0)
     RETURN
@@ -806,12 +807,12 @@ EVT_BEGIN(majyorin_evt_main)
     SUBTRACT(LW(0), 20)
     SUBTRACT(LW(2), 10)
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), 1024)
-    CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), 1024)
-    CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), 1024)
-    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), 16777216)
-    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), 16777216)
-    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), 16777216)
+    CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_TALK_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_NO_TALK_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), NPC_FLAG_NO_TALK_TURN)
     CALL(evt_npc_set_force_regl_anim, STRING("マジョリン"), STRING("MJR_D_4"))
     CALL(evt_npc_set_force_regl_anim, STRING("マリリン"), STRING("MRR_D_4"))
     CALL(evt_npc_set_force_regl_anim, STRING("ランペル"), STRING("D_2"))

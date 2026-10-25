@@ -198,7 +198,7 @@ EVT_BEGIN(evt_powan)
     CALL(evt_snd_bgmoff, 18432)
     CALL(evt_msg_print, 0, STRING("stg6_pik_06"), 0, 0)
     WAIT_MS(300)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), 131088)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
 #ifdef VERSION_G8ME01
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -70, 5, -248)
 #else
@@ -296,7 +296,7 @@ static EVT_BEGIN(init_powan)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(335)
         CALL(evt_npc_set_position, STRING("me"), 165, 20, -190)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 131088)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     END_SWITCH
     RETURN
 EVT_END()
@@ -323,7 +323,7 @@ EVT_BEGIN(miyageya_talk)
                 CALL(evt_msg_print, 0, STRING("irai_27_002"), 0, 0)
             END_IF
             ELSE
-            CALL(evt_npc_flag_onoff, 1, STRING("土産屋"), 32)
+            CALL(evt_npc_flag_onoff, 1, STRING("土産屋"), NPC_FLAG_NO_HIT)
             CALL(evt_cam3d_evt_set, -545, 90, 530, -290, 55, 285, 800, 11)
             BEGIN_INLINE_EVENT
                 LOOP(0)
@@ -355,7 +355,7 @@ EVT_BEGIN(miyageya_talk)
             SET_VALUE(LW(4), LW(0))
             SET_VALUE(LW(5), LW(2))
             CALL(evt_npc_add_dirdist, LW(4), LW(5), LW(3), 30)
-            CALL(evt_npc_flag_onoff, 1, STRING("土産屋"), 32)
+            CALL(evt_npc_flag_onoff, 1, STRING("土産屋"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_move_position, STRING("土産屋"), LW(4), LW(5), 0, 50, 0)
             CALL(evt_pouch_get_haveitemcnt, LW(3))
             CALL(evt_pouch_check_item, 1, LW(4))
@@ -371,11 +371,11 @@ EVT_BEGIN(miyageya_talk)
                 CALL(evt_item_get_item_end_wait, STRING("sc"))
                 SET_VALUE(GSWF(3278), 1)
                 CALL(evt_npc_move_position, STRING("土産屋"), LW(0), LW(2), 0, 50, 0)
-                CALL(evt_npc_flag_onoff, 0, STRING("土産屋"), 32)
+                CALL(evt_npc_flag_onoff, 0, STRING("土産屋"), NPC_FLAG_NO_HIT)
                 ELSE
                 WAIT_MS(500)
                 CALL(evt_npc_move_position, STRING("土産屋"), LW(0), LW(2), 0, 80, 0)
-                CALL(evt_npc_flag_onoff, 0, STRING("土産屋"), 32)
+                CALL(evt_npc_flag_onoff, 0, STRING("土産屋"), NPC_FLAG_NO_HIT)
                 CALL(evt_msg_print, 0, STRING("irai_27_007_1"), 0, STRING("土産屋"))
                 WAIT_MS(300)
                 CALL(evt_item_entry, STRING("iri_27"), 214, -246, 15, 246, 16, GSWF(3278), 0)
@@ -383,7 +383,7 @@ EVT_BEGIN(miyageya_talk)
                 CALL(evt_msg_print, 0, STRING("irai_27_007_2"), 0, STRING("土産屋"))
             END_IF
             CALL(evt_npc_set_position, STRING("ルイージ"), -386, 0, 214)
-            CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), 131120)
+            CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_NO_HIT | NPC_FLAG_GRAVITY)
             CALL(evt_npc_move_position, STRING("ルイージ"), -330, 272, 0, 60, 0)
             CALL(evt_msg_print, 0, STRING("irai_27_008"), 0, STRING("ルイージ"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -402,7 +402,7 @@ EVT_BEGIN(miyageya_talk)
             CALL(evt_msg_print, 0, STRING("irai_27_011"), 0, 0)
             CALL(evt_msg_print, 0, STRING("irai_27_012"), 0, STRING("ルイージ"))
             CALL(evt_npc_move_position, STRING("ルイージ"), -386, 214, 0, 150, 0)
-            CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), 131088)
+            CALL(evt_npc_flag_onoff, 0, STRING("ルイージ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
             CALL(evt_npc_set_position, STRING("ルイージ"), 0, -1000, 0)
             CALL(evt_set_dir_to_target, STRING("土産屋"), STRING("mario"))
             WAIT_MS(300)
@@ -431,7 +431,7 @@ EVT_BEGIN(miyageya_talk)
             CALL(evt_npc_set_anim, STRING("me"), STRING("KNF_S_1"))
             CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("KNF_S_2"), STRING("KNF_T_2"))
             CALL(evt_msg_print, 0, STRING("kpa_stg7_004"), 0, STRING("me"))
-            CALL(evt_npc_flag_onoff, 0, STRING("me"), 512)
+            CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
             SET_VALUE(LSWF(1), 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("kpa_stg7_004_1"), 0, STRING("me"))
@@ -461,7 +461,7 @@ EVT_BEGIN(miyageya_init)
     CALL(evt_npc_set_position, STRING("me"), -270, -5, 260)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(373, 376)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 1024)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     END_SWITCH
     CALL(evt_npc_change_interrupt, STRING("me"), 6, PTR(miyageya_talk))
     RETURN
@@ -561,7 +561,7 @@ EVT_BEGIN(konarikin_talk)
                 WAIT_MS(300)
                 CALL(evt_party_set_dir_npc, 0, STRING("コナリキン"))
             END_INLINE_EVENT
-            CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
             CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
             CALL(evt_npc_move_position, STRING("me"), -222, -225, 0, 120, 0)
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
@@ -580,8 +580,8 @@ EVT_BEGIN(konarikin_talk)
         CALL(evt_msg_print, 0, STRING("kpa_stg7_006"), 0, STRING("mario"))
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("C_1"), STRING("T_4"))
         CALL(evt_msg_print, 0, STRING("kpa_stg7_007"), 0, STRING("me"))
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), 32)
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), 1024)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
         CALL(evt_npc_set_anim, STRING("me"), STRING("R_2"))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -628,7 +628,7 @@ EVT_END()
 
 EVT_BEGIN(narikin_papa_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 16777216)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 373)
         IF_INT_LESS(GSW_STORY_PROGRESS, 376)
             CALL(evt_npc_set_position, STRING("me"), -6, -5, 161)
@@ -639,7 +639,7 @@ EVT_END()
 
 EVT_BEGIN(narikin_mama_init)
     CALL_CHILD(PTR(npc_init_evt))
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 16777216)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_TALK_TURN)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 373)
         IF_INT_LESS(GSW_STORY_PROGRESS, 376)
             CALL(evt_npc_set_position, STRING("me"), 18, -5, 185)
@@ -677,7 +677,7 @@ static EVT_BEGIN(baba_init)
 EVT_END()
 
 EVT_BEGIN(takun4_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("ターくん４"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ターくん４"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
@@ -696,12 +696,12 @@ EVT_BEGIN(takun4_talk)
 EVT_END()
 
 EVT_BEGIN(takun5_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("ターくん５"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ターくん５"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(373, 376)
         CALL(evt_npc_set_position, STRING("ターくん５"), 0, -1000, 0)
         CASE_DEFAULT
-        CALL(evt_npc_flag_onoff, 1, STRING("ターくん５"), 131088)
+        CALL(evt_npc_flag_onoff, 1, STRING("ターくん５"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     END_SWITCH
     RETURN
 EVT_END()
@@ -719,12 +719,12 @@ EVT_BEGIN(takun5_talk)
 EVT_END()
 
 EVT_BEGIN(takun6_init)
-    CALL(evt_npc_flag_onoff, 1, STRING("ターくん６"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ターくん６"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(373, 376)
         CALL(evt_npc_set_position, STRING("ターくん６"), 0, -1000, 0)
         CASE_DEFAULT
-        CALL(evt_npc_flag_onoff, 1, STRING("ターくん６"), 131088)
+        CALL(evt_npc_flag_onoff, 1, STRING("ターくん６"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     END_SWITCH
     RETURN
 EVT_END()
@@ -744,7 +744,7 @@ EVT_END()
 static NpcSetupInfo npc_data[] = {
     {
         /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_powan, // initEvent
         NULL, // regularEvent
@@ -756,7 +756,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"土産屋"*/"\x93\x79\x8E\x59\x89\xAE", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         miyageya_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -852,7 +852,7 @@ EVT_BEGIN(resaresa_entry)
     CALL(evt_npc_set_tribe, STRING("レサレサ"), STRING("レサレサ"))
     CALL(evt_npc_set_position, STRING("レサレサ"), 30, 15, 120)
     CALL(evt_npc_set_ry, STRING("レサレサ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("レサレサ"), 4194816)
+    CALL(evt_npc_flag_onoff, 1, STRING("レサレサ"), NPC_FLAG_TALK_POSE | NPC_FLAG_RESUME_AFTER_TALK)
     CALL(evt_npc_change_interrupt, STRING("レサレサ"), 1, PTR(teresa_fuwafuwa))
     CALL(evt_npc_change_interrupt, STRING("レサレサ"), 6, PTR(resaresa_talk))
     RETURN
@@ -868,7 +868,7 @@ EVT_BEGIN(sebaschan_entry)
     CALL(evt_npc_set_tribe, STRING("セバスチャン"), STRING("セバスチャン"))
     CALL(evt_npc_set_position, STRING("セバスチャン"), 75, 4, 90)
     CALL(evt_npc_set_ry, STRING("セバスチャン"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("セバスチャン"), 20972032)
+    CALL(evt_npc_flag_onoff, 1, STRING("セバスチャン"), NPC_FLAG_TALK_POSE | NPC_FLAG_RESUME_AFTER_TALK | NPC_FLAG_NO_TALK_TURN)
     CALL(evt_npc_change_interrupt, STRING("セバスチャン"), 1, PTR(teresa_fuwafuwa))
     CALL(evt_npc_change_interrupt, STRING("セバスチャン"), 6, PTR(sebaschan_talk))
     RETURN
@@ -956,12 +956,12 @@ EVT_BEGIN(pik_01_koopa_evt)
     CALL(evt_mario_set_pos, -325, -5, -325)
     CALL(evt_npc_set_position, STRING("ババ"), -425, 25, -425)
     CALL(evt_mario_set_dir, 90, 0, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     CALL(evt_cam3d_evt_set, -273, 145, 196, -273, 69, -237, 0, 11)
     CALL(evt_seq_wait, 2)
     CALL(evt_bero_exec_wait, 65536)
-    CALL(evt_npc_flag_onoff, 0, STRING("ババ"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_INSTANT_TURN)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -1179,7 +1179,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_ry, STRING("ポワン探偵"), 270)
     CALL(evt_npc_set_position, STRING("マダム"), 10, -5, 0)
     CALL(evt_npc_set_ry, STRING("マダム"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("マダム"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("マダム"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_position, STRING("コナリキン"), 70, 0, -70)
     CALL(evt_npc_set_ry, STRING("コナリキン"), 270)
     CALL(evt_npc_set_position, STRING("ナリキンママ"), 30, 0, -105)
@@ -1243,7 +1243,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     END_INLINE_EVENT
     CALL(evt_seq_wait, 2)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("マダム"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("マダム"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_53"), 0, STRING("マダム"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_las_148_54"), 0, STRING("ポワン探偵"))
@@ -1293,7 +1293,7 @@ EVT_END()
 EVT_BEGIN(iri_27_npc_entry)
     CALL(evt_npc_entry, STRING("ルイージ"), STRING("c_luigi"))
     CALL(evt_npc_set_tribe, STRING("ルイージ"), STRING("ルイージ"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("ルイージ"), 2)
     CALL(evt_npc_set_position, STRING("ルイージ"), 0, -1000, 0)
     RETURN

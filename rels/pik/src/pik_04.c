@@ -25,6 +25,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_add_coin);
@@ -288,8 +289,8 @@ EVT_BEGIN(imgstart)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), 1)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), STRING("offscreen"))
-    CALL(evt_npc_flag_onoff, 1, STRING("店員女"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("店員女"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), NPC_FLAG_NO_DRAW)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     WAIT_FRAMES(1)
     CALL(evt_sub_intpl_msec_init, 11, 255, 0, 1000)
@@ -319,8 +320,8 @@ EVT_BEGIN(imgend)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), 1)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), STRING("offscreen"))
-    CALL(evt_npc_flag_onoff, 1, STRING("店員女"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("店員女"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), NPC_FLAG_NO_DRAW)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     WAIT_FRAMES(1)
     CALL(evt_sub_intpl_msec_init, 11, 0, 255, 1000)
@@ -340,8 +341,8 @@ EVT_BEGIN(imgend)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("door_h"), 1)
     CALL(evt_npc_set_offscreen, STRING("店員女"), 0)
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("店員女"), 128)
-    CALL(evt_npc_flag_onoff, 0, STRING("キザ野郎"), 128)
+    CALL(evt_npc_flag_onoff, 0, STRING("店員女"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 0, STRING("キザ野郎"), NPC_FLAG_NO_DRAW)
     RETURN
 EVT_END()
 
@@ -657,7 +658,7 @@ EVT_BEGIN(talk_takun2)
 EVT_END()
 
 EVT_BEGIN(init_takun3)
-    CALL(evt_npc_flag_onoff, 1, STRING("ターくん３"), 132624)
+    CALL(evt_npc_flag_onoff, 1, STRING("ターくん３"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
 
@@ -689,7 +690,7 @@ EVT_END()
 static NpcSetupInfo npc_data[] = {
     {
         /*"土産屋"*/"\x93\x79\x8E\x59\x89\xAE", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_miyage, // initEvent
         NULL, // regularEvent
@@ -701,7 +702,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"３人娘１"*/"\x82\x52\x90\x6C\x96\xBA\x82\x50", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_musume1, // initEvent
         NULL, // regularEvent
@@ -713,7 +714,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"３人娘２"*/"\x82\x52\x90\x6C\x96\xBA\x82\x51", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_musume2, // initEvent
         NULL, // regularEvent
@@ -725,7 +726,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"３人娘３"*/"\x82\x52\x90\x6C\x96\xBA\x82\x52", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_musume3, // initEvent
         NULL, // regularEvent
@@ -737,7 +738,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ターくん１"*/"\x83\x5E\x81\x5B\x82\xAD\x82\xF1\x82\x50", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_takun1, // initEvent
         NULL, // regularEvent
@@ -749,7 +750,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"ターくん２"*/"\x83\x5E\x81\x5B\x82\xAD\x82\xF1\x82\x51", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_takun2, // initEvent
         NULL, // regularEvent
@@ -761,7 +762,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"店員女"*/"\x93\x58\x88\xF5\x8F\x97", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -770,7 +771,7 @@ static NpcSetupInfo npc_data[] = {
     },
     {
         /*"キザ野郎"*/"\x83\x4C\x83\x55\x96\xEC\x98\x59", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         init_kiza, // initEvent
         NULL, // regularEvent
@@ -879,12 +880,12 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_set_tribe, STRING("軍団Ｂ"), STRING("第三勢力研究員"))
     CALL(evt_npc_set_position, STRING("軍団Ｂ"), 7, 5, 151)
     CALL(evt_npc_set_ry, STRING("軍団Ｂ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("軍団Ｂ"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("軍団Ｂ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_entry, STRING("軍団Ｃ"), STRING("c_zako_e"))
     CALL(evt_npc_set_tribe, STRING("軍団Ｃ"), STRING("第三勢力エリート"))
     CALL(evt_npc_set_position, STRING("軍団Ｃ"), -48, 0, 193)
     CALL(evt_npc_set_ry, STRING("軍団Ｃ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("軍団Ｃ"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("軍団Ｃ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_entry, STRING("軍団Ｄ"), STRING("c_zako_n"))
     CALL(evt_npc_set_tribe, STRING("軍団Ｄ"), STRING("第三勢力部下"))
     CALL(evt_npc_set_position, STRING("軍団Ｄ"), 142, 5, 233)
@@ -897,7 +898,7 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_set_tribe, STRING("ポワン"), STRING("ポワン探偵"))
     CALL(evt_npc_set_position, STRING("ポワン"), -29, 0, 455)
     CALL(evt_npc_set_ry, STRING("ポワン"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("ポワン"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ポワン"), NPC_FLAG_INSTANT_TURN)
     RETURN
 EVT_END()
 

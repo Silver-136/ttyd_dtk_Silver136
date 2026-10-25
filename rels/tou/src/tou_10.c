@@ -19,6 +19,7 @@
 #include "evt/evt_hit.h"
 #include "evt/evt_pouch.h"
 #include "driver/mobjdrv.h"
+#include "driver/npcdrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_pouch.h"
@@ -241,7 +242,7 @@ EVT_BEGIN(init_gard)
 EVT_END()
 
 EVT_BEGIN(talk_gard)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -130, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -557,7 +558,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_kino, // initEvent
         NULL, // regularEvent
@@ -569,7 +570,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ガードマン"*/"\x83\x4B\x81\x5B\x83\x68\x83\x7D\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gard, // initEvent
         NULL, // regularEvent
@@ -581,7 +582,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ガンス"*/"\x83\x4B\x83\x93\x83\x58", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -590,7 +591,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ヨッシー"*/"\x83\x88\x83\x62\x83\x56\x81\x5B", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -599,7 +600,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マイケル"*/"\x83\x7D\x83\x43\x83\x50\x83\x8B", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_michel, // initEvent
         NULL, // regularEvent
@@ -611,7 +612,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ブロッツ"*/"\x83\x75\x83\x8D\x83\x62\x83\x63", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_brots, // initEvent
         NULL, // regularEvent
@@ -623,7 +624,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ガンガン"*/"\x83\x4B\x83\x93\x83\x4B\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_gangan, // initEvent
         NULL, // regularEvent
@@ -635,7 +636,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ポグ"*/"\x83\x7C\x83\x4F", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_poku, // initEvent
         NULL, // regularEvent
@@ -647,7 +648,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"アイアン"*/"\x83\x41\x83\x43\x83\x41\x83\x93", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_iron, // initEvent
         NULL, // regularEvent
@@ -659,7 +660,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"アイアン２"*/"\x83\x41\x83\x43\x83\x41\x83\x93\x82\x51", // name
-        0x40000600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION, // flags
         0, // reactionFlags
         init_iron2, // initEvent
         NULL, // regularEvent
@@ -719,7 +720,7 @@ EVT_BEGIN(evt_saisyo_after)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), 2)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -55, -95, 0, FLOAT(80.0f), 1)
     IF_INT_EQUAL(GSWF(2396), 1)
@@ -1029,7 +1030,7 @@ EVT_BEGIN(evt_tou_chibi_yoshi)
     CALL(evt_npc_entry, STRING("ヨッシー"), LW(0))
     CALL(evt_npc_set_position, STRING("ヨッシー"), 0, -1000, 0)
     CALL(evt_npc_set_tribe, STRING("ヨッシー"), STRING("ヨッシー"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ヨッシー"), 1073743360)
+    CALL(evt_npc_flag_onoff, 1, STRING("ヨッシー"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_msg_print_party, STRING("stg3_tou_278"))
     CALL(evt_party_set_dir, 0, 270, -1)
@@ -1353,9 +1354,9 @@ EVT_BEGIN(evt_rec)
         CALL(evt_mario_set_dir, 270, 300, 0)
         CALL(evt_party_set_dir, 0, 270, 300)
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -40, -100, 0, FLOAT(80.0f), 1)
-    CALL(evt_npc_flag_onoff, 0, STRING("キノシコワ"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
     WAIT_MS(600)
@@ -1395,9 +1396,9 @@ static EVT_BEGIN(evt_gardman)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_set_pose, STRING("M_N_7"))
-        CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_NO_HIT)
         CALL(evt_mario_jump_pos, 40, 0, -120, 400, 1, -1000)
-        CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), 32)
+        CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_NO_HIT)
         WAIT_MS(500)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_mario_dispflag_onoff, 0, 2)
@@ -1415,7 +1416,7 @@ static EVT_BEGIN(evt_gardman)
         END_IF
     END_LOOP
     CALL(evt_npc_status_onoff, 0, STRING("ガードマン"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_set_dir_to_target, STRING("ガードマン"), STRING("mario"))
     CALL(evt_npc_set_position, STRING("ガードマン"), 0, 0, -170)
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -90, 0, FLOAT(80.0f), 1)
@@ -1435,7 +1436,7 @@ static EVT_BEGIN(evt_gardman)
     CALL(evt_msg_print, 0, STRING("stg3_tou_75"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), 2)
-    CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

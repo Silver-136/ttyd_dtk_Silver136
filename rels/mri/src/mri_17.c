@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
+#include "driver/npcdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/imgdrv.h"
@@ -144,7 +145,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガイド"*/"\x83\x4B\x83\x43\x83\x68", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         guide_init, // initEvent
         NULL, // regularEvent
@@ -156,7 +157,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ガイド妹"*/"\x83\x4B\x83\x43\x83\x68\x96\x85", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         sister_init, // initEvent
         NULL, // regularEvent
@@ -168,7 +169,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ライバル"*/"\x83\x89\x83\x43\x83\x6F\x83\x8B", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         rival_init, // initEvent
         NULL, // regularEvent
@@ -346,9 +347,9 @@ EVT_END()
 
 EVT_BEGIN(trap_event)
     WAIT_WHILE(GF(15))
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), 1073742368)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), 1073742368)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), 1073742368)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     WAIT_MS(500)
@@ -371,7 +372,7 @@ EVT_BEGIN(trap_event)
     CALL(evt_puni_set_mode, 1, 30)
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), 1073743392)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
     SET_VALUE(LW(0), STRING("ガイド"))
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
@@ -430,9 +431,9 @@ EVT_BEGIN(trap_event)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, 50, 8, FLOAT(120.0f))
     END_INLINE_EVENT
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), 1024)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), 1024)
-    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), 1024)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_sound_data_reset, STRING("第三勢力部下Ａ"))
     CALL(evt_npc_sound_data_reset, STRING("第三勢力部下Ｂ"))
     CALL(evt_npc_sound_data_reset, STRING("第三勢力幹部"))

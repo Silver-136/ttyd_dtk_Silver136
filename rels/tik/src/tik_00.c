@@ -772,7 +772,7 @@ EVT_BEGIN(uranai_main)
         CALL(evt_mapobj_rotate, 1, STRING("card_1"), LW(0), 0, 0)
         CALL(evt_mapobj_trans, 1, STRING("card_1"), 0, 180, 0)
         IF_FLOAT_GREATER(LW(0), FLOAT(-20.0f))
-            CALL(evt_npc_flag_onoff, 1, STRING("うらない師"), 128)
+            CALL(evt_npc_flag_onoff, 1, STRING("うらない師"), NPC_FLAG_NO_DRAW)
         END_IF
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
@@ -960,7 +960,7 @@ EVT_BEGIN(uranai_main)
             SET_FLOAT_VALUE(GW(3), LW(0))
             IF_FLOAT_GREATER(GW(3), FLOAT(3600.0f))
                 CALL(evt_mapobj_flag_onoff, 1, 1, STRING("card_omote_5"), 1)
-                CALL(evt_npc_flag_onoff, 0, STRING("うらない師"), 128)
+                CALL(evt_npc_flag_onoff, 0, STRING("うらない師"), NPC_FLAG_NO_DRAW)
             END_IF
             WAIT_FRAMES(1)
             IF_INT_EQUAL(LW(1), 0)
@@ -1468,7 +1468,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"うらない師"*/"\x82\xA4\x82\xE7\x82\xC8\x82\xA2\x8E\x74", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         uranaisi_init, // initEvent
         NULL, // regularEvent
@@ -1480,7 +1480,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"星マニア"*/"\x90\xAF\x83\x7D\x83\x6A\x83\x41", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         starmaniac_init, // initEvent
         NULL, // regularEvent
@@ -1492,7 +1492,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"情報屋ケチ"*/"\x8F\xEE\x95\xF1\x89\xAE\x83\x50\x83\x60", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         npc_init_evt, // initEvent
         NULL, // regularEvent
@@ -1504,7 +1504,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"クリボー５"*/"\x83\x4E\x83\x8A\x83\x7B\x81\x5B\x82\x54", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         kuribo5_init, // initEvent
         NULL, // regularEvent
@@ -1516,7 +1516,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"チューさん４"*/"\x83\x60\x83\x85\x81\x5B\x82\xB3\x82\xF1\x82\x53", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         chusan4_init, // initEvent
         chusan4_regl, // regularEvent
@@ -1528,7 +1528,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ボロドー３"*/"\x83\x7B\x83\x8D\x83\x68\x81\x5B\x82\x52", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         borodo3_init, // initEvent
         borodo3_regl, // regularEvent
@@ -1540,7 +1540,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ボロドー４"*/"\x83\x7B\x83\x8D\x83\x68\x81\x5B\x82\x53", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         borodo4_init, // initEvent
         NULL, // regularEvent
@@ -1552,7 +1552,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ピンクボム兵"*/"\x83\x73\x83\x93\x83\x4E\x83\x7B\x83\x80\x95\xBA", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         pinkbom_init, // initEvent
         NULL, // regularEvent
@@ -1564,7 +1564,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"マスター２"*/"\x83\x7D\x83\x58\x83\x5E\x81\x5B\x82\x51", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         master_2_init, // initEvent
         NULL, // regularEvent
@@ -1576,7 +1576,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"店員"*/"\x93\x58\x88\xF5", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -2535,7 +2535,7 @@ EVT_BEGIN(kurihakase_event)
     CALL(evt_party_stop, 0)
     CALL(evt_snd_envon_f, 272, STRING("ENV_STG0_TIK2"), 2000)
     CALL(evt_npc_set_position, STRING("クリハカセ"), -30, 0, 170)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
@@ -2645,7 +2645,7 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), -540, 20, -25)
     CALL(evt_npc_set_ry, STRING("クリスチーヌ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), 1073742880)
+    CALL(evt_npc_flag_onoff, 1, STRING("クリスチーヌ"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     RETURN
 EVT_END()
 

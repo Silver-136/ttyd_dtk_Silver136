@@ -128,7 +128,7 @@ static EVT_BEGIN(syuryo_init)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 399)
             CALL(evt_npc_set_position, STRING("me"), 410, 25, 0)
             CALL(evt_npc_set_ry, STRING("me"), 270)
-            CALL(evt_npc_flag_onoff, 1, STRING("me"), 131088)
+            CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
         END_IF
     END_IF
     RETURN
@@ -157,7 +157,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"シュリョー"*/"\x83\x56\x83\x85\x83\x8A\x83\x87\x81\x5B", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         syuryo_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -167,7 +167,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"クッパ"*/"\x83\x4E\x83\x62\x83\x70", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         koopa_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -177,7 +177,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ババ"*/"\x83\x6F\x83\x6F", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         baba_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -444,7 +444,7 @@ EVT_BEGIN(syuryo_evt)
     CALL(evt_cam3d_evt_set, -160, 77, 279, -160, 35, -18, 0, 11)
     WAIT_FRAMES(1)
     CALL(evt_msg_print_party, STRING("stg8_las_57"))
-    CALL(evt_npc_flag_onoff, 1, STRING("シュリョー"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("シュリョー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 90, 85, 305, 90, 50, -18, 0, 11)
     WAIT_FRAMES(1)
     WAIT_MS(500)
@@ -456,7 +456,7 @@ EVT_BEGIN(syuryo_evt)
     CALL(evt_cam3d_evt_set, -160, 67, 230, -160, 32, -18, 0, 11)
     WAIT_FRAMES(1)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("シュリョー"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("シュリョー"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_msg_print_party, STRING("stg8_las_61"))
     CALL(evt_cam3d_evt_set, 90, 85, 305, 90, 50, -18, 0, 11)
     WAIT_FRAMES(1)
@@ -603,7 +603,7 @@ EVT_BEGIN(syuryo_evt)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_set_dir, 0, 0, 0)
     CALL(evt_mario_set_dispdir, 180)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), NPC_FLAG_INSTANT_TURN)
     WAIT_FRAMES(1)
     CALL(syuryo_baria_recalc_pos)
     WAIT_MS(500)
@@ -641,7 +641,7 @@ EVT_BEGIN(syuryo_evt)
     WAIT_FRAMES(1)
     CALL(syuryo_baria_recalc_pos)
     CALL(evt_msg_print, 0, STRING("stg8_las_79"), 0, STRING("ピーチ姫"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 75, 86, 230, 75, 50, -18, 500, 11)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_las_80"), 0, STRING("シュリョー"))
@@ -780,7 +780,7 @@ EVT_BEGIN(koopa_evt)
     ADD(LW(3), 300)
     CALL(evt_npc_set_position, STRING("クッパ"), LW(2), LW(3), LW(4))
     CALL(evt_npc_set_ry, STRING("クッパ"), 270)
-    CALL(evt_npc_flag_onoff, 1, STRING("クッパ"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("クッパ"), NPC_FLAG_NO_HIT)
     CALL(evt_msg_print, 0, STRING("stg8_las_86"), 0, STRING("クッパ"))
     CALL(evt_npc_set_anim, STRING("クッパ"), STRING("KPA_D_1"))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CEILING_BREAK2"), LW(2), LW(3), LW(4), 0)
@@ -979,7 +979,7 @@ EVT_BEGIN(koopa_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_SURPRISED1_1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, 1, 0, STRING("クッパ"), 0, 0, 0, 0, 0, 0, 0, 30)
     WAIT_MS(600)
-    CALL(evt_npc_flag_onoff, 1, STRING("クッパ"), 512)
+    CALL(evt_npc_flag_onoff, 1, STRING("クッパ"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_set_autotalkpose, STRING("クッパ"), STRING("KPA_S_1"), STRING("KPA_T_1"))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("クッパ"), LW(2), LW(3), LW(4))
@@ -1098,7 +1098,7 @@ EVT_BEGIN(koopa_evt)
     CALL(evt_npc_set_autotalkpose, STRING("クッパ"), STRING("KPA_Z_3"), STRING("KPA_T_8"))
     CALL(evt_npc_set_position, STRING("ピーチ姫"), 650, 25, 0)
     CALL(evt_npc_set_position, STRING("シュリョー"), 650, 25, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), NPC_FLAG_NO_DRAW)
     CALL(eff_guruguru, STRING("koopa_piyo"), -10, 60, -10, 20)
     CALL(eff_guruguru, STRING("baba_piyo"), 70, 30, 20, 20)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KOOPA_PIYO1"), -10, 60, -10, 0)
@@ -1152,7 +1152,7 @@ EVT_BEGIN(koopa_evt)
     CALL(evt_npc_set_position, STRING("シュリョー"), 600, 25, 0)
     CALL(evt_npc_set_ry, STRING("シュリョー"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("シュリョー"), 1073750016)
-    CALL(evt_npc_flag_onoff, 0, STRING("シュリョー"), 131088)
+    CALL(evt_npc_flag_onoff, 0, STRING("シュリョー"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_set_tribe, STRING("シュリョー"), STRING("第三勢力総統（ヒビ）"))
     BEGIN_INLINE_EVENT
         WAIT_MS(600)
@@ -1168,10 +1168,10 @@ EVT_BEGIN(koopa_evt)
     CALL(evt_npc_set_ry, STRING("ババ"), 270)
     CALL(evt_cam3d_evt_off, 0, 11)
     WAIT_FRAMES(1)
-    CALL(evt_npc_flag_onoff, 0, STRING("クッパ"), 1568)
-    CALL(evt_npc_flag_onoff, 0, STRING("ババ"), 1536)
-    CALL(evt_npc_flag_onoff, 1, STRING("クッパ"), 16777216)
-    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), 16777216)
+    CALL(evt_npc_flag_onoff, 0, STRING("クッパ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("クッパ"), NPC_FLAG_NO_TALK_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_TALK_TURN)
     CALL(evt_npc_change_interrupt, STRING("クッパ"), 6, PTR(koopa_talk))
     CALL(evt_npc_change_interrupt, STRING("ババ"), 6, PTR(baba_talk))
     SET_VALUE(GSW_STORY_PROGRESS, 400)

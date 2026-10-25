@@ -15,6 +15,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_map.h"
 #include "driver/mobjdrv.h"
+#include "driver/npcdrv.h"
 
 
 static EvtWord e_door_close[12];
@@ -163,10 +164,10 @@ EVT_BEGIN(las_17_init_evt)
     IF_INT_LESS(GSW(1123), 4)
         SET_VALUE(GSW(1123), 0)
     END_IF
-    CALL(evt_npc_flag_onoff, 0, STRING("クリボー"), 4)
-    CALL(evt_npc_flag_onoff, 0, STRING("トゲクリボー"), 4)
-    CALL(evt_npc_flag_onoff, 0, STRING("ノコノコ"), 4)
-    CALL(evt_npc_flag_onoff, 0, STRING("シンノスケ"), 4)
+    CALL(evt_npc_flag_onoff, 0, STRING("クリボー"), NPC_FLAG_RECORD_DEFEAT)
+    CALL(evt_npc_flag_onoff, 0, STRING("トゲクリボー"), NPC_FLAG_RECORD_DEFEAT)
+    CALL(evt_npc_flag_onoff, 0, STRING("ノコノコ"), NPC_FLAG_RECORD_DEFEAT)
+    CALL(evt_npc_flag_onoff, 0, STRING("シンノスケ"), NPC_FLAG_RECORD_DEFEAT)
     CALL(evt_npc_change_interrupt, STRING("クリボー"), 8, PTR(enemy1_dead_evt))
     CALL(evt_npc_change_interrupt, STRING("トゲクリボー"), 8, PTR(enemy2_dead_evt))
     CALL(evt_npc_change_interrupt, STRING("ノコノコ"), 8, PTR(enemy3_dead_evt))

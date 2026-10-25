@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
+#include "driver/npcdrv.h"
 
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
@@ -366,7 +367,7 @@ EVT_BEGIN(yuka_event)
     SPAWN_EVENT_GET_ID(PTR(yuka_shake), LW(10))
     CALL(evt_puni_flag_onoff, 1, 0, 262144)
     CALL(evt_puni_set_mode, 1, 30)
-    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), 1536)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e21_00"), 0, STRING("ガイドsp"))
     CALL(evt_puni_flag_onoff, 1, 1, 262144)
     CALL(evt_puni_set_mode, 1, 30)

@@ -1440,7 +1440,7 @@ EVT_BEGIN(peach_evt_dance)
         GOTO(0)
     END_IF
 #ifdef VERSION_G8ME01
-    CALL(evt_npc_flag_onoff, 1, STRING("ホログラム"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("ホログラム"), NPC_FLAG_NO_DRAW)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING(("\203z\203\215\203O\203\211\203\200")), 128)
 #endif

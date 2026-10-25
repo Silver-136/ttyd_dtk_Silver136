@@ -31,7 +31,7 @@
 // clang-format off
 // .sdata
 EVT_BEGIN(npc_init_evt)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), 0x600)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
     END
 EVT_END()
@@ -77,7 +77,7 @@ USER_FUNC(evt_npc_slave_entry) {
     strcat(slaveName, ident);
     npcEntry(slaveName, animName);
     slave = npcNameToPtr(slaveName);
-    slave->flags |= 0x120000 | 0x18;
+    slave->flags |= (NPC_FLAG_GRAVITY | NPC_FLAG_UPDATE_BY_EVENT) | 0x18;
     slave->deadEvent = deadEvent;
     slave->battleInfo = npc->battleInfo;
     npcSetSlave(npc, slave, id);
@@ -508,7 +508,7 @@ USER_FUNC(evt_npc_move_position) {
     }
 
     // Re-aim at the target each frame unless direction is locked
-    if ((npc->flags & 0x1) && !(npc->jumpFlags & 0x1)) {
+    if ((npc->flags & NPC_FLAG_IN_USE) && !(npc->jumpFlags & 0x1)) {
         npc->moveDir = angleABf(0.0f, 0.0f, diff.x, diff.z);
     }
 
@@ -745,8 +745,8 @@ USER_FUNC(evt_npc_jump_position_nohit) {
 
         event->userdataf[1] = -4.0f * arcHeight;
         event->userdataf[2] = (targetY - npc->jumpStartPos.y) - event->userdataf[1];
-        event->userdata3 = npc->flags & 0x80000;
-        npc->flags &= ~0x80000;
+        event->userdata3 = npc->flags & NPC_FLAG_SHADOW_NO_FLOOR;
+        npc->flags &= ~NPC_FLAG_SHADOW_NO_FLOOR;
 
         if (psndGetFlag() & 0x100) {
             if (!(animPoseGetMaterialFlag(npc->poseId) & 0x1800)) {

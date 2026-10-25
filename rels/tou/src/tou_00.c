@@ -514,7 +514,7 @@ EVT_BEGIN(tou_00_koopa_evt)
     CALL(evt_npc_set_anim, STRING("飛クッパ"), STRING("HKPA_O_2"))
     WAIT_MS(200)
     WAIT_MS(500)
-    CALL(evt_npc_flag_onoff, 0, STRING("飛クッパ"), 512)
+    CALL(evt_npc_flag_onoff, 0, STRING("飛クッパ"), NPC_FLAG_TALK_POSE)
     BEGIN_INLINE_EVENT
         CALL(evt_msg_print, 0, STRING("kpa_stg4_009"), 0, STRING("飛クッパ"))
     END_INLINE_EVENT
@@ -569,7 +569,7 @@ USER_FUNC(kemuri_move) {
 static NpcSetupInfo npcEnt[] = {
     {
         /*"飛クッパ"*/"\x94\xF2\x83\x4E\x83\x62\x83\x70", // name
-        0x200, // flags
+        NPC_FLAG_TALK_POSE, // flags
         0, // reactionFlags
         hkoopa_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType

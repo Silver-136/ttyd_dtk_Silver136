@@ -10,6 +10,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
+#include "driver/npcdrv.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -503,8 +504,8 @@ EVT_BEGIN(boots_lv2_juyoitem_lecture_init)
     CALL(evt_mario_set_pos, 0, 0, 70)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(0), 150)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノピコ"), 1536)
-    CALL(evt_npc_flag_onoff, 1, STRING("キノピコ"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノピコ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノピコ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_ry, STRING("キノピコ"), 270)
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(26.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, 0)

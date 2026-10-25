@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "driver/mapdrv.h"
+#include "driver/npcdrv.h"
 
 #include "driver/effdrv.h"
 #include "mario/mariost.h"
@@ -40,7 +41,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ピーチ姫"*/"\x83\x73\x81\x5B\x83\x60\x95\x50", // name
-        0x80600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         peach_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -75,7 +76,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_set_pos, 40, 28, 64)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_flag_onoff, 1, 1024)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), 163856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG0_SHIP_MOVE1"), LW(0), LW(1), LW(2), LW(3))
     CALL(evt_snd_sfx_vol, LW(3), 63)
@@ -83,7 +84,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_seq_wait, 2)
     CALL(evt_npc_set_anim, STRING("ピーチ姫"), STRING("P_S_7"))
     WAIT_MS(2000)
-    CALL(evt_npc_flag_onoff, 0, STRING("ピーチ姫"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("ピーチ姫"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_7"), STRING("P_T_13"))
     CALL(evt_msg_print, 0, STRING("ep_27"), 0, STRING("ピーチ姫"))
     CALL(evt_npc_set_ry, STRING("ピーチ姫"), 270)

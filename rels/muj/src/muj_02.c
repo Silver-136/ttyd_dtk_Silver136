@@ -12,6 +12,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_mobj.h"
 #include "evt/evt_pouch.h"
+#include "driver/npcdrv.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -174,8 +175,8 @@ EVT_END()
 
 EVT_BEGIN(lost_wedding_ring)
     CALL(evt_party_stop, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), 32)
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), 32)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_get_reglid, STRING("モニー"), LW(0))
     DELETE_EVENT(LW(0))
     CALL(evt_npc_get_reglid, STRING("ピートン"), LW(0))
@@ -261,8 +262,8 @@ EVT_BEGIN(lost_wedding_ring)
         CALL(evt_npc_set_ry, STRING("モニー"), 90)
         CALL(evt_npc_move_position, STRING("モニー"), 500, -40, 0, FLOAT(120.0f), 0)
     END_IF
-    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), 32)
-    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), 32)
+    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_restart_regular_event, STRING("モニー"))
     CALL(evt_npc_restart_regular_event, STRING("ピートン"))
     CALL(evt_mario_dispflag_onoff, 0, 2)
@@ -289,8 +290,8 @@ EVT_END()
 
 EVT_BEGIN(find_wedding_ring)
     CALL(evt_party_stop, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_get_reglid, STRING("モニー"), LW(0))
     DELETE_EVENT(LW(0))
     CALL(evt_npc_get_reglid, STRING("ピートン"), LW(0))
@@ -449,7 +450,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"モニー"*/"\x83\x82\x83\x6A\x81\x5B", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         mony_init, // initEvent
         mony_regl, // regularEvent
@@ -461,7 +462,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ピートン"*/"\x83\x73\x81\x5B\x83\x67\x83\x93", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         peton_init, // initEvent
         peton_regl, // regularEvent

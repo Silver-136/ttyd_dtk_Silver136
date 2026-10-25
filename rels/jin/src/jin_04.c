@@ -14,6 +14,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "evt/evt_map.h"
+#include "driver/npcdrv.h"
 
 #include "mario/mario_pouch.h"
 #include "evt/evt_bero.h"
@@ -183,14 +184,14 @@ EVT_BEGIN(irekawatta_mario_init)
     CALL(evt_npc_set_position, STRING("ランペル"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("にせマリオ"), -8, 670, 41)
     CALL(evt_npc_set_ry, STRING("にせマリオ"), 90)
-    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), 32768)
+    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_party_set_pos, 0, -40, 670, 41)
     CALL(evt_party_set_dir, 0, 90, 0)
     CALL(evt_mario_set_pos, 80, 670, 50)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_cam3d_evt_set, 75, 785, 422, 75, 715, 25, 0, 11)
     WAIT_FRAMES(1)
-    CALL(evt_npc_flag_onoff, 0, STRING("にせマリオ"), 32768)
+    CALL(evt_npc_flag_onoff, 0, STRING("にせマリオ"), NPC_FLAG_INSTANT_TURN)
     RETURN
 EVT_END()
 
@@ -356,7 +357,7 @@ EVT_BEGIN(yoshi_color)
     END_SWITCH
     CALL(evt_npc_entry, STRING("ヨッシー"), LW(0))
     CALL(evt_npc_set_tribe, STRING("ヨッシー"), STRING("ヨッシー"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ヨッシー"), 1074267648)
+    CALL(evt_npc_flag_onoff, 1, STRING("ヨッシー"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("ヨッシー"), 0, -1000, 0)
     RETURN
 EVT_END()
@@ -456,9 +457,9 @@ EVT_BEGIN(hontonosugata_mario_init)
     CALL(evt_jin_vivian_pose_set, 1, STRING("PTR_S_1"))
     CALL(evt_jin_vivian_pose_set, 7, STRING("PTR_T_1"))
     CALL(evt_npc_set_position, STRING("ランペル"), -15, 670, 41)
-    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), 1073741856)
-    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("にせマリオ"), 0, 670, 41)
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 109, 670, 41)
     CALL(evt_npc_set_position, STRING("ノコタロウ"), 78, 670, 75)
@@ -485,12 +486,12 @@ EVT_BEGIN(hontonosugata_mario)
     CALL_CHILD(PTR(hontonosugata_mario_init))
     CALL(evt_item_entry, STRING("rubystar"), 117, 0, -1000, 0, 17, -1, 0)
     CALL(evt_npc_entry, STRING("ダミー"), STRING("c_mario"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), 128)
+    CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 30)
     ADD(LW(2), 5)
     CALL(evt_npc_set_position, STRING("ダミー"), LW(0), LW(1), LW(2))
-    CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), 1073741856)
+    CALL(evt_npc_flag_onoff, 1, STRING("ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_LANPEL_M_DOWN1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_anim, STRING("にせマリオ"), STRING("EM_D_4"))
@@ -525,15 +526,15 @@ EVT_BEGIN(hontonosugata_mario)
     END_INLINE_EVENT
     WAIT_MS(340)
     SET_VALUE(LW(4), 100)
-    CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), 128)
-    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), 128)
+    CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_NO_DRAW)
     WAIT_MS(LW(4))
     LOOP(0)
-        CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), 128)
-        CALL(evt_npc_flag_onoff, 0, STRING("にせマリオ"), 128)
+        CALL(evt_npc_flag_onoff, 1, STRING("ランペル"), NPC_FLAG_NO_DRAW)
+        CALL(evt_npc_flag_onoff, 0, STRING("にせマリオ"), NPC_FLAG_NO_DRAW)
         WAIT_MS(LW(4))
-        CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), 128)
-        CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), 128)
+        CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_NO_DRAW)
+        CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_NO_DRAW)
         WAIT_MS(LW(4))
         SUBTRACT(LW(4), 10)
         IF_INT_LESS_OR_EQUAL(LW(4), 10)
@@ -617,7 +618,7 @@ EVT_BEGIN(hontonosugata_mario)
     WAIT_MS(400)
     CALL(evt_npc_set_ry, STRING("ランペル"), 270)
     CALL(evt_msg_print, 0, STRING("stg4_jin_28"), 0, STRING("ランペル"))
-    CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), 1024)
+    CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("ランペル"), STRING("R_2"))
     CALL(evt_npc_set_ry, STRING("ランペル"), 90)
     CALL(evt_npc_jump_position_nohit, STRING("ランペル"), 47, 696, -66, 500, 80)
@@ -753,7 +754,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         ranperu_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -763,7 +764,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"にせマリオ"*/"\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, // reactionFlags
         nisemario_init, // initEvent
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, // regularEvent..territoryType
@@ -773,7 +774,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"クリスチーヌ"*/"\x83\x4E\x83\x8A\x83\x58\x83\x60\x81\x5B\x83\x6B", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -782,7 +783,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ノコタロウ"*/"\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -791,7 +792,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"クラウダ"*/"\x83\x4E\x83\x89\x83\x45\x83\x5F", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase
@@ -800,7 +801,7 @@ static NpcSetupInfo npcEnt[] = {
     },
     {
         /*"ヨッシー"*/"\x83\x88\x83\x62\x83\x56\x81\x5B", // name
-        0x600, // flags
+        NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM, // flags
         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // reactionFlags..returnEvent
         NULL, 0, // blowEvent..territoryType
         {0}, // territoryBase

@@ -669,7 +669,7 @@ EVT_BEGIN(evt_diary_read)
         CALL(evt_npc_set_anim, STRING("\202\344\202\244\202\352\202\242"), STRING("O_1"))
         CALL(evt_npc_set_autotalkpose, STRING("\202\344\202\244\202\352\202\242"), STRING("O_2"), STRING("T_2"))
     END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING("\202\344\202\244\202\352\202\242"), 262176)
+    CALL(evt_npc_flag_onoff, 1, STRING("\202\344\202\244\202\352\202\242"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_SHADOW)
     BEGIN_INLINE_EVENT
         LOOP(0)
             CALL(evt_sub_intpl_msec_init, 11, 180, 64, 1000)

@@ -1133,11 +1133,11 @@ static EVT_BEGIN(senkaron_event)
         SET_VALUE(GF(0), 0)
         BEGIN_INLINE_EVENT
             WAIT_MS(500)
-            CALL(evt_npc_flag_onoff, 1, STRING("黒カロン"), 32)
+            CALL(evt_npc_flag_onoff, 1, STRING("黒カロン"), NPC_FLAG_NO_HIT)
             CALL(kurokaron_get_move_pos, LW(0), LW(1))
             CALL(evt_npc_move_position, STRING("黒カロン"), LW(0), LW(1), 0, FLOAT(80.0f), 0)
             WAIT_FRAMES(1)
-            CALL(evt_npc_flag_onoff, 0, STRING("黒カロン"), 32)
+            CALL(evt_npc_flag_onoff, 0, STRING("黒カロン"), NPC_FLAG_NO_HIT)
             SET_VALUE(GF(0), 1)
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
@@ -1176,7 +1176,7 @@ static EVT_BEGIN(senkaron_event)
             CALL(evt_mario_set_dispdir, LW(5))
         END_LOOP
         CALL(senkaronFlagOffMesPushing)
-        CALL(evt_npc_flag_onoff, 1, STRING("黒カロン"), 32)
+        CALL(evt_npc_flag_onoff, 1, STRING("黒カロン"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_change_interrupt, STRING("黒カロン"), 1, PTR(kurokaron_move))
         CALL(evt_npc_restart_regular_event, STRING("黒カロン"))
         CALL(evt_mario_dispflag_onoff, 0, 2)
@@ -1519,7 +1519,7 @@ EVT_END()
 static NpcSetupInfo npcEnt[] = {
     {
         /*"黒カロン"*/"\x8D\x95\x83\x4A\x83\x8D\x83\x93", // name
-        0x1000000, // flags
+        NPC_FLAG_NO_TALK_TURN, // flags
         0, // reactionFlags
         kurokaron_init, // initEvent
         NULL, // regularEvent
