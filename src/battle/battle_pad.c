@@ -1,7 +1,5 @@
 /* "battle_pad" - Battle (Game)Pad Helper
- * Status: Complete, 1:1
- *
- * Function: helper functions for reading/writing controller inputs
+ * Helper functions for reading/writing controller inputs.
  */
 #include "battle/battle_pad.h"
 #include "battle/battle.h"

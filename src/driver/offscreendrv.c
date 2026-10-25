@@ -27,12 +27,12 @@ void offscreenInit(void) {
     memset(wp->entries, 0, wp->count * sizeof(OffscreenEntry));
 }
 
-void offscreenReset(BOOL inBattle) { //1:1
+void offscreenReset(BOOL inBattle) {
     OffscreenWork* wp = offscreenGetWork(inBattle);
     memset(wp->entries, 0, wp->count * sizeof(OffscreenEntry));
 }
 
-s32 offscreenEntry(const char* name) { //1:1, needs variable names
+s32 offscreenEntry(const char* name) {
     OffscreenWork* wp = offscreenGetWorkGp();
     int i, count;
     OffscreenEntry* entry;
@@ -87,7 +87,7 @@ void offscreenDisp(CameraId camId, void* param) {
     }
 }
 
-void offscreenMain(void) { //1:1, need variable names
+void offscreenMain(void) {
     OffscreenWork* wp = offscreenGetWorkGp();
     int i, count;
     OffscreenEntry* entry;
@@ -109,7 +109,7 @@ void offscreenMain(void) { //1:1, need variable names
     dispEntry(CAMERA_OFFSCREEN2, 0.0f, 7, offscreenDisp, NULL);
 }
 
-void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom) { //1:1
+void offscreenAddBoundingBox(s32 id, u16 left, u16 top, u16 right, u16 bottom) {
     OffscreenEntry* entry;
 
     if (right > left) {

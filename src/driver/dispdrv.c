@@ -1,9 +1,5 @@
 /* "dispdrv" - Display Driver
- * Status: 1:1
- *
- * Function: helper functions for rendering and displaying to the screen, others do heavy lifting
- *
- * Last Update: 7/21/2022, finish dispdrv so we can rely on it for other systems
+ * Helper functions for rendering and displaying to the screen, others do heavy lifting.
  */
 
 #include "driver/dispdrv.h"

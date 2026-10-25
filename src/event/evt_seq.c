@@ -1,4 +1,3 @@
-//1:1, very short, TODO: better header
 #include "evt/evt_seq.h"
 #include "driver/seqdrv.h"
 #include "evt/evt_word.h"

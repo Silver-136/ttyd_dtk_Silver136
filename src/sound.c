@@ -52,7 +52,7 @@ void sndFree(void* ptr) {
     __memFree(HEAP_DEFAULT, ptr);
 }
 
-void SoundInit(void) { // 1:1, assuming sndMalloc inlines
+void SoundInit(void) {
     SND_HOOKS hooks = (SND_HOOKS){ sndMalloc, sndFree };
     void* data;
     SoundStream* streams;
@@ -265,12 +265,12 @@ void SoundMainInt(void) {
     SoundSSMainInt();
 }
 
-void SoundSetFadeTime(u16 in, u16 out) { // 1:1
+void SoundSetFadeTime(u16 in, u16 out) {
     sound.fadeIn = in;
     sound.fadeOut = out;
 }
 
-void* loadDVD_callback(u32 offset, u32 bytes) { // 1:1
+void* loadDVD_callback(u32 offset, u32 bytes) {
     DVDFileInfo info;
 
     if (!DVDOpen(sound.filepath, &info)) {
@@ -283,7 +283,7 @@ void* loadDVD_callback(u32 offset, u32 bytes) { // 1:1
     return sound.filedata;
 }
 
-BOOL SoundLoadDVD2(const char* path) { // 1:1
+BOOL SoundLoadDVD2(const char* path) {
     DVDEntry* entry;
     u32 length;
     void* pointer;
@@ -294,7 +294,7 @@ BOOL SoundLoadDVD2(const char* path) { // 1:1
 
     sprintf(str, "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
     entry = DVDMgrOpen(str, 2, 0);
-    length = entry == NULL; // fixes regalloc
+    length = entry == NULL;
     if (entry == NULL) {
         pointer = NULL;
     } else {
@@ -377,7 +377,7 @@ BOOL SoundLoadDVD2(const char* path) { // 1:1
     return TRUE;
 }
 
-BOOL SoundLoadDVD2PushGroup(u8* groupIds) { // 1:1
+BOOL SoundLoadDVD2PushGroup(u8* groupIds) {
     SND_GROUPID id;
     s32 temp;
 
@@ -415,7 +415,7 @@ void SoundLoadDVD2Free(void) {
     }
 }
 
-BOOL SoundSLibLoadDVD(const char* path) { // regalloc, stack, otherwise 1:1
+BOOL SoundSLibLoadDVD(const char* path) {
     SoundGroup* groupsHead;
     u32 length2;
     u32 length3;

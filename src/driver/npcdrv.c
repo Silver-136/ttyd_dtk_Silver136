@@ -442,7 +442,7 @@ void npcDisp_blur(CameraId camId, void* param) {
 }
 #pragma pop
 
-void npcInit(void) { // 1:1
+void npcInit(void) {
     FieldBattleData* data;
     NpcWork* wp;
 
@@ -542,7 +542,7 @@ s32 npcEntry(const char* a1, const char* animName) {
 static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
 #endif
 
-NpcTribeInfo* npcGetTribe(const char* tribeName) { // 1:1
+NpcTribeInfo* npcGetTribe(const char* tribeName) {
     NpcTribeInfo* tribe;
 
     for (tribe = npcTribe; tribe->nameJp; tribe++) {

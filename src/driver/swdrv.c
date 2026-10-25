@@ -1,8 +1,5 @@
 /* "swdrv" - Saved Work Driver (for evt)
- * Status: Complete, 1:1, aside from unused (_)swToggle which is...unused
- * 
- * Function: Helper driver for accessing the "saved work" data for evt
- * scripts
+ * Helper driver for accessing the "saved work" data for evt scripts.
  */
 #include "driver/swdrv.h"
 #include "mario/mariost.h"

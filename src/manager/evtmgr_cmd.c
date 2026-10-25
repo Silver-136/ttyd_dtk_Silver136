@@ -1,10 +1,6 @@
 /* "evtmgr_cmd" - Command Event Manager
-* Status: 1:1
-*
-* Function: handles all the opcodes/commands an event can use to actually "run" the script
-*
-* Last Update: 9/20/2022, should be completely finished
-*/
+ * Handles all the opcodes/commands an event can use to actually "run" the script.
+ */
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_cmd.h"
 #include "memory.h"

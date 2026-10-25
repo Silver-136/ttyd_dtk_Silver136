@@ -1,8 +1,5 @@
 /* "event" - story event flags
- * Status: Almost complete, need to stub/implement commented out functions,
- * theoretically 1:1
- *
- * Function: all the data for setting story flags based on progress
+ * Story event data: the story flags set as the story progresses.
  */
 #include "event.h"
 #include "driver/swdrv.h"

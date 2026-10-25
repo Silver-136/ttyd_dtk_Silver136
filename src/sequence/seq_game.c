@@ -1,9 +1,5 @@
 /* "seq_game" - Main Game Sequence
- * Status: 1:1, theoretically finished
- *
- * Function: the sequence running when on the overworld
- *
- * Last Update: 7/8/2022, finish seq_game
+ * The sequence running when on the overworld.
  */
 
 #include "seq/seq_game.h"

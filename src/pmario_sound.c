@@ -5142,7 +5142,7 @@ s32 searchPSSFXList(const char* name) {
     return i;
 }
 
-void psndInit(void) { //1:1
+void psndInit(void) {
     PaperSoundEnv* env;
     PaperSoundEffect* sfx;
     int i;
@@ -5179,7 +5179,7 @@ void psndInit(void) { //1:1
     SoundSLibLoadDVD("sound/proj/pmario");
 }
 
-void psndMain(void) { //1:1
+void psndMain(void) {
     if (init_f) {
         if (psnd.sfxCooldown) {
             psnd.sfxCooldown--;
@@ -5224,7 +5224,7 @@ BOOL psndPushGroup(void) {
     return TRUE;
 }
 
-void psndSetPosDirListener(Vec* position, f32 direction) {  //1:1
+void psndSetPosDirListener(Vec* position, f32 direction) {
     psnd.position = *position;
     psnd.direction = direction;
 }

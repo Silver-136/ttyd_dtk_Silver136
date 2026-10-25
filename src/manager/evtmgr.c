@@ -1,10 +1,6 @@
 /* "evtmgr" - Event Manager
-* Status: 1:1, just needs comments and struct cleanup
-*
-* Function: helps manage all the scripts the game uses
-*
-* Last Update: 7/10/2022, completed evtmgr
-*/
+ * Helps manage all the scripts the game uses.
+ */
 
 #include "manager/evtmgr.h"
 #include "evt/evt_msg.h"

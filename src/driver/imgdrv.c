@@ -1,5 +1,6 @@
 /* "imgdrv" - Image Driver
- * Function: still not quite sure, TODO something about shadows that shadowdrv doesn't handle
+ * Images for event scripts: screen captures (imgCapture) drawn as planes or projections (imgDisp,
+ * imgDisp_ProjPlane).
  */
 #include "driver/imgdrv.h"
 #include "driver/animdrv.h"
@@ -34,7 +35,7 @@ void imgCapture(CameraId camId, void* param);
 
 void imgShadowDisp(CameraId camId, void* param);
 
-static void zFill(void) { //almost 1:1
+static void zFill(void) {
     static s32 depth_image[32] ATTRIBUTE_ALIGN(32) = { // GX texture: 32-byte aligned (US .data placement shows it)
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
@@ -368,7 +369,7 @@ void imgCapture(CameraId camId, void* param) {
     }
 }
 
-void imgInit(void) { //1:1
+void imgInit(void) {
     wp->count = 10;
     wp->entries = __memAlloc(HEAP_DEFAULT, wp->count * sizeof(ImageEntry));
     memset(wp->entries, 0, wp->count * sizeof(ImageEntry));
@@ -387,7 +388,7 @@ void imgAutoRelease(s32 type) {
     }
 }
 
-s32 imgEntry(const char* name, s32 type) { //1:1, needs variable names
+s32 imgEntry(const char* name, s32 type) {
     int i, count;
     ImageEntry* entry;
 
@@ -449,7 +450,7 @@ s32 imgEntry(const char* name, s32 type) { //1:1, needs variable names
     return i;
 }
 
-void imgMain(void) { //1:1
+void imgMain(void) {
     s32 type = gp->inBattle != 0;
     int shadow, i, count;
     ImageEntry* entry;
@@ -488,7 +489,7 @@ void imgMain(void) { //1:1
     }
 }
 
-ImageEntry* imgNameToPtr(const char* name, s32 type) { //1:1
+ImageEntry* imgNameToPtr(const char* name, s32 type) {
     int i, count;
     ImageEntry* entry;
 
@@ -502,7 +503,7 @@ ImageEntry* imgNameToPtr(const char* name, s32 type) { //1:1
     return entry;
 }
 
-void imgFreeCapture(ImageEntry* entry, s32 shadowId) { //1:1, needs enums
+void imgFreeCapture(ImageEntry* entry, s32 shadowId) {
     ImageShadow* shadow = &entry->shadows[shadowId];
     if (shadow->flags & 4) {
         shadow->flags &= ~0x10;
@@ -519,16 +520,16 @@ void imgFreeCapture(ImageEntry* entry, s32 shadowId) { //1:1, needs enums
     }
 }
 
-void imgSetVirtualPoint(ImageEntry* entry, const Vec* point) { //1:1
+void imgSetVirtualPoint(ImageEntry* entry, const Vec* point) {
     entry->flags &= ~8;
     entry->point = *point;
 }
 
-void imgClearVirtualPoint(ImageEntry* entry) { //1:1
+void imgClearVirtualPoint(ImageEntry* entry) {
     entry->flags |= 8;
 }
 
-void imgRelease(ImageEntry* entry, s32 type) { //1:1 after inlining
+void imgRelease(ImageEntry* entry, s32 type) {
     int i;
 
     for (i = 0; i < 3; i++) {
@@ -538,7 +539,7 @@ void imgRelease(ImageEntry* entry, s32 type) { //1:1 after inlining
     memset(entry, 0, sizeof(ImageEntry));
 }
 
-void imgSetShadow(ImageEntry* entry, s32 shadowId) { //1:1
+void imgSetShadow(ImageEntry* entry, s32 shadowId) {
     entry->shadowId = shadowId;
 }
 

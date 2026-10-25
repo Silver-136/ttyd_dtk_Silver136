@@ -1,10 +1,5 @@
 /* "dvdmgr" - DVD File Manager
- * Status: Module finished, write-up/documentation needed
- *
- * Function: easy file handling for loading data from the disc, instead of
- * having to call DVD functions directly and handle errors
- * 
- * Last Update: 12/18/2021 more clean-up, latest changes, update types
+ * Easy file handling for loading data from the disc, instead of having to call DVD functions directly and handle errors.
  */
 #include "manager/dvdmgr.h"
 #include "memory.h"
@@ -25,14 +20,14 @@ BOOL dvdmgr_thread_on;
 void* proc_main(void* param);
 static s32 compare(const void** a, const void** b);
 
-void* proc_main(void* param) { //1:1
+void* proc_main(void* param) {
     while (1) {
         DVDMgrMain();
         OSYieldThread();
     }
 }
 
-void DVDMgrInit(void) { //1:1
+void DVDMgrInit(void) {
     dvdq = __memAlloc(HEAP_DEFAULT, sizeof(DVDEntry) * DVDEntryCount);
     memset(dvdq, 0, sizeof(DVDEntry) * DVDEntryCount);
     if (!OSCreateThread(&dvdmgr_thread, proc_main, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH)) {
@@ -42,14 +37,14 @@ void DVDMgrInit(void) { //1:1
     OSResumeThread(&dvdmgr_thread);
 }
 
-void DVDMgrDelete(void) { //1:1
+void DVDMgrDelete(void) {
     if (dvdmgr_thread_on) {
         OSCancelThread(&dvdmgr_thread);
         dvdmgr_thread_on = FALSE;
     }
 }
 
-static s32 compare(const void** a, const void** b) { //1:1
+static s32 compare(const void** a, const void** b) {
     u8 value1, value2;
     
     value1 = (u8)dvdq[*(u8*)a].priority;
@@ -62,7 +57,7 @@ static s32 compare(const void** a, const void** b) { //1:1
     }
 }
 
-void DVDMgrMain(void) { //1:1
+void DVDMgrMain(void) {
     u8 array[0x100];
     u8* table;
     DVDEntry* entry;
@@ -135,7 +130,7 @@ void DVDMgrMain(void) { //1:1
     }
 }
 
-DVDEntry* DVDMgrOpen(const char* path, u8 priority, u16 unknown) { //1:1
+DVDEntry* DVDMgrOpen(const char* path, u8 priority, u16 unknown) {
     DVDEntry* entry;
     int i;
 

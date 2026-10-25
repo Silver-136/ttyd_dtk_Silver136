@@ -1,8 +1,5 @@
 /* "evt_badgeshop" - Badge Shop Script Functions
- * Status: Complete, not 1:1 (see comments throughout files, mostly
- * regalloc, along with bargainGeneration cleanup
- *
- * Function: part of the backend for various shops
+ * Part of the backend for the shops (badge shop functions for event scripts).
  */
 #include "evt/evt_badgeshop.h"
 #include "manager/evtmgr.h"
@@ -423,7 +420,7 @@ s16 badgeShop_set(u8* table, s16 id, s16 val) {
 }
 
 #pragma dont_inline reset
-s32 badgeShop_get(u8* table, s16 id) { //1:1
+s32 badgeShop_get(u8* table, s16 id) {
     s32 bound;
     s16 index;
     u8 mask;
@@ -458,7 +455,7 @@ s32 badgeShop_get(u8* table, s16 id) { //1:1
     return (s16)((mask & table[index / 4]) >> shift);
 }
 
-s32 badgeShop_add(u8* table, s16 id, s32 value) { // 1:1, can blow up in your face
+s32 badgeShop_add(u8* table, s16 id, s32 value) {
     s32 temp;
     s32 mask;
     s32 shift;

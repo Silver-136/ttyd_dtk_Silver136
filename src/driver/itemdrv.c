@@ -138,7 +138,7 @@ static inline void itemGetEnd(ItemEntry* entry) {
 
 void itemGetSound(ItemEntry* entry);
 
-void itemInit(void) { // 1:1
+void itemInit(void) {
     ItemWork* wp;
 
     wp = &work[0];

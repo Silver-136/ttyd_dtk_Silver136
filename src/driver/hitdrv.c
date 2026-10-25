@@ -815,7 +815,7 @@ inline BOOL tempfunc3(HitCheckQuery* query, HitVector* vector) {
     return 1;
 }
 
-HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) { // 1:1
+HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
     f32 temp;
     HitVector* vector;
     Vec position;
@@ -959,7 +959,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) { 
 }
 
 HitEntry* hitCheckFilter(HitFilterCallback callback, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
-                         f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz) { // 1:1
+                         f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz) {
     HitCheckQuery temp;
     HitCheckQuery* query = &temp;
     HitEntry* entry;
@@ -1057,7 +1057,7 @@ BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector) {
     return TRUE;
 }
 
-BOOL hitCheckVecHitObjXZ(HitCheckQuery* query, HitEntry* entry) { // 1:1
+BOOL hitCheckVecHitObjXZ(HitCheckQuery* query, HitEntry* entry) {
     int i;
     HitVector* vector;
 
@@ -1076,12 +1076,12 @@ BOOL hitCheckVecHitObjXZ(HitCheckQuery* query, HitEntry* entry) { // 1:1
     return 0;
 }
 
-BOOL chkFilterAttr(HitCheckQuery* query, HitEntry* entry) { // 1:1
+BOOL chkFilterAttr(HitCheckQuery* query, HitEntry* entry) {
     return (entry->attributes & query->user0) == 0;
 }
 
 HitEntry* hitCheckAttr(s32 user0, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX, f32* hitNY, f32* hitNZ,
-                       f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz) { // 1:1
+                       f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz) {
     HitCheckQuery temp;
     HitCheckQuery* query = &temp;
     HitEntry* entry;
@@ -1105,7 +1105,7 @@ HitEntry* hitCheckAttr(s32 user0, f32* hitX, f32* hitY, f32* hitZ, f32* distance
 }
 
 HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
-                               f32 distance) { // almost 1:1, stubborn regalloc
+                               f32 distance) {
     MapEntry* map = mapGetWork()->entries;
     MapEntry* mapEntry = map;
     int i;
@@ -1187,7 +1187,7 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     return &map->hitEntries[objectId];
 }
 
-HitEntry* hitNameToPtr(const char* name) { // 1:1
+HitEntry* hitNameToPtr(const char* name) {
     MapEntry* map;
     MapWork* wp = mapGetWork();
     int j;
@@ -1210,7 +1210,7 @@ HitEntry* hitNameToPtr(const char* name) { // 1:1
     return NULL;
 }
 
-void hitObjGetPosSub(HitEntry* hit, Vec* position, s32* counter, BOOL recursion) { // 1:1, awful inlining
+void hitObjGetPosSub(HitEntry* hit, Vec* position, s32* counter, BOOL recursion) {
     Vec center;
 
     if (hit->child != NULL) {
@@ -1227,7 +1227,7 @@ void hitObjGetPosSub(HitEntry* hit, Vec* position, s32* counter, BOOL recursion)
     }
 }
 
-void hitObjGetPos(const char* name, Vec* position) { // 1:1
+void hitObjGetPos(const char* name, Vec* position) {
     Vec sum;
     s32 counter;
     HitEntry* hit;
@@ -1243,7 +1243,7 @@ void hitObjGetPos(const char* name, Vec* position) { // 1:1
     PSVECScale(&sum, position, 1.0f / (f32)counter);
 }
 
-void hitObjGetNormal(const char* name, Vec* normal) { // 1:1
+void hitObjGetNormal(const char* name, Vec* normal) {
     HitEntry* hit;
 
     hit = hitNameToPtr(name);
@@ -1252,7 +1252,7 @@ void hitObjGetNormal(const char* name, Vec* normal) { // 1:1
     }
 }
 
-const char* hitGetName(HitEntry* hit) { // 1:1
+const char* hitGetName(HitEntry* hit) {
     MapEntry* map;
     s32 count;
     int i;
@@ -1277,11 +1277,11 @@ const char* hitGetName(HitEntry* hit) { // 1:1
     return hit->joint->name;
 }
 
-s32 hitGetAttr(HitEntry* hit) { // 1:1
+s32 hitGetAttr(HitEntry* hit) {
     return hit != NULL ? hit->attributes : 0;
 }
 
-void hitDamageReturnSet(HitEntry* hit, HitDamageReturn* damage, BOOL recursion) { // 1:1
+void hitDamageReturnSet(HitEntry* hit, HitDamageReturn* damage, BOOL recursion) {
     hit->attributes |= 0x40000000;
     hit->damage = damage;
     if (hit->child != NULL) {
@@ -1294,7 +1294,7 @@ void hitDamageReturnSet(HitEntry* hit, HitDamageReturn* damage, BOOL recursion) 
     }
 }
 
-void hitGrpDamageReturnSet(const char* name, HitDamageReturn* damage) { // 1:1
+void hitGrpDamageReturnSet(const char* name, HitDamageReturn* damage) {
     HitEntry* hit;
 
     hit = hitNameToPtr(name);

@@ -1,11 +1,7 @@
 #include "version.h"
 /* "cardmgr" - Memory Card Manager
-* Status: almost 1:1, some functions don't work right with memcard_probe's opt_propagation it seems
-*
-* Function: handles all communication with save data and writing to memory cards
-*
-* Last Update: 1/19/2023, first finished, can prolly use a cleanup pass
-*/
+ * Handles all communication with save data and writing to memory cards.
+ */
 #include "manager/cardmgr.h"
 #include "mario/mario.h"
 #include "mario/mario_party.h"

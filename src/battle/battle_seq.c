@@ -166,7 +166,7 @@ const char* _rule_msg_table_after[] = {
     "stg3_tou_cp_053", "stg3_tou_cp_052", "a", "a",
 };
 
-void BattleSequenceManager(void) { //1:1
+void BattleSequenceManager(void) {
     BattleWork* wp = _battleWorkPointer;
     switch (BattleGetSeq(wp, SEQ_UNKNOWN)) {
         case 0:
@@ -269,7 +269,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
     }
 }
 
-void btlseqInit(BattleWork* wp) { //1:1, needs stmw
+void btlseqInit(BattleWork* wp) {
     MarioWork* mario;
     PartyEntry* party;
 

@@ -1938,7 +1938,6 @@ void materialProc(s32 shapeId, s32 xluStage)
   }
 }
 
-// I'm so sorry, whoever gets tasked with matching this function
 // note: I detect at least 8 inlined functions here, good luck finding the separation
 // FAKE: renderProc's per-draw pose-data read as an inline (the source notes "inlined function here"); its call-site temp gives the target wp/data register order
 static inline AnimationPoseData* rpCurData(void) { return wp->mpCurPoseData; }

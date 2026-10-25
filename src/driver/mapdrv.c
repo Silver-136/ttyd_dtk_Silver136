@@ -81,7 +81,7 @@ typedef MapEntryAnimData MapAnim;
 //local prototypes
 //anim functions?
 
-void mapErrorEntry(s32 type, const char* name) { //1:1
+void mapErrorEntry(s32 type, const char* name) {
     MapError* error = error_data;
 
     error += error_count;
@@ -112,7 +112,7 @@ s32 mapGetActiveGroup(void) {
     return activeGroup;
 }
 
-void mapGetJointsSub(MapFileJoint* joint, s32* numJoints) { //1:1
+void mapGetJointsSub(MapFileJoint* joint, s32* numJoints) {
     (*numJoints)++;
     if (joint->child) {
         mapGetJointsSub(joint->child, numJoints);
@@ -122,7 +122,7 @@ void mapGetJointsSub(MapFileJoint* joint, s32* numJoints) { //1:1
     }
 }
 
-s32 mapGetJoints(MapFileJoint* joint) { //1:1
+s32 mapGetJoints(MapFileJoint* joint) {
     s32 numJoints;
 
     numJoints = 0;
@@ -3431,7 +3431,7 @@ MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name) {
     return mapSearchDmdJointSub2(joint, name, "|");
 }
 
-MapObject* mapGetMapObj(const char *name) { // 1:1
+MapObject* mapGetMapObj(const char *name) {
     MapWork *wp;
     MapEntry* entry;
     int j;

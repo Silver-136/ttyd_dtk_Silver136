@@ -1,8 +1,5 @@
 /* "seqdrv" - Sequence Driver
- * Status: Mostly complete, need function pointers in seq_data and
- * proper names for seqdrv_work
- * 
- * Function: used for swapping between game states (logo, game, battle, demo/e3)
+ * Proper names for seqdrv_work used for swapping between game states (logo, game, battle, demo/e3).
  */
 #include "driver/seqdrv.h"
 #include "system.h"

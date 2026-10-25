@@ -1,9 +1,5 @@
 /* "system" - Useful Functions
- * Status: 1:1 for all code, just need to fixup .rodata
- *
- * Function: lots of helper functions for complex math
- *
- * Last Update: 6/9/2026, finally complete fsort and qqsort
+ * Lots of helper functions for complex math.
  */
 
 #include "system.h"

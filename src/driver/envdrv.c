@@ -103,7 +103,7 @@ void envReInit(void) {
     memset(wp, 0, sizeof(EnvironmentWork));
 }
 
-void envTexSetup(void) { //1:1
+void envTexSetup(void) {
     DVDEntry* entry;
     TEXPalette* tpl;
     char path[128];
@@ -126,7 +126,7 @@ void envTexSetup(void) { //1:1
     }
 }
 
-void envCapture(CameraId camId, void* param) { //1:1
+void envCapture(CameraId camId, void* param) {
     EnvironmentWork* wp = envGetWork();
     u16 var0, var1, var2, var3;
     u32 size;
@@ -157,7 +157,7 @@ void envCapture(CameraId camId, void* param) { //1:1
     }
 }
 
-void envCapture2(CameraId camId, void* param) { //1:1
+void envCapture2(CameraId camId, void* param) {
     EnvironmentWork* wp = envGetWork();
     u16 var0, var1;
 
@@ -192,7 +192,7 @@ void envDisp(CameraId camId, void *param) {
     GXSetProjectionv(pm);
 }
 
-void envDisp2(CameraId camId, void *param) { //almost 1:1, needs extra addi
+void envDisp2(CameraId camId, void *param) {
     f32 vp[GX_VIEWPORT_SZ];
     f32 pm[GX_PROJECTION_SZ];
     EnvironmentWork* wp;
@@ -595,7 +595,6 @@ void envBlurOff(void) {
     _mapFree(wp->envBlur);
 }
 
-//almost 1:1, needs some regalloc work and type changes
 void envGlare(EnvironmentGlare* glare) {
     static f32 frame_cnt = 0.0f;
     EnvironmentWork* envWork = envGetWork();

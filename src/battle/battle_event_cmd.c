@@ -1464,7 +1464,7 @@ USER_FUNC(btlevtcmd_GetHp) {
 }
 
 //s32* battleId, s32* retIndex
-USER_FUNC(btlevtcmd_GetFp) { //1:1
+USER_FUNC(btlevtcmd_GetFp) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -1482,7 +1482,7 @@ USER_FUNC(btlevtcmd_GetFp) { //1:1
 }
 
 //s32* battleId, s32* retIndex
-USER_FUNC(btlevtcmd_GetMaxHp) { //1:1
+USER_FUNC(btlevtcmd_GetMaxHp) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -1498,7 +1498,7 @@ USER_FUNC(btlevtcmd_GetMaxHp) { //1:1
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(btlevtcmd_GetMaxFp) { //1:1
+USER_FUNC(btlevtcmd_GetMaxFp) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -1515,7 +1515,7 @@ USER_FUNC(btlevtcmd_GetMaxFp) { //1:1
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(btlevtcmd_SetHp) { //1:1
+USER_FUNC(btlevtcmd_SetHp) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -1537,7 +1537,7 @@ USER_FUNC(btlevtcmd_SetHp) { //1:1
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(btlevtcmd_SetFp) { //1:1
+USER_FUNC(btlevtcmd_SetFp) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;

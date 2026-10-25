@@ -75,7 +75,7 @@ u32 count;
 //local prototypes
 void smartGarbage(void);
 
-void memInit(void) { //almost 1:1, stubborn regalloc at the end
+void memInit(void) {
     MapAllocEntry* entry;
     void* arenaLo;
     void* arenaHi;
@@ -200,7 +200,7 @@ void N_battleMapFree(void) {
 #endif
 
 void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
-    MapAllocEntry* nextptr; //shorthand to make sure regalloc is correct
+    MapAllocEntry* nextptr;
     MapAllocEntry* entry; //for our loop
     MapAllocEntry* tailEntry; //make sure we don't lose when inserting, might need better name
     MapAllocEntry* currEntry; //one we're allocating
@@ -256,7 +256,7 @@ void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
 }
 
 void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
-    MapAllocEntry* nextptr; //shorthand to make sure regalloc is correct
+    MapAllocEntry* nextptr;
     MapAllocEntry* entry; //for our loop
     MapAllocEntry* tailEntry; //make sure we don't lose when inserting, might need better name
     MapAllocEntry* currEntry; //one we're allocating

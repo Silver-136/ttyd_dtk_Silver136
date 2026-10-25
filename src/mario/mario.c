@@ -1647,7 +1647,7 @@ BOOL marioPaperOn(const char* name) {
     return TRUE;
 }
 
-void marioPaperOff(void) { //1:1
+void marioPaperOff(void) {
     MarioWork* wp = mp;
 
     if (wp->dispFlags & 0x40000000) {
@@ -1660,15 +1660,15 @@ void marioPaperOff(void) { //1:1
     }
 }
 
-void marioPaperLightOn(void) { //1:1
+void marioPaperLightOn(void) {
     animPoseSetMaterialLightFlagOn(mp->paperAnimGroupId[0], 1);
 }
 
-void marioPaperLightOff(void) { //1:1
+void marioPaperLightOff(void) {
     animPoseSetMaterialLightFlagOff(mp->paperAnimGroupId[0], 1);
 }
 
-void marioGetScreenPos(Vec position, f32* x, f32* y, f32* z) { //1:1
+void marioGetScreenPos(Vec position, f32* x, f32* y, f32* z) {
     CameraEntry* camera;
     f32 proj[7];
     f32 view[6];
@@ -1680,7 +1680,7 @@ void marioGetScreenPos(Vec position, f32* x, f32* y, f32* z) { //1:1
     GXProject(position.x, position.y, position.z, camera->view, proj, view, x, y, z);
 }
 
-BOOL marioChkInScreen(s32 x, s32 y) { //1:1
+BOOL marioChkInScreen(s32 x, s32 y) {
     BOOL valid = FALSE;
     if (x >= 0 && x <= 600 && y >= 0 && y <= 535) {
         valid = TRUE;
@@ -1688,7 +1688,7 @@ BOOL marioChkInScreen(s32 x, s32 y) { //1:1
     return valid != FALSE; //why
 }
 
-f32 marioGetScale(void) { //1:1
+f32 marioGetScale(void) {
     return mp->flags & MARIO_FLAG_BG_MODE ? 1.2f : 2.0f;
 }
 
@@ -2195,7 +2195,7 @@ void marioDisp(CameraId camId, void* param) {
     animPoseSetLocalTimeRate(wp->paperAnimGroupId[marioAnimeId()], (wp->flags & MARIO_FLAG_IN_SHALLOW_WATER) ? 0.75f : 1.0f);
 }
 
-const char* toRearPose(const char* name) { //1:1
+const char* toRearPose(const char* name) {
     const char* rear = NULL;
     if (mp->characterId == CHARACTER_PEACH && !(mp->peachFlags & 0x2000)) {
         if (!strcmp(name, "P_Z_1")) {
@@ -2334,7 +2334,7 @@ const char* toRearPose(const char* name) { //1:1
     }
 }
 
-const char* toFrontPose(const char* name) { //1:1
+const char* toFrontPose(const char* name) {
     const char* front = NULL;
     if (mp->characterId == CHARACTER_PEACH && !(mp->peachFlags & 0x2000)) {
         if (!strcmp(name, "P_Z_1R")) {
