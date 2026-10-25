@@ -11,6 +11,20 @@ typedef enum ItemEntry_Flags {
     ITEM_FLAG_COLLECT_LSWF = (1 << 6), // collectFlag is an LSWF, set when the item is collected
 } ItemEntry_Flags;
 
+// ItemEntry.mode (itemModeChange); descriptive names from itemMain / itemseq_Bound
+typedef enum ItemEntryMode {
+    ITEM_MODE_GROUND = 1, // follows the ground, collectible
+    ITEM_MODE_GET = 2, // being collected (itemseq_GetItem)
+    ITEM_MODE_FALL = 3, // falls and bounces, collectible
+    ITEM_MODE_FALL_NO_PICKUP = 4, // as FALL, not collectible before the first bounce
+    ITEM_MODE_SCATTER = 5, // thrown up and scattered, collectible
+    ITEM_MODE_SCATTER_NO_PICKUP = 6, // as SCATTER, not collectible while rising
+    ITEM_MODE_STILL = 7, // stays in place, collectible
+    ITEM_MODE_CARRIED = 8, // carried by the partner
+    ITEM_MODE_DELETE = 9, // deleted on the next update
+    ITEM_MODE_POP = 10, // pops up once and disappears
+} ItemEntryMode;
+
 typedef struct ItemEntry {
     u16 flags; //0x0
     u16 type; //0x2, entry type (itemEntry arg)
@@ -19,7 +33,7 @@ typedef struct ItemEntry {
     char name[0x10]; //0xC
     EffectEntry* effect; //0x1C
     EvtWord evtCode; //0x20, event script run on pickup (evtEntry)
-    u16 mode; //0x24
+    u16 mode; //0x24, ItemEntryMode
     u16 subState; //0x26, per-sequence state
     s32 winId[3]; //0x28
     u8 pad_34[0x38 - 0x34]; //0x34, never accessed
