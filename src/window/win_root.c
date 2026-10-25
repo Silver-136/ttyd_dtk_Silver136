@@ -2465,7 +2465,7 @@ void winMailDisp(WindowWork* wp) {
     MailData* mail;
 
     if (wp->item.mailX < 320.0f && wp->item.mailY > -240.0f) {
-        ((void (*)(WindowWork*, f32, f32))winMailGX)(wp, wp->item.mailX, wp->item.mailY);
+        winMailGX(wp, wp->item.mailX, wp->item.mailY);
         if (wp->item.state != 0xCA) {
             for (i = 0; i < wp->item.mailNum; i++) {
                 GXColor white;

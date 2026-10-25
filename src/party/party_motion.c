@@ -92,7 +92,7 @@ USER_FUNC(evt_snd_bgmoff_f) {
     EvtWord* args = event->args;
     s32 a = args[0];
     s32 t = evtGetValue(event, args[1]);
-    ((BOOL (*)(s32, s32, s32))psndBGMOff_f_d)(a, t, 0);
+    psndBGMOff_f_d(a, t, 0);
     return EVT_RETURN_DONE;
 }
 

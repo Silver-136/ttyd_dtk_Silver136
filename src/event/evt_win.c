@@ -259,7 +259,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
         mapObjFlagOn(wp->entries[i].mapObj, 0x4000);
         if (wp->goods[i] != 0) {
             sprintf(name, "uwn%d", i);
-            ((void (*)(const char*, u16))iconEntry)(name, itemDataTable[wp->goods[i]].icon_id);
+            iconEntry(name, itemDataTable[wp->goods[i]].icon_id);
             iconSetPos(name, pos.x, pos.y + 6.0f, pos.z);
             iconFlagOn(name, 0x40);
         } else {
@@ -1415,7 +1415,7 @@ USER_FUNC(set_new_goods_list) {
     if (wp->goodsIdx < wp->goodsMax) {
         sprintf(name, "uwn%d", wp->goodsIdx);
         if (item != 0) {
-            ((void (*)(char*, u16))iconChange)(name, itemDataTable[item].icon_id);
+            iconChange(name, itemDataTable[item].icon_id);
         } else {
             iconDelete(name);
         }

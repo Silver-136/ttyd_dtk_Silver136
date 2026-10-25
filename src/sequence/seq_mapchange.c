@@ -177,7 +177,7 @@ void seq_mapChangeMain(SequenceWork* work) {
                 fok = TRUE;
             }
             if (fok) {
-                if (((BOOL (*)(const char*))mapPreLoad)(_next_map)) {
+                if (mapPreLoad(_next_map)) {
                     FileEntry* file;
                     area_name = getAreaName();
                     file = fileAllocf(0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
