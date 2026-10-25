@@ -1037,12 +1037,12 @@ s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
     BattleSamplingEnemy(targets, weapon, wp->activeUnitId, BtlUnit_GetEnemyBelong(unit), weapon->targetClassFlags,
         weapon->targetPropertyFlags, (s32)wp->alliances[unit->mAlliance].attackDirection);
     targets->currentTarget = 0;
-    if (weapon->targetPropertyFlags & 0x30000000) {
+    if (weapon->targetPropertyFlags & (TARGET_PROP_SAME_SIDE_FIRST | TARGET_PROP_OPPOSITE_SIDE_FIRST)) {
         selected = -1;
         belong = BtlUnit_GetBelong(unit);
         for (i = 0; i < targets->numTargets; i++) {
             target = &targets->targets[targets->targetIndices[i]];
-            if (weapon->targetPropertyFlags & 0x10000000) {
+            if (weapon->targetPropertyFlags & TARGET_PROP_SAME_SIDE_FIRST) {
                 if (belong == BtlUnit_GetBelong(BattleGetUnitPtr(wp, target->unitIdx))) {
                     selected = i;
                 }

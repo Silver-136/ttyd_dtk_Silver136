@@ -3443,7 +3443,7 @@ USER_FUNC(btlevtcmd_SamplingEnemy) {
     belong = evtGetValue(event, args[1]);
     weapon = (BattleWeapon*)evtGetValue(event, args[2]);
     dir = -wp->alliances[belong].attackDirection;
-    if (weapon->targetPropertyFlags & 0x10000000) {
+    if (weapon->targetPropertyFlags & TARGET_PROP_SAME_SIDE_FIRST) {
         dir *= -1;
     }
     BattleSamplingEnemy(targets, weapon, id, belong, weapon->targetClassFlags, weapon->targetPropertyFlags, dir);

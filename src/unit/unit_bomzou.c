@@ -135,7 +135,7 @@ BattleWeapon weapon_bomzou_explosion = {
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_OR_SEMI_PARTS | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
-    0x20000000, // targetPropertyFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_EXPLOSION, // element
     0, // damagePattern
     3, // acLevel

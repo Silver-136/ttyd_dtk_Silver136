@@ -21,6 +21,23 @@
 #define TARGET_CLASS_MULTIPLE                0x2000000 // all targets at once
 #define TARGET_CLASS_NONE                    0x80000000 // no valid targets
 
+// BattleWeapon.targetPropertyFlags (battle_detect.c BattleSamplingEnemy; 0x4000000 excludes parts with the
+// unused part attribute 0x2000000)
+#define TARGET_PROP_TATTLE                 0x1 // only parts that can be tattled (tattle data, not kUntattleable)
+#define TARGET_PROP_NO_FLOATING2           0x2 // not floating units (same test as 0x8)
+#define TARGET_PROP_NO_CEILING             0x4 // not ceiling units
+#define TARGET_PROP_NO_FLOATING            0x8 // not floating units
+#define TARGET_PROP_NO_GROUNDED            0x10 // only floating or ceiling units
+#define TARGET_PROP_JUMPLIKE               0x1000 // not parts immune to jumps
+#define TARGET_PROP_HAMMERLIKE             0x2000 // not parts immune to hammers
+#define TARGET_PROP_SHELL_TOSSLIKE         0x4000 // not parts immune to shell tosses
+#define TARGET_PROP_ONLY_SHELL_TOSS_IMMUNE 0x8000 // only parts immune to shell tosses
+#define TARGET_PROP_RECOIL                 0x100000 // with HAMMERLIKE, the attacker itself stays a target
+#define TARGET_PROP_ONLY_FRONTMOST         0x1000000 // only the frontmost part of each side
+#define TARGET_PROP_NO_SHELL_SHIELDED      0x2000000 // not units under a shell shield
+#define TARGET_PROP_SAME_SIDE_FIRST        0x10000000 // first target on the attacker's side; sampling direction reversed
+#define TARGET_PROP_OPPOSITE_SIDE_FIRST    0x20000000 // first target on the opposing side
+
 /* BattleWeapon.targetWeightFlags: how an enemy chooses among the targets */
 #define TARGET_WEIGHT_MARIO         0x1 // prefer Mario
 #define TARGET_WEIGHT_PARTNER       0x2 // prefer a partner

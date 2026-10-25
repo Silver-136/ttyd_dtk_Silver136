@@ -215,7 +215,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             {
         BOOL ok;
         do {
-                        if (d->propFlags & 1) {
+                        if (d->propFlags & TARGET_PROP_TATTLE) {
                 if (part->attributes & kUntattleable) {
                     ok = FALSE;
                     break;
@@ -229,58 +229,58 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                     break;
                 }
             }
-            if (d->propFlags & 2) {
+            if (d->propFlags & TARGET_PROP_NO_FLOATING2) {
                 if (unit->mAttributeFlags & kFloating) {
                     ok = FALSE;
                     break;
                 }
             }
-            if (d->propFlags & 4) {
+            if (d->propFlags & TARGET_PROP_NO_CEILING) {
                 if (unit->mAttributeFlags & kCeiling) {
                     ok = FALSE;
                     break;
                 }
             }
-            if (d->propFlags & 8) {
+            if (d->propFlags & TARGET_PROP_NO_FLOATING) {
                 if (unit->mAttributeFlags & kFloating) {
                     ok = FALSE;
                     break;
                 }
             }
-            if (d->propFlags & 0x10) {
+            if (d->propFlags & TARGET_PROP_NO_GROUNDED) {
                 u32 a = unit->mAttributeFlags;
                 if (!(a & 4) && !(a & 2)) {
                     ok = FALSE;
                     break;
                 }
             }
-            if (d->propFlags & 0x1000) {
+            if (d->propFlags & TARGET_PROP_JUMPLIKE) {
                 if (part->attributes & kJumplikeCannotTarget) {
                     ok = FALSE;
                     break;
                 }
             }
-            if (d->propFlags & 0x2000) {
+            if (d->propFlags & TARGET_PROP_HAMMERLIKE) {
                 if (part->attributes & kHammerlikeCannotTarget) {
-                    if (!(d->propFlags & 0x100000) || d->unitId != unit->unitId) {
+                    if (!(d->propFlags & TARGET_PROP_RECOIL) || d->unitId != unit->unitId) {
                         ok = FALSE;
                         break;
                     }
                 }
             }
-            if (d->propFlags & 0x4000) {
+            if (d->propFlags & TARGET_PROP_SHELL_TOSSLIKE) {
                 if (part->attributes & kShellTosslikeCannotTarget) {
                     ok = FALSE;
                     break;
                 }
             }
-            if (d->propFlags & 0x8000) {
+            if (d->propFlags & TARGET_PROP_ONLY_SHELL_TOSS_IMMUNE) {
                 if (!(part->attributes & kShellTosslikeCannotTarget)) {
                     ok = FALSE;
                     break;
                 }
             }
-            if (d->propFlags & 0x2000000) {
+            if (d->propFlags & TARGET_PROP_NO_SHELL_SHIELDED) {
                 if (unit->mAttributeFlags & kShellShielded) {
                     ok = FALSE;
                     break;
@@ -340,7 +340,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             tg4 = &t[i];
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, tg4->unitIdx), tg4->partIdx);
             do {
-            if ((d->propFlags & 0x1000000) && !(part->attributes & VERSION_PICK(0x10, 0x40))) {
+            if ((d->propFlags & TARGET_PROP_ONLY_FRONTMOST) && !(part->attributes & VERSION_PICK(0x10, 0x40))) {
                 ok4 = TRUE;
                 for (j = 0; j < n; j++) {
                     s32 a;
