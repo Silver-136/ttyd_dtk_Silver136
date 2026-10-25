@@ -297,6 +297,19 @@ config.linker_version = "GC/2.6"
 # constants in every unit, functions no caller references), which a stripping link would drop.
 config.rel_strip_partial = False
 
+# REL units load the MSL math headers as a precompiled header, which gives every unit the dtrigf constants
+# (include/msl_rel.pch, libs/msl/include/dtrigf.h). Modules still being moved over are listed in PCH_RELS.
+config.precompiled_headers = [
+    {
+        "source": "msl_rel.pch",
+        "mw_version": "GC/2.6",
+        "cflags": [*cflags_rel],
+    },
+]
+PCH_RELS = {"aaa", "bom", "dig", "dmo", "end", "hom", "qiz"}
+# end_00's constants follow its own data in the original, so that unit is not built with the header
+PCH_EXCLUDE = {"end_00.c"}
+
 
 # Helper function for Dolphin libraries
 def DolphinLib(lib_name: str, cflags: Any, objects: List[Object]) -> Dict[str, Any]:
@@ -312,6 +325,10 @@ def DolphinLib(lib_name: str, cflags: Any, objects: List[Object]) -> Dict[str, A
 
 # Helper function for REL script objects
 def Rel(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+    if lib_name in PCH_RELS:
+        for obj in objects:
+            if obj.name not in PCH_EXCLUDE:
+                obj.options["extra_cflags"] = [*obj.options["extra_cflags"], "-prefix msl_rel.mch"]
     return {
         "lib": lib_name,
         "src_dir": f"rels/{lib_name}/src",

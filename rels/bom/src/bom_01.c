@@ -35,35 +35,6 @@
 USER_FUNC(evt_msg_pri);
 #endif
 
-// math-inline function-local statics (negone_one$374 ...) the target keeps at the start of .data
-f32 fd_bom_01_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_bom_01_neg_one_382 = -1.0f;
-
-f32 fd_bom_01___local_PI_383 = 3.1415927f;
-
-f32 fd_bom_01___local_3PIO2_385 = 4.712389f;
-
-f32 fd_bom_01_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_bom_01___local_PIO2_384 = 1.5707964f;
-
-f32 fd_bom_01_one_381 = 1.0f;
-
-f32 fd_bom_01_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_bom_01_neg_one_365 = -1.0f;
-
-f32 fd_bom_01___local_PI_366 = 3.1415927f;
-
-f32 fd_bom_01___local_3PIO2_368 = 4.712389f;
-
-f32 fd_bom_01_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_bom_01___local_PIO2_367 = 1.5707964f;
-
-f32 fd_bom_01_one_364 = 1.0f;
-
 
 typedef struct SightWork { FileEntry* tpl; s32 level[5]; f32 rot; s32 dir; s32 count1; s32 count2; } SightWork;
 SightWork* sight_wp;
@@ -612,20 +583,6 @@ s32 make_ext_table(EventEntry* event, BOOL isFirstCall) {
     EXT_DATA[30].file = NULL;
     return EVT_RETURN_DONE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 EVT_BEGIN(evt_door_1)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5546875f))

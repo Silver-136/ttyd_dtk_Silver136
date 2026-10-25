@@ -1,0 +1,3 @@
+/* Precompiled header of the REL units: the MSL math headers, compiled once and loaded before each unit. */
+#include <math.h>
+#include <dtrigf.h>
