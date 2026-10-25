@@ -471,17 +471,6 @@ WorldData world_data = { "MarioSt", "マリオの世界", { &area_kwb, &area_bti
                                                       &area_las, &area_kpa, &area_jon, &area_yuu, &area_qiz, &area_sys,
                                                       &area_dmo, &area_dig, &area_end } };
 
-
-/*
-00032a68 00014c 80038048  4 mapDataPtr 	mapdata.o
-000329d0 000098 80037fb0  4 areaDataPtr 	mapdata.o
-UNUSED   00000c ........ worldDataPtr mapdata.o
-UNUSED   0000b4 ........ maxMapInArea mapdata.o
-UNUSED   0000b8 ........ maxBtlInArea mapdata.o
-UNUSED   000028 ........ maxAreaInWorld mapdata.o
-00032878 000158 80037e58  4 relSetEvtAddr 	mapdata.o
-000327c8 0000b0 80037da8  4 relSetBtlAddr 	mapdata.o */
-
 // forward declarations
 WorldData* worldDataPtr(void);
 int maxMapInArea(const char* areaName);

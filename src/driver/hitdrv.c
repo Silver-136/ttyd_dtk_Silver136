@@ -24,61 +24,8 @@ HitEntry* hitEntry(MapFileJoint* root, Mtx rootMtx, s32 mapIndex);
 HitEntry* hitEntrySub(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, BOOL ignoreSiblings, s32 mapIndex);
 HitEntry* _hitEnt(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, s32 mapIndex);
 
-/*
-    00012b2c 000004 8001810c  4 hitInit 	hitdrv.o
-    00012a94 000098 80018074  4 hitReInit 	hitdrv.o
-    0001260c 000488 80017bec  4 _hitEnt 	hitdrv.o
-    00012394 000278 80017974  4 hitEntrySub 	hitdrv.o
-    000122fc 000098 800178dc  4 hitEntry 	hitdrv.o
-    0001228c 000070 8001786c  4 hitEntryMOBJ 	hitdrv.o
-    000121e8 0000a4 800177c8  4 hitDelete 	hitdrv.o
-    00011fc4 000224 800175a4  4 hitMain 	hitdrv.o
-    00011ef0 0000d4 800174d0  4 hitObjFlagOn 	hitdrv.o
-    00011e1c 0000d4 800173fc  4 hitObjFlagOff 	hitdrv.o
-    00011b0c 000310 800170ec  4 hitFlgOn 	hitdrv.o
-    000117f4 000318 80016dd4  4 hitFlgOff 	hitdrv.o
-    0001171c 0000d8 80016cfc  4 hitGrpFlagOn 	hitdrv.o
-    00011644 0000d8 80016c24  4 hitGrpFlagOff 	hitdrv.o
-    00011570 0000d4 80016b50  4 hitObjAttrOn 	hitdrv.o
-    0001149c 0000d4 80016a7c  4 hitObjAttrOff 	hitdrv.o
-    0001118c 000310 8001676c  4 hitAtrOn 	hitdrv.o
-    00010e78 000314 80016458  4 hitAtrOff 	hitdrv.o
-    00010da0 0000d8 80016380  4 hitGrpAttrOn 	hitdrv.o
-    00010cc8 0000d8 800162a8  4 hitGrpAttrOff 	hitdrv.o
-    00010c68 000060 80016248  4 hitReCalcMatrix 	hitdrv.o
-    000107bc 0004ac 80015d9c  4 hitReCalcMatrix2 	hitdrv.o
-    00010308 0004b4 800158e8  4 hitCalcVtxPosition 	hitdrv.o
-    0000f878 000a90 80014e58  4 hitCheckVecFilter 	hitdrv.o
-    0000f750 000128 80014d30  4 hitCheckFilter 	hitdrv.o
-    0000f3a4 0003ac 80014984  4 checkTriVec_xz 	hitdrv.o
-    0000f2c0 0000e4 800148a0  4 hitCheckVecHitObjXZ 	hitdrv.o
-    0000f2a8 000018 80014888  4 chkFilterAttr 	hitdrv.o
-    0000f174 000134 80014754  4 hitCheckAttr 	hitdrv.o
-    UNUSED   00002c ........ chkFilterAttr2 hitdrv.o
-    UNUSED   000138 ........ hitCheckAttrOnly hitdrv.o
-    0000ec18 00055c 800141f8  4 hitCheckSphereFilter 	hitdrv.o
-    UNUSED   000088 ........ hitPreCheck hitdrv.o
-    0000eb68 0000b0 80014148  4 hitNameToPtr 	hitdrv.o
-    0000e5fc 00056c 80013bdc  4 hitObjGetPosSub 	hitdrv.o
-    0000e4ac 000150 80013a8c  4 hitObjGetPos 	hitdrv.o
-    0000e3d4 0000d8 800139b4  4 hitObjGetNormal 	hitdrv.o
-    0000e3b8 00001c 80013998  4 hitGetName 	hitdrv.o
-    0000e3a0 000018 80013980  4 hitGetAttr 	hitdrv.o
-    0000e054 00034c 80013634  4 hitDamageReturnSet 	hitdrv.o
-    0000df8c 0000c8 8001356c  4 hitGrpDamageReturnSet 	hitdrv.o
-    0000df80 00000c 80013560  4 hitGetDamageReturnPos 	hitdrv.o
-    0000de88 0000f8 80013468  4 hitBindMapObj 	hitdrv.o
-    0000dd7c 00010c 8001335c  4 hitBindUpdate 	hitdrv.o
-    UNUSED   0006a4 ........ dbg_hitObjDisp hitdrv.o
-    UNUSED   00022c ........ bounding_sphere hitdrv.o
-    UNUSED   000528 ........ bounding_box hitdrv.o
-    UNUSED   000038 ........ hitGetEntNum hitdrv.o
-    UNUSED   00004c ........ hitNumberToPtr hitdrv.o
-    0000dd7c 005e1c 8001335c  1 .text 	hitdrv.o
-*/
-
 s32 unk_8041840C;
-HitEntry* hitActiveListTop; // TODO: proper name
+HitEntry* hitActiveListTop; // head of the active hit list (descriptive name, see docs/NAME_PROVENANCE.md)
 
 // local prototypes
 
