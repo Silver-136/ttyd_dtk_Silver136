@@ -21,9 +21,9 @@ USER_FUNC(evt_item_entry) {
     s32 y = evtGetValue(event, args[3]);
     s32 z = evtGetValue(event, args[4]);
     s32 type = evtGetValue(event, args[5]);
-    s32 evtId = args[6];
-    s32 a5 = evtGetValue(event, args[7]);
-    itemEntry(name, itemId, type, evtId, a5, x, y, z);
+    s32 collectFlag = args[6];
+    s32 evtCode = evtGetValue(event, args[7]);
+    itemEntry(name, itemId, type, collectFlag, evtCode, x, y, z);
     return EVT_RETURN_DONE;
 }
 

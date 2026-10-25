@@ -505,19 +505,19 @@ EVT_BEGIN(enemy_common_dead_event)
     CALL(evt_npc_get_drop_coin, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, 121, LW(0), LW(1), LW(2), 10, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_COIN, LW(0), LW(1), LW(2), 10, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_heart, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, 123, LW(0), LW(1), LW(2), 10, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_HEART, LW(0), LW(1), LW(2), 10, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_flower, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, 124, LW(0), LW(1), LW(2), 10, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_FLOWER, LW(0), LW(1), LW(2), 10, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_item, STRING("me"), LW(3))
@@ -1837,19 +1837,19 @@ EVT_BEGIN(killer_dead_event)
     CALL(evt_npc_get_drop_coin, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, 121, LW(0), LW(1), LW(2), 8, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_COIN, LW(0), LW(1), LW(2), 8, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_heart, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, 123, LW(0), LW(1), LW(2), 8, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_HEART, LW(0), LW(1), LW(2), 8, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_flower, STRING("me"), LW(3))
     IF_INT_GREATER(LW(3), 0)
         LOOP(LW(3))
-            CALL(evt_item_entry, 0, 124, LW(0), LW(1), LW(2), 8, -1, 0)
+            CALL(evt_item_entry, 0, ITEM_FLOWER, LW(0), LW(1), LW(2), 8, -1, 0)
         END_LOOP
     END_IF
     CALL(evt_npc_get_drop_item, STRING("me"), LW(3))
