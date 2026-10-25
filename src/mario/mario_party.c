@@ -73,7 +73,7 @@ s32 marioUseParty(void) {
     if (party == NULL) {
         return 0;
     }
-    if (party->currentMemberId == 1 && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
+    if (party->currentMemberId == PARTY_MEMBER_GOOMBELLA && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         return 0;
     }
     if (party->currentMemberId == 4 && yoshiGetStatus()) {

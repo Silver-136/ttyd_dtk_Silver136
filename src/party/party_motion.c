@@ -355,13 +355,13 @@ void party_motion_stay(PartyEntry* party) {
                 f32 sd;
                 if (party->moveKind == 0) {
                     sd = 18.0f;
-                } else if (party->currentMemberId == 5) {
+                } else if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
                     if (party->trigFlags & 0x200000) {
                         sd = 8.0f;
                     } else {
                         sd = 30.0f;
                     }
-                } else if (party->currentMemberId == 6) {
+                } else if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
                     if (party->trigFlags & 0x200000) {
                         sd = 8.0f;
                     } else {
@@ -378,13 +378,13 @@ void party_motion_stay(PartyEntry* party) {
             f32 sd;
             if (party->moveKind == 0) {
                 sd = 18.0f;
-            } else if (party->currentMemberId == 5) {
+            } else if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
                 if (party->trigFlags & 0x200000) {
                     sd = 8.0f;
                 } else {
                     sd = 30.0f;
                 }
-            } else if (party->currentMemberId == 6) {
+            } else if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
                 if (party->trigFlags & 0x200000) {
                     sd = 8.0f;
                 } else {
@@ -430,7 +430,7 @@ void party_motion_stay(PartyEntry* party) {
                         partyChgMot(party, 1);
                         partyClearFootmark2();
                     }
-                } else if (other->currentMemberId == 3 && other->runMode == 3) {
+                } else if (other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == 3) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
                         distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim) {
                         partyChgMot(party, 1);
@@ -471,7 +471,7 @@ void party_motion_stay(PartyEntry* party) {
     }
     partyWalkChkGnd(party);
     party_force_reset_outofscreen(party);
-    if (party->currentMemberId == 7 && !(party->flags2 & 0x8000) && !marioKeyOffChk() && marioChkDeepSleep() != 1 &&
+    if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ && !(party->flags2 & 0x8000) && !marioKeyOffChk() && marioChkDeepSleep() != 1 &&
         chuchu_searchObject()) {
         switch (party->useMotionId) {
         case 1:
@@ -524,7 +524,7 @@ void party_motion_wait(PartyEntry* party) {
         partyFlyAdjustY(party);
     } else {
         partyWalkChkGnd(party);
-        if (party->currentMemberId == 7 && !(party->flags2 & 0x8000) && !marioKeyOffChk() &&
+        if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ && !(party->flags2 & 0x8000) && !marioKeyOffChk() &&
             marioChkDeepSleep() != 1 && chuchu_searchObject()) {
             switch (party->useMotionId) {
                 case 1:
@@ -2920,13 +2920,13 @@ static f32 partyStayDist(PartyEntry* party) {
     f32 d;
     if (party->moveKind == 0) {
         d = 18.0f;
-    } else if (party->currentMemberId == 5) {
+    } else if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
         if (party->trigFlags & 0x200000) {
             d = 8.0f;
         } else {
             d = 30.0f;
         }
-    } else if (party->currentMemberId == 6) {
+    } else if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         if (party->trigFlags & 0x200000) {
             d = 8.0f;
         } else {
@@ -3131,7 +3131,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
     pos = party->position;
     if (party->moveKind == 0) {
         speed = party->width;
-    } else if (party->currentMemberId == 5) {
+    } else if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
         speed = 10.0f;
         margin = 70;
     } else {
