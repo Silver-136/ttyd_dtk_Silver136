@@ -21,6 +21,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_telop.h"
+#include "eff/eff_kemutest.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -64,7 +65,6 @@ KpaSen* kpaSen;
 s32 calcPose(s32 i, s32 lo, s32 hi, s32 flag);
 void kpaSen_ext_disp(CameraId camera, void* param);
 void kpaSen_ext_shadow_disp(CameraId camera, void* param);
-void effKemuTestDrawCam(EffectEntry* effect, s32 camera);
 
 USER_FUNC(L_evt_hitobj_flag_onoff);
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);

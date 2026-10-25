@@ -16,6 +16,7 @@
 #include "party/party_nokonoko.h"
 #include "mario/mario_hit.h"
 #include "party/party_hit.h"
+#include "eff/eff_kemutest.h"
 
 extern void partyUpdMoveSpd(PartyEntry* party);
 extern void partyWalkInit(PartyEntry* party, s32 mode);
@@ -28,7 +29,6 @@ static s32 nokoSe;
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_small_star_n64.h"
 #include "mario/mariost.h"
-void effKemuTestDrawCam();
 EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy,
                                   f32 dz);
 HitEntry* hitCheckFilter(HitFilterCallback callback, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,

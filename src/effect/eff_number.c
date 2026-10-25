@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "version.h"
+#include "eff/eff_number.h"
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 

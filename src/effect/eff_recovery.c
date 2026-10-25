@@ -11,12 +11,12 @@
 #include <dolphin/os.h>
 #include "libc_decls.h"
 #include "pmario_sound.h"
+#include "eff/eff_number.h"
 
 double sin(double);
 double cos(double);
 EffectEntry* effStardustEntry(s32, f32, f32, f32, f32, f32, s32, s32);
 u32 strlen(const char* s);
-void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra);
 
 typedef struct MayaPoly {
     s32 keyCount;          // 0x0

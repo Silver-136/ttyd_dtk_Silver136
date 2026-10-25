@@ -7,6 +7,8 @@
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "eff/n64/eff_kameki_tornade_n64.h"
 #include "system.h"
+#include "eff/eff_batten.h"
+#include "eff/eff_kemutest.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/effdrv.h"
@@ -46,7 +48,6 @@ typedef struct BattenEffWork {
     u8 field_0x10[0x28 - 0x10];
     Mtx mtx;
 } BattenEffWork;
-EffectEntry* effBattenEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 typedef struct TargetWork { s32 state; s32 count; EffectEntry* eff; } TargetWork;
 typedef struct AudMember {
     s32 flags;
@@ -68,7 +69,6 @@ s32 irand(s32 scalar);
 extern EvtWord aud_hit_event[];
 void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z);
 void aud_fire_eff(f32 x, f32 y, f32 z);
-void effKemuTestSetRxRz(EffectEntry* eff, f32 rx, f32 rz);
 void psndSFX_vol(s32 id, u8 vol);
 EffectEntry* eff_tor;
 s32 torCount;

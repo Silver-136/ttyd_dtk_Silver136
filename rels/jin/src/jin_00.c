@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
+#include "mot/mot_hammer.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -62,7 +63,6 @@ static s32 g_nNumEndProc[1];
 f32 g_fSpeed;
 static f32 randf(f32 min, f32 max);
 static inline f32 sinf(f32 x) { return sin(x); }
-f32 marioGetAngleKaitenHammer(void);
 static void computePos(Teresa* ter, Vec* out);
 s32 computeAlpha(Teresa* ter, MarioWork* mp, f32 angle);
 void computeMtx(ExtdrvPose* pose, f32 angle);

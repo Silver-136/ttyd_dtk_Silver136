@@ -41,6 +41,7 @@
 #include "poly_trig.h"
 #include "eff/eff_small_star.h"
 #include "koopa_motion.h"
+#include "mot/mot_hammer.h"
 
 f32 cloudGetBreathPower(Vec pos, f32 width);
 
@@ -2295,7 +2296,6 @@ typedef struct FbatHitResult {
 s32 vivianGetStatus(void);
 s32 marioGetJabaraState(void);
 s32 nokonokoGetStatus(PartyEntry* party);
-f32 marioGetAngleKaitenHammer(void);
 NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 

@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
 #include "battle/battle_status_effect.h"
+#include "eff/eff_fall.h"
 
 #include "battle/battle.h"
 #include "battle/battle_stage_object.h"
@@ -21,7 +22,6 @@
 #include "battle/battle_database_common.h"
 
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration);
-BOOL effFallCheckHit(EffectEntry* effect);
 
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);

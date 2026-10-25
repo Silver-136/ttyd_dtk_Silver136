@@ -17,6 +17,7 @@
 #include "evt/evt_cam.h"
 #include "dolphin/os.h"
 #include "poly_trig.h"
+#include "eff/eff_fall.h"
 
 typedef struct EffFallWork {
     s32 type;       // 0x0

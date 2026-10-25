@@ -22,6 +22,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
 #include "poly_trig.h"
+#include "eff/eff_kemutest.h"
 
 #include "memory.h"
 #include "string.h"
@@ -195,7 +196,6 @@ static void pose_init(void);
 void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void pose_main(void);
 static void ext_disp(CameraId camera, void* param);
-void effKemuTestSetRxRz(EffectEntry* effect, f32 rx, f32 rz);
 static void depthDisp(CameraId camera, void* param);
 void envSetYami(MapTevCallbackInfo* info);
 void ext_disp_minnnanokoe(CameraId camera, void* param);

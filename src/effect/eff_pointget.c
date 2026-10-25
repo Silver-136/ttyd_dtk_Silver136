@@ -8,6 +8,7 @@
 #include <dolphin/mtx.h>
 #include <stdio.h>
 #include <string.h>
+#include "eff/eff_pointget.h"
 
 typedef struct EffPointGetWork {
     s32 type;      // 0x0
@@ -19,7 +20,6 @@ typedef struct EffPointGetWork {
     s32 state;     // 0x20
 } EffPointGetWork;
 
-EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 duration);
 void effPointGetMain(EffectEntry* effect);
 void effPointGetDisp(CameraId cameraId, EffectEntry* effect);
 

@@ -4,6 +4,7 @@
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
 #include <math.h>
+#include "himo.h"
 
 
 extern void spline_getvalue(Vec* out, s32 n, Vec* pts, f32* t1, f32* t2, f32 t);

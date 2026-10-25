@@ -12,6 +12,7 @@
 #include "dolphin/os.h"
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
+#include "himo.h"
 
 #include <stdio.h>
 
@@ -349,7 +350,6 @@ void animPose_AllocBuffer(AnimationPose* pose);
 void animSetMaterial_Texture(s32 texCount, s32 *texIdRemap, AnimPoseTexEntry *pTexEntries, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile);
 void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend);
 void materialProc(s32 shapeId, s32 xluStage);
-void vivihimo(Mtx a, Mtx b, f32 speed, f32 scale, f32 offA, f32 offB);
 void animInit(void) {
     int i;
     FileEntry* file;

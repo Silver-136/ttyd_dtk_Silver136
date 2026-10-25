@@ -12,6 +12,7 @@
 #include "peach.h"
 #include "mario/mario_pouch.h"
 #include "mot/mot_jabara.h"
+#include "mot/mot_hammer.h"
 
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
@@ -49,7 +50,6 @@ BOOL marioChkDeepSleep(void) {
 }
 
 #ifdef VERSION_G8ME01
-s32 marioGetHammerLevel(void);
 #endif
 void mot_stay(void) {
     MarioWork* mario;

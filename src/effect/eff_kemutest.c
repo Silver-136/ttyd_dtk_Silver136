@@ -12,6 +12,7 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "eff/eff_kemutest.h"
 
 
 

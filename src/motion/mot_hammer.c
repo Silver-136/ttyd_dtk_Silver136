@@ -18,6 +18,7 @@
 #include "sfx_name_word.h"
 #include "evt/evt_cam.h"
 #include "mot/mot_stay.h"
+#include "mot/mot_hammer.h"
 
 double cos(float);
 HitEntry* hitEstimate(s32* out);

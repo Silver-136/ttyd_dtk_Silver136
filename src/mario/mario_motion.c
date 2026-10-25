@@ -30,6 +30,9 @@
 #include "peach.h"
 #include "party/party_yoshi.h"
 #include "party/party_vivian.h"
+#include "mot/mot_hammer.h"
+#include "mot/mot_hip.h"
+#include "mot/mot_dokan.h"
 
 
 typedef struct MarioJumpData {
@@ -54,15 +57,9 @@ typedef struct MotCaseEntry {
 #endif
 void mot_talk(void);
 void mot_getItem(void);
-void mot_hip(void);
-void mot_hip_post(void);
-void mot_hammer(void);
-void mot_hammer2(void);
-void mot_ham2_post(void);
 void mot_kaze(void);
 void mot_vivian(void);
 void mot_vivian_post(void);
-void mot_dokan(void);
 void mot_bottomless(void);
 void mot_forceReset(void);
 void mot_shadow(void);
@@ -73,15 +70,12 @@ s32 psndSFXOn_3D(s32 id, Vec* position);
 void* marioChkLandon(f32* y, f32 spd);
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioCreviceWallChk(Vec pos);
-s32 marioGetHammerLevel(void);
-BOOL marioChkHammer2(void);
 BOOL marioChkPlanePlace(void* hit);
 MotCaseEntry* caseCheckHitObj(void* hit);
 void* fbatNpcTalkCheck(void);
 void effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 void kpaClearHitobjRide(void);
 void* kpaChkHitobjRide(void);
-BOOL marioChkHipAttack(void);
 
 MarioMotTblEntry marioMotTbl[] = {
     {mot_stay, NULL, mot_stay_post},

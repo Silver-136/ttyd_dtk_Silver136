@@ -11,6 +11,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "poly_trig.h"
+#include "eff/eff_mobj_broken.h"
 
 
 #define PI 3.1415927f

@@ -44,6 +44,7 @@
 #include "system.h"
 #include "driver/npcdrv.h"
 #include "koopa_motion.h"
+#include "eff/eff_mobj_broken.h"
 s32 mobj_koopa_pole_evt(MapObjectEntry* mobj);
 void kpa_disp_pole_score(CameraId camId, void* param);
 static USER_FUNC(kpa_get_level);
@@ -158,7 +159,6 @@ static inline BOOL isAnimA13(const s8* a) {
 extern void* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 id, s32 mode, s32 collect, void* script);
 
 extern void npcKoopaModeMobjBoundDeadCheck(void* hit);
-extern void effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z);
 
 s32 kpa_powerup(EventEntry* event, BOOL isFirstCall);
 s32 fire_func(EventEntry* event, BOOL isFirstCall);

@@ -15,6 +15,7 @@
 #include "mario/mario_hit.h"
 #include "mot/mot_damage.h"
 #include "koopa_motion.h"
+#include "mot/mot_hip.h"
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
 
@@ -37,7 +38,6 @@ static EVT_BEGIN(quake_bgmode_evt)
 EVT_END()
 
 s32 U_chkground(void);
-void mot_hip_post(void);
 #ifdef VERSION_G8ME01
 #define MHPOST() hip_post_inl()
 #else

@@ -4,6 +4,7 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_status_effect.h"
+#include "eff/eff_batten.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle.h"
@@ -33,7 +34,6 @@ typedef struct ArmWork {
     EffectEntry* eff;
 } ArmWork;
 static ArmWork* work[2];
-EffectEntry* effBattenEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 double atan(double x);
 typedef struct BattenEffWork {
     s32 field_0x0;

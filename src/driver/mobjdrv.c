@@ -22,6 +22,7 @@
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/pad.h>
 #include "koopa_hit.h"
+#include "mot/mot_hip.h"
 
 
 
@@ -582,7 +583,6 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
     entry->position.z = z;
 }
 
-s32 marioChkHipBump(void);
 
 typedef struct MobjWorkHit {
     s32 count;

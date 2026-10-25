@@ -39,6 +39,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_audience.h"
+#include "eff/eff_pointget.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -224,7 +225,6 @@ void btlseqEnd_DispInit(BattleWork* wp);
 void btlseqEnd_DispMain(CameraId camId, void* param);
 
 void _GetExpIcon_End(SeqEndWork* work);
-EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 duration);
 
 extern PoseTableEntry pose_table_nokotarou_stay[];
 

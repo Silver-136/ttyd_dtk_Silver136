@@ -6,6 +6,7 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_batten.h"
 
 typedef struct EffBattenWork {
     s32 type;      // 0x0

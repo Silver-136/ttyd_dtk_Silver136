@@ -7,6 +7,7 @@
 #include "party.h"
 #include "system.h"
 #include "mot/mot_slit.h"
+#include "mot/mot_dokan.h"
 
 
 
