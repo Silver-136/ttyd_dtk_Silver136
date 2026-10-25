@@ -508,7 +508,7 @@ void effDrawMayaPoly(MayaPoly* poly) {
     }
 }
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 void effDrawMayaPoly(MayaPoly* poly);
 void effCalcMayaAnim(MayaAnim* anim);
 void effPlayMayaAnim(MayaAnim* anim);

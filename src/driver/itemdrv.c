@@ -1821,7 +1821,7 @@ void itemPickUp(ItemEntry* entry) {
     entry->flags2 &= ~0x100;
 }
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 void itemPickUp(ItemEntry* entry);
 u32 itemStatus(ItemEntry* entry, u32 flags);
 void itemStatusOn(ItemEntry* entry, u32 flags);

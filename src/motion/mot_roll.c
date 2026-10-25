@@ -1268,7 +1268,7 @@ void marioRollStrippedPool(void) {
     mario->fallStartPos.y = __fabsf(mario->fallStartPos.z) < 45.0;
 }
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 void mot_fall_roll(void);
 void roll_upstairs(void);
 void mot_roll(void);

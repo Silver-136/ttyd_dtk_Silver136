@@ -629,7 +629,6 @@ void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 height, f32 width
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
-//haven't checked asm, probably very close to 1:1 given patterns on previous functions
 void _windowDispGX_Message(s32 type, s32 a2, u8 alpha, BOOL dark, f32 x, f32 y, f32 height, f32 width, f32 a9, f32 a10) {
     CameraEntry* camera;
     Mtx trans, scale;

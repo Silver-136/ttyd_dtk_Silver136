@@ -411,7 +411,7 @@ config.libs = [
         "progress_category": "game",
         "objects": [
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_table.c"),
-            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_stick_keep_left.c", extra_cflags=["-O4,s"]),
+            Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_stick_keep_left.c", extra_cflags=["-O4,s", "-inline off"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_timing_a.c", extra_cflags=["-O4,s"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_repeatedly.c", extra_cflags=["-O4,s"]),
             Object(MatchingFor("G8MJ01", "G8ME01"), "battle/ac/ac_shot.c", extra_cflags=["-O4,s"]),

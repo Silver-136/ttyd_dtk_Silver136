@@ -1999,7 +1999,7 @@ void renderProc(s32 shapeId, s32 unused) {
     s32 clr0VtxSize, posVtxSize, nrmVtxSize;
     s32 drawCount;
     Mtx camMtx, invCamMtx;
-    Vec lightPos, lightPos2; // TODO: rename? 2 is probably implicit stack copy
+    Vec lightPos, lightPos2;
 
     if (shapeId != -1) {
         GXColor* clr0VtxPtr;

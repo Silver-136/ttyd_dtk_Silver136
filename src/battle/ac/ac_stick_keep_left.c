@@ -268,7 +268,6 @@ void battleAcDelete_StickKeepLeft(BattleWork* work) {
     work->actionCommands.mAcState = 0x3ED;
 }
 
-#pragma dont_inline on
 static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     s32 count;
     s32 idx;

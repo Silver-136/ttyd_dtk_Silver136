@@ -702,7 +702,7 @@ void L_gcResetCheck(void) {
 }
 #pragma dont_inline reset
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 void L_gcResetCheck(void);
 void gcRumbleCheck(void);
 void* gcDvdCheckThread(void* param);

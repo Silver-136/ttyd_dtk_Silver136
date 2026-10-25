@@ -1069,7 +1069,7 @@ BOOL checkHarbor(Vec* out) {
     return FALSE;
 }
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 BOOL checkHarbor(Vec* out);
 void shipMove(void);
 void mot_ship(void);

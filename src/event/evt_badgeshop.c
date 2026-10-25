@@ -245,7 +245,7 @@ void badgeShop_bteresaGeneration(void) {
     }
 }
 
-void badgeShop_bargainGeneration(void) { //finished, needs cleanup and probably fixes
+void badgeShop_bargainGeneration(void) {
     s16 stopcount;
     u8 table[0x19];
     s16 has;

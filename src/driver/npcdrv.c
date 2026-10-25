@@ -3377,7 +3377,7 @@ BOOL N_fbatPreventMarioEventChk(void) {
 }
 
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 BOOL N_fbatPreventMarioEventChk(void);
 BOOL npcCheckBlow(NpcEntry* npc);
 s32 npcCalcScore(NpcEntry* npc);

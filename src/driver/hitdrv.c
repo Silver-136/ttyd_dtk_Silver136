@@ -8,7 +8,7 @@
 #include "party.h"
 #include <string.h>
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 void hitBindUpdate(const char* name);
 void hitDamageReturnSet(HitEntry* hit, HitDamageReturn* damage, BOOL recursion);
 void hitObjGetPosSub(HitEntry* hit, Vec* position, s32* counter, BOOL recursion);

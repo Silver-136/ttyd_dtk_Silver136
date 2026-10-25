@@ -3010,7 +3010,7 @@ void partySetFamicomMode(PartyEntry* party, s32 mode) {
     }
 }
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 void partySetFamicomMode(PartyEntry* party, s32 mode);
 void partyShadowOff(PartyEntry* party);
 void partyUpdateKeyData(PartyEntry* party);

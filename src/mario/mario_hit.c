@@ -2586,7 +2586,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
     }
 }
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 void marioCheckWallShip(f32 dx, f32 dz);
 BOOL marioSlitChkWallAround(void);
 HitEntry* N_dou10_yoko_yari3(void);

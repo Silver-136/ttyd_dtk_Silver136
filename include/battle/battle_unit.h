@@ -469,9 +469,9 @@ typedef struct BattleWorkUnitPart {
     u8 pad_DC[0xF8 - 0xDC];                                // 0xDC, never accessed
     BtlPoseSoundTable moveSndTable;                        // 0xF8, btlevtcmd_SetPartsJump/Run/Walk/DiveSound
     EvtWord work[16];                                      // 0x130, part work words (btlevtcmd_SetPartsWork / GetPartsWork): numbers and table pointers
-    Vec mHitBaseOffset;                                    // 0x170, guess
+    Vec mHitBaseOffset;                                    // 0x170, copied from the kind part's hitBaseOffset
     Vec mHitOffset;                                        // 0x17C
-    Vec mHitCursorBaseOffset;                              // 0x188, guess
+    Vec mHitCursorBaseOffset;                              // 0x188, copied from the kind part's hitCursorBaseOffset
     Vec mHitCursorOffset;                                  // 0x194
     s16 hitOffsetX;                                        // 0x1A0, target-cursor X offset (btl_hitoffsetx)
     s16 shadowSize;                                        // 0x1A2, from kind part 0x30; scales shadowEntry

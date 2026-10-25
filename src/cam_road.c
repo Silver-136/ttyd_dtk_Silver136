@@ -1264,7 +1264,7 @@ void camRoadCurveOff(const char* name) {
     }
 }
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 void camRoadCurveOff(const char* name);
 void camRoadCurveOn(const char* name);
 void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t);

@@ -1236,7 +1236,7 @@ char* pouchGetYoshiName(void) {
 //
 //
 
-// prototypes for asm stopgap forward references
+// forward declarations: these functions are defined further down
 char* pouchGetYoshiName(void);
 void pouchSetYoshiName(char* name);
 void pouchSetPartyColor(PartyId partnerId, s32 color);

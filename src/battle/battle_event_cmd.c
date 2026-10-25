@@ -1987,7 +1987,7 @@ USER_FUNC(btlevtcmd_CheckDamagePattern) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(btlevtcmd_CheckSpace) { //TODO: probably wrong
+USER_FUNC(btlevtcmd_CheckSpace) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
     s32 boundX, boundY, boundZ;
