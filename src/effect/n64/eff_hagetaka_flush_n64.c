@@ -35,7 +35,7 @@ static u8 color_rotation_data[] = {
 void effHagetakaFlushMain(EffectEntry* effect);
 void effHagetakaFlushDisp(CameraId cameraId, EffectEntry* effect);
 
-EffectEntry* effHagetakaFlushN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
+EffectEntry* effHagetakaFlushN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffHagetakaFlushN64Work* work;
 

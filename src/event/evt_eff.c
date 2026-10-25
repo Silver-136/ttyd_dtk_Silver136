@@ -141,6 +141,7 @@
 #include "eff/eff_toge_flush.h"
 #include "eff/eff_levelup.h"
 #include "eff/eff_kemuri.h"
+#include "eff/n64/eff_hagetaka_flush_n64.h"
 
 #include "party.h"
 
@@ -157,7 +158,6 @@ extern EffectEntry* effMagicHoraoN64Entry(s32, s32, s32, s32, f32, f32, f32, f32
 extern EffectEntry* effLensflareN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effOpukuJetwrainN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effTimestampN64Entry(s32, s32, f32, f32, f32, f32);
-extern EffectEntry* effHagetakaFlushN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
 extern EffectEntry* effFallEntry(s32, s32, s32, f32, f32, f32, f32, f32, f32);

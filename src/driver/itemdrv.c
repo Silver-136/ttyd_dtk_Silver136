@@ -38,6 +38,7 @@
 #include "eff/eff_splash.h"
 #include "party/party_nokonoko.h"
 #include "mario/mario_cam.h"
+#include "eff/n64/eff_hagetaka_flush_n64.h"
 
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
@@ -61,7 +62,6 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
 
 extern ItemData itemDataTable[];
 s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
-EffectEntry* effHagetakaFlushN64Entry(s32 a1, s32 a2, f32 x, f32 y, f32 z, f32 scale);
 
 BOOL itemGetNokoCheck(ItemEntry* entry);
 void winNameDisp(WinMgrEntry* win);
