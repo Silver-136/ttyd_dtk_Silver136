@@ -37,6 +37,15 @@
 
 typedef enum BattleWeaponSpecialFlags { SPECIAL_UNGUARDABLE = 0x20000 } BattleWeaponSpecialFlags;
 
+// BattleWeapon.element (weapon tables: Ice Storm and blizzards 2, bombs and dynamite 3, thunder items 4)
+typedef enum BattleWeaponElement {
+    ELEMENT_NORMAL,
+    ELEMENT_FIRE,
+    ELEMENT_ICE,
+    ELEMENT_EXPLOSION,
+    ELEMENT_ELECTRIC,
+} BattleWeaponElement;
+
 typedef struct BattleWeapon {
     const char* name;                 // 0x0, msg tag
     u16 icon;                         // 0x4

@@ -395,7 +395,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     }
     element = weapon->element;
     if (attacker && (weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN)) {
-        element = 1;
+        element = ELEMENT_FIRE;
     }
     defaultResult = flags | 0x1E;
     *result = defaultResult;
@@ -553,7 +553,7 @@ skip:
     if (flags & 0x40000) {
         damage--;
     }
-    if (element == 1 && target->badgesEquipped.IcePower) {
+    if (element == ELEMENT_FIRE && target->badgesEquipped.IcePower) {
         damage -= target->badgesEquipped.IcePower;
     }
     damage -= target->badgesEquipped.PDownDUp;
@@ -1592,7 +1592,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 break;
             }
             if ((part->counterAttributes & kCounterExplosive) &&
-                (weapon->element == 3 || weapon->element == 4 || weapon->element == 1 ||
+                (weapon->element == ELEMENT_EXPLOSION || weapon->element == ELEMENT_ELECTRIC || weapon->element == ELEMENT_FIRE ||
                  ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN)))) {
                 BattleRunHitEvent(target, 0x719);
                 ret = 18;
@@ -1717,19 +1717,19 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         }
         if (cw.poisonStatus) {
             r1 = 0;
-            BattleSetStatusDamage(&r1, attacker, part, 0, 4, 100, 0, 3, 1);
+            BattleSetStatusDamage(&r1, attacker, part, 0, STATUS_POISON, 100, 0, 3, 1);
         }
         if (cw.freezeStatus) {
             r2 = 0;
-            BattleSetStatusDamage(&r2, attacker, part, 0, 9, 100, 0, 3, 1);
+            BattleSetStatusDamage(&r2, attacker, part, 0, STATUS_FREEZE, 100, 0, 3, 1);
         }
         if (cw.burnStatus) {
             r3 = 0;
-            BattleSetStatusDamage(&r3, attacker, part, 0, 8, 100, 0, 3, 1);
+            BattleSetStatusDamage(&r3, attacker, part, 0, STATUS_BURN, 100, 0, 3, 1);
         }
         if (cw.electricStatus) {
             r4 = 0;
-            BattleSetStatusDamage(&r4, attacker, part, 0, 6, 100, 0, 3, 1);
+            BattleSetStatusDamage(&r4, attacker, part, 0, STATUS_ELECTRIC, 100, 0, 3, 1);
         }
         if (!cw.count) {
             cw.count = 1;
@@ -1962,7 +1962,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         }
     } else {
         if ((part->counterAttributes & kCounterExplosive) && !(weapon->counterResistFlags & 0x80)) {
-            if (weapon->element == 3 || weapon->element == 4 || weapon->element == 1 ||
+            if (weapon->element == ELEMENT_EXPLOSION || weapon->element == ELEMENT_ELECTRIC || weapon->element == ELEMENT_FIRE ||
                 ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN))) {
                 work->type = 0x31;
                 work->msg = 0x131;

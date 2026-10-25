@@ -210,7 +210,7 @@ BattleWeapon marioDefaultWeapon_Jump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
@@ -256,7 +256,7 @@ BattleWeapon marioWeapon_KururinJump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_k_jump", // acHelpMsg
@@ -306,7 +306,7 @@ BattleWeapon marioWeapon_KururinJump2 = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_k_jump", // acHelpMsg
@@ -360,7 +360,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_j_jump", // acHelpMsg
@@ -410,7 +410,7 @@ BattleWeapon marioWeapon_JyabaraJumpFailed = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -445,7 +445,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackKaitenHammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     14, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -481,7 +481,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     16, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -523,7 +523,7 @@ BattleWeapon marioDefaultWeapon_Hammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
@@ -569,7 +569,7 @@ BattleWeapon marioWeapon_KaitenHammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     14, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -604,7 +604,7 @@ BattleWeapon marioWeapon_KaitenHammerInvolved = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20102000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     15, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -650,7 +650,7 @@ BattleWeapon marioWeapon_UltraHammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     16, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -685,7 +685,7 @@ BattleWeapon marioWeapon_UltraHammerInvolved = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20102000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     17, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -730,7 +730,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     19, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -768,7 +768,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
@@ -809,7 +809,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
@@ -846,7 +846,7 @@ BattleWeapon badgeWeapon_DokanJump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
@@ -883,7 +883,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
@@ -928,7 +928,7 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_tatsumaki_jump", // acHelpMsg
@@ -958,7 +958,7 @@ BattleWeapon badgeWeapon_TatsumakiJumpInvolved = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000010, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -994,7 +994,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
@@ -1038,7 +1038,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
@@ -1081,7 +1081,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
@@ -1126,7 +1126,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
@@ -1163,7 +1163,7 @@ BattleWeapon badgeWeapon_DokanHammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
@@ -1204,7 +1204,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000008, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
@@ -1241,7 +1241,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000008, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_ultra_jishin_hammer", // acHelpMsg
@@ -1278,7 +1278,7 @@ BattleWeapon badgeWeapon_HammerNageru = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer_nageru", // acHelpMsg
@@ -1315,7 +1315,7 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
@@ -1356,7 +1356,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
@@ -1404,7 +1404,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20002000, // targetPropertyFlags
-    1, // element
+    ELEMENT_FIRE, // element
     0, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -1452,7 +1452,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10002000, // targetPropertyFlags
-    1, // element
+    ELEMENT_FIRE, // element
     0, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -1496,7 +1496,7 @@ BattleWeapon badgeWeapon_IceNaguri = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    2, // element
+    ELEMENT_ICE, // element
     0, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -1546,7 +1546,7 @@ BattleWeapon badgeWeapon_Charge = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1589,7 +1589,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1632,7 +1632,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1675,7 +1675,7 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1708,7 +1708,7 @@ BattleWeapon badgeWeapon_2KaiItem = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1740,7 +1740,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1771,7 +1771,7 @@ BattleWeapon badgeWeapon_DefenceCommand = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1806,7 +1806,7 @@ BattleWeapon badgeWeapon_DefenceCommandP = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1853,7 +1853,7 @@ BattleWeapon marioWeapon_BakuGame = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_sac_3", // acHelpMsg
@@ -1898,7 +1898,7 @@ BattleWeapon marioWeapon_Scissor = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_sac_5", // acHelpMsg
@@ -1940,7 +1940,7 @@ BattleWeapon marioWeapon_ZubaStar = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_sac_8", // acHelpMsg
@@ -1982,7 +1982,7 @@ BattleWeapon marioWeapon_Genki0 = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_sac_1", // acHelpMsg
@@ -2024,7 +2024,7 @@ BattleWeapon marioWeapon_Genki1 = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_sac_6", // acHelpMsg
@@ -2066,7 +2066,7 @@ BattleWeapon marioWeapon_Deka = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_sac_2", // acHelpMsg
@@ -2108,7 +2108,7 @@ BattleWeapon marioWeapon_Muki = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_sac_4", // acHelpMsg
@@ -2150,7 +2150,7 @@ BattleWeapon marioWeapon_Suki = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_sac_7", // acHelpMsg

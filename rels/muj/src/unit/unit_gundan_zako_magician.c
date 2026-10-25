@@ -162,7 +162,7 @@ static BattleWeapon weapon_gundan_zako_magician_fire_bottle = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001000, // targetPropertyFlags
-    1, // element
+    ELEMENT_FIRE, // element
     0, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -201,7 +201,7 @@ static BattleWeapon weapon_gundan_zako_magician_hunyahunya_bottle = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -240,7 +240,7 @@ static BattleWeapon weapon_gundan_zako_magician_yokeyoke_bottle = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -281,7 +281,7 @@ static BattleWeapon weapon_gundan_zako_magician_minimini_bottle = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -319,7 +319,7 @@ static BattleWeapon weapon_gundan_zako_magician_one_recover = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, 0, // acHelpMsg..special
@@ -353,7 +353,7 @@ static BattleWeapon weapon_gundan_zako_magician_all_recover = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, 0, // acHelpMsg..special
@@ -386,7 +386,7 @@ static BattleWeapon weapon_gundan_zako_magician_ziwaziwa_bottle = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg

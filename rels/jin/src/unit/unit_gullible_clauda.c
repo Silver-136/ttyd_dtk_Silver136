@@ -108,7 +108,7 @@ static BattleWeapon enemyWeapon_ClaudaNormalAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     10, // damagePattern
     3, // acLevel
     2, // reserved_6F

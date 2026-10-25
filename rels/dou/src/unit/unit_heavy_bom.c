@@ -158,7 +158,7 @@ static BattleWeapon weapon_heavy_bomb_super_explosion = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    3, // element
+    ELEMENT_EXPLOSION, // element
     0, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -194,7 +194,7 @@ static BattleWeapon weapon_heavy_bomb_guard = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -232,7 +232,7 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -269,7 +269,7 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg

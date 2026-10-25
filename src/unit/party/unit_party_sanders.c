@@ -288,7 +288,7 @@ BattleWeapon partyWeapon_SandersFirstAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    3, // element
+    ELEMENT_EXPLOSION, // element
     0, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -330,7 +330,7 @@ BattleWeapon partyWeapon_SandersNormalAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    3, // element
+    ELEMENT_EXPLOSION, // element
     0, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -373,7 +373,7 @@ BattleWeapon partyWeapon_SandersTimeBombSet = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_jigen_bakudan", // acHelpMsg
@@ -415,7 +415,7 @@ BattleWeapon partyWeapon_SandersCounterSet = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     "msg_ac_bom_counter", // acHelpMsg
@@ -465,7 +465,7 @@ BattleWeapon partyWeapon_SandersSuperBombAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    3, // element
+    ELEMENT_EXPLOSION, // element
     0, // damagePattern
     3, // acLevel
     2, // reserved_6F

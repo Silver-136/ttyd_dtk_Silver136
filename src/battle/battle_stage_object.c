@@ -525,7 +525,7 @@ BattleWeaponData _nozzle_at_base_mario = {{
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -557,7 +557,7 @@ BattleWeaponData _nozzle_at_base_monster = {{
     {0}, // fpDamageWork
     0x200006F, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -597,7 +597,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -628,7 +628,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -659,7 +659,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -690,7 +690,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -730,7 +730,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -761,7 +761,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                2, 0, // element..damagePattern
+                ELEMENT_ICE, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -792,7 +792,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -823,7 +823,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -863,7 +863,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -894,7 +894,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                2, 0, // element..damagePattern
+                ELEMENT_ICE, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -925,7 +925,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                3, 0, // element..damagePattern
+                ELEMENT_EXPLOSION, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -956,7 +956,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -996,7 +996,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1027,7 +1027,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                2, 0, // element..damagePattern
+                ELEMENT_ICE, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1058,7 +1058,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                3, 0, // element..damagePattern
+                ELEMENT_EXPLOSION, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1089,7 +1089,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                1, 0, // element..damagePattern
+                ELEMENT_FIRE, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1126,7 +1126,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             {0}, // fpDamageWork
             TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
             0x20000000, // targetPropertyFlags
-            0, 10, // element..damagePattern
+            ELEMENT_NORMAL, 10, // element..damagePattern
             3, // acLevel
             2, // reserved_6F
             NULL, // acHelpMsg
@@ -1159,7 +1159,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1190,7 +1190,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1221,7 +1221,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 1, // element..damagePattern
+                ELEMENT_NORMAL, 1, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1252,7 +1252,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1283,7 +1283,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1314,7 +1314,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1345,7 +1345,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1376,7 +1376,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1407,7 +1407,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1441,7 +1441,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             {0}, // fpDamageWork
             TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
             0x20000000, // targetPropertyFlags
-            0, 10, // element..damagePattern
+            ELEMENT_NORMAL, 10, // element..damagePattern
             3, // acLevel
             2, // reserved_6F
             NULL, // acHelpMsg
@@ -1474,7 +1474,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1505,7 +1505,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1536,7 +1536,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 1, // element..damagePattern
+                ELEMENT_NORMAL, 1, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1567,7 +1567,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1598,7 +1598,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1629,7 +1629,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1660,7 +1660,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1691,7 +1691,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1722,7 +1722,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1756,7 +1756,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             {0}, // fpDamageWork
             TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
             0x20000000, // targetPropertyFlags
-            0, 10, // element..damagePattern
+            ELEMENT_NORMAL, 10, // element..damagePattern
             3, // acLevel
             2, // reserved_6F
             NULL, // acHelpMsg
@@ -1789,7 +1789,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1820,7 +1820,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1851,7 +1851,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 1, // element..damagePattern
+                ELEMENT_NORMAL, 1, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1882,7 +1882,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1913,7 +1913,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1944,7 +1944,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -1975,7 +1975,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2006,7 +2006,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2037,7 +2037,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2071,7 +2071,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             {0}, // fpDamageWork
             TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
             0x20000000, // targetPropertyFlags
-            0, 10, // element..damagePattern
+            ELEMENT_NORMAL, 10, // element..damagePattern
             3, // acLevel
             2, // reserved_6F
             NULL, // acHelpMsg
@@ -2104,7 +2104,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2135,7 +2135,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2166,7 +2166,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 1, // element..damagePattern
+                ELEMENT_NORMAL, 1, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2197,7 +2197,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2228,7 +2228,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2259,7 +2259,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 0, // element..damagePattern
+                ELEMENT_NORMAL, 0, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2290,7 +2290,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2321,7 +2321,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg
@@ -2352,7 +2352,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 {0}, // fpDamageWork
                 TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
                 0x20000000, // targetPropertyFlags
-                0, 10, // element..damagePattern
+                ELEMENT_NORMAL, 10, // element..damagePattern
                 3, // acLevel
                 2, // reserved_6F
                 NULL, // acHelpMsg

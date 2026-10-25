@@ -297,7 +297,7 @@ static BattleWeapon weapon_rampell_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -942,7 +942,7 @@ static BattleWeapon weapon_masao_jump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -978,7 +978,7 @@ static BattleWeapon weapon_masao_hammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1014,7 +1014,7 @@ static BattleWeapon weapon_masao_kururin_jump = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1050,7 +1050,7 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1577,7 +1577,7 @@ static BattleWeapon enemyWeapon_ChristineNormalAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -1895,7 +1895,7 @@ static BattleWeapon enemyWeapon_NokotarouKouraAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21004004, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     8, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -1932,7 +1932,7 @@ static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20004004, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     8, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -2395,7 +2395,7 @@ static BattleWeapon enemyWeapon_ClaudaNormalAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     10, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -2622,7 +2622,7 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -2960,7 +2960,7 @@ BattleWeapon weapon_vivian_kagenuke_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
-    0, 0, // element..damagePattern
+    ELEMENT_NORMAL, 0, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -3170,7 +3170,7 @@ BattleWeapon enemyWeapon_SandersNormalAttack = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    3, // element
+    ELEMENT_EXPLOSION, // element
     0, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -3377,7 +3377,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     22, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -3414,7 +3414,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     21, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -3451,7 +3451,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     24, // damagePattern
     3, // acLevel
     2, // reserved_6F
@@ -3488,7 +3488,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast = {
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
-    0, // element
+    ELEMENT_NORMAL, // element
     23, // damagePattern
     3, // acLevel
     2, // reserved_6F
