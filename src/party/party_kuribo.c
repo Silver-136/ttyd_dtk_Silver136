@@ -136,7 +136,7 @@ USER_FUNC(pre_kurio_use) {
             msg = "obj_hlp_yajirushi";
         } else if (!strcmp(name, "MOBJ_Lock")) {
             msg = "obj_hlp_lock";
-        } else if (!strcmp(name, "MOBJ_KururinFloor\x00\x00")) {
+        } else if (!strcmp(name, "MOBJ_KururinFloor")) {
             msg = "msg_kuri_map";
         } else {
             msg = "msg_kuri_map";

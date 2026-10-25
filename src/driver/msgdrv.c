@@ -16,16 +16,16 @@
 #include "icon_ids.h"
 #include "libc_decls.h"
 #define EXT_LIT(sym, val) (val)
-const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>\000\000\000";
+const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
 #ifdef VERSION_G8ME01
-const char R_no_messages_US[48] = "<col ff0000ff>No messages.[English]<col>\012<key>";
-const char R_no_messages_DE[48] = "<col ff0000ff>No messages.[German]<col>\012<key>";
-const char R_no_messages_FR[48] = "<col ff0000ff>No messages.[French]<col>\012<key>";
-const char R_no_messages_ES[48] = "<col ff0000ff>No messages.[Spanish]<col>\012<key>";
-const char R_no_messages_IT[48] = "<col ff0000ff>No messages.[Italian]<col>\012<key>";
-const char R_no_messages_DU[48] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>";
+const char R_no_messages_US[] = "<col ff0000ff>No messages.[English]<col>\012<key>";
+const char R_no_messages_DE[] = "<col ff0000ff>No messages.[German]<col>\012<key>";
+const char R_no_messages_FR[] = "<col ff0000ff>No messages.[French]<col>\012<key>";
+const char R_no_messages_ES[] = "<col ff0000ff>No messages.[Spanish]<col>\012<key>";
+const char R_no_messages_IT[] = "<col ff0000ff>No messages.[Italian]<col>\012<key>";
+const char R_no_messages_DU[] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>";
 #else
-const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>\000\000";
+const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 #endif
 const char str_802C4E4C[12] = "\123\124\111\103\113\137\114\105\106\124";
 const char str_802C4E58[12] = "\102\125\124\124\117\116\137\114";

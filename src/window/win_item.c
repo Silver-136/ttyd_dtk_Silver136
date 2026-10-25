@@ -41,7 +41,7 @@ s32 marioRollCancelDisable(void);
 BOOL U_marioSlitContinueChk(void);
 
 static const char* luigi_book_1[] = {
-    "msg_luigi_book1_txt1\000\000\000",
+    "msg_luigi_book1_txt1",
     "msg_luigi_book1_txt2",
     "msg_luigi_book1_txt3",
     "msg_luigi_book1_txt4",
@@ -57,7 +57,7 @@ static const char* luigi_book_1[] = {
 };
 
 static const char* luigi_book_2[] = {
-    "msg_luigi_book2_txt1\000\000\000",
+    "msg_luigi_book2_txt1",
     "msg_luigi_book2_txt2",
     "msg_luigi_book2_txt3",
     "msg_luigi_book2_txt4",
@@ -73,7 +73,7 @@ static const char* luigi_book_2[] = {
 };
 
 static const char* luigi_book_3[] = {
-    "msg_luigi_book3_txt1\000\000\000",
+    "msg_luigi_book3_txt1",
     "msg_luigi_book3_txt2",
     "msg_luigi_book3_txt3",
     "msg_luigi_book3_txt4",
@@ -89,7 +89,7 @@ static const char* luigi_book_3[] = {
 };
 
 static const char* luigi_book_4[] = {
-    "msg_luigi_book4_txt1\000\000\000",
+    "msg_luigi_book4_txt1",
     "msg_luigi_book4_txt2",
     "msg_luigi_book4_txt3",
     "msg_luigi_book4_txt4",
@@ -105,7 +105,7 @@ static const char* luigi_book_4[] = {
 };
 
 static const char* luigi_book_5[] = {
-    "msg_luigi_book5_txt1\000\000\000",
+    "msg_luigi_book5_txt1",
     "msg_luigi_book5_txt2",
     "msg_luigi_book5_txt3",
     "msg_luigi_book5_txt4",
