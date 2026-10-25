@@ -280,7 +280,7 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
     while (1) {
         type = *table;
         if (*table == -1) break;
-        if (((BOOL (*)(BattleUnit*, s8))BtlUnit_CheckStatus)(unit, type)) {
+        if (BtlUnit_CheckStatus(unit, type)) {
             return type;
         }
         table++;

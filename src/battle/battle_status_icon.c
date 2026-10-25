@@ -285,13 +285,13 @@ BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     s8 turns, strength;
     s32 kind;
     if (_battleWorkPointer->flags & 0x10000) {
-        if (type != 1 && !((BOOL(*)(BattleUnit*, s8))BtlUnit_CheckStatus)(unit, disp->id)) return FALSE;
+        if (type != 1 && !BtlUnit_CheckStatus(unit, disp->id)) return FALSE;
         kind = (s32)unit->currentKind;
         if (!((kind >= UNIT_GOOMBA && kind < UNIT_UNUSED_TREE) || (kind >= UNIT_MARIO && kind < TYPE_PARTNER_MIN) || (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX))) return FALSE;
-    } else if (!((BOOL(*)(BattleUnit*, s8))BtlUnit_CheckStatus)(unit, disp->id)) {
+    } else if (!BtlUnit_CheckStatus(unit, disp->id)) {
         return FALSE;
     }
-    ((void(*)(BattleUnit*, s8, s8*, s8*))BtlUnit_GetStatus)(unit, type, &turns, &strength);
+    BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
     entry->icon = disp->something;
@@ -308,12 +308,12 @@ BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
     int type = disp->id;
     s8 turns, strength;
     Vec v;
-    if (!((BOOL(*)(BattleUnit*, s8))BtlUnit_CheckStatus)(unit, type)) {
+    if (!BtlUnit_CheckStatus(unit, type)) {
         unit->mStatusIconWork.dizzyAngle = 0.0f;
         return FALSE;
     }
     unit->mStatusIconWork.dizzyAngle += 4.0f;
-    ((void(*)(BattleUnit*, s8, s8*, s8*))BtlUnit_GetStatus)(unit, type, &turns, &strength);
+    BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
     entry->icon = disp->something;
@@ -331,11 +331,11 @@ BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
 BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     int type = disp->id;
     s8 turns, strength;
-    if (!((BOOL(*)(BattleUnit*, s8))BtlUnit_CheckStatus)(unit, type)) {
+    if (!BtlUnit_CheckStatus(unit, type)) {
         unit->mStatusIconWork.allergyBlinkTimer = 0;
         return FALSE;
     }
-    ((void(*)(BattleUnit*, s8, s8*, s8*))BtlUnit_GetStatus)(unit, type, &turns, &strength);
+    BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
     entry->icon = disp->something;
@@ -353,7 +353,7 @@ BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIc
 BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     s32 type = disp->id;
     s8 turns, strength;
-    if (!((BOOL(*)(BattleUnit*, s8))BtlUnit_CheckStatus)(unit, disp->id)) {
+    if (!BtlUnit_CheckStatus(unit, disp->id)) {
         unit->mStatusIconWork.elecState = 0;
         unit->mStatusIconWork.elecTimer = 0;
         return FALSE;
@@ -380,7 +380,7 @@ BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
             }
             break;
     }
-    ((void(*)(BattleUnit*, s8, s8*, s8*))BtlUnit_GetStatus)(unit, type, &turns, &strength);
+    BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
     entry->icon = disp->something;
@@ -409,13 +409,13 @@ BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     } else {
         return FALSE;
     }
-    if (!((BOOL(*)(BattleUnit*, s8))BtlUnit_CheckStatus)(unit, disp->id)) {
+    if (!BtlUnit_CheckStatus(unit, disp->id)) {
         *ctr = 0;
         return FALSE;
     }
     (*ctr)++; t = (*ctr * 12) % 720;
     if (t >= 360) t = 720 - t;
-    ((void(*)(BattleUnit*, s8, s8*, s8*))BtlUnit_GetStatus)(unit, type, &turns, &strength);
+    BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
     entry->icon = disp->something;

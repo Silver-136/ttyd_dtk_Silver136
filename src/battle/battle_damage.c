@@ -1063,7 +1063,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
         if ((u32)type == 0x1b) {
             *result |= 0x10;
         }
-        ok = ((BOOL (*)(BattleUnit*, s8, s8, s8))BtlUnit_SetStatus)(unit, type, time, strength);
+        ok = BtlUnit_SetStatus(unit, type, time, strength);
     }
     switch (type) {
         case STATUS_ELECTRIC:
@@ -1247,7 +1247,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
 
     announce = 0;
     if (ok) {
-        ((void (*)(BattleUnit*, s8, s8*, s8*))BtlUnit_GetStatus)(unit, type, &curTurns, &curStrength);
+        BtlUnit_GetStatus(unit, type, &curTurns, &curStrength);
         switch (type) {
             case STATUS_CHARGE:
                 if (curStrength > 0) {

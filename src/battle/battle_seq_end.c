@@ -333,15 +333,15 @@ void btlseqEnd(BattleWork* wp) {
     case 0x7000005: {
         BattleUnit* mario = BattleGetMarioPtr(wp);
         BattleUnit* party = BattleGetPartyPtr(wp);
-        s32 i;
+        s8 i;
         if (party && BtlUnit_CheckStatusFlag(party, 1)) {
             party->flippedTurns = 0;
             BtlUnit_OffStatusFlag(party, 1);
             BtlUnit_GetPartsPtr(party, BtlUnit_GetBodyPartsId(party))->poseTable = pose_table_nokotarou_stay;
         }
         BattleConsumeReserveItem();
-        for (i = 0; (s8)i < 0x1C; i++) {
-            if ((s8)i >= 0x1C || (s8)i < 0x19) {
+        for (i = 0; i < 0x1C; i++) {
+            if (i >= 0x1C || i < 0x19) {
                 if (party) BtlUnit_SetStatus(party, i, 0, 0);
                 BtlUnit_SetStatus(mario, i, 0, 0);
             }
