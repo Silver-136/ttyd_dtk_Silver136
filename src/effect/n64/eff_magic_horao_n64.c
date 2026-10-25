@@ -5,17 +5,12 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <stdlib.h>
+#include "eff/eff_n64.h"
+#include "eff/n64/eff_hokori_n64.h"
 
 double sin(double);
 
-typedef struct effN64Vtx {
-    s16 x, y, z;
-    s16 s, t;
-    u8 r, g, b, a;
-} effN64Vtx;
 
-void effGetTexObjN64(u32 id, GXTexObj* obj);
-void effSetVtxDescN64(effN64Vtx* vtx);
 void tri2();
 
 typedef struct EffMagicHoraoN64Work {
@@ -44,7 +39,6 @@ static effN64Vtx size64x64_tex64x64_vtx[] = {
     {-3200, 6400, 0, 0, 2048, 0, 0, 0, 0xFF},
 };
 
-EffectEntry* effHokoriN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z);
 
 void effMagicHoraoMain(EffectEntry* effect);
 void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect);

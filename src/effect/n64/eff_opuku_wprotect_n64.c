@@ -7,12 +7,8 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 #include "eff/n64/eff_water_damage_n64.h"
+#include "eff/eff_n64.h"
 
-typedef struct effN64Vtx {
-    s16 x, y, z;   // 0x0
-    s16 s, t;      // 0x6
-    u8 r, g, b, a; // 0xA
-} effN64Vtx;
 
 typedef struct PointData {
     s8 x, y, z;
@@ -20,9 +16,6 @@ typedef struct PointData {
     u8 r, g, b;
 } PointData;
 
-void effGetTexObjN64(u32 id, GXTexObj* obj);
-void effSetVtxDescN64(effN64Vtx* vtx);
-u32 effTblRandN64(u32 rand, s32 index);
 void tri2();
 double sin(double);
 double cos(double);
