@@ -76,5 +76,5 @@ void BattleAcGaugeSeInit(void);
 void BattleAcGaugeSeUpdate(f32 value);
 s32 BattleActionCommandGetPrizeLv(BattleWork* work, BattleUnit* unit, s32 lv);
 void BattleActionCommandSetDifficulty(BattleWork* work, BattleUnit* unit, s32 difficulty);
-void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 a4, s32 a5);
+void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 setupFlags, s32 setupParam);
 s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon);

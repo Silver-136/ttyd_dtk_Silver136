@@ -13,5 +13,5 @@ typedef struct effSleepData {
     s32 delay; //0x20, per-bubble stagger (16, 32, ...)
 } effSleepData;
 
-EffectEntry* effSleepEntry(s32 a1, s32 a2, f32 a3, f32 a4, f32 a5, f32 a6, f32 a7);
+EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation);
 void effSleepMain(EffectEntry* effect);

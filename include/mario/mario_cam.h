@@ -4,7 +4,7 @@
 #include "driver/camdrv.h"
 
 s32 marioGetCamId(void);
-void marioCamZoomOffReq2(s32);
+void marioCamZoomOffReq2(s32 value);
 f32 marioGetCamFollowRate(void);
 void marioResetCamFollowRate(void);
 void marioResetCamShift(void);

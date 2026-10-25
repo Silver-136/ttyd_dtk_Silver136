@@ -325,7 +325,7 @@ s32 npcCalcScore(NpcEntry* npc);
 void npcGetBackItemEntry(NpcEntry* npc);
 void npcSetMarioAutoTalkPose(const char* stayPose, const char* talkPose);
 void npcTuningRy(NpcEntry* npc, f32 angle);
-void fbatSetAttackAnnounce(s32 a1);
+void fbatSetAttackAnnounce(s32 hitKind);
 void fbatSetAttackAnnounceEnable(void);
 BOOL npcCheckBlow(NpcEntry* npc);
 void npcClearDeadInfo(void);

@@ -1,7 +1,7 @@
 #include "dolphin/types.h"
 #include "mario/mario.h"
 
-void marioChgMot(MarioMotion);
+void marioChgMot(MarioMotion id);
 BOOL marioChkItemMotion(void);
 BOOL marioChkJump(void);
 BOOL marioChkTransform(void);

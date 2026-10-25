@@ -30,13 +30,13 @@ void msgWindow_Add(const char* msg, s32 id);
 #include "party.h"
 extern float __fabsf(float);
 
-s32 msgWindow_Entry(const char* msg, s32 a2, s32 a3);
+s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 s32 BattleTransID(EventEntry* event, s32 type);
 
 // the message window's MsgWinData lives in its userdata block
 #define MSGW(w) ((MsgWinData*)(w)->userdata->address)
 
-s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 a3, EvtWord name) {
+s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name) {
     NpcEntry* npc = NULL;
     WindowEntry* win;
     const char* m;
@@ -47,7 +47,7 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
             m = msg;
             msg = "DIRECT";
         }
-        event->printWindowId = msgWindow_Entry(m, a3, (s16)event->msgPriority);
+        event->printWindowId = msgWindow_Entry(m, callback, (s16)event->msgPriority);
         event->msgPriority = 0;
         win = windowGetPointer(event->printWindowId);
         MSGW(win)->tag = msg;

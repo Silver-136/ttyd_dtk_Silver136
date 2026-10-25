@@ -57,7 +57,7 @@ typedef struct ItemWork {
 void itemInit(void);
 void itemReInit(void);
 void itemMain(void);
-ItemEntry* itemNameToPtr(char*);
+ItemEntry* itemNameToPtr(char* name);
 
 void itemNokoForceGet(ItemEntry* entry);
 void itemPickUp(ItemEntry* entry);

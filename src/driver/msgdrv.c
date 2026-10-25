@@ -1498,7 +1498,7 @@ s32 msgIconStr2ID(const char* str) {
     return -1;
 }
 
-s32 msgWindow_Entry(const char* msg, s32 field_0x79FC, u16 priority) {
+s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     WindowEntry* window;
     char* copy;
     MsgWinData* data;
@@ -1519,7 +1519,7 @@ s32 msgWindow_Entry(const char* msg, s32 field_0x79FC, u16 priority) {
     memset(data, 0, sizeof(MsgWinData));
     data->window = window;
     data->flags = 3;
-    data->callback = field_0x79FC;
+    data->callback = callback;
     data->lastUpdateTime = gp->renderTime;
     data->openTime = gp->renderTime;
     data->talkSfxGroup = 0;

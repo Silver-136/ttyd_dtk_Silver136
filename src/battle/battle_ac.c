@@ -75,12 +75,12 @@ void BattleActionCommandDeclareACResult(BattleWork* work, BattleWeapon* weapon, 
     }
 }
 
-void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 a4, s32 a5) {
+void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 setupFlags, s32 setupParam) {
     ActionCommandEntry* entry; // r6
 
     entry = ActionCommandList;
     work->actionCommands.mAcUnit = unit;
-    work->actionCommands.setupFlags = a4;
+    work->actionCommands.setupFlags = setupFlags;
     work->actionCommands.mAcState = 0;
     work->actionCommands.mResultCount = 0;
     work->actionCommands.result = 1;
@@ -88,7 +88,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 a4
     work->actionCommands.dispcb = NULL;
     work->actionCommands.resultcb = NULL;
     work->actionCommands.deletecb = NULL;
-    work->actionCommands.setupParam = a5;
+    work->actionCommands.setupParam = setupParam;
     work->actionCommands.doneFlags = 0;
     for (; entry->id; entry++) {
         if (entry->id == id) {

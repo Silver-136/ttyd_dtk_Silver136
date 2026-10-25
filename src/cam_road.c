@@ -1097,14 +1097,14 @@ static inline f32 hokanRate(f32 t, f32 a, f32 b, f32 k, f32 o) {
     }
     return r;
 }
-static inline f32 angleLerp(f32 a0, f32 a1, f32 r) {
-    while (a0 - a1 > 3.1415927f) {
-        a0 -= 6.2831855f;
+static inline f32 angleLerp(f32 from, f32 to, f32 r) {
+    while (from - to > 3.1415927f) {
+        from -= 6.2831855f;
     }
-    while (a0 - a1 < -3.1415927f) {
-        a0 += 6.2831855f;
+    while (from - to < -3.1415927f) {
+        from += 6.2831855f;
     }
-    return r * (a1 - a0) + a0;
+    return r * (to - from) + from;
 }
 #pragma dont_inline on
 void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t) {

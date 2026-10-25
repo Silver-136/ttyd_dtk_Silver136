@@ -15,7 +15,7 @@
 //local prototypes
 void effSleepDisp(CameraId camId, EffectEntry* effect);
 
-EffectEntry* effSleepEntry(s32 a1, s32 a2, f32 x, f32 y, f32 z, f32 scale, f32 rotation) {
+EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation) {
     EffectEntry* effect;
     s32 smth;
     effSleepData* data;
@@ -31,17 +31,17 @@ EffectEntry* effSleepEntry(s32 a1, s32 a2, f32 x, f32 y, f32 z, f32 scale, f32 r
     effect->userdata = data;
     effect->callback = effSleepMain;
     effect->flags |= 2;
-    data->type = a1;
+    data->type = type;
     data->position.x = x;
     data->position.y = y;
     data->position.z = z;
     data->scale = scale;
     data->alpha = 0;
-    if (a2 <= 0) {
+    if (lifetime <= 0) {
         data->lifetime = 1000;
     }
     else {
-        data->lifetime = a2;
+        data->lifetime = lifetime;
     }
     data->age = 0;
 

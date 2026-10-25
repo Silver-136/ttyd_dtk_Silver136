@@ -900,7 +900,7 @@ void BtlUnit_OnUnitFlag(BattleUnit* unit, s32 flags);
 void BtlUnit_OffUnitFlag(BattleUnit* unit, s32 flags);
 char* BtlUnit_GetPoseNameFromType(BattleUnitPart* part, s32 type);
 
-void BtlUnit_CheckPinchStatus(BattleUnit* unit, BOOL a2);
+void BtlUnit_CheckPinchStatus(BattleUnit* unit, BOOL noAudience);
 
 void BtlUnit_SetParamToPouch(BattleUnit* unit);
 

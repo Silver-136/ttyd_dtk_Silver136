@@ -54,7 +54,7 @@ void _mapFree(void* alloc);
 #endif
 void smartInit(void);
 void smartReInit(void);
-void smartAutoFree(s32 a1);
+void smartAutoFree(s32 allocType);
 void smartFree(smartEntry* entry);
 smartEntry* smartAlloc(u32 size, u8 type);
 GXTexObj* smartTexObj(GXTexObj* obj, void** image_ptr);

@@ -60,7 +60,7 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
 }
 
 extern ItemData itemDataTable[];
-s32 msgWindow_Entry(const char* msg, s32 a2, s32 a3);
+s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 EffectEntry* effHagetakaFlushN64Entry(s32 a1, s32 a2, f32 x, f32 y, f32 z, f32 scale);
 
 BOOL itemGetNokoCheck(ItemEntry* entry);

@@ -36,7 +36,7 @@ typedef struct effKemuri1EWork {
     s32 field_0x4C;
 } effKemuri1EWork;
 
-EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 a5) {
+EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
 
 
     EffectEntry* effect;
@@ -170,7 +170,7 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 a5) {
                 data->f24 = 0.099999994f;
                 data->f28 = 0.94f;
                 data->f2C = 0.94f;
-                angle2 = (a5 + (f32)(((i - 1) * 360) / (effCount - 1))) * 6.2831855f / 360.0f;
+                angle2 = (angleOfs + (f32)(((i - 1) * 360) / (effCount - 1))) * 6.2831855f / 360.0f;
                 tmp = sin(angle2);
                 data->position.x = 10.0f * -tmp;
                 data->position.y = 0.0f;

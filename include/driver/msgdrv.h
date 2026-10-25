@@ -87,7 +87,7 @@ void msgLoad(const char* filename, s32 index);
 MessageWork* msgGetWork(void);
 
 const char* msgSearch(const char* tag);
-BOOL _ismbblead(u32 a1);
+BOOL _ismbblead(u32 c);
 
 char* msgGetCommand(char* msg, char* cmd, char* arg);
 s32 msgIconStr2ID(const char* str);
