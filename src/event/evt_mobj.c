@@ -3048,13 +3048,13 @@ void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
     mobj->paperTexData = smartAlloc(GXGetTexBufferSize(hh, ww, 6, 0, 0), 3);
     GXSetTexCopySrc(0, 0, h, w);
     GXSetTexCopyDst(hh, ww, (GXTexFmt)6, 1);
-    GXSetZMode(1, (GXCompare)3, 1);
+    GXSetZMode(1, GX_LEQUAL, 1);
     GXCopyTex(mobj->paperTexData->address, 1);
     GXInvalidateTexAll();
     GXPixModeSync();
     GXTexModeSync();
-    GXInitTexObj(&mobj->paperTexObj, mobj->paperTexData->address, hh, ww, (GXTexFmt)6, (GXTexWrapMode)0, (GXTexWrapMode)0, 0);
-    GXInitTexObjLOD(&mobj->paperTexObj, (GXTexFilter)0, (GXTexFilter)0, 0.0f, 0.0f, 0.0f, 0, 0, (GXAnisotropy)0);
+    GXInitTexObj(&mobj->paperTexObj, mobj->paperTexData->address, hh, ww, (GXTexFmt)6, GX_CLAMP, GX_CLAMP, 0);
+    GXInitTexObjLOD(&mobj->paperTexObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     PSMTXIdentity(mobj->paperTexMtx);
     memcpy(camGetPtr(camId), saved, 0x260);
 }

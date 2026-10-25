@@ -417,7 +417,7 @@ void btlseqEnd(BattleWork* wp) {
         flag = 0;
         {
             BattleUnit* party = BattleGetPartyPtr(wp);
-            if (party && BtlUnit_CheckStatus(party, (StatusEffectType)0x1B)) {
+            if (party && BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
                 flag = 1;
             }
         }
@@ -694,7 +694,7 @@ void btlseqEnd(BattleWork* wp) {
             ok = 0;
         } else if (party2) {
             if (((u32)mario->mStatusFlags & 0x10000000) || ((u32)mario->mStatusFlags & 0x20000000) ||
-                BtlUnit_CheckStatus(party2, (StatusEffectType)0x1B)) {
+                BtlUnit_CheckStatus(party2, STATUS_INSTANT_KILL)) {
                 ok = 0;
             }
         }
@@ -755,7 +755,7 @@ void btlseqEnd(BattleWork* wp) {
             ok = 0;
         } else if (party) {
             if (((u32)mario->mStatusFlags & 0x10000000) || ((u32)mario->mStatusFlags & 0x20000000) ||
-                BtlUnit_CheckStatus(party, (StatusEffectType)0x1B)) {
+                BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
                 ok = 0;
             }
         }

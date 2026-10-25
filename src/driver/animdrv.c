@@ -1610,7 +1610,7 @@ void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *
             GXInitTlutObj(&tlut, desc->CLUTHeader->data, desc->CLUTHeader->format, desc->CLUTHeader->numEntries);
             GXInitTexObjCI(&obj, desc->textureHeader->data, desc->textureHeader->width, desc->textureHeader->height, (GXCITexFmt) desc->textureHeader->format, wrapS, wrapT, mipmap, 0);
             hdr = desc->textureHeader;
-            GXInitTexObjLOD(&obj, hdr->minFilter, hdr->magFilter, hdr->minLOD, hdr->maxLOD, hdr->LODBias, (GXBool) 0, hdr->edgeLODEnable, GX_ANISO_1);
+            GXInitTexObjLOD(&obj, hdr->minFilter, hdr->magFilter, hdr->minLOD, hdr->maxLOD, hdr->LODBias, GX_FALSE, hdr->edgeLODEnable, GX_ANISO_1);
             GXLoadTlut(&tlut, 0);
             GXLoadTexObj(&obj, (GXTexMapID) i[0]);
         } else {
@@ -1633,7 +1633,7 @@ void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *
             }
             GXInitTexObj(&obj, hdr->data, hdr->width, hdr->height, (GXTexFmt) hdr->format, wrapS, wrapT, hdr->minLOD != hdr->maxLOD);
             hdr = desc->textureHeader;
-            GXInitTexObjLOD(&obj, hdr->minFilter, hdr->magFilter, hdr->minLOD, hdr->maxLOD, hdr->LODBias, (GXBool) 0, hdr->edgeLODEnable, GX_ANISO_1);
+            GXInitTexObjLOD(&obj, hdr->minFilter, hdr->magFilter, hdr->minLOD, hdr->maxLOD, hdr->LODBias, GX_FALSE, hdr->edgeLODEnable, GX_ANISO_1);
             GXLoadTexObj(&obj, (GXTexMapID) i[0]);
         }
     }
@@ -1671,7 +1671,7 @@ void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *
         }
         switch (flags) {
             case 0:
-                GXSetTexCoordGen2((GXTexCoordID) i[0], GX_TG_MTX2x4, (GXTexGenSrc) (GX_TG_TEX0 + i[0]), GX_IDENTITY, (GXBool) 0, GX_PTIDENTITY);
+                GXSetTexCoordGen2((GXTexCoordID) i[0], GX_TG_MTX2x4, (GXTexGenSrc) (GX_TG_TEX0 + i[0]), GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
                 continue;
 
             case 1:
@@ -1711,7 +1711,7 @@ void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *
 
         j = (u32)i[0] * 3; // FAKE: unsigned multiply (i >= 0, same value) shifts loop-2 colouring toward target
         texMtx = GX_TEXMTX0 + j;
-        GXSetTexCoordGen2((GXTexCoordID) i[0], GX_TG_MTX2x4, (GXTexGenSrc) (GX_TG_TEX0 + i[0]), texMtx, (GXBool) 0, GX_PTIDENTITY);
+        GXSetTexCoordGen2((GXTexCoordID) i[0], GX_TG_MTX2x4, (GXTexGenSrc) (GX_TG_TEX0 + i[0]), texMtx, GX_FALSE, GX_PTIDENTITY);
         GXLoadTexMtxImm(m, texMtx, GX_MTX2x4);
     }
 

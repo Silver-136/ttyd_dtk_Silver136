@@ -562,7 +562,7 @@ void bomhei_use_main(PartyEntry* party) {
         } else {
             evtEntryType(quake_evt, 0, 0, 0);
         }
-        eff = effSandarsEntry(pouchGetPartyAttackLv((PartyId)3), party->position.x,
+        eff = effSandarsEntry(pouchGetPartyAttackLv(PARTNER_BOBBERY), party->position.x,
                               party->position.y + party->height, party->position.z, 0.0f);
         ((EffSandarsWork*)eff->userdata)->camId = party->camId;
         fbatSandersBombTriggerOn();

@@ -870,7 +870,7 @@ void disp_texture(CameraId camId, void* param) {
     GXSetProjection(camera->projection, camera->projType);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, (GXLogicOp)7);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_OR);
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     GXSetNumChans(0);
     GXSetNumTevStages(1);
@@ -1132,7 +1132,7 @@ void disp_tec(CameraId camId, void* param) {
     camera = camGetPtr(camId);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, (GXLogicOp)7);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_OR);
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     GXSetNumChans(0);
     GXSetNumTexGens(1);
@@ -1206,7 +1206,7 @@ void disp_dummy_black(CameraId camId, void* param) {
     GXSetProjection(camera->projection, camera->projType);
     GXSetZCompLoc(GX_FALSE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, (GXLogicOp)7);
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_OR);
     GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
