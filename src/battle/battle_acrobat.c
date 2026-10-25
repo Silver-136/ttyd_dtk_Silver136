@@ -50,13 +50,13 @@ s32 BattleAcrobatMain(BattleWork* work) {
     }
     if (work->mStylishCurFrame <= 1 && work->mStylishEarlyFrames > 0) {
         for (i = 0; i < work->mStylishEarlyFrames; ++i) {
-            if (BattlePadCheckRecordTrigger(i, 0x100)) {
+            if (BattlePadCheckRecordTrigger(i, PAD_BUTTON_A)) {
                 work->mStylishResult = -1;
                 return EVT_RETURN_YIELD;
             }
         }
     }
-    if (BattlePadCheckTrigger(0x100) || doSimplified) {
+    if (BattlePadCheckTrigger(PAD_BUTTON_A) || doSimplified) {
         if (work->mStylishCurFrame <= work->mStylishWindowStart) {
             work->mStylishResult = -1;
             return EVT_RETURN_YIELD;

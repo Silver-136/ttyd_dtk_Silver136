@@ -574,7 +574,7 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
         BattleGetUnitPtr(wp, msg->unitId);
         if (msg->timer) {
             msg->timer--;
-            if (BattlePadCheckTrigger(0x300)) {
+            if (BattlePadCheckTrigger(PAD_BUTTON_A | PAD_BUTTON_B)) {
                 msg->timer = 0;
             }
             if (!msg->timer) {

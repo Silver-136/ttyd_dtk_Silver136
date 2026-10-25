@@ -125,7 +125,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
         return work->actionCommands.result;
     }
     for (i = 0; i < 20; i++) {
-        if (BattlePadCheckRecordTrigger(i, 0x100)) {
+        if (BattlePadCheckRecordTrigger(i, PAD_BUTTON_A)) {
             count++;
         }
     }
@@ -134,7 +134,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
         return work->actionCommands.result;
     }
     for (i = 0; i < successFrame; i++) {
-        if (BattlePadCheckRecordTrigger(i, 0x100)) {
+        if (BattlePadCheckRecordTrigger(i, PAD_BUTTON_A)) {
             break;
         }
     }

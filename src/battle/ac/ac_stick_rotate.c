@@ -51,25 +51,25 @@ s32 _GetInputDir(void) {
     if (AC_PARAMS(_battleWorkPointer)->button != 0 && !BattlePadCheckNow(AC_PARAMS(_battleWorkPointer)->button)) {
         return -1;
     }
-    if (BattlePadCheckNow(0x10000)) {
-        if (BattlePadCheckNow(0x80000)) {
+    if (BattlePadCheckNow(BATTLE_PAD_STICK_UP)) {
+        if (BattlePadCheckNow(BATTLE_PAD_STICK_RIGHT)) {
             return 2;
         }
-        if (BattlePadCheckNow(0x40000)) {
+        if (BattlePadCheckNow(BATTLE_PAD_STICK_LEFT)) {
             return 8;
         }
         return 1;
     }
-    if (BattlePadCheckNow(0x20000)) {
-        if (BattlePadCheckNow(0x80000)) {
+    if (BattlePadCheckNow(BATTLE_PAD_STICK_DOWN)) {
+        if (BattlePadCheckNow(BATTLE_PAD_STICK_RIGHT)) {
             return 4;
         }
-        return (BattlePadCheckNow(0x40000) != 0U) + 5;
+        return (BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) != 0U) + 5;
     }
-    if (BattlePadCheckNow(0x80000)) {
+    if (BattlePadCheckNow(BATTLE_PAD_STICK_RIGHT)) {
         return 3;
     }
-    return BattlePadCheckNow(0x40000) != 0U ? 7 : 0;
+    return BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) != 0U ? 7 : 0;
 }
 
 s32 _CalcRollDir(void) {

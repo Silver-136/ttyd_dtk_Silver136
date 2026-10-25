@@ -76,22 +76,22 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     return 0;
                 }
                 if (lw->held0 == 0) {
-                    if (BattlePadCheckTrigger(0x40000)) {
+                    if (BattlePadCheckTrigger(BATTLE_PAD_STICK_LEFT)) {
                         lw->held0 = 1;
                     }
                 } else {
                     lw->held0++;
-                    if (((s32)BattlePadCheckNow(0x40000) == 0)) {
+                    if (BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) == 0) {
                         lw->held0 = 0;
                     }
                 }
                 if (lw->held1 == 0) {
-                    if (BattlePadCheckTrigger(0x800000)) {
+                    if (BattlePadCheckTrigger(BATTLE_PAD_SUBSTICK_RIGHT)) {
                         lw->held1 = 1;
                     }
                 } else {
                     lw->held1++;
-                    if (((s32)BattlePadCheckNow(0x800000) == 0)) {
+                    if (BattlePadCheckNow(BATTLE_PAD_SUBSTICK_RIGHT) == 0) {
                         lw->held1 = 0;
                     }
                 }
@@ -118,12 +118,12 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                 lw->timer--;
                 if (lw->held0 > 0) {
                     lw->held0++;
-                } else if (((s32)BattlePadCheckNow(0x40000) == 0)) {
+                } else if (BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) == 0) {
                     lw->held0 = 1;
                 }
                 if (lw->held1 > 0) {
                     lw->held1++;
-                } else if (((s32)BattlePadCheckNow(0x800000) == 0)) {
+                } else if (BattlePadCheckNow(BATTLE_PAD_SUBSTICK_RIGHT) == 0) {
                     lw->held1 = 1;
                 }
                 if (!autoCmd) {

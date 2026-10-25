@@ -655,13 +655,13 @@ USER_FUNC(_test_rtn) {
         event->userdata[0] = 0;
     }
     // debug: pick a unit with the d-pad, then scale and move it
-    if (BattlePadMultiCheckTrigger(2, 1)) {
+    if (BattlePadMultiCheckTrigger(2, PAD_BUTTON_LEFT)) {
         event->userdata[0]++;
         if (event->userdata[0] >= 3) {
             event->userdata[0] = 0;
         }
     }
-    if (BattlePadMultiCheckTrigger(2, 2)) {
+    if (BattlePadMultiCheckTrigger(2, PAD_BUTTON_RIGHT)) {
         event->userdata[0]--;
         if (event->userdata[0] < 0) {
             event->userdata[0] = 2;
@@ -679,13 +679,13 @@ USER_FUNC(_test_rtn) {
             break;
     }
     target = BattleGetUnitPtr(wp, targetId);
-    BattlePadMultiCheckTrigger(2, 3);
-    if (BattlePadMultiCheckNow(2, 0x40)) {
+    BattlePadMultiCheckTrigger(2, PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT);
+    if (BattlePadMultiCheckNow(2, PAD_TRIGGER_L)) {
         target->mScale.x += 0.02f;
         target->mScale.y += 0.02f;
         target->mScale.z += 0.02f;
     }
-    if (BattlePadMultiCheckNow(2, 0x20)) {
+    if (BattlePadMultiCheckNow(2, PAD_TRIGGER_R)) {
         target->mScale.x -= 0.02f;
         target->mScale.y -= 0.02f;
         target->mScale.z -= 0.02f;
@@ -693,7 +693,7 @@ USER_FUNC(_test_rtn) {
     target->mPosition.x += 0.1f * keyGetStickX(2);
     target->mPosition.y += 0.1f * keyGetSubStickY(2);
     target->mPosition.z -= 0.1f * keyGetStickY(2);
-    BattlePadMultiCheckTrigger(2, 0x100);
+    BattlePadMultiCheckTrigger(2, PAD_BUTTON_A);
     return EVT_RETURN_BLOCK;
 }
 #endif

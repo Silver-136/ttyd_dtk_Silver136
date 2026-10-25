@@ -106,9 +106,9 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
             ac->mAcState = 1000;
         case 1000:
             pw->frame++;
-            if (BattlePadCheckNow(0x100)) {
+            if (BattlePadCheckNow(PAD_BUTTON_A)) {
                 ac->outputParams[1] = 1;
-                if (BattlePadCheckTrigger(0x100)) {
+                if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
                     pw->presses++;
                     pw->holdFrames = 0;
                 }

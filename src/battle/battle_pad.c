@@ -75,31 +75,31 @@ void BtlPad_WorkUpdate(BattleWorkPad* pad, s32 chan) {
     pad->mButtonsReleasedHistory[0] = gp->buttonUp[chan];
 
     if (pad->mPadData[0].stickY >= 30) {
-        pad->mButtonsHistory[0] |= (1 << 16);
+        pad->mButtonsHistory[0] |= BATTLE_PAD_STICK_UP;
     }
     if (pad->mPadData[0].stickY <= -30) {
-        pad->mButtonsHistory[0] |= (1 << 17);
+        pad->mButtonsHistory[0] |= BATTLE_PAD_STICK_DOWN;
     }
 
     if (pad->mPadData[0].stickX <= -30) {
-        pad->mButtonsHistory[0] |= (1 << 18);
+        pad->mButtonsHistory[0] |= BATTLE_PAD_STICK_LEFT;
     }
     if (pad->mPadData[0].stickX >= 30) {
-        pad->mButtonsHistory[0] |= (1 << 19);
+        pad->mButtonsHistory[0] |= BATTLE_PAD_STICK_RIGHT;
     }
 
     if (pad->mPadData[0].substickY >= 30) {
-        pad->mButtonsHistory[0] |= (1 << 20);
+        pad->mButtonsHistory[0] |= BATTLE_PAD_SUBSTICK_UP;
     }
     if (pad->mPadData[0].substickY <= -30) {
-        pad->mButtonsHistory[0] |= (1 << 21);
+        pad->mButtonsHistory[0] |= BATTLE_PAD_SUBSTICK_DOWN;
     }
 
     if (pad->mPadData[0].substickX <= -30) {
-        pad->mButtonsHistory[0] |= (1 << 22);
+        pad->mButtonsHistory[0] |= BATTLE_PAD_SUBSTICK_LEFT;
     }
     if (pad->mPadData[0].substickX >= 30) {
-        pad->mButtonsHistory[0] |= (1 << 23);
+        pad->mButtonsHistory[0] |= BATTLE_PAD_SUBSTICK_RIGHT;
     }
 
     pad->mButtonsPressedHistory[0] |= pad->mButtonsHistory[0] & ~pad->mButtonsHistory[1] & 0xFFFF0000;

@@ -96,7 +96,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
                 work->actionCommands.mAcState = 1002;
                 break;
             }
-            if (BattlePadCheckTrigger(0x100) || autoCommand) {
+            if (BattlePadCheckTrigger(PAD_BUTTON_A) || autoCommand) {
                 if (cw->inRange) {
                     work->actionCommands.result = 2;
                     work->actionCommands.mResultCount++;

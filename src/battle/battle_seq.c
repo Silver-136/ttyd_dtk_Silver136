@@ -834,7 +834,7 @@ void btlseqTurn(BattleWork *wp)
     {
       wp->ruleDispTimer--;
     }
-      if ((wp->ruleDispTimer <= 0) || BattlePadCheckTrigger(0x300))
+      if ((wp->ruleDispTimer <= 0) || BattlePadCheckTrigger(PAD_BUTTON_A | PAD_BUTTON_B))
     {
       BattleIncSeq(wp, SEQ_TURN);
       break;

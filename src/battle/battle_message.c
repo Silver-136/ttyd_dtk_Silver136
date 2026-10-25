@@ -63,7 +63,7 @@ USER_FUNC(btlevtcmd_AnnounceMessage) {
     dispEntry(CAMERA_2D, 900.0f, 1, _disp, NULL);
 #ifdef VERSION_G8ME01
     if (type == 2) {
-        if (BattlePadCheckTrigger(0x100) || BattlePadCheckTrigger(0x200)) {
+        if (BattlePadCheckTrigger(PAD_BUTTON_A) || BattlePadCheckTrigger(PAD_BUTTON_B)) {
             event->userdata[0] = 0;
         }
     }

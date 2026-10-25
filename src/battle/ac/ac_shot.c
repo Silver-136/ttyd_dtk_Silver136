@@ -146,7 +146,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     }
                     break;
                 }
-                if (!BattlePadCheckTrigger(0x100) && !SH_OUT(ac)[0] && ac->countdown <= 0) {
+                if (!BattlePadCheckTrigger(PAD_BUTTON_A) && !SH_OUT(ac)[0] && ac->countdown <= 0) {
                     if (--sw->timer <= 0) {
                         SH_OUT(ac)[1] = (s32)(sw->maxV * sw->speed / 100.0f);
                         if ((f32)SH_OUT(ac)[1] < sw->minV) {
@@ -207,7 +207,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     } else {
                         ac->mAcState = 1000;
                     }
-                } else if (!BattlePadCheckNow(0x100)) {
+                } else if (!BattlePadCheckNow(PAD_BUTTON_A)) {
                     SH_OUT(ac)[1] = (s32)(sw->maxV * sw->speed / 100.0f);
                     if ((f32)SH_OUT(ac)[1] < sw->minV) {
                         SH_OUT(ac)[1] = (s32)sw->minV;

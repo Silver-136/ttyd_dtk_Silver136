@@ -466,7 +466,7 @@ void btlseqEnd(BattleWork* wp) {
     case 0x700000B:
         if (work->expDisp > 0) {
             work->timer = work->timer + 1;
-            if ((s32)(s32)BattlePadCheckNow(0x300) != 0) {
+            if (BattlePadCheckNow(PAD_BUTTON_A | PAD_BUTTON_B) != 0) {
                 if (work->timer < 1000) {
                     work->timer = work->timer + 1000;
                 }
@@ -568,12 +568,12 @@ void btlseqEnd(BattleWork* wp) {
             if (evtCheckID(work->evtId)) break;
             work->evtId = 0;
         }
-        if (BattlePadCheckTrigger(0x80000)) {
+        if (BattlePadCheckTrigger(BATTLE_PAD_STICK_RIGHT)) {
             if (work->selected < work->objCount - 1) {
                 work->selected = work->selected + 1;
             }
         }
-        if (BattlePadCheckTrigger(0x40000)) {
+        if (BattlePadCheckTrigger(BATTLE_PAD_STICK_LEFT)) {
             if (work->selected > 0) {
                 work->selected = work->selected - 1;
             }
@@ -599,7 +599,7 @@ void btlseqEnd(BattleWork* wp) {
                 break;
             }
         }
-        if (BattlePadCheckTrigger(0x100)) {
+        if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
             s32 ok = 0;
             switch (work->selected) {
             case 0:
@@ -625,23 +625,23 @@ void btlseqEnd(BattleWork* wp) {
         break;
     }
     case 0x7000013:
-        if (BattlePadCheckTrigger(0x20000)) {
+        if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
             work->cursor = work->cursor + 1;
             if (work->cursor >= work->cursorCount) {
                 work->cursor = 0;
             }
         }
-        if (BattlePadCheckTrigger(0x10000)) {
+        if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
             work->cursor = work->cursor - 1;
             if (work->cursor < 0) {
                 work->cursor = work->cursorCount - 1;
             }
         }
-        if (BattlePadCheckTrigger(0x200)) {
+        if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
             work->flags &= ~0x10;
             SS(0x7000012);
         }
-        if (BattlePadCheckTrigger(0x100)) {
+        if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
             if (work->cursor == 0) {
                 work->flags &= ~0x18;
                 SS(0x7000015);
