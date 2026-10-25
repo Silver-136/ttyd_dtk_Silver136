@@ -26,6 +26,7 @@
 #include "driver/msgdrv.h"
 #include "driver/windowdrv.h"
 #include "sfx_name_word.h"
+#include "mario/mario_party.h"
 
 // TODO: move all this into other TUs
 typedef enum winTexMode {

@@ -12,6 +12,7 @@
 #include "system.h"
 #include "libc_decls.h"
 #include "cam_road.h"
+#include "cam_shift.h"
 
 // NOTE: this is ~roughly 12.5 degrees in radians, ideally it should be MTXDegToRad(12.5) or 5PI/72
 #define DEG_TO_RAD_12_5__1 0.21816612780094147

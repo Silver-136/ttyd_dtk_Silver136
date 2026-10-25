@@ -441,7 +441,7 @@ HitEntry* searchUnder2(f32* out, f32 x, f32 y, f32 z) {
 }
 
 extern void marioSetFallPara(void);
-extern BOOL marioChgMotSub(s32 mot, s32 a);
+extern void marioChgMotSub(MarioMotion id, s32 callPost);
 
 static inline BOOL marioChkGndOk(void) {
     MarioWork* w = marioGetPtr();
