@@ -136,15 +136,17 @@
 #include "eff/eff_majinai.h"
 #include "mario/mario_party.h"
 #include "manager/evtmgr_cmd.h"
+#include "eff/n64/eff_wangflush_n64.h"
+#include "eff/n64/eff_rothammer_success_n64.h"
+#include "eff/eff_toge_flush.h"
+#include "eff/eff_levelup.h"
 
 #include "party.h"
 
 extern EffectEntry* effFlowerN64Entry(s32, s32, f32, f32, f32);
 extern EffectEntry* effFallLeafN64Entry(s32, s32, f32, f32, f32);
 extern EffectEntry* effGarekiN64Entry(s32, f32, f32, f32, f32);
-extern EffectEntry* effWangFlushN64Entry(s32, s32, f32, f32, f32);
 extern EffectEntry* effMagic3N64Entry(s32, s32, f32, f32, f32);
-extern EffectEntry* effRotHammerSuccessN64Entry(s32, s32, s32, f32, f32, f32);
 extern EffectEntry* effRotHammerFailN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effFireFlowerN64Entry(s32, s32, f32, f32, f32);
 extern EffectEntry* effWhirlwindN64Entry(s32, s32, s32, f32);
@@ -158,8 +160,6 @@ extern EffectEntry* effHagetakaFlushN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
 extern EffectEntry* effKemuriEntry(s32, f32, f32, f32, f32);
-extern EffectEntry* effTogeFlushEntry(s32, s32, f32, f32, f32);
-extern EffectEntry* effLevelupEntry(s32, s32, f32, f32, f32);
 extern EffectEntry* effFallEntry(s32, s32, s32, f32, f32, f32, f32, f32, f32);
 extern EffectEntry* effNozleEntry(s32, s32, f32, f32, f32, f32, f32);
 extern EffectEntry* effParticleEntry(s32, s32, s32, f32, f32, f32, f32, f32, f32);
@@ -249,7 +249,7 @@ USER_FUNC(evt_eff) {
             entry = effChargeEntry(int2, int7, float3, float4, float5, float6);
             break;
         case 19:
-            entry = effTogeFlushEntry(int2, int6, float3, float4, float5);
+            entry = effTogeFlushEntry(int2, float3, float4, float5, int6);
             break;
         case 20:
             entry = effIceEntry(int2, int7, float3, float4, float5, float6);
@@ -267,7 +267,7 @@ USER_FUNC(evt_eff) {
             entry = effStageClearEntry(int2, float3, float4, float5);
             break;
         case 33:
-            entry = effLevelupEntry(int2, int6, float3, float4, float5);
+            entry = effLevelupEntry(int2, float3, float4, float5, int6);
             break;
         case 35:
             entry = effFallEntry(int2, int9, int10, float3, float4, float5, float6, float7, float8);
@@ -543,7 +543,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 20:
-            effect = effWangFlushN64Entry(int2, int6, float3, float4, float5);
+            effect = effWangFlushN64Entry(int2, float3, float4, float5, int6);
             break;
 
         case 21:
@@ -604,7 +604,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 36:
-            effect = effRotHammerSuccessN64Entry(int2, int6, int7, float3, float4, float5);
+            effect = effRotHammerSuccessN64Entry(int2, float3, float4, float5, int6, int7);
             break;
 
         case 37:

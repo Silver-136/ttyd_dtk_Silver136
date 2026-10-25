@@ -17,6 +17,7 @@
 #include "evt/evt_item.h"
 #include "evt/evt_hit.h"
 #include "evt/evt_pouch.h"
+#include "eff/eff_fire.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mario.h"
@@ -36,7 +37,6 @@ NpcEntry* fbatNpcTalkCheck(void);
 static char tmp[32];
 Vec camPt;
 Vec camAt;
-EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 
 USER_FUNC(evt_mario_flag_onoff);
 USER_FUNC(evt_win_item_select);
@@ -1415,7 +1415,7 @@ USER_FUNC(fire) {
 
     mapObjGetPos(name, &pos);
     mapObjFlagOn(name, 0x4000);
-    effFireEntry(3, pos.x, pos.y - 4.0f, pos.z, 0.5f, 0);
+    effFireEntry(3, 0, pos.x, pos.y - 4.0f, pos.z, 0.5f);
     return EVT_RETURN_DONE;
 }
 

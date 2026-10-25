@@ -4,6 +4,7 @@
 #include "memory.h"
 #include <stdlib.h>
 #include "eff/n64/eff_snow_dust_n64.h"
+#include "eff/n64/eff_vapor_n64.h"
 
 typedef struct EffSnowmanN64Work {
     s32 type;      // 0x0
@@ -26,7 +27,6 @@ typedef struct EffSnowmanN64Work {
     s32 phase;     // 0x5C
 } EffSnowmanN64Work;
 
-EffectEntry* effVaporN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 delay);
 
 static s8 jump_hscale_data[] = {100, 90, 82, 76, 72, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
 static u8 land_hscale_data[] = "dZRLHFJYdlnlf`_`ceddddddddd";
@@ -211,9 +211,7 @@ void effSnowmanMain(EffectEntry* effect) {
             break;
     }
     if ((frame & 7) == 1) {
-        effVaporN64Entry(2, work->position.x + work->offset.x + (f32)(rand() % 60) - 30.0f,
-                         50.0f + (work->position.y + work->offset.y + (f32)(rand() % 100)),
-                         work->position.z + work->offset.z, 4.0f, 40);
+        effVaporN64Entry(2, 40, work->position.x + work->offset.x + (f32)(rand() % 60) - 30.0f, 50.0f + (work->position.y + work->offset.y + (f32)(rand() % 100)), work->position.z + work->offset.z, 4.0f);
         effSnowDustN64Entry(1, 10, 30, work->position.x + work->offset.x, 10.0f + (work->position.y + work->offset.y),
                             60.0f + (work->position.z + work->offset.z), 60.0f, 100.0f, 2.0f);
     }

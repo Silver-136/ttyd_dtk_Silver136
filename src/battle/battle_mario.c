@@ -19,6 +19,7 @@
 #include "party/party_motion.h"
 #include "driver/npcdrv.h"
 #include "battle/battle_audience.h"
+#include "eff/eff_fire.h"
 static USER_FUNC(_get_mario_hammer_lv);
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"
@@ -34,7 +35,6 @@ static USER_FUNC(_get_mario_hammer_lv);
 #include "system.h"
 #include "pmario_sound.h"
 
-EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 duration);
 void BtlUnit_SetAnim(BattleUnitPart* part, s32 anim);
 
 #include "battle/battle_unit.h"
@@ -6634,7 +6634,7 @@ USER_FUNC(_mario_fire_ball_controll) {
     EffectEntry* eff;
     if (isFirstCall) {
         event->userdata[0] = 0;
-        event->userdata[1] = (EvtWord)effFireEntry(5, 0.0f, 0.0f, 0.0f, battle_mario_one, 1000);
+        event->userdata[1] = (EvtWord)effFireEntry(5, 1000, 0.0f, 0.0f, 0.0f, battle_mario_one);
 
     }
     eff = (EffectEntry*)event->userdata[1];

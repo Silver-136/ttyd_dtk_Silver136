@@ -4,6 +4,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_map.h"
 #include "driver/mapdrv.h"
+#include "eff/eff_fire.h"
 
 #include "driver/effdrv.h"
 #include "battle/battle.h"
@@ -16,7 +17,6 @@
 
 EffectEntry* hi_fire_eff[6];
 s8 hi_fire_end_flag[4];
-EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 
 USER_FUNC(_gear_rotate);
 USER_FUNC(check_battle_end);
@@ -3483,7 +3483,7 @@ USER_FUNC(hi_fire_main) {
     if (isFirstCall) {
         hi_fire_end_flag[0] = 0;
         for (i = 0; i < 6; i++) {
-            hi_fire_eff[i] = effFireEntry(8, 0.0f, -1000.0f, 0.0f, 1.0f, 1000);
+            hi_fire_eff[i] = effFireEntry(8, 1000, 0.0f, -1000.0f, 0.0f, 1.0f);
         }
     }
     if (hi_fire_end_flag[0]) {
