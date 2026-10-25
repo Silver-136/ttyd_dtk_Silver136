@@ -4,6 +4,17 @@
 #include "manager/filemgr.h"
 #include <dolphin/os.h>
 
+#ifdef VERSION_G8ME01
+typedef struct LogoWork {
+    FileEntry* texture; //0x0
+    s32 page; //0x4
+    OSTime lastInput; //0x8
+    BOOL skipStory; //0x10
+    s32 progState; //0x14
+    BOOL progressive; //0x18
+    s32 toggle; //0x1C
+} LogoWork;
+#else
 typedef struct LogoWork {
     BOOL progressive; //0x0
     s32 promptStep; //0x4, progressive-scan prompt step
@@ -15,6 +26,7 @@ typedef struct LogoWork {
     BOOL skipStory; //0x20
     u8 pad_24[0x28 - 0x24]; //0x24, never accessed
 } LogoWork;
+#endif
 
 void seq_logoInit(SequenceWork* work);
 void seq_logoMain(SequenceWork* work);

@@ -1,11 +1,5 @@
-#ifdef VERSION_G8ME01
-#define LogoWork LogoWorkJP
-#endif
 #include "seq/seq_logo.h"
 #include "libc_decls.h"
-#ifdef VERSION_G8ME01
-#undef LogoWork
-#endif
 #include "driver/arcdrv.h"
 #include "driver/effdrv.h"
 #include "driver/envdrv.h"
@@ -26,16 +20,6 @@
 #include <string.h>
 
 #ifdef VERSION_G8ME01
-typedef struct LogoWork {
-    FileEntry* texture; //0x0
-    s32 page; //0x4
-    OSTime lastInput; //0x8
-    BOOL skipStory; //0x10
-    s32 progState; //0x14
-    BOOL progressive; //0x18
-    s32 toggle; //0x1C
-} LogoWork;
-
 static inline s32* logoStoryTime(void);
 extern u32 seq_logo_zero_color;
 #endif
