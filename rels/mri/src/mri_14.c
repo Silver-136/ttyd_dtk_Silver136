@@ -265,7 +265,7 @@ USER_FUNC(starstone_rotate_func) {
     char* name = (char*)evtGetValue(event, args[0]);
     f32 angle = evtGetValue(event, args[1]);
 
-    ((EffStarStoneWork*)itemNameToPtr(name)->effect->userdata)->rotY = angle;
+    ((EffStarStoneWork*)itemNameToPtr(name)->effect->userdata)->rot.y = angle;
     return EVT_RETURN_BLOCK;
 }
 

@@ -290,7 +290,7 @@ static USER_FUNC(starstone_set_ry) {
     f32 ry = evtGetFloat(event, args[1]);
     EffectEntry* eff = effNameToPtr(name);
 
-    ((EffStarStoneWork*)eff->userdata)->rotY = ry - 360.0f * ((s32)ry / 360);
+    ((EffStarStoneWork*)eff->userdata)->rot.y = ry - 360.0f * ((s32)ry / 360);
     return EVT_RETURN_DONE;
 }
 
@@ -838,7 +838,7 @@ USER_FUNC(tiz_stone) {
     if (eff != NULL) {
         ((EffStarStoneWork*)eff->userdata)->cam = 7;
         ((EffStarStoneWork*)eff->userdata)->a = 255.0f * t;
-        ((EffStarStoneWork*)eff->userdata)->rotY = 5.0f * (360.0f * t);
+        ((EffStarStoneWork*)eff->userdata)->rot.y = 5.0f * (360.0f * t);
     }
     eff = effNameToPtr("tiz_dust2");
     if (eff != NULL) {

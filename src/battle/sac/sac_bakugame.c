@@ -118,13 +118,6 @@ typedef struct BakuWork {
     u8 pad2b4[4];
 } BakuWork;
 
-typedef struct StarEffWork {
-    u8 pad0[8];
-    Vec pos;  // 0x8
-    f32 scl;  // 0x14
-    Vec rot;  // 0x18
-} StarEffWork;
-
 typedef struct AudM {
     u32 flags;
     u8 pad4[0xE8 - 0x4];
@@ -264,14 +257,14 @@ static USER_FUNC(main_star) {
         break;
     }
     if (w->eff) {
-        StarEffWork* e = (StarEffWork*)w->eff->userdata;
-        e->pos.x = w->spos.x;
-        e->pos.y = w->spos.y;
-        e->pos.z = w->spos.z;
+        EffStarStoneWork* e = (EffStarStoneWork*)w->eff->userdata;
+        e->position.x = w->spos.x;
+        e->position.y = w->spos.y;
+        e->position.z = w->spos.z;
         e->rot.x = w->rot.x;
         e->rot.y = w->rot.y;
         e->rot.z = w->rot.z;
-        e->scl = 1.5f * w->scale.x;
+        e->scale = 1.5f * w->scale.x;
     }
     dispEntry(CAMERA_3D, 0.0f, 2, bakuGameDispStar, NULL);
     return 0;

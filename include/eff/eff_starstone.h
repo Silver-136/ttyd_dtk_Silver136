@@ -10,9 +10,8 @@ typedef struct EffStarStoneWork {
     u16 flags;       // 0x4
     Vec position;    // 0x8
     f32 scale;       // 0x14
-    f32 f18;         // 0x18
-    f32 rotY;        // 0x1C, degrees (stone_ry)
-    f32 f20;         // 0x20
+    Vec rot;         // 0x18, degrees; drawn turned about y by rot.y, about z by rot.z, then about y by rot.x
+                     // (rot.y is stone_ry)
     f32 f24;         // 0x24
     f32 f28;         // 0x28
     s32 timer;       // 0x2C

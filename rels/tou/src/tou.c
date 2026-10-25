@@ -85,7 +85,6 @@ static void disp_proc(CameraId cameraId, void* param);
 typedef struct GansWork { smartEntry* buf; GXTexObj tex; s32 onoff; s32 alpha; s32 ready; } GansWork;
 GansWork* gans_wp;
 void gans_tex(CameraId cameraId, void* param);
-typedef struct StarStoneWork { u8 field_0x0[8]; Vec pos; u8 field_0x14[8]; f32 rot; } StarStoneWork;
 static s32 champion_belt_onoff;
 
 USER_FUNC(evt_mario_dispflag_onoff);
@@ -2458,7 +2457,7 @@ static f32 camGetRy(void) {
 }
 
 USER_FUNC(tou_champion_belt) {
-    void** udPtr; // FAKE: alias of &eff->userdata; a typed StarStoneWork* local or direct eff->userdata changes codegen
+    void** udPtr; // FAKE: alias of &eff->userdata; a typed EffStarStoneWork* local or direct eff->userdata changes codegen
     EffectEntry* eff;
     s32 idx;
     Vec* positions;
@@ -2479,23 +2478,23 @@ USER_FUNC(tou_champion_belt) {
     angle = reviseAngle(camGetRy() - pose->rotationY);
     eff = event->userdatap[0];
     udPtr = &eff->userdata;
-    ((StarStoneWork*)(*udPtr))->pos.x = positions[idx].x;
-    ((StarStoneWork*)(*udPtr))->pos.y = positions[idx].y;
-    ((StarStoneWork*)(*udPtr))->pos.z = positions[idx].z;
+    ((EffStarStoneWork*)(*udPtr))->position.x = positions[idx].x;
+    ((EffStarStoneWork*)(*udPtr))->position.y = positions[idx].y;
+    ((EffStarStoneWork*)(*udPtr))->position.z = positions[idx].z;
     if ((angle > 90.0f && angle <= 270.0f) || (angle < -90.0f && angle >= -270.0f)) {
-        ((StarStoneWork*)(*udPtr))->rot = 8.0f - (angle + camGetPtr(CAMERA_3D)->viewYaw);
+        ((EffStarStoneWork*)(*udPtr))->rot.y = 8.0f - (angle + camGetPtr(CAMERA_3D)->viewYaw);
     } else {
-        ((StarStoneWork*)(*udPtr))->rot = -(angle + camGetPtr(CAMERA_3D)->viewYaw) - 8.0f;
+        ((EffStarStoneWork*)(*udPtr))->rot.y = -(angle + camGetPtr(CAMERA_3D)->viewYaw) - 8.0f;
     }
     if (npc->position.y <= -1000.0f) {
-        ((StarStoneWork*)(*udPtr))->pos.x = 0.0f;
-        ((StarStoneWork*)(*udPtr))->pos.y = -1000.0f;
-        ((StarStoneWork*)(*udPtr))->pos.z = 0.0f;
+        ((EffStarStoneWork*)(*udPtr))->position.x = 0.0f;
+        ((EffStarStoneWork*)(*udPtr))->position.y = -1000.0f;
+        ((EffStarStoneWork*)(*udPtr))->position.z = 0.0f;
     }
     if (champion_belt_onoff) {
-        ((StarStoneWork*)(*udPtr))->pos.x = 0.0f;
-        ((StarStoneWork*)(*udPtr))->pos.y = -1000.0f;
-        ((StarStoneWork*)(*udPtr))->pos.z = 0.0f;
+        ((EffStarStoneWork*)(*udPtr))->position.x = 0.0f;
+        ((EffStarStoneWork*)(*udPtr))->position.y = -1000.0f;
+        ((EffStarStoneWork*)(*udPtr))->position.z = 0.0f;
     }
     return EVT_RETURN_BLOCK;
 }

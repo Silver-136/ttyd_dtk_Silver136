@@ -148,13 +148,6 @@ s32 wait_star_stone_up(void) {
 
 void zubaStarDispStar(CameraId cam, void* param);
 
-typedef struct StarStoneData {
-    u8 pad0[8];
-    Vec pos;
-    f32 scale;
-    Vec rot;
-} StarStoneData;
-
 
 s32 main_star(void) {
     ZubaStarWork* w = GetZubaStarPtr();
@@ -207,10 +200,10 @@ s32 main_star(void) {
         break;
     }
     if (w->eff) {
-        StarStoneData* d = (StarStoneData*)w->eff->userdata;
-        d->pos.x = w->pos.x;
-        d->pos.y = w->pos.y;
-        d->pos.z = w->pos.z;
+        EffStarStoneWork* d = (EffStarStoneWork*)w->eff->userdata;
+        d->position.x = w->pos.x;
+        d->position.y = w->pos.y;
+        d->position.z = w->pos.z;
         d->rot.x = w->rot.x;
         d->rot.y = w->rot.y;
         d->rot.z = w->rot.z;

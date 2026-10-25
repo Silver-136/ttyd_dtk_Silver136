@@ -427,7 +427,7 @@ USER_FUNC(hoshi_delete) {
 USER_FUNC(hoshi_r) {
     EffectEntry* eff = (EffectEntry*)event->lwData[10];
 
-    ((EffStarStoneWork*)eff->userdata)->rotY = evtGetValue(event, event->args[0]);
+    ((EffStarStoneWork*)eff->userdata)->rot.y = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 

@@ -3188,7 +3188,7 @@ static USER_FUNC(starstone_set_ry) {
     const char* name = (const char*)evtGetValue(event, args[0]);
     f32 ry = evtGetFloat(event, args[1]);
 
-    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rotY = ry;
+    ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
     return EVT_RETURN_DONE;
 }
 

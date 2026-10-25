@@ -3973,7 +3973,7 @@ s32 evt_boss_stone_r(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     EffectEntry* eff = itemNameToPtr("stone")->effect;
 
-    ((EffStarStoneWork*)eff->userdata)->rotY = evtGetFloat(event, args[0]);
+    ((EffStarStoneWork*)eff->userdata)->rot.y = evtGetFloat(event, args[0]);
     return EVT_RETURN_DONE;
 }
 

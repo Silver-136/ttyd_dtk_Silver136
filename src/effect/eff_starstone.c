@@ -289,11 +289,11 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
     PSMTXTrans(m, (w)->position.x + (tx), (w)->position.y, (w)->position.z + (tz));    \
     PSMTXScale(s, sc, sc, sc);                                                         \
     PSMTXConcat(m, s, m);                                                              \
-    PSMTXRotRad(r, 'y', MTXDegToRad((w)->rotY));                                        \
+    PSMTXRotRad(r, 'y', MTXDegToRad((w)->rot.y));                                        \
     PSMTXConcat(m, r, m);                                                              \
-    PSMTXRotRad(r, 'z', MTXDegToRad(nz(w)->f20));                                      \
+    PSMTXRotRad(r, 'z', MTXDegToRad(nz(w)->rot.z));                                      \
     PSMTXConcat(m, r, m);                                                              \
-    PSMTXRotRad(r, 'y', MTXDegToRad(ny(w)->f18));                                      \
+    PSMTXRotRad(r, 'y', MTXDegToRad(ny(w)->rot.x));                                      \
     PSMTXConcat(m, r, m);                                                              \
     PSMTXConcat(cam->view, m, m);                                                      \
     GXLoadPosMtxImm(m, 0);                                                             \
@@ -340,7 +340,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
-    work->rotY = 0.0f;
+    work->rot.y = 0.0f;
     work->scale = 1.5f * scale;
     work->f24 = 0.0f;
     work->f28 = 0.0f;
@@ -485,10 +485,10 @@ void effStarStoneMain(EffectEntry* effect) {
             w->f4c -= (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
             w->f50 += (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
             w->f54 += (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
-            w->f20 += (90.0f - w->f20) / 10.0f;
+            w->rot.z += (90.0f - w->rot.z) / 10.0f;
         }
         if (w->state > 3) {
-            w->f18 += (-90.0f - w->f18) / 10.0f;
+            w->rot.x += (-90.0f - w->rot.x) / 10.0f;
         }
         break;
     }
@@ -555,7 +555,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
     PSMTXConcat(m, s, m);
-    PSMTXRotRad(r, 'y', MTXDegToRad(w->rotY));
+    PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
     PSMTXConcat(m, r, m);
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, 0);
@@ -577,7 +577,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
     PSMTXScale(s, w->scale, w->scale, w->scale);
     PSMTXConcat(m, s, m);
-    PSMTXRotRad(r, 'y', MTXDegToRad(w->rotY));
+    PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
     PSMTXConcat(m, r, m);
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, 0);
@@ -643,11 +643,11 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
   PSMTXTrans(m, w->position.x + w->f48, w->position.y, w->position.z + w->f4c);
   PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
   PSMTXConcat(m, s, m);
-  PSMTXRotRad(r, 'y', w->rotY * 0.01745329252f);
+  PSMTXRotRad(r, 'y', w->rot.y * 0.01745329252f);
   PSMTXConcat(m, r, m);
-  PSMTXRotRad(r, 'z', w->f20 * 0.01745329252f);
+  PSMTXRotRad(r, 'z', w->rot.z * 0.01745329252f);
   PSMTXConcat(m, r, m);
-  PSMTXRotRad(r, 'y', w->f18 * 0.01745329252f);
+  PSMTXRotRad(r, 'y', w->rot.x * 0.01745329252f);
   PSMTXConcat(m, r, m);
   PSMTXConcat(cam->view, m, m);
   GXLoadPosMtxImm(m, 0);
@@ -675,11 +675,11 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
   PSMTXTrans(m, w->position.x + w->f50, w->position.y, w->position.z + w->f54);
   PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
   PSMTXConcat(m, s, m);
-  PSMTXRotRad(r, 'y', w->rotY * 0.01745329252f);
+  PSMTXRotRad(r, 'y', w->rot.y * 0.01745329252f);
   PSMTXConcat(m, r, m);
-  PSMTXRotRad(r, 'z', (-w->f20) * 0.01745329252f);
+  PSMTXRotRad(r, 'z', (-w->rot.z) * 0.01745329252f);
   PSMTXConcat(m, r, m);
-  PSMTXRotRad(r, 'y', (-w->f18) * 0.01745329252f);
+  PSMTXRotRad(r, 'y', (-w->rot.x) * 0.01745329252f);
   PSMTXConcat(m, r, m);
   PSMTXConcat(cam->view, m, m);
   GXLoadPosMtxImm(m, 0);
@@ -738,11 +738,11 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
   PSMTXTrans(m, w->position.x + w->f48, w->position.y, w->position.z + w->f4c);
   PSMTXScale(s, w->scale, w->scale, w->scale);
   PSMTXConcat(m, s, m);
-  PSMTXRotRad(r, 'y', w->rotY * 0.01745329252f);
+  PSMTXRotRad(r, 'y', w->rot.y * 0.01745329252f);
   PSMTXConcat(m, r, m);
-  PSMTXRotRad(r, 'z', w->f20 * 0.01745329252f);
+  PSMTXRotRad(r, 'z', w->rot.z * 0.01745329252f);
   PSMTXConcat(m, r, m);
-  PSMTXRotRad(r, 'y', w->f18 * 0.01745329252f);
+  PSMTXRotRad(r, 'y', w->rot.x * 0.01745329252f);
   PSMTXConcat(m, r, m);
   PSMTXConcat(cam->view, m, m);
   GXLoadPosMtxImm(m, 0);
@@ -770,11 +770,11 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect)
   PSMTXTrans(m, w->position.x + w->f50, w->position.y, w->position.z + w->f54);
   PSMTXScale(s, w->scale, w->scale, w->scale);
   PSMTXConcat(m, s, m);
-  PSMTXRotRad(r, 'y', w->rotY * 0.01745329252f);
+  PSMTXRotRad(r, 'y', w->rot.y * 0.01745329252f);
   PSMTXConcat(m, r, m);
-  PSMTXRotRad(r, 'z', (-w->f20) * 0.01745329252f);
+  PSMTXRotRad(r, 'z', (-w->rot.z) * 0.01745329252f);
   PSMTXConcat(m, r, m);
-  PSMTXRotRad(r, 'y', (-w->f18) * 0.01745329252f);
+  PSMTXRotRad(r, 'y', (-w->rot.x) * 0.01745329252f);
   PSMTXConcat(m, r, m);
   PSMTXConcat(cam->view, m, m);
   GXLoadPosMtxImm(m, 0);

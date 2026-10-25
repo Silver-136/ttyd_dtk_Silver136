@@ -6014,7 +6014,7 @@ static USER_FUNC(starstone_set_ry) {
 
     for (i = 0; i < 7; i++) {
         sprintf(name, "starstone%d", i);
-        ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rotY = ry;
+        ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rot.y = ry;
     }
     return EVT_RETURN_DONE;
 }

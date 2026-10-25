@@ -283,9 +283,9 @@ USER_FUNC(tou_champion_belt) {
     (*work)->position.y = positions[group].y;
     (*work)->position.z = positions[group].z;
     if ((angle > 90.0f && angle <= 270.0f) || (angle < -90.0f && angle >= -270.0f)) {
-        (*work)->rotY = 8.0f - (angle + camGetPtr(CAMERA_3D)->viewYaw);
+        (*work)->rot.y = 8.0f - (angle + camGetPtr(CAMERA_3D)->viewYaw);
     } else {
-        (*work)->rotY = -(angle + camGetPtr(CAMERA_3D)->viewYaw) - 8.0f;
+        (*work)->rot.y = -(angle + camGetPtr(CAMERA_3D)->viewYaw) - 8.0f;
     }
     if (npc->position.y <= -1000.0f) {
         (*work)->position.x = 0.0f;

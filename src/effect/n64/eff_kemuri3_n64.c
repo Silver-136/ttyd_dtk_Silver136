@@ -24,10 +24,10 @@ typedef struct EffKemuri3N64Work {
     f32 field_0x64;   // 0x64
     f32 field_0x68;   // 0x68
     f32 field_0x6C;   // 0x6C
-    f32 field_0x70;   // 0x70
-    f32 field_0x74;   // 0x74
-    f32 field_0x78;   // 0x78
-    f32 field_0x7C;   // 0x7C
+    f32 vSpeed;       // 0x70, vertical: vSnap adds to vJerk, vJerk to vAccel, vAccel to vSpeed
+    f32 vAccel;       // 0x74
+    f32 vJerk;        // 0x78
+    f32 vSnap;        // 0x7C
     f32 sinAngle;     // 0x80
     f32 cosAngle;     // 0x84
 } EffKemuri3N64Work;
@@ -67,10 +67,10 @@ EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->rotation.x = 0.0f;
         work->rotation.y = angle + (f32)ofs;
         work->rotation.z = 0.0f;
-        work->field_0x70 = 1.75f;
-        work->field_0x74 = -0.08f;
-        work->field_0x78 = 0.0f;
-        work->field_0x7C = 0.0f;
+        work->vSpeed = 1.75f;
+        work->vAccel = -0.08f;
+        work->vJerk = 0.0f;
+        work->vSnap = 0.0f;
         work->speed = -3.9f;
         rad = reviseAngle(work->rotation.y);
         t = 6.2831855f * rad;
@@ -112,12 +112,12 @@ void effKemuri3Main(EffectEntry* effect) {
         work->speed *= 0.85f;
         work->position.x += work->speed * work->sinAngle;
         work->position.z += work->speed * work->cosAngle;
-        work->field_0x78 += work->field_0x7C;
-        work->field_0x74 += work->field_0x78;
-        work->field_0x70 += work->field_0x74;
-        work->position.y += work->field_0x70;
-        if (work->field_0x70 < 0.0f) {
-            work->field_0x78 = 0.004f;
+        work->vJerk += work->vSnap;
+        work->vAccel += work->vJerk;
+        work->vSpeed += work->vAccel;
+        work->position.y += work->vSpeed;
+        if (work->vSpeed < 0.0f) {
+            work->vJerk = 0.004f;
         }
         work->rotation.x -= 1.0f;
         if (work->rotation.x < -100.0f) {

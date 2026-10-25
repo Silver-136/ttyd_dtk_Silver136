@@ -1799,7 +1799,7 @@ USER_FUNC(stone_ry) {
     s32 ang = evtGetValue(event, args[1]);
     EffectEntry* item = itemNameToPtr(name)->effect;
     ((EffStarStoneWork*)item->userdata)->flags &= ~4;
-    ((EffStarStoneWork*)item->userdata)->rotY = ang % 360;
+    ((EffStarStoneWork*)item->userdata)->rot.y = ang % 360;
     return EVT_RETURN_DONE;
 }
 
