@@ -25,11 +25,9 @@
 #include "peach.h"
 #include "koopa_motion.h"
 #include "mot/mot_roll.h"
-void marioRollTryCancel(void);
 #include "mot/mot_plane.h"
 
 
-void mario_plane_cancel(void);
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
 
 #define HITOBJ(n, field)                                   \

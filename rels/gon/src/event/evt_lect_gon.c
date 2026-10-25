@@ -14,7 +14,6 @@
 #include "evt/evt_lecture.h"
 #include "mot/mot_slit.h"
 #include "mot/mot_roll.h"
-void marioRollTryCancel(void);
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"

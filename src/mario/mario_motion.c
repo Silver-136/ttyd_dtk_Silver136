@@ -90,7 +90,6 @@ void* kpaChkHitobjRide(void);
 BOOL kpaHipAttackOk(void);
 BOOL marioChkHipAttack(void);
 BOOL vivianGetStatus(void);
-void mario_plane_cancel(void);
 void allPartyForceRideOn(void);
 void marioLandOn(void);
 void marioClearJumpPara(void);

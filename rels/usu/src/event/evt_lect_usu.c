@@ -52,7 +52,6 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) { camera->p
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 static EffectEntry* eff;
 static Vec daiv;
-void marioRollTryCancel(void);
 
 static USER_FUNC(efffukidashichange_cam);
 static USER_FUNC(effitemget_busaiku);

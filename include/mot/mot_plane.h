@@ -28,3 +28,4 @@ s32 marioGetPlaneStatus(void);
 s32 marioPlaneGetFlyingDir(void);
 void mot_plane(void);
 void mot_plane_post(void);
+BOOL mario_plane_cancel(void);

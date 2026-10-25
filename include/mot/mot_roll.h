@@ -21,3 +21,4 @@ void setRollEvtFlag(void);
 s32 getRollEvtFlag(void);
 s32 marioRollCancel(void);
 s32 marioRollKeyDisable(void);
+s32 marioRollTryCancel(void);

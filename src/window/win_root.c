@@ -18,6 +18,8 @@
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
 #include "eff/eff_magic1_n64.h"
+#include "win/win_mario.h"
+#include "win/win_party.h"
 
 extern ItemData itemDataTable[];
 void qqsort(void* base, u32 n, u32 size, s32 (*compare)(const void*, const void*));
@@ -30,9 +32,6 @@ typedef struct WinSortData {
 void winMakeSkipList(WindowWork* wp);
 void winTexInit_x2(TEXPalette* tpl);
 void winTexSet_x2(u32 a, u32 b, Vec translate, Vec scale, GXColor color);
-void winMarioDisp(s32 camId, WindowWork* wp, s32 n);
-void winPartyDisp(s32 camId, WindowWork* wp, s32 n);
-void winItemDisp(s32 camId, WindowWork* wp, s32 n);
 void winBadgeDisp(s32 camId, WindowWork* wp, s32 n);
 void winLogDisp(s32 camId, WindowWork* wp, s32 n);
 void winMailDisp(WindowWork* wp);
@@ -85,27 +84,22 @@ u8 enemy_monoshiri_sort_table[] = {
 #include "memory.h"
 
 void winMarioInit();
-void winPartyInit();
 void winItemInit();
 void winBadgeInit();
 void winLogInit();
 void winMarioInit2();
-void winPartyInit2();
 void winItemInit2();
 void winBadgeInit2();
 void winLogInit2();
 s32 winMarioMain();
-s32 winPartyMain();
 s32 winItemMain();
 s32 winBadgeMain();
 s32 winLogMain();
 void winMarioMain2();
-void winPartyMain2();
 void winItemMain2();
 void winBadgeMain2();
 void winLogMain2();
 void winMarioExit();
-void winPartyExit();
 void winItemExit();
 void winBadgeExit();
 void winLogExit();
