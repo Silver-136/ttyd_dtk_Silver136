@@ -4045,12 +4045,12 @@ void puni_puni_disp(CameraId camId, void* param) {
         for (ip = &info, i = 0, off = 0; i < puniGetPoseNum(); i++, off += sizeof(PunidrvPose)) {
             pose = (PunidrvPose*)((u8*)puniGetPosePtr() + off);
             ip->tevStage = 1;
-            ip->texCoord = 1;
             ip->texMap = 1;
+            ip->texCoord = 1;
             ip->indStage = 0;
             ip->mtx = *pose->mtx;
             envSetYami(ip);
-            GXSetNumTexGens(ip->texMap);
+            GXSetNumTexGens(ip->texCoord);
             GXSetNumTevStages(ip->tevStage);
             GXSetNumIndStages(ip->indStage);
             puniPoseDraw(i);

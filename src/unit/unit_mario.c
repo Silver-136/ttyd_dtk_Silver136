@@ -295,8 +295,8 @@ s32 mario_pinch_pose_sound_callback(BattleUnit* unit) {
 static void callback(MapTevCallbackInfo* info) {
     GXColor color = {0x4D, 0x09, 0x52, 0xFF};
     s32 tevStage = info->tevStage;
-    s32 texCoord = info->texCoord;
     s32 texMap = info->texMap;
+    s32 texCoord = info->texCoord;
     s32 field_0x18 = info->indStage;
 
     GXSetTevColor(GX_TEVREG0, color);
@@ -307,9 +307,9 @@ static void callback(MapTevCallbackInfo* info) {
     GXSetTevAlphaIn(tevStage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
     GXSetTevSwapMode(tevStage, GX_TEV_SWAP0, GX_TEV_SWAP0);
     info->tevStage = tevStage + 1;
-    info->texMap = texMap;
-    info->indStage = field_0x18;
     info->texCoord = texCoord;
+    info->indStage = field_0x18;
+    info->texMap = texMap;
 }
 
 void faker_mario_makkuro_set(BattleUnit* unit) {

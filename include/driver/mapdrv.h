@@ -347,8 +347,8 @@ typedef struct MapTevCallbackInfo {
     MtxPtr mtx;        // 0x4
     u8 drawMode[0x4]; // 0x8, s32 draw mode (stored raw)
     s32 tevStage;      // 0xC, next free TEV stage
-    s32 texCoord;      // 0x10
-    s32 texMap;        // 0x14
+    s32 texMap;        // 0x10, next free texture map
+    s32 texCoord;      // 0x14, next free texture coordinate
     s32 indStage;      // 0x18, next free indirect TEV stage
 } MapTevCallbackInfo;
 

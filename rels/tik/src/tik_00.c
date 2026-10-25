@@ -687,8 +687,8 @@ void card_tev(MapTevCallbackInfo* info) {
         GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_ZERO, GX_CA_APREV);
         GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
         info->tevStage = 1;
-        info->texMap = 1;
         info->texCoord = 1;
+        info->texMap = 1;
     }
 }
 

@@ -1404,8 +1404,8 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
 
     p = *(MapObject**)info->mapObj;
     tevStage = info->tevStage;
-    texMap = info->texCoord;
-    texCoord = info->texMap;
+    texMap = info->texMap;
+    texCoord = info->texCoord;
     field_0x18 = info->indStage;
     flags = p->flags;
     if (flags & 0x20) {
@@ -1481,9 +1481,9 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     texCoord++;
     texMap++;
     info->tevStage = tevStage;
-    info->texMap = texCoord;
+    info->texCoord = texCoord;
     info->indStage = field_0x18;
-    info->texCoord = texMap;
+    info->texMap = texMap;
 }
 
 BOOL img_wait(void) {

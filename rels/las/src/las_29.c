@@ -553,8 +553,8 @@ void map_color_tev(MapTevCallbackInfo* info) {
         GXSetTevColor(GX_TEVREG0, color);
     }
     info->tevStage = 1;
-    info->texMap = 0;
     info->texCoord = 0;
+    info->texMap = 0;
 }
 
 USER_FUNC(all_hikari_onoff) {

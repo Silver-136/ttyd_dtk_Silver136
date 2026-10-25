@@ -23,8 +23,8 @@ EvtWord evt_usu_kagemario_party_kill[42];
 
 static void callback(MapTevCallbackInfo* info) {
     s32 stage = info->tevStage;
-    s32 texCoord = info->texCoord;
     s32 texMap = info->texMap;
+    s32 texCoord = info->texCoord;
     s32 field_0x18 = info->indStage;
 
     if (marioGetPtr()->flags & MARIO_FLAG_BG_MODE) {
@@ -41,9 +41,9 @@ static void callback(MapTevCallbackInfo* info) {
     GXSetTevAlphaIn(stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
     GXSetTevSwapMode(stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
     info->tevStage = stage + 1;
-    info->texMap = texMap;
-    info->indStage = field_0x18;
     info->texCoord = texCoord;
+    info->indStage = field_0x18;
+    info->texMap = texMap;
 }
 
 static s32 color_change_evt(s32 on) {

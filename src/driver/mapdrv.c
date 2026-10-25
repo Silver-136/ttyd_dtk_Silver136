@@ -2770,15 +2770,15 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         info.mtx = mtx;
         *(s32*)info.drawMode = drawMode;
         info.tevStage = tevStage;
-        info.texCoord = map;
-        info.texMap = coord;
+        info.texMap = map;
+        info.texCoord = coord;
         info.indStage = 0;
         callback = ((MapTevCallback*)((u8*)&mapWork[activeGroup] + offsetof(MapEntry, tevCallbacks)))[(u32)(flags & 0xF000000) >> 24];
         if (callback) {
             callback(ip);
         }
         tevStage = info.tevStage;
-        coord = info.texMap;
+        coord = info.texCoord;
         indStages = info.indStage;
     }
 

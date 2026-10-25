@@ -797,8 +797,8 @@ static void sun_tev(MapTevCallbackInfo* info) {
         GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9,
     };
     s32 stage = info->tevStage;
-    s32 texMap = info->texCoord;
-    s32 texCoord = info->texMap;
+    s32 texMap = info->texMap;
+    s32 texCoord = info->texCoord;
     s32 indStage = info->indStage;
     GXTexObj obj;
     f32 mtx[2][3];
@@ -838,9 +838,9 @@ static void sun_tev(MapTevCallbackInfo* info) {
     GXSetIndTexCoordScale(indStage, GX_ITS_1, GX_ITS_1);
     GXSetTevIndWarp(GX_TEVSTAGE0, indStage, GX_TRUE, GX_FALSE, GX_ITM_0);
     info->tevStage = stage;
-    info->texMap = texCoord;
+    info->texCoord = texCoord;
     info->indStage = indStage + 1;
-    info->texCoord = texMap + 1;
+    info->texMap = texMap + 1;
 }
 
 static USER_FUNC(test_glare) {

@@ -1037,8 +1037,8 @@ void envAddTev(s32 type, MapTevCallbackInfo *info) {
     s32 indStage;
     Mtx mtx;
     stage = info->tevStage;
-    map = info->texCoord; // MapTevCallbackInfo's texCoord/texMap fields are filled the other way round by mapdrv
-    coord = info->texMap;
+    map = info->texMap; // MapTevCallbackInfo's texMap/texCoord fields are filled the other way round by mapdrv
+    coord = info->texCoord;
     indStage = info->indStage;
     if (type == 0) {
         return;
@@ -1184,9 +1184,9 @@ void envAddTev(s32 type, MapTevCallbackInfo *info) {
     }
 
     info->tevStage = stage;
-    info->texMap = coord;
+    info->texCoord = coord;
     info->indStage = indStage;
-    info->texCoord = map;
+    info->texMap = map;
 }
 
 #undef ENV_TEX_TAIL
@@ -1223,8 +1223,8 @@ void envSetWater(MapTevCallbackInfo* info) {
 
     obj = envWaterObj(info);
     stage = info->tevStage;
-    map = info->texCoord;
-    coord = info->texMap;
+    map = info->texMap;
+    coord = info->texCoord;
     ind = info->indStage;
     if (obj->flags & 0x20) {
         while ((obj = envWaterParent(obj)) != NULL) {
@@ -1341,9 +1341,9 @@ void envSetWater(MapTevCallbackInfo* info) {
     ind++;
     map += 2;
     info->tevStage = stage;
-    info->texMap = coord;
+    info->texCoord = coord;
     info->indStage = ind;
-    info->texCoord = map;
+    info->texMap = map;
 }
 
 void envSetYamiView(Mtx view) {
@@ -1367,8 +1367,8 @@ void envSetYami(MapTevCallbackInfo* info) {
 
     wp = envGetWork();
     stage = info->tevStage;
-    map = info->texCoord;
-    coord = info->texMap;
+    map = info->texMap;
+    coord = info->texCoord;
     unk18 = info->indStage;
 
     if (v_count != (rc = gp->retraceCount)) {
@@ -1424,9 +1424,9 @@ void envSetYami(MapTevCallbackInfo* info) {
     coord += 2;
     map += 2;
     info->tevStage = stage;
-    info->texMap = coord;
+    info->texCoord = coord;
     info->indStage = unk18;
-    info->texCoord = map;
+    info->texMap = map;
 }
 
 

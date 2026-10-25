@@ -299,8 +299,8 @@ void monitor_cap_tev(MapTevCallbackInfo* info) {
         GXLoadTexMtxImm(proj, GX_TEXMTX0, GX_MTX3x4);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
         info->tevStage = 1;
-        info->texMap = 1;
         info->texCoord = 1;
+        info->texMap = 1;
     }
 }
 

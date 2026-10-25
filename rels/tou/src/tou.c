@@ -2369,8 +2369,8 @@ void monitor_tev(MapTevCallbackInfo* info) {
             GXSetTevColor(GX_TEVREG0, tou_mkcolor(gans_wp->alpha));
         }
         info->tevStage = 2;
-        info->texMap = 2;
         info->texCoord = 2;
+        info->texMap = 2;
     }
 }
 

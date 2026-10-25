@@ -881,7 +881,7 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
     GXLoadTexMtxImm(m, GX_TEXMTX1, GX_MTX2x4);
     p->tevStage = 2;
-    p->texMap = 2;
     p->texCoord = 2;
+    p->texMap = 2;
 }
 

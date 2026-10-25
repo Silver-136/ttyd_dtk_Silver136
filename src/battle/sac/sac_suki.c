@@ -711,8 +711,8 @@ void set_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A0);
     GXSetTevColor(GX_TEVREG0, mk_suki(v));
     info->tevStage = 1;
-    info->texMap = 0;
     info->texCoord = 0;
+    info->texMap = 0;
 }
 
 

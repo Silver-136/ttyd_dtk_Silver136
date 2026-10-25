@@ -1936,8 +1936,8 @@ void kusuri_naka_color_tev(MapTevCallbackInfo* info) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_RASA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
     GXSetTevColor(GX_TEVREG0, KUSURI_COL);
     info->tevStage = 1;
-    info->texMap = 0;
     info->texCoord = 0;
+    info->texMap = 0;
 }
 
 USER_FUNC(kusuri_color_get) {

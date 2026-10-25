@@ -3798,8 +3798,8 @@ void screen_tev(MapTevCallbackInfo* info) {
         GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1);
         GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
         info->tevStage = 2;
-        info->texMap = 2;
         info->texCoord = 2;
+        info->texMap = 2;
     }
 }
 
@@ -4047,8 +4047,8 @@ static inline void cb_set_color(u8 a) {
 
 static void callback(MapTevCallbackInfo* info) {
     s32 stage = info->tevStage;
-    s32 texCoord = info->texCoord;
     s32 texMap = info->texMap;
+    s32 texCoord = info->texCoord;
     s32 field_0x18 = info->indStage;
 
     cb_set_color(gans_alpha);
@@ -4059,9 +4059,9 @@ static void callback(MapTevCallbackInfo* info) {
     GXSetTevAlphaIn(stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
     GXSetTevSwapMode(stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
     info->tevStage = stage + 1;
-    info->texMap = texMap;
-    info->indStage = field_0x18;
     info->texCoord = texCoord;
+    info->indStage = field_0x18;
+    info->texMap = texMap;
 }
 
 s32 gans_white_on(EventEntry* event, BOOL isFirstCall) {
