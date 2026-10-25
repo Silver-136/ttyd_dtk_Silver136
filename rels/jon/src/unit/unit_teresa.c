@@ -209,7 +209,7 @@ static BattleWeapon weapon_teresa_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -244,7 +244,7 @@ static BattleWeapon weapon_teresa_trans_myself = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -281,7 +281,7 @@ static BattleWeapon weapon_teresa_trans = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -318,7 +318,7 @@ static BattleWeapon weapon_teresa_move = {
     2, // reserved_6F
     NULL, // acHelpMsg
     8, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance

@@ -418,7 +418,7 @@ BattleWeapon weapon_champion_roof_shake_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -459,7 +459,7 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x20087, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

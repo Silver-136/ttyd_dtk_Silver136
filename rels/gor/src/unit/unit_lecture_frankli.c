@@ -138,7 +138,7 @@ BattleWeapon _lec_weapon_jump = {
     2, // reserved_6F
     "msg_ac_jump", // acHelpMsg
     0x35807, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -179,7 +179,7 @@ BattleWeapon _lec_weapon_hammer = {
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
     0x30887, // special
-    0x7FB, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

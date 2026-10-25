@@ -302,7 +302,7 @@ static BattleWeapon weapon_rampell_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x11007, // special
-    6, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -947,7 +947,7 @@ static BattleWeapon weapon_masao_jump = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15807, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -983,7 +983,7 @@ static BattleWeapon weapon_masao_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10807, // special
-    0x20C, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -1019,7 +1019,7 @@ static BattleWeapon weapon_masao_kururin_jump = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15807, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -1055,7 +1055,7 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10807, // special
-    0x20C, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -1582,7 +1582,7 @@ static BattleWeapon enemyWeapon_ChristineNormalAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15017, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -1901,7 +1901,7 @@ static BattleWeapon enemyWeapon_NokotarouKouraAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10087, // special
-    0x5FF, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -1938,7 +1938,7 @@ static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10087, // special
-    0x5FF, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -2401,7 +2401,7 @@ static BattleWeapon enemyWeapon_ClaudaNormalAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x14087, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -2627,7 +2627,7 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15097, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -2965,7 +2965,7 @@ BattleWeapon weapon_vivian_kagenuke_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x14087, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -3176,7 +3176,7 @@ BattleWeapon enemyWeapon_SandersNormalAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x14087, // special
-    0x7FB, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -3383,7 +3383,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x140C7, // special
-    0x20C, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -3420,7 +3420,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x140C7, // special
-    0x20C, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -3457,7 +3457,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x140C7, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -3494,7 +3494,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x140C7, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

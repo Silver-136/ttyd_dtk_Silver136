@@ -142,7 +142,7 @@ BattleWeapon weapon_bomzou_explosion = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x20080, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

@@ -195,7 +195,7 @@ static BattleWeapon weapon_bubble_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x70, // counterResistFlags
+    COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -233,7 +233,7 @@ static BattleWeapon weapon_bubble_fire_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0xC7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime

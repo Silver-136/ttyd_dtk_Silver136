@@ -222,7 +222,7 @@ BattleWeapon weapon_fire_bros_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
@@ -261,7 +261,7 @@ BattleWeapon weapon_fire_bros_renzoku_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
@@ -300,7 +300,7 @@ BattleWeapon weapon_fire_bros_nagemakuri_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime

@@ -263,7 +263,7 @@ BattleWeapon weapon_gundan_zako_group1_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x1087, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

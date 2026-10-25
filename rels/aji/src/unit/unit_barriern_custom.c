@@ -208,7 +208,7 @@ static BattleWeapon weapon_wakka_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0xC7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
     80, // stopChance
@@ -247,7 +247,7 @@ static BattleWeapon weapon_wawawa_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0xC7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
     80, // stopChance

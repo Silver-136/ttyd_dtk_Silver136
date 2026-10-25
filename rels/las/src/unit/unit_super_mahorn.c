@@ -238,7 +238,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0xC7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -279,7 +279,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -315,7 +315,7 @@ static BattleWeapon weapon_mahorn_attack_punch = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    2, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -350,7 +350,7 @@ static BattleWeapon weapon_mahorn_trans_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -387,7 +387,7 @@ static BattleWeapon weapon_mahorn_yokeyoke_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, // poisonTime..electricTime
     100, // dodgyChance
@@ -423,7 +423,7 @@ static BattleWeapon weapon_mahorn_dekadeka_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, // burnChance..freezeTime
@@ -460,7 +460,7 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -497,7 +497,7 @@ static BattleWeapon weapon_mahorn_recover_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, 0, // acHelpMsg..special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP | TARGET_WEIGHT_LOW_HP_RATIO, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

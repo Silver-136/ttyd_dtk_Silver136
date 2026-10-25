@@ -128,7 +128,7 @@ BattleWeapon weapon_cortez_saber_float_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

@@ -334,7 +334,7 @@ static BattleWeapon weapon_kamec_attack_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0xC7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -369,7 +369,7 @@ static BattleWeapon weapon_kamec_dekadeka_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -407,7 +407,7 @@ static BattleWeapon weapon_kamec_biribiri_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, // poisonStrength..confuseTime
@@ -445,7 +445,7 @@ static BattleWeapon weapon_kamec_trans_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -482,7 +482,7 @@ static BattleWeapon weapon_kamec_katikati_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -520,7 +520,7 @@ static BattleWeapon weapon_kamec_recover_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, 0, // acHelpMsg..special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP | TARGET_WEIGHT_LOW_HP_RATIO, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -554,7 +554,7 @@ static BattleWeapon weapon_kamec_all_recover_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, 0, // acHelpMsg..special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance

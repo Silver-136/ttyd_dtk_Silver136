@@ -170,7 +170,7 @@ static BattleWeapon weapon_marilyn_kagenuke_attack1 = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    2, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -210,7 +210,7 @@ static BattleWeapon weapon_marilyn_thunder_attack1 = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x20044, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -245,7 +245,7 @@ static BattleWeapon weapon_marilyn_charge1 = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance

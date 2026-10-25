@@ -35,6 +35,22 @@
 #define TARGET_WEIGHT_IN_PERIL      0x1000 // prefer targets in Peril
 #define TARGET_WEIGHT_RANDOM        0x80000000 // pick at random by weight (else the heaviest)
 
+// BattleWeapon.counterResistFlags: counters the weapon ignores (BattleCheckCounter)
+typedef enum BattleWeaponCounterResist_Flags {
+    COUNTER_RESIST_ELECTRIC = 0x1,
+    COUNTER_RESIST_TOP_SPIKY = 0x2,
+    COUNTER_RESIST_PREEMPTIVE_SPIKY = 0x4,
+    COUNTER_RESIST_FRONT_SPIKY = 0x8,
+    COUNTER_RESIST_FIERY = 0x10,
+    COUNTER_RESIST_ICY = 0x20,
+    COUNTER_RESIST_POISON = 0x40,
+    COUNTER_RESIST_EXPLOSIVE = 0x80,
+    COUNTER_RESIST_VOLATILE_EXPLOSIVE = 0x100,
+    COUNTER_RESIST_PAYBACK = 0x200,
+    COUNTER_RESIST_HOLD_FAST = 0x400, // the Payback status and the Return Postage badge
+    COUNTER_RESIST_ALL = 0x7FF,
+} BattleWeaponCounterResist_Flags;
+
 typedef enum BattleWeaponSpecialFlags { SPECIAL_UNGUARDABLE = 0x20000 } BattleWeaponSpecialFlags;
 
 // BattleWeapon.element (weapon tables: Ice Storm and blizzards 2, bombs and dynamite 3, thunder items 4)

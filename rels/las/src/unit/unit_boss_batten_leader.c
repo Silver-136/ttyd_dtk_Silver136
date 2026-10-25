@@ -220,7 +220,7 @@ BattleWeapon weapon_batten_leader_thunder = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -261,7 +261,7 @@ BattleWeapon weapon_batten_leader_fire = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
@@ -308,7 +308,7 @@ BattleWeapon weapon_batten_leader_ice = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -346,7 +346,7 @@ BattleWeapon weapon_batten_leader_shikaeshi = {
     2, // reserved_6F
     NULL, // acHelpMsg
     8, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -382,7 +382,7 @@ BattleWeapon weapon_batten_leader_yokeyoke = {
     2, // reserved_6F
     NULL, // acHelpMsg
     8, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, // poisonStrength..electricTime
@@ -424,7 +424,7 @@ BattleWeapon weapon_batten_leader_stop = {
     2, // reserved_6F
     NULL, // acHelpMsg
     7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
     30, // stopChance
     2, // stopTime

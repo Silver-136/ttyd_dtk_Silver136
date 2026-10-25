@@ -168,7 +168,7 @@ static BattleWeapon weapon_gundan_zako_magician_fire_bottle = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
@@ -206,7 +206,7 @@ static BattleWeapon weapon_gundan_zako_magician_hunyahunya_bottle = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -245,7 +245,7 @@ static BattleWeapon weapon_gundan_zako_magician_yokeyoke_bottle = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, // poisonTime..electricTime
     100, // dodgyChance
@@ -286,7 +286,7 @@ static BattleWeapon weapon_gundan_zako_magician_minimini_bottle = {
     2, // reserved_6F
     NULL, // acHelpMsg
     7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -323,7 +323,7 @@ static BattleWeapon weapon_gundan_zako_magician_one_recover = {
     3, // acLevel
     2, // reserved_6F
     NULL, 0, // acHelpMsg..special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP | TARGET_WEIGHT_LOW_HP_RATIO, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -357,7 +357,7 @@ static BattleWeapon weapon_gundan_zako_magician_all_recover = {
     3, // acLevel
     2, // reserved_6F
     NULL, 0, // acHelpMsg..special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -391,7 +391,7 @@ static BattleWeapon weapon_gundan_zako_magician_ziwaziwa_bottle = {
     2, // reserved_6F
     NULL, // acHelpMsg
     8, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP | TARGET_WEIGHT_LOW_HP_RATIO, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

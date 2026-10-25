@@ -269,7 +269,7 @@ BattleWeapon weapon_cortez_normal_front_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -309,7 +309,7 @@ BattleWeapon weapon_cortez_normal_rear_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     8, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -349,7 +349,7 @@ BattleWeapon weapon_cortez_midaregiri_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -385,7 +385,7 @@ BattleWeapon weapon_cortez_mode2_head_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x1087, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -420,7 +420,7 @@ BattleWeapon weapon_cortez_mode2_charge = {
     2, // reserved_6F
     NULL, // acHelpMsg
     8, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -460,7 +460,7 @@ BattleWeapon weapon_cortez_mode2_bone_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -496,7 +496,7 @@ BattleWeapon weapon_cortez_mode3_kamitsuki_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

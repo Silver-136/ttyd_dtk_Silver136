@@ -221,7 +221,7 @@ BattleWeapon weapon_atmic_teresa_press = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x1087, // special
-    0x6C, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -260,7 +260,7 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
     50, // stopChance
     3, // stopTime
@@ -302,7 +302,7 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x67, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, // poisonTime..poisonStrength
     50, // confuseChance
@@ -344,7 +344,7 @@ BattleWeapon weapon_atmic_teresa_breath = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x97, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

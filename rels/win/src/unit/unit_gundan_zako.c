@@ -147,7 +147,7 @@ static BattleWeapon weapon_gundan_zako_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x1087, // special
-    2, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -183,7 +183,7 @@ static BattleWeapon weapon_gundan_zako_jump_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x5087, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -218,7 +218,7 @@ static BattleWeapon weapon_gundan_zako_dekadeka_bottle = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, // burnChance..freezeTime

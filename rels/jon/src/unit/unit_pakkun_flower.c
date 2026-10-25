@@ -139,7 +139,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    2, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

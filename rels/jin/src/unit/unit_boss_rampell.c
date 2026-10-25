@@ -240,7 +240,7 @@ static BattleWeapon weapon_rampell_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x11007, // special
-    6, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -655,7 +655,7 @@ static BattleWeapon weapon_masao_jump = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15807, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -691,7 +691,7 @@ static BattleWeapon weapon_masao_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10807, // special
-    0x20C, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -727,7 +727,7 @@ static BattleWeapon weapon_masao_kururin_jump = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15807, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -763,7 +763,7 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10807, // special
-    0x20C, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

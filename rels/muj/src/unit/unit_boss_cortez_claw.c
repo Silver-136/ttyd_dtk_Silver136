@@ -125,7 +125,7 @@ BattleWeapon weapon_cortez_claw_float_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
     50, // poisonChance

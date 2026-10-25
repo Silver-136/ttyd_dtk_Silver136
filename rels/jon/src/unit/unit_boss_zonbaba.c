@@ -191,7 +191,7 @@ BattleWeapon weapon_zonbaba_fumituke_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -231,7 +231,7 @@ BattleWeapon weapon_zonbaba_kamituki_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x20007, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -270,7 +270,7 @@ BattleWeapon weapon_zonbaba_cold_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, // burnChance..burnTime
@@ -312,7 +312,7 @@ BattleWeapon weapon_zonbaba_confuze_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, // poisonTime..poisonStrength
     30, // confuseChance
@@ -354,7 +354,7 @@ BattleWeapon weapon_zonbaba_sleep_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, // targetWeightFlags
     30, // sleepChance
     5, // sleepTime
@@ -396,7 +396,7 @@ BattleWeapon weapon_zonbaba_minimini_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, // burnChance..freezeTime
@@ -433,7 +433,7 @@ BattleWeapon weapon_zonbaba_recover = {
     2, // reserved_6F
     NULL, // acHelpMsg
     7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance

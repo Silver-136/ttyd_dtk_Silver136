@@ -343,7 +343,7 @@ BattleWeapon weapon_peach_black_thunder_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -429,7 +429,7 @@ BattleWeapon weapon_peach_drain_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -464,7 +464,7 @@ BattleWeapon weapon_peach_dark_drag_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -500,7 +500,7 @@ BattleWeapon weapon_peach_dark_drag_last_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x2004F, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -535,7 +535,7 @@ BattleWeapon weapon_peach_dark_charge_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -575,7 +575,7 @@ BattleWeapon weapon_peach_black_wave_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -615,7 +615,7 @@ BattleWeapon weapon_peach_black_sigh_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -661,7 +661,7 @@ BattleWeapon weapon_peach_black_temptation_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, // poisonStrength
@@ -708,7 +708,7 @@ BattleWeapon weapon_peach_black_poison_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
 #ifdef VERSION_G8ME01
@@ -755,7 +755,7 @@ BattleWeapon weapon_peach_black_press_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -799,7 +799,7 @@ BattleWeapon weapon_peach_black_1000hand_attack = {
 #else
     7, // special
 #endif
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

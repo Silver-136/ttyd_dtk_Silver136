@@ -129,7 +129,7 @@ BattleWeapon weapon_pansy_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
 #ifdef VERSION_G8ME01
     50, // sleepChance

@@ -316,7 +316,7 @@ BattleWeapon partyWeapon_NokotarouFirstAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x2008F, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -358,7 +358,7 @@ BattleWeapon partyWeapon_NokotarouKouraAttack = {
     2, // reserved_6F
     "msg_ac_hammer", // acHelpMsg
     0x30087, // special
-    0x5FF, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -409,7 +409,7 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     2, // reserved_6F
     "msg_ac_koura_shubibin", // acHelpMsg
     0x20087, // special
-    0x5FF, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -455,7 +455,7 @@ BattleWeapon partyWeapon_NokotarouKouraGuard = {
     2, // reserved_6F
     "msg_ac_koura_no_mamori", // acHelpMsg
     0x20000, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -501,7 +501,7 @@ BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     2, // reserved_6F
     "msg_ac_tsuranuki_koura", // acHelpMsg
     0x200C7, // special
-    0x5FF, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

@@ -187,7 +187,7 @@ static BattleWeapon weapon_wanwan_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x72, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

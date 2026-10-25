@@ -113,7 +113,7 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15097, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

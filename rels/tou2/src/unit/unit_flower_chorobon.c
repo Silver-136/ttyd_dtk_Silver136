@@ -209,7 +209,7 @@ static BattleWeapon weapon_chorobon_magic_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x2000, // targetWeightFlags
     0, // sleepChance
     5, // sleepTime

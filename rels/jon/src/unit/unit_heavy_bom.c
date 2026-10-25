@@ -151,7 +151,7 @@ static BattleWeapon weapon_heavy_bomb_super_explosion = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x22087, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -186,7 +186,7 @@ static BattleWeapon weapon_heavy_bomb_guard = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x20008, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -224,7 +224,7 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x20008, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, // burnChance..sizeChangeStrength
@@ -261,7 +261,7 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x20008, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance

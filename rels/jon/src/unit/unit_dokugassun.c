@@ -142,7 +142,7 @@ static BattleWeapon weapon_dokugassun_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x5087, // special
-    0x40, // counterResistFlags
+    COUNTER_RESIST_POISON, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -182,7 +182,7 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
     70, // poisonChance

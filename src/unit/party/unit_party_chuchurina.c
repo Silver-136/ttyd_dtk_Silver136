@@ -264,7 +264,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
     0x34047, // special
-    0x202, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -310,7 +310,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
     0x34047, // special
-    0x202, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -356,7 +356,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
     0x34047, // special
-    2, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -402,7 +402,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     2, // reserved_6F
     "msg_ac_binta", // acHelpMsg
     0x34047, // special
-    2, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -452,7 +452,7 @@ BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     2, // reserved_6F
     "msg_ac_madowaseru", // acHelpMsg
     0x20000, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, // sleepChance..stopTime
     100, // dizzyChance
@@ -497,7 +497,7 @@ BattleWeapon partyWeapon_ChuchurinaItemSteal = {
     2, // reserved_6F
     "msg_ac_heart_catch", // acHelpMsg
     0x20000, // special
-    0x202, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -539,7 +539,7 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
     2, // reserved_6F
     "msg_ac_chuchurina_kiss", // acHelpMsg
     0x20008, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80003500, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

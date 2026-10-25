@@ -249,7 +249,7 @@ BattleWeapon partyWeapon_ChristineNormalAttack = {
     2, // reserved_6F
     "msg_ac_zutsuki", // acHelpMsg
     0x35007, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -294,7 +294,7 @@ BattleWeapon partyWeapon_ChristineMonosiri = {
     2, // reserved_6F
     "msg_ac_monoshiri", // acHelpMsg
     0x20008, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -340,7 +340,7 @@ BattleWeapon partyWeapon_ChristineRenzokuAttack = {
     2, // reserved_6F
     "msg_ac_zutsuki", // acHelpMsg
     0x25017, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -386,7 +386,7 @@ BattleWeapon partyWeapon_ChristineKiss = {
     2, // reserved_6F
     "msg_ac_kiss", // acHelpMsg
     0x20108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance

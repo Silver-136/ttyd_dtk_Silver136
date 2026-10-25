@@ -178,7 +178,7 @@ static BattleWeapon weapon_togedaruma_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x1E, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

@@ -146,7 +146,7 @@ BattleWeapon weapon_poison_pakkun_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    2, // counterResistFlags
+    COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -186,7 +186,7 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x47, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..dizzyTime
     50, // poisonChance
     10, // poisonTime

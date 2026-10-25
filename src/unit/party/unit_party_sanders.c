@@ -294,7 +294,7 @@ BattleWeapon partyWeapon_SandersFirstAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x26087, // special
-    0x7FB, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -336,7 +336,7 @@ BattleWeapon partyWeapon_SandersNormalAttack = {
     2, // reserved_6F
     "msg_ac_bakuhatsu", // acHelpMsg
     0x36087, // special
-    0x7FB, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -378,7 +378,7 @@ BattleWeapon partyWeapon_SandersTimeBombSet = {
     2, // reserved_6F
     "msg_ac_jigen_bakudan", // acHelpMsg
     0x20000, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -420,7 +420,7 @@ BattleWeapon partyWeapon_SandersCounterSet = {
     2, // reserved_6F
     "msg_ac_bom_counter", // acHelpMsg
     0x20108, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
@@ -471,7 +471,7 @@ BattleWeapon partyWeapon_SandersSuperBombAttack = {
     2, // reserved_6F
     "msg_ac_super_bakuhatsu", // acHelpMsg
     0x26087, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

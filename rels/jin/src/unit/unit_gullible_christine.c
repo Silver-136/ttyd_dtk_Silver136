@@ -119,7 +119,7 @@ static BattleWeapon enemyWeapon_ChristineNormalAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15007, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

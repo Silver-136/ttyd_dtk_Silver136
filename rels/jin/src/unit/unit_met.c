@@ -212,7 +212,7 @@ static BattleWeapon weapon_met_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x87, // special
-    0x5FF, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -248,7 +248,7 @@ static BattleWeapon weapon_met_ceil_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x5087, // special
-    0x5FF, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

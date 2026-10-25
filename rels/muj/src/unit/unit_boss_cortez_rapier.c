@@ -129,7 +129,7 @@ BattleWeapon weapon_cortez_rapier_float_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0xC7, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

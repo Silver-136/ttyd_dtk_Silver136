@@ -125,7 +125,7 @@ static BattleWeapon enemyWeapon_NokotarouKouraAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10087, // special
-    0x5FF, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -162,7 +162,7 @@ static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10087, // special
-    0x5FF, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x2004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

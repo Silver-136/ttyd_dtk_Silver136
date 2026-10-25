@@ -163,7 +163,7 @@ static BattleWeapon weapon_masao_jump = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15807, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -199,7 +199,7 @@ static BattleWeapon weapon_masao_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10807, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -235,7 +235,7 @@ static BattleWeapon weapon_masao_kururin_jump = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x15807, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -271,7 +271,7 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x10807, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

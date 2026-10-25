@@ -370,7 +370,7 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     2, // reserved_6F
     "msg_ac_hip_drop", // acHelpMsg
     0x35097, // special
-    0xC, // counterResistFlags
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -417,7 +417,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     2, // reserved_6F
     "msg_ac_nomikomi", // acHelpMsg
     0x20047, // special
-    0x7FB, // counterResistFlags
+    COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -464,7 +464,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     2, // reserved_6F
     "msg_ac_nomikomi", // acHelpMsg
     0x20047, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -510,7 +510,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     2, // reserved_6F
     "msg_ac_nomikomi", // acHelpMsg
     0x20040, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -553,7 +553,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     2, // reserved_6F
     "msg_ac_nomikomi", // acHelpMsg
     0x20040, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -583,7 +583,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     2, // reserved_6F
     NULL, // acHelpMsg
     0x20040, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     4, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -629,7 +629,7 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     2, // reserved_6F
     "msg_ac_wonder_egg", // acHelpMsg
     0x20003, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -678,7 +678,7 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
     2, // reserved_6F
     "msg_ac_taigun_yoshi", // acHelpMsg
     0x20017, // special
-    0x7FF, // counterResistFlags
+    COUNTER_RESIST_ALL, // counterResistFlags
     0x80002004, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
