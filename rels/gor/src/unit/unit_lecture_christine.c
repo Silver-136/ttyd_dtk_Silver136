@@ -164,7 +164,7 @@ static BattleUnitKindPart parts[] = {
 
 BattleUnitSetup entry_lecture_frankli = {
     &unit_lecture_frankli, // mUnitKindParams
-    2, // alliance
+    ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
     0x4000001, // attackPhase
     {0.0f, 0.0f, -45.0f}, // position

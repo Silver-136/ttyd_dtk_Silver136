@@ -142,7 +142,7 @@ BattleStageData tou_btlstage_data[] = {
 BattleUnitSetup btlparty_tou_tou_rank_19[] = {
     {
         &unit_kurikuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {10.0f, 0.0f, -20.0f}, // position
@@ -152,7 +152,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
     },
     {
         &unit_kurikuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -162,7 +162,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
     },
     {
         &unit_kurikuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -172,7 +172,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
     },
     {
         &unit_kurikuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -182,7 +182,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
     },
     {
         &unit_kurikuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {170.0f, 0.0f, 20.0f}, // position
@@ -205,7 +205,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_19 = {
 BattleUnitSetup btlparty_tou_tou_rank_18[] = {
     {
         &unit_nokonoko_fighter, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -215,7 +215,7 @@ BattleUnitSetup btlparty_tou_tou_rank_18[] = {
     },
     {
         &unit_nokonoko_fighter, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -225,7 +225,7 @@ BattleUnitSetup btlparty_tou_tou_rank_18[] = {
     },
     {
         &unit_patapata_fighter, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -248,7 +248,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_18 = {
 BattleUnitSetup btlparty_tou_tou_rank_17[] = {
     {
         &unit_sambo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -258,7 +258,7 @@ BattleUnitSetup btlparty_tou_tou_rank_17[] = {
     },
     {
         &unit_sambo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -268,7 +268,7 @@ BattleUnitSetup btlparty_tou_tou_rank_17[] = {
     },
     {
         &unit_sambo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -291,7 +291,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_17 = {
 BattleUnitSetup btlparty_tou_tou_rank_16[] = {
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -301,7 +301,7 @@ BattleUnitSetup btlparty_tou_tou_rank_16[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -311,7 +311,7 @@ BattleUnitSetup btlparty_tou_tou_rank_16[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -334,7 +334,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_16 = {
 BattleUnitSetup btlparty_tou_tou_rank_15[] = {
     {
         &unit_togezo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -344,7 +344,7 @@ BattleUnitSetup btlparty_tou_tou_rank_15[] = {
     },
     {
         &unit_togezo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -354,7 +354,7 @@ BattleUnitSetup btlparty_tou_tou_rank_15[] = {
     },
     {
         &unit_jyugem, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -377,7 +377,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_15 = {
 BattleUnitSetup btlparty_tou_tou_rank_14[] = {
     {
         &unit_monochrome_pakkun, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -387,7 +387,7 @@ BattleUnitSetup btlparty_tou_tou_rank_14[] = {
     },
     {
         &unit_monochrome_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -397,7 +397,7 @@ BattleUnitSetup btlparty_tou_tou_rank_14[] = {
     },
     {
         &unit_piders, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -420,7 +420,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_14 = {
 BattleUnitSetup btlparty_tou_tou_rank_13[] = {
     {
         &unit_hyper_sinnosuke, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -430,7 +430,7 @@ BattleUnitSetup btlparty_tou_tou_rank_13[] = {
     },
     {
         &unit_hyper_sinnosuke, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -440,7 +440,7 @@ BattleUnitSetup btlparty_tou_tou_rank_13[] = {
     },
     {
         &unit_hyper_sinnosuke, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -463,7 +463,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_13 = {
 BattleUnitSetup btlparty_tou_tou_rank_12[] = {
     {
         &unit_bomhei, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
@@ -473,7 +473,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
     },
     {
         &unit_bomhei, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -483,7 +483,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
     },
     {
         &unit_bomhei, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -493,7 +493,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
     },
     {
         &unit_bomhei, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
@@ -516,7 +516,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_12 = {
 BattleUnitSetup btlparty_tou_tou_rank_11[] = {
     {
         &unit_borodo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
@@ -526,7 +526,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
     },
     {
         &unit_borodo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -536,7 +536,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
     },
     {
         &unit_borodo_king, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -546,7 +546,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
     },
     {
         &unit_borodo_king, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
@@ -569,7 +569,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_11 = {
 BattleUnitSetup btlparty_tou_tou_rank_10[] = {
     {
         &unit_iron_sinemon, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {80.0f, 0.0f, 0.0f}, // position
@@ -579,7 +579,7 @@ BattleUnitSetup btlparty_tou_tou_rank_10[] = {
     },
     {
         &unit_iron_sinemon2, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 10.0f}, // position
@@ -602,7 +602,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_10 = {
 BattleUnitSetup btlparty_tou_tou_rank_9[] = {
     {
         &unit_crimson_togemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -612,7 +612,7 @@ BattleUnitSetup btlparty_tou_tou_rank_9[] = {
     },
     {
         &unit_crimson_togemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -635,7 +635,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_9 = {
 BattleUnitSetup btlparty_tou_tou_rank_8[] = {
     {
         &unit_togedaruma, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -645,7 +645,7 @@ BattleUnitSetup btlparty_tou_tou_rank_8[] = {
     },
     {
         &unit_togedaruma, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -668,7 +668,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_8 = {
 BattleUnitSetup btlparty_tou_tou_rank_7[] = {
     {
         &unit_ura_noko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -678,7 +678,7 @@ BattleUnitSetup btlparty_tou_tou_rank_7[] = {
     },
     {
         &unit_ura_pata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -688,7 +688,7 @@ BattleUnitSetup btlparty_tou_tou_rank_7[] = {
     },
     {
         &unit_ura_noko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -711,7 +711,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_7 = {
 BattleUnitSetup btlparty_tou_tou_rank_6[] = {
     {
         &unit_chorobon, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -721,7 +721,7 @@ BattleUnitSetup btlparty_tou_tou_rank_6[] = {
     },
     {
         &unit_green_chorobon, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -731,7 +731,7 @@ BattleUnitSetup btlparty_tou_tou_rank_6[] = {
     },
     {
         &unit_flower_chorobon, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -754,7 +754,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_6 = {
 BattleUnitSetup btlparty_tou_tou_rank_5[] = {
     {
         &unit_kamec_red, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -764,7 +764,7 @@ BattleUnitSetup btlparty_tou_tou_rank_5[] = {
     },
     {
         &unit_kamec_white, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -774,7 +774,7 @@ BattleUnitSetup btlparty_tou_tou_rank_5[] = {
     },
     {
         &unit_kamec_green, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -797,7 +797,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_5 = {
 BattleUnitSetup btlparty_tou_tou_rank_4[] = {
     {
         &unit_dark_keeper, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -820,7 +820,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_4 = {
 BattleUnitSetup btlparty_tou_tou_rank_3[] = {
     {
         &unit_hammer_bros, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -830,7 +830,7 @@ BattleUnitSetup btlparty_tou_tou_rank_3[] = {
     },
     {
         &unit_fire_bros, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -840,7 +840,7 @@ BattleUnitSetup btlparty_tou_tou_rank_3[] = {
     },
     {
         &unit_boomerang_bros, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -863,7 +863,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_3 = {
 BattleUnitSetup btlparty_tou_tou_rank_2[] = {
     {
         &unit_burst_wanwan, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -873,7 +873,7 @@ BattleUnitSetup btlparty_tou_tou_rank_2[] = {
     },
     {
         &unit_burst_wanwan, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -896,7 +896,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_2 = {
 BattleUnitSetup btlparty_tou_tou_rank_1[] = {
     {
         &unit_togenoko_ace, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -919,7 +919,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_1 = {
 BattleUnitSetup btlparty_tou_tou_add_1[] = {
     {
         &unit_basabasa, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 130.0f, -10.0f}, // position
@@ -929,7 +929,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
     },
     {
         &unit_basabasa, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 130.0f, 0.0f}, // position
@@ -939,7 +939,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
     },
     {
         &unit_basabasa, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 130.0f, 10.0f}, // position
@@ -949,7 +949,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
     },
     {
         &unit_basabasa, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 130.0f, 20.0f}, // position
@@ -972,7 +972,7 @@ BattleGroupSetup btlgrp_tou_tou_add_1 = {
 BattleUnitSetup btlparty_tou_tou_add_2[] = {
     {
         &unit_hinnya, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
@@ -982,7 +982,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
     },
     {
         &unit_hannya, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -992,7 +992,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
     },
     {
         &unit_hinnya, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -1002,7 +1002,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
     },
     {
         &unit_hannya, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
@@ -1025,7 +1025,7 @@ BattleGroupSetup btlgrp_tou_tou_add_2 = {
 BattleUnitSetup btlparty_tou_tou_boss[] = {
     {
         &unit_boss_macho_gance, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -1048,7 +1048,7 @@ BattleGroupSetup btlgrp_tou_tou_boss = {
 BattleUnitSetup btlparty_tou_tou_champ[] = {
     {
         &unit_boss_champion, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -1071,7 +1071,7 @@ BattleGroupSetup btlgrp_tou_tou_champ = {
 BattleUnitSetup btlparty_tou_tou_koopa[] = {
     {
         &unit_boss_koopa_tou, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position

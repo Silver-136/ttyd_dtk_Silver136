@@ -161,7 +161,7 @@ BattleWeapon weapon_kanbu1_attack = {
 
 BattleUnitSetup entry_npc_christine = {
     &unit_npc_christine, // mUnitKindParams
-    2, // alliance
+    ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
     0x4000001, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position

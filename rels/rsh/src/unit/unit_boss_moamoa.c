@@ -262,7 +262,7 @@ static BattleUnitKindPart parts[] = {
 
 BattleUnitSetup entry_boss_moamoa_tentacle_a = {
     &unit_boss_moamoa_tentacle_a, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
@@ -273,7 +273,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_a = {
 
 BattleUnitSetup entry_boss_moamoa_tentacle_b = {
     &unit_boss_moamoa_tentacle_b, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
@@ -284,7 +284,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_b = {
 
 BattleUnitSetup entry_boss_moamoa_tentacle_c = {
     &unit_boss_moamoa_tentacle_c, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
@@ -295,7 +295,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_c = {
 
 BattleUnitSetup entry_boss_moamoa_mouth = {
     &unit_boss_moamoa_mouth, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position

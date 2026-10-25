@@ -361,7 +361,7 @@ static BattleWeapon weapon_koopa_fire_attack = {
 
 BattleUnitSetup entry_kamec_obaba = {
     &unit_boss_kamec_obaba, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position

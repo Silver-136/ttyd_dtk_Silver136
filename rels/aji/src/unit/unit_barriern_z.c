@@ -271,7 +271,7 @@ static BattleWeapon weapon_wawawa_attack = {
 
 static BattleUnitSetup entry_barriern_satellite = {
     &unit_barriern_z_satellite, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position

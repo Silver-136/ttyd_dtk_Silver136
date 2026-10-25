@@ -401,7 +401,7 @@ BattleWeapon weapon_batten_aud_attack = {
 
 static BattleUnitSetup entry_rocket_punch = {
     &unit_boss_rocket_punch_mkII, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position

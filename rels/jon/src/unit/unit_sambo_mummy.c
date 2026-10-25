@@ -1549,7 +1549,7 @@ EVT_END()
 
 static BattleUnitSetup entry_sambo = {
     &unit_sambo_mummy, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position

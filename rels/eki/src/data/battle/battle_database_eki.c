@@ -140,7 +140,7 @@ BattleStageData eki_btlstage_data[] = {
 BattleUnitSetup btlparty_eki_eki_06_01_off_1[] = {
     {
         &unit_kuriboo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -150,7 +150,7 @@ BattleUnitSetup btlparty_eki_eki_06_01_off_1[] = {
     },
     {
         &unit_kuriboo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -160,7 +160,7 @@ BattleUnitSetup btlparty_eki_eki_06_01_off_1[] = {
     },
     {
         &unit_kuriboo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -184,7 +184,7 @@ BattleGroupSetup btlgrp_eki_eki_06_01_off_1 = {
 BattleUnitSetup btlparty_eki_eki_02_01_off_1[] = {
     {
         &unit_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -194,7 +194,7 @@ BattleUnitSetup btlparty_eki_eki_02_01_off_1[] = {
     },
     {
         &unit_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -218,7 +218,7 @@ BattleGroupSetup btlgrp_eki_eki_02_01_off_1 = {
 BattleUnitSetup btlparty_eki_eki_02_02_off_1[] = {
     {
         &unit_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -228,7 +228,7 @@ BattleUnitSetup btlparty_eki_eki_02_02_off_1[] = {
     },
     {
         &unit_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -238,7 +238,7 @@ BattleUnitSetup btlparty_eki_eki_02_02_off_1[] = {
     },
     {
         &unit_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -262,7 +262,7 @@ BattleGroupSetup btlgrp_eki_eki_02_02_off_1 = {
 BattleUnitSetup btlparty_eki_eki_02_03_off_1[] = {
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -272,7 +272,7 @@ BattleUnitSetup btlparty_eki_eki_02_03_off_1[] = {
     },
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -296,7 +296,7 @@ BattleGroupSetup btlgrp_eki_eki_02_03_off_1 = {
 BattleUnitSetup btlparty_eki_eki_03_01_off_1[] = {
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -306,7 +306,7 @@ BattleUnitSetup btlparty_eki_eki_03_01_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -330,7 +330,7 @@ BattleGroupSetup btlgrp_eki_eki_03_01_off_1 = {
 BattleUnitSetup btlparty_eki_eki_03_02_off_1[] = {
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -340,7 +340,7 @@ BattleUnitSetup btlparty_eki_eki_03_02_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -350,7 +350,7 @@ BattleUnitSetup btlparty_eki_eki_03_02_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -374,7 +374,7 @@ BattleGroupSetup btlgrp_eki_eki_03_02_off_1 = {
 BattleUnitSetup btlparty_eki_eki_03_03_off_1[] = {
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -384,7 +384,7 @@ BattleUnitSetup btlparty_eki_eki_03_03_off_1[] = {
     },
     {
         &unit_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -394,7 +394,7 @@ BattleUnitSetup btlparty_eki_eki_03_03_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -418,7 +418,7 @@ BattleGroupSetup btlgrp_eki_eki_03_03_off_1 = {
 BattleUnitSetup btlparty_eki_eki_03_05_off_1[] = {
     {
         &unit_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -428,7 +428,7 @@ BattleUnitSetup btlparty_eki_eki_03_05_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -452,7 +452,7 @@ BattleGroupSetup btlgrp_eki_eki_03_05_off_1 = {
 BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
     {
         &unit_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 40.0f, -10.0f}, // position
@@ -462,7 +462,7 @@ BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -472,7 +472,7 @@ BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -482,7 +482,7 @@ BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
     },
     {
         &unit_kurokumorn, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 40.0f, 20.0f}, // position
@@ -506,7 +506,7 @@ BattleGroupSetup btlgrp_eki_eki_03_07_off_1 = {
 BattleUnitSetup btlparty_eki_eki_04_01_off_1[] = {
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -516,7 +516,7 @@ BattleUnitSetup btlparty_eki_eki_04_01_off_1[] = {
     },
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -526,7 +526,7 @@ BattleUnitSetup btlparty_eki_eki_04_01_off_1[] = {
     },
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -550,7 +550,7 @@ BattleGroupSetup btlgrp_eki_eki_04_01_off_1 = {
 BattleUnitSetup btlparty_eki_eki_04_02_off_1[] = {
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -560,7 +560,7 @@ BattleUnitSetup btlparty_eki_eki_04_02_off_1[] = {
     },
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -570,7 +570,7 @@ BattleUnitSetup btlparty_eki_eki_04_02_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -594,7 +594,7 @@ BattleGroupSetup btlgrp_eki_eki_04_02_off_1 = {
 BattleUnitSetup btlparty_eki_eki_04_06_off_1[] = {
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -604,7 +604,7 @@ BattleUnitSetup btlparty_eki_eki_04_06_off_1[] = {
     },
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -628,7 +628,7 @@ BattleGroupSetup btlgrp_eki_eki_04_06_off_1 = {
 BattleUnitSetup btlparty_eki_eki_04_03_off_1[] = {
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -638,7 +638,7 @@ BattleUnitSetup btlparty_eki_eki_04_03_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -662,7 +662,7 @@ BattleGroupSetup btlgrp_eki_eki_04_03_off_1 = {
 BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
@@ -672,7 +672,7 @@ BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -682,7 +682,7 @@ BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -692,7 +692,7 @@ BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
     },
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
@@ -716,7 +716,7 @@ BattleGroupSetup btlgrp_eki_eki_04_04_off_1 = {
 BattleUnitSetup btlparty_eki_eki_04_05_off_1[] = {
     {
         &unit_sambo_mummy, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -726,7 +726,7 @@ BattleUnitSetup btlparty_eki_eki_04_05_off_1[] = {
     },
     {
         &unit_patatogemet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position

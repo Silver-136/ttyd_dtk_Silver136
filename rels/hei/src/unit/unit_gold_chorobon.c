@@ -247,7 +247,7 @@ EVT_END()
 
 BattleUnitSetup entry_chorogun = {
     &unit_chorobon_gundan, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {75.0f, 0.0f, 0.0f}, // position

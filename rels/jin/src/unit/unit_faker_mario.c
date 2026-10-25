@@ -474,7 +474,7 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
 
 BattleUnitSetup entry_gullible_christine = {
     &unit_gullible_christine, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
@@ -485,7 +485,7 @@ BattleUnitSetup entry_gullible_christine = {
 
 BattleUnitSetup entry_gullible_nokotarou = {
     &unit_gullible_nokotarou, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
@@ -496,7 +496,7 @@ BattleUnitSetup entry_gullible_nokotarou = {
 
 BattleUnitSetup entry_gullible_clauda = {
     &unit_gullible_clauda, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
@@ -507,7 +507,7 @@ BattleUnitSetup entry_gullible_clauda = {
 
 BattleUnitSetup entry_gullible_yoshi = {
     &unit_gullible_yoshi, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position

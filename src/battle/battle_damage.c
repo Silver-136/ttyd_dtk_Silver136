@@ -487,24 +487,24 @@ skip:
     defense = part->defense->defenses[element];
     defenseAttr = part->defenseAttr->defenseAttrs[element];
     switch (element) {
-        case 1:
+        case ELEMENT_FIRE:
             *result = flags | DAMAGE_CODE_FIRE;
             break;
-        case 2:
+        case ELEMENT_ICE:
             *result = flags | DAMAGE_CODE_ICE;
             break;
-        case 4:
+        case ELEMENT_ELECTRIC:
             *result = flags | DAMAGE_CODE_ELECTRIC;
             break;
-        case 3:
+        case ELEMENT_EXPLOSION:
             *result = flags | DAMAGE_CODE_EXPLOSION;
             break;
-        case 0:
+        case ELEMENT_NORMAL:
         default:
             *result = flags | DAMAGE_CODE_NORMAL;
             break;
     }
-    if (defenseAttr != 3) {
+    if (defenseAttr != DEFENSE_ATTR_ABSORB) {
         if (target->badgesEquipped.DefendPlus) {
             defense += target->badgesEquipped.DefendPlus;
         }
@@ -536,7 +536,7 @@ skip:
             defense = 0;
         }
     }
-    damage = (defenseAttr == 3) ? damage : damage - defense;
+    damage = (defenseAttr == DEFENSE_ATTR_ABSORB) ? damage : damage - defense;
     if ((damage += target->badgesEquipped.PUpDDown) > 0) {
         if (weapon->special & SPECIAL_DIMINISH_BY_HIT) {
             if ((damage -= target->hpDamageCount) <= 0) {
@@ -564,24 +564,24 @@ skip:
         damage = (damage + n - 1) / n;
     }
     switch (defenseAttr) {
-        case 1:
+        case DEFENSE_ATTR_WEAK:
             damage++;
             break;
-        case 2:
+        case DEFENSE_ATTR_IMMUNE:
             damage = 0;
             break;
-        case 4:
+        case DEFENSE_ATTR_IMMUNE_EXCEPT_GULP:
             if (!(flags & 0x80000000)) {
                 damage = 0;
             }
             break;
-        case 3:
+        case DEFENSE_ATTR_ABSORB:
             break;
     }
     if (damage < 0) {
         damage = 0;
     }
-    if (defenseAttr == 3) {
+    if (defenseAttr == DEFENSE_ATTR_ABSORB) {
         *result |= 0x2000;
         return (u32)damage * -1;
     }

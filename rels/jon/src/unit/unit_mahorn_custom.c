@@ -562,7 +562,7 @@ static BattleWeapon weapon_mahorn_recover_magic = {
 
 static BattleUnitSetup entry_mahorn = {
     &unit_mahorn_custom_bunsin, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position

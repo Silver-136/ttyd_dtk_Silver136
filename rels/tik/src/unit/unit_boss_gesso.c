@@ -328,7 +328,7 @@ EVT_END()
 
 BattleUnitSetup entry_gesso_left_arm_entry_data = {
     &unit_boss_gesso_left_arm, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position
@@ -339,7 +339,7 @@ BattleUnitSetup entry_gesso_left_arm_entry_data = {
 
 BattleUnitSetup entry_gesso_right_arm_entry_data = {
     &unit_boss_gesso_right_arm, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {0.0f, -1000.0f, 0.0f}, // position

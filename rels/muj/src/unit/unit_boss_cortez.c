@@ -1697,7 +1697,7 @@ EVT_END()
 
 BattleUnitSetup entry_claw = {
     &unit_boss_cortez_claw, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
@@ -1708,7 +1708,7 @@ BattleUnitSetup entry_claw = {
 
 BattleUnitSetup entry_rapier = {
     &unit_boss_cortez_rapier, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
@@ -1719,7 +1719,7 @@ BattleUnitSetup entry_rapier = {
 
 BattleUnitSetup entry_sword = {
     &unit_boss_cortez_sword, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
@@ -1730,7 +1730,7 @@ BattleUnitSetup entry_sword = {
 
 BattleUnitSetup entry_saber = {
     &unit_boss_cortez_saber, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position

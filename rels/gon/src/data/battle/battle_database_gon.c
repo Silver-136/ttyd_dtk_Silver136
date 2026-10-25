@@ -142,7 +142,7 @@ BattleStageData gon_btlstage_data[] = {
 BattleUnitSetup btlparty_gon_gon_02_02_off_1[] = {
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -152,7 +152,7 @@ BattleUnitSetup btlparty_gon_gon_02_02_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -162,7 +162,7 @@ BattleUnitSetup btlparty_gon_gon_02_02_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -186,7 +186,7 @@ BattleGroupSetup btlgrp_gon_gon_02_02_off_1 = {
 BattleUnitSetup btlparty_gon_gon_02_03_off_1[] = {
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -196,7 +196,7 @@ BattleUnitSetup btlparty_gon_gon_02_03_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -220,7 +220,7 @@ BattleGroupSetup btlgrp_gon_gon_02_03_off_1 = {
 BattleUnitSetup btlparty_gon_gon_02_04_off_1[] = {
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -230,7 +230,7 @@ BattleUnitSetup btlparty_gon_gon_02_04_off_1[] = {
     },
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -240,7 +240,7 @@ BattleUnitSetup btlparty_gon_gon_02_04_off_1[] = {
     },
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -264,7 +264,7 @@ BattleGroupSetup btlgrp_gon_gon_02_04_off_1 = {
 BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
     {
         &unit_red_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -274,7 +274,7 @@ BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {10.0f, 0.0f, -20.0f}, // position
@@ -284,7 +284,7 @@ BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -294,7 +294,7 @@ BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -304,7 +304,7 @@ BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {170.0f, 0.0f, 20.0f}, // position
@@ -327,7 +327,7 @@ BattleGroupSetup btlgrp_gon_gon_03_01_off_1 = {
 BattleUnitSetup btlparty_gon_gon_04_01_off_1[] = {
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -337,7 +337,7 @@ BattleUnitSetup btlparty_gon_gon_04_01_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -361,7 +361,7 @@ BattleGroupSetup btlgrp_gon_gon_04_01_off_1 = {
 BattleUnitSetup btlparty_gon_gon_04_02_off_1[] = {
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
@@ -371,7 +371,7 @@ BattleUnitSetup btlparty_gon_gon_04_02_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -381,7 +381,7 @@ BattleUnitSetup btlparty_gon_gon_04_02_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -391,7 +391,7 @@ BattleUnitSetup btlparty_gon_gon_04_02_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
@@ -415,7 +415,7 @@ BattleGroupSetup btlgrp_gon_gon_04_02_off_1 = {
 BattleUnitSetup btlparty_gon_gon_04_03_off_1[] = {
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -425,7 +425,7 @@ BattleUnitSetup btlparty_gon_gon_04_03_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -435,7 +435,7 @@ BattleUnitSetup btlparty_gon_gon_04_03_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -459,7 +459,7 @@ BattleGroupSetup btlgrp_gon_gon_04_03_off_1 = {
 BattleUnitSetup btlparty_gon_gon_06_03_off_1[] = {
     {
         &unit_patakuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -469,7 +469,7 @@ BattleUnitSetup btlparty_gon_gon_06_03_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -479,7 +479,7 @@ BattleUnitSetup btlparty_gon_gon_06_03_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -503,7 +503,7 @@ BattleGroupSetup btlgrp_gon_gon_06_03_off_1 = {
 BattleUnitSetup btlparty_gon_gon_06_04_off_1[] = {
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -513,7 +513,7 @@ BattleUnitSetup btlparty_gon_gon_06_04_off_1[] = {
     },
     {
         &unit_patakuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -523,7 +523,7 @@ BattleUnitSetup btlparty_gon_gon_06_04_off_1[] = {
     },
     {
         &unit_patakuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -547,7 +547,7 @@ BattleGroupSetup btlgrp_gon_gon_06_04_off_1 = {
 BattleUnitSetup btlparty_gon_gon_08_01_off_1[] = {
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -557,7 +557,7 @@ BattleUnitSetup btlparty_gon_gon_08_01_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -581,7 +581,7 @@ BattleGroupSetup btlgrp_gon_gon_08_01_off_1 = {
 BattleUnitSetup btlparty_gon_gon_08_03_off_1[] = {
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -591,7 +591,7 @@ BattleUnitSetup btlparty_gon_gon_08_03_off_1[] = {
     },
     {
         &unit_togekuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -615,7 +615,7 @@ BattleGroupSetup btlgrp_gon_gon_08_03_off_1 = {
 BattleUnitSetup btlparty_gon_gon_08_05_off_1[] = {
     {
         &unit_patakuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -625,7 +625,7 @@ BattleUnitSetup btlparty_gon_gon_08_05_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -649,7 +649,7 @@ BattleGroupSetup btlgrp_gon_gon_08_05_off_1 = {
 BattleUnitSetup btlparty_gon_gon_09_01_off_1[] = {
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -659,7 +659,7 @@ BattleUnitSetup btlparty_gon_gon_09_01_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -669,7 +669,7 @@ BattleUnitSetup btlparty_gon_gon_09_01_off_1[] = {
     },
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -693,7 +693,7 @@ BattleGroupSetup btlgrp_gon_gon_09_01_off_1 = {
 BattleUnitSetup btlparty_gon_gon_09_02_off_1[] = {
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -703,7 +703,7 @@ BattleUnitSetup btlparty_gon_gon_09_02_off_1[] = {
     },
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -713,7 +713,7 @@ BattleUnitSetup btlparty_gon_gon_09_02_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -737,7 +737,7 @@ BattleGroupSetup btlgrp_gon_gon_09_02_off_1 = {
 BattleUnitSetup btlparty_gon_gon_09_04_off_1[] = {
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
@@ -747,7 +747,7 @@ BattleUnitSetup btlparty_gon_gon_09_04_off_1[] = {
     },
     {
         &unit_honenoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -757,7 +757,7 @@ BattleUnitSetup btlparty_gon_gon_09_04_off_1[] = {
     },
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -767,7 +767,7 @@ BattleUnitSetup btlparty_gon_gon_09_04_off_1[] = {
     },
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
@@ -791,7 +791,7 @@ BattleGroupSetup btlgrp_gon_gon_09_04_off_1 = {
 BattleUnitSetup btlparty_gon_gon_10_01_off_1[] = {
     {
         &unit_togekuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
@@ -801,7 +801,7 @@ BattleUnitSetup btlparty_gon_gon_10_01_off_1[] = {
     },
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -811,7 +811,7 @@ BattleUnitSetup btlparty_gon_gon_10_01_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -821,7 +821,7 @@ BattleUnitSetup btlparty_gon_gon_10_01_off_1[] = {
     },
     {
         &unit_togekuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
@@ -845,7 +845,7 @@ BattleGroupSetup btlgrp_gon_gon_10_01_off_1 = {
 BattleUnitSetup btlparty_gon_gon_10_02_off_1[] = {
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -855,7 +855,7 @@ BattleUnitSetup btlparty_gon_gon_10_02_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -865,7 +865,7 @@ BattleUnitSetup btlparty_gon_gon_10_02_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -889,7 +889,7 @@ BattleGroupSetup btlgrp_gon_gon_10_02_off_1 = {
 BattleUnitSetup btlparty_gon_gon_10_03_off_1[] = {
     {
         &unit_nokonoko, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
@@ -899,7 +899,7 @@ BattleUnitSetup btlparty_gon_gon_10_03_off_1[] = {
     },
     {
         &unit_togekuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -909,7 +909,7 @@ BattleUnitSetup btlparty_gon_gon_10_03_off_1[] = {
     },
     {
         &unit_patakuri, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -919,7 +919,7 @@ BattleUnitSetup btlparty_gon_gon_10_03_off_1[] = {
     },
     {
         &unit_patapata, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 40.0f, 20.0f}, // position
@@ -943,7 +943,7 @@ BattleGroupSetup btlgrp_gon_gon_10_03_off_1 = {
 BattleUnitSetup btlparty_gon_gon_11_01_off_1[] = {
     {
         &unit_boss_gonbaba, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {365.0f, 0.0f, 0.0f}, // position

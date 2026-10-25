@@ -228,7 +228,7 @@ BattleStageData dou_btlstage_data[] = {
 BattleUnitSetup btlparty_dou_dou_00_01_off_1[] = {
     {
         &unit_kuriboo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -238,7 +238,7 @@ BattleUnitSetup btlparty_dou_dou_00_01_off_1[] = {
     },
     {
         &unit_kuriboo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -248,7 +248,7 @@ BattleUnitSetup btlparty_dou_dou_00_01_off_1[] = {
     },
     {
         &unit_kuriboo, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -272,7 +272,7 @@ BattleGroupSetup btlgrp_dou_dou_00_01_off_1 = {
 BattleUnitSetup btlparty_dou_dou_01_01_off_01[] = {
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -282,7 +282,7 @@ BattleUnitSetup btlparty_dou_dou_01_01_off_01[] = {
     },
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -292,7 +292,7 @@ BattleUnitSetup btlparty_dou_dou_01_01_off_01[] = {
     },
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -316,7 +316,7 @@ BattleGroupSetup btlgrp_dou_dou_01_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_02_01_off_01[] = {
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -326,7 +326,7 @@ BattleUnitSetup btlparty_dou_dou_02_01_off_01[] = {
     },
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -350,7 +350,7 @@ BattleGroupSetup btlgrp_dou_dou_02_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_02_02_off_01[] = {
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 40.0f, -10.0f}, // position
@@ -360,7 +360,7 @@ BattleUnitSetup btlparty_dou_dou_02_02_off_01[] = {
     },
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -370,7 +370,7 @@ BattleUnitSetup btlparty_dou_dou_02_02_off_01[] = {
     },
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -380,7 +380,7 @@ BattleUnitSetup btlparty_dou_dou_02_02_off_01[] = {
     },
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 40.0f, 20.0f}, // position
@@ -404,7 +404,7 @@ BattleGroupSetup btlgrp_dou_dou_02_02_off_01 = {
 BattleUnitSetup btlparty_dou_dou_03_01_off_01[] = {
     {
         &unit_killer_cannon, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -414,7 +414,7 @@ BattleUnitSetup btlparty_dou_dou_03_01_off_01[] = {
     },
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
@@ -438,7 +438,7 @@ BattleGroupSetup btlgrp_dou_dou_03_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_03_99_off_01[] = {
     {
         &unit_killer, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -448,7 +448,7 @@ BattleUnitSetup btlparty_dou_dou_03_99_off_01[] = {
     },
     {
         &unit_killer, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -472,7 +472,7 @@ BattleGroupSetup btlgrp_dou_dou_03_99_off_01 = {
 BattleUnitSetup btlparty_dou_dou_03_02_off_01[] = {
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -482,7 +482,7 @@ BattleUnitSetup btlparty_dou_dou_03_02_off_01[] = {
     },
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -506,7 +506,7 @@ BattleGroupSetup btlgrp_dou_dou_03_02_off_01 = {
 BattleUnitSetup btlparty_dou_dou_03_03_off_01[] = {
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 0.0f, -10.0f}, // position
@@ -516,7 +516,7 @@ BattleUnitSetup btlparty_dou_dou_03_03_off_01[] = {
     },
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
@@ -526,7 +526,7 @@ BattleUnitSetup btlparty_dou_dou_03_03_off_01[] = {
     },
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
@@ -550,7 +550,7 @@ BattleGroupSetup btlgrp_dou_dou_03_03_off_01 = {
 BattleUnitSetup btlparty_dou_dou_05_01_off_01[] = {
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -560,7 +560,7 @@ BattleUnitSetup btlparty_dou_dou_05_01_off_01[] = {
     },
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -584,7 +584,7 @@ BattleGroupSetup btlgrp_dou_dou_05_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_05_02_off_01[] = {
     {
         &unit_patamet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -594,7 +594,7 @@ BattleUnitSetup btlparty_dou_dou_05_02_off_01[] = {
     },
     {
         &unit_patamet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -618,7 +618,7 @@ BattleGroupSetup btlgrp_dou_dou_05_02_off_01 = {
 BattleUnitSetup btlparty_dou_dou_06_01_off_01[] = {
     {
         &unit_patamet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -628,7 +628,7 @@ BattleUnitSetup btlparty_dou_dou_06_01_off_01[] = {
     },
     {
         &unit_patamet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -638,7 +638,7 @@ BattleUnitSetup btlparty_dou_dou_06_01_off_01[] = {
     },
     {
         &unit_patamet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -662,7 +662,7 @@ BattleGroupSetup btlgrp_dou_dou_06_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_06_02_off_01[] = {
     {
         &unit_patamet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 40.0f, -10.0f}, // position
@@ -672,7 +672,7 @@ BattleUnitSetup btlparty_dou_dou_06_02_off_01[] = {
     },
     {
         &unit_patamet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -682,7 +682,7 @@ BattleUnitSetup btlparty_dou_dou_06_02_off_01[] = {
     },
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -692,7 +692,7 @@ BattleUnitSetup btlparty_dou_dou_06_02_off_01[] = {
     },
     {
         &unit_patamet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 40.0f, 20.0f}, // position
@@ -716,7 +716,7 @@ BattleGroupSetup btlgrp_dou_dou_06_02_off_01 = {
 BattleUnitSetup btlparty_dou_dou_06_03_off_01[] = {
     {
         &unit_patamet, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -740,7 +740,7 @@ BattleGroupSetup btlgrp_dou_dou_06_03_off_01 = {
 BattleUnitSetup btlparty_dou_dou_07_01_off_01[] = {
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -750,7 +750,7 @@ BattleUnitSetup btlparty_dou_dou_07_01_off_01[] = {
     },
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -760,7 +760,7 @@ BattleUnitSetup btlparty_dou_dou_07_01_off_01[] = {
     },
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -784,7 +784,7 @@ BattleGroupSetup btlgrp_dou_dou_07_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_08_01_off_01[] = {
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {30.0f, 0.0f, -10.0f}, // position
@@ -794,7 +794,7 @@ BattleUnitSetup btlparty_dou_dou_08_01_off_01[] = {
     },
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -804,7 +804,7 @@ BattleUnitSetup btlparty_dou_dou_08_01_off_01[] = {
     },
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -814,7 +814,7 @@ BattleUnitSetup btlparty_dou_dou_08_01_off_01[] = {
     },
     {
         &unit_heavy_bom, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 0.0f, 20.0f}, // position
@@ -838,7 +838,7 @@ BattleGroupSetup btlgrp_dou_dou_08_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_09_01_off_01[] = {
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -848,7 +848,7 @@ BattleUnitSetup btlparty_dou_dou_09_01_off_01[] = {
     },
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -858,7 +858,7 @@ BattleUnitSetup btlparty_dou_dou_09_01_off_01[] = {
     },
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -882,7 +882,7 @@ BattleGroupSetup btlgrp_dou_dou_09_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_09_02_off_01[] = {
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {50.0f, 40.0f, -10.0f}, // position
@@ -892,7 +892,7 @@ BattleUnitSetup btlparty_dou_dou_09_02_off_01[] = {
     },
     {
         &unit_hermos, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
@@ -902,7 +902,7 @@ BattleUnitSetup btlparty_dou_dou_09_02_off_01[] = {
     },
     {
         &unit_bubble, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
@@ -926,7 +926,7 @@ BattleGroupSetup btlgrp_dou_dou_09_02_off_01 = {
 BattleUnitSetup btlparty_dou_dou_12_01_off_01[] = {
     {
         &unit_killer_cannon, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -936,7 +936,7 @@ BattleUnitSetup btlparty_dou_dou_12_01_off_01[] = {
     },
     {
         &unit_killer_cannon, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -960,7 +960,7 @@ BattleGroupSetup btlgrp_dou_dou_12_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_12_99_off_01[] = {
     {
         &unit_killer, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -970,7 +970,7 @@ BattleUnitSetup btlparty_dou_dou_12_99_off_01[] = {
     },
     {
         &unit_killer, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
@@ -994,7 +994,7 @@ BattleGroupSetup btlgrp_dou_dou_12_99_off_01 = {
 BattleUnitSetup btlparty_dou_dou_13_01_off_01[] = {
     {
         &unit_killer_cannon, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
@@ -1004,7 +1004,7 @@ BattleUnitSetup btlparty_dou_dou_13_01_off_01[] = {
     },
     {
         &unit_killer_cannon, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
@@ -1028,7 +1028,7 @@ BattleGroupSetup btlgrp_dou_dou_13_01_off_01 = {
 BattleUnitSetup btlparty_dou_dou_13_99_off_01[] = {
     {
         &unit_killer, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, 40.0f, 0.0f}, // position
@@ -1038,7 +1038,7 @@ BattleUnitSetup btlparty_dou_dou_13_99_off_01[] = {
     },
     {
         &unit_killer, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position

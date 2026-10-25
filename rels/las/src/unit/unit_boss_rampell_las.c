@@ -322,7 +322,7 @@ static BattleWeapon weapon_rampell_attack = {
 
 static BattleUnitSetup entry_marilyn = {
     &unit_boss_marilyn_las, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
@@ -333,7 +333,7 @@ static BattleUnitSetup entry_marilyn = {
 
 static BattleUnitSetup entry_majolyne = {
     &unit_boss_majolyne_las, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position

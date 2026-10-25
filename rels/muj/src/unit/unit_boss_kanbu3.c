@@ -237,7 +237,7 @@ BattleWeapon weapon_kanbu3_charge = {
 
 BattleUnitSetup entry_kenkyu = {
     &unit_gundan_zako_magician, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position
@@ -248,7 +248,7 @@ BattleUnitSetup entry_kenkyu = {
 
 BattleUnitSetup entry_group1 = {
     &unit_boss_gundan_zako_group1, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position
@@ -259,7 +259,7 @@ BattleUnitSetup entry_group1 = {
 
 BattleUnitSetup entry_group2 = {
     &unit_boss_gundan_zako_group2, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position
@@ -270,7 +270,7 @@ BattleUnitSetup entry_group2 = {
 
 BattleUnitSetup entry_group3 = {
     &unit_boss_gundan_zako_group3, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position

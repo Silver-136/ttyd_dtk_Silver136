@@ -45,7 +45,7 @@ BattleStageData nok_btlstage_data[] = {
 BattleUnitSetup btlparty_nok_hei_ep[] = {
     {
         &unit_act_mario, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position

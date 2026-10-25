@@ -1536,7 +1536,7 @@ EVT_END()
 
 BattleUnitSetup entry_bomzou = {
     &unit_bomzou, // mUnitKindParams
-    2, // alliance
+    ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
     0x4000001, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position

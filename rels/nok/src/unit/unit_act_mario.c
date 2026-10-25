@@ -176,7 +176,7 @@ EVT_END()
 BattleUnitSetup entry_unit_data[] = {
     {
         &unit_act_clauda, // mUnitKindParams
-        0, // alliance
+        ALLIANCE_PLAYER, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {-140.0f, 0.0f, 5.0f}, // position
@@ -186,7 +186,7 @@ BattleUnitSetup entry_unit_data[] = {
     },
     {
         &unit_act_teresa, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {45.0f, 40.0f, 0.0f}, // position
@@ -196,7 +196,7 @@ BattleUnitSetup entry_unit_data[] = {
     },
     {
         &unit_act_teresa, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {85.0f, 40.0f, 0.0f}, // position
@@ -206,7 +206,7 @@ BattleUnitSetup entry_unit_data[] = {
     },
     {
         &unit_act_atmic_teresa, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {150.0f, 40.0f, 0.0f}, // position
@@ -216,7 +216,7 @@ BattleUnitSetup entry_unit_data[] = {
     },
     {
         &unit_act_kinopio, // mUnitKindParams
-        2, // alliance
+        ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {-75.0f, 0.0f, -40.0f}, // position
@@ -226,7 +226,7 @@ BattleUnitSetup entry_unit_data[] = {
     },
     {
         &unit_act_kinopio, // mUnitKindParams
-        2, // alliance
+        ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {-15.0f, 0.0f, -40.0f}, // position
@@ -236,7 +236,7 @@ BattleUnitSetup entry_unit_data[] = {
     },
     {
         &unit_act_kinopiko, // mUnitKindParams
-        2, // alliance
+        ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {-45.0f, 0.0f, -40.0f}, // position
@@ -246,7 +246,7 @@ BattleUnitSetup entry_unit_data[] = {
     },
     {
         &unitdata_Party_Christine, // mUnitKindParams
-        2, // alliance
+        ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {0.0f, -50.0f, 110.0f}, // position

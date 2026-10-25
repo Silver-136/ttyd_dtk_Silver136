@@ -1360,7 +1360,7 @@ BattleUnitKindPart queen_hand_small_parts[] = {
 
 BattleUnitSetup entry_shadow_queen = {
     &unit_boss_shadow_queen, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {75.0f, 0.0f, 0.0f}, // position
@@ -1371,7 +1371,7 @@ BattleUnitSetup entry_shadow_queen = {
 
 BattleUnitSetup entry_shadow_hand_1 = {
     &unit_boss_shadow_hand_1, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {15.0f, 0.0f, -50.0f}, // position
@@ -1382,7 +1382,7 @@ BattleUnitSetup entry_shadow_hand_1 = {
 
 BattleUnitSetup entry_shadow_hand_2 = {
     &unit_boss_shadow_hand_2, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {160.0f, 0.0f, 50.0f}, // position
@@ -1393,7 +1393,7 @@ BattleUnitSetup entry_shadow_hand_2 = {
 
 BattleUnitSetup entry_shadow_hand_small = {
     &unit_boss_shadow_hand_small, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {95.0f, 0.0f, 0.0f}, // position

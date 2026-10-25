@@ -407,12 +407,21 @@ typedef struct BattleDataEntry {
     void* data; // 0x4
 } BattleDataEntry;
 
+// BattleUnitDefenseAttr.defenseAttrs: what a hit of that element does (BattleCalculateDamage)
+typedef enum BattleDefenseAttr {
+    DEFENSE_ATTR_NONE,
+    DEFENSE_ATTR_WEAK,               // +1 damage
+    DEFENSE_ATTR_IMMUNE,             // no damage
+    DEFENSE_ATTR_ABSORB,             // defense ignored, the damage heals instead
+    DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, // no damage unless the damage flags have 0x80000000 (Yoshi's Gulp attacks)
+} BattleDefenseAttr;
+
 typedef struct BattleUnitDefense {
-    s8 defenses[5]; // 0x0
+    s8 defenses[5]; // 0x0, indexed by BattleWeaponElement
 } BattleUnitDefense;
 
 typedef struct BattleUnitDefenseAttr {
-    s8 defenseAttrs[5]; // 0x0
+    s8 defenseAttrs[5]; // 0x0, BattleDefenseAttr, indexed by BattleWeaponElement
 } BattleUnitDefenseAttr;
 
 typedef struct StatusVulnerability {

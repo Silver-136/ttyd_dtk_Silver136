@@ -1777,7 +1777,7 @@ EVT_END()
 
 BattleUnitSetup entry_koura = {
     &unit_koura, // mUnitKindParams
-    0, // alliance
+    ALLIANCE_PLAYER, // alliance
     {0}, // pad_05
     0x4000001, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position

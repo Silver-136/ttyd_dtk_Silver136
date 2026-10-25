@@ -128,7 +128,7 @@ static BattleUnitKindPart parts[] = {
 
 static BattleUnitSetup entry_killer = {
     &unit_killer, // mUnitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     0x4000004, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position

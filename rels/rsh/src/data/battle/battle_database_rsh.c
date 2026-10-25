@@ -50,7 +50,7 @@ BattleStageData rsh_btlstage_data[] = {
 BattleUnitSetup btlparty_rsh_rsh_06_01_off_1[] = {
     {
         &unit_boss_moamoa, // mUnitKindParams
-        1, // alliance
+        ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
         {70.0f, -20.0f, 0.0f}, // position
