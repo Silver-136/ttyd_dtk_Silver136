@@ -100,12 +100,6 @@ void coingetDisp(WinMgrEntry* entry);
 USER_FUNC(evt_key_get_button);
 USER_FUNC(evt_key_get_dir);
 
-extern EvtWord evt_sub_stopwatch[7];
-extern EvtWord evt_sub_tree_access_entry[28];
-extern EvtWord evt_sub_kusa_access_entry[26];
-extern EvtWord evt_sub_starstone[VERSION_PICK(1043, 1084)];
-extern EvtWord evt_sub_mail_vibration[26];
-extern EvtWord evt_sub_mail_event[VERSION_PICK(117, 123)];
 #ifndef VERSION_G8ME01
 s32 evt_sub_mail_event_end[1];
 #endif

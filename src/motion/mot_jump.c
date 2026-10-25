@@ -444,7 +444,7 @@ void mot_upstairs(void) {
             if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                 motSlitContinue();
             } else if (mario->dispFlags & 0x1000000) {
-                marioChgMot2(0x15);
+                marioChgMot2(MARIO_MOTION_SLIT);
             } else {
                 marioChgMotAuto();
             }

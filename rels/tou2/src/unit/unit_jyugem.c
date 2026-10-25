@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
+#include "tou2.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -15,7 +16,6 @@
 
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 static USER_FUNC(togezo_copy_status);
-extern BattleUnitKind unit_togezo;
 
 BattleUnitKind unit_jyugem;
 static BattleUnitDefense defence;

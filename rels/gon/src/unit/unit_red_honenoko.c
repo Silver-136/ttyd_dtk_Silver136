@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
+#include "gon.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -16,7 +17,6 @@
 
 USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(honenoko_copy_status);
-extern BattleUnitKind unit_honenoko;
 
 BattleUnitKind unit_red_honenoko;
 static BattleUnitDefense defence;

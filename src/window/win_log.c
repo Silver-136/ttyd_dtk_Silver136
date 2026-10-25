@@ -1434,7 +1434,6 @@ typedef struct MoaChain {
     const char* b;
 } MoaChain;
 
-extern const s32 g_moamoa_chain_num;
 extern MoaChain g_moamoa_chain_tbl[];
 void animPoseVivianMain(s32 poseId, Vec* v);
 

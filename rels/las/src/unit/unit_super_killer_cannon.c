@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "las.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -12,7 +13,6 @@
 
 static USER_FUNC(killer_get_angle);
 static USER_FUNC(killer_copy_status);
-extern BattleUnitKind unit_super_killer;
 
 BattleUnitKind unit_super_killer_cannon;
 static BattleUnitDefense defence;

@@ -4,6 +4,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
+#include "muj.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
@@ -27,7 +28,6 @@ USER_FUNC(check_exist_kenkyu);
 #ifdef VERSION_G8ME01
 #endif
 extern s32 down_ceil[];
-extern BattleUnitKind unit_boss_gundan_zako_group1;
 extern BattleUnitKind unit_boss_gundan_zako_group2;
 extern BattleUnitKind unit_boss_gundan_zako_group3;
 extern BattleUnitKind unit_gundan_zako_magician;

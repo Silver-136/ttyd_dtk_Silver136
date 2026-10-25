@@ -446,7 +446,7 @@ void kpa_fall_80213C38(void) {
     if (kpaGetBodyStatus() == 2) {
         m = marioGetPtr();
         if (m->currMotionId != MARIO_MOTION_KPA_SWIM) {
-            marioChgMot2(0x25);
+            marioChgMot2(MARIO_MOTION_KPA_SWIM);
         }
         kpaClearHitobjRide();
         m->flags &= ~MARIO_FLAG_IS_JUMPING;

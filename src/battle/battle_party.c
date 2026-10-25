@@ -6,8 +6,8 @@
 #include "unit/party/unit_party_vivian.h"
 #include "unit/party/unit_party_sanders.h"
 #include "unit/party/unit_party_chuchurina.h"
+#include "unit/party/unit_party_christine.h"
 
-extern BattleUnitKind unitdata_Party_Christine;
 
 #define PARTY_SETUP(kind) {&kind, 0, {0}, 0x04000002, {1000.0f, 0.0f, 1000.0f}, 0, {0, 0, 0, 0}, NULL}
 

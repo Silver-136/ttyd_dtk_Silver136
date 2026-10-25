@@ -76,11 +76,6 @@ typedef struct WinDt {
 } WinDt;
 
 #ifndef VERSION_G8ME01
-extern EvtWord evt_memcard_check[];
-extern EvtWord evt_memcard_start[];
-extern EvtWord evt_memcard_save[];
-extern EvtWord evt_memcard_delete[];
-extern EvtWord evt_memcard_copy[];
 #endif
 extern void SoundSetOutputMode(s32 mode);
 extern BOOL psndENVOn(u32 flags, const char* name);
@@ -134,9 +129,7 @@ __declspec(section ".sdata2") const u32 seq_logo_zero_color[2];
 static EvtWord evt_shake[12];
 #else
 
-extern s32 stone_id[];
 static EvtWord evt_shake[12];
-extern EvtWord evt_continue[];
 #endif
 
 s32 evt_seq_load_keep_msg_window(EventEntry* evt, BOOL isFirstCall) {
