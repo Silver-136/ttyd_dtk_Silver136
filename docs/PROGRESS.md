@@ -77,8 +77,9 @@ unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory
 | `__declspec(section ...)` placements | 434 | 18 |
 | Padding objects (`gap_*`) | 142 | 8 |
 | Whole-file optimizer/inline pragmas | 50 size + 16 inline settings | 0: per-unit flags in `configure.py` |
-| Other optimizer and inline pragmas | 697 | 477 |
-| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 289 (FAKES.md rows 214 -> 173) |
+| Other optimizer and inline pragmas | 697 | 472 |
+| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 275 (FAKES.md rows 214 -> 170) |
 | Inline asm in game code | 19 | 6 |
 | Private copies of prototypes in `.c` files | ~20,000 | ~1,000 left (event functions, owner-header and SDK prototypes now come from headers) |
-| Raw numbers given names | | unit kinds and sides, items, sounds (182 ids), saved variables, targeting flags, characters, menu states, party/battle/item/event flags, ... |
+| Raw numbers given names | | unit kinds and sides, items, sounds (182 ids), saved variables, targeting flags, characters, menu states, party/battle/item/event flags, weapon elements, counter resistances, special and target-property flags, unit and part attributes (also in about 1,200 event-script calls), statuses, partner ids, ... |
+| Copies of shared code and types | | one polynomial sin/cos inline replaces 30 private copies; private views of effect and message work structs replaced by the real types |
