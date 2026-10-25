@@ -77,9 +77,13 @@ unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory
 | `__declspec(section ...)` placements | 434 | 18 |
 | Padding objects (`gap_*`) | 142 | 8 |
 | Whole-file optimizer/inline pragmas | 50 size + 16 inline settings | 0: per-unit flags in `configure.py` |
-| Other optimizer and inline pragmas | 697 | 472 |
-| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 275 (FAKES.md rows 214 -> 170) |
+| Per-function optimizer and inline pragma pairs replaced by one per-unit flag (`-inline noauto`, `-opt noprop`, ...) | | 59 units |
+| Other optimizer and inline pragmas | 697 | 312 |
+| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 283 (FAKES.md rows 214 -> 178; 13 rows added for no-op statements that were in the code without a FAKE note) |
 | Inline asm in game code | 19 | 6 |
 | Private copies of prototypes in `.c` files | ~20,000 | ~1,000 left (event functions, owner-header and SDK prototypes now come from headers) |
 | Raw numbers given names | | unit kinds and sides, items, sounds (182 ids), saved variables, targeting flags, characters, menu states, party/battle/item/event flags, weapon elements, counter resistances, special and target-property flags, unit and part attributes (also in about 1,200 event-script calls), statuses, partner ids, ... |
+| Calls through function-pointer casts (wrong or private prototypes) | ~385 | 47 (one typed declaration per function; open families listed in `cleanup_notes`) |
+| SDK call arguments and enum casts as numbers | | 2,282 GX arguments, 54 camera ids, 85 pad masks, 50 clock conversions (`OSTicksTo*`, `OSDiffTick`) and other enum casts named |
+| Formatting | | Ghidra-style braces joined (2,360), 2-space and irregular indentation re-indented (33 files), casts spaced as `(T*)x`, `(void*)0` as `NULL`, 45 TODO notes removed or turned into facts |
 | Copies of shared code and types | | one polynomial sin/cos inline replaces 30 private copies; private views of effect and message work structs replaced by the real types |
