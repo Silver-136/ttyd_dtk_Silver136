@@ -20,7 +20,7 @@ void evt_msg_init(void) {
 }
 
 
-s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 a3, EvtWord name);
+s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name);
 void msgWindow_Add(const char* msg, s32 id);
 
 #include "evt/evt_npc.h"

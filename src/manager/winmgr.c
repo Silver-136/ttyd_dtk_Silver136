@@ -582,7 +582,7 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
     }
 }
 
-WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 a2, BOOL a3) {
+WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL a3) {
     s32 n;
     WinMgrDesc* desc;
     WinMgrSelect* sel;
@@ -609,7 +609,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 a2, BOOL a3) {
     sel->cursorY = 0.0f;
     sel->cursorX = 0.0f;
     sel->scrollY = 0.0f;
-    sel->newItem = a2;
+    sel->newItem = newItem;
     if (a3) {
         sel->flags |= 0x100;
     }
@@ -631,8 +631,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 a2, BOOL a3) {
             sel->items = __memAlloc(HEAP_DEFAULT, 0x1E8);
             memset(sel->items, 0, 0x1E8);
             sel->numItems = 0;
-            if (a2) {
-                sel->items[sel->numItems++].id = a2;
+            if (newItem) {
+                sel->items[sel->numItems++].id = newItem;
             }
             for (i = 0; i < 121; i++) {
                 id = (u16)pouchKeyItem(i);
@@ -654,8 +654,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 a2, BOOL a3) {
             sel->items = __memAlloc(HEAP_DEFAULT, 0x54);
             memset(sel->items, 0, 0x54);
             sel->numItems = 0;
-            if (a2) {
-                sel->items[sel->numItems++].id = a2;
+            if (newItem) {
+                sel->items[sel->numItems++].id = newItem;
             }
             for (i = 0; i < 20; i++) {
                 id = (u16)pouchHaveItem(i);
@@ -669,8 +669,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 a2, BOOL a3) {
             sel->items = __memAlloc(HEAP_DEFAULT, 0x324);
             memset(sel->items, 0, 0x324);
             sel->numItems = 0;
-            if (a2) {
-                sel->items[sel->numItems++].id = a2;
+            if (newItem) {
+                sel->items[sel->numItems++].id = newItem;
             }
             for (i = 0; i < 200; i++) {
                 id = (u16)pouchHaveBadge(i);
@@ -688,8 +688,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 a2, BOOL a3) {
             sel->items = __memAlloc(HEAP_DEFAULT, 0x84);
             memset(sel->items, 0, 0x84);
             sel->numItems = 0;
-            if (a2) {
-                sel->items[sel->numItems++].id = a2;
+            if (newItem) {
+                sel->items[sel->numItems++].id = newItem;
             }
             for (i = 0; i < 32; i++) {
                 id = (u16)pouchKeepItem(i);
@@ -876,8 +876,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 a2, BOOL a3) {
                 sel->items = __memAlloc(HEAP_DEFAULT, (m + 1) * 4);
                 memset(sel->items, 0, (m + 1) * 4);
                 sel->numItems = 0;
-                if (a2) {
-                    sel->items[sel->numItems++].id = a2;
+                if (newItem) {
+                    sel->items[sel->numItems++].id = newItem;
                 }
                 for (it = list, i = 0; *it != -1; it++) {
                     sel->items[sel->numItems++].id = list[i++];

@@ -45,7 +45,7 @@ static u8 cloud_once_flag;
 static void _mapsetofs_all(CloudWork* wp);
 static void _mapclsofs_all(CloudWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
-static void _img_alloc_capture(const char* a0, s32 a1, const char* a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
+static void _img_alloc_capture(const char* name, s32 shadowId, const char* offName, s32 allocMode, s32 x, s32 y, s32 w, s32 h);
 
 static USER_FUNC(evt_cloud_main);
 USER_FUNC(evt_iri_16_cloud_ent);
@@ -573,19 +573,19 @@ static EVT_BEGIN(evt_cloud_main_evt)
     RETURN
 EVT_END()
 
-static void _img_alloc_capture(const char* a0, s32 a1, const char* a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) {
+static void _img_alloc_capture(const char* name, s32 shadowId, const char* offName, s32 allocMode, s32 x, s32 y, s32 w, s32 h) {
     EventEntry event;
     EvtWord args[10];
 
     event.args = args;
-    args[0] = (EvtWord)a0;
-    args[1] = a1;
-    args[2] = (EvtWord)a2;
-    args[3] = a3;
-    args[4] = a4;
-    args[5] = a5;
-    args[6] = a6;
-    args[7] = a7;
+    args[0] = (EvtWord)name;
+    args[1] = shadowId;
+    args[2] = (EvtWord)offName;
+    args[3] = allocMode;
+    args[4] = x;
+    args[5] = y;
+    args[6] = w;
+    args[7] = h;
     evt_img_alloc_capture(&event, TRUE);
 }
 

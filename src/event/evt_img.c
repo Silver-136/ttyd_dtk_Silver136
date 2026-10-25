@@ -57,7 +57,7 @@ USER_FUNC(evt_img_alloc_capture) {
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 shadowId = evtGetValue(event, args[1]);
     const char* offName = (const char*)evtGetValue(event, args[2]);
-    s32 unk = evtGetValue(event, args[3]);
+    s32 allocMode = evtGetValue(event, args[3]);
     s32 x = evtGetValue(event, args[4]);
     s32 y = evtGetValue(event, args[5]);
     s32 w = evtGetValue(event, args[6]);
@@ -116,8 +116,8 @@ USER_FUNC(evt_img_alloc_capture) {
     }
     sh->offscreenId = offId;
     sh->flags = 0x14;
-    sh->allocMode = unk;
-    if (unk != 0) {
+    sh->allocMode = allocMode;
+    if (allocMode != 0) {
         sh->flags |= 0x100;
     }
     return EVT_RETURN_DONE;

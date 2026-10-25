@@ -24,7 +24,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 
-extern ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
+extern ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
 
 extern USER_FUNC(evt_mario_dispflag_onoff);
 extern USER_FUNC(evt_mario_flag_onoff);

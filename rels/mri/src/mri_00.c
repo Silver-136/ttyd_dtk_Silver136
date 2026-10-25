@@ -50,7 +50,7 @@ static u8 cloud_once_flag;
 static void _mapsetofs_all(CloudWork* wp);
 static void _mapclsofs_all(CloudWork* wp);
 static s32 _ofs_get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
-static void _img_alloc_capture(EvtWord a0, EvtWord a1, EvtWord a2, EvtWord a3, EvtWord a4, EvtWord a5, EvtWord a6, EvtWord a7);
+static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, EvtWord allocMode, EvtWord x, EvtWord y, EvtWord w, EvtWord h);
 void envSetYamiView(Mtx mtx);
 
 static USER_FUNC(anim_tevcallback);
@@ -117,19 +117,19 @@ EvtWord mri_00_init_evt[377];
 EvtWord mri_00_init_evt[296];
 #endif
 
-static void _img_alloc_capture(EvtWord a0, EvtWord a1, EvtWord a2, EvtWord a3, EvtWord a4, EvtWord a5, EvtWord a6, EvtWord a7) {
+static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, EvtWord allocMode, EvtWord x, EvtWord y, EvtWord w, EvtWord h) {
     EventEntry event;
     EvtWord args[10];
 
     event.args = args;
-    args[0] = a0;
-    args[1] = a1;
-    args[2] = a2;
-    args[3] = a3;
-    args[4] = a4;
-    args[5] = a5;
-    args[6] = a6;
-    args[7] = a7;
+    args[0] = name;
+    args[1] = shadowId;
+    args[2] = offName;
+    args[3] = allocMode;
+    args[4] = x;
+    args[5] = y;
+    args[6] = w;
+    args[7] = h;
     evt_img_alloc_capture(&event, TRUE);
 }
 

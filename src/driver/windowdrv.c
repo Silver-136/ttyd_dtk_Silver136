@@ -29,7 +29,7 @@ static const GXColor fog_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 //local prototypes
 void windowTexSetup_callback(s32 error, DVDFileInfo* info);
-void _windowDispGX_Message(s32 type, s32 a2, u8 alpha, BOOL dark, f32 x, f32 y, f32 height, f32 width, f32 a9, f32 a10);
+void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, f32 y, f32 height, f32 width, f32 tailX, f32 tailY);
 static inline void fogOff(void) { GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, fog_color); }
 
 void windowInit(void) {
@@ -629,7 +629,7 @@ void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 height, f32 width
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
-void _windowDispGX_Message(s32 type, s32 a2, u8 alpha, BOOL dark, f32 x, f32 y, f32 height, f32 width, f32 a9, f32 a10) {
+void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, f32 y, f32 height, f32 width, f32 tailX, f32 tailY) {
     CameraEntry* camera;
     Mtx trans, scale;
     Mtx norm_mtx1, norm_mtx2, norm_mtx3, norm_mtx4;
@@ -977,34 +977,34 @@ void _windowDispGX_Message(s32 type, s32 a2, u8 alpha, BOOL dark, f32 x, f32 y, 
             break;
     }
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    //TODO: cleanup, rename vars
-    if (a2 & 1) {
-        if (a2 & 4) {
+
+    if (tailFlags & 1) {
+        if (tailFlags & 4) {
             xx = (0.7f * height) + x;
         }
         else {
             xx = (0.38f * height) + x;
         }
         
-        if (a2 & 8) {
+        if (tailFlags & 8) {
             y2 = -((0.175f * width) - y);
             y = ((0.225f * width) + y);
-            if (y2 >= a10) goto end;
+            if (y2 >= tailY) goto end;
         }
         else {
             y2 = -((0.8f * width) - y);
             y = -((1.2f * width) - y);
-            if (y2 <= a10) goto end;
+            if (y2 <= tailY) goto end;
         }
-        r = (xx - (((xx - a9) * (y2 - y)) / (y2 - a10)));
-        if (a9 >= xx) {
-            if (r > a9) {
-                r = a9;
+        r = (xx - (((xx - tailX) * (y2 - y)) / (y2 - tailY)));
+        if (tailX >= xx) {
+            if (r > tailX) {
+                r = tailX;
             }
         }
         else {
-            if (r < a9) {
-                r = a9;
+            if (r < tailX) {
+                r = tailX;
             }
         }
         
@@ -1046,7 +1046,7 @@ end:
 BOOL tpl_loaded; //new in retail, tpl loaded
 TEXPalette* winTpl; //new in retail
 
-void windowDispGX_Message(s32 type, s32 a2, u8 alpha, f32 x, f32 y, f32 height, f32 width, f32 a9, f32 a10) {
+void windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, f32 x, f32 y, f32 height, f32 width, f32 tailX, f32 tailY) {
     GXSetCullMode(GX_CULL_NONE);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -1071,11 +1071,11 @@ void windowDispGX_Message(s32 type, s32 a2, u8 alpha, f32 x, f32 y, f32 height, 
     GXSetCurrentMtx(0);
     switch (type) {
         case WINDOW_TYPE_TEC:
-            _windowDispGX_Message(type, 0, alpha, 1, x, y, height, width, a9, a10);
+            _windowDispGX_Message(type, 0, alpha, 1, x, y, height, width, tailX, tailY);
             break;
         default:
-            _windowDispGX_Message(type, a2, alpha, 1, x, y, height, width, a9, a10);
-            _windowDispGX_Message(type, a2, alpha, 0, x, y, height, width, a9, a10);
+            _windowDispGX_Message(type, tailFlags, alpha, 1, x, y, height, width, tailX, tailY);
+            _windowDispGX_Message(type, tailFlags, alpha, 0, x, y, height, width, tailX, tailY);
             break;
     }
 }

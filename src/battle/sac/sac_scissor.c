@@ -94,7 +94,7 @@ void tess(Pt* buf, s32 count);
 void star_disp2D_sub(s32 idx, s32 alpha);
 s32 scissor_damage_sub2(Vec pt);
 void scissor_damage_sub(BattleUnit* unit, s32* out);
-s32 scissor_intersection(f32, f32, f32, f32, f32, f32, f32, f32, f32*, f32*);
+s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
 
 
 
@@ -853,7 +853,7 @@ s32 scissor_timer_main(void) {
     return 0;
 }
 
-GXColor HSV2RGB(GXColor);
+GXColor HSV2RGB(GXColor hsv);
 
 s32 scissor_control(EventEntry* evt, BOOL first) {
     ScissorWork* w = GetScissorPtr();

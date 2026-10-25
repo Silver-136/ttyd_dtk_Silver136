@@ -126,16 +126,16 @@ void evt_icon_disp_func(CameraId camId, void* param) {
     }
 }
 
-PuniTexInfo* _make_texbuf(PuniTexInfo* texbuf, s32 count, const char* a3, const char* a4, f32 a5) {
+PuniTexInfo* _make_texbuf(PuniTexInfo* texbuf, s32 count, const char* group, const char* anim, f32 frame) {
     s32 i;
 
     for (i = 0; i < count; i++) {
         texbuf->group = _mapAlloc(0xC);
         texbuf->anim = _mapAlloc(0xC);
-        strcpy(texbuf->group, a3);
-        strcpy(texbuf->anim, a4);
-        texbuf->frame = a5;
-        a5 += 1.0f;
+        strcpy(texbuf->group, group);
+        strcpy(texbuf->anim, anim);
+        texbuf->frame = frame;
+        frame += 1.0f;
         texbuf++;
     }
     return texbuf;

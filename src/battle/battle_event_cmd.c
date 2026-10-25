@@ -3470,7 +3470,7 @@ void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon,
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
 s32 BattleCheckCounter(s32* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
-void* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
+void* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
 #include "eff/n64/eff_coin_n64.h"
 static inline void bec_coin(BattleUnit* unit, s32 item) {
     s32 coins;

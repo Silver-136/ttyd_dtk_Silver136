@@ -120,7 +120,7 @@ void BattleStatusEffectDelete(BattleUnit* unit) {
 
 #include "driver/effdrv.h"
 EffectEntry* effSparkEntry(s32, s32, f32, f32, f32, f32);
-EffectEntry* effSleepEntry(s32, s32, f32, f32, f32, f32, f32);
+EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation);
 #define EFF_SLEEP(u) ((u)->sleepEff)
 #define EFF_SPARK(u) ((u)->sparkEff)
 
@@ -200,8 +200,8 @@ void BSE_BiribiriDelete(BattleUnit* unit) {
 }
 #pragma optimize_for_size reset
 
-EffectEntry* effFireEntry(s32, s32, f32, f32, f32, f32);
-EffectEntry* effIceEntry(s32, s32, f32, f32, f32, f32);
+EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
+EffectEntry* effIceEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
 #define EFF_FIRE(u) ((u)->fireEff)
 #define EFF_ICE(u) ((u)->iceEff)
 
