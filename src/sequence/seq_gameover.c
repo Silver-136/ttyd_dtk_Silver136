@@ -299,9 +299,9 @@ void seq_gameOverMain(SequenceWork* work) {
             camera->viewport[1] = 0.0f;
             camera->viewport[2] = gp->fbWidth;
             camera->viewport[3] = gp->efbHeight;
-            camGetPtr(CAMERA_2D)->flags &= ~0x100;
-            camGetPtr(CAMERA_2D)->flags |= 0x400;
-            camGetPtr(CAMERA_2D)->flags |= 0x200;
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX;
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
             fadeTecOff();
             fadeSoftFocusOff();
             npcClearDeadInfo();
@@ -375,7 +375,7 @@ void seq_gameOverMain(SequenceWork* work) {
             strcpy(gp->currentMapName, "");
             strcpy(gp->currentAreaName, "");
             statusWinDispOn();
-            camGetPtr(CAMERA_2D)->flags &= ~0x200;
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
             if (gp->flags & 0x1000) {
                 seqSetSeq(SEQ_E3, NULL, NULL);
             } else {

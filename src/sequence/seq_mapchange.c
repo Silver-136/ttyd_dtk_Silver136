@@ -240,9 +240,9 @@ void seq_mapChangeMain(SequenceWork* work) {
         work->state++;
         break;
     case 6:
-        if (!(camGetPtr(CAMERA_2D)->flags & 0x200) && !(bero_get_BeroEXEC() & 1) &&
+        if (!(camGetPtr(CAMERA_2D)->flags & CAMERA_FLAG_LETTER_BOX_OFF) && !(bero_get_BeroEXEC() & 1) &&
             (!marioChkKey() || !marioChkCtrl())) {
-            camGetPtr(CAMERA_2D)->flags |= 0x500;
+            camGetPtr(CAMERA_2D)->flags |= (CAMERA_FLAG_LETTER_BOX | CAMERA_FLAG_LETTER_BOX_INSTANT);
         }
         if (npcWaitAllInitEvtEnd()) {
             npcExecAllReglEvt();
@@ -465,7 +465,7 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
     mw->camTarget = mw->position;
     camRoadReset();
     camShiftReset();
-    if (cam->flags & 4) {
+    if (cam->flags & CAMERA_FLAG_ROAD) {
         camRoadMain(&roadOut, 1.0f + cam->marioPos.x, 1.0f + cam->marioPos.y, 1.0f + cam->marioPos.z,
                     1.0f + cam->marioAt.x, 1.0f + cam->marioAt.y, 1.0f + cam->marioAt.z, 0.0f);
     }

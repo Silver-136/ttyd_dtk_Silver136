@@ -842,7 +842,7 @@ void mot_slit(void) {
     }
     switch (m->slitState) {
     case 0x50:
-        camGetPtr(CAMERA_2D)->flags |= 0x200;
+        camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         CAMFIX(m)
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
         if (0.0f == m->mot.slit.pushDir) {
@@ -862,7 +862,7 @@ void mot_slit(void) {
         }
         break;
     case 0x52:
-        camGetPtr(CAMERA_2D)->flags &= ~0x200;
+        camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
         m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
         m->slitState = 0x14;
         m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
@@ -870,7 +870,7 @@ void mot_slit(void) {
     }
     switch (m->slitState) {
     case 0x5a:
-        camGetPtr(CAMERA_2D)->flags |= 0x200;
+        camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         CAMFIX(m)
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
         marioChgPaper("PM_S_1H");
@@ -905,7 +905,7 @@ void mot_slit(void) {
         m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         m->slitState = 0x5e;
     case 0x5e:
-        camGetPtr(CAMERA_2D)->flags &= ~0x200;
+        camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
         m->slitState = 0x14;
         break;
     }

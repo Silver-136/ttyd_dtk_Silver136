@@ -44,7 +44,7 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
     BOOL reset = FALSE;
 
     shiftRate = camRoadGetCurrentShiftXRate();
-    if (camera->flags & 0x20) {
+    if (camera->flags & CAMERA_FLAG_ROAD_SHIFT_OFF) {
         reset = TRUE;
     }
     if (reset) {

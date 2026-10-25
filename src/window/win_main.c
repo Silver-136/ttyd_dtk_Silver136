@@ -223,7 +223,7 @@ void winMain(void) {
                 } else {
                     wp->menuSel = 0;
                 }
-                camGetPtr(CAMERA_2D)->flags |= 0x200;
+                camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
                 if (gp->flags & 0x1000) {
                     wp->menuSel = 1;
                 }
@@ -316,7 +316,7 @@ void winMain(void) {
                 break;
 
             case WIN_MENU_CLOSE:
-                camGetPtr(CAMERA_2D)->flags &= ~0x200;
+                camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
                 if (mario->characterId == CHARACTER_BOWSER) {
                     if (!kpaGetStageViewType()) {
                         marioCtrlOn();

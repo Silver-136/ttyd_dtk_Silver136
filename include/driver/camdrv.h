@@ -23,8 +23,22 @@ typedef enum CameraId {
     CAMERA_MAX,
 } CameraId;
 
+// CameraEntry.flags (camdrv, evt_cam)
+typedef enum CameraFlags {
+    CAMERA_FLAG_DISP_OFF = (1 << 0),          // 0x1, camDispOff: not drawn
+    CAMERA_FLAG_CTRL_OFF = (1 << 1),          // 0x2, camCtrlOff: cam3dMain does nothing
+    CAMERA_FLAG_ROAD = (1 << 2),              // 0x4, camLoadRoad loaded a camera road
+    CAMERA_FLAG_PROJ_ADJUST = (1 << 3),       // 0x8, projAdjust applied to the projection once (shake)
+    CAMERA_FLAG_NO_Y_FOLLOW = (1 << 4),       // 0x10, cam3dMain does not follow Mario's height
+    CAMERA_FLAG_ROAD_SHIFT_OFF = (1 << 5),    // 0x20, evt_cam3d_road_shift_onoff(0)
+    CAMERA_FLAG_AUTO_NEAR_FAR = (1 << 6),     // 0x40, camEvalNearFar before each perspective draw
+    CAMERA_FLAG_LETTER_BOX = (1 << 8),        // 0x100, letter box bars shown
+    CAMERA_FLAG_LETTER_BOX_OFF = (1 << 9),    // 0x200, evt_cam_letter_box_disable: no automatic bars
+    CAMERA_FLAG_LETTER_BOX_INSTANT = (1 << 10), // 0x400, the next bar change is immediate
+} CameraFlags;
+
 struct CameraEntry {
-    u16 flags;                   // 0x0
+    u16 flags;                   // 0x0, CameraFlags
     u16 mode;                    // 0x2
     u16 stateA;                  // 0x4
     u8 align_6[0x8 - 0x6];       // 0x6

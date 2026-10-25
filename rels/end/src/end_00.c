@@ -159,9 +159,9 @@ void _prolog(void) {
     }
     relSetEvtAddr("end_00", end_00_init_evt);
 #ifdef VERSION_G8ME01
-    camGetPtr(CAMERA_2D)->flags |= 0x200;
-    camGetPtr(CAMERA_2D)->flags &= ~0x100;
-    camGetPtr(CAMERA_2D)->flags |= 0x400;
+    camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
+    camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX;
+    camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
 #endif
 }
 
@@ -173,7 +173,7 @@ void _epilog(void) {
     }
     end_staff_roll_exit();
 #ifdef VERSION_G8ME01
-    camGetPtr(CAMERA_2D)->flags &= ~0x200;
+    camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
 #endif
 }
 

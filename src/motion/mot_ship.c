@@ -317,7 +317,7 @@ void mot_ship(void) {
         marioGetPtr()->motShip->bobSpeed = 4.25f;
         m->currSubMotionId = 0;
         if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-            camGetPtr(CAMERA_2D)->flags |= 0x200;
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         }
     }
     switch (m->currSubMotionId) {
@@ -555,14 +555,14 @@ void mot_ship(void) {
             marioGetPtr()->motShip->bobSpeed = 4.25f;
             m->currSubMotionId = 50;
             if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-                camGetPtr(CAMERA_2D)->flags &= ~0x200;
+                camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
             }
         }
         break;
     }
     case 30:
         if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-            camGetPtr(CAMERA_2D)->flags |= 0x200;
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         }
         m->currSubMotionId = 31;
         /* fallthrough */
@@ -785,7 +785,7 @@ void mot_ship(void) {
             marioGetPtr()->motStruct = NULL;
         }
         if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-            camGetPtr(CAMERA_2D)->flags &= ~0x200;
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
         }
         break;
     case 50:

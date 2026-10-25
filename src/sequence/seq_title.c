@@ -108,8 +108,8 @@ void L_titleInit(SequenceWork* work) {
             }
         }
     }
-    camGetPtr(CAMERA_2D)->flags &= ~0x100;
-    camGetPtr(CAMERA_2D)->flags |= 0x400;
+    camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX;
+    camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
 }
 
 

@@ -131,7 +131,7 @@ static inline void itemGetEnd(ItemEntry* entry) {
     }
     marioKeyOn();
     marioChgStayMotion();
-    camGetPtr(CAMERA_2D)->flags &= ~0x200;
+    camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
 }
 
 void itemGetSound(ItemEntry* entry);
@@ -938,7 +938,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             entry->subState = 1;
             entry->timer = 0;
-            camGetPtr(CAMERA_2D)->flags |= 0x200;
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
             marioKeyOff();
             marioStSystemLevel(2);
             psndSetFlag(PSND_FLAG_MUTE_SFX);

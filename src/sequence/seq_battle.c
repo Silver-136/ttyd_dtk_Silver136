@@ -329,7 +329,7 @@ void battle_exit(void) {
     iconReInit();
     extReset();
     bmapUnLoad();
-    if (camGetPtr(CAMERA_3D)->flags & 4) {
+    if (camGetPtr(CAMERA_3D)->flags & CAMERA_FLAG_ROAD) {
         camSetMode(CAMERA_3D, 1);
     } else {
         camSetMode(CAMERA_3D, 3);

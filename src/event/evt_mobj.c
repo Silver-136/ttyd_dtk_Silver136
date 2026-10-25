@@ -2090,7 +2090,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
             break;
         }
         marioKeyOff();
-        camGetPtr(CAMERA_2D)->flags |= 0x200;
+        camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_HIT1), &mobj->position);
         mobj->state++;
     case 1:
@@ -2167,7 +2167,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         marioChgPose("M_S_1");
         marioKeyOn();
         statusWinForceOff();
-        camGetPtr(CAMERA_2D)->flags &= ~0x200;
+        camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
         mobj->state++;
         break;
     case 6:
@@ -2188,7 +2188,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
     case 11:
         if (windowCheckID(mobj->typeData[2]) == 0) {
             marioKeyOn();
-            camGetPtr(CAMERA_2D)->flags &= ~0x200;
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
             mobj->flags &= ~MOBJ_FLAG_HIT;
             mobj->state = 0;
         }
@@ -2200,7 +2200,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
     case 21:
         if (windowCheckID(mobj->typeData[2]) == 0) {
             marioKeyOn();
-            camGetPtr(CAMERA_2D)->flags &= ~0x200;
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
             mobj->flags &= ~MOBJ_FLAG_HIT;
             mobj->state = 0;
         }
@@ -2281,7 +2281,7 @@ s32 mobj_save_blk(MapObjectEntry* mobj) {
             marioStSystemLevel(1);
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_SAVE1), &mobj->position);
             animPoseSetAnim(mobj->poseId, "A_1", 1);
-            camGetPtr(CAMERA_2D)->flags |= 0x200;
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
             mobj->state++;
         }
         break;
@@ -2310,7 +2310,7 @@ s32 mobj_save_blk(MapObjectEntry* mobj) {
     case 4:
         if (evtCheckID(mobj->eventId) != 1) {
             marioStSystemLevel(0);
-            camGetPtr(CAMERA_2D)->flags &= ~0x200;
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
             mobj->flags &= ~MOBJ_FLAG_HIT;
             marioKeyOn();
             mobj->state = 0;

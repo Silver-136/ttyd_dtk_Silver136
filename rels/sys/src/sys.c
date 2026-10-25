@@ -196,9 +196,9 @@ void _prolog(void) {
         evtGetValue(NULL, GSW_STORY_PROGRESS) != 280) {
         psndStopAllFadeOut();
     }
-    camGetPtr(CAMERA_2D)->flags |= 0x200;
-    camGetPtr(CAMERA_2D)->flags &= ~0x100;
-    camGetPtr(CAMERA_2D)->flags |= 0x400;
+    camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
+    camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX;
+    camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
 }
 
 EVT_BEGIN(dummy_evt)
@@ -224,7 +224,7 @@ static void _epilog(void) {
     if (strcmp(gp->currentMapName, "sys_01") == 0) {
         sys_01_release();
     }
-    camGetPtr(CAMERA_2D)->flags &= ~0x200;
+    camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
     for (dtor = _dtors; *dtor != NULL; dtor++) {
         (*dtor)();
     }

@@ -153,12 +153,12 @@ void marioNoUpdateCamPos(void) {
 }
 
 void camFollowYOn(void) {
-    camGetPtr(CAMERA_3D)->flags &= ~0x10;
+    camGetPtr(CAMERA_3D)->flags &= ~CAMERA_FLAG_NO_Y_FOLLOW;
     marioGetPtr()->dispFlags &= ~0x20000;
 }
 
 void camFollowYOff(void) {
-    camGetPtr(CAMERA_3D)->flags |= 0x10;
+    camGetPtr(CAMERA_3D)->flags |= CAMERA_FLAG_NO_Y_FOLLOW;
     marioGetPtr()->dispFlags |= 0x20000;
 }
 

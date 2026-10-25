@@ -1013,7 +1013,7 @@ USER_FUNC(hit_group_chk) {
 USER_FUNC(bg_cam_chk) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 
-    if (marioBgmodeChk() && (camera->flags & 0x10) && marioGetPtr()->airTimer == 0) {
+    if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW) && marioGetPtr()->airTimer == 0) {
         camFollowYOn();
     }
     return EVT_RETURN_BLOCK;

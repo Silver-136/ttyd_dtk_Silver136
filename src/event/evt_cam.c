@@ -83,10 +83,10 @@ USER_FUNC(evt_cam_shake) {
     } else {
         PSMTX44Trans(camGetPtr(camId)->projAdjust, -x, -y, 0.0f);
     }
-    camGetPtr(camId)->flags |= 8;
+    camGetPtr(camId)->flags |= CAMERA_FLAG_PROJ_ADJUST;
     if (msec) {
         if ((u64)msec < OSTicksToMilliseconds(now - *(u64*)&event->userdata[1])) {
-            camGetPtr(id)->flags &= ~8;
+            camGetPtr(id)->flags &= ~CAMERA_FLAG_PROJ_ADJUST;
             padRumbleOff(0);
             return EVT_RETURN_DONE;
         }
@@ -367,9 +367,9 @@ USER_FUNC(evt_cam3d_road_shift_onoff) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 
     if (on) {
-        camera->flags &= ~0x20;
+        camera->flags &= ~CAMERA_FLAG_ROAD_SHIFT_OFF;
     } else {
-        camera->flags |= 0x20;
+        camera->flags |= CAMERA_FLAG_ROAD_SHIFT_OFF;
     }
     return EVT_RETURN_DONE;
 }
@@ -550,18 +550,18 @@ USER_FUNC(evt_cam_letter_box_onoff) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
 
     if (on) {
-        camera->flags |= 0x100;
+        camera->flags |= CAMERA_FLAG_LETTER_BOX;
         psndSetFlag(0x20);
         camera->letterBoxAlpha = 255;
         camera->letterBoxTop = 0;
         camera->letterBoxBottom = 0;
         camera->letterBoxCamId = CAMERA_2D;
     } else {
-        camera->flags &= ~0x100;
+        camera->flags &= ~CAMERA_FLAG_LETTER_BOX;
         psndClearFlag(0x20);
     }
     if (flag) {
-        camera->flags |= 0x400;
+        camera->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
     }
     return EVT_RETURN_DONE;
 }
@@ -572,10 +572,10 @@ USER_FUNC(evt_cam_letter_box_disable) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
 
     if (disable) {
-        camera->flags |= 0x200;
+        camera->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         psndSetFlag(0x40);
     } else {
-        camera->flags &= ~0x200;
+        camera->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
         psndClearFlag(0x40);
     }
     return EVT_RETURN_DONE;
@@ -584,7 +584,7 @@ USER_FUNC(evt_cam_letter_box_disable) {
 USER_FUNC(evt_cam_letter_box_wait) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
 
-    if ((camera->flags & 0x100) && camera->letterBoxTop == 49 && camera->letterBoxBottom == 44) {
+    if ((camera->flags & CAMERA_FLAG_LETTER_BOX) && camera->letterBoxTop == 49 && camera->letterBoxBottom == 44) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
