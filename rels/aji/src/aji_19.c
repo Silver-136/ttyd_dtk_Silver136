@@ -29,20 +29,6 @@ static USER_FUNC(mario_chk);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 
-f32 fd_aji_19_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_aji_19_neg_one_382;
-f32 fd_aji_19___local_PI_383;
-f32 fd_aji_19___local_3PIO2_385;
-f32 fd_aji_19_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_aji_19___local_PIO2_384;
-f32 fd_aji_19_one_381;
-f32 fd_aji_19_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_aji_19_neg_one_365;
-f32 fd_aji_19___local_PI_366;
-f32 fd_aji_19___local_3PIO2_368;
-f32 fd_aji_19_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_aji_19___local_PIO2_367;
-f32 fd_aji_19_one_364;
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
@@ -50,34 +36,6 @@ static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
 EvtWord evt_hajimete[33];
 EvtWord aji_19_init_evt[56];
-
-f32 fd_aji_19_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_aji_19_neg_one_382 = -1.0f;
-
-f32 fd_aji_19___local_PI_383 = 3.1415927f;
-
-f32 fd_aji_19___local_3PIO2_385 = 4.712389f;
-
-f32 fd_aji_19_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_aji_19___local_PIO2_384 = 1.5707964f;
-
-f32 fd_aji_19_one_381 = 1.0f;
-
-f32 fd_aji_19_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_aji_19_neg_one_365 = -1.0f;
-
-f32 fd_aji_19___local_PI_366 = 3.1415927f;
-
-f32 fd_aji_19___local_3PIO2_368 = 4.712389f;
-
-f32 fd_aji_19_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_aji_19___local_PIO2_367 = 1.5707964f;
-
-f32 fd_aji_19_one_364 = 1.0f;
 
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))

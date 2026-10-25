@@ -66,20 +66,6 @@ USER_FUNC(namiyoke_fail_stop);
 USER_FUNC(namiyoke_se_check);
 USER_FUNC(namiyoke_set_mapobj);
 
-f32 fd_dou_10_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_dou_10_neg_one_382;
-f32 fd_dou_10___local_PI_383;
-f32 fd_dou_10___local_3PIO2_385;
-f32 fd_dou_10_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_dou_10___local_PIO2_384;
-f32 fd_dou_10_one_381;
-f32 fd_dou_10_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_dou_10_neg_one_365;
-f32 fd_dou_10___local_PI_366;
-f32 fd_dou_10___local_3PIO2_368;
-f32 fd_dou_10_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_dou_10___local_PIO2_367;
-f32 fd_dou_10_one_364;
 static BeroEntry bero_entry_data[5];
 const char* namiyoke_mapobj[15];
 EvtWord nami_running[72];
@@ -97,34 +83,6 @@ static EvtWord yari_trap[11];
 static EvtWord dou_puka_event_main0[60];
 static HitDamageReturn hitDmgRetPoints[4];
 EvtWord dou_10_init_evt[64];
-
-f32 fd_dou_10_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_dou_10_neg_one_382 = -1.0f;
-
-f32 fd_dou_10___local_PI_383 = 3.1415927f;
-
-f32 fd_dou_10___local_3PIO2_385 = 4.712389f;
-
-f32 fd_dou_10_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_dou_10___local_PIO2_384 = 1.5707964f;
-
-f32 fd_dou_10_one_381 = 1.0f;
-
-f32 fd_dou_10_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_dou_10_neg_one_365 = -1.0f;
-
-f32 fd_dou_10___local_PI_366 = 3.1415927f;
-
-f32 fd_dou_10___local_3PIO2_368 = 4.712389f;
-
-f32 fd_dou_10_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_dou_10___local_PIO2_367 = 1.5707964f;
-
-f32 fd_dou_10_one_364 = 1.0f;
 
 static BeroEntry bero_entry_data[] = {
     {

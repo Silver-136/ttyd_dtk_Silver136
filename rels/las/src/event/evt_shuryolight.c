@@ -27,20 +27,6 @@ static s32 shuryolightRunEvt(EvtWord* code, s32 id);
 static void shuryolightSetAnim(s32 index, s32 anim);
 static void shuryolight_callback(void* param, s32 group);
 
-f32 fd_evt_shuryolight_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_evt_shuryolight_neg_one_382;
-f32 fd_evt_shuryolight___local_PI_383;
-f32 fd_evt_shuryolight___local_3PIO2_385;
-f32 fd_evt_shuryolight_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_evt_shuryolight___local_PIO2_384;
-f32 fd_evt_shuryolight_one_381;
-f32 fd_evt_shuryolight_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_evt_shuryolight_neg_one_365;
-f32 fd_evt_shuryolight___local_PI_366;
-f32 fd_evt_shuryolight___local_3PIO2_368;
-f32 fd_evt_shuryolight_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_evt_shuryolight___local_PIO2_367;
-f32 fd_evt_shuryolight_one_364;
 static const char* green_light_anim[5];
 static const char* yellow_light_anim[5];
 static const char* red_light_anim[5];
@@ -51,34 +37,6 @@ EvtWord shuryolight_head_normal[30];
 EvtWord shuryolight_head_tenmetu[20];
 EvtWord shuryolight_head_off[14];
 EvtWord shuryolight_tue_normal[31];
-
-f32 fd_evt_shuryolight_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_evt_shuryolight_neg_one_382 = -1.0f;
-
-f32 fd_evt_shuryolight___local_PI_383 = 3.1415927f;
-
-f32 fd_evt_shuryolight___local_3PIO2_385 = 4.712389f;
-
-f32 fd_evt_shuryolight_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_evt_shuryolight___local_PIO2_384 = 1.5707964f;
-
-f32 fd_evt_shuryolight_one_381 = 1.0f;
-
-f32 fd_evt_shuryolight_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_evt_shuryolight_neg_one_365 = -1.0f;
-
-f32 fd_evt_shuryolight___local_PI_366 = 3.1415927f;
-
-f32 fd_evt_shuryolight___local_3PIO2_368 = 4.712389f;
-
-f32 fd_evt_shuryolight_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_evt_shuryolight___local_PIO2_367 = 1.5707964f;
-
-f32 fd_evt_shuryolight_one_364 = 1.0f;
 
 static const char* green_light_anim[] = {
     "L_1C",

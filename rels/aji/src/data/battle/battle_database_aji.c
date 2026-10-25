@@ -14,20 +14,6 @@ extern BattleUnitKind unit_barriern;
 extern BattleUnitKind unit_barriern_custom;
 extern BattleUnitKind unit_barriern_z;
 
-f32 fd_battle_database_aji_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_aji_neg_one_382;
-f32 fd_battle_database_aji___local_PI_383;
-f32 fd_battle_database_aji___local_3PIO2_385;
-f32 fd_battle_database_aji_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_aji___local_PIO2_384;
-f32 fd_battle_database_aji_one_381;
-f32 fd_battle_database_aji_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_aji_neg_one_365;
-f32 fd_battle_database_aji___local_PI_366;
-f32 fd_battle_database_aji___local_3PIO2_368;
-f32 fd_battle_database_aji_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_aji___local_PIO2_367;
-f32 fd_battle_database_aji_one_364;
 BattleStageObjectData aji_btlobject_data[27];
 BattleStageData aji_btlstage_data[7];
 BattleUnitSetup btlparty_aji_aji_mbmkII[1];
@@ -92,34 +78,6 @@ NpcBattleSelect btlgrpsel_aji_btlno_aji_15_01_off[2];
 NpcSetupBattleInfo btlsetup_aji_tbl[24];
 NpcTerritoryInfo btl_aji_setup_no_tbl[24];
 EvtWord bgset_aji_space_event[35];
-
-f32 fd_battle_database_aji_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_aji_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_aji___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_aji___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_aji_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_aji___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_aji_one_381 = 1.0f;
-
-f32 fd_battle_database_aji_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_aji_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_aji___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_aji___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_aji_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_aji___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_aji_one_364 = 1.0f;
 
 BattleStageObjectData aji_btlobject_data[] = {
     {"dentou_01", 2, 0, {144.0f, 0.0f, -54.0f}, 0, 60, {0}},

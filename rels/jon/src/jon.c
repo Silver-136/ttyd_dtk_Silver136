@@ -180,20 +180,6 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
-f32 fd_jon_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_jon_neg_one_382;
-f32 fd_jon___local_PI_383;
-f32 fd_jon___local_3PIO2_385;
-f32 fd_jon_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_jon___local_PIO2_384;
-f32 fd_jon_one_381;
-f32 fd_jon_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_jon_neg_one_365;
-f32 fd_jon___local_PI_366;
-f32 fd_jon___local_3PIO2_368;
-f32 fd_jon_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_jon___local_PIO2_367;
-f32 fd_jon_one_364;
 #ifdef VERSION_G8ME01
 EvtWord jon_init_evt[400];
 #else
@@ -285,34 +271,6 @@ static EvtWord gonbaba_standup_shake[23];
 static EvtWord gonbaba_fog_change[87];
 static EvtWord gonbaba_down_shake[83];
 EvtWord zonbaba_first_event[677];
-
-f32 fd_jon_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_jon_neg_one_382 = -1.0f;
-
-f32 fd_jon___local_PI_383 = 3.1415927f;
-
-f32 fd_jon___local_3PIO2_385 = 4.712389f;
-
-f32 fd_jon_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_jon___local_PIO2_384 = 1.5707964f;
-
-f32 fd_jon_one_381 = 1.0f;
-
-f32 fd_jon_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_jon_neg_one_365 = -1.0f;
-
-f32 fd_jon___local_PI_366 = 3.1415927f;
-
-f32 fd_jon___local_3PIO2_368 = 4.712389f;
-
-f32 fd_jon_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_jon___local_PIO2_367 = 1.5707964f;
-
-f32 fd_jon_one_364 = 1.0f;
 
 EVT_BEGIN(jon_init_evt)
     CALL(evt_sub_get_system_flag, LW(0))
@@ -3228,5 +3186,4 @@ void _prolog(void) {
     relSetEvtAddr("jon_06", jon_init_evt);
     relSetBtlAddr("jon", btlsetup_jon_tbl, btl_jon_setup_no_tbl);
 }
-
 

@@ -77,20 +77,6 @@ USER_FUNC(evt_npc_set_stay_anim);
 static void callback(s32 type, void** work);
 void kuti_callback(s32 type, void** work);
 
-f32 fd_aji_04_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_aji_04_neg_one_382;
-f32 fd_aji_04___local_PI_383;
-f32 fd_aji_04___local_3PIO2_385;
-f32 fd_aji_04_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_aji_04___local_PIO2_384;
-f32 fd_aji_04_one_381;
-f32 fd_aji_04_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_aji_04_neg_one_365;
-f32 fd_aji_04___local_PI_366;
-f32 fd_aji_04___local_3PIO2_368;
-f32 fd_aji_04_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_aji_04___local_PIO2_367;
-f32 fd_aji_04_one_364;
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
@@ -116,34 +102,6 @@ EvtWord kuizu_sekizou[920];
 #endif
 EvtWord sekizou_init[47];
 EvtWord aji_04_init_evt[55];
-
-f32 fd_aji_04_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_aji_04_neg_one_382 = -1.0f;
-
-f32 fd_aji_04___local_PI_383 = 3.1415927f;
-
-f32 fd_aji_04___local_3PIO2_385 = 4.712389f;
-
-f32 fd_aji_04_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_aji_04___local_PIO2_384 = 1.5707964f;
-
-f32 fd_aji_04_one_381 = 1.0f;
-
-f32 fd_aji_04_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_aji_04_neg_one_365 = -1.0f;
-
-f32 fd_aji_04___local_PI_366 = 3.1415927f;
-
-f32 fd_aji_04___local_3PIO2_368 = 4.712389f;
-
-f32 fd_aji_04_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_aji_04___local_PIO2_367 = 1.5707964f;
-
-f32 fd_aji_04_one_364 = 1.0f;
 
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -778,7 +736,6 @@ EVT_BEGIN(sekizou_init)
     CALL(evt_run_case_evt, 9, 1, STRING("a_sekizou_1_a"), 0, PTR(kuizu_sekizou), 0)
     RETURN
 EVT_END()
-
 
 static void callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;

@@ -31,20 +31,6 @@ extern BattleUnitKind unit_boss_rampell_las;
 extern BattleUnitKind unit_red_honenoko;
 extern BattleUnitKind unit_super_killer_cannon;
 
-f32 fd_battle_database_las_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_las_neg_one_382;
-f32 fd_battle_database_las___local_PI_383;
-f32 fd_battle_database_las___local_3PIO2_385;
-f32 fd_battle_database_las_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_las___local_PIO2_384;
-f32 fd_battle_database_las_one_381;
-f32 fd_battle_database_las_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_las_neg_one_365;
-f32 fd_battle_database_las___local_PI_366;
-f32 fd_battle_database_las___local_3PIO2_368;
-f32 fd_battle_database_las_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_las___local_PIO2_367;
-f32 fd_battle_database_las_one_364;
 BattleStageObjectData las_btlobject_data[38];
 BattleStageData las_btlstage_data[10];
 BattleUnitSetup btlparty_las_las_05_01[5];
@@ -237,34 +223,6 @@ USER_FUNC(hi_fire_end) {
     hi_fire_end_flag[0] = 1;
     return EVT_RETURN_DONE;
 }
-
-f32 fd_battle_database_las_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_las_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_las___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_las___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_las_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_las___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_las_one_381 = 1.0f;
-
-f32 fd_battle_database_las_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_las_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_las___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_las___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_las_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_las___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_las_one_364 = 1.0f;
 
 BattleStageObjectData las_btlobject_data[] = {
     {"A1", 2, 0, {93.0f, 0.0f, -64.0f}, 0, 60, {0}},

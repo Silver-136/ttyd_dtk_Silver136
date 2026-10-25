@@ -4,7 +4,6 @@
 #include "npc_event.h"
 #include "las.h"
 
-
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cam3d_evt_off);
 USER_FUNC(evt_cam3d_evt_set);
@@ -34,20 +33,6 @@ USER_FUNC(evt_snd_envon);
 USER_FUNC(evt_snd_set_rev_mode);
 USER_FUNC(evt_snd_sfxon_3d);
 
-f32 fd_las_17_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_las_17_neg_one_382;
-f32 fd_las_17___local_PI_383;
-f32 fd_las_17___local_3PIO2_385;
-f32 fd_las_17_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_las_17___local_PIO2_384;
-f32 fd_las_17_one_381;
-f32 fd_las_17_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_las_17_neg_one_365;
-f32 fd_las_17___local_PI_366;
-f32 fd_las_17___local_3PIO2_368;
-f32 fd_las_17_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_las_17___local_PIO2_367;
-f32 fd_las_17_one_364;
 static EvtWord e_door_close[12];
 static EvtWord e_door_open[12];
 static BeroEntry bero_entry_data[2];
@@ -59,34 +44,6 @@ EvtWord enemy3_dead_evt[11];
 EvtWord enemy4_dead_evt[102];
 static EvtWord hint_plate[24];
 EvtWord las_17_init_evt[123];
-
-f32 fd_las_17_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_las_17_neg_one_382 = -1.0f;
-
-f32 fd_las_17___local_PI_383 = 3.1415927f;
-
-f32 fd_las_17___local_3PIO2_385 = 4.712389f;
-
-f32 fd_las_17_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_las_17___local_PIO2_384 = 1.5707964f;
-
-f32 fd_las_17_one_381 = 1.0f;
-
-f32 fd_las_17_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_las_17_neg_one_365 = -1.0f;
-
-f32 fd_las_17___local_PI_366 = 3.1415927f;
-
-f32 fd_las_17___local_3PIO2_368 = 4.712389f;
-
-f32 fd_las_17_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_las_17___local_PIO2_367 = 1.5707964f;
-
-f32 fd_las_17_one_364 = 1.0f;
 
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))

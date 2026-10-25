@@ -70,20 +70,6 @@ static USER_FUNC(eff_magic_get_posX);
 static USER_FUNC(eff_magic);
 static USER_FUNC(eff_staff);
 
-f32 fd_boss_kamec_obaba_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_boss_kamec_obaba_neg_one_382;
-f32 fd_boss_kamec_obaba___local_PI_383;
-f32 fd_boss_kamec_obaba___local_3PIO2_385;
-f32 fd_boss_kamec_obaba_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_boss_kamec_obaba___local_PIO2_384;
-f32 fd_boss_kamec_obaba_one_381;
-f32 fd_boss_kamec_obaba_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_boss_kamec_obaba_neg_one_365;
-f32 fd_boss_kamec_obaba___local_PI_366;
-f32 fd_boss_kamec_obaba___local_3PIO2_368;
-f32 fd_boss_kamec_obaba_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_boss_kamec_obaba___local_PIO2_367;
-f32 fd_boss_kamec_obaba_one_364;
 BattleWeapon weapon_kamec_obaba_attack_magic;
 BattleWeapon weapon_kamec_obaba_dekadeka_magic;
 BattleWeapon weapon_kamec_obaba_biribiri_magic;
@@ -121,34 +107,6 @@ static EvtWord biribiri_magic_event[4];
 static EvtWord trans_magic_event[4];
 static EvtWord recover_magic_event[90];
 static EvtWord wait_event[6];
-
-f32 fd_boss_kamec_obaba_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_kamec_obaba_neg_one_382 = -1.0f;
-
-f32 fd_boss_kamec_obaba___local_PI_383 = 3.1415927f;
-
-f32 fd_boss_kamec_obaba___local_3PIO2_385 = 4.712389f;
-
-f32 fd_boss_kamec_obaba_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_kamec_obaba___local_PIO2_384 = 1.5707964f;
-
-f32 fd_boss_kamec_obaba_one_381 = 1.0f;
-
-f32 fd_boss_kamec_obaba_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_kamec_obaba_neg_one_365 = -1.0f;
-
-f32 fd_boss_kamec_obaba___local_PI_366 = 3.1415927f;
-
-f32 fd_boss_kamec_obaba___local_3PIO2_368 = 4.712389f;
-
-f32 fd_boss_kamec_obaba_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_kamec_obaba___local_PIO2_367 = 1.5707964f;
-
-f32 fd_boss_kamec_obaba_one_364 = 1.0f;
 
 BattleWeapon weapon_kamec_obaba_attack_magic = {
     NULL, 0, // name..icon

@@ -55,20 +55,6 @@ static void _mapsetofs_all(CloudWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
 static void _img_alloc_capture(EvtWord a0, EvtWord a1, EvtWord a2, EvtWord a3, EvtWord a4, EvtWord a5, EvtWord a6, EvtWord a7);
 
-f32 fd_las_14_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_las_14_neg_one_382;
-f32 fd_las_14___local_PI_383;
-f32 fd_las_14___local_3PIO2_385;
-f32 fd_las_14_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_las_14___local_PIO2_384;
-f32 fd_las_14_one_381;
-f32 fd_las_14_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_las_14_neg_one_365;
-f32 fd_las_14___local_PI_366;
-f32 fd_las_14___local_3PIO2_368;
-f32 fd_las_14_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_las_14___local_PIO2_367;
-f32 fd_las_14_one_364;
 static EvtWord w_door_close[12];
 static EvtWord w_door_open[12];
 static BeroEntry bero_entry_data[2];
@@ -183,34 +169,6 @@ static void _mapclsofs_all(CloudWork* wp) {
         mapGrpClearOffScreen(wp->groupNames[i]);
     }
 }
-
-f32 fd_las_14_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_las_14_neg_one_382 = -1.0f;
-
-f32 fd_las_14___local_PI_383 = 3.1415927f;
-
-f32 fd_las_14___local_3PIO2_385 = 4.712389f;
-
-f32 fd_las_14_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_las_14___local_PIO2_384 = 1.5707964f;
-
-f32 fd_las_14_one_381 = 1.0f;
-
-f32 fd_las_14_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_las_14_neg_one_365 = -1.0f;
-
-f32 fd_las_14___local_PI_366 = 3.1415927f;
-
-f32 fd_las_14___local_3PIO2_368 = 4.712389f;
-
-f32 fd_las_14_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_las_14___local_PIO2_367 = 1.5707964f;
-
-f32 fd_las_14_one_364 = 1.0f;
 
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))

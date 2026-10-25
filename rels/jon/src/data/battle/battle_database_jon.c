@@ -7,24 +7,9 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-
 extern BattleUnitKind unit_hyper_jyugem;
 extern BattleUnitKind unit_jyugem;
 
-f32 fd_battle_database_jon_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_jon_neg_one_382;
-f32 fd_battle_database_jon___local_PI_383;
-f32 fd_battle_database_jon___local_3PIO2_385;
-f32 fd_battle_database_jon_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_jon___local_PIO2_384;
-f32 fd_battle_database_jon_one_381;
-f32 fd_battle_database_jon_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_jon_neg_one_365;
-f32 fd_battle_database_jon___local_PI_366;
-f32 fd_battle_database_jon___local_3PIO2_368;
-f32 fd_battle_database_jon_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_jon___local_PIO2_367;
-f32 fd_battle_database_jon_one_364;
 BattleStageObjectData jon_btlobject_data[8];
 BattleStageData jon_btlstage_data[4];
 BattleUnitSetup btlparty_jon_jon_100_01_off_1[1];
@@ -383,34 +368,6 @@ NpcBattleSelect btlgrpsel_jon_btlno_jon_95_off[4];
 NpcBattleSelect btlgrpsel_jon_btlno_jon_100_zonbaba_off[2];
 NpcSetupBattleInfo btlsetup_jon_tbl[53];
 NpcTerritoryInfo btl_jon_setup_no_tbl[53];
-
-f32 fd_battle_database_jon_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_jon_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_jon___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_jon___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_jon_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_jon___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_jon_one_381 = 1.0f;
-
-f32 fd_battle_database_jon_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_jon_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_jon___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_jon___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_jon_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_jon___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_jon_one_364 = 1.0f;
 
 BattleStageObjectData jon_btlobject_data[] = {
     {"B_0", 2, 2, {0}, 0, 60, {0}},

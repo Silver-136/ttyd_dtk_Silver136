@@ -154,20 +154,6 @@ void _kurokaron_next_move_index(void);
 s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario);
 s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz);
 
-f32 fd_las_05_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_las_05_neg_one_382;
-f32 fd_las_05___local_PI_383;
-f32 fd_las_05___local_3PIO2_385;
-f32 fd_las_05_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_las_05___local_PIO2_384;
-f32 fd_las_05_one_381;
-f32 fd_las_05_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_las_05_neg_one_365;
-f32 fd_las_05___local_PI_366;
-f32 fd_las_05___local_3PIO2_368;
-f32 fd_las_05_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_las_05___local_PIO2_367;
-f32 fd_las_05_one_364;
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
@@ -263,7 +249,6 @@ s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
     }
     return result;
 }
-
 
 u8 kurokaron_move_index = 0;
 u8 kurokaron_move_flag = 0;
@@ -597,34 +582,6 @@ s32 party_hit_check(f32 x, f32 z, f32* dir) {
     }
     return hit;
 }
-
-f32 fd_las_05_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_las_05_neg_one_382 = -1.0f;
-
-f32 fd_las_05___local_PI_383 = 3.1415927f;
-
-f32 fd_las_05___local_3PIO2_385 = 4.712389f;
-
-f32 fd_las_05_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_las_05___local_PIO2_384 = 1.5707964f;
-
-f32 fd_las_05_one_381 = 1.0f;
-
-f32 fd_las_05_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_las_05_neg_one_365 = -1.0f;
-
-f32 fd_las_05___local_PI_366 = 3.1415927f;
-
-f32 fd_las_05___local_3PIO2_368 = 4.712389f;
-
-f32 fd_las_05_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_las_05___local_PIO2_367 = 1.5707964f;
-
-f32 fd_las_05_one_364 = 1.0f;
 
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))

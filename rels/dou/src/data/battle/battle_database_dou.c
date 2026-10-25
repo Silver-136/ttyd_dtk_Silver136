@@ -15,20 +15,6 @@ f32 sinfd(f32 degrees);
 static USER_FUNC(_wave_offset);
 extern BattleUnitKind unit_killer_cannon;
 
-f32 fd_battle_database_dou_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_dou_neg_one_382;
-f32 fd_battle_database_dou___local_PI_383;
-f32 fd_battle_database_dou___local_3PIO2_385;
-f32 fd_battle_database_dou_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_dou___local_PIO2_384;
-f32 fd_battle_database_dou_one_381;
-f32 fd_battle_database_dou_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_dou_neg_one_365;
-f32 fd_battle_database_dou___local_PI_366;
-f32 fd_battle_database_dou___local_3PIO2_368;
-f32 fd_battle_database_dou_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_dou___local_PIO2_367;
-f32 fd_battle_database_dou_one_364;
 BattleStageObjectData dou_btlobject_data[51];
 BattleStageData dou_btlstage_data[6];
 BattleUnitSetup btlparty_dou_dou_00_01_off_1[3];
@@ -103,34 +89,6 @@ NpcBattleSelect btlgrpsel_dou_btlno_dou_13_99_off[2];
 NpcSetupBattleInfo btlsetup_dou_tbl[28];
 NpcTerritoryInfo btl_dou_setup_no_tbl[28];
 EvtWord bgset_dou_wave_event[77];
-
-f32 fd_battle_database_dou_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_dou_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_dou___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_dou___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_dou_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_dou___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_dou_one_381 = 1.0f;
-
-f32 fd_battle_database_dou_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_dou_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_dou___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_dou___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_dou_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_dou___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_dou_one_364 = 1.0f;
 
 BattleStageObjectData dou_btlobject_data[] = {
     {"taki", 2, 2, {0}, 0, 60, {0}},

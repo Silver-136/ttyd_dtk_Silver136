@@ -9,7 +9,6 @@
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
 
-
 USER_FUNC(btlevtcmd_AddHomePos);
 USER_FUNC(btlevtcmd_AddPos);
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
@@ -39,20 +38,6 @@ USER_FUNC(btlevtcmd_SetStatusIconOffset);
 USER_FUNC(btlevtcmd_StartWaitEvent);
 USER_FUNC(btlevtcmd_WaitAttackEnd);
 
-f32 fd_basabasa_green_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_basabasa_green_neg_one_382;
-f32 fd_basabasa_green___local_PI_383;
-f32 fd_basabasa_green___local_3PIO2_385;
-f32 fd_basabasa_green_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_basabasa_green___local_PIO2_384;
-f32 fd_basabasa_green_one_381;
-f32 fd_basabasa_green_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_basabasa_green_neg_one_365;
-f32 fd_basabasa_green___local_PI_366;
-f32 fd_basabasa_green___local_3PIO2_368;
-f32 fd_basabasa_green_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_basabasa_green___local_PIO2_367;
-f32 fd_basabasa_green_one_364;
 BattleUnitKind unit_basabasa_green;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -73,34 +58,6 @@ static EvtWord counter_damage_event[16];
 static EvtWord ceil_fall_ready_event[23];
 static EvtWord attack_event[683];
 static EvtWord wait_event[6];
-
-f32 fd_basabasa_green_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_basabasa_green_neg_one_382 = -1.0f;
-
-f32 fd_basabasa_green___local_PI_383 = 3.1415927f;
-
-f32 fd_basabasa_green___local_3PIO2_385 = 4.712389f;
-
-f32 fd_basabasa_green_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_basabasa_green___local_PIO2_384 = 1.5707964f;
-
-f32 fd_basabasa_green_one_381 = 1.0f;
-
-f32 fd_basabasa_green_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_basabasa_green_neg_one_365 = -1.0f;
-
-f32 fd_basabasa_green___local_PI_366 = 3.1415927f;
-
-f32 fd_basabasa_green___local_3PIO2_368 = 4.712389f;
-
-f32 fd_basabasa_green_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_basabasa_green___local_PIO2_367 = 1.5707964f;
-
-f32 fd_basabasa_green_one_364 = 1.0f;
 
 BattleUnitKind unit_basabasa_green = {
     167,

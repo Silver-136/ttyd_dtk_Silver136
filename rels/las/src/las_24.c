@@ -3,7 +3,6 @@
 #include "evt/evt_bero.h"
 #include "las.h"
 
-
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -39,20 +38,6 @@ USER_FUNC(evt_sub_get_sincos);
 USER_FUNC(las_24_adjust_for_framerate);
 #endif
 
-f32 fd_las_24_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_las_24_neg_one_382;
-f32 fd_las_24___local_PI_383;
-f32 fd_las_24___local_3PIO2_385;
-f32 fd_las_24_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_las_24___local_PIO2_384;
-f32 fd_las_24_one_381;
-f32 fd_las_24_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_las_24_neg_one_365;
-f32 fd_las_24___local_PI_366;
-f32 fd_las_24___local_3PIO2_368;
-f32 fd_las_24_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_las_24___local_PIO2_367;
-f32 fd_las_24_one_364;
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[4];
@@ -71,34 +56,6 @@ static EvtWord dai_evt[13];
 #endif
 static EvtWord box_evt[33];
 EvtWord las_24_init_evt[190];
-
-f32 fd_las_24_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_las_24_neg_one_382 = -1.0f;
-
-f32 fd_las_24___local_PI_383 = 3.1415927f;
-
-f32 fd_las_24___local_3PIO2_385 = 4.712389f;
-
-f32 fd_las_24_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_las_24___local_PIO2_384 = 1.5707964f;
-
-f32 fd_las_24_one_381 = 1.0f;
-
-f32 fd_las_24_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_las_24_neg_one_365 = -1.0f;
-
-f32 fd_las_24___local_PI_366 = 3.1415927f;
-
-f32 fd_las_24___local_3PIO2_368 = 4.712389f;
-
-f32 fd_las_24_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_las_24___local_PIO2_367 = 1.5707964f;
-
-f32 fd_las_24_one_364 = 1.0f;
 
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
@@ -386,7 +343,6 @@ EVT_BEGIN(las_24_init_evt)
     CALL(evt_mobj_itembox, STRING("box"), -255, -380, 75, 0, 0, PTR(box_evt), GSWF(4370))
     RETURN
 EVT_END()
-
 
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
