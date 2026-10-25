@@ -187,8 +187,21 @@ typedef struct AnimationPoseData {
     AnimTableEntry* mpAnims;       // 0x1AC
 } AnimationPoseData;
 
+// AnimationPose.flags, named from the animdrv functions that set them; 0x10 (tested in materialProc, never set in
+// C) is not named.
+typedef enum AnimationPoseFlags {
+    ANIM_POSE_FLAG_ACTIVE = (1 << 0),               // 0x1, slot in use (animPoseEntry and the paper/effect entries)
+    ANIM_POSE_FLAG_PAPER_GROUP = (1 << 1),          // 0x2, animPoseSetPaperAnimGroup
+    ANIM_POSE_FLAG_PAPER_ANIM_CHANGED = (1 << 2),   // 0x4, animPoseSetAnim on a paper pose; consumed by the paper draw
+    ANIM_POSE_FLAG_PERA = (1 << 3),                 // 0x8, animPosePaperPeraOn (paper flip)
+    ANIM_POSE_FLAG_VIVIAN = (1 << 5),               // 0x20, animPoseVivianMain
+    ANIM_POSE_FLAG_WORLD_POSITION_EVAL = (1 << 6),  // 0x40, animPoseWorldPositionEvalOn
+    ANIM_POSE_FLAG_WORLD_MATRIX_EVAL = (1 << 7),    // 0x80, animPoseWorldMatrixEvalOn
+    ANIM_POSE_FLAG_INSTANT_TURN = (1 << 8),         // 0x100, paper rotation snaps to the target (NPC_FLAG_INSTANT_TURN)
+} AnimationPoseFlags;
+
 typedef struct AnimationPose {
-    u32 flags;                          // 0x0, unsigned
+    u32 flags;                          // 0x0, AnimationPoseFlags
     s32 typeFlags;                      // 0x4
     s32 references;                     // 0x8
     s32 type;                           // 0xC

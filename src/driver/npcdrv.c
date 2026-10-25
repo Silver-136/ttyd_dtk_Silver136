@@ -141,12 +141,12 @@ void npcRecoveryFieldNpc(void) {
                 pose->scaleZFlip = field->scaleZFlip;
                 pose->peraTargetRotY = field->peraTargetRotY;
 
-                if (pose->flags & 0x40) {
-                    pose->flags &= ~0x40;
+                if (pose->flags & ANIM_POSE_FLAG_WORLD_POSITION_EVAL) {
+                    pose->flags &= ~ANIM_POSE_FLAG_WORLD_POSITION_EVAL;
                     animPoseWorldPositionEvalOn(entry->poseId);
                 }
-                if (pose->flags & 0x80) {
-                    pose->flags &= ~0x80;
+                if (pose->flags & ANIM_POSE_FLAG_WORLD_MATRIX_EVAL) {
+                    pose->flags &= ~ANIM_POSE_FLAG_WORLD_MATRIX_EVAL;
                     animPoseWorldMatrixEvalOn(entry->poseId);
                 }
                 animPoseMain(entry->poseId);
@@ -669,9 +669,9 @@ void npcMain(void) {
     for (i = 0, entry = npcwork->entries; i < total; i++, entry++) {
         if (entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_READY) {
             if (entry->flags & NPC_FLAG_INSTANT_TURN) {
-                animPoseGetAnimPosePtr(entry->poseId)->flags |= 0x100;
+                animPoseGetAnimPosePtr(entry->poseId)->flags |= ANIM_POSE_FLAG_INSTANT_TURN;
             } else {
-                animPoseGetAnimPosePtr(entry->poseId)->flags &= ~0x100;
+                animPoseGetAnimPosePtr(entry->poseId)->flags &= ~ANIM_POSE_FLAG_INSTANT_TURN;
             }
 
             if (!(entry->flags & NPC_FLAG_UPDATE_BY_EVENT)) {

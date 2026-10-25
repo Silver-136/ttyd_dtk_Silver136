@@ -507,7 +507,7 @@ s32 animPoseEntry(const char *animName, s32 type) {
     pose = NULL;
     poseId[0] = -1;
     label_1:
-    pose->flags |= 1;
+    pose->flags |= ANIM_POSE_FLAG_ACTIVE;
 
     pose->references = pose->typeFlags = fileId[0] = 0;
     count = wp->totalFiles;
@@ -645,7 +645,7 @@ s32 animPaperPoseEntry(const char* animName, s32 group) {
     pose = animPoseGetAnimPosePtr(i);
     pose->typeFlags = 3;
     pose->references = 0;
-    pose->flags |= 1;
+    pose->flags |= ANIM_POSE_FLAG_ACTIVE;
     return i;
 }
 
@@ -694,7 +694,7 @@ void animPosePaperPeraOn(s32 poseId) {
     AnimationPose* dst = &wp->poses[wp->poses[poseId].paperId];
     AnimationPose* src = &wp->poses[poseId];
 
-    dst->flags |= 8;
+    dst->flags |= ANIM_POSE_FLAG_PERA;
     dst->peraRotY = src->peraRotY;
     dst->rotationY = src->rotationY;
     dst->peraTargetRotY = src->peraTargetRotY;
@@ -759,8 +759,8 @@ void animPoseSetAnim(s32 poseId, const char* animName, BOOL reset) {
     animId = animPoseGetAnimIdx(animPoseGetBaseData(pose), animName);
     if (reset || animId != pose->animId) {
         pose->animId = animId;
-        if (pose->paperId != -1 && pose->flags & 2) {
-            pose->flags |= 4;
+        if (pose->paperId != -1 && pose->flags & ANIM_POSE_FLAG_PAPER_GROUP) {
+            pose->flags |= ANIM_POSE_FLAG_PAPER_ANIM_CHANGED;
         }
         pose->localTime = animTimeGetTime(pose->type);
         pose->lastFrameZero = -1;
@@ -776,7 +776,7 @@ s32 animPaperPoseGetId(const char* animName, s32 group) {
 
     for (i = 0; i < wp->totalPoses; i++) {
         pose = &wp->poses[i];
-        if (pose->flags & 1 && pose->typeFlags & 1 && pose->typeFlags & 2 && pose->type == group &&
+        if (pose->flags & ANIM_POSE_FLAG_ACTIVE && pose->typeFlags & 1 && pose->typeFlags & 2 && pose->type == group &&
             !strcmp(animPoseGetBaseData(pose)->fileName, animName)) {
             break;
         }
@@ -802,11 +802,11 @@ void animPoseSetPaperAnimGroup(s32 poseId, const char* animName, BOOL someflag) 
     animPosePaperAnimId(pose) = -1;
     pose->mLocalTimeInit = animTimeGetTime(pose->type);
     if (someflag) {
-        pose->flags |= 2;
-        pose->flags |= 4;
+        pose->flags |= ANIM_POSE_FLAG_PAPER_GROUP;
+        pose->flags |= ANIM_POSE_FLAG_PAPER_ANIM_CHANGED;
     } else {
-        pose->flags &= ~2;
-        pose->flags &= ~4;
+        pose->flags &= ~ANIM_POSE_FLAG_PAPER_GROUP;
+        pose->flags &= ~ANIM_POSE_FLAG_PAPER_ANIM_CHANGED;
     }
     animPoseSetMaterialLightFlagOn(poseId, 1);
 }
@@ -840,7 +840,7 @@ inline s32 animEffectPoseEntry(const char* animName, s32 group) {
     pose = animPoseGetAnimPosePtr(i);
     pose->typeFlags = 1;
     pose->references = 0;
-    pose->flags |= 1;
+    pose->flags |= ANIM_POSE_FLAG_ACTIVE;
     return i;
 }
 
@@ -869,10 +869,10 @@ void animPoseSetEffect(s32 poseId, const char* animName, BOOL someflag) {
     animPosePaperAnimId(pose) = -1;
     pose->mLocalTimeInit = animTimeGetTime(pose->type);
     if (someflag) {
-        pose->flags |= 2;
-        pose->flags |= 4;
+        pose->flags |= ANIM_POSE_FLAG_PAPER_GROUP;
+        pose->flags |= ANIM_POSE_FLAG_PAPER_ANIM_CHANGED;
     } else {
-        pose->flags &= ~2;
+        pose->flags &= ~ANIM_POSE_FLAG_PAPER_GROUP;
     }
     animPoseSetMaterialLightFlagOn(poseId, 1);
 }
@@ -907,7 +907,7 @@ f32 animPoseGetLoopTimes(s32 id) {
 BOOL animPoseGetPeraEnd(s32 poseId) {
     AnimationPose* pose = &wp->poses[poseId];
 
-    if (!(pose->flags & 8)) {
+    if (!(pose->flags & ANIM_POSE_FLAG_PERA)) {
         return TRUE;
     }
     if (__fabs(pose->peraTargetRotY - pose->rotationY) < 10.0) {
@@ -1297,7 +1297,7 @@ void animPoseMain(s32 poseId) {
     }
     pose->lastFrameZero = frame;
     pose->lastFrameTime = t;
-    if (pose->flags & 8) {
+    if (pose->flags & ANIM_POSE_FLAG_PERA) {
         CameraEntry* cam = camGetPtr(CAMERA_3D);
         f = 57.29579f * (f32)atan2(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z));
         while (f < -360.0f) f += 360.0f;
@@ -2152,7 +2152,7 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 ble
             PSMTXCopy(*g_modeling_mtx, (*wp->mpCurPose->worldMatrices)[groupId]);
         }
         pose = wp->mpCurPose;
-        if (pose->flags & 0x20 && groupId == pose->vivianGroupNo[0]) {
+        if (pose->flags & ANIM_POSE_FLAG_VIVIAN && groupId == pose->vivianGroupNo[0]) {
             Mtx* m;
             MtxPtr mat;
             f32* speed;
@@ -2291,7 +2291,7 @@ void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f3
         }
         wp->currDispMode = mode;
     }
-    if (pose->flags & 8) {
+    if (pose->flags & ANIM_POSE_FLAG_PERA) {
         rotY += -90.0f;
         pose->peraRotY = rotY;
         diff = _animClampAngle2(_animCamAngle() - pose->peraRotY);
@@ -2306,7 +2306,7 @@ void _animPoseDrawMtx(AnimationPose* pose, Mtx matrix, s32 xluMode, f32 rotY, f3
         while (pose->peraTargetRotY - pose->rotationY < -180.0f) {
             pose->rotationY -= 360.0f;
         }
-        if (pose->flags & 0x100) {
+        if (pose->flags & ANIM_POSE_FLAG_INSTANT_TURN) {
             pose->rotationY = pose->peraTargetRotY;
         } else {
             pose->rotationY += 0.1f * (pose->peraTargetRotY - pose->rotationY);
@@ -2386,7 +2386,7 @@ static inline void apdEval(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale)
     AnimationPoseData *data;
     data = *((AnimationPoseData**)wp->files[pose->fileId].handle->data);
     m = (Mtx*)matrix;
-    if ((!(pose->flags & 8)) && rotY) {
+    if ((!(pose->flags & ANIM_POSE_FLAG_PERA)) && rotY) {
         PSMTXRotRad(rot, 'y', 0.017453292f * rotY);
         PSMTXConcat(matrix, rot, tmp);
         m = &tmp;
@@ -2416,7 +2416,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
     AnimationPoseData *pd;
     pose = &wp->poses[poseId];
     if (pose->paperId != (-1)) {
-        if (pose->flags & 0xC0) {
+        if (pose->flags & (ANIM_POSE_FLAG_WORLD_POSITION_EVAL | ANIM_POSE_FLAG_WORLD_MATRIX_EVAL)) {
             apdEval(pose, matrix, rotY, scale);
         }
         paper = &wp->poses[pose->paperId];
@@ -2458,7 +2458,7 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale) {
         paper->materialLightFlag = pose->materialLightFlag;
         paper->materialColor = pose->materialColor;
         paper->materialColor2 = pose->materialColor2;
-        if (pose->flags & 2) {
+        if (pose->flags & ANIM_POSE_FLAG_PAPER_GROUP) {
             PSMTXScale(m1, pose->paperTexScaleX, pose->paperTexScaleY, 1.0f);
             PSMTXTrans(m2, *((f32*)(0x104 + ((u8*)pose))), pose->paperTexOfsY, 0.0f);
             PSMTXConcat(m1, m2, m1);
@@ -2540,10 +2540,10 @@ void animPoseRelease(s32 poseId) {
     if ((u32)pose->typeFlags != 0) {
         animPaperPoseRelease(poseId);
     } else {
-        if (pose->flags & 0x40) {
+        if (pose->flags & ANIM_POSE_FLAG_WORLD_POSITION_EVAL) {
             smartFree((smartEntry*)pose->worldPositions);
         }
-        if (pose->flags & 0x80) {
+        if (pose->flags & ANIM_POSE_FLAG_WORLD_MATRIX_EVAL) {
             smartFree((smartEntry*)pose->worldMatrices);
         }
         animPoseFileRelease(pose->fileId);
@@ -2567,7 +2567,7 @@ void animPoseAutoRelease(s32 type) {
 
     for (i = 0; i < wp->totalPoses; i++) {
         pose = animPoseGetAnimPosePtr(i);
-        if (pose->flags & 1 && pose->type == type) {
+        if (pose->flags & ANIM_POSE_FLAG_ACTIVE && pose->type == type) {
             animPoseRelease(i);
         }
     }
@@ -2582,7 +2582,7 @@ void animPaperPoseDisp(CameraId camId, void* param) {
     AnimationPose* pose;
 
     for (i = 0, pose = wp->poses; i < wp->totalPoses; i++, pose++) {
-        if (pose->flags & 1 && pose->paperId != -1) {
+        if (pose->flags & ANIM_POSE_FLAG_ACTIVE && pose->paperId != -1) {
             animPaperPoseDispSub(0, pose);
         }
     }
@@ -2605,7 +2605,7 @@ void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
 
     pose = arg;
     scale = 8.0f;
-    if (!(arg->flags & 1)) {
+    if (!(arg->flags & ANIM_POSE_FLAG_ACTIVE)) {
         return;
     }
     // FAKE: dead int-guarded re-definition (COLOURING M). The second reaching def stops IRO pass-0 copy
@@ -2651,7 +2651,7 @@ void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
         right = 16;
         bottom = 16;
     }
-    if (pose->flags & 2 && pose->flags & 4 && gp->inBattle) {
+    if (pose->flags & ANIM_POSE_FLAG_PAPER_GROUP && pose->flags & ANIM_POSE_FLAG_PAPER_ANIM_CHANGED && gp->inBattle) {
         a = d->bboxMin.x * scale + (s32)(DEMOGetRenderModeObj()->fbWidth / 2);
         x1 = d->bboxMax.x * scale + (s32)(DEMOGetRenderModeObj()->fbWidth / 2);
         y0 = hh - scale * (d->bboxMax.y - d->bboxMin.y);
@@ -2675,8 +2675,8 @@ void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     if (bottom > DEMOGetRenderModeObj()->efbHeight - 2) {
         bottom = DEMOGetRenderModeObj()->efbHeight - 2;
     }
-    if (pose->flags & 2) {
-        if (pose->flags & 4) {
+    if (pose->flags & ANIM_POSE_FLAG_PAPER_GROUP) {
+        if (pose->flags & ANIM_POSE_FLAG_PAPER_ANIM_CHANGED) {
             a = DEMOGetRenderModeObj()->fbWidth / 2 - left;
             t = right - DEMOGetRenderModeObj()->fbWidth / 2;
             b = a;
@@ -2692,7 +2692,7 @@ void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
             pose->paperScaleXZ = (8.0f / scale) * ((f32)(pose->paperRectRight - pose->paperRectLeft) / 150.0f);
             pose->paperScaleY = (8.0f / scale) * ((f32)(pose->paperRectBottom - pose->paperRectTop) / 215.0f);
             pose->paperOfsY = d->bboxMin.y + (hh - bottom) / scale;
-            pose->flags &= ~4;
+            pose->flags &= ~ANIM_POSE_FLAG_PAPER_ANIM_CHANGED;
         }
     } else {
         s32 a;
@@ -2744,7 +2744,7 @@ inline s32 animPoseSearchName(const char* name, s32 type) {
 
     for (i = 0; i < wp->totalPoses; i++) {
         pose = &wp->poses[i];
-        if (pose->flags & 1 && pose->type == type && !strcmp(animPoseGetBaseData(pose)->fileName, name)) {
+        if (pose->flags & ANIM_POSE_FLAG_ACTIVE && pose->type == type && !strcmp(animPoseGetBaseData(pose)->fileName, name)) {
             break;
         }
     }
@@ -2999,8 +2999,8 @@ void animPoseWorldPositionEvalOn(s32 poseId) {
     AnimationPoseData* data = animPoseGetBaseData(pose);
     u8 heap;
 
-    if (!(pose->flags & 0x40)) {
-        pose->flags |= 0x40;
+    if (!(pose->flags & ANIM_POSE_FLAG_WORLD_POSITION_EVAL)) {
+        pose->flags |= ANIM_POSE_FLAG_WORLD_POSITION_EVAL;
         switch (pose->type) {
             case 0:
                 heap = 1;
@@ -3020,8 +3020,8 @@ void animPoseWorldPositionEvalOn(s32 poseId) {
 void L_animPoseWorldPositionEvalOff(s32 poseId) {
     AnimationPose* pose = &wp->poses[poseId];
 
-    if (pose->flags & 0x40) {
-        pose->flags &= ~0x40;
+    if (pose->flags & ANIM_POSE_FLAG_WORLD_POSITION_EVAL) {
+        pose->flags &= ~ANIM_POSE_FLAG_WORLD_POSITION_EVAL;
         smartFree((smartEntry*)pose->worldPositions);
         pose->worldPositions = NULL;
     }
@@ -3032,8 +3032,8 @@ void animPoseWorldMatrixEvalOn(s32 poseId) {
     AnimationPoseData* data = animPoseGetBaseData(pose);
     u8 heap;
 
-    if (!(pose->flags & 0x80)) {
-        pose->flags |= 0x80;
+    if (!(pose->flags & ANIM_POSE_FLAG_WORLD_MATRIX_EVAL)) {
+        pose->flags |= ANIM_POSE_FLAG_WORLD_MATRIX_EVAL;
         switch (pose->type) {
             case 0:
                 heap = 1;
@@ -3053,7 +3053,7 @@ void animPoseWorldMatrixEvalOn(s32 poseId) {
 void animPoseVivianMain(s32 poseId, Vec* pos) {
     AnimationPose* pose = &wp->poses[poseId];
 
-    pose->flags |= 0x20;
+    pose->flags |= ANIM_POSE_FLAG_VIVIAN;
     pose->matrix[0][3] = pos->x;
     pose->matrix[1][3] = pos->y;
     pose->matrix[2][3] = pos->z;
