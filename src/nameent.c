@@ -896,7 +896,7 @@ void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr((CameraId)8)->view, 0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
     GXSetCurrentMtx(0);
     nameTexQuad(0x2F, x, y, 8, 8);
     nameTexQuad(0x2D, x + 8, y, w - 8 - 8, 8);
@@ -1029,7 +1029,7 @@ void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr((CameraId)8)->view, 0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, 0);
     GXSetCurrentMtx(0);
     nameWinQuad(tpl, type + 4, type + 5, type, x, y, w - 16, h - 16);
     nameWinQuad(tpl, type + 4, type + 7, type + 2, x + w - 16, y, 16, h - 16);

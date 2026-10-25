@@ -2237,7 +2237,7 @@ void partyPreDisp(PartyEntry* party) {
         return;
     }
     screen = party->position;
-    PSMTX44MultVec(camGetPtr((CameraId)4)->projection, &screen, &screen);
+    PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &screen, &screen);
     z = 5000.0f * screen.z + 5000.0f;
     if (z < 0.0f) {
         z = 0.0f;

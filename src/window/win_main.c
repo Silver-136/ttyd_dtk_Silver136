@@ -226,7 +226,7 @@ void winMain(void) {
                 } else {
                     wp->menuSel = 0;
                 }
-                camGetPtr((CameraId)8)->flags |= 0x200;
+                camGetPtr(CAMERA_2D)->flags |= 0x200;
                 if (gp->flags & 0x1000) {
                     wp->menuSel = 1;
                 }
@@ -319,7 +319,7 @@ void winMain(void) {
                 break;
 
             case WIN_MENU_CLOSE:
-                camGetPtr((CameraId)8)->flags &= ~0x200;
+                camGetPtr(CAMERA_2D)->flags &= ~0x200;
                 if (mario->characterId == CHARACTER_BOWSER) {
                     if (!kpaGetStageViewType()) {
                         marioCtrlOn();
@@ -1138,7 +1138,7 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     sy = scale.y * GXGetTexObjHeight(&obj);
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr((CameraId)8)->view, m, m);
+    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -1171,7 +1171,7 @@ void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
     sy = scale.y * GXGetTexObjHeight(&obj);
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr((CameraId)8)->view, m, m);
+    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -1214,7 +1214,7 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, r, m);
     PSMTXConcat(m, scl, m);
-    PSMTXConcat(camGetPtr((CameraId)8)->view, m, m);
+    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -1270,7 +1270,7 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
     sy = scale.y * GXGetTexObjHeight(&obj);
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr((CameraId)8)->view, m, m);
+    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -1356,7 +1356,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     sy = scale.y * GXGetTexObjHeight(&obj);
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr((CameraId)8)->view, m, m);
+    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);

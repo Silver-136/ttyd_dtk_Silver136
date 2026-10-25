@@ -240,7 +240,7 @@ void effStageClearMain(EffectEntry* effect) {
     if (type < 10) {
         dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effStageClearDisp, effect);
     } else {
-        dispEntry((CameraId)5, dispCalcZ(&pos), 8, (DispCallback)effStageClearDisp, effect);
+        dispEntry(CAMERA_3D_EFFECTA, dispCalcZ(&pos), 8, (DispCallback)effStageClearDisp, effect);
     }
 }
 

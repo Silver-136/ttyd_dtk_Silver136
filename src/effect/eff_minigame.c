@@ -422,7 +422,7 @@ void effMiniGameMain(EffectEntry* effect) {
         effect->flags &= ~4;
         effDelete(effect);
     } else {
-        dispEntry((CameraId)8, dispCalcZ(&pos), 2, (DispCallback)effMiniGameDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&pos), 2, (DispCallback)effMiniGameDisp, effect);
     }
 }
 

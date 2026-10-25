@@ -834,7 +834,7 @@ void btlseqEnd(BattleWork* wp) {
         break;
     }
     }
-    btlseqEnd_DispMain((CameraId)8, wp);
+    btlseqEnd_DispMain(CAMERA_2D, wp);
 }
 
 void _ExecAllUnitBattleEndEvent(void) {

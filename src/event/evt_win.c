@@ -422,7 +422,7 @@ USER_FUNC(evt_unitwin_main_func) {
     } else {
         wp->flags &= ~1;
     }
-    dispEntry((CameraId)8, 1000.0f, 0, evt_unitwin_disp_func, wp);
+    dispEntry(CAMERA_2D, 1000.0f, 0, evt_unitwin_disp_func, wp);
     return EVT_RETURN_BLOCK;
 }
 

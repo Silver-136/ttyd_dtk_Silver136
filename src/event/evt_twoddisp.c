@@ -69,7 +69,7 @@ USER_FUNC(twoddisp_main) {
     u32 i;
     for (i = 0; (s32)i < 100; i++) {
     }
-    dispEntry((CameraId)8, 1000.0f, 0, twoddisp_disp, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, 0, twoddisp_disp, NULL);
     return 2;
 }
 

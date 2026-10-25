@@ -956,9 +956,9 @@ void npcMain(void) {
                 if (!(entry->flags & 0x800)) {
                     CameraEntry* cam;
 
-                    cam = camGetPtr((CameraId)4);
+                    cam = camGetPtr(CAMERA_3D);
                     PSMTXMultVec(cam->view, &entry->position, &dv);
-                    cam = camGetPtr((CameraId)4);
+                    cam = camGetPtr(CAMERA_3D);
                     PSMTX44MultVec(cam->projection, &dv, &dv);
                     if ((dv.z > -1.0f && dv.z < 0.0f && dv.x >= -2.0f && dv.x <= 2.0f && dv.y >= -2.0f && dv.y <= 2.0f) ||
                         (entry->flags & 0x40)) {
@@ -1025,11 +1025,11 @@ void npcMain(void) {
                         }
                         if (entry->offscreenId != -1) {
                             if (entry->color.a != 0xFF) {
-                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen_xlu, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, 2, npcDisp_offscreen_xlu, entry);
                             } else {
-                                dispEntry((CameraId)1, prio, 0, npcDisp_offscreen, entry);
-                                dispEntry((CameraId)1, prio, 1, npcDisp_offscreen, entry);
-                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, 0, npcDisp_offscreen, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, 1, npcDisp_offscreen, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, 2, npcDisp_offscreen, entry);
                             }
                         }
                     }
@@ -1065,7 +1065,7 @@ void npcMain(void) {
                         break;
                     }
                     ann->y = 0.0f;
-                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, ann);
+                    dispEntry(CAMERA_FADE, 0.0f, 2, _fbatFirstAttackAnnouceDisp, ann);
                     break;
                 case 1:
                     (ann->timer)++;
@@ -1075,7 +1075,7 @@ void npcMain(void) {
                     }
                     ann->x = 0.0f;
                     ann->y = 0.0f;
-                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, ann);
+                    dispEntry(CAMERA_FADE, 0.0f, 2, _fbatFirstAttackAnnouceDisp, ann);
                     break;
             }
         }

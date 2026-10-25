@@ -209,7 +209,7 @@ s32 main_star(void) {
         d->rot.z = w->rot.z;
         d->scale = 1.5f * w->scale.x;
     }
-    dispEntry((CameraId)4, 0.0f, 2, zubaStarDispStar, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 2, zubaStarDispStar, NULL);
     return 0;
 }
 
@@ -717,7 +717,7 @@ USER_FUNC(zubastar_main) {
             break;
         }
     }
-    dispEntry((CameraId)8, 900.0f, 1, zubastar_disp2D, NULL);
+    dispEntry(CAMERA_2D, 900.0f, 1, zubastar_disp2D, NULL);
     return 0;
 }
 
@@ -730,7 +730,7 @@ USER_FUNC(zubastar_bomb) {
     s32 i;
     s32 k;
     if (isFirstCall) {
-        dispEntry((CameraId)8, 0.0f, 0, zubastar_capture, NULL);
+        dispEntry(CAMERA_2D, 0.0f, 0, zubastar_capture, NULL);
         w->phase = 0;
         return 0;
     }
@@ -790,7 +790,7 @@ USER_FUNC(zubastar_bomb) {
             break;
         }
     }
-    dispEntry((CameraId)8, 0.0f, 1, zubastar_disp_bomb, NULL);
+    dispEntry(CAMERA_2D, 0.0f, 1, zubastar_disp_bomb, NULL);
     return 0;
 }
 
@@ -828,7 +828,7 @@ void zubastar_capture(CameraId cam, void* param) {
 
 void zubastar_disp_bomb(CameraId cam, void* param) {
     ZubaStarWork* w = GetZubaStarPtr();
-    CameraEntry* camera = camGetPtr((CameraId)8);
+    CameraEntry* camera = camGetPtr(CAMERA_2D);
     Mtx tc;
     Mtx tn;
     Mtx rot;

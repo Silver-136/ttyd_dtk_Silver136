@@ -52,7 +52,7 @@ USER_FUNC(kpa_score_disp_main) {
             ksdp[i].timer--;
         }
     }
-    dispEntry((CameraId)4, 0.0f, 2, (DispCallback)kpaScoreDisp, 0);
+    dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)kpaScoreDisp, 0);
     return EVT_RETURN_DONE;
 }
 

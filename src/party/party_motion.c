@@ -1567,7 +1567,7 @@ void party_motion_homing_fly(PartyEntry* party) {
 }
 
 void party_set_behind_dir(PartyEntry* party, f32 dir) {
-    party->homeDir = revise360(dir + camGetPtr((CameraId)4)->viewYaw);
+    party->homeDir = revise360(dir + camGetPtr(CAMERA_3D)->viewYaw);
     party->trigFlags |= 0x100000;
 }
 

@@ -6637,7 +6637,7 @@ USER_FUNC(puni_disp_info_sub) {
     }
     packed = (count << 16) | total;
     if (Punigp->showPuniCounter && total >= 10) {
-        dispEntry((CameraId)8, 1000.0f, 0, puniCountDisp, (void*)packed);
+        dispEntry(CAMERA_2D, 1000.0f, 0, puniCountDisp, (void*)packed);
     }
     return EVT_RETURN_DONE;
 }

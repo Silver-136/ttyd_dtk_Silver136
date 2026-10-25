@@ -248,8 +248,8 @@ void titleMain(SequenceWork* work) {
             break;
     }
     if (wp2->state != 12 && work->state < 14) {
-        dispEntry((CameraId)4, 0.0f, 0, disp1, NULL);
-        dispEntry((CameraId)7, 0.0f, 0, disp2, NULL);
+        dispEntry(CAMERA_3D, 0.0f, 0, disp1, NULL);
+        dispEntry(CAMERA_3D_EFFECTB, 0.0f, 0, disp2, NULL);
         switch (wp2->debug) {
             case 0:
                 if (keyGetButtonTrg(0) & ~0x400) {

@@ -2017,10 +2017,10 @@ void mapDisp(void) {
                 }
             }
             if (obj->flags & 0x20000000) {
-                dispEntry((CameraId)1, 5000.0f, 3, !(obj->flags & 0x10) ? mapDispMapObj_bbox : mapDispMapGrp_bbox, obj);
+                dispEntry(CAMERA_OFFSCREEN2, 5000.0f, 3, !(obj->flags & 0x10) ? mapDispMapObj_bbox : mapDispMapGrp_bbox, obj);
             }
             if (obj->flags & 0x80) {
-                dispEntry((CameraId)1, z, mode, !(obj->flags & 0x10) ? mapDispMapObj_off : mapDispMapGrp_off, obj);
+                dispEntry(CAMERA_OFFSCREEN2, z, mode, !(obj->flags & 0x10) ? mapDispMapObj_off : mapDispMapGrp_off, obj);
             }
             if (!(obj->flags & 1)) {
                 dispEntry(obj->cameraId, z, mode, !(obj->flags & 0x10) ? mapDispMapObj : mapDispMapGrp, obj);

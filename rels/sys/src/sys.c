@@ -1249,7 +1249,7 @@ USER_FUNC(display) {
     }
     if (wp->state != 0) {
 #ifdef VERSION_G8ME01
-        dispEntry((CameraId)4, 0.0f, 2, sys_01_msg_tex_capture_func, wp);
+        dispEntry(CAMERA_3D, 0.0f, 2, sys_01_msg_tex_capture_func, wp);
 #endif
         dispEntry(CAMERA_3D_EFFECTA, 0.0f, 2, display_func, wp);
     }

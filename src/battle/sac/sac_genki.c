@@ -185,9 +185,9 @@ USER_FUNC(main_genki) {
         main_object(i);
     }
     main_star();
-    dispEntry((CameraId)8, 901.0f, 1, disp_2D, NULL);
-    dispEntry((CameraId)4, 0.0f, 1, disp_3D, NULL);
-    dispEntry((CameraId)4, 0.0f, 2, disp_3D_alpha, NULL);
+    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, NULL);
     return 0;
 }
 

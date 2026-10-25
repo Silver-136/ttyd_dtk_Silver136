@@ -20,7 +20,7 @@
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
 
-#define CAMF() (camGetPtr((CameraId)8)->flags)
+#define CAMF() (camGetPtr(CAMERA_2D)->flags)
 
 typedef struct MotRollWork {
     f32 spdX;           // 0x00: roll velocity x (marioResetRollSpd clears it)

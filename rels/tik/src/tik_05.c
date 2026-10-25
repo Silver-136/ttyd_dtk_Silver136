@@ -1095,7 +1095,7 @@ USER_FUNC(tiz_broken) {
         smartFree(broken_wp->pieces);
         return EVT_RETURN_DONE;
     }
-    dispEntry((CameraId)8, 0.0f, 0, tiz_broken_draw, NULL);
+    dispEntry(CAMERA_2D, 0.0f, 0, tiz_broken_draw, NULL);
     return EVT_RETURN_BLOCK;
 }
 #pragma opt_propagation reset
