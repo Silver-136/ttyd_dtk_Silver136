@@ -34,7 +34,7 @@ EVT_BEGIN(npc_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), 0x600)
     RETURN
     END
-EVT_END();
+EVT_END()
 // clang-format on
 
 // const char* npcDesc, const char* npcName
