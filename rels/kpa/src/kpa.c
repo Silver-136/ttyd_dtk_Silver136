@@ -39,7 +39,6 @@ void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
 s32 kpaMutekiCheck(void);
 f32 kpaGetWidth(s32 type);
 void kpaFireDelete(void);
-void kpaAddCoinPos(s32 num, Vec* pos);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];

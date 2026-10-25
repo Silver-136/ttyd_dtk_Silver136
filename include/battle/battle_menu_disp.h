@@ -26,3 +26,5 @@ void BattleMenuDisp_WeaponSelect_End(BattleWork* wp);
 void BattleMenuDisp_WeaponSelect_Main(BattleWork* wp);
 void BattleMenuDisp_MultiItem_Init(BattleWork* wp, BOOL flag);
 void BattleMenuDisp_Operation_Init(BattleWork* wp, BOOL flag);
+void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, BOOL flag);
+void BattleMenuDisp_WeaponSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandWeapon* weapons, BOOL flag);

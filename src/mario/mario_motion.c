@@ -75,14 +75,12 @@ BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioCreviceWallChk(Vec pos);
 s32 marioGetHammerLevel(void);
 BOOL marioChkHammer2(void);
-BOOL marioChkShipPlace(void* hit);
 BOOL marioChkPlanePlace(void* hit);
 MotCaseEntry* caseCheckHitObj(void* hit);
 void* fbatNpcTalkCheck(void);
 void effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 void kpaClearHitobjRide(void);
 void* kpaChkHitobjRide(void);
-BOOL kpaHipAttackOk(void);
 BOOL marioChkHipAttack(void);
 
 MarioMotTblEntry marioMotTbl[] = {

@@ -617,7 +617,6 @@ void mapSetPlayRate(const char* name, f32 rate) {
     }
 }
 
-struct HitEntry* hitEntry(MapFileJoint* root, Mtx rootMtx, s32 mapIndex);
 
 static inline void* mapSearchChunk(MapHeader* header, const char* name) {
     u32 k;

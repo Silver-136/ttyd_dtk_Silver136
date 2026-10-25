@@ -381,3 +381,4 @@ void animPoseAutoRelease(s32 type);
 void L_animPoseWorldPositionEvalOff(s32 poseId);
 void animPoseDrawShape(s32 poseId, s32 shapeId);
 BOOL animPoseTestXLU(s32 poseId);
+void animPoseVivianMain(s32 poseId, Vec* pos);

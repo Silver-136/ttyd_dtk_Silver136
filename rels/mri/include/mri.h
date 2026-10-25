@@ -80,3 +80,4 @@ USER_FUNC(evt_mri_toge_make_retsu);
 USER_FUNC(evt_mri_toge_retsu_stop);
 USER_FUNC(hakari_color);
 USER_FUNC(mri_npc_buruburu);
+void togeMakeRetsu(Vec* pos, s16 leader, s16 start, s16 end);

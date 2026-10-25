@@ -117,7 +117,6 @@ void btlDispGXInit2D(void) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 }
 
-int animPoseVivianMain();
 void BattleCommandDisplay(BattleWork* wp);
 void BattleStockExpDisp(void);
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed);

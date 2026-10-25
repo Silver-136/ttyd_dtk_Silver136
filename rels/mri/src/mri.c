@@ -15,6 +15,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
+#include "rels/mri/include/mri.h"
 
 #include "data/mapdata.h"
 #include "manager/evtmgr_cmd.h"
@@ -51,7 +52,6 @@ void _unresolved(void);
 BOOL toge_searchParent(PuniData* self, s16 group);
 void togeModeParent(PuniData* puni);
 void togeMoveParent(PuniData* puni);
-void togeMakeRetsu(Vec* pos, s16 leader, s16 start, s16 end);
 
 void _prolog(void) {
     voidfunctionptr* ctor;

@@ -19,8 +19,6 @@ void hitAtrOff(HitEntry* hit, u32 mask, s32 r);
 void hitAtrOn(HitEntry* hit, u32 mask, s32 r);
 void hitFlgOff(HitEntry* hit, u16 mask, s32 r);
 void hitFlgOn(HitEntry* hit, u16 mask, s32 r);
-HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx);
-HitEntry* hitEntry(MapFileJoint* root, Mtx rootMtx, s32 mapIndex);
 HitEntry* hitEntrySub(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, BOOL ignoreSiblings, s32 mapIndex);
 HitEntry* _hitEnt(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, s32 mapIndex);
 

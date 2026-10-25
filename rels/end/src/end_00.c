@@ -85,7 +85,6 @@ extern CreditMsg end_staff_roll_msg_tbl[50];
 extern CreditNpc R_credits_npc_info[152];
 extern const char* g_moamoa_chain_tbl[][2];
 static inline f32 tanf(f32 x) { return tan(x); }
-void animPoseVivianMain(s32 poseId, Vec* pos);
 s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];

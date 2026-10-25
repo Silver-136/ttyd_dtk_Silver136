@@ -87,7 +87,6 @@ void e3DispOffscreen(CameraId cameraId, void* param);
 #ifdef VERSION_G8ME01
 static
 #endif
-void pressStartGX(s32 alpha, f32 x, f32 y);
 
 void alarm_handler(OSAlarm* alarm, OSContext* context) {
     gp->flags |= 0x2000;

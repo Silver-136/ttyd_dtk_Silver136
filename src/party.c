@@ -2118,7 +2118,6 @@ void partySetCamId(PartyEntry* party, s32 cameraId) {
 }
 
 BOOL N_vivianDisplayTailCheck(PartyEntry* party);
-void animPoseVivianMain(s32 poseId, Vec* pos);
 void partyDisp(CameraId cam, void* param);
 
 void partyMakeDispDir(PartyEntry* party) {

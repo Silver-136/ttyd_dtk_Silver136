@@ -40,9 +40,9 @@
 #include "mario/mario_hit.h"
 #include "poly_trig.h"
 #include "eff/eff_small_star.h"
+#include "koopa_motion.h"
 
 f32 cloudGetBreathPower(Vec pos, f32 width);
-void kpaPowDown(void);
 
 void FontDrawStringShake(f32 x, f32 y, const char* message);
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
@@ -629,7 +629,6 @@ s32 vivianGetStatus(void);
         if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok = 0; } else { ok = 1; } } while (0)
 void shadowSetCollision(s32 shadow, s32 val);
 s32 shadowEntry(f32 x, f32 y, f32 z, f32 size);
-void animPoseVivianMain(s32 poseId, Vec* pos);
 f32 sinfd(f32 degrees);
 void npcKoopaModeMain(void);
 BOOL npcCheckBlow(NpcEntry* npc);

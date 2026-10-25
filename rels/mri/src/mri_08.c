@@ -18,8 +18,8 @@
 #include "mri_puni.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "rels/mri/include/mri.h"
 
-void togeMakeRetsu(Vec* pos, s32 leader, s32 start, s32 end);
 
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);

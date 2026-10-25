@@ -30,6 +30,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "win/win_root.h"
 #ifdef VERSION_G8ME01
 char* strstr(const char* str, const char* sub);
 #endif
@@ -74,8 +75,6 @@ static WindowWork* wp;
 #include "statuswindow.h"
 #include "data/party_data.h"
 #include "manager/evtmgr_cmd.h"
-s32 winRootMain(WindowWork* wp);
-void winRootDisp(CameraId camId, WindowWork* wp);
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
 void winLectureKeyMask(void);
 void iconGetTexObj(GXTexObj* obj, u16 iconId);

@@ -43,6 +43,7 @@
 #include "driver/camdrv.h"
 #include "system.h"
 #include "driver/npcdrv.h"
+#include "koopa_motion.h"
 s32 mobj_koopa_pole_evt(MapObjectEntry* mobj);
 void kpa_disp_pole_score(CameraId camId, void* param);
 static USER_FUNC(kpa_get_level);
@@ -125,7 +126,6 @@ USER_FUNC(evt_mobj_get_kindname);
 USER_FUNC(evt_mobj_check);
 
 extern EventEntry* mobjRunEvent(MapObjectEntry* mobj, EvtWord* eventCode);
-extern void kpaPowUp(void);
 
 static inline MapObjectEntry* MOBJ_PTR(EventEntry* event, const char* name) {
     return strcmp(name, "me") ? mobjNameToPtr(name) : event->thisMapObj;

@@ -17,6 +17,7 @@
 #include "eff/eff_magic1_n64.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "seq/seq_e3.h"
 
 
 #ifdef VERSION_G8ME01
@@ -40,7 +41,6 @@ void L_titleInit(SequenceWork* work);
 void titleMain(SequenceWork* work);
 void disp1(CameraId cameraId, void* param);
 void disp2(CameraId cameraId, void* param);
-PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y);
 static void titleLoadDemo(void);
 
 const char* DbgBtlSel_GetMsgDataPtr(void) {

@@ -14,3 +14,4 @@ void marioShipSetDispDir(void);
 void mot_ship(void);
 void mot_ship_post(void);
 s32 N_marioShipGetDir(void);
+BOOL marioChkShipPlace(HitEntry* hit);

@@ -1429,7 +1429,6 @@ typedef struct MoaChain {
 } MoaChain;
 
 extern MoaChain g_moamoa_chain_tbl[];
-void animPoseVivianMain(s32 poseId, Vec* v);
 
 
 
@@ -1561,7 +1560,6 @@ void capture(CameraId camera, void* param) {
     GXSetScissor(sx, sy, sw, sh);
 }
 
-void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y);
 
 void monosiri_disp(CameraId camera, void* param) {
     MonosiriWork* m = param;

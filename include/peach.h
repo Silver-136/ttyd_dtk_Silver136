@@ -13,3 +13,4 @@ void peachTransformOff(void);
 void peachTransformOn(void);
 void peach_stay(void);
 void peach_talk(void);
+s32 peachMain(void);

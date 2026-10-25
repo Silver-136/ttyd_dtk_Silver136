@@ -20,6 +20,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "win/win_mario.h"
 #include "win/win_party.h"
+#include "win/win_root.h"
 
 extern ItemData itemDataTable[];
 void qqsort(void* base, u32 n, u32 size, s32 (*compare)(const void*, const void*));
@@ -29,13 +30,10 @@ typedef struct WinSortData {
     void (*func)(WindowWork* wp);
 } WinSortData;
 
-void winMakeSkipList(WindowWork* wp);
-void winBadgeDisp(s32 camId, WindowWork* wp, s32 n);
 void winLogDisp(s32 camId, WindowWork* wp, s32 n);
 void winMailDisp(WindowWork* wp);
 void winMsgDisp(WindowWork* wp, f32 x, f32 y);
 void winSortGX(WindowWork* wp);
-void winMakeEquipList(WindowWork* wp);
 
 void sort_1_1_func(WindowWork* wp);
 void sort_1_2_func(WindowWork* wp);
@@ -84,20 +82,7 @@ u8 enemy_monoshiri_sort_table[] = {
 #include "icon_ids.h"
 #include "driver/animdrv.h"
 
-void winMarioInit();
-void winItemInit();
-void winBadgeInit();
-void winMarioInit2();
-void winItemInit2();
-void winBadgeInit2();
-s32 winMarioMain();
-s32 winItemMain();
-s32 winBadgeMain();
 void winMarioMain2();
-void winItemMain2();
-void winBadgeMain2();
-void winMarioExit();
-void winItemExit();
 void winBadgeExit();
 void winRootBgDrawDisp();
 void winRootBgCaptureDisp();

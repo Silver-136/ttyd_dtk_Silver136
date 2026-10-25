@@ -51,7 +51,6 @@ typedef struct HouseWork {
 s32 DoorFLAG;
 s32 door_mapflag;
 
-void door_position_sub(s32 type, const char* map, const char* hitIn, const char* hitOut, Vec* in, Vec* out, BOOL mario);
 void door_dark_flag_sub(BOOL on, const char** npcs, const char** mobjs, const char** items);
 
 

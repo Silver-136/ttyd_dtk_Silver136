@@ -41,3 +41,4 @@ USER_FUNC(npc_hide_onoff);
 USER_FUNC(npc_light);
 USER_FUNC(out_pos);
 USER_FUNC(outside_group);
+void door_position_sub(s32 type, const char* map, const char* hitIn, const char* hitOut, Vec* in, Vec* out, BOOL mario);

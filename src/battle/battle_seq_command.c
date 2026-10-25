@@ -38,8 +38,6 @@
 #include "battle/battle_detect.h"
 
 
-void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
-void BattleMenuDisp_WeaponSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandWeapon* weapons, s32 a);
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 void _btlcmd_MakeMultiItemTable(BattleWork* wp);

@@ -33,7 +33,6 @@ extern ItemData itemDataTable[];
 
 #ifdef VERSION_G8ME01
 #endif
-void animPoseVivianMain(s32 poseId, Vec* pos);
 
 BattleWeapon* chri_waza[4] = {
     &partyWeapon_ChristineNormalAttack,

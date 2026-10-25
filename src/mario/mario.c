@@ -889,7 +889,6 @@ void marioReInit(void) {
     wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
 }
 
-void peachMain(void);
 #ifdef VERSION_G8ME01
 #define mario_kemuri_80130474 mario_kemuri // US: global name
 #endif

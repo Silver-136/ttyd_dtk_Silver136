@@ -270,7 +270,6 @@ CubeJoint front2DJ = {
 };
 
 
-HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx);
 
 #define MAX_MOBJ_WORK 3
 
