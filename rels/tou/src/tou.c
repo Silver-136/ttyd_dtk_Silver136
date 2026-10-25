@@ -2457,7 +2457,7 @@ static f32 camGetRy(void) {
 }
 
 USER_FUNC(tou_champion_belt) {
-    void** udPtr; // FAKE: alias of &eff->userdata; a typed EffStarStoneWork* local or direct eff->userdata changes codegen
+    EffStarStoneWork** work;
     EffectEntry* eff;
     s32 idx;
     Vec* positions;
@@ -2477,24 +2477,26 @@ USER_FUNC(tou_champion_belt) {
     idx = animPoseGetGroupIdx(npc->poseId, "locator8");
     angle = reviseAngle(camGetRy() - pose->rotationY);
     eff = event->userdatap[0];
-    udPtr = &eff->userdata;
-    ((EffStarStoneWork*)(*udPtr))->position.x = positions[idx].x;
-    ((EffStarStoneWork*)(*udPtr))->position.y = positions[idx].y;
-    ((EffStarStoneWork*)(*udPtr))->position.z = positions[idx].z;
+    // FAKE: the work is read through a pointer to the userdata slot, so userdata is reloaded at every store (as in
+    // tou2's copy of this function; a plain EffStarStoneWork* local or a cast per access changes the code)
+    work = (EffStarStoneWork**)&eff->userdata;
+    (*work)->position.x = positions[idx].x;
+    (*work)->position.y = positions[idx].y;
+    (*work)->position.z = positions[idx].z;
     if ((angle > 90.0f && angle <= 270.0f) || (angle < -90.0f && angle >= -270.0f)) {
-        ((EffStarStoneWork*)(*udPtr))->rot.y = 8.0f - (angle + camGetPtr(CAMERA_3D)->viewYaw);
+        (*work)->rot.y = 8.0f - (angle + camGetPtr(CAMERA_3D)->viewYaw);
     } else {
-        ((EffStarStoneWork*)(*udPtr))->rot.y = -(angle + camGetPtr(CAMERA_3D)->viewYaw) - 8.0f;
+        (*work)->rot.y = -(angle + camGetPtr(CAMERA_3D)->viewYaw) - 8.0f;
     }
     if (npc->position.y <= -1000.0f) {
-        ((EffStarStoneWork*)(*udPtr))->position.x = 0.0f;
-        ((EffStarStoneWork*)(*udPtr))->position.y = -1000.0f;
-        ((EffStarStoneWork*)(*udPtr))->position.z = 0.0f;
+        (*work)->position.x = 0.0f;
+        (*work)->position.y = -1000.0f;
+        (*work)->position.z = 0.0f;
     }
     if (champion_belt_onoff) {
-        ((EffStarStoneWork*)(*udPtr))->position.x = 0.0f;
-        ((EffStarStoneWork*)(*udPtr))->position.y = -1000.0f;
-        ((EffStarStoneWork*)(*udPtr))->position.z = 0.0f;
+        (*work)->position.x = 0.0f;
+        (*work)->position.y = -1000.0f;
+        (*work)->position.z = 0.0f;
     }
     return EVT_RETURN_BLOCK;
 }
