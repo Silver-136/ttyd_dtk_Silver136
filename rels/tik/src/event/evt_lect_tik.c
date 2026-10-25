@@ -81,20 +81,6 @@ static USER_FUNC(lect_status_off);
 static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
-f32 fd_evt_lect_tik_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_tik_neg_one_382;
-f32 fd_evt_lect_tik___local_PI_383;
-f32 fd_evt_lect_tik___local_3PIO2_385;
-f32 fd_evt_lect_tik_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_tik___local_PIO2_384;
-f32 fd_evt_lect_tik_one_381;
-f32 fd_evt_lect_tik_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_tik_neg_one_365;
-f32 fd_evt_lect_tik___local_PI_366;
-f32 fd_evt_lect_tik___local_3PIO2_368;
-f32 fd_evt_lect_tik_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_tik___local_PIO2_367;
-f32 fd_evt_lect_tik_one_364;
 EvtWord plane_majin_lecture_init[73];
 EvtWord plane_majin_lecture[715];
 
@@ -500,34 +486,6 @@ static USER_FUNC(evtflash) {
     return EVT_RETURN_DONE;
 }
 
-f32 fd_evt_lect_tik_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_evt_lect_tik_neg_one_382 = -1.0f;
-
-f32 fd_evt_lect_tik___local_PI_383 = 3.1415927f;
-
-f32 fd_evt_lect_tik___local_3PIO2_385 = 4.712389f;
-
-f32 fd_evt_lect_tik_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_evt_lect_tik___local_PIO2_384 = 1.5707964f;
-
-f32 fd_evt_lect_tik_one_381 = 1.0f;
-
-f32 fd_evt_lect_tik_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_evt_lect_tik_neg_one_365 = -1.0f;
-
-f32 fd_evt_lect_tik___local_PI_366 = 3.1415927f;
-
-f32 fd_evt_lect_tik___local_3PIO2_368 = 4.712389f;
-
-f32 fd_evt_lect_tik_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_evt_lect_tik___local_PIO2_367 = 1.5707964f;
-
-f32 fd_evt_lect_tik_one_364 = 1.0f;
-
 EVT_BEGIN(plane_majin_lecture_init)
     CALL(lect_set_systemlevel, 0)
     CALL(lect_test_systemlevel)
@@ -783,7 +741,6 @@ EVT_BEGIN(plane_majin_lecture)
     CALL(evt_npc_set_position, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), 0, -1000, 0)
     RETURN
 EVT_END_PAD()
-
 
 static USER_FUNC(lect_push_r_check) {
     EvtWord* args = event->args;

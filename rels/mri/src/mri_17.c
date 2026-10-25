@@ -93,20 +93,6 @@ USER_FUNC(evt_target_flag_onoff);
 USER_FUNC(evt_target_set_position);
 static USER_FUNC(set_depthPlaneOffset);
 
-f32 fd_mri_17_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_mri_17_neg_one_382;
-f32 fd_mri_17___local_PI_383;
-f32 fd_mri_17___local_3PIO2_385;
-f32 fd_mri_17_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_mri_17___local_PIO2_384;
-f32 fd_mri_17_one_381;
-f32 fd_mri_17_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_mri_17_neg_one_365;
-f32 fd_mri_17___local_PI_366;
-f32 fd_mri_17___local_3PIO2_368;
-f32 fd_mri_17_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_mri_17___local_PIO2_367;
-f32 fd_mri_17_one_364;
 EvtWord bero_02_into_event[14];
 static BeroEntry bero_entry_data[4];
 static EvtWord guide_init[2];
@@ -131,34 +117,6 @@ static EvtWord breakyuka_main[131];
 EvtWord strange_statue[56];
 EvtWord switch_event[41];
 EvtWord mri_17_init_evt[208];
-
-f32 fd_mri_17_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_17_neg_one_382 = -1.0f;
-
-f32 fd_mri_17___local_PI_383 = 3.1415927f;
-
-f32 fd_mri_17___local_3PIO2_385 = 4.712389f;
-
-f32 fd_mri_17_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_17___local_PIO2_384 = 1.5707964f;
-
-f32 fd_mri_17_one_381 = 1.0f;
-
-f32 fd_mri_17_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_17_neg_one_365 = -1.0f;
-
-f32 fd_mri_17___local_PI_366 = 3.1415927f;
-
-f32 fd_mri_17___local_3PIO2_368 = 4.712389f;
-
-f32 fd_mri_17_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_17___local_PIO2_367 = 1.5707964f;
-
-f32 fd_mri_17_one_364 = 1.0f;
 
 EVT_BEGIN(bero_02_into_event)
     IF_INT_EQUAL(GSWF(2872), 0)

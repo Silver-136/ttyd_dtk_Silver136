@@ -46,7 +46,6 @@ static inline f32 sinf_l(f32 x) { f32 v = sin(x); return v; }
 static inline f32 cosf_l(f32 x) { return cos(x); }
 static inline f32 orbit_update(f32 x) { return x * 3.141592f / 180.0f; }
 
-
 USER_FUNC(L_evt_mario_keyon_wait);
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(alpha_init_func);
@@ -202,20 +201,6 @@ void suifu_kyorokyoro_init(NanNPC* npc);
 void suifu_kyorokyoro(NanNPC* npc);
 static void alpha_tev(MapTevCallbackInfo* info);
 
-f32 fd_muj_00_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_muj_00_neg_one_382;
-f32 fd_muj_00___local_PI_383;
-f32 fd_muj_00___local_3PIO2_385;
-f32 fd_muj_00_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_muj_00___local_PIO2_384;
-f32 fd_muj_00_one_381;
-f32 fd_muj_00_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_muj_00_neg_one_365;
-f32 fd_muj_00___local_PI_366;
-f32 fd_muj_00___local_3PIO2_368;
-f32 fd_muj_00_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_muj_00___local_PIO2_367;
-f32 fd_muj_00_one_364;
 static ExtTexInfo ext_entry_data[59];
 static s16 suifu_animtbl[42];
 s16 suifu_animtbl_run[22];
@@ -791,34 +776,6 @@ USER_FUNC(cam_test_func) {
     evtSetValue(event, *p1, center.z - dist * c);
     return EVT_RETURN_DONE;
 }
-
-f32 fd_muj_00_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_00_neg_one_382 = -1.0f;
-
-f32 fd_muj_00___local_PI_383 = 3.1415927f;
-
-f32 fd_muj_00___local_3PIO2_385 = 4.712389f;
-
-f32 fd_muj_00_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_00___local_PIO2_384 = 1.5707964f;
-
-f32 fd_muj_00_one_381 = 1.0f;
-
-f32 fd_muj_00_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_00_neg_one_365 = -1.0f;
-
-f32 fd_muj_00___local_PI_366 = 3.1415927f;
-
-f32 fd_muj_00___local_3PIO2_368 = 4.712389f;
-
-f32 fd_muj_00_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_00___local_PIO2_367 = 1.5707964f;
-
-f32 fd_muj_00_one_364 = 1.0f;
 
 static ExtTexInfo ext_entry_data[] = {
     {"c_boro_k", "S_1", 0.0f},
@@ -3980,5 +3937,4 @@ EVT_BEGIN(muj_00_init_evt)
     RETURN
 EVT_END()
 #endif
-
 

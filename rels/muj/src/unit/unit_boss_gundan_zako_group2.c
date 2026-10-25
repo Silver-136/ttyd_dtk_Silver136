@@ -80,20 +80,6 @@ USER_FUNC(zakogun_ext_init2);
 USER_FUNC(up_ceil);
 USER_FUNC(down_ceil);
 
-f32 fd_boss_gundan_zako_group2_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_boss_gundan_zako_group2_neg_one_382;
-f32 fd_boss_gundan_zako_group2___local_PI_383;
-f32 fd_boss_gundan_zako_group2___local_3PIO2_385;
-f32 fd_boss_gundan_zako_group2_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_boss_gundan_zako_group2___local_PIO2_384;
-f32 fd_boss_gundan_zako_group2_one_381;
-f32 fd_boss_gundan_zako_group2_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_boss_gundan_zako_group2_neg_one_365;
-f32 fd_boss_gundan_zako_group2___local_PI_366;
-f32 fd_boss_gundan_zako_group2___local_3PIO2_368;
-f32 fd_boss_gundan_zako_group2_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_boss_gundan_zako_group2___local_PIO2_367;
-f32 fd_boss_gundan_zako_group2_one_364;
 BattleUnitKind unit_boss_gundan_zako_group2;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -113,34 +99,6 @@ static EvtWord hit_check_event[34];
 EvtWord hit_check_event2[7];
 EvtWord hit_check_event_sub[123];
 static EvtWord wait_event[6];
-
-f32 fd_boss_gundan_zako_group2_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_gundan_zako_group2_neg_one_382 = -1.0f;
-
-f32 fd_boss_gundan_zako_group2___local_PI_383 = 3.1415927f;
-
-f32 fd_boss_gundan_zako_group2___local_3PIO2_385 = 4.712389f;
-
-f32 fd_boss_gundan_zako_group2_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_gundan_zako_group2___local_PIO2_384 = 1.5707964f;
-
-f32 fd_boss_gundan_zako_group2_one_381 = 1.0f;
-
-f32 fd_boss_gundan_zako_group2_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_gundan_zako_group2_neg_one_365 = -1.0f;
-
-f32 fd_boss_gundan_zako_group2___local_PI_366 = 3.1415927f;
-
-f32 fd_boss_gundan_zako_group2___local_3PIO2_368 = 4.712389f;
-
-f32 fd_boss_gundan_zako_group2_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_gundan_zako_group2___local_PIO2_367 = 1.5707964f;
-
-f32 fd_boss_gundan_zako_group2_one_364 = 1.0f;
 
 BattleUnitKind unit_boss_gundan_zako_group2 = {
     101,

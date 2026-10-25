@@ -1,5 +1,4 @@
 #include "version.h"
-#pragma dollar_identifiers on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -64,20 +63,6 @@ USER_FUNC(zakogun_ext_init3);
 USER_FUNC(zakogun_kanbu_on_ball);
 extern s32 zakogun_get_kanbu_id_evtcmd[];
 
-f32 negone_one$374[2] __attribute__((aligned(8)));
-f32 neg_one$382;
-f32 __local_PI$383;
-f32 __local_3PIO2$385;
-f32 one_negone$373[2] __attribute__((aligned(8)));
-f32 __local_PIO2$384;
-f32 one$381;
-f32 negone_one$360[2] __attribute__((aligned(8)));
-f32 neg_one$365;
-f32 __local_PI$366;
-f32 __local_3PIO2$368;
-f32 one_negone$359[2] __attribute__((aligned(8)));
-f32 __local_PIO2$367;
-f32 one$364;
 BattleUnitKind unit_boss_gundan_zako_group3;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -134,36 +119,6 @@ USER_FUNC(zakogun_ext_init3) {
     }
     return EVT_RETURN_DONE;
 }
-
-f32 negone_one$374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 neg_one$382 = -1.0f;
-
-f32 __local_PI$383 = 3.1415927f;
-
-f32 __local_3PIO2$385 = 4.712389f;
-
-
-f32 one_negone$373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 __local_PIO2$384 = 1.5707964f;
-
-f32 one$381 = 1.0f;
-
-f32 negone_one$360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 neg_one$365 = -1.0f;
-
-f32 __local_PI$366 = 3.1415927f;
-
-f32 __local_3PIO2$368 = 4.712389f;
-
-
-f32 one_negone$359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 __local_PIO2$367 = 1.5707964f;
-
-f32 one$364 = 1.0f;
 
 BattleUnitKind unit_boss_gundan_zako_group3 = {
     102,

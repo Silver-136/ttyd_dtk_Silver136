@@ -245,22 +245,6 @@ static void pose_change(Kyaku* kyaku, const char* name, const char* anim);
 static void pose_main(void);
 static void pose_init(void);
 
-f32 fd_tou_03_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_tou_03_neg_one_382;
-f32 fd_tou_03___local_PI_383;
-f32 fd_tou_03___local_3PIO2_385;
-f32 fd_tou_03_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_tou_03___local_PIO2_384;
-f32 fd_tou_03_one_381;
-f32 fd_tou_03_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_tou_03_neg_one_365;
-f32 fd_tou_03___local_PI_366;
-f32 fd_tou_03___local_3PIO2_368;
-f32 fd_tou_03_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_tou_03___local_PIO2_367;
-f32 fd_tou_03_one_364;
-f64 fd_tou_03__three_localstatic4_sqrtf;
-f64 fd_tou_03__half_localstatic3_sqrtf;
 ExtTexInfo ext_kyaku_data[51];
 EvtWord x[1];
 EvtWord evt_kyaku[138];
@@ -332,37 +316,13 @@ EvtWord evt_kyaku_check[105];
 #endif
 EvtWord tou_03_init_evt[VERSION_PICK(370, 372)];
 
-f32 fd_tou_03_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
+// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
+#pragma push
+#pragma dollar_identifiers on
+static f64 _three$localstatic4$sqrtf = 3.0;
 
-f32 fd_tou_03_neg_one_382 = -1.0f;
-
-f32 fd_tou_03___local_PI_383 = 3.1415927f;
-
-f32 fd_tou_03___local_3PIO2_385 = 4.712389f;
-
-f32 fd_tou_03_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou_03___local_PIO2_384 = 1.5707964f;
-
-f32 fd_tou_03_one_381 = 1.0f;
-
-f32 fd_tou_03_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tou_03_neg_one_365 = -1.0f;
-
-f32 fd_tou_03___local_PI_366 = 3.1415927f;
-
-f32 fd_tou_03___local_3PIO2_368 = 4.712389f;
-
-f32 fd_tou_03_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou_03___local_PIO2_367 = 1.5707964f;
-
-f32 fd_tou_03_one_364 = 1.0f;
-
-f64 fd_tou_03__three_localstatic4_sqrtf = 3.0;
-
-f64 fd_tou_03__half_localstatic3_sqrtf = 0.5;
+static f64 _half$localstatic3$sqrtf = 0.5;
+#pragma pop
 
 ExtTexInfo ext_kyaku_data[] = {
     {("c_kinopio"), ("KNP_S_1"), 0.0f},
@@ -6005,5 +5965,4 @@ EVT_BEGIN(tou_03_init_evt)
     RETURN
 EVT_END()
 #endif
-
 

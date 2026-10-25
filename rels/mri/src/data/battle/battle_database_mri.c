@@ -7,24 +7,9 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-
 USER_FUNC(evt_mapobj_flag_onoff);
 extern BattleUnitKind unit_barriern;
 
-f32 fd_battle_database_mri_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_mri_neg_one_382;
-f32 fd_battle_database_mri___local_PI_383;
-f32 fd_battle_database_mri___local_3PIO2_385;
-f32 fd_battle_database_mri_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_mri___local_PIO2_384;
-f32 fd_battle_database_mri_one_381;
-f32 fd_battle_database_mri_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_mri_neg_one_365;
-f32 fd_battle_database_mri___local_PI_366;
-f32 fd_battle_database_mri___local_3PIO2_368;
-f32 fd_battle_database_mri_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_mri___local_PIO2_367;
-f32 fd_battle_database_mri_one_364;
 BattleStageObjectData mri_btlobject_data[43];
 BattleStageData mri_btlstage_data[4];
 BattleUnitSetup btlparty_mri_mri_01_01[2];
@@ -85,34 +70,6 @@ NpcBattleSelect btlgrpsel_mri_btlno_mri_mb_off[2];
 NpcSetupBattleInfo btlsetup_mri_tbl[22];
 NpcTerritoryInfo btl_mri_setup_no_tbl[22];
 EvtWord stg_02_1_init_evt[8];
-
-f32 fd_battle_database_mri_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_mri_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_mri___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_mri___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_mri_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_mri___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_mri_one_381 = 1.0f;
-
-f32 fd_battle_database_mri_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_mri_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_mri___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_mri___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_mri_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_mri___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_mri_one_364 = 1.0f;
 
 BattleStageObjectData mri_btlobject_data[] = {
     {"S_isk_01", 2, 0, {19.0f, 0.0f, -55.0f}, 0, 60, {0}},

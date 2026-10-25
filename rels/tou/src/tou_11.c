@@ -4,7 +4,6 @@
 #include "tou.h"
 #include "evt/evt_npc.h"
 
-
 USER_FUNC(evt_bero_get_entername);
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_mapchange);
@@ -49,20 +48,6 @@ USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_intpl_msec_get_value);
 USER_FUNC(evt_sub_intpl_msec_init);
 
-f32 fd_tou_11_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_tou_11_neg_one_382;
-f32 fd_tou_11___local_PI_383;
-f32 fd_tou_11___local_3PIO2_385;
-f32 fd_tou_11_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_tou_11___local_PIO2_384;
-f32 fd_tou_11_one_381;
-f32 fd_tou_11_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_tou_11_neg_one_365;
-f32 fd_tou_11___local_PI_366;
-f32 fd_tou_11___local_3PIO2_368;
-f32 fd_tou_11_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_tou_11___local_PIO2_367;
-f32 fd_tou_11_one_364;
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
 static EvtWord e_door_open[12];
@@ -75,34 +60,6 @@ EvtWord evt_tojikome_sandome[37];
 static EvtWord evt_tojikome_msg[30];
 EvtWord evt_postar[23];
 EvtWord tou_11_init_evt[178];
-
-f32 fd_tou_11_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tou_11_neg_one_382 = -1.0f;
-
-f32 fd_tou_11___local_PI_383 = 3.1415927f;
-
-f32 fd_tou_11___local_3PIO2_385 = 4.712389f;
-
-f32 fd_tou_11_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou_11___local_PIO2_384 = 1.5707964f;
-
-f32 fd_tou_11_one_381 = 1.0f;
-
-f32 fd_tou_11_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tou_11_neg_one_365 = -1.0f;
-
-f32 fd_tou_11___local_PI_366 = 3.1415927f;
-
-f32 fd_tou_11___local_3PIO2_368 = 4.712389f;
-
-f32 fd_tou_11_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou_11___local_PIO2_367 = 1.5707964f;
-
-f32 fd_tou_11_one_364 = 1.0f;
 
 static EVT_BEGIN(n_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))

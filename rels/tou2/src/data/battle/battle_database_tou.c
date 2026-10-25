@@ -7,27 +7,12 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-
 USER_FUNC(evt_map_set_tevcallback);
 USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(tou_gamen_screen_tev_init);
 extern s32 tou_gamen_screen_tev[];
 extern BattleUnitKind unit_jyugem;
 
-f32 fd_battle_database_tou_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_tou_neg_one_382;
-f32 fd_battle_database_tou___local_PI_383;
-f32 fd_battle_database_tou___local_3PIO2_385;
-f32 fd_battle_database_tou_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_tou___local_PIO2_384;
-f32 fd_battle_database_tou_one_381;
-f32 fd_battle_database_tou_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_tou_neg_one_365;
-f32 fd_battle_database_tou___local_PI_366;
-f32 fd_battle_database_tou___local_3PIO2_368;
-f32 fd_battle_database_tou_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_tou___local_PIO2_367;
-f32 fd_battle_database_tou_one_364;
 BattleStageObjectData tou_btlobject_data[14];
 BattleStageData tou_btlstage_data[2];
 BattleUnitSetup btlparty_tou_tou_rank_19[5];
@@ -106,34 +91,6 @@ NpcBattleSelect btlgrpsel_tou_btlno_tou_01_24_off[2];
 NpcSetupBattleInfo btlsetup_tou_tbl[26];
 NpcTerritoryInfo btl_tou_setup_no_tbl[26];
 EvtWord bgset_tou_screen_evt[22];
-
-f32 fd_battle_database_tou_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_tou_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_tou___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_tou___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_tou_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_tou___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_tou_one_381 = 1.0f;
-
-f32 fd_battle_database_tou_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_tou_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_tou___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_tou___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_tou_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_tou___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_tou_one_364 = 1.0f;
 
 BattleStageObjectData tou_btlobject_data[] = {
     {"gamen", 2, 0, {0.0f, 0.0f, -50.0f}, 0, 60, {0}},

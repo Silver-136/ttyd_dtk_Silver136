@@ -1,5 +1,4 @@
 #include "version.h"
-#pragma dollar_identifiers on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -149,20 +148,6 @@ static void pose_change(Fan* fan, const char* name, const char* anim);
 static void pose_main(void);
 static void pose_init(void);
 
-static f32 negone_one$374[2] __attribute__((aligned(8)));
-static f32 neg_one$382;
-static f32 __local_PI$383;
-static f32 __local_3PIO2$385;
-static f32 one_negone$373[2] __attribute__((aligned(8)));
-static f32 __local_PIO2$384;
-static f32 one$381;
-static f32 negone_one$360[2] __attribute__((aligned(8)));
-static f32 neg_one$365;
-static f32 __local_PI$366;
-static f32 __local_3PIO2$368;
-static f32 one_negone$359[2] __attribute__((aligned(8)));
-static f32 __local_PIO2$367;
-static f32 one$364;
 static EvtWord s_door_open[58];
 static EvtWord s_door_close[58];
 EvtWord n_1_door_open[22];
@@ -319,36 +304,6 @@ static f32 randf(f32 min, f32 max) {
 
     return r * (max - min) + min;
 }
-
-static f32 negone_one$374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-static f32 neg_one$382 = -1.0f;
-
-static f32 __local_PI$383 = 3.1415927f;
-
-static f32 __local_3PIO2$385 = 4.712389f;
-
-
-static f32 one_negone$373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-static f32 __local_PIO2$384 = 1.5707964f;
-
-static f32 one$381 = 1.0f;
-
-static f32 negone_one$360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-static f32 neg_one$365 = -1.0f;
-
-static f32 __local_PI$366 = 3.1415927f;
-
-static f32 __local_3PIO2$368 = 4.712389f;
-
-
-static f32 one_negone$359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-static f32 __local_PIO2$367 = 1.5707964f;
-
-static f32 one$364 = 1.0f;
 
 static EVT_BEGIN(s_door_open)
     IF_FLOAT_EQUAL(LW(0), FLOAT((0.0f)))
@@ -2684,5 +2639,4 @@ EVT_BEGIN(tou_02_init_evt)
     RETURN
 EVT_END()
 #endif
-
 

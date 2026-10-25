@@ -97,20 +97,6 @@ USER_FUNC(tik_npc_buruburu);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 
-f32 fd_tik_02_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_tik_02_neg_one_382;
-f32 fd_tik_02___local_PI_383;
-f32 fd_tik_02___local_3PIO2_385;
-f32 fd_tik_02_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_tik_02___local_PIO2_384;
-f32 fd_tik_02_one_381;
-f32 fd_tik_02_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_tik_02_neg_one_365;
-f32 fd_tik_02___local_PI_366;
-f32 fd_tik_02___local_3PIO2_368;
-f32 fd_tik_02_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_tik_02___local_PIO2_367;
-f32 fd_tik_02_one_364;
 static BeroEntry bero_entry_data[7];
 static BeroEntry bero_entry_data2[2];
 EvtWord geso_init[2];
@@ -266,34 +252,6 @@ USER_FUNC(geso_set_checkpose) {
     npc->checkPose = (const char*)geso_checkpose;
     return EVT_RETURN_DONE;
 }
-
-f32 fd_tik_02_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tik_02_neg_one_382 = -1.0f;
-
-f32 fd_tik_02___local_PI_383 = 3.1415927f;
-
-f32 fd_tik_02___local_3PIO2_385 = 4.712389f;
-
-f32 fd_tik_02_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tik_02___local_PIO2_384 = 1.5707964f;
-
-f32 fd_tik_02_one_381 = 1.0f;
-
-f32 fd_tik_02_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tik_02_neg_one_365 = -1.0f;
-
-f32 fd_tik_02___local_PI_366 = 3.1415927f;
-
-f32 fd_tik_02___local_3PIO2_368 = 4.712389f;
-
-f32 fd_tik_02_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tik_02___local_PIO2_367 = 1.5707964f;
-
-f32 fd_tik_02_one_364 = 1.0f;
 
 static BeroEntry bero_entry_data[] = {
     {

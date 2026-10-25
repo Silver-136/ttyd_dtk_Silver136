@@ -81,20 +81,6 @@ static USER_FUNC(evtflash);
 USER_FUNC(muj_item_move_3d_position);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);
 
-f32 fd_muj_12_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_muj_12_neg_one_382;
-f32 fd_muj_12___local_PI_383;
-f32 fd_muj_12___local_3PIO2_385;
-f32 fd_muj_12_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_muj_12___local_PIO2_384;
-f32 fd_muj_12_one_381;
-f32 fd_muj_12_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_muj_12_neg_one_365;
-f32 fd_muj_12___local_PI_366;
-f32 fd_muj_12___local_3PIO2_368;
-f32 fd_muj_12_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_muj_12___local_PIO2_367;
-f32 fd_muj_12_one_364;
 static EvtWord back_dark[27];
 static EvtWord door_custom[53];
 static EvtWord bero_custom[135];
@@ -119,34 +105,6 @@ EvtWord muj_12_init_evt[60];
 
 static const GXColor evtflash_col1 = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor evtflash_col2 = {0xFF, 0xFF, 0xFF, 0xFF};
-
-f32 fd_muj_12_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_12_neg_one_382 = -1.0f;
-
-f32 fd_muj_12___local_PI_383 = 3.1415927f;
-
-f32 fd_muj_12___local_3PIO2_385 = 4.712389f;
-
-f32 fd_muj_12_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_12___local_PIO2_384 = 1.5707964f;
-
-f32 fd_muj_12_one_381 = 1.0f;
-
-f32 fd_muj_12_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_12_neg_one_365 = -1.0f;
-
-f32 fd_muj_12___local_PI_366 = 3.1415927f;
-
-f32 fd_muj_12___local_3PIO2_368 = 4.712389f;
-
-f32 fd_muj_12_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_12___local_PIO2_367 = 1.5707964f;
-
-f32 fd_muj_12_one_364 = 1.0f;
 
 static EVT_BEGIN(back_dark)
     CALL(evt_sub_intpl_msec_init, 11, 255, 0, LW(10))
@@ -244,7 +202,6 @@ static EVT_BEGIN(w_open)
     CALL(evt_mapobj_rotate, 0, STRING("S_doa"), 0, LW(0), 0)
     RETURN
 EVT_END()
-
 
 static BeroEntry bero_entry_data[] = {
     {

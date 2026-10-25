@@ -20,7 +20,6 @@
 #include "driver/hitdrv.h"
 #include "data_tables.h"
 
-
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_info_anime);
@@ -86,20 +85,6 @@ USER_FUNC(suifu_option_init_func);
 static USER_FUNC(tornade_alpha_func);
 void elmosalpha_func(NanNPC* npc);
 
-f32 fd_muj_10_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_muj_10_neg_one_382;
-f32 fd_muj_10___local_PI_383;
-f32 fd_muj_10___local_3PIO2_385;
-f32 fd_muj_10_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_muj_10___local_PIO2_384;
-f32 fd_muj_10_one_381;
-f32 fd_muj_10_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_muj_10_neg_one_365;
-f32 fd_muj_10___local_PI_366;
-f32 fd_muj_10___local_3PIO2_368;
-f32 fd_muj_10_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_muj_10___local_PIO2_367;
-f32 fd_muj_10_one_364;
 static EvtWord megane_init[18];
 static EvtWord megane_talk[8];
 static NpcSetupInfo npcEnt[2];
@@ -158,34 +143,6 @@ USER_FUNC(suifu_option_init_func) {
     }
     return EVT_RETURN_DONE;
 }
-
-f32 fd_muj_10_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_10_neg_one_382 = -1.0f;
-
-f32 fd_muj_10___local_PI_383 = 3.1415927f;
-
-f32 fd_muj_10___local_3PIO2_385 = 4.712389f;
-
-f32 fd_muj_10_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_10___local_PIO2_384 = 1.5707964f;
-
-f32 fd_muj_10_one_381 = 1.0f;
-
-f32 fd_muj_10_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_10_neg_one_365 = -1.0f;
-
-f32 fd_muj_10___local_PI_366 = 3.1415927f;
-
-f32 fd_muj_10___local_3PIO2_368 = 4.712389f;
-
-f32 fd_muj_10_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_10___local_PIO2_367 = 1.5707964f;
-
-f32 fd_muj_10_one_364 = 1.0f;
 
 static EVT_BEGIN(megane_init)
     SWITCH(GSW(0))

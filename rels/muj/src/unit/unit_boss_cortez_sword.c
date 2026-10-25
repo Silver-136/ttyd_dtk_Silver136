@@ -6,7 +6,6 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
 
-
 USER_FUNC(btlevtcmd_AnimeChangePose);
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
 USER_FUNC(btlevtcmd_AnimeChangePoseType);
@@ -52,20 +51,6 @@ USER_FUNC(evt_snd_sfxon);
 USER_FUNC(evt_sub_intpl_get_value);
 USER_FUNC(evt_sub_intpl_init);
 
-f32 fd_boss_cortez_sword_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_boss_cortez_sword_neg_one_382;
-f32 fd_boss_cortez_sword___local_PI_383;
-f32 fd_boss_cortez_sword___local_3PIO2_385;
-f32 fd_boss_cortez_sword_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_boss_cortez_sword___local_PIO2_384;
-f32 fd_boss_cortez_sword_one_381;
-f32 fd_boss_cortez_sword_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_boss_cortez_sword_neg_one_365;
-f32 fd_boss_cortez_sword___local_PI_366;
-f32 fd_boss_cortez_sword___local_3PIO2_368;
-f32 fd_boss_cortez_sword_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_boss_cortez_sword___local_PIO2_367;
-f32 fd_boss_cortez_sword_one_364;
 BattleUnitKind unit_boss_cortez_sword;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -91,34 +76,6 @@ static EvtWord dead_event[2];
 EvtWord cortez_weapon_dead_event[100];
 EvtWord cortez_weapon_break_event[88];
 EvtWord cortez_weapon_blow_dead_event[121];
-
-f32 fd_boss_cortez_sword_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_cortez_sword_neg_one_382 = -1.0f;
-
-f32 fd_boss_cortez_sword___local_PI_383 = 3.1415927f;
-
-f32 fd_boss_cortez_sword___local_3PIO2_385 = 4.712389f;
-
-f32 fd_boss_cortez_sword_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_cortez_sword___local_PIO2_384 = 1.5707964f;
-
-f32 fd_boss_cortez_sword_one_381 = 1.0f;
-
-f32 fd_boss_cortez_sword_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_cortez_sword_neg_one_365 = -1.0f;
-
-f32 fd_boss_cortez_sword___local_PI_366 = 3.1415927f;
-
-f32 fd_boss_cortez_sword___local_3PIO2_368 = 4.712389f;
-
-f32 fd_boss_cortez_sword_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_cortez_sword___local_PIO2_367 = 1.5707964f;
-
-f32 fd_boss_cortez_sword_one_364 = 1.0f;
 
 BattleUnitKind unit_boss_cortez_sword = {
     97,

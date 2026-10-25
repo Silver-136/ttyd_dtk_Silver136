@@ -4,7 +4,6 @@
 #include "evt/evt_sub.h"
 #include "data_tables.h"
 
-
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cam3d_evt_off);
 USER_FUNC(evt_cam3d_evt_set);
@@ -30,53 +29,11 @@ USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_intpl_msec_get_value);
 USER_FUNC(evt_sub_intpl_msec_init);
 
-f32 fd_win_02_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_win_02_neg_one_382;
-f32 fd_win_02___local_PI_383;
-f32 fd_win_02___local_3PIO2_385;
-f32 fd_win_02_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_win_02___local_PIO2_384;
-f32 fd_win_02_one_381;
-f32 fd_win_02_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_win_02_neg_one_365;
-f32 fd_win_02___local_PI_366;
-f32 fd_win_02___local_3PIO2_368;
-f32 fd_win_02_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_win_02___local_PIO2_367;
-f32 fd_win_02_one_364;
 static BeroEntry bero_entry_data[5];
 EvtWord evt_hikou_nobiru_init[89];
 EvtWord evt_hikou_nobiru[203];
 static TreeAccess tree_access_data[3];
 EvtWord win_02_init_evt[87];
-
-f32 fd_win_02_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_win_02_neg_one_382 = -1.0f;
-
-f32 fd_win_02___local_PI_383 = 3.1415927f;
-
-f32 fd_win_02___local_3PIO2_385 = 4.712389f;
-
-f32 fd_win_02_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_win_02___local_PIO2_384 = 1.5707964f;
-
-f32 fd_win_02_one_381 = 1.0f;
-
-f32 fd_win_02_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_win_02_neg_one_365 = -1.0f;
-
-f32 fd_win_02___local_PI_366 = 3.1415927f;
-
-f32 fd_win_02___local_3PIO2_368 = 4.712389f;
-
-f32 fd_win_02_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_win_02___local_PIO2_367 = 1.5707964f;
-
-f32 fd_win_02_one_364 = 1.0f;
 
 static BeroEntry bero_entry_data[] = {
     {

@@ -3,7 +3,6 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_movefloor.h"
 
-
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cam3d_evt_off);
@@ -70,20 +69,6 @@ USER_FUNC(evt_snd_envon);
 USER_FUNC(evt_snd_set_rev_mode);
 USER_FUNC(evt_snd_sfxon_3d);
 
-f32 fd_tik_01_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_tik_01_neg_one_382;
-f32 fd_tik_01___local_PI_383;
-f32 fd_tik_01___local_3PIO2_385;
-f32 fd_tik_01_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_tik_01___local_PIO2_384;
-f32 fd_tik_01_one_381;
-f32 fd_tik_01_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_tik_01_neg_one_365;
-f32 fd_tik_01___local_PI_366;
-f32 fd_tik_01___local_3PIO2_368;
-f32 fd_tik_01_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_tik_01___local_PIO2_367;
-f32 fd_tik_01_one_364;
 EvtWord lecture_badge_after_00_evt[34];
 EvtWord dokan_2_in_evt[22];
 static BeroEntry bero_entry_data[12];
@@ -93,34 +78,6 @@ EvtWord wall_bomb00[139];
 EvtWord wall_bomb01[140];
 static EvtWord mobj_box00[34];
 EvtWord tik_01_init_evt[208];
-
-f32 fd_tik_01_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tik_01_neg_one_382 = -1.0f;
-
-f32 fd_tik_01___local_PI_383 = 3.1415927f;
-
-f32 fd_tik_01___local_3PIO2_385 = 4.712389f;
-
-f32 fd_tik_01_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tik_01___local_PIO2_384 = 1.5707964f;
-
-f32 fd_tik_01_one_381 = 1.0f;
-
-f32 fd_tik_01_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tik_01_neg_one_365 = -1.0f;
-
-f32 fd_tik_01___local_PI_366 = 3.1415927f;
-
-f32 fd_tik_01___local_3PIO2_368 = 4.712389f;
-
-f32 fd_tik_01_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tik_01___local_PIO2_367 = 1.5707964f;
-
-f32 fd_tik_01_one_364 = 1.0f;
 
 EVT_BEGIN(lecture_badge_after_00_evt)
     CALL(evt_mario_key_onoff, 0)

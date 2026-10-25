@@ -1,4 +1,3 @@
-#pragma dollar_identifiers on
 #include "eff/eff_starstone.h"
 #include "eff/n64/eff_crystal_n64.h"
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
@@ -189,20 +188,6 @@ void tiz_broken_draw(CameraId cameraId, void* param);
 static void alpha_tev(MapTevCallbackInfo* info);
 USER_FUNC(starstone_set_scale);
 
-f32 negone_one$374[2] __attribute__((aligned(8)));
-f32 neg_one$382;
-f32 __local_PI$383;
-f32 __local_3PIO2$385;
-f32 one_negone$373[2] __attribute__((aligned(8)));
-f32 __local_PIO2$384;
-f32 one$381;
-f32 negone_one$360[2] __attribute__((aligned(8)));
-f32 neg_one$365;
-f32 __local_PI$366;
-f32 __local_3PIO2$368;
-f32 one_negone$359[2] __attribute__((aligned(8)));
-f32 __local_PIO2$367;
-f32 one$364;
 static EvtWord n_door_close[22];
 static EvtWord n_door_open[22];
 static BeroEntry bero_entry_data[4];
@@ -245,37 +230,6 @@ EvtWord lastdungeon_init[36];
 EvtWord lastdungeon[103];
 EvtWord mahojin_event7[VERSION_PICK(2537, 2541)];
 EvtWord tik_05_init_evt[VERSION_PICK(289, 287)];
-
-f32 negone_one$374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 neg_one$382 = -1.0f;
-
-f32 __local_PI$383 = 3.1415927f;
-
-f32 __local_3PIO2$385 = 4.712389f;
-
-
-f32 one_negone$373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 __local_PIO2$384 = 1.5707964f;
-
-f32 one$381 = 1.0f;
-
-f32 negone_one$360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 neg_one$365 = -1.0f;
-
-f32 __local_PI$366 = 3.1415927f;
-
-f32 __local_3PIO2$368 = 4.712389f;
-
-u32 gap_04_0000B17C_data[1] = {0};
-
-f32 one_negone$359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 __local_PIO2$367 = 1.5707964f;
-
-f32 one$364 = 1.0f;
 
 static EVT_BEGIN(n_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
@@ -1285,7 +1239,6 @@ USER_FUNC(map_disp_onoff) {
     }
     return EVT_RETURN_DONE;
 }
-
 
 USER_FUNC(crystal_bgmode) {
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
@@ -3866,5 +3819,4 @@ EVT_BEGIN(tik_05_init_evt)
     RETURN
 EVT_END()
 #endif
-
 

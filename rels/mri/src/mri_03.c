@@ -141,20 +141,6 @@ static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 void puniModeEventparent(PuniData* puni);
 
-f32 fd_mri_03_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_mri_03_neg_one_382;
-f32 fd_mri_03___local_PI_383;
-f32 fd_mri_03___local_3PIO2_385;
-f32 fd_mri_03_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_mri_03___local_PIO2_384;
-f32 fd_mri_03_one_381;
-f32 fd_mri_03_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_mri_03_neg_one_365;
-f32 fd_mri_03___local_PI_366;
-f32 fd_mri_03___local_3PIO2_368;
-f32 fd_mri_03_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_mri_03___local_PIO2_367;
-f32 fd_mri_03_one_364;
 EvtWord jail_alpha_mario_check[24];
 EvtWord jail_alpha[220];
 EvtWord after_2hours[73];
@@ -234,34 +220,6 @@ static USER_FUNC(alpha_set_func) {
     *_ap = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
-
-f32 fd_mri_03_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_03_neg_one_382 = -1.0f;
-
-f32 fd_mri_03___local_PI_383 = 3.1415927f;
-
-f32 fd_mri_03___local_3PIO2_385 = 4.712389f;
-
-f32 fd_mri_03_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_03___local_PIO2_384 = 1.5707964f;
-
-f32 fd_mri_03_one_381 = 1.0f;
-
-f32 fd_mri_03_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_03_neg_one_365 = -1.0f;
-
-f32 fd_mri_03___local_PI_366 = 3.1415927f;
-
-f32 fd_mri_03___local_3PIO2_368 = 4.712389f;
-
-f32 fd_mri_03_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_03___local_PIO2_367 = 1.5707964f;
-
-f32 fd_mri_03_one_364 = 1.0f;
 
 EVT_BEGIN(jail_alpha_mario_check)
     LOOP(0)
@@ -1018,9 +976,6 @@ EVT_BEGIN(bluejail_event)
     CALL(evt_bero_mapchange, STRING("mri_08"), STRING("e_bero"))
     RETURN
 EVT_END()
-
-
-
 
 static EVT_BEGIN(mario_kirimomi_event)
     WAIT_MS(300)

@@ -58,20 +58,6 @@ USER_FUNC(_ikasumi_effect);
 extern BattleUnitKind unit_boss_gesso_left_arm;
 extern BattleUnitKind unit_boss_gesso_right_arm;
 
-f32 fd_boss_gesso_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_boss_gesso_neg_one_382;
-f32 fd_boss_gesso___local_PI_383;
-f32 fd_boss_gesso___local_3PIO2_385;
-f32 fd_boss_gesso_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_boss_gesso___local_PIO2_384;
-f32 fd_boss_gesso_one_381;
-f32 fd_boss_gesso_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_boss_gesso_neg_one_365;
-f32 fd_boss_gesso___local_PI_366;
-f32 fd_boss_gesso___local_3PIO2_368;
-f32 fd_boss_gesso_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_boss_gesso___local_PIO2_367;
-f32 fd_boss_gesso_one_364;
 BattleUnitKind unit_boss_gesso;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -109,34 +95,6 @@ BattleWeapon weapon_gesso_ikasumi_attack;
 EvtWord gesso_ikasumi_attack[193];
 static EvtWord wait_event[6];
 EvtWord dead_subevent[48];
-
-f32 fd_boss_gesso_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_gesso_neg_one_382 = -1.0f;
-
-f32 fd_boss_gesso___local_PI_383 = 3.1415927f;
-
-f32 fd_boss_gesso___local_3PIO2_385 = 4.712389f;
-
-f32 fd_boss_gesso_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_gesso___local_PIO2_384 = 1.5707964f;
-
-f32 fd_boss_gesso_one_381 = 1.0f;
-
-f32 fd_boss_gesso_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_gesso_neg_one_365 = -1.0f;
-
-f32 fd_boss_gesso___local_PI_366 = 3.1415927f;
-
-f32 fd_boss_gesso___local_3PIO2_368 = 4.712389f;
-
-f32 fd_boss_gesso_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_gesso___local_PIO2_367 = 1.5707964f;
-
-f32 fd_boss_gesso_one_364 = 1.0f;
 
 BattleUnitKind unit_boss_gesso = {
     8,

@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 
-
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_flag_on);
@@ -15,51 +14,9 @@ USER_FUNC(evt_snd_bgmon);
 USER_FUNC(evt_snd_envon);
 USER_FUNC(evt_snd_set_rev_mode);
 
-f32 fd_tik_14_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_tik_14_neg_one_382;
-f32 fd_tik_14___local_PI_383;
-f32 fd_tik_14___local_3PIO2_385;
-f32 fd_tik_14_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_tik_14___local_PIO2_384;
-f32 fd_tik_14_one_381;
-f32 fd_tik_14_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_tik_14_neg_one_365;
-f32 fd_tik_14___local_PI_366;
-f32 fd_tik_14___local_3PIO2_368;
-f32 fd_tik_14_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_tik_14___local_PIO2_367;
-f32 fd_tik_14_one_364;
 static BeroEntry bero_entry_data[3];
 static EvtWord item_get00[34];
 EvtWord tik_14_init_evt[30];
-
-f32 fd_tik_14_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tik_14_neg_one_382 = -1.0f;
-
-f32 fd_tik_14___local_PI_383 = 3.1415927f;
-
-f32 fd_tik_14___local_3PIO2_385 = 4.712389f;
-
-f32 fd_tik_14_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tik_14___local_PIO2_384 = 1.5707964f;
-
-f32 fd_tik_14_one_381 = 1.0f;
-
-f32 fd_tik_14_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tik_14_neg_one_365 = -1.0f;
-
-f32 fd_tik_14___local_PI_366 = 3.1415927f;
-
-f32 fd_tik_14___local_3PIO2_368 = 4.712389f;
-
-f32 fd_tik_14_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tik_14___local_PIO2_367 = 1.5707964f;
-
-f32 fd_tik_14_one_364 = 1.0f;
 
 static BeroEntry bero_entry_data[] = {
     {

@@ -48,20 +48,6 @@ USER_FUNC(btlevtcmd_get_turn);
 USER_FUNC(evt_eff);
 static USER_FUNC(togezo_copy_status);
 
-f32 fd_hyper_jyugem_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_hyper_jyugem_neg_one_382;
-f32 fd_hyper_jyugem___local_PI_383;
-f32 fd_hyper_jyugem___local_3PIO2_385;
-f32 fd_hyper_jyugem_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_hyper_jyugem___local_PIO2_384;
-f32 fd_hyper_jyugem_one_381;
-f32 fd_hyper_jyugem_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_hyper_jyugem_neg_one_365;
-f32 fd_hyper_jyugem___local_PI_366;
-f32 fd_hyper_jyugem___local_3PIO2_368;
-f32 fd_hyper_jyugem_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_hyper_jyugem___local_PIO2_367;
-f32 fd_hyper_jyugem_one_364;
 static BattleUnitKind unit_hyper_jyugem;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -96,34 +82,6 @@ static USER_FUNC(togezo_copy_status) {
     unit2->mSizeChangeStrength = unit1->mSizeChangeStrength;
     return EVT_RETURN_DONE;
 }
-
-f32 fd_hyper_jyugem_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_hyper_jyugem_neg_one_382 = -1.0f;
-
-f32 fd_hyper_jyugem___local_PI_383 = 3.1415927f;
-
-f32 fd_hyper_jyugem___local_3PIO2_385 = 4.712389f;
-
-f32 fd_hyper_jyugem_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_hyper_jyugem___local_PIO2_384 = 1.5707964f;
-
-f32 fd_hyper_jyugem_one_381 = 1.0f;
-
-f32 fd_hyper_jyugem_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_hyper_jyugem_neg_one_365 = -1.0f;
-
-f32 fd_hyper_jyugem___local_PI_366 = 3.1415927f;
-
-f32 fd_hyper_jyugem___local_3PIO2_368 = 4.712389f;
-
-f32 fd_hyper_jyugem_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_hyper_jyugem___local_PIO2_367 = 1.5707964f;
-
-f32 fd_hyper_jyugem_one_364 = 1.0f;
 
 static BattleUnitKind unit_hyper_jyugem = {
     159, // mUnitType

@@ -119,20 +119,6 @@ USER_FUNC(evt_sub_random);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(muj_npc_guruguru);
 
-f32 fd_muj_05_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_muj_05_neg_one_382;
-f32 fd_muj_05___local_PI_383;
-f32 fd_muj_05___local_3PIO2_385;
-f32 fd_muj_05_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_muj_05___local_PIO2_384;
-f32 fd_muj_05_one_381;
-f32 fd_muj_05_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_muj_05_neg_one_365;
-f32 fd_muj_05___local_PI_366;
-f32 fd_muj_05___local_3PIO2_368;
-f32 fd_muj_05_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_muj_05___local_PIO2_367;
-f32 fd_muj_05_one_364;
 EvtWord sanders_rotate[28];
 EvtWord sanders_nakama_sub[13];
 EvtWord sanders_nakama[173];
@@ -228,34 +214,6 @@ USER_FUNC(evt_dokuroiwa_command_init) {
     memset(command_work, 0, 7 * sizeof(s32));
     return EVT_RETURN_DONE;
 }
-
-f32 fd_muj_05_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_05_neg_one_382 = -1.0f;
-
-f32 fd_muj_05___local_PI_383 = 3.1415927f;
-
-f32 fd_muj_05___local_3PIO2_385 = 4.712389f;
-
-f32 fd_muj_05_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_05___local_PIO2_384 = 1.5707964f;
-
-f32 fd_muj_05_one_381 = 1.0f;
-
-f32 fd_muj_05_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_05_neg_one_365 = -1.0f;
-
-f32 fd_muj_05___local_PI_366 = 3.1415927f;
-
-f32 fd_muj_05___local_3PIO2_368 = 4.712389f;
-
-f32 fd_muj_05_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_05___local_PIO2_367 = 1.5707964f;
-
-f32 fd_muj_05_one_364 = 1.0f;
 
 EVT_BEGIN(sanders_rotate)
     CALL(evt_sub_intpl_msec_init, 0, LW(1), LW(2), LW(3))

@@ -28,7 +28,6 @@
 #include "mario/mariost.h"
 #include "data/npc_data.h"
 
-
 typedef struct RankEntry {
     u16 flags;
     // pad 2 bytes
@@ -129,34 +128,6 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg);
 static RankData rank_work;
 static DispWork disp_work;
 static s32 champion_belt_onoff;
-
-f32 fd_tou2_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tou2_neg_one_382 = -1.0f;
-
-f32 fd_tou2___local_PI_383 = 3.1415927f;
-
-f32 fd_tou2___local_3PIO2_385 = 4.712389f;
-
-f32 fd_tou2_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou2___local_PIO2_384 = 1.5707964f;
-
-f32 fd_tou2_one_381 = 1.0f;
-
-f32 fd_tou2_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tou2_neg_one_365 = -1.0f;
-
-f32 fd_tou2___local_PI_366 = 3.1415927f;
-
-f32 fd_tou2___local_3PIO2_368 = 4.712389f;
-
-f32 fd_tou2_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou2___local_PIO2_367 = 1.5707964f;
-
-f32 fd_tou2_one_364 = 1.0f;
 
 static FighterData fighterDt[23] = {
     { FIGHT_CHAMPION, "stg3_tou_sensyu_00", "stg3_tou_sensyu2_00", 22, "stg3_tou_400_02", "stg3_tou_400_03", 250 },                // Rawk Hawk
@@ -438,7 +409,6 @@ static void disp_proc(CameraId cameraId, void* param) {
         scissorW = winW;
         GXSetScissor(scissorX, (u16)sy, scissorW, (u16)sh);
     }
-
 
     num = 0;
     for (i = 0; i < rank_wp->count; i++) {

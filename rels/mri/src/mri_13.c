@@ -64,20 +64,6 @@ USER_FUNC(evt_target_flag_onoff);
 USER_FUNC(evt_target_set_position);
 USER_FUNC(yuka_fall_check);
 
-f32 fd_mri_13_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_mri_13_neg_one_382;
-f32 fd_mri_13___local_PI_383;
-f32 fd_mri_13___local_3PIO2_385;
-f32 fd_mri_13_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_mri_13___local_PIO2_384;
-f32 fd_mri_13_one_381;
-f32 fd_mri_13_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_mri_13_neg_one_365;
-f32 fd_mri_13___local_PI_366;
-f32 fd_mri_13___local_3PIO2_368;
-f32 fd_mri_13_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_mri_13___local_PIO2_367;
-f32 fd_mri_13_one_364;
 BeroEntry bero_dai3_kanbu[1];
 static BeroEntry bero_entry_data[3];
 static EvtWord punipuni_mario_halt[33];
@@ -92,34 +78,6 @@ EvtWord yuka_event[421];
 static EvtWord evt_f1_ueki_01[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_13_init_evt[205];
-
-f32 fd_mri_13_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_13_neg_one_382 = -1.0f;
-
-f32 fd_mri_13___local_PI_383 = 3.1415927f;
-
-f32 fd_mri_13___local_3PIO2_385 = 4.712389f;
-
-f32 fd_mri_13_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_13___local_PIO2_384 = 1.5707964f;
-
-f32 fd_mri_13_one_381 = 1.0f;
-
-f32 fd_mri_13_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_13_neg_one_365 = -1.0f;
-
-f32 fd_mri_13___local_PI_366 = 3.1415927f;
-
-f32 fd_mri_13___local_3PIO2_368 = 4.712389f;
-
-f32 fd_mri_13_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_13___local_PIO2_367 = 1.5707964f;
-
-f32 fd_mri_13_one_364 = 1.0f;
 
 BeroEntry bero_dai3_kanbu[] = {
     {

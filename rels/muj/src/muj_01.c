@@ -137,20 +137,6 @@ extern s32 envSetYami[];
 
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 void envSetYamiView(Mtx mtx);
-f32 fd_muj_01_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_muj_01_neg_one_382;
-f32 fd_muj_01___local_PI_383;
-f32 fd_muj_01___local_3PIO2_385;
-f32 fd_muj_01_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_muj_01___local_PIO2_384;
-f32 fd_muj_01_one_381;
-f32 fd_muj_01_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_muj_01_neg_one_365;
-f32 fd_muj_01___local_PI_366;
-f32 fd_muj_01___local_3PIO2_368;
-f32 fd_muj_01_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_muj_01___local_PIO2_367;
-f32 fd_muj_01_one_364;
 EvtWord custom_door_dark2[34];
 EvtWord custom_door_light2[30];
 static EvtWord garawaru_init[39];
@@ -223,35 +209,6 @@ static EvtWord epilogue_evt_sub[117];
 static EvtWord epilogue_evt[88];
 EvtWord yakan_anime[17];
 EvtWord muj_01_init_evt[225];
-
-
-f32 fd_muj_01_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_01_neg_one_382 = -1.0f;
-
-f32 fd_muj_01___local_PI_383 = 3.1415927f;
-
-f32 fd_muj_01___local_3PIO2_385 = 4.712389f;
-
-f32 fd_muj_01_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_01___local_PIO2_384 = 1.5707964f;
-
-f32 fd_muj_01_one_381 = 1.0f;
-
-f32 fd_muj_01_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_muj_01_neg_one_365 = -1.0f;
-
-f32 fd_muj_01___local_PI_366 = 3.1415927f;
-
-f32 fd_muj_01___local_3PIO2_368 = 4.712389f;
-
-f32 fd_muj_01_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_muj_01___local_PIO2_367 = 1.5707964f;
-
-f32 fd_muj_01_one_364 = 1.0f;
 
 EVT_BEGIN(custom_door_dark2)
     CALL(evt_sub_intpl_msec_init, 11, 255, 0, 300)

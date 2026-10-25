@@ -3,7 +3,6 @@
 #include "evt/evt_bero.h"
 #include "win.h"
 
-
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam3d_evt_set);
@@ -32,54 +31,12 @@ USER_FUNC(evt_snd_envon);
 USER_FUNC(evt_sub_intpl_msec_get_value);
 USER_FUNC(evt_sub_intpl_msec_init);
 
-f32 fd_win_05_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_win_05_neg_one_382;
-f32 fd_win_05___local_PI_383;
-f32 fd_win_05___local_3PIO2_385;
-f32 fd_win_05_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_win_05___local_PIO2_384;
-f32 fd_win_05_one_381;
-f32 fd_win_05_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_win_05_neg_one_365;
-f32 fd_win_05___local_PI_366;
-f32 fd_win_05___local_3PIO2_368;
-f32 fd_win_05_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_win_05___local_PIO2_367;
-f32 fd_win_05_one_364;
 EvtWord win_05_door_open[10];
 EvtWord win_05_door_close[10];
 static BeroEntry bero_entry_data[2];
 static EvtWord item_get00[34];
 static EvtWord cloud_toujou[126];
 EvtWord win_05_init_evt[42];
-
-f32 fd_win_05_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_win_05_neg_one_382 = -1.0f;
-
-f32 fd_win_05___local_PI_383 = 3.1415927f;
-
-f32 fd_win_05___local_3PIO2_385 = 4.712389f;
-
-f32 fd_win_05_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_win_05___local_PIO2_384 = 1.5707964f;
-
-f32 fd_win_05_one_381 = 1.0f;
-
-f32 fd_win_05_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_win_05_neg_one_365 = -1.0f;
-
-f32 fd_win_05___local_PI_366 = 3.1415927f;
-
-f32 fd_win_05___local_3PIO2_368 = 4.712389f;
-
-f32 fd_win_05_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_win_05___local_PIO2_367 = 1.5707964f;
-
-f32 fd_win_05_one_364 = 1.0f;
 
 EVT_BEGIN(win_05_door_open)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))

@@ -182,20 +182,6 @@ USER_FUNC(evt_countdown_stop);
 #endif
 void mri_stg3_012_cb(s32 type, void* param);
 
-f32 fd_mri_01_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_mri_01_neg_one_382;
-f32 fd_mri_01___local_PI_383;
-f32 fd_mri_01___local_3PIO2_385;
-f32 fd_mri_01_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_mri_01___local_PIO2_384;
-f32 fd_mri_01_one_381;
-f32 fd_mri_01_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_mri_01_neg_one_365;
-f32 fd_mri_01___local_PI_366;
-f32 fd_mri_01___local_3PIO2_368;
-f32 fd_mri_01_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_mri_01___local_PIO2_367;
-f32 fd_mri_01_one_364;
 static EvtWord guide_init[29];
 static EvtWord guide_talk[20];
 static EvtWord rival_init[30];
@@ -327,34 +313,6 @@ USER_FUNC(elder_talk_sub_fadeoff) {
     puniFadeOff(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
-
-f32 fd_mri_01_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_01_neg_one_382 = -1.0f;
-
-f32 fd_mri_01___local_PI_383 = 3.1415927f;
-
-f32 fd_mri_01___local_3PIO2_385 = 4.712389f;
-
-f32 fd_mri_01_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_01___local_PIO2_384 = 1.5707964f;
-
-f32 fd_mri_01_one_381 = 1.0f;
-
-f32 fd_mri_01_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_01_neg_one_365 = -1.0f;
-
-f32 fd_mri_01___local_PI_366 = 3.1415927f;
-
-f32 fd_mri_01___local_3PIO2_368 = 4.712389f;
-
-f32 fd_mri_01_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_01___local_PIO2_367 = 1.5707964f;
-
-f32 fd_mri_01_one_364 = 1.0f;
 
 static EVT_BEGIN(guide_init)
     SWITCH(GSW(0))

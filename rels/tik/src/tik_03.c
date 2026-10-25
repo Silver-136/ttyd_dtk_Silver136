@@ -3,7 +3,6 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_npc.h"
 
-
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_overwrite);
@@ -51,20 +50,6 @@ USER_FUNC(evt_snd_envon);
 USER_FUNC(evt_snd_set_rev_mode);
 USER_FUNC(evt_snd_sfxon_3d);
 
-f32 fd_tik_03_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_tik_03_neg_one_382;
-f32 fd_tik_03___local_PI_383;
-f32 fd_tik_03___local_3PIO2_385;
-f32 fd_tik_03_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_tik_03___local_PIO2_384;
-f32 fd_tik_03_one_381;
-f32 fd_tik_03_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_tik_03_neg_one_365;
-f32 fd_tik_03___local_PI_366;
-f32 fd_tik_03___local_3PIO2_368;
-f32 fd_tik_03_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_tik_03___local_PIO2_367;
-f32 fd_tik_03_one_364;
 EvtWord bero_05_custom_in[30];
 EvtWord bero_05_custom_out[12];
 static BeroEntry bero_entry_data[3];
@@ -80,34 +65,6 @@ EvtWord puni_switch[133];
 EvtWord puni_nakama[93];
 EvtWord tik03_switch_evt[70];
 EvtWord tik_03_init_evt[116];
-
-f32 fd_tik_03_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tik_03_neg_one_382 = -1.0f;
-
-f32 fd_tik_03___local_PI_383 = 3.1415927f;
-
-f32 fd_tik_03___local_3PIO2_385 = 4.712389f;
-
-f32 fd_tik_03_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tik_03___local_PIO2_384 = 1.5707964f;
-
-f32 fd_tik_03_one_381 = 1.0f;
-
-f32 fd_tik_03_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tik_03_neg_one_365 = -1.0f;
-
-f32 fd_tik_03___local_PI_366 = 3.1415927f;
-
-f32 fd_tik_03___local_3PIO2_368 = 4.712389f;
-
-f32 fd_tik_03_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tik_03___local_PIO2_367 = 1.5707964f;
-
-f32 fd_tik_03_one_364 = 1.0f;
 
 EVT_BEGIN(bero_05_custom_in)
     IF_INT_GREATER_OR_EQUAL(GSW(0), 112)

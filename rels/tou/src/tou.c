@@ -45,10 +45,8 @@ typedef struct DispWork { f32 y; f32 targetY; s32 page; } DispWork;
 typedef struct FighterData { u16 flags; const char* name; const char* name2; s32 info; const char* msg1; const char* msg2; s16 score; } FighterData;
 typedef struct RuleData { const char* name; const char* msg; s32 id; s32 a; s32 b; } RuleData;
 static DispWork* dwp;
-static FighterData fighterDt_raw[23];
-#define fighterDt (fighterDt_raw)
-static FighterData fighterDt_re_raw[21];
-#define fighterDt_re (fighterDt_re_raw)
+static FighterData fighterDt[23];
+static FighterData fighterDt_re[21];
 static void rankingControll(void);
 #define GET_RANK(rank, i) rank = 0; for (i = 0; i < rank_wp->num; i++) { if (!(rank_wp->entries[i].flags & 2)) { if (rank_wp->entries[i].flags & 4) { break; } rank++; } }
 static void insert(s32* list, s32 num, s32 from, s32 to);
@@ -57,12 +55,9 @@ static void insert(s32* list, s32 num, s32 from, s32 to);
 #define FIND_FLAG(k, list, n, flag) for (k = 0; k < n; k++) { if (fighterDt[rank_wp->entries[list[k]].id].flags & flag) { break; } }
 #define MOVE_FLAG(list, n, flag, pos) FIND_FLAG(k, list, n, flag); if (k < n) { insert(list, n, k, pos); }
 static void printRanking(void);
-static RuleData ruleDt_2bu_raw[10];
-#define ruleDt_2bu (ruleDt_2bu_raw)
-static RuleData ruleDt_1bu_raw[14];
-#define ruleDt_1bu (ruleDt_1bu_raw)
-static RuleData ruleDt_re_raw[14];
-#define ruleDt_re (ruleDt_re_raw)
+static RuleData ruleDt_2bu[10];
+static RuleData ruleDt_1bu[14];
+static RuleData ruleDt_re[14];
 static s32 tou_bss_1C;
 static RankWork rank_work;
 static DispWork disp_work;
@@ -214,22 +209,6 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
-f32 fd_tou_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_tou_neg_one_382;
-f32 fd_tou___local_PI_383;
-f32 fd_tou___local_3PIO2_385;
-f32 fd_tou_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_tou___local_PIO2_384;
-f32 fd_tou_one_381;
-f32 fd_tou_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_tou_neg_one_365;
-f32 fd_tou___local_PI_366;
-f32 fd_tou___local_3PIO2_368;
-f32 fd_tou_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_tou___local_PIO2_367;
-f32 fd_tou_one_364;
-f64 fd_tou__three_localstatic4_sqrtf;
-f64 fd_tou__half_localstatic3_sqrtf;
 const char* lockerDt[46];
 EvtWord evt_close[188];
 static EvtWord evt_open[VERSION_PICK(165, 173)];
@@ -772,39 +751,15 @@ static void printRanking(void) {
     }
 }
 
-f32 fd_tou_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
+// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
+#pragma push
+#pragma dollar_identifiers on
+static f64 _three$localstatic4$sqrtf = 3.0;
 
-f32 fd_tou_neg_one_382 = -1.0f;
+static f64 _half$localstatic3$sqrtf = 0.5;
+#pragma pop
 
-f32 fd_tou___local_PI_383 = 3.1415927f;
-
-f32 fd_tou___local_3PIO2_385 = 4.712389f;
-
-f32 fd_tou_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou___local_PIO2_384 = 1.5707964f;
-
-f32 fd_tou_one_381 = 1.0f;
-
-f32 fd_tou_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tou_neg_one_365 = -1.0f;
-
-f32 fd_tou___local_PI_366 = 3.1415927f;
-
-f32 fd_tou___local_3PIO2_368 = 4.712389f;
-
-f32 fd_tou_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou___local_PIO2_367 = 1.5707964f;
-
-f32 fd_tou_one_364 = 1.0f;
-
-f64 fd_tou__three_localstatic4_sqrtf = 3.0;
-
-f64 fd_tou__half_localstatic3_sqrtf = 0.5;
-
-static FighterData fighterDt_raw[] = {
+static FighterData fighterDt[] = {
     {4, "stg3_tou_sensyu_00", "stg3_tou_sensyu2_00", 22, "stg3_tou_400_02", "stg3_tou_400_03", 250},
     {4097, "stg3_tou_sensyu_01", "stg3_tou_sensyu2_01", 19, "stg3_tou_118_00", "stg3_tou_118_01", 200},
     {1, "stg3_tou_sensyu_02", "stg3_tou_sensyu2_02", 18, "stg3_tou_118_02", "stg3_tou_118_03", 180},
@@ -830,7 +785,7 @@ static FighterData fighterDt_raw[] = {
     {2, "stg3_tou_sensyu_22", "stg3_tou_sensyu2_22", 21, "stg3_tou_118_36_04", "stg3_tou_118_36_05", 0},
 };
 
-static FighterData fighterDt_re_raw[] = {
+static FighterData fighterDt_re[] = {
     {4, "stg3_tou_re_315", "stg3_tou_re_338", 22, "stg3_tou_re_289", "stg3_tou_re_290", 250},
     {4097, "stg3_tou_re_316", "stg3_tou_re_339", 19, "stg3_tou_re_179", "stg3_tou_re_180", 200},
     {1, "stg3_tou_re_317", "stg3_tou_re_340", 18, "stg3_tou_re_181", "stg3_tou_re_182", 180},
@@ -854,7 +809,7 @@ static FighterData fighterDt_re_raw[] = {
     {8, "stg3_tou_re_335", "stg3_tou_re_358", 1, 0, 0, 0},
 };
 
-static RuleData ruleDt_2bu_raw[] = {
+static RuleData ruleDt_2bu[] = {
     {"stg3_tou_107_01", "stg3_tou_cp_000", 18, 3, 3},
     {"stg3_tou_107_02", "stg3_tou_cp_001", 1, 1, 1},
     {"stg3_tou_107_03", "stg3_tou_cp_002", 3, 1, 1},
@@ -867,7 +822,7 @@ static RuleData ruleDt_2bu_raw[] = {
     {"stg3_tou_107_16", "stg3_tou_cp_009", 43, 1, 1},
 };
 
-static RuleData ruleDt_1bu_raw[] = {
+static RuleData ruleDt_1bu[] = {
     {"stg3_tou_107_01", "stg3_tou_cp_010", 18, 5, 5},
     {"stg3_tou_107_02", "stg3_tou_cp_011", 1, 1, 1},
     {"stg3_tou_107_03", "stg3_tou_cp_012", 3, 1, 1},
@@ -884,7 +839,7 @@ static RuleData ruleDt_1bu_raw[] = {
     {"stg3_tou_107_20", "stg3_tou_cp_024", 63, 255, 255},
 };
 
-static RuleData ruleDt_re_raw[] = {
+static RuleData ruleDt_re[] = {
     {"stg3_tou_re_362", "stg3_tou_cp_040", 18, 5, 5},
     {"stg3_tou_re_363", "stg3_tou_cp_041", 1, 1, 1},
     {"stg3_tou_re_364", "stg3_tou_cp_042", 3, 1, 1},
@@ -1812,7 +1767,6 @@ static EVT_BEGIN(evt_gardman)
     RETURN
 EVT_END()
 
-
 EVT_BEGIN(evt_gardman_spawn)
     CALL_CHILD(PTR(evt_gardman))
     RETURN
@@ -2501,7 +2455,6 @@ void monitor_tev(MapTevCallbackInfo* info) {
     }
 }
 
-
 USER_FUNC(onoff) {
     gans_wp->onoff = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
@@ -2572,8 +2525,6 @@ USER_FUNC(octo_start) {
     }
     return EVT_RETURN_DONE;
 }
-
-
 
 USER_FUNC(fight_money) {
     EvtWord* args = event->args;
@@ -2653,9 +2604,6 @@ static USER_FUNC(tou_champion_belt_onoff) {
     champion_belt_onoff = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
-
-
-
 
 EVT_BEGIN(evt_michel_8)
     CALL(evt_npc_set_position, STRING("オクトール"), 145, 0, 50)

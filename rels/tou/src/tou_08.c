@@ -101,20 +101,6 @@ USER_FUNC(evt_npc_get_reglid);
 USER_FUNC(evt_npc_restart_regular_event);
 #endif
 
-f32 fd_tou_08_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_tou_08_neg_one_382;
-f32 fd_tou_08___local_PI_383;
-f32 fd_tou_08___local_3PIO2_385;
-f32 fd_tou_08_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_tou_08___local_PIO2_384;
-f32 fd_tou_08_one_381;
-f32 fd_tou_08_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_tou_08_neg_one_365;
-f32 fd_tou_08___local_PI_366;
-f32 fd_tou_08___local_3PIO2_368;
-f32 fd_tou_08_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_tou_08___local_PIO2_367;
-f32 fd_tou_08_one_364;
 static EvtWord evt_toile[42];
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
@@ -146,34 +132,6 @@ static EvtWord epilogue_npc_entry[84];
 static EvtWord epilogue_evt_sub[322];
 static EvtWord epilogue_evt[83];
 EvtWord tou_08_init_evt[289];
-
-f32 fd_tou_08_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tou_08_neg_one_382 = -1.0f;
-
-f32 fd_tou_08___local_PI_383 = 3.1415927f;
-
-f32 fd_tou_08___local_3PIO2_385 = 4.712389f;
-
-f32 fd_tou_08_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou_08___local_PIO2_384 = 1.5707964f;
-
-f32 fd_tou_08_one_381 = 1.0f;
-
-f32 fd_tou_08_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_tou_08_neg_one_365 = -1.0f;
-
-f32 fd_tou_08___local_PI_366 = 3.1415927f;
-
-f32 fd_tou_08___local_3PIO2_368 = 4.712389f;
-
-f32 fd_tou_08_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_tou_08___local_PIO2_367 = 1.5707964f;
-
-f32 fd_tou_08_one_364 = 1.0f;
 
 static EVT_BEGIN(evt_toile)
     IF_INT_LESS(GSW(0), 157)

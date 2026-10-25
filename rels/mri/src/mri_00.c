@@ -144,20 +144,6 @@ static void _mapsetofs_all(CloudWork* wp);
 static void _mapclsofs_all(CloudWork* wp);
 extern s32 envSetYami[];
 
-f32 fd_mri_00_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_mri_00_neg_one_382;
-f32 fd_mri_00___local_PI_383;
-f32 fd_mri_00___local_3PIO2_385;
-f32 fd_mri_00_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_mri_00___local_PIO2_384;
-f32 fd_mri_00_one_381;
-f32 fd_mri_00_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_mri_00_neg_one_365;
-f32 fd_mri_00___local_PI_366;
-f32 fd_mri_00___local_3PIO2_368;
-f32 fd_mri_00_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_mri_00___local_PIO2_367;
-f32 fd_mri_00_one_364;
 static s16 puni_rand_position[196];
 EvtWord mario_see_you_init[54];
 static f32 spline_dt[24];
@@ -264,34 +250,6 @@ static void _mapclsofs_all(CloudWork* wp) {
         mapGrpClearOffScreen(wp->groupNames[i]);
     }
 }
-
-f32 fd_mri_00_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_00_neg_one_382 = -1.0f;
-
-f32 fd_mri_00___local_PI_383 = 3.1415927f;
-
-f32 fd_mri_00___local_3PIO2_385 = 4.712389f;
-
-f32 fd_mri_00_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_00___local_PIO2_384 = 1.5707964f;
-
-f32 fd_mri_00_one_381 = 1.0f;
-
-f32 fd_mri_00_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_00_neg_one_365 = -1.0f;
-
-f32 fd_mri_00___local_PI_366 = 3.1415927f;
-
-f32 fd_mri_00___local_3PIO2_368 = 4.712389f;
-
-f32 fd_mri_00_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_00___local_PIO2_367 = 1.5707964f;
-
-f32 fd_mri_00_one_364 = 1.0f;
 
 static s16 puni_rand_position[] = {
     83, 10, 33, 31, 176, 118, -98, 49,
@@ -1326,7 +1284,6 @@ static USER_FUNC(starstone_set_ry) {
     ((EffStarStoneWork*)effNameToPtr(name)->userdata)->rotY = ry;
     return EVT_RETURN_DONE;
 }
-
 
 EVT_BEGIN(puni_set)
     SET_VALUE(LW(0), 5)

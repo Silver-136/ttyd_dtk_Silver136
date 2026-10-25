@@ -17,7 +17,6 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 
-
 USER_FUNC(btlevtcmd_CheckPartsCounterAttribute);
 USER_FUNC(btlevtcmd_EnemyItemUseCheck);
 USER_FUNC(btlevtcmd_GetPos);
@@ -35,20 +34,6 @@ static USER_FUNC(eff_poison_barrier);
 USER_FUNC(evt_sub_random);
 static USER_FUNC(eff_poison_breath);
 
-f32 fd_dokugassun_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_dokugassun_neg_one_382;
-f32 fd_dokugassun___local_PI_383;
-f32 fd_dokugassun___local_3PIO2_385;
-f32 fd_dokugassun_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_dokugassun___local_PIO2_384;
-f32 fd_dokugassun_one_381;
-f32 fd_dokugassun_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_dokugassun_neg_one_365;
-f32 fd_dokugassun___local_PI_366;
-f32 fd_dokugassun___local_3PIO2_368;
-f32 fd_dokugassun_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_dokugassun___local_PIO2_367;
-f32 fd_dokugassun_one_364;
 static BattleUnitKind unit_dokugassun;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -69,34 +54,6 @@ static EvtWord unison_phase_event[140];
 static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[13];
-
-f32 fd_dokugassun_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_dokugassun_neg_one_382 = -1.0f;
-
-f32 fd_dokugassun___local_PI_383 = 3.1415927f;
-
-f32 fd_dokugassun___local_3PIO2_385 = 4.712389f;
-
-f32 fd_dokugassun_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_dokugassun___local_PIO2_384 = 1.5707964f;
-
-f32 fd_dokugassun_one_381 = 1.0f;
-
-f32 fd_dokugassun_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_dokugassun_neg_one_365 = -1.0f;
-
-f32 fd_dokugassun___local_PI_366 = 3.1415927f;
-
-f32 fd_dokugassun___local_3PIO2_368 = 4.712389f;
-
-f32 fd_dokugassun_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_dokugassun___local_PIO2_367 = 1.5707964f;
-
-f32 fd_dokugassun_one_364 = 1.0f;
 
 static BattleUnitKind unit_dokugassun = {
     166, // mUnitType

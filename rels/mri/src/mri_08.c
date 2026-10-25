@@ -6,7 +6,6 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 
-
 void togeMakeRetsu(Vec* pos, s32 leader, s32 start, s32 end);
 
 USER_FUNC(evt_bero_get_info);
@@ -83,20 +82,6 @@ USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
 USER_FUNC(toge_enter_func00);
 
-f32 fd_mri_08_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_mri_08_neg_one_382;
-f32 fd_mri_08___local_PI_383;
-f32 fd_mri_08___local_3PIO2_385;
-f32 fd_mri_08_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_mri_08___local_PIO2_384;
-f32 fd_mri_08_one_381;
-f32 fd_mri_08_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_mri_08_neg_one_365;
-f32 fd_mri_08___local_PI_366;
-f32 fd_mri_08___local_3PIO2_368;
-f32 fd_mri_08_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_mri_08___local_PIO2_367;
-f32 fd_mri_08_one_364;
 EvtWord toge_1_init[17];
 EvtWord toge_1_talk[44];
 EvtWord toge_2_init[17];
@@ -123,34 +108,6 @@ static EvtWord puni_vs_toge_init[86];
 static EvtWord puni_vs_toge[140];
 static KusaAccess ueki_access_data[6];
 EvtWord mri_08_init_evt[190];
-
-f32 fd_mri_08_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_08_neg_one_382 = -1.0f;
-
-f32 fd_mri_08___local_PI_383 = 3.1415927f;
-
-f32 fd_mri_08___local_3PIO2_385 = 4.712389f;
-
-f32 fd_mri_08_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_08___local_PIO2_384 = 1.5707964f;
-
-f32 fd_mri_08_one_381 = 1.0f;
-
-f32 fd_mri_08_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_mri_08_neg_one_365 = -1.0f;
-
-f32 fd_mri_08___local_PI_366 = 3.1415927f;
-
-f32 fd_mri_08___local_3PIO2_368 = 4.712389f;
-
-f32 fd_mri_08_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_mri_08___local_PIO2_367 = 1.5707964f;
-
-f32 fd_mri_08_one_364 = 1.0f;
 
 EVT_BEGIN(toge_1_init)
     SWITCH(GSW(0))
