@@ -156,7 +156,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
 }
 
 s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
-    s32 diff = ((s32(*)(BattleWork*))BattleActionCommandGetDifficulty)(work);
+    s32 diff = BattleActionCommandGetDifficulty(work);
     TimingAEntry* e = _ac_timing_a_timing_tbl[diff];
     s32 ret = e->value;
     s32 count = work->actionCommands.mResultCount;

@@ -833,7 +833,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
         PSMTXConcat(scale, m, m);
         PSMTXConcat(trans, m, m);
         next = tex[reel->item];
-        ((void (*)(Mtx, u32, GXColor, s32))btlDispTexPlane2)(m, next, (GXColor){0xFF, 0xFF, 0xFF, reel->alpha}, 0);
+        btlDispTexPlane2(m, next, (GXColor){0xFF, 0xFF, 0xFF, reel->alpha}, 0);
         if (reel->state <= 10 && reel->state != 3 && reel->state != 4) {
             idx = reel->index + 1;
             if (idx >= reel->numCards) {
@@ -846,7 +846,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
                 PSMTXTrans(trans, 0.0f, -128.0f, 0.0f);
             }
             PSMTXConcat(trans, m, m);
-            ((void (*)(Mtx, u32, GXColor, s32))btlDispTexPlane2)(m, next, (GXColor){0xFF, 0xFF, 0xFF, reel->alpha}, 0);
+            btlDispTexPlane2(m, next, (GXColor){0xFF, 0xFF, 0xFF, reel->alpha}, 0);
         }
     }
     GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);

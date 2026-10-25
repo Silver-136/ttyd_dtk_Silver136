@@ -37,7 +37,7 @@ void psndSFX_pit(s32 id, s32 pitch);
 void test_kururing_mapdisp(CameraId cam);
 
 #define SFXON(name) (psndSFXOn(name))
-#define TEXPLANE(m, id, col) (((void (*)(Mtx, u32, GXColor, s32))btlDispTexPlane2)(m, id, col, 0))
+#define TEXPLANE(m, id, col) (btlDispTexPlane2(m, id, col, 0))
 
 typedef struct DekaTiming {
     s32 state;  // 0x0

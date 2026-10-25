@@ -1,3 +1,4 @@
+#include "battle/battle_disp.h"
 #include "battle/battle_menu_disp.h"
 #include "battle/battle_seq_command.h"
 #include "battle/battle_unit.h"
@@ -16,7 +17,7 @@ extern ItemData itemDataTable[];
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 double sin(double);
 void btlGetScreenPoint(Vec* pos, Vec* out);
-void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color, s32 a);
+
 void btlDispGXInit2D(void);
 
 

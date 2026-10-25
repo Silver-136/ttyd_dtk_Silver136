@@ -37,7 +37,7 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     PGLv2Work* g = AC_WORK(ac);
     BattleACDispParams* disp = AC_DISP(ac);
-    s32 diff = ((s32 (*)(BattleWork*))BattleActionCommandGetDifficulty)(work);
+    s32 diff = BattleActionCommandGetDifficulty(work);
     s32 flag = 0;
     s32 pressed;
     s32 i;

@@ -125,7 +125,7 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     RepeatWork* r = (RepeatWork*)ac->work;
     RepeatDisp* d = (RepeatDisp*)&ac->disp;
-    s32 diff = ((s32(*)(BattleWork*))BattleActionCommandGetDifficulty)(work);
+    s32 diff = BattleActionCommandGetDifficulty(work);
     s32 pressed;
     BOOL autoCmd = FALSE;
     if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {

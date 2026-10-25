@@ -216,7 +216,7 @@ void btlDispTexPlainGX(u32 id, GXColor color0, GXColor color1, GXColor color2, G
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
-void btlDispTexPlane(u32 id, GXColor color, f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY) {
+void btlDispTexPlane(f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY, u32 id, GXColor color, s32 unused) {
     CameraEntry* camera;
     Mtx scale, trans, mtx;
 
@@ -230,7 +230,7 @@ void btlDispTexPlane(u32 id, GXColor color, f32 tX, f32 tY, f32 tZ, f32 sX, f32 
     btlDispTexPlainGX(id, color, color, color, color);
 }
 
-void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color) {
+void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color, s32 unused) {
     CameraEntry* camera;
     Mtx mtx2;
 
@@ -242,7 +242,7 @@ void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color) {
     btlDispTexPlainGX(id, color, color, color, color);
 }
 
-void btlDispTexPlane3(Mtx mtx, u32 id, GXColor color0, GXColor color1, GXColor color2, GXColor color3) {
+void btlDispTexPlane3(Mtx mtx, u32 id, GXColor color0, GXColor color1, GXColor color2, GXColor color3, s32 unused) {
     CameraEntry* camera;
     Mtx mtx2;
 
@@ -1270,7 +1270,7 @@ void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXC
     PSMTXConcat(rotX, mtx, mtx);
     PSMTXConcat(rotY, mtx, mtx);
     PSMTXConcat(trans, mtx, mtx);
-    ((void (*)(Mtx, u32, GXColor, s32))btlDispTexPlane2)(mtx, id, color, 0);
+    btlDispTexPlane2(mtx, id, color, 0);
 }
 
 void BattleStockExpDisp(void) {

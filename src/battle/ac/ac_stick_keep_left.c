@@ -157,7 +157,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         }
                     } else {
                         diff = SKL_P(work)->params[1] - cw->timer;
-                        if (diff > ac_stickkeepleft_ok_frame[((s32(*)(BattleWork*))BattleActionCommandGetDifficulty)(work)]) {
+                        if (diff > ac_stickkeepleft_ok_frame[BattleActionCommandGetDifficulty(work)]) {
                             if (!(SKL_P(work)->acFlags & 2)) {
                                 work->actionCommands.outputParams[2] = 1;
                             }

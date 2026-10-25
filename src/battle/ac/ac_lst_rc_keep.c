@@ -152,7 +152,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                 ok = 0;
                 if (lw->count == 4) {
                     d = ac->params[4] - tm;
-                    if (d <= ac_lstrckeep_ok_frame[((s32(*)(BattleWork*))BattleActionCommandGetDifficulty)(work)]) {
+                    if (d <= ac_lstrckeep_ok_frame[BattleActionCommandGetDifficulty(work)]) {
                         ok = 1;
                     }
                 }

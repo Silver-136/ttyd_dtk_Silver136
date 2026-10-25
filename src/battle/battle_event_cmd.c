@@ -4804,7 +4804,7 @@ USER_FUNC(btlevtcmd_AcSetDifficulty) {
 
 USER_FUNC(btlevtcmd_AcGetDifficulty) {
     s32 index = event->args[0];
-    evtSetValue(event, index, ((s32(*)(BattleWork*))BattleActionCommandGetDifficulty)(_battleWorkPointer));
+    evtSetValue(event, index, BattleActionCommandGetDifficulty(_battleWorkPointer));
     return EVT_RETURN_DONE;
 }
 

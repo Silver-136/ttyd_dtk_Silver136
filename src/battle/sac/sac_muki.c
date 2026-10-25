@@ -722,7 +722,7 @@ USER_FUNC(end_muki) {
 
 static inline f32 addf(f32 a, f32 b) { return a + b; }
 static inline f32 mulf(f32 x, f32 y) { return x * y; }
-#define TEXPLANE2(m, id, c) ((void (*)(Mtx, u32, GXColor, s32))btlDispTexPlane2)(m, id, c, 0)
+#define TEXPLANE2(m, id, c) btlDispTexPlane2(m, id, c, 0)
 static void disp_2D(CameraId cam, void* param) {
     MukiWork* w = get_ptr();
     Mtx m;
@@ -778,7 +778,7 @@ static void disp_2D(CameraId cam, void* param) {
             PSMTXTransApply(m, m, x - 30.0f, y, 0.0f);
             col[0] = col[1] = (GXColor){0xE9, 0x4A, 0x3F, 0xFF};
             col[2] = col[3] = (GXColor){0xFE, 0xE6, 0x3E, 0xFF};
-            ((void (*)(Mtx, u32, GXColor, GXColor, GXColor, GXColor, s32))btlDispTexPlane3)(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
+            btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 35.0f, y - 14.0f, 0.0f);
             iconDispGx2(m, 0x10, ICON_1ED);
@@ -831,7 +831,7 @@ static void disp_2D(CameraId cam, void* param) {
             PSMTXTransApply(m, m, x - 30.0f, y, 0.0f);
             col[0] = col[1] = (GXColor){0x3F, 0x3F, 0xE9, 0xFF};
             col[2] = col[3] = (GXColor){0x74, 0xC9, 0xFF, 0xFF};
-            ((void (*)(Mtx, u32, GXColor, GXColor, GXColor, GXColor, s32))btlDispTexPlane3)(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
+            btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
             PSMTXScale(m, 0.7f, 0.7f, 0.7f);
             PSMTXTransApply(m, m, x - 35.0f, y - 14.0f, 0.0f);
             iconDispGx2(m, 0x10, ICON_1ED);
@@ -857,7 +857,7 @@ static void disp_3D(CameraId cam, void* param) {
                 PSMTXScale(m, o->scale.x * (f32)c[j * 2], o->scale.y * (f32)c[j * 2 + 1], o->scale.z);
                 PSMTXTransApply(m, m, o->pos.x, o->pos.y, o->pos.z);
                 PSMTXTransApply(m, m, o->scale.x * (f32)a[j * 2], o->scale.y * (f32)a[j * 2 + 1], 0.0f);
-                ((void (*)(Mtx, u32, GXColor, s32))btlDispTexPlane2)(m, BTL_TEX(0x42), (GXColor){0xDE, 0xDE, 0xDE, 0xFF}, 0);
+                btlDispTexPlane2(m, BTL_TEX(0x42), (GXColor){0xDE, 0xDE, 0xDE, 0xFF}, 0);
             }
         }
     }
@@ -893,7 +893,7 @@ static void disp_3D_alpha(CameraId cam, void* param) {
                 {
                 col[0] = col[1] = (GXColor){0xE9, 0x4A, 0x3F, o->alpha};
                 col[2] = col[3] = (GXColor){0xFE, 0xE6, 0x3E, o->alpha};
-                ((void (*)(Mtx, u32, GXColor, GXColor, GXColor, GXColor, s32))btlDispTexPlane3)(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
+                btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
                 }
                 break;
             case 1: {
@@ -907,7 +907,7 @@ static void disp_3D_alpha(CameraId cam, void* param) {
                 {
                 col[0] = col[1] = (GXColor){0x3F, 0x3F, 0xE9, o->alpha};
                 col[2] = col[3] = (GXColor){0x74, 0xC9, 0xFF, o->alpha};
-                ((void (*)(Mtx, u32, GXColor, GXColor, GXColor, GXColor, s32))btlDispTexPlane3)(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
+                btlDispTexPlane3(m, BTL_TEX(0x45), col[0], col[1], col[2], col[3], 0);
                 }
                 }
 break;

@@ -1,3 +1,4 @@
+#include "battle/battle_disp.h"
 #include "battle/battle.h"
 #include <dolphin/pad.h>
 #include "battle/battle_ac.h"
@@ -15,7 +16,7 @@
 
 
 u16 BattleACGetButtonIcon(s32 button, s32 pressed);
-void btlDispTexPlane(u32 id, GXColor color, s32 unk, f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY);
+
 
 typedef struct SignalTimingWork {
     s32 hits;       // 0x0
@@ -116,7 +117,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work)
         w->frame = 0;
         w->index = 0;
         w->next = 0;
-        w->difficulty = ((s32 (*)(BattleWork *)) BattleActionCommandGetDifficulty)(work);
+        w->difficulty = BattleActionCommandGetDifficulty(work);
         w->okFlag = 0;
         ST_OUT_RESULT(work) = 0;
         for (k = 0; k < 5; k++)
@@ -604,7 +605,7 @@ PSMTXTrans(mTrans, fx + (f32)((ST_FLAGS(work) & 1) ? count * 0x30 - 26 + ST_LEAD
                 iconDispGx(&pos, 0x10, BattleACGetButtonIcon(w->buttons[i], 0), 0.8f);
             } else if (w->next <= (i + ST_LEAD(work))) {
                 if (i >= count - 1) {
-                    btlDispTexPlane(BTL_TEX(0x40), (GXColor){255, 255, 255, 255}, 0, x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250)), yc, 0.0f, 0.8f, 0.8f);
+                    btlDispTexPlane(x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250)), yc, 0.0f, 0.8f, 0.8f, BTL_TEX(0x40), (GXColor){255, 255, 255, 255}, 0);
                 }
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
@@ -618,9 +619,9 @@ PSMTXTrans(mTrans, fx + (f32)((ST_FLAGS(work) & 1) ? count * 0x30 - 26 + ST_LEAD
     yd = yb - 25.0f;
     for (i = 0; i < count; i++) {
         if (w->results[i] == 1) {
-            btlDispTexPlane(BTL_TEX(0x3E), (GXColor){255, 255, 255, 255}, 0, x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250)), yd, 0.0f, 1.0f, 1.0f);
+            btlDispTexPlane(x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3E), (GXColor){255, 255, 255, 255}, 0);
         } else if (w->results[i] == -1) {
-            btlDispTexPlane(BTL_TEX(0x3F), (GXColor){255, 255, 255, 255}, 0, x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250)), yd, 0.0f, 1.0f, 1.0f);
+            btlDispTexPlane(x + (f32)(i * 48 + (ST_LEAD(work) * 33 - 250)), yd, 0.0f, 1.0f, 1.0f, BTL_TEX(0x3F), (GXColor){255, 255, 255, 255}, 0);
         }
     }
 }

@@ -14,7 +14,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_pouch.h"
-#define btlDispTexPlane btlDispTexPlane_hdr
+
 #include "battle/battle_disp.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle_event_cmd.h"
@@ -24,8 +24,8 @@
 #include "evt/evt_audience.h"
 #include "evt/evt_env.h"
 #include "evt/evt_sub.h"
-#undef btlDispTexPlane
-void btlDispTexPlane(f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY, u32 id, GXColor color, s32 unk);
+
+
 
 
 typedef struct YoshiGundanPart YoshiGundanPart;

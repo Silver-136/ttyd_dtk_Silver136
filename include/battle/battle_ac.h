@@ -41,7 +41,7 @@ typedef struct BattleActions {
     s32 mResultCount;                // 0x24
     s32 result;                      // 0x28
     s8 mBaseAcDifficulty;            // 0x2C
-    s8 mAcDifficulty;                // 0x2D
+    u8 mAcDifficulty;                // 0x2D
     u8 pad_2E[2];                    // 0x2E, never accessed
     s32 doneFlags;                   // 0x30, bit 1: AC finished (delete handler forces the end state otherwise)
     u32 acFlags;                     // 0x34, btlevtcmd_AcSetFlag; 0x10 tested in signal timing
@@ -70,7 +70,7 @@ void BattleActionCommandStart(BattleWork* work);
 void BattleActionCommandStop(BattleWork* work);
 s32 BattleActionCommandGetDefenceResult(void);
 void BattleActionCommandResetDefenceResult(void);
-s8 BattleActionCommandGetDifficulty(BattleWork* work);
+s32 BattleActionCommandGetDifficulty(BattleWork* work);
 void BattleAcGaugeSeDelete(void);
 void BattleAcGaugeSeInit(void);
 void BattleAcGaugeSeUpdate(f32 value);

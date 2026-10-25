@@ -1,3 +1,4 @@
+#include "battle/battle_disp.h"
 #include "version.h"
 #include "battle/battle_status_icon.h"
 #include "battle/battle.h"
@@ -220,8 +221,8 @@ void BattleStatusIconDelete(BattleUnit* unit) {
     ; //stubbed in retail
 }
 
-void btlDispTexPlane(u32 id, GXColor color, f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY, s32 extra);
-void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color, s32 extra);
+
+
 extern void btlGetScreenPoint(Vec* in, Vec* out);
 
 void BattleStatusIconDisp(CameraId camId, void* param) {
@@ -243,9 +244,9 @@ void BattleStatusIconDisp(CameraId camId, void* param) {
         p.z -= (f32)(-(i * 2));
         if (!(e->flags & 1)) {
             if (!(icon->mFlags & 1)) {
-                btlDispTexPlane(VERSION_PICK(0x23, 0x30), col, p.x, p.y, p.z, 0.8f, 0.8f, 0);
+                btlDispTexPlane(p.x, p.y, p.z, 0.8f, 0.8f, VERSION_PICK(0x23, 0x30), col, 0);
             } else {
-                btlDispTexPlane(VERSION_PICK(0x23, 0x30), col, p.x, p.y, p.z, 0.8f, -0.8f, 0);
+                btlDispTexPlane(p.x, p.y, p.z, 0.8f, -0.8f, VERSION_PICK(0x23, 0x30), col, 0);
             }
         }
         if (e->icon == 0) continue;
