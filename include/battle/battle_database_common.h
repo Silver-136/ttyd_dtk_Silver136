@@ -35,6 +35,7 @@
 #define TARGET_PROP_RECOIL                 0x100000 // with HAMMERLIKE, the attacker itself stays a target
 #define TARGET_PROP_ONLY_FRONTMOST         0x1000000 // only the frontmost part of each side
 #define TARGET_PROP_NO_SHELL_SHIELDED      0x2000000 // not units under a shell shield
+#define TARGET_PROP_SHADOWED_ONLY          0x4000000 // not parts with kNoShadow
 #define TARGET_PROP_SAME_SIDE_FIRST        0x10000000 // first target on the attacker's side; sampling direction reversed
 #define TARGET_PROP_OPPOSITE_SIDE_FIRST    0x20000000 // first target on the opposing side
 

@@ -1787,7 +1787,7 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
         n = (u8)unit->mKindParams->numParts;
         part = unit->mParts;
         for (j = 0; j < n; j++) {
-            if (part->attributes & 8) {
+            if (part->attributes & kGuardTargetPart) {
                 break;
             }
             part = part->mNextPart;
@@ -1844,7 +1844,7 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
         n = (u8)unit->mKindParams->numParts;
         part = unit->mParts;
         for (j = 0; j < n; j++) {
-            if (part->attributes & 8) {
+            if (part->attributes & kGuardTargetPart) {
                 break;
             }
             part = part->mNextPart;

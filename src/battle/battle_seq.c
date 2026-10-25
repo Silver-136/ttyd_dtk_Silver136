@@ -2278,7 +2278,7 @@ void btlseqAct(BattleWork* wp) {
             }
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             evt = NULL;
-            if ((wp->flags & 0x40000000) && !(unit->mAttributeFlags & 0x2000) &&
+            if ((wp->flags & 0x40000000) && !(unit->mAttributeFlags & kActsInZeroGravity) &&
                 !(unit->attackEventFlags & 8) && !(unit->attackEventFlags & 0x10)) {
                 evt = evtEntry(btldefaultevt_CantMoveZeroGravity, 10, 0);
             } else if (unit->attackEventFlags & 0x10) {

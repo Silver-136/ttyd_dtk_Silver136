@@ -985,7 +985,7 @@ void gravityOffsetControl(BattleUnitPart* part) {
 
     if (!(wp->flags & 0x40000000)) {
         active = FALSE;
-    } else if (unit->mAttributeFlags & 0x1004) {
+    } else if (unit->mAttributeFlags & (kFloating | kNoGravityBob)) {
         active = FALSE;
     }
     if (active) {
@@ -1008,9 +1008,9 @@ void floatOffsetControl(BattleUnitPart* part) {
     BOOL active = TRUE;
     BattleUnit* unit = part->mOwner;
 
-    if (!(unit->flags & 0x100000)) {
+    if (!(unit->flags & BATTLE_UNIT_FLAG_FLOAT_CAPABLE)) {
         active = FALSE;
-    } else if (!(unit->flags & 0x200000)) {
+    } else if (!(unit->flags & BATTLE_UNIT_FLAG_FLOAT_ACTIVE)) {
         active = FALSE;
     } else if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
         active = FALSE;

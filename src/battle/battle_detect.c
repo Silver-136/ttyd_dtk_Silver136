@@ -179,7 +179,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             }
             if (flags & TARGET_CLASS_ONLY_MAIN_PARTS) {
                 u32 a = part->attributes;
-                if (!((a & 1) || (a & 2)) || (a & 0x40000)) {
+                if (!((a & 1) || (a & 2)) || (a & kNotMainTarget)) {
                     ok = FALSE;
                     break;
                 }
@@ -187,9 +187,9 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             if (flags & TARGET_CLASS_ONLY_MAIN_OR_SEMI_PARTS) {
                 u32 a = part->attributes;
 #ifdef VERSION_G8ME01
-                if (!((a & 1) || (a & 2) || (a & 4)) || (a & 0x10) || (a & 0x40000)) {
+                if (!((a & 1) || (a & 2) || (a & 4)) || (a & 0x10) || (a & kNotMainTarget)) {
 #else
-                if (!((a & 1) || (a & 2) || (a & 4)) || (a & 0x40000)) {
+                if (!((a & 1) || (a & 2) || (a & 4)) || (a & kNotMainTarget)) {
 #endif
                     ok = FALSE;
                     break;
@@ -287,7 +287,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                     break;
                 }
             }
-            if (d->propFlags & 0x4000000) {
+            if (d->propFlags & TARGET_PROP_SHADOWED_ONLY) {
                 if (part->attributes & kNoShadow) {
                     ok = FALSE;
                     break;

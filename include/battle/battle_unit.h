@@ -26,7 +26,7 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kMainPart = (1 << 0),                    // 0x1
     kImportantPart = (1 << 1),               // 0x2
     kSemiImportantPart = (1 << 2),           // 0x4
-    kUnknown_0x8 = (1 << 3),                 // 0x8
+    kGuardTargetPart = (1 << 3),             // 0x8, the part an attack is redirected to when this unit bodyguards
     kUnknown_0x10 = (1 << 4),                // 0x10
     kUnknown_0x40 = (1 << 6),                // 0x40
     kWeakToAttackFxR = (1 << 7),             // 0x80
@@ -36,7 +36,7 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kIsBombFlippable = (1 << 13),            // 0x2000
     kClone = (1 << 14),                      // 0x4000, attacks pass through unless SPECIAL_CONTACTS_CLONES
     kNotTargetable = (1 << 16),              // 0x10000
-    kUnknown_0x40000 = (1 << 18),            // 0x40000
+    kNotMainTarget = (1 << 18),              // 0x40000, never chosen as the main/important target part (battle_detect)
     kUntattleable = (1 << 19),               // 0x80000
     kJumplikeCannotTarget = (1 << 20),       // 0x100000
     kHammerlikeCannotTarget = (1 << 21),     // 0x200000
@@ -54,9 +54,12 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
 // 0x1000000 are not named yet)
 typedef enum BattleUnit_Flags {
     BATTLE_UNIT_FLAG_SHOW_HP = (1 << 0),                  // 0x1, enemy HP shown until the gauge timer runs out
+    BATTLE_UNIT_FLAG_MOVE_COLOR_FADING = (1 << 1),        // 0x2, set while the move colour fades towards its level
     BATTLE_UNIT_FLAG_KIND_CHANGED = (1 << 2),             // 0x4, tattle check also looks at initialKind
     BATTLE_UNIT_FLAG_SWAPPED_OUT = (1 << 3),              // 0x8, partner replaced by another (BattleGetPartyPtr skips it)
     BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER = (1 << 16),     // 0x10000, drawn and shadowed together with its partner (Veil)
+    BATTLE_UNIT_FLAG_FLOAT_CAPABLE = (1 << 20),           // 0x100000, floats (bobs) when FLOAT_ACTIVE is also set
+    BATTLE_UNIT_FLAG_FLOAT_ACTIVE = (1 << 21),            // 0x200000, float bob running (off during some attacks)
     BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING = (1 << 25),  // 0x2000000
     BATTLE_UNIT_FLAG_ACTING = (1 << 26),                  // 0x4000000, its attack event has started
     BATTLE_UNIT_FLAG_HIDE_HELD_ITEM = (1 << 27),          // 0x8000000
@@ -71,8 +74,8 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kPermanentlyInvisible = (1 << 3),    // 0x8, drawn translucent and attacks miss (like STATUS_INVISIBLE)
     kVeiled = (1 << 4),                  // 0x10
     kShellShielded = (1 << 5),           // 0x20
-    kUnknownUnit_0x1000 = (1 << 12),     // 0x1000
-    kUnknownUnit_0x2000 = (1 << 13),     // 0x2000
+    kNoGravityBob = (1 << 12),           // 0x1000, no zero-gravity bob (like kFloating)
+    kActsInZeroGravity = (1 << 13),      // 0x2000, not stopped by the zero-gravity cannot-act event
     kUndead = (1 << 16),                 // 0x10000, keeps taking turns while KO'd (STATUS_INSTANT_KILL)
     kInactive = (1 << 17),               // 0x20000
     kUnitLeader = (1 << 18),             // 0x40000, the side whose leaders are all down is defeated

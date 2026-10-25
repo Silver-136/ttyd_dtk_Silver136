@@ -138,7 +138,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventAttack, -2, PTR(attack_event))
     CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, -2, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_OnUnitFlag, -2, 3145728)
+    CALL(btlevtcmd_OnUnitFlag, -2, BATTLE_UNIT_FLAG_FLOAT_CAPABLE | BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
