@@ -26,6 +26,7 @@
 #include "koopa_motion.h"
 #include "mot/mot_roll.h"
 #include "mot/mot_plane.h"
+#include "eff/eff_kemuri.h"
 
 
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
@@ -136,7 +137,6 @@ static inline BOOL marioLandChk(f32 vy) {
     return FALSE;
 }
 
-void* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 void partyMoveBehindMario3(PartyEntry* party, s32 a, f32 dir);
 
 USER_FUNC(evt_mario_dokan_prepare) {

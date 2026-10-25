@@ -140,6 +140,7 @@
 #include "eff/n64/eff_rothammer_success_n64.h"
 #include "eff/eff_toge_flush.h"
 #include "eff/eff_levelup.h"
+#include "eff/eff_kemuri.h"
 
 #include "party.h"
 
@@ -159,7 +160,6 @@ extern EffectEntry* effTimestampN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effHagetakaFlushN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
-extern EffectEntry* effKemuriEntry(s32, f32, f32, f32, f32);
 extern EffectEntry* effFallEntry(s32, s32, s32, f32, f32, f32, f32, f32, f32);
 extern EffectEntry* effNozleEntry(s32, s32, f32, f32, f32, f32, f32);
 extern EffectEntry* effParticleEntry(s32, s32, s32, f32, f32, f32, f32, f32, f32);

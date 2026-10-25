@@ -23,7 +23,6 @@ void kemuri(void);
 void kemuri_mugi(void);
 void mario_kemuri_landon(void);
 
-#define kemuriEntry ((EffectEntry * (*)(s32, f32, f32, f32, f32))effKemuriEntry)
 
 void mario_kemuri_80130474(void) {
     static s32 ct = 8;
@@ -79,7 +78,7 @@ void mario_kemuri_80130474(void) {
 
 void mario_simple_kemuri(void) {
     MarioWork* mario = marioGetPtr();
-    EffectEntry* eff = kemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
+    EffectEntry* eff = effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
 
     if (mario->flags & MARIO_FLAG_BG_MODE) {
         ((effKemuriData*)eff->userdata)->scale = 0.6f;
@@ -102,7 +101,7 @@ void mario_land_kemuri(void) {
             } else if (attr & 0x100) {
                 mario_kemuri_landon();
             } else {
-                eff = kemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
+                eff = effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
                 if (mario->flags & MARIO_FLAG_BG_MODE) {
                     ((effKemuriData*)eff->userdata)->scale = 0.6f;
                 }
@@ -202,10 +201,10 @@ void kemuri(void) {
             y = mario->position.y;
             z = mario->position.z;
             if (mario->characterId == CHARACTER_BOWSER) {
-                eff = kemuriEntry(0, x, y, 10.0f + z, 0.0f);
+                eff = effKemuriEntry(0, x, y, 10.0f + z, 0.0f);
                 ((effKemuriData*)eff->userdata)->scale = kpaGetBaseScale(kpaGetLevel());
             } else {
-                kemuriEntry(0, x, y, z, dir);
+                effKemuriEntry(0, x, y, z, dir);
             }
         }
     } else if (mario->currMotionId != MARIO_MOTION_DASH) {

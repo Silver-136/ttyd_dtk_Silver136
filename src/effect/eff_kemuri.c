@@ -32,14 +32,14 @@ u8 heavy_scale[30][2] = {
 };
 
 
-EffectEntry* effKemuriEntry(s32 int2, f32 float3, f32 float4, f32 float5) {
+EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 dir) {
     effKemuriData* d;
     effKemuriData* data;
     s32 numEffects, i;
     
     EffectEntry* entry = effEntry();
     numEffects = 1;
-    switch (int2) {
+    switch (type) {
         case 0:
             numEffects = 3;
             break;
@@ -56,10 +56,10 @@ EffectEntry* effKemuriEntry(s32 int2, f32 float3, f32 float4, f32 float5) {
     entry->userdata = data;
     entry->callback = effKemuriMain;
 
-    data->type = int2;
-    data->x = float3;
-    data->y = float4;
-    data->z = float5;
+    data->type = type;
+    data->x = x;
+    data->y = y;
+    data->z = z;
 
     data->frame = 0;
 
@@ -82,7 +82,7 @@ EffectEntry* effKemuriEntry(s32 int2, f32 float3, f32 float4, f32 float5) {
         d->texFrame0 = 0;
         d->texFrame1 = 0;
 
-        switch (int2) {
+        switch (type) {
             case 0:
                 d->velX = i & 1 ? 3.0f : -3.0f;
                 d->lifetime = 32;

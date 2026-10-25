@@ -34,6 +34,7 @@
 #include "mot/mot_hip.h"
 #include "mot/mot_dokan.h"
 #include "koopa_hit.h"
+#include "eff/eff_kemuri.h"
 
 
 typedef struct MarioJumpData {
@@ -74,7 +75,6 @@ BOOL marioCreviceWallChk(Vec pos);
 BOOL marioChkPlanePlace(void* hit);
 MotCaseEntry* caseCheckHitObj(void* hit);
 void* fbatNpcTalkCheck(void);
-void effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 
 MarioMotTblEntry marioMotTbl[] = {
     {mot_stay, NULL, mot_stay_post},

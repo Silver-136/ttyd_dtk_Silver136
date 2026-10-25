@@ -49,5 +49,5 @@ typedef struct effKemuriData {
     s32 lifetime; //0x88, frames (32 or 64)
 } effKemuriData;
 
-EffectEntry* effKemuriEntry(s32 int2, f32 float3, f32 float4, f32 float5);
+EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 dir); // dir: passed by mario_kemuri, not read
 void effKemuriMain(EffectEntry* effect);
