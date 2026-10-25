@@ -322,7 +322,6 @@ void battleAcDelete_GaugeTiming2(BattleWork* work) {
     }
 }
 
-#pragma opt_loop_invariants off
 static void actionCommandDisp(f32 x, f32 y) {
     BattleActions* ac = &_battleWorkPointer->actionCommands;
     BattleACDispParams* disp = &ac->disp;
@@ -469,4 +468,3 @@ static void actionCommandDisp(f32 x, f32 y) {
         iconNumberDispGx(m3, num, FALSE, (GXColor){255, 255, 255, 255});
     }
 }
-#pragma opt_loop_invariants reset

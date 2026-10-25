@@ -218,7 +218,6 @@ extern void* effRippleEntry(s32 type, f32 x, f32 y, f32 z);
 extern void effRippleSetCamId(void* eff, s32 cam);
 extern void effRippleSetPosition(void* eff, f32 x, f32 y, f32 z);
 
-#pragma opt_common_subs off
 static inline void vivianFollow(PartyEntry* party) {
     HitEntry* hit;
     u8 id;
@@ -519,7 +518,6 @@ void vivian_use(PartyEntry* party) {
 }
 
 #pragma explicit_zero_data reset
-#pragma opt_common_subs reset
 
 
 

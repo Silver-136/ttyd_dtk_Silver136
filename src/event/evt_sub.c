@@ -1701,7 +1701,6 @@ void coingetDisp(WinMgrEntry* entry) {
 }
 
 
-#pragma opt_propagation off
 #pragma opt_lifetimes off
 USER_FUNC(evt_sub_get_coin) {
     s32 coin = evtGetValue(event, event->args[0]);
@@ -1790,7 +1789,6 @@ USER_FUNC(evt_sub_get_coin) {
     }
     return EVT_RETURN_DONE;
 }
-#pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
 USER_FUNC(stone_ry) {

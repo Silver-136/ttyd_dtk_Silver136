@@ -246,8 +246,6 @@ USER_FUNC(evt_item_move_3d_position) {
     return EVT_RETURN_DONE;
 }
 
-#pragma opt_propagation off
-#pragma opt_lifetimes off
 USER_FUNC(evt_item_get_important_item) {
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, event->args[0]));
     MarioWork* mario = marioGetPtr();
@@ -291,5 +289,3 @@ USER_FUNC(evt_item_get_important_item) {
     event->userdata[1] = *(s32*)&tb;
     return EVT_RETURN_BLOCK;
 }
-#pragma opt_propagation reset
-#pragma opt_lifetimes reset

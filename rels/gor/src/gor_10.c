@@ -71,7 +71,6 @@ void tegami_delete(void) {
 }
 
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 static void depthDisp(CameraId camera, void* param) {
     f32 amp = evtGetFloat(NULL, GW(0)) / 100.0f;
     CameraEntry* cam = camGetPtr(camera);
@@ -139,7 +138,6 @@ static void depthDisp(CameraId camera, void* param) {
     sysWaitDrawSync();
 }
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 static USER_FUNC(depth) {
     dispEntry(CAMERA_2D, 1200.0f, 0, depthDisp, NULL);

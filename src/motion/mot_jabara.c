@@ -211,7 +211,6 @@ void mario_land_kemuri(void);
 void* marioSearchHead(Vec* p, f32* h, f32 r);
 void swingMain(void);
 void* marioChkLandon(f32* outY, f32 y);
-#pragma opt_common_subs off
 void jabaraSwingStart(s32 s);
 void jabaraSwingWalk(void);
 
@@ -714,7 +713,6 @@ void mot_jabara(void) {
     }
 }
 
-#pragma opt_common_subs reset
 BOOL jabaraNoHitChk(void) {
     MarioWork* mario = marioGetPtr();
     if ((u16)mario->currMotionId != MARIO_MOTION_JABARA) {

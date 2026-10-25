@@ -56,7 +56,6 @@ void effGonbabaBreathMain(EffectEntry* effect);
 void effGonbabaBreathDisp(CameraId cameraId, EffectEntry* effect);
 
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
     f32 ang;
     f32 spd;
@@ -147,7 +146,6 @@ void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
 }
 
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 EffectEntry* effGonbabaBreathEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
     EffectEntry* effect;

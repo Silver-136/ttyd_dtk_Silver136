@@ -63,8 +63,6 @@ static inline f32 _cosf(f32 x) {
     return a;
 }
 
-#pragma opt_propagation off
-#pragma opt_lifetimes off
 EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     s32 delay;
     EffectEntry* effect;
@@ -101,8 +99,6 @@ EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     }
     return effect;
 }
-#pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 void effStarPointMain(EffectEntry* effect) {
     EffStarPointWork* work = effect->userdata;

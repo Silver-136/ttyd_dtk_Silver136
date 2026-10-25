@@ -310,7 +310,6 @@ static inline void escape(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 
 }
 
 #pragma push
-#pragma opt_lifetimes off
 #pragma opt_dead_assignments off
 static inline void jump_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) {
     f32 rs = rand() / 32767.0f;
@@ -462,7 +461,6 @@ static inline s32 npc_jump_get_time(EventEntry* event, EvtWord* args) {
 }
 
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -520,7 +518,6 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     return 0;
 }
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall) {
     f32 frame = evtGetFloat(event, *event->args);

@@ -133,7 +133,6 @@ void effSweatMain(EffectEntry* effect) {
     }
 }
 
-#pragma opt_loop_invariants off
 void effSweatDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffSweatN64Work* work;
@@ -210,4 +209,3 @@ void effSweatDisp(CameraId cameraId, EffectEntry* effect) {
         GXTexCoord2f32(0.0f, 1.0f);
     }
 }
-#pragma opt_loop_invariants reset

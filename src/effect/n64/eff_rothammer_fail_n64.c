@@ -8,7 +8,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-#pragma opt_propagation off
 
 
 typedef struct EffRotHammerFailN64Work {

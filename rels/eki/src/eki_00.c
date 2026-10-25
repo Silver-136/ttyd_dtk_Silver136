@@ -573,7 +573,6 @@ static f32 randf(f32 min, f32 max) {
 
     return r * (max - min) + min;
 }
-#pragma opt_propagation off
 #pragma opt_lifetimes off
 __declspec(section ".rodata") static Vec ext_moamoa_t0 = {0.0f, 0.0f, 10.0f};
 __declspec(section ".rodata") static Vec ext_moamoa_t1 = {0.0f, 0.0f, 10.0f};
@@ -618,7 +617,6 @@ static void ext_moamoa_init(void) {
         ext_moamoa_main();
     }
 }
-#pragma opt_propagation reset
 #pragma opt_lifetimes reset
 static void ext_disp(CameraId camera, void* param) {
     u16 left, top, right, bottom;
@@ -697,7 +695,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
     pose->flags &= ~4;
 }
 #pragma dont_inline reset
-#pragma opt_propagation off
 #pragma opt_lifetimes off
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     MarioWork* mario = marioGetPtr();
@@ -790,9 +787,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     }
     return 0;
 }
-#pragma opt_propagation reset
 #pragma opt_lifetimes reset
-#pragma opt_propagation off
 #pragma opt_lifetimes off
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 static void ext_moamoa_main(void)
@@ -1396,7 +1391,6 @@ static void ext_moamoa_main(void)
     }
   }
 }
-#pragma opt_propagation reset
 #pragma opt_lifetimes reset
 static void ext_moamoa_dispent(void) {
     if (wp->flags & 1) {

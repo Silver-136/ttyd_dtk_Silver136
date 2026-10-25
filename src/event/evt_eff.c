@@ -911,7 +911,6 @@ USER_FUNC(evt_eff_delete_ptr) {
 extern EffectEntry* effFukidashiEntry(s32 a, s32 b, NpcEntry* npc, s32 d, f32 x, f32 y, f32 z, f32 w, f32 e);
 
 #pragma push
-#pragma opt_propagation off
 USER_FUNC(evt_eff_fukidashi) {
     EvtWord* args = event->args;
     s32 mode = evtGetValue(event, args[0]);

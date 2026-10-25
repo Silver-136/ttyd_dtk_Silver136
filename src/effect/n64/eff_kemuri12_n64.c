@@ -93,7 +93,6 @@ void effKemuri12Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri12Disp, effect);
 }
 
-#pragma opt_propagation off
 
 void effKemuri12Disp(CameraId cameraId, EffectEntry *effect)
 {
@@ -208,5 +207,4 @@ void effKemuri12Disp(CameraId cameraId, EffectEntry *effect)
   }
 
 }
-#pragma opt_propagation reset
 

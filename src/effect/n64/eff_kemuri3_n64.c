@@ -36,7 +36,6 @@ void effKemuri3Main(EffectEntry* effect);
 void effKemuri3Disp(CameraId cameraId, EffectEntry* effect);
 
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     s32 ofs;
     EffectEntry* effect;
@@ -82,7 +81,6 @@ EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
 }
 
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 void effKemuri3Main(EffectEntry* effect) {
     EffKemuri3N64Work* work = effect->userdata;
     s32 i;

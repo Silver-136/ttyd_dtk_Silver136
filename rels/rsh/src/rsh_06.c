@@ -1472,7 +1472,6 @@ static void ext_moamoa_main(void) {
 }
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
-#pragma opt_dead_assignments reset
 static void ext_moamoa_dispent(void) {
     if (wp->flags & 1) {
         dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);

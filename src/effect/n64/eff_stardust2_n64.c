@@ -163,7 +163,6 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 camera, f32 x, f32 y,
     return effect;
 }
 
-#pragma opt_propagation off
 void effStardust2Main(EffectEntry* effect) {
     EffStardust2N64Work* w = effect->userdata;
     Vec position;
@@ -280,7 +279,6 @@ void effStardust2Main(EffectEntry* effect) {
     dispEntry(camera, dispCalcZ(&position), 2, (DispCallback)effStardust2Disp, effect);
 }
 
-#pragma opt_propagation reset
 void effStardust2Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     EffStardust2N64Work* w;

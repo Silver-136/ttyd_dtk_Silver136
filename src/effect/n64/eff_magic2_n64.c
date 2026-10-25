@@ -138,7 +138,6 @@ EffectEntry* effMagic2N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scal
     return effect;
 }
 
-#pragma opt_common_subs off
 void effMagic2Main(EffectEntry* effect) {
     EffMagic2N64Work* w = effect->userdata;
     Vec position;
@@ -209,7 +208,6 @@ void effMagic2Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagic2Disp, effect);
 }
 
-#pragma opt_common_subs reset
 void effMagic2Disp(CameraId cameraId, EffectEntry* effect) {
     s32 fov;
     s32 half;

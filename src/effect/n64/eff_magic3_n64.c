@@ -26,7 +26,6 @@ void effMagic3Main(EffectEntry* effect);
 void effMagic3Disp(CameraId cameraId, EffectEntry* effect);
 
 #pragma opt_propagation off
-#pragma opt_strength_reduction off
 EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
     s32 j;
     EffectEntry* effect;
@@ -105,7 +104,6 @@ EffectEntry* effMagic3N64Entry(s32 type, f32 x, f32 y, f32 z, s32 life) {
 }
 
 #pragma opt_propagation reset
-#pragma opt_strength_reduction reset
 inline f32 magic3_scale(f32 a, f32 b) { return 3.0f * a + b; }
 
 void effMagic3Main(EffectEntry* effect) {

@@ -96,8 +96,6 @@ void effSleepMain(EffectEntry* effect) {
 }
 
 #pragma push
-#pragma opt_propagation off
-#pragma opt_lifetimes off
 
 // FAKE: same values as the plain form, written so the code generator sees the target's shapes:
 // - sin argument via `(t = tau * x, t *= 0.015625f)`: a compound assignment skips the front end's

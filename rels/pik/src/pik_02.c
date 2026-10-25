@@ -431,8 +431,6 @@ USER_FUNC(hoshi_r) {
     return EVT_RETURN_DONE;
 }
 
-#pragma opt_propagation off
-#pragma opt_lifetimes off
 USER_FUNC(hoshi_jump) {
     f32* pos = (f32*)((EffectEntry*)event->lwData[10])->userdata + 2;
     NpcEntry* npc = npcNameToPtr("\203}\203W\203\207\203\212\203\223");
@@ -476,8 +474,6 @@ USER_FUNC(hoshi_jump) {
     event->userdata[1] = *(s32*)&vy;
     return EVT_RETURN_BLOCK;
 }
-#pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 USER_FUNC(get_starstone_seq) {
     EvtWord* args = event->args;

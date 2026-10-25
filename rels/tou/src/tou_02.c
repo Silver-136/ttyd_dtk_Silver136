@@ -1593,7 +1593,6 @@ void fan_disp(CameraId camera, void* param) {
 }
 
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 static Vec fan_zero;
 void ext_fan_main(void) {
     MarioWork* mario = marioGetPtr();
@@ -1837,7 +1836,6 @@ void ext_fan_main(void) {
 
 static __declspec(section ".rodata") Vec fan_zero = {0.0f, 0.0f, 0.0f};
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 EVT_BEGIN(mario_momikucha_msg)
     SET_VALUE(LW(10), 0)
@@ -1980,7 +1978,6 @@ void ext_fan_dispent(void) {
 }
 
 #pragma opt_propagation off
-#pragma opt_lifetimes off
 s32 check_hammer(Fan* fan) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
@@ -2023,7 +2020,6 @@ s32 check_hammer(Fan* fan) {
     return 0;
 }
 #pragma opt_propagation reset
-#pragma opt_lifetimes reset
 
 s32 evt_end_count(EventEntry* event, BOOL isFirstCall) {
     evtSetValue(event, event->args[0], fan_wp->count);
