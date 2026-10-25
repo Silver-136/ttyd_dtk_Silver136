@@ -232,15 +232,15 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
 #define VTX_SETUP(posT, nrmT, clrMac, clrT, texT, texFrac) \
     GXClearVtxDesc();                                      \
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);                                    \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);                       \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);                       \
     GXSetArray(GX_VA_POS, posT, 6);                                \
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);                                   \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);                       \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);                       \
     GXSetArray(GX_VA_NRM, nrmT, 3);                               \
     GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);                                   \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);                       \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);                       \
     clrMac(clrT) GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);                      \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, texFrac);                 \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, texFrac);                 \
     GXSetArray(GX_VA_TEX0, texT, 4);
 
 #define DISP_START(w)                                  \
@@ -653,15 +653,15 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
     GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
     GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
     GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, 14);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[0] = 0; dlIdx[0] < 19U; dlIdx[0]++) {
         if ((w->flags & 1) || (dlIdx[0] != 0)) {
@@ -683,15 +683,15 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
     GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
     GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
     GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, 14);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[1] = 0; dlIdx[1] < 19U; dlIdx[1]++) {
         if ((w->flags & 1) || (dlIdx[1] != 0)) {
@@ -741,15 +741,15 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
     GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
     GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
     GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, 14);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[2] = 0; dlIdx[2] < 19U; dlIdx[2]++) {
         if ((w->flags & 1) || (dlIdx[2] != 0)) {
@@ -771,15 +771,15 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 11);
     GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
     GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
     GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
     GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, 14);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[3] = 0; dlIdx[3] < 19U; dlIdx[3]++) {
         if ((w->flags & 1) || (dlIdx[3] != 0)) {

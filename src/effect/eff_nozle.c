@@ -481,19 +481,19 @@ void effNozleMain(EffectEntry* effect) {
 #define SETUP(d, pf, tf, vtx, nrm, col, t0, t1) \
     GXClearVtxDesc();                           \
     GXSetVtxDesc(GX_VA_POS, d);                         \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, pf);            \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, pf);            \
     GXSetArray(GX_VA_POS, vtx, 6);                      \
     GXSetVtxDesc(GX_VA_NRM, d);                        \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);            \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);            \
     GXSetArray(GX_VA_NRM, nrm, 3);                     \
     GXSetVtxDesc(GX_VA_CLR0, d);                        \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);            \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);            \
     GXSetArray(GX_VA_CLR0, col, 4);                     \
     GXSetVtxDesc(GX_VA_TEX0, d);                        \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, tf);           \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, tf);           \
     GXSetArray(GX_VA_TEX0, t0, 4);                      \
     GXSetVtxDesc(GX_VA_TEX1, d);                        \
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, 1, 3, tf);           \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, tf);           \
     GXSetArray(GX_VA_TEX1, t1, 4)
 
 #define CALLDL(n, tbl, sz_, S, D) { for (k = 0, S = sz_, D = tbl; k < n; k++, S++, D++) { GXCallDisplayList(*D, *S * 32); } }

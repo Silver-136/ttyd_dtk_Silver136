@@ -129,8 +129,8 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 4, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 4, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     switch (type) {
     case 1:
         start = 1;

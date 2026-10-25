@@ -1625,7 +1625,7 @@ void monosiri_disp(CameraId camera, void* param) {
             GXSetTevColorOp(i, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
             GXSetTevAlphaOp(i, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
             GXSetTevColorIn(i, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
-            GXSetTevAlphaIn(i, GX_CA_ZERO, GX_CA_TEXA, 6, i == 0 ? GX_CA_ZERO : GX_CA_APREV);
+            GXSetTevAlphaIn(i, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, i == 0 ? GX_CA_ZERO : GX_CA_APREV);
             GXSetTevKAlphaSel(i, GX_TEV_KASEL_1_8);
         }
         GXSetTevOrder(GX_TEVSTAGE8, GX_TEXCOORD7, GX_TEXMAP1, GX_COLOR_NULL);

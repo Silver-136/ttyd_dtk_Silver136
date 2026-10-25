@@ -657,12 +657,12 @@ void envGlare(EnvironmentGlare* glare) {
     for (i = 0; i < 7; i++) {
         GXSetTevOrder(i * 2 + 2, i + 1, GX_TEXMAP0, GX_COLOR_NULL);
         GXSetTevColorOp(i * 2 + 2, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVREG1);
-        GXSetTevColorIn(i * 2 + 2, 0xE, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+        GXSetTevColorIn(i * 2 + 2, GX_CC_KONST, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
         GXSetTevKColorSel(i * 2 + 2, texW);
         GXSetTevSwapMode(i * 2 + 2, GX_TEV_SWAP0, GX_TEV_SWAP0);
         GXSetTevOrder(i * 2 + 3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
         GXSetTevColorOp(i * 2 + 3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-        GXSetTevColorIn(i * 2 + 3, GX_CC_ZERO, GX_CC_C1, 0xE, GX_CC_CPREV);
+        GXSetTevColorIn(i * 2 + 3, GX_CC_ZERO, GX_CC_C1, GX_CC_KONST, GX_CC_CPREV);
         GXSetTevKColorSel(i * 2 + 3, texH);
         GXSetTevSwapMode(i * 2 + 3, GX_TEV_SWAP0, GX_TEV_SWAP0);
     }
