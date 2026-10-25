@@ -1608,6 +1608,7 @@ BOOL marioChkTalkable(void);
 void* fbatHitCheck(u32 flags, void* a1);
 
 #include "eff/eff_small_star.h"
+#include <dolphin/pad.h>
 s32 _majinai_effect(EventEntry* event, BOOL isFirstCall);
 s32 _check(EventEntry* event, BOOL isFirstCall);
 s32 marioStGetSystemLevel(void);
@@ -1947,7 +1948,7 @@ void fbatEncountCheck(void)
     }
 
     mario->touchNpc = talk;
-    if (wp->talkTarget && (keyGetButtonTrg(0) & 0x100))
+    if (wp->talkTarget && (keyGetButtonTrg(0) & PAD_BUTTON_A))
     {
       npc = wp->talkTarget;
       data = gp->fbatData;

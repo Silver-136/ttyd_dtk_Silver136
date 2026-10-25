@@ -7,6 +7,7 @@
 #include "system.h"
 #include <string.h>
 #include "mario/mario_sbr.h"
+#include <dolphin/pad.h>
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global vivian_init
@@ -383,7 +384,7 @@ void vivian_use(PartyEntry* party) {
         if (vivian_cancel_req) {
             party->useMotionId = 20;
         }
-        if (!(party->flags & 0x80000000) && (party->buttonTrg & 0x600)) {
+        if (!(party->flags & 0x80000000) && (party->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_X))) {
             party->useMotionId = 20;
         }
         break;

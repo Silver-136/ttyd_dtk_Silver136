@@ -33,6 +33,7 @@
 #include "evt/evt_lecture.h"
 #include "libc_decls.h"
 #include <math.h>
+#include <dolphin/pad.h>
 
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
@@ -1165,7 +1166,7 @@ void itemseq_GetItem(ItemEntry* entry) {
 			if (winMgrAction(entry->winId[0])) {
 				break;
 			}
-			if (!(keyGetButtonTrg(0) & 0x300)) {
+			if (!(keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B))) {
 				break;
 			}
 			winMgrCloseAutoDelete(entry->winId[0]);
@@ -1285,7 +1286,7 @@ void itemseq_GetItem(ItemEntry* entry) {
 			itemDelete(entry->name);
 			break;
 		case 9:
-			if (!(keyGetButtonTrg(0) & 0x100)) {
+			if (!(keyGetButtonTrg(0) & PAD_BUTTON_A)) {
 				break;
 			}
 			winMgrCloseAutoDelete(entry->winId[0]);

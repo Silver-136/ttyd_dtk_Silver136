@@ -36,6 +36,7 @@ void countDownFlagOff(u16);
 #include "manager/winmgr.h"
 #include <stdio.h>
 #include <dolphin/os.h>
+#include <dolphin/pad.h>
 #ifdef VERSION_G8ME01
 void evtMsgFmtInt(char* buf, s32 value);
 void statusWinForceUpdate(void);
@@ -2308,7 +2309,7 @@ USER_FUNC(evt_sub_get_coin) {
 		}
 		return EVT_RETURN_BLOCK;
 	case 10:
-		if (keyGetButtonTrg(0) & 0x100) {
+		if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
 			event->userdata[0] = 100;
 		}
 		return EVT_RETURN_BLOCK;

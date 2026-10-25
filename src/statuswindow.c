@@ -13,6 +13,7 @@
 #include "memory.h"
 #include "pmario_sound.h"
 #include <string.h>
+#include <dolphin/pad.h>
 
 double cos(double);
 
@@ -160,7 +161,7 @@ void statusWinMain(void) {
                         statusWinClose();
                     }
                 }
-                if (mario->buttonTrg & 0x10) {
+                if (mario->buttonTrg & PAD_TRIGGER_Z) {
                     if (!statusWinCheck()) {
                         statusWinOpen();
                         wp->forceTimer = gp->framerate * 10;

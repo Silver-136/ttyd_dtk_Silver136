@@ -10,6 +10,7 @@
 #include "icon_ids.h"
 #include "libc_decls.h"
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
 
 extern ItemData itemDataTable[];
 
@@ -129,11 +130,11 @@ s32 winBadgeMain(WindowWork* w) {
 
     switch (w->badge.state) {
     case 0:
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             return -1;
         }
-        if (w->buttonTrg & 0x1000) {
+        if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         if (w->dirRep & 0x3000) {
@@ -142,7 +143,7 @@ s32 winBadgeMain(WindowWork* w) {
             if (w->badge.tab) {
                 winMakeEquipList(w);
             }
-        } else if (w->buttonTrg & 0x100) {
+        } else if (w->buttonTrg & PAD_BUTTON_A) {
             if (w->badge.tab == 0 && !pouchGetHaveBadgeCnt()) {
                 break;
             }
@@ -152,7 +153,7 @@ s32 winBadgeMain(WindowWork* w) {
             psndSFXOn(SFX_NAME_WORD(0x20012));
             w->badge.state = 10;
             break;
-        } else if (w->buttonTrg & 0x10) {
+        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
             void* p = w;
             s32 m = 3;
@@ -176,7 +177,7 @@ s32 winBadgeMain(WindowWork* w) {
         }
         pages = (cnt + 7) / 8;
         tab = w->badge.tab;
-        if (w->buttonTrg & 0x100) {
+        if (w->buttonTrg & PAD_BUTTON_A) {
             if (tab == 0) {
                 s32 idx = w->badge.sel[tab];
                 if (pouchEquipCheckBadgeIndex(idx)) {
@@ -208,19 +209,19 @@ s32 winBadgeMain(WindowWork* w) {
                 pouchRevisePartyParam();
                 mario_change(w, pouchHaveBadge(idx));
             }
-        } else if (w->buttonTrg & 0x200) {
+        } else if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             w->badge.state = 0;
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
-        } else if (w->buttonRep & 0x40) {
+        } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->badge.page[tab]--;
             if (w->badge.page[tab] < 0) {
                 w->badge.page[tab] = 0;
             }
             w->badge.sel[tab] = w->badge.page[tab] * 8;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonRep & 0x20) {
+        } else if (w->buttonRep & PAD_TRIGGER_R) {
             w->badge.page[tab]++;
             if (w->badge.page[tab] >= pages) {
                 w->badge.page[tab] = pages - 1;
@@ -233,7 +234,7 @@ s32 winBadgeMain(WindowWork* w) {
         } else if (w->dirRep & 0x2000) {
             w->badge.sel[tab]++;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonTrg & 0x10) {
+        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
             void* p = w;
             m = 3;
@@ -265,7 +266,7 @@ s32 winBadgeMain(WindowWork* w) {
         if (!winSortWait(w)) {
             w->badge.state = w->savedState;
         }
-        if (w->buttonTrg & 0x1000) {
+        if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         break;

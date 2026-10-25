@@ -16,6 +16,7 @@
 #include "data/mail_data.h"
 #include "icon_ids.h"
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
 
 void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
@@ -238,17 +239,17 @@ s32 winItemMain(WindowWork* w) {
 
     switch (w->item.state) {
     case 0:
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             return -1;
         }
-        if (w->buttonTrg & 0x1000) {
+        if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         if (w->dirRep & 0x3000) {
             w->item.mode = 1 - w->item.mode;
             psndSFXOn(SFX_NAME_WORD(0x20005));
-        } else if (w->buttonTrg & 0x100) {
+        } else if (w->buttonTrg & PAD_BUTTON_A) {
             if (w->item.mode == 0 && pouchGetHaveItemCnt() == 0) {
                 break;
             }
@@ -258,7 +259,7 @@ s32 winItemMain(WindowWork* w) {
             w->item.state = 10;
             psndSFXOn(SFX_NAME_WORD(0x20012));
             break;
-        } else if (w->buttonTrg & 0x10) {
+        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
             w->savedState = w->item.state;
             psndSFXOn(SFX_NAME_WORD(0x20012));
@@ -276,11 +277,11 @@ s32 winItemMain(WindowWork* w) {
         }
         mode = w->item.mode;
         pages = (cnt + 9) / 10;
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             w->item.state = 0;
         }
-        if (w->buttonTrg & 0x100) {
+        if (w->buttonTrg & PAD_BUTTON_A) {
             if (w->item.mode == 0) {
                 id = pouchHaveItem(w->item.cursor[mode]);
                 if (itemDataTable[id].usable_locations & 4) {
@@ -320,14 +321,14 @@ s32 winItemMain(WindowWork* w) {
                     return -2;
                 }
             }
-        } else if (w->buttonRep & 0x40) {
+        } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->item.page[mode]--;
             if (w->item.page[mode] < 0) {
                 w->item.page[mode] = 0;
             }
             w->item.cursor[mode] = w->item.page[mode] * 10;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonRep & 0x20) {
+        } else if (w->buttonRep & PAD_TRIGGER_R) {
             w->item.page[mode]++;
             if (w->item.page[mode] >= pages) {
                 w->item.page[mode] = pages - 1;
@@ -361,12 +362,12 @@ s32 winItemMain(WindowWork* w) {
             }
             w->item.page[mode] = w->item.cursor[mode] / 10;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonTrg & 0x10) {
+        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
             w->savedState = w->item.state;
             psndSFXOn(SFX_NAME_WORD(0x20012));
             w->item.state = 1000;
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         w->helpTgtX = (f32)(w->item.cursor[mode] % 10 % 2 * 204 - 155);
@@ -379,7 +380,7 @@ s32 winItemMain(WindowWork* w) {
         winMsgEntry(w, id, itemDataTable[id].description, 0);
         break;
     case 100:
-        if (w->buttonTrg & 0x100) {
+        if (w->buttonTrg & PAD_BUTTON_A) {
             psndSFXOn(SFX_NAME_WORD(0x20012));
             w->item.bookPage++;
             if (w->item.bookPage >= w->item.bookPages) {
@@ -391,7 +392,7 @@ s32 winItemMain(WindowWork* w) {
                 w->helpX = w->helpTgtX;
                 w->helpY = w->helpTgtY;
             }
-        } else if (w->buttonTrg & 0x200) {
+        } else if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             w->item.bookPage--;
             if (w->item.bookPage < 0) {
@@ -403,7 +404,7 @@ s32 winItemMain(WindowWork* w) {
                 w->helpX = w->helpTgtX;
                 w->helpY = w->helpTgtY;
             }
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             w->item.bookTgtX = 320.0f;
             w->item.bookTgtY = -240.0f;
             w->flags &= ~0x8000;
@@ -415,7 +416,7 @@ s32 winItemMain(WindowWork* w) {
         w->helpTgtY = 150.0f;
         break;
     case 200:
-        if (w->buttonTrg & 0x100) {
+        if (w->buttonTrg & PAD_BUTTON_A) {
             if ((s32)pouchCheckMail(w->item.mail[w->item.mailSel].id) == 1) {
                 pouchOpenMail(w->item.mail[w->item.mailSel].id);
             }
@@ -429,7 +430,7 @@ s32 winItemMain(WindowWork* w) {
             if (mail->flags & 0x1000) {
                 w->item.mailLines += 10;
             }
-        } else if (w->buttonTrg & 0x200) {
+        } else if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             w->item.state = 10;
             w->item.mailTgtX = 320.0f;
@@ -456,7 +457,7 @@ s32 winItemMain(WindowWork* w) {
             if (old != w->item.mailSel) {
                 psndSFXOn(SFX_NAME_WORD(0x20036));
             }
-        } else if (w->buttonRep & 0x40) {
+        } else if (w->buttonRep & PAD_TRIGGER_L) {
             old = w->item.mailPage;
             w->item.mailPage--;
             if (w->item.mailPage < 0) {
@@ -466,7 +467,7 @@ s32 winItemMain(WindowWork* w) {
             if (old != w->item.mailPage) {
                 psndSFXOn(SFX_NAME_WORD(0x20036));
             }
-        } else if (w->buttonRep & 0x20) {
+        } else if (w->buttonRep & PAD_TRIGGER_R) {
             pages = (w->item.mailNum + 4) / 5;
             old = w->item.mailPage;
             w->item.mailPage++;
@@ -477,12 +478,12 @@ s32 winItemMain(WindowWork* w) {
             if (old != w->item.mailPage) {
                 psndSFXOn(SFX_NAME_WORD(0x20036));
             }
-        } else if (w->buttonTrg & 0x10) {
+        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 7, w->item.mailTgtX, w->item.mailTgtY - 60.0f);
             w->savedState = w->item.state;
             psndSFXOn(SFX_NAME_WORD(0x20012));
             w->item.state = 1000;
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             w->item.mailTgtX = 320.0f;
             w->item.mailTgtY = -240.0f;
             return -2;
@@ -523,13 +524,13 @@ s32 winItemMain(WindowWork* w) {
                 }
             }
         }
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20036));
             if (w->mailRes) {
                 fileFree(w->mailRes);
             }
             w->item.state = 200;
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             if (w->mailRes) {
                 fileFree(w->mailRes);
             }
@@ -541,13 +542,13 @@ s32 winItemMain(WindowWork* w) {
         w->helpTgtY = 120.0f;
         break;
     case 300:
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             w->item.state = 10;
             w->item.useItem = 0;
             winMgrClose(w->useWin[0]);
             winMgrClose(w->useWin[1]);
-        } else if (w->buttonTrg & 0x100) {
+        } else if (w->buttonTrg & PAD_BUTTON_A) {
             mp = marioGetPtr();
             ok = 0;
             psndSFXOn(SFX_NAME_WORD(0x20012));
@@ -611,7 +612,7 @@ s32 winItemMain(WindowWork* w) {
             if (old != w->item.useTarget) {
                 psndSFXOn(SFX_NAME_WORD(0x20005));
             }
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             w->item.useItem = 0;
             winMgrClose(w->useWin[0]);
             winMgrClose(w->useWin[1]);
@@ -648,7 +649,7 @@ s32 winItemMain(WindowWork* w) {
         if (!winSortWait(w)) {
             w->item.state = w->savedState;
         }
-        if (w->buttonTrg & 0x1000) {
+        if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         break;

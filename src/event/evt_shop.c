@@ -24,6 +24,7 @@
 #include <dolphin/mtx.h>
 #include <string.h>
 #include <stdio.h>
+#include <dolphin/pad.h>
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);
@@ -1328,7 +1329,7 @@ USER_FUNC(disp_list) {
 		winMgrOpen(event->userdata[2]);
 		psndSFXOn((const char*)0x2A);
 	}
-	if (keyGetButtonTrg(0) & 0x200) {
+	if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 		winMgrCloseAutoDelete(event->userdata[0]);
 		winMgrCloseAutoDelete(event->userdata[1]);
 		winMgrCloseAutoDelete(event->userdata[2]);

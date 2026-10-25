@@ -23,6 +23,7 @@
 #include "unit/party/unit_party_sanders.h"
 #include "unit/party/unit_party_chuchurina.h"
 #include "libc_decls.h"
+#include <dolphin/pad.h>
 
 extern ItemData itemDataTable[];
 
@@ -248,19 +249,19 @@ s32 winPartyMain(WindowWork* wp) {
 
     switch (wp->party.mode) {
         case 0:
-            if (wp->buttonTrg & 0x100) {
+            if (wp->buttonTrg & PAD_BUTTON_A) {
                 wp->party.field_0x19C = 1;
                 return -2;
             }
-            if (wp->buttonTrg & 0x400) {
+            if (wp->buttonTrg & PAD_BUTTON_X) {
                 wp->party.mode = 1;
                 wp->party.wazaCursor = 0;
                 psndSFXOn((const char*)0x20012);
-            } else if (wp->buttonTrg & 0x200) {
+            } else if (wp->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn((const char*)0x20013);
                 wp->party.field_0x19C = 0;
                 return -1;
-            } else if (wp->buttonTrg & 0x1000) {
+            } else if (wp->buttonTrg & PAD_BUTTON_START) {
                 wp->party.field_0x19C = 0;
                 return -2;
             } else if (wp->dirRep & 0x4000) {
@@ -320,10 +321,10 @@ s32 winPartyMain(WindowWork* wp) {
                     wp->party.wazaCursor = 0;
                 }
                 psndSFXOn((const char*)0x20005);
-            } else if (wp->buttonTrg & 0x200) {
+            } else if (wp->buttonTrg & PAD_BUTTON_B) {
                 wp->party.mode = 0;
                 psndSFXOn((const char*)0x20013);
-            } else if (wp->buttonTrg & 0x1000) {
+            } else if (wp->buttonTrg & PAD_BUTTON_START) {
                 wp->party.field_0x19C = 0;
                 return -2;
             }

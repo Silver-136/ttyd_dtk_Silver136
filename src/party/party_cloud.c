@@ -60,6 +60,7 @@ static inline void cloudSweep(PartyEntry* party, f32 sign, s32 i) {
     }
 }
 #include "eff/n64/eff_kumokumo_n64.h"
+#include <dolphin/pad.h>
 void partyChgMoveMode(PartyEntry* party, s32 mode);
 void partyUpdateKeyData(PartyEntry* party);
 void* memset(void*, int, unsigned long);
@@ -479,7 +480,7 @@ void N__cloud_use(PartyEntry* party) {
             CW(party)->breathLevel = 0;
         }
         if (!(party->flags & 0x80000000)) {
-            if (party->buttonHold & 0x400) {
+            if (party->buttonHold & PAD_BUTTON_X) {
                 if (marioKeyOffChk() == 0) {
                     break;
                 }
@@ -505,7 +506,7 @@ void N__cloud_use(PartyEntry* party) {
         cloudCalcPos(party);
         party->position = party->moveTarget;
         partyUpdateKeyData(party);
-        if (party->buttonTrg & 0x400) {
+        if (party->buttonTrg & PAD_BUTTON_X) {
             party->useMotionId = 10;
         }
         if (--party->moveFrames <= 0) {

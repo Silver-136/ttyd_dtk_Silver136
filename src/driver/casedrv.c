@@ -15,6 +15,7 @@ extern EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags);
 #include "system.h"
 #include "win/win_main.h"
 #include <string.h>
+#include <dolphin/pad.h>
 
 extern void* fbatNpcTalkCheck(void);
 
@@ -136,7 +137,7 @@ void caseMain(void) {
 				break;
 			case 4:
 				if (jumpFrom != NULL && mario->airTimer == 1 && fbatNpcTalkCheck() == NULL &&
-				    !strcmp(hitGetName(jumpFrom), entry->hitObjName) && (mario->buttonTrg & 0x100)) {
+				    !strcmp(hitGetName(jumpFrom), entry->hitObjName) && (mario->buttonTrg & PAD_BUTTON_A)) {
 					SET_HIT(entry);
 				}
 				break;

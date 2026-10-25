@@ -23,6 +23,7 @@
 #include "evt/evt_npc.h"
 #include "driver/fadedrv.h"
 #include "system.h"
+#include <dolphin/pad.h>
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_mario_wait_landon);
 #endif
@@ -655,7 +656,7 @@ static USER_FUNC(evtflash) {
 static USER_FUNC(lect_push_r_check) {
     EvtWord* args = event->args;
 
-    if (keyGetButton(0) & 0x20) {
+    if (keyGetButton(0) & PAD_TRIGGER_R) {
         evtSetValue(event, args[0], TRUE);
     } else {
         evtSetValue(event, args[0], FALSE);

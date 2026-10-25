@@ -26,6 +26,7 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_npc.h"
 #include "evt/evt_snd.h"
+#include <dolphin/pad.h>
 
 static OSTime wwstart;
 void statusWinForceClose(void);
@@ -745,7 +746,7 @@ EVT_END_PAD()
 static USER_FUNC(lect_push_r_check) {
     EvtWord* args = event->args;
 
-    if (keyGetButton(0) & 0x20) {
+    if (keyGetButton(0) & PAD_TRIGGER_R) {
         evtSetValue(event, args[0], TRUE);
     } else {
         evtSetValue(event, args[0], FALSE);

@@ -13,6 +13,7 @@
 #include <string.h>
 #include "libc_decls.h"
 #include "win/win_mario.h"
+#include <dolphin/pad.h>
 
 extern ItemData itemDataTable[];
 void winIconInit(void);
@@ -167,13 +168,13 @@ s32 winMarioMain(WindowWork* w) {
 
     switch (w->mario.f190) {
         case 0:
-            if (w->buttonTrg & 0x100) {
+            if (w->buttonTrg & PAD_BUTTON_A) {
                 if (w->marioSel == 12) {
                     w->mario.f190 = 1;
                     w->mario.f194 = 0;
                     psndSFXOn((const char*)0x20012);
                 }
-            } else if (w->buttonTrg & 0x200) {
+            } else if (w->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn((const char*)0x20013);
                 if (w->flags & 0x2000) {
                     COLOR_ANIM(anims[1], "S_1")
@@ -182,7 +183,7 @@ s32 winMarioMain(WindowWork* w) {
                 }
                 animPoseSetAnim(w->mario.poseId, anims[1], 0);
                 return -1;
-            } else if (w->buttonTrg & 0x1000) {
+            } else if (w->buttonTrg & PAD_BUTTON_START) {
                 return -2;
             } else if (w->dirRep & 0x1000) {
                 NAV(0)
@@ -250,10 +251,10 @@ s32 winMarioMain(WindowWork* w) {
                     w->mario.f194 = 0;
                 }
                 psndSFXOn((const char*)0x20005);
-            } else if (w->buttonTrg & 0x200) {
+            } else if (w->buttonTrg & PAD_BUTTON_B) {
                 w->mario.f190 = 0;
                 psndSFXOn((const char*)0x20013);
-            } else if (w->buttonTrg & 0x1000) {
+            } else if (w->buttonTrg & PAD_BUTTON_START) {
                 return -2;
             }
             w->helpTgtX = -280.0f;

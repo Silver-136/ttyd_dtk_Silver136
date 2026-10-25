@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include "icon_ids.h"
 #include "libc_decls.h"
+#include <dolphin/pad.h>
 #define EXT_LIT(sym, val) (val)
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
 #ifdef VERSION_G8ME01
@@ -1826,7 +1827,7 @@ void msgWindow_Main(WindowEntry* window) {
 		if (trg & (target | 0x200)) {
 			WIN_STATE(window) = 1;
 			data->pageState = 2;
-			if (keyGetButtonTrg(0) & 0x200) {
+			if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 				if (!(data->flags & 0x80)) {
 					data->flags |= 4;
 				}
@@ -1835,7 +1836,7 @@ void msgWindow_Main(WindowEntry* window) {
 #ifdef VERSION_G8ME01
 		else // US: one key per frame
 #endif
-		if (keyGetButtonTrg(0) & 0x10) {
+		if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
 			data->page = data->pageCount - 1;
 			if (msgWinPrevPage(window) != 0U) {
 				WIN_STATE(window) = 9;
@@ -1888,7 +1889,7 @@ void msgWindow_Main(WindowEntry* window) {
 #ifdef VERSION_G8ME01
 		else // US: one key per frame
 #endif
-		if (keyGetButtonTrg(0) & 0x200) {
+		if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 			WIN_STATE(window) = 10;
 			window->timestamp = gp->renderTime;
 			data->page = data->pageCount - 1;
@@ -1897,7 +1898,7 @@ void msgWindow_Main(WindowEntry* window) {
 #ifdef VERSION_G8ME01
 		else // US: one key per frame
 #endif
-		if (keyGetButtonTrg(0) & 0x10) {
+		if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
 			WIN_STATE(window) = 9;
 			window->timestamp = gp->renderTime;
 			if (msgWinPrevPage(window) != 0U) {
@@ -2114,7 +2115,7 @@ void selectWindow_Main(WindowEntry* window) {
 		if (prev != data->sel) {
 			psndSFXOn(SFX_NAME_WORD(0x20005));
 		}
-		if (keyGetButtonTrg(0) & 0x200) {
+		if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 			switch (data->cancel) {
 			case -1:
 				break;
@@ -2130,7 +2131,7 @@ void selectWindow_Main(WindowEntry* window) {
 				break;
 			}
 		}
-		else if (keyGetButtonTrg(0) & 0x100) {
+		else if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
 			WIN_STATE(window) = 7;
 			psndSFXOn(SFX_NAME_WORD(0x20012));
 		}

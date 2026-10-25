@@ -17,6 +17,7 @@
 #include "mario/mariost.h"
 #include "evt/evt_yuugijou.h"
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
 
 const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
 void FontDrawMessageMtx(Mtx mtx, const char* msg);
@@ -995,7 +996,7 @@ USER_FUNC(yuuranking_wait_button) {
     if (isFirstCall) {
         wp->dispFlags |= 2;
     }
-    if (!(wp->dispFlags & 4) && (keyGetButtonTrg(0) & 0x300)) {
+    if (!(wp->dispFlags & 4) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B))) {
         wp->dispFlags &= ~2;
         psndSFXOn((const char*)0x12);
         return EVT_RETURN_DONE;

@@ -14,6 +14,7 @@
 #include <string.h>
 #include "driver/animdrv.h"
 #include "mario/mario_hit.h"
+#include <dolphin/pad.h>
 
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 void allPartyRideOff(void);
@@ -131,8 +132,8 @@ BOOL marioChkJabara(void) {
 	if (!priChk()) {
 		return FALSE;
 	}
-	if (!(mario->buttonHold & 0x100)) {
-		if (!(mario->buttonHold & 0x200)) {
+	if (!(mario->buttonHold & PAD_BUTTON_A)) {
+		if (!(mario->buttonHold & PAD_BUTTON_B)) {
 			if (strcmp(mario->animName, "M_I_Y") == 0 && (u16)mario->currMotionId == 0) {
 				marioChgPose("M_S_1");
 				marioVoiceGlareOff();
@@ -331,7 +332,7 @@ void mot_jabara(void) {
 			v74 = mario->position;
 			headDist = 25.0f;
 			if (marioSearchHead(&v74, &headDist, 200.0f)) {
-				if (!(mario->buttonHold & 0x100)) {
+				if (!(mario->buttonHold & PAD_BUTTON_A)) {
 					marioGetPtr()->motJabara->headBlockTimer++;
 					if (marioGetPtr()->motJabara->headBlockTimer > sysMsec2Frame(5000)) {
 						found = TRUE;
@@ -341,7 +342,7 @@ void mot_jabara(void) {
 					break;
 				}
 			}
-			if (!found && (mario->buttonHold & 0x100) && !(mario->buttonUp & 0x100)) {
+			if (!found && (mario->buttonHold & PAD_BUTTON_A) && !(mario->buttonUp & PAD_BUTTON_A)) {
 				break;
 			}
 		}
@@ -537,7 +538,7 @@ void mot_jabara(void) {
 				if (++mario->mot.jabara.animFrame > 0x78) {
 					mario->mot.jabara.animFrame = 0;
 				}
-				if (mario->buttonTrg & 0x200) {
+				if (mario->buttonTrg & PAD_BUTTON_B) {
 					mario->flags |= 0x80;
 					mario->flags &= ~0x400;
 					marioPaperOff();
@@ -613,12 +614,12 @@ void mot_jabara(void) {
 		}
 		break;
 	case 0x50:
-		if (mario->buttonTrg & 0x100) {
+		if (mario->buttonTrg & PAD_BUTTON_A) {
 			mario->flags |= 0x80;
 			mario->baseSpeed = 0.0f;
 			mario->rot.x = 0.0f;
 			mario->currSubMotionId = 0x5a;
-		} else if (mario->buttonTrg & 0x200) {
+		} else if (mario->buttonTrg & PAD_BUTTON_B) {
 			mario->flags |= 0x80;
 			marioGetPtr();
 			allPartyRideOff();
@@ -784,7 +785,7 @@ void jabaraSwingWalk(void) {
 void swingMain(void) {
 	MarioWork* m = marioGetPtr();
 	if (marioGetPtr()->motStruct) {
-		if ((s32)m->currSubMotionId < 0x5a && (m->buttonTrg & 0x300) && !(marioGetPtr()->motJabara->flags & 1)) {
+		if ((s32)m->currSubMotionId < 0x5a && (m->buttonTrg & (PAD_BUTTON_A | PAD_BUTTON_B)) && !(marioGetPtr()->motJabara->flags & 1)) {
 			m->mot.jabara.rotTimer = 0;
 			marioGetPtr()->motJabara->flags |= 1;
 		}

@@ -24,6 +24,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include <math.h>
+#include <dolphin/pad.h>
 
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
@@ -1748,7 +1749,7 @@ void marioSearchFrontWall_staying(f32 dz) {
     if (w->hitobjFront) {
         w->frontWallDist = h;
     }
-    if (w->buttonTrg & 0x100) {
+    if (w->buttonTrg & PAD_BUTTON_A) {
         w->hitobjFrontA = NULL;
         pos = w->position;
         if (searchFrontWall(&pos, &h, r, w->directionView, w->wPlayerCollisionBox.z)) {

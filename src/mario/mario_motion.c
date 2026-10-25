@@ -7,6 +7,7 @@
 #include "party.h"
 #include "driver/npcdrv.h"
 #include "driver/mobjdrv.h"
+#include <dolphin/pad.h>
 
 
 typedef struct MarioJumpData {
@@ -347,7 +348,7 @@ void marioBoots(void) {
 		if (!kpaHipAttackOk()) {
 			return;
 		}
-		if (!(mario->buttonTrg & 0x100)) {
+		if (!(mario->buttonTrg & PAD_BUTTON_A)) {
 			return;
 		}
 		marioChgMot(MARIO_MOTION_HIP);
@@ -574,7 +575,7 @@ void marioJump(void) {
 	}
 	prev = mario->jumpVelocityY;
 	marioMakeJumpPara();
-	if (mario->jumpVelocityY > 0.0f && mario->airTimer >= 4 && !(mario->buttonHold & 0x100)) {
+	if (mario->jumpVelocityY > 0.0f && mario->airTimer >= 4 && !(mario->buttonHold & PAD_BUTTON_A)) {
 		mario->jumpVelocityY += -0.526f;
 	}
 	if (mario->jumpVelocityY <= 0.0f) {
@@ -654,7 +655,7 @@ void marioFall(void) {
 #ifdef VERSION_G8ME01
 	if (!(mario->trigFlags & 0x200000) && (mario->trigFlags & 0x100000)) {
 		rub = marioGetRub(0x100, &a, &b, &c);
-		if (mario->buttonHold & 0x100) {
+		if (mario->buttonHold & PAD_BUTTON_A) {
 			mario->trigFlags |= 0x400000;
 		}
 	}
@@ -795,7 +796,7 @@ void marioLandOn(void) {
 		if (!(mario->dispFlags & 0x1000000)) {
 #ifdef VERSION_G8ME01
 			if (marioPriCheckJabara()) {
-				if (mario->buttonHold & 0x100) {
+				if (mario->buttonHold & PAD_BUTTON_A) {
 					marioChgMot(MARIO_MOTION_STAY);
 				} else {
 					marioChgMot(MARIO_MOTION_WALK);
@@ -914,7 +915,7 @@ void mot_getItem(void) {
 BOOL marioChkJump(void) {
 	MarioWork* mario = marioGetPtr();
 	MotCaseEntry* ce;
-	if (!(mario->buttonTrg & 0x100)) {
+	if (!(mario->buttonTrg & PAD_BUTTON_A)) {
 		return FALSE;
 	}
 	if (mario->currMotionId == MARIO_MOTION_YOSHI) {
@@ -956,7 +957,7 @@ BOOL marioChkJump(void) {
 
 BOOL marioChkTransform(void) {
 	MarioWork* mario = marioGetPtr();
-	if (!(mario->buttonTrg & 0x800)) {
+	if (!(mario->buttonTrg & PAD_BUTTON_Y)) {
 		return FALSE;
 	}
 	if (!(mario->trigFlags & 4) && mario->partyUseDelay) {
@@ -989,7 +990,7 @@ BOOL marioChkItemMotion(void) {
 		marioChgMot(MARIO_MOTION_HAMMER_2);
 		return TRUE;
 	}
-	trig = mario->buttonTrg & 0x200;
+	trig = mario->buttonTrg & PAD_BUTTON_B;
 	if (!trig) {
 		return FALSE;
 	}
@@ -1015,7 +1016,7 @@ s32 marioRollChgChk(void) {
 	if (mario->flags & 0x80000000) {
 		return 0;
 	}
-	if (!(mario->buttonHold & 0x20)) {
+	if (!(mario->buttonHold & PAD_TRIGGER_R)) {
 		return 0;
 	}
 	if (marioGetRub(0x20, &a, &b, &c) != TRUE) {
@@ -1030,7 +1031,7 @@ s32 marioRollChgChk(void) {
 	if (marioSlitChkWallAround() || marioCreviceWallChk(mario->position)) {
 		return 0;
 	}
-	if (mario->buttonHold & 0x20) {
+	if (mario->buttonHold & PAD_TRIGGER_R) {
 		marioChgMot(MARIO_MOTION_ROLL);
 		return MARIO_MOTION_ROLL;
 	}
@@ -1071,7 +1072,7 @@ void mot_kaze(void) {
 				mario->mot.kaze.spinSpeed = 60.0f;
 			}
 			mario->displayDirection = revise360(mario->displayDirection + mario->mot.kaze.spinSpeed);
-			if (mario->buttonHold & 0x10) {
+			if (mario->buttonHold & PAD_TRIGGER_Z) {
 				break;
 			}
 			mario->displayDirectionTarget = marioChkBackAngle(mario->displayDirection) ? 180.0f : 0.0f;
@@ -1106,7 +1107,7 @@ void mot_shadow(void) {
 	}
 	switch ((s32)mario->currSubMotionId) {
 		case 0:
-			if (mario->buttonTrg & 0x200) {
+			if (mario->buttonTrg & PAD_BUTTON_B) {
 				mario->rot.x = 0.0f;
 				mario->rot.z = 0.0f;
 				mario->multiTimer = 0;

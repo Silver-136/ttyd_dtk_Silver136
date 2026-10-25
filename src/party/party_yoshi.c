@@ -17,6 +17,7 @@
 #include "mot/mot_damage.h"
 #include "mot/mot_jump.h"
 #include "mario/mario_cam.h"
+#include <dolphin/pad.h>
 
 typedef struct YoshiWork {
     u8 pad0[0x4];         // 0x0
@@ -526,7 +527,7 @@ void yoshi_use(PartyEntry* party) {
             }
             if (party->flags & 2) {
                 if (!(party->flags & 0x80000000)) {
-                    if (party->buttonTrg & 0x100) {
+                    if (party->buttonTrg & PAD_BUTTON_A) {
                         party->useMotionId = 20;
                         break;
                     }
@@ -572,7 +573,7 @@ void yoshi_use(PartyEntry* party) {
             L_searchHead(party);
             checkWall(party, spd, dir);
             SYNC_MARIO(mario, party);
-            if (party->buttonTrg & 0x600) {
+            if (party->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_X)) {
                 party->useMotionId = 100;
             }
             searchGround(party);
@@ -745,7 +746,7 @@ void yoshi_use(PartyEntry* party) {
                         party->gravity = -1.0f;
                         party->useMotionId = 50;
                     }
-                } else if (mario->airTimer > 68 || !(party->buttonHold & 0x100) || marioKeyOffChk()) {
+                } else if (mario->airTimer > 68 || !(party->buttonHold & PAD_BUTTON_A) || marioKeyOffChk()) {
                     party->velY = 0.0f;
                     party->gravity = -1.0f;
                     party->useMotionId = 50;
@@ -874,7 +875,7 @@ void yoshi_use(PartyEntry* party) {
                 L_getStick(party, &angle, &speed);
                 L_yoshiFlyMove(party);
             }
-            if (!(party->buttonHold & 0x100) || marioKeyOffChk()) {
+            if (!(party->buttonHold & PAD_BUTTON_A) || marioKeyOffChk()) {
                 if (party->useMotionId == 50) {
                     party->useMotionId = 51;
                 }
@@ -1265,7 +1266,7 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
             party->hitobjFront = hit;
             mario->hitobjFront = hit;
         }
-        if (party->buttonTrg & 0x100) {
+        if (party->buttonTrg & PAD_BUTTON_A) {
             pos = party->position;
             hit = partySearchWallFront(party, &pos, spd, party->targetDir);
             if (hit == NULL) {

@@ -14,6 +14,7 @@
 #include <string.h>
 #include "driver/mobjdrv.h"
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
 
 double cos(float);
 void sincosf(f32* s, f32* c, f32 deg);
@@ -328,8 +329,8 @@ s32 marioChkHammer2(void) {
 	if (pouchGetPtr()->hammerLevel < 2) {
 		return 0;
 	}
-	if (!(mario->buttonHold & 0x200)) {
-		if (!(mario->buttonHold & 0x100)) {
+	if (!(mario->buttonHold & PAD_BUTTON_B)) {
+		if (!(mario->buttonHold & PAD_BUTTON_A)) {
 			if (strcmp(mario->animName, "M_I_Y") == 0 && mario->currMotionId == 0) {
 				marioChgPose("M_S_1");
 				marioVoiceGlareOff();
@@ -535,7 +536,7 @@ void mot_hammer2(void) {
 			animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->mot.hammer2.animTime / 6.0f);
 		}
 	case 11:
-		if (!(mario->buttonHold & 0x200)) {
+		if (!(mario->buttonHold & PAD_BUTTON_B)) {
 			if ((u32)mario->mot.hammer2.sfxId != 0xFFFFFFFFU) {
 				psndSFXOff(mario->mot.hammer2.sfxId);
 				mario->mot.hammer2.sfxId = -1;

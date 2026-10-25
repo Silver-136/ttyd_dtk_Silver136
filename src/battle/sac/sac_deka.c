@@ -26,6 +26,7 @@
 #include "battle/sac/sac_common.h"
 #include "party/party_motion.h"
 #include "battle/sac/sac_deka.h"
+#include <dolphin/pad.h>
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -404,7 +405,7 @@ static void main_base(void) {
                 }
             }
         }
-        if (keyGetButtonTrg(0) & 0x100) {
+        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
             for (i = 0; i < 8; i++) {
                 t = &w->timing[idx[i]];
                 if (t->state == 2 && w->cursor >= t->pos - 7.0f && w->cursor <= 7.0f + t->pos) {

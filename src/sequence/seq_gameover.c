@@ -17,6 +17,7 @@
 #include "system.h"
 #include <string.h>
 #include "seq/seq_gameover.h"
+#include <dolphin/pad.h>
 #undef mapPreLoad
 
 typedef struct GameOverWork {
@@ -372,7 +373,7 @@ void seq_gameOverMain(SequenceWork* work) {
             break;
         case 5:
             if (evtCheckID(wp->evt->eventId)) {
-                if (!(keyGetButtonTrg(0) & 0x1100)) {
+                if (!(keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START))) {
                     break;
                 }
             }

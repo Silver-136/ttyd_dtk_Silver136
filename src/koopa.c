@@ -10,6 +10,7 @@
 #include "memory.h"
 #include <string.h>
 #include "koopa_hit.h"
+#include <dolphin/pad.h>
 
 void kpaSetSpec(void);
 void kpa2DMain(void);
@@ -504,7 +505,7 @@ f32 kpaSetJumpPara(void) {
 
 f32 kpaSetFallPara(void) {
     MarioWork* mp = marioGetPtr();
-    if ((mp->buttonHold & 0x100)) {
+    if ((mp->buttonHold & PAD_BUTTON_A)) {
         SETP(mp, -0.05f, -0.08f, -0.006f, -0.002f);
     } else {
         SETP(mp, -0.1f, -0.2f, -0.024f, -0.01f);
@@ -589,7 +590,7 @@ void kpaFall(void) {
             }
         }
         if (mp->currMotionId != 4) {
-            if (mp->buttonHold & 0x100) {
+            if (mp->buttonHold & PAD_BUTTON_A) {
                 mp->jumpSnapY = -0.001f;
             } else {
                 mp->jumpSnapY = -0.01f;
@@ -701,7 +702,7 @@ void kpaFireAttack(void) {
         if (--KPW(mp)->attackTimer > 0) {
             break;
         }
-        if (mp->buttonHold & 0x200) {
+        if (mp->buttonHold & PAD_BUTTON_B) {
             break;
         }
         if (KPW(mp)->fireHold != 0) {
@@ -758,7 +759,7 @@ void kpaFireAttack(void) {
         if (--KPW(mp)->attackTimer > 0) {
             break;
         }
-        if (mp->buttonHold & 0x200) {
+        if (mp->buttonHold & PAD_BUTTON_B) {
             break;
         }
         if (KPW(mp)->fireHold != 0) {

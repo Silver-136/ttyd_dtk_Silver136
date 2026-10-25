@@ -19,6 +19,7 @@
 #include "eff/eff_sandars.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_cmd.h"
+#include <dolphin/pad.h>
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global bomhei_init
@@ -384,7 +385,7 @@ void bomhei_use_main(PartyEntry* party) {
         bomheiSetHoldPos(party);
         bomheiChkHitAttr(party);
         if ((party->flags & 0x80000000) ||
-            (mario->hitobjStandOn != NULL && mario->airTimer == 0 && !(mario->buttonHold & 0x400))) {
+            (mario->hitobjStandOn != NULL && mario->airTimer == 0 && !(mario->buttonHold & PAD_BUTTON_X))) {
             party->useMotionId = 20;
         }
         break;

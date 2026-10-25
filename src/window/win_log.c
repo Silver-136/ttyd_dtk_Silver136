@@ -19,6 +19,7 @@
 #include "mario/mario.h"
 #include "pmario_sound.h"
 #include "system.h"
+#include <dolphin/pad.h>
 
 typedef struct TubuDt {
     s16 x;
@@ -451,11 +452,11 @@ s32 winLogMain(WindowWork* w) {
 
     switch (w->log.fD68) {
     case 0:
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             return -1;
         }
-        if (w->buttonTrg & 0x1000) {
+        if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         if (w->dirRep & 0x2000) {
@@ -468,7 +469,7 @@ s32 winLogMain(WindowWork* w) {
             w->log.cursor--;
             if (w->log.cursor < 0) w->log.cursor = w->log.count - 1;
             if (old != w->log.cursor) psndSFXOn(SFX_NAME_WORD(0x20005));
-        } else if (w->buttonTrg & 0x100) {
+        } else if (w->buttonTrg & PAD_BUTTON_A) {
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 30;
             }
@@ -556,7 +557,7 @@ s32 winLogMain(WindowWork* w) {
             }
             animPoseSetMaterialFlagOn(w->log.pose, 0x1800);
         }
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
@@ -568,7 +569,7 @@ s32 winLogMain(WindowWork* w) {
             w->mapRes = NULL;
             if (w->log.pose != -1) animPoseRelease(w->log.pose);
             w->log.pose = -1;
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         min = 10000.0f;
@@ -640,7 +641,7 @@ s32 winLogMain(WindowWork* w) {
         w->helpTgtY += 20.0f;
         break;
     case 11:
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
@@ -663,7 +664,7 @@ s32 winLogMain(WindowWork* w) {
             while (w->log.fE80 > w->log.fE7C) w->log.fE80 -= 360.0f;
             psndSFXOn(SFX_NAME_WORD(0x209D6));
             psndSFXOn(SFX_NAME_WORD(0x20037));
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         w->helpTgtY = w->helpTgtX = -50.0f;
@@ -675,7 +676,7 @@ s32 winLogMain(WindowWork* w) {
         break;
     case 12:
         pages = (w->log.badge.num + 27) / 28;
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
@@ -686,12 +687,12 @@ s32 winLogMain(WindowWork* w) {
             w->log.badge.ty = -250.0f;
             w->log.badge.tf24 = -200.0f;
             w->log.badge.tf2C = -300.0f;
-        } else if (w->buttonRep & 0x40) {
+        } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->log.badge.idx--;
             if (w->log.badge.idx < 0) w->log.badge.idx = 0;
             w->log.badge.cursor = w->log.badge.idx * 28;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonRep & 0x20) {
+        } else if (w->buttonRep & PAD_TRIGGER_R) {
             w->log.badge.idx++;
             if (w->log.badge.idx >= pages) w->log.badge.idx = pages - 1;
             w->log.badge.cursor = w->log.badge.idx * 28;
@@ -714,12 +715,12 @@ s32 winLogMain(WindowWork* w) {
             }
             w->log.badge.idx = w->log.badge.cursor / 28;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonTrg & 0x10) {
+        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 4, -310.0f, 150.0f);
             w->savedState = w->log.fD68;
             psndSFXOn(SFX_NAME_WORD(0x20012));
             w->log.fD68 = 1000;
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         w->helpTgtX = w->log.badge.cursor % 28 % 7 * 56 - 140;
@@ -732,7 +733,7 @@ s32 winLogMain(WindowWork* w) {
         break;
     case 13:
         pages = (w->log.recipe.num + 27) / 28;
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
@@ -743,12 +744,12 @@ s32 winLogMain(WindowWork* w) {
             w->log.recipe.ty = -250.0f;
             w->log.recipe.tf24 = -200.0f;
             w->log.recipe.tf2C = -300.0f;
-        } else if (w->buttonRep & 0x40) {
+        } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->log.recipe.idx--;
             if (w->log.recipe.idx < 0) w->log.recipe.idx = 0;
             w->log.recipe.cursor = w->log.recipe.idx * 28;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonRep & 0x20) {
+        } else if (w->buttonRep & PAD_TRIGGER_R) {
             w->log.recipe.idx++;
             if (w->log.recipe.idx >= pages) w->log.recipe.idx = pages - 1;
             w->log.recipe.cursor = w->log.recipe.idx * 28;
@@ -771,12 +772,12 @@ s32 winLogMain(WindowWork* w) {
             }
             w->log.recipe.idx = w->log.recipe.cursor / 28;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonTrg & 0x10) {
+        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 5, -310.0f, 150.0f);
             w->savedState = w->log.fD68;
             psndSFXOn(SFX_NAME_WORD(0x20012));
             w->log.fD68 = 1000;
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         w->helpTgtX = w->log.recipe.cursor % 28 % 7 * 56 - 140;
@@ -789,7 +790,7 @@ s32 winLogMain(WindowWork* w) {
         break;
     case 14:
         pages = (w->log.enemyNum + 15) / 16;
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             for (i = 0; i < w->log.count; i++) {
                 w->log.menu[i].state = 40;
@@ -798,12 +799,12 @@ s32 winLogMain(WindowWork* w) {
             w->log.fD68 = 0;
             w->log.f102C = 320.0f;
             w->log.f1034 = -240.0f;
-        } else if (w->buttonRep & 0x40) {
+        } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->log.enemyPage--;
             if (w->log.enemyPage < 0) w->log.enemyPage = 0;
             w->log.enemySel = w->log.enemyPage * 16;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonRep & 0x20) {
+        } else if (w->buttonRep & PAD_TRIGGER_R) {
             w->log.enemyPage++;
             if (w->log.enemyPage >= pages) w->log.enemyPage = pages - 1;
             w->log.enemySel = w->log.enemyPage * 16;
@@ -835,18 +836,18 @@ s32 winLogMain(WindowWork* w) {
             if (w->log.enemySel >= w->log.enemyNum) w->log.enemySel = w->log.enemyNum - 1;
             w->log.enemyPage = w->log.enemySel / 16;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->buttonTrg & 0x100) {
+        } else if (w->buttonTrg & PAD_BUTTON_A) {
             if (swGet(w->log.enemy[w->log.enemySel].id + 0x117A)) {
                 psndSFXOn(SFX_NAME_WORD(0x20012));
                 w->log.fD68 = 21;
                 w->log.mono = monosiriInit(w->log.enemy[w->log.enemySel].id, -60.0f, 150.0f);
             }
-        } else if (w->buttonTrg & 0x10) {
+        } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 6, -310.0f, 150.0f);
             w->savedState = w->log.fD68;
             psndSFXOn(SFX_NAME_WORD(0x20012));
             w->log.fD68 = 1001;
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         w->helpTgtX = w->log.enemySel % 16 / 8 * 216 - 180;
@@ -858,11 +859,11 @@ s32 winLogMain(WindowWork* w) {
         }
         break;
     case 21:
-        if (w->buttonTrg & 0x200) {
+        if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(0x20013));
             w->log.fD68 = 22;
             monosiriClose(w->log.mono);
-        } else if (w->buttonTrg & 0x1000) {
+        } else if (w->buttonTrg & PAD_BUTTON_START) {
             monosiriExit(w->log.mono);
             return -2;
         } else {
@@ -882,7 +883,7 @@ s32 winLogMain(WindowWork* w) {
         if (!winSortWait(w)) {
             w->log.fD68 = w->savedState;
         }
-        if (w->buttonTrg & 0x1000) {
+        if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
         break;

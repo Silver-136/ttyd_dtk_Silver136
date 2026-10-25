@@ -27,6 +27,7 @@
 #include "icon_ids.h"
 #include "mario/mariost.h"
 #include "data/npc_data.h"
+#include <dolphin/pad.h>
 
 typedef struct RankEntry {
     u16 flags;
@@ -335,15 +336,15 @@ static USER_FUNC(evt_tou_print_ranking) {
         printRanking();
         return EVT_RETURN_BLOCK;
     }
-    if (keyGetButtonTrg(0) & 0x200) {
+    if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
         psndSFXOn((const char*)0x13);
         return EVT_RETURN_YIELD;
     }
-    if (dwp->page > 0 && (keyGetButtonTrg(0) & 0x40)) {
+    if (dwp->page > 0 && (keyGetButtonTrg(0) & PAD_TRIGGER_L)) {
         psndSFXOn((const char*)5);
         dwp->page--;
     }
-    if (dwp->page < 1 && (keyGetButtonTrg(0) & 0x20)) {
+    if (dwp->page < 1 && (keyGetButtonTrg(0) & PAD_TRIGGER_R)) {
         dwp->page++;
         psndSFXOn((const char*)5);
     }

@@ -23,6 +23,7 @@
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -400,7 +401,7 @@ void main_cursor(void) {
             w->flags &= ~1;
             w->t34 = 0;
         }
-        if (keyGetButtonTrg(0) & 0x100) {
+        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
             w->kind38 = 5;
             ob = w->o3d[w->idx].link;
             if (ob) {

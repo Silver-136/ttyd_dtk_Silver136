@@ -26,6 +26,7 @@
 #include "battle/sac/sac_bakugame.h"
 #include "battle/battle_database_common.h"
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
 
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
@@ -626,7 +627,7 @@ state_end:
     }
 
     if (w->s7c >= 10 && w->s7c <= 30) {
-        if (keyGetButtonTrg(0) & 0x700) {
+        if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X)) {
             w->vel = 1.5f;
         }
         w->acc = -0.3f;
@@ -911,13 +912,13 @@ state_end:
             break;
         }
         w->s80++;
-        if (keyGetButtonTrg(0) & 0x400) {
+        if (keyGetButtonTrg(0) & PAD_BUTTON_X) {
             w->cd = w->btn[2].target;
         }
-        if (keyGetButtonTrg(0) & 0x200) {
+        if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
             w->cd = w->btn[1].target;
         }
-        if (keyGetButtonTrg(0) & 0x100) {
+        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
             w->cd = w->btn[0].target;
         }
         break;

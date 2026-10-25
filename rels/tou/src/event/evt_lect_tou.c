@@ -27,6 +27,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_party.h"
 #include "mario/mario_cam.h"
+#include <dolphin/pad.h>
 
 static OSTime wwstart;
 void statusWinForceClose(void);
@@ -1219,7 +1220,7 @@ static USER_FUNC(lect_mobj_set_nosysblend) {
 static USER_FUNC(lect_push_a_check) {
     EvtWord* args = event->args;
 
-    if (keyGetButton(0) & 0x100) {
+    if (keyGetButton(0) & PAD_BUTTON_A) {
         evtSetValue(event, args[0], TRUE);
     } else {
         evtSetValue(event, args[0], FALSE);
@@ -1230,7 +1231,7 @@ static USER_FUNC(lect_push_a_check) {
 static USER_FUNC(lect_push_b_check) {
     EvtWord* args = event->args;
 
-    if (keyGetButton(0) & 0x200) {
+    if (keyGetButton(0) & PAD_BUTTON_B) {
         evtSetValue(event, args[0], TRUE);
     } else {
         evtSetValue(event, args[0], FALSE);

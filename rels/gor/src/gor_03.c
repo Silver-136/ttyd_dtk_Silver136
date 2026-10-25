@@ -31,6 +31,7 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
+#include <dolphin/pad.h>
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);
@@ -6393,21 +6394,21 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 if (j == data->cursor) {
                     switch (j) {
                         case 0:
-                            if (keyGetButtonTrg(0) & 0x100) {
+                            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                                 press = 1;
                             } else {
                                 press = 0;
                             }
                             break;
                         case 1:
-                            if (keyGetButtonTrg(0) & 0x100) {
+                            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                                 press = 1;
                             } else {
                                 press = 0;
                             }
                             break;
                         case 2:
-                            if (keyGetButtonTrg(0) & 0x100) {
+                            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                                 press = 1;
                             } else {
                                 press = 0;

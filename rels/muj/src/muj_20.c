@@ -29,6 +29,7 @@
 #include "party/party_motion.h"
 #include "muj.h"
 #include "data_tables.h"
+#include <dolphin/pad.h>
 
 NpcEntry* evtNpcNameToPtr(EventEntry* event, const char* name);
 typedef struct MarcoShip { f32 angle; f32 speed; f32 max; s32 stopped; s32 state; s32 field_0x14; OSTime time; } MarcoShip;
@@ -2323,7 +2324,7 @@ USER_FUNC(logo) {
             }
             break;
         case 2:
-            if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & 0x1300)) {
+            if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_START))) {
                 wp->counter = 0;
                 wp->state++;
                 evtSetValue(event, GF(1), 1);

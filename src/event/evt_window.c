@@ -12,6 +12,7 @@
 #include <dolphin/mtx.h>
 #include <string.h>
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
 
 s32 psndSFXOn_3D(const char* name, Vec* position);
 void statusWinForceUpdateCoin(void);
@@ -225,7 +226,7 @@ USER_FUNC(evt_win_one_message) {
 		}
 		break;
 	case 2:
-		if (keyGetButtonTrg(0) & 0x100) {
+		if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
 			switch (w->type) {
 			case 0:
 				psndSFXOn_3D("SFX_MAIL_RECEPTION1", &marioGetPtr()->position);

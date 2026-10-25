@@ -14,6 +14,7 @@
 #include "koopa_motion.h"
 #include "evt/evt_cmd.h"
 #include "koopa_hit.h"
+#include <dolphin/pad.h>
 
 #ifdef VERSION_G8ME01
 // US exports this as the global kpa_fall (mot_jump calls it by that name)
@@ -65,7 +66,7 @@ static inline s32 kpa_stay_chk(void) {
     if (kpaGetStageViewType() == 1) {
         return 0;
     }
-    if (!(m2->buttonTrg & 0x100)) {
+    if (!(m2->buttonTrg & PAD_BUTTON_A)) {
         return 0;
     }
     if (kpaGetBodyStatus() == 2) {
@@ -196,7 +197,7 @@ void kpa_stay(void) {
     if (kpaGetAttackMode() == 0) {
         s32 r = kpa_stay_chk();
         if (r == 0) {
-            if (m->buttonTrg & 0x200) {
+            if (m->buttonTrg & PAD_BUTTON_B) {
                 kpaAttackStart();
             } else {
                 if (m->forceMoveTimer == 0) {
@@ -235,7 +236,7 @@ void kpa_walk(void) {
         KPW(m)->standParamB = -0.02f;
     }
     if (!kpa_stay_chk()) {
-        if (m->buttonTrg & 0x200) {
+        if (m->buttonTrg & PAD_BUTTON_B) {
             kpaAttackStart();
             marioChgMot(0);
             return;
@@ -309,7 +310,7 @@ void kpa_dash(void) {
         m->mot.kpa.animFrame = 0;
     }
     if (!kpa_stay_chk()) {
-        if (m->buttonTrg & 0x200) {
+        if (m->buttonTrg & PAD_BUTTON_B) {
             kpaAttackStart();
             marioChgMot(0);
             return;
@@ -392,7 +393,7 @@ void kpa_jump(void) {
     if (m->currMotionId != 8) {
         prevVy = m->jumpVelocityY;
         marioMakeJumpPara();
-        if (m->jumpVelocityY > 0.0f && m->airTimer >= 4 && !(m->buttonHold & 0x100)) {
+        if (m->jumpVelocityY > 0.0f && m->airTimer >= 4 && !(m->buttonHold & PAD_BUTTON_A)) {
             m->jumpVelocityY += -0.526f;
         }
         if (m->jumpVelocityY <= 0.0f) {
@@ -521,7 +522,7 @@ void kpa_hip(void) {
             if (m->position.y > 75.0f) {
                 camFollowYOn();
             }
-            if ((m->buttonHold & 0x100) && !m->hitobjStandOn) {
+            if ((m->buttonHold & PAD_BUTTON_A) && !m->hitobjStandOn) {
                 kpa_hip_launch(m);
             } else {
                 m->flags &= ~0x80;
@@ -746,13 +747,13 @@ void kpa_swim(void) {
         m->kpaSpeed = 0.0f;
         KPW(marioGetPtr())->flags |= 0x10;
     }
-    if (m->buttonTrg & 0x200) {
+    if (m->buttonTrg & PAD_BUTTON_B) {
         kpaAttackStart2();
     }
     if (kpaFireAttackCheck() == 1) {
         m->wStickDir1 = 0;
         m->wStickDir2 = 0;
-    } else if (kpaGetBodyStatus() == 2 && (m->buttonTrg & 0x100)) {
+    } else if (kpaGetBodyStatus() == 2 && (m->buttonTrg & PAD_BUTTON_A)) {
         s32 st = (s32)m->currSubMotionId;
         if (st >= 0 && st <= 1 && m->position.y < 280.0f) {
             m->currSubMotionId = 0;
@@ -929,7 +930,7 @@ void kpa_swim(void) {
         m->currSubMotionId = 0x29;
         m->multiTimer = 0x18;
     case 0x29:
-        if ((m->buttonTrg & 0x100) && !kpaFireAttackCheck()) {
+        if ((m->buttonTrg & PAD_BUTTON_A) && !kpaFireAttackCheck()) {
             m->currSubMotionId = 0x14;
         } else {
             m->multiTimer = (s32)m->multiTimer - 1;

@@ -15,6 +15,7 @@
 #include "system.h"
 #include <string.h>
 #include "mario/mariost.h"
+#include <dolphin/pad.h>
 
 typedef struct MotShipWork {
 	u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = N_marioShipGetDir; set to 0/1/2 by shipDecideDir
@@ -866,7 +867,7 @@ void mot_ship(void) {
 			m->currSubMotionId = 0x32;
 		}
 		shipEff(m->baseSpeed);
-		if (m->buttonTrg & 0xa00) {
+		if (m->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_Y)) {
 			if (checkHarbor(&marioGetPtr()->motShip->harborPos)) {
 				m->currSubMotionId = 0x1e;
 			}

@@ -20,6 +20,7 @@
 #include "koopa.h"
 #include "driver/shadowdrv.h"
 #include "manager/evtmgr_cmd.h"
+#include <dolphin/pad.h>
 
 
 
@@ -736,7 +737,7 @@ void mobjMain(void) {
                     goto hitDone;
                 }
                 if (marioFrontActionValidChk() && (entry->flags & 0x40000) && mario->hitobjFront == hitPtr &&
-                    (mario->buttonTrg & 0x100) && !partyFlag) {
+                    (mario->buttonTrg & PAD_BUTTON_A) && !partyFlag) {
                     entry->hitFlag = 0x40000;
                     hit = 1;
                     goto hitDone;

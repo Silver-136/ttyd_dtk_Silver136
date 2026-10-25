@@ -24,6 +24,7 @@ void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h);
 void nameMaskGX(f32 t);
 void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type);
 #include <string.h>
+#include <dolphin/pad.h>
 
 s32 nameMain(void);
 double sin(double);
@@ -315,7 +316,7 @@ s32 nameMain(void) {
 	switch (wp->state) {
 		case 0:
 			if ((wp->flags & 1) && gp->debugFlag == 0) {
-				if (keyGetButtonTrg(0) & 0x100) {
+				if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
 					off = wp->cursorX;
 #ifdef VERSION_G8ME01
 					if (off >= 10 && wp->cursorY >= (s32)((u32)gp->language == 0 ? 4 : 6)) {
@@ -435,7 +436,7 @@ s32 nameMain(void) {
 						wp->cursorY = 7;
 						psndSFXOn((const char*)0xA);
 					}
-				} else if (keyGetButtonTrg(0) & 0x1000) {
+				} else if (keyGetButtonTrg(0) & PAD_BUTTON_START) {
 #ifdef VERSION_G8ME01
 					if ((u32)gp->language == 0) {
 						len = strlen(wp->name) / 2;
@@ -495,7 +496,7 @@ s32 nameMain(void) {
 						psndSFXOn((const char*)0x20014);
 					}
 #endif
-				} else if (keyGetButtonTrg(0) & 0x200) {
+				} else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 #ifdef VERSION_G8ME01
 					if ((u32)gp->language == 0) {
 						if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "\x81\x40", 2)) {
@@ -620,7 +621,7 @@ s32 nameMain(void) {
 			}
 			break;
 		case 100:
-			if (keyGetButtonTrg(0) & 0x100) {
+			if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
 				if (wp->confirmSel == 0) {
 					wp->state++;
 					psndSFXOn((const char*)0x12);
@@ -628,7 +629,7 @@ s32 nameMain(void) {
 					wp->state = 0;
 					psndSFXOn((const char*)0x13);
 				}
-			} else if (keyGetButtonTrg(0) & 0x200) {
+			} else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 				wp->state = 0;
 				psndSFXOn((const char*)0x13);
 			} else if (keyGetDirRep(0) & 0x3000) {

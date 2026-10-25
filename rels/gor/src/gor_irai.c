@@ -18,6 +18,7 @@
 #include "evt/evt_cmd.h"
 #include "gor.h"
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_party_set_dir);
@@ -657,12 +658,12 @@ USER_FUNC(irai_main_func) {
             psndSFXOn((const char*)0x2A);
             break;
         case 1:
-            if ((keyGetButtonTrg(0) & 0x100) && swByteGet(1420) == 0 && !swGet(wp->list[wp->cursor] + 5374)) {
+            if ((keyGetButtonTrg(0) & PAD_BUTTON_A) && swByteGet(1420) == 0 && !swGet(wp->list[wp->cursor] + 5374)) {
                 psndSFXOn((const char*)0x12);
                 wp->state = 100;
                 break;
             }
-            if (keyGetButtonTrg(0) & 0x200) {
+            if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 psndSFXOn((const char*)0x13);
                 wp->state = 101;
                 break;
@@ -710,7 +711,7 @@ USER_FUNC(irai_main_func) {
                     wp->top--;
                 }
             }
-            if (wp->top > 0 && (keyGetButtonTrg(0) & 0x40)) {
+            if (wp->top > 0 && (keyGetButtonTrg(0) & PAD_TRIGGER_L)) {
                 n = 10;
                 if (wp->top < 10) {
                     n = wp->top;
@@ -719,7 +720,7 @@ USER_FUNC(irai_main_func) {
                 wp->cursor -= n;
                 psndSFXOn((const char*)5);
             }
-            if (wp->top < wp->count - 10 && (keyGetButtonTrg(0) & 0x20)) {
+            if (wp->top < wp->count - 10 && (keyGetButtonTrg(0) & PAD_TRIGGER_R)) {
                 n = 10;
                 if (-wp->top + (wp->count - 10) < 10) {
                     n = -wp->top + (wp->count - 10);

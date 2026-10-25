@@ -13,6 +13,7 @@
 #include <string.h>
 #include "mario/mariost.h"
 #include "manager/evtmgr.h"
+#include <dolphin/pad.h>
 #ifdef VERSION_G8ME01
 void marioChkWallAround(Vec* pos, s32 a1, f32 a2, f32 angle, f32 radius, f32 height);
 #endif
@@ -549,12 +550,12 @@ static void flyMain(void) {
 	if ((s32)mp->currSubMotionId != 15) {
 		return;
 	}
-	if (mp->buttonTrg & 0x100) {
+	if (mp->buttonTrg & PAD_BUTTON_A) {
 		mp->currSubMotionId = 51;
 		mp->mot.plane.groundY = mp->position.y;
 		return;
 	}
-	if (mp->buttonTrg & 0x200) {
+	if (mp->buttonTrg & PAD_BUTTON_B) {
 		mp->currSubMotionId = 51;
 		mp->mot.plane.groundY = mp->position.y;
 		return;

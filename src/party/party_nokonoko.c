@@ -26,6 +26,7 @@ double cos(double);
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_small_star_n64.h"
 #include "mario/mariost.h"
+#include <dolphin/pad.h>
 void effKemuTestDrawCam();
 EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy,
@@ -375,7 +376,7 @@ void nokonoko_use(PartyEntry* party) {
             if (party->moveSpeed <= EXT_LIT(float_0_8041b51c, 0.0f)) {
                 party->moveSpeed = 0.0f;
                 if (!(party->flags & 0x80000000)) {
-                    if (mario->buttonHold & 0x400) {
+                    if (mario->buttonHold & PAD_BUTTON_X) {
                         party->useMotionId = 13;
                         party->moveFrames = 0;
                     } else {
@@ -424,7 +425,7 @@ void nokonoko_use(PartyEntry* party) {
                 noko_se_off();
                 break;
             }
-            if (mario->buttonHold & 0x400) {
+            if (mario->buttonHold & PAD_BUTTON_X) {
                 break;
             }
             party->useMotionId = party->work.nokonoko.dashed != 0 ? 80 : 50;

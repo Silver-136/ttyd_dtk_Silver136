@@ -258,11 +258,11 @@ s32 winRootMain(WindowWork* w) {
         dispEntry(CAMERA_2D, 1000.0f, 0, (DispCallback)winRootBgCaptureDisp, w);
         break;
     case 10:
-        if (w->buttonTrg & 0x1200) {
+        if (w->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_START)) {
             if (w->menu[0].state == 100) {
                 w->active = 20;
             }
-        } else if (w->buttonTrg & 0x100) {
+        } else if (w->buttonTrg & PAD_BUTTON_A) {
             if (w->tab[w->tabSel].id == 1 && !w->party.count) {
                 break;
             }
@@ -1052,6 +1052,7 @@ void winFontInit(void);
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
 void* L_msgGetWork(void);
 #include "driver/animdrv.h"
+#include <dolphin/pad.h>
 
 static inline void winBookTex(WindowWork* w, s32 id, f32 x, f32 y, f32 width, f32 height) {
     GXTexObj obj;

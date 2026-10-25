@@ -10,6 +10,7 @@
 #include "system.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_cmd.h"
+#include <dolphin/pad.h>
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
 HitEntry* marioSearchGround(f32* a, f32* b, f32* c, f32 d, f32 e);
@@ -49,7 +50,7 @@ BOOL marioChkHipAttack(void) {
 
     ret = FALSE;
     mario = marioGetPtr();
-    if (mario->jumpPeakAirTime >= 10 && (mario->buttonTrg & 0x100) && pouchGetJumpLv() >= 2) {
+    if (mario->jumpPeakAirTime >= 10 && (mario->buttonTrg & PAD_BUTTON_A) && pouchGetJumpLv() >= 2) {
         ret = TRUE;
     }
     return ret;

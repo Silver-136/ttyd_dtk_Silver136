@@ -15,6 +15,7 @@
 #include <dolphin/mtx.h>
 #include <string.h>
 #include "eff/eff_magic1_n64.h"
+#include <dolphin/pad.h>
 
 
 #ifdef VERSION_G8ME01
@@ -202,7 +203,7 @@ void titleMain(SequenceWork* work) {
 			if (wp2->fadeAlpha > 1.0f) {
 				wp2->fadeAlpha = 1.0f;
 			}
-			if (keyGetButtonTrg(0) & 0x1100) {
+			if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
 				psndSFXOn((const char*)8);
 				wp2->state = 10;
 			}
@@ -265,7 +266,7 @@ void titleMain(SequenceWork* work) {
 				if (keyGetButtonTrg(0) & ~0x400) {
 					wp2->debug = 0;
 				}
-				else if (keyGetButtonTrg(0) & 0x400) {
+				else if (keyGetButtonTrg(0) & PAD_BUTTON_X) {
 					wp2->debug++;
 				}
 				break;
@@ -273,7 +274,7 @@ void titleMain(SequenceWork* work) {
 				if (keyGetButtonTrg(0) & ~0x200) {
 					wp2->debug = 0;
 				}
-				else if (keyGetButtonTrg(0) & 0x200) {
+				else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 					wp2->debug++;
 				}
 				break;
@@ -281,7 +282,7 @@ void titleMain(SequenceWork* work) {
 				if (keyGetButtonTrg(0) & ~0x20) {
 					wp2->debug = 0;
 				}
-				else if (keyGetButtonTrg(0) & 0x20) {
+				else if (keyGetButtonTrg(0) & PAD_TRIGGER_R) {
 					wp2->debug++;
 				}
 				break;
@@ -289,7 +290,7 @@ void titleMain(SequenceWork* work) {
 				if (keyGetButtonTrg(0) & ~0x200) {
 					wp2->debug = 0;
 				}
-				else if (keyGetButtonTrg(0) & 0x200) {
+				else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 					wp2->debug++;
 				}
 				break;
@@ -297,7 +298,7 @@ void titleMain(SequenceWork* work) {
 				if (keyGetButtonTrg(0) & ~0x800) {
 					wp2->debug = 0;
 				}
-				else if (keyGetButtonTrg(0) & 0x800) {
+				else if (keyGetButtonTrg(0) & PAD_BUTTON_Y) {
 					wp2->debug++;
 				}
 				break;
@@ -305,7 +306,7 @@ void titleMain(SequenceWork* work) {
 				if (keyGetButtonTrg(0) & ~0x40) {
 					wp2->debug = 0;
 				}
-				else if (keyGetButtonTrg(0) & 0x40) {
+				else if (keyGetButtonTrg(0) & PAD_TRIGGER_L) {
 					wp2->debug = -1;
 				}
 				break;
@@ -377,7 +378,7 @@ void disp2(CameraId cameraId, void* param) {
 #else
 	pressStartGX(alpha, 0.0f, -110.0f);
 #endif
-	if (wp2->debug < 0 && (keyGetButton(0) & 0x10)) {
+	if (wp2->debug < 0 && (keyGetButton(0) & PAD_TRIGGER_Z)) {
 		FontDrawStart();
 		FontDrawEdge();
 		FontDrawColor((GXColor){0xFA, 0xFA, 0xFA, 0xFF});

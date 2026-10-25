@@ -16,6 +16,7 @@
 #undef pouchEquipCheckBadge
 #endif
 #include "mario/mario_sbr.h"
+#include <dolphin/pad.h>
 s32 pouchGetHP(void);
 s32 pouchEquipCheckBadge(s32 badgeId);
 void kpa_stay(void);
@@ -77,7 +78,7 @@ void mot_stay(void) {
 		return;
 	}
 #ifdef VERSION_G8ME01
-	if (!(mario->buttonHold & 0x100)) {
+	if (!(mario->buttonHold & PAD_BUTTON_A)) {
 		mario->trigFlags &= ~0x200000;
 		mario->trigFlags &= ~0x400000;
 	}
@@ -209,14 +210,14 @@ void mot_stay(void) {
 	}
 #ifdef VERSION_G8ME01
 	if (marioGetHammerLevel() < 2) {
-		if (mario->buttonTrg & 0x200) {
+		if (mario->buttonTrg & PAD_BUTTON_B) {
 			return;
 		}
-	} else if (mario->buttonHold & 0x200) {
+	} else if (mario->buttonHold & PAD_BUTTON_B) {
 		return;
 	}
 #else
-	if (mario->buttonHold & 0x200) {
+	if (mario->buttonHold & PAD_BUTTON_B) {
 		return;
 	}
 #endif
@@ -238,12 +239,12 @@ void mot_stay(void) {
 	if (held) {
 #else
 	held = FALSE;
-	if (mario->buttonHold & 0x100) {
+	if (mario->buttonHold & PAD_BUTTON_A) {
 		mario->mot.stay.holdTimer = mario->mot.stay.holdTimer + 1;
 	} else {
 		mario->mot.stay.holdTimer = 0;
 	}
-	if (mario->buttonHold & 0x100) {
+	if (mario->buttonHold & PAD_BUTTON_A) {
 		if (mario->mot.stay.holdTimer < 10) {
 			held = FALSE;
 		} else {

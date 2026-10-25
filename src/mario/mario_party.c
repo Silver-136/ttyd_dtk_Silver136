@@ -3,6 +3,7 @@
 #include "mario/mario_party.h"
 #include "mario/mario.h"
 #include "party.h"
+#include <dolphin/pad.h>
 
 s32 partyEntry(PartyId id);
 s32 partyEntry2(PartyId id);
@@ -87,7 +88,7 @@ s32 marioUseParty(void) {
     if (party->currentMemberId == 4 && yoshiGetStatus()) {
         return 0;
     }
-    if (!(wp->trigFlags & 2) && (wp->buttonTrg & 0x400)) {
+    if (!(wp->trigFlags & 2) && (wp->buttonTrg & PAD_BUTTON_X)) {
         wp->trigFlags |= 2;
         wp->partyUseDelay = 5;
     }

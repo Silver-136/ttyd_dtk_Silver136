@@ -10,6 +10,7 @@
 #include <string.h>
 #include "libc_decls.h"
 #include <math.h>
+#include <dolphin/pad.h>
 
 f32 revise360(f32);
 f32 distABf(f32, f32, f32, f32);
@@ -760,7 +761,7 @@ void mot_roll(void) {
         roll_upstairs();
         return;
     }
-    if (mario->buttonTrg & 0x200) {
+    if (mario->buttonTrg & PAD_BUTTON_B) {
         if (!rollChk()) {
             mario->currSubMotionId = 0x14;
             CAMF() |= 0x200;
@@ -827,7 +828,7 @@ void mot_roll(void) {
         RW()->spdZ = v27;
     }
     if (mario->hitobjStandOn) {
-        if (!(hitGetAttr(mario->hitobjStandOn) & 0xa00) && mario->airTimer == 0 && (mario->buttonTrg & 0x100)) {
+        if (!(hitGetAttr(mario->hitobjStandOn) & 0xa00) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
             if (!(strcmp(gp->currentMapName, "eki_04") == 0 && __fabsf(mario->groundSlope) >= 40.0f)) {
                 MarioWork* m = marioGetPtr();
                 camFollowYOff();

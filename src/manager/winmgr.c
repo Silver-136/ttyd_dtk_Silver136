@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "win/win_item.h"
+#include <dolphin/pad.h>
 
 typedef struct WinMgrSelectTbl {
     u16 numDescriptors; // 0x0
@@ -1171,7 +1172,7 @@ void select_main(WinMgrEntry* entry) {
             if (prev != sel->cursor) {
                 psndSFXOn((const char*)0x20005);
             }
-            if (keyGetButtonTrg(0) & 0x100) {
+            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 if (sel->items[sel->cursor].flags & 2) {
                     psndSFXOn((const char*)0x20014);
                 }
@@ -1180,7 +1181,7 @@ void select_main(WinMgrEntry* entry) {
                     sel->state++;
                 }
             }
-            else if (keyGetButtonTrg(0) & 0x200) {
+            else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 if (sel->flags & 0x100) {
                     psndSFXOn((const char*)0x20013);
                     sel->flags |= 0x2000;

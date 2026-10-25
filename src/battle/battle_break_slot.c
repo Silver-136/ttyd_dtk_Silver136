@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
+#include <dolphin/pad.h>
 
 typedef struct { s32 v[8]; } SlotCards8;
 typedef struct { s32 v[5]; } SlotCards5;
@@ -378,7 +379,7 @@ void BattleBreakSlot_Main(void) {
 				slot->phaseTimer = 0;
 				psndSFXOff(slot->startSfxId);
 			}
-			if ((keyGetButtonTrg(0) & 0x100) && slot->phaseTimer >= 15) {
+			if ((keyGetButtonTrg(0) & PAD_BUTTON_A) && slot->phaseTimer >= 15) {
 				reel = BattleBreakSlotReelGetPtr(0);
 				for (i = 0; i < 3; i++, reel++) {
 					if (reel->state == 8) {

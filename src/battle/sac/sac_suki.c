@@ -24,6 +24,7 @@
 #include "battle/sac/sac_suki.h"
 #include "battle/battle_database_common.h"
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
 
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 size);
@@ -314,7 +315,7 @@ static void main_base(void) {
             w->timer = 0;
             break;
         }
-        if (keyGetButtonTrg(0) & 0xF00) {
+        if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_Y)) {
             u32 trg = keyGetButtonTrg(0);
             if (w->btn[w->cur].button & trg) {
                 EventEntry* e;

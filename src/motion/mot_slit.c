@@ -6,6 +6,7 @@
 #include "pmario_sound.h"
 #include "system.h"
 #include <string.h>
+#include <dolphin/pad.h>
 
 #ifdef VERSION_G8ME01
 void U_allPartySlitOffReq(void);
@@ -83,11 +84,11 @@ s32 marioSlitButton(void) {
 		return 0;
 	}
 	if (!(mario->dispFlags & 0x1000000)) {
-		if (mario->buttonHold & 0x20) {
+		if (mario->buttonHold & PAD_TRIGGER_R) {
 			return 1;
 		}
 	} else {
-		if (mario->buttonHold & 0x20) {
+		if (mario->buttonHold & PAD_TRIGGER_R) {
 			return 2;
 		}
 		if (mario->triggerR >= 50) {
