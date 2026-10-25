@@ -804,7 +804,11 @@ void btlseqEnd(BattleWork* wp) {
         BattleUnit* mario;
         MarioWork* mw;
         void* pe;
-        if (party) kind = (s32)party->currentKind; else kind = 0;
+        if (party) {
+            kind = (s32)party->currentKind;
+        } else {
+            kind = 0;
+        }
         id = BattleTransPartyId(kind);
         fd = wp->fbatInfo->setup;
         mario = BattleGetMarioPtr(wp);
@@ -817,7 +821,11 @@ void btlseqEnd(BattleWork* wp) {
         BattleSetSeq(wp, SEQ_UNKNOWN, 4);
         mw = marioGetPtr();
         mw->dispFlags &= ~1;
-        if (kind) marioPartyEntry((PartyId)id); else marioPartyKill();
+        if (kind) {
+            marioPartyEntry((PartyId)id);
+        } else {
+            marioPartyKill();
+        }
         pe = partyGetPtr(marioGetPartyId());
         if (pe) ((PartyEntry*)pe)->flags2 &= ~1;
         BtlActRec_JudgeRuleKeep();

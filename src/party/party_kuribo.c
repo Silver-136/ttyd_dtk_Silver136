@@ -77,9 +77,17 @@ USER_FUNC(pre_kurio_use) {
         mobj = mobjHitObjPtrToPtr(hit);
 #define name (mobj->animName)
         if (!strcmp(name, "MOBJ_Lv1Block")) {
-            if (pouchGetHammerLv() < 1) msg = "obj_hlp_block_y_0"; else msg = "obj_hlp_block_y_1";
+            if (pouchGetHammerLv() < 1) {
+                msg = "obj_hlp_block_y_0";
+            } else {
+                msg = "obj_hlp_block_y_1";
+            }
         } else if (!strcmp(name, "MOBJ_Lv1BigBlock")) {
-            if (pouchGetHammerLv() < 1) msg = "obj_hlp_block_y_0"; else msg = "obj_hlp_block_y_1";
+            if (pouchGetHammerLv() < 1) {
+                msg = "obj_hlp_block_y_0";
+            } else {
+                msg = "obj_hlp_block_y_1";
+            }
         } else if (!strcmp(name, "MOBJ_Lv1BigBigBlock")) {
             if (pouchGetHammerLv() < 1) msg = "obj_hlp_block_y_0";
             else if (pouchGetHammerLv() < 2) msg = "obj_hlp_block_y_2";

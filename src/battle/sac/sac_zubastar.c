@@ -333,9 +333,17 @@ s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, 
     f32 dx1 = x2 - x1;
     f32 d, a, t, e1, e2, dx2, b;
     if (dx1 == 0.0f && (x4 - x3) == 0.0f) return 0;
-    if (dx1 != 0.0f) e1 = dx1; else e1 = 1e-5f;
+    if (dx1 != 0.0f) {
+        e1 = dx1;
+    } else {
+        e1 = 1e-5f;
+    }
     dx2 = x4 - x3;
-    if (dx2 != 0.0f) e2 = dx2; else e2 = 1e-5f;
+    if (dx2 != 0.0f) {
+        e2 = dx2;
+    } else {
+        e2 = 1e-5f;
+    }
     a = (y2 - y1) / e1;
     b = (y4 - y3) / e2;
     d = a - b;

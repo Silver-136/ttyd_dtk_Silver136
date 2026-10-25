@@ -277,7 +277,11 @@ void monteCountDisp(void) {
                 y = y / 10;
                 if (y == 0) {
                     s32 sg;
-                    if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) sg = 1; else sg = -1;
+                    if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) {
+                        sg = 1;
+                    } else {
+                        sg = -1;
+                    }
                     y = sg;
                 }
                 yuwp->dispTokens += y;

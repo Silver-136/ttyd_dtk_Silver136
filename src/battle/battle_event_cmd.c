@@ -4702,7 +4702,11 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
         } else if (unit->mMoveTargetPos.x - unit->mMoveStartPos.x < 0.0f) {
             neg = 0;
         } else {
-            if (unit->mMoveTargetPos.y - unit->mMoveStartPos.y < 0.0f) neg = 0; else neg = 1;
+            if (unit->mMoveTargetPos.y - unit->mMoveStartPos.y < 0.0f) {
+                neg = 0;
+            } else {
+                neg = 1;
+            }
         }
         if (d == 0.0f) {
             d = 1.0f;

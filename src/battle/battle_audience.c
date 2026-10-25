@@ -1027,20 +1027,32 @@ void BattleAudienceSettingAudience(void) {
     case 2: {
         s32 q;
         for (q = 0; q < 12; q++) {
-            if (q == 1 || q == 7) weights[q] = 1; else weights[q] = 0;
+            if (q == 1 || q == 7) {
+                weights[q] = 1;
+            } else {
+                weights[q] = 0;
+            }
         }
         hasKind = 0;
         }
         break;
     case 5:
         for (i = 0; i < 12; i++) {
-            if (i == 1) weights[i] = 1; else weights[i] = 0;
+            if (i == 1) {
+                weights[i] = 1;
+            } else {
+                weights[i] = 0;
+            }
         }
         hasKind = 0;
         break;
     case 6:
         for (i = 0; i < 12; i++) {
-            if (audience_kind[i].flags & 1) weights[i] = 2; else weights[i] = 1;
+            if (audience_kind[i].flags & 1) {
+                weights[i] = 2;
+            } else {
+                weights[i] = 1;
+            }
         }
         hasKind = 1;
         break;
@@ -1094,7 +1106,11 @@ void BattleAudienceSettingAudience(void) {
             case 12: id = 11; break;
             }
             for (i = 0; i < 12; i++) {
-                if (i == id) weights[i] = 1; else weights[i] = 0;
+                if (i == id) {
+                    weights[i] = 1;
+                } else {
+                    weights[i] = 0;
+                }
             }
         }
         hasKind = 1;

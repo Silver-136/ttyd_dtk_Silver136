@@ -265,49 +265,109 @@ u16 BattleACGetButtonIcon(s32 button, s32 pressed) {
 
     switch (button) {
     case PAD_BUTTON_A:
-        if (pressed) icon = ICON_BUTTON_A_PRESSED; else icon = ICON_BUTTON_A;
+        if (pressed) {
+            icon = ICON_BUTTON_A_PRESSED;
+        } else {
+            icon = ICON_BUTTON_A;
+        }
         break;
     case PAD_BUTTON_B:
-        if (pressed) icon = ICON_BUTTON_B_PRESSED; else icon = ICON_BUTTON_B;
+        if (pressed) {
+            icon = ICON_BUTTON_B_PRESSED;
+        } else {
+            icon = ICON_BUTTON_B;
+        }
         break;
     case PAD_BUTTON_X:
-        if (pressed) icon = ICON_BUTTON_X_PRESSED; else icon = ICON_BUTTON_X;
+        if (pressed) {
+            icon = ICON_BUTTON_X_PRESSED;
+        } else {
+            icon = ICON_BUTTON_X;
+        }
         break;
     case PAD_BUTTON_Y:
-        if (pressed) icon = ICON_BUTTON_Y_PRESSED; else icon = ICON_BUTTON_Y;
+        if (pressed) {
+            icon = ICON_BUTTON_Y_PRESSED;
+        } else {
+            icon = ICON_BUTTON_Y;
+        }
         break;
     case PAD_TRIGGER_R:
-        if (pressed) icon = ICON_TRIGGER_R_PRESSED; else icon = ICON_TRIGGER_R;
+        if (pressed) {
+            icon = ICON_TRIGGER_R_PRESSED;
+        } else {
+            icon = ICON_TRIGGER_R;
+        }
         break;
     case PAD_TRIGGER_L:
-        if (pressed) icon = ICON_TRIGGER_L_PRESSED; else icon = ICON_TRIGGER_L;
+        if (pressed) {
+            icon = ICON_TRIGGER_L_PRESSED;
+        } else {
+            icon = ICON_TRIGGER_L;
+        }
         break;
     case PAD_TRIGGER_Z:
-        if (pressed) icon = ICON_TRIGGER_Z_PRESSED; else icon = ICON_TRIGGER_Z;
+        if (pressed) {
+            icon = ICON_TRIGGER_Z_PRESSED;
+        } else {
+            icon = ICON_TRIGGER_Z;
+        }
         break;
     case BATTLE_PAD_STICK_UP:
-        if (pressed) icon = ICON_STICK_UP; else icon = ICON_STICK_NEUTRAL;
+        if (pressed) {
+            icon = ICON_STICK_UP;
+        } else {
+            icon = ICON_STICK_NEUTRAL;
+        }
         break;
     case BATTLE_PAD_STICK_DOWN:
-        if (pressed) icon = ICON_STICK_DOWN; else icon = ICON_STICK_NEUTRAL;
+        if (pressed) {
+            icon = ICON_STICK_DOWN;
+        } else {
+            icon = ICON_STICK_NEUTRAL;
+        }
         break;
     case BATTLE_PAD_STICK_LEFT:
-        if (pressed) icon = ICON_STICK_LEFT; else icon = ICON_STICK_NEUTRAL;
+        if (pressed) {
+            icon = ICON_STICK_LEFT;
+        } else {
+            icon = ICON_STICK_NEUTRAL;
+        }
         break;
     case BATTLE_PAD_STICK_RIGHT:
-        if (pressed) icon = ICON_STICK_RIGHT; else icon = ICON_STICK_NEUTRAL;
+        if (pressed) {
+            icon = ICON_STICK_RIGHT;
+        } else {
+            icon = ICON_STICK_NEUTRAL;
+        }
         break;
     case BATTLE_PAD_STICK_UP | BATTLE_PAD_STICK_RIGHT:
-        if (pressed) icon = ICON_STICK_UP_RIGHT; else icon = ICON_STICK_NEUTRAL;
+        if (pressed) {
+            icon = ICON_STICK_UP_RIGHT;
+        } else {
+            icon = ICON_STICK_NEUTRAL;
+        }
         break;
     case BATTLE_PAD_STICK_DOWN | BATTLE_PAD_STICK_RIGHT:
-        if (pressed) icon = ICON_STICK_DOWN_RIGHT; else icon = ICON_STICK_NEUTRAL;
+        if (pressed) {
+            icon = ICON_STICK_DOWN_RIGHT;
+        } else {
+            icon = ICON_STICK_NEUTRAL;
+        }
         break;
     case BATTLE_PAD_STICK_UP | BATTLE_PAD_STICK_LEFT:
-        if (pressed) icon = ICON_STICK_UP_LEFT; else icon = ICON_STICK_NEUTRAL;
+        if (pressed) {
+            icon = ICON_STICK_UP_LEFT;
+        } else {
+            icon = ICON_STICK_NEUTRAL;
+        }
         break;
     case BATTLE_PAD_STICK_DOWN | BATTLE_PAD_STICK_LEFT:
-        if (pressed) icon = ICON_STICK_DOWN_LEFT; else icon = ICON_STICK_NEUTRAL;
+        if (pressed) {
+            icon = ICON_STICK_DOWN_LEFT;
+        } else {
+            icon = ICON_STICK_NEUTRAL;
+        }
         break;
     }
     return icon;

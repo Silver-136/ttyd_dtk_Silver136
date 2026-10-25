@@ -194,7 +194,11 @@ static void main_dl(EffectEntry* effect, Mtx base) {
             GXSetTevColor(GX_TEVREG1, (GXColor){(u8)(s32)effMagic1Blend(a[1], 255, (f32)(s32)((gp->retraceCount << 5) + a[0])),
                                                 (u8)(s32)effMagic1Blend(a[2], 255, (f32)(s32)((gp->retraceCount << 5) + a[0])),
                                                 (u8)(s32)effMagic1Blend(a[3], 255, (f32)(s32)((gp->retraceCount << 5) + a[0])), 255});
-            if (type == 0) sz = 15; else sz = 10;
+            if (type == 0) {
+                sz = 15;
+            } else {
+                sz = 10;
+            }
             PSMTXScale(m98, 2.0f, 0.25f, 1.0f);
             PSMTXTrans(mf8, 0.0f, (f32)(3 - j) * 64.0f / 256.0f, 0.0f);
             PSMTXConcat(mf8, m98, mf8);
