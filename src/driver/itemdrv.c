@@ -278,11 +278,6 @@ BOOL N_itemPickUpFromFieldCheck(void) {
     return FALSE;
 }
 
-typedef struct ItemEffPos {
-    u8 pad[8];
-    Vec position;
-} ItemEffPos;
-
 void itemMain(void) {
     ItemWork* wp = itemGetWork();
     MarioWork* mario;
@@ -406,14 +401,14 @@ void itemMain(void) {
             switch (entry->itemId) {
                 case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77: case 0x78:
                     if (!(entry->flags2 & 0x100)) {
-                        ((ItemEffPos*)entry->effect->userdata)->position.x = entry->position.x;
-                        ((ItemEffPos*)entry->effect->userdata)->position.y = 16.0f + entry->position.y;
-                        ((ItemEffPos*)entry->effect->userdata)->position.z = entry->position.z;
+                        ((EffStarStoneWork*)entry->effect->userdata)->position.x = entry->position.x;
+                        ((EffStarStoneWork*)entry->effect->userdata)->position.y = 16.0f + entry->position.y;
+                        ((EffStarStoneWork*)entry->effect->userdata)->position.z = entry->position.z;
                     }
                     else {
-                        ((ItemEffPos*)entry->effect->userdata)->position.x = entry->position.x;
-                        ((ItemEffPos*)entry->effect->userdata)->position.y = -1000.0f;
-                        ((ItemEffPos*)entry->effect->userdata)->position.z = entry->position.z;
+                        ((EffStarStoneWork*)entry->effect->userdata)->position.x = entry->position.x;
+                        ((EffStarStoneWork*)entry->effect->userdata)->position.y = -1000.0f;
+                        ((EffStarStoneWork*)entry->effect->userdata)->position.z = entry->position.z;
                     }
                     break;
                 default:

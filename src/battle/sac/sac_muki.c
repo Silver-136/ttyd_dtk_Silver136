@@ -100,15 +100,6 @@ typedef struct MukiWork {
     u8 weapon[0xc0];       // 0x408
 } MukiWork;
 
-typedef struct IconEffWork {
-    u8 pad0[8];
-    Vec pos;  // 0x8
-    f32 scl;  // 0x14
-    Vec rot;  // 0x18
-    u8 pad24[0x5f - 0x24];
-    u8 alpha; // 0x5f
-} IconEffWork;
-
 static void disp_3D_alpha(CameraId cam, void* param);
 static void disp_3D(CameraId cam, void* param);
 static void disp_2D(CameraId cam, void* param);
@@ -642,15 +633,15 @@ void main_icon(s32 idx) {
         break;
     }
     if (o->eff) {
-        IconEffWork* e = (IconEffWork*)o->eff->userdata;
-        e->pos.x = o->pos.x;
-        e->pos.y = o->pos.y;
-        e->pos.z = o->pos.z;
+        EffStarStoneWork* e = (EffStarStoneWork*)o->eff->userdata;
+        e->position.x = o->pos.x;
+        e->position.y = o->pos.y;
+        e->position.z = o->pos.z;
         e->rot.x = o->rot.x;
         e->rot.y = o->rot.y;
         e->rot.z = o->rot.z;
-        e->scl = 9.0f * o->scale.x;
-        e->alpha = o->alpha;
+        e->scale = 9.0f * o->scale.x;
+        e->a = o->alpha;
     }
 }
 

@@ -54,13 +54,6 @@ typedef struct YoshiGundanWork {
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_sweat_n64.h"
 #include "data_tables.h"
-typedef struct YoshiSweatWork {
-    s32 pad0;
-    f32 x;
-    f32 y;
-    f32 z;
-} YoshiSweatWork;
-
 
 
 USER_FUNC(_attack_aud);
@@ -2158,9 +2151,9 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
     } else {
         eff = (EffectEntry*)event->userdata[2];
         if (event->userdata[1] < 16) {
-            ((YoshiSweatWork*)eff->userdata)->x = unit->mMoveCurrentPos.x;
-            ((YoshiSweatWork*)eff->userdata)->y = unit->mMoveCurrentPos.y + unit->mSizeMultiplier * (0.5f * BtlUnit_GetHeight(unit));
-            ((YoshiSweatWork*)eff->userdata)->z = unit->mMoveCurrentPos.z;
+            ((EffSweatN64Work*)eff->userdata)->position.x = unit->mMoveCurrentPos.x;
+            ((EffSweatN64Work*)eff->userdata)->position.y = unit->mMoveCurrentPos.y + unit->mSizeMultiplier * (0.5f * BtlUnit_GetHeight(unit));
+            ((EffSweatN64Work*)eff->userdata)->position.z = unit->mMoveCurrentPos.z;
         }
     }
     unit->moveFrames--;
