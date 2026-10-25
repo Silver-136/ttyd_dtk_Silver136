@@ -1,8 +1,7 @@
 Paper Mario: The Thousand-Year Door
-[![Build Status]](https://github.com/LLCOOLT/ttyd/actions/workflows/build.yml) ![Progress] ![Functions Progress] ![Data Progress] ![Linked Progress]
+![Progress] ![Functions Progress] ![Data Progress] ![Linked Progress]
 =============
 
-[Build Status]: https://github.com/LLCOOLT/ttyd/actions/workflows/build.yml/badge.svg?branch=main
 [Progress]: https://img.shields.io/badge/Code-100.00%25-blue
 [Functions Progress]: https://img.shields.io/badge/Functions-100.00%25-blue
 [Data Progress]: https://img.shields.io/badge/Data-100.00%25-blue
@@ -12,17 +11,24 @@ A matching decompilation of Paper Mario: The Thousand-Year Door. The Japanese (G
 
 ## Origins and credit
 
-This project started as a fork of [doldecomp/ttyd](https://github.com/doldecomp/ttyd), which grew out of [NWPlayer123](https://github.com/NWPlayer123)'s original G8MJ01 decomp-toolkit setup. The project structure, build system, splits, symbols and the early decompilation work come from them and their contributors. Many thanks to everyone who worked on it. The US version also draws on [Silver136](https://github.com/Silver-136/ttyd_dtk_Silver136)'s US decompilation. The original MIT licence and copyright notice are kept in [LICENSE](LICENSE).
+This repository continues [LLCOOLT/ttyd](https://github.com/LLCOOLT/ttyd), the first tree to match both releases completely, with the author's permission. That tree started as a fork of [doldecomp/ttyd](https://github.com/doldecomp/ttyd), which grew out of [NWPlayer123](https://github.com/NWPlayer123)'s original G8MJ01 decomp-toolkit setup; the project structure, build system, splits, symbols and the early decompilation work come from them and their contributors, and the US version builds on this repository's earlier US decompilation. Many thanks to everyone who worked on it. The original MIT licence and copyright notice are kept in [LICENSE](LICENSE).
 
-It is now an **independent project and is not affiliated with doldecomp**. All of the code added since the fork was written with the help of AI tools (Anthropic's Claude), so it is kept separate from the upstream project. Please don't take questions about this repository to the doldecomp community; use this repository's issues instead.
+It is an **independent project and is not affiliated with doldecomp**. The code added since the fork was written with the help of AI tools (Anthropic's Claude). Please don't take questions about this repository to the doldecomp community; use this repository's issues instead.
 
-Some functions use small behaviour-identical tricks to reach a byte-identical build; each is marked in the code with a `FAKE` comment and listed in [docs/FAKES.md](docs/FAKES.md).
+## Cleanup
+
+With both releases matching, the work here is cleanup: the C should read like plausible original source, with no matching tricks left, while both builds stay byte-identical to the retail game. Every change is checked against both releases (hashes) and objdiff (100 % code and data). Highlights so far:
+
+- **MSL math headers as precompiled headers.** Every unit of the original carries constants from MSL's paired-single sine/cosine helpers and the sqrtf inline, which the compiler emits when the math headers are precompiled. The units now load `include/msl_rel.pch` / `include/msl_main.pch` (`libs/msl/include/math.h`, `libs/msl/include/dtrigf.h`, our own reconstruction) instead of carrying about 17,000 lines of hand-made copies; the RELs are linked without stripping, as the originals were, so none of the 600 REL `force_active` pragmas is needed.
+- **No dead-strip guards**: functions the linker strips are ordinary C again (the JP demo's linker maps list them as unused).
+- **Real sizes and alignment instead of padding**: tables, strings and GX arrays take their sizes from the US symbol map and their 32-byte alignment from the declaration; most `gap_*` filler objects, section placements and `force_active` pragmas are gone.
+- **Prototypes and types**: calls through casts to another prototype replaced by the right declarations, calls without prototypes fixed, string pools written as literals.
+
+Some functions still use small behaviour-identical tricks to reach a byte-identical build; each is marked in the code with a `FAKE` comment and listed in [docs/FAKES.md](docs/FAKES.md). Descriptive names that are not original names are listed in [docs/NAME_PROVENANCE.md](docs/NAME_PROVENANCE.md).
 
 Beyond matching, the code has been cleaned up for reading: struct fields instead of raw pointer math, named fields instead of placeholders, typed data instead of raw integer tables, and declarations in headers. The [cleanup table in docs/PROGRESS.md](docs/PROGRESS.md#code-quality-cleanup-since-2026-10-23) shows the before and after counts.
 
 ![Progress treemap: one cell per file, sized by code bytes, colored by match percent](docs/progress.svg)
-
-Live progress maps (interactive versions of the treemap above): [JP (G8MJ01)](https://claude.ai/artifact/74tZKbcCQ7WUWFM577oqmY) and [US (G8ME01)](https://claude.ai/artifact/1Hdacn3R1wrwjtwDQRuwKJ)
 
 <!-- progress-start -->
 **Progress** (all source is C; units whose C does not match yet are built from the original code, so the build stays byte-identical):
@@ -113,7 +119,7 @@ Building
 - Clone the repository:
 
   ```sh
-  git clone https://github.com/LLCOOLT/ttyd.git
+  git clone https://github.com/Silver-136/ttyd_dtk_Silver136.git
   ```
 
 - Copy your game's disc image to `orig/G8MJ01` (JP) or `orig/G8ME01` (US).
@@ -167,7 +173,7 @@ Project layout
 
 - `src/`: the main executable, by system: `battle/`, `driver/` (actors, maps, effects, messages and other runtime drivers), `effect/`, `event/` (script commands), `manager/`, `mario/`, `motion/`, `party/`, `sequence/`, `unit/`, `window/`, and core files such as `main.c`, `system.c` and `memory.c`.
 - `rels/<area>/`: one folder per area REL (`aji`, `gor`, `tik`, ...), each with its own `src/` and `include/`. Battle units and area data live under the area that loads them.
-- `include/`: headers for the main executable, mirroring `src/`. Shared types such as the script word (`evt/evt_word.h`) and the address word (`addr_word.h`) are here.
+- `include/`: headers for the main executable, mirroring `src/`. Shared types such as the script word (`evt/evt_word.h`) and the address word (`addr_word.h`) are here, and the two precompiled headers (`msl_main.pch`, `msl_rel.pch`) the game units load.
 - `libs/`: the libraries linked into the game: the Dolphin SDK (`dolsdk2004`), MSL, MusyX, the runtime and TRK.
 - `config/<version>/`: decomp-toolkit configuration per version: `config.yml`, `splits.txt` (which file owns which address range), `symbols.txt` and `build.sha1` (the hashes the build is checked against).
 - `docs/`: progress, the cleanup summary and the list of fakes.
