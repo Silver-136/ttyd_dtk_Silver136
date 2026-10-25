@@ -46,7 +46,6 @@ BOOL effFallCheckHit(EffectEntry* effect);
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
 void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, u32 flags, s32* unitId, s32* partId);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
-f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
 //local prototypes
 void BattleObjectConfig(void);

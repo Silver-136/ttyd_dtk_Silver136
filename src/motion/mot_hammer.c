@@ -578,7 +578,7 @@ void mot_hammer2(void) {
             } else if (mario->hammerChargeLv <= 1) {
                 mario->mot.hammer2.spinSpeed = 15.0f;
             }
-            ((EffectEntry* (*)(f32, f32, f32, f32, BOOL, s32))effUltraHammerEntry)(mario->position.x, 20.0f + mario->position.y, mario->position.z, 1.0f, mario->hammerDir != 0, (s32)mario->multiTimer);
+            effUltraHammerEntry(mario->position.x, 20.0f + mario->position.y, mario->position.z, 1.0f, mario->hammerDir != 0, (s32)mario->multiTimer);
         }
         break;
     case 20:

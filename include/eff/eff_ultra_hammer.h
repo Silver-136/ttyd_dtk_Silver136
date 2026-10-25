@@ -15,4 +15,4 @@ typedef struct EffUltraHammerData {
     s32 update; //0x28, how long until scroll updates
 } EffUltraHammerData;
 
-EffectEntry* effUltraHammerEntry(BOOL mode, s32 counter, f32 x, f32 y, f32 z, f32 scale);
+EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 counter);

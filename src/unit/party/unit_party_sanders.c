@@ -21,7 +21,6 @@
 #include "evt/evt_snd.h"
 #include "battle/battle_status_effect.h"
 
-f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

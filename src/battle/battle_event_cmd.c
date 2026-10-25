@@ -2801,7 +2801,6 @@ USER_FUNC(btlevtcmd_JumpSetting) {
 }
 
 /* movers begin (half_B) */
-f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 void _UnitMoveSoundControl(BattleUnit* unit);
 void _UnitMoveSoundControlEnd(BattleUnit* unit);
 

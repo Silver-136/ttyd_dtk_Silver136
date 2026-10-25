@@ -23,7 +23,6 @@ typedef struct EffSheepWork {
     s32 sfxId;      // 0x30
 } EffSheepWork;
 
-f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
 void effSheepDisp(CameraId cameraId, EffectEntry* effect);
 void effSheepMain(EffectEntry* effect);

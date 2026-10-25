@@ -375,7 +375,7 @@ void mot_jabara(void) {
         if (mario->hammerChargeLv == 3) {
             hitY = marioChkOverheadJabara(&overheadHit, &overheadDist);
         } else {
-            hitY = ((f32 (*)(void))marioChkOverhead)();
+            hitY = marioChkOverhead();
         }
         if (mario->hitobjHead == NULL) {
             if (mario->jumpVelocityY <= 0.0f) {

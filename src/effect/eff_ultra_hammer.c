@@ -424,7 +424,7 @@ u8 wakka_dl_0_size_tbl[] = {
 void effUltraHammerMain(EffectEntry* effect);
 void effUltraHammerDisp(enum CameraId camId, void *param);
 
-EffectEntry* effUltraHammerEntry(BOOL mode, s32 counter, f32 x, f32 y, f32 z, f32 scale) {
+EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 counter) {
     EffectEntry* effect;
     EffUltraHammerData* data;
     s32 i;

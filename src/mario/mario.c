@@ -890,7 +890,6 @@ void marioReInit(void) {
 
 void itemCoinDrop(Vec* position);
 void peachMain(void);
-void marioSearchUnder(void);
 #ifdef VERSION_G8ME01
 #define mario_kemuri_80130474 mario_kemuri // US: global name
 #endif

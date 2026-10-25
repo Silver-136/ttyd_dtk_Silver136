@@ -1468,7 +1468,6 @@ USER_FUNC(_get_move_frame) {
     return EVT_RETURN_DONE;
 }
 
-f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
 USER_FUNC(_get_vivian_attack_position) {
     BattleWork* wp = _battleWorkPointer;

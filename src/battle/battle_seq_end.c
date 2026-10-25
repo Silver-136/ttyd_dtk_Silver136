@@ -224,7 +224,7 @@ void btlseqEnd_DispInit(BattleWork* wp);
 void btlseqEnd_DispMain(CameraId camId, void* param);
 
 void _GetExpIcon_End(SeqEndWork* work);
-EffectEntry* effPointGetEntry(s32 a, s32 exp, f32 x, f32 y, f32 z, s32 c);
+EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 duration);
 
 extern PoseTableEntry pose_table_nokotarou_stay[];
 
@@ -451,7 +451,7 @@ void btlseqEnd(BattleWork* wp) {
                 }
             }
             if (!work->expEffect) {
-                work->expEffect = ((EffectEntry* (*)(f32, f32, f32, s32, s32, s32))effPointGetEntry)(0.0f, 90.0f, 0.0f, 0, work->exp, 0);
+                work->expEffect = effPointGetEntry(0, 0.0f, 90.0f, 0.0f, work->exp, 0);
             }
             BattleSetSeq(wp, SEQ_END, 0x700000B);
             break;

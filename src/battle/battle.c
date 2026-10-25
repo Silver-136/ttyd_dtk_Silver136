@@ -26,10 +26,7 @@ typedef enum EquipFlags {
 } EquipFlags;
 
 BattleWork* _battleWorkPointer;
-#ifdef VERSION_G8ME01
-#endif
 
-f32 BattleGetFloorHeight(f32 x, f32 y, f32 z);
 BattleUnitSetup entryunit_mario = { &unitdata_Mario, 0, {0}, 0x04000002, {-100.0f, 0.0f, -5.0f} };
 BattleUnitSetup entryunit_system = { &unit_system, 0, {0}, 0x04000002 };
 
@@ -459,7 +456,7 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
     BtlUnit_GetHomePos(unit, &x, &y, &z);
     BtlUnit_GetHomePos(party, &x, &dummy, &z);
     BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_PARTNER, 0);
-    y += ((f32 (*)(BattleWork*, f32, f32, f32))BattleGetFloorHeight)(_battleWorkPointer, x, y, z);
+    y += BattleGetFloorHeight(_battleWorkPointer, x, y, z);
     BtlUnit_SetHomePos(unit, x, y, z);
     if (wp->activeUnitId == oldId) {
         wp->activeUnitId = *(s32*)unit;
@@ -811,7 +808,7 @@ s32 BattleGetStockExp(BattleWork* wp) {
     return exp;
 }
 
-f32 BattleGetFloorHeight(f32 x, f32 y, f32 z) {
+f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z) {
     BattleStage* stage = BattleStageGetPtr();
     if (z <= stage->stageSizeZ) {
         return 0.0f;

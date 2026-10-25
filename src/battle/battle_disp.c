@@ -22,7 +22,6 @@
 #include "dolphin/mtx.h"
 #include "driver/shadowdrv.h"
 
-f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
 extern ItemData itemDataTable[];
 

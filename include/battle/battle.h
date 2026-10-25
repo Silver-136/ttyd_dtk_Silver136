@@ -269,6 +269,7 @@ void* BattleAlloc(u32 size);
 #endif
 void BattleIncSeq(BattleWork* wp, BattleSequence seq);
 s32 BattleGetSeq(BattleWork* wp, BattleSequence seq);
+f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 void BattleSetSeq(BattleWork* wp, BattleSequence seq, u32 value);
 void BattleSetMarioParamToFieldBattle(BattleWork* work);
 BOOL Btl_UnitSetup(BattleWork* work);

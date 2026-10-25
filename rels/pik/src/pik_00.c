@@ -22,6 +22,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_telop.h"
 #include "evt/evt_pouch.h"
+#include "mario/mario_hit.h"
 
 #include "driver/imgdrv.h"
 #include "driver/animdrv.h"
@@ -59,7 +60,6 @@ typedef struct ClankData {
     EvtFloat y;
 } ClankData;
 
-HitEntry* marioSearchUnder(void);
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_under);

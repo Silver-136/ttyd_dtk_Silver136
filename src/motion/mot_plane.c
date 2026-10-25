@@ -488,7 +488,6 @@ void mot_plane(void) {
 
 
 double sin(double);
-void marioSearchUnder(void);
 
 #define PI 3.1415927f
 #define SPD (mp->baseSpeed)
@@ -755,7 +754,7 @@ static void flyMain(void) {
     } else {
         mp->motPlane->stallTimer = 0;
     }
-    mp->hitobjUnder = ((HitEntry * (*)(void)) marioSearchUnder)();
+    mp->hitobjUnder = marioSearchUnder();
     if (chkCollision(&mp->mot.plane.groundY)) {
         if (mp->hitobjHead != NULL) {
             mp->currSubMotionId = 40;
