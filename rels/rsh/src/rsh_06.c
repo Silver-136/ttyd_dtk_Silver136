@@ -1084,10 +1084,7 @@ static void ext_moamoa_main(void) {
       }
         if (!sndFlag)
       {
-        // FAKE: named Vec + static zero template instead of &(Vec){...} (drops one coalesced copy; same values)
-        Vec pos;
-        static const Vec z = {0.0f, 0.0f, 0.0f};
-        pos = z;
+        Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = (*pose->mtx)[0][3]; pos.y = (*pose->mtx)[1][3]; pos.z = (*pose->mtx)[2][3];
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG6_MOAMOA_DAMAGED1), &pos);
         sndFlag = 1;
