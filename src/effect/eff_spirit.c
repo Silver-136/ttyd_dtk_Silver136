@@ -9,7 +9,6 @@
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 
-#define INTPL(a, b, m, c, n) ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, m, c, n)
 
 typedef struct EffSpiritWork {
     s32 type;       // 0x0
@@ -109,15 +108,15 @@ void effSpiritMain(EffectEntry* effect) {
         case 1:
             if (work->step < work->steps) {
                 work->step++;
-                work->position.x = INTPL(work->startPos.x, work->endPos.x, 11, work->step, work->steps);
-                work->position.y = INTPL(work->startPos.y, work->endPos.y, 11, work->step, work->steps);
-                work->position.z = INTPL(work->startPos.z, work->endPos.z, 11, work->step, work->steps);
+                work->position.x = intplGetValue(11, work->startPos.x, work->endPos.x, work->step, work->steps);
+                work->position.y = intplGetValue(11, work->startPos.y, work->endPos.y, work->step, work->steps);
+                work->position.z = intplGetValue(11, work->startPos.z, work->endPos.z, work->step, work->steps);
                 {
                     f32 ang = 3.1415927f * ((f32)work->step / (f32)work->steps);
                     ang = sin(ang);
                     work->position.y += 50.0f * ang;
                 }
-                work->scale = INTPL(1.0f, 0.0f, 11, work->step, work->steps);
+                work->scale = intplGetValue(11, 1.0f, 0.0f, work->step, work->steps);
             } else {
                 effDelete(effect);
                 return;
@@ -126,9 +125,9 @@ void effSpiritMain(EffectEntry* effect) {
     }
     switch (work->colorState) {
         case 0:
-            work->r = INTPL(255.0f, 37.0f, 11, work->colorStep, 32);
-            work->g = INTPL(242.0f, 254.0f, 11, work->colorStep, 32);
-            work->b = INTPL(0.0f, 246.0f, 11, work->colorStep, 32);
+            work->r = intplGetValue(11, 255.0f, 37.0f, work->colorStep, 32);
+            work->g = intplGetValue(11, 242.0f, 254.0f, work->colorStep, 32);
+            work->b = intplGetValue(11, 0.0f, 246.0f, work->colorStep, 32);
             work->colorStep++;
             if (work->colorStep >= 32) {
                 work->colorState = 1;
@@ -136,9 +135,9 @@ void effSpiritMain(EffectEntry* effect) {
             }
             break;
         case 1:
-            work->r = INTPL(37.0f, 226.0f, 11, work->colorStep, 32);
-            work->g = INTPL(254.0f, 65.0f, 11, work->colorStep, 32);
-            work->b = INTPL(246.0f, 255.0f, 11, work->colorStep, 32);
+            work->r = intplGetValue(11, 37.0f, 226.0f, work->colorStep, 32);
+            work->g = intplGetValue(11, 254.0f, 65.0f, work->colorStep, 32);
+            work->b = intplGetValue(11, 246.0f, 255.0f, work->colorStep, 32);
             work->colorStep++;
             if (work->colorStep >= 32) {
                 work->colorState = 2;
@@ -146,9 +145,9 @@ void effSpiritMain(EffectEntry* effect) {
             }
             break;
         case 2:
-            work->r = INTPL(226.0f, 255.0f, 11, work->colorStep, 32);
-            work->g = INTPL(65.0f, 242.0f, 11, work->colorStep, 32);
-            work->b = INTPL(255.0f, 0.0f, 11, work->colorStep, 32);
+            work->r = intplGetValue(11, 226.0f, 255.0f, work->colorStep, 32);
+            work->g = intplGetValue(11, 65.0f, 242.0f, work->colorStep, 32);
+            work->b = intplGetValue(11, 255.0f, 0.0f, work->colorStep, 32);
             work->colorStep++;
             if (work->colorStep >= 32) {
                 work->colorState = 0;

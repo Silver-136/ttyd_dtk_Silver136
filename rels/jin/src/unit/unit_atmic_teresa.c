@@ -1,3 +1,4 @@
+#include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_ext.h"
@@ -28,7 +29,7 @@ AtmTeresa* teresa;
 s32 teresa_count;
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, u32 flags, s32 pitch, Vec* pos);
 s32 irand(s32 scalar);
-f32 intplGetValue(s32 mode, f32 start, f32 end, s32 cur, s32 steps);
+
 double cos(double x);
 double sin(double x);
 void teresa_ext_disp(CameraId camera, void* param);

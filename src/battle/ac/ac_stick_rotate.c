@@ -343,7 +343,7 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
     }
     switch (work->actionCommands.mAcState) {
         case 99:
-            disp->iconX = intplGetValue(4, 20 - disp->slideTimer, 20, -300.0f, 30.0f);
+            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             fn(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
@@ -364,7 +364,7 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
                 disp->slideTimer--;
             }
             if (disp->slideTimer <= 40) {
-                disp->iconX = intplGetValue(4, disp->slideTimer, 40, -300.0f, 30.0f);
+                disp->iconX = intplGetValue(4, -300.0f, 30.0f, disp->slideTimer, 40);
             } else {
                 disp->iconX = 30.0f;
             }

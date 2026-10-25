@@ -264,7 +264,6 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-#define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 
 USER_FUNC(battle_evt_majo_disp_on) {
     EvtWord* args = event->args;
@@ -297,7 +296,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
     }
     switch (event->userdata[0]) {
         case 0:
-            part->shadowScale = INTPL(0, event->userdata[1], 30, 0.0f, 2.0f);
+            part->shadowScale = intplGetValue(0, 0.0f, 2.0f, event->userdata[1], 30);
             if (event->userdata[1] == 0) {
                 psndSFXOn_3D("SFX_BTL_VIVIAN_SHADOW1_1", &unit->mPosition);
             }
@@ -308,7 +307,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
             break;
         case 1:
             if (event->userdata[1] <= 30) {
-                part->shadowScale = INTPL(0, event->userdata[1], 30, 0.0f, 2.0f);
+                part->shadowScale = intplGetValue(0, 0.0f, 2.0f, event->userdata[1], 30);
                 event->userdata[1]++;
             }
             if (!animEffectAsync("p_bibi", 1)) {
@@ -327,7 +326,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
             break;
         case 2:
             if (event->userdata[1] <= 30) {
-                part->shadowScale = INTPL(0, event->userdata[1], 30, 0.0f, 2.0f);
+                part->shadowScale = intplGetValue(0, 0.0f, 2.0f, event->userdata[1], 30);
                 event->userdata[1]++;
             }
             if (animPoseGetLoopTimes(animPoseGetAnimPosePtr(pose)->paperId) >= 0.6666667f) {
@@ -337,7 +336,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
             }
             break;
         case 3:
-            part->shadowScale = INTPL(0, event->userdata[1], 15, 2.0f, 1.0f);
+            part->shadowScale = intplGetValue(0, 2.0f, 1.0f, event->userdata[1], 15);
             event->userdata[1]++;
             if (event->userdata[1] > 15) {
                 part->shadowScale = 1.0f;
@@ -1334,7 +1333,7 @@ static EVT_BEGIN(attack_audience_event)
 EVT_END()
 
 
-#define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
+#define intplGetValue(mode, a, b, cur, steps) intplGetValue(mode, a, b, cur, steps)
 
 USER_FUNC(battle_evt_majo_disp_off) {
     EvtWord* args = event->args;
@@ -1357,7 +1356,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
     }
     switch (event->userdata[0]) {
         case 0:
-            part->shadowScale = INTPL(0, event->userdata[1], 30, 1.0f, 2.0f);
+            part->shadowScale = intplGetValue(0, 1.0f, 2.0f, event->userdata[1], 30);
             if (flag != 0) {
                 unit->flags |= 0x10000;
             }
@@ -1368,7 +1367,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
             break;
         case 1:
             if (event->userdata[1] <= 30) {
-                part->shadowScale = INTPL(0, event->userdata[1], 30, 1.0f, 2.0f);
+                part->shadowScale = intplGetValue(0, 1.0f, 2.0f, event->userdata[1], 30);
                 event->userdata[1]++;
             }
             if (!animEffectAsync("p_bibi", 1)) {
@@ -1381,7 +1380,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
             break;
         case 2:
             if (event->userdata[1] <= 30) {
-                part->shadowScale = INTPL(0, event->userdata[1], 30, 1.0f, 2.0f);
+                part->shadowScale = intplGetValue(0, 1.0f, 2.0f, event->userdata[1], 30);
                 event->userdata[1]++;
             }
             if (animPoseGetLoopTimes(animPoseGetAnimPosePtr(pose)->paperId) >= 1.0f) {
@@ -1394,7 +1393,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
             }
             break;
         case 3:
-            part->shadowScale = INTPL(0, event->userdata[1], 20, 2.0f, 0.0f);
+            part->shadowScale = intplGetValue(0, 2.0f, 0.0f, event->userdata[1], 20);
             event->userdata[1]++;
             if (event->userdata[1] > 20) {
                 part->shadowScale = 0.0f;
@@ -1570,9 +1569,9 @@ void _disp_heart(CameraId camera, void* param) {
     if (w->heart.unit != NULL) {
         {
             if (w->heart.cur <= w->heart.start) {
-                scale = intplGetValue(5, w->heart.cur, w->heart.start, 0.0f, 1.2f);
+                scale = intplGetValue(5, 0.0f, 1.2f, w->heart.cur, w->heart.start);
             } else if (w->heart.cur <= w->heart.end) {
-                scale = intplGetValue(0xb, w->heart.cur - w->heart.start, w->heart.end - w->heart.start, 1.2f, 1.0f);
+                scale = intplGetValue(0xb, 1.2f, 1.0f, w->heart.cur - w->heart.start, w->heart.end - w->heart.start);
             } else {
                 scale = 1.0f;
             }

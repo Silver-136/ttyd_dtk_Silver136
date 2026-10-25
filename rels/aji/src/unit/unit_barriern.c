@@ -1,3 +1,4 @@
+#include "system.h"
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -23,7 +24,7 @@
 s32 irand(s32 scalar);
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n);
-f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);
+
 typedef struct BarriernSpline { s32 n; Vec* table; f32 a[5]; f32 b[15]; s32 count; } BarriernSpline;
 void spline_maketable(s32 n, Vec* table, f32* a, f32* b);
 void spline_getvalue(f32 t, Vec* out, s32 n, Vec* table, f32* a, f32* b);
@@ -570,7 +571,7 @@ static USER_FUNC(barriern_zanzou3) {
 }
 
 static inline f32 intpl_ff(f32 start, f32 end, s32 mode, s32 cur, s32 total) {
-    return intplGetValue(start, end, mode, cur, total);
+    return intplGetValue(mode, start, end, cur, total);
 }
 
 static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 type) {
@@ -633,7 +634,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
     {
-        f32 s = intplGetValue(0.8f, scale, mode, zanzou_count[0], frames);
+        f32 s = intplGetValue(mode, 0.8f, scale, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
     }
     for (i = 2, j = 0; i <= 6; i++, j++) {
@@ -642,7 +643,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         part = BtlUnit_GetPartsPtr(unit, i);
         s = intpl_ff(start[j], end[j], mode, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
-        part->color.a = intplGetValue(alphaStart, alphaEnd, 0, zanzou_count[0], frames);
+        part->color.a = intplGetValue(0, alphaStart, alphaEnd, zanzou_count[0], frames);
     }
     if (zanzou_count[0] >= frames) {
         part = BtlUnit_GetPartsPtr(unit, 1);
@@ -741,16 +742,16 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
     {
-        f32 s = intplGetValue(0.8f, scale, 4, zanzou_count[0], frames);
+        f32 s = intplGetValue(4, 0.8f, scale, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
     }
     for (i = 2, j = 0; i <= 6; i++, j++) {
         f32 s;
 
         part = BtlUnit_GetPartsPtr(unit, i);
-        s = intplGetValue(start[j], end[j], mode, zanzou_count[(s32)(n + 1)], frames);
+        s = intplGetValue(mode, start[j], end[j], zanzou_count[(s32)(n + 1)], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
-        part->color.a = intplGetValue(alphaStart, alphaEnd, 0, zanzou_count[(s32)(n + 1)], frames);
+        part->color.a = intplGetValue(0, alphaStart, alphaEnd, zanzou_count[(s32)(n + 1)], frames);
     }
     if (zanzou_count[(s32)(n + 1)] >= frames) {
         part = BtlUnit_GetPartsPtr(unit, 1);
@@ -1493,7 +1494,7 @@ static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
         }
         return FALSE;
     }
-    spline_getvalue(intplGetValue(0.0f, 1.0f, 4, sp->count, 60), &pos, sp->n, sp->table, sp->a, sp->b);
+    spline_getvalue(intplGetValue(4, 0.0f, 1.0f, sp->count, 60), &pos, sp->n, sp->table, sp->a, sp->b);
     sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[4 + n]);
     if (sat == NULL) {
         return FALSE;

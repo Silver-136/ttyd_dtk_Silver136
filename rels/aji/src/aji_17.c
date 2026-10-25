@@ -3360,8 +3360,8 @@ s32 move_center(EventEntry* event, BOOL isFirstCall) {
     }
     elapsed = OSTicksToMilliseconds((u64)(s32)((u32)now - event->userdata[1]));
     if (elapsed < frames) {
-        dance_dt.cx = intplGetValue(11, elapsed, frames, x0, x1);
-        dance_dt.cy = intplGetValue(11, elapsed, frames, z0, z1);
+        dance_dt.cx = intplGetValue(11, x0, x1, elapsed, frames);
+        dance_dt.cy = intplGetValue(11, z0, z1, elapsed, frames);
         return EVT_RETURN_BLOCK;
     }
     dance_dt.cx = x1;

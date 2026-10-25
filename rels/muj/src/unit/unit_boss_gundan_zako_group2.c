@@ -1,3 +1,4 @@
+#include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_camera.h"
@@ -14,7 +15,7 @@
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_weapon_power.h"
 #include "pmario_sound.h"
-f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);
+
 s32 irand(s32 scalar);
 #include "dolphin/mtx.h"
 #include "battle/battle_database_common.h"
@@ -469,7 +470,7 @@ USER_FUNC(down_ceil) {
         *ceil &= ~0x20;
         work->sfx = work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
-    body->mPosition.y = wire->mPosition.y = intplGetValue(work->start.y, work->end.y, 4, work->steps - work->timer, work->steps);
+    body->mPosition.y = wire->mPosition.y = intplGetValue(4, work->start.y, work->end.y, work->steps - work->timer, work->steps);
     work->timer--;
     if (work->timer < 0) {
         psndSFXOff(work->sfx);
@@ -491,7 +492,7 @@ USER_FUNC(up_ceil) {
         *ceil |= 0x20;
         work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
-    body->mPosition.y = wire->mPosition.y = intplGetValue(work->start.y, work->end.y, 4, work->steps - work->timer, work->steps);
+    body->mPosition.y = wire->mPosition.y = intplGetValue(4, work->start.y, work->end.y, work->steps - work->timer, work->steps);
     work->timer--;
     if (work->timer < 0) {
         psndSFXOff(work->sfx);
@@ -509,7 +510,7 @@ USER_FUNC(shake_ceil) {
         work->end = (Vec){0.0f, 135.0f, 0.0f};
         work->timer = 0;
     }
-    body->mPosition.y = wire->mPosition.y = intplGetValue(work->start.y, work->end.y, 4, work->timer, 9);
+    body->mPosition.y = wire->mPosition.y = intplGetValue(4, work->start.y, work->end.y, work->timer, 9);
     work->timer++;
     if (work->timer > 17) {
         body->mPosition.y = wire->mPosition.y = 130.0f;
@@ -590,8 +591,8 @@ void zakogun_ext_main2(void) {
                 zako->state = 25;
                 zako->timer = zako->timerMax = 8;
             case 25:
-                zako->pos.x = intplGetValue(zako->start.x, zako->target.x, 4, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.y = intplGetValue(zako->start.y, zako->target.y, 4, (zako->timerMax - zako->timer) * 2, zako->timerMax);
+                zako->pos.x = intplGetValue(4, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.y = intplGetValue(4, zako->start.y, zako->target.y, (zako->timerMax - zako->timer) * 2, zako->timerMax);
                 zako->timer--;
                 if (zako->timer < 0) {
                     BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
@@ -691,8 +692,8 @@ void zakogun_ext_main2(void) {
                 zako->timer = zako->timerMax = 8;
                 btl_camera_set_mode(0, 0);
             case 55:
-                zako->pos.x = intplGetValue(zako->start.x, zako->target.x, 4, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.y = intplGetValue(zako->start.y, zako->target.y, 4, (zako->timerMax - zako->timer) * 2, zako->timerMax);
+                zako->pos.x = intplGetValue(4, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.y = intplGetValue(4, zako->start.y, zako->target.y, (zako->timerMax - zako->timer) * 2, zako->timerMax);
                 zako->timer--;
                 if (zako->timer < 0) {
                     if (zako->pos.x <= zako->home.x) {
@@ -746,8 +747,8 @@ void zakogun_ext_main2(void) {
                 zako->timer = zako->timerMax = 20;
                 zako->vel.y = (2.0f * (zako->target.y - zako->start.y) - -200.0f) / 40.0f;
             case 85:
-                zako->pos.x = intplGetValue(zako->start.x, zako->target.x, 0, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.z = intplGetValue(zako->start.z, zako->target.z, 0, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.x = intplGetValue(0, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(0, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
                 zako->pos.y += zako->vel.y;
                 zako->vel.y += -0.5f;
                 zako->timer--;
@@ -764,8 +765,8 @@ void zakogun_ext_main2(void) {
                 zako->timer = zako->timerMax = 10;
                 zako->vel.y = (2.0f * (zako->target.y - zako->start.y) - -50.0f) / 20.0f;
             case 87:
-                zako->pos.x = intplGetValue(zako->start.x, zako->target.x, 0, zako->timerMax - zako->timer, zako->timerMax);
-                zako->pos.z = intplGetValue(zako->start.z, zako->target.z, 0, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.x = intplGetValue(0, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(0, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
                 zako->pos.y += zako->vel.y;
                 zako->vel.y += -0.5f;
                 zako->timer--;

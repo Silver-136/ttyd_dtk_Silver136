@@ -25,7 +25,6 @@
 #include "battle/battle_audience.h"
 
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
-#define INTPL(m, c, n, a, b) ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, m, c, n)
 
 typedef struct ZSObj {
     /* 0x00 */ s32 a;
@@ -178,17 +177,17 @@ s32 main_star(void) {
     case 2:
         w->timer++;
         if (w->timer <= 100) {
-            w->pos.x = INTPL(0, w->timer, 100, w->start.x, w->end.x);
-            w->pos.y = INTPL(0, w->timer, 100, w->start.y, w->end.y);
-            w->pos.z = INTPL(0, w->timer, 100, w->start.z, w->end.z);
-            w->scale.x = w->scale.y = w->scale.z = INTPL(0, w->timer, 100, 0.0f, 2.0f);
+            w->pos.x = intplGetValue(0, w->start.x, w->end.x, w->timer, 100);
+            w->pos.y = intplGetValue(0, w->start.y, w->end.y, w->timer, 100);
+            w->pos.z = intplGetValue(0, w->start.z, w->end.z, w->timer, 100);
+            w->scale.x = w->scale.y = w->scale.z = intplGetValue(0, 0.0f, 2.0f, w->timer, 100);
         } else {
             w->pos.x = w->end.x;
             w->pos.y = w->end.y;
             w->pos.z = w->end.z;
             w->scale.x = w->scale.y = w->scale.z = 2.0f;
         }
-        w->rot.y = INTPL(4, w->timer, 120, 0.0f, 2160.0f);
+        w->rot.y = intplGetValue(4, 0.0f, 2160.0f, w->timer, 120);
         if (w->timer >= 120) {
             w->stone_state = 3;
             w->timer = 0;
@@ -198,7 +197,7 @@ s32 main_star(void) {
         break;
     case 3:
         w->timer++;
-        w->pos.y = INTPL(1, w->timer, 60, w->start.y, w->end.y);
+        w->pos.y = intplGetValue(1, w->start.y, w->end.y, w->timer, 60);
         if (w->timer >= 60) {
             w->stone_state = 4;
             w->timer = 0;
@@ -593,7 +592,7 @@ USER_FUNC(zubastar_main) {
     case 6:
         w->cursor.f4++;
         w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = INTPL(4, w->cursor.f4, 15, 300.0f, 300.0f);
+        w->cursor.pos.y = intplGetValue(4, 300.0f, 300.0f, w->cursor.f4, 15);
         w->cursor.pos.z = 0.0f;
         if (w->cursor.f4 >= 15) w->cursor.timer = 10;
         break;
@@ -606,7 +605,7 @@ USER_FUNC(zubastar_main) {
     case 16:
         w->cursor.f4++;
         w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = INTPL(4, w->cursor.f4, 15, 300.0f, 300.0f);
+        w->cursor.pos.y = intplGetValue(4, 300.0f, 300.0f, w->cursor.f4, 15);
         w->cursor.pos.z = 0.0f;
         if (w->cursor.f4 >= 15) w->cursor.timer = 20;
         break;
@@ -628,8 +627,8 @@ USER_FUNC(zubastar_main) {
         psndSFXOn("SFX_BTL_SAC_ZUBA_STAR2");
     case 26:
         w->ltimer++;
-        w->cursor.pos.x = INTPL(0, w->ltimer, 15, w->lstart.x, w->lend.x);
-        w->cursor.pos.y = INTPL(0, w->ltimer, 15, w->lstart.y, w->lend.y);
+        w->cursor.pos.x = intplGetValue(0, w->lstart.x, w->lend.x, w->ltimer, 15);
+        w->cursor.pos.y = intplGetValue(0, w->lstart.y, w->lend.y, w->ltimer, 15);
         {
             ZSLine* l = &w->lines[w->lidx];
             l->x1 = w->cursor.pos.x;
@@ -672,7 +671,7 @@ USER_FUNC(zubastar_main) {
         break;
     case 6:
         w->gaugeTimer++;
-        w->gaugePos.x = INTPL(4, w->gaugeTimer, 30, -1000.0f, 50.0f);
+        w->gaugePos.x = intplGetValue(4, -1000.0f, 50.0f, w->gaugeTimer, 30);
         if (w->gaugeTimer >= 30) w->gaugeState = 10;
         break;
     case 10:
@@ -701,7 +700,7 @@ USER_FUNC(zubastar_main) {
         w->gaugeAcc = 0.0f;
         w->fa1 = 0;
         w->gaugeTimer++;
-        w->gaugePos.x = INTPL(4, w->gaugeTimer, 30, 50.0f, -1000.0f);
+        w->gaugePos.x = intplGetValue(4, 50.0f, -1000.0f, w->gaugeTimer, 30);
         if (w->gaugeTimer >= 30) w->gaugeTimer = 30;
         break;
     case 16:
@@ -717,7 +716,7 @@ USER_FUNC(zubastar_main) {
         break;
     case 21:
         w->gaugeTimer++;
-        w->gaugePos.x = INTPL(4, w->gaugeTimer, 30, 50.0f, -1000.0f);
+        w->gaugePos.x = intplGetValue(4, 50.0f, -1000.0f, w->gaugeTimer, 30);
         if (w->gaugeTimer >= 30) w->gaugeTimer = 30;
         break;
     }
@@ -791,8 +790,8 @@ USER_FUNC(zubastar_bomb) {
             break;
         }
         case 5:
-            t->pos.x = INTPL(0, t->f48, t->f4c, t->start.x, t->end.x);
-            t->pos.z = INTPL(0, t->f48, t->f4c, t->start.z, t->end.z);
+            t->pos.x = intplGetValue(0, t->start.x, t->end.x, t->f48, t->f4c);
+            t->pos.z = intplGetValue(0, t->start.z, t->end.z, t->f48, t->f4c);
             t->pos.y += t->vy;
             t->rot += t->rotSpeed;
             t->vy += -1.25f;
@@ -942,9 +941,9 @@ void zubastar_disp2D(CameraId cam, void* param) {
         s32 a;
         l = &w->lines[i];
         if (l->timer <= 30) {
-            a = INTPL(0, l->timer, 30, 128.0f, 255.0f);
+            a = intplGetValue(0, 128.0f, 255.0f, l->timer, 30);
         } else {
-            a = INTPL(0, l->timer - 30, 30, 255.0f, 128.0f);
+            a = intplGetValue(0, 255.0f, 128.0f, l->timer - 30, 30);
         }
         if (l->state == 5) {
             setG(a);

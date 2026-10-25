@@ -77,7 +77,7 @@ void effLaserMain(EffectEntry* effect) {
             break;
         case 1:
             work->timer++;
-            work->position.y = intplGetValue(1, work->timer, 60, 500.0f + work->target.y, work->target.y);
+            work->position.y = intplGetValue(1, 500.0f + work->target.y, work->target.y, work->timer, 60);
             if (work->timer >= 60) {
                 animPoseSetAnim(work->poseId, "A_1", TRUE);
                 animPoseSetLocalTimeRate(work->poseId, 0.5f);

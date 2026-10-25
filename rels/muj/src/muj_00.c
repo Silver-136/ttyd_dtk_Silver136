@@ -510,8 +510,8 @@ void tobikakari_seq00(NanNPC* npc) {
             elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
             if (elapsed < npc->duration) {
                 t = (f32)elapsed / (f32)npc->duration;
-                npc->pos.x = intplGetValue(0, elapsed, npc->duration, npc->start.x, npc->target.x);
-                npc->pos.z = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(npc->start.z, npc->target.z, 0, elapsed, npc->duration);
+                npc->pos.x = intplGetValue(0, npc->start.x, npc->target.x, elapsed, npc->duration);
+                npc->pos.z = intplGetValue(0, npc->start.z, npc->target.z, elapsed, npc->duration);
                 npc->pos.y = npc->start.y + t * (npc->vy * t + npc->dy);
             } else {
                 npc->pos = npc->target;

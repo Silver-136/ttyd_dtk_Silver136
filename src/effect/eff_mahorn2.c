@@ -8,7 +8,7 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
-#include <string.h>
+#include <string.h>
 #include "version.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
@@ -131,7 +131,7 @@ void effMahorn2Main(EffectEntry *effect) {
                 break;
             case 2:
                 if (data->intplStep < 90) {
-                    data->scale = intplGetValue(11, ++data->intplStep, 45, 0.0f, 3.0f);
+                    data->scale = intplGetValue(11, 0.0f, 3.0f, ++data->intplStep, 45);
                 }
                 break;
             case 3:

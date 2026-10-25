@@ -1545,7 +1545,7 @@ void BattleAudienceItemCtrlProcess(void) {
                 {
                 Vec v = {0.0f, 0.0f, 0.0f};
                 v.x = ((BattleAudienceMember*)aud)->drawPosX + kd->itemOffsetX;
-                ox = intplGetValue(0, k, 5, -10.0f, 0.0f);
+                ox = intplGetValue(0, -10.0f, 0.0f, k, 5);
                 { f32 t = ((BattleAudienceMember*)aud)->drawPosY + kd->itemOffsetY; v.y = t + ox; }
                 v.z = 1.0f + ((BattleAudienceMember*)aud)->drawPosZ;
                 it->position = v;
@@ -1792,11 +1792,11 @@ void BattleAudienceApSrcCtrlProcess(void) {
         case 5:
             (s->timer)++;
             dx = s->startPos.x; dy = s->targetPos.x;
-            s->position.x = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(dx, dy, 5, s->timer, s->duration);
+            s->position.x = intplGetValue(5, dx, dy, s->timer, s->duration);
             dx = s->startPos.y; dy = s->targetPos.y;
-            s->position.y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(dx, dy, 5, s->timer, s->duration);
+            s->position.y = intplGetValue(5, dx, dy, s->timer, s->duration);
             if (s->timer >= s->duration - 20) {
-                s->scale.y = intplGetValue(4, s->timer - (s->duration - 20), 10, 0.9f, 0.8f);
+                s->scale.y = intplGetValue(4, 0.9f, 0.8f, s->timer - (s->duration - 20), 10);
             }
             if (s->timer >= s->duration) {
                 s->state = 10;
@@ -1824,7 +1824,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
             break;
         case 15:
             (s->timer)++;
-            s->radius = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(s->startRadius, 0.0f, 4, s->timer, s->duration);
+            s->radius = intplGetValue(4, s->startRadius, 0.0f, s->timer, s->duration);
             s->angle += s->angleSpeed;
             if (s->angle < 0.0f) {
                 s->angle += 6.283184f;
@@ -1841,7 +1841,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
             break;
         case 20:
             (s->timer)++;
-            s->alpha = intplGetValue(4, s->timer, s->duration, 128.0f, 0.0f);
+            s->alpha = intplGetValue(4, 128.0f, 0.0f, s->timer, s->duration);
             if (s->timer >= s->duration) {
                 s->flags = 0;
                 pouchAddAP(1);
@@ -1936,7 +1936,7 @@ void BattleAudienceWinCtrlProcess(void) {
             win->slideTimer = 0;
         }
     }
-    win->x = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(-500.0f, -280.0f, 4, win->slideTimer, 15);
+    win->x = intplGetValue(4, -500.0f, -280.0f, win->slideTimer, 15);
     win->y = -160.0f;
     win->z = 0.0f;
 }
@@ -3873,8 +3873,7 @@ void BattleAudienceSoundMain(void) {
         }
         if (sound->mForceFadeLength > 0) {
             sound->mForceFadeTimer++;
-            sound->mVolumeMultiplier = intplGetValue(0, sound->mForceFadeTimer, sound->mForceFadeLength,
-                                                     sound->mFadeStartVolumeMultiplier, sound->mFadeEndVolumeMultiplier);
+            sound->mVolumeMultiplier = intplGetValue(0, sound->mFadeStartVolumeMultiplier, sound->mFadeEndVolumeMultiplier, sound->mForceFadeTimer, sound->mForceFadeLength);
             psndSFX_vol(sound->sfxId, (u8)(sound->mCurrentBaseSfxVolume * sound->mVolumeMultiplier / 100));
             if (sound->mForceFadeTimer >= sound->mForceFadeLength) {
                 sound->mForceFadeLength = 0;
@@ -3886,8 +3885,7 @@ void BattleAudienceSoundMain(void) {
                 sound->mFadeEndVolumeMultiplier = 0;
             }
             if (sound->duration <= sound->mFadeoutTime) {
-                sound->mVolumeMultiplier = intplGetValue(0, sound->mFadeoutTime - sound->duration, sound->mFadeoutTime,
-                                                         sound->mFadeStartVolumeMultiplier, sound->mFadeEndVolumeMultiplier);
+                sound->mVolumeMultiplier = intplGetValue(0, sound->mFadeStartVolumeMultiplier, sound->mFadeEndVolumeMultiplier, sound->mFadeoutTime - sound->duration, sound->mFadeoutTime);
                 psndSFX_vol(sound->sfxId, (u8)(sound->mCurrentBaseSfxVolume * sound->mVolumeMultiplier / 100));
             }
             sound->duration--;

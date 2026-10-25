@@ -1617,11 +1617,11 @@ USER_FUNC(_lvup_spot_move) {
         event->userdata[1]++;
     case 3:
         event->userdata[4]--;
-        e->pos.x = intplGetValue(2, event->userdata[4], 21, 0.0f, event->userdata[2]);
-        e->pos.y = intplGetValue(2, event->userdata[4], 21, -25.0f, event->userdata[3]);
+        e->pos.x = intplGetValue(2, 0.0f, event->userdata[2], event->userdata[4], 21);
+        e->pos.y = intplGetValue(2, -25.0f, event->userdata[3], event->userdata[4], 21);
         {
             GXColor c = {0xFF, 0xFF, 0xFF, 0x00};
-            c.a = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(255.0f, 128.0f, 0, event->userdata[4], 21);
+            c.a = intplGetValue(0, 255.0f, 128.0f, event->userdata[4], 21);
             e->color = c;
         }
         if (event->userdata[4] <= 0) {
@@ -1647,7 +1647,7 @@ USER_FUNC(_lvup_spot_off) {
     for (i = 0; i < 5; i++) {
         GXColor c = {0xFF, 0xFF, 0xFF, 0x00};
         e = (SeqEndSpot*)spot->entries + i;
-        c.a = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, event->userdata[2], 2, event->userdata[1], event->userdata[0]);
+        c.a = intplGetValue(2, 0.0f, event->userdata[2], event->userdata[1], event->userdata[0]);
 
         e->color = c;
         if (e->color.a == 0) {
@@ -1675,7 +1675,7 @@ USER_FUNC(_lvup_object_noselect_delete) {
     if (event->userdata[0] < event->userdata[2]) {
         for (i = 0; i < work->objCount; i++) {
             if (i != sel) {
-                work->objs[i].color.a = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(255.0f, 0.0f, 5, event->userdata[0], event->userdata[2]);
+                work->objs[i].color.a = intplGetValue(5, 255.0f, 0.0f, event->userdata[0], event->userdata[2]);
 
             }
         }
@@ -1706,9 +1706,9 @@ USER_FUNC(_lvup_object_select_move) {
     }
     event->userdata[0]++;
     if (event->userdata[0] < event->userdata[1]) {
-        obj->pos.x = intplGetValue(5, event->userdata[0], event->userdata[1], event->userdata[2], event->userdata[4]);
-        obj->pos.z = intplGetValue(5, event->userdata[0], event->userdata[1], event->userdata[3], event->userdata[5]);
-        obj->rot.y = reviseAngle(((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 2160.0f, 5, event->userdata[0], event->userdata[1]));
+        obj->pos.x = intplGetValue(5, event->userdata[2], event->userdata[4], event->userdata[0], event->userdata[1]);
+        obj->pos.z = intplGetValue(5, event->userdata[3], event->userdata[5], event->userdata[0], event->userdata[1]);
+        obj->rot.y = reviseAngle(intplGetValue(5, 0.0f, 2160.0f, event->userdata[0], event->userdata[1]));
         return 0;
     }
     obj->pos.x = event->userdata[4];
@@ -1732,9 +1732,9 @@ USER_FUNC(_lvup_object_decide_bound) {
     if (event->userdata[0] < event->userdata[2]) {
         half = event->userdata[2] / 2;
         if (event->userdata[0] < half) {
-            obj->pos.y = event->userdata[1] + intplGetValue(5, event->userdata[0], half, 0.0f, event->userdata[3]);
+            obj->pos.y = event->userdata[1] + intplGetValue(5, 0.0f, event->userdata[3], event->userdata[0], half);
         } else {
-            obj->pos.y = event->userdata[1] + intplGetValue(5, event->userdata[0] - half, half, event->userdata[3], 0.0f);
+            obj->pos.y = event->userdata[1] + intplGetValue(5, event->userdata[3], 0.0f, event->userdata[0] - half, half);
         }
         return 0;
     }

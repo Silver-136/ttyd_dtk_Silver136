@@ -218,7 +218,7 @@ void battleAcDisp_PendulumCraneTiming(CameraId cameraId, void* param) {
     disp = &ac->disp;
     switch (ac->mAcState) {
         case 99:
-            disp->iconX = intplGetValue(4, 20 - disp->slideTimer, 20, -300.0f, 30.0f);
+            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case 100:
         case 1000:
             actionCommandDisp(disp->iconX, disp->iconY);
@@ -229,7 +229,7 @@ void battleAcDisp_PendulumCraneTiming(CameraId cameraId, void* param) {
         case 1002:
         case 1003:
             if (disp->slideTimer >= 40) {
-                disp->iconX = intplGetValue(4, disp->slideTimer - 40, 20, 30.0f, -300.0f);
+                disp->iconX = intplGetValue(4, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

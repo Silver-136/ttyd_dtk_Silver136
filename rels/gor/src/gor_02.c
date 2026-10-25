@@ -1,3 +1,4 @@
+#include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -55,7 +56,7 @@ f32 reviseAngle(f32 angle);
 typedef struct MonosiriFollow { s32 seq; s32* list; s32 count; } MonosiriFollow;
 #define FOLLOW (follow)
 void door_position_sub(s32 type, const char* mapObj, const char* hitA, const char* hitB, Vec* outPos, Vec* inPos, s32 flag);
-f32 intplGetValue(s32 mode, s32 currStep, f32 start, f32 end, s32 steps);
+
 typedef struct DoorColorWork { GXColor color; GXColor color2; } DoorColorWork;
 DoorColorWork* _door;
 static u8* _ap;
@@ -577,9 +578,9 @@ static USER_FUNC(wariai_enzan_1f_intpl) {
             evtSetFloat(event, out, c);
             return EVT_RETURN_DONE;
         }
-        r = 1.0f - intplGetValue(t, b - a, 1.0f, 0.0f, b);
+        r = 1.0f - intplGetValue(t, 1.0f, 0.0f, b - a, b);
     } else {
-        r = intplGetValue(t, b - a, 0.0f, 1.0f, b);
+        r = intplGetValue(t, 0.0f, 1.0f, b - a, b);
     }
     evtSetFloat(event, out, (1.0f - r) * c + r * d);
     return EVT_RETURN_DONE;

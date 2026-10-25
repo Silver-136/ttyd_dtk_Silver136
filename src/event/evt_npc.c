@@ -762,8 +762,8 @@ USER_FUNC(evt_npc_jump_position_nohit) {
 
     if (elapsed < duration) {
         t = (f32)elapsed / (f32)duration;
-        npc->position.x = intplGetValue(0, (s32)elapsed, duration, npc->jumpStartPos.x, targetX);
-        npc->position.z = intplGetValue(0, (s32)elapsed, duration, npc->jumpStartPos.z, targetZ);
+        npc->position.x = intplGetValue(0, npc->jumpStartPos.x, targetX, (s32)elapsed, duration);
+        npc->position.z = intplGetValue(0, npc->jumpStartPos.z, targetZ, (s32)elapsed, duration);
         npc->position.y = npc->jumpStartPos.y + t * ((event->userdataf[1] * t) + event->userdataf[2]);
         return EVT_RETURN_BLOCK;
     }

@@ -1,3 +1,4 @@
+#include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -16,7 +17,7 @@
 #include "eff/n64/eff_vapor_n64.h"
 #include "manager/evtmgr_cmd.h"
 
-f32 intplGetValue(f32 start, f32 end, s32 mode, s32 currStep, s32 steps);
+
 s32 irand(s32 scalar);
 
 static USER_FUNC(shadow_scale_memory);
@@ -687,7 +688,7 @@ static USER_FUNC(shadow_scale_return) {
     if (isFirstCall) {
         unit->work[1] = 0;
     }
-    part->shadowScale = intplGetValue(0.0f, unit->work[0], 0, unit->work[1], 15);
+    part->shadowScale = intplGetValue(0, 0.0f, unit->work[0], unit->work[1], 15);
     if (unit->work[1] >= 15) {
         return EVT_RETURN_DONE;
     }
@@ -703,7 +704,7 @@ static USER_FUNC(shadow_scale_small) {
     if (isFirstCall) {
         unit->work[1] = 0;
     }
-    part->shadowScale = intplGetValue(unit->work[0], 0.0f, 0, unit->work[1], 15);
+    part->shadowScale = intplGetValue(0, unit->work[0], 0.0f, unit->work[1], 15);
     if (unit->work[1] >= 15) {
         return EVT_RETURN_DONE;
     }

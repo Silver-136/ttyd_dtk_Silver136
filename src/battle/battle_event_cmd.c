@@ -6499,28 +6499,28 @@ USER_FUNC(btlevtcmd_SacBgsetMove) {
                 case 1:
                     if (on) {
                         if (obj->mPosition.x >= 0.0f) {
-                            val = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(450.0f, 0.0f, mode, event->userdata[0], 45);
+                            val = intplGetValue(mode, 450.0f, 0.0f, event->userdata[0], 45);
                         }
                         else {
-                            val = -((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(450.0f, 0.0f, mode, event->userdata[0], 45);
+                            val = -intplGetValue(mode, 450.0f, 0.0f, event->userdata[0], 45);
                         }
                     }
                     else {
                         if (obj->mPosition.x >= 0.0f) {
-                            val = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 450.0f, mode, event->userdata[0], 45);
+                            val = intplGetValue(mode, 0.0f, 450.0f, event->userdata[0], 45);
                         }
                         else {
-                            val = -((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 450.0f, mode, event->userdata[0], 45);
+                            val = -intplGetValue(mode, 0.0f, 450.0f, event->userdata[0], 45);
                         }
                     }
                     obj->positionOffset2.x = val;
                     break;
                 case 2:
                     if (on) {
-                        val = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(260.0f, 0.0f, mode, event->userdata[0], 45);
+                        val = intplGetValue(mode, 260.0f, 0.0f, event->userdata[0], 45);
                     }
                     else {
-                        val = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 260.0f, mode, event->userdata[0], 45);
+                        val = intplGetValue(mode, 0.0f, 260.0f, event->userdata[0], 45);
                     }
                     obj->positionOffset2.y = val;
                     break;

@@ -111,9 +111,9 @@ USER_FUNC(evt_gazigazi_move_position) {
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0]);
     if (elapsed < msec) {
-        x0 = intplGetValue(mode, (s32)elapsed, msec, x0, x1);
-        y0 = intplGetValue(mode, (s32)elapsed, msec, y0, y1);
-        z0 = intplGetValue(mode, (s32)elapsed, msec, z0, z1);
+        x0 = intplGetValue(mode, x0, x1, (s32)elapsed, msec);
+        y0 = intplGetValue(mode, y0, y1, (s32)elapsed, msec);
+        z0 = intplGetValue(mode, z0, z1, (s32)elapsed, msec);
         {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = x0;

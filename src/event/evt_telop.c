@@ -62,7 +62,7 @@ USER_FUNC(evt_telop_entry) {
     case 1:
         ms = ((u32)event->lifetime - (u32)wp->time) / (OS_TIMER_CLOCK / 1000);
         if (ms < 1000) {
-            wp->alpha = intplGetValue(11, ms, 1000, -256.0f, 256.0f);
+            wp->alpha = intplGetValue(11, -256.0f, 256.0f, ms, 1000);
         } else {
             wp->time = event->lifetime;
             event->userdata[0]++;
@@ -80,7 +80,7 @@ USER_FUNC(evt_telop_entry) {
     case 3:
         ms = ((u32)event->lifetime - (u32)wp->time) / (OS_TIMER_CLOCK / 1000);
         if (ms < 1000) {
-            wp->alpha = intplGetValue(11, ms, 1000, 256.0f, -256.0f);
+            wp->alpha = intplGetValue(11, 256.0f, -256.0f, ms, 1000);
         } else {
             event->userdata[0]++;
         }

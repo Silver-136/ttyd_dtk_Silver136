@@ -1190,7 +1190,7 @@ USER_FUNC(display) {
                         }
                         break;
                     case 1:
-                        chr->rot = intplGetValue(5, chr->timer, 90, 90.0f, 1800.0f);
+                        chr->rot = intplGetValue(5, 90.0f, 1800.0f, chr->timer, 90);
                         chr->timer++;
                         if (chr->timer > 90) {
                             chr->state++;

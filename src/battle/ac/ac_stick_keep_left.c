@@ -230,7 +230,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
         case 0x64:
         case 0x3E8:
             disp->iconStep = -1;
-            disp->iconX = intplGetValue(4, 20 - disp->slideTimer, 20, -300.0f, 30.0f);
+            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
             if (SKL_P(work)->params[3] == 0 && disp->slideTimer > 0) {
                 disp->slideTimer--;
@@ -238,7 +238,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
             break;
         case 0x3E9:
             disp->iconStep = cw->idx - 1;
-            disp->iconX = intplGetValue(4, 20 - disp->slideTimer, 20, -300.0f, 30.0f);
+            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
             if (SKL_P(work)->params[3] == 0 && disp->slideTimer > 0) {
                 disp->slideTimer--;
@@ -252,7 +252,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
         case 0x3ED:
         case 0x3EE:
             if (disp->slideTimer >= 40) {
-                disp->iconX = intplGetValue(4, disp->slideTimer - 40, 20, 30.0f, -300.0f);
+                disp->iconX = intplGetValue(4, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

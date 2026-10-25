@@ -1356,7 +1356,7 @@ static USER_FUNC(down_ceil) {
         event->userdata[0] = 120;
         *ceil &= ~0x20;
     }
-    body->mPosition.y = wire->mPosition.y = intplGetValue(4, 120 - event->userdata[0], 120, 250.0f, 130.0f);
+    body->mPosition.y = wire->mPosition.y = intplGetValue(4, 250.0f, 130.0f, 120 - event->userdata[0], 120);
     event->userdata[0]--;
     if (event->userdata[0] < 0) {
         return EVT_RETURN_DONE;

@@ -6481,7 +6481,7 @@ USER_FUNC(_tatsumaki_effect) {
         psndSFX_pos(ud[7], &v);
     case 1:
         ud[1]++;
-        r = ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 80.0f, 5, ud[1], 90);
+        r = intplGetValue(5, 0.0f, 80.0f, ud[1], 90);
         ang = ud[1] * 4;
         dx = r * cosfd(ang);
         dz = r * sinfd(ang);
@@ -6563,10 +6563,10 @@ USER_FUNC(_hammer_star_effect) {
         event->userdata[0] = 0;
     }
     if (unit->faceDirection >= 0) {
-        angle = ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(210.0f, 420.0f, 1, event->userdata[0], 12);
+        angle = intplGetValue(1, 210.0f, 420.0f, event->userdata[0], 12);
         rot = -10.0f;
     } else {
-        angle = ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(150.0f, -60.0f, 1, event->userdata[0], 12);
+        angle = intplGetValue(1, 150.0f, -60.0f, event->userdata[0], 12);
         rot = 10.0f;
     }
     BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);

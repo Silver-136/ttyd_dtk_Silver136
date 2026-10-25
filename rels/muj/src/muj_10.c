@@ -710,7 +710,7 @@ void elmosalpha_func(NanNPC* npc) {
         case 2:
             elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
             if (elapsed < npc->duration) {
-                npc->color.a = intplGetValue(0, elapsed, npc->duration, 0.0f, 255.0f);
+                npc->color.a = intplGetValue(0, 0.0f, 255.0f, elapsed, npc->duration);
             } else {
                 npc->state = 3;
             }

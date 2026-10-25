@@ -115,12 +115,12 @@ void battleCameraMain(void) {
     if (wp->cameraWork.moveToTimer > 0) {
       moveLv3 = wp->cameraWork.moveSpeedLv;
       wp->cameraWork.moveToTimer--;
-      pos.x = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames, wp->cameraWork.moveToStartPos.x, wp->cameraWork.moveToEndPos.x);
-      pos.y = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames, wp->cameraWork.moveToStartPos.y, wp->cameraWork.moveToEndPos.y);
-      pos.z = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames, wp->cameraWork.moveToStartPos.z, wp->cameraWork.moveToEndPos.z);
-      atX = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames, wp->cameraWork.moveToStartAt.x, wp->cameraWork.moveToEndAt.x);
-      atY = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames, wp->cameraWork.moveToStartAt.y, wp->cameraWork.moveToEndAt.y);
-      atZ = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames, wp->cameraWork.moveToStartAt.z, wp->cameraWork.moveToEndAt.z);
+      pos.x = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartPos.x, wp->cameraWork.moveToEndPos.x, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+      pos.y = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartPos.y, wp->cameraWork.moveToEndPos.y, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+      pos.z = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartPos.z, wp->cameraWork.moveToEndPos.z, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+      atX = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartAt.x, wp->cameraWork.moveToEndAt.x, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+      atY = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartAt.y, wp->cameraWork.moveToEndAt.y, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
+      atZ = intplGetValue(wp->cameraWork.moveToType, wp->cameraWork.moveToStartAt.z, wp->cameraWork.moveToEndAt.z, wp->cameraWork.moveToFrames - wp->cameraWork.moveToTimer, wp->cameraWork.moveToFrames);
       wp->cameraWork.moveSpeedLv = 3;
       wp->cameraWork.zoomSpeedLv = 3;
       battleCameraMoveTo(0, 0, pos.x, pos.y, pos.z, atX, atY, atZ, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
@@ -508,7 +508,7 @@ void battleCameraMain(void) {
     phase = (wp->cameraWork.shakeWFrames - wp->cameraWork.shakeWTimer) & 2;
     wp->cameraWork.moveSpeedLv = 3;
     wp->cameraWork.zoomSpeedLv = 3;
-    wp->cameraWork.shakeWOfs = intplGetValue(wp->cameraWork.shakeWType, (wp->cameraWork.shakeWFrames - wp->cameraWork.shakeWTimer) / 2, wp->cameraWork.shakeWFrames / 2, wp->cameraWork.shakeWAmp[0], wp->cameraWork.shakeWAmp[1]);
+    wp->cameraWork.shakeWOfs = intplGetValue(wp->cameraWork.shakeWType, wp->cameraWork.shakeWAmp[0], wp->cameraWork.shakeWAmp[1], (wp->cameraWork.shakeWFrames - wp->cameraWork.shakeWTimer) / 2, wp->cameraWork.shakeWFrames / 2);
     if (wp->cameraWork.shakeWTimer > 0) {
       if (phase == 0) {
         battleCameraMoveTo(0, 0, cam->cameraPos.x + wp->cameraWork.shakeWOfs, cam->cameraPos.y, cam->cameraPos.z, cam->cameraAt.x + wp->cameraWork.shakeWOfs, cam->cameraAt.y, cam->cameraAt.z, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
@@ -528,7 +528,7 @@ void battleCameraMain(void) {
     phase2 = (wp->cameraWork.shakeHFrames - wp->cameraWork.shakeHTimer) & 2;
     wp->cameraWork.moveSpeedLv = 3;
     wp->cameraWork.zoomSpeedLv = 3;
-    wp->cameraWork.shakeHOfs = intplGetValue(wp->cameraWork.shakeHType, (wp->cameraWork.shakeHFrames - wp->cameraWork.shakeHTimer) / 2, wp->cameraWork.shakeHFrames / 2, wp->cameraWork.shakeHAmp[0], wp->cameraWork.shakeHAmp[1]);
+    wp->cameraWork.shakeHOfs = intplGetValue(wp->cameraWork.shakeHType, wp->cameraWork.shakeHAmp[0], wp->cameraWork.shakeHAmp[1], (wp->cameraWork.shakeHFrames - wp->cameraWork.shakeHTimer) / 2, wp->cameraWork.shakeHFrames / 2);
     if (wp->cameraWork.shakeHTimer > 0) {
       if (phase2 == 0) {
         battleCameraMoveTo(0, 0, cam->cameraPos.x, cam->cameraPos.y + wp->cameraWork.shakeHOfs, cam->cameraPos.z, cam->cameraAt.x, cam->cameraAt.y + wp->cameraWork.shakeHOfs, cam->cameraAt.z, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);

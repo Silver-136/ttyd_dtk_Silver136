@@ -2408,7 +2408,7 @@ USER_FUNC(_cortez_collect_energy) {
                         case 1:
                             work->timer[i]++;
                             BattleAudience_GetRotate(aid, &x, &y, &z);
-                            x = intplGetValue(0, work->timer[i], 30, 0.0f, -90.0f);
+                            x = intplGetValue(0, 0.0f, -90.0f, work->timer[i], 30);
                             BattleAudience_SetRotate(aid, x, y, z);
                             if (work->timer[i] >= 30) {
                                 work->seq[i]++;

@@ -35,7 +35,6 @@
 void btlGetScreenPoint(Vec* in, Vec* out);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
-#define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 
 static USER_FUNC(star_stone_appear);
 static USER_FUNC(wait_game_end);
@@ -244,7 +243,7 @@ static void main_base(void) {
         break;
     case 3:
         w->timer++;
-        w->f2c = INTPL(4, w->timer, 30, -400.0f, -120.0f);
+        w->f2c = intplGetValue(4, -400.0f, -120.0f, w->timer, 30);
         if (w->timer >= 30) {
             w->state = 4;
             w->timer = 0;
@@ -487,14 +486,14 @@ void main_cursor(void) {
         w->t3c++;
         w->col74 = (GXColor){0x0, 0x0, 0xFF, 0xFF};
         if (!(w->flags & 1)) {
-            w->cpos.x = INTPL(4, w->t3c, 5, w->cfrom.x, w->cto.x);
-            w->cpos.y = INTPL(4, w->t3c, 5, w->cfrom.y, w->cto.y);
+            w->cpos.x = intplGetValue(4, w->cfrom.x, w->cto.x, w->t3c, 5);
+            w->cpos.y = intplGetValue(4, w->cfrom.y, w->cto.y, w->t3c, 5);
             if (w->t3c >= 5) {
                 w->kind38 = 2;
             }
         } else {
-            w->cpos.x = INTPL(4, w->t3c, 25, w->cfrom.x, w->cto.x);
-            w->cpos.y = INTPL(4, w->t3c, 25, w->cfrom.y, w->cto.y);
+            w->cpos.x = intplGetValue(4, w->cfrom.x, w->cto.x, w->t3c, 25);
+            w->cpos.y = intplGetValue(4, w->cfrom.y, w->cto.y, w->t3c, 25);
             if (w->t3c >= 25) {
                 w->kind38 = 2;
             }
@@ -538,7 +537,7 @@ void main_point(s32 idx) {
     case 2:
         o->timer--;
         if (o->timer <= 30) {
-            o->scale.x = o->scale.y = INTPL(0, 30 - o->timer, 30, 0.0f, 0.5f);
+            o->scale.x = o->scale.y = intplGetValue(0, 0.0f, 0.5f, 30 - o->timer, 30);
         }
         if (o->timer <= 0) {
             o->kind = 3;
@@ -575,7 +574,7 @@ void main_point(s32 idx) {
     case 7:
         o->timer--;
         if (o->timer <= 30) {
-            o->scale.x = o->scale.y = INTPL(0, 30 - o->timer, 30, 0.5f, 0.0f);
+            o->scale.x = o->scale.y = intplGetValue(0, 0.5f, 0.0f, 30 - o->timer, 30);
         }
         if (o->timer <= 0) {
             o->kind = 8;
@@ -606,8 +605,8 @@ void main_icon(s32 idx) {
         o->scale = (Vec){0.3f, 0.3f, 0.3f};
     case 2:
         o->timer++;
-        o->rot.y = INTPL(4, o->timer, 30, 180.0f, 1080.0f);
-        o->alpha = INTPL(0, o->timer, 30, 0.0f, 255.0f);
+        o->rot.y = intplGetValue(4, 180.0f, 1080.0f, o->timer, 30);
+        o->alpha = intplGetValue(0, 0.0f, 255.0f, o->timer, 30);
         if (o->timer >= 30) {
             o->kind = 7;
         }
@@ -618,8 +617,8 @@ void main_icon(s32 idx) {
         o->rot.y = 0.0f;
     case 4:
         o->timer++;
-        o->rot.y = INTPL(1, o->timer, 30, 0.0f, 900.0f);
-        o->alpha = INTPL(0, o->timer, 30, 255.0f, 0.0f);
+        o->rot.y = intplGetValue(1, 0.0f, 900.0f, o->timer, 30);
+        o->alpha = intplGetValue(0, 255.0f, 0.0f, o->timer, 30);
         if (o->timer >= 30) {
             o->kind = 0;
         }
@@ -682,17 +681,17 @@ static void main_star(void) {
     case 2:
         w->starTimer++;
         if (w->starTimer <= 100) {
-            w->spos.x = INTPL(0, w->starTimer, 100, w->from.x, w->to.x);
-            w->spos.y = INTPL(0, w->starTimer, 100, w->from.y, w->to.y);
-            w->spos.z = INTPL(0, w->starTimer, 100, w->from.z, w->to.z);
-            w->scale.x = w->scale.y = w->scale.z = INTPL(0, w->starTimer, 100, 0.0f, 2.0f);
+            w->spos.x = intplGetValue(0, w->from.x, w->to.x, w->starTimer, 100);
+            w->spos.y = intplGetValue(0, w->from.y, w->to.y, w->starTimer, 100);
+            w->spos.z = intplGetValue(0, w->from.z, w->to.z, w->starTimer, 100);
+            w->scale.x = w->scale.y = w->scale.z = intplGetValue(0, 0.0f, 2.0f, w->starTimer, 100);
         } else {
             w->spos.x = w->to.x;
             w->spos.y = w->to.y;
             w->spos.z = w->to.z;
             w->scale.x = w->scale.y = w->scale.z = 2.0f;
         }
-        w->rot.y = INTPL(4, w->starTimer, 120, 0.0f, 2160.0f);
+        w->rot.y = intplGetValue(4, 0.0f, 2160.0f, w->starTimer, 120);
         if (w->starTimer >= 120) {
             w->star = 3;
             w->starTimer = 0;
@@ -702,7 +701,7 @@ static void main_star(void) {
         break;
     case 3:
         w->starTimer++;
-        w->spos.y = INTPL(1, w->starTimer, 60, w->from.y, w->to.y);
+        w->spos.y = intplGetValue(1, w->from.y, w->to.y, w->starTimer, 60);
         if (w->starTimer >= 60) {
             w->star = 5;
             w->starTimer = 0;

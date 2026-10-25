@@ -98,7 +98,7 @@ void effPointGetMain(EffectEntry* effect) {
     work->timer++;
     switch (work->state) {
         case 0:
-            work->position.x = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(-1000.0f, 0.0f, 11, work->timer, 45);
+            work->position.x = intplGetValue(11, -1000.0f, 0.0f, work->timer, 45);
             if (work->timer >= 45) {
                 work->timer = 0;
                 work->state++;
@@ -117,7 +117,7 @@ void effPointGetMain(EffectEntry* effect) {
             }
             break;
         case 2:
-            work->position.x = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 1000.0f, 11, work->timer, 60);
+            work->position.x = intplGetValue(11, 0.0f, 1000.0f, work->timer, 60);
             if (work->timer >= 60) {
                 effDelete(effect);
                 return;

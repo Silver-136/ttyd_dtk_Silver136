@@ -218,7 +218,7 @@ void battleAcDisp_LstRcKeep(CameraId cameraId, void* param) {
         case 100:
         case 1000:
             disp->iconStep = -1;
-            disp->iconX = intplGetValue(4, 20 - disp->slideTimer, 20, -300.0f, 30.0f);
+            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
             if (disp->slideTimer > 0) {
                 (disp->slideTimer)--;
@@ -226,7 +226,7 @@ void battleAcDisp_LstRcKeep(CameraId cameraId, void* param) {
             break;
         case 1001:
             disp->iconStep = lw->count - 1;
-            disp->iconX = intplGetValue(4, 20 - disp->slideTimer, 20, -300.0f, 30.0f);
+            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
             if (disp->slideTimer > 0) {
                 (disp->slideTimer)--;
@@ -240,7 +240,7 @@ void battleAcDisp_LstRcKeep(CameraId cameraId, void* param) {
         case 1005:
         case 1006:
             if (disp->slideTimer >= 40) {
-                disp->iconX = intplGetValue(4, disp->slideTimer - 40, 20, 30.0f, -300.0f);
+                disp->iconX = intplGetValue(4, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

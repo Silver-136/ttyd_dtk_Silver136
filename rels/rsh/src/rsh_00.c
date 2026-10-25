@@ -372,12 +372,12 @@ void moamoa_main(void) {
             case 3:
                 if (moa->timer < 20) {
                     if (!(moa->flags & 1)) {
-                        r = intplGetValue(2, ++moa->timer, 20, 50.0f, 0.0f);
+                        r = intplGetValue(2, 50.0f, 0.0f, ++moa->timer, 20);
                         (*pose->mtx)[0][3] = moa->pos.x + r * (f32)sin(moa->angle);
                         (*pose->mtx)[1][3] = moa->pos.y - r * (f32)cos(moa->angle);
                         (*pose->mtx)[2][3] = moa->pos.z;
                     } else {
-                        r = intplGetValue(2, ++moa->timer, 20, 50.0f, 0.0f);
+                        r = intplGetValue(2, 50.0f, 0.0f, ++moa->timer, 20);
                         (*pose->mtx)[0][3] = moa->pos.x;
                         (*pose->mtx)[1][3] = moa->pos.y - r * (f32)cos(moa->angle);
                         (*pose->mtx)[2][3] = moa->pos.z;

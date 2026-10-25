@@ -170,7 +170,7 @@ void titleMain(SequenceWork* work) {
             break;
         case 2:
             wp2->topPosX = 0.0f;
-            wp2->topPosY = intplGetValue(10, wp2->counter, TFR, 300.0f, 120.0f);
+            wp2->topPosY = intplGetValue(10, 300.0f, 120.0f, wp2->counter, TFR);
             wp2->timer--;
             if (wp2->timer == 0) {
                 if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
@@ -181,7 +181,7 @@ void titleMain(SequenceWork* work) {
                 }
             }
             wp2->bottomPosX = 0.0f;
-            wp2->bottomPosY = intplGetValue(11, wp2->counter, TFR, -300.0f, -170.0f);
+            wp2->bottomPosY = intplGetValue(11, -300.0f, -170.0f, wp2->counter, TFR);
             wp2->counter++;
             if (wp2->counter > TFR) {
                 titleLoadDemo();
@@ -235,8 +235,8 @@ void titleMain(SequenceWork* work) {
             wp2->state++;
             break;
         case 21:
-            wp2->topPosY = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(120.0f, 400.0f, 11, wp2->counter, TFR);
-            wp2->bottomPosY = intplGetValue(11, wp2->counter, TFR, -170.0f, -400.0f);
+            wp2->topPosY = intplGetValue(11, 120.0f, 400.0f, wp2->counter, TFR);
+            wp2->bottomPosY = intplGetValue(11, -170.0f, -400.0f, wp2->counter, TFR);
             wp2->counter++;
             if (wp2->counter > TFR) {
                 wp2->counter = TFR;

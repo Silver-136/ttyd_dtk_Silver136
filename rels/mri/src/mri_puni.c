@@ -3534,8 +3534,8 @@ void puniModeWater(PuniData* p) {
             u32 t = ((u32)gp->renderTime - p->startTimeLo) / (OS_TIMER_CLOCK / 1000);
             if ((s32)t < 300) {
                 f32 f = (f32)(s32)t / 300.0f;
-                p->pos.x = intplGetValue(0, t, 300, p->moveStart.x, p->savedPos.x);
-                p->pos.z = intplGetValue(0, t, 300, p->moveStart.z, p->savedPos.z);
+                p->pos.x = intplGetValue(0, p->moveStart.x, p->savedPos.x, t, 300);
+                p->pos.z = intplGetValue(0, p->moveStart.z, p->savedPos.z, t, 300);
                 p->pos.y = f * (p->modeF0 * f + p->modeF1) + p->moveStart.y;
                 p->prevPos = p->pos;
             } else {
@@ -6086,8 +6086,8 @@ USER_FUNC(evt_puni_move_position) {
         p->moveEnd.z = z;
     }
     if ((s32)(t = (((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000))) < frames) {
-        p->pos.x = intplGetValue(0, t, frames, p->moveStart.x, p->moveEnd.x);
-        p->pos.z = intplGetValue(0, t, frames, p->moveStart.z, p->moveEnd.z);
+        p->pos.x = intplGetValue(0, p->moveStart.x, p->moveEnd.x, t, frames);
+        p->pos.z = intplGetValue(0, p->moveStart.z, p->moveEnd.z, t, frames);
         p->prevPos = p->pos;
         return EVT_RETURN_BLOCK;
     }
@@ -6150,8 +6150,8 @@ USER_FUNC(evt_puni_jump_position) {
     if (t < frames) {
         r = (f32)t / (f32)frames;
         r = (f32)t / (f32)frames;
-        p->pos.x = intplGetValue(0, (s32)t, frames, p->moveStart.x, x);
-        p->pos.z = intplGetValue(0, (s32)t, frames, p->moveStart.z, z);
+        p->pos.x = intplGetValue(0, p->moveStart.x, x, (s32)t, frames);
+        p->pos.z = intplGetValue(0, p->moveStart.z, z, (s32)t, frames);
         p->pos.y = r * (p->modeF0 * r + p->modeF1) + p->moveStart.y;
         return EVT_RETURN_BLOCK;
     }

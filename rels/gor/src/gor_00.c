@@ -3605,8 +3605,8 @@ void gundan1000tai_seq01(NanNPC* npc) {
             elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
             if (elapsed < npc->duration) {
                 t = (f32)elapsed / (f32)npc->duration;
-                npc->pos.x = intplGetValue(0, elapsed, npc->duration, npc->dest.x, npc->jumpEnd.x);
-                npc->pos.z = ((f32 (*)(s32, f32, f32, s32, s32))intplGetValue)(0, npc->dest.z, npc->jumpEnd.z, elapsed, npc->duration);
+                npc->pos.x = intplGetValue(0, npc->dest.x, npc->jumpEnd.x, elapsed, npc->duration);
+                npc->pos.z = intplGetValue(0, npc->dest.z, npc->jumpEnd.z, elapsed, npc->duration);
                 npc->pos.y = npc->dest.y + t * (npc->speed * t + npc->moveDir);
             } else {
                 npc->pos = npc->jumpEnd;

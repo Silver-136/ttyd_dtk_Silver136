@@ -1053,9 +1053,9 @@ USER_FUNC(win_item_move_3d_position) {
     if (elapsed < frames) {
         // the elapsed time is kept in the (dead) isFirstCall parameter
         isFirstCall = elapsed;
-        item->position.x = intplGetValue(mode, isFirstCall, frames, event->userdataf[1], x);
-        item->position.y = yOffset + intplGetValue(mode, isFirstCall, frames, event->userdataf[2], y);
-        item->position.z = intplGetValue(mode, isFirstCall, frames, event->userdata3f, z);
+        item->position.x = intplGetValue(mode, event->userdataf[1], x, isFirstCall, frames);
+        item->position.y = yOffset + intplGetValue(mode, event->userdataf[2], y, isFirstCall, frames);
+        item->position.z = intplGetValue(mode, event->userdata3f, z, isFirstCall, frames);
         return EVT_RETURN_BLOCK;
     }
     item->position.x = x;

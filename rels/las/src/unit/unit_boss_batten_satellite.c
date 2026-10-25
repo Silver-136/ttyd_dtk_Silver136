@@ -1,3 +1,4 @@
+#include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 
@@ -11,7 +12,7 @@
 #include "battle/battle_database_common.h"
 
 s32 bts_x_flag_data;
-f32 intplGetValue(s32 mode, s32 currStep, f32 start, f32 end, s32 steps);
+
 
 USER_FUNC(bts_x_flag_wait);
 USER_FUNC(bts_x_flag_get);
@@ -438,9 +439,9 @@ USER_FUNC(bts_wariai_enzan_1f_intpl_w) {
             evtSetFloat(event, out, c);
             return EVT_RETURN_DONE;
         }
-        r1 = 1.0f - intplGetValue(t1, b - a, 1.0f, 0.0f, b);
+        r1 = 1.0f - intplGetValue(t1, 1.0f, 0.0f, b - a, b);
     } else {
-        r1 = intplGetValue(t1, b - a, 0.0f, 1.0f, b);
+        r1 = intplGetValue(t1, 0.0f, 1.0f, b - a, b);
     }
     if (t2 >= 14.0f) {
         t2 = t1 - 14.0f;
@@ -448,9 +449,9 @@ USER_FUNC(bts_wariai_enzan_1f_intpl_w) {
             evtSetFloat(event, out, c);
             return EVT_RETURN_DONE;
         }
-        r2 = 1.0f - intplGetValue(t2, b - a, 1.0f, 0.0f, b);
+        r2 = 1.0f - intplGetValue(t2, 1.0f, 0.0f, b - a, b);
     } else {
-        r2 = intplGetValue(t2, b - a, 0.0f, 1.0f, b);
+        r2 = intplGetValue(t2, 0.0f, 1.0f, b - a, b);
     }
     w = r1 * r2;
     evtSetFloat(event, out, c * (1.0f - w) + d * w);
@@ -473,9 +474,9 @@ static USER_FUNC(bts_wariai_enzan_1f_intpl) {
             evtSetFloat(event, out, c);
             return EVT_RETURN_DONE;
         }
-        r = 1.0f - intplGetValue(t, b - a, 1.0f, 0.0f, b);
+        r = 1.0f - intplGetValue(t, 1.0f, 0.0f, b - a, b);
     } else {
-        r = intplGetValue(t, b - a, 0.0f, 1.0f, b);
+        r = intplGetValue(t, 0.0f, 1.0f, b - a, b);
     }
     evtSetFloat(event, out, (1.0f - r) * c + r * d);
     return EVT_RETURN_DONE;

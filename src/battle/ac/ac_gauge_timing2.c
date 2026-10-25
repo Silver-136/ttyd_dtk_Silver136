@@ -293,7 +293,7 @@ void battleAcDisp_GaugeTiming2(CameraId cameraId, BattleWork* work) {
     BattleACDispParams* disp = &ac->disp;
     switch (ac->mAcState) {
         case 99:
-            disp->iconX = ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(-300.0f, 30.0f, 4, 20 - disp->slideTimer, 20);
+            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case 100:
         case 1000:
         case 1002:
@@ -305,7 +305,7 @@ void battleAcDisp_GaugeTiming2(CameraId cameraId, BattleWork* work) {
         case 1003:
         case 1004:
             if (disp->slideTimer >= 40) {
-                disp->iconX = ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(30.0f, -300.0f, 4, disp->slideTimer - 40, 20);
+                disp->iconX = intplGetValue(4, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

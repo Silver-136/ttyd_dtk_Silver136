@@ -155,9 +155,9 @@ void effLevelupMain(EffectEntry* effect) {
                 break;
             case 3:
                 if (i < 2) {
-                    work->xOffset = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 400.0f, 1, work->timer, 30);
+                    work->xOffset = intplGetValue(1, 0.0f, 400.0f, work->timer, 30);
                 } else {
-                    work->xOffset = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, -400.0f, 1, work->timer, 30);
+                    work->xOffset = intplGetValue(1, 0.0f, -400.0f, work->timer, 30);
                 }
                 work->timer++;
                 if (work->timer > 30) {

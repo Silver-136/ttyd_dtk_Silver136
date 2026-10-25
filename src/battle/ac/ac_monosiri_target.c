@@ -82,7 +82,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             work->actionCommands.mAcState = 1000;
         case 1000:
             cw->frame++;
-            cw->pos.x = (cw->hitPos.x - 80.0f) + intplGetValue(0, cw->frame, cw->maxFrames, 0.0f, 160.0f);
+            cw->pos.x = (cw->hitPos.x - 80.0f) + intplGetValue(0, 0.0f, 160.0f, cw->frame, cw->maxFrames);
             if (__fabs(cw->pos.x - cw->targetPos.x) < 28.0) {
                 cw->inRange = 1;
             } else {
@@ -171,7 +171,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     if (cw->inRange) {
         s32 t = cw->inRangeCnt % 30;
         if (t < 20) {
-            alpha = 0.01f * intplGetValue(5, t, 20, 100.0f, 0.0f);
+            alpha = 0.01f * intplGetValue(5, 100.0f, 0.0f, t, 20);
         }
     }
 

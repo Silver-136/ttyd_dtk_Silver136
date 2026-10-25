@@ -486,7 +486,7 @@ void cam3dMain(CameraEntry* camera) {
 
             {
                 f32 t, it;
-                t = intplGetValue(camera->curveB, (s32)(100000.0f * camera->progressB), 100000, 0.0f, 1.0f);
+                t = intplGetValue(camera->curveB, 0.0f, 1.0f, (s32)(100000.0f * camera->progressB), 100000);
                 it = 1.0f - t;
                 switch (camera->stateB) {
                     case 0:
@@ -569,8 +569,7 @@ void cam3dMain(CameraEntry* camera) {
 
                 {
                     f32 t, it;
-                    t = intplGetValue(camera->curveA, (s32)(100000.0f * (1.0f - camera->progressA)), 100000, 0.0f,
-                                      1.0f);
+                    t = intplGetValue(camera->curveA, 0.0f, 1.0f, (s32)(100000.0f * (1.0f - camera->progressA)), 100000);
                     it = 1.0f - t;
                     camera->cameraAt.x = (work.at.x * it) + (work2.at.x * t);
                     camera->cameraAt.y = (work.at.y * it) + (work2.at.y * t);

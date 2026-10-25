@@ -68,7 +68,7 @@ void effQueen2Main(EffectEntry* effect) {
     }
     switch (work->state) {
         case 0:
-            work->alpha = intplGetValue(11, work->timer++, 60, 0.0f, 128.0f);
+            work->alpha = intplGetValue(11, 0.0f, 128.0f, work->timer++, 60);
             if (work->timer > 60) {
                 work->timer = 0;
                 work->state++;
@@ -78,7 +78,7 @@ void effQueen2Main(EffectEntry* effect) {
             {
                 f32 base = work->baseScale;
                 s32 t = work->timer++;
-                work->scale = intplGetValue(11, t, 120, base, 3.0f);
+                work->scale = intplGetValue(11, base, 3.0f, t, 120);
             }
             if (work->timer > 120) {
                 work->timer = 0;

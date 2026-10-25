@@ -1059,11 +1059,11 @@ interrupt:
             case 2:
                 (ann->timer)++;
                 if (ann->timer < 20) {
-                    ann->x = intplGetValue(5, ann->timer, 20, -600.0f, 0.0f);
+                    ann->x = intplGetValue(5, -600.0f, 0.0f, ann->timer, 20);
                 } else if (ann->timer < 80) {
                     ann->x = 0.0f;
                 } else if (ann->timer < 100) {
-                    ann->x = intplGetValue(1, ann->timer - 80, 20, 0.0f, 600.0f);
+                    ann->x = intplGetValue(1, 0.0f, 600.0f, ann->timer - 80, 20);
                 } else {
                     ann->hitKind = 0;
                     break;

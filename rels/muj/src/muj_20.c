@@ -185,8 +185,8 @@ USER_FUNC(urouro_func) {
     }
     t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
     if (t < duration) {
-        sx = intplGetValue(mode, t, duration, sx, ex);
-        sz = intplGetValue(mode, t, duration, sz, ez);
+        sx = intplGetValue(mode, sx, ex, t, duration);
+        sz = intplGetValue(mode, sz, ez, t, duration);
         if (!noDir) {
             if (npc->position.x > sx) {
                 npc->direction = 270.0f;
@@ -235,9 +235,9 @@ USER_FUNC(urouro_fuwafuwa_func) {
     }
     t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
     if (t < duration) {
-        sx = intplGetValue(mode, t, duration, sx, ex);
-        sy = intplGetValue(mode, t, duration, sy, ey);
-        sz = intplGetValue(mode, t, duration, sz, ez);
+        sx = intplGetValue(mode, sx, ex, t, duration);
+        sy = intplGetValue(mode, sy, ey, t, duration);
+        sz = intplGetValue(mode, sz, ez, t, duration);
         if (!noDir) {
             if (npc->position.x > sx) {
                 npc->direction = 270.0f;
@@ -636,7 +636,7 @@ void elmos1000tai_seq00(NanNPC* npc) {
         case 2:
             t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
             if (t < npc->duration) {
-                npc->color.a = intplGetValue(0, t, npc->duration, 0.0f, 255.0f);
+                npc->color.a = intplGetValue(0, 0.0f, 255.0f, t, npc->duration);
             } else {
                 npc->state = 3;
             }
@@ -2234,8 +2234,8 @@ EVT_END()
  * prototype with `steps` last reproduces that evaluation order; the registers
  * (r3 mode, r4 step, r5 steps, f1 start, f2 end) are the same under the EABI,
  * so the call is behaviour-identical. */
-typedef f32 (*IntplStepsLastFn)(s32 mode, s32 step, f32 start, f32 end, s32 steps);
-#define intplGetValueStepsLast(mode, step, start, end, steps)     ((IntplStepsLastFn)intplGetValue)(mode, step, start, end, steps)
+
+
 #endif
 
 USER_FUNC(logo) {
@@ -2260,11 +2260,11 @@ USER_FUNC(logo) {
             break;
         case 1:
             if (wp->counter < VERSION_PICK(180, FPS_FRAMES(180))) {
-                wp->alpha = intplGetValue(11, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)), 0.0f, 255.0f);
+                wp->alpha = intplGetValue(11, 0.0f, 255.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
 #ifdef VERSION_G8ME01
-                wp->y = intplGetValueStepsLast(11, ++wp->counter, -50.0f, 0.0f, FPS_FRAMES(180)); /* FAKE */
+                wp->y = intplGetValue(11, -50.0f, 0.0f, ++wp->counter, FPS_FRAMES(180)); /* FAKE */
 #else
-                wp->y = intplGetValue(11, ++wp->counter, 180, -50.0f, 0.0f);
+                wp->y = intplGetValue(11, -50.0f, 0.0f, ++wp->counter, 180);
 #endif
             } else if (gp->retraceCount % 15 == 0) {
                 wp->state++;
@@ -2279,11 +2279,11 @@ USER_FUNC(logo) {
             break;
         case 3:
             if (wp->counter < VERSION_PICK(120, FPS_FRAMES(120))) {
-                wp->alpha = intplGetValue(11, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)), 255.0f, 0.0f);
+                wp->alpha = intplGetValue(11, 255.0f, 0.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
 #ifdef VERSION_G8ME01
-                wp->y = intplGetValueStepsLast(11, ++wp->counter, 0.0f, 100.0f, FPS_FRAMES(120)); /* FAKE */
+                wp->y = intplGetValue(11, 0.0f, 100.0f, ++wp->counter, FPS_FRAMES(120)); /* FAKE */
 #else
-                wp->y = intplGetValue(11, ++wp->counter, 120, 0.0f, 100.0f);
+                wp->y = intplGetValue(11, 0.0f, 100.0f, ++wp->counter, 120);
 #endif
             } else {
                 wp->state++;

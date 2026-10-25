@@ -152,7 +152,6 @@ static void disp_3D(CameraId cam, void* param);
 static void disp_2D(CameraId cam, void* param);
 static GenkiWork* get_ptr(void);
 
-#define INTPL(mode, cur, steps, a, b) ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 
 USER_FUNC(main_genki) {
     GenkiWork* w = get_ptr();
@@ -770,13 +769,13 @@ void main_star0(s32 idx) {
     case 2:
         s->timer++;
         if (s->timer <= 100) {
-            s->pos.y = INTPL(0, s->timer, 100, s->start.y, s->end.y);
+            s->pos.y = intplGetValue(0, s->start.y, s->end.y, s->timer, 100);
             BtlUnit_GetPos(mario, &x, &y, &z);
-            s->radius = INTPL(0, s->timer, 100, 0.0f, 40.0f);
+            s->radius = intplGetValue(0, 0.0f, 40.0f, s->timer, 100);
             s->angle += s->angleSpeed;
             s->pos.x = s->radius * (f32)cos(s->angle) + x;
             s->pos.z = s->radius * (f32)sin(s->angle) + z;
-            s->scale.x = s->scale.y = s->scale.z = INTPL(0, s->timer, 100, 0.0f, 0.75f);
+            s->scale.x = s->scale.y = s->scale.z = intplGetValue(0, 0.0f, 0.75f, s->timer, 100);
         } else {
             s->pos.y = s->end.y;
             BtlUnit_GetPos(mario, &x, &y, &z);
@@ -785,7 +784,7 @@ void main_star0(s32 idx) {
             s->pos.z = s->radius * (f32)sin(s->angle) + z;
             s->scale.x = s->scale.y = s->scale.z = 0.75f;
         }
-        s->rot.y = INTPL(4, s->timer, 120, 0.0f, 2160.0f);
+        s->rot.y = intplGetValue(4, 0.0f, 2160.0f, s->timer, 120);
         if (s->timer >= 120) {
             s->state = 3;
             s->timer = 0;
@@ -797,7 +796,7 @@ void main_star0(s32 idx) {
         break;
     case 3:
         s->timer++;
-        s->pos.x = INTPL(4, s->timer, 60, s->start.x, s->end.x);
+        s->pos.x = intplGetValue(4, s->start.x, s->end.x, s->timer, 60);
         s->pos.y += s->vel.y;
         s->vel.y += 0.2f - 0.01f * idx;
         s->rot.y = 0.0f;
@@ -867,18 +866,18 @@ void main_star1(void) {
     case 2:
         w->star[0].timer++;
         if (w->star[0].timer <= 100) {
-            w->star[0].pos.x = INTPL(0, w->star[0].timer, 100, w->star[0].start.x, w->star[0].end.x);
-            w->star[0].pos.y = INTPL(0, w->star[0].timer, 100, w->star[0].start.y, w->star[0].end.y);
-            w->star[0].pos.z = INTPL(0, w->star[0].timer, 100, w->star[0].start.z, w->star[0].end.z);
+            w->star[0].pos.x = intplGetValue(0, w->star[0].start.x, w->star[0].end.x, w->star[0].timer, 100);
+            w->star[0].pos.y = intplGetValue(0, w->star[0].start.y, w->star[0].end.y, w->star[0].timer, 100);
+            w->star[0].pos.z = intplGetValue(0, w->star[0].start.z, w->star[0].end.z, w->star[0].timer, 100);
             w->star[0].scale.x = w->star[0].scale.y = w->star[0].scale.z =
-                INTPL(0, w->star[0].timer, 100, 0.0f, 2.0f);
+                intplGetValue(0, 0.0f, 2.0f, w->star[0].timer, 100);
         } else {
             w->star[0].pos.x = w->star[0].end.x;
             w->star[0].pos.y = w->star[0].end.y;
             w->star[0].pos.z = w->star[0].end.z;
             w->star[0].scale.x = w->star[0].scale.y = w->star[0].scale.z = 2.0f;
         }
-        w->star[0].rot.y = INTPL(4, w->star[0].timer, 120, 0.0f, 2160.0f);
+        w->star[0].rot.y = intplGetValue(4, 0.0f, 2160.0f, w->star[0].timer, 120);
         if (w->star[0].timer >= 120) {
             w->star[0].state = 3;
             w->star[0].timer = 0;
@@ -890,7 +889,7 @@ void main_star1(void) {
         break;
     case 3:
         w->star[0].timer++;
-        w->star[0].pos.x = INTPL(4, w->star[0].timer, 60, w->star[0].start.x, w->star[0].end.x);
+        w->star[0].pos.x = intplGetValue(4, w->star[0].start.x, w->star[0].end.x, w->star[0].timer, 60);
         w->star[0].pos.y += w->star[0].vel.y;
         w->star[0].vel.y += 0.2f;
         w->star[0].rot.y = 0.0f;

@@ -288,8 +288,8 @@ USER_FUNC(evt_mri_door_naname_func) {
         f32 x;
         f32 z;
         isFirstCall = elapsed;
-        x = intplGetValue(mode, isFirstCall, frames, x0, x1);
-        z = intplGetValue(mode, isFirstCall, frames, z0, z1);
+        x = intplGetValue(mode, x0, x1, isFirstCall, frames);
+        z = intplGetValue(mode, z0, z1, isFirstCall, frames);
         mapObjTranslate(name, x, 0.0f, z);
         return EVT_RETURN_BLOCK;
     }

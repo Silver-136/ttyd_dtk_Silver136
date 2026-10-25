@@ -703,9 +703,9 @@ void zakogun_ext_main1(void) {
                 zakogun_set_pose(zako, 0x16, 10, 1);
                 break;
             case 15:
-                zako->pos.x = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.x, zako->target.x);
-                zako->pos.y = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.y, zako->target.y);
-                zako->pos.z = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.z, zako->target.z);
+                zako->pos.x = intplGetValue(0, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.y = intplGetValue(0, zako->start.y, zako->target.y, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(0, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
                 if (i == 5) {
                     if (zako->timer % 12 == 0) {
                         BtlUnit_snd_se_pos(unit, "SFX_BOSS_TEAM_3RD_MOVE1L", 0x7f, 0, &zako->pos);
@@ -779,8 +779,8 @@ void zakogun_ext_main1(void) {
                 zakogun_set_pose(zako, 0x22, 1, 1);
                 break;
             case 17:
-                zako->pos.x = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.x, zako->target.x);
-                zako->pos.z = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.z, zako->target.z);
+                zako->pos.x = intplGetValue(0, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(0, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
                 zako->pos.y += zako->vel.y;
                 zako->vel.y += -0.5f;
                 zako->timer--;
@@ -898,7 +898,7 @@ void zakogun_ext_main1(void) {
                 zako->state = 45;
                 zako->timer = zako->timerMax = 40;
             case 45:
-                zako->pos.x = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.x, zako->target.x);
+                zako->pos.x = intplGetValue(0, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
                 if (zako->timer % 12 == 0) {
                     BtlUnit_snd_se_pos(unit, "SFX_BOSS_TEAM_3RD_MOVE1L", 0x7f, 0, &zako->pos);
                 }
@@ -932,8 +932,8 @@ void zakogun_ext_main1(void) {
             }
             case 55:
                 BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
-                zako->pos.x = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.x, zako->target.x);
-                zako->pos.z = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.z, zako->target.z);
+                zako->pos.x = intplGetValue(0, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(0, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
                 zako->pos.y += zako->vel.y;
                 zako->vel.y += -0.2f;
                 zako->timer--;
@@ -946,8 +946,8 @@ void zakogun_ext_main1(void) {
                 }
                 break;
             case 58:
-                zako->pos.x = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.x, zako->target.x);
-                zako->pos.z = intplGetValue(0, zako->timerMax - zako->timer, zako->timerMax, zako->start.z, zako->target.z);
+                zako->pos.x = intplGetValue(0, zako->start.x, zako->target.x, zako->timerMax - zako->timer, zako->timerMax);
+                zako->pos.z = intplGetValue(0, zako->start.z, zako->target.z, zako->timerMax - zako->timer, zako->timerMax);
                 zako->pos.y += zako->vel.y;
                 zako->vel.y += -0.2f;
                 zako->timer--;

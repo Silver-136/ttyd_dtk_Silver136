@@ -147,7 +147,7 @@ static inline void winRootTabMain(WindowWork* w) {
             }
             break;
         case 2:
-            w->tab[i].y = intplGetValue(11, w->tab[i].timer++, WR_FRAMES(10), 300.0f, 185.0f);
+            w->tab[i].y = intplGetValue(11, 300.0f, 185.0f, w->tab[i].timer++, WR_FRAMES(10));
             if (w->tab[i].timer > WR_FRAMES(10)) {
                 w->tab[i].state++;
             }
@@ -157,7 +157,7 @@ static inline void winRootTabMain(WindowWork* w) {
             w->tab[i].state++;
             break;
         case 12:
-            w->tab[i].y = intplGetValue(11, w->tab[i].timer++, WR_FRAMES(10), 180.0f, 300.0f);
+            w->tab[i].y = intplGetValue(11, 180.0f, 300.0f, w->tab[i].timer++, WR_FRAMES(10));
             if (w->tab[i].timer > WR_FRAMES(10)) {
                 w->tab[i].state++;
             }
@@ -517,7 +517,7 @@ void winBgMain(WindowWork* wp) {
                 wp->menu[i].state++;
                 break;
             case 1:
-                wp->menu[i].x = intplGetValue(11, wp->menu[i].timer++, WR_FRAMES(16), 800.0f, 0.0f);
+                wp->menu[i].x = intplGetValue(11, 800.0f, 0.0f, wp->menu[i].timer++, WR_FRAMES(16));
                 if (wp->menu[i].timer > WR_FRAMES(16)) {
                     wp->menu[i].state = 100;
                 }
@@ -528,7 +528,7 @@ void winBgMain(WindowWork* wp) {
                 wp->menu[i].state++;
                 break;
             case 11:
-                wp->menu[i].x = intplGetValue(11, wp->menu[i].timer++, WR_FRAMES(16), 0.0f, 800.0f);
+                wp->menu[i].x = intplGetValue(11, 0.0f, 800.0f, wp->menu[i].timer++, WR_FRAMES(16));
                 if (wp->menu[i].timer > WR_FRAMES(16)) {
                     wp->menu[i].state = -1;
                 }
@@ -539,7 +539,7 @@ void winBgMain(WindowWork* wp) {
                 wp->menu[i].state++;
                 break;
             case 21:
-                wp->menu[i].x = intplGetValue(11, wp->menu[i].timer++, WR_FRAMES(24), 640.0f, 0.0f);
+                wp->menu[i].x = intplGetValue(11, 640.0f, 0.0f, wp->menu[i].timer++, WR_FRAMES(24));
                 if (wp->menu[i].timer > WR_FRAMES(24)) {
                     wp->menu[i].state = 100;
                 }
@@ -550,7 +550,7 @@ void winBgMain(WindowWork* wp) {
                 wp->menu[i].state++;
                 break;
             case 31:
-                wp->menu[i].x = intplGetValue(11, wp->menu[i].timer++, WR_FRAMES(24), -640.0f, 0.0f);
+                wp->menu[i].x = intplGetValue(11, -640.0f, 0.0f, wp->menu[i].timer++, WR_FRAMES(24));
                 if (wp->menu[i].timer > WR_FRAMES(24)) {
                     wp->menu[i].state = 100;
                 }
@@ -561,7 +561,7 @@ void winBgMain(WindowWork* wp) {
                 wp->menu[i].state++;
                 break;
             case 41:
-                wp->menu[i].x = intplGetValue(11, wp->menu[i].timer++, WR_FRAMES(24), 0.0f, -640.0f);
+                wp->menu[i].x = intplGetValue(11, 0.0f, -640.0f, wp->menu[i].timer++, WR_FRAMES(24));
                 if (wp->menu[i].timer > WR_FRAMES(24)) {
                     wp->menu[i].state = -1;
                 }
@@ -687,7 +687,7 @@ void winMsgMain(WindowWork* wp) {
             wp->msgState++;
             break;
         case 1:
-            wp->msgOfsX = intplGetValue(11, wp->msgTimer++, WR_FRAMES(16), -800.0f, 0.0f);
+            wp->msgOfsX = intplGetValue(11, -800.0f, 0.0f, wp->msgTimer++, WR_FRAMES(16));
             if (wp->msgTimer > WR_FRAMES(16)) {
                 wp->msgState++;
             }
@@ -725,7 +725,7 @@ void winMsgMain(WindowWork* wp) {
             wp->msgState++;
             break;
         case 11:
-            wp->msgOfsX = intplGetValue(11, wp->msgTimer++, WR_FRAMES(16), 0.0f, -800.0f);
+            wp->msgOfsX = intplGetValue(11, 0.0f, -800.0f, wp->msgTimer++, WR_FRAMES(16));
             if (wp->msgTimer > WR_FRAMES(16)) {
                 wp->msgState++;
             }

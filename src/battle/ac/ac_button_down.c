@@ -305,7 +305,7 @@ void battleAcDisp_ButtonDown(CameraId cameraId, void* param) {
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
-            x = intplGetValue(4, 20 - disp->slideTimer, 20, -300.0f, 0.0f);
+            x = intplGetValue(4, -300.0f, 0.0f, 20 - disp->slideTimer, 20);
             y = 0.0f;
             break;
         default:

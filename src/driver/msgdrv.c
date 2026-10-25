@@ -1977,10 +1977,10 @@ void msgWindow_Disp(CameraId camId, void* param) {
             case 6:
             case 8:
             case 9:
-                ex = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(pos.x, ( window->height / EXT_LIT(float_2_8041a524, 2.0f) ) + window->x, 0, window->alpha, 255);
-                ey = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(pos.y, window->y - ( window->width / EXT_LIT(float_2_8041a524, 2.0f) ), 0, window->alpha, 255);
-                w = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(EXT_LIT(float_10_8041a538, 10.0f), window->height, 0, window->alpha, 255);
-                h = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(EXT_LIT(float_10_8041a538, 10.0f), window->width, 0, window->alpha, 255);
+                ex = intplGetValue(0, pos.x, ( window->height / EXT_LIT(float_2_8041a524, 2.0f) ) + window->x, window->alpha, 255);
+                ey = intplGetValue(0, pos.y, window->y - ( window->width / EXT_LIT(float_2_8041a524, 2.0f) ), window->alpha, 255);
+                w = intplGetValue(0, EXT_LIT(float_10_8041a538, 10.0f), window->height, window->alpha, 255);
+                h = intplGetValue(0, EXT_LIT(float_10_8041a538, 10.0f), window->width, window->alpha, 255);
                 windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / EXT_LIT(float_2_8041a524, 2.0f) ), ey + ( h / EXT_LIT(float_2_8041a524, 2.0f) ), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
                     GXSetScissor(camera->scissor[0], 240.0f - (window->y - 36.0f), camera->scissor[2], 100);
@@ -1994,10 +1994,10 @@ void msgWindow_Disp(CameraId camId, void* param) {
                 } else {
                     window->y = 60.0f + pos.y;
                 }
-                ex = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(pos.x, ( window->height / EXT_LIT(float_2_8041a524, 2.0f) ) + window->x, 0, window->alpha, 255);
-                ey = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(pos.y, window->y - ( window->width / EXT_LIT(float_2_8041a524, 2.0f) ), 0, window->alpha, 255);
-                w = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(EXT_LIT(float_10_8041a538, 10.0f), window->height, 0, window->alpha, 255);
-                h = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(EXT_LIT(float_10_8041a538, 10.0f), window->width, 0, window->alpha, 255);
+                ex = intplGetValue(0, pos.x, ( window->height / EXT_LIT(float_2_8041a524, 2.0f) ) + window->x, window->alpha, 255);
+                ey = intplGetValue(0, pos.y, window->y - ( window->width / EXT_LIT(float_2_8041a524, 2.0f) ), window->alpha, 255);
+                w = intplGetValue(0, EXT_LIT(float_10_8041a538, 10.0f), window->height, window->alpha, 255);
+                h = intplGetValue(0, EXT_LIT(float_10_8041a538, 10.0f), window->width, window->alpha, 255);
                 windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / EXT_LIT(float_2_8041a524, 2.0f) ), ey + ( h / EXT_LIT(float_2_8041a524, 2.0f) ), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
                     sy = 240 - ((( s32)window->y ) - 10);

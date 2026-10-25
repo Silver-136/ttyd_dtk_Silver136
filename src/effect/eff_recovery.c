@@ -408,7 +408,7 @@ void effRecoveryMain(EffectEntry* effect) {
                 break;
             case 3:
                 if (p->timer < 40) {
-                    a = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 360.0f, 11, ++p->timer, 40);
+                    a = intplGetValue(11, 0.0f, 360.0f, ++p->timer, 40);
                     d = distABf(0.0f, 0.0f, p->position.x, p->position.z);
                     d *= 0.99f;
                     a = 6.2831855f * (90.0f + (a + 360.0f * (f32)(i - 2) / (f32)amount)) / 360.0f;
@@ -428,10 +428,10 @@ void effRecoveryMain(EffectEntry* effect) {
             case 5:
                 if (p->timer < 16) {
                     p->timer++;
-                    p->position.x = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(p->position.x, 0.0f, 1, p->timer, 16);
-                    p->position.y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(p->position.y, baseY, 1, p->timer, 16);
-                    p->position.z = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(p->position.z, 0.0f, 1, p->timer, 20);
-                    p->scale.x = p->scale.y = p->scale.z = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(1.0f, 0.0f, 1, p->timer, 16);
+                    p->position.x = intplGetValue(1, p->position.x, 0.0f, p->timer, 16);
+                    p->position.y = intplGetValue(1, p->position.y, baseY, p->timer, 16);
+                    p->position.z = intplGetValue(1, p->position.z, 0.0f, p->timer, 20);
+                    p->scale.x = p->scale.y = p->scale.z = intplGetValue(1, 1.0f, 0.0f, p->timer, 16);
                 } else {
                     p->state++;
                 }

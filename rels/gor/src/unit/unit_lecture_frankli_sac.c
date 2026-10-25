@@ -268,10 +268,10 @@ USER_FUNC(spot_square) {
     }
     darkCount++;
     if (darkCount >= 0 && darkCount <= time) {
-        dark = intplGetValue(0, darkCount, time, 0.0f, 192.0f);
+        dark = intplGetValue(0, 0.0f, 192.0f, darkCount, time);
     }
     if (darkCount >= time + wait && darkCount <= wait + time * 2) {
-        dark = intplGetValue(0, darkCount - (time + wait), time, 192.0f, 0.0f);
+        dark = intplGetValue(0, 192.0f, 0.0f, darkCount - (time + wait), time);
     }
     dispEntry(CAMERA_2D, 500.0f, 2, spot_square_disp, NULL);
     return darkCount >= wait + time * 2 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

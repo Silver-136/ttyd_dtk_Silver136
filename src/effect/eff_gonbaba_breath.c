@@ -392,9 +392,9 @@ void effGonbabaBreathMain(EffectEntry* effect) {
                 work->velY *= 0.9f;
                 work->position.x += work->velX;
                 work->position.y += work->velY;
-                work->from[0] = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(work->from[0], work->to[0], 11, 30 - work->life, 30);
-                work->from[1] = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(work->from[1], work->to[1], 11, 30 - work->life, 30);
-                work->from[2] = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(work->from[2], work->to[2], 11, 30 - work->life, 30);
+                work->from[0] = intplGetValue(11, work->from[0], work->to[0], 30 - work->life, 30);
+                work->from[1] = intplGetValue(11, work->from[1], work->to[1], 30 - work->life, 30);
+                work->from[2] = intplGetValue(11, work->from[2], work->to[2], 30 - work->life, 30);
                 break;
             case 17:
                 if (work->life == 0) {
@@ -414,9 +414,9 @@ void effGonbabaBreathMain(EffectEntry* effect) {
                 work->velY *= 0.9f;
                 work->position.x += work->velX;
                 work->position.y += work->velY;
-                work->from[0] = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(work->from[0], work->to[0], 11, 60 - work->life, 60);
-                work->from[1] = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(work->from[1], work->to[1], 11, 60 - work->life, 60);
-                work->from[2] = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(work->from[2], work->to[2], 11, 60 - work->life, 60);
+                work->from[0] = intplGetValue(11, work->from[0], work->to[0], 60 - work->life, 60);
+                work->from[1] = intplGetValue(11, work->from[1], work->to[1], 60 - work->life, 60);
+                work->from[2] = intplGetValue(11, work->from[2], work->to[2], 60 - work->life, 60);
                 break;
         }
     }

@@ -235,9 +235,9 @@ USER_FUNC(evt_item_move_3d_position) {
         *z0 = item->position.z;
     }
     if ((s32)(elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0])) < ms) {
-        item->position.x = intplGetValue(mode, (s32)elapsed, ms, event->userdataf[1], x);
-        item->position.y = intplGetValue(mode, (s32)elapsed, ms, event->userdataf[2], y);
-        item->position.z = intplGetValue(mode, (s32)elapsed, ms, *z0, z);
+        item->position.x = intplGetValue(mode, event->userdataf[1], x, (s32)elapsed, ms);
+        item->position.y = intplGetValue(mode, event->userdataf[2], y, (s32)elapsed, ms);
+        item->position.z = intplGetValue(mode, *z0, z, (s32)elapsed, ms);
         return EVT_RETURN_BLOCK;
     }
     item->position.x = x;

@@ -638,7 +638,6 @@ typedef struct StarEffWork {
 } StarEffWork;
 
 void star_disp2D(CameraId camera, void* param);
-#define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 
 s32 star_control(EventEntry* evt, BOOL first) {
     ScissorWork* w = GetScissorPtr();
@@ -670,17 +669,17 @@ s32 star_control(EventEntry* evt, BOOL first) {
     case 2:
         w->unk_120++;
         if (w->unk_120 <= 100) {
-            w->pos.x = INTPL(0, w->unk_120, 100, w->from.x, w->to.x);
-            w->pos.y = INTPL(0, w->unk_120, 100, w->from.y, w->to.y);
-            w->pos.z = INTPL(0, w->unk_120, 100, w->from.z, w->to.z);
-            w->scale.x = w->scale.y = w->scale.z = INTPL(0, w->unk_120, 100, 0.0f, 2.0f);
+            w->pos.x = intplGetValue(0, w->from.x, w->to.x, w->unk_120, 100);
+            w->pos.y = intplGetValue(0, w->from.y, w->to.y, w->unk_120, 100);
+            w->pos.z = intplGetValue(0, w->from.z, w->to.z, w->unk_120, 100);
+            w->scale.x = w->scale.y = w->scale.z = intplGetValue(0, 0.0f, 2.0f, w->unk_120, 100);
         } else {
             w->pos.x = w->to.x;
             w->pos.y = w->to.y;
             w->pos.z = w->to.z;
             w->scale.x = w->scale.y = w->scale.z = 2.0f;
         }
-        w->rot.y = INTPL(4, w->unk_120, 120, 0.0f, 2160.0f);
+        w->rot.y = intplGetValue(4, 0.0f, 2160.0f, w->unk_120, 120);
         if (w->unk_120 >= 120) {
             w->phase = 3;
             w->unk_120 = 0;
@@ -690,7 +689,7 @@ s32 star_control(EventEntry* evt, BOOL first) {
         break;
     case 3:
         w->unk_120++;
-        w->pos.y = INTPL(1, w->unk_120, 60, w->from.y, w->to.y);
+        w->pos.y = intplGetValue(1, w->from.y, w->to.y, w->unk_120, 60);
         if (w->unk_120 >= 60) {
             w->phase = 4;
             w->unk_120 = 0;
@@ -709,7 +708,7 @@ s32 star_control(EventEntry* evt, BOOL first) {
         break;
     case 4:
         w->unk_120++;
-        w->pos.y = INTPL(4, w->unk_120, 60, w->from.y, w->to.y);
+        w->pos.y = intplGetValue(4, w->from.y, w->to.y, w->unk_120, 60);
         t->x = w->pos.x;
         t->y = w->pos.y;
         if (w->unk_120 >= 60) {
@@ -774,7 +773,7 @@ void star_disp2D_sub(s32 idx, s32 alpha) {
         if (w->unk_120 > 30) {
             w->unk_120 = 30;
         }
-        alpha = (s32)((f32(*)(f32, f32, s32, s32, s32))intplGetValue)((f32)(u8)alpha, 0.0f, 0, w->unk_120, 30);
+        alpha = (s32)intplGetValue(0, (f32)(u8)alpha, 0.0f, w->unk_120, 30);
     }
     col = (GXColor){0xFF, 0xFF, 0xFF, 0x00};
     col.a = alpha;
@@ -819,7 +818,7 @@ s32 scissor_timer_main(void) {
         w->state = 5;
         w->step = 0;
     case 5:
-        w->unk_108 = ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(320.0f, 120.0f, 4, w->step, 15);
+        w->unk_108 = intplGetValue(4, 320.0f, 120.0f, w->step, 15);
         w->step++;
         if (w->step > 15) {
             w->state = 10;
@@ -833,7 +832,7 @@ s32 scissor_timer_main(void) {
         }
         break;
     case 15:
-        w->unk_108 = ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(120.0f, 320.0f, 4, w->step, 15);
+        w->unk_108 = intplGetValue(4, 120.0f, 320.0f, w->step, 15);
         w->step++;
         if (w->step > 15) {
             w->state = 20;
@@ -1121,9 +1120,9 @@ void scissor_disp_control(CameraId camera, void* param) {
         w->unk_10 -= 60;
     }
     if (w->unk_10 <= 29) {
-        ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 255.0f, 0, w->unk_10, 29);
+        intplGetValue(0, 0.0f, 255.0f, w->unk_10, 29);
     } else {
-        ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(255.0f, 0.0f, 0, w->unk_10 - 30, 59);
+        intplGetValue(0, 255.0f, 0.0f, w->unk_10 - 30, 59);
     }
     GXSetCullMode(0);
     GXClearVtxDesc();

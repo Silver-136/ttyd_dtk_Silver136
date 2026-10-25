@@ -78,7 +78,6 @@ typedef struct SplineWork {
 
 void spline_getvalue(f32* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl);
 void spline_maketable(s32 n, Vec* pts, f32* ts, Vec* tbl);
-#define INTPL_F(mode, cur, steps, a, b) ((f32 (*)(s32, f32, f32, s32, s32))intplGetValue)(mode, a, b, cur, steps)
 
 
 
@@ -1244,7 +1243,7 @@ USER_FUNC(evt_sub_intpl_init) {
 }
 
 USER_FUNC(evt_sub_intpl_get_value) {
-    event->lwData[0] = intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], event->lwData[12], event->lwData[13]);
+    event->lwData[0] = intplGetValue(event->lwData[11], event->lwData[12], event->lwData[13], event->lwData[14], event->lwData[15]);
     if (event->lwData[14] >= event->lwData[15]) {
         event->lwData[1] = 0;
     } else {
@@ -1256,7 +1255,7 @@ USER_FUNC(evt_sub_intpl_get_value) {
 
 USER_FUNC(evt_sub_intpl_get_value_para) {
     EvtWord* args = event->args;
-    evtSetFloat(event, args[0], intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], event->lwData[12], event->lwData[13]));
+    evtSetFloat(event, args[0], intplGetValue(event->lwData[11], event->lwData[12], event->lwData[13], event->lwData[14], event->lwData[15]));
     if (event->lwData[14] >= event->lwData[15]) {
         evtSetValue(event, args[1], 0);
     } else {
@@ -1286,7 +1285,7 @@ USER_FUNC(evt_sub_intpl_get_float) {
     s32 done = args[1];
     f32 start = evtGetFloat(event, LW(12));
     f32 end = evtGetFloat(event, LW(13));
-    f32 v = intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], start, end);
+    f32 v = intplGetValue(event->lwData[11], start, end, event->lwData[14], event->lwData[15]);
     if (out != EVT_NULLPTR) {
         evtSetFloat(event, out, v);
     }
@@ -1318,7 +1317,7 @@ USER_FUNC(evt_sub_intpl_msec_init) {
 USER_FUNC(evt_sub_intpl_msec_get_value) {
     s32 ms = (u64)(s32)((s32)event->lifetime - (s32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
     if (ms < event->lwData[15]) {
-        event->lwData[0] = intplGetValue(event->lwData[11], ms, event->lwData[15], event->lwData[12], event->lwData[13]);
+        event->lwData[0] = intplGetValue(event->lwData[11], event->lwData[12], event->lwData[13], ms, event->lwData[15]);
         event->lwData[1] = 1;
     } else {
         event->lwData[0] = event->lwData[13];
@@ -1331,7 +1330,7 @@ USER_FUNC(evt_sub_intpl_msec_get_value_para) {
     EvtWord* args = event->args;
     s32 ms = (u64)(s32)((s32)event->lifetime - (s32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
     if (ms < event->lwData[15]) {
-        evtSetFloat(event, args[0], intplGetValue(event->lwData[11], ms, event->lwData[15], event->lwData[12], event->lwData[13]));
+        evtSetFloat(event, args[0], intplGetValue(event->lwData[11], event->lwData[12], event->lwData[13], ms, event->lwData[15]));
         evtSetValue(event, args[1], 1);
     } else {
         evtSetFloat(event, args[0], event->lwData[13]);
@@ -1371,10 +1370,10 @@ USER_FUNC(evt_sub_spline_get_value) {
     f32 v[3];
     f32 t;
     if (!w->manual) {
-        t = INTPL_F(w->mode, w->cur, w->steps, 0.0f, 1.0f);
+        t = intplGetValue(w->mode, 0.0f, 1.0f, w->cur, w->steps);
     } else {
         el = (u64)(event->lifetime - w->start) / (OS_TIMER_CLOCK / 1000);
-        t = INTPL_F(w->mode, (s32)el, w->msec, 0.0f, 1.0f);
+        t = intplGetValue(w->mode, 0.0f, 1.0f, (s32)el, w->msec);
     }
     spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
     evtSetValue(event, args[0], FLOAT(v[0]));

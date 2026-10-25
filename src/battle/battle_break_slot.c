@@ -580,14 +580,14 @@ void BattleBreakSlot_Main(void) {
                 }
                 rr->counter++;
                 if (rr->counter <= 5) {
-                    y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(110.0f, 142.0f, 0, rr->counter, 5);
+                    y = intplGetValue(0, 110.0f, 142.0f, rr->counter, 5);
                     rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
                     rr->scale = (Vec){0.8f, 0.8f, 0.8f};
                     rr->rot = (Vec){0.0f, 0.0f, 0.0f};
                     rr->pivot = (Vec){0.0f, 0.0f, 0.0f};
                     rr->alpha = 255;
                 } else {
-                    y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(142.0f, 174.0f, 4, rr->counter - 5, 20);
+                    y = intplGetValue(4, 142.0f, 174.0f, rr->counter - 5, 20);
                     rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
                     rr->scale = (Vec){0.8f, 0.8f, 0.8f};
                     rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -615,7 +615,7 @@ void BattleBreakSlot_Main(void) {
                 }
                 break;
             case 3:
-                y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(142.0f, 174.0f, 0, rr->counter, 20);
+                y = intplGetValue(0, 142.0f, 174.0f, rr->counter, 20);
                 rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
                 rr->scale = (Vec){0.8f, 0.8f, 0.8f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -627,7 +627,7 @@ void BattleBreakSlot_Main(void) {
                 }
                 break;
             case 4:
-                y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(142.0f, 174.0f, 0, rr->counter, 20);
+                y = intplGetValue(0, 142.0f, 174.0f, rr->counter, 20);
                 rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
                 rr->scale = (Vec){0.8f, 0.8f, 0.8f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -640,7 +640,7 @@ void BattleBreakSlot_Main(void) {
                 break;
             case 5:
                 rr->flags |= 1;
-                y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(-128.0f, 0.0f, 0, rr->counter, 40);
+                y = intplGetValue(0, -128.0f, 0.0f, rr->counter, 40);
                 rr->pos = (Vec){i * 128 - 128, y, 0.0f};
                 rr->scale = (Vec){1.0f, 1.0f, 1.0f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -658,7 +658,7 @@ void BattleBreakSlot_Main(void) {
             case 6:
                 break;
             case 7:
-                rr->spinSpeed = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 22.5f, 0, rr->counter, 20);
+                rr->spinSpeed = intplGetValue(0, 0.0f, 22.5f, rr->counter, 20);
                 rr->pos = (Vec){128.0f * i + -128.0f, rr->pos.y + rr->spinSpeed, 0.0f};
                 rr->scale = (Vec){1.0f, 1.0f, 1.0f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -732,16 +732,16 @@ void BattleBreakSlot_Main(void) {
             case 10:
                 if (i == 2) {
                     rr->counter++;
-                    rr->spinSpeed = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(rr->spinSpeed, 0.0f, 0, rr->counter, 20);
+                    rr->spinSpeed = intplGetValue(0, rr->spinSpeed, 0.0f, rr->counter, 20);
                     rr->pos.y = rr->spinSpeed * (f32)sin(3.141592f * (2.0f * rr->counter) / 8.0f);
                 }
                 break;
             case 11:
                 rr->spinSpeed = 0.0f;
                 rr->pos.y = 0.0f;
-                y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(1.0f, 2.0f, 0, rr->counter, 60);
+                y = intplGetValue(0, 1.0f, 2.0f, rr->counter, 60);
                 rr->scale = (Vec){y, y, 1.0f};
-                rr->alpha = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(255.0f, 0.0f, 0, rr->counter, 60);
+                rr->alpha = intplGetValue(0, 255.0f, 0.0f, rr->counter, 60);
                 rr->counter++;
                 if (rr->counter > 60) {
                     rr->state = 13;
@@ -751,7 +751,7 @@ void BattleBreakSlot_Main(void) {
             case 12:
                 rr->spinSpeed = 0.0f;
                 rr->pos.y = 0.0f;
-                y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 128.0f, 0, rr->counter, 40);
+                y = intplGetValue(0, 0.0f, 128.0f, rr->counter, 40);
                 rr->pos = (Vec){128.0f * i + -128.0f, y, 0.0f};
                 rr->scale = (Vec){1.0f, 1.0f, 1.0f};
                 rr->rot = (Vec){0.0f, 0.0f, 0.0f};

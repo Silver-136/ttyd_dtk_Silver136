@@ -230,7 +230,7 @@ void battleAcDisp_ShotTarget(CameraId cameraId, void* param) {
         case 1000:
         case 1001:
         case 1002:
-            d->iconX = intplGetValue(4, 20 - d->slideTimer, 20, -200.0f, 30.0f);
+            d->iconX = intplGetValue(4, -200.0f, 30.0f, 20 - d->slideTimer, 20);
             actionCommandDisp(d->iconX, d->iconY);
             if (d->slideTimer > 0) {
                 d->slideTimer--;
@@ -239,7 +239,7 @@ void battleAcDisp_ShotTarget(CameraId cameraId, void* param) {
         case 1003:
         case 1004:
             if (d->slideTimer >= 40) {
-                d->iconX = intplGetValue(4, d->slideTimer - 40, 20, 30.0f, -200.0f);
+                d->iconX = intplGetValue(4, 30.0f, -200.0f, d->slideTimer - 40, 20);
             } else {
                 d->iconX = 30.0f;
             }

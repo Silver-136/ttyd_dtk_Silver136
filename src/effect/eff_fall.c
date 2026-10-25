@@ -661,7 +661,7 @@ void effFallMain(EffectEntry* effect) {
                         }
                         break;
                     case 1:
-                        e->rot2 = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(30.0f, -27.0f, 11, e->timer, 180);
+                        e->rot2 = intplGetValue(11, 30.0f, -27.0f, e->timer, 180);
                         if (e->rot2 < 0.0f) {
                             e->rot3 = e->rot2;
                             e->rot2 = 0.0f;
@@ -676,7 +676,7 @@ void effFallMain(EffectEntry* effect) {
                         }
                         break;
                     case 2:
-                        e->rot2 = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(-27.0f, 80.0f, 11, e->timer, 200);
+                        e->rot2 = intplGetValue(11, -27.0f, 80.0f, e->timer, 200);
                         if (e->rot2 < 0.0f) {
                             e->rot3 = e->rot2;
                             e->rot2 = 0.0f;

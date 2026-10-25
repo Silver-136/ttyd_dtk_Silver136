@@ -144,24 +144,9 @@ USER_FUNC(evt_audience_move_position_frame) {
     else if (compare < 0.0f) {
         member->angle = 0.0f;
     }
-    x = intplGetValue(
-        member->interpType,
-        member->interpFramesTotal - member->interpFramesLeft,
-        member->interpFramesTotal,
-        member->startPosX,
-        member->targetPosX);
-    y = intplGetValue(
-        member->interpType,
-        member->interpFramesTotal - member->interpFramesLeft,
-        member->interpFramesTotal,
-        member->startPosY,
-        member->targetPosY);
-    z = intplGetValue(
-        member->interpType,
-        member->interpFramesTotal - member->interpFramesLeft,
-        member->interpFramesTotal,
-        member->startPosZ,
-        member->targetPosZ);
+    x = intplGetValue(member->interpType, member->startPosX, member->targetPosX, member->interpFramesTotal - member->interpFramesLeft, member->interpFramesTotal);
+    y = intplGetValue(member->interpType, member->startPosY, member->targetPosY, member->interpFramesTotal - member->interpFramesLeft, member->interpFramesTotal);
+    z = intplGetValue(member->interpType, member->startPosZ, member->targetPosZ, member->interpFramesTotal - member->interpFramesLeft, member->interpFramesTotal);
     BattleAudience_SetPosition(id, x, y, z);
     member->interpFramesLeft--;
     if (member->interpFramesLeft <= 0) {

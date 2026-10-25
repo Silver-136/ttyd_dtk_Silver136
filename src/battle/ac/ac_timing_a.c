@@ -76,7 +76,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     int iconSlot;
     switch (work->actionCommands.mAcState) {
         case 99:
-            disp->iconX = intplGetValue(4, 20 - disp->slideTimer, 20, -300.0f, 30.0f);
+            disp->iconX = intplGetValue(4, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case 100:
             disp->iconX = 30.0f;
             actionCommandDisp(disp->iconX, disp->iconY);
@@ -88,7 +88,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
         case 1001:
             if (disp->slideTimer >= 40) {
                 iconSlot = 4; // FAKE: register-held index; also read uninitialized on the else path below. Literal 4 / slot = 4 at decl both differ
-                disp->iconX = intplGetValue(iconSlot, AC_SLIDE_TIMER_AT(disp, iconSlot) - 40, 20, 30.0f, -300.0f);
+                disp->iconX = intplGetValue(iconSlot, 30.0f, -300.0f, AC_SLIDE_TIMER_AT(disp, iconSlot) - 40, 20);
             } else {
                 disp->iconX = 30.0f;
             }

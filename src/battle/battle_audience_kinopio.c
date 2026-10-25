@@ -425,7 +425,7 @@ void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
         }
         m->step++;
     case 1:
-        m->dispOffset.y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 10.0f, 4, m->counter, 15);
+        m->dispOffset.y = intplGetValue(4, 0.0f, 10.0f, m->counter, 15);
         m->counter++;
         if (m->counter > 30) {
             m->counterF -= 1.0f;
@@ -555,7 +555,7 @@ void BattleAudienceCtrlProcessKinopioBooing(s32 index) {
         }
         m->step++;
     case 1:
-        m->dispOffset.y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, 10.0f, 4, m->counter, 15);
+        m->dispOffset.y = intplGetValue(4, 0.0f, 10.0f, m->counter, 15);
         m->counter++;
         if (m->counter > 30) {
             m->counterF -= 1.0f;
@@ -847,9 +847,9 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index) {
         parts = BattleGetUnitPartsPtr(BtlUnit_GetUnitId(unit), BtlUnit_GetBodyPartsId(unit));
 
         m->counter++;
-        m->position.x = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(m->mHomePosition.x, 0.0f, 5, m->counter, 60);
-        m->position.y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(m->mHomePosition.y, 80.0f, 5, m->counter, 60);
-        m->position.z = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(m->mHomePosition.z, 100.0f, 5, m->counter, 60);
+        m->position.x = intplGetValue(5, m->mHomePosition.x, 0.0f, m->counter, 60);
+        m->position.y = intplGetValue(5, m->mHomePosition.y, 80.0f, m->counter, 60);
+        m->position.z = intplGetValue(5, m->mHomePosition.z, 100.0f, m->counter, 60);
         if (m->counter >= 60) {
             BattleAudience_SetAnim(index, 7, FALSE);
             BtlUnit_GetHitPos(unit, parts, &x, &y, &z);
@@ -868,9 +868,9 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index) {
         break;
     case 10:
         m->counter++;
-        m->position.x = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(0.0f, x, 0, m->counter, 30);
-        m->position.y = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(80.0f, y - 15.0f, 4, m->counter, 30);
-        m->position.z = ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(100.0f, z, 0, m->counter, 30);
+        m->position.x = intplGetValue(0, 0.0f, x, m->counter, 30);
+        m->position.y = intplGetValue(4, 80.0f, y - 15.0f, m->counter, 30);
+        m->position.z = intplGetValue(0, 100.0f, z, m->counter, 30);
         if (m->counter == 30) {
             unit = m->targetUnit;
             parts = BattleGetUnitPartsPtr(BtlUnit_GetUnitId(unit), BtlUnit_GetBodyPartsId(unit));
