@@ -343,9 +343,9 @@ void mapSetMaterialLight(s32 flags, Vec position);
 void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2);
 void mapSetMaterialFog(void);
 typedef struct MapTevCallbackInfo {
-    u8 mapObj[0x4]; // 0x0, MapObject* being drawn (stored raw)
+    MapObject* mapObj; // 0x0, map object being drawn
     MtxPtr mtx;        // 0x4
-    u8 drawMode[0x4]; // 0x8, s32 draw mode (stored raw)
+    s32 drawMode;      // 0x8
     s32 tevStage;      // 0xC, next free TEV stage
     s32 texMap;        // 0x10, next free texture map
     s32 texCoord;      // 0x14, next free texture coordinate

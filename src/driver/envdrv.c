@@ -1037,7 +1037,7 @@ void envAddTev(s32 type, MapTevCallbackInfo *info) {
     s32 indStage;
     Mtx mtx;
     stage = info->tevStage;
-    map = info->texMap; // MapTevCallbackInfo's texMap/texCoord fields are filled the other way round by mapdrv
+    map = info->texMap;
     coord = info->texCoord;
     indStage = info->indStage;
     if (type == 0) {
@@ -1193,7 +1193,9 @@ void envAddTev(s32 type, MapTevCallbackInfo *info) {
 
 #undef tw
 
-static inline MapObject* envWaterObj(MapTevCallbackInfo* info) { return *(MapObject**)info->mapObj; }
+static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
+    return info->mapObj;
+}
 static inline MapObject* envWaterParent(MapObject* o) { return o->parent; }
 void envSetWater(MapTevCallbackInfo* info) {
     MapObject* obj;
@@ -1284,7 +1286,7 @@ void envSetWater(MapTevCallbackInfo* info) {
     GXTexModeSync();
     GXInitTexObj(&obj1, buf, (u16)hw, (u16)hh, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&obj1, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    PSMTXMultVec(info->mtx, &(*(MapObject**)info->mapObj)->center, &pos);
+    PSMTXMultVec(info->mtx, &info->mapObj->center, &pos);
     scale = 1000.0f / PSVECDistance(&camGetCurPtr()->cameraPos, &pos);
     if (scale < 0.0f) {
         scale = 0.0f;

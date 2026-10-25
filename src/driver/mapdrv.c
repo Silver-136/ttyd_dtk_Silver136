@@ -2766,9 +2766,9 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
         MapTevCallback callback;
         MapTevCallbackInfo* ip = &info;
 
-        *(MapObject**)info.mapObj = current_mp;
+        info.mapObj = current_mp;
         info.mtx = mtx;
-        *(s32*)info.drawMode = drawMode;
+        info.drawMode = drawMode;
         info.tevStage = tevStage;
         info.texMap = map;
         info.texCoord = coord;

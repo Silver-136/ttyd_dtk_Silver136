@@ -197,16 +197,7 @@ static void pose_main(void);
 static void ext_disp(CameraId camera, void* param);
 void effKemuTestSetRxRz(EffectEntry* effect, f32 rx, f32 rz);
 static void depthDisp(CameraId camera, void* param);
-typedef struct YamiParam {
-    s32 field_0x0;
-    f32 (*mtx)[4];
-    s32 field_0x8;
-    s32 numTevStages;
-    s32 field_0x10;
-    s32 numTexGens;
-    s32 numIndStages;
-} YamiParam;
-void envSetYami(YamiParam* param);
+void envSetYami(MapTevCallbackInfo* info);
 void ext_disp_minnnanokoe(CameraId camera, void* param);
 void jump_minnnanokoe(s32 i, f32 h);
 
@@ -2394,8 +2385,8 @@ void jump_minnnanokoe(s32 i, f32 h) {
 }
 
 void ext_disp_minnnanokoe(CameraId camera, void* param) {
-    YamiParam yp;
-    YamiParam* p = &yp;
+    MapTevCallbackInfo yp;
+    MapTevCallbackInfo* p = &yp;
     ExtdrvPose* pose = extGetPosePtr();
     s32 i;
 
@@ -2404,15 +2395,15 @@ void ext_disp_minnnanokoe(CameraId camera, void* param) {
     extLoadTexture();
     extLoadTev();
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
-        yp.numTevStages = 1;
-        yp.field_0x10 = 1;
-        yp.numTexGens = 1;
-        yp.numIndStages = 0;
+        yp.tevStage = 1;
+        yp.texMap = 1;
+        yp.texCoord = 1;
+        yp.indStage = 0;
         yp.mtx = *pose->mtx;
         envSetYami(p);
-        GXSetNumTexGens(yp.numTexGens);
-        GXSetNumTevStages(yp.numTevStages);
-        GXSetNumIndStages(yp.numIndStages);
+        GXSetNumTexGens(yp.texCoord);
+        GXSetNumTevStages(yp.tevStage);
+        GXSetNumIndStages(yp.indStage);
         extPoseDraw(i);
     }
     extLoadTextureExit();
