@@ -2365,7 +2365,7 @@ BOOL winSortWait(WindowWork* wp) {
     return wp->sortActive != 0;
 }
 
-void winKageGX(WindowWork* wp, GXColor color, f32 x, f32 y, f32 z, f32 s) {
+void winKageGX(WindowWork* wp, f32 x, f32 y, f32 z, f32 s, GXColor color) {
     Mtx out;
     Mtx trans;
     Mtx scale;

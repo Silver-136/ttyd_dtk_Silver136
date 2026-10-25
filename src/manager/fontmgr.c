@@ -1,6 +1,7 @@
 #include "manager/fontmgr.h"
 #include "manager/dvdmgr.h"
 #include "driver/camdrv.h"
+#include "driver/icondrv.h"
 #include "driver/msgdrv.h"
 #include "mario/mariost.h"
 #include "memory.h"
@@ -526,7 +527,6 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
         x += fontScale.x * (width + charspace[gp->language]);
     }
 }
-extern void iconGetWidthHight(u16* width, u16* height, u16 id);
 extern void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale);
 
 static inline void fontDrawCodeEdgeI(u16 code, s16 x, s16 y) {
@@ -596,7 +596,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
                                 id = 0;
                             }
                         }
-                        iconGetWidthHight(&w, &h, id);
+                        iconGetWidthHight(&w, &h, (u16)id);
                         pos.x = d1 + (cx + 0.5f * w * scale);
                         pos.y = d2 + (cy - h * scale);
                         pos.z = 0.0f;
@@ -678,7 +678,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                                 id = 0;
                             }
                         }
-                        iconGetWidthHight(&w, &h, id);
+                        iconGetWidthHight(&w, &h, (u16)id);
                         pos.x = d1 + (cx + 0.5f * w * scale);
                         pos.y = d2 + (cy - h * scale);
                         pos.z = 0.0f;
@@ -767,7 +767,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
                                 id = 0;
                             }
                         }
-                        iconGetWidthHight(&w, &h, id);
+                        iconGetWidthHight(&w, &h, (u16)id);
                         width += w * scale + d3;
                     }
                     else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {

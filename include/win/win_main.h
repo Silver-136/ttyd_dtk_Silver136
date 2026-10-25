@@ -299,7 +299,7 @@ void winBgGX(WindowWork* wp, s32 type, f32 x, f32 y);
 void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h);
 void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h);
 void winWazaGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h);
-void winKageGX(WindowWork* wp, GXColor color, f32 x, f32 y, f32 z, f32 scale);
+void winKageGX(WindowWork* wp, f32 x, f32 y, f32 z, f32 scale, GXColor color);
 void winBookGX(WindowWork* wp, s32 type, f32 x, f32 y);
 void winHakoGX(WindowWork* wp, s32 type, f32 x, f32 y);
 void winSortEntry(WindowWork* wp, s32 type, f32 x, f32 y);

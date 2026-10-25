@@ -764,7 +764,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         animPoseSetLocalTime(w->mario.poseId, (f32)(gp->retraceCount % (s32)anim->loopInfo[2]));
     }
     animPoseMain(w->mario.poseId);
-    winKageGX(w, (GXColor){0x00, 0x00, 0x00, 0x80}, x - 150.0f, y, 0.0f, 1.0f);
+    winKageGX(w, x - 150.0f, y, 0.0f, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
     PSMTXTrans(mtx, x - 150.0f, y, 0.0f);
     winZClear();
     animPoseDrawMtx(w->mario.poseId, mtx, 2, 0.0f, 5.0f);

@@ -1009,7 +1009,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             PSMTXRotRad(m2, 'y', 0.017453292f * (51.42857f * i - w->log.fE80));
             PSMTXMultVec(m2, &v, &v);
             PSMTXMultVec(m1, &v, &v);
-            winKageGX(w, (GXColor){0x00, 0x00, 0x00, 0x80}, v.x + (x + w->log.fE68), (v.y + (y + w->log.fE70)) - 30.0f, v.z, 1.0f);
+            winKageGX(w, v.x + (x + w->log.fE68), (v.y + (y + w->log.fE70)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
             wk = w->log.eff[i]->userdata;
             wk->position.x = v.x + (x + w->log.fE68);
             wk = w->log.eff[i]->userdata;

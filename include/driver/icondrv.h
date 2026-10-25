@@ -73,11 +73,7 @@ void iconGetTexObj(GXTexObj* texObj, s32 iconId);
 void iconGetTexObj(GXTexObj* texObj, s16 iconId);
 #endif
 void iconGetWidthHeight(u16* width, u16* height, s16 iconId);
-#ifdef VERSION_G8ME01
 void iconGetWidthHight(u16* width, u16* height, s32 iconId);
-#else
-void iconGetWidthHight(u16* width, u16* height, s16 iconId);
-#endif
 IconEntry* iconNameToPtr(const char* name);
 void iconSetPos(const char* name, f32 x, f32 y, f32 z);
 void iconFlagOn(const char* name, s16 flags);

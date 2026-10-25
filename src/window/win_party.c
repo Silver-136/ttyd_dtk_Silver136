@@ -349,7 +349,6 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     GXColor black;
     GXColor white0;
     GXColor black0; 
-    GXColor* kp;
     f32 scale;
     f32 tx;
     f32 bx;
@@ -438,9 +437,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
         PSMTXRotRad(ry, 'y', 0.017453292f * ((( 360.0f / wp->party.count ) * i ) - wp->party.angle));
         PSMTXMultVec(ry, &v, &v);
         PSMTXMultVec(rx, &v, &v);
-        kp = &(GXColor){0x00, 0x00, 0x00, 0x80};
-        // FAKE: the colour goes by address with the floats first (the by-value call rebuilds the literal each pass and evaluates the scale first)
-        ((void (*)(WindowWork*, f32, f32, f32, f32, GXColor*))winKageGX)(wp, (x - 140.0f) + v.x, 20.0f + (y + v.y), v.z, (i == wp->party.cursor) ? ( 0.8f ) : ( 0.6f) , kp);
+        winKageGX(wp, (x - 140.0f) + v.x, 20.0f + (y + v.y), v.z, (i == wp->party.cursor) ? 0.8f : 0.6f, (GXColor){0x00, 0x00, 0x00, 0x80});
     }
 
     for (i = 0; i < wp->party.count; i++) {

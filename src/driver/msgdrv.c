@@ -1166,8 +1166,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
                 if (!isHM) {
                     entry->value = iconId;
-                    // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
-                    ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
+                    iconGetWidthHight(&iw, &ih, (u16)iconId);
                     entry->glyph = 0xFFF8;
                     entry->x = (x + (( 0.5f * iw ) * iconScale) ) + iconOffX;
 #ifndef VERSION_G8ME01

@@ -569,11 +569,7 @@ void iconGetTexObj(GXTexObj* texObj, s16 iconId) {
     GXInitTexObjLOD(texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 }
 
-#ifdef VERSION_G8ME01
 void iconGetWidthHight(u16* width, u16* height, s32 iconId) {
-#else
-void iconGetWidthHight(u16* width, u16* height, s16 iconId) {
-#endif
     IconBinData* entry;
     TEXDescriptor* descriptor;
 
