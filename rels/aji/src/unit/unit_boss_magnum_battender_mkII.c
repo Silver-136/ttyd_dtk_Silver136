@@ -724,7 +724,7 @@ USER_FUNC(aud_fire_hit) {
             mem->rotation.y = 0.0f;
             mem->scale.x = mem->scale.y = 1.0f;
             mem->flags |= 4;
-            evt = evtEntry(aud_hit_event, 0, 0x20);
+            evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
             evt->lwData[0] = list[i];
             evt->lwData[1] = (s32)(1024.0f * hx) - EVTDAT_FLOAT_BASE;
             evt->lwData[2] = (s32)(1024.0f * hy) - EVTDAT_FLOAT_BASE;
@@ -773,7 +773,7 @@ USER_FUNC(aud_fire_no_hit) {
             mem->rotation.y = 0.0f;
             mem->scale.x = mem->scale.y = 1.0f;
             mem->flags |= 4;
-            evt = evtEntry(aud_hit_event, 0, 0x20);
+            evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
             evt->lwData[0] = list[i];
             evt->lwData[1] = FLOAT(-275.0f);
             evt->lwData[2] = (s32)(1024.0f * (hy - 20.0f)) - EVTDAT_FLOAT_BASE;

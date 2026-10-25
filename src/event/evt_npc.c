@@ -196,7 +196,7 @@ USER_FUNC(evt_npc_setup) {
                 if (evtId) {
                     evtDeleteID(evtId);
                 }
-                newEvt = evtEntry(npc->moveEvent, 0, 0x20);
+                newEvt = evtEntry(npc->moveEvent, 0, EVENT_START_IMMEDIATE);
                 newEvt->wNpcEventType = 1;
                 newEvt->ownerNPC = npc;
                 npc->regularEvtId = newEvt->eventId;

@@ -129,7 +129,7 @@ USER_FUNC(evt_item_get_item) {
         return EVT_RETURN_BLOCK;
     }
     if (item == NULL) return EVT_RETURN_DONE;
-    if (!(item->flags & 1)) return EVT_RETURN_DONE;
+    if (!(item->flags & ITEM_FLAG_ACTIVE)) return EVT_RETURN_DONE;
     if (itemStatus(item, 2)) return EVT_RETURN_DONE;
     return itemStatus(item, 0x10000) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
@@ -137,7 +137,7 @@ USER_FUNC(evt_item_get_item) {
 USER_FUNC(evt_item_get_item_end_wait) {
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, event->args[0]));
     if (item == NULL) return EVT_RETURN_DONE;
-    if (!(item->flags & 1)) return EVT_RETURN_DONE;
+    if (!(item->flags & ITEM_FLAG_ACTIVE)) return EVT_RETURN_DONE;
     if (itemStatus(item, 2)) return EVT_RETURN_DONE;
     return itemStatus(item, 0x10000) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }

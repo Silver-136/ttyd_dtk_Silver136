@@ -411,7 +411,7 @@ USER_FUNC(zubastar_main) {
             EventEntry* ev;
             w->phase = 20;
             w->level++;
-            ev = evtEntry(nice_event, 0, 0x20);
+            ev = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
                 { s32 v = w->level + 1; ev->lwData[0] = v < 6 ? v : 6; }
             psndSFXOff(w->sfx);
             break;

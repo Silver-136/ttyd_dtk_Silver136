@@ -22,6 +22,8 @@ typedef enum WindowType {
     WINDOW_TYPE_CLEAR = 11
 } WindowType;
 
+#define WINDOW_FLAG_ACTIVE 1 // WindowEntry.flags: slot in use
+
 struct WindowEntry {
     u8 state[2]; //0x0, u16 message-window state (WIN_STATE in msgdrv.c)
     u16 flags; //0x2

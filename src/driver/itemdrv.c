@@ -81,7 +81,7 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy);
 
 HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle);
 void itemseq_GetItem(ItemEntry* entry);
-ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
+ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
 
 //.bss
 static ItemWork work[2];
@@ -114,14 +114,14 @@ static inline BOOL itemGetPouch(ItemEntry* entry) {
     if (!pouchGetItem(entry->itemId)) {
         return FALSE;
     }
-    if (entry->flags & 0x20) {
-        swSet(entry->evtId);
+    if (entry->flags & ITEM_FLAG_COLLECT_GSWF) {
+        swSet(entry->collectFlag);
     }
-    else if (entry->flags & 0x40) {
-        _swSet(entry->evtId);
+    else if (entry->flags & ITEM_FLAG_COLLECT_LSWF) {
+        _swSet(entry->collectFlag);
     }
     if ((u32)entry->evtCode != 0) {
-        evt = evtEntry((EvtWord*)entry->evtCode, 0, 0x20);
+        evt = evtEntry((EvtWord*)entry->evtCode, 0, EVENT_START_IMMEDIATE);
         evt->lwData[0] = FLOAT(entry->position.x);
         evt->lwData[1] = FLOAT(entry->position.y);
         evt->lwData[2] = FLOAT(entry->position.z);
@@ -167,7 +167,7 @@ void itemReInit(void) {
 
     if (!gp->inBattle) {
         for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-            if (entry->flags & 1) { //flush all current badges
+            if (entry->flags & ITEM_FLAG_ACTIVE) { //flush all current badges
                 itemCheckBadge(entry);
             }
         }
@@ -176,7 +176,7 @@ void itemReInit(void) {
     //clear all existing entries
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
         iconDelete(entry->name);
-        entry->flags &= ~1;
+        entry->flags &= ~ITEM_FLAG_ACTIVE;
         memset(entry->name, 0, sizeof(entry->name));
     }
 }
@@ -220,7 +220,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
         ItemEntry* item;
         int i;
         for (item = wp->entries, i = 0; i < wp->count; i++, item++) {
-            if (item->flags & 1 && item->mode == 2) {
+            if (item->flags & ITEM_FLAG_ACTIVE && item->mode == 2) {
                 return FALSE;
             }
         }
@@ -263,7 +263,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
         ItemEntry* item;
         int i;
         for (item = wp->entries, i = 0; i < wp->count; i++, item++) {
-            if (item->flags & 1 && item->mode == 2) {
+            if (item->flags & ITEM_FLAG_ACTIVE && item->mode == 2) {
                 return FALSE;
             }
         }
@@ -277,7 +277,7 @@ BOOL N_itemPickUpFromFieldCheck(void) {
     int i;
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-        if (entry->flags & 1 && entry->mode == 2) {
+        if (entry->flags & ITEM_FLAG_ACTIVE && entry->mode == 2) {
             return TRUE;
         }
     }
@@ -309,7 +309,7 @@ void itemMain(void) {
     }
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-        if (!(entry->flags & 1)) continue;
+        if (!(entry->flags & ITEM_FLAG_ACTIVE)) continue;
         mode = entry->mode;
         active = TRUE;
         switch (mode) {
@@ -408,7 +408,7 @@ void itemMain(void) {
                 break;
         }
 
-        if (entry->flags & 1) {
+        if (entry->flags & ITEM_FLAG_ACTIVE) {
             switch (entry->itemId) {
                 case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77: case 0x78:
                     if (!(entry->flags2 & 0x100)) {
@@ -446,7 +446,7 @@ void itemMain(void) {
 
     wp = gp->inBattle ? &work[0] : &work[1];
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-        if (entry->flags & 1) {
+        if (entry->flags & ITEM_FLAG_ACTIVE) {
             entry->baseTime = gp->renderTime;
         }
     }
@@ -465,7 +465,7 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
 
     found = NULL;
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-        if (entry->flags & 1 && entry->itemId == itemId && entry->flags & 0x400) {
+        if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == itemId && entry->flags & 0x400) {
             found = entry;
             break;
         }
@@ -474,7 +474,7 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
 }
 #endif
 
-ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z) {
+ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z) {
     ItemWork* wp = itemGetWork();
     int i;
     ItemEntry* entry;
@@ -489,18 +489,18 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, 
 
     isGswf = FALSE;
     isLswf = FALSE;
-    if (evtId != -1) {
-        if (evtId >= GSWF(0) && evtId <= EVTDAT_GSWF_MAX) {
-            evtId += EVTDAT_GSWF_BASE;
+    if (collectFlag != -1) {
+        if (collectFlag >= GSWF(0) && collectFlag <= EVTDAT_GSWF_MAX) {
+            collectFlag += EVTDAT_GSWF_BASE;
             isGswf = TRUE;
-            if (swGet(evtId)) {
+            if (swGet(collectFlag)) {
                 return NULL;
             }
         }
-        else if (evtId >= LSWF(0) && evtId <= EVTDAT_LSWF_MAX) {
-            evtId += EVTDAT_LSWF_BASE;
+        else if (collectFlag >= LSWF(0) && collectFlag <= EVTDAT_LSWF_MAX) {
+            collectFlag += EVTDAT_LSWF_BASE;
             isLswf = TRUE;
-            if (_swGet(evtId)) {
+            if (_swGet(collectFlag)) {
                 return NULL;
             }
         }
@@ -516,7 +516,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, 
     }
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-        if (entry->flags & 1 && !strcmp(entry->name, name)) {
+        if (entry->flags & ITEM_FLAG_ACTIVE && !strcmp(entry->name, name)) {
             break;
         }
     }
@@ -527,7 +527,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, 
 #else
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
 #endif
-        if (!(entry->flags & 1)) {
+        if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             break;
         }
     }
@@ -536,7 +536,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, 
     if (i >= wp->count) {
         entry = NULL;
         for (e = base, i = 0; i < wp->count; i++, e++) {
-            if (e->flags & 1 && e->itemId == 0x79 && e->flags & 0x400) {
+            if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == 0x79 && e->flags & 0x400) {
                 entry = e;
                 break;
             }
@@ -547,7 +547,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, 
         else {
             entry = NULL;
             for (e = base, i = 0; i < wp->count; i++, e++) {
-                if (e->flags & 1 && e->itemId == 0x7C && e->flags & 0x400) {
+                if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == 0x7C && e->flags & 0x400) {
                     entry = e;
                     break;
                 }
@@ -563,17 +563,17 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, 
 #else
     if (i >= wp->count) {
         entry = wp->entries;
-        if (entry->flags & 1 && entry->itemId == 0x79 && entry->flags & 0x400) {
+        if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x79 && entry->flags & 0x400) {
             itemDelete(entry->name);
         }
         else {
             entry = wp->entries;
-            if (entry->flags & 1 && entry->itemId == 0x7C && entry->flags & 0x400) {
+            if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x7C && entry->flags & 0x400) {
                 itemDelete(entry->name);
             }
             else {
                 entry = wp->entries;
-                if (entry->flags & 1 && entry->itemId == 0x7B && entry->flags & 0x400) {
+                if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x7B && entry->flags & 0x400) {
                     itemDelete(entry->name);
                 }
                 else {
@@ -594,22 +594,22 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, 
     entry->position.z = z;
     entry->itemId = itemId;
     entry->type = type;
-    entry->evtCode = a5;
-    entry->flags |= 1;
+    entry->evtCode = evtCode;
+    entry->flags |= ITEM_FLAG_ACTIVE;
     entry->scale = 1.0f;
     entry->alpha = 0xFF;
-    if (evtId != -1) {
+    if (collectFlag != -1) {
         if (isGswf) {
-            entry->evtId = evtId;
-            entry->flags |= 0x20;
+            entry->collectFlag = collectFlag;
+            entry->flags |= ITEM_FLAG_COLLECT_GSWF;
         }
         else if (isLswf) {
-            entry->evtId = evtId;
-            entry->flags |= 0x40;
+            entry->collectFlag = collectFlag;
+            entry->flags |= ITEM_FLAG_COLLECT_LSWF;
         }
     }
     else {
-        entry->evtId = -1;
+        entry->collectFlag = -1;
     }
 
     switch (entry->itemId) {
@@ -719,7 +719,7 @@ void itemDelete(const char* name) {
                     iconDelete(entry->name);
                     break;
             }
-            entry->flags &= ~1;
+            entry->flags &= ~ITEM_FLAG_ACTIVE;
         }
     }
 }
@@ -750,7 +750,7 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
     mario = marioGetPtr();
     found = NULL;
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-        if (!(entry->flags & 1)) continue;
+        if (!(entry->flags & ITEM_FLAG_ACTIVE)) continue;
             if (entry->flags & 2) { do { } while (0); continue; }
         if (entry->flags2 & 0x1000) continue;
         if (entry->mode == 2) continue;
@@ -793,7 +793,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     i = 0;
     pos = makeVecByValue2(x, y, z);
     for (; i < wp->count; i++, entry++) {
-        if (!(entry->flags & 1)) continue;
+        if (!(entry->flags & ITEM_FLAG_ACTIVE)) continue;
         if (entry->flags2 & 0x1000) continue;
         if (entry->flags2 & 0x100000) continue;
         if (entry->mode == 2) continue;
@@ -1237,8 +1237,8 @@ void itemseq_GetItem(ItemEntry* entry) {
                 entry->flags2 &= ~1;
                 entry->itemId = select;
                 entry->evtCode = 0;
-                entry->evtId = 0;
-                entry->flags &= ~0x60;
+                entry->collectFlag = 0;
+                entry->flags &= ~(ITEM_FLAG_COLLECT_GSWF | ITEM_FLAG_COLLECT_LSWF);
                 iconChange(entry->name, itemDataTable[entry->itemId].icon_id);
                 wp->currId++;
                 sprintf(iconNameToPtr(entry->name)->name, "_i%05x", wp->currId);
@@ -1846,7 +1846,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range);
 ItemEntry* itemNameToPtr(char* name);
 void itemDelete(const char* name);
-ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
+ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
 void itemModeChange(ItemEntry* entry, s32 mode);
 void itemMain(void);
 BOOL N_itemPickUpFromFieldCheck(void);

@@ -4365,7 +4365,7 @@ USER_FUNC(zakoEntryDokan) {
                 if (zako->regularEvtId) {
                     evtDeleteID(zako->regularEvtId);
                 }
-                e = evtEntry(zako->moveEvent, 0, 0x20);
+                e = evtEntry(zako->moveEvent, 0, EVENT_START_IMMEDIATE);
                 e->wNpcEventType = 1;
                 e->ownerNPC = zako;
                 zako->regularEvtId = e->eventId;
@@ -4437,7 +4437,7 @@ USER_FUNC(zakoEntryFall) {
                 if (zako->regularEvtId) {
                     evtDeleteID(zako->regularEvtId);
                 }
-                e = evtEntry(zako->moveEvent, 0, 0x20);
+                e = evtEntry(zako->moveEvent, 0, EVENT_START_IMMEDIATE);
                 e->wNpcEventType = 1;
                 e->ownerNPC = zako;
                 zako->regularEvtId = e->eventId;

@@ -155,7 +155,8 @@ typedef enum EventEntry_Flags {
     EVENT_ACTIVE = (1 << 0),
     EVENT_STOPPED = (1 << 1),
 
-    EVENT_WAITING_ON_CHILD = (1 << 4)
+    EVENT_WAITING_ON_CHILD = (1 << 4),
+    EVENT_START_IMMEDIATE = (1 << 5), // run at once when entered while the manager is running events
 } EventEntry_Flags;
 
 struct EventEntry {

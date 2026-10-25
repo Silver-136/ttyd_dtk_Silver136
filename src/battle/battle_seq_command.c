@@ -1174,7 +1174,7 @@ s32 BattleCommandInput(BattleWork* work) {
             break;
         case 3:
             cmd->state = 4;
-            cmd->errorEvtId = evtEntry(_btl_cmd_error_msg_event, 0, 0x20)->eventId;
+            cmd->errorEvtId = evtEntry(_btl_cmd_error_msg_event, 0, EVENT_START_IMMEDIATE)->eventId;
         case 4:
             if (!evtCheckID(cmd->errorEvtId)) {
                 cmd->errorEvtId = 0;
@@ -1213,7 +1213,7 @@ s32 BattleCommandInput(BattleWork* work) {
             break;
         case 8:
             cmd->state = 9;
-            cmd->errorEvtId = evtEntry(_btl_cmd_error_msg_event, 0, 0x20)->eventId;
+            cmd->errorEvtId = evtEntry(_btl_cmd_error_msg_event, 0, EVENT_START_IMMEDIATE)->eventId;
         case 9:
             if (!evtCheckID(cmd->errorEvtId)) {
                 cmd->errorEvtId = 0;
@@ -1331,7 +1331,7 @@ s32 BattleCommandInput(BattleWork* work) {
             break;
         case 17:
             cmd->state = 18;
-            cmd->errorEvtId = evtEntry(_btl_cmd_error_msg_event, 0, 0x20)->eventId;
+            cmd->errorEvtId = evtEntry(_btl_cmd_error_msg_event, 0, EVENT_START_IMMEDIATE)->eventId;
         case 18:
             if (!evtCheckID(cmd->errorEvtId)) {
                 cmd->errorEvtId = 0;
@@ -1355,7 +1355,7 @@ s32 BattleCommandInput(BattleWork* work) {
             break;
         case 22:
             cmd->state = 23;
-            cmd->errorEvtId = evtEntry(_btl_cmd_error_msg_event, 0, 0x20)->eventId;
+            cmd->errorEvtId = evtEntry(_btl_cmd_error_msg_event, 0, EVENT_START_IMMEDIATE)->eventId;
         case 23:
             if (!evtCheckID(cmd->errorEvtId)) {
                 cmd->errorEvtId = 0;

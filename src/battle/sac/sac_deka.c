@@ -371,7 +371,7 @@ static void main_base(void) {
                 w->result++;
                 w->starState = 6;
                 psndSFXOff(w->sfx);
-                ev = evtEntry(nice_event, 0, 0x20);
+                ev = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
                 v = w->result + 1;
                 ev->lwData[0] = v < 6 ? v : 6;
                 if (w->round > 5) {

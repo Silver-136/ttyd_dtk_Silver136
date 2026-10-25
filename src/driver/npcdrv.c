@@ -2733,30 +2733,30 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
     if (flags & ~0xF00) {
         evt = NULL;
         if ((flags & 0x10) && npc->deadEvent) {
-            evt = evtEntry(npc->deadEvent, 0, 0x20);
+            evt = evtEntry(npc->deadEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 8;
             evt->ownerNPC = npc;
         } else if ((flags & 0x10000000) && npc->moveEvent) {
-            evt = evtEntry(npc->moveEvent, 0, 0x20);
+            evt = evtEntry(npc->moveEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 1;
             evt->ownerNPC = npc;
         } else if ((flags & 8) && npc->blowEvent) {
-            evt = evtEntry(npc->blowEvent, 0, 0x20);
+            evt = evtEntry(npc->blowEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 5;
             evt->ownerNPC = npc;
         } else if ((flags & 1) && npc->findEvent && !(npc->jumpFlags & 0x1000) &&
                    !(npc->flags & 0x200000) && !(flags & 0x100)) {
-            evt = evtEntry(npc->findEvent, 0, 0x20);
+            evt = evtEntry(npc->findEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 2;
             evt->ownerNPC = npc;
         } else if ((flags & 2) && npc->lostEvent && !(npc->jumpFlags & 0x1000) &&
                    !(npc->flags & 0x200000)) {
-            evt = evtEntry(npc->lostEvent, 0, 0x20);
+            evt = evtEntry(npc->lostEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 3;
             evt->ownerNPC = npc;
         } else if ((flags & 4) && npc->returnEvent && !(npc->jumpFlags & 0x1000) &&
                    !(npc->flags & 0x200000)) {
-            evt = evtEntry(npc->returnEvent, 0, 0x20);
+            evt = evtEntry(npc->returnEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 4;
             evt->ownerNPC = npc;
         }
@@ -3072,7 +3072,7 @@ void npcExecAllReglEvt(void) {
             if (entry->regularEvtId) {
                 evtDeleteID(entry->regularEvtId);
             }
-            evt = evtEntry(entry->moveEvent, 0, 0x20);
+            evt = evtEntry(entry->moveEvent, 0, EVENT_START_IMMEDIATE);
             evt->wNpcEventType = 1;
             evt->ownerNPC = entry;
             entry->regularEvtId = evt->eventId;

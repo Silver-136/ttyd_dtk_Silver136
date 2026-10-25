@@ -5,11 +5,17 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
 
+typedef enum ItemEntry_Flags {
+    ITEM_FLAG_ACTIVE = (1 << 0),
+    ITEM_FLAG_COLLECT_GSWF = (1 << 5), // collectFlag is a GSWF, set when the item is collected
+    ITEM_FLAG_COLLECT_LSWF = (1 << 6), // collectFlag is an LSWF, set when the item is collected
+} ItemEntry_Flags;
+
 typedef struct ItemEntry {
     u16 flags; //0x0
     u16 type; //0x2, entry type (itemEntry arg)
     s32 itemId; //0x4
-    s32 evtId; //0x8, TODO: better name?
+    s32 collectFlag; //0x8, saved flag set when the item is collected (-1: none)
     char name[0x10]; //0xC
     EffectEntry* effect; //0x1C
     EvtWord evtCode; //0x20, event script run on pickup (evtEntry)

@@ -158,7 +158,7 @@ USER_FUNC(evt_hitobj_attr_onoff) {
 static void name_callback_sub(const char* name, void* evt, BOOL flag) {
     HitEntry* hit = hitNameToPtr(name);
     if (hit != NULL) {
-        evtEntry(evt, 0, 0x20)->lwData[0] = (EvtWord)name;
+        evtEntry(evt, 0, EVENT_START_IMMEDIATE)->lwData[0] = (EvtWord)name;
         if (hit->child != NULL) {
             name_callback_sub(*(const char**)hit->child->joint, evt, TRUE);
         }

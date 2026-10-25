@@ -417,7 +417,7 @@ void btlseqFirstAct(BattleWork* wp) {
             BattleGetFirstAttackUnit(wp, &a, &b);
             wp->activeUnitId = a->unitId;
             a->mTokenFlags |= 0x1000;
-            evt = evtEntry(b->damageEventCode, 10, 0x20);
+            evt = evtEntry(b->damageEventCode, 10, EVENT_START_IMMEDIATE);
             if (evt) {
                 evt->unitId = b->unitId;
                 b->damageCode = 0x39;

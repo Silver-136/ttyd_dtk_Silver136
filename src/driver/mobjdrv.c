@@ -1035,7 +1035,7 @@ BOOL mobjCheckExec() {
 static inline int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inlined in retail but not in demo
     if (!strcmp(entry->animName, kururinName)) {
         ItemEntry* item = itemNameToPtr(entry->name);
-        if ((item != NULL && (item->flags & 1) && evtGetValue(0, entry->flagVar) == 0))
+        if ((item != NULL && (item->flags & ITEM_FLAG_ACTIVE) && evtGetValue(0, entry->flagVar) == 0))
             return 1;
         else if ((evtGetValue(0, entry->flagVar) != 0))
             return 1;

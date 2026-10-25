@@ -261,7 +261,7 @@ USER_FUNC(offset) {
 
 USER_FUNC(breakfast) {
     ItemEntry* item = itemNameToPtr("breakfast");
-    if (item == NULL || !(item->flags & 1)) {
+    if (item == NULL || !(item->flags & ITEM_FLAG_ACTIVE)) {
         KinopioWork* w = *wp;
         if (w->breakfastItem != 0) {
             itemEntry("breakfast", w->breakfastItem, 0x10, -1, 0, w->breakfastPos.x, w->breakfastPos.y,

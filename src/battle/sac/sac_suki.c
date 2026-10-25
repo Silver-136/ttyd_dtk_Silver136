@@ -326,7 +326,7 @@ static void main_base(void) {
                 w->timer = 0;
                 w->round++;
                 w->starState = 5;
-                e = evtEntry(nice_event, 0, 0x20);
+                e = evtEntry(nice_event, 0, EVENT_START_IMMEDIATE);
                 n = w->round + 1;
                 e->lwData[0] = n < 6 ? n : 6;
                 if (num >= 1 && num <= 49) {

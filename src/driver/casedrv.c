@@ -213,7 +213,7 @@ void caseMain(void) {
                 EventEntry* evt;
                 if (!evtCheckID(entry->evtId)) entry->evtId = 0;
                 if (entry->evtId == 0) {
-                    evt = evtEntry(entry->evtCode, entry->priority, 0x20);
+                    evt = evtEntry(entry->evtCode, entry->priority, EVENT_START_IMMEDIATE);
                     evt->caseId = entry->caseId;
                     entry->evtId = evt->eventId;
                     memcpy(evt->lwData, entry->lwData, sizeof(entry->lwData));

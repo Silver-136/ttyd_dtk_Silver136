@@ -121,9 +121,9 @@ s32 windowEntry(u16 a1) {
 
     entry = WinObjects;
     for (i = 0; i < 7; i++, entry++) {
-        if (!(entry->flags & 1)) {
+        if (!(entry->flags & WINDOW_FLAG_ACTIVE)) {
             memset(entry, 0, sizeof(WindowEntry));
-            entry->flags = 1;
+            entry->flags = WINDOW_FLAG_ACTIVE;
             entry->priority = a1;
             return i;
         }
@@ -142,7 +142,7 @@ BOOL windowDelete(WindowEntry* entry) {
 
 BOOL windowDeleteID(s32 id) {
     WindowEntry* entry = &WinObjects[id];
-    if (!(entry->flags & 1)) {
+    if (!(entry->flags & WINDOW_FLAG_ACTIVE)) {
         return FALSE;
     }
     if (entry->delete) {
@@ -159,7 +159,7 @@ void windowMain(void) {
 
     entry = WinObjects;
     for (i = 0; i < 7; i++, entry++) {
-        if (entry->flags & 1) {
+        if (entry->flags & WINDOW_FLAG_ACTIVE) {
             if (entry->main) {
                 entry->main(entry);
             }

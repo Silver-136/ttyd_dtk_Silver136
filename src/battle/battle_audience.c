@@ -492,7 +492,7 @@ void BattleAudience_PerAct(void) {
         if (audience->flags & 0x200) total -= 5.0f;
     }
     if (audience->flags & 0x8000) {
-        audience->event = evtEntry(&msg_puni_all_escape, 0, 0x20);
+        audience->event = evtEntry(&msg_puni_all_escape, 0, EVENT_START_IMMEDIATE);
         audience->flags &= ~0x8000;
     }
     BattleAudienceAddTargetNum(audience->mAudienceDeltaMultiplier * (0.01f * total), 0.0f);
@@ -623,7 +623,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
             }
             break;
         case 8:
-            audience->event = evtEntry(&msg_heavy_bomb_fire, 0, 0x20);
+            audience->event = evtEntry(&msg_heavy_bomb_fire, 0, EVENT_START_IMMEDIATE);
             audience->mCheckPhaseReactionState = 9;
             break;
         case 9:
@@ -634,7 +634,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
             break;
         case 10:
             if (audience->flags & 0x8000) {
-                audience->event = evtEntry(&msg_puni_all_escape, 0, 0x20);
+                audience->event = evtEntry(&msg_puni_all_escape, 0, EVENT_START_IMMEDIATE);
                 audience->flags &= ~0x8000;
                 audience->mCheckPhaseReactionState = 11;
             }
@@ -784,7 +784,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                                 break;
                             case 10:
                                 SUB = 15;
-                                audience->event = evtEntry(&msg_puni_all_enter, 0, 0x20);
+                                audience->event = evtEntry(&msg_puni_all_enter, 0, EVENT_START_IMMEDIATE);
                                 break;
                             case 15:
                                 if (!evtCheckID(audience->event->eventId)) {
@@ -857,7 +857,7 @@ BOOL BattleAudience_CheckReactionPerPhase(void) {
                                 break;
                             case 10:
                                 SUB = 15;
-                                audience->event = evtEntry(&msg_pansy_sing, 0, 0x20);
+                                audience->event = evtEntry(&msg_pansy_sing, 0, EVENT_START_IMMEDIATE);
                                 break;
                             case 15:
                                 if (!evtCheckID(audience->event->eventId)) {

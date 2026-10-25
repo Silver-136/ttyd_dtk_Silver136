@@ -294,7 +294,7 @@ static void main_base(void) {
                 } else if (n >= 5) {
                     n = 6;
                 }
-                evtEntry(nice_event_pow, 0, 0x20)->lwData[0] = n;
+                evtEntry(nice_event_pow, 0, EVENT_START_IMMEDIATE)->lwData[0] = n;
             }
         }
         break;

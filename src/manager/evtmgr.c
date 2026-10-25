@@ -203,7 +203,7 @@ EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags) {
 
     make_jump_table(entry);
 
-    if (runMainF && entry->flags & 0x20) {
+    if (runMainF && entry->flags & EVENT_START_IMMEDIATE) {
         priTbl[priTblNum] = id;
         priIDTbl[priTblNum] = entry->eventId;
         priTblNum++;
@@ -262,7 +262,7 @@ EventEntry* evtEntryType(void* evtCode, u8 priority, u8 flags, u8 type) {
 
     make_jump_table(entry);
 
-    if (runMainF && entry->flags & 0x20) {
+    if (runMainF && entry->flags & EVENT_START_IMMEDIATE) {
         priTbl[priTblNum] = id;
         priIDTbl[priTblNum] = entry->eventId;
         priTblNum++;

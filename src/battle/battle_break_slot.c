@@ -449,30 +449,30 @@ void BattleBreakSlot_Main(void) {
             if (slot->phaseTimer == 130) {
                 switch (BattleBreakSlotReelGetPtr(0)->item) {
                     case 0:
-                        evtEntry(kinoko_effect, 0, 0x20);
+                        evtEntry(kinoko_effect, 0, EVENT_START_IMMEDIATE);
                         slot->breakTurn = 4;
                         slot->spMultiplier = 2.0f;
                         break;
                     case 1:
-                        evtEntry(flower_effect, 0, 0x20);
+                        evtEntry(flower_effect, 0, EVENT_START_IMMEDIATE);
                         slot->breakTurn = 4;
                         slot->spMultiplier = 2.0f;
                         break;
                     case 2:
-                        evtEntry(star_effect, 0, 0x20);
+                        evtEntry(star_effect, 0, EVENT_START_IMMEDIATE);
                         pouchSetAP(pouchGetMaxAP());
                         psndSFXOn("SFX_HP_RECOVER_BIG1");
                         slot->breakTurn = 4;
                         slot->spMultiplier = 2.0f;
                         break;
                     case 3:
-                        evtEntry(shine_effect, 0, 0x20);
+                        evtEntry(shine_effect, 0, EVENT_START_IMMEDIATE);
                         pouchSetAP(pouchGetMaxAP());
                         slot->breakTurn = 6;
                         slot->spMultiplier = 3.0f;
                         break;
                     case 4:
-                        evtEntry(doku_kinoko_effect, 0, 0x20);
+                        evtEntry(doku_kinoko_effect, 0, EVENT_START_IMMEDIATE);
                         ((void (*)(s32))pouchSetAP)(pouchGetAP() / 2);
                         break;
                 }
@@ -546,19 +546,19 @@ void BattleBreakSlot_Main(void) {
 #endif
                     switch (BattleBreakSlotReelGetPtr(0)->item) {
                         case 0:
-                            slot->evt = evtEntry(msg_hp_max, 0, 0x20);
+                            slot->evt = evtEntry(msg_hp_max, 0, EVENT_START_IMMEDIATE);
                             break;
                         case 1:
-                            slot->evt = evtEntry(msg_fp_max, 0, 0x20);
+                            slot->evt = evtEntry(msg_fp_max, 0, EVENT_START_IMMEDIATE);
                             break;
                         case 2:
-                            slot->evt = evtEntry(msg_star_max, 0, 0x20);
+                            slot->evt = evtEntry(msg_star_max, 0, EVENT_START_IMMEDIATE);
                             break;
                         case 3:
-                            slot->evt = evtEntry(msg_super_max, 0, 0x20);
+                            slot->evt = evtEntry(msg_super_max, 0, EVENT_START_IMMEDIATE);
                             break;
                         case 4:
-                            slot->evt = evtEntry(msg_fault, 0, 0x20);
+                            slot->evt = evtEntry(msg_fault, 0, EVENT_START_IMMEDIATE);
                             break;
                     }
                 }
