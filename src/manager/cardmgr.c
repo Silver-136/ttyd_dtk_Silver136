@@ -23,13 +23,13 @@
 #include "assets/_mariost_icon_tlut.inc"
 #include "assets/_mariost_banner_tex.inc"
 #include "libc_decls.h"
-const char str_802CCC80[] = "mariost_save_file";
+const char cardFileName[] = "mariost_save_file";
 #ifdef VERSION_G8ME01
-const char str_802CCC94[] = "Paper Mario";
-const char str_802CCCAC[0x12] = "%2d/%2d save data";
+const char cardGameTitle[] = "Paper Mario";
+const char cardDateFormat[0x12] = "%2d/%2d save data";
 #else
-const char str_802CCC94[] = "ペーパーマリオＲＰＧ";
-const char str_802CCCAC[0x20] = "%2d月%2d日のセーブデータです";
+const char cardGameTitle[] = "ペーパーマリオＲＰＧ";
+const char cardDateFormat[0x20] = "%2d月%2d日のセーブデータです";
 #endif
 
 //.sbss
@@ -1095,9 +1095,9 @@ static inline void make_header(void) {
     OSCalendarTime td;
     metadata = &cardGetFilePtr()->metadata;
     memset(metadata, 0, sizeof(metadata->data));
-    strcpy(metadata->data.fileName, str_802CCC94);
+    strcpy(metadata->data.fileName, cardGameTitle);
     OSTicksToCalendarTime(OSGetTime(), &td);
-    sprintf(metadata->data.dateString, str_802CCCAC, td.mon + 1, td.mday);
+    sprintf(metadata->data.dateString, cardDateFormat, td.mon + 1, td.mday);
     memcpy(metadata->data.bannerTex, _mariost_banner_tex, sizeof(metadata->data.bannerTex));
     memcpy(metadata->data.iconTex, _mariost_icon_tex, sizeof(metadata->data.iconTex));
     memcpy(metadata->data.iconTlut, _mariost_icon_tlut, sizeof(metadata->data.iconTlut));
@@ -1194,7 +1194,7 @@ static inline void memcard_delete(void) {
     wp->flags |= 1;
     
     i = 0;
-    while (result = CARDDelete(wp->chan, str_802CCC80), result == CARD_RESULT_BUSY) {
+    while (result = CARDDelete(wp->chan, cardFileName), result == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
@@ -1215,7 +1215,7 @@ void createCallback(s32 chan, s32 result) {
 
 static inline void memcard_create(void) {
     wp->flags |= 1;
-    CARDCreateAsync(wp->chan, str_802CCC80, sizeof(CardData) + (sizeof(CardSaveSlot) * 4), &wp->info, createCallback);
+    CARDCreateAsync(wp->chan, cardFileName, sizeof(CardData) + (sizeof(CardSaveSlot) * 4), &wp->info, createCallback);
 }
 
 void writeCallback(s32 chan, s32 result) {
@@ -1323,7 +1323,7 @@ void memcard_open(void) {
         }
         if ((result != CARD_RESULT_NOFILE) && (result != CARD_RESULT_NOPERM)) {
             if (result == CARD_RESULT_READY) {
-                if (!strcmp(stat.fileName, str_802CCC80)) {
+                if (!strcmp(stat.fileName, cardFileName)) {
                     if ((stat.commentAddr == 0) && (stat.iconAddr == 0x40) && (stat.length == 0x22000)) {
                         wp->fileNo = fileNo;
                         break;
@@ -1373,7 +1373,7 @@ void memcard_open(void) {
         return;
     }
     i = 0;
-    while (result = CARDOpen(wp->chan, str_802CCC80, &wp->info), result == CARD_RESULT_BUSY) {
+    while (result = CARDOpen(wp->chan, cardFileName, &wp->info), result == CARD_RESULT_BUSY) {
         if (++i > 1000000) {
             result = CARD_RESULT_FATAL_ERROR;
             break;

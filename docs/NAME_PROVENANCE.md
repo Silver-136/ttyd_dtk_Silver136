@@ -2114,3 +2114,14 @@ renaming: `@740`, `__local_PI$366`, `monte_p`, `one$381`, `partyGetTargetDistY`,
 | data | yuu | `yuucounter_window_null_evt` | `unk_evt_yuu_00019740` | .data:0x00004598 | yes |
 | data | yuu | `monte_p` | `unk_yuu_bss00000004` | .bss:0x00000004 | yes |
 | data | yuu | `yuu_03_monte_p` | `unk_yuu_bss00000010` | .bss:0x00000010 | yes |
+
+## Names added in this fork
+
+Descriptive names given after the adoption (not original either); same rule: replace with an original name when
+one turns up.
+
+| Kind | Unit | Name | Replaced placeholder | Date |
+| --- | --- | --- | --- | --- |
+| data | cardmgr | `cardFileName` ("mariost_save_file") | `str_802CCC80` | 2026-10-25 |
+| data | cardmgr | `cardGameTitle` (memory card title, US/JP text) | `str_802CCC94` | 2026-10-25 |
+| data | cardmgr | `cardDateFormat` (memory card comment format) | `str_802CCCAC` | 2026-10-25 |
