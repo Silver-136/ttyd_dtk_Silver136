@@ -2810,7 +2810,7 @@ BOOL BattleCommandAttackAudienceCheck(void) {
     s32 id;
 
     if (BattlePadCheckTrigger(PAD_BUTTON_X) && !(wp->flags & 0x40000000)) {
-        if (BattleGetMarioPtr(wp)->mAttributeFlags & 0x10) {
+        if (BattleGetMarioPtr(wp)->mAttributeFlags & kVeiled) {
             return FALSE;
         }
         BattleAudience_GetItemOn(&id, NULL, NULL, NULL, NULL);

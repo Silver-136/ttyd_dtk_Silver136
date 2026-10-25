@@ -797,7 +797,7 @@ static USER_FUNC(_set_draw_callback) {
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
 
     animPoseSetDispCallBack(part->poseId, _fire_point_callback, part);
-    BtlUnit_GetPartsPtr(unit, 2)->attributes |= 0x1000000;
+    BtlUnit_GetPartsPtr(unit, 2)->attributes |= kHidden;
     return EVT_RETURN_DONE;
 }
 

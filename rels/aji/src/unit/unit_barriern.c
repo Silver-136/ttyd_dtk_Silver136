@@ -657,7 +657,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         BtlUnit_SetPartsScale(part, 0.8f, 0.8f, 1.0f);
         part->color.a = 255;
         for (i = 2; i <= 6; i++) {
-            BtlUnit_GetPartsPtr(unit, i)->attributes |= 0x1000000;
+            BtlUnit_GetPartsPtr(unit, i)->attributes |= kHidden;
         }
         return EVT_RETURN_DONE;
     }
@@ -765,7 +765,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
         BtlUnit_SetPartsScale(part, 0.8f, 0.8f, 1.0f);
         part->color.a = 255;
         for (i = 2; i <= 6; i++) {
-            BtlUnit_GetPartsPtr(unit, i)->attributes |= 0x1000000;
+            BtlUnit_GetPartsPtr(unit, i)->attributes |= kHidden;
         }
         return EVT_RETURN_DONE;
     }

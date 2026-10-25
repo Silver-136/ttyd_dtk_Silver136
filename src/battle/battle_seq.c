@@ -2231,7 +2231,7 @@ void btlseqAct(BattleWork* wp) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000003);
                 } else if (unit->mAttributeFlags & kVeiled) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000004);
-                } else if (unit->currentKind == UNIT_VIVIAN && (BattleGetMarioPtr(wp)->mAttributeFlags & 0x10)) {
+                } else if (unit->currentKind == UNIT_VIVIAN && (BattleGetMarioPtr(wp)->mAttributeFlags & kVeiled)) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000004);
                 } else if (unit->flippedTurns) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000005);
