@@ -26,6 +26,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "mario/mario_pouch.h"
+#include "battle/battle_damage.h"
 
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* parts);
 void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);
@@ -722,13 +723,13 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         SET_VALUE(LW(14), 0)
         CALL(btlevtcmd_StopAC)
         IF_INT_EQUAL(LW(5), 3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
         IF_INT_EQUAL(LW(5), 6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
         IF_INT_EQUAL(LW(5), 2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         LOOP(20)
             CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 18, 0)
@@ -1364,13 +1365,13 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 256, LW(6))
     IF_INT_NOT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(6), 3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
         IF_INT_EQUAL(LW(6), 6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
         IF_INT_EQUAL(LW(6), 2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(50)
     END_IF
@@ -1581,11 +1582,11 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
             CASE_OR_EQUAL(4)
             CASE_END
             CASE_EQUAL(3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             CASE_EQUAL(6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
             CASE_EQUAL(1)
             CASE_DEFAULT
         END_SWITCH

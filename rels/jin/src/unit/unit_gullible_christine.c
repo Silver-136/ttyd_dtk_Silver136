@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "unit/party/unit_party_christine.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_damage.h"
 
 USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(_krb_get_dir);
@@ -342,13 +343,13 @@ static EVT_BEGIN(attack_event_christine)
     END_IF
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
         IF_INT_EQUAL(LW(5), 6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
         IF_INT_EQUAL(LW(5), 2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_JumpContinue, -2)
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 0, 0)

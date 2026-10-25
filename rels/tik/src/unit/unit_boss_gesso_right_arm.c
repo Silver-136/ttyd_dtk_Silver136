@@ -13,6 +13,7 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
+#include "battle/battle_damage.h"
 
 static USER_FUNC(_check_zenei_kouei);
 extern s32 R_defence_attr_turn[];
@@ -364,11 +365,11 @@ static EVT_BEGIN(attack_event)
     IF_INT_NOT_EQUAL(LW(5), 1)
         SWITCH(LW(5))
             CASE_EQUAL(3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             CASE_EQUAL(6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_SWITCH
     ELSE
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))

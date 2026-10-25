@@ -18,6 +18,7 @@
 #include "evt/evt_snd.h"
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
+#include "battle/battle_damage.h"
 
 
 #ifdef VERSION_G8ME01
@@ -594,11 +595,11 @@ EVT_BEGIN(gesso_ikasumi_attack)
     IF_INT_NOT_EQUAL(LW(5), 1)
         SWITCH(LW(5))
             CASE_EQUAL(3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             CASE_EQUAL(6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_SWITCH
     ELSE
         IF_INT_EQUAL(LW(10), 0)

@@ -8,6 +8,7 @@
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_damage.h"
 
 extern EvtWord gesso_arm_damage_pose_event[];
 extern EvtWord gesso_arm_dead_event[];
@@ -277,11 +278,11 @@ static EVT_BEGIN(attack_event)
     IF_INT_NOT_EQUAL(LW(5), 1)
         SWITCH(LW(5))
             CASE_EQUAL(3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             CASE_EQUAL(6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_SWITCH
     ELSE
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))

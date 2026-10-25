@@ -1936,7 +1936,7 @@ USER_FUNC(btlevtcmd_StartAvoid) {
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     damageCode = args[1] | 0x100;
-    if ((u8)damageCode == 0x26) {
+    if ((u8)damageCode == DAMAGE_CODE_LUCKY) {
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
         if (pos.y < 85.0f) {
             pos.y += 50.0f;

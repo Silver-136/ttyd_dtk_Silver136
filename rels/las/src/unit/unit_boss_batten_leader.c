@@ -29,6 +29,7 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_damage.h"
 
 Vec nowv;
 f32 maer;
@@ -2044,14 +2045,14 @@ EVT_BEGIN(batten_leader_thunder_attack_event)
             GOTO(90)
             CASE_END
             CASE_EQUAL(3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             GOTO(90)
             CASE_END
             CASE_EQUAL(6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             GOTO(90)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
             GOTO(90)
             CASE_EQUAL(1)
             GOTO(91)
@@ -2156,14 +2157,14 @@ EVT_BEGIN(batten_leader_fire_attack_event)
             SET_VALUE(LW(6), 90)
             CASE_END
             CASE_EQUAL(3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             SET_VALUE(LW(6), 90)
             CASE_END
             CASE_EQUAL(6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             SET_VALUE(LW(6), 90)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
             SET_VALUE(LW(6), 90)
             CASE_EQUAL(1)
             SET_VALUE(LW(6), 91)
@@ -2264,14 +2265,14 @@ EVT_BEGIN(batten_leader_ice_attack_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(3)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(6)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(2)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(1)
         GOTO(91)
@@ -2453,14 +2454,14 @@ EVT_BEGIN(batten_leader_stop_attack_event)
             SET_VALUE(LW(6), 90)
             CASE_END
             CASE_EQUAL(3)
-            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             SET_VALUE(LW(6), 90)
             CASE_END
             CASE_EQUAL(6)
-            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             SET_VALUE(LW(6), 90)
             CASE_EQUAL(2)
-            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
             SET_VALUE(LW(6), 90)
             CASE_EQUAL(1)
             SET_VALUE(LW(6), 91)

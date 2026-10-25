@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
+#include "battle/battle_damage.h"
 
 USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(honenoko_copy_status);
@@ -446,13 +447,13 @@ EVT_END()
 
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
     END_IF
     IF_INT_EQUAL(LW(5), 6)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
     END_IF
     IF_INT_EQUAL(LW(5), 2)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_IF
     RETURN
 EVT_END()
@@ -585,13 +586,13 @@ EVT_END()
 
 static EVT_BEGIN(start_avoid2)
     IF_INT_EQUAL(LW(11), 3)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
     END_IF
     IF_INT_EQUAL(LW(11), 6)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
     END_IF
     IF_INT_EQUAL(LW(11), 2)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_IF
     RETURN
 EVT_END()
