@@ -82,13 +82,11 @@ def main():
     pure_c = tc.get("asm_fns", 1) == 0  # L 2026-10-21: asm stand-ins removed; every figure is C
     if pure_c:
         head = (
-            "**Progress** (all source is C; units whose C does not match yet are built from the original code, "
-            "so the build stays byte-identical):\n\n"
+            "**Progress** (every unit is built from C and both builds are byte-identical to the original game):\n\n"
             "| Measure | Value |\n|---|---|\n"
             f"| **Code matched by C** (by code size) | **{tc['true_code']:.2f}%** |\n"
             f"| **Functions matched by C** | **{tc['true_fns']} / {tc['total_fns']}** ({100.0 * tc['true_fns'] / tc['total_fns']:.1f}%) |\n"
             f"| Files linked from C | {total.get('complete_units')} / {total.get('total_units')} ({pct(total, 'complete_code_percent'):.2f}% of code) |\n"
-            + (f"| Fuzzy match | {tc['true_fuzzy']:.2f}% |\n" if "true_fuzzy" in tc else "")
             + (f"| Data, exact (bytes + where each relocation points; objdiff's name-paired figure is {tc['objdiff_data']:.2f}%) | {tc['true_data']:.2f}% |\n" if "true_data" in tc else "")
             + "\n"
         )

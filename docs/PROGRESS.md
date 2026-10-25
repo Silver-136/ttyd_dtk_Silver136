@@ -64,3 +64,21 @@ The cleanup keeps both builds byte-identical; every change is gated on JP (32 fi
 | Pointers stored in integers (`(s32)"name"` table fields, pointer values in `s32` slots) | 2,598 casts | 60, at SDK interfaces that take `u32` addresses or in listed fakes |
 
 Placements that stay are needed or kept on purpose: SDK startup sections, padding fillers, and small main-executable data that the original source most likely placed by hand too. Behaviour-identical fakes stay as well, and each is listed in [FAKES.md](FAKES.md).
+
+## Cleanup since 2026-10-24 (this fork)
+
+Same rule: every commit keeps both builds byte-identical (US 30 files, JP 32 files, objdiff 100 % code and data per
+unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory.py`, start = commit 85ac972b.
+
+| What | Start | Now |
+| --- | --- | --- |
+| Hand-made copies of the MSL math-header constants (`fd_*` objects) | 16,730 lines in 607 files | 28 lines in 1 file (end_00); the rest come from the math headers, precompiled as the original was |
+| `#pragma force_active` | 776 | 15 |
+| `__declspec(section ...)` placements | 434 | 18 |
+| Padding objects (`gap_*`) | 142 | 8 |
+| Whole-file optimizer/inline pragmas | 50 size + 16 inline settings | 0: per-unit flags in `configure.py` |
+| Other optimizer and inline pragmas | 697 | 477 |
+| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 289 (FAKES.md rows 214 -> 173) |
+| Inline asm in game code | 19 | 6 |
+| Private copies of prototypes in `.c` files | ~20,000 | ~1,000 left (event functions, owner-header and SDK prototypes now come from headers) |
+| Raw numbers given names | | unit kinds and sides, items, sounds (182 ids), saved variables, targeting flags, characters, menu states, party/battle/item/event flags, ... |
