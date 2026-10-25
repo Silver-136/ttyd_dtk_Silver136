@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "rels/dmo/include/dmo.h"
 
 #include "data/mapdata.h"
 #include "dmo.h"
@@ -7,7 +8,6 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-void demo_exit(void);
 
 void _unresolved(void);
 void _epilog(void);

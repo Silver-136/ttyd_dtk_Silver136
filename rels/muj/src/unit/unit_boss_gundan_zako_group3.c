@@ -5,6 +5,7 @@
 #include "libc_decls.h"
 #include "battle/battle_camera.h"
 #include "battle/battle_status_effect.h"
+#include "rels/muj/include/muj.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -46,8 +47,6 @@ typedef struct ZakoGunWork { s32 flag; s32 targetId;
     s32 state; s32 timer; Vec pos; u8 field_0x1c[0x34 - 0x1c]; f32 radius; f32 angle; f32 speed; u8 field_0x40[0x48 - 0x40]; Vec start; Vec end; s32 timer2; s32 steps; s32 count; s32 sfx; } ZakoGunWork;
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
-BattleUnit* zakogun_get_ptr(void);
-s32 zakogun_get_kanbu_id(void);
 void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 double sqrt(double x);
@@ -60,7 +59,6 @@ USER_FUNC(zakogun_dead3);
 USER_FUNC(zakogun_attack3_3);
 USER_FUNC(zakogun_attack3_2);
 USER_FUNC(zakogun_attack3_1);
-void zakogun_ext_main3(void);
 USER_FUNC(zakogun_ext_init3);
 USER_FUNC(zakogun_kanbu_on_ball);
 extern s32 zakogun_get_kanbu_id_evtcmd[];

@@ -11,6 +11,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "rels/dmo/include/dmo.h"
 
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
@@ -74,7 +75,6 @@ USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
 USER_FUNC(demo_draw);
 void demo_cap(void);
-void demo_exit(void);
 USER_FUNC(demo_init);
 
 EvtWord buttonCheck[32];

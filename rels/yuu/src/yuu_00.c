@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_yuugijou.h"
+#include "rels/yuu/include/yuu.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -43,8 +44,6 @@ typedef struct HikokiWork {
     s32 monteCount;
     EventEntry* viewEvent;
 } HikokiWork;
-s32 yuucounter_get_data(void);
-void yuucounter_flag_on(s32 flag);
 #ifdef VERSION_G8ME01
 USER_FUNC(yuuminigame1_floor_chk);
 USER_FUNC(yuuminigame1_floor_on_off);
@@ -101,7 +100,6 @@ USER_FUNC(yuuranking_wait_button);
 #ifdef VERSION_G8ME01
 #endif
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data);
-void yuuminigame_disp_1hikoki(CameraId camera, void* param);
 void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall);
 

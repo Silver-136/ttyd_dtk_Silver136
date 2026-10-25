@@ -21,6 +21,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "eff/eff_bomb.h"
+#include "rels/gor/include/gor.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
@@ -236,11 +237,9 @@ USER_FUNC(yuugijou_montemedal_wait);
 USER_FUNC(yuugijou_set_yupflag);
 USER_FUNC(yuuranking_wait_button);
 void kuji_bomb_055_callback(s32 type, MsgWinData** work);
-void goryuugijo_disp_slot(CameraId camera, void* param);
 void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall);
 void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall);
 USER_FUNC(evt_goryuugijo_get_caseid);
-void goryuugijo_disp_montemedal(CameraId camera, void* param);
 void goryuugijo_main_montemedal(EventEntry* event, BOOL isFirstCall);
 void goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall);
 

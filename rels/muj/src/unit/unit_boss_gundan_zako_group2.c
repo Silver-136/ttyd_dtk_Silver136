@@ -7,6 +7,7 @@
 #include "evt/evt_sub.h"
 #include "libc_decls.h"
 #include "battle/battle_status_effect.h"
+#include "rels/muj/include/muj.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -73,7 +74,6 @@ typedef struct ZakoGunWork {
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
-BattleUnit* zakogun_get_ptr(void);
 void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
 
 USER_FUNC(shake_ceil);
@@ -84,7 +84,6 @@ USER_FUNC(zakogun_damage_pose_cancel);
 USER_FUNC(zakogun_set_target_id);
 USER_FUNC(zakogun_escape2);
 USER_FUNC(zakogun_dead2);
-void zakogun_ext_main2(void);
 USER_FUNC(zakogun_ext_init2);
 USER_FUNC(up_ceil);
 USER_FUNC(down_ceil);

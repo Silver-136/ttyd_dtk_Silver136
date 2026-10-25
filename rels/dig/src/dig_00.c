@@ -9,6 +9,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_seq.h"
 #include "dolphin/exi.h"
+#include "rels/dig/include/dig.h"
 
 #include "seq/seq_demo.h"
 #include "memory.h"
@@ -34,8 +35,6 @@ USER_FUNC(gravity_scale);
 USER_FUNC(movie);
 USER_FUNC(sound_fade);
 static USER_FUNC(z);
-void dig_thpStop(void);
-void dig_thpInit(void);
 
 static s32* wp[1];
 static DigAnim anim_tbl[48];

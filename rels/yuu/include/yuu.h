@@ -62,3 +62,12 @@ extern EvtWord yuu_02_jumpret[];
 extern EvtWord yuu_03_icon_monte_entry_evt[];
 
 extern EvtWord minigame01_floor_delete[];
+void yuucounter_flag_on(u32 mask);
+s32 yuucounter_get_data(void);
+void yuuminigame_disp_4slit(CameraId camera, void* param);
+void yuuminigame_disp_3roll(CameraId camera, void* param);
+void yuuminigame_disp_2fune(CameraId camera, void* param);
+void yuuminigame_disp_1hikoki(CameraId camera, void* param);
+void ext_yuunpc_minigame4_init_sub(void);
+s32 yuunpc_juni(Vec* pos);
+void yuunpc_wp_flag_off(u16 flag);

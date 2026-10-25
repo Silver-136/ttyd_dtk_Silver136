@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "rels/aaa/include/aaa.h"
 
 #include "data/mapdata.h"
 #include "aaa.h"
@@ -7,7 +8,6 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-void mapdelete(void);
 
 void _unresolved(void);
 void _epilog(void);

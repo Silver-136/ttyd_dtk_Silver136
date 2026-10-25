@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "rels/gor/include/gor.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "memory.h"
@@ -20,10 +21,8 @@ typedef struct GoryuuWork {
 } GoryuuWork;
 s32 goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall);
 s32 goryuugijo_main_montemedal(EventEntry* event, BOOL isFirstCall);
-void goryuugijo_disp_montemedal(CameraId camera, void* param);
 s32 goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall);
 s32 goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall);
-void goryuugijo_disp_slot(CameraId camera, void* param);
 void evt_goryuugijo_disp_func(CameraId camera, void* param);
 
 USER_FUNC(evt_goryuugijo_main_func);

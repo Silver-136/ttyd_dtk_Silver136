@@ -40,3 +40,7 @@ USER_FUNC(muj_mario_pos_osreport_func);
 USER_FUNC(muj_npc_buruburu);
 USER_FUNC(muj_npc_fuwafuwa);
 USER_FUNC(muj_ship_puka_func);
+s32 zakogun_get_kanbu_id(void);
+BattleUnit* zakogun_get_ptr(void);
+void zakogun_ext_main3(void);
+void zakogun_ext_main2(void);

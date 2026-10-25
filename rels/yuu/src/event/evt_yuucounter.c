@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "rels/yuu/include/yuu.h"
 
 #include "dolphin/os.h"
 #include "memory.h"
@@ -32,16 +33,13 @@ void evtYuuSetWindowEvt(EvtWord* evt);
 void evt_yuucounter_disp_func(CameraId camera, void* param);
 static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor bgColor = {0xFF, 0xFF, 0xFF, 0x99};
-s32 yuunpc_juni(Vec* pos);
 void iconDispGxCol(Mtx pos, s16 flags, u16 iconId, GXColor color);
 
 USER_FUNC(evt_yuucounter_main_func);
 USER_FUNC(yuucounter_disp_flag_onoff);
 u32 yuucounter_flag(u32 mask);
 void yuucounter_flag_off(u32 mask);
-void yuucounter_flag_on(u32 mask);
 void yuucounter_set_data(s32 data);
-s32 yuucounter_get_data(void);
 USER_FUNC(evt_yuucounter_free);
 USER_FUNC(evt_yuucounter_alloc);
 

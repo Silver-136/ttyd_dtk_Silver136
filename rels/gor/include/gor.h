@@ -46,3 +46,6 @@ USER_FUNC(evt_gor_inemuri_snd_set);
 USER_FUNC(evt_gor_msg_cat_alloc);
 USER_FUNC(evt_gor_msg_cat_free);
 USER_FUNC(evt_gor_villager_urouro_check_func);
+void goryuugijo_disp_montemedal(CameraId camera, void* param);
+void goryuugijo_disp_slot(CameraId camera, void* param);
+void tegami_delete(void);

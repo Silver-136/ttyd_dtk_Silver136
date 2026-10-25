@@ -7,6 +7,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_johoya.h"
+#include "rels/gor/include/gor.h"
 
 #include "data/mapdata.h"
 #include "mario/mariost.h"
@@ -23,7 +24,6 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-void tegami_delete(void);
 static s32 gor_inemuri_snd_id;
 static char* gor_msg_cat_buf;
 

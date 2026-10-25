@@ -5,6 +5,7 @@
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"
 #include "evt/evt_seq.h"
+#include "rels/yuu/include/yuu.h"
 
 #include "driver/npcdrv.h"
 #include "driver/extdrv.h"
@@ -78,7 +79,6 @@ f32 yuusintbl[450];
 s32 chusan_mov_tbl[28];
 s32 chusan_act_tbl[8];
 f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc);
-void ext_yuunpc_minigame4_init_sub(void);
 MiniGameWork* yuunpc_yuuminigame4_ptr;
 void yuunpc_disp(CameraId camera, void* param);
 void yuunpc_pose_minigame1_main(void);
@@ -92,9 +92,7 @@ void ext_yuunpc_minigame2_main(void);
 void ext_yuunpc_minigame1_main(void);
 void ext_yuunpc_dispent(void);
 void ext_yuunpc_minigame4_init(void);
-s32 yuunpc_juni(Vec* pos);
 u16 yuunpc_wp_flag_check(u16 flag);
-void yuunpc_wp_flag_off(u16 flag);
 void yuunpc_wp_flag_on(u16 flag);
 void errper_set_rtn(YuuNpc* npc);
 s32 goalincheck(YuuNpc* npc);

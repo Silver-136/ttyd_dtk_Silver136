@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "rels/yuu/include/yuu.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "memory.h"
@@ -14,16 +15,12 @@ s32 stackp;
 void* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z);
 s32 yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall);
 s32 yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_disp_1hikoki(CameraId camera, void* param);
 s32 yuuminigame_init_2fune(EventEntry* event, BOOL isFirstCall);
 s32 yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_disp_2fune(CameraId camera, void* param);
 s32 yuuminigame_init_3roll(EventEntry* event, BOOL isFirstCall);
 s32 yuuminigame_main_3roll(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_disp_3roll(CameraId camera, void* param);
 s32 yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall);
 s32 yuuminigame_main_4slit(EventEntry* event, BOOL isFirstCall);
-void yuuminigame_disp_4slit(CameraId camera, void* param);
 void evt_yuuminigame_disp_func(CameraId camera, void* param);
 
 USER_FUNC(evt_yuuminigame_main_func);

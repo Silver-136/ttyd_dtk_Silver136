@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_cam.h"
 #include "poly_trig.h"
+#include "rels/gor/include/gor.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -42,7 +43,6 @@ USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(mabuta);
 USER_FUNC(tegami);
-void tegami_delete(void);
 
 static void draw(CameraId camera, void* param) {
     winTexInit(*(TEXPalette**)wp->tpl->data);

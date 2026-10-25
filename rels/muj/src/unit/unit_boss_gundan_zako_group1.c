@@ -5,6 +5,7 @@
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"
 #include "battle/battle_status_effect.h"
+#include "rels/muj/include/muj.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -49,8 +50,6 @@ typedef struct ZakoGunWork { s32 flag; s32 targetId;
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 void zakogun_ext_main1(void);
-void zakogun_ext_main2(void);
-void zakogun_ext_main3(void);
 void zakogun_ext_disp(CameraId camera, void* param);
 
 USER_FUNC(zakogun_attack1);
@@ -63,11 +62,9 @@ USER_FUNC(zakogun_escape1);
 USER_FUNC(zakogun_dead1);
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 USER_FUNC(zakogun_ext_init1);
-s32 zakogun_get_kanbu_id(void);
 USER_FUNC(zakogun_get_kanbu_id_evtcmd);
 void zakogun_ext_main(void);
 void zakogun_ext_init(void);
-BattleUnit* zakogun_get_ptr(void);
 void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
 
 BattleUnitKind unit_boss_gundan_zako_group1;

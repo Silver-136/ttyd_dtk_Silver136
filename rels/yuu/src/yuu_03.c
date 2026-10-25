@@ -18,6 +18,7 @@
 #include "mot/mot_slit.h"
 #include "evt/evt_yuugijou.h"
 #include "mot/mot_roll.h"
+#include "rels/yuu/include/yuu.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -52,8 +53,6 @@ typedef struct Monte {
     MiniGameWork* wp;
 } Monte;
 void yuu_03_icon_monte_disp(CameraId camera, void* param);
-void ext_yuunpc_minigame4_init_sub(void);
-void yuunpc_wp_flag_off(s32 flag);
 typedef struct RyushiWork {
     s32 flag;
     s32 mode;
@@ -78,8 +77,6 @@ static f32 randf(f32 min, f32 max);
 void ryushi_disp(CameraId camera, void* param);
 USER_FUNC(evt_ryushi_init);
 BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, SlitWork* data);
-s32 yuucounter_get_data(void);
-void yuucounter_flag_on(s32 flag);
 #define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)
 
 USER_FUNC(eff_call_minigame);
@@ -104,7 +101,6 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuunpc_go);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
-void yuuminigame_disp_4slit(CameraId camera, void* param);
 void yuuminigame_main_4slit(EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall);
 USER_FUNC(evt_ryushi_init);

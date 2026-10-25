@@ -19,6 +19,7 @@
 #include "mot/mot_ship.h"
 #include "evt/evt_yuugijou.h"
 #include "driver/mapdrv.h"
+#include "rels/yuu/include/yuu.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -51,8 +52,6 @@ typedef struct FuneWork {
     s32 monteCount;
     EventEntry* viewEvent;
 } FuneWork;
-s32 yuucounter_get_data(void);
-void yuucounter_flag_on(s32 flag);
 typedef struct MonteSub {
     s32 unk0;
     Vec pos;
@@ -108,7 +107,6 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
 BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, FuneWork* data);
-void yuuminigame_disp_2fune(CameraId camera, void* param);
 void yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_2fune(EventEntry* event, BOOL isFirstCall);
 static BOOL get_monte_check(Vec* a, Vec* b);

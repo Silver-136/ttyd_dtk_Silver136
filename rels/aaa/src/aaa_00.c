@@ -12,6 +12,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "rels/aaa/include/aaa.h"
 
 #include "driver/camdrv.h"
 #include "win/win_main.h"
@@ -35,7 +36,6 @@ static AaaWork* wp;
 USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(mapdraw);
-void mapdelete(void);
 
 static NpcSetupInfo npcEnt[3];
 static EvtWord evt_door[15];

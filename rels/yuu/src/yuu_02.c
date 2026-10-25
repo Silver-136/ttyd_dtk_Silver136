@@ -15,6 +15,7 @@
 #include "evt/evt_snd.h"
 #include "mot/mot_roll.h"
 #include "evt/evt_yuugijou.h"
+#include "rels/yuu/include/yuu.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -70,8 +71,6 @@ typedef struct MonteTable {
 static void* yuunpc_wp;
 static Monte* monte_p; /* monte_p */
 static Monte* icon_monte_p;
-s32 yuucounter_get_data(void);
-void yuucounter_flag_on(s32 flag);
 extern MonteTable montetable[];
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
@@ -105,7 +104,6 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data);
-void yuuminigame_disp_3roll(CameraId camera, void* param);
 void yuuminigame_main_3roll(EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_3roll(EventEntry* event, BOOL isFirstCall);
 USER_FUNC(yuu_02_icon_monte_onoff);
