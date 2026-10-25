@@ -29,8 +29,16 @@ typedef enum FadeType {
     MARIO_HEAD_FADE_OUT = 53,
 } FadeType;
 
+// FadeEntry.flags (fadeEntry, fadeMain, disp_maku)
+typedef enum FadeFlags {
+    FADE_FLAG_ACTIVE = (1 << 0),      // 0x1, slot in use (fadeEntry)
+    FADE_FLAG_DONE = (1 << 1),        // 0x2, the fade reached its end
+    FADE_FLAG_VIRTUAL_POS = (1 << 2), // 0x4, fadeSetAnimVirtualPos: centred on a set position
+    FADE_FLAG_NARROW_FAST = (1 << 3), // 0x8, fadeSetNarrowFast: shorter narrowing (90 frames, not 180)
+} FadeFlags;
+
 typedef struct FadeEntry {
-    u16 flags; //0x0, 4 = use virtual pos
+    u16 flags; //0x0, FadeFlags
     u8 pad_2[2]; //0x2
     FadeType type; //0x4
     s32 state; //0x8, step within the fade type

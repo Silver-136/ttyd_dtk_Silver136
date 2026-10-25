@@ -166,7 +166,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
             break;
     }
     entry->flags = 0;
-    entry->flags |= 1;
+    entry->flags |= FADE_FLAG_ACTIVE;
     entry->type = type;
     *(s64*)&entry->durationHi = duration;
     entry->color = color;
@@ -394,7 +394,7 @@ void fadeSetAnimOfsPos(f32 x, f32 y) {
 void fadeSetAnimVirtualPos(f32 x, f32 y, f32 z) {
     FadeEntry* entry = &wp->entries[1];
     entry->VirtualPos = (Vec){x, y, z};
-    entry->flags |= 4;
+    entry->flags |= FADE_FLAG_VIRTUAL_POS;
 }
 
 void fadeSetOffscreenCallback(OffscreenCallback callback, void* param) {
@@ -428,7 +428,7 @@ void fadeMain(void) {
 
     entry = &wp->entries[0];
     for (i = 0; i < 5; i++, entry++) {
-        if (!(entry->flags & 1)) {
+        if (!(entry->flags & FADE_FLAG_ACTIVE)) {
             continue;
         }
         switch (entry->type) {
@@ -446,12 +446,12 @@ void fadeMain(void) {
                             entry->rotation += 10.0f;
                             if (entry->progress < 0.0f) {
                                 entry->progress = 0.0f;
-                                entry->flags |= 2;
+                                entry->flags |= FADE_FLAG_DONE;
                                 entry->state++;
                             }
                         } else {
                             entry->progress = 0.0f;
-                            entry->flags |= 2;
+                            entry->flags |= FADE_FLAG_DONE;
                             entry->state++;
                         }
                         break;
@@ -466,12 +466,12 @@ void fadeMain(void) {
                             entry->rotation -= 10.0f;
                             if (entry->progress > 1.0f) {
                                 entry->progress = 1.0f;
-                                entry->flags |= 2;
+                                entry->flags |= FADE_FLAG_DONE;
                                 entry->state++;
                             }
                         } else {
                             entry->progress = 1.0f;
-                            entry->flags |= 2;
+                            entry->flags |= FADE_FLAG_DONE;
                             entry->state++;
                         }
                         break;
@@ -531,7 +531,7 @@ void fadeMain(void) {
                         break;
                     case 1:
                         if (entry->image->loopTimes >= 1.0f) {
-                            entry->flags |= 2;
+                            entry->flags |= FADE_FLAG_DONE;
                             switch (entry->type) {
                                 case 0x2A: case 0x2C: case 0x2E: case 0x30:
                                     imgRelease(entry->image, entry->imageType);
@@ -595,7 +595,7 @@ void fadeMain(void) {
                                     entry->image->animName = "A_2";
                                     break;
                                 default:
-                                    entry->flags |= 2;
+                                    entry->flags |= FADE_FLAG_DONE;
                                     break;
                             }
                             entry->state++;
@@ -603,7 +603,7 @@ void fadeMain(void) {
                         break;
                     case 2:
                         if (entry->image->loopTimes >= 1.0f) {
-                            entry->flags |= 2;
+                            entry->flags |= FADE_FLAG_DONE;
                             entry->state++;
                         }
                         break;
@@ -629,7 +629,7 @@ void fadeMain(void) {
                         break;
                     case 1:
                         if (entry->image->loopTimes >= 1.0f) {
-                            entry->flags |= 2;
+                            entry->flags |= FADE_FLAG_DONE;
                             imgRelease(entry->image, entry->imageType);
                             animPaperPoseRelease(entry->paperPoseId);
                             entry->paperPoseId = -1;
@@ -660,7 +660,7 @@ void fadeMain(void) {
                     case 1:
                         animPoseMain(entry->poseId);
                         if (animPoseGetLoopTimes(entry->poseId) >= 1.0f) {
-                            entry->flags |= 2;
+                            entry->flags |= FADE_FLAG_DONE;
                             entry->state++;
                         }
                         break;
@@ -694,7 +694,7 @@ void fadeMain(void) {
                         }
                         animPoseMain(entry->poseId);
                         if (animPoseGetLoopTimes(entry->poseId) >= 1.0f) {
-                            entry->flags |= 2;
+                            entry->flags |= FADE_FLAG_DONE;
                             entry->state++;
                             animPoseRelease(entry->poseId);
                             entry->poseId = -1;
@@ -737,7 +737,7 @@ void fadeMain(void) {
                     case 1:
                         animPoseMain(entry->poseId);
                         if (entry->type == 0x22 || entry->type == 0x28) {
-                            if (!(entry->flags & 8)) {
+                            if (!(entry->flags & FADE_FLAG_NARROW_FAST)) {
                                 if (entry->scaleTimer < FPS_FRAMES(180)) {
                                     entry->scale = intplGetValue(12, 3.0f, 1.0f, ++entry->scaleTimer, FPS_FRAMES(180));
                                 }
@@ -749,19 +749,19 @@ void fadeMain(void) {
                         }
                         if (animPoseGetLoopTimes(entry->poseId) >= 1.0f) {
                             if (entry->type == 0x22 || entry->type == 0x28) {
-                                if (!(entry->flags & 8)) {
+                                if (!(entry->flags & FADE_FLAG_NARROW_FAST)) {
                                     if (entry->scaleTimer == FPS_FRAMES(180)) {
-                                        entry->flags |= 2;
+                                        entry->flags |= FADE_FLAG_DONE;
                                         entry->state++;
                                     }
                                 } else {
                                     if (entry->scaleTimer == FPS_FRAMES(90)) {
-                                        entry->flags |= 2;
+                                        entry->flags |= FADE_FLAG_DONE;
                                         entry->state++;
                                     }
                                 }
                             } else {
-                                entry->flags |= 2;
+                                entry->flags |= FADE_FLAG_DONE;
                                 entry->state++;
                                 psndSFXOff(entry->sfxId);
                                 if (entry->type == 0x19 || entry->type == 0x1C || entry->type == 0x40) {
@@ -789,7 +789,7 @@ void fadeMain(void) {
                         if (entry->scaleTimer < FPS_FRAMES(120)) {
                             entry->scale = intplGetValue(12, 1.0f, 3.0f, ++entry->scaleTimer, FPS_FRAMES(120));
                         } else {
-                            entry->flags |= 2;
+                            entry->flags |= FADE_FLAG_DONE;
                             entry->state++;
                             animPoseRelease(entry->poseId);
                             entry->poseId = -1;
@@ -1061,7 +1061,7 @@ void disp_maku(CameraId camId, void* param) {
         case 0x19:
         case 0x1C:
         case 0x40:
-            if (entry->flags & 2) {
+            if (entry->flags & FADE_FLAG_DONE) {
                 return;
             }
     }
@@ -1076,7 +1076,7 @@ void disp_maku(CameraId camId, void* param) {
     if (entry->poseId < 0) {
         return;
     }
-    if (entry->flags & 4) {
+    if (entry->flags & FADE_FLAG_VIRTUAL_POS) {
         camera = camGetPtr(CAMERA_3D);
         mag = 3.141592f;
         depth = camera->fovY;
@@ -1270,7 +1270,7 @@ TEXPalette* fadeGetTpl(void) {
 }
 
 void fadeSetNarrowFast(void) {
-    wp->entries[1].flags |= 8;
+    wp->entries[1].flags |= FADE_FLAG_NARROW_FAST;
 }
 
 
