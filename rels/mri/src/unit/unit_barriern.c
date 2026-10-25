@@ -34,7 +34,13 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
 static s32 zanzou_count[3];
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
-typedef struct BarriernSpline { s32 n; Vec* table; f32 a[5]; f32 b[15]; s32 count; } BarriernSpline;
+typedef struct BarriernSpline {
+    s32 n;
+    Vec* table;
+    f32 a[5];
+    f32 b[15];
+    s32 count;
+} BarriernSpline;
 void spline_maketable(s32 n, Vec* table, f32* a, f32* b);
 void spline_getvalue(f32 t, Vec* out, s32 n, Vec* table, f32* a, f32* b);
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);

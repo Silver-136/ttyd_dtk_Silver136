@@ -22,7 +22,23 @@
 #include "driver/extdrv.h"
 #include "manager/evtmgr_cmd.h"
 
-typedef struct ZakoGun { s8 field_0x0; s8 state; s32 timer; s32 timerMax; Vec pos; Vec home; s32 poseBase; s32 poseNum; s32 poseDiv; s32 poseCount; Vec start; Vec target; Vec vel; Vec ofs; Vec rot; } ZakoGun;
+typedef struct ZakoGun {
+    s8 field_0x0;
+    s8 state;
+    s32 timer;
+    s32 timerMax;
+    Vec pos;
+    Vec home;
+    s32 poseBase;
+    s32 poseNum;
+    s32 poseDiv;
+    s32 poseCount;
+    Vec start;
+    Vec target;
+    Vec vel;
+    Vec ofs;
+    Vec rot;
+} ZakoGun;
 typedef struct ZakoGunWork { s32 flag; s32 targetId;
 #ifdef VERSION_G8ME01
     u8 us_pad08[0xC]; // US: 12 more bytes here

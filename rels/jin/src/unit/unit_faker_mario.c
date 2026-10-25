@@ -19,9 +19,26 @@
 
 typedef struct FakerStatus { s16 data[15]; } FakerStatus;
 #ifdef VERSION_G8ME01
-typedef struct FakerParam { f32 size; FakerStatus status; s32 statusFlags; u16 commandDisabled[2]; s16 currentHp; s16 maxHp; s16 currentFp; s16 maxFp; } FakerParam;
+typedef struct FakerParam {
+    f32 size;
+    FakerStatus status;
+    s32 statusFlags;
+    u16 commandDisabled[2];
+    s16 currentHp;
+    s16 maxHp;
+    s16 currentFp;
+    s16 maxFp;
+} FakerParam;
 #else
-typedef struct FakerParam { f32 size; FakerStatus status; s32 statusFlags; s16 currentHp; s16 maxHp; s16 currentFp; s16 maxFp; } FakerParam;
+typedef struct FakerParam {
+    f32 size;
+    FakerStatus status;
+    s32 statusFlags;
+    s16 currentHp;
+    s16 maxHp;
+    s16 currentFp;
+    s16 maxFp;
+} FakerParam;
 #endif
 
 static USER_FUNC(_anime_load);

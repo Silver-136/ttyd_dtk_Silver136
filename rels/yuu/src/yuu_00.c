@@ -35,16 +35,42 @@
 #else
 #define YUU_ICON_OFS 0
 #endif
-typedef struct HikokiWork { u32 flags; s32 phase; s32 coins; s32 result; s32 monteCount; EventEntry* viewEvent; } HikokiWork;
+typedef struct HikokiWork {
+    u32 flags;
+    s32 phase;
+    s32 coins;
+    s32 result;
+    s32 monteCount;
+    EventEntry* viewEvent;
+} HikokiWork;
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
 #ifdef VERSION_G8ME01
 USER_FUNC(yuuminigame1_floor_chk);
 USER_FUNC(yuuminigame1_floor_on_off);
 #endif
-typedef struct MonteSub { s32 unk0; Vec pos; f32 scale; u8 unk14[0x38 - 0x14]; } MonteSub;
-typedef struct Monte { u8 hidden; u8 unk1; s16 num; u8 state; u8 unk5[3]; MonteSub sub; MiniGameWork* wp; } Monte;
-typedef struct MonteTable { f32 x0; f32 x1; f32 y0; f32 y1; s32 num; } MonteTable;
+typedef struct MonteSub {
+    s32 unk0;
+    Vec pos;
+    f32 scale;
+    u8 unk14[0x38 - 0x14];
+} MonteSub;
+typedef struct Monte {
+    u8 hidden;
+    u8 unk1;
+    s16 num;
+    u8 state;
+    u8 unk5[3];
+    MonteSub sub;
+    MiniGameWork* wp;
+} Monte;
+typedef struct MonteTable {
+    f32 x0;
+    f32 x1;
+    f32 y0;
+    f32 y1;
+    s32 num;
+} MonteTable;
 static void* yuunpc_wp;
 static Monte* monte_p;
 #define MONTETABLE (montetable)

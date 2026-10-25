@@ -32,12 +32,38 @@
 #include "battle/battle_sub.h"
 #include "pmario_sound.h"
 
-typedef struct ArmWork { Vec prevPos; Vec pos; f32 rot; f32 targetRot; EffectEntry* eff; } ArmWork;
+typedef struct ArmWork {
+    Vec prevPos;
+    Vec pos;
+    f32 rot;
+    f32 targetRot;
+    EffectEntry* eff;
+} ArmWork;
 double atan(double x);
-typedef struct BattenEffWork { s32 field_0x0; Vec pos; u8 field_0x10[0x28 - 0x10]; Mtx mtx; } BattenEffWork;
+typedef struct BattenEffWork {
+    s32 field_0x0;
+    Vec pos;
+    u8 field_0x10[0x28 - 0x10];
+    Mtx mtx;
+} BattenEffWork;
 EffectEntry* effBattenEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 typedef struct TargetWork { s32 state; s32 count; EffectEntry* eff; } TargetWork;
-typedef struct AudMember { s32 flags; s32 step; s32 counter; u8 pad_0C[0x48 - 0xC]; Vec position; u8 pad_54[0x60 - 0x54]; Vec scale; u8 pad_6C[0x9C - 0x6C]; Vec rotation; u8 pad_A8[0xB4 - 0xA8]; Vec home; u8 pad_C0[0xF8 - 0xC0]; s32 frame; s32 frames; } AudMember;
+typedef struct AudMember {
+    s32 flags;
+    s32 step;
+    s32 counter;
+    u8 pad_0C[0x48 - 0xC];
+    Vec position;
+    u8 pad_54[0x60 - 0x54];
+    Vec scale;
+    u8 pad_6C[0x9C - 0x6C];
+    Vec rotation;
+    u8 pad_A8[0xB4 - 0xA8];
+    Vec home;
+    u8 pad_C0[0xF8 - 0xC0];
+    s32 frame;
+    s32 frames;
+} AudMember;
 s32 irand(s32 scalar);
 extern EvtWord aud_hit_event[];
 void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z);

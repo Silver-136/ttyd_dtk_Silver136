@@ -23,7 +23,17 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_sub.h"
 
-typedef struct AtmTeresa { u8 state; u8 flag; s32 anim; s32 wait; s32 timer; Vec vel; Vec start; Vec target; u8 mode; } AtmTeresa;
+typedef struct AtmTeresa {
+    u8 state;
+    u8 flag;
+    s32 anim;
+    s32 wait;
+    s32 timer;
+    Vec vel;
+    Vec start;
+    Vec target;
+    u8 mode;
+} AtmTeresa;
 AtmTeresa* teresa;
 #define ATMIC_TERESA_SCALE atmic_teresa_scale
 s32 teresa_count;

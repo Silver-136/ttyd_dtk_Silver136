@@ -25,11 +25,22 @@
 #include "battle/battle_sub.h"
 
 static EffectEntry* eff_charge;
-typedef struct ArmWork { Vec prevPos; Vec pos; f32 rot; f32 targetRot; EffectEntry* eff; } ArmWork;
+typedef struct ArmWork {
+    Vec prevPos;
+    Vec pos;
+    f32 rot;
+    f32 targetRot;
+    EffectEntry* eff;
+} ArmWork;
 static ArmWork* work[2];
 EffectEntry* effBattenEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 double atan(double x);
-typedef struct BattenEffWork { s32 field_0x0; Vec pos; u8 field_0x10[0x28 - 0x10]; Mtx mtx; } BattenEffWork;
+typedef struct BattenEffWork {
+    s32 field_0x0;
+    Vec pos;
+    u8 field_0x10[0x28 - 0x10];
+    Mtx mtx;
+} BattenEffWork;
 
 static USER_FUNC(arm_check);
 static USER_FUNC(arm_end);

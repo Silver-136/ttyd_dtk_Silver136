@@ -52,7 +52,18 @@
 #endif
 
 void mapGrpSetColor(const char* name, GXColor color);
-typedef struct UranaiWork { s32 lwData[16]; s32 gwData[32]; smartEntry* buf; GXTexObj tex; s32 ready; EventEntry* capEvent; s32 x; s32 y; s32 w; s32 h; } UranaiWork;
+typedef struct UranaiWork {
+    s32 lwData[16];
+    s32 gwData[32];
+    smartEntry* buf;
+    GXTexObj tex;
+    s32 ready;
+    EventEntry* capEvent;
+    s32 x;
+    s32 y;
+    s32 w;
+    s32 h;
+} UranaiWork;
 void uranai_cap(CameraId cameraId, void* param);
 static inline f32 tanf(f32 x) { return tan(x); }
 const char* search_evt_moji(s32 id);

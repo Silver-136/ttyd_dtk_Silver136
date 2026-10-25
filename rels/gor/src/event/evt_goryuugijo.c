@@ -8,7 +8,16 @@
 #include "driver/dispdrv.h"
 
 void* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z);
-typedef struct GoryuuWork { EventEntry* event; EventEntry* subEvent; u16 flags; s32 type; s32 (*init)(EventEntry* event, BOOL isFirstCall); s32 (*main)(EventEntry* event, BOOL isFirstCall); void (*disp)(CameraId camera, void* param); void* data; } GoryuuWork;
+typedef struct GoryuuWork {
+    EventEntry* event;
+    EventEntry* subEvent;
+    u16 flags;
+    s32 type;
+    s32 (*init)(EventEntry* event, BOOL isFirstCall);
+    s32 (*main)(EventEntry* event, BOOL isFirstCall);
+    void (*disp)(CameraId camera, void* param);
+    void* data;
+} GoryuuWork;
 s32 goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall);
 s32 goryuugijo_main_montemedal(EventEntry* event, BOOL isFirstCall);
 void goryuugijo_disp_montemedal(CameraId camera, void* param);

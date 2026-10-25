@@ -29,7 +29,20 @@
 #include "data_tables.h"
 #include "driver/extdrv.h"
 
-typedef struct Chorobon { s16 flags; s16 state; s16 field_0x4; u8 field_0x6[2]; Vec target; f32 vy; s16 timer; u8 field_0x1a[2]; f32 speed; f32 gravity; s16 next; u8 field_0x26[0x30 - 0x26]; } Chorobon;
+typedef struct Chorobon {
+    s16 flags;
+    s16 state;
+    s16 field_0x4;
+    u8 field_0x6[2];
+    Vec target;
+    f32 vy;
+    s16 timer;
+    u8 field_0x1a[2];
+    f32 speed;
+    f32 gravity;
+    s16 next;
+    u8 field_0x26[0x30 - 0x26];
+} Chorobon;
 typedef struct ChorobonWork { s32 field_0x0; s32 count; Chorobon* chb; } ChorobonWork;
 static ChorobonWork* wp;
 static f32 randf(f32 min, f32 max);

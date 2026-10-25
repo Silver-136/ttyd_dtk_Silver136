@@ -21,7 +21,24 @@
 #include <dolphin/pad.h>
 
 const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
-typedef struct YuuRankingWork { EventEntry* event; u16 flags; u32 dispFlags; f32 x; f32 y; s32 type; s32 mode; s32 score; s32 bonus; s32 mul; s32 rank; s32 max; s32 phase; s32 monte; s32 dispScore; s32 timer; } YuuRankingWork;
+typedef struct YuuRankingWork {
+    EventEntry* event;
+    u16 flags;
+    u32 dispFlags;
+    f32 x;
+    f32 y;
+    s32 type;
+    s32 mode;
+    s32 score;
+    s32 bonus;
+    s32 mul;
+    s32 rank;
+    s32 max;
+    s32 phase;
+    s32 monte;
+    s32 dispScore;
+    s32 timer;
+} YuuRankingWork;
 #ifdef VERSION_G8ME01
 // US keeps separate rankings for 60Hz (record rows 0-3) and 50Hz (rows 4-7) play.
 #define YURANK(f) ((f) + (gp->framerate == 50 ? 1 : 0) * 4)

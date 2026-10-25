@@ -35,7 +35,15 @@ extern voidfunctionptr _dtors[];
 #ifdef VERSION_G8ME01
 #endif
 void display_func(CameraId cameraId, void* param);
-typedef struct SysChar { f32 x; f32 y; f32 z; f32 rot; s32 timer; s32 state; s32 texid; } SysChar;
+typedef struct SysChar {
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 rot;
+    s32 timer;
+    s32 state;
+    s32 texid;
+} SysChar;
 #ifdef VERSION_G8ME01
 // US: room for 64 letters, plus the chapter subtitle rendered once into a texture
 typedef struct SysWork {
@@ -54,7 +62,18 @@ typedef struct SysWork {
     u16 msgTexH;        // 0x72A
 } SysWork;
 #else
-typedef struct SysWork { s32 state; FileEntry* file; f32 rot; s32 frame; s32 scroll; s32 type; s32 alpha; f32 angle; s32 count; SysChar chars[8]; } SysWork;
+typedef struct SysWork {
+    s32 state;
+    FileEntry* file;
+    f32 rot;
+    s32 frame;
+    s32 scroll;
+    s32 type;
+    s32 alpha;
+    f32 angle;
+    s32 count;
+    SysChar chars[8];
+} SysWork;
 #endif
 SysWork* g_wp;
 

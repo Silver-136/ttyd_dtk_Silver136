@@ -29,8 +29,19 @@
 #include "party/party_motion.h"
 #include "gor.h"
 #include "data_tables.h"
-typedef struct SharinData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat speed; } SharinData;
-typedef struct ClankData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat x; EvtFloat y; } ClankData;
+typedef struct SharinData {
+    const char* name;
+    s32 field_0x4;
+    s32 field_0x8;
+    EvtFloat speed;
+} SharinData;
+typedef struct ClankData {
+    const char* name;
+    s32 field_0x4;
+    s32 field_0x8;
+    EvtFloat x;
+    EvtFloat y;
+} ClankData;
 
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_pouch_open_mail);

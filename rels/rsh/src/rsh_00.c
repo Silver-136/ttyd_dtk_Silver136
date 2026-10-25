@@ -32,9 +32,30 @@
 #include "data_tables.h"
 #include "driver/extdrv.h"
 
-typedef struct MoamoaPoseDef { char model[16]; char anim[8]; s16 loop; f32 speed; s32 start; s32 count; } MoamoaPoseDef;
-typedef struct Moamoa { u16 flags; s16 state; s16 timer; Vec pos; f32 angle; s16 pose; u64 startTime; } Moamoa;
-typedef struct MoamoaWork { s32 field_0x0; s32 count; Moamoa* moa; s32 numDefs; MoamoaPoseDef defs[32]; } MoamoaWork;
+typedef struct MoamoaPoseDef {
+    char model[16];
+    char anim[8];
+    s16 loop;
+    f32 speed;
+    s32 start;
+    s32 count;
+} MoamoaPoseDef;
+typedef struct Moamoa {
+    u16 flags;
+    s16 state;
+    s16 timer;
+    Vec pos;
+    f32 angle;
+    s16 pose;
+    u64 startTime;
+} Moamoa;
+typedef struct MoamoaWork {
+    s32 field_0x0;
+    s32 count;
+    Moamoa* moa;
+    s32 numDefs;
+    MoamoaPoseDef defs[32];
+} MoamoaWork;
 typedef struct MoamoaData { const char* model; const char* anim; f32 speed; } MoamoaData;
 static MoamoaWork* wp;
 static f32 randf(f32 min, f32 max);

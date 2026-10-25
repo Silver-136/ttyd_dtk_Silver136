@@ -42,7 +42,15 @@ static OSTime wwstart;
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 typedef struct LectButtonDisp { s32 unk0; Vec pos; } LectButtonDisp;
-typedef struct LectButton { u8 flags; u8 seq; u8 pad_2[0x8 - 0x2]; LectButtonDisp disp; u8 pad_18[0x40 - 0x18]; s16 iconId; s16 alpha; } LectButton;
+typedef struct LectButton {
+    u8 flags;
+    u8 seq;
+    u8 pad_2[0x8 - 0x2];
+    LectButtonDisp disp;
+    u8 pad_18[0x40 - 0x18];
+    s16 iconId;
+    s16 alpha;
+} LectButton;
 static LectButton lbtn[2];
 static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
     camera->presetPos = camera->cameraPos;

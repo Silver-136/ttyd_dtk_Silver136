@@ -63,7 +63,13 @@ EvtWord move_left_right[128];
 EvtWord move_up_down[226];
 EvtWord move_r[84];
 /* moving-floor gimmick read by shikake_init: hit, mapobj, two motion params, time; a NULL mapobj ends the table */
-typedef struct ShikakeMove { const char* hit; const char* mapobj; s32 param0; s32 param1; s32 time; } ShikakeMove;
+typedef struct ShikakeMove {
+    const char* hit;
+    const char* mapobj;
+    s32 param0;
+    s32 param1;
+    s32 time;
+} ShikakeMove;
 typedef struct ShikakeMoveTbl7 { ShikakeMove rows[7]; const char* end[2]; } ShikakeMoveTbl7;
 ShikakeMoveTbl7 left_right_tbl;
 typedef struct ShikakeMoveTbl6 { ShikakeMove rows[6]; const char* end[2]; } ShikakeMoveTbl6;

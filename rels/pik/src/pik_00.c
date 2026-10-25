@@ -45,8 +45,19 @@
 #include "data_tables.h"
 #include "cam_road.h"
 #include "cam_shift.h"
-typedef struct SharinData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat speed; } SharinData;
-typedef struct ClankData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat x; EvtFloat y; } ClankData;
+typedef struct SharinData {
+    const char* name;
+    s32 field_0x4;
+    s32 field_0x8;
+    EvtFloat speed;
+} SharinData;
+typedef struct ClankData {
+    const char* name;
+    s32 field_0x4;
+    s32 field_0x8;
+    EvtFloat x;
+    EvtFloat y;
+} ClankData;
 
 HitEntry* marioSearchUnder(void);
 

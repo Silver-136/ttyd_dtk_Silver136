@@ -55,8 +55,23 @@
 #include <math.h>
 
 static inline f32 fid(f32 x) { return x; }
-typedef struct KaitenParam { Vec pos; Vec target; f32 angle; f32 dist; } KaitenParam;
-typedef struct BrokenPiece { s32 state; s32 delay; s32 dir; Vec vel; Vec pos; f32 rot; f32 rotSpeed; f32 gx; f32 gy; } BrokenPiece;
+typedef struct KaitenParam {
+    Vec pos;
+    Vec target;
+    f32 angle;
+    f32 dist;
+} KaitenParam;
+typedef struct BrokenPiece {
+    s32 state;
+    s32 delay;
+    s32 dir;
+    Vec vel;
+    Vec pos;
+    f32 rot;
+    f32 rotSpeed;
+    f32 gx;
+    f32 gy;
+} BrokenPiece;
 typedef struct BrokenWork { s32 copied; smartEntry* tex; smartEntry* pieces; } BrokenWork;
 static u8* _ap;
 static KaitenParam* ckp0;

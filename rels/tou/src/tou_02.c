@@ -45,9 +45,37 @@ USER_FUNC(N_evt_sub_status_gauge_force_update);
 USER_FUNC(evt_sub_get_language);
 #endif
 
-typedef struct Fan { u16 flags; s16 state; s16 animIdx; u8 pad_0x6[2]; u64 time; Vec pos; Vec vel; f32 field_0x28; Vec target; Vec param; s16 timer; } Fan;
-typedef struct FanAnim { char name[16]; char anim[8]; s16 loop; f32 rate; s32 start; s32 count; } FanAnim;
-typedef struct FanWork { s32 num; Fan* fans; s32 animNum; FanAnim anim[32]; s32 hammerTimer; s32 count; s32 sfxId; u8 vol; } FanWork;
+typedef struct Fan {
+    u16 flags;
+    s16 state;
+    s16 animIdx;
+    u8 pad_0x6[2];
+    u64 time;
+    Vec pos;
+    Vec vel;
+    f32 field_0x28;
+    Vec target;
+    Vec param;
+    s16 timer;
+} Fan;
+typedef struct FanAnim {
+    char name[16];
+    char anim[8];
+    s16 loop;
+    f32 rate;
+    s32 start;
+    s32 count;
+} FanAnim;
+typedef struct FanWork {
+    s32 num;
+    Fan* fans;
+    s32 animNum;
+    FanAnim anim[32];
+    s32 hammerTimer;
+    s32 count;
+    s32 sfxId;
+    u8 vol;
+} FanWork;
 typedef struct FanData { const char* name; const char* anim; f32 rate; } FanData;
 FanWork* fan_wp;
 static void pose_init(void);

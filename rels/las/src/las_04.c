@@ -33,8 +33,39 @@
 #include <math.h>
 
 typedef struct FirebarBall { s32 pose; Vec pos; } FirebarBall;
-typedef struct FirebarSetup { u8 type; u8 count; u8 field_0x2[2]; Vec pos; f32 spacing; f32 field_0x14; f32 speed; void* callback; f32 param; f32 radius; } FirebarSetup; // param: type 0 start angle, type 1 end x
-typedef struct FirebarWork { u8 type; u8 count; u16 flags; Vec pos; f32 prevAngle; f32 angle; f32 speed; f32 spacing; f32 field_0x20; f32 scale; f32 endX; f32 radius; void (*callback)(struct FirebarWork* wp, s32 type); s32 hitCount; s32 sfxId; s32 state; f32 shadowAngle; FirebarBall* balls; FirebarSetup* setup; } FirebarWork;
+typedef struct FirebarSetup {
+    u8 type;
+    u8 count;
+    u8 field_0x2[2];
+    Vec pos;
+    f32 spacing;
+    f32 field_0x14;
+    f32 speed;
+    void* callback;
+    f32 param;
+    f32 radius;
+} FirebarSetup; // param: type 0 start angle, type 1 end x
+typedef struct FirebarWork {
+    u8 type;
+    u8 count;
+    u16 flags;
+    Vec pos;
+    f32 prevAngle;
+    f32 angle;
+    f32 speed;
+    f32 spacing;
+    f32 field_0x20;
+    f32 scale;
+    f32 endX;
+    f32 radius;
+    void (*callback)(struct FirebarWork* wp, s32 type);
+    s32 hitCount;
+    s32 sfxId;
+    s32 state;
+    f32 shadowAngle;
+    FirebarBall* balls;
+    FirebarSetup* setup;
+} FirebarWork;
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 mode, s32 flag, void* script, f32 x, f32 y, f32 z);
 void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
 void firebar_disp(CameraId camera, void* param);

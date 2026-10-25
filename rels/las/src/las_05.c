@@ -44,8 +44,24 @@
 s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz);
 s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario);
 void _kurokaron_next_move_index(void);
-typedef struct Senkaron { s8 state; u16 area; s32 timer; f32 vx; f32 vy; f32 vz; u32 flags; } Senkaron;
-typedef struct SenkaronWork { s32 attackStart; s32 escape; s32 mesPushing; u32 frameCount; s32 marioPushed; s32 hammerFrame; Senkaron* sk; } SenkaronWork;
+typedef struct Senkaron {
+    s8 state;
+    u16 area;
+    s32 timer;
+    f32 vx;
+    f32 vy;
+    f32 vz;
+    u32 flags;
+} Senkaron;
+typedef struct SenkaronWork {
+    s32 attackStart;
+    s32 escape;
+    s32 mesPushing;
+    u32 frameCount;
+    s32 marioPushed;
+    s32 hammerFrame;
+    Senkaron* sk;
+} SenkaronWork;
 SenkaronWork* skwp;
 static f32 randf(f32 min, f32 max);
 s32 nokonokoGetStatus(void);

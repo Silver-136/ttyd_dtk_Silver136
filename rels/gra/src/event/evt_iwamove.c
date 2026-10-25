@@ -7,7 +7,13 @@
 #include "driver/hitdrv.h"
 #include "system.h"
 
-typedef struct IwaMoveWork { s32 init; s32 timer; s32 state; EventEntry* event; EvtWord* script; } IwaMoveWork;
+typedef struct IwaMoveWork {
+    s32 init;
+    s32 timer;
+    s32 state;
+    EventEntry* event;
+    EvtWord* script;
+} IwaMoveWork;
 IwaMoveWork iwamove;
 
 USER_FUNC(evt_iwamove_main);

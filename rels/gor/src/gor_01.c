@@ -58,7 +58,12 @@
 #endif
 
 extern ItemData itemDataTable[];
-typedef struct ShopSel { u8 field_0x0[8]; s32* items; u8 field_0xC[0x24 - 0xC]; s32 sel; } ShopSel;
+typedef struct ShopSel {
+    u8 field_0x0[8];
+    s32* items;
+    u8 field_0xC[0x24 - 0xC];
+    s32 sel;
+} ShopSel;
 void mapGrpSetColor(const char* name, GXColor color);
 NpcEntry* fbatNpcTalkCheck(MarioWork* mario);
 EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);

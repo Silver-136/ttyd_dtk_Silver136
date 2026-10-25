@@ -22,7 +22,16 @@
 #include "driver/extdrv.h"
 #include "manager/evtmgr_cmd.h"
 
-typedef struct Chorogun { u8 flags; u8 state; u8 pad_2[2]; Vec vel; f32 speed; Vec pos; s32 timer; Vec target; } Chorogun;
+typedef struct Chorogun {
+    u8 flags;
+    u8 state;
+    u8 pad_2[2];
+    Vec vel;
+    f32 speed;
+    Vec pos;
+    s32 timer;
+    Vec target;
+} Chorogun;
 Chorogun* chorogun;
 s32 chorogun_targetId;
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);

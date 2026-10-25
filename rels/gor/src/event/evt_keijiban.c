@@ -9,7 +9,14 @@
 #include "memory.h"
 
 typedef struct KeijibanEntry { s16 unk0; s16 evtNo; s16 index; } KeijibanEntry;
-typedef struct KeijibanData { KeijibanEntry* entries; s32 count; const char* prefix; char* label; s32 current; s32 maxEvtNo; } KeijibanData;
+typedef struct KeijibanData {
+    KeijibanEntry* entries;
+    s32 count;
+    const char* prefix;
+    char* label;
+    s32 current;
+    s32 maxEvtNo;
+} KeijibanData;
 #define KJDT (_kjdt)
 
 s32 keijiban_data_make(const char* prefix, BOOL fill);

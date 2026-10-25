@@ -26,7 +26,13 @@ s32 irand(s32 scalar);
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n);
 
-typedef struct BarriernSpline { s32 n; Vec* table; f32 a[5]; f32 b[15]; s32 count; } BarriernSpline;
+typedef struct BarriernSpline {
+    s32 n;
+    Vec* table;
+    f32 a[5];
+    f32 b[15];
+    s32 count;
+} BarriernSpline;
 void spline_maketable(s32 n, Vec* table, f32* a, f32* b);
 void spline_getvalue(f32 t, Vec* out, s32 n, Vec* table, f32* a, f32* b);
 static s32 zanzou_count[3];

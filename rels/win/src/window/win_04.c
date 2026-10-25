@@ -28,7 +28,15 @@
 #include "win.h"
 #include "mario/mario_pouch.h"
 
-typedef struct Flower { s16 state; s16 timer; f32 x; f32 y; f32 scale; f32 targetScale; s32 alpha; } Flower;
+typedef struct Flower {
+    s16 state;
+    s16 timer;
+    f32 x;
+    f32 y;
+    f32 scale;
+    f32 targetScale;
+    s32 alpha;
+} Flower;
 typedef struct FlowerWork { s32 count; Flower* flowers; } FlowerWork;
 void flower_disp(CameraId camera, void* param);
 void envAddTev(s32 type, void* param);

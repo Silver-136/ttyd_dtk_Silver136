@@ -40,7 +40,18 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 
-typedef struct Teresa { Vec vel; f32 angle; Vec ofs; f32 bobPhase; f32 turnSpeed; Vec from; Vec to; s32 wait; u8 alpha; u8 seq; } Teresa;
+typedef struct Teresa {
+    Vec vel;
+    f32 angle;
+    Vec ofs;
+    f32 bobPhase;
+    f32 turnSpeed;
+    Vec from;
+    Vec to;
+    s32 wait;
+    u8 alpha;
+    u8 seq;
+} Teresa;
 static Teresa* pTeresa;
 Vec g_vecRotCenter;
 s32 g_bMove;

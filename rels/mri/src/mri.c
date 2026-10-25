@@ -34,7 +34,12 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 void mapGrpSetColor(const char* name, GXColor color);
-typedef struct HSV { u8 h; u8 s; u8 v; u8 a; } HSV;
+typedef struct HSV {
+    u8 h;
+    u8 s;
+    u8 v;
+    u8 a;
+} HSV;
 GXColor HSV2RGB(HSV hsv);
 PuniWork* puniGetPunigp(void);
 void puniModeWinjump(PuniData* puni);

@@ -17,7 +17,14 @@
 #include "battle/battle_event_default.h"
 #include "battle/battle_sub.h"
 
-typedef struct WanaWork { s32 ready; s32 poseId; Mtx mtx; GXTexObj obj; BattleUnitPart* part; smartEntry* tex; } WanaWork;
+typedef struct WanaWork {
+    s32 ready;
+    s32 poseId;
+    Mtx mtx;
+    GXTexObj obj;
+    BattleUnitPart* part;
+    smartEntry* tex;
+} WanaWork;
 void test_kururing_mapdisp(CameraId camera);
 static f32 tanf(f32 x);
 void replace_callback(BattleUnitPart* part, s32 type);

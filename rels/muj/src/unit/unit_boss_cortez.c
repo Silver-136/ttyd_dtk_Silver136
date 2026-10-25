@@ -25,7 +25,17 @@
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
 
-typedef struct CortezWork { s16 state; s16 count; s16 audienceId[100]; s16 wait[100]; s16 timer[100]; s16 seq[100]; void* eff[100]; Vec srcPos[100]; Vec dstPos[100]; } CortezWork;
+typedef struct CortezWork {
+    s16 state;
+    s16 count;
+    s16 audienceId[100];
+    s16 wait[100];
+    s16 timer[100];
+    s16 seq[100];
+    void* eff[100];
+    Vec srcPos[100];
+    Vec dstPos[100];
+} CortezWork;
 BattleUnitSetup entry_honeduka;
 
 USER_FUNC(_cortez_check_drain_audience);

@@ -22,7 +22,16 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_sub.h"
 
-typedef struct IconJumpWork { Vec start; Vec pos; Vec end; s32 frames; f32 speed; f32 gravity; f32 vy; u8 pad[0x7C - 0x34]; } IconJumpWork;
+typedef struct IconJumpWork {
+    Vec start;
+    Vec pos;
+    Vec end;
+    s32 frames;
+    f32 speed;
+    f32 gravity;
+    f32 vy;
+    u8 pad[0x7C - 0x34];
+} IconJumpWork;
 static void _disp_icon(CameraId camera, void* param);
 
 USER_FUNC(btlevtcmd_SetEventEntry);

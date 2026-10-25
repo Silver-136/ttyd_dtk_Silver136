@@ -30,7 +30,16 @@
 #include "data_tables.h"
 
 static void senteresa_ext_disp(CameraId camera, void* param);
-typedef struct Teresa { Vec pos; Vec dst; f32 t; f32 field_0x1C; f32 field_0x20; f32 field_0x24; s32 wait; u8 state; } Teresa;
+typedef struct Teresa {
+    Vec pos;
+    Vec dst;
+    f32 t;
+    f32 field_0x1C;
+    f32 field_0x20;
+    f32 field_0x24;
+    s32 wait;
+    u8 state;
+} Teresa;
 static Teresa* pTeresa;
 static s32 g_nNumEndProc[1];
 s32 g_nNumOutBox[1];

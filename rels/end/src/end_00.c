@@ -47,10 +47,34 @@
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 typedef struct EndMoa { Vec pos; s32 chain; s32 idx; } EndMoa;
 typedef struct EndExtData { const char* anim; const char* pose; f32 speed; } EndExtData;
-typedef struct EndWork { FileEntry* tpl; s32 mode; s32 alpha; s32 alpha2; s32 tevAlpha; s32 win1[3]; s32 win2[3]; s32 field_0x2c; s32 pos; EventEntry* evt; } EndWork;
-typedef struct CreditMsg { s32 field_0x0; s32 pos; s32 type; const char* msg1[3]; const char* msg2[3]; } CreditMsg;
+typedef struct EndWork {
+    FileEntry* tpl;
+    s32 mode;
+    s32 alpha;
+    s32 alpha2;
+    s32 tevAlpha;
+    s32 win1[3];
+    s32 win2[3];
+    s32 field_0x2c;
+    s32 pos;
+    EventEntry* evt;
+} EndWork;
+typedef struct CreditMsg {
+    s32 field_0x0;
+    s32 pos;
+    s32 type;
+    const char* msg1[3];
+    const char* msg2[3];
+} CreditMsg;
 typedef struct CreditNpc { const char* agb; const char* anim; EvtWord* evt; } CreditNpc;
-typedef struct CreditActor { s32 state; s32 poseId; f32 angle; f32 limit; s32 pos; Mtx mtx; } CreditActor;
+typedef struct CreditActor {
+    s32 state;
+    s32 poseId;
+    f32 angle;
+    f32 limit;
+    s32 pos;
+    Mtx mtx;
+} CreditActor;
 EndWork end_work;
 s32 (*end_moa_chain_group)[2];
 s32* end_moa_chain_count;

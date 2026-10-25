@@ -21,7 +21,12 @@
 #include "dolphin/mtx.h"
 #include "evt/evt_bero.h"
 
-typedef struct KaitenParam { Vec pos; Vec target; f32 angle; f32 dist; } KaitenParam;
+typedef struct KaitenParam {
+    Vec pos;
+    Vec target;
+    f32 angle;
+    f32 dist;
+} KaitenParam;
 static KaitenParam* ckp0;
 static KaitenParam* ckp1;
 static KaitenParam* ckpw;

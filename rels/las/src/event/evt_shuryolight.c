@@ -8,8 +8,19 @@
 #include "memory.h"
 
 void animPoseSetDispCallBack(s32 poseId, void (*callback)(void* param, s32 group), void* param);
-typedef struct ShuryoLight { NpcEntry* npc; const char** anims; s32 status; s32 group; s32 shape; } ShuryoLight;
-typedef struct ShuryoWork { s32 powerEvt; s32 headEvt; s32 tueEvt; ShuryoLight lights[5]; } ShuryoWork;
+typedef struct ShuryoLight {
+    NpcEntry* npc;
+    const char** anims;
+    s32 status;
+    s32 group;
+    s32 shape;
+} ShuryoLight;
+typedef struct ShuryoWork {
+    s32 powerEvt;
+    s32 headEvt;
+    s32 tueEvt;
+    ShuryoLight lights[5];
+} ShuryoWork;
 static ShuryoWork* slhp;
 
 static USER_FUNC(evt_shuryolight_set_anim);

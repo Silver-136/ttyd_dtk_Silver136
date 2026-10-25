@@ -41,8 +41,22 @@
 #ifdef VERSION_G8ME01
 #endif
 
-typedef struct DanceData { u16 flags; u8 step; u8 movePos; f32 cx; f32 cy; f32 rot; } DanceData;
-typedef struct HorogramWork { void* buf0; void* buf1; GXTexObj tex0; GXTexObj tex1; u16 ready; u16 flags; } HorogramWork;
+typedef struct DanceData {
+    u16 flags;
+    u8 step;
+    u8 movePos;
+    f32 cx;
+    f32 cy;
+    f32 rot;
+} DanceData;
+typedef struct HorogramWork {
+    void* buf0;
+    void* buf1;
+    GXTexObj tex0;
+    GXTexObj tex1;
+    u16 ready;
+    u16 flags;
+} HorogramWork;
 HorogramWork* horogram_wp;
 DanceData dance_dt;
 void peach_capture(CameraId cameraId, void* param);

@@ -38,7 +38,13 @@ char xmemo[20];
 EventEntry* xevt;
 void animPoseSetDispCallBack(s32 poseId, void (*callback)(BattleUnitPart*, s32), void* userdata);
 void _light_point_callback(BattleUnitPart* part, s32 group);
-typedef struct BattenSpline { s32 n; Vec* table; f32 a[5]; f32 b[15]; s32 count; } BattenSpline;
+typedef struct BattenSpline {
+    s32 n;
+    Vec* table;
+    f32 a[5];
+    f32 b[15];
+    s32 count;
+} BattenSpline;
 void spline_maketable(s32 n, Vec* table, f32* a, f32* b);
 void spline_getvalue(f32 t, Vec* out, s32 n, Vec* table, f32* a, f32* b);
 u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);

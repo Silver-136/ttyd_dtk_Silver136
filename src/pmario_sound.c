@@ -25,7 +25,15 @@
 #define PSND_SET_FADE(w) ((w)->sfxFadeMax = PSND_FADE45, (w)->sfxFadeTime = PSND_FADE45)
 #endif
 
-typedef struct SoundBGMEntry { const char* name; u32 flags; const char* path; u8 volume; u8 pan; u8 group; u8 scope; } SoundBGMEntry; // scope 1: scopeTimer starts at 0xFF
+typedef struct SoundBGMEntry {
+    const char* name;
+    u32 flags;
+    const char* path;
+    u8 volume;
+    u8 pan;
+    u8 group;
+    u8 scope;
+} SoundBGMEntry; // scope 1: scopeTimer starts at 0xFF
 //TODO: put this in a folder?
 
 //.data

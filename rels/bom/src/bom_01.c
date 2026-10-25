@@ -55,19 +55,58 @@
 #endif
 
 
-typedef struct SightWork { FileEntry* tpl; s32 level[5]; f32 rot; s32 dir; s32 count1; s32 count2; } SightWork;
+typedef struct SightWork {
+    FileEntry* tpl;
+    s32 level[5];
+    f32 rot;
+    s32 dir;
+    s32 count1;
+    s32 count2;
+} SightWork;
 SightWork* sight_wp;
 // make_name's sprintf buffer; file scope so .bss keeps the target order lp, name, sight_wp (a function static is emitted first)
 static char name[64];
-typedef struct BomSoundWork { u8 pad_0[0x330]; u16 sampleBank; u8 pad_332[0x5C0 - 0x332]; s16 samples[2][0x400]; u32 sampleIndex; } BomSoundWork;
+typedef struct BomSoundWork {
+    u8 pad_0[0x330];
+    u16 sampleBank;
+    u8 pad_332[0x5C0 - 0x332];
+    s16 samples[2][0x400];
+    u32 sampleIndex;
+} BomSoundWork;
 extern BomSoundWork sound;
 void drawBG(s32 id, f32 x, f32 y, f32 sx, f32 sy, f32 rot);
 void drawNum(s32 num, s32 digits, f32 x, f32 y, f32 scale);
 void disp_sight(CameraId camera, void* param);
 typedef struct ExtAnimDef { const char* file; const char* name; f32 time; } ExtAnimDef;
-typedef struct BomAnim { char name[8]; f32 time; s32 start; s32 count; } BomAnim;
-typedef struct Bom { u8 state; u8 next; u8 pad_2[2]; Vec target; f32 field_0x10; f32 gravity; s16 timer; u8 pad_1a[2]; f32 vy; s32 anim; u8 pad_24[4]; OSTime time; } Bom;
-typedef struct BomWork { u16 flags; u8 pad_2[2]; s32 count; BomAnim anims[8]; s32 animCount; u8 pad_ac[4]; Bom bom[1000]; } BomWork;
+typedef struct BomAnim {
+    char name[8];
+    f32 time;
+    s32 start;
+    s32 count;
+} BomAnim;
+typedef struct Bom {
+    u8 state;
+    u8 next;
+    u8 pad_2[2];
+    Vec target;
+    f32 field_0x10;
+    f32 gravity;
+    s16 timer;
+    u8 pad_1a[2];
+    f32 vy;
+    s32 anim;
+    u8 pad_24[4];
+    OSTime time;
+} Bom;
+typedef struct BomWork {
+    u16 flags;
+    u8 pad_2[2];
+    s32 count;
+    BomAnim anims[8];
+    s32 animCount;
+    u8 pad_ac[4];
+    Bom bom[1000];
+} BomWork;
 smartEntry* lp;
 #define EXT_DATA ((ExtAnimDef*)ext_data)
 static void pose_change(s32 i, const char* name);
@@ -158,7 +197,15 @@ static void pose_main(void);
 static void ext_disp(CameraId camera, void* param);
 void effKemuTestSetRxRz(EffectEntry* effect, f32 rx, f32 rz);
 static void depthDisp(CameraId camera, void* param);
-typedef struct YamiParam { s32 field_0x0; f32 (*mtx)[4]; s32 field_0x8; s32 numTevStages; s32 field_0x10; s32 numTexGens; s32 numIndStages; } YamiParam;
+typedef struct YamiParam {
+    s32 field_0x0;
+    f32 (*mtx)[4];
+    s32 field_0x8;
+    s32 numTevStages;
+    s32 field_0x10;
+    s32 numTexGens;
+    s32 numIndStages;
+} YamiParam;
 void envSetYami(YamiParam* param);
 void ext_disp_minnnanokoe(CameraId camera, void* param);
 void jump_minnnanokoe(s32 i, f32 h);

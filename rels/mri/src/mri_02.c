@@ -23,7 +23,12 @@
 #include "mri.h"
 #include "data_tables.h"
 
-typedef struct Mri02Switch { f32 base; f32 weight; f32 target; f32 pos; } Mri02Switch;
+typedef struct Mri02Switch {
+    f32 base;
+    f32 weight;
+    f32 target;
+    f32 pos;
+} Mri02Switch;
 Mri02Switch mri02switch;
 
 USER_FUNC(getSwitch);

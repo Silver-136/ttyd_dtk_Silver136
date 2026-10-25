@@ -26,9 +26,46 @@
 #include "data_tables.h"
 #include "driver/extdrv.h"
 
-typedef struct MoamoaGroup { char anim[16]; char pose[8]; f32 speed; s32 start; s32 num; } MoamoaGroup;
-typedef struct Moamoa { u16 flags; u8 field_0x2[2]; Vec pos; s16 group; u8 field_0x12[6]; OSTime time; s16 chain; s16 order; f32 t; s32 poseId; s32 type; EvtWord* owner; Vec vel; Vec pos2; u8 field_0x4c[4]; } Moamoa;
-typedef struct MoamoaWork { s32 field_0x0; s32 count; Moamoa* elems; s32 numGroups; MoamoaGroup groups[32]; s16 chainNum[128]; s16 chainIdx[128][2]; s32 poseId[5]; s32 unitId; Vec center; f32 angle; f32 radius; f32 targetScale; f32 scale; } MoamoaWork;
+typedef struct MoamoaGroup {
+    char anim[16];
+    char pose[8];
+    f32 speed;
+    s32 start;
+    s32 num;
+} MoamoaGroup;
+typedef struct Moamoa {
+    u16 flags;
+    u8 field_0x2[2];
+    Vec pos;
+    s16 group;
+    u8 field_0x12[6];
+    OSTime time;
+    s16 chain;
+    s16 order;
+    f32 t;
+    s32 poseId;
+    s32 type;
+    EvtWord* owner;
+    Vec vel;
+    Vec pos2;
+    u8 field_0x4c[4];
+} Moamoa;
+typedef struct MoamoaWork {
+    s32 field_0x0;
+    s32 count;
+    Moamoa* elems;
+    s32 numGroups;
+    MoamoaGroup groups[32];
+    s16 chainNum[128];
+    s16 chainIdx[128][2];
+    s32 poseId[5];
+    s32 unitId;
+    Vec center;
+    f32 angle;
+    f32 radius;
+    f32 targetScale;
+    f32 scale;
+} MoamoaWork;
 typedef struct MoamoaExtData { const char* anim; const char* pose; f32 speed; } MoamoaExtData;
 static MoamoaWork* wp;
 void moamoa_mainUnitIdClear(void);

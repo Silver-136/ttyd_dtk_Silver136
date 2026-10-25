@@ -22,16 +22,53 @@ s32 irand(s32 scalar);
 #include "battle/battle_database_common.h"
 #include "driver/extdrv.h"
 
-typedef struct ZakoGun { s8 field_0x0; s8 state; s32 timer; s32 timerMax; Vec pos; Vec home; s32 poseBase; s32 poseNum; s32 poseDiv; s32 poseCount; Vec start; Vec target; Vec vel; u8 field_0x58[0x64 - 0x58]; Vec rot; } ZakoGun;
+typedef struct ZakoGun {
+    s8 field_0x0;
+    s8 state;
+    s32 timer;
+    s32 timerMax;
+    Vec pos;
+    Vec home;
+    s32 poseBase;
+    s32 poseNum;
+    s32 poseDiv;
+    s32 poseCount;
+    Vec start;
+    Vec target;
+    Vec vel;
+    u8 field_0x58[0x64 - 0x58];
+    Vec rot;
+} ZakoGun;
 #ifdef VERSION_G8ME01
 #define ZAKOGUNWORK_PAD 0x54
 #else
 #define ZAKOGUNWORK_PAD 0x48
 #endif
 #ifdef VERSION_G8ME01
-typedef struct ZakoGunWork { s32 flag; s32 targetId; Vec targetPos; u8 field_0x14[ZAKOGUNWORK_PAD - 0x14]; Vec start; Vec end; s32 timer; s32 steps; s32 count; s32 sfx; } ZakoGunWork;
+typedef struct ZakoGunWork {
+    s32 flag;
+    s32 targetId;
+    Vec targetPos;
+    u8 field_0x14[ZAKOGUNWORK_PAD - 0x14];
+    Vec start;
+    Vec end;
+    s32 timer;
+    s32 steps;
+    s32 count;
+    s32 sfx;
+} ZakoGunWork;
 #else
-typedef struct ZakoGunWork { s32 flag; s32 targetId; u8 field_0x8[ZAKOGUNWORK_PAD - 0x8]; Vec start; Vec end; s32 timer; s32 steps; s32 count; s32 sfx; } ZakoGunWork;
+typedef struct ZakoGunWork {
+    s32 flag;
+    s32 targetId;
+    u8 field_0x8[ZAKOGUNWORK_PAD - 0x8];
+    Vec start;
+    Vec end;
+    s32 timer;
+    s32 steps;
+    s32 count;
+    s32 sfx;
+} ZakoGunWork;
 #endif
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;

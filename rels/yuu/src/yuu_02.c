@@ -33,10 +33,40 @@
 #include "evt/evt_movefloor.h"
 #include "yuu.h"
 
-typedef struct RollWork { u32 flags; s32 phase; s32 coins; s32 result; s32 index; EventEntry* jumpEvent; Vec pos; s32 monteCount; EventEntry* viewEvent; } RollWork;
-typedef struct MonteSub { s32 unk0; Vec pos; f32 scale; u8 unk14[0x38 - 0x14]; } MonteSub;
-typedef struct Monte { u8 hidden; u8 unk1; s16 num; u8 state; u8 unk5[3]; MonteSub sub; MiniGameWork* wp; } Monte;
-typedef struct MonteTable { f32 x0; f32 x1; f32 z0; f32 z1; s32 num; s32 type; } MonteTable;
+typedef struct RollWork {
+    u32 flags;
+    s32 phase;
+    s32 coins;
+    s32 result;
+    s32 index;
+    EventEntry* jumpEvent;
+    Vec pos;
+    s32 monteCount;
+    EventEntry* viewEvent;
+} RollWork;
+typedef struct MonteSub {
+    s32 unk0;
+    Vec pos;
+    f32 scale;
+    u8 unk14[0x38 - 0x14];
+} MonteSub;
+typedef struct Monte {
+    u8 hidden;
+    u8 unk1;
+    s16 num;
+    u8 state;
+    u8 unk5[3];
+    MonteSub sub;
+    MiniGameWork* wp;
+} Monte;
+typedef struct MonteTable {
+    f32 x0;
+    f32 x1;
+    f32 z0;
+    f32 z1;
+    s32 num;
+    s32 type;
+} MonteTable;
 static void* yuunpc_wp;
 static Monte* monte_p; /* monte_p */
 static Monte* icon_monte_p;

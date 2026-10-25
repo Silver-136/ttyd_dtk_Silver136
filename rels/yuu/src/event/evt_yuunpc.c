@@ -23,11 +23,53 @@
 #include "data_tables.h"
 #include <math.h>
 
-typedef struct YuuNpcPose { char name[16]; char anim[8]; u16 field_0x18; f32 frames; f32 jump; s32 start; s32 count; u16 flags; f32 walkAnimSpeed; } YuuNpcPose;
+typedef struct YuuNpcPose {
+    char name[16];
+    char anim[8];
+    u16 field_0x18;
+    f32 frames;
+    f32 jump;
+    s32 start;
+    s32 count;
+    u16 flags;
+    f32 walkAnimSpeed;
+} YuuNpcPose;
 // motion: 0 stand, 1 walk, 2 run (YUU_STOP/WALK/RUN), 3 fall, 4 jump (YUU_JUMP); turnTimer counts the 30-frame turn
 // that starts from turnBaseDir; errper (set by errper_set_rtn) is the random spread of the goal position
-typedef struct YuuNpc { u16 id; u16 flags; s16 state; f32 errper; Vec goal; Vec dest; Vec pos; Vec dir; f32 speed; f32 vy; f32 turnBaseDir; f32 zofs; s32 motion; s32 turnTimer; s16 poseId; s16 poses[4]; u8 field_0x5e[2]; NpcEntry* npc; f32 animSpeed; u64 time; } YuuNpc;
-typedef struct YuuNpcWork { u16 flags; s32 numNpc; s32 slot[3]; YuuNpc* npcs; s32 basePoseNum; s32 numPoses; s32 chusanPose; s16 hit[6 * 72]; s16 hitY[72]; YuuNpcPose pose[32]; } YuuNpcWork;
+typedef struct YuuNpc {
+    u16 id;
+    u16 flags;
+    s16 state;
+    f32 errper;
+    Vec goal;
+    Vec dest;
+    Vec pos;
+    Vec dir;
+    f32 speed;
+    f32 vy;
+    f32 turnBaseDir;
+    f32 zofs;
+    s32 motion;
+    s32 turnTimer;
+    s16 poseId;
+    s16 poses[4];
+    u8 field_0x5e[2];
+    NpcEntry* npc;
+    f32 animSpeed;
+    u64 time;
+} YuuNpc;
+typedef struct YuuNpcWork {
+    u16 flags;
+    s32 numNpc;
+    s32 slot[3];
+    YuuNpc* npcs;
+    s32 basePoseNum;
+    s32 numPoses;
+    s32 chusanPose;
+    s16 hit[6 * 72];
+    s16 hitY[72];
+    YuuNpcPose pose[32];
+} YuuNpcWork;
 static YuuNpcWork* yuunpc_wp;
 typedef struct YuuNpcData { const char* name; const char* anim; f32 frames; } YuuNpcData;
 s32 yuunpc_pose_check(const char* name, const char* anim);

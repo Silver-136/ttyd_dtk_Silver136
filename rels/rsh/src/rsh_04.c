@@ -84,7 +84,12 @@ static EvtWord talk_powan[204];
 static NpcSetupInfo npc_data[7];
 EvtWord evt_tana_5[50];
 /* shelf access table read by READ_INT4: hit, msg, event, second msg; a NULL hit ends it */
-typedef struct ShelfAccess { const char* hit; const char* msg; EvtWord* evt; const char* msg2; } ShelfAccess;
+typedef struct ShelfAccess {
+    const char* hit;
+    const char* msg;
+    EvtWord* evt;
+    const char* msg2;
+} ShelfAccess;
 typedef struct ShelfAccessTbl3 { ShelfAccess rows[3]; const char* end[1]; } ShelfAccessTbl3;
 static ShelfAccessTbl3 access_tbl;
 static EvtWord evt_access[32];

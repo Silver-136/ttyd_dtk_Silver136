@@ -35,13 +35,46 @@
 #ifdef VERSION_G8ME01
 #endif
 
-typedef struct FuneWork { u32 flags; s32 phase; s32 coins; s32 result; s32 index; s32 state; f32 dist; Vec dir; s32 timer; f32 y; f32 x; s32 monteCount; EventEntry* viewEvent; } FuneWork;
+typedef struct FuneWork {
+    u32 flags;
+    s32 phase;
+    s32 coins;
+    s32 result;
+    s32 index;
+    s32 state;
+    f32 dist;
+    Vec dir;
+    s32 timer;
+    f32 y;
+    f32 x;
+    s32 monteCount;
+    EventEntry* viewEvent;
+} FuneWork;
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
 void mapObjGetPos(const char* name, Vec* pos);
-typedef struct MonteSub { s32 unk0; Vec pos; f32 scale; u8 unk14[0x38 - 0x14]; } MonteSub;
-typedef struct Monte { u8 hidden; u8 unk1; s16 num; u8 state; u8 unk5[3]; MonteSub sub; MiniGameWork* wp; } Monte;
-typedef struct MonteTable { f32 x0; f32 x1; f32 y0; f32 y1; s32 num; } MonteTable;
+typedef struct MonteSub {
+    s32 unk0;
+    Vec pos;
+    f32 scale;
+    u8 unk14[0x38 - 0x14];
+} MonteSub;
+typedef struct Monte {
+    u8 hidden;
+    u8 unk1;
+    s16 num;
+    u8 state;
+    u8 unk5[3];
+    MonteSub sub;
+    MiniGameWork* wp;
+} Monte;
+typedef struct MonteTable {
+    f32 x0;
+    f32 x1;
+    f32 y0;
+    f32 y1;
+    s32 num;
+} MonteTable;
 static void* yuunpc_wp;
 static Monte* monte_p;
 #define MONTETABLE (montetable)

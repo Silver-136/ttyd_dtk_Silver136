@@ -15,8 +15,19 @@
 #include "driver/mapdrv.h"
 #include "evt/evt_sub.h"
 #include "data_tables.h"
-typedef struct SharinData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat speed; } SharinData;
-typedef struct ClankData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat x; EvtFloat y; } ClankData;
+typedef struct SharinData {
+    const char* name;
+    s32 field_0x4;
+    s32 field_0x8;
+    EvtFloat speed;
+} SharinData;
+typedef struct ClankData {
+    const char* name;
+    s32 field_0x4;
+    s32 field_0x8;
+    EvtFloat x;
+    EvtFloat y;
+} ClankData;
 
 static USER_FUNC(ramp_r);
 static void resha_tev(MapTevCallbackInfo* info);

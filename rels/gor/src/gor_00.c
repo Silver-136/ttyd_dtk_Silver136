@@ -56,7 +56,12 @@
 void mapObjGetPos(const char* name, Vec* pos);
 void suifu100taikikan_seq01(NanNPC* npc);
 void suifu100taikikan_seq00(NanNPC* npc);
-typedef struct KaitenParam { Vec pos; Vec target; f32 angle; f32 dist; } KaitenParam;
+typedef struct KaitenParam {
+    Vec pos;
+    Vec target;
+    f32 angle;
+    f32 dist;
+} KaitenParam;
 static u8* _ap;
 static s32* itemsel_table_ram;
 static KaitenParam* ckp0;
