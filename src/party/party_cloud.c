@@ -71,7 +71,7 @@ void mot_cloud() {
     }
 }
 
-void cloudResetAt() {
+void cloudResetAt(void) {
     MarioWork* mario = marioGetPtr();
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
@@ -91,7 +91,7 @@ void cloudResetAt() {
     mario->camShiftTargetX = 0.0f;
 }
 
-u8 cloudGetStatus() {
+u8 cloudGetStatus(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
     u8 status = 2;

@@ -73,7 +73,7 @@ void BattleStageSetDark(StageDark* d, u8 v, s32 time, u8 mode);
 void BattleStageSetDarkBase(StageDark* d, u8 v, s32 time, u8 mode);
 void batSpotInit(void);
 f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x);
-void batSpotMain();
+void batSpotMain(void);
 void drawCone(CameraId camId, BattleSpotEntry* e);
 
 BattleStage* BattleStageGetPtr(void) {
@@ -618,7 +618,7 @@ void batSpotInit(void) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
-void batSpotMain() {
+void batSpotMain(void) {
     s32 count = wp->count;
 
     while (count-- > 0) {}

@@ -20,11 +20,11 @@
 #define PARTY_ID(args) ((args)[0] == 0 ? partyCtrlNo : 1)
 
 extern void partyChgPose();
-extern s32 bomheiGetStatus();
+extern s32 bomheiGetStatus(void);
 extern void vivianUnhold(PartyEntry* party);
 extern void L_partyVivianTailStart();
 extern void L_partyVivianTailStop();
-extern s32 cloudGetStatus();
+extern s32 cloudGetStatus(void);
 
 USER_FUNC(evt_party_flg_onoff) {
     PartyEntry* p;

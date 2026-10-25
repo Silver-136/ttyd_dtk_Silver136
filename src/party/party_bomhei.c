@@ -115,7 +115,7 @@ void bomhei_init_800BFBB0(PartyEntry* party) {
     party->work.bomhei.sfxId2 = -1;
 }
 
-u8 bomheiGetStatus() {
+u8 bomheiGetStatus(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
     u8 status = 2;
@@ -145,7 +145,7 @@ void bomhei_exit(PartyEntry* party) {
     }
 }
 
-void bomhei_use_cancel() {
+void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
     if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
         p->playerPtr->flags &= ~(1 << 13);

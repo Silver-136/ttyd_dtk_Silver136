@@ -100,18 +100,18 @@ s32 scissor_damage_sub2(Vec pt);
 void scissor_damage_sub(BattleUnit* unit, s32* out);
 s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
 
-static s32 star_stone_appear();
-s32 wait_star_standby();
-s32 scissor_end();
-s32 scissor_init();
-s32 scissor_offscreen();
+static s32 star_stone_appear(void);
+s32 wait_star_standby(void);
+s32 scissor_end(void);
+s32 scissor_init(void);
+s32 scissor_offscreen(void);
 s32 scissor_ofscreen_ok();
 s32 scissor_damage();
 s32 scissor_control();
-s32 scissor_timer_main();
+s32 scissor_timer_main(void);
 s32 scissor_timer_get();
 s32 star_control();
-s32 scissor_tess();
+s32 scissor_tess(void);
 
 BattleWeapon weapon_scissor;
 BattleWeapon weapon_scissor_finish;

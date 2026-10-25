@@ -1012,7 +1012,7 @@ BOOL mobjGetHint(MapObjectEntry* entry) {
     return (entry->flags >> 5) & 1;
 }
 
-BOOL mobjCheckExec() {
+BOOL mobjCheckExec(void) {
     MapObjectWork* wp = mobjGetWork();
     int i;
     MapObjectEntry* entry;
