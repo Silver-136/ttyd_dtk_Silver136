@@ -789,7 +789,7 @@ s32 pouchGetSuperCoin(void) {
     return mpp->mShineSpriteCount;
 }
 
-s16 pouchSetSuperCoin(s16 count) {
+s32 pouchSetSuperCoin(s32 count) {
     mpp->mShineSpriteCount = count;
     return mpp->mShineSpriteCount;
 }
@@ -798,7 +798,7 @@ s32 pouchGetStarPiece(void) {
     return mpp->mStarPieceCount;
 }
 
-s16 pouchAddStarPiece(s16 count) {
+s32 pouchAddStarPiece(s32 count) {
     mpp->mStarPieceCount += count;
     return mpp->mStarPieceCount;
 }
@@ -941,7 +941,7 @@ s32 pouchGetPartyAttackLv(PartyId partyId) {
     return ((PouchPartyData*)((u8*)mpp + partyId * sizeof(PouchPartyData)))->attackLevel;
 }
 
-BOOL pouchAddKeepItem(s16 id) {
+BOOL pouchAddKeepItem(s32 id) {
     s32 i, j;
 
     for (i = MAX_STORED_ITEMS - 1; i >= 0; i--) {
@@ -1196,80 +1196,3 @@ char* pouchGetYoshiName(void) {
     }
     return mpp->yoshiName;
 }
-//
-//
-//
-//
-
-// forward declarations: these functions are defined further down
-char* pouchGetYoshiName(void);
-void pouchSetYoshiName(char* name);
-void pouchSetPartyColor(PartyId partnerId, s32 color);
-s32 pouchGetPartyColor(PartyId partnerId);
-u32 pouchCheckMail(s32 mailId);
-void pouchOpenMail(s32 mailId);
-void pouchReceiveMail(s32 mailId);
-s32 pouchReceiveMailCount(void);
-void pouchGetStarStone(u32 id);
-void pouchAddKpaScore(u32 score);
-u32 pouchGetKpaScore(void);
-s32 pouchGetKpaCoin(void);
-s32 pouchArriveBadge(s32 id);
-BOOL N_pouchUnEquipBadgeID(s32 badgeId);
-BOOL pouchEquipBadgeID(s32 badgeId);
-BOOL pouchEquipCheckBadgeIndex(s32 index);
-s32 pouchEquipCheckBadge(s32 badgeId);
-BOOL pouchUnEquipBadgeIndex(s32 index);
-BOOL pouchEquipBadgeIndex(s32 index);
-void pouchRevisePartyParam(void);
-void pouchReviseMarioParam(void);
-BOOL pouchRemoveKeepItem(s32 id, s32 index);
-BOOL pouchAddKeepItem(s16 id);
-s32 pouchGetPartyAttackLv(PartyId partyId);
-s32 pouchGetHammerLv(void);
-s32 pouchGetJumpLv(void);
-void pouchSetAudienceNum(f32 num);
-f32 pouchGetAudienceNum(void);
-s32 pouchGetMaxAP(void);
-void pouchSetAP(s32 points);
-void pouchAddAP(s32 points);
-s32 pouchGetAP(void);
-void pouchSetMaxFP(s16 points);
-void pouchSetFP(s32 points);
-s32 pouchGetMaxFP(void);
-s32 pouchGetFP(void);
-void pouchSetPartyHP(s32 partnerId, s32 points);
-s32 pouchGetPartyHP(PartyId partnerId);
-void pouchSetMaxHP(s16 points);
-void pouchSetHP(s32 points);
-s32 pouchGetMaxHP(void);
-s32 pouchGetHP(void);
-s16 pouchAddStarPiece(s16 count);
-s32 pouchGetStarPiece(void);
-s16 pouchSetSuperCoin(s16 count);
-s32 pouchGetSuperCoin(void);
-s32 pouchSetCoin(s32 coins);
-s32 pouchAddCoin(s32 coins);
-s32 pouchGetCoin(void);
-void pouchSortItem(s32 mode);
-s32 comp_kind_r(s16* a, s16* b);
-s32 comp_aiueo_r(const void* a, const void* b);
-s32 comp_kind(s16* a, s16* b);
-s32 comp_aiueo(const void* a, const void* b);
-void pouchHiraToKata(const char* src, char* dst);
-BOOL pouchRemoveItemIndex(ItemType type, s32 index);
-BOOL pouchRemoveItem(ItemType type);
-s32 pouchCheckItem(u32 itemId);
-BOOL pouchGetItem(ItemType type);
-s32 pouchGetEmptyKeepItemCnt(void);
-s32 pouchGetEmptyHaveItemCnt(void);
-s32 pouchGetEquipBadgeCnt(void);
-s32 pouchGetHaveBadgeCnt(void);
-s32 pouchGetKeepItemCnt(void);
-s32 pouchGetHaveItemCnt(void);
-ItemType pouchHaveBadge(s32 id);
-ItemType pouchKeepItem(s32 id);
-ItemType pouchHaveItem(s32 id);
-ItemType pouchKeyItem(s32 id);
-void pouchInit(void);
-PouchData* pouchGetPtr(void);

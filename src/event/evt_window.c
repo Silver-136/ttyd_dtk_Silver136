@@ -17,9 +17,6 @@
 #include "nameent.h"
 #include "statuswindow.h"
 
-
-#define RAW_GET(fn) ((s32(*)(void))(fn))
-
 typedef struct CoinWin {
     s32 id;    // 0x0
     s32 coins; // 0x4
@@ -265,11 +262,11 @@ static void coin_disp(WinMgrEntry* entry) {
         icon = 0x18B + EW_ICON_OFS;
         break;
     case 1:
-        target = RAW_GET(pouchGetSuperCoin)();
+        target = pouchGetSuperCoin();
         icon = 0x102 + EW_ICON_OFS;
         break;
     case 2:
-        target = RAW_GET(pouchGetStarPiece)();
+        target = pouchGetStarPiece();
         icon = 0x18D + EW_ICON_OFS;
         break;
     }
@@ -318,10 +315,10 @@ USER_FUNC(evt_win_coin_on) {
         w->coins = pouchGetCoin();
         break;
     case 1:
-        w->coins = RAW_GET(pouchGetSuperCoin)();
+        w->coins = pouchGetSuperCoin();
         break;
     case 2:
-        w->coins = RAW_GET(pouchGetStarPiece)();
+        w->coins = pouchGetStarPiece();
         break;
     }
     winMgrSetParam(w->id, w);
@@ -338,10 +335,10 @@ USER_FUNC(evt_win_coin_off) {
         coins = pouchGetCoin();
         break;
     case 1:
-        coins = RAW_GET(pouchGetSuperCoin)();
+        coins = pouchGetSuperCoin();
         break;
     case 2:
-        coins = RAW_GET(pouchGetStarPiece)();
+        coins = pouchGetStarPiece();
         break;
     }
     if (w->coins != coins) {
@@ -360,10 +357,10 @@ USER_FUNC(evt_win_coin_wait) {
         coins = pouchGetCoin();
         break;
     case 1:
-        coins = RAW_GET(pouchGetSuperCoin)();
+        coins = pouchGetSuperCoin();
         break;
     case 2:
-        coins = RAW_GET(pouchGetStarPiece)();
+        coins = pouchGetStarPiece();
         break;
     }
     return w->coins != coins ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;

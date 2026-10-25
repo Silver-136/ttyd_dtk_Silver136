@@ -3,10 +3,6 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 
-
-typedef s32 (*SetFn)(s32);
-#define RAW_SET(fn) ((SetFn)fn)
-
 #define GET_ARG0 evtGetValue(event, event->args[0])
 
 #define SETTER(name, fn) \
@@ -26,9 +22,9 @@ GETTER(evt_pouch_get_coin, pouchGetCoin)
 SETTER(evt_pouch_add_coin, pouchAddCoin)
 SETTER(evt_pouch_set_coin, pouchSetCoin)
 GETTER(evt_pouch_get_supercoin, pouchGetSuperCoin)
-SETTER(evt_pouch_set_supercoin, RAW_SET(pouchSetSuperCoin))
+SETTER(evt_pouch_set_supercoin, pouchSetSuperCoin)
 GETTER(evt_pouch_get_starpiece, pouchGetStarPiece)
-SETTER(evt_pouch_add_starpiece, RAW_SET(pouchAddStarPiece))
+SETTER(evt_pouch_add_starpiece, pouchAddStarPiece)
 SETTER(evt_pouch_get_starstone, pouchGetStarStone)
 
 USER_FUNC(evt_pouch_add_item) {
@@ -69,7 +65,7 @@ USER_FUNC(N_evt_pouch_remove_item_index) {
 
 USER_FUNC(evt_pouch_add_keepitem) {
     EvtWord* args = event->args;
-    if (RAW_SET(pouchAddKeepItem)(evtGetValue(event, args[0]))) {
+    if (pouchAddKeepItem(evtGetValue(event, args[0]))) {
         evtSetValue(event, args[1], 0);
     } else {
         evtSetValue(event, args[1], -1);
