@@ -36,7 +36,7 @@ EffectEntry* effBreathFireN64Entry(s32 type, s32 count, s32 seed, s32 lifetime, 
     effect->callback = effBreathFireMain;
     work->type = type;
     work->count = count;
-    work->unk8 = seed;
+    work->seed = seed;
     work->pos.x = x;
     work->pos.y = y;
     work->pos.z = z;
@@ -51,14 +51,14 @@ EffectEntry* effBreathFireN64Entry(s32 type, s32 count, s32 seed, s32 lifetime, 
     } else {
         work->scale = 0.040000003f;
     }
-    work->unk30 = work->scale;
+    work->baseScale = work->scale;
     work->lifetime = lifetime;
     work->remaining = lifetime;
     work->frame = 0;
     work->alpha = 255;
-    work->unk5c = 0.0f;
-    work->unk3c = 0.1f;
-    work->unk34 = work->unk30;
+    work->texFrame = 0.0f;
+    work->scaleRate = 0.1f;
+    work->targetScale = work->baseScale;
     if (type == 0) {
         work->vel.x = 0.2f * (0.2f * (endX - x) * (f32)((s32)effTblRandN64(10, seed) - 5));
         work->vel.y = 0.2f * (0.2f * (endY - y) * (f32)((s32)effTblRandN64(10, seed + 1) - 5));
@@ -92,7 +92,7 @@ void effBreathFireMain(EffectEntry* effect) {
     tmp.y = work->pos.y;
     tmp.z = work->pos.z;
     position = tmp;
-    work->unk5c = 4.0f * work->frame / 10.0f;
+    work->texFrame = 4.0f * work->frame / 10.0f;
     work->remaining--;
     work->frame++;
     remaining = work->remaining;
@@ -111,8 +111,8 @@ void effBreathFireMain(EffectEntry* effect) {
             work->velY = 0.01f * frame + work->velY;
             work->pos.y = work->pos.y + work->velY;
         }
-        if (frame == work->unk8 + 1 && work->count > 0) {
-            child = effBreathFireN64Entry(work->type, work->count - 1, work->unk8, lifetime, work->start.x,
+        if (frame == work->seed + 1 && work->count > 0) {
+            child = effBreathFireN64Entry(work->type, work->count - 1, work->seed, lifetime, work->start.x,
                                           work->start.y, work->start.z, work->end.x, work->end.y, work->end.z);
             ((EffBreathFireN64Work*)child->userdata)->color[0] = work->color[0];
             ((EffBreathFireN64Work*)child->userdata)->color[1] = work->color[1];
@@ -120,9 +120,9 @@ void effBreathFireMain(EffectEntry* effect) {
             ((EffBreathFireN64Work*)child->userdata)->color[3] = work->color[3];
             ((EffBreathFireN64Work*)child->userdata)->color[4] = work->color[4];
             ((EffBreathFireN64Work*)child->userdata)->color[5] = work->color[5];
-            ((EffBreathFireN64Work*)child->userdata)->unk30 = ((EffBreathFireN64Work*)child->userdata)->scale = work->unk30;
-            ((EffBreathFireN64Work*)child->userdata)->unk34 = work->unk34;
-            ((EffBreathFireN64Work*)child->userdata)->unk3c = work->unk3c;
+            ((EffBreathFireN64Work*)child->userdata)->baseScale = ((EffBreathFireN64Work*)child->userdata)->scale = work->baseScale;
+            ((EffBreathFireN64Work*)child->userdata)->targetScale = work->targetScale;
+            ((EffBreathFireN64Work*)child->userdata)->scaleRate = work->scaleRate;
         }
         if (remaining < 10 && work->type == 0) {
             work->alpha = remaining * 25;
@@ -133,7 +133,7 @@ void effBreathFireMain(EffectEntry* effect) {
         }
         if (work->type == 2) {
             work->alpha = remaining * 224 / lifetime;
-            work->scale += work->unk3c * (work->unk34 - work->scale);
+            work->scale += work->scaleRate * (work->targetScale - work->scale);
         }
         dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBreathFireDisp, effect);
     }
@@ -152,7 +152,7 @@ void effBreathFireDisp(CameraId cameraId, EffectEntry* effect) {
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
-    f = work->unk5c;
+    f = work->texFrame;
     n = (s32)f;
     GXSetNumChans(1);
     GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);

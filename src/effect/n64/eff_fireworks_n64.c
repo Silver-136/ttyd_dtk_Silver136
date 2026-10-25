@@ -20,10 +20,10 @@ typedef struct EffFireworksN64Work {
     s32 g;           // 0x28
     s32 b;           // 0x2c
     s32 alpha;       // 0x30
-    s32 unk34;       // 0x34
-    s32 unk38;       // 0x38
-    s32 unk3C;       // 0x3c
-    s32 unk40;       // 0x40
+    s32 r2;          // 0x34
+    s32 g2;          // 0x38
+    s32 b2;          // 0x3c
+    s32 alpha2;      // 0x40
     f32 scale;       // 0x44
     f32 scaleTarget; // 0x48
     s32 state;       // 0x4c
@@ -108,10 +108,10 @@ EffectEntry* effFireworksN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f
     work->r = 255;
     work->g = 255;
     work->b = 100;
-    work->unk34 = 255;
-    work->unk38 = 100;
-    work->unk3C = 150;
-    work->unk40 = 255;
+    work->r2 = 255;
+    work->g2 = 100;
+    work->b2 = 150;
+    work->alpha2 = 255;
     work->px[0] = work->position.x;
     work->py[0] = work->position.y - 1000.0f;
     work->pz[0] = work->position.z;

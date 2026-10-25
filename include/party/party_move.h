@@ -2,6 +2,17 @@
 
 #include "party.h"
 #include "dolphin/types.h"
+#include <dolphin/mtx.h>
+
+// Footmark.flag bits, set by partyRecordFootmark from the leader it follows
+#define FOOTMARK_FLAG_JUMP 1  // the leader was jumping
+#define FOOTMARK_FLAG_SLIT 4  // Mario was passing through a slit (marioChkSlitThrouh)
+
+typedef struct Footmark {
+    u8 flag;    // 0x0
+    u8 pad[3];  // 0x1
+    Vec pos;    // 0x4
+} Footmark;
 
 void partyChgMot(PartyEntry* party, s32 mot);
 void partyClearFootmark(void);
@@ -26,6 +37,7 @@ void partyChkWall(PartyEntry* party);
 void partyClearFootmark2(void);
 void partyFlyMain(PartyEntry* party);
 void partyForceWalk(PartyEntry* party);
+Footmark* partyGetFootmarkPtr(s32 id);
 s32 partyGetFootmarkReadId(s32 id);
 s32 partyGetFootmarkWriteId(s32 id);
 void partyGetReadId(s32 id, f32* x, f32* y, f32* z);

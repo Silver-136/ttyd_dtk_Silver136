@@ -236,8 +236,8 @@ USER_FUNC(evt_eff) {
         case 13:
             entry = effBreathFireEntry(int2, int9, int10, int11, float3, float4, float5, float6, float7, float8);
             ((EffBreathFireN64Work*)entry->userdata)->scale = float12;
-            ((EffBreathFireN64Work*)entry->userdata)->unk30 = float12;
-            ((EffBreathFireN64Work*)entry->userdata)->unk34 = float13;
+            ((EffBreathFireN64Work*)entry->userdata)->baseScale = float12;
+            ((EffBreathFireN64Work*)entry->userdata)->targetScale = float13;
             break;
         case 4:
             entry = effHitEntry(int2, int7, float3, float4, float5, float6);

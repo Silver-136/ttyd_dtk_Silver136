@@ -784,13 +784,6 @@ void partyFlyAdjustY(PartyEntry* party) {
 }
 
 
-typedef struct PartyFootmark {
-    u8 unk0;
-    u8 unk1[3];
-    Vec pos;
-} PartyFootmark;
-
-PartyFootmark* partyGetFootmarkPtr(s32 id);
 s32 marioGetSlitFloorPos(Vec* pos);
 
 void partyGetReadId2(s32 id, Vec* pos);
@@ -802,7 +795,7 @@ void party_motion_homing_walk(PartyEntry* party) {
     MarioWork* mario;
     PartyEntry* other;
     s32 i;
-    PartyFootmark* fm;
+    Footmark* fm;
     MarioWork* m3;
     u32 attr;
     f32 lim;
@@ -1062,7 +1055,7 @@ found:
                 }
             }
         }
-        if ((party->flags & PARTY_FLAG_IS_GROUNDED) && (fm->unk0 & 1)) {
+        if ((party->flags & PARTY_FLAG_IS_GROUNDED) && (fm->flag & FOOTMARK_FLAG_JUMP)) {
             md = toMovedir(party->displayDirectionTarget);
             partyGetReadId(id, &rx, &ry, &rz);
             L_getTargetPos(id, &tp);
@@ -1090,7 +1083,7 @@ found:
             partyChgMot(party, 2);
             break;
         }
-        if ((party->flags & PARTY_FLAG_IS_GROUNDED) && (fm->unk0 & 4)) {
+        if ((party->flags & PARTY_FLAG_IS_GROUNDED) && (fm->flag & FOOTMARK_FLAG_SLIT)) {
             if (distABf(px, pz, t.x, t.z) <= 5.0f) {
                 ((void (*)(PartyEntry*))partyChgMotSlitFloor)(party);
             }
@@ -1099,7 +1092,7 @@ found:
     }
     if (party->moveSpeed) {
         partyChgWalkPose(party, party->moveSpeed);
-    } else if (!(fm->unk0 & 4)) {
+    } else if (!(fm->flag & FOOTMARK_FLAG_SLIT)) {
         partyChgMot(party, 0);
     }
     party->targetDir = dir;
@@ -1240,7 +1233,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     s32 w;
     HitEntry* hit;
     MarioWork* m2;
-    PartyFootmark* fm;
+    Footmark* fm;
     u32 attr;
     f32 lim;
     f32 lim2;

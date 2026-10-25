@@ -12,7 +12,7 @@ typedef struct EffPokopiPipoN64Work {
     Vec position;  // 0x4
     Vec start;     // 0x10
     Vec end;       // 0x1C
-    s32 unk28;     // 0x28 lifetime
+    s32 lifetime;  // 0x28
     s32 frame;     // 0x2C
     s32 r;         // 0x30
     s32 g;         // 0x34
@@ -59,9 +59,9 @@ EffectEntry* effPokopiPipoN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, 
     work->type = type;
     work->frame = 0;
     if (duration <= 0) {
-        work->unk28 = 1000;
+        work->lifetime = 1000;
     } else {
-        work->unk28 = duration + 60;
+        work->lifetime = duration + 60;
     }
     work->duration = duration;
     work->alpha = 255;
@@ -107,13 +107,13 @@ void effPokopiPipoMain(EffectEntry* effect) {
     position = tmp;
     if (effect->flags & 4) {
         effect->flags &= ~4;
-        work->unk28 = 16;
+        work->lifetime = 16;
     }
-    if (work->unk28 < 1000) {
-        work->unk28--;
+    if (work->lifetime < 1000) {
+        work->lifetime--;
     }
     work->frame++;
-    if (work->unk28 < 0) {
+    if (work->lifetime < 0) {
         effDelete(effect);
         return;
     }

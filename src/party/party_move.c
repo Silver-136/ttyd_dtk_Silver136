@@ -25,12 +25,6 @@
 #include "driver/npcdrv.h"
 #include "mario/mario_hit.h"
 
-typedef struct Footmark {
-    u8 flag;    // 0x0
-    u8 pad[3];  // 0x1
-    Vec pos;    // 0x4
-} Footmark;
-
 
 s32 partyMoveMain(PartyEntry* party, s32 hosei);
 f32 partyUpdMoveSpd(PartyEntry* party, f32 spd);
@@ -395,7 +389,7 @@ static inline void partyPutFootmark(s32 id, Vec pos, u32 flags) {
     MarioWork* mario = marioGetPtr();
     Footmark* fm = &footmarkBuf[id][writeId[id]];
 
-    if ((fm->flag & 1) && (flags & 1)) {
+    if ((fm->flag & FOOTMARK_FLAG_JUMP) && (flags & FOOTMARK_FLAG_JUMP)) {
         return;
     }
     if (fm->pos.x == pos.x && fm->pos.y == pos.y && fm->pos.z == pos.z) {
@@ -410,15 +404,15 @@ static inline void partyPutFootmark(s32 id, Vec pos, u32 flags) {
     }
     fm = &footmarkBuf[id][writeId[id]];
     fm->pos = pos;
-    if (flags & 1) {
-        fm->flag |= 1;
+    if (flags & FOOTMARK_FLAG_JUMP) {
+        fm->flag |= FOOTMARK_FLAG_JUMP;
     } else {
-        fm->flag &= ~1;
+        fm->flag &= ~FOOTMARK_FLAG_JUMP;
     }
-    if (flags & 4) {
-        fm->flag |= 4;
+    if (flags & FOOTMARK_FLAG_SLIT) {
+        fm->flag |= FOOTMARK_FLAG_SLIT;
     } else {
-        fm->flag &= ~4;
+        fm->flag &= ~FOOTMARK_FLAG_SLIT;
     }
 }
 
@@ -438,10 +432,10 @@ void partyRecordFootmark(PartyEntry* party) {
 
     if (party->currentSlotId == 0) {
         if (partyChkMarioJumpFlag()) {
-            flags |= 1;
+            flags |= FOOTMARK_FLAG_JUMP;
         }
         if (marioChkSlitThrouh()) {
-            flags |= 4;
+            flags |= FOOTMARK_FLAG_SLIT;
         }
         partyPutFootmark(partyGetFootmarkId(party), mario->position, flags);
     } else {
@@ -457,7 +451,7 @@ void partyRecordFootmark(PartyEntry* party) {
                 partyClearFootmark();
             }
             if (partyChkOtherFlag(other)) {
-                flags |= 1;
+                flags |= FOOTMARK_FLAG_JUMP;
             }
             partyPutFootmark(partyGetFootmarkId(party), other->position, flags);
         } else {
