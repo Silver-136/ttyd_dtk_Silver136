@@ -75,7 +75,6 @@ BOOL nameEntPrepare(void);
 BOOL nameEntIsCancel(void);
 double sin(double);
 double fmod(double, double);
-static inline float fabsf(float x) { return (float)__fabs(x); }
 void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
 void winTexSetRot(u32 id, Vec translate, Vec scale, GXColor color, f32 rot);
@@ -90,14 +89,6 @@ void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);
 void continueGame(void);
 
-__declspec(section ".data") f32 seq_load_negone_one_a[] = { -1.0f, 1.0f };
-__declspec(section ".data") static f32 negone_one_374[] = { -1.0f, 1.0f };
-__declspec(section ".data") f32 seq_load_one_negone_a[] = { 1.0f, -1.0f };
-__declspec(section ".data") static f32 one_negone_373[] = { 1.0f, -1.0f };
-__declspec(section ".data") f32 seq_load_negone_one_b[] = { -1.0f, 1.0f };
-__declspec(section ".data") static f32 negone_one_360[] = { -1.0f, 1.0f };
-__declspec(section ".data") f32 seq_load_one_negone_b[] = { 1.0f, -1.0f };
-__declspec(section ".data") static f32 one_negone_359[] = { 1.0f, -1.0f };
 
 WinDt win_dt[9] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {7, 2, 1, 1}},
@@ -1315,7 +1306,6 @@ BOOL nameEntPrepare(void);
 BOOL nameEntIsCancel(void);
 double sin(double);
 double fmod(double, double);
-static inline float fabsf(float x) { return (float)__fabs(x); }
 void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
 void winTexSetRot(u32 id, Vec translate, Vec scale, GXColor color, f32 rot);
@@ -1328,14 +1318,6 @@ void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);
 void continueGame(void);
 
-__declspec(section ".data") f32 seq_load_negone_one_a[] = { -1.0f, 1.0f };
-__declspec(section ".data") static f32 negone_one_374[] = { -1.0f, 1.0f };
-__declspec(section ".data") f32 seq_load_one_negone_a[] = { 1.0f, -1.0f };
-__declspec(section ".data") static f32 one_negone_373[] = { 1.0f, -1.0f };
-__declspec(section ".data") f32 seq_load_negone_one_b[] = { -1.0f, 1.0f };
-__declspec(section ".data") static f32 negone_one_360[] = { -1.0f, 1.0f };
-__declspec(section ".data") f32 seq_load_one_negone_b[] = { 1.0f, -1.0f };
-__declspec(section ".data") static f32 one_negone_359[] = { 1.0f, -1.0f };
 
 WinDt win_dt[9] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {7, 2, 1, 1}},
