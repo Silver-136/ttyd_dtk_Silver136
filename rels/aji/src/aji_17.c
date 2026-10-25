@@ -3380,7 +3380,7 @@ s32 move_center(EventEntry* event, BOOL isFirstCall) {
         event->userdata[1] = now & 0xFFFFFFFF;
         return EVT_RETURN_BLOCK;
     }
-    elapsed = OSTicksToMilliseconds((u64)(s32)((u32)now - event->userdata[1]));
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(now, event->userdata[1]));
     if (elapsed < frames) {
         dance_dt.cx = intplGetValue(11, x0, x1, elapsed, frames);
         dance_dt.cy = intplGetValue(11, z0, z1, elapsed, frames);

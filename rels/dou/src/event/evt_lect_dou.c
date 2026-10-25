@@ -117,7 +117,7 @@ static USER_FUNC(lect_mario_ido_sum) {
         evtSetFloat(event, LW(1), mario->position.y);
         evtSetFloat(event, LW(2), mario->position.z);
     }
-    elapsed = OSTicksToMilliseconds((u64)(s32)((u32)event->lifetime - (u32)wwstart));
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
     if (elapsed > frames) {
         elapsed = frames;
     }

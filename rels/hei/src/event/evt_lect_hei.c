@@ -121,7 +121,7 @@ static USER_FUNC(lect_mario_ido_sum) {
         evtSetFloat(event, LW(1), mario->position.y);
         evtSetFloat(event, LW(2), mario->position.z);
     }
-    elapsed = OSTicksToMilliseconds((u64)(s32)((u32)event->lifetime - (u32)wwstart));
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
     if (elapsed > frames) {
         elapsed = frames;
     }
@@ -738,7 +738,7 @@ static USER_FUNC(lect_party_ido_sum) {
         evtSetFloat(event, LW(5), party->position.z);
         return EVT_RETURN_BLOCK;
     }
-    elapsed = OSTicksToMilliseconds((u64)(s32)((u32)event->lifetime - (u32)wwstart));
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
     if (elapsed > frames) {
         elapsed = frames;
     }

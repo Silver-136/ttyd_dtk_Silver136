@@ -1977,7 +1977,7 @@ USER_FUNC(kusuri_color_set) {
         event->userdata[0] = ((u64)now >> 32) & 0xFFFFFFFF;
         event->userdata[1] = now & 0xFFFFFFFF;
     }
-    elapsed = OSTicksToMilliseconds((u64)(s32)((u32)now - event->userdata[1]));
+    elapsed = OSTicksToMilliseconds((u64)OSDiffTick(now, event->userdata[1]));
     if (elapsed < event->lwData[8]) {
         done = FALSE;
         t = (f32)elapsed / (f32)event->lwData[8];

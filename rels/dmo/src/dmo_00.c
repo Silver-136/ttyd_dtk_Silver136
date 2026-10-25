@@ -478,7 +478,7 @@ USER_FUNC(demo_scale) {
     if (isFirstCall) {
         event->savedTime = now;
     }
-    t = (s32)OSTicksToMilliseconds((u64)(s32)((u32)now - (u32)event->savedTime)) / 12000.0f;
+    t = (s32)OSTicksToMilliseconds((u64)OSDiffTick(now, event->savedTime)) / 12000.0f;
     wp->scale = 600.0f * (1.0f - t) + 1500.0f * t;
     wp->scale /= 1000.0f;
     if (wp->scale >= 1.5f) {
