@@ -1224,8 +1224,8 @@ EVT_BEGIN(peach_dance_light)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(peach_evt_dance)
+#ifdef VERSION_G8ME01
     CALL(evt_npc_pera_onoff, STRING("ホログラム"), 0)
     CALL(evt_npc_set_ry, STRING("ホログラム"), 180)
     CALL(evt_npc_pera_onoff, STRING("ホログラム2"), 0)
@@ -1399,18 +1399,7 @@ EVT_BEGIN(peach_evt_dance)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_npc_set_color, STRING("ホログラム"), 255, 255, 255, LW(0))
-        WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW(1), 1)
-            GOTO(1)
-        END_IF
-        CALL(evt_cam3d_evt_set, 0, 95, 243, 0, 45, -53, 700, 11)
-        WAIT_MS(700)
-        GOTO(100)
-    END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(peach_evt_dance)
     CALL(evt_npc_pera_onoff, STRING(("\203z\203\215\203O\203\211\203\200")), 0)
     CALL(evt_npc_set_ry, STRING(("\203z\203\215\203O\203\211\203\200")), 180)
     CALL(evt_npc_pera_onoff, STRING(("\203z\203\215\203O\203\211\203\2002")), 0)
@@ -1577,6 +1566,7 @@ EVT_BEGIN(peach_evt_dance)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_npc_set_color, STRING(("\203z\203\215\203O\203\211\203\200")), 255, 255, 255, LW(0))
+#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(1)
@@ -1587,7 +1577,6 @@ EVT_BEGIN(peach_evt_dance)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_mario_set_mode, 1)
@@ -3036,8 +3025,8 @@ EVT_BEGIN(tec_talk)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(aji_17_init_evt)
+#ifdef VERSION_G8ME01
     SET_VALUE(LW(0), STRING("S_camera_1"))
     SET_VALUE(LW(1), -30)
     SET_VALUE(LW(2), 60)
@@ -3126,12 +3115,7 @@ EVT_BEGIN(aji_17_init_evt)
         CALL(evt_map_playanim, STRING("moza"), 1, 0)
         CALL(evt_map_pauseanim, 0, STRING("moza"))
         CALL(evt_run_case_evt, 9, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
-    END_IF
-    CALL(evt_snd_set_rev_mode, 1)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(aji_17_init_evt)
     SET_VALUE(LW(0), STRING(("S_camera_1")))
     SET_VALUE(LW(1), -30)
     SET_VALUE(LW(2), 60)
@@ -3219,11 +3203,11 @@ EVT_BEGIN(aji_17_init_evt)
         CALL(evt_map_playanim, STRING(("moza")), 1, 0)
         CALL(evt_map_pauseanim, 0, STRING(("moza")))
         CALL(evt_run_case_evt, 9, 1, STRING(("keyboard")), 0, PTR(tec_talk), 0)
+#endif
     END_IF
     CALL(evt_snd_set_rev_mode, 1)
     RETURN
 EVT_END()
-#endif
 
 // target .data tail pad word
 

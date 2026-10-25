@@ -1659,8 +1659,8 @@ s32 mobj_lock(MapObjectEntry* mobj) {
     case 2:
         if (mobj->typeDataU[0] & 0x80000000) {
             item = 0;
-#ifdef VERSION_G8ME01
             for (i = 0; ; i++) {
+#ifdef VERSION_G8ME01
                 s32* list = mobj->typeDataList[0];
                 s32 r;
                 if (list[i] == -1) {
@@ -1669,11 +1669,7 @@ s32 mobj_lock(MapObjectEntry* mobj) {
                 r = pouchCheckItem(list[i]);
                 if (r) {
                     item = list[i];
-                    break;
-                }
-            }
 #else
-            for (i = 0; ; i++) {
                 s32 it = mobj->typeDataList[0][i];
                 s32 r;
                 if (it == -1) {
@@ -1682,10 +1678,10 @@ s32 mobj_lock(MapObjectEntry* mobj) {
                 r = pouchCheckItem(it);
                 if (r) {
                     item = r;
+#endif
                     break;
                 }
             }
-#endif
         } else if ((i = pouchCheckItem(mobj->typeData[0])) != 0) {
             item = mobj->typeData[0];
         } else {

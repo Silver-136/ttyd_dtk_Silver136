@@ -197,14 +197,12 @@ void mot_dokan(void) {
             mario->dispFlags |= 0x100;
             marioPaperLightOff();
             mario->displayDirection = mario->displayDirectionTarget;
-            mario->currSubMotionId = 40;
-            _partyEntry(1);
 #else
             mario->displayDirection = mario->displayDirectionTarget;
             mario->mot.dokan.rotSpeed = 30.0f;
+#endif
             mario->currSubMotionId = 40;
             _partyEntry(1);
-#endif
             mario->dispFlags |= 0x1000;
             partyShadowOff(partyGetPtr(marioGetPartyId()));
             partyShadowOff(partyGetPtr(marioGetExtraPartyId()));

@@ -1682,16 +1682,14 @@ void marioCheckWall(f32 dx, f32 dz) {
                     if (!(hitGetAttr(hit) & 0x80) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                         w->hitobjPush = hit;
                     }
-                }
-            }
 #else
             if (++w->wallPushTimer >= 20) {
                 w->wallPushTimer = 20;
                 if (!(hitGetAttr(hit) & 0x80) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
                     w->hitobjPush = hit;
+#endif
                 }
             }
-#endif
             w->position = pos;
         }
     } else {

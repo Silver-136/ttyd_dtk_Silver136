@@ -532,15 +532,13 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
                     if (YURANK(yuwp->recordScore)[wp->type][i] >= 0) {
                         rsec = YURANK(yuwp->recordScore)[wp->type][i] / 1000;
                         fr = gp->framerate == 50 ? 1 : 0;
-                        rmin = rsec / 60;
-                        rsec = rsec % 60;
 #else
                     rscore = YURANK(yuwp->recordScore)[wp->type][i];
                     if (rscore >= 0) {
                         rsec = rscore / 1000;
+#endif
                         rmin = rsec / 60;
                         rsec = rsec % 60;
-#endif
 #ifdef VERSION_G8ME01
                         sprintf(buf, "%1d%s%02d%s%02d", rmin, msgSearch("menu_colon"), rsec, msgSearch("menu_colon"), ((yuwp->recordScore + fr * 4)[wp->type][i] % 1000) / 10);
 #else

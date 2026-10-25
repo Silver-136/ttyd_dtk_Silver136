@@ -163,9 +163,9 @@ void mot_stay(void) {
         }
     }
     if (strcmp(mario->animName, "M_S_3") == 0 && marioChkKey()) {
-#ifdef VERSION_G8ME01
         m = marioGetPtr();
         m->idleTimer = m->idleTimer + 1;
+#ifdef VERSION_G8ME01
         if (m->idleTimer >= gp->framerate * 4) {
             m->idleTimer = 0;
             m->poseTime = 0;
@@ -174,11 +174,7 @@ void mot_stay(void) {
             m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF1), &m->position);
         }
         if (m->idleTimer == gp->framerate * 2) {
-            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF2), &m->position);
-        }
 #else
-        m = marioGetPtr();
-        m->idleTimer = m->idleTimer + 1;
         if (m->idleTimer > 0xF0) {
             m->idleTimer = 0;
         }
@@ -186,9 +182,9 @@ void mot_stay(void) {
             m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF1), &m->position);
         }
         if (m->idleTimer == 0x87) {
+#endif
             m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF2), &m->position);
         }
-#endif
     }
     if (mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
         if (mario->controlStickSensitivity > 0.0f) {
@@ -205,13 +201,11 @@ void mot_stay(void) {
             return;
         }
     } else if (mario->buttonHold & PAD_BUTTON_B) {
-        return;
-    }
 #else
     if (mario->buttonHold & PAD_BUTTON_B) {
+#endif
         return;
     }
-#endif
     if (marioSlitAbilityChk() && marioSlitButton() == 1) {
         marioChgMot(MARIO_MOTION_SLIT);
         return;
@@ -287,14 +281,11 @@ void mot_stay(void) {
             break;
         case 3:
             if ((s32)--mario->multiTimer < 0) {
+                marioChgEvtPose("M_N_5A");
 #ifdef VERSION_G8ME01
-                marioChgEvtPose("M_N_5A");
                 mario->poseTime = 0;
-                mario->multiTimer = 0;
-#else
-                marioChgEvtPose("M_N_5A");
-                mario->multiTimer = 0;
 #endif
+                mario->multiTimer = 0;
                 mario->currSubMotionId = 4;
                 MARIO_STAY(mario).deepSleepTimer = 0;
                 m = marioGetPtr();

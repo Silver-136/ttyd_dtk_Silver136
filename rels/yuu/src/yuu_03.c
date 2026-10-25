@@ -708,13 +708,13 @@ EVT_BEGIN(minigame04_end)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(yuu_03_init_evt)
     CALL(evt_map_playanim, STRING("yajirushi"), 1, 0)
     CALL(evt_map_playanim, STRING("tama"), 1, 0)
     CALL(evt_map_playanim, STRING("gurade"), 1, 0)
     CALL(evt_map_playanim, STRING("kyaku"), 1, 0)
     SPAWN_EVENT(PTR(minigame04_main))
+#ifdef VERSION_G8ME01
     CALL_CHILD(evt_yuunpc_minigame4)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("J_mon"), 16384)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("E_mon"), 16384)
@@ -741,19 +741,11 @@ EVT_BEGIN(yuu_03_init_evt)
         CASE_EQUAL(5)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("I_mon"), 16384)
     END_SWITCH
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(yuu_03_init_evt)
-    CALL(evt_map_playanim, STRING("yajirushi"), 1, 0)
-    CALL(evt_map_playanim, STRING("tama"), 1, 0)
-    CALL(evt_map_playanim, STRING("gurade"), 1, 0)
-    CALL(evt_map_playanim, STRING("kyaku"), 1, 0)
-    SPAWN_EVENT(PTR(minigame04_main))
     CALL_CHILD(PTR(evt_yuunpc_minigame4))
+#endif
     RETURN
 EVT_END()
-#endif
 
 void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall) {
     SlitWork* data = ((MiniGameWork*)event->lwData[0])->data;

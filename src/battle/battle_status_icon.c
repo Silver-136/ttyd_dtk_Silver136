@@ -20,8 +20,8 @@ BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
 BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 
-#ifdef VERSION_G8ME01
 IconDispTableEntry _disp_table[0x17] = {
+#ifdef VERSION_G8ME01
         {1, _bsi_default_turn, 22, 1},
         {4, _bsi_default_turn, 20, 1},
         {21, _bsi_default_turn, 21, 1},
@@ -120,9 +120,7 @@ IconDispTableEntry _disp_table_3[0x17] = {
         {23, _bsi_regeneration, 36, 0},
         {24, _bsi_regeneration, 37, 0},
         {-1, NULL, 0, 0},
-};
 #else
-IconDispTableEntry _disp_table[0x17] = {
     {1, _bsi_default_turn, 15, 1},
     {4, _bsi_default_turn, 13, 1},
     {21, _bsi_default_turn, 14, 1},
@@ -146,8 +144,8 @@ IconDispTableEntry _disp_table[0x17] = {
     {23, _bsi_regeneration, 23, 0},
     {24, _bsi_regeneration, 24, 0},
     {-1, NULL, 0, 0},
-};
 #endif
+};
 
 
 

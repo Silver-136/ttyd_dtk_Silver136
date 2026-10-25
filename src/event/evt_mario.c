@@ -682,25 +682,22 @@ USER_FUNC(evt_mario_normalize) {
     BOOL off;
 
     if (isFirstCall) {
+        party = partyGetPtr(marioGetPartyId());
+        if (party) {
 #ifdef VERSION_G8ME01
-        party = partyGetPtr(marioGetPartyId());
-        if (party) {
             partySlitReset(party);
         }
         party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
             partySlitReset(party);
-        }
 #else
-        party = partyGetPtr(marioGetPartyId());
-        if (party) {
             party->slitOn = 0;
         }
         party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
             party->slitOn = 0;
-        }
 #endif
+        }
         mp->trigFlags |= 0x80000000;
         event->userdata[1] = 0;
         off = !marioChkCtrl();

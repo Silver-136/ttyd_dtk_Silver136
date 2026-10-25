@@ -1091,14 +1091,12 @@ void mot_roll(void) {
 #ifdef VERSION_G8ME01
         if (marioGetPtr()->motStruct && (u32)RW()->sfxId == (u32)-1) {
             RW()->sfxId = (s32)psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
-            m->mot.roll.flags |= 0x1000;
-        }
 #else
         if ((u32)m->mot.roll.sfxId == (u32)-1) {
             m->mot.roll.sfxId = (s32)psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
+#endif
             m->mot.roll.flags |= 0x1000;
         }
-#endif
     } else {
         MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01

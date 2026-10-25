@@ -544,15 +544,13 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
     u16* s;
     u16* d;
     s32 len = strlen(src) / 2;
-    u16 c;
-    s32 i;
 #else
     u16* s = (u16*)src;
     s32 len = strlen(src) / 2;
     u16* d = (u16*)dst;
+#endif
     u16 c;
     s32 i;
-#endif
 #ifdef VERSION_G8ME01
     if ((u32)gp->language == 0) {
         s = (u16*)src; /* FAKE: s and d set inside the language branch, the same spelling as in pouchHiraToKata */
@@ -678,8 +676,8 @@ void pouchSortItem(s32 mode) {
         else if (mode == 10) qqsort(keys, n, 2, comp_kind_r);
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
-#ifdef VERSION_G8ME01
     if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
+#ifdef VERSION_G8ME01
         /* FAKE: block-scoped (shadowing j/i) locals and separate sort counter m steer register colouring */
         ItemData* a;
         ItemData* b;
@@ -732,16 +730,7 @@ void pouchSortItem(s32 mode) {
                     t2 = equipped[m];
                     badges[m] = badges[j];
                     equipped[m] = equipped[j];
-                    badges[j] = t1;
-                    equipped[j] = t2;
-                }
-            }
-        }
-        memcpy(pp[0]->badges, badges, sizeof(badges));
-        memcpy(pp[0]->equippedBadges, equipped, sizeof(equipped));
-    }
 #else
-    if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
         i = 0;
         for (n = 0; n < 200; n++) {
             if (pp[0]->badges[n] != 0) {
@@ -783,6 +772,7 @@ void pouchSortItem(s32 mode) {
                     t2 = equipped[n];
                     badges[n] = badges[j];
                     equipped[n] = equipped[j];
+#endif
                     badges[j] = t1;
                     equipped[j] = t2;
                 }
@@ -791,7 +781,6 @@ void pouchSortItem(s32 mode) {
         memcpy(pp[0]->badges, badges, sizeof(badges));
         memcpy(pp[0]->equippedBadges, equipped, sizeof(equipped));
     }
-#endif
 }
 
 s32 pouchGetCoin(void) {

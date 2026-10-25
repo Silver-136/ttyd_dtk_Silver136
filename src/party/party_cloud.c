@@ -251,8 +251,8 @@ void cloud_hover_main(PartyEntry* party) {
     party->dispOfs.y = 3.0f + 3.0f * a;
 }
 
-#ifdef VERSION_G8ME01
 void cloud_move(PartyEntry* party) {
+#ifdef VERSION_G8ME01
     f32 a;
 
     if (party->trigFlags & 8) {
@@ -269,10 +269,7 @@ void cloud_move(PartyEntry* party) {
         if (party->moveMode != 2) {
             party->trigFlags &= ~0x40000;
         }
-    }
-}
 #else
-void cloud_move(PartyEntry* party) {
     if (party->trigFlags & 8) {
         party->trigFlags &= ~8;
         partyMoveFlyInit(party, 1);
@@ -282,9 +279,9 @@ void cloud_move(PartyEntry* party) {
     cloud_hover_main(party);
     if (party->moveMode != 2) {
         party->trigFlags &= ~0x40000;
+#endif
     }
 }
-#endif
 
 void cloud_init(PartyEntry* party) {
     party->memberKind = 5;

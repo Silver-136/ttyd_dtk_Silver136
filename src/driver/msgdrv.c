@@ -150,27 +150,21 @@ void msgInit(void) {
 }
 
 void msgLoad(const char* filename, s32 index) {
-#ifdef VERSION_G8ME01
     MessageEntry* entry;
     const char* str;
     MsgLookupEntry* lookup;
     const char* msgptr;
     int i;
+#ifdef VERSION_G8ME01
     s32 msgcount;
     DVDEntry* dvd;
     s32 max;
     s32 len;
-    u32 ofs;
 #else
-    MessageEntry* entry;
-    const char* str;
-    MsgLookupEntry* lookup;
-    const char* msgptr;
-    int i;
     DVDEntry* dvd;
     s32 msgcount;
-    u32 ofs;
 #endif
+    u32 ofs;
     char filepath[64];
     char dvdpath[128]; //TODO: double check size
 
@@ -945,9 +939,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
             data->parseScroll = s230;
             return;
         case '\n':
-#ifdef VERSION_G8ME01
             entry->glyph = 0xFFFB;
             entry->time = time;
+#ifdef VERSION_G8ME01
             if (0.0f == maxScale) {
                 maxScale = 1.0f;
             }
@@ -960,8 +954,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 s230 -= 32.0f * maxScale;
             }
 #else
-            entry->glyph = 0xFFFB;
-            entry->time = time;
             x = 0;
             if (EXT_LIT(float_0_8041a514, 0.0f) == maxScale) {
                 maxScale = 1.0f;
@@ -1032,14 +1024,12 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "pos") == 0) {
                 sscanf(args, "%d%d", &v48, &v44);
                 x = v48;
-#ifdef VERSION_G8ME01
                 if (v44 != 999) {
                     y = s234 - v44;
+#ifdef VERSION_G8ME01
                     s230 = -v44;
                 }
 #else
-                if (v44 != 999) {
-                    y = s234 - v44;
                 }
                 s230 = -v44;
 #endif

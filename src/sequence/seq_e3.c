@@ -312,17 +312,13 @@ void seq_e3Main(SequenceWork* seq) {
                 marioPartyEntry(found[foundIdx].partners[1]);
             }
 
-#ifdef VERSION_G8ME01
             if (wp->scenario == 0) {
+#ifdef VERSION_G8ME01
                 seqSetSeq(SEQ_MAP_CHANGE, "gor_00", NULL);
             } else if (wp->scenario == 1) {
-                seqSetSeq(SEQ_MAP_CHANGE, "hei_00", "dokan_2");
-            } else {
-#else
-            if (wp->scenario == 0) {
-                seqSetSeq(SEQ_MAP_CHANGE, "hei_00", "dokan_2");
-            } else {
 #endif
+                seqSetSeq(SEQ_MAP_CHANGE, "hei_00", "dokan_2");
+            } else {
                 seqSetSeq(SEQ_MAP_CHANGE, found[foundIdx].mapName, found[foundIdx].beroName);
             }
 

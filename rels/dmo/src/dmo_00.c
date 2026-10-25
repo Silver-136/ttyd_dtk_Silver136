@@ -990,10 +990,10 @@ EVT_BEGIN(chusan_move)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(dmo_00_init_evt)
     CALL(demo_init)
     CALL(evt_npc_entry, STRING("peach"), STRING("c_peach"))
+#ifdef VERSION_G8ME01
     CALL(evt_npc_set_tribe, STRING("peach"), STRING("デモピーチ標準2"))
     CALL(evt_npc_set_ry, STRING("peach"), 90)
     CALL(evt_npc_set_position, STRING("peach"), -2, 0, 550)
@@ -1056,9 +1056,6 @@ EVT_BEGIN(dmo_00_init_evt)
     RETURN
 EVT_END()
 #else
-EVT_BEGIN(dmo_00_init_evt)
-    CALL(demo_init)
-    CALL(evt_npc_entry, STRING("peach"), STRING("c_peach"))
     CALL(evt_npc_set_tribe, STRING("peach"), STRING(/*"デモピーチ標準2"*/"\x83\x66\x83\x82\x83\x73\x81\x5B\x83\x60\x95\x57\x8F\x80\x32"))
     CALL(evt_npc_set_ry, STRING("peach"), 90)
     CALL(evt_npc_set_position, STRING("peach"), -2, 0, 550)

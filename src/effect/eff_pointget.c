@@ -127,8 +127,8 @@ void effPointGetMain(EffectEntry* effect) {
     dispEntry(CAMERA_2D, dispCalcZ(&position), 2, (DispCallback)effPointGetDisp, effect);
 }
 
-#ifdef VERSION_G8ME01
 void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
+#ifdef VERSION_G8ME01
     f32 w;
     f32 w1;
     EffPointGetWork* work = effect->userdata;
@@ -270,10 +270,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
                     break;
             }
         }
-    }
-}
 #else
-void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     EffPointGetWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
     f32 scale = work->scale;
@@ -373,6 +370,6 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
         GXTexCoord2f32(1.0f, 1.0f);
         GXPosition3f32(0.0f, x0, 0.0f);
         GXTexCoord2f32(0.0f, 1.0f);
+#endif
     }
 }
-#endif

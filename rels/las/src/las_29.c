@@ -2288,7 +2288,6 @@ EVT_BEGIN(last_evt_3_2)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(last_evt_4)
     CALL(evt_snd_bgmoff, 512)
     CALL(evt_mario_key_onoff, 0)
@@ -2296,6 +2295,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_cam3d_evt_set, -560, 100, 283, 19, 150, 0, 0, 11)
     CALL(evt_mario_set_pos, -150, 0, 0)
     CALL(evt_party_set_pos, 0, -190, 0, 15)
+#ifdef VERSION_G8ME01
     CALL(evt_npc_set_position, STRING("影の女王"), 55, 0, 0)
     CALL(evt_npc_set_position, STRING("ブラックピーチ"), 25, 70, 0)
     CALL(evt_npc_set_position, STRING("マジョリン"), -50, 0, -150)
@@ -2769,29 +2769,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_npc_flag_onoff, 1, STRING("ピーチ姫"), 1024)
     CALL(evt_npc_move_position, STRING("ピーチ姫"), 15, 0, 0, FLOAT(60.0f), 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_192"), 0, STRING("ピーチ姫"))
-    CALL(rou_hikari_front_onoff, 0, 0)
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_PAUSE3"), LW(0), LW(1), LW(2), 0)
-        CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 1, 30)
-    END_INLINE_EVENT
-    CALL(evt_cam3d_evt_set, 0, 300, 840, 0, -20, 0, 4000, 11)
-    WAIT_MS(2000)
-    CALL(evt_snd_bgmoff_f, 512, 3000)
-    CALL(evt_fade_out, 1800)
-    SET_VALUE(GSW_STORY_PROGRESS, 402)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 1, 9, 300)
-    CALL(evt_bero_mapchange, STRING("gor_11"), 0)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(last_evt_4)
-    CALL(evt_snd_bgmoff, 512)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_party_stop, 0)
-    CALL(evt_cam3d_evt_set, -560, 100, 283, 19, 150, 0, 0, 11)
-    CALL(evt_mario_set_pos, -150, 0, 0)
-    CALL(evt_party_set_pos, 0, -190, 0, 15)
     CALL(evt_npc_set_position, STRING(/*"影の女王"*/"\x89\x65\x82\xCC\x8F\x97\x89\xA4"), 55, 0, 0)
     CALL(evt_npc_set_position, STRING(/*"ブラックピーチ"*/"\x83\x75\x83\x89\x83\x62\x83\x4E\x83\x73\x81\x5B\x83\x60"), 25, 70, 0)
     CALL(evt_npc_set_position, STRING(/*"マジョリン"*/"\x83\x7D\x83\x57\x83\x87\x83\x8A\x83\x93"), -50, 0, -150)
@@ -3265,6 +3243,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ピーチ姫"*/"\x83\x73\x81\x5B\x83\x60\x95\x50"), 1024)
     CALL(evt_npc_move_position, STRING(/*"ピーチ姫"*/"\x83\x73\x81\x5B\x83\x60\x95\x50"), 15, 0, 0, FLOAT(60.0f), 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_192"), 0, STRING(/*"ピーチ姫"*/"\x83\x73\x81\x5B\x83\x60\x95\x50"))
+#endif
     CALL(rou_hikari_front_onoff, 0, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -3280,7 +3259,6 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_bero_mapchange, STRING("gor_11"), 0)
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(shuryolight_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)

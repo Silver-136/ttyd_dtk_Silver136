@@ -178,15 +178,13 @@ EVT_BEGIN(dummy_evt)
     RETURN
 EVT_END()
 
+static u32 niji_tbl[] = {
 #ifdef VERSION_G8ME01
-static u32 niji_tbl[] = {
     19, 26, 24, 27, 22, 22,
-};
 #else
-static u32 niji_tbl[] = {
     19, 22,
-};
 #endif
+};
 
 static const char* msg_tbl[] = {
     "msg_stg_seq_prolouge", "msg_stg_seq_stg1", "msg_stg_seq_stg2", "msg_stg_seq_stg3", "msg_stg_seq_stg4", "msg_stg_seq_stg5", "msg_stg_seq_stg6", "msg_stg_seq_stg7",
@@ -928,8 +926,6 @@ s8** lang_tbl[] = {
 
 const char* lang_prefix[] = {
     "jp", "us", "ge", "fr", "sp", "it", "du",
-};
-
 #else
 s8 prologue_us_tbl[] = {
     17, 18, 19, 20, 19, 7, 21, 8, -1,
@@ -977,9 +973,9 @@ s8** lang_tbl[] = {
 
 const char* lang_prefix[] = {
     "jp", "us",
+#endif
 };
 
-#endif
 
 EVT_BEGIN(sys_01_init_evt)
     CALL(init)

@@ -340,7 +340,6 @@ EVT_BEGIN(evt_party_chuumoku)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
     CALL(evt_cam3d_evt_set, 220, 130, 250, 220, 55, -180, 500, 11)
@@ -348,6 +347,7 @@ EVT_BEGIN(evt_shorui_funshitu)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_party_move_pos, 0, 255, -150, 500)
+#ifdef VERSION_G8ME01
             CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
         END_IF
     END_INLINE_EVENT
@@ -438,17 +438,7 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), 32)
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), -2147483648)
     CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), -2147483648)
-    SET_VALUE(GSW_STORY_PROGRESS, 304)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(evt_shorui_funshitu)
-    CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
-    CALL(evt_cam3d_evt_set, 220, 130, 250, 220, 55, -180, 500, 11)
-    BEGIN_INLINE_EVENT
-        CALL(evt_mario_get_party, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(evt_party_move_pos, 0, 255, -150, 500)
             CALL(evt_party_set_dir_npc, 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
         END_IF
     END_INLINE_EVENT
@@ -537,10 +527,10 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_npc_flag_onoff, 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), 32)
     CALL(evt_npc_flag_onoff, 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), -2147483648)
     CALL(evt_npc_flag_onoff, 0, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), -2147483648)
+#endif
     SET_VALUE(GSW_STORY_PROGRESS, 304)
     RETURN
 EVT_END()
-#endif
 
 static s32 item_tbl[] = {
     ITEM_VITAL_PAPER, -1,
@@ -771,8 +761,8 @@ static EVT_BEGIN(talk_syashou)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(talk_sarary_repeat)
+#ifdef VERSION_G8ME01
     CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), -2147483648)
     CALL(evt_npc_get_position, STRING("サラリーマン"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("サラリーマン"), LW(3))
@@ -781,13 +771,7 @@ EVT_BEGIN(talk_sarary_repeat)
     ADD(LW(1), 10)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING("サラリーマン"))
-    LOOP(0)
-        CALL(evt_msg_repeat)
-    END_LOOP
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(talk_sarary_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), -2147483648)
     CALL(evt_npc_get_position, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"), LW(3))
@@ -796,12 +780,12 @@ EVT_BEGIN(talk_sarary_repeat)
     ADD(LW(1), 10)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
+#endif
     LOOP(0)
         CALL(evt_msg_repeat)
     END_LOOP
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(init_sarary)
     SWITCH(GSW_STORY_PROGRESS)
@@ -894,8 +878,8 @@ EVT_BEGIN(talk_papa_mama)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(talk_papa_repeat)
+#ifdef VERSION_G8ME01
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンパパ"), -2147483648)
     CALL(evt_npc_get_position, STRING("ナリキンパパ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンパパ"), LW(3))
@@ -903,13 +887,7 @@ EVT_BEGIN(talk_papa_repeat)
     ADD(LW(1), 15)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING("ナリキンパパ"))
-    LOOP(0)
-        CALL(evt_msg_repeat)
-    END_LOOP
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(talk_papa_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"), -2147483648)
     CALL(evt_npc_get_position, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"), LW(3))
@@ -917,12 +895,12 @@ EVT_BEGIN(talk_papa_repeat)
     ADD(LW(1), 15)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"))
+#endif
     LOOP(0)
         CALL(evt_msg_repeat)
     END_LOOP
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(init_papa)
     SWITCH(GSW_STORY_PROGRESS)
@@ -958,8 +936,8 @@ static EVT_BEGIN(talk_papa)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(talk_mama_repeat)
+#ifdef VERSION_G8ME01
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンママ"), -2147483648)
     CALL(evt_npc_get_position, STRING("ナリキンママ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンママ"), LW(3))
@@ -967,13 +945,7 @@ EVT_BEGIN(talk_mama_repeat)
     ADD(LW(1), 10)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING("ナリキンママ"))
-    LOOP(0)
-        CALL(evt_msg_repeat)
-    END_LOOP
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(talk_mama_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D"), -2147483648)
     CALL(evt_npc_get_position, STRING(/*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING(/*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D"), LW(3))
@@ -981,12 +953,12 @@ EVT_BEGIN(talk_mama_repeat)
     ADD(LW(1), 10)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING(/*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D"))
+#endif
     LOOP(0)
         CALL(evt_msg_repeat)
     END_LOOP
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(init_mama)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1127,8 +1099,8 @@ static EVT_BEGIN(talk_konari)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(talk_powan_repeat)
+#ifdef VERSION_G8ME01
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), -2147483648)
     CALL(evt_npc_get_position, STRING("ポワン探偵"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ポワン探偵"), LW(3))
@@ -1137,13 +1109,7 @@ EVT_BEGIN(talk_powan_repeat)
     SUBTRACT(LW(1), 4)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING("ポワン探偵"))
-    LOOP(0)
-        CALL(evt_msg_repeat)
-    END_LOOP
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(talk_powan_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), -2147483648)
     CALL(evt_npc_get_position, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), LW(3))
@@ -1152,12 +1118,12 @@ EVT_BEGIN(talk_powan_repeat)
     SUBTRACT(LW(1), 4)
     CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
+#endif
     LOOP(0)
         CALL(evt_msg_repeat)
     END_LOOP
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(init_powan)
     SWITCH(GSW_STORY_PROGRESS)

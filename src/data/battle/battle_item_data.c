@@ -1885,13 +1885,13 @@ BattleWeapon ItemWeaponData_Madowaseno_Kona = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Nemure_Yoikoyo))
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_shake_h, 0, 1, 0, 10000, 0)
+#ifdef VERSION_G8ME01
     CALL(btlevtcmd_check_battleflag, LW(0), 256)
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
@@ -1901,24 +1901,10 @@ EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
         ADD(LW(2), 15)
         CALL(evt_eff, 0, STRING("sheep"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     END_IF
-    WAIT_FRAMES(300)
-    CALL(evt_btl_camera_noshake, 0)
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
-    CALL(evt_audience_ap_recovery)
-    WAIT_FRAMES(150)
-    CALL_CHILD(PTR(_return_home_event))
-    CALL(btlevtcmd_StartWaitEvent, -2)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
-    SET_VALUE(LW(12), PTR(&ItemWeaponData_Nemure_Yoikoyo))
-    CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
-    WAIT_FRAMES(30)
-    CALL(evt_btl_camera_shake_h, 0, 1, 0, 10000, 0)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(evt_eff, 0, STRING("sheep"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+#endif
     WAIT_FRAMES(300)
     CALL(evt_btl_camera_noshake, 0)
     CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
@@ -1928,7 +1914,6 @@ EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
-#endif
 
 BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     NULL, 0, // name..icon

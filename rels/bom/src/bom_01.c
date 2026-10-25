@@ -2410,12 +2410,12 @@ EVT_BEGIN(bom1000_minnnanokoe)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 static EVT_BEGIN(minnnanokoe_evt)
     SPAWN_EVENT(PTR(bom1000_minnnanokoe))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
+#ifdef VERSION_G8ME01
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_yuka1"), 1)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
@@ -2551,14 +2551,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(2000)
     CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
     CALL(evt_bero_mapchange, STRING("las_29"), STRING("minnnanokoe"))
-    RETURN
-EVT_END()
 #else
-static EVT_BEGIN(minnnanokoe_evt)
-    SPAWN_EVENT(PTR(bom1000_minnnanokoe))
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("S_yuka1")), 1)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
@@ -2688,9 +2681,9 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(2000)
     CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
     CALL(evt_bero_mapchange, STRING(("las_29")), STRING(("minnnanokoe")))
+#endif
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(evt_door)
     CALL(evt_mario_key_onoff, 0)

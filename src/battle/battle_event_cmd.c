@@ -5140,17 +5140,6 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     }
     if (pos.x - h < -180.0f) {
         pos.x = -180.0f + h;
-    }
-    if (pos.y < 80.0f) {
-        entry = effNiceEntry(eff, pos.x - h, 50.0f + pos.y, pos.z);
-    }
-    else {
-        entry = effNiceEntry(eff, pos.x - h, pos.y - 50.0f, pos.z);
-    }
-    ((NiceEffectWork*)entry->userdata)->overallScale = scale;
-    psndSFX_pit(psndSFXOn_3D(name, &pos), 0);
-    return EVT_RETURN_DONE;
-}
 #else
 USER_FUNC(btlevtcmd_ACSuccessEffect) {
     EvtWord* args = event->args;
@@ -5182,6 +5171,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     h = w / 2.0f;
     if (pos.x + h > 160.0f) {
         pos.x = 160.0f - h;
+#endif
     }
     if (pos.y < 80.0f) {
         entry = effNiceEntry(eff, pos.x - h, 50.0f + pos.y, pos.z);
@@ -5193,7 +5183,6 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     psndSFX_pit(psndSFXOn_3D(name, &pos), 0);
     return EVT_RETURN_DONE;
 }
-#endif
 
 USER_FUNC(btlevtcmd_ac_timing_flag_onoff) {
     EvtWord* args = event->args;

@@ -594,11 +594,11 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(muj_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, 253)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ8"))
+#ifdef VERSION_G8ME01
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ8"))
@@ -654,18 +654,7 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
-    CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 258)
-        CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, -260, 135, -145, 0, 0)
-        CALL(evt_mobj_save_blk, STRING("s_blk"), -45, 83, 0, 0, 0)
-    END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(muj_10_init_evt)
-    IF_INT_LESS(GSW_STORY_PROGRESS, 253)
-        CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST1"))
-        CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ8"))
     ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_DOU1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ8"))
@@ -720,6 +709,7 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(evt_gazigazi_entry)
+#endif
     CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 258)
         CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, -260, 135, -145, 0, 0)
@@ -727,7 +717,6 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 void elmosalpha_func(NanNPC* npc) {
     s32 elapsed;

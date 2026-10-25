@@ -921,8 +921,8 @@ void winFontInit(void) {
     FontDrawStart();
 }
 
-#ifdef VERSION_G8ME01
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
+#ifdef VERSION_G8ME01
     char buf[0x1000];
     const char* msg = fmt;
     Mtx trans;
@@ -957,9 +957,7 @@ void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* f
         scale.x *= width / w;
     }
     winFontSet(pos, scale, color, msg);
-}
 #else
-void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     Mtx trans;
     Mtx scl;
@@ -972,11 +970,11 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
     FontDrawMessageMtx(trans, buf);
-}
 #endif
+}
 
-#ifdef VERSION_G8ME01
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
+#ifdef VERSION_G8ME01
     char buf[0x1000];
     const char* msg = fmt;
     Mtx trans;
@@ -999,9 +997,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
     FontDrawStringMtx(trans, msg);
-}
 #else
-void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     Mtx trans;
     Mtx scl;
@@ -1014,11 +1010,11 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
     FontDrawStringMtx(trans, buf);
-}
 #endif
+}
 
-#ifdef VERSION_G8ME01
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
+#ifdef VERSION_G8ME01
     char buf[0x1000];
     const char* msg = fmt;
     Mtx trans;
@@ -1055,9 +1051,7 @@ void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const cha
         scale.x *= width / w;
     }
     winFontSetEdge(pos, scale, color, msg);
-}
 #else
-void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     Mtx trans;
     Mtx scl;
@@ -1072,8 +1066,8 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     FontDrawEdge();
     FontDrawStringMtx(trans, buf);
     FontDrawEdgeOff();
-}
 #endif
+}
 
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
     Mtx trans;

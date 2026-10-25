@@ -364,12 +364,10 @@ s32 U_chkground(void) {
 
 #pragma dont_inline reset
 
+void mot_hip_post(void) {
 #ifdef VERSION_G8ME01
-void mot_hip_post(void) {
     hip_post_inl();
-}
 #else
-void mot_hip_post(void) {
     MarioWork* mario;
 
     mario = marioGetPtr();
@@ -384,5 +382,5 @@ void mot_hip_post(void) {
         psndSFXOff(SND2);
         SND2 = -1;
     }
-}
 #endif
+}

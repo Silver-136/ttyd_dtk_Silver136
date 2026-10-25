@@ -1384,10 +1384,10 @@ void L_partyVivianTailStop(PartyEntry* party);
 static inline void partyChgRunM(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
 }
-#ifdef VERSION_G8ME01
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
+#ifdef VERSION_G8ME01
     party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
     party->displayDirection = mario->displayDirection;
     party->moveDir = mario->moveDirection;
@@ -1458,14 +1458,7 @@ s32 partyDokanInit(PartyEntry* party) {
         animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
         break;
     }
-    L_partyVivianTailStop(party);
-    return 0;
-}
-
 #else
-s32 partyDokanInit(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-
     party->flags2 |= 0x10;
     switch (mario->dokanType) {
     case 2:
@@ -1510,16 +1503,16 @@ s32 partyDokanInit(PartyEntry* party) {
     party->displayDirection = mario->displayDirection;
     party->moveDir = mario->moveDirection;
     party->position = mario->position;
+#endif
     L_partyVivianTailStop(party);
     return 0;
 }
 
-#endif
 
-#ifdef VERSION_G8ME01
 s32 partyDokanMain(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     s32 n;
+#ifdef VERSION_G8ME01
     f32 s;
     f32 c;
 
@@ -1561,69 +1554,7 @@ s32 partyDokanMain(PartyEntry* party) {
         case 0:
         case 1:
             party->position.z -= 0.2f;
-            break;
-        }
-        if (--party->moveFrames <= 0) {
-            party->motionStep = 102;
-        }
-        break;
-    case 102:
-        party->scale = (Vec){1.0f, 1.0f, 1.0f};
-        party->rot = (Vec){0.0f, 0.0f, 0.0f};
-        party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-        party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-        party->displayDirectionTarget = mario->displayDirectionTarget;
-        party->displayDirection = party->displayDirectionTarget;
-        party->targetDir = mario->directionView;
-        party->moveDir = mario->directionView;
-        partyPaperOff(party);
-        animPoseSetMaterialLightFlagOn(party->paperAnimGroup, 1);
-        party->flags2 &= ~8;
-        party->flags2 &= ~0x10;
-        party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
-        party->flags &= ~PARTY_FLAG_FORCE_FALL;
-        partyShadowOn(party);
-        L_partyVivianTailStart(party);
-        party->trailPos = party->position;
-        partyChgRunMode(party, 1);
-        n = 0;
-        if (partyGetPtr(marioGetPartyId())) {
-            n = 1;
-        }
-        if (partyGetPtr(marioGetExtraPartyId())) {
-            n++;
-        }
-        if ((s8)party->dirKind == 4) {
-            if (n == 1) {
-                party->position.z += -4.0f;
-            } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-                party->position.z += -4.0f;
-                party->position.x += 1.5f;
-            } else {
-                party->position.z += -3.0f;
-                party->position.x += -1.5f;
-            }
-        }
-        if ((s8)party->dirKind == 1) {
-            if (n == 1) {
-                party->position.z += -4.0f;
-            } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-                party->position.z += -4.0f;
-                party->position.x += 1.5f;
-            } else {
-                party->position.z += -3.0f;
-                party->position.x += -1.5f;
-            }
-        }
-        break;
-    }
-    return 0;
-}
-
 #else
-s32 partyDokanMain(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-    s32 n;
 
     switch (party->motionStep) {
     case 0:
@@ -1659,6 +1590,7 @@ s32 partyDokanMain(PartyEntry* party) {
         case 0:
         case 1:
             party->position.z += -0.2f;
+#endif
             break;
         }
         if (--party->moveFrames <= 0) {
@@ -1718,7 +1650,6 @@ s32 partyDokanMain(PartyEntry* party) {
     return 0;
 }
 
-#endif
 
 void partyDokanEnd(s32 id, s32 dir) {
     PartyEntry* party = partyGetPtr(id);

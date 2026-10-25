@@ -442,10 +442,10 @@ USER_FUNC(evt_uranaisi_msg_alloc) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
 USER_FUNC(evt_uranaisi_msg_set) {
     EvtWord* args = event->args;
     const char* msg = msgSearch((const char*)evtGetValue(event, args[0]));
+#ifdef VERSION_G8ME01
     UranaiTag tag = uranaisi_pos_tag;
     char* t = tag.s; // FAKE: reading the tag through a pointer keeps tag[0] from being hoisted out of the loop
     char num[20];
@@ -533,19 +533,13 @@ USER_FUNC(evt_uranaisi_msg_set) {
         ofs[k] -= FontGetMessageWidth(num);
     }
     sprintf(uranaisi_msgp, buf, ofs[0], uranaisi_ryokin_rtn(0), ofs[1], uranaisi_ryokin_rtn(1), ofs[2], uranaisi_ryokin_rtn(2));
-    evtSetValue(event, args[1], (EvtWord)uranaisi_msgp);
-    return EVT_RETURN_DONE;
-}
 #else
-USER_FUNC(evt_uranaisi_msg_set) {
-    EvtWord* args = event->args;
-    const char* msg = msgSearch((const char*)evtGetValue(event, args[0]));
 
     sprintf(uranaisi_msgp, msg, uranaisi_ryokin_rtn(0), uranaisi_ryokin_rtn(1), uranaisi_ryokin_rtn(2));
+#endif
     evtSetValue(event, args[1], (EvtWord)uranaisi_msgp);
     return EVT_RETURN_DONE;
 }
-#endif
 
 static USER_FUNC(evt_osreport) {
     EvtWord* args = event->args;
@@ -1106,7 +1100,6 @@ EVT_BEGIN(starmaniac_get_event)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(starmaniac_talk)
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -1143,6 +1136,7 @@ EVT_BEGIN(starmaniac_talk)
         RETURN
     END_IF
     CALL(evt_sub_get_language, LW(0))
+#ifdef VERSION_G8ME01
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -1151,91 +1145,13 @@ EVT_BEGIN(starmaniac_talk)
         CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
         CALL(evt_msg_print_insert, 1, LW(14), 0, STRING("me"), LW(4))
     END_SWITCH
-    CALL(evt_msg_select, 0, STRING("starmaniac_10"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_win_coin_off, LW(12))
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_11"))
-        GOTO(0)
-    END_IF
-    CALL(evt_pouch_add_item, LW(1), LW(0))
-    IF_INT_EQUAL(LW(0), -1)
-        CALL(evt_win_coin_off, LW(12))
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_15"))
-        CALL(tik_snd_on)
-        RETURN
-    END_IF
-    CALL(evt_badgeShop_starmaniac_dec, LW(1))
-    MULTIPLY(LW(3), -1)
-    CALL(evt_pouch_add_starpiece, LW(3))
-    CALL(evt_win_coin_wait, LW(12))
-    WAIT_MS(500)
-    CALL(evt_win_coin_off, LW(12))
-    CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
-        CALL(tik_snd_on)
-        RETURN
-    END_IF
-    CALL(evt_pouch_get_starpiece, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
-        CALL(tik_snd_on)
-        RETURN
-    END_IF
-    CALL(evt_msg_print_add, 0, STRING("starmaniac_13"))
-    CALL(evt_msg_select, 0, STRING("starmaniac_10"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_14"))
-        CALL(tik_snd_on)
-        RETURN
-    END_IF
-    CALL(evt_msg_continue)
-    GOTO(0)
-    CALL(tik_snd_on)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(starmaniac_talk)
-    CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
-    IF_INT_LESS_OR_EQUAL(LW(0), 0)
-        CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
-        RETURN
-    END_IF
-    CALL(tik_snd_off)
-    IF_INT_EQUAL(GSWF(1325), 0)
-        CALL(evt_msg_print, 0, STRING("starmaniac_00"), 0, STRING("me"))
-        SET_VALUE(GSWF(1325), 1)
-        ELSE
-        CALL(evt_msg_print, 0, STRING("starmaniac_01"), 0, STRING("me"))
-    END_IF
-    CALL(evt_msg_select, 0, STRING("starmaniac_03"))
-    IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_05"))
-        CALL(tik_snd_on)
-        RETURN
-    END_IF
-    CALL(evt_pouch_get_starpiece, LW(0))
-    IF_INT_LESS_OR_EQUAL(LW(0), 0)
-        CALL(evt_msg_print_add, 0, STRING("starmaniac_06"))
-        CALL(tik_snd_on)
-        RETURN
-    END_IF
-    CALL(evt_msg_print_add, 0, STRING("starmaniac_07"))
-    LABEL(0)
-    CALL(evt_win_coin_on, 2, LW(12))
-    CALL(evt_win_other_select, 13)
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_win_coin_off, LW(12))
-        CALL(evt_msg_print, 0, STRING("starmaniac_08"), 0, STRING("me"))
-        CALL(tik_snd_on)
-        RETURN
-    END_IF
-    CALL(evt_sub_get_language, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(3), LW(2), LW(4))
         ELSE
         CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(2), LW(3), LW(4))
     END_IF
+#endif
     CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_win_coin_off, LW(12))
@@ -1279,9 +1195,7 @@ EVT_BEGIN(starmaniac_talk)
     CALL(tik_snd_on)
     RETURN
 EVT_END()
-#endif
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(johoyaketi_talk)
     IF_INT_EQUAL(GSWF(3), 0)
         CALL(evt_msg_print, 0, STRING("johoyaketi_00"), 0, STRING("me"))
@@ -1306,6 +1220,7 @@ EVT_BEGIN(johoyaketi_talk)
         SUBTRACT(LW(1), 1)
         CALL(evt_sub_random, LW(1), LW(0))
         CALL(johoya_keti_newjoho_makelabel, LW(0), LW(2), LW(3), LW(4), LW(5))
+#ifdef VERSION_G8ME01
         CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
@@ -1314,67 +1229,9 @@ EVT_BEGIN(johoyaketi_talk)
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("johoyaketi_01"), LW(5))
             CALL(evt_msg_print_insert, 1, LW(14), 0, STRING("me"), LW(4), LW(3))
         END_SWITCH
-        CALL(evt_win_coin_on, 0, LW(12))
-        CALL(evt_msg_select, 0, STRING("johoyaketi_02"))
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_pouch_get_coin, LW(0))
-            IF_INT_LESS(LW(0), LW(5))
-                CALL(evt_msg_print_add, 0, STRING("johoyaketi_09"))
-                CALL(evt_win_coin_off, LW(12))
-                RETURN
-            END_IF
-            MULTIPLY(LW(5), -1)
-            CALL(evt_pouch_add_coin, LW(5))
-            CALL(evt_win_coin_wait, LW(12))
-            WAIT_MS(500)
-            CALL(evt_win_coin_off, LW(12))
-            CALL(evt_msg_print_add, 0, LW(2))
-            CALL(johoya_keti_newjoho_setreadflag)
-            CALL(evt_msg_print_add, 0, STRING("johoyaketi_07"))
-            ELSE
-            CALL(evt_win_coin_off, LW(12))
-            CALL(johoya_keti_oldspeak_check, LW(0))
-            IF_INT_EQUAL(LW(0), 0)
-                CALL(evt_msg_print_add, 0, STRING("johoyaketi_04"))
-                ELSE
-                CALL(evt_msg_print_add, 0, STRING("johoyaketi_05"))
-                SUBTRACT(LW(0), 1)
-                CALL(evt_sub_random, LW(0), LW(0))
-                CALL(johoya_keti_oldspeak_makelabel, LW(0), LW(0), LW(3), LW(4), LW(5))
-                CALL(evt_msg_print_add, 0, LW(0))
-                CALL(johoya_keti_oldspeak_setreadflag)
-                CALL(evt_msg_print_add, 0, STRING("johoyaketi_07"))
-            END_IF
-        END_IF
-    END_IF
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(johoyaketi_talk)
-    IF_INT_EQUAL(GSWF(3), 0)
-        CALL(evt_msg_print, 0, STRING("johoyaketi_00"), 0, STRING("me"))
-        SET_VALUE(GSWF(3), 1)
-        RETURN
-    END_IF
-    CALL(johoya_keti_newjoho_check, LW(1))
-    IF_INT_EQUAL(LW(1), 0)
-        CALL(johoya_keti_oldspeak_check, LW(0))
-        IF_INT_EQUAL(LW(0), 0)
-            CALL(evt_msg_print, 0, STRING("johoyaketi_08"), 0, STRING("me"))
-            ELSE
-            CALL(evt_msg_print, 0, STRING("johoyaketi_06"), 0, STRING("me"))
-            SUBTRACT(LW(0), 1)
-            CALL(evt_sub_random, LW(0), LW(0))
-            CALL(johoya_keti_oldspeak_makelabel, LW(0), LW(0), LW(3), LW(4), LW(5))
-            CALL(evt_msg_print_add, 0, LW(0))
-            CALL(johoya_keti_oldspeak_setreadflag)
-            CALL(evt_msg_print_add, 0, STRING("johoyaketi_07"))
-        END_IF
-        ELSE
-        SUBTRACT(LW(1), 1)
-        CALL(evt_sub_random, LW(1), LW(0))
-        CALL(johoya_keti_newjoho_makelabel, LW(0), LW(2), LW(3), LW(4), LW(5))
         CALL(evt_msg_print_insert, 0, STRING("johoyaketi_01"), 0, STRING("me"), LW(5), LW(4), LW(3))
+#endif
         CALL(evt_win_coin_on, 0, LW(12))
         CALL(evt_msg_select, 0, STRING("johoyaketi_02"))
         IF_INT_EQUAL(LW(0), 0)
@@ -1410,7 +1267,6 @@ EVT_BEGIN(johoyaketi_talk)
     END_IF
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(kuribo5_init)
     RETURN

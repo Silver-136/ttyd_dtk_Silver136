@@ -526,8 +526,8 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
         }
     }
 
-#ifdef VERSION_G8ME01
     if (i >= wp->count) {
+#ifdef VERSION_G8ME01
         entry = NULL;
         for (e = base, i = 0; i < wp->count; i++, e++) {
             if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == 0x79 && e->flags & 0x400) {
@@ -552,10 +552,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
             else {
                 entry = itemFindDeletable(wp, 0x7B);
                 entry = NULL;
-            }
-        }
 #else
-    if (i >= wp->count) {
         entry = wp->entries;
         if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == 0x79 && entry->flags & 0x400) {
             itemDelete(entry->name);
@@ -573,9 +570,9 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
                 else {
                     entry = NULL;
                 }
+#endif
             }
         }
-#endif
         if (entry == NULL) {
             return NULL;
         }
@@ -837,13 +834,6 @@ void winNameDisp(WinMgrEntry* win) {
         win->x = -win->width / 2;
     }
     win->height = win->description->height + lines * 24;
-    if (!winMgrAction(entry->winId[0])) {
-        FontDrawStart();
-        FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
-        FontDrawMessage(-width / 2, win->y - 8, buffer);
-    }
-}
-
 #else
 void winNameDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
@@ -863,6 +853,7 @@ void winNameDisp(WinMgrEntry* win) {
         win->width = width + 20;
         win->x = -win->width / 2;
     }
+#endif
     if (!winMgrAction(entry->winId[0])) {
         FontDrawStart();
         FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
@@ -870,13 +861,12 @@ void winNameDisp(WinMgrEntry* win) {
     }
 }
 
-#endif
 
-#ifdef VERSION_G8ME01
 void winNameDisp2(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     const char* name;
     u16 width;
+#ifdef VERSION_G8ME01
     u16 lines;
     char buffer[1024];
 
@@ -894,18 +884,7 @@ void winNameDisp2(WinMgrEntry* win) {
         win->x = -win->width / 2;
     }
     win->height = win->description->height + lines * 24;
-    if (!winMgrAction(entry->winId[0])) {
-        FontDrawStart();
-        FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
-        FontDrawMessage(-width / 2, win->y - 8, buffer);
-    }
-}
-
 #else
-void winNameDisp2(WinMgrEntry* win) {
-    ItemEntry* entry = win->param;
-    const char* name;
-    u16 width;
     char buffer[1024];
 
     name = msgSearch(itemDataTable[entry->itemId].name);
@@ -915,6 +894,7 @@ void winNameDisp2(WinMgrEntry* win) {
         win->width = width + 20;
         win->x = -win->width / 2;
     }
+#endif
     if (!winMgrAction(entry->winId[0])) {
         FontDrawStart();
         FontDrawColor((GXColor){0x00, 0x00, 0x00, 0xFF});
@@ -922,7 +902,6 @@ void winNameDisp2(WinMgrEntry* win) {
     }
 }
 
-#endif
 
 void winHelpMain(WinMgrEntry* win) {
     winMgrHelpMain(win);

@@ -274,9 +274,9 @@ void kemuri(void) {
     }
 }
 
-#ifdef VERSION_G8ME01
 void party_kemuri(PartyEntry* party) {
 
+#ifdef VERSION_G8ME01
     if ((u32)marioStGetSystemLevel() == 0) {
         if (party->runMode != 10) {
             if (party->moveKind != 1) {
@@ -320,13 +320,7 @@ void party_kemuri(PartyEntry* party) {
                         party->kemuriTimer = 4;
                     }
                 }
-            }
-        }
-    }
-}
 #else
-void party_kemuri(PartyEntry* party) {
-
     if (party->moveKind != 1) {
         if (party->runMode == 3 && party->currentMemberId == 4) {
             if ((void*)party->hitobjStandOn != NULL) {
@@ -360,9 +354,9 @@ void party_kemuri(PartyEntry* party) {
             }
             else {
                 party->kemuriTimer = 4;
+#endif
             }
         }
     }
 }
-#endif
 #pragma dont_inline reset

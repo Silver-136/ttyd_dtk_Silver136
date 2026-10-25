@@ -368,7 +368,6 @@ static inline void partyWallSlide(Vec* out, Vec n, f32 d, f32 sn, f32 cs) {
     out->z += 0.5f * (mz - dot * n.z);
 }
 
-#ifdef VERSION_G8ME01
 HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     Vec qpos;
     Vec qdir;
@@ -381,6 +380,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 bestD, d;
     f32 rd, maxD;
     HitEntry* best;
+#ifdef VERSION_G8ME01
     s32 count;
     HitEntry* hit;
     s32 i;
@@ -463,45 +463,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         hit = NULL;
         sincosf(&sn2, &cs2, ang - 45.0f);
         for (i = 0; i < count; i++) {
-            bestD = rd;
-            qpos.y = pos->y + arr[i];
-            {
-            Vec dd = {0.0f, 0.0f, 0.0f};
-            dd.x = sn2;
-            dd.z = cs2;
-            qdir = dd;
-            }
-            hit = marioHitCheckVec(&qpos, &qdir, NULL, NULL, &bestD);
-        }
-    }
-    if (best) {
-        if (!hit) {
-            pos->x += v.x;
-            pos->z += v.z;
-        }
-        return best;
-    }
-    if (!hit) {
-        pos->x += dist * sn;
-        pos->z += dist * cs;
-    }
-    return NULL;
-    } while (0);
-}
-
 #else
-HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
-    Vec qpos;
-    Vec qdir;
-    Vec outPos;
-    Vec bestNrm;
-    Vec nrm;
-    Vec v = {0.0f, 0.0f, 0.0f};
-    f32 arr[4];
-    f32 sn, cs, sn2, cs2;
-    f32 bestD, d;
-    f32 rd, maxD;
-    HitEntry* best;
     HitEntry* hit;
     s32 i;
 
@@ -576,6 +538,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     if (hit) {
         sincosf(&sn2, &cs2, ang - 45.0f);
         for (i = 0; i < 3; i++) {
+#endif
             bestD = rd;
             qpos.y = pos->y + arr[i];
             {
@@ -602,12 +565,11 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     } while (0);
 }
 
-#endif
 
-#ifdef VERSION_G8ME01
 HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 sn, cs;
     f32 d, dy, hh;
+#ifdef VERSION_G8ME01
     f32 w, maxD;
     HitEntry* hit;
     Vec p, nrm;
@@ -638,26 +600,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     }
     p = party->position;
     d = maxD;
-    p.y += dy;
-    hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
-    if (hit) {
-        if (partyNrmTo(&nrm) >= 45.0f) {
-            party->frontWallDist = d;
-            partyWallSlide(pos, nrm, dist, sn, cs);
-            return hit;
-        }
-    }
-    }
-    party->frontWallDist = -1.0f;
-    pos->x += dist * sn;
-    pos->z += dist * cs;
-    return NULL;
-}
-
 #else
-HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
-    f32 sn, cs;
-    f32 d, dy, hh;
     HitEntry* hit;
     Vec p, nrm;
 
@@ -683,6 +626,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     }
     p = party->position;
     d = 0.5f * party->width + dist;
+#endif
     p.y += dy;
     hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
     if (hit) {
@@ -699,7 +643,6 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     return NULL;
 }
 
-#endif
 
 void partySearchHead(PartyEntry *party, Vec *pos, f32 *dist, f32 angle)
 {

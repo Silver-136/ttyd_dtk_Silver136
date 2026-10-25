@@ -1663,31 +1663,26 @@ void monosiri_disp(CameraId camera, void* param) {
             GXPosition3f32(x1 + qw, y1, 0.0f);
             GXTexCoord2f32(1.0f, 0.0f);
         }
-#ifdef VERSION_G8ME01
         id = m->id;
         te = battleGetUnitMonosiriPtr(id);
         if (id == 0x4D || id == 0x87) {
             if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xD2) {
+#ifdef VERSION_G8ME01
                 sprintf(buf, (u32)gp->language != 0 ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
             } else {
                 sprintf(buf, (u32)gp->language != 0 ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_rampell"));
             }
         } else {
             sprintf(buf, (u32)gp->language != 0 ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
-        }
 #else
-        id = m->id;
-        te = battleGetUnitMonosiriPtr(id);
-        if (id == 0x4D || id == 0x87) {
-            if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xD2) {
                 sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
             } else {
                 sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_rampell"));
             }
         } else {
             sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
-        }
 #endif
+        }
         w = 0.75f * FontGetMessageWidth(buf);
         winFontInit();
         winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 180.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);

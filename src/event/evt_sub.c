@@ -240,7 +240,6 @@ EVT_BEGIN(evt_sub_kusa_access_entry)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(evt_sub_starstone)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -316,6 +315,7 @@ EVT_BEGIN(evt_sub_starstone)
     IF_INT_EQUAL(LF(8), 0)
         CALL(evt_mario_set_pose, STRING("M_N_3"))
     END_IF
+#ifdef VERSION_G8ME01
     CALL(evt_snd_bgmoff, 1024)
     CALL(evt_snd_bgmon, 1, STRING("BGM_FF_GET_STARSTONE1"))
     CALL(bgm_start_wait)
@@ -506,156 +506,7 @@ EVT_BEGIN(evt_sub_starstone)
     END_IF
     SET_VALUE(LF(10), 0)
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
-    CALL(evt_mario_init_camid)
-    CALL(evt_party_init_camid, 0)
-    CALL(evt_party_init_camid, 1)
-    IF_INT_EQUAL(LF(1), 1)
-        CALL(evt_snd_bgmoff_f, 512, 2000)
-        CALL(evt_snd_envoff_f, 512, 2000)
-        CALL(evt_snd_sfx_all_stop)
-        CALL(evt_fade_entry, 17, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
-        CALL(evt_bero_mapchange, STRING("aji_10"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(2), 1)
-        CALL(evt_snd_bgmoff_f, 512, 2000)
-        CALL(evt_snd_envoff_f, 512, 2000)
-        CALL(evt_snd_sfx_all_stop)
-        CALL(evt_fade_entry, 17, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
-        CALL(evt_bero_mapchange, STRING("aji_10"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(3), 1)
-        CALL(evt_snd_bgmoff_f, 512, 2000)
-        CALL(evt_snd_envoff_f, 512, 2000)
-        CALL(evt_snd_sfx_all_stop)
-        CALL(evt_fade_entry, 17, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
-        CALL(evt_bero_mapchange, STRING("aji_10"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(4), 1)
-        CALL(evt_fade_set_mapchange_type, 1, 17, 800, 16, 800)
-        CALL(evt_bero_mapchange, STRING("usu_00"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(5), 1)
-        CALL(evt_fade_set_mapchange_type, 1, 17, 800, 16, 800)
-        CALL(evt_bero_mapchange, STRING("muj_12"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(6), 1)
-        CALL(evt_fade_set_mapchange_type, 0, 17, 800, 16, 800)
-        CALL(evt_bero_mapchange, STRING("pik_03"), STRING("next"))
-    END_IF
-    IF_INT_EQUAL(LF(7), 1)
-        CALL(evt_snd_bgmoff_f, 512, 2000)
-        CALL(evt_snd_envoff_f, 512, 2000)
-        CALL(evt_snd_sfx_all_stop)
-        CALL(evt_fade_entry, 17, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
-        CALL(evt_bero_mapchange, STRING("pik_01"), 0)
-    END_IF
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_snd_bgmoff_f, 512, 2000)
-        CALL(evt_snd_envoff_f, 512, 2000)
-        CALL(evt_snd_sfx_all_stop)
-        CALL(evt_fade_entry, 17, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-        WAIT_MS(2000)
-        CALL(evt_eff_delete, STRING("sub_bg"))
-        CALL(evt_eff_delete, STRING("sub_clear"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_jin04"), 1)
-        CALL(evt_fade_reset, 1)
-        CALL(evt_npc_set_camid, STRING("にせマリオ"), 4)
-        CALL(evt_mario_set_pose, STRING("M_D_2"))
-        CALL(evt_fade_entry, 16, 1000, 0, 0, 0)
-        CALL(evt_fade_end_wait)
-    END_IF
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(evt_sub_starstone)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_party_stop, 0)
-    SWITCH(LW(0))
-        CASE_EQUAL(1)
-        CALL(evt_pouch_get_starstone, 1)
-        CALL(evt_pouch_add_item, 114, LW(2))
-        CASE_EQUAL(2)
-        CALL(evt_pouch_get_starstone, 2)
-        CALL(evt_pouch_add_item, 115, LW(2))
-        CASE_EQUAL(3)
-        CALL(evt_pouch_get_starstone, 3)
-        CALL(evt_pouch_add_item, 116, LW(2))
-        CASE_EQUAL(4)
-        CALL(evt_pouch_get_starstone, 4)
-        CALL(evt_pouch_add_item, 117, LW(2))
-        CASE_EQUAL(5)
-        CALL(evt_pouch_get_starstone, 5)
-        CALL(evt_pouch_add_item, 118, LW(2))
-        CASE_EQUAL(6)
-        CALL(evt_pouch_get_starstone, 6)
-        CALL(evt_pouch_add_item, 119, LW(2))
-        CASE_EQUAL(7)
-        CALL(evt_pouch_get_starstone, 7)
-        CALL(evt_pouch_add_item, 120, LW(2))
-        CASE_EQUAL(-1)
-    END_SWITCH
-    IF_INT_EQUAL(LW(0), 1)
-        SET_VALUE(LF(1), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 2)
-        SET_VALUE(LF(2), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 3)
-        SET_VALUE(LF(3), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 4)
-        SET_VALUE(LF(4), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 5)
-        SET_VALUE(LF(5), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 6)
-        SET_VALUE(LF(6), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), 7)
-        SET_VALUE(LF(7), 1)
-    END_IF
-    IF_INT_EQUAL(LW(0), -1)
-        SET_VALUE(LF(8), 1)
-    END_IF
-    CALL(set_stop, 0)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(9700)
-        CALL(set_stop, 1)
-    END_INLINE_EVENT
-    CALL(evt_snd_sfxon, STRING("SFX_EVT_STARSTONE_WHITEOUT1"), 0)
-    CALL(evt_fade_entry, 10, 300, 255, 255, 255)
-    CALL(evt_fade_end_wait)
-    IF_INT_EQUAL(LF(8), 1)
-        CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
-        ELSE
-        CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
-    END_IF
-    CALL(evt_sub_get_sincos, 0, LW(5), LW(6))
-    MULTIPLY_FLOAT(LW(5), FLOAT(40.0f))
-    MULTIPLY_FLOAT(LW(6), FLOAT(40.0f))
-    ADD_FLOAT(LW(5), LW(2))
-    ADD_FLOAT(LW(6), LW(4))
-    CALL(evt_item_set_position, LW(1), LW(5), LW(3), LW(6))
-    CALL(evt_mario_adjust_dir)
-    WAIT_MS(500)
-    IF_INT_EQUAL(LF(8), 0)
-        CALL(evt_mario_set_pose, STRING("M_N_3"))
-    END_IF
     CALL(evt_fade_entry, 9, 300, 255, 255, 255)
     CALL(evt_snd_bgmoff, 1024)
     CALL(evt_snd_bgmon, 1, STRING("BGM_FF_GET_STARSTONE1"))
@@ -833,6 +684,7 @@ EVT_BEGIN(evt_sub_starstone)
     END_IF
     SET_VALUE(LF(10), 0)
     CALL_CHILD(PTR(evt_memcard_save))
+#endif
     CALL(evt_mario_init_camid)
     CALL(evt_party_init_camid, 0)
     CALL(evt_party_init_camid, 1)
@@ -907,7 +759,6 @@ EVT_BEGIN(evt_sub_starstone)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(evt_sub_mail_vibration)
     LOOP(10)
@@ -1103,42 +954,21 @@ EVT_BEGIN(mail_evt_gor_04)
     RETURN
 EVT_END()
 
+EVT_BEGIN(mail_evt_rsh_03_a)
+    IF_INT_EQUAL(GSWF(12), 1)
+        RETURN
+    END_IF
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    LOOP(0)
+        SET_VALUE(LW(10), LW(0))
+        SET_VALUE(LW(11), LW(1))
+        SET_VALUE(LW(12), LW(2))
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #ifdef VERSION_G8ME01
-EVT_BEGIN(mail_evt_rsh_03_a)
-    IF_INT_EQUAL(GSWF(12), 1)
-        RETURN
-    END_IF
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    LOOP(0)
-        SET_VALUE(LW(10), LW(0))
-        SET_VALUE(LW(11), LW(1))
-        SET_VALUE(LW(12), LW(2))
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -100, -2000, -100, 2000, LW(5))
-        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 328)
-            IF_INT_EQUAL(LW(5), 1)
-                BREAK_LOOP
-            END_IF
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    SET_VALUE(GSWF(12), 1)
-    CALL(evt_pouch_receive_mail, 21)
-    CALL_CHILD(PTR(mail_evt))
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(mail_evt_rsh_03_a)
-    IF_INT_EQUAL(GSWF(12), 1)
-        RETURN
-    END_IF
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    LOOP(0)
-        SET_VALUE(LW(10), LW(0))
-        SET_VALUE(LW(11), LW(1))
-        SET_VALUE(LW(12), LW(2))
-        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 400, -2000, 400, 2000, LW(5))
+#endif
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 328)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
@@ -1151,7 +981,6 @@ EVT_BEGIN(mail_evt_rsh_03_a)
     CALL_CHILD(PTR(mail_evt))
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(mail_evt_hom_00)
     IF_INT_EQUAL(GSWF(13), 1)

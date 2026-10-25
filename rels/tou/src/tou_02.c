@@ -2030,10 +2030,10 @@ static EVT_BEGIN(evt_poster_7)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 static EVT_BEGIN(evt_poster_8)
     SET_VALUE(GSWF(2463), 1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, 153)
+#ifdef VERSION_G8ME01
         CALL(evt_sub_get_language, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_mapobj_get_position, STRING("p_m_8"), LW(0), LW(1), LW(2))
@@ -2046,13 +2046,7 @@ static EVT_BEGIN(evt_poster_8)
         CALL(evt_item_set_bound_rate, STRING("key"), FLOAT(0.5996094f))
         CALL(evt_item_set_jump_power, STRING("key"), FLOAT(500.0f))
         CALL(evt_item_status_on, STRING("key"), 16)
-    END_IF
-    RETURN
-EVT_END()
 #else
-static EVT_BEGIN(evt_poster_8)
-    SET_VALUE(GSWF(2463), 1)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, 153)
         CALL(evt_mapobj_get_position, STRING(("p_m_8")), LW(0), LW(1), LW(2))
         CALL(evt_item_entry, STRING(("key")), 19, LW(0), LW(1), LW(2), 4, -1, PTR(evt_key))
         CALL(evt_item_set_move_dir_speed, STRING(("key")), FLOAT(180.0f), FLOAT((90.0f)))
@@ -2060,10 +2054,10 @@ static EVT_BEGIN(evt_poster_8)
         CALL(evt_item_set_bound_rate, STRING(("key")), FLOAT(0.5996094f))
         CALL(evt_item_set_jump_power, STRING(("key")), FLOAT(500.0f))
         CALL(evt_item_status_on, STRING(("key")), 16)
+#endif
     END_IF
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(evt_poster_9)
     SET_VALUE(GSWF(2464), 1)
@@ -2115,10 +2109,10 @@ static EVT_BEGIN(evt_after_peach)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(tou_02_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(127, 137)
+#ifdef VERSION_G8ME01
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU2"))
         CALL(evt_snd_bgmoff, 26624)
@@ -2380,12 +2374,7 @@ EVT_BEGIN(tou_02_init_evt)
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_kaidan_7"), 2)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(tou_02_init_evt)
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(127, 137)
         CALL(evt_snd_bgmon, 512, STRING(("BGM_STG3_TOU2")))
         CALL(evt_snd_envon, 272, STRING(("ENV_STG3_TOU2")))
         CALL(evt_snd_bgmoff, 26624)
@@ -2559,7 +2548,7 @@ EVT_BEGIN(tou_02_init_evt)
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING(("s_kaidan_7")), 2)
+#endif
     RETURN
 EVT_END()
-#endif
 

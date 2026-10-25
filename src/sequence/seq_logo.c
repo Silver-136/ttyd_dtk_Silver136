@@ -41,9 +41,9 @@ void progDisp(CameraId camId, void* param);
 static s32 logoAsyncFirst(void);
 #endif
 
-#ifndef VERSION_G8ME01
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
+#ifndef VERSION_G8ME01
     wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
         if (VIGetDTVStatus()) {
@@ -71,32 +71,7 @@ void seq_logoInit(SequenceWork* work) {
         VIConfigure(&sRMObjHReso);
         if (!wp && !wp && !wp) {
         }
-        VIFlush();
-        VIWaitForRetrace();
-    }
-    else {
-        switch (OSGetResetCode() & 1) {
-            case OS_RESET_RESTART:
-                VIConfigure(&sRMObjHReso);
-                VIFlush();
-                VIWaitForRetrace();
-                break;
-
-            case OS_RESET_HOTRESET:
-                VIConfigure(&sRMObjHReso_prog);
-                VIFlush();
-                VIWaitForRetrace();
-                VIWaitForRetrace();
-                gp->flags |= 8;
-                break;
-        }
-        gp->flags |= 4;
-    }
-}
-
 #else
-void seq_logoInit(SequenceWork* work) {
-    memset(wp, 0, sizeof(LogoWork));
     wp->page = -1;
     wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
@@ -122,6 +97,7 @@ void seq_logoInit(SequenceWork* work) {
     }
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
         VIConfigure(&sRMObjHReso);
+#endif
         VIFlush();
         VIWaitForRetrace();
     }
@@ -145,7 +121,6 @@ void seq_logoInit(SequenceWork* work) {
     }
 }
 
-#endif
 
 void seq_logoExit(SequenceWork* work) {
     fontmgrTexSetup();
@@ -158,8 +133,8 @@ void seq_logoExit(SequenceWork* work) {
     fileFree(wp->texture);
 }
 
-#ifndef VERSION_G8ME01
 void seq_logoMain(SequenceWork* work) {
+#ifndef VERSION_G8ME01
     static OSTime time; //time instance 1
     u32 size;
     u8* decode;
@@ -308,11 +283,7 @@ void seq_logoMain(SequenceWork* work) {
     if (work->state < 10) {
         dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, NULL);
         dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
-    }
-}
-
 #else
-void seq_logoMain(SequenceWork* work) {
     static OSTime time;
 
     switch (work->state) {
@@ -488,12 +459,11 @@ void seq_logoMain(SequenceWork* work) {
     }
     if (work->state >= 4 && work->state < 18) {
         dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, work);
+#endif
     }
 }
 
-#endif
 
-#ifndef VERSION_G8ME01
 //param is unused
 void logoDisp(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
@@ -526,6 +496,7 @@ void logoDisp(CameraId camId, void* param) {
         GXSetScissor(0, 0, 608, 448);
         GXSetViewport(0.0f, 0.0f, 608.0f, 448.0f, -1.0f, 1.0f);
 
+#ifndef VERSION_G8ME01
         switch (wp->logoId) {
             case 0:
                 TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 0);
@@ -621,88 +592,7 @@ void logoDisp(CameraId camId, void* param) {
                 break;
         
             case 2:
-                TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 2);
-                GXLoadTexObj(&texObj, GX_TEXMAP0);
-                GXSetNumChans(1u);
-                GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
-                GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                GXSetNumTexGens(1);
-                GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
-                GXSetNumTevStages(1);
-                GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-                GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-                GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-                GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_RASC, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
-                GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_TEXA, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
-                GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-                GXSetZCompLoc(GX_TRUE);
-                GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-                GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
-                MTXOrtho(ortho, 0.0f, 448.0f, 0.0f, 608.0f, -100.0f, 100.0f);
-                GXSetProjection(ortho, GX_ORTHOGRAPHIC);
-                MTXIdentity(position);
-                GXLoadPosMtxImm(position, 0);
-                GXSetCurrentMtx(0);
-                GXSetCullMode(GX_CULL_NONE);
-                GXClearVtxDesc();
-                GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-                GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-
-                GXPosition3f32(189.0f, 150.0f, 0.0f);
-                GXTexCoord2f32(0.0f, 0.0f);
-
-                GXPosition3f32(421.0f, 150.0f, 0.0f);
-                GXTexCoord2f32(1.0f, 0.0f);
-
-                GXPosition3f32(421.0f, 262.0f, 0.0f);
-                GXTexCoord2f32(1.0f, 1.0f);
-
-                GXPosition3f32(189.0f, 262.0f, 0.0f);
-                GXTexCoord2f32(0.0f, 1.0f);
-                break;
-        }
-        GXSetProjectionv(projection);
-        GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
-        GXSetScissor(sciLeft, sciTop, sciWidth, sciHeight);
-    }
-}
-
 #else
-//param is unused
-void logoDisp(CameraId camId, void* param) {
-    GXRenderModeObj* rmode;
-    f32 width, height, x, y;
-
-    //stack variables
-    Mtx44 ortho; //stack + 0xAC
-    Mtx position; //stack + 0x7C
-    f32 projection[GX_PROJECTION_SZ]; //stack + 0x60
-    f32 viewport[GX_VIEWPORT_SZ]; //stack + 0x48
-    GXTexObj texObj; //stack + 0x28
-    u32 sciLeft, sciTop, sciWidth, sciHeight; //tack + 0x24
-
-    if (wp->texture) {
-        GXGetProjectionv(projection);
-        GXGetViewportv(viewport);
-        GXGetScissor(&sciLeft, &sciTop, &sciWidth, &sciHeight);
-        if (OSGetProgressiveMode() != 1) {
-            rmode = &sRMObjHReso;
-        }
-        else {
-            rmode = &sRMObjHReso_prog;
-        }
-        GXSetPixelFmt(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
-        GXSetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
-        GXSetDispCopyDst(rmode->fbWidth, rmode->efbHeight);
-        GXSetDispCopyYScale((f32)rmode->xfbHeight / (f32)rmode->efbHeight);
-        GXSetDispCopyGamma(GX_GM_1_0);
-        GXSetScissorBoxOffset(0, 0);
-        GXSetScissor(0, 0, 608, 448);
-        GXSetViewport(0.0f, 0.0f, 608.0f, 448.0f, -1.0f, 1.0f);
-
         switch (wp->page) {
             case -1:
                 break;
@@ -874,6 +764,7 @@ void logoDisp(CameraId camId, void* param) {
                 break;
         
             case 4:
+#endif
                 TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 2);
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetNumChans(1u);
@@ -923,7 +814,6 @@ void logoDisp(CameraId camId, void* param) {
     }
 }
 
-#endif
 
 #ifndef VERSION_G8ME01
 //param is unused

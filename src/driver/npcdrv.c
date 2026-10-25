@@ -1524,8 +1524,8 @@ void npcStrippedAnnouncePool(f32* f) {
     f[1] = 600.0f;
 }
 
-#ifdef VERSION_G8ME01
 void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
+#ifdef VERSION_G8ME01
     s32 height;
     FirstStrikeInfo* firstStrike = param;
     const char* message;
@@ -1573,10 +1573,7 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     for (i = 0; i < lines; i++) {
         FontDrawStringShake(mulf(0.1f, x - width / 2), mulf(0.1f, y + -29 * i - 3.0f), buf[i]);
     }
-}
-
 #else
-void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     FirstStrikeInfo* firstStrike = param;
     const char* message;
     f32 x;
@@ -1598,9 +1595,9 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     FontDrawColor((GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     FontDrawScale(0.1f);
     FontDrawStringShake(mulf(0.1f, x - width / 2.0f), mulf(y - 3.0f, 0.1f), message);
+#endif
 }
 
-#endif
 
 
 void partyKeyOn(void);

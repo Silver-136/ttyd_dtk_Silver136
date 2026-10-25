@@ -31,8 +31,6 @@ s32 size_table[HEAP_COUNT][2] = {
     {1, 0xD90},
     {1, 0xE0},
     {1, 0x80},
-    {0, 0x64}
-};
 #else
 #define HEAP_COUNT 6
 #define SMART_HEAP 5
@@ -42,9 +40,9 @@ s32 size_table[HEAP_COUNT][2] = {
     {1, 0xE0}, //0x38000, 224 KiB
     {1, 0x80}, //0x20000, 128 KiB
     {1, 0x100}, //0x40000, 256 KiB
+#endif
     {0, 0x64}
 };
-#endif
 static SmartWork* wp = &smartWork;
 
 //.sbss
@@ -123,8 +121,8 @@ void memInit(void) { //almost 1:1, stubborn regalloc at the end
 }
 
 
-#ifdef VERSION_G8ME01
 static inline void mapallocInit(void) {
+#ifdef VERSION_G8ME01
     u32 size;
     MapAllocEntry* entry;
     u32 total;
@@ -141,9 +139,7 @@ static inline void mapallocInit(void) {
     entry->next = NULL;
     entry->size = total - sizeof(MapAllocEntry);
     entry->inuse = 0;
-}
 #else
-static inline void mapallocInit(void) {
     MapAllocEntry* entry;
     u32 size;
 
@@ -159,8 +155,8 @@ static inline void mapallocInit(void) {
     mapalloc_base_ptr = entry;
     mapalloc_size = size;
     COUNT = 0;
-}
 #endif
+}
 
 void memClear(HEAP_TYPE heap) {
     OSDestroyHeap(heapHandle[heap]);

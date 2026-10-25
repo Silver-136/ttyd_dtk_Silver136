@@ -2176,8 +2176,6 @@ void SoundSSMainInt(void) {
                 }
             } else if (sound.coverState == 2 && stream->entries[0].loaded == 1) {
                 sound.coverState = 0;
-            }
-        }
 #else
         if ((stream->flags & 8) && !(stream->flags & 2) && (stream->flags & 1)) {
             if (stream->entries[0].srcPos != 0 && stream->entries[0].loaded == 0 && !(stream->flags & 0x1000)) {
@@ -2194,9 +2192,9 @@ void SoundSSMainInt(void) {
                 if (stream->flags & 0x400) {
                     stream->entries[1].loaded = 1;
                 }
+#endif
             }
         }
-#endif
     }
 }
 

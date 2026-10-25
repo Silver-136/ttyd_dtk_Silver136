@@ -649,9 +649,6 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             sprintf(sbuf, "%s", winZenkakuStr((u8)superActionTable[i]->baseSpCost));
             winFontSet((Vec){x2 - (f32)(FontGetMessageWidth(sbuf) / 2), (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
             winFontSet((Vec){cx6, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("btl_cost_disp_AP"));
-        }
-    }
-}
 #else
 void winMarioDisp(s32 camId, void* param, s32 idx) {
     static s32 pri[6] = {3, 2, 8, 10, 7, 9};
@@ -858,7 +855,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             sprintf(sbuf, "%s", winZenkakuStr((u8)superActionTable[i]->baseSpCost));
             winFontSet((Vec){x - (f32)(FontGetMessageWidth(sbuf) / 2), (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, sbuf);
             winFontSet((Vec){cx, (f32)(120 - i * 26), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, "\x82\x72\x82\x6F");
+#endif
         }
     }
 }
-#endif

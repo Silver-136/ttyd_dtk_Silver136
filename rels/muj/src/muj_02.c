@@ -511,10 +511,10 @@ static EVT_BEGIN(evt_kusa_6)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 static TreeAccess tree_tbl[] = {
     {5, "A_treeA_01", "treeA_01_m", "treeA_01_ha", 0, NULL},
     {5, "A_treeA_02", "treeA_02_m", "treeA_02_ha", 0, NULL},
+#ifdef VERSION_G8ME01
     {5, "A_treeB_01", "treeB_01_m", "treeB_01_ha", 0, NULL},
     {5, "A_treeB_02", "treeB_02_m", "treeB_02_ha", 0, NULL},
     {5, "A_treeB_03", "treeB_03_m", "treeB_03_ha", 0, NULL},
@@ -525,23 +525,13 @@ static TreeAccess tree_tbl[] = {
 TreeAccess tree_tbl_treeb_evt[] = {
     {5, "A_treeA_01", "treeA_01_m", "treeA_01_ha", 0, NULL},
     {5, "A_treeA_02", "treeA_02_m", "treeA_02_ha", 0, NULL},
-    {5, "A_treeB_01", "treeB_01_m", "treeB_01_ha", 0, evt_treeb_01},
-    {5, "A_treeB_02", "treeB_02_m", "treeB_02_ha", 0, NULL},
-    {5, "A_treeB_03", "treeB_03_m", "treeB_03_ha", 0, NULL},
-    {5, "A_treeB_04", "treeB_04_m", "treeB_04_ha", 0, NULL},
-    {7, NULL, NULL, NULL, 0, NULL},
-};
-#else
-static TreeAccess tree_tbl[] = {
-    {5, "A_treeA_01", "treeA_01_m", "treeA_01_ha", 0, NULL},
-    {5, "A_treeA_02", "treeA_02_m", "treeA_02_ha", 0, NULL},
-    {5, "A_treeB_01", "treeB_01_m", "treeB_01_ha", 0, evt_treeb_01},
-    {5, "A_treeB_02", "treeB_02_m", "treeB_02_ha", 0, NULL},
-    {5, "A_treeB_03", "treeB_03_m", "treeB_03_ha", 0, NULL},
-    {5, "A_treeB_04", "treeB_04_m", "treeB_04_ha", 0, NULL},
-    {7, NULL, NULL, NULL, 0, NULL},
-};
 #endif
+    {5, "A_treeB_01", "treeB_01_m", "treeB_01_ha", 0, evt_treeb_01},
+    {5, "A_treeB_02", "treeB_02_m", "treeB_02_ha", 0, NULL},
+    {5, "A_treeB_03", "treeB_03_m", "treeB_03_ha", 0, NULL},
+    {5, "A_treeB_04", "treeB_04_m", "treeB_04_ha", 0, NULL},
+    {7, NULL, NULL, NULL, 0, NULL},
+};
 
 static KusaAccess kusa_tbl[] = {
     {1, "A_kuwa_move_01", "S_kuwa_move_01", NULL},

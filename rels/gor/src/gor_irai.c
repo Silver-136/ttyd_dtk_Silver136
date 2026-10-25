@@ -299,9 +299,9 @@ EVT_BEGIN(gor_irai_lecture)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(gor_irai_main)
     IF_INT_EQUAL(GSWF(5374), 0)
+#ifdef VERSION_G8ME01
         BEGIN_INLINE_EVENT
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_INLINE_EVENT
@@ -311,88 +311,46 @@ EVT_BEGIN(gor_irai_main)
         BEGIN_INLINE_EVENT
             CALL(evt_party_set_dir, 1, 270, 200)
         END_INLINE_EVENT
-        CALL_CHILD(PTR(gor_irai_lecture))
-        RETURN
-    END_IF
-    CALL(evt_mario_key_onoff, 0)
-    CALL(irai_init_func)
-    LABEL(10)
-    CALL(irai_main_func)
-    CALL(irai_check_func)
-    IF_INT_EQUAL(LW(0), -1)
-        GOTO(100)
-    END_IF
-    SET_INT_READ_ADDR(PTR(&irai_msg_exposition))
-    SET_VALUE(LW(0), LW(11))
-    ADD(LW(0), -1)
-    READ_INT_INDEXED(LW(1), LW(0))
-    CALL(evt_msg_toge, 1, 0, 0, 0)
-    CALL(evt_msg_print, 0, LW(1), 0, 0)
-    CALL(evt_msg_toge, 1, 0, 0, 0)
-    CALL(evt_msg_print, 0, LW(12), 0, 0)
-    CALL(evt_msg_select, 0, STRING("irai_01"))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_msg_print_add, 0, STRING("irai_73"))
-        CALL(irai_start_func)
-        SET_INT_READ_ADDR(PTR(irai_start_event))
-        SET_VALUE(LW(0), LW(11))
-        ADD(LW(0), -1)
-        READ_INT_INDEXED(LW(1), LW(0))
-        SPAWN_EVENT(LW(1))
-        SET_VALUE(GSW(1420), LW(11))
-        DEBUG_PUT_REG(GSW(1420))
-        ELSE
-        CALL(evt_msg_continue)
-        GOTO(10)
-    END_IF
-    LABEL(100)
-    CALL(irai_end_func)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-#else
-EVT_BEGIN(gor_irai_main)
-    IF_INT_EQUAL(GSWF(5374), 0)
-        CALL_CHILD(PTR(gor_irai_lecture))
-        RETURN
-    END_IF
-    CALL(evt_mario_key_onoff, 0)
-    CALL(irai_init_func)
-    LABEL(10)
-    CALL(irai_main_func)
-    CALL(irai_check_func)
-    IF_INT_EQUAL(LW(0), -1)
-        GOTO(100)
-    END_IF
-    SET_INT_READ_ADDR(PTR(&irai_msg_exposition))
-    SET_VALUE(LW(0), LW(11))
-    ADD(LW(0), -1)
-    READ_INT_INDEXED(LW(1), LW(0))
-    CALL(evt_msg_toge, 1, 0, 0, 0)
-    CALL(evt_msg_print, 0, LW(1), 0, 0)
-    CALL(evt_msg_toge, 1, 0, 0, 0)
-    CALL(evt_msg_print, 0, LW(12), 0, 0)
-    CALL(evt_msg_select, 0, STRING("irai_01"))
-    IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_msg_print_add, 0, STRING("irai_73"))
-        CALL(irai_start_func)
-        SET_INT_READ_ADDR(PTR(irai_start_event))
-        SET_VALUE(LW(0), LW(11))
-        ADD(LW(0), -1)
-        READ_INT_INDEXED(LW(1), LW(0))
-        SPAWN_EVENT(LW(1))
-        SET_VALUE(GSW(1420), LW(11))
-        DEBUG_PUT_REG(GSW(1420))
-        ELSE
-        CALL(evt_msg_continue)
-        GOTO(10)
-    END_IF
-    LABEL(100)
-    CALL(irai_end_func)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
 #endif
+        CALL_CHILD(PTR(gor_irai_lecture))
+        RETURN
+    END_IF
+    CALL(evt_mario_key_onoff, 0)
+    CALL(irai_init_func)
+    LABEL(10)
+    CALL(irai_main_func)
+    CALL(irai_check_func)
+    IF_INT_EQUAL(LW(0), -1)
+        GOTO(100)
+    END_IF
+    SET_INT_READ_ADDR(PTR(&irai_msg_exposition))
+    SET_VALUE(LW(0), LW(11))
+    ADD(LW(0), -1)
+    READ_INT_INDEXED(LW(1), LW(0))
+    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_print, 0, LW(1), 0, 0)
+    CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_print, 0, LW(12), 0, 0)
+    CALL(evt_msg_select, 0, STRING("irai_01"))
+    IF_INT_EQUAL(LW(0), 0)
+        CALL(evt_msg_print_add, 0, STRING("irai_73"))
+        CALL(irai_start_func)
+        SET_INT_READ_ADDR(PTR(irai_start_event))
+        SET_VALUE(LW(0), LW(11))
+        ADD(LW(0), -1)
+        READ_INT_INDEXED(LW(1), LW(0))
+        SPAWN_EVENT(LW(1))
+        SET_VALUE(GSW(1420), LW(11))
+        DEBUG_PUT_REG(GSW(1420))
+        ELSE
+        CALL(evt_msg_continue)
+        GOTO(10)
+    END_IF
+    LABEL(100)
+    CALL(irai_end_func)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
 
 EVT_BEGIN(gor_irai_tenshu_main)
     SET_VALUE(LW(0), GSWF(5375))
@@ -876,9 +834,6 @@ void irai_window_disp(CameraId camera, void* param) {
         no = wp->list[i] - 1;
         iraiDrawFit(wp->client[no], -119.0f, wp->scroll + (140 - i * 30), 180.0f, w);
         iraiDrawFit(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30), 260.0f, w);
-    }
-    GXSetScissor(left, top, width, height);
-}
 #else
 static inline f32 iraiAddI(f32 a, s32 b) {
     return a + b;
@@ -937,7 +892,7 @@ void irai_window_disp(CameraId camera, void* param) {
         no = wp->list[i] - 1;
         FontDrawString(wp->client[no], -119.0f, iraiAddI(wp->scroll, 140 - i * 30));
         FontDrawString(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30));
+#endif
     }
     GXSetScissor(left, top, width, height);
 }
-#endif

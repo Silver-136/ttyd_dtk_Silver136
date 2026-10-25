@@ -282,15 +282,13 @@ static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
     }
 }
 
+void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg) {
 #ifdef VERSION_G8ME01
-void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg) {
     FontDrawStringVecPitch((Vec){x, y, 0.0f}, pitch, (const s8*)msg);
-}
 #else
-void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg) {
     fontDrawStringVecPitch((Vec){x, y, 0.0f}, pitch, (const s8*)msg);
-}
 #endif
+}
 
 #ifdef VERSION_G8ME01
 // FAKE: auto_inline off keeps the wrappers from inlining FontDrawStringVecPitch (the US wrappers call it)
@@ -863,11 +861,11 @@ void JUTFontSetup(u16 font) {
     s32 len;
 #endif
 
-#ifdef VERSION_G8ME01
     if (!pfh) {
         sprintf(path, "%s/f/%s.bfn", getMarioStDvdRoot(), fontname[font]);
         dvd = DVDMgrOpen(path, 2, 0);
         size = DVDMgrGetLength(dvd);
+#ifdef VERSION_G8ME01
         maxsize = size;
         for (j = 0; j < 7; j++) {
             sprintf(path, "%s/font/%s.bfn", getMarioStDvdRoot(), fontname[j]);
@@ -882,16 +880,11 @@ void JUTFontSetup(u16 font) {
         }
         pfh = __memAlloc(HEAP_DEFAULT, OSRoundUp32B(maxsize));
         DVDMgrRead(dvd, pfh, OSRoundUp32B(size), 0);
-        DVDMgrClose(dvd);
 #else
-    if (!pfh) {
-        sprintf(path, "%s/f/%s.bfn", getMarioStDvdRoot(), fontname[font]);
-        dvd = DVDMgrOpen(path, 2, 0);
-        size = DVDMgrGetLength(dvd);
         pfh = __memAlloc(HEAP_DEFAULT, size = OSRoundUp32B(size));
         DVDMgrRead(dvd, pfh, size, 0);
-        DVDMgrClose(dvd);
 #endif
+        DVDMgrClose(dvd);
         ptr = (BinaryFontBlock*)(pfh + 1);
         for (i = 0; i < pfh->blockcount; i++) {
             switch (ptr->magic) {

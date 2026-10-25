@@ -410,11 +410,6 @@ void viPostCallback(u32 retraceCount) {
         if (!(gp->systemLevelFlags & 1)) {
             gp->systemLv0Time += gp->retraceDeltaTime;
         }
-        gp->renderTime += gp->retraceDeltaTime;
-        if (!gp->inBattle) {
-            gp->renderFieldTime += gp->retraceDeltaTime;
-        }
-    }
 #else
     if (!(gp->systemLevelFlags & 8)) {
         gp->systemLv3Time += gp->retraceDeltaTime;
@@ -429,12 +424,12 @@ void viPostCallback(u32 retraceCount) {
         gp->systemLv0Time += gp->retraceDeltaTime;
     }
     if (!gp->dvdError && !winCheck()) {
+#endif
         gp->renderTime += gp->retraceDeltaTime;
         if (!gp->inBattle) {
             gp->renderFieldTime += gp->retraceDeltaTime;
         }
     }
-#endif
     gp->retraceTime = time;
     gp->retraceCount = retraceCount;
     if (battleDisableHResetCheck()) {

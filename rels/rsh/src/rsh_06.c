@@ -1383,13 +1383,13 @@ static EVT_BEGIN(evt_clank)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 static EVT_BEGIN(evt_bg)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(11), FLOAT(0.0f))
     LOOP(0)
         SET_FLOAT_VALUE(LW(0), GW(0))
         ADD_FLOAT(LW(10), LW(0))
+#ifdef VERSION_G8ME01
         IF_FLOAT_GREATER(LW(10), FLOAT(0.0f))
             ADD_FLOAT(LW(10), FLOAT(-800.0f))
         END_IF
@@ -1406,23 +1406,7 @@ static EVT_BEGIN(evt_bg)
         CALL(evt_mapobj_trans, 1, STRING("jimen"), LW(10), 0, 0)
         CALL(evt_mapobj_trans, 1, STRING("iwayama"), LW(11), 0, 0)
         CALL(evt_mapobj_trans, 1, STRING("yama"), LW(11), 0, 0)
-        WAIT_FRAMES(1)
-        LOOP(0)
-            IF_INT_EQUAL(GSWF(3583), 1)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_LOOP
-    RETURN
-EVT_END()
 #else
-static EVT_BEGIN(evt_bg)
-    SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
-    SET_FLOAT_VALUE(LW(11), FLOAT(0.0f))
-    LOOP(0)
-        SET_FLOAT_VALUE(LW(0), GW(0))
-        ADD_FLOAT(LW(10), LW(0))
         IF_INT_GREATER(LW(10), FLOAT(1200.0f))
             SUBTRACT_FLOAT(LW(10), FLOAT(2400.0f))
         END_IF
@@ -1439,6 +1423,7 @@ static EVT_BEGIN(evt_bg)
         CALL(evt_mapobj_trans, 1, STRING(((char*)"jimen")), LW(10), 0, 0)
         CALL(evt_mapobj_trans, 1, STRING(((char*)"yama")), LW(10), 0, 0)
         CALL(evt_mapobj_trans, 1, STRING(((char*)"iwayama")), LW(11), 0, 0)
+#endif
         WAIT_FRAMES(1)
         LOOP(0)
             IF_INT_EQUAL(GSWF(3583), 1)
@@ -1449,7 +1434,6 @@ static EVT_BEGIN(evt_bg)
     END_LOOP
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(evt_hoshi)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))

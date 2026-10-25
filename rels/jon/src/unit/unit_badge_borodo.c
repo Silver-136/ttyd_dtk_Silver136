@@ -317,13 +317,11 @@ static PoseTableEntry pose_table_item_have[] = {
 extern EvtWord _badge_borodo_emergency_revival_event[];
 static BattleDataEntry data_table[] = {
     {51, _badge_borodo_emergency_revival_event},
-    {0, NULL},
-};
 #else
 static BattleDataEntry data_table[] = {
+#endif
     {0, NULL},
 };
-#endif
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_badge_borodo", "c_borodo_t", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},

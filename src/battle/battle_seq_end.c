@@ -1255,8 +1255,6 @@ EVT_BEGIN(_curtain_close_event)
     CALL(btlevtcmd_BtlStageObjFlagOnOff, STRING("spotlight"), 1, 0)
     CALL(_lvup_select_obj_lvup_param_disp)
     CALL(_lvup_disp_flag_onoff, 1, 32)
-    RETURN
-EVT_END()
 #else
 EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
@@ -1402,9 +1400,9 @@ EVT_BEGIN(_curtain_close_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(0))
     CALL(_lvup_select_obj_lvup_param_disp)
+#endif
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(_confetti_control_event)
     SET_VALUE(LW(0), 1)

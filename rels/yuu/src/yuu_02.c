@@ -811,7 +811,6 @@ EVT_BEGIN(s_en1_turn)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(yuu_02_init_evt)
     CALL(evt_map_playanim, STRING("den1"), 1, 0)
     CALL(evt_map_playanim, STRING("den2"), 1, 0)
@@ -820,6 +819,7 @@ EVT_BEGIN(yuu_02_init_evt)
     SPAWN_EVENT(s_en1_turn)
     SPAWN_EVENT(minigame03_main)
     CALL_CHILD(evt_yuunpc_minigame3)
+#ifdef VERSION_G8ME01
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("J_mon"), 16384)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("E_mon"), 16384)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_mon"), 16384)
@@ -868,14 +868,6 @@ EVT_BEGIN(yuu_02_init_evt)
     RETURN
 EVT_END()
 #else
-EVT_BEGIN(yuu_02_init_evt)
-    CALL(evt_map_playanim, STRING("den1"), 1, 0)
-    CALL(evt_map_playanim, STRING("den2"), 1, 0)
-    CALL(evt_map_playanim, STRING("kumo"), 1, 0)
-    CALL(evt_map_playanim, STRING("wakka"), 1, 0)
-    SPAWN_EVENT(s_en1_turn)
-    SPAWN_EVENT(minigame03_main)
-    CALL_CHILD(evt_yuunpc_minigame3)
     RETURN
 EVT_END_PAD()
 #endif

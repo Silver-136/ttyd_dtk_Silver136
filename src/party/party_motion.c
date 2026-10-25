@@ -730,10 +730,6 @@ void partyFlyAdjustY(PartyEntry* party) {
                 rate = 0.2f;
             }
             partyFlyMoveY(party, t, rate);
-        }
-    }
-}
-
 #else
 void partyFlyAdjustY(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -808,11 +804,11 @@ void partyFlyAdjustY(PartyEntry* party) {
         if (diff > 5.0f || 0.0f > diff) {
             rate = 0.05f;
             party->position.y += diff * rate;
+#endif
         }
     }
 }
 
-#endif
 
 typedef struct PartyFootmark {
     u8 unk0;
@@ -2803,16 +2799,13 @@ BOOL party_slit(PartyEntry* party) {
 #ifdef VERSION_G8ME01
             if (!partyChkBetweenWalls(party, party->position) && !(mario->flags & MARIO_FLAG_PAPER_MODE) &&
                 !(hitGetAttr(party->hitobjFront) & 0x2000) && !(hitGetAttr(party->hitobjPush) & 0x2000))
-            {
-                party->slitStep = 40;
-            }
 #else
             if (!(mario->flags & MARIO_FLAG_PAPER_MODE) && !(hitGetAttr(party->hitobjFront) & 0x2000) &&
                 !(hitGetAttr(party->hitobjPush) & 0x2000))
+#endif
             {
                 party->slitStep = 40;
             }
-#endif
             break;
     }
     switch (party->slitStep) {

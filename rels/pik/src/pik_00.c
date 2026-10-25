@@ -1148,23 +1148,6 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
             WAIT_MS(500)
             CALL(evt_sub_status_gauge_force_close)
             CALL(pik_00_statuswin_force_off)
-            CALL(evt_msg_print, 0, STRING("stg7_pik_19"), 0, STRING("ナリキンパパ"))
-            SET_VALUE(GSWF(3874), 1)
-            SET_VALUE(LW(0), 0)
-            IF_INT_EQUAL(GSWF(3874), 1)
-                ADD(LW(0), 1)
-            END_IF
-            IF_INT_EQUAL(GSWF(3876), 1)
-                ADD(LW(0), 1)
-            END_IF
-            IF_INT_EQUAL(LW(0), 2)
-                SET_VALUE(GSW_STORY_PROGRESS, 355)
-            END_IF
-        END_IF
-    END_SWITCH
-    CALL(evt_cam3d_evt_off, 500, 11)
-    RETURN
-EVT_END()
 #else
 EVT_BEGIN(talk_papa_taihou_kyoka)
     IF_INT_EQUAL(GSWF(3881), 0)
@@ -1281,6 +1264,7 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
             END_LOOP
             WAIT_MS(500)
             CALL(evt_sub_status_gauge_force_close)
+#endif
             CALL(evt_msg_print, 0, STRING("stg7_pik_19"), 0, STRING("ナリキンパパ"))
             SET_VALUE(GSWF(3874), 1)
             SET_VALUE(LW(0), 0)
@@ -1298,7 +1282,6 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
     CALL(evt_cam3d_evt_off, 500, 11)
     RETURN
 EVT_END()
-#endif
 
 static EVT_BEGIN(talk_papa)
     IF_INT_EQUAL(GSW(1420), 25)

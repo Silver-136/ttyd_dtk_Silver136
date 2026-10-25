@@ -1804,8 +1804,8 @@ void select_disp2(WinMgrEntry* entry) {
             msg = msgSearch("msg_window_select_7");
             break;
     }
-#ifdef VERSION_G8ME01
     if (!(wp->mEntries[sel->descriptorId[1]].flags & 4)) {
+#ifdef VERSION_G8ME01
         Mtx trans;
         Mtx scale;
         f32 tw;
@@ -1840,14 +1840,12 @@ void select_disp2(WinMgrEntry* entry) {
                 e->height = eh;
             }
         }
-    }
 #else
-    if (!(wp->mEntries[sel->descriptorId[1]].flags & 4)) {
         w = (entry->width - FontGetMessageWidthLine(msg, &lines)) / 2;
         FontDrawStart();
         FontDrawMessage(entry->x + w, entry->y - (entry->height - (lines + 1) * 24) / 2, msg);
-    }
 #endif
+    }
 }
 
 void select_main3(WinMgrEntry* entry) {

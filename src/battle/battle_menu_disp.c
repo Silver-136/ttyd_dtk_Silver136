@@ -770,8 +770,6 @@ void DrawMenuPinchMark(void) {
     } else {
         N_DrawMenuMarioPinchMark();
         N_DrawMenuPartyPinchMark();
-    }
-}
 #else
 void DrawMenuPinchMark(void) {
     Mtx m;
@@ -849,9 +847,9 @@ void DrawMenuPinchMark(void) {
         PSMTXConcat(cam->view, m, out);
         GXLoadPosMtxImm(out, 0);
         btlDispGXQuads2D(-28.0f, 12.0f, 28.0f, -12.0f, r, g, b, a);
+#endif
     }
 }
-#endif
 
 void DrawMenuHelpWin(const char* msg, f32 x, f32 y) {
     f32 tx;

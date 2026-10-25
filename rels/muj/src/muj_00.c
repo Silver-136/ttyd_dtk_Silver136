@@ -3505,7 +3505,6 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(muj_00_init_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_light_bind_mapobj, STRING("pointLight1"), STRING("S_b"), 0)
@@ -3522,6 +3521,7 @@ EVT_BEGIN(muj_00_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 268)
         IF_INT_EQUAL(GSWF(3125), 1)
             CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
+#ifdef VERSION_G8ME01
             ELSE
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
         END_IF
@@ -3658,27 +3658,7 @@ EVT_BEGIN(muj_00_init_evt)
             SPAWN_EVENT(PTR(into_muj_ship))
         END_IF
         SPAWN_EVENT(PTR(mony_peton_boarding))
-    END_SWITCH
-    CALL(evt_hitobj_onoff, STRING("A_b_bero01"), 1, 0)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(muj_00_init_evt)
-    BEGIN_INLINE_EVENT
-        CALL(evt_light_bind_mapobj, STRING("pointLight1"), STRING("S_b"), 0)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(evt_light_bind_mapobj, STRING("pointLight2"), STRING("S_b"), 0)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(evt_light_bind_mapobj, STRING("pointLight3"), STRING("S_b"), 0)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(evt_light_bind_mapobj, STRING("pointLight4"), STRING("S_b"), 0)
-    END_INLINE_EVENT
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 268)
-        IF_INT_EQUAL(GSWF(3125), 1)
-            CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
         ELSE
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG5_MUJ1"))
         END_IF
@@ -3814,9 +3794,9 @@ EVT_BEGIN(muj_00_init_evt)
             SPAWN_EVENT(into_muj_ship)
         END_IF
         SPAWN_EVENT(mony_peton_boarding)
+#endif
     END_SWITCH
     CALL(evt_hitobj_onoff, STRING("A_b_bero01"), 1, 0)
     RETURN
 EVT_END()
-#endif
 

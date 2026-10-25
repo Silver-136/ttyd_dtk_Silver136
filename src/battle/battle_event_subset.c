@@ -60,7 +60,6 @@ EvtWord subsetevt_nodamage_motion[6];
 EvtWord subsetevt_regeneration[4];
 EvtWord subset_attack_ready_jump_event[2];
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(subsetevt_dead)
     CALL(_disable_restore_command_cursor)
     CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
@@ -79,6 +78,7 @@ EVT_BEGIN(subsetevt_dead)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
         CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
         CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 0, 0, 0, 0, -1)
+#ifdef VERSION_G8ME01
         ELSE
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 40)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
@@ -232,31 +232,7 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
                 CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
                 ELSE
-                CALL_CHILD(subsetevt_dead_core)
-            END_IF
-        END_IF
-    END_SWITCH
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(subsetevt_dead)
-    CALL(_disable_restore_command_cursor)
-    CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(222)
-        GOTO(0)
-        CASE_BETWEEN(224, 230)
-        GOTO(0)
-        CASE_DEFAULT
-        GOTO(1)
-    END_SWITCH
-    LABEL(0)
-    CALL(btlevtcmd_CheckAttribute, LW(10), 4, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 42)
-        CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
-        CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
-        CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 0, 0, 0, 0, -1)
     ELSE
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 40)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
@@ -409,13 +385,13 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
                 CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
             ELSE
+#endif
                 CALL_CHILD(subsetevt_dead_core)
             END_IF
         END_IF
     END_SWITCH
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(subsetevt_dead_core)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 50)

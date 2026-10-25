@@ -2813,8 +2813,6 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
         }
     }
     return id;
-}
-
 #else
 s32 BattleAudience_NoUsedFCHaitiRand(void) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
@@ -2852,9 +2850,9 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
         }
     }
     return -1;
+#endif
 }
 
-#endif
 
 s32 BattleAudience_GetAudienceNum(void) {
     return BattleAudienceBaseGetPtr()->mCurrentAudienceIntCount;

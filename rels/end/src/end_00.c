@@ -204,7 +204,6 @@ USER_FUNC(evt_end_credit_npc_get_wait_type) {
 
 EndWork* end_wp = &end_work;
 
-#ifdef VERSION_G8ME01
 CreditMsg end_staff_roll_msg_tbl[] = {
     0, 0, 0, 0, 0, 0, "a00", 0,
     0, 0, 0, 1, 0, "a01", 0, "b00",
@@ -242,6 +241,7 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     0, 0, 0, "b31", "b32", 0, 0, 3,
     30, 0, "a19", 0, "b33", 0, 0, 0,
     3, 31, 0, "a20", 0, "b34", "b35", "b36",
+#ifdef VERSION_G8ME01
     0, 3, 32, 0, "a31", 0, "b73", "b74",
     "b75", 0, 3, 33, 0, 0, 0, "b76",
     "b77", "b92", 0, 3, 34, 0, "a36", 0,
@@ -256,52 +256,7 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     "b53", "b84", 0, 0, 42, 0, "a25", 0,
     "b55", "b86", 0, 0, 0, 43, 0, "a26",
     0, "b88", "b89", "b56", 0, 0, 44, 0,
-    "a27", 0, "b57", 0, 0, 0, 0, 45,
-    0, "a28", 0, "b58", "b59", 0, 0, 0,
-    46, 0, 0, 0, "b60", "b61", 0, 0,
-    0, 47, 0, "a29", 0, "b62", "b63", 0,
-    0, 0, 48, 0, "a30", 0, "b64", 0,
-    0, 0, 4, 49, "c00", 0, 0, "c01",
-    0, 0,
-};
 #else
-CreditMsg end_staff_roll_msg_tbl[] = {
-    0, 0, 0, 0, 0, 0, "a00", 0,
-    0, 0, 0, 1, 0, "a01", 0, "b00",
-    0, 0, 0, 0, 2, 0, "a02", 0,
-    "b01", 0, 0, 0, 0, 3, 0, 0,
-    0, "b02", "b03", 0, 0, 0, 4, 0,
-    "a03", 0, "b04", 0, 0, 0, 0, 5,
-    0, "a04", 0, "b05", 0, 0, 0, 0,
-    6, 0, "a05", 0, "b06", 0, 0, 0,
-    0, 7, 0, "a06", 0, "b07", 0, 0,
-    0, 0, 8, 0, "a07", 0, "b08", 0,
-    0, 0, 0, 9, 0, "a08", 0, "b09",
-    0, 0, 0, 0, 10, 0, 0, 0,
-    "b10", "b11", 0, 0, 1, 11, 0, "a09",
-    0, "b12", 0, 0, 0, 1, 12, 0,
-    0, 0, "b13", 0, 0, 0, 1, 13,
-    0, 0, 0, "b14", 0, 0, 0, 1,
-    14, 0, 0, 0, "b15", "b16", 0, 0,
-    1, 15, 0, "a10", 0, "b17", 0, 0,
-    0, 1, 16, 0, "a11", 0, "b18", 0,
-    0, 0, 1, 17, 0, "a12", 0, "b19",
-    0, 0, 0, 1, 18, 0, "a13", 0,
-    "b20", 0, 0, 0, 1, 19, 0, 0,
-    0, "b21", 0, 0, 0, 2, 20, 0,
-    "a14", 0, "b22", 0, 0, 0, 2, 21,
-    0, 0, 0, "b23", 0, 0, 0, 2,
-    22, 0, 0, 0, "b24", 0, 0, 0,
-    2, 23, 0, 0, 0, "b25", 0, 0,
-    0, 2, 24, 0, "a15", 0, "b26", 0,
-    0, 0, 2, 25, 0, 0, 0, "b27",
-    0, 0, 0, 2, 26, 0, "a17", 0,
-    "b28", 0, 0, 0, 2, 27, 0, 0,
-    0, "b29", 0, 0, 0, 2, 28, 0,
-    "a18", 0, "b30", 0, 0, 0, 2, 29,
-    0, 0, 0, "b31", "b32", 0, 0, 3,
-    30, 0, "a19", 0, "b33", 0, 0, 0,
-    3, 31, 0, "a20", 0, "b34", "b35", "b36",
     0, 3, 32, 0, "a21", 0, "b37", "b38",
     0, 0, 3, 33, 0, 0, 0, "b39",
     "b40", 0, 0, 3, 34, 0, 0, 0,
@@ -316,6 +271,7 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     0, 0, 0, 0, 42, 0, "a25", 0,
     "b55", 0, 0, 0, 0, 43, 0, "a26",
     0, "b56", 0, 0, 0, 0, 44, 0,
+#endif
     "a27", 0, "b57", 0, 0, 0, 0, 45,
     0, "a28", 0, "b58", "b59", 0, 0, 0,
     46, 0, 0, 0, "b60", "b61", 0, 0,
@@ -324,7 +280,6 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     0, 0, 4, 49, "c00", 0, 0, "c01",
     0, 0,
 };
-#endif
 
 CreditNpc R_credits_npc_info[] = {
     "c_luigi", "W_1", 0, "c_pkr", "PKR_W_1", 0, "c_kuri_h", "W_1",
@@ -848,41 +803,26 @@ EVT_BEGIN(end_image_main_evt)
     RETURN
 EVT_END()
 
+EVT_BEGIN(end_return_title_evt)
+    CALL(evt_fade_entry, 12, 2000, 0, 0, 0)
+    CALL(evt_fade_end_wait)
+    WAIT_MS(1500)
+    SET_VALUE(GF(10), 1)
+    CALL(evt_end_font_restore)
+    SET_VALUE(GSW_STORY_PROGRESS, 404)
+    SET_VALUE(LF(10), 0)
+    SET_VALUE(LW(0), 21)
 #ifdef VERSION_G8ME01
-EVT_BEGIN(end_return_title_evt)
-    CALL(evt_fade_entry, 12, 2000, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1500)
-    SET_VALUE(GF(10), 1)
-    CALL(evt_end_font_restore)
-    SET_VALUE(GSW_STORY_PROGRESS, 404)
-    SET_VALUE(LF(10), 0)
-    SET_VALUE(LW(0), 21)
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
-    CALL(evt_snd_bgmoff_f, 512, 2000)
-    CALL(evt_snd_bgmoff_f, 513, 2000)
-    CALL(evt_fade_set_mapchange_type, 1, 17, 2000, -1, -1)
-    CALL(evt_seq_set_seq, 3, STRING("title"), 0)
-    RETURN
-EVT_END()
 #else
-EVT_BEGIN(end_return_title_evt)
-    CALL(evt_fade_entry, 12, 2000, 0, 0, 0)
-    CALL(evt_fade_end_wait)
-    WAIT_MS(1500)
-    SET_VALUE(GF(10), 1)
-    CALL(evt_end_font_restore)
-    SET_VALUE(GSW_STORY_PROGRESS, 404)
-    SET_VALUE(LF(10), 0)
-    SET_VALUE(LW(0), 21)
     CALL_CHILD(PTR(evt_memcard_save))
+#endif
     CALL(evt_snd_bgmoff_f, 512, 2000)
     CALL(evt_snd_bgmoff_f, 513, 2000)
     CALL(evt_fade_set_mapchange_type, 1, 17, 2000, -1, -1)
     CALL(evt_seq_set_seq, 3, STRING("title"), 0)
     RETURN
 EVT_END()
-#endif
 
 EVT_BEGIN(end_00_init_evt)
     CALL(evt_mario_cont_onoff, 0)

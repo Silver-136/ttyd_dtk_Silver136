@@ -10,7 +10,6 @@
 #include <dolphin/gx.h>
 
 
-#ifdef VERSION_G8ME01
 //.sdata
 const char* anim_jp[] = {
     "EFF_nice",
@@ -30,6 +29,7 @@ const char* anim_us[] = {
     NULL,
     "EFF_lucky_us"
 };
+#ifdef VERSION_G8ME01
 const char* anim_lang3[] = {
     "EFF_nice_D",
     "EFF_good_D",
@@ -79,25 +79,6 @@ typedef struct AcrobatSet {
 } AcrobatSet;
 AcrobatSet acrobat_tbl[6] = { { acrobat_jp, 7 }, { acrobat_us, 8 }, { acrobat_lang3, 5 }, { acrobat_lang4, 6 }, { acrobat_lang5, 9 }, { acrobat_lang6, 10 } };
 #else
-//.sdata
-const char* anim_jp[] = {
-    "EFF_nice",
-    "EFF_good",
-    "EFF_great",
-    "EFF_wonderful",
-    "EFF_excellent",
-    NULL,
-    "EFF_lucky"
-};
-const char* anim_us[] = {
-    "EFF_nice_us",
-    "EFF_good_us",
-    "EFF_great_us",
-    "EFF_wonderful_us",
-    "EFF_excellent_us",
-    NULL,
-    "EFF_lucky_us"
-};
 static const char** anim_tbl[2] = { anim_jp, anim_us };
 s32 acrobat_jp[] = {179, 180, 181, 182, 183, 184, 185};
 s32 acrobat_us[] = {183, 184, 185, 186, 187, 188}; //includes nonexistant textures
@@ -235,9 +216,9 @@ void effNiceMain(EffectEntry* effect) {
         pose = animPoseGetAnimPosePtr(wp->poseId);
         data = animPoseGetAnimDataPtr(wp->poseId);
         animPoseMain(wp->poseId);
-#ifdef VERSION_G8ME01
         switch (type) {
         case 0:
+#ifdef VERSION_G8ME01
         case 1:
         case 2:
         case 3:
@@ -263,11 +244,7 @@ void effNiceMain(EffectEntry* effect) {
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
             }
-            break;
-        }
 #else
-        switch (type) {
-        case 0:
         case 1: {
             len = data->loopInfo[2];
             start = ((u32)gp->language == 0) ? 32.0f : 34.0f;
@@ -313,9 +290,9 @@ void effNiceMain(EffectEntry* effect) {
             break;
         }
         case 6:
+#endif
             break;
         }
-#endif
         if (animPoseGetLoopTimes(wp->poseId) >= 1.0f) {
             animPoseRelease(wp->poseId);
             effDelete(effect);
@@ -461,13 +438,10 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(cameraId);
     Mtx trans, rot, scale, mtx;
     GXTexObj tex;
+    f32 size, half, ofsX, ofsY, ten;
+    int i;
 #ifdef VERSION_G8ME01
-    f32 size, half, ofsX, ofsY, ten;
-    int i;
     s32 id;
-#else
-    f32 size, half, ofsX, ofsY, ten;
-    int i;
 #endif
 
     PSMTXTrans(trans, wp->position.x, wp->position.y, wp->position.z);
@@ -496,8 +470,8 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-#ifdef VERSION_G8ME01
     size = 20.0f;
+#ifdef VERSION_G8ME01
     size = -size;
     wp++;
     for (i = 1; i < effect->count; i++, wp++) {
@@ -535,9 +509,7 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
             GXPosition3f32(half, half, 0.0f);
             GXTexCoord2f32(0.0f, 1.0f);
         }
-    }
 #else
-    size = 20.0f;
     ten = 10.0f;
     size = -size;
     half = size; half *= 0.5f;
@@ -572,7 +544,7 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
         GXTexCoord2f32(1.0f, 1.0f);
         GXPosition3f32(half, half, 0.0f);
         GXTexCoord2f32(0.0f, 1.0f);
-    }
 #endif
+    }
 }
 
