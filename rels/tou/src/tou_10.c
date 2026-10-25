@@ -213,7 +213,7 @@ USER_FUNC(tou_10_mario_free_wait) {
 
 static USER_FUNC(getYoshiColor) {
     EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(4));
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
     return EVT_RETURN_DONE;
 }
 
@@ -229,19 +229,19 @@ USER_FUNC(setYoshiColor) {
     minutes = (s32)OSTicksToSeconds(gp->retraceLocalTime - start) / 60;
     minutes %= 20;
     if (minutes <= 5) {
-        pouchSetPartyColor(4, 0);
+        pouchSetPartyColor(PARTNER_YOSHI, 0);
     } else if (minutes <= 8) {
-        pouchSetPartyColor(4, 1);
+        pouchSetPartyColor(PARTNER_YOSHI, 1);
     } else if (minutes <= 11) {
-        pouchSetPartyColor(4, 2);
+        pouchSetPartyColor(PARTNER_YOSHI, 2);
     } else if (minutes <= 14) {
-        pouchSetPartyColor(4, 3);
+        pouchSetPartyColor(PARTNER_YOSHI, 3);
     } else if (minutes <= 17) {
-        pouchSetPartyColor(4, 4);
+        pouchSetPartyColor(PARTNER_YOSHI, 4);
     } else if (minutes <= 18) {
-        pouchSetPartyColor(4, 5);
+        pouchSetPartyColor(PARTNER_YOSHI, 5);
     } else {
-        pouchSetPartyColor(4, 6);
+        pouchSetPartyColor(PARTNER_YOSHI, 6);
     }
     return EVT_RETURN_DONE;
 }

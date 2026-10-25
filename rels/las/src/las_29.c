@@ -6,6 +6,7 @@
 #include "eff/eff_fire.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "mario/mario_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/effdrv.h"
@@ -840,7 +841,7 @@ USER_FUNC(make_koe_label) {
     EvtWord* args = event->args;
     s32 n = evtGetValue(event, args[0]);
 
-    if (n == 18 && !partyChkJoin(7)) {
+    if (n == 18 && !partyChkJoin(PARTNER_MSMOWZ)) {
         n = 1;
         evtSetValue(event, args[0], 1);
     }

@@ -1,5 +1,6 @@
 #include "version.h"
 #include "icon_ids.h"
+#include "mario/mario_pouch.h"
 #pragma optimize_for_size on
 #include "battle/battle.h"
 #include "eff/n64/eff_stamp_n64.h"
@@ -1098,7 +1099,7 @@ static void disp_3D(CameraId cam, void* param) {
                     icon = ICON_1AE;
                     break;
                 case 0xE2:
-                    switch (pouchGetPartyColor(4)) {
+                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                     case 1:
                         icon = ICON_1A8;
                         break;

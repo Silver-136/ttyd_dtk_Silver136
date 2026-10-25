@@ -2355,7 +2355,7 @@ USER_FUNC(stone_bg) {
     if (npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49") != NULL && evtGetValue(event, GSW(0)) < 211) {
         npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49")->cameraId = 5;
     } else {
-        marioSetCamId(5);
+        marioSetCamId(CAMERA_3D_EFFECTA);
     }
     return EVT_RETURN_DONE;
 }

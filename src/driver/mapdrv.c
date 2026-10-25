@@ -886,9 +886,9 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         }
         if (activeGroup != 1) {
             sprintf(str1, "./m/%s/c", map);
-            camLoadRoad(4, str1);
+            camLoadRoad(CAMERA_3D, str1);
         }
-        camSetTypePersp(4);
+        camSetTypePersp(CAMERA_3D);
         mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, (&wo->entries[group])->textureTable);
         {
             Vec mn;
@@ -968,8 +968,8 @@ void mapUnLoad(void) {
     hitReInit();
     lightReInit();
     envReInit();
-    camUnLoadRoad(4);
-    camSetTypePersp(4);
+    camUnLoadRoad(CAMERA_3D);
+    camSetTypePersp(CAMERA_3D);
     entry2 = wp->entries;
     for (i = 0; i < wp->entries[0].count; entry2++, i++) {
         if (entry2->dat) {

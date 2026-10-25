@@ -188,7 +188,7 @@ s32 winRootMain(WindowWork* w) {
         psndSFXOn((const char*)0x2002A);
         w->tabNum = 0;
         WIN_ROOT_ADD_TAB(0);
-        if (swByteGet(0) >= 7 || partyChkJoin(1)) {
+        if (swByteGet(0) >= 7 || partyChkJoin(PARTNER_GOOMBELLA)) {
             WIN_ROOT_ADD_TAB(1);
         }
         WIN_ROOT_ADD_TAB(2);

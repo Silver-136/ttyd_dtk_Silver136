@@ -16,7 +16,7 @@ BOOL N_pouchUnEquipBadgeID(s32 badgeId);
 
 void seq_gameOverInit(SequenceWork* work) {
     winReInit();
-    camDispOn(4);
+    camDispOn(CAMERA_3D);
     psndStopAllFadeOut();
     psndSetReverb(0);
     L_psndBGM_stop();

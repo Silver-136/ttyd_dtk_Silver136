@@ -1412,7 +1412,7 @@ void select_disp(WinMgrEntry* entry) {
 static inline s32 select_party_icon(u16 id) /* */ {
     s32 icon = party_icon_table[id];
     if (icon == ICON_158) {
-        switch (pouchGetPartyColor(4)) {
+        switch (pouchGetPartyColor(PARTNER_YOSHI)) {
             case 0:
                 icon = ICON_158;
                 break;

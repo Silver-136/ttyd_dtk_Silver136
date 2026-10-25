@@ -12,6 +12,7 @@
 #include <dolphin/os.h>
 #include <string.h>
 #include "libc_decls.h"
+#include "driver/camdrv.h"
 
 void qqsort(void* array, s32 num, s32 size, s32 (*cmp)(void*, void*));
 
@@ -329,11 +330,11 @@ void nannpc_ext_main() {
 
 void nannpc_ext_dispent() {
     if (!(nanNPCWork->flags & 1)) {
-        dispEntry(4, 0.0f, 1, nannpc_ext_disp, 0);
-        dispEntry(4, 0.0f, 2, nannpc_ext_shadow_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, 1, nannpc_ext_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, 2, nannpc_ext_shadow_disp, 0);
     } else {
-        dispEntry(4, 0.0f, 2, nannpc_ext_disp, 0);
-        dispEntry(4, 0.0f, 2, nannpc_ext_shadow_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, 2, nannpc_ext_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, 2, nannpc_ext_shadow_disp, 0);
     }
 }
 

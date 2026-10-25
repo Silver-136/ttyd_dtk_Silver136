@@ -1,6 +1,7 @@
 #include "eff/eff_starstone.h"
 #include "icon_ids.h"
 #include <dolphin/pad.h>
+#include "battle/battle_status_effect.h"
 #pragma optimize_for_size on
 #pragma dont_inline on
 #include "battle/battle.h"
@@ -294,7 +295,7 @@ static USER_FUNC(main_star) {
         e->rot.z = w->rot.z;
         e->scl = 1.5f * w->scale.x;
     }
-    dispEntry(4, 0.0f, 2, bakuGameDispStar, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 2, bakuGameDispStar, NULL);
     return 0;
 }
 
@@ -840,7 +841,7 @@ state_end:
                 }
                 for (i = 0; i < 64; i++) {
                     u = BattleGetUnitPtr(bw, i);
-                    if (u != NULL && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, 27) &&
+                    if (u != NULL && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
                         u->mAlliance == 1 && BtlUnit_CanActStatus(u)) {
                         if (w->s80 == 0) {
                             BtlUnit_SetBodyAnimType(u, 0x41);
@@ -1047,7 +1048,7 @@ state_end:
                 for (i = 0; i < 64; i++) {
                     u = BattleGetUnitPtr(bw, i);
                     if (u != NULL && u->mAlliance == 1 && BtlUnit_CanActStatus(u) &&
-                        !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, 27) &&
+                        !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
                         !(u->mAttributeFlags & 4) && !(u->mAttributeFlags & 2)) {
                         BtlUnit_GetHomePos(u, &hx, &hy, &hz);
                         BtlUnit_SetPos(u, hx, hy + w->hpos.y, hz);
@@ -1133,8 +1134,8 @@ main_end:
     if (w->poseId != -1) {
         animPoseMain(w->poseId);
     }
-    dispEntry(8, 900.0f, 1, bakuGameDisp2D, NULL);
-    dispEntry(4, 0.0f, 1, bakuGameDisp3D, NULL);
+    dispEntry(CAMERA_2D, 900.0f, 1, bakuGameDisp2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
     return 0;
 }
 
@@ -1189,7 +1190,7 @@ USER_FUNC(bakuGameHeihoReturn) {
         }
         break;
     }
-    dispEntry(4, 0.0f, 1, bakuGameDisp3D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
     return 0;
 }
 
@@ -1220,7 +1221,7 @@ BOOL bakuGamePartyExist(BattleUnit* unit) {
     if (unit == NULL) {
         return FALSE;
     }
-    if (BtlUnit_CheckStatus(unit, 27)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
         return FALSE;
     }
     return BtlUnit_CanActStatus(unit) != 0;
@@ -1250,7 +1251,7 @@ void bakuGameEnemySurpriseReset(void) {
 
     for (i = 0; i < 64; i++) {
         u = BattleGetUnitPtr(wp, i);
-        if (u != NULL && u->mAlliance == 1 && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, 27)) {
+        if (u != NULL && u->mAlliance == 1 && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
         }
     }
@@ -1307,7 +1308,7 @@ void bakuGameEnemySurprise(void) {
 
     for (i = 0; i < 64; i++) {
         u = BattleGetUnitPtr(wp, i);
-        if (u != NULL && u->mAlliance == 1 && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, 27)) {
+        if (u != NULL && u->mAlliance == 1 && !(u->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
             BtlUnit_SetBodyAnimType(u, 0x27);
         }
     }

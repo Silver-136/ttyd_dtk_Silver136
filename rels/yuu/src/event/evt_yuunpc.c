@@ -2007,7 +2007,7 @@ void yuunpc_disp(CameraId camera, void* param) {
 }
 
 void ext_yuunpc_dispent(void) {
-    dispEntry(4, 0.0f, 1, yuunpc_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 1, yuunpc_disp, NULL);
 }
 
 void ext_yuunpc_minigame1_main(void) {

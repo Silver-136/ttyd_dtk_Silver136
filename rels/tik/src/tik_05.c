@@ -1250,7 +1250,7 @@ USER_FUNC(map_bgmode) {
     ((ItemGetWork*)eff->userdata)->size = 4.3f;
     eff = effNameToPtr(name2);
     ((EffTreasureMapWork*)eff->userdata)->cameraId = 5;
-    marioSetCamId(5);
+    marioSetCamId(CAMERA_3D_EFFECTA);
     return EVT_RETURN_DONE;
 }
 
@@ -1264,7 +1264,7 @@ USER_FUNC(map_bgmode_end) {
     ((ItemGetWork*)eff->userdata)->camera = 4;
     eff = effNameToPtr(name2);
     ((EffTreasureMapWork*)eff->userdata)->cameraId = 4;
-    marioSetCamId(4);
+    marioSetCamId(CAMERA_3D);
     return EVT_RETURN_DONE;
 }
 

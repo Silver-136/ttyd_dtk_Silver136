@@ -2,6 +2,7 @@
 #include "eff/eff_mahorn2.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -1934,11 +1935,11 @@ static USER_FUNC(set_hand_dest) {
     }
     hand -= 2;
     dest = (f32*)unit->work[hand];
-    if (BtlUnit_CheckStatus(unit, 10)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
         dest[0] = 1.25f * -x;
         dest[1] = 1.25f * y;
         dest[2] = 1.25f * z;
-    } else if (BtlUnit_CheckStatus(unit, 11)) {
+    } else if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
         dest[0] = 0.75f * -x;
         dest[1] = 0.75f * y;
         dest[2] = 0.75f * z;
@@ -1969,15 +1970,15 @@ static USER_FUNC(hand_ctrl) {
     if (unit == NULL) {
         return EVT_RETURN_BLOCK;
     }
-    BtlUnit_GetStatus(unit, 2, &turns, &strength);
+    BtlUnit_GetStatus(unit, STATUS_STOP, &turns, &strength);
     if (turns > 0) {
         return EVT_RETURN_DONE;
     }
-    BtlUnit_GetStatus(unit, 9, &turns, &strength);
+    BtlUnit_GetStatus(unit, STATUS_FREEZE, &turns, &strength);
     if (turns > 0) {
         return EVT_RETURN_DONE;
     }
-    BtlUnit_GetStatus(unit, 1, &turns, &strength);
+    BtlUnit_GetStatus(unit, STATUS_SLEEP, &turns, &strength);
     if (turns > 0) {
         return EVT_RETURN_DONE;
     }
@@ -2048,7 +2049,7 @@ static USER_FUNC(mahorn_get_live_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->mAlliance == 1 && !BtlUnit_CheckStatus(unit, 0x1B)) {
+        if (unit != NULL && unit->mAlliance == 1 && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             num++;
         }
     }

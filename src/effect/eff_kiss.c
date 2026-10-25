@@ -225,9 +225,9 @@ void effKissMain(EffectEntry* effect) {
         break;
     }
     if (type == 4 || type == 5) {
-        dispEntry(4, dispCalcZ(&pos), 2, (DispCallback)effKissDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effKissDisp2, effect);
     } else {
-        dispEntry(4, dispCalcZ(&pos), 2, (DispCallback)effKissDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effKissDisp, effect);
     }
 }
 

@@ -13,6 +13,7 @@
 #include "system.h"
 #include <string.h>
 #include "icon_ids.h"
+#include "battle/battle_status_effect.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
@@ -422,13 +423,13 @@ next:
         unit->moveColorLvDisp = loop;
         BtlUnit_HpGaugeMain(unit);
         unit->mSizeMultiplier = 1.0f;
-        BtlUnit_GetStatus(unit, 0xB, &turns, &strength);
+        BtlUnit_GetStatus(unit, STATUS_TINY, &turns, &strength);
         if (turns > 0 && strength < 0) {
             scale = 0.5f * strength + 1.0f;
             if (scale < 0.5f) scale = 0.5f;
             unit->mSizeMultiplier *= scale;
         }
-        BtlUnit_GetStatus(unit, 0xA, &turns, &strength);
+        BtlUnit_GetStatus(unit, STATUS_HUGE, &turns, &strength);
         if (turns > 0 && strength > 0) {
             scale = 1.0f + strength;
             if (scale > 2.0f) scale = 2.0f;
@@ -446,11 +447,11 @@ next:
                     poseName = searchPoseTbl(part->poseTable, type);
                 }
                 else {
-                    if (type == 0x1C && !BtlUnit_CheckStatus(unit, 0x16) && (unit->mStatusFlags & 0x20000000)) {
+                    if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & 0x20000000)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, 0x39);
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, 0x1C);
                     }
-                    else if (type == 0x1C && !BtlUnit_CheckStatus(unit, 0x16) && (unit->mStatusFlags & 0x10000000)) {
+                    else if (type == 0x1C && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & 0x10000000)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, 0x38);
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, 0x1C);
                     }
@@ -461,10 +462,10 @@ next:
                         poseName = BtlUnit_GetPoseNameFromType(part, 0x2D);
                     }
                 }
-                if (BtlUnit_CheckStatus(unit, 0x13)) {
+                if (BtlUnit_CheckStatus(unit, STATUS_FAST)) {
                     btlDispAnimeSpeed(part, 2.0f);
                 }
-                else if (BtlUnit_CheckStatus(unit, 0x14)) {
+                else if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
                     btlDispAnimeSpeed(part, 0.5f);
                 }
                 else {
@@ -489,18 +490,18 @@ next:
                 }
                 else {
                     PART_POSETYPE(part) = 1;
-                    if (BtlUnit_CheckStatus(unit, 0x12) || part->color.a != 0xFF) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
                         PART_POSETYPE(part) = 7;
                         xlu = 1;
                     }
                 }
                 if (!(PART_ANIMFLAGS(part) & 2) || (PART_ANIMFLAGS(part) & 8) || (PART_ANIMFLAGS(part) & 0x80)) {
                     PART_POSETYPE(part) = 1;
-                    if (BtlUnit_CheckStatus(unit, 0x12) || part->color.a != 0xFF) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
                         PART_POSETYPE(part) = 7;
                         xlu = 1;
                     }
-                    if (BtlUnit_CheckStatus(unit, 7)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
                         PART_POSETYPE(part) = 4;
                         xlu = 1;
                     }
@@ -525,7 +526,7 @@ next:
             animPoseMain(part->poseId);
             zpos = (Vec){wx, wy, wz + part->dispZOffset};
             part->dispColor.a = part->mKindPartParams->baseAlpha;
-            if (BtlUnit_CheckStatus(unit, 0x12) || (unit->mAttributeFlags & 8)) {
+            if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || (unit->mAttributeFlags & 8)) {
                 part->dispColor.a = (part->dispColor.a << 7) / 255;
             }
             part->dispColor.a = part->dispColor.a * part->color.a / 255;
@@ -857,7 +858,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
         color->b = 0;
     }
     if (color->r == 0xFF && color->g == 0xFF && color->b == 0xFF) {
-        if (BtlUnit_CheckStatus(unit, 4)) {
+        if (BtlUnit_CheckStatus(unit, STATUS_POISON)) {
             color->r = color->r * 160 / 255;
             color->b = color->r * 160 / 255;
         }
@@ -870,7 +871,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
     if (part->dispCallback) {
         part->dispCallback(part, 0);
     }
-    if (BtlUnit_CheckStatus(unit, 0x10)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_CHARGE)) {
         animPoseSetMaterialFlagOn(part->poseId, 0x800000);
     }
     else {
@@ -1085,7 +1086,7 @@ void floatOffsetControl(BattleUnitPart* part) {
     else if (!(unit->flags & 0x200000)) {
         active = FALSE;
     }
-    else if (BtlUnit_CheckStatus(unit, 0x1B)) {
+    else if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
         active = FALSE;
     }
     if (active) {

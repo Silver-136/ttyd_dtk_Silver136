@@ -14,6 +14,7 @@
 #include "system.h"
 #include <string.h>
 #include <dolphin/gx.h>
+#include "battle/battle_status_effect.h"
 
 #pragma optimize_for_size on
 #pragma dont_inline on
@@ -1199,9 +1200,9 @@ void BattleAudienceSettingAudience(void) {
     case 2:
         while ((n = BattleAudience_NoUsedHaitiRand()) != -1) {
             if (n % 20 <= 9) {
-                BattleAudience_Entry(n, 7, 0);
+                BattleAudience_Entry(n, AUDIENCE_PUNI, 0);
             } else {
-                BattleAudience_Entry(n, 1, 0);
+                BattleAudience_Entry(n, AUDIENCE_XNAUT, 0);
             }
         }
         break;
@@ -1608,7 +1609,7 @@ void BattleAudienceItemCtrlProcess(void) {
                 it->mode = 0;
             }
             aud = (u8*)it->target;
-            BtlUnit_GetStatus((BattleUnit*)aud, 0x12, &a, &b);
+            BtlUnit_GetStatus((BattleUnit*)aud, STATUS_INVISIBLE, &a, &b);
             if (a >= 1 || BtlUnit_CheckShadowGuard((BattleUnit*)aud)) {
                 it->mode = 0;
             }
@@ -3209,7 +3210,7 @@ void BattleAudienceAddPuni(s32 num) {
             if (id == -1) {
                 return;
             }
-            if (BattleAudience_Entry(id, 7, 11) == TRUE) {
+            if (BattleAudience_Entry(id, AUDIENCE_PUNI, 11) == TRUE) {
                 audience->mAddedAudienceCount += 1.0f;
             }
         }

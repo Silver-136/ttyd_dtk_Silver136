@@ -196,7 +196,7 @@ void effKemuriMain(EffectEntry* effect) {
             return;
         }
     }
-    dispEntry(4, dispCalcZ(&pos2), 2, effKemuriDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, effKemuriDisp, effect);
 }
 
 #pragma opt_propagation off
@@ -231,7 +231,7 @@ static void effKemuri2Main(EffectEntry* entry) {
             p->alpha *= 0.8f;
         }
     }
-    dispEntry(4, dispCalcZ(&pos2), 2, effKemuri2Disp, entry);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, effKemuri2Disp, entry);
 }
 #pragma opt_propagation reset
 

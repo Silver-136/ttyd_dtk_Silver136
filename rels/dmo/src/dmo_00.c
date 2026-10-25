@@ -479,12 +479,12 @@ void demo_window(CameraId cameraId, void* param) {
 }
 
 USER_FUNC(demo_draw) {
-    dispEntry(4, 9.0f, 7, demo_desk, NULL);
-    dispEntry(4, 8.0f, 7, demo_book, NULL);
+    dispEntry(CAMERA_3D, 9.0f, 7, demo_desk, NULL);
+    dispEntry(CAMERA_3D, 8.0f, 7, demo_book, NULL);
     if (wp->fade != 0.0f) {
-        dispEntry(7, 0.0f, 7, demo_img, NULL);
+        dispEntry(CAMERA_3D_EFFECTB, 0.0f, 7, demo_img, NULL);
     }
-    dispEntry(8, 0.0f, 3, demo_window, NULL);
+    dispEntry(CAMERA_2D, 0.0f, 3, demo_window, NULL);
     return EVT_RETURN_BLOCK;
 }
 

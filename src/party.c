@@ -1147,7 +1147,7 @@ void driveParty(PartyEntry* party) {
         mario->currPartySlotId[party->currentSlotId] = -1;
         partyPtrTbl[party->currentSlotId] = NULL;
         animPoseRelease(party->paperAnimGroup);
-        __memFree(0, party);
+        __memFree(HEAP_DEFAULT, party);
         return;
     }
     party_kemuri(party);

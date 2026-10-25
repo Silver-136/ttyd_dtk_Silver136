@@ -1,4 +1,5 @@
 #include "version.h"
+#include "battle/battle_status_effect.h"
 #pragma optimize_for_size on
 #include "battle/battle.h"
 #include "battle/battle_monosiri.h"
@@ -35,7 +36,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     {
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
-        if (unit && !BtlUnit_CheckStatus(unit, 0x1B) && !(unit->mAttributeFlags & 0x40)) {
+        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && !(unit->mAttributeFlags & 0x40)) {
             part = unit->mParts;
             np2 = unit->mKindParams->numParts & 0xFF;
             for (j = 0; j < np2; j++) {
@@ -479,51 +480,51 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
                 case 0:
                     break;
                 case 0x8E:
-                    if (!BtlUnit_CanActStatus(unit) || BtlUnit_CheckStatus(unit, 10)) {
+                    if (!BtlUnit_CanActStatus(unit) || BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
                         w[id] = 1;
                     }
                     break;
                 case 0x92:
-                    if (BtlUnit_CheckStatus(unit, 0xB)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
                         w[id] = 1;
                     }
                     break;
                 case 0x93:
-                    if (BtlUnit_CheckStatus(unit, 0xF)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN)) {
                         w[id] = 1;
                     }
                     break;
                 case 0x8F:
-                    if (BtlUnit_CheckStatus(unit, 0xE)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_DEFENSE_UP)) {
                         w[id] = 1;
                     }
                     break;
                 case 0x86:
-                    if (BtlUnit_CheckStatus(unit, 0x12)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
                         w[id] = 1;
                     }
                     break;
                 case 0x87:
-                    if (BtlUnit_CheckStatus(unit, 6)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC)) {
                         w[id] = 1;
                     }
                     break;
                 case 0x88:
-                    if (BtlUnit_CheckStatus(unit, 7)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
                         w[id] = 1;
                     }
                     break;
                 case 0x89:
-                    if (BtlUnit_CheckStatus(unit, 5)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE)) {
                         w[id] = 1;
                     }
                     break;
                 case 0x99:
-                    if (!BtlUnit_CheckStatus(unit, 1) && !BtlUnit_CheckStatus(unit, 2)
-                        && !BtlUnit_CheckStatus(unit, 3) && !BtlUnit_CheckStatus(unit, 4)
-                        && !BtlUnit_CheckStatus(unit, 5) && !BtlUnit_CheckStatus(unit, 8)
-                        && !BtlUnit_CheckStatus(unit, 9) && !BtlUnit_CheckStatus(unit, 0xB)
-                        && !BtlUnit_CheckStatus(unit, 0xF) && !BtlUnit_CheckStatus(unit, 0x14)) {
+                    if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) && !BtlUnit_CheckStatus(unit, STATUS_STOP)
+                        && !BtlUnit_CheckStatus(unit, STATUS_DIZZY) && !BtlUnit_CheckStatus(unit, STATUS_POISON)
+                        && !BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && !BtlUnit_CheckStatus(unit, STATUS_BURN)
+                        && !BtlUnit_CheckStatus(unit, STATUS_FREEZE) && !BtlUnit_CheckStatus(unit, STATUS_TINY)
+                        && !BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN) && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
                         w[id] = 1;
                     }
                     break;

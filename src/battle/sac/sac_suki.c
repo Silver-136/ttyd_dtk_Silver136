@@ -228,9 +228,9 @@ USER_FUNC(main_suki) {
         main_button(i);
     }
     main_star();
-    dispEntry(8, 901.0f, 1, disp_2D, 0);
-    dispEntry(4, 0.0f, 1, disp_3D, 0);
-    dispEntry(4, 0.0f, 2, disp_3D_alpha, 0);
+    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, 0);
+    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, 0);
+    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, 0);
     return 0;
 }
 

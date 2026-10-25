@@ -244,7 +244,7 @@ void kpaPreInit(void) {
     s32* sfxIdPtr;
     MarioWork* mp = marioGetPtr();
     if (KPW(mp) == NULL) {
-        KPW(mp) = (KpaWork*)__memAlloc(0, sizeof(KpaWork));
+        KPW(mp) = (KpaWork*)__memAlloc(HEAP_DEFAULT, sizeof(KpaWork));
     }
     memset(KPW(mp), 0, sizeof(KpaWork));
     KPW(mp)->level = 1;

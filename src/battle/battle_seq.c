@@ -493,7 +493,7 @@ void btlseqFirstAct(BattleWork* wp) {
             if (BattleCheckConcluded(wp)) {
                 BattleAudience_PerAct();
                 BattleSetSeq(wp, SEQ_UNKNOWN, 3);
-                BattleSetSeq(wp, 7, 0x7000000);
+                BattleSetSeq(wp, SEQ_END, 0x7000000);
                 break;
             }
             BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000004);
@@ -625,7 +625,7 @@ void btlseqFirstAct(BattleWork* wp) {
         case 0x200000E:
             wp->flags &= ~2;
             BattleSetSeq(wp, SEQ_UNKNOWN, 2);
-            BattleSetSeq(wp, 3, 0x3000000);
+            BattleSetSeq(wp, SEQ_TURN, 0x3000000);
             break;
     }
 }
@@ -951,7 +951,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 1);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_SLEEP);
       sfx |= ret;
       if (ret)
       {
@@ -984,7 +984,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 2);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_STOP);
       sfx |= ret;
       if (ret)
       {
@@ -1017,7 +1017,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 3);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DIZZY);
       sfx |= ret;
       if (ret)
       {
@@ -1050,7 +1050,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 5);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_CONFUSE);
       sfx |= ret;
       if (ret)
       {
@@ -1083,7 +1083,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 6);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ELECTRIC);
       sfx |= ret;
       if (ret)
       {
@@ -1116,7 +1116,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 7);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DODGY);
       sfx |= ret;
       if (ret)
       {
@@ -1149,7 +1149,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 8);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_BURN);
       sfx |= ret;
       if (ret)
       {
@@ -1186,7 +1186,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
       {
         unit = BattleGetUnitPtr(wp, i);
-        if (BtlUnit_CheckRecoveryStatus(unit, 9))
+        if (BtlUnit_CheckRecoveryStatus(unit, STATUS_FREEZE))
         {
           if (!BtlUnit_CheckShadowGuard(unit))
           {
@@ -1216,7 +1216,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 10);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_HUGE);
       sfx |= ret;
       if (ret)
       {
@@ -1249,7 +1249,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 11);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_TINY);
       sfx |= ret;
       if (ret)
       {
@@ -1282,7 +1282,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 4);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_POISON);
       sfx |= ret;
       if (ret)
       {
@@ -1315,7 +1315,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 12);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ATTACK_UP);
       sfx |= ret;
       if (ret)
       {
@@ -1348,7 +1348,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 13);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ATTACK_DOWN);
       sfx |= ret;
       if (ret)
       {
@@ -1381,7 +1381,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 14);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DEFENSE_UP);
       sfx |= ret;
       if (ret)
       {
@@ -1414,7 +1414,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 15);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_DEFENSE_DOWN);
       sfx |= ret;
       if (ret)
       {
@@ -1447,7 +1447,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
     {
       unit = BattleGetUnitPtr(wp, i);
-      ret = BtlUnit_CheckRecoveryStatus(unit, 0);
+      ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_ALLERGIC);
       sfx |= ret;
       if (ret)
       {
@@ -1482,7 +1482,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if (unit)
       {
-        ret = BtlUnit_CheckRecoveryStatus(unit, 0x17);
+        ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_HP_REGEN);
         sfx |= ret;
         if (ret)
         {
@@ -1518,7 +1518,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if (unit)
       {
-        ret = BtlUnit_CheckRecoveryStatus(unit, 0x18);
+        ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_FP_REGEN);
         sfx |= ret;
         if (ret)
         {
@@ -1554,7 +1554,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if (unit)
       {
-        ret = BtlUnit_CheckRecoveryStatus(unit, 0x12);
+        ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_INVISIBLE);
         sfx |= ret;
         if (ret)
         {
@@ -1590,7 +1590,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if (unit)
       {
-        ret = BtlUnit_CheckRecoveryStatus(unit, 0x13);
+        ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_FAST);
         sfx |= ret;
         if (ret)
         {
@@ -1626,7 +1626,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if (unit)
       {
-        ret = BtlUnit_CheckRecoveryStatus(unit, 0x14);
+        ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_SLOW);
         sfx |= ret;
         if (ret)
         {
@@ -1663,7 +1663,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if (unit)
       {
-        ret = BtlUnit_CheckRecoveryStatus(unit, 0x15);
+        ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_PAYBACK);
         sfx |= ret;
         if (ret)
         {
@@ -1699,7 +1699,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if (unit)
       {
-        ret = BtlUnit_CheckRecoveryStatus(unit, 0x16);
+        ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_HOLD_FAST);
         sfx |= ret;
         if (ret)
         {
@@ -1735,7 +1735,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
       {
-        BtlUnit_GetStatus(unit, 4, &turns, &strength);
+        BtlUnit_GetStatus(unit, STATUS_POISON, &turns, &strength);
         if ((strength > 0) && (!BtlUnit_CheckShadowGuard(unit)))
         {
           found = 1;
@@ -1761,7 +1761,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
       {
-        BtlUnit_GetStatus(unit, 8, &turns, &strength);
+        BtlUnit_GetStatus(unit, STATUS_BURN, &turns, &strength);
         if (strength > 0)
         {
           found = 1;
@@ -1792,7 +1792,7 @@ void btlseqTurn(BattleWork *wp)
         unit = BattleGetUnitPtr(wp, i);
         if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
         {
-          BtlUnit_GetStatus(unit, 8, &turns, &strength);
+          BtlUnit_GetStatus(unit, STATUS_BURN, &turns, &strength);
           if (strength > 0)
           {
             BSE_TurnFirstProcessEffectEntry(unit, 1);
@@ -1843,7 +1843,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
       {
-        BtlUnit_GetStatus(unit, 0x17, &turns, &strength);
+        BtlUnit_GetStatus(unit, STATUS_HP_REGEN, &turns, &strength);
         if (strength > 0)
         {
           if (!(unit->mAttributeFlags & 0x40000000))
@@ -1890,7 +1890,7 @@ void btlseqTurn(BattleWork *wp)
       unit = BattleGetUnitPtr(wp, i);
       if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0))
       {
-        BtlUnit_GetStatus(unit, 0x18, &turns, &strength);
+        BtlUnit_GetStatus(unit, STATUS_FP_REGEN, &turns, &strength);
         if (strength > 0)
         {
           BtlUnit_RecoverFp(unit, strength);
@@ -2059,7 +2059,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
       {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && !BtlUnit_CheckStatus(unit, 27) && unit->currentHp > 0 && unit->usCommandDisabled[0])
+        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[0])
         {
           unit->usCommandDisabled[0]--;
         }
@@ -2080,7 +2080,7 @@ void btlseqTurn(BattleWork *wp)
       for (i = 0; i < 64; i++)
       {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && !BtlUnit_CheckStatus(unit, 27) && unit->currentHp > 0 && unit->usCommandDisabled[1])
+        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[1])
         {
           unit->usCommandDisabled[1]--;
         }
@@ -2431,18 +2431,18 @@ void btlseqAct(BattleWork* wp) {
             cantMove = TRUE;
             switch (unit->currentKind) {
                 case UNIT_MARIO:
-                    if (!BtlUnit_CheckStatus(unit, 1) &&
-                        !BtlUnit_CheckStatus(unit, 2) &&
-                        !BtlUnit_CheckStatus(unit, 9) &&
+                    if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
+                        !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
+                        !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
                         !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                         cantMove = FALSE;
                     }
                     break;
                 default:
                     if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-                        if (!BtlUnit_CheckStatus(unit, 1) &&
-                            !BtlUnit_CheckStatus(unit, 2) &&
-                            !BtlUnit_CheckStatus(unit, 9) &&
+                        if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
+                            !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
+                            !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
                             !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                             cantMove = FALSE;
                         }
@@ -2516,14 +2516,14 @@ void btlseqAct(BattleWork* wp) {
             else if (unit->attackEventFlags & 2) {
                 evt = evtEntry(unit->attackEventCode, 10, 0);
             }
-            else if (!BtlUnit_CheckStatus(unit, 1) &&
-                !BtlUnit_CheckStatus(unit, 2) &&
-                !BtlUnit_CheckStatus(unit, 9) &&
+            else if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
+                !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
+                !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
                 (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->mAttributeFlags & 0x10000))) {
-                if (BtlUnit_CheckStatus(unit, 6) && irand(100) < 0) {
+                if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC) && irand(100) < 0) {
                     evt = evtEntry(btldefaultevt_BiribiriMove, 10, 0);
                 }
-                else if (BtlUnit_CheckStatus(unit, 5) && irand(100) < 50) {
+                else if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && irand(100) < 50) {
                     unit->mTokenFlags |= 0x10;
                     evt = evtEntry(unit->confusionEventCode, 10, 0);
                 }
@@ -2563,7 +2563,7 @@ void btlseqAct(BattleWork* wp) {
             if (unit) {
                 unit->flags &= ~0x4000000;
                 if (unit->mTokenFlags & 8) {
-                    BtlUnit_SetStatus(unit, 0x10, 1, -99);
+                    BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
                     unit->mTokenFlags &= ~8;
                 }
                 if (wp->majinaiState == 1) {
@@ -2721,7 +2721,7 @@ void btlseqPhaseFirstProcess(BattleWork* wp) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             unit->mMoveColorLv = 0xFF;
-            if (unit->moveState == 10 && !BtlUnit_CheckStatus(unit, 0x14)) {
+            if (unit->moveState == 10 && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
                 continue;
             }
             if (unit->attackPhase == BattleGetSeq(wp, SEQ_PHASE) &&

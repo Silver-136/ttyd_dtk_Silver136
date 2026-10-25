@@ -19,6 +19,7 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_sub.h"
 #include "party/party_motion.h"
+#include "driver/camdrv.h"
 
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -1836,7 +1837,7 @@ USER_FUNC(_disp_heart_entry) {
         return EVT_RETURN_DONE;
     }
     event->heart.cur++;
-    dispEntry(4, 0.0f, 1, (DispCallback)_disp_heart, event);
+    dispEntry(CAMERA_3D, 0.0f, 1, (DispCallback)_disp_heart, event);
     return event->heart.cur < event->heart.total ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 

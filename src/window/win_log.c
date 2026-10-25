@@ -21,6 +21,7 @@
 #include "system.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "driver/camdrv.h"
 
 typedef struct TubuDt {
     s16 x;
@@ -1366,7 +1367,7 @@ void monosiriMain(MonosiriWork* m) {
                 animPoseSetAnim(m->pose1, t->poseName, 1);
                 animPoseMain(m->pose1);
             }
-            dispEntry(2, 0.0f, 6, capture, m);
+            dispEntry(CAMERA_SHADOW, 0.0f, 6, capture, m);
         }
         break;
     case 2:
@@ -1377,7 +1378,7 @@ void monosiriMain(MonosiriWork* m) {
     m->curX += (m->x - m->curX) / FPS_EASE(6.0f);
     m->curY += (m->y - m->curY) / FPS_EASE(6.0f);
     if (m->state > 0) {
-        dispEntry(8, 0.0f, 0, monosiri_disp, m);
+        dispEntry(CAMERA_2D, 0.0f, 0, monosiri_disp, m);
     }
 }
 

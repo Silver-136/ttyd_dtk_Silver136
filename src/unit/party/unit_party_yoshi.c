@@ -13,6 +13,7 @@
 #include "pmario_sound.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "mario/mario_pouch.h"
 #define btlDispTexPlane btlDispTexPlane_hdr
 #include "battle/battle_disp.h"
 #include "battle/battle_event_default.h"
@@ -1987,7 +1988,7 @@ USER_FUNC(yoshi_original_color_anim_set) {
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     BattleGetUnitPtr(wp, id);
-    switch (pouchGetPartyColor(4)) {
+    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
     case 1:
         name = "c_babyyoshi2";
         break;

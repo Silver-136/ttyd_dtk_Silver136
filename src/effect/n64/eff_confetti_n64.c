@@ -255,9 +255,9 @@ void effConfettiMain(EffectEntry* effect) {
     if (type < 10) {
         dispEntry(camId, dispCalcZ(&position), 2, (DispCallback)effConfettiDisp, effect);
     } else if (type < 20) {
-        dispEntry(7, dispCalcZ(&position), 2, (DispCallback)effConfettiDisp, effect);
+        dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), 2, (DispCallback)effConfettiDisp, effect);
     } else {
-        dispEntry(8, dispCalcZ(&position), 2, (DispCallback)effConfettiDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&position), 2, (DispCallback)effConfettiDisp, effect);
     }
 }
 

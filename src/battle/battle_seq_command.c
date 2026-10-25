@@ -21,6 +21,7 @@
 #include "battle/battle_item_data.h"
 #include "battle/battle_ac_help.h"
 #include "battle/battle_menu_disp.h"
+#include "battle/battle_status_effect.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
@@ -943,7 +944,7 @@ u16 _battleGetPartyIcon(s32 kind) {
         entry = &_checkPartyTable[i + 1];
         if (entry->kind == kind) {
             if (entry->kind == UNIT_YOSHI) {
-                switch (pouchGetPartyColor(4)) {
+                switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                     case 1:
                         return ICON_159;
                     case 2:
@@ -1478,8 +1479,8 @@ void BattleCommandDisplay_ActMenuSetup(BattleWork* wp, u32 a) {
     if (unit->maxMovesThisTurn <= 0 || unit->maxMovesThisTurn != unit->movesRemaining) { \
         return FALSE; \
     } \
-    if (BtlUnit_CheckStatus(unit, 1) || BtlUnit_CheckStatus(unit, 2) || BtlUnit_CheckStatus(unit, 9) || \
-        BtlUnit_CheckStatus(unit, 0x1b)) { \
+    if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) || BtlUnit_CheckStatus(unit, STATUS_FREEZE) || \
+        BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) { \
         return FALSE; \
     }
 

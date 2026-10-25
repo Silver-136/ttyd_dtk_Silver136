@@ -27,6 +27,7 @@
 #include "party/party_motion.h"
 #include "battle/sac/sac_deka.h"
 #include <dolphin/pad.h>
+#include "battle/battle_status_effect.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -193,10 +194,10 @@ USER_FUNC(main_deka) {
     main_star();
     main_enemy();
     yuka_main();
-    dispEntry(8, 901.0f, 1, disp_2D, 0);
-    dispEntry(4, 0.0f, 1, disp_3D, 0);
-    dispEntry(4, 0.0f, 2, disp_3D_alpha, 0);
-    dispEntry(4, 0.0f, 0, yuka_disp, 0);
+    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, 0);
+    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, 0);
+    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, 0);
+    dispEntry(CAMERA_3D, 0.0f, 0, yuka_disp, 0);
     return 0;
 }
 
@@ -246,7 +247,7 @@ static void yuka_init(void) {
             m->v[r][i] = r;
         }
     }
-    dispEntry(2, 0.0f, 0, yuka_capture, 0);
+    dispEntry(CAMERA_SHADOW, 0.0f, 0, yuka_capture, 0);
 }
 
 static void yuka_main(void) {
@@ -794,7 +795,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                     if (part->attributes & 0x4000) {
                         continue;
                     }
-                    if (!(unit->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(unit, 0x1B)) {
+                    if (!(unit->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                         BtlUnit_SetAnimType(part, 0x27);
                     }
                     effSmallStarEntry(0, 2, xc, unit->mPosition.y, unit->mPosition.z, 0.0f, -1.0f, 0.0f);
@@ -805,7 +806,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                     if (unit->mAttributeFlags & 0x20000) {
                         continue;
                     }
-                    if (BtlUnit_CheckStatus(unit, 0x1B)) {
+                    if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                         continue;
                     }
                     w->enemyRot[*n] = 20.0f;
@@ -824,7 +825,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
     if (unit->mPosition.y < unit->mHomePosition.y) {
         unit->mPosition.y = unit->mHomePosition.y;
         w->enemyVel[*n].y = 0.0f;
-        if (!(unit->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(unit, 0x1B)) {
+        if (!(unit->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             unit->mRotation.z = 0.0f;
             w->enemyRot[*n] = 0.0f;
         }

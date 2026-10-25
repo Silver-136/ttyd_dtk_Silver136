@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "driver/icondrv.h"
+#include "driver/camdrv.h"
 
 
 #define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i)) /* cast keeps the 0x18D88 displacement folded into each access */
@@ -130,7 +131,7 @@ void BSE_Sleep(BattleUnit* unit) {
     f32 dx, dy;
     BOOL on = FALSE;
 
-    if (BtlUnit_CheckStatus(unit, 1)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_SLEEP)) {
         on = TRUE;
     }
     if (on) {
@@ -168,7 +169,7 @@ void BSE_Biribiri(BattleUnit* unit) {
     f32 dy;
     BOOL on = FALSE;
 
-    if (BtlUnit_CheckStatus(unit, 6)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC)) {
         on = TRUE;
     }
     if (on) {
@@ -210,7 +211,7 @@ void BSE_Fire(BattleUnit* unit) {
     f32* wk;
     BOOL on = FALSE;
 
-    if (BtlUnit_CheckStatus(unit, 8)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_BURN)) {
         on = TRUE;
     }
     if (on) {
@@ -244,7 +245,7 @@ void BSE_Freeze(BattleUnit* unit) {
     f32 a, b, sc;
     BOOL on = FALSE;
 
-    if (BtlUnit_CheckStatus(unit, 9)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_FREEZE)) {
         on = TRUE;
     }
     if (on) {
@@ -536,7 +537,7 @@ void BattleStatusChangeMsgAdjust(BattleWork* wp) {
         msg->flags = 0;
         for (j = 0; j < 64; j++) {
             unit = BattleGetUnitPtr(wp, j);
-            if (unit && !BtlUnit_CheckStatus(unit, 0x1B)) {
+            if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                 e = &unit->statusChangeInfo[0];
                 found = 0;
                 k = 0;
@@ -599,7 +600,7 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
             }
             msg->timer = 90;
         }
-        dispEntry(8, 900.0f, 1, (DispCallback)_st_chg_msg_disp, 0);
+        dispEntry(CAMERA_2D, 900.0f, 1, (DispCallback)_st_chg_msg_disp, 0);
         break;
     }
     if (ret) {

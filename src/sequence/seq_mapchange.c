@@ -234,10 +234,10 @@ void seq_mapChangeMain(SequenceWork* work) {
         break;
     case 4:
         if (gp->mapEventId == 0) {
-            camCtrlOn(4);
+            camCtrlOn(CAMERA_3D);
             work->state++;
         } else if (!evtCheckID(gp->mapEventId)) {
-            camCtrlOn(4);
+            camCtrlOn(CAMERA_3D);
             gp->mapEventId = 0;
             work->state++;
         }
@@ -370,8 +370,8 @@ void _unload(const char* prevMap, const char* nextMap, const char* bero) {
     if (swReinit) {
         swReInit();
     }
-    memClear(1);
-    memClear(2);
+    memClear(HEAP_MALLOC);
+    memClear(HEAP_EXT);
     smartAutoFree(1);
     nanNPCWork = NULL;
 }
@@ -392,7 +392,7 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
     } else {
         mapLoad(map->mapName);
     }
-    camCtrlOff(4);
+    camCtrlOff(CAMERA_3D);
     if (gp->debugBattle) {
         msgLoad("gon_11", 0);
     } else {

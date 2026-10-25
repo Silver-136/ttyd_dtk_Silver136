@@ -432,7 +432,7 @@ USER_FUNC(evt_unitwin_main_func) {
 
 static inline s32 unitwin_party_icon(s32 icon) {
     if (icon == ICON_158) {
-        switch (pouchGetPartyColor(4)) {
+        switch (pouchGetPartyColor(PARTNER_YOSHI)) {
             case 0:
                 icon = ICON_158;
                 break;

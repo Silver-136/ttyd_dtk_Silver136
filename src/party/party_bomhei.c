@@ -91,7 +91,7 @@ static inline BOOL isBombRock(HitEntry* hit) {
 
 #define BOMHEI_FREE(p)                         \
     if ((p)->useStruct != NULL) {         \
-        __memFree(0, (p)->useStruct);     \
+        __memFree(HEAP_DEFAULT, (p)->useStruct);     \
         (p)->useStruct = NULL;            \
     }
 

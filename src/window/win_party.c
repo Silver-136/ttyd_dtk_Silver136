@@ -110,7 +110,7 @@ void winPartyInit(WindowWork* wp) {
                 !(pouch->partyData[j].flags & 2)) {
                 if (wp->flags & 0x2000) {
                     poseName = winPartyDt[i].poseName2;
-                    switch (pouchGetPartyColor(4)) {
+                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                         case 0:
                             animName = "R_5";
                             break;
@@ -135,7 +135,7 @@ void winPartyInit(WindowWork* wp) {
                             break;
                     }
                 } else if (j == 4) {
-                    switch (pouchGetPartyColor(4)) {
+                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                         case 0:
                             poseName = "EFF_m_yoshi";
                             break;
@@ -194,7 +194,7 @@ void winPartyInit(WindowWork* wp) {
     wp->party.angle = wp->party.angleTarget = 360.0f / wp->party.count * wp->party.cursor;
     wp->party.mode = 0;
     wp->party.wazaCount = pouchGetPartyAttackLv(winPartyDt[wp->party.dtIdx].partyId) + 2;
-    switch (pouchGetPartyColor(4)) {
+    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
         case 0:
             winPartyDt[3].nameMsgId = ICON_158;
             break;
@@ -475,7 +475,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
             if (wp->flags & 0x2000) {
                 animName = winPartyDt[j].animName2;
                 if (winPartyDt[j].partyId == 4) {
-                    switch (pouchGetPartyColor(4)) {
+                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                         case 0:
                             animName = "R_5";
                             break;
@@ -521,7 +521,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
             if (wp->flags & 0x2000) {
                 animName = winPartyDt[j].animName2;
                 if (winPartyDt[j].partyId == 4) {
-                    switch (pouchGetPartyColor(4)) {
+                    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                         case 0:
                             animName = "Z_5";
                             break;

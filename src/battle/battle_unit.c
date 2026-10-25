@@ -4,6 +4,7 @@
 #include "battle/battle.h"
 #include "system.h"
 #include <string.h>
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle_disp.h"
 #include "mario/mario_pouch.h"
@@ -1522,8 +1523,8 @@ BOOL BtlUnit_GetACPossibility(BattleUnit* unit) {
     if (unit->currentKind == UNIT_SHELL_SHIELD) {
         return FALSE;
     }
-    if (BtlUnit_CheckStatus(unit, 1) || BtlUnit_CheckStatus(unit, 2) ||
-        BtlUnit_CheckStatus(unit, 9) || BtlUnit_CheckStatus(unit, 0x1B)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) ||
+        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
         return FALSE;
     }
     return !BtlUnit_CheckStatusFlag(unit, 1);
@@ -1562,8 +1563,8 @@ BOOL BtlUnit_CanGuardStatus(BattleUnit* unit) {
 }
 
 BOOL BtlUnit_CanActStatus(BattleUnit* unit) {
-    if (BtlUnit_CheckStatus(unit, 1) || BtlUnit_CheckStatus(unit, 2) ||
-        BtlUnit_CheckStatus(unit, 9) || BtlUnit_CheckStatus(unit, 0x1B)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) ||
+        BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
         return FALSE;
     }
     return !BtlUnit_CheckStatusFlag(unit, 1);
@@ -1591,7 +1592,7 @@ void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
         unit->usCommandDisabled[1] = info->usCommandDisabled[1];
 #endif
         if (unit->currentHp <= 0) {
-            BtlUnit_SetStatus(unit, 0x1B, 1, 1);
+            BtlUnit_SetStatus(unit, STATUS_INSTANT_KILL, 1, 1);
         }
     }
 }
@@ -1891,10 +1892,10 @@ void BtlUnit_ResetMoveStatus(BattleUnit* unit) {
 
     unit->moveState = 0;
     unit->movesRemaining = unit->maxMoveCount;
-    if (BtlUnit_CheckStatus(unit, 0x13)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_FAST)) {
         unit->movesRemaining *= 2;
     }
-    if (BtlUnit_CheckStatus(unit, 0x14)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
         if (unit->movesRemaining >= 2) {
             unit->movesRemaining /= 2;
         }
@@ -2046,7 +2047,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
         state->prevTime = -1.0f;
         state->loopCount = (s32)pose->loopTime;
         state->count = 0;
-        if (BattleGetSeq(wp, 4) == 0x4000002 || BattleGetSeq(wp, 4) == 0x4000004) {
+        if (BattleGetSeq(wp, SEQ_PHASE) == 0x4000002 || BattleGetSeq(wp, SEQ_PHASE) == 0x4000004) {
             state->flag = 1;
         }
     }
@@ -2081,7 +2082,7 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
                 }
                 psndSFX_vol(id, vol = 0x7F);
                 state->count++;
-                if (part->mOwner->attackPhase != BattleGetSeq(wp, 4)) {
+                if (part->mOwner->attackPhase != BattleGetSeq(wp, SEQ_PHASE)) {
                     f64 k;
                     dv = (f64)(u32)vol;
                     vol = dv * (k = 0.7);
@@ -2114,12 +2115,12 @@ s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s16 pi
     s16 pit = 0;
     s16 p;
 
-    if (BtlUnit_CheckStatus(unit, 0xB)) {
-        BtlUnit_GetStatus(unit, 0xB, &turns, &strength);
+    if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
+        BtlUnit_GetStatus(unit, STATUS_TINY, &turns, &strength);
         pit = (strength * 2 - 1) * -0x155;
     }
-    if (BtlUnit_CheckStatus(unit, 0xA)) {
-        BtlUnit_GetStatus(unit, 0xA, &turns, &strength);
+    if (BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
+        BtlUnit_GetStatus(unit, STATUS_HUGE, &turns, &strength);
         pit = (strength * 2 + 1) * -0x155;
     }
 

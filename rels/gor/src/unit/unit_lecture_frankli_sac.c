@@ -210,9 +210,9 @@ static USER_FUNC(lecture_init) {
     }
     for (i = 0; i < 11; i++) {
         if ((seat = seats[i]) != 48) {
-            BattleAudience_Entry(seat, 0, 0);
+            BattleAudience_Entry(seat, AUDIENCE_TOAD, 0);
         } else {
-            BattleAudience_Entry(seat, 3, 0);
+            BattleAudience_Entry(seat, AUDIENCE_HAMMER_BRO, 0);
             BattleAudienceGetPtr(seats[i])->flags |= 0x200;
         }
     }

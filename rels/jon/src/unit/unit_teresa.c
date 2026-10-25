@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -114,10 +115,10 @@ static USER_FUNC(teresa_check_trans) {
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
         if (unit != NULL) {
-            if (unit->currentKind == 0x4B && !BtlUnit_CheckStatus(unit, 0x12) && i != self) {
+            if (unit->currentKind == 0x4B && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
                 num++;
             }
-            if (unit->currentKind == 0x6A && !BtlUnit_CheckStatus(unit, 0x12) && i != self) {
+            if (unit->currentKind == 0x6A && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
                 num++;
             }
         }

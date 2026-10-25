@@ -1,4 +1,5 @@
 #include "driver/itemdrv.h"
+#include "driver/camdrv.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #include <string.h>
@@ -197,7 +198,7 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
             return 2;
         }
     }
-    dispEntry(8, 900.0f, 1, (void*)_get_item_announce_disp, NULL);
+    dispEntry(CAMERA_2D, 900.0f, 1, (void*)_get_item_announce_disp, NULL);
     return 0;
 }
 

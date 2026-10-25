@@ -1022,7 +1022,7 @@ static void rankingControll(void) {
         }
     }
 
-    buf = (RankEntry*)__memAlloc(0, sizeof(RankEntry) * rank_wp->count);
+    buf = (RankEntry*)__memAlloc(HEAP_DEFAULT, sizeof(RankEntry) * rank_wp->count);
     for (i = 0; i < nAbove; i++) {
         buf[i] = rank_wp->entries[above[i]];
     }
@@ -1035,7 +1035,7 @@ static void rankingControll(void) {
         buf[j] = rank_wp->entries[below[i]];
     }
     memcpy(rank_wp->entries, buf, sizeof(RankEntry) * rank_wp->count);
-    __memFree(0, buf);
+    __memFree(HEAP_DEFAULT, buf);
 
     // Calculate our current rank and store it in 580.
     rank = 0;

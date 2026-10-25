@@ -217,7 +217,7 @@ void effPturnMain(EffectEntry* effect) {
         }
         work->age++;
     }
-    dispEntry(4, dispCalcZ(&position), 2, (DispCallback)effPturnDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPturnDisp, effect);
 }
 
 void effPturnDisp(CameraId cameraId, EffectEntry* effect) {

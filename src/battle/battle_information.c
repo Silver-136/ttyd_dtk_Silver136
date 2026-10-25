@@ -4,6 +4,7 @@
 #include "mario/mario_pouch.h"
 #include "system.h"
 #include "manager/evtmgr_cmd.h"
+#include "battle/battle_unit.h"
 
 #pragma auto_inline off
 #pragma optimize_for_size on
@@ -22,7 +23,7 @@ void BattleInformationSetFirstAttack(FieldBattleInfo* info, u32 partyId) {
 
 void BattleInformationInit(FieldBattleInfo* info) {
     BattleInformationSetMode(info, 0);
-    BattleInformationSetParty(info, 0);
+    BattleInformationSetParty(info, UNIT_NULL);
     BattleInformationSetFirstAttack(info, 0);
     BattleInformationSetResult(info, 0);
     info->setup = NULL;

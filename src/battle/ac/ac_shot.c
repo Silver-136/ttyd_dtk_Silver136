@@ -6,6 +6,7 @@
 #include "system.h"
 #include <string.h>
 #include "pmario_sound.h"
+#include "driver/camdrv.h"
 
 #ifdef VERSION_G8ME01
 #define AC_ICON_OFS 8
@@ -248,9 +249,9 @@ s32 battleAcMain_Shot(BattleWork* work) {
         }
     } while (loop);
     if (ac->mAcState == 1000 || ac->mAcState == 1001) {
-        dispEntry(8, 900.0f, 1, _disp_target_mark, work);
+        dispEntry(CAMERA_2D, 900.0f, 1, _disp_target_mark, work);
     }
-    dispEntry(8, 900.0f, 1, _disp_target_mark_afterimage, work);
+    dispEntry(CAMERA_2D, 900.0f, 1, _disp_target_mark_afterimage, work);
     return 1;
 }
 

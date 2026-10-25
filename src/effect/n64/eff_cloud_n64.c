@@ -188,7 +188,7 @@ void effCloudMain(EffectEntry* effect) {
         }
         work->len[idx] = prev + d;
     }
-    dispEntry(4, dispCalcZ(&position), 2, (DispCallback)effCloudDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effCloudDisp, effect);
 }
 
 void effCloudDisp(CameraId cameraId, EffectEntry* effect) {

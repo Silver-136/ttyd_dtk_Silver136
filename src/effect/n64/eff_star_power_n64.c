@@ -150,7 +150,7 @@ void effStarPowerMain(EffectEntry* effect) {
         work->prevRotZ = work->rotZ;
         work->prevScale = work->scale;
     }
-    dispEntry(4, dispCalcZ(&position), 2, (DispCallback)effStarPowerDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effStarPowerDisp, effect);
 }
 
 effN64Vtx testsrc_akari_v[] = {

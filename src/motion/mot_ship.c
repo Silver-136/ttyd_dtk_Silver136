@@ -311,7 +311,7 @@ void mot_ship(void) {
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-        newWork = __memAlloc(0, 0x48);
+        newWork = __memAlloc(HEAP_DEFAULT, 0x48);
         marioGetPtr()->motShip = newWork;
         memset(marioGetPtr()->motStruct, 0, 0x48);
         marioGetPtr()->motShip->sfxId = -1;

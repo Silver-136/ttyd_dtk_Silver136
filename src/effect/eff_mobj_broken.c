@@ -270,9 +270,9 @@ static void effMObjBrokenMain(EffectEntry* effect) {
         return;
     }
     if (type != 7) {
-        dispEntry(4, dispCalcZ(&pos2), 8, (DispCallback)effMObjBrokenDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos2), 8, (DispCallback)effMObjBrokenDisp, effect);
     } else {
-        dispEntry(4, dispCalcZ(&pos2), 8, (DispCallback)effMObjBrokenDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos2), 8, (DispCallback)effMObjBrokenDisp2, effect);
     }
 }
 

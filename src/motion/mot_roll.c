@@ -401,7 +401,7 @@ void mot_roll_post(void) {
     marioAdjustMoveDir();
     marioChgPose("M_S_1");
     if (marioGetPtr()->motStruct) {
-        __memFree(0, marioGetPtr()->motStruct);
+        __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
         mario = 0;
         marioGetPtr()->motStruct = (void*)mario;
     }
@@ -452,7 +452,7 @@ void marioRollForceCancel(void) {
         marioAdjustMoveDir();
         marioChgPose("M_S_1");
         if (marioGetPtr()->motStruct) {
-            __memFree(0, marioGetPtr()->motStruct);
+            __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
             mario = 0;
             marioGetPtr()->motStruct = (void*)mario;
         }
@@ -483,7 +483,7 @@ void marioReInit_roll(void) {
     MarioWork* mario = marioGetPtr();
     f32 z0;
     f32 z1;
-    p = __memAlloc(0, sizeof(MotRollWork));
+    p = __memAlloc(HEAP_DEFAULT, sizeof(MotRollWork));
     marioGetPtr()->motStruct = p;
     memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
     {
@@ -564,7 +564,7 @@ void mot_roll(void) {
         mario->mot.word[4] = 0;
         mario->mot.word[5] = 0;
         {
-            void* p = __memAlloc(0, sizeof(MotRollWork));
+            void* p = __memAlloc(HEAP_DEFAULT, sizeof(MotRollWork));
             marioGetPtr()->motStruct = p;
         }
         memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
@@ -734,7 +734,7 @@ void mot_roll(void) {
             marioChgPose("M_S_1");
             if (marioGetPtr()->motStruct) {
                 void* z;
-                __memFree(0, marioGetPtr()->motStruct);
+                __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
                 z = 0;
                 marioGetPtr()->motStruct = z;
             }

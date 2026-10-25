@@ -351,7 +351,7 @@ void statusWinDisp(CameraId camId, void* param) {
     if (wp->cur.party) {
         partysDt[1].iconId = party_icon[wp->cur.party];
         if (wp->cur.party == 4) {
-            switch (pouchGetPartyColor(4)) {
+            switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                 case 0:
                     partysDt[1].iconId = ICON_1A7;
                     break;
@@ -399,7 +399,7 @@ void statusWinDisp(CameraId camId, void* param) {
         MTXConcat(m2, s2, m2);
 #ifdef VERSION_G8ME01
         iconDispGxCol(m2, 0x10, ICON_212, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        if (swByteGet(0) >= 7 || partyChkJoin(1)) {
+        if (swByteGet(0) >= 7 || partyChkJoin(PARTNER_GOOMBELLA)) {
             MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
@@ -422,7 +422,7 @@ void statusWinDisp(CameraId camId, void* param) {
         iconDispGxCol(m2, 0x10, (u16)journal_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
         iconDispGxCol(m2, 0x10, 0x212, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        if (swByteGet(0) >= 7 || partyChkJoin(1)) {
+        if (swByteGet(0) >= 7 || partyChkJoin(PARTNER_GOOMBELLA)) {
             MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);

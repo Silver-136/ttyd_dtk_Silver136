@@ -372,7 +372,7 @@ void effBoobooMain(EffectEntry* effect) {
             work->frame[i] = 0;
         }
     }
-    dispEntry(4, 0.0f, 0, (DispCallback)effBoobooDisp, effect);
+    dispEntry(CAMERA_3D, 0.0f, 0, (DispCallback)effBoobooDisp, effect);
 }
 
 #define TEX_COMMON(id, cin_d)                                                                              \

@@ -394,7 +394,7 @@ void effReleaseMain(EffectEntry* effect) {
             work->size[i] = 0.0f;
         }
     }
-    dispEntry(4, dispCalcZ(&position), 2, (DispCallback)effReleaseDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effReleaseDisp, effect);
 }
 
 void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {

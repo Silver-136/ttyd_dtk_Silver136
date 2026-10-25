@@ -18,6 +18,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_msg.h"
 #include "evt/evt_snd.h"
+#include "battle/battle_status_effect.h"
 
 void* monosiriInit(BattleUnitType kind, f32 x, f32 y);
 void monosiriMain(void* work);
@@ -2418,7 +2419,7 @@ USER_FUNC(_set_hustle) {
             unit->mMoveColorLv = 0xFF;
             if (unit->maxMovesThisTurn <= 0) {
                 unit->maxMovesThisTurn = 1;
-                if (BtlUnit_CheckStatus(unit, 0x14)) {
+                if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
                     unit->mTokenFlags |= 0x2000;
                 }
             }

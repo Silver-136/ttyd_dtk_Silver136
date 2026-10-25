@@ -1,5 +1,6 @@
 #include "eff/eff_starstone.h"
 #include "icon_ids.h"
+#include "battle/battle_status_effect.h"
 #pragma optimize_for_size on
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -934,12 +935,12 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
                     w->smart = NULL;
                 }
                 w->smart = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, 4, 0, 0), 1);
-                dispEntry(8, 0, 0.0f, scissor_capture, NULL);
+                dispEntry(CAMERA_2D, 0, 0.0f, scissor_capture, NULL);
                 return 2;
             }
         }
     }
-    dispEntry(8, 0, 0.0f, scissor_disp_control, NULL);
+    dispEntry(CAMERA_2D, 0, 0.0f, scissor_disp_control, NULL);
     return 0;
 }
 
@@ -973,7 +974,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
         if (unit != NULL && BtlUnit_GetBelong(unit) == 1) {
             BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             s32 res;
-            if (BtlUnit_CheckStatus(unit, 0x1B) != 1 && !(part->attributes & 0x4000) && !(part->attributes & 0x20000000) &&
+            if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) != 1 && !(part->attributes & 0x4000) && !(part->attributes & 0x20000000) &&
                 !(part->attributes & 0x10000) && *(s8*)part->defenseAttr != 4 && *(s8*)part->defenseAttr != 2) {
                 scissor_damage_sub(unit, &res);
                 w->unitIds[n] = i;
@@ -1159,7 +1160,7 @@ void scissor_disp_control(CameraId camera, void* param) {
 
 s32 scissor_offscreen(void) {
     GetScissorPtr();
-    dispEntry(1, 0.0f, 1, scissor_disp_region, NULL);
+    dispEntry(CAMERA_OFFSCREEN2, 0.0f, 1, scissor_disp_region, NULL);
     return 2;
 }
 

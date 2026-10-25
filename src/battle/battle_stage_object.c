@@ -26,6 +26,7 @@
 #include "battle/battle_weapon_power.h"
 #include "unit/unit_object_tree.h"
 #include "unit/unit_object_switch.h"
+#include "battle/battle_status_effect.h"
 
 #pragma optimize_for_size on
 #pragma dont_inline on
@@ -3148,7 +3149,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
     if (isFirstCall) {
         for (i = 0; i < 64; i++) {
             unit = BattleGetUnitPtr(wp, i);
-            if (unit && !(unit->flags & 0x80000000) && !BtlUnit_CheckStatus(unit, 0x1B) && unit->ceilFallEventCode) {
+            if (unit && !(unit->flags & 0x80000000) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->ceilFallEventCode) {
                 evt = evtEntry(unit->ceilFallEventCode, 10, 0);
                 if (evt) {
                     evt->unitId = unit->unitId;

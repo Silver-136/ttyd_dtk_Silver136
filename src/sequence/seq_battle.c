@@ -244,7 +244,7 @@ BOOL battle_init(void) {
     fbat = fbatGetPointer();
     npc = fbat->target;
     pouch = pouchGetPtr();
-    camSetMode(4, 2);
+    camSetMode(CAMERA_3D, 2);
     if (gp->debugBattle) {
         const char* msg = DbgBtlSel_GetMsgDataPtr();
         if (msg) {
@@ -256,7 +256,7 @@ BOOL battle_init(void) {
 #ifdef VERSION_G8ME01
     N_battleMapAlloc();
 #else
-    memClear(4);
+    memClear(HEAP_BATTLE);
     smartAutoFree(2);
 #endif
     _battleWorkPointer = NULL;
@@ -334,9 +334,9 @@ void battle_exit(void) {
     extReset();
     bmapUnLoad();
     if (camGetPtr(CAMERA_3D)->flags & 4) {
-        camSetMode(4, 1);
+        camSetMode(CAMERA_3D, 1);
     } else {
-        camSetMode(4, 3);
+        camSetMode(CAMERA_3D, 3);
     }
     npcReset(TRUE);
     mobjReset(TRUE);
@@ -348,7 +348,7 @@ void battle_exit(void) {
     npcRecoveryFieldNpc();
     gp->inBattle = 0;
 #ifndef VERSION_G8ME01
-    memClear(4);
+    memClear(HEAP_BATTLE);
 #endif
     evtStartAll(4);
     if (debug_battle_flag == 0) {

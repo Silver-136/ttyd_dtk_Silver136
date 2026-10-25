@@ -1066,13 +1066,13 @@ void itemseq_GetItem(ItemEntry* entry) {
             if (entry->flags2 & 0x2000) {
                 ((ItemGetWork*)wp->effect->userdata)->camera = 5;
                 iconFlagOn(entry->name, 0x200);
-                marioSetCamId(7);
+                marioSetCamId(CAMERA_3D_EFFECTB);
             }
             else {
                 ((ItemGetWork*)wp->effect->userdata)->camera = 5;
                 iconFlagOn(entry->name, 0x100);
                 if (type == 0 || type == 3) {
-                    marioSetCamId(5);
+                    marioSetCamId(CAMERA_3D_EFFECTA);
                 }
             }
             if (!(entry->flags & 0x8000)) {
@@ -1184,7 +1184,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 break;
             }
             effSoftDelete(wp->effect);
-            marioSetCamId(4);
+            marioSetCamId(CAMERA_3D);
             iconFlagOff(entry->name, 0x100);
             if (entry->itemId == 0x49) {
 #ifdef VERSION_G8ME01
@@ -1220,7 +1220,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 break;
             }
             effSoftDelete(wp->effect);
-            marioSetCamId(4);
+            marioSetCamId(CAMERA_3D);
             iconFlagOff(entry->name, 0x100);
             itemGetEnd(entry);
             itemDelete(entry->name);

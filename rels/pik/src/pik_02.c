@@ -2,6 +2,7 @@
 #include "eff/eff_itemget.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
+#include "driver/camdrv.h"
 
 #include "driver/effdrv.h"
 #include "mario/mario.h"
@@ -606,7 +607,7 @@ static USER_FUNC(stone_bg) {
     ((ItemGetWork*)eff->userdata)->camera = 5;
     eff = effNameToPtr("nise");
     ((EffStarStoneWork*)eff->userdata)->cam = 5;
-    marioSetCamId(5);
+    marioSetCamId(CAMERA_3D_EFFECTA);
     return EVT_RETURN_DONE;
 }
 

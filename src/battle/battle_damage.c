@@ -2,6 +2,7 @@
 #include "eff/n64/eff_vapor_n64.h"
 #include "version.h"
 #include "mario/mario_pouch.h"
+#include "battle/battle_status_effect.h"
 #pragma optimize_for_size on
 #pragma dont_inline on
 #include "battle/battle_damage.h"
@@ -276,11 +277,11 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             BtlActRec_AddPoint(&wp->actRecord.partnerDamageTaken, damage);
         }
     }
-    if (flag && (damage > 0 || fpDamage > 0) && BtlUnit_CheckStatus(target, 1) && irand(100) < 50) {
+    if (flag && (damage > 0 || fpDamage > 0) && BtlUnit_CheckStatus(target, STATUS_SLEEP) && irand(100) < 50) {
         f32 x, y, z;
         target->mSleepTurns = 1;
         target->mSleepStrength = 100;
-        BtlUnit_CheckRecoveryStatus(target, 1);
+        BtlUnit_CheckRecoveryStatus(target, STATUS_SLEEP);
         BtlUnit_GetPos(target, &x, &y, &z);
         y += BtlUnit_GetHeight(target) / 2;
         effFukidashiEntry(0, 0, 0, 0x3c, x, y, z, 10.0f, 0.0f);
@@ -424,7 +425,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         flags |= 0x1000;
     }
     element = weapon->element;
-    if (attacker && (weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, 8)) {
+    if (attacker && (weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN)) {
         element = 1;
     }
     defaultResult = flags | 0x1E;
@@ -469,22 +470,22 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         }
     }
     if (weapon->special & 4) {
-        if (BtlUnit_CheckStatus(attacker, 0x10)) {
-            BtlUnit_GetStatus(attacker, 0x10, &turns, &strength);
+        if (BtlUnit_CheckStatus(attacker, STATUS_CHARGE)) {
+            BtlUnit_GetStatus(attacker, STATUS_CHARGE, &turns, &strength);
             if ((damage += strength) < 0) {
                 damage = 0;
             }
         }
         attacker->mTokenFlags |= 8;
     }
-    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, 0xA)) {
-        BtlUnit_GetStatus(attacker, 0xA, &turns, &strength);
+    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, STATUS_HUGE)) {
+        BtlUnit_GetStatus(attacker, STATUS_HUGE, &turns, &strength);
         if ((damage += strength) < 0) {
             damage = 0;
         }
     }
-    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, 0xC)) {
-        BtlUnit_GetStatus(attacker, 0xC, &turns, &strength);
+    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, STATUS_ATTACK_UP)) {
+        BtlUnit_GetStatus(attacker, STATUS_ATTACK_UP, &turns, &strength);
         if ((damage += strength) < 0) {
             damage = 0;
         }
@@ -499,14 +500,14 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     if (isJump && attacker->badgesEquipped.FpDrain) {
         damage -= attacker->badgesEquipped.FpDrain;
     }
-    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, 0xB)) {
-        BtlUnit_GetStatus(attacker, 0xB, &turns, &strength);
+    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, STATUS_TINY)) {
+        BtlUnit_GetStatus(attacker, STATUS_TINY, &turns, &strength);
         if ((damage += strength) < 0) {
             damage = 0;
         }
     }
-    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, 0xD)) {
-        BtlUnit_GetStatus(attacker, 0xD, &turns, &strength);
+    if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, STATUS_ATTACK_DOWN)) {
+        BtlUnit_GetStatus(attacker, STATUS_ATTACK_DOWN, &turns, &strength);
         if ((damage += strength) < 0) {
             damage = 0;
         }
@@ -545,12 +546,12 @@ skip:
         if (BtlUnit_CheckStatusFlag(target, 0x1000000)) {
             defense++;
         }
-        if (BtlUnit_CheckStatus(target, 0xE)) {
-            BtlUnit_GetStatus(target, 0xE, &turns, &strength);
+        if (BtlUnit_CheckStatus(target, STATUS_DEFENSE_UP)) {
+            BtlUnit_GetStatus(target, STATUS_DEFENSE_UP, &turns, &strength);
             defense += strength;
         }
-        if (BtlUnit_CheckStatus(target, 0xF)) {
-            BtlUnit_GetStatus(target, 0xF, &turns, &strength);
+        if (BtlUnit_CheckStatus(target, STATUS_DEFENSE_DOWN)) {
+            BtlUnit_GetStatus(target, STATUS_DEFENSE_DOWN, &turns, &strength);
             if ((defense += strength) < 0) {
                 defense = 0;
             }
@@ -975,7 +976,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
     s8 curStrength;
 
     ok = 0;
-    BtlUnit_GetStatus(unit, 0x10, NULL, &prevStrength);
+    BtlUnit_GetStatus(unit, STATUS_CHARGE, NULL, &prevStrength);
     switch (type) {
         case 0x16:
         case 0x17:
@@ -1023,7 +1024,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
     if (part->attributes & 0x80000000) {
         return 0;
     }
-    if (BtlUnit_CheckStatus(unit, 0) && !ok) {
+    if (BtlUnit_CheckStatus(unit, STATUS_ALLERGIC) && !ok) {
         return 0;
     }
     if (part->attributes & 0x40000000) {
@@ -1469,7 +1470,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (weapon->special & 8) {
         return 1;
     }
-    if (BtlUnit_CheckStatus(target, 0x12) || (target->mAttributeFlags & 8)) {
+    if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & 8)) {
         return 4;
     }
     if (target->mAttributeFlags & 0x10) {
@@ -1505,11 +1506,11 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
             }
         }
     }
-    if (BtlUnit_CheckStatus(target, 7) && !BtlUnit_CheckStatus(target, 1) && !BtlUnit_CheckStatus(target, 2) && irand(100) >= 50) {
+    if (BtlUnit_CheckStatus(target, STATUS_DODGY) && !BtlUnit_CheckStatus(target, STATUS_SLEEP) && !BtlUnit_CheckStatus(target, STATUS_STOP) && irand(100) >= 50) {
         return 6;
     }
     n = (u8)weapon->baseAccuracy;
-    if (BtlUnit_CheckStatus(attacker, 3)) {
+    if (BtlUnit_CheckStatus(attacker, STATUS_DIZZY)) {
         n = n * 50 / 100;
     }
     if (wp->stageObjectWork.fogEffect) {
@@ -1624,7 +1625,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             }
             if ((part->counterAttributes & 0x1000) &&
                 (weapon->element == 3 || weapon->element == 4 || weapon->element == 1 ||
-                 ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, 8)))) {
+                 ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN)))) {
                 BattleRunHitEvent(target, 0x719);
                 ret = 18;
                 break;
@@ -1694,7 +1695,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             ret = 18;
             break;
         }
-        if (((u32)flags & 0x100) && (weapon->special & 0x80) && BtlUnit_CheckStatus(target, 9) && irand(100) < 0) {
+        if (((u32)flags & 0x100) && (weapon->special & 0x80) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
             code2 = 0x8717;
             _checkDamageCode_EmergencyRevival(target, (u32*)&code2);
             BattleRunHitEvent(target, code2);
@@ -1981,7 +1982,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         if (part->counterAttributes & 0x80) {
             work->field_0x14 = 1;
         }
-    } else if (((part->counterAttributes & 0x400) || (part->counterAttributes & 0x800)) && !(weapon->counterResistFlags & 1) && !BtlUnit_CheckStatus(attacker, 6)) {
+    } else if (((part->counterAttributes & 0x400) || (part->counterAttributes & 0x800)) && !(weapon->counterResistFlags & 1) && !BtlUnit_CheckStatus(attacker, STATUS_ELECTRIC)) {
         work->type = 0x30;
         work->msg = 0x130;
         work->count++;
@@ -1994,7 +1995,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
     } else {
         if ((part->counterAttributes & 0x1000) && !(weapon->counterResistFlags & 0x80)) {
             if (weapon->element == 3 || weapon->element == 4 || weapon->element == 1 ||
-                ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, 8))) {
+                ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN))) {
                 work->type = 0x31;
                 work->msg = 0x131;
                 work->count++;
@@ -2007,8 +2008,8 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
             work->count++;
             *flags |= 0x100;
         }
-        if ((BtlUnit_CheckStatus(target, 6) || (part->counterAttributes & 0x400) || (part->counterAttributes & 0x800)) &&
-            !(weapon->counterResistFlags & 1) && !BtlUnit_CheckStatus(attacker, 6)) {
+        if ((BtlUnit_CheckStatus(target, STATUS_ELECTRIC) || (part->counterAttributes & 0x400) || (part->counterAttributes & 0x800)) &&
+            !(weapon->counterResistFlags & 1) && !BtlUnit_CheckStatus(attacker, STATUS_ELECTRIC)) {
             work->type = 0x34;
             work->msg = 0x134;
             work->count++;
@@ -2017,7 +2018,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
                 work->field_0x10 = 1;
             }
         }
-        if (BtlUnit_CheckStatus(target, 0x15) && !(weapon->counterResistFlags & 0x200)) {
+        if (BtlUnit_CheckStatus(target, STATUS_PAYBACK) && !(weapon->counterResistFlags & 0x200)) {
             work->type = 0x35;
             work->msg = 0x135;
             *flags |= 0x100;
@@ -2032,7 +2033,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
                 work->field_0xC = 1;
             }
         }
-        if (BtlUnit_CheckStatus(target, 0x16) && !(weapon->counterResistFlags & 0x400)) {
+        if (BtlUnit_CheckStatus(target, STATUS_HOLD_FAST) && !(weapon->counterResistFlags & 0x400)) {
             work->type = 0x36;
             work->msg = 0x136;
             *flags |= 0x100;

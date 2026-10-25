@@ -1211,7 +1211,7 @@ static USER_FUNC(juyoitem_end) {
     ItemEntry* item = (ItemEntry*)event->lwData[8];
 
     effSoftDelete((EffectEntry*)event->lwData[9]);
-    marioSetCamId(4);
+    marioSetCamId(CAMERA_3D);
     iconFlagOff(item->name, 0x200);
     return EVT_RETURN_DONE;
 }

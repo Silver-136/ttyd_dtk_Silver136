@@ -1212,7 +1212,7 @@ void teresa_ext_main(void) {
                 break;
         }
     }
-    dispEntry(4, 0.0f, 1, teresa_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 1, teresa_ext_disp, NULL);
 }
 
 void teresa_ext_disp(CameraId camera, void* param) {

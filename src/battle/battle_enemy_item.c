@@ -4,6 +4,7 @@
 #include "battle/battle_unit.h"
 #include "data/item_data.h"
 #include "system.h"
+#include "battle/battle_status_effect.h"
 
 extern ItemData itemDataTable[];
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s32 direction);
@@ -129,22 +130,22 @@ void* _check_status_attack_item(BattleUnit* self) {
                 }
                 break;
             case 0x92:
-                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, 0xB)) {
+                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_TINY)) {
                     RET();
                 }
                 break;
             case 0x93:
-                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, 0xF)) {
+                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN)) {
                     RET();
                 }
                 break;
             case 0x89:
-                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, 5)) {
+                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_CONFUSE)) {
                     RET();
                 }
                 break;
             case 0x8D:
-                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, 3)) {
+                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_DIZZY)) {
                     RET();
                 }
                 break;
@@ -164,27 +165,27 @@ void* _check_status_support_item(BattleUnit* self) {
         if (!NOFLAG) {
             switch (itemId) {
             case 0x8E:
-                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, 0xA)) {
+                if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
                     RET();
                 }
                 break;
             case 0x8F:
-                if (!BtlUnit_CheckStatus(unit, 0xE)) {
+                if (!BtlUnit_CheckStatus(unit, STATUS_DEFENSE_UP)) {
                     RET();
                 }
                 break;
             case 0x86:
-                if (!BtlUnit_CheckStatus(unit, 0x12)) {
+                if (!BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
                     RET();
                 }
                 break;
             case 0x87:
-                if (!BtlUnit_CheckStatus(unit, 6)) {
+                if (!BtlUnit_CheckStatus(unit, STATUS_ELECTRIC)) {
                     RET();
                 }
                 break;
             case 0x88:
-                if (!BtlUnit_CheckStatus(unit, 7)) {
+                if (!BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
                     RET();
                 }
                 break;
@@ -204,17 +205,17 @@ void* _check_status_recover_item(BattleUnit* self) {
         if (!NOFLAG) {
             switch (itemId) {
             case 0x99:
-                if (BtlUnit_CheckStatus(unit, 1) ||
-                    BtlUnit_CheckStatus(unit, 2) ||
-                    BtlUnit_CheckStatus(unit, 3) ||
-                    BtlUnit_CheckStatus(unit, 4) ||
-                    BtlUnit_CheckStatus(unit, 5) ||
-                    BtlUnit_CheckStatus(unit, 6) ||
-                    BtlUnit_CheckStatus(unit, 8) ||
-                    BtlUnit_CheckStatus(unit, 9) ||
-                    BtlUnit_CheckStatus(unit, 11) ||
-                    BtlUnit_CheckStatus(unit, 15) ||
-                    BtlUnit_CheckStatus(unit, 20)) {
+                if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) ||
+                    BtlUnit_CheckStatus(unit, STATUS_STOP) ||
+                    BtlUnit_CheckStatus(unit, STATUS_DIZZY) ||
+                    BtlUnit_CheckStatus(unit, STATUS_POISON) ||
+                    BtlUnit_CheckStatus(unit, STATUS_CONFUSE) ||
+                    BtlUnit_CheckStatus(unit, STATUS_ELECTRIC) ||
+                    BtlUnit_CheckStatus(unit, STATUS_BURN) ||
+                    BtlUnit_CheckStatus(unit, STATUS_FREEZE) ||
+                    BtlUnit_CheckStatus(unit, STATUS_TINY) ||
+                    BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN) ||
+                    BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
                     RET();
                 }
                 break;

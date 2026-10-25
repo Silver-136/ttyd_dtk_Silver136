@@ -11,6 +11,7 @@
 #include <string.h>
 #include "battle/battle_audience_kinopio.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_status_effect.h"
 
 #pragma optimize_for_size on
 #pragma dont_inline on
@@ -893,7 +894,7 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index) {
         if (m->counter == 30) {
             unit = m->targetUnit;
             parts = BattleGetUnitPartsPtr(BtlUnit_GetUnitId(unit), BtlUnit_GetBodyPartsId(unit));
-            BtlUnit_GetStatus(unit, 0x12, &st1, &st0);
+            BtlUnit_GetStatus(unit, STATUS_INVISIBLE, &st1, &st0);
             if (st1 < 1 && !BtlUnit_CheckShadowGuard(unit)) {
                 BattleCheckDamage(BattleGetSystemPtr(bw), unit, (struct BattleWorkUnitPart*)parts,
                                   &weapon_teresa_trans, 0x100);

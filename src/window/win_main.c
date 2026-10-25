@@ -230,7 +230,7 @@ void winMain(void) {
                         if (strcmp(gp->currentAreaName, "yuu") == 0) {
                             break;
                         }
-                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= 7 || partyChkJoin(1))) {
+                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= 7 || partyChkJoin(PARTNER_GOOMBELLA))) {
                             wp->menuSel = 1;
                         } else if (wp->buttonTrg & PAD_BUTTON_UP) {
                             wp->menuSel = 2;
@@ -908,7 +908,7 @@ USER_FUNC(famicom_check) {
 USER_FUNC(party_color) {
     EvtWord* args = event->args;
 
-    evtSetValue(event, args[0], pouchGetPartyColor(4));
+    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
     return EVT_RETURN_DONE;
 }
 

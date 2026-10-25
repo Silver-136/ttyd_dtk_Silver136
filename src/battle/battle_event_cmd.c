@@ -1,6 +1,7 @@
 #include "driver/itemdrv.h"
 #include "battle/ac/ac_timing_a.h"
 #include "battle/battle_event_cmd.h"
+#include "battle/battle_status_effect.h"
 #pragma optimize_for_size on
 #include "battle/battle_acrobat.h"
 #include "battle/battle_disp.h"
@@ -5372,7 +5373,7 @@ USER_FUNC(btlevtcmd_AnimeChangePoseDirect) {
     part->animFlags &= ~0x10;
     animPoseSetAnim(part->poseId, name, TRUE);
     part->poseType = 1;
-    if (BtlUnit_CheckStatus(unit, 18)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
         part->poseType = 7;
     }
     return EVT_RETURN_DONE;
@@ -5679,8 +5680,8 @@ USER_FUNC(btlevtcmd_CheckGuardMotionEnable) {
     index = args[1];
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     enable = TRUE;
-    if (BtlUnit_CheckStatus(unit, 1) || BtlUnit_CheckStatus(unit, 2) || BtlUnit_CheckStatus(unit, 9) ||
-        BtlUnit_CheckStatus(unit, 11) || BtlUnit_CheckStatus(unit, 27) || BtlUnit_CheckStatus(unit, 18)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) || BtlUnit_CheckStatus(unit, STATUS_STOP) || BtlUnit_CheckStatus(unit, STATUS_FREEZE) ||
+        BtlUnit_CheckStatus(unit, STATUS_TINY) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
         enable = FALSE;
     }
     if (BtlUnit_CheckStatusFlag(unit, 1)) {
