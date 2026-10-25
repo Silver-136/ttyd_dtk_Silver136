@@ -75,7 +75,7 @@ static BattleUnitKind unit_patapata = {
     "SFX_ENM_PATA_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
-    "SFX_BTL_DAMAGE_BIRIBIRI1", // explosionDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
     0x40004, // attributeFlags
     &regist_patapata, // statusVulnerability
     1, // numParts

@@ -65,7 +65,7 @@ static BattleUnitKind unit_sinemon = {
     "SFX_ENM_EMON_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
-    "SFX_BTL_DAMAGE_BIRIBIRI1", // explosionDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
     0x40000, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts

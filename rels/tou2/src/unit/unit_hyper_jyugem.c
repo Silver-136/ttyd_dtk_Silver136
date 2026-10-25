@@ -89,7 +89,7 @@ static BattleUnitKind unit_hyper_jyugem = {
     "SFX_ENM_JUGEMU_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
-    "SFX_BTL_DAMAGE_BIRIBIRI1", // explosionDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
     4, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts

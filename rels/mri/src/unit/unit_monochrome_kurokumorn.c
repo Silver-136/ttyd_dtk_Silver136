@@ -69,7 +69,7 @@ static BattleUnitKind unit_monochrome_kurokumorn = {
     "SFX_ENM_KUMO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
-    "SFX_BTL_DAMAGE_BIRIBIRI1", // explosionDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
     4, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts

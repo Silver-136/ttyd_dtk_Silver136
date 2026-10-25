@@ -813,7 +813,7 @@ typedef struct BattleUnitKind {
     const char* damageSfxName;                // 0x9C
     const char* fireDamageSfxName;            // 0xA0
     const char* iceDamageSfxName;             // 0xA4
-    const char* explosionDamageSfxName;       // 0xA8
+    const char* electricDamageSfxName;       // 0xA8
     u32 attributeFlags;                       // 0xAC
     StatusVulnerability* statusVulnerability; // 0xB0
     s8 numParts;                              // 0xB4

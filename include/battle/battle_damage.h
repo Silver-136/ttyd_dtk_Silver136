@@ -27,6 +27,29 @@ typedef struct BattleVulnerableStatus {
     u8 instaKillRate; //0x15
 } BattleVulnerableStatus;
 
+// Low byte of a hit result (the upper bits are flags; 0x16, 0x1C and 0x1D are status-only outcomes not named yet)
+typedef enum BattleDamageCode {
+    DAMAGE_CODE_NORMAL = 0x17, // hit by a normal-element weapon
+    DAMAGE_CODE_FIRE = 0x18,
+    DAMAGE_CODE_EXPLOSION = 0x19,
+    DAMAGE_CODE_ICE = 0x1A,
+    DAMAGE_CODE_ELECTRIC = 0x1B,
+    DAMAGE_CODE_NO_DAMAGE = 0x1E, // the hit did no damage (default result)
+    DAMAGE_CODE_SUPERGUARDED = 0x2A,
+    DAMAGE_CODE_COUNTER_TOP_SPIKY = 0x2B, // BattleCheckCounter kinds; the message id is 0x100 + the code
+    DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY = 0x2C,
+    DAMAGE_CODE_COUNTER_FRONT_SPIKY = 0x2D,
+    DAMAGE_CODE_COUNTER_FIERY = 0x2E,
+    DAMAGE_CODE_COUNTER_ICY = 0x2F,
+    DAMAGE_CODE_COUNTER_ELECTRIC = 0x30, // electric part
+    DAMAGE_CODE_COUNTER_EXPLOSIVE = 0x31,
+    DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE = 0x32,
+    DAMAGE_CODE_COUNTER_POISON = 0x33,
+    DAMAGE_CODE_COUNTER_ELECTRIFIED = 0x34, // target under STATUS_ELECTRIC
+    DAMAGE_CODE_COUNTER_PAYBACK = 0x35, // Payback status or Return Postage
+    DAMAGE_CODE_COUNTER_HOLD_FAST = 0x36,
+} BattleDamageCode;
+
 // Counter result filled by BattleCheckCounter (BattleInitCounterPreCheckWork clears it and sets attackHits)
 typedef struct CounterWork {
     s32 attackHits;     // 0x0, cleared when a contact hazard (spiky, fiery, icy, electric part) stops the attack
