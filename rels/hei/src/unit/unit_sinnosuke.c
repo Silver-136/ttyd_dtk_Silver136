@@ -142,42 +142,42 @@ static BattleWeapon weapon_sinnosuke_attack = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {1, "SIS_N_1"},
-    {2, "SIS_Y_1"},
-    {9, "SIS_Y_1"},
-    {5, "SIS_K_1"},
-    {4, "SIS_I_1"},
-    {3, "SIS_I_1"},
-    {28, "SIS_S_1"},
-    {29, "SIS_Q_1"},
+    {POSE_TYPE_SLEEP, "SIS_N_1"},
+    {POSE_TYPE_STOP, "SIS_Y_1"},
+    {POSE_TYPE_FREEZE, "SIS_Y_1"},
+    {POSE_TYPE_CONFUSE, "SIS_K_1"},
+    {POSE_TYPE_POISON, "SIS_I_1"},
+    {POSE_TYPE_DIZZY, "SIS_I_1"},
+    {POSE_TYPE_NORMAL, "SIS_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "SIS_Q_1"},
     {30, "SIS_Q_1"},
-    {31, "SIS_A_1a"},
-    {39, "SIS_D_1"},
-    {50, "SIS_A_1a"},
-    {40, "SIS_W_1"},
-    {42, "SIS_R_1"},
-    {56, "SIS_I_1"},
-    {57, "SIS_I_1"},
-    {65, "SIS_T_1"},
-    {69, "SIS_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SIS_A_1a"},
+    {POSE_TYPE_DAMAGE, "SIS_D_1"},
+    {POSE_TYPE_ATTACK, "SIS_A_1a"},
+    {POSE_TYPE_WALK, "SIS_W_1"},
+    {POSE_TYPE_RUN, "SIS_R_1"},
+    {POSE_TYPE_DANGER, "SIS_I_1"},
+    {POSE_TYPE_PERIL, "SIS_I_1"},
+    {POSE_TYPE_TALK, "SIS_T_1"},
+    {POSE_TYPE_ACTION, "SIS_S_1"},
 };
 
 static PoseTableEntry pose_table_turn[] = {
-    {1, "SIS_N_2"},
-    {2, "SIS_Y_2"},
-    {9, "SIS_Y_2"},
-    {5, "SIS_K_2"},
-    {4, "SIS_K_2"},
-    {3, "SIS_K_2"},
-    {28, "SIS_D_2"},
-    {29, "SIS_D_2"},
+    {POSE_TYPE_SLEEP, "SIS_N_2"},
+    {POSE_TYPE_STOP, "SIS_Y_2"},
+    {POSE_TYPE_FREEZE, "SIS_Y_2"},
+    {POSE_TYPE_CONFUSE, "SIS_K_2"},
+    {POSE_TYPE_POISON, "SIS_K_2"},
+    {POSE_TYPE_DIZZY, "SIS_K_2"},
+    {POSE_TYPE_NORMAL, "SIS_D_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "SIS_D_2"},
     {30, "SIS_D_2"},
-    {31, "SIS_D_2"},
-    {39, "SIS_D_2"},
-    {56, "SIS_K_2"},
-    {57, "SIS_K_2"},
-    {65, "SIS_D_2"},
-    {69, "SIS_D_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SIS_D_2"},
+    {POSE_TYPE_DAMAGE, "SIS_D_2"},
+    {POSE_TYPE_DANGER, "SIS_K_2"},
+    {POSE_TYPE_PERIL, "SIS_K_2"},
+    {POSE_TYPE_TALK, "SIS_D_2"},
+    {POSE_TYPE_ACTION, "SIS_D_2"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -318,7 +318,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_sinnosuke_attack))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(15))
@@ -336,7 +336,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_EMON_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ATTACK)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(750)
@@ -393,7 +393,7 @@ static EVT_BEGIN(attack_event)
     GOTO(98)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)

@@ -143,45 +143,45 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {50, 40, 50, 100, 50, 100, 100, 30, 0, 75, 100, 75, 100, 90, 60, 0, 0, 100, 60, 100, 100, 0};
 
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "K_1"},
-    {28, "S_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "K_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "D_1"},
-    {39, "D_1"},
-    {50, "E_1A"},
-    {42, "R_1"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_ATTACK, "E_1A"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 static PoseTableEntry pose_table_furafura[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "K_1"},
-    {28, "X_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "K_1"},
+    {POSE_TYPE_NORMAL, "X_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "D_1"},
-    {39, "D_1"},
-    {50, "E_1A"},
-    {42, "R_1"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "X_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_ATTACK, "E_1A"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "X_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -779,7 +779,7 @@ static EVT_BEGIN(phase_event)
                 END_SIBLING_EVENT
                 WAIT_MS(200)
             END_LOOP
-            CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+            CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
             WAIT_MS(400)
             CALL(btlevtcmd_StatusWindowOnOff, 1)
             CALL(evt_btl_camera_set_mode, 0, 0)
@@ -1122,7 +1122,7 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(btlevtcmd_PayWeaponCost, -2, LW(9))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_PartsFaceDirectionSub, -2, 1, LW(0), 250)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(x_flag_set, 0, 1)
     BEGIN_SIBLING_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.00390625f), FLOAT(0.0f), 1166)
@@ -1132,7 +1132,7 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(x_flag_wait, 0, 0)
     WAIT_MS(500)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     BEGIN_SIBLING_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.00390625f), FLOAT(0.0f), 500)
     END_SIBLING_EVENT
@@ -1190,7 +1190,7 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 18, -1)
     CALL(btlevtcmd_MoveDirectionAdd, -2, LW(0), 18)
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 9, -1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     WAIT_MS(300)
     GOTO(98)
     LABEL(91)
@@ -1214,9 +1214,9 @@ EVT_BEGIN(gance_attack_attack_event)
     CALL(x_flag_wait, 0, 0)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(x_flag_set, 0, 1)
     BEGIN_SIBLING_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.00390625f), FLOAT(0.0f), 666)
@@ -1380,9 +1380,9 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
     CALL(x_flag_wait, 0, 0)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(x_flag_set, 0, 1)
     BEGIN_SIBLING_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.00390625f), FLOAT(0.0f), 666)
@@ -1412,7 +1412,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("M_1"))
     WAIT_MS(1000)
     CALL(evt_eff_delete, STRING("hikari"))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_GANSU_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetRotate, -2, LW(0), LW(1), LW(2))
     SET_VALUE(LW(5), 12)
@@ -1518,9 +1518,9 @@ EVT_BEGIN(gance_body_attack_attack_event)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_ResetFaceDirection, -2)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(x_flag_set, 0, 1)
     BEGIN_SIBLING_EVENT
         CALL(evt_cam_shake, 4, FLOAT(0.00390625f), FLOAT(0.0f), 666)

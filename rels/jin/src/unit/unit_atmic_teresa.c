@@ -158,43 +158,43 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {28, "S_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "S_1"},
-    {39, "D_1"},
-    {42, "R_1"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 PoseTableEntry pose_table_kaokakusi[] = {
-    {1, "A_1"},
-    {2, "A_1"},
-    {9, "A_1"},
-    {5, "A_1"},
-    {4, "A_1"},
-    {3, "A_1"},
-    {28, "A_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "A_1"},
+    {POSE_TYPE_STOP, "A_1"},
+    {POSE_TYPE_FREEZE, "A_1"},
+    {POSE_TYPE_CONFUSE, "A_1"},
+    {POSE_TYPE_POISON, "A_1"},
+    {POSE_TYPE_DIZZY, "A_1"},
+    {POSE_TYPE_NORMAL, "A_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "A_1"},
-    {39, "D_1"},
-    {42, "A_1"},
-    {40, "A_1"},
-    {56, "A_1"},
-    {57, "A_1"},
-    {65, "T_1"},
-    {69, "A_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "A_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_RUN, "A_1"},
+    {POSE_TYPE_WALK, "A_1"},
+    {POSE_TYPE_DANGER, "A_1"},
+    {POSE_TYPE_PERIL, "A_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "A_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -431,7 +431,7 @@ EVT_END()
 EVT_BEGIN(kaokakusi_event)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_ATMTLSA_MOVE2"), EVT_NULLPTR, 0, LW(15))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 60)
     SUBTRACT(LW(1), 10)
@@ -553,7 +553,7 @@ EVT_BEGIN(surprise_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_atmic_teresa_surprise))
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_ATMTLSA_FACE_HIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetPartsRotate, -2, 1, 0, 180, 0)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 30)
@@ -736,7 +736,7 @@ static EVT_BEGIN(breath_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_atmic_teresa_breath))
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_ATMTLSA_FACE_HIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetPartsRotate, -2, 1, 0, 180, 0)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 30)

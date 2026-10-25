@@ -297,21 +297,21 @@ static BattleUnitDefenseAttr defence_attr_fmario = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist_fmario = {50, 50, 70, 50, 50, 50, 100, 40, 100, 70, 100, 70, 100, 90, 50, 0, 0, 100, 50, 100, 100, 3};
 
 static PoseTableEntry pose_table_fmario_stay[] = {
-    {1, "EM_N_1"},
-    {2, "EM_Y_2"},
-    {9, "EM_Y_2"},
-    {5, "EM_K_1"},
-    {4, "EM_K_1"},
-    {3, "EM_K_1"},
-    {28, "EM_S_1"},
-    {39, "EM_D_1"},
-    {50, "EM_A_1"},
-    {42, "EM_R_1"},
-    {40, "EM_W_1"},
-    {56, "EM_D_3"},
-    {57, "EM_D_3"},
-    {65, "EM_T_1"},
-    {69, "EM_S_1"},
+    {POSE_TYPE_SLEEP, "EM_N_1"},
+    {POSE_TYPE_STOP, "EM_Y_2"},
+    {POSE_TYPE_FREEZE, "EM_Y_2"},
+    {POSE_TYPE_CONFUSE, "EM_K_1"},
+    {POSE_TYPE_POISON, "EM_K_1"},
+    {POSE_TYPE_DIZZY, "EM_K_1"},
+    {POSE_TYPE_NORMAL, "EM_S_1"},
+    {POSE_TYPE_DAMAGE, "EM_D_1"},
+    {POSE_TYPE_ATTACK, "EM_A_1"},
+    {POSE_TYPE_RUN, "EM_R_1"},
+    {POSE_TYPE_WALK, "EM_W_1"},
+    {POSE_TYPE_DANGER, "EM_D_3"},
+    {POSE_TYPE_PERIL, "EM_D_3"},
+    {POSE_TYPE_TALK, "EM_T_1"},
+    {POSE_TYPE_ACTION, "EM_S_1"},
 };
 
 static BattleDataEntry data_table_fmario[] = {
@@ -635,7 +635,7 @@ static EVT_BEGIN(dead_event_fmario)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("EM_W_1"))
         CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
         CALL(btlevtcmd_ResetFaceDirection, -2)
     END_IF
@@ -883,7 +883,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     CALL(evt_btl_camera_set_homing_unitparts, 0, -2, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(3.0f))
     CALL(btlevtcmd_GetTakeoffPosition, -2, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(6))
@@ -943,7 +943,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("EM_W_1"))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
@@ -971,7 +971,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     CALL(evt_btl_camera_set_homing_unitparts, 0, -2, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(3.0f))
     CALL(btlevtcmd_GetTakeoffPosition, -2, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(6))
@@ -1059,7 +1059,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("EM_W_1"))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
@@ -1086,7 +1086,7 @@ static EVT_BEGIN(marioAttackEvent_NormalHammer)
     CALL(evt_btl_camera_set_homing_unitparts, 0, -2, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 100)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, -2, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 24)
@@ -1144,7 +1144,7 @@ static EVT_BEGIN(marioAttackEvent_NormalHammer)
     CALL(btlevtcmd_SetRotate, -2, 0, 0, 0)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("EM_W_1"))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)
@@ -1171,7 +1171,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(evt_btl_camera_set_homing_unitparts, 0, -2, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 100)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, -2, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 24)
@@ -1229,7 +1229,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_SetRotate, -2, 0, 0, 0)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("EM_W_1"))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     CALL(btlevtcmd_ResetFaceDirection, -2)

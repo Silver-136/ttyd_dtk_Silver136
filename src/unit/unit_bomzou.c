@@ -38,24 +38,24 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static PoseTableEntry pose_table_3[] = {
-    {28, "B_2"},
-    {31, "B_2"},
-    {39, "B_2"},
-    {69, "B_2"},
+    {POSE_TYPE_NORMAL, "B_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "B_2"},
+    {POSE_TYPE_DAMAGE, "B_2"},
+    {POSE_TYPE_ACTION, "B_2"},
 };
 
 static PoseTableEntry pose_table_2[] = {
-    {28, "B_3"},
-    {31, "B_3"},
-    {39, "B_3"},
-    {69, "B_3"},
+    {POSE_TYPE_NORMAL, "B_3"},
+    {POSE_TYPE_DAMAGE_GUARDED, "B_3"},
+    {POSE_TYPE_DAMAGE, "B_3"},
+    {POSE_TYPE_ACTION, "B_3"},
 };
 
 static PoseTableEntry pose_table_1[] = {
-    {28, "B_4"},
-    {31, "B_4"},
-    {39, "B_4"},
-    {69, "B_4"},
+    {POSE_TYPE_NORMAL, "B_4"},
+    {POSE_TYPE_DAMAGE_GUARDED, "B_4"},
+    {POSE_TYPE_DAMAGE, "B_4"},
+    {POSE_TYPE_ACTION, "B_4"},
 };
 
 BattleUnitKind unit_bomzou = {

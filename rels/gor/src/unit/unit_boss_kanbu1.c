@@ -213,7 +213,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_snd_se, -3, STRING("SFX_VOICE_MARIO_HAND_UP1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_AnimeChangePose, -3, 1, STRING("M_N_2"))
             CALL(btlevtcmd_AnimeWaitPlayComplete, -3, 1)
-            CALL(btlevtcmd_AnimeChangePoseType, -3, 1, 43)
+            CALL(btlevtcmd_AnimeChangePoseType, -3, 1, POSE_TYPE_NEUTRAL)
             BEGIN_SIBLING_EVENT_GET_ID(LW(5))
                 CALL(evt_sub_intpl_init, 0, 180, 0, 15)
                 LOOP(16)
@@ -374,45 +374,45 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {28, "S_1"},
-    {65, "T_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "S_1"},
-    {39, "D_1"},
-    {42, "R_2"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_RUN, "R_2"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 static PoseTableEntry pose_table_guard[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {28, "G_2"},
-    {65, "T_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
+    {POSE_TYPE_NORMAL, "G_2"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "G_2"},
-    {39, "D_1"},
-    {42, "R_2"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "G_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "G_2"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_RUN, "R_2"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "G_2"},
 };
 
 static EVT_BEGIN(normal_attack_event)

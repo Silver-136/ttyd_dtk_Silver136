@@ -89,13 +89,13 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static PoseTableEntry pose_table[] = {
-    {28, "S_1"},
-    {31, "A_2"},
-    {39, "D_1"},
-    {40, "W_1"},
-    {42, "R_1"},
-    {65, "T_1"},
-    {69, "S_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "A_2"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 static BattleDataEntry data_table[] = {

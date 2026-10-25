@@ -151,78 +151,78 @@ static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
 static StatusVulnerability regist_guard = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {28, "S_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "S_1"},
-    {39, "D_1"},
-    {50, "A_1"},
-    {42, "R_1"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_ATTACK, "A_1"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 static PoseTableEntry pose_table_turn[] = {
-    {1, "N_2"},
-    {2, "Z_2"},
-    {9, "Z_2"},
-    {5, "K_2"},
-    {4, "S_2"},
-    {3, "S_2"},
-    {28, "S_2"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_2"},
+    {POSE_TYPE_STOP, "Z_2"},
+    {POSE_TYPE_FREEZE, "Z_2"},
+    {POSE_TYPE_CONFUSE, "K_2"},
+    {POSE_TYPE_POISON, "S_2"},
+    {POSE_TYPE_DIZZY, "S_2"},
+    {POSE_TYPE_NORMAL, "S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "D_1"},
-    {39, "D_1"},
-    {56, "S_2"},
-    {57, "S_2"},
-    {65, "S_2"},
-    {69, "S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_DANGER, "S_2"},
+    {POSE_TYPE_PERIL, "S_2"},
+    {POSE_TYPE_TALK, "S_2"},
+    {POSE_TYPE_ACTION, "S_2"},
 };
 
 static PoseTableEntry pose_table_guard[] = {
-    {1, "A_1"},
-    {2, "A_1"},
-    {9, "A_1"},
-    {5, "A_1"},
-    {4, "A_1"},
-    {3, "A_1"},
-    {28, "A_1"},
-    {29, "A_1"},
+    {POSE_TYPE_SLEEP, "A_1"},
+    {POSE_TYPE_STOP, "A_1"},
+    {POSE_TYPE_FREEZE, "A_1"},
+    {POSE_TYPE_CONFUSE, "A_1"},
+    {POSE_TYPE_POISON, "A_1"},
+    {POSE_TYPE_DIZZY, "A_1"},
+    {POSE_TYPE_NORMAL, "A_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "A_1"},
     {30, "A_1"},
-    {31, "A_1"},
-    {39, "A_1"},
-    {56, "A_1"},
-    {57, "A_1"},
-    {65, "A_1"},
-    {69, "A_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "A_1"},
+    {POSE_TYPE_DAMAGE, "A_1"},
+    {POSE_TYPE_DANGER, "A_1"},
+    {POSE_TYPE_PERIL, "A_1"},
+    {POSE_TYPE_TALK, "A_1"},
+    {POSE_TYPE_ACTION, "A_1"},
 };
 
 static PoseTableEntry pose_table_guard_turn[] = {
-    {1, "G_1"},
-    {2, "G_1"},
-    {9, "G_1"},
-    {5, "G_1"},
-    {4, "G_1"},
-    {3, "G_1"},
-    {28, "G_1"},
-    {29, "G_1"},
+    {POSE_TYPE_SLEEP, "G_1"},
+    {POSE_TYPE_STOP, "G_1"},
+    {POSE_TYPE_FREEZE, "G_1"},
+    {POSE_TYPE_CONFUSE, "G_1"},
+    {POSE_TYPE_POISON, "G_1"},
+    {POSE_TYPE_DIZZY, "G_1"},
+    {POSE_TYPE_NORMAL, "G_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "G_1"},
     {30, "G_1"},
-    {31, "G_1"},
-    {39, "G_1"},
-    {56, "G_1"},
-    {57, "G_1"},
-    {65, "G_1"},
-    {69, "G_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "G_1"},
+    {POSE_TYPE_DAMAGE, "G_1"},
+    {POSE_TYPE_DANGER, "G_1"},
+    {POSE_TYPE_PERIL, "G_1"},
+    {POSE_TYPE_TALK, "G_1"},
+    {POSE_TYPE_ACTION, "G_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -406,10 +406,10 @@ static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 39)
+        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     ELSE
         CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_guard_turn))
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 69)
+        CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_ACTION)
     END_IF
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table_turn))
     CALL(btlevtcmd_OnStatusFlag, LW(10), 1)
@@ -421,7 +421,7 @@ static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 15, -1)
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 10, -1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 69)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_ACTION)
     RETURN
 EVT_END()
 

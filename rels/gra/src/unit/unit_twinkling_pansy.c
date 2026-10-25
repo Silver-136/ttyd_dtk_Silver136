@@ -168,24 +168,24 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static PoseTableEntry pose_table[] = {
-    {1, "PAN_N_1"},
-    {2, "PAN_Y_1"},
-    {9, "PAN_Y_1"},
-    {5, "PAN_K_1"},
-    {4, "PAN_X_1"},
-    {3, "PAN_X_1"},
-    {28, "PAN_S_1"},
-    {29, "PAN_Q_1"},
+    {POSE_TYPE_SLEEP, "PAN_N_1"},
+    {POSE_TYPE_STOP, "PAN_Y_1"},
+    {POSE_TYPE_FREEZE, "PAN_Y_1"},
+    {POSE_TYPE_CONFUSE, "PAN_K_1"},
+    {POSE_TYPE_POISON, "PAN_X_1"},
+    {POSE_TYPE_DIZZY, "PAN_X_1"},
+    {POSE_TYPE_NORMAL, "PAN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "PAN_Q_1"},
     {30, "PAN_Q_1"},
-    {31, "PAN_S_1"},
-    {39, "PAN_D_1"},
-    {50, "PAN_A_1"},
-    {42, "PAN_R_1"},
-    {40, "PAN_W_1"},
-    {56, "PAN_X_1"},
-    {57, "PAN_X_1"},
-    {65, "PAN_T_1"},
-    {69, "PAN_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PAN_S_1"},
+    {POSE_TYPE_DAMAGE, "PAN_D_1"},
+    {POSE_TYPE_ATTACK, "PAN_A_1"},
+    {POSE_TYPE_RUN, "PAN_R_1"},
+    {POSE_TYPE_WALK, "PAN_W_1"},
+    {POSE_TYPE_DANGER, "PAN_X_1"},
+    {POSE_TYPE_PERIL, "PAN_X_1"},
+    {POSE_TYPE_TALK, "PAN_T_1"},
+    {POSE_TYPE_ACTION, "PAN_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -258,7 +258,7 @@ static EVT_BEGIN(song_event)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PANSY_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ATTACK)
     BEGIN_SIBLING_EVENT
         LOOP(10)
             CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
@@ -324,7 +324,7 @@ static EVT_BEGIN(song_event)
     END_LOOP
     CALL(evt_map_blend_off, 0)
     CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)

@@ -174,24 +174,24 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {90, 90, 50, 100, 90, 100, 100, 90, 100, 90, 100, 90, 100, 95, 90, 100, 70, 100, 90, 100, 100, 95};
 
 static PoseTableEntry pose_table[] = {
-    {1, "PAI_N_1"},
-    {2, "PAI_Y_1"},
-    {9, "PAI_Y_1"},
-    {5, "PAI_K_1"},
-    {4, "PAI_X_1"},
-    {3, "PAI_X_1"},
-    {28, "PAI_S_1"},
-    {29, "PAI_D_1"},
+    {POSE_TYPE_SLEEP, "PAI_N_1"},
+    {POSE_TYPE_STOP, "PAI_Y_1"},
+    {POSE_TYPE_FREEZE, "PAI_Y_1"},
+    {POSE_TYPE_CONFUSE, "PAI_K_1"},
+    {POSE_TYPE_POISON, "PAI_X_1"},
+    {POSE_TYPE_DIZZY, "PAI_X_1"},
+    {POSE_TYPE_NORMAL, "PAI_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "PAI_D_1"},
     {30, "PAI_D_1"},
-    {31, "PAI_S_1"},
-    {39, "PAI_D_1"},
-    {50, "PAI_A_1"},
-    {40, "PAI_W_1"},
-    {42, "PAI_W_1"},
-    {56, "PAI_X_1"},
-    {57, "PAI_X_1"},
-    {65, "PAI_S_1"},
-    {69, "PAI_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PAI_S_1"},
+    {POSE_TYPE_DAMAGE, "PAI_D_1"},
+    {POSE_TYPE_ATTACK, "PAI_A_1"},
+    {POSE_TYPE_WALK, "PAI_W_1"},
+    {POSE_TYPE_RUN, "PAI_W_1"},
+    {POSE_TYPE_DANGER, "PAI_X_1"},
+    {POSE_TYPE_PERIL, "PAI_X_1"},
+    {POSE_TYPE_TALK, "PAI_S_1"},
+    {POSE_TYPE_ACTION, "PAI_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -566,7 +566,7 @@ EVT_END()
 static EVT_BEGIN(blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, -2, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), POSE_TYPE_DAMAGE)
     BEGIN_SIBLING_EVENT
         LABEL(0)
         CALL(btlevtcmd_AddRotate, -2, 0, 20, 0)

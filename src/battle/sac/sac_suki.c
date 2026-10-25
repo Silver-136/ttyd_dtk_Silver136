@@ -804,7 +804,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
             END_IF
             CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), 536870912, LW(1))
             IF_INT_EQUAL(LW(1), 0)
-                CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), 39)
+                CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_DAMAGE)
             END_IF
             CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
             GOTO(5)

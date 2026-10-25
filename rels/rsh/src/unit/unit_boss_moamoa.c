@@ -233,17 +233,17 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 PoseTableEntry moamoa1_pose_table[] = {
-    {28, "S_1_1"},
-    {31, "D_1_1"},
-    {39, "D_1_1"},
-    {69, "S_1_1"},
+    {POSE_TYPE_NORMAL, "S_1_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1_1"},
+    {POSE_TYPE_DAMAGE, "D_1_1"},
+    {POSE_TYPE_ACTION, "S_1_1"},
 };
 
 PoseTableEntry moamoa1_weakness_pose_table[] = {
-    {28, "S_1_3"},
-    {31, "D_1_3"},
-    {39, "D_1_3"},
-    {69, "S_1_3"},
+    {POSE_TYPE_NORMAL, "S_1_3"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1_3"},
+    {POSE_TYPE_DAMAGE, "D_1_3"},
+    {POSE_TYPE_ACTION, "S_1_3"},
 };
 
 static BattleDataEntry data_table[] = {

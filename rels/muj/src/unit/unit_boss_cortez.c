@@ -596,149 +596,149 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 };
 
 PoseTableEntry pose_table_mode_1[] = {
-    {1, "KRT_N_1"},
-    {5, "KRT_K_1"},
-    {2, "KRT_Z_1"},
-    {9, "KRT_Z_1"},
-    {4, "KRT_X_1"},
-    {3, "KRT_K_1"},
-    {28, "KRT_S_1"},
-    {31, "KRT_S_1"},
-    {39, "KRT_D1_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_SLEEP, "KRT_N_1"},
+    {POSE_TYPE_CONFUSE, "KRT_K_1"},
+    {POSE_TYPE_STOP, "KRT_Z_1"},
+    {POSE_TYPE_FREEZE, "KRT_Z_1"},
+    {POSE_TYPE_POISON, "KRT_X_1"},
+    {POSE_TYPE_DIZZY, "KRT_K_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_D1_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 PoseTableEntry pose_table_mode_1_hone[] = {
-    {1, "KRT_N_1"},
-    {5, "KRT_K_1"},
-    {2, "KRT_Z_1"},
-    {9, "KRT_Z_1"},
-    {4, "KRT_X_1"},
-    {3, "KRT_K_1"},
-    {28, "KRT_S_1"},
-    {31, "KRT_S_1"},
-    {39, "KRT_D1_2"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_SLEEP, "KRT_N_1"},
+    {POSE_TYPE_CONFUSE, "KRT_K_1"},
+    {POSE_TYPE_STOP, "KRT_Z_1"},
+    {POSE_TYPE_FREEZE, "KRT_Z_1"},
+    {POSE_TYPE_POISON, "KRT_X_1"},
+    {POSE_TYPE_DIZZY, "KRT_K_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_D1_2"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 PoseTableEntry pose_table_mode_2_normal[] = {
-    {28, "KRT_1S_1"},
-    {31, "KRT_1S_1"},
-    {39, "KRT_1D_1"},
-    {69, "KRT_1S_1"},
+    {POSE_TYPE_NORMAL, "KRT_1S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_1D_1"},
+    {POSE_TYPE_ACTION, "KRT_1S_1"},
 };
 
 PoseTableEntry pose_table_mode_2_upper_normal[] = {
-    {28, "KRT_1S_1"},
-    {31, "KRT_1S_1"},
-    {39, "KRT_1D_1"},
-    {69, "KRT_1S_1"},
+    {POSE_TYPE_NORMAL, "KRT_1S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_1D_1"},
+    {POSE_TYPE_ACTION, "KRT_1S_1"},
 };
 
 PoseTableEntry pose_table_mode_2_upper_normal_counter[] = {
-    {28, "KRT_1S2_1"},
-    {31, "KRT_1S2_1"},
-    {39, "KRT_1D2_1"},
-    {69, "KRT_1S2_1"},
+    {POSE_TYPE_NORMAL, "KRT_1S2_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S2_1"},
+    {POSE_TYPE_DAMAGE, "KRT_1D2_1"},
+    {POSE_TYPE_ACTION, "KRT_1S2_1"},
 };
 
 PoseTableEntry pose_table_mode_2_upper_charge[] = {
-    {28, "KRT_1S_2"},
-    {31, "KRT_1S_2"},
-    {39, "KRT_1D_2"},
-    {69, "KRT_1S_2"},
+    {POSE_TYPE_NORMAL, "KRT_1S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S_2"},
+    {POSE_TYPE_DAMAGE, "KRT_1D_2"},
+    {POSE_TYPE_ACTION, "KRT_1S_2"},
 };
 
 PoseTableEntry pose_table_mode_2_upper_charge_counter[] = {
-    {28, "KRT_1S2_2"},
-    {31, "KRT_1S2_2"},
-    {39, "KRT_1D2_2"},
-    {69, "KRT_1S2_2"},
+    {POSE_TYPE_NORMAL, "KRT_1S2_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_1S2_2"},
+    {POSE_TYPE_DAMAGE, "KRT_1D2_2"},
+    {POSE_TYPE_ACTION, "KRT_1S2_2"},
 };
 
 PoseTableEntry pose_table_mode_2_middle_normal[] = {
-    {28, "KRT_2S_1"},
-    {31, "KRT_2S_1"},
-    {39, "KRT_2D_1"},
-    {69, "KRT_2S_1"},
+    {POSE_TYPE_NORMAL, "KRT_2S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_2S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_2D_1"},
+    {POSE_TYPE_ACTION, "KRT_2S_1"},
 };
 
 PoseTableEntry pose_table_mode_2_middle_normal_counter[] = {
-    {28, "KRT_2S2_1"},
-    {31, "KRT_2S2_1"},
-    {39, "KRT_2D2_1"},
-    {69, "KRT_2S2_1"},
+    {POSE_TYPE_NORMAL, "KRT_2S2_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_2S2_1"},
+    {POSE_TYPE_DAMAGE, "KRT_2D2_1"},
+    {POSE_TYPE_ACTION, "KRT_2S2_1"},
 };
 
 PoseTableEntry pose_table_mode_2_middle_charge[] = {
-    {28, "KRT_2S_2"},
-    {31, "KRT_2S_2"},
-    {39, "KRT_2D_2"},
-    {69, "KRT_2S_2"},
+    {POSE_TYPE_NORMAL, "KRT_2S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_2S_2"},
+    {POSE_TYPE_DAMAGE, "KRT_2D_2"},
+    {POSE_TYPE_ACTION, "KRT_2S_2"},
 };
 
 PoseTableEntry pose_table_mode_2_middle_charge_counter[] = {
-    {28, "KRT_2S2_2"},
-    {31, "KRT_2S2_2"},
-    {39, "KRT_2D2_2"},
-    {69, "KRT_2S2_2"},
+    {POSE_TYPE_NORMAL, "KRT_2S2_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_2S2_2"},
+    {POSE_TYPE_DAMAGE, "KRT_2D2_2"},
+    {POSE_TYPE_ACTION, "KRT_2S2_2"},
 };
 
 PoseTableEntry pose_table_mode_2_lower_normal[] = {
-    {28, "KRT_3S_1"},
-    {31, "KRT_3S_1"},
-    {39, "KRT_3D_2"},
-    {69, "KRT_3S_1"},
+    {POSE_TYPE_NORMAL, "KRT_3S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_3S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_3D_2"},
+    {POSE_TYPE_ACTION, "KRT_3S_1"},
 };
 
 PoseTableEntry pose_table_mode_2_lower_normal_counter[] = {
-    {28, "KRT_3S3_1"},
-    {31, "KRT_3S3_1"},
-    {39, "KRT_3D3_2"},
-    {69, "KRT_3S3_1"},
+    {POSE_TYPE_NORMAL, "KRT_3S3_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_3S3_1"},
+    {POSE_TYPE_DAMAGE, "KRT_3D3_2"},
+    {POSE_TYPE_ACTION, "KRT_3S3_1"},
 };
 
 PoseTableEntry pose_table_mode_2_lower_charge[] = {
-    {28, "KRT_3S_2"},
-    {31, "KRT_3S_2"},
-    {39, "KRT_3D_2"},
-    {69, "KRT_3S_2"},
+    {POSE_TYPE_NORMAL, "KRT_3S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_3S_2"},
+    {POSE_TYPE_DAMAGE, "KRT_3D_2"},
+    {POSE_TYPE_ACTION, "KRT_3S_2"},
 };
 
 PoseTableEntry pose_table_mode_2_lower_charge_counter[] = {
-    {28, "KRT_3S3_2"},
-    {31, "KRT_3S3_2"},
-    {39, "KRT_3D3_2"},
-    {69, "KRT_3S3_2"},
+    {POSE_TYPE_NORMAL, "KRT_3S3_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_3S3_2"},
+    {POSE_TYPE_DAMAGE, "KRT_3D3_2"},
+    {POSE_TYPE_ACTION, "KRT_3S3_2"},
 };
 
 PoseTableEntry pose_table_fly_bone[] = {
-    {28, "KRT_Z_1"},
-    {31, "KRT_Z_1"},
-    {39, "KRT_Z_1"},
-    {69, "KRT_Z_1"},
+    {POSE_TYPE_NORMAL, "KRT_Z_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
+    {POSE_TYPE_DAMAGE, "KRT_Z_1"},
+    {POSE_TYPE_ACTION, "KRT_Z_1"},
 };
 
 PoseTableEntry pose_table_mode_3[] = {
-    {1, "KRT_N_1"},
-    {2, "KRT_Z_1"},
-    {9, "KRT_Z_1"},
-    {5, "KRT_K_1"},
-    {4, "KRT_X_1"},
-    {3, "KRT_K_1"},
-    {28, "KRT_S_1"},
-    {29, "KRT_D_2"},
+    {POSE_TYPE_SLEEP, "KRT_N_1"},
+    {POSE_TYPE_STOP, "KRT_Z_1"},
+    {POSE_TYPE_FREEZE, "KRT_Z_1"},
+    {POSE_TYPE_CONFUSE, "KRT_K_1"},
+    {POSE_TYPE_POISON, "KRT_X_1"},
+    {POSE_TYPE_DIZZY, "KRT_K_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KRT_D_2"},
     {30, "KRT_D_2"},
-    {31, "KRT_S_1"},
-    {39, "KRT_D_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_D_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 PoseTableEntry pose_table_honeduka[] = {
-    {28, "KRT_Z_1"},
-    {31, "KRT_Z_1"},
-    {39, "KRT_Z_1"},
-    {69, "KRT_Z_1"},
+    {POSE_TYPE_NORMAL, "KRT_Z_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
+    {POSE_TYPE_DAMAGE, "KRT_Z_1"},
+    {POSE_TYPE_ACTION, "KRT_Z_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -864,7 +864,7 @@ EVT_END()
 EVT_BEGIN(cortez_ac_counter_damage_event)
     CALL(btlevtcmd_GetUnitWork, -2, 5, LW(0))
     IF_INT_LESS(LW(0), 4)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
         WAIT_MS(500)
         RETURN
     END_IF
@@ -1855,7 +1855,7 @@ static EVT_BEGIN(cortez_damage_sub_event)
     END_IF
     CALL(btlevtcmd_GetDamagePartsId, -2, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 2)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
         ELSE
         CALL(btlevtcmd_GetUnitWork, -2, 5, LW(0))
         SWITCH(LW(0))

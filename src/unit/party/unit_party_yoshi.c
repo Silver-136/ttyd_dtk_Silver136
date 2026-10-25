@@ -164,31 +164,31 @@ u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
 
 
 PoseTableEntry pose_table_yoshi_stay[] = {
-    {9, "PYS_D_5"},
-    {2, "PYS_D_5"},
-    {3, "PYS_X_1"},
-    {4, "PYS_D_2"},
-    {5, "PYS_X_1"},
-    {1, "PYS_N_1"},
-    {27, "PYS_D_3"},
-    {28, "PYS_S_1"},
+    {POSE_TYPE_FREEZE, "PYS_D_5"},
+    {POSE_TYPE_STOP, "PYS_D_5"},
+    {POSE_TYPE_DIZZY, "PYS_X_1"},
+    {POSE_TYPE_POISON, "PYS_D_2"},
+    {POSE_TYPE_CONFUSE, "PYS_X_1"},
+    {POSE_TYPE_SLEEP, "PYS_N_1"},
+    {POSE_TYPE_KO, "PYS_D_3"},
+    {POSE_TYPE_NORMAL, "PYS_S_1"},
     {37, "PYS_G_2"},
-    {31, "PYS_G_1"},
-    {39, "PYS_D_1"},
-    {40, "PYS_W_1"},
-    {42, "PYS_R_1"},
-    {57, "PYS_D_2"},
-    {56, "PYS_D_2"},
-    {60, "PYS_D_4"},
-    {61, "PYS_D_2"},
-    {65, "PYS_T_1"},
-    {52, "PYS_I_1"},
-    {67, "PYS_C_1"},
-    {66, "PYS_O_1"},
-    {64, "PYS_F_1"},
-    {49, "PYS_F_1"},
-    {45, "PYS_G_1"},
-    {69, "PYS_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PYS_G_1"},
+    {POSE_TYPE_DAMAGE, "PYS_D_1"},
+    {POSE_TYPE_WALK, "PYS_W_1"},
+    {POSE_TYPE_RUN, "PYS_R_1"},
+    {POSE_TYPE_PERIL, "PYS_D_2"},
+    {POSE_TYPE_DANGER, "PYS_D_2"},
+    {POSE_TYPE_ESCAPE_STUMBLE, "PYS_D_4"},
+    {POSE_TYPE_ESCAPE_RECOVER, "PYS_D_2"},
+    {POSE_TYPE_TALK, "PYS_T_1"},
+    {POSE_TYPE_ITEM, "PYS_I_1"},
+    {POSE_TYPE_COMMAND, "PYS_C_1"},
+    {POSE_TYPE_APPEAL, "PYS_O_1"},
+    {POSE_TYPE_ZERO_GRAVITY, "PYS_F_1"},
+    {POSE_TYPE_AVOID_COUNTER, "PYS_F_1"},
+    {POSE_TYPE_DEFEND, "PYS_G_1"},
+    {POSE_TYPE_ACTION, "PYS_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -209,24 +209,24 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 PoseTableEntry pose_table_egg_g[] = {
-    {28, "CHU_C_1"},
-    {31, "CHU_C_1"},
-    {39, "CHU_C_1"},
-    {69, "CHU_C_1"},
+    {POSE_TYPE_NORMAL, "CHU_C_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_1"},
+    {POSE_TYPE_DAMAGE, "CHU_C_1"},
+    {POSE_TYPE_ACTION, "CHU_C_1"},
 };
 
 PoseTableEntry pose_table_egg_y[] = {
-    {28, "CHU_C_2"},
-    {31, "CHU_C_2"},
-    {39, "CHU_C_2"},
-    {69, "CHU_C_2"},
+    {POSE_TYPE_NORMAL, "CHU_C_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_2"},
+    {POSE_TYPE_DAMAGE, "CHU_C_2"},
+    {POSE_TYPE_ACTION, "CHU_C_2"},
 };
 
 PoseTableEntry pose_table_egg_p[] = {
-    {28, "CHU_C_3"},
-    {31, "CHU_C_3"},
-    {39, "CHU_C_3"},
-    {69, "CHU_C_3"},
+    {POSE_TYPE_NORMAL, "CHU_C_3"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_3"},
+    {POSE_TYPE_DAMAGE, "CHU_C_3"},
+    {POSE_TYPE_ACTION, "CHU_C_3"},
 };
 
 BattleUnitKindPart unitpartsdata_Party_Yoshi[] = {
@@ -310,7 +310,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 250)
     CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
     WAIT_FRAMES(40)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_SetMoveSoundDataWork, -2, STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 0, 6, 6, 0, 0)
@@ -996,7 +996,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
@@ -1069,7 +1069,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(3.0f))
         CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 80, -1, 0)
         CALL(btlevtcmd_CommandCheckDamage, -2, LW(3), LW(4), 256, LW(5))
@@ -1081,7 +1081,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(3.0f))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 80, -1, 0)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
@@ -1244,7 +1244,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     LABEL(95)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetUnitWork, -2, 1, LW(5))
@@ -1431,7 +1431,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
         CASE_DEFAULT
         CALL(btlevtcmd_AnimeSetPoseTable, -2, LW(12), PTR(pose_table_egg_g))
     END_SWITCH
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(12), 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(12), POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetPartsWork, -2, LW(12), 1, 4)
     CALL(btlevtcmd_SetPartsWork, -2, LW(12), 2, PTR(&partyWeapon_YoshiEggAttack_Minimini))
     LABEL(20)
@@ -1576,7 +1576,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     CALL(btlevtcmd_SetPartsWork, -2, LW(12), 7, LW(15))
     CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
     WAIT_FRAMES(10)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     LABEL(90)
     IF_INT_NOT_EQUAL(LW(12), LW(13))
         ADD(LW(12), 1)
@@ -1614,7 +1614,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     END_IF
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
@@ -1760,13 +1760,13 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
         CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
         CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PYS_Y_1"))
         CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
         CASE_DEFAULT
         CALL(evt_audience_acrobat_notry)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         BEGIN_SIBLING_EVENT
             WAIT_MS(166)
-            CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+            CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
         END_SIBLING_EVENT
     END_SWITCH
     BEGIN_INLINE_EVENT_GET_ID(LW(9))
@@ -1854,12 +1854,12 @@ EVT_END()
 
 EVT_BEGIN(yoshi_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 66)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_APPEAL1"), LW(0), LW(1), LW(2), 0)
     WAIT_FRAMES(40)
     CALL(btlevtcmd_AudienceAppeal, -2)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
@@ -1870,7 +1870,7 @@ static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PYS_Y_1"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     RETURN
 EVT_END()
 
@@ -1898,7 +1898,7 @@ static EVT_BEGIN(attack_audience_event)
         CASE_DEFAULT
         CALL(btlevtcmd_AnimeSetPoseTable, -2, LW(12), PTR(pose_table_egg_g))
     END_SWITCH
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(12), 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(12), POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetPartsMoveSpeed, -2, LW(12), FLOAT(7.5f))
     CALL(btlevtcmd_SetPartsFallAccel, -2, LW(12), FLOAT(0.099609375f))
     CALL(btlevtcmd_OnPartsAttribute, -2, LW(12), 50331648)
@@ -1922,7 +1922,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, LW(8))
     BEGIN_SIBLING_EVENT
         WAIT_MS(1000)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
     WAIT_FRAMES(7)
     CALL(btlevtcmd_OffPartsAttribute, -2, LW(12), 50331648)

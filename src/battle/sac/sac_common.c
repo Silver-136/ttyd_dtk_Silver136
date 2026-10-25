@@ -35,7 +35,7 @@ EVT_BEGIN(sac_start_camera_evt)
 EVT_END()
 
 EVT_BEGIN(sac_mario_item_on_evt)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 15)
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 5, -1, 0)
@@ -73,7 +73,7 @@ EVT_BEGIN(sac_start_stardust)
 EVT_END()
 
 EVT_BEGIN(sac_mario_back_home)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 5, -1, 0)
     RETURN

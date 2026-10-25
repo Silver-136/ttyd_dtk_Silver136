@@ -307,24 +307,24 @@ BattleUnitDefenseAttr peach_defence_attr = {{0, 0, 0, 0, 0}};
 StatusVulnerability peach_regist = {30, 30, 30, 100, 30, 100, 100, 0, 100, 60, 100, 60, 100, 75, 30, 0, 0, 100, 30, 100, 100, 0};
 
 PoseTableEntry peach_pose_table[] = {
-    {1, "KRT_N_1"},
-    {2, "KRT_Z_1"},
-    {9, "KRT_Z_1"},
-    {5, "KRT_K_1"},
-    {4, "KRT_S_1"},
-    {3, "KRT_K_1"},
-    {28, "KRT_S_1"},
-    {29, "KRT_D_1"},
+    {POSE_TYPE_SLEEP, "KRT_N_1"},
+    {POSE_TYPE_STOP, "KRT_Z_1"},
+    {POSE_TYPE_FREEZE, "KRT_Z_1"},
+    {POSE_TYPE_CONFUSE, "KRT_K_1"},
+    {POSE_TYPE_POISON, "KRT_S_1"},
+    {POSE_TYPE_DIZZY, "KRT_K_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KRT_D_1"},
     {30, "KRT_Q_1"},
-    {31, "KRT_Q_1"},
-    {39, "KRT_D_1"},
-    {50, "KRT_A_1"},
-    {42, "KRT_W_1"},
-    {40, "KRT_W_1"},
-    {56, "KRT_X_1"},
-    {57, "KRT_X_1"},
-    {65, "KRT_T_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_Q_1"},
+    {POSE_TYPE_DAMAGE, "KRT_D_1"},
+    {POSE_TYPE_ATTACK, "KRT_A_1"},
+    {POSE_TYPE_RUN, "KRT_W_1"},
+    {POSE_TYPE_WALK, "KRT_W_1"},
+    {POSE_TYPE_DANGER, "KRT_X_1"},
+    {POSE_TYPE_PERIL, "KRT_X_1"},
+    {POSE_TYPE_TALK, "KRT_T_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 BattleDataEntry peach_data_table[] = {
@@ -918,31 +918,31 @@ BattleUnitDefenseAttr queen_muteki_defence_attr = {{2, 2, 2, 2, 2}};
 StatusVulnerability queen_muteki_regist = {0};
 
 PoseTableEntry queen_pose_table[] = {
-    {1, "KRT_S_1"},
-    {2, "KRT_S_1"},
-    {9, "KRT_S_1"},
-    {5, "KRT_S_1"},
-    {4, "KRT_S_1"},
-    {3, "KRT_S_1"},
-    {28, "KRT_S_1"},
-    {29, "KRT_S_1"},
+    {POSE_TYPE_SLEEP, "KRT_S_1"},
+    {POSE_TYPE_STOP, "KRT_S_1"},
+    {POSE_TYPE_FREEZE, "KRT_S_1"},
+    {POSE_TYPE_CONFUSE, "KRT_S_1"},
+    {POSE_TYPE_POISON, "KRT_S_1"},
+    {POSE_TYPE_DIZZY, "KRT_S_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KRT_S_1"},
     {30, "KRT_S_1"},
-    {31, "KRT_S_1"},
-    {39, "KRT_S_1"},
-    {50, "KRT_S_1"},
-    {42, "KRT_S_1"},
-    {40, "KRT_S_1"},
-    {56, "KRT_S_1"},
-    {57, "KRT_S_1"},
-    {65, "KRT_T_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_S_1"},
+    {POSE_TYPE_ATTACK, "KRT_S_1"},
+    {POSE_TYPE_RUN, "KRT_S_1"},
+    {POSE_TYPE_WALK, "KRT_S_1"},
+    {POSE_TYPE_DANGER, "KRT_S_1"},
+    {POSE_TYPE_PERIL, "KRT_S_1"},
+    {POSE_TYPE_TALK, "KRT_T_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 PoseTableEntry queen_hand_pose_table[] = {
-    {28, "KRT_S_1"},
-    {31, "KRT_S_1"},
-    {39, "KRT_S_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_S_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 BattleDataEntry queen_data_table[] = {
@@ -1058,14 +1058,14 @@ BattleUnitDefenseAttr queen_hand_1_defence_attr = {{0, 0, 0, 0, 0}};
 StatusVulnerability queen_hand_1_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 80, 30, 0, 0, 0, 0, 0, 0, 0};
 
 PoseTableEntry queen_hand_1_pose_table[] = {
-    {28, "KRT_S_1"},
-    {29, "KRT_Q_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KRT_Q_1"},
     {30, "KRT_Q_1"},
-    {31, "KRT_D_1"},
-    {39, "KRT_D_1"},
-    {56, "KRT_S_1"},
-    {57, "KRT_S_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_D_1"},
+    {POSE_TYPE_DAMAGE, "KRT_D_1"},
+    {POSE_TYPE_DANGER, "KRT_S_1"},
+    {POSE_TYPE_PERIL, "KRT_S_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 BattleDataEntry queen_hand_1_data_table[] = {
@@ -1150,14 +1150,14 @@ BattleUnitDefenseAttr queen_hand_2_defence_attr = {{0, 0, 0, 0, 0}};
 StatusVulnerability queen_hand_2_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 80, 30, 0, 0, 0, 0, 0, 0, 0};
 
 PoseTableEntry queen_hand_2_pose_table[] = {
-    {28, "KRT_S_1"},
-    {29, "KRT_Q_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KRT_Q_1"},
     {30, "KRT_Q_1"},
-    {31, "KRT_D_1"},
-    {39, "KRT_D_1"},
-    {56, "KRT_S_1"},
-    {57, "KRT_S_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_D_1"},
+    {POSE_TYPE_DAMAGE, "KRT_D_1"},
+    {POSE_TYPE_DANGER, "KRT_S_1"},
+    {POSE_TYPE_PERIL, "KRT_S_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 BattleDataEntry queen_hand_2_data_table[] = {
@@ -1242,14 +1242,14 @@ BattleUnitDefenseAttr queen_hand_small_defence_attr = {{0, 0, 0, 0, 0}};
 StatusVulnerability queen_hand_small_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 80, 30, 0, 0, 0, 0, 0, 0, 0};
 
 PoseTableEntry queen_hand_small_pose_table[] = {
-    {28, "KRT_S_1"},
-    {29, "KRT_S_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KRT_S_1"},
     {30, "KRT_S_1"},
-    {31, "KRT_S_1"},
-    {39, "KRT_S_1"},
-    {56, "KRT_S_1"},
-    {57, "KRT_S_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_S_1"},
+    {POSE_TYPE_DANGER, "KRT_S_1"},
+    {POSE_TYPE_PERIL, "KRT_S_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 BattleDataEntry queen_hand_small_data_table[] = {

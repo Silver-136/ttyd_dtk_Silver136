@@ -317,9 +317,9 @@ static EVT_BEGIN(damage_event)
                 CALL(btlevtcmd_GetDamageCode, -2, LW(0))
                 SWITCH(LW(0))
                     CASE_EQUAL(24)
-                    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 29)
+                    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE_FIRE)
                     CASE_EQUAL(25)
-                    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 29)
+                    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE_FIRE)
                     CASE_DEFAULT
                     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("D_1"))
                 END_SWITCH
@@ -600,7 +600,7 @@ EVT_BEGIN(call_event)
     END_SWITCH
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(100)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(15), -1)
         CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
@@ -778,45 +778,45 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {28, "S_1"},
-    {65, "T_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "S_1"},
-    {39, "D_1"},
-    {42, "R_2"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_RUN, "R_2"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 static PoseTableEntry pose_table_guard[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {28, "G_2"},
-    {65, "T_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
+    {POSE_TYPE_NORMAL, "G_2"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "G_2"},
-    {39, "D_1"},
-    {42, "R_2"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "G_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "G_2"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_RUN, "R_2"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "G_2"},
 };
 
 static EVT_BEGIN(normal_attack_event)

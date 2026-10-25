@@ -148,26 +148,26 @@ BattleWeapon weapon_cortez_sword_float_attack = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {2, "KRT_Z_1"},
-    {9, "KRT_Z_1"},
-    {28, "KRT_S_1"},
-    {31, "KRT_S_1"},
-    {39, "KRT_S_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_STOP, "KRT_Z_1"},
+    {POSE_TYPE_FREEZE, "KRT_Z_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_S_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 PoseTableEntry pose_table_otitabuki[] = {
-    {28, "KRT_Z_1"},
-    {31, "KRT_Z_1"},
-    {39, "KRT_Z_1"},
-    {69, "KRT_Z_1"},
+    {POSE_TYPE_NORMAL, "KRT_Z_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
+    {POSE_TYPE_DAMAGE, "KRT_Z_1"},
+    {POSE_TYPE_ACTION, "KRT_Z_1"},
 };
 
 static PoseTableEntry pose_table_break[] = {
-    {28, "KRT_Z_1"},
-    {31, "KRT_Z_1"},
-    {39, "KRT_Z_1"},
-    {69, "KRT_Z_1"},
+    {POSE_TYPE_NORMAL, "KRT_Z_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
+    {POSE_TYPE_DAMAGE, "KRT_Z_1"},
+    {POSE_TYPE_ACTION, "KRT_Z_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -737,7 +737,7 @@ EVT_END()
 EVT_BEGIN(cortez_weapon_blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, -2, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), POSE_TYPE_DAMAGE)
     BEGIN_SIBLING_EVENT
         LABEL(0)
         CALL(btlevtcmd_AddRotate, -2, 0, 20, 0)

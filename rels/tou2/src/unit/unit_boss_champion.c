@@ -152,45 +152,45 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {60, 50, 60, 100, 60, 100, 100, 40, 0, 85, 100, 85, 100, 90, 60, 0, 0, 100, 70, 100, 100, 0};
 
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "K_1"},
-    {28, "S_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "K_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "D_1"},
-    {39, "D_1"},
-    {50, "Z_6"},
-    {42, "R_1"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_ATTACK, "Z_6"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 PoseTableEntry pose_table_roof[] = {
-    {1, "N_2"},
-    {2, "Y_2"},
-    {9, "Y_2"},
-    {5, "K_2"},
-    {4, "X_2"},
-    {3, "K_2"},
-    {28, "S_8"},
-    {29, "Q_2"},
+    {POSE_TYPE_SLEEP, "N_2"},
+    {POSE_TYPE_STOP, "Y_2"},
+    {POSE_TYPE_FREEZE, "Y_2"},
+    {POSE_TYPE_CONFUSE, "K_2"},
+    {POSE_TYPE_POISON, "X_2"},
+    {POSE_TYPE_DIZZY, "K_2"},
+    {POSE_TYPE_NORMAL, "S_8"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_2"},
     {30, "Q_2"},
-    {31, "D_2"},
-    {39, "D_2"},
-    {50, "Z_8"},
-    {42, "W_2"},
-    {40, "W_2"},
-    {56, "X_2"},
-    {57, "X_2"},
-    {65, "T_8"},
-    {69, "S_8"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_2"},
+    {POSE_TYPE_DAMAGE, "D_2"},
+    {POSE_TYPE_ATTACK, "Z_8"},
+    {POSE_TYPE_RUN, "W_2"},
+    {POSE_TYPE_WALK, "W_2"},
+    {POSE_TYPE_DANGER, "X_2"},
+    {POSE_TYPE_PERIL, "X_2"},
+    {POSE_TYPE_TALK, "T_8"},
+    {POSE_TYPE_ACTION, "S_8"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -508,7 +508,7 @@ EVT_BEGIN(to_floor)
     CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table))
     CALL(btlevtcmd_SetTalkPoseType, -2, 65)
     CALL(btlevtcmd_SetStayPoseType, -2, 43)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_OffAttribute, -2, kCeiling)
     CALL(btlevtcmd_OffPartsAttribute, -2, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
     CALL(btlevtcmd_SetKissHitOffset, -2, 10, 48, 10)
@@ -788,7 +788,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("A_3B"))
                 BEGIN_INLINE_EVENT
                     WAIT_MS(600)
-                    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+                    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
                 END_INLINE_EVENT
                 CALL(evt_snd_sfxon, STRING("SFX_BOSS_BLED_MOVE_CAILING1"), LW(15))
                 CALL(down_ceil)

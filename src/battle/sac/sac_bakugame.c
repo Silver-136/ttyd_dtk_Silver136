@@ -1487,7 +1487,7 @@ EVT_BEGIN(hitCheck_MarioTeam)
             CALL(btlevtcmd_AddRotate, LW(3), 0, 18, 0)
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), 39)
+        CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_DAMAGE)
         LOOP(5)
             CALL(btlevtcmd_AddRotate, LW(3), 0, 18, 0)
             WAIT_FRAMES(1)

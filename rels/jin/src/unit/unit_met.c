@@ -105,65 +105,65 @@ BattleUnitKind unit_met = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {1, "MET_N_1"},
-    {2, "MET_Y_1"},
-    {9, "MET_Y_1"},
-    {5, "MET_K_1"},
-    {4, "MET_X_1"},
-    {3, "MET_X_1"},
-    {28, "MET_S_1"},
-    {29, "MET_Q_1"},
+    {POSE_TYPE_SLEEP, "MET_N_1"},
+    {POSE_TYPE_STOP, "MET_Y_1"},
+    {POSE_TYPE_FREEZE, "MET_Y_1"},
+    {POSE_TYPE_CONFUSE, "MET_K_1"},
+    {POSE_TYPE_POISON, "MET_X_1"},
+    {POSE_TYPE_DIZZY, "MET_X_1"},
+    {POSE_TYPE_NORMAL, "MET_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "MET_Q_1"},
     {30, "MET_Q_1"},
-    {31, "MET_A_1"},
-    {39, "MET_D_1"},
-    {50, "MET_A_1"},
-    {40, "MET_W_1"},
-    {42, "MET_R_1"},
-    {56, "MET_X_1"},
-    {57, "MET_X_1"},
-    {65, "MET_T_1"},
-    {69, "MET_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "MET_A_1"},
+    {POSE_TYPE_DAMAGE, "MET_D_1"},
+    {POSE_TYPE_ATTACK, "MET_A_1"},
+    {POSE_TYPE_WALK, "MET_W_1"},
+    {POSE_TYPE_RUN, "MET_R_1"},
+    {POSE_TYPE_DANGER, "MET_X_1"},
+    {POSE_TYPE_PERIL, "MET_X_1"},
+    {POSE_TYPE_TALK, "MET_T_1"},
+    {POSE_TYPE_ACTION, "MET_S_1"},
 };
 
 static PoseTableEntry pose_table_ceil[] = {
-    {1, "SMT_N_1"},
-    {2, "SMT_Y_1"},
-    {9, "SMT_Y_1"},
-    {5, "SMT_K_1"},
-    {4, "SMT_X_1"},
-    {3, "SMT_X_1"},
-    {28, "SMT_S_1"},
-    {29, "SMT_Q_1"},
+    {POSE_TYPE_SLEEP, "SMT_N_1"},
+    {POSE_TYPE_STOP, "SMT_Y_1"},
+    {POSE_TYPE_FREEZE, "SMT_Y_1"},
+    {POSE_TYPE_CONFUSE, "SMT_K_1"},
+    {POSE_TYPE_POISON, "SMT_X_1"},
+    {POSE_TYPE_DIZZY, "SMT_X_1"},
+    {POSE_TYPE_NORMAL, "SMT_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "SMT_Q_1"},
     {30, "SMT_Q_1"},
-    {31, "SMT_A_1"},
-    {39, "SMT_D_1"},
-    {50, "SMT_A_1"},
-    {40, "SMT_W_1"},
-    {42, "SMT_R_1"},
-    {56, "SMT_X_1"},
-    {57, "SMT_X_1"},
-    {65, "SMT_S_1"},
-    {69, "SMT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SMT_A_1"},
+    {POSE_TYPE_DAMAGE, "SMT_D_1"},
+    {POSE_TYPE_ATTACK, "SMT_A_1"},
+    {POSE_TYPE_WALK, "SMT_W_1"},
+    {POSE_TYPE_RUN, "SMT_R_1"},
+    {POSE_TYPE_DANGER, "SMT_X_1"},
+    {POSE_TYPE_PERIL, "SMT_X_1"},
+    {POSE_TYPE_TALK, "SMT_S_1"},
+    {POSE_TYPE_ACTION, "SMT_S_1"},
 };
 
 static PoseTableEntry pose_table_turn[] = {
-    {1, "MET_N_2"},
-    {2, "MET_Y_2"},
-    {9, "MET_Y_2"},
-    {5, "MET_K_2"},
-    {4, "MET_X_2"},
-    {3, "MET_X_2"},
-    {28, "MET_S_2"},
-    {29, "MET_Q_2"},
+    {POSE_TYPE_SLEEP, "MET_N_2"},
+    {POSE_TYPE_STOP, "MET_Y_2"},
+    {POSE_TYPE_FREEZE, "MET_Y_2"},
+    {POSE_TYPE_CONFUSE, "MET_K_2"},
+    {POSE_TYPE_POISON, "MET_X_2"},
+    {POSE_TYPE_DIZZY, "MET_X_2"},
+    {POSE_TYPE_NORMAL, "MET_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "MET_Q_2"},
     {30, "MET_Q_2"},
-    {31, "MET_A_1"},
-    {39, "MET_D_3"},
-    {50, "MET_A_1"},
-    {40, "MET_W_1"},
-    {56, "MET_X_2"},
-    {57, "MET_X_2"},
-    {65, "MET_S_2"},
-    {69, "MET_S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "MET_A_1"},
+    {POSE_TYPE_DAMAGE, "MET_D_3"},
+    {POSE_TYPE_ATTACK, "MET_A_1"},
+    {POSE_TYPE_WALK, "MET_W_1"},
+    {POSE_TYPE_DANGER, "MET_X_2"},
+    {POSE_TYPE_PERIL, "MET_X_2"},
+    {POSE_TYPE_TALK, "MET_S_2"},
+    {POSE_TYPE_ACTION, "MET_S_2"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -332,7 +332,7 @@ static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
     CALL(btlevtcmd_OnStatusFlag, LW(10), 1)
     CALL(btlevtcmd_SetOverTurnCount, LW(10), 1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 39)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_INSIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(4)
     CALL(btlevtcmd_SetFallAccel, -2, FLOAT(1.0f))
@@ -356,7 +356,7 @@ static EVT_BEGIN(wakeup_event)
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr))
     CALL(btlevtcmd_OffStatusFlag, LW(10), 1)
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 69)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_ACTION)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_INSIDE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetFallAccel, -2, FLOAT(1.0f))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
@@ -411,7 +411,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 0, -1)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_MET_SHELL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ATTACK)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_MET_ATTACK2"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_SetUnitWork, -2, 1, 0)
     CALL(btlevtcmd_SetUnitWork, -2, 2, 0)
@@ -476,7 +476,7 @@ static EVT_BEGIN(attack_event)
     WAIT_MS(250)
     CALL(evt_snd_sfxoff, LW(15))
     CALL(btlevtcmd_SetUnitWork, -2, 1, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_MET_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_JumpSetting, -2, 20, FLOAT(10.0f), FLOAT(0.39941406f))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
@@ -502,7 +502,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, -2, 1, 1)
     GOTO(98)
     LABEL(98)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
@@ -582,7 +582,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 69)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_ACTION)
     CALL(btlevtcmd_OnStatusFlag, LW(10), 1)
     CALL(btlevtcmd_SetOverTurnCount, LW(10), 1)
     CALL(btlevtcmd_SetFallAccel, -2, FLOAT(1.0f))
@@ -629,12 +629,12 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     WAIT_MS(100)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, -2, LW(10), LW(11), LW(12))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(5.0f))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(11), LW(12), 60, -1, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ATTACK)
     WAIT_MS(250)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_MET_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetMoveSpeed, -2, 0)
@@ -694,7 +694,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_SetHitOffset, -2, 1, 0, 0, 0)
     CALL(btlevtcmd_SetHitCursorOffset, -2, 1, 0, 0, 0)
     CALL(btlevtcmd_SetKissHitOffset, -2, 12, 15, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_JumpSetting, -2, 20, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 25)
@@ -705,7 +705,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 25)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_MET_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_JumpPosition, -2, LW(0), 0, LW(2), 20, -1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetHomePos, -2, LW(7), 0, LW(9))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, -2, LW(7), 0, LW(9), 0, -1, 0)

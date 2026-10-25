@@ -524,45 +524,45 @@ u8 defencecopy[8] __attribute__((aligned(4))) = { // defenses[5] copied into the
 };
 
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "K_1"},
-    {28, "S_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "K_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "D_1"},
-    {39, "D_1"},
-    {50, "A_2"},
-    {42, "R_1"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_ATTACK, "A_2"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 static PoseTableEntry pose_table_furafura[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "K_1"},
-    {28, "X_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "K_1"},
+    {POSE_TYPE_NORMAL, "X_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "D_1"},
-    {39, "D_1"},
-    {50, "A_2"},
-    {42, "R_1"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_3"},
-    {69, "X_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_ATTACK, "A_2"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_3"},
+    {POSE_TYPE_ACTION, "X_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -1400,7 +1400,7 @@ static EVT_BEGIN(entry_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(6), 4)
     CALL_CHILD(sub_call_satellite)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     CALL(check_satellite)
     CALL(btlevtcmd_StatusWindowOnOff, 1)
     CALL(evt_btl_camera_set_mode, 0, 0)
@@ -1441,7 +1441,7 @@ EVT_BEGIN(damage_sub_event)
     END_IF
     CALL(btlevtcmd_GetDamagePartsId, LW(10), LW(11))
     IF_INT_EQUAL(LW(11), 1)
-        CALL(btlevtcmd_AnimeChangePoseType, LW(10), 1, 39)
+        CALL(btlevtcmd_AnimeChangePoseType, LW(10), 1, POSE_TYPE_DAMAGE)
         ELSE
         CALL(enzan_lw_save)
         SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_off))
@@ -2276,13 +2276,13 @@ EVT_BEGIN(batten_leader_ice_attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     WAIT_MS(300)
     GOTO(98)
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     LABEL(98)
     CALL(btlevtcmd_ResetFaceDirection, -2)
     RETURN

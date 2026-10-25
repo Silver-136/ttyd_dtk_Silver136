@@ -183,25 +183,25 @@ BattleWeapon weapon_togekuri_charge = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {1, "TGK_N_1"},
-    {2, "TGK_Y_1"},
-    {9, "TGK_Y_1"},
-    {5, "TGK_K_1"},
-    {4, "TGK_I_1"},
-    {3, "TGK_I_1"},
-    {28, "TGK_S_1"},
-    {29, "TGK_Q_1"},
+    {POSE_TYPE_SLEEP, "TGK_N_1"},
+    {POSE_TYPE_STOP, "TGK_Y_1"},
+    {POSE_TYPE_FREEZE, "TGK_Y_1"},
+    {POSE_TYPE_CONFUSE, "TGK_K_1"},
+    {POSE_TYPE_POISON, "TGK_I_1"},
+    {POSE_TYPE_DIZZY, "TGK_I_1"},
+    {POSE_TYPE_NORMAL, "TGK_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "TGK_Q_1"},
     {30, "TGK_Q_1"},
-    {31, "TGK_S_1"},
-    {39, "TGK_D_1"},
-    {50, "TGK_A_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "TGK_S_1"},
+    {POSE_TYPE_DAMAGE, "TGK_D_1"},
+    {POSE_TYPE_ATTACK, "TGK_A_1"},
     {41, "TGK_R_2"},
-    {42, "TGK_R_1"},
-    {40, "TGK_W_1"},
-    {56, "TGK_I_1"},
-    {57, "TGK_I_1"},
-    {65, "TGK_T_1"},
-    {69, "TGK_S_1"},
+    {POSE_TYPE_RUN, "TGK_R_1"},
+    {POSE_TYPE_WALK, "TGK_W_1"},
+    {POSE_TYPE_DANGER, "TGK_I_1"},
+    {POSE_TYPE_PERIL, "TGK_I_1"},
+    {POSE_TYPE_TALK, "TGK_T_1"},
+    {POSE_TYPE_ACTION, "TGK_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -349,20 +349,20 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_togekuri_attack))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 80)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, -2, LW(0), 0, LW(2), 0, -1, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     WAIT_MS(170)
     CALL(evt_btl_camera_set_mode, 0, 3)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ATTACK)
     CALL(btlevtcmd_SetRotateOffset, -2, 0, 15, 0)
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_GetPosFloat, -2, LW(5), LW(6), LW(7))
@@ -449,7 +449,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetScale, -2, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_togekuri_attack))
     CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_togekuri_attack), 256, LW(5))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(6))
         DIVIDE(LW(6), 10)

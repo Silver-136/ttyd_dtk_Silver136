@@ -174,45 +174,45 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static PoseTableEntry pose_table[] = {
-    {1, "PKF_N_1"},
-    {2, "PKF_Y_1"},
-    {9, "PKF_Y_1"},
-    {5, "PKF_K_1"},
-    {4, "PKF_X_1"},
-    {3, "PKF_X_1"},
-    {28, "PKF_S_1"},
-    {29, "PKF_Q_1"},
+    {POSE_TYPE_SLEEP, "PKF_N_1"},
+    {POSE_TYPE_STOP, "PKF_Y_1"},
+    {POSE_TYPE_FREEZE, "PKF_Y_1"},
+    {POSE_TYPE_CONFUSE, "PKF_K_1"},
+    {POSE_TYPE_POISON, "PKF_X_1"},
+    {POSE_TYPE_DIZZY, "PKF_X_1"},
+    {POSE_TYPE_NORMAL, "PKF_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "PKF_Q_1"},
     {30, "PKF_Q_1"},
-    {31, "PKF_S_2"},
-    {39, "PKF_D_1"},
-    {50, "PKF_A_1B"},
-    {40, "PKF_S_1"},
-    {42, "PKF_S_1"},
-    {56, "PKF_X_1"},
-    {57, "PKF_X_1"},
-    {65, "PKF_T_1"},
-    {69, "PKF_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PKF_S_2"},
+    {POSE_TYPE_DAMAGE, "PKF_D_1"},
+    {POSE_TYPE_ATTACK, "PKF_A_1B"},
+    {POSE_TYPE_WALK, "PKF_S_1"},
+    {POSE_TYPE_RUN, "PKF_S_1"},
+    {POSE_TYPE_DANGER, "PKF_X_1"},
+    {POSE_TYPE_PERIL, "PKF_X_1"},
+    {POSE_TYPE_TALK, "PKF_T_1"},
+    {POSE_TYPE_ACTION, "PKF_S_1"},
 };
 
 static PoseTableEntry pose_table_ceil[] = {
-    {1, "PKF_N_2"},
-    {2, "PKF_Y_2"},
-    {9, "PKF_Y_2"},
-    {5, "PKF_K_2"},
-    {4, "PKF_X_2"},
-    {3, "PKF_X_2"},
-    {28, "PKF_S_3"},
-    {29, "PKF_Q_2"},
+    {POSE_TYPE_SLEEP, "PKF_N_2"},
+    {POSE_TYPE_STOP, "PKF_Y_2"},
+    {POSE_TYPE_FREEZE, "PKF_Y_2"},
+    {POSE_TYPE_CONFUSE, "PKF_K_2"},
+    {POSE_TYPE_POISON, "PKF_X_2"},
+    {POSE_TYPE_DIZZY, "PKF_X_2"},
+    {POSE_TYPE_NORMAL, "PKF_S_3"},
+    {POSE_TYPE_DAMAGE_FIRE, "PKF_Q_2"},
     {30, "PKF_Q_2"},
-    {31, "PKF_S_4"},
-    {39, "PKF_D_2"},
-    {50, "PKF_A_5"},
-    {40, "PKF_S_3"},
-    {42, "PKF_S_3"},
-    {56, "PKF_X_2"},
-    {57, "PKF_X_2"},
-    {65, "PKF_S_3"},
-    {69, "PKF_S_3"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PKF_S_4"},
+    {POSE_TYPE_DAMAGE, "PKF_D_2"},
+    {POSE_TYPE_ATTACK, "PKF_A_5"},
+    {POSE_TYPE_WALK, "PKF_S_3"},
+    {POSE_TYPE_RUN, "PKF_S_3"},
+    {POSE_TYPE_DANGER, "PKF_X_2"},
+    {POSE_TYPE_PERIL, "PKF_X_2"},
+    {POSE_TYPE_TALK, "PKF_S_3"},
+    {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -245,7 +245,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 31)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE_GUARDED)
     WAIT_MS(250)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PKF_S_1"))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))

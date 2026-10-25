@@ -100,10 +100,10 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static PoseTableEntry pose_table[] = {
-    {28, "GSO_S1_1"},
-    {31, "GSO_S1_1"},
-    {39, "GSO_D1_1"},
-    {69, "GSO_S1_1"},
+    {POSE_TYPE_NORMAL, "GSO_S1_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "GSO_S1_1"},
+    {POSE_TYPE_DAMAGE, "GSO_D1_1"},
+    {POSE_TYPE_ACTION, "GSO_S1_1"},
 };
 
 BattleDataEntry gesso_left_arm_data_table[] = {

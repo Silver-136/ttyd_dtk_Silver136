@@ -439,8 +439,72 @@ typedef struct StatusVulnerability {
     u8 ohko;         // 0x15
 } StatusVulnerability;
 
+// PoseTableEntry.poseType: descriptive names from the code that selects each type (battle_disp, the default
+// events, BtlUnit_SetAnimType); unnamed types (30, 32-34, 37, 41, 47, 51, 53-55) have no proven common role.
+typedef enum BattlePoseType {
+    POSE_TYPE_ALLERGIC = 0, // 0..27: the StatusEffectType of the unit's priority status (_GetStatusPoseType)
+    POSE_TYPE_SLEEP = 1,
+    POSE_TYPE_STOP = 2,
+    POSE_TYPE_DIZZY = 3,
+    POSE_TYPE_POISON = 4,
+    POSE_TYPE_CONFUSE = 5,
+    POSE_TYPE_ELECTRIC = 6,
+    POSE_TYPE_DODGY = 7,
+    POSE_TYPE_BURN = 8,
+    POSE_TYPE_FREEZE = 9,
+    POSE_TYPE_HUGE = 10,
+    POSE_TYPE_TINY = 11,
+    POSE_TYPE_ATTACK_UP = 12,
+    POSE_TYPE_ATTACK_DOWN = 13,
+    POSE_TYPE_DEFENSE_UP = 14,
+    POSE_TYPE_DEFENSE_DOWN = 15,
+    POSE_TYPE_CHARGE = 16,
+    POSE_TYPE_FLIPPED = 17,
+    POSE_TYPE_INVISIBLE = 18,
+    POSE_TYPE_FAST = 19,
+    POSE_TYPE_SLOW = 20,
+    POSE_TYPE_PAYBACK = 21,
+    POSE_TYPE_HOLD_FAST = 22,
+    POSE_TYPE_HP_REGEN = 23,
+    POSE_TYPE_FP_REGEN = 24,
+    POSE_TYPE_FRIGHT = 25,
+    POSE_TYPE_GALE_FORCE = 26,
+    POSE_TYPE_KO = 27,
+    POSE_TYPE_NORMAL = 28, // no priority status; fallback of 0..28
+    POSE_TYPE_DAMAGE_FIRE = 29, // fire/explosion hit
+    POSE_TYPE_DAMAGE_GUARDED = 31, // guarded hit
+    POSE_TYPE_DAMAGE_STATUS = 35, // status-only hit
+    POSE_TYPE_DAMAGE_TOP_SPIKY = 36, // top-spike counter damage
+    POSE_TYPE_DAMAGE_SURPRISED = 38, // surprise damage
+    POSE_TYPE_DAMAGE = 39, // general damage; fallback of 29..39
+    POSE_TYPE_WALK = 40,
+    POSE_TYPE_RUN = 42, // also the battle-exit run
+    POSE_TYPE_NEUTRAL = 43, // staging pose (appeal entry, curtain, many attacks)
+    POSE_TYPE_JUMP = 44,
+    POSE_TYPE_DEFEND = 45,
+    POSE_TYPE_BODYGUARD = 46,
+    POSE_TYPE_AVOID_DODGY = 48,
+    POSE_TYPE_AVOID_COUNTER = 49, // counter avoided / superguard
+    POSE_TYPE_ATTACK = 50,
+    POSE_TYPE_ITEM = 52, // receives or uses an item
+    POSE_TYPE_DANGER = 56,
+    POSE_TYPE_PERIL = 57,
+    POSE_TYPE_KISSED_CHRISTINE = 58, // Goombella's kiss
+    POSE_TYPE_KISSED_CHUCHURINA = 59, // Ms. Mowz's kiss
+    POSE_TYPE_ESCAPE_STUMBLE = 60, // failed escape
+    POSE_TYPE_ESCAPE_RECOVER = 61,
+    POSE_TYPE_HAPPY_HEART = 62,
+    POSE_TYPE_HAPPY_FLOWER = 63,
+    POSE_TYPE_ZERO_GRAVITY = 64, // cannot act in zero gravity
+    POSE_TYPE_TALK = 65,
+    POSE_TYPE_APPEAL = 66,
+    POSE_TYPE_COMMAND = 67, // command selection
+    POSE_TYPE_SHELL_SHIELD_OPEN = 68,
+    POSE_TYPE_ACTION = 69, // fallback of 40..69
+} BattlePoseType;
+
 typedef struct PoseTableEntry {
-    s32 poseType;         // 0x0
+    s32 poseType;         // 0x0, BattlePoseType
     const char* poseName; // 0x4
 } PoseTableEntry;
 

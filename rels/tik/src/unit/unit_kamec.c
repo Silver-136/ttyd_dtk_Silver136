@@ -237,43 +237,43 @@ static StatusVulnerability regist = {70, 75, 80, 100, 70, 100, 100, 70, 100, 90,
 static StatusVulnerability regist_bunsin = {0};
 
 static PoseTableEntry pose_table[] = {
-    {1, "KMK_N_1"},
-    {2, "KMK_Y_1"},
-    {9, "KMK_Y_1"},
-    {5, "KMK_K_1"},
-    {4, "KMK_X_1"},
-    {3, "KMK_X_1"},
-    {28, "KMK_S_1"},
-    {29, "KMK_Q_1"},
+    {POSE_TYPE_SLEEP, "KMK_N_1"},
+    {POSE_TYPE_STOP, "KMK_Y_1"},
+    {POSE_TYPE_FREEZE, "KMK_Y_1"},
+    {POSE_TYPE_CONFUSE, "KMK_K_1"},
+    {POSE_TYPE_POISON, "KMK_X_1"},
+    {POSE_TYPE_DIZZY, "KMK_X_1"},
+    {POSE_TYPE_NORMAL, "KMK_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KMK_Q_1"},
     {30, "KMK_Q_1"},
-    {31, "KMK_S_1"},
-    {39, "KMK_D_1"},
-    {42, "KMK_R_1"},
-    {40, "KMK_W_1"},
-    {56, "KMK_X_1"},
-    {57, "KMK_X_1"},
-    {65, "KMK_T_1"},
-    {69, "KMK_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KMK_S_1"},
+    {POSE_TYPE_DAMAGE, "KMK_D_1"},
+    {POSE_TYPE_RUN, "KMK_R_1"},
+    {POSE_TYPE_WALK, "KMK_W_1"},
+    {POSE_TYPE_DANGER, "KMK_X_1"},
+    {POSE_TYPE_PERIL, "KMK_X_1"},
+    {POSE_TYPE_TALK, "KMK_T_1"},
+    {POSE_TYPE_ACTION, "KMK_S_1"},
 };
 
 static PoseTableEntry pose_table_sky[] = {
-    {1, "KMK_N_2"},
-    {2, "KMK_Y_2"},
-    {9, "KMK_Y_2"},
-    {5, "KMK_K_2"},
-    {4, "KMK_X_2"},
-    {3, "KMK_X_2"},
-    {28, "KMK_S_2"},
-    {29, "KMK_Q_2"},
+    {POSE_TYPE_SLEEP, "KMK_N_2"},
+    {POSE_TYPE_STOP, "KMK_Y_2"},
+    {POSE_TYPE_FREEZE, "KMK_Y_2"},
+    {POSE_TYPE_CONFUSE, "KMK_K_2"},
+    {POSE_TYPE_POISON, "KMK_X_2"},
+    {POSE_TYPE_DIZZY, "KMK_X_2"},
+    {POSE_TYPE_NORMAL, "KMK_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "KMK_Q_2"},
     {30, "KMK_Q_2"},
-    {31, "KMK_S_2"},
-    {39, "KMK_D_2"},
-    {42, "KMK_R_2"},
-    {40, "KMK_W_2"},
-    {56, "KMK_X_2"},
-    {57, "KMK_X_2"},
-    {65, "KMK_T_2"},
-    {69, "KMK_S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KMK_S_2"},
+    {POSE_TYPE_DAMAGE, "KMK_D_2"},
+    {POSE_TYPE_RUN, "KMK_R_2"},
+    {POSE_TYPE_WALK, "KMK_W_2"},
+    {POSE_TYPE_DANGER, "KMK_X_2"},
+    {POSE_TYPE_PERIL, "KMK_X_2"},
+    {POSE_TYPE_TALK, "KMK_T_2"},
+    {POSE_TYPE_ACTION, "KMK_S_2"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -763,7 +763,7 @@ EVT_END()
 static EVT_BEGIN(kamec_subset_blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, -2, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), POSE_TYPE_DAMAGE)
     BEGIN_SIBLING_EVENT
         LABEL(0)
         CALL(btlevtcmd_AddRotate, -2, 0, 20, 0)
@@ -821,7 +821,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_OffPartsAttribute, -2, 1, kIsWinged)
     CALL(btlevtcmd_OffPartsAttribute, -2, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_OffPartsAttribute, -2, 1, kShellTosslikeCannotTarget)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table))
     CALL(btlevtcmd_GetUnitWork, -2, 1, LW(0))
@@ -830,7 +830,7 @@ static EVT_BEGIN(dmg_fall_event)
     ELSE
         CALL(btlevtcmd_ChangeDataTable, -2, PTR(data_table_bunsin))
     END_IF
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPartsPos, -2, 2, LW(0), LW(1), LW(2))
@@ -853,7 +853,7 @@ static EVT_BEGIN(dmg_fall_event)
     WAIT_MS(500)
     CALL(btlevtcmd_SetUnitWork, -2, 0, 0)
     CALL_CHILD(init_event2)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
     RETURN
 EVT_END()
 
@@ -1364,18 +1364,18 @@ static EVT_BEGIN(attack_magic_event)
         LABEL(98)
         WAIT_FRAMES(30)
         CALL(kamec_get_bunsin, LW(6), LW(7), LW(8), LW(9), LW(0))
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
         IF_INT_NOT_EQUAL(LW(6), -1)
-            CALL(btlevtcmd_AnimeChangePoseType, LW(6), 1, 43)
+            CALL(btlevtcmd_AnimeChangePoseType, LW(6), 1, POSE_TYPE_NEUTRAL)
         END_IF
         IF_INT_NOT_EQUAL(LW(7), -1)
-            CALL(btlevtcmd_AnimeChangePoseType, LW(7), 1, 43)
+            CALL(btlevtcmd_AnimeChangePoseType, LW(7), 1, POSE_TYPE_NEUTRAL)
         END_IF
         IF_INT_NOT_EQUAL(LW(8), -1)
-            CALL(btlevtcmd_AnimeChangePoseType, LW(8), 1, 43)
+            CALL(btlevtcmd_AnimeChangePoseType, LW(8), 1, POSE_TYPE_NEUTRAL)
         END_IF
         IF_INT_NOT_EQUAL(LW(9), -1)
-            CALL(btlevtcmd_AnimeChangePoseType, LW(9), 1, 43)
+            CALL(btlevtcmd_AnimeChangePoseType, LW(9), 1, POSE_TYPE_NEUTRAL)
         END_IF
         LABEL(99)
         CALL(btlevtcmd_ResetFaceDirection, -2)

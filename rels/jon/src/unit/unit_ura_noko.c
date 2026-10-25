@@ -103,44 +103,44 @@ BattleUnitKind unit_ura_noko = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {1, "NKT_N_1"},
-    {2, "NKT_Y_1"},
-    {9, "NKT_Y_1"},
-    {5, "NKT_K_1"},
-    {4, "NKT_X_1"},
-    {3, "NKT_X_1"},
-    {28, "NKT_S_1"},
-    {29, "NKT_Q_1"},
+    {POSE_TYPE_SLEEP, "NKT_N_1"},
+    {POSE_TYPE_STOP, "NKT_Y_1"},
+    {POSE_TYPE_FREEZE, "NKT_Y_1"},
+    {POSE_TYPE_CONFUSE, "NKT_K_1"},
+    {POSE_TYPE_POISON, "NKT_X_1"},
+    {POSE_TYPE_DIZZY, "NKT_X_1"},
+    {POSE_TYPE_NORMAL, "NKT_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "NKT_Q_1"},
     {30, "NKT_Q_1"},
-    {31, "NKT_S_1"},
-    {39, "NKT_D_1"},
-    {50, "NKT_A_1"},
-    {42, "NKT_R_1"},
-    {40, "NKT_W_1"},
-    {56, "NKT_X_1"},
-    {57, "NKT_X_1"},
-    {65, "NKT_T_1"},
-    {69, "NKT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "NKT_S_1"},
+    {POSE_TYPE_DAMAGE, "NKT_D_1"},
+    {POSE_TYPE_ATTACK, "NKT_A_1"},
+    {POSE_TYPE_RUN, "NKT_R_1"},
+    {POSE_TYPE_WALK, "NKT_W_1"},
+    {POSE_TYPE_DANGER, "NKT_X_1"},
+    {POSE_TYPE_PERIL, "NKT_X_1"},
+    {POSE_TYPE_TALK, "NKT_T_1"},
+    {POSE_TYPE_ACTION, "NKT_S_1"},
 };
 
 static PoseTableEntry pose_table_turn[] = {
-    {1, "NKT_N_2"},
-    {2, "NKT_B_1"},
-    {9, "NKT_B_1"},
-    {5, "NKT_K_2"},
-    {4, "NKT_K_2"},
-    {3, "NKT_K_2"},
-    {28, "NKT_S_2"},
-    {29, "NKT_Q_1"},
+    {POSE_TYPE_SLEEP, "NKT_N_2"},
+    {POSE_TYPE_STOP, "NKT_B_1"},
+    {POSE_TYPE_FREEZE, "NKT_B_1"},
+    {POSE_TYPE_CONFUSE, "NKT_K_2"},
+    {POSE_TYPE_POISON, "NKT_K_2"},
+    {POSE_TYPE_DIZZY, "NKT_K_2"},
+    {POSE_TYPE_NORMAL, "NKT_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "NKT_Q_1"},
     {30, "NKT_Q_1"},
-    {31, "NKT_D_1"},
-    {39, "NKT_D_1"},
-    {42, "NKT_R_1"},
-    {40, "NKT_W_1"},
-    {56, "NKT_K_2"},
-    {57, "NKT_K_2"},
-    {65, "NKT_S_2"},
-    {69, "NKT_S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "NKT_D_1"},
+    {POSE_TYPE_DAMAGE, "NKT_D_1"},
+    {POSE_TYPE_RUN, "NKT_R_1"},
+    {POSE_TYPE_WALK, "NKT_W_1"},
+    {POSE_TYPE_DANGER, "NKT_K_2"},
+    {POSE_TYPE_PERIL, "NKT_K_2"},
+    {POSE_TYPE_TALK, "NKT_S_2"},
+    {POSE_TYPE_ACTION, "NKT_S_2"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -354,7 +354,7 @@ static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_NOKO_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetUnitWork, -2, 0, 1)
     CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
@@ -473,7 +473,7 @@ static EVT_BEGIN(attack_event)
     WAIT_MS(250)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_NOKO_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetUnitWork, -2, 0, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_JumpSetting, -2, 20, FLOAT(10.0f), FLOAT(0.39941406f))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 40)
@@ -500,7 +500,7 @@ static EVT_BEGIN(attack_event)
     GOTO(98)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)

@@ -352,99 +352,99 @@ static BattleWeapon weapon_sambo_spike_attack_2 = {
 };
 
 static PoseTableEntry pose_table_body4[] = {
-    {1, "SNB_N_1"},
-    {2, "SNB_Y_1"},
-    {9, "SNB_Y_1"},
-    {5, "SNB_K_1"},
-    {4, "SNB_X_1"},
-    {3, "SNB_X_1"},
-    {28, "SNB_S_1"},
-    {29, "SNB_Q_1"},
+    {POSE_TYPE_SLEEP, "SNB_N_1"},
+    {POSE_TYPE_STOP, "SNB_Y_1"},
+    {POSE_TYPE_FREEZE, "SNB_Y_1"},
+    {POSE_TYPE_CONFUSE, "SNB_K_1"},
+    {POSE_TYPE_POISON, "SNB_X_1"},
+    {POSE_TYPE_DIZZY, "SNB_X_1"},
+    {POSE_TYPE_NORMAL, "SNB_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "SNB_Q_1"},
     {30, "SNB_Q_1"},
-    {31, "SNB_S_1"},
-    {39, "SNB_D_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SNB_S_1"},
+    {POSE_TYPE_DAMAGE, "SNB_D_1"},
     {47, "SNB_W_1"},
-    {42, "SNB_W_1"},
-    {40, "SNB_W_1"},
-    {56, "SNB_X_1"},
-    {57, "SNB_X_1"},
-    {65, "SNB_T_1"},
-    {69, "SNB_S_1"},
+    {POSE_TYPE_RUN, "SNB_W_1"},
+    {POSE_TYPE_WALK, "SNB_W_1"},
+    {POSE_TYPE_DANGER, "SNB_X_1"},
+    {POSE_TYPE_PERIL, "SNB_X_1"},
+    {POSE_TYPE_TALK, "SNB_T_1"},
+    {POSE_TYPE_ACTION, "SNB_S_1"},
 };
 
 static PoseTableEntry pose_table_body3[] = {
-    {1, "SNB_N_2"},
-    {2, "SNB_Y_2"},
-    {9, "SNB_Y_2"},
-    {5, "SNB_K_2"},
-    {4, "SNB_X_2"},
-    {3, "SNB_X_2"},
-    {28, "SNB_S_2"},
-    {29, "SNB_Q_2"},
+    {POSE_TYPE_SLEEP, "SNB_N_2"},
+    {POSE_TYPE_STOP, "SNB_Y_2"},
+    {POSE_TYPE_FREEZE, "SNB_Y_2"},
+    {POSE_TYPE_CONFUSE, "SNB_K_2"},
+    {POSE_TYPE_POISON, "SNB_X_2"},
+    {POSE_TYPE_DIZZY, "SNB_X_2"},
+    {POSE_TYPE_NORMAL, "SNB_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "SNB_Q_2"},
     {30, "SNB_Q_2"},
-    {31, "SNB_S_2"},
-    {39, "SNB_D_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SNB_S_2"},
+    {POSE_TYPE_DAMAGE, "SNB_D_2"},
     {47, "SNB_W_2"},
-    {50, "SNB_A_1A"},
+    {POSE_TYPE_ATTACK, "SNB_A_1A"},
     {51, "SNB_A_1B"},
-    {42, "SNB_W_2"},
-    {40, "SNB_W_2"},
-    {56, "SNB_X_2"},
-    {57, "SNB_X_2"},
-    {65, "SNB_T_2"},
-    {69, "SNB_S_2"},
+    {POSE_TYPE_RUN, "SNB_W_2"},
+    {POSE_TYPE_WALK, "SNB_W_2"},
+    {POSE_TYPE_DANGER, "SNB_X_2"},
+    {POSE_TYPE_PERIL, "SNB_X_2"},
+    {POSE_TYPE_TALK, "SNB_T_2"},
+    {POSE_TYPE_ACTION, "SNB_S_2"},
 };
 
 static PoseTableEntry pose_table_body2[] = {
-    {1, "SNB_N_3"},
-    {2, "SNB_Y_3"},
-    {9, "SNB_Y_3"},
-    {5, "SNB_K_3"},
-    {4, "SNB_X_3"},
-    {3, "SNB_X_3"},
-    {28, "SNB_S_3"},
-    {29, "SNB_Q_3"},
+    {POSE_TYPE_SLEEP, "SNB_N_3"},
+    {POSE_TYPE_STOP, "SNB_Y_3"},
+    {POSE_TYPE_FREEZE, "SNB_Y_3"},
+    {POSE_TYPE_CONFUSE, "SNB_K_3"},
+    {POSE_TYPE_POISON, "SNB_X_3"},
+    {POSE_TYPE_DIZZY, "SNB_X_3"},
+    {POSE_TYPE_NORMAL, "SNB_S_3"},
+    {POSE_TYPE_DAMAGE_FIRE, "SNB_Q_3"},
     {30, "SNB_Q_3"},
-    {31, "SNB_S_3"},
-    {39, "SNB_D_3"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SNB_S_3"},
+    {POSE_TYPE_DAMAGE, "SNB_D_3"},
     {47, "SNB_W_3"},
-    {50, "SNB_A_2A"},
+    {POSE_TYPE_ATTACK, "SNB_A_2A"},
     {51, "SNB_A_2B"},
-    {42, "SNB_W_3"},
-    {40, "SNB_W_3"},
-    {56, "SNB_X_3"},
-    {57, "SNB_X_3"},
-    {65, "SNB_T_3"},
-    {69, "SNB_S_3"},
+    {POSE_TYPE_RUN, "SNB_W_3"},
+    {POSE_TYPE_WALK, "SNB_W_3"},
+    {POSE_TYPE_DANGER, "SNB_X_3"},
+    {POSE_TYPE_PERIL, "SNB_X_3"},
+    {POSE_TYPE_TALK, "SNB_T_3"},
+    {POSE_TYPE_ACTION, "SNB_S_3"},
 };
 
 static PoseTableEntry pose_table_body1[] = {
-    {1, "SNB_N_4"},
-    {2, "SNB_Y_4"},
-    {9, "SNB_Y_4"},
-    {5, "SNB_K_4"},
-    {4, "SNB_X_4"},
-    {3, "SNB_X_4"},
-    {28, "SNB_S_4"},
-    {29, "SNB_Q_4"},
+    {POSE_TYPE_SLEEP, "SNB_N_4"},
+    {POSE_TYPE_STOP, "SNB_Y_4"},
+    {POSE_TYPE_FREEZE, "SNB_Y_4"},
+    {POSE_TYPE_CONFUSE, "SNB_K_4"},
+    {POSE_TYPE_POISON, "SNB_X_4"},
+    {POSE_TYPE_DIZZY, "SNB_X_4"},
+    {POSE_TYPE_NORMAL, "SNB_S_4"},
+    {POSE_TYPE_DAMAGE_FIRE, "SNB_Q_4"},
     {30, "SNB_Q_4"},
-    {31, "SNB_S_4"},
-    {39, "SNB_D_4"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SNB_S_4"},
+    {POSE_TYPE_DAMAGE, "SNB_D_4"},
     {47, "SNB_W_4"},
-    {50, "SNB_A_3A"},
+    {POSE_TYPE_ATTACK, "SNB_A_3A"},
     {51, "SNB_A_3B"},
-    {42, "SNB_W_4"},
-    {40, "SNB_W_4"},
-    {56, "SNB_X_4"},
-    {57, "SNB_X_4"},
-    {65, "SNB_T_4"},
-    {69, "SNB_S_4"},
+    {POSE_TYPE_RUN, "SNB_W_4"},
+    {POSE_TYPE_WALK, "SNB_W_4"},
+    {POSE_TYPE_DANGER, "SNB_X_4"},
+    {POSE_TYPE_PERIL, "SNB_X_4"},
+    {POSE_TYPE_TALK, "SNB_T_4"},
+    {POSE_TYPE_ACTION, "SNB_S_4"},
 };
 
 static PoseTableEntry pose_table_parts[] = {
-    {28, "SNB_B_1"},
-    {39, "SNB_B_1"},
-    {69, "SNB_B_1"},
+    {POSE_TYPE_NORMAL, "SNB_B_1"},
+    {POSE_TYPE_DAMAGE, "SNB_B_1"},
+    {POSE_TYPE_ACTION, "SNB_B_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -549,7 +549,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, -2, 0, 4)
     CALL_CHILD(PTR(_body_param_set))
     CALL(btlevtcmd_SetUnitWork, -2, 1, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 5, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 5, POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetRunSound, -2, STRING("SFX_ENM_SAMBO_MOVE1"), STRING("SFX_ENM_SAMBO_MOVE1"), 0, 6, 6)
     CALL(btlevtcmd_SetWalkSound, -2, STRING("SFX_ENM_SAMBO_MOVE1"), STRING("SFX_ENM_SAMBO_MOVE1"), 0, 6, 6)
     CALL(btlevtcmd_StartWaitEvent, -2)
@@ -1004,11 +1004,11 @@ static EVT_BEGIN(attack_head_2_event)
             CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 14)
         END_IF
     END_SWITCH
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), POSE_TYPE_WALK)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(2.0f))
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
@@ -1100,7 +1100,7 @@ static EVT_BEGIN(attack_head_2_event)
         CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_sambo_head_attack_2), 256, LW(5))
     END_SWITCH
     CALL(btlevtcmd_SetRotate, -2, 0, 0, 90)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), POSE_TYPE_NEUTRAL)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     SET_VALUE(LW(14), -90)
@@ -1274,7 +1274,7 @@ static EVT_BEGIN(attack_head_1_event)
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 10)
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 8, -1)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_SAMBO_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 4, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 4, POSE_TYPE_NEUTRAL)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_AnimeChangePoseType, -2, 4, 41)
@@ -1384,7 +1384,7 @@ static EVT_BEGIN(attack_spike_event)
         CALL(btlevtcmd_JumpPartsPosition, -2, 5, LW(0), LW(1), LW(2), 30, -1)
     END_SIBLING_EVENT
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_SAMBO_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), 50)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), POSE_TYPE_ATTACK)
     WAIT_FRAMES(24)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_SAMBO_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_SAMBO_ATTACK5"), EVT_NULLPTR, 0, LW(14))
@@ -1450,7 +1450,7 @@ static EVT_BEGIN(attack_spike_event)
     END_SWITCH
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(12), 256, LW(5))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(6), POSE_TYPE_NEUTRAL)
     IF_INT_EQUAL(LW(5), 21)
         CALL(evt_snd_sfxoff, LW(14))
         CALL(btlevtcmd_GetBodyId, -2, LW(11))

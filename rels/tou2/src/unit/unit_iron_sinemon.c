@@ -155,24 +155,24 @@ static BattleWeapon weapon_iron_sinemon_attack = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {1, "SIN_N_1"},
-    {2, "SIN_Y_1"},
-    {9, "SIN_Y_1"},
-    {5, "SIN_K_1"},
-    {4, "SIN_I_1"},
-    {3, "SIS_I_1"},
-    {28, "SIN_S_1"},
-    {29, "SIN_Q_1"},
+    {POSE_TYPE_SLEEP, "SIN_N_1"},
+    {POSE_TYPE_STOP, "SIN_Y_1"},
+    {POSE_TYPE_FREEZE, "SIN_Y_1"},
+    {POSE_TYPE_CONFUSE, "SIN_K_1"},
+    {POSE_TYPE_POISON, "SIN_I_1"},
+    {POSE_TYPE_DIZZY, "SIS_I_1"},
+    {POSE_TYPE_NORMAL, "SIN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "SIN_Q_1"},
     {30, "SIN_Q_1"},
-    {31, "SIN_A_1a"},
-    {39, "SIN_D_1"},
-    {50, "SIN_A_1a"},
-    {40, "SIN_W_1"},
-    {42, "SIN_R_1"},
-    {65, "SIN_T_1"},
-    {56, "SIN_I_1"},
-    {57, "SIN_I_1"},
-    {69, "SIN_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SIN_A_1a"},
+    {POSE_TYPE_DAMAGE, "SIN_D_1"},
+    {POSE_TYPE_ATTACK, "SIN_A_1a"},
+    {POSE_TYPE_WALK, "SIN_W_1"},
+    {POSE_TYPE_RUN, "SIN_R_1"},
+    {POSE_TYPE_TALK, "SIN_T_1"},
+    {POSE_TYPE_DANGER, "SIN_I_1"},
+    {POSE_TYPE_PERIL, "SIN_I_1"},
+    {POSE_TYPE_ACTION, "SIN_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -365,7 +365,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_ISIN_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ATTACK)
     CALL(evt_btl_camera_set_zoom, 0, 300)
     WAIT_MS(750)
     DELETE_EVENT(LW(14))
@@ -423,7 +423,7 @@ static EVT_BEGIN(attack_event)
     GOTO(98)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)

@@ -629,23 +629,23 @@ static EVT_BEGIN(attack_event_bunsin)
 EVT_END()
 
 static PoseTableEntry pose_table[] = {
-    {1, "MAH_N_1"},
-    {2, "MAH_Y_1"},
-    {9, "MAH_Y_1"},
-    {5, "MAH_K_1"},
-    {4, "MAH_X_1"},
-    {3, "MAH_X_1"},
-    {28, "MAH_S_1"},
-    {29, "MAH_Q_1"},
+    {POSE_TYPE_SLEEP, "MAH_N_1"},
+    {POSE_TYPE_STOP, "MAH_Y_1"},
+    {POSE_TYPE_FREEZE, "MAH_Y_1"},
+    {POSE_TYPE_CONFUSE, "MAH_K_1"},
+    {POSE_TYPE_POISON, "MAH_X_1"},
+    {POSE_TYPE_DIZZY, "MAH_X_1"},
+    {POSE_TYPE_NORMAL, "MAH_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "MAH_Q_1"},
     {30, "MAH_Q_1"},
-    {31, "MAH_A_1"},
-    {39, "MAH_D_1"},
-    {40, "MAH_W_1"},
-    {42, "MAH_R_1"},
-    {56, "MAH_X_1"},
-    {57, "MAH_X_1"},
-    {65, "MAH_T_1"},
-    {69, "MAH_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "MAH_A_1"},
+    {POSE_TYPE_DAMAGE, "MAH_D_1"},
+    {POSE_TYPE_WALK, "MAH_W_1"},
+    {POSE_TYPE_RUN, "MAH_R_1"},
+    {POSE_TYPE_DANGER, "MAH_X_1"},
+    {POSE_TYPE_PERIL, "MAH_X_1"},
+    {POSE_TYPE_TALK, "MAH_T_1"},
+    {POSE_TYPE_ACTION, "MAH_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -868,7 +868,7 @@ EVT_END()
 static EVT_BEGIN(mahorn_subset_blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, -2, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), POSE_TYPE_DAMAGE)
     BEGIN_SIBLING_EVENT
         LABEL(0)
         CALL(btlevtcmd_AddRotate, -2, 0, 20, 0)

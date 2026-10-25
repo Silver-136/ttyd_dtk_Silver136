@@ -57,40 +57,40 @@ static EvtWord wait_event[6];
 EvtWord mario_win_reaction[9];
 
 PoseTableEntry pose_table_mario_stay[] = {
-    {4, "M_S_3"},
-    {1, "M_N_5"},
-    {2, "M_Z_10"},
-    {9, "M_Z_10"},
-    {5, "M_X_1"},
-    {3, "M_X_1"},
-    {27, "M_Z_11"},
-    {28, "M_S_1"},
-    {35, "M_V_2"},
+    {POSE_TYPE_POISON, "M_S_3"},
+    {POSE_TYPE_SLEEP, "M_N_5"},
+    {POSE_TYPE_STOP, "M_Z_10"},
+    {POSE_TYPE_FREEZE, "M_Z_10"},
+    {POSE_TYPE_CONFUSE, "M_X_1"},
+    {POSE_TYPE_DIZZY, "M_X_1"},
+    {POSE_TYPE_KO, "M_Z_11"},
+    {POSE_TYPE_NORMAL, "M_S_1"},
+    {POSE_TYPE_DAMAGE_STATUS, "M_V_2"},
     {37, "M_B_2"},
-    {36, "M_D_6"},
-    {31, "M_B_1"},
+    {POSE_TYPE_DAMAGE_TOP_SPIKY, "M_D_6"},
+    {POSE_TYPE_DAMAGE_GUARDED, "M_B_1"},
     {32, "M_V_1"},
-    {38, "M_N_7"},
-    {39, "M_D_1"},
-    {43, "M_S_1"},
-    {40, "M_W_1"},
-    {42, "M_R_1"},
-    {44, "M_J_1B"},
-    {52, "M_I_1"},
-    {57, "M_S_3"},
-    {56, "M_S_3"},
-    {62, "M_V_2"},
-    {63, "M_V_2"},
-    {58, "M_A_3B"},
-    {59, "M_A_3B"},
-    {60, "M_D_2"},
-    {61, "M_V_1"},
-    {67, "M_C_3"},
-    {66, "M_N_8"},
-    {64, "M_I_O"},
-    {49, "M_J_1B"},
-    {45, "M_B_2"},
-    {69, "M_S_1"},
+    {POSE_TYPE_DAMAGE_SURPRISED, "M_N_7"},
+    {POSE_TYPE_DAMAGE, "M_D_1"},
+    {POSE_TYPE_NEUTRAL, "M_S_1"},
+    {POSE_TYPE_WALK, "M_W_1"},
+    {POSE_TYPE_RUN, "M_R_1"},
+    {POSE_TYPE_JUMP, "M_J_1B"},
+    {POSE_TYPE_ITEM, "M_I_1"},
+    {POSE_TYPE_PERIL, "M_S_3"},
+    {POSE_TYPE_DANGER, "M_S_3"},
+    {POSE_TYPE_HAPPY_HEART, "M_V_2"},
+    {POSE_TYPE_HAPPY_FLOWER, "M_V_2"},
+    {POSE_TYPE_KISSED_CHRISTINE, "M_A_3B"},
+    {POSE_TYPE_KISSED_CHUCHURINA, "M_A_3B"},
+    {POSE_TYPE_ESCAPE_STUMBLE, "M_D_2"},
+    {POSE_TYPE_ESCAPE_RECOVER, "M_V_1"},
+    {POSE_TYPE_COMMAND, "M_C_3"},
+    {POSE_TYPE_APPEAL, "M_N_8"},
+    {POSE_TYPE_ZERO_GRAVITY, "M_I_O"},
+    {POSE_TYPE_AVOID_COUNTER, "M_J_1B"},
+    {POSE_TYPE_DEFEND, "M_B_2"},
+    {POSE_TYPE_ACTION, "M_S_1"},
 };
 
 BattleDataEntry data_table_mario[] = {
@@ -113,9 +113,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 PoseTableEntry pose_table_object[] = {
-    {28, "KRN_H_1"},
-    {39, "KRN_H_1"},
-    {69, "KRN_H_1"},
+    {POSE_TYPE_NORMAL, "KRN_H_1"},
+    {POSE_TYPE_DAMAGE, "KRN_H_1"},
+    {POSE_TYPE_ACTION, "KRN_H_1"},
 };
 
 BattleUnitKindPart unitpartsdata_Mario[] = {
@@ -196,7 +196,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
     CALL(evt_map_replayanim, 0, STRING("dontyo"))
     WAIT_FRAMES(40)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 61, -1, 0)
     LABEL(0)
@@ -220,15 +220,15 @@ EVT_BEGIN(mario_ride_btl_entry_event)
     CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
     CALL(evt_map_replayanim, 0, STRING("dontyo"))
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -4, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 30)
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 50, -1, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 44)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_JUMP)
     CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 60)
     CALL(btlevtcmd_SetFallAccel, -2, FLOAT(0.5f))
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 24, -1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 10, -1, 0)
     LABEL(0)
@@ -451,7 +451,7 @@ EVT_BEGIN(mario_emergency_revival_event)
     ADD(LW(1), 30)
     CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), 10, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(2000)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 44)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_JUMP)
     CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 20, -1)
@@ -460,7 +460,7 @@ EVT_BEGIN(mario_emergency_revival_event)
 EVT_END()
 
 EVT_BEGIN(mario_appeal_event)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 66)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_APPEAL1"), LW(0), LW(1), LW(2), 0)
     WAIT_FRAMES(60)
@@ -513,7 +513,7 @@ EVT_BEGIN(btlataudevtMarioJump)
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 10, -1)
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 10)
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 6, -1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_MS(500)
         CALL(evt_btl_camera_set_mode, 0, 0)
@@ -544,7 +544,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
     MULTIPLY(LW(8), LW(4))
     MULTIPLY(LW(8), -1)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_MovePosition, -2, LW(8), LW(1), LW(2), 0, -1, 0)
     WAIT_FRAMES(20)
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
@@ -620,7 +620,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("M_H_16"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(8.0f))
     SET_VALUE(LW(0), 0)

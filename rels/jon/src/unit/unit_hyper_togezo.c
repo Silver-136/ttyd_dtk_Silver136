@@ -129,53 +129,53 @@ static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
 static StatusVulnerability regist_guard = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 static PoseTableEntry pose_table[] = {
-    {1, "TGZ_N_1"},
-    {2, "TGZ_Y_1"},
-    {9, "TGZ_Y_1"},
-    {5, "TGZ_K_1"},
-    {4, "TGZ_X_1"},
-    {3, "TGZ_X_1"},
-    {28, "TGZ_S_1"},
-    {29, "TGZ_Q_1"},
+    {POSE_TYPE_SLEEP, "TGZ_N_1"},
+    {POSE_TYPE_STOP, "TGZ_Y_1"},
+    {POSE_TYPE_FREEZE, "TGZ_Y_1"},
+    {POSE_TYPE_CONFUSE, "TGZ_K_1"},
+    {POSE_TYPE_POISON, "TGZ_X_1"},
+    {POSE_TYPE_DIZZY, "TGZ_X_1"},
+    {POSE_TYPE_NORMAL, "TGZ_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "TGZ_Q_1"},
     {30, "TGZ_Q_1"},
-    {31, "TGZ_A_1"},
-    {39, "TGZ_D_1"},
-    {40, "TGZ_W_1"},
-    {42, "TGZ_R_1"},
-    {65, "TGZ_T_1"},
-    {69, "TGZ_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "TGZ_A_1"},
+    {POSE_TYPE_DAMAGE, "TGZ_D_1"},
+    {POSE_TYPE_WALK, "TGZ_W_1"},
+    {POSE_TYPE_RUN, "TGZ_R_1"},
+    {POSE_TYPE_TALK, "TGZ_T_1"},
+    {POSE_TYPE_ACTION, "TGZ_S_1"},
 };
 
 static PoseTableEntry pose_table_turn[] = {
-    {1, "TGZ_N_2"},
-    {2, "TGZ_Y_2"},
-    {9, "TGZ_Y_2"},
-    {5, "TGZ_K_2"},
-    {4, "TGZ_X_2"},
-    {3, "TGZ_X_2"},
-    {28, "TGZ_S_2"},
-    {29, "TGZ_Q_2"},
+    {POSE_TYPE_SLEEP, "TGZ_N_2"},
+    {POSE_TYPE_STOP, "TGZ_Y_2"},
+    {POSE_TYPE_FREEZE, "TGZ_Y_2"},
+    {POSE_TYPE_CONFUSE, "TGZ_K_2"},
+    {POSE_TYPE_POISON, "TGZ_X_2"},
+    {POSE_TYPE_DIZZY, "TGZ_X_2"},
+    {POSE_TYPE_NORMAL, "TGZ_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "TGZ_Q_2"},
     {30, "TGZ_Q_2"},
-    {31, "TGZ_S_1"},
-    {39, "TGZ_D_3"},
-    {40, "TGZ_W_1"},
-    {42, "TGZ_R_1"},
-    {69, "TGZ_S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "TGZ_S_1"},
+    {POSE_TYPE_DAMAGE, "TGZ_D_3"},
+    {POSE_TYPE_WALK, "TGZ_W_1"},
+    {POSE_TYPE_RUN, "TGZ_R_1"},
+    {POSE_TYPE_ACTION, "TGZ_S_2"},
 };
 
 static PoseTableEntry pose_table_guard[] = {
-    {1, "TGZ_P_1"},
-    {2, "TGZ_P_1"},
-    {9, "TGZ_P_1"},
-    {5, "TGZ_P_1"},
-    {4, "TGZ_P_1"},
-    {3, "TGZ_P_1"},
-    {28, "TGZ_P_1"},
-    {29, "TGZ_P_1"},
+    {POSE_TYPE_SLEEP, "TGZ_P_1"},
+    {POSE_TYPE_STOP, "TGZ_P_1"},
+    {POSE_TYPE_FREEZE, "TGZ_P_1"},
+    {POSE_TYPE_CONFUSE, "TGZ_P_1"},
+    {POSE_TYPE_POISON, "TGZ_P_1"},
+    {POSE_TYPE_DIZZY, "TGZ_P_1"},
+    {POSE_TYPE_NORMAL, "TGZ_P_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "TGZ_P_1"},
     {30, "TGZ_P_1"},
-    {31, "TGZ_P_1"},
-    {39, "TGZ_P_1"},
-    {69, "TGZ_P_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "TGZ_P_1"},
+    {POSE_TYPE_DAMAGE, "TGZ_P_1"},
+    {POSE_TYPE_ACTION, "TGZ_P_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -327,7 +327,7 @@ static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_OffPartsCounterAttribute, LW(10), LW(11), 4)
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table_turn))
     CALL(btlevtcmd_SetOverTurnCount, LW(10), 1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 39)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(evt_snd_sfxon, STRING("SFX_CONDITION_INSIDE"), 0)
     CALL(btlevtcmd_SetFallAccel, -2, FLOAT(1.0f))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
@@ -354,7 +354,7 @@ static EVT_BEGIN(wakeup_event)
     CALL(btlevtcmd_OnPartsCounterAttribute, LW(10), LW(11), 1)
     CALL(btlevtcmd_OnPartsCounterAttribute, LW(10), LW(11), 4)
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 69)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(1.0f))
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 18, -1)
@@ -586,7 +586,7 @@ static EVT_BEGIN(normal_attack_event)
     END_LOOP
     WAIT_FRAMES(5)
     CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)

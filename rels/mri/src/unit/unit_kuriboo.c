@@ -73,26 +73,26 @@ static BattleUnitKind unit_kuriboo = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {1, "KUR_N_1"},
-    {2, "KUR_Y_1"},
-    {9, "KUR_Y_1"},
-    {5, "KUR_K_1"},
-    {4, "KUR_I_1"},
-    {3, "KUR_I_1"},
-    {28, "KUR_S_1"},
-    {29, "KUR_Q_1"},
+    {POSE_TYPE_SLEEP, "KUR_N_1"},
+    {POSE_TYPE_STOP, "KUR_Y_1"},
+    {POSE_TYPE_FREEZE, "KUR_Y_1"},
+    {POSE_TYPE_CONFUSE, "KUR_K_1"},
+    {POSE_TYPE_POISON, "KUR_I_1"},
+    {POSE_TYPE_DIZZY, "KUR_I_1"},
+    {POSE_TYPE_NORMAL, "KUR_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KUR_Q_1"},
     {30, "KUR_Q_1"},
-    {31, "KUR_S_1"},
-    {39, "KUR_D_1"},
-    {50, "KUR_A_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KUR_S_1"},
+    {POSE_TYPE_DAMAGE, "KUR_D_1"},
+    {POSE_TYPE_ATTACK, "KUR_A_1"},
     {51, "KUR_A_2"},
-    {42, "KUR_R_1"},
+    {POSE_TYPE_RUN, "KUR_R_1"},
     {41, "KUR_R_2"},
-    {40, "KUR_W_1"},
-    {56, "KUR_I_1"},
-    {57, "KUR_I_1"},
-    {65, "KUR_T_1"},
-    {69, "KUR_S_1"},
+    {POSE_TYPE_WALK, "KUR_W_1"},
+    {POSE_TYPE_DANGER, "KUR_I_1"},
+    {POSE_TYPE_PERIL, "KUR_I_1"},
+    {POSE_TYPE_TALK, "KUR_T_1"},
+    {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -235,14 +235,14 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_kuriboo_attack))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, -2, LW(0), 0, LW(2), 0, -1, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     WAIT_MS(170)

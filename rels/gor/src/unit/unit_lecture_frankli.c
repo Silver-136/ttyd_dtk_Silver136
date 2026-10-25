@@ -103,11 +103,11 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static PoseTableEntry pose_table[] = {
-    {27, "D_1"},
-    {28, "S_1"},
-    {31, "D_2"},
-    {39, "D_2"},
-    {69, "S_1"},
+    {POSE_TYPE_KO, "D_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_2"},
+    {POSE_TYPE_DAMAGE, "D_2"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 BattleWeapon _lec_weapon_jump = {
@@ -458,7 +458,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, -2, LW(0))
     CALL(btlevtcmd_SetupAC, -2, 1, 1, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(3.0f))
     CALL(btlevtcmd_GetTakeoffPosition, -2, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(6))
@@ -620,7 +620,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("M_W_1"))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
@@ -686,7 +686,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
             CALL(btlevtcmd_AcSetFlag, 0)
         END_IF
         CALL(btlevtcmd_SetupAC, -2, 3, 1, 0)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetPos, -2, EVT_NULLPTR, LW(1), EVT_NULLPTR)
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 35)
@@ -816,7 +816,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     CALL(btlevtcmd_SetRotate, -2, 0, 0, 0)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("M_W_1"))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)

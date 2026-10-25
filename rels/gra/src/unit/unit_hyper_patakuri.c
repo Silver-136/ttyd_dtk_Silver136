@@ -193,25 +193,25 @@ static BattleUnitKindPart parts_patakuri[] = {
 };
 
 static PoseTableEntry pose_table_patakuri[] = {
-    {1, "PTK_N_1"},
-    {2, "PTK_Y_1"},
-    {9, "PTK_Y_1"},
-    {5, "PTK_K_1"},
-    {4, "PTK_I_1"},
-    {3, "PTK_I_1"},
-    {28, "PTK_S_1"},
-    {29, "PTK_Q_1"},
+    {POSE_TYPE_SLEEP, "PTK_N_1"},
+    {POSE_TYPE_STOP, "PTK_Y_1"},
+    {POSE_TYPE_FREEZE, "PTK_Y_1"},
+    {POSE_TYPE_CONFUSE, "PTK_K_1"},
+    {POSE_TYPE_POISON, "PTK_I_1"},
+    {POSE_TYPE_DIZZY, "PTK_I_1"},
+    {POSE_TYPE_NORMAL, "PTK_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "PTK_Q_1"},
     {30, "PTK_Q_1"},
-    {31, "PTK_S_1"},
-    {39, "PTK_D_1"},
-    {50, "PTK_A_1"},
-    {42, "PTK_R_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PTK_S_1"},
+    {POSE_TYPE_DAMAGE, "PTK_D_1"},
+    {POSE_TYPE_ATTACK, "PTK_A_1"},
+    {POSE_TYPE_RUN, "PTK_R_1"},
     {41, "PTK_R_2"},
-    {40, "PTK_W_1"},
-    {56, "PTK_I_1"},
-    {57, "PTK_I_1"},
-    {65, "PTK_T_1"},
-    {69, "PTK_S_1"},
+    {POSE_TYPE_WALK, "PTK_W_1"},
+    {POSE_TYPE_DANGER, "PTK_I_1"},
+    {POSE_TYPE_PERIL, "PTK_I_1"},
+    {POSE_TYPE_TALK, "PTK_T_1"},
+    {POSE_TYPE_ACTION, "PTK_S_1"},
 };
 
 static BattleDataEntry data_table_patakuri[] = {
@@ -252,7 +252,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_ReplaceParts, LW(10), LW(11), PTR(parts), 1)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_KIND_CHANGED)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 39)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 0)
@@ -264,7 +264,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_ChangeKind, LW(10), 66)
     CALL_CHILD(init_event)
     WAIT_FRAMES(1)
-    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 39)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     RETURN
 EVT_END()
 
@@ -338,7 +338,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_patakuri_attack))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 50)
     ADD(LW(1), 40)
@@ -351,7 +351,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     CALL(evt_btl_camera_set_mode, 0, 3)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ATTACK)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 50)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(5.0f))
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PATAKURI_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -385,7 +385,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 50)
     SUBTRACT(LW(1), 10)
     CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 0, -20, 1, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
     GOTO(98)
     LABEL(91)
@@ -403,7 +403,7 @@ static EVT_BEGIN(attack_event_patakuri)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_SetMoveSoundDataWork, -2, STRING("SFX_ENM_PATAKURI_MOVE1"), STRING("SFX_ENM_PATAKURI_MOVE1"), 0, 15, 15, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(7.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 0, -10, 0, 0, -2)
@@ -422,26 +422,26 @@ static EVT_BEGIN(wait_event_patakuri)
 EVT_END()
 
 static PoseTableEntry pose_table[] = {
-    {1, "KUR_N_1"},
-    {2, "KUR_Y_1"},
-    {9, "KUR_Y_1"},
-    {5, "KUR_K_1"},
-    {4, "KUR_I_1"},
-    {3, "KUR_I_1"},
-    {28, "KUR_S_1"},
-    {29, "KUR_Q_1"},
+    {POSE_TYPE_SLEEP, "KUR_N_1"},
+    {POSE_TYPE_STOP, "KUR_Y_1"},
+    {POSE_TYPE_FREEZE, "KUR_Y_1"},
+    {POSE_TYPE_CONFUSE, "KUR_K_1"},
+    {POSE_TYPE_POISON, "KUR_I_1"},
+    {POSE_TYPE_DIZZY, "KUR_I_1"},
+    {POSE_TYPE_NORMAL, "KUR_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KUR_Q_1"},
     {30, "KUR_Q_1"},
-    {31, "KUR_S_1"},
-    {39, "KUR_D_1"},
-    {50, "KUR_A_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KUR_S_1"},
+    {POSE_TYPE_DAMAGE, "KUR_D_1"},
+    {POSE_TYPE_ATTACK, "KUR_A_1"},
     {51, "KUR_A_2"},
-    {42, "KUR_R_1"},
+    {POSE_TYPE_RUN, "KUR_R_1"},
     {41, "KUR_R_2"},
-    {40, "KUR_W_1"},
-    {56, "KUR_I_1"},
-    {57, "KUR_I_1"},
-    {65, "KUR_T_1"},
-    {69, "KUR_S_1"},
+    {POSE_TYPE_WALK, "KUR_W_1"},
+    {POSE_TYPE_DANGER, "KUR_I_1"},
+    {POSE_TYPE_PERIL, "KUR_I_1"},
+    {POSE_TYPE_TALK, "KUR_T_1"},
+    {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -639,14 +639,14 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_kuriboo_attack))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, -2, LW(0), 0, LW(2), 0, -1, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     WAIT_MS(170)

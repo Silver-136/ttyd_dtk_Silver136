@@ -265,7 +265,7 @@ EVT_BEGIN(btlataudevtPresentItem_Get)
     END_IF
     CALL(_get_present_item)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), 52)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_ITEM)
     CALL(_get_item_announce)
     CALL(_delete_present_item, EVT_NULLPTR)
     CALL(btlevtcmd_GetUnitId, -2, LW(0))

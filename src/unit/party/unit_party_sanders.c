@@ -84,54 +84,54 @@ static EvtWord party_win_reaction[9];
 
 
 PoseTableEntry pose_table_sanders_stay[] = {
-    {9, "D_4"},
-    {2, "D_4"},
-    {3, "X_1"},
-    {4, "D_2"},
-    {5, "X_1"},
-    {1, "N_1"},
-    {27, "D_3"},
-    {28, "S_1"},
+    {POSE_TYPE_FREEZE, "D_4"},
+    {POSE_TYPE_STOP, "D_4"},
+    {POSE_TYPE_DIZZY, "X_1"},
+    {POSE_TYPE_POISON, "D_2"},
+    {POSE_TYPE_CONFUSE, "X_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_KO, "D_3"},
+    {POSE_TYPE_NORMAL, "S_1"},
     {37, "G_2"},
-    {31, "G_1"},
-    {39, "D_1"},
-    {40, "W_1"},
-    {42, "R_1"},
-    {57, "D_2"},
-    {56, "D_2"},
-    {60, "D_4"},
-    {61, "D_2"},
-    {65, "T_1"},
-    {52, "I_1"},
-    {67, "C_1"},
-    {66, "O_1"},
-    {64, "R_3"},
-    {49, "J_1A"},
-    {45, "G_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "G_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_PERIL, "D_2"},
+    {POSE_TYPE_DANGER, "D_2"},
+    {POSE_TYPE_ESCAPE_STUMBLE, "D_4"},
+    {POSE_TYPE_ESCAPE_RECOVER, "D_2"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ITEM, "I_1"},
+    {POSE_TYPE_COMMAND, "C_1"},
+    {POSE_TYPE_APPEAL, "O_1"},
+    {POSE_TYPE_ZERO_GRAVITY, "R_3"},
+    {POSE_TYPE_AVOID_COUNTER, "J_1A"},
+    {POSE_TYPE_DEFEND, "G_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 PoseTableEntry pose_table_counter_sanders[] = {
-    {1, "N_2"},
-    {27, "D_3"},
-    {28, "A_3"},
+    {POSE_TYPE_SLEEP, "N_2"},
+    {POSE_TYPE_KO, "D_3"},
+    {POSE_TYPE_NORMAL, "A_3"},
     {37, "G_2"},
-    {31, "G_1"},
-    {39, "D_1"},
-    {40, "W_1"},
-    {42, "R_1"},
-    {57, "D_2"},
-    {56, "D_2"},
-    {60, "D_4"},
-    {61, "D_2"},
-    {65, "T_1"},
-    {52, "I_1"},
-    {67, "C_1"},
-    {66, "O_1"},
-    {64, "R_3"},
-    {49, "J_1A"},
-    {45, "G_1"},
-    {69, "A_3"},
+    {POSE_TYPE_DAMAGE_GUARDED, "G_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_PERIL, "D_2"},
+    {POSE_TYPE_DANGER, "D_2"},
+    {POSE_TYPE_ESCAPE_STUMBLE, "D_4"},
+    {POSE_TYPE_ESCAPE_RECOVER, "D_2"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ITEM, "I_1"},
+    {POSE_TYPE_COMMAND, "C_1"},
+    {POSE_TYPE_APPEAL, "O_1"},
+    {POSE_TYPE_ZERO_GRAVITY, "R_3"},
+    {POSE_TYPE_AVOID_COUNTER, "J_1A"},
+    {POSE_TYPE_DEFEND, "G_1"},
+    {POSE_TYPE_ACTION, "A_3"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -221,7 +221,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 250)
     CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
     WAIT_FRAMES(40)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_SetMoveSoundDataWork, -2, STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 0, 9, 9, 0, 0)
@@ -552,7 +552,7 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
@@ -831,7 +831,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
@@ -1162,7 +1162,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
     LABEL(99)
@@ -1414,7 +1414,7 @@ EVT_END()
 
 EVT_BEGIN(sanders_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 66)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_APPEAL1"), LW(0), LW(1), LW(2), 0)
     CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
@@ -1451,7 +1451,7 @@ static EVT_BEGIN(attack_audience_event)
     MULTIPLY(LW(8), LW(4))
     MULTIPLY(LW(8), -1)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_MovePosition, -2, LW(8), LW(1), LW(2), 0, -1, 0)
     WAIT_FRAMES(20)
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))

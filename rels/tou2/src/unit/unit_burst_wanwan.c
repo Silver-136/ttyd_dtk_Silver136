@@ -114,25 +114,25 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 2, 0, 0}};
 static StatusVulnerability regist = {0, 70, 65, 100, 65, 100, 0, 70, 100, 90, 100, 90, 100, 95, 65, 45, 30, 100, 65, 100, 100, 95};
 
 static PoseTableEntry pose_table[] = {
-    {1, "WAN_N_1"},
-    {2, "WAN_Y_1"},
-    {9, "WAN_Y_1"},
-    {5, "WAN_K_1"},
-    {4, "WAN_X_1"},
-    {3, "WAN_X_1"},
-    {27, "WAN_Z_1"},
-    {28, "WAN_S_1A"},
-    {29, "WAN_D_1"},
+    {POSE_TYPE_SLEEP, "WAN_N_1"},
+    {POSE_TYPE_STOP, "WAN_Y_1"},
+    {POSE_TYPE_FREEZE, "WAN_Y_1"},
+    {POSE_TYPE_CONFUSE, "WAN_K_1"},
+    {POSE_TYPE_POISON, "WAN_X_1"},
+    {POSE_TYPE_DIZZY, "WAN_X_1"},
+    {POSE_TYPE_KO, "WAN_Z_1"},
+    {POSE_TYPE_NORMAL, "WAN_S_1A"},
+    {POSE_TYPE_DAMAGE_FIRE, "WAN_D_1"},
     {30, "WAN_D_1"},
-    {31, "WAN_A_1"},
-    {39, "WAN_D_1"},
-    {50, "WAN_A_1"},
-    {42, "WAN_R_1"},
-    {40, "WAN_W_1"},
-    {56, "WAN_X_1"},
-    {57, "WAN_X_1"},
-    {65, "WAN_S_1A"},
-    {69, "WAN_S_1A"},
+    {POSE_TYPE_DAMAGE_GUARDED, "WAN_A_1"},
+    {POSE_TYPE_DAMAGE, "WAN_D_1"},
+    {POSE_TYPE_ATTACK, "WAN_A_1"},
+    {POSE_TYPE_RUN, "WAN_R_1"},
+    {POSE_TYPE_WALK, "WAN_W_1"},
+    {POSE_TYPE_DANGER, "WAN_X_1"},
+    {POSE_TYPE_PERIL, "WAN_X_1"},
+    {POSE_TYPE_TALK, "WAN_S_1A"},
+    {POSE_TYPE_ACTION, "WAN_S_1A"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -241,7 +241,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(counter_damage_event)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_SetPartsFallAccel, LW(10), 1, FLOAT(1.0f))
     CALL(btlevtcmd_GetPartsPos, LW(10), 1, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_PartsFaceDirectionSub, LW(10), 1, LW(2), 25)

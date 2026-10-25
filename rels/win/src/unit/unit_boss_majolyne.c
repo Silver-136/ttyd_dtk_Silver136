@@ -130,24 +130,24 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {70, 80, 70, 100, 70, 100, 100, 50, 100, 80, 100, 80, 100, 95, 70, 0, 0, 100, 70, 100, 100, 0};
 
 static PoseTableEntry pose_table[] = {
-    {1, "MJR_N_1"},
-    {2, "MJR_Z_1"},
-    {9, "MJR_Z_1"},
-    {5, "MJR_X_1"},
-    {4, "MJR_X_1"},
-    {3, "MJR_X_1"},
-    {28, "MJR_S_1"},
-    {29, "MJR_Q_1"},
+    {POSE_TYPE_SLEEP, "MJR_N_1"},
+    {POSE_TYPE_STOP, "MJR_Z_1"},
+    {POSE_TYPE_FREEZE, "MJR_Z_1"},
+    {POSE_TYPE_CONFUSE, "MJR_X_1"},
+    {POSE_TYPE_POISON, "MJR_X_1"},
+    {POSE_TYPE_DIZZY, "MJR_X_1"},
+    {POSE_TYPE_NORMAL, "MJR_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "MJR_Q_1"},
     {30, "MJR_Q_1"},
-    {31, "MJR_D_1"},
-    {39, "MJR_D_1"},
-    {50, "MJR_S_1"},
-    {42, "MJR_R_1"},
-    {40, "MJR_W_1"},
-    {56, "MJR_S_1"},
-    {57, "MJR_S_1"},
-    {65, "MJR_T_1"},
-    {69, "MJR_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "MJR_D_1"},
+    {POSE_TYPE_DAMAGE, "MJR_D_1"},
+    {POSE_TYPE_ATTACK, "MJR_S_1"},
+    {POSE_TYPE_RUN, "MJR_R_1"},
+    {POSE_TYPE_WALK, "MJR_W_1"},
+    {POSE_TYPE_DANGER, "MJR_S_1"},
+    {POSE_TYPE_PERIL, "MJR_S_1"},
+    {POSE_TYPE_TALK, "MJR_T_1"},
+    {POSE_TYPE_ACTION, "MJR_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -402,7 +402,7 @@ static EVT_BEGIN(dead_event)
     END_IF
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
         CALL(btlevtcmd_ResetFaceDirection, -2)
     END_IF

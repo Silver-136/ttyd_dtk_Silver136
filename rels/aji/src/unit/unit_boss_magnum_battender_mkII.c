@@ -220,42 +220,42 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 40, 40, 0, 40, 0, 100, 20, 0, 0, 100, 0, 100, 80, 40, 0, 0, 100, 30, 0, 0, 0};
 
 static PoseTableEntry pose_table[] = {
-    {1, "MGN_S_1"},
-    {2, "MGN_2D_1"},
-    {9, "MGN_2D_1"},
-    {5, "MGN_X_1"},
-    {4, "MGN_X_1"},
-    {3, "MGN_X_1"},
-    {28, "MGN_S_1"},
-    {29, "MGN_Q_1"},
+    {POSE_TYPE_SLEEP, "MGN_S_1"},
+    {POSE_TYPE_STOP, "MGN_2D_1"},
+    {POSE_TYPE_FREEZE, "MGN_2D_1"},
+    {POSE_TYPE_CONFUSE, "MGN_X_1"},
+    {POSE_TYPE_POISON, "MGN_X_1"},
+    {POSE_TYPE_DIZZY, "MGN_X_1"},
+    {POSE_TYPE_NORMAL, "MGN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_1"},
     {30, "MGN_Q_1"},
-    {31, "MGN_S_1"},
-    {39, "MGN_D_1"},
-    {40, "MGN_W_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "MGN_S_1"},
+    {POSE_TYPE_DAMAGE, "MGN_D_1"},
+    {POSE_TYPE_WALK, "MGN_W_1"},
     {41, "MGN_W_2"},
-    {56, "MGN_S_1"},
-    {57, "MGN_S_1"},
-    {65, "MGN_T_1"},
-    {69, "MGN_S_1"},
+    {POSE_TYPE_DANGER, "MGN_S_1"},
+    {POSE_TYPE_PERIL, "MGN_S_1"},
+    {POSE_TYPE_TALK, "MGN_T_1"},
+    {POSE_TYPE_ACTION, "MGN_S_1"},
 };
 
 static PoseTableEntry pose_table_no_arm[] = {
-    {1, "MGN_S_2"},
-    {2, "MGN_2D_2"},
-    {9, "MGN_2D_2"},
-    {5, "MGN_X_2"},
-    {4, "MGN_X_2"},
-    {3, "MGN_X_2"},
-    {28, "MGN_S_2"},
-    {29, "MGN_Q_2"},
+    {POSE_TYPE_SLEEP, "MGN_S_2"},
+    {POSE_TYPE_STOP, "MGN_2D_2"},
+    {POSE_TYPE_FREEZE, "MGN_2D_2"},
+    {POSE_TYPE_CONFUSE, "MGN_X_2"},
+    {POSE_TYPE_POISON, "MGN_X_2"},
+    {POSE_TYPE_DIZZY, "MGN_X_2"},
+    {POSE_TYPE_NORMAL, "MGN_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_2"},
     {30, "MGN_Q_2"},
-    {31, "MGN_S_2"},
-    {39, "MGN_D_2"},
-    {40, "MGN_W_3"},
-    {56, "MGN_S_2"},
-    {57, "MGN_S_2"},
-    {65, "MGN_T_2"},
-    {69, "MGN_S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "MGN_S_2"},
+    {POSE_TYPE_DAMAGE, "MGN_D_2"},
+    {POSE_TYPE_WALK, "MGN_W_3"},
+    {POSE_TYPE_DANGER, "MGN_S_2"},
+    {POSE_TYPE_PERIL, "MGN_S_2"},
+    {POSE_TYPE_TALK, "MGN_T_2"},
+    {POSE_TYPE_ACTION, "MGN_S_2"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -1255,7 +1255,7 @@ EVT_BEGIN(drill_attack_event)
     CALL(btlevtcmd_SetRotate, -2, 0, 0, 0)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, -2, 400, LW(1), LW(2))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 60, -1, 0)
     RETURN
@@ -1673,14 +1673,14 @@ static EVT_BEGIN(arm_bunri_event)
     CALL(btlevtcmd_SetUnitWork, LW(3), 0, 0)
     CALL(btlevtcmd_SetUnitWork, LW(3), 1, 1)
     CALL(btlevtcmd_SetUnitWork, -2, 3, LW(3))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(3), 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(3), 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_SpawnUnit, LW(4), PTR(&entry_rocket_punch), 0)
     CALL(btlevtcmd_SetUnitWork, LW(4), 0, 1)
     CALL(btlevtcmd_SetUnitWork, LW(4), 1, 1)
     CALL(btlevtcmd_SetUnitWork, -2, 4, LW(4))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(4), 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(4), 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table_no_arm))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     WAIT_MS(1500)
     RETURN
 EVT_END()
@@ -1692,11 +1692,11 @@ static EVT_BEGIN(arm_return_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_rocket_punch), 0)
     CALL(btlevtcmd_SetUnitWork, LW(3), 0, 2)
     CALL(btlevtcmd_SetUnitWork, -2, 3, LW(3))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(3), 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(3), 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_SpawnUnit, LW(4), PTR(&entry_rocket_punch), 0)
     CALL(btlevtcmd_SetUnitWork, LW(4), 0, 3)
     CALL(btlevtcmd_SetUnitWork, -2, 4, LW(4))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(4), 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(4), 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MBTN_PUNCH_FLY1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetPos, LW(3), 300, 40, -100)
@@ -1715,7 +1715,7 @@ static EVT_BEGIN(arm_return_event)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("MGN_A1_8"))
     WAIT_MS(600)
     CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
     RETURN
 EVT_END()
@@ -1798,20 +1798,20 @@ static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist_r = {0, 70, 70, 100, 70, 100, 100, 70, 0, 0, 100, 0, 100, 85, 70, 0, 100, 100, 70, 0, 0, 0};
 
 static PoseTableEntry pose_table_r[] = {
-    {1, "MGN_A1_9"},
-    {2, "MGN_A1_4"},
-    {9, "MGN_A1_4"},
-    {5, "MGN_A1_9"},
-    {4, "MGN_A1_9"},
-    {3, "MGN_A1_9"},
-    {28, "MGN_A1_9"},
-    {29, "MGN_A1_9"},
+    {POSE_TYPE_SLEEP, "MGN_A1_9"},
+    {POSE_TYPE_STOP, "MGN_A1_4"},
+    {POSE_TYPE_FREEZE, "MGN_A1_4"},
+    {POSE_TYPE_CONFUSE, "MGN_A1_9"},
+    {POSE_TYPE_POISON, "MGN_A1_9"},
+    {POSE_TYPE_DIZZY, "MGN_A1_9"},
+    {POSE_TYPE_NORMAL, "MGN_A1_9"},
+    {POSE_TYPE_DAMAGE_FIRE, "MGN_A1_9"},
     {30, "MGN_A1_9"},
-    {31, "MGN_A1_9"},
-    {39, "MGN_A1_9"},
-    {56, "MGN_A1_9"},
-    {57, "MGN_A1_9"},
-    {69, "MGN_A1_9"},
+    {POSE_TYPE_DAMAGE_GUARDED, "MGN_A1_9"},
+    {POSE_TYPE_DAMAGE, "MGN_A1_9"},
+    {POSE_TYPE_DANGER, "MGN_A1_9"},
+    {POSE_TYPE_PERIL, "MGN_A1_9"},
+    {POSE_TYPE_ACTION, "MGN_A1_9"},
 };
 
 static BattleDataEntry data_table_r[] = {

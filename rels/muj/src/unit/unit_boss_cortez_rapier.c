@@ -143,12 +143,12 @@ BattleWeapon weapon_cortez_rapier_float_attack = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {2, "KRT_Z_1"},
-    {9, "KRT_Z_1"},
-    {28, "KRT_S_1"},
-    {31, "KRT_S_1"},
-    {39, "KRT_S_1"},
-    {69, "KRT_S_1"},
+    {POSE_TYPE_STOP, "KRT_Z_1"},
+    {POSE_TYPE_FREEZE, "KRT_Z_1"},
+    {POSE_TYPE_NORMAL, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
+    {POSE_TYPE_DAMAGE, "KRT_S_1"},
+    {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
 static BattleDataEntry data_table[] = {

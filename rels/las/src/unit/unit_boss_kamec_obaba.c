@@ -361,49 +361,49 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {40, 40, 60, 100, 40, 100, 100, 40, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
 
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {28, "S_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "D_1"},
-    {39, "D_1"},
-    {42, "R_1"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "T_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "T_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 static PoseTableEntry pose_table_sky[] = {
-    {1, "N_2"},
-    {2, "Y_2"},
-    {9, "Y_2"},
-    {5, "K_2"},
-    {4, "X_2"},
-    {3, "X_2"},
-    {28, "S_2"},
-    {29, "Q_2"},
+    {POSE_TYPE_SLEEP, "N_2"},
+    {POSE_TYPE_STOP, "Y_2"},
+    {POSE_TYPE_FREEZE, "Y_2"},
+    {POSE_TYPE_CONFUSE, "K_2"},
+    {POSE_TYPE_POISON, "X_2"},
+    {POSE_TYPE_DIZZY, "X_2"},
+    {POSE_TYPE_NORMAL, "S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_2"},
     {30, "Q_2"},
-    {31, "D_2"},
-    {39, "D_2"},
-    {42, "R_2"},
-    {40, "W_2"},
-    {56, "X_2"},
-    {57, "X_2"},
-    {65, "T_2"},
-    {69, "S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_2"},
+    {POSE_TYPE_DAMAGE, "D_2"},
+    {POSE_TYPE_RUN, "R_2"},
+    {POSE_TYPE_WALK, "W_2"},
+    {POSE_TYPE_DANGER, "X_2"},
+    {POSE_TYPE_PERIL, "X_2"},
+    {POSE_TYPE_TALK, "T_2"},
+    {POSE_TYPE_ACTION, "S_2"},
 };
 
 static PoseTableEntry pose_table_dead[] = {
-    {28, "D_3"},
-    {39, "D_3"},
-    {69, "D_3"},
+    {POSE_TYPE_NORMAL, "D_3"},
+    {POSE_TYPE_DAMAGE, "D_3"},
+    {POSE_TYPE_ACTION, "D_3"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -483,7 +483,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table))
     CALL(btlevtcmd_SetTalkPoseType, -2, 65)
     CALL(btlevtcmd_SetStayPoseType, -2, 43)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPartsPos, -2, 2, LW(0), LW(1), LW(2))
@@ -601,12 +601,12 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_OnAttribute, -2, kFloating)
     CALL(btlevtcmd_OnPartsAttribute, -2, 1, kHammerlikeCannotTarget)
     CALL(btlevtcmd_OnPartsAttribute, -2, 1, kShellTosslikeCannotTarget)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table_sky))
     CALL(btlevtcmd_SetTalkPoseType, -2, 65)
     CALL(btlevtcmd_SetStayPoseType, -2, 43)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         LOOP(0)
             CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KAMEBABA_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -619,7 +619,7 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, -2, LW(0), 40, LW(2), 60, 0, 4, 0, -1)
     CALL(btlevtcmd_SetHomePos, -2, LW(0), 40, LW(2))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     DELETE_EVENT(LW(15))
     WAIT_MS(500)
     CALL(btlevtcmd_SetUnitWork, -2, 0, 1)
@@ -974,7 +974,7 @@ static EVT_BEGIN(attack_magic_event)
         GOTO(98)
         LABEL(98)
         WAIT_FRAMES(30)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
         LABEL(99)
         CALL(btlevtcmd_ResetFaceDirection, -2)
         RETURN

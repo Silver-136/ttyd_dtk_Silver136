@@ -152,24 +152,24 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 75, 90, 0, 10, 100, 100, 75, 100, 75, 100, 75, 100, 95, 75, 0, 90, 100, 75, 100, 100, 90};
 
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "K_1"},
-    {28, "S_1"},
-    {29, "Q_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "K_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {30, "Q_1"},
-    {31, "D_1"},
-    {39, "D_1"},
-    {50, "A_1"},
-    {42, "S_1"},
-    {40, "S_1"},
-    {56, "X_1"},
-    {57, "X_1"},
-    {65, "A_1"},
-    {69, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "D_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_ATTACK, "A_1"},
+    {POSE_TYPE_RUN, "S_1"},
+    {POSE_TYPE_WALK, "S_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
+    {POSE_TYPE_TALK, "A_1"},
+    {POSE_TYPE_ACTION, "S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -281,7 +281,7 @@ EVT_END()
 EVT_BEGIN(batten_satellite_attack_attack_event)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("F_1"))
     WAIT_MS(400)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
     CALL(btlevtcmd_SamplingEnemy, -2, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))

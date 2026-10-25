@@ -135,45 +135,45 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {1, "CYU_N_1"},
-    {2, "CYU_Y_1"},
-    {9, "CYU_Y_1"},
-    {5, "CYU_K_1"},
-    {4, "CYU_X_1"},
-    {3, "CYU_X_1"},
-    {28, "CYU_S_1"},
-    {29, "CYU_Q_1"},
+    {POSE_TYPE_SLEEP, "CYU_N_1"},
+    {POSE_TYPE_STOP, "CYU_Y_1"},
+    {POSE_TYPE_FREEZE, "CYU_Y_1"},
+    {POSE_TYPE_CONFUSE, "CYU_K_1"},
+    {POSE_TYPE_POISON, "CYU_X_1"},
+    {POSE_TYPE_DIZZY, "CYU_X_1"},
+    {POSE_TYPE_NORMAL, "CYU_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "CYU_Q_1"},
     {30, "CYU_Q_1"},
-    {31, "CYU_S_1"},
-    {39, "CYU_D_1"},
-    {50, "CYU_A_1"},
-    {42, "CYU_R_1"},
-    {40, "CYU_W_1"},
-    {56, "CYU_X_1"},
-    {57, "CYU_X_1"},
-    {65, "CYU_T_1"},
-    {69, "CYU_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CYU_S_1"},
+    {POSE_TYPE_DAMAGE, "CYU_D_1"},
+    {POSE_TYPE_ATTACK, "CYU_A_1"},
+    {POSE_TYPE_RUN, "CYU_R_1"},
+    {POSE_TYPE_WALK, "CYU_W_1"},
+    {POSE_TYPE_DANGER, "CYU_X_1"},
+    {POSE_TYPE_PERIL, "CYU_X_1"},
+    {POSE_TYPE_TALK, "CYU_T_1"},
+    {POSE_TYPE_ACTION, "CYU_S_1"},
 };
 
 static PoseTableEntry pose_table_ceil[] = {
-    {1, "CYU_N_2"},
-    {2, "CYU_Y_2"},
-    {9, "CYU_Y_2"},
-    {5, "CYU_K_2"},
-    {4, "CYU_X_2"},
-    {3, "CYU_X_2"},
-    {28, "CYU_S_2"},
-    {29, "CYU_Q_2"},
+    {POSE_TYPE_SLEEP, "CYU_N_2"},
+    {POSE_TYPE_STOP, "CYU_Y_2"},
+    {POSE_TYPE_FREEZE, "CYU_Y_2"},
+    {POSE_TYPE_CONFUSE, "CYU_K_2"},
+    {POSE_TYPE_POISON, "CYU_X_2"},
+    {POSE_TYPE_DIZZY, "CYU_X_2"},
+    {POSE_TYPE_NORMAL, "CYU_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "CYU_Q_2"},
     {30, "CYU_Q_2"},
-    {31, "CYU_S_2"},
-    {39, "CYU_D_2"},
-    {50, "CYU_A_1"},
-    {42, "CYU_S_1"},
-    {40, "CYU_S_1"},
-    {56, "CYU_X_2"},
-    {57, "CYU_X_2"},
-    {65, "CYU_T_2"},
-    {69, "CYU_S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CYU_S_2"},
+    {POSE_TYPE_DAMAGE, "CYU_D_2"},
+    {POSE_TYPE_ATTACK, "CYU_A_1"},
+    {POSE_TYPE_RUN, "CYU_S_1"},
+    {POSE_TYPE_WALK, "CYU_S_1"},
+    {POSE_TYPE_DANGER, "CYU_X_2"},
+    {POSE_TYPE_PERIL, "CYU_X_2"},
+    {POSE_TYPE_TALK, "CYU_T_2"},
+    {POSE_TYPE_ACTION, "CYU_S_2"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -257,7 +257,7 @@ static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_SetPossessionItemOffset, -2, 0, 0, 0)
     CALL(btlevtcmd_SetEventCeilFall, -2, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_AddPos, -2, 0, -30, 0)
     CALL(btlevtcmd_AddHomePos, -2, 0, -30, 0)
@@ -375,7 +375,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_CheckAttribute, -2, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
         WAIT_FRAMES(1)
         CALL(btlevtcmd_AddPos, -2, 0, -30, 0)
         CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(2.5f))
@@ -383,9 +383,9 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 30)
         SUBTRACT(LW(1), 40)
         CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 0, -16, 0, 0, -1)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     END_IF
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     ADD(LW(1), -6)
     LOOP(2)
@@ -465,7 +465,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_basabasa_attack))
     CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_basabasa_attack), 256, LW(5))
     CALL(btlevtcmd_SetRotate, -2, 0, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 15)
@@ -514,7 +514,7 @@ static EVT_BEGIN(attack_event)
     GOTO(98)
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_CheckAttribute, -2, kCeiling, LW(7))

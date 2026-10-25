@@ -146,51 +146,51 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {30, 30, 30, 100, 40, 100, 100, 25, 100, 75, 100, 75, 100, 80, 30, 0, 0, 100, 30, 100, 100, 5};
 
 static PoseTableEntry pose_table[] = {
-    {1, "KPA_N_3"},
-    {2, "KPA_Z_6"},
-    {9, "KPA_Z_6"},
-    {5, "KPA_K_2"},
-    {4, "KPA_S_2"},
-    {3, "KPA_S_2"},
-    {28, "KPA_S_1"},
-    {29, "KPA_Q_2"},
+    {POSE_TYPE_SLEEP, "KPA_N_3"},
+    {POSE_TYPE_STOP, "KPA_Z_6"},
+    {POSE_TYPE_FREEZE, "KPA_Z_6"},
+    {POSE_TYPE_CONFUSE, "KPA_K_2"},
+    {POSE_TYPE_POISON, "KPA_S_2"},
+    {POSE_TYPE_DIZZY, "KPA_S_2"},
+    {POSE_TYPE_NORMAL, "KPA_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KPA_Q_2"},
     {30, "KPA_Q_2"},
-    {31, "KPA_D_1"},
-    {39, "KPA_D_1"},
-    {50, "KPA_S_1"},
-    {42, "KPA_R_1"},
-    {40, "KPA_W_1"},
-    {56, "KPA_S_1"},
-    {57, "KPA_S_1"},
-    {65, "KPA_T_1"},
-    {69, "KPA_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KPA_D_1"},
+    {POSE_TYPE_DAMAGE, "KPA_D_1"},
+    {POSE_TYPE_ATTACK, "KPA_S_1"},
+    {POSE_TYPE_RUN, "KPA_R_1"},
+    {POSE_TYPE_WALK, "KPA_W_1"},
+    {POSE_TYPE_DANGER, "KPA_S_1"},
+    {POSE_TYPE_PERIL, "KPA_S_1"},
+    {POSE_TYPE_TALK, "KPA_T_1"},
+    {POSE_TYPE_ACTION, "KPA_S_1"},
 };
 
 static PoseTableEntry pose_table_forward_leaning[] = {
-    {1, "KPA_N_2"},
-    {2, "KPA_Z_5"},
-    {9, "KPA_Z_5"},
-    {5, "KPA_K_1"},
-    {4, "KPA_X_1"},
-    {3, "KPA_X_1"},
-    {28, "KPA_S_8"},
-    {29, "KPA_D_4"},
+    {POSE_TYPE_SLEEP, "KPA_N_2"},
+    {POSE_TYPE_STOP, "KPA_Z_5"},
+    {POSE_TYPE_FREEZE, "KPA_Z_5"},
+    {POSE_TYPE_CONFUSE, "KPA_K_1"},
+    {POSE_TYPE_POISON, "KPA_X_1"},
+    {POSE_TYPE_DIZZY, "KPA_X_1"},
+    {POSE_TYPE_NORMAL, "KPA_S_8"},
+    {POSE_TYPE_DAMAGE_FIRE, "KPA_D_4"},
     {30, "KPA_D_4"},
-    {31, "KPA_D_4"},
-    {39, "KPA_D_4"},
-    {50, "KPA_S_8"},
-    {42, "KPA_R_1"},
-    {40, "KPA_W_1"},
-    {56, "KPA_S_8"},
-    {57, "KPA_S_8"},
-    {65, "KPA_T_9"},
-    {69, "KPA_S_8"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KPA_D_4"},
+    {POSE_TYPE_DAMAGE, "KPA_D_4"},
+    {POSE_TYPE_ATTACK, "KPA_S_8"},
+    {POSE_TYPE_RUN, "KPA_R_1"},
+    {POSE_TYPE_WALK, "KPA_W_1"},
+    {POSE_TYPE_DANGER, "KPA_S_8"},
+    {POSE_TYPE_PERIL, "KPA_S_8"},
+    {POSE_TYPE_TALK, "KPA_T_9"},
+    {POSE_TYPE_ACTION, "KPA_S_8"},
 };
 
 static PoseTableEntry pose_table_dead[] = {
-    {28, "KPA_Z_3"},
-    {39, "KPA_Z_3"},
-    {69, "KPA_Z_3"},
+    {POSE_TYPE_NORMAL, "KPA_Z_3"},
+    {POSE_TYPE_DAMAGE, "KPA_Z_3"},
+    {POSE_TYPE_ACTION, "KPA_Z_3"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -459,9 +459,9 @@ static EVT_BEGIN(dead_event)
     END_IF
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
         CALL(btlevtcmd_ResetFaceDirection, -2)
     END_IF
     WAIT_FRAMES(1)
@@ -573,7 +573,7 @@ static EVT_BEGIN(harf_hp_event)
                 CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("KPA_U_2"))
                 WAIT_MS(200)
             END_IF
-            CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+            CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
         END_IF
     END_IF
     RETURN
@@ -643,7 +643,7 @@ static EVT_BEGIN(hip_attack_event)
     CALL(btlevtcmd_PayWeaponCost, -2, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 40)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(2.0f))

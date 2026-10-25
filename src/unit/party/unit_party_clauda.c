@@ -261,31 +261,31 @@ BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
 };
 
 PoseTableEntry pose_table_clauda_stay[] = {
-    {9, "PWD_D_5"},
-    {2, "PWD_D_5"},
-    {3, "PWD_X_1"},
-    {4, "PWD_D_2"},
-    {5, "PWD_X_1"},
-    {1, "PWD_N_1"},
-    {27, "PWD_D_3"},
-    {28, "PWD_S_1"},
+    {POSE_TYPE_FREEZE, "PWD_D_5"},
+    {POSE_TYPE_STOP, "PWD_D_5"},
+    {POSE_TYPE_DIZZY, "PWD_X_1"},
+    {POSE_TYPE_POISON, "PWD_D_2"},
+    {POSE_TYPE_CONFUSE, "PWD_X_1"},
+    {POSE_TYPE_SLEEP, "PWD_N_1"},
+    {POSE_TYPE_KO, "PWD_D_3"},
+    {POSE_TYPE_NORMAL, "PWD_S_1"},
     {37, "PWD_G_2"},
-    {31, "PWD_G_1"},
-    {39, "PWD_D_1"},
-    {40, "PWD_W_1"},
-    {42, "PWD_R_1"},
-    {57, "PWD_D_2"},
-    {56, "PWD_D_2"},
-    {60, "PWD_D_3"},
-    {61, "PWD_D_2"},
-    {65, "PWD_T_1"},
-    {52, "PWD_I_1"},
-    {67, "PWD_C_1"},
-    {66, "PWD_O_1"},
-    {64, "PWD_X_1"},
-    {49, "PWD_A4_3"},
-    {45, "PWD_G_1"},
-    {69, "PWD_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PWD_G_1"},
+    {POSE_TYPE_DAMAGE, "PWD_D_1"},
+    {POSE_TYPE_WALK, "PWD_W_1"},
+    {POSE_TYPE_RUN, "PWD_R_1"},
+    {POSE_TYPE_PERIL, "PWD_D_2"},
+    {POSE_TYPE_DANGER, "PWD_D_2"},
+    {POSE_TYPE_ESCAPE_STUMBLE, "PWD_D_3"},
+    {POSE_TYPE_ESCAPE_RECOVER, "PWD_D_2"},
+    {POSE_TYPE_TALK, "PWD_T_1"},
+    {POSE_TYPE_ITEM, "PWD_I_1"},
+    {POSE_TYPE_COMMAND, "PWD_C_1"},
+    {POSE_TYPE_APPEAL, "PWD_O_1"},
+    {POSE_TYPE_ZERO_GRAVITY, "PWD_X_1"},
+    {POSE_TYPE_AVOID_COUNTER, "PWD_A4_3"},
+    {POSE_TYPE_DEFEND, "PWD_G_1"},
+    {POSE_TYPE_ACTION, "PWD_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -374,7 +374,7 @@ static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 250)
     CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
     WAIT_FRAMES(40)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(4.0f))
     CALL(btlevtcmd_SetMoveSoundDataWork, -2, STRING("SFX_PARTY_BATTLE_SUBHANG1"), STRING("SFX_PARTY_BATTLE_SUBHANG1"), 0, 9, 3, 0, 0)
@@ -431,7 +431,7 @@ EVT_BEGIN(partyClaudaAttack_NormalAttack)
     CALL(btlevtcmd_AcSetParamAll, LW(3), LW(4), 180, LW(0), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_AcSetFlag, 0)
     CALL(btlevtcmd_SetupAC, -2, 8, 1, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_StartAC, 1)
     CALL(btlevtcmd_ResultAC)
@@ -587,7 +587,7 @@ EVT_BEGIN(partyClaudaAttack_NormalAttack)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetMoveFrame, -2, LW(0), LW(1), LW(2), FLOAT(6.0f), LW(15))
     CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), LW(15), 0, 4, 0, -1)
@@ -745,7 +745,7 @@ EVT_BEGIN(partyClaudaAttack_BreathAttack)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_snd_sfxoff, LW(14))
     CALL(evt_eff_delete_ptr, LW(13))
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_ACRStart, -2, 0, 25, 25, 20)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     IF_INT_NOT_EQUAL(LW(6), 2)
@@ -854,7 +854,7 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
         CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(0), LW(2), 1, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(3.0f))
         CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 40, 0, 5, 0, -1)
         CALL(btlevtcmd_CommandCheckDamage, -2, LW(3), LW(4), 256, LW(5))
@@ -1007,7 +1007,7 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
     LABEL(95)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 40, 0, 5, 0, -1)
     LABEL(99)
@@ -1095,7 +1095,7 @@ EVT_END()
 
 EVT_BEGIN(clauda_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 66)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_APPEAL1"), LW(0), LW(1), LW(2), 0)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
@@ -1199,7 +1199,7 @@ EVT_BEGIN(attack_bad_audience_event)
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 18, -1)
     CALL(btlevtcmd_OnUnitFlag, -2, BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
     WAIT_MS(400)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, -2, LW(0), 0, LW(2), 16, 0, 4, 0, 0)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
@@ -1246,7 +1246,7 @@ EVT_BEGIN(attack_good_audience_event)
     CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PWD_A3_3"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
     WAIT_MS(300)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, -2, LW(0), 0, LW(2), 16, 0, 4, 0, 0)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))

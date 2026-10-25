@@ -110,27 +110,27 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static PoseTableEntry pose_table[] = {
-    {28, "PKO_S_1"},
-    {31, "PKO_S_1"},
-    {39, "PKO_D_1"},
-    {68, "PKO_Z_1"},
-    {69, "PKO_S_1"},
+    {POSE_TYPE_NORMAL, "PKO_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PKO_S_1"},
+    {POSE_TYPE_DAMAGE, "PKO_D_1"},
+    {POSE_TYPE_SHELL_SHIELD_OPEN, "PKO_Z_1"},
+    {POSE_TYPE_ACTION, "PKO_S_1"},
 };
 
 PoseTableEntry pose_table_crack_lv1[] = {
-    {28, "PKO_S_2"},
-    {31, "PKO_S_2"},
-    {39, "PKO_D_2"},
-    {68, "PKO_Z_2"},
-    {69, "PKO_S_2"},
+    {POSE_TYPE_NORMAL, "PKO_S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PKO_S_2"},
+    {POSE_TYPE_DAMAGE, "PKO_D_2"},
+    {POSE_TYPE_SHELL_SHIELD_OPEN, "PKO_Z_2"},
+    {POSE_TYPE_ACTION, "PKO_S_2"},
 };
 
 PoseTableEntry pose_table_crack_lv2[] = {
-    {28, "PKO_S_3"},
-    {31, "PKO_S_3"},
-    {39, "PKO_D_3"},
-    {68, "PKO_Z_3"},
-    {69, "PKO_S_3"},
+    {POSE_TYPE_NORMAL, "PKO_S_3"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PKO_S_3"},
+    {POSE_TYPE_DAMAGE, "PKO_D_3"},
+    {POSE_TYPE_SHELL_SHIELD_OPEN, "PKO_Z_3"},
+    {POSE_TYPE_ACTION, "PKO_S_3"},
 };
 
 static BattleUnitKindPart parts[] = {
@@ -188,7 +188,7 @@ EVT_BEGIN(koura_open)
     CALL(btlevtcmd_OffAttribute, LW(3), 64)
     CALL(btlevtcmd_OnPartsAttribute, -2, 1, kNotTargetable)
     CALL(btlevtcmd_SetUnitWork, -2, 2, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 68)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_SHELL_SHIELD_OPEN)
     RETURN
 EVT_END()
 
@@ -239,7 +239,7 @@ EVT_BEGIN(damage_core)
         END_IF
         CALL(btlevtcmd_SetUnitWork, -2, 3, 0)
     END_SWITCH
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
     WAIT_MS(500)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN

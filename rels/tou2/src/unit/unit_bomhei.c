@@ -103,45 +103,45 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static PoseTableEntry pose_table[] = {
-    {1, "BOM_N_1"},
-    {2, "BOM_Y_1"},
-    {9, "BOM_Y_1"},
-    {5, "BOM_K_1"},
-    {4, "BOM_X_1"},
-    {3, "BOM_X_1"},
-    {28, "BOM_S_1"},
-    {29, "BOM_Q_1"},
+    {POSE_TYPE_SLEEP, "BOM_N_1"},
+    {POSE_TYPE_STOP, "BOM_Y_1"},
+    {POSE_TYPE_FREEZE, "BOM_Y_1"},
+    {POSE_TYPE_CONFUSE, "BOM_K_1"},
+    {POSE_TYPE_POISON, "BOM_X_1"},
+    {POSE_TYPE_DIZZY, "BOM_X_1"},
+    {POSE_TYPE_NORMAL, "BOM_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "BOM_Q_1"},
     {30, "BOM_Q_1"},
-    {31, "BOM_S_1"},
-    {39, "BOM_D_1"},
-    {50, "BOM_A_1"},
-    {42, "BOM_R_1"},
-    {40, "BOM_W_1"},
-    {56, "BOM_X_1"},
-    {57, "BOM_X_1"},
-    {65, "BOM_T_1"},
-    {69, "BOM_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "BOM_S_1"},
+    {POSE_TYPE_DAMAGE, "BOM_D_1"},
+    {POSE_TYPE_ATTACK, "BOM_A_1"},
+    {POSE_TYPE_RUN, "BOM_R_1"},
+    {POSE_TYPE_WALK, "BOM_W_1"},
+    {POSE_TYPE_DANGER, "BOM_X_1"},
+    {POSE_TYPE_PERIL, "BOM_X_1"},
+    {POSE_TYPE_TALK, "BOM_T_1"},
+    {POSE_TYPE_ACTION, "BOM_S_1"},
 };
 
 static PoseTableEntry pose_table_spark[] = {
-    {1, "BOM_N_2"},
-    {2, "BOM_Y_2"},
-    {9, "BOM_Y_2"},
-    {5, "BOM_K_2"},
-    {4, "BOM_X_2"},
-    {3, "BOM_X_2"},
-    {28, "BOM_S_2"},
-    {29, "BOM_Q_2"},
+    {POSE_TYPE_SLEEP, "BOM_N_2"},
+    {POSE_TYPE_STOP, "BOM_Y_2"},
+    {POSE_TYPE_FREEZE, "BOM_Y_2"},
+    {POSE_TYPE_CONFUSE, "BOM_K_2"},
+    {POSE_TYPE_POISON, "BOM_X_2"},
+    {POSE_TYPE_DIZZY, "BOM_X_2"},
+    {POSE_TYPE_NORMAL, "BOM_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "BOM_Q_2"},
     {30, "BOM_Q_2"},
-    {31, "BOM_S_2"},
-    {39, "BOM_D_2"},
-    {50, "BOM_A_2"},
-    {42, "BOM_R_2"},
-    {40, "BOM_W_2"},
-    {56, "BOM_X_2"},
-    {57, "BOM_X_2"},
-    {65, "BOM_T_2"},
-    {69, "BOM_S_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "BOM_S_2"},
+    {POSE_TYPE_DAMAGE, "BOM_D_2"},
+    {POSE_TYPE_ATTACK, "BOM_A_2"},
+    {POSE_TYPE_RUN, "BOM_R_2"},
+    {POSE_TYPE_WALK, "BOM_W_2"},
+    {POSE_TYPE_DANGER, "BOM_X_2"},
+    {POSE_TYPE_PERIL, "BOM_X_2"},
+    {POSE_TYPE_TALK, "BOM_T_2"},
+    {POSE_TYPE_ACTION, "BOM_S_2"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -302,7 +302,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(change_spark_event)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_CheckDamageCode, -2, 256, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
@@ -315,7 +315,7 @@ static EVT_BEGIN(change_spark_event)
         CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event_spark))
         CALL(btlevtcmd_SetEventConfusion, -2, PTR(attack_event_spark))
         CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table_spark))
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 39)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_DAMAGE)
         CALL(btlevtcmd_OnPartsCounterAttribute, -2, 1, 8192)
         CALL(btlevtcmd_ChangeDataTable, -2, PTR(data_table_spark))
     END_IF
@@ -359,7 +359,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpSetting, -2, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 0, -1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(10.0f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 10)
@@ -388,7 +388,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(5.0f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 30)
@@ -420,7 +420,7 @@ static EVT_BEGIN(attack_event)
     GOTO(98)
     LABEL(98)
     CALL(btlevtcmd_SetMoveSoundDataWork, -2, STRING("SFX_ENM_BOMB_MOVE4"), STRING("SFX_ENM_BOMB_MOVE4"), 0, 10, 10, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(5.0f))
     CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -2, 1)
@@ -484,7 +484,7 @@ static EVT_BEGIN(attack_event_spark)
     CALL(btlevtcmd_JumpSetting, -2, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 0, -1)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(10.0f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 10)

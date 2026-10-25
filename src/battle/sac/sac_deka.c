@@ -764,7 +764,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                         continue;
                     }
                     if (!(unit->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
-                        BtlUnit_SetAnimType(part, 0x27);
+                        BtlUnit_SetAnimType(part, POSE_TYPE_DAMAGE);
                     }
                     effSmallStarEntry(0, 2, xc, unit->mPosition.y, unit->mPosition.z, 0.0f, -1.0f, 0.0f);
                     BtlUnit_snd_se(unit, unit->mKindParams->damageSfxName, EVT_NULLPTR, 0);
@@ -992,7 +992,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
     CALL_CHILD(sac_mario_back_home)
     CALL(wait_star_stone_take_on)
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 44)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_JUMP)
         CALL(get_ride_pos, 0, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpSetting, -2, 30, 0, FLOAT(0.39941406f))
         CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 30, -1)
@@ -1015,11 +1015,11 @@ EVT_BEGIN(marioAttackEvent_Deka)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
         IF_INT_NOT_EQUAL(LW(14), -1)
-            CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), 44)
+            CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), POSE_TYPE_JUMP)
             CALL(get_ride_pos, 1, LW(0), LW(1), LW(2))
             CALL(btlevtcmd_JumpSetting, LW(14), 30, 0, FLOAT(0.39941406f))
             CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, -1)
-            CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), 43)
+            CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), POSE_TYPE_NEUTRAL)
         END_IF
     END_SIBLING_EVENT
     WAIT_FRAMES(30)
@@ -1053,15 +1053,15 @@ EVT_BEGIN(marioAttackEvent_Deka)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 44)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_JUMP)
         CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpSetting, -2, 30, 0, FLOAT(0.39941406f))
         CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 30, -1)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
         IF_INT_NOT_EQUAL(LW(14), -1)
-            CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), 44)
+            CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), POSE_TYPE_JUMP)
             CALL(btlevtcmd_GetHomePos, LW(14), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_JumpSetting, LW(14), 30, 0, FLOAT(0.39941406f))
             CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, -1)

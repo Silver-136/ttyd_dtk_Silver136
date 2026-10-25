@@ -1955,7 +1955,7 @@ void BtlUnit_SetCommandAnimPose(BattleUnit* unit) {
         special = TRUE;
     }
     if (special) {
-        BtlUnit_SetAnimType(part, 0x43);
+        BtlUnit_SetAnimType(part, POSE_TYPE_COMMAND);
         PART_FLAGS(part) |= 0x80;
     } else {
         btlDispPoseAnime(part);

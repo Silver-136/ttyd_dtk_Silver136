@@ -113,24 +113,24 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 0};
 
 static PoseTableEntry pose_table[] = {
-    {1, "CBN_N_1"},
-    {2, "CBN_Y_1"},
-    {9, "CBN_Y_1"},
-    {5, "CBN_K_1"},
-    {4, "CBN_X_1"},
-    {3, "CBN_X_1"},
-    {28, "CBN_S_1"},
-    {29, "CBN_Q_1"},
+    {POSE_TYPE_SLEEP, "CBN_N_1"},
+    {POSE_TYPE_STOP, "CBN_Y_1"},
+    {POSE_TYPE_FREEZE, "CBN_Y_1"},
+    {POSE_TYPE_CONFUSE, "CBN_K_1"},
+    {POSE_TYPE_POISON, "CBN_X_1"},
+    {POSE_TYPE_DIZZY, "CBN_X_1"},
+    {POSE_TYPE_NORMAL, "CBN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "CBN_Q_1"},
     {30, "CBN_Q_1"},
-    {31, "CBN_S_1"},
-    {39, "CBN_D_1"},
-    {50, "CBN_A_1"},
-    {42, "CBN_R_1"},
-    {40, "CBN_W_1"},
-    {56, "CBN_X_1"},
-    {57, "CBN_X_1"},
-    {65, "CBN_T_1"},
-    {69, "CBN_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CBN_S_1"},
+    {POSE_TYPE_DAMAGE, "CBN_D_1"},
+    {POSE_TYPE_ATTACK, "CBN_A_1"},
+    {POSE_TYPE_RUN, "CBN_R_1"},
+    {POSE_TYPE_WALK, "CBN_W_1"},
+    {POSE_TYPE_DANGER, "CBN_X_1"},
+    {POSE_TYPE_PERIL, "CBN_X_1"},
+    {POSE_TYPE_TALK, "CBN_T_1"},
+    {POSE_TYPE_ACTION, "CBN_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -369,7 +369,7 @@ static EVT_BEGIN(counter_damage_event)
 EVT_END()
 
 static EVT_BEGIN(return_event)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_JumpSetting, -2, 0, FLOAT(4.0f), FLOAT(0.5996094f))
     CALL(btlevtcmd_GetHomePos, -2, LW(5), LW(6), LW(7))
     SET_VALUE(LW(8), 40)
@@ -403,7 +403,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, -2, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 100)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_JumpSetting, -2, 0, FLOAT(4.0f), FLOAT(0.5996094f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(5), LW(6), LW(7))
     SET_VALUE(LW(6), 0)
@@ -413,7 +413,7 @@ static EVT_BEGIN(attack_event)
     WAIT_FRAMES(20)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_JumpSetting, -2, 60, 0, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     SUBTRACT(LW(2), 2)

@@ -270,27 +270,27 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {20, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 100, 0, 100, 0, 0, 100, 0, 0, 0, 0};
 
 static PoseTableEntry pose_table[] = {
-    {1, "GNB_N_1"},
-    {5, "GNB_X_1"},
-    {2, "GNB_Z_1"},
-    {3, "GNB_X_1"},
-    {28, "GNB_S_3"},
-    {65, "GNB_T_3"},
-    {31, "GNB_S_3"},
-    {39, "GNB_D_1"},
-    {69, "GNB_S_3"},
+    {POSE_TYPE_SLEEP, "GNB_N_1"},
+    {POSE_TYPE_CONFUSE, "GNB_X_1"},
+    {POSE_TYPE_STOP, "GNB_Z_1"},
+    {POSE_TYPE_DIZZY, "GNB_X_1"},
+    {POSE_TYPE_NORMAL, "GNB_S_3"},
+    {POSE_TYPE_TALK, "GNB_T_3"},
+    {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_3"},
+    {POSE_TYPE_DAMAGE, "GNB_D_1"},
+    {POSE_TYPE_ACTION, "GNB_S_3"},
 };
 
 static PoseTableEntry pose_table_weak[] = {
-    {1, "GNB_N_1"},
-    {5, "GNB_X_1"},
-    {2, "GNB_N_1"},
-    {3, "GNB_X_1"},
-    {28, "GNB_S_4"},
-    {65, "GNB_T_4"},
-    {31, "GNB_S_4"},
-    {39, "GNB_V_1"},
-    {69, "GNB_S_4"},
+    {POSE_TYPE_SLEEP, "GNB_N_1"},
+    {POSE_TYPE_CONFUSE, "GNB_X_1"},
+    {POSE_TYPE_STOP, "GNB_N_1"},
+    {POSE_TYPE_DIZZY, "GNB_X_1"},
+    {POSE_TYPE_NORMAL, "GNB_S_4"},
+    {POSE_TYPE_TALK, "GNB_T_4"},
+    {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_4"},
+    {POSE_TYPE_DAMAGE, "GNB_V_1"},
+    {POSE_TYPE_ACTION, "GNB_S_4"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -326,9 +326,9 @@ static EVT_BEGIN(battle_entry_event)
     ADD(LW(1), LW(3))
     CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_AnimeChangePoseType, -3, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -3, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetBodyId, -4, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, -4, LW(0), 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -4, LW(0), POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -3, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, -4, LW(3), LW(4), LW(5))
     SET_VALUE(LW(8), LW(0))
@@ -347,7 +347,7 @@ static EVT_BEGIN(battle_entry_event)
         CALL(btlevtcmd_SetMoveSpeed, -4, FLOAT(6.0f))
         CALL(btlevtcmd_MovePosition, -4, LW(3), LW(4), LW(5), 0, -1, 0)
         CALL(btlevtcmd_GetBodyId, -4, LW(0))
-        CALL(btlevtcmd_AnimeChangePoseType, -4, LW(0), 43)
+        CALL(btlevtcmd_AnimeChangePoseType, -4, LW(0), POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
     CALL(btlevtcmd_SetMoveSpeed, -3, FLOAT(6.0f))
     CALL(btlevtcmd_MovePosition, -3, LW(0), LW(1), LW(2), 0, -1, 0)
@@ -375,14 +375,14 @@ static EVT_BEGIN(battle_entry_event)
         CALL(btlevtcmd_GetPos, -4, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpPosition, -4, LW(0), LW(1), LW(2), 25, -1)
         CALL(btlevtcmd_GetBodyId, -4, LW(0))
-        CALL(btlevtcmd_AnimeChangePoseType, -4, LW(0), 5)
+        CALL(btlevtcmd_AnimeChangePoseType, -4, LW(0), POSE_TYPE_CONFUSE)
     END_INLINE_EVENT
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_GNB_APPEAR1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_shake_h, 1, 8, 0, 20, 13)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, -3, 1, STRING("M_I_Y"))
     CALL(btlevtcmd_GetBodyId, -4, LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, -4, LW(0), 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -4, LW(0), POSE_TYPE_NEUTRAL)
     CALL(evt_btl_camera_set_mode, 1, 3)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 60, 0)
     WAIT_FRAMES(60)
@@ -513,7 +513,7 @@ EVT_BEGIN(negotiation_event)
         CALL(btlevtcmd_RunDataEventChild, LW(3), UNIT_DATA_KOURA_OPEN_EVENT)
         CALL(btlevtcmd_SetUnitWork, LW(3), 2, 0)
     END_IF
-    CALL(btlevtcmd_AnimeChangePoseType, -3, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -3, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, -3, FLOAT(3.0f))
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 400)
@@ -521,7 +521,7 @@ EVT_BEGIN(negotiation_event)
     IF_INT_EQUAL(LW(5), 0)
         CALL(btlevtcmd_AnimeChangePose, -3, 1, STRING("M_C_4"))
     ELSE
-        CALL(btlevtcmd_AnimeChangePoseType, -3, 1, 43)
+        CALL(btlevtcmd_AnimeChangePoseType, -3, 1, POSE_TYPE_NEUTRAL)
     END_IF
     WAIT_MS(700)
     BEGIN_INLINE_EVENT
@@ -854,7 +854,7 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_moveto, 1, 0, 110, 860, 0, 60, 170, 20, 0)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_GetBodyId, -4, LW(6))
-    CALL(btlevtcmd_AnimeChangePoseType, -4, LW(6), 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -4, LW(6), POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHomePos, -3, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, -4, LW(3), LW(4), LW(5))
     CALL(btlevtcmd_GetStageAudienceAreaSize, EVT_NULLPTR, LW(6), EVT_NULLPTR)
@@ -879,7 +879,7 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_GetBodyId, -3, LW(3))
     CALL(btlevtcmd_AnimeChangePose, -3, LW(3), STRING("M_I_Y"))
     CALL(btlevtcmd_GetBodyId, -4, LW(4))
-    CALL(btlevtcmd_AnimeChangePoseType, -4, LW(4), 69)
+    CALL(btlevtcmd_AnimeChangePoseType, -4, LW(4), POSE_TYPE_ACTION)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_reset_turn)
     CALL(evt_btl_camera_set_prilimit, 0)

@@ -158,21 +158,21 @@ static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}, {0}};
 static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0}};
 
 static PoseTableEntry pose_table[] = {
-    {1, "CBN_N_1"},
-    {2, "CBN_Y_1"},
-    {9, "CBN_Y_1"},
-    {5, "CBN_K_1"},
-    {4, "CBN_X_1"},
-    {3, "CBN_X_1"},
-    {28, "CBN_S_1"},
-    {29, "CBN_Q_1"},
+    {POSE_TYPE_SLEEP, "CBN_N_1"},
+    {POSE_TYPE_STOP, "CBN_Y_1"},
+    {POSE_TYPE_FREEZE, "CBN_Y_1"},
+    {POSE_TYPE_CONFUSE, "CBN_K_1"},
+    {POSE_TYPE_POISON, "CBN_X_1"},
+    {POSE_TYPE_DIZZY, "CBN_X_1"},
+    {POSE_TYPE_NORMAL, "CBN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "CBN_Q_1"},
     {30, "CBN_Q_1"},
-    {31, "CBN_S_1"},
-    {39, "CBN_D_1"},
-    {50, "CBN_A_1"},
-    {42, "CBN_R_1"},
-    {40, "CBN_W_1"},
-    {69, "CBN_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CBN_S_1"},
+    {POSE_TYPE_DAMAGE, "CBN_D_1"},
+    {POSE_TYPE_ATTACK, "CBN_A_1"},
+    {POSE_TYPE_RUN, "CBN_R_1"},
+    {POSE_TYPE_WALK, "CBN_W_1"},
+    {POSE_TYPE_ACTION, "CBN_S_1"},
 };
 
 static BattleDataEntry data_table[] = {

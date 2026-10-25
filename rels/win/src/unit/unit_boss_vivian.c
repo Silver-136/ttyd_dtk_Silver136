@@ -127,24 +127,24 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {70, 80, 70, 100, 70, 100, 100, 50, 100, 80, 100, 80, 100, 95, 70, 0, 0, 100, 70, 100, 100, 0};
 
 static PoseTableEntry pose_table[] = {
-    {1, "PTR_N_1"},
-    {2, "PTR_Z_1"},
-    {9, "PTR_Z_1"},
-    {5, "PTR_X_1"},
-    {4, "PTR_X_1"},
-    {3, "PTR_X_1"},
-    {28, "PTR_S_4"},
-    {29, "PTR_Q_1"},
+    {POSE_TYPE_SLEEP, "PTR_N_1"},
+    {POSE_TYPE_STOP, "PTR_Z_1"},
+    {POSE_TYPE_FREEZE, "PTR_Z_1"},
+    {POSE_TYPE_CONFUSE, "PTR_X_1"},
+    {POSE_TYPE_POISON, "PTR_X_1"},
+    {POSE_TYPE_DIZZY, "PTR_X_1"},
+    {POSE_TYPE_NORMAL, "PTR_S_4"},
+    {POSE_TYPE_DAMAGE_FIRE, "PTR_Q_1"},
     {30, "PTR_Q_1"},
-    {31, "PTR_D_1"},
-    {39, "PTR_D_1"},
-    {50, "PTR_S_4"},
-    {42, "PTR_R_1"},
-    {40, "PTR_W_1"},
-    {56, "PTR_D_2"},
-    {57, "PTR_D_2"},
-    {65, "PTR_T_5"},
-    {69, "PTR_S_4"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PTR_D_1"},
+    {POSE_TYPE_DAMAGE, "PTR_D_1"},
+    {POSE_TYPE_ATTACK, "PTR_S_4"},
+    {POSE_TYPE_RUN, "PTR_R_1"},
+    {POSE_TYPE_WALK, "PTR_W_1"},
+    {POSE_TYPE_DANGER, "PTR_D_2"},
+    {POSE_TYPE_PERIL, "PTR_D_2"},
+    {POSE_TYPE_TALK, "PTR_T_5"},
+    {POSE_TYPE_ACTION, "PTR_S_4"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -359,7 +359,7 @@ static EVT_BEGIN(dead_event)
     END_IF
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(6.0f))
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 40)
+        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, -1, 0)
         CALL(btlevtcmd_ResetFaceDirection, -2)
     END_IF
@@ -564,7 +564,7 @@ static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
     LABEL(98)
     WAIT_MS(500)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 43)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
     CALL_CHILD(vivian_down)
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_MS(200)

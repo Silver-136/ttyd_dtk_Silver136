@@ -136,24 +136,24 @@ static BattleWeapon weapon_killer_charge_attack = {
 };
 
 static PoseTableEntry pose_table[] = {
-    {1, "KIL_N_1"},
-    {2, "KIL_D_1"},
-    {9, "KIL_D_1"},
-    {5, "KIL_K_1"},
-    {4, "KIL_X_1"},
-    {3, "KIL_X_1"},
-    {28, "KIL_S_1"},
-    {29, "KIL_Q_1"},
+    {POSE_TYPE_SLEEP, "KIL_N_1"},
+    {POSE_TYPE_STOP, "KIL_D_1"},
+    {POSE_TYPE_FREEZE, "KIL_D_1"},
+    {POSE_TYPE_CONFUSE, "KIL_K_1"},
+    {POSE_TYPE_POISON, "KIL_X_1"},
+    {POSE_TYPE_DIZZY, "KIL_X_1"},
+    {POSE_TYPE_NORMAL, "KIL_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KIL_Q_1"},
     {30, "KIL_Q_1"},
-    {31, "KIL_A_1"},
-    {39, "KIL_D_1"},
-    {50, "KIL_A_1"},
-    {40, "KIL_W_1"},
-    {42, "KIL_R_1"},
-    {56, "KIL_X_1"},
-    {57, "KIL_X_1"},
-    {65, "KIL_T_1"},
-    {69, "KIL_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KIL_A_1"},
+    {POSE_TYPE_DAMAGE, "KIL_D_1"},
+    {POSE_TYPE_ATTACK, "KIL_A_1"},
+    {POSE_TYPE_WALK, "KIL_W_1"},
+    {POSE_TYPE_RUN, "KIL_R_1"},
+    {POSE_TYPE_DANGER, "KIL_X_1"},
+    {POSE_TYPE_PERIL, "KIL_X_1"},
+    {POSE_TYPE_TALK, "KIL_T_1"},
+    {POSE_TYPE_ACTION, "KIL_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
@@ -228,7 +228,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_KILLER_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ATTACK)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_KILLER_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), PTR(&weapon_killer_charge_attack), 256, LW(5))
@@ -251,7 +251,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(8.0f))
     CALL(btlevtcmd_JumpPosition, -2, LW(0), 10, LW(2), 0, -1)
@@ -266,7 +266,7 @@ static EVT_BEGIN(attack_event)
     WAIT_MS(500)
     GOTO(98)
     LABEL(91)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 42)
+    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(8.0f))
     CALL(btlevtcmd_JumpPosition, -2, LW(0), 10, LW(2), 0, -1)

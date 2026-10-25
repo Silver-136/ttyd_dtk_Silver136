@@ -90,10 +90,10 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static PoseTableEntry pose_table[] = {
-    {28, "PKR_S_1"},
-    {31, "PKR_S_1"},
-    {39, "PKR_S_1"},
-    {69, "PKR_S_1"},
+    {POSE_TYPE_NORMAL, "PKR_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PKR_S_1"},
+    {POSE_TYPE_DAMAGE, "PKR_S_1"},
+    {POSE_TYPE_ACTION, "PKR_S_1"},
 };
 
 static BattleDataEntry data_table[] = {
