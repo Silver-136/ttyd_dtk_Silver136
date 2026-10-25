@@ -360,7 +360,6 @@ void battleCameraMain(void) {
       break;
     }
     wp->cameraWork.audienceId = 10;
-    aud->mAudienceDeltaMultiplier = aud->mAudienceDeltaMultiplier; // FAKE: no code; keeps aud live into case 13 (target unit r27)
     d = wp->cameraWork.homingOffset2.x - wp->cameraWork.homingOffset.x;
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     ofs = wp->cameraWork.homingOffset2.x - pos.x;

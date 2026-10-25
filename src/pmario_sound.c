@@ -5538,8 +5538,6 @@ static inline s32 psndBGMSearch(char* name) {
   if (i >= 0x106) {
     i = 0;
   }
-  // FAKE: dead int guard (COLOURING W) keeps name live to the return with 3 division pairs: name degree 22 -> 32, so it is simplified late and colours r24 as in the target; folded after RA, no code
-  { s32 gz = 0; if (gz != 0) { i = ((((SFX_NAME_ID(name) / i) / (i / SFX_NAME_ID(name))) / ((SFX_NAME_ID(name) / (i + 1)) / ((i + 1) / SFX_NAME_ID(name)))) / ((SFX_NAME_ID(name) / (i + 2)) / ((i + 2) / SFX_NAME_ID(name)))); } }
   return i;
 }
 static inline void psndBGMSearchP(char* name, s32* pi) {
@@ -5557,8 +5555,6 @@ static inline void psndBGMSearchP(char* name, s32* pi) {
   if (*pi >= 0x106) {
     *pi = 0;
   }
-  // FAKE: dead int guard (COLOURING W) keeps name live to the return with 3 division pairs: name degree 22 -> 32, so it is simplified late and colours r24 as in the target; folded after RA, no code
-  { s32 gz = 0; if (gz != 0) { *pi = ((((SFX_NAME_ID(name) / *pi) / (*pi / SFX_NAME_ID(name))) / ((SFX_NAME_ID(name) / (*pi + 1)) / ((*pi + 1) / SFX_NAME_ID(name)))) / ((SFX_NAME_ID(name) / (*pi + 2)) / ((*pi + 2) / SFX_NAME_ID(name)))); } }
 }
 BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
 {
@@ -6025,8 +6021,6 @@ void psndSFXMain(void) {
         }
         fade = (p->sfxFadeTime * 127) / p->sfxFadeMax;
     }
-    // FAKE: dead int guard (COLOURING W, A8): 4-division arm adds pre-RA interference only; folded after RA, no code
-    { s32 gz = 0; if (gz != 0) { fade = ((fade / cnt) / (cnt / fade)) / (((fade + 1) / cnt) / (cnt / (fade + 1))); } }
     tvol = 100;
     if ((psnd.flags & 0x20) && ( !(psnd.flags & 0x40)) ) {
         tvol = 120;
