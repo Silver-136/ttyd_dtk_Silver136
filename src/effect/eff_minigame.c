@@ -7,6 +7,7 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "sfx_name_word.h"
 
 typedef struct MiniGameWork {
     s32 type;   // 0x0
@@ -201,7 +202,7 @@ void effMiniGameMain(EffectEntry* effect) {
             if (work->delay < 0) {
                 work->delay = 0;
                 work->state++;
-                psndSFXOn((const char*)0x8D1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_COUNT1));
             }
             break;
         case 1:
@@ -283,7 +284,7 @@ void effMiniGameMain(EffectEntry* effect) {
             break;
         case 20:
             if (work->delay == 0) {
-                psndSFXOn((const char*)0x8D2);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_START1));
             }
             work->delay--;
             if (work->delay < 0) {

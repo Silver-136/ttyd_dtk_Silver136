@@ -16,6 +16,7 @@
 #include <string.h>
 #include "eff/eff_magic1_n64.h"
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 
 #ifdef VERSION_G8ME01
@@ -177,7 +178,7 @@ void titleMain(SequenceWork* work) {
                     sound.streams[psbgm[0].streamId].flags &= ~0x8000;
                 }
                 if (seqGetPrevSeq() == SEQ_GAME_OVER) {
-                    psndSFXOn((const char*)0xAB8);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CLAUD_ATTACK2));
                 }
             }
             wp2->bottomPosX = 0.0f;
@@ -202,7 +203,7 @@ void titleMain(SequenceWork* work) {
                 wp2->fadeAlpha = 1.0f;
             }
             if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
-                psndSFXOn((const char*)8);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_PRESS_START1));
                 wp2->state = 10;
             }
             else if (++wp2->idle > TFR * 20 - TFR) {

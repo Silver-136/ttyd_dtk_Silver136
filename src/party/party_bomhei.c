@@ -20,6 +20,7 @@
 #include "driver/npcdrv.h"
 #include "evt/evt_cmd.h"
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global bomhei_init
@@ -393,7 +394,7 @@ void bomhei_use_main(PartyEntry* party) {
 
     switch (party->useMotionId) {
     case 20:
-        psndSFXOn_3D((const char*)0x939, &party->playerPtr->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_THROW1), &party->playerPtr->position);
         party->work.bomhei.state = 30;
         party->useMotionId = 21;
         x = party->position.x;
@@ -468,7 +469,7 @@ void bomhei_use_main(PartyEntry* party) {
         if (BWORK(party)->timer == (s16)sysMsec2Frame(2500)) {
             BWORK(party)->flags |= 2;
             if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
-                party->work.bomhei.sfxId = psndSFXOn_3D((const char*)0x93C, &party->playerPtr->position);
+                party->work.bomhei.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE1), &party->playerPtr->position);
             }
         } else if (BWORK(party)->timer == (s16)sysMsec2Frame(500)) {
             party->useMotionId = 50;
@@ -518,7 +519,7 @@ void bomhei_use_main(PartyEntry* party) {
             party->work.bomhei.sfxId = -1;
         }
         if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
-            party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)0x93D, &party->playerPtr->position);
+            party->work.bomhei.sfxId2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE2), &party->playerPtr->position);
         }
         partyChgPose(party, "A_3");
         party->useMotionId = 51;
@@ -555,7 +556,7 @@ void bomhei_use_main(PartyEntry* party) {
     case 60: {
         EffectEntry* eff;
         BOMHEI_CLEAN_SFX(party);
-        psndSFXOn_3D((const char*)0x93B, &party->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_BOMB1), &party->position);
         BWORK(party)->timer = 0;
         party->moveSpeed = 0.0f;
         partyMove(party);
@@ -635,7 +636,7 @@ void bomhei_use_main(PartyEntry* party) {
                 partyChgPose(party, "F_1");
                 party->useMotionId = 82;
                 party->moveFrames = 30;
-                psndSFXOn_3D((const char*)0x93A, &party->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_DOWN1), &party->position);
             }
         }
         break;

@@ -14,6 +14,7 @@
 #include "pmario_sound.h"
 #include <string.h>
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 double cos(double);
 
@@ -165,13 +166,13 @@ void statusWinMain(void) {
                     if (!statusWinCheck()) {
                         statusWinOpen();
                         wp->forceTimer = gp->framerate * 10;
-                        psndSFXOn((const char*)0x2A);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
                         wp->flags |= 0x100;
                     } else {
                         statusWinClose();
                         wp->forceTimer = gp->framerate * 10;
                         wp->forcedClose = 1;
-                        psndSFXOn((const char*)0x2B);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
                     }
                 }
                 if (valueCheck()) {

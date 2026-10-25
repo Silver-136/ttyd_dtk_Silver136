@@ -13,6 +13,7 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "sfx_name_word.h"
 
 void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
@@ -325,16 +326,16 @@ s32 nameMain(void) {
                         switch (wp->cursorY) {
                             case 4:
                                 wp->charTable = hiragana_tbl;
-                                psndSFXOn((const char*)0x2000C);
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_FONT_CHANGE1 | PSND_SFX_BYPASS_MUTE));
                                 break;
                             case 5:
                                 wp->charTable = katakana_tbl;
-                                psndSFXOn((const char*)0x2000C);
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_FONT_CHANGE1 | PSND_SFX_BYPASS_MUTE));
                                 break;
                             case 6:
                                 if (wp->nameLen > 0) {
                                     wp->nameLen--;
-                                    psndSFXOn((const char*)0x2000B);
+                                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1 | PSND_SFX_BYPASS_MUTE));
                                                             }
                                 break;
                             case 7: {
@@ -352,13 +353,13 @@ s32 nameMain(void) {
                                     if (k < n || wp->type != 0) {
                                         wp->confirmSel = 1;
                                         wp->state = 100;
-                                        psndSFXOn((const char*)0x20012);
+                                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                                         if (wp->type == 1 && k >= n) {
                                             strcpy(wp->name, msgSearch("name_party3"));
                                             wp->nameLen = strlen(wp->name) / 2;
                                         }
                                     } else {
-                                        psndSFXOn((const char*)0x20014);
+                                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
                                     }
                                 } else {
                                     s32 m;
@@ -372,13 +373,13 @@ s32 nameMain(void) {
                                     if (m < n || wp->type != 0) {
                                         wp->confirmSel = 1;
                                         wp->state = 100;
-                                        psndSFXOn((const char*)0x20012);
+                                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                                         if (wp->type == 1 && m >= n) {
                                             strcpy(wp->name, msgSearch("name_party3"));
                                             wp->nameLen = strlen(wp->name);
                                         }
                                     } else {
-                                        psndSFXOn((const char*)0x20014);
+                                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
                                     }
                                 }
 #else
@@ -391,13 +392,13 @@ s32 nameMain(void) {
                                 if (k < n || wp->type != 0) {
                                     wp->confirmSel = 1;
                                     wp->state = 100;
-                                    psndSFXOn((const char*)0x20012);
+                                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                                     if (wp->type == 1 && k >= n) {
                                         strcpy(wp->name, msgSearch("name_party3"));
                                         wp->nameLen = strlen(wp->name) / 2;
                                     }
                                 } else {
-                                    psndSFXOn((const char*)0x20014);
+                                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
                                 }
 #endif
 }
@@ -419,7 +420,7 @@ s32 nameMain(void) {
                             wp->cursorX = 10;
                             wp->cursorY = 7;
                         }
-                        psndSFXOn((const char*)0xA);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_SET1));
                     } else if (wp->nameLen == 8) {
                         wp->nameLen = 7;
 #ifdef VERSION_G8ME01
@@ -433,7 +434,7 @@ s32 nameMain(void) {
 #endif
                         wp->cursorX = 10;
                         wp->cursorY = 7;
-                        psndSFXOn((const char*)0xA);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_SET1));
                     }
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_START) {
 #ifdef VERSION_G8ME01
@@ -447,13 +448,13 @@ s32 nameMain(void) {
                         if (j < len || wp->type != 0) {
                             wp->confirmSel = 1;
                             wp->state = 100;
-                            psndSFXOn((const char*)0x12);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                             if (wp->type == 1 && j >= len) {
                                 strcpy(wp->name, msgSearch("name_party3"));
                                 wp->nameLen = strlen(wp->name) / 2;
                             }
                         } else {
-                            psndSFXOn((const char*)0x20014);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
                         }
                     } else {
                         s32 m;
@@ -467,13 +468,13 @@ s32 nameMain(void) {
                         if (m < len || wp->type != 0) {
                             wp->confirmSel = 1;
                             wp->state = 100;
-                            psndSFXOn((const char*)0x12);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                             if (wp->type == 1 && m >= len) {
                                 strcpy(wp->name, msgSearch("name_party3"));
                                 wp->nameLen = strlen(wp->name);
                             }
                         } else {
-                            psndSFXOn((const char*)0x20014);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
                         }
                     }
 #else
@@ -486,20 +487,20 @@ s32 nameMain(void) {
                     if (j < len || wp->type != 0) {
                         wp->confirmSel = 1;
                         wp->state = 100;
-                        psndSFXOn((const char*)0x12);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                         if (wp->type == 1 && j >= len) {
                             strcpy(wp->name, msgSearch("name_party3"));
                             wp->nameLen = strlen(wp->name) / 2;
                         }
                     } else {
-                        psndSFXOn((const char*)0x20014);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
                     }
 #endif
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 #ifdef VERSION_G8ME01
                     if ((u32)gp->language == 0) {
                         if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "\x81\x40", 2)) {
-                            psndSFXOn((const char*)0x13);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                             wp->state = 0x65;
                             wp->flags |= 2;
                         } else {
@@ -508,11 +509,11 @@ s32 nameMain(void) {
                             if (wp->nameLen < 0) {
                                 wp->nameLen = 0;
                             }
-                            psndSFXOn((const char*)0xB);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1));
                         }
                     } else {
                         if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, " ", 1)) {
-                            psndSFXOn((const char*)0x13);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                             wp->state = 0x65;
                             wp->flags |= 2;
                         } else {
@@ -521,12 +522,12 @@ s32 nameMain(void) {
                             if (wp->nameLen < 0) {
                                 wp->nameLen = 0;
                             }
-                            psndSFXOn((const char*)0xB);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1));
                         }
                     }
 #else
                     if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "\x81\x40", 2)) {
-                        psndSFXOn((const char*)0x13);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                         wp->state = 0x65;
                         wp->flags |= 2;
                     } else {
@@ -535,7 +536,7 @@ s32 nameMain(void) {
                         if (wp->nameLen < 0) {
                             wp->nameLen = 0;
                         }
-                        psndSFXOn((const char*)0xB);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1));
                     }
 #endif
                 } else if (keyGetDirRep(0) & DEMO_STICK_LEFT) {
@@ -551,7 +552,7 @@ s32 nameMain(void) {
                         } else if (wp->cursorX < 0) {
                             wp->cursorX = 13;
                         }
-                        psndSFXOn((const char*)5);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                     }
                 } else if (keyGetDirRep(0) & DEMO_STICK_RIGHT) {
                     if (dist < 10.0f) {
@@ -566,7 +567,7 @@ s32 nameMain(void) {
                         } else if (wp->cursorX >= NAMEENT_COLS) {
                             wp->cursorX = 0;
                         }
-                        psndSFXOn((const char*)5);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                     }
                 } else if (keyGetDirRep(0) & DEMO_STICK_UP) {
                     if (dist < 10.0f) {
@@ -579,7 +580,7 @@ s32 nameMain(void) {
                                 wp->cursorY = 8;
                             }
                         }
-                        psndSFXOn((const char*)5);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                     }
                 } else if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
                     if (dist < 10.0f) {
@@ -594,7 +595,7 @@ s32 nameMain(void) {
                         } else if (wp->cursorY >= 9) {
                             wp->cursorY = 0;
                         }
-                        psndSFXOn((const char*)5);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                     }
                 }
             }
@@ -623,17 +624,17 @@ s32 nameMain(void) {
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 if (wp->confirmSel == 0) {
                     wp->state++;
-                    psndSFXOn((const char*)0x12);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                 } else {
                     wp->state = 0;
-                    psndSFXOn((const char*)0x13);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 }
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 wp->state = 0;
-                psndSFXOn((const char*)0x13);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
             } else if (keyGetDirRep(0) & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
                 wp->confirmSel = 1 - wp->confirmSel;
-                psndSFXOn((const char*)5);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             }
             wp->x2 = -60.0f;
             wp->y2 = -30.0f - 40.0f * (f32)wp->confirmSel;

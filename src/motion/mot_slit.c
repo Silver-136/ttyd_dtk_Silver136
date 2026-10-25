@@ -9,6 +9,7 @@
 #include <dolphin/pad.h>
 #include "mario/mario_pouch.h"
 #include "driver/camdrv.h"
+#include "sfx_name_word.h"
 
 #ifdef VERSION_G8ME01
 void U_allPartySlitOffReq(void);
@@ -590,7 +591,7 @@ void mot_slit(void) {
         m->mot.slit.lastY = m->position.y;
         SPEEDCHK_US(m)
         marioGetPtr();
-        psndSFXOn_3D((char*)0x177, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT1), &m->position);
         break;
     case 2:
 #ifdef VERSION_G8ME01
@@ -941,7 +942,7 @@ void mot_slit(void) {
                 m->directionView = toMovedirSimple(m->displayDirection);
             }
         }
-        psndSFXOn_3D((char*)0x178, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT2), &m->position);
     case 0x65:
 #ifdef VERSION_G8ME01
         if (!m->controlStickSensitivity) {
@@ -1011,7 +1012,7 @@ void mot_slit(void) {
             m->displayDirectionTarget = m->displayDirection;
             m->directionView = toMovedirSimple(m->displayDirection);
         }
-        psndSFXOn_3D((char*)0x178, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT2), &m->position);
     case 0x6f:
         if (--m->slitTimer2 > 0) {
             break;
@@ -1048,7 +1049,7 @@ void mot_slit(void) {
             m->displayDirectionTarget = m->displayDirection;
             m->directionView = toMovedirSimple(m->displayDirection);
         }
-        psndSFXOn_3D((char*)0x178, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT2), &m->position);
     case 0x79:
         if (--m->slitTimer2 > 0) {
             break;

@@ -25,6 +25,7 @@
 #include "libc_decls.h"
 #include <math.h>
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
@@ -1341,7 +1342,7 @@ f32 marioChkOverhead(void) {
             }
         }
         if (w->currMotionId == MARIO_MOTION_JUMP || w->currMotionId == MARIO_MOTION_JUMP_STAND) {
-            psndSFXOn_3D((const char*)0x156, &w->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HEAD1), &w->position);
             marioClearJumpPara();
             w->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
             if (w->characterId != 2) {

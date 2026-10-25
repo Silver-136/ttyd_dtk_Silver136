@@ -1,6 +1,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -1054,7 +1055,7 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     data->timer = 120;
                     data->y = mario->position.y;
                     mario->dispFlags |= 0x100;
-                    psndSFXOn_3D((const char*)0x8DB, &mario->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_BOAT_UZUSIO1), &mario->position);
                     data->result--;
                     break;
                 }
@@ -1073,7 +1074,7 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                 for (j = 0; j < 3; j++) {
                     if (PSVECSquareDistance(&box[j], &pos) <= 225.0f) {
                         if (!marioChkSwirlPower()) {
-                            psndSFXOn_3D((const char*)0x8DC, &mario->position);
+                            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_BOAT_UZUSIO2), &mario->position);
                             data->result--;
                         }
                         data->index = i;

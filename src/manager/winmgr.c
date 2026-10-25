@@ -23,6 +23,7 @@
 #include "win/win_item.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "sfx_name_word.h"
 
 typedef struct WinMgrSelectTbl {
     u16 numDescriptors; // 0x0
@@ -1125,7 +1126,7 @@ void select_main(WinMgrEntry* entry) {
             if (3 <= sel->numDescriptors) {
                 winMgrHelpInit(winMgrGetPtr(sel->descriptorId[2]));
             }
-            psndSFXOn((const char*)0x2002A);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1 | PSND_SFX_BYPASS_MUTE));
             statusWinForceOpen();
             sel->state++;
             break;
@@ -1171,20 +1172,20 @@ void select_main(WinMgrEntry* entry) {
                 }
             }
             if (prev != sel->cursor) {
-                psndSFXOn((const char*)0x20005);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 if (sel->items[sel->cursor].flags & 2) {
-                    psndSFXOn((const char*)0x20014);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
                 }
                 else {
-                    psndSFXOn((const char*)0x20012);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                     sel->state++;
                 }
             }
             else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 if (sel->flags & 0x100) {
-                    psndSFXOn((const char*)0x20013);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                     sel->flags |= 0x2000;
                     sel->state++;
                 }
@@ -1197,7 +1198,7 @@ void select_main(WinMgrEntry* entry) {
             for (i = 0; i < sel->numDescriptors; i++) {
                 winMgrClose(sel->descriptorId[i]);
             }
-            psndSFXOn((const char*)0x2002B);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1 | PSND_SFX_BYPASS_MUTE));
             statusWinForceOff();
             sel->state++;
             break;

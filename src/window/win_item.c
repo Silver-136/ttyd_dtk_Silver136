@@ -18,6 +18,7 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "sfx_name_word.h"
 
 void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
@@ -241,7 +242,7 @@ s32 winItemMain(WindowWork* w) {
     switch (w->item.state) {
     case 0:
         if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
             return -1;
         }
         if (w->buttonTrg & PAD_BUTTON_START) {
@@ -249,7 +250,7 @@ s32 winItemMain(WindowWork* w) {
         }
         if (w->dirRep & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
             w->item.mode = 1 - w->item.mode;
-            psndSFXOn(SFX_NAME_WORD(0x20005));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->buttonTrg & PAD_BUTTON_A) {
             if (w->item.mode == 0 && pouchGetHaveItemCnt() == 0) {
                 break;
@@ -258,12 +259,12 @@ s32 winItemMain(WindowWork* w) {
                 break;
             }
             w->item.state = 10;
-            psndSFXOn(SFX_NAME_WORD(0x20012));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             break;
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
             w->savedState = w->item.state;
-            psndSFXOn(SFX_NAME_WORD(0x20012));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             w->item.state = 1000;
         }
         w->helpTgtX = -275.0f;
@@ -279,7 +280,7 @@ s32 winItemMain(WindowWork* w) {
         mode = w->item.mode;
         pages = (cnt + 9) / 10;
         if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
             w->item.state = 0;
         }
         if (w->buttonTrg & PAD_BUTTON_A) {
@@ -291,7 +292,7 @@ s32 winItemMain(WindowWork* w) {
                     w->item.state = 300;
                     w->item.useTarget = 0;
                     w->item.blink = 0;
-                    psndSFXOn(SFX_NAME_WORD(0x20012));
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                     entry = winMgrGetPtr(w->useWin[0]);
                     winMgrSetSize(w->useWin[0], entry->x, entry->y, entry->width, w->party.count * 28 + 68);
                     winMgrOpen(w->useWin[0]);
@@ -310,15 +311,15 @@ s32 winItemMain(WindowWork* w) {
                     for (w->item.bookPages = 0; book[w->item.bookPages] != NULL; w->item.bookPages++) {
                     }
                     w->item.bookPages = (w->item.bookPages + 1) / 2;
-                    psndSFXOn(SFX_NAME_WORD(0x20012));
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 } else if (c == 0x36 && pouchReceiveMailCount()) {
                     w->item.state = 200;
                     w->item.mailTgtX = -144.0f;
                     w->item.mailTgtY = 180.0f;
-                    psndSFXOn(SFX_NAME_WORD(0x20012));
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 } else if (c == 0x4E) {
                     w->item.useItem = c;
-                    psndSFXOn(SFX_NAME_WORD(0x20012));
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                     return -2;
                 }
             }
@@ -328,14 +329,14 @@ s32 winItemMain(WindowWork* w) {
                 w->item.page[mode] = 0;
             }
             w->item.cursor[mode] = w->item.page[mode] * 10;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->buttonRep & PAD_TRIGGER_R) {
             w->item.page[mode]++;
             if (w->item.page[mode] >= pages) {
                 w->item.page[mode] = pages - 1;
             }
             w->item.cursor[mode] = w->item.page[mode] * 10;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->dirRep & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
             if (w->item.cursor[mode] % 2) {
                 if ((n = w->item.cursor[mode] - 1) >= 0 && n < cnt) {
@@ -346,14 +347,14 @@ s32 winItemMain(WindowWork* w) {
                     w->item.cursor[mode]++;
                 }
             }
-            psndSFXOn(SFX_NAME_WORD(0x20035));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->dirRep & DEMO_STICK_UP) {
             c = w->item.cursor[mode];
             if ((n = c - 2) >= 0 && n < cnt) {
                 w->item.cursor[mode] = c - 2;
             }
             w->item.page[mode] = w->item.cursor[mode] / 10;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->dirRep & DEMO_STICK_DOWN) {
             c = w->item.cursor[mode];
             if ((n = c + 2) >= 0 && n < cnt) {
@@ -362,11 +363,11 @@ s32 winItemMain(WindowWork* w) {
                 w->item.cursor[mode] = cnt - 1;
             }
             w->item.page[mode] = w->item.cursor[mode] / 10;
-            psndSFXOn(SFX_NAME_WORD(0x20035));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_TABI_MOVE1 | PSND_SFX_BYPASS_MUTE));
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, w->item.mode != 0, -310.0f, 150.0f);
             w->savedState = w->item.state;
-            psndSFXOn(SFX_NAME_WORD(0x20012));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             w->item.state = 1000;
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
@@ -382,7 +383,7 @@ s32 winItemMain(WindowWork* w) {
         break;
     case 100:
         if (w->buttonTrg & PAD_BUTTON_A) {
-            psndSFXOn(SFX_NAME_WORD(0x20012));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             w->item.bookPage++;
             if (w->item.bookPage >= w->item.bookPages) {
                 w->item.bookPage = w->item.bookPages - 1;
@@ -394,7 +395,7 @@ s32 winItemMain(WindowWork* w) {
                 w->helpY = w->helpTgtY;
             }
         } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
             w->item.bookPage--;
             if (w->item.bookPage < 0) {
                 w->item.bookPage = 0;
@@ -422,7 +423,7 @@ s32 winItemMain(WindowWork* w) {
                 pouchOpenMail(w->item.mail[w->item.mailSel].id);
             }
             swSet(0x26);
-            psndSFXOn(SFX_NAME_WORD(0x20036));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
             w->item.state = 201;
             mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
             FontGetMessageWidthLine(msgSearch(mail->body), &w->item.mailLines);
@@ -432,7 +433,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.mailLines += 10;
             }
         } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
             w->item.state = 10;
             w->item.mailTgtX = 320.0f;
             w->item.mailTgtY = -240.0f;
@@ -445,7 +446,7 @@ s32 winItemMain(WindowWork* w) {
             w->item.mailPage = w->item.mailSel / 5;
             w->item.mailLine = 0;
             if (old != w->item.mailSel) {
-                psndSFXOn(SFX_NAME_WORD(0x20036));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
         } else if (w->dirRep & DEMO_STICK_DOWN) {
             old = w->item.mailSel;
@@ -456,7 +457,7 @@ s32 winItemMain(WindowWork* w) {
             w->item.mailPage = w->item.mailSel / 5;
             w->item.mailLine = 0;
             if (old != w->item.mailSel) {
-                psndSFXOn(SFX_NAME_WORD(0x20036));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
         } else if (w->buttonRep & PAD_TRIGGER_L) {
             old = w->item.mailPage;
@@ -466,7 +467,7 @@ s32 winItemMain(WindowWork* w) {
             }
             w->item.mailSel = w->item.mailPage * 5;
             if (old != w->item.mailPage) {
-                psndSFXOn(SFX_NAME_WORD(0x20036));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
         } else if (w->buttonRep & PAD_TRIGGER_R) {
             pages = (w->item.mailNum + 4) / 5;
@@ -477,12 +478,12 @@ s32 winItemMain(WindowWork* w) {
             }
             w->item.mailSel = w->item.mailPage * 5;
             if (old != w->item.mailPage) {
-                psndSFXOn(SFX_NAME_WORD(0x20036));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             winSortEntry(w, 7, w->item.mailTgtX, w->item.mailTgtY - 60.0f);
             w->savedState = w->item.state;
-            psndSFXOn(SFX_NAME_WORD(0x20012));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             w->item.state = 1000;
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             w->item.mailTgtX = 320.0f;
@@ -526,7 +527,7 @@ s32 winItemMain(WindowWork* w) {
             }
         }
         if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20036));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
             if (w->mailRes) {
                 fileFree(w->mailRes);
             }
@@ -544,7 +545,7 @@ s32 winItemMain(WindowWork* w) {
         break;
     case 300:
         if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
             w->item.state = 10;
             w->item.useItem = 0;
             winMgrClose(w->useWin[0]);
@@ -552,7 +553,7 @@ s32 winItemMain(WindowWork* w) {
         } else if (w->buttonTrg & PAD_BUTTON_A) {
             mp = marioGetPtr();
             ok = 0;
-            psndSFXOn(SFX_NAME_WORD(0x20012));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             if (mp->currMotionId == MARIO_MOTION_SHIP || mp->currMotionId == MARIO_MOTION_PLANE) {
                 ok = 1;
             }
@@ -602,7 +603,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.useTarget = w->party.count;
             }
             if (old != w->item.useTarget) {
-                psndSFXOn(SFX_NAME_WORD(0x20005));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
         } else if (w->dirRep & DEMO_STICK_DOWN) {
             old = w->item.useTarget;
@@ -611,7 +612,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.useTarget = 0;
             }
             if (old != w->item.useTarget) {
-                psndSFXOn(SFX_NAME_WORD(0x20005));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             w->item.useItem = 0;

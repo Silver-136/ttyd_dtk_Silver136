@@ -8,6 +8,7 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "sfx_name_word.h"
 
 USER_FUNC(evt_cam_shake);
 
@@ -128,7 +129,7 @@ void effLevelupMain(EffectEntry* effect) {
                     work->y = y_trans[work->timer];
                     if (i == 1 && work->y == 0.0f) {
                         evtEntry(evt_shake, 0, 0);
-                        psndSFXOn((const char*)0xa57);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_SYS_LEVELUP_FALL1));
                     }
                 } else {
                     work->state++;

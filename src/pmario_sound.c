@@ -2,6 +2,7 @@
 #include "driver/seqdrv.h"
 #include "system.h"
 #include <math.h>
+#include "sfx_name_word.h"
 
 #define _MATH_H_
 #include "pmario_sound.h"
@@ -6016,7 +6017,7 @@ void psndSFXMain(void) {
     sfx[0] = pssfx;
     for (i = 0, base = sfx[0]; i < 40; i++, base++) {
         if ((base->listId != 0xFFFFFFFF) && ( !(base->flags & 1) )) {
-            f = pssfxlist[base->listId & 0x1FFF].fxId;
+            f = pssfxlist[base->listId & PSND_SFX_INDEX_MASK].fxId;
             if (f & 0x80000000) {
                 if (!SoundSSCheck(base->channel)) {
                     base->listId = none;
@@ -6060,7 +6061,7 @@ void psndSFXMain(void) {
         if (sfx[0]->listId == 0xFFFFFFFF) {
             continue;
         }
-        e = &pssfxlist[sfx[0]->listId & 0x1FFF];
+        e = &pssfxlist[sfx[0]->listId & PSND_SFX_INDEX_MASK];
         cnt++;
         if (sfx[0]->flags & 1) {
             sfx[0]->flags &= ~0x100;
@@ -6234,7 +6235,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
   s32 i;
   s32 id;
   id = searchPSSFXList(name);
-  sid = id & 0x1FFF;
+  sid = id & PSND_SFX_INDEX_MASK;
   entry = &pssfxlist[sid];
   if (entry->fxId == 0)
   {
@@ -6260,7 +6261,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
   for (i = 0; i < 40; i++)
   {
     PaperSoundEffect *t = pssfx + i;
-    if ((((((u32) t->listId) != 0xFFFFFFFF) && (((u32) (t->listId & 0x1FFF)) == ((u32) sid))) && (t->flags & 0x100)) && (delay == 0))
+    if ((((((u32) t->listId) != 0xFFFFFFFF) && (((u32) (t->listId & PSND_SFX_INDEX_MASK)) == ((u32) sid))) && (t->flags & 0x100)) && (delay == 0))
     {
       delayPtr = (u16 *) (& psnd.sfxDelay);
       delay = (*delayPtr += 8);
@@ -6328,7 +6329,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
   {
     sfx->flags |= 0x400;
   }
-  if (id & 0x20000)
+  if (id & PSND_SFX_BYPASS_MUTE)
   {
     sfx->flags |= 0x800;
   }
@@ -6412,7 +6413,7 @@ void psndSFX_pit(s32 id, u16 pitch) {
         sfx->pitch = pitch;
     }
     else {
-        SoundEffectEntry* entry = &pssfxlist[sfx->listId & 0x1FFF];
+        SoundEffectEntry* entry = &pssfxlist[sfx->listId & PSND_SFX_INDEX_MASK];
         if (!(entry->fxId & 0x80000000)) {
             if (!(entry->fxId & 0x80000000)) {
                 SoundEfxSetPitch(sfx->channel, pitch);
@@ -6645,7 +6646,7 @@ void psndENVMain(void) {
             break;
         }
     }
-#define ENVAPPLY { u8 vol; u16 lpf; ENVVOL(e, &psnd, vol) { s32 id = *(s32*)&e->sfx; PaperSoundEffect* sfx; if (id != 0xFFFFFFFF) { sfx = &pssfx[id & 0xFF]; if (sfx->listId != 0xFFFFFFFF) { sfx->volume = vol; } } } lpf = 0; if (psnd.envId[0] == e->id) lpf = psnd.envLpf[0]; if (psnd.envId[1] == e->id) lpf = psnd.envLpf[1]; { s32 id = e->sfx; PaperSoundEffect* sfx; if (id != 0xFFFFFFFF) { sfx = &pssfx[id & 0xFF]; if (sfx->listId != 0xFFFFFFFF) { SoundEffectEntry* entry = &pssfxlist[sfx->listId & 0x1FFF]; sfx->lpf = lpf; { if (sfx->flags & 1) { } else if (!(entry->fxId & 0x80000000)) { if (!(entry->fxId & 0x80000000)) { SoundEfxSetLPF(sfx->channel, (s16)lpf); } } } } } } }
+#define ENVAPPLY { u8 vol; u16 lpf; ENVVOL(e, &psnd, vol) { s32 id = *(s32*)&e->sfx; PaperSoundEffect* sfx; if (id != 0xFFFFFFFF) { sfx = &pssfx[id & 0xFF]; if (sfx->listId != 0xFFFFFFFF) { sfx->volume = vol; } } } lpf = 0; if (psnd.envId[0] == e->id) lpf = psnd.envLpf[0]; if (psnd.envId[1] == e->id) lpf = psnd.envLpf[1]; { s32 id = e->sfx; PaperSoundEffect* sfx; if (id != 0xFFFFFFFF) { sfx = &pssfx[id & 0xFF]; if (sfx->listId != 0xFFFFFFFF) { SoundEffectEntry* entry = &pssfxlist[sfx->listId & PSND_SFX_INDEX_MASK]; sfx->lpf = lpf; { if (sfx->flags & 1) { } else if (!(entry->fxId & 0x80000000)) { if (!(entry->fxId & 0x80000000)) { SoundEfxSetLPF(sfx->channel, (s16)lpf); } } } } } } }
     for (i = 0; i < 16; i++) {
 #define e ent
         ent = &psenv[i];

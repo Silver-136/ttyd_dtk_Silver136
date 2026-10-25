@@ -17,6 +17,7 @@
 #include "libc_decls.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "sfx_name_word.h"
 #define EXT_LIT(sym, val) (val)
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
 #ifdef VERSION_G8ME01
@@ -305,7 +306,7 @@ static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
 static inline void msgVoiceSE(smartEntry* smart) {
     MsgWinData* d = smart->address;
     if (d->window->type != 1 && !msgSEflag) {
-        psndSFXOnVol(SFX_NAME_WORD(0x20044), d->talkVolume);
+        psndSFXOnVol(SFX_NAME_WORD(PSND_SFX_MESSAGE1_1 | PSND_SFX_BYPASS_MUTE), d->talkVolume);
         msgSEflag = 1;
     }
 }
@@ -344,7 +345,7 @@ s32 msgMain(smartEntry* smart) {
         data->pageAdvanced = 1;
         data->curPage++;
         data->pageState = 0;
-        psndSFXOn(SFX_NAME_WORD(0x2003D));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_WAIT1 | PSND_SFX_BYPASS_MUTE));
         data->playTime += 100;
         if (MSG_CB(data)) {
             MSG_CB(data)(3, smart);
@@ -1752,7 +1753,7 @@ void msgWindow_Main(WindowEntry* window) {
         if (!(window->flags & 8)) {
             se = msgWindowOpen_SE_Data[window->type * 2];
             if (se >= 0) {
-                psndSFXOn(SFX_NAME_WORD(se | 0x20000));
+                psndSFXOn(SFX_NAME_WORD(se | PSND_SFX_BYPASS_MUTE));
             }
         }
         window->timestamp = gp->renderTime;
@@ -1771,7 +1772,7 @@ void msgWindow_Main(WindowEntry* window) {
         if (!(window->flags & 8)) {
             se = msgWindowOpen_SE_Data[window->type * 2 + 1];
             if (se >= 0) {
-                psndSFXOn(SFX_NAME_WORD(se | 0x20000));
+                psndSFXOn(SFX_NAME_WORD(se | PSND_SFX_BYPASS_MUTE));
             }
         }
         window->timestamp = gp->renderTime;
@@ -1837,7 +1838,7 @@ void msgWindow_Main(WindowEntry* window) {
             if (msgWinPrevPage(window) != 0U) {
                 WIN_STATE(window) = 9;
                 window->timestamp = gp->renderTime;
-                psndSFXOn(SFX_NAME_WORD(0x20041));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
                 data->flags |= 0x40;
             }
         }
@@ -1880,7 +1881,7 @@ void msgWindow_Main(WindowEntry* window) {
             WIN_STATE(window) = 10;
             window->timestamp = gp->renderTime;
             msgWinNextPage(window);
-            psndSFXOn(SFX_NAME_WORD(0x20041));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
         }
 #ifdef VERSION_G8ME01
         else // US: one key per frame
@@ -1889,7 +1890,7 @@ void msgWindow_Main(WindowEntry* window) {
             WIN_STATE(window) = 10;
             window->timestamp = gp->renderTime;
             data->page = data->pageCount - 1;
-            psndSFXOn(SFX_NAME_WORD(0x20041));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
         }
 #ifdef VERSION_G8ME01
         else // US: one key per frame
@@ -1898,7 +1899,7 @@ void msgWindow_Main(WindowEntry* window) {
             WIN_STATE(window) = 9;
             window->timestamp = gp->renderTime;
             if (msgWinPrevPage(window) != 0U) {
-                psndSFXOn(SFX_NAME_WORD(0x20041));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
             }
         }
         break;
@@ -2109,7 +2110,7 @@ void selectWindow_Main(WindowEntry* window) {
             data->sel = 0;
         }
         if (prev != data->sel) {
-            psndSFXOn(SFX_NAME_WORD(0x20005));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
         }
         if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
             switch (data->cancel) {
@@ -2118,18 +2119,18 @@ void selectWindow_Main(WindowEntry* window) {
             case -2:
                 data->sel = -1;
                 WIN_STATE(window) = 7;
-                psndSFXOn(SFX_NAME_WORD(0x20013));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 break;
             default:
                 data->sel = data->cancel;
                 WIN_STATE(window) = 7;
-                psndSFXOn(SFX_NAME_WORD(0x20013));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 break;
             }
         }
         else if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
             WIN_STATE(window) = 7;
-            psndSFXOn(SFX_NAME_WORD(0x20012));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
         }
         break;
     case 7:

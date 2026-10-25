@@ -13,6 +13,7 @@
 #include <string.h>
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 void statusWinForceUpdateCoin(void);
 void nameEntOff(void);
@@ -301,7 +302,7 @@ static void coin_disp(WinMgrEntry* entry) {
         w->timer++;
         w->timer = w->timer % 1200;
         if (coinwin_se_wait == 0) {
-            psndSFXOn(SFX_NAME_WORD(0x2005B));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_COUNT_COIN1 | PSND_SFX_BYPASS_MUTE));
             coinwin_se_wait = 7;
         }
     }

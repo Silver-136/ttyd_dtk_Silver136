@@ -9,6 +9,7 @@
 #include <string.h>
 #include "version.h"
 #include "libc_decls.h"
+#include "sfx_name_word.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -2321,7 +2322,7 @@ void party_motion_jump(PartyEntry* party) {
         party->flags |= 0x10;
         party->flags &= ~2;
         partyChgPoseId(party, 4);
-        psndSFXOn_3D((const char*)0x927, &party->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_JUMP1), &party->position);
         party->motionStep = 10;
         if (!(party->flags & 8)) {
             partyNextReadId(partyGetFootmarkId(party));
@@ -2413,7 +2414,7 @@ void party_motion_jump2(PartyEntry* party) {
         partyChgPoseId(party, 4);
         party->flags |= 0x10;
         party->flags &= ~2;
-        psndSFXOn_3D((const char*)0x927, &party->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_JUMP1), &party->position);
         party->motionStep = 0;
     }
     switch (party->motionStep) {

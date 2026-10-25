@@ -6,6 +6,7 @@
 #include "memory.h"
 #include "pmario_sound.h"
 #include <string.h>
+#include "sfx_name_word.h"
 
 void mapObjGetPos();
 
@@ -527,7 +528,7 @@ USER_FUNC(moving_floor_set_se) {
         if ((psndGetFlag() & 0x100) && !(obj->flags & 0x1800)) {
             flags = 0x10000;
         }
-        w->seId = psndSFXOn_3D(SFX_NAME_WORD(flags | 0x424), &pos);
+        w->seId = psndSFXOn_3D(SFX_NAME_WORD(flags | PSND_SFX_STG1_TIK_FLOOR_MOVE1), &pos);
     }
     return EVT_RETURN_DONE;
 }

@@ -21,6 +21,7 @@
 #include "driver/mobjdrv.h"
 #include "libc_decls.h"
 #include <math.h>
+#include "sfx_name_word.h"
 
 typedef struct Footmark {
     u8 flag;    // 0x0
@@ -577,7 +578,7 @@ f32 partyUpdMoveSpd(PartyEntry* party, f32 spd) {
 }
 
 void N_partyPlaySfxPartyLanding1(PartyEntry* party) {
-    psndSFXOn_3D((const char*)0x928, &party->position);
+    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_LANDING1), &party->position);
 }
 
 void partyPlaySfxFootstep(PartyEntry* party, s32 arg) {
@@ -595,14 +596,14 @@ void partyPlaySfxFootstep(PartyEntry* party, s32 arg) {
         }
         if (party->footstepTimer >= b) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x60D, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG5_MARCO_MOVE1R), &party->position);
         } else if (party->footstepTimer == a) {
-            psndSFXOn_3D((const char*)0x60C, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG5_MARCO_MOVE1L), &party->position);
         }
     } else if (party->currentMemberId == 8) {
         if (party->footstepTimer >= 15) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x942, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_EGG1), &party->position);
         }
     } else if (party->currentMemberId == 10) {
         if (arg == 0) {
@@ -614,14 +615,14 @@ void partyPlaySfxFootstep(PartyEntry* party, s32 arg) {
         }
         if (party->footstepTimer >= b) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x3FF, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG0_PUNI_MOVE1), &party->position);
         } else if (party->footstepTimer == a) {
-            psndSFXOn_3D((const char*)0x3FF, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG0_PUNI_MOVE1), &party->position);
         }
     } else if (party->moveKind == 1) {
         if (party->footstepTimer >= (!arg ? 40 : 20)) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x926, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_MOVE2), &party->position);
         }
     } else {
         if (arg == 0) {
@@ -633,9 +634,9 @@ void partyPlaySfxFootstep(PartyEntry* party, s32 arg) {
         }
         if (party->footstepTimer >= b) {
             party->footstepTimer = 0;
-            psndSFXOn_3D((const char*)0x925, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_MOVE1R), &party->position);
         } else if (party->footstepTimer == a) {
-            psndSFXOn_3D((const char*)0x924, &party->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_MOVE1L), &party->position);
         }
     }
 }

@@ -2,6 +2,7 @@
 #include "mario/mariost.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 #include "data/mapdata.h"
 #include "driver/swdrv.h"
@@ -1245,16 +1246,16 @@ static USER_FUNC(evt_tou_print_ranking) {
         return EVT_RETURN_BLOCK;
     }
     if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-        psndSFXOn((const char*)0x13);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
         return EVT_RETURN_YIELD;
     }
     if (dwp->page > 0 && (keyGetButtonTrg(0) & PAD_TRIGGER_L)) {
-        psndSFXOn((const char*)5);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
         dwp->page--;
     }
     if (dwp->page < 1 && (keyGetButtonTrg(0) & PAD_TRIGGER_R)) {
         dwp->page++;
-        psndSFXOn((const char*)5);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
     }
     dwp->targetY = dwp->page * 220;
     dwp->y += (dwp->targetY - dwp->y) / 8.0f;

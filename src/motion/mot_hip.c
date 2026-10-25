@@ -11,6 +11,7 @@
 #include "evt/evt_cam.h"
 #include "evt/evt_cmd.h"
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
 HitEntry* marioSearchGround(f32* a, f32* b, f32* c, f32 d, f32 e);
@@ -76,10 +77,10 @@ static inline void hip_snd_on(void) {
     MarioWork* mario = marioGetPtr();
 
     if ((u32)SND1 == 0xFFFFFFFFU) {
-        SND1 = psndSFXOn_3D((char*)0x158, &mario->position);
+        SND1 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIP_DROP1), &mario->position);
     }
     if ((u32)SND2 == 0xFFFFFFFFU) {
-        SND2 = psndSFXOn_3D((char*)0xDB, &mario->position);
+        SND2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_POWER1), &mario->position);
     }
 }
 
@@ -159,8 +160,8 @@ void mot_hip(void) {
 #ifdef VERSION_G8ME01
         hip_snd_on();
 #else
-        SND1 = psndSFXOn_3D((char*)0x158, &mario->position);
-        SND2 = psndSFXOn_3D((char*)0xDB, &mario->position);
+        SND1 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIP_DROP1), &mario->position);
+        SND2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_POWER1), &mario->position);
 #endif
         mario->mot.hip.angle = 0.0f;
         mario->baseSpeed = 0.0f;
@@ -277,7 +278,7 @@ void mot_hip(void) {
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
             }
-            psndSFXOn_3D((char*)0x159, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIO_DROP2), &mario->position);
             evtEntryType(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0, 0);
         } else {
             mario->position.y += fall;

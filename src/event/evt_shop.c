@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);
@@ -1326,13 +1327,13 @@ USER_FUNC(disp_list) {
         winMgrOpen(event->userdata[0]);
         winMgrOpen(event->userdata[1]);
         winMgrOpen(event->userdata[2]);
-        psndSFXOn((const char*)0x2A);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
     }
     if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
         winMgrCloseAutoDelete(event->userdata[0]);
         winMgrCloseAutoDelete(event->userdata[1]);
         winMgrCloseAutoDelete(event->userdata[2]);
-        psndSFXOn((const char*)0x2B);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
         return EVT_RETURN_YIELD;
     }
     return EVT_RETURN_BLOCK;
@@ -1414,7 +1415,7 @@ USER_FUNC(point_wait) {
     ShopWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
     if (wp->points != SHOP_PTS(pouch)) {
-        psndSFXOn((const char*)0x8CA);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;

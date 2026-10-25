@@ -10,6 +10,7 @@
 #include "data/party_data.h"
 #include "pmario_sound.h"
 #include "mario/mario.h"
+#include "sfx_name_word.h"
 
 //.data
 
@@ -1299,7 +1300,7 @@ s32 partyHelloMain(PartyEntry* party) {
         party->flags2 &= ~0x10;
         ret = 1;
         party->runMode = 1;
-        psndSFXOn_3D((const char*)0x20920, (Vec*)(mario + 0x8C));
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_OUT1 | PSND_SFX_BYPASS_MUTE), (Vec*)(mario + 0x8C));
         break;
     }
     case 10:
@@ -1371,7 +1372,7 @@ s32 partyGoodbyeMain(PartyEntry* party) {
         }
         break;
     case 10:
-        psndSFXOn_3D((const char*)0x2091F, &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_IN1 | PSND_SFX_BYPASS_MUTE), &mario->position);
         tx = party->moveTarget.x = mario->position.x;
         ty = party->moveTarget.y = 0.5f * mario->wPlayerCollisionBox.y + mario->position.y;
         tz = party->moveTarget.z = mario->position.z;

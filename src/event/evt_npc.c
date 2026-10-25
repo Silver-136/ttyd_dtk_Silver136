@@ -19,6 +19,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include <math.h>
+#include "sfx_name_word.h"
 
 
 #ifdef __MWERKS__
@@ -2268,7 +2269,7 @@ USER_FUNC(evt_npc_majo_disp_on) {
             animPosePaperPeraOn(npc->poseId);
             animPoseSetLocalTime(npc->poseId, 0.0f);
             event->userdata[0]++;
-            psndSFXOn_3D((char*)0x275, &npc->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_WITCH_SHADOW_SPREAD1), &npc->position);
             break;
 
         default:
@@ -2285,13 +2286,13 @@ USER_FUNC(evt_npc_majo_disp_on) {
                     case 0:
                         break;
                     case 1:
-                        psndSFXOn_3D((char*)0x937, &npc->position);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW2), &npc->position);
                         break;
                     case 2:
-                        psndSFXOn_3D((char*)0x27B, &npc->position);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_MARI_SHADOW2), &npc->position);
                         break;
                     case 3:
-                        psndSFXOn_3D((char*)0x278, &npc->position);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_MAJO_SHADOW2), &npc->position);
                         break;
                 }
             }
@@ -2330,7 +2331,7 @@ USER_FUNC(evt_npc_majo_disp_off) {
     if (isFirstCall) {
         event->userdata[0] = 0;
         event->userdata[1] = 0;
-        psndSFXOn_3D((char*)0x275, &npc->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_WITCH_SHADOW_SPREAD1), &npc->position);
     }
 
     if (!animGroupBaseAsync("p_bibi", group, NULL)) {
@@ -2348,13 +2349,13 @@ USER_FUNC(evt_npc_majo_disp_off) {
                     case 0:
                         break;
                     case 1:
-                        psndSFXOn_3D((char*)0x936, &npc->position);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1), &npc->position);
                         break;
                     case 2:
-                        psndSFXOn_3D((char*)0x27A, &npc->position);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_MARI_SHADOW1), &npc->position);
                         break;
                     case 3:
-                        psndSFXOn_3D((char*)0x277, &npc->position);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_MAJO_SHADOW1), &npc->position);
                         break;
                 }
             }

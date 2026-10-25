@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_pouch.h"
+#include "sfx_name_word.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -611,7 +612,7 @@ USER_FUNC(firebar_entry) {
     }
     if (__fabsf(mario->position.x - wp->pos.x) < 120.0f) {
         if (psndSFXChk(wp->sfxId)) {
-            wp->sfxId = psndSFXOn_3D((const char*)0x1CD, &wp->pos);
+            wp->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_FIREBAR_ROUND1), &wp->pos);
         }
     } else if (psndSFXChk(wp->sfxId) == 0) {
         psndSFXOff(wp->sfxId);

@@ -16,6 +16,7 @@
 #include <string.h>
 #include "seq/seq_gameover.h"
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 typedef struct GameOverWork {
     EventEntry* evt; // 0x0
@@ -360,7 +361,7 @@ void seq_gameOverMain(SequenceWork* work) {
             }
             marioReset();
             marioEntry();
-            psndBGMOn(0x200, (char*)0x93);
+            psndBGMOn(0x200, (char*)PSND_BGM_BATTLE_LOSE1);
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= 0x8000;
             }

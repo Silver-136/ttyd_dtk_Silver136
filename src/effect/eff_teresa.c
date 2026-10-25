@@ -5,6 +5,7 @@
 #include "pmario_sound.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "sfx_name_word.h"
 
 typedef struct EffTeresaWork {
     s32 type;                   // 0x0
@@ -43,7 +44,7 @@ EffectEntry* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
         position.x = work->position.x;
         position.y = work->position.y;
         position.z = work->position.z;
-        psndSFXOn_3D((char*)0x5D5, &position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_LIGHT1), &position);
     }
     return effect;
 }
@@ -74,7 +75,7 @@ void effTeresaMain(EffectEntry* effect) {
                     sfxPosition.x = work->position.x;
                     sfxPosition.y = work->position.y;
                     sfxPosition.z = work->position.z;
-                    psndSFXOn_3D((char*)0x5D6, &sfxPosition);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_A_APPEAR1), &sfxPosition);
                 }
             }
             work->rotZ += 10.0f;

@@ -7,6 +7,7 @@
 #include "system.h"
 #include <string.h>
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
@@ -28,7 +29,7 @@ static inline BOOL lowHP(void) {
 void marioVoiceGlareOn(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->soundId[1] == (u32)-1) {
-        mario->soundId[1] = psndSFXOn_3D((char*)0xDC, &mario->position);
+        mario->soundId[1] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_POWER2), &mario->position);
     }
 }
 
@@ -117,7 +118,7 @@ void mot_stay(void) {
             if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
                 if (pouchGetHP() == 0) {
                     marioChgPose("M_I_S");
-                    psndSFXOn_3D((char*)0x173, &mario->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FURAFURA1), &mario->position);
                 } else if (lowHP() && marioChkKey()) {
                     mario->dispFlags |= 4;
                     marioChgPose("M_S_3");
@@ -173,10 +174,10 @@ void mot_stay(void) {
             m->poseTime = 0;
         }
         if (m->idleTimer == 0) {
-            m->soundId[0] = psndSFXOn_3D((char*)0xE1, &m->position);
+            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF1), &m->position);
         }
         if (m->idleTimer == gp->framerate * 2) {
-            m->soundId[0] = psndSFXOn_3D((char*)0xE2, &m->position);
+            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF2), &m->position);
         }
 #else
         m = marioGetPtr();
@@ -185,10 +186,10 @@ void mot_stay(void) {
             m->idleTimer = 0;
         }
         if (m->idleTimer == 0xF) {
-            m->soundId[0] = psndSFXOn_3D((char*)0xE1, &m->position);
+            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF1), &m->position);
         }
         if (m->idleTimer == 0x87) {
-            m->soundId[0] = psndSFXOn_3D((char*)0xE2, &m->position);
+            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_RELIEF2), &m->position);
         }
 #endif
     }
@@ -277,7 +278,7 @@ void mot_stay(void) {
             marioChgEvtPose("M_I_5");
             marioAdjustMoveDir();
             m = marioGetPtr();
-            m->soundId[0] = psndSFXOn_3D((char*)0xEF, &m->position);
+            m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_YAWN1), &m->position);
             mario->multiTimer = 0x32;
             mario->currSubMotionId = 2;
         case 2:
@@ -300,7 +301,7 @@ void mot_stay(void) {
                 mario->currSubMotionId = 4;
                 MARIO_STAY(mario).deepSleepTimer = 0;
                 m = marioGetPtr();
-                m->soundId[0] = psndSFXOn_3D((char*)0xE4, &m->position);
+                m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_SLEEP1), &m->position);
             }
             break;
         case 4:
@@ -314,7 +315,7 @@ void mot_stay(void) {
 #endif
                 mario->multiTimer = 0;
                 m = marioGetPtr();
-                m->soundId[0] = psndSFXOn_3D((char*)0xE4, &m->position);
+                m->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_SLEEP1), &m->position);
             }
             if ((mario->flags & MARIO_FLAG_KEY_OFF) || lowHP()) {
                 marioChgPose("M_S_1");

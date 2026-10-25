@@ -6,6 +6,7 @@
 #include "system.h"
 #include "driver/animdrv.h"
 #include "peach.h"
+#include "sfx_name_word.h"
 
 int strcmp(const char*, const char*);
 void marioChkOverhead(void);
@@ -299,7 +300,7 @@ void peach_stay(void) {
                 marioChgPose("P_U_1");
                 MT = 80;
                 mp->currSubMotionId = 1;
-                mp->soundId[0] = psndSFXOn_3D((char*)0x101, &mp->position);
+                mp->soundId[0] = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_PEACH_SAD1_1), &mp->position);
                 marioAdjustMoveDir();
             }
             break;

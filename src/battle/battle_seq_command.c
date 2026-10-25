@@ -21,6 +21,7 @@
 #include "battle/battle_ac_help.h"
 #include "battle/battle_menu_disp.h"
 #include "battle/battle_status_effect.h"
+#include "sfx_name_word.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
@@ -1275,7 +1276,7 @@ s32 BattleCommandInput(BattleWork* work) {
                 }
             }
             if (BattlePadCheckTrigger(0x200)) {
-                psndSFXOn((const char*)0x9d9);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
                 BattleCommandDisplay_TargetSelectMenuEnd(wp);
                 cmd->state = 6;
                 wp->flags &= ~4;
@@ -1289,7 +1290,7 @@ s32 BattleCommandInput(BattleWork* work) {
                 break;
             }
             if (BattlePadCheckTrigger(0x100)) {
-                psndSFXOn((const char*)0x9d8);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_OK1));
                 BattleStageOffLightInCommand(1, 1);
                 cmd->state = 0x1d;
                 BattleCommandDisplay_TargetSelectMenuEnd(wp);
@@ -1382,7 +1383,7 @@ s32 BattleCommandInput(BattleWork* work) {
             _commandRestoreRec();
         case 28:
             if (BattlePadCheckTrigger(0x200)) {
-                psndSFXOn((const char*)0x9d9);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
                 BattleCommandDisplay_ProtectPartnerSelectMenuEnd(wp);
                 cmd->state = 20;
             } else if (BattlePadCheckTrigger(0x100)) {
@@ -1499,7 +1500,7 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
 
     _btlcmd_GetCursorPtr(cmd, 14, &cursor);
     if (BattlePadCheckTrigger(0x800) && BattleCommandCheckChangePositionEnable(wp)) {
-        psndSFXOn((const char*)0x9d8);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_OK1));
         BattleCommandDisplay_ActMenuEnd(wp);
         cmd->actType = 9;
         cmd->state = 0x1d;
@@ -1544,7 +1545,7 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
         }
         if (BattlePadCheckTrigger(0x100) || wp->commandMenu.attackAudience) {
             if (cmd->act[cursor->absPos].enabled) {
-                psndSFXOn((const char*)0x9d8);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_OK1));
                 cmd->actType = cmd->act[cursor->absPos].type;
                 switch (cmd->actType) {
                 case 0:
@@ -1607,7 +1608,7 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
                 cursor->absPos = cursor->count - 1;
             }
         } else if (!BattleCommandAttackAudienceCheck() && BattlePadCheckTrigger(0x800) && BattleCommandCheckChangePositionEnable(wp)) {
-            psndSFXOn((const char*)0x9d8);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_OK1));
             BattleCommandDisplay_ActMenuEnd(wp);
             cmd->actType = 9;
             ret = 1;
@@ -1687,7 +1688,7 @@ s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type) {
         }
         if (BattlePadCheckTrigger(0x100) || wp->commandMenu.attackAudience) {
             if (cmd->weapon[cursor->absPos].enabled) {
-                psndSFXOn((const char*)0x9d8);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_OK1));
                 BattleCommandDisplay_WeaponSelectMenuEnd(wp);
                 _btlcmd_SelectWeaponDecide(wp, type, cursor->absPos);
                 BattleCommandDisplay_TargetSelectMenuSetup(wp);
@@ -1744,7 +1745,7 @@ s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type) {
         if (BattlePadCheckTrigger(0x200)) {
             if (type == 2 && (unit->badgesEquipped.DoubleDip || unit->badgesEquipped.TripleDip)) {
                 if (!unit->moveState) {
-                    psndSFXOn((const char*)0x9d9);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
                     BattleCommandDisplay_WeaponSelectMenuEnd(wp);
                     cmd->state = 0xf;
                 } else {
@@ -1752,7 +1753,7 @@ s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type) {
                     cmd->state = 0xc;
                 }
             } else {
-                psndSFXOn((const char*)0x9d9);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
                 BattleCommandDisplay_WeaponSelectMenuEnd(wp);
                 cmd->state = 1;
             }
@@ -1894,7 +1895,7 @@ s32 BattleCommandDisplay_OperationMenuMain(BattleWork* wp) {
         _btlcmd_GetCursorPtr(cmd, 5, &cursor);
         if (BattlePadCheckTrigger(0x100) || wp->commandMenu.attackAudience) {
             if (cmd->operation[cursor->absPos].enabled) {
-                psndSFXOn((const char*)0x9d8);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_OK1));
                 cmd->operationType = cmd->operation[cursor->absPos].type;
                 switch (cmd->operationType) {
                 case 1:
@@ -1957,7 +1958,7 @@ s32 BattleCommandDisplay_OperationMenuMain(BattleWork* wp) {
             }
         }
         if (BattlePadCheckTrigger(0x200)) {
-            psndSFXOn((const char*)0x9d9);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
             BattleCommandDisplay_OperationMenuEnd(wp);
             ret = 1;
             cmd->state = 1;
@@ -2002,7 +2003,7 @@ s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp) {
         _btlcmd_GetCursorPtr(cmd, 3, &cursor);
         if (BattlePadCheckTrigger(0x100) || wp->commandMenu.attackAudience) {
             if (cmd->multiItem[cursor->absPos].enabled) {
-                psndSFXOn((const char*)0x9d8);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_OK1));
                 cmd->dipMode = cmd->multiItem[cursor->absPos].padE[0];
                 cmd->state = 5;
                 BattleCommandDisplay_MultiItemMenuEnd(wp);
@@ -2048,7 +2049,7 @@ s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp) {
             }
         }
         if (BattlePadCheckTrigger(0x200)) {
-            psndSFXOn((const char*)0x9d9);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
             BattleCommandDisplay_MultiItemMenuEnd(wp);
             ret = 1;
             cmd->state = 1;
@@ -2090,7 +2091,7 @@ s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp) {
         _btlcmd_GetCursorPtr(cmd, 10, &cursor);
         if (BattlePadCheckTrigger(0x100) || wp->commandMenu.attackAudience) {
             if (cmd->party[cursor->absPos].enabled) {
-                psndSFXOn((const char*)0x9d8);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_OK1));
                 BattleStageOffLightInCommand(0, 1);
                 cmd->partyKind = cmd->party[cursor->absPos].kind;
                 cmd->state = 0x1d;
@@ -2130,7 +2131,7 @@ s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp) {
             }
         }
         if (BattlePadCheckTrigger(0x200)) {
-            psndSFXOn((const char*)0x9d9);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_CANCEL1));
             BattleCommandDisplay_ChangePartySelectMenuEnd(wp);
             ret = 1;
             cmd->state = 0x14;

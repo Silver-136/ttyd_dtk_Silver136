@@ -10,6 +10,7 @@
 #include "koopa_motion.h"
 #include "peach.h"
 #include "mario/mario_pouch.h"
+#include "sfx_name_word.h"
 
 
 void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
@@ -20,58 +21,58 @@ void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
     hitAttr = hitGetAttr(hitObj);
     if ((mario->multiTimer % interval) == 0) {
         if (hitAttr & 0x100) {
-            psndSFXOn_3D((char*)0x143, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE2R), &mario->position);
             return;
         }
         if (hitAttr & 0x200000) {
-            psndSFXOn_3D((char*)0x145, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE3R), &mario->position);
             return;
         }
         if (hitAttr & 0x100000) {
-            psndSFXOn_3D((char*)0x147, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE4R), &mario->position);
             return;
         }
         if (hitAttr & 0x1000) {
             if (strncmp(gp->currentMapName, "mri", 3) != 0) {
-                psndSFXOn_3D((char*)0x149, &mario->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE5R), &mario->position);
                 return;
             }
-            psndSFXOn_3D((char*)0x143, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE2R), &mario->position);
             return;
         }
         if (hitAttr & 0x400000) {
-            psndSFXOn_3D((char*)0x14B, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE6R), &mario->position);
             return;
         }
-        psndSFXOn_3D((char*)0x141, &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE1R), &mario->position);
         return;
     }
     if ((mario->multiTimer % (interval >> 1U)) == 0) {
         if (hitAttr & 0x100) {
-            psndSFXOn_3D((char*)0x142, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE2L), &mario->position);
             return;
         }
         if (hitAttr & 0x200000) {
-            psndSFXOn_3D((char*)0x144, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE3L), &mario->position);
             return;
         }
         if (hitAttr & 0x100000) {
-            psndSFXOn_3D((char*)0x146, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE4L), &mario->position);
             return;
         }
         if (hitAttr & 0x1000) {
             if (strncmp(gp->currentMapName, "mri", 3) != 0) {
-                psndSFXOn_3D((char*)0x148, &mario->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE5L), &mario->position);
                 return;
             }
-            psndSFXOn_3D((char*)0x142, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE2L), &mario->position);
             return;
         }
         if (hitAttr & 0x400000) {
-            psndSFXOn_3D((char*)0x14A, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE6L), &mario->position);
             return;
         }
-        psndSFXOn_3D((char*)0x140, &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_MOVE1L), &mario->position);
     }
 }
 

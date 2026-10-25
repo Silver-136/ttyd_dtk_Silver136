@@ -31,6 +31,7 @@
 #include "evt/evt_mobj.h"
 #include "libc_decls.h"
 #include "pmario_sound.h"
+#include "sfx_name_word.h"
 s32 mobj_koopa_pole_evt(MapObjectEntry* mobj);
 void kpa_disp_pole_score(CameraId camId, void* param);
 static USER_FUNC(kpa_get_level);
@@ -476,7 +477,7 @@ s32 mobj_switch_blue(MapObjectEntry* mobj) {
             if (mobj->hitFlag == 0x200000 || mobj->hitFlag == 0x1000000) {
                 marioChgMot(MARIO_MOTION_JUMP_SW);
             }
-            psndSFXOn_3D((const char*)0x1d2, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BIKKURI_SWITCH_ON1), &mobj->position);
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             mobj->state++;
         }
@@ -632,14 +633,14 @@ s32 mobj_switch_red(MapObjectEntry* mobj) {
             if (mobj->hitFlag == 0x200000 || mobj->hitFlag == 0x1000000) {
                 marioChgMot(MARIO_MOTION_JUMP_SW);
             }
-            psndSFXOn_3D((const char*)0x1d2, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BIKKURI_SWITCH_ON1), &mobj->position);
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             mobj->flags &= ~8;
         }
         break;
     case 1:
         if (mobj->flags & 8) {
-            psndSFXOn_3D((const char*)0x1d2, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BIKKURI_SWITCH_ON1), &mobj->position);
             if (mobj->hitFlag == 0x200000) {
                 marioChgMot(MARIO_MOTION_JUMP_SW);
             }
@@ -746,9 +747,9 @@ s32 mobj_timerswitch(MapObjectEntry* mobj) {
                 marioChgMot(MARIO_MOTION_JUMP_SW);
             }
             if (other->state != 2) {
-                psndSFXOn_3D((const char*)0x1c1, &mobj->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_TIMER_SWITCH_HIT1), &mobj->position);
             } else {
-                psndSFXOn_3D((const char*)0x1c2, &mobj->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_TIMER_SWITCH_LIGHT1), &mobj->position);
             }
             evtEntryType(evt_shake, 0, 0, 0);
             animPoseSetAnim(mobj->poseId, "A_1", 1);
@@ -881,7 +882,7 @@ s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
     case 0:
         if (mobj->flags & 8) {
             mobjRunEvent(mobj, (s32*)mobj->event);
-            psndSFXOn_3D((const char*)0x1d3, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_RIDE_SWITCH_ON1), &mobj->position);
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             mobj->state = 1;
         }
@@ -906,7 +907,7 @@ s32 mobj_rideswitch_lightblue(MapObjectEntry* mobj) {
             if (!(mobj->flags & 8)) {
                 mobj->state = 3;
                 animPoseSetAnim(mobj->poseId, "A_2", 1);
-                psndSFXOn_3D((const char*)0x1d4, &mobj->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_RIDE_SWITCH_ON2), &mobj->position);
                 mobjRunEvent(mobj, (s32*)mobj->extraEvent);
             } else {
                 mobj->flags &= ~8;
@@ -988,32 +989,32 @@ s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
             }
             if ((s32)(u8)mario->characterId != 2) {
                 if (!strcmp(mobj->animName, "MOBJ_RedJumpStand")) {
-                    psndSFXOn_3D((const char*)0x1eb, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND1), &mobj->position);
                 } else {
-                    psndSFXOn_3D((const char*)0x1ec, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND2), &mobj->position);
                 }
                 switch (irand(4)) {
                 case 0:
-                    psndSFXOn_3D((const char*)0xab, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_1), &mobj->position);
                     break;
                 case 1:
-                    psndSFXOn_3D((const char*)0xac, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_2), &mobj->position);
                     break;
                 case 2:
-                    psndSFXOn_3D((const char*)0xad, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_3), &mobj->position);
                     break;
                 case 3:
-                    psndSFXOn_3D((const char*)0xae, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_4), &mobj->position);
                     break;
                 case 4:
-                    psndSFXOn_3D((const char*)0xaf, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_5), &mobj->position);
                     break;
                 }
             } else if (!strcmp(mobj->animName, "MOBJ_RedJumpStand")) {
-                psndSFXOn((const char*)0x1eb);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND1));
                 do { } while (0);
             } else {
-                psndSFXOn((const char*)0x1ec);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND2));
             }
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             mobj->flags &= ~8;
@@ -1080,31 +1081,31 @@ s32 mobj_jumpstand_blue(MapObjectEntry* mobj) {
             }
             if (mario->characterId != 2) {
                 if (!strcmp(mobj->animName, "MOBJ_BlueJumpStand")) {
-                    psndSFXOn_3D((const char*)0x1eb, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND1), &mobj->position);
                 } else {
-                    psndSFXOn_3D((const char*)0x1ec, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND2), &mobj->position);
                 }
                 switch (irand(4)) {
                 case 0:
-                    psndSFXOn_3D((const char*)0xab, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_1), &mobj->position);
                     break;
                 case 1:
-                    psndSFXOn_3D((const char*)0xac, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_2), &mobj->position);
                     break;
                 case 2:
-                    psndSFXOn_3D((const char*)0xad, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_3), &mobj->position);
                     break;
                 case 3:
-                    psndSFXOn_3D((const char*)0xae, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_4), &mobj->position);
                     break;
                 case 4:
-                    psndSFXOn_3D((const char*)0xaf, &mobj->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_5), &mobj->position);
                     break;
                 }
             } else if (!strcmp(mobj->animName, "MOBJ_BlueJumpStand")) {
-                psndSFXOn((const char*)0x1eb);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND1));
             } else {
-                psndSFXOn((const char*)0x1ec);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND2));
             }
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             mobj->flags &= ~8;
@@ -1221,11 +1222,11 @@ s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
         img->animTime = animTimeGetTime(type);
         imgSetShadow(img, 2);
         if (!strcmp(mobj->animName, "MOBJ_Lv1Block") || !strcmp(mobj->animName, "MOBJ_Lv2Block")) {
-            psndSFXOn_3D((const char*)0x1c7, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_OJAMA_SMALL1), &mobj->position);
         } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBlock") || !strcmp(mobj->animName, "MOBJ_Lv2BigBlock")) {
-            psndSFXOn_3D((const char*)0x1c8, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_OJAMA_MID1), &mobj->position);
         } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBigBlock") || !strcmp(mobj->animName, "MOBJ_Lv2BigBigBlock")) {
-            psndSFXOn_3D((const char*)0x1c9, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_OJAMA_BIG1), &mobj->position);
         }
         mobj->state = 11;
         break;
@@ -1473,7 +1474,7 @@ s32 mobj_switch_float_blk(MapObjectEntry* mobj) {
         if (mobj->hitFlag == 0x200000) {
             marioChgMot(MARIO_MOTION_JUMP_SW);
         }
-        psndSFXOn_3D((const char*)0x1b5, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_SWITCH1), &mobj->position);
         switch (mobj->hitFlag) {
         case 0x400000:
             animPoseSetAnim(mobj->poseId, _switch_anim[anim + 1], 1);
@@ -1763,7 +1764,7 @@ s32 mobj_lock(MapObjectEntry* mobj) {
             mobj->velocity.y *= -0.8f;
             mobj->bounce += 1.0f;
             if (mobj->bounce < 4.0f) {
-                psndSFXOn_3D((const char*)0x1e6, &mobj->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_UNLOCK1_LEAPED1), &mobj->position);
             }
         } else {
             mobj->position.y += mobj->velocity.y;
@@ -2137,7 +2138,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         }
         marioKeyOff();
         camGetPtr((CameraId)8)->flags |= 0x200;
-        psndSFXOn_3D((const char*)0x1d9, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_HIT1), &mobj->position);
         mobj->state++;
     case 1:
         if (!((u32)gp->flags & 0x1000) && swGet(0xea) == 0) {
@@ -2156,7 +2157,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
             effSoftDelete(mobj->effect);
             mobj->effect = NULL;
         }
-        psndSFXOn_3D((const char*)0x1da, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_HEART1), &mobj->position);
         animPoseSetAnim(mobj->poseId, "A_2", 1);  // correctness: target str_8041A11C
         if (mobj->typeData[1] == 0) {
             mobj->state = 3;
@@ -2169,7 +2170,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
     case 3:
         if (mobj->timer == 100) {
             effStardustEntry(1, 30, 60, mobj->position.x, 45.0f + mobj->position.y, mobj->position.z, 50.0f, 50.0f);
-            psndSFXOn_3D((const char*)0x1db, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_SHINE1), &mobj->position);
         }
         if (mobj->timer == 100) {
             recoveryHeal();
@@ -2183,7 +2184,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
     case 4:
         if (mobj->timer == 100) {
             effStardustEntry(1, 30, 60, mobj->position.x, 45.0f + mobj->position.y, mobj->position.z, 50.0f, 50.0f);
-            psndSFXOn_3D((const char*)0x1db, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_SHINE1), &mobj->position);
         }
         if (mobj->timer == 100) {
             kind = mobj->typeData[1];
@@ -2325,7 +2326,7 @@ s32 mobj_save_blk(MapObjectEntry* mobj) {
         if (mobj->flags & 8) {
             marioKeyOff();
             marioStSystemLevel(1);
-            psndSFXOn_3D((const char*)0x1af, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_SAVE1), &mobj->position);
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             camGetPtr((CameraId)8)->flags |= 0x200;
             mobj->state++;
@@ -2410,7 +2411,7 @@ s32 mobj_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
         if (mobj->flags & 8) {
-            psndSFXOn_3D((const char*)0x1b7, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_UNBREAK1), &mobj->position);
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             mobj->flags &= ~8;
             mobj->state++;
@@ -2500,9 +2501,9 @@ s32 mobj_badgeblk(MapObjectEntry* mobj) {
         if (mobj->flags & 8) {
             if (!strcmp(mobj->animName, "MOBJ_BadgeBlock") || !strcmp(mobj->animName, "MOBJ_BrickBadgeBlock") ||
                 !strcmp(mobj->animName, "MOBJ_HiddenBadgeBlock")) {
-                psndSFXOn_3D((const char*)0x1bb, &mobj->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_BADGE1), &mobj->position);
             } else {
-                psndSFXOn_3D((const char*)0x1ba, &mobj->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_QUESTION1), &mobj->position);
             }
             if (mobj->flags & 0x800) {
                 mobj->flags &= ~0x800;
@@ -2518,12 +2519,12 @@ s32 mobj_badgeblk(MapObjectEntry* mobj) {
                 item->gravityScale = 1.0f;
                 item->maxBounces = 0;
                 item->velocityY = 360.0f;
-                psndSFXOn_3D((const char*)0x1bc, &mobj->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_ITEM_APPEAR1), &mobj->position);
             } else {
                 pouchAddCoin(1);
                 itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
                 evtSetValue(NULL, mobj->flagVar, 1);
-                psndSFXOn_3D((const char*)0x5b, &mobj->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_COUNT_COIN1), &mobj->position);
             }
             mobj->state++;
         }
@@ -2546,7 +2547,7 @@ s32 mobj_badgeblk(MapObjectEntry* mobj) {
         if (mobj->flags & 8) {
             mobj->flags &= ~8;
             animPoseSetAnim(mobj->poseId, "A_2", 1);
-            psndSFXOn_3D((const char*)0x1b7, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_UNBREAK1), &mobj->position);
             mobj->state++;
         }
         break;
@@ -2627,7 +2628,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
             marioCtrlOff();
         }
         gp->systemLevelFlags |= 3;
-        psndSFXOn_3D((const char*)0x201c0, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_POWER_SHINE1 | PSND_SFX_BYPASS_MUTE), &mobj->position);
         animPoseSetAnim(mobj->poseId, "A_1", 1);
         itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, "pwrblk1", ITEM_SHINE_SPRITE, 0xf, -1, NULL);
         mobj->state++;
@@ -2740,7 +2741,7 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
         img->animName = "A_1";
         img->animTime = animTimeGetTime(type);
         imgSetShadow(img, 2);
-        psndSFXOn_3D((const char*)0x1b8, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_BREAK1), &mobj->position);
         mobj->state = 11;
         break;
     case 11:
@@ -2781,7 +2782,7 @@ s32 mobj_10countblk(MapObjectEntry* mobj) {
                 strcpy(mobj->animName, "MOBJ_Block");
             }
             animPoseSetAnim(mobj->poseId, "A_1", 1);
-            psndSFXOn_3D((const char*)0x1be, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_TEN_COUNT_HIT1), &mobj->position);
             evtSetValue(NULL, mobj->flagVar, 1);
             if ((u32)mobj->event != 0) {
                 mobjRunEvent(mobj, (s32*)mobj->event);
@@ -2805,7 +2806,7 @@ s32 mobj_10countblk(MapObjectEntry* mobj) {
             break;
         }
         if (mobj->flags & 8) {
-            psndSFXOn_3D((const char*)0x1bf, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_TEN_COUNT_COIN1), &mobj->position);
             pouchAddCoin(1);
             itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
             mobj->flags &= ~8;
@@ -2814,7 +2815,7 @@ s32 mobj_10countblk(MapObjectEntry* mobj) {
         break;
     case 90:
         if (mobj->flags & 8) {
-            psndSFXOn_3D((const char*)0x1b7, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_UNBREAK1), &mobj->position);
             animPoseSetAnim(mobj->poseId, "A_3", 1);
             mobj->flags &= ~8;
             mobj->state++;
@@ -3185,11 +3186,11 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         }
         if (mode == 1) {
             animPoseSetAnim(mobj->poseId, "A_1", 1);
-            psndSFXOnEx_3D(SFX_NAME_WORD(0x1ee), &mobj->position, 0xff, 0xff, 100, 0x10);
+            psndSFXOnEx_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_KURURIN_FLOOR_HOP1), &mobj->position, 0xff, 0xff, 100, 0x10);
             mobj->state = 10;
         } else if (mode == 2) {
             animPoseSetAnim(mobj->poseId, "A_2", 1);
-            psndSFXOn_3D((const char*)0x1ef, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_KURURIN_FLOOR_LEAP1), &mobj->position);
             mobj->state = 1;
             item = itemNameToPtr(mobj->name);
             if (item == NULL || !(((ItemEntry*)item)->flags & 1)) {
@@ -3216,7 +3217,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             mobj->flags &= ~0x400;
             mobj->flags &= ~8;
             animPoseSetAnim(mobj->poseId, "S_1", 1);
-            psndSFXOn_3D((const char*)0x1f0, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_KURURIN_FLOOR_CLOSE1), &mobj->position);
             mobj->state = 0;
         }
         break;
@@ -3274,7 +3275,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         KURU_POSE_FLAGS(mobj) &= ~0x10;
         mobj->flags &= ~0x400;
         animPoseSetAnim(mobj->poseId, "S_1", 1);
-        psndSFXOn_3D((const char*)0x1f0, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_KURURIN_FLOOR_CLOSE1), &mobj->position);
         mobj->timer = 20;
         mobj->state++;
     }
@@ -3389,7 +3390,7 @@ s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
         }
         break;
     case 10:
-        psndSFXOn_3D((const char*)0x1c4, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_OJAMA1), &mobj->position);
         effMObjBrokenEntry(5, mobj->position.x, 25.0f + mobj->position.y, 25.0f + mobj->position.z);
         item = itemEntry(mobj->position.x, 25.0f + mobj->position.y, mobj->position.z, mobj->name, ITEM_BOWSER_BROS_MEAT, 4, -1, kpa_powerup_evt);
         if (item) {
@@ -3402,7 +3403,7 @@ s32 mobj_koopa_ojama_blk_evt(MapObjectEntry* mobj) {
             item->velocityY = 500.0f;
             item->speed = 120.0f;
             item->direction = 90;
-            psndSFXOn_3D((const char*)0x836, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MEAT_APPEAR1), &mobj->position);
         }
         mobj->state = 99;
         break;
@@ -3538,7 +3539,7 @@ s32 mobj_koopa_brickblk(MapObjectEntry* mobj) {
         }
         break;
     case 10:
-        psndSFXOn_3D((const char*)0x1b8, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_BREAK1), &mobj->position);
         if (!strcmp(mobj->animName, "MOBJ_FlowBrickBlock")) {
             effMObjBrokenEntry(0, mobj->position.x, 12.5f + mobj->position.y, 12.5f + mobj->position.z);
         } else if (!strcmp(mobj->animName, "MOBJ_block_ky")) {
@@ -3551,7 +3552,7 @@ s32 mobj_koopa_brickblk(MapObjectEntry* mobj) {
         mobj->state = 99;
         break;
     case 20:
-        psndSFXOn_3D((const char*)0x1b7, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_UNBREAK1), &mobj->position);
         animPoseSetAnim(mobj->poseId, "A_1", 1);
         mobj->state = 21;
         break;
@@ -3664,12 +3665,12 @@ s32 mobj_koopa_badgeblk(MapObjectEntry* mobj) {
             item->velocityY = 500.0f;
             item->speed = 120.0f;
             item->direction = 90;
-            psndSFXOn_3D((const char*)0x836, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MEAT_APPEAR1), &mobj->position);
         } else {
             kpaAddCoin(1);
             itemEntry(mobj->position.x, mobj->position.y, mobj->position.z, NULL, ITEM_COIN, 0xf, -1, NULL);
             evtSetValue(NULL, mobj->flagVar, 1);
-            psndSFXOn_3D((const char*)0x5b, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_COUNT_COIN1), &mobj->position);
         }
         if (mobj->hitFlag == 0x4000000) {
             npcKoopaModeMobjBoundDeadCheck(mobj->hitObj[0].hitObject);
@@ -3708,7 +3709,7 @@ s32 mobj_koopa_badgeblk(MapObjectEntry* mobj) {
         }
         break;
     case 91:
-        psndSFXOn_3D((const char*)0x1b8, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_BREAK1), &mobj->position);
         effMObjBrokenEntry(2, mobj->position.x, 12.5f + mobj->position.y, 12.5f + mobj->position.z);
         mobj->state = 99;
         break;
@@ -3834,7 +3835,7 @@ s32 mobj_koopa_blk(MapObjectEntry* mobj) {
         }
         break;
     case 10:
-        psndSFXOn_3D((const char*)0x1b8, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_BREAK1), &mobj->position);
         effMObjBrokenEntry(2, mobj->position.x, 12.5f + mobj->position.y, 12.5f + mobj->position.z);
         mobj->state = 99;
     case 99:
@@ -3917,7 +3918,7 @@ s32 mobj_koopa_dokan_evt(MapObjectEntry* mobj) {
         } else {
             effMObjBrokenEntry(6, mobj->position.x - 25.0f, 25.0f + mobj->position.y, 25.0f + mobj->position.z);
         }
-        psndSFXOn_3D((const char*)0x834, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_DOKAN_BREAK1), &mobj->position);
         mobj->state = 99;
         break;
     case 99:
@@ -4043,7 +4044,7 @@ s32 mobj_koopa_sango_evt(MapObjectEntry* mobj) {
         break;
     case 10:
         if (mobj->hitFlag == 0x20000000) {
-            psndSFXOn_3D((const char*)0xb67, &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_DAMAGE_FIRE1), &mobj->position);
         }
         ev = evtEntry(evt_fire, 0, 0);
         ev->lwData[0] = (s32)(1024.0f * mobj->position.x) + 0xF24A7A80;
@@ -4129,7 +4130,7 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
     if (mobj->state < 10) {
         if (distABf(mario->position.x, mario->position.y, mobj->position.x, mobj->position.y) < 150.0f) {
             if (psndSFXChk(mobj->typeWork)) {
-                mobj->typeWork = psndSFXOn_3D((const char*)0x1cd, &mobj->position);
+                mobj->typeWork = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_FIREBAR_ROUND1), &mobj->position);
             }
         } else if (psndSFXChk(mobj->typeWork) == 0) {
             psndSFXOff(mobj->typeWork);
@@ -4177,7 +4178,7 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
         mobj->state = 10;
         break;
     case 10:
-        psndSFXOn_3D((const char*)0x1b8, &mobj->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BLOCK_BREAK1), &mobj->position);
         effMObjBrokenEntry(0, mobj->position.x, 12.5f + mobj->position.y, 12.5f + mobj->position.z);
         mobj->state++;
         break;

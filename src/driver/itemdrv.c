@@ -30,6 +30,7 @@
 #include "evt/evt_lecture.h"
 #include "libc_decls.h"
 #include <math.h>
+#include "sfx_name_word.h"
 
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
@@ -1558,7 +1559,7 @@ void itemseq_Bound(ItemEntry* entry) {
                         sndPos.x = entry->position.x;
                         sndPos.y = entry->position.y;
                         sndPos.z = entry->position.z;
-                        psndSFXOn_3D((const char*)0x194, &sndPos);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_WATER1), &sndPos);
                     }
                     effSplashEntry(0, entry->position.x, entry->position.y, entry->position.z, 0.7f);
                     entry->flags |= 2;

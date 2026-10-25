@@ -1,6 +1,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 #include "manager/fontmgr.h"
 #include "driver/msgdrv.h"
@@ -603,7 +604,7 @@ static USER_FUNC(evt_yuuranking_main_func) {
                 }
                 wp->phase++;
                 if (wp->score != 0) {
-                    snd_id = psndSFXOn((const char*)0x8D7);
+                    snd_id = psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_RESULT_COUNT1));
                 }
                 break;
             case 2:
@@ -692,7 +693,7 @@ static USER_FUNC(evt_yuuranking_main_func) {
                         target = yuu_kesan(wp->type, wp->dispScore, wp->bonus, 0, wp->max);
                         if (wp->monte < target) {
                             wp->monte++;
-                            psndSFXOn((const char*)0x8CA);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
                         } else if (wp->monte > target) {
                             wp->monte--;
                         } else if (wp->score > 0 && (wp->mul > 1 || wp->mul < 0)) {
@@ -732,7 +733,7 @@ static USER_FUNC(evt_yuuranking_main_func) {
                         target = yuu_kesan(wp->type, wp->dispScore, wp->bonus, wp->mul, wp->max);
                         if (wp->monte < target) {
                             wp->monte++;
-                            psndSFXOn((const char*)0x8CA);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
                         } else if (wp->monte > target) {
                             wp->monte--;
                         } else {
@@ -996,7 +997,7 @@ USER_FUNC(yuuranking_wait_button) {
     }
     if (!(wp->dispFlags & 4) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B))) {
         wp->dispFlags &= ~2;
-        psndSFXOn((const char*)0x12);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

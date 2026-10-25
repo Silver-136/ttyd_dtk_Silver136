@@ -11,6 +11,7 @@
 #include <dolphin/mtx.h>
 #include "evt/evt_cam.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 double tan(double);
 int rand(void);
@@ -200,7 +201,7 @@ void effStageClearMain(EffectEntry* effect) {
         if (p->delay != 0) {
             p->delay--;
             if (p->delay == 0) {
-                psndSFXOn(SFX_NAME_WORD(type == 0 ? 0x29b : 0x82e));
+                psndSFXOn(SFX_NAME_WORD(type == 0 ? PSND_SFX_EVT_STAGE_CLEAR1 : PSND_SFX_KUPPA_GOALIN1));
             }
         } else {
             if ((u32)p->frame < 11) {
@@ -233,7 +234,7 @@ void effStageClearMain(EffectEntry* effect) {
             a = pos.y + (f32)(100 - irand(200));
             b = pos.x + (f32)(200 - irand(400));
             effConfettiEntry(rand() % 3 + 24, 60, b, a, pos.z);
-            psndSFXOn((const char*)0x82f);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_KUPPA_FIREWORKS1));
             work->confetti--;
         }
     }

@@ -16,6 +16,7 @@
 #include "libc_decls.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "sfx_name_word.h"
 
 extern ItemData itemDataTable[];
 void qqsort(void* base, u32 n, u32 size, s32 (*compare)(const void*, const void*));
@@ -185,7 +186,7 @@ s32 winRootMain(WindowWork* w) {
 
     switch (w->active) {
     case 0:
-        psndSFXOn((const char*)0x2002A);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1 | PSND_SFX_BYPASS_MUTE));
         w->tabNum = 0;
         WIN_ROOT_ADD_TAB(0);
         if (swByteGet(0) >= 7 || partyChkJoin(PARTNER_GOOMBELLA)) {
@@ -268,7 +269,7 @@ s32 winRootMain(WindowWork* w) {
             if (w->tab[w->tabSel].id == 1 && !w->party.count) {
                 break;
             }
-            psndSFXOn((const char*)0x20012);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             w->active = w->tab[w->tabSel].id + 11;
             switch (w->tab[w->tabSel].id) {
             case 0:
@@ -292,8 +293,8 @@ s32 winRootMain(WindowWork* w) {
 #else
         } else if (w->dirRep & DEMO_STICK_LEFT) {
 #endif
-            psndSFXOn((const char*)0x20032);
-            psndSFXOn((const char*)0x20031);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE2 | PSND_SFX_BYPASS_MUTE));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE1 | PSND_SFX_BYPASS_MUTE));
             w->tabSel--;
             if (w->tabSel < 0) {
                 w->tabSel = w->tabNum - 1;
@@ -311,8 +312,8 @@ s32 winRootMain(WindowWork* w) {
 #else
         } else if (w->dirRep & DEMO_STICK_RIGHT) {
 #endif
-            psndSFXOn((const char*)0x20032);
-            psndSFXOn((const char*)0x20031);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE2 | PSND_SFX_BYPASS_MUTE));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_SLIDE1 | PSND_SFX_BYPASS_MUTE));
             w->tabSel++;
             if (w->tabSel >= w->tabNum) {
                 w->tabSel = 0;
@@ -373,7 +374,7 @@ s32 winRootMain(WindowWork* w) {
         }
         break;
     case 20:
-        psndSFXOn((const char*)0x2002B);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1 | PSND_SFX_BYPASS_MUTE));
         for (i = 0; i < w->tabNum; i++) {
             w->tab[i].state = 10;
         }
@@ -710,12 +711,12 @@ void winMsgMain(WindowWork* wp) {
                 if (wp->msgLine < 0) {
                     wp->msgLine = 0;
                 } else {
-                    psndSFXOn(SFX_NAME_WORD(0x20006));
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE2 | PSND_SFX_BYPASS_MUTE));
                 }
             } else if (keyGetDirTrg(0) & DEMO_SUBSTICK_DOWN) {
                 if (wp->msgLine / 2 < (wp->msgLines + 1) / 2 - 1) {
                     wp->msgLine += 2;
-                    psndSFXOn(SFX_NAME_WORD(0x20006));
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE2 | PSND_SFX_BYPASS_MUTE));
                 }
             }
             break;
@@ -2217,23 +2218,23 @@ void winSortMain(WindowWork* wp) {
     } else
 #endif
     if (trg & 0x200) {
-        psndSFXOn(SFX_NAME_WORD(0x20013));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
         wp->sortActive = 0;
         wp->sortTgtX = -600.0f;
     } else if (rep & 0x1000) {
-        psndSFXOn(SFX_NAME_WORD(0x20005));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
         wp->sortSel--;
         if (wp->sortSel < 0) {
             wp->sortSel = wp->sortNum - 1;
         }
     } else if (rep & 0x2000) {
-        psndSFXOn(SFX_NAME_WORD(0x20005));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
         wp->sortSel++;
         if (wp->sortSel >= wp->sortNum) {
             wp->sortSel = 0;
         }
     } else if (trg & 0x100) {
-        psndSFXOn(SFX_NAME_WORD(0x20012));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
         sort_data[wp->sortType][wp->sortSel].func(wp);
     }
 #ifndef VERSION_G8ME01

@@ -15,6 +15,7 @@
 #include "evt/evt_cmd.h"
 #include "koopa_hit.h"
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 #ifdef VERSION_G8ME01
 // US exports this as the global kpa_fall (mot_jump calls it by that name)
@@ -249,17 +250,17 @@ void kpa_walk(void) {
             animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], (f32)m->poseTime);
             if (kpaGetBodyStatus() == 0) {
                 if ((s32)m->multiTimer % 40 == 0) {
-                    psndSFXOn_3D((const char*)0x819, &m->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MOVE2), &m->position);
                 } else if ((s32)m->multiTimer % 20 == 0) {
-                    psndSFXOn_3D((const char*)0x818, &m->position);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MOVE1), &m->position);
                 }
                 m->multiTimer++;
             }
         } else if (kpaGetBodyStatus() == 0) {
             if ((s32)m->multiTimer % 40 == 0) {
-                psndSFXOn_3D((const char*)0x819, &m->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MOVE2), &m->position);
             } else if ((s32)m->multiTimer % 20 == 0) {
-                psndSFXOn_3D((const char*)0x818, &m->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MOVE1), &m->position);
             }
             m->multiTimer++;
         }
@@ -324,9 +325,9 @@ void kpa_dash(void) {
         }
         if (kpaGetBodyStatus() == 0) {
             if ((s32)m->multiTimer % 30 == 0) {
-                psndSFXOn_3D((const char*)0x819, &m->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MOVE2), &m->position);
             } else if ((s32)m->multiTimer % 15 == 0) {
-                psndSFXOn_3D((const char*)0x818, &m->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MOVE1), &m->position);
             }
             m->multiTimer++;
         }
@@ -379,7 +380,7 @@ void kpa_jump(void) {
         }
         kpaChgPose("KPA_J_1A", "KPA2_J_1A");
         {
-        psndSFXOn_3D((const char*)0x81E, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_JUMP1), &m->position);
         if (m->airTimer == 0) {
             {
                 m->fallStartPos = m->position;
@@ -471,7 +472,7 @@ void kpa_hip(void) {
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         m->flags &= ~MARIO_FLAG_HAS_INPUT_JUMP;
-        psndSFXOn_3D((const char*)0x81F, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_HIP_DROP1), &m->position);
         marioAdjustMoveDir();
         m->currSubMotionId = 10;
         m->multiTimer = 6;
@@ -508,7 +509,7 @@ void kpa_hip(void) {
             m->currSubMotionId = 0x15;
             m->multiTimer = 0x14;
             m->position.y = y;
-            psndSFXOn_3D((const char*)0x820, &m->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_HIP_DROP2), &m->position);
             evtEntry(quake_kpaHipAttack_evt, 0, 0);
             m->airTimer = 0;
             m->jumpPeakAirTime = 0;
@@ -592,7 +593,7 @@ void kpa_powup(void) {
             m->baseSpeed = 0.0f;
         }
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
-        psndSFXOn_3D((const char*)0x111, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_KOOPA_HAPPY1_1), &m->position);
     }
     lv = kpaGetLevel();
     if (lv <= 3) {
@@ -606,7 +607,7 @@ void kpa_powup(void) {
     case 0:
         m->multiTimer = 5;
         m->currSubMotionId = 1;
-        psndSFXOn_3D((const char*)0x823, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_BIG1), &m->position);
         break;
     default:
         if (--m->multiTimer > 0) {
@@ -651,7 +652,7 @@ void kpa_powdown(void) {
             m->baseSpeed = 0.0f;
         }
         m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
-        psndSFXOn_3D((const char*)0x11D, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_KOOPA_SATIATED1_1), &m->position);
     }
     lv = kpaGetLevel();
     if (lv >= 0) {
@@ -665,7 +666,7 @@ void kpa_powdown(void) {
     case 0:
         m->multiTimer = 5;
         m->currSubMotionId = 1;
-        psndSFXOn_3D((const char*)0x824, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_SMALL1), &m->position);
         break;
     default:
         if (--m->multiTimer > 0) {
@@ -864,7 +865,7 @@ void kpa_swim(void) {
     case 0x1E:
         if (KPW(m)->flags & 0x100) {
             KPW(m)->flags &= ~0x100;
-            psndSFXOn_3D((const char*)0x827, &m->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_WATER_FALL1), &m->position);
         }
         if (kpaGetAttackMode() == 0) {
             kpaChgPose("KPA_W_1", "KPA2_Z_2");
@@ -944,7 +945,7 @@ void kpa_swim(void) {
 void quake_kpaLandOn(void) {
     MarioWork* m = marioGetPtr();
     if (kpaGetStageType() != 1) {
-        psndSFXOn_3D((const char*)0x81D, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_LANDING1), &m->position);
         if (kpaGetLevel() >= 2) {
             evtEntry(quake_kpaLandOn_evt, 0, 0);
         }

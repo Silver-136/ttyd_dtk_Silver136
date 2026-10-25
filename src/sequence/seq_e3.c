@@ -25,6 +25,7 @@
 #include "manager/fontmgr.h"
 #include "driver/msgdrv.h"
 #include "driver/windowdrv.h"
+#include "sfx_name_word.h"
 
 // TODO: move all this into other TUs
 typedef enum winTexMode {
@@ -215,13 +216,13 @@ void seq_e3Main(SequenceWork* seq) {
             if (prev != wp->scenario) {
                 psndSFXOn((void*)5);
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_B || OSTicksToSeconds(OSGetTime() - none_key) > 120) {
-                psndSFXOn((char*)19);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 fadeEntry(MARIO_HEAD_FADE_IN, 0, (GXColor){ 0x00, 0x00, 0x00, 0xFF });
                 fadeSetOffscreenCallback(e3DispOffscreen, seq);
                 wp->nextScreen = 0;
                 seq->state++;
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                psndSFXOn((char*)18);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                 seq->state = 100;
             }
         } break;

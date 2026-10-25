@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -1317,7 +1318,7 @@ static void senteresa_ext_main(void) {
                 if (pTeresa[i].wait == 0) {
                     if (i == 0) {
                         Vec pos = {0.0f, 200.0f, 0.0f};
-                        psndSFXOn_3D((const char*)0x5D3, &pos);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_APPEAR2), &pos);
                     }
                     pTeresa[i].seq++;
                 }
@@ -1347,7 +1348,7 @@ static void senteresa_ext_main(void) {
                     g_nNumEndProc[0]++;
                     if (i == 0) {
                         Vec pos = {0.0f, 200.0f, 0.0f};
-                        psndSFXOn_3D((const char*)0x5D3, &pos);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_APPEAR2), &pos);
                     }
                 } else {
                     pTeresa[i].alpha = alpha;
@@ -1357,7 +1358,7 @@ static void senteresa_ext_main(void) {
                         g_nNumEndProc[0]++;
                         if (i == 0) {
                             Vec pos = {0.0f, 200.0f, 0.0f};
-                            psndSFXOn_3D((const char*)0x5D3, &pos);
+                            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_APPEAR2), &pos);
                         }
                     }
                 }
@@ -1507,7 +1508,7 @@ static void senteresa_ext_main(void) {
                         pos.x = (*pose->mtx)[0][3];
                         pos.y = (*pose->mtx)[1][3];
                         pos.z = (*pose->mtx)[2][3];
-                        psndSFXOn_3D((const char*)0x5D7, &pos);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_ESCAPE1), &pos);
                     }
                 }
                 break;
@@ -1586,7 +1587,7 @@ static void senteresa_ext_main(void) {
                         pos.x = (*pose->mtx)[0][3];
                         pos.y = (*pose->mtx)[1][3];
                         pos.z = (*pose->mtx)[2][3];
-                        psndSFXOn_3D((const char*)0x5D4, &pos);
+                        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_TOGETHER1), &pos);
                     }
                     g_nNumEndProc[0]++;
                 } else {
@@ -1792,7 +1793,7 @@ USER_FUNC(senteresa_huttobu) {
             pos.x = (*pose->mtx)[0][3];
             pos.y = (*pose->mtx)[1][3];
             pos.z = (*pose->mtx)[2][3];
-            psndSFXOn_3D((const char*)0x5D7, &pos);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_ESCAPE1), &pos);
         }
     }
     return EVT_RETURN_DONE;

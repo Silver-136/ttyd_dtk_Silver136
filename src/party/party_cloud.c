@@ -14,6 +14,7 @@ double cos(double x);
 #include "mario/mario_cam.h"
 #include "system.h"
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 Vec cloud_at;
 
@@ -421,7 +422,7 @@ void N__cloud_use(PartyEntry* party) {
             mario->camShiftTargetX = 70.0f * (revise360(270.0f - mario->displayDirectionTarget) <= 180.0f ? -1.0f : 1.0f);
         }
         if (CW(party) != NULL && (u32)CW(party)->sfxId == 0xFFFFFFFF) {
-            CW(party)->sfxId = psndSFXOn_3D((const char*)0x930, &party->playerPtr->position);
+            CW(party)->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CLAUD_WIND1), &party->playerPtr->position);
         }
     case 11:
         cloudCalcPos(party);

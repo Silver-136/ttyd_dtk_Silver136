@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "system.h"
@@ -1034,13 +1035,13 @@ static void senkaron_ext_main(void) {
                             pos.x = (*ep->mtx)[0][3];
                             pos.y = (*ep->mtx)[1][3];
                             pos.z = (*ep->mtx)[2][3];
-                            psndSFXOn_3D((const char*)0xAFB, &pos);
+                            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_FLD_ENM_HONENOKO_MOVE1L), &pos);
                         } else {
                             Vec pos = {0.0f, 0.0f, 0.0f};
                             pos.x = (*ep->mtx)[0][3];
                             pos.y = (*ep->mtx)[1][3];
                             pos.z = (*ep->mtx)[2][3];
-                            psndSFXOn_3D((const char*)0xAFC, &pos);
+                            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_FLD_ENM_HONENOKO_MOVE1R), &pos);
                         }
                     }
                 } else {

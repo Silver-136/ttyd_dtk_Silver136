@@ -14,6 +14,7 @@
 #include "evt/evt_cam.h"
 #include "evt/evt_damage.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 HitEntry* marioChkLandon(f32* outY, f32 y);
@@ -55,13 +56,13 @@ void marioDmgRetQuakeOn(void) {
 
 void marioSetSplash(s32 kind, Vec* pos) {
     if (kind == 0) {
-        psndSFXOn_3D((char*)0x194, pos);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_WATER1), pos);
     }
     if (marioBgmodeChk() != 1) {
         effSplashEntry(kind != 0, pos->x, pos->y, pos->z, 1.0f);
     }
     if (kind == 1) {
-        psndSFXOn_3D((char*)0xBA, pos);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_DAMAGED2), pos);
     }
 }
 
@@ -158,7 +159,7 @@ void mot_damage(void) {
     case 10:
         if (++mario->multiTimer == 2) {
             mario->currSubMotionId = 11;
-            psndSFXOn_3D((char*)0x195, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_LEAP_WATER1), &mario->position);
             if (mario->damageHit != NULL) {
                 evtEntry(evt_gazigazi, 0, 0);
             }
@@ -291,8 +292,8 @@ void mot_damage(void) {
                 marioChgPose("M_D_2");
             }
             marioDmgRetQuakeOn();
-            psndSFXOn_3D((char*)0xCB, &mario->position);
-            psndSFXOn_3D((char*)0x197, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_LAND_DAMAGE2), &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_CRUSH1), &mario->position);
             mario_simple_kemuri();
         }
         if (mario->hitobjStandOn == NULL) {
@@ -379,7 +380,7 @@ void mot_damageToge(void) {
         } else {
             marioChgPose("M_D_6");
         }
-        psndSFXOn_3D((char*)0xBA, &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_DAMAGED2), &mario->position);
         mario_simple_kemuri();
         mario->currSubMotionId = 11;
     case 11: {
@@ -447,8 +448,8 @@ void mot_damageToge(void) {
         } else {
             marioChgPose("M_D_2");
             marioDmgRetQuakeOn();
-            psndSFXOn_3D((char*)0xCB, &mario->position);
-            psndSFXOn_3D((char*)0x197, &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_LAND_DAMAGE2), &mario->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FALL_CRUSH1), &mario->position);
             mario_simple_kemuri();
             mario->hitobjStandOn = h;
             mario->hitobjJumpFrom = NULL;

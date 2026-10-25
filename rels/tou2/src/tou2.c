@@ -28,6 +28,7 @@
 #include "mario/mariost.h"
 #include "data/npc_data.h"
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 typedef struct RankEntry {
     u16 flags;
@@ -336,16 +337,16 @@ static USER_FUNC(evt_tou_print_ranking) {
         return EVT_RETURN_BLOCK;
     }
     if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-        psndSFXOn((const char*)0x13);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
         return EVT_RETURN_YIELD;
     }
     if (dwp->page > 0 && (keyGetButtonTrg(0) & PAD_TRIGGER_L)) {
-        psndSFXOn((const char*)5);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
         dwp->page--;
     }
     if (dwp->page < 1 && (keyGetButtonTrg(0) & PAD_TRIGGER_R)) {
         dwp->page++;
-        psndSFXOn((const char*)5);
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
     }
     dwp->target = dwp->page * 220;
     dwp->scroll += (dwp->target - dwp->scroll) / 8.0f;

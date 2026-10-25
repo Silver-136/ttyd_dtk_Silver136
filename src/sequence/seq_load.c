@@ -3,6 +3,7 @@
 #include "seq/seq_load.h"
 #include "sdk_decls.h"
 #include "win/win_mario.h"
+#include "sfx_name_word.h"
 
 #ifdef VERSION_G8ME01
 // US version: all functions exact (loadDraw needs the two FAKE spellings marked inside it).
@@ -669,7 +670,7 @@ void loadMain(SequenceWork* seq) {
                         SoundSetOutputMode(2);
                         break;
                 }
-                psndENVOn(0x110, (const char*)0x75);
+                psndENVOn(0x110, (const char*)PSND_ENV_SYS_FL1);
             }
             wp->tx = -74.0f;
             wp->ty = 4.0f + (50.0f - 50.0f * wp->unk24);
@@ -1928,7 +1929,7 @@ void loadMain(SequenceWork* seq) {
                         SoundSetOutputMode(2);
                         break;
                 }
-                psndENVOn(0x110, (const char*)0x75);
+                psndENVOn(0x110, (const char*)PSND_ENV_SYS_FL1);
             }
             wp->tx = EXT_LIT(float_neg74_8041be74, -74.0f);
             wp->ty = EXT_LIT(float_4_8041be78, 4.0f) + (EXT_LIT(float_50_8041be6c, 50.0f) - 50.0f * wp->unk24);

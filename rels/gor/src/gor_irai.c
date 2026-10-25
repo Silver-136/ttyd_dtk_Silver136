@@ -1,6 +1,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -656,16 +657,16 @@ USER_FUNC(irai_main_func) {
             iconFlagOn("iraiLButton", 2);
             iconFlagOn("iraiRButton", 2);
             wp->state = 1;
-            psndSFXOn((const char*)0x2A);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
             break;
         case 1:
             if ((keyGetButtonTrg(0) & PAD_BUTTON_A) && swByteGet(1420) == 0 && !swGet(wp->list[wp->cursor] + 5374)) {
-                psndSFXOn((const char*)0x12);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                 wp->state = 100;
                 break;
             }
             if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-                psndSFXOn((const char*)0x13);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 wp->state = 101;
                 break;
             }
@@ -673,22 +674,22 @@ USER_FUNC(irai_main_func) {
             if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
                 if (wp->count - 1 <= wp->cursor) {
                     if (keyGetDirTrg(0) & DEMO_STICK_DOWN) {
-                        psndSFXOn((const char*)5);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                         wp->cursor++;
                     }
                 } else {
-                    psndSFXOn((const char*)5);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                     wp->cursor++;
                 }
             }
             if (keyGetDirRep(0) & DEMO_STICK_UP) {
                 if (wp->cursor <= 0) {
                     if (keyGetDirTrg(0) & DEMO_STICK_UP) {
-                        psndSFXOn((const char*)5);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                         wp->cursor--;
                     }
                 } else {
-                    psndSFXOn((const char*)5);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                     wp->cursor--;
                 }
             }
@@ -719,7 +720,7 @@ USER_FUNC(irai_main_func) {
                 }
                 wp->top -= n;
                 wp->cursor -= n;
-                psndSFXOn((const char*)5);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             }
             if (wp->top < wp->count - 10 && (keyGetButtonTrg(0) & PAD_TRIGGER_R)) {
                 n = 10;
@@ -728,7 +729,7 @@ USER_FUNC(irai_main_func) {
                 }
                 wp->top += n;
                 wp->cursor += n;
-                psndSFXOn((const char*)5);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             }
             if (wp->cursor != wp->last) {
                 wp->field_0x94 = 0;
@@ -766,7 +767,7 @@ USER_FUNC(irai_main_func) {
             iconDelete("iraiArrowDown");
             iconDelete("iraiLButton");
             iconDelete("iraiRButton");
-            psndSFXOn((const char*)0x2B);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
             return EVT_RETURN_DONE;
         case 101:
             event->lwData[0] = -1;
@@ -776,7 +777,7 @@ USER_FUNC(irai_main_func) {
             iconDelete("iraiArrowDown");
             iconDelete("iraiLButton");
             iconDelete("iraiRButton");
-            psndSFXOn((const char*)0x2B);
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
             return EVT_RETURN_DONE;
     }
     dispEntry(CAMERA_2D, 300.0f, 0, irai_window_disp, wp);

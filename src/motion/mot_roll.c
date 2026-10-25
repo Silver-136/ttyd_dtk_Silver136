@@ -11,6 +11,7 @@
 #include "libc_decls.h"
 #include <math.h>
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 f32 revise360(f32);
 f32 distABf(f32, f32, f32, f32);
@@ -632,8 +633,8 @@ void mot_roll(void) {
         RW()->squashTrigger = z0;
         z1 = 0;
         RW()->squashState = z1;
-        psndSFXOn_3D((char*)0x179, &mario->position);
-        psndSFXOn_3D((char*)0x9f, &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL1), &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_FLD_JUMP3), &mario->position);
         mario->currSubMotionId = 1;
         break;
     }
@@ -685,7 +686,7 @@ void mot_roll(void) {
         }
         marioChgPaper("PM_R_1C");
         marioPaperLightOff();
-        psndSFXOn_3D((char*)0x17a, &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL2), &mario->position);
     case 0x15:
         if (--mario->multiTimer > 0) {
             v31 = revise360(mario->directionView - mario->targetYaw);
@@ -831,7 +832,7 @@ void mot_roll(void) {
                 m->jumpSnapY = -0.02f;
                 m->flags |= MARIO_FLAG_IS_JUMPING;
                 m->airTimer = 1;
-                psndSFXOn_3D((char*)0x17c, &marioGetPtr()->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_JUMP1), &marioGetPtr()->position);
                 mario->hitobjJumpFrom = mario->hitobjStandOn;
                 mario->hitobjStandOn = 0;
                 mario->fallStartPos = mario->position;
@@ -1099,12 +1100,12 @@ void mot_roll(void) {
         MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
         if (marioGetPtr()->motStruct && (u32)RW()->sfxId == (u32)-1) {
-            RW()->sfxId = (s32)psndSFXOn_3D((char*)0x17b, &m->position);
+            RW()->sfxId = (s32)psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
             m->mot.roll.flags |= 0x1000;
         }
 #else
         if ((u32)m->mot.roll.sfxId == (u32)-1) {
-            m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)0x17b, &m->position);
+            m->mot.roll.sfxId = (s32)psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
             m->mot.roll.flags |= 0x1000;
         }
 #endif

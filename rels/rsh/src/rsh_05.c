@@ -1,4 +1,5 @@
 #include "version.h"
+#include "sfx_name_word.h"
 #pragma inline_max_total_size(11500)
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -1155,7 +1156,7 @@ static void ext_moamoa_main(void) {
         static const Vec z = {0.0f, 0.0f, 0.0f};
         pos = z;
         pos.x = (*pose->mtx)[0][3]; pos.y = (*pose->mtx)[1][3]; pos.z = (*pose->mtx)[2][3];
-        psndSFXOn_3D((const char *) 0x6c3, &pos);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG6_MOAMOA_DAMAGED1), &pos);
         sfx = 1;
       }
         dist = -100.0f;

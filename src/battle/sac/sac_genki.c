@@ -24,6 +24,7 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "battle/sac/sac_genki.h"
+#include "sfx_name_word.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -545,49 +546,49 @@ void main_weapon(s32 idx) {
         effHitEntry(0, 5, o->pos.x, o->pos.y, o->pos.z, 1.0f);
         switch (o->kind) {
         case 0:
-            psndSFXOn_3D((const char*)0xA64, &wp->pos);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
             w->score0 += 1;
             if (w->score0 >= 99) {
                 w->score0 = 99;
             }
             break;
         case 1:
-            psndSFXOn_3D((const char*)0xA66, &wp->pos);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
             w->score0 += 3;
             if (w->score0 >= 99) {
                 w->score0 = 99;
             }
             break;
         case 2:
-            psndSFXOn_3D((const char*)0xA64, &wp->pos);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
             w->score1 += 1;
             if (w->score1 >= 99) {
                 w->score1 = 99;
             }
             break;
         case 3:
-            psndSFXOn_3D((const char*)0xA66, &wp->pos);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
             w->score1 += 3;
             if (w->score1 >= 99) {
                 w->score1 = 99;
             }
             break;
         case 4:
-            psndSFXOn_3D((const char*)0xA65, &wp->pos);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT4), &wp->pos);
             w->score2 += 1;
             if (w->score2 >= 99) {
                 w->score2 = 99;
             }
             break;
         case 5:
-            psndSFXOn_3D((const char*)0xA67, &wp->pos);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT6), &wp->pos);
             w->score2 += 3;
             if (w->score2 >= 99) {
                 w->score2 = 99;
             }
             break;
         case 6:
-            psndSFXOn_3D((const char*)0xA68, &wp->pos);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT7), &wp->pos);
             w->marioState = 3;
             break;
         }

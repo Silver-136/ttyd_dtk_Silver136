@@ -1,6 +1,7 @@
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #include <string.h>
+#include "sfx_name_word.h"
 void camFollowYOn(void);
 BOOL marioPriCheckJabara(void);
 #endif
@@ -378,7 +379,7 @@ void mot_jump(void) {
         if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
             jumpSfx(mario);
         }
-        psndSFXOn_3D((char*)0x14D, &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_JUMP1), &mario->position);
         if (mario->airTimer == 0) {
             mario->fallStartPos = mario->position;
         }
@@ -415,7 +416,7 @@ void mot_jumpSmall(void) {
         if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
             jumpSfx(mario);
         }
-        psndSFXOn_3D((char*)0x14D, &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_JUMP1), &mario->position);
         if (mario->airTimer == 0) {
             mario->fallStartPos = mario->position;
         }

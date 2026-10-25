@@ -8,6 +8,7 @@
 #include <dolphin/mtx.h>
 #include <string.h>
 #include "pmario_sound.h"
+#include "sfx_name_word.h"
 
 extern USER_FUNC(evt_mario_set_prev_party_pos);
 extern USER_FUNC(evt_mario_set_enable_key);
@@ -346,7 +347,7 @@ void monteCountDisp(void) {
             y = yuwp->tokens - yuwp->dispTokens;
             yuwp->dispTick = 0;
             if (monte_snd_flag == 0 && y != 0) {
-                psndSFXOn(SFX_NAME_WORD(0x8CA));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
                 monte_snd_flag = 8;
             }
             if (y != 0) {

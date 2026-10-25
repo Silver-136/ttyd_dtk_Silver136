@@ -1,6 +1,7 @@
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 #include "driver/npcdrv.h"
 #include "driver/extdrv.h"
@@ -1306,7 +1307,7 @@ static inline f32 yuunpc_rnd10(YuuNpc* npc) /* */ {
         (npc)->dir.x = 1.0f;                                                                                             \
         (npc)->dir.z = 0.0f;                                                                                             \
         if (!(c26 & 0x1f)) {                                                                                             \
-            psndSFXOn_3D((const char*)0x8e0, &(npc)->pos);                                                               \
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_JUMP1), &(npc)->pos);                                                               \
         }                                                                                                                \
         c26++;                                                                                                           \
     } while (0)
@@ -1885,9 +1886,9 @@ void yuunpc_pose_minigame4_main(void) {
                         t = gp->retraceCount + i;
                         if (!(t & 0xf)) {
                             if (t & 0x10) {
-                                psndSFXOn_3D((const char*)0x8de, &npc->pos);
+                                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
                             } else {
-                                psndSFXOn_3D((const char*)0x8df, &npc->pos);
+                                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
                             }
                         }
                     }
@@ -1949,9 +1950,9 @@ void yuunpc_pose_minigame4_main(void) {
                         t = gp->retraceCount + i;
                         if (!(t & 7)) {
                             if (t & 8) {
-                                psndSFXOn_3D((const char*)0x8de, &npc->pos);
+                                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1L), &npc->pos);
                             } else {
-                                psndSFXOn_3D((const char*)0x8df, &npc->pos);
+                                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_MOVE1R), &npc->pos);
                             }
                         }
                     }

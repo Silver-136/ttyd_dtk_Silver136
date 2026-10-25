@@ -15,6 +15,7 @@
 #include "win/win_mario.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "sfx_name_word.h"
 
 extern ItemData itemDataTable[];
 void winIconInit(void);
@@ -160,7 +161,7 @@ void winMarioExit(WindowWork* w) {
         w->marioSel = p->links[n];                                         \
         p = &linkDt[w->marioSel];                                          \
     }                                                                 \
-    psndSFXOn((const char*)0x20005);
+    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 
 s32 winMarioMain(WindowWork* w) {
     const char* anims[2];
@@ -173,10 +174,10 @@ s32 winMarioMain(WindowWork* w) {
                 if (w->marioSel == 12) {
                     w->mario.f190 = 1;
                     w->mario.f194 = 0;
-                    psndSFXOn((const char*)0x20012);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
                 }
             } else if (w->buttonTrg & PAD_BUTTON_B) {
-                psndSFXOn((const char*)0x20013);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 if (w->flags & 0x2000) {
                     COLOR_ANIM(anims[1], "S_1")
                 } else {
@@ -245,16 +246,16 @@ s32 winMarioMain(WindowWork* w) {
                 if (w->mario.f194 < 0) {
                     w->mario.f194 = w->mario.f198 - 1;
                 }
-                psndSFXOn((const char*)0x20005);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             } else if (w->dirRep & DEMO_STICK_DOWN) {
                 w->mario.f194++;
                 if (w->mario.f194 >= w->mario.f198) {
                     w->mario.f194 = 0;
                 }
-                psndSFXOn((const char*)0x20005);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             } else if (w->buttonTrg & PAD_BUTTON_B) {
                 w->mario.f190 = 0;
-                psndSFXOn((const char*)0x20013);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
             } else if (w->buttonTrg & PAD_BUTTON_START) {
                 return -2;
             }

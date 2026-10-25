@@ -14,6 +14,7 @@
 #include "party/party_hit.h"
 #include "party/party_move.h"
 #include "manager/evtmgr_cmd.h"
+#include "sfx_name_word.h"
 
 typedef struct ChuchuParty {
     u32 flags;                 // 0x0
@@ -157,7 +158,7 @@ USER_FUNC(search_result) {
             }
             return EVT_RETURN_DONE;
         }
-        psndSFXOn_3D((const char*)0x945, &party->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CHURINA_SMELL_JUMP1), &party->position);
         event->userdata3 = 42;
         partyChgPose(party, "PCH_Y_1");
     }
@@ -423,7 +424,7 @@ void chuchu_use(PartyEntry* party) {
         if (--cp->timer > 0) {
             break;
         }
-        psndSFXOn_3D((const char*)0x944, &cp->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CHURINA_SMELL1), &cp->position);
         partyChgPose(party, "PCH_A2_1");
         cp->state = 21;
         cp->timer = 30;

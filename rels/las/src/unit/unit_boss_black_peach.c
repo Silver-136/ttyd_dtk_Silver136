@@ -3,6 +3,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "sfx_name_word.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -4447,7 +4448,7 @@ USER_FUNC(queen_hand_small_drag_1_evt) {
                     pos.x = -100.0f;
                     pos.y = 0.0f;
                     pos.z = 0.0f;
-                    psndSFXOn_3D((const char*)0xF3C, &pos);
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BOSS_QWEN_HAND_IN1), &pos);
                 }
                 break;
             }
@@ -5016,7 +5017,7 @@ USER_FUNC(queen_drain) {
     pos.x = x;
     pos.y = y;
     pos.z = z;
-    psndSFXOn_3D((const char*)0xF20, &pos);
+    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BOSS_BPCH_DRAIN2), &pos);
     effStardust2N64Entry(5, 10, 30, x, y, z, 20.0f, 40.0f);
     return EVT_RETURN_DONE;
 }
@@ -5032,7 +5033,7 @@ USER_FUNC(queen_thunder) {
     pos.x = x;
     pos.y = y;
     pos.z = z;
-    psndSFXOn_3D((const char*)0xF1E, &pos);
+    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BOSS_BPCH_THUNDER1), &pos);
     eff = effPokopiThunderN64Entry(0, 40, 20.0f + x + irand(20), 150.0f, 20.0f + z, x, 0.0f, z, 1.0f);
     ((EffPokopiThunderN64Work*)eff->userdata)->r = 255;
     ((EffPokopiThunderN64Work*)eff->userdata)->g = 160;

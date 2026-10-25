@@ -25,6 +25,7 @@
 #include "libc_decls.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "sfx_name_word.h"
 
 extern ItemData itemDataTable[];
 
@@ -255,9 +256,9 @@ s32 winPartyMain(WindowWork* wp) {
             if (wp->buttonTrg & PAD_BUTTON_X) {
                 wp->party.mode = 1;
                 wp->party.wazaCursor = 0;
-                psndSFXOn((const char*)0x20012);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             } else if (wp->buttonTrg & PAD_BUTTON_B) {
-                psndSFXOn((const char*)0x20013);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 wp->party.field_0x19C = 0;
                 return -1;
             } else if (wp->buttonTrg & PAD_BUTTON_START) {
@@ -274,7 +275,7 @@ s32 winPartyMain(WindowWork* wp) {
                     wp->party.angle += 360.0f;
                 }
                 if (prev != wp->party.cursor) {
-                    psndSFXOn((const char*)0x209D6);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
                 }
                 for (i = 0; i < 8; i++) {
                     if (wp->party.partyIds[wp->party.cursor] == winPartyDt[i].partyId) {
@@ -293,7 +294,7 @@ s32 winPartyMain(WindowWork* wp) {
                     wp->party.angle -= 360.0f;
                 }
                 if (prev != wp->party.cursor) {
-                    psndSFXOn((const char*)0x209D6);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_BTL_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
                 }
                 for (i = 0; i < 8; i++) {
                     if (wp->party.partyIds[wp->party.cursor] == winPartyDt[i].partyId) {
@@ -313,16 +314,16 @@ s32 winPartyMain(WindowWork* wp) {
                 if (wp->party.wazaCursor < 0) {
                     wp->party.wazaCursor = wp->party.wazaCount - 1;
                 }
-                psndSFXOn((const char*)0x20005);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             } else if (wp->dirRep & DEMO_STICK_DOWN) {
                 wp->party.wazaCursor++;
                 if (wp->party.wazaCursor >= wp->party.wazaCount) {
                     wp->party.wazaCursor = 0;
                 }
-                psndSFXOn((const char*)0x20005);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             } else if (wp->buttonTrg & PAD_BUTTON_B) {
                 wp->party.mode = 0;
-                psndSFXOn((const char*)0x20013);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
             } else if (wp->buttonTrg & PAD_BUTTON_START) {
                 wp->party.field_0x19C = 0;
                 return -2;

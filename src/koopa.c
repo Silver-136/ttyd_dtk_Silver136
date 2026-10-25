@@ -12,6 +12,7 @@
 #include "koopa_hit.h"
 #include <dolphin/pad.h>
 #include "driver/camdrv.h"
+#include "sfx_name_word.h"
 
 void kpaSetSpec(void);
 void kpa2DMain(void);
@@ -123,8 +124,8 @@ static inline void kpaFireEntry(Vec pos) {
 static inline void kpaFireSEOn(void) {
     MarioWork* mp = marioGetPtr();
     if (KPW(mp)->fireSfxId == 0xFFFFFFFFU) {
-        KPW(mp)->fireSfxId = psndSFXOn_3D((const char*)0x821, &mp->position);
-        psndSFXOn_3D((const char*)0x131, &mp->position);
+        KPW(mp)->fireSfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_FIRE_BREATH1), &mp->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_KOOPA_FIRE1), &mp->position);
     }
 }
 
@@ -565,7 +566,7 @@ void kpaFall(void) {
         }
         if (mp->hitobjStandOn) {
             marioLandOn();
-            psndSFXOn_3D((char*)0x81D, &mp->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_LANDING1), &mp->position);
         }
     } else {
         void* h;

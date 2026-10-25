@@ -16,6 +16,7 @@
 #include <string.h>
 #include "mario/mariost.h"
 #include <dolphin/pad.h>
+#include "sfx_name_word.h"
 
 typedef struct MotShipWork {
     u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = N_marioShipGetDir; set to 0/1/2 by shipDecideDir
@@ -325,8 +326,8 @@ void mot_ship(void) {
     }
     switch (m->currSubMotionId) {
     case 0:
-        psndSFXOn_3D((const char*)0x18d, &m->position);
-        psndSFXOn_3D((const char*)0xaf, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP_JUMP1), &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_5), &m->position);
         marioCamZoomUp();
         marioPreJump();
         marioChgPose("M_J_1B");
@@ -552,7 +553,7 @@ void mot_ship(void) {
             m->moveDirection = m->directionView;
             m->dispFlags &= ~0x100;
             m->dispFlags |= 0x1000;
-            psndSFXOn_3D((const char*)0x18f, &m->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1_2), &m->position);
             marioGetPtr()->motShip->wakeEff = effFunemizuEntry(0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
             ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->cam = m->camId;
             marioGetPtr()->motShip->bobAngle = 0.0f;
@@ -642,7 +643,7 @@ void mot_ship(void) {
         m->dispFlags |= 0x100;
         marioAdjustMoveDir();
         m->currSubMotionId = 0x2b;
-        psndSFXOn_3D((const char*)0x192, &m->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP3), &m->position);
         {
             EventEntry* e = evtEntry(sound_evt2, 0, 0);
             e->lwData[0] = FLOAT(m->position.x);
@@ -1038,7 +1039,7 @@ void shipMove(void)
     MarioWork *mm = marioGetPtr();
     if ((marioGetPtr()->motStruct != ((void *) 0)) && (((u32) (marioGetPtr()->motShip->sfxId)) == 0xFFFFFFFFU))
     {
-      snd = psndSFXOn_3D((const char *) 0x190, (&mm->position));
+      snd = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1), (&mm->position));
       marioGetPtr()->motShip->sfxId = snd;
     }
   }
