@@ -6,6 +6,7 @@
 #include "libc_decls.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "eff/n64/eff_kameki_tornade_n64.h"
+#include "system.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/effdrv.h"
@@ -36,7 +37,6 @@ double atan(double x);
 typedef struct BattenEffWork { s32 field_0x0; Vec pos; u8 field_0x10[0x28 - 0x10]; Mtx mtx; } BattenEffWork;
 EffectEntry* effBattenEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 typedef struct TargetWork { s32 state; s32 count; EffectEntry* eff; } TargetWork;
-f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);
 typedef struct AudMember { s32 flags; s32 step; s32 counter; u8 pad_0C[0x48 - 0xC]; Vec position; u8 pad_54[0x60 - 0x54]; Vec scale; u8 pad_6C[0x9C - 0x6C]; Vec rotation; u8 pad_A8[0xB4 - 0xA8]; Vec home; u8 pad_C0[0xF8 - 0xC0]; s32 frame; s32 frames; } AudMember;
 s32 irand(s32 scalar);
 extern EvtWord aud_hit_event[];
@@ -616,10 +616,10 @@ USER_FUNC(aud_suikomi) {
                     mem->flags &= ~4;
                     mem->flags |= 2;
                 }
-                mem->position.x = intplGetValue(mem->home.x, x2, 4, mem->frame, mem->frames);
-                mem->position.y = intplGetValue(mem->home.y, y2, 2, mem->frame, mem->frames);
-                mem->position.z = intplGetValue(mem->home.z, z2, 4, mem->frame, mem->frames);
-                mem->scale.x = mem->scale.y = intplGetValue(1.0f, 0.65f, 4, mem->frame, mem->frames);
+                mem->position.x = intplGetValue(4, mem->home.x, x2, mem->frame, mem->frames);
+                mem->position.y = intplGetValue(2, mem->home.y, y2, mem->frame, mem->frames);
+                mem->position.z = intplGetValue(4, mem->home.z, z2, mem->frame, mem->frames);
+                mem->scale.x = mem->scale.y = intplGetValue(4, 1.0f, 0.65f, mem->frame, mem->frames);
                 break;
             }
         }
@@ -633,7 +633,7 @@ USER_FUNC(aud_scream_fadeout) {
         scream_fade_start_vol = psndSFX_get_vol(screamId);
     }
     scream_fade_timer--;
-    scream_fade_vol = intplGetValue(scream_fade_start_vol, 0.0f, 0, 120 - scream_fade_timer, 120);
+    scream_fade_vol = intplGetValue(0, scream_fade_start_vol, 0.0f, 120 - scream_fade_timer, 120);
     psndSFX_vol(screamId, scream_fade_vol);
     if (scream_fade_timer <= 0) {
         return EVT_RETURN_DONE;
@@ -762,8 +762,8 @@ USER_FUNC(aud_target_mark) {
     switch (wp_target->state) {
         case 0:
             wp_target->count++;
-            ew->pos.x = intplGetValue(60.0f + x, x - 5.0f, 4, wp_target->count, 60);
-            ew->pos.y = intplGetValue(20.0f + y, 60.0f + y, 4, wp_target->count, 60);
+            ew->pos.x = intplGetValue(4, 60.0f + x, x - 5.0f, wp_target->count, 60);
+            ew->pos.y = intplGetValue(4, 20.0f + y, 60.0f + y, wp_target->count, 60);
             ew->pos.z = 20.0f + z;
             if (wp_target->count >= 60) {
                 wp_target->state = 5;
@@ -772,8 +772,8 @@ USER_FUNC(aud_target_mark) {
             break;
         case 5:
             wp_target->count++;
-            ew->pos.x = intplGetValue(x - 5.0f, x - 25.0f, 4, wp_target->count, 40);
-            ew->pos.y = intplGetValue(60.0f + y, 20.0f + y, 4, wp_target->count, 40);
+            ew->pos.x = intplGetValue(4, x - 5.0f, x - 25.0f, wp_target->count, 40);
+            ew->pos.y = intplGetValue(4, 60.0f + y, 20.0f + y, wp_target->count, 40);
             ew->pos.z = 20.0f + z;
             if (wp_target->count >= 40) {
                 wp_target->state = 10;
@@ -782,8 +782,8 @@ USER_FUNC(aud_target_mark) {
             break;
         case 10:
             wp_target->count++;
-            ew->pos.x = intplGetValue(x - 25.0f, x, 4, wp_target->count, 20);
-            ew->pos.y = intplGetValue(20.0f + y, y, 4, wp_target->count, 20);
+            ew->pos.x = intplGetValue(4, x - 25.0f, x, wp_target->count, 20);
+            ew->pos.y = intplGetValue(4, 20.0f + y, y, wp_target->count, 20);
             ew->pos.z = 20.0f + z;
             if (wp_target->count >= 20) {
                 wp_target->state = 15;
