@@ -6878,16 +6878,12 @@ end:
 }
 
 #ifndef VERSION_G8ME01
-#pragma dont_inline on
 #else
-#pragma dont_inline off
 #endif
 BOOL psndENVOff(u32 flags) {
     return psndENVOff_f_d(flags, 1000, 0);
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5) {
     u16* env;
     s32 silent = silent_tbl[(flags >> 12) & 0xF];
@@ -6935,7 +6931,6 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5) {
     return TRUE;
 }
 
-#pragma dont_inline reset
 
 BOOL psndENV_LPF(s32 id, u16 freq) {
     if (psnd.envId[id & 0xF] == 0) {
