@@ -515,7 +515,7 @@ next:
             if (!(unit->mAttributeFlags & kUnitNoShadow) && !(part->attributes & kNoShadow)) {
                 BtlUnit_GetPartsWorldPos(part, &ppos.x, &ppos.y, &ppos.z);
                 spos = ppos;
-                if ((unit->flags & 0x10000) && (partner = BattleGetPartnerPtr(wp, unit)) != NULL) {
+                if ((unit->flags & BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER) && (partner = BattleGetPartnerPtr(wp, unit)) != NULL) {
                     BtlUnit_GetPos(partner, &vpos.x, &vpos.y, &vpos.z);
                     spos.x += vpos.x;
                     spos.x *= 0.5f;
@@ -535,7 +535,7 @@ next:
                 if (scale < 0.1f) scale = 0.1f;
                 scale = scale * ((f32)part->shadowSize * unit->mScale.x * part->mScale.x * unit->mSizeMultiplier) ;
                 scale = scale * part->shadowScale;
-                if ((unit->flags & 0x10000) && scale < 16.0f) scale = 16.0f;
+                if ((unit->flags & BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER) && scale < 16.0f) scale = 16.0f;
                 if (scale < 10.0f) scale = 8.0f;
                 shadowEntry(spos.x, 10.0f + h, spos.z, scale);
             }
@@ -549,10 +549,10 @@ next:
             BtlUnit_ControlPoseSoundMain(part);
         }
         if (unit->heldItem) {
-            if ((unit->flags & 0x40000000) && !(unit->flags & 0x8000000)) {
+            if ((unit->flags & BATTLE_UNIT_FLAG_STOLEN_ITEM) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
                 dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitStolenItemDisp, unit);
             }
-            else if ((!(unit->flags & 0x4000000) || (unit->flags & 0x2000000)) && !(unit->flags & 0x8000000)) {
+            else if ((!(unit->flags & BATTLE_UNIT_FLAG_ACTING) || (unit->flags & BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING)) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
                 dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitItemDisp, unit);
             }
         }

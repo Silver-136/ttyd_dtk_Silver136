@@ -413,7 +413,7 @@ BattleUnit* BattleGetPartyPtr(BattleWork* wp) {
     BattleUnit* unit;
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && !(unit->flags & 8) && unit->currentKind >= TYPE_PARTNER_MIN &&
+        if (unit != NULL && !(unit->flags & BATTLE_UNIT_FLAG_SWAPPED_OUT) && unit->currentKind >= TYPE_PARTNER_MIN &&
             unit->currentKind < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER) {
             return unit;
         }
@@ -469,7 +469,7 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
     unit->maxMovesThisTurn = party->maxMovesThisTurn;
     unit->activeTurns = party->activeTurns;
     BtlUnit_SetParamToPouch(party);
-    party->flags |= 8;
+    party->flags |= BATTLE_UNIT_FLAG_SWAPPED_OUT;
     unit->mMoveColorLv = party->mMoveColorLv;
     unit->moveColorLvDisp = party->moveColorLvDisp;
     return unit;
@@ -824,7 +824,7 @@ void BattleCheckUnitBroken(BattleWork* wp) {
 
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
-        if (unit && unit->flags & 0x80000000) {
+        if (unit && unit->flags & BATTLE_UNIT_FLAG_BROKEN) {
             BtlUnit_Delete(unit);
         }
     }

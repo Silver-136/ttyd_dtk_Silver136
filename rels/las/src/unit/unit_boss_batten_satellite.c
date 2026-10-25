@@ -191,7 +191,7 @@ static BattleDataEntry data_table[] = {
 };
 
 EVT_BEGIN(dmg_counter_event)
-    CALL(btlevtcmd_OnUnitFlag, LW(10), 1)
+    CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
     SWITCH(LW(0))
         CASE_EQUAL(43)
         CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)

@@ -2564,7 +2564,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
         if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) continue;
         if (!battleCheckUnitMonosiriFlag(wp->units[i])) continue;
         if (unit->mAttributeFlags & kUnitNoHpGauge) continue;
-        if (!(wp->commandMenu.flags & 0x1000000) && !(unit->flags & 1)) continue;
+        if (!(wp->commandMenu.flags & 0x1000000) && !(unit->flags & BATTLE_UNIT_FLAG_SHOW_HP)) continue;
         position.x = unit->mPosition.x;
         position.y = unit->mPosition.y;
         position.z = unit->mPosition.z;
@@ -2576,7 +2576,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
         position.x += (f32)unit->mHpGaugeOffset[0];
         position.y += (f32)unit->mHpGaugeOffset[1];
         btlGetScreenPoint(&position, &screen);
-        if ((unit->flags & 1) && (unit->hpGauge.flags & 1) && unit->hpGauge.visibleTimer < 20) {
+        if ((unit->flags & BATTLE_UNIT_FLAG_SHOW_HP) && (unit->hpGauge.flags & 1) && unit->hpGauge.visibleTimer < 20) {
             color.a = intplGetValue(0, 0.0f, 255.0f, unit->hpGauge.visibleTimer, 20);
         }
         ofs = 20;

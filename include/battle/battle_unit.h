@@ -50,6 +50,20 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kImmuneToStatus = (1 << 31)             // 0x80000000, no status at all
 } PartsAttribute_Flags;
 
+// BattleUnit.flags (named where the code shows the use; 2, 0x100000/0x200000 (float bob, both needed) and
+// 0x1000000 are not named yet)
+typedef enum BattleUnit_Flags {
+    BATTLE_UNIT_FLAG_SHOW_HP = (1 << 0),                  // 0x1, enemy HP shown until the gauge timer runs out
+    BATTLE_UNIT_FLAG_KIND_CHANGED = (1 << 2),             // 0x4, tattle check also looks at initialKind
+    BATTLE_UNIT_FLAG_SWAPPED_OUT = (1 << 3),              // 0x8, partner replaced by another (BattleGetPartyPtr skips it)
+    BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER = (1 << 16),     // 0x10000, drawn and shadowed together with its partner (Veil)
+    BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING = (1 << 25),  // 0x2000000
+    BATTLE_UNIT_FLAG_ACTING = (1 << 26),                  // 0x4000000, its attack event has started
+    BATTLE_UNIT_FLAG_HIDE_HELD_ITEM = (1 << 27),          // 0x8000000
+    BATTLE_UNIT_FLAG_STOLEN_ITEM = (1 << 30),             // 0x40000000, holds an item stolen from the player
+    BATTLE_UNIT_FLAG_BROKEN = (1 << 31)                   // 0x80000000, deleted by BattleCheckUnitBroken
+} BattleUnit_Flags;
+
 typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kUnknown_0x1 = (1 << 0),             // 0x1
     kCeiling = (1 << 1),                 // 0x2

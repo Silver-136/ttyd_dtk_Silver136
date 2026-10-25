@@ -246,7 +246,7 @@ USER_FUNC(btlevtcmd_KillUnit) {
     else {
         BtlUnit_SetStatus(unit, STATUS_INSTANT_KILL, 1, 1);
         if (!(flags & 1)) {
-            unit->flags |= 0x80000000;
+            unit->flags |= BATTLE_UNIT_FLAG_BROKEN;
         }
         return EVT_RETURN_DONE;
     }
@@ -2196,7 +2196,7 @@ USER_FUNC(btlevtcmd_GetUnitId) {
     id = BattleTransID(event, btlId);
     index = args[1];
     unit = BattleGetUnitPtr(wp, id);
-    if (unit && (unit->flags & 0x80000000)) {
+    if (unit && (unit->flags & BATTLE_UNIT_FLAG_BROKEN)) {
         unit = NULL;
     }
     if (unit) {
@@ -2717,7 +2717,7 @@ USER_FUNC(btlevtcmd_GetBackItem) {
 
     btlId = evtGetValue(event, args[0]);
     unit = BattleGetUnitPtr(wp, BattleTransID(event, btlId));
-    if ((unit->flags & 0x40000000) && (item = unit->heldItem) != ITEM_NULL) {
+    if ((unit->flags & BATTLE_UNIT_FLAG_STOLEN_ITEM) && (item = unit->heldItem) != ITEM_NULL) {
         info = wp->fbatInfo->setup;
         for (i = 0; i < 8; i++) {
             if (info->recoveredItems[i] == 0) {

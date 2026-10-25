@@ -744,7 +744,7 @@ BOOL battleCheckUnitMonosiriFlag(BattleUnit* unit) {
     }
     flag = swGet(kind + 0x117A);
     flag |= wp->tattledUnitTypeFlags[kind / 32] & (1 << (kind % 32));
-    if (unit->flags & 4) {
+    if (unit->flags & BATTLE_UNIT_FLAG_KIND_CHANGED) {
         kind = unit->initialKind;
         flag |= wp->tattledUnitTypeFlags[kind / 32] & (1 << (kind % 32));
     }

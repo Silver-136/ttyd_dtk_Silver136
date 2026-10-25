@@ -200,7 +200,7 @@ EVT_BEGIN(subsetevt_dead)
 #else
             ELSE
 #endif
-                CALL(btlevtcmd_OnUnitFlag, LW(10), 134217728)
+                CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
                 SET_VALUE(LW(0), 48)
                 LABEL(5)
                 WAIT_FRAMES(1)
@@ -246,9 +246,9 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.69921875f))
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 20, -1)
-                CALL(btlevtcmd_OffUnitFlag, LW(10), 134217728)
+                CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
 #ifdef VERSION_G8ME01
-                CALL(btlevtcmd_OffUnitFlag, LW(10), 1073741824)
+                CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_STOLEN_ITEM)
                 CALL(btlevtcmd_StartWaitEvent, -2)
             END_IF
             ELSE
@@ -279,7 +279,7 @@ EVT_BEGIN(subsetevt_dead_core)
         CALL(btlevtcmd_RunDataEventChild, LW(10), 50)
     END_IF
     SET_VALUE(LW(0), 48)
-    CALL(btlevtcmd_OnUnitFlag, LW(10), 134217728)
+    CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LABEL(10)
     WAIT_FRAMES(1)
@@ -715,7 +715,7 @@ EVT_BEGIN(subsetevt_damage)
 EVT_END()
 
 EVT_BEGIN(subsetevt_counter_damage)
-    CALL(btlevtcmd_OnUnitFlag, LW(10), 1)
+    CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
     BEGIN_SIBLING_EVENT
         SWITCH(LW(0))
             CASE_OR_EQUAL(43)

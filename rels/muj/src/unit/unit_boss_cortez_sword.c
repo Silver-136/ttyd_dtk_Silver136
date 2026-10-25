@@ -645,7 +645,7 @@ static EVT_BEGIN(cortez_damage_sub_event)
 EVT_END()
 
 EVT_BEGIN(cortez_weapon_counter_damage_event)
-    CALL(btlevtcmd_OnUnitFlag, LW(10), 1)
+    CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
     SWITCH(LW(0))
         CASE_EQUAL(43)
         CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)

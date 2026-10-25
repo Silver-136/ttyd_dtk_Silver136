@@ -2197,7 +2197,7 @@ EVT_BEGIN(mode2_rib_close_event)
 EVT_END()
 
 EVT_BEGIN(mode2_honeduka_damage_event)
-    CALL(btlevtcmd_OnUnitFlag, -2, 1)
+    CALL(btlevtcmd_OnUnitFlag, -2, BATTLE_UNIT_FLAG_SHOW_HP)
     SET_VALUE(LW(8), 0)
     CALL(btlevtcmd_SetUnitWork, -2, 7, 1)
     CALL(btlevtcmd_CheckDamageCode, -2, 256, LW(1))

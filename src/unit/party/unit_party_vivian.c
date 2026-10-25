@@ -342,7 +342,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
                 part->shadowScale = 1.0f;
                 animPoseSetEffect(pose, NULL, 1);
                 if (flag != 0) {
-                    unit->flags &= ~0x10000;
+                    unit->flags &= ~BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER;
                 }
                 return EVT_RETURN_DONE;
             }
@@ -1219,7 +1219,7 @@ EVT_END()
 
 EVT_BEGIN(vivian_counter_damage_event)
     CALL(btlevtcmd_SetScale, -2, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
-    CALL(btlevtcmd_OnUnitFlag, -2, 1)
+    CALL(btlevtcmd_OnUnitFlag, -2, BATTLE_UNIT_FLAG_SHOW_HP)
     IF_INT_EQUAL(LW(0), 43)
         SET_VALUE(LW(14), 36)
     ELSE
@@ -1358,7 +1358,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
         case 0:
             part->shadowScale = intplGetValue(0, 1.0f, 2.0f, event->userdata[1], 30);
             if (flag != 0) {
-                unit->flags |= 0x10000;
+                unit->flags |= BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER;
             }
             event->userdata[1]++;
             if (event->userdata[1] > 15) {

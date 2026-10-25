@@ -834,7 +834,7 @@ EVT_END()
 
 EVT_BEGIN(macho_gance_damage_event)
     CALL(btlevtcmd_ResetFaceDirection, LW(10))
-    CALL(btlevtcmd_OnUnitFlag, LW(10), 1)
+    CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
     BEGIN_SIBLING_EVENT
         SWITCH(LW(0))
             CASE_OR_EQUAL(43)

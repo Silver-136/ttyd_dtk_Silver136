@@ -263,7 +263,7 @@ BOOL BtlUnit_Delete(BattleUnit* unit) {
             wp->movePriorityQueue[j] = -1;
         }
     }
-    if (unit->flags & 0x40000000) {
+    if (unit->flags & BATTLE_UNIT_FLAG_STOLEN_ITEM) {
         NpcBattleInfo* info = wp->fbatInfo->setup;
         if (unit->groupSetupId >= 0) {
             info->stolenItems[unit->groupSetupId] = unit->heldItem;
@@ -2177,8 +2177,8 @@ void BtlUnit_HpGaugeMain(BattleUnit* unit) {
     if (gauge->visibleTimer > 0) {
         gauge->visibleTimer--;
     }
-    if ((unit->flags & 1) && gauge->visibleTimer <= 0 && (gauge->flags & 1)) {
-        unit->flags &= ~1;
+    if ((unit->flags & BATTLE_UNIT_FLAG_SHOW_HP) && gauge->visibleTimer <= 0 && (gauge->flags & 1)) {
+        unit->flags &= ~BATTLE_UNIT_FLAG_SHOW_HP;
         gauge->flags &= ~1;
     }
 }

@@ -409,7 +409,7 @@ void btlseqFirstAct(BattleWork* wp) {
                 b->damageCode = 0x39;
                 b->damageEventId = evt->eventId;
             }
-            a->flags |= 0x4000000;
+            a->flags |= BATTLE_UNIT_FLAG_ACTING;
             if (type < 9) {
                 a->attackEventCode = (void*)_GetFirstAttackWeapon(type)->mAttackEvtScript;
                 a->attackEventFlags = 0;
@@ -469,7 +469,7 @@ void btlseqFirstAct(BattleWork* wp) {
                 BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000003);
                 unit = BattleGetUnitPtr(wp, wp->activeUnitId);
                 if (unit) {
-                    unit->flags &= ~0x4000000;
+                    unit->flags &= ~BATTLE_UNIT_FLAG_ACTING;
                 }
             }
             break;
@@ -2473,7 +2473,7 @@ void btlseqAct(BattleWork* wp) {
         case 0x6000003:
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             unit->attackEventFlags = 1;
-            unit->flags |= 0x4000000;
+            unit->flags |= BATTLE_UNIT_FLAG_ACTING;
             BattleSetSeq(wp, SEQ_ACT, 0x6000006);
             break;
         case 0x6000004:
@@ -2546,7 +2546,7 @@ void btlseqAct(BattleWork* wp) {
             }
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             if (unit) {
-                unit->flags &= ~0x4000000;
+                unit->flags &= ~BATTLE_UNIT_FLAG_ACTING;
                 if (unit->mTokenFlags & kChargeExpended) {
                     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
                     unit->mTokenFlags &= ~kChargeExpended;

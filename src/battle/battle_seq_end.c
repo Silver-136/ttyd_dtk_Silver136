@@ -1447,7 +1447,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (!unit) continue;
-        if (unit->flags & 0x80000000) continue;
+        if (unit->flags & BATTLE_UNIT_FLAG_BROKEN) continue;
         kind = unit->currentKind;
         if (kind == UNIT_SYSTEM) continue;
         if (kind == UNIT_MARIO) continue;

@@ -3127,7 +3127,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
     if (isFirstCall) {
         for (i = 0; i < 64; i++) {
             unit = BattleGetUnitPtr(wp, i);
-            if (unit && !(unit->flags & 0x80000000) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->ceilFallEventCode) {
+            if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->ceilFallEventCode) {
                 evt = evtEntry(unit->ceilFallEventCode, 10, 0);
                 if (evt) {
                     evt->unitId = unit->unitId;
@@ -3138,7 +3138,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
     }
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && !(unit->flags & 0x80000000)) {
+        if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN)) {
             if (unit->ceilFallEventId && !evtCheckID(unit->ceilFallEventId)) {
                 unit->ceilFallEventId = 0;
             }
