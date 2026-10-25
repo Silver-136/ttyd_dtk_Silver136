@@ -495,7 +495,7 @@ void btlseqFirstAct(BattleWork* wp) {
             BattleIncSeq(wp, SEQ_FIRST_ACT);
 
         case 0x2000006:
-            if ((u8)BattleAudience_CheckReaction()) {
+            if (BattleAudience_CheckReaction()) {
                 break;
             }
             if (!BattleCheckConcluded(wp) && (u8)BattleBreakSlot_CheckReaction()) {
@@ -2144,7 +2144,7 @@ void btlseqMove(BattleWork* wp) {
                 }
                 break;
             case 0x500000B:
-                if ((u8)BattleAudience_CheckReactionPerPhase()) {
+                if (BattleAudience_CheckReactionPerPhase()) {
                     break;
                 }
                 if (!BattleWaitAllActiveEvtEnd(wp)) {
@@ -2392,7 +2392,7 @@ void btlseqAct(BattleWork* wp) {
             BattleAudience_PerAct();
             BattleIncSeq(wp, SEQ_ACT);
         case 0x600000A:
-            if ((u8)BattleAudience_CheckReaction()) {
+            if (BattleAudience_CheckReaction()) {
                 break;
             }
             if (!BattleCheckConcluded(wp) && (u8)BattleBreakSlot_CheckReaction()) {

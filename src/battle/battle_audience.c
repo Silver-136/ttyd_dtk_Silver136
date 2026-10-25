@@ -473,7 +473,7 @@ void BattleAudience_PerAct(void) {
     BattleAudience_ActInit();
 }
 
-BOOL BattleAudience_CheckReaction(void) {
+u8 BattleAudience_CheckReaction(void) {
     BattleAudience* audience;
     EventEntry* evt;
 
@@ -540,7 +540,7 @@ void BattleAudience_PerPhase(u32 value) {
 #define SUB pe->phaseSub
 #define CLR pe->phaseListCount = 0;
 #define QSEL(t) for (counter = 0, i = 0; i <= 59; i++) { if (check_exe_phase_evt_status(i, t)) { list[counter] = i; counter++; } }
-BOOL BattleAudience_CheckReactionPerPhase(void) {
+u8 BattleAudience_CheckReactionPerPhase(void) {
     BattleAudience* audience;
     BattleAudience* pe;
     BattleAudienceMember* member;

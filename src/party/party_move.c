@@ -924,7 +924,7 @@ void partyMoveCheckWall(PartyEntry* party) {
     }
 }
 
-s16 partyMarioHosei(PartyEntry* party);
+s32 partyMarioHosei(PartyEntry* party);
 
 void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
     MarioWork* mario = party->playerPtr;
@@ -937,7 +937,7 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
     f32 z;
     f32 mul;
 
-    hosei = ((s32 (*)(PartyEntry*))partyMarioHosei)(party);
+    hosei = partyMarioHosei(party);
     if (hosei && party->moveMode != 2) {
         if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
             partyClearFootmark();
@@ -968,7 +968,7 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
     *spd = mul * sqrtf(x * x + z * z);
 }
 
-s16 partyMarioHosei(PartyEntry* party) {
+s32 partyMarioHosei(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 kx;
     f32 kz;
