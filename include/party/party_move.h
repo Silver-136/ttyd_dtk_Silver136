@@ -4,6 +4,8 @@
 #include "dolphin/types.h"
 #include <dolphin/mtx.h>
 
+struct HitEntry;
+
 // Footmark.flag bits, set by partyRecordFootmark from the leader it follows
 #define FOOTMARK_FLAG_JUMP 1  // the leader was jumping
 #define FOOTMARK_FLAG_SLIT 4  // Mario was passing through a slit (marioChkSlitThrouh)
