@@ -99,7 +99,7 @@ void mot_vivian_post(void) {
             partyChgPoseId(party, 1);
             L_partyVivianTailStart(party);
         }
-    } else if (party && party->currentMemberId == 6 && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    } else if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         goto cancel;
     }
     return;
@@ -126,7 +126,7 @@ s32 vivianGetStatus(void) {
     if (party == NULL) {
         return 0;
     }
-    if (party->currentMemberId != 6 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party->currentMemberId != PARTY_MEMBER_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return 0;
     }
     st = party->useMotionId;
@@ -143,7 +143,7 @@ s32 vivianGetStatus(void) {
 }
 
 void vivianUnhold(PartyEntry* party) {
-    if (party == NULL || party->currentMemberId != 6 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party == NULL || party->currentMemberId != PARTY_MEMBER_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return;
     }
     if (party->useMotionId == 10) {
@@ -152,19 +152,19 @@ void vivianUnhold(PartyEntry* party) {
 }
 
 void L_partyVivianTailStop(PartyEntry* party) {
-    if (party->currentMemberId == 6) {
+    if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         party->tailFlags |= 1;
     }
 }
 
 void L_partyVivianTailStart(PartyEntry* party) {
-    if (party->currentMemberId == 6) {
+    if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         party->tailFlags &= ~1;
     }
 }
 
 BOOL N_vivianDisplayTailCheck(PartyEntry* party) {
-    if (party->currentMemberId != 6) {
+    if (party->currentMemberId != PARTY_MEMBER_VIVIAN) {
         return FALSE;
     }
     if ((party->tailFlags & 1)) {
@@ -182,7 +182,7 @@ BOOL N_vivianDisplayTailCheck(PartyEntry* party) {
 void vivianShadow(PartyEntry* party) {
     f32 dx, dy, dz;
 
-    if (party && party->currentMemberId == 6) {
+    if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         dx = 0.1f * (party->position.x - party->trailPos.x);
         dy = 0.1f * (party->position.y - party->trailPos.y);
         dz = 0.1f * (party->position.z - party->trailPos.z);

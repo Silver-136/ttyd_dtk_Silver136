@@ -49,7 +49,7 @@ s32 nokonokoGetStatus(PartyEntry* party) {
     if (party == NULL) {
         return 0;
     }
-    if (party->currentMemberId != 2 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party->currentMemberId != PARTY_MEMBER_KOOPS || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return 0;
     }
     status = 7;
@@ -80,7 +80,7 @@ BOOL nokonoko_holdItem(void) {
     if (party == NULL) {
         return FALSE;
     }
-    if (party->currentMemberId != 2 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party->currentMemberId != PARTY_MEMBER_KOOPS || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return FALSE;
     }
     return party->work.nokonoko.heldItem != NULL;
@@ -823,7 +823,7 @@ void nokonoko_use(PartyEntry* party) {
 }
 
 void nokonoko_finish(PartyEntry* party) {
-    if (party != NULL && party->currentMemberId == 2 && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party != NULL && party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         nokonoko_use_post(party);
         if (party->runMode != 9) {
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {

@@ -171,7 +171,7 @@ static USER_FUNC(ride_chk) {
     if (isFirstCall) {
         memset(onoff, 0, sizeof(onoff));
     }
-    if (party != NULL && party->currentMemberId == 4 && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party != NULL && party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = mario->hitobjStandOn;
         if (hit == NULL) {
             hit = mario->hitobjJumpFrom;

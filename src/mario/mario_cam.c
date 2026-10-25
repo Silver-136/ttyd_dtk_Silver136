@@ -236,7 +236,7 @@ BOOL marioCamZoomUp(void) {
         return FALSE;
     }
 
-    if (!party || party->currentMemberId != 5 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (!party || party->currentMemberId != PARTY_MEMBER_FLURRIE || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         if (camGetPtr(CAMERA_3D)->stateA) {
             return FALSE;
         }

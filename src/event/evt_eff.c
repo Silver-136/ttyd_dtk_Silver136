@@ -953,7 +953,7 @@ USER_FUNC(evt_eff_fukidashi) {
                 {
                     f32 yy = 2.0f * ((PartyEntry*)p)->height / 3.0f;
                     f32 ww;
-                    if (((PartyEntry*)p)->currentMemberId == 5) yy = 30.0f;
+                    if (((PartyEntry*)p)->currentMemberId == PARTY_MEMBER_FLURRIE) yy = 30.0f;
                     ww = ((PartyEntry*)p)->height / 3.0f;
                     entry = effFukidashiEntry(a, number, (NpcEntry*)-2, d, 0.0f, yy, 0.0f, ww, duration);
                 }

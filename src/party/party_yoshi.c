@@ -118,7 +118,7 @@ s32 yoshiGetStatus(void) {
     s32 status = 5;
     u8 motion;
 
-    if (party == NULL || party->currentMemberId != 4 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party == NULL || party->currentMemberId != PARTY_MEMBER_YOSHI || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return 0;
     }
     motion = party->useMotionId;
@@ -262,7 +262,7 @@ void yoshi_exit(PartyEntry* party) {
 void yoshi_jumpStand(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
-    if (party == NULL || party->currentMemberId != 4 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (party == NULL || party->currentMemberId != PARTY_MEMBER_YOSHI || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return;
     }
     if (!(party->useMotionId >= 60 && party->useMotionId <= 66)) {

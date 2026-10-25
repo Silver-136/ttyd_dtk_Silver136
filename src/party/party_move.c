@@ -579,7 +579,7 @@ void partyPlaySfxFootstep(PartyEntry* party, s32 arg) {
     s32 b;
 
     party->footstepTimer++;
-    if (party->currentMemberId == 9) {
+    if (party->currentMemberId == PARTY_MEMBER_FLAVIO) {
         if (arg == 0) {
             a = 20;
             b = 40;
@@ -593,12 +593,12 @@ void partyPlaySfxFootstep(PartyEntry* party, s32 arg) {
         } else if (party->footstepTimer == a) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG5_MARCO_MOVE1L), &party->position);
         }
-    } else if (party->currentMemberId == 8) {
+    } else if (party->currentMemberId == PARTY_MEMBER_EGG) {
         if (party->footstepTimer >= 15) {
             party->footstepTimer = 0;
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_EGG1), &party->position);
         }
-    } else if (party->currentMemberId == 10) {
+    } else if (party->currentMemberId == PARTY_MEMBER_PUNIO) {
         if (arg == 0) {
             a = 5;
             b = 10;
@@ -638,7 +638,7 @@ void partyChgStayPose(PartyEntry* party) {
     if (party->runMode != 0) {
         if (marioChkDeepSleep() == TRUE || (party->flags & PARTY_FLAG_SLEEP_ON)) {
             partyChgPoseId(party, 6);
-        } else if (party->currentMemberId != 7) {
+        } else if (party->currentMemberId != PARTY_MEMBER_MS_MOWZ) {
             partyChgPoseId(party, 1);
         } else if (!chuchu_searchObject()) {
             partyChgPoseId(party, 1);
@@ -863,7 +863,7 @@ void partySetDir(PartyEntry* party, f32 x, f32 z) {
 }
 
 void partyMoveBehindMario(PartyEntry* party, s32 arg) {
-    if (party->currentMemberId == 4 && party->runMode == 3) {
+    if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == 3) {
         return;
     }
     party->moveArg = arg;
@@ -872,7 +872,7 @@ void partyMoveBehindMario(PartyEntry* party, s32 arg) {
 }
 
 void partyMoveBehindMario3(PartyEntry* party, s32 arg) {
-    if (party->currentMemberId == 4 && party->runMode == 3) {
+    if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == 3) {
         return;
     }
     party->trigFlags |= 0x100000;
@@ -884,7 +884,7 @@ void partyMoveBehindMario3(PartyEntry* party, s32 arg) {
 }
 
 void partyMoveBesideMario(PartyEntry* party, s32 arg) {
-    if (party->currentMemberId == 4 && party->runMode == 3) {
+    if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == 3) {
         return;
     }
     party->moveArg = arg;
@@ -1061,14 +1061,14 @@ void party_move_mode_wait(PartyEntry* party) {
         party->trigFlags &= ~4;
         partyChgPoseId(party, 1);
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-        if (party->currentMemberId == 5) {
+        if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
             cloud_hover_init(party);
         }
     }
     switch (party->motionId) {
         case 0:
             party_motion_wait(party);
-            if (party->currentMemberId == 5) {
+            if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
                 cloud_hover_main(party);
             }
             break;
@@ -1158,7 +1158,7 @@ void partyWalkMain(PartyEntry* party) {
     } else {
         other = anotherPartyGetPtr(party->currentSlotId);
         if (other) {
-            if ((other->currentMemberId == 3 && other->runMode == 3) || nokonokoGetStatus(other) == 3 ||
+            if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == 3) || nokonokoGetStatus(other) == 3 ||
                 PSVECDistance(&mario->position, &other->position) >= 150.0f) {
                 flags = partyChkMarioJumpFlag();
                 partyPutFootmark(1, marioGetPtr()->position, flags);
@@ -1181,14 +1181,14 @@ void party_move_mode_stay(PartyEntry* party) {
     if (party->trigFlags & 4) {
         party->trigFlags &= ~4;
         partyChgPoseId(party, 1);
-        if (party->currentMemberId == 5) {
+        if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
             cloud_hover_init(party);
         }
     }
     switch (party->motionId) {
         case 0:
             party_motion_stay(party);
-            if (party->currentMemberId == 5) {
+            if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
                 cloud_hover_main(party);
             }
             break;
@@ -1297,10 +1297,10 @@ void partyForceWalk(PartyEntry* party) {
     if (party->trigFlags & 8) {
         party->trigFlags &= ~8;
         if (party->flags & PARTY_FLAG_IS_BEING_USED) {
-            if (party->currentMemberId == 3) {
+            if (party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                 bomhei_use_cancel();
             }
-            if (party->currentMemberId == 2) {
+            if (party->currentMemberId == PARTY_MEMBER_KOOPS) {
                 nokonoko_finish(party);
             }
             party->flags &= ~PARTY_FLAG_IS_BEING_USED;
@@ -1358,7 +1358,7 @@ void partyForceWalk(PartyEntry* party) {
             break;
     }
     party->moveDir = party->targetDir;
-    if (party->currentMemberId == 6) {
+    if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         vivianShadow(party);
     }
 }
@@ -1883,7 +1883,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
     f32 radius;
     f32 ang;
 
-    if (party->currentMemberId == 5) {
+    if (party->currentMemberId == PARTY_MEMBER_FLURRIE) {
         radius = 32.0f;
     } else if (party->trigFlags & 0x200000) {
         radius = 28.0f;

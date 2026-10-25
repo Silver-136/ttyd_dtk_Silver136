@@ -186,7 +186,7 @@ void caseMain(void) {
                 break;
             case 15:
                 party = partyGetPtr(marioGetPartyId());
-                if (party != NULL && party->currentMemberId == 3) {
+                if (party != NULL && party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                     HitEntry* ph = party->hitobjAction;
                     if (ph != NULL && !strcmp(hitGetName(ph), entry->hitObjName)) SET_HIT(entry);
                 }

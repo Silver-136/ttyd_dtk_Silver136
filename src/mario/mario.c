@@ -455,7 +455,7 @@ BOOL marioChkKey(void) {
         return FALSE;
     }
     if (party->flags & PARTY_FLAG_IS_BEING_USED) {
-        if (party->currentMemberId == 7 || party->currentMemberId == 5 || party->currentMemberId == 6) {
+        if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ || party->currentMemberId == PARTY_MEMBER_FLURRIE || party->currentMemberId == PARTY_MEMBER_VIVIAN) {
             return FALSE;
         }
     }

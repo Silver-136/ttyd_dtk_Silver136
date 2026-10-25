@@ -814,7 +814,7 @@ USER_FUNC(evt_party_nokotaro_kick) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != 2) {
+        if (p->currentMemberId != PARTY_MEMBER_KOOPS) {
             return EVT_RETURN_DONE;
         }
         if (p->flags & PARTY_FLAG_IS_BEING_USED) {
@@ -840,7 +840,7 @@ USER_FUNC(evt_party_nokotaro_kick_hold) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != 2) {
+        if (p->currentMemberId != PARTY_MEMBER_KOOPS) {
             return EVT_RETURN_DONE;
         }
         if (p->flags & PARTY_FLAG_IS_BEING_USED) {
@@ -867,7 +867,7 @@ USER_FUNC(evt_party_nokotaro_hold_cancel) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != 2) {
+        if (p->currentMemberId != PARTY_MEMBER_KOOPS) {
             return EVT_RETURN_DONE;
         }
         if (nokonokoGetStatus(p) == 0) {
@@ -904,7 +904,7 @@ USER_FUNC(evt_party_nokotaro_get_status) {
     if (p == NULL) {
         return EVT_RETURN_DONE;
     }
-    if (p->currentMemberId != 2) {
+    if (p->currentMemberId != PARTY_MEMBER_KOOPS) {
         return EVT_RETURN_DONE;
     }
     dst = args[1];
@@ -920,7 +920,7 @@ USER_FUNC(evt_party_cloud_breathout) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != 5) {
+        if (p->currentMemberId != PARTY_MEMBER_FLURRIE) {
             return EVT_RETURN_DONE;
         }
         if (p->flags & PARTY_FLAG_IS_BEING_USED) {
@@ -951,7 +951,7 @@ USER_FUNC(N_evt_party_cloud_lock_animations_on_off) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (p->currentMemberId != 5) {
+        if (p->currentMemberId != PARTY_MEMBER_FLURRIE) {
             return EVT_RETURN_DONE;
         }
         if (p->flags & PARTY_FLAG_IS_BEING_USED) {

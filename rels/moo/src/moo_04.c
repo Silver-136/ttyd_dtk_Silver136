@@ -277,7 +277,7 @@ static USER_FUNC(mario_kirimomi) {
     mario->rot.z = fmod(mario->rot.z, 360.0);
     if (party != NULL) {
         party->scale.x = party->scale.y = scale;
-        if (party->currentMemberId != 4) {
+        if (party->currentMemberId != PARTY_MEMBER_YOSHI) {
             party->rotOfsY = party->height / 2;
         } else {
             party->rotOfsY = (party->height - 10.0f) / 2;

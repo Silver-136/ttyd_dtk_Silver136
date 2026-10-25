@@ -711,7 +711,7 @@ void partyReInit(void) {
             party->motionStep = 0;
             party->flags |= 0x8000;
         }
-        if (party->currentMemberId == 7) {
+        if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ) {
             chuchu_reinit(party);
         }
         partyResetTouchWallCt();
@@ -2255,7 +2255,7 @@ void partyPreDisp(PartyEntry* party) {
     }
     mode = 2;
     size = 13.333333f;
-    if ((s8)(u8)party->currentMemberId != 6) {
+    if ((s8)(u8)party->currentMemberId != PARTY_MEMBER_VIVIAN) {
         party->trailPos = party->position;
     } else {
         if (party->runMode == 4 || (party->runMode == 8 && !(party->flags & PARTY_FLAG_IS_BEING_USED))) {
@@ -2343,21 +2343,21 @@ void partyDisp(CameraId cam, void* param) {
     PSMTXConcat(t, m, m);
     yoff = 0.0f;
     if (party->paperAnimName) {
-        if (party->currentMemberId == 4) {
+        if (party->currentMemberId == PARTY_MEMBER_YOSHI) {
             yoff = 1.0f;
-        } else if (party->currentMemberId == 3) {
+        } else if (party->currentMemberId == PARTY_MEMBER_BOBBERY) {
             yoff = 2.0f;
-        } else if (party->currentMemberId == 7) {
+        } else if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ) {
             yoff = 2.0f;
-        } else if (party->currentMemberId == 1) {
+        } else if (party->currentMemberId == PARTY_MEMBER_GOOMBELLA) {
             yoff = 2.0f;
-        } else if (party->currentMemberId == 11) {
+        } else if (party->currentMemberId == PARTY_MEMBER_FRANKLY) {
             yoff = 3.0f;
-        } else if (party->currentMemberId == 8) {
+        } else if (party->currentMemberId == PARTY_MEMBER_EGG) {
             yoff = 3.5f;
-        } else if (party->currentMemberId == 10) {
+        } else if (party->currentMemberId == PARTY_MEMBER_PUNIO) {
             yoff = 4.0f;
-        } else if (party->currentMemberId == 9) {
+        } else if (party->currentMemberId == PARTY_MEMBER_FLAVIO) {
             yoff = -1.0f;
         }
     }

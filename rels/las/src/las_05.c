@@ -1500,7 +1500,7 @@ USER_FUNC(party_hit) {
     f32 dir;
 
     if (party_hit_check(npc->position.x, npc->position.z, &dir) &&
-        (party->currentMemberId == 2 || party->currentMemberId == 3)) {
+        (party->currentMemberId == PARTY_MEMBER_KOOPS || party->currentMemberId == PARTY_MEMBER_BOBBERY)) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);

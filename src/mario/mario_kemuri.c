@@ -264,7 +264,7 @@ void party_kemuri(PartyEntry* party) {
     if (marioStGetSystemLevel() == 0) {
         if (party->runMode != 10) {
             if (party->moveKind != 1) {
-                if (party->runMode == 3 && party->currentMemberId == 4) {
+                if (party->runMode == 3 && party->currentMemberId == PARTY_MEMBER_YOSHI) {
                     if ((void*)party->hitobjStandOn != NULL) {
                         if (!(hitGetAttr((void*)party->hitobjStandOn) & 0x100)) {
                             if (party->moveSpeed < 2.0f) {
@@ -301,7 +301,7 @@ void party_kemuri(PartyEntry* party) {
                 }
 #else
     if (party->moveKind != 1) {
-        if (party->runMode == 3 && party->currentMemberId == 4) {
+        if (party->runMode == 3 && party->currentMemberId == PARTY_MEMBER_YOSHI) {
             if ((void*)party->hitobjStandOn != NULL) {
                 if (party->moveSpeed < 2.0f) {
                     party->kemuriTimer = 7;

@@ -740,7 +740,7 @@ void mobjMain(void) {
                         entry->hitFlag = 0x800000;
                         hit = 1;
                         goto hitDone;
-                    } else if (party->hitobjAction != NULL && (s32)(u8)party->currentMemberId == 3) {
+                    } else if (party->hitobjAction != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                         if (PSVECDistance(&party->position, &entry->position) <
                             entry->hitObj[0].hitObject->radius + party->width) {
                             entry->hitFlag = 0x800000;
@@ -749,7 +749,7 @@ void mobjMain(void) {
                         }
                     }
                 }
-                if ((entry->flags & 0x2000000) && party != NULL && (s32)(u8)party->currentMemberId == 3) {
+                if ((entry->flags & 0x2000000) && party != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
                     if (party->hitobjAction == hitPtr) {
                         entry->hitFlag = 0x2000000;
                         hit = 1;
