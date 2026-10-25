@@ -413,8 +413,8 @@ EVT_BEGIN(vivian_hide_event)
             CALL(btlevtcmd_SetMoveSpeed, LW(3), FLOAT(2.0f))
             CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), 0, -1, 0)
         END_INLINE_EVENT
-        CALL(btlevtcmd_OffPartsAttribute, -2, 1, 65536)
-        CALL(btlevtcmd_OffPartsAttribute, -2, 1, 16777216)
+        CALL(btlevtcmd_OffPartsAttribute, -2, 1, kNotTargetable)
+        CALL(btlevtcmd_OffPartsAttribute, -2, 1, kHidden)
         CALL(battle_evt_majo_disp_on, -2, 1, LW(0), LW(1), LW(2), 1)
         CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
@@ -880,7 +880,7 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     ADD(LW(1), 1)
     CALL(evt_eff, 0, STRING("ripple"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(333)
-    CALL(btlevtcmd_OnPartsAttribute, -2, 1, 16842752)
+    CALL(btlevtcmd_OnPartsAttribute, -2, 1, kNotTargetable | kHidden)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_SetUnitWork, -2, 4, 1)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
@@ -1388,7 +1388,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
                 event->userdata[1] = 0;
                 psndSFXOn_3D("SFX_BTL_VIVIAN_SHADOW1_2", &unit->mPosition);
                 if (flag2 != 0) {
-                    part->attributes |= 0x1000000;
+                    part->attributes |= kHidden;
                 }
             }
             break;

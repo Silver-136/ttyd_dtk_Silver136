@@ -233,8 +233,8 @@ static BattleWeapon weapon_bomhei_bomb = {
 
 static EVT_BEGIN(bomb_event)
     CALL(evt_btl_camera_shake_w, 0, 5, 0, 15, 0)
-    CALL(btlevtcmd_OnAttribute, -2, 16777216)
-    CALL(btlevtcmd_OnPartsAttribute, -2, 1, 33554432)
+    CALL(btlevtcmd_OnAttribute, -2, kUnitHidden)
+    CALL(btlevtcmd_OnPartsAttribute, -2, 1, kNoShadow)
     CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_snd_sfxoff, LW(0))

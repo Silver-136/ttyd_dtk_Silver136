@@ -2588,11 +2588,11 @@ static USER_FUNC(_set_draw_callback) {
     p5 = BtlUnit_GetPartsPtr(unit, 5);
     p6 = BtlUnit_GetPartsPtr(unit, 6);
     p7 = BtlUnit_GetPartsPtr(unit, 7);
-    p3->attributes |= 0x1000000;
-    p4->attributes |= 0x1000000;
-    p5->attributes |= 0x1000000;
-    p6->attributes |= 0x1000000;
-    p7->attributes |= 0x1000000;
+    p3->attributes |= kHidden;
+    p4->attributes |= kHidden;
+    p5->attributes |= kHidden;
+    p6->attributes |= kHidden;
+    p7->attributes |= kHidden;
     return EVT_RETURN_DONE;
 }
 void _light_point_callback(BattleUnitPart* part, s32 group) {

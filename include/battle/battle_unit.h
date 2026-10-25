@@ -42,6 +42,9 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kHammerlikeCannotTarget = (1 << 21),     // 0x200000
     kShellTosslikeCannotTarget = (1 << 22),  // 0x400000
     kNoHpLoss = (1 << 23),                   // 0x800000, damage is counted but HP does not go down
+    kHidden = (1 << 24),                     // 0x1000000, not drawn
+    kNoShadow = (1 << 25),                   // 0x2000000, no shadow
+    kMotionBlur = (1 << 26),                 // 0x4000000, also drawn with btlUnitPartsBlurDisp
     kImmuneToDamageAndStatus = (1 << 29),   // 0x20000000, no HP/FP damage and no status (battle_damage.c)
     kImmuneToNegativeStatus = (1 << 30),    // 0x40000000, sleep, stop, poison, ... and instant kill blocked
     kImmuneToStatus = (1 << 31)             // 0x80000000, no status at all
@@ -51,7 +54,7 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kUnknown_0x1 = (1 << 0),             // 0x1
     kCeiling = (1 << 1),                 // 0x2
     kFloating = (1 << 2),                // 0x4
-    kPermanentlyInvisible = (1 << 3),    // 0x8, not drawn and attacks miss (like STATUS_INVISIBLE)
+    kPermanentlyInvisible = (1 << 3),    // 0x8, drawn translucent and attacks miss (like STATUS_INVISIBLE)
     kVeiled = (1 << 4),                  // 0x10
     kShellShielded = (1 << 5),           // 0x20
     kUnknownUnit_0x1000 = (1 << 12),     // 0x1000
@@ -59,7 +62,10 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kUndead = (1 << 16),                 // 0x10000, keeps taking turns while KO'd (STATUS_INSTANT_KILL)
     kInactive = (1 << 17),               // 0x20000
     kNoTurn = (1 << 19),                 // 0x80000, never put in the turn order
+    kNoDamageNumber = (1 << 22),         // 0x400000, the damage star with the HP number is not shown
+    kUnitHidden = (1 << 24),             // 0x1000000, no part is drawn
     kUnknownUnit_0x2000000 = (1 << 25),  // 0x2000000
+    kUnitNoShadow = (1 << 29),           // 0x20000000, no part casts a shadow
     kUnitHpFixed = (1 << 30)             // 0x40000000, HP neither falls from damage nor rises from HP Regen (lecture mode)
 } BattleUnitAttribute_Flags;
 

@@ -287,7 +287,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (d->propFlags & 0x4000000) {
-                if (part->attributes & 0x2000000) {
+                if (part->attributes & kNoShadow) {
                     ok = FALSE;
                     break;
                 }

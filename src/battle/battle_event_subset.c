@@ -772,7 +772,7 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
     CALL(btlevtcmd_GetGuardKouraId, -3, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
         CALL(btlevtcmd_RunDataEventChild, LW(10), 60)
-        CALL(btlevtcmd_OffPartsAttribute, -3, 1, 16777216)
+        CALL(btlevtcmd_OffPartsAttribute, -3, 1, kHidden)
         CALL(btlevtcmd_SetUnitWork, LW(10), 2, 2)
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_BTL_POS_CHANGE1"), 0)

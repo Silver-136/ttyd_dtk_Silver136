@@ -495,7 +495,7 @@ next:
             part->dispColor.r = part->color.r;
             part->dispColor.g = part->color.g;
             part->dispColor.b = part->color.b;
-            if (!(unit->mAttributeFlags & 0x1000000) && !(part->attributes & 0x1000000)) {
+            if (!(unit->mAttributeFlags & kUnitHidden) && !(part->attributes & kHidden)) {
                 if (!(part->attributes & kMainPart) || !(unit->mAttributeFlags & kVeiled)) {
                     if (part->dispColor.a < 0xFF || animPoseTestXLU(part->poseId)) {
                         if (!(PART_ANIMFLAGS(part) & 0x100)) {
@@ -508,11 +508,11 @@ next:
                         }
                     }
                 }
-                if (part->attributes & 0x4000000) {
+                if (part->attributes & kMotionBlur) {
                     dispEntry(CAMERA_3D, wz, 2, (DispCallback)btlUnitPartsBlurDisp, part);
                 }
             }
-            if (!(unit->mAttributeFlags & 0x20000000) && !(part->attributes & 0x2000000)) {
+            if (!(unit->mAttributeFlags & kUnitNoShadow) && !(part->attributes & kNoShadow)) {
                 BtlUnit_GetPartsWorldPos(part, &ppos.x, &ppos.y, &ppos.z);
                 spos = ppos;
                 if ((unit->flags & 0x10000) && (partner = BattleGetPartnerPtr(wp, unit)) != NULL) {
@@ -905,7 +905,7 @@ void btlUnitStolenItemDisp(CameraId camId, void* param) {
 
 void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation) {
 
-    if (part->attributes & 0x4000000) {
+    if (part->attributes & kMotionBlur) {
         _partsBlurControl(part, 1, orientation, color, rotation);
     }
     else {

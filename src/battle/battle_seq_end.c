@@ -1451,7 +1451,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
             evt = evtEntry(data, 10, 0);
             evt->unitId = unit->unitId;
         } else if (unit->currentKind != UNIT_BOBBERY) {
-            unit->mAttributeFlags |= 0x21000000;
+            unit->mAttributeFlags |= (kUnitHidden | kUnitNoShadow);
         }
     }
     obj = BattleSearchObjectPtr("if_body");

@@ -21,8 +21,8 @@
 #define TARGET_CLASS_MULTIPLE                0x2000000 // all targets at once
 #define TARGET_CLASS_NONE                    0x80000000 // no valid targets
 
-// BattleWeapon.targetPropertyFlags (battle_detect.c BattleSamplingEnemy; 0x4000000 excludes parts with the
-// unused part attribute 0x2000000)
+// BattleWeapon.targetPropertyFlags (battle_detect.c BattleSamplingEnemy; 0x4000000 excludes parts with kNoShadow,
+// part attribute 0x2000000)
 #define TARGET_PROP_TATTLE                 0x1 // only parts that can be tattled (tattle data, not kUntattleable)
 #define TARGET_PROP_NO_FLOATING2           0x2 // not floating units (same test as 0x8)
 #define TARGET_PROP_NO_CEILING             0x4 // not ceiling units

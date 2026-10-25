@@ -423,7 +423,7 @@ static EVT_BEGIN(unison_phase_event)
             SET_VALUE(LW(1), 40)
             CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 60, 10, 4, 0, -1)
             CALL(btlevtcmd_SetHomePos, -2, LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_OnPartsAttribute, -2, 1, 6291456)
+            CALL(btlevtcmd_OnPartsAttribute, -2, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
             CALL(btlevtcmd_SetUnitWork, -2, 0, 0)
         ELSE
             CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_KUMO_MOVE5"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -431,7 +431,7 @@ static EVT_BEGIN(unison_phase_event)
             SET_VALUE(LW(1), 10)
             CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 60, -10, 4, 0, -1)
             CALL(btlevtcmd_SetHomePos, -2, LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_OffPartsAttribute, -2, 1, 6291456)
+            CALL(btlevtcmd_OffPartsAttribute, -2, 1, kHammerlikeCannotTarget | kShellTosslikeCannotTarget)
             CALL(btlevtcmd_SetUnitWork, -2, 0, 1)
         END_IF
     END_IF

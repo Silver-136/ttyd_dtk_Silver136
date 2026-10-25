@@ -94,7 +94,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                     break;
             }
             if (BtlUnit_GetBelong(target) == 0) {
-                if (damage != 0 && !(target->mAttributeFlags & 0x400000)) {
+                if (damage != 0 && !(target->mAttributeFlags & kNoDamageNumber)) {
                     effDamageStarEntry(0, damage, x - 8.0f, 5.0f + y, z, 10.0f, 30.0f);
                 }
                 if (fpDamage != 0) {
@@ -105,7 +105,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                     }
                 }
             } else {
-                if (damage != 0 && !(target->mAttributeFlags & 0x400000)) {
+                if (damage != 0 && !(target->mAttributeFlags & kNoDamageNumber)) {
                     effDamageStarEntry(0, damage, x, 10.0f + y, z, 10.0f, -30.0f);
                 }
                 if (fpDamage != 0) {
