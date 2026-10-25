@@ -18,7 +18,6 @@
 #ifdef VERSION_G8ME01
 #endif
 
-void mapSetPaperAmbColor(GXColor);
 double fabs(double);
 BOOL marioCreviceWallChk(const Vec* p);
 
@@ -431,11 +430,13 @@ static inline void slitInit(void) {
     m->dispFlags |= 4;
     m->dispFlags |= 0x1000000;
     if (m->paperPoseId == -1) {
-        GXColor tmp; GXColor col = {0, 0, 0, 255};
+        GXColor tmp;
+        GXColor col = {0, 0, 0, 255};
         col.r = 0xa8;
         col.g = 0xa8;
         col.b = 0xa8;
-        tmp = col; ((void (*)(GXColor*))mapSetPaperAmbColor)(&tmp);
+        tmp = col;
+        mapSetPaperAmbColor(&tmp);
         marioPaperOn("p_slit");
     }
     if (!m->controlStickSensitivity) {

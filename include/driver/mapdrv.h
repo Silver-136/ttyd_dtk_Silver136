@@ -394,6 +394,7 @@ void mapPauseAnimationAll(const char* name);
 void mapPlayAnimationLv(const char* name, s32 mode, s32 level);
 void mapReStartAnimation(const char* name);
 void mapReStartAnimationAll(const char* name);
+void mapSetPaperAmbColor(GXColor* color);
 void mapResetPaperAmbColor(void);
 void mapSetPlayRate(const char* name, f32 rate);
 void bmapLoad(const char *map, const char *map2);

@@ -6017,7 +6017,7 @@ void psndSFXMain(void) {
                     base->listId = none;
                     base->channel = -1;
                 }
-            } else if (!((u32(*)(s32))SoundEfxCheck)(base->channel)) {
+            } else if (!SoundEfxCheck(base->channel)) {
                 base->listId = none;
                 base->channel = none;
             }

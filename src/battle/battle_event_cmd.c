@@ -3428,7 +3428,7 @@ static inline void bec_coin(BattleUnit* unit, s32 item) {
         if (coins > 0) {
             pouchAddCoin(coins);
             BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-            ((void (*)(s32, s32, f32, f32, f32, f32))effCoinN64Entry)(0, 0, pos.x, pos.y, pos.z, 1.0f);
+            effCoinN64Entry(0, 0, pos.x, pos.y, pos.z, 1.0f);
         }
     }
 }
@@ -3661,7 +3661,7 @@ USER_FUNC(btlevtcmd_ConsumeItemReserve) {
             if (coins > 0) {
                 pouchAddCoin(coins);
                 BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-                ((void (*)(s32, s32, f32, f32, f32, f32))effCoinN64Entry)(0, 0, pos.x, pos.y, pos.z, 1.0f);
+                effCoinN64Entry(0, 0, pos.x, pos.y, pos.z, 1.0f);
             }
         }
     } else {

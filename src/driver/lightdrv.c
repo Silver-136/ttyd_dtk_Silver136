@@ -1,9 +1,4 @@
-/* header declares lightEntry/lightGetNearObj with by-value structs and void return; the real ABI differs */
-#define lightEntry lightEntry_header_decl
-#define lightGetNearObj lightGetNearObj_header_decl
 #include "driver/lightdrv.h"
-#undef lightEntry
-#undef lightGetNearObj
 #include "driver/camdrv.h"
 #include "driver/mapdrv.h"
 #include "memory.h"
@@ -111,7 +106,7 @@ void lightMain(void) {
 
 
 
-s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, GXColor color, s32 attenType, s32 flags, f32 spotAngle, f32 attenAngle) {
+s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, const GXColor* color, f32 spotAngle, f32 attenAngle, s32 attenType, s32 flags) {
     static const Vec decay_tbl[] = {
     {1.0f, 0.0f, 0.0f},
     {0.0f, 0.1f, 0.0f},
@@ -157,7 +152,7 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, GXColor
     entry->position = *position;
     entry->rotation = *rotation;
     entry->basePosition = *position;
-    entry->color = color;
+    entry->color = *color;
     entry->spotAngle = spotAngle;
     entry->attenAngle = attenAngle;
     entry->attenDistCoef.x = decay_tbl[attenType].x;
@@ -217,7 +212,7 @@ static s32 _sort(const void* a, const void* b) {
     return 0;
 }
 
-s32 lightGetNearObj(Vec position, LightEntry** out, s32 count, LightEntryFlags flags) {
+s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, LightEntryFlags flags) {
     s32 found;
     LightWork* wp = lightGetWork();
     NearWork tmp[32];
@@ -235,7 +230,7 @@ s32 lightGetNearObj(Vec position, LightEntry** out, s32 count, LightEntryFlags f
         for (i = 0; i < wp->count; i++, entry++) {
             if (entry->flags & LIGHT_ENABLED) {
                 tp->entry = entry;
-                tp->dist = VECDistance(&position, &entry->position);
+                tp->dist = VECDistance(position, &entry->position);
                 tp++;
                 n++;
             }

@@ -217,7 +217,7 @@ void SoundEfxSetAux1(s32 chan, u8 reverb);
 void SoundEfxSetPan(s32 chan, u8 pan);
 void SoundEfxSetSrndPan(s32 chan, u8 span);
 void SoundEfxSetLPF(s32 chan, s16 freq);
-BOOL SoundEfxCheck(s32 chan);
+u32 SoundEfxCheck(s32 chan);
 
 void SoundSSMuteOff(s32 chan);
 u32 SoundSSCheck(s32 chan);

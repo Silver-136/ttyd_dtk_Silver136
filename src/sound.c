@@ -1076,7 +1076,7 @@ void SoundEfxSetLPF(s32 chan, s16 freq) {
     }
 }
 
-BOOL SoundEfxCheck(s32 chan) {
+u32 SoundEfxCheck(s32 chan) {
     SoundEffect* sfx;
 
     sfx = &sound.effects[chan];

@@ -41,7 +41,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 void effCoinMain(EffectEntry* effect);
 void effCoinDisp(CameraId cameraId, EffectEntry* effect);
 
-EffectEntry* effCoinN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
+EffectEntry* effCoinN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffCoinN64Work* work;
     EffCoinN64Data* data;

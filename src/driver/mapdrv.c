@@ -76,8 +76,6 @@ MapWork* mapWork; //allocates two entries
 
 typedef MapEntryAnimData MapAnim;
 
-#define lightGetNearObj(pos, out, count, flags) ((s32 (*)(Vec*, LightEntry**, s32, LightEntryFlags))lightGetNearObj)(pos, out, count, flags)
-
 //local prototypes
 //anim functions?
 
@@ -837,7 +835,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
                     lflags = light->lflags;
                 }
                 lcolor = light->color;
-                ((s32(*)(const char*, s32, Vec*, Vec*, GXColor*, f32, f32, s32, s32))lightEntry)(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
+                lightEntry(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
             }
         }
         mapResetPaperAmbColor();

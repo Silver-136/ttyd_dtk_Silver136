@@ -728,7 +728,7 @@ void effThunderMain(EffectEntry* effect) {
         }
     }
 
-    ((void (*)(s32, s32, f32, DispCallback, void*))dispEntry)(CAMERA_3D, 2, dispCalcZ(&position), (DispCallback)effThunderDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effThunderDisp, effect);
 }
 
 void effThunderDisp(CameraId cameraId, EffectEntry* effect) {

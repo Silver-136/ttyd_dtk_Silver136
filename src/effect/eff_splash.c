@@ -295,7 +295,7 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
     f32 proj[7];
     f32 vp[6];
     f32 sx, sy, sz;
-    u8 argb[4];
+    union { u32 word; struct { u8 a, r, g, b; } color; } pixel;
     GXColor c;
 
     cam = camGetPtr(cameraId);
@@ -305,10 +305,10 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
     GXProject(work->position.x, work->position.y, work->position.z, cam->view, proj, vp, &sx, &sy, &sz);
     if (sx > 0.0f && sx < 608.0f && sy > 0.0f && sy < 480.0f) {
         sysWaitDrawSync();
-        ((void (*)())GXPeekARGB)((s32)sx, (s32)sy, argb);
-        work->color.r = argb[1];
-        work->color.g = argb[2];
-        work->color.b = argb[3];
+        GXPeekARGB((u16)sx, (u16)sy, &pixel.word);
+        work->color.r = pixel.color.r;
+        work->color.g = pixel.color.g;
+        work->color.b = pixel.color.b;
         work->color.a = 255;
     }
     work->hasColor = 1;
