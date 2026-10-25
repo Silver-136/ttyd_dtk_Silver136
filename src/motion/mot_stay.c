@@ -8,14 +8,13 @@
 #include <string.h>
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "koopa_motion.h"
+#include "peach.h"
 
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
 #include "mario/mario_sbr.h"
-void kpa_stay(void);
-void peach_stay(void);
-void marioClearJumpPara(void);
 void marioChgMot2(MarioMotion);
 void motSlitCancel(void);
 BOOL marioChkJabara(void);

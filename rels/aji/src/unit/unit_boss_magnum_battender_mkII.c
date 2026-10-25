@@ -38,7 +38,6 @@ extern EvtWord aud_hit_event[];
 void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z);
 void aud_fire_eff(f32 x, f32 y, f32 z);
 void effKemuTestSetRxRz(EffectEntry* eff, f32 rx, f32 rz);
-u8 psndSFX_get_vol(s32 id);
 void psndSFX_vol(s32 id, u8 vol);
 EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 scale1, f32 scale2);
 EffectEntry* effKamekiTornadeN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);

@@ -1,9 +1,8 @@
 #include "battle/battle.h"
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/mtx.h>
+#include "battle/battle_stage.h"
 
-s32 BattleStageGetLightNumberByName(const char* name);
-s32 BattleStageSysLightEntry(const char* name);
 void BattleStageLightRelease(s32 idx, s32 a, s32 b);
 void BattleStageLightSetLightColor(s32 idx, u8 r, u8 g, u8 b, s32 a, s32 c);
 void BattleStageLightSetWidth(s32 idx, s32 w, s32 a, s32 b);

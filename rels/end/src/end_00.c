@@ -49,11 +49,8 @@ extern CreditNpc R_credits_npc_info[152];
 extern const char* g_moamoa_chain_tbl[][2];
 static inline f32 tanf(f32 x) { return tan(x); }
 s32 EXIGetType(s32 chan, u32 dev, u32* type);
-void L_animPoseWorldPositionEvalOff(s32 poseId);
 void animPoseVivianMain(s32 poseId, Vec* pos);
 s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
-void msgWindow_Continue(s32 id);
-void JUTFont_Free(void);
 void JUTFontSetup(s32 mode);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];

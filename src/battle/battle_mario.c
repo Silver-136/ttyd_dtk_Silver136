@@ -18,6 +18,7 @@
 #include "evt/evt_sub.h"
 #include "party/party_motion.h"
 #include "driver/npcdrv.h"
+#include "battle/battle_audience.h"
 static USER_FUNC(_get_mario_hammer_lv);
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"
@@ -34,10 +35,7 @@ static USER_FUNC(_get_mario_hammer_lv);
 #include "pmario_sound.h"
 
 EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 duration);
-void BattleAudience_Case_JumpNewRecord(void);
 void BtlUnit_SetAnim(BattleUnitPart* part, s32 anim);
-f32 sinfd(f32);
-f32 cosfd(f32);
 
 #include "battle/battle_unit.h"
 #include "battle/battle_database_common.h"

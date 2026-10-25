@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "statuswindow.h"
 
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
@@ -16,10 +17,7 @@
 u8 dark;
 s32 darkCount;
 f32 point[4];
-void statusAPBlink(s32 time);
-BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems);
 void BattleAudienceAddAudienceNum(s32 num);
-void BattleAudienceJoySACLecture(void);
 #include "battle/battle_break_slot.h"
 
 static USER_FUNC(_battle_set_lecture_unit_id);

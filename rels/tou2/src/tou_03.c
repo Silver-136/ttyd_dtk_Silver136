@@ -51,7 +51,6 @@ static f32 sinf(f32 x);
 static f32 sinf(f32 x);
 double cos(double x);
 double sin(double x);
-void psndMapChange(void);
 typedef struct ScreenWork { void* buf; s32 ready; f32 scale; f32 scaleTarget; f32 x; f32 xTarget; f32 y; f32 yTarget; s32 count; s32 mode; f32 field_0x28; u8* noise; } ScreenWork;
 static f32 randf(f32 min, f32 max);
 static f32 randf(f32 min, f32 max);
@@ -78,8 +77,6 @@ u32 __tou_rand(void);
 u32 __tou_rand(void);
 void __tou_srand(u32 seed);
 void __tou_srand(u32 seed);
-void fbatSetAttackAnnounce(s32 type);
-void fbatSetAttackAnnounceEnable(void);
 
 s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall);
 s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall);

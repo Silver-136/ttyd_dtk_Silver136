@@ -8,9 +8,9 @@
 #include "battle/battle_unit.h"
 #include "icon_ids.h"
 #include "pmario_sound.h"
+#include "battle/battle_audience.h"
 
 void psndSFX_pit(s32 id, s32 pitch);
-void BattleAudience_Case_ActionCommandBad(BattleWeapon* weapon);
 void BattleAudience_Case_ActionCommandGood(BattleWeapon* weapon);
 
 #define AC_SE_ID(wp) ((wp)->actionCommands.seId)

@@ -11,3 +11,5 @@ void nokonoko_move(PartyEntry* party);
 void nokonoko_use(PartyEntry* party);
 void nokonoko_use_post(PartyEntry* party);
 void nokotaro_hold_cancel(PartyEntry* party);
+BOOL nokonoko_holdItem(void);
+void nokonoko_use_cancel(void);

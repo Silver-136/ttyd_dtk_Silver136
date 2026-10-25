@@ -36,7 +36,6 @@ typedef struct SenkaronWork { s32 attackStart; s32 escape; s32 mesPushing; u32 f
 SenkaronWork* skwp;
 static f32 randf(f32 min, f32 max);
 s32 nokonokoGetStatus(void);
-f32 cloudGetBreathDist(void);
 double sqrt(double x);
 f32 marioGetAngleKaitenHammer(void);
 s32 party_hit_check(f32 x, f32 z, f32* dir);

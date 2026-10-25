@@ -13,8 +13,6 @@
 #include "libc_decls.h"
 
 void FontDrawString(f32 x, f32 y, const char* msg);
-void FontDrawScale(f32 scale);
-void FontDrawColorIDX(s32 idx);
 extern ItemData itemDataTable[];
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 double sin(double);

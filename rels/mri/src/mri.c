@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "driver/mapdrv.h"
 
 #include "data/mapdata.h"
 #include "manager/evtmgr_cmd.h"
@@ -18,14 +19,11 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
 void mapGrpSetColor(const char* name, GXColor color);
 typedef struct HSV { u8 h; u8 s; u8 v; u8 a; } HSV;
 GXColor HSV2RGB(HSV hsv);
 PuniData* puniGetPunidat(void);
-void puniMoveDecel(PuniData* puni);
 PuniWork* puniGetPunigp(void);
-void PuniDokuritsu(PuniData* puni);
 void puniModeWinjump(PuniData* puni);
 
 USER_FUNC(evt_bero_exec_get);

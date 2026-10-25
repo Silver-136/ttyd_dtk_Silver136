@@ -126,9 +126,6 @@ typedef struct GenkiWork {
 s32 statusWinOpen();
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 EffectEntry* effStardustEntry(s32 type, s32 count, s32 camera, f32 x, f32 y, f32 z, f32 vx, f32 vy);
-void BattleAudienceSoundBooingKind(s32 kind);
-void BattleAudienceSoundCallKind(s32 kind);
-void BattleAudienceSoundHandBeat(void);
 void btlDispTex4(s32 id, Vec pos, Vec scale, Vec rot, GXColor color);
 USER_FUNC(recover_cmd_disable);
 USER_FUNC(star_appear);

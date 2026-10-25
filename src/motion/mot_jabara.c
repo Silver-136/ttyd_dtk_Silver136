@@ -17,10 +17,9 @@
 #include <dolphin/pad.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "party.h"
 
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
-void allPartyRideOff(void);
-void marioClearJumpPara(void);
 void marioVoiceGlareOn(void);
 void marioVoiceGlareOff(void);
 
@@ -211,10 +210,8 @@ static inline void jabaraLand(f32 y_, void* h_) {
 
 void mario_land_kemuri(void);
 void mot_slit_post(void);
-void L_allPartyRideOn(void);
 void marioChkOverhead(void);
 void* marioSearchHead(Vec* p, f32* h, f32 r);
-HitEntry* marioChkLandon2(f32* out, f32 y, f32 z);
 void swingMain(void);
 void* marioChkLandon(f32* outY, f32 y);
 #pragma opt_common_subs off

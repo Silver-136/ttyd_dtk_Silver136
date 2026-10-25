@@ -28,3 +28,5 @@ typedef struct BattleVulnerableStatus {
 } BattleVulnerableStatus;
 
 s32 BattleCheckDamage(struct BattleUnit* unit1, struct BattleUnit* unit2, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, s32 flags);
+void BattleAttackDeclare(s32* unitIdx, s32* partIdx);
+void BattleInitCounterPreCheckWork(s32* work);

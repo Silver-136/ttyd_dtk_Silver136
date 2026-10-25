@@ -17,6 +17,8 @@
 #include "libc_decls.h"
 #include "party/party_yoshi.h"
 #include "party/party_vivian.h"
+#include "party/party_motion.h"
+#include "party/party_chuchu.h"
 
 //.data
 
@@ -741,7 +743,6 @@ void driveParty(PartyEntry* party);
 #include "mario/mario_sbr.h"
 s32 partyHelloMain(PartyEntry* party);
 BOOL N_marioShipGetDir(void);
-void L_partyForceSlitOff(PartyEntry* party);
 static inline void partyShadowOn(PartyEntry* party) {
     if (party) {
         party->flags2 &= ~0x100000;
@@ -752,8 +753,6 @@ void partyInit(void) {
     memset(partyPtrTbl, 0, sizeof(partyPtrTbl));
 }
 
-void chuchu_reinit(PartyEntry* party);
-void partyResetTouchWallCt(void);
 
 static inline void partyReInitClear(PartyEntry* party) {
     s32 poseId;
@@ -1018,9 +1017,6 @@ void partyMain(void) {
 /* @@DRIVE@@ */
 void party_kemuri(PartyEntry* party);
 void vivianShadow(PartyEntry* party);
-void party_move_mode_wait(PartyEntry* party);
-void partyForceWalk(PartyEntry* party);
-void L_partyForceSlitOff(PartyEntry* party);
 void partyPreDisp(PartyEntry* party);
 void partyHello(PartyEntry* party);
 void partyRideMain(PartyEntry* party);

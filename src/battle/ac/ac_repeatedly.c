@@ -12,9 +12,6 @@
 
 u32 SIProbe(s32 chan);
 void BattleAcDrawGauge();
-void BattleAcGaugeSeInit(void);
-void BattleAcGaugeSeUpdate(f32 value);
-void BattleAcGaugeSeDelete(void);
 
 typedef struct RepeatDisp {
     s32 frame;        // 0x0

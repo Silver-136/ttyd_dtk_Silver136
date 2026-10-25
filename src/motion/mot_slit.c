@@ -12,19 +12,16 @@
 #include "sfx_name_word.h"
 #include "mario/mario_sbr.h"
 #include "mario/mario_hit.h"
+#include "party/party_motion.h"
+#include "driver/mapdrv.h"
 
 #ifdef VERSION_G8ME01
-void U_allPartySlitOffReq(void);
 #endif
 
 BOOL marioRollChgChk(void);
 void marioChgMot2(MarioMotion);
 BOOL marioSlitChkWallAround(void);
-void allPartySlitOn(void);
-void allPartySlitOff(void);
-void allPartyForceSlitOff(void);
 void mapSetPaperAmbColor(GXColor);
-void mapResetPaperAmbColor(void);
 double fabs(double);
 BOOL marioCreviceWallChk(const Vec* p);
 

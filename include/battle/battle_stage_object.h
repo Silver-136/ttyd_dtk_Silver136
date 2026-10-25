@@ -112,3 +112,10 @@ extern BattleStageObjectData _object_wall_data;
 extern void* jumptable_80374848[];
 
 BOOL BattleFogForceStop(void);
+void BattleStage_DestroyA1(void);
+void BattleStage_DestroyA2(void);
+void BattleStage_DestroyB(void);
+void BattleStage_IronFrameFallCheck(void);
+void BattleStage_NozzleDirChangeCheck(void);
+void BattleStage_NozzleWorkCheck(s32 type);
+void BattleStage_WallCloseCheck(void);

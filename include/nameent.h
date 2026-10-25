@@ -34,3 +34,10 @@ void nameEntReInit(void);
 void nameEntMain(void);
 
 extern const char* latin_tbl[];
+const char* nameEntGetName(void);
+BOOL nameEntIsCancel(void);
+void nameEntOff(void);
+void nameEntOn(s32 type);
+BOOL nameEntPrepare(void);
+BOOL nameEntWait(void);
+void nameMaskGX(f32 t);

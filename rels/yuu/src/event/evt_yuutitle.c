@@ -12,7 +12,6 @@
 typedef struct YuuTitleWork { EventEntry* event; u16 flags; f32 x; f32 y; f32 startX; f32 startY; f32 targetX; f32 targetY; s32 alpha; const char* msg; } YuuTitleWork;
 static YuuTitleWork* _wp;
 void evt_yuutitle_disp_func(CameraId camera, void* param);
-void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* str);
 
 USER_FUNC(evt_yuutitle_main_func);

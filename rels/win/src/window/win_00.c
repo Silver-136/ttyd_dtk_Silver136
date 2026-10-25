@@ -12,7 +12,6 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 
-u16 itemFlag(ItemEntry* item, u16 mask);
 
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_info);

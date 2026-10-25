@@ -28,8 +28,6 @@ typedef struct YuuRankingWork { EventEntry* event; u16 flags; u32 dispFlags; f32
 #else
 #define YURANK(f) (f)
 #endif
-void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* str);
-void FontDrawScale(f32 scale);
 
 static USER_FUNC(evt_yuuranking_main_func);
 static USER_FUNC(yuuranking_get_monte);

@@ -18,7 +18,6 @@ static u8* _ap;
 void puniMoveAtari(PuniData* puni, Vec pos, Vec dir, s32 flag, f32 speed);
 PuniData* puniGetPunidat(void);
 void puniModeEventparent(PuniData* puni);
-void puniMoveDecel(PuniData* puni);
 
 USER_FUNC(evt_bero_exec_onoff);
 USER_FUNC(evt_bero_exec_wait);

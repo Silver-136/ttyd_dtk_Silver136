@@ -2,6 +2,9 @@
 #include "mario/mariost.h"
 #include <string.h>
 #include "sfx_name_word.h"
+#include "mario/mario_hit.h"
+#include "koopa_motion.h"
+#include "koopa.h"
 void camFollowYOn(void);
 BOOL marioPriCheckJabara(void);
 #endif
@@ -18,14 +21,8 @@ BOOL marioPriCheckJabara(void);
 #ifdef VERSION_G8ME01
 #define kpa_fall_80213C38 kpa_fall
 #endif
-void kpa_fall_80213C38(void);
-void kpa_jump(void);
-void kpa_jumpNpc(void);
 void kpaChgPose(const char* a, const char* b);
-void clear_hitobj_ride(void);
-void marioSetJumpPara(void);
 void marioSetPeakYpos(void);
-void marioClearJumpPara(void);
 void marioChgMot2(MarioMotion);
 void marioChgMotAuto(void);
 void marioSlitForceCancel(void);

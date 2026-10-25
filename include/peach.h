@@ -1,2 +1,15 @@
 void peach_dash(void);
 void peach_walk(void);
+void peachPreInit(void);
+void peachSetStsAftershower(void);
+void peachSetStsAngry(void);
+void peachSetStsCarry(void);
+void peachSetStsHappy(void);
+void peachSetStsInvisible(void);
+void peachSetStsNormal(void);
+void peachSetStsOrdinary(void);
+void peachSetStsUneasy(void);
+void peachTransformOff(void);
+void peachTransformOn(void);
+void peach_stay(void);
+void peach_talk(void);

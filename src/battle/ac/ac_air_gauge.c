@@ -9,9 +9,6 @@
 #include "icon_ids.h"
 
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
-void BattleAcGaugeSeInit(void);
-void BattleAcGaugeSeUpdate(f32 value);
-void BattleAcGaugeSeDelete(void);
 
 typedef struct AirGaugeWork {
     s32 frame;      // 0x0, frames since input started

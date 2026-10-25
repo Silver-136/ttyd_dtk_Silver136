@@ -22,7 +22,6 @@
 typedef struct PosterWork { u32 flags; s32 group; s32 shape; } PosterWork;
 PosterWork* poster;
 void draw_poster(void* userdata, s32 group);
-void animPoseDrawShape(s32 poseId, s32 shapeIdx);
 void animPoseSetDispCallBack(s32 poseId, void (*callback)(void*, s32), void* userdata);
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);

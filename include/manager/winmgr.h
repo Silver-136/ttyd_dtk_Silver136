@@ -88,3 +88,4 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 a2, BOOL a3);
 s32 winMgrSelect(WinMgrSelect* select);
 s32 winMgrSelectOther(WinMgrSelect* select, struct EventEntry* evt);
 void winMgrSelectDelete(WinMgrSelect* select);
+s32 winMgrSelectGetCursor(WinMgrSelect* sel);

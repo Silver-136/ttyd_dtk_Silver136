@@ -17,10 +17,10 @@
 #include "evt/evt_yuugijou.h"
 #include "evt/evt_johoya.h"
 #include "statuswindow.h"
+#include "party.h"
 //TODO: put in /evt?
 //funcs sorted backwards aka original source file
 
-s32 yoshiSetColor(void);
 
 #ifdef VERSION_G8ME01
 #define NAME_EN(x) , x

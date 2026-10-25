@@ -4,6 +4,7 @@
 #include "sdk_decls.h"
 #include "win/win_mario.h"
 #include "sfx_name_word.h"
+#include "nameent.h"
 
 #ifdef VERSION_G8ME01
 // US version: all functions exact (loadDraw needs the two FAKE spellings marked inside it).
@@ -67,19 +68,11 @@ typedef struct WinDt {
 
 extern void SoundSetOutputMode(s32 mode);
 extern BOOL psndENVOn(u32 flags, const char* name);
-void nameEntOn(s32 type);
-void nameEntOff(void);
-const char* nameEntGetName(void);
-BOOL nameEntWait(void);
-BOOL nameEntPrepare(void);
-BOOL nameEntIsCancel(void);
 double sin(double);
 double fmod(double, double);
 void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
 void winTexSetRot(u32 id, Vec translate, Vec scale, GXColor color, f32 rot);
-void nameMaskGX(f32 alpha);
-void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* str);
 void FontDrawScaleVec(Vec scale);
 void loadMain(SequenceWork* seq);
@@ -1293,19 +1286,11 @@ extern s32 evt_sub_rumble_onoff(EventEntry* evt, BOOL isFirstCall);
 extern s32 evt_sub_animgroup_async(EventEntry* evt, BOOL isFirstCall);
 extern void SoundSetOutputMode(s32 mode);
 extern BOOL psndENVOn(u32 flags, const char* name);
-void nameEntOn(s32 type);
-void nameEntOff(void);
-const char* nameEntGetName(void);
-BOOL nameEntWait(void);
-BOOL nameEntPrepare(void);
-BOOL nameEntIsCancel(void);
 double sin(double);
 double fmod(double, double);
 void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
 void winTexSetRot(u32 id, Vec translate, Vec scale, GXColor color, f32 rot);
-void nameMaskGX(f32 alpha);
-void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* str);
 void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);

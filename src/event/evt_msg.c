@@ -6,6 +6,7 @@
 #include "manager/evtmgr_cmd.h"
 #include <string.h>
 #include <stdio.h>
+#include "battle/battle_unit.h"
 
 // US message buffer is twice as large
 #ifdef VERSION_G8ME01
@@ -31,7 +32,6 @@ extern float __fabsf(float);
 
 s32 msgWindow_Entry(const char* msg, s32 a2, s32 a3);
 s32 BattleTransID(EventEntry* event, s32 type);
-void BtlUnit_GetTalkTogePos(s32 unit, f32* x, f32* y, f32* z);
 
 // the message window's MsgWinData lives in its userdata block
 #define MSGW(w) ((MsgWinData*)(w)->userdata->address)
@@ -332,8 +332,6 @@ USER_FUNC(evt_msg_print_add_insert) {
 }
 
 void msgWindow_ForceClose(s32 id);
-void msgWindow_Repeat(s32 id);
-void msgWindow_Continue(s32 id);
 
 USER_FUNC(evt_msg_continue) {
     if (isFirstCall) {

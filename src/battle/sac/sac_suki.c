@@ -27,8 +27,6 @@
 #include "eff/n64/eff_stardust_n64.h"
 
 void btlGetScreenPoint(Vec* in, Vec* out);
-void BattleAudienceSoundWhistleKind(s32 kind);
-void BattleAudienceSoundCallKind(s32 kind);
 
 typedef struct SukiBtn {
     s32 state;  // 0x0

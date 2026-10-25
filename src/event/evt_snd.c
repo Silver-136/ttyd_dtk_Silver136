@@ -11,8 +11,6 @@
 #include "win/win_main.h"
 
 
-void psndSetReverb(s32 mode);
-BOOL N_pouchUnEquipBadgeID(s32 badgeId);
 
 void seq_gameOverInit(SequenceWork* work) {
     winReInit();

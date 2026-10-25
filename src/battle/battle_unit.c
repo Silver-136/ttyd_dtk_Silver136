@@ -4,6 +4,8 @@
 #include "system.h"
 #include <string.h>
 #include "battle/battle_status_effect.h"
+#include "battle/battle_audience.h"
+#include "battle/battle_actrecord.h"
 
 #include "battle/battle_disp.h"
 #include "mario/mario_pouch.h"
@@ -16,12 +18,8 @@
 double pow(double, double);
 void btlDispChangeAnime(BattleUnitPart* part, const char* name, s32 mode);
 void btlDispPoseAnime(BattleUnitPart* part);
-void BattleAudience_Case_MarioDanger(void);
-void BattleAudience_Case_MarioPinch(void);
 void BtlActRec_AddPoint(u8* rec, u8 points);
-void BtlActRec_AddCount(u8* rec);
 void psndSFX_pit(s32 id, s16 pitch);
-u8 psndSFX_get_vol(s32 id);
 void psndSFX_vol(s32 id, u8 vol);
 
 typedef struct BtlPoseEntry {

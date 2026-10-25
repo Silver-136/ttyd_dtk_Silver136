@@ -90,3 +90,6 @@ void shadowProjShadowDrawCountUp(void);
 void shadowSetSize(s32 id, f32 size);
 
 void U_shadowSetMode(s32 id, u8 alpha);
+s32 shadowGetCharShadowProjection(void);
+ShadowConfig* shadowGetDepthShadowConfig(void);
+ShadowConfig* shadowGetProjShadowConfig(void);

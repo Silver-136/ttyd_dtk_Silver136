@@ -19,6 +19,7 @@
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
 #include "eff/eff_magic1_n64.h"
+#include "battle/battle_unit.h"
 #define EXT_LIT(sym, val) (val)
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
 #ifdef VERSION_G8ME01
@@ -67,11 +68,8 @@ void selectWindow_Main(WindowEntry* window);
 s32 msgMain(smartEntry* smart);
 void selectWindow_Disp(CameraId camId, void* param);
 
-void BtlUnit_ChangeStayAnim(s32 unitId);
 void npcSetStayPose(const char* name);
-void BtlUnit_ChangeTalkAnim(s32 unitId);
 void npcSetTalkPose(const char* name);
-s32 psndSFXOnVol(const char* name, u8 vol);
 
 typedef struct MsgLookupEntry {
     u32 startaddr; //0x0
@@ -461,14 +459,7 @@ s32 msgMain(smartEntry* smart) {
     return 3;
 }
 
-void FontDrawNoise(void);
-void FontDrawNoiseOff(void);
-void FontDrawRainbowColor(void);
-void FontDrawRainbowColorOff(void);
-void FontDrawColorIDX(s32 idx);
-void FontDrawColor_(void);
 GXColor FontGetDrawColor(void);
-void FontDrawScale(f32 scale);
 #ifdef VERSION_G8ME01
 void FontDrawScaleVec(Vec scale);
 
@@ -481,7 +472,6 @@ void FontDrawScaleVec(Vec scale);
         FontDrawScale((c)->scale);                            \
     }
 #endif
-void FontDrawCode(f32 x, f32 y, u16 code);
 void FontDrawCodeMtx(Mtx mtx, u16 code);
 
 BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y);

@@ -81,10 +81,8 @@ typedef struct AudSound {
         (sound)->mVolumeMultiplier = 100;                                                           \
     }
 
-s32 psndSFXChk(s32 id);
 void psndSFX_vol(s32 id, s32 vol);
 void psndSFX_pit(s32 id, s32 pitch);
-u8 psndSFX_get_vol(s32 id);
 
 // local prototypes
 FileEntry* tplRead(const char* path);
@@ -121,8 +119,6 @@ s32 BattleAudience_GetPPAudienceNum_RL_Sub(s32 offset);
 BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id);
 void BattleAudience_ApRecoveryBuild(StarPowerInfo* info);
 double sqrt(double);
-s32 BattleBreakSlot_GetBreakTurn();
-void BattleBreakSlot_PointInc();
 void BattleAudienceNumToTarget(void);
 s32 BattleAudienceNumToTargetSub(void);
 void BattleAudienceAddTargetNumSub(f32 value);
@@ -167,7 +163,6 @@ void BattleAudienceNoiseMain(void);
 
 extern ItemData itemDataTable[];
 
-void BattleStatusWindowAPRecoveryOn(void);
 #pragma force_active on
 
 BattleWeapon weapon_data_akikan = {

@@ -38,11 +38,9 @@
 
 typedef struct MarcoShip { f32 angle; f32 speed; f32 max; s32 stopped; s32 state; s32 field_0x14; OSTime time; } MarcoShip;
 MarcoShip* marcoship;
-void mapSetPlayRate(const char* name, f32 rate);
 typedef struct MapAnimRate { f32 fune; f32 funeTarget; f32 nami; f32 namiTarget; } MapAnimRate;
 MapAnimRate mapAnimRate;
 static u8* _ap;
-void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
 EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);
 void mapObjGetPos(const char* name, Vec* pos);
 typedef struct LogoWork { FileEntry* tpl; f32 y; s32 alpha; s32 state; s32 counter; } LogoWork;

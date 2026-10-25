@@ -14,9 +14,9 @@
 #include "sfx_name_word.h"
 #include "mario/mario_hit.h"
 #include "mot/mot_damage.h"
+#include "koopa_motion.h"
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
-void kpa_hip(void);
 
 #ifdef VERSION_G8ME01
 #define SND1 (mario->soundId[3])

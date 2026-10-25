@@ -29,32 +29,29 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/fadedrv.h"
 #include "mario/mario.h"
+#include "battle/battle_audience.h"
+#include "battle/battle_break_slot.h"
+#include "battle/battle_stage_object.h"
+#include "battle/battle_actrecord.h"
+#include "battle/battle_camera.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
 
 // external prototypes
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
-void mapObjScale(const char* name, f32 x, f32 y, f32 z);
-BOOL BattleAfterReactionMain(void);
-void BtlActRec_JudgeTurnRuleKeep(void);
-void BtlActRec_AddCount(u8* count);
 void BattleMajinaiCheck(void);
 void BattleFogEndCheck(void);
-void BattleStatusWindowEventOff(void);
 void BattleCommandInit(BattleWork* wp);
 BOOL BattleCommandInput(BattleWork* wp);
-f32 battleCameraGetPosMoveSpeed(void);
 void BattleStatusChangeMsgAdjust(BattleWork* wp);
 BOOL BattleStatusChangeMsgMain(BattleWork* wp);
 BOOL BattleStatusChangeAnnouceMain(BattleWork* wp);
-BOOL BattleBreakSlot_CheckReaction(void);
 void BtlUnit_SetTotalHitDamage(BattleUnit* unit, s32 damage);
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 s32 BattleDamageDirect(s32 unitIdx, BattleUnit* unit, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 stopFlags, u32 damageEffect, u32 pattern);
 void effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z);
 void effFreezeN64Entry(s32 a, s32 b, f32 x, f32 y, f32 z, f32 scale);
-void BattleAudience_Case_TurnEnd(void);
 void BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 extern s32 marioDefaultWeapon_Jump[];
 extern s32 marioWeapon_KururinJump[];
@@ -351,10 +348,6 @@ BattleWeapon* _GetFirstAttackWeapon(s32 type) {
     }
 }
 
-void BattleAudience_Case_FirstAttack_Good(void);
-void BattleAudience_Case_FirstAttack_Bad(void);
-void BattleStage_WallCloseCheck(void);
-void BattleStage_NozzleWorkCheck(s32 a);
 void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** a, BattleUnit** b);
 
 

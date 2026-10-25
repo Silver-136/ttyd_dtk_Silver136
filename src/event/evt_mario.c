@@ -19,36 +19,22 @@
 #include "mario/mario_hit.h"
 #include "party/party_yoshi.h"
 #include "mot/mot_slit.h"
+#include "party/party_motion.h"
+#include "mario/mario_balloon.h"
+#include "party/party_move.h"
+#include "peach.h"
+#include "koopa_motion.h"
 
 
 void mario_plane_cancel(void);
 s32 marioGetPlaneStatus(void);
 s32 partyKill(s32 id);
-s32 partyKill2(s32 id);
 void partyGoodbye(s32 id);
 s32 partyEntry(s32 id);
 s32 partyEntry2(s32 id);
 s32 partyEntryHello(s32 id);
 s32 partyEntry2Hello(s32 id);
-s32 partyEntryPos(s32 id, f32 x, f32 y, f32 z);
-s32 partyEntry2Pos(s32 id, f32 x, f32 y, f32 z);
-void partyChgRunMode(PartyEntry* party, s32 mode);
-void partyShadowOff(PartyEntry* party);
-void peachSetStsNormal(void);
-void peachSetStsAftershower(void);
-void peachSetStsInvisible(void);
-void peachSetStsHappy(void);
-void peachSetStsUneasy(void);
-void peachSetStsAngry(void);
-void peachSetStsOrdinary(void);
-void peachSetStsCarry(void);
-void peachTransformOff(void);
-void peachTransformOn(void);
-void kpaSetLevel(s32 level);
 BOOL marioChkSlitThrouhEnd(void);
-void marioBalloonOn(s32 type);
-void marioBalloonOff(void);
-void marioChgTalkMotion(void);
 void marioRollTryCancel(void);
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
 void marioSlitForceCancel(void);
@@ -136,8 +122,6 @@ BOOL marioGetoffYoshi(void);
 void marioRollCancel(void);
 void motSlitCancel2(void);
 
-void marioClearJumpPara(void);
-void quake_kpaHipAttack(void);
 
 void rollEvtJumpSetup(void);
 void setRollEvtFlag(void);
@@ -171,10 +155,7 @@ static inline BOOL marioLandChk(f32 vy) {
 }
 
 void* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
-void N_partyFollowCloseOn(PartyEntry* party);
-void N_partyFollowCloseOff(PartyEntry* party);
 void partyMoveBehindMario3(PartyEntry* party, s32 a, f32 dir);
-void partySetDispDirToMario(PartyEntry* party);
 
 USER_FUNC(evt_mario_dokan_prepare) {
     EvtWord* args = event->args;
@@ -710,7 +691,6 @@ USER_FUNC(evt_mario_set_pose) {
 }
 
 #ifdef VERSION_G8ME01
-void partySlitReset(PartyEntry* party);
 #endif
 
 USER_FUNC(evt_mario_normalize) {

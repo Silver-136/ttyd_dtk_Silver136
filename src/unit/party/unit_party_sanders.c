@@ -20,8 +20,6 @@
 #include "unit/unit_bomzou.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
-f32 sinfd(f32 degrees);
-f32 cosfd(f32 degrees);
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

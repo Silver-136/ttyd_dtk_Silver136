@@ -21,7 +21,6 @@
 
 extern ItemData itemDataTable[];
 void qqsort(void* base, u32 n, u32 size, s32 (*compare)(const void*, const void*));
-void pouchHiraToKata(const char* msg, char* out);
 
 typedef struct WinSortData {
     const char* name;

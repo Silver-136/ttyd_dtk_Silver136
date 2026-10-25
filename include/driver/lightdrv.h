@@ -49,3 +49,7 @@ void lightGetNearObj(Vec position, LightEntry** out, s32 count, LightEntryFlags 
 
 
 
+s32 lightCheckCharaLight(void);
+LightEntry* lightGetAmbient(void);
+LightEntry* lightGetCharaAmbient(void);
+LightEntry* lightGetPaper(void);

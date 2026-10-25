@@ -114,3 +114,5 @@ f32 camRoadGetCurrentShiftXRate(void);
 void camRoadReset(void);
 
 s32 camRoadSetup(const char* name);
+void camRoadCurveOff(const char* name);
+void camRoadCurveOn(const char* name);

@@ -30,8 +30,6 @@ typedef struct YuuRankingWork { EventEntry* event; u16 flags; u32 dispFlags; f32
 #endif
 static s32 snd_id; // was a function-local static; file scope (declared before _wp: .bss is emitted reversed) keeps order _wp, snd_id
 static YuuRankingWork* _wp;
-void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* str);
-void FontDrawScale(f32 scale);
 
 static USER_FUNC(evt_yuuranking_main_func);
 USER_FUNC(yuuranking_get_monte);

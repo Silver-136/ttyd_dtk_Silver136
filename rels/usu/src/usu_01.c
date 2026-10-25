@@ -2,6 +2,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/mapdrv.h"
 
 #include "mario/mario.h"
 #include "driver/animdrv.h"
@@ -24,8 +25,6 @@ USER_FUNC(evt_mario_get_motion);
 #endif
 
 extern ItemData itemDataTable[];
-void mapObjFlagOn(const char* name, u32 flags);
-void mapObjFlagOff(const char* name, u32 flags);
 
 static USER_FUNC(bgm_start_wait);
 static USER_FUNC(booboo_main);

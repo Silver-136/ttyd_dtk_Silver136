@@ -28,9 +28,6 @@ USER_FUNC(evt_eff_delete);
 
 s32 BattleAudienceSoundCheck(s32 id);
 void BattleAudienceSoundSetVol(s32 id, u8 vol, s32 c);
-void BattleAudienceSoundHandBeat(void);
-void BattleAudienceSoundCheerKind(s32 kind, s32 a, s32 b);
-void BattleAudienceSoundWhistleKind(s32 kind);
 
 static s32 count;
 s32 count2;

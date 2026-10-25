@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "gra.h"
+#include "cam_road.h"
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(camera_curve_off);
@@ -486,14 +487,12 @@ EVT_BEGIN(gra_05_init_evt)
     RETURN
 EVT_END()
 
-void camRoadCurveOff(const char* name);
 
 USER_FUNC(camera_curve_off) {
     camRoadCurveOff("|MarioSt_CameraRoad|curve2");
     return EVT_RETURN_DONE;
 }
 
-void camRoadCurveOn(const char* name);
 
 USER_FUNC(camera_curve_on) {
     camRoadCurveOn("|MarioSt_CameraRoad|curve2");

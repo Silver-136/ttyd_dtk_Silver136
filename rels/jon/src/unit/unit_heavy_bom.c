@@ -761,7 +761,6 @@ static EVT_BEGIN(explosion_event)
     RETURN
 EVT_END()
 
-void animPoseDrawShape(s32 poseId, s32 shapeIdx);
 
 static void _fire_point_callback(BattleUnitPart* part, s32 group) {
     BattleUnit* unit = part->mOwner;

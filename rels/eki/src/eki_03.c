@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
+#include "driver/envdrv.h"
 
 #include "memory.h"
 #include "mario/mariost.h"
@@ -12,7 +13,6 @@
 
 static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
-void envGlareFilterZ(f32 z);
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cam_road_reset);

@@ -33,7 +33,6 @@ void itemStatusOn(ItemEntry* item, s32 flags);
 void shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 scale);
 void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
 void firebar_disp(CameraId camera, void* param);
-s32 psndSFXChk(s32 id);
 void _firebar_rot(FirebarWork* wp);
 void _firebar_trans(FirebarWork* wp);
 s32 _firebar_hitCheck2(FirebarWork* wp);

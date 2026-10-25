@@ -19,7 +19,6 @@ extern void partyUpdMoveSpd(PartyEntry* party);
 extern void partyWalkInit(PartyEntry* party, s32 mode);
 extern void partyGoodbyeInit(PartyEntry* party);
 extern s32 partyGoodbyeMain(PartyEntry* party);
-extern void partyChgRunMode(PartyEntry* party, s32 mode);
 
 
 static s32 nokoSe;

@@ -27,6 +27,7 @@
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
 #include "win/win_mario.h"
+#include "driver/itemdrv.h"
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);
@@ -37,8 +38,6 @@ USER_FUNC(evt_msg_fmt_str);
 extern ItemData itemDataTable[];
 void FontDrawString(f32 x, f32 y, const char* str);
 void mapObjGetPos(const char* name, Vec* pos);
-void mapObjFlagOn(const char* name, u32 mask);
-BOOL N_itemPickUpFromFieldCheck(void);
 BOOL winGhostDiaryChk(void);
 
 //.sbss

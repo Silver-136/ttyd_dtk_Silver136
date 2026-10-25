@@ -14,6 +14,7 @@
 #include <math.h>
 #include "driver/envdrv.h"
 #include "libc_decls.h"
+#include "driver/hitdrv.h"
 static inline f32 sinf(f32 x) { return sin(x); }
 #include <string.h>
 
@@ -76,10 +77,7 @@ MapWork* mapWork; //allocates two entries
 
 typedef MapEntryAnimData MapAnim;
 
-LightEntry* lightGetPaper(void);
-LightEntry* lightGetCharaAmbient(void);
 void mapGetJointsSub(MapFileJoint* joint, s32* numJoints);
-s32 lightCheckCharaLight(void);
 #define lightGetNearObj(pos, out, count, flags) ((s32 (*)(Vec*, LightEntry**, s32, LightEntryFlags))lightGetNearObj)(pos, out, count, flags)
 
 //local prototypes
@@ -383,7 +381,6 @@ MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index) {
     return mapEntrySub(joint, NULL, mtx, TRUE, index);
 }
 
-s32 shadowGetCharShadowProjection(void);
 GXTexObj* shadowGetCharShadowTexObj(void);
 GXColor shadowGetCharShadowColor(void);
 f32 (*shadowGetCharShadowProjTexMtx(void))[4];
@@ -391,13 +388,11 @@ GXTexObj* shadowGetDepthShadowTexObj(void);
 f32 (*shadowGetDepthShadowDepthMtx(void))[4];
 f32 (*shadowGetDepthShadowProjTexMtx(void))[4];
 GXColor shadowGetDepthShadowColor(void);
-ShadowConfig* shadowGetDepthShadowConfig(void);
 GXTexObj* shadowGetRamp8TexObj(void);
 GXTexObj* shadowGetRamp16TexObj(void);
 GXTexObj* shadowGetProjShadowTexObj(void);
 f32 (*shadowGetProjShadowProjTexMtx(void))[4];
 GXColor shadowGetProjShadowColor(void);
-ShadowConfig* shadowGetProjShadowConfig(void);
 void mapSetMaterial(MapObject* obj, void* material);
 void mapSetMaterial(MapObject* obj, void* material);
 void mapResetPaperAmbColor(void);
@@ -935,7 +930,6 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     disableMapDraw = FALSE;
 }
 
-void hitReInit(void);
 
 void mapUnLoad(void) {
     MapEntry* entry2;
@@ -2956,7 +2950,6 @@ static inline void mapSetObjFog(MapObject* obj) {
     }
 }
 
-LightEntry* lightGetAmbient(void);
 
 void mapSetTextureMatrix(MapMaterial* mat) {
     s32 j;

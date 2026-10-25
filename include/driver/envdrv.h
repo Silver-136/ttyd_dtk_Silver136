@@ -65,3 +65,4 @@ struct MapTevCallbackInfo;
 void envSetWater(struct MapTevCallbackInfo* info);
 
 
+void envGlareFilterZ(f32 zscale);

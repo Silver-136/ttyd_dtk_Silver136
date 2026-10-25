@@ -848,7 +848,6 @@ EVT_BEGIN(aji_09_init_evt)
     RETURN
 EVT_END()
 
-void partySetFamicomMode(PartyEntry* party, s32 mode);
 
 USER_FUNC(dot_mario) {
     PartyEntry* party = partyGetPtr(0);

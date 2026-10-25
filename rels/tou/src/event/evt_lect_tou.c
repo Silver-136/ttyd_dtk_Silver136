@@ -6,6 +6,7 @@
 #include "evt/evt_cmd.h"
 #include "mario/mario_motion.h"
 #include "pmario_sound.h"
+#include "statuswindow.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -32,8 +33,6 @@
 #include <dolphin/pad.h>
 
 static OSTime wwstart;
-void statusWinForceClose(void);
-void statusWinForceCloseClear(void);
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 typedef struct LectButtonDisp { s32 unk0; Vec pos; } LectButtonDisp;
@@ -43,7 +42,6 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) { camera->p
 void hitGrpFlagOn(const char* name, u32 flags);
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 static EffectEntry* eff;
-void itemSetPosition(ItemEntry* item, f32 x, f32 y, f32 z);
 
 static USER_FUNC(effitemget_busaiku);
 static USER_FUNC(effitemget_open);

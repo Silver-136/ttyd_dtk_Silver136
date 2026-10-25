@@ -22,6 +22,7 @@
 #include "battle/battle_database_common.h"
 #include <dolphin/pad.h>
 #include "libc_decls.h"
+#include "battle/battle_audience.h"
 
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
 #define INTPL(m, c, n, a, b) ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, m, c, n)
@@ -369,11 +370,7 @@ static EVT_BEGIN(nice_event)
     RETURN
 EVT_END()
 void zubastar_disp2D(CameraId cam, void* param);
-s32 psndSFXChk(s32 id);
 void psndSFX_pit(s32 id, s32 pitch);
-void BattleAudienceSoundCallKind(s32 kind);
-void BattleAudienceSoundWhistleKind(s32 kind);
-void btl_camera_shake_h(s32 a, f32 b, f32 c, s32 d, s32 e);
 #define SFXON(s) psndSFXOn(s)
 
 USER_FUNC(zubastar_main) {

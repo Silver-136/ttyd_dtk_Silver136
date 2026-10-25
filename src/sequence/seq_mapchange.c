@@ -29,6 +29,8 @@
 #include "statuswindow.h"
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
+#include "mario/mario_sbr.h"
+#include "driver/npcdrv.h"
 
 //.sbss
 char _next_area[0x20];
@@ -49,15 +51,7 @@ void _relUnLoad(void);
 void _load(const char*, const char*, const char*);
 void _unload(const char*, const char*, const char*);
 
-BOOL setupDataCheck(void);
-void setupDataBase(const char* area, const char* map);
-void psndMapChange(void);
-s32 psndBGMPlayTime(s32 id);
 void evt_cam_road_reset(s32, s32);
-void N_marioSetBottomlessRespawnPos(f32, f32, f32);
-void npcExecAllInitEvt(void);
-BOOL npcWaitAllInitEvtEnd(void);
-void npcExecAllReglEvt(void);
 
 static const char mc_tou[4];
 static const char mc_tou2[5];

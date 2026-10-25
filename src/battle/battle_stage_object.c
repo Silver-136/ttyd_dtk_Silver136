@@ -28,31 +28,22 @@
 #include "unit/unit_object_switch.h"
 #include "battle/battle_status_effect.h"
 #include "battle/battle_camera.h"
+#include "battle/battle_seq.h"
+#include "battle/battle_sub.h"
 
 #pragma dont_inline on
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
 
-void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
-void mapObjRotate(const char* name, f32 x, f32 y, f32 z);
 void mapGrpSetColor(const char* name, GXColor color);
-void mapPlayAnimationLv(const char* name, s32 mode, s32 level);
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
-f32 sinfd(f32 degrees);
-f32 cosfd(f32 degrees);
 void FontDrawString(f32 x, f32 y, const char* str);
-BOOL BattleCheckConcluded(BattleWork* wp);
-BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp);
-void BattleAudience_Case_HaikeiSet(void);
-void BattleAudience_Case_FallObject_Aud(s32 index, u8 type);
-void BattleAudience_Case_FallObject_Stage(void);
 EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 lifetime);
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration);
 BOOL effFallCheckHit(EffectEntry* effect);
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
 void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, u32 flags, s32* unitId, s32* partId);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
-BOOL BtlUnit_GetACPossibility(BattleUnit* unit);
 s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon);
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 

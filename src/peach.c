@@ -12,19 +12,14 @@
 #include "mario/mario_hit.h"
 #include "mario/mario_sbr.h"
 #include "driver/npcdrv.h"
+#include "mario/mario_balloon.h"
+#include "party.h"
 
 void marioChkOverhead(void);
-void marioBottomless(void);
-void marioBalloonMain(void);
 #ifdef VERSION_G8ME01
 #define mario_kemuri_80130474 mario_kemuri // US: global name
 #endif
 void mario_kemuri_80130474(void);
-void partyMain(void);
-void marioJump(void);
-void marioFall(void);
-void marioChkGnd2(void);
-void marioBoots(void);
 
 void peachChgPose(const char* name);
 void peachTransformOff(void);

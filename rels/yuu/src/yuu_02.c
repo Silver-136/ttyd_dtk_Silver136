@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "party.h"
 #include "cam_shift.h"
+#include "mario/mario_motion.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -32,7 +33,6 @@ void yuucounter_flag_on(s32 flag);
 void marioResetRollSpd(void);
 void clrRollEvtFlag(void);
 void monteCountDisp(void);
-void marioChgRollMotion(void);
 void marioRollFixOn(void);
 extern MonteTable montetable[];
 static void monte_disp(CameraId camera, void* param);

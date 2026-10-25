@@ -22,8 +22,6 @@ void FontDrawString(f32 x, f32 y, const char* str);
 #endif
 
 void printCount(CameraId camera, void* param);
-void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* str);
-void FontDrawScale(f32 scale);
 
 USER_FUNC(countDisp);
 USER_FUNC(evt_bero_get_info);

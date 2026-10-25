@@ -4,8 +4,8 @@
 #include "battle/battle_unit.h"
 #include "system.h"
 #include <string.h>
+#include "battle/battle_sub.h"
 
-f32 sinfd(f32 degrees);
 
 typedef struct CraneTimingParams {
     u8 field_0x0[0x3C - 0x0]; // 0x0, BattleActions header

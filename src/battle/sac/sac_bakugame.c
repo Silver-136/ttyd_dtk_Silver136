@@ -31,16 +31,10 @@
 #include "pmario_sound.h"
 
 void btlGetScreenPoint(Vec* in, Vec* out);
-void BattleAudienceSoundWhistleKind(s32 kind);
-void BattleAudienceSoundCallKind(s32 kind);
-void BattleAudienceSoundBooing(void);
-void BattleAudienceSoundBooingKind(s32 kind);
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
-void btl_camera_shake_h(s32 a, f32 b, f32 c, s32 d, s32 e);
 void btlDispPoseAnime(BattleUnitPart* part);
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);
 void psndSFX_pit(s32 id, s32 pitch);
-s32 psndSFXChk(s32 id);
 
 #define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 #define GET_EXIST(i) ((u8(*)(s32))BattleAudience_GetExist)(i)

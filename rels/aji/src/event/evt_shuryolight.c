@@ -6,7 +6,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "memory.h"
 
-void animPoseDrawShape(s32 poseId, s32 shapeIdx);
 void animPoseSetDispCallBack(s32 poseId, void (*callback)(void* param, s32 group), void* param);
 typedef struct ShuryoLight { NpcEntry* npc; const char** anims; s32 status; s32 group; s32 shape; } ShuryoLight;
 typedef struct ShuryoWork { s32 powerEvt; s32 headEvt; s32 tueEvt; ShuryoLight lights[5]; } ShuryoWork;

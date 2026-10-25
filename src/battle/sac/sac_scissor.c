@@ -944,8 +944,6 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
 }
 
 void btlGetScreenPoint(Vec* in, Vec* out);
-void BattleAudienceSoundCallKind(s32 kind);
-void BattleAudienceSoundHandBeat(void);
 void BattleAudienceSoundSetVol(s32 kind, s32 vol, s32 frames);
 #include "battle/battle_audience.h"
 #include "evt/evt_cmd.h"

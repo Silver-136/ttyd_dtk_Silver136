@@ -66,7 +66,6 @@ static s32 tou_bss_1C;
 static RankWork rank_work;
 static DispWork disp_work;
 static const char* suuji[10];
-void FontDrawScale(f32 scale);
 static void disp_proc(CameraId cameraId, void* param);
 typedef struct GansWork { smartEntry* buf; GXTexObj tex; s32 onoff; s32 alpha; s32 ready; } GansWork;
 GansWork* gans_wp;

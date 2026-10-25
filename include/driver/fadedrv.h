@@ -96,3 +96,5 @@ void fadeSetNarrowFast(void);
 #ifdef VERSION_G8ME01
 extern const f32 float_1_8041f770;
 #endif
+void _callback(s32 error, DVDFileInfo* info);
+void fadeSetAnimVirtualPos(f32 x, f32 y, f32 z);

@@ -5,9 +5,6 @@
 #include "mario/mariost.h"
 
 // cardmgr.c helpers (named cardE80/cardEAC/cardED0 in cardmgr.h)
-BOOL cardInsertChanged(void);
-void cardInsertWatchEnd(void);
-void cardInsertWatchStart(void);
 
 USER_FUNC(evt_fade_end_wait);
 USER_FUNC(evt_msg_continue);

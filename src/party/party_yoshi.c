@@ -29,7 +29,6 @@ typedef struct YoshiWork {
 } YoshiWork;
 
 
-extern void partyChgRunMode(PartyEntry* party, s32 mode);
 extern void partyChgPose(PartyEntry* party, const char* pose);
 extern void partyGoodbyeInit(PartyEntry* party);
 extern s32 partyGoodbyeMain(PartyEntry* party);
@@ -38,7 +37,6 @@ extern f32 marioGetMoveRate(void);
 extern HitEntry* dou10_yoko_yari2(void* out);
 extern void* partyChkFrontStep(PartyEntry* party, f32 range, f32* y, f32* a, f32* b);
 extern void psndSFXOff(s32 id);
-extern void partyUpdateKeyData(PartyEntry* party);
 extern s32 psndSFXOn_3D(s32 id, Vec* pos);
 extern void* marioSearchHead(Vec* pos, f32 range, f32* height);
 extern s32 marioChkDamageSink(void);

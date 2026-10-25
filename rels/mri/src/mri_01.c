@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "countdown.h"
+#include "mri_puni.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -25,7 +26,6 @@
 void* puniGetPunigp(void);
 void* puniGetPunidat(void);
 void puniswGetindex(s32 flag, s32 index, s32* a, s32* b);
-void puniswTrapGetindex(s32 index, s32* trap);
 void puniFadeOff(s32 index);
 static u8* bp;
 

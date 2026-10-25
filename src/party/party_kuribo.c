@@ -7,6 +7,7 @@
 #include "driver/hitdrv.h"
 #include "mario/mario_pouch.h"
 #include "driver/mobjdrv.h"
+#include "party/party_move.h"
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global kuribo_init
@@ -153,7 +154,6 @@ USER_FUNC(pre_kurio_use) {
 void marioStSystemLevel(s32 level);
 void partyGoodbyeInit(PartyEntry* party);
 BOOL partyGoodbyeMain(PartyEntry* party);
-void partyChgRunMode(PartyEntry* party, s32 mode);
 
 USER_FUNC(post_kurio_use) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -191,7 +191,6 @@ EVT_END()
 void* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 angle);
 BOOL partyGetAppearPos3(PartyEntry* party, Vec* pos);
 s32 fbatNpcTalkCheck(void);
-void partyChgMoveMode(PartyEntry* party, s32 mode);
 void partyChgMot(PartyEntry* party, s32 mot);
 void partyChkGnd(PartyEntry* party);
 f32 angleABf(f32, f32, f32, f32);

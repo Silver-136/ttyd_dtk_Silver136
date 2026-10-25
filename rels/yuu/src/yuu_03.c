@@ -4,6 +4,7 @@
 #include "cam_shift.h"
 #include "libc_decls.h"
 #include "party.h"
+#include "driver/mapdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -42,7 +43,6 @@ static void polygon(f32 x, f32 y, f32 w, f32 h, f32 u, f32 v);
 static f32 randf(f32 min, f32 max);
 void ryushi_disp(CameraId camera, void* param);
 USER_FUNC(evt_ryushi_init);
-void mapObjRotate(const char* name, f32 x, f32 y, f32 z);
 BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, SlitWork* data);
 void monteCountDisp(void);
 s32 yuucounter_get_data(void);

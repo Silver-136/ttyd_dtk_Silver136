@@ -7,11 +7,6 @@
 #include "party.h"
 #include "system.h"
 
-void partyChgRunMode(PartyEntry* party, s32 mode);
-void partyShadowOff(PartyEntry* party);
-void partyDokanEnd(s32 id, s32 type);
-s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z);
-s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z);
 void marioSlitForceCancel(void);
 
 

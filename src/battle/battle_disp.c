@@ -16,11 +16,13 @@
 #include "battle/battle_audience.h"
 #include "battle/battle_status_icon.h"
 #include "manager/evtmgr.h"
+#include "battle/battle_break_slot.h"
+#include "battle/battle_stage.h"
+#include "battle/battle_sub.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
 extern ItemData itemDataTable[];
-f32 sinfd(f32 degrees);
 s32 BtlUnit_EnemyItemCanUseCheck(s32 item);
 
 #define PART_GRAVITY(p) ((p)->gravityTimer)
@@ -136,13 +138,9 @@ void PSMTXRotRad(Mtx m, char axis, f32 rad);
 void PSMTXScale(Mtx m, f32 xS, f32 yS, f32 zS);
 void PSMTXTrans(Mtx m, f32 xT, f32 yT, f32 zT);
 int animPoseVivianMain();
-void BattleBreakSlot_Disp(void);
 void BattleCommandDisplay(BattleWork* wp);
-void BattleStageDisp(void);
 void BattleStockExpDisp(void);
 void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part);
-void BtlUnit_HpGaugeMain(BattleUnit* unit);
-BOOL animPoseTestXLU(s32 poseId);
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed);
 void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation);
 void floatOffsetControl(BattleUnitPart* part);
@@ -311,12 +309,8 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
 
 typedef void (*PartsDispCb)(BattleUnitPart*, s32);
 void shadowEntry(f32 x, f32 y, f32 z, f32 s);
-void BtlUnit_HpGaugeMain(BattleUnit* unit);
 void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part);
-BOOL animPoseTestXLU(s32 poseId);
-void BattleStageDisp(void);
 void BattleCommandDisplay(BattleWork* wp);
-void BattleBreakSlot_Disp(void);
 void BattleStockExpDisp(void);
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed);
 void gravityOffsetControl(BattleUnitPart* part);

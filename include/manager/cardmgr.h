@@ -103,3 +103,6 @@ void cardWriteHeader(void);
 void cardReadAll(void);
 void cardCreate(void);
 void cardFormat(void);
+BOOL cardInsertChanged(void);
+void cardInsertWatchEnd(void);
+void cardInsertWatchStart(void);

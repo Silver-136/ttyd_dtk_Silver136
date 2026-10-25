@@ -24,7 +24,6 @@ double sqrt(double);
 double __fabs(double);
 #define fabs(x) __fabs(x)
 
-BOOL npcCheckBlow(NpcEntry* npc);
 void PSVECSubtract(const Vec* a, const Vec* b, Vec* ab);
 
 // functions are defined in reverse of target order (deferred inlining)

@@ -16,13 +16,13 @@
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
 #include "eff/eff_splash.h"
+#include "party/party_bomhei.h"
+#include "party/party_yoshi.h"
+#include "party/party_nokonoko.h"
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
 void marioClearSlitFloor(void);
 void marioSlitForceCancel(void);
-void marioYoshiForceCancel(void);
-void nokonoko_use_cancel(void);
-void bomhei_use_cancel2(void);
 void mario_simple_kemuri(void);
 
 

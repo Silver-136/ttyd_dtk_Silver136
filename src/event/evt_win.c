@@ -26,17 +26,14 @@
 #include <string.h>
 #include "icon_ids.h"
 #include "mario/mario_party.h"
+#include "driver/itemdrv.h"
+#include "statuswindow.h"
 
 extern ItemData itemDataTable[];
 
 void mapObjGetPos(const char* name, Vec* pos);
-void mapObjFlagOn(const char* name, u32 flags);
-void mapObjFlagOff(const char* name, u32 flags);
 void FontDrawString(f32 x, f32 y, const char* str);
 BOOL winGhostDiaryChk(void);
-BOOL N_itemPickUpFromFieldCheck(void);
-void statusWinForceUpdateCoin(void);
-void FontDrawScale(f32 scale);
 s16 johoya_get(u8* table, s16 id);
 
 typedef struct UnitWinEntry {

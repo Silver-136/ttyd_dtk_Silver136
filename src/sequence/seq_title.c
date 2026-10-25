@@ -25,7 +25,6 @@
 #define PSTATIC static
 #endif
 
-void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* msg);
 
 TitleWork work2;

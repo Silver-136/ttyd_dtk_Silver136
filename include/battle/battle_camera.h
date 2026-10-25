@@ -69,3 +69,7 @@ USER_FUNC(evt_btl_camera_wait_move_end);
 void battleCameraMain(void);
 void btl_camera_set_mode(s32 pri, s32 mode);
 void btl_camera_set_moveSpeedLv(s32 pri, s32 lv);
+f32 battleCameraGetPosMoveSpeed(void);
+void btl_camera_noshake(s32 pri);
+void btl_camera_set_posoffset(s32 pri, f32 x, f32 y, f32 z);
+void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 type);

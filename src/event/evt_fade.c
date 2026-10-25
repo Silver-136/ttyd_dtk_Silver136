@@ -5,7 +5,6 @@
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/gx.h>
 
-void fadeSetAnimVirtualPos(f32 x, f32 y, f32 z);
 
 USER_FUNC(evt_fade_in) {
     EvtWord* args = event->args;

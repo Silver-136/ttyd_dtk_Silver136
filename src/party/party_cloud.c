@@ -25,8 +25,6 @@ Vec cloud_at;
 #else
 #define MW_US 0
 #endif
-void partyMoveFlyInit(PartyEntry* party, s32 arg);
-void partyFlyMain(PartyEntry* party);
 
 #include "driver/hitdrv.h"
 #include "driver/effdrv.h"
@@ -35,7 +33,6 @@ void partyFlyMain(PartyEntry* party);
 #include "mario/mario_motion.h"
 void N__cloud_use(PartyEntry* party);
 void getHitBreatheout2(PartyEntry* party, f32 unk);
-void partyChgRunMode(PartyEntry* party, s32 mode);
 void partyChgPose(PartyEntry* party, const char* pose);
 
 
@@ -61,8 +58,6 @@ static inline void cloudSweep(PartyEntry* party, f32 sign, s32 i) {
     }
 }
 #include "eff/n64/eff_kumokumo_n64.h"
-void partyChgMoveMode(PartyEntry* party, s32 mode);
-void partyUpdateKeyData(PartyEntry* party);
 
 
 

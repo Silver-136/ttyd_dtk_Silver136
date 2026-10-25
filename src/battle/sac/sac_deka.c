@@ -33,11 +33,6 @@
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 
-void BattleAudienceSoundWhistleKind(s32 kind);
-void BattleAudienceSoundCallKind(s32 kind);
-void BattleAudienceSoundHandBeat(void);
-void BattleAudienceSoundBooing(void);
-void btl_camera_shake_h(s32 a, f32 b, f32 c, s32 d, s32 e);
 void psndSFX_pit(s32 id, s32 pitch);
 void test_kururing_mapdisp(CameraId cam);
 

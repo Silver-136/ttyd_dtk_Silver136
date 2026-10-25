@@ -10,7 +10,6 @@ s32 partyEntry(PartyId id);
 s32 partyEntry2(PartyId id);
 s32 partyEntryHello(PartyId id);
 s32 partyEntry2Hello(PartyId id);
-void partyHello(PartyEntry* party);
 void partyGoodbye(s32 slot);
 void partyKill(s32 slot);
 s32 partyDoWork(void);

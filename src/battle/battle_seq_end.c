@@ -49,8 +49,6 @@
 
 void FontDrawString(f32 x, f32 y, const char* msg);
 
-void BattleAudience_Case_GreatVictory(void);
-void BattleAudience_Case_FastVictory(f32 rate);
 
 typedef struct SeqEndObj {
     Vec pos;                    // 0x0
@@ -118,7 +116,6 @@ void L__LvupParamHelpMsgDisp(CameraId camId, void* param);
 void _MarioExpDisp(CameraId camId, void* param);
 void _GetExpIcon_Disp(CameraId camId, void* param);
 void _lvup_select_object_disp(CameraId camId, void* param);
-BattleSpotWork* BatSpotGetPtr(void);
 
 
 #define SEW(wp) ((SeqEndWork*)(wp)->seqEndWork)
@@ -256,7 +253,6 @@ void btlseqEnd_DispMain(CameraId camId, void* param);
 
 #define SS(v) BattleSetSeq(wp, (BattleSequence)7, (v))
 void _GetExpIcon_End(SeqEndWork* work);
-void btl_camera_set_posoffset(s32 pri, f32 x, f32 y, f32 z);
 EffectEntry* effPointGetEntry(s32 a, s32 exp, f32 x, f32 y, f32 z, s32 c);
 
 extern PoseTableEntry pose_table_nokotarou_stay[];
@@ -1728,7 +1724,6 @@ USER_FUNC(_lvup_spot_on) {
     return 2;
 }
 
-f32 sinfd(f32);
 
 USER_FUNC(_lvup_spot_move) {
     BattleSpotWork* spot = BatSpotGetPtr();

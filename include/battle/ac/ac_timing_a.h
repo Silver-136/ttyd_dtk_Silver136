@@ -10,3 +10,4 @@ typedef struct TimingAWork {          // BattleActions.work for the TimingA comm
 } TimingAWork;
 
 s32 battleAcMain_TimingA(BattleWork* work);
+s32 battleAcTimingA_GetSuccessFrame(BattleWork* work);

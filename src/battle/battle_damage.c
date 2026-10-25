@@ -9,6 +9,8 @@
 #include "eff/n64/eff_ice_n64.h"
 #include "eff/eff_damage_star.h"
 #include "eff/eff_recovery.h"
+#include "battle/battle_audience.h"
+#include "battle/battle_actrecord.h"
 #pragma dont_inline on
 #include "battle/battle_damage.h"
 #include "battle/battle.h"
@@ -38,7 +40,6 @@ typedef struct CounterWork {
     u32 field_0x2C; // 0x2C
 } CounterWork;
 
-BOOL BtlUnit_CanGuardStatus(BattleUnit* unit);
 void btlDispPoseAnime(BattleUnitPart* part);
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
@@ -51,21 +52,13 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
 void BattleInitCounterPreCheckWork(s32* work);
 s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
-BOOL BtlUnit_GetACPossibility(BattleUnit* unit);
-void BattleAudience_Case_GuardGood(void);
-void BattleAudience_Case_GuardBad(void);
-void BattleAudience_Case_EnemyNoDamage(void);
 void BattleAudience_Case_EnemyDamage(s32 damage);
-void BattleAudience_Case_Countered(void);
 void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 
 EffectEntry* effFukidashiEntry(s32 a, s32 b, s32 c, s32 d, f32 x, f32 y, f32 z, f32 scale, f32 e);
-void BtlActRec_AddCount(u8* count);
 void BtlActRec_AddPoint(u8* rec, u8 points);
 void BattleAudience_Case_MarioBigDamage(s32 damage);
-void BattleAudience_Case_PartyDown(void);
 void BattleAudience_Case_KillEnemy(s32 level);
-void BattleAudience_Case_FinalAttack(void);
 
 
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag) {

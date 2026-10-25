@@ -21,6 +21,8 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "mot/mot_ship.h"
+#include "party.h"
+#include "mario/mario_hit.h"
 
 typedef struct MotShipWork {
     u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = N_marioShipGetDir; set to 0/1/2 by shipDecideDir
@@ -87,20 +89,14 @@ static inline s32 harborKind(HitEntry* hit) {
 BOOL checkHarbor(Vec* out);
 
 
-void allPartyRideOff(void);
-void allPartyForceRideOn(void);
 void* effFunemizuEntry(s32, f32, f32, f32, f32, f32);
 
-void allPartyRideShip(void);
-void marioClearJumpPara(void);
-void N_marioReloadMapOnBottomlessOff(void);
 
 double __fabs(double);
 HitEntry* marioChkLandon(f32, f32*);
 
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
 
-void marioCheckWallShip(f32, f32);
 void shipMove(void);
 #define EFFP() ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)
 s32 N_marioShipGetDir(void) {

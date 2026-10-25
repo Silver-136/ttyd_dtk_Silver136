@@ -29,23 +29,15 @@
 #include "libc_decls.h"
 #include "battle/battle_disp.h"
 #include "system.h"
+#include "battle/battle_stage.h"
+#include "battle/battle_actrecord.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
-void BattleMenuDisp_ActSelect_Disp(BattleWork* wp);
-void BattleMenuDisp_ActSelect_End(BattleWork* wp);
 void BattleMenuDisp_WeaponSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandWeapon* weapons, s32 a);
-void BattleMenuDisp_WeaponSelect_Disp(BattleWork* wp);
-void BattleMenuDisp_WeaponSelect_End(BattleWork* wp);
 void BattleMenuDisp_Operation_Init(BattleWork* wp, s32 a);
-void BattleMenuDisp_Operation_Disp(BattleWork* wp);
-void BattleMenuDisp_Operation_End(BattleWork* wp);
 void BattleMenuDisp_MultiItem_Init(BattleWork* wp, s32 a);
-void BattleMenuDisp_MultiItem_Disp(BattleWork* wp);
-void BattleMenuDisp_MultiItem_End(BattleWork* wp);
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
-void BattleMenuDisp_ChangePartySelect_Disp(BattleWork* wp);
-void BattleMenuDisp_ChangePartySelect_End(BattleWork* wp);
 void BattleStageOffLightInCommand(s32 a, s32 b);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 void _btlcmd_MakeMultiItemTable(BattleWork* wp);
@@ -1070,12 +1062,7 @@ s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
 #pragma dont_inline reset
 
 void BattleSamplingEnemyUpdate(BattleWorkWeaponTargets* targets);
-void BtlUnit_SetCommandAnimPose(BattleUnit* unit);
 void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
-void BattleStageOnLightInCommand(void);
-void BattleStageOffLightFriendInCommand(void);
-void BattleStageOffLightEnemyInCommand(void);
-void BattleStageOnLightEnemyInCommand(void);
 void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a);
 s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckSetup(BattleWork* wp);
@@ -1481,7 +1468,6 @@ void BattleCommandDisplay_ActMenuSetup(BattleWork* wp, u32 a) {
         return FALSE; \
     }
 
-void BattleMenuDisp_ActSelect_Main(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp);
 
@@ -1661,9 +1647,6 @@ void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a)
 }
 #pragma dont_inline reset
 
-void BattleStageOnLightFriendInCommand(void);
-void BattleStageOnLightEnemyInCommand(void);
-void BattleMenuDisp_WeaponSelect_Main(BattleWork* wp);
 void BattleCommandDisplay_WeaponSelectMenuEnd(BattleWork* wp);
 void BattleCommandDisplay_TargetSelectMenuSetup(BattleWork* wp);
 
@@ -1874,7 +1857,6 @@ void BattleCommandDisplay_OperationMenuSetup(BattleWork* wp, s32 a) {
 }
 #pragma dont_inline reset
 
-void BattleMenuDisp_Operation_Main(BattleWork* wp);
 void BattleCommandDisplay_OperationMenuEnd(BattleWork* wp);
 
 s32 BattleCommandDisplay_OperationMenuMain(BattleWork* wp) {
@@ -1986,7 +1968,6 @@ void BattleCommandDisplay_MultiItemMenuSetup(BattleWork* wp, s32 a) {
 }
 #pragma dont_inline reset
 
-void BattleMenuDisp_MultiItem_Main(BattleWork* wp);
 void BattleCommandDisplay_MultiItemMenuEnd(BattleWork* wp);
 
 s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp) {
@@ -2074,7 +2055,6 @@ void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp) {
     wp->commandMenu.flags |= 0x1001000;
 }
 
-void BattleMenuDisp_ChangePartySelect_Main(BattleWork* wp);
 void BattleCommandDisplay_ChangePartySelectMenuEnd(BattleWork* wp);
 
 s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp) {
@@ -2319,10 +2299,8 @@ void BattleCommandDisplay_AllEnd(BattleWork* wp) {
 }
 #pragma dont_inline reset
 
-void BtlActRec_AddCount(u8* p);
 void* btlataudGetAttackEventPtr(s32 id);
 void* btlataudGetMoveEventPtr(s32 id);
-void msgWindow_Continue(s32 id);
 s32 _check_weapon_type_attack(BattleWeapon* weapon);
 #define UEVT(u) ((u)->attackEventCode)
 #define UEVTMODE(u) ((u)->attackEventFlags)

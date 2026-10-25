@@ -21,8 +21,6 @@
 #include "evt/evt_snd.h"
 #include "battle/battle_database_common.h"
 
-f32 sinfd(f32 degrees);
-f32 cosfd(f32 degrees);
 u8* lightGetPaperCraft(void);
 
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);

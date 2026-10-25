@@ -13,6 +13,7 @@
 #include "libc_decls.h"
 #include <math.h>
 #include "driver/camdrv.h"
+#include "driver/fadedrv.h"
 #define EXT_LIT(sym, val) (val)
 
 //.data
@@ -72,7 +73,6 @@ TEXPalette* env_tpl = NULL;
 s32 tpl_ok = 0;
 
 //local prototypes
-void _callback(s32 result, DVDFileInfo* fileInfo);
 void envCapture(CameraId camId, void* param);
 void envCapture2(CameraId camId, void* param);
 void envDisp(CameraId camId, void* param);

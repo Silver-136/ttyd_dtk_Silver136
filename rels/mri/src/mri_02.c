@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "driver/hitdrv.h"
+#include "driver/mapdrv.h"
 
 #include "pmario_sound.h"
 #include "manager/evtmgr_cmd.h"
@@ -10,8 +12,6 @@
 
 typedef struct Mri02Switch { f32 base; f32 weight; f32 target; f32 pos; } Mri02Switch;
 Mri02Switch mri02switch;
-void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
-void hitBindUpdate(const char* name);
 
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_info);

@@ -38,3 +38,7 @@ void cloud_hover_main(PartyEntry* party);
 void cloud_init(PartyEntry* party);
 void cloud_move(PartyEntry* party);
 void cloud_use(PartyEntry* party);
+void N_cloudLockAnimationsOff(PartyEntry* party);
+void N_cloudLockAnimationsOn(PartyEntry* party);
+f32 cloudGetBreathDist(void);
+void mot_cloud(void);

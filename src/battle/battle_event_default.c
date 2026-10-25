@@ -14,13 +14,10 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_batstage.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_audience.h"
 
 
-f32 sinfd(f32 degrees);
 BOOL BattlePartyAnimeLoad(s32 id);
-void BattleAudience_Case_Escape(void);
-void BattleAudience_Case_Escape_Bad(void);
-void BattleAudience_Case_Escape_Good(void);
 s32 BattleDamageDirect(s32 attackerId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage,
                        u32 flags, s32 code, u32 counter);
 

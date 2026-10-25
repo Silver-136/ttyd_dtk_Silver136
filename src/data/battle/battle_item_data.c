@@ -21,13 +21,10 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_audience.h"
 #include "evt/evt_mobj.h"
+#include "statuswindow.h"
 
 extern ItemData itemDataTable[];
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
-void N_statusClearBlink(void);
-void statusMarioHPBlink(s32 frames);
-void statusPartyHPBlink(s32 frames);
-void statusFPBlink(s32 frames);
 EffectEntry* effNanigaEntry(s32 type, s32* table, s32 item, f32 x, f32 y, f32 z);
 void _nancy_disp(CameraId cameraId, void* param);
 void _disp_item_icon(CameraId cameraId, void* param);

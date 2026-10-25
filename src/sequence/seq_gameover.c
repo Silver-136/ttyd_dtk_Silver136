@@ -21,6 +21,7 @@
 #include "countdown.h"
 #include "cam_road.h"
 #include "cam_shift.h"
+#include "driver/npcdrv.h"
 
 typedef struct GameOverWork {
     EventEntry* evt; // 0x0
@@ -29,7 +30,6 @@ typedef struct GameOverWork {
 
 void _relUnLoad(void);
 void _unload(const char* map, const char* nextMap, const char* nextBero);
-void npcClearDeadInfo(void);
 
 USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mapobj_flag_onoff);

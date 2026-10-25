@@ -10,10 +10,8 @@ void hitObjAttrOff(const char* name, s32 attr);
 void hitGrpAttrOn(const char* name, s32 attr);
 void hitGrpAttrOff(const char* name, s32 attr);
 void hitObjFlagOn(const char* name, u16 flag);
-void hitObjFlagOff(const char* name, u16 flag);
 void hitGrpFlagOn(const char* name, u16 flag);
 void hitGrpFlagOff(const char* name, u16 flag);
-void hitBindUpdate(const char* name);
 
 HitDamageReturn* hitDmgretPtr;
 

@@ -5,10 +5,10 @@
 #include "battle/battle_unit.h"
 #include "data/item_data.h"
 #include "system.h"
+#include "battle/battle_sub.h"
 
 extern ItemData itemDataTable[];
 
-s32 BtlCompForwardLv(s32 dir, f32 x);
 
 #pragma inline_max_total_size(100000)
 

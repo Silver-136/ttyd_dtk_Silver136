@@ -25,7 +25,6 @@
 typedef struct { s32 v[8]; } SlotCards8;
 typedef struct { s32 v[5]; } SlotCards5;
 
-void BattleAudienceNumToTarget(void);
 
 BreakSlotReel* BattleBreakSlotReelGetPtr(s32 no);
 void BattleBreakSlot_Start(void);
@@ -280,10 +279,6 @@ void BattleBreakSlot_Init(void) {
 }
 
 s32 BattleAudienceAddAudienceNum(s32 num);
-void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 x);
-void btl_camera_noshake(s32 pri);
-void BattleAudienceSoundRun(s32 id);
-void BattleAudienceSoundBooing(void);
 
 
 void BattleBreakSlot_Main(void) {

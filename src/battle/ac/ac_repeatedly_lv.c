@@ -10,9 +10,6 @@
 
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);
 void BattleAcDrawGauge(f32 anim, s32 x, s32 y, u8 a, s32 n, s32 v0, s32 v1, s32 v2, s32 flags);
-void BattleAcGaugeSeInit(void);
-void BattleAcGaugeSeDelete(void);
-void BattleAcGaugeSeUpdate(f32 gauge);
 
 typedef struct RepeatedlyLvWork {
     u32 mask;    // 0x0

@@ -221,3 +221,13 @@ void SoundEfxSetLPF(s32 chan, s16 freq);
 BOOL SoundEfxCheck(s32 chan);
 
 void SoundSSMuteOff(s32 chan);
+u32 SoundSSCheck(s32 chan);
+void SoundSSContinueCh(s32 chan);
+void SoundSSFadeoutCh(s32 chan);
+void SoundSSMuteOn(s32 chan);
+void SoundSSPlayCh(s32 chan, const char* name);
+void SoundSSSetPanCh(s32 chan, u8 pan);
+void SoundSSSetPlayFreqCh(s32 chan, u16 freq);
+void SoundSSSetSrndPanCh(s32 chan, u8 span);
+void SoundSSSetVolCh(s32 chan, u8 vol);
+void SoundSSStopCh(s32 chan);

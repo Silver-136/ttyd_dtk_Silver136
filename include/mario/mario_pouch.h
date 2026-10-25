@@ -510,3 +510,5 @@ char* pouchGetYoshiName(void);
 
 BOOL pouchRemoveItemIndex(ItemType type, s32 index);
 void pouchSortItem(s32 mode);
+BOOL N_pouchUnEquipBadgeID(s32 badgeId);
+void pouchHiraToKata(const char* src, char* dst);

@@ -80,3 +80,6 @@ Vec* hitGetDamageReturnPos(HitEntry* hit);
 void hitBindMapObj(const char* hitName, const char* mapobjName);
 
 void hitDelete(const char* name);
+void hitBindUpdate(const char* name);
+void hitObjFlagOff(const char* name, u16 mask);
+void hitReInit(void);

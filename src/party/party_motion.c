@@ -23,7 +23,6 @@
 #include <math.h>
 
 static BOOL partyChkMarioFollowY(MarioWork* mario);
-void partyPaperOff(PartyEntry* party);
 void partyChgMotSlitFloor(PartyEntry* party);
 
 static s32 unk_804189f4;
@@ -42,43 +41,26 @@ void partyWalkChkGnd(PartyEntry* party);
 void* partySearchHead(PartyEntry* party, Vec* pos, f32* height, f32 dir);
 s32 partyChkNoStandMobj(HitEntry* hit);
 void partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out);
-void partyClearFootmark2(void);
-void partyChgStayPose(PartyEntry* party);
-void partyChkWall(PartyEntry* party);
-void partyChgRunMode(PartyEntry* party, s32 mode);
 void partyMoveBehindMario(PartyEntry* party, s32 a);
 s32 marioChkDeepSleep(void);
 s32 chuchu_searchObject(void);
 void partyChgPose(PartyEntry* party, const char* pose);
 void partyForceSetSpd(PartyEntry* party, f32 a);
 void partyChgPaper(PartyEntry* party, const char* name);
-void partyPaperLightOff(PartyEntry* party);
 void marioClearSlitFloor(void);
 void movePos(f32* x, f32* z, f32 dist, f32 dir);
-void partyMoveCheckWall(PartyEntry* party);
-void partyChgWalkPose(PartyEntry* party, f32 speed);
-void partyChgMoveMode(PartyEntry* party, s32 mode);
-void partySetDir(PartyEntry* party, f32 x, f32 z);
 s32 partyGetFootmarkId();
-void partyNextReadId(s32 id);
 void partyGetAppearPos4(PartyEntry* party, Vec* pos);
-void N_partyPlaySfxPartyLanding1(PartyEntry* party);
 
 // Note: the real evt_snd user functions live in this split (see evt_snd.c).
 // Functions are defined in reverse order (-inline deferred).
 
-void psndSetReverb(s32 mode);
 BOOL psndENVOn(s32 a, s32 b);
 BOOL psndENVOn_f_d(s32 a, s32 b, s32 c, s32 d);
 BOOL psndENVOff_f_d(s32 a, s32 b, s32 c);
 void psndENV_LPF(s32 a, u16 b);
-void psndSFX_dist(s32 id, u16 dist);
 void psndSFX_vol(s32 id, u8 vol);
 void psndSFX_pit(s32 id, s16 pit);
-s32 psndSFXChk(s32 id);
-s32 psndSFXOn_(const char* name);
-void psndBGMScope(s32 a, s32 b);
-void psndBGM_rate(s32 a, u16 b);
 BOOL psndBGMOn_f_d(s32 a, s32 b, s32 c, s32 d, s32 e);
 void psndBGMOn_f(s32 a, s32 b, s32 c, s32 d);
 
@@ -313,7 +295,6 @@ void N_partyFollowCloseOff(PartyEntry* party) {
     party->trigFlags &= ~0x20000;
 }
 
-void partySetDispDirToMario(PartyEntry* party);
 void partySetTargetSpd(PartyEntry* party, f32 spd);
 void partyGetAppearPos3(PartyEntry* party, Vec* pos);
 static inline HitEntry* partyBehindGround(PartyEntry* party) {
@@ -328,12 +309,6 @@ static inline HitEntry* partyBehindGround(PartyEntry* party) {
     return hit;
 }
 
-s32 partyGetFootmarkWriteId(s32 id);
-s32 partyGetFootmarkReadId(s32 id);
-f32 partyGetTargetDist(s32 id, f32 x, f32 z);
-f32 partyGetTargetDir(s32 id, f32 x, f32 z);
-f32 partyGetTargetMovespd(s32 id);
-void partyGetReadId(s32 id, f32* x, f32* y, f32* z);
 static f32 partyStayDist(PartyEntry* party);
 static u32 partyGetFrontAttr(PartyEntry* party, f32 dir);
 static f32 partyHomingOff(PartyEntry* party);
@@ -345,7 +320,6 @@ static void partyPoseA2(PartyEntry* party);
 s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
 
 f32 partyGetTargetDist3D(s32 id, Vec* p);
-f32 partyGetTargetDist(s32 id, f32 x, f32 z);
 HitEntry* marioChkWallAround(Vec* pos, s32 a, f32 spd, f32 dir, f32 w, f32 h);
 #ifdef VERSION_G8ME01
 HitEntry* partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 w, f32 h);
@@ -854,10 +828,8 @@ typedef struct PartyFootmark {
     Vec pos;
 } PartyFootmark;
 
-f32 partyGetTargetMovespd2(PartyEntry* party);
 PartyFootmark* partyGetFootmarkPtr(s32 id);
 s32 marioGetSlitFloorPos(Vec* pos);
-f32 partyGetTargetDistY(s32 id, f32 y);
 
 void partyGetReadId2(s32 id, Vec* pos);
 void L_getTargetPos(s32 id, Vec* pos);

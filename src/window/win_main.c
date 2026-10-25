@@ -18,6 +18,7 @@
 #include "evt/evt_yuugijou.h"
 #include "koopa.h"
 #include "eff/eff_magic1_n64.h"
+#include "party/party_motion.h"
 #ifdef VERSION_G8ME01
 char* strstr(const char* str, const char* sub);
 #endif
@@ -102,7 +103,6 @@ static WindowWork* wp;
 s32 winRootMain(WindowWork* wp);
 void winRootDisp(CameraId camId, WindowWork* wp);
 const char* winGetMapTplName(void);
-void kpaPauseSE2(void);
 void FontDrawScaleVec(Vec scale);
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
 void winLectureKeyMask(void);
@@ -110,7 +110,6 @@ void iconGetTexObj(GXTexObj* obj, u16 iconId);
 void winDisp(CameraId camId, void* param);
 void winDispKoopa(CameraId camId, void* param);
 
-void allPartyForceSlitOff(void);
 
 WindowWork* winGetPtr(void) {
     return wp;

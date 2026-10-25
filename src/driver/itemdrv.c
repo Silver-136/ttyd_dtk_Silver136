@@ -36,6 +36,7 @@
 #include "mot/mot_jabara.h"
 #include "eff/eff_starstone.h"
 #include "eff/eff_splash.h"
+#include "party/party_nokonoko.h"
 
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
@@ -58,13 +59,10 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
 }
 
 extern ItemData itemDataTable[];
-BOOL marioChkItemGetMotion(void);
-void marioChgGetItemMotion(void);
 void marioSetCamId(s32 camId);
 u32 psndBGMChkSilent(s32 a1);
 BOOL psndBGMChk(s32 a1);
 s32 msgWindow_Entry(const char* msg, s32 a2, s32 a3);
-BOOL nokonoko_holdItem(void);
 EffectEntry* effHagetakaFlushN64Entry(s32 a1, s32 a2, f32 x, f32 y, f32 z, f32 scale);
 
 BOOL itemGetNokoCheck(ItemEntry* entry);

@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "battle/battle_sub.h"
 
 #include "battle/battle_stage_object.h"
 #include "system.h"
@@ -10,7 +11,6 @@
 #include "battle/battle_stage.h"
 #include "driver/npcdrv.h"
 
-f32 sinfd(f32 degrees);
 
 static USER_FUNC(_wave_offset);
 extern BattleUnitKind unit_killer_cannon;

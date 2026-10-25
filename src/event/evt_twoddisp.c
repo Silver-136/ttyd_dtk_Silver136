@@ -10,7 +10,6 @@
 #include "evt/evt_twoddisp.h"
 #include "libc_decls.h"
 
-void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* str);
 
 typedef struct TwodEntry {

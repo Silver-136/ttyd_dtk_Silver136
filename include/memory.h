@@ -65,3 +65,5 @@ extern BOOL g_bFirstSmartAlloc;
 #ifdef VERSION_G8ME01
 extern void* R_battlemapalloc_base_ptr;
 #endif
+void N_battleMapAlloc(void);
+void N_battleMapFree(void);

@@ -1,6 +1,4 @@
 #ifdef VERSION_G8ME01
-void N_battleMapFree(void);
-void N_battleMapAlloc(void);
 #endif
 #include "battle/battle.h"
 #include "battle/battle_information.h"
@@ -32,6 +30,7 @@ void N_battleMapAlloc(void);
 #include "system.h"
 #include <dolphin/mtx.h>
 #include "driver/mobjdrv.h"
+#include "driver/mapdrv.h"
 
 typedef struct BattleSeqWork {
     s32 sequence;   // 0x0
@@ -41,8 +40,6 @@ typedef struct BattleSeqWork {
 } BattleSeqWork;
 
 BOOL bmapLoad(const char* a, const char* b);
-void bmapUnLoad(void);
-BattleUnitType BattleTransPartyIdToUnitKind(s32 id);
 void psndBGMOn_f(u32 a, u32 b, u32 c, u32 d);
 BOOL psndENVOn(u32 a, char* b);
 

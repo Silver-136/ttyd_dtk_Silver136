@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "pmario_sound.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -23,7 +24,6 @@
 typedef struct CortezWork { s16 state; s16 count; s16 audienceId[100]; s16 wait[100]; s16 timer[100]; s16 seq[100]; void* eff[100]; Vec srcPos[100]; Vec dstPos[100]; } CortezWork;
 void* effSpiritEntry(s32 type, s32 time, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, f32 scale);
 void* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 a, f32 b, f32 c);
-u8 psndSFX_get_vol(s32 id);
 BattleUnitSetup entry_honeduka;
 
 USER_FUNC(_cortez_check_drain_audience);

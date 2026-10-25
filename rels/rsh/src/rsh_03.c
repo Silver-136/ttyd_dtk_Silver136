@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/mapdrv.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mario.h"
@@ -22,7 +23,6 @@ Vec camPt;
 Vec camAt;
 EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 void mapObjGetPos(const char* name, Vec* pos);
-void mapObjFlagOn(const char* name, u32 flags);
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cam3d_evt_off);

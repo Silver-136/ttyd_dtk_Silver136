@@ -75,3 +75,5 @@ typedef enum BattleActRecordConditionType {
 } BattleActRecordConditionType;
 
 void BtlActRec_JudgeRuleKeep(void);
+void BtlActRec_AddCount(u8* count);
+void BtlActRec_JudgeTurnRuleKeep(void);

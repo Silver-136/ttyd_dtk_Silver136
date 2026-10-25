@@ -35,7 +35,6 @@ f32 partyUpdMoveSpd(PartyEntry* party, f32 spd);
 extern void party_set_behind_dir(PartyEntry* party);
 extern void party_motion_fall(PartyEntry* party);
 static void flyMain(PartyEntry* party);
-extern void partyChgRunMode(PartyEntry* party, s32 mode);
 extern void vivianShadow(PartyEntry* party);
 extern HitEntry* marioChkWallAround(Vec* pos, s32 a, f32 spd, f32 dir, f32 w, f32 h);
 #ifdef VERSION_G8ME01

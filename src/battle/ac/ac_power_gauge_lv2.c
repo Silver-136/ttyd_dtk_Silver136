@@ -10,9 +10,6 @@
 
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);
 void BattleAcDrawGauge(f32 ratio, s32 x, s32 y, s32 icon, s32 count, s32 a, s32 b, s32 c, s32 flags);
-void BattleAcGaugeSeInit(void);
-void BattleAcGaugeSeUpdate(f32 value);
-void BattleAcGaugeSeDelete(void);
 
 typedef struct PGLv2Work {
     s32 timer;     // 0x0

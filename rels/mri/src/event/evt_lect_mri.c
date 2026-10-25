@@ -5,6 +5,7 @@
 #include "evt/evt_cmd.h"
 #include "mario/mario_motion.h"
 #include "pmario_sound.h"
+#include "statuswindow.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -35,8 +36,6 @@
 #include <dolphin/pad.h>
 
 static OSTime wwstart;
-void statusWinForceClose(void);
-void statusWinForceCloseClear(void);
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 typedef struct LectButtonDisp { s32 unk0; Vec pos; } LectButtonDisp;
@@ -44,7 +43,6 @@ typedef struct LectButton { u8 flags; u8 seq; u8 pad_2[0x8 - 0x2]; LectButtonDis
 static LectButton lbtn[2];
 static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) { camera->presetPos = camera->cameraPos; camera->presetAt = camera->cameraAt; PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos); PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt); camera->startTimeA = gp->renderTime; camera->durationA = 0; camera->stateA = 3; camera->curveA = 11; }
 void hitGrpFlagOn(const char* name, u32 flags);
-void itemSetPosition(ItemEntry* item, f32 x, f32 y, f32 z);
 
 USER_FUNC(evt_cam3d_evt_set_rel);
 USER_FUNC(evt_mario_adjust_dir);

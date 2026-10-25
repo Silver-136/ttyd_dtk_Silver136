@@ -378,3 +378,6 @@ extern u32 anim_ext_tex_size;
 extern const s32 g_moamoa_chain_num;
 
 void animPoseAutoRelease(s32 type);
+void L_animPoseWorldPositionEvalOff(s32 poseId);
+void animPoseDrawShape(s32 poseId, s32 shapeId);
+BOOL animPoseTestXLU(s32 poseId);

@@ -34,9 +34,6 @@
 
 void btlGetScreenPoint(Vec* in, Vec* out);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
-void BattleAudienceSoundHandBeat(void);
-void BattleAudienceSoundCallKind(s32 kind);
-void BattleAudienceSoundBooingKind(s32 kind);
 
 #define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 

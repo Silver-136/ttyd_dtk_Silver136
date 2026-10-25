@@ -14,14 +14,9 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "nameent.h"
+#include "statuswindow.h"
 
-void statusWinForceUpdateCoin(void);
-void nameEntOff(void);
-const char* nameEntGetName(void);
-BOOL nameEntWait(void);
-BOOL nameEntPrepare(void);
-void nameEntOn(s32 type);
-s32 winMgrSelectGetCursor(WinMgrSelect* sel);
 
 #define RAW_GET(fn) ((s32(*)(void))(fn))
 

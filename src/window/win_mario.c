@@ -16,6 +16,7 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
+#include "battle/battle_seq_end.h"
 
 extern ItemData itemDataTable[];
 void winIconInit(void);
@@ -393,7 +394,6 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
-const char* BattleGetRankNameLabel(s32 level);
 
 #ifdef VERSION_G8ME01
 void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...);

@@ -123,7 +123,6 @@ extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 extern NpcSetupBattleInfo btlsetup_tou_tbl[];
 
-void FontDrawScale(f32 scale);
 
 static RankData rank_work;
 static DispWork disp_work;

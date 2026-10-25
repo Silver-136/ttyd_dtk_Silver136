@@ -787,7 +787,6 @@ EVT_BEGIN(hei_07_init_evt)
     RETURN
 EVT_END()
 
-void mapPlayAnimationLv(const char* animName, s32 mode, s32 level);
 
 static void callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;

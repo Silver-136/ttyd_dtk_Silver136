@@ -58,3 +58,7 @@ extern EvtWord shine_effect[];
 extern EvtWord star_effect[];
 
 void BattleBreakSlot_HideReel(void);
+BOOL BattleBreakSlot_CheckReaction(void);
+void BattleBreakSlot_Disp(void);
+s32 BattleBreakSlot_GetBreakTurn(void);
+void BattleBreakSlot_PointInc(void);

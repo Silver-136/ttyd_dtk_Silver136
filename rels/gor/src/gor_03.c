@@ -63,10 +63,8 @@ extern GorYuuWork* yuwp;
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
 typedef struct SlotDrum { const char* drum[3]; const char* reber; const char* anim; const char* window[3][3]; const char* neon[3]; } SlotDrum;
-void mapObjRotate(const char* name, f32 x, f32 y, f32 z);
 void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel);
 #define UPSIDEGARA ((s32(*)[3][8])upsidegara)
-void mapPlayAnimationLv(const char* name, s32 mode, s32 level);
 void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel);
 #define SLOTGARA ((s32(*)[3][8])slotgara)
 s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);

@@ -6,6 +6,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "pmario_sound.h"
+#include "statuswindow.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -30,8 +31,6 @@ USER_FUNC(evt_mario_wait_landon);
 #endif
 
 static OSTime wwstart;
-void statusWinForceClose(void);
-void statusWinForceCloseClear(void);
 static s32 x_flag_data[2];
 static void lecture_button_disp(CameraId camera, void* param);
 typedef struct LectButtonDisp { s32 unk0; Vec pos; } LectButtonDisp;

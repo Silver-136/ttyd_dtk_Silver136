@@ -34,7 +34,6 @@
 #define MW_US 0
 #endif
 
-extern void partyChgRunMode(PartyEntry* party, s32 mode);
 extern void partyGoodbyeInit(PartyEntry* party);
 extern s32 partyGoodbyeMain(PartyEntry* party);
 extern void partyGetAppearPos(PartyEntry* party, Vec* pos);

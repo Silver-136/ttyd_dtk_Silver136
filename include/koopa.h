@@ -64,3 +64,10 @@ typedef struct KpaWork {
     s32 swimSplashTimer;          // 0x150, kpa_swim_splash
 } KpaWork;                  // size 0x154
 f32 kpaSetFallPara(void);
+void kpaFireDelete(void);
+void kpaMain(void);
+s32 kpaNoHitEnemyCheck(void);
+void kpaPauseSE2(void);
+void kpaPreInit(void);
+void kpaSetLevel(s32 lv);
+void kpa_jumpNpc(void);

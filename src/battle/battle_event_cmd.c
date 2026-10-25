@@ -19,6 +19,9 @@
 #include "battle/battle_stage.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_stage_object.h"
+#include "battle/battle_damage.h"
+#include "battle/battle_audience.h"
+#include "battle/battle_seq.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -2650,10 +2653,6 @@ USER_FUNC(btlevtcmd_CheckCommandUnit) {
     return EVT_RETURN_DONE;
 }
 
-void BattleStoreExp(BattleWork* wp, s32 exp);
-void BattleStoreCoin(BattleWork* wp, s32 coin);
-s32 BtlUnit_GetExp(BattleUnit* unit);
-s32 BtlUnit_GetCoin(BattleUnit* unit);
 
 USER_FUNC(btlevtcmd_ChangeKind) {
     s32 btlId, id, kind;
@@ -2821,7 +2820,6 @@ USER_FUNC(btlevtcmd_JumpSetting) {
 
 /* movers begin (half_B) */
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
-void BtlUnit_LoadSeMode(s32 mode, s32 kind, BtlPoseSoundTable* table, BecSndWork* work);
 void _UnitMoveSoundControl(BattleUnit* unit);
 void _UnitMoveSoundControlEnd(BattleUnit* unit);
 
@@ -3112,10 +3110,7 @@ USER_FUNC(btlevtcmd_GetMoveFrame) {
 }
 
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
-f32 sinfd(f32 degrees);
-f32 cosfd(f32 degrees);
 
-f32 atan2f_safety(f32 y, f32 x);
 USER_FUNC(btlevtcmd_DivePosition) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -3456,12 +3451,8 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 #include "data/item_data.h"
 void BattleStatusWindowCheck(void);
 s32 BattleEnemyUseItemCheck(BattleUnit* unit);
-void BattleAudience_ApRecoveryBuild(StarPowerInfo* info);
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
-void battleSortPhaseMoveTable(BattleWork* wp, s32 a);
 void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
-void BattleAfterReactionEntry(s32 id, s32 value);
-BOOL BtlUnit_GetACPossibility(BattleUnit* unit);
 BattleWeapon* BattleGetSelectWeapon(BattleWork* wp);
 extern ItemData itemDataTable[];
 #include "driver/animdrv.h"
@@ -3469,24 +3460,16 @@ void btlDispChangePeraAnime(BattleUnitPart* part, s32 anim);
 void BtlUnit_PoseSoundInit(BattleUnitPart* part);
 void btlDispPoseAnime(BattleUnitPart* part);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* name);
-void BattleAudience_Case_Appeal(BattleUnit* unit);
-s32 battleAcTimingA_GetSuccessFrame(BattleWork* wp);
-s32 BattleActionCommandGetPrizeLv(BattleWork* wp, BattleUnit* unit, s32 value);
 void BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon);
-void BattleActionCommandSetup(BattleWork* wp, s32 a, BattleUnit* unit, s32 b, s32 c);
-void BattleActionCommandSetDifficulty(BattleWork* wp, BattleUnit* unit, s32 diff);
 void BattleAttackDeclareAll(BattleWork* wp);
 void BattleGetFirstAttackUnit(BattleWork* wp, s32* a, BattleUnit** unit);
 void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, s32 a, s32* b, s32* c);
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s32 pitch, Vec* pos);
-void BtlUnit_SetSeMode(BecSndWork* work, const char* name0, const char* name1, s16 c, s16 e, s16 unused, s16 a, s16 b);
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit);
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
-void BattleAttackDeclare(s32* unitIdx, s32* partIdx);
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
-void BattleInitCounterPreCheckWork(s32* work);
 s32 BattleCheckCounter(s32* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 void* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
@@ -5064,8 +5047,6 @@ USER_FUNC(btlevtcmd_AudienceDeclareACResult) {
     return EVT_RETURN_DONE;
 }
 
-void BattleAudience_Case_AcrobatGood(void);
-void BattleAudience_Case_AcrobatBad(void);
 
 USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
     EvtWord* args = event->args;
@@ -5960,12 +5941,6 @@ USER_FUNC(btlevtcmd_GetItemRecoverParam) {
     return EVT_RETURN_DONE;
 }
 
-void BattleStage_DestroyA1(void);
-void BattleStage_DestroyA2(void);
-void BattleStage_DestroyB(void);
-void BattleStage_NozzleDirChangeCheck(void);
-void BattleStage_NozzleWorkCheck(s32);
-void BattleStage_IronFrameFallCheck(void);
 void BattleStage_ObjectFallCheck(void);
 
 USER_FUNC(btlevtcmd_WeaponAftereffect) {

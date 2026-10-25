@@ -9,9 +9,6 @@
 #include <string.h>
 
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
-void BattleAcGaugeSeInit(void);
-void BattleAcGaugeSeUpdate(f32 value);
-void BattleAcGaugeSeDelete(void);
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);
 
 typedef struct PowerGaugeWork {

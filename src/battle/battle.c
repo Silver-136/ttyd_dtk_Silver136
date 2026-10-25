@@ -16,6 +16,7 @@
 #include "unit/unit_mario.h"
 #include "unit/unit_system.h"
 #include "driver/animdrv.h"
+#include "statuswindow.h"
 
 typedef enum EquipFlags {
     EQUIP_RESET = 1 << 0,   // 0x1, clear/reset equipped badges
@@ -432,9 +433,7 @@ void BattlePartyAnimeLoad(s32 partyId) {
     animEffectAsync(setup->mUnitKindParams->mParts->modelName, 1);
 }
 
-BOOL statusWinCheck(void);
 void statusWinOpen(void);
-void statusWinClose(void);
 
 BattleUnit* BattleChangeParty(BattleWork* wp) {
     s32 kind = wp->commandMenu.partyKind;
@@ -852,7 +851,6 @@ void BattleAfterReactionRelease(s32 a, s32 b) {
     }
 }
 
-BOOL BattleCheckConcluded(BattleWork* wp);
 
 BOOL BattleAfterReactionMain(void) {
     s32 id;

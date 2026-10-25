@@ -18,38 +18,14 @@
 
 
 void mapObjGetPos(const char* name, Vec* pos);
-void mapObjFlagOn(const char* name, u32 flags);
-void mapObjFlagOff(const char* name, u32 flags);
-void mapObjGetFlushColor(const char* name, u8* r, u8* g, u8* b, u8* a);
-void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a);
-void mapGrpSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a);
-void mapObjFlushOn(const char* name);
-void mapObjFlushOff(const char* name);
-void mapGrpFlushOn(const char* name);
-void mapGrpFlushOff(const char* name);
-void mapObjClearOffScreen(const char* name);
-void mapGrpClearOffScreen(const char* name);
 void mapObjSetOffScreen(const char* name, s32 val);
 void mapGrpSetOffScreen(const char* name, s32 val);
-void mapSetPlayRate(const char* name, f32 rate);
-void mapReStartAnimation(const char* name);
-void mapReStartAnimationAll(const char* name);
-void mapPauseAnimation(const char* name);
-void mapPauseAnimationAll(const char* name);
-void mapPlayAnimationLv(const char* name, s32 mode, s32 level);
 void mapObjSetColor(const char* name, GXColor color);
 void mapGrpSetColor(const char* name, GXColor color);
-void mapBlendOff(void);
-void mapBlendOff2(void);
 void mapSetBlend(GXColor color);
 void mapSetBlend2(GXColor color);
-void mapFogOn(void);
-void mapFogOff(void);
 void mapGetFog(s32* type, f32* start, f32* end, GXColor* color);
 void mapSetFog(s32 type, f32 start, f32 end, GXColor color);
-void mapObjScale(const char* name, f32 x, f32 y, f32 z);
-void mapObjRotate(const char* name, f32 x, f32 y, f32 z);
-void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
 
 USER_FUNC(N_evt_mapdisp_onoff);
 USER_FUNC(evt_map_replace_mapobj);

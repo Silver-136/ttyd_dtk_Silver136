@@ -11,7 +11,6 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-void partySetFamicomMode(PartyEntry* party, s32 mode);
 
 void _unresolved(void);
 void _epilog(void);

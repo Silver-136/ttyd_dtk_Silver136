@@ -76,3 +76,4 @@ extern const char kururinName[];
 BOOL mobjCheckExec();
 void mobjReset(BOOL inBattle);
 void mobjSetPosition(const char* name, f32 x, f32 y, f32 z);
+void mobjKoopaOn(void);
