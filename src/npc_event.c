@@ -106,6 +106,8 @@ USER_FUNC(_2d_dead_jump) {
         npc->jumpTargetPos.z = tz;
         npc->jumpStartPos = npc->position;
         PSVECSubtract(&npc->jumpTargetPos, &npc->jumpStartPos, &d);
+        // FAKE: an if/else that only self-assigns d.y; the then-branch statement and the else block are both needed
+        // (an empty else gives the same code, the plain if or no statement do not)
         if (d.x * d.x + d.z * d.z > 0.0f) {
             d.y = d.y;
         } else {

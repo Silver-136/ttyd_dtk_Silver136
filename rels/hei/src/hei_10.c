@@ -46,6 +46,8 @@ typedef struct Chorobon {
 typedef struct ChorobonWork { s32 field_0x0; s32 count; Chorobon* chb; } ChorobonWork;
 static ChorobonWork* wp;
 static f32 randf(f32 min, f32 max);
+// FAKE: the `a = a;` lines in chb_sin/chb_cos keep each quadrant's polynomial in the target float registers
+// (polySinf/polyCosf from poly_trig.h and removing them change the register choice)
 static inline f32 chb_sin(f32 x) {
     f32 a = 0.00761f;
     f32 b = 0.16605f;

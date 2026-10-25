@@ -26,6 +26,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | US | src/mario/mario_pouch.c | pouchHiraToKata | US: s and d are re-assigned inside the language branch (they already hold these values) | see comment |
 | US | src/mario/mario_pouch.c | pouchSortItem | US: block-scoped locals (shadowing j/i) and a separate sort counter m steer register colouring | see comment |
 | US | src/party/party_hit.c | partyChkBetweenWalls | US: `party_addf` inline add keeps the original fadds operand order (pos.y, 10.0f) | see comment |
+| Both | src/npc_event.c | _2d_dead_jump | `if (...) { d.y = d.y; } else { d.y = d.y; }` around the moveDir computation | no if, a plain if, removing the then-branch self-assignment (an empty else is equivalent) |
 | Both | src/mario/mario_pouch.c | pouchGetPartyAttackLv | the partyData[partyId] address is formed by hand from mpp and sizeof(PouchPartyData) (same address), so the field offset is added to the scaled index before the base (addi + lhax) | `mpp->partyData[partyId].attackLevel` (add + lha 10) |
 | Both | libs/dolsdk2004/src/gx/GXGeometry.c | GXGetCullMode | `// fake match?` in the non-default branch: decodes genMode with `((hwMode >> 0xD) & 0x2) | (((int)hwMode >> 0xE) & 0x2) >> 1` instead of the readable switch | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | 17 functions (MCCInit .. MCCWrite, MailboxCheck, ...) | `int unused[N];` dead local in each function (comment "fake but blah"): pads the stack frame to the original size | see comment |
@@ -34,6 +35,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | libs/musyx/src/musyx/runtime/s_data.c | sndSeqPlayEx | local `GSROOT* r` stepped one GSTACK per iteration (`/* fake: ... */`) to reproduce the register use of seqPlaySong(.., 0, ..) inlined | see comment |
 | Both | rels/bom/src/bom_01.c | disp_sight | pointer-typed ?: = id = on ? 6 : 7 without the branchless int select (same value) | int/unsigned/char/short/long long arms, enum-like and propagated arms, if/else, inline helpers, a named k (spill worker, tiny TUs re_work/spill/bom/tern) |
 | Both | rels/bom/src/bom_01.c | ext_main | SFX_NAME_WORD (integer round trip) on the literal, see jump() | plain literals, a named `se` local, `(const char*)(u32)` (spill worker) |
+| Both | rels/hei/src/hei_10.c | chb_sin, chb_cos | `a = a;` self-assignments in the quadrant branches (register choice) | the shared polySinf/polyCosf (only float registers differ); removing them |
 | Both | rels/bom/src/bom_01.c | jump | SFX_NAME_WORD (integer round trip) makes the front end hoist the literal address (same pointer value) | see comment |
 | Both | rels/dou/src/dou_10.c | dou_namiatari_check | (decomp-permuter): the addf inline fixes the fadds operand order | see comment |
 | Both | rels/eki/src/eki_00.c | ext_moamoa_main | integer cast (SFX_NAME_WORD) hoists the literal as an @ temp; block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target | see comment |

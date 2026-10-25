@@ -5706,7 +5706,7 @@ s32 evt_toge_setup(EventEntry *event, BOOL isFirstCall)
         p->defense = 10;
         p->reserved_582 = 10;
         p->damage = 0;
-        p->attacked = kind * 0;
+        p->attacked = 0;
         p->hitRate = 50;
         p->hitRateGuard = 70;
         p->flags |= 0x101402;
