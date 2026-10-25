@@ -179,87 +179,16 @@ static const char* battlePartyMsgPad[6] = {0};
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 // US-only localized article/plural helpers (evt_msg_fmt_int / evtMsgFmtInt, evt_msg_fmt_str / evtMsgFmtStr, below).
-// Their article strings and tables are the US data by name.
 // clang-format off
-#pragma force_active on // FAKE: the helpers reach most of these strings as words + offset from one base,
-                        // so force_active keeps the unnamed ones in the pool
-const char str_Einen_802cc608[8] = {0x45, 0x69, 0x6E, 0x65, 0x6E, 0x20, 0x00, 0x00};
-const char str_einen_802cc610[8] = {0x65, 0x69, 0x6E, 0x65, 0x6E, 0x20, 0x00, 0x00};
-const char str_COIN_802cc618[8] = {0x3C, 0x43, 0x4F, 0x49, 0x4E, 0x3E, 0x00, 0x00};
-const char str_M_nzen_802cc620[8] = {0x4D, 0xFC, 0x6E, 0x7A, 0x65, 0x6E, 0x00, 0x00};
-const char str_POINT_802cc628[8] = {0x3C, 0x50, 0x4F, 0x49, 0x4E, 0x54, 0x3E, 0x00};
-const char str_Punkte_802cc630[8] = {0x50, 0x75, 0x6E, 0x6B, 0x74, 0x65, 0x00, 0x00};
-const char str_moneta_802cc638[8] = {0x6D, 0x6F, 0x6E, 0x65, 0x74, 0x61, 0x00, 0x00};
-const char str_monete_802cc640[8] = {0x6D, 0x6F, 0x6E, 0x65, 0x74, 0x65, 0x00, 0x00};
-const char str_point_802cc648[8] = {0x3C, 0x70, 0x6F, 0x69, 0x6E, 0x74, 0x3E, 0x00};
-const char str_OGGETTO_802cc650[12] = {0x3C, 0x4F, 0x47, 0x47, 0x45, 0x54, 0x54, 0x4F, 0x3E, 0x00, 0x00, 0x00};
-const char str_oggetto_802cc65c[8] = {0x6F, 0x67, 0x67, 0x65, 0x74, 0x74, 0x6F, 0x00};
-const char str_oggtti_802cc664[8] = {0x6F, 0x67, 0x67, 0x74, 0x74, 0x69, 0x00, 0x00};
-const char str_ITEM_802cc66c[8] = {0x3C, 0x49, 0x54, 0x45, 0x4D, 0x3E, 0x00, 0x00};
-const char str_AN_ITEM_802cc674[12] = {0x3C, 0x41, 0x4E, 0x5F, 0x49, 0x54, 0x45, 0x4D, 0x3E, 0x00, 0x00, 0x00};
-const char str_MPLdie_802cc680[12] = {0x3C, 0x4D, 0x50, 0x4C, 0x64, 0x69, 0x65, 0x3E, 0x00, 0x00, 0x00, 0x00};
-const char str_FPLdie_802cc68c[12] = {0x3C, 0x46, 0x50, 0x4C, 0x64, 0x69, 0x65, 0x3E, 0x00, 0x00, 0x00, 0x00};
-const char str_NPLdie_802cc698[12] = {0x3C, 0x4E, 0x50, 0x4C, 0x64, 0x69, 0x65, 0x3E, 0x00, 0x00, 0x00, 0x00};
-const char str_Einen_802cc6a4[8] = {0x3C, 0x45, 0x69, 0x6E, 0x65, 0x6E, 0x3E, 0x00};
-const char str_Ein_ITEM_802cc6ac[12] = {0x3C, 0x45, 0x69, 0x6E, 0x5F, 0x49, 0x54, 0x45, 0x4D, 0x3E, 0x00, 0x00};
-const char str_ein_ITEM_802cc6b8[12] = {0x3C, 0x65, 0x69, 0x6E, 0x5F, 0x49, 0x54, 0x45, 0x4D, 0x3E, 0x00, 0x00};
-const char str_Einen_ITEM_802cc6c4[16] = {0x3C, 0x45, 0x69, 0x6E, 0x65, 0x6E, 0x5F, 0x49, 0x54, 0x45, 0x4D, 0x3E, 0x00, 0x00, 0x00, 0x00};
-const char str_einen_ITEM_802cc6d4[16] = {0x3C, 0x65, 0x69, 0x6E, 0x65, 0x6E, 0x5F, 0x49, 0x54, 0x45, 0x4D, 0x3E, 0x00, 0x00, 0x00, 0x00};
-const char str_PLles_802cc6e4[8] = {0x3C, 0x50, 0x4C, 0x6C, 0x65, 0x73, 0x3E, 0x00};
-const char str_Un_ITEM_802cc6ec[12] = {0x3C, 0x55, 0x6E, 0x5F, 0x49, 0x54, 0x45, 0x4D, 0x3E, 0x00, 0x00, 0x00};
-const char str_un_ITEM_802cc6f8[12] = {0x3C, 0x75, 0x6E, 0x5F, 0x49, 0x54, 0x45, 0x4D, 0x3E, 0x00, 0x00, 0x00};
-const char str_PLunos_802cc704[12] = {0x3C, 0x50, 0x4C, 0x75, 0x6E, 0x6F, 0x73, 0x3E, 0x00, 0x00, 0x00, 0x00};
-const char str_PLunas_802cc710[12] = {0x3C, 0x50, 0x4C, 0x75, 0x6E, 0x61, 0x73, 0x3E, 0x00, 0x00, 0x00, 0x00};
-const char str_Ein_80421764[] = "Ein ";
-const char str_Eine_8042176c[] = "Eine ";
-const char str_Die_80421774[] = "Die ";
-const char str_ein_8042177c[] = "ein ";
-const char str_eine_80421784[] = "eine ";
-const char str_die_8042178c[] = "die ";
-const char str_Un_80421794[4] = {0x55, 0x6E, 0x20, 0x00};
-const char str_Une_80421798[] = "Une ";
-const char str_Les_804217a0[] = "Les ";
-const char str_un_804217a8[4] = {0x75, 0x6E, 0x20, 0x00};
-const char str_une_804217ac[] = "une ";
-const char str_les_804217b4[] = "les ";
-const char str_Una_804217bc[] = "Una ";
-const char str_Unos_804217c4[] = "Unos ";
-const char str_Unas_804217cc[] = "Unas ";
-const char str_una_804217d4[] = "una ";
-const char str_unos_804217dc[] = "unos ";
-const char str_unas_804217e4[] = "unas ";
-const char str_NUM_804217ec[] = "<NUM>";
-const char str_PCTd_804217f4[4] = {0x25, 0x64, 0x00, 0x00};
-const char str_S_804217f8[4] = {0x3C, 0x53, 0x3E, 0x00};
-const char str_s_804217fc[4] = {0x73, 0x00, 0x00, 0x00};
-const char str_N_80421800[4] = {0x3C, 0x4E, 0x3E, 0x00};
-const char str_X_80421804[4] = {0x3C, 0x58, 0x3E, 0x00};
-const char str_x_80421808[4] = {0x78, 0x00, 0x00, 0x00};
-const char str_M_nze_8042180c[] = "M\xFCnze";
-const char str_Punkt_80421814[] = "Punkt";
-const char str_punto_8042181c[] = "punto";
-const char str_punti_80421824[] = "punti";
-const char str_Punto_8042182c[] = "Punto";
-const char str_Punti_80421834[] = "Punti";
-const char str_an_8042183c[4] = {0x61, 0x6E, 0x20, 0x00};
-const char str_a_80421840[4] = {0x61, 0x20, 0x00, 0x00};
-const char str_AN_80421844[] = "<AN>";
-const char str_M_8042184c[4] = {0x3C, 0x4D, 0x3E, 0x00};
-const char str_F_80421850[4] = {0x3C, 0x46, 0x3E, 0x00};
-const char str_un_80421854[] = "<un>";
-const char str_MNA_8042185c[] = "<MNA>";
-const char str_FNA_80421864[] = "<FNA>";
-const char* msg_de_article_nom_cap_tbl[6] = {(const char*)str_Ein_80421764, (const char*)str_Eine_8042176c, (const char*)str_Ein_80421764, (const char*)str_Die_80421774, (const char*)str_Die_80421774, (const char*)str_Die_80421774};
-const char* msg_de_article_nom_tbl[6] = {(const char*)str_ein_8042177c, (const char*)str_eine_80421784, (const char*)str_ein_8042177c, (const char*)str_die_8042178c, (const char*)str_die_8042178c, (const char*)str_die_8042178c};
-const char* msg_de_article_acc_cap_tbl[6] = {(const char*)str_Einen_802cc608, (const char*)str_Eine_8042176c, (const char*)str_Ein_80421764, (const char*)str_Die_80421774, (const char*)str_Die_80421774, (const char*)str_Die_80421774};
-const char* msg_de_article_acc_tbl[6] = {(const char*)str_einen_802cc610, (const char*)str_eine_80421784, (const char*)str_ein_8042177c, (const char*)str_die_8042178c, (const char*)str_die_8042178c, (const char*)str_die_8042178c};
-const char* msg_fr_article_cap_tbl[3] = {(const char*)str_Un_80421794, (const char*)str_Une_80421798, (const char*)str_Les_804217a0};
-const char* msg_fr_article_tbl[3] = {(const char*)str_un_804217a8, (const char*)str_une_804217ac, (const char*)str_les_804217b4};
-const char* msg_es_article_cap_tbl[1] = {(const char*)str_Un_80421794};
-const char* msg_es_article_cap_tbl_tail[5] = {(const char*)str_Una_804217bc, "", "", (const char*)str_Unos_804217c4, (const char*)str_Unas_804217cc};
-const char* msg_es_article_tbl[6] = {(const char*)str_un_804217a8, (const char*)str_una_804217d4, "", "", (const char*)str_unos_804217dc, (const char*)str_unas_804217e4};
+const char* msg_de_article_nom_cap_tbl[6] = {"Ein ", "Eine ", "Ein ", "Die ", "Die ", "Die "};
+const char* msg_de_article_nom_tbl[6] = {"ein ", "eine ", "ein ", "die ", "die ", "die "};
+const char* msg_de_article_acc_cap_tbl[6] = {"Einen ", "Eine ", "Ein ", "Die ", "Die ", "Die "};
+const char* msg_de_article_acc_tbl[6] = {"einen ", "eine ", "ein ", "die ", "die ", "die "};
+const char* msg_fr_article_cap_tbl[3] = {"Un ", "Une ", "Les "};
+const char* msg_fr_article_tbl[3] = {"un ", "une ", "les "};
+const char* msg_es_article_cap_tbl[6] = {"Un ", "Una ", "", "", "Unos ", "Unas "};
+const char* msg_es_article_tbl[6] = {"un ", "una ", "", "", "unos ", "unas "};
 
-#pragma force_active reset
 char* strcat(char* dst, const char* src);
 char* strstr(const char* s, const char* sub);
 
@@ -500,7 +429,6 @@ USER_FUNC(evt_msg_npc) {
 // US-only localized article/plural helpers. The US build emits functions in reverse source
 // order, so these sit at the end of the file to come first in .text.
 void evtMsgFmtStr(char* buf, const char* name) {
-    const char* words = str_Einen_802cc608; /* FAKE: one base for the pooled .rodata strings */
     char tmp[0xA00];
     u32 len;
     char* marker;
@@ -521,34 +449,34 @@ void evtMsgFmtStr(char* buf, const char* name) {
         case 'i':
         case 'o':
         case 'u':
-            article = str_an_8042183c;
+            article = "an ";
             break;
         default:
-            article = str_a_80421840;
+            article = "a ";
             break;
         }
-        if ((marker = strstr(buf, str_AN_80421844)) != NULL) {
+        if ((marker = strstr(buf, "<AN>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, article);
             strcat(tmp, marker + 4);
             strcpy(buf, tmp);
-            if ((marker = strstr(buf, words + 0x64)) != NULL) {
+            if ((marker = strstr(buf, "<ITEM>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);
                 tmp[len] = 0;
                 strcat(tmp, name);
                 strcat(tmp, marker + 6);
             }
-        } else if ((marker = strstr(buf, words + 0x6C)) != NULL) {
+        } else if ((marker = strstr(buf, "<AN_ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, article);
             strcat(tmp, name);
             strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, words + 0x64)) != NULL) {
+        } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
@@ -558,62 +486,62 @@ void evtMsgFmtStr(char* buf, const char* name) {
         break;
     case 2:
         form = 0;
-        if (strstr(name, str_M_8042184c) != NULL) {
+        if (strstr(name, "<M>") != NULL) {
             form = 0;
-        } else if (strstr(name, str_F_80421850) != NULL) {
+        } else if (strstr(name, "<F>") != NULL) {
             form = 1;
-        } else if (strstr(name, str_N_80421800) != NULL) {
+        } else if (strstr(name, "<N>") != NULL) {
             form = 2;
-        } else if (strstr(name, words + 0x78) != NULL) {
+        } else if (strstr(name, "<MPLdie>") != NULL) {
             form = 3;
-        } else if (strstr(name, words + 0x84) != NULL) {
+        } else if (strstr(name, "<FPLdie>") != NULL) {
             form = 4;
-        } else if (strstr(name, words + 0x90) != NULL) {
+        } else if (strstr(name, "<NPLdie>") != NULL) {
             form = 5;
         }
-        if ((marker = strstr(buf, words + 0x9C)) != NULL) {
+        if ((marker = strstr(buf, "<Einen>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_de_article_acc_cap_tbl[form]);
             strcat(tmp, marker + 7);
             strcpy(buf, tmp);
-            if ((marker = strstr(buf, words + 0x64)) != NULL) {
+            if ((marker = strstr(buf, "<ITEM>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);
                 tmp[len] = 0;
                 strcat(tmp, name);
                 strcat(tmp, marker + 6);
             }
-        } else if ((marker = strstr(buf, words + 0xA4)) != NULL) {
+        } else if ((marker = strstr(buf, "<Ein_ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_de_article_nom_cap_tbl[form]);
             strcat(tmp, name);
             strcat(tmp, marker + 10);
-        } else if ((marker = strstr(buf, words + 0xB0)) != NULL) {
+        } else if ((marker = strstr(buf, "<ein_ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_de_article_nom_tbl[form]);
             strcat(tmp, name);
             strcat(tmp, marker + 10);
-        } else if ((marker = strstr(buf, words + 0xBC)) != NULL) {
+        } else if ((marker = strstr(buf, "<Einen_ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_de_article_acc_cap_tbl[form]);
             strcat(tmp, name);
             strcat(tmp, marker + 12);
-        } else if ((marker = strstr(buf, words + 0xCC)) != NULL) {
+        } else if ((marker = strstr(buf, "<einen_ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_de_article_acc_tbl[form]);
             strcat(tmp, name);
             strcat(tmp, marker + 12);
-        } else if ((marker = strstr(buf, words + 0x64)) != NULL) {
+        } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
@@ -623,42 +551,42 @@ void evtMsgFmtStr(char* buf, const char* name) {
         break;
     case 3:
         form = 0;
-        if (strstr(name, str_M_8042184c) != NULL) {
+        if (strstr(name, "<M>") != NULL) {
             form = 0;
-        } else if (strstr(name, str_F_80421850) != NULL) {
+        } else if (strstr(name, "<F>") != NULL) {
             form = 1;
-        } else if (strstr(name, words + 0xDC) != NULL) {
+        } else if (strstr(name, "<PLles>") != NULL) {
             form = 2;
         }
-        if ((marker = strstr(buf, str_un_80421854)) != NULL) {
+        if ((marker = strstr(buf, "<un>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_fr_article_tbl[form]);
             strcat(tmp, marker + 4);
             strcpy(buf, tmp);
-            if ((marker = strstr(buf, words + 0x64)) != NULL) {
+            if ((marker = strstr(buf, "<ITEM>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);
                 tmp[len] = 0;
                 strcat(tmp, name);
                 strcat(tmp, marker + 6);
             }
-        } else if ((marker = strstr(buf, words + 0xE4)) != NULL) {
+        } else if ((marker = strstr(buf, "<Un_ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_fr_article_cap_tbl[form]);
             strcat(tmp, name);
             strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, words + 0xF0)) != NULL) {
+        } else if ((marker = strstr(buf, "<un_ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_fr_article_tbl[form]);
             strcat(tmp, name);
             strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, words + 0x64)) != NULL) {
+        } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
@@ -668,48 +596,48 @@ void evtMsgFmtStr(char* buf, const char* name) {
         break;
     case 4:
         form = 0;
-        if (strstr(name, str_M_8042184c) != NULL) {
+        if (strstr(name, "<M>") != NULL) {
             form = 0;
-        } else if (strstr(name, str_F_80421850) != NULL) {
+        } else if (strstr(name, "<F>") != NULL) {
             form = 1;
-        } else if (strstr(name, str_MNA_8042185c) != NULL) {
+        } else if (strstr(name, "<MNA>") != NULL) {
             form = 2;
-        } else if (strstr(name, str_FNA_80421864) != NULL) {
+        } else if (strstr(name, "<FNA>") != NULL) {
             form = 3;
-        } else if (strstr(name, words + 0xFC) != NULL) {
+        } else if (strstr(name, "<PLunos>") != NULL) {
             form = 4;
-        } else if (strstr(name, words + 0x108) != NULL) {
+        } else if (strstr(name, "<PLunas>") != NULL) {
             form = 5;
         }
-        if ((marker = strstr(buf, str_un_80421854)) != NULL) {
+        if ((marker = strstr(buf, "<un>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_es_article_tbl[form]);
             strcat(tmp, marker + 4);
             strcpy(buf, tmp);
-            if ((marker = strstr(buf, words + 0x64)) != NULL) {
+            if ((marker = strstr(buf, "<ITEM>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);
                 tmp[len] = 0;
                 strcat(tmp, name);
                 strcat(tmp, marker + 6);
             }
-        } else if ((marker = strstr(buf, words + 0xE4)) != NULL) {
+        } else if ((marker = strstr(buf, "<Un_ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_es_article_cap_tbl[form]);
             strcat(tmp, name);
             strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, words + 0xF0)) != NULL) {
+        } else if ((marker = strstr(buf, "<un_ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
             strcat(tmp, msg_es_article_tbl[form]);
             strcat(tmp, name);
             strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, words + 0x64)) != NULL) {
+        } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
@@ -718,7 +646,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
         }
         break;
     case 5:
-        if ((marker = strstr(buf, words + 0x64)) != NULL) {
+        if ((marker = strstr(buf, "<ITEM>")) != NULL) {
             len = strlen(buf) - strlen(marker);
             strncpy(tmp, buf, len);
             tmp[len] = 0;
@@ -756,21 +684,20 @@ USER_FUNC(evt_msg_fmt_str) {
 }
 
 void evtMsgFmtInt(char* buf, s32 count) {
-    const char* words = str_Einen_802cc608; /* FAKE: one base for the pooled .rodata strings */
     char* marker;
     u32 len;
     char num[16];
     u32 numLen;
     char* found;
 
-    found = strstr(buf, str_NUM_804217ec);
+    found = strstr(buf, "<NUM>");
     if (found == NULL) {
         return;
     }
     numLen = strlen(buf) - strlen(found);
     strncpy(msg_num_buf, buf, numLen);
     msg_num_buf[numLen] = 0;
-    sprintf(num, str_PCTd_804217f4, count);
+    sprintf(num, "%d", count);
     strcat(msg_num_buf, num);
     strcat(msg_num_buf, found + 5);
 
@@ -778,15 +705,15 @@ void evtMsgFmtInt(char* buf, s32 count) {
     case 1:
     case 4:
     case 6:
-        if ((marker = strstr(msg_num_buf, str_S_804217f8)) != NULL) {
+        if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count != 1) {
-                strcat(msg_plural_buf, str_s_804217fc);
+                strcat(msg_plural_buf, "s");
             }
             strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, str_N_80421800)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
@@ -794,23 +721,23 @@ void evtMsgFmtInt(char* buf, s32 count) {
         }
         break;
     case 3:
-        if ((marker = strstr(msg_num_buf, str_X_80421804)) != NULL) {
+        if ((marker = strstr(msg_num_buf, "<X>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count > 1) {
-                strcat(msg_plural_buf, str_x_80421808);
+                strcat(msg_plural_buf, "x");
             }
             strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, str_S_804217f8)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count > 1) {
-                strcat(msg_plural_buf, str_s_804217fc);
+                strcat(msg_plural_buf, "s");
             }
             strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, str_N_80421800)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
@@ -818,35 +745,35 @@ void evtMsgFmtInt(char* buf, s32 count) {
         }
         break;
     case 2:
-        if ((marker = strstr(msg_num_buf, words + 0x10)) != NULL) {
+        if ((marker = strstr(msg_num_buf, "<COIN>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count == 1) {
-                strcat(msg_plural_buf, str_M_nze_8042180c);
+                strcat(msg_plural_buf, "M\xFCnze");
             } else {
-                strcat(msg_plural_buf, words + 0x18);
+                strcat(msg_plural_buf, "M\xFCnzen");
             }
             strcat(msg_plural_buf, marker + 6);
-        } else if ((marker = strstr(msg_num_buf, words + 0x20)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<POINT>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count == 1) {
-                strcat(msg_plural_buf, str_Punkt_80421814);
+                strcat(msg_plural_buf, "Punkt");
             } else {
-                strcat(msg_plural_buf, words + 0x28);
+                strcat(msg_plural_buf, "Punkte");
             }
             strcat(msg_plural_buf, marker + 7);
-        } else if ((marker = strstr(msg_num_buf, str_S_804217f8)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count != 1) {
-                strcat(msg_plural_buf, str_s_804217fc);
+                strcat(msg_plural_buf, "s");
             }
             strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, str_N_80421800)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
@@ -854,55 +781,55 @@ void evtMsgFmtInt(char* buf, s32 count) {
         }
         break;
     case 5:
-        if ((marker = strstr(msg_num_buf, words + 0x10)) != NULL) {
+        if ((marker = strstr(msg_num_buf, "<COIN>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count == 1) {
-                strcat(msg_plural_buf, words + 0x30);
+                strcat(msg_plural_buf, "moneta");
             } else {
-                strcat(msg_plural_buf, words + 0x38);
+                strcat(msg_plural_buf, "monete");
             }
             strcat(msg_plural_buf, marker + 6);
-        } else if ((marker = strstr(msg_num_buf, words + 0x40)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<point>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count == 1) {
-                strcat(msg_plural_buf, str_punto_8042181c);
+                strcat(msg_plural_buf, "punto");
             } else {
-                strcat(msg_plural_buf, str_punti_80421824);
+                strcat(msg_plural_buf, "punti");
             }
             strcat(msg_plural_buf, marker + 7);
-        } else if ((marker = strstr(msg_num_buf, words + 0x20)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<POINT>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count == 1) {
-                strcat(msg_plural_buf, str_Punto_8042182c);
+                strcat(msg_plural_buf, "Punto");
             } else {
-                strcat(msg_plural_buf, str_Punti_80421834);
+                strcat(msg_plural_buf, "Punti");
             }
             strcat(msg_plural_buf, marker + 7);
-        } else if ((marker = strstr(msg_num_buf, words + 0x48)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<OGGETTO>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count == 1) {
-                strcat(msg_plural_buf, words + 0x54);
+                strcat(msg_plural_buf, "oggetto");
             } else {
-                strcat(msg_plural_buf, words + 0x5C);
+                strcat(msg_plural_buf, "oggtti");
             }
             strcat(msg_plural_buf, marker + 7);
-        } else if ((marker = strstr(msg_num_buf, str_S_804217f8)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
             if (count != 1) {
-                strcat(msg_plural_buf, str_s_804217fc);
+                strcat(msg_plural_buf, "s");
             }
             strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, str_N_80421800)) != NULL) {
+        } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
             len = strlen(msg_num_buf) - strlen(marker);
             strncpy(msg_plural_buf, msg_num_buf, len);
             msg_plural_buf[len] = 0;
