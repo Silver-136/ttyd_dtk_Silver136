@@ -759,7 +759,7 @@ USER_FUNC(check_satellite) {
     if (!all) {
         part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
         part2 = BtlUnit_GetPartsPtr(unit, 2);
-        if (part->attributes & 0x40000000) {
+        if (part->attributes & kImmuneToNegativeStatus) {
             evt = evtEntryType(hakai_snd_event, event->priority, 0, event->type);
             evt->unitId = event->unitId;
             evt->ownerNPC = event->ownerNPC;
@@ -783,8 +783,8 @@ USER_FUNC(check_satellite) {
                 effGlassN64Entry(2, 60, x + dx, y + dy, z, 1.0f);
             }
         }
-        part->attributes &= ~0x40000000;
-        part2->attributes &= ~0x20000000;
+        part->attributes &= ~kImmuneToNegativeStatus;
+        part2->attributes &= ~kImmuneToDamageAndStatus;
         part->defenseAttr = &defence_attr;
         for (i = 0; i < 5; i++) {
             part->defense->defenses[i] = defencecopy[i];
@@ -793,7 +793,7 @@ USER_FUNC(check_satellite) {
     } else {
         part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
         part2 = BtlUnit_GetPartsPtr(unit, 2);
-        if (!(part->attributes & 0x40000000)) {
+        if (!(part->attributes & kImmuneToNegativeStatus)) {
             f32 px;
             f32 py;
             f32 pz;
@@ -815,8 +815,8 @@ USER_FUNC(check_satellite) {
 
             ud[4] = 2.5f * unit->mSizeMultiplier;
         }
-        part->attributes |= 0x40000000;
-        part2->attributes |= 0x20000000;
+        part->attributes |= kImmuneToNegativeStatus;
+        part2->attributes |= kImmuneToDamageAndStatus;
         part->defenseAttr = &defence_attr_muteki;
         for (i = 0; i < 5; i++) {
             part->defense->defenses[i] = defencecopy[i];

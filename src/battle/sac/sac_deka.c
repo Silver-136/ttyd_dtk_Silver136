@@ -763,7 +763,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                     w->enemyVel[*n].y += 0.5f * m->vel[0][i].y;
                     i2 = BtlUnit_GetBodyPartsId(unit);
                     part = BtlUnit_GetPartsPtr(unit, i2);
-                    if (part->attributes & 0x20000000) {
+                    if (part->attributes & kImmuneToDamageAndStatus) {
                         continue;
                     }
                     if (part->attributes & 0x4000) {

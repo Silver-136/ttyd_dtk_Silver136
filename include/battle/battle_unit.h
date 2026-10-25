@@ -42,9 +42,9 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kHammerlikeCannotTarget = (1 << 21),     // 0x200000
     kShellTosslikeCannotTarget = (1 << 22),  // 0x400000
     kUnknown_0x800000 = (1 << 23),           // 0x800000
-    kUnk_ImmuneToDamageOrStatus = (1 << 29), // 0x20000000
-    kUnk_ImmageToOHKO = (1 << 30),           // 0x40000000
-    kUnk_ImmuneToStatus = (1 << 31)          // 0x80000000
+    kImmuneToDamageAndStatus = (1 << 29),   // 0x20000000, no HP/FP damage and no status (battle_damage.c)
+    kImmuneToNegativeStatus = (1 << 30),    // 0x40000000, sleep, stop, poison, ... and instant kill blocked
+    kImmuneToStatus = (1 << 31)             // 0x80000000, no status at all
 } PartsAttribute_Flags;
 
 typedef enum BattleUnitAttribute_Flags { // 32-bit size

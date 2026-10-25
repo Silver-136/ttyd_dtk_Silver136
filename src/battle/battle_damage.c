@@ -403,7 +403,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     if (fn == NULL) {
         return 0;
     }
-    if (part->attributes & 0x20000000) {
+    if (part->attributes & kImmuneToDamageAndStatus) {
         return 0;
     }
     if (attacker && (weapon->special & SPECIAL_BADGE_POWER) && attacker->badgesEquipped.AllOrNothing &&
@@ -611,7 +611,7 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
     if (fn == NULL) {
         return 0;
     }
-    if (part->attributes & 0x20000000) {
+    if (part->attributes & kImmuneToDamageAndStatus) {
         return 0;
     }
     if (attacker && (weapon->special & SPECIAL_BADGE_POWER) && attacker->badgesEquipped.AllOrNothing &&
@@ -946,72 +946,72 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
     ok = 0;
     BtlUnit_GetStatus(unit, STATUS_CHARGE, NULL, &prevStrength);
     switch (type) {
-        case 0x16:
-        case 0x17:
-        case 0x18:
+        case STATUS_HOLD_FAST:
+        case STATUS_HP_REGEN:
+        case STATUS_FP_REGEN:
             break;
-        case 0x13:
-        case 0x14:
+        case STATUS_FAST:
+        case STATUS_SLOW:
             if (time <= 0) {
                 ok = 1;
             }
             break;
-        case 0:
-        case 0x15:
+        case STATUS_ALLERGIC:
+        case STATUS_PAYBACK:
             if (time <= 0) {
                 ok = 1;
             }
             break;
-        case 0xa:
-        case 0xb:
-        case 0xc:
-        case 0xd:
-        case 0xe:
-        case 0xf:
+        case STATUS_HUGE:
+        case STATUS_TINY:
+        case STATUS_ATTACK_UP:
+        case STATUS_ATTACK_DOWN:
+        case STATUS_DEFENSE_UP:
+        case STATUS_DEFENSE_DOWN:
             if (strength == 0) {
                 ok = 1;
             }
             break;
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
+        case STATUS_SLEEP:
+        case STATUS_STOP:
+        case STATUS_DIZZY:
+        case STATUS_POISON:
+        case STATUS_CONFUSE:
+        case STATUS_ELECTRIC:
+        case STATUS_DODGY:
+        case STATUS_BURN:
+        case STATUS_FREEZE:
             if (time == 0) {
                 ok = 1;
             }
             break;
     }
-    if (part->attributes & 0x20000000) {
+    if (part->attributes & kImmuneToDamageAndStatus) {
         return 0;
     }
-    if (part->attributes & 0x80000000) {
+    if (part->attributes & kImmuneToStatus) {
         return 0;
     }
     if (BtlUnit_CheckStatus(unit, STATUS_ALLERGIC) && !ok) {
         return 0;
     }
-    if (part->attributes & 0x40000000) {
+    if (part->attributes & kImmuneToNegativeStatus) {
         switch (type) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 8:
-            case 9:
-            case 0xb:
-            case 0xd:
-            case 0xf:
-            case 0x14:
-            case 0x19:
-            case 0x1a:
-            case 0x1b:
+            case STATUS_ALLERGIC:
+            case STATUS_SLEEP:
+            case STATUS_STOP:
+            case STATUS_DIZZY:
+            case STATUS_POISON:
+            case STATUS_CONFUSE:
+            case STATUS_BURN:
+            case STATUS_FREEZE:
+            case STATUS_TINY:
+            case STATUS_ATTACK_DOWN:
+            case STATUS_DEFENSE_DOWN:
+            case STATUS_SLOW:
+            case STATUS_FRIGHT:
+            case STATUS_GALE_FORCE:
+            case STATUS_INSTANT_KILL:
                 if (!ok) {
                     return 0;
                 }
@@ -1020,16 +1020,16 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
     }
     if (unit->badgesEquipped.FeelingFine) {
         switch (type) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 0xb:
-            case 0xd:
-            case 0xf:
-            case 0x1b:
+            case STATUS_SLEEP:
+            case STATUS_STOP:
+            case STATUS_DIZZY:
+            case STATUS_POISON:
+            case STATUS_CONFUSE:
+            case STATUS_ELECTRIC:
+            case STATUS_TINY:
+            case STATUS_ATTACK_DOWN:
+            case STATUS_DEFENSE_DOWN:
+            case STATUS_INSTANT_KILL:
                 return 0;
         }
     }
@@ -1066,18 +1066,18 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
         ok = ((BOOL (*)(BattleUnit*, s8, s8, s8))BtlUnit_SetStatus)(unit, type, time, strength);
     }
     switch (type) {
-        case 6:
-        case 7:
-        case 0xa:
-        case 0xc:
-        case 0xe:
-        case 0x10:
-        case 0x12:
-        case 0x13:
-        case 0x15:
-        case 0x16:
-        case 0x17:
-        case 0x18:
+        case STATUS_ELECTRIC:
+        case STATUS_DODGY:
+        case STATUS_HUGE:
+        case STATUS_ATTACK_UP:
+        case STATUS_DEFENSE_UP:
+        case STATUS_CHARGE:
+        case STATUS_INVISIBLE:
+        case STATUS_FAST:
+        case STATUS_PAYBACK:
+        case STATUS_HOLD_FAST:
+        case STATUS_HP_REGEN:
+        case STATUS_FP_REGEN:
             *result |= 2;
             break;
         default:
@@ -1111,98 +1111,98 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
 #endif
         }
         switch (type) {
-            case 1:
+            case STATUS_SLEEP:
                 effStampN64Entry(0, x, y, 10.0f + z);
                 break;
-            case 5:
+            case STATUS_CONFUSE:
                 effStampN64Entry(1, x, y, 10.0f + z);
                 break;
-            case 2:
+            case STATUS_STOP:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 110, 110, 10, 10, 10);
                 break;
-            case 3:
+            case STATUS_DIZZY:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 0, 110, 220, 10, 10, 10);
                 break;
-            case 4:
+            case STATUS_POISON:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 0, 220, 0, 10, 10, 10);
                 break;
-            case 6:
+            case STATUS_ELECTRIC:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 0, 10, 10, 10);
                 break;
-            case 0x10:
+            case STATUS_CHARGE:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 220, 220, 0);
                 break;
-            case 0x15:
-            case 0x16:
+            case STATUS_PAYBACK:
+            case STATUS_HOLD_FAST:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 0, 0, 0, 220);
                 break;
-            case 0xa:
+            case STATUS_HUGE:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 220, 0, 0);
                 break;
-            case 0xb:
+            case STATUS_TINY:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 0, 0, 10, 10, 10);
                 break;
-            case 0xc:
+            case STATUS_ATTACK_UP:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 220, 0, 0);
                 break;
-            case 0xd:
+            case STATUS_ATTACK_DOWN:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 0, 0, 10, 10, 10);
                 break;
-            case 0xe:
+            case STATUS_DEFENSE_UP:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 0, 0, 220);
                 break;
-            case 0xf:
+            case STATUS_DEFENSE_DOWN:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 0, 0, 220, 10, 10, 10);
                 break;
-            case 0x13:
+            case STATUS_FAST:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 220, 110, 0);
                 break;
-            case 0x14:
+            case STATUS_SLOW:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 110, 0, 10, 10, 10);
                 break;
-            case 8:
+            case STATUS_BURN:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 0, 220, 0, 0);
                 break;
-            case 9:
+            case STATUS_FREEZE:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 0, 110, 220);
                 break;
-            case 0:
+            case STATUS_ALLERGIC:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 160, 220, 0, 10, 10, 10);
                 break;
-            case 0x12:
+            case STATUS_INVISIBLE:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 110, 110, 110);
                 break;
-            case 0x17:
+            case STATUS_HP_REGEN:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 220, 110, 110);
                 break;
-            case 0x18:
+            case STATUS_FP_REGEN:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 160, 220, 0);
                 break;
-            case 7:
+            case STATUS_DODGY:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 0, 220, 0);
                 break;
-            case 0x1b:
+            case STATUS_INSTANT_KILL:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
                 STAMP_COL(eff, 220, 220, 220, 10, 10, 10);
                 break;
@@ -1212,15 +1212,15 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
                 break;
         }
         switch (type) {
-            case 0xe:
-            case 0xf:
+            case STATUS_DEFENSE_UP:
+            case STATUS_DEFENSE_DOWN:
                 effUpdownEntry(1, strength, 0x3c, x, y, 20.0f + z);
                 break;
-            case 0xa:
-            case 0xb:
-            case 0xc:
-            case 0xd:
-            case 0x10:
+            case STATUS_HUGE:
+            case STATUS_TINY:
+            case STATUS_ATTACK_UP:
+            case STATUS_ATTACK_DOWN:
+            case STATUS_CHARGE:
                 effUpdownEntry(0, strength, 0x3c, x, y, 15.0f + z);
                 break;
         }
@@ -1228,12 +1228,12 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
         BtlUnit_GetPos(unit, &x, &y, &z);
         y += BtlUnit_GetHeight(unit) / 2;
         switch (type) {
-            case 8:
+            case STATUS_BURN:
                 if (unit->iceEff) {
                     effSoftDelete(unit->iceEff);
                 }
                 break;
-            case 9:
+            case STATUS_FREEZE:
                 eff = effVaporN64Entry(0, 0x3c, x, y, z, 1.0f);
                 ((EffVaporN64Work*)eff->userdata)->r1 = 0xff;
                 ((EffVaporN64Work*)eff->userdata)->g1 = 0xff;
@@ -1249,7 +1249,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
     if (ok) {
         ((void (*)(BattleUnit*, s8, s8*, s8*))BtlUnit_GetStatus)(unit, type, &curTurns, &curStrength);
         switch (type) {
-            case 0x10:
+            case STATUS_CHARGE:
                 if (curStrength > 0) {
                     if (prevStrength != curStrength) {
                         BattleStatusChangeInfoSetAnnouce(unit, type, curStrength, 1);
@@ -1262,35 +1262,35 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
                     }
                 }
                 break;
-            case 4:
+            case STATUS_POISON:
                 if (curStrength > 0) {
                     BattleStatusChangeInfoSetAnnouce(unit, type, curStrength, 1);
                     BattleStatusChangeMsgSetAnnouce(unit, type, 1);
                     announce = 1;
                 }
                 break;
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 0xa:
-            case 0xb:
-            case 0xc:
-            case 0xd:
-            case 0xe:
-            case 0xf:
-            case 0x12:
-            case 0x13:
-            case 0x14:
-            case 0x15:
-            case 0x16:
-            case 0x17:
-            case 0x18:
+            case STATUS_ALLERGIC:
+            case STATUS_SLEEP:
+            case STATUS_STOP:
+            case STATUS_DIZZY:
+            case STATUS_CONFUSE:
+            case STATUS_ELECTRIC:
+            case STATUS_DODGY:
+            case STATUS_BURN:
+            case STATUS_FREEZE:
+            case STATUS_HUGE:
+            case STATUS_TINY:
+            case STATUS_ATTACK_UP:
+            case STATUS_ATTACK_DOWN:
+            case STATUS_DEFENSE_UP:
+            case STATUS_DEFENSE_DOWN:
+            case STATUS_INVISIBLE:
+            case STATUS_FAST:
+            case STATUS_SLOW:
+            case STATUS_PAYBACK:
+            case STATUS_HOLD_FAST:
+            case STATUS_HP_REGEN:
+            case STATUS_FP_REGEN:
                 if (curTurns > 0) {
                     BattleStatusChangeInfoSetAnnouce(unit, type, curTurns, 1);
                     BattleStatusChangeMsgSetAnnouce(unit, type, 1);
@@ -1302,76 +1302,76 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
     BtlUnit_GetHitPos(unit, part, &hitPos.x, &hitPos.y, &hitPos.z);
     if (announce) {
         switch (type) {
-            case 1:
+            case STATUS_SLEEP:
                 psndSFXOn_3D("SFX_CONDITION_SLEEP1", &hitPos);
                 break;
-            case 2:
+            case STATUS_STOP:
                 psndSFXOn_3D("SFX_CONDITION_STOP1", &hitPos);
                 break;
-            case 3:
+            case STATUS_DIZZY:
                 psndSFXOn_3D("SFX_CONDITION_GURUGURU1", &hitPos);
                 break;
-            case 5:
+            case STATUS_CONFUSE:
                 psndSFXOn_3D("SFX_CONDITION_CONFUSE1", &hitPos);
                 break;
-            case 4:
+            case STATUS_POISON:
                 psndSFXOn_3D("SFX_CONDITION_POISON1", &hitPos);
                 break;
-            case 7:
+            case STATUS_DODGY:
                 psndSFXOn_3D("SFX_CONDITION_YOKEYOKE1", &hitPos);
                 break;
-            case 6:
+            case STATUS_ELECTRIC:
                 psndSFXOn_3D("SFX_CONDITION_BIRIBIRI1", &hitPos);
                 break;
-            case 0xa:
+            case STATUS_HUGE:
                 psndSFXOn_3D("SFX_CONDITION_DEKADEKA1", &hitPos);
                 break;
-            case 0xb:
+            case STATUS_TINY:
                 psndSFXOn_3D("SFX_CONDITION_MINIMINI1", &hitPos);
                 break;
-            case 0xe:
+            case STATUS_DEFENSE_UP:
                 psndSFXOn_3D("SFX_CONDITION_KATIKATI1", &hitPos);
                 break;
-            case 0xf:
+            case STATUS_DEFENSE_DOWN:
                 psndSFXOn_3D("SFX_BTL_FUNYA1", &hitPos);
                 break;
-            case 0x14:
+            case STATUS_SLOW:
                 psndSFXOn_3D("SFX_CONDITION_SLOW1", &hitPos);
                 break;
-            case 8:
+            case STATUS_BURN:
                 psndSFXOn_3D("SFX_CONDITION_FIRE1", &hitPos);
                 break;
-            case 9:
+            case STATUS_FREEZE:
                 psndSFXOn_3D("SFX_CONDITION_ICE1", &hitPos);
                 break;
-            case 0x13:
+            case STATUS_FAST:
                 psndSFXOn_3D("SFX_CONDITION_FAST1", &hitPos);
                 break;
-            case 0x17:
+            case STATUS_HP_REGEN:
                 psndSFXOn_3D("SFX_CONDITION_REST_HP_SLOW1", &hitPos);
                 break;
-            case 0x18:
+            case STATUS_FP_REGEN:
                 psndSFXOn_3D("SFX_CONDITION_REST_FP_SLOW1", &hitPos);
                 break;
-            case 0:
+            case STATUS_ALLERGIC:
                 psndSFXOn_3D("SFX_CONDITION_ALLERGY1", &hitPos);
                 break;
-            case 0xc:
+            case STATUS_ATTACK_UP:
                 psndSFXOn_3D("SFX_CONDITION_TUYOTUYO1", &hitPos);
                 break;
-            case 0xd:
+            case STATUS_ATTACK_DOWN:
                 psndSFXOn_3D("SFX_CONDITION_YOWAYOWA1", &hitPos);
                 break;
-            case 0x10:
+            case STATUS_CHARGE:
                 psndSFXOn_3D("SFX_CONDITION_CHARGE1", &hitPos);
                 break;
-            case 0x12:
+            case STATUS_INVISIBLE:
                 psndSFXOn_3D("SFX_CONDITION_TOUMEI1", &hitPos);
                 break;
-            case 0x15:
+            case STATUS_PAYBACK:
                 psndSFXOn_3D("SFX_CONDITION_COUNTER1", &hitPos);
                 break;
-            case 0x16:
+            case STATUS_HOLD_FAST:
                 psndSFXOn_3D("SFX_BTL_THUNDERS_COUNTER1", &hitPos);
                 break;
         }

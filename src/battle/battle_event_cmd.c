@@ -1705,7 +1705,7 @@ USER_FUNC(btlevtcmd_RecoverHp) {
     unit = BattleGetUnitPtr(wp, id);
     evtGetValue(event, args[1]); //unused, debug?
     hp = evtGetValue(event, args[2]);
-    if (!(unit->mAttributeFlags & kUnk_ImmageToOHKO)) {
+    if (!(unit->mAttributeFlags & kImmuneToNegativeStatus)) {
         unit->hpGauge.prevHp = unit->currentHp;
         BtlUnit_RecoverHp(unit, hp);
         unit->hpGauge.targetHp = unit->currentHp;

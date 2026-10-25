@@ -1780,7 +1780,7 @@ static USER_FUNC(_check_satellite) {
     }
     if (!alive) {
         part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-        if (part->attributes & 0x20000000) {
+        if (part->attributes & kImmuneToDamageAndStatus) {
             effDelete((EffectEntry*)unit->work[3]);
             unit->work[3] = 0;
             BtlUnit_snd_se(unit, "SFX_ENM_BARRI_BARRIER_BREAK1", 0xF1194D80, 0);
@@ -1794,11 +1794,11 @@ static USER_FUNC(_check_satellite) {
                 effGlassN64Entry(2, 60, x + dx, y + dy, z, 1.0f);
             }
         }
-        part->attributes &= ~0x20000000;
+        part->attributes &= ~kImmuneToDamageAndStatus;
         evtSetValue(event, args[0], 0);
     } else {
         part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-        if (!(part->attributes & 0x20000000)) {
+        if (!(part->attributes & kImmuneToDamageAndStatus)) {
             f32 px;
             f32 py;
             f32 pz;
@@ -1807,7 +1807,7 @@ static USER_FUNC(_check_satellite) {
             BtlUnit_GetPos(unit, &px, &py, &pz);
             unit->work[3] = (EvtWord)effSyuryouEntry(1, 1000, 0.0f, -1000.0f, 0.0f);
         }
-        part->attributes |= 0x20000000;
+        part->attributes |= kImmuneToDamageAndStatus;
         evtSetValue(event, args[0], 1);
         if (unit->work[3] != 0) {
             f32* ud = ((EffectEntry*)unit->work[3])->userdata;
