@@ -868,7 +868,7 @@ static void ext_moamoa_main(void) {
             mm->flags |= 0x10;
         }
 
-        if (wp->escapeEvt == ((void *) 0)) {
+        if (wp->escapeEvt == NULL) {
             wp->escapeEvt = evtEntry(evt_moamoa_escape, 0, 0);
         }
     }

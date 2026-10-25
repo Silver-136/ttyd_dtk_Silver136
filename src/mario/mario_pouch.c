@@ -229,7 +229,7 @@ BOOL pouchGetItem(ItemType type) {
         if (mpp->currentFP < mpp->maximumFP) {
             mpp->currentFP++;
             // FAKE: dead store (function returns right after); steers register allocation
-            itemLists[1] = (void *) 0;
+            itemLists[1] = (void*)0;
         }
         return 1;
     }
@@ -282,15 +282,15 @@ BOOL pouchGetItem(ItemType type) {
         swSet(type - 0x70);
     }
     size = 0;
-    itemLists[0] = (void *) 0;
-    itemLists[1] = (void *) 0;
+    itemLists[0] = (void*)0;
+    itemLists[1] = (void*)0;
     if ((type >= 0x79) && (type < 0xEC)) {
         itemLists[0] = mpp->heldItems;
         size = pouchCheckItem(ITEM_STRANGE_SACK) ? (20) : (10);
         ok = 1;
     } else
         if ((type >= 1) && (type < 0x79)) {
-        itemLists[1] = (void *) 0;
+        itemLists[1] = (void*)0;
         size = 0x79;
         ok = 1;
         itemLists[0] = mpp->keyItems;
@@ -365,17 +365,17 @@ BOOL pouchRemoveItem(ItemType type) {
     s32 maximum;
     int i;
     maximum = 0;
-    table1 = (void *) 0;
-    table2 = (void *) 0;
+    table1 = (void*)0;
+    table2 = (void*)0;
     if ((type >= ITEM_COIN) && (type < (ITEM_FRESH_JUICE + 1))) {
         table1 = mpp->heldItems;
-        table2 = (void *) 0;
+        table2 = (void*)0;
         maximum = pouchCheckItem(ITEM_STRANGE_SACK) ? (20) : (10);
         valid = 1;
     } else
         if ((type >= ITEM_STRANGE_SACK) && (type < (ITEM_CRYSTAL_STAR + 1))) {
         table1 = mpp->keyItems;
-        table2 = (void *) 0;
+        table2 = (void*)0;
         maximum = 121;
         valid = 1;
     } else

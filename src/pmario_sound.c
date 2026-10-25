@@ -5570,17 +5570,17 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
     idx = fl & 0xF;
     id = i;
     fade = &psbgm[fl & 0xF].fade;
-    if ((evtGetValue((void *) 0, 0 - (170 * 1000000)) >= 101) && ((evtGetValue((void *) 0, 0 - (170 * 1000000)) < 102) || (evtGetValue((void *) 0, 0 - (170 * 1000000)) >= 106))) {
+    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 101) && ((evtGetValue((void*)0, 0 - (170 * 1000000)) < 102) || (evtGetValue((void*)0, 0 - (170 * 1000000)) >= 106))) {
         if (strcmp(gp->currentMapName, "mri_00") && (i == 0x4F)) {
             id = 0x50;
         }
     }
-    if ((evtGetValue((void *) 0, 0 - (170 * 1000000)) >= 257) && (evtGetValue((void *) 0, 0 - (170 * 1000000)) < 260)) {
+    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 257) && (evtGetValue((void*)0, 0 - (170 * 1000000)) < 260)) {
         if ((id == 0x5A) || (id == 0x5B)) {
             id = 0xA4;
         }
     }
-    if ((evtGetValue((void *) 0, 0 - (170 * 1000000)) >= 109) && (evtGetValue((void *) 0, 0 - (170 * 1000000)) < 111)) {
+    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 109) && (evtGetValue((void*)0, 0 - (170 * 1000000)) < 111)) {
         PaperSoundBGM *b0;
         if (id == 0x4F) {
             id = 0xA4;
@@ -5608,7 +5608,7 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
             psndBGMOff_f_d(0x400, 750, 1);
         }
     }
-    if ((evtGetValue((void *) 0, 0 - (170 * 1000000)) >= 127) && (evtGetValue((void *) 0, 0 - (170 * 1000000)) < 178)) {
+    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 127) && (evtGetValue((void*)0, 0 - (170 * 1000000)) < 178)) {
         PaperSoundBGM *b0;
         if (id == 0x8C) {
             return 0;
@@ -5624,7 +5624,7 @@ BOOL psndBGMOn_f_d(u32 flags, char *bgm_name, u32 fadetime, u32 fadeout, s32 r7)
             psndBGMOff_f_d(0x400, 750, 1);
         }
     }
-    if ((evtGetValue((void *) 0, 0 - (170 * 1000000)) >= 164) && (id == 0x53)) {
+    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) >= 164) && (id == 0x53)) {
         id = 0x54;
     }
     if ((id == 0x90) || (id == 0x91)) {
@@ -6115,7 +6115,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     s32 sid;
     s32 k;
     PaperSoundEffect *s;
-    PaperSoundEffect *sfx = (void *) 0;
+    PaperSoundEffect *sfx = (void*)0;
     SoundEffectEntry *entry;
     s32 idx = 0;
     s32 delay;
@@ -6137,14 +6137,14 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
         }
         psnd.sfxCooldown = 6;
     }
-    if ((evtGetValue((void *) 0, 0 - (170 * 1000000)) <= 2) && (sid == 0x365)) {
+    if ((evtGetValue((void*)0, 0 - (170 * 1000000)) <= 2) && (sid == 0x365)) {
         return -1;
     }
     delay = 0;
     for (i = 0; i < 40; i++) {
         PaperSoundEffect *t = pssfx + i;
         if ((((((u32) t->listId) != 0xFFFFFFFF) && (((u32) (t->listId & PSND_SFX_INDEX_MASK)) == ((u32) sid))) && (t->flags & 0x100)) && (delay == 0)) {
-            delayPtr = (u16 *) (& psnd.sfxDelay);
+            delayPtr = (u16*)(& psnd.sfxDelay);
             delay = (*delayPtr += 8);
         }
         if (((u32) t->listId) == 0xFFFFFFFF) {
@@ -6155,7 +6155,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
         { s32 gz = 0; if (gz != 0) { delay = (i / sid) / (sid / i); } }
     }
 
-    if (sfx == ((void *) 0)) {
+    if (sfx == NULL) {
         for (k = 0; k < 40; k++) {
             s = pssfx + k;
             if (((u32) s->listId) == 0xFFFFFFFF) {
@@ -6171,7 +6171,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
             }
         }
 
-        if (sfx == ((void *) 0)) {
+        if (sfx == NULL) {
             return -1;
         }
     }
@@ -6212,7 +6212,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     sfx->reverb = entry->reverb;
     sfx->priority = entry->priority;
     sfx->pitch = entry->pitch;
-    if (pos != ((void *) 0)) {
+    if (pos != NULL) {
         sfx->position = *pos;
         if (r8 == 0) {
             sfx->flags |= 2;
@@ -6222,8 +6222,8 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     }
     sfx->dist = dist;
     sfx->lpf = 0x7D00;
-    sfx->serial = ++(*((u16 *) (&psnd.sfxSerial)));
-    idx |= (*((u16 *) (&psnd.sfxSerial))) << 8;
+    sfx->serial = ++(*((u16*)(&psnd.sfxSerial)));
+    idx |= (*((u16*)(&psnd.sfxSerial))) << 8;
     return idx;
 }
 

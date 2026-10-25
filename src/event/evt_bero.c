@@ -508,8 +508,8 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall) {
     float halfTurn;
     f32 respawnZ;
     f32 len = evtGetFloat(event, args[1]);
-    s32 *pos = (s32 *) event->lwData[6];
-    const char *name = (const char *) event->lwData[3];
+    s32 *pos = (s32*)event->lwData[6];
+    const char *name = (const char*)event->lwData[3];
     s32 angle = event->lwData[5];
     Vec start;
     f32 *hxPtr;
@@ -521,7 +521,7 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall) {
     end.y = pos[1];
     end.z = pos[2];
     if (pos[0] == 100000) {
-        hitObjGetPos((const char *) name, &start);
+        hitObjGetPos((const char*)name, &start);
     }
     if (len != 0.0f) {
         Vec tmp2;
@@ -552,7 +552,7 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall) {
         }
         dist = 1000000.0f;
         hxPtr = &hx;
-        if (hitCheckFilter((void *) 0, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
+        if (hitCheckFilter((void*)0, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f)) {
             tmp.y = hy;
         }
         tmp2 = tmp;

@@ -2876,7 +2876,7 @@ void puniModeRecover(PuniData* p) {
                 p->mode = 13;
                 p->modeStep = 0;
             } else {
-                if (((s32)gp->retraceCount & 3) == (*(s16 *) (&p->index) & 3)) {
+                if (((s32)gp->retraceCount & 3) == (*(s16*)(&p->index) & 3)) {
                     if (p->flags & 1) {
                         p->target = searchBattleTeki_inl(p);
                     } else {
@@ -3185,7 +3185,7 @@ void puniModeFall(PuniData* p) {
             }
             if (Punigp->floor == 0x12 && p->pos.y < -300.0f) {
                 s32 zero = 0;
-                puniswTrapSetindex(*(s16 *) (&p->index), &zero);
+                puniswTrapSetindex(*(s16*)(&p->index), &zero);
                 p->flags &= ~0x00800000;
             }
             {
@@ -5067,9 +5067,9 @@ s32 evt_puni_init(EventEntry *event, BOOL isFirstCall) {
         puniInit();
         return 0;
     }
-    puniAnimationInit_inl((s16 **) puni_patern_table, (s16 **) toge_patern_table);
+    puniAnimationInit_inl((s16**)puni_patern_table, (s16**)toge_patern_table);
     puniAnimationInit2();
-    puniEntry(a, (PunidrvTexInfo *) tex, (void *) b, (void *) c, (void *) d);
+    puniEntry(a, (PunidrvTexInfo*)tex, (void*)b, (void*)c, (void*)d);
     return 2;
 }
 

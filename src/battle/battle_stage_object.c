@@ -3832,7 +3832,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             unit = BattleGetUnitPtr(wp, e3->unitId);
             part = BattleGetUnitPartsPtr(e3->unitId, e3->partId);
         }
-        if ((e3->effect == ((void *) 0)) || (e3->delay > 0)) {
+        if ((e3->effect == NULL) || (e3->delay > 0)) {
             e3->delay--;
             if (e3->delay > 0) {
                 continue;
@@ -3925,7 +3925,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
             }
 
         } else {
-            if ((e3->effect != ((void *) 0)) && (!effFallCheckHit(e3->effect))) {
+            if ((e3->effect != NULL) && (!effFallCheckHit(e3->effect))) {
                 continue;
             }
             weapon3 = &e3->weapon.weapon;

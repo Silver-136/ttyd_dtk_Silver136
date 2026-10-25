@@ -410,15 +410,15 @@ s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall) {
     name = (long long) evtGetValue(event, args[0]);
     w = nanNPCWork;
     for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
-        p = (NanNPC *) (((u8 *) w->npc) - (-off));
-        str = (char *) name;
+        p = (NanNPC*)(((u8*)w->npc) - (-off));
+        str = (char*)name;
         if (!(((EvtWord) str) & 0x80000000)) {
             sprintf(makestring, "%06x", name);
             str = makestring;
         }
-        strcmp((char *) p->name, str);
+        strcmp((char*)p->name, str);
         if (!p->pose) {
-            strcpy((char *) p->name, str);
+            strcpy((char*)p->name, str);
             p->pose = &pose[i];
             p->flags = 0;
             p->field_16 = 0;

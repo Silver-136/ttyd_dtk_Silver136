@@ -1706,7 +1706,7 @@ void partyRideMain(PartyEntry *party) {
     f32 shrink; // FAKE: one function-scope temp for (f32)(16 - timer), shared by cases 110 and 111 (see docs/FAKES.md)
     Vec s;
     f32 dy0;
-    u8 *mario = (u8 *) party->playerPtr;
+    u8 *mario = (u8*)party->playerPtr;
     switch (party->motionStep) {
         case 0:
             getRidePos(party, &pos);
@@ -1759,8 +1759,8 @@ void partyRideMain(PartyEntry *party) {
             }
 
         case 10:
-            party->position = *((Vec *) (mario + 0x8C));
-            party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
+            party->position = *((Vec*)(mario + 0x8C));
+            party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
             party->moveDir = toMovedir(party->displayDirectionTarget);
             break;
 
@@ -1819,14 +1819,14 @@ void partyRideMain(PartyEntry *party) {
                 y = ((MarioWork*)mario)->position.y;
                 z = ((MarioWork*)mario)->position.z;
                 party->position.x = x;
-                party->position.y = y + (0.5f * (((MarioWork *) mario)->wPlayerCollisionBox.y));
+                party->position.y = y + (0.5f * (((MarioWork*)mario)->wPlayerCollisionBox.y));
                 party->position.z = z;
                 if (party->motionStep == 100) {
                     partyGetAppearPos(party, &party->moveTarget);
                 } else {
                     partyGetAppearPos2(party, &party->moveTarget);
                 }
-                party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
+                party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
                 party->moveFrames = 16;
                 party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
                 party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
@@ -1885,8 +1885,8 @@ void partyRideMain(PartyEntry *party) {
                     break;
                 }
                 (((PartyEntry*)party)->moveFrames) = 0;
-                party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
-                party->displayDirection = ((MarioWork *) mario)->displayDirectionTarget;
+                party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
+                party->displayDirection = ((MarioWork*)mario)->displayDirectionTarget;
                 party->moveDir = toMovedirSimple(party->displayDirection);
                 party->targetDir = party->moveDir;
                 partyClearJumpPara(party);

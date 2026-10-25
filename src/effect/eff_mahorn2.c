@@ -144,14 +144,14 @@ void effMahorn2Main(EffectEntry *effect) {
                 }
                 else {
                     data->scale += -data->scale / 8.0f;
-                    if (!((effMahorn2Data *)effect->userdata)->hasHit) {
-                        ((effMahorn2Data *)effect->userdata)->hasHit = TRUE;
+                    if (!((effMahorn2Data*)effect->userdata)->hasHit) {
+                        ((effMahorn2Data*)effect->userdata)->hasHit = TRUE;
                         effHitEntry(0, 4, target.x, target.y, target.z, scale);
                     }
                 }
                 break;
             case 4:
-                if (((effMahorn2Data *)effect->userdata)->hasHit) {
+                if (((effMahorn2Data*)effect->userdata)->hasHit) {
                     data->position.x += data->target.x;
                     data->position.y += data->target.y;
                     data->position.z += data->target.z;

@@ -701,20 +701,20 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     OffscreenEntry *off;
     ImageEntry *img;
     BOOL inBattle;
-    wp = (CloudWork *) event->lwData[0];
+    wp = (CloudWork*)event->lwData[0];
     inBattle = gp->inBattle != 0;
     mario = marioGetPtr();
     ptmp = partyGetPtr(0);
     if (isFirstCall) {
         return 0;
     }
-    if (ptmp == ((void *) 0)) {
+    if (ptmp == NULL) {
         return 0;
     }
-    hit0 = (HitEntry *) cloudGetHitBreathout(0);
-    hit1 = (HitEntry *) cloudGetHitBreathout(1);
-    hit2 = (HitEntry *) cloudGetHitBreathout(2);
-    hit3 = (HitEntry *) cloudGetHitBreathout(3);
+    hit0 = (HitEntry*)cloudGetHitBreathout(0);
+    hit1 = (HitEntry*)cloudGetHitBreathout(1);
+    hit2 = (HitEntry*)cloudGetHitBreathout(2);
+    hit3 = (HitEntry*)cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
             if (((s32) (cloud_once_flag & 0xFFFFFFFFFFFFFFFFu)) == 1) // FAKE: no-op 64-bit mask; needed for 100% (plain cloud_once_flag == 1 gives 97.9-98.1)
@@ -734,7 +734,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
             } else {
                 strcpy(wp->animName, "P_oof_cloud_1");
             }
-            if (!animGroupBaseAsync(wp->animName, inBattle, (void *) 0)) {
+            if (!animGroupBaseAsync(wp->animName, inBattle, (void*)0)) {
                 break;
             }
             cloud_once_flag = 1;
@@ -814,7 +814,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
 
         case 20:
             psndSFXOn_3D("SFX_OFF_CLAUD_WIND3", &mario->position);
-            if (wp->endEvt != ((void *) 0)) {
+            if (wp->endEvt != NULL) {
                 evtEntry(wp->endEvt, 0, 0);
             }
             img = imgNameToPtr(wp->imgName, inBattle);

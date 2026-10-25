@@ -81,8 +81,8 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
     s32 k;
     BOOL unique;
     BattleActions *ac = &work->actionCommands;
-    SignalTimingWork *w = (SignalTimingWork *)ac->work;
-    BattleACDispParams *disp = (BattleACDispParams *)&ac->disp;
+    SignalTimingWork *w = (SignalTimingWork*)ac->work;
+    BattleACDispParams *disp = (BattleACDispParams*)&ac->disp;
     BOOL loop;
     BOOL autoCommand = 0;
     BOOL got;
@@ -330,10 +330,10 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 break;
 
             case 1006:
-                ac->maincb = (void *) 0;
-                ac->dispcb = (void *) 0;
-                ac->resultcb = (void *) 0;
-                ac->deletecb = (void *) 0;
+                ac->maincb = (void*)0;
+                ac->dispcb = (void*)0;
+                ac->resultcb = (void*)0;
+                ac->deletecb = (void*)0;
                 break;
 
         }

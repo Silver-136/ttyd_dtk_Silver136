@@ -291,7 +291,7 @@ s32 bakuGameDecideWeapon(EventEntry *event, BOOL isFirstCall) {
     v = evtGetValue(event, args[1]);
     w = GetBakuGamePtr();
 
-    wp = (BattleWeapon *) w->weapon;
+    wp = (BattleWeapon*)w->weapon;
     q = &wp->sleepChance;
     memcpy(w->weapon, &weapon, 0xC0);
 

@@ -1223,7 +1223,7 @@ s32 evt_readf_n(EventEntry* entry) { // 73
 }
 
 s32 evt_set_user_wrk(EventEntry* entry) { // 74
-    entry->uwBase = (EvtWord*) evtGetValue(entry, *entry->args);
+    entry->uwBase = (EvtWord*)evtGetValue(entry, *entry->args);
     
     return EVT_RETURN_DONE;
 }

@@ -821,7 +821,7 @@ void btlseqTurn(BattleWork *wp) {
                 BattleIncSeq(wp, SEQ_TURN);
                 break;
             }
-            dispEntry(CAMERA_2D, 900.0f, 1, _rule_disp, (void *) 0);
+            dispEntry(CAMERA_2D, 900.0f, 1, _rule_disp, (void*)0);
             break;
 
         case 0x3000002:
@@ -1114,7 +1114,7 @@ void btlseqTurn(BattleWork *wp) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (BtlUnit_CheckRecoveryStatus(unit, STATUS_FREEZE)) {
                         if (!BtlUnit_CheckShadowGuard(unit)) {
-                            BattleDamageDirect(-5, unit, (void *) 0, 1, 0, 0x11A, 0, 1);
+                            BattleDamageDirect(-5, unit, (void*)0, 1, 0, 0x11A, 0, 1);
                         }
                         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
                         pos.y += BtlUnit_GetHeight(unit);
@@ -1577,7 +1577,7 @@ void btlseqTurn(BattleWork *wp) {
                     BtlUnit_GetStatus(unit, STATUS_POISON, &turns, &strength);
                     if ((strength > 0) && (!BtlUnit_CheckShadowGuard(unit))) {
                         found = 1;
-                        BattleDamageDirect(-5, unit, (void *) 0, strength, 0, 0x117, 0, 1);
+                        BattleDamageDirect(-5, unit, (void*)0, strength, 0, 0x117, 0, 1);
                     }
                 }
             }

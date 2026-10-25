@@ -48,7 +48,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
     BOOL found;
     s32 i3;
     s32 i4;
-    GT2Work *gw = (GT2Work *)work->actionCommands.work;
+    GT2Work *gw = (GT2Work*)work->actionCommands.work;
     BOOL autoCommand = 0;
     BattleACDispParams *disp = &work->actionCommands.disp;
     s32 i;
@@ -233,10 +233,10 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             break;
 
         case 1005:
-            work->actionCommands.maincb = (void *) 0;
-            work->actionCommands.dispcb = (void *) 0;
-            work->actionCommands.resultcb = (void *) 0;
-            work->actionCommands.deletecb = (void *) 0;
+            work->actionCommands.maincb = (void*)0;
+            work->actionCommands.dispcb = (void*)0;
+            work->actionCommands.resultcb = (void*)0;
+            work->actionCommands.deletecb = (void*)0;
             return 0;
 
     }

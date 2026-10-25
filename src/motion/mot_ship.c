@@ -1001,14 +1001,14 @@ void shipMove(void) {
     }
     if (len >= 1.0f) {
         MarioWork *mm = marioGetPtr();
-        if ((marioGetPtr()->motStruct != ((void *) 0)) && (((u32) (marioGetPtr()->motShip->sfxId)) == 0xFFFFFFFFU)) {
+        if ((marioGetPtr()->motStruct != NULL) && (((u32) (marioGetPtr()->motShip->sfxId)) == 0xFFFFFFFFU)) {
             snd = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1), (&mm->position));
             marioGetPtr()->motShip->sfxId = snd;
         }
     } else
         if (len <= 0.2f) {
         marioGetPtr();
-        if ((marioGetPtr()->motStruct != ((void *) 0)) && (((u32) (marioGetPtr()->motShip->sfxId)) != 0xFFFFFFFFU)) {
+        if ((marioGetPtr()->motStruct != NULL) && (((u32) (marioGetPtr()->motShip->sfxId)) != 0xFFFFFFFFU)) {
             psndSFXOff(marioGetPtr()->motShip->sfxId);
             snd = -1;
             marioGetPtr()->motShip->sfxId = snd;

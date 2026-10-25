@@ -27,7 +27,7 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y);
 // and the shared offset IV. allDone is declared first for the register order.
 s32 battleAcMain_ButtonDown(BattleWork *work) {
     BattleActions *ac = &work->actionCommands;
-    BDWork *p = (BDWork *) work->actionCommands.work;
+    BDWork *p = (BDWork*)work->actionCommands.work;
     BattleACDispParams *disp = &work->actionCommands.disp;
     s32 allDone;
     s32 i;
@@ -152,16 +152,16 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     ac->mAcState = 1001;
                     break;
                 }
-                *((s32 *) (&ac->outputParams[0])) = 0;
+                *((s32*)(&ac->outputParams[0])) = 0;
                 done = 1;
                 for (i = 0; i < (work->actionCommands.params[2]); i++) {
                     if (p->button[(u32)i]) {
                         if (p->pressed[(u32)i]) {
-                            (*((s32 *) (&ac->outputParams[0])))++;
+                            (*((s32*)(&ac->outputParams[0])))++;
                         } else
                             if (((p->button[(u32)i]) == BattlePadGetTrigger()) || flag) {
                             p->pressed[(u32)i] = 1;
-                            (*((s32 *) (&ac->outputParams[0])))++;
+                            (*((s32*)(&ac->outputParams[0])))++;
                             if ((work->actionCommands.params[1]) == 1) {
                                 if ((i + 1) < (work->actionCommands.params[2])) {
                                     done = 0;
@@ -172,7 +172,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                             if (BattlePadGetTrigger()) {
                             ac->result = 0;
                             ac->mAcState = 1001;
-                            if (((work->actionCommands.acFlags) & 2) && ((*((s32 *) (&ac->outputParams[0]))) > 0)) {
+                            if (((work->actionCommands.acFlags) & 2) && ((*((s32*)(&ac->outputParams[0]))) > 0)) {
                                 allDone = 1;
                                 ac->result |= 2;
                                 ac->result &= ~1;
@@ -189,9 +189,9 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     }
                 }
 
-                if (p->sndCount != (*((s32 *) (&ac->outputParams[0])))) {
+                if (p->sndCount != (*((s32*)(&ac->outputParams[0])))) {
                     psndSFXOn(sfx);
-                    p->sndCount = *((s32 *) (&ac->outputParams[0]));
+                    p->sndCount = *((s32*)(&ac->outputParams[0]));
                 }
                 if (done) {
                     ac->result |= 2;
@@ -205,7 +205,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     ac->result = 0;
                     allDone = 1;
                     ac->mAcState = 1001;
-                    if (((work->actionCommands.acFlags) & 2) && ((*((s32 *) (&ac->outputParams[0]))) > 0)) {
+                    if (((work->actionCommands.acFlags) & 2) && ((*((s32*)(&ac->outputParams[0]))) > 0)) {
                         ac->result |= 2;
                         ac->result &= ~1;
                         ac->mAcState = 1001;
@@ -232,10 +232,10 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                 break;
 
             case 1005:
-                ac->maincb = (void *) 0;
-                ac->dispcb = (void *) 0;
-                ac->resultcb = (void *) 0;
-                ac->deletecb = (void *) 0;
+                ac->maincb = (void*)0;
+                ac->dispcb = (void*)0;
+                ac->resultcb = (void*)0;
+                ac->deletecb = (void*)0;
                 break;
 
         }
@@ -277,7 +277,7 @@ void battleAcDelete_ButtonDown(BattleWork* work) {
 
 static void actionCommandDisp(s32 unused, f32 x, f32 y) {
     BattleWork *work = _battleWorkPointer;
-    BDWork *p = (BDWork *) work->actionCommands.work;
+    BDWork *p = (BDWork*)work->actionCommands.work;
     s32 k;
     s32 end = ((work->actionCommands.params[2]) * 3) + 2;
     int size;

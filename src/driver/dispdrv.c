@@ -36,9 +36,9 @@ s32 _sort(const void** sortA, const void** sortB);
 
 void dispInit(void) {
     pDispWork = __memAlloc(HEAP_DEFAULT, sizeof(DispEntry) * DISP_MAX_ENTRIES);
-    pSortWork = __memAlloc(HEAP_DEFAULT, sizeof(DispEntry*) * DISP_MAX_ENTRIES);
+    pSortWork = __memAlloc(HEAP_DEFAULT, sizeof(DispEntry*)* DISP_MAX_ENTRIES);
     memset(pDispWork, 0, sizeof(DispEntry) * DISP_MAX_ENTRIES);
-    memset(pSortWork, 0, sizeof(DispEntry*) * DISP_MAX_ENTRIES);
+    memset(pSortWork, 0, sizeof(DispEntry*)* DISP_MAX_ENTRIES);
     entry_n = 0;
 }
 

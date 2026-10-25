@@ -429,10 +429,10 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
     pi = args;
     pr = args;
     pf = args;
-    effName = (const char *) evtGetValue(event, *(pi++));
+    effName = (const char*)evtGetValue(event, *(pi++));
     evtGetValue(event, *(pr++));
     evtGetValue(event, *(pf++));
-    effSet = (const char *) evtGetValue(event, *(pi++));
+    effSet = (const char*)evtGetValue(event, *(pi++));
     u1a = evtGetValue(event, *(pr++));
     u1b = evtGetValue(event, *(pf++));
     int2 = evtGetValue(event, *(pi++));
@@ -462,7 +462,7 @@ s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
     float13 = evtGetFloat(event, *(pr++));
     float14 = evtGetFloat(event, *(pr++));
     raw3 = pf[1];
-    effect = (void *) 0;
+    effect = (void*)0;
     switch (effGetSetN64(effSet)->id) {
         case 0:
             effect = effExpBomN64Entry(float2, float3, float4);
