@@ -87,9 +87,9 @@ static f32 sintbl[450] = {
 };
 
 void extInit(void) {
-	ExtdrvWork* wp = extGetWork();
-	wp->poseNum = 0;
-	wp->poses = NULL;
+    ExtdrvWork* wp = extGetWork();
+    wp->poseNum = 0;
+    wp->poses = NULL;
 }
 
 void extEntry(s32 poseNum, ExtdrvTexInfo* texInfo, void (*initFunc)(void), void (*mainFunc)(void), void (*mainFunc2)(void)) {

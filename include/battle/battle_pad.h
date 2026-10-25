@@ -3,16 +3,16 @@
 #include <dolphin/pad.h>
 
 typedef struct BattleWorkPad {
-	PADStatus mPadData[2]; //0x0, current, last
+    PADStatus mPadData[2]; //0x0, current, last
 
-	u32 mButtonsPressedHistory[30]; //0x18
-	u32 mButtonsHeldHistory[30]; //0x90
-	u32 mButtonsHistory[30]; //0x108
-	u32 mButtonsReleasedHistory[30]; //0x180
+    u32 mButtonsPressedHistory[30]; //0x18
+    u32 mButtonsHeldHistory[30]; //0x90
+    u32 mButtonsHistory[30]; //0x108
+    u32 mButtonsReleasedHistory[30]; //0x180
 
-	s8 mHoldRepeatState; //0x1F8
-	s8 mHoldRepeatFrameCounter; //0x1F9
-	u8 pad_0x1FA[2]; //0x1FA
+    s8 mHoldRepeatState; //0x1F8
+    s8 mHoldRepeatFrameCounter; //0x1F9
+    u8 pad_0x1FA[2]; //0x1FA
 } BattleWorkPad;
 
 void BattlePadInit(void);

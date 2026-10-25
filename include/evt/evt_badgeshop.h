@@ -4,20 +4,20 @@
 #include "evt/evt_cmd.h"
 
 typedef struct BadgeShopWork {
-	u8 special_table[0x19]; //0x0, Lovely Howz of Badges
-	u8 bargain_table[0x19]; //0x19, Lovely Howz of Badges Discount
-	u8 starmaniac_table[0x19]; //0x32, Dazzle's Badges
-	u8 bottakuru_table[0x55]; //0x4B, Charlieton's Items
-	u8 bteresa_table[0x55]; //0xA0, Pianta Parlor
-	u8 align[3];
-	s32 bargainBadges[5]; //0xF8
-	s32 bargainNum; //0x10C
-	s32 reserved_110; //0x110, cleared and added to bargainNum in the restock loop, never set nonzero
-	u16 restockFlags; //0x114, bit0: regenerate bargain/bottakuru stock on next entry to gor_01
-	u16 pad_116; //0x116, never accessed
-	u32 pad_118; //0x118, never accessed
-	u32 pad_11C; //0x11C, never accessed
-	u32 pad_120; //0x120, never accessed
+    u8 special_table[0x19]; //0x0, Lovely Howz of Badges
+    u8 bargain_table[0x19]; //0x19, Lovely Howz of Badges Discount
+    u8 starmaniac_table[0x19]; //0x32, Dazzle's Badges
+    u8 bottakuru_table[0x55]; //0x4B, Charlieton's Items
+    u8 bteresa_table[0x55]; //0xA0, Pianta Parlor
+    u8 align[3];
+    s32 bargainBadges[5]; //0xF8
+    s32 bargainNum; //0x10C
+    s32 reserved_110; //0x110, cleared and added to bargainNum in the restock loop, never set nonzero
+    u16 restockFlags; //0x114, bit0: regenerate bargain/bottakuru stock on next entry to gor_01
+    u16 pad_116; //0x116, never accessed
+    u32 pad_118; //0x118, never accessed
+    u32 pad_11C; //0x11C, never accessed
+    u32 pad_120; //0x120, never accessed
 } BadgeShopWork;
 
 s32 getBadgeBottakuru100TableMaxCount(void); //Charlieton Pit of 100 Trials

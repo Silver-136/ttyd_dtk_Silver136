@@ -24,8 +24,8 @@ RETURN
 EVT_END()
 
 void seq_gameInit(SequenceWork* wp) {
-	none_key = OSGetTime();
-	gp->systemLevelFlags &= ~0x10;
+    none_key = OSGetTime();
+    gp->systemLevelFlags &= ~0x10;
 }
 
 void seq_gameMain(SequenceWork* wp) {

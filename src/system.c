@@ -931,27 +931,27 @@ s32 LZ77Decode(u8* inputBuffer, u8* outputBuffer) {
 // clang-format off
 #ifdef __MWERKS__
 asm void* memcpy_as4(void* dest, const void* src, u32 count) {
-	nofralloc
-	addi    r3, r3, -4
-	srwi    r5, r5, 2
-	addi    r4, r4, -4
-	mtctr   r5
-	@0:
-	lwzu    r11, 4(r4)
-	stwu    r11, 4(r3)
-	bdnz    @0
-	blr
+    nofralloc
+    addi    r3, r3, -4
+    srwi    r5, r5, 2
+    addi    r4, r4, -4
+    mtctr   r5
+    @0:
+    lwzu    r11, 4(r4)
+    stwu    r11, 4(r3)
+    bdnz    @0
+    blr
 }
 #else
 // the same word copy in C
 void* memcpy_as4(void* dest, const void* src, u32 count) {
-	u32* d = (u32*)dest;
-	const u32* s = (const u32*)src;
-	u32 n = count >> 2;
-	while (n--) {
-		*d++ = *s++;
-	}
-	return dest;
+    u32* d = (u32*)dest;
+    const u32* s = (const u32*)src;
+    u32 n = count >> 2;
+    while (n--) {
+        *d++ = *s++;
+    }
+    return dest;
 }
 #endif
 // clang-format on

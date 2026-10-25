@@ -58,28 +58,28 @@ extern USER_FUNC(evt_win_coin_off);
 extern USER_FUNC(evt_win_coin_on);
 
 typedef struct KinopioParty {
-	u16 flags;
-	s16 maximumHP;
-	s16 pad4;
-	s16 currentHP;
-	s16 pad8[3];
+    u16 flags;
+    s16 maximumHP;
+    s16 pad4;
+    s16 currentHP;
+    s16 pad8[3];
 } KinopioParty;
 
 typedef s32 (*KinopioGetter)(void);
 
 typedef struct KinopioWork {
-	s32 breakfastItem; // 0x0
-	Vec breakfastPos;  // 0x4
-	s32 ryoukin;       // 0x10
-	Vec bed;           // 0x14
-	Vec bedside;       // 0x20
-	f32 cam[6];        // 0x2C
-	f32 bedDeg;        // 0x44
-	Vec npcTalk;       // 0x48
-	char* npcName;     // 0x54
-	s32 msg[14];       // 0x58
-	s32 toBedEvt;      // 0x90
-	s32 fromBedEvt;    // 0x94
+    s32 breakfastItem; // 0x0
+    Vec breakfastPos;  // 0x4
+    s32 ryoukin;       // 0x10
+    Vec bed;           // 0x14
+    Vec bedside;       // 0x20
+    f32 cam[6];        // 0x2C
+    f32 bedDeg;        // 0x44
+    Vec npcTalk;       // 0x48
+    char* npcName;     // 0x54
+    s32 msg[14];       // 0x58
+    s32 toBedEvt;      // 0x90
+    s32 fromBedEvt;    // 0x94
 } KinopioWork;
 
 USER_FUNC(N_cameraman_on);
@@ -110,181 +110,181 @@ static KinopioWork* work;
 static KinopioWork** wp = &work;
 
 USER_FUNC(evt_kinopio_setup) {
-	KinopioWork* w = (KinopioWork*)evtGetValue(event, event->args[0]);
-	NpcEntry* npc = npcNameToPtr(w->npcName);
-	if (!animGroupBaseAsync("p_slit", 0, NULL)) {
-		return 0;
-	}
-	npc->talkEvt = kinopio_house_talk_evt;
-	*wp = w;
-	return 2;
+    KinopioWork* w = (KinopioWork*)evtGetValue(event, event->args[0]);
+    NpcEntry* npc = npcNameToPtr(w->npcName);
+    if (!animGroupBaseAsync("p_slit", 0, NULL)) {
+        return 0;
+    }
+    npc->talkEvt = kinopio_house_talk_evt;
+    *wp = w;
+    return 2;
 }
 
 USER_FUNC(msg_no) {
-	EvtWord* args = event->args;
-	s32 idx = evtGetValue(event, args[0]);
-	evtSetValue(event, args[1], (*wp)->msg[idx]);
-	return 2;
+    EvtWord* args = event->args;
+    s32 idx = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], (*wp)->msg[idx]);
+    return 2;
 }
 
 USER_FUNC(power_chk) {
-	EvtWord* args = event->args;
-	s32 ok;
-	s32 i;
-	KinopioParty* pouch = (KinopioParty*)pouchGetPtr();
-	ok = 1;
-	for (i = 0; i < 8; i++) {
-		if ((pouch[i].flags & 1) && pouch[i].currentHP != pouch[i].maximumHP) {
-			ok = 0;
-			break;
-		}
-	}
-	if (((KinopioGetter)pouchGetHP)() == ((KinopioGetter)pouchGetMaxHP)() && ((KinopioGetter)pouchGetFP)() == ((KinopioGetter)pouchGetMaxFP)() && ((KinopioGetter)pouchGetAP)() == ((KinopioGetter)pouchGetMaxAP)() && ok) {
-		evtSetValue(event, args[0], 1);
-	} else {
-		evtSetValue(event, args[0], 0);
-	}
-	return 2;
+    EvtWord* args = event->args;
+    s32 ok;
+    s32 i;
+    KinopioParty* pouch = (KinopioParty*)pouchGetPtr();
+    ok = 1;
+    for (i = 0; i < 8; i++) {
+        if ((pouch[i].flags & 1) && pouch[i].currentHP != pouch[i].maximumHP) {
+            ok = 0;
+            break;
+        }
+    }
+    if (((KinopioGetter)pouchGetHP)() == ((KinopioGetter)pouchGetMaxHP)() && ((KinopioGetter)pouchGetFP)() == ((KinopioGetter)pouchGetMaxFP)() && ((KinopioGetter)pouchGetAP)() == ((KinopioGetter)pouchGetMaxAP)() && ok) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 0);
+    }
+    return 2;
 }
 
 USER_FUNC(coin_chk) {
-	EvtWord* args = event->args;
-	if (pouchGetCoin() < (*wp)->ryoukin) {
-		evtSetValue(event, args[0], 1);
-	} else {
-		evtSetValue(event, args[0], 0);
-	}
-	return 2;
+    EvtWord* args = event->args;
+    if (pouchGetCoin() < (*wp)->ryoukin) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 0);
+    }
+    return 2;
 }
 
 USER_FUNC(get_ryoukin) {
-	evtSetValue(event, event->args[0], (*wp)->ryoukin);
-	return 2;
+    evtSetValue(event, event->args[0], (*wp)->ryoukin);
+    return 2;
 }
 
 USER_FUNC(get_npcname) {
-	evtSetValue(event, event->args[0], (EvtWord)(*wp)->npcName);
-	return 2;
+    evtSetValue(event, event->args[0], (EvtWord)(*wp)->npcName);
+    return 2;
 }
 
 USER_FUNC(get_bed) {
-	EvtWord* args = event->args;
-	evtSetFloat(event, args[0], (*wp)->bed.x);
-	evtSetFloat(event, args[1], (*wp)->bed.y);
-	evtSetFloat(event, args[2], (*wp)->bed.z);
-	return 2;
+    EvtWord* args = event->args;
+    evtSetFloat(event, args[0], (*wp)->bed.x);
+    evtSetFloat(event, args[1], (*wp)->bed.y);
+    evtSetFloat(event, args[2], (*wp)->bed.z);
+    return 2;
 }
 
 USER_FUNC(get_bedside) {
-	EvtWord* args = event->args;
-	evtSetFloat(event, args[0], (*wp)->bedside.x);
-	evtSetFloat(event, args[1], (*wp)->bedside.y);
-	evtSetFloat(event, args[2], (*wp)->bedside.z);
-	return 2;
+    EvtWord* args = event->args;
+    evtSetFloat(event, args[0], (*wp)->bedside.x);
+    evtSetFloat(event, args[1], (*wp)->bedside.y);
+    evtSetFloat(event, args[2], (*wp)->bedside.z);
+    return 2;
 }
 
 USER_FUNC(get_beddeg) {
-	evtSetFloat(event, event->args[0], (*wp)->bedDeg);
-	return 2;
+    evtSetFloat(event, event->args[0], (*wp)->bedDeg);
+    return 2;
 }
 
 USER_FUNC(get_npctalk) {
-	EvtWord* args = event->args;
-	evtSetFloat(event, args[0], (*wp)->npcTalk.x);
-	evtSetFloat(event, args[1], (*wp)->npcTalk.y);
-	evtSetFloat(event, args[2], (*wp)->npcTalk.z);
-	return 2;
+    EvtWord* args = event->args;
+    evtSetFloat(event, args[0], (*wp)->npcTalk.x);
+    evtSetFloat(event, args[1], (*wp)->npcTalk.y);
+    evtSetFloat(event, args[2], (*wp)->npcTalk.z);
+    return 2;
 }
 
 USER_FUNC(get_cam) {
-	EvtWord* args = event->args;
-	evtSetFloat(event, args[0], (*wp)->cam[0]);
-	evtSetFloat(event, args[1], (*wp)->cam[1]);
-	evtSetFloat(event, args[2], (*wp)->cam[2]);
-	evtSetFloat(event, args[3], (*wp)->cam[3]);
-	evtSetFloat(event, args[4], (*wp)->cam[4]);
-	evtSetFloat(event, args[5], (*wp)->cam[5]);
-	return 2;
+    EvtWord* args = event->args;
+    evtSetFloat(event, args[0], (*wp)->cam[0]);
+    evtSetFloat(event, args[1], (*wp)->cam[1]);
+    evtSetFloat(event, args[2], (*wp)->cam[2]);
+    evtSetFloat(event, args[3], (*wp)->cam[3]);
+    evtSetFloat(event, args[4], (*wp)->cam[4]);
+    evtSetFloat(event, args[5], (*wp)->cam[5]);
+    return 2;
 }
 
 USER_FUNC(get_to_bed_evt) {
-	evtSetValue(event, event->args[0], (*wp)->toBedEvt);
-	return 2;
+    evtSetValue(event, event->args[0], (*wp)->toBedEvt);
+    return 2;
 }
 
 USER_FUNC(get_from_bed_evt) {
-	evtSetValue(event, event->args[0], (*wp)->fromBedEvt);
-	return 2;
+    evtSetValue(event, event->args[0], (*wp)->fromBedEvt);
+    return 2;
 }
 
 static USER_FUNC(paper_on) {
-	EvtWord* args = event->args;
-	f32 amount = evtGetFloat(event, *args++);
-	MarioWork* mario = marioGetPtr();
-	if (isFirstCall) {
-		marioPaperOn("p_slit");
-		marioChgPose("M_S_1");
-		marioChgPaper("PM_S_3A");
-		event->userdata[0] = 0;
-	}
-	if (event->userdata[0] < 30) {
-		f32 ang;
-		if (strcmp(gp->currentMapName, "pik_04") == 0) {
-			ang = 6.2831855f * amount / 360.0f;
-			mario->position.x -= 0.2f * (f32)cos(ang);
-			mario->position.z -= 0.2f * (f32)sin(ang);
-		} else {
-			ang = 6.2831855f * amount / 360.0f;
-			mario->position.x += 0.2f * (f32)cos(ang);
-			mario->position.z += 0.2f * (f32)sin(ang);
-		}
-		event->userdata[0]++;
-	}
-	mario->displayDirectionTarget = amount;
-	mario->displayDirection = amount;
-	return 0;
+    EvtWord* args = event->args;
+    f32 amount = evtGetFloat(event, *args++);
+    MarioWork* mario = marioGetPtr();
+    if (isFirstCall) {
+        marioPaperOn("p_slit");
+        marioChgPose("M_S_1");
+        marioChgPaper("PM_S_3A");
+        event->userdata[0] = 0;
+    }
+    if (event->userdata[0] < 30) {
+        f32 ang;
+        if (strcmp(gp->currentMapName, "pik_04") == 0) {
+            ang = 6.2831855f * amount / 360.0f;
+            mario->position.x -= 0.2f * (f32)cos(ang);
+            mario->position.z -= 0.2f * (f32)sin(ang);
+        } else {
+            ang = 6.2831855f * amount / 360.0f;
+            mario->position.x += 0.2f * (f32)cos(ang);
+            mario->position.z += 0.2f * (f32)sin(ang);
+        }
+        event->userdata[0]++;
+    }
+    mario->displayDirectionTarget = amount;
+    mario->displayDirection = amount;
+    return 0;
 }
 
 static USER_FUNC(paper_off) {
-	marioPaperOff();
-	return 2;
+    marioPaperOff();
+    return 2;
 }
 
 USER_FUNC(offset) {
-	EvtWord* args = event->args;
-	f32 dist = evtGetFloat(event, args[0]);
-	f32 ang = 6.2831855f * (90.0f + camGetPtr(CAMERA_3D)->viewYaw) / 360.0f;
-	evtSetFloat(event, args[1], dist * -(f32)sin(ang));
-	evtSetFloat(event, args[2], dist * (f32)cos(ang));
-	return 2;
+    EvtWord* args = event->args;
+    f32 dist = evtGetFloat(event, args[0]);
+    f32 ang = 6.2831855f * (90.0f + camGetPtr(CAMERA_3D)->viewYaw) / 360.0f;
+    evtSetFloat(event, args[1], dist * -(f32)sin(ang));
+    evtSetFloat(event, args[2], dist * (f32)cos(ang));
+    return 2;
 }
 
 USER_FUNC(breakfast) {
-	ItemEntry* item = itemNameToPtr("breakfast");
-	if (item == NULL || !(item->flags & 1)) {
-		KinopioWork* w = *wp;
-		if (w->breakfastItem != 0) {
-			itemEntry("breakfast", w->breakfastItem, 0x10, -1, 0, w->breakfastPos.x, w->breakfastPos.y,
-			          w->breakfastPos.z);
-		}
-	}
-	return 2;
+    ItemEntry* item = itemNameToPtr("breakfast");
+    if (item == NULL || !(item->flags & 1)) {
+        KinopioWork* w = *wp;
+        if (w->breakfastItem != 0) {
+            itemEntry("breakfast", w->breakfastItem, 0x10, -1, 0, w->breakfastPos.x, w->breakfastPos.y,
+                      w->breakfastPos.z);
+        }
+    }
+    return 2;
 }
 
 USER_FUNC(snd_off) {
-	psndSetFlag(0x80);
-	return 2;
+    psndSetFlag(0x80);
+    return 2;
 }
 
 USER_FUNC(snd_on) {
-	psndClearFlag(0x80);
-	return 2;
+    psndClearFlag(0x80);
+    return 2;
 }
 
 USER_FUNC(N_cameraman_on) {
-	NpcEntry* npc = npcNameToPtr("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223");
-	animPoseSetMaterialFlagOn(npc->poseId, 0x1800);
-	return 2;
+    NpcEntry* npc = npcNameToPtr("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223");
+    animPoseSetMaterialFlagOn(npc->poseId, 0x1800);
+    return 2;
 }
 
 //.data

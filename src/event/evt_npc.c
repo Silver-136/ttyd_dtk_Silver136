@@ -32,9 +32,9 @@
 // clang-format off
 // .sdata
 EVT_BEGIN(npc_init_evt)
-	CALL(evt_npc_flag_onoff, 1, STRING("me"), 0x600)
-	RETURN
-	END
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), 0x600)
+    RETURN
+    END
 EVT_END();
 // clang-format on
 

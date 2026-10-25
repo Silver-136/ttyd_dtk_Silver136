@@ -21,48 +21,48 @@ const char* next_p1;
 const char* next_p0;
 
 void seqInit_MARIOSTORY(void) {
-	memset(&seqWork, 0, sizeof(SequenceWork));
-	now_seq = SEQ_UNDEFINED;
-	next_seq = SEQ_UNDEFINED;
-	prev_seq = SEQ_UNDEFINED;
+    memset(&seqWork, 0, sizeof(SequenceWork));
+    now_seq = SEQ_UNDEFINED;
+    next_seq = SEQ_UNDEFINED;
+    prev_seq = SEQ_UNDEFINED;
 }
 
 void seqMain(void) {
-	if (next_seq != now_seq) {
-		if (now_seq != SEQ_UNDEFINED) {
-			sysWaitDrawSync();
-			seq_data[now_seq][2](&seqWork); //call Exit function
-		}
-		prev_seq = now_seq; //store previous
-		memset(&seqWork, 0, sizeof(SequenceWork));
-		now_seq = next_seq;
-		seqWork.sequence = next_seq;
-		seqWork.state = 0;
-		seqWork.mapName = next_p0;
-		seqWork.beroName = next_p1;
-		seq_data[next_seq][0](&seqWork); //call Init function
-	}
-	seq_data[now_seq][1](&seqWork); //call Main function
+    if (next_seq != now_seq) {
+        if (now_seq != SEQ_UNDEFINED) {
+            sysWaitDrawSync();
+            seq_data[now_seq][2](&seqWork); //call Exit function
+        }
+        prev_seq = now_seq; //store previous
+        memset(&seqWork, 0, sizeof(SequenceWork));
+        now_seq = next_seq;
+        seqWork.sequence = next_seq;
+        seqWork.state = 0;
+        seqWork.mapName = next_p0;
+        seqWork.beroName = next_p1;
+        seq_data[next_seq][0](&seqWork); //call Init function
+    }
+    seq_data[now_seq][1](&seqWork); //call Main function
 }
 
 void seqSetSeq(SequenceType seq, const char* map, const char* bero) {
-	next_seq = seq;
-	next_p0 = map;
-	next_p1 = bero;
+    next_seq = seq;
+    next_p0 = map;
+    next_p1 = bero;
 }
 
 SequenceType seqGetSeq(void) {
-	return now_seq;
+    return now_seq;
 }
 
 SequenceType seqGetPrevSeq(void) {
-	return prev_seq;
+    return prev_seq;
 }
 
 SequenceType seqGetNextSeq(void) {
-	return next_seq;
+    return next_seq;
 }
 
 BOOL seqCheckSeq(void) {
-	return now_seq != next_seq;
+    return now_seq != next_seq;
 }

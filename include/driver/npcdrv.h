@@ -240,16 +240,16 @@ typedef struct FirstStrikeInfo {
 } FirstStrikeInfo;
 
 typedef struct FieldBattleInfo {
-	u32 mode; //0x0, unused
-	BattleUnitType party; //0x4
-	u32 partyId; //0x8
-	NpcBattleInfo* setup; //0xC
-	u32 result; //0x10
-	u32 coins; //0x14, BattleStoreCoin
-	u8 ruleType; //0x18, NpcBattleInfo.battleRule[0], index into the _rule_msg tables
-	u8 ruleKeepResult; //0x19
-	u8 ruleParam; //0x1A, battleRule[1], printed in the rule message
-	u8 ruleParam2; //0x1B, battleRule[2], never read
+    u32 mode; //0x0, unused
+    BattleUnitType party; //0x4
+    u32 partyId; //0x8
+    NpcBattleInfo* setup; //0xC
+    u32 result; //0x10
+    u32 coins; //0x14, BattleStoreCoin
+    u8 ruleType; //0x18, NpcBattleInfo.battleRule[0], index into the _rule_msg tables
+    u8 ruleKeepResult; //0x19
+    u8 ruleParam; //0x1A, battleRule[1], printed in the rule message
+    u8 ruleParam2; //0x1B, battleRule[2], never read
 } FieldBattleInfo;
 
 typedef struct FieldBattleData {

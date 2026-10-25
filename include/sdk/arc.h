@@ -3,27 +3,27 @@
 #include <dolphin/types.h>
 
 typedef struct ARCHeader {
-	u32 magic;
-	s32 fstStart;
-	u32 fstSize;
-	s32 fileStart;
-	s32 reserved[4];
+    u32 magic;
+    s32 fstStart;
+    u32 fstSize;
+    s32 fileStart;
+    s32 reserved[4];
 } ARCHeader;
 
 typedef struct ARCHandle {
-	void* archiveStartAddr;
-	void* FSTStart;
-	void* fileStart;
-	u32 entryNum;
-	char* FSTStringStart;
-	u32 FSTLength;
-	u32 currDir;
+    void* archiveStartAddr;
+    void* FSTStart;
+    void* fileStart;
+    u32 entryNum;
+    char* FSTStringStart;
+    u32 FSTLength;
+    u32 currDir;
 } ARCHandle;
 
 typedef struct ARCFileInfo {
-	ARCHandle* handle;
-	u32 startOffset;
-	u32 length;
+    ARCHandle* handle;
+    u32 startOffset;
+    u32 length;
 } ARCFileInfo;
 
 s32 ARCConvertPathToEntrynum(ARCHandle* handle, const char* path);

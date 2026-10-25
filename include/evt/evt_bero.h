@@ -4,28 +4,28 @@
 #include "evt/evt_cmd.h"
 
 typedef union BeroINFO {
-	const char* name;
-	s32 value;
+    const char* name;
+    s32 value;
 } BeroINFO;
 
 typedef struct BeroEntry {
-	const char* hitName; //0x0
-	u16 type; //0x4, BeroInfoType | 0x1000 background | 0x2000 no fade; low 12 bits: 0 road, 1 door, 2 pipe, 3 gate, 0xF00 none
-	u16 sfxId; //0x6
-	s32 directionId; //0x8, 45-degree steps from north, 8 up, 9 down
-	s32 centerPosition; //0xC, x of centerPosition[3]
-	s32 centerPositionY; //0x10
-	s32 centerPositionZ; //0x14
-	s32 length; //0x18, -1 = default for type
-	EvtWord* enterEvent; //0x1C;
-	s32 caseType; //0x20, -1 = default for type
-	EvtWord* exitEvent; //0x24
-	const char* nextMapName; //0x28
-	const char* nextBeroName; //0x2C
-	u16 enterAnimeType; //0x30
-	u16 exitAnimeType; //0x32
-	const void* enterAnimeArg; //0x34, map animation name or script, by anime type
-	const void* exitAnimeArg; //0x38, map animation name or script, by anime type
+    const char* hitName; //0x0
+    u16 type; //0x4, BeroInfoType | 0x1000 background | 0x2000 no fade; low 12 bits: 0 road, 1 door, 2 pipe, 3 gate, 0xF00 none
+    u16 sfxId; //0x6
+    s32 directionId; //0x8, 45-degree steps from north, 8 up, 9 down
+    s32 centerPosition; //0xC, x of centerPosition[3]
+    s32 centerPositionY; //0x10
+    s32 centerPositionZ; //0x14
+    s32 length; //0x18, -1 = default for type
+    EvtWord* enterEvent; //0x1C;
+    s32 caseType; //0x20, -1 = default for type
+    EvtWord* exitEvent; //0x24
+    const char* nextMapName; //0x28
+    const char* nextBeroName; //0x2C
+    u16 enterAnimeType; //0x30
+    u16 exitAnimeType; //0x32
+    const void* enterAnimeArg; //0x34, map animation name or script, by anime type
+    const void* exitAnimeArg; //0x38, map animation name or script, by anime type
 } BeroEntry;
 
 EVT_DEF(evt_bero_info_run);

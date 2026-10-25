@@ -87,24 +87,24 @@ typedef enum MarioFlags {
 
 #pragma enumsalwaysint off
 typedef enum MarioTrigFlags {
-	MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION = (1 << 0),
-	MARIO_TRIG_FLAG_USE_PARTNER = (1 << 1),
-	MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON = (1 << 2),
-	MARIO_TRIG_FLAG_DISP_DIR_CORRECTION = (1 << 8),
-	MARIO_TRIG_FLAG_DISP_DIR_LEFT = (1 << 9),
-	MARIO_TRIG_FLAG_DISP_DIR_RIGHT = (1 << 10),
-	MARIO_TRIG_FLAG_CHG_ANIM = (1 << 12),
-	MARIO_TRIG_FLAG_CHG_PAPER_ANIM = (1 << 14),
-	MARIO_TRIG_FLAG_SET_JUMP_PARAMS = (1 << 16),
-	MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI = (1 << 17),
-	MARIO_TRIG_FLAG_JABARA_CHK = (1 << 20),
-	MARIO_TRIG_FLAG_JABARA_MOVE_CHK = (1 << 21),
-	MARIO_TRIG_FLAG_START_JABARA_SPIN = (1 << 22),
-	MARIO_TRIG_FLAG_DISABLE_UNUSED_INPUT = (1 << 24),
-	MARIO_TRIG_FLAG_DISABLE_TRIGGERS = (1 << 25),
-	MARIO_TRIG_FLAG_DISABLE_SUB_STICK = (1 << 26),
-	MARIO_TRIG_FLAG_DISABLE_STICK = (1 << 27),
-	MARIO_TRIG_FLAG_DISABLE_PARTY_SLIT = (1 << 30)
+    MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION = (1 << 0),
+    MARIO_TRIG_FLAG_USE_PARTNER = (1 << 1),
+    MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON = (1 << 2),
+    MARIO_TRIG_FLAG_DISP_DIR_CORRECTION = (1 << 8),
+    MARIO_TRIG_FLAG_DISP_DIR_LEFT = (1 << 9),
+    MARIO_TRIG_FLAG_DISP_DIR_RIGHT = (1 << 10),
+    MARIO_TRIG_FLAG_CHG_ANIM = (1 << 12),
+    MARIO_TRIG_FLAG_CHG_PAPER_ANIM = (1 << 14),
+    MARIO_TRIG_FLAG_SET_JUMP_PARAMS = (1 << 16),
+    MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI = (1 << 17),
+    MARIO_TRIG_FLAG_JABARA_CHK = (1 << 20),
+    MARIO_TRIG_FLAG_JABARA_MOVE_CHK = (1 << 21),
+    MARIO_TRIG_FLAG_START_JABARA_SPIN = (1 << 22),
+    MARIO_TRIG_FLAG_DISABLE_UNUSED_INPUT = (1 << 24),
+    MARIO_TRIG_FLAG_DISABLE_TRIGGERS = (1 << 25),
+    MARIO_TRIG_FLAG_DISABLE_SUB_STICK = (1 << 26),
+    MARIO_TRIG_FLAG_DISABLE_STICK = (1 << 27),
+    MARIO_TRIG_FLAG_DISABLE_PARTY_SLIT = (1 << 30)
 } MarioTrigFlags;
 #pragma enumsalwaysint on
 
@@ -294,14 +294,14 @@ typedef struct MarioWork {
     s8 colorId;                    // 0x3D
     s8 dokanType;                  // 0x3E, pipe kind set by evt_mario before motion 0x1D (mot_dokan)
     s8 wallPushTimer;              // 0x3F, frames pushed into a wall before hitobjPush is set
-	s8 wMotionTimer;               // 0x40
+    s8 wMotionTimer;               // 0x40
     s8 hammerChargeTimer;          // 0x41, mot_hammer charge frames (capped at 20)
     s8 hammerChargeLv;             // 0x42, mot_hammer charge stage (3 = full)
     s8 hammerDir;                  // 0x43, mot_hammer swing side (0/1)
     s32 currSubMotionId;           // 0x44
     s32 multiTimer;                // 0x48, per-motion frame counter (Koopa footstep SFX every 20, npcdrv flag-1 shadow size); ttyd-tools wYawnTimer, but no yawn use here
-	s16 mutekiTimer;                     // 0x4C
-	s16 forceMoveTimer;            // 0x4E
+    s16 mutekiTimer;                     // 0x4C
+    s16 forceMoveTimer;            // 0x4E
     s16 airTimer;                  // 0x50
     s16 jumpPeakAirTime;           // 0x52, airTimer when the jump reached its peak (mario_motion.c marioJump)
     s16 prevAirTimer;              // 0x54, airTimer of the previous frame (marioMain end)
@@ -352,19 +352,19 @@ typedef struct MarioWork {
     s32 screenY;                    // 0x16C
     s32 screenZ;                   // 0x170
     Vec floorMove;                 // 0x174, per-frame position correction: moving floor, evt_mario_set_hosei_xyz
-	f32 baseSpeed;                 // 0x180, same on US
+    f32 baseSpeed;                 // 0x180, same on US
     f32 mBaseWalkSpeed;            // 0x184
     f32 mBaseDashSpeed;            // 0x188, same on US
     f32 moveDist;                  // 0x18C, distance to move this frame (marioMove)
 #ifdef VERSION_G8ME01
     f32 jumpStartSpeed;            // 0x190 US only (+4 from here): baseSpeed at jump start
 #endif
-	f32 controlStickSensitivity;   // 0x190
-	f32 controlStickAngle;         // 0x194
+    f32 controlStickSensitivity;   // 0x190
+    f32 controlStickAngle;         // 0x194
     f32 targetYaw;                 // 0x198
     f32 moveDirection;                    // 0x19C
-	f32 directionView;             // 0x1A0
-	f32 forceDir;                  // 0x1A4, forced view direction while flags 0x40 (evt_mario_set_force_dir)
+    f32 directionView;             // 0x1A0
+    f32 forceDir;                  // 0x1A4, forced view direction while flags 0x40 (evt_mario_set_force_dir)
     f32 displayDirection;                           // 0x1A8
     f32 displayDirectionTarget;                     // 0x1AC
     f32 savedDisplayDirection;     // 0x1B0, displayDirection saved by mot_hammer
@@ -378,21 +378,21 @@ typedef struct MarioWork {
     struct NpcEntry* targetNpc;    // 0x1D8, NPC in range for interaction (npcdrv)
     void* hitobjFrontA;             // 0x1DC, wall in front found on an A press
     void* hitobjFront;              // 0x1E0
-	void* hitobjStandOn;           // 0x1E4, 0x1E8 US HitEntry
-	void* hitobjJumpFrom;          // 0x1E8, 0x1EC US HitEntry
-	void* hitobjPush;              // 0x1EC JP, 0x1F0 US HitEntry
-	void* hitobjWall;               // 0x1F0, wall touched this frame (before push threshold)
-	void* hitobjHead;              // 0x1F4
-	void* hitobjUnder;              // 0x1F8
-	void* hitobjHammer;             // 0x1FC, HitEntry hit by the hammer (mobjdrv/casedrv/marioChkHitHammer)
-	void* hitobjHammerNew;          // 0x200, HitEntry found by this swing frame (copied to hitobjHammer)
-	void* damageHit;               // 0x204, HitEntry
-	void* prevHitobjStandOn;       // 0x208, hitobjStandOn of the previous frame (marioMain end)
-	struct HitEntry* hitobjFrontWall; // 0x20C, front wall found by searchFrontWall
-	f32 frontWallDist;             // 0x210, distance to the front wall (1000 = none)
-	f32 groundSlope;               // 0x214, floor slope angle (degrees)
-	Vec groundRot;                 // 0x218, floor normal as x/z rotation angles (degrees)
-	f32 playerGravity;             // 0x224 JP, 228 US, 1.0 (0.5 on moo_* moon maps); scales walk/dash speed and jump gravity (marioSetGravity)
+    void* hitobjStandOn;           // 0x1E4, 0x1E8 US HitEntry
+    void* hitobjJumpFrom;          // 0x1E8, 0x1EC US HitEntry
+    void* hitobjPush;              // 0x1EC JP, 0x1F0 US HitEntry
+    void* hitobjWall;               // 0x1F0, wall touched this frame (before push threshold)
+    void* hitobjHead;              // 0x1F4
+    void* hitobjUnder;              // 0x1F8
+    void* hitobjHammer;             // 0x1FC, HitEntry hit by the hammer (mobjdrv/casedrv/marioChkHitHammer)
+    void* hitobjHammerNew;          // 0x200, HitEntry found by this swing frame (copied to hitobjHammer)
+    void* damageHit;               // 0x204, HitEntry
+    void* prevHitobjStandOn;       // 0x208, hitobjStandOn of the previous frame (marioMain end)
+    struct HitEntry* hitobjFrontWall; // 0x20C, front wall found by searchFrontWall
+    f32 frontWallDist;             // 0x210, distance to the front wall (1000 = none)
+    f32 groundSlope;               // 0x214, floor slope angle (degrees)
+    Vec groundRot;                 // 0x218, floor normal as x/z rotation angles (degrees)
+    f32 playerGravity;             // 0x224 JP, 228 US, 1.0 (0.5 on moo_* moon maps); scales walk/dash speed and jump gravity (marioSetGravity)
     s32 paperAnimGroupId[5];       // 0x228 JP, 0x22C US
     s32 paperPoseId;               // 0x23C JP, 0x240 US
     u8 pad_240[0x241 - 0x240];     // 0x240, never accessed
@@ -403,25 +403,25 @@ typedef struct MarioWork {
     u16 buttonTrg;               // 0x248
     u16 buttonRepeat;              // 0x24A
     u16 buttonUp;                  // 0x24C
-	s8 wStickDir1;                 // 0x24E JP, 0x252 US
-	s8 wStickDir2;                 // 0x24F JP, 0x253 US
-	s8 substickX;                  // 0x250
-	s8 substickY;                  // 0x251, negated
-	u8 triggerL;                   // 0x252
-	u8 triggerR;                   // 0x253
-	u8 analogA;                    // 0x254, always 0
-	u8 analogB;                    // 0x255, always 0
-	u8 pad_256[0x258 - 0x256];    // 0x256, never accessed
-	u32 demoButtonPrev;            // 0x258, DemoPad buttons last frame
-	u32 demoButtonNew;             // 0x25C, DemoPad buttons pressed this frame
-	void* balloonEffect;           // 0x260, EffectEntry*
-	void* balloonNpc;              // 0x264, NpcEntry*
-	s32 slitPosSet;                // 0x268, mot_slit: slitPos is valid
-	Vec slitPos;                   // 0x26C, mot_slit saved position
+    s8 wStickDir1;                 // 0x24E JP, 0x252 US
+    s8 wStickDir2;                 // 0x24F JP, 0x253 US
+    s8 substickX;                  // 0x250
+    s8 substickY;                  // 0x251, negated
+    u8 triggerL;                   // 0x252
+    u8 triggerR;                   // 0x253
+    u8 analogA;                    // 0x254, always 0
+    u8 analogB;                    // 0x255, always 0
+    u8 pad_256[0x258 - 0x256];    // 0x256, never accessed
+    u32 demoButtonPrev;            // 0x258, DemoPad buttons last frame
+    u32 demoButtonNew;             // 0x25C, DemoPad buttons pressed this frame
+    void* balloonEffect;           // 0x260, EffectEntry*
+    void* balloonNpc;              // 0x264, NpcEntry*
+    s32 slitPosSet;                // 0x268, mot_slit: slitPos is valid
+    Vec slitPos;                   // 0x26C, mot_slit saved position
 #ifdef VERSION_G8ME01
     s32 soundId[5];                // 0x278, US: 5 sounds (+8 from here)
 #else
-	s32 soundId[3];                // 0x278
+    s32 soundId[3];                // 0x278
 #endif
     u32 enableKeyMask;             // 0x284 JP, 0x290 US: evt_mario_set_enable_key; 0 = all buttons
     union {                        // 0x288 JP, 0x294 US: per-motion work (motstruct design)

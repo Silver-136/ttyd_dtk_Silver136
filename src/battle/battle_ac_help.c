@@ -6,31 +6,31 @@
 #include "driver/windowdrv.h"
 #include "manager/fontmgr.h"
 void BattleAcHelpSetHelp(const char* msg) {
-	_battleWorkPointer->acHelpMsg = msg;
+    _battleWorkPointer->acHelpMsg = msg;
 }
 void BattleAcHelpSetDispType(s32 type) {
-	_battleWorkPointer->acHelpDispType = type;
-	switch (type) {
-		case 0:
-			BattleAudience_WinSetActive(TRUE);
-			break;
-		default:
-			BattleAudience_WinSetActive(FALSE);
-			break;
-	}
+    _battleWorkPointer->acHelpDispType = type;
+    switch (type) {
+        case 0:
+            BattleAudience_WinSetActive(TRUE);
+            break;
+        default:
+            BattleAudience_WinSetActive(FALSE);
+            break;
+    }
 }
 void BattleAcHelpInit(void) {
-	//stubbed in retail
+    //stubbed in retail
 }
 void _ac_help_disp(CameraId cameraId, void* param);
 void BattleAcHelpMain(void) {
-	BattleWork* wp = _battleWorkPointer;
-	s32* type = &wp->acHelpDispType;
-	if (wp->acHelpMsg && *type && !(wp->flags & 2)) {
-		dispEntry(CAMERA_2D, 498.0f, 1, _ac_help_disp, NULL);
-	}
-	if (_ac_help_disp) {
-	}
+    BattleWork* wp = _battleWorkPointer;
+    s32* type = &wp->acHelpDispType;
+    if (wp->acHelpMsg && *type && !(wp->flags & 2)) {
+        dispEntry(CAMERA_2D, 498.0f, 1, _ac_help_disp, NULL);
+    }
+    if (_ac_help_disp) {
+    }
 }
 void _ac_help_disp(CameraId cameraId, void *param)
 {

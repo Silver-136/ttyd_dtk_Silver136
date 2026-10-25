@@ -15,13 +15,13 @@
 // Turn on MSR[FP] and MSR[RI] (0x8000 | 0x2) so the error handler can use the FPU and
 // survive nested exceptions. Clobbers r5, as in the original code.
 #define HW_ENABLE_MSR_FP_RI() \
-	asm { \
-		mfmsr	r5; \
-		ori		r5, r5, 0x8000; \
-		ori		r5, r5, 2; \
-		mtmsr	r5; \
-		isync; \
-	}
+    asm { \
+        mfmsr	r5; \
+        ori		r5, r5, 0x8000; \
+        ori		r5, r5, 2; \
+        mtmsr	r5; \
+        isync; \
+    }
 
 #else
 

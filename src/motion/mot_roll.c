@@ -32,13 +32,13 @@ void marioAdjustMoveDir(void);
 #define CAMF() (camGetPtr((CameraId)8)->flags)
 
 typedef struct MotRollWork {
-	f32 spdX;           // 0x00: roll velocity x (marioResetRollSpd clears it)
-	f32 spdZ;           // 0x04: roll velocity z
-	s32 squashTrigger;  // 0x08: nonzero restarts the squash animation (-> squashState 1)
-	s32 squashState;    // 0x0C: y-scale squash state machine (1.4 / back to 1.0)
-	s32 field_0x10;     // 0x10
+    f32 spdX;           // 0x00: roll velocity x (marioResetRollSpd clears it)
+    f32 spdZ;           // 0x04: roll velocity z
+    s32 squashTrigger;  // 0x08: nonzero restarts the squash animation (-> squashState 1)
+    s32 squashState;    // 0x0C: y-scale squash state machine (1.4 / back to 1.0)
+    s32 field_0x10;     // 0x10
 #ifdef VERSION_G8ME01
-	s32 sfxId;          // 0x14: US only, roll loop (0x17B), -1 when off
+    s32 sfxId;          // 0x14: US only, roll loop (0x17B), -1 when off
 #endif
 } MotRollWork;          // size 0x14 JP, 0x18 US
 

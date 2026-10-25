@@ -159,422 +159,422 @@ EVT_END()
 //new in retail, no args
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
-	EvtWord* args = event->args;
-	s32 x, y, z;
+    EvtWord* args = event->args;
+    s32 x, y, z;
 
-	x = evtGetValue(event, args[0]);
-	y = evtGetValue(event, args[1]);
-	z = evtGetValue(event, args[2]);
-	N_marioSetBottomlessRespawnPosOnBeroEntry((f32)x, (f32)y, (f32)z);
-	return EVT_RETURN_DONE;
+    x = evtGetValue(event, args[0]);
+    y = evtGetValue(event, args[1]);
+    z = evtGetValue(event, args[2]);
+    N_marioSetBottomlessRespawnPosOnBeroEntry((f32)x, (f32)y, (f32)z);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
-	MarioWork* wp = marioGetPtr();
-	N_marioSetBottomlessRespawnPosOnBeroEntry(wp->position.x, wp->position.y, wp->position.z);
-	return EVT_RETURN_DONE;
+    MarioWork* wp = marioGetPtr();
+    N_marioSetBottomlessRespawnPosOnBeroEntry(wp->position.x, wp->position.y, wp->position.z);
+    return EVT_RETURN_DONE;
 }
 
 s32 bero_get_BeroEXEC(void) {
-	return BeroEXEC;
+    return BeroEXEC;
 }
 
 s32 bero_get_BeroNUM(void) {
-	return BeroNUM;
+    return BeroNUM;
 }
 
 f32 bero_get_BeroSX(void) {
-	return BeroSX;
+    return BeroSX;
 }
 
 f32 bero_get_BeroSY(void) {
-	return BeroSY;
+    return BeroSY;
 }
 
 f32 bero_get_BeroSZ(void) {
-	return BeroSZ;
+    return BeroSZ;
 }
 
 f32 bero_get_BeroEX(void) {
-	return BeroEX;
+    return BeroEX;
 }
 
 f32 bero_get_BeroEY(void) {
-	return BeroEY;
+    return BeroEY;
 }
 
 f32 bero_get_BeroEZ(void) {
-	return BeroEZ;
+    return BeroEZ;
 }
 
 BeroEntry** bero_get_ptr(void) {
-	return BeroINFOARR;
+    return BeroINFOARR;
 }
 
 void bero_clear_Offset(void) {
-	BeroOX = 0.0f;
-	BeroOY = 0.0f;
-	BeroOZ = 0.0f;
+    BeroOX = 0.0f;
+    BeroOY = 0.0f;
+    BeroOZ = 0.0f;
 }
 
 s32 bero_id_filter(EvtWord id) { //1:1, cursed function, do not touch
-	BeroEntry** temp, **table = BeroINFOARR;
-	s32 newId = id;
-	const char *string, *test;
+    BeroEntry** temp, **table = BeroINFOARR;
+    s32 newId = id;
+    const char *string, *test;
 
-	if (id < 0 || id >= 16) {
-		test = (const char*)id;
-		if (&newId != NULL) {
-			newId = 0;
-		}
-		temp = table;
-		while (1) {
-			string = (*temp)->hitName;
-			if (!string || !strcmp(string, test)) {
-				break;
-			}
-			temp++;
-			if (&newId != NULL) {
-				newId++;
-			}
-		}
-	}
-	return newId;
+    if (id < 0 || id >= 16) {
+        test = (const char*)id;
+        if (&newId != NULL) {
+            newId = 0;
+        }
+        temp = table;
+        while (1) {
+            string = (*temp)->hitName;
+            if (!string || !strcmp(string, test)) {
+                break;
+            }
+            temp++;
+            if (&newId != NULL) {
+                newId++;
+            }
+        }
+    }
+    return newId;
 }
 
 //const char** mapName, const char** beroName
 USER_FUNC(evt_bero_mapchange) {
-	EvtWord* args = event->args;
-	const char *map, *bero;
+    EvtWord* args = event->args;
+    const char *map, *bero;
 
-	map = (const char*)evtGetValue(event, args[0]);
-	bero = (const char*)evtGetValue(event, args[1]);
-	if (isFirstCall) {
-		seqSetSeq(SEQ_MAP_CHANGE, map, bero);
-	}
-	return EVT_RETURN_BLOCK;
+    map = (const char*)evtGetValue(event, args[0]);
+    bero = (const char*)evtGetValue(event, args[1]);
+    if (isFirstCall) {
+        seqSetSeq(SEQ_MAP_CHANGE, map, bero);
+    }
+    return EVT_RETURN_BLOCK;
 }
 
 //s32 retIndex
 USER_FUNC(evt_bero_get_entername) {
-	evtSetValue(event, *event->args, (EvtWord)&gp->beroEnterName);
-	return EVT_RETURN_DONE;
+    evtSetValue(event, *event->args, (EvtWord)&gp->beroEnterName);
+    return EVT_RETURN_DONE;
 }
 
 //BOOL* on/off, s32* mask
 USER_FUNC(evt_bero_exec_onoff) {
-	EvtWord* args = event->args;
-	BOOL onoff;
-	s32 mask, value;
+    EvtWord* args = event->args;
+    BOOL onoff;
+    s32 mask, value;
 
-	onoff = evtGetValue(event, args[0]);
-	mask = evtGetValue(event, args[1]);
-	value = BeroEXEC | mask;
-	if (onoff) {
-		value = BeroEXEC & ~mask;
-	}
-	BeroEXEC = value;
-	return EVT_RETURN_DONE;
+    onoff = evtGetValue(event, args[0]);
+    mask = evtGetValue(event, args[1]);
+    value = BeroEXEC | mask;
+    if (onoff) {
+        value = BeroEXEC & ~mask;
+    }
+    BeroEXEC = value;
+    return EVT_RETURN_DONE;
 }
 
 //s32 retIndex
 USER_FUNC(evt_bero_exec_get) {
-	evtSetValue(event, *event->args, BeroEXEC);
-	return EVT_RETURN_DONE;
+    evtSetValue(event, *event->args, BeroEXEC);
+    return EVT_RETURN_DONE;
 }
 
 //s32* mask, TODO: add states, change EvtStatus to s32 and do #defines
 USER_FUNC(evt_bero_exec_wait) {
-	return evtGetValue(event, *event->args) & BeroEXEC ? EVT_RETURN_DONE : 0;
+    return evtGetValue(event, *event->args) & BeroEXEC ? EVT_RETURN_DONE : 0;
 }
 
 //f32 retX, f32 retY, f32 retZ
 USER_FUNC(evt_bero_get_start_position) {
-	EvtWord* args = event->args;
+    EvtWord* args = event->args;
 
-	evtSetFloat(event, args[0], BeroSX);
-	evtSetFloat(event, args[1], BeroSY);
-	evtSetFloat(event, args[2], BeroSZ);
-	return EVT_RETURN_DONE;
+    evtSetFloat(event, args[0], BeroSX);
+    evtSetFloat(event, args[1], BeroSY);
+    evtSetFloat(event, args[2], BeroSZ);
+    return EVT_RETURN_DONE;
 }
 
 //f32 retX, f32 retY, f32 retZ
 USER_FUNC(evt_bero_get_end_position) {
-	EvtWord* args = event->args;
+    EvtWord* args = event->args;
 
-	evtSetFloat(event, args[0], BeroEX);
-	evtSetFloat(event, args[1], BeroEY);
-	evtSetFloat(event, args[2], BeroEZ);
-	return EVT_RETURN_DONE;
+    evtSetFloat(event, args[0], BeroEX);
+    evtSetFloat(event, args[1], BeroEY);
+    evtSetFloat(event, args[2], BeroEZ);
+    return EVT_RETURN_DONE;
 }
 
 //s32* id, s32 retIndex1, s32 retIndex2, s32 retIndex3, s32 retIndex4
 USER_FUNC(evt_bero_get_info_anime) {
-	BeroEntry* bero;
-	EvtWord* args = event->args;
+    BeroEntry* bero;
+    EvtWord* args = event->args;
 
-	bero = BeroINFOARR[evtGetValue(event, args[0])];
-	evtSetValue(event, args[1], bero->enterAnimeType);
-	evtSetValue(event, args[2], bero->exitAnimeType);
-	evtSetValue(event, args[3], (EvtWord)bero->enterAnimeArg);
-	evtSetValue(event, args[4], (EvtWord)bero->exitAnimeArg);
-	return EVT_RETURN_DONE;
+    bero = BeroINFOARR[evtGetValue(event, args[0])];
+    evtSetValue(event, args[1], bero->enterAnimeType);
+    evtSetValue(event, args[2], bero->exitAnimeType);
+    evtSetValue(event, args[3], (EvtWord)bero->enterAnimeArg);
+    evtSetValue(event, args[4], (EvtWord)bero->exitAnimeArg);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_get_info_length) {
-	BeroEntry* bero;
-	EvtWord* args = event->args;
-	s32 v5;
-	f32 storeme;
+    BeroEntry* bero;
+    EvtWord* args = event->args;
+    s32 v5;
+    f32 storeme;
 
-	args = event->args;
-	bero = BeroINFOARR[evtGetValue(event, args[0])];
-	v5 = bero->length;
-	if (v5 != -1) {
-		evtSetFloat(event, args[1], (f32)v5);
-		return EVT_RETURN_DONE;
-	}
-	switch (bero->type & 0xFFF) {
-		case 0:
-		case 3:
-		case 0xF00:
-			storeme = 30.0f;
-			break;
-		case 1:
-			storeme = 60.0f;
-			break;
-		case 2:
-			storeme = 60.0f;
-			break;
-		default:
-			storeme = 60.0f;
-			break;
-	}
-	evtSetFloat(event, args[1], storeme);
-	return EVT_RETURN_DONE;
+    args = event->args;
+    bero = BeroINFOARR[evtGetValue(event, args[0])];
+    v5 = bero->length;
+    if (v5 != -1) {
+        evtSetFloat(event, args[1], (f32)v5);
+        return EVT_RETURN_DONE;
+    }
+    switch (bero->type & 0xFFF) {
+        case 0:
+        case 3:
+        case 0xF00:
+            storeme = 30.0f;
+            break;
+        case 1:
+            storeme = 60.0f;
+            break;
+        case 2:
+            storeme = 60.0f;
+            break;
+        default:
+            storeme = 60.0f;
+            break;
+    }
+    evtSetFloat(event, args[1], storeme);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_get_info_kinddir) {
-	BeroEntry* bero;
-	EvtWord* args = event->args;
+    BeroEntry* bero;
+    EvtWord* args = event->args;
 
-	bero = BeroINFOARR[evtGetValue(event, args[0])];
-	evtSetValue(event, args[1], bero->type);
-	evtSetValue(event, args[2], bero->sfxId);
-	evtSetValue(event, args[3], bero->directionId);
-	return EVT_RETURN_DONE;
+    bero = BeroINFOARR[evtGetValue(event, args[0])];
+    evtSetValue(event, args[1], bero->type);
+    evtSetValue(event, args[2], bero->sfxId);
+    evtSetValue(event, args[3], bero->directionId);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_get_info_nextarea) {
-	BeroEntry* bero;
-	EvtWord* args = event->args;
+    BeroEntry* bero;
+    EvtWord* args = event->args;
 
-	bero = BeroINFOARR[evtGetValue(event, args[0])];
-	evtSetValue(event, args[1], (EvtWord)bero->nextMapName);
-	evtSetValue(event, args[2], (EvtWord)bero->nextBeroName);
-	return EVT_RETURN_DONE;
+    bero = BeroINFOARR[evtGetValue(event, args[0])];
+    evtSetValue(event, args[1], (EvtWord)bero->nextMapName);
+    evtSetValue(event, args[2], (EvtWord)bero->nextBeroName);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_set_now_number) {
-	BeroNOWNUM = evtGetValue(event, *event->args);
-	return EVT_RETURN_DONE;
+    BeroNOWNUM = evtGetValue(event, *event->args);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_get_now_number) {
-	evtSetValue(event, *event->args, BeroNOWNUM);
-	return EVT_RETURN_DONE;
+    evtSetValue(event, *event->args, BeroNOWNUM);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_get_info) {
-	BeroEntry** table;
-	int i;
-	BeroEntry* entry;
-	HitEntry* hit;
-	s32* switches;
-	s32 val;
+    BeroEntry** table;
+    int i;
+    BeroEntry* entry;
+    HitEntry* hit;
+    s32* switches;
+    s32 val;
 
-	table = BeroINFOARR;
-	for (i = 0; i < 16; i++) {
-		*table++ = NULL;
-	}
-	table = BeroINFOARR;
-	
-	{
-	BeroEntry* en;
-	for (en = (BeroEntry*)event->lwData[0];; en++) {
-		HitEntry* h = hitNameToPtr(en->hitName);
-		if (!en->hitName) {
-			break;
-		}
-		if (!h) {
-			mapErrorEntry(1, en->hitName);
-		}
-	}
-	}
-	{
-	BeroEntry* e = (BeroEntry*)event->lwData[0];
-	switches = BeroSW;
-	i = 0;
-	while (1) {
-		if (!e->hitName) {
-			break;
-		}
-		*table = e;
-		switches[i] = -1;
-		table++;
-		i++;
-		e++;
-	}
-	}
-	BeroNUM = i;
-	BeroEXEC = 0;
-	return EVT_RETURN_DONE;
+    table = BeroINFOARR;
+    for (i = 0; i < 16; i++) {
+        *table++ = NULL;
+    }
+    table = BeroINFOARR;
+    
+    {
+    BeroEntry* en;
+    for (en = (BeroEntry*)event->lwData[0];; en++) {
+        HitEntry* h = hitNameToPtr(en->hitName);
+        if (!en->hitName) {
+            break;
+        }
+        if (!h) {
+            mapErrorEntry(1, en->hitName);
+        }
+    }
+    }
+    {
+    BeroEntry* e = (BeroEntry*)event->lwData[0];
+    switches = BeroSW;
+    i = 0;
+    while (1) {
+        if (!e->hitName) {
+            break;
+        }
+        *table = e;
+        switches[i] = -1;
+        table++;
+        i++;
+        e++;
+    }
+    }
+    BeroNUM = i;
+    BeroEXEC = 0;
+    return EVT_RETURN_DONE;
 }
 
 // FAKE: walk flag picks a pointer-walk loop (evt_bero_get_info_num) or the index loop (evt_bero_get_into_info); constant-folded per call site
 static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
-	u32 i;
-	const char** p;
-	const char* dirs[8] = {"n_", "ne_", "e_", "se_", "s_", "sw_", "w_", "nw_"};
-	s32 kind = bero->directionId;
-	switch (kind) {
-	case 20000:
-		if (kind == 10000) {
-			kind = 10000;
-		} else {
-		switch (bero->type & 0xFFF) {
-			case 0:
-			case 1:
-				if (walk) {
-					for (i = 0, p = dirs; i < 8; i++, p++) {
-						if (!strncmp(*p, bero->hitName, strlen(*p))) {
-							break;
-						}
-					}
-				} else {
-					for (i = 0; i < 8; i++) {
-						if (!strncmp(dirs[i], bero->hitName, strlen(dirs[i]))) {
-							break;
-						}
-					}
-				}
-				break;
-			default:
-				i = 10000;
-				break;
-		}
-		kind = i;
-		}
-		break;
-	}
-	return kind;
+    u32 i;
+    const char** p;
+    const char* dirs[8] = {"n_", "ne_", "e_", "se_", "s_", "sw_", "w_", "nw_"};
+    s32 kind = bero->directionId;
+    switch (kind) {
+    case 20000:
+        if (kind == 10000) {
+            kind = 10000;
+        } else {
+        switch (bero->type & 0xFFF) {
+            case 0:
+            case 1:
+                if (walk) {
+                    for (i = 0, p = dirs; i < 8; i++, p++) {
+                        if (!strncmp(*p, bero->hitName, strlen(*p))) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (i = 0; i < 8; i++) {
+                        if (!strncmp(dirs[i], bero->hitName, strlen(dirs[i]))) {
+                            break;
+                        }
+                    }
+                }
+                break;
+            default:
+                i = 10000;
+                break;
+        }
+        kind = i;
+        }
+        break;
+    }
+    return kind;
 }
 
 USER_FUNC(evt_bero_get_into_info) {
-	s32 i;
-	BeroEntry* bero;
-	EvtWord* evt;
-	BeroEntry** table;
+    s32 i;
+    BeroEntry* bero;
+    EvtWord* evt;
+    BeroEntry** table;
 
-	for (i = 0;; i++) {
-		bero = BeroINFOARR[i];
-		if (!bero || !strcmp(gp->beroEnterName, "")) {
-			i = 0;
-			bero = bero_null;
-			break;
-		}
-		if (!strcmp(bero->hitName, gp->beroEnterName)) break;
-	}
-	if ((gp->flags & 2) && !strcmp(gp->beroEnterName, "")) {
-		bero = BeroINFOARR[0];
-		event->lwData[1] = 0;
-		event->lwData[2] = BeroNUM;
-		event->lwData[3] = (EvtWord)bero->hitName;
-		event->lwData[4] = bero->type;
-		event->lwData[5] = bero_get_kind(bero, 0);
-		event->lwData[6] = (EvtWord)&bero->centerPosition;
-		evt = bero->enterEvent;
-		if (!evt) evt = default_entevt;
-		event->lwData[7] = (EvtWord)evt;
-		event->lwData[8] = 0xFFFF0000;
-		return EVT_RETURN_DONE;
-	} else {
-		event->lwData[1] = i;
-		event->lwData[2] = BeroNUM;
-		event->lwData[3] = (EvtWord)gp->beroEnterName;
-		event->lwData[4] = bero->type;
-		event->lwData[5] = bero_get_kind(bero, 0);
-		event->lwData[6] = (EvtWord)&bero->centerPosition;
-		evt = bero->enterEvent;
-		if (!evt) evt = default_entevt;
-		event->lwData[7] = (EvtWord)evt;
-		event->lwData[8] = 0xFFFF0000;
-		return EVT_RETURN_DONE;
-	}
+    for (i = 0;; i++) {
+        bero = BeroINFOARR[i];
+        if (!bero || !strcmp(gp->beroEnterName, "")) {
+            i = 0;
+            bero = bero_null;
+            break;
+        }
+        if (!strcmp(bero->hitName, gp->beroEnterName)) break;
+    }
+    if ((gp->flags & 2) && !strcmp(gp->beroEnterName, "")) {
+        bero = BeroINFOARR[0];
+        event->lwData[1] = 0;
+        event->lwData[2] = BeroNUM;
+        event->lwData[3] = (EvtWord)bero->hitName;
+        event->lwData[4] = bero->type;
+        event->lwData[5] = bero_get_kind(bero, 0);
+        event->lwData[6] = (EvtWord)&bero->centerPosition;
+        evt = bero->enterEvent;
+        if (!evt) evt = default_entevt;
+        event->lwData[7] = (EvtWord)evt;
+        event->lwData[8] = 0xFFFF0000;
+        return EVT_RETURN_DONE;
+    } else {
+        event->lwData[1] = i;
+        event->lwData[2] = BeroNUM;
+        event->lwData[3] = (EvtWord)gp->beroEnterName;
+        event->lwData[4] = bero->type;
+        event->lwData[5] = bero_get_kind(bero, 0);
+        event->lwData[6] = (EvtWord)&bero->centerPosition;
+        evt = bero->enterEvent;
+        if (!evt) evt = default_entevt;
+        event->lwData[7] = (EvtWord)evt;
+        event->lwData[8] = 0xFFFF0000;
+        return EVT_RETURN_DONE;
+    }
 }
 
 USER_FUNC(evt_bero_read_mario_pera) {
-	if (isFirstCall) {
-		event->userdata[0] = 0;
-	}
-	switch (event->userdata[0]) {
-		case 0:
-			if (animGroupBaseAsync("p_dokan_x", 0, NULL)) {
-				event->userdata[0] = 1;
-			}
-			break;
-		case 1:
-			if (animGroupBaseAsync("p_dokan_y", 0, NULL)) {
-				event->userdata[0] = 100;
-			}
-			break;
-		case 2:
-			break;
-		default:
-			break;
-	}
-	return event->userdata[0] == 100 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    if (isFirstCall) {
+        event->userdata[0] = 0;
+    }
+    switch (event->userdata[0]) {
+        case 0:
+            if (animGroupBaseAsync("p_dokan_x", 0, NULL)) {
+                event->userdata[0] = 1;
+            }
+            break;
+        case 1:
+            if (animGroupBaseAsync("p_dokan_y", 0, NULL)) {
+                event->userdata[0] = 100;
+            }
+            break;
+        case 2:
+            break;
+        default:
+            break;
+    }
+    return event->userdata[0] == 100 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(evt_bero_id_filter) {
-	EvtWord* args = event->args;
-	evtSetValue(event, args[0], bero_id_filter(evtGetValue(event, args[0])));
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    evtSetValue(event, args[0], bero_id_filter(evtGetValue(event, args[0])));
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_get_info_num) {
-	EvtWord* args = event->args;
-	s32 id = evtGetValue(event, args[0]);
-	BeroEntry* bero = BeroINFOARR[id];
-	s32 kind;
-	EvtWord* evt;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    BeroEntry* bero = BeroINFOARR[id];
+    s32 kind;
+    EvtWord* evt;
 
-	event->lwData[3] = (EvtWord)bero->hitName;
-	event->lwData[4] = bero->type;
-	event->lwData[5] = bero_get_kind(bero, 1);
-	event->lwData[6] = (EvtWord)&bero->centerPosition;
-	evt = bero->enterEvent;
-	if (!evt) evt = default_entevt;
-	event->lwData[7] = (EvtWord)evt;
-	event->lwData[8] = 0xFFFF0000;
-	event->lwData[9] = BeroSW[id];
-	event->lwData[10] = bero->caseType;
-	if (bero->caseType == -1) {
-		switch (bero->type & 0xFFF) {
-			case 0xF00: event->lwData[10] = 0; break;
-			case 0: event->lwData[10] = 10; break;
-			case 1: event->lwData[10] = 9; break;
-			case 2: event->lwData[10] = 4; break;
-			case 3: event->lwData[10] = 7; break;
-		}
-	}
-	evt = bero->exitEvent;
-	if (!evt) evt = default_outevt;
-	event->lwData[11] = (EvtWord)evt;
-	event->lwData[12] = 0xFFFF0000;
-	event->lwData[13] = (EvtWord)bero->nextMapName;
-	event->lwData[14] = (EvtWord)bero->nextBeroName;
-	return EVT_RETURN_DONE;
+    event->lwData[3] = (EvtWord)bero->hitName;
+    event->lwData[4] = bero->type;
+    event->lwData[5] = bero_get_kind(bero, 1);
+    event->lwData[6] = (EvtWord)&bero->centerPosition;
+    evt = bero->enterEvent;
+    if (!evt) evt = default_entevt;
+    event->lwData[7] = (EvtWord)evt;
+    event->lwData[8] = 0xFFFF0000;
+    event->lwData[9] = BeroSW[id];
+    event->lwData[10] = bero->caseType;
+    if (bero->caseType == -1) {
+        switch (bero->type & 0xFFF) {
+            case 0xF00: event->lwData[10] = 0; break;
+            case 0: event->lwData[10] = 10; break;
+            case 1: event->lwData[10] = 9; break;
+            case 2: event->lwData[10] = 4; break;
+            case 3: event->lwData[10] = 7; break;
+        }
+    }
+    evt = bero->exitEvent;
+    if (!evt) evt = default_outevt;
+    event->lwData[11] = (EvtWord)evt;
+    event->lwData[12] = 0xFFFF0000;
+    event->lwData[13] = (EvtWord)bero->nextMapName;
+    event->lwData[14] = (EvtWord)bero->nextBeroName;
+    return EVT_RETURN_DONE;
 }
 
 s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
@@ -658,98 +658,98 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
 }
 
 void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* start, Vec* end) {
-	f32 hx, hy, hz, dist, nx, ny, nz;
-	f32 ofs;
-	hz = hy = hx = 0.0f;
-	dist = 10000.0f;
-	ofs = 20.0f;
-	switch (kind) {
-	case 6:
-		a = -a;
-		ofs = -ofs;
-	case 2:
-		if (id == 0) {
-			hitObjGetPos((const char*)name, start);
-			start->x -= ofs;
-			end->x = start->x + a;
-			end->y = start->y;
-			end->z = start->z;
-			hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, end->x, end->y, end->z, 0.0f, -1.0f, 0.0f);
-		} else {
-			hitObjGetPos((const char*)name, end);
-			end->x -= ofs;
-			start->x = end->x + a;
-			start->y = end->y;
-			start->z = end->z;
-			hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start->x, start->y, start->z, 0.0f, -1.0f, 0.0f);
-		}
-		end->y = start->y = hy;
-		break;
-	case 9:
-		a = -a;
-	case 8:
-		if (id == 0) {
-			hitObjGetPos((const char*)name, start);
-			end->x = start->x;
-			end->y = start->y + a;
-			end->z = start->z;
-		} else {
-			hitObjGetPos((const char*)name, end);
-			start->x = end->x;
-			start->y = end->y + a;
-			start->z = end->z;
-		}
-		break;
-	case 10000:
-	default:
-		hitObjGetPos((const char*)name, start);
-		hitObjGetPos((const char*)name, end);
-		break;
-	}
+    f32 hx, hy, hz, dist, nx, ny, nz;
+    f32 ofs;
+    hz = hy = hx = 0.0f;
+    dist = 10000.0f;
+    ofs = 20.0f;
+    switch (kind) {
+    case 6:
+        a = -a;
+        ofs = -ofs;
+    case 2:
+        if (id == 0) {
+            hitObjGetPos((const char*)name, start);
+            start->x -= ofs;
+            end->x = start->x + a;
+            end->y = start->y;
+            end->z = start->z;
+            hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, end->x, end->y, end->z, 0.0f, -1.0f, 0.0f);
+        } else {
+            hitObjGetPos((const char*)name, end);
+            end->x -= ofs;
+            start->x = end->x + a;
+            start->y = end->y;
+            start->z = end->z;
+            hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start->x, start->y, start->z, 0.0f, -1.0f, 0.0f);
+        }
+        end->y = start->y = hy;
+        break;
+    case 9:
+        a = -a;
+    case 8:
+        if (id == 0) {
+            hitObjGetPos((const char*)name, start);
+            end->x = start->x;
+            end->y = start->y + a;
+            end->z = start->z;
+        } else {
+            hitObjGetPos((const char*)name, end);
+            start->x = end->x;
+            start->y = end->y + a;
+            start->z = end->z;
+        }
+        break;
+    case 10000:
+    default:
+        hitObjGetPos((const char*)name, start);
+        hitObjGetPos((const char*)name, end);
+        break;
+    }
 }
 
 USER_FUNC(bero_get_position_pipe_pure) {
-	EvtWord* args = event->args;
-	s32 id = evtGetValue(event, args[0]);
-	s32 a = evtGetFloat(event, args[1]);
-	s32 kind = event->lwData[5];
-	Vec start, end;
-	bero_get_position_pipe_sub(id, a, event->lwData[3], kind, &start, &end);
-	BeroSX = start.x;
-	BeroSY = kind == 8 ? start.y - 37.5f : start.y;
-	BeroSZ = start.z;
-	BeroEX = end.x;
-	BeroEY = (f32)(kind == 8 ? end.y - 37.5f : end.y);
-	BeroEZ = end.z;
-	N_marioSetBottomlessRespawnPosOnBeroEntry(BeroEX, BeroEY, BeroEZ);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 a = evtGetFloat(event, args[1]);
+    s32 kind = event->lwData[5];
+    Vec start, end;
+    bero_get_position_pipe_sub(id, a, event->lwData[3], kind, &start, &end);
+    BeroSX = start.x;
+    BeroSY = kind == 8 ? start.y - 37.5f : start.y;
+    BeroSZ = start.z;
+    BeroEX = end.x;
+    BeroEY = (f32)(kind == 8 ? end.y - 37.5f : end.y);
+    BeroEZ = end.z;
+    N_marioSetBottomlessRespawnPosOnBeroEntry(BeroEX, BeroEY, BeroEZ);
+    return EVT_RETURN_DONE;
 }
 
 
 USER_FUNC(bero_get_position_pipe2) {
-	EvtWord* args = event->args;
-	s32 id = evtGetValue(event, args[0]);
-	s32 a = evtGetFloat(event, args[1]);
-	Vec start, end;
-	CameraParams out;
-	bero_get_position_pipe_sub(id, a, event->lwData[3], event->lwData[5], &start, &end);
-	end.y += 1.0f;
-	camRoadReset();
-	camShiftReset();
-	camRoadMain(&out, end.x, end.y, end.z, end.x, end.y, end.z, 0.0f);
-	{
-	Vec pt = {0.0f, 0.0f, 0.0f};
-	Vec at = {0.0f, 0.0f, 0.0f};
-	pt.x = out.pos.x;
-	pt.y = out.pos.y;
-	pt.z = out.pos.z;
-	at.x = out.at.x;
-	at.y = out.at.y;
-	at.z = out.at.z;
-	BeroPT = pt;
-	BeroAT = at;
-	}
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 a = evtGetFloat(event, args[1]);
+    Vec start, end;
+    CameraParams out;
+    bero_get_position_pipe_sub(id, a, event->lwData[3], event->lwData[5], &start, &end);
+    end.y += 1.0f;
+    camRoadReset();
+    camShiftReset();
+    camRoadMain(&out, end.x, end.y, end.z, end.x, end.y, end.z, 0.0f);
+    {
+    Vec pt = {0.0f, 0.0f, 0.0f};
+    Vec at = {0.0f, 0.0f, 0.0f};
+    pt.x = out.pos.x;
+    pt.y = out.pos.y;
+    pt.z = out.pos.z;
+    at.x = out.at.x;
+    at.y = out.at.y;
+    at.z = out.at.z;
+    BeroPT = pt;
+    BeroAT = at;
+    }
+    return EVT_RETURN_DONE;
 }
 
 EVT_BEGIN(evt_bero_nonride_check)
@@ -997,302 +997,302 @@ EVT_END()
 typedef struct { u8 pad[0xac]; u32 flags; s32 kind; } BeroPipeInfo;
 
 s32 bero_set_disp_position_pipe(BeroPipeInfo* info) {
-	switch (info->kind) {
-		case 2: case 6:
-			if (!(info->flags & 0x1000)) {
-				marioGetPtr()->dispOfs.y += 3.0f;
-				marioGetPtr()->dispOfs.z -= 15.0f;
-			}
-			break;
-		case 7: case 10000:
-			break;
-		case 8: case 9:
-			if (!(info->flags & 0x1000)) {
-				marioGetPtr()->dispOfs.z -= 13.0f;
-			} else {
-				marioGetPtr()->dispOfs.z -= 20.0f;
-			}
-			break;
-	}
-	return 2;
+    switch (info->kind) {
+        case 2: case 6:
+            if (!(info->flags & 0x1000)) {
+                marioGetPtr()->dispOfs.y += 3.0f;
+                marioGetPtr()->dispOfs.z -= 15.0f;
+            }
+            break;
+        case 7: case 10000:
+            break;
+        case 8: case 9:
+            if (!(info->flags & 0x1000)) {
+                marioGetPtr()->dispOfs.z -= 13.0f;
+            } else {
+                marioGetPtr()->dispOfs.z -= 20.0f;
+            }
+            break;
+    }
+    return 2;
 }
 
 USER_FUNC(evt_bero_switch_on) {
-	BeroEntry** table = BeroINFOARR;
-	EvtWord* args = event->args;
-	BeroEntry** temp;
-	EvtWord id = evtGetValue(event, *args++);
-	s32 newId = id;
-	const char *string, *test;
-	if (id < 0 || id >= 16) {
-		test = (const char*)id;
-		if (&newId != NULL) {
-			newId = 0;
-		}
-		temp = table;
-		while (1) {
-			string = (*temp)->hitName;
-			if (!string || !strcmp(string, test)) {
-				break;
-			}
-			temp++;
-			if (&newId != NULL) {
-				newId++;
-			}
-		}
-	}
-	if (BeroSW[newId] == 1) {
-		event->lwData[0] = 1;
-	} else {
-		event->lwData[0] = 0;
-	}
-	BeroSW[newId] = 1;
-	event->lwData[1] = newId;
-	return EVT_RETURN_DONE;
+    BeroEntry** table = BeroINFOARR;
+    EvtWord* args = event->args;
+    BeroEntry** temp;
+    EvtWord id = evtGetValue(event, *args++);
+    s32 newId = id;
+    const char *string, *test;
+    if (id < 0 || id >= 16) {
+        test = (const char*)id;
+        if (&newId != NULL) {
+            newId = 0;
+        }
+        temp = table;
+        while (1) {
+            string = (*temp)->hitName;
+            if (!string || !strcmp(string, test)) {
+                break;
+            }
+            temp++;
+            if (&newId != NULL) {
+                newId++;
+            }
+        }
+    }
+    if (BeroSW[newId] == 1) {
+        event->lwData[0] = 1;
+    } else {
+        event->lwData[0] = 0;
+    }
+    BeroSW[newId] = 1;
+    event->lwData[1] = newId;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_switch_off) {
-	BeroEntry** table = BeroINFOARR;
-	EvtWord* args = event->args;
-	BeroEntry** temp;
-	EvtWord id = evtGetValue(event, *args++);
-	s32 newId = id;
-	const char *string, *test;
-	if (id < 0 || id >= 16) {
-		test = (const char*)id;
-		if (&newId != NULL) {
-			newId = 0;
-		}
-		temp = table;
-		while (1) {
-			string = (*temp)->hitName;
-			if (!string || !strcmp(string, test)) {
-				break;
-			}
-			temp++;
-			if (&newId != NULL) {
-				newId++;
-			}
-		}
-	}
-	if (BeroSW[newId] != 1) {
-		event->lwData[0] = 1;
-	} else {
-		event->lwData[0] = 0;
-	}
-	BeroSW[newId] = 0;
-	event->lwData[1] = newId;
-	return EVT_RETURN_DONE;
+    BeroEntry** table = BeroINFOARR;
+    EvtWord* args = event->args;
+    BeroEntry** temp;
+    EvtWord id = evtGetValue(event, *args++);
+    s32 newId = id;
+    const char *string, *test;
+    if (id < 0 || id >= 16) {
+        test = (const char*)id;
+        if (&newId != NULL) {
+            newId = 0;
+        }
+        temp = table;
+        while (1) {
+            string = (*temp)->hitName;
+            if (!string || !strcmp(string, test)) {
+                break;
+            }
+            temp++;
+            if (&newId != NULL) {
+                newId++;
+            }
+        }
+    }
+    if (BeroSW[newId] != 1) {
+        event->lwData[0] = 1;
+    } else {
+        event->lwData[0] = 0;
+    }
+    BeroSW[newId] = 0;
+    event->lwData[1] = newId;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_get_number) {
-	BeroEntry** table = BeroINFOARR;
-	EvtWord* args = event->args;
-	BeroEntry** temp;
-	EvtWord id = evtGetValue(event, *args++);
-	s32 newId = id;
-	const char *string, *test;
-	if (id < 0 || id >= 16) {
-		test = (const char*)id;
-		if (&newId != NULL) {
-			newId = 0;
-		}
-		temp = table;
-		while (1) {
-			string = (*temp)->hitName;
-			if (!string || !strcmp(string, test)) {
-				break;
-			}
-			temp++;
-			if (&newId != NULL) {
-				newId++;
-			}
-		}
-	}
-	event->lwData[1] = newId;
-	return EVT_RETURN_DONE;
+    BeroEntry** table = BeroINFOARR;
+    EvtWord* args = event->args;
+    BeroEntry** temp;
+    EvtWord id = evtGetValue(event, *args++);
+    s32 newId = id;
+    const char *string, *test;
+    if (id < 0 || id >= 16) {
+        test = (const char*)id;
+        if (&newId != NULL) {
+            newId = 0;
+        }
+        temp = table;
+        while (1) {
+            string = (*temp)->hitName;
+            if (!string || !strcmp(string, test)) {
+                break;
+            }
+            temp++;
+            if (&newId != NULL) {
+                newId++;
+            }
+        }
+    }
+    event->lwData[1] = newId;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_case_id_save) {
-	EvtWord* args = event->args;
-	s32 id = evtGetValue(event, args[0]);
-	BeroID[id] = evtGetValue(event, args[1]);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    BeroID[id] = evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_case_id_load) {
-	EvtWord* args = event->args;
-	s32 id = evtGetValue(event, args[0]);
-	evtSetValue(event, args[1], BeroID[id]);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], BeroID[id]);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_disppos_save) {
-	BeroOX = marioGetPtr()->dispOfs.x;
-	BeroOY = marioGetPtr()->dispOfs.y;
-	BeroOZ = marioGetPtr()->dispOfs.z;
-	return EVT_RETURN_DONE;
+    BeroOX = marioGetPtr()->dispOfs.x;
+    BeroOY = marioGetPtr()->dispOfs.y;
+    BeroOZ = marioGetPtr()->dispOfs.z;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_disppos_load) {
-	marioGetPtr()->dispOfs.x = BeroOX;
-	marioGetPtr()->dispOfs.y = BeroOY;
-	marioGetPtr()->dispOfs.z = BeroOZ;
-	return EVT_RETURN_DONE;
+    marioGetPtr()->dispOfs.x = BeroOX;
+    marioGetPtr()->dispOfs.y = BeroOY;
+    marioGetPtr()->dispOfs.z = BeroOZ;
+    return EVT_RETURN_DONE;
 }
 
 #include "system.h"
 
 USER_FUNC(evt_bero_move_mario_speed) {
-	EvtWord* args = event->args;
-	f32 speed = evtGetFloat(event, args[0]);
-	OSTime now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
-	f32 s, c;
-	f32 angle;
-	f32 dx, dy;
-	f32 dist;
-	f32 ox, oy;
-	BOOL xdone, ydone;
-	s32 frames;
-	f32 sx;
+    EvtWord* args = event->args;
+    f32 speed = evtGetFloat(event, args[0]);
+    OSTime now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
+    f32 s, c;
+    f32 angle;
+    f32 dx, dy;
+    f32 dist;
+    f32 ox, oy;
+    BOOL xdone, ydone;
+    s32 frames;
+    f32 sx;
 
-	if (isFirstCall) {
-		event->savedTime = now;
-	}
-	speed = sysFrame2SecFloat(speed);
-	angle = 6.2831855f * reviseAngle(angleABf(BeroSX, BeroSY, BeroEX, BeroEY)) / 360.0f;
-	s = sin(angle);
-	c = cos(angle);
-	frames = sysMsec2Frame((s32)OSTicksToMilliseconds((u64)((s32)now - (s32)event->savedTime)));
-	dx = speed * s;
-	dy = -(speed * c);
-	dist = speed * frames;
-	ox = s * dist;
-	sx = BeroSX;
-	marioGetPtr()->position.x = sx + ox;
-	oy = -(c * dist);
-	marioGetPtr()->position.y = BeroSY + oy;
-	marioGetPtr()->position.z = BeroSZ;
-	xdone = FALSE;
-	if (dx >= 0.0f && BeroEX <= marioGetPtr()->position.x) {
-		xdone = TRUE;
-	}
-	if (dx < 0.0f && BeroEX >= marioGetPtr()->position.x) {
-		xdone = TRUE;
-	}
-	ydone = FALSE;
-	if (dy >= 0.0f && BeroEY <= marioGetPtr()->position.y) {
-		ydone = TRUE;
-	}
-	if (dy < 0.0f && BeroEY >= marioGetPtr()->position.y) {
-		ydone = TRUE;
-	}
-	if (xdone + ydone != 2) {
-		return EVT_RETURN_BLOCK;
-	}
-	marioGetPtr()->position.x = BeroEX;
-	marioGetPtr()->position.y = BeroEY;
-	marioGetPtr()->position.z = BeroEZ;
-	return EVT_RETURN_DONE;
+    if (isFirstCall) {
+        event->savedTime = now;
+    }
+    speed = sysFrame2SecFloat(speed);
+    angle = 6.2831855f * reviseAngle(angleABf(BeroSX, BeroSY, BeroEX, BeroEY)) / 360.0f;
+    s = sin(angle);
+    c = cos(angle);
+    frames = sysMsec2Frame((s32)OSTicksToMilliseconds((u64)((s32)now - (s32)event->savedTime)));
+    dx = speed * s;
+    dy = -(speed * c);
+    dist = speed * frames;
+    ox = s * dist;
+    sx = BeroSX;
+    marioGetPtr()->position.x = sx + ox;
+    oy = -(c * dist);
+    marioGetPtr()->position.y = BeroSY + oy;
+    marioGetPtr()->position.z = BeroSZ;
+    xdone = FALSE;
+    if (dx >= 0.0f && BeroEX <= marioGetPtr()->position.x) {
+        xdone = TRUE;
+    }
+    if (dx < 0.0f && BeroEX >= marioGetPtr()->position.x) {
+        xdone = TRUE;
+    }
+    ydone = FALSE;
+    if (dy >= 0.0f && BeroEY <= marioGetPtr()->position.y) {
+        ydone = TRUE;
+    }
+    if (dy < 0.0f && BeroEY >= marioGetPtr()->position.y) {
+        ydone = TRUE;
+    }
+    if (xdone + ydone != 2) {
+        return EVT_RETURN_BLOCK;
+    }
+    marioGetPtr()->position.x = BeroEX;
+    marioGetPtr()->position.y = BeroEY;
+    marioGetPtr()->position.z = BeroEZ;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_overwrite) {
-	BeroEntry** temp, **table = BeroINFOARR;
-	EvtWord* args = event->args;
-	EvtWord id = evtGetValue(event, args[0]);
-	s32 newId = id;
-	const char *string, *test;
-	if (id < 0 || id >= 16) {
-		test = (const char*)id;
-		if (&newId != NULL) {
-			newId = 0;
-		}
-		temp = table;
-		while (1) {
-			string = (*temp)->hitName;
-			if (!string || !strcmp(string, test)) {
-				break;
-			}
-			temp++;
-			if (&newId != NULL) {
-				newId++;
-			}
-		}
-	}
-	BeroINFOARR[newId] = (BeroEntry*)evtGetValue(event, args[1]);
-	return EVT_RETURN_DONE;
+    BeroEntry** temp, **table = BeroINFOARR;
+    EvtWord* args = event->args;
+    EvtWord id = evtGetValue(event, args[0]);
+    s32 newId = id;
+    const char *string, *test;
+    if (id < 0 || id >= 16) {
+        test = (const char*)id;
+        if (&newId != NULL) {
+            newId = 0;
+        }
+        temp = table;
+        while (1) {
+            string = (*temp)->hitName;
+            if (!string || !strcmp(string, test)) {
+                break;
+            }
+            temp++;
+            if (&newId != NULL) {
+                newId++;
+            }
+        }
+    }
+    BeroINFOARR[newId] = (BeroEntry*)evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_cam3d_change) {
-	EvtWord* args = event->args;
-	CameraEntry* cam = camGetPtr(4);
-	s32 time = evtGetValue(event, args[0]);
-	s32 curve = evtGetValue(event, args[1]);
-	cam->presetPos = cam->cameraPos;
-	cam->presetAt = cam->cameraAt;
-	cam->storedPos = BeroPT;
-	cam->storedAt = BeroAT;
-	cam->startTimeA = gp->renderTime;
-	cam->durationA = (u32)(time * (OS_TIMER_CLOCK / 1000));
-	cam->stateA = 3;
-	cam->curveA = curve;
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    CameraEntry* cam = camGetPtr(4);
+    s32 time = evtGetValue(event, args[0]);
+    s32 curve = evtGetValue(event, args[1]);
+    cam->presetPos = cam->cameraPos;
+    cam->presetAt = cam->cameraAt;
+    cam->storedPos = BeroPT;
+    cam->storedAt = BeroAT;
+    cam->startTimeA = gp->renderTime;
+    cam->durationA = (u32)(time * (OS_TIMER_CLOCK / 1000));
+    cam->stateA = 3;
+    cam->curveA = curve;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_cam_shift_init) {
-	camRoadReset();
-	camShiftReset();
-	return EVT_RETURN_DONE;
+    camRoadReset();
+    camShiftReset();
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_mario_go_init) {
-	BeroMarioGO = FALSE;
-	return EVT_RETURN_DONE;
+    BeroMarioGO = FALSE;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_mario_go) {
-	BeroMarioGO = TRUE;
-	return EVT_RETURN_DONE;
+    BeroMarioGO = TRUE;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_mario_go_wait) {
-	return BeroMarioGO == 0 ? 0 : EVT_RETURN_DONE;
+    return BeroMarioGO == 0 ? 0 : EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_bero_1stcheck) {
-	EvtWord* args = event->args;
-	if (strcmp((const char*)event->lwData[13], "sys_01") == 0) {
-		evtSetValue(event, args[0], 1);
-	} else {
-		evtSetValue(event, args[0], 0);
-	}
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    if (strcmp((const char*)event->lwData[13], "sys_01") == 0) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 0);
+    }
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_camera_change_event_from_road) {
-	MarioWork* mario = marioGetPtr();
-	CameraEntry* cam = camGetPtr(4);
-	f32 bank;
-	CameraParams out;
-	camShiftMain(cam, mario, &bank);
-	camRoadMain(&out, mario->position.x, cam->marioPos.y, mario->position.z, mario->position.x, cam->marioPos.y, mario->position.z, bank);
-	{
-	Vec pt = {0.0f, 0.0f, 0.0f};
-	pt.x = out.pos.x; pt.y = out.pos.y; pt.z = out.pos.z;
-	{
-	Vec at = {0.0f, 0.0f, 0.0f};
-	at.x = out.at.x; at.y = out.at.y; at.z = out.at.z;
-	cam->presetPos = cam->cameraPos;
-	cam->presetAt = cam->cameraAt;
-	cam->storedPos = pt;
-	cam->storedAt = at;
-	cam->startTimeA = gp->renderTime;
-	cam->durationA = (u32)(500 * (OS_TIMER_CLOCK / 1000));
-	cam->stateA = 3;
-	cam->curveA = 11;
-	}
-	}
-	return EVT_RETURN_DONE;
+    MarioWork* mario = marioGetPtr();
+    CameraEntry* cam = camGetPtr(4);
+    f32 bank;
+    CameraParams out;
+    camShiftMain(cam, mario, &bank);
+    camRoadMain(&out, mario->position.x, cam->marioPos.y, mario->position.z, mario->position.x, cam->marioPos.y, mario->position.z, bank);
+    {
+    Vec pt = {0.0f, 0.0f, 0.0f};
+    pt.x = out.pos.x; pt.y = out.pos.y; pt.z = out.pos.z;
+    {
+    Vec at = {0.0f, 0.0f, 0.0f};
+    at.x = out.at.x; at.y = out.at.y; at.z = out.at.z;
+    cam->presetPos = cam->cameraPos;
+    cam->presetAt = cam->cameraAt;
+    cam->storedPos = pt;
+    cam->storedAt = at;
+    cam->startTimeA = gp->renderTime;
+    cam->durationA = (u32)(500 * (OS_TIMER_CLOCK / 1000));
+    cam->stateA = 3;
+    cam->curveA = 11;
+    }
+    }
+    return EVT_RETURN_DONE;
 }
 
 EVT_BEGIN(bero_case_init_check)

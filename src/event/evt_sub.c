@@ -45,26 +45,26 @@ double sin(double);
 double cos(double);
 
 #define KEYFN(name, fn)                                       \
-	USER_FUNC(name) {                                         \
-		EvtWord* args = event->args;                              \
-		s32 chan = evtGetValue(event, args[0]);               \
-		evtSetValue(event, args[1], fn(chan));                \
-		return EVT_RETURN_DONE;                               \
-	}
+    USER_FUNC(name) {                                         \
+        EvtWord* args = event->args;                              \
+        s32 chan = evtGetValue(event, args[0]);               \
+        evtSetValue(event, args[1], fn(chan));                \
+        return EVT_RETURN_DONE;                               \
+    }
 
 s32 stop;
 
 typedef struct SplineWork {
-	s32 n;         // 0x0
-	f32* ts;       // 0x4
-	Vec* pts;      // 0x8
-	Vec* tbl;      // 0xC
-	s32 cur;       // 0x10
-	s32 steps;     // 0x14
-	s32 mode;      // 0x18
-	s32 msec;      // 0x1C
-	OSTime start;  // 0x20
-	s32 manual;    // 0x28
+    s32 n;         // 0x0
+    f32* ts;       // 0x4
+    Vec* pts;      // 0x8
+    Vec* tbl;      // 0xC
+    s32 cur;       // 0x10
+    s32 steps;     // 0x14
+    s32 mode;      // 0x18
+    s32 msec;      // 0x1C
+    OSTime start;  // 0x20
+    s32 manual;    // 0x28
 } SplineWork;
 
 void spline_getvalue(f32* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl);
@@ -1759,318 +1759,318 @@ __declspec(section ".data") s32 evt_sub_mail_event_end[] = {
 #pragma force_active reset
 
 USER_FUNC(evt_sub_intpl_init) {
-	EvtWord* args = event->args;
-	s32 mode = evtGetValue(event, args[0]);
-	s32 start = evtGetValue(event, args[1]);
-	s32 end = evtGetValue(event, args[2]);
-	s32 steps = evtGetValue(event, args[3]);
-	event->lwData[11] = mode;
-	event->lwData[12] = start;
-	event->lwData[13] = end;
-	event->lwData[14] = 0;
-	event->lwData[15] = steps;
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 mode = evtGetValue(event, args[0]);
+    s32 start = evtGetValue(event, args[1]);
+    s32 end = evtGetValue(event, args[2]);
+    s32 steps = evtGetValue(event, args[3]);
+    event->lwData[11] = mode;
+    event->lwData[12] = start;
+    event->lwData[13] = end;
+    event->lwData[14] = 0;
+    event->lwData[15] = steps;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_intpl_get_value) {
-	event->lwData[0] = intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], event->lwData[12], event->lwData[13]);
-	if (event->lwData[14] >= event->lwData[15]) {
-		event->lwData[1] = 0;
-	} else {
-		event->lwData[1] = 1;
-	}
-	event->lwData[14]++;
-	return EVT_RETURN_DONE;
+    event->lwData[0] = intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], event->lwData[12], event->lwData[13]);
+    if (event->lwData[14] >= event->lwData[15]) {
+        event->lwData[1] = 0;
+    } else {
+        event->lwData[1] = 1;
+    }
+    event->lwData[14]++;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_intpl_get_value_para) {
-	EvtWord* args = event->args;
-	evtSetFloat(event, args[0], intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], event->lwData[12], event->lwData[13]));
-	if (event->lwData[14] >= event->lwData[15]) {
-		evtSetValue(event, args[1], 0);
-	} else {
-		evtSetValue(event, args[1], 1);
-	}
-	event->lwData[14]++;
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    evtSetFloat(event, args[0], intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], event->lwData[12], event->lwData[13]));
+    if (event->lwData[14] >= event->lwData[15]) {
+        evtSetValue(event, args[1], 0);
+    } else {
+        evtSetValue(event, args[1], 1);
+    }
+    event->lwData[14]++;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_intpl_init_float) {
-	EvtWord* args = event->args;
-	s32 mode = evtGetValue(event, args[0]);
-	f32 start = evtGetFloat(event, args[1]);
-	f32 end = evtGetFloat(event, args[2]);
-	s32 steps = evtGetValue(event, args[3]);
-	event->lwData[11] = mode;
-	event->lwData[12] = EVT_FLOAT_OF(start);
-	event->lwData[13] = EVT_FLOAT_OF(end);
-	event->lwData[14] = 0;
-	event->lwData[15] = steps;
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 mode = evtGetValue(event, args[0]);
+    f32 start = evtGetFloat(event, args[1]);
+    f32 end = evtGetFloat(event, args[2]);
+    s32 steps = evtGetValue(event, args[3]);
+    event->lwData[11] = mode;
+    event->lwData[12] = EVT_FLOAT_OF(start);
+    event->lwData[13] = EVT_FLOAT_OF(end);
+    event->lwData[14] = 0;
+    event->lwData[15] = steps;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_intpl_get_float) {
-	EvtWord* args = event->args;
-	s32 out = args[0];
-	s32 done = args[1];
-	f32 start = evtGetFloat(event, LW(12));
-	f32 end = evtGetFloat(event, LW(13));
-	f32 v = intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], start, end);
-	if (out != -250000000) {
-		evtSetFloat(event, out, v);
-	}
-	if (done != -250000000) {
-		if (event->lwData[14] >= event->lwData[15]) {
-			evtSetValue(event, done, 0);
-		} else {
-			evtSetValue(event, done, 1);
-		}
-	}
-	event->lwData[14]++;
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 out = args[0];
+    s32 done = args[1];
+    f32 start = evtGetFloat(event, LW(12));
+    f32 end = evtGetFloat(event, LW(13));
+    f32 v = intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], start, end);
+    if (out != -250000000) {
+        evtSetFloat(event, out, v);
+    }
+    if (done != -250000000) {
+        if (event->lwData[14] >= event->lwData[15]) {
+            evtSetValue(event, done, 0);
+        } else {
+            evtSetValue(event, done, 1);
+        }
+    }
+    event->lwData[14]++;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_intpl_msec_init) {
-	EvtWord* args = event->args;
-	s32 mode = evtGetValue(event, args[0]);
-	s32 start = evtGetValue(event, args[1]);
-	s32 end = evtGetValue(event, args[2]);
-	s32 msec = evtGetValue(event, args[3]);
-	event->lwData[11] = mode;
-	event->lwData[12] = start;
-	event->lwData[13] = end;
-	event->lwData[15] = msec;
-	event->savedTime = event->lifetime;
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 mode = evtGetValue(event, args[0]);
+    s32 start = evtGetValue(event, args[1]);
+    s32 end = evtGetValue(event, args[2]);
+    s32 msec = evtGetValue(event, args[3]);
+    event->lwData[11] = mode;
+    event->lwData[12] = start;
+    event->lwData[13] = end;
+    event->lwData[15] = msec;
+    event->savedTime = event->lifetime;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_intpl_msec_get_value) {
-	s32 ms = (u64)(s32)((s32)event->lifetime - (s32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
-	if (ms < event->lwData[15]) {
-		event->lwData[0] = intplGetValue(event->lwData[11], ms, event->lwData[15], event->lwData[12], event->lwData[13]);
-		event->lwData[1] = 1;
-	} else {
-		event->lwData[0] = event->lwData[13];
-		event->lwData[1] = 0;
-	}
-	return EVT_RETURN_DONE;
+    s32 ms = (u64)(s32)((s32)event->lifetime - (s32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
+    if (ms < event->lwData[15]) {
+        event->lwData[0] = intplGetValue(event->lwData[11], ms, event->lwData[15], event->lwData[12], event->lwData[13]);
+        event->lwData[1] = 1;
+    } else {
+        event->lwData[0] = event->lwData[13];
+        event->lwData[1] = 0;
+    }
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_intpl_msec_get_value_para) {
-	EvtWord* args = event->args;
-	s32 ms = (u64)(s32)((s32)event->lifetime - (s32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
-	if (ms < event->lwData[15]) {
-		evtSetFloat(event, args[0], intplGetValue(event->lwData[11], ms, event->lwData[15], event->lwData[12], event->lwData[13]));
-		evtSetValue(event, args[1], 1);
-	} else {
-		evtSetFloat(event, args[0], event->lwData[13]);
-		evtSetValue(event, args[1], 0);
-	}
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 ms = (u64)(s32)((s32)event->lifetime - (s32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
+    if (ms < event->lwData[15]) {
+        evtSetFloat(event, args[0], intplGetValue(event->lwData[11], ms, event->lwData[15], event->lwData[12], event->lwData[13]));
+        evtSetValue(event, args[1], 1);
+    } else {
+        evtSetFloat(event, args[0], event->lwData[13]);
+        evtSetValue(event, args[1], 0);
+    }
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_spline_init) {
-	EvtWord* args = event->args;
-	s32 manual = evtGetValue(event, args[0]);
-	s32 mode = evtGetValue(event, args[1]);
-	Vec* pts = (Vec*)evtGetValue(event, args[2]);
-	s32 n = evtGetValue(event, args[3]);
-	s32 steps = evtGetValue(event, args[4]);
-	s32 msec = evtGetValue(event, args[5]);
-	SplineWork* w = _mapAlloc(sizeof(SplineWork));
-	event->lwData[15] = (EvtWord)w;
-	w->n = n;
-	w->ts = _mapAlloc(n * 4);
-	w->pts = pts;
-	w->tbl = _mapAlloc(n * 12);
-	spline_maketable(n, w->pts, w->ts, w->tbl);
-	w->manual = manual;
-	w->mode = mode;
-	w->cur = 0;
-	w->steps = steps;
-	w->msec = msec;
-	w->start = event->lifetime;
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 manual = evtGetValue(event, args[0]);
+    s32 mode = evtGetValue(event, args[1]);
+    Vec* pts = (Vec*)evtGetValue(event, args[2]);
+    s32 n = evtGetValue(event, args[3]);
+    s32 steps = evtGetValue(event, args[4]);
+    s32 msec = evtGetValue(event, args[5]);
+    SplineWork* w = _mapAlloc(sizeof(SplineWork));
+    event->lwData[15] = (EvtWord)w;
+    w->n = n;
+    w->ts = _mapAlloc(n * 4);
+    w->pts = pts;
+    w->tbl = _mapAlloc(n * 12);
+    spline_maketable(n, w->pts, w->ts, w->tbl);
+    w->manual = manual;
+    w->mode = mode;
+    w->cur = 0;
+    w->steps = steps;
+    w->msec = msec;
+    w->start = event->lifetime;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_spline_get_value) {
-	EvtWord* args = event->args;
-	SplineWork* w = (SplineWork*)event->lwData[15];
-	f32 el;
-	f32 v[3];
-	f32 t;
-	if (!w->manual) {
-		t = INTPL_F(w->mode, w->cur, w->steps, 0.0f, 1.0f);
-	} else {
-		el = (u64)(event->lifetime - w->start) / (OS_TIMER_CLOCK / 1000);
-		t = INTPL_F(w->mode, (s32)el, w->msec, 0.0f, 1.0f);
-	}
-	spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
-	evtSetValue(event, args[0], EVT_FLOAT_OF(v[0]));
-	evtSetValue(event, args[1], EVT_FLOAT_OF(v[1]));
-	evtSetValue(event, args[2], EVT_FLOAT_OF(v[2]));
-	w->cur++;
-	if (!w->manual) {
-		if (w->cur <= w->steps) {
-			evtSetValue(event, args[3], 1);
-			return EVT_RETURN_DONE;
-		}
-	} else if (el <= (f32)w->msec) {
-		evtSetValue(event, args[3], 1);
-		return EVT_RETURN_DONE;
-	}
-	_mapFree(w->ts);
-	_mapFree(w->tbl);
-	_mapFree(w);
-	evtSetValue(event, args[3], 0);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    SplineWork* w = (SplineWork*)event->lwData[15];
+    f32 el;
+    f32 v[3];
+    f32 t;
+    if (!w->manual) {
+        t = INTPL_F(w->mode, w->cur, w->steps, 0.0f, 1.0f);
+    } else {
+        el = (u64)(event->lifetime - w->start) / (OS_TIMER_CLOCK / 1000);
+        t = INTPL_F(w->mode, (s32)el, w->msec, 0.0f, 1.0f);
+    }
+    spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
+    evtSetValue(event, args[0], EVT_FLOAT_OF(v[0]));
+    evtSetValue(event, args[1], EVT_FLOAT_OF(v[1]));
+    evtSetValue(event, args[2], EVT_FLOAT_OF(v[2]));
+    w->cur++;
+    if (!w->manual) {
+        if (w->cur <= w->steps) {
+            evtSetValue(event, args[3], 1);
+            return EVT_RETURN_DONE;
+        }
+    } else if (el <= (f32)w->msec) {
+        evtSetValue(event, args[3], 1);
+        return EVT_RETURN_DONE;
+    }
+    _mapFree(w->ts);
+    _mapFree(w->tbl);
+    _mapFree(w);
+    evtSetValue(event, args[3], 0);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_spline_get_value_manual) {
-	EvtWord* args = event->args;
-	SplineWork* w = (SplineWork*)event->lwData[15];
-	f32 t = evtGetValue(event, args[0]);
-	f32 v[3];
-	t = t;
-	t = t / (w->manual ? (f32)w->msec : (f32)w->steps);
-	spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
-	evtSetValue(event, args[1], EVT_FLOAT_OF(v[0]));
-	evtSetValue(event, args[2], EVT_FLOAT_OF(v[1]));
-	evtSetValue(event, args[3], EVT_FLOAT_OF(v[2]));
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    SplineWork* w = (SplineWork*)event->lwData[15];
+    f32 t = evtGetValue(event, args[0]);
+    f32 v[3];
+    t = t;
+    t = t / (w->manual ? (f32)w->msec : (f32)w->steps);
+    spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
+    evtSetValue(event, args[1], EVT_FLOAT_OF(v[0]));
+    evtSetValue(event, args[2], EVT_FLOAT_OF(v[1]));
+    evtSetValue(event, args[3], EVT_FLOAT_OF(v[2]));
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_spline_free) {
-	SplineWork* w = (SplineWork*)event->lwData[15];
-	_mapFree(w->ts);
-	_mapFree(w->tbl);
-	_mapFree(w);
-	return EVT_RETURN_DONE;
+    SplineWork* w = (SplineWork*)event->lwData[15];
+    _mapFree(w->ts);
+    _mapFree(w->tbl);
+    _mapFree(w);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_get_sincos) {
-	EvtWord* args = event->args;
-	f32 rad = (3.141592f * evtGetFloat(event, args[0])) / 180.0f;
-	f32 s = (f32)sin(rad);
-	evtSetValue(event, args[1], (s32)(1024.0f * s) - 230000000);
-	s = (f32)cos(rad);
-	evtSetValue(event, args[2], (s32)(1024.0f * s) - 230000000);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    f32 rad = (3.141592f * evtGetFloat(event, args[0])) / 180.0f;
+    f32 s = (f32)sin(rad);
+    evtSetValue(event, args[1], (s32)(1024.0f * s) - 230000000);
+    s = (f32)cos(rad);
+    evtSetValue(event, args[2], (s32)(1024.0f * s) - 230000000);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_rumble_onoff) {
-	EvtWord* args = event->args;
-	s32 mode = evtGetValue(event, args[0]);
-	s32 chan = evtGetValue(event, args[1]);
-	switch (mode) {
-	case 0:
-		padRumbleOn(chan);
-		break;
-	case 1:
-		padRumbleOff(chan);
-		break;
-	case 2:
-		padRumbleHardOff(chan);
-		break;
-	}
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 mode = evtGetValue(event, args[0]);
+    s32 chan = evtGetValue(event, args[1]);
+    switch (mode) {
+    case 0:
+        padRumbleOn(chan);
+        break;
+    case 1:
+        padRumbleOff(chan);
+        break;
+    case 2:
+        padRumbleHardOff(chan);
+        break;
+    }
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_random) {
-	EvtWord* args = event->args;
-	s32 n = evtGetValue(event, args[0]);
-	evtSetValue(event, args[1], rand() % (n + 1));
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 n = evtGetValue(event, args[0]);
+    evtSetValue(event, args[1], rand() % (n + 1));
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_get_stopwatch) {
-	EvtWord* args = event->args;
-	s64* sw = (s64*)evtGetPtrID(evtGetValue(event, args[0]));
-	s32 ms = *sw / (OS_TIMER_CLOCK / 1000);
-	if (ms > 600000) {
-		ms = 600000;
-	}
-	evtSetValue(event, args[1], ms);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s64* sw = (s64*)evtGetPtrID(evtGetValue(event, args[0]));
+    s32 ms = *sw / (OS_TIMER_CLOCK / 1000);
+    if (ms > 600000) {
+        ms = 600000;
+    }
+    evtSetValue(event, args[1], ms);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_area_check) {
-	EvtWord* args = event->args;
-	s32 mode = evtGetValue(event, args[0]);
-	f32 a1 = evtGetValue(event, args[1]);
-	f32 a2 = evtGetValue(event, args[2]);
-	f32 a3 = evtGetValue(event, args[3]);
-	f32 a4 = evtGetValue(event, args[4]);
-	f32 a5 = evtGetValue(event, args[5]);
-	s32 result;
-	switch (mode) {
-	case 0: {
-		f32 dist = distABf(a1, a2, a4, a5);
-		if (a3 < dist) {
-			result = 0;
-		} else {
-			result = 1;
-		}
-		break;
-	}
-	case 1:
-		result = 1;
-		if (a1 - a3 > a4) {
-			result = 0;
-		}
-		if (a1 + a3 < a4) {
-			result = 0;
-		}
-		if (a2 - a3 > a5) {
-			result = 0;
-		}
-		if (a2 + a3 < a5) {
-			result = 0;
-		}
-		break;
-	default:
-		result = 0;
-		break;
-	}
-	evtSetValue(event, args[6], result);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 mode = evtGetValue(event, args[0]);
+    f32 a1 = evtGetValue(event, args[1]);
+    f32 a2 = evtGetValue(event, args[2]);
+    f32 a3 = evtGetValue(event, args[3]);
+    f32 a4 = evtGetValue(event, args[4]);
+    f32 a5 = evtGetValue(event, args[5]);
+    s32 result;
+    switch (mode) {
+    case 0: {
+        f32 dist = distABf(a1, a2, a4, a5);
+        if (a3 < dist) {
+            result = 0;
+        } else {
+            result = 1;
+        }
+        break;
+    }
+    case 1:
+        result = 1;
+        if (a1 - a3 > a4) {
+            result = 0;
+        }
+        if (a1 + a3 < a4) {
+            result = 0;
+        }
+        if (a2 - a3 > a5) {
+            result = 0;
+        }
+        if (a2 + a3 < a5) {
+            result = 0;
+        }
+        break;
+    default:
+        result = 0;
+        break;
+    }
+    evtSetValue(event, args[6], result);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_get_dist) {
-	EvtWord* args = event->args;
-	f32 x1 = evtGetValue(event, args[0]);
-	f32 y1 = evtGetValue(event, args[1]);
-	f32 x2 = evtGetValue(event, args[2]);
-	f32 y2 = evtGetValue(event, args[3]);
-	evtSetFloat(event, args[4], distABf(x1, y1, x2, y2));
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    f32 x1 = evtGetValue(event, args[0]);
+    f32 y1 = evtGetValue(event, args[1]);
+    f32 x2 = evtGetValue(event, args[2]);
+    f32 y2 = evtGetValue(event, args[3]);
+    evtSetFloat(event, args[4], distABf(x1, y1, x2, y2));
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_get_dir) {
-	EvtWord* args = event->args;
-	f32 x1 = evtGetValue(event, args[0]);
-	f32 y1 = evtGetValue(event, args[1]);
-	f32 x2 = evtGetValue(event, args[2]);
-	f32 y2 = evtGetValue(event, args[3]);
-	evtSetFloat(event, args[4], angleABf(x1, y1, x2, y2));
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    f32 x1 = evtGetValue(event, args[0]);
+    f32 y1 = evtGetValue(event, args[1]);
+    f32 x2 = evtGetValue(event, args[2]);
+    f32 y2 = evtGetValue(event, args[3]);
+    evtSetFloat(event, args[4], angleABf(x1, y1, x2, y2));
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_get_system_flag) {
-	evtSetValue(event, event->args[0], gp->flags);
-	return EVT_RETURN_DONE;
+    evtSetValue(event, event->args[0], gp->flags);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_system_flag_onoff) {
-	EvtWord* args = event->args;
-	s32 onoff = evtGetValue(event, args[0]);
-	s32 flag = args[1];
-	if (onoff) {
-		gp->flags |= flag;
-	} else {
-		gp->flags &= ~flag;
-	}
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 onoff = evtGetValue(event, args[0]);
+    s32 flag = args[1];
+    if (onoff) {
+        gp->flags |= flag;
+    } else {
+        gp->flags &= ~flag;
+    }
+    return EVT_RETURN_DONE;
 }
 
 KEYFN(evt_key_get_dir, keyGetDir)
@@ -2080,159 +2080,159 @@ KEYFN(evt_key_get_button, keyGetButton)
 KEYFN(evt_key_get_buttontrg, keyGetButtonTrg)
 
 USER_FUNC(evt_sub_get_mapname) {
-	evtSetValue(event, event->args[0], (EvtWord)gp->currentMapName);
-	return EVT_RETURN_DONE;
+    evtSetValue(event, event->args[0], (EvtWord)gp->currentMapName);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_get_areaname) {
-	evtSetValue(event, event->args[0], (EvtWord)gp->currentAreaName);
-	return EVT_RETURN_DONE;
+    evtSetValue(event, event->args[0], (EvtWord)gp->currentAreaName);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_status_gauge_force_open) {
-	statusWinForceOpen();
-	return EVT_RETURN_DONE;
+    statusWinForceOpen();
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_status_gauge_force_close) {
-	statusWinForceClose();
-	return EVT_RETURN_DONE;
+    statusWinForceClose();
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_status_gauge_check_update) {
-	EvtWord* args = event->args;
-	if (statusWinCheckUpdate()) {
-		evtSetValue(event, args[0], 1);
-	} else {
-		evtSetValue(event, args[0], 0);
-	}
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    if (statusWinCheckUpdate()) {
+        evtSetValue(event, args[0], 1);
+    } else {
+        evtSetValue(event, args[0], 0);
+    }
+    return EVT_RETURN_DONE;
 }
 
 #ifdef VERSION_G8ME01
 USER_FUNC(N_evt_sub_status_gauge_force_update) {
-	statusWinForceUpdate();
-	return EVT_RETURN_DONE;
+    statusWinForceUpdate();
+    return EVT_RETURN_DONE;
 }
 #endif
 
 USER_FUNC(evt_sub_save_playtime) {
-	s32 base = event->args[0];
-	u8 buf[8];
-	*(s64*)buf = gp->retraceLocalTime;
-	swByteSet(base + 0xA21FE80, buf[0]);
-	swByteSet(base + 0xA21FE81, buf[1]);
-	swByteSet(base + 0xA21FE82, buf[2]);
-	swByteSet(base + 0xA21FE83, buf[3]);
-	swByteSet(base + 0xA21FE84, buf[4]);
-	swByteSet(base + 0xA21FE85, buf[5]);
-	swByteSet(base + 0xA21FE86, buf[6]);
-	swByteSet(base + 0xA21FE87, buf[7]);
-	return EVT_RETURN_DONE;
+    s32 base = event->args[0];
+    u8 buf[8];
+    *(s64*)buf = gp->retraceLocalTime;
+    swByteSet(base + 0xA21FE80, buf[0]);
+    swByteSet(base + 0xA21FE81, buf[1]);
+    swByteSet(base + 0xA21FE82, buf[2]);
+    swByteSet(base + 0xA21FE83, buf[3]);
+    swByteSet(base + 0xA21FE84, buf[4]);
+    swByteSet(base + 0xA21FE85, buf[5]);
+    swByteSet(base + 0xA21FE86, buf[6]);
+    swByteSet(base + 0xA21FE87, buf[7]);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_load_progresstime) {
-	EvtWord* args = event->args;
-	s32 base = args[0];
-	u8 buf[8];
-	s64 ms;
-	buf[0] = swByteGet(base + 0xA21FE80);
-	buf[1] = swByteGet(base + 0xA21FE81);
-	buf[2] = swByteGet(base + 0xA21FE82);
-	buf[3] = swByteGet(base + 0xA21FE83);
-	buf[4] = swByteGet(base + 0xA21FE84);
-	buf[5] = swByteGet(base + 0xA21FE85);
-	buf[6] = swByteGet(base + 0xA21FE86);
-	buf[7] = swByteGet(base + 0xA21FE87);
-	ms = (gp->retraceLocalTime - *(s64*)buf) / (OS_TIMER_CLOCK / 1000);
-	if (ms > 86400000) {
-		ms = 86400000;
-	}
-	evtSetValue(event, args[1], ms);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 base = args[0];
+    u8 buf[8];
+    s64 ms;
+    buf[0] = swByteGet(base + 0xA21FE80);
+    buf[1] = swByteGet(base + 0xA21FE81);
+    buf[2] = swByteGet(base + 0xA21FE82);
+    buf[3] = swByteGet(base + 0xA21FE83);
+    buf[4] = swByteGet(base + 0xA21FE84);
+    buf[5] = swByteGet(base + 0xA21FE85);
+    buf[6] = swByteGet(base + 0xA21FE86);
+    buf[7] = swByteGet(base + 0xA21FE87);
+    ms = (gp->retraceLocalTime - *(s64*)buf) / (OS_TIMER_CLOCK / 1000);
+    if (ms > 86400000) {
+        ms = 86400000;
+    }
+    evtSetValue(event, args[1], ms);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_get_language) {
-	evtSetValue(event, event->args[0], gp->language);
-	return EVT_RETURN_DONE;
+    evtSetValue(event, event->args[0], gp->language);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_animgroup_async) {
-	const char* group = (const char*)evtGetValue(event, event->args[0]);
-	s32 r = animGroupBaseAsync(group, gp->inBattle != 0, NULL);
-	if (r == 0) {
-		return EVT_RETURN_BLOCK;
-	}
-	if (r != 0) {
-		return EVT_RETURN_DONE;
-	}
-	return EVT_RETURN_DONE;
+    const char* group = (const char*)evtGetValue(event, event->args[0]);
+    s32 r = animGroupBaseAsync(group, gp->inBattle != 0, NULL);
+    if (r == 0) {
+        return EVT_RETURN_BLOCK;
+    }
+    if (r != 0) {
+        return EVT_RETURN_DONE;
+    }
+    return EVT_RETURN_DONE;
 }
 
 
 USER_FUNC(evt_sub_countdown_start) {
-	EvtWord* args = event->args;
-	s32 limit = evtGetValue(event, args[0]);
-	s32 restart = evtGetValue(event, args[1]);
-	countDownStart(limit, restart);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 limit = evtGetValue(event, args[0]);
+    s32 restart = evtGetValue(event, args[1]);
+    countDownStart(limit, restart);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_countdown_get_status) {
-	EvtWord* args = event->args;
-	evtSetValue(event, args[0], countDownGetStatus());
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    evtSetValue(event, args[0], countDownGetStatus());
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_countdown_end) {
-	countDownEnd();
-	return EVT_RETURN_DONE;
+    countDownEnd();
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_countdown_flag_onoff) {
-	EvtWord* args = event->args;
-	s32 onoff = evtGetValue(event, args[0]);
-	s32 flag = evtGetValue(event, args[1]);
-	if (onoff) {
-		countDownFlagOn(flag);
-	} else {
-		countDownFlagOff(flag);
-	}
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 onoff = evtGetValue(event, args[0]);
+    s32 flag = evtGetValue(event, args[1]);
+    if (onoff) {
+        countDownFlagOn(flag);
+    } else {
+        countDownFlagOff(flag);
+    }
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_sub_countdown_set_restart_time) {
-	countDownSetRestartTime(evtGetValue(event, event->args[0]));
-	return EVT_RETURN_DONE;
+    countDownSetRestartTime(evtGetValue(event, event->args[0]));
+    return EVT_RETURN_DONE;
 }
 
 void coingetDisp(WinMgrEntry* entry) {
-	s32* work = entry->param;
-	char buf[0x400];
-	if (work[1]) {
+    s32* work = entry->param;
+    char buf[0x400];
+    if (work[1]) {
 #ifdef VERSION_G8ME01
-		u16 lines;
-		s32 w;
+        u16 lines;
+        s32 w;
 
-		if ((u32)gp->language == 0) {
-			sprintf(buf, msgSearch("msg_window_coin_get"), work[0]);
-		} else {
-			strcpy(buf, msgSearch("msg_window_coin_get"));
-			evtMsgFmtInt(buf, work[0]);
-		}
-		w = FontGetMessageWidthLine(buf, &lines) + 20;
-		if (w > entry->width) {
-			entry->width = w;
-			entry->x = -entry->width / 2;
-		}
-		entry->height = entry->description->height + lines * 24;
+        if ((u32)gp->language == 0) {
+            sprintf(buf, msgSearch("msg_window_coin_get"), work[0]);
+        } else {
+            strcpy(buf, msgSearch("msg_window_coin_get"));
+            evtMsgFmtInt(buf, work[0]);
+        }
+        w = FontGetMessageWidthLine(buf, &lines) + 20;
+        if (w > entry->width) {
+            entry->width = w;
+            entry->x = -entry->width / 2;
+        }
+        entry->height = entry->description->height + lines * 24;
 #else
-		sprintf(buf, msgSearch("msg_window_coin_get"), work[0]);
+        sprintf(buf, msgSearch("msg_window_coin_get"), work[0]);
 #endif
-		FontDrawStart();
-		FontDrawColor(coin_black);
-		FontDrawMessage(-(s32)FontGetMessageWidth(buf) / 2, entry->y - 8, buf);
-	}
+        FontDrawStart();
+        FontDrawColor(coin_black);
+        FontDrawMessage(-(s32)FontGetMessageWidth(buf) / 2, entry->y - 8, buf);
+    }
 }
 
 static inline f32 coin_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
@@ -2242,148 +2242,148 @@ void marioChgStayMotion(void);
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 USER_FUNC(evt_sub_get_coin) {
-	s32 coin = evtGetValue(event, event->args[0]);
-	MarioWork* mario = marioGetPtr();
-	Vec a = mario->position;
-	Vec b = a;
-	f32 rad = reviseAngle((100.0f * camGetPtr(4)->viewYaw + 5.0f) / 100.0f);
-	f32 s;
-	f32 c;
-	s32 state;
-	EffectEntry* eff;
-	s32* work;
-	rad = 6.2831855f * rad / 360.0f;
-	s = 10.0f * coin_sin(rad);
-	c = 10.0f * coin_cos(rad);
-	a.x += s;
-	a.z -= c;
-	a.y += 62.0f;
-	b.x += s;
-	b.y += 52.0f;
-	b.z -= c;
-	if (isFirstCall) {
-		event->userdata[0] = 0;
-		event->userdatap[1] = effItemGetEntry(7, a.x, a.y, a.z);
-		event->userdata[2] = 0;
-		event->userdata3 = 0;
-		event->wInterpWork = _mapAlloc(8);
-	}
-	state = event->userdata[0];
-	eff = event->userdatap[1];
-	work = event->wInterpWork;
-	switch (state) {
-	case 0:
-		iconEntry("iraiCoin", ICON_18B);
-		iconSetPos("iraiCoin", b.x, b.y, b.z);
-		iconFlagOn("iraiCoin", 0x102);
-		((ItemGetWork*)eff->userdata)->camera = 5;
-		marioChgGetItemMotion();
-		event->userdata3 = winMgrEntry(coinget_window_desc);
-		winMgrOpen(event->userdata3);
-		winMgrSetParam(event->userdata3, work);
-		work[0] = coin;
-		work[1] = 0;
-		psndBGMOff(0x3800);
-		psndBGMOn(0x201, "BGM_FF_GET_ITEM1");
-		event->userdata[2] = 200;
-		event->savedTime = gp->renderTime;
-		event->userdata[0] = 1;
-		return EVT_RETURN_BLOCK;
-	case 1:
-		if ((s32)(((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
-			iconFlagOff("iraiCoin", 2);
-			work[1] = 1;
-			event->userdata[2] = 500;
-			event->savedTime = gp->renderTime;
-			event->userdata[0] = 2;
-		}
-		return EVT_RETURN_BLOCK;
-	case 2:
-		if ((s32)(((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
-			event->userdata[0] = 10;
-		}
-		return EVT_RETURN_BLOCK;
-	case 10:
-		if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-			event->userdata[0] = 100;
-		}
-		return EVT_RETURN_BLOCK;
-	case 100:
-		((s16 (*)(s32))pouchAddCoin)(coin);
-		effSoftDelete(eff);
-		iconDelete("iraiCoin");
-		marioChgStayMotion();
-		psndBGMOn(0xa0, NULL);
-		psndBGMOff(0x201);
-		winMgrCloseAutoDelete(event->userdata3);
-		work[1] = 0;
-		event->userdata[0] = 101;
-		return EVT_RETURN_DONE;
-	case 101:
-		if (!winMgrAction(event->userdata3)) {
-			_mapFree(work);
-			return EVT_RETURN_DONE;
-		}
-		return EVT_RETURN_BLOCK;
-	}
-	return EVT_RETURN_DONE;
+    s32 coin = evtGetValue(event, event->args[0]);
+    MarioWork* mario = marioGetPtr();
+    Vec a = mario->position;
+    Vec b = a;
+    f32 rad = reviseAngle((100.0f * camGetPtr(4)->viewYaw + 5.0f) / 100.0f);
+    f32 s;
+    f32 c;
+    s32 state;
+    EffectEntry* eff;
+    s32* work;
+    rad = 6.2831855f * rad / 360.0f;
+    s = 10.0f * coin_sin(rad);
+    c = 10.0f * coin_cos(rad);
+    a.x += s;
+    a.z -= c;
+    a.y += 62.0f;
+    b.x += s;
+    b.y += 52.0f;
+    b.z -= c;
+    if (isFirstCall) {
+        event->userdata[0] = 0;
+        event->userdatap[1] = effItemGetEntry(7, a.x, a.y, a.z);
+        event->userdata[2] = 0;
+        event->userdata3 = 0;
+        event->wInterpWork = _mapAlloc(8);
+    }
+    state = event->userdata[0];
+    eff = event->userdatap[1];
+    work = event->wInterpWork;
+    switch (state) {
+    case 0:
+        iconEntry("iraiCoin", ICON_18B);
+        iconSetPos("iraiCoin", b.x, b.y, b.z);
+        iconFlagOn("iraiCoin", 0x102);
+        ((ItemGetWork*)eff->userdata)->camera = 5;
+        marioChgGetItemMotion();
+        event->userdata3 = winMgrEntry(coinget_window_desc);
+        winMgrOpen(event->userdata3);
+        winMgrSetParam(event->userdata3, work);
+        work[0] = coin;
+        work[1] = 0;
+        psndBGMOff(0x3800);
+        psndBGMOn(0x201, "BGM_FF_GET_ITEM1");
+        event->userdata[2] = 200;
+        event->savedTime = gp->renderTime;
+        event->userdata[0] = 1;
+        return EVT_RETURN_BLOCK;
+    case 1:
+        if ((s32)(((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
+            iconFlagOff("iraiCoin", 2);
+            work[1] = 1;
+            event->userdata[2] = 500;
+            event->savedTime = gp->renderTime;
+            event->userdata[0] = 2;
+        }
+        return EVT_RETURN_BLOCK;
+    case 2:
+        if ((s32)(((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
+            event->userdata[0] = 10;
+        }
+        return EVT_RETURN_BLOCK;
+    case 10:
+        if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+            event->userdata[0] = 100;
+        }
+        return EVT_RETURN_BLOCK;
+    case 100:
+        ((s16 (*)(s32))pouchAddCoin)(coin);
+        effSoftDelete(eff);
+        iconDelete("iraiCoin");
+        marioChgStayMotion();
+        psndBGMOn(0xa0, NULL);
+        psndBGMOff(0x201);
+        winMgrCloseAutoDelete(event->userdata3);
+        work[1] = 0;
+        event->userdata[0] = 101;
+        return EVT_RETURN_DONE;
+    case 101:
+        if (!winMgrAction(event->userdata3)) {
+            _mapFree(work);
+            return EVT_RETURN_DONE;
+        }
+        return EVT_RETURN_BLOCK;
+    }
+    return EVT_RETURN_DONE;
 }
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
 USER_FUNC(stone_ry) {
-	EvtWord* args = event->args;
-	char* name = (char*)evtGetValue(event, args[0]);
-	s32 ang = evtGetValue(event, args[1]);
-	EffectEntry* item = itemNameToPtr(name)->effect;
-	((EffStarStoneWork*)item->userdata)->flags &= ~4;
-	((EffStarStoneWork*)item->userdata)->rotY = ang % 360;
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    char* name = (char*)evtGetValue(event, args[0]);
+    s32 ang = evtGetValue(event, args[1]);
+    EffectEntry* item = itemNameToPtr(name)->effect;
+    ((EffStarStoneWork*)item->userdata)->flags &= ~4;
+    ((EffStarStoneWork*)item->userdata)->rotY = ang % 360;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(stone_bg) {
-	char* name;
-	CameraEntry* cam;
-	EffectEntry* eff;
-	u8* item;
-	name = (char*)evtGetValue(event, event->args[0]);
-	cam = camGetPtr(8);
-	cam->letterBoxCamId = 5;
-	eff = effNameToPtr("sub_bg");
-	((ItemGetWork*)eff->userdata)->camera = 5;
-	item = (u8*)itemNameToPtr(name);
-	((EffStarStoneWork*)((ItemEntry*)item)->effect->userdata)->cam = 5;
-	if (npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49") != NULL && evtGetValue(event, GSW(0)) < 211) {
-		npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49")->cameraId = 5;
-	} else {
-		marioSetCamId(5);
-	}
-	return EVT_RETURN_DONE;
+    char* name;
+    CameraEntry* cam;
+    EffectEntry* eff;
+    u8* item;
+    name = (char*)evtGetValue(event, event->args[0]);
+    cam = camGetPtr(8);
+    cam->letterBoxCamId = 5;
+    eff = effNameToPtr("sub_bg");
+    ((ItemGetWork*)eff->userdata)->camera = 5;
+    item = (u8*)itemNameToPtr(name);
+    ((EffStarStoneWork*)((ItemEntry*)item)->effect->userdata)->cam = 5;
+    if (npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49") != NULL && evtGetValue(event, GSW(0)) < 211) {
+        npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49")->cameraId = 5;
+    } else {
+        marioSetCamId(5);
+    }
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(stone_bg_open) {
-	EffectEntry* e = effNameToPtr("sub_bg");
-	((ItemGetWork*)e->userdata)->state = 1;
-	return EVT_RETURN_DONE;
+    EffectEntry* e = effNameToPtr("sub_bg");
+    ((ItemGetWork*)e->userdata)->state = 1;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(stageclear_wait) {
-	effNameToPtr("sub_clear");
-	return effStageClearEndChk() ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    effNameToPtr("sub_clear");
+    return effStageClearEndChk() ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(set_stop) {
-	stop = evtGetValue(event, event->args[0]);
-	return EVT_RETURN_DONE;
+    stop = evtGetValue(event, event->args[0]);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(get_stop) {
-	evtSetValue(event, event->args[0], stop);
-	return EVT_RETURN_DONE;
+    evtSetValue(event, event->args[0], stop);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(bgm_start_wait) {
-	return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 #ifdef VERSION_G8ME01
@@ -2402,91 +2402,91 @@ USER_FUNC(evt_sub_scale_by_fps) {
 #endif
 
 USER_FUNC(evt_sub_check_intersect) {
-	EvtWord* args = event->args;
-	f32 a, b, c, d, e, f, g, h;
-	f32 t1, t2;
-	a = evtGetFloat(event, args[0]);
-	b = evtGetFloat(event, args[1]);
-	c = evtGetFloat(event, args[2]);
-	d = evtGetFloat(event, args[3]);
-	e = evtGetFloat(event, args[4]);
-	f = evtGetFloat(event, args[5]);
-	g = evtGetFloat(event, args[6]);
-	h = evtGetFloat(event, args[7]);
-	if (a >= c) {
-		if ((a < e && a < g) || (c > e && c > g)) {
-			evtSetValue(event, args[8], 0);
-			return EVT_RETURN_DONE;
-		}
-	} else {
-		if ((c < e && c < g) || (a > e && a > g)) {
-			evtSetValue(event, args[8], 0);
-			return EVT_RETURN_DONE;
-		}
-	}
-	if (b >= d) {
-		if ((b < f && b < h) || (d > f && d > h)) {
-			evtSetValue(event, args[8], 0);
-			return EVT_RETURN_DONE;
-		}
-	} else {
-		if ((d < f && d < h) || (b > f && b > h)) {
-			evtSetValue(event, args[8], 0);
-			return EVT_RETURN_DONE;
-		}
-	}
-	t1 = (a - c) * (f - b) + (b - d) * (a - e);
-	t2 = (a - c) * (h - b) + (b - d) * (a - g);
-	if (t1 * t2 > 0.0f) {
-		evtSetValue(event, args[8], 0);
-		return EVT_RETURN_DONE;
-	}
-	t1 = (e - g) * (b - f) + (f - h) * (e - a);
-	t2 = (e - g) * (d - f) + (f - h) * (e - c);
-	if (t1 * t2 > 0.0f) {
-		evtSetValue(event, args[8], 0);
-		return EVT_RETURN_DONE;
-	}
-	evtSetValue(event, args[8], 1);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    f32 a, b, c, d, e, f, g, h;
+    f32 t1, t2;
+    a = evtGetFloat(event, args[0]);
+    b = evtGetFloat(event, args[1]);
+    c = evtGetFloat(event, args[2]);
+    d = evtGetFloat(event, args[3]);
+    e = evtGetFloat(event, args[4]);
+    f = evtGetFloat(event, args[5]);
+    g = evtGetFloat(event, args[6]);
+    h = evtGetFloat(event, args[7]);
+    if (a >= c) {
+        if ((a < e && a < g) || (c > e && c > g)) {
+            evtSetValue(event, args[8], 0);
+            return EVT_RETURN_DONE;
+        }
+    } else {
+        if ((c < e && c < g) || (a > e && a > g)) {
+            evtSetValue(event, args[8], 0);
+            return EVT_RETURN_DONE;
+        }
+    }
+    if (b >= d) {
+        if ((b < f && b < h) || (d > f && d > h)) {
+            evtSetValue(event, args[8], 0);
+            return EVT_RETURN_DONE;
+        }
+    } else {
+        if ((d < f && d < h) || (b > f && b > h)) {
+            evtSetValue(event, args[8], 0);
+            return EVT_RETURN_DONE;
+        }
+    }
+    t1 = (a - c) * (f - b) + (b - d) * (a - e);
+    t2 = (a - c) * (h - b) + (b - d) * (a - g);
+    if (t1 * t2 > 0.0f) {
+        evtSetValue(event, args[8], 0);
+        return EVT_RETURN_DONE;
+    }
+    t1 = (e - g) * (b - f) + (f - h) * (e - a);
+    t2 = (e - g) * (d - f) + (f - h) * (e - c);
+    if (t1 * t2 > 0.0f) {
+        evtSetValue(event, args[8], 0);
+        return EVT_RETURN_DONE;
+    }
+    evtSetValue(event, args[8], 1);
+    return EVT_RETURN_DONE;
 }
 
 #define IRAI_CHECK(flag, done, base, mail)                                    \
-	if (swGet(flag) && !swGet(done)) {                                        \
-		for (i = 0; i < 8; i++) {                                             \
-			u.b[i] = swByteGet(base + i);                                     \
-		}                                                                     \
-		if (OSTicksToSeconds(gp->retraceLocalTime - u.t) > 7200) {           \
-			ret = 1;                                                          \
-			if (arg) {                                                        \
-				swSet(done);                                                  \
-				pouchReceiveMail(mail);                                       \
-			}                                                                 \
-		}                                                                     \
-	}
+    if (swGet(flag) && !swGet(done)) {                                        \
+        for (i = 0; i < 8; i++) {                                             \
+            u.b[i] = swByteGet(base + i);                                     \
+        }                                                                     \
+        if (OSTicksToSeconds(gp->retraceLocalTime - u.t) > 7200) {           \
+            ret = 1;                                                          \
+            if (arg) {                                                        \
+                swSet(done);                                                  \
+                pouchReceiveMail(mail);                                       \
+            }                                                                 \
+        }                                                                     \
+    }
 USER_FUNC(irai_mail_check) {
-	EvtWord* args = event->args;
-	s32 arg = evtGetValue(event, args[0]);
-	s32 ret = 0;
-	s32 i;
-	union {
-		u8 b[8];
-		OSTime t;
-	} u;
-	IRAI_CHECK(0x1505, 0x17, 0x58d, 0x25)
-	IRAI_CHECK(0x150a, 0x18, 0x595, 0x26)
-	IRAI_CHECK(0x150b, 0x19, 0x59d, 0x27)
-	IRAI_CHECK(0x150d, 0x1a, 0x5a5, 0x28)
-	IRAI_CHECK(0x1512, 0x1b, 0x5ad, 0x29)
-	IRAI_CHECK(0x1518, 0x1c, 0x5b5, 0x2a)
-	evtSetValue(event, args[1], ret);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 arg = evtGetValue(event, args[0]);
+    s32 ret = 0;
+    s32 i;
+    union {
+        u8 b[8];
+        OSTime t;
+    } u;
+    IRAI_CHECK(0x1505, 0x17, 0x58d, 0x25)
+    IRAI_CHECK(0x150a, 0x18, 0x595, 0x26)
+    IRAI_CHECK(0x150b, 0x19, 0x59d, 0x27)
+    IRAI_CHECK(0x150d, 0x1a, 0x5a5, 0x28)
+    IRAI_CHECK(0x1512, 0x1b, 0x5ad, 0x29)
+    IRAI_CHECK(0x1518, 0x1c, 0x5b5, 0x2a)
+    evtSetValue(event, args[1], ret);
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(mail_evt_gor_04_keyoff_check) {
-	EvtWord* args = event->args;
-	s32 a = marioCtrlOffChk();
-	s32 b = marioKeyOffChk();
-	evtSetValue(event, args[0], b + a);
-	return EVT_RETURN_DONE;
+    EvtWord* args = event->args;
+    s32 a = marioCtrlOffChk();
+    s32 b = marioKeyOffChk();
+    evtSetValue(event, args[0], b + a);
+    return EVT_RETURN_DONE;
 }

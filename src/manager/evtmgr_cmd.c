@@ -205,26 +205,26 @@ s32 evt_do(EventEntry* entry) { // 5
 }
 
 s32 evt_while(EventEntry* entry) { // 6
-	s32 depth = entry->loopDepth;
-	s32 counter = entry->loopCounters[depth];
+    s32 depth = entry->loopDepth;
+    s32 counter = entry->loopCounters[depth];
 
-	if (counter == 0) {
-		entry->nextCommand = entry->loopStartPtrs[depth];
-		return EVT_RETURN_DONE;
-	}
-	if (counter >= -10000000) {
-		entry->loopCounters[depth] = --counter;
-	} else {
-		s32 var = evtGetValue(entry, counter);
-		evtSetValue(entry, counter, var - 1);
-		counter = var - 1;
-	}
-	if (counter != 0) {
-		entry->nextCommand = entry->loopStartPtrs[depth];
-		return EVT_RETURN_DONE;
-	}
-	entry->loopDepth--;
-	return EVT_RETURN_DONE;
+    if (counter == 0) {
+        entry->nextCommand = entry->loopStartPtrs[depth];
+        return EVT_RETURN_DONE;
+    }
+    if (counter >= -10000000) {
+        entry->loopCounters[depth] = --counter;
+    } else {
+        s32 var = evtGetValue(entry, counter);
+        evtSetValue(entry, counter, var - 1);
+        counter = var - 1;
+    }
+    if (counter != 0) {
+        entry->nextCommand = entry->loopStartPtrs[depth];
+        return EVT_RETURN_DONE;
+    }
+    entry->loopDepth--;
+    return EVT_RETURN_DONE;
 }
 
 s32 evt_do_break(EventEntry* entry) { // 7
@@ -249,9 +249,9 @@ s32 evt_wait_frm(EventEntry* entry) { // 9
             entry->blocked = TRUE;
     }
 
-	if (!entry->userdata[0]) {
-		return EVT_RETURN_DONE;
-	}
+    if (!entry->userdata[0]) {
+        return EVT_RETURN_DONE;
+    }
     
     entry->userdata[0]--;
     if (entry->userdata[0]) {
@@ -1458,15 +1458,15 @@ s32 evt_user_func(EventEntry* entry) { // 91
 
     switch (entry->blocked) {
         case 0:
-    		entry->userfunc = (UserFunction)evtGetValue(entry, *args++);
-    		entry->params--;
-    		entry->args = args;
-    		entry->blocked = 1;
-    		result = entry->userfunc(entry, 1);
+            entry->userfunc = (UserFunction)evtGetValue(entry, *args++);
+            entry->params--;
+            entry->args = args;
+            entry->blocked = 1;
+            result = entry->userfunc(entry, 1);
             break;
 
         default:
-		    result = entry->userfunc(entry, 0);
+            result = entry->userfunc(entry, 0);
             break;
     }
 
@@ -2401,52 +2401,52 @@ EvtWord evtGetValue(EventEntry* entry, EvtWord index) {
 }
 
 EvtWord evtGetNumber(EventEntry* entry, EvtWord index) {
-	if (index <= EVTDAT_ADDR_MAX) {
-		return index;
-	}
-	if (index <= (-250 * 1000000)) {
-		return index;
-	}
-	if (index <= EVTDAT_FLOAT_MAX) {
-		return index;
-	}
-	if (index <= EVTDAT_UF_MAX) {
-		return index + EVTDAT_UF_BASE;
-	}
-	if (index <= EVTDAT_UW_MAX) {
-		return index + EVTDAT_UW_BASE;
-	}
-	if (index <= EVTDAT_GSW_MAX) {
-		return index + EVTDAT_GSW_BASE;
-	}
-	if (index <= EVTDAT_LSW_MAX) {
-		return index + EVTDAT_LSW_BASE;
-	}
-	if (index <= EVTDAT_GSWF_MAX) {
-		return index + EVTDAT_GSWF_BASE;
-	}
-	if (index <= EVTDAT_LSWF_MAX) {
-		return index + EVTDAT_LSWF_BASE;
-	}
-	if (index <= EVTDAT_GF_MAX) {
-		return index + EVTDAT_GF_BASE;
-	}
-	if (index <= EVTDAT_LF_MAX) {
-		return index + EVTDAT_LF_BASE;
-	}
-	if (index <= EVTDAT_GW_MAX) {
-		return index + EVTDAT_GW_BASE;
-	}
-	if (index <= EVTDAT_LW_MAX) {
-		return index + EVTDAT_LW_BASE;
-	}
-	return index;
+    if (index <= EVTDAT_ADDR_MAX) {
+        return index;
+    }
+    if (index <= (-250 * 1000000)) {
+        return index;
+    }
+    if (index <= EVTDAT_FLOAT_MAX) {
+        return index;
+    }
+    if (index <= EVTDAT_UF_MAX) {
+        return index + EVTDAT_UF_BASE;
+    }
+    if (index <= EVTDAT_UW_MAX) {
+        return index + EVTDAT_UW_BASE;
+    }
+    if (index <= EVTDAT_GSW_MAX) {
+        return index + EVTDAT_GSW_BASE;
+    }
+    if (index <= EVTDAT_LSW_MAX) {
+        return index + EVTDAT_LSW_BASE;
+    }
+    if (index <= EVTDAT_GSWF_MAX) {
+        return index + EVTDAT_GSWF_BASE;
+    }
+    if (index <= EVTDAT_LSWF_MAX) {
+        return index + EVTDAT_LSWF_BASE;
+    }
+    if (index <= EVTDAT_GF_MAX) {
+        return index + EVTDAT_GF_BASE;
+    }
+    if (index <= EVTDAT_LF_MAX) {
+        return index + EVTDAT_LF_BASE;
+    }
+    if (index <= EVTDAT_GW_MAX) {
+        return index + EVTDAT_GW_BASE;
+    }
+    if (index <= EVTDAT_LW_MAX) {
+        return index + EVTDAT_LW_BASE;
+    }
+    return index;
 }
 
 EvtWord evtSetValue(EventEntry* entry, EvtWord index, EvtWord value) {
     EventWork* wp = evtGetWork();
     s32 result;
-	s32 shift;
+    s32 shift;
 
     if (index <= EVTDAT_ADDR_MAX) {
         return value;
@@ -2455,15 +2455,15 @@ EvtWord evtSetValue(EventEntry* entry, EvtWord index, EvtWord value) {
         return (s32)check_float(value);
     }
     if (index <= EVTDAT_UF_MAX) {
-		index += EVTDAT_UF_BASE;
-		shift = index % 32;
-		if (value != 0) { //set bit
-			entry->ufBase[index / 32] |= (1 << shift);
-		}
-		else { //clear bit
-			entry->ufBase[index / 32] &= ~(1 << shift);
-		}
-		return value;
+        index += EVTDAT_UF_BASE;
+        shift = index % 32;
+        if (value != 0) { //set bit
+            entry->ufBase[index / 32] |= (1 << shift);
+        }
+        else { //clear bit
+            entry->ufBase[index / 32] &= ~(1 << shift);
+        }
+        return value;
     }
     if (index <= EVTDAT_UW_MAX) {
         index += EVTDAT_UW_BASE;

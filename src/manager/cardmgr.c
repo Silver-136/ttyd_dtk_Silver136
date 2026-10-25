@@ -80,68 +80,68 @@ static inline BOOL headerCheck2(void);
 static inline BOOL dataCheck(void);
 
 CardData* cardGetFilePtr(void) {
-	return wp->data;
+    return wp->data;
 }
 
 void cardBufReset(void) {
-	s32 flags;
-	s32 timeout;
+    s32 flags;
+    s32 timeout;
 
-	flags = wp->flags;
-	if (wp->flags & 1) {
-		CARDCancel(&wp->info);
-		for (timeout = 1000000; timeout > 0; timeout--) {
-			if (!(wp->flags & 1)) {
-				break;
-			}
-		}
-		wp->flags &= ~1;
-	}
+    flags = wp->flags;
+    if (wp->flags & 1) {
+        CARDCancel(&wp->info);
+        for (timeout = 1000000; timeout > 0; timeout--) {
+            if (!(wp->flags & 1)) {
+                break;
+            }
+        }
+        wp->flags &= ~1;
+    }
 
-	make_header();
-	make_data();
+    make_header();
+    make_data();
 
-	wp->chan = -1;
-	wp->fileNo = -1;
-	wp->serialNo = 0;
-	wp->op = 0;
-	wp->result = CARD_RESULT_NOCARD;
-	wp->flags = 0;
+    wp->chan = -1;
+    wp->fileNo = -1;
+    wp->serialNo = 0;
+    wp->op = 0;
+    wp->result = CARD_RESULT_NOCARD;
+    wp->flags = 0;
 }
 
 void cardInit(void) {
-	wp = __memAlloc(HEAP_DEFAULT, sizeof(CardWork));
-	memset(wp, 0, sizeof(CardWork));
-	wp->workArea = __memAlloc(HEAP_DEFAULT, CARD_WORKAREA_SIZE);
-	memset(wp->workArea, 0, CARD_WORKAREA_SIZE);
-	wp->data = __memAlloc(HEAP_DEFAULT, sizeof(CardData));
-	memset(wp->data, 0, sizeof(CardData));
-	wp->readBuf = __memAlloc(HEAP_DEFAULT, sizeof(CardSaveSlot));
-	memset(wp->readBuf, 0, sizeof(CardSaveSlot));
-	wp->writeBuf = __memAlloc(HEAP_DEFAULT, sizeof(CardSaveSlot));
-	memset(wp->writeBuf, 0, sizeof(CardSaveSlot));
+    wp = __memAlloc(HEAP_DEFAULT, sizeof(CardWork));
+    memset(wp, 0, sizeof(CardWork));
+    wp->workArea = __memAlloc(HEAP_DEFAULT, CARD_WORKAREA_SIZE);
+    memset(wp->workArea, 0, CARD_WORKAREA_SIZE);
+    wp->data = __memAlloc(HEAP_DEFAULT, sizeof(CardData));
+    memset(wp->data, 0, sizeof(CardData));
+    wp->readBuf = __memAlloc(HEAP_DEFAULT, sizeof(CardSaveSlot));
+    memset(wp->readBuf, 0, sizeof(CardSaveSlot));
+    wp->writeBuf = __memAlloc(HEAP_DEFAULT, sizeof(CardSaveSlot));
+    memset(wp->writeBuf, 0, sizeof(CardSaveSlot));
 
-	make_header();
-	make_data();
+    make_header();
+    make_data();
 
-	wp->chan = -1;
-	wp->fileNo = -1;
-	wp->serialNo = 0;
-	wp->op = 0;
-	wp->result = CARD_RESULT_NOCARD;
-	wp->flags = 0;
-	CARDInit();
+    wp->chan = -1;
+    wp->fileNo = -1;
+    wp->serialNo = 0;
+    wp->op = 0;
+    wp->result = CARD_RESULT_NOCARD;
+    wp->flags = 0;
+    CARDInit();
 }
 
 void cardInsertWatchStart(void) {
-	wp->prevInserted = wp->chan;
-	wp->busyFrames = 10;
-	wp->flags |= 0x8000;
+    wp->prevInserted = wp->chan;
+    wp->busyFrames = 10;
+    wp->flags |= 0x8000;
 }
 
 void cardInsertWatchEnd(void) {
-	wp->flags &= ~0x8000;
-	wp->flags &= ~0xC000;
+    wp->flags &= ~0x8000;
+    wp->flags &= ~0xC000;
 }
 
 BOOL cardInsertChanged(void) {
@@ -165,128 +165,128 @@ BOOL cardIsExec(void) {
 }
 
 s32 cardGetCode(void) {
-	return wp->result;
+    return wp->result;
 }
 
 void cardMain(void) {
-	s32 inserted;
+    s32 inserted;
 
-	if (wp->flags & 0x8000) {
-		inserted = (s32)(s64)-(CARDProbe(0) == 0); //is something inserted?
-		if (wp->prevInserted != inserted) {
-			wp->flags |= 0x4000;
-		}
-		wp->prevInserted = inserted;
-		if (wp->busyFrames) {
-			wp->busyFrames--;
-		}
-	}
+    if (wp->flags & 0x8000) {
+        inserted = (s32)(s64)-(CARDProbe(0) == 0); //is something inserted?
+        if (wp->prevInserted != inserted) {
+            wp->flags |= 0x4000;
+        }
+        wp->prevInserted = inserted;
+        if (wp->busyFrames) {
+            wp->busyFrames--;
+        }
+    }
 
-	switch (wp->op) {
-		case 1:
-			write_main();
-			break;
+    switch (wp->op) {
+        case 1:
+            write_main();
+            break;
 
-		case 2:
-			write_header_main();
-			break;
+        case 2:
+            write_header_main();
+            break;
 
-		case 3:
-			read_main();
-			break;
+        case 3:
+            read_main();
+            break;
 
-		case 4:
-			read_all_main();
-			break;
+        case 4:
+            read_all_main();
+            break;
 
-		case 5:
-			create_main();
-			break;
+        case 5:
+            create_main();
+            break;
 
-		case 6:
-			if (wp->result != CARD_RESULT_READY) {
-				wp->op = 8;
-				wp->flags |= 0x200;
-				wp->flags &= ~2;
-			}
-			else if (!(wp->flags & 1)) {
-				switch (wp->opStep) {
-					case 0:
-						memcard_probe();
-						break;
+        case 6:
+            if (wp->result != CARD_RESULT_READY) {
+                wp->op = 8;
+                wp->flags |= 0x200;
+                wp->flags &= ~2;
+            }
+            else if (!(wp->flags & 1)) {
+                switch (wp->opStep) {
+                    case 0:
+                        memcard_probe();
+                        break;
 
-					case 1:
-						memcard_mount();
-						break;
+                    case 1:
+                        memcard_mount();
+                        break;
 
-					case 2:
-						memcard_format();
-						break;
+                    case 2:
+                        memcard_format();
+                        break;
 
-					case 3:
-						memcard_unmount();
-						break;
+                    case 3:
+                        memcard_unmount();
+                        break;
 
-					case 4:
-						wp->op = 0;
-						wp->flags |= 0x100;
-						wp->flags &= ~2;
-						break;
-				}
-				wp->opStep++;
-			}
-			else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
-				wp->result = CARDGetResultCode(wp->chan);
-				wp->flags &= ~1;
-			}
-			break;
+                    case 4:
+                        wp->op = 0;
+                        wp->flags |= 0x100;
+                        wp->flags &= ~2;
+                        break;
+                }
+                wp->opStep++;
+            }
+            else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+                wp->result = CARDGetResultCode(wp->chan);
+                wp->flags &= ~1;
+            }
+            break;
 
-		case 7:
-			if (wp->result != CARD_RESULT_READY) {
-				wp->op = 8;
-				wp->flags |= 0x200;
-				wp->flags &= ~2;
-			}
-			else if (!(wp->flags & 1)) {
-				switch (wp->opStep) {
-					case 0:
-						memcard_probe();
-						break;
+        case 7:
+            if (wp->result != CARD_RESULT_READY) {
+                wp->op = 8;
+                wp->flags |= 0x200;
+                wp->flags &= ~2;
+            }
+            else if (!(wp->flags & 1)) {
+                switch (wp->opStep) {
+                    case 0:
+                        memcard_probe();
+                        break;
 
-					case 1:
-						memcard_mount();
-						break;
+                    case 1:
+                        memcard_mount();
+                        break;
 
-					case 2:
-						memcard_check();
-						break;
+                    case 2:
+                        memcard_check();
+                        break;
 
-					case 3:
-						memcard_delete();
-						break;
+                    case 3:
+                        memcard_delete();
+                        break;
 
-					case 4:
-						memcard_unmount();
-						break;
+                    case 4:
+                        memcard_unmount();
+                        break;
 
-					case 5:
-						wp->op = 0;
-						wp->flags |= 0x100;
-						wp->flags &= ~2;
-						break;
-				}
-				wp->opStep++;
-			}
-			else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
-				wp->result = CARDGetResultCode(wp->chan);
-				wp->flags &= ~1;
-			}
-			break;
+                    case 5:
+                        wp->op = 0;
+                        wp->flags |= 0x100;
+                        wp->flags &= ~2;
+                        break;
+                }
+                wp->opStep++;
+            }
+            else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
+                wp->result = CARDGetResultCode(wp->chan);
+                wp->flags &= ~1;
+            }
+            break;
 
-		case 8:
-		default:
-			break;
-	}
+        case 8:
+        default:
+            break;
+    }
 }
 #pragma opt_propagation on
 
@@ -1089,31 +1089,31 @@ static inline BOOL dataCheck(void) {
 }
 
 static inline void make_header(void) {
-	CardMetadata* metadata;
-	s32 i;
-	u8* temp;
-	u32 checksum;
-	OSCalendarTime td;
-	metadata = &cardGetFilePtr()->metadata;
-	memset(metadata, 0, sizeof(metadata->data));
-	strcpy(metadata->data.fileName, str_802CCC94);
-	OSTicksToCalendarTime(OSGetTime(), &td);
-	sprintf(metadata->data.dateString, str_802CCCAC, td.mon + 1, td.mday);
-	memcpy(metadata->data.bannerTex, _mariost_banner_tex, sizeof(metadata->data.bannerTex));
-	memcpy(metadata->data.iconTex, _mariost_icon_tex, sizeof(metadata->data.iconTex));
-	memcpy(metadata->data.iconTlut, _mariost_icon_tlut, sizeof(metadata->data.iconTlut));
-	metadata->data.rumbleEnabled = (gp->rumbleEnabled != 0);
-	metadata->data.soundMode = (u16)gp->soundMode;
-	metadata->data.lastSlot = (u16)gp->lastSlot;
-	metadata->checksum1 = (checksum = 0u);
-	metadata->checksum2 = ~0u;
+    CardMetadata* metadata;
+    s32 i;
+    u8* temp;
+    u32 checksum;
+    OSCalendarTime td;
+    metadata = &cardGetFilePtr()->metadata;
+    memset(metadata, 0, sizeof(metadata->data));
+    strcpy(metadata->data.fileName, str_802CCC94);
+    OSTicksToCalendarTime(OSGetTime(), &td);
+    sprintf(metadata->data.dateString, str_802CCCAC, td.mon + 1, td.mday);
+    memcpy(metadata->data.bannerTex, _mariost_banner_tex, sizeof(metadata->data.bannerTex));
+    memcpy(metadata->data.iconTex, _mariost_icon_tex, sizeof(metadata->data.iconTex));
+    memcpy(metadata->data.iconTlut, _mariost_icon_tlut, sizeof(metadata->data.iconTlut));
+    metadata->data.rumbleEnabled = (gp->rumbleEnabled != 0);
+    metadata->data.soundMode = (u16)gp->soundMode;
+    metadata->data.lastSlot = (u16)gp->lastSlot;
+    metadata->checksum1 = (checksum = 0u);
+    metadata->checksum2 = ~0u;
 
-	temp = (u8*)&metadata->data;
-	for (i = 0; i < (s32)sizeof(metadata->data); i++) {
-		checksum += temp[i];
-	}
-	metadata->checksum1 = checksum;
-	metadata->checksum2 = ~metadata->checksum1;
+    temp = (u8*)&metadata->data;
+    for (i = 0; i < (s32)sizeof(metadata->data); i++) {
+        checksum += temp[i];
+    }
+    metadata->checksum1 = checksum;
+    metadata->checksum2 = ~metadata->checksum1;
 }
 
 static inline void make_data(void) {
@@ -1135,7 +1135,7 @@ static inline void make_data(void) {
 
 
 void mountDetachCallback(s32 chan, s32 result) {
-	; //stubbed in retail
+    ; //stubbed in retail
 }
 
 void mountAttachCallback(s32 chan, s32 result) {
@@ -1169,8 +1169,8 @@ static inline void memcard_unmount(void) {
 }
 
 void checkCallback(s32 chan, s32 result) {
-	wp->result = result;
-	wp->flags &= ~1;
+    wp->result = result;
+    wp->flags &= ~1;
 }
 
 static inline void memcard_check(void) {
@@ -1179,8 +1179,8 @@ static inline void memcard_check(void) {
 }
 
 void formatCallback(s32 chan, s32 result) {
-	wp->result = result;
-	wp->flags &= ~1;
+    wp->result = result;
+    wp->flags &= ~1;
 }
 
 static inline void memcard_format(void) {
@@ -1210,8 +1210,8 @@ static inline void memcard_delete(void) {
 }
 
 void createCallback(s32 chan, s32 result) {
-	wp->result = result;
-	wp->flags &= ~1;
+    wp->result = result;
+    wp->flags &= ~1;
 }
 
 static inline void memcard_create(void) {
@@ -1220,8 +1220,8 @@ static inline void memcard_create(void) {
 }
 
 void writeCallback(s32 chan, s32 result) {
-	wp->result = result;
-	wp->flags &= ~1;
+    wp->result = result;
+    wp->flags &= ~1;
 }
 
 static inline void memcard_write(void* addr, s32 length, s32 offset) {
@@ -1230,8 +1230,8 @@ static inline void memcard_write(void* addr, s32 length, s32 offset) {
 }
 
 void readCallback(s32 chan, s32 result) {
-	wp->result = result;
-	wp->flags &= ~1;
+    wp->result = result;
+    wp->flags &= ~1;
 }
 
 static inline void memcard_read(void* addr, s32 length, s32 offset) {
@@ -1240,8 +1240,8 @@ static inline void memcard_read(void* addr, s32 length, s32 offset) {
 }
 
 void statusCallback(s32 chan, s32 result) {
-	wp->result = result;
-	wp->flags &= ~1;
+    wp->result = result;
+    wp->flags &= ~1;
 }
 
 static inline void memcard_set_stat(void) {
