@@ -12,6 +12,8 @@
 #include "party/party_motion.h"
 #include "mario/mario_motion.h"
 #include "party/party_hit.h"
+#include "mario/mario_hit.h"
+#include "eff/eff_ripple.h"
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global vivian_init
@@ -208,15 +210,10 @@ void vivian_move(PartyEntry* party) {
 }
 
 
-extern void* marioSearchGround(f32* x, f32* y, f32* z, f32 a, f32 b);
-extern void marioChkWallAround(Vec* pos, s32 arg, f32 a, f32 b, f32 c, f32 d);
 #ifdef VERSION_G8ME01
 #endif
 extern void partyChgPose(PartyEntry* party, const char* name);
 extern s32 psndSFXOn_3D(s32 id, Vec* pos);
-extern void* effRippleEntry(s32 type, f32 x, f32 y, f32 z);
-extern void effRippleSetCamId(void* eff, s32 cam);
-extern void effRippleSetPosition(void* eff, f32 x, f32 y, f32 z);
 
 static inline void vivianFollow(PartyEntry* party) {
     HitEntry* hit;
