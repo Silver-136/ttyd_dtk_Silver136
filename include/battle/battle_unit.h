@@ -51,12 +51,14 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kUnknown_0x1 = (1 << 0),             // 0x1
     kCeiling = (1 << 1),                 // 0x2
     kFloating = (1 << 2),                // 0x4
-    kUnknownUnit_0x8 = (1 << 3),         // 0x8
+    kPermanentlyInvisible = (1 << 3),    // 0x8, not drawn and attacks miss (like STATUS_INVISIBLE)
     kVeiled = (1 << 4),                  // 0x10
     kShellShielded = (1 << 5),           // 0x20
     kUnknownUnit_0x1000 = (1 << 12),     // 0x1000
     kUnknownUnit_0x2000 = (1 << 13),     // 0x2000
+    kUndead = (1 << 16),                 // 0x10000, keeps taking turns while KO'd (STATUS_INSTANT_KILL)
     kInactive = (1 << 17),               // 0x20000
+    kNoTurn = (1 << 19),                 // 0x80000, never put in the turn order
     kUnknownUnit_0x2000000 = (1 << 25),  // 0x2000000
     kUnitHpFixed = (1 << 30)             // 0x40000000, HP neither falls from damage nor rises from HP Regen (lecture mode)
 } BattleUnitAttribute_Flags;

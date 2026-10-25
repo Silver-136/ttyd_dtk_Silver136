@@ -2273,7 +2273,7 @@ void btlseqMove(BattleWork* wp) {
                         unit = BattleGetUnitPtr(wp, id);
                         if (unit && unit->movesRemaining > 0) {
                             state = unit->moveState;
-                            if (state != 10 && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->mAttributeFlags & 0x10000))) {
+                            if (state != 10 && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->mAttributeFlags & kUndead))) {
                                 if (state != 1) {
                                     break;
                                 }
@@ -2504,7 +2504,7 @@ void btlseqAct(BattleWork* wp) {
             else if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
-                (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->mAttributeFlags & 0x10000))) {
+                (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->mAttributeFlags & kUndead))) {
                 if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC) && irand(100) < 0) {
                     evt = evtEntry(btldefaultevt_BiribiriMove, 10, 0);
                 }
@@ -2710,7 +2710,7 @@ void btlseqPhaseFirstProcess(BattleWork* wp) {
                 continue;
             }
             if (unit->attackPhase == BattleGetSeq(wp, SEQ_PHASE) &&
-                !(unit->mAttributeFlags & 0x80000)) {
+                !(unit->mAttributeFlags & kNoTurn)) {
                 wp->movePriorityQueue[count] = unit->unitId;
                 unit->protectId = -1;
                 for (part = unit->mParts; part; part = part->mNextPart) {
@@ -2789,7 +2789,7 @@ void battleMakePhaseEvtTable(BattleWork* wp) {
     count = 0;
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && !(unit->mAttributeFlags & 0x80000)) {
+        if (unit && !(unit->mAttributeFlags & kNoTurn)) {
             table[count].unitId = i;
             BtlUnit_GetHomePos(unit, &x, &y, &z);
             if (x >= 0.0f) {

@@ -488,7 +488,7 @@ next:
             animPoseMain(part->poseId);
             zpos = (Vec){wx, wy, wz + part->dispZOffset};
             part->dispColor.a = part->mKindPartParams->baseAlpha;
-            if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || (unit->mAttributeFlags & 8)) {
+            if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || (unit->mAttributeFlags & kPermanentlyInvisible)) {
                 part->dispColor.a = (part->dispColor.a << 7) / 255;
             }
             part->dispColor.a = part->dispColor.a * part->color.a / 255;

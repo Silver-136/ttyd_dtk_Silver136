@@ -262,7 +262,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         target->currentHp = 0;
         if (result & 0x100) {
             result |= 0x200;
-            if (target->mAttributeFlags & 0x10000) {
+            if (target->mAttributeFlags & kUndead) {
                 switch ((u8)result) {
                     case 0x18:
                     case 0x19:
@@ -1438,7 +1438,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (weapon->special & SPECIAL_CANNOT_MISS) {
         return 1;
     }
-    if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & 8)) {
+    if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & kPermanentlyInvisible)) {
         return 4;
     }
     if (target->mAttributeFlags & kVeiled) {
