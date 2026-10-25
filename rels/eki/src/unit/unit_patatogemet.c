@@ -565,8 +565,8 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        9, // attributes
-        1, // counterAttributes
+        kMainPart | kGuardTargetPart, // attributes
+        kCounterTopSpiky, // counterAttributes
         pose_table, // poseTable
     },
 };

@@ -76,7 +76,7 @@ static BattleUnitKind unit_patapata = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    0x40004, // attributeFlags
+    kFloating | kUnitLeader, // attributeFlags
     &regist_patapata, // statusVulnerability
     1, // numParts
     parts_patapata, // mParts
@@ -139,7 +139,7 @@ static BattleUnitKindPart parts_patapata[] = {
         255, // baseAlpha
         &defence_patapata, // defense
         &defence_patapata_attr, // defenseAttr
-        0x600809, // attributes
+        kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, // attributes
         0, // counterAttributes
         pose_table_patapata, // poseTable
     },
@@ -457,7 +457,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        0x1009, // attributes
+        kMainPart | kGuardTargetPart | kIsShelled, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },

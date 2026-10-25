@@ -235,69 +235,51 @@ EvtWord queen_hand_small_dead_event[32];
 EvtWord queen_hand_small_wait_event[6];
 
 BattleUnitKind unit_boss_black_peach = {
-    UNIT_SHADOW_QUEEN_PEACH,
-    "btl_un_black_peach",
-    150,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    100,
-    0,
-    50,
-    6,
-    40,
-    54,
-    5,
-    54,
-    0.0f,
-    27.0f,
-    0.0f,
-    0,
-    -3,
-    0.0f,
-    40.0f,
-    0.0f,
-    20.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    15.0f,
-    0.0f,
-    0.0f,
-    15.0f,
-    45.0f,
-    0.0f,
-    0.0f,
-    27.0f,
-    0.0f,
-    40.0f,
-    54.0f,
-    80,
-    0,
-    0,
-    2,
-    100,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_BPCH_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &peach_regist,
-    7,
-    peach_parts,
-    peach_init_event,
-    peach_data_table,
+    UNIT_SHADOW_QUEEN_PEACH, // mUnitType
+    "btl_un_black_peach", // name
+    150, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    0, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    6, // pbSoftCap
+    40, // width
+    54, // height
+    {5, 54}, // hitOffset
+    {0.0f, 27.0f, 0.0f}, // centerOffset
+    {0, -3}, // hpGaugeOffset
+    {0.0f, 40.0f, 0.0f}, // talkTogeBaseOffset
+    {20.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {15.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {15.0f, 45.0f, 0.0f}, // kissHitOffset
+    {0.0f, 27.0f, 0.0f}, // cutBaseOffset
+    40.0f, // cutWidth
+    54.0f, // cutHeight
+    80, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    0, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_BPCH_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    0, // attributeFlags
+    &peach_regist, // statusVulnerability
+    7, // numParts
+    peach_parts, // mParts
+    peach_init_event, // initEventCode
+    peach_data_table, // dataTable
 };
 
 BattleUnitDefense peach_defence = {{0, 0, 0, 0, 0}};

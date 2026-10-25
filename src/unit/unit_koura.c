@@ -28,69 +28,51 @@ static EvtWord wait_event[6];
 static EvtWord attack_event[2];
 
 BattleUnitKind unit_koura = {
-    UNIT_SHELL_SHIELD,
-    "btl_un_koura",
-    8,
-    0,
-    5,
-    1,
-    1,
-    0,
-    0,
-    0,
-    0,
-    100,
-    9,
-    24,
-    24,
-    24,
-    24,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    25.0f,
-    0.0f,
-    0.0f,
-    25.0f,
-    15.6f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    -1,
-    0,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BTL_DAMAGE1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kUnitNoncombatant,
-    &regist,
-    2,
-    parts,
-    init_event,
-    data_table,
+    UNIT_SHELL_SHIELD, // mUnitType
+    "btl_un_koura", // name
+    8, // maxHp
+    0, // maxFp
+    5, // mDangerHP
+    1, // mPerilHP
+    1, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    0, // bonusCoinRate
+    0, // baseCoin
+    100, // runRate
+    9, // pbSoftCap
+    24, // width
+    24, // height
+    {24, 24}, // hitOffset
+    {0.0f, 0.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {0.0f, 0.0f, 0.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {25.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {25.0f, 15.6f, 0.0f}, // kissHitOffset
+    {0.0f, 0.0f, 0.0f}, // cutBaseOffset
+    0.0f, // cutWidth
+    0.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BTL_DAMAGE1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitNoncombatant, // attributeFlags
+    &regist, // statusVulnerability
+    2, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleDataEntry data_table[] = {

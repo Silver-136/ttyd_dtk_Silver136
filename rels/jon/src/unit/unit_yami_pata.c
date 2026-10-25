@@ -41,69 +41,51 @@ static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_yami_pata = {
-    UNIT_DARK_PARATROOPA,
-    "btl_un_yami_pata",
-    8,
-    0,
-    1,
-    1,
-    17,
-    0,
-    1,
-    70,
-    1,
-    50,
-    9999,
-    36,
-    40,
-    -4,
-    40,
-    0.0f,
-    24.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    9.0f,
-    6.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    18.0f,
-    0.0f,
-    0.0f,
-    11.0f,
-    24.0f,
-    0.0f,
-    0.0f,
-    24.0f,
-    0.0f,
-    36.0f,
-    40.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_PATA_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kFloating | kUnitLeader,
-    &regist_patapata,
-    1,
-    parts_patapata,
-    init_event_patapata,
-    data_table_patapata,
+    UNIT_DARK_PARATROOPA, // mUnitType
+    "btl_un_yami_pata", // name
+    8, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    17, // mLevel
+    0, // mBonusExp
+    1, // bonusCoin
+    70, // bonusCoinRate
+    1, // baseCoin
+    50, // runRate
+    9999, // pbSoftCap
+    36, // width
+    40, // height
+    {-4, 40}, // hitOffset
+    {0.0f, 24.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {9.0f, 6.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {18.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {11.0f, 24.0f, 0.0f}, // kissHitOffset
+    {0.0f, 24.0f, 0.0f}, // cutBaseOffset
+    36.0f, // cutWidth
+    40.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_ENM_PATA_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kFloating | kUnitLeader, // attributeFlags
+    &regist_patapata, // statusVulnerability
+    1, // numParts
+    parts_patapata, // mParts
+    init_event_patapata, // initEventCode
+    data_table_patapata, // dataTable
 };
 
 static BattleWeapon weapon_patapata_attack = {
@@ -464,7 +446,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        0x1009, // attributes
+        kMainPart | kGuardTargetPart | kIsShelled, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },

@@ -46,69 +46,51 @@ static EvtWord attack_event[638];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_hyper_patakuri = {
-    UNIT_HYPER_PARAGOOMBA,
-    "btl_un_hyper_patakuri",
-    8,
-    0,
-    1,
-    1,
-    15,
-    0,
-    2,
-    70,
-    1,
-    60,
-    9999,
-    23,
-    25,
-    5,
-    25,
-    0.0f,
-    12.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    11.5f,
-    0.0f,
-    0.0f,
-    12.0f,
-    16.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    0.0f,
-    23.0f,
-    25.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_PATAKURI_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kFloating | kUnitLeader,
-    &regist_patakuri,
-    1,
-    parts_patakuri,
-    init_event_patakuri,
-    data_table_patakuri,
+    UNIT_HYPER_PARAGOOMBA, // mUnitType
+    "btl_un_hyper_patakuri", // name
+    8, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    15, // mLevel
+    0, // mBonusExp
+    2, // bonusCoin
+    70, // bonusCoinRate
+    1, // baseCoin
+    60, // runRate
+    9999, // pbSoftCap
+    23, // width
+    25, // height
+    {5, 25}, // hitOffset
+    {0.0f, 12.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {12.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {11.5f, 0.0f, 0.0f}, // bintaHitOffset
+    {12.0f, 16.0f, 0.0f}, // kissHitOffset
+    {0.0f, 12.0f, 0.0f}, // cutBaseOffset
+    23.0f, // cutWidth
+    25.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_ENM_PATAKURI_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kFloating | kUnitLeader, // attributeFlags
+    &regist_patakuri, // statusVulnerability
+    1, // numParts
+    parts_patakuri, // mParts
+    init_event_patakuri, // initEventCode
+    data_table_patakuri, // dataTable
 };
 
 static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
@@ -468,7 +450,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        9, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },

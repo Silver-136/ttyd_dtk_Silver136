@@ -42,69 +42,51 @@ static EvtWord marioAttackEvent_KaitenHammer[299];
 static EvtWord wait_event_fmario[6];
 
 BattleUnitKind unit_faker_mario_gra = {
-    UNIT_DOOPLISS_CHAPTER4_INVINCIBLE,
-    "btl_un_hatena",
-    40,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    100,
-    0,
-    70,
-    7,
-    24,
-    40,
-    12,
-    40,
-    0.0f,
-    20.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    40.0f,
-    0.0f,
-    12.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    32.0f,
-    0.0f,
-    0.0f,
-    20.0f,
-    0.0f,
-    24.0f,
-    40.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_MARIO_DAMAGE1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &regist_fmario,
-    1,
-    parts_fmario,
-    init_event_fmario,
-    data_table_fmario,
+    UNIT_DOOPLISS_CHAPTER4_INVINCIBLE, // mUnitType
+    "btl_un_hatena", // name
+    40, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    0, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    70, // runRate
+    7, // pbSoftCap
+    24, // width
+    40, // height
+    {12, 40}, // hitOffset
+    {0.0f, 20.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 40.0f, 0.0f}, // talkTogeBaseOffset
+    {12.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {12.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {12.0f, 32.0f, 0.0f}, // kissHitOffset
+    {0.0f, 20.0f, 0.0f}, // cutBaseOffset
+    24.0f, // cutWidth
+    40.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_MARIO_DAMAGE1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    0, // attributeFlags
+    &regist_fmario, // statusVulnerability
+    1, // numParts
+    parts_fmario, // mParts
+    init_event_fmario, // initEventCode
+    data_table_fmario, // dataTable
 };
 
 static BattleUnitDefense defence_fmario = {{0, 0, 0, 0, 0}};

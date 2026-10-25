@@ -59,69 +59,51 @@ static EvtWord explosion_event[247];
 #endif
 
 BattleUnitKind unit_heavy_bom = {
-    UNIT_BULKY_BOB_OMB,
-    "btl_un_heavy_bom",
-    6,
-    0,
-    1,
-    1,
-    22,
-    0,
-    4,
-    70,
-    0,
-    40,
-    9999,
-    54,
-    70,
-    7,
-    70,
-    0.0f,
-    35.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    27.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    27.0f,
-    0.0f,
-    0.0f,
-    27.0f,
-    45.5f,
-    0.0f,
-    0.0f,
-    35.0f,
-    0.0f,
-    54.0f,
-    70.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_HEAVYB_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &regist,
-    2,
-    parts,
-    init_event,
-    data_table,
+    UNIT_BULKY_BOB_OMB, // mUnitType
+    "btl_un_heavy_bom", // name
+    6, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    22, // mLevel
+    0, // mBonusExp
+    4, // bonusCoin
+    70, // bonusCoinRate
+    0, // baseCoin
+    40, // runRate
+    9999, // pbSoftCap
+    54, // width
+    70, // height
+    {7, 70}, // hitOffset
+    {0.0f, 35.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {27.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {27.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {27.0f, 45.5f, 0.0f}, // kissHitOffset
+    {0.0f, 35.0f, 0.0f}, // cutBaseOffset
+    54.0f, // cutWidth
+    70.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    0, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_ENM_HEAVYB_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    0, // attributeFlags
+    &regist, // statusVulnerability
+    2, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleWeapon weapon_heavy_bomb_super_explosion = {

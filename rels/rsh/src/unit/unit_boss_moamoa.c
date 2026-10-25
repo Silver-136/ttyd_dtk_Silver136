@@ -155,69 +155,51 @@ void moamoa_mainUnitIdClear(void) {
 }
 
 BattleUnitKind unit_boss_moamoa = {
-    UNIT_SMORG,
-    "btl_un_moamoa",
-    50,
-    0,
-    1,
-    1,
-    78,
-    0,
-    0,
-    100,
-    0,
-    50,
-    6,
-    160,
-    80,
-    0,
-    24,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    280.0f,
-    40.0f,
-    0.0f,
-    80.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    15.0f,
-    10.0f,
-    80.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    80.0f,
-    20.0f,
-    0.0f,
-    70.0f,
-    0.0f,
-    160.0f,
-    80.0f,
-    0,
-    0,
-    -1,
-    0,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_MOA_G_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kUnitNoSpin,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_SMORG, // mUnitType
+    "btl_un_moamoa", // name
+    50, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    78, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    6, // pbSoftCap
+    160, // width
+    80, // height
+    {0, 24}, // hitOffset
+    {0.0f, 0.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {280.0f, 40.0f, 0.0f}, // talkTogeBaseOffset
+    {80.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    15.0f, // vivianOffsetX
+    10.0f, // vivianOffsetZ
+    {80.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {10.0f, 80.0f, 20.0f}, // kissHitOffset
+    {0.0f, 70.0f, 0.0f}, // cutBaseOffset
+    160.0f, // cutWidth
+    80.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    0, // hammerKnockbackChance
+    0, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_MOA_G_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitNoSpin, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 BattleUnitDefense moamoa_defence = {{2, 2, 2, 2, 2}};

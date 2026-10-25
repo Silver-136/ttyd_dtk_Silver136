@@ -50,69 +50,51 @@ static f32 tanf(f32 x) {
 }
 
 BattleUnitKind unit_wanawana = {
-    UNIT_UNUSED_WANAWANA,
-    "btl_un_wanawana",
-    2,
-    0,
-    1,
-    1,
-    1,
-    0,
-    1,
-    0,
-    0,
-    100,
-    9,
-    24,
-    24,
-    24,
-    24,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    15.6f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    0,
-    0,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BTL_DAMAGE1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_UNUSED_WANAWANA, // mUnitType
+    "btl_un_wanawana", // name
+    2, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    1, // mLevel
+    0, // mBonusExp
+    1, // bonusCoin
+    0, // bonusCoinRate
+    0, // baseCoin
+    100, // runRate
+    9, // pbSoftCap
+    24, // width
+    24, // height
+    {24, 24}, // hitOffset
+    {0.0f, 0.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {0.0f, 0.0f, 0.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {12.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {12.0f, 15.6f, 0.0f}, // kissHitOffset
+    {0.0f, 0.0f, 0.0f}, // cutBaseOffset
+    0.0f, // cutWidth
+    0.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    0, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BTL_DAMAGE1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    0, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

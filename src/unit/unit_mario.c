@@ -125,69 +125,51 @@ BattleUnitKindPart unitpartsdata_Mario[] = {
 };
 
 BattleUnitKind unitdata_Mario = {
-    UNIT_MARIO,
-    "btl_un_mario",
-    10,
-    5,
-    5,
-    1,
-    1,
-    0,
-    0,
-    0,
-    0,
-    100,
-    9,
-    22,
-    36,
-    11,
-    36,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    40.0f,
-    0.0f,
-    0.0f,
-    40.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    11.0f,
-    0.0f,
-    0.0f,
-    11.0f,
-    23.4f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    -1,
-    0,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_MARIO_DAMAGE1",
-    "SFX_MARIO_DAMAGE_FIRE1",
-    "SFX_MARIO_DAMAGE_ICE1",
-    "SFX_MARIO_DAMAGE_BIRIBIRI1",
-    kUnitLeader | kUnitNoHpGauge,
-    &regist,
-    3,
-    unitpartsdata_Mario,
-    init_event,
-    data_table_mario,
+    UNIT_MARIO, // mUnitType
+    "btl_un_mario", // name
+    10, // maxHp
+    5, // maxFp
+    5, // mDangerHP
+    1, // mPerilHP
+    1, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    0, // bonusCoinRate
+    0, // baseCoin
+    100, // runRate
+    9, // pbSoftCap
+    22, // width
+    36, // height
+    {11, 36}, // hitOffset
+    {0.0f, 0.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 40.0f, 0.0f}, // talkTogeBaseOffset
+    {0.0f, 40.0f, 0.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {11.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {11.0f, 23.4f, 0.0f}, // kissHitOffset
+    {0.0f, 0.0f, 0.0f}, // cutBaseOffset
+    0.0f, // cutWidth
+    0.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_MARIO_DAMAGE1", // damageSfxName
+    "SFX_MARIO_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_MARIO_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_MARIO_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitLeader | kUnitNoHpGauge, // attributeFlags
+    &regist, // statusVulnerability
+    3, // numParts
+    unitpartsdata_Mario, // mParts
+    init_event, // initEventCode
+    data_table_mario, // dataTable
 };
 
 static EVT_BEGIN(battle_entry_event)

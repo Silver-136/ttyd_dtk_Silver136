@@ -109,69 +109,51 @@ EvtWord hit_check_event_sub[123];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boss_gundan_zako_group2 = {
-    UNIT_X_NAUTS_CRUMP_FORMATION2,
-    "btl_un_gundan_zako_group2",
-    6,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    100,
-    0,
-    50,
-    9999,
-    400,
-    36,
-    0,
-    55,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    200.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    200.0f,
-    0.0f,
-    0.0f,
-    200.0f,
-    23.4f,
-    0.0f,
-    60.0f,
-    -35.0f,
-    0.0f,
-    280.0f,
-    36.0f,
-    0,
-    0,
-    -1,
-    0,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_TEAM_3RD_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kCeiling | kUnitNoSpin,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_X_NAUTS_CRUMP_FORMATION2, // mUnitType
+    "btl_un_gundan_zako_group2", // name
+    6, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    0, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    9999, // pbSoftCap
+    400, // width
+    36, // height
+    {0, 55}, // hitOffset
+    {0.0f, 0.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {200.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {200.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {200.0f, 23.4f, 0.0f}, // kissHitOffset
+    {60.0f, -35.0f, 0.0f}, // cutBaseOffset
+    280.0f, // cutWidth
+    36.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    0, // hammerKnockbackChance
+    0, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_TEAM_3RD_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kCeiling | kUnitNoSpin, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

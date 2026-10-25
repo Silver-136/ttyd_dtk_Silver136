@@ -25,69 +25,51 @@ static EvtWord attack_event_clauda[393];
 static EvtWord wait_event_clauda[6];
 
 BattleUnitKind unit_gullible_clauda = {
-    UNIT_FLURRIE_CHAPTER4,
-    "btl_un_gullible_clauda",
-    10,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    100,
-    0,
-    50,
-    9,
-    42,
-    46,
-    12,
-    40,
-    0.0f,
-    23.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    40.0f,
-    0.0f,
-    21.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    21.0f,
-    0.0f,
-    0.0f,
-    21.0f,
-    29.9f,
-    0.0f,
-    0.0f,
-    23.0f,
-    0.0f,
-    42.0f,
-    46.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_PARTY_DAMAGE1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kUnitNoncombatant,
-    &regist_clauda,
-    1,
-    parts_clauda,
-    init_event_clauda,
-    data_table_clauda,
+    UNIT_FLURRIE_CHAPTER4, // mUnitType
+    "btl_un_gullible_clauda", // name
+    10, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    0, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    9, // pbSoftCap
+    42, // width
+    46, // height
+    {12, 40}, // hitOffset
+    {0.0f, 23.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 40.0f, 0.0f}, // talkTogeBaseOffset
+    {21.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {21.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {21.0f, 29.9f, 0.0f}, // kissHitOffset
+    {0.0f, 23.0f, 0.0f}, // cutBaseOffset
+    42.0f, // cutWidth
+    46.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_PARTY_DAMAGE1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitNoncombatant, // attributeFlags
+    &regist_clauda, // statusVulnerability
+    1, // numParts
+    parts_clauda, // mParts
+    init_event_clauda, // initEventCode
+    data_table_clauda, // dataTable
 };
 
 static BattleWeapon enemyWeapon_ClaudaNormalAttack = {

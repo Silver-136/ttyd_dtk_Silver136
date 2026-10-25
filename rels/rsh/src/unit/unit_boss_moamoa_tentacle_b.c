@@ -34,69 +34,51 @@ static EvtWord evt_attack[387];
 static EvtWord wait_event[32];
 
 BattleUnitKind unit_boss_moamoa_tentacle_b = {
-    UNIT_SMORG_MIASMA_TENTACLE_B,
-    "btl_un_moamoa_tentacl_b",
-    4,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    100,
-    0,
-    50,
-    10,
-    90,
-    100,
-    0,
-    85,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    280.0f,
-    40.0f,
-    0.0f,
-    45.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    45.0f,
-    0.0f,
-    0.0f,
-    35.0f,
-    75.0f,
-    20.0f,
-    -30.0f,
-    130.0f,
-    0.0f,
-    90.0f,
-    100.0f,
-    0,
-    0,
-    -1,
-    0,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_MOA_G_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kUnitNoSpin,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_SMORG_MIASMA_TENTACLE_B, // mUnitType
+    "btl_un_moamoa_tentacl_b", // name
+    4, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    0, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    10, // pbSoftCap
+    90, // width
+    100, // height
+    {0, 85}, // hitOffset
+    {0.0f, 0.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {280.0f, 40.0f, 0.0f}, // talkTogeBaseOffset
+    {45.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {45.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {35.0f, 75.0f, 20.0f}, // kissHitOffset
+    {-30.0f, 130.0f, 0.0f}, // cutBaseOffset
+    90.0f, // cutWidth
+    100.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    0, // hammerKnockbackChance
+    0, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_MOA_G_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitNoSpin, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};

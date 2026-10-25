@@ -38,69 +38,51 @@ static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_honenoko = {
-    UNIT_DULL_BONES,
-    "btl_un_honenoko",
-    1,
-    0,
-    1,
-    1,
-    9,
-    0,
-    0,
-    70,
-    1,
-    70,
-    9999,
-    36,
-    40,
-    -4,
-    40,
-    0.0f,
-    20.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    18.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    18.0f,
-    0.0f,
-    0.0f,
-    9.0f,
-    24.0f,
-    0.0f,
-    0.0f,
-    20.0f,
-    0.0f,
-    36.0f,
-    40.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_HONENOKO_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &regist,
-    4,
-    parts,
-    init_event,
-    data_table,
+    UNIT_DULL_BONES, // mUnitType
+    "btl_un_honenoko", // name
+    1, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    9, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    70, // bonusCoinRate
+    1, // baseCoin
+    70, // runRate
+    9999, // pbSoftCap
+    36, // width
+    40, // height
+    {-4, 40}, // hitOffset
+    {0.0f, 20.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {18.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {18.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {9.0f, 24.0f, 0.0f}, // kissHitOffset
+    {0.0f, 20.0f, 0.0f}, // cutBaseOffset
+    36.0f, // cutWidth
+    40.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_ENM_HONENOKO_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    0, // attributeFlags
+    &regist, // statusVulnerability
+    4, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};

@@ -41,69 +41,51 @@ static EvtWord attack_event[500];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_gold_chorobon = {
-    UNIT_GOLD_FUZZY,
-    "btl_un_gold_chorobon",
-    10,
-    0,
-    1,
-    1,
-    27,
-    0,
-    10,
-    100,
-    0,
-    50,
-    5,
-    28,
-    32,
-    5,
-    32,
-    0.0f,
-    16.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    14.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    14.0f,
-    0.0f,
-    0.0f,
-    14.0f,
-    20.8f,
-    0.0f,
-    0.0f,
-    16.0f,
-    0.0f,
-    28.0f,
-    32.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_G_CHORO_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kUnitLeader,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_GOLD_FUZZY, // mUnitType
+    "btl_un_gold_chorobon", // name
+    10, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    27, // mLevel
+    0, // mBonusExp
+    10, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    5, // pbSoftCap
+    28, // width
+    32, // height
+    {5, 32}, // hitOffset
+    {0.0f, 16.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {14.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {14.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {14.0f, 20.8f, 0.0f}, // kissHitOffset
+    {0.0f, 16.0f, 0.0f}, // cutBaseOffset
+    28.0f, // cutWidth
+    32.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_G_CHORO_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitLeader, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

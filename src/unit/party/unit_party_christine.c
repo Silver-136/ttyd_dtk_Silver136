@@ -120,69 +120,51 @@ BattleUnitKindPart unitpartsdata_Party_Christine[] = {
 };
 
 BattleUnitKind unitdata_Party_Christine = {
-    UNIT_GOOMBELLA,
-    "btl_un_christine",
-    10,
-    5,
-    5,
-    1,
-    1,
-    0,
-    0,
-    0,
-    0,
-    100,
-    9,
-    20,
-    20,
-    10,
-    24,
-    0.0f,
-    12.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    30.0f,
-    0.0f,
-    0.0f,
-    30.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    13.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    -1,
-    0,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_PARTY_DAMAGE1",
-    "SFX_MARIO_DAMAGE_FIRE1",
-    "SFX_MARIO_DAMAGE_ICE1",
-    "SFX_MARIO_DAMAGE_BIRIBIRI1",
-    kUnitNoHpGauge,
-    &regist,
-    1,
-    unitpartsdata_Party_Christine,
-    init_event,
-    data_table,
+    UNIT_GOOMBELLA, // mUnitType
+    "btl_un_christine", // name
+    10, // maxHp
+    5, // maxFp
+    5, // mDangerHP
+    1, // mPerilHP
+    1, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    0, // bonusCoinRate
+    0, // baseCoin
+    100, // runRate
+    9, // pbSoftCap
+    20, // width
+    20, // height
+    {10, 24}, // hitOffset
+    {0.0f, 12.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 30.0f, 0.0f}, // talkTogeBaseOffset
+    {0.0f, 30.0f, 0.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {10.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {10.0f, 13.0f, 0.0f}, // kissHitOffset
+    {0.0f, 0.0f, 0.0f}, // cutBaseOffset
+    0.0f, // cutWidth
+    0.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_PARTY_DAMAGE1", // damageSfxName
+    "SFX_MARIO_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_MARIO_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_MARIO_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitNoHpGauge, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    unitpartsdata_Party_Christine, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static EVT_BEGIN(battle_entry_event)

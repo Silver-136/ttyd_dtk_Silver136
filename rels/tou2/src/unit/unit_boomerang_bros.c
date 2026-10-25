@@ -33,69 +33,51 @@ EvtWord renzoku_attack_event_confuse[328];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boomerang_bros = {
-    UNIT_BOOMERANG_BRO,
-    "btl_un_boomerang_bros",
-    7,
-    0,
-    1,
-    1,
-    20,
-    0,
-    2,
-    70,
-    2,
-    50,
-    9999,
-    36,
-    44,
-    3,
-    44,
-    0.0f,
-    22.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    18.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    15.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    28.0f,
-    0.0f,
-    0.0f,
-    22.0f,
-    0.0f,
-    36.0f,
-    44.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_BOOME_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &regist,
-    4,
-    parts,
-    init_event,
-    data_table,
+    UNIT_BOOMERANG_BRO, // mUnitType
+    "btl_un_boomerang_bros", // name
+    7, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    20, // mLevel
+    0, // mBonusExp
+    2, // bonusCoin
+    70, // bonusCoinRate
+    2, // baseCoin
+    50, // runRate
+    9999, // pbSoftCap
+    36, // width
+    44, // height
+    {3, 44}, // hitOffset
+    {0.0f, 22.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {18.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {15.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {10.0f, 28.0f, 0.0f}, // kissHitOffset
+    {0.0f, 22.0f, 0.0f}, // cutBaseOffset
+    36.0f, // cutWidth
+    44.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_ENM_BOOME_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    0, // attributeFlags
+    &regist, // statusVulnerability
+    4, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};

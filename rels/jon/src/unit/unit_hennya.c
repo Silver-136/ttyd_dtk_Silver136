@@ -26,69 +26,51 @@ static EvtWord attack_event[455];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_hennya = {
-    UNIT_SPUNIA,
-    "btl_un_hennya",
-    12,
-    0,
-    1,
-    1,
-    33,
-    1,
-    3,
-    70,
-    1,
-    50,
-    9999,
-    26,
-    40,
-    3,
-    35,
-    0.0f,
-    20.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    13.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    13.0f,
-    0.0f,
-    0.0f,
-    13.0f,
-    20.0f,
-    0.0f,
-    0.0f,
-    20.0f,
-    0.0f,
-    26.0f,
-    40.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_HANNYA_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_SPUNIA, // mUnitType
+    "btl_un_hennya", // name
+    12, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    33, // mLevel
+    1, // mBonusExp
+    3, // bonusCoin
+    70, // bonusCoinRate
+    1, // baseCoin
+    50, // runRate
+    9999, // pbSoftCap
+    26, // width
+    40, // height
+    {3, 35}, // hitOffset
+    {0.0f, 20.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {13.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {13.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {13.0f, 20.0f, 0.0f}, // kissHitOffset
+    {0.0f, 20.0f, 0.0f}, // cutBaseOffset
+    26.0f, // cutWidth
+    40.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_ENM_HANNYA_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    0, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};

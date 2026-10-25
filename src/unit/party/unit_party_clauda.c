@@ -304,69 +304,51 @@ BattleUnitKindPart unitpartsdata_Party_Clauda[] = {
 };
 
 BattleUnitKind unitdata_Party_Clauda = {
-    UNIT_FLURRIE,
-    "btl_un_clauda",
-    10,
-    5,
-    5,
-    1,
-    1,
-    0,
-    0,
-    0,
-    0,
-    100,
-    9,
-    20,
-    50,
-    16,
-    44,
-    0.0f,
-    12.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    40.0f,
-    0.0f,
-    0.0f,
-    40.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    0.0f,
-    0.0f,
-    10.0f,
-    32.5f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    -1,
-    0,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_PARTY_DAMAGE1",
-    "SFX_MARIO_DAMAGE_FIRE1",
-    "SFX_MARIO_DAMAGE_ICE1",
-    "SFX_MARIO_DAMAGE_BIRIBIRI1",
-    kFloating | kUnitNoHpGauge,
-    &regist,
-    1,
-    unitpartsdata_Party_Clauda,
-    init_event,
-    data_table,
+    UNIT_FLURRIE, // mUnitType
+    "btl_un_clauda", // name
+    10, // maxHp
+    5, // maxFp
+    5, // mDangerHP
+    1, // mPerilHP
+    1, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    0, // bonusCoinRate
+    0, // baseCoin
+    100, // runRate
+    9, // pbSoftCap
+    20, // width
+    50, // height
+    {16, 44}, // hitOffset
+    {0.0f, 12.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 40.0f, 0.0f}, // talkTogeBaseOffset
+    {0.0f, 40.0f, 0.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {10.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {10.0f, 32.5f, 0.0f}, // kissHitOffset
+    {0.0f, 0.0f, 0.0f}, // cutBaseOffset
+    0.0f, // cutWidth
+    0.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_PARTY_DAMAGE1", // damageSfxName
+    "SFX_MARIO_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_MARIO_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_MARIO_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kFloating | kUnitNoHpGauge, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    unitpartsdata_Party_Clauda, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static EVT_BEGIN(battle_entry_event)

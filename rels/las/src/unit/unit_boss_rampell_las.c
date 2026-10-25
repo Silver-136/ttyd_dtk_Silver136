@@ -178,69 +178,51 @@ EvtWord attack_event_chuchurina_normal[831];
 EvtWord wait_event_chuchurina[6];
 
 BattleUnitKind unit_boss_rampell_las = {
-    UNIT_DOOPLISS_CHAPTER8,
-    "btl_un_rampell",
-    40,
-    0,
-    1,
-    1,
-    57,
-    0,
-    0,
-    100,
-    0,
-    50,
-    7,
-    50,
-    48,
-    4,
-    48,
-    0.0f,
-    22.0f,
-    0.0f,
-    0,
-    -3,
-    0.0f,
-    40.0f,
-    0.0f,
-    25.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    18.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    32.0f,
-    0.0f,
-    7.0f,
-    20.0f,
-    0.0f,
-    50.0f,
-    48.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_RNPL_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_DOOPLISS_CHAPTER8, // mUnitType
+    "btl_un_rampell", // name
+    40, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    57, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    7, // pbSoftCap
+    50, // width
+    48, // height
+    {4, 48}, // hitOffset
+    {0.0f, 22.0f, 0.0f}, // centerOffset
+    {0, -3}, // hpGaugeOffset
+    {0.0f, 40.0f, 0.0f}, // talkTogeBaseOffset
+    {25.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {18.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {12.0f, 32.0f, 0.0f}, // kissHitOffset
+    {7.0f, 20.0f, 0.0f}, // cutBaseOffset
+    50.0f, // cutWidth
+    48.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_RNPL_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    0, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
@@ -918,7 +900,7 @@ static BattleUnitKindPart parts_fmario[] = {
         255, // baseAlpha
         &defence_fmario, // defense
         &defence_attr_fmario, // defenseAttr
-        9, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table_fmario_stay, // poseTable
     },
@@ -1619,7 +1601,7 @@ static BattleUnitKindPart parts_christine[] = {
         255, // baseAlpha
         &defence_christine, // defense
         &defence_attr_christine, // defenseAttr
-        9, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table_christine_stay, // poseTable
     },
@@ -1978,7 +1960,7 @@ static BattleUnitKindPart parts_nokotarou[] = {
         255, // baseAlpha
         &defence_nokotarou, // defense
         &defence_attr_nokotarou, // defenseAttr
-        0x1009, // attributes
+        kMainPart | kGuardTargetPart | kIsShelled, // attributes
         0, // counterAttributes
         pose_table_nokotarou_stay, // poseTable
     },
@@ -2438,7 +2420,7 @@ static BattleUnitKindPart parts_clauda[] = {
         255, // baseAlpha
         &defence_clauda, // defense
         &defence_attr_clauda, // defenseAttr
-        9, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table_clauda_stay, // poseTable
     },
@@ -2664,7 +2646,7 @@ static BattleUnitKindPart parts_yoshi[] = {
         255, // baseAlpha
         &defence_yoshi, // defense
         &defence_attr_yoshi, // defenseAttr
-        9, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table_yoshi_stay, // poseTable
     },
@@ -2936,7 +2918,7 @@ BattleUnitKindPart parts_vivian[] = {
         255, // baseAlpha
         &defence_vivian, // defense
         &defence_attr_vivian, // defenseAttr
-        9, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table_vivian_stay, // poseTable
     },
@@ -3146,7 +3128,7 @@ BattleUnitKindPart parts_sanders[] = {
         255, // baseAlpha
         &defence_sanders, // defense
         &defence_attr_sanders, // defenseAttr
-        9, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table_sanders_stay, // poseTable
     },
@@ -3353,7 +3335,7 @@ BattleUnitKindPart parts_chuchurina[] = {
         255, // baseAlpha
         &defence_chuchurina, // defense
         &defence_attr_chuchurina, // defenseAttr
-        9, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table_chuchurina_stay, // poseTable
     },

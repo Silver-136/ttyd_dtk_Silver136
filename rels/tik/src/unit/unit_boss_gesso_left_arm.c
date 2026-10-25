@@ -28,69 +28,51 @@ static EvtWord attack_event[171];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boss_gesso_left_arm = {
-    UNIT_BLOOPER_LEFT_TENTACLE,
-    "btl_un_gesso_left_arm",
-    3,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    100,
-    0,
-    50,
-    9,
-    150,
-    40,
-    -240,
-    36,
-    0.0f,
-    0.0f,
-    0.0f,
-    -255,
-    -5,
-    0.0f,
-    0.0f,
-    0.0f,
-    75.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    75.0f,
-    0.0f,
-    0.0f,
-    75.0f,
-    26.0f,
-    0.0f,
-    -215.0f,
-    20.0f,
-    0.0f,
-    150.0f,
-    40.0f,
-    0,
-    0,
-    -1,
-    0,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_GESSO_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kUnitNoSpin,
-    &regist,
-    1,
-    parts,
-    init_event,
-    gesso_left_arm_data_table,
+    UNIT_BLOOPER_LEFT_TENTACLE, // mUnitType
+    "btl_un_gesso_left_arm", // name
+    3, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    0, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    9, // pbSoftCap
+    150, // width
+    40, // height
+    {-240, 36}, // hitOffset
+    {0.0f, 0.0f, 0.0f}, // centerOffset
+    {-255, -5}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {75.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {75.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {75.0f, 26.0f, 0.0f}, // kissHitOffset
+    {-215.0f, 20.0f, 0.0f}, // cutBaseOffset
+    150.0f, // cutWidth
+    40.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    0, // hammerKnockbackChance
+    0, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_GESSO_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitNoSpin, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    gesso_left_arm_data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

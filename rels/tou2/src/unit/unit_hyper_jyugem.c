@@ -90,7 +90,7 @@ static BattleUnitKind unit_hyper_jyugem = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    4, // attributeFlags
+    kFloating, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
     parts, // mParts
@@ -163,7 +163,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        0x600009, // attributes
+        kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },
@@ -179,7 +179,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        0x13010000, // attributes
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },

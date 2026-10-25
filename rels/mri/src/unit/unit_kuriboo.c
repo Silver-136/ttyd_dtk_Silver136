@@ -64,7 +64,7 @@ static BattleUnitKind unit_kuriboo = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    0x40000, // attributeFlags
+    kUnitLeader, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
     parts, // mParts
@@ -119,7 +119,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        9, // attributes
+        kMainPart | kGuardTargetPart, // attributes
         0, // counterAttributes
         pose_table, // poseTable
     },

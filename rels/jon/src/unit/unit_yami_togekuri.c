@@ -35,69 +35,51 @@ static EvtWord attack_event[597];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_yami_togekuri = {
-    UNIT_SPIKY_GLOOMBA,
-    "btl_un_yami_togekuri",
-    7,
-    0,
-    1,
-    1,
-    13,
-    0,
-    2,
-    70,
-    0,
-    50,
-    9999,
-    23,
-    30,
-    5,
-    30,
-    0.0f,
-    15.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    11.5f,
-    0.0f,
-    0.0f,
-    11.5f,
-    18.0f,
-    0.0f,
-    0.0f,
-    15.0f,
-    0.0f,
-    23.0f,
-    30.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_TOGEKURI_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kUnitLeader,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_SPIKY_GLOOMBA, // mUnitType
+    "btl_un_yami_togekuri", // name
+    7, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    13, // mLevel
+    0, // mBonusExp
+    2, // bonusCoin
+    70, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    9999, // pbSoftCap
+    23, // width
+    30, // height
+    {5, 30}, // hitOffset
+    {0.0f, 15.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {12.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {11.5f, 0.0f, 0.0f}, // bintaHitOffset
+    {11.5f, 18.0f, 0.0f}, // kissHitOffset
+    {0.0f, 15.0f, 0.0f}, // cutBaseOffset
+    23.0f, // cutWidth
+    30.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_ENM_TOGEKURI_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitLeader, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

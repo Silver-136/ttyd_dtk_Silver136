@@ -35,69 +35,51 @@ static EvtWord wait_event[10];
 static EvtWord cortez_damage_sub_event[25];
 
 BattleUnitKind unit_boss_cortez_rapier = {
-    UNIT_CORTEZ_RAPIER,
-    "btl_un_cortez_rapier",
-    4,
-    0,
-    1,
-    1,
-    0,
-    0,
-    0,
-    100,
-    0,
-    50,
-    20,
-    140,
-    30,
-    0,
-    30,
-    0.0f,
-    15.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    70.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    70.0f,
-    0.0f,
-    0.0f,
-    70.0f,
-    19.5f,
-    0.0f,
-    0.0f,
-    15.0f,
-    0.0f,
-    140.0f,
-    30.0f,
-    0,
-    0,
-    -1,
-    0,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_KOR_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kFloating | kUnitNoHpGauge,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_CORTEZ_RAPIER, // mUnitType
+    "btl_un_cortez_rapier", // name
+    4, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    0, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    20, // pbSoftCap
+    140, // width
+    30, // height
+    {0, 30}, // hitOffset
+    {0.0f, 15.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {70.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {70.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {70.0f, 19.5f, 0.0f}, // kissHitOffset
+    {0.0f, 15.0f, 0.0f}, // cutBaseOffset
+    140.0f, // cutWidth
+    30.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_KOR_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kFloating | kUnitNoHpGauge, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};

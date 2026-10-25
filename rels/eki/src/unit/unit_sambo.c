@@ -471,8 +471,8 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        9, // attributes
-        5, // counterAttributes
+        kMainPart | kGuardTargetPart, // attributes
+        kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body4, // poseTable
     },
     {
@@ -487,8 +487,8 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        0x3010000, // attributes
-        5, // counterAttributes
+        kNotTargetable | kHidden | kNoShadow, // attributes
+        kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body3, // poseTable
     },
     {
@@ -503,8 +503,8 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        0x3010000, // attributes
-        5, // counterAttributes
+        kNotTargetable | kHidden | kNoShadow, // attributes
+        kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body2, // poseTable
     },
     {
@@ -519,8 +519,8 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        0x3010000, // attributes
-        5, // counterAttributes
+        kNotTargetable | kHidden | kNoShadow, // attributes
+        kCounterTopSpiky | kCounterFrontSpiky, // counterAttributes
         pose_table_body1, // poseTable
     },
     {
@@ -535,7 +535,7 @@ static BattleUnitKindPart parts[] = {
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
-        0x13010000, // attributes
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
         0, // counterAttributes
         pose_table_parts, // poseTable
     },

@@ -59,69 +59,51 @@ static PoseTableEntry pose_table_1[] = {
 };
 
 BattleUnitKind unit_bomzou = {
-    UNIT_BOMB_SQUAD_BOMB,
-    "btl_un_bomzou",
-    1,
-    0,
-    1,
-    1,
-    1,
-    0,
-    0,
-    0,
-    0,
-    100,
-    9,
-    24,
-    24,
-    0,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    0.0f,
-    0.0f,
-    12.0f,
-    15.6f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    -1,
-    0,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BTL_DAMAGE1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kNoDamageNumber | kUnitNoHpGauge | kUnitNoncombatant,
-    &regist,
-    1,
-    parts,
-    init_event,
-    data_table,
+    UNIT_BOMB_SQUAD_BOMB, // mUnitType
+    "btl_un_bomzou", // name
+    1, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    1, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    0, // bonusCoinRate
+    0, // baseCoin
+    100, // runRate
+    9, // pbSoftCap
+    24, // width
+    24, // height
+    {0, 20}, // hitOffset
+    {0.0f, 0.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {0.0f, 0.0f, 0.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {12.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {12.0f, 15.6f, 0.0f}, // kissHitOffset
+    {0.0f, 0.0f, 0.0f}, // cutBaseOffset
+    0.0f, // cutWidth
+    0.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BTL_DAMAGE1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kNoDamageNumber | kUnitNoHpGauge | kUnitNoncombatant, // attributeFlags
+    &regist, // statusVulnerability
+    1, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 BattleWeapon weapon_bomzou_explosion = {

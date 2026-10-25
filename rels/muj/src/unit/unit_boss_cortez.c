@@ -137,69 +137,51 @@ EvtWord mode2_honeduka_damage_event[76];
 EvtWord mode_change_event[111];
 
 BattleUnitKind unit_boss_cortez = {
-    UNIT_CORTEZ,
-    "btl_un_cortez",
-    20,
-    0,
-    1,
-    1,
-    77,
-    0,
-    0,
-    100,
-    0,
-    50,
-    6,
-    250,
-    170,
-    -10,
-    90,
-    0.0f,
-    0.0f,
-    0.0f,
-    0,
-    0,
-    0.0f,
-    0.0f,
-    0.0f,
-    125.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    25.0f,
-    0.0f,
-    0.0f,
-    32.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    -70.0f,
-    65.0f,
-    0.0f,
-    180.0f,
-    130.0f,
-    0,
-    0,
-    -1,
-    0,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_KOR_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kUnitNoSpin,
-    &regist,
-    19,
-    parts,
-    init_event,
-    data_table,
+    UNIT_CORTEZ, // mUnitType
+    "btl_un_cortez", // name
+    20, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    77, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    6, // pbSoftCap
+    250, // width
+    170, // height
+    {-10, 90}, // hitOffset
+    {0.0f, 0.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {125.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 25.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {32.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {0.0f, 0.0f, 0.0f}, // kissHitOffset
+    {-70.0f, 65.0f, 0.0f}, // cutBaseOffset
+    180.0f, // cutWidth
+    130.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    -1, // swallowChance
+    0, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_KOR_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kUnitNoSpin, // attributeFlags
+    &regist, // statusVulnerability
+    19, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static StatusVulnerability regist = {40, 40, 50, 100, 50, 100, 100, 25, 0, 0, 100, 0, 100, 90, 50, 0, 0, 100, 50, 0, 0, 0};

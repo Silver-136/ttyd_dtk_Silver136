@@ -90,69 +90,51 @@ static EvtWord spawn_event[76];
 static EvtWord wait_event[386];
 
 BattleUnitKind unit_super_mahorn = {
-    UNIT_DARK_WIZZERD,
-    "btl_un_super_mahorn",
-    10,
-    0,
-    1,
-    1,
-    33,
-    0,
-    2,
-    70,
-    2,
-    50,
-    9999,
-    48,
-    44,
-    0,
-    44,
-    0.0f,
-    22.0f,
-    0.0f,
-    0,
-    -9,
-    0.0f,
-    0.0f,
-    0.0f,
-    24.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    24.0f,
-    0.0f,
-    0.0f,
-    16.0f,
-    28.6f,
-    10.0f,
-    0.0f,
-    22.0f,
-    0.0f,
-    48.0f,
-    44.0f,
-    0,
-    0,
-    0,
-    2,
-    0,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_ENM_MAHO_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kFloating,
-    &regist,
-    5,
-    parts,
-    init_event,
-    data_table,
+    UNIT_DARK_WIZZERD, // mUnitType
+    "btl_un_super_mahorn", // name
+    10, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    33, // mLevel
+    0, // mBonusExp
+    2, // bonusCoin
+    70, // bonusCoinRate
+    2, // baseCoin
+    50, // runRate
+    9999, // pbSoftCap
+    48, // width
+    44, // height
+    {0, 44}, // hitOffset
+    {0.0f, 22.0f, 0.0f}, // centerOffset
+    {0, -9}, // hpGaugeOffset
+    {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
+    {24.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {24.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {16.0f, 28.6f, 10.0f}, // kissHitOffset
+    {0.0f, 22.0f, 0.0f}, // cutBaseOffset
+    48.0f, // cutWidth
+    44.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    0, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_ENM_MAHO_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kFloating, // attributeFlags
+    &regist, // statusVulnerability
+    5, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitKind unit_super_mahorn_bunsin = {
@@ -191,7 +173,7 @@ static BattleUnitKind unit_super_mahorn_bunsin = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-    0x400004, // attributeFlags
+    kFloating | kNoDamageNumber, // attributeFlags
     &regist, // statusVulnerability
     5, // numParts
     parts, // mParts

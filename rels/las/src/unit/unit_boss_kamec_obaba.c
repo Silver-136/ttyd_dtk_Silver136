@@ -289,69 +289,51 @@ BattleWeapon weapon_kamec_obaba_recover_magic = {
 };
 
 BattleUnitKind unit_boss_kamec_obaba = {
-    UNIT_KAMMY_KOOPA,
-    "btl_un_kamec_obaba",
-    50,
-    0,
-    1,
-    1,
-    48,
-    0,
-    0,
-    100,
-    0,
-    50,
-    6,
-    42,
-    42,
-    7,
-    42,
-    0.0f,
-    21.0f,
-    0.0f,
-    0,
-    0,
-    20.0f,
-    20.0f,
-    0.0f,
-    21.0f,
-    0.0f,
-    -10.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    0.0f,
-    18.0f,
-    0.0f,
-    0.0f,
-    21.0f,
-    27.3f,
-    0.0f,
-    0.0f,
-    21.0f,
-    0.0f,
-    42.0f,
-    42.0f,
-    0,
-    0,
-    0,
-    2,
-    100,
-    20,
-    0.0f,
-    0.0f,
-    0.0f,
-    "SFX_BOSS_KAMEBABA_DAMAGED1",
-    "SFX_BTL_DAMAGE_FIRE1",
-    "SFX_BTL_DAMAGE_ICE1",
-    "SFX_BTL_DAMAGE_BIRIBIRI1",
-    kFloating,
-    &regist,
-    2,
-    parts,
-    init_event,
-    data_table,
+    UNIT_KAMMY_KOOPA, // mUnitType
+    "btl_un_kamec_obaba", // name
+    50, // maxHp
+    0, // maxFp
+    1, // mDangerHP
+    1, // mPerilHP
+    48, // mLevel
+    0, // mBonusExp
+    0, // bonusCoin
+    100, // bonusCoinRate
+    0, // baseCoin
+    50, // runRate
+    6, // pbSoftCap
+    42, // width
+    42, // height
+    {7, 42}, // hitOffset
+    {0.0f, 21.0f, 0.0f}, // centerOffset
+    {0, 0}, // hpGaugeOffset
+    {20.0f, 20.0f, 0.0f}, // talkTogeBaseOffset
+    {21.0f, 0.0f, -10.0f}, // heldItemBaseOffset
+    {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+    0.0f, // vivianOffsetX
+    0.0f, // vivianOffsetZ
+    {18.0f, 0.0f, 0.0f}, // bintaHitOffset
+    {21.0f, 27.3f, 0.0f}, // kissHitOffset
+    {0.0f, 21.0f, 0.0f}, // cutBaseOffset
+    42.0f, // cutWidth
+    42.0f, // cutHeight
+    0, // turnOrder
+    0, // turnOrderVariance
+    0, // swallowChance
+    2, // swallowAttributes
+    100, // hammerKnockbackChance
+    20, // itemStealParam
+    {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+    "SFX_BOSS_KAMEBABA_DAMAGED1", // damageSfxName
+    "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
+    "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
+    "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
+    kFloating, // attributeFlags
+    &regist, // statusVulnerability
+    2, // numParts
+    parts, // mParts
+    init_event, // initEventCode
+    data_table, // dataTable
 };
 
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
