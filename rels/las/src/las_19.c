@@ -310,7 +310,7 @@ static EVT_BEGIN(switch2_evt)
 EVT_END()
 
 static EVT_BEGIN(cloud_evt)
-    SET_VALUE(GSW(0), 392)
+    SET_VALUE(GSW_STORY_PROGRESS, 392)
     RETURN
 EVT_END()
 
@@ -319,7 +319,7 @@ EVT_BEGIN(las_19_init_evt)
     IF_STR_EQUAL(LW(0), STRING("chgmap_evt"))
         CALL(evt_snd_bgmoff, 512)
         ELSE
-        IF_INT_LESS(GSW(0), 390)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 390)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST1"))
             ELSE
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG8_LST3"))
@@ -329,7 +329,7 @@ EVT_BEGIN(las_19_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    IF_INT_LESS(GSW(0), 392)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 392)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_futa"), STRING("A_futa"), PTR(cloud_evt))
         ELSE
@@ -343,7 +343,7 @@ EVT_BEGIN(las_19_init_evt)
         ELSE
         CALL_CHILD(PTR(evt_bero_info_run))
     END_IF
-    IF_INT_LESS(GSW(0), 390)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 390)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), 1)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_npc_check_delete, STRING("マホーン２"))
@@ -359,7 +359,7 @@ EVT_BEGIN(las_19_init_evt)
         CALL(evt_npc_check_delete, STRING("マホーン１"))
         SPAWN_EVENT(PTR(hikari_evt))
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 390)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 390)
         CALL(evt_mobj_switch_float_blk, STRING("switch1"), 375, -320, -45, STRING(""), 2, PTR(switch1_evt), 0)
         CALL(evt_mobj_switch_float_blk, STRING("switch2"), 450, -320, -45, STRING(""), 0, PTR(switch2_evt), 0)
         IF_INT_EQUAL(GSWF(4353), 0)

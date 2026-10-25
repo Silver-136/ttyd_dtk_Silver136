@@ -1446,7 +1446,7 @@ EVT_BEGIN(evt_bridge2)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_mapobj_rotate, 1, STRING(((char*)"s_lever")), 0, 0, -80)
     SET_VALUE(GF(0), 1)
-    SET_VALUE(GSW(0), 325)
+    SET_VALUE(GSW_STORY_PROGRESS, 325)
     SET_VALUE(GSWF(3576), 0)
     RETURN
 EVT_END()
@@ -1496,7 +1496,7 @@ static EVT_BEGIN(evt_origami)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-    SET_VALUE(GSW(0), 324)
+    SET_VALUE(GSW_STORY_PROGRESS, 324)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
     CALL(evt_mario_key_onoff, 1)
@@ -1577,7 +1577,7 @@ static EVT_BEGIN(evt_meet_moamoa)
     END_SWITCH
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW(0), 322)
+    SET_VALUE(GSW_STORY_PROGRESS, 322)
     CALL(evt_mario_dispflag_onoff, 0, 2)
     CALL(evt_party_run, 0)
     RETURN
@@ -1595,7 +1595,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
     CALL(evt_run_case_evt, 9, 1, STRING(((char*)"a_lever")), 0, PTR(evt_origami), GW(10))
-    SET_VALUE(GSW(0), 323)
+    SET_VALUE(GSW_STORY_PROGRESS, 323)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1707,7 +1707,7 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_mapobj_clear_offscreen, 1, STRING(((char*)"s_eki_00")))
     CALL(evt_mapobj_set_offscreen, 1, STRING(((char*)"s_eki_07")), STRING(((char*)"offscreen")))
     CALL(evt_img_onoff, STRING(((char*)"capture_img")), 1)
-    IF_INT_LESS(GSW(0), 323)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 323)
         CALL(evt_moamoa_flag_onoff, 0, 1)
         CALL(evt_moamoa_flag_onoff, 1, 2)
     END_IF
@@ -1729,7 +1729,7 @@ EVT_BEGIN(evt_elv_down)
         END_IF
     END_LOOP
     CALL(evt_img_onoff, STRING(((char*)"capture_img")), 0)
-    IF_INT_LESS(GSW(0), 323)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 323)
         CALL(evt_moamoa_flag_onoff, 1, 1)
         CALL(evt_moamoa_flag_onoff, 0, 2)
     END_IF
@@ -1737,14 +1737,14 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_hitobj_onoff, STRING(((char*)"a_eki_07")), 1, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(((char*)"s_eki_00")), 1)
     CALL(evt_hitobj_onoff, STRING(((char*)"a_eki_00")), 1, 0)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(323)
         CASE_EQUAL(323)
         CALL(evt_run_case_evt, 9, 1, STRING(((char*)"a_lever")), 0, PTR(evt_origami), GW(10))
         CASE_DEFAULT
         CALL(evt_mapobj_rotate, 1, STRING(((char*)"s_lever")), 0, 0, -80)
     END_SWITCH
-    IF_INT_EQUAL(GSW(0), 324)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 324)
         CALL(evt_mobj_switch_blue, 0, STRING(((char*)"bridge_sw")), -220, 60, 0, PTR(evt_bridge), GSWF(3725))
     END_IF
     CALL(evt_item_delete_check, STRING(((char*)"item")), LW(0))
@@ -1753,7 +1753,7 @@ EVT_BEGIN(evt_elv_down)
         SUBTRACT(LW(1), 2000)
         CALL(evt_item_set_position, STRING(((char*)"item")), LW(0), LW(1), LW(2))
     END_IF
-    IF_INT_LESS(GSW(0), 324)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 324)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING(((char*)"kaidann")), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING(((char*)"ori")), 1)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING(((char*)"n_kaidan")), 1)
@@ -1786,10 +1786,10 @@ EVT_BEGIN(evt_elv_down)
     END_INLINE_EVENT
     CALL(evt_map_playanim, STRING(((char*)"anm_ere_door_2")), 0, 0)
     WAIT_MS(500)
-    IF_INT_LESS(GSW(0), 322)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 322)
         CALL_CHILD(PTR(evt_meet_moamoa))
     END_IF
-    IF_INT_EQUAL(GSW(0), 322)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 322)
         CALL(evt_snd_bgmon, 512, STRING(((char*)"BGM_EVT_DANGER4")))
     END_IF
     CALL(evt_map_checkanim, STRING(((char*)"anm_ere_door_2")), LW(0), LW(1))
@@ -1827,7 +1827,7 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_mapobj_set_offscreen, 1, STRING(((char*)"s_eki_07")), STRING(((char*)"offscreen")))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(((char*)"s_eki_07")), 1)
     CALL(evt_img_onoff, STRING(((char*)"capture_img")), 1)
-    IF_INT_LESS(GSW(0), 323)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 323)
         CALL(evt_moamoa_flag_onoff, 0, 1)
         CALL(evt_moamoa_flag_onoff, 1, 2)
     END_IF
@@ -1849,7 +1849,7 @@ EVT_BEGIN(evt_elv_up)
         END_IF
     END_LOOP
     CALL(evt_img_onoff, STRING(((char*)"capture_img")), 0)
-    IF_INT_LESS(GSW(0), 323)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 323)
         CALL(evt_moamoa_flag_onoff, 0, 2)
     END_IF
     BEGIN_INLINE_EVENT
@@ -1887,9 +1887,9 @@ EVT_BEGIN(evt_elv_up)
         END_IF
     END_LOOP
     CALL(evt_img_onoff, STRING(((char*)"capture_img")), 0)
-    IF_INT_LESS(GSW(0), 324)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 324)
     END_IF
-    IF_INT_EQUAL(GSW(0), 324)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 324)
         CALL(evt_mobj_delete, STRING(((char*)"bridge_sw")))
     END_IF
     CALL(evt_item_delete_check, STRING(((char*)"item")), LW(0))
@@ -1902,7 +1902,7 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_hitobj_onoff, STRING(((char*)"a_eki_07")), 1, 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING(((char*)"s_eki_00")), 1)
     CALL(evt_hitobj_onoff, STRING(((char*)"a_eki_00")), 1, 1)
-    IF_INT_EQUAL(GSW(0), 323)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 323)
         CALL(evt_del_case_evt, 0, GW(10))
     END_IF
     BEGIN_INLINE_EVENT
@@ -1931,14 +1931,14 @@ static s32 item_tbl[] = {
 
 EVT_BEGIN(evt_elv)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_LESS(GSW(0), 321)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 321)
         CALL(evt_win_item_select, 0, PTR(item_tbl), LW(1), 0)
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
         CALL(evt_pouch_remove_item, 26, LW(0))
-        SET_VALUE(GSW(0), 321)
+        SET_VALUE(GSW_STORY_PROGRESS, 321)
         CALL(evt_snd_sfxon, STRING(((char*)"SFX_STG6_ELEVATOR_KEY1")), 0)
         CALL(evt_msg_print, 0, STRING(((char*)"stg6_eki_07")), 0, 0)
     END_IF
@@ -1991,13 +1991,13 @@ EVT_BEGIN(eki_00_init_evt)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING(((char*)"s_eki_07")), 1)
     CALL(evt_hitobj_onoff, STRING(((char*)"a_eki_07")), 1, 0)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 320)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 320)
         CALL_CHILD(PTR(evt_elv_init))
         CALL(evt_run_case_evt, 9, 1, STRING(((char*)"a_suitti")), 0, PTR(evt_elv), 0)
         ELSE
         CALL(evt_run_case_evt, 9, 1, STRING(((char*)"a_suitti")), 0, PTR(evt_elv_nomsg), 0)
     END_IF
-    IF_INT_LESS(GSW(0), 323)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 323)
         CALL_CHILD(PTR(evt_moamoa_init))
     END_IF
     CALL(evt_item_entry, STRING(((char*)"item")), 300, -260, 130, -60, 17, GSWF(3745), 0)

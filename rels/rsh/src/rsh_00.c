@@ -508,7 +508,7 @@ static EVT_BEGIN(evt_moamoa)
     END_INLINE_EVENT
     CALL(evt_moamoa_set_seq_all, 1)
     WAIT_MS(500)
-    SET_VALUE(GSW(0), 329)
+    SET_VALUE(GSW_STORY_PROGRESS, 329)
     LOOP(3)
         CALL(evt_cam3d_evt_set, -2, 86, 230, 126, 38, -13, 350, 11)
         WAIT_MS(350)
@@ -558,7 +558,7 @@ static EVT_BEGIN(evt_moamoa)
 EVT_END()
 
 EVT_BEGIN(evt_rsh_moamoa_on_window)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(329, 331)
         CALL(evt_snd_sfxon, STRING("SFX_STG6_MOAMOA_VOICE2"), LW(10))
         CALL(evt_snd_sfx_vol, LW(10), 88)
@@ -640,8 +640,8 @@ static BeroEntry bero_data_c[] = {
 
 EVT_BEGIN(evt_handle)
     LOOP(0)
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 329)
-            IF_INT_LESS(GSW(0), 334)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 329)
+            IF_INT_LESS(GSW_STORY_PROGRESS, 334)
                 BREAK_LOOP
             END_IF
         END_IF
@@ -690,17 +690,17 @@ EVT_BEGIN(regu_unten)
     SET_VALUE(LW(6), 0)
     SET_VALUE(LW(7), 0)
     LOOP(0)
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 310)
-            IF_INT_LESS(GSW(0), 326)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 310)
+            IF_INT_LESS(GSW_STORY_PROGRESS, 326)
                 RETURN
             END_IF
         END_IF
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 329)
-            IF_INT_LESS(GSW(0), 339)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 329)
+            IF_INT_LESS(GSW_STORY_PROGRESS, 339)
                 RETURN
             END_IF
         END_IF
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 346)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 346)
             IF_INT_EQUAL(GSWF(3579), 1)
                 RETURN
             END_IF
@@ -714,7 +714,7 @@ EVT_BEGIN(regu_unten)
         CALL(evt_sub_random, 300, LW(10))
         SWITCH(LW(10))
             CASE_LESS(100)
-            IF_INT_LESS(GSW(0), 328)
+            IF_INT_LESS(GSW_STORY_PROGRESS, 328)
             END_IF
             SET_VALUE(LW(2), LW(3))
             CALL(evt_sub_random, 135, LW(10))
@@ -729,7 +729,7 @@ EVT_BEGIN(regu_unten)
                 GOTO(0)
             END_IF
             CASE_LESS(200)
-            IF_INT_LESS(GSW(0), 328)
+            IF_INT_LESS(GSW_STORY_PROGRESS, 328)
             END_IF
             SET_VALUE(LW(4), LW(5))
             CALL(evt_sub_random, 40, LW(10))
@@ -744,7 +744,7 @@ EVT_BEGIN(regu_unten)
                 GOTO(1)
             END_IF
             CASE_DEFAULT
-            IF_INT_LESS(GSW(0), 328)
+            IF_INT_LESS(GSW_STORY_PROGRESS, 328)
             END_IF
             SET_VALUE(LW(6), LW(7))
             CALL(evt_sub_random, 135, LW(10))
@@ -768,7 +768,7 @@ EVT_BEGIN(regu_unten)
 EVT_END()
 
 static EVT_BEGIN(init_unten)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(329, 331)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), 1536)
         CALL(evt_npc_set_anim, STRING("me"), STRING("B_2"))
@@ -777,7 +777,7 @@ static EVT_BEGIN(init_unten)
 EVT_END()
 
 static EVT_BEGIN(talk_unten)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(288)
         IF_INT_EQUAL(LSWF(1), 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_00"), 0, 0)
@@ -803,7 +803,7 @@ static EVT_BEGIN(talk_unten)
         CALL(evt_item_get_item_end_wait, STRING("sign"))
         CALL(evt_npc_set_anim, STRING("me"), STRING("T_1"))
         CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, STRING("me"))
-        SET_VALUE(GSW(0), 293)
+        SET_VALUE(GSW_STORY_PROGRESS, 293)
         CASE_LESS(294)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         CASE_LESS(301)
@@ -891,7 +891,7 @@ static EVT_BEGIN(evt_access_entry)
 EVT_END()
 
 EVT_BEGIN(rsh_00_init_evt)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(310, 325)
         CASE_GREATER_OR_EQUAL(333)
         CASE_DEFAULT
@@ -912,7 +912,7 @@ EVT_BEGIN(rsh_00_init_evt)
         ELSE
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF(5648))
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(284, 286)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_4"))
@@ -956,14 +956,14 @@ EVT_BEGIN(rsh_00_a_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(rsh_00_init_evt))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(328, 331)
         CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a"))
         CALL(evt_npc_set_position, STRING("moa_a"), 0, -1000, 0)
         CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b"))
         CALL(evt_npc_set_position, STRING("moa_b"), 0, -1000, 0)
         CALL(evt_ext_entry, 1000, PTR(moamoa_data), PTR(moamoa_init), PTR(moamoa_main), PTR(moamoa_dispent))
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 329)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 329)
             CALL(evt_moamoa_set_seq_all, 4)
         END_IF
     END_SWITCH

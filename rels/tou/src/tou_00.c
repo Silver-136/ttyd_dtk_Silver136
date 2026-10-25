@@ -719,7 +719,7 @@ EVT_END()
 EVT_BEGIN(tou_00_init_evt)
     SET_VALUE(GW(11), 0)
     CALL(evt_npc_setup, PTR(npcEnt))
-    IF_INT_EQUAL(GSW(0), 215)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 215)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), 1)
         CALL(evt_mario_set_mode, 2)
         SPAWN_EVENT(PTR(tou_00_koopa_evt))
@@ -742,7 +742,7 @@ EVT_BEGIN(tou_00_init_evt)
         SPAWN_EVENT(PTR(evt_to_tou))
     END_IF
     SPAWN_EVENT(PTR(evt_tou_balloon))
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 127)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 127)
         SPAWN_EVENT_GET_ID(PTR(evt_skip), GW(15))
     END_IF
     RETURN

@@ -135,7 +135,7 @@ static USER_FUNC(evt_chuchu_back_loop) {
 }
 
 static EVT_BEGIN(chuchurina_sogu)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 50)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 50)
         CALL(evt_npc_set_position, STRING("チュチュリーナ"), 0, -1000, 0)
         RETURN
     END_IF
@@ -156,7 +156,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_mario_mov_pos2, 130, 0, FLOAT(150.0f))
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_stop, 0)
-    SET_VALUE(GSW(0), 50)
+    SET_VALUE(GSW_STORY_PROGRESS, 50)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_heya"), 2)
     CALL(evt_npc_flag_onoff, 1, STRING("チュチュリーナ"), 1073741856)
     CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), 1024)
@@ -297,7 +297,7 @@ static EVT_BEGIN(item_get00)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)
-    SET_VALUE(GSW(0), 51)
+    SET_VALUE(GSW_STORY_PROGRESS, 51)
     RETURN
 EVT_END()
 
@@ -326,7 +326,7 @@ EVT_END()
 EVT_BEGIN(gon_12_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 50)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 50)
         CALL_CHILD(PTR(evt_bero_info_run))
     END_IF
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_GON1"))
@@ -335,7 +335,7 @@ EVT_BEGIN(gon_12_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_change_fbat_mode, 1)
     SPAWN_EVENT(PTR(chuchurina_sogu))
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 51)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 51)
         SET_VALUE(GSWF(1507), 1)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -117, 0, -75, 0, 0, PTR(item_get00), GSWF(1507))

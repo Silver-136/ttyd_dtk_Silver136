@@ -151,8 +151,8 @@ static EVT_BEGIN(buy_evt)
     CALL(evt_mario_normalize)
     SET_VALUE(LW(10), LW(0))
     CALL(disp_off, LW(10))
-    IF_INT_EQUAL(GSWF(0), 0)
-        SET_VALUE(GSWF(0), 1)
+    IF_INT_EQUAL(GSWF_SHOP_TUTORIAL_SEEN, 0)
+        SET_VALUE(GSWF_SHOP_TUTORIAL_SEEN, 1)
         CALL_CHILD(PTR(first_shopping_evt))
         RETURN
     END_IF
@@ -212,8 +212,8 @@ static EVT_BEGIN(buy_evt)
     CALL(evt_msg_print_add, 0, LW(14))
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), 4096)
-        IF_INT_EQUAL(GSWF(235), 0)
-            SET_VALUE(GSWF(235), 1)
+        IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
+            SET_VALUE(GSWF_ITEM_TUTORIAL_SEEN, 1)
             CALL(evt_msg_print, 0, STRING("item_first_hit"), 0, 0)
         END_IF
     END_IF
@@ -274,8 +274,8 @@ static EVT_BEGIN(buy_evt)
     CALL(evt_mario_normalize)
     SET_VALUE(LW(10), LW(0))
     CALL(disp_off, LW(10))
-    IF_INT_EQUAL(GSWF(0), 0)
-        SET_VALUE(GSWF(0), 1)
+    IF_INT_EQUAL(GSWF_SHOP_TUTORIAL_SEEN, 0)
+        SET_VALUE(GSWF_SHOP_TUTORIAL_SEEN, 1)
         CALL_CHILD(PTR(first_shopping_evt))
         RETURN
     END_IF
@@ -331,8 +331,8 @@ static EVT_BEGIN(buy_evt)
     CALL(evt_msg_continue)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), 4096)
-        IF_INT_EQUAL(GSWF(235), 0)
-            SET_VALUE(GSWF(235), 1)
+        IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
+            SET_VALUE(GSWF_ITEM_TUTORIAL_SEEN, 1)
             CALL(evt_msg_print, 0, STRING("item_first_hit"), 0, 0)
         END_IF
     END_IF
@@ -398,8 +398,8 @@ EVT_BEGIN(shopper_talk_evt)
             SET_VALUE(LF(10), 1)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(0), 0)
-        SET_VALUE(GSWF(0), 1)
+    IF_INT_EQUAL(GSWF_SHOP_TUTORIAL_SEEN, 0)
+        SET_VALUE(GSWF_SHOP_TUTORIAL_SEEN, 1)
         CALL_CHILD(PTR(first_shopping_evt))
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -549,8 +549,8 @@ EVT_BEGIN(shopper_talk_evt)
             SET_VALUE(LF(10), 1)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(0), 0)
-        SET_VALUE(GSWF(0), 1)
+    IF_INT_EQUAL(GSWF_SHOP_TUTORIAL_SEEN, 0)
+        SET_VALUE(GSWF_SHOP_TUTORIAL_SEEN, 1)
         CALL_CHILD(PTR(first_shopping_evt))
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -1658,7 +1658,7 @@ USER_FUNC(evt_shop_main_func) {
         trg = 0;
     }
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
-        evtGetValue(event, GSW(0)) >= 0x148 && evtGetValue(event, GSW(0)) < 0x14C &&
+        evtGetValue(event, GSW_STORY_PROGRESS) >= 0x148 && evtGetValue(event, GSW_STORY_PROGRESS) < 0x14C &&
         !evtGetValue(event, GSWF(3442))) {
         return EVT_RETURN_BLOCK;
     }

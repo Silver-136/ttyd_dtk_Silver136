@@ -58,7 +58,7 @@ EvtWord welcome_wonderforest[260];
 EvtWord win_06_init_evt[82];
 
 static EVT_BEGIN(first_evt_dokan)
-    IF_INT_NOT_EQUAL(GSW(0), 70)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 70)
         SET_VALUE(LW(0), 0)
         RETURN
     END_IF
@@ -179,7 +179,7 @@ EVT_BEGIN(welcome_wonderforest)
     CALL(evt_msg_print, 0, STRING("stg2_win_e00_00"), 0, STRING("extparty"))
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW(0), 71)
+    SET_VALUE(GSW_STORY_PROGRESS, 71)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
@@ -189,7 +189,7 @@ EVT_BEGIN(welcome_wonderforest)
 EVT_END()
 
 EVT_BEGIN(win_06_init_evt)
-    IF_INT_LESS(GSW(0), 71)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 71)
         BEGIN_INLINE_EVENT
             CALL(evt_snd_bgmoff, 512)
             CALL(evt_snd_envon, 272, STRING("ENV_STG2_WIN1"))
@@ -208,7 +208,7 @@ EVT_BEGIN(win_06_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kusa"), 2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group22"), 2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_oku_01H081"), 2)
-    IF_INT_EQUAL(GSW(0), 70)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 70)
         CALL_CHILD(PTR(welcome_wonderforest_init))
         SPAWN_EVENT(PTR(welcome_wonderforest))
     END_IF

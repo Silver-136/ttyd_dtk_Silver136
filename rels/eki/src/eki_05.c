@@ -155,13 +155,13 @@ EVT_BEGIN(evt_boots)
     CALL(evt_item_get_important_item, STRING("boots"))
     CALL(evt_item_get_item, STRING("boots"))
     CALL(evt_item_get_item_end_wait, STRING("boots"))
-    SET_VALUE(GSW(0), 319)
+    SET_VALUE(GSW_STORY_PROGRESS, 319)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_elvkey)
-    SET_VALUE(GSW(0), 320)
+    SET_VALUE(GSW_STORY_PROGRESS, 320)
     RETURN
 EVT_END()
 
@@ -186,10 +186,10 @@ EVT_BEGIN(eki_05_init_evt)
     SET_VALUE(GF(0), 0)
     CALL(evt_run_case_evt, 9, 1, STRING("a_garasu_1"), 0, PTR(grass_open_1), 0)
     CALL(evt_run_case_evt, 9, 1, STRING("a_garasu_2"), 0, PTR(grass_open_2), 0)
-    IF_INT_LESS(GSW(0), 319)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 319)
         CALL(evt_mobj_itembox, STRING("tbox"), -85, 295, 0, 1, 0, PTR(evt_boots), GSWF(3728))
     END_IF
-    IF_INT_LESS(GSW(0), 320)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 320)
         CALL(evt_item_entry, STRING("elvkey"), 26, -135, 136, -70, 17, -1, PTR(evt_elvkey))
         CALL(evt_run_case_evt, 16, 1, STRING("a_t_2"), 0, PTR(evt_head), 0)
     END_IF

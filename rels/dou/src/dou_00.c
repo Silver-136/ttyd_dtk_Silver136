@@ -34,7 +34,7 @@ EvtWord totsunyu_event[46];
 EvtWord dou_00_init_evt[61];
 
 static EVT_BEGIN(bero_in_event)
-    IF_INT_EQUAL(GSW(0), 242)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 242)
         CALL_CHILD(PTR(totsunyu_event))
     END_IF
     SET_VALUE(LW(0), 0)
@@ -102,7 +102,7 @@ EVT_BEGIN(totsunyu_event)
     CALL(evt_msg_print, 0, STRING("stg5_dou_00"), 0, 0)
     SPAWN_EVENT(PTR(back_light))
     WAIT_MS(200)
-    SET_VALUE(GSW(0), 243)
+    SET_VALUE(GSW_STORY_PROGRESS, 243)
     CALL(evt_mario_key_onoff, 1)
     BEGIN_INLINE_EVENT
         CALL(evt_telop_entry, 10)

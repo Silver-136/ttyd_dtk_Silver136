@@ -127,7 +127,7 @@ static BeroEntry bero_data[] = {
 };
 
 EVT_BEGIN(evt_poster)
-    SET_VALUE(GSW(0), 316)
+    SET_VALUE(GSW_STORY_PROGRESS, 316)
     SET_VALUE(LW(0), 1)
     CALL_CHILD(PTR(bero_case_switch_on))
     RETURN
@@ -170,8 +170,8 @@ static EVT_BEGIN(evt_chk)
     SET_VALUE(LW(0), 1)
     CALL_CHILD(PTR(bero_case_switch_on))
     CALL(evt_hitobj_onoff, STRING("a_kabe"), 1, 0)
-    IF_INT_LESS(GSW(0), 316)
-        SET_VALUE(GSW(0), 316)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 316)
+        SET_VALUE(GSW_STORY_PROGRESS, 316)
     END_IF
     RETURN
 EVT_END()

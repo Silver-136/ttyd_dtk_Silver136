@@ -166,7 +166,7 @@ static EVT_BEGIN(e_door_open)
 EVT_END()
 
 EVT_BEGIN(evt_snd_stop)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 370)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 370)
         CALL(evt_snd_sfxoff, GW(11))
     END_IF
     SET_VALUE(LW(0), 0)
@@ -486,7 +486,7 @@ static USER_FUNC(mario_chk) {
             break;
         }
     }
-    if (evtGetValue(event, GSW(0)) >= 370) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) >= 370) {
         MarioWork* mario = marioGetPtr();
         PartyEntry* party = partyGetPtr(0);
         if (mario != NULL && mario->hitobjStandOn != NULL && hitIsGroup(mario->hitobjStandOn, hitNameToPtr("A_bel"))) {
@@ -928,7 +928,7 @@ static EVT_BEGIN(evt_sw)
     CALL(evt_img_release, STRING("img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_kaidan"))
     CALL(evt_offscreen_delete, STRING("ofs"))
-    SET_VALUE(GSW(0), 371)
+    SET_VALUE(GSW_STORY_PROGRESS, 371)
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_off, 1000, 11)
     WAIT_MS(500)
@@ -993,7 +993,7 @@ static EVT_BEGIN(evt_ramp)
 EVT_END()
 
 EVT_BEGIN(evt_bcv_sw)
-    SET_VALUE(GSW(0), 370)
+    SET_VALUE(GSW_STORY_PROGRESS, 370)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -575, 152, 578, -575, 57, 37, 1000, 11)
     WAIT_MS(1000)
@@ -1038,7 +1038,7 @@ static EVT_BEGIN(evt_door_msg)
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
-        SET_VALUE(GSW(0), 372)
+        SET_VALUE(GSW_STORY_PROGRESS, 372)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi1_mid"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi1_aka"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights1_m"), 1)
@@ -1063,7 +1063,7 @@ EVT_BEGIN(aji_13_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ami2"), 2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_dai5"), 2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_dai3"), 2)
-    IF_INT_LESS(GSW(0), 370)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 370)
         CALL(evt_mobj_switch_blue, 0, STRING("bcv_sw"), -150, 0, 100, PTR(evt_bcv_sw), GSWF(4185))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_pato1"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("meta_1_1"), 1)
@@ -1089,12 +1089,12 @@ EVT_BEGIN(aji_13_init_evt)
     IF_INT_EQUAL(GSWF(4181), 0)
         CALL(evt_item_entry, STRING("key"), 32, -50, 100, 100, 16, -1, PTR(evt_key_get))
     END_IF
-    IF_INT_LESS(GSW(0), 371)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 371)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF(4184))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kaidan"), 1)
         CALL(evt_hitobj_onoff, STRING("A_kaidan"), 1, 0)
     END_IF
-    IF_INT_LESS(GSW(0), 372)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 372)
         SET_VALUE(LW(0), STRING("e_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_run_case_evt, 9, 1, STRING("A_kagi1"), 0, PTR(evt_door_msg), 0)
@@ -1108,7 +1108,7 @@ EVT_BEGIN(aji_13_init_evt)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, 300, 60, 100, 0, 0)
     CALL(evt_item_entry, STRING("item00"), 150, -670, 320, -450, 16, GSWF(4215), 0)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5996094f))
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 373)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 373)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
         CALL(evt_npc_check_delete, STRING("バリアーンＺ"))
     END_IF

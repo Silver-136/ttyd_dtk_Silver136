@@ -70,7 +70,7 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
     CALL(evt_msg_print, 0, STRING("stg5_dou_01"), 0, 0)
-    SET_VALUE(GSW(0), 244)
+    SET_VALUE(GSW_STORY_PROGRESS, 244)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -85,7 +85,7 @@ EVT_BEGIN(dou_01_init_evt)
     WAIT_FRAMES(1)
     CALL(evt_mobj_jumpstand_blue, 0, STRING("mobj_jump00"), 400, 92, 375, -21, 0, 0)
     CALL(evt_mobj_jumpstand_blue, 0, STRING("mobj_jump01"), 350, -45, 50, -15, 0, 0)
-    IF_INT_EQUAL(GSW(0), 243)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 243)
         SPAWN_EVENT(PTR(korutesu_event))
     END_IF
     RETURN

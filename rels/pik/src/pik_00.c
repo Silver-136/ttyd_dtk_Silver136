@@ -447,7 +447,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
         CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1"), 0)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
-        IF_INT_LESS(GSW(0), 339)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 339)
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2"), 0)
             ELSE
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2_2"), 0)
@@ -1035,7 +1035,7 @@ static EVT_BEGIN(evt_train)
     END_INLINE_EVENT
     SPAWN_EVENT(PTR(hom_10_evt_resha_start2))
     WAIT_MS(10000)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 345)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 345)
         SET_VALUE(GSWF(3456), 1)
     END_IF
     SET_VALUE(GSWF(3578), 1)
@@ -1054,7 +1054,7 @@ EVT_BEGIN(init_ekiin)
 EVT_END()
 
 EVT_BEGIN(talk_ekiin)
-    IF_INT_LESS(GSW(0), 339)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 339)
         CALL(evt_msg_print, 0, STRING("stg6_pik_00"), 0, 0)
         RETURN
         ELSE
@@ -1236,7 +1236,7 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
                 ADD(LW(0), 1)
             END_IF
             IF_INT_EQUAL(LW(0), 2)
-                SET_VALUE(GSW(0), 355)
+                SET_VALUE(GSW_STORY_PROGRESS, 355)
             END_IF
         END_IF
     END_SWITCH
@@ -1369,7 +1369,7 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
                 ADD(LW(0), 1)
             END_IF
             IF_INT_EQUAL(LW(0), 2)
-                SET_VALUE(GSW(0), 355)
+                SET_VALUE(GSW_STORY_PROGRESS, 355)
             END_IF
         END_IF
     END_SWITCH
@@ -1409,7 +1409,7 @@ static EVT_BEGIN(talk_papa)
         CALL(evt_msg_print, 0, STRING("irai_29_18_1"), 0, 0)
         RETURN
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(339)
         CALL(evt_msg_print, 0, STRING("stg6_pik_01"), 0, 0)
         CASE_LESS(354)
@@ -1520,7 +1520,7 @@ static EVT_BEGIN(talk_mama)
             RETURN
         END_IF
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(339)
         CALL(evt_msg_print, 0, STRING("stg6_pik_02"), 0, 0)
         CASE_LESS(354)
@@ -1550,7 +1550,7 @@ static EVT_BEGIN(init_konari)
 EVT_END()
 
 static EVT_BEGIN(talk_konari)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(339)
         CALL(evt_msg_print, 0, STRING("stg6_pik_03"), 0, 0)
         CASE_LESS(354)
@@ -1646,14 +1646,14 @@ static EVT_BEGIN(talk_madam)
         CALL_CHILD(PTR(talk_madam_ring_return))
         RETURN
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(347)
         CALL(evt_msg_print, 0, STRING("stg6_pik_04"), 0, 0)
         CASE_DEFAULT
         IF_INT_EQUAL(GSWF(3275), 0)
             CALL(evt_msg_print, 0, STRING("stg6_pik_04"), 0, 0)
             ELSE
-            IF_INT_LESS_OR_EQUAL(GSW(0), 402)
+            IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 402)
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_01"), 0, 0)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_pik_clear_01_1"), 0, 0)
@@ -1664,7 +1664,7 @@ static EVT_BEGIN(talk_madam)
 EVT_END()
 
 static EVT_BEGIN(init_sarary)
-    IF_INT_LESS(GSW(0), 345)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 345)
         CALL(evt_npc_set_position, STRING("me"), 85, -5, 35)
     END_IF
     RETURN
@@ -1921,7 +1921,7 @@ EVT_BEGIN(evt_pik_00_arrival)
     WAIT_MS(10000)
     SET_VALUE(GSWF(3580), 1)
     CALL(evt_snd_bgm_scope, 0, 0)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(334)
         SET_VALUE(GSWF(3444), 1)
         CALL(evt_bero_mapchange, STRING("rsh_02_a"), 0)
@@ -1986,7 +1986,7 @@ EVT_END()
 EVT_BEGIN(pik_00_init_evt)
     SET_VALUE(GF(11), 0)
     SET_VALUE(GSWF(3580), 1)
-    IF_INT_LESS(GSW(0), 339)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 339)
         SET_VALUE(GSWF(3578), 0)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_5"), 1)

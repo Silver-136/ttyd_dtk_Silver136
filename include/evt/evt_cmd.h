@@ -248,6 +248,18 @@
 #define UW(id) ((id) - EVTDAT_UW_BASE)
 #define UF(id) ((id) - EVTDAT_UF_BASE)
 
+/* Saved variables with a known meaning */
+#define GSW_STORY_PROGRESS GSW(0)             /* how far the story has advanced; GSW 0 alone is stored as s32 */
+#define GSW_GLITZ_PIT_OPPONENT GSW(501)       /* Glitz Pit: the opponent of the current match */
+#define GSW_GLITZ_PIT_CONDITION GSW(502)      /* Glitz Pit: the special condition of the current match */
+#define GSW_GLITZ_PIT_RANK GSW(580)           /* Glitz Pit: Mario's saved rank */
+#define GSW_PIT_FLOOR GSW(1321)               /* Pit of 100 Trials: floor index 0..99 (shown as 1..100) */
+#define GSWF_SHOP_TUTORIAL_SEEN GSWF(0)
+#define GSWF_SAVE_BLOCK_TUTORIAL_SEEN GSWF(233)
+#define GSWF_ITEM_TUTORIAL_SEEN GSWF(235)
+#define GSWF_GLITZ_PIT_MATCH_RESERVED GSWF(2388)
+#define GSWF_GLITZ_PIT_WON_LAST_MATCH GSWF(2443)
+
 #define EVT_RETURN_BLOCK 0
 #define EVT_RETURN_YIELD 1
 #define EVT_RETURN_DONE 2

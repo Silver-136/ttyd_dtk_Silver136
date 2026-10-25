@@ -299,7 +299,7 @@ static void rankingInit(void) {
     RankEntry* entry;
 
     memset(rank_wp, 0, sizeof(RankWork));
-    rank_wp->num = evtGetValue(NULL, GSW(0)) < 0xAC ? 23 : 21;
+    rank_wp->num = evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC ? 23 : 21;
     rank_wp->entries = _mapAlloc(rank_wp->num * sizeof(RankEntry));
     memset(rank_wp->entries, 0, rank_wp->num * sizeof(RankEntry));
     entry = rank_wp->entries;
@@ -321,7 +321,7 @@ static void rankingInit(void) {
         }
     }
     swSet(0x9E1);
-    if (evtGetValue(NULL, GSW(0)) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
         rank_wp->entries[21].flags |= 2;
         rank_wp->entries[22].flags |= 2;
         if (evtGetValue(NULL, GSWF(2412))) {
@@ -517,7 +517,7 @@ USER_FUNC(evt_tou_get_ranking) {
 
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
-    s32 flag = evtGetValue(event, GSWF(2443));
+    s32 flag = evtGetValue(event, GSWF_GLITZ_PIT_WON_LAST_MATCH);
     s32 rank;
     RankEntry* entry;
     s32 i;
@@ -551,7 +551,7 @@ USER_FUNC(evt_tou_get_fighter_info) {
     s32 id = evtGetValue(event, args[0]);
     FighterData* dt;
 
-    if (evtGetValue(NULL, GSW(0)) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
         dt = fighterDt;
     } else {
         dt = fighterDt_re;
@@ -566,7 +566,7 @@ static USER_FUNC(evt_tou_get_fighter_name2) {
     s32 id = evtGetValue(event, args[0]);
     FighterData* dt;
 
-    if (evtGetValue(NULL, GSW(0)) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
         dt = fighterDt;
     } else {
         dt = fighterDt_re;
@@ -600,7 +600,7 @@ static USER_FUNC(evt_tou_get_fighter_battle_msg) {
     s32 id = evtGetValue(event, args[0]);
     FighterData* dt;
 
-    if (evtGetValue(NULL, GSW(0)) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
         dt = fighterDt;
     } else {
         dt = fighterDt_re;
@@ -618,7 +618,7 @@ static USER_FUNC(evt_tou_get_rule_info) {
     s32 i;
     s32 rank;
 
-    if (evtGetValue(NULL, GSW(0)) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
         GET_RANK(rank, i);
         if (rank > 10) {
             num = 10;
@@ -662,7 +662,7 @@ USER_FUNC(evt_tou_get_rule_msg2) {
     s32 i;
     s32 rank;
 
-    if (evtGetValue(NULL, GSW(0)) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
         GET_RANK(rank, i);
         if (rank > 10) {
             num = 10;
@@ -747,7 +747,7 @@ static USER_FUNC(evt_tou_set_rule_result) {
 static void printRanking(void) {
     s32 i;
 
-    evtGetValue(NULL, GSW(0));
+    evtGetValue(NULL, GSW_STORY_PROGRESS);
     for (i = 0; i < rank_wp->num; i++) {
     }
 }
@@ -881,7 +881,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     Mtx mtx;
     char buf[0x100];
 
-    if (evtGetValue(NULL, GSW(0)) < 0xAC) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
         dt = fighterDt;
     } else {
         dt = fighterDt_re;
@@ -1128,10 +1128,10 @@ EVT_BEGIN(evt_close)
 EVT_END()
 
 static EVT_BEGIN(evt_open)
-    IF_INT_LESS(GSW(0), 132)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 132)
         CALL(evt_sub_get_mapname, LW(5))
         IF_STR_EQUAL(LW(5), STRING("tou_10"))
-            IF_INT_EQUAL(GSWF(2388), 0)
+            IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
 #ifdef VERSION_G8ME01
                 CALL(tou_mario_keyoff_check, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
@@ -1309,7 +1309,7 @@ void gans_tex(CameraId cameraId, void* param) {
         C_MTXLookAt(lookAt, &pos, &up, &target);
     }
     saved = *camGetPtr(cameraId);
-    npc = npcNameToPtr(evtGetValue(NULL, GSW(0)) < 0xAC ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
+    npc = npcNameToPtr(evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
     PSMTXCopy(lookAt, camGetCurPtr()->view);
     animPosePeraOff(npc->poseId);
     PSMTXIdentity(ident);
@@ -1577,8 +1577,8 @@ EVT_BEGIN(talk_gardman)
             CALL(evt_msg_print, 0, STRING("stg3_tou_304_01"), 0, STRING("ガードマン"))
         END_IF
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 137)
-        IF_INT_LESS(GSW(0), 138)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 137)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 138)
             CALL(chk, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL_CHILD(PTR(evt_tamago_byebye))
@@ -1633,7 +1633,7 @@ EVT_BEGIN(talk_gardman)
     IF_INT_EQUAL(LF(1), 1)
         SET_VALUE(GSWF(2394), 1)
     END_IF
-    IF_INT_LESS(GSW(0), 172)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 172)
         IF_INT_EQUAL(GSWF(2383), 1)
             CALL(evt_bero_mapchange, STRING("tou_04"), 0)
             RETURN
@@ -1805,10 +1805,10 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         CALL(evt_mapobj_get_position, STRING("gamen"), LW(0), LW(1), LW(2))
         CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_next_match, LW(0))
-        SET_VALUE(GSW(501), LW(0))
+        SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
-        IF_INT_LESS(GSW(0), 172)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 172)
             IF_INT_EQUAL(LW(3), 10)
                 IF_INT_EQUAL(GSWF(2397), 0)
                     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(3), LW(1))
@@ -1826,10 +1826,10 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         CALL(evt_mapobj_get_position, STRING("gamenn"), LW(0), LW(1), LW(2))
         CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_next_match, LW(0))
-        SET_VALUE(GSW(501), LW(0))
+        SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
-        IF_INT_LESS(GSW(0), 172)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 172)
             IF_INT_EQUAL(LW(3), 0)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(1))
                 ELSE
@@ -1842,7 +1842,7 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
             END_IF
         END_IF
-        IF_INT_EQUAL(GSW(501), 0)
+        IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
             IF_INT_EQUAL(GSWF(2399), 0)
                 SET_VALUE(GSWF(2383), 1)
             END_IF
@@ -1852,17 +1852,17 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         CALL(evt_mapobj_get_position, STRING("gamenn"), LW(0), LW(1), LW(2))
         CALL(evt_msg_toge, 2, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_next_match, LW(0))
-        SET_VALUE(GSW(501), LW(0))
+        SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
-        IF_INT_LESS(GSW(0), 172)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 172)
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
             ELSE
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
         END_IF
     END_IF
-    CALL(evt_tou_get_rule_info, GSW(501), LW(10), LW(13), LW(14), LW(15))
-    SET_VALUE(GSW(502), LW(13))
+    CALL(evt_tou_get_rule_info, GSW_GLITZ_PIT_OPPONENT, LW(10), LW(13), LW(14), LW(15))
+    SET_VALUE(GSW_GLITZ_PIT_CONDITION, LW(13))
     SET_VALUE(GSW(503), LW(14))
     SET_VALUE(GSW(504), LW(15))
     CALL(evt_msg_print_add, 0, LW(10))
@@ -1879,9 +1879,9 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         END_IF
     END_IF
     SPAWN_EVENT(PTR(evt_gardman))
-    SET_VALUE(GSWF(2388), 1)
-    IF_INT_LESS(GSW(0), 172)
-        IF_INT_EQUAL(GSW(501), 18)
+    SET_VALUE(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 172)
+        IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 18)
             IF_INT_EQUAL(GSWF(2405), 0)
                 SET_VALUE(GSWF(2405), 1)
                 CALL_CHILD(PTR(evt_michel_1))
@@ -1933,7 +1933,7 @@ EVT_BEGIN(evt_tou_match_make_default)
         CASE_EQUAL(0)
         SET_VALUE(LF(10), 0)
         SET_VALUE(LF(11), 0)
-        SWITCH(GSW(0))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(139, 142)
             SET_VALUE(LF(10), 1)
             IF_INT_EQUAL(LF(0), 1)
@@ -1986,9 +1986,9 @@ EVT_BEGIN(evt_tou_match_make_default)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        IF_INT_EQUAL(GSWF(2388), 1)
-            CALL(evt_tou_get_fighter_info, GSW(501), LW(0), LW(1))
-            CALL(evt_tou_get_rule_msg2, GSW(502), LW(2))
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
+            CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
+            CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
             CALL(evt_msg_print_add, 1, STRING("<scrl_auto><once_stop>"))
             CALL(evt_msg_print_add_insert, 0, LW(12), LW(0), LW(2))
             ELSE
@@ -2391,7 +2391,7 @@ EVT_BEGIN(evt_michel_7)
 EVT_END()
 
 USER_FUNC(make_monitor) {
-    NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW(0)) < 0xAC ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
+    NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
     GansWork* wp;
 
     if (isFirstCall) {
@@ -2826,7 +2826,7 @@ EVT_BEGIN(evt_mail_1)
     CALL(evt_pouch_receive_mail, 7)
     CALL(evt_pouch_open_mail, 7)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-    SET_VALUE(GSW(0), 139)
+    SET_VALUE(GSW_STORY_PROGRESS, 139)
     RETURN
 EVT_END()
 
@@ -3008,7 +3008,7 @@ EVT_BEGIN(evt_mail_3)
     CALL(evt_pouch_receive_mail, 10)
     CALL(evt_pouch_open_mail, 10)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-    SET_VALUE(GSW(0), 144)
+    SET_VALUE(GSW_STORY_PROGRESS, 144)
     RETURN
 EVT_END()
 
@@ -3110,7 +3110,7 @@ EVT_BEGIN(evt_mail_5)
     CALL(evt_pouch_receive_mail, 14)
     CALL(evt_pouch_open_mail, 14)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU1"))
-    SET_VALUE(GSW(0), 153)
+    SET_VALUE(GSW_STORY_PROGRESS, 153)
     RETURN
 EVT_END()
 
@@ -3180,7 +3180,7 @@ EVT_END()
 
 EVT_BEGIN(evt_tou_match_after_default)
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW(501), 10)
+    IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
         CALL(chk, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LF(0), 1)
@@ -3189,8 +3189,8 @@ EVT_BEGIN(evt_tou_match_after_default)
             CALL(evt_party_cont_onoff, 1, 0)
         END_IF
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 137)
-        IF_INT_LESS(GSW(0), 138)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 137)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 138)
             IF_INT_EQUAL(LF(0), 0)
                 CALL(chk, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
@@ -3604,7 +3604,7 @@ EVT_BEGIN(evt_tou_match_after_default)
     IF_INT_EQUAL(LF(10), 1)
         CALL(evt_mario_set_dir, 270, 300, 0)
         CALL(evt_msg_print_party, STRING("stg3_tou_114"))
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 172)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 172)
             SET_VALUE(GSWF(2505), 1)
         END_IF
     END_IF
@@ -3623,10 +3623,10 @@ EVT_BEGIN(evt_tou_match_after_default)
         CALL(evt_pouch_add_item, 65, LW(0))
     END_IF
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW(501), 10)
+    IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
         CALL(chk, LW(0))
         IF_INT_EQUAL(LW(0), 0)
-            IF_INT_GREATER_OR_EQUAL(GSW(0), 137)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 137)
                 CALL_CHILD(PTR(evt_tou_chibi_yoshi))
                 ELSE
                 CALL_CHILD(PTR(evt_michel_9))
@@ -3634,7 +3634,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 137)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 137)
         IF_INT_EQUAL(LF(0), 0)
             CALL(chk, LW(0))
             IF_INT_EQUAL(LW(0), 0)

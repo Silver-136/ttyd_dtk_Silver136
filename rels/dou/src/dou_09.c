@@ -472,7 +472,7 @@ EVT_BEGIN(dou_09_init_evt)
     WAIT_FRAMES(1)
     CALL(evt_map_playanim, STRING("nami"), 1, 0)
     CALL(evt_map_playanim, STRING("moku"), 1, 0)
-    IF_INT_LESS(GSW(0), 248)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 248)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mon_b"), 1)
         ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("mon_a"), 1)

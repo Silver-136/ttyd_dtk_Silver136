@@ -246,7 +246,7 @@ void winMain(void) {
                         break;
                     }
 #ifdef VERSION_G8ME01
-                    if ((gp->flags & 0x1000) && evtGetValue(NULL, GSW(0)) < 7) {
+                    if ((gp->flags & 0x1000) && evtGetValue(NULL, GSW_STORY_PROGRESS) < 7) {
                         break;
                     }
 #endif
@@ -782,7 +782,7 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(evt_msg_continue)
 #ifdef VERSION_G8ME01
     LOOP(0)
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 20)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 20)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)

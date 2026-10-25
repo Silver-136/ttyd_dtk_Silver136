@@ -1475,7 +1475,7 @@ static EVT_BEGIN(evt_meet_moamoa)
     END_SWITCH
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
-    SET_VALUE(GSW(0), 330)
+    SET_VALUE(GSW_STORY_PROGRESS, 330)
     RETURN
 EVT_END()
 
@@ -1605,14 +1605,14 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_npc_flag_onoff, 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 32)
     CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
     CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
-    SET_VALUE(GSW(0), 331)
+    SET_VALUE(GSW_STORY_PROGRESS, 331)
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
     RETURN
 EVT_END()
 
 static EVT_BEGIN(init_syashou)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(329, 332)
         CALL(evt_npc_set_position, STRING("me"), -115, 0, 20)
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("O_1"), STRING("T_3"))
@@ -1624,7 +1624,7 @@ static EVT_BEGIN(init_syashou)
 EVT_END()
 
 static EVT_BEGIN(talk_syashou)
-    IF_INT_LESS(GSW(0), 331)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 331)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_249_01_01"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_242"), 0, 0)
@@ -1633,7 +1633,7 @@ static EVT_BEGIN(talk_syashou)
 EVT_END()
 
 static EVT_BEGIN(init_waitless)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(329, 332)
         CALL(evt_npc_set_position, STRING("me"), 50, 0, 0)
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("P_1"), STRING("T_5"))
@@ -1645,7 +1645,7 @@ static EVT_BEGIN(init_waitless)
 EVT_END()
 
 static EVT_BEGIN(talk_waitless)
-    IF_INT_LESS(GSW(0), 331)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 331)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_249_01_02"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_243"), 0, 0)
@@ -1792,7 +1792,7 @@ static NpcSetupInfo npc_data[] = {
 };
 
 EVT_BEGIN(evt_ghost_diary)
-    SET_VALUE(GSW(0), 299)
+    SET_VALUE(GSW_STORY_PROGRESS, 299)
     RETURN
 EVT_END()
 
@@ -1866,13 +1866,13 @@ static EVT_BEGIN(evt_access_entry)
 EVT_END()
 
 EVT_BEGIN(rsh_05_init_evt)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(310, 325)
         CASE_DEFAULT
         CALL(evt_map_playanim, STRING("yure"), 1, 0)
     END_SWITCH
     CALL_CHILD(PTR(evt_access_entry))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(284, 286)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_3"))
@@ -1901,7 +1901,7 @@ EVT_BEGIN(rsh_05_init_evt)
 EVT_END()
 
 EVT_BEGIN(rsh_05_a_init_evt)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(288)
         SET_VALUE(LW(0), PTR(bero_data_a))
         CASE_LESS(294)
@@ -1921,7 +1921,7 @@ EVT_BEGIN(rsh_05_a_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(rsh_05_init_evt))
     CALL(evt_npc_setup, PTR(npc_data))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(329)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
@@ -1938,7 +1938,7 @@ EVT_BEGIN(rsh_05_a_init_evt)
         CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
         CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
     END_SWITCH
-    IF_INT_LESS(GSW(0), 299)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 299)
         CALL(evt_item_entry, STRING("diary"), 78, -90, 0, -140, 0, -1, PTR(evt_ghost_diary))
     END_IF
     RETURN

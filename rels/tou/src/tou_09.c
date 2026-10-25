@@ -283,7 +283,7 @@ static EVT_BEGIN(evt_tojikome_msg)
 EVT_END()
 
 EVT_BEGIN(tou_09_init_evt)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(127, 137)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))

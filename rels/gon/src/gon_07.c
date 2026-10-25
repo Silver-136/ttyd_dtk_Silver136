@@ -83,7 +83,7 @@ EVT_END()
 
 EVT_BEGIN(out_func)
     CALL(evt_sub_countdown_end)
-    IF_INT_EQUAL(GSW(0), 43)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 43)
         CALL(evt_snd_sfxoff, GW(10))
     END_IF
     SET_VALUE(LW(0), 0)
@@ -169,10 +169,10 @@ static EVT_BEGIN(shake_evt)
 EVT_END()
 
 static EVT_BEGIN(item_evt)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 43)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 43)
         RETURN
     END_IF
-    SET_VALUE(GSW(0), 43)
+    SET_VALUE(GSW_STORY_PROGRESS, 43)
     SET_VALUE(GSWF(1494), 1)
     CALL(evt_snd_bgmoff, 512)
     CALL(evt_mario_key_onoff, 0)
@@ -318,7 +318,7 @@ EVT_BEGIN(gon_07_init_evt)
     CALL(evt_snd_envon, 272, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_snd_bgmoff, 18432)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 43)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 43)
         SET_VALUE(GSWF(1494), 1)
     END_IF
     CALL(evt_mobj_itembox, STRING("gon07treasure"), 0, 0, 0, 0, 0, PTR(item_evt), GSWF(1494))

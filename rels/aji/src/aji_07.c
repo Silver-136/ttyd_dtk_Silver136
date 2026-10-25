@@ -183,7 +183,7 @@ EVT_BEGIN(tensou_ride)
     END_LOOP
     WAIT_MS(2000)
     CALL(evt_snd_sfxoff, LW(9))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(376)
         SET_VALUE(GSWF(4175), 1)
         CALL(evt_bero_mapchange, STRING("tik_00"), 0)

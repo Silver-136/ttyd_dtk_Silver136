@@ -776,7 +776,7 @@ USER_FUNC(tou_gamen_screen_tev_init) {
     screen_wp->field_18 = screen_wp->field_1C = 0.0f;
     screen_wp->field_20 = 0;
     screen_wp->field_28 = -1.0f;
-    if (evtGetValue(event, GSW(0)) == 163) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) == 163) {
         screen_wp->field_24 = 1;
     }
     evtEntry(screen_evt, 0, 0);

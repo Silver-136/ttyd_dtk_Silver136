@@ -5872,10 +5872,10 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch) {
         return FALSE;
     }
     if (!someswitch) {
-        if (evtGetValue(NULL, GSW(0)) >= 109 && evtGetValue(NULL, GSW(0)) < 111 && bgm->listId == 0xA4) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 109 && evtGetValue(NULL, GSW_STORY_PROGRESS) < 111 && bgm->listId == 0xA4) {
             return FALSE;
         }
-        if (evtGetValue(NULL, GSW(0)) >= 127 && evtGetValue(NULL, GSW(0)) < 178 && psbgm[0].listId == 0xC3) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 127 && evtGetValue(NULL, GSW_STORY_PROGRESS) < 178 && psbgm[0].listId == 0xC3) {
             if (bgm->listId != 0x92) {
                 return FALSE;
             }

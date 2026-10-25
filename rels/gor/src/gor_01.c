@@ -846,8 +846,8 @@ EVT_BEGIN(badgemaster_init)
     IF_INT_EQUAL(GSWF(5390), 1)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 127)
-        IF_INT_LESS_OR_EQUAL(GSW(0), 148)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 127)
+        IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 148)
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         END_IF
     END_IF
@@ -855,7 +855,7 @@ EVT_BEGIN(badgemaster_init)
 EVT_END()
 
 EVT_BEGIN(badgemaster_talk)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_024_00"), 0, STRING("me"))
         CASE_LESS(112)
@@ -883,7 +883,7 @@ EVT_BEGIN(kinoji_init)
 EVT_END()
 
 EVT_BEGIN(kinoji_talk)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_019"), 0, STRING("me"))
         CASE_LESS(112)
@@ -1500,7 +1500,7 @@ EVT_END()
 #endif
 
 static EVT_BEGIN(marco_init)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(223, 269)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
@@ -1510,7 +1510,7 @@ EVT_END()
 static EVT_BEGIN(marco_talk)
     DELETE_EVENT(GW(0))
     CALL(evt_msg_close, STRING("mac_4_004"))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(222)
         CALL(evt_msg_print, 0, STRING("mac_4_005"), 0, STRING("me"))
         SET_VALUE(GSWF(1192), 1)
@@ -1634,7 +1634,7 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         END_INLINE_EVENT
         WAIT_MS(3000)
-        SET_VALUE(GSW(0), 223)
+        SET_VALUE(GSW_STORY_PROGRESS, 223)
         CASE_LESS(339)
         CALL(evt_msg_print, 0, STRING("gor_01_031_08_1"), 0, STRING("me"))
         CASE_LESS(373)
@@ -1648,7 +1648,7 @@ static EVT_BEGIN(marco_talk)
 EVT_END()
 
 EVT_BEGIN(master_init)
-    IF_INT_EQUAL(GSW(0), 222)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 222)
         CALL(evt_npc_set_position, STRING("me"), 259, 0, -275)
     END_IF
     RETURN
@@ -1703,7 +1703,7 @@ EVT_BEGIN(master_talk)
             END_IF
         END_IF
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(223)
         CALL(evt_msg_print, 0, STRING("gor_01_016"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(224)
@@ -1816,7 +1816,7 @@ EVT_BEGIN(master_talk)
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_set_pose, STRING("M_N_2"))
         WAIT_MS(800)
-        SET_VALUE(GSW(0), 226)
+        SET_VALUE(GSW_STORY_PROGRESS, 226)
         CALL(evt_snd_bgmoff_f, 513, 1000)
         CALL(evt_snd_bgmon_f, 288, 0, 1000)
         CASE_EQUAL(226)
@@ -1846,7 +1846,7 @@ EVT_BEGIN(master_talk)
 EVT_END()
 
 EVT_BEGIN(shoptender_init)
-    IF_INT_LESS(GSW(0), 223)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 223)
         IF_INT_EQUAL(GSWF(1191), 1)
             CALL(evt_npc_set_position, STRING("me"), -75, 0, -30)
             CALL(evt_npc_set_ry, STRING("me"), 90)
@@ -1904,7 +1904,7 @@ EVT_BEGIN(shoptender_talk)
             CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
             WAIT_MS(500)
             CALL(evt_msg_print, 0, STRING("gor_01_013_01"), 0, STRING("me"))
-            IF_INT_LESS(GSW(0), 56)
+            IF_INT_LESS(GSW_STORY_PROGRESS, 56)
                 SET_VALUE(GSWF(1189), 1)
                 ELSE
                 SET_VALUE(GSWF(1190), 1)
@@ -1913,7 +1913,7 @@ EVT_BEGIN(shoptender_talk)
         END_IF
         ELSE
         DEBUG_PUT_MSG(STRING("店員TALK３"))
-        SWITCH(GSW(0))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_LESS(112)
             CALL(evt_msg_print, 0, STRING("gor_01_015_02"), 0, STRING("me"))
             CASE_LESS(164)
@@ -1952,7 +1952,7 @@ EVT_BEGIN(roten1_regl)
 EVT_END()
 
 EVT_BEGIN(roten1_talk)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_025_00"), 0, STRING("me"))
         CASE_LESS(112)
@@ -1981,7 +1981,7 @@ EVT_BEGIN(roten2_init)
 EVT_END()
 
 EVT_BEGIN(roten2_talk)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_025_00_2"), 0, STRING("me"))
         CASE_LESS(112)
@@ -2030,7 +2030,7 @@ EVT_BEGIN(kuribo1_talk)
         END_IF
         RETURN
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_026_00"), 0, STRING("me"))
         CASE_LESS(112)
@@ -2064,7 +2064,7 @@ EVT_BEGIN(kuribo2_regl)
 EVT_END()
 
 EVT_BEGIN(kuribo2_talk)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_027_00"), 0, STRING("me"))
         CASE_LESS(112)
@@ -2117,7 +2117,7 @@ EVT_BEGIN(kuribo3_talk)
         END_IF
         RETURN
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_028_00"), 0, STRING("me"))
         CASE_LESS(112)
@@ -2257,7 +2257,7 @@ EVT_BEGIN(chusan1_talk)
         SET_VALUE(GF(9), 0)
         RETURN
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_029_00"), 0, STRING("me"))
         CASE_LESS(112)
@@ -2285,7 +2285,7 @@ EVT_BEGIN(chusan2_init)
 EVT_END()
 
 EVT_BEGIN(chusan2_talk)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_030_00"), 0, STRING("me"))
         CASE_LESS(112)
@@ -2313,7 +2313,7 @@ static EVT_BEGIN(bomhei_init)
 EVT_END()
 
 EVT_BEGIN(bomhei_talk)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(56)
         CALL(evt_msg_print, 0, STRING("gor_01_031_00"), 0, STRING("me"))
         CASE_LESS(112)
@@ -2337,7 +2337,7 @@ EVT_BEGIN(bomhei_talk)
 EVT_END()
 
 EVT_BEGIN(bottakuru_init)
-    IF_INT_LESS(GSW(0), 56)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 56)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         RETURN
     END_IF
@@ -2570,7 +2570,7 @@ EVT_END()
 #endif
 
 static EVT_BEGIN(luigi_init)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(112, 163)
         CALL(evt_npc_set_position, STRING("me"), 380, 0, 300)
         CALL(evt_npc_set_ry_lr, STRING("me"), 0)
@@ -2590,7 +2590,7 @@ static EVT_BEGIN(luigi_talk)
 EVT_END()
 
 static EVT_BEGIN(luigi_npcEnt)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(112, 163)
         CALL(evt_npc_entry, STRING("キック"), STRING("c_lp_gesso"))
         CALL(evt_npc_set_tribe, STRING("キック"), STRING("キック"))
@@ -2662,7 +2662,7 @@ NpcSetupInfo torqueEnt[] = {
 };
 
 EVT_BEGIN(kick2_init)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(373, 400)
         CALL(evt_npc_set_position, STRING("me"), 270, 154, -300)
         CASE_DEFAULT
@@ -2781,7 +2781,7 @@ static EVT_BEGIN(borodo2_talk)
 EVT_END()
 
 EVT_BEGIN(thief_init)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(8)
         CALL(evt_npc_set_position, STRING("me"), 500, 0, -175)
     END_SWITCH
@@ -2789,7 +2789,7 @@ EVT_BEGIN(thief_init)
 EVT_END()
 
 EVT_BEGIN(thief_talk)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(8, 22)
         IF_INT_EQUAL(GSWF(1198), 0)
             SET_VALUE(LF(0), 0)
@@ -3096,7 +3096,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 EVT_BEGIN(christine_nakama_before)
-    IF_INT_NOT_EQUAL(GSW(0), 6)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 6)
         SET_VALUE(LW(0), 0)
         RETURN
     END_IF
@@ -3549,7 +3549,7 @@ static USER_FUNC(evt_osreport) {
 
     switch (evtGetValue(event, args[0])) {
         case 0:
-            evtSetValue(event, args[1], search_evt_moji(evtGetValue(event, GSW(0))));
+            evtSetValue(event, args[1], search_evt_moji(evtGetValue(event, GSW_STORY_PROGRESS)));
             break;
     }
     return EVT_RETURN_DONE;
@@ -3604,7 +3604,7 @@ EVT_BEGIN(house03_f1f2_fade)
 EVT_END()
 
 EVT_BEGIN(luigi_f1_fade_check)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(112, 163)
         CASE_BETWEEN(215, 260)
         CALL(evt_npc_set_color, STRING("ルイージ"), LW(0), LW(0), LW(0), 255)
@@ -3638,7 +3638,7 @@ EVT_BEGIN(house03_f1_fade)
 EVT_END()
 
 EVT_BEGIN(luigi_f2_fade_check)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(112, 163)
         CASE_BETWEEN(215, 260)
         CASE_GREATER_OR_EQUAL(373)
@@ -3689,7 +3689,7 @@ EVT_BEGIN(house03_suiteki)
 EVT_END()
 
 EVT_BEGIN(marco_hitorigoto)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 223)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 223)
         RETURN
     END_IF
     CALL(evt_mario_wait_movable)
@@ -4145,7 +4145,7 @@ EVT_BEGIN(gor_01_shop_setup)
         CALL(evt_pouch_check_item, 57, LW(3))
         CALL(evt_pouch_check_item, 58, LW(4))
         CALL(evt_pouch_check_item, 59, LW(5))
-        SWITCH(GSW(0))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_LESS(215)
             SET_VALUE(LW(11), 0)
             CASE_LESS(261)
@@ -4455,7 +4455,7 @@ EVT_BEGIN(christine_nakama)
     CALL(evt_mario_dispflag_onoff, 0, 256)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
-    SET_VALUE(GSW(0), 7)
+    SET_VALUE(GSW_STORY_PROGRESS, 7)
     SPAWN_EVENT(PTR(christine_nakama_after))
     RETURN
 EVT_END()
@@ -5100,7 +5100,7 @@ EVT_BEGIN(gor_01_koopa_evt)
     WAIT_MS(1200)
     CALL(evt_npc_move_position, STRING("ルイージ"), 50, 100, 0, 60, 0)
     WAIT_MS(1000)
-    SET_VALUE(GSW(0), 342)
+    SET_VALUE(GSW_STORY_PROGRESS, 342)
     CALL(evt_bero_mapchange, STRING("kpa_05"), STRING(""))
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -5901,11 +5901,11 @@ EVT_END()
 #ifdef VERSION_G8ME01
 EVT_BEGIN(gor_01_init_evt)
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW(0), 341)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 341)
         CALL(evt_mario_set_mode, 2)
         SET_VALUE(LF(0), 1)
     END_IF
-    IF_INT_EQUAL(GSW(0), 400)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             SET_VALUE(LF(1), 1)
@@ -5914,7 +5914,7 @@ EVT_BEGIN(gor_01_init_evt)
             SET_VALUE(LF(1), 1)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSW(0), 402)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
         CALL(evt_snd_envon, 272, STRING("ENV_STG0_GOR1"))
     ELSE
         IF_INT_EQUAL(LF(0), 0)
@@ -5944,23 +5944,23 @@ EVT_BEGIN(gor_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSW(0), 6)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 6)
         CALL_CHILD(christine_nakama_init)
     END_IF
-    IF_INT_EQUAL(GSW(0), 7)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 7)
         IF_INT_EQUAL(GSWF(1200), 0)
             SPAWN_EVENT(christine_nakama_after)
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(1191), 0)
         IF_INT_EQUAL(GSWF(1189), 1)
-            IF_INT_GREATER_OR_EQUAL(GSW(0), 56)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 56)
                 SET_VALUE(GSWF(1191), 1)
             END_IF
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(1191), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 56)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 56)
             SET_VALUE(LW(0), GSWF(1189))
             ADD(LW(0), GSWF(1190))
             IF_INT_NOT_EQUAL(LW(0), 0)
@@ -5985,7 +5985,7 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_item_entry, STRING("item_00"), 125, 490, 0, 245, 16, GSWF(5570), 0)
     CALL(evt_item_entry, STRING("item_01"), 125, 550, 0, -150, 16, GSWF(5571), 0)
     CALL(evt_item_entry, STRING("item_02"), 125, -565, 162, -160, 16, GSWF(5572), 0)
-    IF_INT_LESS(GSW(0), 223)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 223)
         CALL(evt_item_entry, STRING("ドクロジュエル"), 71, 315, 20, -125, 16, -1, 0)
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), 2)
         CALL(evt_item_status_on, STRING("ドクロジュエル"), 33554432)
@@ -6000,13 +6000,13 @@ EVT_BEGIN(gor_01_init_evt)
     SET_VALUE(LW(0), GW(6))
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_02_f1))
-    IF_INT_LESS(GSW(0), 223)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 223)
         IF_INT_EQUAL(GSWF(1191), 1)
             SET_VALUE(LW(0), PTR(&door_data_02_f1_01))
         END_IF
     END_IF
     CALL_CHILD(evt_door_entry)
-    IF_INT_LESS(GSW(0), 19)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 19)
         CALL(evt_run_case_evt, 9, 1, STRING("A_ie_02_f2_doa01"), 0, PTR(evt_door_02_f2_junbityu), 0)
     ELSE
         SET_VALUE(LW(0), PTR(&door_data_02_f2))
@@ -6067,7 +6067,7 @@ EVT_BEGIN(gor_01_init_evt)
             SPAWN_EVENT(minnnanokoe_evt)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSW(0), 402)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
         CALL(evt_mario_kill_party, 0)
         CALL_CHILD(epilogue_npc_entry)
         SPAWN_EVENT(epilogue_evt)
@@ -6080,11 +6080,11 @@ EVT_END()
 #else
 EVT_BEGIN(gor_01_init_evt)
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW(0), 341)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 341)
         CALL(evt_mario_set_mode, 2)
         SET_VALUE(LF(0), 1)
     END_IF
-    IF_INT_EQUAL(GSW(0), 400)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 400)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
             SET_VALUE(LF(1), 1)
@@ -6093,7 +6093,7 @@ EVT_BEGIN(gor_01_init_evt)
             SET_VALUE(LF(1), 1)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSW(0), 402)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
         CALL(evt_snd_envon, 272, STRING("ENV_STG0_GOR1"))
     ELSE
         IF_INT_EQUAL(LF(0), 0)
@@ -6123,23 +6123,23 @@ EVT_BEGIN(gor_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSW(0), 6)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 6)
         CALL_CHILD(christine_nakama_init)
     END_IF
-    IF_INT_EQUAL(GSW(0), 7)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 7)
         IF_INT_EQUAL(GSWF(1200), 0)
             SPAWN_EVENT(christine_nakama_after)
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(1191), 0)
         IF_INT_EQUAL(GSWF(1189), 1)
-            IF_INT_GREATER_OR_EQUAL(GSW(0), 56)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 56)
                 SET_VALUE(GSWF(1191), 1)
             END_IF
         END_IF
     END_IF
     IF_INT_EQUAL(GSWF(1191), 0)
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 56)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 56)
             SET_VALUE(LW(0), GSWF(1189))
             ADD(LW(0), GSWF(1190))
             IF_INT_NOT_EQUAL(LW(0), 0)
@@ -6164,7 +6164,7 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_item_entry, STRING("item_00"), 125, 490, 0, 245, 16, GSWF(5570), 0)
     CALL(evt_item_entry, STRING("item_01"), 125, 550, 0, -150, 16, GSWF(5571), 0)
     CALL(evt_item_entry, STRING("item_02"), 125, -565, 162, -160, 16, GSWF(5572), 0)
-    IF_INT_LESS(GSW(0), 223)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 223)
         CALL(evt_item_entry, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 71, 315, 20, -125, 16, -1, 0)
         CALL(evt_item_flag_on, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 2)
         CALL(evt_item_status_on, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 33554432)
@@ -6179,13 +6179,13 @@ EVT_BEGIN(gor_01_init_evt)
     SET_VALUE(LW(0), GW(6))
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_02_f1))
-    IF_INT_LESS(GSW(0), 223)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 223)
         IF_INT_EQUAL(GSWF(1191), 1)
             SET_VALUE(LW(0), PTR(&door_data_02_f1_01))
         END_IF
     END_IF
     CALL_CHILD(evt_door_entry)
-    IF_INT_LESS(GSW(0), 19)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 19)
         CALL(evt_run_case_evt, 9, 1, STRING("A_ie_02_f2_doa01"), 0, PTR(evt_door_02_f2_junbityu), 0)
     ELSE
         SET_VALUE(LW(0), PTR(&door_data_02_f2))
@@ -6245,7 +6245,7 @@ EVT_BEGIN(gor_01_init_evt)
             SPAWN_EVENT(minnnanokoe_evt)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSW(0), 402)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
         CALL(evt_mario_kill_party, 0)
         CALL_CHILD(epilogue_npc_entry)
         SPAWN_EVENT(epilogue_evt)
@@ -7366,7 +7366,7 @@ EVT_BEGIN(cooking_evt)
         ELSE
         IF_INT_EQUAL(LSWF(1), 0)
             SET_VALUE(LF(0), 0)
-            IF_INT_GREATER_OR_EQUAL(GSW(0), 215)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 215)
                 IF_INT_NOT_EQUAL(GSW(1420), 18)
                     IF_INT_EQUAL(GSWF(5392), 0)
                         SET_VALUE(LF(0), 1)

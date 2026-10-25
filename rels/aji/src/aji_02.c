@@ -157,7 +157,7 @@ static EVT_BEGIN(evt_box)
     CALL(evt_item_entry, STRING("dummy"), 27, LW(0), LW(1), LW(2), 17, -1, 0)
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_item_get_item, STRING("dummy"))
-    SET_VALUE(GSW(0), 362)
+    SET_VALUE(GSW_STORY_PROGRESS, 362)
     WAIT_FRAMES(1)
     CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no01"), 2048)
     CALL(all_flag_off)
@@ -235,7 +235,7 @@ EVT_END()
 EVT_BEGIN(aji_02_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     CALL(evt_snd_set_rev_mode, 1)
-    IF_INT_LESS(GSW(0), 352)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 352)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG7_DUN1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG7_AJI1"))
         ELSE
@@ -258,7 +258,7 @@ EVT_BEGIN(aji_02_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_cam_road_reset)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("no1"), 1)
-    IF_INT_LESS(GSW(0), 362)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 362)
         SPAWN_EVENT(PTR(hikaru_yuka_init))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ato"), 1)
         WAIT_FRAMES(1)
@@ -318,7 +318,7 @@ static USER_FUNC(ride_chk) {
             mapGrpFlagOff(name, 1);
         }
     }
-    if (evtGetValue(event, GSW(0)) >= 362) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) >= 362) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

@@ -100,7 +100,7 @@ EvtWord item_mri_04[34];
 EvtWord mri_04_init_evt[178];
 
 static EVT_BEGIN(bero_custom)
-    IF_INT_EQUAL(GSW(0), 92)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 92)
         SET_VALUE(LW(0), 1)
         RETURN
     END_IF
@@ -129,7 +129,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 static EVT_BEGIN(chibitoge_init)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(118)
         IF_INT_EQUAL(GSWF(2884), 1)
             IF_INT_EQUAL(GSWF(2840), 0)
@@ -382,7 +382,7 @@ static EVT_BEGIN(chuchurina_sogu)
     WAIT_MS(500)
     CALL(evt_item_entry, STRING("item_key"), 16, 60, 0, 0, 4, GSWF(2839), 0)
     CALL(evt_puni_set_mode, 1, 1)
-    SET_VALUE(GSW(0), 93)
+    SET_VALUE(GSW_STORY_PROGRESS, 93)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -464,7 +464,7 @@ EVT_BEGIN(black_shadow)
     CALL(evt_npc_set_anim, LW(8), STRING("PCH_S_1"))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_26_00_02"), 0, LW(9))
     WAIT_MS(1000)
-    SET_VALUE(GSW(0), 91)
+    SET_VALUE(GSW_STORY_PROGRESS, 91)
     CALL(evt_bero_mapchange, STRING("mri_03"), STRING("dokan"))
     RETURN
 EVT_END()
@@ -513,7 +513,7 @@ EVT_BEGIN(mri_04_init_evt)
     SPAWN_EVENT(PTR(mri_countdown))
     SET_VALUE(LW(0), PTR(ueki_access_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(90)
         CALL(evt_snd_bgmoff, 512)
         CALL(evt_snd_envoff, 512)
@@ -525,7 +525,7 @@ EVT_BEGIN(mri_04_init_evt)
         CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI5"))
     END_SWITCH
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -155, 0, 35, 0, 0, PTR(item_mri_04), GSWF(2837))
-    IF_INT_EQUAL(GSW(0), 90)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 90)
         CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, 0, 0, 0, 0)
         ELSE
         CALL(evt_mobj_itembox, STRING("mobj_box01"), -105, 0, 70, 0, 0, 0, 1)
@@ -535,13 +535,13 @@ EVT_BEGIN(mri_04_init_evt)
     CALL(evt_map_playanim, STRING("awa_01"), 1, 0)
     CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
     CALL(evt_map_playanim, STRING("hikari_01"), 1, 0)
-    IF_INT_EQUAL(GSW(0), 90)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 90)
         SPAWN_EVENT(PTR(black_shadow))
     END_IF
-    IF_INT_EQUAL(GSW(0), 92)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 92)
         SPAWN_EVENT(PTR(chuchurina_sogu))
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 93)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 93)
         CALL(evt_item_entry, STRING("item_key"), 16, 60, 0, 0, 14, GSWF(2839), 0)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), 2)

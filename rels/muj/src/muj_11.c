@@ -95,13 +95,13 @@ EVT_BEGIN(warning_event)
         CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, STRING("stg5_dou_20"), 0, 0)
-    SET_VALUE(GSW(0), 252)
+    SET_VALUE(GSW_STORY_PROGRESS, 252)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(muj_11_init_evt)
-    IF_INT_LESS(GSW(0), 253)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 253)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST1"))
         CALL(evt_snd_envoff, 512)
         ELSE
@@ -111,7 +111,7 @@ EVT_BEGIN(muj_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    IF_INT_EQUAL(GSW(0), 251)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 251)
         SPAWN_EVENT(PTR(warning_event))
     END_IF
     RETURN

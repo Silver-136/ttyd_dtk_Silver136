@@ -375,7 +375,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     f32 nameW;
 #endif
 
-    fighters = evtGetValue(NULL, GSW(0)) < 172 ? fighterDt : fighterDt_re;
+    fighters = evtGetValue(NULL, GSW_STORY_PROGRESS) < 172 ? fighterDt : fighterDt_re;
     winW = 250.0f;
     left = -winW / 2.0f;
     windowDispGX_System(0, 0xFF, left - 30.0f, 165.0f, 310.0f, 330.0f);
@@ -508,7 +508,7 @@ static void disp_proc(CameraId cameraId, void* param) {
 static void printRanking(void) {
     s32 i;
 
-    evtGetValue(NULL, GSW(0));
+    evtGetValue(NULL, GSW_STORY_PROGRESS);
     for (i = 0; i < rank_wp->count; i++) {
     }
 }
@@ -584,7 +584,7 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
     s32 i;
     s32 rank;
 
-    if (evtGetValue(NULL, GSW(0)) < 172) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 172) {
         rank = 0;
         for (i = 0; i < rank_wp->count; i++) {
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
@@ -625,7 +625,7 @@ static USER_FUNC(evt_tou_get_rule_info) {
     s32 i;
     s32 rank;
 
-    if (evtGetValue(NULL, GSW(0)) < 172) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 172) {
         rank = 0;
         for (i = 0; i < rank_wp->count; i++) {
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
@@ -727,7 +727,7 @@ USER_FUNC(evt_tou_get_fighter_num) {
 USER_FUNC(evt_tou_get_fighter_battle_msg) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
-    FighterData* fighters = evtGetValue(NULL, GSW(0)) < 172 ? fighterDt : fighterDt_re;
+    FighterData* fighters = evtGetValue(NULL, GSW_STORY_PROGRESS) < 172 ? fighterDt : fighterDt_re;
 
     evtSetValue(event, args[1], (EvtWord)fighters[id].taunt);
     evtSetValue(event, args[2], (EvtWord)fighters[id].victory);
@@ -756,7 +756,7 @@ static USER_FUNC(evt_tou_get_fighter_rank) {
 USER_FUNC(evt_tou_get_fighter_name2) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
-    FighterData* fighters = evtGetValue(NULL, GSW(0)) < 172 ? fighterDt : fighterDt_re;
+    FighterData* fighters = evtGetValue(NULL, GSW_STORY_PROGRESS) < 172 ? fighterDt : fighterDt_re;
 
     evtSetValue(event, args[1], (EvtWord)msgSearch(fighters[id].title));
     return EVT_RETURN_DONE;
@@ -765,7 +765,7 @@ USER_FUNC(evt_tou_get_fighter_name2) {
 USER_FUNC(evt_tou_get_fighter_info) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
-    FighterData* fighters = evtGetValue(NULL, GSW(0)) < 172 ? fighterDt : fighterDt_re;
+    FighterData* fighters = evtGetValue(NULL, GSW_STORY_PROGRESS) < 172 ? fighterDt : fighterDt_re;
 
     evtSetValue(event, args[1], (EvtWord)msgSearch(fighters[id].name));
     evtSetValue(event, args[2], fighterDt[id].setupId);
@@ -774,7 +774,7 @@ USER_FUNC(evt_tou_get_fighter_info) {
 
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
-    BOOL reverse = evtGetValue(event, GSWF(2443));
+    BOOL reverse = evtGetValue(event, GSWF_GLITZ_PIT_WON_LAST_MATCH);
     s32 list[32];
     s32 i;
     s32 rank;
@@ -1122,7 +1122,7 @@ static void rankingInit(void) {
 
     memset(rank_wp, 0, sizeof(RankData));
     // We need to handle the excluded entries if we're doing rematches
-    temp = evtGetValue(NULL, GSW(0));
+    temp = evtGetValue(NULL, GSW_STORY_PROGRESS);
     count = 21;
     if (temp < 172) {
         count = 23;
@@ -1153,7 +1153,7 @@ static void rankingInit(void) {
     swSet(2529);
 
     // Set up the initial run-through
-    if (evtGetValue(NULL, GSW(0)) < 172) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 172) {
         rank_wp->entries[FIGHTER_SWOOPS].flags |= RANK_HIDDEN;
         rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_HIDDEN;
 

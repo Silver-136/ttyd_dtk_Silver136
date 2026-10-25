@@ -471,7 +471,7 @@ EVT_BEGIN(peach_evt_kou_in)
     CALL_CHILD(PTR(peach_evt_ka_close))
     IF_INT_EQUAL(GSWF(4203), 1)
         CALL(evt_snd_bgmoff, 1024)
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 167)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 167)
             IF_STR_EQUAL(LW(9), STRING("S_kou1_ka"))
                 IF_INT_EQUAL(GSWF(4205), 0)
                     CALL(evt_msg_print, 0, STRING("peach_aji_137_02"), 0, STRING("mario"))
@@ -486,7 +486,7 @@ EVT_BEGIN(peach_evt_kou_in)
                 END_IF
             END_IF
         END_IF
-        IF_INT_EQUAL(GSW(0), 168)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 168)
             IF_INT_EQUAL(GSWF(4206), 0)
                 CALL(evt_msg_print, 0, STRING("peach_aji_154"), 0, STRING("mario"))
             END_IF
@@ -496,7 +496,7 @@ EVT_BEGIN(peach_evt_kou_in)
         CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_CHANGE_CLOTH1"), LW(0), LW(1), LW(2), LW(3))
         CALL(evt_snd_sfx_dist, LW(3), 0)
         WAIT_MS(1000)
-        IF_INT_EQUAL(GSW(0), 166)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 166)
             WAIT_MS(1000)
             CALL(evt_msg_print, 0, STRING("peach_aji_136"), 0, STRING("mario"))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -504,7 +504,7 @@ EVT_BEGIN(peach_evt_kou_in)
             CALL(evt_snd_sfx_dist, LW(3), 0)
             WAIT_MS(2500)
         END_IF
-        IF_INT_EQUAL(GSW(0), 166)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 166)
             CALL(evt_msg_print, 0, STRING("peach_aji_137"), 0, STRING("mario"))
             IF_STR_EQUAL(LW(9), STRING("S_kou1_ka"))
                 SET_VALUE(GSWF(4205), 1)
@@ -535,10 +535,10 @@ EVT_BEGIN(peach_evt_kou_out)
     SET_VALUE(LW(0), LW(9))
     CALL_CHILD(PTR(peach_evt_ka_close))
     IF_INT_EQUAL(GSWF(4203), 1)
-        IF_INT_EQUAL(GSW(0), 166)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 166)
             CALL(evt_msg_print, 0, STRING("peach_aji_137_01"), 0, STRING("mario"))
         END_IF
-        IF_INT_EQUAL(GSW(0), 168)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 168)
             IF_STR_EQUAL(LW(9), STRING("S_kou1_ka"))
                 IF_INT_EQUAL(GSWF(4205), 0)
                     RETURN
@@ -599,8 +599,8 @@ EVT_BEGIN(peach_evt_kou1_out)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_cam_letter_box_disable, 0)
         ELSE
-        IF_INT_EQUAL(GSW(0), 166)
-            SET_VALUE(GSW(0), 167)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 166)
+            SET_VALUE(GSW_STORY_PROGRESS, 167)
         END_IF
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -646,8 +646,8 @@ EVT_BEGIN(peach_evt_kou2_out)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_cam_letter_box_disable, 0)
         ELSE
-        IF_INT_EQUAL(GSW(0), 166)
-            SET_VALUE(GSW(0), 167)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 166)
+            SET_VALUE(GSW_STORY_PROGRESS, 167)
         END_IF
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -700,7 +700,7 @@ EVT_END()
 
 static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_LESS(GSW(0), 167)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 167)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), 1)
         CALL(evt_mapobj_flag_onoff, 0, 0, STRING("R_fuku_g"), 1)
@@ -737,7 +737,7 @@ static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_run_case_evt, 9, 1, STRING("A_kou2_ka_ura"), 0, PTR(peach_evt_kou2_out), 0)
     CALL(evt_seq_wait, 2)
     CALL(evt_bero_exec_wait, 65536)
-    IF_INT_LESS(GSW(0), 168)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 168)
         SET_VALUE(LW(0), STRING("s_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_bero_overwrite, STRING("s_bero"), PTR(bero_data_peach1))
@@ -748,11 +748,11 @@ static EVT_BEGIN(peach_evt_stg3)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_run_case_evt, 9, 1, STRING("s_bero"), 0, PTR(s_bero_out), 0)
     END_IF
-    IF_INT_EQUAL(GSW(0), 166)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 166)
         WAIT_MS(600)
         CALL(evt_msg_print, 0, STRING("peach_aji_132"), 0, 0)
     END_IF
-    IF_INT_EQUAL(GSW(0), 168)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 168)
         WAIT_MS(500)
         CALL(evt_mario_set_dir, 90, 300, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_152"), 0, STRING("mario"))
@@ -770,8 +770,8 @@ static EVT_BEGIN(evt_memo1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_33"), 0, 0)
     CALL(evt_mario_key_onoff, 1)
-    IF_INT_LESS(GSW(0), 364)
-        SET_VALUE(GSW(0), 364)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 364)
+        SET_VALUE(GSW_STORY_PROGRESS, 364)
     END_IF
     RETURN
 EVT_END()
@@ -792,8 +792,8 @@ EVT_BEGIN(aji_09_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku1"), 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fuku2"), 1)
     SET_VALUE(LF(0), 0)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 166)
-        IF_INT_LESS_OR_EQUAL(GSW(0), 168)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 166)
+        IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, 168)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
@@ -875,10 +875,10 @@ USER_FUNC(check_kou_evt) {
     evtGetValue(event, args[0]);
     value = evtGetValue(event, args[1]);
     result = 0;
-    if (evtGetValue(NULL, GSW(0)) == 0xA6 && evtGetValue(NULL, GSWF(4203)) == 1) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) == 0xA6 && evtGetValue(NULL, GSWF(4203)) == 1) {
         result = 1;
     }
-    if (evtGetValue(NULL, GSW(0)) == 0xA8 && evtGetValue(NULL, GSWF(4206)) == 0 &&
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) == 0xA8 && evtGetValue(NULL, GSWF(4206)) == 0 &&
         value == evtGetValue(NULL, GSWF(4205))) {
         result = 1;
     }

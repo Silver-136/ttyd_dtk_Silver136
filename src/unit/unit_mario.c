@@ -281,8 +281,8 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetPartsWork, -2, 3, 0, 0)
     CALL(_mario_super_emblem_anim_set, -2)
     CALL(btlevtcmd_SetEventEntry, -2, PTR(battle_entry_event))
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 201)
-        IF_INT_LESS(GSW(0), 212)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 201)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 212)
             CALL(_mario_makkuro_set)
         END_IF
     END_IF

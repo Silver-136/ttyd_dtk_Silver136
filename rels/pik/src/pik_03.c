@@ -96,7 +96,7 @@ static BeroEntry bero_data[] = {
 
 static EVT_BEGIN(evt_daiza)
     CALL(evt_mario_key_onoff, 0)
-    SET_VALUE(GSW(0), 338)
+    SET_VALUE(GSW_STORY_PROGRESS, 338)
     CALL(evt_npc_stop_for_event)
     SET_VALUE(LW(0), 6)
     SET_VALUE(LW(1), STRING("star"))
@@ -114,10 +114,10 @@ EVT_BEGIN(pik_03_init_evt)
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG6_PIK2"))
     CALL(evt_snd_envon, 272, STRING("ENV_STG6_PIK3"))
     CALL(evt_snd_set_rev_mode, 2)
-    IF_INT_LESS(GSW(0), 338)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 338)
         CALL(evt_item_entry, STRING("star"), 119, 0, 45, -950, 17, -1, 0)
     END_IF
-    IF_INT_LESS(GSW(0), 338)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 338)
         CALL(evt_run_case_evt, 9, 1, STRING("dai_a"), 0, PTR(evt_daiza), 0)
     END_IF
     CALL(evt_item_entry, STRING("item01"), 327, -305, 330, -990, 16, GSWF(3277), 0)

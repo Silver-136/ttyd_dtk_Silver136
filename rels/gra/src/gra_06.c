@@ -298,7 +298,7 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_party_run, 0)
     CALL(evt_cam3d_evt_off, 500, 11)
     WAIT_MS(500)
-    SET_VALUE(GSW(0), 193)
+    SET_VALUE(GSW_STORY_PROGRESS, 193)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -418,7 +418,7 @@ EVT_BEGIN(gra_06_init_evt)
         ELSE
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
-        IF_INT_LESS(GSW(0), 193)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 193)
             CALL_CHILD(PTR(bero_case_entry))
             ELSE
             CALL_CHILD(PTR(evt_bero_info_run))
@@ -441,7 +441,7 @@ EVT_BEGIN(gra_06_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kusari"), 1)
         CALL(evt_hitobj_onoff, STRING("a_saku01"), 1, 0)
     END_IF
-    IF_INT_LESS(GSW(0), 193)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 193)
         SPAWN_EVENT(PTR(first_gra06jin))
         ELSE
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG4_JIN1"))

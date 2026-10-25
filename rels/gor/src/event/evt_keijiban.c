@@ -24,7 +24,7 @@ s32 keijiban_data_make(const char* prefix, BOOL fill) {
     char name[64];
     char buf[64];
     KeijibanData* kj = KJDT;
-    s32 gsw = evtGetValue(NULL, GSW(0));
+    s32 gsw = evtGetValue(NULL, GSW_STORY_PROGRESS);
     s32 i;
     s32 len;
     s32 field;

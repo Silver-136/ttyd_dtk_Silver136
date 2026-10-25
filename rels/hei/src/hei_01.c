@@ -357,7 +357,7 @@ EVT_BEGIN(bridge_evt)
     END_INLINE_EVENT
     CALL_CHILD(PTR(bridge_evt_02))
     CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 1)
-    SET_VALUE(GSW(0), 25)
+    SET_VALUE(GSW_STORY_PROGRESS, 25)
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_start_for_event)
     RETURN
@@ -386,7 +386,7 @@ EVT_BEGIN(nokotaro_get)
     CALL(evt_party_set_dir, 0, 90, 200)
 #endif
     CALL(evt_msg_print, 0, STRING("stg1_hei_09"), 0, STRING("party"))
-    SET_VALUE(GSW(0), 33)
+    SET_VALUE(GSW_STORY_PROGRESS, 33)
     RETURN
 EVT_END()
 
@@ -415,7 +415,7 @@ EVT_BEGIN(nokotaro_nakama)
     IF_INT_EQUAL(GSWF(1775), 0)
         RETURN
     END_IF
-    IF_INT_NOT_EQUAL(GSW(0), 32)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 32)
         RETURN
     END_IF
     IF_INT_NOT_EQUAL(GSWF(1781), 0)
@@ -505,7 +505,7 @@ EVT_BEGIN(nokotarou_talk_2)
     CALL(evt_msg_print, 0, STRING("stg1_hei_12"), 0, STRING("ノコタロウ"))
     CALL_CHILD(PTR(nokotaro_kanyu))
     CALL(evt_npc_start_for_event)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 33)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 33)
         CALL(evt_npc_change_fbat_mode, 1)
         ELSE
         CALL(evt_party_run, 0)
@@ -547,7 +547,7 @@ EVT_BEGIN(evt_nokorin)
     END_IF
     LABEL(0)
     WAIT_FRAMES(1)
-    IF_INT_LESS(GSW(0), 33)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 33)
         GOTO(0)
     END_IF
     CALL(evt_mario_key_onoff, 0)
@@ -907,7 +907,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_party_run, 0)
     CALL(evt_cam_shift_reset)
     CALL(evt_cam3d_evt_off, 500, 11)
-    SET_VALUE(GSW(0), 63)
+    SET_VALUE(GSW_STORY_PROGRESS, 63)
     CALL(evt_pouch_receive_mail, 0)
     CALL(evt_pouch_open_mail, 0)
     RETURN
@@ -955,7 +955,7 @@ EVT_BEGIN(hei_01_init_evt)
         CALL_CHILD(PTR(bero_case_switch_on))
     END_IF
     CALL(evt_map_playanim, STRING("anm_mizu"), 1, 0)
-    IF_INT_LESS(GSW(0), 25)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 25)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hasi"), 1)
         CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 0)
         SET_VALUE(GW(0), 0)
@@ -965,13 +965,13 @@ EVT_BEGIN(hei_01_init_evt)
     SPAWN_EVENT(PTR(evt_nokorin))
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
-    IF_INT_EQUAL(GSW(0), 62)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 62)
         SPAWN_EVENT(PTR(peach_mail))
     END_IF
     CALL(evt_snd_bgmon, 512, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, 272, STRING("ENV_STG1_HEI2"))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("USIROKUSA"), 2)
-    IF_INT_LESS(GSW(0), 25)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 25)
         IF_INT_EQUAL(GSWF(1805), 0)
             SPAWN_EVENT(PTR(christine_hei_01))
         END_IF

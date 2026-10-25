@@ -231,7 +231,7 @@ EVT_BEGIN(gra_04_tree_open_evt)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_hitobj_onoff, STRING("w_bero_1"), 0, 1)
-    SET_VALUE(GSW(0), 189)
+    SET_VALUE(GSW_STORY_PROGRESS, 189)
     RETURN
 EVT_END()
 
@@ -252,7 +252,7 @@ EVT_BEGIN(gra_04_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_usu_kagemario_party_kill))
-    IF_INT_LESS(GSW(0), 189)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 189)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 1, PTR(&fukitobashi_tbl), STRING("A_futa"), PTR(gra_04_tree_open_evt))
         CALL(evt_cloud_set_cap_size, 256, 256)

@@ -1051,7 +1051,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
         case 15:
             evt->lwData[1] = id;
             evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
-            evt->lwData[3] = ((evtGetValue(NULL, GSW(1321)) + 11) * itemDataTable[id].buy_price) / 10;
+            evt->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[id].buy_price) / 10;
             evt->lwData[4] = itemDataTable[id].bp_cost;
             break;
         case 16:
@@ -1303,7 +1303,7 @@ void select_disp(WinMgrEntry* entry) {
                     show = TRUE;
                     break;
                 case 15:
-                    price = item->buy_price * (evtGetValue(NULL, GSW(1321)) + 11) / 10;
+                    price = item->buy_price * (evtGetValue(NULL, GSW_PIT_FLOOR) + 11) / 10;
                     show = TRUE;
                     break;
                 case 16:

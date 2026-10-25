@@ -216,7 +216,7 @@ EVT_BEGIN(evt_carry_up_bridge)
         CALL(evt_item_get_item, STRING("a"))
         CALL(evt_item_get_item_end_wait, STRING("a"))
         CALL(evt_msg_print, 0, STRING("stg6_hom_08"), 0, STRING("me"))
-        SET_VALUE(GSW(0), 311)
+        SET_VALUE(GSW_STORY_PROGRESS, 311)
         ELSE
         CALL(evt_msg_print_add, 0, STRING("stg6_hom_09"))
     END_IF
@@ -224,11 +224,11 @@ EVT_BEGIN(evt_carry_up_bridge)
 EVT_END()
 
 EVT_BEGIN(init_powan_toron_konari_papa_gurume)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(325)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 310)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 310)
         CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
     END_IF
     RETURN
@@ -264,7 +264,7 @@ EVT_BEGIN(init_ekiin1)
 EVT_END()
 
 EVT_BEGIN(talk_ekiin1)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(311)
         CALL_CHILD(PTR(evt_carry_up_bridge))
         CASE_LESS(325)
@@ -278,7 +278,7 @@ EVT_BEGIN(talk_ekiin1)
 EVT_END()
 
 EVT_BEGIN(init_ekiin2)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(325)
         CALL(evt_npc_set_position, STRING("me"), -865, 80, 100)
     END_SWITCH
@@ -286,7 +286,7 @@ EVT_BEGIN(init_ekiin2)
 EVT_END()
 
 EVT_BEGIN(talk_ekiin2)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(325)
         CALL(evt_msg_print, 0, STRING("stg6_eki_03"), 0, 0)
         CASE_LESS(326)
@@ -450,12 +450,12 @@ EVT_END()
 static EVT_BEGIN(evt_lock)
     SET_VALUE(LW(0), 1)
     CALL_CHILD(PTR(bero_case_switch_on))
-    SET_VALUE(GSW(0), 312)
+    SET_VALUE(GSW_STORY_PROGRESS, 312)
     RETURN
 EVT_END()
 
 EVT_BEGIN(evt_train_door)
-    IF_INT_NOT_EQUAL(GSW(0), 325)
+    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 325)
         SET_VALUE(LW(0), 0)
         RETURN
     END_IF
@@ -522,7 +522,7 @@ static EVT_BEGIN(evt_train)
     WAIT_MS(4000)
     SET_VALUE(GSWF(3582), 1)
     SET_VALUE(GSWF(3577), 1)
-    SET_VALUE(GSW(0), 326)
+    SET_VALUE(GSW_STORY_PROGRESS, 326)
     WAIT_FRAMES(1)
     CALL(evt_bero_mapchange, STRING("rsh_02_c"), STRING("hom_hassya"))
     RETURN
@@ -727,7 +727,7 @@ EVT_BEGIN(evt_hom_touchaku)
         END_IF
     END_LOOP
     CALL(evt_snd_bgm_scope, 0, 0)
-    SET_VALUE(GSW(0), 310)
+    SET_VALUE(GSW_STORY_PROGRESS, 310)
     CALL(evt_bero_mapchange, STRING("rsh_02_b"), STRING("hom_touchaku"))
     RETURN
 EVT_END()
@@ -773,7 +773,7 @@ EVT_BEGIN(hom_00_init_evt)
         ELSE
         CALL_CHILD(PTR(hom_10_evt_resha_left))
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 339)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 339)
         CALL(evt_bero_get_entername, LW(0))
         CALL(evt_sub_get_system_flag, LW(1))
         IF_STR_NOT_EQUAL(LW(0), STRING("n_bero_1"))
@@ -806,29 +806,29 @@ EVT_BEGIN(hom_00_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    IF_INT_LESS(GSW(0), 310)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 310)
         SPAWN_EVENT(PTR(evt_hom_touchaku))
     END_IF
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome"))
         SPAWN_EVENT(PTR(evt_hom_touchaku_nidome))
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 340)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 340)
         SET_VALUE(LW(0), STRING("n_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_bero_overwrite, STRING("n_bero_1"), PTR(bero_data_nidome))
         SET_VALUE(LW(0), STRING("n_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_on))
     END_IF
-    IF_INT_LESS(GSW(0), 312)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 312)
         CALL(evt_mobj_lock, STRING("lock"), 24, -260, 90, -190, 0, PTR(evt_chk), PTR(evt_lock), GSWF(3575))
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 325)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 325)
         CALL(evt_map_playanim, STRING("hasi"), 2, 0)
     END_IF
-    IF_INT_EQUAL(GSW(0), 325)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 325)
         CALL(evt_hitobj_attr_onoff, 0, 1, STRING("n_bero_1"), 8388608)
         CALL(evt_run_case_evt, 8, 1, STRING("n_bero_1"), 0, PTR(evt_train), 0)
         CALL(evt_map_playanim, STRING("n_1_door_open"), 2, 0)

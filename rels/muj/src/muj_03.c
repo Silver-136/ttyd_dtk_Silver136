@@ -29,7 +29,7 @@ static KusaAccess kusa_tbl[9];
 EvtWord muj_03_init_evt[112];
 
 EVT_BEGIN(muj_03_event_01)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 234)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 234)
         IF_INT_EQUAL(GSWF(3131), 0)
             SPAWN_EVENT(PTR(nigeru_suifu01))
             SET_VALUE(GSWF(3131), 1)

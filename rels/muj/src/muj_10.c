@@ -145,7 +145,7 @@ USER_FUNC(suifu_option_init_func) {
 }
 
 static EVT_BEGIN(megane_init)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(251, 252)
         CALL(evt_npc_set_position, STRING("me"), -455, 25, -40)
         CALL(evt_npc_set_ry, STRING("me"), 90)
@@ -211,7 +211,7 @@ static EVT_BEGIN(door_custom)
 EVT_END()
 
 static EVT_BEGIN(bero_in_event)
-    IF_INT_EQUAL(GSW(0), 258)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 258)
         SPAWN_EVENT(PTR(door_custom))
         CALL(evt_party_stop, 0)
         CALL(evt_party_stop, 1)
@@ -318,7 +318,7 @@ EVT_BEGIN(nazo_event)
     CALL(evt_npc_get_position, STRING("めがね水夫"), LW(0), LW(1), LW(2))
     CALL(evt_npc_move_position, STRING("めがね水夫"), LW(0), -40, 0, FLOAT(120.0f), 0)
     CALL(evt_cam3d_evt_off, 500, 11)
-    SET_VALUE(GSW(0), 251)
+    SET_VALUE(GSW_STORY_PROGRESS, 251)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -357,7 +357,7 @@ EVT_BEGIN(oidasare_event)
     WAIT_MS(1000)
     CALL(evt_mario_dispflag_onoff, 0, 2)
     CALL(evt_cam3d_evt_off, 500, 11)
-    SET_VALUE(GSW(0), 254)
+    SET_VALUE(GSW_STORY_PROGRESS, 254)
     CALL(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -583,7 +583,7 @@ EVT_BEGIN(senin_event)
         ADD(LW(0), 1)
     END_LOOP
     WAIT_MS(3000)
-    SET_VALUE(GSW(0), 259)
+    SET_VALUE(GSW_STORY_PROGRESS, 259)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     CALL(evt_bero_mapchange, STRING("muj_00"), STRING(""))
 #endif
@@ -610,7 +610,7 @@ EVT_BEGIN(korutesu_appear_event)
         ADD(LW(0), 1)
     END_LOOP
     WAIT_MS(3000)
-    SET_VALUE(GSW(0), 259)
+    SET_VALUE(GSW_STORY_PROGRESS, 259)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     CALL(evt_bero_mapchange, STRING("muj_00"), STRING(""))
     RETURN
@@ -644,7 +644,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 #ifdef VERSION_G8ME01
 EVT_BEGIN(muj_10_init_evt)
-    IF_INT_LESS(GSW(0), 253)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 253)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ8"))
         ELSE
@@ -658,23 +658,23 @@ EVT_BEGIN(muj_10_init_evt)
     CALL(evt_cam_road_reset)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_sound_data_set, STRING("めがね水夫"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1L"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-    IF_INT_EQUAL(GSW(0), 250)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 250)
         SPAWN_EVENT(PTR(nazo_event))
     END_IF
-    IF_INT_EQUAL(GSW(0), 253)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 253)
         SPAWN_EVENT(PTR(oidasare_event))
     END_IF
-    IF_INT_EQUAL(GSW(0), 258)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 258)
         CALL_CHILD(PTR(senin_event))
         SPAWN_EVENT(PTR(korutesu_appear_event))
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 260)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 260)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), 1)
     END_IF
     CALL(evt_map_playanim, STRING("mizu"), 1, 0)
     CALL(evt_map_playanim, STRING("noname"), 1, 0)
-    IF_INT_LESS(GSW(0), 260)
-        IF_INT_NOT_EQUAL(GSW(0), 258)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 260)
+        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 258)
             CALL(evt_map_playanim, STRING("fune"), 1, 0)
         END_IF
         BEGIN_INLINE_EVENT
@@ -685,7 +685,7 @@ EVT_BEGIN(muj_10_init_evt)
             END_LOOP
         END_INLINE_EVENT
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 260)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 260)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope01"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope02"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_m"), 1)
@@ -695,15 +695,15 @@ EVT_BEGIN(muj_10_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_zan"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_02"), 1)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 257)
-        IF_INT_LESS(GSW(0), 258)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 257)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 258)
             SPAWN_EVENT(PTR(dai3_shurai_after))
         END_IF
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
-    IF_INT_LESS(GSW(0), 258)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 258)
         CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, -260, 135, -145, 0, 0)
         CALL(evt_mobj_save_blk, STRING("s_blk"), -45, 83, 0, 0, 0)
     END_IF
@@ -711,7 +711,7 @@ EVT_BEGIN(muj_10_init_evt)
 EVT_END()
 #else
 EVT_BEGIN(muj_10_init_evt)
-    IF_INT_LESS(GSW(0), 253)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 253)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_STG5_GHOST1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ8"))
     ELSE
@@ -725,22 +725,22 @@ EVT_BEGIN(muj_10_init_evt)
     CALL(evt_cam_road_reset)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_sound_data_set, STRING(/*"めがね水夫"*/"\x82\xDF\x82\xAA\x82\xCB\x90\x85\x95\x76"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1L"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
-    IF_INT_EQUAL(GSW(0), 250)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 250)
         SPAWN_EVENT(nazo_event)
     END_IF
-    IF_INT_EQUAL(GSW(0), 253)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 253)
         SPAWN_EVENT(oidasare_event)
     END_IF
-    IF_INT_EQUAL(GSW(0), 258)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 258)
         SPAWN_EVENT(senin_event)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 260)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 260)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), 1)
     END_IF
     CALL(evt_map_playanim, STRING("mizu"), 1, 0)
     CALL(evt_map_playanim, STRING("noname"), 1, 0)
-    IF_INT_LESS(GSW(0), 260)
-        IF_INT_NOT_EQUAL(GSW(0), 258)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 260)
+        IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, 258)
             CALL(evt_map_playanim, STRING("fune"), 1, 0)
         END_IF
         BEGIN_INLINE_EVENT
@@ -751,7 +751,7 @@ EVT_BEGIN(muj_10_init_evt)
             END_LOOP
         END_INLINE_EVENT
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 260)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 260)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope01"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_rope02"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_m"), 1)
@@ -761,15 +761,15 @@ EVT_BEGIN(muj_10_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hasi_zan"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_10_sui02_02"), 1)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 257)
-        IF_INT_LESS(GSW(0), 258)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 257)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 258)
             SPAWN_EVENT(dai3_shurai_after)
         END_IF
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(evt_gazigazi_entry)
     CALL(evt_hitobj_onoff, STRING("A_b_bero02"), 1, 0)
-    IF_INT_LESS(GSW(0), 258)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 258)
         CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, -260, 135, -145, 0, 0)
         CALL(evt_mobj_save_blk, STRING("s_blk"), -45, 83, 0, 0, 0)
     END_IF

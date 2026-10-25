@@ -165,7 +165,7 @@ EVT_BEGIN(simi_check)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
-        SWITCH(GSW(0))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(283, 302)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka"), 1)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka_simi"), 1)
@@ -187,7 +187,7 @@ EVT_BEGIN(simi_offscreen_check)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
-        SWITCH(GSW(0))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(283, 302)
             CALL(evt_mapobj_clear_offscreen, 0, STRING("s_yuka"))
             CASE_DEFAULT
@@ -200,7 +200,7 @@ EVT_END()
 EVT_BEGIN(kami_check)
     CALL(evt_sub_get_mapname, LW(10))
     IF_STR_EQUAL(LW(10), STRING("rsh_01_a"))
-        IF_INT_EQUAL(GSW(0), 304)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 304)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3_kami"), 1)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_3"), 1)
             ELSE
@@ -209,7 +209,7 @@ EVT_BEGIN(kami_check)
         END_IF
     END_IF
     IF_STR_EQUAL(LW(10), STRING("rsh_02_a"))
-        SWITCH(GSW(0))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(306, 307)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_5_kami"), 1)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), 1)
@@ -226,14 +226,14 @@ EVT_END()
 EVT_BEGIN(kami_offscreen_check)
     CALL(evt_sub_get_mapname, LW(10))
     IF_STR_EQUAL(LW(10), STRING("rsh_01_a"))
-        IF_INT_EQUAL(GSW(0), 304)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 304)
             CALL(evt_mapobj_clear_offscreen, 0, STRING("yuka_3"))
             ELSE
             CALL(evt_mapobj_clear_offscreen, 0, STRING("yuka_3_kami"))
         END_IF
     END_IF
     IF_STR_EQUAL(LW(10), STRING("rsh_02_a"))
-        SWITCH(GSW(0))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(306, 307)
             CALL(evt_mapobj_clear_offscreen, 0, STRING("yuka_5"))
             CASE_DEFAULT
@@ -344,7 +344,7 @@ EVT_BEGIN(evt_rsh_door_open)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         IF_STR_EQUAL(LW(1), STRING("heya_5"))
-            SWITCH(GSW(0))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_EQUAL(301)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_img_wait_animend, STRING("capture_img"))
@@ -461,7 +461,7 @@ EVT_BEGIN(evt_rsh_door_close)
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(6), 8388608)
     CALL(img_wait)
     BEGIN_INLINE_EVENT
-        IF_INT_EQUAL(GSW(0), 288)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 288)
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))
                 WAIT_MS(1000)
@@ -471,7 +471,7 @@ EVT_BEGIN(evt_rsh_door_close)
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        IF_INT_EQUAL(GSW(0), 294)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 294)
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_b"))
                 WAIT_MS(1000)
@@ -480,7 +480,7 @@ EVT_BEGIN(evt_rsh_door_close)
             END_IF
         END_IF
     END_INLINE_EVENT
-    IF_INT_EQUAL(GSW(0), 297)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 297)
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
             IF_INT_EQUAL(GSWF(3439), 0)
@@ -493,7 +493,7 @@ EVT_BEGIN(evt_rsh_door_close)
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("rsh_02_a"))
             IF_STR_EQUAL(LW(1), STRING("heya_5"))
-                SWITCH(GSW(0))
+                SWITCH(GSW_STORY_PROGRESS)
                     CASE_BETWEEN(306, 307)
                     CALL(evt_snd_bgmon, 160, 0)
                 END_SWITCH

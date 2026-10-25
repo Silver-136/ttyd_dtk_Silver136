@@ -370,7 +370,7 @@ static s32 key_tbl[] = {
 };
 
 static EVT_BEGIN(key_evt)
-    SET_VALUE(GSW(0), 393)
+    SET_VALUE(GSW_STORY_PROGRESS, 393)
     RETURN
 EVT_END()
 
@@ -386,7 +386,7 @@ static EVT_BEGIN(key_check_evt)
 EVT_END()
 
 static EVT_BEGIN(unlock_evt)
-    SET_VALUE(GSW(0), 394)
+    SET_VALUE(GSW_STORY_PROGRESS, 394)
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
     RETURN
@@ -410,10 +410,10 @@ EVT_BEGIN(las_22_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    IF_INT_LESS(GSW(0), 390)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 390)
         CALL(evt_npc_check_delete, STRING("スーパーマホーン"))
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 395)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 395)
         SPAWN_EVENT(PTR(kaitendai_evt))
     END_IF
     CALL(evt_mapobj_flag_onoff, 0, 0, STRING("S_hgm_01a"), 2)
@@ -429,10 +429,10 @@ EVT_BEGIN(las_22_init_evt)
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -660, -500, 100, 0, 0, PTR(mobj_box00), GSWF(4377))
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -150, 220, -100, 151, 0, GSWF(4378), 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -650, 100, -100, 0, 0)
-    IF_INT_LESS(GSW(0), 393)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 393)
         CALL(evt_item_entry, STRING("key"), 47, -25, -80, -100, 16, -1, PTR(key_evt))
     END_IF
-    IF_INT_LESS(GSW(0), 394)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 394)
         CALL(evt_mobj_lock, STRING("lock"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF(4355))
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))

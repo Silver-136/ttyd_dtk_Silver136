@@ -2128,8 +2128,8 @@ void _rule_disp(CameraId cameraId, void* param) {
     // FAKE: s32 width holding the u16 result, halved as (u16)width / 2 (twin _get_item_announce_disp shape)
     s32 width;
 
-    if (evtGetValue(NULL, GSW(0)) < 0xAC) {
-        if (evtGetValue(NULL, GSW(580)) < 11) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xAC) {
+        if (evtGetValue(NULL, GSW_GLITZ_PIT_RANK) < 11) {
             sprintf(buf, msgSearch(_rule_msg_table_1bu[info->ruleType]), info->ruleParam);
         }
         else {

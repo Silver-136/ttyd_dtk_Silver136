@@ -290,7 +290,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_shift_reset)
     CALL(evt_cam3d_evt_off, 500, 11)
-    SET_VALUE(GSW(0), 220)
+    SET_VALUE(GSW_STORY_PROGRESS, 220)
     CALL(evt_pouch_receive_mail, 3)
     CALL(evt_pouch_open_mail, 3)
     RETURN
@@ -394,15 +394,15 @@ EVT_BEGIN(tik_07_init_evt)
     SET_RAW_VALUE(LW(6), GW(0))
     SET_RAW_VALUE(LW(7), GW(1))
     SPAWN_EVENT(PTR(ridedown_floor))
-    IF_INT_LESS(GSW(0), 261)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 261)
         CALL(evt_npc_check_delete, STRING("トゲノコ"))
         CALL(evt_npc_check_delete, STRING("ハンマーブロス"))
         ELSE
         CALL(evt_npc_check_delete, STRING("ハンニャー１"))
         CALL(evt_npc_check_delete, STRING("ハンニャー２"))
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 349)
-        IF_INT_LESS(GSW(0), 352)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 349)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 352)
             SET_VALUE(LW(0), STRING("dokan__1"))
             CALL_CHILD(PTR(bero_case_switch_off))
             CALL(evt_bero_overwrite, STRING("dokan__1"), PTR(bero_entry_data2))
@@ -410,7 +410,7 @@ EVT_BEGIN(tik_07_init_evt)
             CALL_CHILD(PTR(bero_case_switch_on))
         END_IF
     END_IF
-    IF_INT_EQUAL(GSW(0), 219)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 219)
         SPAWN_EVENT(PTR(peach_mail))
     END_IF
     RETURN

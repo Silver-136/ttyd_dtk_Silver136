@@ -401,8 +401,8 @@ EVT_BEGIN(gon_01_init_evt)
         SET_VALUE(LW(0), PTR(bero_entry_data))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))
-        IF_INT_LESS(GSW(0), 35)
-            SET_VALUE(GSW(0), 35)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 35)
+            SET_VALUE(GSW_STORY_PROGRESS, 35)
             SPAWN_EVENT(PTR(gon_01_GATEEVENT_evt))
         END_IF
     END_IF
@@ -415,8 +415,8 @@ EVT_BEGIN(gon_01_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasj"), 2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_l"), 2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_r"), 2)
-    IF_INT_LESS(GSW(0), 37)
-        SET_VALUE(GSW(0), 37)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 37)
+        SET_VALUE(GSW_STORY_PROGRESS, 37)
     END_IF
     RETURN
 EVT_END()

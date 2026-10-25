@@ -288,7 +288,7 @@ EVT_BEGIN(hom_10_evt_resha_start)
         CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1"), 0)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
-        IF_INT_LESS(GSW(0), 339)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 339)
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2"), 0)
             ELSE
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2_2"), 0)

@@ -105,7 +105,7 @@ static EVT_BEGIN(evt_check)
 EVT_END()
 
 EVT_BEGIN(evt_usu_kagemario_party_kill)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(201, 205)
         CALL(evt_party_stop, 0)
         CALL(evt_party_set_pos, 0, 0, -1000, 0)

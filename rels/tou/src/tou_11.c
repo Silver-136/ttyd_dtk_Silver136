@@ -342,7 +342,7 @@ EVT_BEGIN(tou_11_init_evt)
         SPAWN_EVENT(PTR(evt_tojikome))
         RETURN
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(127, 137)
         CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))

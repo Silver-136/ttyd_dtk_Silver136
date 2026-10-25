@@ -261,53 +261,53 @@ void badgeShop_bargainGeneration(void) { //finished, needs cleanup and probably 
     s32 count;
     s32 v7;
 
-    if (evtGetValue(NULL, GSW(0)) >= 55 && !evtGetValue(0, GSWF(238))) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 55 && !evtGetValue(0, GSWF(238))) {
         evtSetValue(NULL, GSWF(238), 1);
         for (ptr = badge_special_table_stage_1_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW(0)) >= 112 && !evtGetValue(0, GSWF(239))) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 112 && !evtGetValue(0, GSWF(239))) {
         evtSetValue(NULL, GSWF(239), 1);
         for (ptr = badge_special_table_stage_2_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW(0)) >= 164 && !evtGetValue(0, GSWF(240))) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 164 && !evtGetValue(0, GSWF(240))) {
         evtSetValue(NULL, GSWF(240), 1);
         for (ptr = badge_special_table_stage_3_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW(0)) >= 212 && !evtGetValue(0, GSWF(241))) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 212 && !evtGetValue(0, GSWF(241))) {
         evtSetValue(NULL, GSWF(241), 1);
         for (ptr = badge_special_table_stage_4_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW(0)) >= 253 && !evtGetValue(0, GSWF(242))) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 253 && !evtGetValue(0, GSWF(242))) {
         evtSetValue(NULL, GSWF(242), 1);
         for (ptr = badge_special_table_stage_5_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW(0)) >= 338 && !evtGetValue(0, GSWF(243))) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 338 && !evtGetValue(0, GSWF(243))) {
         evtSetValue(NULL, GSWF(243), 1);
         for (ptr = badge_special_table_stage_6_clear; *ptr; ptr++) {
             badgeShop_add(bdsw->special_table, (s16)*ptr, 1);
         }
     }
 
-    if (evtGetValue(NULL, GSW(0)) >= 373 && !evtGetValue(0, GSWF(244))) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 373 && !evtGetValue(0, GSWF(244))) {
         evtSetValue(NULL, GSWF(244), 1);
     }
 
-    if (evtGetValue(NULL, GSW(0)) >= 401 && !evtGetValue(0, GSWF(245))) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= 401 && !evtGetValue(0, GSWF(245))) {
         evtSetValue(NULL, GSWF(245), 1);
     }
 

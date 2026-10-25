@@ -382,7 +382,7 @@ EVT_BEGIN(aji_15_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 373)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 373)
         CALL(evt_npc_check_delete, STRING("軍団ザコエリート"))
     END_IF
     CALL(evt_mario_get_mode, LW(0))

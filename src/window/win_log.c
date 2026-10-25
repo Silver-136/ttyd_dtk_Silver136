@@ -1258,7 +1258,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
         if (w->log.enemyPage * 16 + i >= w->log.enemyNum) break;
         if (swGet(id + 0x117A)) {
             if (id == 0x4D || id == 0x87) {
-                if (evtGetValue(NULL, GSW(0)) < 0xD2) {
+                if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xD2) {
                     name = msgSearch("btl_un_hatena");
                 } else {
                     name = msgSearch("btl_un_rampell");
@@ -1678,7 +1678,7 @@ void monosiri_disp(CameraId camera, void* param) {
         id = m->id;
         te = battleGetUnitMonosiriPtr(id);
         if (id == 0x4D || id == 0x87) {
-            if (evtGetValue(NULL, GSW(0)) < 0xD2) {
+            if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xD2) {
                 sprintf(buf, (u32)gp->language != 0 ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
             } else {
                 sprintf(buf, (u32)gp->language != 0 ? "%d. %s" : "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_rampell"));
@@ -1690,7 +1690,7 @@ void monosiri_disp(CameraId camera, void* param) {
         id = m->id;
         te = battleGetUnitMonosiriPtr(id);
         if (id == 0x4D || id == 0x87) {
-            if (evtGetValue(NULL, GSW(0)) < 0xD2) {
+            if (evtGetValue(NULL, GSW_STORY_PROGRESS) < 0xD2) {
                 sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_hatena"));
             } else {
                 sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch("btl_un_rampell"));

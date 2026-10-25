@@ -529,7 +529,7 @@ USER_FUNC(mri_npc_buruburu) {
 }
 
 EVT_BEGIN(mri_countdown)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 118)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 118)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF(2880), 1)
@@ -567,7 +567,7 @@ EVT_BEGIN(mri_countdown)
         RESUME_TYPES_OTHER(4)
         RETURN
     END_IF
-    SET_VALUE(GSW(0), 127)
+    SET_VALUE(GSW_STORY_PROGRESS, 127)
     CALL(evt_snd_bgmoff_f, 512, 500)
     CALL(evt_snd_envoff_f, 512, 500)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), 0)

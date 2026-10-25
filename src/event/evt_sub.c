@@ -1157,7 +1157,7 @@ EVT_BEGIN(mail_evt_nok_01)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 190, -2000, 190, 2000, LW(5))
-        IF_INT_EQUAL(GSW(0), 27)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 27)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1181,7 +1181,7 @@ EVT_BEGIN(mail_evt_gor_03)
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -100, -2000, -100, 2000, LW(5))
         IF_INT_EQUAL(LW(5), 1)
             SET_VALUE(LF(0), 0)
-            IF_INT_EQUAL(GSW(0), 125)
+            IF_INT_EQUAL(GSW_STORY_PROGRESS, 125)
                 IF_INT_EQUAL(GSWF(8), 0)
                     SET_VALUE(GSWF(8), 1)
                     CALL(evt_pouch_receive_mail, 17)
@@ -1213,7 +1213,7 @@ EVT_BEGIN(mail_evt_gor_02)
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -280, -50, -230, 220, LW(5))
         IF_INT_EQUAL(LW(5), 1)
             SET_VALUE(LF(0), 0)
-            IF_INT_EQUAL(GSW(0), 175)
+            IF_INT_EQUAL(GSW_STORY_PROGRESS, 175)
                 IF_INT_EQUAL(GSWF(9), 0)
                     SET_VALUE(GSWF(9), 1)
                     CALL(evt_pouch_receive_mail, 18)
@@ -1246,7 +1246,7 @@ EVT_BEGIN(mail_evt_gor_01)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 350, -2000, 350, 2000, LW(5))
-        IF_INT_EQUAL(GSW(0), 228)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 228)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1273,7 +1273,7 @@ EVT_BEGIN(mail_evt_gor_04)
         END_IF
         IF_INT_EQUAL(LW(5), 1)
             SET_VALUE(LF(0), 0)
-            IF_INT_EQUAL(GSW(0), 280)
+            IF_INT_EQUAL(GSW_STORY_PROGRESS, 280)
                 IF_INT_EQUAL(GSWF(11), 0)
                     SET_VALUE(GSWF(11), 1)
                     CALL(evt_pouch_receive_mail, 20)
@@ -1307,7 +1307,7 @@ EVT_BEGIN(mail_evt_rsh_03_a)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -100, -2000, -100, 2000, LW(5))
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 328)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 328)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1331,7 +1331,7 @@ EVT_BEGIN(mail_evt_rsh_03_a)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 400, -2000, 400, 2000, LW(5))
-        IF_INT_GREATER_OR_EQUAL(GSW(0), 328)
+        IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 328)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1356,7 +1356,7 @@ EVT_BEGIN(mail_evt_hom_00)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -600, -2000, -600, 2000, LW(5))
-        IF_INT_EQUAL(GSW(0), 325)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 325)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1380,7 +1380,7 @@ EVT_BEGIN(mail_evt_gor_02_2)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -1000, -4226, 1000, 7374, LW(5))
-        IF_INT_EQUAL(GSW(0), 348)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 348)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1404,7 +1404,7 @@ EVT_BEGIN(mail_evt_bom_01)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -230, -2000, -230, 2000, LW(5))
-        IF_INT_EQUAL(GSW(0), 354)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 354)
             IF_INT_EQUAL(GSWF(3874), 1)
                 IF_INT_EQUAL(LW(5), 1)
                     BREAK_LOOP
@@ -1431,7 +1431,7 @@ EVT_BEGIN(mail_evt_tik_00)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 470, -2000, 470, 2000, LW(5))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -500, -2000, -500, 2000, LW(6))
-        IF_INT_EQUAL(GSW(0), 378)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 378)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1459,7 +1459,7 @@ EVT_BEGIN(mail_evt_win_01)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 390, -2000, 390, 2000, LW(5))
-        IF_INT_EQUAL(GSW(0), 87)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 87)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1483,7 +1483,7 @@ EVT_BEGIN(mail_evt_tou_01)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -50, -2000, -50, 2000, LW(5))
-        IF_INT_EQUAL(GSW(0), 137)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 137)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1509,7 +1509,7 @@ EVT_BEGIN(mail_evt_usu_01)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 110, -2000, 110, 2000, LW(5))
-        IF_INT_EQUAL(GSW(0), 187)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 187)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1532,7 +1532,7 @@ EVT_BEGIN(mail_evt_gor_01_2)
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -2000, 200, 2000, 200, LW(5))
         IF_INT_EQUAL(LW(5), 1)
             SET_VALUE(LF(0), 0)
-            IF_INT_EQUAL(GSW(0), 270)
+            IF_INT_EQUAL(GSW_STORY_PROGRESS, 270)
                 IF_INT_EQUAL(GSWF(20), 0)
                     SET_VALUE(GSWF(20), 1)
                     CALL(evt_pouch_receive_mail, 30)
@@ -1567,7 +1567,7 @@ EVT_BEGIN(mail_evt_rsh_03_a_2)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 400, -2000, 400, 2000, LW(5))
-        IF_INT_EQUAL(GSW(0), 303)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 303)
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
@@ -1591,7 +1591,7 @@ EVT_BEGIN(mail_evt_pik_00)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -60, -2000, -60, 2000, LW(5))
-        IF_INT_EQUAL(GSW(0), 354)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, 354)
             IF_INT_EQUAL(GSWF(3874), 1)
                 IF_INT_EQUAL(LW(5), 1)
                     BREAK_LOOP
@@ -2352,7 +2352,7 @@ USER_FUNC(stone_bg) {
     ((ItemGetWork*)eff->userdata)->camera = 5;
     item = (u8*)itemNameToPtr(name);
     ((EffStarStoneWork*)((ItemEntry*)item)->effect->userdata)->cam = 5;
-    if (npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49") != NULL && evtGetValue(event, GSW(0)) < 211) {
+    if (npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49") != NULL && evtGetValue(event, GSW_STORY_PROGRESS) < 211) {
         npcNameToPtr_NoAssert("\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49")->cameraId = 5;
     } else {
         marioSetCamId(CAMERA_3D_EFFECTA);

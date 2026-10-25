@@ -303,7 +303,7 @@ void iconEntry(const char* name, u16 iconId) {
     }
     entry->uflags |= 1;
     if (mapGetWork()->entries[0].flags & 2) {
-        if (!strncmp(gp->currentMapName, "aji", 3) && evtGetValue(0, GSW(0)) == 0x178) {
+        if (!strncmp(gp->currentMapName, "aji", 3) && evtGetValue(0, GSW_STORY_PROGRESS) == 0x178) {
             entry->uflags &= ~0x40;
         } else {
             entry->uflags |= 0x40;

@@ -118,7 +118,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     random = group->randomItemWeight;
     none = group->noItemWeight;
     type = 0;
-    if (evtGetValue(NULL, GSW(0)) <= 19) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) <= 19) {
         random = 0;
         held = 0;
         none = 100;

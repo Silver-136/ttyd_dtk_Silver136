@@ -225,7 +225,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
     s32 count;    
     s32 labelId;
     
-    maxLabel = evtGetValue(0, GSW(0));
+    maxLabel = evtGetValue(0, GSW_STORY_PROGRESS);
 
     count = 0;
     storyId = 0;

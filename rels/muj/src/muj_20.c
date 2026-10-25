@@ -1027,7 +1027,7 @@ EVT_BEGIN(onryo_event)
     SPAWN_EVENT(nannpc_mode_setup)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), 1)
     CALL(evt_hitobj_onoff, STRING("A_b"), 1, 0)
-    IF_INT_EQUAL(GSW(0), 230)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 230)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_cont_onoff, 0)
         CALL(evt_party_cont_onoff, 0, 0)
@@ -1062,7 +1062,7 @@ EVT_BEGIN(onryo_event)
     CALL(evt_msg_print, 0, STRING("stg5_sea_29"), 0, 0)
     CALL_CHILD(hiru_yoru_event)
     WAIT_MS(1000)
-    SET_VALUE(GSW(0), 230)
+    SET_VALUE(GSW_STORY_PROGRESS, 230)
     LABEL(100)
     CALL(evt_mario_cont_onoff, 1)
 #ifdef VERSION_G8ME01
@@ -1557,7 +1557,7 @@ EVT_BEGIN(onryo_event)
     CALL(evt_fade_end_wait)
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_snd_bgmoff, 512)
-    SET_VALUE(GSW(0), 231)
+    SET_VALUE(GSW_STORY_PROGRESS, 231)
     CALL(evt_fade_set_mapchange_type, 0, 10, 0, 9, 300)
     CALL(evt_bero_mapchange, STRING("muj_00"), STRING(""))
     RETURN
@@ -1605,7 +1605,7 @@ EVT_BEGIN(muj_20_koopa_evt)
     END_IF
     SET_VALUE(GF(0), 1)
     WAIT_MS(2000)
-    SET_VALUE(GSW(0), 216)
+    SET_VALUE(GSW_STORY_PROGRESS, 216)
     CALL(evt_bero_mapchange, STRING("kpa_03"), STRING(""))
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1852,7 +1852,7 @@ static USER_FUNC(fune_eff) {
     speed = distABf(oldX, oldZ, pos.x, pos.z);
     angleABf(oldX, oldZ, pos.x, pos.z);
     off85 = 85.0f;
-    if (evtGetValue(event, GSW(0)) == 2) {
+    if (evtGetValue(event, GSW_STORY_PROGRESS) == 2) {
         speed = 2.0f;
     }
     ((EffFunemizuWork*)eff1->userdata)->scale = 3.0f;
@@ -2204,7 +2204,7 @@ EVT_BEGIN(muj_20_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hai_r_04"), 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hai_r_05"), 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_m"), 1)
-    IF_INT_EQUAL(GSW(0), 215)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 215)
         CALL(evt_mario_set_mode, 2)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a1"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), 1)
@@ -2231,12 +2231,12 @@ EVT_BEGIN(muj_20_init_evt)
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ1_1"))
         SPAWN_EVENT(PTR(muj_gor_ship))
     END_IF
-    IF_INT_EQUAL(GSW(0), 229)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 229)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_SAILING1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ1_1"))
         SPAWN_EVENT(PTR(onryo_event))
     END_IF
-    IF_INT_EQUAL(GSW(0), 230)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 230)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_SAILING1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG5_MUJ1_1"))
         SPAWN_EVENT(PTR(onryo_event))
@@ -2267,7 +2267,7 @@ EVT_BEGIN(muj_20_init_evt)
         SPAWN_EVENT(PTR(anm_yure))
         SPAWN_EVENT(PTR(evt_prologue))
     END_IF
-    IF_INT_EQUAL(GSW(0), 402)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 402)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a1"), 1)
         CALL(evt_hitobj_onoff, STRING("A_a1"), 1, 0)
         CALL(evt_map_playanim, STRING("yoru_hiru"), 2, 0)

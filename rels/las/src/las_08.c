@@ -107,7 +107,7 @@ static EVT_BEGIN(e2_door_open)
 EVT_END()
 
 static EVT_BEGIN(door_matigai_evt)
-    IF_INT_EQUAL(GSW(0), 385)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 385)
         SET_VALUE(GSW(1121), 0)
         SET_VALUE(GSWF(4325), 1)
     END_IF
@@ -116,10 +116,10 @@ static EVT_BEGIN(door_matigai_evt)
 EVT_END()
 
 EVT_BEGIN(door_seikai_evt)
-    IF_INT_EQUAL(GSW(0), 385)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 385)
         ADD(GSW(1121), 1)
         IF_INT_GREATER_OR_EQUAL(GSW(1121), 7)
-            SET_VALUE(GSW(0), 386)
+            SET_VALUE(GSW_STORY_PROGRESS, 386)
         END_IF
     END_IF
     SET_VALUE(LW(0), 0)
@@ -322,7 +322,7 @@ s32 mugen_kairou_list[] = {
 
 EVT_BEGIN(mugen_kairou_init)
     CALL_CHILD(PTR(taimatu_evt))
-    IF_INT_EQUAL(GSW(0), 385)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 385)
         CALL(mugen_kairou_get_list, GSW(1121), LW(0))
         CALL(hi_onoff, LW(0), 1)
         CALL(evt_seq_wait, 2)

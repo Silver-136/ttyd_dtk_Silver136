@@ -137,7 +137,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 static EVT_BEGIN(door_open)
-    IF_INT_LESS(GSW(0), 30)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 30)
         CALL(evt_mario_key_onoff, 0)
         WAIT_MS(800)
         BEGIN_INLINE_EVENT
@@ -163,7 +163,7 @@ static EVT_BEGIN(door_open)
         CALL(evt_cam3d_evt_off, 1000, 11)
         WAIT_MS(1000)
         CALL(evt_hitobj_onoff, STRING("a_mon"), 0, 0)
-        SET_VALUE(GSW(0), 30)
+        SET_VALUE(GSW_STORY_PROGRESS, 30)
         CALL(evt_mario_key_onoff, 1)
     END_IF
     RETURN
@@ -257,7 +257,7 @@ EVT_BEGIN(hei_05_init_evt)
     CALL(evt_snd_envon, 272, STRING("ENV_STG1_HEI4"))
     CALL(evt_snd_set_rev_mode, 1)
     CALL(evt_map_playanim, STRING("anm_hokori"), 1, 0)
-    IF_INT_LESS(GSW(0), 30)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 30)
         IF_INT_EQUAL(GSWF(1792), 0)
             CALL(evt_npc_set_anim, STRING("シンエモン1"), STRING("KUR_Z_1"))
             CALL(evt_npc_set_position, STRING("シンエモン1"), -119, 65, -77)

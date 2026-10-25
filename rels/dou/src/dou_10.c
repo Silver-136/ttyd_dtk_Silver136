@@ -470,8 +470,8 @@ EVT_BEGIN(namiyoke_se)
 EVT_END()
 
 EVT_BEGIN(namiyoke_check)
-    IF_INT_EQUAL(GSW(0), 248)
-        SET_VALUE(GSW(0), 249)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 248)
+        SET_VALUE(GSW_STORY_PROGRESS, 249)
     END_IF
     CALL(evt_sub_entrymgr_init, LW(9), 15)
     SPAWN_EVENT(PTR(namiyoke_init))

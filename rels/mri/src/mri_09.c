@@ -278,7 +278,7 @@ EVT_BEGIN(wall_roll)
     CALL(evt_mobj_delete, STRING("slot02"))
     CALL(evt_mobj_delete, STRING("slot03"))
     WAIT_MS(500)
-    SET_VALUE(GSW(0), 104)
+    SET_VALUE(GSW_STORY_PROGRESS, 104)
 #ifdef VERSION_G8ME01
     CALL(N_evt_party_cloud_lock_animations_on_off, 0, 0)
 #endif
@@ -311,7 +311,7 @@ static KusaAccess ueki_access_data[] = {
 };
 
 EVT_BEGIN(slot00_event)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 104)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 104)
         RETURN
     END_IF
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -335,7 +335,7 @@ EVT_BEGIN(slot00_event)
 EVT_END()
 
 EVT_BEGIN(slot01_event)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 104)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 104)
         RETURN
     END_IF
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -359,7 +359,7 @@ EVT_BEGIN(slot01_event)
 EVT_END()
 
 EVT_BEGIN(slot02_event)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 104)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 104)
         RETURN
     END_IF
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -383,7 +383,7 @@ EVT_BEGIN(slot02_event)
 EVT_END()
 
 EVT_BEGIN(slot03_event)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 104)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 104)
         RETURN
     END_IF
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -467,7 +467,7 @@ EVT_BEGIN(get_blue_jail_key)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00"), 0, STRING("ガイドsp"))
     CALL(evt_puni_flag_onoff, 1, 1, 262144)
     CALL(evt_puni_set_mode, 1, 1)
-    SET_VALUE(GSW(0), 98)
+    SET_VALUE(GSW_STORY_PROGRESS, 98)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_off))
@@ -494,7 +494,7 @@ EVT_BEGIN(mri_09_init_evt)
     SPAWN_EVENT(PTR(puni_piders_check))
     SET_VALUE(LW(0), PTR(ueki_access_data))
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(109, 110)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_DANGER4"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG2_MRI9"))
@@ -507,7 +507,7 @@ EVT_BEGIN(mri_09_init_evt)
     CALL(evt_map_playanim, STRING("mizu_02"), 1, 0)
     CALL(evt_map_playanim, STRING("awa_01"), 1, 0)
     CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(103)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 0)
 #ifdef VERSION_G8ME01

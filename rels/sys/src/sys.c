@@ -174,8 +174,8 @@ void _prolog(void) {
     }
     relSetEvtAddr("sys_00", dummy_evt);
     relSetEvtAddr("sys_01", sys_01_init_evt);
-    if (evtGetValue(NULL, GSW(0)) != 2 && evtGetValue(NULL, GSW(0)) != 125 && evtGetValue(NULL, GSW(0)) != 229 &&
-        evtGetValue(NULL, GSW(0)) != 280) {
+    if (evtGetValue(NULL, GSW_STORY_PROGRESS) != 2 && evtGetValue(NULL, GSW_STORY_PROGRESS) != 125 && evtGetValue(NULL, GSW_STORY_PROGRESS) != 229 &&
+        evtGetValue(NULL, GSW_STORY_PROGRESS) != 280) {
         psndStopAllFadeOut();
     }
     camGetPtr(CAMERA_2D)->flags |= 0x200;

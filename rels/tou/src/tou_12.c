@@ -139,12 +139,12 @@ static EVT_BEGIN(evt_block_broken)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     SPAWN_EVENT(PTR(evt_kinoshikowa))
-    SET_VALUE(GSW(0), 156)
+    SET_VALUE(GSW_STORY_PROGRESS, 156)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(init_michel)
-    IF_INT_LESS(GSW(0), 164)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 164)
         CALL(evt_npc_set_anim, STRING("マイケル"), STRING("NKT_Z_1"))
         CALL(evt_npc_set_position, STRING("マイケル"), 175, 0, -20)
         CALL(evt_npc_set_rotate, STRING("マイケル"), -80, 0, 0)
@@ -153,7 +153,7 @@ static EVT_BEGIN(init_michel)
 EVT_END()
 
 EVT_BEGIN(init_michel_dummy)
-    IF_INT_LESS(GSW(0), 164)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 164)
         CALL(evt_npc_set_position, STRING("マイケルダミー"), 175, 0, -20)
     END_IF
     RETURN
@@ -165,7 +165,7 @@ static EVT_BEGIN(talk_michel)
 EVT_END()
 
 static EVT_BEGIN(init_brots)
-    IF_INT_LESS(GSW(0), 164)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 164)
         CALL(evt_npc_set_position, STRING("ブロッツ"), 110, 3, -60)
         CALL(evt_npc_set_rotate, STRING("ブロッツ"), -70, 0, -80)
         CALL(evt_npc_flag_onoff, 0, STRING("ブロッツ"), 1536)
@@ -178,7 +178,7 @@ static EVT_BEGIN(init_brots)
 EVT_END()
 
 EVT_BEGIN(init_brots_dummy)
-    IF_INT_LESS(GSW(0), 164)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 164)
         CALL(evt_npc_set_position, STRING("ブロッツダミー"), 125, 4, -60)
     END_IF
     RETURN
@@ -280,11 +280,11 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 EVT_BEGIN(tou_12_init_evt)
-    IF_INT_EQUAL(GSW(0), 163)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, 163)
         CALL(evt_snd_bgmoff, 512)
         CALL(evt_snd_envoff, 512)
         ELSE
-        SWITCH(GSW(0))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(127, 137)
             CALL(evt_snd_bgmon, 512, STRING("BGM_STG3_TOU2"))
             CALL(evt_snd_envon, 272, STRING("ENV_STG3_TOU6"))
@@ -303,11 +303,11 @@ EVT_BEGIN(tou_12_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_item_entry, STRING("item01"), 125, 190, 0, 30, 16, GSWF(5627), 0)
-    IF_INT_LESS(GSW(0), 156)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 156)
         CALL(evt_mobj_lv_blk, STRING("aa"), 125, 0, 0, PTR(evt_block_broken), GSWF(2441), STRING("MOBJ_Lv1BigBigBlock"))
         CALL(evt_mobj_flag_onoff, 0, STRING("aa"), 64)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 164)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 164)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gor_hae"), 1)
         ELSE
         CALL(evt_map_playanim, STRING("anm_hae"), 1, 0)

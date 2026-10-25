@@ -379,7 +379,7 @@ static BeroEntry bero_data_c[] = {
 };
 
 EVT_BEGIN(init_cook)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(328, 332)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
@@ -483,7 +483,7 @@ EVT_BEGIN(talk_cook)
         CALL_CHILD(PTR(talk_cook_nabe_return))
         RETURN
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(283)
         IF_INT_EQUAL(LSWF(5), 0)
             SET_VALUE(LSWF(5), 1)
@@ -528,7 +528,7 @@ EVT_BEGIN(talk_cook)
 EVT_END()
 
 static EVT_BEGIN(init_waitless)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(328, 332)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     END_SWITCH
@@ -591,7 +591,7 @@ EVT_BEGIN(talk_waitless_pias_return)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_196_2"), 0, STRING("ウェイトレス"))
     END_IF
     CALL(evt_npc_restart_regular_event, STRING("ウェイトレス"))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(310, 325)
         CALL(evt_snd_bgmoff, 26624)
         CASE_BETWEEN(334, 344)
@@ -603,7 +603,7 @@ EVT_BEGIN(talk_waitless_pias_return)
 EVT_END()
 
 static EVT_BEGIN(talk_waitless)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 288)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 288)
         IF_INT_EQUAL(GSWF(3432), 0)
             CALL(evt_snd_bgmoff, 18432)
             IF_INT_EQUAL(GSWF(3431), 0)
@@ -619,7 +619,7 @@ static EVT_BEGIN(talk_waitless)
                 ELSE
                 CALL(evt_msg_print_add, 0, STRING("stg6_rsh_76"))
             END_IF
-            SWITCH(GSW(0))
+            SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(310, 325)
                 CALL(evt_snd_bgmoff, 26624)
                 CASE_BETWEEN(334, 344)
@@ -635,7 +635,7 @@ static EVT_BEGIN(talk_waitless)
         CALL_CHILD(PTR(talk_waitless_pias_return))
         RETURN
     END_IF
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(283)
         IF_INT_EQUAL(LSWF(7), 0)
             SET_VALUE(LSWF(7), 1)
@@ -689,8 +689,8 @@ static EVT_BEGIN(talk_waitless)
 EVT_END()
 
 EVT_BEGIN(move_waitless)
-    IF_INT_GREATER_OR_EQUAL(GSW(0), 283)
-        IF_INT_LESS(GSW(0), 287)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 283)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 287)
             RETURN
         END_IF
     END_IF
@@ -746,7 +746,7 @@ static NpcSetupInfo npc_data[] = {
 };
 
 static EVT_BEGIN(talk_toron)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(284)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_20"), 0, 0)
         CASE_DEFAULT
@@ -756,7 +756,7 @@ static EVT_BEGIN(talk_toron)
 EVT_END()
 
 static EVT_BEGIN(talk_sarary)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(284)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_21"), 0, 0)
         CASE_DEFAULT
@@ -971,7 +971,7 @@ EVT_BEGIN(evt_lanch_missing)
     CALL(evt_npc_set_autotalkpose, STRING("ウェイトレス"), STRING("S_1"), STRING("T_1"))
     CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
     CALL(evt_cam3d_evt_off, 500, 11)
-    SET_VALUE(GSW(0), 284)
+    SET_VALUE(GSW_STORY_PROGRESS, 284)
     CALL(evt_run_case_evt, 5, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), 0)
     CALL(evt_snd_envoff, 513)
     CALL(evt_snd_envon, 288, 0)
@@ -982,7 +982,7 @@ EVT_BEGIN(evt_lanch_missing)
 EVT_END()
 
 static EVT_BEGIN(talk_powan)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(284)
         CALL_CHILD(PTR(evt_lanch_missing))
         CASE_DEFAULT
@@ -1168,7 +1168,7 @@ EVT_BEGIN(evt_lunch_talk)
 EVT_END()
 
 EVT_BEGIN(evt_shop_moamoa_talk)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(328)
         SET_VALUE(LW(0), 0)
         CASE_LESS(329)
@@ -1421,7 +1421,7 @@ EVT_BEGIN(evt_shop_close)
 #endif
     CALL(evt_sub_get_mapname, LW(10))
     IF_STR_EQUAL(LW(10), STRING("rsh_03_a"))
-        SWITCH(GSW(0))
+        SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(283, 302)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka"), 1)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka_simi"), 1)
@@ -1484,7 +1484,7 @@ USER_FUNC(fire) {
 
 EVT_BEGIN(evt_shop_door_init)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("omise_masuku"), 1)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_OR_EQUAL(301)
         CASE_OR_EQUAL(326)
         CASE_END
@@ -1501,13 +1501,13 @@ static EVT_BEGIN(evt_yuka_simi)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_DOUBTFUL_POINT1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_51"), 0, 0)
-    IF_INT_LESS(GSW(0), 285)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 285)
         CALL(evt_party_stop, 0)
         WAIT_MS(300)
         CALL(evt_msg_print_party, STRING("stg6_rsh_52"))
         CALL(evt_party_run, 0)
     END_IF
-    SET_VALUE(GSW(0), 285)
+    SET_VALUE(GSW_STORY_PROGRESS, 285)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1533,7 +1533,7 @@ static const char* access_tbl[] = {
 
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
-    IF_INT_LESS(GSW(0), 345)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 345)
         CALL(evt_msg_print, 0, LW(1), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, LW(2), 0, 0)
@@ -1555,7 +1555,7 @@ static EVT_BEGIN(evt_access_entry)
 EVT_END()
 
 EVT_BEGIN(rsh_03_init_evt)
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(310, 325)
         CASE_GREATER_OR_EQUAL(333)
         CASE_DEFAULT
@@ -1565,7 +1565,7 @@ EVT_BEGIN(rsh_03_init_evt)
         CALL(evt_map_playanim, STRING("hai_iwayama"), 1, 0)
         CALL(evt_map_playanim, STRING("hai_saboten"), 1, 0)
     END_SWITCH
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(283, 286)
         CALL(evt_npc_setup, PTR(npc_data_lunch))
         CALL(evt_npc_set_position, STRING("コック"), 25, 1, -180)
@@ -1589,8 +1589,8 @@ EVT_BEGIN(rsh_03_init_evt)
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     BEGIN_INLINE_EVENT
         LOOP(10)
-            IF_INT_GREATER_OR_EQUAL(GSW(0), 328)
-                IF_INT_LESS(GSW(0), 332)
+            IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, 328)
+                IF_INT_LESS(GSW_STORY_PROGRESS, 332)
                     IF_INT_EQUAL(GSWF(3442), 0)
                         CALL(evt_npc_flag_onoff, 1, STRING("店員"), 16777216)
                         CALL(evt_npc_flag_onoff, 0, STRING("店員"), 1536)
@@ -1602,7 +1602,7 @@ EVT_BEGIN(rsh_03_init_evt)
         END_LOOP
     END_INLINE_EVENT
     CALL_CHILD(PTR(evt_access_entry))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(284, 286)
         CALL(evt_snd_bgmon, 512, STRING("BGM_EVT_POWAN1"))
         CALL(evt_snd_envon, 272, STRING("ENV_STG6_RSH1_3"))
@@ -1647,12 +1647,12 @@ EVT_BEGIN(rsh_03_a_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(rsh_03_init_evt))
     CALL_CHILD(PTR(evt_rsh_moamoa_on_window))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(283, 302)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka"), 1)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka_simi"), 1)
-        IF_INT_GREATER(GSW(0), 283)
-            IF_INT_LESS(GSW(0), 287)
+        IF_INT_GREATER(GSW_STORY_PROGRESS, 283)
+            IF_INT_LESS(GSW_STORY_PROGRESS, 287)
                 CALL(evt_run_case_evt, 5, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), 0)
             END_IF
         END_IF
@@ -1747,7 +1747,7 @@ EVT_BEGIN(rsh_03_c_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_open"), 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Sp_open"), 1)
 #endif
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_OR_EQUAL(301)
         CASE_OR_EQUAL(326)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shop_open_yuka"), 1)

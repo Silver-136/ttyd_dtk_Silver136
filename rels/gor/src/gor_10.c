@@ -413,7 +413,7 @@ EVT_BEGIN(gor_10_init_evt)
     IF_BITS_SET(LW(0), 2)
         RETURN
     END_IF
-    IF_INT_LESS(GSW(0), 2)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 2)
         CALL_CHILD(PTR(tegami_init_evt))
         ELSE
         CALL_CHILD(PTR(mezame_init_evt))

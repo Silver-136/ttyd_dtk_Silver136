@@ -1571,7 +1571,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
         CALL(evt_snd_sfxon, STRING(((char*)"SFX_STG6_TRAIN_MOVE1")), 0)
     END_IF
     IF_STR_EQUAL(LW(0), STRING(((char*)"hom_00")))
-        IF_INT_LESS(GSW(0), 339)
+        IF_INT_LESS(GSW_STORY_PROGRESS, 339)
             CALL(evt_snd_sfxon, STRING(((char*)"SFX_STG6_TRAIN_MOVE1_2")), 0)
             ELSE
             CALL(evt_snd_sfxon, STRING(((char*)"SFX_STG6_TRAIN_MOVE1_2_2")), 0)
@@ -2240,7 +2240,7 @@ EVT_BEGIN(evt_great_moamoa)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(2000)
-    SET_VALUE(GSW(0), 332)
+    SET_VALUE(GSW_STORY_PROGRESS, 332)
     CALL(evt_bero_mapchange, STRING(((char*)"rsh_01_a")), STRING(((char*)"w_bero")))
     RETURN
 EVT_END()
@@ -2312,7 +2312,7 @@ EVT_END()
 
 EVT_BEGIN(rsh_06_init_evt)
     CALL_CHILD(PTR(evt_resha_init))
-    SWITCH(GSW(0))
+    SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(284, 286)
         CALL(evt_snd_bgmon, 512, STRING(((char*)"BGM_EVT_POWAN1")))
         CALL(evt_snd_envon, 272, STRING(((char*)"ENV_STG6_RSH1_3")))
@@ -2351,7 +2351,7 @@ EVT_BEGIN(rsh_06_a_init_evt)
         SPAWN_EVENT(PTR(moamoa_debug))
         RETURN
     END_IF
-    IF_INT_LESS(GSW(0), 332)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 332)
         CALL_CHILD(PTR(evt_moamoa_init))
     END_IF
     RETURN

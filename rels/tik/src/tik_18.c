@@ -131,7 +131,7 @@ EVT_BEGIN(tik_18_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_win_1"), 1)
         CALL(evt_hitobj_onoff, STRING("a_win_1"), 1, 0)
     END_IF
-    IF_INT_LESS(GSW(0), 261)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 261)
         CALL(evt_npc_check_delete, STRING("カメック"))
         CALL(evt_npc_check_delete, STRING("トゲノコ"))
         ELSE

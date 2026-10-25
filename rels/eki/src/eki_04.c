@@ -104,8 +104,8 @@ EVT_BEGIN(eki_04_init_evt)
     CALL(evt_item_entry, STRING("item02"), 262, -250, 230, 40, 16, GSWF(3747), 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("futi_"), 2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("hasira"), 2)
-    IF_INT_LESS(GSW(0), 316)
-        SET_VALUE(GSW(0), 316)
+    IF_INT_LESS(GSW_STORY_PROGRESS, 316)
+        SET_VALUE(GSW_STORY_PROGRESS, 316)
     END_IF
     RETURN
 EVT_END()
