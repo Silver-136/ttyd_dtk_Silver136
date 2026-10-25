@@ -8,6 +8,7 @@
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
 #include "libc_decls.h"
+#include "sound.h"
 
 #ifdef VERSION_G8ME01
 // US version: all functions exact (loadDraw needs the two FAKE spellings marked inside it).
@@ -76,7 +77,6 @@ typedef struct WinDt {
 
 #ifndef VERSION_G8ME01
 #endif
-extern void SoundSetOutputMode(s32 mode);
 extern BOOL psndENVOn(u32 flags, const char* name);
 double sin(double);
 double fmod(double, double);
@@ -193,11 +193,11 @@ void seq_loadMain(SequenceWork* seq) {
                     wp->cardCode = cardGetCode();
                     wp->flags &= ~0x40;
                     if (OSGetSoundMode() == 0) {
-                        SoundSetOutputMode(0);
+                        SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                         gp->soundMode = 0;
                         wp->soundMode = 0;
                     } else {
-                        SoundSetOutputMode(1);
+                        SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                         if (gp->soundMode == 0) {
                             wp->soundMode = 1;
                         } else {
@@ -658,9 +658,9 @@ void loadMain(SequenceWork* seq) {
                         break;
                 }
                 if (OSGetSoundMode() == 0) {
-                    SoundSetOutputMode(0);
+                    SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                 } else {
-                    SoundSetOutputMode(1);
+                    SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                 }
                 SFX(0x12);
                 psndBGMOn(0xa0, NULL);
@@ -675,9 +675,9 @@ void loadMain(SequenceWork* seq) {
                 psndENVOff(0x200);
                 wp->soundModeSel = wp->soundMode;
                 if (OSGetSoundMode() == 0) {
-                    SoundSetOutputMode(0);
+                    SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                 } else {
-                    SoundSetOutputMode(1);
+                    SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                 }
                 wp->flags &= ~1;
                 wp->state = 1;
@@ -692,13 +692,13 @@ void loadMain(SequenceWork* seq) {
             if (wp->soundModeSel != sound) {
                 switch (wp->soundModeSel) {
                     case 0:
-                        SoundSetOutputMode(0);
+                        SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                         break;
                     case 1:
-                        SoundSetOutputMode(1);
+                        SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                         break;
                     case 2:
-                        SoundSetOutputMode(2);
+                        SoundSetOutputMode(SND_OUTPUTMODE_SURROUND);
                         break;
                 }
                 psndENVOn(0x110, (const char*)PSND_ENV_SYS_FL1);

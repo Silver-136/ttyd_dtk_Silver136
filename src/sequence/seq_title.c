@@ -93,9 +93,9 @@ void L_titleInit(SequenceWork* work) {
     if (seqGetPrevSeq() != SEQ_LOAD) {
         if (seqGetPrevSeq() == SEQ_GAME_OVER) {
             if (OSGetSoundMode() == 0) {
-                SoundSetOutputMode(0);
+                SoundSetOutputMode(SND_OUTPUTMODE_MONO);
             } else {
-                SoundSetOutputMode(1);
+                SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
             }
             psndBGMOn(0x200, "BGM_DIGEST1");
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
