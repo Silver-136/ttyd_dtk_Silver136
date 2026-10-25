@@ -443,7 +443,6 @@ BattleWeapon weapon_majolyne_powder_attack5 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-#ifdef VERSION_G8ME01
 static EVT_BEGIN(majolyne_down)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
@@ -452,18 +451,7 @@ static EVT_BEGIN(majolyne_down)
     CALL(battle_evt_majo_disp_off, -2, 1, 0, 0)
     RETURN
 EVT_END()
-#else
-static EVT_BEGIN(majolyne_down)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(250)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MAJO_SHADOW1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    END_INLINE_EVENT
-    CALL(battle_evt_majo_disp_off, -2, 1, 0, 0)
-    RETURN
-EVT_END()
-#endif
 
-#ifdef VERSION_G8ME01
 static EVT_BEGIN(majolyne_up)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
@@ -473,17 +461,6 @@ static EVT_BEGIN(majolyne_up)
     CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
     RETURN
 EVT_END()
-#else
-static EVT_BEGIN(majolyne_up)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(250)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MAJO_SHADOW2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    END_INLINE_EVENT
-    CALL(battle_evt_majo_disp_on, -2, 1, LW(0), LW(1), LW(2), 0)
-    CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
-    RETURN
-EVT_END()
-#endif
 
 static EVT_BEGIN(majo3_zoom)
     CALL(btlevtcmd_GetPos, LW(0), LW(0), EVT_NULLPTR, EVT_NULLPTR)
@@ -1109,7 +1086,6 @@ static EVT_BEGIN(kagenuke_attack_event)
 EVT_END()
 #endif
 
-#ifdef VERSION_G8ME01
 static EVT_BEGIN(blizzard_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
     CALL(btlevtcmd_SamplingEnemy, -2, LW(0), LW(9))
@@ -1187,85 +1163,6 @@ static EVT_BEGIN(blizzard_attack_event)
     WAIT_MS(1000)
     RETURN
 EVT_END()
-#else
-static EVT_BEGIN(blizzard_attack_event)
-    CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
-    CALL(btlevtcmd_SamplingEnemy, -2, LW(0), LW(9))
-    CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
-    IF_INT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_CheckToken, -2, 16, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(subsetevt_confuse_flustered)
-        END_IF
-        RETURN
-    END_IF
-    CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclareAll, -2)
-    CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_PayWeaponCost, -2, LW(9))
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MAJO_HAND_OPEN1"), EVT_NULLPTR, 0, LW(15))
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("MJR_A1_2"))
-    WAIT_FRAMES(25)
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("MJR_A1_3"))
-    WAIT_MS(700)
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("MJR_A1_4"))
-    WAIT_MS(200)
-    CALL(evt_snd_sfxoff, LW(15))
-    CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
-    SET_VALUE(LW(10), 0)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MAJO_ATTACK_ICE1"), EVT_NULLPTR, 0, LW(15))
-    CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetFaceDirection, -2, LW(5))
-    IF_INT_GREATER_OR_EQUAL(LW(5), 0)
-        CALL(evt_eff, 0, STRING("ibuki"), 0, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
-    ELSE
-        CALL(evt_eff, 0, STRING("ibuki"), 1, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
-    END_IF
-    WAIT_FRAMES(150)
-    CALL(evt_snd_sfxoff, LW(15))
-    LABEL(10)
-    CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
-    SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
-        GOTO(90)
-        CASE_END
-        CASE_EQUAL(3)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
-        GOTO(90)
-        CASE_END
-        CASE_EQUAL(6)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
-        GOTO(90)
-        CASE_EQUAL(2)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
-        GOTO(90)
-        CASE_EQUAL(1)
-        GOTO(91)
-        CASE_END
-        CASE_DEFAULT
-        GOTO(98)
-        CASE_END
-    END_SWITCH
-    LABEL(90)
-    GOTO(97)
-    LABEL(91)
-    IF_INT_EQUAL(LW(10), 0)
-        CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
-    END_IF
-    CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
-    LABEL(97)
-    CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
-    IF_INT_NOT_EQUAL(LW(3), -1)
-        ADD(LW(10), 1)
-        GOTO(10)
-    END_IF
-    LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    WAIT_MS(1000)
-    RETURN
-EVT_END()
-#endif
 
 static EVT_BEGIN(powder_attack_check)
     CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
@@ -1274,7 +1171,6 @@ static EVT_BEGIN(powder_attack_check)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 static EVT_BEGIN(powder_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, -2, 16, LW(0))
@@ -1338,71 +1234,6 @@ static EVT_BEGIN(powder_attack_event)
     CALL(btlevtcmd_ResetFaceDirection, -2)
     RETURN
 EVT_END()
-#else
-static EVT_BEGIN(powder_attack_event)
-    IF_INT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_CheckToken, -2, 16, LW(0))
-        IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL_CHILD(subsetevt_confuse_flustered)
-            RETURN
-        END_IF
-        GOTO(99)
-    END_IF
-    CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
-    CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_PayWeaponCost, -2, LW(9))
-    IF_INT_EQUAL(LW(9), PTR(&weapon_majolyne_powder_attack1))
-        CALL(evt_btl_camera_set_mode, 0, 9)
-        CALL(evt_btl_camera_set_homing_unit, 0, -2, LW(3))
-        CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
-        CALL(evt_btl_camera_set_zoom, 0, 200)
-    END_IF
-    CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
-    CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_MAJO_HAND_OPEN1"), EVT_NULLPTR, 0, LW(15))
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("MJR_A2_1"))
-    WAIT_MS(700)
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("MJR_A2_2"))
-    WAIT_MS(100)
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("MJR_A2_3"))
-    CALL(evt_snd_sfxoff, LW(15))
-    CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
-    SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
-        GOTO(90)
-        CASE_END
-        CASE_EQUAL(3)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
-        GOTO(90)
-        CASE_END
-        CASE_EQUAL(6)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
-        GOTO(90)
-        CASE_EQUAL(2)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
-        GOTO(90)
-        CASE_EQUAL(1)
-        GOTO(91)
-        CASE_END
-        CASE_DEFAULT
-        GOTO(98)
-        CASE_END
-    END_SWITCH
-    LABEL(90)
-    GOTO(99)
-    LABEL(91)
-    CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
-    CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
-    WAIT_FRAMES(30)
-    GOTO(99)
-    LABEL(99)
-    CALL(evt_btl_camera_set_mode, 0, 0)
-    WAIT_MS(250)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
-    RETURN
-EVT_END()
-#endif
 
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)

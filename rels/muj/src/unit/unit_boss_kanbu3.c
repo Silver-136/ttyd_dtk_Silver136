@@ -633,7 +633,6 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(call_event)
     CALL(check_exist_group, LW(15))
     CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
@@ -726,100 +725,6 @@ EVT_BEGIN(call_event)
     LABEL(99)
     RETURN
 EVT_END()
-#else
-EVT_BEGIN(call_event)
-    CALL(check_exist_group, LW(15))
-    CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(0)
-        IF_INT_EQUAL(LW(15), -1)
-            GOTO(10)
-        END_IF
-        CASE_END
-        CASE_EQUAL(1)
-        IF_INT_EQUAL(LW(15), -1)
-            GOTO(10)
-        END_IF
-        CASE_END
-        CASE_EQUAL(2)
-        IF_INT_EQUAL(LW(15), -1)
-            GOTO(10)
-        END_IF
-        CASE_END
-    END_SWITCH
-    SET_VALUE(LW(0), 0)
-    GOTO(99)
-    LABEL(10)
-    CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
-    SWITCH(LW(0))
-        CASE_EQUAL(0)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("C_1"))
-        WAIT_FRAMES(16)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("C_1"))
-        CASE_END
-        CASE_EQUAL(1)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("C_2"))
-        WAIT_FRAMES(16)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("C_2"))
-        WAIT_FRAMES(16)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("C_2"))
-        CASE_END
-        CASE_EQUAL(2)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("C_1"))
-        WAIT_FRAMES(16)
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("C_1"))
-        CASE_END
-    END_SWITCH
-    BEGIN_INLINE_EVENT
-        WAIT_FRAMES(100)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 69)
-    END_INLINE_EVENT
-    IF_INT_EQUAL(LW(15), -1)
-        CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
-        SWITCH(LW(0))
-            CASE_EQUAL(0)
-            CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-            SUBTRACT(LW(0), 80)
-            SUBTRACT(LW(2), 20)
-            CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_group1), 0)
-            CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
-            CALL(zakogun_ext_init1)
-            WAIT_FRAMES(120)
-            CASE_END
-            CASE_EQUAL(1)
-            CALL(zakogun_ext_init2)
-            CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_group2), 0)
-            CALL(btlevtcmd_SetPos, LW(0), 0, 80, 0)
-            CALL(btlevtcmd_SetHomePos, LW(0), 0, 80, 0)
-            CALL(down_ceil)
-            WAIT_FRAMES(60)
-            CASE_END
-            CASE_EQUAL(2)
-            CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-            SUBTRACT(LW(0), 80)
-            SUBTRACT(LW(2), 20)
-            CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_group3), 0)
-            CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
-            CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
-            CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_MOVE2"), 0)
-            CALL(zakogun_ext_init3)
-            WAIT_FRAMES(120)
-            CASE_END
-        END_SWITCH
-    END_IF
-    SET_VALUE(LW(0), 1)
-    LABEL(99)
-    RETURN
-EVT_END()
-#endif
 
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, -2, LW(0))

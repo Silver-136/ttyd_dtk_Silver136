@@ -205,11 +205,7 @@ void kemuri(void) {
     f32 s, c;
     f32 x, y, z;
 
-#ifdef VERSION_G8ME01
     if (mario->prevAirTimer != 0 && mario->prevHitobjStandOn == NULL && mario->hitobjStandOn != NULL) {
-#else
-    if (mario->prevAirTimer != 0 && mario->prevHitobjStandOn == NULL && mario->hitobjStandOn != NULL) {
-#endif
         if (mario->trigFlags & MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI) {
             mario->trigFlags &= ~MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
         }

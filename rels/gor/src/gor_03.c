@@ -3104,7 +3104,6 @@ s32 upsidegara[] = {
 typedef struct I3 { s32 v[3]; } I3;
 static const I3 disp_slot_icons = {{ICON_1F3, ICON_1F3, ICON_1F3}};
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(ranking_set)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, FLOAT(-541.8994f), FLOAT(115.5f), FLOAT(-115.0f), FLOAT(-197.0f), FLOAT(56.799805f), FLOAT(-115.0f), 600, 11)
@@ -3127,30 +3126,6 @@ EVT_BEGIN(ranking_set)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
-#else
-EVT_BEGIN(ranking_set)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_cam3d_evt_set, FLOAT(-541.8994f), FLOAT(115.5f), FLOAT(-115.0f), FLOAT(-197.0f), FLOAT(56.799805f), FLOAT(-115.0f), 600, 11)
-    WAIT_MS(600)
-    LOOP(0)
-        CALL(evt_msg_print, 0, STRING("ranking_mess_00"), 0, 0)
-        CALL(evt_msg_select, 0, STRING("ranking_mess_01"))
-        CALL(evt_msg_continue)
-        IF_INT_EQUAL(LW(0), 5)
-            GOTO(0)
-        END_IF
-        CALL(evt_yuuranking_alloc, 0, 0, LW(0), 2, 0, 0, 0, 0)
-        WAIT_FRAMES(1)
-        CALL(yuuranking_wait_button)
-        CALL(evt_yuuranking_free)
-    END_LOOP
-    LABEL(0)
-    CALL(evt_cam3d_evt_off, 600, 11)
-    WAIT_MS(600)
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-#endif
 
 #ifdef VERSION_G8ME01
 EVT_BEGIN(exchange_set)

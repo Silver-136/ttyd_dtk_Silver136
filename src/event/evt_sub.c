@@ -140,7 +140,6 @@ WinMgrDesc coinget_window_desc[] = {
     {0, 0, 8, -175, 120, 350, 42, {0xE1, 0xD7, 0x9B, 0xFF}, NULL, coingetDisp},
 };
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(tree_evt)
     SET_TYPE(0)
     SET_VALUE(LF(0), 0)
@@ -196,63 +195,6 @@ EVT_BEGIN(tree_evt)
     END_LOOP
     RETURN
 EVT_END()
-#else
-EVT_BEGIN(tree_evt)
-    SET_TYPE(0)
-    SET_VALUE(LF(0), 0)
-    IF_INT_NOT_EQUAL(LW(3), 0)
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_INT_NOT_EQUAL(LW(4), 0)
-        SET_VALUE(LF(0), 1)
-    END_IF
-    IF_INT_EQUAL(LF(0), 1)
-        CALL(evt_mapobj_get_position, LW(2), LW(13), LW(14), LW(15))
-        CALL(evt_snd_sfxon_3d, STRING("SFX_HIT_TREE1"), LW(13), LW(14), LW(15), 0)
-        CALL(evt_snd_sfxon_3d, STRING("SFX_HIT_TREE1_LEAVES1"), LW(13), LW(14), LW(15), 0)
-        CALL(evt_mapobj_get_position, LW(2), LW(13), LW(14), LW(15))
-        CALL(evt_mapobj_get_position, LW(3), LW(10), LW(11), LW(12))
-        SET_VALUE(LW(14), LW(11))
-        CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
-        SET_VALUE(LW(15), LW(12))
-        SUBTRACT(LW(14), 25)
-        SWITCH(LW(0))
-            CASE_EQUAL(0)
-            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 0, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
-            CASE_EQUAL(1)
-            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 3, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
-            CASE_EQUAL(2)
-            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 4, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
-            CASE_EQUAL(3)
-            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 4, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
-            CASE_EQUAL(4)
-            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 3, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
-            CASE_EQUAL(5)
-            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 2, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
-            CASE_EQUAL(6)
-            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 2, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
-        END_SWITCH
-    END_IF
-    IF_INT_NOT_EQUAL(LW(5), 0)
-        SPAWN_EVENT(LW(5))
-    END_IF
-    SET_INT_READ_ADDR(PTR(tree_data))
-    LOOP(25)
-        READ_INT3(LW(10), LW(11), LW(12))
-        IF_INT_NOT_EQUAL(LW(2), 0)
-            CALL(evt_mapobj_rotate, 1, LW(2), FLOAT(0.0f), FLOAT(0.0f), LW(10))
-        END_IF
-        IF_INT_NOT_EQUAL(LW(3), 0)
-            CALL(evt_mapobj_trans, 1, LW(3), LW(11), FLOAT(0.0f), FLOAT(0.0f))
-        END_IF
-        IF_INT_NOT_EQUAL(LW(4), 0)
-            CALL(evt_mapobj_trans, 1, LW(4), LW(12), FLOAT(0.0f), FLOAT(0.0f))
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    RETURN
-EVT_END()
-#endif
 
 EVT_BEGIN(evt_sub_tree_access_entry)
     SET_INT_READ_ADDR(LW(0))
@@ -267,7 +209,6 @@ EVT_BEGIN(evt_sub_tree_access_entry)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(kusa_evt)
     SET_TYPE(0)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
@@ -285,25 +226,6 @@ EVT_BEGIN(kusa_evt)
     END_LOOP
     RETURN
 EVT_END()
-#else
-EVT_BEGIN(kusa_evt)
-    SET_TYPE(0)
-    CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(10), LW(11), LW(12), 0)
-    IF_INT_NOT_EQUAL(LW(3), 0)
-        SPAWN_EVENT(LW(3))
-    END_IF
-    SET_INT_READ_ADDR(PTR(kusa_data))
-    LOOP(12)
-        READ_INT(LW(10))
-        IF_INT_NOT_EQUAL(LW(2), 0)
-            CALL(evt_mapobj_trans, 1, LW(2), LW(10), FLOAT(0.0f), FLOAT(0.0f))
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    RETURN
-EVT_END()
-#endif
 
 EVT_BEGIN(evt_sub_kusa_access_entry)
     SET_INT_READ_ADDR(LW(0))
@@ -1001,7 +923,6 @@ EVT_BEGIN(evt_sub_mail_vibration)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
 EVT_BEGIN(mail_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -1032,38 +953,6 @@ EVT_BEGIN(mail_evt)
     CALL(evt_cam_letter_box_disable, 0)
     RETURN
 EVT_END()
-#else
-EVT_BEGIN(mail_evt)
-    CALL(evt_cam_letter_box_disable, 1)
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_normalize)
-    CALL(evt_party_yoshi_ride, 0, 0)
-    CALL(evt_mario_wait_rideon)
-    CALL(evt_mario_balloon_bikkuri)
-    CALL(evt_snd_bgmoff, 1024)
-    CALL(evt_snd_bgmon, 1, STRING("BGM_FF_MAIL_RECEPTION3"))
-    SPAWN_EVENT_GET_ID(PTR(evt_sub_mail_vibration), LW(10))
-    WAIT_MS(500)
-    CALL(evt_win_one_message, 0)
-    DELETE_EVENT(LW(10))
-    WAIT_FRAMES(1)
-    CALL(evt_sub_rumble_onoff, 1, 0)
-    CALL(evt_mario_balloon_off)
-    CALL(evt_snd_bgmoff, 513)
-    CALL(evt_snd_bgmon, 288, 0)
-    IF_INT_EQUAL(GSWF(37), 0)
-        SET_VALUE(GSWF(37), 1)
-        CALL(evt_msg_print, 0, STRING("mail_first_hit"), 0, 0)
-        ELSE
-        IF_INT_EQUAL(GSWF(38), 0)
-            CALL(evt_msg_print, 0, STRING("mail_first_hit"), 0, 0)
-        END_IF
-    END_IF
-    CALL(evt_mario_key_onoff, 1)
-    CALL(evt_cam_letter_box_disable, 0)
-    RETURN
-EVT_END()
-#endif
 
 EVT_BEGIN(mail_evt_nok_01)
     IF_INT_EQUAL(GSWF(7), 1)
