@@ -17,6 +17,7 @@
 #include "party/party_hit.h"
 #include "party/party_bomhei.h"
 #include "party/party_nokonoko.h"
+#include "party/party_motion.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -30,7 +31,6 @@ static f32 touch_wall_ct;
 static s32 upstairs_count;
 static f32 upstairs_dy;
 
-void L_partyForceSlitOff(PartyEntry* party);
 BOOL party_slit(PartyEntry* party);
 #ifdef VERSION_G8ME01
 BOOL partyChkBetweenWalls(PartyEntry* party, Vec pos);

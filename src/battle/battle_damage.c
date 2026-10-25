@@ -49,7 +49,6 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
 s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* resultFlags, u32 flags);
 s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
-void BattleInitCounterPreCheckWork(s32* work);
 s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
 void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 

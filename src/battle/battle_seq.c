@@ -56,10 +56,7 @@ extern s32 marioDefaultWeapon_Hammer[];
 //local prototypes
 USER_FUNC(_set_haikei_entry_scale);
 void _mapobj_data_touch_scale(s32 layer);
-BOOL BattleCheckConcluded(BattleWork* wp);
-BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp);
 void battleMakePhaseEvtTable(BattleWork* wp);
-void battleSortPhaseMoveTable(BattleWork* wp, s32 count);
 void btlseqPhaseFirstProcess(BattleWork* wp);
 void btlseqTurnFirstProcess(BattleWork* wp);
 void btlseqAct(BattleWork* wp);

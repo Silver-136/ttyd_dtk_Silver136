@@ -23,7 +23,6 @@ void GXGetProjectionv(f32* ptr);
 void GXGetViewportv(f32* vp);
 void nameBG(void);
 void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h);
-void nameMaskGX(f32 t);
 void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type);
 #include <string.h>
 

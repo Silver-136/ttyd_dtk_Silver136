@@ -585,7 +585,6 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
 }
 
 s32 marioChkHipBump(void);
-s32 mobjCheckItemboxOpen(MapObjectEntry* entry);
 
 typedef struct MobjWorkHit {
     s32 count;

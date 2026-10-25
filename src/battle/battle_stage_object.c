@@ -3655,24 +3655,15 @@ typedef struct FallObjectWork {
     FallObjectEntry entries[1]; //0x4
 } FallObjectWork;
 s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall);
-s32 BattleStage_ObjectFallCheck(void);
 void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src);
 void _rate_mix_3(s8* dstChance, s8* dstTime, s8* dstStrength, s8* srcChance, s8* srcTime, s8* srcStrength);
 void _rate_mix(s8* dstChance, s8* dstTime, s8* srcChance, s8* srcTime);
 s32 _get_nozzle_attack_index(u8 index);
-BOOL BattleFogEndCheck(void);
 f32 _get_nozzle_dir(s32 index);
 void _nozzle_type_init(void);
-void BattleStage_NozzleWorkCheck(s32 type);
-void BattleStage_IronFrameFallCheck(void);
 void _disp_escape_wall_message(CameraId camera, void* param);
-void BattleStage_WallCloseCheck(void);
 void _Nozzle_Change_Check(u8 index, u8* rate);
-void BattleStage_NozzleDirChangeCheck(void);
 void _mobj_shake_main(BattleStageObject* obj);
-void BattleStage_DestroyB(void);
-void BattleStage_DestroyA2(void);
-void BattleStage_DestroyA1(void);
 void BattleObjectConfig(void);
 USER_FUNC(_object_fall_wait);
 USER_FUNC(_nozzle_work_get_weapon_address);

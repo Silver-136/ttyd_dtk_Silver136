@@ -32,8 +32,6 @@ typedef struct RubWork {
     s16 hist[21];   // 0x3C
 } RubWork;
 
-void marioGetRubInit(void);
-void marioGetStick(f32* dir, f32* mag);
 
 RubWork rubwork;
 

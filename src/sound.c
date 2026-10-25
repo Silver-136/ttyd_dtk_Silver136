@@ -1266,8 +1266,6 @@ void cache_flush(u32 pointerToARQRequest);
 void _ssDVDReadAsync_cache_aram(u32 pointerToARQRequest);
 void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo);
 void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo);
-void SoundSSStopCh(s32 chan);
-void SoundSSSetPanCh(s32 chan, u8 pan);
 
 inline void SoundIntOff(void) {
     if (!sound.interruptDepth) {

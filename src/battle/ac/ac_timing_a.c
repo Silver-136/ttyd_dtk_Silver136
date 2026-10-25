@@ -100,7 +100,6 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     }
 }
 
-s32 battleAcTimingA_GetSuccessFrame(BattleWork* work);
 #pragma dont_inline on
 
 s32 battleAcResult_TimingA(BattleWork* work) {

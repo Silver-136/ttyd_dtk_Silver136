@@ -74,9 +74,6 @@ void gaugeDisp(s32 sp, f32 x, f32 y);
 void statusGetValue(SVal* values);
 BOOL valueCheck(void);
 void valueUpdate(void);
-void statusWinOpen(void);
-void statusWinClose(void);
-BOOL statusWinCheck(void);
 
 void statusWinInit(void) {
     wp = __memAlloc(HEAP_DEFAULT, sizeof(SWork));

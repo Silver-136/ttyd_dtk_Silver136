@@ -21,8 +21,6 @@
 #endif
 #include <math.h>
 
-HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDist, f32* outAng);
-extern HitEntry* partyChkFrontStep(PartyEntry* party, f32 a, f32* x, f32* y, f32* z);
 
 BOOL chkfilter(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;

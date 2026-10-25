@@ -22,7 +22,6 @@ void marioChkOverhead(void);
 void mario_kemuri_80130474(void);
 
 void peachChgPose(const char* name);
-void peachTransformOff(void);
 
 static inline void peachStepSe(s32 d1, s32 d2) {
     MarioWork* mp = marioGetPtr();

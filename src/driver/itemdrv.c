@@ -70,9 +70,7 @@ void winNameDisp2(WinMgrEntry* win);
 void winHelpMain(WinMgrEntry* win);
 void winHelpDisp(WinMgrEntry* win);
 void winFullDisp(WinMgrEntry* win);
-BOOL N_itemPickUpFromFieldCheck(void);
 
-ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range);
 HitEntry* itemHitCheckY(ItemEntry* entry, f32 z, f32 y, f32 x, f32 vy);
 HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy);
 

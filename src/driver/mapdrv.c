@@ -53,7 +53,6 @@ void mapDispMapGrp_off(CameraId cam, MapObject* obj);
 void mapDispMapObj(CameraId cam, MapObject* obj);
 void mapDispMapObj_bbox(CameraId cam, MapObject* obj);
 void mapDispMapObj_off(CameraId cam, MapObject* obj);
-void bmapUnLoad(void);
 
 #define TWO_PI 6.28318530717958647692528676655900576839433879875021f
 
@@ -395,8 +394,6 @@ f32 (*shadowGetProjShadowProjTexMtx(void))[4];
 GXColor shadowGetProjShadowColor(void);
 void mapSetMaterial(MapObject* obj, void* material);
 void mapSetMaterial(MapObject* obj, void* material);
-void mapResetPaperAmbColor(void);
-void mapResetPaperAmbColor(void);
 static inline void mapResetPaperCraftAmbColor(void);
 
 void makeDisplayList(BOOL group) {

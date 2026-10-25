@@ -1265,8 +1265,6 @@ void camRoadCurveOff(const char* name) {
 }
 
 // forward declarations: these functions are defined further down
-void camRoadCurveOff(const char* name);
-void camRoadCurveOn(const char* name);
 void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t);
 u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed);
 void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g);

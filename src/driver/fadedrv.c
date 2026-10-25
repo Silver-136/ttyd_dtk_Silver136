@@ -29,7 +29,6 @@ const f32 float_0_8041f774 = 0.0f;
 static FadeWork* wp;
 
 //local prototypes
-void _callback(s32 error, DVDFileInfo* info);
 void disp_texture(CameraId camId, void* param);
 static f32 z(void);
 static void zFill(void);

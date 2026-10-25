@@ -882,7 +882,6 @@ BOOL BattleAfterReactionMain(void) {
     return FALSE;
 }
 
-BOOL BattleStatusWindowCheck(void);
 
 BOOL battleDisableHResetCheck(void) {
     BattleWork* wp = _battleWorkPointer;

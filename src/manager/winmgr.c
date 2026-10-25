@@ -65,7 +65,6 @@ void winMgrDisp(CameraId camId, void* param);
 void winMgrSeq(WinMgrEntry* entry);
 int select_comp_type(void* a, void* b);
 int select_comp_starpiece(void* a, void* b);
-s32 winMgrSelectGetCursor(WinMgrSelect* sel);
 
 //.data
 

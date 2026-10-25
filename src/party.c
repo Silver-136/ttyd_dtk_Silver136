@@ -135,7 +135,6 @@ PartyEntry* partyPtrTbl[2];
 PartyData* party_dp;
 s32 partyCtrlNo;
 
-void partyChgRunMode(PartyEntry* party, s32 mode);
 s32 partyEntryMain(s32 memberId);
 void partyGetAppearPos2(PartyEntry* party, Vec* pos);
 
@@ -735,7 +734,6 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
     return slot;
 }
 
-void partyShadowOff(PartyEntry* party);
 void vivianUnhold(PartyEntry* party);
 void L_partyVivianTailStart(PartyEntry* party);
 void getRidePos(PartyEntry* party, Vec* pos);
@@ -1018,7 +1016,6 @@ void partyMain(void) {
 void party_kemuri(PartyEntry* party);
 void vivianShadow(PartyEntry* party);
 void partyPreDisp(PartyEntry* party);
-void partyHello(PartyEntry* party);
 void partyRideMain(PartyEntry* party);
 s32 partyRideYoshiMain(PartyEntry* party);
 void party_damage_return(PartyEntry* party);
@@ -1208,7 +1205,6 @@ void partyHello(PartyEntry* party) {
 
 /* @@HELLO@@ */
 void partyGetAppearPos(PartyEntry* party, Vec* pos);
-void allPartyForceRideOn(void);
 
 s32 partyHelloMain(PartyEntry* party) {
     s32 ret = 0;
@@ -2571,7 +2567,6 @@ PartyEntry* partyPtrTbl[2];
 PartyData* party_dp;
 s32 partyCtrlNo;
 
-void partyChgRunMode(PartyEntry* party, s32 mode);
 s32 partyEntryMain(s32 memberId);
 void partyGetAppearPos2(PartyEntry* party, Vec* pos);
 
@@ -3011,52 +3006,19 @@ void partySetFamicomMode(PartyEntry* party, s32 mode) {
 }
 
 // forward declarations: these functions are defined further down
-void partySetFamicomMode(PartyEntry* party, s32 mode);
-void partyShadowOff(PartyEntry* party);
-void partyUpdateKeyData(PartyEntry* party);
 void partyDisp(CameraId cam, void* param);
 void partyPreDisp(PartyEntry* party);
 void partyMakeDispDir(PartyEntry* party);
-void partySetCamId(PartyEntry* party, s32 cameraId);
 void party_damage_return(PartyEntry* party);
 s32 partyRideYoshiMain(PartyEntry* party);
 void partyRideMain(PartyEntry *party);
-s32 partyRideChk(PartyEntry* party);
-void allPartyRideOff2(void);
-void allPartyRideOff(void);
-void L_allPartyRideOn(void);
-void allPartyForceRideOn(void);
 void getRidePos(PartyEntry* party, Vec* pos);
-void allPartyRideShip(void);
-void allPartyRidePlane(void);
-void partyDokanEnd(s32 id, s32 dir);
 s32 partyDokanMain(PartyEntry* party);
 s32 partyDokanInit(PartyEntry* party);
-s32 partyGoodbyeMain(PartyEntry* party);
-s32 partyGoodbyeInit(PartyEntry* party);
 s32 partyHelloMain(PartyEntry* party);
-void partyHello(PartyEntry* party);
-BOOL partyDoWork(void);
 void driveParty(PartyEntry* party);
-void partyMain(void);
 void N_partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub);
-void partyChgRunMode(PartyEntry* party, s32 mode);
 void N__partyChgRunMode(PartyEntry* party, s32 prev, s32 mode);
-void partyReInit(void);
-void partyInit(void);
-s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z);
-s32 partyEntry2Hello(s32 memberId);
-s32 partyEntry2(s32 memberId);
 s32 partyEntryMain(s32 memberId);
-s32 yoshiSetColor(void);
-s32 partyKill2(s32 id);
-s32 partyKill(s32 id);
-BOOL partyGoodbye(s32 id);
-s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z);
-s32 partyEntry(s32 memberId);
-s32 partyEntryHello(s32 memberId);
 void partySetForceMove(PartyEntry* party, s16 a2, f32 a3, f32 a4);
-void partyChgPaper(PartyEntry* party, char* paper);
 void partyChgPose(PartyEntry* party, char* pose);
-void partyPaperLightOff(PartyEntry* party);
-void partyPaperOff(PartyEntry* party);

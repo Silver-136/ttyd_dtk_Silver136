@@ -47,7 +47,6 @@ EVT_BEGIN(quake_kpaHipAttack_evt)
 EVT_END()
 
 extern void* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle);
-void kpaSetSpec(void);
 
 static inline void kpa_hip_launch(MarioWork* m) {
     m->currSubMotionId = 0x14;

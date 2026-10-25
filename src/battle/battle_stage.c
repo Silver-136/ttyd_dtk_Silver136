@@ -71,7 +71,6 @@ void DarkByPoint(u8 alpha, f32 x, f32 y, f32 z);
 void DarkBySquare(f32 x0, f32 y0, f32 x1, f32 y1, f32 z, u8 alpha);
 void BattleStageSetDark(StageDark* d, u8 v, s32 time, u8 mode);
 void BattleStageSetDarkBase(StageDark* d, u8 v, s32 time, u8 mode);
-void BattleStageLightSetTarget(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode);
 void batSpotInit(void);
 f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x);
 void batSpotMain();
