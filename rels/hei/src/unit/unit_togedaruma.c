@@ -31,7 +31,7 @@ static EvtWord attack_event[358];
 static EvtWord wait_event[102];
 
 BattleUnitKind unit_togedaruma = {
-    19,
+    UNIT_BRISTLE,
     "btl_un_togedaruma",
     2,
     0,
@@ -153,7 +153,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_togedaruma", "c_togedaruma", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x2009, 0x7, pose_table},
+    {1, "btl_un_togedaruma", "c_togedaruma", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
 static BattleWeapon weapon_togedaruma_attack = {

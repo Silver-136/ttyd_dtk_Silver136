@@ -39,7 +39,7 @@ static EvtWord attack_event_ceil[467];
 static EvtWord wait_event_ceil[6];
 
 BattleUnitKind unit_met = {
-    72,
+    UNIT_BUZZY_BEETLE,
     "btl_un_met",
     5,
     0,
@@ -272,7 +272,7 @@ static BattleUnitDefenseAttr defence_attr_turn = {0};
 static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 90, 100, 90, 100, 95, 75, 60, 30, 100, 75, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_met", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_met", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

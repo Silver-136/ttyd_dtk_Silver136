@@ -69,7 +69,7 @@ static USER_FUNC(kanbu_get_id) {
 }
 
 BattleUnitKind unit_gundan_zako_magician = {
-    119,
+    UNIT_X_NAUT_PHD,
     "btl_un_gundan_zako_magician",
     9,
     0,
@@ -164,7 +164,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gundan_zako_magician", "c_zako_m", 0.0f, 0.0f, 0.0f, 0.0f, 28.0f, 0.0f, 0.0f, 38.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_gundan_zako_magician", "c_zako_m", 0.0f, 0.0f, 0.0f, 0.0f, 28.0f, 0.0f, 0.0f, 38.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_gundan_zako_magician", "c_zako_m", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13018000, 0, pose_table},
 };
 

@@ -57,7 +57,7 @@ static EvtWord wait_event[6];
 EvtWord majo3_shadow_tail_event[78];
 
 BattleUnitKind unit_boss_majolyne_las = {
-    133,
+    UNIT_BELDAM_CHAPTER8,
     "btl_un_majolyne4",
     30,
     0,
@@ -155,7 +155,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_majolyne4", "c_majyorin", 0.0f, 0.0f, 0.0f, 5.0f, 20.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_majolyne4", "c_majyorin", 0.0f, 0.0f, 0.0f, 5.0f, 20.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_majolyne_kagenuke_attack1 = {

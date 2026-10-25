@@ -36,7 +36,7 @@ static EvtWord attack_event_nokotarou_shubibin[339];
 static EvtWord wait_event_nokotarou[6];
 
 BattleUnitKind unit_gullible_nokotarou = {
-    81,
+    UNIT_KOOPS_CHAPTER4,
     "btl_un_gullible_nokotarou",
     10,
     0,
@@ -93,7 +93,7 @@ BattleUnitKind unit_gullible_nokotarou = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x10000000,
+    kUnitNoncombatant,
     &regist_nokotarou,
     1,
     parts_nokotarou,
@@ -190,7 +190,7 @@ static BattleDataEntry data_table_nokotarou[] = {
 };
 
 static BattleUnitKindPart parts_nokotarou[] = {
-    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_nokotarou, &defence_attr_nokotarou, 0x1009, 0, pose_table_nokotarou_stay},
+    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_nokotarou, &defence_attr_nokotarou, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table_nokotarou_stay},
 };
 
 static EVT_BEGIN(dmg_turn_event)

@@ -162,7 +162,7 @@ static USER_FUNC(_steal_item) {
 }
 
 BattleUnitKind unit_badge_borodo = {
-    158,
+    UNIT_BADGE_BANDIT,
     "btl_un_badge_borodo",
     12,
     0,
@@ -324,7 +324,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_badge_borodo", "c_borodo_t", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_badge_borodo", "c_borodo_t", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

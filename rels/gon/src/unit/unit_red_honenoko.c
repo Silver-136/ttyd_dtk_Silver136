@@ -39,7 +39,7 @@ static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_red_honenoko = {
-    22,
+    UNIT_RED_BONES,
     "btl_un_red_honenoko",
     5,
     0,
@@ -96,7 +96,7 @@ BattleUnitKind unit_red_honenoko = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x10000,
+    kUndead,
     &regist,
     4,
     parts,
@@ -111,10 +111,10 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 85, 40, 0, 40, 100, 90, 80, 100, 90, 100, 90, 100, 90, 80, 0, 80, 100, 80, 100, 100, 0};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_red_honenoko", "c_karon_r_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
-    {2, "btl_un_red_honenoko", "c_karon_r_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {3, "btl_un_red_honenoko", "c_nagehone_g", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {4, "btl_un_red_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
+    {1, "btl_un_red_honenoko", "c_karon_r_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {2, "btl_un_red_honenoko", "c_karon_r_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {3, "btl_un_red_honenoko", "c_nagehone_g", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {4, "btl_un_red_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 static BattleWeapon weapon_honenoko_attack = {

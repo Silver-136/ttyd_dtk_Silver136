@@ -31,7 +31,7 @@ static EvtWord wait_event[10];
 static EvtWord cortez_damage_sub_event[25];
 
 BattleUnitKind unit_boss_cortez_claw = {
-    95,
+    UNIT_CORTEZ_HOOK,
     "btl_un_cortez_claw",
     4,
     0,
@@ -88,7 +88,7 @@ BattleUnitKind unit_boss_cortez_claw = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x2000004,
+    kFloating | kUnitNoHpGauge,
     &regist,
     1,
     parts,
@@ -172,7 +172,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_cortez_claw", "c_buki4", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x3010009, 0, pose_table},
+    {1, "btl_un_cortez_claw", "c_buki4", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

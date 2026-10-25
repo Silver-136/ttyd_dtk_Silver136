@@ -43,7 +43,7 @@ static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_black_karon = {
-    131,
+    UNIT_DARK_BONES,
     "btl_un_black_karon",
     20,
     0,
@@ -100,7 +100,7 @@ BattleUnitKind unit_black_karon = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x10000,
+    kUndead,
     &regist,
     6,
     parts,
@@ -115,12 +115,12 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 65, 20, 0, 20, 100, 100, 60, 100, 80, 100, 80, 100, 80, 60, 0, 60, 100, 60, 100, 100, 85};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
-    {2, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {3, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {4, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {5, "btl_un_black_karon", "c_nagehone", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {6, "btl_un_black_karon", "c_karon_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
+    {1, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {2, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {3, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {4, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {5, "btl_un_black_karon", "c_nagehone", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {6, "btl_un_black_karon", "c_karon_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 static BattleWeapon weapon_honenoko_attack = {

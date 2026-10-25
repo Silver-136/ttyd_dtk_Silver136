@@ -40,7 +40,7 @@ EvtWord cortez_weapon_break_event[88];
 EvtWord cortez_weapon_blow_dead_event[121];
 
 BattleUnitKind unit_boss_cortez_sword = {
-    97,
+    UNIT_CORTEZ_SWORD,
     "btl_un_cortez_sword",
     4,
     0,
@@ -97,7 +97,7 @@ BattleUnitKind unit_boss_cortez_sword = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x2000004,
+    kFloating | kUnitNoHpGauge,
     &regist,
     1,
     parts,
@@ -195,7 +195,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_cortez_sword", "c_buki2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x3010009, 0x7, pose_table},
+    {1, "btl_un_cortez_sword", "c_buki2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
 static EVT_BEGIN(init_event)

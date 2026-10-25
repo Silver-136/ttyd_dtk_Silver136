@@ -30,7 +30,7 @@ static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_kurikuri = {
-    36,
+    UNIT_GOOMBA_GLITZVILLE,
     "btl_un_kuriboo",
     2,
     0,
@@ -87,7 +87,7 @@ BattleUnitKind unit_kurikuri = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x40000,
+    kUnitLeader,
     &regist,
     1,
     parts,
@@ -130,7 +130,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {100, 110, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 110, 100, 100, 100, 100, 100, 150};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_kuriboo", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_kuriboo", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_kuriboo_attack = {

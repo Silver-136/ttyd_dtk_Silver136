@@ -42,7 +42,7 @@ static EvtWord wait_sound_event1[25];
 static EvtWord wait_sound_event2[12];
 
 BattleUnitKind unit_wanwan = {
-    127,
+    UNIT_CHAIN_CHOMP,
     "btl_un_wanwan",
     7,
     0,
@@ -154,15 +154,15 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x10000009, 0, pose_table},
-    {2, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x12010000, 0, pose_table},
-    {3, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x12010000, 0, pose_table},
-    {4, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x12010000, 0, pose_table},
-    {5, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x12010000, 0, pose_table},
-    {6, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x12010000, 0, pose_table},
-    {7, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x12010000, 0, pose_table},
-    {8, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x12010000, 0, pose_table},
-    {9, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x12010000, 0, pose_table},
+    {1, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kAbsolutePosition, 0, pose_table},
+    {2, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {3, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {4, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {5, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {6, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {7, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {8, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {9, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 static BattleWeapon weapon_wanwan_attack = {

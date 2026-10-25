@@ -35,7 +35,7 @@ static EvtWord drain_attack_event[911];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_flower_chorobon = {
-    87,
+    UNIT_FLOWER_FUZZY,
     "btl_un_flower_chorobon",
     6,
     0,
@@ -92,7 +92,7 @@ BattleUnitKind unit_flower_chorobon = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x40000,
+    kUnitLeader,
     &regist,
     1,
     parts,
@@ -107,7 +107,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {85, 85, 80, 100, 85, 100, 100, 70, 100, 90, 100, 90, 100, 95, 60, 85, 80, 100, 80, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_flower_chorobon", "c_chorobon_f", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_flower_chorobon", "c_chorobon_f", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_chorobon_drain_attack = {

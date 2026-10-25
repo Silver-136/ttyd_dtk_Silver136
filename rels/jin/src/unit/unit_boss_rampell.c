@@ -116,7 +116,7 @@ static USER_FUNC(eff_scanning) {
 }
 
 BattleUnitKind unit_boss_rampell = {
-    77,
+    UNIT_DOOPLISS_CHAPTER4_FIGHT1,
     "btl_un_hatena",
     40,
     0,
@@ -214,7 +214,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_hatena", "c_ranpel", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 40.0f, 0.0f, 30, 40, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_hatena", "c_ranpel", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 40.0f, 0.0f, 30, 40, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_rampell_attack = {

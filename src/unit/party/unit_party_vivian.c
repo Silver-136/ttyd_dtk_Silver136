@@ -180,11 +180,11 @@ static BattleDataEntry data_table[] = {
 };
 
 BattleUnitKindPart unitpartsdata_Party_Vivian[] = {
-    {1, "btl_un_vivian", "c_vivian", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence.d, &defence_attr.d, 0x9, 0, pose_table_vivian_stay},
+    {1, "btl_un_vivian", "c_vivian", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence.d, &defence_attr.d, kMainPart | kGuardTargetPart, 0, pose_table_vivian_stay},
 };
 
 BattleUnitKind unitdata_Party_Vivian = {
-    228,
+    UNIT_VIVIAN,
     "btl_un_vivian",
     10,
     5,
@@ -241,7 +241,7 @@ BattleUnitKind unitdata_Party_Vivian = {
     "SFX_MARIO_DAMAGE_FIRE1",
     "SFX_MARIO_DAMAGE_ICE1",
     "SFX_MARIO_DAMAGE_BIRIBIRI1",
-    0x2000004,
+    kFloating | kUnitNoHpGauge,
     &regist.d,
     1,
     unitpartsdata_Party_Vivian,

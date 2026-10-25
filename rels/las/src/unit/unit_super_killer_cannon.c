@@ -44,7 +44,7 @@ static USER_FUNC(killer_copy_status) {
 }
 
 BattleUnitKind unit_super_killer_cannon = {
-    125,
+    UNIT_BOMBSHELL_BILL_BLASTER,
     "btl_un_super_killer_cannon",
     10,
     0,
@@ -116,9 +116,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 90, 100, 80, 100, 80, 100, 95, 40, 0, 5, 100, 40, 100, 100, 90};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 35, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
-    {2, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, 0x10000, 0, pose_table},
-    {3, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, 0x10000, 0, pose_table},
+    {1, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 35, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {2, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
+    {3, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
 };
 
 static BattleUnitSetup entry_killer = {

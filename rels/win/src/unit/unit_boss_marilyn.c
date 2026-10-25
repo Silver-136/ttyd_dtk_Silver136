@@ -46,7 +46,7 @@ static EvtWord charge_attack_event[58];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boss_marilyn = {
-    32,
+    UNIT_MARILYN_CHAPTER2,
     "btl_un_marilyn1",
     12,
     0,
@@ -144,7 +144,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_marilyn1", "c_maririn", 0.0f, 0.0f, 0.0f, 15.0f, 45.0f, 0.0f, 0.0f, 50.0f, 0.0f, 38, 56, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_marilyn1", "c_maririn", 0.0f, 0.0f, 0.0f, 15.0f, 45.0f, 0.0f, 0.0f, 50.0f, 0.0f, 38, 56, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_marilyn_kagenuke_attack1 = {

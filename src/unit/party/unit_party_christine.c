@@ -116,11 +116,11 @@ static BattleDataEntry data_table[] = {
 };
 
 BattleUnitKindPart unitpartsdata_Party_Christine[] = {
-    {1, "btl_un_christine", "c_pkr", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, 0x9, 0, pose_table_christine_stay},
+    {1, "btl_un_christine", "c_pkr", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_christine_stay},
 };
 
 BattleUnitKind unitdata_Party_Christine = {
-    224,
+    UNIT_GOOMBELLA,
     "btl_un_christine",
     10,
     5,
@@ -177,7 +177,7 @@ BattleUnitKind unitdata_Party_Christine = {
     "SFX_MARIO_DAMAGE_FIRE1",
     "SFX_MARIO_DAMAGE_ICE1",
     "SFX_MARIO_DAMAGE_BIRIBIRI1",
-    0x2000000,
+    kUnitNoHpGauge,
     &regist,
     1,
     unitpartsdata_Party_Christine,

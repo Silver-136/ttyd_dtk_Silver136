@@ -30,7 +30,7 @@ static EvtWord evt_attack[302];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boss_moamoa_mouth = {
-    111,
+    UNIT_SMORG_MIASMA_CLAW,
     "btl_un_moamoa_mouth",
     6,
     0,
@@ -87,7 +87,7 @@ BattleUnitKind unit_boss_moamoa_mouth = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x240000,
+    kUnitLeader | kUnitNoSpin,
     &regist,
     1,
     parts,
@@ -114,7 +114,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_moamoa_mouth", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, 67.0f, 82.0f, 10.0f, 63.0f, 95.0f, 10.0f, 20, 30, 255, &defence, &defence_attr, 0x600001, 0, pose_table},
+    {1, "btl_un_moamoa_mouth", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, 67.0f, 82.0f, 10.0f, 63.0f, 95.0f, 10.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
 static BattleWeapon weapon_moamoa_attack = {

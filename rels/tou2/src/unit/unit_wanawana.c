@@ -50,7 +50,7 @@ static f32 tanf(f32 x) {
 }
 
 BattleUnitKind unit_wanawana = {
-    199,
+    UNIT_UNUSED_WANAWANA,
     "btl_un_wanawana",
     2,
     0,
@@ -133,7 +133,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_wanawana", "nakayama_test4", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_wanawana", "nakayama_test4", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 void replace_disp(CameraId camera, void* param) {

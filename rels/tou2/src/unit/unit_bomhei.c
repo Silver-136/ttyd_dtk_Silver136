@@ -33,7 +33,7 @@ static EvtWord attack_event_spark[288];
 static EvtWord wait_event_spark[27];
 
 BattleUnitKind unit_bomhei = {
-    43,
+    UNIT_BOB_OMB,
     "btl_un_bomhei",
     4,
     0,
@@ -155,7 +155,7 @@ static BattleDataEntry data_table_spark[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_bomhei", "c_bomhey", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0x1000, pose_table},
+    {1, "btl_un_bomhei", "c_bomhey", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterExplosive, pose_table},
 };
 
 static StatusVulnerability regist = {70, 100, 70, 0, 70, 150, 100, 100, 100, 90, 100, 90, 100, 95, 80, 90, 80, 100, 80, 100, 100, 95};

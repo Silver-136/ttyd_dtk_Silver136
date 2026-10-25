@@ -225,7 +225,7 @@ USER_FUNC(_load_param) {
 }
 
 BattleUnitKind unit_faker_mario = {
-    79,
+    UNIT_DOOPLISS_CHAPTER4_FIGHT2,
     "btl_un_rampell",
     40,
     0,
@@ -320,7 +320,7 @@ static BattleDataEntry data_table_fmario[] = {
 };
 
 static BattleUnitKindPart parts_fmario[] = {
-    {1, "btl_un_rampell", "c_mario", 0.0f, 0.0f, 0.0f, 3.0f, 27.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_fmario, &defence_attr_fmario, 0x9, 0, pose_table_fmario_stay},
+    {1, "btl_un_rampell", "c_mario", 0.0f, 0.0f, 0.0f, 3.0f, 27.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_fmario, &defence_attr_fmario, kMainPart | kGuardTargetPart, 0, pose_table_fmario_stay},
 };
 
 static BattleWeapon weapon_masao_jump = {

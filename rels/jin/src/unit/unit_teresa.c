@@ -39,7 +39,7 @@ static EvtWord move_event_sub[103];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_teresa = {
-    75,
+    UNIT_BOO,
     "btl_un_teresa",
     7,
     0,
@@ -96,7 +96,7 @@ BattleUnitKind unit_teresa = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     1,
     parts,
@@ -111,7 +111,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {50, 50, 105, 0, 50, 100, 100, 50, 100, 90, 100, 90, 100, 95, 60, 50, 90, 100, 10, 100, 100, 10};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_teresa", "c_teresa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_teresa", "c_teresa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_teresa_attack = {

@@ -97,7 +97,7 @@ static USER_FUNC(eff_magic_get_posX) {
 }
 
 BattleUnitKind unit_kamec_white = {
-    51,
+    UNIT_WHITE_MAGIKOOPA,
     "btl_un_kamec_white",
     7,
     0,
@@ -163,7 +163,7 @@ BattleUnitKind unit_kamec_white = {
 };
 
 BattleUnitKind unit_kamec_white_bunsin = {
-    52,
+    UNIT_WHITE_MAGIKOOPA_CLONE,
     "btl_un_kamec_white_bunsin",
     7,
     0,
@@ -220,7 +220,7 @@ BattleUnitKind unit_kamec_white_bunsin = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x400000,
+    kNoDamageNumber,
     &regist,
     2,
     parts,
@@ -307,8 +307,8 @@ static BattleDataEntry data_table_sky_bunsin[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_kamec_white", "c_kamek_w", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
-    {2, "btl_un_kamec_white", "c_kamek_w", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
+    {1, "btl_un_kamec_white", "c_kamek_w", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {2, "btl_un_kamec_white", "c_kamek_w", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 static BattleWeapon weapon_kamec_attack_magic = {

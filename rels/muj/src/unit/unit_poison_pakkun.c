@@ -49,7 +49,7 @@ static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_poison_pakkun = {
-    88,
+    UNIT_PUTRID_PIRANHA,
     "btl_un_poison_pakkun",
     8,
     0,
@@ -121,7 +121,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {105, 80, 50, 0, 95, 100, 100, 70, 100, 90, 100, 90, 100, 95, 80, 20, 40, 100, 80, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_poison_pakkun", "c_pakflwr_p", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0x1, pose_table},
+    {1, "btl_un_poison_pakkun", "c_pakflwr_p", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
 BattleWeapon weapon_poison_pakkun_attack = {

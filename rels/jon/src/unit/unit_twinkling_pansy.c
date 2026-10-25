@@ -28,7 +28,7 @@ static EvtWord escape_event[96];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_twinkling_pansy = {
-    70,
+    UNIT_AMAZY_DAYZEE,
     "btl_un_twinkling_pansy",
     20,
     0,
@@ -100,7 +100,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {50, 10, 10, 100, 30, 100, 100, 10, 100, 10, 100, 10, 100, 10, 10, 100, 60, 100, 10, 100, 100, 10};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_twinkling_pansy", "c_kpansy", 0.0f, 0.0f, 0.0f, 0.0f, 29.0f, 0.0f, 0.0f, 34.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_twinkling_pansy", "c_kpansy", 0.0f, 0.0f, 0.0f, 0.0f, 29.0f, 0.0f, 0.0f, 34.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_twinkling_pansy_attack = {

@@ -30,7 +30,7 @@ static EvtWord attack_event[454];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_sinemon = {
-    114,
+    UNIT_MOON_CLEFT,
     "btl_un_sinemon",
     6,
     0,
@@ -87,7 +87,7 @@ BattleUnitKind unit_sinemon = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x40000,
+    kUnitLeader,
     &regist,
     1,
     parts,
@@ -104,7 +104,7 @@ static BattleUnitDefense defence_turn = {0};
 static StatusVulnerability regist = {30, 80, 30, 100, 30, 100, 0, 50, 100, 60, 100, 60, 100, 100, 50, 30, 20, 100, 50, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_sinemon", "c_sinemon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x2009, 0x1, pose_table},
+    {1, "btl_un_sinemon", "c_sinemon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky, pose_table},
 };
 
 static BattleWeapon weapon_sinemon_attack = {

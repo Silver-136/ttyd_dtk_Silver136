@@ -31,7 +31,7 @@ static EvtWord attack_event_christine[690];
 static EvtWord wait_event_christine[7];
 
 BattleUnitKind unit_gullible_christine = {
-    80,
+    UNIT_GOOMBELLA_CHAPTER4,
     "btl_un_gullible_christine",
     10,
     0,
@@ -88,7 +88,7 @@ BattleUnitKind unit_gullible_christine = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x10000000,
+    kUnitNoncombatant,
     &regist_christine,
     1,
     parts_christine,
@@ -144,7 +144,7 @@ static BattleDataEntry data_table_christine[] = {
 };
 
 static BattleUnitKindPart parts_christine[] = {
-    {1, "btl_un_christine", "c_pkr", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_christine, &defence_attr_christine, 0x9, 0, pose_table_christine_stay},
+    {1, "btl_un_christine", "c_pkr", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_christine, &defence_attr_christine, kMainPart | kGuardTargetPart, 0, pose_table_christine_stay},
 };
 
 static EVT_BEGIN(fmario_zoom_christine)

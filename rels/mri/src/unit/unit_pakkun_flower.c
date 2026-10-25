@@ -42,7 +42,7 @@ static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
 static BattleUnitKind unit_pakkun_flower = {
-    162, // mUnitType
+    UNIT_PIRANHA_PLANT, // mUnitType
     "btl_un_pakkun_flower", // name
     15, // maxHp
     0, // maxFp

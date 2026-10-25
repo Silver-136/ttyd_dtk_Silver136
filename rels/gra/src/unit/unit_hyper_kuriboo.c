@@ -31,7 +31,7 @@ static EvtWord attack_event[638];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_hyper_kuriboo = {
-    66,
+    UNIT_HYPER_GOOMBA,
     "btl_un_hyper_kuriboo",
     8,
     0,
@@ -88,7 +88,7 @@ BattleUnitKind unit_hyper_kuriboo = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x40000,
+    kUnitLeader,
     &regist,
     1,
     parts,
@@ -131,7 +131,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {80, 90, 80, 100, 80, 100, 100, 80, 100, 95, 100, 95, 100, 95, 80, 90, 80, 100, 80, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_hyper_kuriboo", "c_kuribo_h", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_hyper_kuriboo", "c_kuribo_h", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_kuriboo_attack = {

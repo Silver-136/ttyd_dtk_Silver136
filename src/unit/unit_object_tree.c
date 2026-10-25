@@ -23,7 +23,7 @@ static EvtWord attack_event[5];
 static EvtWord wait_event[2];
 
 BattleUnitKind unit_object_tree = {
-    216,
+    UNIT_UNUSED_TREE,
     "btl_un_tree",
     999,
     0,
@@ -89,7 +89,7 @@ BattleUnitKind unit_object_tree = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_tree", "b_mario", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x3000009, 0, pose_table},
+    {1, "btl_un_tree", "b_mario", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

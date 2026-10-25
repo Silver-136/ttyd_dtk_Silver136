@@ -111,7 +111,7 @@ static USER_FUNC(teresa_check_trans) {
 }
 
 BattleUnitKind unit_purple_teresa = {
-    106,
+    UNIT_DARK_BOO,
     "btl_un_purple_teresa",
     8,
     0,
@@ -168,7 +168,7 @@ BattleUnitKind unit_purple_teresa = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     1,
     parts,
@@ -183,7 +183,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {40, 40, 100, 0, 40, 100, 100, 40, 100, 85, 100, 85, 100, 90, 50, 40, 85, 100, 0, 100, 100, 10};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_purple_teresa", "c_teresa_p", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_purple_teresa", "c_teresa_p", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_teresa_attack = {

@@ -26,7 +26,7 @@ static EvtWord attack_event[455];
 static EvtWord wait_event[6];
 
 static BattleUnitKind unit_hennya = {
-    163, // mUnitType
+    UNIT_SPUNIA, // mUnitType
     "btl_un_hennya", // name
     12, // maxHp
     0, // maxFp

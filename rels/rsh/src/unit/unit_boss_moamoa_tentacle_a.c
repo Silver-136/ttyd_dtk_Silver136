@@ -34,7 +34,7 @@ static EvtWord evt_attack[387];
 static EvtWord wait_event[32];
 
 BattleUnitKind unit_boss_moamoa_tentacle_a = {
-    110,
+    UNIT_SMORG_MIASMA_TENTACLE_C,
     "btl_un_moamoa_tentacle_c",
     4,
     0,
@@ -91,7 +91,7 @@ BattleUnitKind unit_boss_moamoa_tentacle_a = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     1,
     parts,
@@ -118,7 +118,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_moamoa_tentacle_a", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, -74.0f, 77.0f, 30.0f, -76.0f, 92.0f, 30.0f, 20, 30, 255, &defence, &defence_attr, 0x600001, 0, pose_table},
+    {1, "btl_un_moamoa_tentacle_a", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, -74.0f, 77.0f, 30.0f, -76.0f, 92.0f, 30.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
 static BattleWeapon weapon_moamoa_attack = {

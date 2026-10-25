@@ -41,7 +41,7 @@ static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
 static BattleUnitKind unit_patapata = {
-    15, // mUnitType
+    UNIT_PARATROOPA, // mUnitType
     "btl_un_patapata", // name
     4, // maxHp
     0, // maxFp

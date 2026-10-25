@@ -36,7 +36,7 @@ static EvtWord attack_event[738];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_hyper_togekuri = {
-    68,
+    UNIT_HYPER_SPIKY_GOOMBA,
     "btl_un_hyper_togekuri",
     8,
     0,
@@ -93,7 +93,7 @@ BattleUnitKind unit_hyper_togekuri = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x40000,
+    kUnitLeader,
     &regist,
     1,
     parts,
@@ -108,7 +108,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {80, 90, 80, 100, 80, 100, 100, 80, 100, 90, 100, 90, 100, 95, 80, 90, 90, 100, 80, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_hyper_togekuri", "c_kuribo_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0x1, pose_table},
+    {1, "btl_un_hyper_togekuri", "c_kuribo_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
 static BattleWeapon weapon_togekuri_attack = {

@@ -59,7 +59,7 @@ static EvtWord explosion_event[247];
 #endif
 
 BattleUnitKind unit_heavy_bom = {
-    92,
+    UNIT_BULKY_BOB_OMB,
     "btl_un_heavy_bom",
     6,
     0,
@@ -500,8 +500,8 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_heavy_bom", "c_heavy", 0.0f, 0.0f, 0.0f, 15.0f, 50.0f, 0.0f, 0.0f, 65.0f, 0.0f, 65, 70, 255, &defence, &defence_attr, 0x9, 0, pose_table_3},
-    {2, /*"ヘビーボム"*/"\x83\x77\x83\x72\x81\x5B\x83\x7B\x83\x80", "c_heavy", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, 0x2010000, 0, pose_table_3},
+    {1, "btl_un_heavy_bom", "c_heavy", 0.0f, 0.0f, 0.0f, 15.0f, 50.0f, 0.0f, 0.0f, 65.0f, 0.0f, 65, 70, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_3},
+    {2, /*"ヘビーボム"*/"\x83\x77\x83\x72\x81\x5B\x83\x7B\x83\x80", "c_heavy", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table_3},
 };
 
 static EVT_BEGIN(init_event)

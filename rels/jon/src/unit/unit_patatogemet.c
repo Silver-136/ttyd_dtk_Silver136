@@ -56,7 +56,7 @@ static EvtWord attack_event_ceil[426];
 static EvtWord wait_event_ceil[6];
 
 BattleUnitKind unit_patatogemet = {
-    105,
+    UNIT_SPIKY_PARABUZZY,
     "btl_un_patatogemet",
     5,
     0,
@@ -196,7 +196,7 @@ static BattleDataEntry data_table_pata[] = {
 };
 
 static BattleUnitKindPart parts_pata[] = {
-    {1, "btl_un_patatogemet", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 23.0f, 0.0f, 0.0f, 28.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, 0x600809, 0x1, pose_table_pata},
+    {1, "btl_un_patatogemet", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 23.0f, 0.0f, 0.0f, 28.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, kCounterTopSpiky, pose_table_pata},
 };
 
 static PoseSoundTiming pose_sound_timing_table[] = {

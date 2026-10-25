@@ -300,11 +300,11 @@ static BattleDataEntry data_table[] = {
 };
 
 BattleUnitKindPart unitpartsdata_Party_Clauda[] = {
-    {1, "btl_un_clauda", "c_windy", 0.0f, 0.0f, 0.0f, 16.0f, 44.0f, 5.0f, 0.0f, 44.0f, 0.0f, 26, 50, 255, &defence, &defence_attr, 0x9, 0, pose_table_clauda_stay},
+    {1, "btl_un_clauda", "c_windy", 0.0f, 0.0f, 0.0f, 16.0f, 44.0f, 5.0f, 0.0f, 44.0f, 0.0f, 26, 50, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_clauda_stay},
 };
 
 BattleUnitKind unitdata_Party_Clauda = {
-    227,
+    UNIT_FLURRIE,
     "btl_un_clauda",
     10,
     5,
@@ -361,7 +361,7 @@ BattleUnitKind unitdata_Party_Clauda = {
     "SFX_MARIO_DAMAGE_FIRE1",
     "SFX_MARIO_DAMAGE_ICE1",
     "SFX_MARIO_DAMAGE_BIRIBIRI1",
-    0x2000004,
+    kFloating | kUnitNoHpGauge,
     &regist,
     1,
     unitpartsdata_Party_Clauda,

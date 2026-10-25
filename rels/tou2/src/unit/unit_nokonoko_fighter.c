@@ -28,7 +28,7 @@ static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_nokonoko_fighter = {
-    37,
+    UNIT_KP_KOOPA,
     "btl_un_nokonoko_fighter",
     4,
     0,
@@ -85,7 +85,7 @@ BattleUnitKind unit_nokonoko_fighter = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x40000,
+    kUnitLeader,
     &regist,
     1,
     parts,
@@ -149,7 +149,7 @@ static BattleUnitDefense defence_turn = {0};
 static StatusVulnerability regist = {85, 90, 80, 100, 80, 100, 100, 80, 100, 95, 100, 95, 100, 95, 80, 85, 80, 100, 80, 100, 100, 100};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_nokonoko_fighter", "c_touginoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x1009, 0, pose_table},
+    {1, "btl_un_nokonoko_fighter", "c_touginoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table},
 };
 
 static BattleWeapon weapon_nokonoko_attack = {

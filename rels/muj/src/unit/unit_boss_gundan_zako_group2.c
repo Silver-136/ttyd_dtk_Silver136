@@ -109,7 +109,7 @@ EvtWord hit_check_event_sub[123];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boss_gundan_zako_group2 = {
-    101,
+    UNIT_X_NAUTS_CRUMP_FORMATION2,
     "btl_un_gundan_zako_group2",
     6,
     0,
@@ -166,7 +166,7 @@ BattleUnitKind unit_boss_gundan_zako_group2 = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200002,
+    kCeiling | kUnitNoSpin,
     &regist,
     1,
     parts,
@@ -194,7 +194,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gundan_zako_group2", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x3600009, 0, pose_table},
+    {1, "btl_un_gundan_zako_group2", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden | kNoShadow, 0, pose_table},
 };
 
 BattleWeapon weapon_gundan_zako_group2_attack = {

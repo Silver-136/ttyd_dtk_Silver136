@@ -218,9 +218,9 @@ BattleUnitType same_tbl_gundan_zako[] = {
 BattleUnitType same_tbl_cortez[] = {
     UNIT_CORTEZ,
     UNIT_CORTEZ_BONE_PILE,
-    UNIT_CORTEZ_SWORD,
     UNIT_CORTEZ_HOOK,
     UNIT_CORTEZ_RAPIER,
+    UNIT_CORTEZ_SWORD,
     UNIT_CORTEZ_SABER,
     UNIT_NULL
 };

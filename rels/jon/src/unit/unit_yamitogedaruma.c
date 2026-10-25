@@ -32,7 +32,7 @@ static EvtWord attack_event[358];
 static EvtWord wait_event[102];
 
 BattleUnitKind unit_yamitogedaruma = {
-    165,
+    UNIT_DARK_BRISTLE,
     "btl_un_yamitogedaruma",
     8,
     0,
@@ -154,7 +154,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_yamitogedaruma", "c_togedaruma_b", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x2009, 0x7, pose_table},
+    {1, "btl_un_yamitogedaruma", "c_togedaruma_b", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
 static BattleWeapon weapon_togedaruma_attack = {

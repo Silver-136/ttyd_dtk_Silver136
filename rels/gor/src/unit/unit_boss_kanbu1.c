@@ -37,7 +37,7 @@ static PoseTableEntry pose_table_guard[18];
 static EvtWord normal_attack_event[365];
 
 BattleUnitKind unit_boss_kanbu1 = {
-    6,
+    UNIT_LORD_CRUMP_PROLOGUE,
     "btl_un_kanbu1",
     5,
     0,
@@ -115,7 +115,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_kanbu1", "c_kanbu", 0.0f, 0.0f, 0.0f, 0.0f, 45.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_kanbu1", "c_kanbu", 0.0f, 0.0f, 0.0f, 0.0f, 45.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 BattleWeapon weapon_kanbu1_attack = {

@@ -28,7 +28,7 @@ static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
 static BattleUnitKind unit_kuriboo = {
-    1, // mUnitType
+    UNIT_GOOMBA, // mUnitType
     "btl_un_kuriboo", // name
     2, // maxHp
     0, // maxFp

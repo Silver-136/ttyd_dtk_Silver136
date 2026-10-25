@@ -33,7 +33,7 @@ static EvtWord dekadeka_event[125];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_gundan_zako_elite = {
-    120,
+    UNIT_ELITE_X_NAUT,
     "btl_un_gundan_zako_elite",
     10,
     0,
@@ -128,7 +128,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gundan_zako_elite", "c_zako_e", 0.0f, 0.0f, 0.0f, 0.0f, 28.0f, 0.0f, 0.0f, 38.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_gundan_zako_elite", "c_zako_e", 0.0f, 0.0f, 0.0f, 0.0f, 28.0f, 0.0f, 0.0f, 38.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_gundan_zako_attack = {

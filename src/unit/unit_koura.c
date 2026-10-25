@@ -28,7 +28,7 @@ static EvtWord wait_event[6];
 static EvtWord attack_event[2];
 
 BattleUnitKind unit_koura = {
-    223,
+    UNIT_SHELL_SHIELD,
     "btl_un_koura",
     8,
     0,
@@ -85,7 +85,7 @@ BattleUnitKind unit_koura = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x10000000,
+    kUnitNoncombatant,
     &regist,
     2,
     parts,
@@ -134,8 +134,8 @@ PoseTableEntry pose_table_crack_lv2[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 20.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x80009, 0, pose_table},
-    {2, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x3010000, 0, pose_table},
+    {1, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 20.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable, 0, pose_table},
+    {2, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

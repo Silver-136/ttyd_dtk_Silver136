@@ -26,7 +26,7 @@ static EvtWord attack_event[455];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_hannya = {
-    5,
+    UNIT_SPANIA,
     "btl_un_hannya",
     3,
     0,
@@ -104,7 +104,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_hannya", "c_hannya", 0.0f, 0.0f, 0.0f, 0.0f, 27.0f, 0.0f, 0.0f, 37.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0x1, pose_table},
+    {1, "btl_un_hannya", "c_hannya", 0.0f, 0.0f, 0.0f, 0.0f, 27.0f, 0.0f, 0.0f, 37.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
 static BattleWeapon weapon_hannya_attack = {

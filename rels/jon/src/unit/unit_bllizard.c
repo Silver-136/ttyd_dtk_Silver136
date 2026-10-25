@@ -42,7 +42,7 @@ static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
 BattleUnitKind unit_bllizard = {
-    112,
+    UNIT_ICE_PUFF,
     "btl_un_bllizard",
     9,
     0,
@@ -99,7 +99,7 @@ BattleUnitKind unit_bllizard = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     1,
     parts,
@@ -114,7 +114,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 1, 3, 0, 0}};
 static StatusVulnerability regist = {65, 65, 95, 100, 60, 0, 100, 0, 100, 75, 100, 75, 100, 90, 65, 70, 85, 100, 65, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_bllizard", "c_kmoon_b", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, 0x600009, 0, pose_table},
+    {1, "btl_un_bllizard", "c_kmoon_b", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
 static BattleWeapon weapon_bllizard_attack = {

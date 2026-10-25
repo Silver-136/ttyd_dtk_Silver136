@@ -59,7 +59,7 @@ static PoseTableEntry pose_table_1[] = {
 };
 
 BattleUnitKind unit_bomzou = {
-    219,
+    UNIT_BOMB_SQUAD_BOMB,
     "btl_un_bomzou",
     1,
     0,
@@ -116,7 +116,7 @@ BattleUnitKind unit_bomzou = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x12400000,
+    kNoDamageNumber | kUnitNoHpGauge | kUnitNoncombatant,
     &regist,
     1,
     parts,
@@ -156,7 +156,7 @@ BattleWeapon weapon_bomzou_explosion = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_bomzou", "c_bakudan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x80009, 0, pose_table_3},
+    {1, "btl_un_bomzou", "c_bakudan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable, 0, pose_table_3},
 };
 
 static EVT_BEGIN(init_event)

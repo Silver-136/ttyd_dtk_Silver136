@@ -76,7 +76,7 @@ USER_FUNC(ceil_exist) {
 }
 
 BattleUnitKind unit_boss_champion = {
-    64,
+    UNIT_RAWK_HAWK,
     "btl_un_champion",
     40,
     0,
@@ -199,7 +199,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_champion", "c_bred_h", 0.0f, 0.0f, 0.0f, 0.0f, 50.0f, 0.0f, 0.0f, 55.0f, 0.0f, 35, 70, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_champion", "c_bred_h", 0.0f, 0.0f, 0.0f, 0.0f, 50.0f, 0.0f, 0.0f, 55.0f, 0.0f, 35, 70, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 USER_FUNC(init_ceil) {

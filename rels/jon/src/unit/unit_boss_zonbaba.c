@@ -49,7 +49,7 @@ static EvtWord attack_event[282];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boss_zonbaba = {
-    171,
+    UNIT_BONETAIL,
     "btl_un_zonbaba",
     200,
     0,
@@ -114,7 +114,7 @@ BattleUnitKind unit_boss_zonbaba = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     2,
     parts,
@@ -159,8 +159,8 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_zonbaba", "c_gonbaba_z", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, 0x2, 0, pose_table},
-    {2, "btl_un_zonbaba", "c_gonbaba_z", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, 0x1600009, 0, pose_table},
+    {1, "btl_un_zonbaba", "c_gonbaba_z", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart, 0, pose_table},
+    {2, "btl_un_zonbaba", "c_gonbaba_z", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, 0, pose_table},
 };
 
 BattleWeapon weapon_zonbaba_fumituke_attack = {

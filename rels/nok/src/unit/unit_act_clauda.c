@@ -17,7 +17,7 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_act_clauda = {
-    182,
+    UNIT_EPILOGUE_FLURRIE,
     "btl_un_act_clauda",
     10,
     0,
@@ -93,7 +93,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_clauda", "c_windy", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table_clauda_stay},
+    {1, "btl_un_clauda", "c_windy", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_clauda_stay},
 };
 
 static EVT_BEGIN(init_event)

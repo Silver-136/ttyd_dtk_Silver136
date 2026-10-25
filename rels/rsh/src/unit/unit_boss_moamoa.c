@@ -155,7 +155,7 @@ void moamoa_mainUnitIdClear(void) {
 }
 
 BattleUnitKind unit_boss_moamoa = {
-    107,
+    UNIT_SMORG,
     "btl_un_moamoa",
     50,
     0,
@@ -212,7 +212,7 @@ BattleUnitKind unit_boss_moamoa = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     1,
     parts,
@@ -252,7 +252,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_moamoa", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, -2.0f, 53.0f, 20.0f, -4.0f, 63.0f, 20.0f, 20, 30, 255, &moamoa_defence, &defence_attr, 0x20000001, 0, moamoa1_pose_table},
+    {1, "btl_un_moamoa", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, -2.0f, 53.0f, 20.0f, -4.0f, 63.0f, 20.0f, 20, 30, 255, &moamoa_defence, &defence_attr, kMainPart | kImmuneToDamageAndStatus, 0, moamoa1_pose_table},
 };
 
 BattleUnitSetup entry_boss_moamoa_tentacle_a = {

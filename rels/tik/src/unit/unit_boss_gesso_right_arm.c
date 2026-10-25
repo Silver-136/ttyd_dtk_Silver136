@@ -41,7 +41,7 @@ EvtWord gesso_fall_check[219];
 EvtWord gesso_arm_damage_pose_event[35];
 
 BattleUnitKind unit_boss_gesso_right_arm = {
-    10,
+    UNIT_BLOOPER_RIGHT_TENTACLE,
     "btl_un_gesso_right_arm",
     3,
     0,
@@ -98,7 +98,7 @@ BattleUnitKind unit_boss_gesso_right_arm = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     1,
     parts,

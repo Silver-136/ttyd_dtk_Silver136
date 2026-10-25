@@ -80,7 +80,7 @@ BattleWeapon weapon_batten_satellite_attack = {
 };
 
 BattleUnitKind unit_boss_batten_satellite = {
-    147,
+    UNIT_GRODUS_X,
     "btl_un_batten_satellite",
     3,
     0,
@@ -137,7 +137,7 @@ BattleUnitKind unit_boss_batten_satellite = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     1,
     parts,
@@ -238,7 +238,7 @@ EVT_BEGIN(dmg_counter_event)
 EVT_END()
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_batten_satellite", "c_shuryo_p", 0.0f, 0.0f, 0.0f, -4.0f, -2.0f, 0.0f, -6.0f, 1.0f, 0.0f, 14, 14, 255, &defence, &defence_attr, 0x600009, 0, pose_table},
+    {1, "btl_un_batten_satellite", "c_shuryo_p", 0.0f, 0.0f, 0.0f, -4.0f, -2.0f, 0.0f, -6.0f, 1.0f, 0.0f, 14, 14, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

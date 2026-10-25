@@ -194,7 +194,7 @@ BattleWeapon weapon_gonbaba_kamituki_attack = {
 };
 
 BattleUnitKind unit_boss_gonbaba = {
-    23,
+    UNIT_HOOKTAIL,
     "btl_un_gonbaba",
     20,
     0,
@@ -255,7 +255,7 @@ BattleUnitKind unit_boss_gonbaba = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     3,
     parts,
@@ -301,13 +301,13 @@ static BattleDataEntry data_table[] = {
 
 static BattleUnitKindPart parts[] = {
 #ifdef VERSION_G8ME01
-    {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, 0x82, 0, pose_table},
-    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, 0x1600089, 0, pose_table},
+    {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart | kWeakToAttackFxR, 0, pose_table},
+    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kWeakToAttackFxR | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, 0, pose_table},
 #else
     {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, 0x22, 0, pose_table},
     {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, 0x1600029, 0, pose_table},
 #endif
-    {3, "btl_un_gonbaba", "c_gonbaba4", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x1010000, 0, pose_table},
+    {3, "btl_un_gonbaba", "c_gonbaba4", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden, 0, pose_table},
 };
 
 static EVT_BEGIN(battle_entry_event)

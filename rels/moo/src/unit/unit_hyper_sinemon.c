@@ -31,7 +31,7 @@ static EvtWord attack_event[595];
 static EvtWord wait_event[6];
 
 static BattleUnitKind unit_hyper_sinemon = {
-    71, // mUnitType
+    UNIT_HYPER_CLEFT, // mUnitType
     "btl_un_hyper_sinemon", // name
     4, // maxHp
     0, // maxFp

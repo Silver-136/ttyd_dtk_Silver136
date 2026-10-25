@@ -15,11 +15,11 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[2];
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_system", NULL, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x3010009, 0, NULL},
+    {1, "btl_un_system", NULL, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, 0, NULL},
 };
 
 BattleUnitKind unit_system = {
-    220,
+    UNIT_SYSTEM,
     "btl_un_system",
     999,
     0,
@@ -76,7 +76,7 @@ BattleUnitKind unit_system = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x52003000,
+    kNoGravityBob | kActsInZeroGravity | kUnitNoHpGauge | kUnitNoncombatant | kUnitHpFixed,
     &regist,
     1,
     parts,

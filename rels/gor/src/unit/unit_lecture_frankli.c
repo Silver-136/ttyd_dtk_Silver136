@@ -31,7 +31,7 @@ EvtWord lecAttackEvent_Hammer[651];
 EvtWord lecture_end_event[51];
 
 BattleUnitKind unit_lecture_frankli = {
-    178,
+    UNIT_TUTORIAL_FRANKLY_B2,
     "btl_un_frankli",
     10,
     0,
@@ -88,7 +88,7 @@ BattleUnitKind unit_lecture_frankli = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x12000000,
+    kUnitNoHpGauge | kUnitNoncombatant,
     &regist,
     1,
     parts,
@@ -200,7 +200,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_frankli", "c_kuri_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x90009, 0, pose_table},
+    {1, "btl_un_frankli", "c_kuri_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kUntattleable, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

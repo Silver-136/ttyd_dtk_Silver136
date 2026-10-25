@@ -59,7 +59,7 @@ static EvtWord explosion_event[247];
 #endif
 
 static BattleUnitKind unit_heavy_bom = {
-    92, // mUnitType
+    UNIT_BULKY_BOB_OMB, // mUnitType
     "btl_un_heavy_bom", // name
     6, // maxHp
     0, // maxFp

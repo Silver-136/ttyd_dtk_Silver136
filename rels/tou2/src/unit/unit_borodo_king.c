@@ -162,7 +162,7 @@ static USER_FUNC(_steal_item) {
 }
 
 BattleUnitKind unit_borodo_king = {
-    45,
+    UNIT_BIG_BANDIT,
     "btl_un_borodo_king",
     8,
     0,
@@ -324,7 +324,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_borodo_king", "c_borodo_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_borodo_king", "c_borodo_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

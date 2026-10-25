@@ -178,7 +178,7 @@ EvtWord attack_event_chuchurina_normal[831];
 EvtWord wait_event_chuchurina[6];
 
 BattleUnitKind unit_boss_rampell_las = {
-    135,
+    UNIT_DOOPLISS_CHAPTER8,
     "btl_un_rampell",
     40,
     0,
@@ -276,7 +276,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_rampell", "c_ranpel", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_rampell", "c_ranpel", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_rampell_attack = {

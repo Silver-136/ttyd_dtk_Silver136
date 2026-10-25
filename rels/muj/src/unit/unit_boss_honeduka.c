@@ -17,7 +17,7 @@ EvtWord honeduka_damage_sub_event[14];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boss_honeduka = {
-    94,
+    UNIT_CORTEZ_BONE_PILE,
     "btl_un_honeduka",
     100,
     0,
@@ -74,7 +74,7 @@ BattleUnitKind unit_boss_honeduka = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x52200000,
+    kUnitNoSpin | kUnitNoHpGauge | kUnitNoncombatant | kUnitHpFixed,
     &regist,
     1,
     parts,
@@ -101,7 +101,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_honeduka", "c_honezuka", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x2090009, 0, pose_table},
+    {1, "btl_un_honeduka", "c_honezuka", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kUntattleable | kNoShadow, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

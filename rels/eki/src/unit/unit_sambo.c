@@ -49,7 +49,7 @@ static EvtWord sambo_rabbit_move[74];
 static EvtWord _body_param_set[49];
 
 static BattleUnitKind unit_sambo = {
-    39, // mUnitType
+    UNIT_POKEY, // mUnitType
     "btl_un_sambo", // name
     4, // maxHp
     0, // maxFp

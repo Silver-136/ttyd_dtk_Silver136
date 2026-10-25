@@ -119,13 +119,13 @@ PoseTableEntry pose_table_object[] = {
 };
 
 BattleUnitKindPart unitpartsdata_Mario[] = {
-    {1, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, 0x9, 0, pose_table_mario_stay},
-    {2, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, 0x13010000, 0, pose_table_object},
-    {3, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, 0x13010000, 0, pose_table_object},
+    {1, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_mario_stay},
+    {2, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_object},
+    {3, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_object},
 };
 
 BattleUnitKind unitdata_Mario = {
-    222,
+    UNIT_MARIO,
     "btl_un_mario",
     10,
     5,
@@ -182,7 +182,7 @@ BattleUnitKind unitdata_Mario = {
     "SFX_MARIO_DAMAGE_FIRE1",
     "SFX_MARIO_DAMAGE_ICE1",
     "SFX_MARIO_DAMAGE_BIRIBIRI1",
-    0x2040000,
+    kUnitLeader | kUnitNoHpGauge,
     &regist,
     3,
     unitpartsdata_Mario,

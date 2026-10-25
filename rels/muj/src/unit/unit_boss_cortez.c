@@ -137,7 +137,7 @@ EvtWord mode2_honeduka_damage_event[76];
 EvtWord mode_change_event[111];
 
 BattleUnitKind unit_boss_cortez = {
-    93,
+    UNIT_CORTEZ,
     "btl_un_cortez",
     20,
     0,
@@ -194,7 +194,7 @@ BattleUnitKind unit_boss_cortez = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     19,
     parts,
@@ -752,25 +752,25 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_cortez", "c_korutesu1", 0.0f, 0.0f, 0.0f, 145.0f, 90.0f, 30.0f, 145.0f, 90.0f, 30.0f, 20, 30, 255, &defence_honeduka, &defence_honeduka_attr, 0x600009, 0, pose_table_mode_1},
-    {2, "btl_un_cortez", NULL, 0.0f, 0.0f, 0.0f, 60.0f, 110.0f, 20.0f, 60.0f, 110.0f, 20.0f, 20, 30, 255, &defence_mode2_upper_rib_close, &defence_attr_mode2_upper_rib_close, 0x3310004, 0, pose_table_mode_1},
-    {3, "btl_un_cortez", "c_otitabuki", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x3010000, 0, pose_table_mode_1},
-    {4, "btl_un_honeduka", "c_honezuka", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 10.0f, 0.0f, 30.0f, 10.0f, 45, 30, 255, &defence_mode1, &defence_attr_mode1, 0x2000006, 0x1, pose_table_honeduka},
-    {5, "btl_un_honeduka", "c_hone2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x3010000, 0, pose_table_fly_bone},
-    {6, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {7, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {8, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {9, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {10, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {11, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {12, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {13, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {14, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {15, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {16, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {17, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {18, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
-    {19, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, 0x13010000, 0, pose_table_fly_bone},
+    {1, "btl_un_cortez", "c_korutesu1", 0.0f, 0.0f, 0.0f, 145.0f, 90.0f, 30.0f, 145.0f, 90.0f, 30.0f, 20, 30, 255, &defence_honeduka, &defence_honeduka_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_mode_1},
+    {2, "btl_un_cortez", NULL, 0.0f, 0.0f, 0.0f, 60.0f, 110.0f, 20.0f, 60.0f, 110.0f, 20.0f, 20, 30, 255, &defence_mode2_upper_rib_close, &defence_attr_mode2_upper_rib_close, kSemiImportantPart | kNotTargetable | kJumplikeCannotTarget | kHammerlikeCannotTarget | kHidden | kNoShadow, 0, pose_table_mode_1},
+    {3, "btl_un_cortez", "c_otitabuki", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow, 0, pose_table_mode_1},
+    {4, "btl_un_honeduka", "c_honezuka", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 10.0f, 0.0f, 30.0f, 10.0f, 45, 30, 255, &defence_mode1, &defence_attr_mode1, kImportantPart | kSemiImportantPart | kNoShadow, kCounterTopSpiky, pose_table_honeduka},
+    {5, "btl_un_honeduka", "c_hone2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow, 0, pose_table_fly_bone},
+    {6, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {7, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {8, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {9, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {10, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {11, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {12, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {13, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {14, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {15, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {16, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {17, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {18, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
+    {19, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
 };
 
 static EVT_BEGIN(init_event)

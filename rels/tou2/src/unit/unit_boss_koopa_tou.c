@@ -67,7 +67,7 @@ static EvtWord wait_event[6];
 static const char* cmd_disable_string[5];
 
 BattleUnitKind unit_boss_koopa_tou = {
-    63,
+    UNIT_BOWSER_CHAPTER3,
     "btl_un_koopa",
     30,
     0,
@@ -186,7 +186,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_koopa", "c_koopa", 0.0f, 0.0f, 0.0f, 34.0f, 62.0f, 0.0f, 22.0f, 78.0f, 0.0f, 70, 80, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_koopa", "c_koopa", 0.0f, 0.0f, 0.0f, 34.0f, 62.0f, 0.0f, 22.0f, 78.0f, 0.0f, 70, 80, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_koopa_hip_attack = {

@@ -69,7 +69,7 @@ static EvtWord wait_event[6];
 EvtWord dead_subevent[48];
 
 BattleUnitKind unit_boss_gesso = {
-    8,
+    UNIT_BLOOPER,
     "btl_un_gesso",
     12,
     0,
@@ -126,7 +126,7 @@ BattleUnitKind unit_boss_gesso = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     1,
     parts,
@@ -206,7 +206,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gesso", "c_gesso", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 103, -175, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_gesso", "c_gesso", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 103, -175, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 #ifndef VERSION_G8ME01

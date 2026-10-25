@@ -49,7 +49,7 @@ static EvtWord sambo_rabbit_move[74];
 static EvtWord _body_param_set[49];
 
 BattleUnitKind unit_sambo_mummy = {
-    104,
+    UNIT_POISON_POKEY,
     "btl_un_sambo_mummy",
     8,
     0,
@@ -492,11 +492,11 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 84.0f, 0.0f, 0.0f, 90.0f, 0.0f, 20, 90, 255, &defence, &defence_attr, 0x9, 0x5, pose_table_body4},
-    {2, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 64.0f, 0.0f, 0.0f, 70.0f, 0.0f, 20, 70, 255, &defence, &defence_attr, 0x3010000, 0x5, pose_table_body3},
-    {3, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 44.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 50, 255, &defence, &defence_attr, 0x3010000, 0x5, pose_table_body2},
-    {4, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 24.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x3010000, 0x5, pose_table_body1},
-    {5, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table_parts},
+    {1, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 84.0f, 0.0f, 0.0f, 90.0f, 0.0f, 20, 90, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky | kCounterFrontSpiky, pose_table_body4},
+    {2, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 64.0f, 0.0f, 0.0f, 70.0f, 0.0f, 20, 70, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow, kCounterTopSpiky | kCounterFrontSpiky, pose_table_body3},
+    {3, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 44.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 50, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow, kCounterTopSpiky | kCounterFrontSpiky, pose_table_body2},
+    {4, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 24.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow, kCounterTopSpiky | kCounterFrontSpiky, pose_table_body1},
+    {5, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_parts},
 };
 
 static EVT_BEGIN(init_event)

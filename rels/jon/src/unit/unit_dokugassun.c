@@ -44,7 +44,7 @@ static EvtWord charge_event[58];
 static EvtWord wait_event[13];
 
 BattleUnitKind unit_dokugassun = {
-    166,
+    UNIT_POISON_PUFF,
     "btl_un_dokugassun",
     15,
     0,
@@ -101,7 +101,7 @@ BattleUnitKind unit_dokugassun = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     1,
     parts,
@@ -116,7 +116,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {65, 65, 90, 0, 60, 100, 100, 100, 100, 80, 100, 80, 100, 80, 50, 60, 85, 100, 60, 100, 100, 20};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_dokugassun", "c_kmoon_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, 0x600009, 0, pose_table},
+    {1, "btl_un_dokugassun", "c_kmoon_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
 static BattleWeapon weapon_dokugassun_attack = {

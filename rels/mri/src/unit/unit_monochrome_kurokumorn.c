@@ -34,7 +34,7 @@ static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
 static BattleUnitKind unit_monochrome_kurokumorn = {
-    24, // mUnitType
+    UNIT_DARK_PUFF, // mUnitType
     "btl_un_monochrome_kurokumorn", // name
     3, // maxHp
     0, // maxFp

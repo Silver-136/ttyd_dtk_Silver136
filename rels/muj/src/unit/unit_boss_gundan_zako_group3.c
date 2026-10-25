@@ -121,7 +121,7 @@ USER_FUNC(zakogun_ext_init3) {
 }
 
 BattleUnitKind unit_boss_gundan_zako_group3 = {
-    102,
+    UNIT_X_NAUTS_CRUMP_FORMATION3,
     "btl_un_gundan_zako_group3",
     10,
     0,
@@ -178,7 +178,7 @@ BattleUnitKind unit_boss_gundan_zako_group3 = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     1,
     parts,
@@ -206,7 +206,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gundan_zako_group3", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x3000009, 0, pose_table},
+    {1, "btl_un_gundan_zako_group3", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
 
 BattleWeapon weapon_gundan_zako_group3_attack = {

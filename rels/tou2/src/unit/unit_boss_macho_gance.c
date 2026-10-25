@@ -71,7 +71,7 @@ EvtWord gance_body_attack_attack_event[515];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boss_macho_gance = {
-    65,
+    UNIT_MACHO_GRUBBA,
     "btl_un_macho_gance",
     60,
     0,
@@ -203,7 +203,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_macho_gance", "c_m_gansu", 0.0f, 0.0f, 0.0f, 26.0f, 77.0f, 0.0f, 25.0f, 81.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_macho_gance", "c_m_gansu", 0.0f, 0.0f, 0.0f, 26.0f, 77.0f, 0.0f, 25.0f, 81.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 BattleWeapon weapon_gance_macho_speed = {

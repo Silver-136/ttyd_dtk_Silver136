@@ -235,7 +235,7 @@ EvtWord queen_hand_small_dead_event[32];
 EvtWord queen_hand_small_wait_event[6];
 
 BattleUnitKind unit_boss_black_peach = {
-    148,
+    UNIT_SHADOW_QUEEN_PEACH,
     "btl_un_black_peach",
     150,
     0,
@@ -333,7 +333,7 @@ BattleDataEntry peach_data_table[] = {
 };
 
 BattleUnitKindPart peach_parts[] = {
-    {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, -2.0f, 44.0f, 0.0f, -2.0f, 44.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, 0x9, 0, peach_pose_table},
+    {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, -2.0f, 44.0f, 0.0f, -2.0f, 44.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, kMainPart | kGuardTargetPart, 0, peach_pose_table},
     {2, "btl_un_shadow_queen", "c_q_kage_b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, 0x3018000, 0, peach_pose_table},
     {3, "btl_un_shadow_queen", "c_q_kage_f", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, 0x13018000, 0, peach_pose_table},
     {4, "btl_un_shadow_queen", "c_q_kage_h", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, 0x13018000, 0, peach_pose_table},
@@ -840,7 +840,7 @@ BattleWeapon weapon_peach_black_1000hand_attack = {
 };
 
 BattleUnitKind unit_boss_shadow_queen = {
-    150,
+    UNIT_SHADOW_QUEEN_DEMON,
     "btl_un_shadow_queen",
     150,
     0,
@@ -951,7 +951,7 @@ BattleDataEntry queen_data_table[] = {
 };
 
 BattleUnitKindPart queen_parts[] = {
-    {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, 0.0f, 47.0f, 0.0f, 0.0f, 47.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, 0x9, 0, peach_pose_table},
+    {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, 0.0f, 47.0f, 0.0f, 0.0f, 47.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, kMainPart | kGuardTargetPart, 0, peach_pose_table},
     {2, "btl_un_shadow_queen", "c_q_kage_b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, 0x2018000, 0, queen_pose_table},
     {3, "btl_un_shadow_queen", "c_q_kage_f", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, 0x12018000, 0, queen_pose_table},
     {4, "btl_un_shadow_queen", "c_q_kage_h", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, 0x12018000, 0, queen_pose_table},
@@ -986,7 +986,7 @@ EVT_BEGIN(shadow_queen_1000)
 EVT_END()
 
 BattleUnitKind unit_boss_shadow_hand_1 = {
-    151,
+    UNIT_SHADOW_QUEEN_LEFT_RIGHT_HAND,
     "btl_un_shadow_queen",
     5,
     0,
@@ -1043,7 +1043,7 @@ BattleUnitKind unit_boss_shadow_hand_1 = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x2000000,
+    kUnitNoHpGauge,
     &queen_hand_1_regist,
     1,
     queen_hand_1_parts,
@@ -1078,7 +1078,7 @@ BattleUnitKindPart queen_hand_1_parts[] = {
 };
 
 BattleUnitKind unit_boss_shadow_hand_2 = {
-    151,
+    UNIT_SHADOW_QUEEN_LEFT_RIGHT_HAND,
     "btl_un_shadow_queen",
     5,
     0,
@@ -1135,7 +1135,7 @@ BattleUnitKind unit_boss_shadow_hand_2 = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x2000000,
+    kUnitNoHpGauge,
     &queen_hand_2_regist,
     1,
     queen_hand_2_parts,
@@ -1170,7 +1170,7 @@ BattleUnitKindPart queen_hand_2_parts[] = {
 };
 
 BattleUnitKind unit_boss_shadow_hand_small = {
-    152,
+    UNIT_SHADOW_QUEEN_DEAD_HANDS,
     "btl_un_shadow_queen",
     8,
     0,

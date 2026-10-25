@@ -160,7 +160,7 @@ BattleUnit* zakogun_get_ptr(void) {
 }
 
 BattleUnitKind unit_boss_gundan_zako_group1 = {
-    100,
+    UNIT_X_NAUTS_CRUMP_FORMATION1,
     "btl_un_gundan_zako_group1",
     6,
     0,
@@ -217,7 +217,7 @@ BattleUnitKind unit_boss_gundan_zako_group1 = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     1,
     parts,
@@ -246,7 +246,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_gundan_zako_group1", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x3000009, 0, pose_table},
+    {1, "btl_un_gundan_zako_group1", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
 
 BattleWeapon weapon_gundan_zako_group1_attack = {

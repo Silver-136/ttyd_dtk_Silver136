@@ -42,7 +42,7 @@ static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_monochrome_pakkun = {
-    25,
+    UNIT_PALE_PIRANHA,
     "btl_un_monochrome_pakkun",
     4,
     0,
@@ -114,7 +114,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {110, 90, 60, 100, 100, 100, 100, 80, 100, 95, 100, 95, 100, 95, 90, 30, 60, 100, 90, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_monochrome_pakkun", "c_pakflwr_t", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0x1, pose_table},
+    {1, "btl_un_monochrome_pakkun", "c_pakflwr_t", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
 static BattleWeapon weapon_pakkun_flower_attack = {

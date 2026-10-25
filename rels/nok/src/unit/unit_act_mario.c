@@ -50,7 +50,7 @@ EvtWord _act_teresa_attack[190];
 EvtWord _act_atmic_teresa_press_attack[188];
 
 BattleUnitKind unit_act_mario = {
-    181,
+    UNIT_EPILOGUE_DOOPLISS_MARIO,
     "btl_un_act_mario",
     10,
     0,
@@ -136,7 +136,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_act_mario", "c_mario", 0.0f, 0.0f, 0.0f, -5.0f, 30.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_act_mario", "c_mario", 0.0f, 0.0f, 0.0f, -5.0f, 30.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static EVT_BEGIN(init_event)

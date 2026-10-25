@@ -28,7 +28,7 @@ static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_yami_noko = {
-    156,
+    UNIT_DARK_KOOPA,
     "btl_un_yami_noko",
     8,
     0,
@@ -85,7 +85,7 @@ BattleUnitKind unit_yami_noko = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x40000,
+    kUnitLeader,
     &regist,
     1,
     parts,
@@ -149,7 +149,7 @@ static BattleUnitDefense defence_turn = {0};
 static StatusVulnerability regist = {75, 80, 70, 100, 70, 100, 100, 70, 100, 85, 100, 85, 100, 85, 80, 75, 70, 100, 70, 100, 100, 70};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_yami_noko", "c_yaminoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x1009, 0, pose_table},
+    {1, "btl_un_yami_noko", "c_yaminoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table},
 };
 
 static BattleWeapon weapon_nokonoko_attack = {

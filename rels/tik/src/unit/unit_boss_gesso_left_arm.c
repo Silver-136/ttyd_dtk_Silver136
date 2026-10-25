@@ -28,7 +28,7 @@ static EvtWord attack_event[171];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_boss_gesso_left_arm = {
-    9,
+    UNIT_BLOOPER_LEFT_TENTACLE,
     "btl_un_gesso_left_arm",
     3,
     0,
@@ -85,7 +85,7 @@ BattleUnitKind unit_boss_gesso_left_arm = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x200000,
+    kUnitNoSpin,
     &regist,
     1,
     parts,

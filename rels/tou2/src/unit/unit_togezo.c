@@ -43,7 +43,7 @@ static EvtWord guard_cancel_event[89];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_togezo = {
-    41,
+    UNIT_SPINY,
     "btl_un_togezo",
     3,
     0,
@@ -198,7 +198,7 @@ static BattleDataEntry data_table_guard[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_togezo", "c_togezo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x1009, 0x5, pose_table},
+    {1, "btl_un_togezo", "c_togezo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, kCounterTopSpiky | kCounterFrontSpiky, pose_table},
 };
 
 static BattleWeapon weapon_togezo_attack = {

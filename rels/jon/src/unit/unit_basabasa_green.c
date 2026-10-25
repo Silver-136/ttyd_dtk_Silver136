@@ -32,7 +32,7 @@ static EvtWord attack_event[683];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_basabasa_green = {
-    167,
+    UNIT_SWAMPIRE,
     "btl_un_basabasa_green",
     20,
     0,
@@ -194,7 +194,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_basabasa_green", "c_basabasa_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x600009, 0, pose_table_ceil},
+    {1, "btl_un_basabasa_green", "c_basabasa_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
 };
 
 static StatusVulnerability regist = {50, 55, 90, 100, 50, 100, 100, 50, 100, 75, 100, 75, 100, 80, 50, 50, 75, 100, 50, 100, 100, 20};

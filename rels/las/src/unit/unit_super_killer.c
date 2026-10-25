@@ -24,7 +24,7 @@ static EvtWord attack_event[407];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_super_killer = {
-    126,
+    UNIT_BOMBSHELL_BILL,
     "btl_un_super_killer",
     3,
     0,
@@ -81,7 +81,7 @@ BattleUnitKind unit_super_killer = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     1,
     parts,
@@ -96,7 +96,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {0, 0, 100, 0, 40, 150, 100, 60, 100, 85, 100, 85, 100, 95, 65, 0, 90, 100, 65, 100, 100, 90};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_super_killer", "c_kilr_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_super_killer", "c_kilr_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 static BattleWeapon weapon_killer_charge_attack = {

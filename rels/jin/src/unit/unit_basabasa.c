@@ -31,7 +31,7 @@ static EvtWord attack_event[448];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_basabasa = {
-    74,
+    UNIT_SWOOPER,
     "btl_un_basabasa",
     6,
     0,
@@ -193,7 +193,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_basabasa", "c_basabasa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x600009, 0, pose_table_ceil},
+    {1, "btl_un_basabasa", "c_basabasa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
 };
 
 static StatusVulnerability regist = {80, 85, 105, 100, 80, 100, 100, 80, 100, 90, 100, 90, 100, 95, 80, 80, 95, 100, 80, 100, 100, 95};

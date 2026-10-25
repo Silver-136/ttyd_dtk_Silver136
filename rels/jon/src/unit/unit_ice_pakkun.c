@@ -42,7 +42,7 @@ static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_ice_pakkun = {
-    113,
+    UNIT_FROST_PIRANHA,
     "btl_un_ice_pakkun",
     10,
     0,
@@ -114,7 +114,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 1, 3, 0, 0}};
 static StatusVulnerability regist = {100, 70, 40, 100, 80, 100, 100, 0, 100, 85, 100, 85, 100, 85, 70, 10, 40, 100, 70, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_ice_pakkun", "c_pakflwr_a", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0x1, pose_table},
+    {1, "btl_un_ice_pakkun", "c_pakflwr_a", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
 static BattleWeapon weapon_ice_pakkun_attack = {

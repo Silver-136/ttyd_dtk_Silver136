@@ -90,7 +90,7 @@ static EvtWord spawn_event[76];
 static EvtWord wait_event[386];
 
 BattleUnitKind unit_mahorn_custom = {
-    169,
+    UNIT_ELITE_WIZZERD,
     "btl_un_mahorn_custom",
     12,
     0,
@@ -147,7 +147,7 @@ BattleUnitKind unit_mahorn_custom = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     5,
     parts,
@@ -156,7 +156,7 @@ BattleUnitKind unit_mahorn_custom = {
 };
 
 BattleUnitKind unit_mahorn_custom_bunsin = {
-    170,
+    UNIT_ELITE_WIZZERD_CLONE,
     "btl_un_mahorn_custom_bunsin",
     12,
     0,
@@ -213,7 +213,7 @@ BattleUnitKind unit_mahorn_custom_bunsin = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x400004,
+    kFloating | kNoDamageNumber,
     &regist,
     5,
     parts,
@@ -230,11 +230,11 @@ static StatusVulnerability regist = {0, 30, 80, 100, 20, 100, 100, 40, 100, 75, 
 static StatusVulnerability regist_bunsin = {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
-    {2, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x2010009, 0, pose_table},
-    {3, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x2010009, 0, pose_table},
-    {4, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x2010009, 0, pose_table},
-    {5, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x2010009, 0, pose_table},
+    {1, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {2, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
+    {3, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
+    {4, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
+    {5, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
 };
 
 static BattleWeapon weapon_mahorn_attack_magic = {

@@ -54,7 +54,7 @@ static USER_FUNC(togezo_copy_status) {
 }
 
 static BattleUnitKind unit_hyper_jyugem = {
-    159, // mUnitType
+    UNIT_DARK_LAKITU, // mUnitType
     "btl_un_hyper_jyugem", // name
     13, // maxHp
     0, // maxFp

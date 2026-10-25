@@ -289,7 +289,7 @@ BattleWeapon weapon_kamec_obaba_recover_magic = {
 };
 
 BattleUnitKind unit_boss_kamec_obaba = {
-    145,
+    UNIT_KAMMY_KOOPA,
     "btl_un_kamec_obaba",
     50,
     0,
@@ -346,7 +346,7 @@ BattleUnitKind unit_boss_kamec_obaba = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     2,
     parts,
@@ -412,8 +412,8 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x600009, 0, pose_table_sky},
-    {2, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
+    {1, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_sky},
+    {2, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 static EVT_BEGIN(kamec_obaba_zoom)

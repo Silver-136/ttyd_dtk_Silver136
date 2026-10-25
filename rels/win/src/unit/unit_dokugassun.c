@@ -44,7 +44,7 @@ static EvtWord charge_event[58];
 static EvtWord wait_event[13];
 
 static BattleUnitKind unit_dokugassun = {
-    166, // mUnitType
+    UNIT_POISON_PUFF, // mUnitType
     "btl_un_dokugassun", // name
     15, // maxHp
     0, // maxFp

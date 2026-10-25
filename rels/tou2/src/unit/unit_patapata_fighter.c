@@ -41,7 +41,7 @@ static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_patapata_fighter = {
-    38,
+    UNIT_KP_PARATROOPA,
     "btl_un_patapata_fighter",
     4,
     0,
@@ -98,7 +98,7 @@ BattleUnitKind unit_patapata_fighter = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x40004,
+    kFloating | kUnitLeader,
     &regist_patapata,
     1,
     parts_patapata,
@@ -149,7 +149,7 @@ static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist_patapata = {85, 90, 110, 100, 80, 100, 100, 80, 100, 95, 100, 95, 100, 95, 80, 85, 100, 100, 90, 100, 100, 100};
 
 static BattleUnitKindPart parts_patapata[] = {
-    {1, "btl_un_patapata_fighter", "c_touginoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence_patapata, &defence_patapata_attr, 0x600809, 0, pose_table_patapata},
+    {1, "btl_un_patapata_fighter", "c_touginoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence_patapata, &defence_patapata_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patapata},
 };
 
 static PoseTableEntry pose_table_patapata[] = {

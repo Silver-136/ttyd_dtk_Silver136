@@ -28,7 +28,7 @@ static EvtWord attack_event[454];
 static EvtWord wait_event[6];
 
 BattleUnitKind unit_sinnosuke = {
-    18,
+    UNIT_BALD_CLEFT,
     "btl_un_sinnosuke",
     2,
     0,
@@ -85,7 +85,7 @@ BattleUnitKind unit_sinnosuke = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x40000,
+    kUnitLeader,
     &regist,
     1,
     parts,
@@ -102,7 +102,7 @@ static BattleUnitDefense defence_turn = {0};
 static StatusVulnerability regist = {50, 100, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 100, 70, 50, 40, 100, 70, 100, 100, 95};
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_sinnosuke", "c_sinnosuke", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x2009, 0, pose_table},
+    {1, "btl_un_sinnosuke", "c_sinnosuke", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, 0, pose_table},
 };
 
 static BattleWeapon weapon_sinnosuke_attack = {

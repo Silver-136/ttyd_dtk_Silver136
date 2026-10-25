@@ -84,7 +84,7 @@ ExtTexInfo teresa_ext_entry_data[17];
 EvtWord teresa_entry[19];
 
 BattleUnitKind unit_atmic_teresa = {
-    76,
+    UNIT_ATOMIC_BOO,
     "btl_un_atmic_teresa",
     40,
     0,
@@ -145,7 +145,7 @@ BattleUnitKind unit_atmic_teresa = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     1,
     parts,
@@ -202,7 +202,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_atmic_teresa", "c_atmic_trs", 0.0f, 0.0f, 0.0f, 10.0f, 80.0f, 0.0f, 0.0f, 110.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x600009, 0, pose_table},
+    {1, "btl_un_atmic_teresa", "c_atmic_trs", 0.0f, 0.0f, 0.0f, 10.0f, 80.0f, 0.0f, 0.0f, 110.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
 static StatusVulnerability regist = {40, 40, 40, 100, 40, 100, 100, 30, 0, 0, 100, 0, 100, 80, 40, 0, 10, 100, 40, 100, 100, 5};

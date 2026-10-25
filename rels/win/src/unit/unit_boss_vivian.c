@@ -55,7 +55,7 @@ static EvtWord wait_event[6];
 #endif
 
 BattleUnitKind unit_boss_vivian = {
-    33,
+    UNIT_VIVIAN_CHAPTER2,
     "btl_un_vivian1",
     10,
     0,
@@ -153,7 +153,7 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_vivian", "c_vivian", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
+    {1, "btl_un_vivian", "c_vivian", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 BattleWeapon weapon_vivian_kagenuke_attack1 = {

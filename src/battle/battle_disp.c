@@ -626,7 +626,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
     PSMTXConcat(uDisp, uMtx, uMtx);
 
     angle = 270.0f;
-    if (part->attributes & 0x10000000) {
+    if (part->attributes & kAbsolutePosition) {
         if (part->faceDirection >= 0) angle = 90.0f;
         x = part->mPosition.x;
         y = part->mPosition.y + getGravityDispOffset(part) + getFloatDispOffset(part);

@@ -45,6 +45,7 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kHidden = (1 << 24),                     // 0x1000000, not drawn
     kNoShadow = (1 << 25),                   // 0x2000000, no shadow
     kMotionBlur = (1 << 26),                 // 0x4000000, also drawn with btlUnitPartsBlurDisp
+    kAbsolutePosition = (1 << 28),           // 0x10000000, mPosition is the world position, not an offset from the unit
     kImmuneToDamageAndStatus = (1 << 29),   // 0x20000000, no HP/FP damage and no status (battle_damage.c)
     kImmuneToNegativeStatus = (1 << 30),    // 0x40000000, sleep, stop, poison, ... and instant kill blocked
     kImmuneToStatus = (1 << 31)             // 0x80000000, no status at all
@@ -201,9 +202,9 @@ typedef enum BattleUnitType {
     UNIT_BULKY_BOB_OMB,                   // 0x5C
     UNIT_CORTEZ,                          // 0x5D
     UNIT_CORTEZ_BONE_PILE,                // 0x5E
-    UNIT_CORTEZ_SWORD,                    // 0x5F
-    UNIT_CORTEZ_HOOK,                     // 0x60
-    UNIT_CORTEZ_RAPIER,                   // 0x61
+    UNIT_CORTEZ_HOOK,                     // 0x5F, btl_un_cortez_claw ("Cortez Hook")
+    UNIT_CORTEZ_RAPIER,                   // 0x60, btl_un_cortez_rapier
+    UNIT_CORTEZ_SWORD,                    // 0x61, btl_un_cortez_sword
     UNIT_CORTEZ_SABER,                    // 0x62
     UNIT_LORD_CRUMP_CHAPTER5,             // 0x63
     UNIT_X_NAUTS_CRUMP_FORMATION1,        // 0x64

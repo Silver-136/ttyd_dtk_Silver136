@@ -54,7 +54,7 @@ static EvtWord attack_event_ceil[467];
 static EvtWord wait_event_ceil[6];
 
 BattleUnitKind unit_patamet = {
-    89,
+    UNIT_PARABUZZY,
     "btl_un_patamet",
     5,
     0,
@@ -111,7 +111,7 @@ BattleUnitKind unit_patamet = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     1,
     parts_pata,
@@ -189,7 +189,7 @@ static BattleDataEntry data_table_pata[] = {
 };
 
 static BattleUnitKindPart parts_pata[] = {
-    {1, "btl_un_patamet", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, 0x600809, 0, pose_table_pata},
+    {1, "btl_un_patamet", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_pata},
 };
 
 static PoseSoundTiming pose_sound_timing_table[] = {

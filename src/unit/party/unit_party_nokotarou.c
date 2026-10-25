@@ -138,11 +138,11 @@ static BattleDataEntry data_table[] = {
 };
 
 BattleUnitKindPart unitpartsdata_Party_Nokotarou[] = {
-    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 12.0f, 30.0f, 5.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x1009, 0, pose_table_nokotarou_stay},
+    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 12.0f, 30.0f, 5.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table_nokotarou_stay},
 };
 
 BattleUnitKind unitdata_Party_Nokotarou = {
-    225,
+    UNIT_KOOPS,
     "btl_un_nokotarou",
     10,
     5,
@@ -199,7 +199,7 @@ BattleUnitKind unitdata_Party_Nokotarou = {
     "SFX_MARIO_DAMAGE_FIRE1",
     "SFX_MARIO_DAMAGE_ICE1",
     "SFX_MARIO_DAMAGE_BIRIBIRI1",
-    0x2000000,
+    kUnitNoHpGauge,
     &regist,
     1,
     unitpartsdata_Party_Nokotarou,

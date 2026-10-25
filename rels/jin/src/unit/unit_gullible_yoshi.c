@@ -25,7 +25,7 @@ static EvtWord attack_event_yoshi[748];
 static EvtWord wait_event_yoshi[7];
 
 BattleUnitKind unit_gullible_yoshi = {
-    82,
+    UNIT_YOSHI_CHAPTER4,
     "btl_un_gullible_yoshi",
     10,
     0,
@@ -82,7 +82,7 @@ BattleUnitKind unit_gullible_yoshi = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x10000000,
+    kUnitNoncombatant,
     &regist_yoshi,
     1,
     parts_yoshi,
@@ -138,7 +138,7 @@ static BattleDataEntry data_table_yoshi[] = {
 };
 
 static BattleUnitKindPart parts_yoshi[] = {
-    {1, "btl_un_yoshi", "c_babyyoshi", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_yoshi, &defence_attr_yoshi, 0x9, 0, pose_table_yoshi_stay},
+    {1, "btl_un_yoshi", "c_babyyoshi", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_yoshi, &defence_attr_yoshi, kMainPart | kGuardTargetPart, 0, pose_table_yoshi_stay},
 };
 
 static EVT_BEGIN(init_event_yoshi)

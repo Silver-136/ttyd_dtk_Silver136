@@ -33,7 +33,7 @@ static EvtWord dekadeka_event[125];
 static EvtWord wait_event[6];
 
 static BattleUnitKind unit_gundan_zako = {
-    28, // mUnitType
+    UNIT_X_NAUT, // mUnitType
     "btl_un_gundan_zako", // name
     4, // maxHp
     0, // maxFp
