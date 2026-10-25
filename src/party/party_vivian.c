@@ -35,7 +35,6 @@ extern void partyFlyMain(PartyEntry* party);
 extern void partyPaperOff(PartyEntry* party);
 extern void partyChgRunMode(PartyEntry* party, s32 mode);
 
-#pragma explicit_zero_data reset
 s32 vivian_cancel_req;
 
 #pragma explicit_zero_data on

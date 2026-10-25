@@ -1389,7 +1389,6 @@ s32 BattleCommandInput(BattleWork* work) {
     return 0;
 }
 
-#pragma dont_inline reset
 
 void BattleCommandDisplay(BattleWork* wp) {
     BattleCommand* cmd = &wp->commandMenu;

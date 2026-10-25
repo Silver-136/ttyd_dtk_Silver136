@@ -1160,5 +1160,4 @@ void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     GXTexCoord2u8(n0, t1);
 }
 
-#pragma opt_common_subs reset
 

@@ -713,7 +713,6 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
-#pragma dont_inline reset
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
@@ -1306,7 +1305,6 @@ static void ext_moamoa_main(void) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
-#pragma dont_inline reset
 
 static void ext_moamoa_dispent(void) {
     if (wp->flags & 1) {
