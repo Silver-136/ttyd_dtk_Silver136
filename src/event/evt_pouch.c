@@ -4,9 +4,7 @@
 #include "manager/evtmgr_cmd.h"
 
 
-typedef s32 (*GetFn)(void);
 typedef s32 (*SetFn)(s32);
-#define RAW_GET(fn) ((GetFn)fn)
 #define RAW_SET(fn) ((SetFn)fn)
 
 #define GET_ARG0 evtGetValue(event, event->args[0])
@@ -27,9 +25,9 @@ typedef s32 (*SetFn)(s32);
 GETTER(evt_pouch_get_coin, pouchGetCoin)
 SETTER(evt_pouch_add_coin, pouchAddCoin)
 SETTER(evt_pouch_set_coin, pouchSetCoin)
-GETTER(evt_pouch_get_supercoin, RAW_GET(pouchGetSuperCoin))
+GETTER(evt_pouch_get_supercoin, pouchGetSuperCoin)
 SETTER(evt_pouch_set_supercoin, RAW_SET(pouchSetSuperCoin))
-GETTER(evt_pouch_get_starpiece, RAW_GET(pouchGetStarPiece))
+GETTER(evt_pouch_get_starpiece, pouchGetStarPiece)
 SETTER(evt_pouch_add_starpiece, RAW_SET(pouchAddStarPiece))
 SETTER(evt_pouch_get_starstone, pouchGetStarStone)
 
@@ -97,7 +95,7 @@ USER_FUNC(evt_pouch_check_item) {
     return EVT_RETURN_DONE;
 }
 
-GETTER(L_evt_pouch_get_hp, RAW_GET(pouchGetHP))
+GETTER(L_evt_pouch_get_hp, pouchGetHP)
 SETTER(L_evt_pouch_set_hp, pouchSetHP)
 GETTER(evt_pouch_get_max_ap, pouchGetMaxAP)
 SETTER(evt_pouch_set_ap, pouchSetAP)
