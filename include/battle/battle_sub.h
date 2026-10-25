@@ -3,6 +3,15 @@
 #include "battle/battle.h"
 #include "manager/evtmgr.h"
 
+// Special unit ids that BattleTransID resolves; event scripts pass them where a unit id is expected (-1 stays -1).
+enum {
+    UNIT_ID_LECTURE = -6, // BattleWork.lectureUnitId
+    UNIT_ID_SYSTEM = -5,  // the system unit
+    UNIT_ID_PARTNER = -4, // the current partner (-1 when there is none)
+    UNIT_ID_MARIO = -3,
+    UNIT_ID_SELF = -2,    // the unit the script runs for (EventEntry.unitId)
+};
+
 void btlsubResetMoveColorLvAll(BattleWork* work);
 s32 BattleTransID(EventEntry* event, s32 type);
 

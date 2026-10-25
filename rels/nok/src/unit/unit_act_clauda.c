@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "unit/party/unit_party_clauda.h"
 #include "battle/battle_event_cmd.h"
+#include "battle/battle_sub.h"
 
 
 BattleUnitKind unit_act_clauda;
@@ -102,7 +103,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetEventWait, -2, PTR(wait_event))
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
@@ -120,7 +121,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 

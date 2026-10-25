@@ -7,6 +7,7 @@
 #include "battle/battle_event_subset.h"
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_sub.h"
 
 extern EvtWord gesso_arm_damage_pose_event[];
 extern EvtWord gesso_arm_dead_event[];
@@ -138,11 +139,11 @@ static BattleUnitKindPart parts[] = {
 };
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetEventWait, -2, PTR(wait_event))
-    CALL(btlevtcmd_SetEventAttack, -2, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event))
-    CALL(btlevtcmd_SetEventConfusion, -2, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_OnAttribute, -2, kUnitHidden)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
+    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
@@ -151,7 +152,7 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_GetUnitWork, -2, 0, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_GetUnitWork, LW(3), 4, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -188,7 +189,7 @@ EVT_BEGIN(gesso_left_arm_damage_event)
     CALL(btlevtcmd_ResetFaceDirection, LW(10))
     CALL(btlevtcmd_StartWaitEvent, LW(10))
     LABEL(99)
-    CALL(btlevtcmd_GetUnitWork, -2, 0, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_GetUnitWork, LW(3), 4, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -239,31 +240,31 @@ BattleWeapon weapon_gesso_left_arm_attack = {
 };
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_EnemyItemUseCheck, -2, LW(0))
+    CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, -2)
         RETURN
     END_IF
     SET_VALUE(LW(12), PTR(&weapon_gesso_left_arm_attack))
-    CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
-    CALL(btlevtcmd_SamplingEnemy, -2, LW(0), LW(12))
+    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_PayWeaponCost, -2, LW(12))
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("GSO_A1_1"))
+    CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GSO_A1_1"))
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_ftof, 16, LW(0))
         WAIT_FRAMES(LW(0))
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_GESSO_ARM_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GESSO_ARM_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_ftof, 44, LW(0))
         WAIT_FRAMES(LW(0))
-        CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_GESSO_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GESSO_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
 #ifdef VERSION_G8ME01
     CALL(btlevtcmd_ftof, 67, LW(0))
@@ -272,7 +273,7 @@ static EVT_BEGIN(attack_event)
 #endif
     WAIT_FRAMES(LW(0))
     LABEL(50)
-    CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), LW(12), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 1)
         SWITCH(LW(5))
             CASE_EQUAL(3)
@@ -284,7 +285,7 @@ static EVT_BEGIN(attack_event)
         END_SWITCH
     ELSE
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
-        CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(12), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(5))
     END_IF
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -293,7 +294,7 @@ static EVT_BEGIN(attack_event)
             GOTO(50)
         END_IF
     END_IF
-    CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
+    CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     LABEL(99)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_StartWaitEvent, -2)
@@ -301,7 +302,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 

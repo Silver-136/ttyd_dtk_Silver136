@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle_event_cmd.h"
+#include "battle/battle_sub.h"
 
 
 BattleUnitKind unit_boss_honeduka;
@@ -110,10 +111,10 @@ static BattleUnitKindPart parts[] = {
 };
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_OnUnitFlag, -2, 16777216)
-    CALL(btlevtcmd_SetEventWait, -2, PTR(wait_event))
-    CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event))
-    CALL(btlevtcmd_SetMaxMoveCount, -2, 0)
+    CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, 16777216)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
@@ -126,14 +127,14 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 EVT_BEGIN(honeduka_damage_sub_event)
-    CALL(btlevtcmd_GetUnitWork, -2, 0, LW(3))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(3))
     CALL(btlevtcmd_RunDataEventChild, LW(3), UNIT_DATA_WEAPON_BREAK_EVENT)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 

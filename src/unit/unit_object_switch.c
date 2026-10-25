@@ -102,17 +102,17 @@ static EvtWord wait_event[2];
 static EvtWord damage_event[22];
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetEventWait, -2, PTR(wait_event))
-    CALL(btlevtcmd_SetEventAttack, -2, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event))
-    CALL(btlevtcmd_SetEventConfusion, -2, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetMaxMoveCount, -2, 0)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
+    CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    CALL(btlevtcmd_CheckDamageCode, -2, 256, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 256, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(_rumble_switch, -2)
         RETURN

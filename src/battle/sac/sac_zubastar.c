@@ -23,6 +23,7 @@
 #include <dolphin/pad.h>
 #include "libc_decls.h"
 #include "battle/battle_audience.h"
+#include "battle/battle_sub.h"
 
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
 
@@ -964,23 +965,23 @@ EVT_BEGIN(marioAttackEvent_ZubaStar)
     END_SIBLING_EVENT
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL_CHILD(sac_mario_item_on_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START2"), EVT_NULLPTR, 0, LW(11))
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START2"), EVT_NULLPTR, 0, LW(11))
     CALL(star_stone_appear)
     BEGIN_SIBLING_EVENT
         CALL_CHILD(sac_start_stardust)
     END_SIBLING_EVENT
     WAIT_FRAMES(100)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START3"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_FRAMES(40)
     CALL_CHILD(sac_mario_item_on_end_evt)
     CALL_CHILD(sac_mario_back_home)
     CALL(wait_star_stone_up)
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("M_I_Y"))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_I_Y"))
     WAIT_MS(500)
     BEGIN_SIBLING_EVENT
         CALL(sac_handbeat)
@@ -1003,7 +1004,7 @@ EVT_BEGIN(marioAttackEvent_ZubaStar)
     END_INLINE_EVENT
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_CommandGetWeaponAddress, -2, LW(0))
+    CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_WeaponAftereffect, LW(0))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     LABEL(95)
@@ -1012,7 +1013,7 @@ EVT_BEGIN(marioAttackEvent_ZubaStar)
     END_IF
     CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), 16384, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_zubastar), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_zubastar), 256, LW(5))
     END_IF
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(95)

@@ -24,6 +24,7 @@
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_message.h"
 #include "evt/evt_eff.h"
+#include "battle/battle_sub.h"
 
 typedef struct { s32 v[8]; } SlotCards8;
 typedef struct { s32 v[5]; } SlotCards5;
@@ -37,7 +38,7 @@ void item_appear_force(BreakSlotReel* reel, s32 item);
 
 
 EVT_BEGIN(kinoko_effect)
-    CALL(btlevtcmd_GetUnitId, -3, LW(3))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_GetMaxHp, LW(3), LW(5))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -45,7 +46,7 @@ EVT_BEGIN(kinoko_effect)
     CALL(evt_eff, STRING(""), STRING("recovery"), 4, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
     CALL(btlevtcmd_RecoverHp, LW(3), LW(4), LW(5))
     CALL(btlevtcmd_AnimeChangePoseFromTable, LW(3), LW(4))
-    CALL(btlevtcmd_GetUnitId, -4, LW(3))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckStatus, LW(3), 27, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -62,7 +63,7 @@ EVT_BEGIN(kinoko_effect)
 EVT_END()
 
 EVT_BEGIN(flower_effect)
-    CALL(btlevtcmd_GetUnitId, -3, LW(3))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_GetMaxFp, LW(3), LW(5))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -73,7 +74,7 @@ EVT_BEGIN(flower_effect)
 EVT_END()
 
 EVT_BEGIN(shine_effect)
-    CALL(btlevtcmd_GetUnitId, -3, LW(3))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_GetMaxHp, LW(3), LW(5))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -81,7 +82,7 @@ EVT_BEGIN(shine_effect)
     CALL(evt_eff, STRING(""), STRING("recovery"), 4, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
     CALL(btlevtcmd_RecoverHp, LW(3), LW(4), LW(5))
     CALL(btlevtcmd_AnimeChangePoseFromTable, LW(3), LW(4))
-    CALL(btlevtcmd_GetUnitId, -4, LW(3))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckStatus, LW(3), 27, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -95,7 +96,7 @@ EVT_BEGIN(shine_effect)
         END_IF
     END_IF
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_GetUnitId, -3, LW(3))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_GetMaxFp, LW(3), LW(5))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -164,21 +165,21 @@ BattleWeapon weapon_doku_kinoko_fp = {
 };
 
 EVT_BEGIN(doku_kinoko_effect)
-    CALL(btlevtcmd_GetUnitId, -3, LW(3))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
-    CALL(btlevtcmd_CheckDamage, -3, LW(3), LW(4), PTR(&weapon_doku_kinoko), 0, LW(5))
-    CALL(btlevtcmd_GetUnitId, -4, LW(3))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_MARIO, LW(3), LW(4), PTR(&weapon_doku_kinoko), 0, LW(5))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckStatus, LW(3), 27, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
-            CALL(btlevtcmd_CheckDamage, -3, LW(3), LW(4), PTR(&weapon_doku_kinoko), 256, LW(5))
+            CALL(btlevtcmd_CheckDamage, UNIT_ID_MARIO, LW(3), LW(4), PTR(&weapon_doku_kinoko), 256, LW(5))
         END_IF
     END_IF
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_GetUnitId, -3, LW(3))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
-    CALL(btlevtcmd_CheckDamage, -3, LW(3), LW(4), PTR(&weapon_doku_kinoko_fp), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_MARIO, LW(3), LW(4), PTR(&weapon_doku_kinoko_fp), 256, LW(5))
     RETURN
 EVT_END()
 

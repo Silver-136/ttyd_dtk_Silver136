@@ -11,6 +11,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_audience.h"
 #include "battle/battle_status_effect.h"
+#include "battle/battle_sub.h"
 
 
 
@@ -22,8 +23,8 @@ u8 volPer;
 
 EVT_BEGIN(sac_start_camera_evt)
     CALL(evt_btl_camera_set_mode, 0, 7)
-    CALL(evt_btl_camera_set_homing_unit, 0, -2, -1)
-    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(0))
+    CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_btl_camera_set_zoom, 0, 100)
     ELSE
@@ -35,16 +36,16 @@ EVT_BEGIN(sac_start_camera_evt)
 EVT_END()
 
 EVT_BEGIN(sac_mario_item_on_evt)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
-    CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 15)
-    CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 5, -1, 0)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_VOICE_MARIO_HAPPY1"), EVTDAT_POINTER_MAX, 0, EVTDAT_POINTER_MAX)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 15)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 5, -1, 0)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_HAPPY1"), EVTDAT_POINTER_MAX, 0, EVTDAT_POINTER_MAX)
     CALL(evt_audience_sound_cheer, 180, 60)
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("M_P_2"))
-    CALL(btlevtcmd_GetPartsPos, -2, 1, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_GetHeight, -2, LW(5))
-    CALL(btlevtcmd_GetStatusMg, -2, LW(6))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_P_2"))
+    CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(5))
+    CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
     MULTIPLY_FLOAT(LW(5), LW(6))
     ADD(LW(1), LW(5))
     ADD(LW(1), 35)
@@ -64,7 +65,7 @@ EVT_END()
 
 EVT_BEGIN(sac_start_stardust)
     LOOP(6)
-        CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         ADD(LW(1), 50)
         CALL(evt_eff, STRING(""), STRING("stardust"), 5, LW(0), LW(1), LW(2), 30, 30, 10, 30, 0, 0, 0, 0)
         WAIT_FRAMES(10)
@@ -73,24 +74,24 @@ EVT_BEGIN(sac_start_stardust)
 EVT_END()
 
 EVT_BEGIN(sac_mario_back_home)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_WALK)
-    CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 5, -1, 0)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 5, -1, 0)
     RETURN
 EVT_END()
 
 EVT_BEGIN(enemy_slide_go_evt)
-    CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(0), 480)
-    CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(5.0f))
-    CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, 0, 1)
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, 1)
     RETURN
 EVT_END()
 
 EVT_BEGIN(enemy_slide_return_evt)
-    CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(7.0f))
-    CALL(btlevtcmd_MovePosition, -2, LW(0), LW(1), LW(2), 0, 0, 1)
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(7.0f))
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, 1)
     RETURN
 EVT_END()
 

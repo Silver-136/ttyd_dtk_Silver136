@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle_event_cmd.h"
+#include "battle/battle_sub.h"
 
 
 BattleUnitKind unit_npc_christine;
@@ -110,11 +111,11 @@ static BattleUnitKindPart parts[] = {
 };
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetEventWait, -2, PTR(wait_event))
-    CALL(btlevtcmd_SetEventAttack, -2, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event))
-    CALL(btlevtcmd_SetEventConfusion, -2, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetMaxMoveCount, -2, 0)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
+    CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
@@ -136,7 +137,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 

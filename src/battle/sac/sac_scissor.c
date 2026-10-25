@@ -29,6 +29,7 @@
 #include "evt/evt_cmd.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_disp.h"
+#include "battle/battle_sub.h"
 
 double sqrt(double);
 double fabs(double);
@@ -1224,22 +1225,22 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     END_SIBLING_EVENT
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL_CHILD(sac_mario_item_on_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START2"), EVT_NULLPTR, 0, LW(11))
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START2"), EVT_NULLPTR, 0, LW(11))
     CALL(star_stone_appear)
     BEGIN_SIBLING_EVENT
         CALL_CHILD(sac_start_stardust)
     END_SIBLING_EVENT
     WAIT_FRAMES(100)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START3"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_FRAMES(40)
     CALL_CHILD(sac_mario_item_on_end_evt)
     CALL_CHILD(sac_mario_back_home)
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("M_I_Y"))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_I_Y"))
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(30)
         CALL(evt_btl_camera_set_mode, 0, 3)
@@ -1305,7 +1306,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_CommandGetWeaponAddress, -2, LW(0))
+    CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_WeaponAftereffect, LW(0))
     LABEL(95)
     IF_INT_EQUAL(LW(3), -1)
@@ -1313,7 +1314,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     END_IF
     CALL(btlevtcmd_GetTotalDamage, LW(3), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_scissor_finish), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_scissor_finish), 256, LW(5))
     END_IF
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(95)

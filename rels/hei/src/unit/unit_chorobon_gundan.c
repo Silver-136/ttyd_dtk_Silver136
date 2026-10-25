@@ -4,6 +4,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"
+#include "battle/battle_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -223,17 +224,17 @@ EVT_BEGIN(chorogun_dead_reward)
 EVT_END()
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetEventWait, -2, PTR(wait_event))
-    CALL(btlevtcmd_SetEventAttack, -2, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event))
-    CALL(btlevtcmd_SetEventConfusion, -2, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, -2, 0, 0)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    CALL(btlevtcmd_GetDamage, -2, LW(15))
+    CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(0), 0)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(0), LW(15))
@@ -241,13 +242,13 @@ static EVT_BEGIN(damage_event)
         END_IF
         CALL(chorogun_get_alive_num, LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), 50)
-            CALL(btlevtcmd_SetUnitWork, -2, 0, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
             ELSE
             CALL(chorogun_escape)
         END_IF
         ADD(LW(0), 1)
     END_LOOP
-    CALL(btlevtcmd_CheckDamageCode, -2, 256, LW(0))
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, 256, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
@@ -261,28 +262,28 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_EnemyItemUseCheck, -2, LW(0))
+    CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, -2)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
-    CALL(btlevtcmd_SamplingEnemy, -2, LW(0), PTR(&weapon_chorobon_gundan_attack))
+    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_gundan_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_chorobon_gundan_attack), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_chorobon_gundan_attack))
-    CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_chorobon_gundan_attack))
+    CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_chorobon_gundan_attack))
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, LW(3), -1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(chorogun_set_target_id, LW(3))
     CALL(chorogun_approach_target)
-    CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), 256, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
         GOTO(90)
@@ -323,9 +324,9 @@ static EVT_BEGIN(attack_event)
         WAIT_FRAMES(30)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_gundan_attack))
         IF_INT_EQUAL(LW(14), LW(15))
-            CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), 256, LW(5))
+            CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), 256, LW(5))
             ELSE
-            CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), 0, LW(5))
+            CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), 0, LW(5))
         END_IF
         IF_INT_EQUAL(LW(5), 21)
             CALL(chorogun_counterd, LW(6))
@@ -346,7 +347,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 

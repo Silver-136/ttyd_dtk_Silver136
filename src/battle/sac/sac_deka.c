@@ -29,6 +29,7 @@
 #include "battle/battle_status_effect.h"
 #include "eff/eff_starstone.h"
 #include "libc_decls.h"
+#include "battle/battle_sub.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -954,7 +955,7 @@ void yuka_capture(CameraId cam, void* param) {
 }
 
 EVT_BEGIN(marioAttackEvent_Deka)
-    CALL(btlevtcmd_GetUnitId, -4, LW(14))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(14))
     CALL(btlevtcmd_GetBodyId, LW(14), LW(15))
     CALL(btlevtcmd_CheckActStatus, LW(14), LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -964,10 +965,10 @@ EVT_BEGIN(marioAttackEvent_Deka)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_CommandGetWeaponAddress, -2, LW(0))
+    CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_WeaponAftereffect, LW(0))
     CALL(btlevtcmd_reset_move_color_lv_all)
     BEGIN_SIBLING_EVENT
@@ -975,16 +976,16 @@ EVT_BEGIN(marioAttackEvent_Deka)
     END_SIBLING_EVENT
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL_CHILD(sac_mario_item_on_evt)
     WAIT_MS(500)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START2"), EVT_NULLPTR, 0, LW(11))
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START2"), EVT_NULLPTR, 0, LW(11))
     CALL(star_stone_appear)
     BEGIN_SIBLING_EVENT
         CALL_CHILD(sac_start_stardust)
     END_SIBLING_EVENT
     WAIT_FRAMES(100)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BTL_SAC_START3"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_FRAMES(40)
@@ -993,15 +994,15 @@ EVT_BEGIN(marioAttackEvent_Deka)
     CALL_CHILD(sac_mario_back_home)
     CALL(wait_star_stone_take_on)
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_JUMP)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_JUMP)
         CALL(get_ride_pos, 0, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_JumpSetting, -2, 30, 0, FLOAT(0.39941406f))
-        CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 30, -1)
-        CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("M_I_Y"))
+        CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 30, 0, FLOAT(0.39941406f))
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_I_Y"))
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
         IF_INT_NOT_EQUAL(LW(14), -1)
-            CALL(btlevtcmd_GetUnitKind, -4, LW(0))
+            CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
             IF_INT_EQUAL(LW(0), 228)
                 LOOP(0)
                     CALL(btlevtcmd_SetUnitWork, LW(14), 3, 1)
@@ -1029,7 +1030,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
             WAIT_FRAMES(1)
             CALL(get_ride_pos, 0, LW(0), LW(1), LW(2))
             ADD(LW(2), FLOAT(5.0f))
-            CALL(btlevtcmd_SetPos, -2, LW(0), LW(1), LW(2))
+            CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             IF_INT_NOT_EQUAL(LW(14), -1)
                 CALL(get_ride_pos, 1, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_SetPos, LW(14), LW(0), LW(1), LW(2))
@@ -1054,11 +1055,11 @@ EVT_BEGIN(marioAttackEvent_Deka)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_JUMP)
-        CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_JumpSetting, -2, 30, 0, FLOAT(0.39941406f))
-        CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), 30, -1)
-        CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_NEUTRAL)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_JUMP)
+        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 30, 0, FLOAT(0.39941406f))
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
         IF_INT_NOT_EQUAL(LW(14), -1)
@@ -1073,7 +1074,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_SacBgsetMove, 1)
     IF_INT_NOT_EQUAL(LW(14), -1)
-        CALL(btlevtcmd_GetUnitKind, -4, LW(0))
+        CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
         IF_INT_EQUAL(LW(0), 228)
             CALL(btlevtcmd_SetUnitWork, LW(14), 3, 0)
         END_IF
@@ -1117,7 +1118,7 @@ EVT_BEGIN(dmg_evt)
     LABEL(20)
     CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), 16384, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CommandCheckDamage, -3, LW(3), LW(4), 256, LW(5))
+        CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_MARIO, LW(3), LW(4), 256, LW(5))
     END_IF
     LABEL(30)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))

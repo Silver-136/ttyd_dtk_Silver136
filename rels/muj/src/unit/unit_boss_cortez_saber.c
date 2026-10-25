@@ -6,6 +6,7 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
 #include "evt/evt_eff.h"
+#include "battle/battle_sub.h"
 
 USER_FUNC(btlevtcmd_AnimeWaitPlayLoopTiming);
 USER_FUNC(btlevtcmd_SetEventPhase);
@@ -191,16 +192,16 @@ static BattleUnitKindPart parts[] = {
 };
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_OnUnitFlag, -2, 16777216)
-    CALL(btlevtcmd_SetEventWait, -2, PTR(wait_event))
-    CALL(btlevtcmd_SetEventPhase, -2, PTR(cortez_weapon_phase_event))
-    CALL(btlevtcmd_SetEventUnisonPhase, -2, PTR(cortez_weapon_unison_phase_event))
-    CALL(btlevtcmd_SetEventAttack, -2, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event))
-    CALL(btlevtcmd_SetEventConfusion, -2, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetUnitWork, -2, 2, 1)
-    CALL(btlevtcmd_SetUnitWork, -2, 1, 0)
-    CALL(btlevtcmd_SetMaxMoveCount, -2, 0)
+    CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, 16777216)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(cortez_weapon_phase_event))
+    CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(cortez_weapon_unison_phase_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
+    CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
@@ -213,61 +214,61 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(avoid_thorn_event)
-    CALL(btlevtcmd_GetHitPos, -2, 1, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 40)
+    CALL(btlevtcmd_GetHitPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
     ADD(LW(2), 5)
     CALL(evt_eff, STRING(""), STRING("toge_flush"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_GetUnitWork, -2, 1, LW(0))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 1, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StartWaitEvent, -2)
         RETURN
     END_IF
     SET_VALUE(LW(12), PTR(&weapon_cortez_saber_float_attack))
-    CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
-    CALL(btlevtcmd_SamplingEnemy, -2, LW(0), LW(12))
+    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
-    CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_PayWeaponCost, -2, LW(12))
-    CALL(btlevtcmd_SetRotate, -2, 0, 0, 0)
-    CALL(btlevtcmd_SetRotateOffset, -2, 38, 15, 0)
+    CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
+    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+    CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 38, 15, 0)
     BEGIN_SIBLING_EVENT
         CALL(evt_sub_intpl_init, 0, 0, -60, 20)
         LOOP(20)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, LW(0), EVT_NULLPTR, EVT_NULLPTR)
+            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_sub_intpl_init, 2, 0, -135, 30)
         LOOP(30)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
+            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, EVT_NULLPTR, EVT_NULLPTR, LW(0))
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 35)
-    CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 50, -10, 4, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 50, -10, 4, 0, -1)
     WAIT_MS(200)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(evt_sub_intpl_init, 0, -135, 60, 10)
         LOOP(10)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
+            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, EVT_NULLPTR, EVT_NULLPTR, LW(0))
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_KOR_SWORD_DANCE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_SWORD_DANCE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(7)
-    CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), LW(12), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
         GOTO(90)
@@ -285,22 +286,22 @@ static EVT_BEGIN(attack_event)
         GOTO(91)
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_AnimeWaitPlayComplete, -2, 1)
+    CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     GOTO(95)
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
-    CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(12), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(5))
     IF_INT_EQUAL(LW(5), 21)
         DELETE_EVENT(LW(15))
-        CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_FaceDirectionSub, -2, LW(0), 50)
+        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 50)
         ADD(LW(1), 15)
         BEGIN_SIBLING_EVENT
             CALL(evt_sub_intpl_init, 5, -60, 0, 20)
             CALL(evt_sub_intpl_get_value)
             LOOP(21)
                 CALL(evt_sub_intpl_get_value)
-                CALL(btlevtcmd_SetRotate, -2, LW(0), EVT_NULLPTR, EVT_NULLPTR)
+                CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
@@ -309,22 +310,22 @@ static EVT_BEGIN(attack_event)
             CALL(evt_sub_intpl_get_value)
             LOOP(21)
                 CALL(evt_sub_intpl_get_value)
-                CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
+                CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, EVT_NULLPTR, EVT_NULLPTR, LW(0))
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
-        CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 21, 0, 5, 0, -1)
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 21, 0, 5, 0, -1)
         BEGIN_SIBLING_EVENT
             CALL(evt_sub_intpl_init, 4, -30, 0, 20)
             CALL(evt_sub_intpl_get_value)
             LOOP(21)
                 CALL(evt_sub_intpl_get_value)
-                CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
+                CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, EVT_NULLPTR, EVT_NULLPTR, LW(0))
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
-        CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-        CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 40, 0, 4, 0, -1)
+        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, 4, 0, -1)
         RETURN
     END_IF
     LABEL(95)
@@ -334,7 +335,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_sub_intpl_init, 11, -60, 0, 15)
         LOOP(15)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, LW(0), EVT_NULLPTR, EVT_NULLPTR)
+            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
@@ -342,20 +343,20 @@ static EVT_BEGIN(attack_event)
         CALL(evt_sub_intpl_init, 11, 60, 0, 15)
         LOOP(15)
             CALL(evt_sub_intpl_get_value)
-            CALL(btlevtcmd_SetRotate, -2, EVT_NULLPTR, EVT_NULLPTR, LW(0))
+            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, EVT_NULLPTR, EVT_NULLPTR, LW(0))
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
-    CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_DivePosition, -2, LW(0), LW(1), LW(2), 60, -10, 4, 0, -1)
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -10, 4, 0, -1)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_AnimeWaitPlayLoopTiming, -2, 1)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
+    CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
@@ -364,7 +365,7 @@ static EVT_BEGIN(cortez_damage_sub_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(90)
     END_IF
-    CALL(btlevtcmd_GetDamagePartsId, -2, LW(11))
+    CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(11))
     CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("KRT_Z_1"))
     WAIT_FRAMES(30)
     LABEL(90)

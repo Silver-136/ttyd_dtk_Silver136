@@ -1,6 +1,7 @@
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_sub.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_event_default.h"
@@ -228,7 +229,7 @@ EVT_BEGIN(dmg_counter_event)
             RETURN
         END_IF
     END_IF
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_SATELLITE_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SATELLITE_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetHomePos, LW(10), LW(5), LW(6), LW(7))
     WAIT_MS(80)
     SET_VALUE(LW(8), 42)
@@ -236,7 +237,7 @@ EVT_BEGIN(dmg_counter_event)
         CALL(bts_wariai_enzan_1, LW(8), 42, LW(2), LW(5), LW(12))
         CALL(bts_wariai_enzan_1, LW(8), 42, LW(3), LW(6), LW(13))
         CALL(bts_wariai_enzan_1, LW(8), 42, LW(4), LW(7), LW(14))
-        CALL(btlevtcmd_SetPos, -2, LW(12), LW(13), LW(14))
+        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(12), LW(13), LW(14))
         WAIT_FRAMES(1)
     END_LOOP
     RETURN
@@ -247,12 +248,12 @@ static BattleUnitKindPart parts[] = {
 };
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetEventWait, -2, PTR(wait_event))
-    CALL(btlevtcmd_SetEventAttack, -2, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event))
-    CALL(btlevtcmd_SetEventConfusion, -2, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_SetHpGaugeOffset, -2, -5, -13)
-    CALL(btlevtcmd_OnUnitFlag, -2, BATTLE_UNIT_FLAG_FLOAT_CAPABLE | BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
+    CALL(btlevtcmd_SetHpGaugeOffset, UNIT_ID_SELF, -5, -13)
+    CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_FLOAT_CAPABLE | BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
@@ -284,32 +285,32 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 EVT_BEGIN(batten_satellite_attack_attack_event)
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("F_1"))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("F_1"))
     WAIT_MS(400)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
-    CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
-    CALL(btlevtcmd_SamplingEnemy, -2, LW(0), LW(9))
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
+    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_CheckToken, -2, 16, LW(0))
+        CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, 16, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(subsetevt_confuse_flustered)
         END_IF
         RETURN
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_PayWeaponCost, -2, LW(9))
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_SATELLITE_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SATELLITE_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(13), LW(6), LW(7))
     SET_VALUE(LW(8), 9)
     LOOP(LW(8))
         CALL(bts_wariai_enzan_1, LW(8), 9, LW(0), LW(13), LW(10))
         CALL(bts_wariai_enzan_1, LW(8), 9, LW(1), LW(6), LW(11))
         CALL(bts_wariai_enzan_1, LW(8), 9, LW(2), LW(7), LW(12))
-        CALL(btlevtcmd_SetPos, -2, LW(10), LW(11), LW(12))
+        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(10), LW(11), LW(12))
         WAIT_FRAMES(1)
     END_LOOP
     SUBTRACT(LW(13), LW(0))
@@ -328,11 +329,11 @@ EVT_BEGIN(batten_satellite_attack_attack_event)
             CALL(bts_wariai_enzan_1, LW(8), 4, LW(0), LW(13), LW(10))
             CALL(bts_wariai_enzan_1, LW(8), 4, LW(1), LW(6), LW(11))
             CALL(bts_wariai_enzan_1, LW(8), 4, LW(2), LW(7), LW(12))
-            CALL(btlevtcmd_SetPos, -2, LW(10), LW(11), LW(12))
+            CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(10), LW(11), LW(12))
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
-    CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
         GOTO(90)
@@ -358,24 +359,24 @@ EVT_BEGIN(batten_satellite_attack_attack_event)
     GOTO(98)
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
-    CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(5))
     LABEL(98)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_BOSS_SATELLITE_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_GetHomePos, -2, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SATELLITE_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     WAIT_MS(80)
     SET_VALUE(LW(8), 42)
     LOOP(LW(8))
         CALL(bts_wariai_enzan_1, LW(8), 42, LW(13), LW(0), LW(10))
         CALL(bts_wariai_enzan_1, LW(8), 42, LW(6), LW(1), LW(11))
         CALL(bts_wariai_enzan_1, LW(8), 42, LW(7), LW(2), LW(12))
-        CALL(btlevtcmd_SetPos, -2, LW(10), LW(11), LW(12))
+        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(10), LW(11), LW(12))
         WAIT_FRAMES(1)
     END_LOOP
     RETURN
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 

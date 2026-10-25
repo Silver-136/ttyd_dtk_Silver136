@@ -9,6 +9,7 @@
 #include "evt/evt_map.h"
 #include "battle/battle_database_common.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_sub.h"
 
 
 BattleUnitKind unit_pansy;
@@ -154,13 +155,13 @@ BattleWeapon weapon_pansy_attack = {
 };
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_EnemyItemUseCheck, -2, LW(0))
+    CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, -2)
         RETURN
     END_IF
-    CALL(btlevtcmd_GetHp, -2, LW(0))
+    CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
         GOTO(10)
     END_IF
@@ -207,10 +208,10 @@ static BattleDataEntry data_table[] = {
 };
 
 static EVT_BEGIN(init_event)
-    CALL(btlevtcmd_SetEventWait, -2, PTR(wait_event))
-    CALL(btlevtcmd_SetEventAttack, -2, PTR(attack_event))
-    CALL(btlevtcmd_SetEventDamage, -2, PTR(damage_event))
-    CALL(btlevtcmd_SetEventConfusion, -2, PTR(attack_event))
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
@@ -223,11 +224,11 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(song_event)
-    CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
-    CALL(btlevtcmd_SamplingEnemy, -2, LW(0), LW(9))
+    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_CheckToken, -2, 16, LW(0))
+        CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, 16, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
@@ -235,11 +236,11 @@ static EVT_BEGIN(song_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
-    CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
-    CALL(btlevtcmd_PayWeaponCost, -2, LW(9))
-    CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
-    CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
+    CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(0), 255)
     SET_VALUE(LW(1), 255)
     LOOP(0)
@@ -250,11 +251,11 @@ static EVT_BEGIN(song_event)
         SUBTRACT(LW(0), 2)
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PANSY_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ATTACK)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PANSY_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     BEGIN_SIBLING_EVENT
         LOOP(10)
-            CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
+            CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             IF_INT_LESS(LW(15), 0)
                 CALL(evt_eff64, STRING(""), STRING("onpu_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
             ELSE
@@ -267,7 +268,7 @@ static EVT_BEGIN(song_event)
     SET_VALUE(LW(6), 0)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     LABEL(10)
-    CALL(btlevtcmd_PreCheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
         GOTO(90)
@@ -296,7 +297,7 @@ static EVT_BEGIN(song_event)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         SET_VALUE(LW(6), 1)
     END_IF
-    CALL(btlevtcmd_CheckDamage, -2, LW(3), LW(4), LW(9), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(5))
     GOTO(97)
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
@@ -317,7 +318,7 @@ static EVT_BEGIN(song_event)
     END_LOOP
     CALL(evt_map_blend_off, 0)
     CALL(evt_btl_camera_set_mode, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, -2, 1, POSE_TYPE_ACTION)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, -2)
@@ -326,27 +327,27 @@ static EVT_BEGIN(song_event)
 EVT_END()
 
 static EVT_BEGIN(escape_event)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PANSY_ESCAPE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PAN_E_1"))
-    CALL(btlevtcmd_SetRotate, -2, 0, 180, 0)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PANSY_ESCAPE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PAN_E_1"))
+    CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 180, 0)
     WAIT_MS(250)
-    CALL(btlevtcmd_SetPartsBlur, -2, 1, 255, 255, 255, 255, 100, 100, 100, 100, 0)
-    CALL(btlevtcmd_OnPartsAttribute, -2, 1, kMotionBlur)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PANSY_ESCAPE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_SetFallAccel, -2, FLOAT(0.5f))
-    CALL(btlevtcmd_JumpPosition, -2, LW(0), LW(1), LW(2), FLOAT(20.0f), -1)
-    CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_PANSY_ESCAPE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_SetMoveSpeed, -2, FLOAT(9.0f))
-    CALL(btlevtcmd_MovePosition, -2, 300, LW(1), LW(2), 0, -1, 0)
-    CALL(btlevtcmd_OffPartsAttribute, -2, 1, kMotionBlur)
+    CALL(btlevtcmd_SetPartsBlur, UNIT_ID_SELF, 1, 255, 255, 255, 255, 100, 100, 100, 100, 0)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kMotionBlur)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PANSY_ESCAPE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5f))
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), FLOAT(20.0f), -1)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PANSY_ESCAPE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(9.0f))
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, 300, LW(1), LW(2), 0, -1, 0)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kMotionBlur)
     WAIT_MS(500)
-    CALL(btlevtcmd_KillUnit, -2, 0)
+    CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
+    CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 

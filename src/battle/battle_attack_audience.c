@@ -1,6 +1,7 @@
 #include "driver/itemdrv.h"
 #include "driver/camdrv.h"
 #include "evt/evt_msg.h"
+#include "battle/battle_sub.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #include <string.h>
@@ -259,7 +260,7 @@ EVT_END()
 EVT_BEGIN(btlataudevtPresentItem_Get)
     CALL(_get_present_target_id, LW(3))
     CALL(btlevtcmd_StopWaitEvent, -2)
-    CALL(btlevtcmd_GetUnitId, -2, LW(0))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), LW(3))
         CALL(btlevtcmd_StopWaitEvent, LW(3))
     END_IF
@@ -268,7 +269,7 @@ EVT_BEGIN(btlataudevtPresentItem_Get)
     CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_ITEM)
     CALL(_get_item_announce)
     CALL(_delete_present_item, EVT_NULLPTR)
-    CALL(btlevtcmd_GetUnitId, -2, LW(0))
+    CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), LW(3))
         CALL(btlevtcmd_StartWaitEvent, LW(3))
     END_IF
