@@ -306,3 +306,10 @@ void winSortEntry(WindowWork* wp, s32 type, f32 x, f32 y);
 BOOL winSortWait(WindowWork* wp);
 
 extern const volatile f32 float_0p5_8041dc98;
+void winFontInit(void);
+BOOL winGhostDiaryChk(void);
+void winIconGrayInit(void);
+void winIconInit(void);
+BOOL winLectureCheck(void);
+void winLectureOn(void);
+void winTexInit_x2(TEXPalette* texture);

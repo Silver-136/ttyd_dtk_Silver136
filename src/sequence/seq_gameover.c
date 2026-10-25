@@ -24,14 +24,13 @@
 #include "driver/npcdrv.h"
 #include "evt/evt_mario.h"
 #include "evt/evt_party.h"
+#include "seq/seq_mapchange.h"
 
 typedef struct GameOverWork {
     EventEntry* evt; // 0x0
 } GameOverWork;
 
 
-void _relUnLoad(void);
-void _unload(const char* map, const char* nextMap, const char* nextBero);
 
 USER_FUNC(evt_mario_clear_party);
 USER_FUNC(N_evt_snd_bgm_unpause);

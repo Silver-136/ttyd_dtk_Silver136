@@ -19,8 +19,8 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
+#include "mot/mot_roll.h"
 
-void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 #ifdef VERSION_G8ME01
 void winFontSetWidth(Vec translate, Vec scale, GXColor color, f32 width, const char* fmt, ...);
@@ -31,16 +31,12 @@ void itemUseDisp2(WinMgrEntry* entry);
 void itemUseDisp(WinMgrEntry* entry);
 void itemUseDisp2(WinMgrEntry* entry);
 void item_disp(WindowWork* w, f32 xo, f32 yo);
-void winTexInit_x2(TEXPalette* tpl);
 void winTexSet_x2(u32 a, u32 b, Vec translate, Vec scale, GXColor color);
-void winIconInit(void);
-void winIconGrayInit(void);
 void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
 void winFontSetPitch(f32 pitch, Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 extern ItemData itemDataTable[];
 void winFontSetR(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 
-s32 marioRollCancelDisable(void);
 BOOL U_marioSlitContinueChk(void);
 
 static const char* luigi_book_1[] = {

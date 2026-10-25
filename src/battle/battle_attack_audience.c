@@ -1,9 +1,9 @@
 #include "driver/itemdrv.h"
 #include "driver/camdrv.h"
+#include "evt/evt_msg.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #include <string.h>
-void evtMsgFmtStr(char* dst, const char* src);
 #endif
 #include "battle/battle.h"
 #include "battle/battle_audience.h"

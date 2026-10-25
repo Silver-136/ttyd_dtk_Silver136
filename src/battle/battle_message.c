@@ -6,10 +6,10 @@
 #include "manager/evtmgr_cmd.h"
 #include "manager/fontmgr.h"
 #include <stdio.h>
+#include "evt/evt_msg.h"
 #ifdef VERSION_G8ME01
 #include <string.h>
 #include "mario/mariost.h"
-void evtMsgFmtStr(char* dst, const char* src);
 #endif
 
 extern ItemData itemDataTable[];

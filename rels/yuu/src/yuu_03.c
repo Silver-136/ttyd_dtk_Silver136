@@ -15,6 +15,8 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "mot/mot_slit.h"
+#include "evt/evt_yuugijou.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -37,11 +39,9 @@ USER_FUNC(evt_sub_get_language);
 typedef struct MonteSub { s32 unk0; Vec pos; f32 scale; u8 unk14[0x38 - 0x14]; } MonteSub;
 typedef struct Monte { u8 hidden; u8 unk1; s16 num; u8 state; u8 unk5[3]; MonteSub sub; MiniGameWork* wp; } Monte;
 void yuu_03_icon_monte_disp(CameraId camera, void* param);
-void marioSlitForceCancel(void);
 void ext_yuunpc_minigame4_init_sub(void);
 void yuunpc_wp_flag_off(s32 flag);
 void marioRollTryCancel(void);
-void motSlitCancel3(void);
 BOOL marioRollKeyDisable(void);
 typedef struct RyushiWork { s32 flag; s32 mode; Vec base; Vec pos; s32 alpha; s32 count; f32 scale; s32 r; s32 g; s32 b; s32 r2; s32 g2; s32 b2; } RyushiWork;
 static void* yuunpc_wp;
@@ -53,7 +53,6 @@ static f32 randf(f32 min, f32 max);
 void ryushi_disp(CameraId camera, void* param);
 USER_FUNC(evt_ryushi_init);
 BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, SlitWork* data);
-void monteCountDisp(void);
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
 #define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)

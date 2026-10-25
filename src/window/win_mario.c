@@ -17,9 +17,9 @@
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
 #include "battle/battle_seq_end.h"
+#include "win/win_root.h"
 
 extern ItemData itemDataTable[];
-void winIconInit(void);
 void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
 
 typedef struct LinkDt {
@@ -388,8 +388,6 @@ void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
     }
 }
 
-void winZClear(void);
-void winFontInit(void);
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...);

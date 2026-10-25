@@ -28,13 +28,12 @@
 #include "mario/mario_party.h"
 #include "driver/itemdrv.h"
 #include "statuswindow.h"
+#include "win/win_main.h"
 
 extern ItemData itemDataTable[];
 
 void mapObjGetPos(const char* name, Vec* pos);
 void FontDrawString(f32 x, f32 y, const char* str);
-BOOL winGhostDiaryChk(void);
-s16 johoya_get(u8* table, s16 id);
 
 typedef struct UnitWinEntry {
     const char* mapObj; // 0x0

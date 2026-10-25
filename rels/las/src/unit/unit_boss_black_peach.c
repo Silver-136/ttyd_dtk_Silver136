@@ -18,6 +18,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "eff/n64/eff_stardust2_n64.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -51,7 +52,6 @@ HandWork* hand_wp;
 #include "battle/battle_break_slot.h"
 #include "driver/extdrv.h"
 u8* lightGetPaperCraft(void);
-EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 camera, f32 x, f32 y, f32 z, f32 vx, f32 vy);
 void btl_camera_shake_w(s32 a, s32 b, s32 c, f32 d, f32 e);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 

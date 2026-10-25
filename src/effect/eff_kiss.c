@@ -14,7 +14,6 @@
 
 double fabs(double);
 
-void effStardustN64SetScale(EffectEntry* effect, f32 scale);
 
 typedef struct KissWork {
     s32 type;     // 0x0

@@ -17,12 +17,8 @@
 
 extern ItemData itemDataTable[];
 
-void winTexInit_x2(TEXPalette* tpl);
 void winTexSet_x2(u32 a, u32 b, Vec translate, Vec scale, GXColor color);
-void winIconInit(void);
-void winIconGrayInit(void);
 void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
-void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetR(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 

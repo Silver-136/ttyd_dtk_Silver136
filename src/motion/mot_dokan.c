@@ -6,8 +6,8 @@
 #include "mario/mario_sbr.h"
 #include "party.h"
 #include "system.h"
+#include "mot/mot_slit.h"
 
-void marioSlitForceCancel(void);
 
 
 static void _partyEntry(s32 flag) {

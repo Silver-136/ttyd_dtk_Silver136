@@ -19,3 +19,5 @@ extern char msg_article_buf[0xA00];
 extern char msg_count_buf[0xA00];
 extern char msg_num_buf[0xA00];
 extern char msg_plural_buf[0xA00];
+void evtMsgFmtInt(char* buf, s32 count);
+void evtMsgFmtStr(char* buf, const char* name);

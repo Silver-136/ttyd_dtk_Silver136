@@ -27,12 +27,10 @@
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
 #include "win/win_mario.h"
+#include "win/win_root.h"
 
 extern ItemData itemDataTable[];
 
-void winZClear(void);
-void winFontInit(void);
-void winIconInit(void);
 void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color);
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...);

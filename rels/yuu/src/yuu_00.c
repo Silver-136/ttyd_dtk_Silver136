@@ -13,6 +13,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_yuugijou.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -37,7 +38,6 @@
 typedef struct HikokiWork { u32 flags; s32 phase; s32 coins; s32 result; s32 monteCount; EventEntry* viewEvent; } HikokiWork;
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
-void monteCountDisp(void);
 #ifdef VERSION_G8ME01
 USER_FUNC(yuuminigame1_floor_chk);
 USER_FUNC(yuuminigame1_floor_on_off);

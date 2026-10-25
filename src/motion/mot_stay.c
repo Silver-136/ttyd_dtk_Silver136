@@ -11,13 +11,12 @@
 #include "koopa_motion.h"
 #include "peach.h"
 #include "mario/mario_pouch.h"
+#include "mot/mot_jabara.h"
 
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
 #include "mario/mario_sbr.h"
-void motSlitCancel(void);
-BOOL marioChkJabara(void);
 
 static inline BOOL lowHP(void) {
     BOOL r = pouchGetHP() <= 5;
@@ -50,7 +49,6 @@ BOOL marioChkDeepSleep(void) {
 }
 
 #ifdef VERSION_G8ME01
-BOOL marioPriCheckJabara(void);
 s32 marioGetHammerLevel(void);
 #endif
 void mot_stay(void) {

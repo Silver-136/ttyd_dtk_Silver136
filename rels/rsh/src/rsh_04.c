@@ -10,6 +10,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "win/win_main.h"
 
 #include "mario/mario.h"
 #include "driver/npcdrv.h"
@@ -1883,7 +1884,6 @@ EVT_BEGIN(rsh_04_c_init_evt_nidome)
     RETURN
 EVT_END()
 
-BOOL winGhostDiaryChk(void);
 
 static USER_FUNC(mario_flag) {
     EvtWord* args = event->args;

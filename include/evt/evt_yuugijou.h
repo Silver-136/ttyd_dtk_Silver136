@@ -103,3 +103,4 @@ extern PiantaParlorWork* yuwp;
 
 void evtYuuWindow(void);
 s32 evtYuuWindowEndChk(void);
+void monteCountDisp(void);

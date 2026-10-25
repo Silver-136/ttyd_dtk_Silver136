@@ -6,7 +6,6 @@
 #include <dolphin/mtx.h>
 #include "eff/n64/eff_stardust_n64.h"
 
-void effStardustN64SetDrawCam(EffectEntry* eff, s32 camera);
 
 typedef struct EffBreakWork {
     s32 type;      // 0x0

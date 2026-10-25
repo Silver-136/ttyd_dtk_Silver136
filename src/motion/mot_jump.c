@@ -5,10 +5,11 @@
 #include "mario/mario_sbr.h"
 #include "system.h"
 #include "mot/mot_jump.h"
+#include "mot/mot_stay.h"
+#include "mot/mot_jabara.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #include <string.h>
-BOOL marioPriCheckJabara(void);
 #endif
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
@@ -23,8 +24,6 @@ BOOL marioPriCheckJabara(void);
 #ifdef VERSION_G8ME01
 #define kpa_fall_80213C38 kpa_fall
 #endif
-void marioChgMotAuto(void);
-void marioSlitForceCancel(void);
 void* marioChkFront(Vec* out, Vec* pos, f32 dir, f32 dist);
 
 

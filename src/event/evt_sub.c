@@ -48,7 +48,6 @@ s32 effStageClearEndChk();
 #include <stdio.h>
 #include <dolphin/os.h>
 #ifdef VERSION_G8ME01
-void evtMsgFmtInt(char* buf, s32 value);
 #endif
 
 

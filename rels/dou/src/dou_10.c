@@ -10,6 +10,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "mot/mot_ship.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -21,7 +22,6 @@
 #include "evt/evt_damage.h"
 #include "driver/hitdrv.h"
 
-void marioShipForceStop(void);
 static inline f32 addf(f32 a, f32 b) { return a + b; }
 typedef struct EntryMgrEntry { s32 used; s32 id; f32 reg[3]; } EntryMgrEntry;
 typedef struct EntryMgr { s32 count; EntryMgrEntry* entries; } EntryMgr;

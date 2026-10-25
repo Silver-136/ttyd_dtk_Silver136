@@ -16,8 +16,6 @@
 #include "eff/n64/eff_stardust_n64.h"
 
 extern double __fabs(double);
-void effStardustN64SetColor(EffectEntry* effect, f32 r, f32 g, f32 b);
-void effStardustN64SetDrawCam(EffectEntry* effect, s32 camera);
 
 void effStarStoneDraw(CameraId cameraId, EffectEntry* effect);
 void effStarStoneDraw(CameraId cameraId, EffectEntry* effect);

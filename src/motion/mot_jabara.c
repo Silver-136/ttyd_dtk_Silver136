@@ -19,10 +19,10 @@
 #include "libc_decls.h"
 #include "party.h"
 #include "evt/evt_cam.h"
+#include "mot/mot_stay.h"
+#include "mot/mot_slit.h"
 
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
-void marioVoiceGlareOn(void);
-void marioVoiceGlareOff(void);
 
 typedef struct MotJabaraWork {
     u32 flags;          // 0x00: 1 = swing input taken (swingMain); 0x10000 / 0x20000 / 0x40000 = one-shot charge-level sounds played
@@ -209,7 +209,6 @@ static inline void jabaraLand(f32 y_, void* h_) {
     JAB_TAIL(MOTSUB_)
 
 void mario_land_kemuri(void);
-void mot_slit_post(void);
 void marioChkOverhead(void);
 void* marioSearchHead(Vec* p, f32* h, f32 r);
 void swingMain(void);

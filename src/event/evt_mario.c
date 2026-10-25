@@ -24,15 +24,13 @@
 #include "party/party_move.h"
 #include "peach.h"
 #include "koopa_motion.h"
+#include "mot/mot_roll.h"
+#include "mot/mot_plane.h"
 
 
 void mario_plane_cancel(void);
-s32 marioGetPlaneStatus(void);
-BOOL marioChkSlitThrouhEnd(void);
 void marioRollTryCancel(void);
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
-void marioSlitForceCancel(void);
-void marioRollForceCancel(void);
 
 #define HITOBJ(n, field)                                   \
     USER_FUNC(evt_mario_get_name_hitobj_##n) {             \
@@ -112,13 +110,8 @@ static inline BOOL marioChkLanding(void) {
 
 void vivianUnhold(PartyEntry* party);
 void marioRollCancel(void);
-void motSlitCancel2(void);
 
 
-void rollEvtJumpSetup(void);
-void setRollEvtFlag(void);
-void clrRollEvtFlag(void);
-void marioResetRollSpd(void);
 
 static inline BOOL marioLandChk(f32 vy) {
     MarioWork* mp = marioGetPtr();

@@ -13,6 +13,8 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "mot/mot_roll.h"
+#include "evt/evt_yuugijou.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -40,10 +42,6 @@ static Monte* monte_p; /* monte_p */
 static Monte* icon_monte_p;
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
-void marioResetRollSpd(void);
-void clrRollEvtFlag(void);
-void monteCountDisp(void);
-void marioRollFixOn(void);
 extern MonteTable montetable[];
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);

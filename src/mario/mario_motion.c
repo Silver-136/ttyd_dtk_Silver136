@@ -21,6 +21,12 @@
 #include "mot/mot_slit.h"
 #include "koopa_motion.h"
 #include "mario/mario_hit.h"
+#include "mot/mot_jabara.h"
+#include "mot/mot_ship.h"
+#include "mot/mot_roll.h"
+#include "mot/mot_walk.h"
+#include "mot/mot_plane.h"
+#include "mot/mot_stay.h"
 
 
 typedef struct MarioJumpData {
@@ -41,22 +47,8 @@ typedef struct MotCaseEntry {
     s32 type;
 } MotCaseEntry;
 
-void mot_stay(void);
-void mot_stay_post(void);
-void mot_walk(void);
-void mot_dash(void);
-void mot_jump(void);
-void mot_jumpNpc(void);
 #ifdef VERSION_G8ME01
-void N_mot_jumpNpc_post(void);
 #endif
-void mot_jumpSw(void);
-void mot_jumpStand(void);
-void mot_jumpSmall(void);
-void mot_fall(void);
-void mot_fall_post(void);
-void mot_upstairs(void);
-void mot_land(void);
 void mot_talk(void);
 void mot_getItem(void);
 void mot_hip(void);
@@ -64,24 +56,11 @@ void mot_hip_post(void);
 void mot_hammer(void);
 void mot_hammer2(void);
 void mot_ham2_post(void);
-void mot_jabara(void);
-void mot_jabara_post(void);
-void mot_slit(void);
-void mot_slit_post(void);
-void mot_roll(void);
-void mot_roll_post(void);
 void mot_kaze(void);
-void mot_plane(void);
-void mot_plane_post(void);
-void mot_ship(void);
-void mot_ship_post(void);
 void mot_cloud(void);
 void mot_vivian(void);
 void mot_vivian_post(void);
 void mot_dokan(void);
-void mot_grasp(void);
-void mot_damage(void);
-void mot_damageToge(void);
 void mot_bottomless(void);
 void mot_forceReset(void);
 void mot_shadow(void);
@@ -90,14 +69,11 @@ void kpa_swim(void);
 void kpa_powup(void);
 void kpa_powdown(void);
 void mot_dummy(void);
-void mot_fall_roll(void);
 
-void marioSlitForceCancel(void);
 void movePos(f32* x, f32* z, f32 speed, f32 angle);
 s32 psndSFXOn_3D(s32 id, Vec* position);
 void* marioChkLandon(f32* y, f32 spd);
 #define PCHK(x) pouchCheckItem(x)
-void marioDmgRetQuakeOn(void);
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioCreviceWallChk(Vec pos);
 s32 marioGetHammerLevel(void);
@@ -109,19 +85,12 @@ void* fbatNpcTalkCheck(void);
 void peach_talk(void);
 void effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 void yoshi_jumpStand(void);
-void marioSlitReenter(void);
-void motSlitCancel(void);
-void N_marioSlitSetAfterLand(void);
 void kpaClearHitobjRide(void);
 void* kpaChkHitobjRide(void);
 BOOL getRollEvtFlag(void);
-BOOL marioPriCheckJabara(void);
 BOOL kpaHipAttackOk(void);
 BOOL marioChkHipAttack(void);
 BOOL vivianGetStatus(void);
-s32 marioShipChanging(void);
-void marioReInit_ship(void);
-void marioResetRollSpd(void);
 void mario_plane_cancel(void);
 void allPartyForceRideOn(void);
 void marioLandOn(void);

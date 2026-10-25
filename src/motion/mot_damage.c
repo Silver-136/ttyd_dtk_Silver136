@@ -19,10 +19,9 @@
 #include "party/party_bomhei.h"
 #include "party/party_yoshi.h"
 #include "party/party_nokonoko.h"
+#include "mot/mot_slit.h"
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
-void marioClearSlitFloor(void);
-void marioSlitForceCancel(void);
 void mario_simple_kemuri(void);
 
 

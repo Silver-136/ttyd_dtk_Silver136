@@ -32,6 +32,7 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_npc.h"
 #include "evt/evt_sub.h"
+#include "win/win_main.h"
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);
@@ -42,7 +43,6 @@ USER_FUNC(evt_msg_fmt_str);
 extern ItemData itemDataTable[];
 void FontDrawString(f32 x, f32 y, const char* str);
 void mapObjGetPos(const char* name, Vec* pos);
-BOOL winGhostDiaryChk(void);
 
 //.sbss
 static ShopWork* _wp;

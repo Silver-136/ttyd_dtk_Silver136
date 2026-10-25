@@ -20,6 +20,10 @@
 #include <math.h>
 #include "party/party_kuribo.h"
 #include "party/party_bomhei.h"
+#include "mot/mot_plane.h"
+#include "mot/mot_roll.h"
+#include "mot/mot_ship.h"
+#include "mot/mot_slit.h"
 
 #ifdef VERSION_G8ME01
 BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
@@ -27,15 +31,11 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
 
 
 //external prototypes (TODO: move to headers)
-s32 marioShipChanging(void);
 BOOL marioRollKeyDisable(void);
-BOOL marioSlitKeyDisable(void);
 s32 yoshiGetStatus(void);
 BOOL nokonoko_holdItem(void);
 void marioYoshiForceCancel(void);
 BOOL getRollEvtFlag(void);
-void marioSetRollDispDir(void);
-void marioShipSetDispDir(void);
 f32 marioGetMoveRate(f32 dir);
 void marioCheckWall(f32 dist, f32 dir);
 void marioCheckWall_roll(f32 dist, f32 dir);
@@ -49,12 +49,7 @@ void partyReInit(void);
 void marioBaloonInit(void);
 void marioGetRubInit(void);
 BOOL kpaGetStageViewType(void);
-s32 marioGetPlaneStatus(void);
 s32 mario_bomhei_keychk(void);
-void marioSlitForceCancel(void);
-void marioReInit_ship(void);
-void marioReInit_roll(void);
-void marioReInit_slit(void);
 void marioRideYoshi(void);
 void marioMotion(void);
 void marioJump(void);
@@ -105,10 +100,6 @@ s32 marioGetColor(void) {
 void peachPreInit(void);
 void kpaPreInit(void);
 void kpaSetLevel(s32 level);
-void marioForcePlaneAnime(void);
-void marioForceShipAnime(void);
-void marioForceRollAnime(void);
-void marioForceSlitAnime(void);
 void N_marioForceVivianAnime(void);
 void npcSetMarioAutoTalkPose(const char* stay, const char* talk);
 

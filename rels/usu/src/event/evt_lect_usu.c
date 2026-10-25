@@ -18,6 +18,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
+#include "mot/mot_slit.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -51,7 +52,6 @@ EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 static EffectEntry* eff;
 static Vec daiv;
 void marioRollTryCancel(void);
-void motSlitCancel3(void);
 BOOL marioRollKeyDisable(void);
 
 static USER_FUNC(efffukidashichange_cam);

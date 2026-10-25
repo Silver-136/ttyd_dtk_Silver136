@@ -20,6 +20,7 @@
 #include "party/party_motion.h"
 #include "party/party_chuchu.h"
 #include "driver/shadowdrv.h"
+#include "mot/mot_damage.h"
 
 //.data
 
@@ -2352,8 +2353,6 @@ s32 partyRideYoshiMain(PartyEntry* party) {
 }
 
 s32 hitGetAttr(struct HitEntry* hit);
-BOOL marioWaitDamageReturnFall(void);
-BOOL marioWaitDamageTogeReturnFall(void);
 void vivianShadow(PartyEntry* party);
 
 void party_damage_return(PartyEntry* party) {

@@ -23,3 +23,8 @@ typedef struct MotPlaneWork {
 } MotPlaneWork;                   // size 0x48
 
 void flyMain(void);
+void marioForcePlaneAnime(void);
+s32 marioGetPlaneStatus(void);
+s32 marioPlaneGetFlyingDir(void);
+void mot_plane(void);
+void mot_plane_post(void);

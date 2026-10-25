@@ -967,16 +967,13 @@ void winLogMain2(WindowWork* w) {
     w->log.recipe.f2C += (w->log.recipe.tf2C - w->log.recipe.f2C) / FPS_EASE(6.0f);
 }
 
-void winTexInit_x2(TEXPalette* t);
 void winTexSet_x2(u32 a, u32 b, Vec translate, Vec scale, GXColor color);
-void winIconInit(void);
 void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
 void effStarStoneDraw(CameraId cam, EffectEntry* e);
 void mapGX(WindowWork* w, f32 x, f32 y);
 void monoshiriGX(WindowWork* w, f32 x, f32 y);
 
 #ifdef VERSION_G8ME01
-void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 #endif
 
@@ -1208,7 +1205,6 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
     }
 }
 
-void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 
 #ifdef VERSION_G8ME01
@@ -1573,7 +1569,6 @@ void capture(CameraId camera, void* param) {
 }
 
 void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y);
-void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 
 void monosiri_disp(CameraId camera, void* param) {

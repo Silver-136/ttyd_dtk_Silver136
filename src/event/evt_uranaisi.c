@@ -6,8 +6,6 @@
 #include <string.h>
 #include "libc_decls.h"
 
-s16 johoya_get(u8* table, s16 id);
-s16 johoya_set(u8* table, s16 id, s16 val);
 
 typedef struct {
     u16 unk0;

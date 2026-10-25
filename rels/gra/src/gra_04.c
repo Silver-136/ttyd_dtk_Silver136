@@ -10,6 +10,7 @@
 #include "evt/evt_party.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "mot/mot_roll.h"
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(evt_cam3d_evt_set_now);
@@ -252,7 +253,6 @@ EVT_BEGIN(gra_04_init_evt)
     RETURN
 EVT_END()
 
-s32 marioRollCancelDisable(void);
 
 USER_FUNC(roll_release_check) {
     EvtWord* args = event->args;

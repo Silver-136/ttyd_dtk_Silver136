@@ -34,7 +34,6 @@ extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 #ifdef VERSION_G8ME01
 #endif
-void effStardustN64SetDrawCam(EffectEntry* eff, s32 camera);
 void display_func(CameraId cameraId, void* param);
 typedef struct SysChar { f32 x; f32 y; f32 z; f32 rot; s32 timer; s32 state; s32 texid; } SysChar;
 #ifdef VERSION_G8ME01

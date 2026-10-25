@@ -35,8 +35,6 @@ typedef struct EffBombN64Work {
     u8 pad_c4[8];    // 0xC4
 } EffBombN64Work;
 
-void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId);
-void effConfettiN64SetCamId(EffectEntry* effect, s32 camId);
 
 static effN64Vtx size8x8_tex32x32_vtx[] = {
     {-4, -4, 0, 0, 0, 255, 255, 255, 255},

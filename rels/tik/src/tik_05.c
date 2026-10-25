@@ -27,6 +27,8 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "dolphin/exi.h"
+#include "eff/n64/eff_stardust2_n64.h"
+#include "eff/n64/eff_stardust_n64.h"
 
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
@@ -53,8 +55,6 @@
 
 static inline f32 fid(f32 x) { return x; }
 typedef struct KaitenParam { Vec pos; Vec target; f32 angle; f32 dist; } KaitenParam;
-void effStardustN64SetDrawCam(EffectEntry* eff, s32 camera);
-void effStardust2N64SetDrawCam(EffectEntry* eff, s32 camera);
 typedef struct BrokenPiece { s32 state; s32 delay; s32 dir; Vec vel; Vec pos; f32 rot; f32 rotSpeed; f32 gx; f32 gy; } BrokenPiece;
 typedef struct BrokenWork { s32 copied; smartEntry* tex; smartEntry* pieces; } BrokenWork;
 static u8* _ap;

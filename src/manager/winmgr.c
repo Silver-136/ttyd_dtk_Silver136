@@ -25,6 +25,7 @@
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
 #include "statuswindow.h"
+#include "win/win_main.h"
 
 typedef struct WinMgrSelectTbl {
     u16 numDescriptors; // 0x0
@@ -33,17 +34,13 @@ WinMgrDesc* descriptors; // 0x4
 } WinMgrSelectTbl;
 
 extern ItemData itemDataTable[];
-void winFontInit(void);
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
-s16 johoya_get(u8* table, s16 id);
 void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*));
 #ifdef VERSION_G8ME01
 u16 L_pouchEquipBadge(s32 index);
 int select_comp_bteresa(void* a, void* b);
 #endif
-void winIconInit(void);
-void winIconGrayInit(void);
 void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
 
 #define INTPL ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)

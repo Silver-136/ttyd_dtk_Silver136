@@ -36,3 +36,5 @@ void johoya_init(void);
 s32 search_evt_no(const char* label);
 
 extern InformantWork _jdt;
+s16 johoya_get(u8* table, s16 id);
+s16 johoya_set(u8* table, s16 id, s16 val);

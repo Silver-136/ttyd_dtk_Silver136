@@ -15,6 +15,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "mot/mot_roll.h"
 
 #include "mario/mario.h"
 #include "mario/mariost.h"
@@ -27,7 +28,6 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 
-s32 marioRollCancelDisable(void);
 s32 U_marioSlitContinueChk(void);
 NpcEntry* fbatHitCheckAll(void);
 
