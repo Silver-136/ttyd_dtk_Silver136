@@ -331,7 +331,7 @@ s32 mapGetActiveGroup(void);
 s32 mapGetJoints(MapFileJoint* joint);
 void mapInit(void);
 MapEntryAnimData* mapSearchAnmObj(const char* animName);
-void mapCheckAnimation(const char* animName, BOOL* valid, f32* a3);
+void mapCheckAnimation(const char* animName, BOOL* valid, f32* remainingMs);
 // more animation functions?
 void mapUnLoad(void);
 BOOL mapPreLoad(const char* map);

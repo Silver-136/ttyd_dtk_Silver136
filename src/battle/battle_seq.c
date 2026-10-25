@@ -81,7 +81,7 @@ EVT_BEGIN(_default_haikei_set_entry_event)
 EVT_END()
 
 BattleWeapon* _GetFirstAttackWeapon(s32 type);
-void BattleCheckAllPinchStatus(BattleWork* wp, BOOL a2);
+void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience);
 void btlseqInit(BattleWork* wp);
 void btlseqFirstAct(BattleWork* wp);
 void btlseqTurn(BattleWork* wp);
@@ -189,7 +189,7 @@ void BattleSequenceManager(void) { //1:1
     }
 }
 
-void BattleCheckAllPinchStatus(BattleWork* wp, BOOL a2) { //1:1, needs stmw forced
+void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
     BattleUnit* unit;
     BOOL v6;
     int i;
@@ -197,7 +197,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL a2) { //1:1, needs stmw forc
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
-            BtlUnit_CheckPinchStatus(unit, a2);
+            BtlUnit_CheckPinchStatus(unit, noAudience);
         }
     }
 

@@ -1598,7 +1598,7 @@ void partyKeyOff(void);
 void marioChgTalkMotion(void);
 void marioChgStayMotion(void);
 BOOL marioChkTalkable(void);
-void* fbatHitCheck(u32 flags, void* a1);
+void* fbatHitCheck(u32 flags, void* result);
 
 #include "eff/eff_small_star.h"
 s32 _majinai_effect(EventEntry* event, BOOL isFirstCall);
@@ -2395,7 +2395,7 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
 typedef struct { s32 v[11]; } SinTbl;
 static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
 
-void* fbatHitCheck(u32 flags, void* a1) {
+void* fbatHitCheck(u32 flags, void* result) {
     u32 f1000a;
     u32 f20;
     u32 noJump;
@@ -2666,8 +2666,8 @@ void* fbatHitCheck(u32 flags, void* a1) {
         }
     }
 
-    if (a1) {
-        *(FbatHitResult*)a1 = res;
+    if (result) {
+        *(FbatHitResult*)result = res;
     }
     return hit;
 }
@@ -3396,7 +3396,7 @@ void npcSetBattleInfo(NpcEntry* npc, s32 battleInfoId);
 void npcSetupBattleInfo(NpcEntry* npc, NpcSetupBattleInfo* setup);
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
-void* fbatHitCheck(u32 flags, void* a1);
+void* fbatHitCheck(u32 flags, void* result);
 NpcEntry* fbatHitCheckAll(void);
 NpcEntry* fbatNpcTalkCheck(void);
 void npcGroupDead(NpcEntry* entry, u16 reason);

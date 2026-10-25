@@ -494,16 +494,16 @@ MapEntryAnimData* mapSearchAnmObj(const char* animName) {
     return NULL;
 }
 
-void mapCheckAnimation(const char* animName, BOOL* valid, f32* a3) {
+void mapCheckAnimation(const char* animName, BOOL* valid, f32* remainingMs) {
     MapAnim* anim = mapSearchAnmObj_inl(animName);
 
     *valid = FALSE;
-    *a3 = 0.0f;
+    *remainingMs = 0.0f;
     if (anim) {
         if (anim->flags & 2) {
             *valid = TRUE;
         }
-        *a3 = 1000.0f * (anim->anim->length - anim->time) / gp->framerate;
+        *remainingMs = 1000.0f * (anim->anim->length - anim->time) / gp->framerate;
     }
     else {
         *valid = TRUE;

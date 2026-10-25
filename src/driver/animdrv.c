@@ -2628,15 +2628,15 @@ void animPoseDrawMtx(s32 poseId, Mtx matrix, s32 xluMode, f32 rotY, f32 scale)
 
 u32 anim_ext_tex_size;
 
-void animSetPaperTexObj(GXTexObj* obj1, GXTexObj* obj2, GXTexObj* obj3, void* data1, void* data2, void* data3, s32 a7, s32 a8) {
+void animSetPaperTexObj(GXTexObj* obj1, GXTexObj* obj2, GXTexObj* obj3, void* data1, void* data2, void* data3, s32 texMode, s32 unused) {
     wp->mpTexObjs[0] = data1 ? obj1 : NULL;
     wp->mpTexObjs[1] = data2 ? obj2 : NULL;
     wp->mpCurTexObj = data3 ? obj3 : NULL;
     wp->mpTexDatas[0] = data1;
     wp->mpTexDatas[1] = data2;
     wp->mpCurTexData = data3;
-    wp->paperTexMode0 = a7;
-    wp->paperTexMode1 = a7;
+    wp->paperTexMode0 = texMode;
+    wp->paperTexMode1 = texMode;
 }
 
 inline void animPoseFileRelease(s32 fileId) {

@@ -32,7 +32,7 @@ Vec cloud_at;
 #include "pmario_sound.h"
 #include "mario/mario_motion.h"
 void N__cloud_use(PartyEntry* party);
-void getHitBreatheout2(PartyEntry* party, f32 unk);
+void getHitBreatheout2(PartyEntry* party, f32 angle);
 void partyChgPose(PartyEntry* party, const char* pose);
 
 
@@ -569,7 +569,7 @@ void cloud_exit(PartyEntry* party) {
     mario->camShiftTargetX = 0.0f;
 }
 
-void getHitBreatheout2(PartyEntry* party, f32 unk) {
+void getHitBreatheout2(PartyEntry* party, f32 angle) {
     f32 dirSin, dirCos, ys, yc;
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 ofsZ, ofsX;
@@ -594,7 +594,7 @@ void getHitBreatheout2(PartyEntry* party, f32 unk) {
     if (cl->breathDist >= cl->breathDistMax) {
         cl->breathDist = cl->breathDistMax;
     }
-    sincosf(&ys, &yc, unk);
+    sincosf(&ys, &yc, angle);
     dir = toMovedir(CW(party)->breathDir);
     sincosf(&dirSin, &dirCos, dir);
     dist = CW(party)->breathDist;
