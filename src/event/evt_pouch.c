@@ -57,9 +57,9 @@ USER_FUNC(evt_pouch_remove_item) {
 
 USER_FUNC(N_evt_pouch_remove_item_index) {
     EvtWord* args = event->args;
-    s32 a = evtGetValue(event, args[0]);
-    s32 b = evtGetValue(event, args[1]);
-    if (pouchRemoveItemIndex(a, b) == 1) {
+    s32 type = evtGetValue(event, args[0]);
+    s32 index = evtGetValue(event, args[1]);
+    if (pouchRemoveItemIndex(type, index) == 1) {
         pouchReviseMarioParam();
         pouchRevisePartyParam();
         evtSetValue(event, args[2], 0);
@@ -81,9 +81,9 @@ USER_FUNC(evt_pouch_add_keepitem) {
 
 USER_FUNC(evt_pouch_remove_keepitem) {
     EvtWord* args = event->args;
-    s32 a = evtGetValue(event, args[0]);
-    s32 b = evtGetValue(event, args[1]);
-    if (pouchRemoveKeepItem(a, b)) {
+    s32 id = evtGetValue(event, args[0]);
+    s32 index = evtGetValue(event, args[1]);
+    if (pouchRemoveKeepItem(id, index)) {
         evtSetValue(event, args[2], 0);
     } else {
         evtSetValue(event, args[2], -1);

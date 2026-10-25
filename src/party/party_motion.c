@@ -68,8 +68,8 @@ USER_FUNC(evt_snd_bgmon_f) {
     EvtWord* args = event->args;
     s32 a = args[0];
     s32 b = args[1];
-    s32 c = evtGetValue(event, args[2]);
-    psndBGMOn_f(a, b, c, 0);
+    s32 fadetime = evtGetValue(event, args[2]);
+    psndBGMOn_f(a, b, fadetime, 0);
     return EVT_RETURN_DONE;
 }
 
@@ -242,8 +242,8 @@ USER_FUNC(evt_snd_envon_f) {
     EvtWord* args = event->args;
     s32 a = args[0];
     s32 b = args[1];
-    s32 c = evtGetValue(event, args[2]);
-    psndENVOn_f_d(a, SFX_NAME_WORD(b), c, 0);
+    s32 fadetime = evtGetValue(event, args[2]);
+    psndENVOn_f_d(a, SFX_NAME_WORD(b), fadetime, 0);
     return EVT_RETURN_DONE;
 }
 

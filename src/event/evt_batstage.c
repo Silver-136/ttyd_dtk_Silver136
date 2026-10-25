@@ -13,52 +13,52 @@ void BattleStageSetStgDark(u8 a, s32 b, s32 c);
 USER_FUNC(evt_batstage_set_stg_dark) {
     EvtWord* args = event->args;
     u8 a = evtGetValue(event, args[0]);
-    s32 b = evtGetValue(event, args[1]);
-    s32 c = evtGetValue(event, args[2]);
-    BattleStageSetStgDark(a, b, c);
+    s32 time = evtGetValue(event, args[1]);
+    s32 mode = evtGetValue(event, args[2]);
+    BattleStageSetStgDark(a, time, mode);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_batstage_set_stg_dark_base) {
     EvtWord* args = event->args;
     u8 a = evtGetValue(event, args[0]);
-    s32 b = evtGetValue(event, args[1]);
-    s32 c = evtGetValue(event, args[2]);
-    BattleStageSetStgDarkBase(a, b, c);
+    s32 time = evtGetValue(event, args[1]);
+    s32 mode = evtGetValue(event, args[2]);
+    BattleStageSetStgDarkBase(a, time, mode);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_batstage_return_stg_dark_base) {
     EvtWord* args = event->args;
-    s32 a = evtGetValue(event, args[0]);
-    s32 b = evtGetValue(event, args[1]);
-    BattleStageReturnStgDarkBase(a, b);
+    s32 time = evtGetValue(event, args[0]);
+    s32 mode = evtGetValue(event, args[1]);
+    BattleStageReturnStgDarkBase(time, mode);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_batstage_set_aud_dark) {
     EvtWord* args = event->args;
     u8 a = evtGetValue(event, args[0]);
-    s32 b = evtGetValue(event, args[1]);
-    s32 c = evtGetValue(event, args[2]);
-    BattleStageSetAudDark(a, b, c);
+    s32 time = evtGetValue(event, args[1]);
+    s32 mode = evtGetValue(event, args[2]);
+    BattleStageSetAudDark(a, time, mode);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_batstage_set_aud_dark_base) {
     EvtWord* args = event->args;
     u8 a = evtGetValue(event, args[0]);
-    s32 b = evtGetValue(event, args[1]);
-    s32 c = evtGetValue(event, args[2]);
-    BattleStageSetAudDarkBase(a, b, c);
+    s32 time = evtGetValue(event, args[1]);
+    s32 mode = evtGetValue(event, args[2]);
+    BattleStageSetAudDarkBase(a, time, mode);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_batstage_return_aud_dark_base) {
     EvtWord* args = event->args;
-    s32 a = evtGetValue(event, args[0]);
-    s32 b = evtGetValue(event, args[1]);
-    BattleStageReturnAudDarkBase(a, b);
+    s32 time = evtGetValue(event, args[0]);
+    s32 mode = evtGetValue(event, args[1]);
+    BattleStageReturnAudDarkBase(time, mode);
     return EVT_RETURN_DONE;
 }
 

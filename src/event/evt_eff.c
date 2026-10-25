@@ -918,12 +918,12 @@ USER_FUNC(evt_eff_fukidashi) {
     const char* effName = (const char*)evtGetValue(event, args[1]);
     const char* npcName = (const char*)evtGetValue(event, args[2]);
     s32 a = evtGetValue(event, args[3]);
-    s32 b = evtGetValue(event, args[4]);
+    s32 number = evtGetValue(event, args[4]);
     f32 x = evtGetFloat(event, args[5]);
     f32 y = evtGetFloat(event, args[6]);
     f32 z = evtGetFloat(event, args[7]);
     f32 w = evtGetFloat(event, args[8]);
-    f32 e = evtGetFloat(event, args[9]);
+    f32 duration = evtGetFloat(event, args[9]);
     s32 d = evtGetValue(event, args[10]);
     EffectEntry* entry = NULL;
     void* p;
@@ -936,7 +936,7 @@ USER_FUNC(evt_eff_fukidashi) {
             {
                 f32 yy = 2.0f * h / 3.0f;
                 f32 ww = h / 3.0f;
-                entry = effFukidashiEntry(a, b, (NpcEntry*)-1, d, 0.0f, yy, 0.0f, ww, e);
+                entry = effFukidashiEntry(a, number, (NpcEntry*)-1, d, 0.0f, yy, 0.0f, ww, duration);
             }
             break;
         case 1:
@@ -944,11 +944,11 @@ USER_FUNC(evt_eff_fukidashi) {
             {
                 f32 yy = 2.0f * ((NpcEntry*)p)->height / 3.0f;
                 f32 ww = ((NpcEntry*)p)->height / 3.0f;
-                entry = effFukidashiEntry(a, b, (NpcEntry*)p, d, 0.0f, yy, 0.0f, ww, e);
+                entry = effFukidashiEntry(a, number, (NpcEntry*)p, d, 0.0f, yy, 0.0f, ww, duration);
             }
             break;
         case 2:
-            entry = effFukidashiEntry(a, b, NULL, d, x, y, z, w, e);
+            entry = effFukidashiEntry(a, number, NULL, d, x, y, z, w, duration);
             break;
         case 3:
             p = partyGetPtr(marioGetPartyId());
@@ -960,14 +960,14 @@ USER_FUNC(evt_eff_fukidashi) {
                     f32 ww;
                     if (((PartyEntry*)p)->currentMemberId == 5) yy = 30.0f;
                     ww = ((PartyEntry*)p)->height / 3.0f;
-                    entry = effFukidashiEntry(a, b, (NpcEntry*)-2, d, 0.0f, yy, 0.0f, ww, e);
+                    entry = effFukidashiEntry(a, number, (NpcEntry*)-2, d, 0.0f, yy, 0.0f, ww, duration);
                 }
 #else
                 h = ((PartyEntry*)p)->height;
                 {
                     f32 yy = 2.0f * h / 3.0f;
                     f32 ww = h / 3.0f;
-                    entry = effFukidashiEntry(a, b, (NpcEntry*)-2, d, 0.0f, yy, 0.0f, ww, e);
+                    entry = effFukidashiEntry(a, number, (NpcEntry*)-2, d, 0.0f, yy, 0.0f, ww, duration);
                 }
 #endif
             }
@@ -979,7 +979,7 @@ USER_FUNC(evt_eff_fukidashi) {
                 {
                     f32 yy = 2.0f * h / 3.0f;
                     f32 ww = h / 3.0f;
-                    entry = effFukidashiEntry(a, b, (NpcEntry*)-3, d, 0.0f, yy, 0.0f, ww, e);
+                    entry = effFukidashiEntry(a, number, (NpcEntry*)-3, d, 0.0f, yy, 0.0f, ww, duration);
                 }
             }
             break;

@@ -1377,12 +1377,12 @@ USER_FUNC(eff_fall_entry) {
     f32 x = evtGetFloat(event, args[2]);
     f32 y = evtGetFloat(event, args[3]);
     f32 z = evtGetFloat(event, args[4]);
-    f32 a = evtGetFloat(event, args[5]);
-    f32 b = evtGetFloat(event, args[6]);
-    f32 c = evtGetFloat(event, args[7]);
-    s32 d = evtGetValue(event, args[8]);
-    s32 e = evtGetValue(event, args[9]);
-    EffectEntry* eff = effFallEntry(type, x, y, z, a, b, c, d, e);
+    f32 width = evtGetFloat(event, args[5]);
+    f32 drop = evtGetFloat(event, args[6]);
+    f32 dir = evtGetFloat(event, args[7]);
+    s32 num = evtGetValue(event, args[8]);
+    s32 duration = evtGetValue(event, args[9]);
+    EffectEntry* eff = effFallEntry(type, x, y, z, width, drop, dir, num, duration);
 
     evtSetValue(event, var, (EvtWord)eff);
     return EVT_RETURN_DONE;

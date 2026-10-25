@@ -2389,14 +2389,14 @@ USER_FUNC(piders_draw_yawn) {
 
 USER_FUNC(kamec_fire_magic) {
     EvtWord* args = event->args;
-    s32 a = evtGetValue(event, args[0]);
-    s32 b = evtGetValue(event, args[1]);
-    s32 c = evtGetValue(event, args[2]);
-    s32 d = evtGetValue(event, args[3]);
-    s32 e = evtGetValue(event, args[4]);
-    s32 f = evtGetValue(event, args[5]);
+    s32 x = evtGetValue(event, args[0]);
+    s32 y = evtGetValue(event, args[1]);
+    s32 z = evtGetValue(event, args[2]);
+    s32 tx = evtGetValue(event, args[3]);
+    s32 ty = evtGetValue(event, args[4]);
+    s32 tz = evtGetValue(event, args[5]);
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
-    EffectEntry* eff = effMagic1N64Entry(0, 60, (f32)a, (f32)b, (f32)c, (f32)d, (f32)e, (f32)f);
+    EffectEntry* eff = effMagic1N64Entry(0, 60, (f32)x, (f32)y, (f32)z, (f32)tx, (f32)ty, (f32)tz);
     effSetName(eff, npc->description);
     evtSetValue(event, args[6], (EvtWord)eff);
     return EVT_RETURN_DONE;

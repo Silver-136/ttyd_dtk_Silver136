@@ -157,11 +157,11 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
 
 USER_FUNC(evt_msg_print) {
     EvtWord* args = event->args;
-    s32 a = evtGetValue(event, args[0]);
-    const char* b = (const char*)evtGetValue(event, args[1]);
-    s32 c = evtGetValue(event, args[2]);
-    EvtWord d = evtGetValue(event, args[3]);
-    return _evt_msg_print(event, isFirstCall, a, b, c, d);
+    s32 flags = evtGetValue(event, args[0]);
+    const char* msg = (const char*)evtGetValue(event, args[1]);
+    s32 callback = evtGetValue(event, args[2]);
+    EvtWord name = evtGetValue(event, args[3]);
+    return _evt_msg_print(event, isFirstCall, flags, msg, callback, name);
 }
 
 const char* partyMsgStr[] = {"", "_kur", "_nok", "_bom", "_yos", "_win", "_viv", "_chu", "_jug", "_tel", "_lui"};

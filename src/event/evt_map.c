@@ -210,9 +210,9 @@ USER_FUNC(evt_mapobj_color) {
 USER_FUNC(evt_map_playanim) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
-    s32 a = evtGetValue(event, args[1]);
-    s32 b = evtGetValue(event, args[2]);
-    mapPlayAnimationLv(name, a, b);
+    s32 mode = evtGetValue(event, args[1]);
+    s32 level = evtGetValue(event, args[2]);
+    mapPlayAnimationLv(name, mode, level);
     return EVT_RETURN_DONE;
 }
 
