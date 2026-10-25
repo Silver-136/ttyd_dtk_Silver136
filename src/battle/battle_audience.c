@@ -16,7 +16,6 @@
 #include <dolphin/gx.h>
 #include "battle/battle_status_effect.h"
 
-#pragma optimize_for_size on
 #pragma dont_inline on
 
 

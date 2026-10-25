@@ -7,7 +7,6 @@
 #include "battle/battle_unit.h"
 
 #pragma auto_inline off
-#pragma optimize_for_size on
 
 void BattleInformationSetMode(FieldBattleInfo* info, u32 mode) {
     info->mode = mode;

@@ -2,7 +2,6 @@
 #include "icon_ids.h"
 #include <dolphin/pad.h>
 #include "battle/battle_status_effect.h"
-#pragma optimize_for_size on
 #pragma dont_inline on
 #include "battle/battle.h"
 #include "battle/battle_audience.h"

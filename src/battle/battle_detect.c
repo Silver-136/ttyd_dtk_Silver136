@@ -1,6 +1,5 @@
 #include "version.h"
 #include "battle/battle_status_effect.h"
-#pragma optimize_for_size on
 #include "battle/battle.h"
 #include "battle/battle_monosiri.h"
 #include "battle/battle_unit.h"

@@ -10,8 +10,6 @@
 #include <string.h>
 #include "icon_ids.h"
 
-#pragma optimize_for_size on
-
 typedef struct TimingAEntry {
     s32 frame;
     s32 value;

@@ -1,7 +1,6 @@
 #include "eff/eff_starstone.h"
 #include "icon_ids.h"
 #include "battle/battle_status_effect.h"
-#pragma optimize_for_size on
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
 #include "driver/effdrv.h"

@@ -3,7 +3,6 @@
 #include "version.h"
 #include "mario/mario_pouch.h"
 #include "battle/battle_status_effect.h"
-#pragma optimize_for_size on
 #pragma dont_inline on
 #include "battle/battle_damage.h"
 #include "battle/battle.h"

@@ -11,8 +11,6 @@
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 
-#pragma optimize_for_size on
-
 void btlDispTex4(s32 id, Vec pos, Vec scale, Vec rot, GXColor color);
 void btlGetScreenPoint(Vec* in, Vec* out);
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);

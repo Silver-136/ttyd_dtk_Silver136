@@ -16,8 +16,6 @@
 
 s32 BattleACGetButtonIcon(s32 button, s32 pressed);
 
-#pragma optimize_for_size on
-
 typedef struct GT2Work {
     s32 frame;       // 0x0
     f32 cursor;      // 0x4

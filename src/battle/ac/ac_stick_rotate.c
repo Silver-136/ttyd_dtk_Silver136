@@ -1,5 +1,4 @@
 #include "icon_ids.h"
-#pragma optimize_for_size on
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"

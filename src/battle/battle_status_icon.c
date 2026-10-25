@@ -1,5 +1,4 @@
 #include "version.h"
-#pragma optimize_for_size on
 #include "battle/battle_status_icon.h"
 #include "battle/battle.h"
 #include <string.h>

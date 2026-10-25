@@ -1,4 +1,3 @@
-#pragma optimize_for_size on
 #include "battle/battle_seq_command.h"
 #include "battle/battle.h"
 #include "battle/battle_monosiri.h"

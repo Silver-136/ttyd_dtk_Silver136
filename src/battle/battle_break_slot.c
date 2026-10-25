@@ -1,4 +1,3 @@
-#pragma optimize_for_size on
 #include "battle/battle_break_slot.h"
 #include "battle/battle.h"
 #include "battle/battle_audience.h"

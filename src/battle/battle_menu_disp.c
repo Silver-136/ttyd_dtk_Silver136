@@ -1,4 +1,3 @@
-#pragma optimize_for_size on
 #pragma dont_inline on
 #include "battle/battle_menu_disp.h"
 #include "battle/battle_seq_command.h"

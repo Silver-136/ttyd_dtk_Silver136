@@ -1,4 +1,3 @@
-#pragma optimize_for_size on
 #include "eff/n64/eff_crystal_n64.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle.h"

@@ -13,7 +13,6 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_status_effect.h"
 
-#pragma optimize_for_size on
 #pragma dont_inline on
 
 

@@ -1,4 +1,3 @@
-#pragma optimize_for_size on
 #pragma auto_inline off
 #include "battle/battle_unit.h"
 #include "battle/battle.h"

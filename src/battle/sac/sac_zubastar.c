@@ -1,4 +1,3 @@
-#pragma optimize_for_size on
 #include "eff/eff_starstone.h"
 #include "battle/battle.h"
 #include "driver/dispdrv.h"

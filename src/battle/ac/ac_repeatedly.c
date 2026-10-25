@@ -51,8 +51,6 @@ typedef struct RepeatWork {
     s32 endTimer;     // 0x30
 } RepeatWork;
 
-#pragma optimize_for_size on
-
 
 static void actionCommandDisp(f32 x, f32 y);
 void battleAcDelete_Repeatedly(BattleWork* work);

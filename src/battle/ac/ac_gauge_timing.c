@@ -9,8 +9,6 @@
 #include "system.h"
 #include <string.h>
 
-#pragma optimize_for_size on
-
 void btlDispGXInit2DRasta(void);
 void btlDispGXQuads2DRasta(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a);
 u16 BattleACGetButtonIcon(s32 button, s32 pressed);

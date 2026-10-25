@@ -9,8 +9,6 @@
 #include "system.h"
 #include <string.h>
 
-#pragma optimize_for_size on
-
 typedef struct TimingWideWork {
     s32 button;   // 0x0
     s8 mode;      // 0x4

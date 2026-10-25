@@ -21,8 +21,6 @@
 #include <math.h>
 
 
-#pragma optimize_for_size on
-
 #ifdef __MWERKS__
 #define fabs(x) __fabs(x)
 #define fabsf(x) __fabsf(x)

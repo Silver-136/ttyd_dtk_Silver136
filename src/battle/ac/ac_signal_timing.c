@@ -1,4 +1,3 @@
-#pragma optimize_for_size on
 #include "battle/battle.h"
 #include <dolphin/pad.h>
 #include "battle/battle_ac.h"

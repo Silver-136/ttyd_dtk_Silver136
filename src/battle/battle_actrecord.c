@@ -1,7 +1,6 @@
 #include "battle/battle_actrecord.h"
 #include "battle/battle.h"
 
-#pragma optimize_for_size on
 #pragma dont_inline on
 s32 _check_turn_count_0_end(s32 n);
 s32 _check_turn_count_0_turn(s32 n);

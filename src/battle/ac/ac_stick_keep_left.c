@@ -10,8 +10,6 @@
 #include "icon_ids.h"
 #include "pmario_sound.h"
 
-#pragma optimize_for_size on
-
 typedef struct SklWork {
     s32 timer;    // 0x0
     s32 idx;      // 0x4

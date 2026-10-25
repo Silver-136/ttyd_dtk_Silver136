@@ -1,5 +1,4 @@
 #include "version.h"
-#pragma optimize_for_size on
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_unit.h"

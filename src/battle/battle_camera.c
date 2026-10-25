@@ -10,7 +10,6 @@
 
 double sqrt(double);
 #pragma dont_inline on
-#pragma optimize_for_size on
 
 void btl_camera_nomove_x_onoff(s32 pri, s32 on);
 void btl_camera_nomove_y_onoff(s32 pri, s32 on);

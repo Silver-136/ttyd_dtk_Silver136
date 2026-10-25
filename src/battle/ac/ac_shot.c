@@ -16,8 +16,6 @@
 #define AC_TEX_OFS 0
 #endif
 
-#pragma optimize_for_size on
-
 void btlDispTex4(s32 id, Vec pos, Vec scale, Vec rot, GXColor color);
 void btlGetScreenPoint(Vec* in, Vec* out);
 f32 sinfd(f32 degrees);

@@ -8,7 +8,6 @@
 #include "mario/mariost.h"
 
 #pragma dont_inline on
-#pragma optimize_for_size on
 
 void BattlePadInit(void) {
     int i;

@@ -8,8 +8,6 @@
 #include <string.h>
 #include "icon_ids.h"
 
-#pragma optimize_for_size on
-
 typedef struct PowerGaugeWork {
     s32 counter;   // 0x0
     f32 gauge;     // 0x4

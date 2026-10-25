@@ -3,7 +3,6 @@
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_status_effect.h"
 #include "mario/mario_pouch.h"
-#pragma optimize_for_size on
 #include "battle/battle_acrobat.h"
 #include "battle/battle_disp.h"
 #include "battle/battle_sub.h"

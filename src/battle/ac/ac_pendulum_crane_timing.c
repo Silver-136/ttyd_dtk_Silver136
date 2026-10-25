@@ -9,7 +9,6 @@
 #include "system.h"
 #include <string.h>
 
-#pragma optimize_for_size on
 f32 sinfd(f32 degrees);
 #include <stdlib.h>
 #include "icon_ids.h"

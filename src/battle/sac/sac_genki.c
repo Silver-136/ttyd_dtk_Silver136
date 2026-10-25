@@ -1,7 +1,6 @@
 #include "version.h"
 #include "icon_ids.h"
 #include "mario/mario_pouch.h"
-#pragma optimize_for_size on
 #include "battle/battle.h"
 #include "eff/n64/eff_stamp_n64.h"
 #include "battle/battle_audience.h"
