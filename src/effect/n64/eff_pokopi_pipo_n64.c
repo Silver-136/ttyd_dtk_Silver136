@@ -55,7 +55,7 @@ EffectEntry* effPokopiPipoN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, 
     work = __memAlloc(HEAP_EFFECT, sizeof(EffPokopiPipoN64Work));
     effect->userdata = work;
     effect->callback = effPokopiPipoMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
     if (duration <= 0) {
@@ -105,8 +105,8 @@ void effPokopiPipoMain(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 16;
     }
     if (work->lifetime < 1000) {

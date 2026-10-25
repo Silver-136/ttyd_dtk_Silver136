@@ -10,6 +10,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "driver/mobjdrv.h"
 
 
 static BeroEntry bero_entry_data[7];
@@ -226,7 +227,7 @@ EVT_BEGIN(tik_16_init_evt)
     CALL(evt_map_playanim, STRING("anm_mizu"), 1, 0)
     CALL(evt_mobj_lv_blk, STRING("block"), 0, 0, 0, 0, GSWF(1347), STRING("MOBJ_Lv1BigBigBlock"))
     IF_INT_EQUAL(GSWF(1347), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("block"), 128)
+        CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
     SET_VALUE(LW(0), STRING("dai_3"))
     SET_VALUE(LW(1), STRING("a_dai_3"))

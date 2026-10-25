@@ -18,6 +18,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
+#include "driver/mobjdrv.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
@@ -225,7 +226,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_cam3d_evt_set, 255, 220, 648, 255, 170, 150, 1000, 11)
     WAIT_MS(1000)
     CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, 0, 0, PTR(box_evt), GSWF(4361))
-    CALL(evt_mobj_flag_onoff, 0, STRING("box"), 64)
+    CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ボンババ"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_GNB_THROAT_MOVE1"), LW(0), LW(1), LW(2), 0)

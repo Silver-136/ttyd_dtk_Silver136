@@ -7,6 +7,7 @@
 #include "mario/mariost.h"
 #include "memory.h"
 #include <dolphin/mtx.h>
+#include "driver/effdrv.h"
 #ifdef VERSION_G8ME01
 const char* eff_rankup_str_tbl[6] = {"EFF_Rankup", "EFF_Rankup_us", "EFF_Rankup_ge", "EFF_Rankup_fr", "EFF_Rankup_sp", "EFF_Rankup_it"};
 #endif
@@ -31,7 +32,7 @@ EffectEntry* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffRankupWork) * effect->count);
     effect->userdata = work;
     effect->callback = effRankupMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -57,8 +58,8 @@ void effRankupMain(EffectEntry* effect) {
 #endif
 
     // soft delete
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (work->poseId != -1) {
             animPoseRelease(work->poseId);
         }

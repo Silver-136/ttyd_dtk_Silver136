@@ -69,7 +69,7 @@ EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 dur
     work = __memAlloc(HEAP_EFFECT, sizeof(EffPointGetWork) * effect->count);
     effect->userdata = work;
     effect->callback = effPointGetMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x - 2000.0f;
 #ifdef VERSION_G8ME01
@@ -106,8 +106,8 @@ void effPointGetMain(EffectEntry* effect) {
             break;
         case 1:
             if (work->duration == 0) {
-                if (effect->flags & 4) {
-                    effect->flags &= ~4;
+                if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+                    effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
                     work->timer = 0;
                     work->state++;
                 }

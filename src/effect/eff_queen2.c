@@ -7,6 +7,7 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "driver/effdrv.h"
 
 typedef struct EffQueen2Work {
     s32 type;            // 0x0
@@ -30,7 +31,7 @@ EffectEntry* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffQueen2Work) * effect->count);
     effect->userdata = work;
     effect->callback = effQueen2Main;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -58,8 +59,8 @@ void effQueen2Main(EffectEntry* effect) {
     position = (Vec){ work->position.x, work->position.y, work->position.z };
 
     // soft delete
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (work->charge) {
             effDelete(work->charge);
         }

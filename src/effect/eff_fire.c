@@ -93,7 +93,7 @@ EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale
     work = __memAlloc(HEAP_EFFECT, 0x8c);
     effect->userdata = work;
     effect->callback = effFireMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     if (duration <= 0) {
         duration = 1000;
     }
@@ -166,8 +166,8 @@ void effFireMain(EffectEntry* effect) {
     s32 count;
     s32 idx;
 
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->duration = 16;
     }
     if (work->duration < 1000) {
@@ -781,7 +781,7 @@ static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
     sw = __memAlloc(HEAP_EFFECT, 0x40);
     smoke->userdata = sw;
     smoke->callback = effFireSmokeMain;
-    smoke->flags |= 2;
+    smoke->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     sw->unk0 = 0;
     sw->color[3] = 0x80;
     sw->position = (Vec){ x, y, z };
@@ -800,8 +800,8 @@ static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
 void effFireSmokeMain(EffectEntry* effect) {
     EffFireSmokeWork* work = effect->userdata;
 
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->life = 16;
     }
     if (work->life < 1000) {

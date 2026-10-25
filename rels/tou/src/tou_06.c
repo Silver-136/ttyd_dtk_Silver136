@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_pouch.h"
+#include "driver/mobjdrv.h"
 
 #include "stdio.h"
 #include "memory.h"
@@ -490,10 +491,10 @@ EVT_BEGIN(tou_06_init_evt)
     CALL(evt_mobj_lv_blk, STRING("i"), 126, -1, -126, 0, GSWF(2433), STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("j"), 176, -1, -76, 0, GSWF(2434), STRING("MOBJ_Lv1BigBlock"))
     IF_INT_EQUAL(GSWF(2433), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("i"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("i"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_EQUAL(GSWF(2434), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("j"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("j"), MOBJ_FLAG_GRAVITY)
     END_IF
     CALL(evt_mobj_lv_blk, STRING("a"), -126, -1, -126, 0, GSWF(2425), STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("b"), -76, -1, -126, 0, GSWF(2426), STRING("MOBJ_Lv1BigBlock"))
@@ -504,32 +505,32 @@ EVT_BEGIN(tou_06_init_evt)
     CALL(evt_mobj_lv_blk, STRING("g"), -126, -1, -26, 0, GSWF(2431), STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("h"), -76, -1, -26, 0, GSWF(2432), STRING("MOBJ_Lv1BigBlock"))
     IF_INT_EQUAL(GSWF(2425), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("a"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("a"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_EQUAL(GSWF(2426), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("b"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("b"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_EQUAL(GSWF(2427), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("c"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("c"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_EQUAL(GSWF(2428), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("d"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("d"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_EQUAL(GSWF(2429), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("e"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("e"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_EQUAL(GSWF(2430), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("f"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("f"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_EQUAL(GSWF(2431), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("g"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("g"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_EQUAL(GSWF(2432), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("h"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("h"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 150)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), -165, 0, -115, PTR(evt_kaidan), GSWF(2438))
-        CALL(evt_mobj_flag_onoff, 0, STRING("sw"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("sw"), MOBJ_FLAG_GRAVITY)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan"), 1)
         CALL(evt_hitobj_onoff, STRING("a_kaidan"), 1, 0)
         CALL(evt_paper_entry, STRING("OFF_d_ori"))
@@ -539,7 +540,7 @@ EVT_BEGIN(tou_06_init_evt)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 151)
         CALL(evt_mobj_lv_blk, STRING("aa"), -450, 200, 55, PTR(evt_block_broken), GSWF(2439), STRING("MOBJ_Lv1BigBigBlock"))
-        CALL(evt_mobj_flag_onoff, 0, STRING("aa"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("aa"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, 155)
         CALL(evt_mobj_lock, STRING("lock"), 19, 95, 210, 50, -80, PTR(evt_chk), PTR(evt_lock), GSWF(2437))

@@ -58,7 +58,7 @@ EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
     effect->userdata = data;
     memset(data, 0, sizeof(effMugiKemuriData) * 5);
     effect->callback = effMugiKemuriMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     for (i = 0; i < 5; i++, data++) {
         data->flag = 1;
         data->hSpeedScale = 0.29999998f;
@@ -106,7 +106,7 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
     effect->userdata = data;
     memset(data, 0, sizeof(effMugiKemuriData) * 5);
     effect->callback = effMugiKemuri2Main;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     for (i = 0; i < 5; i++, data++) {
         data->flag = 1;
         data->type = type;
@@ -156,8 +156,8 @@ void effMugiKemuriMain(EffectEntry* effect) {
     pos.z = data->pos.z;
     pos2 = pos;
     group = gp->inBattle != 0;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         p = effect->userdata;
         for (i = 0; i < effect->count; i++, p++) {
             if (p->poseId != -1) {
@@ -236,8 +236,8 @@ void effMugiKemuri2Main(EffectEntry* effect) {
     pos.z = data->pos.z;
     pos2 = pos;
     group = gp->inBattle != 0;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         p = effect->userdata;
         for (i = 0; i < effect->count; i++, p++) {
             if (p->poseId != -1) {

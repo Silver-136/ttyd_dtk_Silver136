@@ -5,6 +5,7 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "driver/effdrv.h"
 
 typedef struct EffHolographyN64Work {
     s32 type;     // 0x0
@@ -1357,7 +1358,7 @@ EffectEntry* effHolographyN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, 
     work = __memAlloc(HEAP_EFFECT, sizeof(EffHolographyN64Work));
     effect->userdata = work;
     effect->callback = effHolographyMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
     if (lifetime <= 0) {
@@ -1386,8 +1387,8 @@ void effHolographyMain(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->timer = 16;
     }
     if (work->timer < 1000) {

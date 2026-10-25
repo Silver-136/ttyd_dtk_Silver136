@@ -480,7 +480,7 @@ EVT_BEGIN(gon_06_init_evt)
         SET_VALUE(GSWF(1493), 1)
     END_IF
     CALL(evt_mobj_itembox, STRING("box"), 380, 0, 0, 3, PTR(evt_majin), PTR(evt_majin2), GSWF(1493))
-    CALL(evt_mobj_flag_onoff, 0, STRING("box"), 64)
+    CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     RETURN
 EVT_END()
 

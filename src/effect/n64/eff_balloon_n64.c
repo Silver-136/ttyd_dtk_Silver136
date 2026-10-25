@@ -76,7 +76,7 @@ EffectEntry* effBalloonN64Entry(s32 type, f32 x, f32 y, f32 z, f32 targetScale, 
     work = __memAlloc(HEAP_EFFECT, sizeof(EffBalloonN64Work));
     effect->userdata = work;
     effect->callback = effBalloonMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -104,8 +104,8 @@ void effBalloonMain(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 99;
     }
     if (work->lifetime < 100) {

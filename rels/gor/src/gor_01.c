@@ -4117,7 +4117,7 @@ EVT_BEGIN(ultrahammer_check)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_mobj_flag_onoff, 0, STRING("mobj_box00"), 64)
+    CALL(evt_mobj_flag_onoff, 0, STRING("mobj_box00"), MOBJ_FLAG_GRAVITY)
     SPAWN_EVENT(PTR(box_copy))
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TBOX_FALL1"), LW(0), LW(1), LW(2), LW(10))

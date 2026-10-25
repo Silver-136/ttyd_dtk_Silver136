@@ -15,6 +15,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_pouch.h"
+#include "driver/mobjdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
@@ -542,7 +543,7 @@ EVT_BEGIN(gon_08_init_evt)
     CALL(evt_mobj_float_blk, STRING("blk_0"), 0, 0, 0, 0, 2, 0, LSWF(3))
     CALL_CHILD(PTR(init_0))
     CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 0, 100, -185, STRING("blk_0"), 0, PTR(main_0), LSWF(3))
-    CALL(evt_mobj_flag_onoff, 1, STRING("blk_0"), 128)
+    CALL(evt_mobj_flag_onoff, 1, STRING("blk_0"), MOBJ_FLAG_NO_CULL)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuyu_boxS"), 1)
     CALL(evt_hitobj_onoff, STRING("a_fuyu_box"), 1, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, 52)

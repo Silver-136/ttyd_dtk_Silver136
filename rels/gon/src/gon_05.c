@@ -12,6 +12,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/mobjdrv.h"
 
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
@@ -773,11 +774,11 @@ EVT_BEGIN(gon_05_init_evt)
     CALL(evt_mobj_float_blk, STRING("blk_0"), 120, 815, 150, 2, 2, 0, LSWF(4))
     CALL_CHILD(PTR(init_0))
     CALL(evt_mobj_switch_float_blk, STRING("sw_0"), 20, 1399, 150, STRING("blk_0"), 2, PTR(main_0), LSWF(4))
-    CALL(evt_mobj_flag_onoff, 1, STRING("blk_0"), 128)
+    CALL(evt_mobj_flag_onoff, 1, STRING("blk_0"), MOBJ_FLAG_NO_CULL)
     CALL(evt_mobj_float_blk, STRING("blk_1"), 200, 0, -150, 0, 2, 0, LSWF(5))
     CALL_CHILD(PTR(init_1))
     CALL(evt_mobj_switch_float_blk, STRING("sw_1"), FLOAT(-2.5f), 100, -175, STRING("blk_1"), 0, PTR(main_1), LSWF(5))
-    CALL(evt_mobj_flag_onoff, 1, STRING("blk_1"), 128)
+    CALL(evt_mobj_flag_onoff, 1, STRING("blk_1"), MOBJ_FLAG_NO_CULL)
     IF_INT_LESS(GSW_STORY_PROGRESS, 53)
         CALL(evt_item_entry, STRING("key00"), 14, 200, 1340, 150, 16, -1, PTR(key_get))
     END_IF

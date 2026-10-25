@@ -4,6 +4,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "version.h"
+#include "driver/effdrv.h"
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 
@@ -69,8 +70,8 @@ void effEnergyMain(EffectEntry* effect) {
     position = (Vec){ work->position.x, work->position.y, work->position.z };
 
     // soft delete: start fading out
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->timer = 16;
     }
     if (work->timer < 1000) {

@@ -99,7 +99,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(MiniGameWork));
     effect->userdata = work;
     effect->callback = (EffectCallback)effMiniGameMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->x = x;
     work->y = y;
@@ -418,8 +418,8 @@ void effMiniGameMain(EffectEntry* effect) {
     }
     if (n >= effect->count - 1) {
         effDelete(effect);
-    } else if (effect->flags & 4) {
-        effect->flags &= ~4;
+    } else if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         effDelete(effect);
     } else {
         dispEntry(CAMERA_2D, dispCalcZ(&pos), 2, (DispCallback)effMiniGameDisp, effect);

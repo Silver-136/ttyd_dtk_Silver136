@@ -36,7 +36,7 @@ EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 radius) {
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffSandarsWork));
     effect->userdata = work;
     effect->callback = effSandarsMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -111,8 +111,8 @@ void effSandarsMain(EffectEntry* effect) {
     type = work->type;
     camId = work->camId;
     camera = gp->inBattle != 0;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (work->poseId != -1) {
             animPoseRelease(work->poseId);
         }

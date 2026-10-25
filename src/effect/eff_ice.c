@@ -902,7 +902,7 @@ EffectEntry* effIceEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale)
     work = __memAlloc(HEAP_EFFECT, sizeof(EffIceWork));
     effect->userdata = work;
     effect->callback = effIceMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -933,8 +933,8 @@ static void effIceMain(EffectEntry* effect) {
     pos.z = work->position.z;
     calcPos = pos;
 
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->frame = 90;
         work->state = 1;
         {

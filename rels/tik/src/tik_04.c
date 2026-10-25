@@ -16,6 +16,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "driver/mobjdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -335,7 +336,7 @@ EVT_BEGIN(tik_04_init_evt)
     CALL(evt_mobj_jumpstand_blue, 0, STRING("mobj_jump00"), 150, -450, 0, 0, 0, 0)
     CALL(evt_mobj_lv_blk, STRING("block"), -425, 0, 0, 0, GSWF(1338), STRING("MOBJ_Lv1BigBigBlock"))
     IF_INT_EQUAL(GSWF(1338), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("block"), 128)
+        CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), 310, 0, -25, 0, 0, PTR(mobj_box00), GSWF(1357))
     CALL(evt_mobj_brick, STRING("mobj_box01"), -150, 60, 130, 301, 12, 0, GSWF(1358))

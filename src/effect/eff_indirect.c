@@ -6,6 +6,7 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "driver/effdrv.h"
 
 typedef struct EffIndirectWork {
     s32 type;          // 0x0
@@ -32,7 +33,7 @@ EffectEntry* effIndirectEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffIndirectWork));
     effect->userdata = work;
     effect->callback = effIndirectMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -58,8 +59,8 @@ void effIndirectMain(EffectEntry* effect) {
         case 0:
         case 1:
             // soft delete: start fading out
-            if (effect->flags & 4) {
-                effect->flags &= ~4;
+            if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+                effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
                 work->timer = 16;
             }
             if (work->timer < 1000) {

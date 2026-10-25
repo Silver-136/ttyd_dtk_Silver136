@@ -5,6 +5,7 @@
 #include "mario/mariost.h"
 #include "memory.h"
 #include <dolphin/mtx.h>
+#include "driver/effdrv.h"
 
 void effScanningMain(EffectEntry* effect);
 void effScanningDisp(CameraId camId, void* param);
@@ -20,7 +21,7 @@ EffectEntry* effScanningEntry(s32 int2, f32 float3, f32 float4, f32 float5) {
     data = __memAlloc(HEAP_EFFECT, sizeof(effScanningData) * entry->count);
     entry->userdata = data;
     entry->callback = effScanningMain;
-    entry->flags |= 2;
+    entry->flags |= EFFECT_FLAG_SOFT_DELETABLE;
 
     data->type = int2;
     data->position.x = float3;
@@ -43,8 +44,8 @@ void effScanningMain(EffectEntry* effect) {
     position = (Vec){ data->position.x, data->position.y, data->position.z };
     inBattle = gp->inBattle != 0;
 
-    if (effect->flags & 4) { //soft delete
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) { //soft delete
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (data->animId != -1) {
             animPoseRelease(data->animId);
         }

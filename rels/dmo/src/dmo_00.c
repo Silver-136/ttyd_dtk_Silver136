@@ -12,6 +12,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "rels/dmo/include/dmo.h"
+#include "driver/mobjdrv.h"
 
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
@@ -743,7 +744,7 @@ EVT_BEGIN(demo_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ロテン１"), 128)
     CALL(evt_npc_flag_onoff, 0, STRING("クリボー１"), 128)
     CALL(evt_npc_flag_onoff, 0, STRING("チューさん１"), 128)
-    CALL(evt_mobj_flag_onoff, 0, STRING("hako"), 16384)
+    CALL(evt_mobj_flag_onoff, 0, STRING("hako"), MOBJ_FLAG_NO_DISP)
     CALL(evt_snd_bgmoff_f, 513, 6000)
     CALL(evt_sub_intpl_msec_init, 0, 0, 1000, 3000)
     LOOP(0)
@@ -1032,7 +1033,7 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("hako"), 1073741824)
     CALL(evt_npc_pera_onoff, STRING("hako"), 0)
     CALL(evt_mobj_itembox, STRING("hako"), 340, 110, -20, 1, 0, 0, 0)
-    CALL(evt_mobj_flag_onoff, 1, STRING("hako"), 16384)
+    CALL(evt_mobj_flag_onoff, 1, STRING("hako"), MOBJ_FLAG_NO_DISP)
 #ifdef VERSION_G8ME01
     CALL(evt_npc_entry, STRING("ロテン１"), STRING("c_roten"))
     CALL(evt_npc_set_tribe, STRING("ロテン１"), STRING("ロテン"))

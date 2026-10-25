@@ -91,7 +91,7 @@ EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
     work = __memAlloc(HEAP_EFFECT, sizeof(EffBrokenBarrierN64Work) * 61);
     effect->userdata = work;
     effect->callback = effBrokenBarrierMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
     if (life <= 0) {
@@ -147,8 +147,8 @@ void effBrokenBarrierMain(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
     type = work->type;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 16;
     }
     if (work->lifetime < 1000) {

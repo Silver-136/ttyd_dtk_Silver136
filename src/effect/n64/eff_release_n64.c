@@ -243,8 +243,8 @@ void effReleaseMain(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
     sub = work->sub;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 16;
     }
     if (work->lifetime < 1000) {

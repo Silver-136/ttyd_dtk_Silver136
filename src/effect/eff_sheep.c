@@ -42,7 +42,7 @@ EffectEntry* effSheepEntry(s32 type, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(EffSheepWork));
     effect->userdata = work;
     effect->callback = effSheepMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -92,8 +92,8 @@ void effSheepMain(EffectEntry* effect) {
     position = tmp;
     inBattle = gp->inBattle != 0;
 
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         {
             EffSheepWork* q;
             s32 k;

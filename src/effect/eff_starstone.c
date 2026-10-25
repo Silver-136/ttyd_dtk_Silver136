@@ -333,7 +333,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(EffStarStoneWork));
     effect->userdata = work;
     effect->callback = effStarStoneMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type % 7;
     work->flags = 0;
     work->position.x = x;
@@ -402,8 +402,8 @@ void effStarStoneMain(EffectEntry* effect) {
     pos = tmp;
     type = w->type;
     cam = w->cam;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (w->dust != NULL) {
             effSoftDelete(w->dust);
         }

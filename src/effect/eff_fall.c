@@ -132,7 +132,7 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
     w = __memAlloc(HEAP_EFFECT, effect->count * sizeof(EffFallElem));
     effect->userdata = w;
     effect->callback = effFallMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     // FAKE: comma temps are coloured in assignment order (ia r30 above sfxName r29)
     ia = (0, (s32)width);
     sfxName = (0, "SFX_BTL_STAGE_FALL_WATER1");
@@ -293,8 +293,8 @@ void effFallMain(EffectEntry* effect) {
     rotY = e->rotY;
     duration = e->duration;
     group = gp->inBattle != 0;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         effFallRelease(effect);
         effDelete(effect);
         return;

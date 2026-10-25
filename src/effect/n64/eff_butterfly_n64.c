@@ -224,7 +224,7 @@ EffectEntry* effButterflyN64Entry(s32 type, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffButterflyN64Work));
     effect->userdata = work;
     effect->callback = effButterflyMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->lifetime = 1000;
     work->alpha = 255;
@@ -255,8 +255,8 @@ void effButterflyMain(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 900;
     }
     if (work->lifetime < 1000) {

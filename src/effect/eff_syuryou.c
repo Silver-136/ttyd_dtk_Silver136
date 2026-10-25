@@ -4,6 +4,7 @@
 #include "mario/mariost.h"
 #include "memory.h"
 #include <dolphin/mtx.h>
+#include "driver/effdrv.h"
 
 EffectEntry* effSyuryouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -15,7 +16,7 @@ EffectEntry* effSyuryouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffSyuryouWork) * effect->count);
     effect->userdata = work;
     effect->callback = effSyuryouMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -73,8 +74,8 @@ void effSyuryouMain(EffectEntry* effect) {
     }
 
     // soft delete: start fading out
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->timer = 32;
     }
     if (work->timer < 1000) {

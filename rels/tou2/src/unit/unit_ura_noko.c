@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "driver/effdrv.h"
 
 #include "eff/eff_uranoko.h"
 #include "battle/battle_sub.h"
@@ -688,7 +689,7 @@ static USER_FUNC(eff_aura) {
     }
     BtlUnit_GetPos(unit, &x, &y, &z);
     eff = (EffectEntry*)unit->work[2];
-    if (!(eff->flags & 1)) {
+    if (!(eff->flags & EFFECT_FLAG_ACTIVE)) {
         return EVT_RETURN_DONE;
     }
     work = eff->userdata;

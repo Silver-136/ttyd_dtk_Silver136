@@ -267,7 +267,7 @@ EVT_BEGIN(tik_19_init_evt)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hikou_ue"))
     CALL(evt_paper_entry, STRING("OFF_d_kusya"))
     CALL(evt_mobj_itembox, STRING("box"), 0, 10, -50, 3, PTR(evt_majin), PTR(evt_majin2), GSWF(1352))
-    CALL(evt_mobj_flag_onoff, 0, STRING("box"), 64)
+    CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 0, 0, 50, STRING("kakoi"), 125, GSWF(5597))
     RETURN
 EVT_END()

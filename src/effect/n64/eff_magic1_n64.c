@@ -25,7 +25,7 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
     w = __memAlloc(HEAP_EFFECT, sizeof(EffMagic1N64Work));
     effect->userdata = w;
     effect->callback = effMagic1Main;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     w->age = 0;
     w->type = type;
     w->alpha = 255;
@@ -73,8 +73,8 @@ void effMagic1Main(EffectEntry* effect) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagic1Disp, effect);
         return;
     }
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->life = 0;
     }
     work->life--;

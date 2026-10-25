@@ -6,6 +6,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "eff/eff_mist.h"
+#include "driver/effdrv.h"
 
 
 typedef struct EffToikiWork {
@@ -143,7 +144,7 @@ EffectEntry* effToikiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffToikiWork));
     effect->userdata = work;
     effect->callback = effToikiMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -175,8 +176,8 @@ void effToikiMain(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
     type = work->type;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->timer = 16;
     }
     if (work->timer < 1000) {

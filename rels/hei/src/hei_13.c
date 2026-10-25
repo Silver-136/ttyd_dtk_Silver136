@@ -10,6 +10,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_item.h"
+#include "driver/mobjdrv.h"
 
 
 static BeroEntry bero_entry_data[5];
@@ -124,7 +125,7 @@ EVT_BEGIN(hei_13_init_evt)
     SET_VALUE(LSWF(3), 0)
     CALL(evt_mobj_brick, STRING("mm"), 325, 175, -100, 0, 0, 0, LSWF(3))
     IF_INT_EQUAL(LSWF(3), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("mm"), 2)
+        CALL(evt_mobj_flag_onoff, 1, STRING("mm"), MOBJ_FLAG_NO_SHADOW)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), 4096)

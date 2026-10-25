@@ -68,7 +68,7 @@ EffectEntry* effNanigaEntry(s32 type, f32 x, f32 y, f32 z, s32* list, s32 item) 
     work = __memAlloc(HEAP_EFFECT, sizeof(EffNanigaWork));
     effect->userdata = work;
     effect->callback = effNanigaMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = 20.0f + y;
@@ -130,8 +130,8 @@ void effNanigaMain(EffectEntry* effect) {
     v.z = work->position.z;
     pos = v;
     inBattle = gp->inBattle ? TRUE : FALSE;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (work->pose != -1) {
             animPoseRelease(work->pose);
         }

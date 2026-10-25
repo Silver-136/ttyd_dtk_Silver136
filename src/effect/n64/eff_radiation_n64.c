@@ -72,7 +72,7 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffRadiationN64Work));
     effect->userdata = work;
     effect->callback = effRadiationMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
     work->life = 100;
@@ -161,8 +161,8 @@ void effRadiationMain(EffectEntry* effect) {
         p->life--;
     }
     p->frame++;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         p->life = 10;
     }
     life = p->life;

@@ -8,6 +8,7 @@
 #include "pmario_sound.h"
 #include "system.h"
 #include <dolphin/gx.h>
+#include "driver/effdrv.h"
 
 
 //.sdata
@@ -148,7 +149,7 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
     effect->userdata = userdata;
     memset(userdata, 0, size);
     effect->callback = effNiceMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     userdata->type = type;
     userdata->position.x = x;
     userdata->position.y = y;
@@ -204,8 +205,8 @@ void effNiceMain(EffectEntry* effect) {
     tmp.z = wp->position.z;
     pos = tmp;
     type = wp->type;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (wp->poseId != -1) {
             animPoseRelease(wp->poseId);
         }

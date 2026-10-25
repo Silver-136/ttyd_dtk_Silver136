@@ -5,6 +5,7 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "driver/effdrv.h"
 
 typedef struct EffSparkParticle {
     s32 type;   // 0x0
@@ -63,7 +64,7 @@ EffectEntry* effSparkEntry(s32 type, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, 0x150);
     effect->userdata = work;
     effect->callback = effSparkMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->counter = 0;
     work->life = 1000;
@@ -96,8 +97,8 @@ void effSparkMain(EffectEntry* effect) {
     position = (Vec){ p->x, p->y, p->z };
     type = p->type;
     alpha = p->alpha;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         p->life = 16;
     }
     if (p->life < 1000) {

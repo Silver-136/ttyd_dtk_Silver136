@@ -22,6 +22,7 @@
 #include "evt/evt_snd.h"
 #include "eff/eff_bomb.h"
 #include "rels/gor/include/gor.h"
+#include "driver/mobjdrv.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
@@ -3509,7 +3510,7 @@ EVT_BEGIN(evt_door_01_0_open)
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_check, STRING("pblk2"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("pblk2"), 16386)
+        CALL(evt_mobj_flag_onoff, 1, STRING("pblk2"), MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_NO_DISP)
     END_IF
     RETURN
 EVT_END()
@@ -3534,7 +3535,7 @@ EVT_BEGIN(evt_door_01_0_close)
     CALL(evt_snd_env_lpf, 0, 0)
     CALL(evt_mobj_check, STRING("pblk2"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("pblk2"), 16386)
+        CALL(evt_mobj_flag_onoff, 0, STRING("pblk2"), MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_NO_DISP)
     END_IF
     RETURN
 EVT_END()
@@ -3566,7 +3567,7 @@ EVT_BEGIN(evt_door_01_1_open)
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_check, STRING("pblk2"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("pblk2"), 16386)
+        CALL(evt_mobj_flag_onoff, 1, STRING("pblk2"), MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_NO_DISP)
     END_IF
     RETURN
 EVT_END()
@@ -3600,7 +3601,7 @@ EVT_BEGIN(evt_door_01_1_close)
     CALL(evt_snd_env_lpf, 0, 0)
     CALL(evt_mobj_check, STRING("pblk2"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("pblk2"), 16386)
+        CALL(evt_mobj_flag_onoff, 0, STRING("pblk2"), MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_NO_DISP)
     END_IF
     RETURN
 EVT_END()

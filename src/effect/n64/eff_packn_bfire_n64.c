@@ -60,7 +60,7 @@ EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y,
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffPacknBfireWork));
     effect->userdata = work;
     effect->callback = effPacknBfireMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     if (life <= 0) {
         work->life = 1000;
     } else {
@@ -146,8 +146,8 @@ void effPacknBfireMain(EffectEntry* effect) {
     tmp.z = work->pos.z;
     position = tmp;
     type = work->type;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->life = 16;
     }
     if (work->life < 1000) {

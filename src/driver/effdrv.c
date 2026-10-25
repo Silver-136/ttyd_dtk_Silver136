@@ -275,8 +275,8 @@ void effDelete(EffectEntry* effect) {
 
 void effSoftDelete(EffectEntry* effect) {
     if (effect && effect->flags) {
-        if (effect->flags & 2) {
-            effect->flags |= 4; // "deleted"
+        if (effect->flags & EFFECT_FLAG_SOFT_DELETABLE) {
+            effect->flags |= EFFECT_FLAG_SOFT_DELETE; // "deleted"
         } else {
             effDelete(effect); //inlined
         }

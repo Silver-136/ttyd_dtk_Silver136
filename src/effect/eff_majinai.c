@@ -9,6 +9,7 @@
 #include "mario/mariost.h"
 #include "memory.h"
 #include <dolphin/mtx.h>
+#include "driver/effdrv.h"
 
 EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -21,7 +22,7 @@ EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffMajinaiWork) * effect->count);
     effect->userdata = work;
     effect->callback = effMajinaiMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -48,8 +49,8 @@ void effMajinaiMain(EffectEntry* effect) {
     inBattle = gp->inBattle ? TRUE : FALSE;
 
     // soft delete
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (work->poseId != -1) {
             animPoseRelease(work->poseId);
         }

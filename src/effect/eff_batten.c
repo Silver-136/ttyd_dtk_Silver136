@@ -39,7 +39,7 @@ EffectEntry* effBattenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 sca
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffBattenWork));
     effect->userdata = work;
     effect->callback = effBattenMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -111,8 +111,8 @@ void effBattenMain(EffectEntry* effect) {
         }
         break;
     }
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->frame = 0x20;
     }
     if (work->frame < 1000) {

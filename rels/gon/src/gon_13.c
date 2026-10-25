@@ -8,6 +8,7 @@
 #include "evt/evt_paper.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "driver/mobjdrv.h"
 
 
 static BeroEntry bero_entry_data[2];
@@ -55,7 +56,7 @@ static EVT_BEGIN(switch_evt)
     CALL(evt_img_alloc_capture, STRING("img"), 0, 0, 1, 0, 0, 604, 480)
     WAIT_FRAMES(1)
     CALL(evt_img_onoff, STRING("img"), 1)
-    CALL(evt_mobj_flag_onoff, 0, STRING("mobj_box04"), 16384)
+    CALL(evt_mobj_flag_onoff, 0, STRING("mobj_box04"), MOBJ_FLAG_NO_DISP)
     CALL(evt_mobj_hit_onoff, STRING("mobj_box04"), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING("SFX_OFF1_PERA_BREAK1"), 0)
@@ -80,7 +81,7 @@ EVT_BEGIN(gon_13_init_evt)
     CALL(evt_mobj_floatswitch_blue, 0, STRING("mobj_switch00"), 50, 60, 40, PTR(switch_evt), GSWF(1499))
     CALL(evt_mobj_itembox, STRING("mobj_box04"), 0, 0, -50, 0, 0, PTR(item_get03), GSWF(1510))
     IF_INT_EQUAL(GSWF(1499), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("mobj_box04"), 16384)
+        CALL(evt_mobj_flag_onoff, 1, STRING("mobj_box04"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("mobj_box04"), 0)
     END_IF
     RETURN

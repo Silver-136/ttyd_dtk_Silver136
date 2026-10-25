@@ -154,8 +154,8 @@ void effFireworksMain(EffectEntry* effect) {
     position.y = work->position.y;
     position.z = work->position.z;
     position2 = position;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 16;
     }
     if (work->lifetime < 1000) {

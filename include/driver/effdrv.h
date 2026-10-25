@@ -6,8 +6,15 @@
 
 typedef void (*EffectCallback)(struct EffectEntry* effect);
 
+// EffectEntry.flags (effEntry, effMain, effSoftDelete)
+typedef enum EffectFlags {
+    EFFECT_FLAG_ACTIVE = (1 << 0),         // 0x1, slot in use; effMain runs the callback
+    EFFECT_FLAG_SOFT_DELETABLE = (1 << 1), // 0x2, effSoftDelete only requests the end (the effect fades out itself)
+    EFFECT_FLAG_SOFT_DELETE = (1 << 2),    // 0x4, effSoftDelete requested; the effect clears it and starts fading
+} EffectFlags;
+
 typedef struct EffectEntry {
-    u32 flags;               // 0x0
+    u32 flags;               // 0x0, EffectFlags
     u32 inBattle;            // 0x4
     s32 count;               // 0x8
     void* userdata;          // 0xC, for effects to store their own data

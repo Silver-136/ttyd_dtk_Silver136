@@ -13,6 +13,7 @@
 #include "evt/evt_item.h"
 #include "mario/mariost.h"
 #include "manager/evtmgr_cmd.h"
+#include "driver/mobjdrv.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -225,7 +226,7 @@ EVT_END()
 
 EVT_BEGIN(cloud_blk_evt)
     SET_VALUE(GSWF(4356), 1)
-    CALL(evt_mobj_flag_onoff, 0, STRING("blk"), 256)
+    CALL(evt_mobj_flag_onoff, 0, STRING("blk"), MOBJ_FLAG_HIT_EVERY_FRAME)
     RETURN
 EVT_END()
 
@@ -308,9 +309,9 @@ EVT_BEGIN(las_24_init_evt)
     END_IF
     CALL(evt_mobj_lv_blk, STRING("blk"), -495, 100, 0, 0, GSWF(4357), STRING("MOBJ_Lv2BigBigBlock"))
     IF_INT_EQUAL(GSWF(4357), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("blk"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("blk"), MOBJ_FLAG_GRAVITY)
         IF_INT_EQUAL(GSWF(4356), 0)
-            CALL(evt_mobj_flag_onoff, 1, STRING("blk"), 256)
+            CALL(evt_mobj_flag_onoff, 1, STRING("blk"), MOBJ_FLAG_HIT_EVERY_FRAME)
             CALL(evt_mobj_set_scale, STRING("blk"), FLOAT(0.9980469f), FLOAT(0.9980469f), FLOAT(0.9980469f))
         END_IF
     END_IF

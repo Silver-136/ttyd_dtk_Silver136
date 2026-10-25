@@ -99,7 +99,7 @@ EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffWaterDamageN64Work));
     effect->userdata = work;
     effect->callback = effWaterDamageMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
     if (lifetime <= 0) {
@@ -199,8 +199,8 @@ void effWaterDamageMain(EffectEntry* effect) {
     calcPos = pos;
     type = work->type;
     variant = work->variant;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 16;
     }
     if (work->lifetime < 1000) {

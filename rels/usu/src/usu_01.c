@@ -3135,7 +3135,7 @@ EVT_BEGIN(usu_01_init_evt)
         SET_VALUE(GSWF(1931), 1)
     END_IF
     CALL(evt_mobj_itembox, STRING("pera_box"), -289, 0, -341, 3, PTR(evt_majin), PTR(evt_majin2), GSWF(1931))
-    CALL(evt_mobj_flag_onoff, 0, STRING("pera_box"), 64)
+    CALL(evt_mobj_flag_onoff, 0, STRING("pera_box"), MOBJ_FLAG_GRAVITY)
     CALL(box_r)
     IF_INT_EQUAL(GSWF(5394), 1)
         CALL(evt_item_entry, STRING("iri_20"), 217, -345, 20, -132, 16, GSWF(1938), 0)

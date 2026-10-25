@@ -8,6 +8,7 @@
 #include "version.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "driver/effdrv.h"
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 
@@ -29,7 +30,7 @@ EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     data = __memAlloc(HEAP_EFFECT, effect->count * sizeof(effSleepData));
     effect->userdata = data;
     effect->callback = effSleepMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     data->type = type;
     data->position.x = x;
     data->position.y = y;
@@ -61,8 +62,8 @@ void effSleepMain(EffectEntry* effect) {
     Vec position;
 
     position = (Vec){ data->position.x, data->position.y, data->position.z };
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         data->lifetime = 16;
     }
     if (data->lifetime < 1000) {

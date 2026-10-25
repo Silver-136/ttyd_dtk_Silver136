@@ -12,6 +12,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "evt/evt_map.h"
+#include "driver/mobjdrv.h"
 
 #include "driver/hitdrv.h"
 #include "driver/camdrv.h"
@@ -243,7 +244,7 @@ static EVT_BEGIN(evt_cloud_main_evt)
 EVT_END()
 
 static EVT_BEGIN(cloud_evt)
-    CALL(evt_mobj_flag_onoff, 0, STRING("box"), 16384)
+    CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_NO_DISP)
     CALL(evt_mobj_hit_onoff, STRING("box"), 1)
     CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
     SET_VALUE(GSWF(4344), 1)
@@ -283,7 +284,7 @@ EVT_BEGIN(las_14_init_evt)
     END_IF
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(box_evt), GSWF(4365))
     IF_INT_EQUAL(GSWF(4344), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("box"), 16384)
+        CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF
     CALL(evt_run_case_evt, 9, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)

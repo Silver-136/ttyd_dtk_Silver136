@@ -18,6 +18,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_hit.h"
 #include "evt/evt_pouch.h"
+#include "driver/mobjdrv.h"
 
 #include "mario/mario.h"
 #include "mario/mario_pouch.h"
@@ -1705,7 +1706,7 @@ EVT_BEGIN(tou_10_init_evt)
     CALL_CHILD(PTR(evt_tou_monitor_init))
     IF_INT_LESS(GSW_STORY_PROGRESS, 142)
         CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF(2440), STRING("MOBJ_Lv1BigBigBlock"))
-        CALL(evt_mobj_flag_onoff, 1, STRING("blk"), 128)
+        CALL(evt_mobj_flag_onoff, 1, STRING("blk"), MOBJ_FLAG_NO_CULL)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(132)

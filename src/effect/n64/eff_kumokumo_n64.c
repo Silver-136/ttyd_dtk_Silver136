@@ -176,7 +176,7 @@ EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 ro
     work = __memAlloc(HEAP_EFFECT, count * sizeof(EffKumokumoN64Particle));
     effect->userdata = work;
     effect->callback = effKumokumoMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
     if (time <= 0) {
@@ -311,8 +311,8 @@ void effKumokumoMain(EffectEntry* effect) {
     position = tmp;
     camera = work->camera;
     type = work->type;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->delay = 16;
     }
     if (work->delay < 1000) {

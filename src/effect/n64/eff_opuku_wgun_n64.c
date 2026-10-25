@@ -59,7 +59,7 @@ EffectEntry* effOpukuWgunN64Entry(s32 type, s32 lifetime, f32 x1, f32 y1, f32 z1
     work = __memAlloc(HEAP_EFFECT, sizeof(EffOpukuWgunN64Work));
     effect->userdata = work;
     effect->callback = effOpukuWgunMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
     if (lifetime <= 0) {
@@ -124,8 +124,8 @@ void effOpukuWgunMain(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
     type = work->type;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->lifetime = 16;
     }
     if (work->lifetime < 1000) {

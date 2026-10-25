@@ -6,6 +6,7 @@
 #include "memory.h"
 #include "system.h"
 #include <dolphin/mtx.h>
+#include "driver/effdrv.h"
 
 typedef struct EffLaserWork {
     s32 type;       // 0x0
@@ -29,7 +30,7 @@ EffectEntry* effLaserEntry(s32 type, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffLaserWork) * effect->count);
     effect->userdata = work;
     effect->callback = effLaserMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->target.x = x;
     work->target.y = y;
@@ -55,8 +56,8 @@ void effLaserMain(EffectEntry* effect) {
     inBattle = gp->inBattle != 0;
 
     // soft delete
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         if (work->poseId != -1) {
             animPoseRelease(work->poseId);
         }

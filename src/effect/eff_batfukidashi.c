@@ -5,6 +5,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <stdio.h>
+#include "driver/effdrv.h"
 
 typedef struct EffCoinFukidashiWork {
     s32 type;     // 0x0
@@ -35,7 +36,7 @@ EffectEntry* effCoinFukidashiEntry(s32 type, s32 number, s32 duration, f32 x, f3
     work = __memAlloc(HEAP_EFFECT, sizeof(EffCoinFukidashiWork) * effect->count);
     effect->userdata = work;
     effect->callback = effCoinFukidashiMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -60,8 +61,8 @@ void effCoinFukidashiMain(EffectEntry* effect) {
     position = (Vec){ work->position.x, work->position.y, work->position.z };
 
     // soft delete: start fading out
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->timer = 16;
     }
     if (work->timer < 1000) {

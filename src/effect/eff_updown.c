@@ -40,7 +40,7 @@ EffectEntry* effUpdownEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 timer
     work = __memAlloc(HEAP_EFFECT, sizeof(EffUpdownWork));
     effect->userdata = work;
     effect->callback = effUpdownMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -59,8 +59,8 @@ void effUpdownMain(EffectEntry* effect) {
     s32 type = work->type;
     s32 mode;
 
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->timer = 16;
     }
     if (work->timer < 1000) {

@@ -10,6 +10,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "driver/mobjdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
@@ -383,7 +384,7 @@ EVT_BEGIN(mri_16_init_evt)
     CALL(evt_map_playanim, STRING("awa_02"), 1, 0)
     CALL(evt_mobj_switch_blue, 0, STRING("mobj00"), 0, 79, -120, PTR(water_shikake), GSWF(2867))
     IF_INT_EQUAL(GSWF(2867), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("mobj00"), 64)
+        CALL(evt_mobj_flag_onoff, 0, STRING("mobj00"), MOBJ_FLAG_GRAVITY)
     END_IF
     CALL(evt_hit_bind_mapobj, STRING("A_sikake"), STRING("S_sikake"))
     CALL(ss_set, 0)

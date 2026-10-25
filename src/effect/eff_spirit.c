@@ -6,6 +6,7 @@
 #include <dolphin/mtx.h>
 #include "version.h"
 #include "eff/eff_magic1_n64.h"
+#include "driver/effdrv.h"
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 
@@ -41,7 +42,7 @@ EffectEntry* effSpiritEntry(s32 type, s32 time, f32 x1, f32 y1, f32 z1, f32 x2, 
     work = __memAlloc(HEAP_EFFECT, sizeof(EffSpiritWork));
     effect->userdata = work;
     effect->callback = effSpiritMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x1;
     work->position.y = y1;
@@ -78,8 +79,8 @@ void effSpiritMain(EffectEntry* effect) {
     position = (Vec){ work->position.x, work->position.y, work->position.z };
 
     // soft delete: start fading out
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->timer = 16;
     }
     if (work->timer < 1000) {

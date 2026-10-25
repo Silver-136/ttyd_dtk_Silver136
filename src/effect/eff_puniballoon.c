@@ -38,7 +38,7 @@ EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(PuniBalloonWork));
     effect->userdata = work;
     effect->callback = effPuniBalloonMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x;
     work->position.y = y;
@@ -75,8 +75,8 @@ void effPuniBalloonMain(EffectEntry* effect) {
     pos = tmp;
     type = work->type;
 
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->life = 16;
     }
     if (work->life < 1000) {

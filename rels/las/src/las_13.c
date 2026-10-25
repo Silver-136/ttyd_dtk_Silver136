@@ -9,6 +9,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
 #include "evt/evt_map.h"
+#include "driver/mobjdrv.h"
 
 #include "eff/eff_small_star.h"
 #include "manager/evtmgr_cmd.h"
@@ -96,7 +97,7 @@ EVT_BEGIN(switch_check)
         CALL(evt_cam3d_evt_set, 0, 100, 363, 0, 30, -30, 500, 11)
         WAIT_MS(1000)
         CALL(evt_mobj_set_position, STRING("box"), 0, -30, 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("box"), 16448)
+        CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY | MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 1)
         SET_VALUE(LW(0), STRING("box"))
         CALL_CHILD(PTR(box_syutugen))
@@ -147,7 +148,7 @@ EVT_BEGIN(las_13_init_evt)
     END_IF
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, 0, 0, PTR(box_evt), GSWF(4364))
     IF_INT_EQUAL(GSWF(4343), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("box"), 16384)
+        CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF
     CALL(evt_run_case_evt, 9, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)

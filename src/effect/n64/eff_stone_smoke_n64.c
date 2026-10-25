@@ -5,6 +5,7 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "driver/effdrv.h"
 
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
@@ -29,7 +30,7 @@ EffectEntry* effStoneSmokeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, 
     work = __memAlloc(HEAP_EFFECT, sizeof(EffStoneSmokeN64Work));
     effect->userdata = work;
     effect->callback = effStoneSmokeMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
     if (lifetime <= 0) {
@@ -61,8 +62,8 @@ void effStoneSmokeMain(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
-    if (effect->flags & 4) {
-        effect->flags &= ~4;
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
+        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->timer = 16;
     }
     if (work->timer < 1000) {

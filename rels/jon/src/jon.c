@@ -20,6 +20,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
 #include "evt/evt_pouch.h"
+#include "driver/mobjdrv.h"
 
 #include "driver/npcdrv.h"
 #include "manager/evtmgr.h"
@@ -2729,7 +2730,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_cam3d_evt_set, -145, 80, 882, 104, 114, 81, 1000, 11)
     WAIT_MS(1000)
     CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, 1, 0, PTR(evt_open_box), GSWF(5084))
-    CALL(evt_mobj_flag_onoff, 0, STRING("box"), 64)
+    CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("敵"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_GNB_THROAT_MOVE1"), LW(0), LW(1), LW(2), 0)

@@ -53,7 +53,7 @@ EffectEntry* effOpukuWprotectN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     work = __memAlloc(HEAP_EFFECT, sizeof(EffOpukuWprotectN64Work));
     effect->userdata = work;
     effect->callback = effOpukuWprotectMain;
-    effect->flags |= 2;
+    effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->frame = 0;
     if (lifetime <= 0) {
@@ -97,12 +97,12 @@ void effOpukuWprotectMain(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
     type = work->type;
-    if (effect->flags & 4) {
+    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         if (type == 1) {
-            effect->flags &= ~4;
+            effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
             work->lifetime = 4;
         } else {
-            effect->flags &= ~4;
+            effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
             work->lifetime = 16;
         }
     }

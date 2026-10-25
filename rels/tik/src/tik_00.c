@@ -22,6 +22,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_johoya.h"
 #include "evt/evt_pouch.h"
+#include "driver/mobjdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -1696,7 +1697,7 @@ EVT_BEGIN(evt_open_01)
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_check, STRING("pblk1"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("pblk1"), 2)
+        CALL(evt_mobj_flag_onoff, 1, STRING("pblk1"), MOBJ_FLAG_NO_SHADOW)
     END_IF
     RETURN
 EVT_END()
@@ -1713,7 +1714,7 @@ EVT_BEGIN(evt_close_01)
     CALL(evt_snd_env_lpf, 0, 0)
     CALL(evt_mobj_check, STRING("pblk1"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("pblk1"), 2)
+        CALL(evt_mobj_flag_onoff, 0, STRING("pblk1"), MOBJ_FLAG_NO_SHADOW)
     END_IF
     RETURN
 EVT_END()
