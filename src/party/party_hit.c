@@ -156,7 +156,7 @@ void partyChkGnd(PartyEntry* party) {
     HitEntry* hit;
     f32 a, b, c;
 
-    if (!(party->flags & 0x2000000)) {
+    if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
         attr = 0;
         hit = partySearchGround(party, 11.0f, party->velY);
         if (hit) {
@@ -166,21 +166,21 @@ void partyChkGnd(PartyEntry* party) {
             }
         }
         party->hitobjStandOn = hit;
-        party->flags &= ~0x80;
+        party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         if (hit == NULL) {
-            party->flags &= ~0x2;
+            party->flags &= ~PARTY_FLAG_IS_GROUNDED;
             partyChgMot(party, 3);
             party->gravity = -1.0f;
         } else {
-            party->flags |= 0x2;
+            party->flags |= PARTY_FLAG_IS_GROUNDED;
             if (attr & 0x100) {
-                party->flags |= 0x80;
+                party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
             } else {
-                party->flags &= ~0x80;
+                party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
             }
         }
         party->position.y = party->groundY;
-        if (!(party->flags & 0x30)) {
+        if (!(party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING))) {
             partyChkFrontStep(party, 11.0f, &a, &b, &c);
             if (a - party->position.y >= 5.0f && party->groundSlope <= 30.0f) {
                 party->stepY = a;
@@ -209,7 +209,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     Vec outPos, outNrm;
     f32 dist;
 
-    if (party->flags & 0x2000000) {
+    if (party->flags & PARTY_FLAG_FORCE_FALL) {
         return NULL;
     }
     {
@@ -389,7 +389,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     count = 3;
     arr[0] = 0.75f * partyGetHeight(party);
     arr[1] = 0.5f * partyGetHeight(party);
-    if ((party->flags & 0x30) || yoshiGetStatus() == 2) {
+    if ((party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING)) || yoshiGetStatus() == 2) {
         arr[2] = 1.0f;
     } else {
         arr[2] = 11.0f;
@@ -508,7 +508,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     sincosf(&sn, &cs, ang);
     arr[0] = 0.75f * partyGetHeight(party);
     arr[1] = 0.5f * partyGetHeight(party);
-    if ((party->flags & 0x30) || yoshiGetStatus() == 2) {
+    if ((party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING)) || yoshiGetStatus() == 2) {
         arr[2] = 1.0f;
     } else {
         arr[2] = 11.0f;
@@ -614,7 +614,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 
     sincosf(&sn, &cs, ang);
     w = party->width;
-    if (party->flags & 0x1000) {
+    if (party->flags & PARTY_FLAG_PAPER_MODE) {
         w = 6.0f;
     }
     d = maxD = 0.5f * w + dist;
@@ -885,7 +885,7 @@ static inline HitEntry* partyHitNrm(PartyEntry* party, Vec* pos, Vec* dir, Vec* 
 }
 
 void partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height) {
-    if (party->flags & 0x1000) {
+    if (party->flags & PARTY_FLAG_PAPER_MODE) {
         width = 6.0f;
     }
     marioChkWallAround(pos, 1, spd, dir, width, height);

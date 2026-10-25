@@ -50,7 +50,7 @@ s32 nokonokoGetStatus(PartyEntry* party) {
     if (party == NULL) {
         return 0;
     }
-    if (party->currentMemberId != 2 || !(party->flags & 0x100)) {
+    if (party->currentMemberId != 2 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return 0;
     }
     status = 7;
@@ -81,7 +81,7 @@ BOOL nokonoko_holdItem(void) {
     if (party == NULL) {
         return FALSE;
     }
-    if (party->currentMemberId != 2 || !(party->flags & 0x100)) {
+    if (party->currentMemberId != 2 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return FALSE;
     }
     return party->work.nokonoko.heldItem != NULL;
@@ -136,16 +136,16 @@ void nokonoko_use_cancel(void) {
     marioGetPtr();
     party = partyGetPtr(marioGetPartyId());
     if (nokonokoGetStatus(party) != 0) {
-        if (party->flags & 0x100) {
+        if (party->flags & PARTY_FLAG_IS_BEING_USED) {
             marioGetPtr();
             if ((u32)nokoSe != 0xFFFFFFFFU) {
                 psndSFXOff(nokoSe);
                 nokoSe = -1;
             }
-            party->flags &= ~0x100;
-            party->flags &= ~0x04000000;
-            party->flags &= ~0x01000000;
-            party->flags &= ~0x02000000;
+            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+            party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
+            party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
+            party->flags &= ~PARTY_FLAG_FORCE_FALL;
             party->flags2 &= ~0x20;
             party->flags2 &= ~0x10;
             party->height = EXT_LIT(float_37_8041b550, 37.0f);
@@ -170,10 +170,10 @@ void nokonoko_use_post(PartyEntry* party) {
         psndSFXOff(nokoSe);
         nokoSe = -1;
     }
-    party->flags &= ~0x100;
-    party->flags &= ~0x04000000;
-    party->flags &= ~0x01000000;
-    party->flags &= ~0x02000000;
+    party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+    party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
+    party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
+    party->flags &= ~PARTY_FLAG_FORCE_FALL;
     party->flags2 &= ~0x20;
     party->flags2 &= ~0x10;
     party->height = EXT_LIT(float_37_8041b550, 37.0f);
@@ -245,7 +245,7 @@ void nokonoko_use(PartyEntry* party) {
     f32 dz;
     MarioWork* mario = party->playerPtr;
 
-    if (!(party->flags & 0x80000000) && marioKeyOffChk()) {
+    if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && marioKeyOffChk()) {
         marioGetScreenPos(party->position, &sx, &sy, &sz);
         if (!marioChkInScreen((s32)sx, (s32)sy)) {
             mx = mario->position.x;
@@ -263,7 +263,7 @@ void nokonoko_use(PartyEntry* party) {
         party->work.nokonoko.shellSpinBits = 0;
         party->work.nokonoko.word17C = 0;
         party->work.nokonoko.word180 = 0;
-        if (party->flags & 0x80000000) {
+        if (party->flags & PARTY_FLAG_IS_EVT_USE) {
             if (party->actionTime > 0) {
                 party->work.nokonoko.shellFlags |= 1;
             }
@@ -280,7 +280,7 @@ void nokonoko_use(PartyEntry* party) {
             break;
         }
         partyClearJumpPara(party);
-        party->flags |= 0x04000000;
+        party->flags |= PARTY_FLAG_DISABLE_FLOORS;
         party->flags2 |= 0x10;
         partyChgPose(party, "PNK_K_2");
         party->height = EXT_LIT(float_18p5_8041b558, 18.5f);
@@ -342,8 +342,8 @@ void nokonoko_use(PartyEntry* party) {
     case 10:
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA1), &party->position);
         noko_star(party, 3);
-        party->flags |= 0x04000000;
-        party->flags |= 0x01000000;
+        party->flags |= PARTY_FLAG_DISABLE_FLOORS;
+        party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
         party->useMotionId = 11;
     case 11:
         party->moveSpeed += EXT_LIT(float_2_8041b55c, 2.0f);
@@ -370,7 +370,7 @@ void nokonoko_use(PartyEntry* party) {
             party->moveSpeed += EXT_LIT(float_0p15_8041b580, 0.15f) * (EXT_LIT(float_neg1_8041b520, -1.0f) - party->moveSpeed);
             if (party->moveSpeed <= EXT_LIT(float_0_8041b51c, 0.0f)) {
                 party->moveSpeed = 0.0f;
-                if (!(party->flags & 0x80000000)) {
+                if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
                     if (mario->buttonHold & PAD_BUTTON_X) {
                         party->useMotionId = 13;
                         party->moveFrames = 0;
@@ -413,7 +413,7 @@ void nokonoko_use(PartyEntry* party) {
             break;
         }
         NOKO_ITEM(party, party->useMotionId = 50; psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PNK_KOURA_WALL1), &party->position); noko_star(party, 1); noko_se_off(); break;)
-        if (!(party->flags & 0x80000000)) {
+        if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL || (u16)(mario->currMotionId - 0x1f) <= 1 ||
                 (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
                 nokonoko_finish(party);
@@ -763,7 +763,7 @@ void nokonoko_use(PartyEntry* party) {
         if (--party->moveFrames > 0) {
             break;
         }
-        if (!(party->flags & 0x80000000)) {
+        if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             partyGetReturnPos(&rp);
         } else {
             rp = mario->position;
@@ -779,10 +779,10 @@ void nokonoko_use(PartyEntry* party) {
         party->velY = EXT_LIT(float_0_8041b51c, 0.0f);
         party->accelY = EXT_LIT(float_neg1_8041b520, -1.0f);
         party->moveSpeed = EXT_LIT(float_0_8041b51c, 0.0f);
-        party->flags |= 0x20;
-        party->flags |= 0x02000000;
-        party->flags &= ~0x04000000;
-        party->flags &= ~0x01000000;
+        party->flags |= PARTY_FLAG_IS_FALLING;
+        party->flags |= PARTY_FLAG_FORCE_FALL;
+        party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
+        party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
         party->flags2 &= ~0x20;
         party->flags2 &= ~0x10;
         party->height = EXT_LIT(float_37_8041b550, 37.0f);
@@ -791,7 +791,7 @@ void nokonoko_use(PartyEntry* party) {
     case 113:
         marioGetScreenPos(party->position, &s3x, &s3y, &s3z);
         if (s3y > EXT_LIT(float_240_8041b5d0, 240.0f)) {
-            party->flags &= ~0x02000000;
+            party->flags &= ~PARTY_FLAG_FORCE_FALL;
         }
         partyMove(party);
         if (party->velY <= EXT_LIT(float_neg6_8041b5d4, -6.0f)) {
@@ -824,10 +824,10 @@ void nokonoko_use(PartyEntry* party) {
 }
 
 void nokonoko_finish(PartyEntry* party) {
-    if (party != NULL && party->currentMemberId == 2 && (party->flags & 0x100)) {
+    if (party != NULL && party->currentMemberId == 2 && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         nokonoko_use_post(party);
         if (party->runMode != 9) {
-            if (!(party->flags & 0x80000000)) {
+            if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
                 partyChgRunMode(party, 2);
                 party->moveMode = 0;
             } else {

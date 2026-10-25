@@ -211,7 +211,7 @@ f32 toMovedir(f32 angle) {
 f32 partyToMovedir(PartyEntry* party, f32 angle) {
     void* cam = party->playerPtr;
 
-    if (party->flags & 0x1000) {
+    if (party->flags & PARTY_FLAG_PAPER_MODE) {
         if (party->displayDirection == 280.0f || party->displayDirection == 460.0f) {
             angle = 0.0f;
         } else if (party->displayDirection == 260.0f || party->displayDirection == 440.0f) {

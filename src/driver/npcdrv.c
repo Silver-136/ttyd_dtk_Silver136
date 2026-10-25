@@ -2626,7 +2626,7 @@ void* fbatHitCheck(u32 flags, void* a1) {
                 s32 st;
                 if (party == NULL) break;
                 if (party->memberKind != 2) break;
-                if (!(party->flags & 0x100)) break;
+                if (!(party->flags & PARTY_FLAG_IS_BEING_USED)) break;
                 st = nokonokoGetStatus(party);
                 if (st < 2 || st > 5) break;
             }

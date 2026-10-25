@@ -493,7 +493,7 @@ s32 party_hit_check(f32 x, f32 z, f32* dir) {
             }
             break;
         case 5:
-            if ((party->flags & 0x100) && dx < cloudGetBreathDist() && dz < 30.0f) {
+            if ((party->flags & PARTY_FLAG_IS_BEING_USED) && dx < cloudGetBreathDist() && dz < 30.0f) {
                 if (cloudGetBreathDir() < 180.0f) {
                     if (x > party->position.x) {
                         hit = 1;

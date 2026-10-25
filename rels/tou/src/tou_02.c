@@ -1975,7 +1975,7 @@ s32 check_hammer(Fan* fan) {
         return 1;
     }
     party = partyGetPtr(0);
-    if (party != NULL && party->currentMemberId == 5 && (party->flags & 0x100)) {
+    if (party != NULL && party->currentMemberId == 5 && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         angle = 6.2831855f * cloudGetBreathDir() / 360.0f;
         dist = cloudGetBreathDist();
         pos.x = party->position.x + dist * fan_sin(angle);

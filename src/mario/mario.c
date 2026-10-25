@@ -474,7 +474,7 @@ BOOL marioChkKey(void) {
     if (yoshiGetStatus()) {
         return FALSE;
     }
-    if (party->flags & 0x100) {
+    if (party->flags & PARTY_FLAG_IS_BEING_USED) {
         if (party->currentMemberId == 7 || party->currentMemberId == 5 || party->currentMemberId == 6) {
             return FALSE;
         }

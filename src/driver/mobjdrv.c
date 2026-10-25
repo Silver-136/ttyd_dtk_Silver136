@@ -623,7 +623,7 @@ void mobjMain(void) {
     fbat = *(s16*)fbatGetPointer();
     hitJump = NULL;
     partyFlag = 0;
-    if (party != NULL && (party->flags & 0x100)) {
+    if (party != NULL && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         partyFlag = 1;
     }
 

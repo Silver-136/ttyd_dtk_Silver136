@@ -2073,7 +2073,7 @@ static inline void recoveryHeal(void) {
     ((PouchData*)party)->currentHP = ((PouchData*)party)->maximumHP;
     ((PouchData*)party)->currentFP = ((PouchData*)party)->maximumFP;
     for (i = 0; i < 8; party++, i++) {
-        if ((party->flags & 1) && !(party->flags & 2)) {
+        if ((party->flags & PARTY_FLAG_IS_ACTIVE) && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
             party->currentHP = party->maximumHP;
         }
     }
@@ -2153,7 +2153,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
             ((PouchData*)party)->currentHP = ((PouchData*)party)->maximumHP;
             ((PouchData*)party)->currentFP = ((PouchData*)party)->maximumFP;
             for (i = 0; i < 8; party++, i++) {
-                if ((party->flags & 1) && !(party->flags & 2)) {
+                if ((party->flags & PARTY_FLAG_IS_ACTIVE) && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
                     party->currentHP = party->maximumHP;
                 }
             }

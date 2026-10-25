@@ -236,7 +236,7 @@ BOOL marioCamZoomUp(void) {
         return FALSE;
     }
 
-    if (!party || party->currentMemberId != 5 || !(party->flags & 0x100)) {
+    if (!party || party->currentMemberId != 5 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         if (camGetPtr(CAMERA_3D)->stateA) {
             return FALSE;
         }
@@ -263,7 +263,7 @@ BOOL marioCamZoomUp(void) {
         yOffset = (320.0f - (f32)mario->screenY) / 3.5f;
     }
 
-    if (party && party->currentMemberId == PARTY_MEMBER_FLURRIE && party->flags & 0x100) {
+    if (party && party->currentMemberId == PARTY_MEMBER_FLURRIE && party->flags & PARTY_FLAG_IS_BEING_USED) {
         angleAdjust = toMovedir(mario->displayDirection) >= 180.0f ? -70.0f : 70.0f;
         tempX = mario->screenX;
         zoomDistance = 550.0f;

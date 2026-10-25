@@ -731,7 +731,7 @@ void camLetterBox(void) {
     PartyEntry* party = partyGetPtr(0);
     if (!(camera->flags & 0x200) && !(bero_get_BeroEXEC() & 1)) {
         if ((seqGetSeq() == SEQ_GAME) && (!marioChkKey() || !marioChkCtrl()) &&
-            (!party || (party && !(party->flags & 0x100)))) {
+            (!party || (party && !(party->flags & PARTY_FLAG_IS_BEING_USED)))) {
             if (!(camera->flags & 0x100)) {
                 camera->flags |= 0x100;
                 psndSetFlag(0x20);

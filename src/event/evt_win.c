@@ -343,7 +343,7 @@ USER_FUNC(evt_unitwin_select_func) {
     if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE)) {
         btn = 0;
     }
-    if (party != NULL && (party->flags & 0x100)) {
+    if (party != NULL && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         UNITWIN_CLOSE(wp);
         return EVT_RETURN_BLOCK;
     }

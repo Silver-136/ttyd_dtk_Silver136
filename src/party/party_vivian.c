@@ -87,8 +87,8 @@ void mot_vivian_post(void) {
         mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
         if (party) {
             partyPaperOff(party);
-            party->flags &= ~0x100;
-            party->flags &= ~0x80000000;
+            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+            party->flags &= ~PARTY_FLAG_IS_EVT_USE;
             party->flags2 &= ~0x200000;
             party->work.vivian.shadowSize = 10.0f;
             {
@@ -100,7 +100,7 @@ void mot_vivian_post(void) {
             partyChgPoseId(party, 1);
             L_partyVivianTailStart(party);
         }
-    } else if (party && party->currentMemberId == 6 && (party->flags & 0x100)) {
+    } else if (party && party->currentMemberId == 6 && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         goto cancel;
     }
     return;
@@ -127,7 +127,7 @@ s32 vivianGetStatus(void) {
     if (party == NULL) {
         return 0;
     }
-    if (party->currentMemberId != 6 || !(party->flags & 0x100)) {
+    if (party->currentMemberId != 6 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return 0;
     }
     st = party->useMotionId;
@@ -144,7 +144,7 @@ s32 vivianGetStatus(void) {
 }
 
 void vivianUnhold(PartyEntry* party) {
-    if (party == NULL || party->currentMemberId != 6 || !(party->flags & 0x100)) {
+    if (party == NULL || party->currentMemberId != 6 || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return;
     }
     if (party->useMotionId == 10) {
@@ -380,7 +380,7 @@ void vivian_use(PartyEntry* party) {
         if (vivian_cancel_req) {
             party->useMotionId = 20;
         }
-        if (!(party->flags & 0x80000000) && (party->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_X))) {
+        if (!(party->flags & PARTY_FLAG_IS_EVT_USE) && (party->buttonTrg & (PAD_BUTTON_B | PAD_BUTTON_X))) {
             party->useMotionId = 20;
         }
         break;
@@ -510,14 +510,14 @@ void vivian_use(PartyEntry* party) {
         if (!(party->work.vivian.shadowSize > 10.0f)) {
             party->work.vivian.shadowSize = 10.0f;
             partyPaperOff(party);
-            party->flags &= ~0x100;
+            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
             party->flags2 &= ~0x200000;
             party->work.vivian.shadowSize = 10.0f;
             party->dispOfs.y = 0.0f;
             partyChgRunMode(party, 2);
             party->moveMode = 0;
             partyChgPoseId(party, 1);
-            party->flags &= ~0x80000000;
+            party->flags &= ~PARTY_FLAG_IS_EVT_USE;
         }
         break;
     }

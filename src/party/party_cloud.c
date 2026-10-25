@@ -313,7 +313,7 @@ void cloud_use(PartyEntry* party) {
     if (mario->currMotionId == MARIO_MOTION_CLOUD || mario->currMotionId <= 1 || mario->currMotionId == MARIO_MOTION_DASH) {
         return;
     }
-    party->flags &= ~0x100;
+    party->flags &= ~PARTY_FLAG_IS_BEING_USED;
     if (CW(party) != NULL && (u32)CW(party)->sfxId != 0xFFFFFFFF) {
         psndSFXOff(CW(party)->sfxId);
         CW(party)->sfxId = -1;
@@ -325,7 +325,7 @@ void cloud_use(PartyEntry* party) {
     cloudCalcPos(party);
     party->position = party->moveTarget;
     party->flags2 |= 0x10;
-    party->flags &= ~0x80000000;
+    party->flags &= ~PARTY_FLAG_IS_EVT_USE;
     if (party->useStruct != NULL) {
         __memFree(HEAP_DEFAULT, party->useStruct);
         party->useStruct = NULL;
@@ -367,7 +367,7 @@ void N__cloud_use(PartyEntry* party) {
         if (CW(party) != NULL) {
             CW(party)->sfxId = -1;
         }
-        if (party->flags & 0x80000000) {
+        if (party->flags & PARTY_FLAG_IS_EVT_USE) {
             CW(party)->autoTimer = sysMsec2Frame(party->actionTime);
         }
     }
@@ -411,7 +411,7 @@ void N__cloud_use(PartyEntry* party) {
         party->flags2 |= 0x10;
         CW(party)->breathDist = 0.0f;
         CW(party)->breathDir = mario->displayDirection;
-        if (!(party->flags & 0x80000000)) {
+        if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             mario->camShiftRate.x = 0.03f;
             mario->camShiftTargetX = 70.0f * (revise360(270.0f - mario->displayDirectionTarget) <= 180.0f ? -1.0f : 1.0f);
         }
@@ -473,7 +473,7 @@ void N__cloud_use(PartyEntry* party) {
         if (++CW(party)->breathLevel > 2) {
             CW(party)->breathLevel = 0;
         }
-        if (!(party->flags & 0x80000000)) {
+        if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (party->buttonHold & PAD_BUTTON_X) {
                 if (marioKeyOffChk() == 0) {
                     break;
@@ -488,7 +488,7 @@ void N__cloud_use(PartyEntry* party) {
         CW(party)->hitSweep[1] = NULL;
         party->moveFrames = sysMsec2Frame(200);
         party->useMotionId = 13;
-        if (party->flags & 0x80000000) {
+        if (party->flags & PARTY_FLAG_IS_EVT_USE) {
             party->useMotionId = 20;
         }
         if (CW(party) != NULL && (u32)CW(party)->sfxId != 0xFFFFFFFF) {
@@ -512,7 +512,7 @@ void N__cloud_use(PartyEntry* party) {
         }
         party->useMotionId = 20;
     case 20:
-        party->flags &= ~0x100;
+        party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         if (CW(party) != NULL && (u32)CW(party)->sfxId != 0xFFFFFFFF) {
             psndSFXOff(CW(party)->sfxId);
             CW(party)->sfxId = -1;
@@ -537,11 +537,11 @@ void N__cloud_use(PartyEntry* party) {
         party->moveArg = 0;
         partyChgMoveMode(party, 2);
         partyChgMot(party, 1);
-        if (!(party->flags & 0x80000000)) {
+        if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             mario->camShiftRate.x = 0.01f;
             mario->camShiftTargetX = 0.0f;
         }
-        party->flags &= ~0x80000000;
+        party->flags &= ~PARTY_FLAG_IS_EVT_USE;
         if (party->useStruct != NULL) {
             __memFree(HEAP_DEFAULT, party->useStruct);
             party->useStruct = NULL;

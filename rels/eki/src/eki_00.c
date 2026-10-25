@@ -715,7 +715,7 @@ static void ext_moamoa_main(void)
   {
     wp->idleFrames = 0;
   }
-  if (party->flags & 0x100)
+  if (party->flags & PARTY_FLAG_IS_BEING_USED)
   {
     wp->flags |= 0x10;
   }
@@ -725,7 +725,7 @@ static void ext_moamoa_main(void)
   }
   wp->breathDir = -1.0f;
   wp->breathDist = -1.0f;
-  if ((party->currentMemberId == 5) && (party->flags & 0x100))
+  if ((party->currentMemberId == 5) && (party->flags & PARTY_FLAG_IS_BEING_USED))
   {
     wp->breathDir = cloudGetBreathDir();
     wp->breathDist = cloudGetBreathDist();

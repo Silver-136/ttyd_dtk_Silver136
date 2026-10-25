@@ -1624,7 +1624,7 @@ USER_FUNC(evt_shop_main_func) {
         !evtGetValue(event, GSWF(3442))) {
         return EVT_RETURN_BLOCK;
     }
-    if (party && (party->flags & 0x100)) {
+    if (party && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         if (wp->sel != -1) {
             wp->sel = -1;
             winMgrClose(wp->win[0]);

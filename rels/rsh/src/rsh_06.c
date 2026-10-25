@@ -792,14 +792,14 @@ static void ext_moamoa_main(void) {
     } else {
         wp->idleFrames = 0;
     }
-    if (party->flags & 0x100) {
+    if (party->flags & PARTY_FLAG_IS_BEING_USED) {
         wp->flags |= 0x10;
     } else {
         wp->flags &= ~0x10;
     }
     wp->breathDir = -1.0f;
     wp->breathDist = -1.0f;
-    if (( party->currentMemberId == 5 ) && (party->flags & 0x100)) {
+    if (( party->currentMemberId == 5 ) && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         wp->breathDir = cloudGetBreathDir();
         wp->breathDist = cloudGetBreathDist();
         wp->breathPos.x = ( wp->breathDist * moa_sinx(( 6.2831855f * wp->breathDir ) / 360.0f) ) + party->position.x;

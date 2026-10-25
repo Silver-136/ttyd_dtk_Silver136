@@ -55,8 +55,8 @@ static void _partyEntry(s32 flag) {
                 Vec zero = {0.0f, 0.0f, 0.0f};
                 party->scale = zero;
             }
-            party->flags |= 0x4000000;
-            party->flags |= 0x2000000;
+            party->flags |= PARTY_FLAG_DISABLE_FLOORS;
+            party->flags |= PARTY_FLAG_FORCE_FALL;
             if (count == 1) {
                 off = 180.0f;
             } else {
@@ -73,8 +73,8 @@ static void _partyEntry(s32 flag) {
                 Vec zero = {0.0f, 0.0f, 0.0f};
                 party->scale = zero;
             }
-            party->flags |= 0x4000000;
-            party->flags |= 0x2000000;
+            party->flags |= PARTY_FLAG_DISABLE_FLOORS;
+            party->flags |= PARTY_FLAG_FORCE_FALL;
             if (count == 1) {
                 off = 180.0f;
             } else {

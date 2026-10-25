@@ -154,16 +154,16 @@ USER_FUNC(evt_mario_dokan_prepare) {
             partyShadowOff(party);
             party->scale = (Vec){0.0f, 0.0f, 0.0f};
             party->flags2 |= 1;
-            party->flags |= 0x4000000;
-            party->flags |= 0x2000000;
+            party->flags |= PARTY_FLAG_DISABLE_FLOORS;
+            party->flags |= PARTY_FLAG_FORCE_FALL;
         }
         party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
             partyShadowOff(party);
             party->scale = (Vec){0.0f, 0.0f, 0.0f};
             party->flags2 |= 1;
-            party->flags |= 0x4000000;
-            party->flags |= 0x2000000;
+            party->flags |= PARTY_FLAG_DISABLE_FLOORS;
+            party->flags |= PARTY_FLAG_FORCE_FALL;
         }
     } else if (type == 5) {
         mp->dispFlags |= 0x1000;
@@ -969,7 +969,7 @@ USER_FUNC(evt_mario_party_door_move) {
             }
             party->trigFlags |= 0x40000;
             N_partyFollowCloseOn(party);
-            party->flags |= 0x1000000;
+            party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
             party->trigFlags |= 0x200000;
         }
         party = partyGetPtr(marioGetExtraPartyId());
@@ -983,7 +983,7 @@ USER_FUNC(evt_mario_party_door_move) {
             }
             party->trigFlags |= 0x40000;
             N_partyFollowCloseOn(party);
-            party->flags |= 0x1000000;
+            party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
             party->trigFlags |= 0x200000;
         }
         event->userdata[0] = 0;
@@ -1049,7 +1049,7 @@ USER_FUNC(evt_mario_party_door_move) {
                     party->flags2 |= 0x10;
                 }
                 N_partyFollowCloseOff(party);
-                party->flags &= ~0x1000000;
+                party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~0x40000;
             }
             party = partyGetPtr(marioGetExtraPartyId());
@@ -1061,7 +1061,7 @@ USER_FUNC(evt_mario_party_door_move) {
                     party->flags2 |= 0x10;
                 }
                 N_partyFollowCloseOff(party);
-                party->flags &= ~0x1000000;
+                party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~0x40000;
             }
 #ifdef VERSION_G8ME01
@@ -1101,7 +1101,7 @@ USER_FUNC(evt_mario_party_bero_move) {
                 party->position = mp->position;
             }
             N_partyFollowCloseOn(party);
-            party->flags |= 0x1000000;
+            party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
             party->trigFlags |= 0x200000;
         }
         party = partyGetPtr(marioGetExtraPartyId());
@@ -1114,7 +1114,7 @@ USER_FUNC(evt_mario_party_bero_move) {
                 party->position = mp->position;
             }
             N_partyFollowCloseOn(party);
-            party->flags |= 0x1000000;
+            party->flags |= PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
             party->trigFlags |= 0x200000;
         }
         event->userdata[0] = 0;
@@ -1167,11 +1167,11 @@ USER_FUNC(evt_mario_party_bero_move) {
             break;
         case 6:
             party = partyGetPtr(marioGetPartyId());
-            if (party && (party->flags & 0x80000)) {
+            if (party && (party->flags & PARTY_FLAG_IS_BEHIND_MARIO)) {
                 event->userdata[1] = 0;
             }
             party = partyGetPtr(marioGetExtraPartyId());
-            if (party && (party->flags & 0x80000)) {
+            if (party && (party->flags & PARTY_FLAG_IS_BEHIND_MARIO)) {
                 event->userdata[1] = 0;
             }
             if (--event->userdata[1] > 0) {
@@ -1180,7 +1180,7 @@ USER_FUNC(evt_mario_party_bero_move) {
             party = partyGetPtr(marioGetPartyId());
             if (party) {
                 N_partyFollowCloseOff(party);
-                party->flags &= ~0x1000000;
+                party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~0x200000;
                 if (party->moveKind == 1) {
                     partySetDispDirToMario(party);
@@ -1190,7 +1190,7 @@ USER_FUNC(evt_mario_party_bero_move) {
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
                 N_partyFollowCloseOff(party);
-                party->flags &= ~0x1000000;
+                party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~0x200000;
                 if (party->moveKind == 1) {
                     partySetDispDirToMario(party);
@@ -1745,7 +1745,7 @@ USER_FUNC(evt_mario_party_use_check) {
     s32 id = event->args[0];
     s32 val = 0;
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    if (party && (party->flags & 0x100)) {
+    if (party && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         val = party->currentMemberId;
     }
     evtSetValue(event, id, val);
@@ -1777,8 +1777,8 @@ USER_FUNC(evt_mario_set_prev_party_dokan) {
             mp->currPartySlotId[slot] = id;
             party = partyGetPtr(id);
             partyChgRunMode(party, 0);
-            party->flags |= 0x4000000;
-            party->flags |= 0x2000000;
+            party->flags |= PARTY_FLAG_DISABLE_FLOORS;
+            party->flags |= PARTY_FLAG_FORCE_FALL;
             party->scale = (Vec){0.0f, 0.0f, 0.0f};
         }
     }
@@ -1813,7 +1813,7 @@ USER_FUNC(evt_mario_hello_party) {
     if (!party) {
         return EVT_RETURN_DONE;
     }
-    if (!(party->flags & 1) || party->runMode != 1) {
+    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != 1) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -1844,7 +1844,7 @@ USER_FUNC(evt_mario_hello_exparty_pos) {
     if (!party) {
         return EVT_RETURN_DONE;
     }
-    if (!(party->flags & 1) || party->runMode != 1) {
+    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != 1) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
