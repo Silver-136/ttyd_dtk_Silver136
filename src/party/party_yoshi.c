@@ -288,7 +288,7 @@ void yoshi_damageToge(PartyEntry* party) {
     }
 }
 
-void yoshi_animTimeMain(PartyEntry* party) {
+void yoshiAnimeCtrl(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
     if (!strcmp(party->animName, "PYS_S_2")) {
@@ -748,7 +748,7 @@ void yoshi_use(PartyEntry* party) {
             break;
     }
 
-    yoshi_animTimeMain(party);
+    yoshiAnimeCtrl(party);
     if (party->useMotionId == 13 || yoshiGetStatus() == 3 || yoshiGetStatus() == 4 || yoshiGetStatus() == 2) {
         ox = 0.0f;
         oz = 0.0f;
