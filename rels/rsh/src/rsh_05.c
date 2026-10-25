@@ -89,9 +89,9 @@ typedef struct MoamoaWork {
     f32 mobjY;
     Vec target[3];
     s16 hitCount;
-    s16 field_0x3a[2];
+    s16 targetHits[2]; // hits near each target; above 50 the escape event for that side runs
     s16 field_0x3e;
-    s16 field_0x40;
+    s16 hammerFrames; // frames Mario has been in the hammer motion
     s16 idleFrames;
     EventEntry* escapeEvt;
     u8 field_0x48[0x4c - 0x48];
@@ -577,7 +577,7 @@ static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     s32 i = evtGetValue(event, event->args[0]);
 
     wp->target[i] = wp->target[1 - i];
-    wp->field_0x3a[i] = 100;
+    wp->targetHits[i] = 100;
     if (i == 0) {
         wp->flags |= 0x1000;
     } else {
@@ -741,7 +741,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
         wp->bounceCount = 0;
     }
-    if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->field_0x40 > 10) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->hammerFrames > 10) {
         rad = 6.2831855f * reviseAngle(camGetPtr(CAMERA_3D)->viewYaw + (mario->displayDirection - 90.0f)) / 360.0f;
         dist = 35.0f * polySinf(rad) + mario->position.x;
         if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], dist, mario->position.z - 35.0f * polyCosf(rad)) < 35.0f) {
@@ -843,9 +843,9 @@ static void ext_moamoa_main(void) {
     camGetPtr(CAMERA_3D);
     hit = 0;
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
-        wp->field_0x40++;
+        wp->hammerFrames++;
     } else {
-        wp->field_0x40 = 0;
+        wp->hammerFrames = 0;
     }
     if (mario->currMotionId == MARIO_MOTION_STAY) {
         wp->idleFrames++;
@@ -869,14 +869,14 @@ static void ext_moamoa_main(void) {
         wp->breathPos.y = party->position.y;
         wp->breathPos.z = party->position.z - wp->breathDist * polyCosf(6.2831855f * wp->breathDir / 360.0f);
     }
-    if (wp->field_0x3a[0] > 50) {
+    if (wp->targetHits[0] > 50) {
         wp->target[0] = wp->target[1];
         if (!(wp->flags & 0x1000)) {
             wp->flags |= 0x1000;
             evtEntry(evt_moamoa_escape0, 0, 0);
         }
     }
-    if (wp->field_0x3a[1] > 50) {
+    if (wp->targetHits[1] > 50) {
         wp->target[1] = wp->target[0];
         if (!(wp->flags & 0x2000)) {
             wp->flags |= 0x2000;
@@ -921,7 +921,7 @@ static void ext_moamoa_main(void) {
                     wp->hitCount++;
                     idx = i % 3;
                     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->target[idx].x, wp->target[idx].z) < VERSION_PICK(200.0f, 80.0f)) {
-                        wp->field_0x3a[idx]++;
+                        wp->targetHits[idx]++;
                     }
                 }
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
@@ -934,7 +934,7 @@ static void ext_moamoa_main(void) {
                     wp->hitCount++;
                     idx = i % 3;
                     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->target[idx].x, wp->target[idx].z) < VERSION_PICK(200.0f, 80.0f)) {
-                        wp->field_0x3a[idx]++;
+                        wp->targetHits[idx]++;
                     }
                 }
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
@@ -957,7 +957,7 @@ static void ext_moamoa_main(void) {
                     wp->hitCount++;
                     idx = i % 3;
                     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], wp->target[idx].x, wp->target[idx].z) < VERSION_PICK(200.0f, 80.0f)) {
-                        wp->field_0x3a[idx]++;
+                        wp->targetHits[idx]++;
                     }
                 }
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");

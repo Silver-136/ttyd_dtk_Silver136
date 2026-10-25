@@ -98,9 +98,9 @@ typedef struct MoamoaWork {
     f32 mobjY;
     Vec target[3];
     s16 hitCount;
-    s16 field_0x3a[2];
+    s16 targetHits[2]; // hits near each target; above 50 the escape event for that side runs
     s16 field_0x3e;
-    s16 field_0x40;
+    s16 hammerFrames; // frames Mario has been in the hammer motion
     s16 idleFrames;
     void* escapeEvt;
     s32 animPoseId;
@@ -715,7 +715,7 @@ static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     s32 i = evtGetValue(event, event->args[0]);
 
     wp->target[i] = wp->target[1 - i];
-    wp->field_0x3a[i] = 100;
+    wp->targetHits[i] = 100;
     if (i == 0) {
         wp->flags |= 0x1000;
     } else {
@@ -888,7 +888,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
         wp->bounceCount = 0;
     }
-    if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->field_0x40 > 10) {
+    if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->hammerFrames > 10) {
         cam = camGetPtr(CAMERA_3D);
         {
             f32 yaw = cam->viewYaw;
@@ -993,9 +993,9 @@ static void ext_moamoa_main(void) {
     f32 r;
 
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
-        wp->field_0x40++;
+        wp->hammerFrames++;
     } else {
-        wp->field_0x40 = 0;
+        wp->hammerFrames = 0;
     }
     if (mario->currMotionId == MARIO_MOTION_STAY) {
         wp->idleFrames++;
