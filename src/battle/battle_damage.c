@@ -24,21 +24,6 @@
 #include "system.h"
 #include "pmario_sound.h"
 
-typedef struct CounterWork {
-    s32 field_0x0;  // 0x0
-    s32 field_0x4;  // 0x4
-    s32 field_0x8;  // 0x8
-    s32 field_0xC;  // 0xC
-    s32 field_0x10; // 0x10
-    s32 field_0x14; // 0x14
-    s32 field_0x18; // 0x18
-    s32 field_0x1C; // 0x1C
-    s32 type;       // 0x20
-    u32 msg;        // 0x24
-    s32 count;      // 0x28
-    u32 field_0x2C; // 0x2C
-} CounterWork;
-
 void btlDispPoseAnime(BattleUnitPart* part);
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
@@ -49,7 +34,6 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
 s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* resultFlags, u32 flags);
 s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
-s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
 void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 
 EffectEntry* effFukidashiEntry(s32 a, s32 b, s32 c, s32 d, f32 x, f32 y, f32 z, f32 scale, f32 e);
@@ -1554,7 +1538,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
 
     pierce = 0;
     cwp = &cw;
-    BattleInitCounterPreCheckWork((s32*)cwp);
+    BattleInitCounterPreCheckWork(cwp);
     if (!target) {
         return 18;
     }
@@ -1601,7 +1585,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         }
     }
     BattleCheckCounter(cwp, attacker, target, part, weapon, (u32*)&flags);
-    while (cw.field_0x0) {
+    while (cw.attackHits) {
         if (flags & 0x100) {
             if (part->counterAttributes & kCounterVolatileExplosive) {
                 BattleRunHitEvent(target, 0x719);
@@ -1723,28 +1707,28 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     attacker->superguardedCount++;
     target->superguardCountTaken = attacker->superguardedCount;
     if (cw.msg) {
-        if (cw.field_0x4) {
+        if (cw.payback) {
             cw.count += damage * 50 / 100;
         }
-        if (cw.field_0x18) {
+        if (cw.holdFast) {
             cw.count += damage * 50 / 100;
         }
-        if (cw.field_0x1C) {
+        if (cw.returnPostage) {
             cw.count += damage * 50 / 100;
         }
-        if (cw.field_0xC) {
+        if (cw.poisonStatus) {
             r1 = 0;
             BattleSetStatusDamage(&r1, attacker, part, 0, 4, 100, 0, 3, 1);
         }
-        if (cw.field_0x14) {
+        if (cw.freezeStatus) {
             r2 = 0;
             BattleSetStatusDamage(&r2, attacker, part, 0, 9, 100, 0, 3, 1);
         }
-        if (cw.field_0x8) {
+        if (cw.burnStatus) {
             r3 = 0;
             BattleSetStatusDamage(&r3, attacker, part, 0, 8, 100, 0, 3, 1);
         }
-        if (cw.field_0x10) {
+        if (cw.electricStatus) {
             r4 = 0;
             BattleSetStatusDamage(&r4, attacker, part, 0, 6, 100, 0, 3, 1);
         }
@@ -1754,7 +1738,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (!attacker->mAlliance) {
             BattleAudience_Case_Countered();
         }
-        if (cw.field_0x18) {
+        if (cw.holdFast) {
             BtlUnit_GetHitPos(target, part, &pos.x, &pos.y, &pos.z);
             effBombEntry(0, pos.x, pos.y, pos.z, 1.0f);
             psndSFXOn_3D("SFX_BTL_THUNDERS_ATTACK4", &pos);
@@ -1763,9 +1747,9 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         BattleActionCommandStop(wp);
         BattleAcHelpSetDispType(0);
         BattleDamageDirect(-5, attacker, NULL, cw.count, 0, cw.msg, 0, 1);
-        if (cw.field_0x2C) {
+        if (cw.hitEvent) {
             target->damagePattern = 0;
-            BattleRunHitEvent(target, cw.field_0x2C);
+            BattleRunHitEvent(target, cw.hitEvent);
         }
         return -1;
     }
@@ -1916,9 +1900,9 @@ void BattleAttackDeclareAll(BattleWork* wp) {
     wt->currentTarget = 0;
 }
 
-void BattleInitCounterPreCheckWork(s32* work) {
-    memset(work, 0, 0x30);
-    work[0] = 1;
+void BattleInitCounterPreCheckWork(CounterWork* work) {
+    memset(work, 0, sizeof(CounterWork));
+    work->attackHits = 1;
 }
 
 s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags) {
@@ -1930,52 +1914,52 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         work->type = 0x2B;
         work->msg = 0x12B;
         work->count++;
-        work->field_0x2C = 0x1F;
+        work->hitEvent = 0x1F;
         *flags |= 0x100;
-        work->field_0x0 = 0;
+        work->attackHits = 0;
     } else if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & 4)) {
         work->type = 0x2C;
         work->msg = 0x12C;
         work->count++;
-        work->field_0x2C = 0x20;
+        work->hitEvent = 0x20;
         *flags |= 0x100;
-        work->field_0x0 = 0;
+        work->attackHits = 0;
     } else if ((part->counterAttributes & kCounterFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & 8)) {
         work->type = 0x2D;
         work->msg = 0x12D;
         work->count++;
-        work->field_0x2C = 0x21;
+        work->hitEvent = 0x21;
         *flags |= 0x100;
-        work->field_0x0 = 0;
+        work->attackHits = 0;
     } else if (((part->counterAttributes & kCounterFiery) || (part->counterAttributes & kCounterFieryStatus)) && !attacker->badgesEquipped.IcePower && !(weapon->counterResistFlags & 0x10)) {
         work->type = 0x2E;
         work->msg = 0x12E;
         work->count++;
-        work->field_0x2C = 0x22;
+        work->hitEvent = 0x22;
         *flags |= 0x100;
-        work->field_0x0 = 0;
+        work->attackHits = 0;
         if (part->counterAttributes & kCounterFieryStatus) {
-            work->field_0x8 = 1;
+            work->burnStatus = 1;
         }
     } else if (((part->counterAttributes & kCounterIcy) || (part->counterAttributes & kCounterIcyStatus)) && !(weapon->counterResistFlags & 0x20)) {
         work->type = 0x2F;
         work->msg = 0x12F;
         work->count++;
-        work->field_0x2C = 0x23;
+        work->hitEvent = 0x23;
         *flags |= 0x100;
-        work->field_0x0 = 0;
+        work->attackHits = 0;
         if (part->counterAttributes & kCounterIcyStatus) {
-            work->field_0x14 = 1;
+            work->freezeStatus = 1;
         }
     } else if (((part->counterAttributes & kCounterElectric) || (part->counterAttributes & kCounterElectricStatus)) && !(weapon->counterResistFlags & 1) && !BtlUnit_CheckStatus(attacker, STATUS_ELECTRIC)) {
         work->type = 0x30;
         work->msg = 0x130;
         work->count++;
-        work->field_0x2C = 0x24;
+        work->hitEvent = 0x24;
         *flags |= 0x100;
-        work->field_0x0 = 0;
+        work->attackHits = 0;
         if (part->counterAttributes & kCounterElectricStatus) {
-            work->field_0x10 = 1;
+            work->electricStatus = 1;
         }
     } else {
         if ((part->counterAttributes & kCounterExplosive) && !(weapon->counterResistFlags & 0x80)) {
@@ -2000,35 +1984,35 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
             work->count++;
             *flags |= 0x100;
             if (part->counterAttributes & kCounterElectricStatus) {
-                work->field_0x10 = 1;
+                work->electricStatus = 1;
             }
         }
         if (BtlUnit_CheckStatus(target, STATUS_PAYBACK) && !(weapon->counterResistFlags & 0x200)) {
             work->type = 0x35;
             work->msg = 0x135;
             *flags |= 0x100;
-            work->field_0x4 = 1;
+            work->payback = 1;
         }
         if (((part->counterAttributes & kCounterPoison) || (part->counterAttributes & kCounterPoisonStatus)) && !(weapon->counterResistFlags & 0x40)) {
             work->type = 0x33;
             work->msg = 0x133;
             *flags |= 0x100;
-            work->field_0x4 = 1;
+            work->payback = 1;
             if (part->counterAttributes & kCounterPoisonStatus) {
-                work->field_0xC = 1;
+                work->poisonStatus = 1;
             }
         }
         if (BtlUnit_CheckStatus(target, STATUS_HOLD_FAST) && !(weapon->counterResistFlags & 0x400)) {
             work->type = 0x36;
             work->msg = 0x136;
             *flags |= 0x100;
-            work->field_0x18 = 1;
+            work->holdFast = 1;
         }
         if (target->badgesEquipped.ReturnPostage && !(weapon->counterResistFlags & 0x200)) {
             work->type = 0x35;
             work->msg = 0x135;
             *flags |= 0x100;
-            work->field_0x1C = 1;
+            work->returnPostage = 1;
         }
     }
     switch (work->type) {

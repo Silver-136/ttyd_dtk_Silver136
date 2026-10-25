@@ -27,6 +27,24 @@ typedef struct BattleVulnerableStatus {
     u8 instaKillRate; //0x15
 } BattleVulnerableStatus;
 
+// Counter result filled by BattleCheckCounter (BattleInitCounterPreCheckWork clears it and sets attackHits)
+typedef struct CounterWork {
+    s32 attackHits;     // 0x0, cleared when a contact hazard (spiky, fiery, icy, electric part) stops the attack
+    s32 payback;        // 0x4, Payback status or poison counter: half the damage goes back
+    s32 burnStatus;     // 0x8, the counter also burns the attacker
+    s32 poisonStatus;   // 0xC, ... poisons the attacker
+    s32 electricStatus; // 0x10, ... electrifies the attacker
+    s32 freezeStatus;   // 0x14, ... freezes the attacker
+    s32 holdFast;       // 0x18, Hold Fast status: half the damage goes back, with an explosion
+    s32 returnPostage;  // 0x1C, Return Postage badge: half the damage goes back
+    s32 type;           // 0x20
+    u32 msg;            // 0x24
+    s32 count;          // 0x28, damage dealt back to the attacker
+    u32 hitEvent;       // 0x2C, hit event run on the target (BattleRunHitEvent)
+} CounterWork;
+
 s32 BattleCheckDamage(struct BattleUnit* unit1, struct BattleUnit* unit2, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, s32 flags);
 void BattleAttackDeclare(s32* unitIdx, s32* partIdx);
-void BattleInitCounterPreCheckWork(s32* work);
+void BattleInitCounterPreCheckWork(CounterWork* work);
+s32 BattleCheckCounter(CounterWork* work, struct BattleUnit* attacker, struct BattleUnit* target,
+                       struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32* flags);

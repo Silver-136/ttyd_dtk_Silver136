@@ -3468,7 +3468,6 @@ void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* p
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit);
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
-s32 BattleCheckCounter(s32* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 void* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
 #include "eff/n64/eff_coin_n64.h"
@@ -3840,10 +3839,10 @@ USER_FUNC(btlevtcmd_PreCheckCounter) {
     s32 pno;
     s32 out;
     s32 res;
-    s32 work[12];
+    CounterWork work;
     u32 flags = 0;
 
-    BattleInitCounterPreCheckWork(work);
+    BattleInitCounterPreCheckWork(&work);
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     attacker = BattleGetUnitPtr(wp, id);
@@ -3854,7 +3853,7 @@ USER_FUNC(btlevtcmd_PreCheckCounter) {
     part = BtlUnit_GetPartsPtr(target, pno);
     weapon = (BattleWeapon*)evtGetValue(event, args[3]);
     out = args[5];
-    res = BattleCheckCounter(work, attacker, target, part, weapon, &flags);
+    res = BattleCheckCounter(&work, attacker, target, part, weapon, &flags);
     evtSetValue(event, out, res);
     if (!evtCheckID(event->eventId)) {
         return EVT_RETURN_FINISH;
@@ -3874,10 +3873,10 @@ USER_FUNC(btlevtcmd_CommandPreCheckCounter) {
     s32 pno;
     s32 out;
     s32 res;
-    s32 work[12];
+    CounterWork work;
     u32 flags = 0;
 
-    BattleInitCounterPreCheckWork(work);
+    BattleInitCounterPreCheckWork(&work);
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     attacker = BattleGetUnitPtr(wp, id);
@@ -3888,7 +3887,7 @@ USER_FUNC(btlevtcmd_CommandPreCheckCounter) {
     part = BtlUnit_GetPartsPtr(target, pno);
     out = args[4];
     weapon = BattleGetSelectWeapon(wp);
-    res = BattleCheckCounter(work, attacker, target, part, weapon, &flags);
+    res = BattleCheckCounter(&work, attacker, target, part, weapon, &flags);
     evtSetValue(event, out, res);
     if (!evtCheckID(event->eventId)) {
         return EVT_RETURN_FINISH;
