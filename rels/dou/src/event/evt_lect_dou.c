@@ -187,15 +187,15 @@ static void lecture_button_disp(CameraId camera, void* param) {
             Vec pos;
 
             switch (btn->iconId) {
-                case ICON_075:
-                case ICON_076:
-                case ICON_077:
-                case ICON_078:
-                case ICON_079:
-                case ICON_07A:
-                case ICON_07B:
-                case ICON_07C:
-                case ICON_07D:
+                case ICON_STICK_DOWN_LEFT:
+                case ICON_STICK_DOWN:
+                case ICON_STICK_DOWN_RIGHT:
+                case ICON_STICK_LEFT:
+                case ICON_STICK_NEUTRAL:
+                case ICON_STICK_RIGHT:
+                case ICON_STICK_UP_LEFT:
+                case ICON_STICK_UP:
+                case ICON_STICK_UP_RIGHT:
                     ofs = -15.0f;
                     break;
                 default:
@@ -229,7 +229,7 @@ static USER_FUNC(lecture_button_rtn) {
         btn = &lbtn[i];
         switch (btn->seq) {
             case 0:
-                btn->iconId = ICON_068;
+                btn->iconId = ICON_BUTTON_X;
                 btn->seq = 1;
                 break;
             case 2:
@@ -626,19 +626,19 @@ EVT_BEGIN(ship_majin_lecture)
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_14_1"), 0, STRING("ペラ魔人"))
     LOOP(0)
         CALL(lecture_button_flag_on_off, 0, 2, 1)
-        CALL(lecture_button_set_icon_id, 0, ICON_06A)
+        CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y)
         CALL(lecture_button_set_seq, 0, 2)
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(x_flag_set, 0, 1)
         BEGIN_INLINE_EVENT
             LOOP(0)
-                CALL(lecture_button_set_icon_id, 0, ICON_06B)
+                CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y_PRESSED)
                 WAIT_MS(300)
                 CALL(x_flag_get, 0, LW(0))
                 IF_INT_EQUAL(LW(0), 2)
                     BREAK_LOOP
                 END_IF
-                CALL(lecture_button_set_icon_id, 0, ICON_06A)
+                CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y)
                 WAIT_MS(300)
                 CALL(x_flag_get, 0, LW(0))
                 IF_INT_EQUAL(LW(0), 2)
@@ -670,7 +670,7 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(mainwindow_openenable)
         CALL(evt_cam_letter_box_disable, 0)
         BEGIN_SIBLING_EVENT
-            CALL(lecture_button_set_icon_id, 0, ICON_06B)
+            CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y_PRESSED)
             WAIT_MS(300)
             CALL(lecture_button_set_seq, 0, 3)
             CALL(lecture_button_seq_wait, 0, 1)
@@ -705,19 +705,19 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_15_0"), 0, STRING("ペラ魔人"))
         CALL(lecture_button_flag_on_off, 0, 2, 1)
         CALL(lecture_button_set_pos, 0, FLOAT(-200.0f), FLOAT(-25.0f), FLOAT(0.0f))
-        CALL(lecture_button_set_icon_id, 0, ICON_06A)
+        CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y)
         CALL(lecture_button_set_seq, 0, 2)
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(x_flag_set, 0, 1)
         BEGIN_INLINE_EVENT
             LOOP(0)
-                CALL(lecture_button_set_icon_id, 0, ICON_06B)
+                CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y_PRESSED)
                 WAIT_MS(300)
                 CALL(x_flag_get, 0, LW(0))
                 IF_INT_EQUAL(LW(0), 2)
                     BREAK_LOOP
                 END_IF
-                CALL(lecture_button_set_icon_id, 0, ICON_06A)
+                CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y)
                 WAIT_MS(300)
                 CALL(x_flag_get, 0, LW(0))
                 IF_INT_EQUAL(LW(0), 2)

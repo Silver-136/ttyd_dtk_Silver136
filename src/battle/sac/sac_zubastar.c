@@ -899,7 +899,7 @@ void zubastar_disp2D(CameraId cam, void* param) {
     ZSLine* l;
     s32 i;
     if (w->gaugeState >= 5) {
-        s32 icon = (w->fa1 <= 3U) ? ICON_064 : ICON_065;
+        s32 icon = (w->fa1 <= 3U) ? ICON_BUTTON_A : ICON_BUTTON_A_PRESSED;
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = w->gaugePos.x - 200.0f;
         pos.y = 60.0f + w->gaugePos.y;

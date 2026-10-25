@@ -319,10 +319,10 @@ static void actionCommandDisp(f32 x, f32 y) {
 
     switch (ac->params[0]) {
         case 0:
-            a = ICON_07F;
-            b = ICON_07E;
-            c = ICON_081;
-            d = ICON_080;
+            a = ICON_TRIGGER_L_PRESSED;
+            b = ICON_TRIGGER_L;
+            c = ICON_TRIGGER_R_PRESSED;
+            d = ICON_TRIGGER_R;
             break;
         case 1:
             a = BattleACGetButtonIcon(0x100, 1);

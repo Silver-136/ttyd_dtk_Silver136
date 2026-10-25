@@ -1078,7 +1078,7 @@ void icon_disp(CameraId camera, void* param) {
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXConcat(trans, scale, trans);
-        iconDispGx2(trans, 0x10, ICON_064);
+        iconDispGx2(trans, 0x10, ICON_BUTTON_A);
     } else {
         PSMTXTrans(trans, event->userdata[1] - 30, event->userdata[2] + 100, 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
@@ -1089,7 +1089,7 @@ void icon_disp(CameraId camera, void* param) {
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXConcat(trans, scale, trans);
-        iconDispGx2(trans, 0x10, ICON_066);
+        iconDispGx2(trans, 0x10, ICON_BUTTON_B);
     }
 }
 

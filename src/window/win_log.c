@@ -1276,13 +1276,13 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
         winTexInit(*w->res->data);
         winTexSet(0x17, (Vec){440.0f + x, 18.0f + y, 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, white);
         winIconInit();
-        winIconSet(ICON_07E, (Vec){440.0f + x, y, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
+        winIconSet(ICON_TRIGGER_L, (Vec){440.0f + x, y, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
     }
     if (w->log.enemyPage < (w->log.enemyNum + 15) / 16 - 1) {
         winTexInit(*w->res->data);
         winTexSet(0x17, (Vec){440.0f + x, (y - 15.0f) - 240.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
         winIconInit();
-        winIconSet(ICON_080, (Vec){440.0f + x, y - 240.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
+        winIconSet(ICON_TRIGGER_R, (Vec){440.0f + x, y - 240.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
     }
     msg = msgSearch("msg_menu_sort_narabikae");
     fw = 0.7f * FontGetMessageWidth(msg);

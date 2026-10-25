@@ -277,15 +277,34 @@ static void actionCommandDisp(f32 x, f32 y) {
     camGetPtr(CAMERA_2D);
     tw = TW_WORK(ac);
     switch (tw->button) {
-        case 0x100: b = ICON_065; a = ICON_064; break;
-        case 0x200: b = ICON_067; a = ICON_066; break;
-        case 0x400: b = ICON_069; a = ICON_068; break;
-        case 0x800: b = ICON_06B; a = ICON_06A; break;
-        case 0x40000: b = ICON_078; a = ICON_079; break;
-        case 0x80000: b = ICON_07A; a = ICON_079; break;
-        default: b = ICON_078;
-        a = ICON_079;
-        break;
+        case PAD_BUTTON_A:
+            b = ICON_BUTTON_A_PRESSED;
+            a = ICON_BUTTON_A;
+            break;
+        case PAD_BUTTON_B:
+            b = ICON_BUTTON_B_PRESSED;
+            a = ICON_BUTTON_B;
+            break;
+        case PAD_BUTTON_X:
+            b = ICON_BUTTON_X_PRESSED;
+            a = ICON_BUTTON_X;
+            break;
+        case PAD_BUTTON_Y:
+            b = ICON_BUTTON_Y_PRESSED;
+            a = ICON_BUTTON_Y;
+            break;
+        case BATTLE_PAD_STICK_LEFT:
+            b = ICON_STICK_LEFT;
+            a = ICON_STICK_NEUTRAL;
+            break;
+        case BATTLE_PAD_STICK_RIGHT:
+            b = ICON_STICK_RIGHT;
+            a = ICON_STICK_NEUTRAL;
+            break;
+        default:
+            b = ICON_STICK_LEFT;
+            a = ICON_STICK_NEUTRAL;
+            break;
     }
     switch (tw->state) {
         case 0:

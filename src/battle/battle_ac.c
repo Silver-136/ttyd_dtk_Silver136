@@ -9,6 +9,7 @@
 #include "icon_ids.h"
 #include "pmario_sound.h"
 #include "battle/battle_audience.h"
+#include "battle/battle_pad.h"
 
 void psndSFX_pit(s32 id, s32 pitch);
 
@@ -263,50 +264,50 @@ u16 BattleACGetButtonIcon(s32 button, s32 pressed) {
     u16 icon = 0;
 
     switch (button) {
-    case 0x100:
-        if (pressed) icon = ICON_065; else icon = ICON_064;
+    case PAD_BUTTON_A:
+        if (pressed) icon = ICON_BUTTON_A_PRESSED; else icon = ICON_BUTTON_A;
         break;
-    case 0x200:
-        if (pressed) icon = ICON_067; else icon = ICON_066;
+    case PAD_BUTTON_B:
+        if (pressed) icon = ICON_BUTTON_B_PRESSED; else icon = ICON_BUTTON_B;
         break;
-    case 0x400:
-        if (pressed) icon = ICON_069; else icon = ICON_068;
+    case PAD_BUTTON_X:
+        if (pressed) icon = ICON_BUTTON_X_PRESSED; else icon = ICON_BUTTON_X;
         break;
-    case 0x800:
-        if (pressed) icon = ICON_06B; else icon = ICON_06A;
+    case PAD_BUTTON_Y:
+        if (pressed) icon = ICON_BUTTON_Y_PRESSED; else icon = ICON_BUTTON_Y;
         break;
-    case 0x20:
-        if (pressed) icon = ICON_081; else icon = ICON_080;
+    case PAD_TRIGGER_R:
+        if (pressed) icon = ICON_TRIGGER_R_PRESSED; else icon = ICON_TRIGGER_R;
         break;
-    case 0x40:
-        if (pressed) icon = ICON_07F; else icon = ICON_07E;
+    case PAD_TRIGGER_L:
+        if (pressed) icon = ICON_TRIGGER_L_PRESSED; else icon = ICON_TRIGGER_L;
         break;
-    case 0x10:
-        if (pressed) icon = ICON_083; else icon = ICON_082;
+    case PAD_TRIGGER_Z:
+        if (pressed) icon = ICON_TRIGGER_Z_PRESSED; else icon = ICON_TRIGGER_Z;
         break;
-    case 0x10000:
-        if (pressed) icon = ICON_07C; else icon = ICON_079;
+    case BATTLE_PAD_STICK_UP:
+        if (pressed) icon = ICON_STICK_UP; else icon = ICON_STICK_NEUTRAL;
         break;
-    case 0x20000:
-        if (pressed) icon = ICON_076; else icon = ICON_079;
+    case BATTLE_PAD_STICK_DOWN:
+        if (pressed) icon = ICON_STICK_DOWN; else icon = ICON_STICK_NEUTRAL;
         break;
-    case 0x40000:
-        if (pressed) icon = ICON_078; else icon = ICON_079;
+    case BATTLE_PAD_STICK_LEFT:
+        if (pressed) icon = ICON_STICK_LEFT; else icon = ICON_STICK_NEUTRAL;
         break;
-    case 0x80000:
-        if (pressed) icon = ICON_07A; else icon = ICON_079;
+    case BATTLE_PAD_STICK_RIGHT:
+        if (pressed) icon = ICON_STICK_RIGHT; else icon = ICON_STICK_NEUTRAL;
         break;
-    case 0x90000:
-        if (pressed) icon = ICON_07D; else icon = ICON_079;
+    case BATTLE_PAD_STICK_UP | BATTLE_PAD_STICK_RIGHT:
+        if (pressed) icon = ICON_STICK_UP_RIGHT; else icon = ICON_STICK_NEUTRAL;
         break;
-    case 0xA0000:
-        if (pressed) icon = ICON_077; else icon = ICON_079;
+    case BATTLE_PAD_STICK_DOWN | BATTLE_PAD_STICK_RIGHT:
+        if (pressed) icon = ICON_STICK_DOWN_RIGHT; else icon = ICON_STICK_NEUTRAL;
         break;
-    case 0x50000:
-        if (pressed) icon = ICON_07B; else icon = ICON_079;
+    case BATTLE_PAD_STICK_UP | BATTLE_PAD_STICK_LEFT:
+        if (pressed) icon = ICON_STICK_UP_LEFT; else icon = ICON_STICK_NEUTRAL;
         break;
-    case 0x60000:
-        if (pressed) icon = ICON_075; else icon = ICON_079;
+    case BATTLE_PAD_STICK_DOWN | BATTLE_PAD_STICK_LEFT:
+        if (pressed) icon = ICON_STICK_DOWN_LEFT; else icon = ICON_STICK_NEUTRAL;
         break;
     }
     return icon;

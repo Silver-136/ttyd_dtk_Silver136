@@ -484,7 +484,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         {
             Vec pos = upButtonPos;
             pos.x = left + winW;
-            iconDispGx(&pos, 0x10, ICON_07E, 0.6f);
+            iconDispGx(&pos, 0x10, ICON_TRIGGER_L, 0.6f);
         }
     }
     if (dwp->page < 1) {
@@ -496,7 +496,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         {
             Vec pos = downButtonPos;
             pos.x = left + winW;
-            iconDispGx(&pos, 0x10, ICON_080, 0.6f);
+            iconDispGx(&pos, 0x10, ICON_TRIGGER_R, 0.6f);
         }
     }
 }

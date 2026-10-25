@@ -928,7 +928,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         {
             Vec pos = {0.0f, 75.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, 0x10, ICON_07E, 0.6f);
+            iconDispGx(&pos, 0x10, ICON_TRIGGER_L, 0.6f);
         }
     }
     if (dwp->page < 1) {
@@ -940,7 +940,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         {
             Vec pos = {0.0f, -125.0f, 0.0f};
             pos.x = x + winW;
-            iconDispGx(&pos, 0x10, ICON_080, 0.6f);
+            iconDispGx(&pos, 0x10, ICON_TRIGGER_R, 0.6f);
         }
     }
 }

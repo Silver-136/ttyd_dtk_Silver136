@@ -275,12 +275,12 @@ static void actionCommandDisp(f32 x, f32 y, s32 n) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -232.0f + x;
         pos.y = 70.0f + y;
-        iconDispGx(&pos, 0x10, ICON_078, 1.0f);
+        iconDispGx(&pos, 0x10, ICON_STICK_LEFT, 1.0f);
     } else {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -232.0f + x;
         pos.y = 70.0f + y;
-        iconDispGx(&pos, 0x10, ICON_079, 1.0f);
+        iconDispGx(&pos, 0x10, ICON_STICK_NEUTRAL, 1.0f);
     }
     {
         Vec pos = {0.0f, 0.0f, 0.0f};

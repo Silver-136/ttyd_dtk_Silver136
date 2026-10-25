@@ -375,23 +375,23 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
 u16 _get_icon_id(s8 dir) {
     switch (dir) {
         case 1:
-            return ICON_07C;
+            return ICON_STICK_UP;
         case 2:
-            return ICON_07D;
+            return ICON_STICK_UP_RIGHT;
         case 3:
-            return ICON_07A;
+            return ICON_STICK_RIGHT;
         case 4:
-            return ICON_077;
+            return ICON_STICK_DOWN_RIGHT;
         case 5:
-            return ICON_076;
+            return ICON_STICK_DOWN;
         case 6:
-            return ICON_075;
+            return ICON_STICK_DOWN_LEFT;
         case 7:
-            return ICON_078;
+            return ICON_STICK_LEFT;
         case 8:
-            return ICON_07B;
+            return ICON_STICK_UP_LEFT;
         default:
-            return ICON_079;
+            return ICON_STICK_NEUTRAL;
     }
 }
 
@@ -410,7 +410,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     switch (work->actionCommands.mAcState) {
         case 99:
         case 100:
-            ICON(v0, ICON_079);
+            ICON(v0, ICON_STICK_NEUTRAL);
             break;
         case 1000:
             ICON(v1, _get_icon_id(sw->iconA));
@@ -431,7 +431,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         case 1004:
         case 1005:
         case 1006:
-            ICON(v5, ICON_079);
+            ICON(v5, ICON_STICK_NEUTRAL);
             break;
     }
 }
@@ -445,7 +445,7 @@ void actionCommandDisp2(f32 x, f32 y) {
     switch (work->actionCommands.mAcState) {
         case 99:
         case 100:
-            ICON(v0, ICON_079);
+            ICON(v0, ICON_STICK_NEUTRAL);
             break;
         case 1000:
         case 1001:
@@ -475,7 +475,7 @@ void actionCommandDisp2(f32 x, f32 y) {
         case 1004:
         case 1005:
         case 1006:
-            ICON(v2, ICON_079);
+            ICON(v2, ICON_STICK_NEUTRAL);
             break;
     }
 }

@@ -212,15 +212,15 @@ static void lecture_button_disp(CameraId camera, void* param) {
             Vec pos;
 
             switch (btn->iconId) {
-                case ICON_075:
-                case ICON_076:
-                case ICON_077:
-                case ICON_078:
-                case ICON_079:
-                case ICON_07A:
-                case ICON_07B:
-                case ICON_07C:
-                case ICON_07D:
+                case ICON_STICK_DOWN_LEFT:
+                case ICON_STICK_DOWN:
+                case ICON_STICK_DOWN_RIGHT:
+                case ICON_STICK_LEFT:
+                case ICON_STICK_NEUTRAL:
+                case ICON_STICK_RIGHT:
+                case ICON_STICK_UP_LEFT:
+                case ICON_STICK_UP:
+                case ICON_STICK_UP_RIGHT:
                     ofs = -15.0f;
                     break;
                 default:
@@ -254,7 +254,7 @@ static USER_FUNC(lecture_button_rtn) {
         btn = &lbtn[i];
         switch (btn->seq) {
             case 0:
-                btn->iconId = ICON_068;
+                btn->iconId = ICON_BUTTON_X;
                 btn->seq = 1;
                 break;
             case 2:
@@ -870,11 +870,11 @@ EVT_END()
 EVT_BEGIN(roll_majin_lecture_sub01)
     CALL(lecture_button_set_alpha, 0, 255)
     CALL(lecture_button_set_alpha, 1, 128)
-    CALL(lecture_button_set_icon_id, 1, ICON_079)
+    CALL(lecture_button_set_icon_id, 1, ICON_STICK_NEUTRAL)
     LOOP(0)
-        CALL(lecture_button_set_icon_id, 0, ICON_081)
+        CALL(lecture_button_set_icon_id, 0, ICON_TRIGGER_R_PRESSED)
         WAIT_MS(300)
-        CALL(lecture_button_set_icon_id, 0, ICON_080)
+        CALL(lecture_button_set_icon_id, 0, ICON_TRIGGER_R)
         WAIT_MS(300)
     END_LOOP
     RETURN
@@ -883,23 +883,23 @@ EVT_END()
 EVT_BEGIN(roll_majin_lecture_sub02)
     CALL(lecture_button_set_alpha, 0, 128)
     CALL(lecture_button_set_alpha, 1, 255)
-    CALL(lecture_button_set_icon_id, 0, ICON_081)
+    CALL(lecture_button_set_icon_id, 0, ICON_TRIGGER_R_PRESSED)
     LOOP(0)
-        CALL(lecture_button_set_icon_id, 1, ICON_078)
+        CALL(lecture_button_set_icon_id, 1, ICON_STICK_LEFT)
         WAIT_MS(15)
-        CALL(lecture_button_set_icon_id, 1, ICON_07B)
+        CALL(lecture_button_set_icon_id, 1, ICON_STICK_UP_LEFT)
         WAIT_MS(15)
-        CALL(lecture_button_set_icon_id, 1, ICON_07C)
+        CALL(lecture_button_set_icon_id, 1, ICON_STICK_UP)
         WAIT_MS(15)
-        CALL(lecture_button_set_icon_id, 1, ICON_07D)
+        CALL(lecture_button_set_icon_id, 1, ICON_STICK_UP_RIGHT)
         WAIT_MS(15)
-        CALL(lecture_button_set_icon_id, 1, ICON_07A)
+        CALL(lecture_button_set_icon_id, 1, ICON_STICK_RIGHT)
         WAIT_MS(15)
-        CALL(lecture_button_set_icon_id, 1, ICON_077)
+        CALL(lecture_button_set_icon_id, 1, ICON_STICK_DOWN_RIGHT)
         WAIT_MS(15)
-        CALL(lecture_button_set_icon_id, 1, ICON_076)
+        CALL(lecture_button_set_icon_id, 1, ICON_STICK_DOWN)
         WAIT_MS(15)
-        CALL(lecture_button_set_icon_id, 1, ICON_075)
+        CALL(lecture_button_set_icon_id, 1, ICON_STICK_DOWN_LEFT)
         WAIT_MS(15)
     END_LOOP
     RETURN
@@ -944,10 +944,10 @@ EVT_BEGIN(roll_majin_lecture)
     CALL(evt_msg_print_add, 0, STRING("stg4_usu_majin3_14"))
     LOOP(0)
         CALL(lecture_button_flag_on_off, 0, 2, 1)
-        CALL(lecture_button_set_icon_id, 0, ICON_080)
+        CALL(lecture_button_set_icon_id, 0, ICON_TRIGGER_R)
         CALL(lecture_button_set_seq, 0, 2)
         CALL(lecture_button_flag_on_off, 1, 2, 1)
-        CALL(lecture_button_set_icon_id, 1, ICON_079)
+        CALL(lecture_button_set_icon_id, 1, ICON_STICK_NEUTRAL)
         CALL(lecture_button_set_seq, 1, 2)
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(lecture_button_seq_wait, 1, 1)

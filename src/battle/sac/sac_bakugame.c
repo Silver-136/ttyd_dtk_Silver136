@@ -1311,13 +1311,13 @@ void bakuGameDisp2D(CameraId cam, void* param) {
         b = &w->btn[i];
         switch (b->button) {
         case 0x100:
-            icon = ICON_064;
+            icon = ICON_BUTTON_A;
             break;
         case 0x200:
-            icon = ICON_066;
+            icon = ICON_BUTTON_B;
             break;
         case 0x400:
-            icon = ICON_068;
+            icon = ICON_BUTTON_X;
             break;
         default:
             icon = 0;

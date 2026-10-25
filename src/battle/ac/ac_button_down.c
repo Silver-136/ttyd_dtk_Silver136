@@ -330,46 +330,46 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
             continue;
         }
         switch (p->button[(j >> 1) >> 1]) {
-            case 0x100:
-                a = ICON_065;
-                b = ICON_064;
+            case PAD_BUTTON_A:
+                a = ICON_BUTTON_A_PRESSED;
+                b = ICON_BUTTON_A;
                 break;
 
-            case 0x200:
-                a = ICON_067;
-                b = ICON_066;
+            case PAD_BUTTON_B:
+                a = ICON_BUTTON_B_PRESSED;
+                b = ICON_BUTTON_B;
                 break;
 
-            case 0x400:
-                a = ICON_069;
-                b = ICON_068;
+            case PAD_BUTTON_X:
+                a = ICON_BUTTON_X_PRESSED;
+                b = ICON_BUTTON_X;
                 break;
 
-            case 0x800:
-                a = ICON_06B;
-                b = ICON_06A;
+            case PAD_BUTTON_Y:
+                a = ICON_BUTTON_Y_PRESSED;
+                b = ICON_BUTTON_Y;
                 break;
 
-            case 0x40:
-                a = ICON_07F;
-                b = ICON_07E;
+            case PAD_TRIGGER_L:
+                a = ICON_TRIGGER_L_PRESSED;
+                b = ICON_TRIGGER_L;
                 break;
 
-            case 0x20:
-                a = ICON_081;
-                b = ICON_080;
+            case PAD_TRIGGER_R:
+                a = ICON_TRIGGER_R_PRESSED;
+                b = ICON_TRIGGER_R;
                 break;
 
-            case 0x10:
-                a = ICON_083;
-                b = ICON_082;
+            case PAD_TRIGGER_Z:
+                a = ICON_TRIGGER_Z_PRESSED;
+                b = ICON_TRIGGER_Z;
                 break;
 
-            case 0x40000:
+            case BATTLE_PAD_STICK_LEFT:
 
             default:
-                a = ICON_078;
-                b = ICON_079;
+                a = ICON_STICK_LEFT;
+                b = ICON_STICK_NEUTRAL;
                 break;
 
         }

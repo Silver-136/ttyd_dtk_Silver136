@@ -505,51 +505,51 @@ void N__disp_2D(s32 side, s32 idx) {
     }
     switch (b->button) {
     case 0x100:
-        t = ICON_064;
+        t = ICON_BUTTON_A;
         if (idx < cur) {
-            t = ICON_065;
+            t = ICON_BUTTON_A_PRESSED;
         }
         icon = t;
         break;
     case 0x200:
-        t = ICON_066;
+        t = ICON_BUTTON_B;
         if (idx < cur) {
-            t = ICON_067;
+            t = ICON_BUTTON_B_PRESSED;
         }
         icon = t;
         break;
     case 0x400:
-        t = ICON_068;
+        t = ICON_BUTTON_X;
         if (idx < cur) {
-            t = ICON_069;
+            t = ICON_BUTTON_X_PRESSED;
         }
         icon = t;
         break;
     case 0x800:
-        t = ICON_06A;
+        t = ICON_BUTTON_Y;
         if (idx < cur) {
-            t = ICON_06B;
+            t = ICON_BUTTON_Y_PRESSED;
         }
         icon = t;
         break;
     case 0x40:
-        t = ICON_07E;
+        t = ICON_TRIGGER_L;
         if (idx < cur) {
-            t = ICON_07F;
+            t = ICON_TRIGGER_L_PRESSED;
         }
         icon = t;
         break;
     case 0x20:
-        t = ICON_080;
+        t = ICON_TRIGGER_R;
         if (idx < cur) {
-            t = ICON_081;
+            t = ICON_TRIGGER_R_PRESSED;
         }
         icon = t;
         break;
     case 0x10:
-        t = ICON_082;
+        t = ICON_TRIGGER_Z;
         if (idx < cur) {
-            t = ICON_083;
+            t = ICON_TRIGGER_Z_PRESSED;
         }
         icon = t;
         break;

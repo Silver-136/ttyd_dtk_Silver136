@@ -367,12 +367,12 @@ static void actionCommandDisp(f32 x, f32 y) {
             numIcons = 2;
             break;
         case 13:
-            pressedA = ICON_07C;
-            idleA = ICON_076;
+            pressedA = ICON_STICK_UP;
+            idleA = ICON_STICK_DOWN;
             break;
         case 14:
-            pressedA = ICON_078;
-            idleA = ICON_07A;
+            pressedA = ICON_STICK_LEFT;
+            idleA = ICON_STICK_RIGHT;
             break;
     }
     phase = ac->disp.blinkTimer / 7;

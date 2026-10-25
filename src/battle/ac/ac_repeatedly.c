@@ -345,26 +345,26 @@ static void actionCommandDisp(f32 x, f32 y) {
     camGetPtr(CAMERA_2D);
     if (acw->params[0] != 16) {
         switch (r->btn0) {
-            case 0x100:
-                icon1 = ICON_065;
-                icon2 = ICON_064;
+            case PAD_BUTTON_A:
+                icon1 = ICON_BUTTON_A_PRESSED;
+                icon2 = ICON_BUTTON_A;
                 break;
-            case 0x200:
-                icon1 = ICON_067;
-                icon2 = ICON_066;
+            case PAD_BUTTON_B:
+                icon1 = ICON_BUTTON_B_PRESSED;
+                icon2 = ICON_BUTTON_B;
                 break;
-            case 0x400:
-                icon1 = ICON_069;
-                icon2 = ICON_068;
+            case PAD_BUTTON_X:
+                icon1 = ICON_BUTTON_X_PRESSED;
+                icon2 = ICON_BUTTON_X;
                 break;
-            case 0x800:
-                icon1 = ICON_06B;
-                icon2 = ICON_06A;
+            case PAD_BUTTON_Y:
+                icon1 = ICON_BUTTON_Y_PRESSED;
+                icon2 = ICON_BUTTON_Y;
                 break;
-            case 0x40000:
+            case BATTLE_PAD_STICK_LEFT:
             default:
-                icon1 = ICON_078;
-                icon2 = ICON_079;
+                icon1 = ICON_STICK_LEFT;
+                icon2 = ICON_STICK_NEUTRAL;
                 break;
         }
         if ((d->frame / 7 & 1) == 1) {
@@ -384,16 +384,16 @@ static void actionCommandDisp(f32 x, f32 y) {
             BOOL match;
             u16 a, b, icon;
             if (i == 0) {
-                a = ICON_065;
-                b = ICON_064;
+                a = ICON_BUTTON_A_PRESSED;
+                b = ICON_BUTTON_A;
                 if (r->btn0 == r->btn1) {
                     match = TRUE;
                 } else {
                     match = FALSE;
                 }
             } else {
-                a = ICON_067;
-                b = ICON_066;
+                a = ICON_BUTTON_B_PRESSED;
+                b = ICON_BUTTON_B;
                 if (r->btn0 == r->btn2) {
                     match = TRUE;
                 } else {

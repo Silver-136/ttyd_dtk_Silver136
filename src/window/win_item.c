@@ -758,14 +758,14 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
         width = 250.0f + xo;
         winTexSet(0x17, (Vec){width, 20.0f + (18.0f + (110.0f + yo)), 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, white2);
         winIconInit();
-        winIconSet(ICON_07E, (Vec){width, 20.0f + (113.0f + yo), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
+        winIconSet(ICON_TRIGGER_L, (Vec){width, 20.0f + (113.0f + yo), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     }
     if (cnt > w->item.page[w->item.mode] * 10 + 10) {
         winTexInit(*w->res->data);
         w3 = 250.0f + xo;
         winTexSet(0x17, (Vec){w3, 20.0f + ((yo - 90.0f) - 15.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2);
         winIconInit();
-        winIconSet(ICON_080, (Vec){w3, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
+        winIconSet(ICON_TRIGGER_R, (Vec){w3, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white2);
     }
     w2 = 0.7f * (f32)(u32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
     winFontInit();

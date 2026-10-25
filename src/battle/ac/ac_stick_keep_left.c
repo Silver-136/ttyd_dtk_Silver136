@@ -295,7 +295,7 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
             Vec p = {0.0f, 0.0f, 0.0f};
             p.x = -200.0f + x;
             p.y = 70.0f + y;
-            iconDispGx(&p, 0x10, ICON_079, 1.0f);
+            iconDispGx(&p, 0x10, ICON_STICK_NEUTRAL, 1.0f);
             break;
         }
         case 0x3E8:
@@ -303,12 +303,12 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, 0x10, ICON_078, 1.0f);
+                iconDispGx(&p, 0x10, ICON_STICK_LEFT, 1.0f);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, 0x10, ICON_079, 1.0f);
+                iconDispGx(&p, 0x10, ICON_STICK_NEUTRAL, 1.0f);
             }
             break;
         default:
@@ -316,12 +316,12 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, 0x10, ICON_078, 1.0f);
+                iconDispGx(&p, 0x10, ICON_STICK_LEFT, 1.0f);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = -200.0f + x;
                 p.y = 70.0f + y;
-                iconDispGx(&p, 0x10, ICON_079, 1.0f);
+                iconDispGx(&p, 0x10, ICON_STICK_NEUTRAL, 1.0f);
             }
             break;
     }
