@@ -1480,11 +1480,11 @@ void fbatChangeMode(s16 mode) {
     gp->fbatData->mode = mode;
 }
 
-void fbatSetAttackAnnounce(s32 a1) {
+void fbatSetAttackAnnounce(s32 hitKind) {
     FirstStrikeInfo* firstStrike = &gp->fbatData->firstStrike;
 
     firstStrike->enabled = FALSE;
-    firstStrike->hitKind = a1;
+    firstStrike->hitKind = hitKind;
     firstStrike->timer = 0;
     switch (firstStrike->hitKind) {
         case 0x20000:

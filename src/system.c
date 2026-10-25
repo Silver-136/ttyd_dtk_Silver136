@@ -82,15 +82,15 @@ f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2) {
     return sqrtf((xdiff * xdiff) + (ydiff * ydiff));
 }
 
-f32 compAngle(f32 a1, f32 a2) {
-    if (fabsf(a2 - a1) >= 180.0f) {
-        if (a2 < a1) {
-            a2 += 360.0f;
+f32 compAngle(f32 from, f32 to) {
+    if (fabsf(to - from) >= 180.0f) {
+        if (to < from) {
+            to += 360.0f;
         } else {
-            a2 -= 360.0f;
+            to -= 360.0f;
         }
     }
-    return a2 - a1;
+    return to - from;
 }
 
 f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
@@ -667,14 +667,14 @@ void sincosf(f32* ret_sin, f32* ret_cos, f32 degree) {
     *ret_cos = -(f32)cos(result);
 }
 
-void movePos(float* ret_sin, float* ret_cos, f32 a3, f32 degree) {
+void movePos(float* ret_sin, float* ret_cos, f32 dist, f32 degree) {
     f32 result1, result2, radian;
 
     radian = (TWO_PI * degree) / 360.0f;
     result1 = (f32)sin(radian);
     result2 = (f32)cos(radian);
-    *ret_sin = (a3 * result1) + *ret_sin;
-    *ret_cos = -((a3 * result2) - *ret_cos);
+    *ret_sin = (dist * result1) + *ret_sin;
+    *ret_cos = -((dist * result2) - *ret_cos);
 }
 
 s32 irand(s32 scalar) {
@@ -739,17 +739,17 @@ void sysDummyDraw(Mtx mtx) {
     GXTexCoord2f32(0.0f, 0.0f);
 }
 
-f32 getV60FPS(f32 a1, s64 a2, s64 a3) {
-    u64 v4, v5;
+f32 getV60FPS(f32 perFrame, s64 startTick, s64 endTick) {
+    u64 startMs, endMs;
 
-    v4 = (u64)OSTicksToMilliseconds(a2);
-    v5 = (u64)OSTicksToMilliseconds(a3);
-    if (v5 >= v4) {
-        v5 = v5 - v4;
+    startMs = (u64)OSTicksToMilliseconds(startTick);
+    endMs = (u64)OSTicksToMilliseconds(endTick);
+    if (endMs >= startMs) {
+        endMs = endMs - startMs;
     } else {
-        v5 = (-1 - v4) + v5;
+        endMs = (-1 - startMs) + endMs;
     }
-    return ((60.0f * a1) * (f32)v5) / 1000.0f;
+    return ((60.0f * perFrame) * (f32)endMs) / 1000.0f;
 }
 
 f32 sysFrame2SecFloat(f32 frame) {

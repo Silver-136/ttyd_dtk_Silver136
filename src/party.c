@@ -332,10 +332,10 @@ void partyStop(PartyEntry* party) {
     partyChgRunMode(party, 0);
 }
 
-void partySetForceMove(PartyEntry* party, s32 a2, f32 a3, f32 a4) {
-    party->targetDir = a3;
-    party->forceMoveFrames = a2;
-    party->moveSpeed = a4;
+void partySetForceMove(PartyEntry* party, s32 frames, f32 dir, f32 speed) {
+    party->targetDir = dir;
+    party->forceMoveFrames = frames;
+    party->moveSpeed = speed;
     partyChgRunMode(party, 9);
     partyChgMot(party, 1);
 }

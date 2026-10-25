@@ -402,10 +402,10 @@ void L_smartReInit(void) {
 }
 
 #pragma dont_inline on
-void smartAutoFree(s32 a1) {
+void smartAutoFree(s32 allocType) {
     smartEntry* entry;
     smartEntry* next;
-    u16 type = a1;
+    u16 type = allocType;
 
     for (entry = wp->allocHead; entry; entry = next) {
         next = entry->next;
@@ -413,7 +413,7 @@ void smartAutoFree(s32 a1) {
             smartFree(entry);
         }
     }
-    if (a1 == 3) {
+    if (allocType == 3) {
         for (entry = wp->allocHead; entry; entry = next) {
             next = entry->next;
             if ((s32)entry->type == 4) {

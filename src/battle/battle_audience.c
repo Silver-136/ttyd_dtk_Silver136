@@ -3773,14 +3773,14 @@ void BattleAudienceSoundPakkunEat(s32 index) {
     AUD_SOUND_START(sound, -1, 0);
 }
 
-void BattleAudienceSoundSetVol(s32 index, u8 a2, s32 a3) {
+void BattleAudienceSoundSetVol(s32 index, u8 vol, s32 length) {
     BattleAudienceSound* sound;
 
     sound = BattleAudienceSoundGetPtr(index);
     sound->mFadeStartVolumeMultiplier = sound->mVolumeMultiplier;
-    sound->mFadeEndVolumeMultiplier = a2;
+    sound->mFadeEndVolumeMultiplier = vol;
     sound->mForceFadeTimer = 0;
-    sound->mForceFadeLength = a3;
+    sound->mForceFadeLength = length;
     sound->mFadeoutTime = 0;
 }
 

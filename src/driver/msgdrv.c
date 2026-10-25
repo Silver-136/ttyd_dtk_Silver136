@@ -1434,14 +1434,14 @@ const char* msgSearch(const char* tag) {
     return ErrMessage[gp->language];
 }
 
-BOOL _ismbblead(u32 a1) {
+BOOL _ismbblead(u32 c) {
 #ifdef VERSION_G8ME01
     if ((u32)gp->language != 0) {
         return FALSE;
     }
 #endif
-    a1 = (u8)a1;
-    if ((a1 >= 0x81 && a1 <= 0x9F) || (a1 >= 0xE0 && a1 <= 0xFC)) {
+    c = (u8)c;
+    if ((c >= 0x81 && c <= 0x9F) || (c >= 0xE0 && c <= 0xFC)) {
         return TRUE;
     }
     return FALSE;

@@ -756,8 +756,8 @@ void SoundCloseCover(void) {
     }
 }
 
-inline SoundGroup* SoundSongGetGroup(u8 a1) {
-    u16 temp = a1;
+inline SoundGroup* SoundSongGetGroup(u8 groupIndex) {
+    u16 temp = groupIndex;
     SoundGroup* group;
 
     for (group = sound.groups;; group = group->next) {
@@ -771,7 +771,7 @@ inline SoundGroup* SoundSongGetGroup(u8 a1) {
     return group;
 }
 
-void SoundSongPlayCh(s32 chan, u32 a2) {
+void SoundSongPlayCh(s32 chan, u32 groupInfo) {
     SoundSong* song;
     SoundGroup* group;
 
@@ -780,11 +780,11 @@ void SoundSongPlayCh(s32 chan, u32 a2) {
         sndSeqStop(song->seqId);
     }
     song->vol = 127;
-    group = SoundSongGetGroup((u8)a2);
+    group = SoundSongGetGroup((u8)groupInfo);
     if (group) {
         song->group = group;
-        group->groupId = (SND_GROUPID)((a2 >> 16) & 0xFF);
-        group->songId = (SND_SONGID)((a2 >> 8) & 0xFF);
+        group->groupId = (SND_GROUPID)((groupInfo >> 16) & 0xFF);
+        group->songId = (SND_SONGID)((groupInfo >> 8) & 0xFF);
         song->mask = 0xFFFFFFFF;
         song->seqId = sndSeqPlayEx(group->groupId, group->songId, group->arrfile, 0, 0);
         sndSeqVolume((u8)song->vol, 0, song->seqId, 0);
@@ -864,12 +864,12 @@ inline void SoundEfxMuteCh(s32 chan) {
     }
 }
 
-inline s32 SoundEfxStopAll(u8 a1) {
+inline s32 SoundEfxStopAll(u8 maxPriority) {
     s32 chan;
     SoundEffect* sfx = sound.effects;
 
     for (chan = 0; chan < 40; chan++, sfx++) {
-        if (sfx->priority <= a1) {
+        if (sfx->priority <= maxPriority) {
             SoundEfxMuteCh(chan);
             return chan;
         }
@@ -898,7 +898,7 @@ inline u32 SoundEfxCheckPlay(s32 chan) {
     return TRUE;
 }
 
-s32 SoundEfxPlayEx(SND_FXID fid, u8 a2, u8 vol, u8 pan) {
+s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan) {
     SoundEffect* sfx;
     s32 chan;
 
@@ -911,7 +911,7 @@ s32 SoundEfxPlayEx(SND_FXID fid, u8 a2, u8 vol, u8 pan) {
     if (chan >= 40u) {
         sfx = sound.effects;
         for (chan = 0; chan < 40; chan++, sfx++) {
-            if (sfx->priority <= a2) {
+            if (sfx->priority <= priority) {
                 SoundEfxMuteCh(chan);
                 break;
             }
@@ -934,7 +934,7 @@ s32 SoundEfxPlayEx(SND_FXID fid, u8 a2, u8 vol, u8 pan) {
         return -1;
     }
     sfx->flags = 1;
-    sfx->priority = a2;
+    sfx->priority = priority;
     sfx->vol = vol;
     sfx->pan = pan;
     sfx->span = 0;

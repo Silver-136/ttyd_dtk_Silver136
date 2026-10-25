@@ -115,7 +115,7 @@ void windowReInit(void) {
     w[6].userdata = NULL;
 }
 
-s32 windowEntry(u16 a1) {
+s32 windowEntry(u16 priority) {
     WindowEntry* entry;
     int i;
 
@@ -124,7 +124,7 @@ s32 windowEntry(u16 a1) {
         if (!(entry->flags & WINDOW_FLAG_ACTIVE)) {
             memset(entry, 0, sizeof(WindowEntry));
             entry->flags = WINDOW_FLAG_ACTIVE;
-            entry->priority = a1;
+            entry->priority = priority;
             return i;
         }
     }
