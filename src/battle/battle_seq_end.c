@@ -223,7 +223,6 @@ void _audience_Whistle_control(void);
 void btlseqEnd_DispInit(BattleWork* wp);
 void btlseqEnd_DispMain(CameraId camId, void* param);
 
-#define SS(v) BattleSetSeq(wp, (BattleSequence)7, (v))
 void _GetExpIcon_End(SeqEndWork* work);
 EffectEntry* effPointGetEntry(s32 a, s32 exp, f32 x, f32 y, f32 z, s32 c);
 
@@ -235,7 +234,7 @@ void btlseqEnd(BattleWork* wp) {
     PouchData* pouch = pouchGetPtr();
 
     _audience_Whistle_control();
-    switch (BattleGetSeq(wp, (BattleSequence)7)) {
+    switch (BattleGetSeq(wp, SEQ_END)) {
     case 0x7000000: {
         s32 marioBelong;
         s32 enemyBelong;
@@ -261,20 +260,20 @@ void btlseqEnd(BattleWork* wp) {
         switch (BattleInformationGetResult(info)) {
         case 1:
             if (fbatGetPointer()->postBattleEvent != NULL) {
-                SS(0x7000003);
+                BattleSetSeq(wp, SEQ_END, 0x7000003);
                 return;
             }
             _check_audience_battle_end_exec();
-            SS(0x7000005);
+            BattleSetSeq(wp, SEQ_END, 0x7000005);
             _BattleMarioKouraDelete();
             break;
         case 3:
-            SS(0x7000001);
+            BattleSetSeq(wp, SEQ_END, 0x7000001);
             break;
         case 4:
         default:
             _ExecAllUnitBattleEndEvent();
-            SS(0x700001D);
+            BattleSetSeq(wp, SEQ_END, 0x700001D);
             BattleAudienceSoundSetVolAll(0, 30);
             break;
         }
@@ -291,7 +290,7 @@ void btlseqEnd(BattleWork* wp) {
         FieldBattleData* fb = fbatGetPointer();
         EventEntry* e = evtEntry(fb->postBattleEvent, 10, 0);
         fb->postBattleEventId = e->eventId;
-        SS(0x7000004);
+        BattleSetSeq(wp, SEQ_END, 0x7000004);
         return;
     }
     case 0x7000004: {
@@ -300,11 +299,11 @@ void btlseqEnd(BattleWork* wp) {
         if (evtCheckID(fb->postBattleEventId)) break;
         if (!BattleWaitAllActiveEvtEnd(wp)) break;
         if (fb->postBattleMode) {
-            BattleSetSeq(wp, (BattleSequence)3, 0x3000001);
-            BattleSetSeq(wp, (BattleSequence)0, 2);
+            BattleSetSeq(wp, SEQ_TURN, 0x3000001);
+            BattleSetSeq(wp, SEQ_UNKNOWN, 2);
             return;
         }
-        SS(0x7000005);
+        BattleSetSeq(wp, SEQ_END, 0x7000005);
         _BattleMarioKouraDelete();
         nw = BattleAlloc(0x2AC);
         wp->seqEndWork = (BattleSeqEndWork*)nw;
@@ -319,7 +318,7 @@ void btlseqEnd(BattleWork* wp) {
         btl_camera_set_posoffset(0, 0.0f, 0.0f, 0.0f);
         fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
         psndBGMOff(0x201);
-        SS(0x7000002);
+        BattleSetSeq(wp, SEQ_END, 0x7000002);
         break;
     }
     case 0x7000002:
@@ -328,7 +327,7 @@ void btlseqEnd(BattleWork* wp) {
             seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
             break;
         }
-        SS(0x700001F);
+        BattleSetSeq(wp, SEQ_END, 0x700001F);
         break;
     case 0x7000005: {
         BattleUnit* mario = BattleGetMarioPtr(wp);
@@ -355,7 +354,7 @@ void btlseqEnd(BattleWork* wp) {
             p2->attackEventId = e->eventId;
             break;
         }
-        SS(0x7000006);
+        BattleSetSeq(wp, SEQ_END, 0x7000006);
     }
     case 0x7000006: {
         BattleUnit* mario;
@@ -374,15 +373,15 @@ void btlseqEnd(BattleWork* wp) {
             e = evtEntry(marioAttackEvent_MajinaiExpUp, 10, 0);
             e->unitId = mario->unitId;
             mario->attackEventId = e->eventId;
-            SS(0x7000007);
+            BattleSetSeq(wp, SEQ_END, 0x7000007);
             break;
         }
-        SS(0x7000008);
+        BattleSetSeq(wp, SEQ_END, 0x7000008);
         break;
     }
     case 0x7000007:
         if (!BattleWaitAllActiveEvtEnd(wp)) break;
-        SS(0x7000008);
+        BattleSetSeq(wp, SEQ_END, 0x7000008);
         break;
     case 0x7000008: {
         s32 flag;
@@ -411,7 +410,7 @@ void btlseqEnd(BattleWork* wp) {
             btl_camera_set_mode(0, 0x12);
         }
         btl_camera_set_posoffset(0, 0.0f, 0.0f, 0.0f);
-        SS(0x7000009);
+        BattleSetSeq(wp, SEQ_END, 0x7000009);
         BattleAudienceSoundCheer(0x3C, 0x3C);
         BattleAudienceSoundClap(-1, 0);
         BattleAudienceSoundWhistle();
@@ -433,7 +432,7 @@ void btlseqEnd(BattleWork* wp) {
     case 0x7000009:
         work->timer = work->timer - 1;
         if (work->timer > 0) break;
-        SS(0x700000A);
+        BattleSetSeq(wp, SEQ_END, 0x700000A);
         break;
     case 0x700000A:
         if (work->exp > 0) {
@@ -454,14 +453,14 @@ void btlseqEnd(BattleWork* wp) {
             if (!work->expEffect) {
                 work->expEffect = ((EffectEntry* (*)(f32, f32, f32, s32, s32, s32))effPointGetEntry)(0.0f, 90.0f, 0.0f, 0, work->exp, 0);
             }
-            SS(0x700000B);
+            BattleSetSeq(wp, SEQ_END, 0x700000B);
             break;
         }
         if (!(wp->flags & 0x400000)) {
-            SS(0x7000019);
+            BattleSetSeq(wp, SEQ_END, 0x7000019);
             break;
         }
-        SS(0x700000E);
+        BattleSetSeq(wp, SEQ_END, 0x700000E);
         break;
     case 0x700000B:
         if (work->expDisp > 0) {
@@ -492,14 +491,14 @@ void btlseqEnd(BattleWork* wp) {
         } else {
             work->timer = 0x14;
         }
-        SS(0x700000C);
+        BattleSetSeq(wp, SEQ_END, 0x700000C);
         break;
     case 0x700000C:
         work->timer = work->timer - 1;
         if (work->timer > 0) break;
         work->timer = 0x3C;
         _GetExpIcon_End(work);
-        SS(0x700000D);
+        BattleSetSeq(wp, SEQ_END, 0x700000D);
         effSoftDelete(work->expEffect);
         if (work->levelUp) {
             work->timer = 0x3C;
@@ -511,7 +510,7 @@ void btlseqEnd(BattleWork* wp) {
         work->timer = work->timer - 1;
         if (work->timer > 0) break;
         work->expEffect = NULL;
-        SS(0x700000E);
+        BattleSetSeq(wp, SEQ_END, 0x700000E);
         break;
     case 0x700000E:
         if (wp->flags & 0x400000) {
@@ -519,18 +518,18 @@ void btlseqEnd(BattleWork* wp) {
             EventEntry* e = evtEntry(_event_MajinaiEnd, 10, 0);
             e->unitId = mario->unitId;
             mario->attackEventId = e->eventId;
-            SS(0x700000F);
+            BattleSetSeq(wp, SEQ_END, 0x700000F);
             break;
         }
-        SS(0x7000010);
+        BattleSetSeq(wp, SEQ_END, 0x7000010);
         break;
     case 0x700000F:
         if (!BattleWaitAllActiveEvtEnd(wp)) break;
         if (work->exp > 0) {
-            SS(0x7000010);
+            BattleSetSeq(wp, SEQ_END, 0x7000010);
             break;
         }
-        SS(0x7000019);
+        BattleSetSeq(wp, SEQ_END, 0x7000019);
         break;
     case 0x7000010:
         work->flags &= ~1;
@@ -541,10 +540,10 @@ void btlseqEnd(BattleWork* wp) {
             work->timer = 0;
             BattleAudience_WinSetActive(0);
             BattleBreakSlot_HideReel();
-            SS(0x7000011);
+            BattleSetSeq(wp, SEQ_END, 0x7000011);
             break;
         }
-        SS(0x7000019);
+        BattleSetSeq(wp, SEQ_END, 0x7000019);
         break;
     case 0x7000011:
         if (work->timer == 0) {
@@ -559,7 +558,7 @@ void btlseqEnd(BattleWork* wp) {
         work->evtId = 0;
         BattleStatusWindowSystemOn();
         BattleStatusWindowEventOn();
-        SS(0x7000012);
+        BattleSetSeq(wp, SEQ_END, 0x7000012);
         break;
     case 0x7000012: {
         s32 sel = work->selected;
@@ -617,7 +616,7 @@ void btlseqEnd(BattleWork* wp) {
                 work->unk28 = 0;
                 work->cursorCount = 2;
                 work->flags &= ~0x20;
-                SS(0x7000014);
+                BattleSetSeq(wp, SEQ_END, 0x7000014);
                 e = evtEntry(_jump_event, 10, 0);
                 work->evtId = e->eventId;
             }
@@ -639,22 +638,22 @@ void btlseqEnd(BattleWork* wp) {
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
             work->flags &= ~0x10;
-            SS(0x7000012);
+            BattleSetSeq(wp, SEQ_END, 0x7000012);
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
             if (work->cursor == 0) {
                 work->flags &= ~0x18;
-                SS(0x7000015);
+                BattleSetSeq(wp, SEQ_END, 0x7000015);
                 break;
             }
             work->flags &= ~0x10;
-            SS(0x7000012);
+            BattleSetSeq(wp, SEQ_END, 0x7000012);
         }
         break;
     case 0x7000014:
         if (evtCheckID(work->evtId)) break;
         work->evtId = 0;
-        SS(0x7000015);
+        BattleSetSeq(wp, SEQ_END, 0x7000015);
         break;
     case 0x7000015: {
         BattleUnit* party;
@@ -709,7 +708,7 @@ void btlseqEnd(BattleWork* wp) {
         BtlUnit_SetBodyAnim(BattleGetMarioPtr(wp), "M_V_2");
         BattleAudienceSoundCheer(0xB4, 0x28);
         work->timer = 0xB4;
-        SS(0x7000016);
+        BattleSetSeq(wp, SEQ_END, 0x7000016);
         mario = BattleGetMarioPtr(wp);
         party = BattleGetPartyPtr(wp);
         if (mario) {
@@ -730,22 +729,22 @@ void btlseqEnd(BattleWork* wp) {
         }
         if (work->timer > 0) break;
         if (work->confettiEvtId) evtDeleteID(work->confettiEvtId);
-        SS(0x7000017);
+        BattleSetSeq(wp, SEQ_END, 0x7000017);
         break;
     case 0x7000017: {
         EventEntry* e;
         if (!_get_rank_data(pouch->level)) {
-            SS(0x700001C);
+            BattleSetSeq(wp, SEQ_END, 0x700001C);
             break;
         }
         pouch->rank = _get_rank_data(pouch->level)->rankId;
         e = evtEntry(_rank_up_event, 10, 0);
         work->rankUpEvtId = e->eventId;
-        SS(0x7000018);
+        BattleSetSeq(wp, SEQ_END, 0x7000018);
     }
     case 0x7000018:
         if (evtCheckID(work->rankUpEvtId)) break;
-        SS(0x700001C);
+        BattleSetSeq(wp, SEQ_END, 0x700001C);
         break;
     case 0x7000019: {
         s32 ok = 1;
@@ -769,7 +768,7 @@ void btlseqEnd(BattleWork* wp) {
         }
         BtlUnit_SetBodyAnim(BattleGetMarioPtr(wp), "M_V_1");
         work->timer = 0x3C;
-        SS(0x700001A);
+        BattleSetSeq(wp, SEQ_END, 0x700001A);
         break;
     }
     case 0x700001A:
@@ -781,15 +780,15 @@ void btlseqEnd(BattleWork* wp) {
                 BtlUnit_SetBodyAnimType(BattleGetPartyPtr(wp), 0x2A);
             }
         }
-        SS(0x700001B);
+        BattleSetSeq(wp, SEQ_END, 0x700001B);
         break;
     case 0x700001B:
-        SS(0x700001C);
+        BattleSetSeq(wp, SEQ_END, 0x700001C);
         break;
     case 0x700001C: {
         FieldBattleData* fb;
         NpcEntry* p;
-        SS(0x700001D);
+        BattleSetSeq(wp, SEQ_END, 0x700001D);
         BattleAudienceSoundSetVolAll(0, 30);
         fb = fbatGetPointer();
         p = fb->target;
@@ -798,12 +797,12 @@ void btlseqEnd(BattleWork* wp) {
     }
     case 0x700001D: {
         fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
-        SS(0x700001E);
+        BattleSetSeq(wp, SEQ_END, 0x700001E);
         psndBGMOff(0x201);
     }
     case 0x700001E:
         if (!fadeIsFinish()) break;
-        SS(0x700001F);
+        BattleSetSeq(wp, SEQ_END, 0x700001F);
         break;
     case 0x700001F: {
         BattleUnit* party = BattleGetPartyPtr(wp);
@@ -823,7 +822,7 @@ void btlseqEnd(BattleWork* wp) {
         BattleSetMarioParamToFieldBattle(wp);
         BattleFree(wp->seqEndWork);
         wp->seqEndWork = NULL;
-        BattleSetSeq(wp, (BattleSequence)0, 4);
+        BattleSetSeq(wp, SEQ_UNKNOWN, 4);
         mw = marioGetPtr();
         mw->dispFlags &= ~1;
         if (kind) marioPartyEntry((PartyId)id); else marioPartyKill();
