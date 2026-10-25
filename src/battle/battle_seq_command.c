@@ -1220,8 +1220,8 @@ s32 BattleCommandInput(BattleWork* work) {
             targets = &wp->weaponTargets;
             _btlcmd_GetCursorPtr(cmd, wtype, &cursor);
             t = &targets->targets[targets->targetIndices[targets->currentTarget]];
-            unitIdx = (0, t->unitIdx);
-            partIdx = (0, t->partIdx);
+            unitIdx = t->unitIdx;
+            partIdx = t->partIdx;
             BattleSamplingEnemyUpdate(targets);
             for (i = 0; i < targets->numTargets; i++) {
                 t = &targets->targets[targets->targetIndices[i]];

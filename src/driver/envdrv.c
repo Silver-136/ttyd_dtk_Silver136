@@ -1085,7 +1085,7 @@ void envAddTev(s32 type, MapTevCallbackInfo *info) {
 
         case 3:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_CPREV, GX_CC_ZERO, GX_CC_TEXC, GX_CC_ZERO);
-            GXSetTevAlphaIn((0, (GXTevStageID) stage), GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
+            GXSetTevAlphaIn((GXTevStageID)stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
             ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.5f;
             envLoadTex(0, map);
             GXSetTexCoordGen2((GXTexCoordID) coord, GX_TG_MTX2x4, GX_TG_NRM, texmtx_tbl[map], GX_FALSE, GX_PTIDENTITY);
@@ -1098,7 +1098,7 @@ void envAddTev(s32 type, MapTevCallbackInfo *info) {
         case 4:
             GXSetTevColorIn((GXTevStageID) stage, GX_CC_CPREV, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
             GXSetTevAlphaIn((GXTevStageID) stage, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-            ((EnvTexMtxWork*)wp->texMtxWork)->scale = (0, 0.5f);
+            ((EnvTexMtxWork*)wp->texMtxWork)->scale = 0.5f;
             ((EnvTexMtxWork*)wp->texMtxWork)->rotY = 45.0f;
             ((EnvTexMtxWork*)wp->texMtxWork)->rotX = 45.0f;
             envLoadTex(1, map);

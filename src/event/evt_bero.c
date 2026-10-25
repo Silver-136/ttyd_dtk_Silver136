@@ -556,7 +556,7 @@ s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall) {
             tmp.y = hy;
         }
         tmp2 = tmp;
-        tmp2.x += (30.0f + len) * ((0, (f32) sin(rad)));
+        tmp2.x += (30.0f + len) * (f32)sin(rad);
         tmp2.z += (30.0f + len) * (-((f32) cos((6.2831855f * deg) / 360.0f)));
         start = tmp;
         end = tmp2;

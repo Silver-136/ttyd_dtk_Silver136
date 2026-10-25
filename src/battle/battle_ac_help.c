@@ -47,7 +47,7 @@ void _ac_help_disp(CameraId cameraId, void *param) {
     }
     msgs[0] = msgSearch(*help);
     if (!msgs[0]) {
-        msgs[0] = (0, "めっせーじがみつかりません");
+        msgs[0] = "めっせーじがみつかりません";
     }
     msgs[1] = msgs[0];
     width = FontGetMessageWidthLine(msgs[1], &lines);

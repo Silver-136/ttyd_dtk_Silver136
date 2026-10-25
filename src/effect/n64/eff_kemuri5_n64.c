@@ -74,7 +74,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->scale.y = 1.0f;
         work->scale.z = 1.0f;
         work->alpha = 255;
-        work->baseScaleX = 0.03f * (0, (f32)(rand() % 11)) + 1.0f;
+        work->baseScaleX = 0.03f * (f32)(rand() % 11) + 1.0f;
         work->baseScaleY = 0.03f * (f32)(rand() % 11) + 1.7f;
         work->angle = (f32)(rand() % 61);
         work->timer = 30;

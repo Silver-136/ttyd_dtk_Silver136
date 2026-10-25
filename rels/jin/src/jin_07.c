@@ -388,7 +388,7 @@ USER_FUNC(senteresa_okure_move) {
     f32 t2 = 2.0f * t;
     f32 h00 = (1.0f + t2) * u * u;
     f32 h10 = t * u * u;
-    f32 tt = (0, t * t);
+    f32 tt = t * t;
     f32 h11 = (t * t) * (t - 1.0f);
     f32 h01 = (3.0f - t2) * (t * t);
 

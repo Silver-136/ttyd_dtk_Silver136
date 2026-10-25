@@ -1761,7 +1761,7 @@ USER_FUNC(evt_mobj_lock) {
     s32 item;
     f32 rot;
     f32 x, y, z;
-    name = (const char*)evtGetValue(event, ((0, args))[0]);
+    name = (const char*)evtGetValue(event, args[0]);
     item = evtGetValue(event, args[1]);
     x = evtGetFloat(event, args[2]);
     y = evtGetFloat(event, args[3]);
@@ -3392,9 +3392,6 @@ void mobj_koopa_stone_blk(void) {
 }
 
 s32 mobj_koopa_stone_blk_evt(MapObjectEntry* mobj) {
-    "MOBJ_BombRock";
-    "OFF_d_bom";
-    "MOBJ_trap";
     return 0;
 }
 

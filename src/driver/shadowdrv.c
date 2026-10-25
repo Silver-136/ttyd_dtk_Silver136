@@ -327,7 +327,7 @@ void shadowDisp(CameraId cameraId, void* param) {
         GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
         GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
-        GXSetArray(GX_VA_POS, (0, vertex_tbl) , 12);
+        GXSetArray(GX_VA_POS, vertex_tbl, 12);
         GXSetArray(GX_VA_CLR0, color_tbl, 4);
         cylinderShadowDraw(cameraId, param);
         shadowCharShadowDisp_Texture(cameraId, param);

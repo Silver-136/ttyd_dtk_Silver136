@@ -677,7 +677,7 @@ state_end:
     case 5:
         w->pos.y += w->vy;
         w->vy += -0.5f;
-        ((0, w))->s80--;
+        w->s80--;
         if (w->s80 < 0) {
             w->s7c = 8;
             w->pos.y = w->to.y;
@@ -1044,7 +1044,7 @@ state_end:
             }
             break;
         }
-        ((0, w))->s80--;
+        w->s80--;
         if (w->s80 < 0) {
             w->s7c = 30;
             w->pos = w->to;

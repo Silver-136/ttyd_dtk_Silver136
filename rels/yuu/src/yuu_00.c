@@ -1198,7 +1198,7 @@ static USER_FUNC(fall_rtn) {
         }
     }
     for (i = 0; i < monte_p->num; i++) {
-        sfx = (0, (SfxNameWord)"SFX_EVT_GAME_MONTE_COUNT1");
+        sfx = (SfxNameWord)"SFX_EVT_GAME_MONTE_COUNT1";
         m = &monte_p[i];
         switch (m->state) {
             case 0:

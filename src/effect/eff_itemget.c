@@ -207,7 +207,7 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(m19c, m13c, m19c);
     PSMTXConcat(m19c, m16c, m7c);
     cs = (0, (f32)cos(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f));
-    s = (0, (f32)sin(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f));
+    s = (f32)sin(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f);
     PSMTXTrans(m19c, 2.0f * s, 0.0f, -cs * 2.0f);
     PSMTXConcat(m19c, m7c, m7c);
     GXSetTevColor(GX_TEVREG0, white);

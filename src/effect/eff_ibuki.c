@@ -75,7 +75,7 @@ EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
     work->tex[2] = 0.0f;
     work->tex[3] = 0.0f;
     p = work + 1;
-    for (i = 1, (0, delay = 10); i < effect->count; delay += 10, i++, p++) {
+    for (i = 1, delay = 10; i < effect->count; delay += 10, i++, p++) {
         a = 30 - irand(40);
         p->position.x = 0.0f;
         p->position.y = irand(30);

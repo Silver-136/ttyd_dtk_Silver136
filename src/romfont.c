@@ -245,7 +245,7 @@ void romFontMake(void) {
             /* ASCII mode (language != 0): only scan the English table (t != 0). */
             s32 k = 0;
             if (wp->language == 0 || t != 0) {
-                for (k;;) {
+                for (;;) {
                     u32 b = str[k];
                     u16 w = *(u16*)(str + k);
 #ifdef VERSION_G8ME01
@@ -408,7 +408,7 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
     GXSetCurrentMtx(GX_PNMTX0);
 
     // --- walk the formatted string, one 24x24 quad per glyph ---
-    for (i;;) {
+    for (;;) {
         u32 c = buf[i];
         u16 c16 = *(u16*)&buf[i]; // big-endian lead<<8 | trail, for double-byte
 
