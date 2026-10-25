@@ -161,9 +161,9 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {11, damage_fire_explosion_event},
-    {40, avoid_fire_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT, damage_fire_explosion_event},
+    {UNIT_DATA_AVOID_FIRE_EVENT, avoid_fire_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 

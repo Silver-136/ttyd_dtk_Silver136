@@ -137,7 +137,7 @@ BattleDataEntry gesso_right_arm_data_table[] = {
 
 static BattleDataEntry data_table[] = {
     {10, gesso_arm_damage_pose_event},
-    {49, gesso_arm_dead_event},
+    {UNIT_DATA_DEAD_EVENT, gesso_arm_dead_event},
     {0},
 };
 

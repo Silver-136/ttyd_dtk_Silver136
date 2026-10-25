@@ -94,15 +94,15 @@ PoseTableEntry pose_table_mario_stay[] = {
 };
 
 BattleDataEntry data_table_mario[] = {
-    {5, mario_appeal_event},
-    {6, attack_audience_event},
-    {48, btldefaultevt_Dummy},
-    {51, mario_emergency_revival_event},
-    {49, mario_dead_event},
-    {64, mario_win_reaction},
+    {UNIT_DATA_APPEAL_EVENT, mario_appeal_event},
+    {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
+    {UNIT_DATA_EMERGENCY_REVIVAL_EVENT, mario_emergency_revival_event},
+    {UNIT_DATA_DEAD_EVENT, mario_dead_event},
+    {UNIT_DATA_WIN_REACTION_EVENT, mario_win_reaction},
     {7, subset_attack_ready_jump_event},
-    {65, mario_ride_btl_entry_event},
-    {47, btldefaultevt_avoid_counter_event},
+    {UNIT_DATA_RIDE_ENTRY_EVENT, mario_ride_btl_entry_event},
+    {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},
 };
 

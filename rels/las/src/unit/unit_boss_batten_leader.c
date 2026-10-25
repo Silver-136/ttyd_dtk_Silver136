@@ -560,8 +560,8 @@ static PoseTableEntry pose_table_furafura[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {9, damage_sub_event},
-    {49, dead_event},
+    {UNIT_DATA_DAMAGE_SUB_EVENT, damage_sub_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 

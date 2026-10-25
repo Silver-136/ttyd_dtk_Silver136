@@ -271,7 +271,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {49, dead_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
@@ -901,7 +901,7 @@ static PoseTableEntry pose_table_fmario_stay[] = {
 };
 
 static BattleDataEntry data_table_fmario[] = {
-    {49, dead_event_fmario},
+    {UNIT_DATA_DEAD_EVENT, dead_event_fmario},
     {0},
 };
 
@@ -1602,7 +1602,7 @@ static BattleUnitDefenseAttr defence_attr_christine = {0};
 static StatusVulnerability regist_christine = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
 
 static BattleDataEntry data_table_christine[] = {
-    {49, dead_event_christine},
+    {UNIT_DATA_DEAD_EVENT, dead_event_christine},
     {0},
 };
 
@@ -1960,8 +1960,8 @@ static BattleUnitDefense defence_turn_nokotarou = {0};
 static StatusVulnerability regist_nokotarou = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 100, 40, 0, 0, 100, 40, 100, 100, 5};
 
 static BattleDataEntry data_table_nokotarou[] = {
-    {49, dead_event_nokotarou},
-    {13, dmg_turn_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event_nokotarou},
+    {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {0},
 };
 
@@ -2421,7 +2421,7 @@ static BattleUnitDefenseAttr defence_attr_clauda = {0};
 static StatusVulnerability regist_clauda = {40, 50, 100, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
 
 static BattleDataEntry data_table_clauda[] = {
-    {49, dead_event_clauda},
+    {UNIT_DATA_DEAD_EVENT, dead_event_clauda},
     {0},
 };
 
@@ -2647,7 +2647,7 @@ static BattleUnitDefenseAttr defence_attr_yoshi = {0};
 static StatusVulnerability regist_yoshi = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
 
 static BattleDataEntry data_table_yoshi[] = {
-    {49, dead_event_yoshi},
+    {UNIT_DATA_DEAD_EVENT, dead_event_yoshi},
     {0},
 };
 
@@ -2919,7 +2919,7 @@ BattleUnitDefenseAttr defence_attr_vivian = {0};
 StatusVulnerability regist_vivian = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
 
 BattleDataEntry data_table_vivian[] = {
-    {49, dead_event_vivian},
+    {UNIT_DATA_DEAD_EVENT, dead_event_vivian},
     {0},
 };
 
@@ -3129,7 +3129,7 @@ BattleUnitDefenseAttr defence_attr_sanders = {0};
 StatusVulnerability regist_sanders = {40, 50, 40, 100, 40, 100, 100, 100, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
 
 BattleDataEntry data_table_sanders[] = {
-    {49, dead_event_sanders},
+    {UNIT_DATA_DEAD_EVENT, dead_event_sanders},
     {0},
 };
 
@@ -3336,7 +3336,7 @@ BattleUnitDefenseAttr defence_attr_chuchurina = {0};
 StatusVulnerability regist_chuchurina = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
 
 BattleDataEntry data_table_chuchurina[] = {
-    {49, dead_event_chuchurina},
+    {UNIT_DATA_DEAD_EVENT, dead_event_chuchurina},
     {0},
 };
 

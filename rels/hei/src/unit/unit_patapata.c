@@ -167,8 +167,8 @@ static PoseTableEntry pose_table_patapata[] = {
 };
 
 static BattleDataEntry data_table_patapata[] = {
-    {14, dmg_fall_event},
-    {48, patapata_dmg_first_attack_pos},
+    {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patapata_dmg_first_attack_pos},
     {0},
 };
 
@@ -431,8 +431,8 @@ static PoseTableEntry pose_table_turn[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {13, dmg_turn_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 

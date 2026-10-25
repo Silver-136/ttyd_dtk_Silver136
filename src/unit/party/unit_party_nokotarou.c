@@ -123,17 +123,17 @@ PoseTableEntry pose_table_nokotarou_turn[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {5, nokotarou_appeal_event},
-    {6, attack_audience_event},
+    {UNIT_DATA_APPEAL_EVENT, nokotarou_appeal_event},
+    {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
     {4, change_party_spawn_init_event},
-    {13, dmg_turn_event},
-    {1, __makeTechMenuFunc},
+    {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
+    {UNIT_DATA_TECH_MENU_FUNC, __makeTechMenuFunc},
     {2, wakeup_event},
-    {48, btldefaultevt_Dummy},
-    {64, party_win_reaction},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
+    {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
     {7, subset_attack_ready_jump_event},
     {67, nokotarou_revive_event},
-    {47, btldefaultevt_avoid_counter_event},
+    {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},
 };
 
@@ -1314,7 +1314,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
             CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
             CALL(evt_btl_camera_off_posoffset_manual, 0)
             WAIT_MS(500)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 59)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_KOURA_OPEN_EVENT)
             WAIT_FRAMES(60)
         END_IF
         CALL(btlevtcmd_ResetFaceDirection, -2)

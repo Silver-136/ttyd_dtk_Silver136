@@ -439,13 +439,13 @@ void btlseqEnd(BattleWork* wp) {
         if (work->exp > 0) {
             BattleUnit* mario = BattleGetMarioPtr(wp);
             BattleUnit* party = BattleGetPartyPtr(wp);
-            EventEntry* e = evtEntry(BtlUnit_GetData(mario, 0x40), 10, 0);
+            EventEntry* e = evtEntry(BtlUnit_GetData(mario, UNIT_DATA_WIN_REACTION_EVENT), 10, 0);
             if (e) {
                 e->unitId = mario->unitId;
                 mario->attackEventId = e->eventId;
             }
             if (party) {
-                e = evtEntry(BtlUnit_GetData(party, 0x40), 10, 0);
+                e = evtEntry(BtlUnit_GetData(party, UNIT_DATA_WIN_REACTION_EVENT), 10, 0);
                 if (e) {
                     e->unitId = party->unitId;
                     party->attackEventId = e->eventId;
@@ -849,7 +849,7 @@ void _ExecAllUnitBattleEndEvent(void) {
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
-            data = BtlUnit_GetData(unit, 0x3F);
+            data = BtlUnit_GetData(unit, UNIT_DATA_BATTLE_END_EVENT);
             if (data) {
                 evt = evtEntry(data, 10, 0);
                 evt->unitId = unit->unitId;

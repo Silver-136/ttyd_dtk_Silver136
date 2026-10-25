@@ -145,8 +145,8 @@ static PoseTableEntry pose_table_hold[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {37, avoid_counter_thorn_head_event},
-    {48, dmg_first_attack_pos_event},
+    {UNIT_DATA_AVOID_THORN_HEAD_EVENT, avoid_counter_thorn_head_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos_event},
     {0},
 };
 

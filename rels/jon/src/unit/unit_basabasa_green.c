@@ -189,7 +189,7 @@ static BattleDataEntry data_table[] = {
     {34, counter_damage_event},
     {35, counter_damage_event},
     {36, counter_damage_event},
-    {48, dmg_first_attack_pos},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},
     {0, NULL},
 };
 

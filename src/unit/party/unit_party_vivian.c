@@ -158,9 +158,9 @@ PoseTableEntry pose_table_vivian_stay[] = {
 
 static BattleDataEntry data_table[] = {
     {3, vivian_hide_event},
-    {5, vivian_appeal_event},
-    {6, attack_audience_event},
-    {1, __makeTechMenuFunc},
+    {UNIT_DATA_APPEAL_EVENT, vivian_appeal_event},
+    {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
+    {UNIT_DATA_TECH_MENU_FUNC, __makeTechMenuFunc},
     {25, vivian_counter_damage_event},
     {26, vivian_counter_damage_event},
     {27, vivian_counter_damage_event},
@@ -172,10 +172,10 @@ static BattleDataEntry data_table[] = {
     {33, vivian_counter_damage_event},
     {34, vivian_counter_damage_event},
     {35, vivian_counter_damage_event},
-    {48, btldefaultevt_Dummy},
-    {64, party_win_reaction},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
+    {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
     {7, subset_attack_ready_jump_event},
-    {47, btldefaultevt_avoid_counter_event},
+    {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},
 };
 

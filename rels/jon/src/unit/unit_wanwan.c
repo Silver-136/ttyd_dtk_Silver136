@@ -136,7 +136,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {49, dead_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
     {26, counter_damage_event},
     {25, counter_damage_event},
     {27, counter_damage_event},
@@ -149,7 +149,7 @@ static BattleDataEntry data_table[] = {
     {34, counter_damage_event},
     {35, counter_damage_event},
     {36, counter_damage_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 

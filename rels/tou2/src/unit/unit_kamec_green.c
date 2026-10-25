@@ -277,32 +277,32 @@ static PoseTableEntry pose_table_sky[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {49, kamec_subset_dead_event},
-    {58, kamec_subset_blow_dead_event},
-    {46, avoid_miss_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
+    {UNIT_DATA_BLOW_DEAD_EVENT, kamec_subset_blow_dead_event},
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
 static BattleDataEntry data_table_sky[] = {
-    {49, kamec_subset_dead_event},
-    {58, kamec_subset_blow_dead_event},
-    {46, avoid_miss_event},
-    {14, dmg_fall_event},
-    {48, dmg_first_attack_pos},
+    {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
+    {UNIT_DATA_BLOW_DEAD_EVENT, kamec_subset_blow_dead_event},
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},
     {0},
 };
 
 static BattleDataEntry data_table_bunsin[] = {
-    {46, avoid_miss_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
 static BattleDataEntry data_table_sky_bunsin[] = {
-    {46, avoid_miss_event},
-    {14, dmg_fall_event},
-    {48, dmg_first_attack_pos},
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},
     {0},
 };
 

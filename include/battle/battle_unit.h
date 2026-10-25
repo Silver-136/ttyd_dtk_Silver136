@@ -325,6 +325,37 @@ typedef enum BattleUnitType {
     UNIT_MAX,                             // 0xE7
 } BattleUnitType;
 
+// BattleDataEntry.tag: slots of a unit's data table, named after the (original) events the units put there;
+// hit events use tag = damage code + 6 for most codes. Unnamed tags (2, 3, 7, 24-36, 41-45, 50, 66, ...) hold
+// different events per unit.
+typedef enum BattleDataTag {
+    UNIT_DATA_TECH_MENU_FUNC = 1, // __makeTechMenuFunc
+    UNIT_DATA_APPEAL_EVENT = 5, // *_appeal_event
+    UNIT_DATA_ATTACK_AUDIENCE = 6, // attack_audience_event
+    UNIT_DATA_DAMAGE_SUB_EVENT = 9, // *damage_sub_event
+    UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT = 11, // damage_fire_explosion_event
+    UNIT_DATA_DAMAGE_TURN_EVENT = 13, // dmg_turn_event
+    UNIT_DATA_DAMAGE_FALL_EVENT = 14, // dmg_fall_event
+    UNIT_DATA_FAKE_DEAD_EVENT = 15, // fake_dead_event
+    UNIT_DATA_AVOID_THORN_HEAD_EVENT = 37, // dmg_avoid_counter_thorn_head_event
+    UNIT_DATA_AVOID_THORN_FRONT_EVENT = 38, // dmg_avoid_counter_thorn_front_event
+    UNIT_DATA_AVOID_THORN_EVENT = 39, // dmg_avoid_counter_thorn_event
+    UNIT_DATA_AVOID_FIRE_EVENT = 40, // avoid_fire_event
+    UNIT_DATA_AVOID_MISS_EVENT = 46, // avoid_miss_event; looked up for damage code 0x28
+    UNIT_DATA_AVOID_COUNTER_EVENT = 47, // btldefaultevt_avoid_counter
+    UNIT_DATA_FIRST_ATTACK_POS_EVENT = 48, // dmg_first_attack_pos; most units list btldefaultevt_Dummy
+    UNIT_DATA_DEAD_EVENT = 49, // dead_event
+    UNIT_DATA_EMERGENCY_REVIVAL_EVENT = 51, // *_emergency_revival_event
+    UNIT_DATA_EXPLOSION_EVENT = 52, // explosion_event
+    UNIT_DATA_SWALLOW_BODY_EVENT = 54, // damage_swallow_body
+    UNIT_DATA_BLOW_DEAD_EVENT = 58, // blow_dead_event
+    UNIT_DATA_KOURA_OPEN_EVENT = 59, // koura_open
+    UNIT_DATA_KOURA_CLOSE_EVENT = 60, // koura_close
+    UNIT_DATA_BATTLE_END_EVENT = 63, // battle_end_event
+    UNIT_DATA_WIN_REACTION_EVENT = 64, // *_win_reaction
+    UNIT_DATA_RIDE_ENTRY_EVENT = 65, // mario_ride_btl_entry_event
+} BattleDataTag;
+
 typedef struct BattleDataEntry {
     s32 tag;    // 0x0
     void* data; // 0x4

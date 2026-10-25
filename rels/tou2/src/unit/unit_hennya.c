@@ -77,8 +77,8 @@ static BattleUnitDefenseAttr defence_attr = {0};
 static StatusVulnerability regist = {70, 90, 70, 150, 70, 150, 150, 70, 150, 90, 150, 90, 150, 90, 70, 80, 80, 150, 70, 0, 0, 30};
 
 static BattleDataEntry data_table[] = {
-    {37, dmg_avoid_counter_thorn_head_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 

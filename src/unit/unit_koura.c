@@ -94,12 +94,12 @@ BattleUnitKind unit_koura = {
 };
 
 static BattleDataEntry data_table[] = {
-    {59, koura_open},
-    {60, koura_close},
-    {9, damage_core},
+    {UNIT_DATA_KOURA_OPEN_EVENT, koura_open},
+    {UNIT_DATA_KOURA_CLOSE_EVENT, koura_close},
+    {UNIT_DATA_DAMAGE_SUB_EVENT, damage_core},
     {61, pose_tbl_reset},
     {62, destroy_event},
-    {49, dead_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 

@@ -187,10 +187,10 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {49, dead_event},
-    {58, blow_dead_event},
-    {63, battle_end_event},
-    {48, dmg_first_attack_pos},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
+    {UNIT_DATA_BLOW_DEAD_EVENT, blow_dead_event},
+    {UNIT_DATA_BATTLE_END_EVENT, battle_end_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},
     {0, NULL},
 };
 

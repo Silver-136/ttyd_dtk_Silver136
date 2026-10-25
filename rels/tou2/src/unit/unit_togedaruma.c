@@ -144,11 +144,11 @@ static PoseTableEntry pose_table_turn[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {13, dmg_turn_event},
-    {37, dmg_avoid_counter_thorn_head_event},
-    {39, dmg_avoid_counter_thorn_front_event},
-    {38, dmg_avoid_counter_thorn_front_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
+    {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
+    {UNIT_DATA_AVOID_THORN_EVENT, dmg_avoid_counter_thorn_front_event},
+    {UNIT_DATA_AVOID_THORN_FRONT_EVENT, dmg_avoid_counter_thorn_front_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 

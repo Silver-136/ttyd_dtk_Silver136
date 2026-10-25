@@ -553,7 +553,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
     }
     switch (type) {
         case 6:
-            func = (void (*)(BattleCommand*, s32*))BtlUnit_GetData(unit, 1);
+            func = (void (*)(BattleCommand*, s32*))BtlUnit_GetData(unit, UNIT_DATA_TECH_MENU_FUNC);
             func(cmd, &num);
             break;
         case 2:

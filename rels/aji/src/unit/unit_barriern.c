@@ -300,7 +300,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {48, barriern_dmg_first_attack_pos},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, barriern_dmg_first_attack_pos},
     {0, NULL},
 };
 

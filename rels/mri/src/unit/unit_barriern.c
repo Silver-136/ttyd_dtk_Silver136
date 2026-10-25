@@ -419,7 +419,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
 }
 
 static BattleDataEntry data_table[] = {
-    {48, barriern_dmg_first_attack_pos},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, barriern_dmg_first_attack_pos},
     {0, NULL},
 };
 

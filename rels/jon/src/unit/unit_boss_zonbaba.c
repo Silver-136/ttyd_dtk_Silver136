@@ -153,8 +153,8 @@ static PoseTableEntry pose_table_weak[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {9, zonbaba_damage_sub_event},
-    {49, dead_event},
+    {UNIT_DATA_DAMAGE_SUB_EVENT, zonbaba_damage_sub_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 

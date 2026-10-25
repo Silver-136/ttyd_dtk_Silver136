@@ -151,10 +151,10 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {9, cortez_damage_sub_event},
-    {49, cortez_weapon_dead_event},
+    {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
+    {UNIT_DATA_DEAD_EVENT, cortez_weapon_dead_event},
     {71, cortez_weapon_break_event},
-    {58, cortez_weapon_blow_dead_event},
+    {UNIT_DATA_BLOW_DEAD_EVENT, cortez_weapon_blow_dead_event},
     {36, cortez_weapon_counter_damage_event},
     {24, cortez_weapon_counter_damage_event},
     {25, cortez_weapon_counter_damage_event},

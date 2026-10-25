@@ -98,21 +98,21 @@ EVT_BEGIN(subsetevt_dead)
         CALL(btlevtcmd_ClearAllStatus, LW(10))
         CALL(btlevtcmd_CheckDamageCode, LW(10), 2048, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 51)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
 #ifdef VERSION_G8ME01
             ELSE
 #else
         ELSE
 #endif
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
         END_IF
         CASE_BETWEEN(224, 230)
         CALL(btlevtcmd_CheckDamageCode, LW(10), 2048, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
             CALL(btlevtcmd_ClearAllStatus, LW(10))
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 51)
+            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_RunDataEventChild, LW(10), 51)
+                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
 #ifdef VERSION_G8ME01
                 ELSE
 #else
@@ -154,9 +154,9 @@ EVT_BEGIN(subsetevt_dead)
 #else
         ELSE
 #endif
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 49)
+            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
+                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
 #ifdef VERSION_G8ME01
                 ELSE
 #else
@@ -191,10 +191,10 @@ EVT_BEGIN(subsetevt_dead)
         CASE_DEFAULT
         CALL(btlevtcmd_CheckDamageCode, LW(10), 2048, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 51)
+            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_RunDataEventChild, LW(10), 51)
+                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
 #ifdef VERSION_G8ME01
                 ELSE
 #else
@@ -257,10 +257,10 @@ EVT_BEGIN(subsetevt_dead)
             END_IF
         ELSE
 #endif
-            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 49)
+            CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
-                CALL(btlevtcmd_RunDataEventChild, LW(10), 49)
+                CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
 #ifdef VERSION_G8ME01
                 ELSE
 #else
@@ -385,12 +385,12 @@ EVT_END()
 EVT_BEGIN(subsetevt_damage)
     CALL(btlevtcmd_CheckDamageCode, LW(10), 2097152, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 13)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_TURN_EVENT)
         RETURN
     END_IF
     CALL(btlevtcmd_CheckDamageCode, LW(10), 4194304, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 14)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_FALL_EVENT)
         RETURN
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ROTATE_SHELL_ATTACK, LW(0))
@@ -503,9 +503,9 @@ EVT_BEGIN(subsetevt_damage)
             RETURN
         END_IF
     END_IF
-    CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 9)
+    CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_SUB_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 9)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_SUB_EVENT)
         RETURN
     END_IF
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_SWALLOW_FAILED, LW(0))
@@ -772,7 +772,7 @@ EVT_END()
 EVT_BEGIN(btldefaultevt_ChangePosition)
     CALL(btlevtcmd_GetGuardKouraId, -3, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 60)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_KOURA_CLOSE_EVENT)
         CALL(btlevtcmd_OffPartsAttribute, -3, 1, kHidden)
         CALL(btlevtcmd_SetUnitWork, LW(10), 2, 2)
     END_IF
@@ -810,7 +810,7 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
         END_IF
         CALL(btlevtcmd_GetHp, LW(10), LW(0))
         IF_INT_GREATER(LW(0), 0)
-            CALL(btlevtcmd_RunDataEventChild, LW(10), 59)
+            CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_KOURA_OPEN_EVENT)
             CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
         END_IF

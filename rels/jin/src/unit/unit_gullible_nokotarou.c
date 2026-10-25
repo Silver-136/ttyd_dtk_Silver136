@@ -184,8 +184,8 @@ static BattleUnitDefense defence_turn_nokotarou = {0};
 static StatusVulnerability regist_nokotarou = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 90, 70, 0, 0, 100, 70, 100, 100, 0};
 
 static BattleDataEntry data_table_nokotarou[] = {
-    {49, dead_event_nokotarou},
-    {13, dmg_turn_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event_nokotarou},
+    {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {0, NULL},
 };
 

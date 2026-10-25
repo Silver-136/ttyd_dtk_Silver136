@@ -298,7 +298,7 @@ static PoseTableEntry pose_table_fmario_stay[] = {
 };
 
 static BattleDataEntry data_table_fmario[] = {
-    {49, dead_event_fmario},
+    {UNIT_DATA_DEAD_EVENT, dead_event_fmario},
     {0, NULL},
 };
 

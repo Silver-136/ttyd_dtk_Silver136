@@ -228,9 +228,9 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {49, dead_event},
-    {15, fake_dead_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
+    {UNIT_DATA_FAKE_DEAD_EVENT, fake_dead_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 

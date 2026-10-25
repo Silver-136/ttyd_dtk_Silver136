@@ -109,8 +109,8 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0, 100, 100, 100, 100, 100, 0};
 
 static BattleDataEntry data_table[] = {
-    {48, btldefaultevt_Dummy},
-    {49, dead_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 

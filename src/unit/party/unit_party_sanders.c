@@ -136,14 +136,14 @@ PoseTableEntry pose_table_counter_sanders[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {5, sanders_appeal_event},
-    {6, attack_audience_event},
-    {1, __makeTechMenuFunc},
-    {48, btldefaultevt_Dummy},
-    {64, party_win_reaction},
+    {UNIT_DATA_APPEAL_EVENT, sanders_appeal_event},
+    {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
+    {UNIT_DATA_TECH_MENU_FUNC, __makeTechMenuFunc},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
+    {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
     {7, subset_attack_ready_jump_event},
     {66, sanders_battle_end_event},
-    {47, btldefaultevt_avoid_counter_event},
+    {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},
 };
 

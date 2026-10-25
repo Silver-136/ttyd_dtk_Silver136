@@ -133,7 +133,7 @@ static BattleUnitDefenseAttr defence_attr_yoshi = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist_yoshi = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 90, 70, 0, 0, 100, 70, 100, 100, 0};
 
 static BattleDataEntry data_table_yoshi[] = {
-    {49, dead_event_yoshi},
+    {UNIT_DATA_DEAD_EVENT, dead_event_yoshi},
     {0, NULL},
 };
 

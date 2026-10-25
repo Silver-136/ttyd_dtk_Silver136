@@ -284,9 +284,9 @@ static EVT_BEGIN(explosion_event)
 EVT_END_PAD()
 
 static BattleDataEntry data_table[] = {
-    {49, dead_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
     {53, explosion_event},
-    {63, end_battle_evt},
+    {UNIT_DATA_BATTLE_END_EVENT, end_battle_evt},
     {0, NULL},
 };
 

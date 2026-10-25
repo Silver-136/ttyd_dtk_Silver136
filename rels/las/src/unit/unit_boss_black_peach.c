@@ -302,7 +302,7 @@ PoseTableEntry peach_pose_table[] = {
 };
 
 BattleDataEntry peach_data_table[] = {
-    {49, peach_dead_event},
+    {UNIT_DATA_DEAD_EVENT, peach_dead_event},
     {0, NULL},
 };
 
@@ -920,7 +920,7 @@ PoseTableEntry queen_hand_pose_table[] = {
 };
 
 BattleDataEntry queen_data_table[] = {
-    {49, queen_dead_event},
+    {UNIT_DATA_DEAD_EVENT, queen_dead_event},
     {0, NULL},
 };
 
@@ -1043,7 +1043,7 @@ PoseTableEntry queen_hand_1_pose_table[] = {
 };
 
 BattleDataEntry queen_hand_1_data_table[] = {
-    {49, queen_hand_1_dead_event},
+    {UNIT_DATA_DEAD_EVENT, queen_hand_1_dead_event},
     {0, NULL},
 };
 
@@ -1135,7 +1135,7 @@ PoseTableEntry queen_hand_2_pose_table[] = {
 };
 
 BattleDataEntry queen_hand_2_data_table[] = {
-    {49, queen_hand_2_dead_event},
+    {UNIT_DATA_DEAD_EVENT, queen_hand_2_dead_event},
     {0, NULL},
 };
 
@@ -1227,7 +1227,7 @@ PoseTableEntry queen_hand_small_pose_table[] = {
 };
 
 BattleDataEntry queen_hand_small_data_table[] = {
-    {49, queen_hand_small_dead_event},
+    {UNIT_DATA_DEAD_EVENT, queen_hand_small_dead_event},
     {0, NULL},
 };
 

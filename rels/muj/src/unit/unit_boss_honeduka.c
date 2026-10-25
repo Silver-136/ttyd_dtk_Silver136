@@ -96,7 +96,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {9, honeduka_damage_sub_event},
+    {UNIT_DATA_DAMAGE_SUB_EVENT, honeduka_damage_sub_event},
     {0, NULL},
 };
 

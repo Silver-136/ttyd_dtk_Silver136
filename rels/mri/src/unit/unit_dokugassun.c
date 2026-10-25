@@ -401,7 +401,7 @@ static USER_FUNC(eff_poison_barrier) {
 
 static BattleDataEntry data_table[] = {
     {43, counter_event},
-    {48, dmg_first_attack_pos},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},
     {0},
 };
 

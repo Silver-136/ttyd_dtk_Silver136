@@ -134,7 +134,7 @@ static BattleUnitDefenseAttr defence_attr_clauda = {{0, 0, 0, 0, 0}};
 static StatusVulnerability regist_clauda = {60, 80, 105, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 90, 70, 0, 0, 100, 70, 100, 100, 0};
 
 static BattleDataEntry data_table_clauda[] = {
-    {49, dead_event_clauda},
+    {UNIT_DATA_DEAD_EVENT, dead_event_clauda},
     {0, NULL},
 };
 

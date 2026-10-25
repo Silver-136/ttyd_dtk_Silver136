@@ -345,7 +345,7 @@ static BattleDataEntry data_table[] = {
     {34, counter_damage_event},
     {35, counter_damage_event},
     {36, counter_damage_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 

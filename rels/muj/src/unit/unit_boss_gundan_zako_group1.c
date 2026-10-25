@@ -228,8 +228,8 @@ static PoseTableEntry pose_table[] = {
 
 static BattleDataEntry data_table[] = {
     {18, damage_event_kaiten_hammer},
-    {49, dead_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 

@@ -241,7 +241,7 @@ EVT_BEGIN(btlataudevtDummy)
     RETURN
 EVT_END()
 EvtWord* btlataudGetAttackEventPtr(s32 unitId) {
-    s32* p = BtlUnit_GetData(BattleGetUnitPtr(_battleWorkPointer, unitId), 6);
+    s32* p = BtlUnit_GetData(BattleGetUnitPtr(_battleWorkPointer, unitId), UNIT_DATA_ATTACK_AUDIENCE);
     if (p == NULL) {
         p = btlataudevtDummy;
     }

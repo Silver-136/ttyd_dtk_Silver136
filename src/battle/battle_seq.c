@@ -373,7 +373,7 @@ void btlseqFirstAct(BattleWork* wp) {
                             continue;
                         }
                         if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == UNIT_MARIO) {
-                            evt = evtEntry((s32*)BtlUnit_GetData(unit, 0x41), 10, 0);
+                            evt = evtEntry((s32*)BtlUnit_GetData(unit, UNIT_DATA_RIDE_ENTRY_EVENT), 10, 0);
                             unit->entryEventId = evt->eventId;
                             evt->unitId = unit->unitId;
                         }

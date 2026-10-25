@@ -145,12 +145,12 @@ static PoseTableEntry pose_table_spark[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
 static BattleDataEntry data_table_spark[] = {
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 

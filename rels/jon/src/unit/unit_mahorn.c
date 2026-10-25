@@ -464,14 +464,14 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {46, avoid_miss_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
 static BattleDataEntry data_table_bunsin[] = {
-    {46, avoid_miss_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 

@@ -69,7 +69,7 @@ s32 BattleRunHitEvent(BattleUnit* unit, s32 damageCode) {
 
     id = 0;
     valid = TRUE;
-    if ((u8)damageCode == 0x28 && !BtlUnit_CheckData(unit, 0x2E)) {
+    if ((u8)damageCode == 0x28 && !BtlUnit_CheckData(unit, UNIT_DATA_AVOID_MISS_EVENT)) {
         valid = FALSE;
     }
     if (!valid) {

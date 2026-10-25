@@ -732,12 +732,12 @@ PoseTableEntry pose_table_honeduka[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {9, cortez_damage_sub_event},
-    {49, dead_event},
+    {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
     {71, mode2_honeduka_damage_event},
     {36, cortez_ac_counter_damage_event},
-    {39, avoid_thorn_event},
-    {37, avoid_thorn_event},
+    {UNIT_DATA_AVOID_THORN_EVENT, avoid_thorn_event},
+    {UNIT_DATA_AVOID_THORN_HEAD_EVENT, avoid_thorn_event},
     {0, NULL},
 };
 

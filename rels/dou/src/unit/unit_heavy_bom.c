@@ -495,8 +495,8 @@ static PoseTableEntry pose_table_1_to_0[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {49, dead_event},
-    {52, explosion_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
+    {UNIT_DATA_EXPLOSION_EVENT, explosion_event},
     {0, NULL},
 };
 

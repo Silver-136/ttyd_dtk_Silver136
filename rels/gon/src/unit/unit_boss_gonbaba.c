@@ -294,8 +294,8 @@ static PoseTableEntry pose_table_weak[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {9, gonbaba_damage_sub_event},
-    {49, dead_event},
+    {UNIT_DATA_DAMAGE_SUB_EVENT, gonbaba_damage_sub_event},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
@@ -510,7 +510,7 @@ EVT_BEGIN(negotiation_event)
     LABEL(40)
     CALL(btlevtcmd_GetGuardKouraId, -3, LW(3))
     IF_INT_NOT_EQUAL(LW(3), -1)
-        CALL(btlevtcmd_RunDataEventChild, LW(3), 59)
+        CALL(btlevtcmd_RunDataEventChild, LW(3), UNIT_DATA_KOURA_OPEN_EVENT)
         CALL(btlevtcmd_SetUnitWork, LW(3), 2, 0)
     END_IF
     CALL(btlevtcmd_AnimeChangePoseType, -3, 1, 42)

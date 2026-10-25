@@ -448,13 +448,13 @@ static PoseTableEntry pose_table_parts[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {37, dmg_avoid_counter_thorn_side_event},
-    {39, dmg_avoid_counter_thorn_side_event},
+    {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_side_event},
+    {UNIT_DATA_AVOID_THORN_EVENT, dmg_avoid_counter_thorn_side_event},
     {19, damage_event_bodylost},
     {18, damage_event_bodylost_blow},
     {16, damage_event_bodylost},
-    {48, btldefaultevt_Dummy},
-    {54, damage_swallow_body},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
+    {UNIT_DATA_SWALLOW_BODY_EVENT, damage_swallow_body},
     {0},
 };
 

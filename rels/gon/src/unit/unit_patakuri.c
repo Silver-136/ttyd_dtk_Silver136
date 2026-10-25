@@ -176,8 +176,8 @@ static PoseTableEntry pose_table_patakuri[] = {
 };
 
 static BattleDataEntry data_table_patakuri[] = {
-    {14, dmg_fall_event},
-    {48, patakuri_dmg_first_attack_pos},
+    {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patakuri_dmg_first_attack_pos},
     {0, NULL},
 };
 
@@ -370,7 +370,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
