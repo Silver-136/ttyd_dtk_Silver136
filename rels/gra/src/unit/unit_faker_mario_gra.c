@@ -1,5 +1,9 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle.h"
+#include "battle/battle_sub.h"
+#include "manager/evtmgr_cmd.h"
+#include "battle/battle_database_common.h"
 
 #include "mario/mario_pouch.h"
 #include "battle/battle_event_default.h"
@@ -756,10 +760,6 @@ static USER_FUNC(vivian_comeback) {
 }
 
 #ifdef VERSION_G8ME01
-#include "battle/battle.h"
-#include "battle/battle_sub.h"
-#include "manager/evtmgr_cmd.h"
-#include "battle/battle_database_common.h"
 
 // US only: restore the moves of the unit for this turn.
 USER_FUNC(faker_mario_gra_sync_max_moves) {

@@ -147,7 +147,7 @@ void msgLoad(const char* filename, s32 index) {
 #endif
     u32 ofs;
     char filepath[64];
-    char dvdpath[128]; //TODO: double check size
+    char dvdpath[128];
 
     entry = &msgw->entries[index];
 #ifdef VERSION_G8ME01

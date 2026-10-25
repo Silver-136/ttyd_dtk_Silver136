@@ -2367,7 +2367,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
             case 8:
                 GXSetTevColor(GX_TEVREG0, (GXColor) {
                     0, (u8)((127.0f * sinf((TWO_PI * (f32)(2 * gp->retraceCount)) / 360.0f)) + 127.0f),
-                    0, 0}); //TODO: check
+                    0, 0});
                 GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
                 GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
                 GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

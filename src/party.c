@@ -2439,7 +2439,6 @@ void partyShadowOff(PartyEntry* party) {
     }
 }
 
-/* @@FAMI@@ */
 static inline void partyPoseEntryF(PartyEntry* party) {
     char* animName;
 

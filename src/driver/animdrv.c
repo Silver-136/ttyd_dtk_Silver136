@@ -436,10 +436,9 @@ void animPoseRefresh(void) {
     for (i = 0; i < wp->totalPoses; i++) {
         AnimationPose* pose = &wp->poses[i]; // inline
         if (pose->flags) {
-            // TODO: cleanup in rewrite?
             if ((!wp->inBattle || pose->type != 0) && (wp->inBattle || pose->type != 1)) {
                 animPose_AllocBuffer(pose);
-                pose->lastFrameZero = -1; // TODO: redundant?
+                pose->lastFrameZero = -1;
             }
         }
     }

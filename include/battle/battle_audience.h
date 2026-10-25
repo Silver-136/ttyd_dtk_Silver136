@@ -138,7 +138,6 @@ typedef struct BattleAudienceStar {
     u8 pad_5D[0x60 - 0x5D];
 } BattleAudienceStar;
 
-// TODO: verify variable names
 typedef struct BattleAudienceSound {
     u8 header[0x10 - 0x0];         // 0x0, raw head (AudSound view in battle_audience.c)
     s32 mFadeoutTime;              // 0x10

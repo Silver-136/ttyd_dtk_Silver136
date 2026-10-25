@@ -105,7 +105,7 @@ typedef struct NpcTribeInfo {
     const char* runAnimation;     // 0x1C
     const char* damageAnimation;  // 0x20
     const char* confuseAnimation; // 0x24
-    f32 width;                    // 0x28, TODO double check
+    f32 width;                    // 0x28
     f32 height;                   // 0x2C
     f32 shadowOffsetX;            // 0x30
     f32 shadowOffsetY;            // 0x34
@@ -173,7 +173,7 @@ typedef struct NpcEntry {
     f32 jumpYScale;                 // 0x1C8
     f32 jumpGravity;                // 0x1CC
     f32 maxFallSpeed;               // 0x1D0, fall speed limit, 100 in kpa_03 lava
-    u32 jumpFlags;                  // 0x1D4, TODO verify
+    u32 jumpFlags;                  // 0x1D4
     s16 footstepToggle;             // 0x1D8
     f32 footstepAccum;              // 0x1DC
     const char* footstepSfxA;       // 0x1E0

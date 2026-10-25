@@ -11,6 +11,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_item.h"
+#include "mario/mariost.h"
+#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
@@ -325,8 +327,6 @@ EVT_BEGIN(las_24_init_evt)
 EVT_END()
 
 #ifdef VERSION_G8ME01
-#include "mario/mariost.h"
-#include "manager/evtmgr_cmd.h"
 
 USER_FUNC(las_24_adjust_for_framerate) {
     EvtWord* args = event->args;

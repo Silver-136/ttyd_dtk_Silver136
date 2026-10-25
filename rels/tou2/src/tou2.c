@@ -1024,7 +1024,6 @@ static void rankingControll(void) {
     for (i = 0; i < nAbove; i++) {
         buf[i] = rank_wp->entries[above[i]];
     }
-    // TODO: fixup
     buf[nAbove].flags = RANK_PLAYER;
     buf[nAbove].id = FIGHTER_PLAYER;
     buf[nAbove].points.total = 0;

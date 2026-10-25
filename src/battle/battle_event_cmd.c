@@ -39,7 +39,7 @@ USER_FUNC(btlevtcmd_WaitEventEnd) {
     s32 id;
 
     id = evtGetValue(event, *event->args);
-    return evtCheckID(id) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE; //TODO: fix
+    return evtCheckID(id) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
 //s32 retIndex, s32 battleFlags
@@ -1906,7 +1906,7 @@ USER_FUNC(btlevtcmd_GetDamageCode) {
     id = BattleTransID(event, btlId);
     index = args[1];
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    evtSetValue(event, index, (s32)(u8)unit->damageCode); //TODO: double check this cast
+    evtSetValue(event, index, (s32)(u8)unit->damageCode);
     return EVT_RETURN_DONE;
 }
 

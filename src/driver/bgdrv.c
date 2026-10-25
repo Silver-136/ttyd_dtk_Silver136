@@ -37,7 +37,7 @@ static inline void bgLoad(BackgroundWork* bgwork, const char* filename) {
     TEXPalette* tpl;
     DVDEntry* dvd;
     u32 size;
-    char path[256]; //TODO: check
+    char path[256];
 
     size = 0;
     if (!filename) {
