@@ -1013,7 +1013,7 @@ EVT_BEGIN(marioAttackEvent_ZubaStar)
     END_IF
     CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), 16384, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_zubastar), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_zubastar), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(95)

@@ -775,7 +775,7 @@ static EVT_BEGIN(charge_event)
         CALL(evt_btl_camera_set_mode, 0, 0)
     END_INLINE_EVENT
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_kanbu3_charge))
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_kanbu3_charge), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_kanbu3_charge), DAMAGE_RESULT_FINAL_HIT, LW(5))
     RETURN
 EVT_END()
 
@@ -894,7 +894,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         LABEL(91)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
         LABEL(98)
         CALL(btlevtcmd_JumpContinue, -2)

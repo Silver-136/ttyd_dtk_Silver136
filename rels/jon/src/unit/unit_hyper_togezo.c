@@ -578,7 +578,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEZO_ROLL4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_togezo_attack))
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_togezo_attack), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_togezo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SET_VALUE(LW(0), 36)
     MULTIPLY(LW(0), LW(14))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, -36)
@@ -757,7 +757,7 @@ static EVT_BEGIN(charge_event)
         WAIT_MS(500)
         CALL(evt_btl_camera_set_mode, 0, 0)
     END_INLINE_EVENT
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(9), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     RETURN
 EVT_END()
 

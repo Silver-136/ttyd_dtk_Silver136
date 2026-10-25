@@ -2408,7 +2408,7 @@ EVT_BEGIN(_object_turn_event_core)
             CALL(btlevtcmd_ResultACDefence, LW(10), LW(12))
         END_IF
     END_IF
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_EQUAL(4)
         CASE_EQUAL(2)
@@ -2418,7 +2418,7 @@ EVT_BEGIN(_object_turn_event_core)
         CASE_EQUAL(6)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
         CASE_EQUAL(1)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
     CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
@@ -2458,7 +2458,7 @@ EVT_BEGIN(_fall_frame_event)
             CALL(btlevtcmd_ResultACDefence, LW(10), LW(12))
         END_IF
     END_IF
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
     GOTO(10)
     LABEL(20)
@@ -2493,7 +2493,7 @@ EVT_BEGIN(_nozzle_work_event_core)
             CALL(btlevtcmd_ResultACDefence, LW(10), LW(12))
         END_IF
     END_IF
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_EQUAL(4)
         CASE_EQUAL(2)
@@ -2503,7 +2503,7 @@ EVT_BEGIN(_nozzle_work_event_core)
         CASE_EQUAL(6)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
         CASE_EQUAL(1)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
     CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
@@ -2520,7 +2520,7 @@ EVT_BEGIN(_nozzle_work_event_core)
     IF_INT_EQUAL(LW(10), -1)
         GOTO(29)
     END_IF
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_EQUAL(4)
         CASE_EQUAL(2)
@@ -2530,7 +2530,7 @@ EVT_BEGIN(_nozzle_work_event_core)
         CASE_EQUAL(6)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
         CASE_EQUAL(1)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
     CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))

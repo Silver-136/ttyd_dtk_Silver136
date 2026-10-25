@@ -1052,17 +1052,17 @@ EVT_BEGIN(marioAttackEvent_Muki)
             IF_INT_NOT_EQUAL(LW(1), 0)
                 CALL(set_weapon, 1, LW(1), LW(9))
                 IF_INT_NOT_EQUAL(LW(14), -1)
-                    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(14), LW(15), LW(9), 256, LW(5))
+                    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(14), LW(15), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
                 END_IF
-                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(9), 256, LW(5))
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
             END_IF
         END_INLINE_EVENT
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(set_weapon, 0, LW(0), LW(9))
             IF_INT_NOT_EQUAL(LW(14), -1)
-                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(14), LW(15), LW(9), 256, LW(5))
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(14), LW(15), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
             END_IF
-            CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(9), 256, LW(5))
+            CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_SELF, 1, LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
             RETURN
         END_IF
     END_IF

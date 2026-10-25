@@ -173,13 +173,13 @@ EVT_BEGIN(doku_kinoko_effect)
         CALL(btlevtcmd_CheckStatus, LW(3), 27, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
-            CALL(btlevtcmd_CheckDamage, UNIT_ID_MARIO, LW(3), LW(4), PTR(&weapon_doku_kinoko), 256, LW(5))
+            CALL(btlevtcmd_CheckDamage, UNIT_ID_MARIO, LW(3), LW(4), PTR(&weapon_doku_kinoko), DAMAGE_RESULT_FINAL_HIT, LW(5))
         END_IF
     END_IF
     WAIT_FRAMES(60)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_MARIO, LW(3), LW(4), PTR(&weapon_doku_kinoko_fp), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_MARIO, LW(3), LW(4), PTR(&weapon_doku_kinoko_fp), DAMAGE_RESULT_FINAL_HIT, LW(5))
     RETURN
 EVT_END()
 

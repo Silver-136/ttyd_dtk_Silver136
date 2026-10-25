@@ -406,7 +406,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         return 0;
     }
     if (attacker && (weapon->special & SPECIAL_BADGE_POWER) && attacker->badgesEquipped.AllOrNothing &&
-        !((u32)wp->actionCommands.result & 2) && !(flags & 0x20000)) {
+        !((u32)wp->actionCommands.result & 2) && !(flags & DAMAGE_RESULT_AC_SUCCESS)) {
         return 0;
     }
     damage = weapon->hpDamageWork[0];
@@ -420,7 +420,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         damage += attacker->badgesEquipped.PowerPlus;
         damage += attacker->badgesEquipped.PUpDDown;
         if (attacker->badgesEquipped.AllOrNothing) {
-            if (((u32)wp->actionCommands.result & 2) || (flags & 0x20000)) {
+            if (((u32)wp->actionCommands.result & 2) || (flags & DAMAGE_RESULT_AC_SUCCESS)) {
                 damage += attacker->badgesEquipped.AllOrNothing;
             } else {
                 damage = 0;
@@ -508,7 +508,7 @@ skip:
         if (target->badgesEquipped.DefendPlus) {
             defense += target->badgesEquipped.DefendPlus;
         }
-        if (target->badgesEquipped.DamageDodge && (flags & 0x40000)) {
+        if (target->badgesEquipped.DamageDodge && (flags & DAMAGE_RESULT_GUARD)) {
             defense += target->badgesEquipped.DamageDodge;
         }
         if (BtlUnit_CheckStatusFlag(target, 0x1000000)) {
@@ -549,7 +549,7 @@ skip:
             }
         }
     }
-    if (flags & 0x40000) {
+    if (flags & DAMAGE_RESULT_GUARD) {
         damage--;
     }
     if (element == ELEMENT_FIRE && target->badgesEquipped.IcePower) {
@@ -571,7 +571,7 @@ skip:
             damage = 0;
             break;
         case DEFENSE_ATTR_IMMUNE_EXCEPT_GULP:
-            if (!(flags & 0x80000000)) {
+            if (!(flags & DAMAGE_RESULT_GULP)) {
                 damage = 0;
             }
             break;
@@ -589,7 +589,7 @@ skip:
         *result = defaultResult;
         return 0;
     }
-    if (flags & 0x100) {
+    if (flags & DAMAGE_RESULT_FINAL_HIT) {
         if ((weapon->special & 0x8000) || !(target->mAttributeFlags & 0x100)) {
             *result |= 0x10000;
         }
@@ -620,7 +620,7 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }
-    if (flags & 0x40000) {
+    if (flags & DAMAGE_RESULT_GUARD) {
         reduce = 1;
     }
     damage -= reduce;
@@ -1386,7 +1386,7 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
     s8 time;
     s8 strength;
 
-    if (!(flags & 0x20000000)) {
+    if (!(flags & DAMAGE_RESULT_NO_STATUS)) {
         for (i = 0; i < 28; i++) {
             _getSickStatusParam(attacker, weapon, i, &time, &strength);
             rate = (s8)_getSickStatusRate(weapon, i);
@@ -1449,7 +1449,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (part->attributes & VERSION_PICK(0x10, 0x40)) {
         return 4;
     }
-    if (flags & 0x100000) {
+    if (flags & DAMAGE_RESULT_NO_EVADE) {
         return 1;
     }
     if (target->badgesEquipped.PrettyLucky) {
@@ -1584,7 +1584,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     }
     BattleCheckCounter(cwp, attacker, target, part, weapon, (u32*)&flags);
     while (cw.attackHits) {
-        if (flags & 0x100) {
+        if (flags & DAMAGE_RESULT_FINAL_HIT) {
             if (part->counterAttributes & kCounterVolatileExplosive) {
                 BattleRunHitEvent(target, 0x719);
                 ret = 18;
@@ -1620,7 +1620,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         }
         if ((weapon->special & SPECIAL_GROUND_WINGED) && (part->attributes & kIsWinged)) {
             pierce = 1;
-            if (flags & 0x100) {
+            if (flags & DAMAGE_RESULT_FINAL_HIT) {
                 flags |= 0x400000;
             }
         }
@@ -1628,10 +1628,10 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         damage = BattleCalculateDamage(attacker, target, part, weapon, &result, flags);
         fpDamage = BattleCalculateFpDamage(attacker, target, part, weapon, &result, flags);
         target->hpDamageCount++;
-        if (!(flags & 0x40000)) {
-            if (flags & 0x40000000) {
+        if (!(flags & DAMAGE_RESULT_GUARD)) {
+            if (flags & DAMAGE_RESULT_STATUS_EVERY_HIT) {
                 status = BattleSetStatusDamageFromWeapon(attacker, target, part, weapon, flags);
-            } else if (flags & 0x100) {
+            } else if (flags & DAMAGE_RESULT_FINAL_HIT) {
                 status = BattleSetStatusDamageFromWeapon(attacker, target, part, weapon, flags);
             }
         }
@@ -1654,7 +1654,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (status & 8) {
             result = flags | 0x1D;
         }
-        if (((u32)flags & 0x100) && (status & 0x10)) {
+        if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (status & 0x10)) {
             code = 0x717;
             target->damagePattern = 0;
             _checkDamageCode_EmergencyRevival(target, (u32*)&code);
@@ -1662,7 +1662,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             ret = 18;
             break;
         }
-        if (((u32)flags & 0x100) && (weapon->special & SPECIAL_FREEZE_CRUSH) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
+        if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (weapon->special & SPECIAL_FREEZE_CRUSH) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
             code2 = 0x8717;
             _checkDamageCode_EmergencyRevival(target, (u32*)&code2);
             BattleRunHitEvent(target, code2);
@@ -1691,7 +1691,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             if (irand(100) >= target->mKindParams->hammerKnockbackChance) {
                 pattern = 0;
             }
-            if (!(flags & 0x20000)) {
+            if (!(flags & DAMAGE_RESULT_AC_SUCCESS)) {
                 pattern = 0;
             }
         }

@@ -429,7 +429,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         CALL(_config_key_record, 512)
     END_SWITCH
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(_get_defence_ac_result, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)

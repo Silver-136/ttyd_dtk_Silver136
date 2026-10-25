@@ -1118,7 +1118,7 @@ EVT_BEGIN(dmg_evt)
     LABEL(20)
     CALL(btlevtcmd_CheckPartsAttribute, LW(3), LW(4), 16384, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_MARIO, LW(3), LW(4), 256, LW(5))
+        CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_MARIO, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     LABEL(30)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))

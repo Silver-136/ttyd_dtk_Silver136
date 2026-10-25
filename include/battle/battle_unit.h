@@ -413,7 +413,7 @@ typedef enum BattleDefenseAttr {
     DEFENSE_ATTR_WEAK,               // +1 damage
     DEFENSE_ATTR_IMMUNE,             // no damage
     DEFENSE_ATTR_ABSORB,             // defense ignored, the damage heals instead
-    DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, // no damage unless the damage flags have 0x80000000 (Yoshi's Gulp attacks)
+    DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, // no damage unless the damage flags have DAMAGE_RESULT_GULP
 } BattleDefenseAttr;
 
 typedef struct BattleUnitDefense {

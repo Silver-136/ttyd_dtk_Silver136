@@ -433,7 +433,7 @@ static EVT_BEGIN(damage_check_sub)
     LABEL(98)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(6))
     IF_INT_EQUAL(LW(7), 1)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), DAMAGE_RESULT_FINAL_HIT, LW(5))
         ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 0, LW(5))
     END_IF
@@ -484,7 +484,7 @@ static EVT_BEGIN(damage_check_last)
     LABEL(10)
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(6))
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), DAMAGE_RESULT_FINAL_HIT, LW(5))
         ELSE
         SET_VALUE(LW(7), 1)
         CALL_CHILD(PTR(damage_check_sub))

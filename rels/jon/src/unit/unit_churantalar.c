@@ -796,7 +796,7 @@ static EVT_BEGIN(damage_check_event_sub)
     END_IF
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     IF_INT_EQUAL(LW(8), 1)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(0))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(0))
         ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(0))
     END_IF
@@ -1102,7 +1102,7 @@ static EVT_BEGIN(renzoku_attack_event_sub_last)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), 16777216)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(7), 33554432)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(0))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(0))
         ELSE
         SET_VALUE(LW(8), 1)
         SET_VALUE(LW(10), 0)

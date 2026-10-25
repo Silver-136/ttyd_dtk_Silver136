@@ -274,7 +274,7 @@ static EVT_BEGIN(attack_event)
 #endif
     WAIT_FRAMES(LW(0))
     LABEL(50)
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 1)
         SWITCH(LW(5))
             CASE_EQUAL(3)
@@ -286,7 +286,7 @@ static EVT_BEGIN(attack_event)
         END_SWITCH
     ELSE
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

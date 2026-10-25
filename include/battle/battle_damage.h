@@ -67,7 +67,8 @@ typedef enum BattleDamageCode {
     DAMAGE_CODE_FIRST_ATTACK_POS = 0x39, // first-strike positioning
 } BattleDamageCode;
 
-// Upper bits of BattleUnit.damageCode next to the low-byte BattleDamageCode (BattleCheckDamage's result)
+// Upper bits of BattleUnit.damageCode next to the low-byte BattleDamageCode (BattleCheckDamage's result). The
+// damage check functions take the same bits as their flags argument and start the result from them.
 typedef enum BattleDamageResultFlags {
     DAMAGE_RESULT_FINAL_HIT = 0x100, // last hit of the attack (status, gauge and death are resolved)
     DAMAGE_RESULT_ZERO_HP = 0x200, // HP is zero after the final hit
@@ -76,6 +77,10 @@ typedef enum BattleDamageResultFlags {
     DAMAGE_RESULT_AC_SUCCESS = 0x20000, // the attack's action command succeeded
     DAMAGE_RESULT_GUARD = 0x40000,
     DAMAGE_RESULT_SUPERGUARD = 0x80000,
+    DAMAGE_RESULT_NO_EVADE = 0x100000, // BattlePreCheckDamage reports a hit without the evasion checks
+    DAMAGE_RESULT_NO_STATUS = 0x20000000, // BattleSetStatusDamageFromWeapon inflicts nothing
+    DAMAGE_RESULT_STATUS_EVERY_HIT = 0x40000000, // status is tried on this hit, not only on the final one
+    DAMAGE_RESULT_GULP = (s32)0x80000000, // Yoshi's Gulp: passes DEFENSE_ATTR_IMMUNE_EXCEPT_GULP
 } BattleDamageResultFlags;
 
 // Counter result filled by BattleCheckCounter (BattleInitCounterPreCheckWork clears it and sets attackHits)

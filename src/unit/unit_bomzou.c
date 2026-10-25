@@ -274,9 +274,9 @@ static EVT_BEGIN(explosion_event)
     IF_INT_GREATER(LW(0), 50)
         GOTO(80)
     END_IF
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_bomzou_explosion), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_bomzou_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 1)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_bomzou_explosion), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_bomzou_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     LABEL(80)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
