@@ -36,7 +36,10 @@ static inline void crCheck(BOOL b) {}
 
 
 // FAKE: stand-in for a debug function the linker stripped; its two strings are the last literals in the
-// target .rodata pool (codegen runs bottom-up, so it sits before the first function)
+// target .rodata pool (codegen runs bottom-up, so it sits before the first function). The JP demo map
+// (MarioSt.MAP) names the original: the strings are @2397/@2398, numbered between calcCurrentCamState and
+// camRoadSetup, where the map lists the stripped camRoadDraw (0x8b8 bytes, UNUSED in the demo as well), so
+// no build contains its code.
 static void camRoadStrippedReport(const char* p, s32 a, s32 b) {
     OSReport("%scam = %d\n", p, a);
     OSReport("%scurve = %d\n", p, b);

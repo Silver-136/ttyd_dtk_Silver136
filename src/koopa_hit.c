@@ -572,7 +572,10 @@ HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r) {
 }
 
 // FAKE: stand-in for a function the linker stripped from the original object; its 0.5f is the first
-// literal in the target .sdata2 pool (codegen runs bottom-up, so it must sit last in the file)
+// literal in the target .sdata2 pool (codegen runs bottom-up, so it must sit last in the file). The JP demo
+// map shows the head of koopa_hit.o as kpaSearchWallFront (kept there, 0x320 bytes) and the stripped
+// _reflect2/_reflect; the demo kpaSearchWallFront's literals are 45, 0.75, 0.25, 0.5, so the US original
+// (whose only literal left is 0.5) was a different version and cannot be taken from the demo.
 static f32 kpaHalf(f32 v) {
     return 0.5f * v;
 }
