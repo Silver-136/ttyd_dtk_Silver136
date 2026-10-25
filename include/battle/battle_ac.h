@@ -59,7 +59,6 @@ typedef struct BattleActions {
     };
     u8 work[0x30C - 0x2BC];          // 0x2BC, per-command work (each ac_*.c casts it to its own struct)
 } BattleActions;
-// NB: 0x308 is as far as I can pin to this struct (0x1F98 in battleAcMain_PendulumCraneTiming, TODO?)
 
 void BattleActionCommandManagerInit(BattleWork* wp);
 void BattleActionCommandManager(BattleWork* wp);

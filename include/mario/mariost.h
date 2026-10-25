@@ -78,7 +78,7 @@ typedef struct GlobalWork {
     OSTick mDeltaGame; //0x1314
     OSTick mDeltaRender; //0x1318
     u8 pad_131C[0x1324 - 0x131C]; //0x131C
-// system.c "key" controller data, TODO sub-struct?
+// controller state kept by the key functions (system.c)
     BOOL keyDataValid; //0x1324, key data valid (system.c)
     u32 button[4]; //0x1328
     u32 buttonNew[4]; //0x1338

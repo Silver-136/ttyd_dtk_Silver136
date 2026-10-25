@@ -17,7 +17,7 @@ BattleIcon* BtlIconGetPtr(s32 index) {
     for (i = 0; i < 16; i++) {
         icon = &_battleWorkPointer->icons[i];
         if (icon->flags & 1 && icon->index == index) {
-            return icon; //TODO: redo bwp->iconWork?
+            return icon;
         }
     }
     return NULL;

@@ -10,7 +10,7 @@ typedef struct CaseSetup {
     void* activeFunc; //0xC
     s32 lwData[16]; //0x10
     u8 pad_50[0x54 - 0x50]; //0x50, never accessed
-    void* evtCode; //0x54, TODO re-type
+    void* evtCode; //0x54
     s32 priority; //0x58
 } CaseSetup;
 
@@ -24,7 +24,7 @@ typedef struct CaseEntry {
     void* activeFunc; //0x50
     s32 lwData[16]; //0x54
     s32 evtId; //0x94
-    void* evtCode; //0x98, TODO re-type
+    void* evtCode; //0x98
     s32 priority; //0x9C
 } CaseEntry;
 

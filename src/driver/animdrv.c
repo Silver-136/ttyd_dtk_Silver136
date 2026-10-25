@@ -354,7 +354,7 @@ void animInit(void) {
     int i;
     FileEntry* file;
 
-    wp->totalFiles = 64; // TODO: #define these?
+    wp->totalFiles = 64;
     wp->totalTextures = 64;
     wp->totalPoses = 256;
     wp->mFloatScratchRP = 1024;
@@ -407,8 +407,6 @@ inline AnimationPoseData* animPoseGetBaseData(AnimationPose* pose) {
 
 #define animPoseGetBaseData(pose) (*(AnimationPoseData**)(wp->files[(pose)->fileId].handle->data))
 
-// heavily inlined, TODO helper function for that AnimPoseData* data, copy of animPoseGetAnimBaseDataPtr with AnimPose*
-// arg
 void animPose_AllocBuffer(AnimationPose* pose) {
     pose->mpBufferVtxPos = testAlloc(sizeof(Vec) * animPoseGetBaseData(pose)->mBufferPosNum);
     pose->mpVtxArrayPos = testAlloc(sizeof(Vec) * animPoseGetBaseData(pose)->mBufferPosNum);

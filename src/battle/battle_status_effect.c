@@ -392,10 +392,9 @@ void BattleStatusChangeInfoWorkInit(BattleUnit* unit) {
 }
 #pragma optimize_for_size reset
 
-//should be StatusEffectType, TODO fix for s8
 s32 _get_pri(s8 type) {
     s8* val;
-    s32 priority = 24; //TODO: #define?
+    s32 priority = 24;
 
     for (val = _st_pri_data;; priority--, val++) {
         if (*val == -1) {

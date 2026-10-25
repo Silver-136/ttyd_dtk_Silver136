@@ -12,7 +12,7 @@ typedef struct BattleStageObjectData {
     Vec mPosition; //0xC
     u8 mNumFramesToStartFalling; //0x14
     u8 mNumFramesToFall; //0x15
-    u8 pad_16[2]; //0x16, TODO remove cuz compiler auto-pads
+    u8 pad_16[2]; //0x16
 } BattleStageObjectData;
 
 typedef struct BattleStageObject {

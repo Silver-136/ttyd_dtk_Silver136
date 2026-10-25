@@ -56,7 +56,7 @@ struct HitEntry {
     struct HitEntry* parent;        // 0xD4
     struct HitEntry* child;         // 0xD8
     struct HitEntry* sibling;       // 0xDC
-    struct HitEntry* siblingActive; // 0xE0, TODO: next or sibling
+    struct HitEntry* siblingActive; // 0xE0
 };
 
 void hitInit(void);

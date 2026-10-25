@@ -6,7 +6,7 @@
 typedef enum HEAP_TYPE {
     HEAP_DEFAULT = 0,
     HEAP_MALLOC = 1, //for memInit/Clear to do its allocation
-    HEAP_EXT = 2, //TODO: proper name for EXT
+    HEAP_EXT = 2,
     HEAP_EFFECT = 3,
     HEAP_BATTLE = 4,
     HEAP_UNK5 = 5

@@ -30,7 +30,7 @@ typedef enum SoundEffectFlags {
     SFX_FLAG_8 = (1 << 31)
 } SoundEffectFlags;
 
-// most are translated in __psndSFXOn, TODO
+// sound effect table entry; __psndSFXOn looks names up here
 typedef struct SoundEffectEntry {
     const char* name;       // 0x0, sfx name
     u32 fxId;               // 0x4, lower 2 bytes are SND_FXID, top bits SoundEffectFlags

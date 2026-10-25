@@ -133,7 +133,6 @@ typedef struct EventEntry EventEntry;
 
 typedef s32 (*UserFunction)(EventEntry* evt, BOOL blocked);
 
-// TODO: s32, see evtRestart
 typedef struct EventCommand {
     union {
         s32 header;
@@ -145,7 +144,6 @@ typedef struct EventCommand {
     s32 label;
 } EventCommand;
 
-// unknown, TODO: look at evt_msg_toge/_evt_msg_print
 typedef struct EventEntryMsg {
     f32 x; // 0x0
     f32 y; // 0x4

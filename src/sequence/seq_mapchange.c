@@ -398,7 +398,6 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
     if (gp->flags & 1) {
         MarioWork* mario;
         PartyEntry* party;
-        // TODO: verify this is e.g. Flavio and the Egg from Glitzville and rename accordingly
         PartyEntry* extraParty;
 
         mario = marioGetPtr();

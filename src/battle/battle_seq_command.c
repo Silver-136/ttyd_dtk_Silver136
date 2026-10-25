@@ -58,7 +58,6 @@ void BattleCommandDisplay_MultiItemMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* param);
 
-//TODO: move into battle/seq/?
 
 //local prototypes
 extern ItemData itemDataTable[];

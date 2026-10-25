@@ -5,7 +5,7 @@
 
 typedef struct NameEntryWork {
     u16 flags; //0x0, bit0 = done/closing, bit1 = cancelled
-    u8 pad_2[2]; //0x2, padding?
+    u8 pad_2[2]; //0x2
     s32 loadState; //0x4, tpl load step (0 idle, 1 load, 3 free)
     s32 state; //0x8, input state; 100 = confirm, 0x65 = cancelled
     s32 type; //0xC, nameEntInit type; 1 = partner (default name "name_party3")

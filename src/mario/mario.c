@@ -1617,7 +1617,6 @@ void marioSetPaperAnimeLocalTime(s32 frames) {
     animPoseSetLocalTime(wp->paperAnimGroupId[marioAnimeId()], frames);
 }
 
-//TODO: move below marioPaperOff when -inline deferred is on
 inline void marioPaperRelease(void) {
     MarioWork* wp = mp;
     s32 poseId = wp->paperPoseId;

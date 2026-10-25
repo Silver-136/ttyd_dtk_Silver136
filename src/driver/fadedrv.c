@@ -1259,7 +1259,7 @@ BOOL fadeIsFinish(void) {
     return (*(u16*)((u8*)wp + wp->lastEntryId * sizeof(FadeEntry) + offsetof(FadeWork, entries[0].flags)) >> 1) & 1; // FAKE: byte-offset load so the entries offset folds into the index (mulli/addi/lhzx), as in the target
 }
 
-void fadeReset(s32 id) { //TODO: better param name?
+void fadeReset(s32 id) {
     FadeEntry* entry;
 
     entry = &wp->entries[id];

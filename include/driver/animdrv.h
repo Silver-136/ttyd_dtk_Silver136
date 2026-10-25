@@ -12,7 +12,7 @@ typedef struct AnimTableEntry AnimTableEntry;
 
 typedef struct AnimDrawCallEntry {
     s32 first; // 0x0
-    s32 count; // 0x4, TODO: u32? for cast in GXBegin in renderProc
+    s32 count; // 0x4
 } AnimDrawCallEntry;
 
 typedef struct AnimPoseShapeVertex {
@@ -28,8 +28,8 @@ typedef struct AnimPoseShape {
     AnimPoseShapeVertex vtxTex[8]; // 0x48
     s32 shapeDrawStart;            // 0x98
     s32 shapeDrawCount;            // 0x9C
-    s32 dispMode;                  // 0xA0, TODO: enum?
-    s32 cullMode;                  // 0xA4, TODO: enum?
+    s32 dispMode;                  // 0xA0
+    s32 cullMode;                  // 0xA4
 } AnimPoseShape;
 
 typedef struct AnimPoseShapeDraw {
@@ -247,8 +247,8 @@ typedef struct AnimationPose {
     s32 vivianType;                     // 0x11C
     s32* vivianGroupNo;                 // 0x120
     Mtx matrix;                         // 0x124
-    void* dispCallback;                 // 0x154, TODO: re-type
-    void* dispUserDataCallback;         // 0x158, TODO: re-type
+    void* dispCallback;                 // 0x154
+    void* dispUserDataCallback;         // 0x158
     Vec** worldPositions;               // 0x15C, filled while animPoseWorldPositionEvalOn is set
     s32 numWorldPositions;              // 0x160
     Mtx** worldMatrices;                // 0x164, filled while animPoseWorldMatrixEvalOn is set
@@ -307,7 +307,7 @@ void animInit(void);
 void animMain(void);
 void animPoseBattleInit(void);
 
-s32 animPoseEntry(const char* animName, s32 type); // TODO: add enum?
+s32 animPoseEntry(const char* animName, s32 type);
 s32 animPaperPoseEntry(const char* animName, s32 type);
 
 BOOL animEffectAsync(const char* animName, u32 group);

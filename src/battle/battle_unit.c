@@ -1227,7 +1227,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
     return TRUE;
 }
 
-//TODO: define that chunk of statuses to do sizeof?
+// the 0x1E bytes from mSleepTurns are every status's turns and strength
 void BtlUnit_ClearStatus(BattleUnit* unit) {
     memset(&unit->mSleepTurns, 0, 0x1Eu);
     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);

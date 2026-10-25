@@ -15,7 +15,6 @@
 #include "evt/evt_johoya.h"
 #include "statuswindow.h"
 #include "party.h"
-//TODO: put in /evt?
 //funcs sorted backwards aka original source file
 
 

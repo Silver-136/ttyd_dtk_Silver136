@@ -1242,7 +1242,7 @@ s32 evt_readf_n(EventEntry* entry) { // 73
 
     index = args[0];
     offset = evtGetValue(entry, args[1]);
-    evtSetFloat(entry, index, entry->readAddr[offset]); //bug using readf?
+    evtSetFloat(entry, index, entry->readAddr[offset]); // retail reads the entry as an integer (readAddr, not readfAddr) and converts it
 
     return EVT_RETURN_DONE;
 }

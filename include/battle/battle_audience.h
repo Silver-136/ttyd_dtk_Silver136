@@ -178,7 +178,7 @@ typedef struct BattleAudienceSound {
 } BattleAudienceSound;
 
 typedef struct BattleAudienceWindow {
-    u8 mActive;             // 0x0, TODO "bool"?
+    u8 mActive;             // 0x0
     u8 pad_01[0x8 - 0x1];   // 0x1, never accessed
     f32 x;                  // 0x8, window x
     f32 y;                  // 0xC, window y

@@ -77,7 +77,6 @@ MapWork* mapWork; //allocates two entries
 typedef MapEntryAnimData MapAnim;
 
 //local prototypes
-//anim functions?
 
 void mapErrorEntry(s32 type, const char* name) {
     MapError* error = error_data;

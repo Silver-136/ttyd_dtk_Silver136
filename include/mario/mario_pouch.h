@@ -3,7 +3,6 @@
 #include <dolphin/types.h>
 
 #define MAX_KEY_ITEMS 121
-// TODO: change name if it collides with backpack something
 #define MAX_HELD_ITEMS 20
 #define HELD_ITEM_COUNT_BASE 10
 #define GetHeldItemCount (pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE)

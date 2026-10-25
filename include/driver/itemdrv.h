@@ -26,7 +26,7 @@ typedef struct ItemEntry {
     u32 flags2; //0x38
     Vec position; //0x3C
     f32 scale; //0x48
-    u8 alpha; //0x4C, TODO: "icon_alpha"?
+    u8 alpha; //0x4C
     u8 pad_4D[0x50 - 0x4D]; //0x4D, never accessed
     f32 speed; //0x50
     s32 direction; //0x54

@@ -160,7 +160,7 @@ typedef struct MapFileInfo {
 
 typedef struct MapHeader {
     MapFileHeader file;         // 0x0
-    void* data;                 // 0x20, TODO re-type?
+    void* data;                 // 0x20
     u32* rel;                   // 0x24, relocation table: offsets into data of the pointers to rebase
     MapFileChunk* chunks;       // 0x28
     void* unused;               // 0x2C
@@ -332,7 +332,6 @@ s32 mapGetJoints(MapFileJoint* joint);
 void mapInit(void);
 MapEntryAnimData* mapSearchAnmObj(const char* animName);
 void mapCheckAnimation(const char* animName, BOOL* valid, f32* remainingMs);
-// more animation functions?
 void mapUnLoad(void);
 BOOL mapPreLoad(const char* map);
 void mapLoad(const char* map);

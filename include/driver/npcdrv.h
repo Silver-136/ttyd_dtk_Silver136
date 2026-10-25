@@ -26,7 +26,6 @@ typedef struct NpcDeadInfo {
     s32 mask;         // 0x10
 } NpcDeadInfo;
 
-// TODO: move this somewhere better?
 typedef struct PointDropData {
     s32 maxStatPercent;    // 0x0, 0 terminates the table
     s32 overallDropChance; // 0x4
@@ -182,7 +181,7 @@ typedef struct NpcEntry {
     const char* jumpSfx;            // 0x1EC
     const char* landSfx;            // 0x1F0
     s32 cameraId;                   // 0x1F4, CameraId
-    NpcTerritoryType territoryType; // 0x1F8, verified, TODO: create territory substruct?
+    NpcTerritoryType territoryType; // 0x1F8
     Vec territoryBase;              // 0x1FC, verified
     Vec territoryLoiter;            // 0x208, verified
     Vec territoryHoming;            // 0x214, verified

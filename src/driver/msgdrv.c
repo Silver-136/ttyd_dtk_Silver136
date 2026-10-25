@@ -92,7 +92,7 @@ s32 msgWindowOpen_SE_Data[] = {
 //.sbss
 MessageWork msgWork;
 BOOL msgSEflag; //msgSEInit and related functions are unused
-void* msgSortDvdData; //TODO: re-type
+void* msgSortDvdData;
 u16 g5_active_s772;
 
 //.sdata

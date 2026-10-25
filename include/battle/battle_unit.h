@@ -602,7 +602,7 @@ typedef struct BattleWorkUnitBadgesEquipped {
     u8 AutoCommand;   // 0x27
 } BattleWorkUnitBadgesEquipped;
 
-typedef struct BattleWorkHpGauge { // TODO: diff header file?
+typedef struct BattleWorkHpGauge {
     u16 mode;          // 0x0, gauge style; 1 = trailing bar
     u16 flags;         // 0x2, 1 = hide the gauge when visibleTimer runs out
     s16 drainTimer;    // 0x4, frames left of the bar animation
@@ -615,14 +615,12 @@ typedef struct BattleWorkHpGauge { // TODO: diff header file?
     f32 trailRatio;    // 0x18, trailing (lost HP) bar fill, 0..1
 } BattleWorkHpGauge;
 
-// TODO: move somewhere more sensible
 typedef struct ItemDropData {
     ItemType type;         // 0x0
     s16 holdWeight;        // 0x4
     s16 dropWeight;        // 0x6
 } ItemDropData;
 
-// note to self: +4 is near mUnk_HpGauge at 0x1FC
 typedef struct StChgInfo {
     s8 type;         // 0x0, -1 = free
     s8 strength;     // 0x1, status strength being announced

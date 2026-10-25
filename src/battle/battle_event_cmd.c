@@ -1705,7 +1705,7 @@ USER_FUNC(btlevtcmd_RecoverHp) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
-    evtGetValue(event, args[1]); //unused, debug?
+    evtGetValue(event, args[1]); // read and ignored
     hp = evtGetValue(event, args[2]);
     if (!(unit->mAttributeFlags & kImmuneToNegativeStatus)) {
         unit->hpGauge.prevHp = unit->currentHp;
@@ -1733,7 +1733,7 @@ USER_FUNC(btlevtcmd_RecoverFp) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
-    evtGetValue(event, args[1]); //unused, debug?
+    evtGetValue(event, args[1]); // read and ignored
     value = evtGetValue(event, args[2]);
     BtlUnit_RecoverFp(unit, value);
     return EVT_RETURN_DONE;

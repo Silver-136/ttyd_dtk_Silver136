@@ -853,7 +853,6 @@ s32 fileAsync(const char* filename, s32 type, FileCallback callback) {
     }
 }
 
-//TODO: enum of all archive types
 void fileSetCurrentArchiveType(s32 type) {
     afp->archiveType = type;
 }

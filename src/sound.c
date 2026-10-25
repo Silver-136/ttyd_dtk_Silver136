@@ -12,7 +12,6 @@
 #include "mario/mariost.h"
 #endif
 
-// TODO: use SoundInit to fill in SoundStream/Entry
 
 //.bss
 SND_AUX_REVERBHI revH;

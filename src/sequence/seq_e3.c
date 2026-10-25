@@ -28,7 +28,6 @@
 #include "sfx_name_word.h"
 #include "mario/mario_party.h"
 
-// TODO: move all this into other TUs
 typedef enum winTexMode {
     MODE_5 = 5,
     MODE_6 = 6,

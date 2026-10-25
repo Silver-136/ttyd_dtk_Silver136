@@ -208,7 +208,6 @@ USER_FUNC(evt_bero_exec_get) {
     return EVT_RETURN_DONE;
 }
 
-//s32* mask, TODO: add states, change EvtStatus to s32 and do #defines
 USER_FUNC(evt_bero_exec_wait) {
     return evtGetValue(event, *event->args) & BeroEXEC ? EVT_RETURN_DONE : 0;
 }

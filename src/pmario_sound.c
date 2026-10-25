@@ -34,7 +34,6 @@ typedef struct SoundBGMEntry {
     u8 group;
     u8 scope;
 } SoundBGMEntry; // scope 1: scopeTimer starts at 0xFF
-//TODO: put this in a folder?
 
 //.data
 SoundBGMEntry psbgmlist[] = {

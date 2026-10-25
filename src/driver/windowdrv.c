@@ -1,4 +1,3 @@
-/* TODO: macro "7" for numWindows or smth, tpl index macro/enum for easy waku editing */
 #include "driver/windowdrv.h"
 #include "dolphin/os.h"
 #include "driver/arcdrv.h"
