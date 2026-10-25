@@ -28,11 +28,8 @@ USER_FUNC(evt_eff);
 USER_FUNC(evt_eff_delete);
 
 s32 BattleAudienceSoundCheck(s32 id);
-void BattleAudienceSoundStop(s32 id);
-void BattleAudienceSoundCheer(s32 a, s32 b);
 void BattleAudienceSoundSetVol(s32 id, u8 vol, s32 c);
 void BattleAudienceSoundHandBeat(void);
-void BattleAudienceSoundClap(s32 a, s32 b);
 void BattleAudienceSoundCheerKind(s32 kind, s32 a, s32 b);
 void BattleAudienceSoundWhistleKind(s32 kind);
 

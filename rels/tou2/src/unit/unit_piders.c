@@ -22,7 +22,6 @@ typedef struct PidersYarn { f32 x0; f32 y0; f32 z0; f32 x1; f32 y1; f32 z1; u8 a
 void GXEnd_(void);
 void GXPosition3f32_(f32 x, f32 y, f32 z);
 static void piders_draw_yarn_sub(CameraId camera, void* param);
-BOOL BtlUnit_CanActStatus(BattleUnit* unit);
 
 USER_FUNC(btlevtcmd_AddRotate);
 USER_FUNC(btlevtcmd_AnimeChangePose);

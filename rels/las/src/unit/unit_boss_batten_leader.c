@@ -28,7 +28,6 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 time, f32 x1, f32 y1, f32 z1
 int rand(void);
 Vec nowv;
 f32 maer;
-s32 irand(s32 scalar);
 EffectEntry* effGlassN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 static s32 xlw[16];
 s32 xlw2[16];

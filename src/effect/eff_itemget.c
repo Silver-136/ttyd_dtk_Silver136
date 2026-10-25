@@ -11,7 +11,6 @@
 double sin(double);
 double cos(double);
 
-EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z);
 void effItemGetMain(EffectEntry* effect);
 void effItemGetDisp(CameraId cameraId, EffectEntry* effect);
 void effItemUseDisp(CameraId cameraId, EffectEntry* effect);

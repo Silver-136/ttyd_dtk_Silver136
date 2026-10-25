@@ -35,11 +35,8 @@ static USER_FUNC(_get_mario_hammer_lv);
 #include "pmario_sound.h"
 
 EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 duration);
-void BattleMajinaiDone(void);
-void BattleMajinaiEndCheck(void);
 void BattleAudience_Case_JumpNewRecord(void);
 void BtlUnit_SetAnim(BattleUnitPart* part, s32 anim);
-void BtlUnit_SetPos(BattleUnit* unit, f32 x, f32 y, f32 z);
 f32 sinfd(f32);
 f32 cosfd(f32);
 
@@ -10402,7 +10399,6 @@ USER_FUNC(_wait_jyabara_hit_iron_frame) {
     return EVT_RETURN_DONE;
 }
 
-void psndSFX_pos(s32 id, Vec* position);
 
 USER_FUNC(_tatsumaki_effect) {
     BattleWork* wp = _battleWorkPointer;

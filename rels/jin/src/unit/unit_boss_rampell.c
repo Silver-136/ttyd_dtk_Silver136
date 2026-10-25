@@ -132,7 +132,6 @@ static USER_FUNC(vivian_comeback) {
     return 1;
 }
 
-EffectEntry* effScanningEntry(s32 type, f32 x, f32 y, f32 z);
 
 static USER_FUNC(eff_scanning) {
     EvtWord* args = event->args;

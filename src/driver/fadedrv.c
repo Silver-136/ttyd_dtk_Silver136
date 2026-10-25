@@ -24,7 +24,6 @@ const f32 float_0_8041f774 = 0.0f;
 #pragma force_active reset
 #endif
 
-double tan(double);
 s32 evt_img_alloc_capture(EventEntry* event, BOOL isFirstCall);
 
 static FadeWork* wp;

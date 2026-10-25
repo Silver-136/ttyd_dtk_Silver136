@@ -26,9 +26,7 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 size);
-EffectEntry* effCrystalN64Entry(s32 a, s32 b, f32 x, f32 y, f32 z, f32 size);
 void btlGetScreenPoint(Vec* in, Vec* out);
 void BattleAudienceSoundWhistleKind(s32 kind);
 void BattleAudienceSoundCallKind(s32 kind);

@@ -130,7 +130,6 @@ void BattleAudienceSoundBooingKind(s32 kind);
 void BattleAudienceSoundCallKind(s32 kind);
 void BattleAudienceSoundHandBeat(void);
 void btlDispTex4(s32 id, Vec pos, Vec scale, Vec rot, GXColor color);
-s8 keyGetStickX(u32 chan);
 USER_FUNC(recover_cmd_disable);
 USER_FUNC(star_appear);
 USER_FUNC(status_on);

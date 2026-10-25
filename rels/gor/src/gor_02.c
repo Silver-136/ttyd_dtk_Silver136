@@ -38,10 +38,6 @@ BOOL winLectureCheck(void);
 void statusWinForceOff(void);
 void statusWinForceOpen(void);
 void door_position_sub(s32 type, const char* mapObj, const char* hitA, const char* hitB, Vec* outPos, Vec* inPos, s32 flag);
-void mapGrpFlagOn(const char* name, u32 flags);
-void mapGrpFlagOff(const char* name, u32 flags);
-void bgTransOffsetOn(void);
-void bgTransOffsetOff(void);
 f32 intplGetValue(s32 mode, s32 currStep, f32 start, f32 end, s32 steps);
 typedef struct DoorColorWork { GXColor color; GXColor color2; } DoorColorWork;
 DoorColorWork* _door;
@@ -6127,4 +6123,3 @@ EVT_BEGIN(gor_02_init_evt)
     RETURN
 EVT_END()
 
-BOOL psndBGMStartCheck(s32 id);

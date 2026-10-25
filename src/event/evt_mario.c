@@ -32,8 +32,6 @@ s32 partyEntryPos(s32 id, f32 x, f32 y, f32 z);
 s32 partyEntry2Pos(s32 id, f32 x, f32 y, f32 z);
 void partyChgRunMode(PartyEntry* party, s32 mode);
 void partyShadowOff(PartyEntry* party);
-void partyKeyOff(void);
-void partyKeyOn(void);
 void peachSetStsNormal(void);
 void peachSetStsAftershower(void);
 void peachSetStsInvisible(void);
@@ -45,15 +43,12 @@ void peachSetStsCarry(void);
 void peachTransformOff(void);
 void peachTransformOn(void);
 void kpaSetLevel(s32 level);
-s32 kpaGetLevel(void);
-void kpaAttackStart(void);
 BOOL marioChkSlitThrouhEnd(void);
 void marioBalloonOn(s32 type);
 void marioBalloonOff(void);
 void marioChgTalkMotion(void);
 void marioRollTryCancel(void);
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
-f32 toMovedirSimple(f32 dir);
 void marioSlitForceCancel(void);
 void marioRollForceCancel(void);
 
@@ -143,7 +138,6 @@ BOOL marioGetMotSlitCancel3(void);
 
 void marioClearJumpPara(void);
 void quake_kpaHipAttack(void);
-void kpaChgPose(const char* a, const char* b);
 
 void rollEvtJumpSetup(void);
 void setRollEvtFlag(void);

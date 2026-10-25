@@ -44,7 +44,6 @@ void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 void _btlcmd_MakeMultiItemTable(BattleWork* wp);
 void _btlcmd_MakeOperationTable(BattleWork* wp);
 void _btlcmd_MakeActClassTable(BattleWork* wp);
-void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type);
 void btlGetScreenPoint(Vec* pos, Vec* out);
 void FontDrawString(f32 x, f32 y, const char* msg);
 void FontDrawStart(void);
@@ -56,7 +55,6 @@ BOOL BattleCommandAttackAudienceCheck(void);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param);
 USER_FUNC(_get_msg);
 USER_FUNC(btlevtcmd_AnnounceMessage);
-void SelectedItemCoordinateColorUpDate(void);
 void BattleCommandDisplay_ActMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_WeaponSelectMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_OperationMenuDisp(CameraId camId, void* param);
@@ -72,7 +70,6 @@ extern ItemData itemDataTable[];
 extern BattleWeapon marioDefaultWeapon_Jump;
 extern BattleWeapon marioWeapon_KururinJump;
 extern BattleWeapon marioDefaultWeapon_Hammer;
-BOOL BtlUnit_CanActStatus(BattleUnit* unit);
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 s32 BtlUnit_CheckWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
@@ -1099,7 +1096,6 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuSetup(BattleWork* wp);
 void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp);
 void _commandRestoreRec(void);
 s32 _check_present_item(void);
-void BattleAcHelpSetDispType(s32 type);
 void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd);
 
 
@@ -2083,7 +2079,6 @@ void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp) {
 }
 
 void BattleMenuDisp_ChangePartySelect_Main(BattleWork* wp);
-BOOL BattleMenuKeyOKInACT(BattleWork* wp);
 void BattleCommandDisplay_ChangePartySelectMenuEnd(BattleWork* wp);
 
 s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp) {
@@ -2630,7 +2625,6 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
 	}
 }
 
-void BattleAcHelpSetDispType(s32 type);
 s32 irand(s32 scalar);
 
 #define TEXPLANE ((void (*)(u32, GXColor, s32, f32, f32, f32, f32, f32))btlDispTexPlane)

@@ -34,7 +34,6 @@ typedef struct RubWork {
 
 void marioGetRubInit(void);
 void marioGetStick(f32* dir, f32* mag);
-f32 toMovedirSimple(f32 angle);
 
 RubWork rubwork;
 

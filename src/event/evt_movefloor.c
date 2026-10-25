@@ -7,7 +7,6 @@
 #include "pmario_sound.h"
 #include <string.h>
 
-s32 psndGetFlag();
 void mapObjGetPos();
 
 typedef struct MovingFloor {

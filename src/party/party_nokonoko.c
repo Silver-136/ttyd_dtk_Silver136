@@ -28,19 +28,10 @@ double cos(double);
 #include "eff/n64/eff_small_star_n64.h"
 #include "mario/mariost.h"
 void effKemuTestDrawCam();
-EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy,
                                   f32 dz);
 HitEntry* hitCheckFilter(HitFilterCallback callback, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
                          f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz);
-s32 hitGetAttr(HitEntry* hit);
-void marioChgMot(MarioMotion);
-MarioWork* marioGetPtr(void);
-void marioGetScreenPos(Vec position, f32* x, f32* y, f32* z);
-void psndSFXOff(s32 id);
-s32 psndSFXOn_3D(const char* name, Vec* position);
-void sincosf(f32* ret_sin, f32* ret_cos, f32 degree);
-f32 toMovedir(f32 angle);
 #define EXT_LIT(sym, val) (val)
 extern ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 extern void marioChkWallAround(Vec* pos, s32 a1, f32 a2, f32 angle, f32 radius, f32 height);

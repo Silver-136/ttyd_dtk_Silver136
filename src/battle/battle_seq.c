@@ -41,9 +41,6 @@ void BtlActRec_JudgeTurnRuleKeep(void);
 void BtlActRec_AddCount(u8* count);
 void BattleMajinaiCheck(void);
 void BattleFogEndCheck(void);
-void BattleStatusWindowEventOn(void);
-void BattleStatusWindowSystemOn(void);
-void BattleStatusWindowSystemOff(void);
 void BattleStatusWindowEventOff(void);
 void BattleCommandInit(BattleWork* wp);
 BOOL BattleCommandInput(BattleWork* wp);
@@ -51,10 +48,7 @@ f32 battleCameraGetPosMoveSpeed(void);
 void BattleStatusChangeMsgAdjust(BattleWork* wp);
 BOOL BattleStatusChangeMsgMain(BattleWork* wp);
 BOOL BattleStatusChangeAnnouceMain(BattleWork* wp);
-void BattleConsumeReserveItem(void);
 BOOL BattleBreakSlot_CheckReaction(void);
-void BattleMajinaiDone(void);
-void BattleMajinaiEndCheck(void);
 void BtlUnit_SetTotalHitDamage(BattleUnit* unit, s32 damage);
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 s32 BattleDamageDirect(s32 unitIdx, BattleUnit* unit, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 stopFlags, u32 damageEffect, u32 pattern);
@@ -71,7 +65,6 @@ USER_FUNC(_set_haikei_entry_scale);
 void _mapobj_data_touch_scale(s32 layer);
 BOOL BattleCheckConcluded(BattleWork* wp);
 BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp);
-BOOL BattleWaitAllActiveEvtEnd(BattleWork* wp);
 void battleMakePhaseEvtTable(BattleWork* wp);
 void battleSortPhaseMoveTable(BattleWork* wp, s32 count);
 void btlseqPhaseFirstProcess(BattleWork* wp);
@@ -358,13 +351,11 @@ BattleWeapon* _GetFirstAttackWeapon(s32 type) {
 	}
 }
 
-BattleUnit* BattleGetMarioPtr(BattleWork* wp);
 void BattleAudience_Case_FirstAttack_Good(void);
 void BattleAudience_Case_FirstAttack_Bad(void);
 void BattleStage_WallCloseCheck(void);
 void BattleStage_NozzleWorkCheck(s32 a);
 void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** a, BattleUnit** b);
-BOOL fadeIsFinish(void);
 
 
 void btlseqFirstAct(BattleWork* wp) {

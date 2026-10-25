@@ -11,7 +11,6 @@
 double sin(double);
 double cos(double);
 s32 rand(void);
-s32 irand(s32);
 
 void effSnowDustMain(EffectEntry* effect);
 void effSnowDustDisp(CameraId cameraId, EffectEntry* effect);

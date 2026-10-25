@@ -13,7 +13,6 @@
 #include "unit/party/unit_party_christine.h"
 #include "manager/evtmgr_cmd.h"
 
-EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 unused, f32 scale);
 
 static USER_FUNC(_clauda_breath_effect_fire);
 static USER_FUNC(_clauda_breath_effect_ready);

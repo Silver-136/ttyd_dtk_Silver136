@@ -21,7 +21,6 @@ void allPartyRideOff(void);
 void marioClearJumpPara(void);
 void marioVoiceGlareOn(void);
 void marioVoiceGlareOff(void);
-void marioPaperOff(void);
 
 typedef struct MotJabaraWork {
 	u32 flags;          // 0x00: 1 = swing input taken (swingMain); 0x10000 / 0x20000 / 0x40000 = one-shot charge-level sounds played
@@ -214,9 +213,7 @@ void L_allPartyRideOn(void);
 void marioChkOverhead(void);
 void* marioSearchHead(Vec* p, f32* h, f32 r);
 HitEntry* marioChkLandon2(f32* out, f32 y, f32 z);
-void marioChgSmallJumpMotion(void);
 void swingMain(void);
-f32 marioGetFallSpd(void);
 void* marioChkLandon(f32* outY, f32 y);
 double sin(double);
 double cos(double);

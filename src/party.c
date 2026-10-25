@@ -736,8 +736,6 @@ void driveParty(PartyEntry* party);
 s32 partyHelloMain(PartyEntry* party);
 double sin(double);
 double cos(double);
-f32 toMovedir2(f32 a, f32 b);
-f32 toMovedirSimple(f32 a);
 s32 yoshiGetStatus(void);
 BOOL N_marioShipGetDir(void);
 void partyClearJumpPara(PartyEntry* party);
@@ -1214,7 +1212,6 @@ void partyHello(PartyEntry* party) {
 
 /* @@HELLO@@ */
 void partyMoveNoHosei(PartyEntry* party);
-f32 partyToMovedir(PartyEntry* party, f32 dir);
 void partyGetAppearPos(PartyEntry* party, Vec* pos);
 void allPartyForceRideOn(void);
 
@@ -2010,7 +2007,6 @@ s32 partyRideChk(PartyEntry* party) {
 
 /* @@MID3@@ */
 
-f32 toMovedir(f32 a);
 
 void partyRideMain(PartyEntry *party)
 {
@@ -2335,7 +2331,6 @@ s32 partyRideYoshiMain(PartyEntry* party) {
 
 void marioGetScreenPos(Vec position, f32* x, f32* y, f32* z);
 s32 hitGetAttr(struct HitEntry* hit);
-s32 sysMsec2Frame(s32 msec);
 BOOL marioWaitDamageReturnFall(void);
 BOOL marioWaitDamageTogeReturnFall(void);
 void vivianShadow(PartyEntry* party);
@@ -2998,18 +2993,12 @@ void partySetFamicomMode(PartyEntry* party, s32 mode) {
 void partySetFamicomMode(PartyEntry* party, s32 mode);
 void partyShadowOff(PartyEntry* party);
 void partyUpdateKeyData(PartyEntry* party);
-void L_partyClearCont(PartyEntry* party);
-void partyKeyOff(void);
-void partyKeyOn(void);
 void partyDisp(CameraId cam, void* param);
 void partyPreDisp(PartyEntry* party);
 void partyMakeDispDir(PartyEntry* party);
 void partySetCamId(PartyEntry* party, s32 cameraId);
-void partyInitCamId(PartyEntry* party);
 void party_damage_return(PartyEntry* party);
 s32 partyRideYoshiMain(PartyEntry* party);
-void party_ride_yoshi_force_move(void);
-void party_force_ride_yoshi(PartyEntry* party);
 void partyRideMain(PartyEntry *party);
 s32 partyRideChk(PartyEntry* party);
 void allPartyRideOff2(void);
@@ -3029,18 +3018,15 @@ void partyHello(PartyEntry* party);
 BOOL partyDoWork(void);
 void driveParty(PartyEntry* party);
 void partyMain(void);
-void partyRestoreRunMode(PartyEntry* party);
 void N_partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub);
 void partyChgRunMode(PartyEntry* party, s32 mode);
 void N__partyChgRunMode(PartyEntry* party, s32 prev, s32 mode);
-void partyUsePost(PartyEntry* party);
 void partyReInit(void);
 void partyInit(void);
 s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z);
 s32 partyEntry2Hello(s32 memberId);
 s32 partyEntry2(s32 memberId);
 s32 partyEntryMain(s32 memberId);
-f32 partyGetHeight(PartyEntry* party);
 s32 yoshiSetColor(void);
 s32 partyKill2(s32 id);
 s32 partyKill(s32 id);
@@ -3049,15 +3035,7 @@ s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z);
 s32 partyEntry(s32 memberId);
 s32 partyEntryHello(s32 memberId);
 void partySetForceMove(PartyEntry* party, s16 a2, f32 a3, f32 a4);
-void partyStop(PartyEntry* party);
-void partyRun(PartyEntry* party);
-void partyCtrlOn(void);
-void partyCtrlOff(void);
 void partyChgPaper(PartyEntry* party, char* paper);
 void partyChgPose(PartyEntry* party, char* pose);
-char* partyChgPoseId(PartyEntry* party, s32 index);
 void partyPaperLightOff(PartyEntry* party);
 void partyPaperOff(PartyEntry* party);
-BOOL partyPaperOn(PartyEntry* party, const char* animGroup);
-PartyEntry* anotherPartyGetPtr(s32 index);
-PartyEntry* partyGetPtr(s32 index);

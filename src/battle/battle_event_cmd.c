@@ -2821,7 +2821,6 @@ USER_FUNC(btlevtcmd_JumpSetting) {
 }
 
 /* movers begin (half_B) */
-void btlMovePos(f32 speed, f32 angle, f32* x, f32* z);
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 void BtlUnit_LoadSeMode(s32 mode, s32 kind, BtlPoseSoundTable* table, BecSndWork* work);
 void _UnitMoveSoundControl(BattleUnit* unit);
@@ -3465,14 +3464,12 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 a);
 void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 void BattleAfterReactionEntry(s32 id, s32 value);
 BOOL BtlUnit_GetACPossibility(BattleUnit* unit);
-BOOL BtlUnit_CanActStatus(BattleUnit* unit);
 BattleWeapon* BattleGetSelectWeapon(BattleWork* wp);
 extern ItemData itemDataTable[];
 #include "driver/animdrv.h"
 void btlDispChangePeraAnime(BattleUnitPart* part, s32 anim);
 void BtlUnit_PoseSoundInit(BattleUnitPart* part);
 void btlDispPoseAnime(BattleUnitPart* part);
-void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* name);
 void BattleAudience_Case_Appeal(BattleUnit* unit);
 s32 battleAcTimingA_GetSuccessFrame(BattleWork* wp);
@@ -3485,7 +3482,6 @@ void BattleGetFirstAttackUnit(BattleWork* wp, s32* a, BattleUnit** unit);
 void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, s32 a, s32* b, s32* c);
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s32 pitch, Vec* pos);
 void BtlUnit_SetSeMode(BecSndWork* work, const char* name0, const char* name1, s16 c, s16 e, s16 unused, s16 a, s16 b);
-void psndSFX_pos(s32 id, Vec* pos);
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit);
@@ -3497,8 +3493,6 @@ void BattleInitCounterPreCheckWork(s32* work);
 s32 BattleCheckCounter(s32* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 void* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
-void itemDelete(const char* name);
-void btlMovePos(f32 speed, f32 angle, f32* x, f32* z);
 #include "eff/n64/eff_coin_n64.h"
 s16 pouchAddCoin(s16 coins);
 static inline void bec_coin(BattleUnit* unit, s32 item) {
@@ -4308,7 +4302,6 @@ USER_FUNC(btlevtcmd_MarioJumpParam) {
     return EVT_RETURN_DONE;
 }
 
-f32 reviseAngle(f32 a);
 USER_FUNC(btlevtcmd_MarioJumpPosition) {
     BattleUnit* unit;
     s32 id, frames, type, kind;

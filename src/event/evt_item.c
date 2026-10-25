@@ -8,7 +8,6 @@
 
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
 void itemForceGet(ItemEntry* entry);
-void itemFlagOn(ItemEntry* entry, u16 flags);
 void itemFlagOff(ItemEntry* entry, u16 flags);
 void itemStatusOn(ItemEntry* entry, u32 flags);
 u32 itemStatus(ItemEntry* entry, u32 flags);

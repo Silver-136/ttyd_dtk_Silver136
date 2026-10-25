@@ -12,13 +12,10 @@
 #include "driver/shadowdrv.h"
 #include "gxsub.h"
 #include <math.h>
-double sin(double);
-double cos(double);
 static inline f32 sinf(f32 x) { return sin(x); }
 #include <string.h>
 void envReInit(void);
 
-void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx);
 void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table);
 int __cvt_dbl_usll();
 int __cvt_ull_flt();
@@ -37,8 +34,6 @@ void mapFlgOff(MapObject* obj, u32 flags, BOOL doNext);
 void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext);
 void mapGetBoundingBox(Vec* min, Vec* max);
 void mapGetJointsSub(MapFileJoint* joint, s32* numJoints);
-void mapGrpFlagOff(const char* name, u32 flags);
-void mapGrpFlagOn(const char* name, u32 flags);
 void mapGrpSetColor(const char* name, GXColor color);
 void mapObjGetPosSub(MapObject* obj, Vec* sum, s32* count, BOOL doNext);
 void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force);
@@ -82,7 +77,6 @@ MapWork* mapWork; //allocates two entries
 typedef MapEntryAnimData MapAnim;
 
 LightEntry* lightGetPaper(void);
-LightEntry* lightGetPaperCraft(void);
 LightEntry* lightGetCharaAmbient(void);
 void mapGetJointsSub(MapFileJoint* joint, s32* numJoints);
 s32 lightCheckCharaLight(void);
@@ -1686,7 +1680,6 @@ void mapMain(void) {
 	}
 }
 
-void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2);
 void mapSetTextureMatrix(MapMaterial* mat);
 
 void _mapDispMapObj(CameraId cam, MapObject *obj);
@@ -1698,7 +1691,6 @@ void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj);
 void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj);
 void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
 void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
-void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2);
 void mapSetTextureMatrix(MapMaterial* mat);
 void mapSetTextureMatrix(struct MapMaterial* mat);
 void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);

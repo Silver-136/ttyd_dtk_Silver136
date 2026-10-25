@@ -15,7 +15,6 @@
 #include <math.h>
 
 static BOOL partyChkMarioFollowY(MarioWork* mario);
-PartyEntry* partyGetPtr(s32 index);
 s32 marioGetPartyId(void);
 s32 marioGetExtraPartyId(void);
 f32 revise360(f32 angle);
@@ -49,14 +48,11 @@ void partyChkWall(PartyEntry* party);
 void partyChkGnd(PartyEntry* party);
 void partyChgRunMode(PartyEntry* party, s32 mode);
 void partyMoveBehindMario(PartyEntry* party, s32 a);
-s32 marioKeyOffChk(void);
 s32 marioChkDeepSleep(void);
 s32 chuchu_searchObject(void);
 void partyChgPose(PartyEntry* party, const char* pose);
-void marioGetScreenPos(Vec pos, f32* x, f32* y, f32* z);
 void partyGetReturnPos(Vec* pos);
 void partyForceSetSpd(PartyEntry* party, f32 a);
-BOOL partyPaperOn(PartyEntry* party, const char* name);
 void partyChgPaper(PartyEntry* party, const char* name);
 void partyPaperLightOff(PartyEntry* party);
 void marioClearSlitFloor(void);
@@ -84,7 +80,6 @@ BOOL psndENVOn_f_d(s32 a, s32 b, s32 c, s32 d);
 BOOL psndENVOff_f_d(s32 a, s32 b, s32 c);
 void psndENV_LPF(s32 a, u16 b);
 void psndSFX_dist(s32 id, u16 dist);
-void psndSFX_pos(s32 id, Vec* pos);
 void psndSFX_vol(s32 id, u8 vol);
 void psndSFX_pit(s32 id, s16 pit);
 s32 psndSFXChk(s32 id);
@@ -329,7 +324,6 @@ void partySetDispDirToMario(PartyEntry* party);
 void partySetTargetSpd(PartyEntry* party, f32 spd);
 HitEntry* partyHitCheck(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 void partyGetAppearPos3(PartyEntry* party, Vec* pos);
-s32 marioCtrlOffChk(void);
 static inline HitEntry* partyBehindGround(PartyEntry* party) {
     HitEntry* hit = partySearchGround(party, 10.0f, 0.0f);
     if (hit && (hitGetAttr(hit) & 0x200)) {
@@ -367,7 +361,6 @@ HitEntry* partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 
 #endif
 s32 marioChkSlitThrouh(void);
 void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd);
-PartyEntry* anotherPartyGetPtr(s32 id);
 HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 dir);
 
 void party_force_reset_outofscreen(PartyEntry* party);
@@ -877,7 +870,6 @@ PartyFootmark* partyGetFootmarkPtr(s32 id);
 s32 marioGetSlitFloorPos(Vec* pos);
 f32 partyGetTargetDistY(s32 id, f32 y);
 
-MarioWork* marioGetPtr(void);
 void partyGetReadId2(s32 id, Vec* pos);
 void L_getTargetPos(s32 id, Vec* pos);
 void partyChkFrontStep(PartyEntry* party, f32 dist, f32* y, f32* a, f32* b);
@@ -1686,7 +1678,6 @@ static inline f32 partyGetFollowDir(PartyEntry* party) {
 }
 
 void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd);
-PartyEntry* anotherPartyGetPtr(s32 id);
 
 void party_motion_behind_mario(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;

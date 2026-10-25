@@ -786,7 +786,6 @@ void envGlareFilterZ(f32 zscale) {
     f->flags |= 1;
 }
 
-int rand(void);
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
@@ -849,8 +848,6 @@ typedef struct EnvTexMtxWork {
 } EnvTexMtxWork;
 #define tw ((EnvTexMtxWork*)wp->texMtxWork)
 
-double sin(double);
-double cos(double);
 double acos(double);
 
 void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxType) {
@@ -1210,7 +1207,6 @@ void envAddTev(s32 type, MapTevCallbackInfo *info)
 
 #undef tw
 
-double tan(double);
 static inline MapObject* envWaterObj(MapTevCallbackInfo* info) { return *(MapObject**)info->mapObj; }
 static inline MapObject* envWaterParent(MapObject* o) { return o->parent; }
 void envSetWater(MapTevCallbackInfo* info) {

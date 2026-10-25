@@ -330,7 +330,6 @@ void btlUnitItemDisp2(CameraId camId, BattleUnit* unit);
 void btlUnitStolenItemDisp(CameraId camId, void* param);
 void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation);
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* part);
-StatusEffectType _GetStatusPoseType(BattleUnit* unit);
 
 void btlDispMain(void) {
 	BattleUnit* unit;

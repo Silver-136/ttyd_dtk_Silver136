@@ -22,7 +22,6 @@ static u32 _button_table[7] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUT
 
 static void actionCommandDisp(s32 unused, f32 x, f32 y);
 
-void *memset(void *dest, int ch, size_t count);
 // FAKE: the button[]/pressed[] indexes are cast (u32) (i, j >= 0 there, same value);
 // the cast stops IR strength reduction so the backend emits the target addi/lwzx
 // and the shared offset IV. allDone is declared first for the register order.

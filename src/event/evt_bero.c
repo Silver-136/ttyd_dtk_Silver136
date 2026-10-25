@@ -157,7 +157,6 @@ EVT_END()
 
 //new in retail, f32* x, f32* y, f32* z
 //new in retail, no args
-extern void N_marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z);
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
 	EvtWord* args = event->args;

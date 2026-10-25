@@ -16,17 +16,14 @@
 void qqsort(void* array, s32 num, s32 size, s32 (*cmp)(void*, void*));
 
 
-void evt_nannpc_set_animtbl_sub(NanNPC* npc, s16* tbl);
 s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall);
 void nannpc_ext_dispent();
 void nannpc_ext_main();
-void nannpc_ext_main_sub_fast();
 void nannpc_ext_main_sub();
 void nannpc_ext_init();
 void nannpc_ext_shadow_disp();
 void nannpc_ext_disp();
 s32 nannpc_zcompare(NanNPCSort* a, NanNPCSort* b);
-void nanNPCOption(void);
 USER_FUNC(evt_nannpcwork_flag_onoff);
 USER_FUNC(evt_nannpc_set_color);
 USER_FUNC(evt_nannpc_set_shadow_position);

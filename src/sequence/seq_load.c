@@ -66,7 +66,6 @@ typedef struct WinDt {
 
 extern void SoundSetOutputMode(s32 mode);
 extern BOOL psndENVOn(u32 flags, const char* name);
-extern BOOL psndBGMOff(u32 flags);
 void nameEntOn(s32 type);
 void nameEntOff(void);
 const char* nameEntGetName(void);
@@ -81,10 +80,7 @@ void winTexSetRot(u32 id, Vec translate, Vec scale, GXColor color, f32 rot);
 void nameMaskGX(f32 alpha);
 void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* str);
-void FontDrawEdge(void);
-void FontDrawEdgeOff(void);
 void FontDrawScaleVec(Vec scale);
-const char* msgSearch(const char* key);
 void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);
 void continueGame(void);
@@ -1295,9 +1291,7 @@ extern EvtWord evt_memcard_copy[];
 extern s32 evt_sub_rumble_onoff(EventEntry* evt, BOOL isFirstCall);
 extern s32 evt_sub_animgroup_async(EventEntry* evt, BOOL isFirstCall);
 extern void SoundSetOutputMode(s32 mode);
-extern void OSSetSoundMode(u32 mode);
 extern BOOL psndENVOn(u32 flags, const char* name);
-extern BOOL psndBGMOff(u32 flags);
 void nameEntOn(s32 type);
 void nameEntOff(void);
 const char* nameEntGetName(void);
@@ -1312,8 +1306,6 @@ void winTexSetRot(u32 id, Vec translate, Vec scale, GXColor color, f32 rot);
 void nameMaskGX(f32 alpha);
 void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* str);
-void FontDrawEdge(void);
-void FontDrawEdgeOff(void);
 void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);
 void continueGame(void);
@@ -1411,16 +1403,12 @@ void GXSetVtxAttrFmt(GXVtxFmt vtxfmt, GXAttr attr, GXCompCnt cnt, GXCompType typ
 void GXSetVtxDesc(GXAttr attr, GXAttrType type);
 void GXSetZCompLoc(GXBool before_tex);
 void GXSetZMode(GXBool compare_enable, GXCompare func, GXBool update_enable);
-u32 OSGetSoundMode(void);
 void PSMTXConcat(const Mtx a, const Mtx b, Mtx ab);
 void PSMTXScale(Mtx m, f32 xS, f32 yS, f32 zS);
 void PSMTXTrans(Mtx m, f32 xT, f32 yT, f32 zT);
 int __div2i();
 int __div2u();
 int __mod2u();
-int sprintf(char *s, const char *format, ...);
-char *strcpy(char *dest, const char *src);
-size_t strlen(const char *s);
 void seq_loadMain(SequenceWork* seq) {
     switch (seq->state) {
         case 0:

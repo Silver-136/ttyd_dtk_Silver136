@@ -14,7 +14,6 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 
-s32 psndSFXOn_3D(const char* name, Vec* position);
 void statusWinForceUpdateCoin(void);
 void nameEntOff(void);
 const char* nameEntGetName(void);

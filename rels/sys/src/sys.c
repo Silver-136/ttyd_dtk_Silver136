@@ -31,7 +31,6 @@ double fmod(double x, double y);
 EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 size);
 void effStardustN64SetDrawCam(EffectEntry* eff, s32 camera);
 void display_func(CameraId cameraId, void* param);
-EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z);
 typedef struct SysChar { f32 x; f32 y; f32 z; f32 rot; s32 timer; s32 state; s32 texid; } SysChar;
 #ifdef VERSION_G8ME01
 // US: room for 64 letters, plus the chapter subtitle rendered once into a texture
@@ -257,7 +256,6 @@ static inline void setChanMatColor(GXColor init, s32 c) {
 }
 
 #ifdef VERSION_G8ME01
-void FontDrawMessageMtx(Mtx mtx, const char* msg);
 
 // US: draws the chapter subtitle once, flat, and copies it into a texture that display_func bends
 void sys_01_msg_tex_capture_func(CameraId cameraId, void* param) {

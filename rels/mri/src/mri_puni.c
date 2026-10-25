@@ -36,7 +36,6 @@ void puniMapdata_MRI_09_getidx(f32 x, f32 z, s32* bx, s32* bz);
 void puniMapdata_MRI_16_getidx(f32 x, f32 z, s32* bx, s32* bz);
 void puniMapdata_MRI_09_getpos(s32 bx, s32 bz, f32* x, f32* z);
 extern int abs(int);
-EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 void envSetYami(MapTevCallbackInfo* info);
 
 u16 puni_nom_patern_data[] = {
@@ -235,7 +234,6 @@ void puniAnimationInit2(void) {
 }
 
 
-void animPoseSetLocalTime(s32 poseId, f32 localTimeFrames);
 
 void puniAnimation(PuniData* p, PunidrvPose* t) {
     NpcEntry* npc;
@@ -4674,7 +4672,6 @@ void puniCollideAll(void) {
 }
 
 
-void psndSFX_pos(s32 id, Vec* pos);
 void puniSound(void)
 {
   int i;

@@ -28,7 +28,6 @@ typedef struct Footmark {
     Vec pos;    // 0x4
 } Footmark;
 
-extern char* partyChgPoseId(PartyEntry* party, s32 index);
 
 s32 partyMoveMain(PartyEntry* party, s32 hosei);
 f32 partyUpdMoveSpd(PartyEntry* party, f32 spd);
@@ -42,8 +41,6 @@ extern HitEntry* marioChkWallAround(Vec* pos, s32 a, f32 spd, f32 dir, f32 w, f3
 void partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height);
 #endif
 extern HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* h, f32 a);
-double sin(double);
-double cos(double);
 
 static inline void partyModeTail(PartyEntry* party) {
     Vec pos;
@@ -68,7 +65,6 @@ static inline void partyModeTail(PartyEntry* party) {
         }
     }
 }
-void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd);
 
 Footmark footmarkBuf[2][80];
 s32 writeId[2];

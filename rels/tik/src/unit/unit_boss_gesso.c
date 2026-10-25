@@ -19,7 +19,6 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 
-EffectEntry* effOpukuJetwN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale);
 
 #ifdef VERSION_G8ME01
 USER_FUNC(btlevtcmd_CheckActStatus);

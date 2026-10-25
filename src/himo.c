@@ -5,8 +5,6 @@
 #include "libc_decls.h"
 #include <math.h>
 
-double sin(double);
-double tan(double);
 
 extern void spline_getvalue(Vec* out, s32 n, Vec* pts, f32* t1, f32* t2, f32 t);
 extern void spline_maketable(s32 n, Vec* pts, f32* t1, f32* t2);

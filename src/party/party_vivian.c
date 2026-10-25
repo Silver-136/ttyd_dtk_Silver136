@@ -34,7 +34,6 @@ extern void partyMoveFlyInit(PartyEntry* party, s32 arg);
 extern void partyFlyMain(PartyEntry* party);
 extern void partyPaperOff(PartyEntry* party);
 extern void partyChgRunMode(PartyEntry* party, s32 mode);
-extern char* partyChgPoseId(PartyEntry* party, s32 index);
 
 #pragma explicit_zero_data reset
 s32 vivian_cancel_req;

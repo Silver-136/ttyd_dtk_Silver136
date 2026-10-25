@@ -17,12 +17,9 @@ f32 distABf(f32, f32, f32, f32);
 f32 angleABf(f32, f32, f32, f32);
 f32 toMovedir(f32);
 void sincosf(f32* s, f32* c, f32 deg);
-double sin(double);
-double cos(double);
 BOOL marioChkBero(HitEntry* hit);
 HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 HitEntry* marioChkLandon(f32* outY, f32 y);
-f32 marioGetFallSpd(void);
 void marioLandOn(void);
 void marioClearJumpPara(void);
 void marioGetRubInit(void);
@@ -30,10 +27,6 @@ void allPartyRideShip(void);
 void allPartyRideOff(void);
 void allPartyForceRideOn(void);
 s32 marioSlitChkWallAround(void);
-void camFollowYOff(void);
-void camFollowYOn(void);
-void marioOfsRotReset(void);
-void marioSetSpec(void);
 void marioAdjustMoveDir(void);
 
 #define CAMF() (camGetPtr((CameraId)8)->flags)

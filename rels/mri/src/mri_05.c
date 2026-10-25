@@ -13,7 +13,6 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 
-EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* marioeff;
 
 USER_FUNC(evt_bero_get_info);

@@ -16,8 +16,6 @@
 #include "koopa_hit.h"
 #include <math.h>
 s32 kpaEnemyFireHitChk(f32 x, f32 y, f32 z, f32 h, f32 w);
-void _restfpr_28(void);
-void _savefpr_28(void);
 BOOL kpaFlameHitFilter(HitCheckQuery* query, HitEntry* entry);
 
 

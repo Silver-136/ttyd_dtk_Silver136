@@ -52,7 +52,6 @@ typedef struct IconBinData {
     IconFrame frames[1]; // 0x8
 } IconBinData;
 
-void iconDispGxCol(Mtx pos, s16 flags, s32 iconId, GXColor color);
 
 #define ICON_ANIM_TPL(data, dst)                                   \
     if ((data)->numIcons > 1) {                                    \

@@ -31,8 +31,6 @@ extern ItemData itemDataTable[];
 void winZClear(void);
 void winFontInit(void);
 void winIconInit(void);
-void winTexInit(TEXPalette* texture);
-void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color);
 void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color);
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...);

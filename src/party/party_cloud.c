@@ -34,7 +34,6 @@ void partyFlyMain(PartyEntry* party);
 void N__cloud_use(PartyEntry* party);
 void getHitBreatheout2(PartyEntry* party, f32 unk);
 void partyChgRunMode(PartyEntry* party, s32 mode);
-char* partyChgPoseId(PartyEntry* party, s32 id);
 void partyChgPose(PartyEntry* party, const char* pose);
 void partyChgMot(PartyEntry* party, s32 mot);
 

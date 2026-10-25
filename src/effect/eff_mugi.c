@@ -9,7 +9,6 @@
 #include "libc_decls.h"
 
 double sin(double);
-double cos(double);
 
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"

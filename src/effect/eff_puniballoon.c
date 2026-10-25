@@ -11,7 +11,6 @@
 double sin(double);
 int rand(void);
 
-EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 void effPuniBalloonMain(EffectEntry* effect);
 void effPuniBalloonDisp(CameraId cameraId, EffectEntry* effect);
 static void balloon_1(CameraId cameraId, EffectEntry* effect);

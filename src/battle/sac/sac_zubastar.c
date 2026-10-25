@@ -97,7 +97,6 @@ typedef struct ZubaStarWork {
 
 ZubaStarWork* GetZubaStarPtr(void);
 
-s32 weaponGetPower_ZubaStar(void* a, s32* tbl);
 
 BattleWeapon weapon_zubastar = {
     "btl_wn_sac_zubastar", // name
@@ -157,7 +156,6 @@ typedef struct StarStoneData {
 	Vec rot;
 } StarStoneData;
 
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 
 s32 main_star(void) {
 	ZubaStarWork* w = GetZubaStarPtr();

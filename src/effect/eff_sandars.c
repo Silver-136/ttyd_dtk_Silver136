@@ -11,7 +11,6 @@
 double sin(double);
 double cos(double);
 
-void effGetTexObj(u32 id, GXTexObj* obj);
 void effSandarsMain(EffectEntry* effect);
 void effSandarsDisp(CameraId cameraId, EffectEntry* effect);
 void effSandarsDisp2(CameraId cameraId, EffectEntry* effect);

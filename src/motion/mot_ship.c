@@ -61,7 +61,6 @@ EVT_END()
 f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 const char* paper_ship[4] = {"p_hune", "p_hune_g", "p_hune_y", "p_hune_v"};
 
-void sincosf(f32* s, f32* c, f32 a);
 
 static inline s32 harborKind(HitEntry* hit) {
 	s32 k = 0;
@@ -89,20 +88,15 @@ void* effFunemizuEntry(s32, f32, f32, f32, f32, f32);
 
 void marioPreJump(void);
 void allPartyRideShip(void);
-void marioSetFallPara(void);
 void marioClearJumpPara(void);
 void N_marioReloadMapOnBottomlessOff(void);
 
-f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
-f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
-void movePos(float* ret_sin, float* ret_cos, f32 a3, f32 degree);
 double __fabs(double);
 HitEntry* marioChkLandon(f32, f32*);
 
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
 
 void marioCheckWallShip(f32, f32);
-void marioPaperOff(void);
 double sin(double);
 double cos(double);
 void shipMove(void);

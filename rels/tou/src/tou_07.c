@@ -126,8 +126,6 @@ static EvtWord mobj_box00[34];
 EvtWord tou_07_init_evt[286];
 
 #ifdef VERSION_G8ME01
-s32 marioKeyOffChk(void);
-s32 marioCtrlOffChk(void);
 
 USER_FUNC(tou_07_mario_keyoff_check) {
     EvtWord* args = event->args;

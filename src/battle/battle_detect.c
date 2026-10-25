@@ -8,7 +8,6 @@
 
 extern ItemData itemDataTable[];
 
-BOOL BtlUnit_CanActStatus(BattleUnit* unit);
 s32 BtlCompForwardLv(s32 dir, f32 x);
 
 #pragma inline_max_total_size(100000)

@@ -28,7 +28,6 @@ typedef struct ZakoGunWork { s32 flag; s32 targetId; u8 field_0x8[ZAKOGUNWORK_PA
 #endif
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
-void psndSFXOff(s32 id);
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 BattleUnit* zakogun_get_ptr(void);
 void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);

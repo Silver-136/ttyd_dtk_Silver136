@@ -20,7 +20,6 @@
 #include "libc_decls.h"
 #include <math.h>
 
-extern char* strcat(char* dest, const char* src);
 
 #pragma optimize_for_size on
 
@@ -28,11 +27,7 @@ extern char* strcat(char* dest, const char* src);
 #define fabs(x) __fabs(x)
 #define fabsf(x) __fabsf(x)
 #else
-double fabs(double x);
-float fabsf(float x);
 #endif
-extern double cos(double x);
-extern double fmod(double x, double y);
 
 // clang-format off
 // .sdata

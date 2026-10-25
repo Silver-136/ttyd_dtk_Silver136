@@ -14,7 +14,6 @@
 #ifdef VERSION_G8ME01
 #endif
 
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 
 USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam3d_evt_set);

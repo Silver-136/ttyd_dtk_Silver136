@@ -12,8 +12,6 @@
 #include "libc_decls.h"
 #include <math.h>
 
-double sin(double);
-double cos(double);
 
 void effCloudMain(EffectEntry* effect);
 void effCloudDisp(CameraId cameraId, EffectEntry* effect);

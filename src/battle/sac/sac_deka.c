@@ -137,7 +137,6 @@ static USER_FUNC(star_stone_appear);
 static USER_FUNC(wait_game_end);
 static USER_FUNC(start_game);
 USER_FUNC(wait_star_stone_take_on);
-s32 weaponGetPower_Deka(void);
 void create_timing(void);
 void yuka_disp(CameraId cam, void* param);
 void yuka_capture(CameraId cam, void* param);

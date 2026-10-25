@@ -16,7 +16,6 @@ void kpaSetSpec(void);
 void kpa2DMain(void);
 void kpa3DMain(void);
 void marioChgMot(s32);
-void psndSFXOff(s32);
 void marioResetCamFollowRate(void);
 void camFollowYOff(void);
 void camFollowYOn(void);
@@ -24,7 +23,6 @@ void marioPreJump(void);
 void marioMakeJumpPara(void);
 void marioSetPeakYpos(void);
 void marioBottomless(void);
-void marioPreDisp(void);
 void marioBalloonMain(void);
 #ifdef VERSION_G8ME01
 #define mario_kemuri_80130474 mario_kemuri // US: global name
@@ -38,7 +36,6 @@ void marioChkGnd(void);
 void marioChkGnd2(void);
 void marioBoots(void);
 void marioForceMoveMain(void);
-void marioMove(void);
 void marioCheckWall(f32, f32);
 struct HitEntry* kpaHitCheck(void);
 void kpaSearchFrontUnder(void);
@@ -51,8 +48,6 @@ extern f32 marioJumpData[];
 f32 marioGetFallSpd(void);
 void* marioChkLandon(f32* outY, f32 y);
 void marioLandOn(void);
-s32 marioKeyOffChk(void);
-s32 marioCtrlOffChk(void);
 
 #define KPW(m) ((m)->kpaWork)
 
@@ -63,8 +58,6 @@ s32 kpaPauseSeTable[28] = {0x10C, 0x10D, 0x10E, 0x10F, 0x111, 0x112, 0x113, 0x11
                            0x127, 0x128, 0x129, 0x12A, 0x12C, 0x12D, 0x12E, 0x12F};
 static EffectEntry* fireefp;
 static u8* fireefp_pad;
-s32 kpaGetLevel(void);
-f32 kpaGetBaseScale(s32 lv);
 
 static inline void kpaFireEntry2(Vec pos) {
     MarioWork* mp = marioGetPtr();

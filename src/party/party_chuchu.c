@@ -56,7 +56,6 @@ typedef struct ChuchuTreasure {
 } ChuchuTreasure;
 
 extern void partyGetAppearPos3(PartyEntry* party, Vec* pos);
-extern char* partyChgPoseId(PartyEntry* party, s32 index);
 extern void partyChgPose(PartyEntry* party, char* pose);
 extern void partyChgRunMode(PartyEntry* party, s32 mode);
 extern void partyWalkInit(PartyEntry* party, s32 mode);

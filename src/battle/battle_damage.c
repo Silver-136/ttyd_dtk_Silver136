@@ -36,7 +36,6 @@ BOOL BtlUnit_CanGuardStatus(BattleUnit* unit);
 void btlDispPoseAnime(BattleUnitPart* part);
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
-s32 pouchEquipCheckBadge(s32 badgeId);
 s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u32 special, s32 type, s32 rate, s32 levelDiff, s8 time, s8 strength);
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
 u32 BattleCheckPikkyoro(BattleWeapon* weapon, u32* flags);
@@ -50,9 +49,7 @@ BOOL BtlUnit_GetACPossibility(BattleUnit* unit);
 s32 BattleActionCommandGetDefenceResult(void);
 void BattleActionCommandStop(BattleWork* work);
 void BattleAcHelpSetDispType(s32 type);
-EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z);
 EffectEntry* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
-s32 psndSFXOn_3D(const char* name, Vec* position);
 void BattleAudience_Case_GuardGood(void);
 void BattleAudience_Case_GuardBad(void);
 void BattleAudience_Case_EnemyNoDamage(void);
@@ -954,7 +951,6 @@ u8 _getRegistStatus(BattleUnit* unit, s32 type) {
 
 #include "eff/n64/eff_stamp_n64.h"
 EffectEntry* effUpdownEntry(s32 type, s32 strength, s32 time, f32 x, f32 y, f32 z);
-EffectEntry* effVaporN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 value, s32 flag);
 void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 type, s32 flag);
 

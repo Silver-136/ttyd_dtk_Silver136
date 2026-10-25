@@ -459,12 +459,9 @@ s32 msgMain(smartEntry* smart) {
 	return 3;
 }
 
-double cos(double);
 double sin(double);
 void FontDrawNoise(void);
 void FontDrawNoiseOff(void);
-void FontDrawEdge(void);
-void FontDrawEdgeOff(void);
 void FontDrawRainbowColor(void);
 void FontDrawRainbowColorOff(void);
 void FontDrawColorIDX(s32 idx);
@@ -750,8 +747,6 @@ void msgDispKeyWait_render(s32 wXluStage) {
 	wp->currDispMode = wXluStage;
 }
 
-char* msgGetCommand(char* msg, char* cmd, char* arg);
-s32 msgIconStr2ID(const char* str);
 #ifdef VERSION_G8ME01
 u16 hankakuSearch(s32 c);
 #else

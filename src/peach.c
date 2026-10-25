@@ -17,14 +17,12 @@ void marioBalloonMain(void);
 void mario_kemuri_80130474(void);
 void partyMain(void);
 void marioCamMain(void);
-void marioSetFallPara(void);
 void marioJump(void);
 void marioFall(void);
 void marioChkGnd(void);
 void marioChkGnd2(void);
 void marioBoots(void);
 void marioAdjustMoveDir(void);
-f32 marioGetWalkSpd(void);
 void npcSetMarioAutoTalkPose(const char*, const char*);
 
 void peachChgPose(const char* name);

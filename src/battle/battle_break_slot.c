@@ -28,7 +28,6 @@ void btl_camera_set_mode(s32 pri, s32 mode);
 void btl_camera_set_moveSpeedLv(s32 pri, s32 lv);
 void BattleAudienceNumToTarget(void);
 
-BreakSlotWork* BattleBreakSlotGetPtr(void);
 BreakSlotReel* BattleBreakSlotReelGetPtr(s32 no);
 void BattleBreakSlot_Start(void);
 void BattleBreakSlotDispReel(CameraId camId, void* param);
@@ -282,12 +281,9 @@ void BattleBreakSlot_Init(void) {
 }
 
 s32 BattleAudienceAddAudienceNum(s32 num);
-void BattleAudienceAddTargetNum(f32 a, f32 b);
 void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 x);
 void btl_camera_noshake(s32 pri);
-void BattleAudienceSoundStop(s32 id);
 void BattleAudienceSoundRun(s32 id);
-void BattleAudienceSoundCheer(s32 a, s32 b);
 void BattleAudienceSoundBooing(void);
 double sin(double);
 

@@ -14,7 +14,6 @@
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
 HitEntry* marioSearchGround(f32* a, f32* b, f32* c, f32 d, f32 e);
-f32 marioGetFallSpd(void);
 void set_damage_root_ypos(f32 y);
 void kpa_hip(void);
 

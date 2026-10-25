@@ -17,7 +17,6 @@
 
 
 f32 sinfd(f32 degrees);
-EffectEntry* effFireEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 BOOL BattlePartyAnimeLoad(s32 id);
 void BattleAudience_Case_Escape(void);
 void BattleAudience_Case_Escape_Bad(void);

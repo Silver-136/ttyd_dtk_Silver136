@@ -32,12 +32,7 @@
 #include "mario/mario_cam.h"
 #include <math.h>
 
-double sin(double);
-double cos(double);
-double atan2(double y, double x);
 static inline f32 fid(f32 x) { return x; }
-double sin(double x);
-double cos(double x);
 typedef struct KaitenParam { Vec pos; Vec target; f32 angle; f32 dist; } KaitenParam;
 void effStardustN64SetDrawCam(EffectEntry* eff, s32 camera);
 void effStardust2N64SetDrawCam(EffectEntry* eff, s32 camera);
@@ -52,8 +47,6 @@ s32 select;
 static inline f32 tb_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
 static inline f32 tb_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
 void tiz_broken_draw(CameraId cameraId, void* param);
-void N_mapDispOn(void);
-void N_mapDispOff(void);
 void effStarStoneDraw(CameraId camera, void* param);
 s32 EXIGetType(s32 chan, u32 dev, u32* type);
 

@@ -639,7 +639,6 @@ typedef struct StarEffWork {
     Vec rot;  // 0x18
 } StarEffWork;
 
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 void star_disp2D(CameraId camera, void* param);
 #define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 

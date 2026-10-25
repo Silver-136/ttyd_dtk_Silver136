@@ -19,12 +19,10 @@
 static void piders_draw_yarn_sub(CameraId cameraId, void* param);
 
 double sqrt(double);
-double sin(double);
 double cos(double);
 double __fabs(double);
 #define fabs(x) __fabs(x)
 
-EffectEntry* effMagic1N64Entry(s32 a, s32 b, f32 x, f32 y, f32 z, f32 w, f32 v, f32 u);
 s32 kpaGetLevel(void);
 BOOL npcCheckBlow(NpcEntry* npc);
 void PSVECSubtract(const Vec* a, const Vec* b, Vec* ab);

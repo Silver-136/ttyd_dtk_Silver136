@@ -38,7 +38,6 @@ void camEvalNearFar(CameraEntry* camera);
 void cam3dMain(CameraEntry* camera);
 void cam3dImgMain(CameraEntry* camera);
 void camEffMain(CameraEntry* camera);
-void camLetterBox(void);
 inline Vec makeVecByValue(f32 x, f32 y, f32 z);
 
 void camInit(void) {

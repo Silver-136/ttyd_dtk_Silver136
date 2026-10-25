@@ -17,14 +17,12 @@
 
 EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 HitEntry* marioChkLandon(f32* outY, f32 y);
-f32 marioGetFallSpd(void);
 void marioClearSlitFloor(void);
 void marioSlitForceCancel(void);
 void marioYoshiForceCancel(void);
 void nokonoko_use_cancel(void);
 void bomhei_use_cancel2(void);
 void mario_simple_kemuri(void);
-void marioSetFallPara(void);
 
 
 static EVT_BEGIN(quake_evt)

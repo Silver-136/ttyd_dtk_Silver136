@@ -189,7 +189,6 @@ const char* msg_fr_article_tbl[3] = {"un ", "une ", "les "};
 const char* msg_es_article_cap_tbl[6] = {"Un ", "Una ", "", "", "Unos ", "Unas "};
 const char* msg_es_article_tbl[6] = {"un ", "una ", "", "", "unos ", "unas "};
 
-char* strcat(char* dst, const char* src);
 char* strstr(const char* s, const char* sub);
 
 s32 evt_msg_fmt_int(EventEntry* event, BOOL isFirstCall);

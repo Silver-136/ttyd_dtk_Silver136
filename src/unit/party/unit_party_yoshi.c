@@ -50,7 +50,6 @@ typedef struct YoshiGundanWork {
     f32 timer;
 } YoshiGundanWork;
 
-void psndSFX_pos(s32 id, Vec* position);
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_sweat_n64.h"
 #include "data_tables.h"

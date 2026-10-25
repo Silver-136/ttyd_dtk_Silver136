@@ -17,8 +17,6 @@
 void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
 void FontDrawString(f32 x, f32 y, const char* str);
-void FontDrawEdge(void);
-void FontDrawEdgeOff(void);
 void GXGetProjectionv(f32* ptr);
 void GXGetViewportv(f32* vp);
 void nameBG(void);

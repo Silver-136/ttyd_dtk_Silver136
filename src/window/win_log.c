@@ -425,10 +425,6 @@ void monosiriClose(MonosiriWork* m);
 BOOL monosiriCloseWait(MonosiriWork* m);
 void monosiriExit(MonosiriWork* m);
 const char* winGetMapTplName(void);
-f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
-s8 keyGetStickX(u32 chan);
-s8 keyGetStickY(u32 chan);
-u32 keyGetButton(u32 chan);
 
 s32 winLogMain(WindowWork* w) {
     static char name[0x40];

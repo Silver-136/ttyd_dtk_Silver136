@@ -23,7 +23,6 @@
 
 extern s32 kpaFireAttackCheck(void);
 extern void kpaCamFollow(void);
-extern f32 marioMakeJumpPara(void);
 extern void marioChgMot2(s32 id);
 extern void* marioChkLandon(f32* outY, f32 y);
 f32 kpaStickSpd(s32 dash);

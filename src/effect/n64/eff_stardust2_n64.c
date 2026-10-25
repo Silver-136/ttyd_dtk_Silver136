@@ -8,7 +8,6 @@
 #include "libc_decls.h"
 
 double sin(double);
-double cos(double);
 
 typedef struct EffStardust2N64Work {
     s16 flag;     // 0x0

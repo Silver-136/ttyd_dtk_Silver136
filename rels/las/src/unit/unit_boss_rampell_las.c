@@ -3911,7 +3911,6 @@ EVT_BEGIN(wait_event_chuchurina)
     RETURN
 EVT_END()
 
-EffectEntry* effScanningEntry(s32 type, f32 x, f32 y, f32 z);
 
 static USER_FUNC(eff_scanning) {
     EvtWord* args = event->args;

@@ -14,8 +14,6 @@
 #include "libc_decls.h"
 #include <math.h>
 
-double sin(double);
-double cos(double);
 
 typedef struct effN64Vtx {
     s16 x, y, z;   // 0x0

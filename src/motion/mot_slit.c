@@ -13,20 +13,9 @@
 void U_allPartySlitOffReq(void);
 #endif
 
-BOOL marioChkKey(void);
-s32 marioKeyOffChk(void);
-BOOL marioBgmodeChk(void);
-BOOL marioChkJump(void);
 BOOL marioRollChgChk(void);
-BOOL marioPaperOn(const char* name);
-void marioPaperOff(void);
-void marioChgPaper(const char* name);
-void marioChgPose(const char* name);
 void marioAdjustMoveDir(void);
-void marioChgMot(MarioMotion);
-void marioChgMotSub(MarioMotion, s32);
 void marioChgMot2(MarioMotion);
-void marioSetFallPara(void);
 BOOL marioSlitChkWallAround(void);
 void allPartySlitOn(void);
 void allPartySlitOff(void);

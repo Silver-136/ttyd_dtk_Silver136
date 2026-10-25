@@ -129,7 +129,6 @@ USER_FUNC(evt_mobj_entry);
 
 extern void hitGrpFlagOn(const char* name, u32 flag);
 extern EventEntry* mobjRunEvent(MapObjectEntry* mobj, EvtWord* eventCode);
-extern s32 psndSFXOn_3D(const char* name, Vec* position);
 extern void kpaPowUp(void);
 extern void hitGrpFlagOff(const char* name, u32 flag);
 

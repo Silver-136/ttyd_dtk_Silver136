@@ -19,7 +19,6 @@ void marioChkWallAround(Vec* pos, s32 a1, f32 a2, f32 angle, f32 radius, f32 hei
 #endif
 
 void marioClearJumpPara(void);
-void marioPaperOff(void);
 void allPartyRideOff2(void);
 void allPartyRidePlane(void);
 void marioSetSplash(s32 kind, Vec* pos);
@@ -27,12 +26,7 @@ void set_damage_root_ypos(f32 y);
 HitEntry* marioHitCheck(f32* ox, f32* oy, f32* oz, f32* dist, f32* nx, f32* ny, f32* nz, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz);
 HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 HitEntry* marioSearchGround(f32* a, f32* b, f32* c, f32 d, f32 e);
-f32 revise360(f32 angle);
-s32 marioKeyOffChk(void);
 void animPoseSetLocalTime(s32 poseId, f32 localTimeFrames);
-s32 marioAnimeId(void);
-s32 sysMsec2Frame(s32 msec);
-void marioSetFallPara(void);
 void marioPreJump(void);
 void marioChkOverhead(void);
 

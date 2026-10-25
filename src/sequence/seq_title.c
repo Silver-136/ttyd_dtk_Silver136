@@ -24,10 +24,8 @@
 #define PSTATIC static
 #endif
 
-void FontDrawEdge(void);
 void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* msg);
-void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color);
 
 TitleWork work2;
 TitleWork* wp2 = &work2;

@@ -26,7 +26,6 @@ void evtMsgFmtStr(char* dst, const char* src);
 
 extern ItemData itemDataTable[];
 extern void* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
-extern void itemDelete(const char* name);
 extern void psndSFX_pit(s32 id, s32 pitch);
 
 USER_FUNC(_damage);

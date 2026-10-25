@@ -54,7 +54,6 @@ typedef struct Bom { u8 state; u8 next; u8 pad_2[2]; Vec target; f32 field_0x10;
 typedef struct BomWork { u16 flags; u8 pad_2[2]; s32 count; BomAnim anims[8]; s32 animCount; u8 pad_ac[4]; Bom bom[1000]; } BomWork;
 smartEntry* lp;
 #define EXT_DATA ((ExtAnimDef*)ext_data)
-s32 extGetPoseNum(void);
 static void pose_change(s32 i, const char* name);
 static void pose_change(s32 i, const char* name);
 static ExtTexInfo ext_data[31];
@@ -62,12 +61,6 @@ static inline f32 chb_sin(f32 x) { f32 y; f32 x2; f32 r; f32 a = 0.00761f; f32 b
 static inline f32 chb_cos(f32 x) { f32 y; f32 x2; f32 r; f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; r = a; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; r = a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; r = a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; r = a; } return r; }
 static void pose_init(void);
 static void pose_init(void);
-void extLoadRenderMode(void);
-void extLoadVertex(void);
-void extLoadTexture(void);
-void extLoadTev(void);
-void extDraw(void);
-void extLoadTextureExit(void);
 double sin(double x);
 void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
@@ -81,7 +74,6 @@ static void depthDisp(CameraId camera, void* param);
 static void depthDisp(CameraId camera, void* param);
 typedef struct YamiParam { s32 field_0x0; f32 (*mtx)[4]; s32 field_0x8; s32 numTevStages; s32 field_0x10; s32 numTexGens; s32 numIndStages; } YamiParam;
 void envSetYami(YamiParam* param);
-void extPoseDraw(s32 i);
 void ext_disp_minnnanokoe(CameraId camera, void* param);
 void ext_disp_minnnanokoe(CameraId camera, void* param);
 void jump_minnnanokoe(s32 i, f32 h);

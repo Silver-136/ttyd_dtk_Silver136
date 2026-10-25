@@ -10,23 +10,12 @@
 
 // prototypes for asm stopgap forward references
 void hitBindUpdate(const char* name);
-void hitBindMapObj(const char* hitName, const char* mapobjName);
-Vec* hitGetDamageReturnPos(HitEntry* hit);
-void hitGrpDamageReturnSet(const char* name, HitDamageReturn* damage);
 void hitDamageReturnSet(HitEntry* hit, HitDamageReturn* damage, BOOL recursion);
-s32 hitGetAttr(HitEntry* hit);
-const char* hitGetName(HitEntry* hit);
-void hitObjGetNormal(const char* name, Vec* normal);
-void hitObjGetPos(const char* name, Vec* position);
 void hitObjGetPosSub(HitEntry* hit, Vec* position, s32* counter, BOOL recursion);
-HitEntry* hitNameToPtr(const char* name);
 BOOL chkFilterAttr(HitCheckQuery* query, HitEntry* entry);
-BOOL hitCheckVecHitObjXZ(HitCheckQuery* query, HitEntry* entry);
 BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector);
-HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback);
 s32 hitCalcVtxPosition(HitEntry* hit);
 void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
-void hitReCalcMatrix(HitEntry* hit, Mtx mtx);
 void hitGrpAttrOff(const char* name, u32 mask);
 void hitGrpAttrOn(const char* name, u32 mask);
 void hitAtrOff(HitEntry* hit, u32 mask, s32 r);
@@ -39,8 +28,6 @@ void hitFlgOff(HitEntry* hit, u16 mask, s32 r);
 void hitFlgOn(HitEntry* hit, u16 mask, s32 r);
 void hitObjFlagOff(const char* name, u16 mask);
 void hitObjFlagOn(const char* name, u16 mask);
-void hitMain(void);
-void hitDelete(const char* name);
 HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx);
 HitEntry* hitEntry(MapFileJoint* root, Mtx rootMtx, s32 mapIndex);
 HitEntry* hitEntrySub(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, BOOL ignoreSiblings, s32 mapIndex);

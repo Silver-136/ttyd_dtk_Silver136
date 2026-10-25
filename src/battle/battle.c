@@ -853,7 +853,6 @@ void BattleAfterReactionRelease(s32 a, s32 b) {
 }
 
 BOOL BattleCheckConcluded(BattleWork* wp);
-void BattleConsumeReserveItem(void);
 
 BOOL BattleAfterReactionMain(void) {
     s32 id;

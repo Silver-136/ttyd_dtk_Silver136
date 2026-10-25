@@ -51,7 +51,6 @@ EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 s32 search_evt_moji(s32 id);
 double sin(double);
 double cos(double);
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 void effStarStoneDraw(CameraId camera, void* param);
 s32* iri_09_item_tbl;
 int rand(void);

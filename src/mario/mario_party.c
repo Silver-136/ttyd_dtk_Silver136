@@ -13,7 +13,6 @@ void partyHello(PartyEntry* party);
 void partyGoodbye(s32 slot);
 void partyKill(s32 slot);
 s32 partyDoWork(void);
-BOOL N_marioChkUseParty(void);
 BOOL N_fbatPreventMarioEventChk(void);
 BOOL yoshiGetStatus(void);
 

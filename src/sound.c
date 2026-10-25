@@ -7,7 +7,6 @@
 #include "system.h"
 #include "libc_decls.h"
 double sin(double);
-double cos(double);
 #include <string.h>
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"

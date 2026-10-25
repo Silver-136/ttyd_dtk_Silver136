@@ -36,7 +36,6 @@ double sin(double x);
 double cos(double x);
 typedef struct OrbitData { f32 angle; f32 dist; } OrbitData;
 OrbitData* _op;
-NpcEntry* evtNpcNameToPtr(EventEntry* event, const char* name);
 #define ORBIT(i, p) op[i].angle += d; t = op[i].angle; rad = orbit_update(t); r = op[i].dist; x = r * sinf_l(rad) + cx; t = r * cosf_l(rad) + cz; p.x = x; p.z = t; (void)0
 NanNPC* random_choice_target(s32 type);
 TobiWork* Tobidat;

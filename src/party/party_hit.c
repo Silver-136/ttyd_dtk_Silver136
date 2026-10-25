@@ -21,7 +21,6 @@
 #endif
 #include <math.h>
 
-HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth);
 HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDist, f32* outAng);
 extern HitEntry* partyChkFrontStep(PartyEntry* party, f32 a, f32* x, f32* y, f32* z);
 

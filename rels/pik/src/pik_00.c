@@ -30,8 +30,6 @@ typedef struct SharinData { const char* name; s32 field_0x4; s32 field_0x8; EvtF
 typedef struct ClankData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat x; EvtFloat y; } ClankData;
 
 HitEntry* marioSearchUnder(void);
-void mapGrpFlagOn(const char* name, u32 flags);
-void mapGrpFlagOff(const char* name, u32 flags);
 
 USER_FUNC(evt_bero_get_entername);
 USER_FUNC(evt_bero_get_info);

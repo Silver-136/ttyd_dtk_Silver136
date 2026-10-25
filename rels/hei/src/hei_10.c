@@ -17,23 +17,12 @@
 #include "driver/animdrv.h"
 #include "evt/evt_bero.h"
 #include "data_tables.h"
-void PSMTXIdentity(Mtx m);
-f32 PSVECDistance(const Vec* a, const Vec* b);
 #ifndef VERSION_G8ME01
 void* _mapAlloc(u32 size);
 #else
 #include "memory.h"
 #endif
 #include "driver/extdrv.h"
-AnimationPose* animPoseGetAnimPosePtr(s32 poseId);
-f32 animPoseGetLoopTimes(s32 id);
-void dispEntry(CameraId camera, f32 order, s32 renderMode, DispCallback callback, void* param);
-f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
-f32 evtGetFloat(EventEntry* entry, EvtWord index);
-MarioWork* marioGetPtr(void);
-void *memset(void *dest, int ch, size_t count);
-NpcEntry* npcNameToPtr(const char* name);
-s32 psndSFXOn_3D(const char* name, Vec* position);
 
 typedef struct Chorobon { s16 flags; s16 state; s16 field_0x4; u8 field_0x6[2]; Vec target; f32 vy; s16 timer; u8 field_0x1a[2]; f32 speed; f32 gravity; s16 next; u8 field_0x26[0x30 - 0x26]; } Chorobon;
 typedef struct ChorobonWork { s32 field_0x0; s32 count; Chorobon* chb; } ChorobonWork;
@@ -94,7 +83,6 @@ EvtWord golden_se[55];
 EvtWord evt_golden[319];
 EvtWord hei_10_init_evt[80];
 
-int rand(void);
 
 static inline f32 rand01(void) {
     return rand() / 32767.0f;

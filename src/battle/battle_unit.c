@@ -45,8 +45,6 @@ s32 _enemy_can_use_item_table[] = {
 };
 
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s16 pitch, Vec* pos);
-BOOL BtlUnit_CanActStatus(BattleUnit* unit);
-void BtlUnit_SetAnimType(BattleUnitPart* part, s32 type);
 
 //local prototypes
 void _CheckMoveCount(BattleUnit* unit);

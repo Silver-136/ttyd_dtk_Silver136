@@ -29,7 +29,6 @@ typedef struct EffThunderN64Work {
 } EffThunderN64Work;
 
 EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 w);
-EffectEntry* effAkariChargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 size);
 EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b);
 
 void effThunderMain(EffectEntry* effect);

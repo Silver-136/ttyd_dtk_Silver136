@@ -35,12 +35,9 @@ typedef struct QueenConnect { s32 poseId[3]; u8 field_0xc[0x40 - 0xC]; s32 idx[2
 HandData hand_data[32];
 HandWork* hand_wp;
 s32 psndSFXOn_3D(const char* name, Vec* position);
-void BattleAudienceAddTargetNum(f32 a, f32 b);
 #include "battle/battle_break_slot.h"
 #include "driver/extdrv.h"
 u8* lightGetPaperCraft(void);
-EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b);
-EffectEntry* effPokopiThunderN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz, f32 scale);
 EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 camera, f32 x, f32 y, f32 z, f32 vx, f32 vy);
 void btl_camera_shake_w(s32 a, s32 b, s32 c, f32 d, f32 e);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);

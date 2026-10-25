@@ -9,7 +9,6 @@
 #include "icon_ids.h"
 #include "pmario_sound.h"
 
-void psndSFXOff(s32 id);
 void psndSFX_pit(s32 id, s32 pitch);
 void BattleAudience_Case_ActionCommandBad(BattleWeapon* weapon);
 void BattleAudience_Case_ActionCommandGood(BattleWeapon* weapon);

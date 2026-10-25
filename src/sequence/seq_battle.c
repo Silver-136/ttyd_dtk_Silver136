@@ -43,7 +43,6 @@ BOOL bmapLoad(const char* a, const char* b);
 void bmapUnLoad(void);
 BattleUnitType BattleTransPartyIdToUnitKind(s32 id);
 void psndBGMOn_f(u32 a, u32 b, u32 c, u32 d);
-BOOL psndBGMOff(u32 flags);
 BOOL psndENVOn(u32 a, char* b);
 void mobjReset(BOOL inBattle);
 

@@ -37,7 +37,6 @@ extern HitEntry* marioSearchHead(Vec* pos, f32* h, f32 d);
 #ifdef VERSION_G8ME01
 extern s32 kpaGetLevel(void);
 #endif
-extern BOOL marioChkWallAround(Vec* pos, s32 mode, f32 dx, f32 dz, f32 w, f32 h);
 
 static inline BOOL marioChkBeroSub(s32 attr) {
     BOOL r = TRUE;
@@ -2590,35 +2589,19 @@ void marioCheckWallShip(f32 dx, f32 dz) {
 // prototypes for asm stopgap forward references
 void marioCheckWallShip(f32 dx, f32 dz);
 BOOL marioSlitChkWallAround(void);
-BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h);
-HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang);
 HitEntry* N_dou10_yoko_yari3(void);
 HitEntry* dou10_yoko_yari2(f32* out);
-HitEntry* dou10_yoko_yari(f32* out);
-HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w);
 HitEntry* marioChkFront(f32* out, const Vec* pos, f32 angle, f32 dist);
 void marioCheckWall_roll(f32 dx, f32 dz);
-void marioSearchFrontWall_staying(f32 dz);
 void marioCheckWall(f32 dx, f32 dz);
-HitEntry* marioSearchHead_jabara(Vec* pos, f32* h, s32* side, f32 d);
-HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d);
 HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd);
-f32 marioChkOverheadJabara(s32* sideOut, f32* distOut);
 f32 marioChkOverhead(void);
 HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs);
-HitEntry* marioLandonChk_old(f32* outY, f32 spd);
 HitEntry* marioChkLandon(f32* a, f32 d);
 void marioChkToge(void);
-HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h);
-HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h);
 void marioChkGnd2(void);
-void marioChkGnd(void);
-HitEntry* searchUnder2(f32* out, f32 x, f32 y, f32 z);
 HitEntry* marioSearchUnder(void);
-BOOL marioChkBero(HitEntry* hit);
 void clear_hitobj_ride(void);
-HitEntry* marioHitCheck2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
-HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 BOOL chkfilterVecVivian(HitCheckQuery* query, HitEntry* entry);
 BOOL chkfilterVecRoll(HitCheckQuery* query, HitEntry* entry);
 BOOL chkfilterVec(HitCheckQuery* query, HitEntry* entry);

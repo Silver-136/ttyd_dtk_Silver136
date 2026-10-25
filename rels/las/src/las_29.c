@@ -32,19 +32,14 @@ double sin(double);
 double cos(double);
 void* effMistEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 angle);
 int rand(void);
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
-EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 void npcSetTalkPose(const char* name);
 void npcSetStayPose(const char* name);
-EffectEntry* effPokopiThunderN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz, f32 scale);
 void mapObjGetPos(const char* name, Vec* pos);
 void _hikariEntry(const char* name, s32 type, f32 scale);
 typedef struct HikariData { s32 key; s32 id; } HikariData;
 typedef struct HikariList40 { HikariData entries[40]; s32 endKey; } HikariList40;
 typedef struct HikariList27 { HikariData entries[27]; s32 endKey; } HikariList27;
 #define HIKARI_DATA ((HikariData*)&hikari_data)
-void mapGrpFlagOn(const char* name, u32 flags);
-void mapGrpFlagOff(const char* name, u32 flags);
 
 USER_FUNC(add_vy);
 USER_FUNC(all_hikari_change_kuro);

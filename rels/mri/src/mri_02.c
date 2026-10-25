@@ -53,7 +53,6 @@ USER_FUNC(evt_target_set_position);
 USER_FUNC(getSwitch);
 USER_FUNC(moveSwitch);
 USER_FUNC(setPuniWeight);
-f32 getMri02Yuka(void);
 
 static BeroEntry bero_entry_data[4];
 static EvtWord evt_ueki_04[20];

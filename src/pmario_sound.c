@@ -4,11 +4,6 @@
 #include <math.h>
 
 #define _MATH_H_
-double cos(double);
-double sin(double);
-double fabs(double);
-float sinf(float);
-float cosf(float);
 #include "pmario_sound.h"
 #include "sound.h"
 #include <string.h>
@@ -4962,7 +4957,6 @@ void SoundSSSetSrndPanCh(s32 chan, u8 span);
 void SoundSSPlayCh(s32 chan, const char* name);
 void SoundSSContinueCh(s32 chan);
 void SoundSSFadeoutCh(s32 chan);
-void SoundSongSetVolCh(s32 chan, u8 vol);
 BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6);
 BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5);
 s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 r8, u16 dist, s32 r10);

@@ -37,7 +37,6 @@ s32 g_nNumHuttobasu[1];
 s32 g_nNumHarituku[1];
 static s32 g_nNumEndProc[1];
 f32 g_fSpeed;
-s32 extGetPoseNum(void);
 static f32 randf(f32 min, f32 max);
 double sin(double x);
 static inline f32 sinf(f32 x) { return sin(x); }
@@ -47,17 +46,8 @@ s32 computeAlpha(Teresa* ter, MarioWork* mp, f32 angle);
 void computeMtx(ExtdrvPose* pose, f32 angle);
 f32 computeAngle(ExtdrvPose* pose, MarioWork* mp);
 static void senteresa_ext_disp(CameraId camera, void* param);
-void extLoadVertex(void);
-void extLoadTexture(void);
-void extPoseDraw(s32 i);
-void extLoadTextureExit(void);
 void senteresa_loadTev(void);
 void senteresa_loadRenderMode(void);
-void extLoadShadowMtx(Mtx mtx);
-void extLoadShadowRenderMode(void);
-void extLoadShadowVertex(void);
-void extLoadShadowTev(void);
-void extDrawShadow(void);
 double cos(double x);
 static inline f32 cosf(f32 x) { return cos(x); }
 

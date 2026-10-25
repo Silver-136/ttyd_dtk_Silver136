@@ -48,7 +48,6 @@ void _unload(const char*, const char*, const char*);
 BOOL setupDataCheck(void);
 void setupDataBase(const char* area, const char* map);
 void psndMapChange(void);
-s32 psndGetFlag(void);
 s32 psndBGMPlayTime(s32 id);
 void evt_cam_road_reset(s32, s32);
 void N_marioSetBottomlessRespawnPos(f32, f32, f32);

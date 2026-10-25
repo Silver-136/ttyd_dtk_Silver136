@@ -124,7 +124,6 @@ extern NpcSetupBattleInfo btlsetup_tou_tbl[];
 double atan2(double y, double x);
 int rand(void);
 void FontDrawScale(f32 scale);
-void FontDrawMessageMtx(Mtx mtx, const char* msg);
 
 static RankData rank_work;
 static DispWork disp_work;

@@ -44,7 +44,6 @@ static inline f32 fan_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1
 static inline f32 fan_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
 s32 check_hammer(Fan* fan);
 s32 check_hammer(Fan* fan);
-void psndSFX_pos(s32 id, Vec* pos);
 void psndSFX_vol(s32 id, u8 vol);
 static void pose_main(void);
 static void pose_main(void);
@@ -215,22 +214,8 @@ static EvtWord evt_poster_9[5];
 static EvtWord evt_after_peach[188];
 EvtWord tou_02_init_evt[VERSION_PICK(576, 919)];
 
-void C_VECReflect(const Vec* src, const Vec* normal, Vec* dst);
-void PSMTXIdentity(Mtx m);
-void PSVECAdd(const Vec* a, const Vec* b, Vec* ab);
-f32 PSVECDistance(const Vec* a, const Vec* b);
-f32 PSVECMag(const Vec* v);
-void PSVECNormalize(const Vec* src, Vec* dst);
-void PSVECScale(const Vec* src, Vec* dst, f32 scale);
-f32 PSVECSquareDistance(const Vec* a, const Vec* b);
-void PSVECSubtract(const Vec* a, const Vec* b, Vec* a_b);
 int __cvt_ull_flt();
 int __div2u();
-EvtWord evtGetValue(EventEntry* entry, EvtWord index);
-void *memset(void *dest, int ch, size_t count);
-int rand(void);
-int strcmp(const char *s1, const char *s2);
-char *strcpy(char *dest, const char *src);
 static void pose_init(void) {
     char name[32];
     char anim[32];

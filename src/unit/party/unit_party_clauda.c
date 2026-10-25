@@ -21,7 +21,6 @@
 #include "party/party_motion.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
-EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 unused, f32 scale);
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

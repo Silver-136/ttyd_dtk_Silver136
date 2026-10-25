@@ -133,7 +133,6 @@ EvtWord flower_disp_pos[21];
 static EvtWord cloud_toujou[95];
 EvtWord win_04_init_evt[94];
 
-int rand(void);
 
 EVT_BEGIN(win_04w_door_open)
     SET_VALUE(LW(8), STRING("S_doa_w_l"))

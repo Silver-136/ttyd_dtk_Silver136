@@ -28,17 +28,14 @@ void set_damage_root_ypos(f32 y);
 void marioChgMot(s32 motion);
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 mode, s32 flag, void* script, f32 x, f32 y, f32 z);
 void itemStatusOn(ItemEntry* item, s32 flags);
-double sin(double x);
 void shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 scale);
 void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
 void firebar_disp(CameraId camera, void* param);
-int rand(void);
 s32 psndSFXChk(s32 id);
 void psndSFXOff(s32 id);
 s32 psndSFXOn_3D(const char* name, Vec* position);
 void _firebar_rot(FirebarWork* wp);
 void _firebar_trans(FirebarWork* wp);
-double cos(double x);
 s32 _firebar_hitCheck2(FirebarWork* wp);
 
 USER_FUNC(coin_entry);

@@ -103,18 +103,13 @@ const char* winGetMapTplName(void);
 s32 kpaGetStageViewType(void);
 void kpaPauseSE2(void);
 double sin(double);
-int vsprintf(char* buf, const char* fmt, va_list args);
 void FontDrawScaleVec(Vec scale);
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
-void FontDrawMessageMtx(Mtx mtx, const char* msg);
-void FontDrawEdge(void);
-void FontDrawEdgeOff(void);
 void winLectureKeyMask(void);
 void iconGetTexObj(GXTexObj* obj, u16 iconId);
 void winDisp(CameraId camId, void* param);
 void winDispKoopa(CameraId camId, void* param);
 
-void statusWinForceOff(void);
 void allPartyForceSlitOff(void);
 
 WindowWork* winGetPtr(void) {

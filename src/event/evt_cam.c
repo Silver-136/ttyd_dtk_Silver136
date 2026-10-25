@@ -13,12 +13,9 @@
 #include "cam_road.h"
 #include <math.h>
 
-void camRoadReset(void);
 void camShiftReset(void);
 void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out);
 void OSReport(const char* msg, ...);
-double sin(double);
-double cos(double);
 
 // CameraId id, BOOL on
 USER_FUNC(evt_cam_ctrl_onoff) {
@@ -609,4 +606,3 @@ USER_FUNC(evt_cam_letter_box_camid) {
     return EVT_RETURN_DONE;
 }
 
-void __div2u();

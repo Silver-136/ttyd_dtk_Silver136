@@ -14,7 +14,6 @@ void parseInit(void* ptr, u32 size) {
 	parse.end[0] = size;
 }
 
-int strcmp(const char *s1, const char *s2);
 // the tag copy loop was an inline: its locals take the low volatile registers (r4 j, r5 n) under the strength-reduced buf pointer (r6)
 static inline void parseCopyTag(char* buf, s8* p, s32 i, s32 end) {
 	s32 n;

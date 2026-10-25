@@ -27,12 +27,7 @@
 #include "driver/extdrv.h"
 #include <math.h>
 
-int rand(void);
 s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz);
-void npcTuningRy(NpcEntry* npc, f32 ry);
-double sin(double x);
-double cos(double x);
-s32 psndSFXOn_3D(const char* name, Vec* position);
 s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario);
 void _kurokaron_next_move_index(void);
 typedef struct Senkaron { s8 state; u16 area; s32 timer; f32 vx; f32 vy; f32 vz; u32 flags; } Senkaron;
@@ -448,7 +443,6 @@ USER_FUNC(kurokaron_move_position) {
     return EVT_RETURN_BLOCK;
 }
 
-int rand(void);
 
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;

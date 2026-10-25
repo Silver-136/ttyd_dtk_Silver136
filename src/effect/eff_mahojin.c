@@ -9,7 +9,6 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z);
 void effMahojinMain(EffectEntry* effect);
 void effMahojinDisp(CameraId cameraId, EffectEntry* effect);
 

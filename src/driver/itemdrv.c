@@ -62,18 +62,14 @@ BOOL marioChkItemGetMotion(void);
 void marioChgGetItemMotion(void);
 void marioChgStayMotion(void);
 void marioSetCamId(s32 camId);
-EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z);
 u32 psndBGMChkSilent(s32 a1);
 BOOL psndBGMChk(s32 a1);
-BOOL psndBGMOff(u32 flags);
 s32 msgWindow_Entry(const char* msg, s32 a2, s32 a3);
 BOOL nokonoko_holdItem(void);
 BOOL N_fbatPreventMarioEventChk(void);
 s32 marioGetJabaraState(void);
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
-double sin(double);
-double cos(double);
 EffectEntry* effHagetakaFlushN64Entry(s32 a1, s32 a2, f32 x, f32 y, f32 z, f32 scale);
 
 BOOL itemGetNokoCheck(ItemEntry* entry);
@@ -90,8 +86,6 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy);
 
 HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle);
 void itemseq_GetItem(ItemEntry* entry);
-void itemDelete(const char* name);
-void itemModeChange(ItemEntry* entry, s32 mode);
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
 
 //.bss

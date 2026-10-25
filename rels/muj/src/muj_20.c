@@ -31,7 +31,6 @@
 #include "data_tables.h"
 #include <dolphin/pad.h>
 
-NpcEntry* evtNpcNameToPtr(EventEntry* event, const char* name);
 typedef struct MarcoShip { f32 angle; f32 speed; f32 max; s32 stopped; s32 state; s32 field_0x14; OSTime time; } MarcoShip;
 MarcoShip* marcoship;
 void mapSetPlayRate(const char* name, f32 rate);
@@ -45,8 +44,6 @@ void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
 EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);
 void mapObjGetPos(const char* name, Vec* pos);
-f32 distABf(f32 x1, f32 z1, f32 x2, f32 z2);
-f32 angleABf(f32 x1, f32 z1, f32 x2, f32 z2);
 EffectEntry* effWaterDamageN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale);
 typedef struct LogoWork { FileEntry* tpl; f32 y; s32 alpha; s32 state; s32 counter; } LogoWork;
 static void draw(CameraId camera, void* param);

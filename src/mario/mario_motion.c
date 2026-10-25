@@ -138,13 +138,8 @@ void marioResetRollSpd(void);
 void mario_plane_cancel(void);
 void allPartyForceRideOn(void);
 void marioLandOn(void);
-f32 marioMakeJumpPara(void);
-f32 marioGetFallSpd(void);
-void marioSetFallPara(void);
 void marioClearJumpPara(void);
-void marioChgJumpStandMotion(f32 v);
 void marioChgRollMotion(void);
-void marioChgStayMotion(void);
 
 MarioMotTblEntry marioMotTbl[] = {
 	{mot_stay, NULL, mot_stay_post},

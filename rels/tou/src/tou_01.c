@@ -34,7 +34,6 @@ void mapSetProjMtx(Mtx mtx);
 double sin(double x);
 double cos(double x);
 void envSetYamiView(Mtx mtx);
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(anim_tevcallback);

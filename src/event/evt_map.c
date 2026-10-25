@@ -16,13 +16,10 @@
 #include "evt/evt_map.h"
 
 EffectEntry* effTorchEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
-EffectEntry* effFireEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 
 void mapObjGetPos(const char* name, Vec* pos);
 void mapObjFlagOn(const char* name, u32 flags);
 void mapObjFlagOff(const char* name, u32 flags);
-void mapGrpFlagOn(const char* name, u32 flags);
-void mapGrpFlagOff(const char* name, u32 flags);
 void mapObjGetFlushColor(const char* name, u8* r, u8* g, u8* b, u8* a);
 void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a);
 void mapGrpSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a);

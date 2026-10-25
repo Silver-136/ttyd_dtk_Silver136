@@ -6,7 +6,6 @@
 #include "system.h"
 
 extern ItemData itemDataTable[];
-BOOL BtlUnit_CanActStatus(BattleUnit* unit);
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s32 direction);
 
 void* _check_status_recover_item(BattleUnit* self);

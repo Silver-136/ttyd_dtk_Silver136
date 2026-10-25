@@ -19,7 +19,6 @@ void FontDrawColorIDX(s32 idx);
 extern ItemData itemDataTable[];
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 double sin(double);
-double cos(double);
 void btlGetScreenPoint(Vec* pos, Vec* out);
 void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color, s32 a);
 void btlDispGXInit2D(void);
@@ -63,7 +62,6 @@ void btlDispGXQuads2D(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a);
 #endif
 void FontDrawStringCenterMtx(Mtx mtx, const char* msg);
 void btlDispGXPoint2D(f32 x, f32 y, u8 r, u8 g, u8 b, u8 a, f32 s, f32 t);
-void FontDrawColor(GXColor color);
 void GetRingCenter(Vec* out);
 void GetRingOffset(f32 angle, f32* x, f32* y);
 f32 kakutable[3][5] = {{240.0f, 120.0f, 0.0f, 0.0f, 0.0f}, {270.0f, 180.0f, 90.0f, 0.0f, 0.0f}, {270.0f, 203.0f, 157.0f, 90.0f, 0.0f}};

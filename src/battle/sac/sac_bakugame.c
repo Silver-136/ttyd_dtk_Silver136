@@ -28,7 +28,6 @@
 #include "battle/battle_database_common.h"
 #include "pmario_sound.h"
 
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 void btlGetScreenPoint(Vec* in, Vec* out);
 void BattleAudienceSoundWhistleKind(s32 kind);
@@ -38,14 +37,9 @@ void BattleAudienceSoundBooingKind(s32 kind);
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
 void btl_camera_shake_h(s32 a, f32 b, f32 c, s32 d, s32 e);
 void btlDispPoseAnime(BattleUnitPart* part);
-void BtlUnit_SetBodyAnim(BattleUnit* unit, const char* anim);
-void BtlUnit_SetBodyAnimType(BattleUnit* unit, s32 type);
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);
 void psndSFX_pit(s32 id, s32 pitch);
 s32 psndSFXChk(s32 id);
-void psndSFXOff(s32 id);
-void animPoseRelease(s32 poseId);
-void animPoseMain(s32 poseId);
 s32 BattleTransID(EventEntry* event, s32 type);
 
 #define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)

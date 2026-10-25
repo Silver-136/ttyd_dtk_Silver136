@@ -12,7 +12,6 @@ void partyShadowOff(PartyEntry* party);
 void partyDokanEnd(s32 id, s32 type);
 s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z);
 s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z);
-f32 toMovedirSimple(f32 angle);
 void marioSlitForceCancel(void);
 
 

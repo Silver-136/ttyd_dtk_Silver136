@@ -60,7 +60,6 @@ u16 JUTFont_CodeToGlyph(u32 code);
 void JUTFontSetup(u16 font);
 GXColor HSV2RGB(GXColor hsv);
 void FontDrawColorIDX(s32 idx);
-void FontDrawStart_alpha(u8 alpha);
 #ifdef VERSION_G8ME01
 void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg);
 #endif

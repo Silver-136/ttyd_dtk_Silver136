@@ -46,7 +46,6 @@ BOOL BattleAudience_GetAnimEnd();
 u8 BattleAudience_GetEscapeChangeOK();
 BOOL BattleAudience_GetFront(s32 index);
 s32 BattleAudience_GetAudienceNoFromOffset(s32 index, s32 column, s32 row);
-void BattleAudienceAddTargetNum(f32 a, f32 b);
 void BattleAudienceSoundItemThrow(s32 kind, s32 index);
 
 void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front);

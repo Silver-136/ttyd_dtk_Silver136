@@ -122,7 +122,6 @@ void memInit(void) { //almost 1:1, stubborn regalloc at the end
     }
 }
 
-void* __memAlloc(HEAP_TYPE heap, u32 size);
 
 #ifdef VERSION_G8ME01
 static inline void mapallocInit(void) {

@@ -33,14 +33,11 @@ void mapObjGetPos(const char* name, Vec* pos);
 void mapObjFlagOn(const char* name, u32 flags);
 void mapObjFlagOff(const char* name, u32 flags);
 void FontDrawString(f32 x, f32 y, const char* str);
-void FontDrawEdge(void);
-void FontDrawEdgeOff(void);
 BOOL winGhostDiaryChk(void);
 BOOL N_itemPickUpFromFieldCheck(void);
 void statusWinForceUpdateCoin(void);
 void FontDrawScale(f32 scale);
 s16 johoya_get(u8* table, s16 id);
-s32 marioKeyOn(void);
 
 typedef struct UnitWinEntry {
 	const char* mapObj; // 0x0
