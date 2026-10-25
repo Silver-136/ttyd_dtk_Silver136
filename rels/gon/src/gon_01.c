@@ -4,7 +4,6 @@
 #include "evt/evt_damage.h"
 #include "driver/hitdrv.h"
 
-
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cam3d_evt_off);
 USER_FUNC(evt_cam3d_evt_set);
@@ -45,20 +44,6 @@ USER_FUNC(evt_sub_intpl_msec_get_value);
 USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_telop_entry);
 
-f32 fd_gon_01_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_gon_01_neg_one_382;
-f32 fd_gon_01___local_PI_383;
-f32 fd_gon_01___local_3PIO2_385;
-f32 fd_gon_01_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_gon_01___local_PIO2_384;
-f32 fd_gon_01_one_381;
-f32 fd_gon_01_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_gon_01_neg_one_365;
-f32 fd_gon_01___local_PI_366;
-f32 fd_gon_01___local_3PIO2_368;
-f32 fd_gon_01_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_gon_01___local_PIO2_367;
-f32 fd_gon_01_one_364;
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];
 static BeroEntry bero_entry_data[5];
@@ -66,34 +51,6 @@ EvtWord honenoko_oidasare_evt[466];
 EvtWord gon_01_GATEEVENT_evt[151];
 static HitDamageReturn hitDmgRetPoints[17];
 EvtWord gon_01_init_evt[102];
-
-f32 fd_gon_01_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gon_01_neg_one_382 = -1.0f;
-
-f32 fd_gon_01___local_PI_383 = 3.1415927f;
-
-f32 fd_gon_01___local_3PIO2_385 = 4.712389f;
-
-f32 fd_gon_01_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gon_01___local_PIO2_384 = 1.5707964f;
-
-f32 fd_gon_01_one_381 = 1.0f;
-
-f32 fd_gon_01_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gon_01_neg_one_365 = -1.0f;
-
-f32 fd_gon_01___local_PI_366 = 3.1415927f;
-
-f32 fd_gon_01___local_3PIO2_368 = 4.712389f;
-
-f32 fd_gon_01_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gon_01___local_PIO2_367 = 1.5707964f;
-
-f32 fd_gon_01_one_364 = 1.0f;
 
 static EVT_BEGIN(door01_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))

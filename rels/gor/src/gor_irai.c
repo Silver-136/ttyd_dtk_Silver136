@@ -53,20 +53,6 @@ void irai_window_disp(CameraId camera, void* param);
 void irai_flag_disp(void);
 void irai_flag_clear(void);
 
-f32 fd_gor_irai_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_gor_irai_neg_one_382;
-f32 fd_gor_irai___local_PI_383;
-f32 fd_gor_irai___local_3PIO2_385;
-f32 fd_gor_irai_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_gor_irai___local_PIO2_384;
-f32 fd_gor_irai_one_381;
-f32 fd_gor_irai_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_gor_irai_neg_one_365;
-f32 fd_gor_irai___local_PI_366;
-f32 fd_gor_irai___local_3PIO2_368;
-f32 fd_gor_irai_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_gor_irai___local_PIO2_367;
-f32 fd_gor_irai_one_364;
 const char* irai_msg_client[30];
 const char* irai_msg_contents[30];
 const char* irai_msg_exposition[30];
@@ -98,34 +84,6 @@ EvtWord gor_irai_init[18];
 EvtWord gor_irai_lecture[40];
 EvtWord gor_irai_main[VERSION_PICK(105, 126)];
 EvtWord gor_irai_tenshu_main[VERSION_PICK(258, 261)];
-
-f32 fd_gor_irai_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gor_irai_neg_one_382 = -1.0f;
-
-f32 fd_gor_irai___local_PI_383 = 3.1415927f;
-
-f32 fd_gor_irai___local_3PIO2_385 = 4.712389f;
-
-f32 fd_gor_irai_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gor_irai___local_PIO2_384 = 1.5707964f;
-
-f32 fd_gor_irai_one_381 = 1.0f;
-
-f32 fd_gor_irai_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gor_irai_neg_one_365 = -1.0f;
-
-f32 fd_gor_irai___local_PI_366 = 3.1415927f;
-
-f32 fd_gor_irai___local_3PIO2_368 = 4.712389f;
-
-f32 fd_gor_irai_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gor_irai___local_PIO2_367 = 1.5707964f;
-
-f32 fd_gor_irai_one_364 = 1.0f;
 
 const char* irai_msg_client[] = {
     "irai_client_01", "irai_client_02", "irai_client_03", "irai_client_04", "irai_client_05", "irai_client_06",

@@ -7,24 +7,9 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-
 extern BattleUnitKind unit_boss_kanbu1;
 extern BattleUnitKind unit_lecture_christine;
 
-f32 fd_battle_database_gor_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gor_neg_one_382;
-f32 fd_battle_database_gor___local_PI_383;
-f32 fd_battle_database_gor___local_3PIO2_385;
-f32 fd_battle_database_gor_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gor___local_PIO2_384;
-f32 fd_battle_database_gor_one_381;
-f32 fd_battle_database_gor_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gor_neg_one_365;
-f32 fd_battle_database_gor___local_PI_366;
-f32 fd_battle_database_gor___local_3PIO2_368;
-f32 fd_battle_database_gor_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gor___local_PIO2_367;
-f32 fd_battle_database_gor_one_364;
 BattleStageObjectData gor_btlobject_data[6];
 BattleStageData gor_btlstage_data[2];
 BattleUnitSetup btlparty_gor_gor_00_01_off_1[1];
@@ -43,34 +28,6 @@ NpcBattleSelect btlgrpsel_gor_btlno_gor_02_saclec_off[2];
 NpcBattleSelect btlgrpsel_gor_btlno_gor_02_01_off[2];
 NpcSetupBattleInfo btlsetup_gor_tbl[7];
 NpcTerritoryInfo btl_gor_setup_no_tbl[7];
-
-f32 fd_battle_database_gor_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_gor_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_gor___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_gor___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_gor_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_gor___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_gor_one_381 = 1.0f;
-
-f32 fd_battle_database_gor_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_gor_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_gor___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_gor___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_gor_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_gor___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_gor_one_364 = 1.0f;
 
 BattleStageObjectData gor_btlobject_data[] = {
     {"A1", 2, 0, {33.0f, 0.0f, -48.0f}, 0, 60, {0}},

@@ -2,7 +2,6 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 
-
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
@@ -12,54 +11,12 @@ USER_FUNC(evt_npc_change_fbat_mode);
 USER_FUNC(evt_snd_bgmoff);
 USER_FUNC(evt_snd_envon);
 
-f32 fd_gon_10_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_gon_10_neg_one_382;
-f32 fd_gon_10___local_PI_383;
-f32 fd_gon_10___local_3PIO2_385;
-f32 fd_gon_10_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_gon_10___local_PIO2_384;
-f32 fd_gon_10_one_381;
-f32 fd_gon_10_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_gon_10_neg_one_365;
-f32 fd_gon_10___local_PI_366;
-f32 fd_gon_10___local_3PIO2_368;
-f32 fd_gon_10_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_gon_10___local_PIO2_367;
-f32 fd_gon_10_one_364;
 static EvtWord door02_close[22];
 static EvtWord door02_open[22];
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];
 static BeroEntry bero_entry_data[3];
 EvtWord gon_10_init_evt[46];
-
-f32 fd_gon_10_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gon_10_neg_one_382 = -1.0f;
-
-f32 fd_gon_10___local_PI_383 = 3.1415927f;
-
-f32 fd_gon_10___local_3PIO2_385 = 4.712389f;
-
-f32 fd_gon_10_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gon_10___local_PIO2_384 = 1.5707964f;
-
-f32 fd_gon_10_one_381 = 1.0f;
-
-f32 fd_gon_10_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gon_10_neg_one_365 = -1.0f;
-
-f32 fd_gon_10___local_PI_366 = 3.1415927f;
-
-f32 fd_gon_10___local_3PIO2_368 = 4.712389f;
-
-f32 fd_gon_10_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gon_10___local_PIO2_367 = 1.5707964f;
-
-f32 fd_gon_10_one_364 = 1.0f;
 
 static EVT_BEGIN(door02_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))

@@ -115,20 +115,6 @@ static void senkaron_ext_dispent(void);
 static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 
-f32 fd_gon_03_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_gon_03_neg_one_382;
-f32 fd_gon_03___local_PI_383;
-f32 fd_gon_03___local_3PIO2_385;
-f32 fd_gon_03_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_gon_03___local_PIO2_384;
-f32 fd_gon_03_one_381;
-f32 fd_gon_03_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_gon_03_neg_one_365;
-f32 fd_gon_03___local_PI_366;
-f32 fd_gon_03___local_3PIO2_368;
-f32 fd_gon_03_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_gon_03___local_PIO2_367;
-f32 fd_gon_03_one_364;
 static NpcSetupInfo npcEnt[4];
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];
@@ -151,34 +137,6 @@ EvtWord senkarondummy_regl_event[2];
 EvtWord senkarondummy_talk_event[2];
 EvtWord senkaron_entry_event[9];
 EvtWord senkaron_escape_event[4];
-
-f32 fd_gon_03_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gon_03_neg_one_382 = -1.0f;
-
-f32 fd_gon_03___local_PI_383 = 3.1415927f;
-
-f32 fd_gon_03___local_3PIO2_385 = 4.712389f;
-
-f32 fd_gon_03_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gon_03___local_PIO2_384 = 1.5707964f;
-
-f32 fd_gon_03_one_381 = 1.0f;
-
-f32 fd_gon_03_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gon_03_neg_one_365 = -1.0f;
-
-f32 fd_gon_03___local_PI_366 = 3.1415927f;
-
-f32 fd_gon_03___local_3PIO2_368 = 4.712389f;
-
-f32 fd_gon_03_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gon_03___local_PIO2_367 = 1.5707964f;
-
-f32 fd_gon_03_one_364 = 1.0f;
 
 static NpcSetupInfo npcEnt[] = {
     {
@@ -224,7 +182,6 @@ static EVT_BEGIN(door01_close)
 EVT_END()
 
 int rand(void);
-
 
 static EVT_BEGIN(door01_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))

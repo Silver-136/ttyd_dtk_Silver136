@@ -30,7 +30,6 @@
 #include "data_tables.h"
 #include "pmario_sound.h"
 
-
 f32 reviseAngle(f32 angle);
 typedef struct MonosiriFollow { s32 seq; s32* list; s32 count; } MonosiriFollow;
 #define FOLLOW (follow)
@@ -365,20 +364,6 @@ static void alpha_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
-f32 fd_gor_02_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_gor_02_neg_one_382;
-f32 fd_gor_02___local_PI_383;
-f32 fd_gor_02___local_3PIO2_385;
-f32 fd_gor_02_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_gor_02___local_PIO2_384;
-f32 fd_gor_02_one_381;
-f32 fd_gor_02_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_gor_02_neg_one_365;
-f32 fd_gor_02___local_PI_366;
-f32 fd_gor_02___local_3PIO2_368;
-f32 fd_gor_02_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_gor_02___local_PIO2_367;
-f32 fd_gor_02_one_364;
 EvtWord gor_02_hitobj_off[27];
 EvtWord gor_02_hitobj_on[54];
 EvtWord gor_02_event_00[18];
@@ -596,34 +581,6 @@ EvtWord dearu_event[13];
 EvtWord front_wall_keshi[27];
 EvtWord tobiori_check[48];
 EvtWord gor_02_init_evt[543];
-
-f32 fd_gor_02_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gor_02_neg_one_382 = -1.0f;
-
-f32 fd_gor_02___local_PI_383 = 3.1415927f;
-
-f32 fd_gor_02___local_3PIO2_385 = 4.712389f;
-
-f32 fd_gor_02_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gor_02___local_PIO2_384 = 1.5707964f;
-
-f32 fd_gor_02_one_381 = 1.0f;
-
-f32 fd_gor_02_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_gor_02_neg_one_365 = -1.0f;
-
-f32 fd_gor_02___local_PI_366 = 3.1415927f;
-
-f32 fd_gor_02___local_3PIO2_368 = 4.712389f;
-
-f32 fd_gor_02_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_gor_02___local_PIO2_367 = 1.5707964f;
-
-f32 fd_gor_02_one_364 = 1.0f;
 
 EVT_BEGIN(gor_02_hitobj_off)
     CALL(evt_hitobj_onoff, STRING("A_kabe"), 1, 0)

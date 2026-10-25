@@ -106,20 +106,6 @@ USER_FUNC(evt_party_move_behind_mario);
 #endif
 static USER_FUNC(set_dir);
 
-f32 fd_hei_01_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_hei_01_neg_one_382;
-f32 fd_hei_01___local_PI_383;
-f32 fd_hei_01___local_3PIO2_385;
-f32 fd_hei_01_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_hei_01___local_PIO2_384;
-f32 fd_hei_01_one_381;
-f32 fd_hei_01_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_hei_01_neg_one_365;
-f32 fd_hei_01___local_PI_366;
-f32 fd_hei_01___local_3PIO2_368;
-f32 fd_hei_01_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_hei_01___local_PIO2_367;
-f32 fd_hei_01_one_364;
 EvtWord bero_out_event[5];
 static BeroEntry bero_entry_data[5];
 static EvtWord evt_kusa_2[20];
@@ -148,34 +134,6 @@ static HitDamageReturn hitDmgRetPoints[3];
 static EvtWord peach_mail[287];
 EvtWord christine_hei_01[46];
 EvtWord hei_01_init_evt[148];
-
-f32 fd_hei_01_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_hei_01_neg_one_382 = -1.0f;
-
-f32 fd_hei_01___local_PI_383 = 3.1415927f;
-
-f32 fd_hei_01___local_3PIO2_385 = 4.712389f;
-
-f32 fd_hei_01_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_hei_01___local_PIO2_384 = 1.5707964f;
-
-f32 fd_hei_01_one_381 = 1.0f;
-
-f32 fd_hei_01_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_hei_01_neg_one_365 = -1.0f;
-
-f32 fd_hei_01___local_PI_366 = 3.1415927f;
-
-f32 fd_hei_01___local_3PIO2_368 = 4.712389f;
-
-f32 fd_hei_01_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_hei_01___local_PIO2_367 = 1.5707964f;
-
-f32 fd_hei_01_one_364 = 1.0f;
 
 EVT_BEGIN(bero_out_event)
     SET_VALUE(LW(0), 0)

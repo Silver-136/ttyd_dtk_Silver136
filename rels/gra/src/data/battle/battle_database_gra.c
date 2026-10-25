@@ -7,21 +7,6 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-
-f32 fd_battle_database_gra_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gra_neg_one_382;
-f32 fd_battle_database_gra___local_PI_383;
-f32 fd_battle_database_gra___local_3PIO2_385;
-f32 fd_battle_database_gra_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gra___local_PIO2_384;
-f32 fd_battle_database_gra_one_381;
-f32 fd_battle_database_gra_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gra_neg_one_365;
-f32 fd_battle_database_gra___local_PI_366;
-f32 fd_battle_database_gra___local_3PIO2_368;
-f32 fd_battle_database_gra_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gra___local_PIO2_367;
-f32 fd_battle_database_gra_one_364;
 BattleStageObjectData gra_btlobject_data[22];
 BattleStageData gra_btlstage_data[2];
 BattleUnitSetup btlparty_gra_gra_00_01_off_1[1];
@@ -100,34 +85,6 @@ NpcBattleSelect btlgrpsel_gra_btlno_gra_05_01_off[3];
 NpcBattleSelect btlgrpsel_gra_btlno_gra_05_03_off[4];
 NpcSetupBattleInfo btlsetup_gra_tbl[14];
 NpcTerritoryInfo btl_gra_setup_no_tbl[14];
-
-f32 fd_battle_database_gra_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_gra_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_gra___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_gra___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_gra_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_gra___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_gra_one_381 = 1.0f;
-
-f32 fd_battle_database_gra_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_gra_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_gra___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_gra___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_gra_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_gra___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_gra_one_364 = 1.0f;
 
 BattleStageObjectData gra_btlobject_data[] = {
     {"ki_1", 2, 0, {-100.0f, 0.0f, -30.0f}, 0, 60, {0}},

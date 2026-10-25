@@ -7,23 +7,8 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-
 extern BattleUnitKind unit_red_honenoko;
 
-f32 fd_battle_database_gon_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gon_neg_one_382;
-f32 fd_battle_database_gon___local_PI_383;
-f32 fd_battle_database_gon___local_3PIO2_385;
-f32 fd_battle_database_gon_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gon___local_PIO2_384;
-f32 fd_battle_database_gon_one_381;
-f32 fd_battle_database_gon_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gon_neg_one_365;
-f32 fd_battle_database_gon___local_PI_366;
-f32 fd_battle_database_gon___local_3PIO2_368;
-f32 fd_battle_database_gon_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_gon___local_PIO2_367;
-f32 fd_battle_database_gon_one_364;
 BattleStageObjectData gon_btlobject_data[10];
 BattleStageData gon_btlstage_data[5];
 BattleUnitSetup btlparty_gon_gon_02_02_off_1[3];
@@ -87,34 +72,6 @@ NpcBattleSelect btlgrpsel_gon_btlno_gon_10_03_off[2];
 NpcBattleSelect btlgrpsel_gon_btlno_gon_11_01_off[2];
 NpcSetupBattleInfo btlsetup_gon_tbl[22];
 NpcTerritoryInfo btl_gon_setup_no_tbl[22];
-
-f32 fd_battle_database_gon_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_gon_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_gon___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_gon___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_gon_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_gon___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_gon_one_381 = 1.0f;
-
-f32 fd_battle_database_gon_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_gon_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_gon___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_gon___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_gon_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_gon___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_gon_one_364 = 1.0f;
 
 BattleStageObjectData gon_btlobject_data[] = {
     {"B", 2, 2, {0}, 0, 60, {0}},

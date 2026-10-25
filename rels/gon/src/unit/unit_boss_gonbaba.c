@@ -49,20 +49,6 @@ USER_FUNC(_btlgon_get_escape_param);
 USER_FUNC(_set_gonbaba_light);
 USER_FUNC(_wait_damage_event_end);
 
-f32 fd_boss_gonbaba_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_boss_gonbaba_neg_one_382;
-f32 fd_boss_gonbaba___local_PI_383;
-f32 fd_boss_gonbaba___local_3PIO2_385;
-f32 fd_boss_gonbaba_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_boss_gonbaba___local_PIO2_384;
-f32 fd_boss_gonbaba_one_381;
-f32 fd_boss_gonbaba_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_boss_gonbaba_neg_one_365;
-f32 fd_boss_gonbaba___local_PI_366;
-f32 fd_boss_gonbaba___local_3PIO2_368;
-f32 fd_boss_gonbaba_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_boss_gonbaba___local_PIO2_367;
-f32 fd_boss_gonbaba_one_364;
 BattleWeapon weapon_gonbaba_fumituke_attack;
 BattleWeapon weapon_gonbaba_firebreath_attack;
 BattleWeapon weapon_gonbaba_kamituki_attack;
@@ -108,34 +94,6 @@ static USER_FUNC(_leg_smoke_effect) {
     effKemuri9N64Entry(1, 18, 90, x, y, z, 60.0f, 0.0f);
     return EVT_RETURN_DONE;
 }
-
-f32 fd_boss_gonbaba_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_gonbaba_neg_one_382 = -1.0f;
-
-f32 fd_boss_gonbaba___local_PI_383 = 3.1415927f;
-
-f32 fd_boss_gonbaba___local_3PIO2_385 = 4.712389f;
-
-f32 fd_boss_gonbaba_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_gonbaba___local_PIO2_384 = 1.5707964f;
-
-f32 fd_boss_gonbaba_one_381 = 1.0f;
-
-f32 fd_boss_gonbaba_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_gonbaba_neg_one_365 = -1.0f;
-
-f32 fd_boss_gonbaba___local_PI_366 = 3.1415927f;
-
-f32 fd_boss_gonbaba___local_3PIO2_368 = 4.712389f;
-
-f32 fd_boss_gonbaba_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_gonbaba___local_PIO2_367 = 1.5707964f;
-
-f32 fd_boss_gonbaba_one_364 = 1.0f;
 
 BattleWeapon weapon_gonbaba_fumituke_attack = {
     NULL, 0, // name..icon

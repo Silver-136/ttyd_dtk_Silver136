@@ -132,20 +132,6 @@ static USER_FUNC(lect_status_off);
 static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
-f32 fd_evt_lect_hei_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_hei_neg_one_382;
-f32 fd_evt_lect_hei___local_PI_383;
-f32 fd_evt_lect_hei___local_3PIO2_385;
-f32 fd_evt_lect_hei_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_hei___local_PIO2_384;
-f32 fd_evt_lect_hei_one_381;
-f32 fd_evt_lect_hei_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_hei_neg_one_365;
-f32 fd_evt_lect_hei___local_PI_366;
-f32 fd_evt_lect_hei___local_3PIO2_368;
-f32 fd_evt_lect_hei_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_hei___local_PIO2_367;
-f32 fd_evt_lect_hei_one_364;
 EvtWord nokotaro_party_lecture_init[48];
 EvtWord nokotaro_party_lecture[275];
 static EvtWord all_party_lecture_otosub[11];
@@ -456,34 +442,6 @@ static USER_FUNC(effitemget_busaiku) {
     effitemget_cam_move(camera, ofs);
     return EVT_RETURN_DONE;
 }
-
-f32 fd_evt_lect_hei_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_evt_lect_hei_neg_one_382 = -1.0f;
-
-f32 fd_evt_lect_hei___local_PI_383 = 3.1415927f;
-
-f32 fd_evt_lect_hei___local_3PIO2_385 = 4.712389f;
-
-f32 fd_evt_lect_hei_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_evt_lect_hei___local_PIO2_384 = 1.5707964f;
-
-f32 fd_evt_lect_hei_one_381 = 1.0f;
-
-f32 fd_evt_lect_hei_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_evt_lect_hei_neg_one_365 = -1.0f;
-
-f32 fd_evt_lect_hei___local_PI_366 = 3.1415927f;
-
-f32 fd_evt_lect_hei___local_3PIO2_368 = 4.712389f;
-
-f32 fd_evt_lect_hei_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_evt_lect_hei___local_PIO2_367 = 1.5707964f;
-
-f32 fd_evt_lect_hei_one_364 = 1.0f;
 
 EVT_BEGIN(nokotaro_party_lecture_init)
     CALL(evt_mario_set_pos, 350, 0, 0)

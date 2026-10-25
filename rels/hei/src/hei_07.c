@@ -78,20 +78,6 @@ USER_FUNC(evt_sub_random);
 USER_FUNC(mario_set_dir);
 static void callback(s32 type, void** work);
 
-f32 fd_hei_07_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_hei_07_neg_one_382;
-f32 fd_hei_07___local_PI_383;
-f32 fd_hei_07___local_3PIO2_385;
-f32 fd_hei_07_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_hei_07___local_PIO2_384;
-f32 fd_hei_07_one_381;
-f32 fd_hei_07_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_hei_07_neg_one_365;
-f32 fd_hei_07___local_PI_366;
-f32 fd_hei_07___local_3PIO2_368;
-f32 fd_hei_07_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_hei_07___local_PIO2_367;
-f32 fd_hei_07_one_364;
 static BeroEntry bero_entry_data[3];
 static EvtWord npc_jump[53];
 EvtWord dokan_shake[8];
@@ -111,34 +97,6 @@ static EvtWord offscreen_to_normal[100];
 QuizEntry quiz_data[8];
 EvtWord a_sekizou_1[1018];
 EvtWord hei_07_init_evt[114];
-
-f32 fd_hei_07_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_hei_07_neg_one_382 = -1.0f;
-
-f32 fd_hei_07___local_PI_383 = 3.1415927f;
-
-f32 fd_hei_07___local_3PIO2_385 = 4.712389f;
-
-f32 fd_hei_07_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_hei_07___local_PIO2_384 = 1.5707964f;
-
-f32 fd_hei_07_one_381 = 1.0f;
-
-f32 fd_hei_07_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_hei_07_neg_one_365 = -1.0f;
-
-f32 fd_hei_07___local_PI_366 = 3.1415927f;
-
-f32 fd_hei_07___local_3PIO2_368 = 4.712389f;
-
-f32 fd_hei_07_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_hei_07___local_PIO2_367 = 1.5707964f;
-
-f32 fd_hei_07_one_364 = 1.0f;
 
 static BeroEntry bero_entry_data[] = {
     {
