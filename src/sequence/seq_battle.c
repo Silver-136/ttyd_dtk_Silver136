@@ -200,7 +200,7 @@ void seq_battleMain(BattleSeqWork* work) {
             pos.x = 0.0f;
             pos.y = 0.0f;
             pos.z = 400.0f;
-            if (_battleWorkPointer->flags & 0x100) {
+            if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
                 pos.z += 200.0f;
             }
             psndSetPosDirListener(&pos, camGetPtr(CAMERA_3D)->viewYaw);

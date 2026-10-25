@@ -313,7 +313,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(normal_attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
@@ -421,7 +421,7 @@ static EVT_BEGIN(normal_attack_event)
 EVT_END()
 
 static EVT_BEGIN(throw_attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE

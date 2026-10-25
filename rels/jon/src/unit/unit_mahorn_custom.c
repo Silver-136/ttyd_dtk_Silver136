@@ -573,7 +573,7 @@ static BattleUnitSetup entry_mahorn = {
 };
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_punch))
         CALL_CHILD(PTR(attack_punch_event))
@@ -967,7 +967,7 @@ static EVT_BEGIN(bunsin_kill_event)
 EVT_END()
 
 static EVT_BEGIN(attack_punch_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
@@ -1408,7 +1408,7 @@ static EVT_BEGIN(attack_enemy_common_event_sub_hit)
 EVT_END()
 
 static EVT_BEGIN(attack_magic_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
         ELSE

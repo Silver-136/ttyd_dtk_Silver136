@@ -217,7 +217,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetMaxMoveCount, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 0)
-    CALL(btlevtcmd_onoff_battleflag, 1, 4096)
+    CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_NO_OBJECT_FALL)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()
@@ -247,7 +247,7 @@ static EVT_BEGIN(phase_event)
             CALL(evt_msg_print, 2, STRING("mac_0_b_t2_000"), 0, -2)
             CALL(btlevtcmd_StatusWindowOnOff, 1)
             CALL(evt_btl_camera_set_mode, 0, 0)
-            CALL(btlevtcmd_onoff_battleflag, 1, 16777216)
+            CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_JUMP)
             CALL(btlevtcmd_StartWaitEvent, -3)
             RETURN
         END_IF
@@ -303,8 +303,8 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("S_1"))
             CALL(evt_msg_print, 2, STRING("mac_0_b_t2_007"), 0, -2)
             CALL(btlevtcmd_StatusWindowOnOff, 1)
-            CALL(btlevtcmd_onoff_battleflag, 0, 16777216)
-            CALL(btlevtcmd_onoff_battleflag, 1, 33554432)
+            CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_JUMP)
+            CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_HAMMER)
             RETURN
         END_IF
         CASE_EQUAL(6)
@@ -362,8 +362,8 @@ static EVT_BEGIN(phase_event)
         CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 9)
-            CALL(btlevtcmd_onoff_battleflag, 0, 33554432)
-            CALL(btlevtcmd_onoff_battleflag, 1, 134217728)
+            CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_HAMMER)
+            CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_FREE)
             CALL(btlevtcmd_StopWaitEvent, -3)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
             CALL(btlevtcmd_StatusWindowOnOff, 0)
@@ -383,7 +383,7 @@ static EVT_BEGIN(phase_event)
                 ELSE
                 CALL(evt_msg_print_add, 0, STRING("mac_0_b_t2_020"))
                 CALL(evt_btl_camera_set_mode, 0, 0)
-                CALL(btlevtcmd_onoff_battleflag, 1, 32)
+                CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_INTERRUPT_STOP)
                 RETURN
             END_IF
         END_IF
@@ -846,7 +846,7 @@ EVT_BEGIN(lecture_end_event)
     CALL(evt_msg_print, 2, STRING("mac_0_b_t2_024"), 0, -2)
     CALL(evt_btl_camera_set_mode, 0, 0)
     WAIT_MS(500)
-    CALL(btlevtcmd_onoff_battleflag, 1, 32)
+    CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_INTERRUPT_STOP)
     RETURN
 EVT_END()
 

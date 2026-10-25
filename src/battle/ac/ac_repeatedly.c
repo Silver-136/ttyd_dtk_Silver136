@@ -63,7 +63,7 @@ static void _init_param(BattleWork* work) {
     ((RepeatWork*)work->actionCommands.work)->holdMask = 0;
     switch (work->actionCommands.params[0]) {
         case 10:
-            work->flags |= 0x20000000;
+            work->flags |= BATTLE_FLAG_DISABLE_HRESET;
             break;
         case 8:
             r->holdMask = 0x100;
@@ -324,7 +324,7 @@ void battleAcDisp_Repeatedly(CameraId cameraId, BattleWork* work) {
 void battleAcDelete_Repeatedly(BattleWork* work) {
     switch (work->actionCommands.params[0]) {
         case 10:
-            work->flags &= ~0x20000000;
+            work->flags &= ~BATTLE_FLAG_DISABLE_HRESET;
             break;
     }
     BattleAcGaugeSeDelete();

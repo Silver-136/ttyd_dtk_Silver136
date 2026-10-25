@@ -392,7 +392,7 @@ void btlseqFirstAct(BattleWork* wp) {
                     wp->ruleDispTimer = 0;
                     break;
             }
-            wp->flags |= 2;
+            wp->flags |= BATTLE_FLAG_FIRST_ATTACK;
             BattleGetFirstAttackUnit(wp, &a, &b);
             wp->activeUnitId = a->unitId;
             a->mTokenFlags |= kCurrentlyActing;
@@ -486,7 +486,7 @@ void btlseqFirstAct(BattleWork* wp) {
             BattleIncSeq(wp, SEQ_FIRST_ACT);
 
         case 0x2000005:
-            if (!(wp->flags & 0x30)) {
+            if (!(wp->flags & (BATTLE_FLAG_ESCAPED | BATTLE_FLAG_INTERRUPT_STOP))) {
                 BattleStatusWindowSystemOn();
             }
             BattleConsumeReserveItem();
@@ -582,7 +582,7 @@ void btlseqFirstAct(BattleWork* wp) {
             break;
 
         case 0x200000C:
-            if (wp->flags & 2) {
+            if (wp->flags & BATTLE_FLAG_FIRST_ATTACK) {
                 BattleSetSeq(wp, SEQ_FIRST_ACT, 0x200000E);
                 break;
             }
@@ -596,7 +596,7 @@ void btlseqFirstAct(BattleWork* wp) {
             BattleSetSeq(wp, SEQ_FIRST_ACT, 0x200000E);
 
         case 0x200000E:
-            wp->flags &= ~2;
+            wp->flags &= ~BATTLE_FLAG_FIRST_ATTACK;
             BattleSetSeq(wp, SEQ_UNKNOWN, 2);
             BattleSetSeq(wp, SEQ_TURN, 0x3000000);
             break;
@@ -1897,7 +1897,7 @@ void btlseqTurn(BattleWork *wp) {
         case 0x300004D:
             BattleAudience_Case_TurnEnd();
             BattleSetSeq(wp, SEQ_TURN, 0x3000001);
-            wp->flags &= ~0x2000;
+            wp->flags &= ~BATTLE_FLAG_RESET_TURN;
             break;
 
     }
@@ -2093,24 +2093,24 @@ void btlseqMove(BattleWork* wp) {
                 unit = BattleGetUnitPtr(wp, wp->activeUnitId);
                 if (unit->currentKind == UNIT_MARIO) {
                     pouch = pouchGetPtr();
-                    wp->flags |= 0x600;
+                    wp->flags |= (BATTLE_FLAG_JUMP_NO_SUBMENU | BATTLE_FLAG_HAMMER_NO_SUBMENU);
                     for (i = 0; i < 200; i++) {
                         if (pouch->equippedBadges[i] >= 0xF0 && pouch->equippedBadges[i] < 0xF7) {
-                            wp->flags &= ~0x200;
+                            wp->flags &= ~BATTLE_FLAG_JUMP_NO_SUBMENU;
                             break;
                         }
                     }
                     if (pouch->jumpLevel >= 2) {
-                        wp->flags &= ~0x200;
+                        wp->flags &= ~BATTLE_FLAG_JUMP_NO_SUBMENU;
                     }
                     for (i = 0; i < 200; i++) {
                         if (pouch->equippedBadges[i] >= 0xF7 && pouch->equippedBadges[i] < 0xFE) {
-                            wp->flags &= ~0x400;
+                            wp->flags &= ~BATTLE_FLAG_HAMMER_NO_SUBMENU;
                             break;
                         }
                     }
                     if (pouch->hammerLevel >= 2) {
-                        wp->flags &= ~0x400;
+                        wp->flags &= ~BATTLE_FLAG_HAMMER_NO_SUBMENU;
                     }
                 }
                 break;
@@ -2131,7 +2131,7 @@ void btlseqMove(BattleWork* wp) {
                     }
                 }
                 end = BattlePhaseEndCheck();
-                if (wp->flags & 0x2000) {
+                if (wp->flags & BATTLE_FLAG_RESET_TURN) {
                     end = TRUE;
                 }
                 if (end) {
@@ -2250,7 +2250,7 @@ void btlseqAct(BattleWork* wp) {
             if (!BattleCommandInput(wp)) {
                 break;
             }
-            wp->flags &= ~0x80;
+            wp->flags &= ~BATTLE_FLAG_COMMAND_INPUT;
             BattleSetSeq(wp, SEQ_ACT, 0x6000006);
             break;
         case 0x6000005:
@@ -2278,7 +2278,7 @@ void btlseqAct(BattleWork* wp) {
             }
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             evt = NULL;
-            if ((wp->flags & 0x40000000) && !(unit->mAttributeFlags & kActsInZeroGravity) &&
+            if ((wp->flags & BATTLE_FLAG_ZERO_GRAVITY) && !(unit->mAttributeFlags & kActsInZeroGravity) &&
                 !(unit->attackEventFlags & 8) && !(unit->attackEventFlags & 0x10)) {
                 evt = evtEntry(btldefaultevt_CantMoveZeroGravity, 10, 0);
             } else if (unit->attackEventFlags & 0x10) {
@@ -2325,7 +2325,7 @@ void btlseqAct(BattleWork* wp) {
             }
             BattleIncSeq(wp, SEQ_ACT);
         case 0x6000009:
-            if (!(wp->flags & 0x30)) {
+            if (!(wp->flags & (BATTLE_FLAG_ESCAPED | BATTLE_FLAG_INTERRUPT_STOP))) {
                 BattleStatusWindowSystemOn();
             }
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
@@ -2356,7 +2356,7 @@ void btlseqAct(BattleWork* wp) {
                 }
                 if (unit->moveState == 0) {
                     decrement = TRUE;
-                    if (wp->flags & 0x2000) {
+                    if (wp->flags & BATTLE_FLAG_RESET_TURN) {
                         decrement = TRUE;
                     }
                     if (decrement) {
@@ -2365,7 +2365,7 @@ void btlseqAct(BattleWork* wp) {
                         } else {
                             unit->movesRemaining--;
                         }
-                        if (wp->flags & 0x2000) {
+                        if (wp->flags & BATTLE_FLAG_RESET_TURN) {
                             unit->movesRemaining = 0;
                         }
                         if (unit->movesRemaining <= 0) {
@@ -2376,7 +2376,7 @@ void btlseqAct(BattleWork* wp) {
                                 unit->mTokenFlags &= ~kHasRallyWinkStatus;
                             }
                             if (!BtlUnit_GetBelong(unit) && unit->attackPhase == 0x4000002 &&
-                                !BattlePhaseEndCheck() && !(wp->flags & 0x2000)) {
+                                !BattlePhaseEndCheck() && !(wp->flags & BATTLE_FLAG_RESET_TURN)) {
                                 unit->mMoveColorLv = 0x60;
                             }
                         }
@@ -2732,7 +2732,7 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
     if (count >= 2) {
         return TRUE;
     }
-    return (wp->flags & 0x30) != 0;
+    return (wp->flags & (BATTLE_FLAG_ESCAPED | BATTLE_FLAG_INTERRUPT_STOP)) != 0;
 }
 
 void _mapobj_data_touch_scale(s32 layer) {

@@ -79,7 +79,7 @@ USER_FUNC(btlevtcmd_get_turn) {
 
 //no params
 USER_FUNC(btlevtcmd_reset_turn) {
-    _battleWorkPointer->flags |= 0x2000;
+    _battleWorkPointer->flags |= BATTLE_FLAG_RESET_TURN;
     return EVT_RETURN_DONE;
 }
 
@@ -4019,12 +4019,12 @@ USER_FUNC(btlevtcmd_StopWaitEvent) {
 }
 
 USER_FUNC(btlevtcmd_GuardMoveEnd) {
-    _battleWorkPointer->flags &= ~1;
+    _battleWorkPointer->flags &= ~BATTLE_FLAG_GUARD_MOVE;
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(btlevtcmd_WaitGuardMove) {
-    return (_battleWorkPointer->flags & 1) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return (_battleWorkPointer->flags & BATTLE_FLAG_GUARD_MOVE) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
 USER_FUNC(btlevtcmd_WaitAttackEnd) {
@@ -5884,10 +5884,10 @@ USER_FUNC(btlevtcmd_InterruptStop) {
     if (isFirstCall) {
         switch (type) {
             case 0:
-                wp->flags |= 0x10;
+                wp->flags |= BATTLE_FLAG_ESCAPED;
                 break;
             case 1:
-                wp->flags |= 0x20;
+                wp->flags |= BATTLE_FLAG_INTERRUPT_STOP;
                 break;
         }
     }

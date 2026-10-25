@@ -189,7 +189,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_ChangeFaceDirection, LW(3), -1)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(0))
-    CALL(btlevtcmd_onoff_battleflag, 1, 4096)
+    CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_NO_OBJECT_FALL)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()

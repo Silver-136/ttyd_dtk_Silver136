@@ -26,7 +26,7 @@ void _ac_help_disp(CameraId cameraId, void* param);
 void BattleAcHelpMain(void) {
     BattleWork* wp = _battleWorkPointer;
     s32* type = &wp->acHelpDispType;
-    if (wp->acHelpMsg && *type && !(wp->flags & 2)) {
+    if (wp->acHelpMsg && *type && !(wp->flags & BATTLE_FLAG_FIRST_ATTACK)) {
         dispEntry(CAMERA_2D, 498.0f, 1, _ac_help_disp, NULL);
     }
     if (_ac_help_disp) {

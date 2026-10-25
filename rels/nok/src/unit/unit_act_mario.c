@@ -292,7 +292,7 @@ static EVT_BEGIN(battle_entry_event)
     WAIT_MS(2000)
     CALL(evt_msg_print, 2, STRING("ep_39"), 0, -2)
     WAIT_MS(1000)
-    CALL(btlevtcmd_onoff_battleflag, 1, 32)
+    CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_INTERRUPT_STOP)
     RETURN
 EVT_END()
 

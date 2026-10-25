@@ -364,7 +364,7 @@ void BattleAudience_Main(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleAudience* audience = BattleAudienceBaseGetPtr();
 
-    if (!(audience->flags & 0x10000) && wp->flags & 0x80) {
+    if (!(audience->flags & 0x10000) && wp->flags & BATTLE_FLAG_COMMAND_INPUT) {
         BattleAudience_WinSetActive(1);
     }
     BattleAudienceCtrlProcess();
@@ -372,7 +372,7 @@ void BattleAudience_Main(void) {
     BattleAudienceApSrcCtrlProcess();
     BattleAudienceWinCtrlProcess();
     BattleAudienceSoundMain();
-    if (wp->flags & 0x80) {
+    if (wp->flags & BATTLE_FLAG_COMMAND_INPUT) {
         audience->flags |= 0x10000;
     } else {
         audience->flags &= ~0x10000;
@@ -1303,7 +1303,7 @@ void BattleAudienceCtrlProcess(void) {
     if ((u32)bflags->flags & 0x20000) {
         audience->itemThrowMax = 10000;
     }
-    if (wp->flags & 0x80) {
+    if (wp->flags & BATTLE_FLAG_COMMAND_INPUT) {
         if (audience->itemThrowCount < audience->itemThrowMax) {
             switch (audience->itemThrowCount) {
             case 0: chance = 1800; break;
@@ -1565,7 +1565,7 @@ void BattleAudienceItemCtrlProcess(void) {
             break;
         }
         case 2: {
-            if (!(wp->flags & 0x80)) {
+            if (!(wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
                 it->mode = 0;
             }
             if (it->timer == 20) {
@@ -1590,7 +1590,7 @@ void BattleAudienceItemCtrlProcess(void) {
         }
         case 3: {
                         s8 a, b;
-            if (!(wp->flags & 0x80)) {
+            if (!(wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
                 it->mode = 0;
             }
             aud = (u8*)it->target;
@@ -3088,7 +3088,7 @@ s32 BattleAudienceAddAudienceNum(s32 num) {
     if (num == 0) {
         return 0;
     }
-    if (wp->flags & 0x100) {
+    if (wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
         return 0;
     }
     if (num > 0) {
@@ -3160,7 +3160,7 @@ void BattleAudienceAddPuni(s32 num) {
     s32 i;
 
     audience = BattleAudienceBaseGetPtr();
-    if (pouchGetPtr()->mStarPowersObtained != 0 && audience->typeWeights[7] > 0 && num > 0 && !(wp->flags & 0x100)) {
+    if (pouchGetPtr()->mStarPowersObtained != 0 && audience->typeWeights[7] > 0 && num > 0 && !(wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE)) {
         for (i = 0; i < num; i++) {
             s32 id = BattleAudience_NoUsedFCHaitiRand();
             if (id == -1) {
@@ -3904,10 +3904,10 @@ void BattleAudienceNoiseMain(void) {
     AudSound* sound = AudSoundGetPtr(2);
     s32 num = BattleAudience_GetPPAudienceNum();
 
-    if (!(audience->flags & 0x10000) && (wp->flags & 0x80)) {
+    if (!(audience->flags & 0x10000) && (wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
         BattleAudienceSoundSetVol(2, 60, 80);
     }
-    if ((audience->flags & 0x10000) && !(wp->flags & 0x80)) {
+    if ((audience->flags & 0x10000) && !(wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
         BattleAudienceSoundSetVol(2, 0, 80);
     }
     if (num == 0 && sound->kind != 0) {

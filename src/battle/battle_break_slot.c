@@ -470,7 +470,7 @@ void BattleBreakSlot_Main(void) {
                         btl_camera_set_moveSpeedLv(0, 2);
                         break;
                 }
-                if (_battleWorkPointer->flags & 0x100) {
+                if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
                     btl_camera_set_mode(0, 0);
                 }
             }
@@ -489,7 +489,7 @@ void BattleBreakSlot_Main(void) {
                         updown = BattleAudienceAddAudienceNum(-aud->mMaxAudience);
                         break;
                 }
-                if (_battleWorkPointer->flags & 0x100) {
+                if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
                     updown = 0.0f;
                 }
             }

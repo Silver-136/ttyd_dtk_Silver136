@@ -209,13 +209,13 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
 };
 
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_poison_pakkun_attack))
         CALL_CHILD(PTR(normal_attack_event))
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_poison_pakkun_attack))
         CALL_CHILD(PTR(normal_attack_event))
@@ -244,7 +244,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(breath_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_poison_pakkun_breath_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_poison_pakkun_breath_attack), LW(3), LW(4))
@@ -584,7 +584,7 @@ static EVT_BEGIN(return_event)
 EVT_END()
 
 static EVT_BEGIN(normal_attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))

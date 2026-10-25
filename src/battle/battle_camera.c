@@ -556,7 +556,7 @@ void battleCameraMoveTo(s32 mode, s32 clamp, f32 x, f32 y, f32 z, f32 atX, f32 a
         wp->cameraWork.zoomSpeedLv = 1;
     }
     if (mode == 1) {
-        if (wp->flags & 0x100) {
+        if (wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
             f32 mz = mario->mHomePosition.z;
             f32 ox = 0.0f;
             f32 oy = 0.25f * -mz;

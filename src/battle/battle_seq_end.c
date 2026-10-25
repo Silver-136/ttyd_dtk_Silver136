@@ -396,7 +396,7 @@ void btlseqEnd(BattleWork* wp) {
         }
         work->timer = 0x78;
         btl_camera_set_moveSpeedLv(0, 2);
-        if (!(wp->flags & 0x100)) {
+        if (!(wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE)) {
             btl_camera_set_mode(0, 0x11);
         } else {
             btl_camera_set_mode(0, 0x12);
@@ -448,7 +448,7 @@ void btlseqEnd(BattleWork* wp) {
             BattleSetSeq(wp, SEQ_END, 0x700000B);
             break;
         }
-        if (!(wp->flags & 0x400000)) {
+        if (!(wp->flags & BATTLE_FLAG_MAJINAI_END)) {
             BattleSetSeq(wp, SEQ_END, 0x7000019);
             break;
         }
@@ -505,7 +505,7 @@ void btlseqEnd(BattleWork* wp) {
         BattleSetSeq(wp, SEQ_END, 0x700000E);
         break;
     case 0x700000E:
-        if (wp->flags & 0x400000) {
+        if (wp->flags & BATTLE_FLAG_MAJINAI_END) {
             BattleUnit* mario = BattleGetMarioPtr(wp);
             EventEntry* e = evtEntry(_event_MajinaiEnd, 10, 0);
             e->unitId = mario->unitId;
@@ -1080,7 +1080,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
         CALL(evt_fade_end_wait)
     END_SIBLING_EVENT
-    CALL(btlevtcmd_check_battleflag, LW(0), 256)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_PARTY_IN_AUDIENCE)
     IF_INT_NOT_EQUAL(LW(0), 0)
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_RUN)
@@ -1121,7 +1121,7 @@ EVT_BEGIN(_curtain_close_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
-    CALL(btlevtcmd_onoff_battleflag, 0, 256)
+    CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_PARTY_IN_AUDIENCE)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     WAIT_MS(1500)

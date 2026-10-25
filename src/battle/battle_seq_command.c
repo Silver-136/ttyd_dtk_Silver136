@@ -95,7 +95,7 @@ EVT_END()
 
 void BattleCommandInit(BattleWork* wp) {
     wp->commandMenu.state = 0;
-    wp->flags |= 0x80;
+    wp->flags |= BATTLE_FLAG_COMMAND_INPUT;
 }
 
 void _btlcmd_MakeActClassTable(BattleWork* wp) {
@@ -142,7 +142,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[0].enabled = 0;
             cmd->act[0].disableReason = 3;
         }
-        if (wp->flags & 0x6800000) {
+        if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_SPECIAL)) {
             cmd->act[0].enabled = 0;
             cmd->act[0].disableReason = 3;
         }
@@ -173,7 +173,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
-        if (wp->flags & 0x4800000) {
+        if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_SPECIAL)) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -204,7 +204,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
-        if (wp->flags & 0x5800000) {
+        if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_SPECIAL)) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -242,7 +242,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
                 cmd->act[num].disableReason = 3;
             }
         }
-        if (wp->flags & 0x1F800000) {
+        if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_SPECIAL | BATTLE_FLAG_LECTURE_FREE | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -258,7 +258,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
-        if (wp->flags & 0x1B800000) {
+        if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_FREE | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -266,11 +266,11 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].icon = ICON_14D;
         num++;
     }
-    if (!(wp->flags & 0x8000000)) {
+    if (!(wp->flags & BATTLE_FLAG_LECTURE_FREE)) {
         cmd->act[num].type = 5;
         cmd->act[num].enabled = 1;
         cmd->act[num].disableReason = 0;
-        if (wp->flags & 0x1F800000) {
+        if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_SPECIAL | BATTLE_FLAG_LECTURE_FREE | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -278,13 +278,13 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].icon = ICON_14E;
         num++;
     }
-    if (wp->flags & 0x8000000) {
+    if (wp->flags & BATTLE_FLAG_LECTURE_FREE) {
         cmd->act[num].type = 0xD;
         cmd->act[num].enabled = 1;
         cmd->act[num].disableReason = 0;
         cmd->act[num].name = msgSearch("btl_cmd_act_lecture_end");
         cmd->act[num].icon = ICON_14E;
-        if (wp->flags & 0x10800000) {
+        if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -416,7 +416,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 } else {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
-                if (wp->flags & 0x9000000 && wp->lectureUnitId != -1) {
+                if (wp->flags & (BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_JUMP_WEAPON);
                 }
                 num++;
@@ -463,7 +463,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 } else {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
-                if (wp->flags & 0xA000000 && wp->lectureUnitId != -1) {
+                if (wp->flags & (BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_HAMMER_WEAPON);
                 }
                 num++;
@@ -1164,8 +1164,8 @@ s32 BattleCommandInput(BattleWork* work) {
         case 5:
         case 6:
             type = cmd->actType;
-            if ((type == 0 && ((s32)wp->flags & 0x200)) ||
-                (type == 1 && ((s32)wp->flags & 0x400))) {
+            if ((type == 0 && ((s32)wp->flags & BATTLE_FLAG_JUMP_NO_SUBMENU)) ||
+                (type == 1 && ((s32)wp->flags & BATTLE_FLAG_HAMMER_NO_SUBMENU))) {
                 _btlcmd_SelectWeaponDecide(wp, type, 0);
                 BattleCommandDisplay_TargetSelectMenuSetup(wp);
                 cmd->state = 10;
@@ -1261,8 +1261,8 @@ s32 BattleCommandInput(BattleWork* work) {
                 wp->flags &= ~4;
                 BattleAcHelpSetDispType(0);
                 BtlUnit_SetCommandAnimPose(unit);
-                if ((cmd->actType == 0 && ((s32)wp->flags & 0x200)) ||
-                    (cmd->actType == 1 && ((s32)wp->flags & 0x400))) {
+                if ((cmd->actType == 0 && ((s32)wp->flags & BATTLE_FLAG_JUMP_NO_SUBMENU)) ||
+                    (cmd->actType == 1 && ((s32)wp->flags & BATTLE_FLAG_HAMMER_NO_SUBMENU))) {
                     cmd->state = 1;
                     BattleStageOffLightEnemyInCommand();
                 }
@@ -1487,7 +1487,7 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
             switch (type) {
             case 0:
             case 1:
-                if ((type == 0 && (wp->flags & 0x200)) || (type == 1 && (wp->flags & 0x400))) {
+                if ((type == 0 && (wp->flags & BATTLE_FLAG_JUMP_NO_SUBMENU)) || (type == 1 && (wp->flags & BATTLE_FLAG_HAMMER_NO_SUBMENU))) {
                     _btlcmd_MakeSelectWeaponTable(wp, type);
                     if (_btlcmd_CheckWeaponTargetNum(wp, unit, cmd->weapon[0].weapon) <= 0) {
                         cmd->act[i].enabled = 0;
@@ -1512,7 +1512,7 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
         }
         if (wp->commandMenu.attackAudience) {
             type = cmd->act[cursor->absPos].type;
-            if ((type == 0 && (wp->flags & 0x200)) || (type == 1 && (wp->flags & 0x400))) {
+            if ((type == 0 && (wp->flags & BATTLE_FLAG_JUMP_NO_SUBMENU)) || (type == 1 && (wp->flags & BATTLE_FLAG_HAMMER_NO_SUBMENU))) {
                 wp->commandMenu.attackAudience = 0;
                 wp->commandMenu.recCommand = 0;
             }
@@ -1597,10 +1597,10 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
 BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp) {
     BattleUnit* unit;
 
-    if (wp->flags & 0x800000) {
+    if (wp->flags & BATTLE_FLAG_LECTURE_NO_COMMAND) {
         return FALSE;
     }
-    if (wp->flags & 0x40000000) {
+    if (wp->flags & BATTLE_FLAG_ZERO_GRAVITY) {
         return FALSE;
     }
     unit = BattleGetMarioPtr(wp);
@@ -2564,7 +2564,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
         position.x = unit->mPosition.x;
         position.y = unit->mPosition.y;
         position.z = unit->mPosition.z;
-        if (wp->flags & 0x80) {
+        if (wp->flags & BATTLE_FLAG_COMMAND_INPUT) {
             position.x = unit->mHomePosition.x;
             position.y = unit->mHomePosition.y;
             position.z = unit->mHomePosition.z;
@@ -2810,7 +2810,7 @@ BOOL BattleCommandAttackAudienceCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     s32 id;
 
-    if (BattlePadCheckTrigger(PAD_BUTTON_X) && !(wp->flags & 0x40000000)) {
+    if (BattlePadCheckTrigger(PAD_BUTTON_X) && !(wp->flags & BATTLE_FLAG_ZERO_GRAVITY)) {
         if (BattleGetMarioPtr(wp)->mAttributeFlags & kVeiled) {
             return FALSE;
         }

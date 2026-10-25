@@ -1800,7 +1800,7 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
         BattleGetUnitPtr(wp, *unitIdx)->damagePattern = 0;
         BattleRunHitEvent(BattleGetUnitPtr(wp, *unitIdx), 0x1029);
         BattleGetUnitPtr(wp, *unitIdx)->mTokenFlags |= 4;
-        wp->flags |= 1;
+        wp->flags |= BATTLE_FLAG_GUARD_MOVE;
         unit->damagePattern = 0;
         BattleRunHitEvent(unit, 0x1038);
         unit->mTokenFlags |= 2;
@@ -1857,7 +1857,7 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
         BattleGetUnitPtr(wp, unitIdx)->damagePattern = 0;
         BattleRunHitEvent(BattleGetUnitPtr(wp, unitIdx), 0x1029);
         BattleGetUnitPtr(wp, unitIdx)->mTokenFlags |= 4;
-        wp->flags |= 1;
+        wp->flags |= BATTLE_FLAG_GUARD_MOVE;
         unit->damagePattern = 0;
         BattleRunHitEvent(unit, 0x1038);
         unit->mTokenFlags |= 2;

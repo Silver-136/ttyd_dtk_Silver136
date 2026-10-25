@@ -512,7 +512,7 @@ void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
         if (!(BattleAudienceItemGetPtr(0)->mItemType >= 0xEC && BattleAudienceItemGetPtr(0)->mItemType < 0xF0)) {
             BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
         }
-    } else if (!(m->flags & 0x20) && (bw->flags & 0x80)) {
+    } else if (!(m->flags & 0x20) && (bw->flags & BATTLE_FLAG_COMMAND_INPUT)) {
         item = BattleAudienceItemGetPtr(m->itemId);
         if (!(base->flags & 0x40000)) {
             item->timer--;

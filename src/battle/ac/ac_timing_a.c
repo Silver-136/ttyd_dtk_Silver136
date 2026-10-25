@@ -118,7 +118,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
         return work->actionCommands.result;
     }
     work->actionCommands.result = 0;
-    if (work->flags & 0x1000000) {
+    if (work->flags & BATTLE_FLAG_LECTURE_JUMP) {
         work->actionCommands.outputParams[0] = 3;
         work->actionCommands.result = 2;
         work->actionCommands.mResultCount++;

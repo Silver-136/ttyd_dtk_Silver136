@@ -178,7 +178,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
-    CALL(btlevtcmd_onoff_battleflag, 1, 4096)
+    CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_NO_OBJECT_FALL)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_npc_christine), 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, LW(3))
     CALL(btlevtcmd_SetPos, LW(3), -140, 0, 5)
@@ -423,7 +423,7 @@ static PoseTableEntry pose_table_guard[] = {
 };
 
 static EVT_BEGIN(normal_attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE

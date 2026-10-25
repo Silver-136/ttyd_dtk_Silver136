@@ -41,7 +41,7 @@ void battleMain(void) {
     BattleWork* wp = _battleWorkPointer;
 
     if (wp && BattleMain() == 0) {
-        wp->flags |= 0x80000000;
+        wp->flags |= BATTLE_SEQ_END;
     }
 }
 
@@ -123,7 +123,7 @@ BOOL BattleMain(void) {
     }
 
     if ((gp->flags & 0x1000) && (gp->flags & 0x2000) && BattleGetSeq(wp, SEQ_UNKNOWN) == 2) {
-        wp->flags |= 0x60;
+        wp->flags |= (BATTLE_FLAG_INTERRUPT_STOP | BATTLE_FLAG_DEMO_TIMEOUT);
         BattleSetSeq(wp, SEQ_UNKNOWN, 3);
         BattleSetSeq(wp, SEQ_END, 0x7000000);
         return TRUE;
@@ -965,7 +965,7 @@ void BattleMajinaiDone(void) {
 void BattleMajinaiEndCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     if (pouchGetPtr()->mMerleeCurseUsesRemaining == 0) {
-        wp->flags |= 0x400000;
+        wp->flags |= BATTLE_FLAG_MAJINAI_END;
     }
 }
 

@@ -984,7 +984,7 @@ void gravityOffsetControl(BattleUnitPart* part) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit = part->mOwner;
 
-    if (!(wp->flags & 0x40000000)) {
+    if (!(wp->flags & BATTLE_FLAG_ZERO_GRAVITY)) {
         active = FALSE;
     } else if (unit->mAttributeFlags & (kFloating | kNoGravityBob)) {
         active = FALSE;

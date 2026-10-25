@@ -2385,7 +2385,7 @@ EVT_BEGIN(_object_turn_event_core)
     IF_INT_NOT_EQUAL(LW(9), 1)
         CALL(_bgset_audience_bgset_access)
     END_IF
-    CALL(btlevtcmd_check_battleflag, LW(0), 256)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_PARTY_IN_AUDIENCE)
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(20)
     END_IF
@@ -3576,7 +3576,7 @@ s32 BattleStage_ObjectFallCheck(void) {
     BattleStageObjectWork* sw = STAGE_WORK(wp);
     EventEntry* evt;
 
-    if (wp->flags & 0x1000) {
+    if (wp->flags & BATTLE_FLAG_NO_OBJECT_FALL) {
         return 0;
     }
     evt = evtEntry(_object_fall_event, 10, 0);

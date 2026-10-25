@@ -377,7 +377,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(wakeup_event)
         RETURN
     END_IF
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
         WAIT_FRAMES(30)

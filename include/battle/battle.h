@@ -18,7 +18,32 @@
 
 typedef struct BattleAlliance BattleAlliance;
 
-typedef enum BattleFlags { BATTLE_SEQ_END = 0x80000000 } BattleFlags;
+// BattleWork.flags, named from the code that sets and tests them (lecture bits: Frankly's tutorials, which commands
+// stay selectable). 0x4 (set on command confirm, never read), 0x10000/0x20000 (forced icons, never set) are not
+// named.
+typedef enum BattleFlags {
+    BATTLE_FLAG_GUARD_MOVE = (1 << 0),            // 0x1, btlevtcmd_WaitGuardMove / GuardMoveEnd
+    BATTLE_FLAG_FIRST_ATTACK = (1 << 1),          // 0x2, first-strike sequence
+    BATTLE_FLAG_ESCAPED = (1 << 4),               // 0x10, btlevtcmd_InterruptStop type 0 (result 4)
+    BATTLE_FLAG_INTERRUPT_STOP = (1 << 5),        // 0x20, btlevtcmd_InterruptStop type 1 (result 5)
+    BATTLE_FLAG_DEMO_TIMEOUT = (1 << 6),          // 0x40, demo-mode idle timeout ends the battle
+    BATTLE_FLAG_COMMAND_INPUT = (1 << 7),         // 0x80, command menu open (BattleCommandInit)
+    BATTLE_FLAG_PARTY_IN_AUDIENCE = (1 << 8),     // 0x100, Hooktail negotiation: Mario's party in the audience area
+    BATTLE_FLAG_JUMP_NO_SUBMENU = (1 << 9),       // 0x200, only the plain Jump: no weapon submenu
+    BATTLE_FLAG_HAMMER_NO_SUBMENU = (1 << 10),    // 0x400, only the plain Hammer: no weapon submenu
+    BATTLE_FLAG_NO_OBJECT_FALL = (1 << 12),       // 0x1000, BattleStage_ObjectFallCheck skipped
+    BATTLE_FLAG_RESET_TURN = (1 << 13),           // 0x2000, btlevtcmd_reset_turn
+    BATTLE_FLAG_MAJINAI_END = (1 << 22),          // 0x400000, BattleMajinaiEndCheck: Merlee's spells used up
+    BATTLE_FLAG_LECTURE_NO_COMMAND = (1 << 23),   // 0x800000, every command and the position swap off
+    BATTLE_FLAG_LECTURE_JUMP = (1 << 24),         // 0x1000000, only Jump (lecturer's weapon, timed command succeeds)
+    BATTLE_FLAG_LECTURE_HAMMER = (1 << 25),       // 0x2000000, only Hammer
+    BATTLE_FLAG_LECTURE_SPECIAL = (1 << 26),      // 0x4000000, only Special
+    BATTLE_FLAG_LECTURE_FREE = (1 << 27),         // 0x8000000, free practice: Tactics replaced by Lecture End
+    BATTLE_FLAG_LECTURE_ATTACK = (1 << 28),       // 0x10000000, attacks only (no items, special, tactics)
+    BATTLE_FLAG_DISABLE_HRESET = (1 << 29),       // 0x20000000, battleDisableHResetCheck (Reset button counted)
+    BATTLE_FLAG_ZERO_GRAVITY = (1 << 30),         // 0x40000000, zero-gravity battle (never set in the game)
+    BATTLE_SEQ_END = (1 << 31),                   // 0x80000000
+} BattleFlags;
 
 typedef enum BattleSequence {
     SEQ_UNKNOWN = 0,
@@ -171,7 +196,7 @@ struct BattleWork {
     s32 activeUnitId;                   // 0x420
     s32 lectureUnitId;                  // 0x424, unit id -6 resolves to (_battle_set_lecture_unit_id); its weapons replace the menu weapons, -1 = none
     BattleWorkWeaponTargets weaponTargets; // 0x428
-    u32 flags;                          // 0xEF4
+    u32 flags;                          // 0xEF4, BattleFlags
     s32 dispFlags;                      // 0xEF8
     s32 ruleDispTimer;                  // 0xEFC
     s32 stockExp;                       // 0xF00, BattleStoreExp/BattleGetStockExp
