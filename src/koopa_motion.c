@@ -775,7 +775,7 @@ void kpa_swim(void) {
         m->currSubMotionId = 1;
         m->flags &= ~MARIO_FLAG_IS_FALLING;
         m->flags |= MARIO_FLAG_IS_JUMPING;
-        psndSFXOn_3D((const char*)"SFX_KUPPA_SWIM1", &m->position);
+        psndSFXOn_3D("SFX_KUPPA_SWIM1", &m->position);
         if (kpaGetAttackMode() == 0) {
             kpaChgPose("KPA_W_1", "KPA2_W_2");
         }
@@ -836,7 +836,7 @@ void kpa_swim(void) {
         m->flags &= ~MARIO_FLAG_IS_FALLING;
         m->flags |= MARIO_FLAG_IS_JUMPING;
         kpaChgPose("KPA_J_1A", "KPA2_J_1A");
-        psndSFXOn_3D((const char*)"SFX_KUPPA_WATER_UP1", &m->position);
+        psndSFXOn_3D("SFX_KUPPA_WATER_UP1", &m->position);
         m->jumpVelocityY = 5.0f;
         m->jumpAccelerationY = -0.13f;
         m->jumpJerkY = 0.0f;
