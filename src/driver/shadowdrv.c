@@ -1049,9 +1049,9 @@ void depthShadowEnd(CameraId cameraId, void* param) {
 }
 
 // debug strings (from stripped debug code)
-const char str_802C1AFC[0x1C] = "result scene (8bit depth)";
-const char str_802C1B18[0x2C] = "actual depth from the light (8bit depth)";
-const char str_802C1B44[0x28] = "projected shadow depth map (8bit depth)";
-const char str_802C1B6C[0x1C] = "result scene (16bit depth)";
-const char str_802C1B88[0x2C] = "actual depth from the light (16bit depth)";
-const char str_802C1BB4[0x2C] = "projected shadow depth map (16bit depth)";
+const char str_802C1AFC[] = "result scene (8bit depth)";
+const char str_802C1B18[] = "actual depth from the light (8bit depth)";
+const char str_802C1B44[] = "projected shadow depth map (8bit depth)";
+const char str_802C1B6C[] = "result scene (16bit depth)";
+const char str_802C1B88[] = "actual depth from the light (16bit depth)";
+const char str_802C1BB4[] = "projected shadow depth map (16bit depth)";

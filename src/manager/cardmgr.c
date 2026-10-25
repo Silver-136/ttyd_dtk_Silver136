@@ -23,12 +23,12 @@
 #include "assets/_mariost_icon_tlut.inc"
 #include "assets/_mariost_banner_tex.inc"
 #include "libc_decls.h"
-const char str_802CCC80[0x14] = "mariost_save_file";
+const char str_802CCC80[] = "mariost_save_file";
 #ifdef VERSION_G8ME01
-const char str_802CCC94[0xC] = "Paper Mario";
+const char str_802CCC94[] = "Paper Mario";
 const char str_802CCCAC[0x12] = "%2d/%2d save data";
 #else
-const char str_802CCC94[0x18] = "ペーパーマリオＲＰＧ";
+const char str_802CCC94[] = "ペーパーマリオＲＰＧ";
 const char str_802CCCAC[0x20] = "%2d月%2d日のセーブデータです";
 #endif
 

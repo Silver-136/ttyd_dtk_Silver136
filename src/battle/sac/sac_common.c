@@ -12,7 +12,6 @@
 #include "evt/evt_audience.h"
 
 
-s32 BattleAudienceSoundCheck(s32 id);
 
 static s32 count;
 s32 count2;

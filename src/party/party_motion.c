@@ -53,7 +53,6 @@ void partyGetAppearPos4(PartyEntry* party, Vec* pos);
 // Functions are defined in reverse order (-inline deferred).
 
 BOOL psndENVOn(s32 a, s32 b);
-BOOL psndENVOn_f_d(s32 a, s32 b, s32 c, s32 d);
 void psndSFX_vol(s32 id, u8 vol);
 void psndSFX_pit(s32 id, s16 pit);
 BOOL psndBGMOn_f_d(s32 a, s32 b, s32 c, s32 d, s32 e);
@@ -244,7 +243,7 @@ USER_FUNC(evt_snd_envon_f) {
     s32 a = args[0];
     s32 b = args[1];
     s32 c = evtGetValue(event, args[2]);
-    psndENVOn_f_d(a, b, c, 0);
+    psndENVOn_f_d(a, SFX_NAME_WORD(b), c, 0);
     return EVT_RETURN_DONE;
 }
 

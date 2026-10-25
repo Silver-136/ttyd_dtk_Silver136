@@ -122,7 +122,6 @@ void BattleAudienceJoy_Sub(s32 a, s32 b, s32 c, s32 type);
 s32 BattleAudienceDetectPakkunEatTargetSub2(s32 index, s32 dir);
 s32 BattleAudienceDetectPakkunEatTargetSub(s32 index, s32 dir1, s32 dir2);
 void BattleAudienceSoundNoiseAlways(void);
-u32 BattleAudienceSoundCheck(s32 index);
 s32 BattleAudienceSound0(const char* name);
 s32 BattleAudienceSound1(const char* name, s32 right, s32 left);
 void BattleAudienceSoundGetInfo1(s32 right, s32 left, u8* vol, Vec* pos);
@@ -3793,7 +3792,7 @@ void BattleAudienceSoundSetVolAll(u8 vol, s32 length) {
     }
 }
 
-u32 BattleAudienceSoundCheck(s32 index) {
+s32 BattleAudienceSoundCheck(s32 index) {
     return AudSoundGetPtr(index)->flags & 1;
 }
 

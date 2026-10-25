@@ -317,3 +317,4 @@ BOOL BattleAudience_GetFront(s32 index);
 s32 BattleAudienceAddAudienceNum(s32 num);
 void BattleAudienceSoundSetVol(s32 index, u8 a2, s32 a3);
 BOOL BattleAudience_GetAnimEnd(s32 index);
+s32 BattleAudienceSoundCheck(s32 index);

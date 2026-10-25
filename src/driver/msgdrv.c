@@ -32,23 +32,23 @@ const char R_no_messages_DU[] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>
 #else
 const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 #endif
-const char str_802C4E4C[12] = "\123\124\111\103\113\137\114\105\106\124";
-const char str_802C4E58[12] = "\102\125\124\124\117\116\137\114";
-const char str_802C4E64[12] = "\102\125\124\124\117\116\137\122";
-const char str_802C4E70[12] = "\120\101\104\137\130\137\117\116";
-const char str_802C4E7C[12] = "\120\101\104\137\131\137\117\116";
-const char str_802C4E88[12] = "\120\101\104\137\132\137\117\106\106";
-const char str_802C4E94[12] = "\120\101\104\137\123\124\137\117\106\106";
-const char str_802C4EA0[12] = "\142\154\141\143\153\137\153\145\171";
-const char str_802C4EAC[12] = "\101\116\115\137\120\101\104\137\101";
-const char str_802C4EB8[16] = "\101\116\115\137\123\124\111\103\113\137\122\111\107\110\124";
-const char str_802C4EC8[16] = "\101\116\115\137\120\101\104\137\123\124\101\122\124";
-const char str_802C4ED8[8] = "\120\115\137\131\137\061\102";
-const char str_802C4EE0[8] = "\120\115\137\131\137\062\102";
-const char str_802C4EE8[8] = "\120\115\137\106\137\061\102";
-const char str_802C4EF0[8] = "\120\115\137\106\137\063\102";
-const char str_802C4EF8[8] = "\120\115\137\103\137\061\102";
-const char str_802C4F00[8] = "\120\115\137\103\137\062\102";
+const char str_802C4E4C[12] = "STICK_LEFT";
+const char str_802C4E58[12] = "BUTTON_L";
+const char str_802C4E64[12] = "BUTTON_R";
+const char str_802C4E70[12] = "PAD_X_ON";
+const char str_802C4E7C[12] = "PAD_Y_ON";
+const char str_802C4E88[12] = "PAD_Z_OFF";
+const char str_802C4E94[12] = "PAD_ST_OFF";
+const char str_802C4EA0[12] = "black_key";
+const char str_802C4EAC[12] = "ANM_PAD_A";
+const char str_802C4EB8[16] = "ANM_STICK_RIGHT";
+const char str_802C4EC8[16] = "ANM_PAD_START";
+const char str_802C4ED8[8] = "PM_Y_1B";
+const char str_802C4EE0[8] = "PM_Y_2B";
+const char str_802C4EE8[8] = "PM_F_1B";
+const char str_802C4EF0[8] = "PM_F_3B";
+const char str_802C4EF8[8] = "PM_C_1B";
+const char str_802C4F00[8] = "PM_C_2B";
 
 #ifdef VERSION_G8ME01
 #endif
