@@ -402,7 +402,7 @@ void btlseqFirstAct(BattleWork* wp) {
             wp->flags |= 2;
             BattleGetFirstAttackUnit(wp, &a, &b);
             wp->activeUnitId = a->unitId;
-            a->mTokenFlags |= 0x1000;
+            a->mTokenFlags |= kCurrentlyActing;
             evt = evtEntry(b->damageEventCode, 10, EVENT_START_IMMEDIATE);
             if (evt) {
                 evt->unitId = b->unitId;
@@ -2332,7 +2332,7 @@ void btlseqMove(BattleWork* wp) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit) {
                         BtlUnit_SetTotalHitDamage(unit, 0);
-                        unit->mTokenFlags &= ~0x1000;
+                        unit->mTokenFlags &= ~kCurrentlyActing;
                     }
                 }
                 end = BattlePhaseEndCheck();
@@ -2437,7 +2437,7 @@ void btlseqAct(BattleWork* wp) {
             if (cantMove) {
                 BattleSetSeq(wp, SEQ_ACT, 0x6000003);
             }
-            else if (unit->mAttributeFlags & 0x10) {
+            else if (unit->mAttributeFlags & kVeiled) {
                 BattleSetSeq(wp, SEQ_ACT, 0x6000004);
             }
             else if (unit->currentKind == UNIT_VIVIAN && (BattleGetMarioPtr(wp)->mAttributeFlags & 0x10)) {
@@ -2509,7 +2509,7 @@ void btlseqAct(BattleWork* wp) {
                     evt = evtEntry(btldefaultevt_BiribiriMove, 10, 0);
                 }
                 else if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && irand(100) < 50) {
-                    unit->mTokenFlags |= 0x10;
+                    unit->mTokenFlags |= kConfusedAction;
                     evt = evtEntry(unit->confusionEventCode, 10, 0);
                 }
                 else {
@@ -2547,9 +2547,9 @@ void btlseqAct(BattleWork* wp) {
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             if (unit) {
                 unit->flags &= ~0x4000000;
-                if (unit->mTokenFlags & 8) {
+                if (unit->mTokenFlags & kChargeExpended) {
                     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
-                    unit->mTokenFlags &= ~8;
+                    unit->mTokenFlags &= ~kChargeExpended;
                 }
                 if (wp->majinaiState == 1) {
                     wp->majinaiState = 0;
@@ -2587,11 +2587,11 @@ void btlseqAct(BattleWork* wp) {
                         }
                         if (unit->movesRemaining <= 0) {
                             unit->moveState = 10;
-                            if (!(unit->mTokenFlags & 0x2000)) {
+                            if (!(unit->mTokenFlags & kHasRallyWinkStatus)) {
                                 unit->activeTurns = 0;
                             }
                             else {
-                                unit->mTokenFlags &= ~0x2000;
+                                unit->mTokenFlags &= ~kHasRallyWinkStatus;
                             }
                             if (!BtlUnit_GetBelong(unit) && unit->attackPhase == 0x4000002 &&
                                 !BattlePhaseEndCheck() && !(wp->flags & 0x2000)) {
@@ -2921,7 +2921,7 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
                 unit = BattleGetUnitPtr(wp, j);
                 if (unit && unit->mAlliance == i &&
                     !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
-                    !(unit->mAttributeFlags & 0x20000) &&
+                    !(unit->mAttributeFlags & kInactive) &&
                     !(unit->mAttributeFlags & 0x10000000)) {
                     break;
                 }

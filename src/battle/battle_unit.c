@@ -157,7 +157,7 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
         part->mOwner = unit;
         part->attributes = part->mKindPartParams->attributes;
         part->counterAttributes = part->mKindPartParams->counterAttributes;
-        if (part->attributes & 1) {
+        if (part->attributes & kMainPart) {
             unit->talkPartId = part->mKindPartParams->partNum;
         }
         part->defense = part->mKindPartParams->defense;
@@ -2199,7 +2199,7 @@ BOOL BtlUnit_EnemyItemCanUseCheck(s32 item) {
 }
 
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit) {
-    if (unit->mAttributeFlags & 0x10) {
+    if (unit->mAttributeFlags & kVeiled) {
         return TRUE;
     }
     if (unit->currentKind == UNIT_VIVIAN && unit->work[4] > 0) {

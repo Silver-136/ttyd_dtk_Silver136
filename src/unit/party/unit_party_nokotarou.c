@@ -2619,7 +2619,7 @@ static USER_FUNC(_check_guard_koura) {
     id = evtGetValue(event, args[0]);
     index = args[1];
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    if (!(unit->mAttributeFlags & 0x20)) {
+    if (!(unit->mAttributeFlags & kShellShielded)) {
         evtSetValue(event, index, -1);
         return EVT_RETURN_DONE;
     }

@@ -2401,7 +2401,7 @@ USER_FUNC(_set_hustle) {
             if (unit->maxMovesThisTurn <= 0) {
                 unit->maxMovesThisTurn = 1;
                 if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
-                    unit->mTokenFlags |= 0x2000;
+                    unit->mTokenFlags |= kHasRallyWinkStatus;
                 }
             }
         } else {

@@ -238,7 +238,7 @@ USER_FUNC(btlevtcmd_KillUnit) {
     unit->currentHp = 0;
     BtlUnit_ClearStatus(unit);
     if (flags & 2) {
-        unit->mAttributeFlags |= 0x20000;
+        unit->mAttributeFlags |= kInactive;
         return EVT_RETURN_DONE;
     }
     else {
@@ -3633,8 +3633,8 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
         event->userdata[0] = time;
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
         pos.y += 10.0f;
-        if (!(unit->mAttributeFlags & 0x10)) {
-            if (unit->mAttributeFlags & 2) {
+        if (!(unit->mAttributeFlags & kVeiled)) {
+            if (unit->mAttributeFlags & kCeiling) {
                 pos.y -= 5.0f;
             } else {
                 pos.y += unit->mSizeMultiplier * BtlUnit_GetHeight(unit);

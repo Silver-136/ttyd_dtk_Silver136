@@ -274,7 +274,7 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
     s32* table = _status_pose_table;
     StatusEffectType type;
 
-    if (unit->mAttributeFlags & 0x20000) {
+    if (unit->mAttributeFlags & kInactive) {
         return STATUS_INSTANT_KILL;
     }
     while (1) {
@@ -496,7 +496,7 @@ next:
             part->dispColor.g = part->color.g;
             part->dispColor.b = part->color.b;
             if (!(unit->mAttributeFlags & 0x1000000) && !(part->attributes & 0x1000000)) {
-                if (!(part->attributes & 1) || !(unit->mAttributeFlags & 0x10)) {
+                if (!(part->attributes & kMainPart) || !(unit->mAttributeFlags & kVeiled)) {
                     if (part->dispColor.a < 0xFF || animPoseTestXLU(part->poseId)) {
                         if (!(PART_ANIMFLAGS(part) & 0x100)) {
                             dispEntry(CAMERA_3D, dispCalcZ(&zpos), 2, (DispCallback)btlUnitPartsDisp, part);

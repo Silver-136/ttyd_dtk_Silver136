@@ -33,7 +33,7 @@ void* _check_hp_recover_item(BattleUnit* self);
 
 #define GETUNIT() unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx)
 #define RET() return itemDataTable[itemId].battle_params->mAttackEvtScript
-#define NOFLAG (self->mAttributeFlags & 0x20000)
+#define NOFLAG (self->mAttributeFlags & kInactive)
 
 void* BattleEnemyUseItemCheck(BattleUnit* self) {
     s32 itemId = self->heldItem;
@@ -46,7 +46,7 @@ void* BattleEnemyUseItemCheck(BattleUnit* self) {
     if (weapon == NULL) {
         return NULL;
     }
-    if ((self->mTokenFlags & 0x10) && !(weapon->special & 0x10000)) {
+    if ((self->mTokenFlags & kConfusedAction) && !(weapon->special & 0x10000)) {
         return NULL;
     }
     switch (itemId) {

@@ -762,7 +762,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
         if (xc >= x0 && xc < x0 + step) {
             y = (xc - x0) / step * (m->disp[0][i + 1].y - m->disp[0][i].y) + m->disp[0][i].y;
             if (unit->mPosition.y < y) {
-                if ((unit->mAttributeFlags & 2) && y < 120.0f) {
+                if ((unit->mAttributeFlags & kCeiling) && y < 120.0f) {
                     break;
                 }
                 if (m->vel[0][i].y > 0.0f) {
@@ -781,7 +781,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                     if (part->attributes & 0x4000) {
                         continue;
                     }
-                    if (!(unit->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+                    if (!(unit->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                         BtlUnit_SetAnimType(part, 0x27);
                     }
                     effSmallStarEntry(0, 2, xc, unit->mPosition.y, unit->mPosition.z, 0.0f, -1.0f, 0.0f);
@@ -789,7 +789,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                     if (unit->mAttributeFlags & 0x200000) {
                         continue;
                     }
-                    if (unit->mAttributeFlags & 0x20000) {
+                    if (unit->mAttributeFlags & kInactive) {
                         continue;
                     }
                     if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
@@ -811,7 +811,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
     if (unit->mPosition.y < unit->mHomePosition.y) {
         unit->mPosition.y = unit->mHomePosition.y;
         w->enemyVel[*n].y = 0.0f;
-        if (!(unit->mAttributeFlags & 0x20000) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (!(unit->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             unit->mRotation.z = 0.0f;
             w->enemyRot[*n] = 0.0f;
         }

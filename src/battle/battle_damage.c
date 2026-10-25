@@ -450,7 +450,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         if (attacker->currentHp <= attacker->mKindParams->mDangerHP && attacker->badgesEquipped.PowerRush) {
             damage += attacker->badgesEquipped.PowerRush * 2;
         }
-        if (attacker->badgesEquipped.IcePower && (part->attributes & 0x100)) {
+        if (attacker->badgesEquipped.IcePower && (part->attributes & kWeakToIcePower)) {
             damage += attacker->badgesEquipped.IcePower;
         }
     }
@@ -461,7 +461,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
                 damage = 0;
             }
         }
-        attacker->mTokenFlags |= 8;
+        attacker->mTokenFlags |= kChargeExpended;
     }
     if ((weapon->special & 2) && BtlUnit_CheckStatus(attacker, STATUS_HUGE)) {
         BtlUnit_GetStatus(attacker, STATUS_HUGE, &turns, &strength);
@@ -1108,7 +1108,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
 
     if (ok) {
         BtlUnit_GetPos(unit, &x, &y, &z);
-        if (unit->mAttributeFlags & 2) {
+        if (unit->mAttributeFlags & kCeiling) {
             y -= BtlUnit_GetHeight(unit) / 2;
         } else {
             y += BtlUnit_GetHeight(unit) / 2;
@@ -1447,7 +1447,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
         return 1;
     }
     if (weapon->special & 4) {
-        attacker->mTokenFlags |= 8;
+        attacker->mTokenFlags |= kChargeExpended;
     }
     if ((part->attributes & 0x4000) && !(weapon->special & 0x40000)) {
         return 2;
@@ -1458,10 +1458,10 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & 8)) {
         return 4;
     }
-    if (target->mAttributeFlags & 0x10) {
+    if (target->mAttributeFlags & kVeiled) {
         return 4;
     }
-    if ((part->counterAttributes & 2) && !(weapon->counterResistFlags & 4) && !attacker->badgesEquipped.SpikeShield) {
+    if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !(weapon->counterResistFlags & 4) && !attacker->badgesEquipped.SpikeShield) {
         return 5;
     }
     if (part->attributes & VERSION_PICK(0x10, 0x40)) {
@@ -1603,12 +1603,12 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     BattleCheckCounter(cwp, attacker, target, part, weapon, (u32*)&flags);
     while (cw.field_0x0) {
         if (flags & 0x100) {
-            if (part->counterAttributes & 0x2000) {
+            if (part->counterAttributes & kCounterVolatileExplosive) {
                 BattleRunHitEvent(target, 0x719);
                 ret = 18;
                 break;
             }
-            if ((part->counterAttributes & 0x1000) &&
+            if ((part->counterAttributes & kCounterExplosive) &&
                 (weapon->element == 3 || weapon->element == 4 || weapon->element == 1 ||
                  ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN)))) {
                 BattleRunHitEvent(target, 0x719);
@@ -1628,15 +1628,15 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 BattleAudience_Case_GuardBad();
             }
         }
-        if ((weapon->special & 0x1000) && (part->attributes & 0x1000)) {
+        if ((weapon->special & 0x1000) && (part->attributes & kIsShelled)) {
             pierce = 1;
             flags |= 0x200000;
         }
-        if ((weapon->special & 0x2000) && (part->attributes & 0x2000)) {
+        if ((weapon->special & 0x2000) && (part->attributes & kIsBombFlippable)) {
             pierce = 1;
             flags |= 0x200000;
         }
-        if ((weapon->special & 0x4000) && (part->attributes & 0x800)) {
+        if ((weapon->special & 0x4000) && (part->attributes & kIsWinged)) {
             pierce = 1;
             if (flags & 0x100) {
                 flags |= 0x400000;
@@ -1926,59 +1926,59 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         return 0;
     }
     work->count = 0;
-    if ((part->counterAttributes & 1) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & 2)) {
+    if ((part->counterAttributes & kCounterTopSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & 2)) {
         work->type = 0x2B;
         work->msg = 0x12B;
         work->count++;
         work->field_0x2C = 0x1F;
         *flags |= 0x100;
         work->field_0x0 = 0;
-    } else if ((part->counterAttributes & 2) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & 4)) {
+    } else if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & 4)) {
         work->type = 0x2C;
         work->msg = 0x12C;
         work->count++;
         work->field_0x2C = 0x20;
         *flags |= 0x100;
         work->field_0x0 = 0;
-    } else if ((part->counterAttributes & 4) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & 8)) {
+    } else if ((part->counterAttributes & kCounterFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & 8)) {
         work->type = 0x2D;
         work->msg = 0x12D;
         work->count++;
         work->field_0x2C = 0x21;
         *flags |= 0x100;
         work->field_0x0 = 0;
-    } else if (((part->counterAttributes & 0x10) || (part->counterAttributes & 0x20)) && !attacker->badgesEquipped.IcePower && !(weapon->counterResistFlags & 0x10)) {
+    } else if (((part->counterAttributes & kCounterFiery) || (part->counterAttributes & kCounterFieryStatus)) && !attacker->badgesEquipped.IcePower && !(weapon->counterResistFlags & 0x10)) {
         work->type = 0x2E;
         work->msg = 0x12E;
         work->count++;
         work->field_0x2C = 0x22;
         *flags |= 0x100;
         work->field_0x0 = 0;
-        if (part->counterAttributes & 0x20) {
+        if (part->counterAttributes & kCounterFieryStatus) {
             work->field_0x8 = 1;
         }
-    } else if (((part->counterAttributes & 0x40) || (part->counterAttributes & 0x80)) && !(weapon->counterResistFlags & 0x20)) {
+    } else if (((part->counterAttributes & kCounterIcy) || (part->counterAttributes & kCounterIcyStatus)) && !(weapon->counterResistFlags & 0x20)) {
         work->type = 0x2F;
         work->msg = 0x12F;
         work->count++;
         work->field_0x2C = 0x23;
         *flags |= 0x100;
         work->field_0x0 = 0;
-        if (part->counterAttributes & 0x80) {
+        if (part->counterAttributes & kCounterIcyStatus) {
             work->field_0x14 = 1;
         }
-    } else if (((part->counterAttributes & 0x400) || (part->counterAttributes & 0x800)) && !(weapon->counterResistFlags & 1) && !BtlUnit_CheckStatus(attacker, STATUS_ELECTRIC)) {
+    } else if (((part->counterAttributes & kCounterElectric) || (part->counterAttributes & kCounterElectricStatus)) && !(weapon->counterResistFlags & 1) && !BtlUnit_CheckStatus(attacker, STATUS_ELECTRIC)) {
         work->type = 0x30;
         work->msg = 0x130;
         work->count++;
         work->field_0x2C = 0x24;
         *flags |= 0x100;
         work->field_0x0 = 0;
-        if (part->counterAttributes & 0x800) {
+        if (part->counterAttributes & kCounterElectricStatus) {
             work->field_0x10 = 1;
         }
     } else {
-        if ((part->counterAttributes & 0x1000) && !(weapon->counterResistFlags & 0x80)) {
+        if ((part->counterAttributes & kCounterExplosive) && !(weapon->counterResistFlags & 0x80)) {
             if (weapon->element == 3 || weapon->element == 4 || weapon->element == 1 ||
                 ((weapon->special & 0x400) && BtlUnit_CheckStatus(attacker, STATUS_BURN))) {
                 work->type = 0x31;
@@ -1987,19 +1987,19 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
                 *flags |= 0x100;
             }
         }
-        if ((part->counterAttributes & 0x2000) && !(weapon->counterResistFlags & 0x100)) {
+        if ((part->counterAttributes & kCounterVolatileExplosive) && !(weapon->counterResistFlags & 0x100)) {
             work->type = 0x32;
             work->msg = 0x132;
             work->count++;
             *flags |= 0x100;
         }
-        if ((BtlUnit_CheckStatus(target, STATUS_ELECTRIC) || (part->counterAttributes & 0x400) || (part->counterAttributes & 0x800)) &&
+        if ((BtlUnit_CheckStatus(target, STATUS_ELECTRIC) || (part->counterAttributes & kCounterElectric) || (part->counterAttributes & kCounterElectricStatus)) &&
             !(weapon->counterResistFlags & 1) && !BtlUnit_CheckStatus(attacker, STATUS_ELECTRIC)) {
             work->type = 0x34;
             work->msg = 0x134;
             work->count++;
             *flags |= 0x100;
-            if (part->counterAttributes & 0x800) {
+            if (part->counterAttributes & kCounterElectricStatus) {
                 work->field_0x10 = 1;
             }
         }
@@ -2009,12 +2009,12 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
             *flags |= 0x100;
             work->field_0x4 = 1;
         }
-        if (((part->counterAttributes & 0x100) || (part->counterAttributes & 0x200)) && !(weapon->counterResistFlags & 0x40)) {
+        if (((part->counterAttributes & kCounterPoison) || (part->counterAttributes & kCounterPoisonStatus)) && !(weapon->counterResistFlags & 0x40)) {
             work->type = 0x33;
             work->msg = 0x133;
             *flags |= 0x100;
             work->field_0x4 = 1;
-            if (part->counterAttributes & 0x200) {
+            if (part->counterAttributes & kCounterPoisonStatus) {
                 work->field_0xC = 1;
             }
         }

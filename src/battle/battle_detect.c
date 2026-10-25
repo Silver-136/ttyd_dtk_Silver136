@@ -43,14 +43,14 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 s32 dir;
                 f32 x, y, z;
                 f32 ox, oy, oz;
-                if (part->attributes & 0x10000) {
+                if (part->attributes & kNotTargetable) {
                     part = part->mNextPart;
                     continue;
                 }
                 kp = part->mKindPartParams;
                 dir = part->faceDirection;
                 BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
-                if (!(unit->mAttributeFlags & 2)) {
+                if (!(unit->mAttributeFlags & kCeiling)) {
                     y += part->mPositionOffset.y * unit->mSizeMultiplier;
                 }
                 ox = x;
@@ -216,7 +216,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
         BOOL ok;
         do {
                         if (d->propFlags & 1) {
-                if (part->attributes & 0x80000) {
+                if (part->attributes & kUntattleable) {
                     ok = FALSE;
                     break;
                 }
@@ -230,19 +230,19 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (d->propFlags & 2) {
-                if (unit->mAttributeFlags & 4) {
+                if (unit->mAttributeFlags & kFloating) {
                     ok = FALSE;
                     break;
                 }
             }
             if (d->propFlags & 4) {
-                if (unit->mAttributeFlags & 2) {
+                if (unit->mAttributeFlags & kCeiling) {
                     ok = FALSE;
                     break;
                 }
             }
             if (d->propFlags & 8) {
-                if (unit->mAttributeFlags & 4) {
+                if (unit->mAttributeFlags & kFloating) {
                     ok = FALSE;
                     break;
                 }
@@ -255,13 +255,13 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (d->propFlags & 0x1000) {
-                if (part->attributes & 0x100000) {
+                if (part->attributes & kJumplikeCannotTarget) {
                     ok = FALSE;
                     break;
                 }
             }
             if (d->propFlags & 0x2000) {
-                if (part->attributes & 0x200000) {
+                if (part->attributes & kHammerlikeCannotTarget) {
                     if (!(d->propFlags & 0x100000) || d->unitId != unit->unitId) {
                         ok = FALSE;
                         break;
@@ -269,19 +269,19 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (d->propFlags & 0x4000) {
-                if (part->attributes & 0x400000) {
+                if (part->attributes & kShellTosslikeCannotTarget) {
                     ok = FALSE;
                     break;
                 }
             }
             if (d->propFlags & 0x8000) {
-                if (!(part->attributes & 0x400000)) {
+                if (!(part->attributes & kShellTosslikeCannotTarget)) {
                     ok = FALSE;
                     break;
                 }
             }
             if (d->propFlags & 0x2000000) {
-                if (unit->mAttributeFlags & 0x20) {
+                if (unit->mAttributeFlags & kShellShielded) {
                     ok = FALSE;
                     break;
                 }
@@ -311,7 +311,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 BattleWorkTarget* tg = &t[i];
                 BattleUnitPart* part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, tg->unitIdx), tg->partIdx);
                 BOOL keep = TRUE;
-                if (part->attributes & 2) {
+                if (part->attributes & kImportantPart) {
                     for (j = 0; j < n; j++) {
                         BattleWorkTarget* o = &t[j];
                         if (tg != o && tg->unitIdx == o->unitIdx) {
@@ -357,10 +357,10 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                     }
                     if (a > b) {
                         BattleUnitPart* op = BattleGetUnitPartsPtr(o4->unitIdx, o4->partIdx);
-                        if (!(op->attributes & VERSION_PICK(0x10, 0x40)) && !(op->attributes & 0x400000)) {
+                        if (!(op->attributes & VERSION_PICK(0x10, 0x40)) && !(op->attributes & kShellTosslikeCannotTarget)) {
                             u1 = BattleGetUnitPtr(wp, d->unitId);
                             u2 = BattleGetUnitPtr(wp, o4->unitIdx);
-                            if (!(u1->mTokenFlags & 0x10) || u1 != u2) {
+                            if (!(u1->mTokenFlags & kConfusedAction) || u1 != u2) {
                                 ok4 = FALSE;
                                 break;
                             }
@@ -500,7 +500,7 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
                 w[id] = 1.5f * w[id];
             }
             if (d->weapon) {
-                if (unit->mAttributeFlags & 0x20000) {
+                if (unit->mAttributeFlags & kInactive) {
                     w[id] = 1;
                 }
                 switch (d->weapon->itemId) {

@@ -4357,8 +4357,8 @@ USER_FUNC(_naniga_okorukana_check) {
 
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    if (!(unit->mAttributeFlags & 0x10)) {
-        if (unit->mAttributeFlags & 0x2) {
+    if (!(unit->mAttributeFlags & kVeiled)) {
+        if (unit->mAttributeFlags & kCeiling) {
             pos.y -= 5.0f;
         } else {
             pos.y += BtlUnit_GetHeight(unit) + 20;
@@ -4413,8 +4413,8 @@ USER_FUNC(_get_throw_first_pos) {
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     pos.y += 10.0f;
-    if (!(unit->mAttributeFlags & 0x10)) {
-        if (unit->mAttributeFlags & 0x2) {
+    if (!(unit->mAttributeFlags & kVeiled)) {
+        if (unit->mAttributeFlags & kCeiling) {
             pos.y -= 5.0f;
         } else {
             pos.y += unit->mSizeMultiplier * BtlUnit_GetHeight(unit);
