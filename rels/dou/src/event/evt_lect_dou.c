@@ -447,7 +447,7 @@ static USER_FUNC(dai_moveti_get) {
 static USER_FUNC(lect_slit_check) {
     EvtWord* args = event->args;
 
-    if (marioGetPtr()->flags & 0x100000) {
+    if (marioGetPtr()->flags & MARIO_FLAG_PAPER_MODE) {
         evtSetValue(event, args[0], TRUE);
     } else {
         evtSetValue(event, args[0], FALSE);
@@ -841,7 +841,7 @@ static USER_FUNC(evt_nomal_cange) {
 
     if (isFirstCall) {
         marioRollTryCancel();
-        if (mario->flags & 0x100000) {
+        if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             motSlitCancel3();
         }
     }

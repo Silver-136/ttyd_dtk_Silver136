@@ -624,7 +624,7 @@ void npcMoveG(NpcEntry* npc);
 BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 s32 vivianGetStatus(void);
-#define NPC_CHKMARIO(ok) do {     m = marioGetPtr();     if (m->flags & 0x82000000) { ok = 0; break; }     if (m->flags & 0xA) { ok = 0; break; }     if (gp->mapEventId != 0) { ok = 0; break; }     if (seqGetSeq() != 2) { ok = 0; break; }     if (m->currMotionId == 0x19) { ok = 0; break; }     if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok = 0; } else { ok = 1; } } while (0)
+#define NPC_CHKMARIO(ok) do {     m = marioGetPtr();     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) { ok = 0; break; }     if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { ok = 0; break; }     if (gp->mapEventId != 0) { ok = 0; break; }     if (seqGetSeq() != 2) { ok = 0; break; }     if (m->currMotionId == 0x19) { ok = 0; break; }     if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok = 0; } else { ok = 1; } } while (0)
 void shadowSetCollision(s32 shadow, s32 val);
 s32 shadowEntry(f32 x, f32 y, f32 z, f32 size);
 void animPoseVivianMain(s32 poseId, Vec* pos);
@@ -788,7 +788,7 @@ void npcMain(void) {
                 }
                 if (entry->regularEvtId) {
                     EventEntry* evt = evtGetPtrID(entry->regularEvtId);
-                    if (evt && !(evt->flags & 2)) {
+                    if (evt && !(evt->flags & EVENT_STOPPED)) {
                         s32 st = evt->wNpcEventType;
                         if (entry->blowEvent && st != 5 && st != 8) {
                             int trig;
@@ -2364,8 +2364,8 @@ NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle
 static inline BOOL fbat_canHit(NpcEntry* npc) {
     MarioWork* m = marioGetPtr();
     NpcWork* wp = npcGetWorkPtrInline();
-    if (m->flags & 0x82000000) return FALSE;
-    if (!(wp->flags & 1) && (m->flags & 0xA)) return FALSE;
+    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) return FALSE;
+    if (!(wp->flags & 1) && (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) return FALSE;
     if ((*(s32*)&((GlobalWork*)gp)->mapEventId)) return FALSE;
     if (seqGetSeq() != 2) return FALSE;
     if ((*(u16*)&((MarioWork*)m)->currMotionId) == 0x19) return FALSE;
@@ -2467,7 +2467,7 @@ void* fbatHitCheck(u32 flags, void* a1) {
                         }
                     }
                     if (!f20) continue;
-                    if ((mario->flags & 0x20000) && !(mario->flags & 0x10000) &&
+                    if ((mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING) &&
                         !(npc->flags & 0x20000000)) {
                         hit = npc;
                         res.dist = dist;

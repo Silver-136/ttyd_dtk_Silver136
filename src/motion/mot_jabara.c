@@ -142,7 +142,7 @@ BOOL marioChkJabara(void) {
         return FALSE;
     }
 #ifdef VERSION_G8ME01
-    if ((mario->trigFlags & 0x400000) && (u16)mario->currMotionId == 0 && !((u32)mario->dispFlags & 0x40000000) &&
+    if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && (u16)mario->currMotionId == 0 && !((u32)mario->dispFlags & 0x40000000) &&
         mario->controlStickSensitivity) {
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
@@ -183,7 +183,7 @@ static inline void jabaraLand(f32 y_, void* h_) {
     mp_->hitobjStandOn = h_;
     mp_->hitobjJumpFrom = NULL;
     mp_->position.y = y_;
-    mp_->flags &= ~0xF0000;
+    mp_->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
 }
 
 #define POS (&mario->position)
@@ -235,8 +235,8 @@ void mot_jabara(void) {
     s32 headHit;
     f32 headRange;
     f32 rr;
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->mot.word[0] = 0;
         mario->mot.word[1] = 0;
         mario->mot.jabara.floorY = 0;
@@ -247,7 +247,7 @@ void mot_jabara(void) {
         if (mario->dispFlags & 0x1000000) {
             mot_slit_post();
         }
-        mario->flags &= ~0xF0000;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->currSubMotionId = 0;
         marioGetPtr()->motStruct = __memAlloc(HEAP_DEFAULT, 0x20);
         memset(marioGetPtr()->motStruct, 0, 0x20);
@@ -445,7 +445,7 @@ void mot_jabara(void) {
     switch (mario->currSubMotionId) {
     case 0x28:
         if (strcmp(gp->currentMapName, "eki_02") == 0 && mario->position.x >= -450.0f && mario->position.x <= -190.0f) {
-            mario->flags |= 0x400;
+            mario->flags |= MARIO_FLAG_WALLS_DISABLED;
         }
         SFX(0x188);
         evtEntryType(quake_evt, 0, 0, 0);
@@ -536,8 +536,8 @@ void mot_jabara(void) {
                     mario->mot.jabara.animFrame = 0;
                 }
                 if (mario->buttonTrg & PAD_BUTTON_B) {
-                    mario->flags |= 0x80;
-                    mario->flags &= ~0x400;
+                    mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+                    mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
                     marioPaperOff();
                     marioGetPtr();
                     allPartyRideOff();
@@ -569,7 +569,7 @@ void mot_jabara(void) {
         mario->hitobjJumpFrom = mario->hitobjStandOn;
         mario->hitobjStandOn = 0;
         mario->baseSpeed = 0.0f;
-        mario->flags &= ~0x400;
+        mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
         JAB_TAIL()
         marioPaperOff();
         camFollowYOff();
@@ -612,12 +612,12 @@ void mot_jabara(void) {
         break;
     case 0x50:
         if (mario->buttonTrg & PAD_BUTTON_A) {
-            mario->flags |= 0x80;
+            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
             mario->baseSpeed = 0.0f;
             mario->rot.x = 0.0f;
             mario->currSubMotionId = 0x5a;
         } else if (mario->buttonTrg & PAD_BUTTON_B) {
-            mario->flags |= 0x80;
+            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioGetPtr();
             allPartyRideOff();
             JAB_TAIL(MOTSUB_)
@@ -727,7 +727,7 @@ BOOL jabaraNoHitChk(void) {
 void mot_jabara_post(void) {
     MarioWork* mario = marioGetPtr();
     MarioWork* m2;
-    mario->flags &= ~0x400;
+    mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
     m2 = marioGetPtr();
     m2->camShiftTargetZ = 0.0f;
     m2->camShiftRate.z = 0.01f;
@@ -955,8 +955,8 @@ void swingMain(void) {
 
 void mot_grasp(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0xf0000;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
     }
 }

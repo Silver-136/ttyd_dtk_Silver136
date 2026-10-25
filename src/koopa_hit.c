@@ -116,7 +116,7 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
     dx = __fabsf(m->position.x - x);
     dy = __fabsf(m->position.y + 0.5f * m->wPlayerCollisionBox.y - y - 0.5f * h);
     if (dy <= dh && dx <= dw) {
-        if ((m->flags & 0x20000) && m->position.y > y) {
+        if ((m->flags & MARIO_FLAG_IS_FALLING) && m->position.y > y) {
             if (kpaGetLevel() == 0 && kpaGetStageType() != 1 && m->mutekiTimer == 0 && z < 50.0f) {
                 marioChgMot(4);
             }
@@ -160,7 +160,7 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
     m->groundRot.y = 0.0f;
     m->groundRot.z = 0.0f;
     m->groundSlope = 0.0f;
-    if (m->flags & 0x200) {
+    if (m->flags & MARIO_FLAG_FORCE_WALL) {
         *outY = m->position.y;
         return NULL;
     }
@@ -283,7 +283,7 @@ HitEntry* kpaSearchHead(f32 hgt, f32* outA, f32* outB) {
     s32 md;
 
     m = marioGetPtr();
-    if (m->flags & 0x20000) {
+    if (m->flags & MARIO_FLAG_IS_FALLING) {
         return NULL;
     }
     best = NULL;
@@ -297,7 +297,7 @@ HitEntry* kpaSearchHead(f32 hgt, f32* outA, f32* outB) {
     kpa_headClear();
     tbl = headchkofs[kpaGetLevel()];
     n = *tbl++;
-    if (!(m->flags & 0x10000)) {
+    if (!(m->flags & MARIO_FLAG_IS_JUMPING)) {
         switch (kpaGetLevel()) {
         case 0:
             off = 2.0f;
@@ -334,7 +334,7 @@ HitEntry* kpaSearchHead(f32 hgt, f32* outA, f32* outB) {
         oy = tbl[1];
         md = tbl[2];
         tbl += 3;
-        if (md == 0 && !(m->flags & 0x10000)) {
+        if (md == 0 && !(m->flags & MARIO_FLAG_IS_JUMPING)) {
             continue;
         }
         x = m->position.x + s_;
@@ -524,23 +524,23 @@ HitEntry* kpaHitCheck(void) {
         p += 4;
         switch (i) {
         case 1:
-            if (!(m->flags & 0x10000)) {
+            if (!(m->flags & MARIO_FLAG_IS_JUMPING)) {
                 continue;
             }
             break;
         case 2:
-            if (m->flags & 0x10000) {
+            if (m->flags & MARIO_FLAG_IS_JUMPING) {
                 continue;
             }
             break;
         case 3:
-            if (m->flags & 0x30000) {
+            if (m->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
                 continue;
             }
             break;
         }
         hit = hitCheckSphereFilter(NULL, x, y, z, r);
-        if ((m->flags & 0x10000) && (hitGetAttr(hit) & 0x80000000) && mobjHitObjPtrToPtr(hit)->position.y > y) {
+        if ((m->flags & MARIO_FLAG_IS_JUMPING) && (hitGetAttr(hit) & 0x80000000) && mobjHitObjPtrToPtr(hit)->position.y > y) {
             KHEAD(j) = hit;
         }
         if (hit) {

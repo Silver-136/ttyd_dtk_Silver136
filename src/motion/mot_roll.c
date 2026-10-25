@@ -252,7 +252,7 @@ s32 marioRollCancelDisable(void) {
     if (mario->mot.roll.flags & 0x200) {
         return 1;
     }
-    if ((mario->flags & 0x8000000) != 0) {
+    if ((mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING) != 0) {
         return 1;
     }
     return !mario->hitobjStandOn ? 1 : (marioSlitChkWallAround() != 0);
@@ -288,7 +288,7 @@ void clrRollEvtFlag(void) {
 s32 getRollEvtFlag(void) {
     s32 r = 0;
     MarioWork* mario = marioGetPtr();
-    if (mario->flags & 0x1000000) {
+    if (mario->flags & MARIO_FLAG_TUBE_MODE) {
         if (mario->mot.roll.flags & 0x100) {
             r = 1;
         }
@@ -326,7 +326,7 @@ void marioForceRollAnime(void) {
 s32 marioRollTryCancel(void) {
     s32 ret = 0;
     MarioWork* mario = marioGetPtr();
-    if (!(mario->flags & 0x1000000)) {
+    if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         return 0;
     }
     if (mario->mot.roll.flags & 0x200) {
@@ -337,7 +337,7 @@ s32 marioRollTryCancel(void) {
         MarioWork* m = marioGetPtr();
         if (m->mot.roll.flags & 0x200) {
             r = 1;
-        } else if (m->flags & 0x8000000) {
+        } else if (m->flags & MARIO_FLAG_IS_TOUCHING_CEILING) {
             r = 1;
         } else if (!m->hitobjStandOn) {
             r = 1;
@@ -357,7 +357,7 @@ s32 marioRollTryCancel(void) {
 
 s32 marioRollCancel(void) {
     MarioWork* mario = marioGetPtr();
-    if (!(mario->flags & 0x1000000)) {
+    if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         return 0;
     }
     if (mario->mot.roll.flags & 0x200) {
@@ -396,7 +396,7 @@ void mot_roll_post(void) {
     mario->rot = (Vec){0.0f, 0.0f, 0.0f};
     mario->dispFlags &= ~0x100;
     mario->dispFlags &= ~8;
-    mario->flags &= ~0x1000000;
+    mario->flags &= ~MARIO_FLAG_TUBE_MODE;
     marioPaperOff();
     marioAdjustMoveDir();
     marioChgPose("M_S_1");
@@ -447,7 +447,7 @@ void marioRollForceCancel(void) {
         mario->rot = (Vec){0.0f, 0.0f, 0.0f};
         mario->dispFlags &= ~0x100;
         mario->dispFlags &= ~8;
-        mario->flags &= ~0x1000000;
+        mario->flags &= ~MARIO_FLAG_TUBE_MODE;
         marioPaperOff();
         marioAdjustMoveDir();
         marioChgPose("M_S_1");
@@ -474,7 +474,7 @@ void marioSetRollDispDir(void) {
 void rollEvtJumpSetup(void) {
     MarioWork* mario = marioGetPtr();
     camFollowYOff();
-    mario->flags |= 0x10000;
+    mario->flags |= MARIO_FLAG_IS_JUMPING;
     mario->airTimer = 1;
 }
 
@@ -494,9 +494,9 @@ void marioReInit_roll(void) {
         t->mot.roll.sfxId = -1;
 #endif
     }
-    mario->trigFlags &= ~1;
+    mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     mario->currMotionId = 0x16;
-    mario->flags |= 0x1000000;
+    mario->flags |= MARIO_FLAG_TUBE_MODE;
     mario->rollFlags = 0x10;
     marioPaperOn("p_roll");
     marioChgPose("M_I_U");
@@ -528,7 +528,7 @@ static inline s32 rollChk(void) {
     MarioWork* m = marioGetPtr();
     if (m->mot.roll.flags & 0x200) {
         r = 1;
-    } else if (m->flags & 0x8000000) {
+    } else if (m->flags & MARIO_FLAG_IS_TOUCHING_CEILING) {
         r = 1;
     } else if (!m->hitobjStandOn) {
         r = 1;
@@ -555,9 +555,9 @@ void mot_roll(void) {
     f32 b31;
     f32 s;
     f32 rd;
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0xF0000;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->mot.roll.flags = 0;
         mario->mot.word[2] = 0;
         mario->mot.word[3] = 0;
@@ -596,7 +596,7 @@ void mot_roll(void) {
             mario->moveDirection = 90.0f;
         }
         marioGetRubInit();
-        mario->flags |= 0x1000000;
+        mario->flags |= MARIO_FLAG_TUBE_MODE;
         mario->rollFlags = 0x10;
         mario->dispFlags |= 8;
         mario->dispFlags |= 0x100;
@@ -728,7 +728,7 @@ void mot_roll(void) {
             marioOfsRotReset();
             mario->dispFlags &= ~0x100;
             mario->dispFlags &= ~8;
-            mario->flags &= ~0x1000000;
+            mario->flags &= ~MARIO_FLAG_TUBE_MODE;
             marioPaperOff();
             marioAdjustMoveDir();
             marioChgPose("M_S_1");
@@ -750,7 +750,7 @@ void mot_roll(void) {
     if (mario->currSubMotionId < 0x1e) {
         return;
     }
-    if (mario->flags & 0x40000) {
+    if (mario->flags & MARIO_FLAG_IS_STEPPING) {
         roll_upstairs();
         return;
     }
@@ -829,7 +829,7 @@ void mot_roll(void) {
                 m->jumpAccelerationY = -0.14f;
                 m->jumpJerkY = 0.08f;
                 m->jumpSnapY = -0.02f;
-                m->flags |= 0x10000;
+                m->flags |= MARIO_FLAG_IS_JUMPING;
                 m->airTimer = 1;
                 psndSFXOn_3D((char*)0x17c, &marioGetPtr()->position);
                 mario->hitobjJumpFrom = mario->hitobjStandOn;
@@ -842,7 +842,7 @@ void mot_roll(void) {
         marioUpdateCamCollision(mario->position);
         mario->airTimer = 0;
     }
-    if (mario->flags & 0x30000) {
+    if (mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
         if (mario->hitobjHead) {
             if (mario->jumpVelocityY >= 0.0f) {
                 mario->jumpVelocityY = -0.03f;
@@ -850,7 +850,7 @@ void mot_roll(void) {
                 mario->jumpJerkY = -0.02f;
                 mario->jumpSnapY = -0.002f;
             }
-            mario->flags |= 0x20000;
+            mario->flags |= MARIO_FLAG_IS_FALLING;
         }
         if (mario->airTimer == 0 && mario->jumpVelocityY < 0.0f) {
             mario->fallStartPos = mario->position;
@@ -865,7 +865,7 @@ void mot_roll(void) {
     v28 = RW()->spdZ;
     nx = 0.0f;
     nz = nx;
-    if (!(mario->flags & 0x30000)) {
+    if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
         f32 a26, a30;
         a26 = (f32)(s32)(s8)mario->wStickDir1;
         a30 = (f32)(s32)(s8)mario->wStickDir2;
@@ -884,7 +884,7 @@ void mot_roll(void) {
             nz = nz * (f32)cos(3.1415927f * ((MarioWork*)mario)->directionView / 180.0f);
         }
     }
-    if (!(mario->flags & 0x30000) && !(mario->mot.roll.flags & 0x20)) {
+    if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) && !(mario->mot.roll.flags & 0x20)) {
         v31 = angleABf(0.0f, 0.0f, v29, -v28);
         if (((MarioWork*)mario)->groundRot.z > 0.05f) {
             v26 = (v31 > 180.0f) ? rollData[5] : rollData[6];
@@ -1162,8 +1162,8 @@ void mot_roll(void) {
 
 void roll_upstairs_on(void) {
     MarioWork* mario = marioGetPtr();
-    mario->flags |= 0x40000;
-    mario->flags |= 0x80;
+    mario->flags |= MARIO_FLAG_IS_STEPPING;
+    mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioClearJumpPara();
     mario->multiTimer = 3;
     mario->jumpVelocityY = (mario->stepUpY - mario->position.y) / (f32)(s32)mario->multiTimer;
@@ -1178,9 +1178,9 @@ void roll_upstairs(void) {
     MarioWork* mario = marioGetPtr();
     mario->position.y = mario->position.y + mario->jumpVelocityY;
     if ((s32)--mario->multiTimer <= 0) {
-        mario->flags &= ~0x80;
-        mario->flags &= ~0x40;
-        mario->flags &= ~0x40000;
+        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+        mario->flags &= ~MARIO_FLAG_USE_FORCE_DIRECTION;
+        mario->flags &= ~MARIO_FLAG_IS_STEPPING;
     }
 }
 

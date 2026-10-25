@@ -9,6 +9,7 @@
 #include <string.h>
 #include "data/party_data.h"
 #include "pmario_sound.h"
+#include "mario/mario.h"
 
 //.data
 
@@ -601,7 +602,7 @@ s32 partyEntryMain(s32 memberId) {
         party->flags |= 4;
     }
     party_dp = &partyDataTbl[memberId];
-    if (player->flags & 0x80000000) {
+    if (player->flags & MARIO_FLAG_IS_8_BIT) {
         party->flags2 |= 0x8000;
     }
     if (!party && !party && !party) {
@@ -841,7 +842,7 @@ void partyReInit(void) {
         if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == 3) {
             return;
         }
-        if (!(marioGetPtr()->flags & 0x400000)) {
+        if (!(marioGetPtr()->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
             pose = partyChgPoseId(party, 1);
             partyChgPose(party, pose);
             partyChgRunMode(party, 2);

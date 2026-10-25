@@ -227,7 +227,7 @@ USER_FUNC(camAtY) {
 USER_FUNC(slit_chk) {
     MarioWork* mario = marioGetPtr();
 
-    if (mario->flags & 0x100000) {
+    if (mario->flags & MARIO_FLAG_PAPER_MODE) {
         if ((mario->position.x < -200.0f || mario->position.x > 300.0f) && mario->position.y < 169.0f &&
             mario->position.y > 160.0f) {
             camCtrlOff(CAMERA_3D);

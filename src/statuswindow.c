@@ -137,7 +137,7 @@ void statusWinMain(void) {
     switch (seqGetSeq()) {
         case 2:
         case 3:
-            if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE) || !(mario->flags & 1)) {
+            if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE) || !(mario->flags & MARIO_FLAG_ACTIVE)) {
                 if (statusWinCheck()) {
                     statusWinClose();
                 }

@@ -1044,8 +1044,8 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     data->index = i;
                     marioKeyOff();
                     partyKeyOff();
-                    mario->flags |= 0x200;
-                    mario->flags |= 0x100;
+                    mario->flags |= MARIO_FLAG_FORCE_WALL;
+                    mario->flags |= MARIO_FLAG_FLOORS_DISABLED;
                     data->state = 0;
                     PSVECSubtract(&tmp, &pos, &data->dir);
                     data->dir.y = 0.0f;
@@ -1144,8 +1144,8 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     data->index = 0x15;
                     marioKeyOn();
                     partyKeyOn();
-                    mario->flags &= ~0x200;
-                    mario->flags &= ~0x100;
+                    mario->flags &= ~MARIO_FLAG_FORCE_WALL;
+                    mario->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
                 }
                 break;
         }

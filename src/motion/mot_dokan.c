@@ -97,8 +97,8 @@ void mot_dokan(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
 
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->dispFlags |= 0x1000;
         mario->dispFlags |= 8;
         mario->dispFlags |= 0x100;
@@ -364,7 +364,7 @@ void mot_dokan(void) {
             camFollowYOn();
             mario->camTarget.y = mario->position.y;
         }
-        mario->flags &= ~0x100;
+        mario->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
         break;
     }
     }
@@ -419,7 +419,7 @@ void mot_dokan(void) {
         if (!(mario->flags & MARIO_FLAG_BG_MODE)) {
             camFollowYOn();
         }
-        mario->flags &= ~0x100;
+        mario->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
         break;
     }
     }

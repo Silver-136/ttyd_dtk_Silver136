@@ -125,14 +125,14 @@ void seq_battleMain(BattleSeqWork* work) {
                 case 0x1000000:
                 case 0x800000:
                     if (debug_battle_flag == 0) {
-                        marioGetPtr()->flags &= ~1;
+                        marioGetPtr()->flags &= ~MARIO_FLAG_ACTIVE;
                     }
                     break;
                 default:
                     if (debug_battle_flag == 0) {
                         marioCtrlOff();
                         partyCtrlOff();
-                        marioGetPtr()->flags &= ~1;
+                        marioGetPtr()->flags &= ~MARIO_FLAG_ACTIVE;
                         padRumbleOff(0);
                     }
                     break;
@@ -354,7 +354,7 @@ void battle_exit(void) {
     if (debug_battle_flag == 0) {
         marioCtrlOn();
         partyCtrlOn();
-        marioGetPtr()->flags |= 1;
+        marioGetPtr()->flags |= MARIO_FLAG_ACTIVE;
     }
     L_psndBGM_stop();
     psndClearFlag(0x80);

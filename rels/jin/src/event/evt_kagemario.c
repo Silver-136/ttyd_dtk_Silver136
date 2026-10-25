@@ -32,7 +32,7 @@ static void callback(MapTevCallbackInfo* info) {
     s32 texMap = info->texMap;
     s32 field_0x18 = info->indStage;
 
-    if (marioGetPtr()->flags & 0x2000000) {
+    if (marioGetPtr()->flags & MARIO_FLAG_BG_MODE) {
         GXColor color = {0, 0, 0, 255};
         GXSetTevColor(GX_TEVREG0, color);
     } else {
@@ -58,13 +58,13 @@ static s32 color_change_evt(s32 on) {
         for (i = 0; i < 3; i++) {
             animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[i], 0x0A000000);
         }
-        marioGetPtr()->flags &= ~0x40000000;
+        marioGetPtr()->flags &= ~MARIO_FLAG_IS_SHADOW_MARIO;
     } else {
         mapSetTevCallback(10, callback);
         for (i = 0; i < 3; i++) {
             animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[i], 0x0A000000);
         }
-        marioGetPtr()->flags |= 0x40000000;
+        marioGetPtr()->flags |= MARIO_FLAG_IS_SHADOW_MARIO;
     }
     return 0;
 }

@@ -296,7 +296,7 @@ void nokonoko_use(PartyEntry* party) {
         party->displayDirection = revise360(EXT_LIT(float_45_8041b560, 45.0f) + party->displayDirection);
         party->useMotionId = 1;
         marioChgSmallJumpMotion();
-        mario->trigFlags |= 0x20000;
+        mario->trigFlags |= MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
         mario->baseSpeed = EXT_LIT(float_0_8041b51c, 0.0f);
         break;
     case 1:
@@ -326,7 +326,7 @@ void nokonoko_use(PartyEntry* party) {
             break;
         }
         marioChgMot(3);
-        mario->flags |= 0x80;
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         mario->baseSpeed = EXT_LIT(float_0_8041b51c, 0.0f);
         party->useMotionId = 10;
         party->moveFrames = 15;
@@ -411,7 +411,7 @@ void nokonoko_use(PartyEntry* party) {
         NOKO_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); noko_se_off(); break;)
         if (!(party->flags & 0x80000000)) {
             if (mario->currMotionId == 0x19 || mario->currMotionId == 0x14 || mario->currMotionId == 0x18 || mario->currMotionId == 0x16 || (u16)(mario->currMotionId - 0x1f) <= 1 ||
-                (mario->flags & 0x20) || !marioChkKey()) {
+                (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) || !marioChkKey()) {
                 nokonoko_finish(party);
                 noko_se_off();
                 break;

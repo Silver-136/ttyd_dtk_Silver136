@@ -1082,7 +1082,7 @@ EVT_BEGIN(win_00_init_evt)
 EVT_END()
 
 USER_FUNC(mariowalk_wait) {
-    return !(marioGetPtr()->flags & 0x20);
+    return !(marioGetPtr()->flags & MARIO_FLAG_FORCED_MOVEMENT);
 }
 
 USER_FUNC(win_item_move_3d_position) {

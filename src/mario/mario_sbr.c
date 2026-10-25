@@ -190,7 +190,7 @@ f32 revise360(f32 angle) {
 f32 toMovedir(f32 angle) {
     MarioWork* mp = marioGetPtr();
 
-    if (mp->flags & 0x100000) {
+    if (mp->flags & MARIO_FLAG_PAPER_MODE) {
         if (mp->displayDirection == 280.0f || mp->displayDirection == 460.0f) {
             angle = 0.0f;
         } else if (mp->displayDirection == 260.0f || mp->displayDirection == 440.0f) {
@@ -252,7 +252,7 @@ f32 toMovedirSimple(f32 angle) {
 f32 toMovedir2(f32 angle, f32 ofs) {
     MarioWork* mp = marioGetPtr();
 
-    if (mp->flags & 0x100000) {
+    if (mp->flags & MARIO_FLAG_PAPER_MODE) {
         if (mp->displayDirection == 280.0f || mp->displayDirection == 460.0f) {
             angle = 0.0f;
         } else if (mp->displayDirection == 260.0f || mp->displayDirection == 440.0f) {
@@ -276,10 +276,10 @@ f32 toMovedir2(f32 angle, f32 ofs) {
 void marioForceMoveMain(void) {
     MarioWork* mp = marioGetPtr();
 
-    if (mp->flags & 0x20) {
+    if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
         if (--mp->forceMoveTimer <= 0) {
             mp->forceMoveTimer = 0;
-            mp->flags &= ~0x20;
+            mp->flags &= ~MARIO_FLAG_FORCED_MOVEMENT;
             mp->baseSpeed = 0.0f;
             if (mp->controlStickSensitivity > 1.0f) {
                 mp->baseSpeed = marioGetDashSpd();
@@ -293,7 +293,7 @@ void marioForceMoveMain(void) {
 void marioSetForceMove(f32 dir, s32 time, f32 speed) {
     MarioWork* mp = marioGetPtr();
 
-    mp->flags |= 0x20;
+    mp->flags |= MARIO_FLAG_FORCED_MOVEMENT;
     mp->moveDirection = dir;
     mp->directionView = dir;
     mp->forceMoveTimer = time;
@@ -331,25 +331,25 @@ void marioUpdateKeyData(void) {
     mp->buttonTrg = gp->buttonNew[0] & mask;
     mp->buttonRepeat = gp->buttonRepeat[0] & mask;
     mp->buttonUp = gp->buttonUp[0] & mask;
-    if (!(mp->flags & 0xE)) {
-        if (mp->trigFlags & 0x08000000) {
+    if (!(mp->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_CTRL_OFF_2 | MARIO_FLAG_KEY_OFF))) {
+        if (mp->trigFlags & MARIO_TRIG_FLAG_DISABLE_STICK) {
             mp->wStickDir1 = 0;
             mp->wStickDir2 = 0;
         }
-        if (mp->trigFlags & 0x04000000) {
+        if (mp->trigFlags & MARIO_TRIG_FLAG_DISABLE_SUB_STICK) {
             mp->substickX = 0;
             mp->substickY = 0;
         }
-        if (mp->trigFlags & 0x02000000) {
+        if (mp->trigFlags & MARIO_TRIG_FLAG_DISABLE_TRIGGERS) {
             mp->triggerL = 0;
             mp->triggerR = 0;
         }
-        if (mp->trigFlags & 0x01000000) {
+        if (mp->trigFlags & MARIO_TRIG_FLAG_DISABLE_UNUSED_INPUT) {
             mp->analogA = 0;
             mp->analogB = 0;
         }
     }
-    if ((mp->flags & 0xE) || !marioChkKey()) {
+    if ((mp->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_CTRL_OFF_2 | MARIO_FLAG_KEY_OFF)) || !marioChkKey()) {
         mp->wStickDir1 = 0;
         mp->wStickDir2 = 0;
         mp->substickX = 0;
@@ -380,13 +380,13 @@ void marioGetStick(f32* dir, f32* mag) {
     f32 m;
     f32 a;
 
-    if (mp->flags & 0x20) {
+    if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
         *dir = mp->directionView;
         *mag = mp->baseSpeed;
         return;
     }
     x = mp->wStickDir1;
-    y = ((mp->flags & 0x02000000) || kpaGetStageViewType() == 0) ? 0 : -mp->wStickDir2;
+    y = ((mp->flags & MARIO_FLAG_BG_MODE) || kpaGetStageViewType() == 0) ? 0 : -mp->wStickDir2;
     if (yoshiGetStatus() == 2) {
         y = 0;
     }

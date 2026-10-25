@@ -40,20 +40,20 @@ static f32 marioJumpStandData[] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f
 f32 marioJumpSwData[] = {2.5f, -0.1f, 0.02f, -0.01f, -0.08f, -0.4f, 0.0f, -0.002f};
 
 static inline void chgPoseB(MarioWork* mario) {
-    if (!(mario->flags & 0x2000) && mario->characterId == 0) {
+    if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == 0) {
         marioChgPose("M_J_1B");
     }
 }
 static inline void chgPoseC(MarioWork* mario) {
-    if (!(mario->flags & 0x2000) && mario->characterId == 0) {
+    if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == 0) {
         marioChgPose("M_J_1C");
     }
 }
 
 void marioPreJump(void) {
     MarioWork* mario = marioGetPtr();
-    mario->flags &= ~0x20000;
-    mario->flags |= 0x10000;
+    mario->flags &= ~MARIO_FLAG_IS_FALLING;
+    mario->flags |= MARIO_FLAG_IS_JUMPING;
     mario->airTimer = 0;
     mario->jumpPeakAirTime = 0;
     mario->hitobjJumpFrom = mario->hitobjStandOn;
@@ -73,8 +73,8 @@ f32 marioGetJumpHeight(void) {
 void mot_jumpStand(void) {
     MarioWork* mario = marioGetPtr();
     f32 prev;
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->baseSpeed = 0.0f;
         marioPreJump();
         mario->mot.jump.dist = 0.0f;
@@ -123,8 +123,8 @@ void mot_jumpStand(void) {
             mario->jumpAccelerationY = marioJumpStandData[5];
             mario->jumpJerkY = marioJumpStandData[6];
             mario->jumpSnapY = marioJumpStandData[7];
-            mario->flags &= ~0x10000;
-            mario->flags |= 0x20000;
+            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+            mario->flags |= MARIO_FLAG_IS_FALLING;
             mario->currSubMotionId = 20;
         }
         break;
@@ -137,8 +137,8 @@ void mot_jumpStand(void) {
             mario->jumpAccelerationY = marioJumpStandData[5];
             mario->jumpJerkY = marioJumpStandData[6];
             mario->jumpSnapY = marioJumpStandData[7];
-            mario->flags &= ~0x10000;
-            mario->flags |= 0x20000;
+            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+            mario->flags |= MARIO_FLAG_IS_FALLING;
             mario->currSubMotionId = 20;
         }
         mario->position.y += mario->jumpVelocityY;
@@ -162,10 +162,10 @@ void mot_jumpSw(void) {
     f32 dir;
     f32 x, z;
     f32 s, c;
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         marioResetCamFollowRate();
-        mario->flags |= 0x80;
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         camFollowYOff();
         marioPreJump();
         chgPoseB(mario);
@@ -218,8 +218,8 @@ void mot_jumpSw(void) {
             mario->jumpAccelerationY = marioJumpSwData[5];
             mario->jumpJerkY = marioJumpSwData[6];
             mario->jumpSnapY = marioJumpSwData[7];
-            mario->flags &= ~0x10000;
-            mario->flags |= 0x20000;
+            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+            mario->flags |= MARIO_FLAG_IS_FALLING;
             mario->currSubMotionId = 10;
         }
         mario->position.y += mario->jumpVelocityY;
@@ -244,11 +244,11 @@ void mot_jumpNpc(void) {
         kpa_jumpNpc();
         return;
     }
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         marioResetCamFollowRate();
         if (mario->characterId != 2) {
-            mario->flags |= 0x80;
+            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         }
         camFollowYOff();
         marioPreJump();
@@ -315,8 +315,8 @@ void mot_jumpNpc(void) {
             mario->jumpAccelerationY = -0.02f;
             mario->jumpJerkY = 0.04f;
             mario->jumpSnapY = 0.0f;
-            mario->flags &= ~0x10000;
-            mario->flags |= 0x20000;
+            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+            mario->flags |= MARIO_FLAG_IS_FALLING;
             mario->currSubMotionId = 20;
         }
         mario->position.y += mario->jumpVelocityY;
@@ -362,10 +362,10 @@ void mot_jump(void) {
         kpa_jump();
         return;
     }
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         marioResetCamFollowRate();
-        mario->flags |= 0x80000;
+        mario->flags |= MARIO_FLAG_HAS_INPUT_JUMP;
         mario->multiTimer = 2;
         mario->currSubMotionId = 0;
         marioPreJump();
@@ -382,7 +382,7 @@ void mot_jump(void) {
         if (mario->airTimer == 0) {
             mario->fallStartPos = mario->position;
         }
-        mario->trigFlags &= ~0x10000;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_SET_JUMP_PARAMS;
     }
     switch ((s32)mario->currSubMotionId) {
     case 0:
@@ -401,10 +401,10 @@ void mot_jumpSmall(void) {
         kpa_jump();
         return;
     }
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         marioResetCamFollowRate();
-        mario->flags |= 0x80000;
+        mario->flags |= MARIO_FLAG_HAS_INPUT_JUMP;
         mario->multiTimer = 2;
         mario->currSubMotionId = 0;
         marioPreJump();
@@ -419,7 +419,7 @@ void mot_jumpSmall(void) {
         if (mario->airTimer == 0) {
             mario->fallStartPos = mario->position;
         }
-        mario->trigFlags &= ~0x10000;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_SET_JUMP_PARAMS;
     }
     switch ((s32)mario->currSubMotionId) {
     case 0:
@@ -434,10 +434,10 @@ void mot_jumpSmall(void) {
 
 void mot_upstairs(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags |= 0x40000;
-        mario->flags |= 0x80;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags |= MARIO_FLAG_IS_STEPPING;
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioClearJumpPara();
         mario->multiTimer = 3;
         mario->jumpVelocityY = (mario->stepUpY - mario->position.y) / (f32)(s32)mario->multiTimer;
@@ -447,10 +447,10 @@ void mot_upstairs(void) {
     case 0:
         mario->position.y = mario->position.y + mario->jumpVelocityY;
         if (--mario->multiTimer <= 0) {
-            mario->flags &= ~0x80;
-            mario->flags &= ~0x40;
-            mario->flags &= ~0x40000;
-            if (mario->flags & 0x100000) {
+            mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+            mario->flags &= ~MARIO_FLAG_USE_FORCE_DIRECTION;
+            mario->flags &= ~MARIO_FLAG_IS_STEPPING;
+            if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                 motSlitContinue();
             } else if (mario->dispFlags & 0x1000000) {
                 marioChgMot2(0x15);
@@ -468,13 +468,13 @@ void mot_fall(void) {
         kpa_fall_80213C38();
         return;
     }
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0x10000;
-        mario->flags |= 0x20000;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+        mario->flags |= MARIO_FLAG_IS_FALLING;
 #ifdef VERSION_G8ME01
-        mario->trigFlags &= ~0x200000;
-        mario->trigFlags &= ~0x400000;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_MOVE_CHK;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_START_JABARA_SPIN;
 #endif
         if (mario->soundId[2] != (u32)-1) {
             psndSFXOff(mario->soundId[2]);
@@ -485,11 +485,11 @@ void mot_fall(void) {
         if (mario->currMotionId != 11) {
             if (mario->characterId == 2) {
                 kpaChgPose("KPA_J_1B", "KPA2_J_1B");
-            } else if (!(mario->flags & 0x2000) && mario->characterId == 0) {
+            } else if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == 0) {
                 marioChgPose("M_J_1C");
             }
         } else {
-            mario->flags |= 0x80;
+            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         }
         if (mario->airTimer == 0) {
             mario->fallStartPos = mario->position;
@@ -507,16 +507,16 @@ void mot_fall(void) {
     }
     mario->airTimer++;
 #ifdef VERSION_G8ME01
-    mario->trigFlags &= ~0x100000;
+    mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
     if (marioPriCheckJabara() && mario->jumpStartSpeed == 0.0f && mario->jumpPeakAirTime != 0 && mario->jumpPeakAirTime < mario->airTimer) {
         if (mario->airTimer < 0x12) {
             if (mario->controlStickSensitivity) {
-                mario->trigFlags |= 0x200000;
+                mario->trigFlags |= MARIO_TRIG_FLAG_JABARA_MOVE_CHK;
             }
         } else {
-            mario->trigFlags |= 0x100000;
-            if (!(mario->trigFlags & 0x200000) && mario->controlStickSensitivity) {
-                mario->trigFlags |= 0x400000;
+            mario->trigFlags |= MARIO_TRIG_FLAG_JABARA_CHK;
+            if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && mario->controlStickSensitivity) {
+                mario->trigFlags |= MARIO_TRIG_FLAG_START_JABARA_SPIN;
             }
         }
     }
@@ -541,9 +541,9 @@ void mot_fall_post(void) {
 
 void mot_land(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0xF0000;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->airTimer = 0;
         mario->jumpPeakAirTime = 0;
         mario->currSubMotionId = 0;

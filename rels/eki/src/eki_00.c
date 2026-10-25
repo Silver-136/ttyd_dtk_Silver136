@@ -668,7 +668,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
         return 0;
     }
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (mario->wPlayerCollisionBox.x + 20.0f) / 2
-        && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & 0x20000) && !(mario->flags & 0x10000)
+        && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING)
         && wp->bounceCount < 2) {
         if (mario->currMotionId != 0x16 && mario->currMotionId != 0x1a) {
             marioChgMot(5);
@@ -676,7 +676,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
         wp->bounceCount++;
         return 1;
     }
-    if (!(mario->flags & 0x30000)) {
+    if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
         wp->bounceCount = 0;
     }
     if (mario->currMotionId == 0x12 && wp->field_0x40 > 10) {

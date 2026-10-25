@@ -91,8 +91,8 @@ void mot_damage(void) {
     Vec dest;
     f32 d;
 
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         if (mario->jumpVelocityY == 0.0f) {
             mario->jumpVelocityY = -6.0f;
             mario->jumpAccelerationY = 0.0f;
@@ -235,7 +235,7 @@ void mot_damage(void) {
             break;
         }
         mario->currSubMotionId = 13;
-        mario->flags |= 0x80;
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioSetFallPara();
         mario->dispFlags &= ~1;
         mario->multiTimer = 1;
@@ -253,7 +253,7 @@ void mot_damage(void) {
         if (--mario->multiTimer > 0) {
             break;
         }
-        mario->flags |= 0x80;
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioSetFallPara();
         mario->dispFlags &= ~1;
         mario->currSubMotionId = 20;
@@ -351,8 +351,8 @@ void mot_damageToge(void) {
     Vec dest;
     f32 d;
 
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         marioClearSlitFloor();
         mario->dispFlags &= ~0x100;
         marioAdjustMoveDir();
@@ -423,7 +423,7 @@ void mot_damageToge(void) {
             break;
         }
         mario->currSubMotionId = 13;
-        mario->flags |= 0x80;
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioSetFallPara();
         break;
     case 13:

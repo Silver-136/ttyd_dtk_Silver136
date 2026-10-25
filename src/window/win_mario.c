@@ -93,7 +93,7 @@ void winMarioInit(WindowWork* w) {
         animPoseSetAnim(w->mario.poseId, "M_S_1", 1);
     }
     animPoseSetMaterialFlagOn(w->mario.poseId, 0x1800);
-    if (marioGetPtr()->flags & 0x40000000) {
+    if (marioGetPtr()->flags & MARIO_FLAG_IS_SHADOW_MARIO) {
         animPoseSetMaterialFlagOn(w->mario.poseId, 0x0A000000);
     }
     w->mario.f18C = 0;

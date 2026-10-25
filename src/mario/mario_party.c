@@ -38,12 +38,12 @@ s32 marioUseParty(void) {
 
     if (N_marioChkUseParty()) {
         wp->partyUseDelay = 0;
-        wp->trigFlags &= ~2;
+        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
-    if ((wp->trigFlags & 2) && marioKeyOffChk()) {
+    if ((wp->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) && marioKeyOffChk()) {
         wp->partyUseDelay = 0;
-        wp->trigFlags &= ~2;
+        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
     party = partyGetPtr(marioGetPartyId());
@@ -51,24 +51,24 @@ s32 marioUseParty(void) {
         return 0;
     }
     if (wp->currPartySlotId[0] < 0) {
-        wp->trigFlags &= ~2;
+        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
-    if (wp->flags & 0x80000000) {
+    if (wp->flags & MARIO_FLAG_IS_8_BIT) {
         return 0;
     }
     if (N_fbatPreventMarioEventChk()) {
         wp->partyUseDelay = 0;
-        wp->trigFlags &= ~2;
+        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
-    if ((wp->flags & 0x30000) || wp->airTimer != 0) {
+    if ((wp->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) || wp->airTimer != 0) {
         wp->partyUseDelay = 0;
-        wp->trigFlags &= ~2;
+        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
     if (wp->currMotionId != 0 && wp->currMotionId != 1 && wp->currMotionId != 2) {
-        wp->trigFlags &= ~2;
+        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
     if ((wp->dispFlags & 0x1000000) || party->slitOn == 1) {
@@ -87,8 +87,8 @@ s32 marioUseParty(void) {
     if (party->currentMemberId == 4 && yoshiGetStatus()) {
         return 0;
     }
-    if (!(wp->trigFlags & 2) && (wp->buttonTrg & PAD_BUTTON_X)) {
-        wp->trigFlags |= 2;
+    if (!(wp->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) && (wp->buttonTrg & PAD_BUTTON_X)) {
+        wp->trigFlags |= MARIO_TRIG_FLAG_USE_PARTNER;
         wp->partyUseDelay = 5;
     }
     return 0;
@@ -97,15 +97,15 @@ s32 marioUseParty(void) {
 s32 marioUsePartyMain(void) {
     MarioWork* wp = marioGetPtr();
 
-    if (wp->trigFlags & 2) {
+    if (wp->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) {
         if (marioKeyOffChk()) {
             wp->partyUseDelay = 0;
-            wp->trigFlags &= ~2;
+            wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
             return 0;
         }
         if (--wp->partyUseDelay <= 0) {
             wp->partyUseDelay = 0;
-            wp->trigFlags &= ~2;
+            wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
             return partyDoWork();
         }
     }

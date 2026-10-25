@@ -1724,7 +1724,7 @@ USER_FUNC(_lvup_spot_on) {
     e->rot = (Vec){0.0f, 0.0f, 0.0f};
     e->scale = (Vec){15.0f, 15.0f, 150.0f};
     e->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    e->flags |= 2;
+    e->flags |= EVENT_STOPPED;
     return 2;
 }
 
@@ -1813,7 +1813,7 @@ USER_FUNC(_lvup_spot_off) {
 
         e->color = c;
         if (e->color.a == 0) {
-            e->flags &= ~2;
+            e->flags &= ~EVENT_STOPPED;
         }
     }
     return event->userdata[1] > 0 ? 0 : 2;

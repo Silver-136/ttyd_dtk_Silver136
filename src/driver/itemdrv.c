@@ -206,12 +206,12 @@ BOOL itemGetCheck(ItemEntry* entry) {
     if (mario->characterId == 2) {
         if (!(mario->stageFlags & 1)) {
             if (marioStGetSystemLevel() != 0U) return FALSE;
-            if (mario->flags & 0xA) return FALSE;
+            if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
         }
     }
     else {
         if (marioStGetSystemLevel() != 0U) return FALSE;
-        if (mario->flags & 0xA) return FALSE;
+        if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
     }
     if (gp->mapEventId) return FALSE;
     if (seqGetSeq() != 2) return FALSE;
@@ -255,7 +255,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
     if (!entry) return FALSE;
     if (entry->flags2 & 0x100000) return FALSE;
     if (marioStGetSystemLevel() != 0U) return FALSE;
-    if (mario->flags & 0xA) return FALSE;
+    if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
     if (entry->flags2 & 0x2000000) return FALSE;
     if (gp->mapEventId) return FALSE;
     if (seqGetSeq() != 2) return FALSE;
@@ -1260,7 +1260,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             winMgrSetParam(entry->winId[0], entry);
             marioChgGetItemMotion();
             iconFlagOff(entry->name, 2);
-            if (mario->flags & 0x2000000) {
+            if (mario->flags & MARIO_FLAG_BG_MODE) {
                 entry->flags2 |= 0x8000;
             }
             entry->subState = 9;
@@ -1302,7 +1302,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             itemGetEnd(entry);
             break;
         case 8:
-            if (mario->flags & 0x2000000) {
+            if (mario->flags & MARIO_FLAG_BG_MODE) {
                 entry->flags2 |= 0x8000;
             }
             entry->timer = 0;

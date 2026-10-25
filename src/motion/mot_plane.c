@@ -83,7 +83,7 @@ static inline void planeReset(void) {
     marioPaperOff();
     marioChgPaper(NULL);
     m->dispFlags &= ~0x8;
-    m->flags |= 0x80;
+    m->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioAdjustMoveDir();
     m->dispFlags &= ~0x100;
 }
@@ -188,8 +188,8 @@ void mot_plane(void) {
     f32 y, b, c;
 
     mp = marioGetPtr();
-    if (mp->trigFlags & 1) {
-        mp->trigFlags &= ~1;
+    if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mp->motStruct = __memAlloc(HEAP_DEFAULT, 0x48);
         memset(mp->motStruct, 0, 0x48);
         { MarioWork* m2 = marioGetPtr(); m2->motPlane->sfxId = -1; }
@@ -312,7 +312,7 @@ void mot_plane(void) {
     }
 #endif
     flyMain();
-    if (marioKeyOffChk() && !(mp->trigFlags & 4)) {
+    if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
         if (planeCancel()) {
             return;
         }
@@ -442,7 +442,7 @@ void mot_plane(void) {
             allPartyRideOff2();
             mp->airTimer = 0;
             mp->jumpPeakAirTime = 0;
-            mp->flags &= ~0x80;
+            mp->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioAdjustMoveDir();
             planeReset();
             if (mp->motStruct != NULL) {

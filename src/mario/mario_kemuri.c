@@ -36,7 +36,7 @@ void mario_kemuri_80130474(void) {
     attr = 0;
 
     if ((u32)marioStGetSystemLevel() == 0) {
-      if (!(mario->flags & 0x01000000)) {
+      if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         if (mario->currMotionId == 0x1D) {
             s = s;
         } else {
@@ -70,7 +70,7 @@ void mario_kemuri_80130474(void) {
                     left_or_right = left_or_right == 0;
                 }
             }
-            else if (!(mario->flags & 0x01000000)) {
+            else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
                 if (kpaGetBodyStatus() <= 0 && mario->characterId != 1) {
                     kemuri();
                 }
@@ -86,7 +86,7 @@ void mario_simple_kemuri(void) {
     MarioWork* mario = marioGetPtr();
     EffectEntry* eff = kemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
 
-    if (mario->flags & 0x02000000) {
+    if (mario->flags & MARIO_FLAG_BG_MODE) {
         ((effKemuriData*)eff->userdata)->scale = 0.6f;
     }
 }
@@ -98,8 +98,8 @@ void mario_land_kemuri(void) {
     EffectEntry* eff;
 
     if (hit != NULL) {
-        if (mario->trigFlags & 0x20000) {
-            mario->trigFlags &= ~0x20000;
+        if (mario->trigFlags & MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI) {
+            mario->trigFlags &= ~MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
         }
         else {
             attr = hitGetAttr(hit);
@@ -111,7 +111,7 @@ void mario_land_kemuri(void) {
             }
             else {
                 eff = kemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
-                if (mario->flags & 0x02000000) {
+                if (mario->flags & MARIO_FLAG_BG_MODE) {
                     ((effKemuriData*)eff->userdata)->scale = 0.6f;
                 }
             }
@@ -210,8 +210,8 @@ void kemuri(void) {
 #else
     if (mario->prevAirTimer != 0 && mario->prevHitobjStandOn == NULL && mario->hitobjStandOn != NULL) {
 #endif
-        if (mario->trigFlags & 0x20000) {
-            mario->trigFlags &= ~0x20000;
+        if (mario->trigFlags & MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI) {
+            mario->trigFlags &= ~MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
         }
         else {
             x = mario->position.x;
@@ -239,7 +239,7 @@ void kemuri(void) {
             z = mario->position.z + 0.2f * (mario->wPlayerCollisionBox.x * c);
             eff = effKemuri2Entry(0, x, y, z, s, c);
             }
-            if (mario->flags & 0x02000000) {
+            if (mario->flags & MARIO_FLAG_BG_MODE) {
                 ((effKemuri2Data*)eff->userdata)->scale2 = 0.6f;
             }
         }

@@ -223,8 +223,8 @@ USER_FUNC(yuuminigame4_set_phase) {
 USER_FUNC(evt_slit_cancel) {
     MarioWork* mario = marioGetPtr();
 
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         marioSlitForceCancel();
     }
     return EVT_RETURN_DONE;
@@ -245,7 +245,7 @@ static USER_FUNC(evt_nomal_cange) {
 
     if (isFirstCall) {
         marioRollTryCancel();
-        if (mario->flags & 0x100000) {
+        if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             motSlitCancel3();
         }
     }
@@ -1002,7 +1002,7 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             case 3:
             case 4:
                 if (mario->dispFlags & 0x1000000) {
-                    if (mario->flags & 0x100000) {
+                    if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                         speed = 0.0f;
                     } else {
                         speed = 0.0f;
@@ -1015,7 +1015,7 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             case 7:
             case 8:
                 if (mario->dispFlags & 0x1000000) {
-                    if (mario->flags & 0x100000) {
+                    if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                         speed = -0.0f;
                     } else {
                         speed = -0.0f;

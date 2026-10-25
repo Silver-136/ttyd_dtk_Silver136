@@ -173,7 +173,7 @@ void peachChgPose(const char* name) {
         mp->animName = name;
         mp->poseTime = 0;
         mp->dispFlags &= ~0x30000000;
-        mp->trigFlags |= 0x1000;
+        mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
     }
 }
 
@@ -229,19 +229,19 @@ s32 peachMain(void) {
         mp->frameCounter++;
         return 1;
     }
-    if (mp->flags & 0x40000) {
+    if (mp->flags & MARIO_FLAG_IS_STEPPING) {
         marioMove();
         marioChkOverhead();
         if (mp->airTimer > 100) {
             marioChgMot(10);
             marioSetFallPara();
         }
-    } else if (mp->flags & 0x10000) {
+    } else if (mp->flags & MARIO_FLAG_IS_JUMPING) {
         marioJump();
         marioMove();
         marioChkOverhead();
         if (mp->airTimer > 5) marioChkGnd2();
-    } else if (mp->flags & 0x20000) {
+    } else if (mp->flags & MARIO_FLAG_IS_FALLING) {
         marioMove();
         marioFall();
         marioChkOverhead();
@@ -251,11 +251,11 @@ s32 peachMain(void) {
         marioChkOverhead();
         marioChkGnd();
     }
-    if (mp->flags & 0x20) {
+    if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
         mp->forceMoveTimer--;
         if (mp->forceMoveTimer <= 0) {
             mp->forceMoveTimer = 0;
-            mp->flags &= ~0x20;
+            mp->flags &= ~MARIO_FLAG_FORCED_MOVEMENT;
         }
     }
     marioBoots();
@@ -276,21 +276,21 @@ s32 peachMain(void) {
 void peach_stay(void) {
     MarioWork* mp = marioGetPtr();
 #define MT (mp->multiTimer)
-    if (mp->trigFlags & 1) {
-        mp->trigFlags &= ~1;
+    if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mp->flags &= 0xFFF0FFFF;
         mp->airTimer = 0;
         MT = 0;
         mp->currSubMotionId = 0;
         peachChgPose("P_S_1");
-        if (!(mp->flags & 0x20)) {
+        if (!(mp->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             mp->baseSpeed = 0.0f;
         }
     }
     if (mp->controlStickSensitivity > 0.0f) {
         marioChgMot(1);
     }
-    if (!(mp->flags & 8)) {
+    if (!(mp->flags & MARIO_FLAG_KEY_OFF)) {
     switch (mp->dispFlags & 0x40000000) { case 0:
     { if (!(mp->peachFlags & 0x27F0)) {
         switch (mp->currSubMotionId) {
@@ -325,7 +325,7 @@ void peach_stay(void) {
             if (++MT >= 100) {
                 MT = 0;
             }
-            if (mp->flags & 8) {
+            if (mp->flags & MARIO_FLAG_KEY_OFF) {
                 marioChgPose("P_S_1");
                 mp->currSubMotionId = 0;
             }
@@ -339,8 +339,8 @@ void peach_stay(void) {
 
 void peach_walk(void) {
     MarioWork* mp = marioGetPtr();
-    if (mp->trigFlags & 1) {
-        mp->trigFlags &= ~1;
+    if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mp->flags &= 0xFFF0FFFF;
         if (mp->forceMoveTimer == 0) {
             mp->baseSpeed = marioGetWalkSpd();
@@ -365,8 +365,8 @@ void peach_walk(void) {
 
 void peach_dash(void) {
     MarioWork* mp = marioGetPtr();
-    if (mp->trigFlags & 1) {
-        mp->trigFlags &= ~1;
+    if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mp->flags &= 0xFFF0FFFF;
         if (mp->forceMoveTimer == 0) {
             mp->baseSpeed = marioGetDashSpd();
@@ -378,7 +378,7 @@ void peach_dash(void) {
     if (mp->forceMoveTimer == 0) {
         mp->baseSpeed = marioGetDashSpd();
     }
-    if (mp->flags & 0x20) {
+    if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
         peachStepSe(20, 10);
     } else if ((s8)mp->wStickDir1 * (s8)mp->wStickDir1 + (s8)mp->wStickDir2 * (s8)mp->wStickDir2 <= 3025) {
         marioChgMot(1);
@@ -393,8 +393,8 @@ void peach_dash(void) {
 
 void peach_talk(void) {
     MarioWork* mp = marioGetPtr();
-    if (mp->trigFlags & 1) {
-        mp->trigFlags &= ~1;
+    if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mp->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mp->multiTimer = 0;
         mp->airTimer = 0;
         mp->currSubMotionId = 0;

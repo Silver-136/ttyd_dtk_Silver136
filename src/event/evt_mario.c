@@ -77,13 +77,13 @@ void marioRollForceCancel(void);
     }
 
 #define SETPOSE_BODY                                       \
-    if (mp->flags & 0x80000000) {                          \
+    if (mp->flags & MARIO_FLAG_IS_8_BIT) {                          \
         name = toDotMarioPose(name);                       \
         if (!name) {                                       \
             return EVT_RETURN_DONE;                        \
         }                                                  \
         mp->animName = name;                               \
-        mp->trigFlags |= 0x1000;                           \
+        mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;                           \
     } else {                                               \
         notFound = TRUE;                                   \
         for (i = 0; a_mario_group[i]; i++) {               \
@@ -94,11 +94,11 @@ void marioRollForceCancel(void);
         }                                                  \
         if (!notFound) {                                   \
             mp->animName = name;                           \
-            mp->trigFlags |= 0x1000;                       \
+            mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;                       \
             mp->dispFlags &= ~0x10000000;                  \
         } else {                                           \
             mp->animName = name;                           \
-            mp->trigFlags |= 0x1000;                       \
+            mp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;                       \
             mp->dispFlags |= 0x10000000;                   \
         }                                                  \
     }                                                      \
@@ -150,7 +150,7 @@ static inline BOOL marioLandChk(f32 vy) {
     f32 y;
     f32 b;
     void* hit;
-    if (mp->flags & 0x1000000) {
+    if (mp->flags & MARIO_FLAG_TUBE_MODE) {
         hit = marioSearchGroundRoll(&y, &a, &b, 11.0f, mp->jumpVelocityY);
     } else {
         hit = marioSearchGround(&y, &a, &b, vy, vy);
@@ -159,11 +159,11 @@ static inline BOOL marioLandChk(f32 vy) {
         marioClearJumpPara();
         mp->hitobjStandOn = hit;
         mp->position.y = y;
-        mp->flags &= ~0xF0000;
+        mp->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mp->jumpDistance = __fabsf(distABf(mp->position.x, mp->position.z, mp->lastGroundPos.x, mp->lastGroundPos.z));
         mp->airTimer = 0;
         mp->jumpPeakAirTime = 0;
-        mp->flags &= ~0x80;
+        mp->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         camFollowYOn();
         return TRUE;
     }
@@ -181,7 +181,7 @@ USER_FUNC(evt_mario_dokan_prepare) {
     MarioWork* mp = marioGetPtr();
     PartyEntry* party;
     s32 type;
-    mp->flags |= 0x100;
+    mp->flags |= MARIO_FLAG_FLOORS_DISABLED;
     type = evtGetValue(event, args[0]);
     if (type == 4) {
         mp->scale = (Vec){0.0f, 0.0f, 0.0f};
@@ -244,7 +244,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
                     ret = 2;
                     break;
                 case 1:
-                    if (!(mp->flags & 0x2000000)) {
+                    if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                         marioUpdateCamPos();
                         camFollowYOn();
 #ifdef VERSION_G8ME01
@@ -279,10 +279,10 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             mp->dispFlags |= 0x100;
             mp->displayDirection = mp->displayDirectionTarget;
             mp->mot.dokan.rotSpeed = 0.0f;
-            mp->dispOfs = (Vec){0.0f, 0.0f, (mp->flags & 0x2000000) ? -16.0f : 0.0f};
+            mp->dispOfs = (Vec){0.0f, 0.0f, (mp->flags & MARIO_FLAG_BG_MODE) ? -16.0f : 0.0f};
             event->userdata[0] = 0;
             marioNoUpdateCamPos();
-            if (!(mp->flags & 0x2000000)) {
+            if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                 camFollowYOff();
             }
         } else if (type == 5) {
@@ -324,8 +324,8 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             break;
         case 0:
             mp->scale = (Vec){0.0f, 0.0f, 0.0f};
-            mp->dispOfs = (Vec){0.0f, 0.0f, (mp->flags & 0x2000000) ? -16.0f : 0.0f};
-            if (!(mp->flags & 0x2000000)) {
+            mp->dispOfs = (Vec){0.0f, 0.0f, (mp->flags & MARIO_FLAG_BG_MODE) ? -16.0f : 0.0f};
+            if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                 mp->position.z += -8.0f;
             }
             party = partyGetPtr(marioGetPartyId());
@@ -771,7 +771,7 @@ USER_FUNC(evt_mario_normalize) {
                 marioRollCancel();
                 event->userdata[0] = 1;
             } else if (mp->currMotionId == 0x15) {
-                if (mp->flags & 0x100000) {
+                if (mp->flags & MARIO_FLAG_PAPER_MODE) {
                     motSlitCancel2();
                     event->userdata[0] = 1;
                 }
@@ -861,7 +861,7 @@ USER_FUNC(evt_mario_get_motion) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
     s32 id = args[0];
-    if (mp->trigFlags & 1) {
+    if (mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         evtSetValue(event, id, marioGetPtr()->prevMotionId);
     } else {
         evtSetValue(event, id, marioGetPtr()->currMotionId);
@@ -881,7 +881,7 @@ USER_FUNC(evt_mario_chk_hipbump) {
     MarioWork* mp = marioGetPtr();
     val = 0;
     id = args[0];
-    if (!(mp->trigFlags & 1) && marioGetPtr()->currMotionId == 0x11) {
+    if (!(mp->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) && marioGetPtr()->currMotionId == 0x11) {
         val = 1;
     }
     evtSetValue(event, id, val);
@@ -897,7 +897,7 @@ USER_FUNC(evt_mario_cancel_roll_motion) {
     if (isFirstCall) {
         marioRollTryCancel();
     }
-    if (marioGetPtr()->flags & 0x1000000) {
+    if (marioGetPtr()->flags & MARIO_FLAG_TUBE_MODE) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -913,7 +913,7 @@ USER_FUNC(evt_mario_set_force_dir) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
     if (mp->airTimer > 0) {
-        mp->flags |= 0x40;
+        mp->flags |= MARIO_FLAG_USE_FORCE_DIRECTION;
         mp->forceDir = evtGetValue(event, args[0]);
     }
     return EVT_RETURN_DONE;
@@ -952,13 +952,13 @@ USER_FUNC(evt_mario_mov_pos2) {
     if (isFirstCall) {
         f32 dist = distABf(mp->position.x, mp->position.z, x, z);
         mp->directionView = angleABf(mp->position.x, mp->position.z, x, z);
-        if (mp->flags & 0x2000000) {
+        if (mp->flags & MARIO_FLAG_BG_MODE) {
             spd *= 0.4f;
         }
         spd /= (f32)gp->framerate;
         marioSetForceMove(1.0f / spd + dist / spd, mp->directionView, spd);
     }
-    if (mp->flags & 0x20) {
+    if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
         return EVT_RETURN_BLOCK;
     }
     mp->position.x = x;
@@ -1033,14 +1033,14 @@ USER_FUNC(evt_mario_party_door_move) {
         case 0:
             dist = distABf(mp->position.x, mp->position.z, x, z);
             mp->directionView = angleABf(mp->position.x, mp->position.z, x, z);
-            if (mp->flags & 0x2000000) {
+            if (mp->flags & MARIO_FLAG_BG_MODE) {
                 spd *= 0.4f;
             }
             { s32 n = (f32)gp->framerate * (dist / spd); spd = spd / (f32)gp->framerate; marioSetForceMove(n, mp->directionView, spd); }
             event->userdata[0] = 2;
             break;
         case 2:
-            if (mp->flags & 0x20) {
+            if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
                 break;
             }
             event->userdata[1] = sysMsec2Frame(10);
@@ -1164,14 +1164,14 @@ USER_FUNC(evt_mario_party_bero_move) {
         case 0:
             dist = distABf(mp->position.x, mp->position.z, x, z);
             mp->directionView = angleABf(mp->position.x, mp->position.z, x, z);
-            if (mp->flags & 0x2000000) {
+            if (mp->flags & MARIO_FLAG_BG_MODE) {
                 spd *= 0.4f;
             }
             { s32 n = (f32)gp->framerate * (dist / spd); spd = spd / (f32)gp->framerate; marioSetForceMove(n, mp->directionView, spd); }
             event->userdata[0] = 2;
             break;
         case 2:
-            if (mp->flags & 0x20) {
+            if (mp->flags & MARIO_FLAG_FORCED_MOVEMENT) {
                 break;
             }
             event->userdata[1] = sysMsec2Frame(10);
@@ -1296,7 +1296,7 @@ USER_FUNC(evt_mario_jump_pos) {
                 mp->jumpJerkY = 0.0f;
                 mp->jumpSnapY = 0.0f;
             }
-            if (!(mp->flags & 0x1000000)) {
+            if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
                 marioChgMot(8);
             } else {
                 rollEvtJumpSetup();
@@ -1307,7 +1307,7 @@ USER_FUNC(evt_mario_jump_pos) {
             event->userdata[0] = 1;
         }
         case 1:
-            if (mp->flags & 0x1000000) {
+            if (mp->flags & MARIO_FLAG_TUBE_MODE) {
                 setRollEvtFlag();
                 movePos(&mp->position.x, &mp->position.z, mp->baseSpeed, mp->directionView);
             } else {
@@ -1347,7 +1347,7 @@ USER_FUNC(evt_mario_jump_pos) {
             mp->baseSpeed = 0.0f;
             mp->baseSpeed = 0.0f;
             camFollowYOn();
-            if (!(mp->flags & 0x1000000)) {
+            if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
                 marioChgMot(0);
             } else {
                 marioResetRollSpd();
@@ -1454,7 +1454,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
                 event->userdata[2] = 0.5f * (f32)event->userdata[1] + 0.5f;
             }
             event->userdata[0] = 2;
-            if (!(mp->flags & 0x1000000)) {
+            if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
                 marioChgPose("M_J_1C");
             }
             break;
@@ -1691,7 +1691,7 @@ USER_FUNC(evt_mario_wait_move_end) {
 }
 
 USER_FUNC(evt_mario_wait_movable) {
-    return (marioGetPtr()->flags & 8) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return (marioGetPtr()->flags & MARIO_FLAG_KEY_OFF) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_mario_get_state) {
@@ -2054,7 +2054,7 @@ USER_FUNC(evt_mario_clear_party) {
 }
 
 USER_FUNC(evt_mario_push) {
-    marioGetPtr()->flags |= 0x8000;
+    marioGetPtr()->flags |= MARIO_FLAG_IS_PUSHING;
     return EVT_RETURN_DONE;
 }
 
@@ -2117,12 +2117,12 @@ USER_FUNC(evt_mario_paper_plane) {
             mario_plane_cancel();
         } else {
             marioChgMot(0x18);
-            mp->trigFlags |= 4;
+            mp->trigFlags |= MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
         }
     }
     if (!mode) {
         if (mp->currMotionId == 0 && mp->hitobjStandOn) {
-            mp->trigFlags &= ~4;
+            mp->trigFlags &= ~MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
             return EVT_RETURN_DONE;
         }
     } else if (marioGetPlaneStatus() == 2) {

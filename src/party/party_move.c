@@ -385,7 +385,7 @@ void partyClearFootmark2(void) {
 static inline BOOL partyChkMarioJumpFlag(void) {
     MarioWork* mario = marioGetPtr();
     BOOL ret = FALSE;
-    if (mario->flags & 0x10000) {
+    if (mario->flags & MARIO_FLAG_IS_JUMPING) {
         ret = TRUE;
     }
     return ret;
@@ -494,7 +494,7 @@ static inline f32 partyUpdSpd(PartyEntry* party) {
     f32 cur;
 
     cur = party->moveSpeed;
-    if (mario->flags & 0x8000) {
+    if (mario->flags & MARIO_FLAG_IS_PUSHING) {
         target = mario->baseSpeed;
     } else {
         target = party->targetSpeed * mario->playerGravity * partySpdRate(party);
@@ -522,7 +522,7 @@ static inline f32 partyUpdSpd2(PartyEntry* party) {
     f32 target;
 
     cur = party->moveSpeed;
-    if (mario->flags & 0x8000) {
+    if (mario->flags & MARIO_FLAG_IS_PUSHING) {
         target = mario->baseSpeed;
     } else {
         target = party->targetSpeed * mario->playerGravity * partySpdRate(party);
@@ -998,7 +998,7 @@ s16 partyMarioHosei(PartyEntry* party) {
     }
     if (&party->position) {
     }
-    if (mario->flags & 0x8000) {
+    if (mario->flags & MARIO_FLAG_IS_PUSHING) {
         kx = 0.2f;
         kz = 0.15f;
         ky = kx;
@@ -1109,7 +1109,7 @@ void partyWalkInit(PartyEntry* party) {
     party->reserved_3E = 0;
     party->accelY = 1.8f;
     *(f32*)p114 = 0.0f;
-    if (!(mario->flags & 0x400000)) {
+    if (!(mario->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
         partyChgPoseId(party, 1);
         partyChgMoveMode(party, 1);
         partyChgMot(party, 0);
@@ -1127,7 +1127,7 @@ void partyMoveWalk(PartyEntry* party) {
         f32 target;
         MarioWork* mario = party->playerPtr;
         f32 cur = party->moveSpeed;
-        if (mario->flags & 0x8000) {
+        if (mario->flags & MARIO_FLAG_IS_PUSHING) {
             target = mario->baseSpeed;
         } else {
             target = party->targetSpeed * mario->playerGravity * partySpdRate(party);

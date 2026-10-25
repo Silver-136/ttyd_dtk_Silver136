@@ -72,12 +72,12 @@ void mot_stay(void) {
     }
 #ifdef VERSION_G8ME01
     if (!(mario->buttonHold & PAD_BUTTON_A)) {
-        mario->trigFlags &= ~0x200000;
-        mario->trigFlags &= ~0x400000;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_MOVE_CHK;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_START_JABARA_SPIN;
     }
 #endif
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_HAS_INPUT_JUMP | MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING);
         marioClearJumpPara();
         newMot = TRUE;
@@ -86,11 +86,11 @@ void mot_stay(void) {
         mario->currSubMotionId = 0;
 #ifdef VERSION_G8ME01
         if (marioPriCheckJabara()) {
-            mario->wMotionTimer = (mario->trigFlags & 0x100000) ? 10 : 0;
+            mario->wMotionTimer = (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) ? 10 : 0;
         } else {
             mario->wMotionTimer = 0;
         }
-        mario->trigFlags &= ~0x100000;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
 #else
         mario->wMotionTimer = 0;
 #endif
@@ -228,7 +228,7 @@ void mot_stay(void) {
     marioChkJump();
     marioChkTransform();
 #ifdef VERSION_G8ME01
-    held = mario->controlStickSensitivity && !(mario->trigFlags & 0x400000);
+    held = mario->controlStickSensitivity && !(mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN);
     if (held) {
 #else
     held = FALSE;

@@ -430,7 +430,7 @@ void yoshi_use(PartyEntry* party) {
                 ADD_OFS(party);
                 return;
             }
-            mario->trigFlags |= 0x20000;
+            mario->trigFlags |= MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI;
             marioChgSmallJumpMotion();
             mario->baseSpeed = 0.0f;
             party->moveDir = mario->moveDirection;
@@ -489,7 +489,7 @@ void yoshi_use(PartyEntry* party) {
             party->playerPtr->poseTime = 0;
             party->useMotionId = 13;
         case 13:
-            if (mario->flags & 0x20) {
+            if (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) {
                 marioChgPose("M_Y_2");
                 partyChgPose(party, "PYS_R_2");
                 party->hitobjFront = NULL;
@@ -509,7 +509,7 @@ void yoshi_use(PartyEntry* party) {
                 searchGround(party);
                 if (--mario->forceMoveTimer <= 0) {
                     mario->forceMoveTimer = 0;
-                    mario->flags &= ~0x20;
+                    mario->flags &= ~MARIO_FLAG_FORCED_MOVEMENT;
                 }
                 YW(party)->count++;
                 if (YW(party)->count % 10 == 0) {
@@ -1159,7 +1159,7 @@ void searchGround(PartyEntry* party) {
         party->flags |= 2;
         if (party->flags & 0x20) {
             party->flags &= ~0x70;
-            mario->flags &= ~0xF0000;
+            mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
             party->velY = 0.0f;
             party->position.y = groundY;
             if (party->yoshiPsndSFXId != -1) {
@@ -1210,7 +1210,7 @@ void searchGround2(PartyEntry* party) {
     party->velY = 0.0f;
     party->position.y = party->groundY;
     party->flags &= ~0x70;
-    mario->flags &= ~0xF0000;
+    mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
 }
 
 static void L_searchHead(PartyEntry* party) {
@@ -1326,10 +1326,10 @@ void L_getStick(PartyEntry* party, f32* angle, f32* speed) {
             dist = 1.5f * (mario->mBaseWalkSpeed * marioGetMoveRate());
         }
         if (hitGetAttr(mario->hitobjStandOn) & 0x100) {
-            mario->flags |= 0x4000000;
+            mario->flags |= MARIO_FLAG_IN_SHALLOW_WATER;
             dist *= 0.75f;
         } else {
-            mario->flags &= ~0x4000000;
+            mario->flags &= ~MARIO_FLAG_IN_SHALLOW_WATER;
         }
         dist *= mario->playerGravity;
     }

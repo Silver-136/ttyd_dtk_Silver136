@@ -114,10 +114,10 @@ void mot_hammer(void) {
     HitEntry* hit;
     s32 n;
 
-    if ((s32)mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0xF0000;
-        mario->flags |= 0x80;
+    if ((s32)mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         HAM_DIR(mario, mario->mot.hammer.dir);
         mario->multiTimer = 0;
         mario->airTimer = 0;
@@ -160,9 +160,9 @@ void mot_hammer(void) {
                 s32 k = kind;
                 mario->mot.hammer.hitFrames = k == 7 ? 3 : k;
             }
-            mario->flags |= 0x800;
+            mario->flags |= MARIO_FLAG_HAMMER_HIT_WALL;
         } else {
-            mario->flags &= ~0x800;
+            mario->flags &= ~MARIO_FLAG_HAMMER_HIT_WALL;
         }
         {
             MarioWork* m = marioGetPtr();
@@ -194,7 +194,7 @@ void mot_hammer(void) {
     mario->moveDirection = toMovedir(mario->mot.hammer.dir);
     done = 0;
     mario->directionView = mario->moveDirection;
-    if (mario->flags & 0x800) {
+    if (mario->flags & MARIO_FLAG_HAMMER_HIT_WALL) {
         s32 t = mario->multiTimer;
         s32 lim = mario->mot.hammer.hitFrames;
         n = t <= lim ? t : lim;
@@ -312,7 +312,7 @@ void mot_hammer(void) {
         }
     }
     if (++mario->multiTimer > 20) {
-        mario->flags &= ~0x80;
+        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioChgMot(0);
     }
 }
@@ -336,7 +336,7 @@ s32 marioChkHammer2(void) {
         return 0;
     }
 #ifdef VERSION_G8ME01
-    if (mario->flags & 0x2000000) {
+    if (mario->flags & MARIO_FLAG_BG_MODE) {
         mario->wMotionTimer = 0;
     } else {
         mario->wMotionTimer++;
@@ -426,9 +426,9 @@ void mot_hammer2(void) {
     f32 nz, ny, nx, len, hz, hy, hx;
     f32 co, s;
 
-    if ((s32)mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0xF0000;
+    if ((s32)mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->mot.hammer2.flags = 0;
         mario->currSubMotionId = 0;
         mario->mot.hammer2.sfxId = -1;
@@ -438,7 +438,7 @@ void mot_hammer2(void) {
     }
     switch ((s32)mario->currSubMotionId) {
     case 0:
-        mario->flags |= 0x80;
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         mario->dispFlags |= 4;
         mario->hammerChargeTimer = 0;
         mario->hammerChargeLv = 0;
@@ -629,7 +629,7 @@ void mot_hammer2(void) {
             break;
         }
         mario->dispFlags &= ~0x4;
-        mario->flags &= ~0x80;
+        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioAdjustMoveDir();
         marioChgMotSub(0, 0);
         break;
@@ -667,7 +667,7 @@ void mot_ham2_post(void) {
     mario->dispFlags &= ~0x8;
     mario->dispFlags &= ~0x10;
     mario->dispFlags &= ~0x4;
-    mario->flags &= ~0x80;
+    mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioAdjustMoveDir();
 }
 

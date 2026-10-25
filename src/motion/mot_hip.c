@@ -122,11 +122,11 @@ void mot_hip(void) {
         kpa_hip();
         return;
     }
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0xF0000;
-        mario->flags |= 0x20000;
-        mario->flags |= 0x80;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+        mario->flags |= MARIO_FLAG_IS_FALLING;
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioAdjustMoveDir();
         {
             s32 f = 0;
@@ -209,8 +209,8 @@ void mot_hip(void) {
     case 10:
         marioChkLandon(&y, 0.0f);
         if ((mario->mot.hip.angle += 22.5f) >= 360.0f) {
-            mario->flags &= ~0x10000;
-            mario->flags |= 0x20000;
+            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+            mario->flags |= MARIO_FLAG_IS_FALLING;
             mario->mot.hip.angle = 0.0f;
             mario->currSubMotionId = 20;
             mario->jumpAccelerationY = -3.4744f;
@@ -296,7 +296,7 @@ void mot_hip(void) {
                 camFollowYOn();
             }
             mario->dispFlags &= ~4;
-            mario->flags &= ~0x80;
+            mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioChgMotSub(0, 0);
             MHPOST();
         }
@@ -338,7 +338,7 @@ s32 U_chkground(void) {
         mario->airTimer = 0;
         mario->jumpPeakAirTime = 0;
         mario->dispFlags &= ~4;
-        mario->flags &= ~0x80;
+        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
         camFollowYOn();
         attr = hitGetAttr(hit);
         if (attr & 0x200) {

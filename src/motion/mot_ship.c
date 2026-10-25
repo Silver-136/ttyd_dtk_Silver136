@@ -177,7 +177,7 @@ void marioReInit_ship(void) {
     void* p;
     s32 t, u;
     f32 a, b;
-    m->trigFlags &= ~1;
+    m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     p = __memAlloc(HEAP_DEFAULT, 0x48);
     marioGetPtr()->motStruct = p;
     memset(marioGetPtr()->motStruct, 0, 0x48);
@@ -308,9 +308,9 @@ void mot_ship(void) {
     Vec p1;
     Vec pos;
 
-    if (m->trigFlags & 1) {
-        m->trigFlags &= ~1;
-        m->flags &= ~0xF0000;
+    if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         newWork = __memAlloc(0, 0x48);
         marioGetPtr()->motShip = newWork;
         memset(marioGetPtr()->motStruct, 0, 0x48);
@@ -319,7 +319,7 @@ void mot_ship(void) {
         marioGetPtr()->motShip->bobAngle = 0.0f;
         marioGetPtr()->motShip->bobSpeed = 4.25f;
         m->currSubMotionId = 0;
-        if (!(m->trigFlags & 4)) {
+        if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
             camGetPtr(8)->flags |= 0x200;
         }
     }
@@ -385,7 +385,7 @@ void mot_ship(void) {
         }
         if (m->jumpVelocityY > 0.0f) {
             m->position.y += m->jumpVelocityY;
-            m->flags &= ~0xF0000;
+            m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         }
         break;
     case 2:
@@ -526,9 +526,9 @@ void mot_ship(void) {
             if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
                 mm->hitobjStandOn = land;
                 mm->position.y = ly;
-                mm->flags &= ~0xF0000;
+                mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
                 mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
-                mm->flags &= ~0x80;
+                mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
                 mm->airTimer = 0;
                 mm->jumpPeakAirTime = 0;
                 camFollowYOn();
@@ -545,7 +545,7 @@ void mot_ship(void) {
             m->jumpSnapY = f30;
             m->baseSpeed = f30;
             marioGetPtr()->motShip->turnSpeed = f30;
-            m->flags &= ~0xF0000;
+            m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
             m->displayDirection = revise360(m->displayDirection);
             m->displayDirectionTarget = m->displayDirection;
             m->directionView = toMovedir(m->displayDirection);
@@ -558,14 +558,14 @@ void mot_ship(void) {
             marioGetPtr()->motShip->bobAngle = 0.0f;
             marioGetPtr()->motShip->bobSpeed = 4.25f;
             m->currSubMotionId = 50;
-            if (!(m->trigFlags & 4)) {
+            if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
                 camGetPtr(8)->flags &= ~0x200;
             }
         }
         break;
     }
     case 30:
-        if (!(m->trigFlags & 4)) {
+        if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
             camGetPtr(8)->flags |= 0x200;
         }
         m->currSubMotionId = 31;
@@ -777,7 +777,7 @@ void mot_ship(void) {
         m->jumpJerkY = f30;
         m->jumpSnapY = f30;
         m->baseSpeed = f30;
-        m->flags &= ~0xF0000;
+        m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         m->dispOfs.y = f30;
         marioChgMot(10);
         marioSetFallPara();
@@ -788,7 +788,7 @@ void mot_ship(void) {
             __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
             marioGetPtr()->motStruct = NULL;
         }
-        if (!(m->trigFlags & 4)) {
+        if (!(m->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
             camGetPtr(8)->flags &= ~0x200;
         }
         break;
@@ -799,7 +799,7 @@ void mot_ship(void) {
             marioGetPtr()->motShip->bobAngle = revise360(marioGetPtr()->motShip->bobAngle - marioGetPtr()->motShip->bobSpeed);
             m->dispOfs.y = 3.0f * (f32)sin(3.1415927f * marioGetPtr()->motShip->bobAngle / 180.0f) + -13.0f;
         }
-        if ((s32)m->flags & 0x20) {
+        if ((s32)m->flags & MARIO_FLAG_FORCED_MOVEMENT) {
             shipEff(m->baseSpeed);
             break;
         }
@@ -808,7 +808,7 @@ void mot_ship(void) {
             m->wStickDir2 = 0;
         }
         shipMove();
-        if ((s32)m->flags & 0x20000) {
+        if ((s32)m->flags & MARIO_FLAG_IS_FALLING) {
             MarioWork* mm;
             s32 ok; HitEntry* land;
             f32 ly;
@@ -826,9 +826,9 @@ void mot_ship(void) {
                 if (land && ((d = mm->position.y - ly) <= 0.0f || d + f30 <= 0.0f)) {
                     mm->hitobjStandOn = land;
                     mm->position.y = ly;
-                    mm->flags &= ~0xF0000;
+                    mm->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
                     mm->jumpDistance = __fabsf(distABf(mm->position.x, mm->position.z, mm->lastGroundPos.x, mm->lastGroundPos.z));
-                    mm->flags &= ~0x80;
+                    mm->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
                     mm->airTimer = 0;
                     mm->jumpPeakAirTime = 0;
                     camFollowYOn();
@@ -872,8 +872,8 @@ void mot_ship(void) {
 
 void marioShipChgFall(void) {
     MarioWork* m = marioGetPtr();
-    if (!(m->flags & 0x20000)) {
-        m->flags |= 0x20000;
+    if (!(m->flags & MARIO_FLAG_IS_FALLING)) {
+        m->flags |= MARIO_FLAG_IS_FALLING;
         m->jumpVelocityY = -0.1f;
         m->jumpAccelerationY = -0.2f;
         m->jumpJerkY = 0.024f;

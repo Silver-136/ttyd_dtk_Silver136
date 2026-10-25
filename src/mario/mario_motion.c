@@ -277,9 +277,9 @@ void marioChgJumpStandMotion(f32 v) {
 
 void marioChgSmallJumpMotion(void) {
     MarioWork* mario = marioGetPtr();
-    mario->trigFlags |= 0x10000;
+    mario->trigFlags |= MARIO_TRIG_FLAG_SET_JUMP_PARAMS;
     marioChgMot(MARIO_MOTION_JUMP);
-    mario->flags |= 0x80;
+    mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
     mario->hitobjJumpFrom = mario->hitobjStandOn;
     mario->hitobjStandOn = NULL;
     mario->jumpVelocityY = 6.0f;
@@ -294,7 +294,7 @@ BOOL marioChkItemGetMotion(void) {
     MarioMotion cur = mario->currMotionId;
     if (!cur || cur == MARIO_MOTION_WALK || cur == MARIO_MOTION_DASH ||
         cur == MARIO_MOTION_YOSHI || cur == MARIO_MOTION_ROLL || cur == MARIO_MOTION_SLIT) {
-        if (!(mario->trigFlags & 1)) {
+        if (!(mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION)) {
             ret = TRUE;
         }
     } else if (cur == MARIO_MOTION_SHIP) {
@@ -316,7 +316,7 @@ BOOL marioChkTalkable(void) {
         case MARIO_MOTION_STAY:
         case MARIO_MOTION_WALK:
         case MARIO_MOTION_DASH:
-            if (!(mario->trigFlags & 1) && marioBgmodeChk() != TRUE && !(mario->dispFlags & 0x1000000)) {
+            if (!(mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) && marioBgmodeChk() != TRUE && !(mario->dispFlags & 0x1000000)) {
                 ret = TRUE;
             }
             break;
@@ -363,12 +363,12 @@ void marioMotion(void) {
     mario->hitobjHammer = NULL;
     do {
         marioMotTbl[mario->currMotionId].main();
-    } while (mario->trigFlags & 1);
+    } while (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION);
 }
 
 void marioChgMot(MarioMotion id) {
     MarioWork* mario = marioGetPtr();
-    if (mario->flags & 0x10000000) {
+    if (mario->flags & MARIO_FLAG_CHG_MOT_DISABLED) {
         return;
     }
     if (mario->prevMotionId == MARIO_MOTION_HIP || mario->prevMotionId == MARIO_MOTION_HIP_2) {
@@ -384,12 +384,12 @@ void marioChgMot(MarioMotion id) {
     if (marioMotTbl[mario->prevMotionId].post) {
         marioMotTbl[mario->prevMotionId].post();
     }
-    mario->trigFlags |= 1;
+    mario->trigFlags |= MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
 }
 
 void marioChgMotSub(MarioMotion id, s32 callPost) {
     MarioWork* mario = marioGetPtr();
-    if (mario->flags & 0x10000000) {
+    if (mario->flags & MARIO_FLAG_CHG_MOT_DISABLED) {
         return;
     }
     if (mario->prevMotionId == MARIO_MOTION_HIP || mario->prevMotionId == MARIO_MOTION_HIP_2) {
@@ -411,17 +411,17 @@ void marioChgMotSub(MarioMotion id, s32 callPost) {
             marioMotTbl[mario->prevMotionId].post();
         }
     }
-    mario->trigFlags |= 1;
+    mario->trigFlags |= MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
 }
 
 void marioChgMot2(MarioMotion id) {
     MarioWork* mario = marioGetPtr();
-    if (mario->flags & 0x10000000) {
+    if (mario->flags & MARIO_FLAG_CHG_MOT_DISABLED) {
         return;
     }
     mario->prevMotionId = mario->currMotionId;
     mario->currMotionId = id;
-    mario->trigFlags &= ~1;
+    mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     if (marioMotTbl[mario->prevMotionId].post) {
         marioMotTbl[mario->prevMotionId].post();
     }
@@ -450,9 +450,9 @@ void marioSetJumpPara(void) {
         case MARIO_MOTION_JABARA:
         case MARIO_MOTION_PLANE:
         case MARIO_MOTION_SHIP:
-            if (mario->trigFlags & 0x10000) {
+            if (mario->trigFlags & MARIO_TRIG_FLAG_SET_JUMP_PARAMS) {
                 jd = marioJumpData.jump;
-                if (mario->flags & 0x1000) {
+                if (mario->flags & MARIO_FLAG_PRE_BATTLE_PHYSICS) {
                     mario->jumpVelocityY = 0.5f * jd[0];
                     mario->jumpAccelerationY = 0.5f * jd[1];
                     mario->jumpJerkY = 0.5f * jd[2];
@@ -460,7 +460,7 @@ void marioSetJumpPara(void) {
                 }
             } else {
                 jd = marioJumpData.jump;
-                if (!(mario->flags & 0x1000)) {
+                if (!(mario->flags & MARIO_FLAG_PRE_BATTLE_PHYSICS)) {
                     mario->jumpVelocityY = jd[0];
                     mario->jumpAccelerationY = jd[1];
                     mario->jumpJerkY = jd[2];
@@ -543,7 +543,7 @@ f32 marioGetFallSpd(void) {
 
 f32 marioMakeJumpPara(void) {
     MarioWork* mario = marioGetPtr();
-    f32 div = (mario->flags & 0x1000) ? 1.7f : 1.0f;
+    f32 div = (mario->flags & MARIO_FLAG_PRE_BATTLE_PHYSICS) ? 1.7f : 1.0f;
     mario->jumpJerkY = mario->jumpJerkY + mario->jumpSnapY / div;
     mario->jumpAccelerationY = mario->jumpAccelerationY + mario->jumpJerkY / div;
     mario->jumpVelocityY = mario->jumpVelocityY + mario->jumpAccelerationY / div;
@@ -587,8 +587,8 @@ void marioJump(void) {
             mario->jumpAccelerationY = -0.02f;
             mario->jumpJerkY = -0.02f;
             mario->jumpSnapY = -0.002f;
-            mario->flags &= ~0x10000;
-            mario->flags |= 0x20000;
+            mario->flags &= ~MARIO_FLAG_IS_JUMPING;
+            mario->flags |= MARIO_FLAG_IS_FALLING;
         }
     }
     mario->position.y += mario->jumpVelocityY;
@@ -621,8 +621,8 @@ void marioFall(void) {
         }
         return;
     }
-    if (!(mario->flags & 0x20) && !marioChkInScreen(mario->screenX, mario->screenY)) {
-        mario->flags |= 0x80;
+    if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT) && !marioChkInScreen(mario->screenX, mario->screenY)) {
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         mario->baseSpeed += 0.1f * -mario->baseSpeed;
     }
     if (getRollEvtFlag()) {
@@ -631,7 +631,7 @@ void marioFall(void) {
     if (mario->currMotionId == MARIO_MOTION_HIP || mario->currMotionId == MARIO_MOTION_HIP_2) {
         return;
     }
-    if ((!marioKeyOffChk() || !marioCtrlOffChk()) && !(mario->flags & 0x20)) {
+    if ((!marioKeyOffChk() || !marioCtrlOffChk()) && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
         f32 s = mario->baseSpeed;
         s = s + 0.01f * (-0.5f - s);
         if (s < 0.0f) {
@@ -648,10 +648,10 @@ void marioFall(void) {
         return;
     }
 #ifdef VERSION_G8ME01
-    if (!(mario->trigFlags & 0x200000) && (mario->trigFlags & 0x100000)) {
+    if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK)) {
         rub = marioGetRub(0x100, &a, &b, &c);
         if (mario->buttonHold & PAD_BUTTON_A) {
-            mario->trigFlags |= 0x400000;
+            mario->trigFlags |= MARIO_TRIG_FLAG_START_JABARA_SPIN;
         }
     }
 #else
@@ -667,7 +667,7 @@ void marioFall(void) {
         } else {
             mario->position.y = y;
 #ifdef VERSION_G8ME01
-            if (!(mario->trigFlags & 0x200000) && (mario->trigFlags & 0x100000) && marioPriCheckJabara() && a != -1 && rub >= 0) {
+            if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) && marioPriCheckJabara() && a != -1 && rub >= 0) {
 #else
             if (marioPriCheckJabara() && a != -1 && rub >= 0) {
 #endif
@@ -700,8 +700,8 @@ void marioLandOn(void) {
     if (!(hitGetAttr(mario->hitobjStandOn) & 0x200)) {
         marioClearJumpPara();
     }
-    mario->flags &= ~0x80;
-    mario->flags &= ~0x40;
+    mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+    mario->flags &= ~MARIO_FLAG_USE_FORCE_DIRECTION;
     mario->airTimer = 0;
     mario->jumpPeakAirTime = 0;
     if (mario->characterId != 2) {
@@ -730,8 +730,8 @@ void marioLandOn(void) {
         }
         psndSFXOn_3D(sfx, &pos);
     }
-    if (mario->flags & 0x1000000) {
-        mario->flags &= ~0x30000;
+    if (mario->flags & MARIO_FLAG_TUBE_MODE) {
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING);
         mario->hitobjJumpFrom = NULL;
         return;
     }
@@ -765,7 +765,7 @@ void marioLandOn(void) {
             marioChgMot(MARIO_MOTION_STAY);
             return;
         }
-        if (mario->flags & 0x100000) {
+        if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             marioSlitReenter();
             return;
         }
@@ -775,9 +775,9 @@ void marioLandOn(void) {
         return;
     }
 #ifdef VERSION_G8ME01
-    if (mario->controlStickSensitivity > 0.0f && !(mario->trigFlags & 0x400000) && !(mario->flags & 0x20)) {
+    if (mario->controlStickSensitivity > 0.0f && !(mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
 #else
-    if (mario->controlStickSensitivity > 0.0f && !(mario->flags & 0x20)) {
+    if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
 #endif
         if (mario->characterId == 2) {
             if (kpaFireAttackCheck()) {
@@ -845,8 +845,8 @@ void mot_talk(void) {
         peach_talk();
         return;
     }
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->multiTimer = 0;
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
@@ -896,8 +896,8 @@ void mot_talk(void) {
 
 void mot_getItem(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->multiTimer = 0;
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
@@ -955,7 +955,7 @@ BOOL marioChkTransform(void) {
     if (!(mario->buttonTrg & PAD_BUTTON_Y)) {
         return FALSE;
     }
-    if (!(mario->trigFlags & 4) && mario->partyUseDelay) {
+    if (!(mario->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON) && mario->partyUseDelay) {
         return FALSE;
     }
     if (mario->currMotionId == MARIO_MOTION_YOSHI) {
@@ -975,7 +975,7 @@ BOOL marioChkTransform(void) {
 BOOL marioChkItemMotion(void) {
     MarioWork* mario = marioGetPtr();
     u32 trig;
-    if (mario->flags & 0x80000000) {
+    if (mario->flags & MARIO_FLAG_IS_8_BIT) {
         return FALSE;
     }
     if (!marioGetHammerLevel()) {
@@ -989,7 +989,7 @@ BOOL marioChkItemMotion(void) {
     if (!trig) {
         return FALSE;
     }
-    if (mario->flags & 0x1100000) {
+    if (mario->flags & (MARIO_FLAG_PAPER_MODE | MARIO_FLAG_TUBE_MODE)) {
         return FALSE;
     }
     if (!trig) {
@@ -1008,7 +1008,7 @@ s32 marioRollChgChk(void) {
     s32 b;
     s32 a;
     s32 c;
-    if (mario->flags & 0x80000000) {
+    if (mario->flags & MARIO_FLAG_IS_8_BIT) {
         return 0;
     }
     if (!(mario->buttonHold & PAD_TRIGGER_R)) {
@@ -1050,9 +1050,9 @@ static inline BOOL marioChkBackAngle(f32 a) {
 
 void mot_kaze(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0xF0000;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->dispFlags |= 0x100;
         mario->multiTimer = 0;
         mario->currSubMotionId = 0;
@@ -1089,9 +1089,9 @@ void mot_kaze(void) {
 
 void mot_shadow(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0xF0000;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->dispFlags &= ~0x1000000;
         mario->multiTimer = 0;
         mario->currSubMotionId = 0;
@@ -1130,8 +1130,8 @@ void mot_bottomless(void) {
     f32 z;
     void* hit;
 
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->baseSpeed = 0.0f;
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
@@ -1177,7 +1177,7 @@ void mot_bottomless(void) {
                 break;
             }
             mario->currSubMotionId = 2;
-            mario->flags |= 0x80;
+            mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
             marioSetFallPara();
             break;
         case 2:
@@ -1230,8 +1230,8 @@ void mot_bottomless(void) {
 void mot_forceReset(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->currSubMotionId = 0;
     }
     switch ((s32)mario->currSubMotionId) {

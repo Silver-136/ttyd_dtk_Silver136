@@ -1022,7 +1022,7 @@ found:
     while (TRUE) {
         d3 = distABf(px, pz, t.x, t.z);
         dir = angleABf(px, pz, t.x, t.z);
-        if (mario->flags & 0x8000) {
+        if (mario->flags & MARIO_FLAG_IS_PUSHING) {
             a = party->width + mario->wPlayerCollisionBox.x;
         } else {
             a = 0.5f * party->width + party->moveSpeed;
@@ -1420,7 +1420,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     while (TRUE) {
         dir = angleABf(px, pz, tx, tz);
         dd = distABf(px, pz, tx, tz);
-        if (mario->flags & 0x8000) {
+        if (mario->flags & MARIO_FLAG_IS_PUSHING) {
             a = party->width + mario->wPlayerCollisionBox.x;
         } else {
             a = 0.5f * party->width + party->moveSpeed;
@@ -2772,7 +2772,7 @@ BOOL party_slit(PartyEntry* party) {
 #ifdef VERSION_G8ME01
     // US: a partner not yet in slit mode joins in while Mario is on a slit floor
     if (party->slitOn != 1) {
-        if (mario->flags & 0x100000) {
+        if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             if (mario->trigFlags & 0x80000000) {
                 return TRUE;
             }
@@ -2850,13 +2850,13 @@ BOOL party_slit(PartyEntry* party) {
                 }
             }
 #ifdef VERSION_G8ME01
-            if (!partyChkBetweenWalls(party, party->position) && !(mario->flags & 0x100000) &&
+            if (!partyChkBetweenWalls(party, party->position) && !(mario->flags & MARIO_FLAG_PAPER_MODE) &&
                 !(hitGetAttr(party->hitobjFront) & 0x2000) && !(hitGetAttr(party->hitobjPush) & 0x2000))
             {
                 party->slitStep = 40;
             }
 #else
-            if (!(mario->flags & 0x100000) && !(hitGetAttr(party->hitobjFront) & 0x2000) &&
+            if (!(mario->flags & MARIO_FLAG_PAPER_MODE) && !(hitGetAttr(party->hitobjFront) & 0x2000) &&
                 !(hitGetAttr(party->hitobjPush) & 0x2000))
             {
                 party->slitStep = 40;

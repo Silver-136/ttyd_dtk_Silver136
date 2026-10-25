@@ -183,13 +183,13 @@ void bomhei_use_post(PartyEntry* party) {
     if (party->useMotionId >= 70 && party->useMotionId < 100) {
         partyGetAppearPos(party, &party->position);
     }
-    if (player->flags & (1 << 13)) {
-        player->flags &= ~(1 << 13);
+    if (player->flags & (MARIO_FLAG_ACTIVE << 13)) {
+        player->flags &= ~(MARIO_FLAG_ACTIVE << 13);
         if (player->currMotionId == 1) {
             name = "M_W_1";
         } else if (player->currMotionId == 2) {
             name = "M_R_1";
-        } else if (player->flags & (1 << 16)) {
+        } else if (player->flags & (MARIO_FLAG_ACTIVE << 16)) {
             name = "M_J_1B";
         } else {
             name = "M_S_1";
@@ -472,7 +472,7 @@ void bomhei_use_main(PartyEntry* party) {
             }
         } else if (BWORK(party)->timer == (s16)sysMsec2Frame(500)) {
             party->useMotionId = 50;
-            if (mario->flags & 0x2000) {
+            if (mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
                 party->work.bomhei.state = 40;
             } else {
                 party->useMotionId = 50;
@@ -524,7 +524,7 @@ void bomhei_use_main(PartyEntry* party) {
         party->useMotionId = 51;
         party->moveFrames = 40;
     case 51:
-        if (!(mario->flags & 0x2000)) {
+        if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
             if (party->flags & 2) {
                 party->moveSpeed = 0.0f;
             }
@@ -542,8 +542,8 @@ void bomhei_use_main(PartyEntry* party) {
         }
         BWORK(party)->flags &= ~2;
         party->hitobjAction = check_front(party);
-        if (mario->flags & 0x2000) {
-            mario->flags &= ~0x2000;
+        if (mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
+            mario->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         }
         party->flags &= ~0x20;
         BWORK(party)->flags &= ~8;
@@ -691,11 +691,11 @@ void mario_controll(PartyEntry* party) {
     case 10:
         marioAdjustMoveDir();
         marioChgPose("M_U_2");
-        player->flags |= 0x2000;
+        player->flags |= MARIO_FLAG_IS_CARRYING_BOBBERY;
         party->work.bomhei.state = 101;
         break;
     case 20:
-        player->flags |= 0x2000;
+        player->flags |= MARIO_FLAG_IS_CARRYING_BOBBERY;
         party->work.bomhei.state = 21;
         break;
     case 21:
@@ -727,7 +727,7 @@ void mario_controll(PartyEntry* party) {
         break;
     case 31:
         marioChgPose("M_C_1");
-        player->flags &= ~0x2000;
+        player->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         party->work.bomhei.timer = 50;
         party->work.bomhei.state = 32;
         break;

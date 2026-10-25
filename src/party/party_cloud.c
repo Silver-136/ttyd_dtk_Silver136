@@ -71,8 +71,8 @@ void* memset(void*, int, unsigned long);
 void mot_cloud() {
     MarioWork* mario = marioGetPtr();
     
-    if((mario->trigFlags & 0x1) != 0) {
-        mario->trigFlags &= ~0x1;
+    if((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) != 0) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_HAS_INPUT_JUMP|MARIO_FLAG_IS_STEPPING|MARIO_FLAG_IS_FALLING|MARIO_FLAG_IS_JUMPING);
         mario->multiTimer = 0;
         mario->airTimer = 0;

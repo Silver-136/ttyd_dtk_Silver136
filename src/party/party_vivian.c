@@ -57,9 +57,9 @@ void N_marioForceVivianAnime(void) {
 void mot_vivian(void) {
     MarioWork* mario = marioGetPtr();
 
-    if (mario->trigFlags & 1) {
-        mario->trigFlags &= ~1;
-        mario->flags &= ~0xF0000;
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->multiTimer = 0;
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
@@ -85,7 +85,7 @@ void mot_vivian_post(void) {
             Vec zero = {0.0f, 0.0f, 0.0f};
             mario->dispOfs2 = zero;
         }
-        mario->flags &= ~0x400;
+        mario->flags &= ~MARIO_FLAG_WALLS_DISABLED;
         if (party) {
             partyPaperOff(party);
             party->flags &= ~0x100;
@@ -374,7 +374,7 @@ void vivian_use(PartyEntry* party) {
         if (party->work.vivian.shadowSize <= 10.0f) {
             party->work.vivian.shadowSize = 10.0f;
             party->useMotionId = 10;
-            m->flags |= 0x400;
+            m->flags |= MARIO_FLAG_WALLS_DISABLED;
         }
         break;
     case 10:
@@ -414,7 +414,7 @@ void vivian_use(PartyEntry* party) {
     switch (party->useMotionId) {
     case 20:
         party->work.vivian.followOfs = 0.0f;
-        m->flags &= ~0x400;
+        m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
         psndSFXOn_3D(0x934, &party->position);
         party->useMotionId = 21;
     case 21:

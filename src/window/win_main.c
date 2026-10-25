@@ -277,7 +277,7 @@ void winMain(void) {
                 if (mario->characterId == 2) {
                     kpaPauseSE2();
                 }
-                if (mario->flags & 0x80000000) {
+                if (mario->flags & MARIO_FLAG_IS_8_BIT) {
                     wp->flags |= 0x2000;
                 } else {
                     wp->flags &= ~0x2000;
