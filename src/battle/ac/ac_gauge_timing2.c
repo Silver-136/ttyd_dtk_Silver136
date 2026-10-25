@@ -41,207 +41,207 @@ typedef struct GT2Work {
 static void actionCommandDisp(f32 x, f32 y);
 
 s32 battleAcMain_GaugeTiming2(BattleWork *work) {
-  BOOL pressed;
-  const char *sfxNg;
-  BOOL allDone;
-  const char *sfxNames[2]; // FAKE: register-promoted array of the two SFX names; separate scalars swap regs
-  BOOL found;
-  s32 i3;
-  s32 i4;
-  GT2Work *gw = (GT2Work *)work->actionCommands.work;
-  BOOL autoCommand = 0;
-  BattleACDispParams *disp = &work->actionCommands.disp;
-  s32 i;
-  BOOL doAuto;
-  const char *sfxOk;
-  if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
-    autoCommand = 1;
-  }
-  switch (work->actionCommands.mAcState) {
-    case 0:
-      memset(disp, 0, 0x2C);
-      disp->iconX = -300.0f;
-      disp->iconY = 0.0f;
-      disp->slideTimer = 20;
-      disp->gaugeRatio = 0.0f;
-      disp->color = (GXColor){255, 255, 255, 255};
-      gw->frame = 0;
-      gw->frame2 = 0;
-      work->actionCommands.mAcState = 99;
-      work->actionCommands.result = 1;
-      gw->totalFrames = work->actionCommands.params[1];
-      gw->hit = 0;
-      gw->cursor = 0.0f;
-      work->actionCommands.outputParams[0] = 0;
-      gw->width = work->actionCommands.params[2] * 60;
-      for (i = 0; i < work->actionCommands.params[2]; i++) {
-      gw->targets[i] = (f32) ((100 / work->actionCommands.params[2]) * (i + 1));
-      gw->targets[i] -= 4.0f;
-      gw->state[i] = 0;
-      gw->flag[i] = 0;
-      gw->sfx[i] = -1;
+    BOOL pressed;
+    const char *sfxNg;
+    BOOL allDone;
+    const char *sfxNames[2]; // FAKE: register-promoted array of the two SFX names; separate scalars swap regs
+    BOOL found;
+    s32 i3;
+    s32 i4;
+    GT2Work *gw = (GT2Work *)work->actionCommands.work;
+    BOOL autoCommand = 0;
+    BattleACDispParams *disp = &work->actionCommands.disp;
+    s32 i;
+    BOOL doAuto;
+    const char *sfxOk;
+    if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
+        autoCommand = 1;
     }
-
-      gw->button = 0x100;
-      work->actionCommands.outputParams[1] = 0;
-      break;
-
-    case 99:
-      break;
-
-    case 100:
-      if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
-      if (irand(100) >= 0) {
-        work->actionCommands.setupParam = 30;
-        gw->miss = 0;
-      } else {
-        gw->miss = 1;
-        work->actionCommands.setupParam = 30;
-      }
-      work->actionCommands.mAcState = 1001;
-      break;
-    }
-      work->actionCommands.mAcState = 1000;
-
-    case 1000:
-      gw->frame++;
-      pressed = 0;
-      if (BattlePadCheckTrigger(gw->button)) {
-      pressed = 1;
-    }
-      allDone = 1;
-      for (i = 0; i < work->actionCommands.params[2]; i++) {
-      if (!gw->state[i]) {
-        allDone = 0;
-        break;
-      }
-    }
-
-      if ((gw->frame > gw->totalFrames) && allDone) {
-      if (((s32) work->actionCommands.outputParams[0]) > 0) {
-        work->actionCommands.result = 2;
-        work->actionCommands.mResultCount++;
-      } else {
-        work->actionCommands.result = 0;
-      }
-      work->actionCommands.mAcState = 1002;
-      break;
-    }
-      gw->frame2++;
-      gw->cursor = (100.0f * ((f32) gw->frame2)) / ((f32) gw->totalFrames);
-    {
-      sfxNames[0] = "SFX_AC_COMMAND_NG1";
-      for (i3 = 0; i3 < work->actionCommands.params[2]; i3++) {
-        if ((!gw->state[i3]) && (gw->cursor > (6.0f + gw->targets[i3]))) {
-          gw->state[i3] = -1;
-          psndSFXOn(sfxNames[0]);
-        }
-      }
-
-    }
-      gw->hit = 0;
-    {
-      sfxNames[1] = "SFX_AC_PONE1";
-      for (i = 0; i < work->actionCommands.params[2]; i++) {
-        if ((!gw->state[i]) && (__fabs(gw->cursor - gw->targets[i]) <= 6.0)) {
-          gw->hit = 1;
-          if (gw->sfx[i] == (-1)) {
-            gw->sfx[i] = psndSFXOn(sfxNames[1]);
-          }
-        }
-      }
-
-    }
-      doAuto = 0;
-      if (autoCommand) {
-      BOOL hit2 = 0;
-      s32 j;
-      for (j = 0; j < work->actionCommands.params[2]; j++) {
-        if ((!gw->state[j]) && (__fabs(gw->cursor - gw->targets[j]) <= 6.0)) {
-          hit2 = 1;
-          break;
-        }
-      }
-
-      if (hit2) {
-        doAuto = 1;
-      }
-    }
-      if (pressed || doAuto) {
-      sfxNg = "SFX_AC_COMMAND_NG1";
-      sfxOk = "SFX_AC_COMMAND_OK1";
-      found = 0;
-      for (i4 = 0; i4 < work->actionCommands.params[2]; i4++) {
-        if ((!gw->state[i4]) && (!found)) {
-          f64 d = __fabs(gw->cursor - gw->targets[i4]);
-          if (d <= 6.0) {
-            if ((!doAuto) && gw->flag[i4]) {
-              gw->state[i4] = -1;
-              psndSFXOn(sfxNg);
-              found = 1;
-            } else {
-              gw->state[i4] = 1;
-              work->actionCommands.outputParams[0]++;
-              psndSFXOn(sfxOk);
-              found = 1;
+    switch (work->actionCommands.mAcState) {
+        case 0:
+            memset(disp, 0, 0x2C);
+            disp->iconX = -300.0f;
+            disp->iconY = 0.0f;
+            disp->slideTimer = 20;
+            disp->gaugeRatio = 0.0f;
+            disp->color = (GXColor){255, 255, 255, 255};
+            gw->frame = 0;
+            gw->frame2 = 0;
+            work->actionCommands.mAcState = 99;
+            work->actionCommands.result = 1;
+            gw->totalFrames = work->actionCommands.params[1];
+            gw->hit = 0;
+            gw->cursor = 0.0f;
+            work->actionCommands.outputParams[0] = 0;
+            gw->width = work->actionCommands.params[2] * 60;
+            for (i = 0; i < work->actionCommands.params[2]; i++) {
+                gw->targets[i] = (f32) ((100 / work->actionCommands.params[2]) * (i + 1));
+                gw->targets[i] -= 4.0f;
+                gw->state[i] = 0;
+                gw->flag[i] = 0;
+                gw->sfx[i] = -1;
             }
-          } else
-            if (d < __fabs(gw->targets[1] - gw->targets[0])) {
-            gw->flag[i4] = 1;
-            if (i4 == (work->actionCommands.params[2] - 1)) {
-              gw->state[i4] = -1;
-              psndSFXOn(sfxNg);
-              found = 1;
+
+            gw->button = 0x100;
+            work->actionCommands.outputParams[1] = 0;
+            break;
+
+        case 99:
+            break;
+
+        case 100:
+            if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+                if (irand(100) >= 0) {
+                    work->actionCommands.setupParam = 30;
+                    gw->miss = 0;
+                } else {
+                    gw->miss = 1;
+                    work->actionCommands.setupParam = 30;
+                }
+                work->actionCommands.mAcState = 1001;
+                break;
             }
-          }
-        }
-      }
+            work->actionCommands.mAcState = 1000;
+
+        case 1000:
+            gw->frame++;
+            pressed = 0;
+            if (BattlePadCheckTrigger(gw->button)) {
+                pressed = 1;
+            }
+            allDone = 1;
+            for (i = 0; i < work->actionCommands.params[2]; i++) {
+                if (!gw->state[i]) {
+                    allDone = 0;
+                    break;
+                }
+            }
+
+            if ((gw->frame > gw->totalFrames) && allDone) {
+                if (((s32) work->actionCommands.outputParams[0]) > 0) {
+                    work->actionCommands.result = 2;
+                    work->actionCommands.mResultCount++;
+                } else {
+                    work->actionCommands.result = 0;
+                }
+                work->actionCommands.mAcState = 1002;
+                break;
+            }
+            gw->frame2++;
+            gw->cursor = (100.0f * ((f32) gw->frame2)) / ((f32) gw->totalFrames);
+            {
+                sfxNames[0] = "SFX_AC_COMMAND_NG1";
+                for (i3 = 0; i3 < work->actionCommands.params[2]; i3++) {
+                    if ((!gw->state[i3]) && (gw->cursor > (6.0f + gw->targets[i3]))) {
+                        gw->state[i3] = -1;
+                        psndSFXOn(sfxNames[0]);
+                    }
+                }
+
+            }
+            gw->hit = 0;
+            {
+                sfxNames[1] = "SFX_AC_PONE1";
+                for (i = 0; i < work->actionCommands.params[2]; i++) {
+                    if ((!gw->state[i]) && (__fabs(gw->cursor - gw->targets[i]) <= 6.0)) {
+                        gw->hit = 1;
+                        if (gw->sfx[i] == (-1)) {
+                            gw->sfx[i] = psndSFXOn(sfxNames[1]);
+                        }
+                    }
+                }
+
+            }
+            doAuto = 0;
+            if (autoCommand) {
+                BOOL hit2 = 0;
+                s32 j;
+                for (j = 0; j < work->actionCommands.params[2]; j++) {
+                    if ((!gw->state[j]) && (__fabs(gw->cursor - gw->targets[j]) <= 6.0)) {
+                        hit2 = 1;
+                        break;
+                    }
+                }
+
+                if (hit2) {
+                    doAuto = 1;
+                }
+            }
+            if (pressed || doAuto) {
+                sfxNg = "SFX_AC_COMMAND_NG1";
+                sfxOk = "SFX_AC_COMMAND_OK1";
+                found = 0;
+                for (i4 = 0; i4 < work->actionCommands.params[2]; i4++) {
+                    if ((!gw->state[i4]) && (!found)) {
+                        f64 d = __fabs(gw->cursor - gw->targets[i4]);
+                        if (d <= 6.0) {
+                            if ((!doAuto) && gw->flag[i4]) {
+                                gw->state[i4] = -1;
+                                psndSFXOn(sfxNg);
+                                found = 1;
+                            } else {
+                                gw->state[i4] = 1;
+                                work->actionCommands.outputParams[0]++;
+                                psndSFXOn(sfxOk);
+                                found = 1;
+                            }
+                        } else
+                          if (d < __fabs(gw->targets[1] - gw->targets[0])) {
+                            gw->flag[i4] = 1;
+                            if (i4 == (work->actionCommands.params[2] - 1)) {
+                                gw->state[i4] = -1;
+                                psndSFXOn(sfxNg);
+                                found = 1;
+                            }
+                        }
+                    }
+                }
+
+            }
+            break;
+
+        case 1001:
+            work->actionCommands.setupParam--;
+            if (work->actionCommands.setupParam < 0) {
+                if (gw->miss) {
+                    work->actionCommands.result = 2;
+                    work->actionCommands.mResultCount++;
+                    work->actionCommands.outputParams[0] = irand(work->actionCommands.params[2]) + 1;
+                } else {
+                    work->actionCommands.result = 0;
+                    work->actionCommands.outputParams[0] = 0;
+                }
+                work->actionCommands.doneFlags |= 1;
+                return 0;
+            }
+            break;
+
+        case 1002:
+            work->actionCommands.mAcState = 1003;
+
+        case 1003:
+            work->actionCommands.outputParams[1] = 1;
+            work->actionCommands.doneFlags |= 1;
+            gw->endTimer = 60;
+            work->actionCommands.mAcState = 1004;
+
+        case 1004:
+            gw->endTimer--;
+            if (gw->endTimer <= 0) {
+                work->actionCommands.mAcState = 1005;
+            }
+            break;
+
+        case 1005:
+            work->actionCommands.maincb = (void *) 0;
+            work->actionCommands.dispcb = (void *) 0;
+            work->actionCommands.resultcb = (void *) 0;
+            work->actionCommands.deletecb = (void *) 0;
+            return 0;
 
     }
-      break;
 
-    case 1001:
-      work->actionCommands.setupParam--;
-      if (work->actionCommands.setupParam < 0) {
-      if (gw->miss) {
-        work->actionCommands.result = 2;
-        work->actionCommands.mResultCount++;
-        work->actionCommands.outputParams[0] = irand(work->actionCommands.params[2]) + 1;
-      } else {
-        work->actionCommands.result = 0;
-        work->actionCommands.outputParams[0] = 0;
-      }
-      work->actionCommands.doneFlags |= 1;
-      return 0;
-    }
-      break;
-
-    case 1002:
-      work->actionCommands.mAcState = 1003;
-
-    case 1003:
-      work->actionCommands.outputParams[1] = 1;
-      work->actionCommands.doneFlags |= 1;
-      gw->endTimer = 60;
-      work->actionCommands.mAcState = 1004;
-
-    case 1004:
-      gw->endTimer--;
-      if (gw->endTimer <= 0) {
-      work->actionCommands.mAcState = 1005;
-    }
-      break;
-
-    case 1005:
-      work->actionCommands.maincb = (void *) 0;
-      work->actionCommands.dispcb = (void *) 0;
-      work->actionCommands.resultcb = (void *) 0;
-      work->actionCommands.deletecb = (void *) 0;
-      return 0;
-
-  }
-
-  return 1;
+    return 1;
 }
 
 s32 battleAcResult_GaugeTiming2(BattleWork* work) {
@@ -372,13 +372,13 @@ static void actionCommandDisp(f32 x, f32 y) {
         case 1002:
         case 1003:
         case 1004: {
-            Vec p = {0.0f, 0.0f, 0.0f};
-            Vec e0 = {0.0f, 0.0f, 0.0f};
-            Vec e1 = {0.0f, 0.0f, 0.0f};
-            p.x = 28.0f + (-225.0f + x);
-            p.y = 55.0f + y;
-            ICON(&p, 0x10, icon, 1.0f);
-            break;
+                Vec p = {0.0f, 0.0f, 0.0f};
+                Vec e0 = {0.0f, 0.0f, 0.0f};
+                Vec e1 = {0.0f, 0.0f, 0.0f};
+                p.x = 28.0f + (-225.0f + x);
+                p.y = 55.0f + y;
+                ICON(&p, 0x10, icon, 1.0f);
+                break;
         }
         case 1000:
             if (gw->hit) {
@@ -399,23 +399,23 @@ static void actionCommandDisp(f32 x, f32 y) {
 
     y1 = 25.0f + y;
     {
-    f32 y4 = y1 - 25.0f;
-    for (i = 0; i < ac->params[2]; i++) {
-        switch (gw->state[i]) {
-            case 1:
-                id = BTL_TEX(0x3E);
-                break;
-            case -1:
-                id = BTL_TEX(0x3F);
-                break;
-            default:
-                id = BTL_TEX(0x45);
-                break;
+        f32 y4 = y1 - 25.0f;
+        for (i = 0; i < ac->params[2]; i++) {
+            switch (gw->state[i]) {
+                case 1:
+                    id = BTL_TEX(0x3E);
+                    break;
+                case -1:
+                    id = BTL_TEX(0x3F);
+                    break;
+                default:
+                    id = BTL_TEX(0x45);
+                    break;
+            }
+            if ((u16)id != BTL_TEX(0x45)) {
+                btlDispTexPlane(- 288.0f + x + (((f32)gw->width) * gw->targets[i]) / 100.0f, y4, 0.0f, 1.0f, 1.0f, (u16)id, (GXColor){255, 255, 255, 255}, 0);
+            }
         }
-        if ((u16)id != BTL_TEX(0x45)) {
-            btlDispTexPlane(- 288.0f + x + (((f32)gw->width) * gw->targets[i]) / 100.0f, y4, 0.0f, 1.0f, 1.0f, (u16)id, (GXColor){255, 255, 255, 255}, 0);
-        }
-    }
     }
 
     {

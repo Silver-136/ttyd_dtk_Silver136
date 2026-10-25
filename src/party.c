@@ -437,13 +437,13 @@ static inline s32 partyGetFreeSlot2(void) {
 }
 
 char* yoshigroup[7] = {
-        "c_babyyoshi",
-        "c_babyyoshi2",
-        "c_babyyoshi3",
-        "c_babyyoshi4",
-        "c_babyyoshi5",
-        "c_babyyoshi6",
-        "c_babyyoshi7"
+    "c_babyyoshi",
+    "c_babyyoshi2",
+    "c_babyyoshi3",
+    "c_babyyoshi4",
+    "c_babyyoshi5",
+    "c_babyyoshi6",
+    "c_babyyoshi7"
 };
 s32 partyEntryMain(s32 memberId) {
     MarioWork* player;
@@ -668,19 +668,19 @@ void partyReInit(void) {
         party->camId = marioGetCamId();
         if (party) {
             poseId = party->paperAnimGroup;
-        if (poseId >= 0) {
-            animPoseSetMaterialFlagOff(poseId, -1);
-            animPoseSetMaterialLightFlagOn(poseId, 2);
-        }
-            if (party->paperAnimName) {
-            animPoseSetPaperAnimGroup(party->paperAnimGroup, NULL, FALSE);
-            party->paperAnimName = 0;
-            party->flags2 &= ~0x4000000;
-            if (party->paperPoseId >= 0) {
-                animPaperPoseRelease(party->paperPoseId);
-                party->paperPoseId = -1;
+            if (poseId >= 0) {
+                animPoseSetMaterialFlagOff(poseId, -1);
+                animPoseSetMaterialLightFlagOn(poseId, 2);
             }
-        }
+            if (party->paperAnimName) {
+                animPoseSetPaperAnimGroup(party->paperAnimGroup, NULL, FALSE);
+                party->paperAnimName = 0;
+                party->flags2 &= ~0x4000000;
+                if (party->paperPoseId >= 0) {
+                    animPaperPoseRelease(party->paperPoseId);
+                    party->paperPoseId = -1;
+                }
+            }
             party->hitobjAction = NULL;
             party->hitobjFront = NULL;
             party->reserved_148 = 0;
@@ -734,47 +734,47 @@ void N__partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
     PartyFunc func;
 
     switch (prev) {
-    case 11:
-        if (mode != 8) {
+        case 11:
+            if (mode != 8) {
+                mario = party->playerPtr;
+                partyChgRunMo(party);
+                party->moveDir = mario->moveDirection;
+                party->targetDir = mario->directionView;
+                party->displayDirectionTarget = mario->displayDirectionTarget;
+                party->flags &= ~0x70000;
+                partyClearJumpPara(party);
+                partyChgPoseId(party, 1);
+                party->flags2 &= ~0x10;
+                party->flags2 &= ~1;
+                partyShadowOn(party);
+            }
+            break;
+        case 4:
             mario = party->playerPtr;
-            partyChgRunMo(party);
+            partyChgRunM(party);
+            party->flags2 &= ~0x10;
             party->moveDir = mario->moveDirection;
             party->targetDir = mario->directionView;
             party->displayDirectionTarget = mario->displayDirectionTarget;
-            party->flags &= ~0x70000;
+            party->displayDirection = mario->displayDirection;
             partyClearJumpPara(party);
             partyChgPoseId(party, 1);
             party->flags2 &= ~0x10;
-            party->flags2 &= ~1;
+            party->runMode = 1;
+            break;
+        case 12:
             partyShadowOn(party);
-        }
-        break;
-    case 4:
-        mario = party->playerPtr;
-        partyChgRunM(party);
-        party->flags2 &= ~0x10;
-        party->moveDir = mario->moveDirection;
-        party->targetDir = mario->directionView;
-        party->displayDirectionTarget = mario->displayDirectionTarget;
-        party->displayDirection = mario->displayDirection;
-        partyClearJumpPara(party);
-        partyChgPoseId(party, 1);
-        party->flags2 &= ~0x10;
-        party->runMode = 1;
-        break;
-    case 12:
-        partyShadowOn(party);
-        break;
-    case 3:
-        func = partyDataTbl[party->currentMemberId].post_func;
-        if (func) {
-            func(party);
-        }
-        break;
-    case 1:
-    case 2:
-        L_partyForceSlitOff(party);
-        break;
+            break;
+        case 3:
+            func = partyDataTbl[party->currentMemberId].post_func;
+            if (func) {
+                func(party);
+            }
+            break;
+        case 1:
+        case 2:
+            L_partyForceSlitOff(party);
+            break;
     }
 }
 
@@ -891,15 +891,15 @@ void driveParty(PartyEntry* party) {
         party->mutekiTimer--;
     }
     switch (party->runMode) {
-    case 4: case 5: case 6: case 7: case 8: case 14:
-        break;
-    default:
-        if (!(party->flags & PARTY_FLAG_CTRL_OFF)) break;
-        if (vivianGetStatus() != 2) {
-            vivianShadow(party);
-        }
-        partyPreDisp(party);
-        return;
+        case 4: case 5: case 6: case 7: case 8: case 14:
+            break;
+        default:
+            if (!(party->flags & PARTY_FLAG_CTRL_OFF)) break;
+            if (vivianGetStatus() != 2) {
+                vivianShadow(party);
+            }
+            partyPreDisp(party);
+            return;
     }
     if (*(u32*)mario & 0x2000000) {
         party->flags |= PARTY_FLAG_BG_MODE;
@@ -912,92 +912,92 @@ void driveParty(PartyEntry* party) {
     party->hitobjPush = NULL;
     party->hitobjAction = NULL;
     switch (party->runMode) {
-    case 0:
-        if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
-        if (party->trigFlags & 8) {
-            party->trigFlags &= ~8;
-            partyChgPoseId(party, 1);
-            party->moveSpeed = 0.0f;
-            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-            partyChgMot(party, 0);
-        }
-        party_dp = &partyDataTbl[party->currentMemberId];
-        party_dp->move_func(party);
-        break;
-    case 1:
-        if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
-        party_move_mode_wait(party);
-        break;
-    case 2:
-        if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
-        party_dp = &partyDataTbl[party->currentMemberId];
-        party_dp->move_func(party);
-        break;
-    case 9:
-        if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
-        partyForceWalk(party);
-        break;
-    case 3:
-        if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
-        {
-            void (*fn)(PartyEntry*);
+        case 0:
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
+            if (party->trigFlags & 8) {
+                party->trigFlags &= ~8;
+                partyChgPoseId(party, 1);
+                party->moveSpeed = 0.0f;
+                party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+                partyChgMot(party, 0);
+            }
             party_dp = &partyDataTbl[party->currentMemberId];
-            fn = party_dp->use_func;
-            party->flags |= PARTY_FLAG_IS_BEING_USED;
-            fn(party);
-        }
-        break;
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-        partyHello(party);
-        break;
-    case 8:
-        party_dp = &partyDataTbl[party->currentMemberId];
-        party_dp->bye_func(party);
-        break;
-    case 10:
-        if (party->trigFlags & 8) {
-            party->trigFlags &= ~8;
-            partyDokanInit(party);
-            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-        }
-        partyDokanMain(party);
-        break;
-    case 11:
-        if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
-        if (party->trigFlags & 8) {
-            party->trigFlags &= ~8;
-            party->motionStep = 0;
-            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-            L_partyForceSlitOff(party);
-        }
-        partyRideMain(party);
-        break;
-    case 12:
-        if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
-        if (party->trigFlags & 8) {
-            party->trigFlags &= ~8;
-            party->motionStep = 0;
-            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-        }
-        partyRideYoshiMain(party);
-        break;
-    case 13:
-        if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
-        party_damage_return(party);
-        break;
-    case 14:
-        if (party->trigFlags & 8) {
-            party->trigFlags &= ~8;
-        }
-        mario->prevPartyMemberId[party->currentSlotId] = party->currentMemberId;
-        mario->currPartySlotId[party->currentSlotId] = -1;
-        partyPtrTbl[party->currentSlotId] = NULL;
-        animPoseRelease(party->paperAnimGroup);
-        __memFree(HEAP_DEFAULT, party);
-        return;
+            party_dp->move_func(party);
+            break;
+        case 1:
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
+            party_move_mode_wait(party);
+            break;
+        case 2:
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
+            party_dp = &partyDataTbl[party->currentMemberId];
+            party_dp->move_func(party);
+            break;
+        case 9:
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
+            partyForceWalk(party);
+            break;
+        case 3:
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
+            {
+                void (*fn)(PartyEntry*);
+                party_dp = &partyDataTbl[party->currentMemberId];
+                fn = party_dp->use_func;
+                party->flags |= PARTY_FLAG_IS_BEING_USED;
+                fn(party);
+            }
+            break;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+            partyHello(party);
+            break;
+        case 8:
+            party_dp = &partyDataTbl[party->currentMemberId];
+            party_dp->bye_func(party);
+            break;
+        case 10:
+            if (party->trigFlags & 8) {
+                party->trigFlags &= ~8;
+                partyDokanInit(party);
+                party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+            }
+            partyDokanMain(party);
+            break;
+        case 11:
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
+            if (party->trigFlags & 8) {
+                party->trigFlags &= ~8;
+                party->motionStep = 0;
+                party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+                L_partyForceSlitOff(party);
+            }
+            partyRideMain(party);
+            break;
+        case 12:
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
+            if (party->trigFlags & 8) {
+                party->trigFlags &= ~8;
+                party->motionStep = 0;
+                party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+            }
+            partyRideYoshiMain(party);
+            break;
+        case 13:
+            if ((party->flags & PARTY_FLAG_CTRL_OFF) && !(party->flags & PARTY_FLAG_RUN_OFF)) break;
+            party_damage_return(party);
+            break;
+        case 14:
+            if (party->trigFlags & 8) {
+                party->trigFlags &= ~8;
+            }
+            mario->prevPartyMemberId[party->currentSlotId] = party->currentMemberId;
+            mario->currPartySlotId[party->currentSlotId] = -1;
+            partyPtrTbl[party->currentSlotId] = NULL;
+            animPoseRelease(party->paperAnimGroup);
+            __memFree(HEAP_DEFAULT, party);
+            return;
     }
     party_kemuri(party);
     marioGetScreenPos(party->position, &x, &y, &z);
@@ -1067,103 +1067,103 @@ s32 partyHelloMain(PartyEntry* party) {
     u8* mario = (u8*)party->playerPtr;
 
     switch (party->motionStep) {
-    case 0: {
-        f32 x, y, z, h, dy;
-        x = ((MarioWork*)mario)->position.x;
-        y = ((MarioWork*)mario)->position.y;
-        z = ((MarioWork*)mario)->position.z;
-        party->position.x = x;
-        party->position.y = y + 0.5f * ((MarioWork*)mario)->wPlayerCollisionBox.y;
-        party->position.z = z;
-        partyGetAppearPos(party, &party->moveTarget);
-        party->moveFrames = 16;
-        party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
-        party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
-        party->moveSpeed = party->moveDistance / (f32)*&party->moveFrames;
-        h = 0.5f * (f32)*&party->moveFrames;
-        dy = party->moveTarget.y - party->position.y;
-        if (__fabsf(dy) < 1.0f) {
-            dy = 10.0f;
-        } else if (dy >= 0.0f) {
-            dy += 0.5f * party->height;
-        } else {
-            dy = 10.0f;
+        case 0: {
+                f32 x, y, z, h, dy;
+                x = ((MarioWork*)mario)->position.x;
+                y = ((MarioWork*)mario)->position.y;
+                z = ((MarioWork*)mario)->position.z;
+                party->position.x = x;
+                party->position.y = y + 0.5f * ((MarioWork*)mario)->wPlayerCollisionBox.y;
+                party->position.z = z;
+                partyGetAppearPos(party, &party->moveTarget);
+                party->moveFrames = 16;
+                party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
+                party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
+                party->moveSpeed = party->moveDistance / (f32)*&party->moveFrames;
+                h = 0.5f * (f32)*&party->moveFrames;
+                dy = party->moveTarget.y - party->position.y;
+                if (__fabsf(dy) < 1.0f) {
+                    dy = 10.0f;
+                } else if (dy >= 0.0f) {
+                    dy += 0.5f * party->height;
+                } else {
+                    dy = 10.0f;
+                }
+                dy = (dy + dy) / (h * h - h);
+                party->velY = dy * h;
+                party->accelY = -dy;
+                party->flags |= PARTY_FLAG_IS_JUMPING;
+                party->motionStep = 1;
+                break;
         }
-        dy = (dy + dy) / (h * h - h);
-        party->velY = dy * h;
-        party->accelY = -dy;
-        party->flags |= PARTY_FLAG_IS_JUMPING;
-        party->motionStep = 1;
-        break;
-    }
-    case 1:
-        partyMoveNoHosei(party);
-        if (party->velY <= 0.0f) {
-            party->flags &= ~PARTY_FLAG_IS_JUMPING;
-            party->accelY = -1.6f;
-        }
-        if (party->position.y < -2000.0f) {
-            party->moveFrames = 0;
-            party->motionStep = 2;
-            break;
-        }
-        if (party->hitobjStandOn == NULL) {
-            // FAKE: no-op (PartyEntry*) cast on the shrink-timer reads/stores of moveFrames; the plain field access reschedules the int->float conversion
-            s32 n = 16 - ((PartyEntry*)party)->moveFrames;
-        f32 v = (f32)n / 16.0f;
-            Vec s;
-        s = (Vec){0.0f, 0.0f, 0.0f};
-            s.x = s.y = s.z = v;
-            party->scale = s;
-            if (--party->moveFrames <= 0) {
-                ((PartyEntry*)party)->moveFrames = 0;
+        case 1:
+            partyMoveNoHosei(party);
+            if (party->velY <= 0.0f) {
+                party->flags &= ~PARTY_FLAG_IS_JUMPING;
+                party->accelY = -1.6f;
             }
+            if (party->position.y < -2000.0f) {
+                party->moveFrames = 0;
+                party->motionStep = 2;
+                break;
+            }
+            if (party->hitobjStandOn == NULL) {
+                // FAKE: no-op (PartyEntry*) cast on the shrink-timer reads/stores of moveFrames; the plain field access reschedules the int->float conversion
+                s32 n = 16 - ((PartyEntry*)party)->moveFrames;
+                f32 v = (f32)n / 16.0f;
+                Vec s;
+                s = (Vec){0.0f, 0.0f, 0.0f};
+                s.x = s.y = s.z = v;
+                party->scale = s;
+                if (--party->moveFrames <= 0) {
+                    ((PartyEntry*)party)->moveFrames = 0;
+                }
+                break;
+            }
+            party->motionStep = 2;
+        case 2: {
+                f32 v = (f32)(16 - ((PartyEntry*)party)->moveFrames) / 16.0f;
+                Vec s;
+                s = (Vec){0.0f, 0.0f, 0.0f};
+                s.x = s.y = s.z = v;
+                party->scale = s;
+                if (--party->moveFrames > 0) {
+                    break;
+                }
+                ((PartyEntry*)party)->moveFrames = 0;
+                if (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) {
+                    party->moveDir = partyToMovedir(party, 180.0f);
+                    party->targetDir = party->moveDir;
+                    party->displayDirectionTarget = party->displayDirection = 180.0f;
+                } else {
+                    party->moveDir = partyToMovedir(party, 0.0f);
+                    party->targetDir = party->moveDir;
+                    party->displayDirectionTarget = party->displayDirection = 0.0f;
+                }
+                partyClearJumpPara(party);
+                partyChgPoseId(party, 1);
+                party->flags2 &= ~0x10;
+                ret = 1;
+                party->runMode = 1;
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_OUT1 | PSND_SFX_BYPASS_MUTE), (Vec*)(mario + 0x8C));
+                break;
+        }
+        case 10:
+            partyGetAppearPos2(party, &party->position);
+            party->trailPos = party->position;
+            partyChgPoseId(party, 1);
+            party->runMode = 1;
+            ret = 1;
             break;
-        }
-        party->motionStep = 2;
-    case 2: {
-        f32 v = (f32)(16 - ((PartyEntry*)party)->moveFrames) / 16.0f;
-        Vec s;
-        s = (Vec){0.0f, 0.0f, 0.0f};
-        s.x = s.y = s.z = v;
-        party->scale = s;
-        if (--party->moveFrames > 0) {
+        case 20:
+            partyChgPoseId(party, 1);
+            party->runMode = 0;
+            ret = 1;
             break;
-        }
-        ((PartyEntry*)party)->moveFrames = 0;
-        if (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) {
-            party->moveDir = partyToMovedir(party, 180.0f);
-            party->targetDir = party->moveDir;
-            party->displayDirectionTarget = party->displayDirection = 180.0f;
-        } else {
-            party->moveDir = partyToMovedir(party, 0.0f);
-            party->targetDir = party->moveDir;
-            party->displayDirectionTarget = party->displayDirection = 0.0f;
-        }
-        partyClearJumpPara(party);
-        partyChgPoseId(party, 1);
-        party->flags2 &= ~0x10;
-        ret = 1;
-        party->runMode = 1;
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_OUT1 | PSND_SFX_BYPASS_MUTE), (Vec*)(mario + 0x8C));
-        break;
-    }
-    case 10:
-        partyGetAppearPos2(party, &party->position);
-        party->trailPos = party->position;
-        partyChgPoseId(party, 1);
-        party->runMode = 1;
-        ret = 1;
-        break;
-    case 20:
-        partyChgPoseId(party, 1);
-        party->runMode = 0;
-        ret = 1;
-        break;
-    case 30:
-        allPartyForceRideOn();
-        ret = 1;
-        break;
+        case 30:
+            allPartyForceRideOn();
+            ret = 1;
+            break;
     }
     return ret;
 }
@@ -1197,70 +1197,70 @@ s32 partyGoodbyeMain(PartyEntry* party) {
     f32 tx, ty, tz, px, py, pz;
 
     switch (party->motionStep) {
-    case 0:
-        party_dp = &partyDataTbl[party->currentMemberId];
-        party_dp->use_func(party);
-        if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
-            if (vivianGetStatus() == 0) {
+        case 0:
+            party_dp = &partyDataTbl[party->currentMemberId];
+            party_dp->use_func(party);
+            if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+                if (vivianGetStatus() == 0) {
+                    party->motionStep = 10;
+                    party->runMode = 8;
+                }
+            } else if (party->currentMemberId == PARTY_MEMBER_YOSHI) {
+                if (yoshiGetStatus() == 0) {
+                    party->motionStep = 10;
+                    party->runMode = 8;
+                }
+            } else {
                 party->motionStep = 10;
                 party->runMode = 8;
             }
-        } else if (party->currentMemberId == PARTY_MEMBER_YOSHI) {
-            if (yoshiGetStatus() == 0) {
-                party->motionStep = 10;
-                party->runMode = 8;
-            }
-        } else {
-            party->motionStep = 10;
-            party->runMode = 8;
+            break;
+        case 10:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_IN1 | PSND_SFX_BYPASS_MUTE), &mario->position);
+            tx = party->moveTarget.x = mario->position.x;
+            ty = party->moveTarget.y = 0.5f * mario->wPlayerCollisionBox.y + mario->position.y;
+            tz = party->moveTarget.z = mario->position.z;
+            px = party->position.x;
+            pz = party->position.z;
+            py = party->position.y;
+            party->moveSpeed = 4.0f;
+            party->gravity = 1.6f;
+            party->moveDistance = distABf(px, pz, tx, tz);
+            party->targetDir = angleABf(px, pz, tx, tz);
+            ty -= py;
+            party->moveFrames = 15;
+            party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
+            party->velY = (0.5f * ((f32)party->moveFrames * (party->gravity * (f32)party->moveFrames)) + ty) / (f32)party->moveFrames;
+            partyChgPoseId(party, 4);
+            party->motionStep = 11;
+            break;
+        case 11: {
+                f32 t;
+                party->velY -= party->gravity;
+                party->position.y += party->velY;
+                movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
+                party->displayDirection = revise360(50.0f + party->displayDirection);
+                t = party->moveFrames;
+                if (t > 10.0f) {
+                    t = 10.0f;
+                }
+                party->scale.x = t / 10.0f;
+                party->scale.y = party->scale.x;
+                party->scale.z = party->scale.x;
+                if (--party->moveFrames < 0) {
+                    party->motionStep = 12;
+                }
+                break;
         }
-        break;
-    case 10:
-        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_IN1 | PSND_SFX_BYPASS_MUTE), &mario->position);
-        tx = party->moveTarget.x = mario->position.x;
-        ty = party->moveTarget.y = 0.5f * mario->wPlayerCollisionBox.y + mario->position.y;
-        tz = party->moveTarget.z = mario->position.z;
-        px = party->position.x;
-        pz = party->position.z;
-        py = party->position.y;
-        party->moveSpeed = 4.0f;
-        party->gravity = 1.6f;
-        party->moveDistance = distABf(px, pz, tx, tz);
-        party->targetDir = angleABf(px, pz, tx, tz);
-        ty -= py;
-        party->moveFrames = 15;
-        party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
-        party->velY = (0.5f * ((f32)party->moveFrames * (party->gravity * (f32)party->moveFrames)) + ty) / (f32)party->moveFrames;
-        partyChgPoseId(party, 4);
-        party->motionStep = 11;
-        break;
-    case 11: {
-        f32 t;
-        party->velY -= party->gravity;
-        party->position.y += party->velY;
-        movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
-        party->displayDirection = revise360(50.0f + party->displayDirection);
-        t = party->moveFrames;
-        if (t > 10.0f) {
-            t = 10.0f;
-        }
-        party->scale.x = t / 10.0f;
-        party->scale.y = party->scale.x;
-        party->scale.z = party->scale.x;
-        if (--party->moveFrames < 0) {
-            party->motionStep = 12;
-        }
-        break;
-    }
-    case 12:
-        partyChgPoseId(party, 1);
-        party->velY = 0.0f;
-        party->position.y = party->moveTarget.y;
-        partyChgRunMode(party, 14);
-        return 1;
-    case 20:
-        partyChgRunMode(party, 14);
-        return 1;
+        case 12:
+            partyChgPoseId(party, 1);
+            party->velY = 0.0f;
+            party->position.y = party->moveTarget.y;
+            partyChgRunMode(party, 14);
+            return 1;
+        case 20:
+            partyChgRunMode(party, 14);
+            return 1;
     }
     return 0;
 }
@@ -1281,94 +1281,94 @@ s32 partyDokanInit(PartyEntry* party) {
 #endif
     party->flags2 |= 0x10;
     switch (mario->dokanType) {
-    case 2:
-    case 3:
-        partyPaperOn(party, "p_dokan_y");
+        case 2:
+        case 3:
+            partyPaperOn(party, "p_dokan_y");
 #ifdef VERSION_G8ME01
-        partyChgPaper(party, "PM_D_1A");
-        partyChgPoseId(party, 0);
-        party->spinSpeed = 30.0f;
-        party->motionStep = 0;
-        party->flags2 |= 8;
-        party->flags2 |= 0x10;
-        animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
-#else
-        party->spinSpeed = 30.0f;
-        party->motionStep = 0;
-#endif
-        break;
-    case 0:
-        party->scale = (Vec){0.0f, 0.0f, 0.0f};
-#ifdef VERSION_G8ME01
-        party->flags2 |= 8;
-        party->flags2 |= 0x10;
-        animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
-    case 1:
-        partyPaperOn(party, "p_dokan_y");
-        partyChgPaper(party, "PM_D_1A");
-        partyChgPoseId(party, 0);
-        party->spinSpeed = 30.0f;
-        party->motionStep = 0;
-        party->position = mario->position;
-        party->scale = (Vec){1.0f, 1.0f, 1.0f};
-        party->flags2 |= 8;
-        party->flags2 |= 0x10;
-        animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
-#else
-    case 1:
-        partyPaperOn(party, "p_dokan_y");
-        party->spinSpeed = 30.0f;
-        party->motionStep = 0;
-#endif
-        break;
-    case 5:
-        partyPaperOn(party, "p_dokan_x");
-#ifdef VERSION_G8ME01
-        partyChgPaper(party, "PM_D_1A");
-        partyChgPoseId(party, 0);
-#endif
-        party->spinSpeed = 26.0f;
-        party->motionStep = 10;
-        party->rotOfsY = 10.0f;
-#ifdef VERSION_G8ME01
-        party->flags2 |= 8;
-        party->flags2 |= 0x10;
-        animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
-        break;
-    case 4:
-        party->displayDirectionTarget = mario->displayDirection;
-        partyPaperOn(party, "p_dokan_x");
-        partyChgPaper(party, "PM_D_1A");
-        partyChgPoseId(party, 0);
-        party->motionStep = 10;
-        party->rotOfsY = 10.0f;
-        if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
-            party->rot.x = revise360(180.0f + mario->rot.x);
-            party->displayDirectionTarget = mario->displayDirectionTarget;
-            party->displayDirection = mario->displayDirection;
+            partyChgPaper(party, "PM_D_1A");
+            partyChgPoseId(party, 0);
             party->spinSpeed = 30.0f;
-        } else {
-            party->rot.x = revise360(mario->rot.x - 180.0f);
-            party->displayDirectionTarget = mario->displayDirectionTarget;
-            party->displayDirection = mario->displayDirection;
+            party->motionStep = 0;
             party->flags2 |= 8;
-            party->spinSpeed = -30.0f;
+            party->flags2 |= 0x10;
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+#else
+            party->spinSpeed = 30.0f;
+            party->motionStep = 0;
+#endif
+            break;
+        case 0:
+            party->scale = (Vec){0.0f, 0.0f, 0.0f};
+#ifdef VERSION_G8ME01
+            party->flags2 |= 8;
+            party->flags2 |= 0x10;
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+        case 1:
+            partyPaperOn(party, "p_dokan_y");
+            partyChgPaper(party, "PM_D_1A");
+            partyChgPoseId(party, 0);
+            party->spinSpeed = 30.0f;
+            party->motionStep = 0;
             party->position = mario->position;
-            party->dispOfs.z = -4.0f;
-        }
-        party->flags2 |= 0x10;
-        animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
-        break;
+            party->scale = (Vec){1.0f, 1.0f, 1.0f};
+            party->flags2 |= 8;
+            party->flags2 |= 0x10;
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+#else
+        case 1:
+            partyPaperOn(party, "p_dokan_y");
+            party->spinSpeed = 30.0f;
+            party->motionStep = 0;
+#endif
+            break;
+        case 5:
+            partyPaperOn(party, "p_dokan_x");
+#ifdef VERSION_G8ME01
+            partyChgPaper(party, "PM_D_1A");
+            partyChgPoseId(party, 0);
+#endif
+            party->spinSpeed = 26.0f;
+            party->motionStep = 10;
+            party->rotOfsY = 10.0f;
+#ifdef VERSION_G8ME01
+            party->flags2 |= 8;
+            party->flags2 |= 0x10;
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+            break;
+        case 4:
+            party->displayDirectionTarget = mario->displayDirection;
+            partyPaperOn(party, "p_dokan_x");
+            partyChgPaper(party, "PM_D_1A");
+            partyChgPoseId(party, 0);
+            party->motionStep = 10;
+            party->rotOfsY = 10.0f;
+            if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
+                party->rot.x = revise360(180.0f + mario->rot.x);
+                party->displayDirectionTarget = mario->displayDirectionTarget;
+                party->displayDirection = mario->displayDirection;
+                party->spinSpeed = 30.0f;
+            } else {
+                party->rot.x = revise360(mario->rot.x - 180.0f);
+                party->displayDirectionTarget = mario->displayDirectionTarget;
+                party->displayDirection = mario->displayDirection;
+                party->flags2 |= 8;
+                party->spinSpeed = -30.0f;
+                party->position = mario->position;
+                party->dispOfs.z = -4.0f;
+            }
+            party->flags2 |= 0x10;
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+            break;
     }
 #else
         break;
-    case 4:
-        partyPaperOn(party, "p_dokan_x");
-        party->spinSpeed = -26.0f;
-        party->motionStep = 10;
-        party->rotOfsY = 10.0f;
-        party->rot.x = revise360(180.0f + mario->rot.x);
-        break;
+        case 4:
+            partyPaperOn(party, "p_dokan_x");
+            party->spinSpeed = -26.0f;
+            party->motionStep = 10;
+            party->rotOfsY = 10.0f;
+            party->rot.x = revise360(180.0f + mario->rot.x);
+            break;
     }
     if (!(party->flags2 & 2)) {
         if (party->paperAnimName == 0 || strcmp(party->paperAnimName, "PM_D_1A")) {
@@ -1399,117 +1399,117 @@ s32 partyDokanMain(PartyEntry* party) {
 #endif
 
     switch (party->motionStep) {
-    case 0:
-        party->position = mario->position;
-        party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
+        case 0:
+            party->position = mario->position;
+            party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
 #ifndef VERSION_G8ME01
-        party->scale.x += 0.05f;
-        if (party->scale.x >= 1.0f) {
-            party->scale.x = 1.0f;
-        }
-        party->scale.y = party->scale.x;
-        party->scale.z = party->scale.x;
+            party->scale.x += 0.05f;
+            if (party->scale.x >= 1.0f) {
+                party->scale.x = 1.0f;
+            }
+            party->scale.y = party->scale.x;
+            party->scale.z = party->scale.x;
 #endif
-        break;
-    case 10:
-        party->rot.x += party->spinSpeed;
-#ifdef VERSION_G8ME01
-        party->position = mario->position;
-        sincosf(&s, &c, mario->targetYaw);
-        party->position.x = mario->position.x + -5.0f * s;
-        party->position.z = mario->position.z + 5.0f * c;
-#endif
-        break;
-    case 100:
-        switch (party->dirKind) {
-        case 0:
-        case 1:
-            partyChgPaper(party, "PM_D_1B");
-            party->moveFrames = 18;
-            party->motionStep = 101;
-#ifdef VERSION_G8ME01
-            party->flags2 |= 8;
-            party->flags2 |= 0x10;
-            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
             break;
-        case 4:
-            party->rot.x = 0.0f;
+        case 10:
+            party->rot.x += party->spinSpeed;
+#ifdef VERSION_G8ME01
+            party->position = mario->position;
+            sincosf(&s, &c, mario->targetYaw);
+            party->position.x = mario->position.x + -5.0f * s;
+            party->position.z = mario->position.z + 5.0f * c;
+#endif
+            break;
+        case 100:
+            switch (party->dirKind) {
+                case 0:
+                case 1:
+                    partyChgPaper(party, "PM_D_1B");
+                    party->moveFrames = 18;
+                    party->motionStep = 101;
+#ifdef VERSION_G8ME01
+                    party->flags2 |= 8;
+                    party->flags2 |= 0x10;
+                    animPoseSetMaterialLightFlagOff(party->paperAnimGroup, 1);
+                    break;
+                case 4:
+                    party->rot.x = 0.0f;
+                    party->flags2 &= ~8;
+                    party->displayDirectionTarget = party->displayDirection;
+#else
+                    break;
+                case 4:
+#endif
+                    partyChgPaper(party, "PM_D_1B");
+                    party->moveFrames = 18;
+                    party->motionStep = 101;
+                    break;
+            }
+            break;
+        case 101:
+            switch (party->dirKind) {
+                case 0:
+                case 1:
+#ifdef VERSION_G8ME01
+                    party->position.z -= 0.2f;
+#else
+                    party->position.z += -0.2f;
+#endif
+                    break;
+            }
+            if (--party->moveFrames <= 0) {
+                party->motionStep = 102;
+            }
+            break;
+        case 102:
+            party->scale = (Vec){1.0f, 1.0f, 1.0f};
+            party->rot = (Vec){0.0f, 0.0f, 0.0f};
+            party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
+            party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
+            party->displayDirectionTarget = mario->displayDirectionTarget;
+            party->displayDirection = party->displayDirectionTarget;
+            party->targetDir = mario->directionView;
+            party->moveDir = mario->directionView;
+            partyPaperOff(party);
+            animPoseSetMaterialLightFlagOn(party->paperAnimGroup, 1);
             party->flags2 &= ~8;
-            party->displayDirectionTarget = party->displayDirection;
-#else
-            break;
-        case 4:
-#endif
-            partyChgPaper(party, "PM_D_1B");
-            party->moveFrames = 18;
-            party->motionStep = 101;
-            break;
-        }
-        break;
-    case 101:
-        switch (party->dirKind) {
-        case 0:
-        case 1:
-#ifdef VERSION_G8ME01
-            party->position.z -= 0.2f;
-#else
-            party->position.z += -0.2f;
-#endif
-            break;
-        }
-        if (--party->moveFrames <= 0) {
-            party->motionStep = 102;
-        }
-        break;
-    case 102:
-        party->scale = (Vec){1.0f, 1.0f, 1.0f};
-        party->rot = (Vec){0.0f, 0.0f, 0.0f};
-        party->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-        party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-        party->displayDirectionTarget = mario->displayDirectionTarget;
-        party->displayDirection = party->displayDirectionTarget;
-        party->targetDir = mario->directionView;
-        party->moveDir = mario->directionView;
-        partyPaperOff(party);
-        animPoseSetMaterialLightFlagOn(party->paperAnimGroup, 1);
-        party->flags2 &= ~8;
-        party->flags2 &= ~0x10;
-        party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
-        party->flags &= ~PARTY_FLAG_FORCE_FALL;
-        partyShadowOn(party);
-        L_partyVivianTailStart(party);
-        party->trailPos = party->position;
-        partyChgRunMode(party, 1);
-        n = 0;
-        if (partyGetPtr(marioGetPartyId())) {
-            n = 1;
-        }
-        if (partyGetPtr(marioGetExtraPartyId())) {
-            n++;
-        }
-        if ((s8)party->dirKind == 4) {
-            if (n == 1) {
-                party->position.z += -4.0f;
-            } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-                party->position.z += -4.0f;
-                party->position.x += 1.5f;
-            } else {
-                party->position.z += -3.0f;
-                party->position.x += -1.5f;
+            party->flags2 &= ~0x10;
+            party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
+            party->flags &= ~PARTY_FLAG_FORCE_FALL;
+            partyShadowOn(party);
+            L_partyVivianTailStart(party);
+            party->trailPos = party->position;
+            partyChgRunMode(party, 1);
+            n = 0;
+            if (partyGetPtr(marioGetPartyId())) {
+                n = 1;
             }
-        }
-        if ((s8)party->dirKind == 1) {
-            if (n == 1) {
-                party->position.z += -4.0f;
-            } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-                party->position.z += -4.0f;
-                party->position.x += 1.5f;
-            } else {
-                party->position.z += -3.0f;
-                party->position.x += -1.5f;
+            if (partyGetPtr(marioGetExtraPartyId())) {
+                n++;
             }
-        }
-        break;
+            if ((s8)party->dirKind == 4) {
+                if (n == 1) {
+                    party->position.z += -4.0f;
+                } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
+                    party->position.z += -4.0f;
+                    party->position.x += 1.5f;
+                } else {
+                    party->position.z += -3.0f;
+                    party->position.x += -1.5f;
+                }
+            }
+            if ((s8)party->dirKind == 1) {
+                if (n == 1) {
+                    party->position.z += -4.0f;
+                } else if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
+                    party->position.z += -4.0f;
+                    party->position.x += 1.5f;
+                } else {
+                    party->position.z += -3.0f;
+                    party->position.x += -1.5f;
+                }
+            }
+            break;
     }
     return 0;
 }
@@ -1702,214 +1702,214 @@ s32 partyRideChk(PartyEntry* party) {
 }
 
 void partyRideMain(PartyEntry *party) {
-  Vec pos;
-  f32 shrink; // FAKE: one function-scope temp for (f32)(16 - timer), shared by cases 110 and 111 (see docs/FAKES.md)
-  Vec s;
-  f32 dy0;
-  u8 *mario = (u8 *) party->playerPtr;
-  switch (party->motionStep) {
-    case 0:
-      getRidePos(party, &pos);
-      party->moveTarget = pos;
-      party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-      party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-      party->moveFrames = 30;
-      party->moveSpeed = (party->moveDistance) / ((f32) (party->moveFrames));
-      dy0 = (party->moveTarget.y) - party->position.y;
-      party->gravity = 0.4f;
-      party->velY = (dy0 + (0.5f * (((f32) (party->moveFrames)) * ((party->gravity) * ((f32) (party->moveFrames)))))) / ((f32) (party->moveFrames));
-      party->spinSpeed = 1.0f;
-      party->flags2 |= 0x10;
-      partyChgPoseId(party, 4);
-      party->motionStep = 1;
-      break;
+    Vec pos;
+    f32 shrink; // FAKE: one function-scope temp for (f32)(16 - timer), shared by cases 110 and 111 (see docs/FAKES.md)
+    Vec s;
+    f32 dy0;
+    u8 *mario = (u8 *) party->playerPtr;
+    switch (party->motionStep) {
+        case 0:
+            getRidePos(party, &pos);
+            party->moveTarget = pos;
+            party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            party->moveFrames = 30;
+            party->moveSpeed = (party->moveDistance) / ((f32) (party->moveFrames));
+            dy0 = (party->moveTarget.y) - party->position.y;
+            party->gravity = 0.4f;
+            party->velY = (dy0 + (0.5f * (((f32) (party->moveFrames)) * ((party->gravity) * ((f32) (party->moveFrames)))))) / ((f32) (party->moveFrames));
+            party->spinSpeed = 1.0f;
+            party->flags2 |= 0x10;
+            partyChgPoseId(party, 4);
+            party->motionStep = 1;
+            break;
 
-    case 1:
-    {
-      f32 t;
-      party->velY = (party->velY) - (party->gravity);
-      party->position.y = party->position.y + (party->velY);
-      movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
-      party->displayDirection = revise360((party->displayDirection) + (party->spinSpeed));
-      party->spinSpeed += 2.0f;
-      if ((party->spinSpeed) >= 30.0f) {
-        party->spinSpeed = 30.0f;
-      }
-      t = (f32) (party->moveFrames);
-      if (t > 10.0f) {
-        t = 10.0f;
-      }
-      party->scale.x = t / 10.0f;
-      party->scale.y = party->scale.x;
-      party->scale.z = party->scale.x;
-      if ((--(party->moveFrames)) < 0) {
-        party->motionStep = 2;
-      }
-      break;
+        case 1:
+            {
+                f32 t;
+                party->velY = (party->velY) - (party->gravity);
+                party->position.y = party->position.y + (party->velY);
+                movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
+                party->displayDirection = revise360((party->displayDirection) + (party->spinSpeed));
+                party->spinSpeed += 2.0f;
+                if ((party->spinSpeed) >= 30.0f) {
+                    party->spinSpeed = 30.0f;
+                }
+                t = (f32) (party->moveFrames);
+                if (t > 10.0f) {
+                    t = 10.0f;
+                }
+                party->scale.x = t / 10.0f;
+                party->scale.y = party->scale.x;
+                party->scale.z = party->scale.x;
+                if ((--(party->moveFrames)) < 0) {
+                    party->motionStep = 2;
+                }
+                break;
+            }
+
+        case 2:
+            {
+                partyChgPoseId(party, 1);
+                party->velY = 0.0f;
+                party->position.y = party->moveTarget.y;
+                party->scale = (Vec){0.0f, 0.0f, 0.0f};
+                party->flags2 |= 1;
+                partyShadowOff(party);
+                party->motionStep = 10;
+                break;
+            }
+
+        case 10:
+            party->position = *((Vec *) (mario + 0x8C));
+            party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
+            party->moveDir = toMovedir(party->displayDirectionTarget);
+            break;
+
+        case 11:
+            {
+                partyChgPoseId(party, 1);
+                party->flags2 |= 1;
+                partyShadowOff(party);
+                getRidePos(party, &pos);
+                party->scale = (Vec){0.0f, 0.0f, 0.0f};
+                party->position = pos;
+                party->velY = 0.0f;
+                party->displayDirectionTarget = party->playerPtr->displayDirectionTarget;
+                party->moveDir = toMovedir(party->displayDirectionTarget);
+                break;
+            }
+
+        case 20:
+            party->motionStep = 21;
+            party->moveFrames = 16;
+            party->velY = 16.0f;
+            party->work.common.accelY = 0.5f;
+
+        case 21:
+            party->position.y = party->position.y + (party->velY);
+            party->velY = (party->velY) + (party->work.common.accelY);
+            if ((--(party->moveFrames)) > 0) {
+                break;
+            }
+            party->motionStep = 22;
+            party->flags |= PARTY_FLAG_FORCE_FALL;
+            break;
+
+        case 22:
+            break;
+
+        case 200:
+            party->flags &= ~0x70000;
+            party->dispOfs.y = 0.0f;
+            party->scale.x = 1.0f;
+            party->scale.y = party->scale.x;
+            party->scale.z = party->scale.x;
+            partyShadowOn(party);
+            partyChgRunMode(party, 1);
+            break;
+
+        case 100:
+
+        case 101:
+            {
+                f32 x;
+                f32 y;
+                f32 z;
+                f32 h;
+                f32 dy;
+                party->flags2 &= ~1;
+                x = ((MarioWork*)mario)->position.x;
+                y = ((MarioWork*)mario)->position.y;
+                z = ((MarioWork*)mario)->position.z;
+                party->position.x = x;
+                party->position.y = y + (0.5f * (((MarioWork *) mario)->wPlayerCollisionBox.y));
+                party->position.z = z;
+                if (party->motionStep == 100) {
+                    partyGetAppearPos(party, &party->moveTarget);
+                } else {
+                    partyGetAppearPos2(party, &party->moveTarget);
+                }
+                party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
+                party->moveFrames = 16;
+                party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
+                party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
+                party->moveSpeed = (party->moveDistance) / ((f32) (party->moveFrames));
+                h = 0.5f * ((f32) (party->moveFrames));
+                dy = (party->moveTarget.y) - party->position.y;
+                if (__fabsf(dy) < 1.0f) {
+                    dy = 10.0f;
+                } else
+                  if (dy >= 0.0f) {
+                    dy += 0.5f * (party->height);
+                } else {
+                    dy = 10.0f;
+                }
+                dy = (dy + dy) / ((h * h) - h);
+                party->velY = dy * h;
+                party->accelY = -dy;
+                party->flags |= PARTY_FLAG_IS_JUMPING;
+                party->flags2 &= ~1;
+                partyShadowOn(party);
+                party->motionStep = 110;
+                break;
+            }
+
+        case 110:
+            partyMoveNoHosei(party);
+            if ((party->velY) <= 0.0f) {
+                party->flags &= ~PARTY_FLAG_IS_JUMPING;
+                party->accelY = -1.6f;
+            }
+            if (party->position.y < (-2000.0f)) {
+                party->moveFrames = 0;
+                party->motionStep = 111;
+                break;
+            }
+            if (party->hitobjStandOn == NULL) {
+                // FAKE: no-op (PartyEntry*) cast on the shrink-timer reads/stores of moveFrames; the plain field access reschedules the int->float conversion
+                shrink = (f32) (16 - ((((PartyEntry*)party)->moveFrames)));
+                s = (Vec){0.0f, 0.0f, 0.0f};
+                s.x = (s.y = (s.z = shrink / 16.0f));
+                party->scale = s;
+                if ((--(party->moveFrames)) <= 0) {
+                    (((PartyEntry*)party)->moveFrames) = 0;
+                }
+                break;
+            }
+            party->motionStep = 111;
+
+        case 111:
+            shrink = (f32) (16 - ((((PartyEntry*)party)->moveFrames)));
+            {
+                s = (Vec){0.0f, 0.0f, 0.0f};
+                s.x = (s.y = (s.z = shrink / 16.0f));
+                party->scale = s;
+                if ((--(party->moveFrames)) > 0) {
+                    break;
+                }
+                (((PartyEntry*)party)->moveFrames) = 0;
+                party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
+                party->displayDirection = ((MarioWork *) mario)->displayDirectionTarget;
+                party->moveDir = toMovedirSimple(party->displayDirection);
+                party->targetDir = party->moveDir;
+                partyClearJumpPara(party);
+                partyChgPoseId(party, 1);
+                party->flags2 &= ~0x10;
+                party->flags &= ~0x70000;
+                party->dispOfs.y = 0.0f;
+                party->scale.x = 1.0f;
+                party->scale.y = party->scale.x;
+                party->scale.z = party->scale.x;
+                party->flags2 &= ~1;
+                partyShadowOn(party);
+                partyChgRunMode(party, 1);
+                break;
+            }
+
     }
 
-    case 2:
-    {
-      partyChgPoseId(party, 1);
-      party->velY = 0.0f;
-      party->position.y = party->moveTarget.y;
-      party->scale = (Vec){0.0f, 0.0f, 0.0f};
-      party->flags2 |= 1;
-      partyShadowOff(party);
-      party->motionStep = 10;
-      break;
-    }
-
-    case 10:
-      party->position = *((Vec *) (mario + 0x8C));
-      party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
-      party->moveDir = toMovedir(party->displayDirectionTarget);
-      break;
-
-    case 11:
-    {
-      partyChgPoseId(party, 1);
-      party->flags2 |= 1;
-      partyShadowOff(party);
-      getRidePos(party, &pos);
-      party->scale = (Vec){0.0f, 0.0f, 0.0f};
-      party->position = pos;
-      party->velY = 0.0f;
-      party->displayDirectionTarget = party->playerPtr->displayDirectionTarget;
-      party->moveDir = toMovedir(party->displayDirectionTarget);
-      break;
-    }
-
-    case 20:
-      party->motionStep = 21;
-      party->moveFrames = 16;
-      party->velY = 16.0f;
-      party->work.common.accelY = 0.5f;
-
-    case 21:
-      party->position.y = party->position.y + (party->velY);
-      party->velY = (party->velY) + (party->work.common.accelY);
-      if ((--(party->moveFrames)) > 0) {
-      break;
-    }
-      party->motionStep = 22;
-      party->flags |= PARTY_FLAG_FORCE_FALL;
-      break;
-
-    case 22:
-      break;
-
-    case 200:
-      party->flags &= ~0x70000;
-      party->dispOfs.y = 0.0f;
-      party->scale.x = 1.0f;
-      party->scale.y = party->scale.x;
-      party->scale.z = party->scale.x;
-      partyShadowOn(party);
-      partyChgRunMode(party, 1);
-      break;
-
-    case 100:
-
-    case 101:
-    {
-      f32 x;
-      f32 y;
-      f32 z;
-      f32 h;
-      f32 dy;
-      party->flags2 &= ~1;
-      x = ((MarioWork*)mario)->position.x;
-      y = ((MarioWork*)mario)->position.y;
-      z = ((MarioWork*)mario)->position.z;
-      party->position.x = x;
-      party->position.y = y + (0.5f * (((MarioWork *) mario)->wPlayerCollisionBox.y));
-      party->position.z = z;
-      if (party->motionStep == 100) {
-        partyGetAppearPos(party, &party->moveTarget);
-      } else {
-        partyGetAppearPos2(party, &party->moveTarget);
-      }
-      party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
-      party->moveFrames = 16;
-      party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
-      party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
-      party->moveSpeed = (party->moveDistance) / ((f32) (party->moveFrames));
-      h = 0.5f * ((f32) (party->moveFrames));
-      dy = (party->moveTarget.y) - party->position.y;
-      if (__fabsf(dy) < 1.0f) {
-        dy = 10.0f;
-      } else
-        if (dy >= 0.0f) {
-        dy += 0.5f * (party->height);
-      } else {
-        dy = 10.0f;
-      }
-      dy = (dy + dy) / ((h * h) - h);
-      party->velY = dy * h;
-      party->accelY = -dy;
-      party->flags |= PARTY_FLAG_IS_JUMPING;
-      party->flags2 &= ~1;
-      partyShadowOn(party);
-      party->motionStep = 110;
-      break;
-    }
-
-    case 110:
-      partyMoveNoHosei(party);
-      if ((party->velY) <= 0.0f) {
-      party->flags &= ~PARTY_FLAG_IS_JUMPING;
-      party->accelY = -1.6f;
-    }
-      if (party->position.y < (-2000.0f)) {
-      party->moveFrames = 0;
-      party->motionStep = 111;
-      break;
-    }
-      if (party->hitobjStandOn == NULL) {
-      // FAKE: no-op (PartyEntry*) cast on the shrink-timer reads/stores of moveFrames; the plain field access reschedules the int->float conversion
-      shrink = (f32) (16 - ((((PartyEntry*)party)->moveFrames)));
-      s = (Vec){0.0f, 0.0f, 0.0f};
-      s.x = (s.y = (s.z = shrink / 16.0f));
-      party->scale = s;
-      if ((--(party->moveFrames)) <= 0) {
-        (((PartyEntry*)party)->moveFrames) = 0;
-      }
-      break;
-    }
-      party->motionStep = 111;
-
-    case 111:
-    shrink = (f32) (16 - ((((PartyEntry*)party)->moveFrames)));
-    {
-      s = (Vec){0.0f, 0.0f, 0.0f};
-      s.x = (s.y = (s.z = shrink / 16.0f));
-      party->scale = s;
-      if ((--(party->moveFrames)) > 0) {
-        break;
-      }
-      (((PartyEntry*)party)->moveFrames) = 0;
-      party->displayDirectionTarget = ((MarioWork *) mario)->displayDirectionTarget;
-      party->displayDirection = ((MarioWork *) mario)->displayDirectionTarget;
-      party->moveDir = toMovedirSimple(party->displayDirection);
-      party->targetDir = party->moveDir;
-      partyClearJumpPara(party);
-      partyChgPoseId(party, 1);
-      party->flags2 &= ~0x10;
-      party->flags &= ~0x70000;
-      party->dispOfs.y = 0.0f;
-      party->scale.x = 1.0f;
-      party->scale.y = party->scale.x;
-      party->scale.z = party->scale.x;
-      party->flags2 &= ~1;
-      partyShadowOn(party);
-      partyChgRunMode(party, 1);
-      break;
-    }
-
-  }
-
-  party->trailPos = party->position;
+    party->trailPos = party->position;
 }
 static inline void partyChgRunMo(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
@@ -1947,56 +1947,56 @@ s32 partyRideYoshiMain(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
     switch (party->motionStep) {
-    case 0:
-        party->gravity = 1.6f;
-        getRidePos(party, &pos);
-        party->moveTarget = pos;
-        party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-        party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-        party->moveFrames = 15;
-        party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
-        party->velY = (0.5f * ((f32)party->moveFrames * (party->gravity * (f32)party->moveFrames)) + (party->moveTarget.y - party->position.y)) / (f32)party->moveFrames;
-        partyChgPoseId(party, 4);
-        party->motionStep = 1;
-        break;
-    case 1:
-        getRidePos(party, &pos);
-        party->moveTarget = pos;
-        party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-        party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
-        party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
-        party->velY -= party->gravity;
-        party->position.y += party->velY;
-        movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
-        if (--party->moveFrames <= 0) {
-            party->motionStep = 2;
-        }
-        break;
-    case 2:
-        partyChgPoseId(party, 1);
-        party->velY = 0.0f;
-        party->position.y = party->moveTarget.y;
-        party->motionStep = 10;
-        if (party) {
-            party->flags2 |= 0x100000;
-        }
-        break;
-    case 10:
-        getRidePos(party, &pos);
-        party->position = pos;
-        party->displayDirectionTarget = mario->displayDirectionTarget;
-        party->moveDir = toMovedir(party->displayDirectionTarget);
-        if ((u16)mario->currMotionId != MARIO_MOTION_YOSHI) {
-            partyGetAppearPos(party, &pos2);
-            party->position.x = pos2.x;
-            party->position.z = pos2.z;
-            partyChgRunMode(party, 2);
-            if (party) {
-                party->flags2 &= ~0x100000;
+        case 0:
+            party->gravity = 1.6f;
+            getRidePos(party, &pos);
+            party->moveTarget = pos;
+            party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            party->moveFrames = 15;
+            party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
+            party->velY = (0.5f * ((f32)party->moveFrames * (party->gravity * (f32)party->moveFrames)) + (party->moveTarget.y - party->position.y)) / (f32)party->moveFrames;
+            partyChgPoseId(party, 4);
+            party->motionStep = 1;
+            break;
+        case 1:
+            getRidePos(party, &pos);
+            party->moveTarget = pos;
+            party->moveDistance = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            party->targetDir = angleABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
+            party->moveSpeed = party->moveDistance / (f32)party->moveFrames;
+            party->velY -= party->gravity;
+            party->position.y += party->velY;
+            movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
+            if (--party->moveFrames <= 0) {
+                party->motionStep = 2;
             }
-            party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-        }
-        break;
+            break;
+        case 2:
+            partyChgPoseId(party, 1);
+            party->velY = 0.0f;
+            party->position.y = party->moveTarget.y;
+            party->motionStep = 10;
+            if (party) {
+                party->flags2 |= 0x100000;
+            }
+            break;
+        case 10:
+            getRidePos(party, &pos);
+            party->position = pos;
+            party->displayDirectionTarget = mario->displayDirectionTarget;
+            party->moveDir = toMovedir(party->displayDirectionTarget);
+            if ((u16)mario->currMotionId != MARIO_MOTION_YOSHI) {
+                partyGetAppearPos(party, &pos2);
+                party->position.x = pos2.x;
+                party->position.z = pos2.z;
+                partyChgRunMode(party, 2);
+                if (party) {
+                    party->flags2 &= ~0x100000;
+                }
+                party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
+            }
+            break;
     }
     return 0;
 }
@@ -2019,96 +2019,96 @@ void party_damage_return(PartyEntry* party) {
         }
     }
     switch (party->motionStep) {
-    case 0:
-        if (--party->moveFrames > 0) {
-            break;
-        }
-        party->motionStep = 10;
-    case 10:
-        partyChgPoseId(party, 8);
-        party->moveFrames = sysMsec2Frame(200);
-        party->motionStep = 11;
-    case 11:
-        if (--party->moveFrames > 0) {
-            break;
-        }
-        party->velY = 15.0f;
-        party->accelY = 0.0f;
-        party->motionStep = 12;
-    case 12:
-        party->position.y += party->velY;
-        marioGetScreenPos(party->position, &x, &y, &z);
-        marioGetScreenPos(mario->position, &mx, &my, &mz);
-        lim = (my < -100.0f) ? my : -100.0f;
-        if (y <= lim) {
-            party->moveFrames = 32;
-            party->motionStep = 20;
-        }
-        break;
-    case 20:
-        marioGetScreenPos(party->position, &x, &y, &z);
-#ifdef VERSION_G8ME01
-        if (y > -100.0f) {
-            party->position.y += 20.0f;
-        }
-#else
-        if (y <= -100.0f) {
-            party->position.y += 1.0f;
-        }
-#endif
-        if (mario->currMotionId == MARIO_MOTION_DAMAGE) {
-            if (!marioWaitDamageReturnFall()) {
+        case 0:
+            if (--party->moveFrames > 0) {
                 break;
             }
-        } else if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
-            if (!marioWaitDamageTogeReturnFall()) {
+            party->motionStep = 10;
+        case 10:
+            partyChgPoseId(party, 8);
+            party->moveFrames = sysMsec2Frame(200);
+            party->motionStep = 11;
+        case 11:
+            if (--party->moveFrames > 0) {
                 break;
             }
-        }
-        party->motionStep = 21;
-    case 21:
-        if (--party->moveFrames > 0) {
-            break;
-        }
-        partyGetAppearPos(party, &pos);
-        party->position.x = pos.x;
-        party->position.z = pos.z;
-        party->velY = 0.0f;
-        party->accelY = -1.0f;
-        party->moveSpeed = 0.0f;
-        party->flags |= PARTY_FLAG_IS_FALLING;
-        party->flags |= PARTY_FLAG_FORCE_FALL;
-        party->motionStep = 22;
-        break;
-    case 22:
-        marioGetScreenPos(party->position, &x, &y, &z);
-        if (y > 240.0f) {
-            party->flags &= ~PARTY_FLAG_FORCE_FALL;
-        }
-        partyMove(party);
-        if (party->velY <= -6.0f) {
+            party->velY = 15.0f;
             party->accelY = 0.0f;
-            party->velY = -6.0f;
-        }
-        if (party->position.y < -2000.0f) {
-            party->position = mario->position;
-            party->position.y += 200.0f;
-            party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
-        }
-        if (party->hitobjStandOn && !((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
-            partyChgPoseId(party, 9);
-            party->motionStep = 23;
-            party->moveFrames = 30;
-        }
-        break;
-    case 23:
-        if (--party->moveFrames > 0) {
+            party->motionStep = 12;
+        case 12:
+            party->position.y += party->velY;
+            marioGetScreenPos(party->position, &x, &y, &z);
+            marioGetScreenPos(mario->position, &mx, &my, &mz);
+            lim = (my < -100.0f) ? my : -100.0f;
+            if (y <= lim) {
+                party->moveFrames = 32;
+                party->motionStep = 20;
+            }
             break;
-        }
-        partyChgRunMode(party, 2);
-        party->moveMode = 0;
-        party->flags2 &= ~0x10;
-        break;
+        case 20:
+            marioGetScreenPos(party->position, &x, &y, &z);
+#ifdef VERSION_G8ME01
+            if (y > -100.0f) {
+                party->position.y += 20.0f;
+            }
+#else
+            if (y <= -100.0f) {
+                party->position.y += 1.0f;
+            }
+#endif
+            if (mario->currMotionId == MARIO_MOTION_DAMAGE) {
+                if (!marioWaitDamageReturnFall()) {
+                    break;
+                }
+            } else if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
+                if (!marioWaitDamageTogeReturnFall()) {
+                    break;
+                }
+            }
+            party->motionStep = 21;
+        case 21:
+            if (--party->moveFrames > 0) {
+                break;
+            }
+            partyGetAppearPos(party, &pos);
+            party->position.x = pos.x;
+            party->position.z = pos.z;
+            party->velY = 0.0f;
+            party->accelY = -1.0f;
+            party->moveSpeed = 0.0f;
+            party->flags |= PARTY_FLAG_IS_FALLING;
+            party->flags |= PARTY_FLAG_FORCE_FALL;
+            party->motionStep = 22;
+            break;
+        case 22:
+            marioGetScreenPos(party->position, &x, &y, &z);
+            if (y > 240.0f) {
+                party->flags &= ~PARTY_FLAG_FORCE_FALL;
+            }
+            partyMove(party);
+            if (party->velY <= -6.0f) {
+                party->accelY = 0.0f;
+                party->velY = -6.0f;
+            }
+            if (party->position.y < -2000.0f) {
+                party->position = mario->position;
+                party->position.y += 200.0f;
+                party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
+            }
+            if (party->hitobjStandOn && !((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
+                partyChgPoseId(party, 9);
+                party->motionStep = 23;
+                party->moveFrames = 30;
+            }
+            break;
+        case 23:
+            if (--party->moveFrames > 0) {
+                break;
+            }
+            partyChgRunMode(party, 2);
+            party->moveMode = 0;
+            party->flags2 &= ~0x10;
+            break;
     }
     if (vivianGetStatus() != 2) {
         vivianShadow(party);

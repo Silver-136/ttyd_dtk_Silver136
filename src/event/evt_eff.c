@@ -386,501 +386,501 @@ USER_FUNC(evt_eff) {
 }
 
 s32 evt_eff64(EventEntry *event, BOOL isFirstCall) {
-  EvtWord *args;
-  s32 *pi;
-  s32 *pr;
-  s32 *pf;
-  s32 int2Copy;
-  const char *effName;
-  const char *effSet;
-  s32 int2;
-  s32 int3;
-  s32 int4;
-  s32 int5;
-  s32 int6;
-  s32 int7;
-  s32 int8;
-  s32 int9;
-  s32 int10;
-  s32 int11;
-  s32 int12;
-  s32 int13;
-  s32 int14;
-  s32 raw3;
-  f32 float2;
-  f32 float3;
-  f32 float4;
-  f32 float5;
-  f32 float6;
-  f32 float7;
-  f32 float8;
-  f32 float9;
-  f32 float10;
-  f32 float11;
-  f32 float12;
-  f32 float13;
-  f32 float14;
-  EffectEntry *effect;
-  s32 u0a;
-  s32 u0b;
-  s32 u1a;
-  s32 u1b;
-  args = event->args;
-  pi = args;
-  pr = args;
-  pf = args;
-  effName = (const char *) evtGetValue(event, *(pi++));
-  evtGetValue(event, *(pr++));
-  evtGetValue(event, *(pf++));
-  effSet = (const char *) evtGetValue(event, *(pi++));
-  u1a = evtGetValue(event, *(pr++));
-  u1b = evtGetValue(event, *(pf++));
-  int2 = evtGetValue(event, *(pi++));
-  int3 = evtGetValue(event, *(pi++));
-  int4 = evtGetValue(event, *(pi++));
-  int5 = evtGetValue(event, *(pi++));
-  int6 = evtGetValue(event, *(pi++));
-  int7 = evtGetValue(event, *(pi++));
-  int8 = evtGetValue(event, *(pi++));
-  int9 = evtGetValue(event, *(pi++));
-  int10 = evtGetValue(event, *(pi++));
-  int11 = evtGetValue(event, *(pi++));
-  int12 = evtGetValue(event, *(pi++));
-  int13 = evtGetValue(event, *(pi++));
-  int14 = evtGetValue(event, *(pi++));
-  float2 = evtGetFloat(event, *(pr++));
-  float3 = evtGetFloat(event, *(pr++));
-  float4 = evtGetFloat(event, *(pr++));
-  float5 = evtGetFloat(event, *(pr++));
-  float6 = evtGetFloat(event, *(pr++));
-  float7 = evtGetFloat(event, *(pr++));
-  float8 = evtGetFloat(event, *(pr++));
-  float9 = evtGetFloat(event, *(pr++));
-  float10 = evtGetFloat(event, *(pr++));
-  float11 = evtGetFloat(event, *(pr++));
-  float12 = evtGetFloat(event, *(pr++));
-  float13 = evtGetFloat(event, *(pr++));
-  float14 = evtGetFloat(event, *(pr++));
-  raw3 = pf[1];
-  effect = (void *) 0;
-  switch (effGetSetN64(effSet)->id) {
-    case 0:
-      effect = effExpBomN64Entry(float2, float3, float4);
-      break;
-
-    case 1:
-      effect = effKemuri1N64Entry(int2, float3, float4, float5, float6);
-      break;
-
-    case 2:
-      effect = effKemuri2N64Entry(int2, float3, float4, float5, float6, float7);
-      break;
-
-    case 3:
-      effect = effKemuri3N64Entry(float2, float3, float4, float5);
-      break;
-
-    case 4:
-      effect = effKemuri4N64Entry(int2, float3, float4, float5, float6, float7);
-      break;
-
-    case 5:
-      effect = effKemuri5N64Entry(float2, float3, float4, float5);
-      break;
-
-    case 6:
-      effect = effKemuri6N64Entry(int2, float3, float4, float5);
-      break;
-
-    case 7:
-      effect = effKemuri7N64Entry(float2, float3, float4, float5, float6);
-      break;
-
-    case 8:
-      effect = effFlowerN64Entry(int2, int6, float3, float4, float5);
-      break;
-
-    case 9:
-      effect = effSnowN64Entry(int5, float2, float3, float5);
-      break;
-
-    case 10:
-      effect = effSstarN64Entry(int2, float3, float4, float5, float6, float7, float8, (f32) int9);
-      break;
-
-    case 11:
-      effect = effStardustN64Entry(int2, float3, float4, float5, float6);
-      break;
-
-    case 12:
-      effect = effMagic1N64Entry(int2, int9, float3, float4, float5, float6, float7, float8);
-      break;
-
-    case 13:
-      effect = effMagic2N64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 14:
-      effect = effFallLeafN64Entry(int2, int6, float3, float4, float5);
-      break;
-
-    case 15:
-      effect = effHokoriN64Entry(int2, int6, float3, float4, float5);
-      break;
-
-    case 16:
-      effect = effGarekiN64Entry(int2, float3, float4, float5, float6);
-      break;
-
-    case 17:
-      effect = effKemuri8N64Entry(int2, float3, float4, float5);
-      break;
-
-    case 18:
-      effect = effSmallStarN64Entry(int2, int9, float3, float4, float5, float6, float7, float8);
-      break;
-
-    case 19:
-      effect = effBombN64Entry(int2, float3, float4, float5);
-      break;
-
-    case 20:
-      effect = effWangFlushN64Entry(int2, int6, float3, float4, float5);
-      break;
-
-    case 21:
-      effect = effMagic3N64Entry(int2, int6, float3, float4, float5);
-      break;
-
-    case 22:
-      effect = effKemuri9N64Entry(int2, int7, int9, float3, float4, float5, float6, float8);
-      break;
-
-    case 23:
-      effect = effKemuri10N64Entry(int2, float3, float4, float5, float6, float7, float8, float9);
-      break;
-
-    case 25:
-      effect = effRappaN64Entry(int2, int8, float3, float4, float5, float6, float7);
-      break;
-
-    case 26:
-      effect = effStardust2N64Entry(int2, int8, int9, float3, float4, float5, float6, float7);
-      break;
-
-    case 27:
-      effect = effRippleN64Entry(int2, float3, float4, float5, float6);
-      break;
-
-    case 28:
-      effect = effExplosionN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 29:
-      effect = effKemuri11N64Entry(int2, float3, float4, float5);
-      break;
-
-    case 30:
-      effect = effOnpuN64Entry(int2, float3, float4, float5);
-      break;
-
-    case 31:
-      effect = effKemuri12N64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 32:
-      effect = effSweatN64Entry(int2, float3, float4, float5, float6, float7, int8);
-      break;
-
-    case 33:
-      effect = effBalloonN64Entry(int2, float3, float4, float5, float6, float7);
-      break;
-
-    case 34:
-      effect = effCoolLeafN64Entry(int2, float3, float4, float5);
-      break;
-
-    int2Copy = int2;
-    case 35:
-      effect = effBushN64Entry(int2, float3, float4, float5);
-      break;
-
-    case 36:
-      effect = effRotHammerSuccessN64Entry(int2, int6, int7, float3, float4, float5);
-      break;
-
-    case 37:
-      effect = effRotHammerFailN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 38:
-      effect = effGuruguruN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 39:
-      effect = effIceN64Entry(int2, float3, float4, float5);
-      break;
-
-    case 40:
-      effect = effStampN64Entry(int2, float3, float4, float5);
-      break;
-
-    case 41:
-      effect = effThruHammerN64Entry(int2, float3, float4, float5, float6);
-      break;
-
-    case 42:
-      effect = effRadiationN64Entry(int2, float3, float4, float5, float6);
-      break;
-
-    case 43:
-      effect = effThunderN64Entry(int2, float3, float4, float5, float6, float7);
-      break;
-
-    case 44:
-      effect = effBreathFireN64Entry(int2, int9, int10, int11, float3, float4, float5, float6, float7, float8);
-      break;
-
-    case 45:
-      effect = effBrokenBarrierN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 46:
-      effect = effFireRingN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 47:
-      effect = effFireDustN64Entry(int2, int8, int9, float3, float4, float5, float6, float7);
-      break;
-
-    case 48:
-      effect = effFlameN64Entry(int2, float3, float4, float5, float6);
-      break;
-
-    case 49:
-      effect = effBlowN64Entry(int2, int9, float3, float4, float5, float6, float7, float8);
-      break;
-
-    case 50:
-      effect = effBomheiN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 51:
-      effect = effFireFlowerN64Entry(int2, int6, float3, float4, float5);
-      break;
-
-    case 52:
-      effect = effRecoverHeartN64Entry(int2, int6, float3, float4, float5);
-      break;
-
-    case 53:
-      effect = effPturnN64Entry(int2, int6, float3, float4, float5);
-      break;
-
-    case 54:
-      effect = effHitN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 55:
-      effect = effConfettiN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 56:
-      effect = effSnowfallN64Entry(int2, int3);
-      break;
-
-    case 57:
-      effect = effWhirlwindN64Entry(int2, raw3, int5, float4);
-      break;
-
-    case 58:
-      effect = effThunderflareN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 59:
-      effect = effCoinN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 60:
-      effect = effShockN64Entry(int2, float3, float4, float5, float6, float7);
-      break;
-
-    case 61:
-      effect = effBalloonHeihoN64Entry(int2, int8, float3, float4, float5, float6, float7);
-      break;
-
-    case 62:
-      effect = effRubbleN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
-      break;
-
-    case 63:
-      effMagicHoraoN64Entry(int2, int7, int9, int11, float3, float4, float5, float6, float8, float10);
-      break;
-
-    case 64:
-      effect = effLensflareN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 65:
-      effect = effCrystalN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 66:
-      effect = effButterflyN64Entry(int2, float3, float4, float5);
-      break;
-
-    case 67:
-      effect = effAkariChargeN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 68:
-      effect = effAkariSflushN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 69:
-      effect = effOpukuWgunN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
-      break;
-
-    case 70:
-      effect = effOpukuWprotectN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 71:
-      effect = effOpukuWcurtainN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 72:
-      effect = effOpukuJetwN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 73:
-      effect = effOpukuJetwrainN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 74:
-      effect = effPokopiThunderN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
-      break;
-
-    case 75:
-      effect = effWaterDamageN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 76:
-      effect = effSnowmanN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 77:
-      effect = effHolographyN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
-
-    case 78:
-      effect = effTimestampN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+    EvtWord *args;
+    s32 *pi;
+    s32 *pr;
+    s32 *pf;
+    s32 int2Copy;
+    const char *effName;
+    const char *effSet;
+    s32 int2;
+    s32 int3;
+    s32 int4;
+    s32 int5;
+    s32 int6;
+    s32 int7;
+    s32 int8;
+    s32 int9;
+    s32 int10;
+    s32 int11;
+    s32 int12;
+    s32 int13;
+    s32 int14;
+    s32 raw3;
+    f32 float2;
+    f32 float3;
+    f32 float4;
+    f32 float5;
+    f32 float6;
+    f32 float7;
+    f32 float8;
+    f32 float9;
+    f32 float10;
+    f32 float11;
+    f32 float12;
+    f32 float13;
+    f32 float14;
+    EffectEntry *effect;
+    s32 u0a;
+    s32 u0b;
+    s32 u1a;
+    s32 u1b;
+    args = event->args;
+    pi = args;
+    pr = args;
+    pf = args;
+    effName = (const char *) evtGetValue(event, *(pi++));
+    evtGetValue(event, *(pr++));
+    evtGetValue(event, *(pf++));
+    effSet = (const char *) evtGetValue(event, *(pi++));
+    u1a = evtGetValue(event, *(pr++));
+    u1b = evtGetValue(event, *(pf++));
+    int2 = evtGetValue(event, *(pi++));
+    int3 = evtGetValue(event, *(pi++));
+    int4 = evtGetValue(event, *(pi++));
+    int5 = evtGetValue(event, *(pi++));
+    int6 = evtGetValue(event, *(pi++));
+    int7 = evtGetValue(event, *(pi++));
+    int8 = evtGetValue(event, *(pi++));
+    int9 = evtGetValue(event, *(pi++));
+    int10 = evtGetValue(event, *(pi++));
+    int11 = evtGetValue(event, *(pi++));
+    int12 = evtGetValue(event, *(pi++));
+    int13 = evtGetValue(event, *(pi++));
+    int14 = evtGetValue(event, *(pi++));
+    float2 = evtGetFloat(event, *(pr++));
+    float3 = evtGetFloat(event, *(pr++));
+    float4 = evtGetFloat(event, *(pr++));
+    float5 = evtGetFloat(event, *(pr++));
+    float6 = evtGetFloat(event, *(pr++));
+    float7 = evtGetFloat(event, *(pr++));
+    float8 = evtGetFloat(event, *(pr++));
+    float9 = evtGetFloat(event, *(pr++));
+    float10 = evtGetFloat(event, *(pr++));
+    float11 = evtGetFloat(event, *(pr++));
+    float12 = evtGetFloat(event, *(pr++));
+    float13 = evtGetFloat(event, *(pr++));
+    float14 = evtGetFloat(event, *(pr++));
+    raw3 = pf[1];
+    effect = (void *) 0;
+    switch (effGetSetN64(effSet)->id) {
+        case 0:
+            effect = effExpBomN64Entry(float2, float3, float4);
+            break;
+
+        case 1:
+            effect = effKemuri1N64Entry(int2, float3, float4, float5, float6);
+            break;
+
+        case 2:
+            effect = effKemuri2N64Entry(int2, float3, float4, float5, float6, float7);
+            break;
+
+        case 3:
+            effect = effKemuri3N64Entry(float2, float3, float4, float5);
+            break;
+
+        case 4:
+            effect = effKemuri4N64Entry(int2, float3, float4, float5, float6, float7);
+            break;
+
+        case 5:
+            effect = effKemuri5N64Entry(float2, float3, float4, float5);
+            break;
+
+        case 6:
+            effect = effKemuri6N64Entry(int2, float3, float4, float5);
+            break;
+
+        case 7:
+            effect = effKemuri7N64Entry(float2, float3, float4, float5, float6);
+            break;
+
+        case 8:
+            effect = effFlowerN64Entry(int2, int6, float3, float4, float5);
+            break;
+
+        case 9:
+            effect = effSnowN64Entry(int5, float2, float3, float5);
+            break;
+
+        case 10:
+            effect = effSstarN64Entry(int2, float3, float4, float5, float6, float7, float8, (f32) int9);
+            break;
+
+        case 11:
+            effect = effStardustN64Entry(int2, float3, float4, float5, float6);
+            break;
+
+        case 12:
+            effect = effMagic1N64Entry(int2, int9, float3, float4, float5, float6, float7, float8);
+            break;
+
+        case 13:
+            effect = effMagic2N64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 14:
+            effect = effFallLeafN64Entry(int2, int6, float3, float4, float5);
+            break;
+
+        case 15:
+            effect = effHokoriN64Entry(int2, int6, float3, float4, float5);
+            break;
+
+        case 16:
+            effect = effGarekiN64Entry(int2, float3, float4, float5, float6);
+            break;
+
+        case 17:
+            effect = effKemuri8N64Entry(int2, float3, float4, float5);
+            break;
+
+        case 18:
+            effect = effSmallStarN64Entry(int2, int9, float3, float4, float5, float6, float7, float8);
+            break;
+
+        case 19:
+            effect = effBombN64Entry(int2, float3, float4, float5);
+            break;
+
+        case 20:
+            effect = effWangFlushN64Entry(int2, int6, float3, float4, float5);
+            break;
+
+        case 21:
+            effect = effMagic3N64Entry(int2, int6, float3, float4, float5);
+            break;
+
+        case 22:
+            effect = effKemuri9N64Entry(int2, int7, int9, float3, float4, float5, float6, float8);
+            break;
+
+        case 23:
+            effect = effKemuri10N64Entry(int2, float3, float4, float5, float6, float7, float8, float9);
+            break;
+
+        case 25:
+            effect = effRappaN64Entry(int2, int8, float3, float4, float5, float6, float7);
+            break;
+
+        case 26:
+            effect = effStardust2N64Entry(int2, int8, int9, float3, float4, float5, float6, float7);
+            break;
+
+        case 27:
+            effect = effRippleN64Entry(int2, float3, float4, float5, float6);
+            break;
+
+        case 28:
+            effect = effExplosionN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 29:
+            effect = effKemuri11N64Entry(int2, float3, float4, float5);
+            break;
+
+        case 30:
+            effect = effOnpuN64Entry(int2, float3, float4, float5);
+            break;
+
+        case 31:
+            effect = effKemuri12N64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 32:
+            effect = effSweatN64Entry(int2, float3, float4, float5, float6, float7, int8);
+            break;
+
+        case 33:
+            effect = effBalloonN64Entry(int2, float3, float4, float5, float6, float7);
+            break;
+
+        case 34:
+            effect = effCoolLeafN64Entry(int2, float3, float4, float5);
+            break;
+
+            int2Copy = int2;
+        case 35:
+            effect = effBushN64Entry(int2, float3, float4, float5);
+            break;
+
+        case 36:
+            effect = effRotHammerSuccessN64Entry(int2, int6, int7, float3, float4, float5);
+            break;
+
+        case 37:
+            effect = effRotHammerFailN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 38:
+            effect = effGuruguruN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 39:
+            effect = effIceN64Entry(int2, float3, float4, float5);
+            break;
+
+        case 40:
+            effect = effStampN64Entry(int2, float3, float4, float5);
+            break;
+
+        case 41:
+            effect = effThruHammerN64Entry(int2, float3, float4, float5, float6);
+            break;
+
+        case 42:
+            effect = effRadiationN64Entry(int2, float3, float4, float5, float6);
+            break;
+
+        case 43:
+            effect = effThunderN64Entry(int2, float3, float4, float5, float6, float7);
+            break;
+
+        case 44:
+            effect = effBreathFireN64Entry(int2, int9, int10, int11, float3, float4, float5, float6, float7, float8);
+            break;
+
+        case 45:
+            effect = effBrokenBarrierN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 46:
+            effect = effFireRingN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 47:
+            effect = effFireDustN64Entry(int2, int8, int9, float3, float4, float5, float6, float7);
+            break;
+
+        case 48:
+            effect = effFlameN64Entry(int2, float3, float4, float5, float6);
+            break;
+
+        case 49:
+            effect = effBlowN64Entry(int2, int9, float3, float4, float5, float6, float7, float8);
+            break;
+
+        case 50:
+            effect = effBomheiN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 51:
+            effect = effFireFlowerN64Entry(int2, int6, float3, float4, float5);
+            break;
+
+        case 52:
+            effect = effRecoverHeartN64Entry(int2, int6, float3, float4, float5);
+            break;
+
+        case 53:
+            effect = effPturnN64Entry(int2, int6, float3, float4, float5);
+            break;
+
+        case 54:
+            effect = effHitN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 55:
+            effect = effConfettiN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 56:
+            effect = effSnowfallN64Entry(int2, int3);
+            break;
+
+        case 57:
+            effect = effWhirlwindN64Entry(int2, raw3, int5, float4);
+            break;
+
+        case 58:
+            effect = effThunderflareN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 59:
+            effect = effCoinN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 60:
+            effect = effShockN64Entry(int2, float3, float4, float5, float6, float7);
+            break;
+
+        case 61:
+            effect = effBalloonHeihoN64Entry(int2, int8, float3, float4, float5, float6, float7);
+            break;
+
+        case 62:
+            effect = effRubbleN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
+            break;
+
+        case 63:
+            effMagicHoraoN64Entry(int2, int7, int9, int11, float3, float4, float5, float6, float8, float10);
+            break;
+
+        case 64:
+            effect = effLensflareN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 65:
+            effect = effCrystalN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 66:
+            effect = effButterflyN64Entry(int2, float3, float4, float5);
+            break;
+
+        case 67:
+            effect = effAkariChargeN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 68:
+            effect = effAkariSflushN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 69:
+            effect = effOpukuWgunN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
+            break;
+
+        case 70:
+            effect = effOpukuWprotectN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 71:
+            effect = effOpukuWcurtainN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 72:
+            effect = effOpukuJetwN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 73:
+            effect = effOpukuJetwrainN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 74:
+            effect = effPokopiThunderN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
+            break;
+
+        case 75:
+            effect = effWaterDamageN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 76:
+            effect = effSnowmanN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 77:
+            effect = effHolographyN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
+
+        case 78:
+            effect = effTimestampN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 79:
-      effect = effPacknBfireN64Entry(int2, int10, int11, float3, float4, float5, float6, float7, float8, float9);
-      break;
+        case 79:
+            effect = effPacknBfireN64Entry(int2, int10, int11, float3, float4, float5, float6, float7, float8, float9);
+            break;
 
-    case 80:
-      effect = effPokopiPipoN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
-      break;
+        case 80:
+            effect = effPokopiPipoN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
+            break;
 
-    case 81:
-      effect = effCloudN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 81:
+            effect = effCloudN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 82:
-      effect = effDogabonAttackN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 82:
+            effect = effDogabonAttackN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 83:
-      effect = effKamekiTornadeN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 83:
+            effect = effKamekiTornadeN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 84:
-      effect = effStoneSmokeN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 84:
+            effect = effStoneSmokeN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 85:
-      effect = effPokopiPchargeN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 85:
+            effect = effPokopiPchargeN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 86:
-      effect = effHagetakaFlushN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 86:
+            effect = effHagetakaFlushN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 87:
-      effect = effKumokumoN64Entry(int2, int9, float3, float4, float5, float6, float7, float8);
-      break;
+        case 87:
+            effect = effKumokumoN64Entry(int2, int9, float3, float4, float5, float6, float7, float8);
+            break;
 
-    case 88:
-      effect = effVaporN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 88:
+            effect = effVaporN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 89:
-      effect = effFireSparkN64Entry(int2, int9, int10, float3, float4, float5, float6, float7, float8, float11, float12);
-      break;
+        case 89:
+            effect = effFireSparkN64Entry(int2, int9, int10, float3, float4, float5, float6, float7, float8, float11, float12);
+            break;
 
-    case 90:
-      effect = effHoraoSpellN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 90:
+            effect = effHoraoSpellN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 91:
-      effect = effSnowDustN64Entry(int2, int9, int10, float3, float4, float5, float6, float7, float8);
-      break;
+        case 91:
+            effect = effSnowDustN64Entry(int2, int9, int10, float3, float4, float5, float6, float7, float8);
+            break;
 
-    case 92:
-      effect = effAkariPoseN64Entry(int2, int7, int8, float3, float4, float5, float6);
-      break;
+        case 92:
+            effect = effAkariPoseN64Entry(int2, int7, int8, float3, float4, float5, float6);
+            break;
 
-    case 93:
-      effect = effKumokumoChipN64Entry(int2, float3, float4, float5, float6, float7, float8, float9, float10);
-      break;
+        case 93:
+            effect = effKumokumoChipN64Entry(int2, float3, float4, float5, float6, float7, float8, float9, float10);
+            break;
 
-    case 94:
-      effect = effFireworksN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
-      break;
+        case 94:
+            effect = effFireworksN64Entry(int2, int10, float3, float4, float5, float6, float7, float8, float9);
+            break;
 
-    case 95:
-      effect = effGlassN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 95:
+            effect = effGlassN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 96:
-      effect = effBoobooN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 96:
+            effect = effBoobooN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 97:
-      effect = effPikkyoloN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 97:
+            effect = effPikkyoloN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 98:
-      effect = effFreezeN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 98:
+            effect = effFreezeN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 99:
-      effect = effSunlightN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 99:
+            effect = effSunlightN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 100:
-      effect = effReleaseN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 100:
+            effect = effReleaseN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-    case 101:
-      effect = effPeachDustN64Entry(int2, float3, float4, float5, float6, (f32) int7);
-      break;
+        case 101:
+            effect = effPeachDustN64Entry(int2, float3, float4, float5, float6, (f32) int7);
+            break;
 
-    case 102:
-      effect = effStarPowerN64Entry(int2, int7, float3, float4, float5, float6);
-      break;
+        case 102:
+            effect = effStarPowerN64Entry(int2, int7, float3, float4, float5, float6);
+            break;
 
-  }
-
-  if (effect && effName) {
-    if (strcmp(effName, "")) {
-      effSetName(effect, effName);
     }
-  }
-  return 2;
+
+    if (effect && effName) {
+        if (strcmp(effName, "")) {
+            effSetName(effect, effName);
+        }
+    }
+    return 2;
 }
 
 

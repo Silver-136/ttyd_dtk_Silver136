@@ -848,22 +848,22 @@ void npcMain(void) {
                             }
                             trig = 0;
                             { s32 ok_; NPC_CHKMARIO(ok_); if (!ok_) {
-                                trig = 1;
-                            } else {
-                                dist = sqrtf(dx * dx + dz * dz);
-                                if (dist > 0.25f * entry->homingRange) {
-                                    if (dy > entry->territoryLoiter.y) {
-                                        trig = 1;
-                                    } else if (-dy > entry->territoryHoming.y) {
-                                        trig = 1;
-                                    } else if (dist > entry->homingRange) {
-                                        trig = 1;
-                                    } else if ((dist = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, dist))) >
-                                               0.5f * entry->homingAngle) {
-                                        trig = 1;
+                                    trig = 1;
+                                } else {
+                                    dist = sqrtf(dx * dx + dz * dz);
+                                    if (dist > 0.25f * entry->homingRange) {
+                                        if (dy > entry->territoryLoiter.y) {
+                                            trig = 1;
+                                        } else if (-dy > entry->territoryHoming.y) {
+                                            trig = 1;
+                                        } else if (dist > entry->homingRange) {
+                                            trig = 1;
+                                        } else if ((dist = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, dist))) >
+                                                   0.5f * entry->homingAngle) {
+                                            trig = 1;
+                                        }
                                     }
                                 }
-                            }
                             }
                             if (trig) {
                                 entry->interruptFlags |= 2;
@@ -900,49 +900,49 @@ void npcMain(void) {
                             dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
                             trig = 1;
                             { s32 ok_; NPC_CHKMARIO(ok_); if (!ok_) {
-                                trig = 0;
-                            } else {
-                                f32 a14;
+                                    trig = 0;
+                                } else {
+                                    f32 a14;
 #ifdef VERSION_G8ME01
-                                if (sd > 0.25f * entry->searchRange) {
-                                    if (sd > entry->searchRange) {
+                                    if (sd > 0.25f * entry->searchRange) {
+                                        if (sd > entry->searchRange) {
 #else
-                                dist = sqrtf(dist);
-                                if (dist > 0.25f * entry->searchRange) {
-                                    if (dist > entry->searchRange) {
+                                    dist = sqrtf(dist);
+                                    if (dist > 0.25f * entry->searchRange) {
+                                        if (dist > entry->searchRange) {
 #endif
-                                        trig = 0;
-                                        goto done14;
-                                    } else if ((a14 = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, a14))) >
-                                               0.5f * entry->searchAngle) {
-                                        trig = 0;
-                                        goto done14;
+                                            trig = 0;
+                                            goto done14;
+                                        } else if ((a14 = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, a14))) >
+                                                   0.5f * entry->searchAngle) {
+                                            trig = 0;
+                                            goto done14;
+                                        }
                                     }
-                                }
-                                {
-                                    if (dy > entry->territoryLoiter.y) {
-                                        trig = 0;
-                                    } else if (-dy > entry->territoryHoming.y) {
-                                        trig = 0;
-                                    } else if (st == 4) {
-                                        if (entry->territoryType == NPC_TERRITORY_TYPE_CIRCLE) {
-                                            f32 tz = entry->territoryBase.z - entry->position.z;
-                                            f32 tx = entry->territoryBase.x - entry->position.x;
-                                            f32 d = sqrtf(tx * tx + tz * tz);
-                                            if (d > 0.75 * entry->territoryHoming.x) {
-                                                trig = 0;
-                                            }
-                                        } else {
-                                            if (entry->position.x < entry->territoryBase.x - 0.75f * entry->territoryHoming.x ||
-                                                entry->position.x > entry->territoryBase.x + 0.75f * entry->territoryHoming.x ||
-                                                entry->position.z < entry->territoryBase.z - 0.75f * entry->territoryHoming.z ||
-                                                entry->position.z > entry->territoryBase.z + 0.75f * entry->territoryHoming.z) {
-                                                trig = 0;
+                                    {
+                                        if (dy > entry->territoryLoiter.y) {
+                                            trig = 0;
+                                        } else if (-dy > entry->territoryHoming.y) {
+                                            trig = 0;
+                                        } else if (st == 4) {
+                                            if (entry->territoryType == NPC_TERRITORY_TYPE_CIRCLE) {
+                                                f32 tz = entry->territoryBase.z - entry->position.z;
+                                                f32 tx = entry->territoryBase.x - entry->position.x;
+                                                f32 d = sqrtf(tx * tx + tz * tz);
+                                                if (d > 0.75 * entry->territoryHoming.x) {
+                                                    trig = 0;
+                                                }
+                                            } else {
+                                                if (entry->position.x < entry->territoryBase.x - 0.75f * entry->territoryHoming.x ||
+                                                    entry->position.x > entry->territoryBase.x + 0.75f * entry->territoryHoming.x ||
+                                                    entry->position.z < entry->territoryBase.z - 0.75f * entry->territoryHoming.z ||
+                                                    entry->position.z > entry->territoryBase.z + 0.75f * entry->territoryHoming.z) {
+                                                    trig = 0;
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
                             }
                             done14:
                             if (trig) {
@@ -950,7 +950,7 @@ void npcMain(void) {
                             }
                         }
                     }
-interrupt:
+                    interrupt:
                     npcCheckInterrupt(entry);
                 }
                 if (!(entry->flags & 0x800)) {
@@ -1052,46 +1052,46 @@ interrupt:
         FirstStrikeInfo* ann = &fbat->firstStrike;
         if (ann->enabled) {
             switch (ann->type) {
-            case 2:
-                (ann->timer)++;
-                if (ann->timer < 20) {
-                    ann->x = intplGetValue(5, -600.0f, 0.0f, ann->timer, 20);
-                } else if (ann->timer < 80) {
+                case 2:
+                    (ann->timer)++;
+                    if (ann->timer < 20) {
+                        ann->x = intplGetValue(5, -600.0f, 0.0f, ann->timer, 20);
+                    } else if (ann->timer < 80) {
+                        ann->x = 0.0f;
+                    } else if (ann->timer < 100) {
+                        ann->x = intplGetValue(1, 0.0f, 600.0f, ann->timer - 80, 20);
+                    } else {
+                        ann->hitKind = 0;
+                        break;
+                    }
+                    ann->y = 0.0f;
+                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, ann);
+                    break;
+                case 1:
+                    (ann->timer)++;
+                    if (ann->timer > 60) {
+                        ann->hitKind = 0;
+                        break;
+                    }
                     ann->x = 0.0f;
-                } else if (ann->timer < 100) {
-                    ann->x = intplGetValue(1, 0.0f, 600.0f, ann->timer - 80, 20);
-                } else {
-                    ann->hitKind = 0;
+                    ann->y = 0.0f;
+                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, ann);
                     break;
-                }
-                ann->y = 0.0f;
-                dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, ann);
-                break;
-            case 1:
-                (ann->timer)++;
-                if (ann->timer > 60) {
-                    ann->hitKind = 0;
-                    break;
-                }
-                ann->x = 0.0f;
-                ann->y = 0.0f;
-                dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, ann);
-                break;
             }
         }
         switch (fbat->mode) {
-        case 1:
-            npcKoopaModeMain();
-            break;
-        case 2:
-        case 3:
-            fbatTalkMode();
-            break;
-        case 5:
-            fbatBattleMode();
-            break;
-        case 6:
-            break;
+            case 1:
+                npcKoopaModeMain();
+                break;
+            case 2:
+            case 3:
+                fbatTalkMode();
+                break;
+            case 5:
+                fbatBattleMode();
+                break;
+            case 6:
+                break;
         }
         fbat->sandersBombTrigger = 0;
     }
@@ -1245,10 +1245,10 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     }
     len = sqrtf(( dx * dx ) + ( dz * dz) );
     if (len > ( (mario->wPlayerCollisionBox.z > 4.0f ) ? ( 3.0f ) : ( 1.5f))) { if (1 ) {
-        scale = 2.0f / len;
-        dx *= scale;
-        dz *= scale;
-    }
+            scale = 2.0f / len;
+            dx *= scale;
+            dz *= scale;
+        }
     }
     mario->position.x += dx;
     mario->position.z += dz;
@@ -1671,8 +1671,8 @@ void fbatEncountCheck(void) {
             case 0x80000:
                 marioChgMotJump2();
                 if (dbg_battleskip != 1) {
-                animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
-            }
+                    animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
+                }
                 break;
 
             case 0x100000:
@@ -1681,20 +1681,20 @@ void fbatEncountCheck(void) {
 
             case 0x400000:
                 if (dbg_battleskip != 1) {
-                animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
-            }
+                    animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
+                }
                 break;
 
             case 0x800000:
                 if (dbg_battleskip != 1) {
-                animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
-            }
+                    animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
+                }
                 break;
 
             case 0x1000000:
                 if (dbg_battleskip != 1) {
-                animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
-            }
+                    animPoseSetAnim(npc->poseId, npc->tribe->damageAnimation, 1);
+                }
                 break;
 
         }
@@ -1761,8 +1761,8 @@ void fbatEncountCheck(void) {
 
             case 0x1000000:
                 if (npc) {
-                psndSFXOn_3D("SFX_BTL_FLD_ENEMY_DAMAGED1", &npc->position);
-            }
+                    psndSFXOn_3D("SFX_BTL_FLD_ENEMY_DAMAGED1", &npc->position);
+                }
                 break;
 
             case 0x10000000:
@@ -2087,7 +2087,7 @@ void fbatBattleMode(void) {
                 skip = FALSE;
                 win = FALSE;
             }
-        decided:
+            decided:
             if (!skip) {
                 if (!win) {
                     gp->fbatData->firstStrike.enabled = TRUE;
@@ -2147,8 +2147,8 @@ void fbatBattleMode(void) {
                 wp = npcGetWorkPtrInline();
                 num = wp->total;
                 for (result = 0, cur = wp->entries; result < num; result++, cur++) {
-                            if (cur && (cur->flags & 2) && (cur->flags & 0x10000000) &&
-                        (cur->jumpFlags & 0x10000)) {
+                    if (cur && (cur->flags & 2) && (cur->flags & 0x10000000) &&
+                (cur->jumpFlags & 0x10000)) {
                         cur->jumpFlags &= ~0x10000;
                         evtStartID(cur->regularEvtId);
                         animPoseSetLocalTimeRate(cur->poseId, 1.0f);
@@ -2207,7 +2207,7 @@ void fbatBattleMode(void) {
                     if (cur->battleInfo.battleFlags & 0x100) {
                         mult++;
                     }
-                apply:
+                    apply:
                     cur->btlCoinDropCount *= mult;
                     if (!stolen) {
                         npcGroupDead(cur, 0);
