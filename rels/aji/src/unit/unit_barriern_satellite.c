@@ -88,7 +88,30 @@ static BattleUnitKindPart parts[] = {
     {6, "btl_un_barriern_satellite", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
-static StatusVulnerability regist = {80, 100, 100, 0, 90, 100, 0, 0, 100, 90, 100, 90, 100, 95, 90, 0, 100, 100, 90, 100, 100, 100};
+static StatusVulnerability regist = {
+    80, // sleep
+    100, // stop
+    100, // dizzy
+    0, // poison
+    90, // confuse
+    100, // electric
+    0, // burn
+    0, // freeze
+    100, // huge
+    90, // tiny
+    100, // attackUp
+    90, // attackDown
+    100, // defenseUp
+    95, // defenseDown
+    90, // allergic
+    0, // fright
+    100, // galeForce
+    100, // fast
+    90, // slow
+    100, // dodgy
+    100, // invisible
+    100, // ohko
+};
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_2"},

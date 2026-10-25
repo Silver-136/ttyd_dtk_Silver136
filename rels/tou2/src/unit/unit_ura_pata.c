@@ -137,7 +137,30 @@ static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 
 static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist_patapata = {85, 90, 110, 100, 80, 100, 100, 80, 100, 90, 100, 90, 100, 90, 80, 85, 100, 100, 80, 100, 100, 95};
+static StatusVulnerability regist_patapata = {
+    85, // sleep
+    90, // stop
+    110, // dizzy
+    100, // poison
+    80, // confuse
+    100, // electric
+    100, // burn
+    80, // freeze
+    100, // huge
+    90, // tiny
+    100, // attackUp
+    90, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    80, // allergic
+    85, // fright
+    100, // galeForce
+    100, // fast
+    80, // slow
+    100, // dodgy
+    100, // invisible
+    95, // ohko
+};
 
 static BattleUnitKindPart parts_patapata[] = {
     {1, "btl_un_ura_pata", "c_uranoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence_patapata, &defence_patapata_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patapata},
@@ -440,7 +463,30 @@ static BattleUnitDefenseAttr defence_attr = {0};
 
 static BattleUnitDefense defence_turn = {0};
 
-static StatusVulnerability regist = {85, 90, 80, 100, 80, 100, 100, 80, 100, 90, 100, 90, 100, 90, 80, 85, 80, 100, 80, 100, 100, 95};
+static StatusVulnerability regist = {
+    85, // sleep
+    90, // stop
+    80, // dizzy
+    100, // poison
+    80, // confuse
+    100, // electric
+    100, // burn
+    80, // freeze
+    100, // huge
+    90, // tiny
+    100, // attackUp
+    90, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    80, // allergic
+    85, // fright
+    80, // galeForce
+    100, // fast
+    80, // slow
+    100, // dodgy
+    100, // invisible
+    95, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {

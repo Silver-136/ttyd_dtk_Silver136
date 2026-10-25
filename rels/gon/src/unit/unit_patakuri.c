@@ -93,7 +93,30 @@ static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist_patakuri = {100, 110, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 110, 110, 100, 100, 100, 100, 150};
+static StatusVulnerability regist_patakuri = {
+    100, // sleep
+    110, // stop
+    120, // dizzy
+    100, // poison
+    100, // confuse
+    100, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    100, // tiny
+    100, // attackUp
+    100, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    100, // allergic
+    110, // fright
+    110, // galeForce
+    100, // fast
+    100, // slow
+    100, // dodgy
+    100, // invisible
+    150, // ohko
+};
 
 static BattleWeapon weapon_patakuri_attack = {
     NULL, 0, // name..icon
@@ -360,7 +383,30 @@ static BattleUnitDefense defence = {0};
 
 static BattleUnitDefenseAttr defence_attr = {0};
 
-static StatusVulnerability regist = {100, 110, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 110, 100, 100, 100, 100, 100, 150};
+static StatusVulnerability regist = {
+    100, // sleep
+    110, // stop
+    100, // dizzy
+    100, // poison
+    100, // confuse
+    100, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    100, // tiny
+    100, // attackUp
+    100, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    100, // allergic
+    110, // fright
+    100, // galeForce
+    100, // fast
+    100, // slow
+    100, // dodgy
+    100, // invisible
+    150, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {

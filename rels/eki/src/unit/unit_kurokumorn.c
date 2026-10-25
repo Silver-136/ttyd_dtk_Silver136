@@ -85,7 +85,30 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 3}};
 
-static StatusVulnerability regist = {75, 75, 100, 100, 70, 0, 100, 100, 100, 90, 100, 90, 100, 90, 60, 70, 95, 100, 70, 100, 100, 95};
+static StatusVulnerability regist = {
+    75, // sleep
+    75, // stop
+    100, // dizzy
+    100, // poison
+    70, // confuse
+    0, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    90, // tiny
+    100, // attackUp
+    90, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    60, // allergic
+    70, // fright
+    95, // galeForce
+    100, // fast
+    70, // slow
+    100, // dodgy
+    100, // invisible
+    95, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kurokumorn", "c_kmoon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},

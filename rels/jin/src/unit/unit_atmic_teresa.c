@@ -205,7 +205,30 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_atmic_teresa", "c_atmic_trs", 0.0f, 0.0f, 0.0f, 10.0f, 80.0f, 0.0f, 0.0f, 110.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
-static StatusVulnerability regist = {40, 40, 40, 100, 40, 100, 100, 30, 0, 0, 100, 0, 100, 80, 40, 0, 10, 100, 40, 100, 100, 5};
+static StatusVulnerability regist = {
+    40, // sleep
+    40, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    0, // huge
+    0, // tiny
+    100, // attackUp
+    0, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    10, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 BattleWeapon weapon_atmic_teresa_press = {
     NULL, 0, // name..icon

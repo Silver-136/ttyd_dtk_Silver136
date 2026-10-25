@@ -199,7 +199,30 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {0, 40, 40, 0, 40, 0, 100, 20, 0, 0, 100, 0, 100, 80, 40, 0, 0, 100, 30, 0, 0, 0};
+static StatusVulnerability regist = {
+    0, // sleep
+    40, // stop
+    40, // dizzy
+    0, // poison
+    40, // confuse
+    0, // electric
+    100, // burn
+    20, // freeze
+    0, // huge
+    0, // tiny
+    100, // attackUp
+    0, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    30, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
+};
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MGN_S_1"},
@@ -1777,7 +1800,30 @@ static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist_r = {0, 70, 70, 100, 70, 100, 100, 70, 0, 0, 100, 0, 100, 85, 70, 0, 100, 100, 70, 0, 0, 0};
+static StatusVulnerability regist_r = {
+    0, // sleep
+    70, // stop
+    70, // dizzy
+    100, // poison
+    70, // confuse
+    100, // electric
+    100, // burn
+    70, // freeze
+    0, // huge
+    0, // tiny
+    100, // attackUp
+    0, // attackDown
+    100, // defenseUp
+    85, // defenseDown
+    70, // allergic
+    0, // fright
+    100, // galeForce
+    100, // fast
+    70, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
+};
 
 static PoseTableEntry pose_table_r[] = {
     {POSE_TYPE_SLEEP, "MGN_A1_9"},

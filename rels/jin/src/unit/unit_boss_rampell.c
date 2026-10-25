@@ -167,7 +167,30 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {60, 60, 70, 100, 60, 100, 100, 50, 100, 80, 100, 80, 100, 90, 60, 0, 0, 100, 60, 100, 100, 0};
+static StatusVulnerability regist = {
+    60, // sleep
+    60, // stop
+    70, // dizzy
+    100, // poison
+    60, // confuse
+    100, // electric
+    100, // burn
+    50, // freeze
+    100, // huge
+    80, // tiny
+    100, // attackUp
+    80, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    60, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    60, // slow
+    100, // dodgy
+    100, // invisible
+    0, // ohko
+};
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
@@ -570,7 +593,30 @@ static BattleUnitDefense defence_fmario = {0};
 
 static BattleUnitDefenseAttr defence_attr_fmario = {0};
 
-static StatusVulnerability regist_fmario = {50, 50, 70, 50, 50, 50, 100, 40, 100, 70, 100, 70, 100, 90, 50, 0, 0, 100, 50, 100, 100, 3};
+static StatusVulnerability regist_fmario = {
+    50, // sleep
+    50, // stop
+    70, // dizzy
+    50, // poison
+    50, // confuse
+    50, // electric
+    100, // burn
+    40, // freeze
+    100, // huge
+    70, // tiny
+    100, // attackUp
+    70, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    50, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    50, // slow
+    100, // dodgy
+    100, // invisible
+    3, // ohko
+};
 
 static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_SLEEP, "EM_N_1"},

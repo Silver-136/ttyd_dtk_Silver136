@@ -85,7 +85,30 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {0, 80, 95, 100, 90, 100, 100, 85, 0, 0, 100, 0, 100, 90, 50, 0, 90, 100, 50, 0, 0, 0};
+static StatusVulnerability regist = {
+    0, // sleep
+    80, // stop
+    95, // dizzy
+    100, // poison
+    90, // confuse
+    100, // electric
+    100, // burn
+    85, // freeze
+    0, // huge
+    0, // tiny
+    100, // attackUp
+    0, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    50, // allergic
+    0, // fright
+    90, // galeForce
+    100, // fast
+    50, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
+};
 
 BattleWeapon weapon_cortez_saber_float_attack = {
     NULL, 0, // name..icon

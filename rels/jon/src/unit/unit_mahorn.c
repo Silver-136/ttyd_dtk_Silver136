@@ -123,7 +123,30 @@ static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {10, 50, 90, 100, 40, 100, 100, 50, 100, 85, 100, 85, 100, 90, 40, 30, 85, 100, 40, 100, 100, 40};
+static StatusVulnerability regist = {
+    10, // sleep
+    50, // stop
+    90, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    50, // freeze
+    100, // huge
+    85, // tiny
+    100, // attackUp
+    85, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    40, // allergic
+    30, // fright
+    85, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    40, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},

@@ -97,7 +97,30 @@ static BattleUnitDefense defence = {0};
 
 static BattleUnitDefenseAttr defence_attr = {0};
 
-static StatusVulnerability regist = {95, 80, 80, 100, 90, 100, 100, 60, 100, 90, 100, 90, 100, 95, 90, 100, 90, 100, 90, 100, 100, 100};
+static StatusVulnerability regist = {
+    95, // sleep
+    80, // stop
+    80, // dizzy
+    100, // poison
+    90, // confuse
+    100, // electric
+    100, // burn
+    60, // freeze
+    100, // huge
+    90, // tiny
+    100, // attackUp
+    90, // attackDown
+    100, // defenseUp
+    95, // defenseDown
+    90, // allergic
+    100, // fright
+    90, // galeForce
+    100, // fast
+    90, // slow
+    100, // dodgy
+    100, // invisible
+    100, // ohko
+};
 
 static BattleWeapon weapon_sambo_head_attack_4 = {
     NULL, 0, // name..icon

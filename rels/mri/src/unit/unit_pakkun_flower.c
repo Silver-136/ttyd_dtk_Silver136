@@ -90,7 +90,30 @@ static BattleUnitDefense defence = {0};
 
 static BattleUnitDefenseAttr defence_attr = {0};
 
-static StatusVulnerability regist = {100, 70, 40, 100, 80, 100, 100, 60, 100, 85, 100, 85, 100, 85, 70, 10, 30, 100, 70, 100, 100, 30};
+static StatusVulnerability regist = {
+    100, // sleep
+    70, // stop
+    40, // dizzy
+    100, // poison
+    80, // confuse
+    100, // electric
+    100, // burn
+    60, // freeze
+    100, // huge
+    85, // tiny
+    100, // attackUp
+    85, // attackDown
+    100, // defenseUp
+    85, // defenseDown
+    70, // allergic
+    10, // fright
+    30, // galeForce
+    100, // fast
+    70, // slow
+    100, // dodgy
+    100, // invisible
+    30, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {

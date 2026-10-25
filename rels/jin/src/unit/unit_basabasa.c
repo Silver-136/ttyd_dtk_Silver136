@@ -178,7 +178,30 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_basabasa", "c_basabasa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
 };
 
-static StatusVulnerability regist = {80, 85, 105, 100, 80, 100, 100, 80, 100, 90, 100, 90, 100, 95, 80, 80, 95, 100, 80, 100, 100, 95};
+static StatusVulnerability regist = {
+    80, // sleep
+    85, // stop
+    105, // dizzy
+    100, // poison
+    80, // confuse
+    100, // electric
+    100, // burn
+    80, // freeze
+    100, // huge
+    90, // tiny
+    100, // attackUp
+    90, // attackDown
+    100, // defenseUp
+    95, // defenseDown
+    80, // allergic
+    80, // fright
+    95, // galeForce
+    100, // fast
+    80, // slow
+    100, // dodgy
+    100, // invisible
+    95, // ohko
+};
 
 static BattleWeapon weapon_basabasa_attack = {
     NULL, 0, // name..icon

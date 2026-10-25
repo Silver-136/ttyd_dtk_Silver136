@@ -113,7 +113,30 @@ static BattleUnitDefense defence_clauda = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefenseAttr defence_attr_clauda = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist_clauda = {60, 80, 105, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 90, 70, 0, 0, 100, 70, 100, 100, 0};
+static StatusVulnerability regist_clauda = {
+    60, // sleep
+    80, // stop
+    105, // dizzy
+    100, // poison
+    70, // confuse
+    100, // electric
+    100, // burn
+    70, // freeze
+    100, // huge
+    70, // tiny
+    100, // attackUp
+    70, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    70, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    70, // slow
+    100, // dodgy
+    100, // invisible
+    0, // ohko
+};
 
 static BattleDataEntry data_table_clauda[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_clauda},

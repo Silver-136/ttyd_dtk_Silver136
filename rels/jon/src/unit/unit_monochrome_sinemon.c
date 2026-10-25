@@ -83,7 +83,30 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
 static BattleUnitDefense defence_turn = {0};
 
-static StatusVulnerability regist = {50, 100, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 100, 70, 50, 70, 100, 70, 100, 100, 95};
+static StatusVulnerability regist = {
+    50, // sleep
+    100, // stop
+    50, // dizzy
+    100, // poison
+    50, // confuse
+    100, // electric
+    0, // burn
+    70, // freeze
+    100, // huge
+    70, // tiny
+    100, // attackUp
+    70, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    70, // allergic
+    50, // fright
+    70, // galeForce
+    100, // fast
+    70, // slow
+    100, // dodgy
+    100, // invisible
+    95, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_monochrome_sinemon", "c_sinemon_w", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky, pose_table},

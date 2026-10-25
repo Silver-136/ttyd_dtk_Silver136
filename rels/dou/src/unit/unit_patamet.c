@@ -141,7 +141,30 @@ static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 
 static BattleUnitDefenseAttr defence_attr_pata = {{0, 2, 0, 2, 0}};
 
-static StatusVulnerability regist_pata = {75, 90, 105, 100, 75, 100, 0, 75, 100, 90, 100, 90, 100, 95, 75, 60, 90, 100, 75, 100, 100, 95};
+static StatusVulnerability regist_pata = {
+    75, // sleep
+    90, // stop
+    105, // dizzy
+    100, // poison
+    75, // confuse
+    100, // electric
+    0, // burn
+    75, // freeze
+    100, // huge
+    90, // tiny
+    100, // attackUp
+    90, // attackDown
+    100, // defenseUp
+    95, // defenseDown
+    75, // allergic
+    60, // fright
+    90, // galeForce
+    100, // fast
+    75, // slow
+    100, // dodgy
+    100, // invisible
+    95, // ohko
+};
 
 static PoseTableEntry pose_table_pata[] = {
     {POSE_TYPE_SLEEP, "PMT_N_1"},
@@ -506,7 +529,30 @@ static BattleUnitDefense defence_turn = {0};
 
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
-static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 90, 100, 90, 100, 95, 75, 60, 30, 100, 75, 100, 100, 95};
+static StatusVulnerability regist = {
+    75, // sleep
+    90, // stop
+    75, // dizzy
+    100, // poison
+    75, // confuse
+    100, // electric
+    0, // burn
+    75, // freeze
+    100, // huge
+    90, // tiny
+    100, // attackUp
+    90, // attackDown
+    100, // defenseUp
+    95, // defenseDown
+    75, // allergic
+    60, // fright
+    30, // galeForce
+    100, // fast
+    75, // slow
+    100, // dodgy
+    100, // invisible
+    95, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {

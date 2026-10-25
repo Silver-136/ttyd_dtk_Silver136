@@ -89,7 +89,30 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {0, 95, 50, 0, 50, 100, 100, 90, 100, 100, 100, 100, 100, 95, 90, 10, 90, 100, 90, 100, 100, 50};
+static StatusVulnerability regist = {
+    0, // sleep
+    95, // stop
+    50, // dizzy
+    0, // poison
+    50, // confuse
+    100, // electric
+    100, // burn
+    90, // freeze
+    100, // huge
+    100, // tiny
+    100, // attackUp
+    100, // attackDown
+    100, // defenseUp
+    95, // defenseDown
+    90, // allergic
+    10, // fright
+    90, // galeForce
+    100, // fast
+    90, // slow
+    100, // dodgy
+    100, // invisible
+    50, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},

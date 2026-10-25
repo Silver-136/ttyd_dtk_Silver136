@@ -172,7 +172,30 @@ static BattleUnitKindPart parts[] = {
     {11, "btl_un_barriern_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
-static StatusVulnerability regist = {20, 70, 95, 0, 60, 100, 100, 0, 100, 85, 100, 85, 100, 90, 60, 0, 80, 100, 60, 100, 100, 95};
+static StatusVulnerability regist = {
+    20, // sleep
+    70, // stop
+    95, // dizzy
+    0, // poison
+    60, // confuse
+    100, // electric
+    100, // burn
+    0, // freeze
+    100, // huge
+    85, // tiny
+    100, // attackUp
+    85, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    60, // allergic
+    0, // fright
+    80, // galeForce
+    100, // fast
+    60, // slow
+    100, // dodgy
+    100, // invisible
+    95, // ohko
+};
 
 static BattleWeapon weapon_wakka_attack = {
     NULL, 0, // name..icon

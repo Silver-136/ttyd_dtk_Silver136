@@ -77,7 +77,30 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {70, 90, 70, 150, 70, 150, 150, 70, 150, 90, 150, 90, 150, 90, 70, 80, 80, 150, 70, 0, 0, 30};
+static StatusVulnerability regist = {
+    70, // sleep
+    90, // stop
+    70, // dizzy
+    150, // poison
+    70, // confuse
+    150, // electric
+    150, // burn
+    70, // freeze
+    150, // huge
+    90, // tiny
+    150, // attackUp
+    90, // attackDown
+    150, // defenseUp
+    90, // defenseDown
+    70, // allergic
+    80, // fright
+    80, // galeForce
+    150, // fast
+    70, // slow
+    0, // dodgy
+    0, // invisible
+    30, // ohko
+};
 
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},

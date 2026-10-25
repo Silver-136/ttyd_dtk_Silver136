@@ -229,7 +229,30 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
+static StatusVulnerability regist = {
+    40, // sleep
+    50, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
@@ -862,7 +885,30 @@ static BattleUnitDefense defence_fmario = {0};
 
 static BattleUnitDefenseAttr defence_attr_fmario = {0};
 
-static StatusVulnerability regist_fmario = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
+static StatusVulnerability regist_fmario = {
+    40, // sleep
+    50, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_SLEEP, "EM_N_1"},
@@ -1581,7 +1627,30 @@ static BattleUnitDefense defence_christine = {0};
 
 static BattleUnitDefenseAttr defence_attr_christine = {0};
 
-static StatusVulnerability regist_christine = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
+static StatusVulnerability regist_christine = {
+    40, // sleep
+    50, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 static BattleDataEntry data_table_christine[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_christine},
@@ -1939,7 +2008,30 @@ static BattleUnitDefenseAttr defence_attr_nokotarou = {0};
 
 static BattleUnitDefense defence_turn_nokotarou = {0};
 
-static StatusVulnerability regist_nokotarou = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 100, 40, 0, 0, 100, 40, 100, 100, 5};
+static StatusVulnerability regist_nokotarou = {
+    40, // sleep
+    50, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 static BattleDataEntry data_table_nokotarou[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_nokotarou},
@@ -2400,7 +2492,30 @@ static BattleUnitDefense defence_clauda = {0};
 
 static BattleUnitDefenseAttr defence_attr_clauda = {0};
 
-static StatusVulnerability regist_clauda = {40, 50, 100, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
+static StatusVulnerability regist_clauda = {
+    40, // sleep
+    50, // stop
+    100, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 static BattleDataEntry data_table_clauda[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_clauda},
@@ -2626,7 +2741,30 @@ static BattleUnitDefense defence_yoshi = {0};
 
 static BattleUnitDefenseAttr defence_attr_yoshi = {0};
 
-static StatusVulnerability regist_yoshi = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
+static StatusVulnerability regist_yoshi = {
+    40, // sleep
+    50, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 static BattleDataEntry data_table_yoshi[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_yoshi},
@@ -2898,7 +3036,30 @@ BattleUnitDefense defence_vivian = {0};
 
 BattleUnitDefenseAttr defence_attr_vivian = {0};
 
-StatusVulnerability regist_vivian = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
+StatusVulnerability regist_vivian = {
+    40, // sleep
+    50, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 BattleDataEntry data_table_vivian[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_vivian},
@@ -3108,7 +3269,30 @@ BattleUnitDefense defence_sanders = {0};
 
 BattleUnitDefenseAttr defence_attr_sanders = {0};
 
-StatusVulnerability regist_sanders = {40, 50, 40, 100, 40, 100, 100, 100, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
+StatusVulnerability regist_sanders = {
+    40, // sleep
+    50, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    100, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 BattleDataEntry data_table_sanders[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_sanders},
@@ -3315,7 +3499,30 @@ BattleUnitDefense defence_chuchurina = {0};
 
 BattleUnitDefenseAttr defence_attr_chuchurina = {0};
 
-StatusVulnerability regist_chuchurina = {40, 50, 40, 100, 40, 100, 100, 30, 100, 60, 100, 60, 100, 80, 40, 0, 0, 100, 40, 100, 100, 5};
+StatusVulnerability regist_chuchurina = {
+    40, // sleep
+    50, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    80, // defenseDown
+    40, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    40, // slow
+    100, // dodgy
+    100, // invisible
+    5, // ohko
+};
 
 BattleDataEntry data_table_chuchurina[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_chuchurina},

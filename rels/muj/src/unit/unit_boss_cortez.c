@@ -184,7 +184,30 @@ BattleUnitKind unit_boss_cortez = {
     data_table, // dataTable
 };
 
-static StatusVulnerability regist = {40, 40, 50, 100, 50, 100, 100, 25, 0, 0, 100, 0, 100, 90, 50, 0, 0, 100, 50, 0, 0, 0};
+static StatusVulnerability regist = {
+    40, // sleep
+    40, // stop
+    50, // dizzy
+    100, // poison
+    50, // confuse
+    100, // electric
+    100, // burn
+    25, // freeze
+    0, // huge
+    0, // tiny
+    100, // attackUp
+    0, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    50, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    50, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
+};
 
 BattleUnitDefense defence_mode1 = {{1, 1, 1, 1, 1}};
 

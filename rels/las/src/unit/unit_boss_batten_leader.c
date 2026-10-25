@@ -499,7 +499,30 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 BattleUnitDefenseAttr defence_attr_muteki = {{2, 2, 2, 2, 2}};
 
-static StatusVulnerability regist = {30, 30, 30, 100, 30, 100, 100, 30, 100, 60, 100, 60, 100, 75, 30, 0, 0, 100, 30, 100, 100, 1};
+static StatusVulnerability regist = {
+    30, // sleep
+    30, // stop
+    30, // dizzy
+    100, // poison
+    30, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    75, // defenseDown
+    30, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    30, // slow
+    100, // dodgy
+    100, // invisible
+    1, // ohko
+};
 
 u8 defencecopy[8] __attribute__((aligned(4))) = { // defenses[5] copied into the part defense, padded to 8
     1, 1, 1, 1, 1, 0, 0, 0,

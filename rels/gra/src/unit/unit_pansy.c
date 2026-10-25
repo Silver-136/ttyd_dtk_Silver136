@@ -78,7 +78,30 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {95, 30, 30, 100, 50, 100, 100, 30, 100, 30, 100, 30, 100, 30, 30, 100, 80, 100, 30, 100, 100, 30};
+static StatusVulnerability regist = {
+    95, // sleep
+    30, // stop
+    30, // dizzy
+    100, // poison
+    50, // confuse
+    100, // electric
+    100, // burn
+    30, // freeze
+    100, // huge
+    30, // tiny
+    100, // attackUp
+    30, // attackDown
+    100, // defenseUp
+    30, // defenseDown
+    30, // allergic
+    100, // fright
+    80, // galeForce
+    100, // fast
+    30, // slow
+    100, // dodgy
+    100, // invisible
+    30, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_pansy", "c_pansy", 0.0f, 0.0f, 0.0f, 0.0f, 29.0f, 0.0f, 0.0f, 34.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},

@@ -124,7 +124,30 @@ static BattleUnitDefense defence_guard = {{2, 2, 2, 2, 2}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {80, 70, 60, 100, 80, 100, 100, 60, 100, 85, 100, 85, 100, 90, 60, 0, 0, 100, 60, 100, 0, 0};
+static StatusVulnerability regist = {
+    80, // sleep
+    70, // stop
+    60, // dizzy
+    100, // poison
+    80, // confuse
+    100, // electric
+    100, // burn
+    60, // freeze
+    100, // huge
+    85, // tiny
+    100, // attackUp
+    85, // attackDown
+    100, // defenseUp
+    90, // defenseDown
+    60, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    60, // slow
+    100, // dodgy
+    0, // invisible
+    0, // ohko
+};
 
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},

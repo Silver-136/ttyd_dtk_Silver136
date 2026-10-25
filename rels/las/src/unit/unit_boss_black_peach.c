@@ -286,7 +286,30 @@ BattleUnitDefense peach_defence = {{0, 0, 0, 0, 0}};
 
 BattleUnitDefenseAttr peach_defence_attr = {{0, 0, 0, 0, 0}};
 
-StatusVulnerability peach_regist = {30, 30, 30, 100, 30, 100, 100, 0, 100, 60, 100, 60, 100, 75, 30, 0, 0, 100, 30, 100, 100, 0};
+StatusVulnerability peach_regist = {
+    30, // sleep
+    30, // stop
+    30, // dizzy
+    100, // poison
+    30, // confuse
+    100, // electric
+    100, // burn
+    0, // freeze
+    100, // huge
+    60, // tiny
+    100, // attackUp
+    60, // attackDown
+    100, // defenseUp
+    75, // defenseDown
+    30, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    30, // slow
+    100, // dodgy
+    100, // invisible
+    0, // ohko
+};
 
 PoseTableEntry peach_pose_table[] = {
     {POSE_TYPE_SLEEP, "KRT_N_1"},
@@ -891,7 +914,30 @@ BattleUnitDefense queen_defence = {{1, 1, 1, 1, 1}};
 
 BattleUnitDefenseAttr queen_defence_attr = {{0, 0, 0, 0, 0}};
 
-StatusVulnerability queen_regist = {30, 30, 30, 100, 30, 100, 100, 0, 100, 0, 100, 0, 100, 60, 30, 0, 0, 100, 30, 0, 0, 0};
+StatusVulnerability queen_regist = {
+    30, // sleep
+    30, // stop
+    30, // dizzy
+    100, // poison
+    30, // confuse
+    100, // electric
+    100, // burn
+    0, // freeze
+    100, // huge
+    0, // tiny
+    100, // attackUp
+    0, // attackDown
+    100, // defenseUp
+    60, // defenseDown
+    30, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    30, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
+};
 
 BattleUnitDefense queen_muteki_defence = {{99, 99, 99, 99, 99}};
 
@@ -1037,7 +1083,30 @@ BattleUnitDefense queen_hand_1_defence = {{0, 0, 0, 0, 0}};
 
 BattleUnitDefenseAttr queen_hand_1_defence_attr = {{0, 0, 0, 0, 0}};
 
-StatusVulnerability queen_hand_1_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 80, 30, 0, 0, 0, 0, 0, 0, 0};
+StatusVulnerability queen_hand_1_regist = {
+    30, // sleep
+    30, // stop
+    30, // dizzy
+    0, // poison
+    30, // confuse
+    0, // electric
+    100, // burn
+    0, // freeze
+    0, // huge
+    0, // tiny
+    0, // attackUp
+    0, // attackDown
+    0, // defenseUp
+    80, // defenseDown
+    30, // allergic
+    0, // fright
+    0, // galeForce
+    0, // fast
+    0, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
+};
 
 PoseTableEntry queen_hand_1_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
@@ -1129,7 +1198,30 @@ BattleUnitDefense queen_hand_2_defence = {{0, 0, 0, 0, 0}};
 
 BattleUnitDefenseAttr queen_hand_2_defence_attr = {{0, 0, 0, 0, 0}};
 
-StatusVulnerability queen_hand_2_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 80, 30, 0, 0, 0, 0, 0, 0, 0};
+StatusVulnerability queen_hand_2_regist = {
+    30, // sleep
+    30, // stop
+    30, // dizzy
+    0, // poison
+    30, // confuse
+    0, // electric
+    100, // burn
+    0, // freeze
+    0, // huge
+    0, // tiny
+    0, // attackUp
+    0, // attackDown
+    0, // defenseUp
+    80, // defenseDown
+    30, // allergic
+    0, // fright
+    0, // galeForce
+    0, // fast
+    0, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
+};
 
 PoseTableEntry queen_hand_2_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
@@ -1221,7 +1313,30 @@ BattleUnitDefense queen_hand_small_defence = {{0, 0, 0, 0, 0}};
 
 BattleUnitDefenseAttr queen_hand_small_defence_attr = {{0, 0, 0, 0, 0}};
 
-StatusVulnerability queen_hand_small_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 80, 30, 0, 0, 0, 0, 0, 0, 0};
+StatusVulnerability queen_hand_small_regist = {
+    30, // sleep
+    30, // stop
+    30, // dizzy
+    0, // poison
+    30, // confuse
+    0, // electric
+    100, // burn
+    0, // freeze
+    0, // huge
+    0, // tiny
+    0, // attackUp
+    0, // attackDown
+    0, // defenseUp
+    80, // defenseDown
+    30, // allergic
+    0, // fright
+    0, // galeForce
+    0, // fast
+    0, // slow
+    0, // dodgy
+    0, // invisible
+    0, // ohko
+};
 
 PoseTableEntry queen_hand_small_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},

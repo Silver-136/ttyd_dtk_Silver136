@@ -121,7 +121,30 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {30, 30, 30, 100, 30, 100, 100, 0, 0, 0, 100, 0, 100, 70, 30, 0, 0, 100, 30, 0, 0, 1};
+static StatusVulnerability regist = {
+    30, // sleep
+    30, // stop
+    30, // dizzy
+    100, // poison
+    30, // confuse
+    100, // electric
+    100, // burn
+    0, // freeze
+    0, // huge
+    0, // tiny
+    100, // attackUp
+    0, // attackDown
+    100, // defenseUp
+    70, // defenseDown
+    30, // allergic
+    0, // fright
+    0, // galeForce
+    100, // fast
+    30, // slow
+    0, // dodgy
+    0, // invisible
+    1, // ohko
+};
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},

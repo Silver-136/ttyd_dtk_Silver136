@@ -162,7 +162,30 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-static StatusVulnerability regist = {50, 50, 105, 0, 50, 100, 100, 50, 100, 90, 100, 90, 100, 95, 60, 50, 90, 100, 10, 100, 100, 10};
+static StatusVulnerability regist = {
+    50, // sleep
+    50, // stop
+    105, // dizzy
+    0, // poison
+    50, // confuse
+    100, // electric
+    100, // burn
+    50, // freeze
+    100, // huge
+    90, // tiny
+    100, // attackUp
+    90, // attackDown
+    100, // defenseUp
+    95, // defenseDown
+    60, // allergic
+    50, // fright
+    90, // galeForce
+    100, // fast
+    10, // slow
+    100, // dodgy
+    100, // invisible
+    10, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_teresa", "c_teresa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},

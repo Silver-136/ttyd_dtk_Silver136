@@ -84,7 +84,30 @@ static BattleUnitDefense defence_turn = {0};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
-static StatusVulnerability regist = {40, 90, 40, 100, 40, 100, 0, 60, 100, 65, 100, 65, 100, 100, 60, 40, 30, 100, 60, 100, 100, 95};
+static StatusVulnerability regist = {
+    40, // sleep
+    90, // stop
+    40, // dizzy
+    100, // poison
+    40, // confuse
+    100, // electric
+    0, // burn
+    60, // freeze
+    100, // huge
+    65, // tiny
+    100, // attackUp
+    65, // attackDown
+    100, // defenseUp
+    100, // defenseDown
+    60, // allergic
+    40, // fright
+    30, // galeForce
+    100, // fast
+    60, // slow
+    100, // dodgy
+    100, // invisible
+    95, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hyper_sinnosuke", "c_sinnosuke_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, 0, pose_table},

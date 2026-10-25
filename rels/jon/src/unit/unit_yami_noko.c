@@ -128,7 +128,30 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static BattleUnitDefense defence_turn = {0};
 
-static StatusVulnerability regist = {75, 80, 70, 100, 70, 100, 100, 70, 100, 85, 100, 85, 100, 85, 80, 75, 70, 100, 70, 100, 100, 70};
+static StatusVulnerability regist = {
+    75, // sleep
+    80, // stop
+    70, // dizzy
+    100, // poison
+    70, // confuse
+    100, // electric
+    100, // burn
+    70, // freeze
+    100, // huge
+    85, // tiny
+    100, // attackUp
+    85, // attackDown
+    100, // defenseUp
+    85, // defenseDown
+    80, // allergic
+    75, // fright
+    70, // galeForce
+    100, // fast
+    70, // slow
+    100, // dodgy
+    100, // invisible
+    70, // ohko
+};
 
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_yami_noko", "c_yaminoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table},
