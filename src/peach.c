@@ -15,7 +15,6 @@
 #include "mario/mario_balloon.h"
 #include "party.h"
 
-void marioChkOverhead(void);
 #ifdef VERSION_G8ME01
 #define mario_kemuri_80130474 mario_kemuri // US: global name
 #endif

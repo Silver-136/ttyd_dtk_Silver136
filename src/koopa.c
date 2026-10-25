@@ -28,7 +28,6 @@ void kpa3DMain(void);
 #define mario_kemuri_80130474 mario_kemuri // US: global name
 #endif
 void mario_kemuri_80130474(void);
-void marioChkOverhead(void);
 void kpaFireAttack(void);
 void kpaFireMain(void);
 void kpaFall(void);

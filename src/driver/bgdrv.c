@@ -21,7 +21,6 @@ static BackgroundWork work[2];
 //local prototypes
 void bgDisp(CameraId camId, void* param);
 
-//TODO: inline function? I see nothing in the symbol map
 #define bgGetWork() (gp->inBattle ? &work[1] : &work[0])
 
 void bgInit(void) {

@@ -208,7 +208,6 @@ static inline void jabaraLand(f32 y_, void* h_) {
     JAB_TAIL(MOTSUB_)
 
 void mario_land_kemuri(void);
-void marioChkOverhead(void);
 void* marioSearchHead(Vec* p, f32* h, f32 r);
 void swingMain(void);
 void* marioChkLandon(f32* outY, f32 y);

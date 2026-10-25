@@ -88,7 +88,6 @@ WinMgrDesc itemdrv_window_desc[4] = {
     {0, 0, 8, -175, 120, 350, 42, {0xE1, 0xD7, 0x9B, 0xFF}, NULL, winNameDisp2},
 };
 
-//TODO: inline function? I see nothing in the symbol map
 #define itemGetWork() (gp->inBattle ? &work[1] : &work[0])
 
 inline void itemCheckBadge(ItemEntry* entry) {

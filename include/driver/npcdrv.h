@@ -285,7 +285,7 @@ void npcRecoveryFieldNpc(void);
 void npcInit(void);
 void npcReset(BOOL inBattle);
 s32 npcGetReactionOfLivingBody(BOOL inBattle);
-s32 npcEntry(const char* a1, const char* animName);
+s32 npcEntry(const char* description, const char* animName);
 NpcTribeInfo* npcGetTribe(const char* tribeName);
 void npcDelete(NpcEntry* entry);
 void npcDeleteGroup(NpcEntry* entry);

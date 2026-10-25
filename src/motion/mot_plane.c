@@ -22,7 +22,6 @@
 #ifdef VERSION_G8ME01
 #endif
 
-void marioChkOverhead(void);
 
 #define SFX3D(id, pos) ((s32 (*)(s32, Vec*))psndSFXOn_3D)(id, pos)
 

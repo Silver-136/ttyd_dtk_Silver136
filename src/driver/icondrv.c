@@ -114,11 +114,9 @@ void _callback_bin(s32 error, DVDFileInfo* info);
 void iconDisp(CameraId camId, void* param);
 void iconGX(Mtx mtx, IconEntry* entry);
 
-// TODO: inline function? I see nothing in the symbol map
 #define iconGetWork() (gp->inBattle ? &work[1] : &work[0])
 
 
-// TODO: remove? no function in original symbol map
 inline IconEntry* iconFindIn(IconWork* wp, const char* name) {
     int i;
     IconEntry* entry = wp->entries;

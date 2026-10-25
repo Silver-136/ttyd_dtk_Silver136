@@ -81,10 +81,8 @@ void npcDisp_blur(CameraId camId, void* param);
 void _npcDeleteGroup(NpcEntry* entry);
 
 #define npcGetWorkPtr2(inBattle) ((inBattle) ? &work.battle : &work.field)
-// TODO: inlining?
 #define npcGetWorkPtrInline() (gp->inBattle ? &work.battle : &work.field)
 
-// TODO: inlining?
 NpcWork* npcGetWorkPtr(void) {
     return gp->inBattle ? &work.battle : &work.field;
 }
@@ -478,9 +476,7 @@ s32 npcGetReactionOfLivingBody(BOOL inBattle) {
     return npcGetWorkPtr2(inBattle)->count;
 }
 
-// TODO: fix entry->position delayed set-Vec with r6/r30
-// TODO: a1 is desc/ription?
-s32 npcEntry(const char* a1, const char* animName) {
+s32 npcEntry(const char* description, const char* animName) {
     NpcWork* wp;
     s32 i;
     NpcEntry* entry;
@@ -489,7 +485,7 @@ s32 npcEntry(const char* a1, const char* animName) {
     wp = gp->inBattle ? &work.battle : &work.field;
     total = wp->total;
     for (i = 0, entry = wp->entries; i < total; i++, entry++) {
-        if (entry->flags & 1 && !strcmp(entry->description, a1)) {
+        if (entry->flags & 1 && !strcmp(entry->description, description)) {
             break;
         }
     }
@@ -502,7 +498,7 @@ s32 npcEntry(const char* a1, const char* animName) {
     }
     memset(entry, 0, sizeof(NpcEntry));
     entry->flags = 3;
-    strcpy(entry->description, a1);
+    strcpy(entry->description, description);
     entry->poseId = animPoseEntry(animName, gp->inBattle != 0);
     if (entry->poseId == -2) {
         entry->poseId = animPoseEntry("hoshi", gp->inBattle != 0);
@@ -3420,7 +3416,7 @@ void npcDeleteGroup(NpcEntry* entry);
 void _npcDeleteGroup(NpcEntry* entry);
 void npcDelete(NpcEntry* entry);
 NpcTribeInfo* npcGetTribe(const char* tribeName);
-s32 npcEntry(const char* a1, const char* animName);
+s32 npcEntry(const char* description, const char* animName);
 s32 npcGetReactionOfLivingBody(BOOL inBattle);
 void npcReset(BOOL inBattle);
 void npcInit(void);

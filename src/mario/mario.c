@@ -39,10 +39,11 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
 #endif
 
 
-//external prototypes (TODO: move to headers)
+// defined without a header prototype: marioGetMoveRate in mario_sbr.c (party_yoshi declares it with no parameter,
+// and the shared prototype changes its code); N_dou10_yoko_yari3 in mario_hit.c takes no parameter but is called
+// here with one
 f32 marioGetMoveRate(f32 dir);
 void N_dou10_yoko_yari3(void* p);
-f32 marioChkOverhead(void);
 
 //.data
 const char* dotMarioPose[4][6] = {
