@@ -16,7 +16,6 @@ typedef struct PointData {
     u8 r, g, b;
 } PointData;
 
-void tri2();
 double sin(double);
 double cos(double);
 

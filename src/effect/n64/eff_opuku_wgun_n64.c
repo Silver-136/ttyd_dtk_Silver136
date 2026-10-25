@@ -11,7 +11,6 @@
 #include "dolphin/os.h"
 
 
-void tri2();
 double sin(double);
 double cos(double);
 

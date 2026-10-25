@@ -9,7 +9,6 @@
 #include "eff/eff_n64.h"
 
 
-void tri2();
 
 typedef struct EffFlameN64Work {
     s32 type;         // 0x0

@@ -21,6 +21,7 @@
 #include "battle/battle_sub.h"
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
+#include "driver/shadowdrv.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
@@ -119,7 +120,6 @@ void btlDispGXInit2D(void) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 }
 
-int BtlUnit_CanActStatus();
 int animPoseVivianMain();
 void BattleCommandDisplay(BattleWork* wp);
 void BattleStockExpDisp(void);
@@ -130,7 +130,6 @@ void floatOffsetControl(BattleUnitPart* part);
 f32 getFloatDispOffset(BattleUnitPart* part);
 f32 getGravityDispOffset(BattleUnitPart* part);
 void gravityOffsetControl(BattleUnitPart* part);
-void shadowEntry(f32 x, f32 y, f32 z, f32 s);
 void statusPoseControl(BattleUnitPart* part);
 void btlDispGXPoint2DRasta(f32 x, f32 y, u8 r, u8 g, u8 b, u8 a) {
     GXPosition3f32(x, y, 0.0f);
@@ -291,7 +290,6 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
 }
 
 typedef void (*PartsDispCb)(BattleUnitPart*, s32);
-void shadowEntry(f32 x, f32 y, f32 z, f32 s);
 void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part);
 void BattleCommandDisplay(BattleWork* wp);
 void BattleStockExpDisp(void);

@@ -1071,14 +1071,4 @@ BOOL checkHarbor(Vec* out) {
 // forward declarations: these functions are defined further down
 BOOL checkHarbor(Vec* out);
 void shipMove(void);
-void mot_ship(void);
-void mot_ship_post(void);
-void marioReInit_ship(void);
-void marioForceShipAnime(void);
 BOOL marioChkShipPlace(HitEntry* hit);
-void marioShipSetDispDir(void);
-void marioShipForceStop(void);
-BOOL marioChkSwirlPower(void);
-void marioSetSwirlPower(s32 msec, f32 a, f32 b);
-s32 marioShipChanging(void);
-s32 N_marioShipGetDir(void);

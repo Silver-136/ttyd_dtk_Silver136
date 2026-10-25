@@ -14,20 +14,14 @@
 #include "mario/mariost.h"
 #include "manager/evtmgr.h"
 #include <dolphin/pad.h>
+#include "mario/mario_hit.h"
+#include "party.h"
+#include "mot/mot_damage.h"
+#include "driver/animdrv.h"
+#include "mot/mot_jump.h"
 #ifdef VERSION_G8ME01
-void marioChkWallAround(Vec* pos, s32 a1, f32 a2, f32 angle, f32 radius, f32 height);
 #endif
 
-void marioClearJumpPara(void);
-void allPartyRideOff2(void);
-void allPartyRidePlane(void);
-void marioSetSplash(s32 kind, Vec* pos);
-void set_damage_root_ypos(f32 y);
-HitEntry* marioHitCheck(f32* ox, f32* oy, f32* oz, f32* dist, f32* nx, f32* ny, f32* nz, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz);
-HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
-HitEntry* marioSearchGround(f32* a, f32* b, f32* c, f32 d, f32 e);
-void animPoseSetLocalTime(s32 poseId, f32 localTimeFrames);
-void marioPreJump(void);
 void marioChkOverhead(void);
 
 #define SFX3D(id, pos) ((s32 (*)(s32, Vec*))psndSFXOn_3D)(id, pos)

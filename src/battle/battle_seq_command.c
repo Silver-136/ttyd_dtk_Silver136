@@ -33,6 +33,7 @@
 #include "battle/battle_actrecord.h"
 #include "battle/battle_attack_audience.h"
 #include "battle/battle_message.h"
+#include "eff/eff_recovery.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
@@ -2502,7 +2503,6 @@ BattleWeapon* BattleGetSelectWeapon(BattleWork* wp) {
     return cmd->weapon[cursor->absPos].weapon;
 }
 
-void effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z);
 
 s32 _check_present_item(void) {
     BattleWork* wp = _battleWorkPointer;

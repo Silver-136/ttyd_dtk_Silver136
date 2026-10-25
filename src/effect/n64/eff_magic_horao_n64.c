@@ -11,7 +11,6 @@
 double sin(double);
 
 
-void tri2();
 
 typedef struct EffMagicHoraoN64Work {
     s32 type;      // 0x0

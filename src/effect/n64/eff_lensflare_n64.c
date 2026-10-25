@@ -5,9 +5,9 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "libc_decls.h"
 
 double cos(double);
-s32 rand(void);
 
 // One element per flare: element 0 is the head (type, position, fade and timers),
 // elements 1-5 are the rings (angle, scale, distance along the flare axis, speed).

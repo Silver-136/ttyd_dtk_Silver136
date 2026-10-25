@@ -9,15 +9,13 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
+#include "libc_decls.h"
+#include "pmario_sound.h"
 
 double sin(double);
 double cos(double);
-s32 rand(void);
-s32 psndSFXOn_3D(const char* name, Vec* position);
 EffectEntry* effStardustEntry(s32, f32, f32, f32, f32, f32, s32, s32);
-int sprintf(char* str, const char* format, ...);
 u32 strlen(const char* s);
-void* memset(void* dst, int val, u32 n);
 void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra);
 
 typedef struct MayaPoly {

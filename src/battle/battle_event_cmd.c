@@ -22,6 +22,7 @@
 #include "battle/battle_damage.h"
 #include "battle/battle_audience.h"
 #include "battle/battle_seq.h"
+#include "eff/eff_itemget.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -3606,7 +3607,6 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
     return EVT_RETURN_DONE;
 }
 
-void effItemGetEntry(s32 type, f32 x, f32 y, f32 z);
 
 USER_FUNC(btlevtcmd_CommandFlyItem) {
     EvtWord* args = event->args;

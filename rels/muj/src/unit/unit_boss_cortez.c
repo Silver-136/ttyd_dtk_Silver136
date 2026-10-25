@@ -3,6 +3,8 @@
 #include "pmario_sound.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "eff/eff_spirit.h"
+#include "eff/n64/eff_kumokumo_n64.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -24,8 +26,6 @@
 #include "data_tables.h"
 
 typedef struct CortezWork { s16 state; s16 count; s16 audienceId[100]; s16 wait[100]; s16 timer[100]; s16 seq[100]; void* eff[100]; Vec srcPos[100]; Vec dstPos[100]; } CortezWork;
-void* effSpiritEntry(s32 type, s32 time, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, f32 scale);
-void* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 a, f32 b, f32 c);
 BattleUnitSetup entry_honeduka;
 
 USER_FUNC(_cortez_check_drain_audience);

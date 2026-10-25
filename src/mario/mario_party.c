@@ -5,8 +5,8 @@
 #include "party.h"
 #include <dolphin/pad.h>
 #include "driver/npcdrv.h"
+#include "party/party_yoshi.h"
 
-BOOL yoshiGetStatus(void);
 
 static inline void marioPartyKillSlot0(void) {
     MarioWork* wp = marioGetPtr();

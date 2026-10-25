@@ -9,7 +9,6 @@
 double sin(double);
 
 
-void tri2();
 
 typedef struct EffTimestampN64Work {
     s32 type;           // 0x0

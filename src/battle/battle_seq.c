@@ -34,6 +34,8 @@
 #include "battle/battle_stage_object.h"
 #include "battle/battle_actrecord.h"
 #include "battle/battle_camera.h"
+#include "eff/eff_recovery.h"
+#include "eff/n64/eff_freeze_n64.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
@@ -46,8 +48,6 @@ void BattleStatusChangeMsgAdjust(BattleWork* wp);
 BOOL BattleStatusChangeMsgMain(BattleWork* wp);
 BOOL BattleStatusChangeAnnouceMain(BattleWork* wp);
 s32 BattleDamageDirect(s32 unitIdx, BattleUnit* unit, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 stopFlags, u32 damageEffect, u32 pattern);
-void effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z);
-void effFreezeN64Entry(s32 a, s32 b, f32 x, f32 y, f32 z, f32 scale);
 void BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 extern s32 marioDefaultWeapon_Jump[];
 extern s32 marioWeapon_KururinJump[];

@@ -11,7 +11,6 @@
 #include "libc_decls.h"
 #include <math.h>
 #include "eff/eff_n64.h"
-void tri2();
 
 u8 yuragi_data[11][24] = {
 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 9, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0,

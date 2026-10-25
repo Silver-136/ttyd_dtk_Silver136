@@ -18,31 +18,16 @@
 #include "battle/battle_camera.h"
 #include "battle/battle_stage.h"
 #include "battle/battle_stage_object.h"
+#include "libc_decls.h"
+#include "battle/battle_break_slot.h"
 
 
 
 double sqrt(double);
 double fabs(double);
 double __fabs(double);
-s32 rand();
-BattleUnit* BattleAudienceDetectTargetAll(void);
-s32 BattleAudienceDetectPakkunEatTarget(s32 index);
-void BattleAudiencePuniAllEscape(void);
-void BattleAudienceSoundSing(s32 index);
-void BattleAudienceSoundShell(s32 index);
-void BattleAudienceSoundBombIgnite(s32 index, s32 duration, s32 fade);
-void BattleAudienceSoundBombFire(s32 index);
-void BattleAudienceSoundPakkunEat(s32 index);
-void BattleAudienceSoundSleep(s32 index);
-void BattleAudienceSoundZZZ(s32 index);
 void btl_camera_set_moveto(s32 a, s32 b, f32 c, f32 d, f32 e, f32 f, f32 g, f32 h, s32 i);
-void btl_camera_shake_h(s32 a, f32 b, f32 c, s32 d, s32 e);
-void BattleStage_NozzleWorkCheck(s32 a);
-s32 BattleBreakSlot_GetBreakTurn();
 u8 BattleAudience_GetEscapeChangeOK();
-BOOL BattleAudience_GetFront(s32 index);
-s32 BattleAudience_GetAudienceNoFromOffset(s32 index, s32 column, s32 row);
-void BattleAudienceSoundItemThrow(s32 kind, s32 index);
 
 void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front);

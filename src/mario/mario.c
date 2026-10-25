@@ -24,6 +24,15 @@
 #include "mot/mot_roll.h"
 #include "mot/mot_ship.h"
 #include "mot/mot_slit.h"
+#include "party/party_yoshi.h"
+#include "party/party_nokonoko.h"
+#include "mario/mario_hit.h"
+#include "mot/mot_damage.h"
+#include "koopa.h"
+#include "mario/mario_balloon.h"
+#include "peach.h"
+#include "driver/npcdrv.h"
+#include "dolphin/mtx.h"
 
 #ifdef VERSION_G8ME01
 BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
@@ -31,31 +40,9 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
 
 
 //external prototypes (TODO: move to headers)
-s32 yoshiGetStatus(void);
-BOOL nokonoko_holdItem(void);
-void marioYoshiForceCancel(void);
 f32 marioGetMoveRate(f32 dir);
-void marioCheckWall(f32 dist, f32 dir);
-void marioCheckWall_roll(f32 dist, f32 dir);
 void N_dou10_yoko_yari3(void* p);
-void set_damage_root_ypos(f32 y);
-void marioChkToge(void);
-void marioResetGravity(void);
-void partyInit(void);
-s32 kpaNoHitEnemyCheck(void);
-void partyReInit(void);
-void marioBaloonInit(void);
-void marioGetRubInit(void);
-BOOL kpaGetStageViewType(void);
-s32 mario_bomhei_keychk(void);
-void marioRideYoshi(void);
-void marioMotion(void);
-void marioJump(void);
-void marioFall(void);
 f32 marioChkOverhead(void);
-void marioChkGnd(void);
-void marioChkGnd2(void);
-void marioChkWallAround(Vec* pos, s32 a1, f32 a2, f32 angle, f32 radius, f32 height);
 
 //.data
 const char* dotMarioPose[4][6] = {
@@ -95,11 +82,6 @@ s32 marioGetColor(void) {
     return mp->colorId;
 }
 
-void peachPreInit(void);
-void kpaPreInit(void);
-void kpaSetLevel(s32 level);
-void N_marioForceVivianAnime(void);
-void npcSetMarioAutoTalkPose(const char* stay, const char* talk);
 
 static inline void marioCharPoseRelease(MarioWork* wp) {
     if (wp->paperAnimGroupId[0] >= 0) {
@@ -928,23 +910,13 @@ void marioReInit(void) {
     wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
 }
 
-void marioHitCheckWidth(void);
 void itemCoinDrop(Vec* position);
-void* marioSearchGround(f32* y, f32* a, f32* b, f32 h, f32 vy);
-void partyMain(void);
-void marioUpdateKeyData(void);
-void marioGetStick(f32* angle, f32* sensitivity);
-void kpaMain(void);
 void peachMain(void);
 void marioSearchUnder(void);
-void marioBottomless(void);
-void marioBalloonMain(void);
 #ifdef VERSION_G8ME01
 #define mario_kemuri_80130474 mario_kemuri // US: global name
 #endif
 void mario_kemuri_80130474(void);
-void marioForceMoveMain(void);
-void marioBoots(void);
 
 static inline void marioMainBlur(MarioWork* wp) {
     if ((wp->frameCounter & 1) && (mp->dispFlags & 0x8000000)) {
@@ -1268,7 +1240,6 @@ void marioCtrlOff2Main(void) {
     }
 }
 
-f32 PSVECDistance(const Vec* a, const Vec* b);
 
 static inline void marioMove_screenPos(void) {
     MarioWork* p = mp;

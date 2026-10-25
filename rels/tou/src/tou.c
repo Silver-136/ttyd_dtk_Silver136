@@ -19,6 +19,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "mario/mario_party.h"
 
 #include "data/mapdata.h"
 #include "driver/swdrv.h"
@@ -84,7 +85,6 @@ static void disp_proc(CameraId cameraId, void* param);
 typedef struct GansWork { smartEntry* buf; GXTexObj tex; s32 onoff; s32 alpha; s32 ready; } GansWork;
 GansWork* gans_wp;
 void gans_tex(CameraId cameraId, void* param);
-BOOL partyChkJoin(s32 id);
 typedef struct StarStoneWork { u8 field_0x0[8]; Vec pos; u8 field_0x14[8]; f32 rot; } StarStoneWork;
 static s32 champion_belt_onoff;
 

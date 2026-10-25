@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
 #include "evt/evt_snd.h"
+#include "eff/n64/eff_kemuri9_n64.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_event_default.h"
@@ -1122,7 +1123,6 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-struct EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32 z, f32 radiusEnd, f32 angle);
 
 static USER_FUNC(_leg_smoke_effect) {
     EvtWord* args = event->args;

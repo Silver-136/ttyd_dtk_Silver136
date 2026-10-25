@@ -16,14 +16,9 @@
 #include "system.h"
 #include "mario/mario_hit.h"
 #include "mot/mot_roll.h"
+#include "party.h"
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
-void marioLandOn(void);
-void marioClearJumpPara(void);
-void marioGetRubInit(void);
-void allPartyRideShip(void);
-void allPartyRideOff(void);
-void allPartyForceRideOn(void);
 
 #define CAMF() (camGetPtr((CameraId)8)->flags)
 
@@ -1269,21 +1264,4 @@ void marioRollStrippedPool(void) {
 }
 
 // forward declarations: these functions are defined further down
-void mot_fall_roll(void);
 void roll_upstairs(void);
-void mot_roll(void);
-void marioReInit_roll(void);
-void rollEvtJumpSetup(void);
-void marioSetRollDispDir(void);
-void marioRollForceCancel(void);
-void mot_roll_post(void);
-s32 marioRollCancel(void);
-s32 marioRollTryCancel(void);
-void marioForceRollAnime(void);
-void marioResetRollSpd(void);
-s32 getRollEvtFlag(void);
-void clrRollEvtFlag(void);
-void setRollEvtFlag(void);
-s32 marioRollKeyDisable(void);
-s32 marioRollCancelDisable(void);
-void marioRollFixOn(void);

@@ -10,7 +10,6 @@
 
 
 
-void tri2();
 
 typedef struct EffOpukuWcurtainN64Work {
     s32 type;       // 0x0

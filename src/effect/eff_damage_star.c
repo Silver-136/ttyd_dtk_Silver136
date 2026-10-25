@@ -14,7 +14,6 @@
 #define HALF_PI 1.5707964f
 
 u32 strlen(const char* s);
-void* memset(void* dst, int val, u32 n);
 void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra);
 
 typedef struct MayaPoly {

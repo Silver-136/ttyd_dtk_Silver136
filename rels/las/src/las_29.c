@@ -19,6 +19,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "eff/eff_mist.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/effdrv.h"
@@ -41,7 +42,6 @@
 #include "las.h"
 #include "mario/mario_party.h"
 
-void* effMistEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 angle);
 void mapObjGetPos(const char* name, Vec* pos);
 void _hikariEntry(const char* name, s32 type, f32 scale);
 typedef struct HikariData { s32 key; s32 id; } HikariData;

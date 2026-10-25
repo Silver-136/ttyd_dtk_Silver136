@@ -5,8 +5,8 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "eff/eff_mist.h"
 
-void* effMistEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 angle);
 
 typedef struct EffToikiWork {
     s32 type;         // 0x0

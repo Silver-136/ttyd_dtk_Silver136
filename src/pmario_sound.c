@@ -4943,23 +4943,12 @@ BOOL _psndPushGroup_trg = 0;
 void stub_fn(void);
 #define STUB_BODY stub_fn();
 
-u32 SoundSSCheck(s32 chan);
-void SoundSSStopCh(s32 chan);
-void SoundSSSetPlayFreqCh(s32 chan, u16 freq);
 
 void psndBGMMain(void);
 void psndENVMain(void);
 void psndSFXMain(void);
 BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);
-void SoundSSMuteOn(s32 chan);
-void SoundSSSetVolCh(s32 chan, u8 vol);
-void SoundSSSetPanCh(s32 chan, u8 pan);
-void SoundSSSetSrndPanCh(s32 chan, u8 span);
-void SoundSSPlayCh(s32 chan, const char* name);
-void SoundSSContinueCh(s32 chan);
-void SoundSSFadeoutCh(s32 chan);
 BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6);
-BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5);
 s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 r8, u16 dist, s32 r10);
 
 static f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
@@ -5979,10 +5968,6 @@ s32 psndBGMPlayTime(s32 id) {
     return OSTicksToMilliseconds(gp->renderTime - bgm->startTime);
 }
 
-void SoundSSSetVolCh(s32 chan, u8 vol);
-void SoundSSSetPanCh(s32 chan, u8 pan);
-void SoundSSSetSrndPanCh(s32 chan, u8 span);
-void SoundSSPlayCh(s32 chan, const char* name);
 static inline s32 sfxvol(PaperSoundEffect* s) {
     s32 v = s->volume * s->entryVolume / 127 - s->attenuation;
     if (v < 0) v = 0;

@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_mist.h"
 
 #include "data/mapdata.h"
 #include "mario/mario.h"
@@ -15,7 +16,6 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-void* effMistEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 angle);
 
 void _unresolved(void);
 void _epilog(void);

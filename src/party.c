@@ -22,6 +22,8 @@
 #include "driver/shadowdrv.h"
 #include "mot/mot_damage.h"
 #include "mot/mot_ship.h"
+#include "driver/hitdrv.h"
+#include "party/party_hit.h"
 
 //.data
 
@@ -2352,7 +2354,6 @@ s32 partyRideYoshiMain(PartyEntry* party) {
     return 0;
 }
 
-s32 hitGetAttr(struct HitEntry* hit);
 void vivianShadow(PartyEntry* party);
 
 void party_damage_return(PartyEntry* party) {
@@ -2666,7 +2667,6 @@ void partySetCamId(PartyEntry* party, s32 cameraId) {
 #include "driver/dispdrv.h"
 BOOL N_vivianDisplayTailCheck(PartyEntry* party);
 void animPoseVivianMain(s32 poseId, Vec* pos);
-struct HitEntry* partyHitCheck(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 void partyDisp(CameraId cam, void* param);
 
 void partyMakeDispDir(PartyEntry* party) {

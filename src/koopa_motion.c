@@ -16,6 +16,7 @@
 #include "koopa_hit.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "eff/eff_mizutama.h"
 
 #ifdef VERSION_G8ME01
 // US exports this as the global kpa_fall (mot_jump calls it by that name)
@@ -46,7 +47,6 @@ EVT_BEGIN(quake_kpaHipAttack_evt)
     RETURN
 EVT_END()
 
-extern void* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle);
 
 static inline void kpa_hip_launch(MarioWork* m) {
     m->currSubMotionId = 0x14;

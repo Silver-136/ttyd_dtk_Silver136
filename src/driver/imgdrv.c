@@ -12,6 +12,7 @@
 #include "driver/shadowdrv.h"
 #include "libc_decls.h"
 #include "driver/mapdrv.h"
+#include "sdk/DEMOInit.h"
 
 //.data
 
@@ -92,7 +93,6 @@ static void zFill(void) { //almost 1:1
     GXSetColorUpdate(GX_TRUE);
 }
 
-extern void* DEMOGetRenderModeObj(void);
 
 void imgDisp(CameraId camId, void* param) {
     ImageEntry* entry = param;
@@ -542,7 +542,6 @@ void imgSetShadow(ImageEntry* entry, s32 shadowId) { //1:1
     entry->shadowId = shadowId;
 }
 
-extern void* DEMOGetRenderModeObj(void);
 
 void imgShadowDisp(CameraId camId, void* param) {
     ImageShadow* sh;

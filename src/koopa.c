@@ -13,40 +13,28 @@
 #include <dolphin/pad.h>
 #include "driver/camdrv.h"
 #include "sfx_name_word.h"
+#include "koopa_motion.h"
+#include "mario/mario_motion.h"
+#include "mario/mario_cam.h"
+#include "mot/mot_jump.h"
+#include "mario/mario_sbr.h"
+#include "mario/mario_balloon.h"
+#include "party.h"
+#include "mario/mario_hit.h"
 
-void kpaSetSpec(void);
 void kpa2DMain(void);
 void kpa3DMain(void);
-void marioChgMot(s32);
-void marioResetCamFollowRate(void);
-void camFollowYOff(void);
-void camFollowYOn(void);
-void marioPreJump(void);
-void marioMakeJumpPara(void);
-void marioSetPeakYpos(void);
-void marioBottomless(void);
-void marioBalloonMain(void);
 #ifdef VERSION_G8ME01
 #define mario_kemuri_80130474 mario_kemuri // US: global name
 #endif
 void mario_kemuri_80130474(void);
-void partyMain(void);
-void marioCamMain(void);
-void marioSetFallPara(void);
 void marioChkOverhead(void);
-void marioChkGnd(void);
-void marioChkGnd2(void);
-void marioBoots(void);
-void marioForceMoveMain(void);
-void marioCheckWall(f32, f32);
 void kpaFireAttack(void);
 void kpaFireMain(void);
 void kpaFall(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 extern f32 marioJumpData[];
-f32 marioGetFallSpd(void);
 void* marioChkLandon(f32* outY, f32 y);
-void marioLandOn(void);
 
 #define KPW(m) ((m)->kpaWork)
 

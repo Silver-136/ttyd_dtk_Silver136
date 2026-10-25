@@ -17,7 +17,6 @@ double cos(double);
 #define Vec2Vtx(v, o) do { OSf32tos16(&(v)->x, &(o)[0]); OSf32tos16(&(v)->y, &(o)[1]); OSf32tos16(&(v)->z, &(o)[2]); } while (0)
 
 
-void tri2();
 
 void effKamekiTornadeMain(EffectEntry* effect);
 void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect);

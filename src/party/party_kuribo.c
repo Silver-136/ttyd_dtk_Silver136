@@ -9,6 +9,10 @@
 #include "driver/mobjdrv.h"
 #include "party/party_move.h"
 #include "evt/evt_msg.h"
+#include "mario/mariost.h"
+#include "party/party_hit.h"
+#include "system.h"
+#include "dolphin/mtx.h"
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global kuribo_init
@@ -151,7 +155,6 @@ USER_FUNC(pre_kurio_use) {
 #undef name
 }
 
-void marioStSystemLevel(s32 level);
 
 USER_FUNC(post_kurio_use) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -185,14 +188,8 @@ EVT_BEGIN(kurio_msg_evt)
     CALL(post_kurio_use)
     RETURN
 EVT_END()
-void* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 angle);
 BOOL partyGetAppearPos3(PartyEntry* party, Vec* pos);
 s32 fbatNpcTalkCheck(void);
-void partyChgMot(PartyEntry* party, s32 mot);
-void partyChkGnd(PartyEntry* party);
-f32 angleABf(f32, f32, f32, f32);
-f32 distABf(f32, f32, f32, f32);
-f32 PSVECDistance(const Vec*, const Vec*);
 
 
 void kuribo_use_post(PartyEntry* party) {

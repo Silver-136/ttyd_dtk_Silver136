@@ -11,7 +11,6 @@ double sin(double);
 
 
 
-void tri2();
 
 typedef struct EffOpukuJetwrainWork {
     s32 type;      // 0x0

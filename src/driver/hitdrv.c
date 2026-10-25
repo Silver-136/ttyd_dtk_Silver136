@@ -9,25 +9,16 @@
 #include <string.h>
 
 // forward declarations: these functions are defined further down
-void hitBindUpdate(const char* name);
 void hitDamageReturnSet(HitEntry* hit, HitDamageReturn* damage, BOOL recursion);
 void hitObjGetPosSub(HitEntry* hit, Vec* position, s32* counter, BOOL recursion);
 BOOL chkFilterAttr(HitCheckQuery* query, HitEntry* entry);
 BOOL checkTriVec_xz(HitCheckQuery* query, HitVector* vector);
 s32 hitCalcVtxPosition(HitEntry* hit);
 void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
-void hitGrpAttrOff(const char* name, u32 mask);
-void hitGrpAttrOn(const char* name, u32 mask);
 void hitAtrOff(HitEntry* hit, u32 mask, s32 r);
 void hitAtrOn(HitEntry* hit, u32 mask, s32 r);
-void hitObjAttrOff(const char* name, u32 mask);
-void hitObjAttrOn(const char* name, u32 mask);
-void hitGrpFlagOff(const char* name, u16 mask);
-void hitGrpFlagOn(const char* name, u16 mask);
 void hitFlgOff(HitEntry* hit, u16 mask, s32 r);
 void hitFlgOn(HitEntry* hit, u16 mask, s32 r);
-void hitObjFlagOff(const char* name, u16 mask);
-void hitObjFlagOn(const char* name, u16 mask);
 HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx);
 HitEntry* hitEntry(MapFileJoint* root, Mtx rootMtx, s32 mapIndex);
 HitEntry* hitEntrySub(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, BOOL ignoreSiblings, s32 mapIndex);

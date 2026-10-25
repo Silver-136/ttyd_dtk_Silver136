@@ -11,6 +11,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "mario/mario_motion.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -34,7 +35,6 @@
 typedef struct FirebarBall { s32 pose; Vec pos; } FirebarBall;
 typedef struct FirebarSetup { u8 type; u8 count; u8 field_0x2[2]; Vec pos; f32 spacing; f32 field_0x14; f32 speed; void* callback; f32 field_0x20; f32 radius; } FirebarSetup;
 typedef struct FirebarWork { u8 type; u8 count; u16 flags; Vec pos; f32 prevAngle; f32 angle; f32 speed; f32 spacing; f32 field_0x20; f32 scale; f32 field_0x28; f32 radius; void (*callback)(struct FirebarWork* wp, s32 type); s32 hitCount; s32 sfxId; s32 state; f32 shadowAngle; FirebarBall* balls; FirebarSetup* setup; } FirebarWork;
-void marioChgMot(s32 motion);
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 mode, s32 flag, void* script, f32 x, f32 y, f32 z);
 void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
 void firebar_disp(CameraId camera, void* param);

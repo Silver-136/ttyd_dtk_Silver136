@@ -6,6 +6,7 @@
 #include "battle/battle_stage.h"
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
+#include "eff/n64/eff_snowfall_n64.h"
 
 USER_FUNC(_snow_control);
 
@@ -592,7 +593,6 @@ EVT_BEGIN(bgset_bom_snow_event)
     RETURN
 EVT_END()
 
-struct EffEntry* effSnowfallN64Entry(s32 type, s32 count);
 
 USER_FUNC(_snow_control) {
     if (isFirstCall) {

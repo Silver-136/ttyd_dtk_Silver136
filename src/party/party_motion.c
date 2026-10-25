@@ -18,6 +18,10 @@
 #include "party/party_bomhei.h"
 #include "party/party_nokonoko.h"
 #include "party/party_motion.h"
+#include "mot/mot_stay.h"
+#include "party/party_chuchu.h"
+#include "mot/mot_slit.h"
+#include "mario/mario_hit.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -41,11 +45,7 @@ void partyWalkChkGnd(PartyEntry* party);
 void* partySearchHead(PartyEntry* party, Vec* pos, f32* height, f32 dir);
 s32 partyChkNoStandMobj(HitEntry* hit);
 void partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out);
-s32 marioChkDeepSleep(void);
-s32 chuchu_searchObject(void);
 void partyChgPose(PartyEntry* party, const char* pose);
-void marioClearSlitFloor(void);
-void movePos(f32* x, f32* z, f32 dist, f32 dir);
 s32 partyGetFootmarkId();
 void partyGetAppearPos4(PartyEntry* party, Vec* pos);
 
@@ -314,11 +314,9 @@ static void partyPoseA2(PartyEntry* party);
 s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
 
 f32 partyGetTargetDist3D(s32 id, Vec* p);
-HitEntry* marioChkWallAround(Vec* pos, s32 a, f32 spd, f32 dir, f32 w, f32 h);
 #ifdef VERSION_G8ME01
 HitEntry* partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 w, f32 h);
 #endif
-s32 marioChkSlitThrouh(void);
 
 void party_force_reset_outofscreen(PartyEntry* party);
 

@@ -61,8 +61,6 @@ const char* evtNoLabel[] = {
 
 //local prototypes
 s32 johoya_data_make(const char* prefix, s32 type);
-s16 johoya_get(u8* table, s16 id);
-s16 johoya_set(u8* table, s16 id, s16 val);
 const char* search_evt_moji(s32 id);
 
 USER_FUNC(johoya_data_alloc) {

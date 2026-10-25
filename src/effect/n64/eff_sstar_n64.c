@@ -17,7 +17,6 @@
 
 
 
-void tri2();
 
 typedef struct EffSstarN64Work {
     s32 type;          // 0x0

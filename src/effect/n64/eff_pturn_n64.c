@@ -8,7 +8,6 @@
 
 double cos(double);
 
-void tri2();
 
 typedef struct PturnElem {
     s32 type;   // 0x0

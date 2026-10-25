@@ -23,13 +23,14 @@
 #include "evt/evt_paper.h"
 #include "party/party_motion.h"
 #include "dolphin/os.h"
+#include "libc_decls.h"
+#include "battle/sac/sac_scissor.h"
 
 double sqrt(double);
 double fabs(double);
 double __fabs(double);
 static inline double my_fabsf(float x) { return __fabs(x); }
 void scissor_disp_control(CameraId camera, void* param);
-void* memset(void*, int, u32);
 
 typedef struct ScissorTri {
     f32 x[3]; // 0x0
@@ -90,7 +91,6 @@ ScissorWork* GetScissorPtr(void);
 void scissor_disp_region(CameraId camera, void* param);
 void scissor_capture(CameraId camera, void* param);
 void tess(Pt* buf, s32 count);
-void* memcpy(void*, const void*, u32);
 void star_disp2D_sub(s32 idx, s32 alpha);
 s32 scissor_damage_sub2(Vec pt);
 void scissor_damage_sub(BattleUnit* unit, s32* out);
@@ -98,7 +98,6 @@ s32 scissor_intersection(f32, f32, f32, f32, f32, f32, f32, f32, f32*, f32*);
 
 
 
-s32 weaponGetPower_Scissor();
 static s32 star_stone_appear();
 s32 wait_star_standby();
 s32 scissor_end();

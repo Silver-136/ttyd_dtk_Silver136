@@ -47,9 +47,7 @@ RETURN
 EVT_END()
 
 u8 rel_bss[0xF10];
-void _relUnLoad(void);
 void _load(const char*, const char*, const char*);
-void _unload(const char*, const char*, const char*);
 
 void evt_cam_road_reset(s32, s32);
 

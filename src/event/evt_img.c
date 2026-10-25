@@ -5,13 +5,13 @@
 #include "mario/mariost.h"
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/gx.h>
+#include "sdk/DEMOInit.h"
 
 typedef struct DEMORenderModeObj {
     u8 pad[4];
     u16 fbWidth;
     u16 efbHeight;
 } DEMORenderModeObj;
-extern DEMORenderModeObj* DEMOGetRenderModeObj(void);
 
 USER_FUNC(evt_img_entry) {
     imgEntry((const char*)evtGetValue(event, event->args[0]), gp->inBattle != 0);

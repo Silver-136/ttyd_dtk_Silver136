@@ -17,6 +17,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_pouch.h"
+#include "driver/punidrv.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -40,7 +41,6 @@
 
 void* puniGetPunigp(void);
 void puniswGetindex(s32 flag, s32 index, s32* a, s32* b);
-void puniFadeOff(s32 index);
 static u8* bp;
 
 USER_FUNC(akari_charge_entry);

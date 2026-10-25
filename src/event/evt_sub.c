@@ -39,8 +39,8 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_pouch.h"
+#include "mario/mario_cam.h"
 
-void marioSetCamId(s32);
 s32 effStageClearEndChk();
 
 #include "system.h"

@@ -17,6 +17,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "libc_decls.h"
 
 #include "string.h"
 #include "mario/mariost.h"
@@ -54,7 +55,6 @@ static void pose_change(Fan* fan, const char* name, const char* anim);
 static void pose_change(Fan* fan, const char* name, const char* anim);
 static f32 randf(f32 min, f32 max);
 static f32 randf(f32 min, f32 max);
-u8 psndSFX_get_vol(s32 id);
 static inline f32 fan_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
 static inline f32 fan_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
 s32 check_hammer(Fan* fan);
@@ -64,7 +64,6 @@ static void pose_main(void);
 static void pose_main(void);
 void fan_disp(CameraId camera, void* param);
 void fan_disp(CameraId camera, void* param);
-f32 cloudGetBreathDist(void);
 
 s32 N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos(EventEntry* event, BOOL isFirstCall);
 s32 evt_cloud_ent(EventEntry* event, BOOL isFirstCall);
@@ -171,7 +170,6 @@ static EvtWord evt_after_peach[188];
 EvtWord tou_02_init_evt[VERSION_PICK(576, 919)];
 
 int __cvt_ull_flt();
-int __div2u();
 static void pose_init(void) {
     char name[32];
     char anim[32];
