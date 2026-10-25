@@ -18,6 +18,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | US | rels/yuu/src/event/evt_yuuranking.c | yuuDrawRight (US inline, used by evt_yuuranking_disp_func) | US: same as the gor twin: x offset plus work pointer, `wp->x` added inside so it is read after the width test (same value) | see comment |
 | US | src/driver/icondrv.c | iconDispGx2 | US: `ep->iconId = (u16)(s16)iconId`, a no-op round trip (the field is u16), steers register choice | see comment |
 | US | src/driver/icondrv.c | iconDispGxCol | US: `ep->iconId = (u16)(s16)iconId`, a no-op round trip (the field is u16), steers register choice | see comment |
+| Both | src/driver/icondrv.c | iconDispGx2, iconDispGxCol | empty `if (icon_bin_ok && icon_bin_ok) { }` after the colour store | removing it changes the object in both versions |
 | US | src/driver/itemdrv.c | itemEntry | US: a named search pointer `e` and entries base `base`; the 0x79/0x7C searches are written as explicit loops, while 0x7B uses the itemFindDeletable inline (register numbering only) | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringShake | US: dead guard `s32 gz = 0; if (gz != 0) x = -1.0f;` (folded after register allocation, emits no code) only creates the -1.0f .sdata2 literal early, before the 28.0f of FontDrawStringMtx | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringVecPitch | US: `#pragma auto_inline off` around it keeps the FontDrawString/FontDrawStringPitch wrappers calling it, as in the target | see comment |

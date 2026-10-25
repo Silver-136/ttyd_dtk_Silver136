@@ -467,8 +467,8 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId)
     }
     entry.uflags = flags;
     entry.color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    if (icon_bin_ok && icon_bin_ok)
-    {
+    // FAKE: empty if on icon_bin_ok (tested twice); removing it changes the object in both versions
+    if (icon_bin_ok && icon_bin_ok) {
     }
 #ifdef VERSION_G8ME01
     /* FAKE: (u16)(s16) round-trip is a no-op on the u16 field (the s32 id goes through s16 first); it steers MWCC's register choice */
@@ -526,6 +526,7 @@ void iconDispGxCol(Mtx pos, s16 flags, s32 iconId, GXColor color) {
     }
     entry.uflags = flags;
     entry.color = color;
+    // FAKE: empty if on icon_bin_ok (tested twice); removing it changes the object in both versions
     if (icon_bin_ok && icon_bin_ok) {
     }
 #ifdef VERSION_G8ME01
