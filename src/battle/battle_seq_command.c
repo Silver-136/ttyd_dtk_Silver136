@@ -35,6 +35,7 @@
 #include "battle/battle_message.h"
 #include "eff/eff_recovery.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_detect.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
@@ -66,7 +67,6 @@ extern BattleWeapon marioWeapon_KururinJump;
 extern BattleWeapon marioDefaultWeapon_Hammer;
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 s32 BtlUnit_CheckWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
-void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
 void BattleDrawEnemyHP(CameraId camId, void* param);
 s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon* weapon);
 
@@ -1059,7 +1059,6 @@ s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
 }
 #pragma dont_inline reset
 
-void BattleSamplingEnemyUpdate(BattleWorkWeaponTargets* targets);
 void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a);
 s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type);

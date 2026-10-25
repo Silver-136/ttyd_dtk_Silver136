@@ -6,6 +6,7 @@
 #include "data/item_data.h"
 #include "system.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_detect.h"
 
 extern ItemData itemDataTable[];
 
@@ -611,7 +612,7 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
     }
 }
 
-void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** a, BattleUnit** b) {
+void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit** target) {
     BattleUnit* found;
     BattleUnit* other;
     BattleUnit* tmp;
@@ -638,6 +639,6 @@ void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** a, BattleUnit** b) {
         other = BattleGetMarioPtr(wp);
         break;
     }
-    *a = found;
-    *b = other;
+    *attacker = found;
+    *target = other;
 }

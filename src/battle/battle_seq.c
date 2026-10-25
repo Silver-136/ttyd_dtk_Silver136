@@ -36,6 +36,7 @@
 #include "battle/battle_camera.h"
 #include "eff/eff_recovery.h"
 #include "eff/n64/eff_freeze_n64.h"
+#include "battle/battle_detect.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
@@ -336,7 +337,6 @@ BattleWeapon* _GetFirstAttackWeapon(s32 type) {
     }
 }
 
-void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** a, BattleUnit** b);
 
 
 void btlseqFirstAct(BattleWork* wp) {

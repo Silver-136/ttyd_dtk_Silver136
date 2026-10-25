@@ -33,6 +33,7 @@
 #include "battle/battle_ac.h"
 #include "battle/battle_message.h"
 #include "battle/battle_event_cmd.h"
+#include "battle/battle_detect.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
@@ -43,8 +44,6 @@ void FontDrawString(f32 x, f32 y, const char* str);
 EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 lifetime);
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration);
 BOOL effFallCheckHit(EffectEntry* effect);
-void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
-void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, u32 flags, s32* unitId, s32* partId);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 
 //local prototypes

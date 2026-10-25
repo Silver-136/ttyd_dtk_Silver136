@@ -23,6 +23,7 @@
 #include "battle/battle_audience.h"
 #include "battle/battle_seq.h"
 #include "eff/eff_itemget.h"
+#include "battle/battle_detect.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -3369,12 +3370,9 @@ void BtlUnit_PoseSoundInit(BattleUnitPart* part);
 void btlDispPoseAnime(BattleUnitPart* part);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* name);
 void BattleAttackDeclareAll(BattleWork* wp);
-void BattleGetFirstAttackUnit(BattleWork* wp, s32* a, BattleUnit** unit);
-void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, s32 a, s32* b, s32* c);
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit);
-void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 void* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
@@ -3468,15 +3466,15 @@ USER_FUNC(btlevtcmd_GetSelectNextEnemy) {
 
 USER_FUNC(btlevtcmd_GetFirstAttackTarget) {
     EvtWord* args = event->args;
-    s32 part;
+    BattleUnit* attacker;
     BattleUnit* unit;
     s32 a = args[0];
     s32 b = args[1];
     s32 body;
 
-    BattleGetFirstAttackUnit(_battleWorkPointer, &part, &unit);
+    BattleGetFirstAttackUnit(_battleWorkPointer, &attacker, &unit);
     body = BtlUnit_GetBodyPartsId(unit);
-    evtSetValue(event, a, *(s32*)unit);
+    evtSetValue(event, a, unit->unitId);
     evtSetValue(event, b, body);
     return EVT_RETURN_DONE;
 }
@@ -4367,7 +4365,7 @@ USER_FUNC(btlevtcmd_GetTakeoffPosition) {
     BtlUnit_GetHomePos(unit, &hx, &hy, &hz);
     BtlUnit_GetHitPos(target, part, &hx, &y, &hz);
     belong = (s8)BtlUnit_GetEnemyBelong(unit);
-    back = ((s32 (*)(BattleWorkWeaponTargets*, BattleWeapon*, s32, s8, u32, u32, s8))BattleSamplingEnemy)(
+    back = BattleSamplingEnemy(
         &targets, NULL, id, belong, 0x1001240, 0x1000000, -wp->alliances[belong].attackDirection);
     BattleChoiceSamplingEnemy(&targets, 4, &cid, &cpno);
     if (targets.numTargets > 0) {

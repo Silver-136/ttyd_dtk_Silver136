@@ -4,9 +4,9 @@
 #include "system.h"
 #include "battle/battle_status_effect.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_detect.h"
 
 extern ItemData itemDataTable[];
-void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s32 direction);
 
 void* _check_status_recover_item(BattleUnit* self);
 void* _check_status_support_item(BattleUnit* self);
