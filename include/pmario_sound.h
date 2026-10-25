@@ -153,6 +153,8 @@ s32 psndSFXOnEx_3D(const char* name, Vec* position, u8 vol, u8 pan, u16 pitch, u
 BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 someswitch);
 BOOL psndBGMStartCheck(s32 id);
 
+/* psndSetFlag/psndClearFlag: sound effects play at volume 0 unless their id has PSND_SFX_BYPASS_MUTE */
+#define PSND_FLAG_MUTE_SFX 0x80
 void psndSetFlag(s32 flag);
 void psndSFXOff(s32 id);
 void L_psndBGM_stop(void);

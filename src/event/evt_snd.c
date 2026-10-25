@@ -18,7 +18,7 @@ void seq_gameOverInit(SequenceWork* work) {
     psndStopAllFadeOut();
     psndSetReverb(0);
     L_psndBGM_stop();
-    psndClearFlag(0x80);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
     psndClearFlag(0x20);
     psndClearFlag(0x40);
     N_pouchUnEquipBadgeID(0x143);

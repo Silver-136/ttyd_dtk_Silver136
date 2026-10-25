@@ -2,6 +2,7 @@
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_unit.h"
+#include "mario/mario_pouch.h"
 
 u32 weaponGetPowerDefault(BattleUnit* unit1, BattleWeapon* weapon, BattleUnit* unit2, BattleUnitPart* part) {
     return weapon->hpDamageWork[0];
@@ -128,6 +129,6 @@ u32 weaponGetPowerTatsumaki(BattleUnit* unit1, BattleWeapon* weapon, BattleUnit*
 
     BattleGetMarioPtr(_battleWorkPointer);
     power = weapon->hpDamageWork[0];
-    power += weapon->hpDamageWork[1] * pouchEquipCheckBadge(0xF3);
+    power += weapon->hpDamageWork[1] * pouchEquipCheckBadge(ITEM_TORNADO_JUMP);
     return power;
 }

@@ -68,7 +68,7 @@ void seq_battleInit(BattleSeqWork* work) {
     psndENVOff(0x400);
     padRumbleOff(0);
     evtStopAll(4);
-    psndSetFlag(0x80);
+    psndSetFlag(PSND_FLAG_MUTE_SFX);
     switch (fbatGetPointer()->hitKind) {
         case 0x1000000:
         case 0x800000:
@@ -354,7 +354,7 @@ void battle_exit(void) {
         marioGetPtr()->flags |= MARIO_FLAG_ACTIVE;
     }
     L_psndBGM_stop();
-    psndClearFlag(0x80);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
     light = lightGetPaperCraft();
     { Vec v = {-200.0f, 100.0f, 100.0f}; light->position = v; }
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);

@@ -48,7 +48,7 @@ USER_FUNC(pre_kurio_use) {
         return EVT_RETURN_DONE;
     }
 
-    psndSetFlag(0x80);
+    psndSetFlag(PSND_FLAG_MUTE_SFX);
     party->flags |= 0x04000000;
     party->flags |= 0x02000000;
 
@@ -163,7 +163,7 @@ USER_FUNC(post_kurio_use) {
     }
     party->useMotionId = 20;
     marioStSystemLevel(0);
-    psndClearFlag(0x80);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
     party->flags &= ~0x04000000;
     party->flags &= ~0x02000000;
     return EVT_RETURN_DONE;

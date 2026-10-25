@@ -67,3 +67,4 @@ void statusWinClose(void);
 void statusWinForceClose(void);
 void statusWinForceCloseClear(void);
 void statusWinForceUpdateCoin(void);
+Vec statusGetApPos(void);

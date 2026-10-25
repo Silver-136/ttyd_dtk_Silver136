@@ -2137,12 +2137,12 @@ void fbatBattleMode(void) {
             evtStopID(data->target->regularEvtId);
             info = &data->info;
             if (!(cur->battleInfo.battleFlags & 0x10000000)) {
-                if (pouchEquipCheckBadge(0x142) && NPC_ENEMY_LEVEL(cur) < pouch->level) {
+                if (pouchEquipCheckBadge(ITEM_BUMP_ATTACK) && NPC_ENEMY_LEVEL(cur) < pouch->level) {
                     skip = TRUE;
                     win = TRUE;
                     goto decided;
                 }
-                if (pouchEquipCheckBadge(0x141) && ((u32)data->hitKind & 0x01FE0000) &&
+                if (pouchEquipCheckBadge(ITEM_FIRST_ATTACK) && ((u32)data->hitKind & 0x01FE0000) &&
                     NPC_ENEMY_LEVEL(cur) < pouch->level) {
                     skip = TRUE;
                     win = TRUE;
@@ -2270,8 +2270,8 @@ void fbatBattleMode(void) {
                     if (data->merleeCoinBonus) {
                         mult = 3;
                     }
-                    if (pouchEquipCheckBadge(0x139)) {
-                        mult += pouchEquipCheckBadge(0x139);
+                    if (pouchEquipCheckBadge(ITEM_MONEY_MONEY)) {
+                        mult += pouchEquipCheckBadge(ITEM_MONEY_MONEY);
                     }
                     if (cur->battleInfo.battleFlags & 0x100) {
                         mult++;
@@ -2467,7 +2467,7 @@ void* fbatHitCheck(u32 flags, void* a1) {
                             hit = npc;
                             res.dist = dist;
                             if (!soft) fbatSetAttackAnnounce(0x10000);
-                        } else if (pouchEquipCheckBadge(0x140)) {
+                        } else if (pouchEquipCheckBadge(ITEM_CHILL_OUT)) {
                             res.kind = 0x10000;
                             hit = npc;
                             res.dist = dist;

@@ -140,12 +140,12 @@ USER_FUNC(tou_07_mario_keyoff_check) {
 #endif
 
 USER_FUNC(tou_07_snd_on) {
-    psndClearFlag(0x80);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(tou_07_snd_off) {
-    psndSetFlag(0x80);
+    psndSetFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
 }
 

@@ -52,13 +52,10 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
 s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
 void BattleInitCounterPreCheckWork(s32* work);
 s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
-void BattleAudience_Case_EnemyDamage(s32 damage);
 void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 
 EffectEntry* effFukidashiEntry(s32 a, s32 b, s32 c, s32 d, f32 x, f32 y, f32 z, f32 scale, f32 e);
 void BtlActRec_AddPoint(u8* rec, u8 points);
-void BattleAudience_Case_MarioBigDamage(s32 damage);
-void BattleAudience_Case_KillEnemy(s32 level);
 
 
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag) {
@@ -887,18 +884,18 @@ void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* o
     if (type == 16) {
         if (weapon == &badgeWeapon_Charge || weapon == &badgeWeapon_ChargeP) {
             if (unit->currentKind == UNIT_MARIO) {
-                n = pouchEquipCheckBadge(0x100);
+                n = pouchEquipCheckBadge(ITEM_CHARGE);
             } else {
-                n = pouchEquipCheckBadge(0x101);
+                n = pouchEquipCheckBadge(ITEM_CHARGE_P);
             }
             if (n >= 2) {
                 strength += n - 1;
             }
         } else if (weapon == &badgeWeapon_SuperCharge || weapon == &badgeWeapon_SuperChargeP) {
             if (unit->currentKind == UNIT_MARIO) {
-                n = pouchEquipCheckBadge(0x151);
+                n = pouchEquipCheckBadge(ITEM_SUPER_CHARGE);
             } else {
-                n = pouchEquipCheckBadge(0x152);
+                n = pouchEquipCheckBadge(ITEM_SUPER_CHARGE_P);
             }
             if (n >= 2) {
                 strength += (n - 1) * 2;

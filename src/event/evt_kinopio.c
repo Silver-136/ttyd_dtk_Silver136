@@ -272,12 +272,12 @@ USER_FUNC(breakfast) {
 }
 
 USER_FUNC(snd_off) {
-    psndSetFlag(0x80);
+    psndSetFlag(PSND_FLAG_MUTE_SFX);
     return 2;
 }
 
 USER_FUNC(snd_on) {
-    psndClearFlag(0x80);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
     return 2;
 }
 

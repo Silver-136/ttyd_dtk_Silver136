@@ -65,8 +65,8 @@ void winBadgeExit(void) {
 }
 
 void mario_change(WindowWork* w, s32 unused) {
-    s32 hasLeft = pouchEquipCheckBadge(0x147);
-    s32 hasRight = pouchEquipCheckBadge(0x148);
+    s32 hasLeft = pouchEquipCheckBadge(ITEM_L_EMBLEM);
+    s32 hasRight = pouchEquipCheckBadge(ITEM_W_EMBLEM);
     const char* model;
     const char* animL;
     const char* animR;

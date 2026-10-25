@@ -130,8 +130,8 @@ static inline void marioCharPoseRelease(MarioWork* wp) {
 }
 
 static inline s32 marioBadgeColor(void) {
-    s32 a = pouchEquipCheckBadge(0x147);
-    s32 b = pouchEquipCheckBadge(0x148);
+    s32 a = pouchEquipCheckBadge(ITEM_L_EMBLEM);
+    s32 b = pouchEquipCheckBadge(ITEM_W_EMBLEM);
 
     if (a && !b) {
         return 1;
@@ -1019,7 +1019,7 @@ void marioMain(void) {
     if (N_marioChkUseParty()) {
         marioColorChk();
         p = mp;
-        if (pouchEquipCheckBadge(0x143)) {
+        if (pouchEquipCheckBadge(ITEM_SLOW_GO)) {
             if (p->currMotionId == MARIO_MOTION_STAY) {
                 p->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
             }
@@ -1418,7 +1418,7 @@ void marioMoveMain(void) {
                 spd *= 0.015f;
             }
         }
-        else if (pouchEquipCheckBadge(0x143)) {
+        else if (pouchEquipCheckBadge(ITEM_SLOW_GO)) {
             spd *= 0.01f;
         }
         else if (marioChkRollMot() == TRUE) {

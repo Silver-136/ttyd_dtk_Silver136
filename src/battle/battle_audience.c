@@ -15,6 +15,7 @@
 #include <string.h>
 #include <dolphin/gx.h>
 #include "battle/battle_status_effect.h"
+#include "statuswindow.h"
 
 #pragma dont_inline on
 
@@ -1755,7 +1756,6 @@ void BattleAudienceItemCtrlProcess(void) {
 }
 
 
-extern void statusGetApPos(Vec* pos);
 void BattleAudienceApSrcCtrlProcess(void) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceStar* star;
@@ -1842,7 +1842,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
                 s->timer = 0;
                 s->duration = 20 + irand(20);
                 s->startPos = s->position;
-                statusGetApPos(&tmp);
+                tmp = statusGetApPos();
                 s->targetPos = tmp;
                 dx = s->startPos.x - s->targetPos.x;
                 dy = s->startPos.y - s->targetPos.y;
@@ -1865,7 +1865,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
                 s->state = 20;
                 s->timer = 0;
                 s->duration = 15;
-                statusGetApPos(&tmp2);
+                tmp2 = statusGetApPos();
                 s->position = tmp2;
             }
             break;
@@ -4003,11 +4003,11 @@ void BattleAudienceNoiseMain(void) {
     }
 }
 
-void BattleAudience_Case_KillEnemy(void) {
+void BattleAudience_Case_KillEnemy(s32 level) {
     BattleAudienceBaseGetPtr()->flags |= 0x1000;
 }
 
-void BattleAudience_Case_ActionCommandGood(void) {
+void BattleAudience_Case_ActionCommandGood(BattleWeapon* weapon) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
     s32 i;
     s32 count = 0;
@@ -4095,7 +4095,7 @@ void BattleAudience_Case_AcrobatNoTry(void) {
     BattleAudienceBaseGetPtr();
 }
 
-void BattleAudience_Case_MarioBigDamage(void) {
+void BattleAudience_Case_MarioBigDamage(s32 damage) {
     BattleAudienceBaseGetPtr();
 }
 
@@ -4192,7 +4192,7 @@ void BattleAudience_Case_Escape_Bad(void) {
     BattleAudienceSoundBooing();
 }
 
-void BattleAudience_Case_EnemyDamage(void) {
+void BattleAudience_Case_EnemyDamage(s32 damage) {
     BattleAudienceBaseGetPtr()->flags |= 0x400;
 }
 

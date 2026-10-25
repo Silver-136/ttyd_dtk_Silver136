@@ -272,7 +272,7 @@ void winMain(void) {
                     marioCtrlOff2();
                 }
                 partyCtrlOff();
-                psndSetFlag(0x80);
+                psndSetFlag(PSND_FLAG_MUTE_SFX);
                 if (mario->characterId == CHARACTER_BOWSER) {
                     kpaPauseSE2();
                 }
@@ -357,7 +357,7 @@ void winMain(void) {
                 }
                 partyCtrlOn();
                 fbatChangeMode(1);
-                psndClearFlag(0x80);
+                psndClearFlag(PSND_FLAG_MUTE_SFX);
                 statusWinForceUpdate();
                 if (!(wp->flags & 0x1000)) {
                     marioStSystemLevel(0);
@@ -421,7 +421,7 @@ void winMain(void) {
                 wp->currentEvent = evtEntryType(evt_item_use, 0, 0, 0);
                 wp->currentEvent->lwData[10] = wp->item.useItem;
                 wp->currentEvent->lwData[11] = wp->item.useTarget == 0 ? 0 : list[wp->item.useTarget - 1]->partyId;
-                psndClearFlag(0x80);
+                psndClearFlag(PSND_FLAG_MUTE_SFX);
                 wp->menuState++;
                 pouchRemoveItemIndex(wp->item.useItem, wp->item.useIdx);
                 break;

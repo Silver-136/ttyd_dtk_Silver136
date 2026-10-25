@@ -2621,12 +2621,12 @@ USER_FUNC(supotto_blendmode) {
 }
 
 USER_FUNC(tik_snd_off) {
-    psndSetFlag(0x80);
+    psndSetFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(tik_snd_on) {
-    psndClearFlag(0x80);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
 }
 

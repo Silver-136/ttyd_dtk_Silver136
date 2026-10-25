@@ -11,7 +11,6 @@
 #include "battle/battle_audience.h"
 
 void psndSFX_pit(s32 id, s32 pitch);
-void BattleAudience_Case_ActionCommandGood(BattleWeapon* weapon);
 
 #define AC_SE_ID(wp) ((wp)->actionCommands.seId)
 #define AC_SE_VAL(wp) ((wp)->actionCommands.seValue)

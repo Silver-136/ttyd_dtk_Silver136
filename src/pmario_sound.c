@@ -6169,7 +6169,7 @@ sgfound:
                 SoundEfxSetVolume(sfx[0]->channel, SFX_VOL(sfx[0]));
             }
         }
-        if (( !(sfx[0]->flags & 0xA30) ) && (psnd.flags & 0x80)) {
+        if (( !(sfx[0]->flags & 0xA30) ) && (psnd.flags & PSND_FLAG_MUTE_SFX)) {
             f = e->fxId;
             if (f & 0x80000000) {
                 SoundSSSetVolCh(sfx[0]->channel, 0);

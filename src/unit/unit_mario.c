@@ -361,10 +361,10 @@ USER_FUNC(_mario_super_emblem_anim_set) {
     id = BattleTransID(event, id);
     BattleGetUnitPtr(wp, id);
     type = 0;
-    if (pouchEquipCheckBadge(0x147)) {
+    if (pouchEquipCheckBadge(ITEM_L_EMBLEM)) {
         type = 1;
     }
-    if (pouchEquipCheckBadge(0x148)) {
+    if (pouchEquipCheckBadge(ITEM_W_EMBLEM)) {
         type += 2;
     }
     switch (type) {

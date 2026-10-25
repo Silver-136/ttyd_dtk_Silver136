@@ -10,6 +10,7 @@
 #include "sfx_name_word.h"
 #include "koopa_motion.h"
 #include "peach.h"
+#include "mario/mario_pouch.h"
 
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
@@ -138,7 +139,7 @@ void mot_stay(void) {
         marioChkJump();
         if (mario->controlStickSensitivity > 0.0f) {
             if ((s8)mario->wStickDir1 * (s8)mario->wStickDir1 + (s8)mario->wStickDir2 * (s8)mario->wStickDir2 > 0xBD1) {
-                if (pouchEquipCheckBadge(0x143) == 0) {
+                if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
                     marioChgMot(MARIO_MOTION_DASH);
                 } else {
                     marioChgMot(MARIO_MOTION_WALK);
@@ -247,7 +248,7 @@ void mot_stay(void) {
     if (mario->wMotionTimer == 0 && mario->controlStickSensitivity > 0.0f && held == FALSE) {
 #endif
         if ((s8)mario->wStickDir1 * (s8)mario->wStickDir1 + (s8)mario->wStickDir2 * (s8)mario->wStickDir2 > 0xBD1) {
-            if (pouchEquipCheckBadge(0x143) == 0) {
+            if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
                 marioChgMot(MARIO_MOTION_DASH);
             } else {
                 marioChgMot(MARIO_MOTION_WALK);
@@ -330,7 +331,7 @@ void marioChgMotAuto(void) {
     if ((s8)a == 0 && (s8)mario->wStickDir2 == 0) {
         marioChgMot(MARIO_MOTION_STAY);
     } else if ((s8)a * (s8)a + (s8)mario->wStickDir2 * (s8)mario->wStickDir2 > 0xBD1) {
-        if (pouchEquipCheckBadge(0x143) == 0) {
+        if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
             marioChgMot(MARIO_MOTION_DASH);
         } else {
             marioChgMot(MARIO_MOTION_WALK);

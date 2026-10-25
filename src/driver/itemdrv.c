@@ -130,7 +130,7 @@ static inline BOOL itemGetPouch(ItemEntry* entry) {
 
 static inline void itemGetEnd(ItemEntry* entry) {
     marioStSystemLevel(0);
-    psndClearFlag(0x80);
+    psndClearFlag(PSND_FLAG_MUTE_SFX);
     if (entry->flags2 & 0x1000000) {
         entry->flags2 &= ~0x1000000;
         marioCtrlOn();
@@ -998,7 +998,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             camGetPtr(CAMERA_2D)->flags |= 0x200;
             marioKeyOff();
             marioStSystemLevel(2);
-            psndSetFlag(0x80);
+            psndSetFlag(PSND_FLAG_MUTE_SFX);
             mario->floorMove.x = 0.0f;
             mario->floorMove.z = 0.0f;
             mario->baseSpeed = 0.0f;
@@ -1262,7 +1262,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             wp->lectureEvt = evtEntryType(all_juyoitem_lecture, 0, 0, 0);
             wp->lectureEvt->lwData[8] = (EvtWord)entry;
             wp->lectureEvt->lwData[9] = (EvtWord)wp->effect;
-            psndClearFlag(0x80);
+            psndClearFlag(PSND_FLAG_MUTE_SFX);
             entry->subState = 7;
             break;
         case 7:
@@ -1320,7 +1320,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 entry->flags &= ~0x1000;
             }
             marioStSystemLevel(0);
-            psndClearFlag(0x80);
+            psndClearFlag(PSND_FLAG_MUTE_SFX);
             if (entry->flags2 & 0x1000000) {
                 entry->flags2 &= ~0x1000000;
                 marioCtrlOn();

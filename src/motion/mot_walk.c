@@ -207,7 +207,7 @@ void mot_walk(void) {
         if (!marioChkItemMotion()) {
             marioChkJump();
             marioChkTransform();
-            if (pouchEquipCheckBadge(0x143) == 0) {
+            if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
                 stickDir1 = player->wStickDir1;
                 stickDir2 = player->wStickDir2;
                 if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) > 0xBD1) {
@@ -330,7 +330,7 @@ void mot_dash(void) {
             stickDir1 = player->wStickDir1;
             stickDir2 = player->wStickDir2;
 #ifdef VERSION_G8ME01
-            if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1 || pouchEquipCheckBadge(323)) {
+            if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1 || pouchEquipCheckBadge(ITEM_SLOW_GO)) {
 #else
             if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1) {
 #endif
