@@ -3320,7 +3320,7 @@ MapFileJoint* mapSearchDmdJointSub2(MapFileJoint* joint, const char* name, const
     }
     if (joint->next) {
         found = mapSearchDmdJointSub2(joint->next, name, prefix);
-        if (1) {
+        {
             if (found) {
                 return found;
             }
@@ -3515,7 +3515,7 @@ void mapObjRotate(const char* name, f32 x, f32 y, f32 z) {
         MTXRotRad(rotX, 'x', MTXDegToRad(x));
         MTXRotRad(rotY, 'y', MTXDegToRad(y));
         MTXRotRad(rotZ, 'z', MTXDegToRad(z));
-        if (1) {
+        {
             MTXConcat(obj->transformMtx, rotZ, obj->transformMtx);
             MTXConcat(obj->transformMtx, rotY, obj->transformMtx);
             MTXConcat(obj->transformMtx, rotX, obj->transformMtx);

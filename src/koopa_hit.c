@@ -550,7 +550,7 @@ HitEntry* kpaHitCheck(void) {
             KHEAD(j) = hit;
         }
         if (hit) {
-            if (1) {
+            {
             }
             best = hit;
         }

@@ -2202,7 +2202,7 @@ HitEntry* N_dou10_yoko_yari3(void) {
     hit = hitCheckVecFilter(&query, NULL);
     if (hit) {
         w->hitobjFront = hit;
-        if (1) {
+        {
             return hit;
         }
     }

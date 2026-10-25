@@ -983,7 +983,7 @@ void mobjCalcMtx(MapObjectEntry* entry) {
     calcMtx(mtx, &position, &entry->scale2, &entry->rotation);
     for (i = 0; i < 2; i++) {
         if (entry->hitObj[i].hitObject != NULL) {
-            if (1) {
+            {
             }
             hitReCalcMatrix(entry->hitObj[i].hitObject, mtx);
         }

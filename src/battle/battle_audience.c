@@ -312,7 +312,7 @@ void BattleAudience_Init(void) {
 
     audience = BattleAudienceBaseGetPtr();
     window = BattleAudienceWinGetPtr();
-    if (1) {
+    {
     pouchGetPtr(); //useless call
     memset(audience, 0, sizeof(BattleAudience));
     }
@@ -944,7 +944,7 @@ void BattleAudience_End(void) {
         if (audience->mTargetAudienceCount < 0.0f) {
             audience->mTargetAudienceCount = 0.0f;
         }
-        if (1) {
+        {
         if (audience->mTargetAudienceCount > (f32)audience->mMaxAudience) {
             audience->mTargetAudienceCount = (f32)audience->mMaxAudience;
         }

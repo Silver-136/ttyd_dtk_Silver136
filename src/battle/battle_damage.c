@@ -2022,7 +2022,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         case DAMAGE_CODE_COUNTER_ICY: return 11;
         case DAMAGE_CODE_COUNTER_EXPLOSIVE: return 12;
         case DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE: return 13;
-        case DAMAGE_CODE_COUNTER_ELECTRIFIED: if (1) { return 14; }
+        case DAMAGE_CODE_COUNTER_ELECTRIFIED: return 14;
         case DAMAGE_CODE_COUNTER_POISON: return 15;
         case DAMAGE_CODE_COUNTER_PAYBACK: return 16;
         case DAMAGE_CODE_COUNTER_HOLD_FAST: return 17;
