@@ -27,7 +27,6 @@ const f32 float_0_8041f774 = 0.0f;
 double tan(double);
 s32 evt_img_alloc_capture(EventEntry* event, BOOL isFirstCall);
 
-u32 gap_fd_sbss;
 static FadeWork* wp;
 
 //local prototypes
@@ -1290,5 +1289,4 @@ void fadeSetNarrowFast(void) {
 	wp->entries[1].flags |= 8;
 }
 
-u32 gap_fd_sdata2[7] = {0};
 

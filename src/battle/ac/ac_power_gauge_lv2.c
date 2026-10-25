@@ -325,6 +325,3 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
 }
 
-#pragma force_active on
-u32 gap_07_804179E8_sdata[6] = {0};
-#pragma force_active reset

@@ -471,9 +471,6 @@ WorldData world_data = { "MarioSt", "マリオの世界", { &area_kwb, &area_bti
                                                       &area_las, &area_kpa, &area_jon, &area_yuu, &area_qiz, &area_sys,
                                                       &area_dmo, &area_dig, &area_end } };
 
-#ifdef VERSION_G8ME01
-u32 gap_mapdata_data[5] = {0, 0, 0, 0, 0};
-#endif
 
 /*
 00032a68 00014c 80038048  4 mapDataPtr 	mapdata.o

@@ -128,7 +128,6 @@ WinDt win_dt3[4] = {
     {140.0f, -65.0f, -120.0f, 60.0f, 10, 0, {1, 1, 2, 2}},
 };
 
-__declspec(section ".data") static u32 gap_06_803DB834_bss;
 static LoadWork work;
 static LoadWork* wp = &work;
 __declspec(section ".sdata2") const u32 seq_logo_zero_color[2];
@@ -1367,7 +1366,6 @@ WinDt win_dt3[4] = {
     {140.0f, -65.0f, -120.0f, 60.0f, 10, 0, {1, 1, 2, 2}},
 };
 
-__declspec(section ".data") static u32 gap_06_803DB834_bss;
 static LoadWork work;
 static LoadWork* wp = &work;
 

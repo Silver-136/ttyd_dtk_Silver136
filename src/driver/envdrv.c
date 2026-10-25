@@ -1384,7 +1384,6 @@ void envSetYami(MapTevCallbackInfo* info) {
     static f32 u1 = 0.0f;
     static f32 u2 = 0.0f;
     static u32 v_count = 0;
-    static s32 gap_08_80418A8C_sbss = 0;
     EnvironmentWork* wp;
     GXTevStageID stage;
     GXTexMapID map;
