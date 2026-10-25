@@ -1,34 +1,19 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_bg.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_bg_auto_scroll_onoff);
-USER_FUNC(evt_bg_set_scrl_offset);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_dispflg_onoff);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_get_sincos);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_sub_spline_get_value);
 USER_FUNC(evt_sub_spline_init);
 

@@ -17,26 +17,9 @@
 double sqrt(double x);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_DivePartsPosition);
-USER_FUNC(btlevtcmd_GetPartsPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_OffAttribute);
-USER_FUNC(btlevtcmd_OnAttribute);
-USER_FUNC(btlevtcmd_PartsFaceDirectionSub);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetPartsFallAccel);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
 static USER_FUNC(chain_init);
 static USER_FUNC(chain_main);
-USER_FUNC(evt_btl_camera_set_mode);
 
 BattleUnitKind unit_wanwan;
 static BattleUnitDefense defence;

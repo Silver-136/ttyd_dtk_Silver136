@@ -1,5 +1,16 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "memory.h"
 #include "cam_road.h"
@@ -16,43 +27,20 @@ static u8* _ap;
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 USER_FUNC(cam_displacement);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_hit_damage_return_set);
 USER_FUNC(evt_hitobj_attr_onoff);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mario_set_mov_spd);
-USER_FUNC(evt_mario_wait_landon);
 USER_FUNC(evt_mobj_brick);
 USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_lock);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_save_blk);
 USER_FUNC(evt_mobj_switch_blue);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
 USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_win_item_select);
 static void alpha_tev(MapTevCallbackInfo* info);
 

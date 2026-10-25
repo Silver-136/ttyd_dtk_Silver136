@@ -3,6 +3,18 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 #include "party/party_nokonoko.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_ext.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 #pragma inline_max_total_size(11500)
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -67,25 +79,13 @@ static void ext_disp(CameraId camera, void* param);
 static void ext_shadow_disp(CameraId camera, void* param);
 static void ext_shadow_disp(CameraId camera, void* param);
 
-s32 evt_bero_get_info(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_set(EventEntry* event, BOOL isFirstCall);
 s32 evt_cam3d_evt_set_at(EventEntry* event, BOOL isFirstCall);
 s32 evt_cam3d_evt_set_xyz(EventEntry* event, BOOL isFirstCall);
 s32 evt_cam3d_evt_xyz_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_zoom_in(EventEntry* event, BOOL isFirstCall);
-s32 evt_eff_fukidashi(EventEntry* event, BOOL isFirstCall);
-s32 evt_ext_entry(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_entry(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_get_item(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_playanim(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_flag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_party(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_key_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_mov_pos2(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_normalize(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_dir(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall);
@@ -96,34 +96,7 @@ static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_print(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_print_add(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_select(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_change_interrupt(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_flag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_get_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_move_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_anim(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_autotalkpose(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_ry(EventEntry* event, BOOL isFirstCall);
 s32 evt_npc_set_tribe(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_setup(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_status_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_move_pos2(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_run(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_set_dir(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_stop(EventEntry* event, BOOL isFirstCall);
-s32 evt_run_case_evt(EventEntry* event, BOOL isFirstCall);
-s32 evt_seq_wait(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_bgmoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_bgmon(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_envoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_envon(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_sfxon_3d(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_get_sincos(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_random(EventEntry* event, BOOL isFirstCall);
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall);
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall);
 static void ext_moamoa_dispent(void);

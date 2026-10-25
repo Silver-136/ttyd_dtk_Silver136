@@ -8,16 +8,15 @@
 #include "evt/evt_party.h"
 #include "evt/evt_sub.h"
 #include "data_tables.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_eff64);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_mobj_badgeblk);
 USER_FUNC(evt_mobj_brick);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
 
 EvtWord muj_03_event_01[22];
 static BeroEntry bero_entry_data[3];

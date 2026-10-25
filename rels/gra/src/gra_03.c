@@ -2,13 +2,12 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "gra.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(evt_mobj_badgeblk);
 USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
 
 static BeroEntry bero_entry_data[3];
 EvtWord gra_03_init_evt[41];

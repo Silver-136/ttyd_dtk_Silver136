@@ -150,12 +150,6 @@ static void yuka_main(void);
 static void yuka_init(void);
 USER_FUNC(main_deka);
 
-USER_FUNC(btlevtcmd_ACSuccessEffect);
-USER_FUNC(btlevtcmd_CheckAttribute);
-USER_FUNC(btlevtcmd_CheckPartsAttribute);
-USER_FUNC(btlevtcmd_CommandCheckDamage);
-USER_FUNC(btlevtcmd_GetSelectEnemy);
-USER_FUNC(btlevtcmd_GetSelectNextEnemy);
 
 static EVT_BEGIN(nice_event)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), 0, 100, 0)

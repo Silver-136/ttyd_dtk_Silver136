@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle_unit.h"
 #include "manager/evtmgr_cmd.h"
@@ -23,24 +24,8 @@
 
 u8* lightGetPaperCraft(void);
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_SetBaseScale);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetEventWait);
 USER_FUNC(btlevtcmd_SetTalkBodyId);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_audience_base_flag_on);
-USER_FUNC(evt_audience_delete);
-USER_FUNC(evt_audience_entry);
-USER_FUNC(evt_audience_flag_on);
-USER_FUNC(evt_sub_random);
 s32 weaponGetPower_Gonbaba(BattleUnit* unit, s32* weapon);
 static USER_FUNC(_leg_smoke_effect);
 USER_FUNC(_btlgon_get_escape_param);

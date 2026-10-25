@@ -2,10 +2,15 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "eki.h"
+#include "evt/evt_case.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_lecture.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_exit_case_evt);
-USER_FUNC(evt_item_delete);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_important_item);
 USER_FUNC(evt_item_get_item);
@@ -14,21 +19,10 @@ USER_FUNC(evt_item_set_bound_rate);
 USER_FUNC(evt_item_set_gravity);
 USER_FUNC(evt_item_set_jump_power);
 USER_FUNC(evt_item_set_move_dir_speed);
-USER_FUNC(evt_item_status_on);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(lect_juyoitem_rel_set);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mapobj_flag_onoff);
 #endif
 
 static EvtWord n_close[12];

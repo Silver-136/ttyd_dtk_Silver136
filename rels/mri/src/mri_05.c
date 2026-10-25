@@ -2,6 +2,15 @@
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/eff_puniballoon.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "mri_puni.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "mario/mario.h"
 #include "mario/mario_motion.h"
@@ -15,45 +24,20 @@
 
 EffectEntry* marioeff;
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff_delete);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_set_position);
 USER_FUNC(evt_map_pauseanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_get_state);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mario_set_motion);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_npc_check_delete);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pcharge_pos);
-USER_FUNC(evt_puni_mem_init);
 USER_FUNC(evt_puni_set_hamari);
 USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_target_flag_onoff);
 USER_FUNC(evt_target_set_position);
 USER_FUNC(evt_target_set_soko);

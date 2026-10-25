@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_eff.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -22,31 +23,8 @@
 extern ItemData itemDataTable[];
 void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_CheckToken);
 USER_FUNC(btlevtcmd_CheckUnitFlag);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_sub_random);
 #ifdef VERSION_G8ME01
-USER_FUNC(btlevtcmd_AddRotate);
-USER_FUNC(btlevtcmd_ClearAllStatus);
-USER_FUNC(btlevtcmd_ConsumeItemReserve);
-USER_FUNC(btlevtcmd_DispItemIcon);
-USER_FUNC(btlevtcmd_JumpSetting);
-USER_FUNC(btlevtcmd_OffUnitFlag);
-USER_FUNC(btlevtcmd_OnOffStatus);
-USER_FUNC(btlevtcmd_RecoverHp);
-USER_FUNC(btlevtcmd_SetHp);
-USER_FUNC(btlevtcmd_SetRotateOffset);
-USER_FUNC(evt_eff);
 #endif
 static USER_FUNC(_steal_item);
 

@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "eff/eff_scanning.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_msg.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -19,40 +20,8 @@
 #include "battle/battle_database_common.h"
 
 static USER_FUNC(_mario_makkuro_set);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_ChangeDataTable);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_ClearAllStatus);
-USER_FUNC(btlevtcmd_DrawLots);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetHp);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_PhaseEventStartDeclare);
-USER_FUNC(btlevtcmd_ReplaceParts);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetRegistStatus);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_get_turn);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_btl_camera_set_prilimit);
-USER_FUNC(evt_btl_camera_wait_move_end);
-USER_FUNC(evt_msg_print);
 static USER_FUNC(vivian_comeback);
 static USER_FUNC(eff_scanning);
 

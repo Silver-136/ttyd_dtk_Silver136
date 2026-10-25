@@ -1,22 +1,15 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_eff_fukidashi);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_normalize);
 USER_FUNC(evt_mobj_jumpstand_blue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 
 static BeroEntry bero_entry_data[3];
 static EvtWord korutesu_event[74];

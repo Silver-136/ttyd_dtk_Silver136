@@ -2,37 +2,30 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "jin.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_road_reset);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_jump_jumpstand);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_wait_landon);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_jumpstand_red);
 USER_FUNC(evt_mobj_wait_animation_end);
 USER_FUNC(evt_party_get_name_hitobj_ride);
 USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 
 static EvtWord w_close[12];
 static EvtWord w_open[12];

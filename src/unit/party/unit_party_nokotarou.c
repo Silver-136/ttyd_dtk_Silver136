@@ -20,57 +20,11 @@
 #include "evt/evt_sub.h"
 #include "party/party_motion.h"
 #include "unit/unit_koura.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_snd.h"
 
-USER_FUNC(btlevtcmd_AddRotate);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_AudienceAppeal);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetFirstAttackTarget);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetOverTurnCount);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_InviteApInfoReport);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_JumpSetting);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_OffStatusFlag);
-USER_FUNC(btlevtcmd_OnStatusFlag);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetFallAccel);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetMoveSoundDataWork);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_SetOverTurnCount);
-USER_FUNC(btlevtcmd_SetPartsDefenceTable);
-USER_FUNC(btlevtcmd_SetPartsWork);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(evt_audience_ap_recovery);
-USER_FUNC(evt_btl_camera_set_homing_unit);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 static USER_FUNC(_check_guard_koura);
 USER_FUNC(_tsuranuki_effect_control);
 USER_FUNC(_color_lv_set);

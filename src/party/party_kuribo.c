@@ -8,6 +8,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/mobjdrv.h"
 #include "party/party_move.h"
+#include "evt/evt_msg.h"
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global kuribo_init
@@ -174,7 +175,6 @@ void kuribo_init_800C23B4(PartyEntry* party) {
     msg_ep = 0;
 }
 
-USER_FUNC(evt_msg_print);
 EVT_BEGIN(kurio_msg_evt)
     CALL(pre_kurio_use)
     IF_INT_EQUAL(4264967296, 0)

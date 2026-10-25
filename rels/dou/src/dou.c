@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_sub.h"
 
 #include "data/mapdata.h"
 #include "manager/evtmgr_cmd.h"
@@ -13,8 +14,6 @@ extern voidfunctionptr _dtors[];
 
 USER_FUNC(dou_mario_pos_osreport_func);
 USER_FUNC(evt_dou_normal_puka);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

@@ -5,6 +5,20 @@
 #include "sfx_name_word.h"
 #include "libc_decls.h"
 #include "eff/eff_starstone.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_case.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_pouch.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "data/mapdata.h"
 #include "driver/swdrv.h"
@@ -75,100 +89,35 @@ typedef struct StarStoneWork { u8 field_0x0[8]; Vec pos; u8 field_0x14[8]; f32 r
 static s32 champion_belt_onoff;
 
 USER_FUNC(chk);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_del_case_evt);
-USER_FUNC(evt_eff_fukidashi);
-USER_FUNC(evt_exit_case_evt);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
 USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_item_delete);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_status_on);
-USER_FUNC(evt_key_get_buttontrg);
 USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_balloon_bikkuri);
 USER_FUNC(evt_mario_balloon_off);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_exparty);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_jump_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_dir_npc);
 USER_FUNC(evt_mario_set_party_pos);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_mario_wait_landon);
-USER_FUNC(evt_msg_continue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
 USER_FUNC(evt_msg_print_add_insert);
 USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_change_interrupt);
 USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_jump_position_nohit);
-USER_FUNC(evt_npc_move_position);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_set_scale);
 USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_npc_status_onoff);
-USER_FUNC(evt_party_cont_onoff);
 USER_FUNC(evt_party_flg_onoff);
-USER_FUNC(evt_party_get_pos);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
 USER_FUNC(evt_party_set_breed_pose);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_dir_npc);
 USER_FUNC(evt_party_set_dir_pos);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pouch_add_coin);
 USER_FUNC(evt_pouch_add_item);
-USER_FUNC(evt_pouch_all_party_recovery);
-USER_FUNC(evt_pouch_mario_recovery);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_party_join);
 USER_FUNC(evt_pouch_party_left);
 USER_FUNC(evt_pouch_receive_mail);
 USER_FUNC(evt_pouch_remove_item);
 static USER_FUNC(evt_rankingReInit);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_set_case_wrk);
-USER_FUNC(evt_set_dir_to_target);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_get_dist);
 USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
-USER_FUNC(evt_sub_rumble_onoff);
 USER_FUNC(evt_tou_get_fighter_info);
 static USER_FUNC(evt_tou_get_fighter_rank);
 static USER_FUNC(evt_tou_get_next_match);

@@ -13,14 +13,6 @@
 s32 bts_x_flag_data;
 f32 intplGetValue(s32 mode, s32 currStep, f32 start, f32 end, s32 steps);
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHpGaugeOffset);
-USER_FUNC(btlevtcmd_StartWaitEvent);
 USER_FUNC(bts_x_flag_wait);
 USER_FUNC(bts_x_flag_get);
 USER_FUNC(bts_x_flag_add);

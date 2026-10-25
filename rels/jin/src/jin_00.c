@@ -3,6 +3,15 @@
 #include "sfx_name_word.h"
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_case.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -52,68 +61,20 @@ void senteresa_loadRenderMode(void);
 static inline f32 cosf(f32 x) { return cos(x); }
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_road_reset);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_exit_case_evt);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
 USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_motion);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_get_pose);
-USER_FUNC(evt_mario_jump_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mobj_exec_cancel);
 USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mobj_save_blk);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_change_interrupt);
-USER_FUNC(evt_npc_check_delete);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_set_color);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_npc_start_for_event);
 USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_set_dir_to_target);
-USER_FUNC(evt_snd_bgm_scope);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_get_dist);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(get_npc_color);
 USER_FUNC(teresa_eff);

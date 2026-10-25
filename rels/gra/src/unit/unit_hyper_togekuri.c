@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_msg.h"
 
 #include "system.h"
 #include "manager/evtmgr_cmd.h"
@@ -12,24 +13,7 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_ChangeFaceDirection);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_msg_print);
 static USER_FUNC(get_attacker);
 static USER_FUNC(krb_get_dir);
 static u16 krb_comp_dir(f32 x, f32 z);

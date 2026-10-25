@@ -2,6 +2,21 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_ext.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_pouch.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "string.h"
 #include "mario/mariost.h"
@@ -52,87 +67,28 @@ void fan_disp(CameraId camera, void* param);
 f32 cloudGetBreathDist(void);
 
 s32 N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_bero_exec_wait(EventEntry* event, BOOL isFirstCall);
-s32 evt_bero_get_entername(EventEntry* event, BOOL isFirstCall);
-s32 evt_bero_get_info(EventEntry* event, BOOL isFirstCall);
-s32 evt_bero_mapchange(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_set(EventEntry* event, BOOL isFirstCall);
 s32 evt_cloud_ent(EventEntry* event, BOOL isFirstCall);
 s32 evt_cloud_init(EventEntry* event, BOOL isFirstCall);
-s32 evt_eff_fukidashi(EventEntry* event, BOOL isFirstCall);
 s32 evt_end_count(EventEntry* event, BOOL isFirstCall);
 s32 evt_end_count(EventEntry* event, BOOL isFirstCall);
-s32 evt_ext_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_fade_end_wait(EventEntry* event, BOOL isFirstCall);
-s32 evt_hitobj_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_entry(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_get_item_end_wait(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_set_bound_rate(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_set_gravity(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_set_jump_power(EventEntry* event, BOOL isFirstCall);
 s32 evt_item_set_move_dir_speed(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_status_on(EventEntry* event, BOOL isFirstCall);
-s32 evt_key_get_buttontrg(EventEntry* event, BOOL isFirstCall);
 s32 evt_map_checkanim(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_playanim(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_flag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_get_position(EventEntry* event, BOOL isFirstCall);
 s32 evt_mapobj_rotate(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_trans(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_balloon_bikkuri(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_balloon_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_party(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_key_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_mov_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_mov_pos2(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_normalize(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_dir(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_party(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_pose(EventEntry* event, BOOL isFirstCall);
-s32 evt_mobj_kururing_floor(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_print(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_print_add(EventEntry* event, BOOL isFirstCall);
 s32 evt_msg_print_insert(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_print_party(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_select(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_toge(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_change_interrupt(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_flag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_get_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_move_position(EventEntry* event, BOOL isFirstCall);
 s32 evt_npc_reverse_ry(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_scale(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_setup(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_status_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_get_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_move_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_run(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_set_dir(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_set_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_stop(EventEntry* event, BOOL isFirstCall);
 s32 evt_party_yoshi_ride(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_all_party_recovery(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_get_yoshiname(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_mario_recovery(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_open_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_receive_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_remove_item(EventEntry* event, BOOL isFirstCall);
-s32 evt_seq_wait(EventEntry* event, BOOL isFirstCall);
-s32 evt_set_dir_to_target(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_bgmoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_bgmon(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_envon(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_sfxoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_sfxon_3d(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_intpl_msec_get_value(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_intpl_msec_init(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_random(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_rumble_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_tou_get_ranking(EventEntry* event, BOOL isFirstCall);
 s32 check_hammer(Fan* fan);
 void ext_fan_dispent(void);

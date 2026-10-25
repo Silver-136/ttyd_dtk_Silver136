@@ -6,9 +6,9 @@
 #include "battle/battle_stage.h"
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
+#include "evt/evt_map.h"
 
 USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(tou_gamen_screen_tev_init);
 extern s32 tou_gamen_screen_tev[];
 extern BattleUnitKind unit_jyugem;

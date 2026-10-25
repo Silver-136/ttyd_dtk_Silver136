@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_eff.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -17,30 +18,8 @@
 static USER_FUNC(_clauda_breath_effect_fire);
 static USER_FUNC(_clauda_breath_effect_ready);
 USER_FUNC(_status_window_off);
-USER_FUNC(btlevtcmd_AddPartsRotate);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeWaitPlayComplete);
-USER_FUNC(btlevtcmd_DivePosition);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_JumpSetting);
-USER_FUNC(btlevtcmd_SetAlpha);
-USER_FUNC(btlevtcmd_SetDispOffset);
 USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetPartsRotate);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StopWaitEvent);
-USER_FUNC(btlevtcmd_WaitEventEnd);
 USER_FUNC(evt_audience_joy_ending);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff_delete_ptr);
-USER_FUNC(evt_sub_random);
 extern BattleUnitKind unit_act_atmic_teresa;
 extern BattleUnitKind unit_act_clauda;
 extern BattleUnitKind unit_act_kinopiko;

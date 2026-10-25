@@ -8,6 +8,15 @@
 #include "pmario_sound.h"
 #include "statuswindow.h"
 #include "driver/hitdrv.h"
+#include "evt/evt_img.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_paper.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
+#include "evt/evt_lecture.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -49,84 +58,24 @@ static USER_FUNC(effitemget_busaiku);
 static USER_FUNC(effitemget_open);
 static USER_FUNC(effitemgetchange_cam);
 USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff_fukidashi);
 USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_img_alloc_capture);
-USER_FUNC(evt_img_clear_virtual_point);
-USER_FUNC(evt_img_entry);
-USER_FUNC(evt_img_free_capture);
-USER_FUNC(evt_img_onoff);
-USER_FUNC(evt_img_release);
-USER_FUNC(evt_img_set_paper);
-USER_FUNC(evt_img_set_paper_anim);
-USER_FUNC(evt_img_wait_animend);
 USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_motion);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_init_camid);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_camid);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_enable_key);
 USER_FUNC(evt_mario_set_party_pos);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mario_trigflag_onoff);
-USER_FUNC(evt_mobj_delete);
-USER_FUNC(evt_mobj_entry);
-USER_FUNC(evt_mobj_flag_onoff);
 USER_FUNC(evt_mobj_set_camid);
 USER_FUNC(evt_mobj_set_gravity_bound);
-USER_FUNC(evt_mobj_set_position);
-USER_FUNC(evt_msg_continue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
 USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_dir);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_move_position);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_autotalkpose);
-USER_FUNC(evt_npc_set_camid);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_start_for_event);
-USER_FUNC(evt_npc_start_for_one_event);
-USER_FUNC(evt_npc_stop_for_event);
 USER_FUNC(evt_npc_stop_for_one_event);
-USER_FUNC(evt_paper_delete);
-USER_FUNC(evt_paper_entry);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_dispflg_onoff);
-USER_FUNC(evt_party_get_pos);
 USER_FUNC(evt_party_init_camid);
-USER_FUNC(evt_party_move_pos2);
 USER_FUNC(evt_party_set_camid);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_party_set_pose);
 USER_FUNC(evt_pouch_get_yoshiname);
 USER_FUNC(evt_pouch_party_join);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_random);
-USER_FUNC(lect_cam_load);
-USER_FUNC(lect_cam_save);
 static USER_FUNC(lect_itemget_kesan);
 static USER_FUNC(lect_mario_ido_sum);
 static USER_FUNC(lect_mobj_hit_nasi);
@@ -135,7 +84,6 @@ static USER_FUNC(lect_party_ido_sum);
 static USER_FUNC(lect_push_b_check);
 static USER_FUNC(lect_status_off);
 static USER_FUNC(lect_status_on);
-USER_FUNC(lect_test_systemlevel);
 static USER_FUNC(lecture_button_flag_on_off);
 static USER_FUNC(lecture_button_rtn);
 static USER_FUNC(lecture_button_seq_wait);

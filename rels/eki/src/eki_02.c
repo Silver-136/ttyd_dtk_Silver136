@@ -2,6 +2,8 @@
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "evt/evt_map.h"
+#include "party/party_motion.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -10,12 +12,8 @@
 #include "dolphin/mtx.h"
 #include "evt/evt_bero.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_envon);
 USER_FUNC(hit_move);
 
 static EvtWord s_close[12];

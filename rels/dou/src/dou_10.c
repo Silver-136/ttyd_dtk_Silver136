@@ -2,6 +2,14 @@
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -19,47 +27,19 @@ typedef struct EntryMgrEntry { s32 used; s32 id; f32 reg[3]; } EntryMgrEntry;
 typedef struct EntryMgr { s32 count; EntryMgrEntry* entries; } EntryMgr;
 
 USER_FUNC(dou_namiatari_check);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_event_from_road);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam3d_get_shift);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_road_reset);
 USER_FUNC(evt_dou_normal_puka);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hit_damage_return_set);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_dispdir);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mario_set_pos);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_entrymgr_check);
 USER_FUNC(evt_sub_entrymgr_delete);
 USER_FUNC(evt_sub_entrymgr_entry);
 USER_FUNC(evt_sub_entrymgr_getreg);
 USER_FUNC(evt_sub_entrymgr_init);
 USER_FUNC(evt_sub_entrymgr_setreg);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(nami_running_func);
 USER_FUNC(nami_running_init_func);
 USER_FUNC(namiyoke_fail_stop);

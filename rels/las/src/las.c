@@ -1,5 +1,12 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mobj.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "data/mapdata.h"
 #include "driver/mobjdrv.h"
@@ -11,23 +18,8 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_eff);
 USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_get_y_position);
-USER_FUNC(evt_mobj_set_y_position);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(mobj_color_off);
 USER_FUNC(mobj_set_color);
 USER_FUNC(mobj_set_ry);

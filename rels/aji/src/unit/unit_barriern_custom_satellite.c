@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_event_cmd.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -7,19 +9,7 @@
 #include "battle/battle_event_default.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(battleGetBarriernSatelliteInitPos);
 
 BattleUnitKind unit_barriern_custom_satellite;

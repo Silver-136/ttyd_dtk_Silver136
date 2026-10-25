@@ -2,26 +2,22 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "mri.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "mri_puni.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_lecture.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_important_item);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_puni_mem_init);
 USER_FUNC(evt_puni_puninum_onoff);
 USER_FUNC(evt_puni_set_hamari);
 USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(lect_juyoitem_rel_set);
 
 static BeroEntry bero_entry_data[2];
 static EvtWord item_evt[68];

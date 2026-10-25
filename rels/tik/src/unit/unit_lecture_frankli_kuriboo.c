@@ -1,35 +1,16 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_event_cmd.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_msg.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
 #include "manager/evtmgr_cmd.h"
 
 static USER_FUNC(_battle_set_lecture_unit_id);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_ChangeFaceDirection);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetMaxMoveCount);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetStayPose);
-USER_FUNC(btlevtcmd_SetTalkPose);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_StopWaitEvent);
-USER_FUNC(btlevtcmd_get_turn);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
 static USER_FUNC(lecture_init);
 
 BattleUnitKind unit_lecture_frankli_kuriboo;

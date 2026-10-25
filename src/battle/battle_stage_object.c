@@ -31,6 +31,8 @@
 #include "battle/battle_seq.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_ac.h"
+#include "battle/battle_message.h"
+#include "battle/battle_event_cmd.h"
 
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
@@ -68,7 +70,6 @@ USER_FUNC(_fall_frame);
 USER_FUNC(_fall_frame_wait_unit_ready);
 USER_FUNC(_fall_frame_wait);
 #ifdef VERSION_G8ME01
-USER_FUNC(btlevtcmd_AnnounceMessage);
 #else
 USER_FUNC(_announce_wall_message);
 #endif
@@ -82,18 +83,7 @@ USER_FUNC(_mobj_destroy);
 USER_FUNC(_mobj_set_alpha);
 USER_FUNC(_set_mobj_rotate_x);
 
-USER_FUNC(btlevtcmd_CheckDamage);
 USER_FUNC(btlevtcmd_GetACPossibility);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetSelectEnemy);
-USER_FUNC(btlevtcmd_GetSelectNextEnemy);
-USER_FUNC(btlevtcmd_PreCheckDamage);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_check_battleflag);
-USER_FUNC(evt_btl_camera_shake_h);
 
 extern BattleWeaponData _nozzle_at_base_mario;
 extern BattleWeaponData _nozzle_at_base_monster;
@@ -3694,13 +3684,11 @@ USER_FUNC(_fall_frame);
 USER_FUNC(_fall_frame_wait_unit_ready);
 USER_FUNC(_fall_frame_wait);
 #ifdef VERSION_G8ME01
-USER_FUNC(btlevtcmd_AnnounceMessage);
 #else
 USER_FUNC(_announce_wall_message);
 #endif
 USER_FUNC(_nozzle_turn);
 USER_FUNC(_set_mobj_shake);
-USER_FUNC(_set_mobj_shake_init);
 USER_FUNC(_bgset_audience_bgset_access);
 USER_FUNC(_bgset_kemuri_effect);
 USER_FUNC(_get_bgset_attack_data);

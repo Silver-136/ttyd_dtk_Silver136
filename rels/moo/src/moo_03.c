@@ -1,33 +1,22 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "mario/mario.h"
 #include "party.h"
 
 
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_party);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 static USER_FUNC(mario_kirimomi);
 static USER_FUNC(z);
 

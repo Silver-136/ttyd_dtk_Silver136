@@ -18,6 +18,7 @@
 #include "evt/evt_sub.h"
 #include "party/party_motion.h"
 #include "unit/unit_bomzou.h"
+#include "evt/evt_snd.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 #include "battle/battle_unit.h"
@@ -27,61 +28,8 @@ USER_FUNC(_get_bomb_hit_position);
 USER_FUNC(_judge_on_stage);
 USER_FUNC(_sanders_make_extra_work_area);
 USER_FUNC(_shot_move);
-USER_FUNC(btlevtcmd_AddRotate);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_AnimeWaitPlayComplete);
-USER_FUNC(btlevtcmd_AudienceAppeal);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetFaceDirection);
-USER_FUNC(btlevtcmd_GetFirstAttackTarget);
-USER_FUNC(btlevtcmd_GetHeight);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetStatusMg);
-USER_FUNC(btlevtcmd_InviteApInfoReport);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_JumpSetting);
-USER_FUNC(btlevtcmd_KillUnit);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_OnOffStatus);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetFallAccel);
-USER_FUNC(btlevtcmd_SetHomePos);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetMoveSoundDataWork);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_SetRotateOffset);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StageDispellFog);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_TransStageFloorPosition);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(evt_audience_ap_recovery);
-USER_FUNC(evt_btl_camera_set_homing_unitparts);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_btl_camera_shake_h);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(_make_counterset_weapon);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 

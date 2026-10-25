@@ -5,20 +5,19 @@
 #include "evt/evt_npc.h"
 #include "kpa_stage_data.h"
 #include "koopa.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam_road_reset);
-USER_FUNC(evt_eff);
 USER_FUNC(evt_koopa_chk_dead);
 USER_FUNC(evt_koopa_get_level);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mario_cam_off);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_jump_jumpstand);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_npc_setup);
 static USER_FUNC(kpa_get_level);
 USER_FUNC(kpa_status_init);
 

@@ -8,23 +8,7 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_GetDamage);
-USER_FUNC(btlevtcmd_GetOverTurnCount);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_eff);
 
 BattleUnitKind unit_hyper_sinemon;
 static BattleUnitDefense defence;

@@ -2,6 +2,21 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_img.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_light.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "driver/npcdrv.h"
 #include "driver/hitdrv.h"
@@ -22,7 +37,6 @@
 #include "evt/evt_sub.h"
 #include "gon.h"
 
-USER_FUNC(evt_img_alloc_capture);
 typedef struct CloudWork { s32 used; s32 state; char animName[0x20]; char imgName[0x20]; char offscreenName[0x20]; char groupNames[8][0x20]; char hitName[0x20]; s32 limit; s32 counter; EventEntry* evt; void* endEvt; s32 timer; s32 x; s32 y; s32 w; s32 h; f32 lastFrame; } CloudWork;
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
 static CloudWork* cloud;
@@ -32,13 +46,7 @@ static void _mapclsofs_all(CloudWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
 static void _img_alloc_capture(const char* a0, s32 a1, const char* a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_shake);
 static USER_FUNC(evt_cloud_main);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff_fukidashi);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_iri_16_cloud_ent);
 USER_FUNC(evt_iri_16_cloud_init);
 USER_FUNC(evt_item_entry);
@@ -46,68 +54,15 @@ USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_item_get_item_end_wait);
 USER_FUNC(evt_item_get_position);
 USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_light_charalight_all_onoff);
-USER_FUNC(evt_light_mario_lighting_onoff);
-USER_FUNC(evt_light_npc_lighting_onoff);
-USER_FUNC(evt_light_party_lighting_onoff);
 USER_FUNC(evt_map_fog_onoff);
-USER_FUNC(evt_map_get_fog);
-USER_FUNC(evt_map_set_fog);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_goodbye_party);
 USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_battle_start);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_npc_delete);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_jump_position_nohit);
-USER_FUNC(evt_npc_move_position);
-USER_FUNC(evt_npc_pera_onoff);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_battle_info);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_set_scale);
-USER_FUNC(evt_npc_status_onoff);
 USER_FUNC(evt_npc_wait_anim);
-USER_FUNC(evt_npc_wait_battle_end);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
 USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfx_vol);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_snd_sfxon_3d_ex);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 static USER_FUNC(gonbaba_wait_landon);
 static void _img_alloc_capture(const char* a0, s32 a1, const char* a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);

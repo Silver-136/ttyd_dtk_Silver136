@@ -32,6 +32,7 @@
 #include "battle/battle_stage.h"
 #include "battle/battle_actrecord.h"
 #include "battle/battle_attack_audience.h"
+#include "battle/battle_message.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
@@ -48,7 +49,6 @@ unsigned long strlen(const char* s);
 BOOL BattleCommandAttackAudienceCheck(void);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param);
 USER_FUNC(_get_msg);
-USER_FUNC(btlevtcmd_AnnounceMessage);
 void BattleCommandDisplay_ActMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_WeaponSelectMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_OperationMenuDisp(CameraId camId, void* param);

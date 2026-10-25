@@ -8,20 +8,6 @@
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_CheckDamagePattern);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_OnAttribute);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
 extern EvtWord gesso_arm_damage_pose_event[];
 extern EvtWord gesso_arm_dead_event[];
 

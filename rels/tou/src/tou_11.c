@@ -3,50 +3,25 @@
 #include "evt/evt_bero.h"
 #include "tou.h"
 #include "evt/evt_npc.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_road_reset);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_eff_fukidashi);
-USER_FUNC(evt_fade_set_mapchange_type);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_npc_move_position);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_npc_status_onoff);
-USER_FUNC(evt_party_get_pos);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_dir_npc);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_set_dir_to_target);
-USER_FUNC(evt_snd_bgm_scope);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];

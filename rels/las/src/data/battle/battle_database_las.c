@@ -1,6 +1,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_map.h"
 
 #include "driver/effdrv.h"
 #include "battle/battle.h"
@@ -18,10 +20,7 @@ void mapObjGetPos(const char* name, Vec* pos);
 
 USER_FUNC(_gear_rotate);
 USER_FUNC(check_battle_end);
-USER_FUNC(evt_eff);
 USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(hi_fire_end);
 USER_FUNC(hi_fire_main);
 extern BattleUnitKind unit_black_karon;

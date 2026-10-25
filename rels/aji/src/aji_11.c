@@ -1,6 +1,15 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "evt/evt_case.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "driver/mapdrv.h"
 #include "mario/mario.h"
@@ -8,40 +17,15 @@
 #include "aji.h"
 #include "mario/mario_pouch.h"
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_exit_case_evt);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_set_mode);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_glide_position);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_scale);
-USER_FUNC(evt_npc_status_onoff);
 USER_FUNC(evt_npc_wait_anim);
 USER_FUNC(evt_peach_set_condition);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_snd_sfxon_3d_ex);
-USER_FUNC(evt_sub_get_system_flag);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_sub_system_flag_onoff);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(map_anim_flag_off);

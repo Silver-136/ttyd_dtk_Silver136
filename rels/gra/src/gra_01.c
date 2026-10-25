@@ -4,25 +4,19 @@
 #include "evt/evt_sub.h"
 #include "gra.h"
 #include "data_tables.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_gra_vivian_pose_set);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
 USER_FUNC(evt_mobj_badgeblk);
 USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_party_run);
 USER_FUNC(evt_party_set_homing_dist);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
 
 static BeroEntry bero_entry_data[3];
 EvtWord gra_01_after_ranpel2[94];

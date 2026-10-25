@@ -1,6 +1,15 @@
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_ext.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "memory.h"
 #include "string.h"
@@ -28,38 +37,14 @@ static inline f32 chb_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.
 void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void ext_disp(CameraId camera, void* param);
 
-s32 evt_bero_get_info(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_event_from_road(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_set(EventEntry* event, BOOL isFirstCall);
 s32 evt_chorobon_escape(EventEntry* event, BOOL isFirstCall);
 s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall);
-s32 evt_eff_fukidashi(EventEntry* event, BOOL isFirstCall);
-s32 evt_ext_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_playanim(EventEntry* event, BOOL isFirstCall);
 s32 evt_map_set_tevcallback(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_flag_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_key_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_pose(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_wait_movable(EventEntry* event, BOOL isFirstCall);
 s32 evt_mobj_badgeblk(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_print(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_battle_start(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_change_fbat_mode(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_flag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_get_position(EventEntry* event, BOOL isFirstCall);
 s32 evt_npc_jump_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_anim(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_wait_battle_end(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_bgmoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_bgmon(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_envon(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_set_rev_mode(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_sfxon_3d(EventEntry* event, BOOL isFirstCall);
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall);
 s32 wait_anim_end(EventEntry* event, BOOL isFirstCall);
 s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall);

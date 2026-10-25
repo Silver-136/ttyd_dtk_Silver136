@@ -2,42 +2,22 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "moo.h"
+#include "evt/evt_case.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_img.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_offscreen.h"
+#include "evt/evt_paper.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_exit_case_evt);
 USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_img_alloc_capture);
-USER_FUNC(evt_img_clear_virtual_point);
-USER_FUNC(evt_img_entry);
-USER_FUNC(evt_img_free_capture);
-USER_FUNC(evt_img_onoff);
-USER_FUNC(evt_img_release);
-USER_FUNC(evt_img_set_paper);
-USER_FUNC(evt_img_set_paper_anim);
-USER_FUNC(evt_img_set_shadow);
-USER_FUNC(evt_img_wait_animend);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_set_offscreen);
 USER_FUNC(evt_mario_bgmode_on);
-USER_FUNC(evt_mario_cam_y_off);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_offscreen_delete);
-USER_FUNC(evt_offscreen_entry);
-USER_FUNC(evt_paper_entry);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_offscreen_get_boundingbox2);
 #endif
 
 EvtWord n_bero_in[25];

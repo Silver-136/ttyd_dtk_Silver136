@@ -10,35 +10,10 @@
 #include "party/party_motion.h"
 #include "unit/party/unit_party_vivian.h"
 #include "battle/battle_database_common.h"
+#include "evt/evt_msg.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_DrawLots);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_SetStayPose);
-USER_FUNC(btlevtcmd_SetTalkPose);
-USER_FUNC(btlevtcmd_SetUnitWork);
 USER_FUNC(btlevtcmd_SortPhaseMoveTable);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_msg_print);
 extern EvtWord btl_marilyn_zoom[];
 extern EvtWord majo3_shadow_tail_event[];
 extern EvtWord majo_unison_phase_event[];

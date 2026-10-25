@@ -5,6 +5,16 @@
 #include "libc_decls.h"
 #include "party.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_map.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_sub.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -21,7 +31,6 @@
 #include "icon_ids.h"
 #include "yuu.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_sub_get_language);
 #endif
 
@@ -50,38 +59,16 @@ void yuucounter_flag_on(s32 flag);
 #define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)
 
 USER_FUNC(eff_call_minigame);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam3d_evt_set_now);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_letter_box_onoff);
-USER_FUNC(evt_cam_road_reset);
 USER_FUNC(evt_fade_in);
-USER_FUNC(evt_fade_out);
-USER_FUNC(evt_key_get_buttontrg);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_enable_key);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mario_set_prev_party_pos);
-USER_FUNC(evt_mario_wait_move_end);
 USER_FUNC(evt_mario_wait_rideon);
-USER_FUNC(evt_msg_select);
 USER_FUNC(evt_ryushi);
 USER_FUNC(evt_ryushi_clr);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
 USER_FUNC(evt_yuucounter_alloc);
 USER_FUNC(evt_yuucounter_free);
 USER_FUNC(evt_yuuminigame_alloc);

@@ -1,6 +1,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -22,49 +24,8 @@
 typedef struct PidersYarn { f32 x0; f32 y0; f32 z0; f32 x1; f32 y1; f32 z1; u8 alpha; } PidersYarn;
 static void piders_draw_yarn_sub(CameraId camera, void* param);
 
-USER_FUNC(btlevtcmd_AddRotate);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AttackDeclare);
-USER_FUNC(btlevtcmd_CalculateFaceDirection);
-USER_FUNC(btlevtcmd_ChangeFaceDirection);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_CheckToken);
-USER_FUNC(btlevtcmd_ChoiceSamplingEnemy);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_JumpPartsContinue);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_PayWeaponCost);
-USER_FUNC(btlevtcmd_PreCheckDamage);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetPartsRotate);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_WaitGuardMove);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(btlevtcmd_check_battleflag);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(piders_draw_yarn);
 static USER_FUNC(piders_get_first_pos_attr);
 static USER_FUNC(piders_get_num);

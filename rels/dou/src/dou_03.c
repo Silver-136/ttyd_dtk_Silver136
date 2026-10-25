@@ -4,44 +4,26 @@
 #include "evt/evt_damage.h"
 #include "driver/hitdrv.h"
 #include "mario/mario_pouch.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_shake);
 USER_FUNC(evt_dou_normal_puka);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hit_damage_return_set);
 USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_map_checkanim);
 USER_FUNC(evt_map_entry_airport_harbor);
 USER_FUNC(evt_map_pauseanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mobj_kururing_floor);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_win_item_select);
 
 EvtWord dou_03_custom[10];

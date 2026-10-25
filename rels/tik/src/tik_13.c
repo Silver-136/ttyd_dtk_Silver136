@@ -1,16 +1,12 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
+#include "evt/evt_map.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon_3d);
 
 static BeroEntry bero_entry_data[2];
 EvtWord tik_13_init_evt[60];

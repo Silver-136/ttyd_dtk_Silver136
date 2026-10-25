@@ -12,52 +12,17 @@
 #include "evt/evt_snd.h"
 #include "unit/party/unit_party_yoshi.h"
 #include "eff/n64/eff_whirlwind_n64.h"
+#include "battle/battle_camera.h"
+#include "party/party_motion.h"
+#include "battle/battle_event_subset.h"
 
 USER_FUNC(_binta_effect);
-USER_FUNC(btlevtcmd_AddRotate);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
 USER_FUNC(btlevtcmd_AnimeCmpPoseType);
-USER_FUNC(btlevtcmd_AnimeSetMotionSpeed);
-USER_FUNC(btlevtcmd_CheckDamagePattern);
-USER_FUNC(btlevtcmd_CheckDataOfDataTable);
 USER_FUNC(btlevtcmd_CheckDefinePosetype);
-USER_FUNC(btlevtcmd_CheckStatus);
 USER_FUNC(btlevtcmd_EllipseMovePosition);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetFaceDirection);
-USER_FUNC(btlevtcmd_GetGuardKouraId);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetHp);
-USER_FUNC(btlevtcmd_GetPartnerId);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnToken);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetFallAccel);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_SetUnitWork);
 USER_FUNC(btlevtcmd_SortPhaseMoveTable);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StopWaitEvent);
-USER_FUNC(btlevtcmd_TransStageFloorPosition);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_WaitEventEnd);
-USER_FUNC(evt_btl_camera_set_homing_unit);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
 USER_FUNC(_check_through_pos);
 USER_FUNC(_set_hp_gauge_fade_flag);
-USER_FUNC(_add_star_point_disp_offset);
 USER_FUNC(_check_at_dm_event_wait);
 USER_FUNC(_disable_restore_command_cursor);
 

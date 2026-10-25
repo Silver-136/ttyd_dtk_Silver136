@@ -1,9 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_event_cmd.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_StartWaitEvent);
 
 BattleUnitKind unit_act_teresa;
 static BattleUnitDefense defence;

@@ -3,6 +3,7 @@
 #include "evt/evt_cmd.h"
 #include "pmario_sound.h"
 #include "libc_decls.h"
+#include "battle/battle_camera.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -34,22 +35,6 @@ void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 double sqrt(double x);
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_GetDamage);
-USER_FUNC(btlevtcmd_GetSelectNextEnemy);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_PreCheckDamage);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_btl_camera_set_mode);
 USER_FUNC(zakogun_damage_pose);
 USER_FUNC(zakogun_damage_pose_cancel);
 USER_FUNC(zakogun_set_target_id);

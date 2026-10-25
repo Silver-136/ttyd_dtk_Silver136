@@ -2,27 +2,17 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "jin.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff_fukidashi);
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mobj_switch_red);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_random);
 
 static EvtWord n2_close[12];
 static EvtWord n2_open[12];

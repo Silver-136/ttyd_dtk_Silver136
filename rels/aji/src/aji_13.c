@@ -5,6 +5,20 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "mario/mario_cam.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_case.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_img.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_offscreen.h"
+#include "evt/evt_paper.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -28,57 +42,18 @@ void* _mapAlloc(u32 size);
 typedef struct { Vec pos; Vec delta; } BeltWork;
 
 USER_FUNC(bg_cam_chk);
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_exit_case_evt);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_img_alloc_capture);
-USER_FUNC(evt_img_clear_virtual_point);
-USER_FUNC(evt_img_entry);
-USER_FUNC(evt_img_onoff);
-USER_FUNC(evt_img_release);
-USER_FUNC(evt_img_set_paper);
-USER_FUNC(evt_img_set_paper_anim);
-USER_FUNC(evt_img_wait_animend);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_set_scale);
 USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_cam_keep_off);
 USER_FUNC(evt_mario_cam_y_on);
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mobj_recovery_blk);
-USER_FUNC(evt_mobj_save_blk);
 USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_check_delete);
-USER_FUNC(evt_offscreen_delete);
-USER_FUNC(evt_offscreen_entry);
-USER_FUNC(evt_offscreen_get_boundingbox);
-USER_FUNC(evt_paper_entry);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(mario_chk);
 USER_FUNC(hit_group_chk);

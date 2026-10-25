@@ -16,6 +16,7 @@
 #include "string.h"
 #include "dolphin/mtx.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_img.h"
 
 typedef struct CloudWork {
     u16 flags; // 0x0
@@ -36,7 +37,6 @@ typedef struct CloudWork {
     f32 lastFrame; // 0xC4
 } CloudWork;
 
-USER_FUNC(evt_img_alloc_capture);
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
 void mapObjGetPos(const char* name, Vec* pos);
 

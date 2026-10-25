@@ -1,16 +1,13 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam_road_reset);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon);
 
 static EvtWord w1_door_close[22];
 static EvtWord w1_door_open[22];

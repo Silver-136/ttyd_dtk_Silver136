@@ -3,18 +3,16 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
 #include "data_tables.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mobj_badgeblk);
 USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_flag_onoff);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_sub_get_system_flag);
 
 static BeroEntry bero_entry_data[5];
 static TreeAccess ki_data[2];

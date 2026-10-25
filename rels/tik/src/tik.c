@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_sub.h"
 
 #include "data/mapdata.h"
 #include "manager/evtmgr_cmd.h"
@@ -12,13 +14,7 @@ extern voidfunctionptr _dtors[];
 
 USER_FUNC(evt_npc_add_dirdist);
 USER_FUNC(evt_npc_get_loiter_dir);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_move_position);
 USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_status_onoff);
-USER_FUNC(evt_sub_get_dir);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_tik_villager_urouro_check_func);
 void _unresolved(void);
 void _epilog(void);

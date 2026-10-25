@@ -5,25 +5,11 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
+#include "evt/evt_eff.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
 USER_FUNC(btlevtcmd_AnimeWaitPlayLoopTiming);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_GetDamage);
-USER_FUNC(btlevtcmd_GetDamagePartsId);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetMaxMoveCount);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_eff);
 extern EvtWord cortez_weapon_blow_dead_event[];
 extern EvtWord cortez_weapon_break_event[];
 extern EvtWord cortez_weapon_counter_damage_event[];

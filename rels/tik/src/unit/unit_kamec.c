@@ -2,6 +2,9 @@
 #include "eff/eff_magic1_n64.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -20,62 +23,7 @@
 EffectEntry* effPokopiPchargeN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 EffectEntry* effThunderflareN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeFlagOnOff);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_AttackDeclare);
-USER_FUNC(btlevtcmd_CalculateFaceDirection);
-USER_FUNC(btlevtcmd_ChangeDataTable);
-USER_FUNC(btlevtcmd_ChangeFaceDirection);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_CheckToken);
-USER_FUNC(btlevtcmd_ChoiceSamplingEnemy);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetHeight);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHp);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetPartsPos);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetSelectEnemy);
-USER_FUNC(btlevtcmd_GetSelectNextEnemy);
-USER_FUNC(btlevtcmd_GetStatusMg);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_KillUnit);
-USER_FUNC(btlevtcmd_OffAttribute);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_PayWeaponCost);
-USER_FUNC(btlevtcmd_RecoverHp);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_SetAlpha);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRegistStatus);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SpawnUnit);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_WaitGuardMove);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(btlevtcmd_check_battleflag);
 static USER_FUNC(eff_magic);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_sub_intpl_get_value_para);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(kamec_copy_status);
 static USER_FUNC(kamec_get_bunsin);
 static USER_FUNC(kamec_get_live_num);

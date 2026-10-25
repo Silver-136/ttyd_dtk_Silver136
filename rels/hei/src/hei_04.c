@@ -3,14 +3,13 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
 #include "data_tables.h"
+#include "evt/evt_map.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
 
 static BeroEntry bero_entry_data[3];
 static EvtWord evt_ki_3[20];

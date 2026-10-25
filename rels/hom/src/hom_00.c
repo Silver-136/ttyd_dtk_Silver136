@@ -2,6 +2,15 @@
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
 #include "driver/envdrv.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
 
 #include "memory.h"
 #include "mario/mariost.h"
@@ -23,64 +32,22 @@
 static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
 
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_event_from_road);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam3d_evt_set_xyz);
-USER_FUNC(evt_cam3d_get_shift);
 USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff_fukidashi);
 USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_item_get_item_end_wait);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_pos);
 USER_FUNC(evt_mobj_exec_cancel);
 USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mobj_recovery_blk);
-USER_FUNC(evt_mobj_save_blk);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_npc_move_position);
 USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_npc_status_onoff);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_move_pos);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_dir_npc);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_get_system_flag);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(test_glare);
 USER_FUNC(tokei);

@@ -1,32 +1,24 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_case.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "eff/eff_small_star.h"
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
 #include "las.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mobj_delete);
-USER_FUNC(evt_mobj_flag_onoff);
 USER_FUNC(evt_mobj_floatswitch_red);
-USER_FUNC(evt_mobj_get_position);
 USER_FUNC(evt_mobj_hit_onoff);
-USER_FUNC(evt_mobj_itembox);
-USER_FUNC(evt_mobj_set_position);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 static USER_FUNC(small_star);
 
 static EvtWord e_door_close[12];

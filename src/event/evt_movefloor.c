@@ -7,6 +7,12 @@
 #include "pmario_sound.h"
 #include <string.h>
 #include "sfx_name_word.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 void mapObjGetPos();
 
@@ -36,25 +42,15 @@ typedef struct MovingFloor {
     f32 angle;       // 0x84
 } MovingFloor;
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info_nextarea);
-USER_FUNC(evt_bero_get_now_number);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_get_exparty);
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_set_hosei_xyz);
 USER_FUNC(evt_party_get_name_hitobj_head);
 USER_FUNC(evt_party_get_name_hitobj_ride);
 USER_FUNC(evt_party_set_hosei_xyz);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_get_areaname);
 USER_FUNC(moving_floor_get_end);
 USER_FUNC(moving_floor_get_kind);

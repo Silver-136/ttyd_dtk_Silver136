@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_msg.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
@@ -10,62 +12,9 @@
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(btlevtcmd_AddScale);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeSetPoseSoundTable);
-USER_FUNC(btlevtcmd_AttackDeclare);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_CheckToken);
-USER_FUNC(btlevtcmd_ChoiceSamplingEnemy);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetDamageCode);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetHp);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_JumpSetting);
-USER_FUNC(btlevtcmd_KillUnit);
-USER_FUNC(btlevtcmd_PayWeaponCost);
-USER_FUNC(btlevtcmd_PreCheckDamage);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetFallAccel);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetScale);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SpawnUnit);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_WaitGuardMove);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(btlevtcmd_reset_move_color_lv_all);
 USER_FUNC(chorogun_appear);
 USER_FUNC(chorogun_escape_all);
-USER_FUNC(evt_btl_camera_add_zoom);
-USER_FUNC(evt_btl_camera_nomove_y_onoff);
-USER_FUNC(evt_btl_camera_set_homing_unit);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_btl_camera_set_prilimit);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_btl_camera_shake_h);
-USER_FUNC(evt_msg_print);
 USER_FUNC(get_gold_chorobon_id);
 extern EvtWord chorogun_entry[];
 extern BattleUnitKind unit_chorobon_gundan;

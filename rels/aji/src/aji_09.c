@@ -1,5 +1,18 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_case.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -10,61 +23,15 @@
 
 USER_FUNC(check_kou_evt);
 USER_FUNC(dot_mario);
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_get_start_position);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_del_case_evt);
-USER_FUNC(evt_exit_case_evt);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_fade_entry);
-USER_FUNC(evt_fade_set_mapchange_type);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_flag_onoff);
-USER_FUNC(evt_mario_get_mode);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_mode);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_wait_landon);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_set_autotalkpose);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_peach_transform_gundan_off);
 USER_FUNC(evt_peach_transform_gundan_on);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_set_case_wrk);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 USER_FUNC(evt_snd_sfx_dist);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 static USER_FUNC(peach_set_pose);
 
 static EvtWord s_door_open[22];

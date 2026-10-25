@@ -33,6 +33,8 @@
 #include "battle/battle_information.h"
 #include <string.h>
 #include "kpa_act.h"
+#include "battle/battle_event_cmd.h"
+#include "evt/evt_msg.h"
 
 f32 cloudGetBreathPower(Vec pos, f32 width);
 BOOL kpaMutekiCheck(void);
@@ -46,9 +48,7 @@ void FontDrawStringShake(f32 x, f32 y, const char* message);
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
 
 #define NPC_RAD2DEG(r) ((r) * 57.29579f)
-USER_FUNC(btlevtcmd_ftomsec);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_msg_print);
 
 typedef struct NpcWork2 {
     NpcWork field;  // 0x0

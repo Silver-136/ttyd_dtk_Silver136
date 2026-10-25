@@ -1,6 +1,8 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_msg.h"
+#include "party/party_motion.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -31,51 +33,10 @@ USER_FUNC(_save_param);
 #ifdef VERSION_G8ME01
 USER_FUNC(faker_mario_sync_max_moves);
 #endif
-USER_FUNC(btlevtcmd_AddScale);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_CheckDataOfDataTable);
-USER_FUNC(btlevtcmd_DrawLots);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_KillUnit);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetFallAccel);
-USER_FUNC(btlevtcmd_SetHomePos);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetScale);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
 USER_FUNC(btlevtcmd_SortPhaseMoveTable);
-USER_FUNC(btlevtcmd_SpawnUnit);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_TransStageFloorPosition);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(vivian_comeback);
 extern BattleUnitSetup entryunit_party[];
 extern BattleUnitKind unit_gullible_christine;

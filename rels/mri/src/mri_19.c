@@ -4,22 +4,19 @@
 #include "evt/evt_sub.h"
 #include "mri.h"
 #include "data_tables.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "mri_puni.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_puni_mem_init);
 USER_FUNC(evt_puni_set_hamari);
 USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
 
 static BeroEntry bero_entry_data[5];
 static KusaAccess ueki_access_data[7];

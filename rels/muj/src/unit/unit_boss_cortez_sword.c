@@ -5,51 +5,13 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_eff.h"
+#include "party/party_motion.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
 USER_FUNC(btlevtcmd_AnimeWaitPlayLoopTiming);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_ClearAllStatus);
-USER_FUNC(btlevtcmd_DivePosition);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetDamage);
-USER_FUNC(btlevtcmd_GetDamagePartsId);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_OffAttribute);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_PhaseEventStartDeclare);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetFallAccel);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetHp);
-USER_FUNC(btlevtcmd_SetMaxMoveCount);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_TransStageFloorPosition);
-USER_FUNC(btlevtcmd_WaitEventEnd);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
 
 BattleUnitKind unit_boss_cortez_sword;
 static BattleUnitDefense defence;

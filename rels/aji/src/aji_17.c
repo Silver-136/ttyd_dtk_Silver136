@@ -4,6 +4,18 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "pmario_sound.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_pouch.h"
+#include "evt/evt_case.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -63,18 +75,8 @@ s32 dance_reverse(EventEntry* event, BOOL isFirstCall);
 s32 dance_reverse(EventEntry* event, BOOL isFirstCall);
 s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall);
 s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall);
-s32 evt_bero_exec_wait(EventEntry* event, BOOL isFirstCall);
-s32 evt_bero_get_info(EventEntry* event, BOOL isFirstCall);
-s32 evt_bero_mapchange(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_off(EventEntry* event, BOOL isFirstCall);
-s32 evt_cam3d_evt_set(EventEntry* event, BOOL isFirstCall);
-s32 evt_eff_fukidashi(EventEntry* event, BOOL isFirstCall);
 s32 evt_eff_softdelete(EventEntry* event, BOOL isFirstCall);
-s32 evt_fade_end_wait(EventEntry* event, BOOL isFirstCall);
-s32 evt_fade_entry(EventEntry* event, BOOL isFirstCall);
 s32 evt_fade_in(EventEntry* event, BOOL isFirstCall);
-s32 evt_fade_out(EventEntry* event, BOOL isFirstCall);
-s32 evt_fade_set_mapchange_type(EventEntry* event, BOOL isFirstCall);
 s32 evt_fade_softfocus_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_fade_tec_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_fuki_btn(EventEntry* event, BOOL isFirstCall);
@@ -83,81 +85,21 @@ s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall);
 s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall);
 s32 evt_map_checkanim(EventEntry* event, BOOL isFirstCall);
 s32 evt_map_pauseanim(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_playanim(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_replayanim(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_set_blend(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_flag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_get_position(EventEntry* event, BOOL isFirstCall);
 s32 evt_mapobj_rotate(EventEntry* event, BOOL isFirstCall);
 s32 evt_mapobj_scale(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_trans(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_adjust_dir(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_get_dispdir(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_mode(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_party(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_jump_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_key_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_kill_party(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_mov_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_mov_pos2(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_dir(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_set_dispdir(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_mode(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_party(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_pose(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_set_reardir(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_wait_move_end(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_continue(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_print(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_print_party(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_select(EventEntry* event, BOOL isFirstCall);
-s32 evt_msg_toge(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_flag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_get_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_move_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_pera_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_anim(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_autotalkpose(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_color(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_height(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_position(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_ry(EventEntry* event, BOOL isFirstCall);
 s32 evt_npc_set_tribe(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_width(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_setup(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_status_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_move_pos2(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_run(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_set_dir(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_set_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_stop(EventEntry* event, BOOL isFirstCall);
 s32 evt_peach_set_condition(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_all_party_recovery(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_mario_recovery(EventEntry* event, BOOL isFirstCall);
-s32 evt_run_case_evt(EventEntry* event, BOOL isFirstCall);
-s32 evt_seq_wait(EventEntry* event, BOOL isFirstCall);
 s32 evt_shuryolight_init(EventEntry* event, BOOL isFirstCall);
 s32 evt_shuryolight_run_evt(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_bgmoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_bgmoff_f(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_bgmon(EventEntry* event, BOOL isFirstCall);
 s32 evt_snd_envoff_f(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_envon(EventEntry* event, BOOL isFirstCall);
 s32 evt_snd_envon_f(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_set_rev_mode(EventEntry* event, BOOL isFirstCall);
 s32 evt_snd_sfx_all_stop(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_sfx_vol(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_sfxoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_sfxon(EventEntry* event, BOOL isFirstCall);
-s32 evt_snd_sfxon_3d(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_get_stopwatch(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_intpl_msec_get_value(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_intpl_msec_init(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_random(EventEntry* event, BOOL isFirstCall);
 s32 get_center(EventEntry* event, BOOL isFirstCall);
 s32 get_center(EventEntry* event, BOOL isFirstCall);
 s32 get_local_rotate(EventEntry* event, BOOL isFirstCall);

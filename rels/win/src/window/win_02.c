@@ -3,31 +3,21 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
 #include "data_tables.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
 USER_FUNC(evt_hit_get_position);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mobj_badgeblk);
 USER_FUNC(evt_mobj_brick);
 USER_FUNC(evt_mobj_powerupblk);
 USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 
 static BeroEntry bero_entry_data[5];
 EvtWord evt_hikou_nobiru_init[89];

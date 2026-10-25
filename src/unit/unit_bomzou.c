@@ -6,26 +6,11 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 USER_FUNC(btlevtcmd_AfterReactionEntry);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_PhaseEventStartDeclare);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetMaxMoveCount);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_sub_random);
 
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;

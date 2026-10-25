@@ -2,6 +2,12 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
+#include "evt/evt_item.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_case.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -22,10 +28,7 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_party_set_dir);
 USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_delete);
 #endif
 
 typedef struct IraiWork { s32 state; s32 count; s32 list[30]; s32 cursor; s32 last; s32 top; s32 yubiX; s32 yubiY; s32 field_0x94; f32 scroll; char client[30][21]; char contents[30][31]; u8 field_0x6B4[0x416C - 0x6B4]; } IraiWork;
@@ -35,16 +38,8 @@ void irai_flag_disp(void);
 void irai_flag_clear(void);
 
 USER_FUNC(evt_door_set_param);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_msg_continue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_set_position);
 USER_FUNC(evt_pouch_add_coin);
 USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_run_case_evt);
 USER_FUNC(irai_cancel_func);
 USER_FUNC(irai_check_func);
 USER_FUNC(irai_end_func);

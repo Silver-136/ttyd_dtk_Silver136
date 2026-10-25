@@ -18,6 +18,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "party.h"
+#include "evt/evt_cam.h"
 
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 void marioVoiceGlareOn(void);
@@ -68,7 +69,6 @@ static inline void* jabaraHitFront(f32 ang) {
     return hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, px, py, pz, sn, 0.0f, cs);
 }
 
-USER_FUNC(evt_cam_shake);
 
 static EVT_BEGIN(quake_evt)
     CALL(evt_cam_shake, 4, 0xF24A7A80, 0xF24A7A8F, 0xF0)

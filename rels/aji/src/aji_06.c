@@ -1,5 +1,18 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_case.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/mapdrv.h"
@@ -25,77 +38,26 @@ s32 g_Kusuri_B;
 s32 g_Kusuri_G;
 s32 g_Kusuri_R;
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_event_from_road);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam3d_get_shift);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_del_case_evt);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_exit_case_evt);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_fade_entry);
-USER_FUNC(evt_fade_set_mapchange_type);
-USER_FUNC(evt_item_delete);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_item_get_item_end_wait);
 USER_FUNC(evt_map_checkanim);
 USER_FUNC(evt_map_pauseanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_map_replayanim);
 USER_FUNC(evt_map_set_flush_color);
 USER_FUNC(evt_map_set_flush_onoff);
 USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_get_dir);
 USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_mode);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_mode);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_wait_landon);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_npc_check_delete);
-USER_FUNC(evt_npc_set_autotalkpose);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_peach_set_condition);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_set_case_wrk);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 USER_FUNC(evt_snd_sfx_dist);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_get_stopwatch);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(kusuri_color_get);
 USER_FUNC(kusuri_color_init);

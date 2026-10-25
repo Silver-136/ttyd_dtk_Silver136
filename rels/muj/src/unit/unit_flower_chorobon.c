@@ -8,27 +8,9 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeSetPoseSoundTable);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetDamageCode);
-USER_FUNC(btlevtcmd_GetFp);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetMaxFp);
-USER_FUNC(btlevtcmd_JumpSetting);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetFp);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetMaxFp);
-USER_FUNC(btlevtcmd_SetScale);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_sub_random);
 
 BattleUnitKind unit_flower_chorobon;
 static BattleUnitDefense defence;

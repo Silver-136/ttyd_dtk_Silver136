@@ -4,6 +4,7 @@
 #include "battle/battle_status_effect.h"
 #include "eff/eff_sandars.h"
 #include "battle/battle_sub.h"
+#include "evt/evt_audience.h"
 #pragma dont_inline on
 #include "battle/battle.h"
 #include "battle/battle_audience.h"
@@ -139,21 +140,6 @@ typedef struct GaugeCol {
     s8 dg, db;
 } GaugeCol;
 
-USER_FUNC(btlevtcmd_ACSuccessEffect);
-USER_FUNC(btlevtcmd_AddRotate);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckPartsAttribute);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetFaceDirection);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetSelectEnemy);
-USER_FUNC(btlevtcmd_GetSelectNextEnemy);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(evt_audience_abnormal_natural_all);
 
 BakuWork* GetBakuGamePtr(void);
 static USER_FUNC(star_stone_appear);

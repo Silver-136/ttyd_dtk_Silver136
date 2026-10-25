@@ -15,6 +15,9 @@
 #include "evt/evt_batstage.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_audience.h"
+#include "battle/battle_message.h"
+#include "evt/evt_eff.h"
+#include "party/party_motion.h"
 
 
 BOOL BattlePartyAnimeLoad(s32 id);
@@ -30,92 +33,19 @@ USER_FUNC(_get_escape_rate);
 USER_FUNC(_get_flower_suitoru_point);
 USER_FUNC(_get_heart_suitoru_point);
 USER_FUNC(_set_escape_ac_hlp_msg);
-USER_FUNC(btlevtcmd_AcSetDifficulty);
-USER_FUNC(btlevtcmd_AcSetFlag);
-USER_FUNC(btlevtcmd_AcSetParamAll);
-USER_FUNC(btlevtcmd_AddScale);
-USER_FUNC(btlevtcmd_AnimeChangePaperAnime);
-USER_FUNC(btlevtcmd_AnimeChangePaperGroup);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
 USER_FUNC(btlevtcmd_AnimeCmpPoseType);
-USER_FUNC(btlevtcmd_AnimeSetMotionSpeed);
-USER_FUNC(btlevtcmd_AnnounceMessage);
-USER_FUNC(btlevtcmd_CalculateFaceDirection);
-USER_FUNC(btlevtcmd_ChangeFaceDirection);
-USER_FUNC(btlevtcmd_ChangeParty);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckAttribute);
-USER_FUNC(btlevtcmd_CheckCommandUnit);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_CheckDamagePattern);
-USER_FUNC(btlevtcmd_CheckDataOfDataTable);
 USER_FUNC(btlevtcmd_CheckDefinePosetype);
 USER_FUNC(btlevtcmd_CheckGuardMotionEnable);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_DivePosition);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetBodyId);
 USER_FUNC(btlevtcmd_GetConfuseActEvent);
-USER_FUNC(btlevtcmd_GetDamageCode);
-USER_FUNC(btlevtcmd_GetHeight);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetMarioId);
-USER_FUNC(btlevtcmd_GetMoveFrame);
-USER_FUNC(btlevtcmd_GetPartnerId);
-USER_FUNC(btlevtcmd_GetPartsPos);
-USER_FUNC(btlevtcmd_GetPartyId);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetProtectId);
-USER_FUNC(btlevtcmd_GetResultAC);
-USER_FUNC(btlevtcmd_GetStatusMg);
 USER_FUNC(btlevtcmd_GuardMoveEnd);
 USER_FUNC(btlevtcmd_InterruptStop);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_JumpSetting);
-USER_FUNC(btlevtcmd_KillUnit);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_OffUnitFlag);
-USER_FUNC(btlevtcmd_OnOffStatus);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_RecoverFp);
-USER_FUNC(btlevtcmd_RecoverHp);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_ResultAC);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetDispOffset);
-USER_FUNC(btlevtcmd_SetFallAccel);
 USER_FUNC(btlevtcmd_SetGuard);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_SetScale);
-USER_FUNC(btlevtcmd_SetupAC);
 USER_FUNC(btlevtcmd_SortPhaseMoveTable);
-USER_FUNC(btlevtcmd_StartAC);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StopAC);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
 USER_FUNC(btlevtcmd_WaitAttackEndCheck);
-USER_FUNC(btlevtcmd_WaitEventEnd);
 USER_FUNC(btlevtcmd_audience_code_escape);
 USER_FUNC(btlevtcmd_audience_code_escape_fail);
 USER_FUNC(btlevtcmd_audience_code_escape_success);
-USER_FUNC(btlevtcmd_check_battleflag);
-USER_FUNC(btlevtcmd_ftomsec);
 USER_FUNC(evt_audience_sound_cheer);
-USER_FUNC(evt_btl_camera_set_homing_unit);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_random);
 
 EvtWord btldefaultevt_Damage[1133];
 EvtWord btldefaultevt_ChangeParty[174];

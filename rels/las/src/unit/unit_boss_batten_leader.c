@@ -4,6 +4,9 @@
 #include "eff/n64/eff_pokopi_thunder_n64.h"
 #include "libc_decls.h"
 #include "eff/n64/eff_glass_n64.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/effdrv.h"
@@ -43,54 +46,14 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n);
 
 static USER_FUNC(_set_draw_callback);
 USER_FUNC(btl_hitoffsetx);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
 USER_FUNC(btlevtcmd_AnimeGetPose);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_AnimeWaitPlayComplete);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_DrawLots);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetDamage);
-USER_FUNC(btlevtcmd_GetDamagePartsId);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHp);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetTotalDamage);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHpGaugeOffset);
-USER_FUNC(btlevtcmd_SetPartsBlur);
-USER_FUNC(btlevtcmd_SetStayPose);
-USER_FUNC(btlevtcmd_SetStayPoseType);
-USER_FUNC(btlevtcmd_SetTalkPose);
-USER_FUNC(btlevtcmd_SetTalkPoseType);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_StopWaitEvent);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_get_turn);
 USER_FUNC(datastrcopy);
 static USER_FUNC(enzan_lw_load);
 USER_FUNC(enzan_lw_load2);
 static USER_FUNC(enzan_lw_save);
 USER_FUNC(enzan_lw_save2);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_random);
 USER_FUNC(pose_check_evt_run);
 USER_FUNC(pose_check_evt_stop);
 USER_FUNC(_hp_gauge_flag_on);

@@ -1,13 +1,10 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
+#include "evt/evt_map.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
 
 BeroEntry bero_data_a_nidome[2];
 BeroEntry bero_data_b_nidome[2];

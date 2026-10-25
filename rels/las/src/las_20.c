@@ -3,30 +3,20 @@
 #include "evt/evt_bero.h"
 #include "las.h"
 #include "manager/evtmgr_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_delete);
 USER_FUNC(evt_mobj_floatswitch_red);
 USER_FUNC(evt_mobj_switch_red);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_get_sincos);
 USER_FUNC(get_hosi_name);
 
 static EvtWord e_door_close[22];

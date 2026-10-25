@@ -1,5 +1,10 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_map.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "data/mapdata.h"
 #include "win.h"
@@ -9,14 +14,7 @@ extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
 USER_FUNC(evt_bero_mario_go);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

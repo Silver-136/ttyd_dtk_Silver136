@@ -2,21 +2,18 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "jin.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_powerupblk);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 
 static EvtWord check_roll[16];
 static BeroEntry bero_entry_data[2];

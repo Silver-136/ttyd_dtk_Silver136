@@ -1,6 +1,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
+#include "battle/battle_event_cmd.h"
+#include "evt/evt_map.h"
 
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"
@@ -21,14 +23,6 @@ static f32 tanf(f32 x);
 void replace_callback(BattleUnitPart* part, s32 type);
 void replace_disp(CameraId camera, void* param);
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(replace_evt);
 void replace_callback(BattleUnitPart* part, s32 type);
 void replace_disp(CameraId camera, void* param);

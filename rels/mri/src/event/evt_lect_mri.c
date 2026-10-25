@@ -7,6 +7,9 @@
 #include "pmario_sound.h"
 #include "statuswindow.h"
 #include "driver/hitdrv.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_sub.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -46,37 +49,12 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) { camera->p
 
 USER_FUNC(evt_cam3d_evt_set_rel);
 USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_get_motion);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_enable_key);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mario_trigflag_onoff);
-USER_FUNC(evt_mobj_delete);
-USER_FUNC(evt_mobj_entry);
-USER_FUNC(evt_mobj_flag_onoff);
 USER_FUNC(evt_mobj_set_camid);
 USER_FUNC(evt_mobj_set_gravity_bound);
-USER_FUNC(evt_mobj_set_position);
-USER_FUNC(evt_msg_continue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_move_position);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_autotalkpose);
-USER_FUNC(evt_npc_set_camid);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(lect_mario_ido_sum);
 static USER_FUNC(lect_mobj_hit_nasi);
 static USER_FUNC(lect_status_off);

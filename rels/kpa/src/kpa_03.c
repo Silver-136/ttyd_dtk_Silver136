@@ -3,19 +3,18 @@
 #include "kpa.h"
 #include "evt/evt_npc.h"
 #include "kpa_stage_data.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_seq.h"
 
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_koopa_chk_dead);
 USER_FUNC(evt_koopa_get_level);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mario_cam_off);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_jump_jumpstand);
 USER_FUNC(evt_mario_set_hosei_xyz);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_seq_wait);
 USER_FUNC(kpa_status_init);
 
 static EvtWord kpa_act_stg2_mobj[209];

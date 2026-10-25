@@ -16,11 +16,11 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "evt/evt_cam.h"
 
 double cos(float);
 void marioVoiceGlareOn(void);
 void marioVoiceGlareOff(void);
-USER_FUNC(evt_cam_shake);
 HitEntry* hitEstimate(s32* out);
 static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32* hy, f32* hz, f32* nx, f32* ny, f32* nz);
 s32 marioGetRub(s32 mask, s32* a, s32* b, f32* c);

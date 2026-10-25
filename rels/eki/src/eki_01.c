@@ -2,26 +2,21 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "mario/mario_pouch.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mobj_exec_cancel);
 USER_FUNC(evt_mobj_lock);
 USER_FUNC(evt_mobj_switch_blue);
 USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_win_item_select);
 
 static EvtWord e_close[12];

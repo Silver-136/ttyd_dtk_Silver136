@@ -3,16 +3,14 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_damage.h"
 #include "driver/hitdrv.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_hit_damage_return_set);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mobj_badgeblk);
 USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_npc_check_delete);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[13];

@@ -1,6 +1,19 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_bg.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "mario/mario.h"
 #include "party.h"
@@ -8,48 +21,9 @@
 #include "evt/evt_npc.h"
 
 
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_bg_disp_onoff);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_eff_delete);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_fade_entry);
-USER_FUNC(evt_fade_set_mapchange_type);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_party);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_add_rotate);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_get_scale);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_rotate_offset);
-USER_FUNC(evt_npc_set_scale);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgm_scope);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
 USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_sub_spline_get_value);
 USER_FUNC(evt_sub_spline_init);
 static USER_FUNC(mario_kirimomi);

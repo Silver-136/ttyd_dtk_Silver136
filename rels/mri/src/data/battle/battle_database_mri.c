@@ -6,8 +6,8 @@
 #include "battle/battle_stage.h"
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
+#include "evt/evt_map.h"
 
-USER_FUNC(evt_mapobj_flag_onoff);
 extern BattleUnitKind unit_barriern;
 
 BattleStageObjectData mri_btlobject_data[43];

@@ -1,5 +1,16 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_case.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_pouch.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mariost.h"
@@ -9,39 +20,9 @@
 
 s32 key_list[4];
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_del_case_evt);
-USER_FUNC(evt_exit_case_evt);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_party);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_pouch_all_party_recovery);
 USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_mario_recovery);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_win_item_select);
 #ifdef VERSION_G8ME01
 USER_FUNC(N_evt_sub_status_gauge_force_update);

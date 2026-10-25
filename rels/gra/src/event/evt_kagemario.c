@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
 
 #include "mario/mario.h"
 #include "driver/mapdrv.h"
@@ -13,10 +15,6 @@ static s32 color_change_evt(s32 on);
 
 static USER_FUNC(check);
 USER_FUNC(evt_mario_clear_party);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
 static USER_FUNC(test);
 static USER_FUNC(evt_kagemario_change);
 USER_FUNC(evt_kagemario_init);

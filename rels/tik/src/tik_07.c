@@ -3,53 +3,33 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_movefloor.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_road_reset);
 USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_eff_fukidashi);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_item_set_scale);
-USER_FUNC(evt_key_get_buttontrg);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_balloon_bikkuri);
 USER_FUNC(evt_mario_balloon_off);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_mario_wait_landon);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_lv_blk);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_save_blk);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_npc_check_delete);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_rumble_onoff);
 
 EvtWord bero_00_open_door[12];
 EvtWord bero_00_close_door[12];

@@ -10,9 +10,6 @@
 #include "system.h"
 #include <dolphin/os.h>
 
-USER_FUNC(evt_npc_pera_onoff);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_set_anim);
 USER_FUNC(evt_npc_wait_anim);
 
 USER_FUNC(evt_gazigazi_move_position);

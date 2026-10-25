@@ -7,25 +7,10 @@
 #include "battle/battle_weapon_power.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckPartsCounterAttribute);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetStatusMg);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetScale);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_sub_random);
 
 static BattleUnitKind unit_monochrome_kurokumorn;
 static BattleUnitDefense defence;

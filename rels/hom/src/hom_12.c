@@ -1,19 +1,14 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "hom.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_letter_box_onoff);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_cont_onoff);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_envon);
 
 EvtWord hom_12_init_evt[140];
 

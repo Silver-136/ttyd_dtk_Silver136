@@ -1,19 +1,14 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_overwrite);
 USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_normalize);
 USER_FUNC(evt_mobj_signboard);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 
 EvtWord oshimodo_event_sub[33];
 static EvtWord oshimodo_event[10];

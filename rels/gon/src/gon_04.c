@@ -3,77 +3,40 @@
 #include "evt/evt_bero.h"
 #include "mario/mario_pouch.h"
 #include "data_tables.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_img.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_offscreen.h"
+#include "evt/evt_paper.h"
+#include "evt/evt_party.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 typedef struct KemuriPos { s32 x; s32 z; } KemuriPos;
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_road_reset);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_img_alloc_capture);
-USER_FUNC(evt_img_clear_virtual_point);
-USER_FUNC(evt_img_entry);
-USER_FUNC(evt_img_free_capture);
-USER_FUNC(evt_img_onoff);
-USER_FUNC(evt_img_release);
-USER_FUNC(evt_img_set_paper);
-USER_FUNC(evt_img_set_paper_anim);
-USER_FUNC(evt_img_wait_animend);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_get_fog);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_map_set_fog);
 USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mapobj_set_offscreen);
 USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mario_party_use_check);
 USER_FUNC(evt_mobj_exec_cancel);
 USER_FUNC(evt_mobj_float_blk);
 USER_FUNC(evt_mobj_get_kindname);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_get_y_position);
 USER_FUNC(evt_mobj_hitevt_onoff);
 USER_FUNC(evt_mobj_lock);
 USER_FUNC(evt_mobj_lv_blk);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_recovery_blk);
-USER_FUNC(evt_mobj_set_y_position);
 USER_FUNC(evt_mobj_switch_blue);
 USER_FUNC(evt_mobj_switch_float_blk);
 USER_FUNC(evt_mobj_switch_red);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_pera_onoff);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_height);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_rotate);
-USER_FUNC(evt_npc_set_width);
-USER_FUNC(evt_offscreen_delete);
-USER_FUNC(evt_offscreen_entry);
-USER_FUNC(evt_offscreen_get_boundingbox);
-USER_FUNC(evt_paper_entry);
-USER_FUNC(evt_party_get_pos);
 USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_random);
-USER_FUNC(evt_sub_rumble_onoff);
 USER_FUNC(evt_win_item_select);
 
 static EvtWord w1_door_close[12];

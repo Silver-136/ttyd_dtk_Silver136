@@ -3,6 +3,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -21,49 +23,6 @@ double __fabs(double x);
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeFlagOnOff);
-USER_FUNC(btlevtcmd_AttackDeclare);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_CheckToken);
-USER_FUNC(btlevtcmd_ChoiceSamplingEnemy);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetFaceDirection);
-USER_FUNC(btlevtcmd_GetFirstAttackTarget);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_PayWeaponCost);
-USER_FUNC(btlevtcmd_RecoverHp);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_SetAlpha);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StopWaitEvent);
-USER_FUNC(btlevtcmd_WaitGuardMove);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(btlevtcmd_check_battleflag);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_sub_intpl_get_value_para);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(hand_ctrl);
 static USER_FUNC(hand_init);
 static USER_FUNC(mahorn_get_bunsin);

@@ -6,36 +6,9 @@
 #include "battle/battle_weapon_power.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AttackDeclareAll);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckToken);
-USER_FUNC(btlevtcmd_ChoiceSamplingEnemy);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetFirstAttackTarget);
-USER_FUNC(btlevtcmd_GetHp);
-USER_FUNC(btlevtcmd_GetSelectEnemy);
-USER_FUNC(btlevtcmd_GetSelectNextEnemy);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_PayWeaponCost);
-USER_FUNC(btlevtcmd_PreCheckDamage);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WaitGuardMove);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(btlevtcmd_check_battleflag);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_sub_random);
 
 BattleUnitKind unit_boomerang_bros;
 static BattleUnitDefense defence;

@@ -1,15 +1,12 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_npc.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_recovery_blk);
-USER_FUNC(evt_mobj_save_blk);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_envon);
 
 static EvtWord door02_close[22];
 static EvtWord door02_open[22];

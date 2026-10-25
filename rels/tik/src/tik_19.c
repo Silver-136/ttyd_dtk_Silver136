@@ -1,6 +1,16 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "pmario_sound.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_img.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_paper.h"
+#include "evt/evt_party.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_lecture.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -9,59 +19,17 @@
 #include "mario/mario_pouch.h"
 
 static USER_FUNC(bgm_start_wait);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_img_alloc_capture);
-USER_FUNC(evt_img_clear_virtual_point);
-USER_FUNC(evt_img_entry);
-USER_FUNC(evt_img_onoff);
-USER_FUNC(evt_img_release);
-USER_FUNC(evt_img_set_paper);
-USER_FUNC(evt_img_set_paper_anim);
 USER_FUNC(evt_img_set_virtual_point);
-USER_FUNC(evt_img_wait_animend);
 USER_FUNC(evt_map_entry_airport_harbor);
 USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_init_camid);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_camid);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_flag_onoff);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
-USER_FUNC(evt_mobj_kururing_floor);
-USER_FUNC(evt_mobj_set_anim);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_paper_delete);
-USER_FUNC(evt_paper_entry);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pouch_add_item);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_win_item_select);
-USER_FUNC(lect_cam_load);
-USER_FUNC(lect_cam_save);
 static void majin_callback(s32 type);
 
 static BeroEntry bero_entry_data[2];

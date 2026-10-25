@@ -1,5 +1,14 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -24,51 +33,17 @@ void FontDrawString(f32 x, f32 y, const char* str);
 void printCount(CameraId camera, void* param);
 
 USER_FUNC(countDisp);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_eff_fukidashi);
 USER_FUNC(evt_get_target_dir);
-USER_FUNC(evt_hit_damage_return_set);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_npc_check_delete);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
 USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_jump_position_nohit);
-USER_FUNC(evt_npc_move_position);
 USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
 USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_npc_status_onoff);
-USER_FUNC(evt_party_get_pos);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_set_dir_to_target);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_win_item_select);
 #ifdef VERSION_G8ME01
 #endif

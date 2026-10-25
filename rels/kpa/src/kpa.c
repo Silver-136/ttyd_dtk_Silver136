@@ -1,5 +1,17 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -33,33 +45,18 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam_ctrl_onoff);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_letter_box_onoff);
 USER_FUNC(evt_cam_type_change);
-USER_FUNC(evt_eff);
 USER_FUNC(evt_fade_in);
-USER_FUNC(evt_fade_out);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_koopa_chk_dead);
-USER_FUNC(evt_map_blend_off);
 USER_FUNC(evt_map_blend_set_flag);
-USER_FUNC(evt_map_set_blend);
 USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
 USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mario_set_mode);
 USER_FUNC(evt_mario_set_motion);
-USER_FUNC(evt_mario_set_pos);
 USER_FUNC(evt_mobj_jumpstand_blue);
 USER_FUNC(evt_mobj_jumpstand_red);
 USER_FUNC(evt_mobj_koopa_badgeblk);
@@ -72,17 +69,7 @@ USER_FUNC(evt_mobj_koopa_ojama_blk);
 USER_FUNC(evt_mobj_koopa_pole);
 USER_FUNC(evt_mobj_koopa_sango);
 USER_FUNC(evt_mobj_koopa_stone_blk);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_set_autotalkpose);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
 USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_sub_get_stopwatch);
 USER_FUNC(evt_twoddisp_entry);
 USER_FUNC(evt_twoddisp_flag_onoff);
 USER_FUNC(evt_twoddisp_init);

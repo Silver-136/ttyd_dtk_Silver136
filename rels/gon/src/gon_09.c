@@ -1,42 +1,24 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam_shake);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mobj_exec_cancel);
 USER_FUNC(evt_mobj_float_blk);
 USER_FUNC(evt_mobj_get_kindname);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_get_y_position);
 USER_FUNC(evt_mobj_hitevt_onoff);
-USER_FUNC(evt_mobj_set_y_position);
 USER_FUNC(evt_mobj_switch_float_blk);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_pera_onoff);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_height);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_rotate);
-USER_FUNC(evt_npc_set_width);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_rumble_onoff);
 
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];

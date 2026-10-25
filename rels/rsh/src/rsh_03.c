@@ -2,6 +2,19 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_env.h"
+#include "evt/evt_img.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_paper.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_item.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mario.h"
@@ -24,80 +37,25 @@ Vec camAt;
 EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 void mapObjGetPos(const char* name, Vec* pos);
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_eff_fukidashi);
-USER_FUNC(evt_env_blur_on);
 USER_FUNC(evt_hit_get_position);
 USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_img_alloc_capture);
-USER_FUNC(evt_img_clear_virtual_point);
-USER_FUNC(evt_img_entry);
-USER_FUNC(evt_img_free_capture);
-USER_FUNC(evt_img_onoff);
-USER_FUNC(evt_img_release);
-USER_FUNC(evt_img_set_paper);
-USER_FUNC(evt_img_set_paper_anim);
-USER_FUNC(evt_img_wait_animend);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_item_get_item_end_wait);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mario_flag_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos);
-USER_FUNC(evt_mario_mov_pos2);
 USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_msg_close);
-USER_FUNC(evt_msg_continue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_height);
-USER_FUNC(evt_npc_get_position);
 USER_FUNC(evt_npc_get_reglid);
 USER_FUNC(evt_npc_jump_position);
-USER_FUNC(evt_npc_move_position);
 USER_FUNC(evt_npc_restart_regular_event);
 USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_autotalkpose);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_npc_status_onoff);
-USER_FUNC(evt_paper_entry);
-USER_FUNC(evt_party_move_pos);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir_npc);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_set_dir_to_target);
-USER_FUNC(evt_shop_setup);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_get_coin);
 USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(fire);
 USER_FUNC(iri_22_make_item_tbl);
@@ -106,7 +64,6 @@ USER_FUNC(omiseFukki);
 USER_FUNC(omiseHozon);
 USER_FUNC(npc_alpha_except_tenin);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_item_delete);
 USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_get_dispdir);
 USER_FUNC(evt_sub_get_language);

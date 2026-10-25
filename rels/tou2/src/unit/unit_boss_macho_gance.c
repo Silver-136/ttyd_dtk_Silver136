@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_env.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_event_default.h"
@@ -17,31 +18,8 @@
 static s32 x_flag_data[2];
 f32 intplGetValue(s32 mode, s32 currStep, f32 start, f32 end, s32 steps);
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_DrawLots);
-USER_FUNC(btlevtcmd_GetHpGaugeOffset);
-USER_FUNC(btlevtcmd_GetStatusMg);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_GetUnitWorkFloat);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHitCursorOffset);
-USER_FUNC(btlevtcmd_SetHitOffset);
-USER_FUNC(btlevtcmd_SetHpGaugeOffset);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetUnitWorkFloat);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_env_blur_on);
 static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_get);
 static USER_FUNC(x_flag_add);

@@ -1,5 +1,11 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -8,23 +14,9 @@
 #include "aji.h"
 
 USER_FUNC(camAtY);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_letter_box_disable);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_npc_check_delete);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(slit_chk);
 
 static EvtWord s_door_open[22];

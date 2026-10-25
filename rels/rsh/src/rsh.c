@@ -2,6 +2,18 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "libc_decls.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_img.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_offscreen.h"
+#include "evt/evt_paper.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "stdio.h"
 #include "string.h"
@@ -25,54 +37,24 @@ extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
 USER_FUNC(debug_print_func);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_letter_box_disable);
 USER_FUNC(evt_hit_get_position);
 USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_img_alloc_capture);
-USER_FUNC(evt_img_entry);
-USER_FUNC(evt_img_free_capture);
-USER_FUNC(evt_img_onoff);
-USER_FUNC(evt_img_set_paper);
-USER_FUNC(evt_img_set_paper_anim);
-USER_FUNC(evt_img_wait_animend);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_map_set_tevcallback);
 USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos);
 USER_FUNC(evt_mario_party_door_move);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_select);
 USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
 USER_FUNC(evt_npc_set_offscreen);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
 USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_offscreen_entry);
-USER_FUNC(evt_paper_entry);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_rsh_get_rnd_npc);
 USER_FUNC(evt_rsh_get_rnd_npc_data);
 USER_FUNC(evt_rsh_get_rnd_npc_talk_evt);
 USER_FUNC(evt_rsh_set_rnd_npc);
 USER_FUNC(evt_rsh_set_rnd_npc_talk_evt);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_sub_random);
 BOOL img_wait(void);
 RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index);
 void rsh_window_tev(MapTevCallbackInfo* info);

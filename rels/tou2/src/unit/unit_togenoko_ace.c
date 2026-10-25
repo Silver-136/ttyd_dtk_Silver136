@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_eff.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
@@ -11,26 +12,6 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckSpace);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetFaceDirection);
-USER_FUNC(btlevtcmd_GetOverTurnCount);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_check_battleflag);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(togenoko_getnum);
 
 BattleUnitKind unit_togenoko_ace;

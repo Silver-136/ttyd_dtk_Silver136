@@ -2,6 +2,9 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_ext.h"
+#include "evt/evt_npc.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -35,34 +38,7 @@ USER_FUNC(moamoa1_on);
 void moamoa_pose(Moamoa* elem);
 void moamoa_draw(CameraId cameraId, void* param);
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetHp);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHitCursorOffset);
-USER_FUNC(btlevtcmd_SetHitOffset);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SpawnUnit);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_ext_entry);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_set_position);
 USER_FUNC(moamoa_on);
 USER_FUNC(moamoa_set_bodyScale);
 void moamoa_draw(CameraId cameraId, void* param);

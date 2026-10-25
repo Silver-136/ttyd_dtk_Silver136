@@ -2,6 +2,16 @@
 #include "evt/evt_cmd.h"
 #include "driver/bgdrv.h"
 #include "pmario_sound.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "driver/npcdrv.h"
 #include "eff/eff_stardust.h"
@@ -20,53 +30,22 @@ static USER_FUNC(effect_stardust);
 static USER_FUNC(enzan_cam_turn_keisan_f);
 static USER_FUNC(enzan_lw_load);
 static USER_FUNC(enzan_lw_save);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff64);
 USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_goodbye_party);
 USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_msg_continue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
 USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_party_dispflg_onoff);
 USER_FUNC(evt_party_flg_onoff);
 USER_FUNC(evt_party_get_dispdir);
-USER_FUNC(evt_party_get_pos);
-USER_FUNC(evt_party_run);
 USER_FUNC(evt_party_set_breed_pose);
 USER_FUNC(evt_party_set_dir_pos);
 USER_FUNC(evt_party_set_dispdir);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(evt_pouch_set_coin);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_set_dir_to_target);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);
 USER_FUNC(evt_win_coin_wait);

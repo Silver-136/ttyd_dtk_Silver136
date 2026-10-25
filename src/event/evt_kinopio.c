@@ -16,42 +16,29 @@
 #include "evt/evt_kinopio.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_pouch.h"
+#include "party/party_motion.h"
 
 extern ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
 
-extern USER_FUNC(evt_eff);
-extern USER_FUNC(evt_eff_fukidashi);
-extern USER_FUNC(evt_fade_end_wait);
 extern USER_FUNC(evt_fade_set_spot_pos);
 extern USER_FUNC(evt_mario_adjust_dir);
 extern USER_FUNC(evt_mario_dispflag_onoff);
 extern USER_FUNC(evt_mario_flag_onoff);
 extern USER_FUNC(evt_mario_get_exparty);
-extern USER_FUNC(evt_mario_get_party);
 extern USER_FUNC(evt_mario_get_pos);
 extern USER_FUNC(evt_mario_goodbye_party);
-extern USER_FUNC(evt_mario_jump_pos);
-extern USER_FUNC(evt_mario_key_onoff);
-extern USER_FUNC(evt_mario_mov_pos2);
 extern USER_FUNC(evt_mario_set_dir_npc);
 extern USER_FUNC(evt_mario_set_party_pos);
-extern USER_FUNC(evt_mario_set_pos);
-extern USER_FUNC(evt_msg_print);
-extern USER_FUNC(evt_msg_print_add);
 extern USER_FUNC(evt_msg_print_insert);
-extern USER_FUNC(evt_msg_select);
 extern USER_FUNC(evt_npc_set_tribe);
-extern USER_FUNC(evt_party_run);
-extern USER_FUNC(evt_party_set_dir_npc);
-extern USER_FUNC(evt_party_set_pos);
 extern USER_FUNC(evt_pouch_add_coin);
-extern USER_FUNC(evt_pouch_all_party_recovery);
 extern USER_FUNC(evt_pouch_check_item);
-extern USER_FUNC(evt_pouch_mario_recovery);
 extern USER_FUNC(evt_pouch_remove_item);
-extern USER_FUNC(evt_set_dir_to_target);
-extern USER_FUNC(evt_snd_bgmoff);
-extern USER_FUNC(evt_snd_sfxon);
 extern USER_FUNC(evt_sub_get_coin);
 extern USER_FUNC(evt_sub_get_mapname);
 extern USER_FUNC(evt_win_coin_off);
@@ -101,7 +88,6 @@ USER_FUNC(get_ryoukin);
 USER_FUNC(coin_chk);
 USER_FUNC(power_chk);
 USER_FUNC(msg_no);
-USER_FUNC(evt_kinopio_setup);
 
 //.sbss
 static KinopioWork* work;

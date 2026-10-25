@@ -1,5 +1,14 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "eff/eff_stardust.h"
 #include "manager/evtmgr_cmd.h"
@@ -9,53 +18,20 @@
 #include "mario/mario_pouch.h"
 
 static USER_FUNC(effect_stardust);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_eff64);
 USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_map_blend_off);
 USER_FUNC(evt_map_blend_set_flag);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_map_set_blend);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_exparty);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_jump_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_motion);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pouch_add_coin);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(evt_pouch_majinai_set);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_set_dir_to_target);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_get_coin);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_unitwin_alloc);
 USER_FUNC(evt_unitwin_free);
 USER_FUNC(evt_win_item_select);

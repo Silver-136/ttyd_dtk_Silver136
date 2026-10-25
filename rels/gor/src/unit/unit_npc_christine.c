@@ -1,14 +1,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
+#include "battle/battle_event_cmd.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetMaxMoveCount);
-USER_FUNC(btlevtcmd_StartWaitEvent);
 
 BattleUnitKind unit_npc_christine;
 static BattleUnitDefense defence;

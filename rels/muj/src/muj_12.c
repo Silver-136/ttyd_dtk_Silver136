@@ -1,5 +1,18 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_env.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "driver/itemdrv.h"
 #include "mario/mariost.h"
@@ -11,72 +24,16 @@
 #include "evt/evt_sub.h"
 #include "muj.h"
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_get_info_anime);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_bero_mario_go);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_eff_fukidashi);
-USER_FUNC(evt_env_blur_on);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_item_delete);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_position);
 USER_FUNC(evt_item_move_3d_position);
 USER_FUNC(evt_item_set_alpha);
-USER_FUNC(evt_map_set_blend);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_battle_start);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_glide_position);
-USER_FUNC(evt_npc_pera_onoff);
-USER_FUNC(evt_npc_set_autotalkpose);
-USER_FUNC(evt_npc_set_battle_info);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_rotate);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_set_scale);
-USER_FUNC(evt_npc_wait_battle_end);
-USER_FUNC(evt_party_get_pos);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_seq_wait);
 USER_FUNC(evt_snd_bgm_freq);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_bgmon_f);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(evtflash);
 USER_FUNC(muj_item_move_3d_position);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);

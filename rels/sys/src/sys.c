@@ -5,6 +5,13 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 #include "eff/n64/eff_stardust_n64.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_sub.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
+#include "evt/evt_snd.h"
 
 #include "data/mapdata.h"
 #include "pmario_sound.h"
@@ -46,18 +53,6 @@ SysWork* g_wp;
 
 USER_FUNC(bg);
 USER_FUNC(display);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_fade_entry);
-USER_FUNC(evt_fade_set_mapchange_type);
-USER_FUNC(evt_key_get_buttontrg);
-USER_FUNC(evt_mario_cont_onoff);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_snd_bgmon);
 USER_FUNC(init);
 #ifdef VERSION_G8ME01
 USER_FUNC(sys_01_start_end_wait);

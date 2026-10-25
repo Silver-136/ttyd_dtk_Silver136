@@ -1,6 +1,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "pmario_sound.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -28,55 +30,7 @@ BattleUnitSetup entry_honeduka;
 
 USER_FUNC(_cortez_check_drain_audience);
 USER_FUNC(_make_cortez_work_area);
-USER_FUNC(btlevtcmd_AddPartsRotate);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_DivePosition);
-USER_FUNC(btlevtcmd_DrawLots);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetDamage);
-USER_FUNC(btlevtcmd_GetDamagePartsId);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetHp);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetMoveFrame);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_JumpPartsPosition);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHitCursorOffset);
-USER_FUNC(btlevtcmd_SetHitOffset);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetKissHitOffset);
-USER_FUNC(btlevtcmd_SetPartsDefenceAttrTable);
-USER_FUNC(btlevtcmd_SetPartsDefenceTable);
-USER_FUNC(btlevtcmd_SetPartsDispOffset);
-USER_FUNC(btlevtcmd_SetPartsFallAccel);
-USER_FUNC(btlevtcmd_SetPartsPos);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SpawnUnit);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_TransStageFloorPosition);
-USER_FUNC(btlevtcmd_WaitEventEnd);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(_check_zenei_kouei);
 USER_FUNC(_cortez_recovery_audience);
 USER_FUNC(_cortez_drain_energy);

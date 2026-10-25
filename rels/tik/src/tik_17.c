@@ -4,31 +4,20 @@
 #include "evt/evt_damage.h"
 #include "evt/evt_movefloor.h"
 #include "driver/hitdrv.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hit_damage_return_set);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mobj_flag_onoff);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_lv_blk);
 USER_FUNC(evt_mobj_tornadoswitch_blue);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[9];

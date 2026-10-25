@@ -3,18 +3,15 @@
 #include "evt/evt_map.h"
 #include "evt/evt_mario.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_fade_set_mapchange_type);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_party_dispflg_onoff);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff_f);
 USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_envon);
 
 static EvtWord epilogue_evt[49];
 EvtWord gor_12_init_evt[35];

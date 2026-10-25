@@ -19,6 +19,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
 #include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 #include "battle/battle_unit.h"
@@ -26,35 +27,8 @@ f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
 USER_FUNC(_check_aud_item_type);
 USER_FUNC(_clauda_make_extra_work_area);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeWaitPlayComplete);
-USER_FUNC(btlevtcmd_AudienceAppeal);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetFaceDirection);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetDiveSound);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetEventWait);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetMoveSoundDataWork);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRotate);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(_make_kumoguard_weapon);
 USER_FUNC(_get_clauda_kiss_hit_position);
 USER_FUNC(_make_kiss_weapon);

@@ -9,8 +9,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "sfx_name_word.h"
+#include "evt/evt_cam.h"
 
-USER_FUNC(evt_cam_shake);
 
 typedef struct EffLevelupWork {
     s32 type;     // 0x0

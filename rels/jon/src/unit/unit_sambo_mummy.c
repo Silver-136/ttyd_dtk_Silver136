@@ -9,48 +9,8 @@
 #include "evt/evt_sub.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "evt/evt_eff.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_CheckSpace);
-USER_FUNC(btlevtcmd_ChoiceSamplingEnemy);
-USER_FUNC(btlevtcmd_DivePartsPosition);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetDamage);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetHeight);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetStatusMg);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_JumpPartsPosition);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_ResetFaceDirection);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_SetCutBaseOffset);
-USER_FUNC(btlevtcmd_SetCutHeight);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHeight);
-USER_FUNC(btlevtcmd_SetKissHitOffset);
-USER_FUNC(btlevtcmd_SetPartsFallAccel);
-USER_FUNC(btlevtcmd_SetPartsPos);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRotateOffset);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetStatusIconOffset);
-USER_FUNC(btlevtcmd_SetSwallowAttribute);
-USER_FUNC(btlevtcmd_SetSwallowParam);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_TransStageFloorPosition);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_sub_random);
 
 BattleUnitKind unit_sambo_mummy;
 static BattleUnitDefense defence;

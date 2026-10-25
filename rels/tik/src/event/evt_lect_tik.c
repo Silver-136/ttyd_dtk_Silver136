@@ -6,6 +6,7 @@
 #include "pmario_sound.h"
 #include "statuswindow.h"
 #include "driver/hitdrv.h"
+#include "evt/evt_lecture.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -45,11 +46,7 @@ BOOL marioRollKeyDisable(void);
 
 USER_FUNC(evt_cam3d_evt_set_rel);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
 static USER_FUNC(lect_map_cam_chg);
-USER_FUNC(lect_set_systemlevel);
-USER_FUNC(lect_test_systemlevel);
 static USER_FUNC(bgm_start_wait);
 static USER_FUNC(evt_nomal_cange);
 static USER_FUNC(lect_push_r_check);

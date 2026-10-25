@@ -2,33 +2,22 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_road_reset);
-USER_FUNC(evt_fade_end_wait);
 USER_FUNC(evt_hitobj_attr_onoff);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_npc_stop_for_event);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_party_yoshi_ride);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 
 EvtWord bero_in[45];
 EvtWord bero_out[53];

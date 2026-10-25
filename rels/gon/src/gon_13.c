@@ -1,32 +1,19 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
+#include "evt/evt_img.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_paper.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_img_alloc_capture);
-USER_FUNC(evt_img_entry);
-USER_FUNC(evt_img_onoff);
-USER_FUNC(evt_img_release);
-USER_FUNC(evt_img_set_paper);
-USER_FUNC(evt_img_set_paper_anim);
-USER_FUNC(evt_img_wait_animend);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_wait_landon);
-USER_FUNC(evt_mobj_flag_onoff);
 USER_FUNC(evt_mobj_floatswitch_blue);
-USER_FUNC(evt_mobj_get_position);
 USER_FUNC(evt_mobj_hit_onoff);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_paper_delete);
-USER_FUNC(evt_paper_entry);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon);
 
 static BeroEntry bero_entry_data[2];
 EvtWord item_get03[34];

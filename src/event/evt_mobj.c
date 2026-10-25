@@ -33,6 +33,11 @@
 #include "pmario_sound.h"
 #include "sfx_name_word.h"
 #include "driver/hitdrv.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 s32 mobj_koopa_pole_evt(MapObjectEntry* mobj);
 void kpa_disp_pole_score(CameraId camId, void* param);
 static USER_FUNC(kpa_get_level);
@@ -84,15 +89,11 @@ USER_FUNC(evt_mobj_koopa_brick);
 USER_FUNC(evt_mobj_koopa_stone_blk);
 USER_FUNC(evt_mobj_koopa_ojama_blk);
 USER_FUNC(kpa_powerup);
-USER_FUNC(evt_mobj_kururing_floor);
 USER_FUNC(evt_mobj_breaking_floor);
 USER_FUNC(evt_mobj_brick);
 USER_FUNC(evt_mobj_powerupblk);
 USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_save_blk);
-USER_FUNC(evt_mobj_recovery_blk);
 USER_FUNC(evt_mobj_signboard);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_lock);
 USER_FUNC(evt_mobj_lock_unlock);
 USER_FUNC(evt_mobj_switch_float_blk);
@@ -111,23 +112,12 @@ USER_FUNC(evt_mobj_hit_onoff);
 USER_FUNC(evt_mobj_hitevt_onoff);
 USER_FUNC(evt_mobj_set_camid);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_mobj_set_anim);
 USER_FUNC(evt_mobj_set_gravity_bound);
 USER_FUNC(evt_mobj_exec_cancel);
 USER_FUNC(evt_mobj_set_z_position);
-USER_FUNC(evt_mobj_set_y_position);
-USER_FUNC(evt_mobj_set_x_position);
-USER_FUNC(evt_mobj_set_position);
 USER_FUNC(evt_mobj_get_z_position);
-USER_FUNC(evt_mobj_get_y_position);
-USER_FUNC(evt_mobj_get_x_position);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_set_scale);
 USER_FUNC(evt_mobj_get_kindname);
-USER_FUNC(evt_mobj_flag_onoff);
 USER_FUNC(evt_mobj_check);
-USER_FUNC(evt_mobj_delete);
-USER_FUNC(evt_mobj_entry);
 
 extern EventEntry* mobjRunEvent(MapObjectEntry* mobj, EvtWord* eventCode);
 extern void kpaPowUp(void);
@@ -203,29 +193,12 @@ extern void test_kururing_mapdisp(s32 camId);
 s32 mobj_kururing_floor(MapObjectEntry* mobj);
 s32 mobj_lock(MapObjectEntry* mobj);
 
-USER_FUNC(evt_cam3d_event_from_road);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam3d_get_shift);
-USER_FUNC(evt_cam_get_at);
 USER_FUNC(evt_cam_get_pos);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_letter_box_onoff);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mario_cam_y_on);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_mov_spd);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_wait_landon);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(kpa_chg_pose);
 USER_FUNC(kpa_clear_jump_data);

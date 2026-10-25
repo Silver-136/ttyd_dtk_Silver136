@@ -1282,8 +1282,6 @@ extern EvtWord evt_memcard_start[];
 extern EvtWord evt_memcard_save[];
 extern EvtWord evt_memcard_delete[];
 extern EvtWord evt_memcard_copy[];
-extern s32 evt_sub_rumble_onoff(EventEntry* evt, BOOL isFirstCall);
-extern s32 evt_sub_animgroup_async(EventEntry* evt, BOOL isFirstCall);
 extern void SoundSetOutputMode(s32 mode);
 extern BOOL psndENVOn(u32 flags, const char* name);
 double sin(double);

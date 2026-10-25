@@ -1,5 +1,12 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -7,28 +14,14 @@
 #include "evt/evt_bero.h"
 #include "jin.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_get_exparty);
 USER_FUNC(evt_mario_get_name_hitobj_push);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_push);
 USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_party_get_pos);
 USER_FUNC(evt_party_get_status);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
 static USER_FUNC(get_pos);
 USER_FUNC(get_width);
 USER_FUNC(set_pos);

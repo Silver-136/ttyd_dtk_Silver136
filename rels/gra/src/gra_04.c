@@ -3,41 +3,28 @@
 #include "evt/evt_bero.h"
 #include "gra.h"
 #include "manager/evtmgr_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
 USER_FUNC(evt_cam3d_evt_set_now);
-USER_FUNC(evt_cam_road_reset);
 USER_FUNC(evt_cam_shift_reset);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_cloud_set_cap_size);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mario_bgmode_off);
 USER_FUNC(evt_mario_bgmode_on);
-USER_FUNC(evt_mario_cam_y_off);
 USER_FUNC(evt_mario_cam_y_on);
 USER_FUNC(evt_mario_get_exparty);
-USER_FUNC(evt_mario_get_party);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_normalize);
 USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_pos);
 USER_FUNC(evt_mario_set_prev_party_pos);
-USER_FUNC(evt_mario_wait_landon);
 USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
 USER_FUNC(roll_release_check);
 
 static EvtWord in_evt[5];

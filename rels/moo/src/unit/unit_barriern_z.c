@@ -1,5 +1,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -32,53 +35,7 @@ static USER_FUNC(_check_satellite);
 static USER_FUNC(barriern_satellite_zanzou);
 static USER_FUNC(barriern_satellite_zanzou2);
 static USER_FUNC(battleGetBarriernSatelliteInitPos);
-USER_FUNC(btlevtcmd_AddPartsScale);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckPartsAttribute);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetPartsWork);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_JumpPartsPosition);
-USER_FUNC(btlevtcmd_JumpPartsSetting);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_PreCheckDamage);
-USER_FUNC(btlevtcmd_RecoverHp);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetPartsBlur);
-USER_FUNC(btlevtcmd_SetPartsPos);
-USER_FUNC(btlevtcmd_SetPartsScale);
-USER_FUNC(btlevtcmd_SetPartsWork);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRGB);
-USER_FUNC(btlevtcmd_SetScale);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SpawnUnit);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_check_battleflag);
-USER_FUNC(evt_btl_camera_set_homing_unit);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(outSplineTableSet);
 static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx);
 static void barriern_wawawa_get_target(s32* unitIdx, s32* partIdx);

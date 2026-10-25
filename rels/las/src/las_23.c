@@ -4,16 +4,13 @@
 #include "evt/evt_damage.h"
 #include "las.h"
 #include "driver/hitdrv.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_hit_damage_return_set);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

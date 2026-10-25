@@ -1,5 +1,9 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_batstage.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
@@ -11,61 +15,9 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_AttackDeclare);
-USER_FUNC(btlevtcmd_ChangeDataTable);
-USER_FUNC(btlevtcmd_ChangeFaceDirection);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_JumpSetting);
-USER_FUNC(btlevtcmd_KillUnit);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_OnOffStatus);
-USER_FUNC(btlevtcmd_PayWeaponCost);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetHp);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_SetPartsDefenceTable);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_SpawnUnit);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(btlevtcmd_get_turn);
 USER_FUNC(check_exist_group);
-USER_FUNC(evt_batstage_return_aud_dark_base);
-USER_FUNC(evt_batstage_set_aud_dark);
-USER_FUNC(evt_btl_camera_set_homing_unit);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_btl_camera_set_prilimit);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_random);
 USER_FUNC(up_ceil);
 USER_FUNC(zakogun_escape1);
 USER_FUNC(zakogun_escape2);
@@ -73,7 +25,6 @@ USER_FUNC(zakogun_ext_init1);
 USER_FUNC(zakogun_ext_init3);
 USER_FUNC(check_exist_kenkyu);
 #ifdef VERSION_G8ME01
-USER_FUNC(btlevtcmd_GetDamageCode);
 #endif
 extern s32 down_ceil[];
 extern BattleUnitKind unit_boss_gundan_zako_group1;

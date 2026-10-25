@@ -1,5 +1,12 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_johoya.h"
 
 #include "data/mapdata.h"
 #include "mario/mariost.h"
@@ -20,25 +27,9 @@ void tegami_delete(void);
 static s32 gor_inemuri_snd_id;
 static char* gor_msg_cat_buf;
 
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_party_run);
 USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_bgmon_f);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_win_other_select);
-USER_FUNC(johoya_data_alloc);
-USER_FUNC(johoya_data_free);
 USER_FUNC(johoya_luigi_newjoho_setreadflag);
 USER_FUNC(evt_gor_inemuri_snd_off);
 USER_FUNC(evt_gor_inemuri_snd_set);

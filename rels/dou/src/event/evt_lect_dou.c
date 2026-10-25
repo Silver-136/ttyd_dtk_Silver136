@@ -6,6 +6,14 @@
 #include "pmario_sound.h"
 #include "statuswindow.h"
 #include "driver/hitdrv.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_lecture.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -39,36 +47,15 @@ BOOL marioRollKeyDisable(void);
 static USER_FUNC(dai_moveti_get);
 static USER_FUNC(dai_moveti_set);
 USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_cam_get_at);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_get_motion);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_enable_key);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mario_trigflag_onoff);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_camid);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
 static USER_FUNC(evtflash);
 static USER_FUNC(lect_map_cam_chg);
-USER_FUNC(lect_set_systemlevel);
 static USER_FUNC(lect_status_off);
 static USER_FUNC(lect_status_on);
-USER_FUNC(lect_test_systemlevel);
 static USER_FUNC(lecture_button_flag_on_off);
 static USER_FUNC(lecture_button_rtn);
 static USER_FUNC(lecture_button_seq_wait);

@@ -1,5 +1,9 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_map.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "stdio.h"
 #include "evt/evt_bero.h"
@@ -7,17 +11,10 @@
 
 static char name[8];
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mobj_badgeblk);
 USER_FUNC(evt_npc_check);
 USER_FUNC(evt_npc_set_link);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 static USER_FUNC(make_name);
 
 static EvtWord w_door_close[22];

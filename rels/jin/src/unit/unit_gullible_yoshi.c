@@ -9,12 +9,6 @@
 #include "unit/party/unit_party_yoshi.h"
 #include "battle/battle_database_common.h"
 
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_StartWaitEvent);
 USER_FUNC(yoshi_original_color_anim_set);
 
 BattleUnitKind unit_gullible_yoshi;

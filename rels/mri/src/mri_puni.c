@@ -10,6 +10,7 @@
 #include "mario/mariost.h"
 #include "mario/mario.h"
 #include "driver/icondrv.h"
+#include "evt/evt_sub.h"
 
 #include "driver/swdrv.h"
 
@@ -2302,7 +2303,6 @@ void puniModeSearch(PuniData* p) {
     m3 = cd & 0xFF;
     switch (find) {
         case 0x000:
-            /* TODO: block at 0x0c19c-0x0c844: verify neighbour order/subset */
             if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
                 PSEARCH_POS(bz, bx - 1);
             } else if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
@@ -2317,7 +2317,6 @@ void puniModeSearch(PuniData* p) {
             }
             break;
         case 0x100:
-            /* TODO: block at 0x0c844-0x0ceec: verify neighbour order/subset */
             if (m1 == move && __abs((s32)h1 - (s32)takasa) <= 0x1000) {
                 PSEARCH_POS(bz - 1, bx);
             } else if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
@@ -2332,7 +2331,6 @@ void puniModeSearch(PuniData* p) {
             }
             break;
         case 0x200:
-            /* TODO: block at 0x0ceec-0x0d594: verify neighbour order/subset */
             if (m2 == move && __abs((s32)h2 - (s32)takasa) <= 0x1000) {
                 PSEARCH_POS(bz, bx + 1);
             } else if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
@@ -2347,7 +2345,6 @@ void puniModeSearch(PuniData* p) {
             }
             break;
         case 0x300:
-            /* TODO: block at 0x0d594-0x0dc44: verify neighbour order/subset */
             if (m3 == move && __abs((s32)h3 - (s32)takasa) <= 0x1000) {
                 PSEARCH_POS(bz + 1, bx);
             } else if (m0 == move && __abs((s32)h0 - (s32)takasa) <= 0x1000) {
@@ -6750,8 +6747,6 @@ USER_FUNC(puni_disp_info_sub) {
 USER_FUNC(evt_make_texbuf);
 USER_FUNC(evt_npc_set_tribe);
 USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 
 EVT_BEGIN(puni_piders_check)
     CALL(evt_seq_wait, 2)

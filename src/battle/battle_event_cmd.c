@@ -1281,7 +1281,7 @@ USER_FUNC(btlevtcmd_SetBaseScale) {
     btlId = evtGetValue(event, args[0]);
 
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1409,7 +1409,7 @@ USER_FUNC(btlevtcmd_SetPartsScale) {
     if (id == -1) {
         return EVT_RETURN_DONE;
     }
-    { //TODO: un-hardcode?
+    {
         partId = evtGetValue(event, args[1]);
         part = BattleGetUnitPartsPtr(id, partId);
         x = evtGetFloat(event, args[2]);
@@ -1434,7 +1434,7 @@ USER_FUNC(btlevtcmd_AddPartsScale) {
     if (id == -1) {
         return EVT_RETURN_DONE;
     }
-    { //TODO: un-hardcode?
+    {
         partId = evtGetValue(event, args[1]);
         part = BattleGetUnitPartsPtr(id, partId);
         x = evtGetFloat(event, args[2]);
@@ -1454,7 +1454,7 @@ USER_FUNC(btlevtcmd_GetHp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1471,7 +1471,7 @@ USER_FUNC(btlevtcmd_GetFp) { //1:1
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1489,7 +1489,7 @@ USER_FUNC(btlevtcmd_GetMaxHp) { //1:1
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1505,7 +1505,7 @@ USER_FUNC(btlevtcmd_GetMaxFp) { //1:1
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1523,7 +1523,7 @@ USER_FUNC(btlevtcmd_SetHp) { //1:1
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1544,7 +1544,7 @@ USER_FUNC(btlevtcmd_SetFp) { //1:1
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1561,7 +1561,7 @@ USER_FUNC(btlevtcmd_SetMaxFp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1613,7 +1613,7 @@ USER_FUNC(btlevtcmd_SetMaxMoveCount) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1632,7 +1632,7 @@ USER_FUNC(btlevtcmd_GetDamagePartsId) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1648,7 +1648,7 @@ USER_FUNC(btlevtcmd_GetHpDamage) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1664,7 +1664,7 @@ USER_FUNC(btlevtcmd_GetFpDamage) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1680,7 +1680,7 @@ USER_FUNC(btlevtcmd_GetHpDamageCount) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) { //TODO: un-hardcode?
+    if (id == -1) {
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1696,7 +1696,7 @@ USER_FUNC(btlevtcmd_RecoverHp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {  //TODO: un-hardcode?
+    if (id == -1) { 
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -1724,7 +1724,7 @@ USER_FUNC(btlevtcmd_RecoverFp) {
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
-    if (id == -1) {  //TODO: un-hardcode?
+    if (id == -1) { 
         return EVT_RETURN_DONE;
     }
     unit = BattleGetUnitPtr(wp, id);

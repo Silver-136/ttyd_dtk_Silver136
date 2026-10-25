@@ -32,8 +32,6 @@ USER_FUNC(_delete_present_item);
 USER_FUNC(_get_item_announce);
 USER_FUNC(_get_present_target_id);
 USER_FUNC(_get_present_item);
-USER_FUNC(_attack_aud);
-USER_FUNC(_get_attack_aud_no);
 
 s32 _get_attack_aud_no(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;

@@ -2,16 +2,14 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "jin.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_kururing_floor);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 
 static EvtWord n_close[12];
 static EvtWord n_open[12];

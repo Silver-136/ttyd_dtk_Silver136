@@ -1,6 +1,11 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_torch.h"
+#include "evt/evt_map.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "driver/mapdrv.h"
 #include "driver/hitdrv.h"
@@ -8,17 +13,9 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_sub_get_sincos);
 USER_FUNC(hi_onoff);
 USER_FUNC(mugen_kairou_get_list);
 

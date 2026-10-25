@@ -2,6 +2,11 @@
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
 #include "driver/envdrv.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "memory.h"
 #include "mario/mariost.h"
@@ -14,20 +19,13 @@
 static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam_road_reset);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mobj_brick);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_mobj_blk);
 #endif

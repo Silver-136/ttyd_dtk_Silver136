@@ -1,6 +1,10 @@
 #include "eff/n64/eff_kameki_tornade_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_eff.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "mario/mario.h"
 #include "system.h"
@@ -18,21 +22,12 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_eff64);
 USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(muj_mario_pos_osreport_func);
 USER_FUNC(muj_ship_puka_func);
 static USER_FUNC(tornade_alpha_func);
 USER_FUNC(muj_npc_buruburu);
 USER_FUNC(muj_npc_fuwafuwa);
-USER_FUNC(muj_npc_guruguru);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

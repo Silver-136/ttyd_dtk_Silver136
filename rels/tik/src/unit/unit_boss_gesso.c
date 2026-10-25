@@ -21,38 +21,11 @@
 
 
 #ifdef VERSION_G8ME01
-USER_FUNC(btlevtcmd_CheckActStatus);
 #else
 USER_FUNC(_test_rtn);
 #endif
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_KillUnit);
-USER_FUNC(btlevtcmd_OnAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHitCursorOffset);
-USER_FUNC(btlevtcmd_SetHitOffset);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetHpGaugeOffset);
-USER_FUNC(btlevtcmd_SetPartsDefenceAttrTable);
-USER_FUNC(btlevtcmd_SetPartsDefenceTable);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRegistStatus);
-USER_FUNC(btlevtcmd_SetStatusIconOffset);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WaitEventEnd);
 USER_FUNC(_ikasumi_effect);
 extern BattleUnitKind unit_boss_gesso_left_arm;
 extern BattleUnitKind unit_boss_gesso_right_arm;

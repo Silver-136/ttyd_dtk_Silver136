@@ -2,6 +2,12 @@
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
 #include "libc_decls.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "mario/mario.h"
 #include "pmario_sound.h"
@@ -15,22 +21,10 @@
 #include "manager/evtmgr_cmd.h"
 
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_hit_damage_return_set);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 static USER_FUNC(hikaru_off);
 static USER_FUNC(mario_chk);
 static USER_FUNC(thunder_main);

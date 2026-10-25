@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "eff/eff_fire.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -19,22 +20,7 @@ static EffectEntry* eff;
 static EffectEntry* eff2[10];
 static s32 step[10];
 
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckSpace);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_StartWaitEvent);
 static USER_FUNC(eff_all_fire);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(eff_fire);
 static USER_FUNC(bubble_copy_status);
 

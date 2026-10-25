@@ -7,24 +7,10 @@
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
 #include "system.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_eff.h"
 
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_homing_unit);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_zoomSpeedLv);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_snd_se);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_GetStatusMg);
 USER_FUNC(evt_audience_sound_cheer);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff_delete);
 
 s32 BattleAudienceSoundCheck(s32 id);
 

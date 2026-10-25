@@ -16,6 +16,14 @@
 #include "pmario_sound.h"
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_case.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 double atan(double);
 
@@ -49,42 +57,20 @@ void door_dark_flag_sub(BOOL on, const char** npcs, const char** mobjs, const ch
 USER_FUNC(N_evt_mario_party_door_halve_hitbox);
 USER_FUNC(animation);
 USER_FUNC(door_dark_flag);
-USER_FUNC(door_entry);
 USER_FUNC(door_group);
-USER_FUNC(evt_cam3d_event_from_road);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam3d_evt_set_xyz);
 USER_FUNC(evt_cam3d_evt_xyz_off);
-USER_FUNC(evt_cam3d_get_shift);
 USER_FUNC(evt_cam_letter_box_disable);
 USER_FUNC(evt_door_load_mapflag);
 USER_FUNC(evt_door_param);
 USER_FUNC(evt_door_save_mapflag);
 USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_map_blend_off);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_map_set_blend);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
 USER_FUNC(evt_mario_party_door_move);
 USER_FUNC(evt_party_move_beside_mario);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
 USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(get_noclip_map);
 USER_FUNC(in_pos);
 USER_FUNC(init_inside_group);
@@ -95,11 +81,8 @@ USER_FUNC(npc_hide_onoff);
 USER_FUNC(npc_light);
 USER_FUNC(out_pos);
 USER_FUNC(outside_group);
-USER_FUNC(snd_door_in);
-USER_FUNC(snd_door_out);
 USER_FUNC(evt_door_end_wait);
 USER_FUNC(evt_door_set_param);
-USER_FUNC(evt_door_data_copy);
 
 EvtWord door_open_se[151];
 EvtWord door_close_se[151];

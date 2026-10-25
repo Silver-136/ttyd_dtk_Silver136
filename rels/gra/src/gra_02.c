@@ -1,5 +1,10 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_msg.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -8,22 +13,10 @@
 #include "evt/evt_npc.h"
 
 static USER_FUNC(booboo_main);
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
 

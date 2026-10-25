@@ -1,6 +1,9 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "statuswindow.h"
+#include "battle/battle_event_cmd.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_msg.h"
 
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
@@ -27,30 +30,7 @@ USER_FUNC(aud_dec);
 USER_FUNC(aud_inc);
 USER_FUNC(aud_joy);
 USER_FUNC(blinkAP);
-USER_FUNC(btlevtcmd_AddUnitWork);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetMaxMoveCount);
-USER_FUNC(btlevtcmd_SetStayPose);
-USER_FUNC(btlevtcmd_SetTalkPose);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_StopWaitEvent);
-USER_FUNC(btlevtcmd_get_turn);
-USER_FUNC(btlevtcmd_onoff_battleflag);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
 USER_FUNC(get_ac_result);
 USER_FUNC(get_actkind);
 USER_FUNC(hammer_on);

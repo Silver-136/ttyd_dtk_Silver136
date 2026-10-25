@@ -6,6 +6,18 @@
 #include "sfx_name_word.h"
 #include "pmario_sound.h"
 #include "libc_decls.h"
+#include "battle/battle_event_cmd.h"
+#include "unit/party/unit_party_vivian.h"
+#include "evt/evt_batstage.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_env.h"
+#include "evt/evt_ext.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -27,7 +39,6 @@
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(btlevtcmd_WaitEventEnd);
 #endif
 
 typedef struct HandElem { u16 flip; u8 field_0x2[2]; s32 animIdx; OSTime time; s16 ofs; s16 phase; f32 speed; Vec pos; s32 field_0x24; } HandElem;
@@ -44,107 +55,11 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 camera, f32 x, f32 y,
 void btl_camera_shake_w(s32 a, s32 b, s32 c, f32 d, f32 e);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
-USER_FUNC(battle_evt_majo_disp_off);
-USER_FUNC(battle_evt_majo_disp_on);
-USER_FUNC(btlevtcmd_AddPartsPos);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AttackDeclare);
-USER_FUNC(btlevtcmd_CheckActStatus);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckPhase);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_CheckToken);
-USER_FUNC(btlevtcmd_ChoiceSamplingEnemy);
-USER_FUNC(btlevtcmd_ClearAllStatus);
-USER_FUNC(btlevtcmd_DrawLots);
-USER_FUNC(btlevtcmd_GetDamageCode);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetHeight);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetHp);
-USER_FUNC(btlevtcmd_GetHpDamage);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetPartsPos);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetSelectNextEnemy);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitWork);
 USER_FUNC(btlevtcmd_InterruptStop);
-USER_FUNC(btlevtcmd_KillUnit);
-USER_FUNC(btlevtcmd_OffAttribute);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_OnUnitFlag);
-USER_FUNC(btlevtcmd_PayWeaponCost);
-USER_FUNC(btlevtcmd_PreCheckDamage);
-USER_FUNC(btlevtcmd_RecoverHp);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_SetAlpha);
-USER_FUNC(btlevtcmd_SetBaseRotate);
-USER_FUNC(btlevtcmd_SetBaseScale);
-USER_FUNC(btlevtcmd_SetBintaHitOffset);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetHitCursorOffset);
-USER_FUNC(btlevtcmd_SetHitOffset);
-USER_FUNC(btlevtcmd_SetHomePos);
-USER_FUNC(btlevtcmd_SetHp);
-USER_FUNC(btlevtcmd_SetKissHitOffset);
-USER_FUNC(btlevtcmd_SetMaxMoveCount);
-USER_FUNC(btlevtcmd_SetPartsBaseRotate);
-USER_FUNC(btlevtcmd_SetPartsBaseScale);
-USER_FUNC(btlevtcmd_SetPartsDefenceAttrTable);
-USER_FUNC(btlevtcmd_SetPartsDefenceTable);
-USER_FUNC(btlevtcmd_SetPartsHomePos);
-USER_FUNC(btlevtcmd_SetPartsPos);
-USER_FUNC(btlevtcmd_SetPartsRotate);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRegistStatus);
-USER_FUNC(btlevtcmd_SetScale);
-USER_FUNC(btlevtcmd_SetStayPose);
-USER_FUNC(btlevtcmd_SetTalkPose);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SpawnUnit);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_WaitAttackEnd);
-USER_FUNC(btlevtcmd_WaitGuardMove);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(btlevtcmd_reset_turn);
 USER_FUNC(eff_queen_set_alpha_evt);
-USER_FUNC(evt_batstage_return_aud_dark_base);
-USER_FUNC(evt_btl_camera_set_homing_unit);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_moveto);
-USER_FUNC(evt_btl_camera_set_prilimit);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_btl_camera_shake_h);
-USER_FUNC(evt_eff);
 USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_env_blur_on);
-USER_FUNC(evt_ext_entry);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_battle_party);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_sfx_vol);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_random);
 USER_FUNC(make_pattern);
 USER_FUNC(peach_hand1000_dark_drag_1_evt);
 USER_FUNC(peach_talk_synchro_shadow_head_evt);

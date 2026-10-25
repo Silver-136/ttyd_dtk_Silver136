@@ -1,5 +1,11 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -16,38 +22,14 @@
 #include "evt/evt_sub.h"
 #include "data_tables.h"
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_hit_damage_return_set);
 USER_FUNC(evt_hitobj_attr_onoff);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_cam_keep_off);
 USER_FUNC(evt_mario_cam_y_on);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_pos);
 USER_FUNC(evt_mobj_jumpstand_blue);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_set_rotate);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(mario_moveride_check);
 
 static NpcSetupInfo npcEnt[6];

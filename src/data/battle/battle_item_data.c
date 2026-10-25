@@ -22,6 +22,12 @@
 #include "evt/evt_audience.h"
 #include "evt/evt_mobj.h"
 #include "statuswindow.h"
+#include "battle/battle_item_data.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_env.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 extern ItemData itemDataTable[];
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
@@ -31,69 +37,15 @@ void _disp_item_icon(CameraId cameraId, void* param);
 extern s32 R_mystery_item_table[];
 
 USER_FUNC(_cam_rot);
-USER_FUNC(_full_ap_recover);
 USER_FUNC(_get_throw_first_pos);
 USER_FUNC(_nancy_mirage);
 USER_FUNC(_naniga_okorukana_check);
 USER_FUNC(_throw_item_icon);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_CheckCommandUnit);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckWeaponPluralTarget);
-USER_FUNC(btlevtcmd_ChoiceSamplingEnemy);
 USER_FUNC(btlevtcmd_CommandFlyItem);
-USER_FUNC(btlevtcmd_CommandGetWeaponAddress);
 USER_FUNC(btlevtcmd_CommandGetWeaponItemId);
 USER_FUNC(btlevtcmd_ConsumeItem);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_GetBodyId);
 USER_FUNC(btlevtcmd_GetConsumeItem);
-USER_FUNC(btlevtcmd_GetDamage);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetFaceDirection);
-USER_FUNC(btlevtcmd_GetFriendBelong);
-USER_FUNC(btlevtcmd_GetHeight);
-USER_FUNC(btlevtcmd_GetHitPos);
-USER_FUNC(btlevtcmd_GetHomePos);
 USER_FUNC(btlevtcmd_GetItemRecoverParam);
-USER_FUNC(btlevtcmd_GetPartsPos);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetSelectEnemy);
-USER_FUNC(btlevtcmd_GetSelectNextEnemy);
-USER_FUNC(btlevtcmd_GetStatusMg);
-USER_FUNC(btlevtcmd_GetUnitKind);
-USER_FUNC(btlevtcmd_GetWidth);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_PreCheckDamage);
-USER_FUNC(btlevtcmd_RecoverFp);
-USER_FUNC(btlevtcmd_RecoverHp);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_SetFp);
-USER_FUNC(btlevtcmd_SetHp);
-USER_FUNC(btlevtcmd_SetMoveSpeed);
-USER_FUNC(btlevtcmd_StageDispellFog);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_StatusWindowOnOff);
-USER_FUNC(btlevtcmd_TransStageFloorPosition);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(btlevtcmd_check_battleflag);
-USER_FUNC(evt_audience_ap_recovery);
-USER_FUNC(evt_btl_camera_noshake);
-USER_FUNC(evt_btl_camera_set_homing_unit);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_set_zoom);
-USER_FUNC(evt_btl_camera_shake_h);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_env_blur_on);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_random);
-USER_FUNC(evt_sub_rumble_onoff);
 USER_FUNC(_hpfp_change_declare_2);
 USER_FUNC(_hpfp_change_declare_1);
 USER_FUNC(_rank_up);

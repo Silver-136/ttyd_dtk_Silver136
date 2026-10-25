@@ -1,6 +1,19 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_case.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "data/mapdata.h"
 #include "manager/evtmgr_cmd.h"
@@ -25,27 +38,14 @@ GXColor HSV2RGB(HSV hsv);
 PuniWork* puniGetPunigp(void);
 void puniModeWinjump(PuniData* puni);
 
-USER_FUNC(evt_bero_exec_get);
-USER_FUNC(evt_bero_exec_onoff);
 USER_FUNC(evt_bero_mario_go);
 USER_FUNC(evt_cam_get_pos);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_fade_entry);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_position);
 USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_get_dir);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mri_door_naname_func);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_get_position);
 USER_FUNC(evt_pouch_add_item);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_remove_item);
@@ -58,18 +58,11 @@ USER_FUNC(evt_puni_init_puni);
 USER_FUNC(evt_puni_set_lsw_index);
 USER_FUNC(evt_puni_set_position);
 USER_FUNC(evt_puni_set_trap_index);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_set_seq);
-USER_FUNC(evt_snd_bgmoff_f);
 USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_countdown_get_status);
 USER_FUNC(evt_sub_countdown_set_restart_time);
 USER_FUNC(evt_sub_countdown_start);
 USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_target_flag_onoff);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(hakari_color);

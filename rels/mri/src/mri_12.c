@@ -4,24 +4,22 @@
 #include "evt/evt_sub.h"
 #include "mri.h"
 #include "data_tables.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_npc.h"
+#include "mri_puni.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mobj_breaking_floor);
-USER_FUNC(evt_npc_change_fbat_mode);
 USER_FUNC(evt_puni_all_fall_check);
-USER_FUNC(evt_puni_mem_init);
 USER_FUNC(evt_puni_set_hamari);
 USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
 USER_FUNC(evt_target_flag_onoff);
 USER_FUNC(evt_target_set_position);
 

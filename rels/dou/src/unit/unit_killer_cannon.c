@@ -10,25 +10,6 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(btlevtcmd_AddHomePos);
-USER_FUNC(btlevtcmd_AddPos);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckSpace);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_GetFaceDirection);
-USER_FUNC(btlevtcmd_GetPartsRotate);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetPartsRotate);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(killer_get_angle);
 static USER_FUNC(killer_copy_status);
 extern BattleUnitKind unit_killer;

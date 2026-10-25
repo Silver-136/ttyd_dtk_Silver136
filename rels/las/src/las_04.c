@@ -5,6 +5,12 @@
 #include "mot/mot_damage.h"
 #include "pmario_sound.h"
 #include "driver/shadowdrv.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -37,16 +43,8 @@ void _firebar_trans(FirebarWork* wp);
 s32 _firebar_hitCheck2(FirebarWork* wp);
 
 USER_FUNC(coin_entry);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_hit_damage_return_set);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_save_blk);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_sub_random);
 USER_FUNC(firebar_disp_evt);
 USER_FUNC(firebar_entry);
 void firebar_cb(FirebarWork* wp, s32 type);

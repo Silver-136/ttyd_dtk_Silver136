@@ -15,37 +15,15 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "data_tables.h"
+#include "evt/evt_map.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 USER_FUNC(_get_local_frame);
 static USER_FUNC(_mario_makkuro_set);
 USER_FUNC(_mario_super_emblem_anim_set);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeSetPoseSoundTable);
-USER_FUNC(btlevtcmd_AudienceAppeal);
-USER_FUNC(btlevtcmd_FaceDirectionAdd);
-USER_FUNC(btlevtcmd_FaceDirectionSub);
-USER_FUNC(btlevtcmd_GetHomePos);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetFallAccel);
 USER_FUNC(btlevtcmd_SetJumpSound);
-USER_FUNC(btlevtcmd_SetPartsWork);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_SetRunSound);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_SetWalkSound);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_map_replayanim);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(_get_mario_hammer_lv);
 void faker_mario_makkuro_set(void);
 static void callback(MapTevCallbackInfo* info);
@@ -424,10 +402,8 @@ static USER_FUNC(_get_mario_hammer_lv) {
 }
 
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_btl_camera_nomove_y_onoff);
 #endif
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_btl_camera_set_posoffset);
 #endif
 EVT_BEGIN(mario_dead_event)
     CALL(evt_btl_camera_set_prilimit, 1)

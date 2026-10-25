@@ -16,6 +16,7 @@
 #include <dolphin/gx.h>
 #include "battle/battle_status_effect.h"
 #include "statuswindow.h"
+#include "battle/battle_message.h"
 
 
 
@@ -25,7 +26,6 @@
 #include "battle/battle_audience_kind_data.h"
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
-USER_FUNC(btlevtcmd_AnnounceMessage);
 EVT_BEGIN(msg_puni_all_escape)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -225, STRING("btl_msg_audience_puni_escape"), 120)
     RETURN

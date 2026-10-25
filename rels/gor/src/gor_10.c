@@ -1,6 +1,15 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -65,30 +74,10 @@ static void draw(CameraId camera, void* param);
 
 USER_FUNC(cam_yure);
 static USER_FUNC(depth);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_ctrl_onoff);
 USER_FUNC(evt_cam_letter_box_camid);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_fade_set_mapchange_type);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_party_dispflg_onoff);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
 USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxchk);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_get_system_flag);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(mabuta);
 USER_FUNC(tegami);
 void mabutaDisp(CameraId camera, void* param);

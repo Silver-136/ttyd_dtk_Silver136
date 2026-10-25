@@ -2,6 +2,23 @@
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_img.h"
+#include "evt/evt_bg.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_pouch.h"
+#include "mri_puni.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
+#include "evt/evt_telop.h"
 
 #include "driver/offscreendrv.h"
 #include "mario/mario.h"
@@ -25,7 +42,6 @@
 #include "mri.h"
 #include "evt/evt_npc.h"
 
-USER_FUNC(evt_img_alloc_capture);
 typedef struct CloudWork { s32 used; s32 state; char animName[0x20]; char imgName[0x20]; char offscreenName[0x20]; char groupNames[8][0x20]; char hitName[0x20]; s32 limit; s32 counter; EventEntry* evt; void* endEvt; s32 timer; s32 x; s32 y; s32 w; s32 h; f32 lastFrame; } CloudWork;
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
 static CloudWork* cloud;
@@ -38,96 +54,35 @@ void envSetYamiView(Mtx mtx);
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(anim_tevcallback);
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_bg_set_color);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_letter_box_onoff);
-USER_FUNC(evt_cam_road_reset);
 static USER_FUNC(evt_cloud_main);
-USER_FUNC(evt_eff_fukidashi);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_fade_set_mapchange_type);
 USER_FUNC(evt_get_target_dir);
 USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_map_set_tevcallback);
 USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mario_clear_party);
-USER_FUNC(evt_mario_cont_onoff);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
 USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_party);
 USER_FUNC(evt_mario_set_party_pos);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mri_cloud_ent);
 USER_FUNC(evt_mri_cloud_init);
 USER_FUNC(evt_mri_get16bitdata);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_change_interrupt);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
 USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_jump_position_nohit);
-USER_FUNC(evt_npc_move_position);
 USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
 USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_npc_status_onoff);
-USER_FUNC(evt_npc_wait_pera);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_get_pos);
 USER_FUNC(evt_party_jump_pos);
 USER_FUNC(evt_party_move_beside_mario);
-USER_FUNC(evt_party_move_pos);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_pouch_all_party_recovery);
-USER_FUNC(evt_pouch_mario_recovery);
 USER_FUNC(evt_puni_flag_onoff);
 USER_FUNC(evt_puni_get_dir);
 USER_FUNC(evt_puni_get_position);
 USER_FUNC(evt_puni_init_puni);
-USER_FUNC(evt_puni_mem_init);
 USER_FUNC(evt_puni_pera_onoff);
 USER_FUNC(evt_puni_set_dir);
 USER_FUNC(evt_puni_set_yuka);
 USER_FUNC(evt_puni_wait_systemmode);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgm_scope);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_sub_spline_get_value);
 USER_FUNC(evt_sub_spline_init);
-USER_FUNC(evt_telop_entry);
 USER_FUNC(get_puni_pos);
 #ifdef VERSION_G8ME01
 USER_FUNC(N_evt_sub_status_gauge_force_update);

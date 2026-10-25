@@ -1,58 +1,34 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_case.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_paper.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "mario/mario.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
 #include "aji.h"
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_road_reset);
-USER_FUNC(evt_del_case_evt);
-USER_FUNC(evt_eff_fukidashi);
 USER_FUNC(evt_fade_softfocus_onoff);
 USER_FUNC(evt_fade_tec_onoff);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_mode);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_mode);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_set_autotalkpose);
-USER_FUNC(evt_npc_set_color);
 USER_FUNC(evt_npc_set_paper);
 USER_FUNC(evt_npc_set_paper_anim);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_paper_entry);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_peach_set_condition);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_get_stopwatch);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 static USER_FUNC(peach_set_pose);
 
 static EvtWord w_door_close[22];

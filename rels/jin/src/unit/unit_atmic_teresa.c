@@ -1,5 +1,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_ext.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_sub.h"
 
 #include "battle/battle.h"
 #include "driver/camdrv.h"
@@ -33,22 +36,6 @@ double sin(double x);
 void teresa_ext_disp(CameraId camera, void* param);
 
 USER_FUNC(atmic_teresa_id_set);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_PreCheckDamage);
-USER_FUNC(btlevtcmd_ResultACDefence);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_StartAvoid);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_ext_entry);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_sub_random);
 USER_FUNC(teresa_wait_breath2);
 USER_FUNC(teresa_wait_breath);
 USER_FUNC(teresa_appear_breath);

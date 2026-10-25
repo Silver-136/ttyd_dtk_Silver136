@@ -2,6 +2,9 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
+#include "evt/evt_ext.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_seq.h"
 
 #include "driver/npcdrv.h"
 #include "driver/extdrv.h"
@@ -39,12 +42,6 @@ void yuunpc_pose_minigame2_main(void);
 void yuunpc_pose_minigame3_main(void);
 void yuunpc_pose_minigame4_main(void);
 
-USER_FUNC(evt_ext_entry);
-USER_FUNC(evt_npc_delete);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_seq_wait);
 void ext_yuunpc_minigame4_main(void);
 void ext_yuunpc_minigame3_main(void);
 void ext_yuunpc_minigame2_main(void);

@@ -5,52 +5,32 @@
 #include "mri.h"
 #include "evt/evt_npc.h"
 #include "data_tables.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "mri_puni.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_eff_fukidashi);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mobj_badgeblk);
 USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_save_blk);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_change_fbat_mode);
 USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_glide_position);
-USER_FUNC(evt_npc_jump_position_nohit);
-USER_FUNC(evt_npc_move_position);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
 USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_puni_count);
 USER_FUNC(evt_puni_flag_onoff);
-USER_FUNC(evt_puni_mem_init);
 USER_FUNC(evt_puni_set_hamari);
 USER_FUNC(evt_puni_set_mode);
 USER_FUNC(evt_puni_set_position);
 USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_target_flag_onoff);
 USER_FUNC(evt_target_set_position);
 USER_FUNC(urouro_init_func);

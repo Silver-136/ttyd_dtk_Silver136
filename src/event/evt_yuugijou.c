@@ -9,16 +9,13 @@
 #include <string.h>
 #include "pmario_sound.h"
 #include "sfx_name_word.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
 
 extern USER_FUNC(evt_mario_set_prev_party_pos);
 extern USER_FUNC(evt_mario_set_enable_key);
-extern USER_FUNC(evt_bero_mapchange);
-extern USER_FUNC(evt_mario_cont_onoff);
 extern USER_FUNC(evt_mario_get_pos);
-extern USER_FUNC(evt_mario_set_pos);
-extern USER_FUNC(evt_msg_print);
-extern USER_FUNC(evt_msg_select);
-extern USER_FUNC(evt_msg_continue);
 
 USER_FUNC(yuuminigame_get_window_evt);
 USER_FUNC(yuuminigame_end);

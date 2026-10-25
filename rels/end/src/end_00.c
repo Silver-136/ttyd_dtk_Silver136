@@ -2,6 +2,18 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
+#include "evt/evt_bg.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_ext.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_sub.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "driver/animdrv.h"
 #include "driver/npcdrv.h"
@@ -55,32 +67,7 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_bg_set_color);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_ext_entry);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_fade_entry);
-USER_FUNC(evt_fade_set_mapchange_type);
-USER_FUNC(evt_key_get_buttontrg);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mario_cont_onoff);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_npc_delete);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_rotate);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_set_scale);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_seq_set_seq);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_end_moamoa_exit);
 USER_FUNC(evt_end_moamoa_init);
 USER_FUNC(evt_end_npc_silhouette_on);

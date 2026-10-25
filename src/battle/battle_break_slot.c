@@ -21,6 +21,9 @@
 #include <dolphin/pad.h>
 #include "battle/battle_camera.h"
 #include "eff/eff_magic1_n64.h"
+#include "battle/battle_event_cmd.h"
+#include "battle/battle_message.h"
+#include "evt/evt_eff.h"
 
 typedef struct { s32 v[8]; } SlotCards8;
 typedef struct { s32 v[5]; } SlotCards5;
@@ -31,18 +34,6 @@ void BattleBreakSlot_Start(void);
 void BattleBreakSlotDispReel(CameraId camId, void* param);
 void item_appear_force(BreakSlotReel* reel, s32 item);
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnnounceMessage);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetMaxFp);
-USER_FUNC(btlevtcmd_GetMaxHp);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_RecoverFp);
-USER_FUNC(btlevtcmd_RecoverHp);
-USER_FUNC(evt_eff);
 
 
 EVT_BEGIN(kinoko_effect)

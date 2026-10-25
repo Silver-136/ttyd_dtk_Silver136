@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_sub.h"
+#include "evt/evt_eff.h"
 
 #include "battle/battle_stage_object.h"
 #include "system.h"
@@ -13,7 +14,6 @@
 
 
 static USER_FUNC(_wave_offset);
-USER_FUNC(evt_eff64);
 extern BattleUnitKind unit_boss_cortez;
 extern BattleUnitKind unit_boss_kanbu3;
 

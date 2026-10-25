@@ -1,6 +1,17 @@
 #include "mri_puni.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
@@ -11,54 +22,25 @@
 #include "manager/evtmgr_cmd.h"
 
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_position);
 USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mobj_recovery_blk);
-USER_FUNC(evt_mobj_save_blk);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_party_get_pos);
 USER_FUNC(evt_puni_flag_onoff);
 USER_FUNC(evt_puni_force_pose);
 USER_FUNC(evt_puni_get_flag);
 USER_FUNC(evt_puni_get_mode);
 USER_FUNC(evt_puni_get_position);
-USER_FUNC(evt_puni_mem_init);
 USER_FUNC(evt_puni_set_anim);
 USER_FUNC(evt_puni_set_hamari);
 USER_FUNC(evt_puni_set_mode);
 USER_FUNC(evt_puni_set_yuka);
 USER_FUNC(evt_puni_winddisable_onoff);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_target_flag_onoff);
 USER_FUNC(evt_target_set_position);
 USER_FUNC(yuka_fall_check);

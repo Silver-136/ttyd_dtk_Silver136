@@ -7,19 +7,9 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_map.h"
 #include "battle/battle_database_common.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetStatusMg);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_sub_random);
 
 BattleUnitKind unit_twinkling_pansy;
 static BattleUnitDefense defence;

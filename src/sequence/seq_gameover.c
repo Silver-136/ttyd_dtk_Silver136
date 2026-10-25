@@ -22,6 +22,8 @@
 #include "cam_road.h"
 #include "cam_shift.h"
 #include "driver/npcdrv.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
 
 typedef struct GameOverWork {
     EventEntry* evt; // 0x0
@@ -31,21 +33,9 @@ typedef struct GameOverWork {
 void _relUnLoad(void);
 void _unload(const char* map, const char* nextMap, const char* nextBero);
 
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_cont_onoff);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_cam_road_reset);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_mario_kill_party);
 USER_FUNC(evt_mario_clear_party);
 USER_FUNC(N_evt_snd_bgm_unpause);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_cam_ctrl_onoff);
 #ifdef VERSION_G8ME01

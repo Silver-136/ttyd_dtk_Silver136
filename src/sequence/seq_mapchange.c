@@ -31,14 +31,14 @@
 #include "eff/eff_magic1_n64.h"
 #include "mario/mario_sbr.h"
 #include "driver/npcdrv.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_mario.h"
 
 //.sbss
 char _next_area[0x20];
 char _next_map[0x20];
 char _next_bero[0x20];
 
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_mario_key_onoff);
 EVT_BEGIN(key_off)
 CALL(evt_seq_wait, 2)
 CALL(evt_fade_end_wait)

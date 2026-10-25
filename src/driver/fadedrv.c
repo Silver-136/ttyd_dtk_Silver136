@@ -15,6 +15,7 @@
 #include <string.h>
 #include "version.h"
 #include "libc_decls.h"
+#include "evt/evt_img.h"
 
 #ifdef VERSION_G8ME01
 // US-only named constant (dispdrv reads it by name), followed by a zero word
@@ -24,7 +25,6 @@ const f32 float_0_8041f774 = 0.0f;
 #pragma force_active reset
 #endif
 
-s32 evt_img_alloc_capture(EventEntry* event, BOOL isFirstCall);
 
 static FadeWork* wp;
 

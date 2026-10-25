@@ -4,35 +4,22 @@
 #include "evt/evt_sub.h"
 #include "mri.h"
 #include "data_tables.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_npc.h"
+#include "mri_puni.h"
+#include "evt/evt_case.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_exec_get);
-USER_FUNC(evt_bero_exec_wait);
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_map_pauseanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_pose);
-USER_FUNC(evt_npc_battle_start);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_move_position);
-USER_FUNC(evt_npc_set_battle_info);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_wait_battle_end);
-USER_FUNC(evt_puni_mem_init);
 USER_FUNC(evt_puni_set_hamari);
 USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
 
 static EvtWord bero_s_doa_close[10];
 static EvtWord bero_s_doa_open[10];

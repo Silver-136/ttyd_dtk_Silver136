@@ -4,44 +4,31 @@
 #include "jin.h"
 #include "evt/evt_npc.h"
 #include "mario/mario_pouch.h"
+#include "evt/evt_case.h"
+#include "evt/evt_item.h"
+#include "evt/evt_sub.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_exit_case_evt);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_key_get_buttontrg);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_balloon_off);
 USER_FUNC(evt_mario_balloon_tenten);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
 USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_itembox);
-USER_FUNC(evt_mobj_kururing_floor);
 USER_FUNC(evt_mobj_lock);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_party_cont_onoff);
 USER_FUNC(evt_party_get_status);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(mainwindow_opendisable);
 USER_FUNC(mainwindow_openenable);

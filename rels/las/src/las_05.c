@@ -1,6 +1,17 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_ext.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "system.h"
@@ -45,80 +56,38 @@ static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 
 USER_FUNC(chk_mario_ctrloff);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_letter_box_onoff);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff_fukidashi);
-USER_FUNC(evt_ext_entry);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_set_bound_limit);
 USER_FUNC(evt_item_set_bound_rate);
 USER_FUNC(evt_item_set_gravity);
 USER_FUNC(evt_item_set_jump_power);
 USER_FUNC(evt_item_set_move_dir_speed);
-USER_FUNC(evt_item_status_on);
 USER_FUNC(evt_key_get_button);
 USER_FUNC(evt_key_get_dir);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_cam_off);
 USER_FUNC(evt_mario_cam_on);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_dispdir);
 USER_FUNC(evt_mario_get_motion);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_get_pose);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_dispdir);
 USER_FUNC(evt_mario_set_motion);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mobj_exec_cancel);
 USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_party);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_battle_start);
-USER_FUNC(evt_npc_change_interrupt);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
 USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_move_position);
 USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_set_anim);
 USER_FUNC(evt_npc_set_balloontype);
-USER_FUNC(evt_npc_set_battle_info);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
 USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_npc_status_onoff);
-USER_FUNC(evt_npc_wait_battle_end);
-USER_FUNC(evt_party_cont_onoff);
 USER_FUNC(evt_party_get_status);
 USER_FUNC(evt_party_set_dispdir);
 USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_seq_set_seq);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_sub_get_dir);
 USER_FUNC(evt_sub_get_dist);
-USER_FUNC(evt_sub_get_stopwatch);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(get_mario_y_pos);
 USER_FUNC(get_party_y_pos);

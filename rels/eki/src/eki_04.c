@@ -1,17 +1,15 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam_road_reset);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_jump_jumpstand);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mobj_jumpstand_red);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_envon);
 
 static EvtWord e_close[12];
 static EvtWord e_open[12];

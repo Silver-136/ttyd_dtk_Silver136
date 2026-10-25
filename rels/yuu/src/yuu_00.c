@@ -3,6 +3,16 @@
 #include "evt/evt_cmd.h"
 #include "party.h"
 #include "cam_shift.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_sub.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_seq.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -41,32 +51,13 @@ static Monte* monte_p;
 static void monte_disp(CameraId camera, void* param);
 
 USER_FUNC(eff_call_minigame);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_letter_box_onoff);
 USER_FUNC(evt_change_plane);
 USER_FUNC(evt_fade_in);
-USER_FUNC(evt_fade_out);
-USER_FUNC(evt_key_get_buttontrg);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mario_set_prev_party_pos);
-USER_FUNC(evt_mario_wait_move_end);
 USER_FUNC(evt_moving_floor_delete);
-USER_FUNC(evt_msg_select);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
 USER_FUNC(evt_yuucounter_alloc);
 USER_FUNC(evt_yuucounter_free);
 USER_FUNC(evt_yuuminigame_alloc);
@@ -92,9 +83,7 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_sub_get_language);
-USER_FUNC(evt_sub_random);
 #endif
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data);
 void yuuminigame_disp_1hikoki(CameraId camera, void* param);

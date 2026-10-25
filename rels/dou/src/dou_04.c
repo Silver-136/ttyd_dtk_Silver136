@@ -3,6 +3,16 @@
 #include "system.h"
 #include "driver/mapdrv.h"
 #include "battle/battle_sub.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -13,67 +23,28 @@
 #include "evt/evt_npc.h"
 
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_box_pukapuka);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_eff_fukidashi);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hit_damage_return_set);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_flag_off);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_item_get_item_end_wait);
 USER_FUNC(evt_item_get_position);
 USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_check_menu);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_jump_pos);
-USER_FUNC(evt_mario_mov_pos2);
 USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_mario_set_dir_npc);
 USER_FUNC(evt_mario_set_hosei_xyz);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mobj_powerupblk);
 USER_FUNC(evt_mobj_switch_red);
-USER_FUNC(evt_msg_continue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_move_position);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_npc_wait_pera);
-USER_FUNC(evt_party_dispflg_onoff);
 USER_FUNC(evt_party_get_name_hitobj_ride);
-USER_FUNC(evt_party_get_pos);
 USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_dir_npc);
 USER_FUNC(evt_party_set_hosei_xyz);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(evt_mapgrp_translate2);
 
 static BeroEntry bero_entry_data[2];

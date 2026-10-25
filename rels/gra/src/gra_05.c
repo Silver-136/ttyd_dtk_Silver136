@@ -3,61 +3,39 @@
 #include "evt/evt_bero.h"
 #include "gra.h"
 #include "cam_road.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_party.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(camera_curve_off);
 USER_FUNC(camera_curve_on);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
 USER_FUNC(evt_cam3d_evt_set_now);
-USER_FUNC(evt_cam_road_reset);
-USER_FUNC(evt_cam_shake);
 USER_FUNC(evt_cam_shift_reset);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_cloud_set_cap_size);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
 USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_iwamove_ent);
 USER_FUNC(evt_iwamove_init);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_bgmode_off);
 USER_FUNC(evt_mario_bgmode_on);
-USER_FUNC(evt_mario_cam_y_off);
 USER_FUNC(evt_mario_cam_y_on);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_jump_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mario_set_prev_party);
 USER_FUNC(evt_mobj_breaking_floor);
 USER_FUNC(evt_mobj_brick);
 USER_FUNC(evt_mobj_powerupblk);
 USER_FUNC(evt_party_force_reset_outofscreen);
 USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 
 EvtWord gra_05_in_01[5];
 EvtWord gra_05_out_01[149];

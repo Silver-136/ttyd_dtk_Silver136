@@ -2,6 +2,14 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_img.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_case.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "driver/hitdrv.h"
 #include "driver/camdrv.h"
@@ -20,7 +28,6 @@
 #include "evt/evt_bero.h"
 #include "las.h"
 
-USER_FUNC(evt_img_alloc_capture);
 typedef struct CloudWork { s32 used; s32 state; char animName[0x20]; char imgName[0x20]; char offscreenName[0x20]; char groupNames[8][0x20]; char hitName[0x20]; s32 limit; s32 counter; EventEntry* evt; void* endEvt; s32 timer; s32 x; s32 y; s32 w; s32 h; f32 lastFrame; } CloudWork;
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
 static CloudWork* cloud;
@@ -30,26 +37,14 @@ static void _mapclsofs_all(CloudWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
 static void _img_alloc_capture(EvtWord a0, EvtWord a1, EvtWord a2, EvtWord a3, EvtWord a4, EvtWord a5, EvtWord a6, EvtWord a7);
 
-USER_FUNC(evt_bero_get_info);
 static USER_FUNC(evt_cloud_main);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_las_cloud_ent);
 USER_FUNC(evt_las_cloud_init);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mobj_flag_onoff);
-USER_FUNC(evt_mobj_get_position);
 USER_FUNC(evt_mobj_hit_onoff);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 static void _mapclsofs_all(CloudWork* wp);
 static void _mapsetofs_all(CloudWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);

@@ -28,6 +28,10 @@
 #include "sfx_name_word.h"
 #include "win/win_mario.h"
 #include "driver/itemdrv.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_sub.h"
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);
@@ -56,26 +60,17 @@ USER_FUNC(add_shop_point);
 USER_FUNC(chk_shop_point);
 USER_FUNC(disp_list);
 USER_FUNC(disp_off);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_normalize);
 USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_msg_continue);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_print_add);
 USER_FUNC(evt_msg_print_add_insert);
 USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_msg_select);
 USER_FUNC(evt_pouch_add_coin);
 USER_FUNC(evt_pouch_add_item);
 USER_FUNC(evt_pouch_add_keepitem);
 USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(evt_pouch_remove_keepitem);
-USER_FUNC(evt_set_dir_to_target);
 USER_FUNC(evt_shop_main_func);
 USER_FUNC(evt_sub_get_language);
 USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_sub_get_system_flag);
-USER_FUNC(evt_sub_load_progresstime);
 USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);
 USER_FUNC(evt_win_coin_wait);

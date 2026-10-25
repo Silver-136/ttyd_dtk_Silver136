@@ -3,16 +3,14 @@
 #include "kpa.h"
 #include "evt/evt_npc.h"
 #include "kpa_stage_data.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_letter_box_disable);
 USER_FUNC(evt_koopa_chk_dead);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_seq_set_seq);
-USER_FUNC(evt_sub_get_system_flag);
 USER_FUNC(kpa_status_init);
 
 EvtWord kpa_act_stg1_mobj[151];

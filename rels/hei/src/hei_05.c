@@ -3,36 +3,17 @@
 #include "evt/evt_bero.h"
 #include "npc_event.h"
 #include "evt/evt_npc.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_case.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
 USER_FUNC(evt_cam3d_evt_set_at);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_del_case_evt);
-USER_FUNC(evt_exit_case_evt);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_get_position);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_jump_position_nohit);
-USER_FUNC(evt_npc_set_anim);
 USER_FUNC(evt_npc_set_link);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_setup);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 
 static BeroEntry bero_entry_data[3];
 static EvtWord dead_evt1[10];

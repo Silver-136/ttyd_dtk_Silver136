@@ -1,5 +1,13 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_env.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
 
 #include "driver/camdrv.h"
 #include "mario/mariost.h"
@@ -14,34 +22,11 @@
 #include "data_tables.h"
 
 USER_FUNC(camera_action);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_env_blur_on);
-USER_FUNC(evt_exit_case_evt);
-USER_FUNC(evt_fade_set_mapchange_type);
 USER_FUNC(evt_item_delete_check);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_mario_bgmode_on);
-USER_FUNC(evt_mario_cam_y_off);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_pos);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_msg_toge);
-USER_FUNC(evt_npc_change_fbat_mode);
 USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_start_for_event);
-USER_FUNC(evt_npc_stop_for_event);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_sfxon_3d);
 
 EvtWord clouda_house_in[12];
 EvtWord clouda_house_out[19];

@@ -1,5 +1,9 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
 
 #include "stdio.h"
 #include "evt/evt_bero.h"
@@ -10,15 +14,9 @@
 
 static char name[8];
 
-USER_FUNC(evt_eff);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mobj_get_position);
 USER_FUNC(evt_mobj_wait_animation_end);
 static USER_FUNC(make_name);
 

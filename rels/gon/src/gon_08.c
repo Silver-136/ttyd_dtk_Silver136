@@ -3,71 +3,39 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_npc.h"
 #include "mario/mario_pouch.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_party.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_goodbye_party);
 USER_FUNC(evt_mario_hello_party);
 USER_FUNC(evt_mario_party_use_check);
 USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_flag_onoff);
 USER_FUNC(evt_mobj_float_blk);
 USER_FUNC(evt_mobj_get_kindname);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_get_y_position);
 USER_FUNC(evt_mobj_hitevt_onoff);
 USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mobj_set_y_position);
 USER_FUNC(evt_mobj_switch_float_blk);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_jump_position_nohit);
-USER_FUNC(evt_npc_pera_onoff);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_height);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_rotate);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_set_width);
-USER_FUNC(evt_npc_setup);
 USER_FUNC(evt_party_outofscreen);
-USER_FUNC(evt_party_set_pos);
 USER_FUNC(evt_party_wait_landon);
 USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_rumble_onoff);
 USER_FUNC(evt_sub_save_playtime);
 USER_FUNC(evt_win_item_select);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_npc_get_position);
 USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_wait_pera);
-USER_FUNC(evt_party_get_pos);
-USER_FUNC(evt_party_move_pos2);
-USER_FUNC(evt_party_run);
-USER_FUNC(evt_party_set_dir);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_set_dir_to_target);
 #endif
 
 static EvtWord door01_close[12];

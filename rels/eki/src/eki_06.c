@@ -1,6 +1,14 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_npc.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/mobjdrv.h"
@@ -14,31 +22,11 @@
 
 static s32 lock;
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_mov_pos2);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mobj_delete);
-USER_FUNC(evt_mobj_get_position);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_set_anim);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_npc_get_ReactionOfLivingBody);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(sw_entry);
 s32 sw_main(MapObjectEntry* mobj);
 void sw_reset(void);

@@ -1,5 +1,14 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
@@ -7,37 +16,19 @@
 #include "evt/evt_bero.h"
 #include "las.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_party);
 USER_FUNC(evt_mario_set_hosei_xyz);
 USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_flag_onoff);
 USER_FUNC(evt_mobj_float_blk);
 USER_FUNC(evt_mobj_get_kindname);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_get_y_position);
 USER_FUNC(evt_mobj_jumpstand_blue);
-USER_FUNC(evt_mobj_set_y_position);
 USER_FUNC(evt_mobj_switch_float_blk);
-USER_FUNC(evt_npc_check_delete);
 USER_FUNC(evt_party_get_name_hitobj_head);
 USER_FUNC(evt_party_get_name_hitobj_ride);
 USER_FUNC(evt_party_set_hosei_xyz);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
 USER_FUNC(set_mobj_y_position);
 static USER_FUNC(set_party_y_pos);
 

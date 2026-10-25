@@ -25,6 +25,13 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 #include "eff/n64/eff_stardust_n64.h"
+#include "evt/evt_batstage.h"
+#include "evt/evt_map.h"
+#include "battle/battle_camera.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_img.h"
+#include "evt/evt_paper.h"
+#include "party/party_motion.h"
 
 void btlGetScreenPoint(Vec* in, Vec* out);
 
@@ -75,56 +82,9 @@ typedef struct StarEffWork {
     s32 mode; // 0x38
 } StarEffWork;
 
-USER_FUNC(btlevtcmd_ACSuccessEffect);
-USER_FUNC(btlevtcmd_ChoiceSamplingEnemy);
-USER_FUNC(btlevtcmd_GetEnemyBelong);
-USER_FUNC(btlevtcmd_GetSelectEnemy);
-USER_FUNC(btlevtcmd_GetSelectNextEnemy);
-USER_FUNC(btlevtcmd_OffPartsAttribute);
-USER_FUNC(btlevtcmd_OnPartsAttribute);
-USER_FUNC(btlevtcmd_SamplingEnemy);
-USER_FUNC(btlevtcmd_SetAlpha);
-USER_FUNC(btlevtcmd_SetRGB);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AttackDeclare);
-USER_FUNC(btlevtcmd_CheckDamage);
-USER_FUNC(btlevtcmd_CheckPartsAttribute);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_CommandGetWeaponAddress);
-USER_FUNC(btlevtcmd_CommandPayWeaponCost);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(btlevtcmd_WaitGuardMove);
-USER_FUNC(btlevtcmd_WeaponAftereffect);
-USER_FUNC(btlevtcmd_reset_move_color_lv_all);
-USER_FUNC(btlevtcmd_snd_se);
-USER_FUNC(evt_batstage_return_aud_dark_base);
 USER_FUNC(evt_batstage_return_stg_dark_base);
-USER_FUNC(evt_batstage_set_aud_dark);
 USER_FUNC(evt_batstage_set_stg_dark);
 USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_shake_h);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_img_alloc_capture);
-USER_FUNC(evt_img_clear_virtual_point);
-USER_FUNC(evt_img_entry);
-USER_FUNC(evt_img_onoff);
-USER_FUNC(evt_img_release);
-USER_FUNC(evt_img_set_paper);
-USER_FUNC(evt_img_set_paper_anim);
-USER_FUNC(evt_paper_delete);
-USER_FUNC(evt_paper_entry);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(sac_ac_help_off);
-USER_FUNC(sac_ac_help_on);
-USER_FUNC(sac_cheer);
-USER_FUNC(sac_cheer_end);
 extern s32 tou_gamen_screen_tev[];
 
 USER_FUNC(aud_set_draw);

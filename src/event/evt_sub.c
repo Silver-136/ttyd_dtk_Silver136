@@ -26,6 +26,17 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 #include "mario/mario_motion.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_party.h"
+#include "evt/evt_case.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
 
 void marioSetCamId(s32);
 s32 effStageClearEndChk();
@@ -77,61 +88,30 @@ static const char coin_fmt[] = "%f%f%f";
 static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
 
 USER_FUNC(bgm_start_wait);
-USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam3d_evt_set_npc_rel);
 USER_FUNC(evt_cam3d_evt_set_rel);
 USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff64);
-USER_FUNC(evt_eff_delete);
 USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_fade_entry);
 USER_FUNC(evt_fade_reset);
-USER_FUNC(evt_fade_set_mapchange_type);
-USER_FUNC(evt_item_delete);
 USER_FUNC(evt_item_get_position);
 USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_balloon_bikkuri);
 USER_FUNC(evt_mario_balloon_off);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_init_camid);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_normalize);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mario_wait_rideon);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_camid);
 USER_FUNC(evt_party_init_camid);
-USER_FUNC(evt_party_stop);
 USER_FUNC(evt_party_yoshi_ride);
 USER_FUNC(evt_pouch_add_item);
 USER_FUNC(evt_pouch_get_starstone);
 USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_run_case_evt);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envoff);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_snd_sfx_all_stop);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(evt_sub_check_intersect);
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_sub_scale_by_fps);
 #endif
-USER_FUNC(evt_sub_get_sincos);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_rumble_onoff);
 USER_FUNC(evt_sub_save_playtime);
 USER_FUNC(evt_win_one_message);
 USER_FUNC(get_stop);
@@ -145,39 +125,24 @@ USER_FUNC(stone_ry);
 USER_FUNC(evt_sub_get_coin);
 void coingetDisp(WinMgrEntry* entry);
 USER_FUNC(evt_sub_countdown_set_restart_time);
-USER_FUNC(evt_sub_countdown_flag_onoff);
-USER_FUNC(evt_sub_countdown_end);
 USER_FUNC(evt_sub_countdown_get_status);
 USER_FUNC(evt_sub_countdown_start);
-USER_FUNC(evt_sub_animgroup_async);
 USER_FUNC(evt_sub_get_language);
-USER_FUNC(evt_sub_load_progresstime);
 USER_FUNC(evt_sub_save_playtime);
 USER_FUNC(evt_sub_status_gauge_check_update);
 USER_FUNC(evt_sub_status_gauge_force_close);
 USER_FUNC(evt_sub_status_gauge_force_open);
 USER_FUNC(evt_sub_get_areaname);
 USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_key_get_buttontrg);
 USER_FUNC(evt_key_get_button);
 USER_FUNC(evt_key_get_dir);
 USER_FUNC(evt_sub_system_flag_onoff);
-USER_FUNC(evt_sub_get_system_flag);
-USER_FUNC(evt_sub_get_dir);
 USER_FUNC(evt_sub_get_dist);
 USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_sub_get_stopwatch);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_sub_spline_free);
 USER_FUNC(evt_sub_spline_get_value_manual);
 USER_FUNC(evt_sub_spline_get_value);
 USER_FUNC(evt_sub_spline_init);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_intpl_get_float);
-USER_FUNC(evt_sub_intpl_init_float);
-USER_FUNC(evt_sub_intpl_get_value_para);
 
 extern EvtWord evt_sub_stopwatch[7];
 extern EvtWord evt_sub_tree_access_entry[28];

@@ -9,12 +9,6 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_DrawLots);
-USER_FUNC(btlevtcmd_EnemyItemUseCheck);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveto);
 static USER_FUNC(vivian_comeback);
 
 BattleUnitKind unit_faker_mario_gra;

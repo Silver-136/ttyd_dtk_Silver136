@@ -30,6 +30,14 @@
 #include "driver/mapdrv.h"
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "battle/battle_disp.h"
+#include "battle/battle_event_cmd.h"
+#include "battle/battle_message.h"
+#include "evt/evt_batstage.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_msg.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -138,45 +146,12 @@ USER_FUNC(_lvup_spot_off);
 USER_FUNC(_lvup_spot_on);
 USER_FUNC(_nozzle_set_offset);
 USER_FUNC(_set_confetti_control_evtid);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnnounceMessage);
 USER_FUNC(btlevtcmd_BtlStageObjFlagOnOff);
 USER_FUNC(btlevtcmd_BtlStageObjGetRotate);
 USER_FUNC(btlevtcmd_BtlStageObjSetRotate);
-USER_FUNC(btlevtcmd_ClearAllStatus);
-USER_FUNC(btlevtcmd_GetBodyId);
-USER_FUNC(btlevtcmd_GetPos);
-USER_FUNC(btlevtcmd_GetUnitId);
-USER_FUNC(btlevtcmd_GetUnitKind);
-USER_FUNC(btlevtcmd_JumpPosition);
-USER_FUNC(btlevtcmd_MovePosition);
-USER_FUNC(btlevtcmd_RunDataEventChild);
-USER_FUNC(btlevtcmd_SetFallAccel);
-USER_FUNC(btlevtcmd_SetMoveSoundDataWork);
-USER_FUNC(btlevtcmd_SetPos);
-USER_FUNC(btlevtcmd_WaitEventEnd);
-USER_FUNC(btlevtcmd_check_battleflag);
-USER_FUNC(btlevtcmd_onoff_battleflag);
-USER_FUNC(btlevtcmd_snd_se);
 USER_FUNC(evt_audience_sound_cheer);
-USER_FUNC(evt_batstage_set_aud_dark);
 USER_FUNC(evt_batstage_set_stg_dark);
 USER_FUNC(evt_batstage_set_stg_dark_base);
-USER_FUNC(evt_btl_camera_set_mode);
-USER_FUNC(evt_btl_camera_set_moveSpeedLv);
-USER_FUNC(evt_btl_camera_shake_h);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_fade_end_wait);
-USER_FUNC(evt_fade_entry);
-USER_FUNC(evt_fade_set_anim_ofs_pos);
-USER_FUNC(evt_fade_set_anim_virtual_pos);
-USER_FUNC(evt_msg_print);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_intpl_get_float);
-USER_FUNC(evt_sub_intpl_get_value);
-USER_FUNC(evt_sub_intpl_init);
-USER_FUNC(evt_sub_intpl_init_float);
 
 
 
@@ -1089,7 +1064,6 @@ void _GetExpIcon_End(SeqEndWork* work) {
 }
 
 #ifdef VERSION_G8ME01
-USER_FUNC(btlevtcmd_PadCheckTrigger);
 USER_FUNC(N__display_select_one_to_upgrade_text);
 USER_FUNC(N__set_initial_upgrade_cursor_position);
 

@@ -4,12 +4,11 @@
 #include "evt/evt_sub.h"
 #include "bom.h"
 #include "data_tables.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
 
 static TreeAccess tree_tbl[4];
 static EvtWord evt_tree[7];

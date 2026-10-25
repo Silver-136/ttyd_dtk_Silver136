@@ -7,6 +7,14 @@
 #include "eff/eff_mist.h"
 #include "eff/eff_splash.h"
 #include "eff/n64/eff_water_damage_n64.h"
+#include "evt/evt_bero.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_sub.h"
+#include "evt/evt_light.h"
+#include "evt/evt_map.h"
+#include "evt/evt_party.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
 
 #include "driver/npcdrv.h"
 #include "mario/mariost.h"
@@ -49,62 +57,19 @@ static void draw(CameraId camera, void* param);
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 USER_FUNC(elmos1000tai_init);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_fade_set_mapchange_type);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hitobj_onoff);
-USER_FUNC(evt_key_get_buttontrg);
-USER_FUNC(evt_light_bind_mapobj);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_map_set_playrate);
 USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_get_position);
 USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_cont_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_set_mode);
-USER_FUNC(evt_mario_set_pos);
 USER_FUNC(evt_nannpc_entry);
 USER_FUNC(evt_nannpc_init);
 USER_FUNC(evt_nannpc_set_animtbl);
 USER_FUNC(evt_nannpc_set_func);
 USER_FUNC(evt_nannpc_set_subfunc);
-USER_FUNC(evt_npc_entry);
-USER_FUNC(evt_npc_flag_onoff);
-USER_FUNC(evt_npc_get_position);
-USER_FUNC(evt_npc_set_anim);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_rotate);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_set_scale);
 USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_cont_onoff);
-USER_FUNC(evt_party_set_pos);
-USER_FUNC(evt_party_stop);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgm_scope);
-USER_FUNC(evt_snd_bgmoff_f);
-USER_FUNC(evt_snd_bgmon);
 USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_envon);
 USER_FUNC(evt_snd_sfx_dist);
-USER_FUNC(evt_snd_sfx_pos);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_get_sincos);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_get_value_para);
-USER_FUNC(evt_sub_intpl_msec_init);
-USER_FUNC(evt_sub_random);
 static USER_FUNC(fune_eff);
 USER_FUNC(kaizoku_fune_eff);
 USER_FUNC(logo);

@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_sub.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -13,7 +14,6 @@ static ShuryoWork* slhp;
 
 static USER_FUNC(evt_shuryolight_set_anim);
 static USER_FUNC(evt_shuryolight_wait_anim_end);
-USER_FUNC(evt_sub_random);
 USER_FUNC(evt_shuryolight_delete);
 static USER_FUNC(evt_shuryolight_run_tue_evt);
 USER_FUNC(evt_shuryolight_run_head_evt);

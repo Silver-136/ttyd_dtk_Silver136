@@ -1,6 +1,12 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_fade.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_seq.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "stdio.h"
 #include "mario/mario.h"
@@ -19,31 +25,12 @@
 
 
 USER_FUNC(all_flag_off);
-USER_FUNC(evt_bero_get_entername);
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_bero_mapchange);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_road_reset);
-USER_FUNC(evt_fade_set_mapchange_type);
 USER_FUNC(evt_hitobj_attr_onoff);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_kill_party);
-USER_FUNC(evt_mario_set_dir);
-USER_FUNC(evt_mario_set_mode);
-USER_FUNC(evt_mario_set_pos);
 USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_get_position);
 USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_seq_wait);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
 USER_FUNC(hikaru_off_func);
 USER_FUNC(hikaru_on_func);
 static USER_FUNC(ride_chk);

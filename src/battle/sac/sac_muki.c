@@ -37,7 +37,6 @@ void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
 #define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 
-USER_FUNC(btlevtcmd_ACSuccessEffect);
 static USER_FUNC(star_stone_appear);
 static USER_FUNC(wait_game_end);
 static USER_FUNC(start_game);

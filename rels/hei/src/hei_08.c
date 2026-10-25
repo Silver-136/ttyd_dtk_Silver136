@@ -1,37 +1,25 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_npc.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
 #include "npc_event.h"
 
-USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_playanim);
 USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_key_onoff);
-USER_FUNC(evt_mario_set_pose);
 USER_FUNC(evt_mario_wait_movable);
-USER_FUNC(evt_npc_battle_start);
-USER_FUNC(evt_npc_change_fbat_mode);
-USER_FUNC(evt_npc_change_interrupt);
 USER_FUNC(evt_npc_check);
 USER_FUNC(evt_npc_check_escape_battle);
-USER_FUNC(evt_npc_flag_onoff);
 USER_FUNC(evt_npc_get_battle_result);
-USER_FUNC(evt_npc_get_position);
 USER_FUNC(evt_npc_jump_position);
 USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_set_battle_info);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_wait_battle_end);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_set_rev_mode);
-USER_FUNC(evt_snd_sfxon_3d);
 static USER_FUNC(npc_dead);
 static USER_FUNC(npc_set_me);
 extern s32 hei_test_water_tev[];

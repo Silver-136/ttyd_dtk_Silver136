@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_camera.h"
+#include "party/party_motion.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -16,26 +18,9 @@
 
 static USER_FUNC(_set_draw_callback);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_btl_camera_shake_h);
 #endif
 USER_FUNC(btlevtcmd_AfterReactionEntry);
-USER_FUNC(btlevtcmd_AnimeChangePose);
-USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
-USER_FUNC(btlevtcmd_AnimeChangePoseType);
-USER_FUNC(btlevtcmd_AnimeSetPoseSoundTable);
-USER_FUNC(btlevtcmd_AnimeSetPoseTable);
-USER_FUNC(btlevtcmd_CheckDamageCode);
-USER_FUNC(btlevtcmd_CheckStatus);
-USER_FUNC(btlevtcmd_GetDamageCode);
-USER_FUNC(btlevtcmd_GetUnitWork);
-USER_FUNC(btlevtcmd_SetEventAttack);
-USER_FUNC(btlevtcmd_SetEventConfusion);
-USER_FUNC(btlevtcmd_SetEventDamage);
 USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventWait);
-USER_FUNC(btlevtcmd_SetUnitWork);
-USER_FUNC(btlevtcmd_StartWaitEvent);
-USER_FUNC(evt_snd_sfxoff);
 static void _fire_point_callback(BattleUnitPart* part, s32 group);
 
 BattleUnitKind unit_heavy_bom;

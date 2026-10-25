@@ -18,6 +18,9 @@
 #include "evt/evt_mario.h"
 #include "libc_decls.h"
 #include "koopa.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 static void piders_draw_yarn_sub(CameraId cameraId, void* param);
 
 double sqrt(double);
@@ -223,68 +226,41 @@ USER_FUNC(piders_get_height) {
 
 
 
-USER_FUNC(evt_eff);
-USER_FUNC(evt_eff_fukidashi);
 USER_FUNC(evt_fbat_trans_floor_position);
 USER_FUNC(evt_get_target_dir);
 USER_FUNC(evt_item_entry);
 USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_npc_add_dirdist);
-USER_FUNC(evt_npc_add_rotate);
 USER_FUNC(evt_npc_blur_onoff);
 USER_FUNC(evt_npc_calc_score);
-USER_FUNC(evt_npc_change_interrupt);
-USER_FUNC(evt_npc_delete);
 USER_FUNC(evt_npc_facedirection_add);
-USER_FUNC(evt_npc_flag_onoff);
 USER_FUNC(evt_npc_get_btlsetup_work);
-USER_FUNC(evt_npc_get_dir);
 USER_FUNC(evt_npc_get_drop_coin);
 USER_FUNC(evt_npc_get_drop_fixitem);
 USER_FUNC(evt_npc_get_drop_flower);
 USER_FUNC(evt_npc_get_drop_heart);
 USER_FUNC(evt_npc_get_drop_item);
-USER_FUNC(evt_npc_get_home_position);
 USER_FUNC(evt_npc_get_kpencount_type);
 USER_FUNC(evt_npc_get_loiter_dir);
-USER_FUNC(evt_npc_get_position);
 USER_FUNC(evt_npc_get_unitwork);
 USER_FUNC(evt_npc_getback_item_entry);
-USER_FUNC(evt_npc_glide_position);
 USER_FUNC(evt_npc_homing_target);
 USER_FUNC(evt_npc_jump_position);
-USER_FUNC(evt_npc_move_position);
-USER_FUNC(evt_npc_pera_onoff);
 USER_FUNC(evt_npc_restart_regular_event);
 USER_FUNC(evt_npc_return_interrupt);
 USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_anim);
 USER_FUNC(evt_npc_set_attack_mode);
 USER_FUNC(evt_npc_set_btlsetup_work);
 USER_FUNC(evt_npc_set_confuse_anim);
 USER_FUNC(evt_npc_set_damage_anim);
-USER_FUNC(evt_npc_set_height);
-USER_FUNC(evt_npc_set_position);
-USER_FUNC(evt_npc_set_rotate);
 USER_FUNC(evt_npc_set_run_anim);
-USER_FUNC(evt_npc_set_ry);
-USER_FUNC(evt_npc_set_scale);
 USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_npc_set_talk_anim);
 USER_FUNC(evt_npc_set_tribe);
 USER_FUNC(evt_npc_set_unitwork);
 USER_FUNC(evt_npc_set_walk_anim);
-USER_FUNC(evt_npc_set_width);
-USER_FUNC(evt_npc_slave_entry);
-USER_FUNC(evt_npc_sound_data_reset);
-USER_FUNC(evt_npc_sound_data_set);
-USER_FUNC(evt_npc_status_onoff);
 USER_FUNC(evt_npc_wait_msec);
 USER_FUNC(evt_set_dir_to_home);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
-USER_FUNC(evt_sub_random);
 USER_FUNC(piders_draw_yawn);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);

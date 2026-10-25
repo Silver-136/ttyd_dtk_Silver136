@@ -1,6 +1,15 @@
 #include "mri_puni.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
+#include "party/party_motion.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
@@ -10,50 +19,23 @@
 
 static s32 ssf;
 
-USER_FUNC(evt_bero_get_info);
-USER_FUNC(evt_cam3d_evt_off);
-USER_FUNC(evt_cam3d_evt_set);
-USER_FUNC(evt_cam_shake);
-USER_FUNC(evt_hit_bind_mapobj);
-USER_FUNC(evt_hit_bind_update);
-USER_FUNC(evt_hit_damage_return_set);
-USER_FUNC(evt_hitobj_onoff);
 USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_on);
 USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_playanim);
-USER_FUNC(evt_mapobj_flag_onoff);
-USER_FUNC(evt_mapobj_trans);
-USER_FUNC(evt_mario_key_onoff);
 USER_FUNC(evt_mario_set_mov_spd);
-USER_FUNC(evt_mario_wait_landon);
-USER_FUNC(evt_mobj_flag_onoff);
-USER_FUNC(evt_mobj_get_position);
-USER_FUNC(evt_mobj_get_y_position);
-USER_FUNC(evt_mobj_itembox);
 USER_FUNC(evt_mobj_powerupblk);
 USER_FUNC(evt_mobj_rideswitch_lightblue);
-USER_FUNC(evt_mobj_set_y_position);
 USER_FUNC(evt_mobj_switch_blue);
 USER_FUNC(evt_mobj_wait_animation_end);
 USER_FUNC(evt_puni_flag_onoff);
 USER_FUNC(evt_puni_get_flag);
 USER_FUNC(evt_puni_get_position);
-USER_FUNC(evt_puni_mem_init);
 USER_FUNC(evt_puni_set_hamari);
 USER_FUNC(evt_puni_set_maze);
 USER_FUNC(evt_puni_set_mode);
 USER_FUNC(evt_puni_set_position);
 USER_FUNC(evt_puni_set_ymode);
 USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_snd_bgmoff);
-USER_FUNC(evt_snd_bgmon);
-USER_FUNC(evt_snd_envon);
-USER_FUNC(evt_snd_sfxoff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_sub_intpl_msec_get_value);
-USER_FUNC(evt_sub_intpl_msec_init);
 USER_FUNC(puni_get_id);
 static USER_FUNC(ss_check);
 static USER_FUNC(ss_set);
