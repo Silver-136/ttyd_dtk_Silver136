@@ -946,7 +946,7 @@ void yuka_capture(CameraId cam, void* param) {
     sysWaitDrawSync();
     GXSetTexCopySrc(0, 0, w->texW, w->texH);
     GXSetTexCopyDst(w->texW, w->texH, 4, 0);
-    GXSetZMode(1, 3, 1);
+    GXSetZMode(1, GX_LEQUAL, 1);
     GXCopyTex(w->tex->address, 1);
     GXPixModeSync();
     memcpy(camGetPtr(cam), &save, sizeof(CameraEntry));
@@ -1150,26 +1150,26 @@ void yuka_disp(CameraId cam, void* param) {
     if (w->tex->address != NULL) {
         m = w->mesh->address;
         if (m != NULL) {
-            GXSetCullMode(0);
+            GXSetCullMode(GX_CULL_NONE);
             GXClearVtxDesc();
-            GXSetVtxDesc(9, 1);
-            GXSetVtxDesc(0xD, 1);
-            GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-            GXSetVtxAttrFmt(0, 0xD, 1, 4, 0);
+            GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+            GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 4, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 4, 0);
             GXSetNumChans(0);
             GXSetNumTexGens(1);
-            GXSetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
+            GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C, 0, 0x7D);
             GXSetNumTevStages(1);
-            GXSetTevOrder(0, 0, 0, 0xFF);
-            GXSetTevOp(0, 3);
-            GXInitTexObj(&obj, w->tex->address, w->texW, w->texH, 4, 0, 0, 0);
-            GXLoadTexObj(&obj, 0);
+            GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+            GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
+            GXInitTexObj(&obj, w->tex->address, w->texW, w->texH, 4, GX_CLAMP, GX_CLAMP, 0);
+            GXLoadTexObj(&obj, GX_TEXMAP0);
             GXLoadPosMtxImm(camera->view, 0);
             GXSetCurrentMtx(0);
             fifo = &GXWGFifo;
             i = 0;
             do {
-                GXBegin(0x80, GX_VTXFMT0, 4);
+                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 YUKA_POSITION(fifo, &m->disp[0][i]);
                 GXTexCoord2f32(m->u[0][i], m->v[0][i]);
                 YUKA_POSITION(fifo, &m->disp[1][i]);

@@ -1672,28 +1672,28 @@ void _mapDispMapObj(CameraId cam, MapObject *obj) {
     }
     switch (mode) {
         case 0:
-            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 7);
+            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_OR);
             GXSetZCompLoc(GX_TRUE);
             GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
             GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
             break;
 
         case 3:
-            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 0);
+            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
             GXSetZCompLoc(GX_TRUE);
             GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
             GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
             break;
 
         case 1:
-            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 0);
+            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
             GXSetZCompLoc(GX_FALSE);
             GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
             GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
             break;
 
         case 4:
-            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 0);
+            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
             GXSetZCompLoc(GX_FALSE);
             GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
             GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
@@ -1704,7 +1704,7 @@ void _mapDispMapObj(CameraId cam, MapObject *obj) {
         case 5:
 
         default:
-            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, 0);
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
             GXSetZCompLoc(GX_TRUE);
             GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
             GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);

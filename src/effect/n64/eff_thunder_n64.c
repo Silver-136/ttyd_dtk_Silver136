@@ -751,54 +751,54 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
         return;
     }
     if (type < 3) {
-        GXSetTevColor(2, (GXColor){0, 0, 0, 255});
+        GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, 255});
         GXSetNumChans(1);
-        GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+        GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
         GXSetNumTevStages(2);
-        GXSetTevOrder(0, 0, 0, 255);
-        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(0, 8, 12, 2, 15);
-        GXSetTevAlphaIn(0, 7, 7, 7, 4);
-        GXSetTevOrder(1, 1, 1, 255);
-        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(1, 15, 15, 15, 0);
-        GXSetTevAlphaIn(1, 7, 4, 4, 0);
-        GXSetTevOrder(2, 1, 1, 255);
-        GXSetTevColorOp(2, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(2, 1, 0, 0, 1, 0);
-        GXSetTevColorIn(2, 15, 15, 15, 0);
-        GXSetTevAlphaIn(2, 7, 4, 2, 0);
-        GXSetTevOrder(3, 255, 255, 4);
-        GXSetTevColorOp(3, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(3, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(3, 15, 15, 15, 0);
-        GXSetTevAlphaIn(3, 7, 0, 5, 7);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_TEXC, GX_CC_ONE, GX_CC_C0, GX_CC_ZERO);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_TEXA, GX_CA_TEXA, GX_CA_APREV);
+        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_TEXA, GX_CA_A1, GX_CA_APREV);
+        GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+        GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
     } else {
-        GXSetTevColor(2, (GXColor){0, 0, 0, 128});
+        GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, 128});
         GXSetNumChans(0);
         GXSetNumTevStages(4);
-        GXSetTevOrder(0, 0, 0, 255);
-        GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(0, 0, 0, 0, 1, 3);
-        GXSetTevColorIn(0, 15, 8, 8, 15);
-        GXSetTevAlphaIn(0, 7, 7, 7, 4);
-        GXSetTevOrder(1, 255, 255, 255);
-        GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(1, 0, 12, 2, 15);
-        GXSetTevAlphaIn(1, 3, 7, 2, 7);
-        GXSetTevOrder(2, 1, 1, 255);
-        GXSetTevColorOp(2, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(2, 15, 15, 15, 0);
-        GXSetTevAlphaIn(2, 7, 4, 3, 0);
-        GXSetTevOrder(3, 255, 255, 255);
-        GXSetTevColorOp(3, 0, 0, 0, 1, 0);
-        GXSetTevAlphaOp(3, 0, 0, 0, 1, 0);
-        GXSetTevColorIn(3, 15, 15, 15, 0);
-        GXSetTevAlphaIn(3, 7, 0, 1, 7);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVREG2);
+        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_TEXC, GX_CC_ZERO);
+        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_CPREV, GX_CC_ONE, GX_CC_C0, GX_CC_ZERO);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_A2, GX_CA_ZERO, GX_CA_A1, GX_CA_ZERO);
+        GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_TEXA, GX_CA_A2, GX_CA_APREV);
+        GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+        GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
     }
     a = 4.0f * work->u0;
     b = 4.0f * work->v0;
@@ -816,7 +816,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(camera->view, view, view);
         GXLoadPosMtxImm(view, 0);
         GXSetCurrentMtx(0);
-        GXSetTevColor(1, (GXColor){255, 47, 198, 255});
+        GXSetTevColor(GX_TEVREG0, (GXColor){255, 47, 198, 255});
             break;
         default:
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
@@ -827,28 +827,28 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(camera->view, view, view);
         GXLoadPosMtxImm(view, 0);
         GXSetCurrentMtx(0);
-        GXSetTevColor(1, (GXColor){255, 255, 0, work->alpha});
+        GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 0, work->alpha});
             break;
     }
     effGetTexObjN64(84, &tex);
-    GXLoadTexObj(&tex, 0);
-    GXLoadTexObj(&tex, 1);
+    GXLoadTexObj(&tex, GX_TEXMAP0);
+    GXLoadTexObj(&tex, GX_TEXMAP1);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen2(0, 1, 4, 30, 0, 125);
-    GXSetTexCoordGen2(1, 1, 4, 33, 0, 125);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 33, 0, 125);
     PSMTXScale(scale, 0.0078125f, 0.03125f, 0.0f);
     PSMTXTrans(mtx, (f32)a, (f32)b, 0.0f);
     PSMTXConcat(scale, mtx, mtx);
-    GXLoadTexMtxImm(mtx, 30, 1);
+    GXLoadTexMtxImm(mtx, 30, GX_MTX2x4);
     PSMTXScale(scale, 0.0078125f, 0.03125f, 0.0f);
     PSMTXTrans(mtx, (f32)c, (f32)d, 0.0f);
     PSMTXConcat(scale, mtx, mtx);
-    GXLoadTexMtxImm(mtx, 33, 1);
-    GXSetCullMode(0);
+    GXLoadTexMtxImm(mtx, 33, GX_MTX2x4);
+    GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(Ncube_inazuma_v);
     switch (type) {
         case 0:
-            GXBegin(144, 0, 156);
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 156);
             tri2(0, 1, 2, 0, 0, 2, 3, 0);
             tri2(4, 5, 5, 0, 4, 5, 4, 0);
             tri2(6, 7, 8, 0, 6, 8, 9, 0);
@@ -877,7 +877,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
             tri2(86, 97, 98, 0, 86, 98, 99, 0);
             break;
         case 1:
-            GXBegin(144, 0, 288);
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 288);
             tri2(100, 101, 102, 0, 100, 102, 103, 0);
             tri2(104, 105, 106, 0, 104, 106, 107, 0);
             tri2(108, 109, 110, 0, 108, 110, 111, 0);
@@ -928,7 +928,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
             tri2(171, 289, 290, 0, 171, 290, 291, 0);
             break;
         case 2:
-            GXBegin(144, 0, 228);
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 228);
             tri2(292, 293, 294, 0, 292, 294, 295, 0);
             tri2(296, 297, 298, 0, 296, 298, 299, 0);
             tri2(300, 301, 302, 0, 300, 302, 303, 0);
@@ -969,7 +969,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
             tri2(410, 441, 442, 0, 410, 442, 443, 0);
             break;
         case 3:
-            GXBegin(144, 0, 48);
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 48);
             tri2(444, 445, 446, 0, 444, 446, 447, 0);
             tri2(448, 449, 450, 0, 448, 450, 451, 0);
             tri2(452, 453, 454, 0, 452, 454, 455, 0);
@@ -980,7 +980,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
             tri2(472, 473, 474, 0, 446, 474, 475, 0);
             break;
         case 4:
-            GXBegin(144, 0, 60);
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 60);
             tri2(476, 477, 478, 0, 476, 478, 479, 0);
             tri2(480, 481, 482, 0, 480, 482, 483, 0);
             tri2(484, 485, 486, 0, 484, 486, 487, 0);
@@ -993,7 +993,7 @@ void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
             tri2(509, 513, 514, 0, 509, 514, 515, 0);
             break;
         case 5:
-            GXBegin(144, 0, 54);
+            GXBegin(GX_TRIANGLES, GX_VTXFMT0, 54);
             tri2(516, 517, 518, 0, 516, 518, 519, 0);
             tri2(520, 521, 522, 0, 520, 522, 523, 0);
             tri2(524, 525, 526, 0, 524, 526, 527, 0);

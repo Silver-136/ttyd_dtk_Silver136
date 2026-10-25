@@ -186,14 +186,14 @@ s32 nannpc_zcompare(NanNPCSort* a, NanNPCSort* b) {
 }
 
 static inline void nannpc_loadTev(void) {
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 15, 8, 2, 15);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaIn(0, 7, 4, 1, 7);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_C0, GX_CC_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_A0, GX_CA_ZERO);
     GXSetNumChans(0);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-    GXSetFog(0, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){255, 255, 255, 255});
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){255, 255, 255, 255});
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
 }
@@ -216,7 +216,7 @@ void nannpc_ext_disp() {
         qqsort(w->sort, w->num, 8, (s32(*)(void*, void*))nannpc_zcompare);
         for (i = extGetPoseNum() - 1; i >= 0; i--) {
             idx = w->sort[i].idx;
-            GXSetTevColor(1, w->npc[idx].color);
+            GXSetTevColor(GX_TEVREG0, w->npc[idx].color);
             extPoseDraw(idx);
         }
         extLoadTextureExit();

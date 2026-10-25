@@ -226,64 +226,64 @@ u8* diamond_7_dl_1_tbl[] = { diamond_7_dl_1_0, diamond_7_dl_1_1, diamond_7_dl_1_
 f32 edge_color[] = { 0.331f, 0.314999998f, 0.231999993f, 0.158999994f, 0.261000007f, 0.162f, 0.287f, 0.240999997f, 0.0930000022f, 0.324999988f, 0.131999999f, 0.141000003f, 0.144999996f, 0.202999994f, 0.305999994f, 0.312000006f, 0.181999996f, 0.115000002f, 0.256000012f, 0.312999994f, 0.344000012f };
 static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3_color0_tbl, diamond_4_color0_tbl, diamond_5_color0_tbl, diamond_6_color0_tbl, diamond_7_color0_tbl };
 
-#define CLR_ARRAY(c) GXSetArray(11, c, 4);
+#define CLR_ARRAY(c) GXSetArray(GX_VA_CLR0, c, 4);
 #define CLR_NONE(c)
 
 #define VTX_SETUP(posT, nrmT, clrMac, clrT, texT, texFrac) \
     GXClearVtxDesc();                                      \
-    GXSetVtxDesc(9, 2);                                    \
-    GXSetVtxAttrFmt(0, 9, 1, 3, 11);                       \
-    GXSetArray(9, posT, 6);                                \
-    GXSetVtxDesc(10, 2);                                   \
-    GXSetVtxAttrFmt(0, 10, 0, 1, 6);                       \
-    GXSetArray(10, nrmT, 3);                               \
-    GXSetVtxDesc(11, 2);                                   \
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);                       \
-    clrMac(clrT) GXSetVtxDesc(13, 2);                      \
-    GXSetVtxAttrFmt(0, 13, 1, 3, texFrac);                 \
-    GXSetArray(13, texT, 4);
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);                                    \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);                       \
+    GXSetArray(GX_VA_POS, posT, 6);                                \
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);                                   \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);                       \
+    GXSetArray(GX_VA_NRM, nrmT, 3);                               \
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);                                   \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);                       \
+    clrMac(clrT) GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);                      \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, texFrac);                 \
+    GXSetArray(GX_VA_TEX0, texT, 4);
 
 #define DISP_START(w)                                  \
     mapSetMaterialFog();                               \
-    GXSetArray(11, color_tbl[(w)->type], 4);           \
+    GXSetArray(GX_VA_CLR0, color_tbl[(w)->type], 4);           \
     GXSetNumChans(1);                                  \
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);                \
-    GXSetChanMatColor(4, (w)->color);                  \
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);                \
+    GXSetChanMatColor(GX_COLOR0A0, (w)->color);                  \
     GXSetNumTexGens(0);                                \
     GXSetNumTevStages(2);                              \
-    GXSetTevOrder(0, 255, 255, 4);                     \
-    GXSetTevOp(0, 4);                                  \
-    GXSetTevOrder(1, 255, 255, 255);                   \
-    GXSetTevColorOp(1, 0, 0, 0, 1, 0);                 \
-    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);                 \
-    GXSetTevColorIn(1, 15, 2, 0, 15);                  \
-    GXSetTevAlphaIn(1, 7, 1, 0, 7);                    \
-    GXSetTevColor(1, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);                     \
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);                                  \
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);                   \
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);                  \
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);                    \
+    GXSetTevColor(GX_TEVREG0, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
 
 #define DISP_MID(w)                                    \
     GXSetNumChans(1);                                  \
-    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);                \
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);                \
     GXSetNumTexGens(1);                                \
-    GXSetTexCoordGen2(0, 1, 4, 30, 0, 125);            \
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);            \
     PSMTXTrans(m, (w)->f24, (w)->f28, 0.0f);           \
-    GXLoadTexMtxImm(m, 30, 1);                         \
+    GXLoadTexMtxImm(m, 30, GX_MTX2x4);                         \
     GXSetNumTevStages(2);                              \
-    GXSetTevOrder(0, 0, 0, 4);                         \
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);                 \
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);                 \
-    GXSetTevOp(0, 0);                                  \
-    GXSetTevOrder(1, 255, 255, 255);                   \
-    GXSetTevColorOp(1, 0, 0, 0, 1, 0);                 \
-    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);                 \
-    GXSetTevColorIn(1, 15, 2, 0, 15);                  \
-    GXSetTevAlphaIn(1, 7, 1, 0, 7);                    \
-    GXSetTevColor(1, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);                         \
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);                                  \
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);                   \
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);                 \
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);                  \
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);                    \
+    GXSetTevColor(GX_TEVREG0, (GXColor){(w)->r, (w)->g, (w)->b, (w)->a});
 
 #define BLEND_STATE()                                  \
-    GXSetBlendMode(1, 4, 5, 0);                        \
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);                        \
     GXSetZCompLoc(1);                                  \
-    GXSetAlphaCompare(7, 0, 0, 7, 0);                  \
-    GXSetZMode(1, 3, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);                  \
+    GXSetZMode(1, GX_LEQUAL, 0);
 
 #define XFORM(w, tx, tz, sc, nz, ny)                                                   \
     PSMTXTrans(m, (w)->position.x + (tx), (w)->position.y, (w)->position.z + (tz));    \
@@ -561,7 +561,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     BLEND_STATE()
-    GXSetCullMode(2);
+    GXSetCullMode(GX_CULL_BACK);
     if (type == 0) {
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
         LOOP1(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
@@ -584,10 +584,10 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     GXSetCurrentMtx(0);
     if (type == 0) {
         effGetTexObj(0x2e, &tex);
-        GXLoadTexObj(&tex, 0);
+        GXLoadTexObj(&tex, GX_TEXMAP0);
     } else {
         effGetTexObj(0x2f, &tex);
-        GXLoadTexObj(&tex, 0);
+        GXLoadTexObj(&tex, GX_TEXMAP0);
     }
     BLEND_STATE()
     if (type == 0) {
@@ -598,7 +598,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
         LOOPK2(diamond_7_dl_0_tbl, diamond_7_dl_0_size_tbl, 34)
     }
     effGetTexObj(0x2d, &tex);
-    GXLoadTexObj(&tex, 0);
+    GXLoadTexObj(&tex, GX_TEXMAP0);
     BLEND_STATE()
     if (type == 0) {
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
@@ -620,25 +620,25 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     s32 type = w->type;
     int dlIdx[4]; // FAKE: four loop counters as one register-promoted array; one counter / four scalars differ
     mapSetMaterialFog();
-    GXSetArray(11, color_tbl[w->type], 4);
+    GXSetArray(GX_VA_CLR0, color_tbl[w->type], 4);
     GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
-    GXSetChanMatColor(4, w->color);
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, w->color);
     GXSetNumTexGens(0);
     GXSetNumTevStages(2);
-    GXSetTevOrder(0, 255, 255, 4);
-    GXSetTevOp(0, 4);
-    GXSetTevOrder(1, 255, 255, 255);
-    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(1, 15, 2, 0, 15);
-    GXSetTevAlphaIn(1, 7, 1, 0, 7);
-    GXSetTevColor(1, (GXColor){w->r, w->g, w->b, w->a});
-    GXSetBlendMode(1, 4, 5, 0);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(1, 3, 0);
-    GXSetCullMode(2);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+    GXSetZMode(1, GX_LEQUAL, 0);
+    GXSetCullMode(GX_CULL_BACK);
     PSMTXTrans(m, w->position.x + w->f48, w->position.y, w->position.z + w->f4c);
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
     PSMTXConcat(m, s, m);
@@ -652,17 +652,17 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
-    GXSetVtxDesc(9, 2);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 11);
-    GXSetArray(9, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(10, 2);
-    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
-    GXSetArray(10, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(11, 2);
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-    GXSetVtxDesc(13, 2);
-    GXSetVtxAttrFmt(0, 13, 1, 3, 14);
-    GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);
+    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);
+    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, 14);
+    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[0] = 0; dlIdx[0] < 19U; dlIdx[0]++) {
         if ((w->flags & 1) || (dlIdx[0] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[0]], diamond_2_2_dl_0_size_tbl[dlIdx[0]] << 5);
@@ -682,17 +682,17 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
-    GXSetVtxDesc(9, 2);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 11);
-    GXSetArray(9, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(10, 2);
-    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
-    GXSetArray(10, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(11, 2);
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-    GXSetVtxDesc(13, 2);
-    GXSetVtxAttrFmt(0, 13, 1, 3, 14);
-    GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);
+    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);
+    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, 14);
+    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[1] = 0; dlIdx[1] < 19U; dlIdx[1]++) {
         if ((w->flags & 1) || (dlIdx[1] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[1]], diamond_2_2_dl_1_size_tbl[dlIdx[1]] << 5);
@@ -700,33 +700,33 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     }
 
     GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(1);
-    GXSetTexCoordGen2(0, 1, 4, 30, 0, 125);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);
     PSMTXTrans(m, w->f24, w->f28, 0.0f);
-    GXLoadTexMtxImm(m, 30, 1);
+    GXLoadTexMtxImm(m, 30, GX_MTX2x4);
     GXSetNumTevStages(2);
-    GXSetTevOrder(0, 0, 0, 4);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevOp(0, 0);
-    GXSetTevOrder(1, 255, 255, 255);
-    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(1, 15, 2, 0, 15);
-    GXSetTevAlphaIn(1, 7, 1, 0, 7);
-    GXSetTevColor(1, (GXColor){w->r, w->g, w->b, w->a});
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
     if (type != 2) {
         effGetTexObj(0x29, &tex);
-        GXLoadTexObj(&tex, 0);
+        GXLoadTexObj(&tex, GX_TEXMAP0);
     } else {
         effGetTexObj(0x2e, &tex);
-        GXLoadTexObj(&tex, 0);
+        GXLoadTexObj(&tex, GX_TEXMAP0);
     }
-    GXSetBlendMode(1, 4, 5, 0);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(1, 3, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+    GXSetZMode(1, GX_LEQUAL, 0);
     PSMTXTrans(m, w->position.x + w->f48, w->position.y, w->position.z + w->f4c);
     PSMTXScale(s, w->scale, w->scale, w->scale);
     PSMTXConcat(m, s, m);
@@ -740,17 +740,17 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
-    GXSetVtxDesc(9, 2);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 11);
-    GXSetArray(9, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(10, 2);
-    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
-    GXSetArray(10, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(11, 2);
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-    GXSetVtxDesc(13, 2);
-    GXSetVtxAttrFmt(0, 13, 1, 3, 14);
-    GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);
+    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);
+    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, 14);
+    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[2] = 0; dlIdx[2] < 19U; dlIdx[2]++) {
         if ((w->flags & 1) || (dlIdx[2] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_0_tbl[dlIdx[2]], diamond_2_2_dl_0_size_tbl[dlIdx[2]] << 5);
@@ -770,17 +770,17 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry *effect) {
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
-    GXSetVtxDesc(9, 2);
-    GXSetVtxAttrFmt(0, 9, 1, 3, 11);
-    GXSetArray(9, diamond_2_2_vertex_tbl, 6);
-    GXSetVtxDesc(10, 2);
-    GXSetVtxAttrFmt(0, 10, 0, 1, 6);
-    GXSetArray(10, diamond_2_2_normal_tbl, 3);
-    GXSetVtxDesc(11, 2);
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);
-    GXSetVtxDesc(13, 2);
-    GXSetVtxAttrFmt(0, 13, 1, 3, 14);
-    GXSetArray(13, diamond_2_2_texcoord0_tbl, 4);
+    GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, 11);
+    GXSetArray(GX_VA_POS, diamond_2_2_vertex_tbl, 6);
+    GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);
+    GXSetArray(GX_VA_NRM, diamond_2_2_normal_tbl, 3);
+    GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);
+    GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, 14);
+    GXSetArray(GX_VA_TEX0, diamond_2_2_texcoord0_tbl, 4);
     for (dlIdx[3] = 0; dlIdx[3] < 19U; dlIdx[3]++) {
         if ((w->flags & 1) || (dlIdx[3] != 0)) {
             GXCallDisplayList(diamond_2_2_dl_1_tbl[dlIdx[3]], diamond_2_2_dl_1_size_tbl[dlIdx[3]] << 5);

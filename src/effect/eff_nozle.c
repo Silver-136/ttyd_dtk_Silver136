@@ -480,21 +480,21 @@ void effNozleMain(EffectEntry* effect) {
 
 #define SETUP(d, pf, tf, vtx, nrm, col, t0, t1) \
     GXClearVtxDesc();                           \
-    GXSetVtxDesc(9, d);                         \
-    GXSetVtxAttrFmt(0, 9, 1, 3, pf);            \
-    GXSetArray(9, vtx, 6);                      \
-    GXSetVtxDesc(10, d);                        \
-    GXSetVtxAttrFmt(0, 10, 0, 1, 6);            \
-    GXSetArray(10, nrm, 3);                     \
-    GXSetVtxDesc(11, d);                        \
-    GXSetVtxAttrFmt(0, 11, 1, 5, 0);            \
-    GXSetArray(11, col, 4);                     \
-    GXSetVtxDesc(13, d);                        \
-    GXSetVtxAttrFmt(0, 13, 1, 3, tf);           \
-    GXSetArray(13, t0, 4);                      \
-    GXSetVtxDesc(14, d);                        \
-    GXSetVtxAttrFmt(0, 14, 1, 3, tf);           \
-    GXSetArray(14, t1, 4)
+    GXSetVtxDesc(GX_VA_POS, d);                         \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 3, pf);            \
+    GXSetArray(GX_VA_POS, vtx, 6);                      \
+    GXSetVtxDesc(GX_VA_NRM, d);                        \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, 0, 1, 6);            \
+    GXSetArray(GX_VA_NRM, nrm, 3);                     \
+    GXSetVtxDesc(GX_VA_CLR0, d);                        \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, 1, GX_RGBA8, 0);            \
+    GXSetArray(GX_VA_CLR0, col, 4);                     \
+    GXSetVtxDesc(GX_VA_TEX0, d);                        \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 3, tf);           \
+    GXSetArray(GX_VA_TEX0, t0, 4);                      \
+    GXSetVtxDesc(GX_VA_TEX1, d);                        \
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, 1, 3, tf);           \
+    GXSetArray(GX_VA_TEX1, t1, 4)
 
 #define CALLDL(n, tbl, sz_, S, D) { for (k = 0, S = sz_, D = tbl; k < n; k++, S++, D++) { GXCallDisplayList(*D, *S * 32); } }
 
@@ -522,10 +522,10 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     cam = camGetPtr(cameraId);
     alpha = work->alpha;
-    GXSetBlendMode(1, 4, 5, 0);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(1);
-    GXSetAlphaCompare(7, 0, 0, 7, 0);
-    GXSetZMode(1, 3, 0);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+    GXSetZMode(1, GX_LEQUAL, 0);
     PSMTXTrans(a, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(b, 'y', 0.017453292f * work->rotY);
     PSMTXConcat(a, b, a);
@@ -537,44 +537,44 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadPosMtxImm(d, 0);
     GXSetCurrentMtx(0);
     GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 1, 0, 0, 2);
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen2(0, 1, 4, 30, 0, 125);
-    GXSetTexCoordGen2(1, 1, 5, 33, 0, 125);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, 33, 0, 125);
     PSMTXTrans(a, work->u0, -work->v0, 0.0f);
-    GXLoadTexMtxImm(a, 30, 1);
+    GXLoadTexMtxImm(a, 30, GX_MTX2x4);
     PSMTXTrans(a, work->u1, -work->v1, 0.0f);
-    GXLoadTexMtxImm(a, 33, 1);
+    GXLoadTexMtxImm(a, 33, GX_MTX2x4);
     effGetTexObj(60, &texObj);
-    GXLoadTexObj(&texObj, 0);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
     switch (work->type) {
         case 0:
         case 3:
             effGetTexObj(61, &texObj);
-            GXLoadTexObj(&texObj, 1);
+            GXLoadTexObj(&texObj, GX_TEXMAP1);
             break;
         case 2:
             effGetTexObj(62, &texObj);
-            GXLoadTexObj(&texObj, 1);
+            GXLoadTexObj(&texObj, GX_TEXMAP1);
             break;
     }
     GXSetNumTevStages(3);
-    GXSetTevOrder(0, 0, 1, 255);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 15, 15, 15, 8);
-    GXSetTevAlphaIn(0, 7, 7, 7, 4);
-    GXSetTevOrder(1, 1, 0, 255);
-    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(1, 15, 0, 9, 15);
-    GXSetTevAlphaIn(1, 7, 0, 4, 7);
-    GXSetTevOrder(2, 255, 255, 4);
-    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(2, 15, 0, 10, 15);
-    GXSetTevAlphaIn(2, 7, 0, 5, 7);
-    GXSetCullMode(0);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXA, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_CPREV, GX_CC_RASC, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
+    GXSetCullMode(GX_CULL_NONE);
     switch (work->type) {
         case 0:
             SETUP(2, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
@@ -589,14 +589,14 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
             CALLDL(17, nozle_3_dl_0_tbl, nozle_3_dl_0_size_tbl, sz3, dl3);
             break;
         case 3:
-            GXSetTevAlphaIn(0, 7, 1, 4, 7);
-            GXSetTevColor(1, (GXColor){0, 0, 0, alpha});
+            GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+            GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, alpha});
             w = effect->userdata;
             for (i = 1, w++; i < effect->count; i++, w++) {
                 PSMTXTrans(a, w->u0, -w->v0, 0.0f);
-                GXLoadTexMtxImm(a, 30, 1);
+                GXLoadTexMtxImm(a, 30, GX_MTX2x4);
                 PSMTXTrans(a, w->u1, -w->v1, 0.0f);
-                GXLoadTexMtxImm(a, 33, 1);
+                GXLoadTexMtxImm(a, 33, GX_MTX2x4);
                 PSMTXTrans(a, w->position.x, w->position.y, w->position.z);
                 PSMTXScale(c, w->sx, w->sy, 1.0f);
                 PSMTXConcat(a, c, c);

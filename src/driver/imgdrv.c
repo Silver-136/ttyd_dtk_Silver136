@@ -283,11 +283,11 @@ static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
     if (alloc == 1) data = smartAlloc(size, 1);
     else if (alloc == 2) data = smartAlloc(size, 0);
     else data = smartAlloc(size, 3);
-    GXSetZMode(1, 3, 1);
+    GXSetZMode(1, GX_LEQUAL, 1);
     GXCopyTex(data->address, 0);
     GXPixModeSync();
-    GXInitTexObj(&sh->texObj, data->address, w, h, fmt, 0, 0, 0);
-    GXInitTexObjLOD(&sh->texObj, 0, 0, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+    GXInitTexObj(&sh->texObj, data->address, w, h, fmt, GX_CLAMP, GX_CLAMP, 0);
+    GXInitTexObjLOD(&sh->texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
     sh->data = data;
 }
 
@@ -319,8 +319,8 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
                     }
                     memcpy(sh->data->address, buf->address, size);
                     DCFlushRange(sh->data->address, size);
-                    GXInitTexObj(&sh->texObj, sh->data->address, w, h, fmt, 0, 0, 0);
-                    GXInitTexObjLOD(&sh->texObj, 0, 0, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+                    GXInitTexObj(&sh->texObj, sh->data->address, w, h, fmt, GX_CLAMP, GX_CLAMP, 0);
+                    GXInitTexObjLOD(&sh->texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
                     offscreenGetBoundingBox(offId, &sh->rect.left, &sh->rect.top, &sh->rect.width, &sh->rect.height);
                     sh->rect.width -= sh->rect.left;
                     sh->rect.height -= sh->rect.top;

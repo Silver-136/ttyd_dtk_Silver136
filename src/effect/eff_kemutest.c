@@ -102,35 +102,35 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
     PSMTXConcat(trans, scl, trans);
     PSMTXConcat(camera->view, trans, view);
     effGetTexObj(0x28, &tex);
-    GXLoadTexObj(&tex, 0);
+    GXLoadTexObj(&tex, GX_TEXMAP0);
     GXSetNumChans(1);
-    GXSetChanCtrl(4, 0, 0, 0, 0, 0, 2);
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(2);
-    GXSetTexCoordGen2(0, 1, 4, 0x1e, 0, 0x7d);
-    GXSetTexCoordGen2(1, 1, 4, 0x21, 0, 0x7d);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x1e, 0, 0x7d);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 0x21, 0, 0x7d);
     GXSetNumTevStages(3);
-    GXSetTevOrder(0, 0, 0, 0xff);
-    GXSetTevColorOp(0, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(0, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(0, 0xf, 0xf, 0xf, 8);
-    GXSetTevAlphaIn(0, 7, 7, 7, 4);
-    GXSetTevOrder(1, 1, 0, 0xff);
-    GXSetTevColorOp(1, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(1, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(1, 0, 8, 2, 0xf);
-    GXSetTevAlphaIn(1, 0, 4, 1, 7);
-    GXSetTevColor(1, (GXColor){ 0x80, 0x80, 0x80, 0x80 });
-    GXSetTevOrder(2, 0xff, 0xff, 4);
-    GXSetTevColorOp(2, 0, 0, 0, 1, 0);
-    GXSetTevAlphaOp(2, 0, 0, 0, 1, 0);
-    GXSetTevColorIn(2, 0xf, 0, 0xa, 0xf);
-    GXSetTevAlphaIn(2, 7, 0, 5, 7);
-    GXSetCullMode(0);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_CPREV, GX_CC_TEXC, GX_CC_C0, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_APREV, GX_CA_TEXA, GX_CA_A0, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, (GXColor){ 0x80, 0x80, 0x80, 0x80 });
+    GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_CPREV, GX_CC_RASC, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
+    GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();
-    GXSetVtxDesc(9, 1);
-    GXSetVtxDesc(0xd, 1);
-    GXSetVtxAttrFmt(0, 9, 1, 4, 0);
-    GXSetVtxAttrFmt(0, 0xd, 1, 4, 0);
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, 1, 4, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, 1, 4, 0);
     switch (type) {
     case 1:
         start = 1;
@@ -154,15 +154,15 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
             PSMTXTrans(trans, 0.0625f * (f32)work->idx0, 0.0f, 0.0f);
             PSMTXScale(scl, 0.0625f, 1.0f, 1.0f);
             PSMTXConcat(trans, scl, trans);
-            GXLoadTexMtxImm(trans, 0x1e, 1);
+            GXLoadTexMtxImm(trans, 0x1e, GX_MTX2x4);
             PSMTXTrans(trans, 0.0625f * (f32)work->idx1, 0.0f, 0.0f);
             PSMTXScale(scl, 0.0625f, 1.0f, 1.0f);
             PSMTXConcat(trans, scl, trans);
-            GXLoadTexMtxImm(trans, 0x21, 1);
+            GXLoadTexMtxImm(trans, 0x21, GX_MTX2x4);
             ext = 16.0f;
             for (pass = start; pass < 2; pass++) {
                 if (pass == 0) {
-                    GXSetChanMatColor(4, (GXColor){ 0, 0, 0, 0x60 });
+                    GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, 0x60 });
                     PSMTXTrans(trans, 2.0f + work->pos.x, work->pos.y - 2.0f, work->pos.z);
                 PSMTXScale(scl, work->scale, work->scale, work->scale);
                 PSMTXConcat(view, trans, trans);
@@ -173,7 +173,7 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
                 PSMTXConcat(trans, scl, trans);
                 GXLoadPosMtxImm(trans, 0);
                 } else {
-                    GXSetChanMatColor(4, (GXColor){ work->r, work->g, work->b, alpha });
+                    GXSetChanMatColor(GX_COLOR0A0, (GXColor){ work->r, work->g, work->b, alpha });
                     PSMTXTrans(trans, work->pos.x, work->pos.y, work->pos.z);
                 PSMTXScale(scl, work->scale, work->scale, work->scale);
                 PSMTXConcat(view, trans, trans);
@@ -185,7 +185,7 @@ void effKemuTestDisp(CameraId cameraId, void* param) {
                 GXLoadPosMtxImm(trans, 0);
                 }
                 half = neg / 2.0f;
-                GXBegin(0x80, 0, 4);
+                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 GXPosition3f32(half, ext, 0.0f);
                 GXTexCoord2f32(0.0f, 0.0f);
                 GXPosition3f32(ext, ext, 0.0f);
