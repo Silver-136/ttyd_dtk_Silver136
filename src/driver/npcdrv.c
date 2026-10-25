@@ -1,12 +1,9 @@
-#define npcCheckInterrupt npcCheckInterrupt_hdr_void
 #include "driver/npcdrv.h"
 #include "data/npc_data.h"
 #include "libc_decls.h"
 #include "pmario_sound.h"
 #include <math.h>
 #include <dolphin/pad.h>
-#undef npcCheckInterrupt
-BOOL npcCheckInterrupt(NpcEntry* npc);
 #include "dolphin/gx/GXStruct.h"
 #include "driver/animdrv.h"
 #include "driver/msgdrv.h"
@@ -3392,7 +3389,6 @@ void npcStopForOneEvent(NpcEntry* npc);
 void npcStopForEvent(void);
 void npcSetBattleInfo(NpcEntry* npc, s32 battleInfoId);
 void npcSetupBattleInfo(NpcEntry* npc, NpcSetupBattleInfo* setup);
-BOOL npcCheckInterrupt(NpcEntry* npc);
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
 void* fbatHitCheck(u32 flags, void* a1);

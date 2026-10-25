@@ -9,16 +9,9 @@
 #include <dolphin/pad.h>
 
 #ifdef VERSION_G8ME01
-/* the pouch header declares these with other return types; this file uses the s32 forms */
-#define pouchGetHP pouchGetHP_hdr
-#define pouchEquipCheckBadge pouchEquipCheckBadge_hdr
 #include "mario/mariost.h"
-#undef pouchGetHP
-#undef pouchEquipCheckBadge
 #endif
 #include "mario/mario_sbr.h"
-s32 pouchGetHP(void);
-s32 pouchEquipCheckBadge(s32 badgeId);
 void kpa_stay(void);
 void peach_stay(void);
 void marioClearJumpPara(void);

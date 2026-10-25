@@ -302,7 +302,7 @@ void npcStartForOneEvent(NpcEntry* npc);
 void npcStartForEvent(void);
 void npcStopForOneEvent(NpcEntry* npc);
 void npcStopForEvent(void);
-void npcCheckInterrupt(NpcEntry* npc);
+BOOL npcCheckInterrupt(NpcEntry* npc);
 void npcGroupDead(NpcEntry* npc, u16 reason);
 f32 npcTransRytoFaceDir(NpcEntry* npc);
 

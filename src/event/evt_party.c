@@ -25,7 +25,6 @@ extern void partySetForceMove(PartyEntry* party, s32 a2, f32 a3, f32 a4);
 extern void partyMoveBesideMario();
 extern void partyMoveBehindMario();
 extern void partySetCamId();
-extern s32 nokonokoGetStatus();
 extern s32 bomheiGetStatus();
 extern void vivianUnhold(PartyEntry* party);
 extern void L_partyVivianTailStart();
@@ -876,7 +875,7 @@ USER_FUNC(evt_party_nokotaro_hold_cancel) {
 		if (p->currentMemberId != 2) {
 			return EVT_RETURN_DONE;
 		}
-		if (nokonokoGetStatus() == 0) {
+		if (nokonokoGetStatus(p) == 0) {
 			return EVT_RETURN_DONE;
 		}
 		event->userdata[0] = 0;
@@ -914,7 +913,7 @@ USER_FUNC(evt_party_nokotaro_get_status) {
 		return EVT_RETURN_DONE;
 	}
 	dst = args[1];
-	evtSetValue(event, dst, nokonokoGetStatus());
+	evtSetValue(event, dst, nokonokoGetStatus(p));
 	return EVT_RETURN_DONE;
 }
 

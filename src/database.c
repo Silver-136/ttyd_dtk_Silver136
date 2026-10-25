@@ -47,8 +47,6 @@ typedef struct MapAttrEntry {
 } MapAttrEntry;
 
 extern MapAttrEntry _map_attr_data[];
-extern void* memset(void*, int, u32);
-extern void animPoseSetAnim(s32, const char*, int);
 
 
 #include "mario/mariost.h"

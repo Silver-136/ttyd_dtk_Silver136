@@ -5,7 +5,6 @@
 #define tri2 tri2_proto_hidden
 #include "eff/eff_n64.h"
 #undef tri2
-void tri2();
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>

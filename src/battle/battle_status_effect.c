@@ -16,7 +16,6 @@
 
 BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit);
 void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed);
-void BattleStatusChangeInfoWorkInit(BattleUnit* unit);
 void _st_chg_msg_disp(void);
 
 typedef struct StChgMsgData {

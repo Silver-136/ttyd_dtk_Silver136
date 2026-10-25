@@ -1,12 +1,4 @@
-#define pouchGetStarPoint pouchGetStarPoint_hdr
-#define pouchAddKpaCoin pouchAddKpaCoin_hdr
-#define pouchMajinaiInit pouchMajinaiInit_hdr
-#define pouchAddHP pouchAddHP_hdr
 #include "mario/mario_pouch.h"
-#undef pouchGetStarPoint
-#undef pouchAddKpaCoin
-#undef pouchMajinaiInit
-#undef pouchAddHP
 #include "driver/msgdrv.h"
 #include "mario/mario_party.h"
 #include "evt/evt_badgeshop.h"
@@ -846,7 +838,7 @@ s16 pouchAddStarPiece(s16 count) {
 	return mpp->mStarPieceCount;
 }
 
-s16 pouchAddHP(s32 points) {
+s16 pouchAddHP(s16 points) {
 	mpp->currentHP += (s16)points;
 	if (mpp->currentHP < 0) {
 		mpp->currentHP = 0;
@@ -1256,9 +1248,7 @@ s32 pouchReceiveMailCount(void);
 void pouchGetStarStone(u32 id);
 void pouchAddKpaScore(u32 score);
 u32 pouchGetKpaScore(void);
-BOOL pouchAddKpaCoin(u8 coins);
 s32 pouchGetKpaCoin(void);
-void pouchMajinaiInit(s32 curseCount);
 s32 pouchArriveBadge(s32 id);
 BOOL N_pouchUnEquipBadgeID(s32 badgeId);
 BOOL pouchEquipBadgeID(s32 badgeId);
@@ -1266,7 +1256,6 @@ BOOL pouchEquipCheckBadgeIndex(s32 index);
 s32 pouchEquipCheckBadge(s32 badgeId);
 BOOL pouchUnEquipBadgeIndex(s32 index);
 BOOL pouchEquipBadgeIndex(s32 index);
-s16 pouchGetStarPoint(void);
 void pouchRevisePartyParam(void);
 void pouchReviseMarioParam(void);
 BOOL pouchRemoveKeepItem(s32 id, s32 index);
@@ -1290,7 +1279,6 @@ void pouchSetMaxHP(s16 points);
 void pouchSetHP(s16 points);
 s16 pouchGetMaxHP(void);
 s32 pouchGetHP(void);
-s16 pouchAddHP(s32 points);
 s16 pouchAddStarPiece(s16 count);
 s32 pouchGetStarPiece(void);
 s16 pouchSetSuperCoin(s16 count);
