@@ -4,6 +4,7 @@
 #include "libc_decls.h"
 #include "pmario_sound.h"
 #include <math.h>
+#include <dolphin/pad.h>
 #undef npcCheckInterrupt
 BOOL npcCheckInterrupt(NpcEntry* npc);
 #include "dolphin/gx/GXStruct.h"
@@ -1608,7 +1609,6 @@ BOOL marioChkTalkable(void);
 void* fbatHitCheck(u32 flags, void* a1);
 
 #include "eff/eff_small_star.h"
-#include <dolphin/pad.h>
 s32 _majinai_effect(EventEntry* event, BOOL isFirstCall);
 s32 _check(EventEntry* event, BOOL isFirstCall);
 s32 marioStGetSystemLevel(void);

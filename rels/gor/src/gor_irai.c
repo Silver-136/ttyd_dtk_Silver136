@@ -19,6 +19,7 @@
 #include "gor.h"
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_mario_set_dir);
 USER_FUNC(evt_party_set_dir);
@@ -669,9 +670,9 @@ USER_FUNC(irai_main_func) {
                 break;
             }
             prev = wp->cursor;
-            if (keyGetDirRep(0) & 0x2000) {
+            if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
                 if (wp->count - 1 <= wp->cursor) {
-                    if (keyGetDirTrg(0) & 0x2000) {
+                    if (keyGetDirTrg(0) & DEMO_STICK_DOWN) {
                         psndSFXOn((const char*)5);
                         wp->cursor++;
                     }
@@ -680,9 +681,9 @@ USER_FUNC(irai_main_func) {
                     wp->cursor++;
                 }
             }
-            if (keyGetDirRep(0) & 0x1000) {
+            if (keyGetDirRep(0) & DEMO_STICK_UP) {
                 if (wp->cursor <= 0) {
-                    if (keyGetDirTrg(0) & 0x1000) {
+                    if (keyGetDirTrg(0) & DEMO_STICK_UP) {
                         psndSFXOn((const char*)5);
                         wp->cursor--;
                     }

@@ -16,6 +16,7 @@
 #include "icon_ids.h"
 #include "libc_decls.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 #define EXT_LIT(sym, val) (val)
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
 #ifdef VERSION_G8ME01
@@ -2090,18 +2091,18 @@ void selectWindow_Main(WindowEntry* window) {
 		break;
 	case 1:
 		prev = data->sel;
-		if ((keyGetButtonTrg(0) & 8) || (keyGetDirTrg(0) & 0x1000)) {
+		if ((keyGetButtonTrg(0) & PAD_BUTTON_UP) || (keyGetDirTrg(0) & DEMO_STICK_UP)) {
 			data->sel--;
 		}
-		else if ((keyGetButtonRep(0) & 8) || (keyGetDirRep(0) & 0x1000)) {
+		else if ((keyGetButtonRep(0) & PAD_BUTTON_UP) || (keyGetDirRep(0) & DEMO_STICK_UP)) {
 			if (data->sel) {
 				data->sel--;
 			}
 		}
-		if ((keyGetButtonTrg(0) & 4) || (keyGetDirTrg(0) & 0x2000)) {
+		if ((keyGetButtonTrg(0) & PAD_BUTTON_DOWN) || (keyGetDirTrg(0) & DEMO_STICK_DOWN)) {
 			data->sel++;
 		}
-		else if ((keyGetButtonRep(0) & 4) || (keyGetDirRep(0) & 0x2000)) {
+		else if ((keyGetButtonRep(0) & PAD_BUTTON_DOWN) || (keyGetDirRep(0) & DEMO_STICK_DOWN)) {
 			if (data->sel < data->numSel - 1) {
 				data->sel++;
 			}

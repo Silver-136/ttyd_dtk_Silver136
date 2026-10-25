@@ -175,9 +175,9 @@ void seq_e3Main(SequenceWork* seq) {
             prev = wp->scenario;
             keyGetStickX(0);
             keyGetStickY(0);
-            if (keyGetDirTrg(0) & 0xC000) {
+            if (keyGetDirTrg(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
                 wp->scenario ^= 1;
-            } else if (keyGetDirTrg(0) & 0x3000) {
+            } else if (keyGetDirTrg(0) & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
                 wp->scenario ^= 2;
             }
 #else

@@ -11,6 +11,7 @@
 #include "libc_decls.h"
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 
 extern ItemData itemDataTable[];
 
@@ -137,7 +138,7 @@ s32 winBadgeMain(WindowWork* w) {
         if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
-        if (w->dirRep & 0x3000) {
+        if (w->dirRep & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
             w->badge.tab = 1 - w->badge.tab;
             psndSFXOn(SFX_NAME_WORD(0x20005));
             if (w->badge.tab) {
@@ -228,10 +229,10 @@ s32 winBadgeMain(WindowWork* w) {
             }
             w->badge.sel[tab] = w->badge.page[tab] * 8;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x1000) {
+        } else if (w->dirRep & DEMO_STICK_UP) {
             w->badge.sel[tab]--;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x2000) {
+        } else if (w->dirRep & DEMO_STICK_DOWN) {
             w->badge.sel[tab]++;
             psndSFXOn(SFX_NAME_WORD(0x20035));
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {

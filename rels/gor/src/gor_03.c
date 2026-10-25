@@ -32,6 +32,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);
@@ -6361,7 +6362,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 mapObjRotate(drumname[data->nowSlot].reber, 0.0f, 0.0f, data->reberAngle);
                 data->counter++;
             }
-            if (data->state[data->cursor] != 2 || (keyGetDirRep(0) & 0xC000)) {
+            if (data->state[data->cursor] != 2 || (keyGetDirRep(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT))) {
                 if (data->state[data->cursor] != 2) {
                     dir = 1;
                 } else {

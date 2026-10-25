@@ -14,6 +14,8 @@
 #include <dolphin/gx.h>
 #include "win/win_item.h"
 #include "libc_decls.h"
+#include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 
 extern ItemData itemDataTable[];
 void qqsort(void* base, u32 n, u32 size, s32 (*compare)(const void*, const void*));
@@ -286,9 +288,9 @@ s32 winRootMain(WindowWork* w) {
                 break;
             }
 #ifdef VERSION_G8ME01
-        } else if (w->dirRep & 0x4000 && w->menu[0].state == 100) {
+        } else if (w->dirRep & DEMO_STICK_LEFT && w->menu[0].state == 100) {
 #else
-        } else if (w->dirRep & 0x4000) {
+        } else if (w->dirRep & DEMO_STICK_LEFT) {
 #endif
             psndSFXOn((const char*)0x20032);
             psndSFXOn((const char*)0x20031);
@@ -305,9 +307,9 @@ s32 winRootMain(WindowWork* w) {
             w->helpTgtX = w->tabSel * 105 - 270;
             winMsgEntry(w, 0, w->tab[w->tabSel].msg, 0);
 #ifdef VERSION_G8ME01
-        } else if (w->dirRep & 0x8000 && w->menu[0].state == 100) {
+        } else if (w->dirRep & DEMO_STICK_RIGHT && w->menu[0].state == 100) {
 #else
-        } else if (w->dirRep & 0x8000) {
+        } else if (w->dirRep & DEMO_STICK_RIGHT) {
 #endif
             psndSFXOn((const char*)0x20032);
             psndSFXOn((const char*)0x20031);
@@ -703,14 +705,14 @@ void winMsgMain(WindowWork* wp) {
                 break;
             }
 #endif
-            if (keyGetDirTrg(0) & 0x100) {
+            if (keyGetDirTrg(0) & DEMO_SUBSTICK_UP) {
                 wp->msgLine -= 2;
                 if (wp->msgLine < 0) {
                     wp->msgLine = 0;
                 } else {
                     psndSFXOn(SFX_NAME_WORD(0x20006));
                 }
-            } else if (keyGetDirTrg(0) & 0x200) {
+            } else if (keyGetDirTrg(0) & DEMO_SUBSTICK_DOWN) {
                 if (wp->msgLine / 2 < (wp->msgLines + 1) / 2 - 1) {
                     wp->msgLine += 2;
                     psndSFXOn(SFX_NAME_WORD(0x20006));
@@ -1052,7 +1054,6 @@ void winFontInit(void);
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
 void* L_msgGetWork(void);
 #include "driver/animdrv.h"
-#include <dolphin/pad.h>
 
 static inline void winBookTex(WindowWork* w, s32 id, f32 x, f32 y, f32 width, f32 height) {
     GXTexObj obj;

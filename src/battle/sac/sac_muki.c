@@ -24,6 +24,7 @@
 #include "battle/battle_database_common.h"
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -463,25 +464,25 @@ void main_cursor(void) {
                 }
             }
         }
-        if (keyGetDirTrg(0) & 0x8000) {
+        if (keyGetDirTrg(0) & DEMO_STICK_RIGHT) {
             if (w->idx % 3 != 2) {
                 w->kind38 = 3;
                 w->idx++;
             }
         }
-        if (keyGetDirTrg(0) & 0x4000) {
+        if (keyGetDirTrg(0) & DEMO_STICK_LEFT) {
             if (w->idx % 3) {
                 w->kind38 = 3;
                 w->idx--;
             }
         }
-        if (keyGetDirTrg(0) & 0x1000) {
+        if (keyGetDirTrg(0) & DEMO_STICK_UP) {
             if (w->idx / 3) {
                 w->kind38 = 3;
                 w->idx -= 3;
             }
         }
-        if (keyGetDirTrg(0) & 0x2000) {
+        if (keyGetDirTrg(0) & DEMO_STICK_DOWN) {
             if (w->idx / 3 != 2) {
                 w->kind38 = 3;
                 w->idx += 3;

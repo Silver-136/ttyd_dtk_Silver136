@@ -11,6 +11,8 @@
 #include "mario/mariost.h"
 #include "version.h"
 #include "pmario_sound.h"
+#include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 
 void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
@@ -24,7 +26,6 @@ void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h);
 void nameMaskGX(f32 t);
 void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type);
 #include <string.h>
-#include <dolphin/pad.h>
 
 s32 nameMain(void);
 double sin(double);
@@ -539,7 +540,7 @@ s32 nameMain(void) {
 						psndSFXOn((const char*)0xB);
 					}
 #endif
-				} else if (keyGetDirRep(0) & 0x4000) {
+				} else if (keyGetDirRep(0) & DEMO_STICK_LEFT) {
 					if (dist < 10.0f) {
 						wp->cursorX--;
 						if (wp->cursorY > NAME_LANG_PICK(3, 5)) {
@@ -554,7 +555,7 @@ s32 nameMain(void) {
 						}
 						psndSFXOn((const char*)5);
 					}
-				} else if (keyGetDirRep(0) & 0x8000) {
+				} else if (keyGetDirRep(0) & DEMO_STICK_RIGHT) {
 					if (dist < 10.0f) {
 						wp->cursorX++;
 						if (wp->cursorY > NAME_LANG_PICK(3, 5)) {
@@ -569,7 +570,7 @@ s32 nameMain(void) {
 						}
 						psndSFXOn((const char*)5);
 					}
-				} else if (keyGetDirRep(0) & 0x1000) {
+				} else if (keyGetDirRep(0) & DEMO_STICK_UP) {
 					if (dist < 10.0f) {
 						wp->cursorY--;
 						if (wp->cursorY < 0) {
@@ -582,7 +583,7 @@ s32 nameMain(void) {
 						}
 						psndSFXOn((const char*)5);
 					}
-				} else if (keyGetDirRep(0) & 0x2000) {
+				} else if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
 					if (dist < 10.0f) {
 						wp->cursorY++;
 						if (wp->cursorX > 9) {
@@ -632,7 +633,7 @@ s32 nameMain(void) {
 			} else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
 				wp->state = 0;
 				psndSFXOn((const char*)0x13);
-			} else if (keyGetDirRep(0) & 0x3000) {
+			} else if (keyGetDirRep(0) & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
 				wp->confirmSel = 1 - wp->confirmSel;
 				psndSFXOn((const char*)5);
 			}

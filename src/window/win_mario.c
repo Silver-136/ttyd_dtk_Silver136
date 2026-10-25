@@ -14,6 +14,7 @@
 #include "libc_decls.h"
 #include "win/win_mario.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 
 extern ItemData itemDataTable[];
 void winIconInit(void);
@@ -185,13 +186,13 @@ s32 winMarioMain(WindowWork* w) {
                 return -1;
             } else if (w->buttonTrg & PAD_BUTTON_START) {
                 return -2;
-            } else if (w->dirRep & 0x1000) {
+            } else if (w->dirRep & DEMO_STICK_UP) {
                 NAV(0)
-            } else if (w->dirRep & 0x2000) {
+            } else if (w->dirRep & DEMO_STICK_DOWN) {
                 NAV(1)
-            } else if (w->dirRep & 0x4000) {
+            } else if (w->dirRep & DEMO_STICK_LEFT) {
                 NAV(2)
-            } else if (w->dirRep & 0x8000) {
+            } else if (w->dirRep & DEMO_STICK_RIGHT) {
                 NAV(3)
             }
             lp = &linkDt[w->marioSel];
@@ -239,13 +240,13 @@ s32 winMarioMain(WindowWork* w) {
             }
             break;
         case 1:
-            if (w->dirRep & 0x1000) {
+            if (w->dirRep & DEMO_STICK_UP) {
                 w->mario.f194--;
                 if (w->mario.f194 < 0) {
                     w->mario.f194 = w->mario.f198 - 1;
                 }
                 psndSFXOn((const char*)0x20005);
-            } else if (w->dirRep & 0x2000) {
+            } else if (w->dirRep & DEMO_STICK_DOWN) {
                 w->mario.f194++;
                 if (w->mario.f194 >= w->mario.f198) {
                     w->mario.f194 = 0;

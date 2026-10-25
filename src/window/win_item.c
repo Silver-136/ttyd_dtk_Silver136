@@ -17,6 +17,7 @@
 #include "icon_ids.h"
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 
 void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
@@ -246,7 +247,7 @@ s32 winItemMain(WindowWork* w) {
         if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
-        if (w->dirRep & 0x3000) {
+        if (w->dirRep & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
             w->item.mode = 1 - w->item.mode;
             psndSFXOn(SFX_NAME_WORD(0x20005));
         } else if (w->buttonTrg & PAD_BUTTON_A) {
@@ -335,7 +336,7 @@ s32 winItemMain(WindowWork* w) {
             }
             w->item.cursor[mode] = w->item.page[mode] * 10;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0xC000) {
+        } else if (w->dirRep & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
             if (w->item.cursor[mode] % 2) {
                 if ((n = w->item.cursor[mode] - 1) >= 0 && n < cnt) {
                     w->item.cursor[mode]--;
@@ -346,14 +347,14 @@ s32 winItemMain(WindowWork* w) {
                 }
             }
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x1000) {
+        } else if (w->dirRep & DEMO_STICK_UP) {
             c = w->item.cursor[mode];
             if ((n = c - 2) >= 0 && n < cnt) {
                 w->item.cursor[mode] = c - 2;
             }
             w->item.page[mode] = w->item.cursor[mode] / 10;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x2000) {
+        } else if (w->dirRep & DEMO_STICK_DOWN) {
             c = w->item.cursor[mode];
             if ((n = c + 2) >= 0 && n < cnt) {
                 w->item.cursor[mode] = c + 2;
@@ -435,7 +436,7 @@ s32 winItemMain(WindowWork* w) {
             w->item.state = 10;
             w->item.mailTgtX = 320.0f;
             w->item.mailTgtY = -240.0f;
-        } else if (w->dirRep & 0x1000) {
+        } else if (w->dirRep & DEMO_STICK_UP) {
             old = w->item.mailSel;
             w->item.mailSel--;
             if (w->item.mailSel < 0) {
@@ -446,7 +447,7 @@ s32 winItemMain(WindowWork* w) {
             if (old != w->item.mailSel) {
                 psndSFXOn(SFX_NAME_WORD(0x20036));
             }
-        } else if (w->dirRep & 0x2000) {
+        } else if (w->dirRep & DEMO_STICK_DOWN) {
             old = w->item.mailSel;
             w->item.mailSel++;
             if (w->item.mailSel >= w->item.mailNum) {
@@ -514,11 +515,11 @@ s32 winItemMain(WindowWork* w) {
         break;
     case 202:
         if (w->item.mailLines > 8) {
-            if (keyGetDirRep(0) & 0x100) {
+            if (keyGetDirRep(0) & DEMO_SUBSTICK_UP) {
                 if (w->item.mailLine > 0) {
                     w->item.mailLine--;
                 }
-            } else if (keyGetDirRep(0) & 0x200) {
+            } else if (keyGetDirRep(0) & DEMO_SUBSTICK_DOWN) {
                 if (w->item.mailLine + 6 < w->item.mailLines) {
                     w->item.mailLine++;
                 }
@@ -594,7 +595,7 @@ s32 winItemMain(WindowWork* w) {
             w->item.blink = 0;
             w->item.state = 301;
             break;
-        } else if (w->dirRep & 0x1000) {
+        } else if (w->dirRep & DEMO_STICK_UP) {
             old = w->item.useTarget;
             w->item.useTarget--;
             if (w->item.useTarget < 0) {
@@ -603,7 +604,7 @@ s32 winItemMain(WindowWork* w) {
             if (old != w->item.useTarget) {
                 psndSFXOn(SFX_NAME_WORD(0x20005));
             }
-        } else if (w->dirRep & 0x2000) {
+        } else if (w->dirRep & DEMO_STICK_DOWN) {
             old = w->item.useTarget;
             w->item.useTarget++;
             if (w->item.useTarget >= w->party.count + 1) {

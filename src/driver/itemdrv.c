@@ -1,6 +1,7 @@
 #include "driver/itemdrv.h"
 #include "eff/eff_itemget.h"
 #include "driver/swdrv.h"
+#include <dolphin/pad.h>
 #define iconEntry iconEntry_hidden
 #define iconChange iconChange_hidden
 #include "driver/icondrv.h"
@@ -33,7 +34,6 @@
 #include "evt/evt_lecture.h"
 #include "libc_decls.h"
 #include <math.h>
-#include <dolphin/pad.h>
 
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };

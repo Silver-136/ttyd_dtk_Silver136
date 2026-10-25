@@ -2,6 +2,8 @@
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"
 #include "driver/swdrv.h"
+#include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 #define evtEntry evtEntry_hdr
 #include "manager/evtmgr.h"
 #include "party/party_yoshi.h"
@@ -15,7 +17,6 @@ extern EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags);
 #include "system.h"
 #include "win/win_main.h"
 #include <string.h>
-#include <dolphin/pad.h>
 
 extern void* fbatNpcTalkCheck(void);
 
@@ -155,7 +156,7 @@ void caseMain(void) {
 				break;
 			case 7:
 				if (standOn != NULL && !strcmp(hitGetName(standOn), entry->hitObjName) &&
-				    (keyGetDirTrg(0) & 0x1000)) {
+				    (keyGetDirTrg(0) & DEMO_STICK_UP)) {
 					SET_HIT(entry);
 				}
 				break;

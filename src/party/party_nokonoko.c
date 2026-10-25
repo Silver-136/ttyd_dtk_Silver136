@@ -9,6 +9,7 @@
 #include "party/party_move.h"
 #include "party/party_bomhei.h"
 #include "mario/mario_motion.h"
+#include <dolphin/pad.h>
 
 extern void partyUpdMoveSpd(PartyEntry* party);
 extern void partyWalkInit(PartyEntry* party, s32 mode);
@@ -26,7 +27,6 @@ double cos(double);
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_small_star_n64.h"
 #include "mario/mariost.h"
-#include <dolphin/pad.h>
 void effKemuTestDrawCam();
 EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy,

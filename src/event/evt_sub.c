@@ -21,6 +21,7 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_memcard.h"
 #include "evt/evt_sub.h"
+#include <dolphin/pad.h>
 
 s32 marioKeyOffChk();
 void marioSetCamId(s32);
@@ -36,7 +37,6 @@ void countDownFlagOff(u16);
 #include "manager/winmgr.h"
 #include <stdio.h>
 #include <dolphin/os.h>
-#include <dolphin/pad.h>
 #ifdef VERSION_G8ME01
 void evtMsgFmtInt(char* buf, s32 value);
 void statusWinForceUpdate(void);

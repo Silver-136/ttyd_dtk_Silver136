@@ -24,6 +24,7 @@
 #include "unit/party/unit_party_chuchurina.h"
 #include "libc_decls.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 
 extern ItemData itemDataTable[];
 
@@ -264,7 +265,7 @@ s32 winPartyMain(WindowWork* wp) {
             } else if (wp->buttonTrg & PAD_BUTTON_START) {
                 wp->party.field_0x19C = 0;
                 return -2;
-            } else if (wp->dirRep & 0x4000) {
+            } else if (wp->dirRep & DEMO_STICK_LEFT) {
                 prev = wp->party.cursor;
                 wp->party.cursor = prev - 1;
                 while (wp->party.cursor < 0) {
@@ -283,7 +284,7 @@ s32 winPartyMain(WindowWork* wp) {
                         break;
                     }
                 }
-            } else if (wp->dirRep & 0x8000) {
+            } else if (wp->dirRep & DEMO_STICK_RIGHT) {
                 prev = wp->party.cursor;
                 wp->party.cursor = prev + 1;
                 while (wp->party.cursor > wp->party.count - 1) {
@@ -309,13 +310,13 @@ s32 winPartyMain(WindowWork* wp) {
             winMsgEntry(wp, 0, winPartyDt[wp->party.dtIdx].msg, 0);
             break;
         case 1:
-            if (wp->dirRep & 0x1000) {
+            if (wp->dirRep & DEMO_STICK_UP) {
                 wp->party.wazaCursor--;
                 if (wp->party.wazaCursor < 0) {
                     wp->party.wazaCursor = wp->party.wazaCount - 1;
                 }
                 psndSFXOn((const char*)0x20005);
-            } else if (wp->dirRep & 0x2000) {
+            } else if (wp->dirRep & DEMO_STICK_DOWN) {
                 wp->party.wazaCursor++;
                 if (wp->party.wazaCursor >= wp->party.wazaCount) {
                     wp->party.wazaCursor = 0;

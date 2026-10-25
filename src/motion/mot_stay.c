@@ -6,6 +6,7 @@
 #include "pmario_sound.h"
 #include "system.h"
 #include <string.h>
+#include <dolphin/pad.h>
 
 #ifdef VERSION_G8ME01
 /* the pouch header declares these with other return types; this file uses the s32 forms */
@@ -16,7 +17,6 @@
 #undef pouchEquipCheckBadge
 #endif
 #include "mario/mario_sbr.h"
-#include <dolphin/pad.h>
 s32 pouchGetHP(void);
 s32 pouchEquipCheckBadge(s32 badgeId);
 void kpa_stay(void);

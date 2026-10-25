@@ -20,6 +20,7 @@
 #include "pmario_sound.h"
 #include "system.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 
 typedef struct TubuDt {
     s16 x;
@@ -459,12 +460,12 @@ s32 winLogMain(WindowWork* w) {
         if (w->buttonTrg & PAD_BUTTON_START) {
             return -2;
         }
-        if (w->dirRep & 0x2000) {
+        if (w->dirRep & DEMO_STICK_DOWN) {
             old = w->log.cursor;
             w->log.cursor++;
             if (w->log.cursor >= w->log.count) w->log.cursor = 0;
             if (old != w->log.cursor) psndSFXOn(SFX_NAME_WORD(0x20005));
-        } else if (w->dirRep & 0x1000) {
+        } else if (w->dirRep & DEMO_STICK_UP) {
             old = w->log.cursor;
             w->log.cursor--;
             if (w->log.cursor < 0) w->log.cursor = w->log.count - 1;
@@ -602,14 +603,14 @@ s32 winLogMain(WindowWork* w) {
         dx = keyGetStickX(0) / 8.0f;
         dy = keyGetStickY(0) / 8.0f;
         if (dx == 0.0f && dy == 0.0f) {
-            if (keyGetButton(0) & 1) {
+            if (keyGetButton(0) & PAD_BUTTON_LEFT) {
                 dx = -8.0f;
-            } else if (keyGetButton(0) & 2) {
+            } else if (keyGetButton(0) & PAD_BUTTON_RIGHT) {
                 dx = 8.0f;
             }
-            if (keyGetButton(0) & 8) {
+            if (keyGetButton(0) & PAD_BUTTON_UP) {
                 dy = 8.0f;
-            } else if (keyGetButton(0) & 4) {
+            } else if (keyGetButton(0) & PAD_BUTTON_DOWN) {
                 dy = -8.0f;
             }
         }
@@ -650,14 +651,14 @@ s32 winLogMain(WindowWork* w) {
             w->log.fD68 = 0;
             w->log.fE6C = -480.0f;
             w->log.fE74 = 0.0f;
-        } else if (w->dirRep & 0x4000) {
+        } else if (w->dirRep & DEMO_STICK_LEFT) {
             w->log.fE60--;
             while (w->log.fE60 < 0) w->log.fE60 += 7;
             w->log.fE7C = 51.42857f * w->log.fE60;
             while (w->log.fE80 < w->log.fE7C) w->log.fE80 += 360.0f;
             psndSFXOn(SFX_NAME_WORD(0x209D6));
             psndSFXOn(SFX_NAME_WORD(0x20037));
-        } else if (w->dirRep & 0x8000) {
+        } else if (w->dirRep & DEMO_STICK_RIGHT) {
             w->log.fE60++;
             while (w->log.fE60 > 6) w->log.fE60 -= 7;
             w->log.fE7C = 51.42857f * w->log.fE60;
@@ -697,17 +698,17 @@ s32 winLogMain(WindowWork* w) {
             if (w->log.badge.idx >= pages) w->log.badge.idx = pages - 1;
             w->log.badge.cursor = w->log.badge.idx * 28;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x8000) {
+        } else if (w->dirRep & DEMO_STICK_RIGHT) {
             if (w->log.badge.cursor % 7 < 6 && w->log.badge.cursor + 1 < w->log.badge.num) w->log.badge.cursor++;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x4000) {
+        } else if (w->dirRep & DEMO_STICK_LEFT) {
             if (w->log.badge.cursor % 7 > 0) w->log.badge.cursor--;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x1000) {
+        } else if (w->dirRep & DEMO_STICK_UP) {
             if ((s32)(w->log.badge.cursor - 7) >= 0 && w->log.badge.cursor - 7 < w->log.badge.num) { w->log.badge.cursor -= 7; }
             w->log.badge.idx = w->log.badge.cursor / 28;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x2000) {
+        } else if (w->dirRep & DEMO_STICK_DOWN) {
             if ((s32)(w->log.badge.cursor + 7) >= 0 && w->log.badge.cursor + 7 < w->log.badge.num) {
                 w->log.badge.cursor += 7;
             } else if (w->log.badge.cursor + (7 - w->log.badge.cursor % 7) < w->log.badge.num) {
@@ -754,17 +755,17 @@ s32 winLogMain(WindowWork* w) {
             if (w->log.recipe.idx >= pages) w->log.recipe.idx = pages - 1;
             w->log.recipe.cursor = w->log.recipe.idx * 28;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x8000) {
+        } else if (w->dirRep & DEMO_STICK_RIGHT) {
             if (w->log.recipe.cursor % 7 < 6 && w->log.recipe.cursor + 1 < w->log.recipe.num) w->log.recipe.cursor++;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x4000) {
+        } else if (w->dirRep & DEMO_STICK_LEFT) {
             if (w->log.recipe.cursor % 7 > 0) w->log.recipe.cursor--;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x1000) {
+        } else if (w->dirRep & DEMO_STICK_UP) {
             if ((s32)(w->log.recipe.cursor - 7) >= 0 && w->log.recipe.cursor - 7 < w->log.recipe.num) { w->log.recipe.cursor -= 7; }
             w->log.recipe.idx = w->log.recipe.cursor / 28;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x2000) {
+        } else if (w->dirRep & DEMO_STICK_DOWN) {
             if ((s32)(w->log.recipe.cursor + 7) >= 0 && w->log.recipe.cursor + 7 < w->log.recipe.num) {
                 w->log.recipe.cursor += 7;
             } else if (w->log.recipe.cursor + (7 - w->log.recipe.cursor % 7) < w->log.recipe.num) {
@@ -809,7 +810,7 @@ s32 winLogMain(WindowWork* w) {
             if (w->log.enemyPage >= pages) w->log.enemyPage = pages - 1;
             w->log.enemySel = w->log.enemyPage * 16;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0xC000) {
+        } else if (w->dirRep & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
             if (w->log.enemySel % 16 < 8) {
                 w->log.enemySel += 8;
             } else {
@@ -818,7 +819,7 @@ s32 winLogMain(WindowWork* w) {
             if (w->log.enemySel >= w->log.enemyNum) w->log.enemySel = w->log.enemyNum - 1;
             if (w->log.enemySel < 0) w->log.enemySel = 0;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x1000) {
+        } else if (w->dirRep & DEMO_STICK_UP) {
             if (w->log.enemySel % 8 == 0) {
                 w->log.enemySel -= 9;
             } else {
@@ -827,7 +828,7 @@ s32 winLogMain(WindowWork* w) {
             if (w->log.enemySel < 0) w->log.enemySel = 0;
             w->log.enemyPage = w->log.enemySel / 16;
             psndSFXOn(SFX_NAME_WORD(0x20035));
-        } else if (w->dirRep & 0x2000) {
+        } else if (w->dirRep & DEMO_STICK_DOWN) {
             if (w->log.enemySel % 8 == 7) {
                 w->log.enemySel += 9;
             } else {

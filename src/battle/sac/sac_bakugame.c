@@ -1,5 +1,6 @@
 #include "eff/eff_starstone.h"
 #include "icon_ids.h"
+#include <dolphin/pad.h>
 #pragma optimize_for_size on
 #pragma dont_inline on
 #include "battle/battle.h"
@@ -26,7 +27,6 @@
 #include "battle/sac/sac_bakugame.h"
 #include "battle/battle_database_common.h"
 #include "pmario_sound.h"
-#include <dolphin/pad.h>
 
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 w);

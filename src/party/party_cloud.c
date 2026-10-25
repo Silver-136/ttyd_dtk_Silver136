@@ -13,6 +13,7 @@ double cos(double x);
 #include "mario/mario_party.h"
 #include "mario/mario_cam.h"
 #include "system.h"
+#include <dolphin/pad.h>
 
 Vec cloud_at;
 
@@ -60,7 +61,6 @@ static inline void cloudSweep(PartyEntry* party, f32 sign, s32 i) {
     }
 }
 #include "eff/n64/eff_kumokumo_n64.h"
-#include <dolphin/pad.h>
 void partyChgMoveMode(PartyEntry* party, s32 mode);
 void partyUpdateKeyData(PartyEntry* party);
 void* memset(void*, int, unsigned long);

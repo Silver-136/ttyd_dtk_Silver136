@@ -22,6 +22,7 @@
 #include <string.h>
 #include "win/win_item.h"
 #include <dolphin/pad.h>
+#include <demo/DEMOPad.h>
 
 typedef struct WinMgrSelectTbl {
     u16 numDescriptors; // 0x0
@@ -517,13 +518,13 @@ void winMgrHelpMain(WinMgrEntry* entry) {
             entry->lines = lines + 1;
         }
         if (entry->lines > 2) {
-            if (keyGetDirTrg(0) & 0x100) {
+            if (keyGetDirTrg(0) & DEMO_SUBSTICK_UP) {
                 entry->scroll -= 2;
                 if (entry->scroll < 0) {
                     entry->scroll = 0;
                 }
             }
-            else if (keyGetDirTrg(0) & 0x200) {
+            else if (keyGetDirTrg(0) & DEMO_SUBSTICK_DOWN) {
                 if ((entry->lines + 1) / 2 - 1 > (entry->scroll + 1) / 2) {
                     entry->scroll += 2;
                 }
@@ -1133,14 +1134,14 @@ void select_main(WinMgrEntry* entry) {
                 break;
             }
             prev = sel->cursor;
-            if (keyGetDirRep(0) & 0x2000) {
+            if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
                 sel->cursor++;
             }
-            if (keyGetDirRep(0) & 0x1000) {
+            if (keyGetDirRep(0) & DEMO_STICK_UP) {
                 sel->cursor--;
             }
             if (sel->cursor >= sel->numItems) {
-                if (keyGetDirTrg(0) & 0x2000) {
+                if (keyGetDirTrg(0) & DEMO_STICK_DOWN) {
                     sel->cursor = 0;
                     sel->scrollTop = 0;
                 }
@@ -1149,7 +1150,7 @@ void select_main(WinMgrEntry* entry) {
                 }
             }
             if (sel->cursor < 0) {
-                if (keyGetDirTrg(0) & 0x1000) {
+                if (keyGetDirTrg(0) & DEMO_STICK_UP) {
                     sel->cursor = sel->numItems - 1;
                     if ((i = sel->numItems - 8) > 0) {
                         sel->scrollTop = i;
