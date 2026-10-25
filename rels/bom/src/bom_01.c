@@ -865,7 +865,7 @@ static void ext_main(void) {
             case 3:
                 angle = ( 6.2831855f * rand() ) / 32767.0f;
                 dist = ( 70.0f * rand() ) / 32767.0f;
-                // correctness: target keeps z = 0.1f (+196) and speed = 3.0f; both rand() results unused
+                // z stays 0.1f (+196) and speed 3.0f: both rand() results are unused, as in the game
                 rand();
                 z = 0.1f;
                 rand();
@@ -893,7 +893,7 @@ static void ext_main(void) {
                 }
                 break;
             case 127:
-                if ((*pose->mtx)[1][3] > ( -1000.0f) ) { // correctness: target tests y (lfs f2,0x1c), not z
+                if ((*pose->mtx)[1][3] > ( -1000.0f) ) { // tests y, not z, as in the game
                     (*pose->mtx)[1][3] = (*pose->mtx)[1][3] - 2.0f;
                     pose->flags &= ~2;
                     PSMTXTrans(m1, 0.0f, -20.0f, 0.0f);

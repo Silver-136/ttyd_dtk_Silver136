@@ -982,7 +982,7 @@ void mot_roll(void) {
                 v28 = 0.0f;
             }
         }
-    } else {  // correctness: target runs the speed clamp only on this path (first branch jumps past it)
+    } else {  // the speed clamp runs only on this path
         if ((mario->mot.roll.flags & 0x10) && mario->groundRot.z == 0.0f) {
             if (makeVec(135.0f) == 1) {
                 v29 = 0.2f * -v29 + v29;

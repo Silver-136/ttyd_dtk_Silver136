@@ -1264,7 +1264,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 i = 1;
                 if (((s8*)tag)[0] != 'R') { i = 2;
                 }
-                if (data->window->type == 1) {  // correctness: data2 only set by the "r" tag branch
+                if (data->window->type == 1) {  // data2 is only set by the "r" tag branch
                     continue;
                 }
                 half = ((s32)strlen(tag + i)) / 2;
@@ -1377,7 +1377,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             msg++;
             time += step;
             entry++;
-            data->charCount++;  // correctness: data2 is only set on one branch (NULL read-modify-write of +0x38)
+            data->charCount++;  // data2 is only set on one branch (otherwise this writes through NULL + 0x38, as in the game)
             continue;
         }
     }

@@ -2101,7 +2101,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
             mobj->effect = NULL;
         }
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_HEART1), &mobj->position);
-        animPoseSetAnim(mobj->poseId, "A_2", 1);  // correctness: target str_8041A11C
+        animPoseSetAnim(mobj->poseId, "A_2", 1);
         if (mobj->typeData[1] == 0) {
             mobj->state = 3;
         } else {
@@ -2153,7 +2153,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         if (animPoseGetLoopTimes(mobj->poseId) < 1.0f) {
             break;
         }
-        animPoseSetAnim(mobj->poseId, "A_1", 1);  // correctness: target str_8041A118
+        animPoseSetAnim(mobj->poseId, "A_1", 1);
         marioChgPose("M_S_1");
         marioKeyOn();
         statusWinForceOff();
@@ -2167,7 +2167,7 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         if (animPoseGetLoopTimes(mobj->poseId) < 1.0f) {
             break;
         }
-        animPoseSetAnim(mobj->poseId, "S_1", 1);  // correctness: target str_8041A12C
+        animPoseSetAnim(mobj->poseId, "S_1", 1);
         mobj->flags &= ~8;
         mobj->state = 0;
         break;

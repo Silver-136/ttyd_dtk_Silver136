@@ -1619,7 +1619,7 @@ void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *
             printf("Error: dispSetTevMode: \203x\201[\203X\203\202\203f\203\213%s \203A\203j\203\201 %s \223\340\202\305 \203t\203\214\201[\203\200\203G\203N\203X\203e\203\223\203V\203\207\203\223\202\314\220\335\222\350\202\252\215s\202\355\202\352\202\304\202\242\202\334\202\267\202\252\201A\212Y\223\226\202\267\202\351\203e\203N\203X\203`\203\203\202\252\202\240\202\350\202\334\202\271\202\361 \nframeExt\224\324\215\206 %d? \202\252\226\263\202\242\202\346\202\244\202\305\202\267\201B\203\202\203f\203\213\202\334\202\275\202\315\203A\203j\203\201\202\311\217C\220\263\202\252\225K\227v\202\305\202\267\201BtextureIdx=%d\n",
                    animPoseGetBaseData(wp->mpCurPose)->fileName,
                    animPoseGetBaseData(wp->mpCurPose)->mpAnims[wp->mpCurPose->animId].name,
-                   animEntries[id].mTexBindIdx, entry->bindId); // correctness: target passes frameExt (r6) and textureIdx (r7) for the two %d
+                   animEntries[id].mTexBindIdx, entry->bindId); // the two %d are frameExt and textureIdx
     }
     wrapFlags = entry->wrapFlags;
     texId = texBinds[bindId].texId;
