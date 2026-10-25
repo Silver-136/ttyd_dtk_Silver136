@@ -10,6 +10,7 @@
 #include "evt/evt_npc.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_mobj.h"
 
 #include "memory.h"
 #include "string.h"
@@ -39,12 +40,7 @@ static void ext_disp(CameraId camera, void* param);
 
 s32 evt_chorobon_escape(EventEntry* event, BOOL isFirstCall);
 s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_set_tevcallback(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_wait_movable(EventEntry* event, BOOL isFirstCall);
-s32 evt_mobj_badgeblk(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_jump_position(EventEntry* event, BOOL isFirstCall);
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall);
 s32 wait_anim_end(EventEntry* event, BOOL isFirstCall);
 s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall);

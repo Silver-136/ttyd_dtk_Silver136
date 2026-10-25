@@ -12,10 +12,6 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_nokonoko_urouro_check_func);
-USER_FUNC(evt_npc_add_dirdist);
-USER_FUNC(evt_npc_get_loiter_dir);
-USER_FUNC(evt_npc_reverse_ry);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

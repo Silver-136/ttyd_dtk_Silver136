@@ -25,6 +25,8 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_party.h"
 #include "seq/seq_mapchange.h"
+#include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
 typedef struct GameOverWork {
     EventEntry* evt; // 0x0
@@ -32,13 +34,8 @@ typedef struct GameOverWork {
 
 
 
-USER_FUNC(evt_mario_clear_party);
-USER_FUNC(N_evt_snd_bgm_unpause);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_cam_ctrl_onoff);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_sub_get_language);
 #endif
 
 static GameOverWork work;

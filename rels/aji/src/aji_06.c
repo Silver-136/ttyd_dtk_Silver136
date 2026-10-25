@@ -13,6 +13,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/mapdrv.h"
@@ -38,25 +39,6 @@ s32 g_Kusuri_B;
 s32 g_Kusuri_G;
 s32 g_Kusuri_R;
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_pauseanim);
-USER_FUNC(evt_map_set_flush_color);
-USER_FUNC(evt_map_set_flush_onoff);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_get_dir);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_peach_set_condition);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_sfx_dist);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(kusuri_color_get);

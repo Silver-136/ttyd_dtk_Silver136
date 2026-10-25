@@ -9,11 +9,8 @@
 #include "mri_puni.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_yuka);
 
 static BeroEntry bero_entry_data[5];
 static EvtWord evt_ueki_04[20];

@@ -8,9 +8,8 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "dou.h"
 
-USER_FUNC(evt_dou_normal_puka);
-USER_FUNC(evt_map_entry_airport_harbor);
 
 static BeroEntry bero_entry_data[3];
 static EvtWord dou_puka_event_main0[60];

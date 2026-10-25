@@ -9,7 +9,6 @@
 #include "party/party_motion.h"
 
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
 
 static EvtWord n_close[12];
 static EvtWord n_open[12];

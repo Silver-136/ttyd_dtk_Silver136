@@ -16,6 +16,8 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_lecture.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -23,22 +25,8 @@
 #include "gon.h"
 #include "mario/mario_pouch.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(bgm_start_wait);
-USER_FUNC(evt_bero_mario_go_init);
-USER_FUNC(evt_bero_mario_go_wait);
-USER_FUNC(evt_img_set_virtual_point);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_switch_red);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_pouch_add_item);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_win_item_select);
 static void majin_callback(s32 type);
 

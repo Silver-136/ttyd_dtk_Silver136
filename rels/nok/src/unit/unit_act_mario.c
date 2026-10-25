@@ -2,6 +2,7 @@
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
+#include "evt/evt_audience.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -19,7 +20,6 @@ static USER_FUNC(_clauda_breath_effect_fire);
 static USER_FUNC(_clauda_breath_effect_ready);
 USER_FUNC(_status_window_off);
 USER_FUNC(btlevtcmd_SetEventEntry);
-USER_FUNC(evt_audience_joy_ending);
 extern BattleUnitKind unit_act_atmic_teresa;
 extern BattleUnitKind unit_act_clauda;
 extern BattleUnitKind unit_act_kinopiko;

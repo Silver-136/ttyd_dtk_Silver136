@@ -9,19 +9,15 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_party.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
 #include "evt/evt_bero.h"
 #include "las.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_floatswitch_blue);
-USER_FUNC(evt_mobj_hit_onoff);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_party_get_status);
 USER_FUNC(get_mobj_seq);
 USER_FUNC(switch_alpha_off);
 USER_FUNC(switch_set_alpha);

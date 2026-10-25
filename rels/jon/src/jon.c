@@ -18,6 +18,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/npcdrv.h"
 #include "manager/evtmgr.h"
@@ -42,58 +44,15 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(enemy_info);
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam_letter_box_wait);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_fog_onoff);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_floatswitch_blue);
-USER_FUNC(evt_mobj_set_z_position);
-USER_FUNC(evt_mobj_signboard);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_npc_add_dirdist);
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_get_loiter_dir);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_get_unitwork);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_balloontype);
-USER_FUNC(evt_npc_set_paper);
-USER_FUNC(evt_npc_set_paper_anim);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_npc_set_unitwork);
-USER_FUNC(evt_npc_wait_anim);
 USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_add_item);
 USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_raster);
 USER_FUNC(evt_snd_sfxon_3d_ex);
-USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_sub_get_language);
-USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);
 USER_FUNC(evt_win_coin_wait);
 USER_FUNC(evt_win_other_select);
 static USER_FUNC(gonbaba_wait_landon);
-USER_FUNC(iri_12_makkino_set_y);
-USER_FUNC(iri_12_paper_init);
-USER_FUNC(setup_npc_ex_para);
-USER_FUNC(shikakeFlag);
-USER_FUNC(wait_landon);
-USER_FUNC(wanwan_set_home_pos);
-USER_FUNC(yattukeFlag);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_msg_fmt_int);
-USER_FUNC(evt_msg_fmt_str);
 #endif
 void iri_12_msgcb(s32 type, void* param);
 void raster_disp(CameraId cameraId, void* param);

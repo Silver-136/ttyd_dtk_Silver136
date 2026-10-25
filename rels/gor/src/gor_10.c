@@ -10,6 +10,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -74,8 +75,6 @@ static void draw(CameraId camera, void* param);
 
 USER_FUNC(cam_yure);
 static USER_FUNC(depth);
-USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_cam_letter_box_camid);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(mabuta);

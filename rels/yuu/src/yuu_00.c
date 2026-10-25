@@ -51,13 +51,7 @@ static Monte* monte_p;
 static void monte_disp(CameraId camera, void* param);
 
 USER_FUNC(eff_call_minigame);
-USER_FUNC(evt_cam_letter_box_disable);
 USER_FUNC(evt_change_plane);
-USER_FUNC(evt_fade_in);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_set_prev_party_pos);
-USER_FUNC(evt_moving_floor_delete);
 USER_FUNC(evt_yuucounter_alloc);
 USER_FUNC(evt_yuucounter_free);
 USER_FUNC(evt_yuuminigame_alloc);
@@ -71,10 +65,6 @@ USER_FUNC(yuu_00_cam_shift_reset);
 USER_FUNC(yuu_atai_init);
 USER_FUNC(yuu_atai_pop);
 USER_FUNC(yuu_atai_push);
-USER_FUNC(yuugijou_add_montemedal);
-USER_FUNC(yuugijou_get_montemedal);
-USER_FUNC(yuugijou_montemedal_disp_onoff);
-USER_FUNC(yuugijou_montemedal_wait);
 USER_FUNC(yuuminigame1_opening_chk);
 USER_FUNC(yuuminigame1_opening_on_off);
 USER_FUNC(yuuminigame1_set_phase);
@@ -83,7 +73,6 @@ USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_sub_get_language);
 #endif
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data);
 void yuuminigame_disp_1hikoki(CameraId camera, void* param);

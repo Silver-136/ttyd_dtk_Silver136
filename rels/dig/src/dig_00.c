@@ -29,9 +29,6 @@ static s32 work[1];
 #define DIG_WP (wp[0])
 
 USER_FUNC(evt_action_sub);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_tribe);
 USER_FUNC(evt_npc_set_walk_anim);
 USER_FUNC(gravity_scale);
 USER_FUNC(movie);

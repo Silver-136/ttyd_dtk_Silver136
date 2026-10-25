@@ -10,8 +10,8 @@
 #include "evt/evt_case.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_sub.h"
 
-USER_FUNC(evt_sub_get_mapname);
 
 static BeroEntry bero_data_a[2];
 static BeroEntry bero_data_b[2];

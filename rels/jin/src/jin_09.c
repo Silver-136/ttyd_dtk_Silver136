@@ -10,13 +10,9 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_mobj.h"
 
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_jump_jumpstand);
-USER_FUNC(evt_mobj_jumpstand_red);
-USER_FUNC(evt_mobj_powerupblk);
 
 static BeroEntry bero_entry_data[2];
 EvtWord jin_09_jumpstand[21];

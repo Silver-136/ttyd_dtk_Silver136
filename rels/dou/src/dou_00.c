@@ -9,14 +9,12 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_item.h"
 
 #include "driver/mapdrv.h"
 #include "driver/envdrv.h"
 #include "evt/evt_bero.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_blend_set_flag);
-USER_FUNC(evt_map_set_tevcallback);
 void water_tev(MapTevCallbackInfo* info);
 
 static EvtWord bero_in_event[11];

@@ -9,14 +9,10 @@
 #include "mri_puni.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_mobj.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_yuka);
 
 static BeroEntry bero_entry_data[5];
 static KusaAccess ueki_access_data[7];

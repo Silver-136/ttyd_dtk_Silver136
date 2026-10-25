@@ -7,8 +7,6 @@
 
 // cardmgr.c helpers (named cardE80/cardEAC/cardED0 in cardmgr.h)
 
-USER_FUNC(evt_msg_print_add_insert);
-USER_FUNC(evt_msg_print_insert);
 USER_FUNC(evt_seq_load_keep_msg_window);
 
 // Functions are emitted in reverse source order (deferred inlining)

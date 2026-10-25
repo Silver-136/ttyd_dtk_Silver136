@@ -19,6 +19,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "memory.h"
 #include "string.h"
@@ -49,7 +51,6 @@
 #include "data_tables.h"
 #include "evt/evt_npc.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_msg_pri);
 #endif
 
 
@@ -94,8 +95,6 @@ void ext_disp_minnnanokoe(CameraId camera, void* param);
 void jump_minnnanokoe(s32 i, f32 h);
 void jump_minnnanokoe(s32 i, f32 h);
 
-s32 L_evt_party_vivian_tail(EventEntry* event, BOOL isFirstCall);
-s32 N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos(EventEntry* event, BOOL isFirstCall);
 static s32 anim_tevcallback(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(anim_tevcallback);
 s32 bom1000_jump(EventEntry* event, BOOL isFirstCall);
@@ -108,20 +107,8 @@ s32 bom_flag(EventEntry* event, BOOL isFirstCall);
 s32 bom_flag(EventEntry* event, BOOL isFirstCall);
 static s32 depth(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(depth);
-s32 evt_cam_letter_box_disable(EventEntry* event, BOOL isFirstCall);
-s32 evt_item_entry(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_set_tevcallback(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_rotate(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_scale(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_reverse_ry(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_tribe(EventEntry* event, BOOL isFirstCall);
-s32 evt_party_set_pose(EventEntry* event, BOOL isFirstCall);
-s32 evt_pouch_remove_item(EventEntry* event, BOOL isFirstCall);
 s32 evt_snd_env_lpf(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_spline_get_value(EventEntry* event, BOOL isFirstCall);
-s32 evt_sub_spline_init(EventEntry* event, BOOL isFirstCall);
 s32 make_ext_table(EventEntry* event, BOOL isFirstCall);
 s32 make_ext_table(EventEntry* event, BOOL isFirstCall);
 s32 make_ext_table_minnnanokoe(EventEntry* event, BOOL isFirstCall);

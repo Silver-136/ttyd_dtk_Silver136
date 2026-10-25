@@ -11,10 +11,8 @@
 #include "evt/evt_paper.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
 #ifdef VERSION_G8ME01
 #endif
 

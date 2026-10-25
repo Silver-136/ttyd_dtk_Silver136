@@ -18,6 +18,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_mobj.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -36,36 +37,8 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 USER_FUNC(dou_mario_kaiten_hosei);
-USER_FUNC(evt_dou_normal_puka);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mobj_switch_blue);
 USER_FUNC(evt_nannpc_entry);
-USER_FUNC(evt_nannpc_flag_onoff);
-USER_FUNC(evt_nannpc_get_position);
-USER_FUNC(evt_nannpc_get_work);
-USER_FUNC(evt_nannpc_init);
-USER_FUNC(evt_nannpc_jump_position);
-USER_FUNC(evt_nannpc_move_position2);
-USER_FUNC(evt_nannpc_ppflag_onoff);
-USER_FUNC(evt_nannpc_set_animtbl);
-USER_FUNC(evt_nannpc_set_dir);
-USER_FUNC(evt_nannpc_set_func);
-USER_FUNC(evt_nannpc_set_hosei_position);
-USER_FUNC(evt_nannpc_set_position);
-USER_FUNC(evt_nannpc_set_shadow_position);
-USER_FUNC(evt_nannpc_set_size);
-USER_FUNC(evt_nannpc_set_subfunc);
-USER_FUNC(evt_nannpc_set_work);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_wait_landon);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 

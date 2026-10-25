@@ -211,7 +211,6 @@ void vivian_move(PartyEntry* party) {
 
 extern void L_partyForceSlitOff(PartyEntry* party);
 extern void* marioSearchGround(f32* x, f32* y, f32* z, f32 a, f32 b);
-extern s32 hitGetAttr(void* hit);
 extern void marioChkWallAround(Vec* pos, s32 arg, f32 a, f32 b, f32 c, f32 d);
 #ifdef VERSION_G8ME01
 extern void partyChkWallAround(struct PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height);
@@ -227,7 +226,7 @@ extern void marioChgMot(s32 mot);
 
 #pragma opt_common_subs off
 static inline void vivianFollow(PartyEntry* party) {
-    void* hit;
+    HitEntry* hit;
     u8 id;
     MarioWork* m = party->playerPtr;
     f32 gx, gy, gz;

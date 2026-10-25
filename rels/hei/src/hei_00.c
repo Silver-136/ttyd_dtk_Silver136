@@ -17,6 +17,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -43,30 +45,7 @@ void mapSetProjMtx(Mtx mtx);
 
 USER_FUNC(cam_test);
 USER_FUNC(dist_check);
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_evt_set_xyz);
-USER_FUNC(evt_cam3d_evt_xyz_off);
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_img_set_position);
-USER_FUNC(evt_img_set_virtual_point);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_timerswitch);
-USER_FUNC(evt_npc_kamek_kemuri1);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(make_gonbaba_projection_evt);

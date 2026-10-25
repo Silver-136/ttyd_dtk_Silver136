@@ -25,25 +25,9 @@
 #include "evt/evt_npc.h"
 #include "driver/hitdrv.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(eff_guruguru);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_npc_majo_disp_on);
-USER_FUNC(evt_npc_set_force_regl_anim);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_sub_area_check);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

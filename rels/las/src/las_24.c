@@ -10,22 +10,10 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_jump_jumpstand);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_breaking_floor);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_floatswitch_red);
-USER_FUNC(evt_mobj_jumpstand_red);
-USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_party_get_name_hitobj_ride);
-USER_FUNC(evt_party_jump_pos);
 #ifdef VERSION_G8ME01
 USER_FUNC(las_24_adjust_for_framerate);
 #endif

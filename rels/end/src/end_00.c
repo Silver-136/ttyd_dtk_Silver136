@@ -67,7 +67,6 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_cam_letter_box_disable);
 USER_FUNC(evt_end_moamoa_exit);
 USER_FUNC(evt_end_moamoa_init);
 USER_FUNC(evt_end_npc_silhouette_on);

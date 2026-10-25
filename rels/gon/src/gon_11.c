@@ -17,6 +17,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
 
 #include "driver/npcdrv.h"
 #include "driver/hitdrv.h"
@@ -49,18 +50,6 @@ static void _img_alloc_capture(const char* a0, s32 a1, const char* a2, s32 a3, s
 static USER_FUNC(evt_cloud_main);
 USER_FUNC(evt_iri_16_cloud_ent);
 USER_FUNC(evt_iri_16_cloud_init);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_map_fog_onoff);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_npc_wait_anim);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_snd_sfxon_3d_ex);
 static USER_FUNC(gonbaba_wait_landon);

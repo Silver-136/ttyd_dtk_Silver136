@@ -11,12 +11,9 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_gra_vivian_pose_set);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_party_set_homing_dist);
 
 static BeroEntry bero_entry_data[3];
 EvtWord gra_01_after_ranpel2[94];

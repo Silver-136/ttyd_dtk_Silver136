@@ -22,17 +22,8 @@
 #include "evt/evt_case.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_img_set_position);
-USER_FUNC(evt_img_set_virtual_point);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_npc_kamek_kemuri2);
 USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_npc_set_stop_anim);
-USER_FUNC(evt_npc_set_tribe);
 USER_FUNC(evt_npc_set_walk_anim);
 USER_FUNC(get_togenoko_pos);
 USER_FUNC(kpa_chg_pose);

@@ -32,22 +32,7 @@
 NpcEntry* fbatHitCheckAll(void);
 
 USER_FUNC(bgm_wait_stop);
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_fade_set_spot_pos);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_npc_blur_onoff);
-USER_FUNC(evt_party_move_behind_mario);
-USER_FUNC(evt_party_set_breed_pose);
-USER_FUNC(evt_party_yoshi_ride);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(toron_check);
 USER_FUNC(mario_normalize_wait);

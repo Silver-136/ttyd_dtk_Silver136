@@ -33,7 +33,6 @@
 #include "evt/evt_movefloor.h"
 #include "yuu.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_sub_get_language);
 #endif
 
 typedef struct FuneWork { u32 flags; s32 phase; s32 coins; s32 result; s32 index; s32 state; f32 dist; Vec dir; s32 timer; f32 y; f32 x; s32 monteCount; EventEntry* viewEvent; } FuneWork;
@@ -51,9 +50,6 @@ static inline BOOL monte_check_inl(Vec* a, Vec* b) { if (PSVECDistance(a, b) < 2
 static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
 
 USER_FUNC(eff_call_minigame);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_fade_in);
-USER_FUNC(evt_mario_set_prev_party_pos);
 USER_FUNC(evt_yuucounter_alloc);
 USER_FUNC(evt_yuucounter_free);
 USER_FUNC(evt_yuuminigame_alloc);
@@ -64,10 +60,6 @@ USER_FUNC(evt_yuutitle_free);
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
 USER_FUNC(yuu_01_cam_shift_reset);
-USER_FUNC(yuugijou_add_montemedal);
-USER_FUNC(yuugijou_get_montemedal);
-USER_FUNC(yuugijou_montemedal_disp_onoff);
-USER_FUNC(yuugijou_montemedal_wait);
 USER_FUNC(yuuminigame2_get_name);
 USER_FUNC(yuuminigame2_opening_chk);
 USER_FUNC(yuuminigame2_opening_on_off);

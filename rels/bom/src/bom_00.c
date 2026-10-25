@@ -14,7 +14,6 @@
 #include "evt/evt_snd.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mobj_brick);
 
 EvtWord evt_bom_snowfall[18];
 static TreeAccess tree_tbl[4];

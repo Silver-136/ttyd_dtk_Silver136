@@ -12,8 +12,6 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(dou_mario_pos_osreport_func);
-USER_FUNC(evt_dou_normal_puka);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

@@ -12,6 +12,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_mobj.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -45,56 +46,15 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_type_change);
-USER_FUNC(evt_fade_in);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_koopa_chk_dead);
-USER_FUNC(evt_map_blend_set_flag);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mario_set_motion);
-USER_FUNC(evt_mobj_jumpstand_blue);
-USER_FUNC(evt_mobj_jumpstand_red);
-USER_FUNC(evt_mobj_koopa_badgeblk);
-USER_FUNC(evt_mobj_koopa_blk);
-USER_FUNC(evt_mobj_koopa_brick);
-USER_FUNC(evt_mobj_koopa_dokan);
-USER_FUNC(evt_mobj_koopa_fireber_dodai);
-USER_FUNC(evt_mobj_koopa_hidden_blk);
-USER_FUNC(evt_mobj_koopa_ojama_blk);
-USER_FUNC(evt_mobj_koopa_pole);
-USER_FUNC(evt_mobj_koopa_sango);
-USER_FUNC(evt_mobj_koopa_stone_blk);
-USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(evt_twoddisp_entry);
 USER_FUNC(evt_twoddisp_flag_onoff);
 USER_FUNC(evt_twoddisp_init);
 USER_FUNC(evt_twoddisp_set_base_position);
 USER_FUNC(evt_twoddisp_set_position);
-USER_FUNC(kpa_add_coin);
 USER_FUNC(kpa_chg_pose);
-USER_FUNC(kpa_get_msg);
-USER_FUNC(kpa_make_item_name);
-USER_FUNC(kpa_make_mobj_name);
-USER_FUNC(kpa_mobj_on);
-USER_FUNC(kpa_muteki_check);
-USER_FUNC(kpa_nohitenemy_ct_clear);
-USER_FUNC(kpa_pole_hitoff);
 USER_FUNC(kpa_score_disp_init);
-USER_FUNC(kpa_set_scale);
-USER_FUNC(kpa_set_time);
-USER_FUNC(kpa_status_get_stage);
-USER_FUNC(kpa_status_main);
-USER_FUNC(kpa_time_countdown);
-USER_FUNC(kpa_fire_off);
-USER_FUNC(kpa_get_cam_pt);
-USER_FUNC(kpa_stageclear_disp_entry);
 void kpa_stageclear_disp(CameraId camera, void* param);
-USER_FUNC(kpa_status_init);
 void kpa_status_disp(CameraId camera, void* param);
 void _unresolved(void);
 void _epilog(void);

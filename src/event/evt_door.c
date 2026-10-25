@@ -24,6 +24,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_party.h"
 
 double atan(double);
 
@@ -54,35 +55,7 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
 void door_dark_flag_sub(BOOL on, const char** npcs, const char** mobjs, const char** items);
 
 
-USER_FUNC(N_evt_mario_party_door_halve_hitbox);
-USER_FUNC(animation);
-USER_FUNC(door_dark_flag);
-USER_FUNC(door_group);
-USER_FUNC(evt_cam3d_evt_set_xyz);
-USER_FUNC(evt_cam3d_evt_xyz_off);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_door_load_mapflag);
-USER_FUNC(evt_door_param);
-USER_FUNC(evt_door_save_mapflag);
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_door_move);
-USER_FUNC(evt_party_move_beside_mario);
 USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(get_noclip_map);
-USER_FUNC(in_pos);
-USER_FUNC(init_inside_group);
-USER_FUNC(inout_hit);
-USER_FUNC(inside_group);
-USER_FUNC(npc_dark);
-USER_FUNC(npc_hide_onoff);
-USER_FUNC(npc_light);
-USER_FUNC(out_pos);
-USER_FUNC(outside_group);
-USER_FUNC(evt_door_end_wait);
-USER_FUNC(evt_door_set_param);
 
 EvtWord door_open_se[151];
 EvtWord door_close_se[151];

@@ -16,7 +16,6 @@
 
 
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_party_set_pose);
 static USER_FUNC(mario_kirimomi);
 static USER_FUNC(z);
 

@@ -13,11 +13,6 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_mobj_tornadoswitch_blue);
-USER_FUNC(evt_mobj_wait_animation_end);
 
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[9];

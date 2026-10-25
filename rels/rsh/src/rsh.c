@@ -14,6 +14,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
 
 #include "stdio.h"
 #include "string.h"
@@ -36,25 +38,6 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(debug_print_func);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_door_move);
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_set_offscreen);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_rsh_get_rnd_npc);
-USER_FUNC(evt_rsh_get_rnd_npc_data);
-USER_FUNC(evt_rsh_get_rnd_npc_talk_evt);
-USER_FUNC(evt_rsh_set_rnd_npc);
-USER_FUNC(evt_rsh_set_rnd_npc_talk_evt);
-USER_FUNC(evt_sub_get_mapname);
 BOOL img_wait(void);
 RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index);
 void rsh_window_tev(MapTevCallbackInfo* info);

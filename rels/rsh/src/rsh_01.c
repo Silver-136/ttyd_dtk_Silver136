@@ -15,17 +15,9 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_sub_get_coin);
-USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(evt_win_item_select);
 
 EvtWord s_bero_close[12];

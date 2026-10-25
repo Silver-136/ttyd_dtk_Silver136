@@ -19,6 +19,8 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -42,18 +44,7 @@ void* _mapAlloc(u32 size);
 typedef struct { Vec pos; Vec delta; } BeltWork;
 
 USER_FUNC(bg_cam_chk);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_set_scale);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_cam_y_on);
 USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(mario_chk);
 USER_FUNC(hit_group_chk);

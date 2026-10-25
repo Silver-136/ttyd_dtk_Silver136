@@ -9,11 +9,9 @@
 #include "mario/mariost.h"
 #include "system.h"
 #include <dolphin/os.h>
+#include "evt/evt_damage.h"
 
-USER_FUNC(evt_npc_wait_anim);
 
-USER_FUNC(evt_gazigazi_move_position);
-USER_FUNC(camdir);
 
 #define GAZIGAZI "\x83\x4B\x83\x57\x83\x4B\x83\x57" // "ガジガジ"
 

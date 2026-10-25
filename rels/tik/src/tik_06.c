@@ -6,18 +6,10 @@
 #include "evt/evt_npc.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_signboard);
-USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_npc_add_dirdist);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_sub_save_playtime);
 
 static EvtWord oshimodo_event[32];
 static BeroEntry bero_entry_data[5];

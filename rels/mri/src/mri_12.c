@@ -12,16 +12,9 @@
 #include "evt/evt_case.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mobj_breaking_floor);
-USER_FUNC(evt_puni_all_fall_check);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_target_flag_onoff);
-USER_FUNC(evt_target_set_position);
 
 static BeroEntry bero_entry_data[6];
 static EvtWord punipuni_ball00_init[32];

@@ -21,11 +21,7 @@
 #include "muj.h"
 #include "evt/evt_npc.h"
 
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_flag_onoff);
-USER_FUNC(evt_mario_get_pos);
 static USER_FUNC(fune_eff);
 
 EvtWord peach_init[12];

@@ -3,6 +3,7 @@
 #include "dolphin/types.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_word.h"
+#include "evt/evt_cmd.h"
 
 extern EvtWord bom_00_init_evt[];
 extern EvtWord bom_01_init_evt[];
@@ -18,3 +19,4 @@ extern BattleUnitKind unit_ice_pakkun;
 extern BattleUnitKind unit_kuriboo;
 
 extern EvtWord evt_bress[];
+USER_FUNC(bress);

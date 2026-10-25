@@ -8,11 +8,10 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_mobj.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mobj_badgeblk);
 
 static BeroEntry bero_entry_data[5];
 EvtWord tik_18_cloud_evt[5];

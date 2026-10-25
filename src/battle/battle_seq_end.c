@@ -38,6 +38,7 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_audience.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -149,9 +150,6 @@ USER_FUNC(_set_confetti_control_evtid);
 USER_FUNC(btlevtcmd_BtlStageObjFlagOnOff);
 USER_FUNC(btlevtcmd_BtlStageObjGetRotate);
 USER_FUNC(btlevtcmd_BtlStageObjSetRotate);
-USER_FUNC(evt_audience_sound_cheer);
-USER_FUNC(evt_batstage_set_stg_dark);
-USER_FUNC(evt_batstage_set_stg_dark_base);
 
 
 

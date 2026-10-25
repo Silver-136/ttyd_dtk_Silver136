@@ -13,6 +13,9 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_pouch.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -24,26 +27,10 @@
 
 
 USER_FUNC(evt_box_pukapuka);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_off);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_set_position);
 USER_FUNC(evt_mario_check_menu);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_hosei_xyz);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_switch_red);
-USER_FUNC(evt_party_get_name_hitobj_ride);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_set_hosei_xyz);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_haveitemcnt);
 USER_FUNC(evt_mapgrp_translate2);
 

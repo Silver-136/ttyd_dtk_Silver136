@@ -9,11 +9,6 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mobj_floatswitch_blue);
-USER_FUNC(evt_mobj_hit_onoff);
-USER_FUNC(evt_mobj_wait_animation_end);
 
 static BeroEntry bero_entry_data[2];
 EvtWord item_get03[34];

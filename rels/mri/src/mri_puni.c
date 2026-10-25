@@ -6743,9 +6743,6 @@ USER_FUNC(puni_disp_info_sub) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(evt_make_texbuf);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_sub_get_mapname);
 
 EVT_BEGIN(puni_piders_check)
     CALL(evt_seq_wait, 2)

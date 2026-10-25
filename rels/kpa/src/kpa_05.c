@@ -12,14 +12,8 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_mobj.h"
 
-USER_FUNC(evt_koopa_chk_dead);
-USER_FUNC(evt_koopa_get_level);
-USER_FUNC(evt_mario_cam_off);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_jump_jumpstand);
 static USER_FUNC(kpa_get_level);
-USER_FUNC(kpa_status_init);
 
 static EvtWord kpa_act_stg3_mobj[118];
 EvtWord kpa_act_stg3_item[79];

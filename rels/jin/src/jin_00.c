@@ -12,6 +12,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -60,21 +61,8 @@ void senteresa_loadTev(void);
 void senteresa_loadRenderMode(void);
 static inline f32 cosf(f32 x) { return cos(x); }
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_get_pose);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_sub_get_dist);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(get_npc_color);
 USER_FUNC(teresa_eff);

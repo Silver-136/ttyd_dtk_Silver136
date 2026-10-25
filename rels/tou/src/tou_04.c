@@ -11,6 +11,8 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "evt/evt_npc.h"
 #include "driver/msgdrv.h"
@@ -23,19 +25,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "manager/fontmgr.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_clear_party);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_party_yoshi_ride);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_sub_get_dist);
 USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(kemuri_stop);

@@ -17,26 +17,13 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_npc.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(bonbaba_wait_landon);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_set_z_position);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_npc_wait_anim);
-USER_FUNC(evt_party_set_homing_dist);
 USER_FUNC(evt_snd_sfxon_3d_ex);
 
 static EvtWord w_door_close[22];

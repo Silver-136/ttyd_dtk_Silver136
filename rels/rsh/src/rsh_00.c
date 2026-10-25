@@ -15,6 +15,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
 
 #include "string.h"
 #include "dolphin/os.h"
@@ -42,15 +43,8 @@ static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim)
 static void moamoa_pose_main(void);
 static void ext_disp(CameraId camera, void* param);
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_moamoa_set_one);
 USER_FUNC(evt_moamoa_set_seq_all);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_sub_get_mapname);
 void moamoa_dispent(void);
 void moamoa_main(void);
 static void ext_disp(CameraId camera, void* param);

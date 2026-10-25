@@ -20,27 +20,9 @@
 #include "mri_puni.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_party.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_breaking_floor);
-USER_FUNC(evt_mobj_hitevt_onoff);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_switch_red);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_puni_all_fall_check);
-USER_FUNC(evt_puni_flag_onoff);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_maze);
-USER_FUNC(evt_puni_set_mode);
-USER_FUNC(evt_puni_set_yuka);
 #ifdef VERSION_G8ME01
-USER_FUNC(N_evt_party_cloud_lock_animations_on_off);
 #endif
 
 BeroEntry bero_bluejail[1];

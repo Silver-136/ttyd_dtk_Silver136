@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -26,22 +27,7 @@
 
 void icon_disp(CameraId camera, void* param);
 
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_item_change_mode);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_move_3d_position);
-USER_FUNC(evt_item_set_bound_limit);
-USER_FUNC(evt_item_set_bound_next_dir);
-USER_FUNC(evt_item_set_bound_next_speed);
-USER_FUNC(evt_item_set_bound_rate);
-USER_FUNC(evt_item_set_gravity);
-USER_FUNC(evt_item_set_jump_power);
-USER_FUNC(evt_item_set_move_dir_speed);
 USER_FUNC(evt_key_get_button);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_sousa_icon);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(item_chk);

@@ -16,9 +16,6 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
 static USER_FUNC(make_name);
 
 static EvtWord w_door_close[22];

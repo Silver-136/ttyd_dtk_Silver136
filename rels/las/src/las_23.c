@@ -9,8 +9,6 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_mapobj_rotate);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

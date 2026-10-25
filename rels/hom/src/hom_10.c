@@ -18,9 +18,6 @@
 typedef struct SharinData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat speed; } SharinData;
 typedef struct ClankData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat x; EvtFloat y; } ClankData;
 
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_sub_get_mapname);
 static USER_FUNC(ramp_r);
 static void resha_tev(MapTevCallbackInfo* info);
 

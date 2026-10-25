@@ -39,7 +39,6 @@
 #include "evt/evt_npc.h"
 #include "aji.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(N_evt_sub_status_gauge_force_update);
 #endif
 
 typedef struct DanceData { u16 flags; u8 step; u8 movePos; f32 cx; f32 cy; f32 rot; } DanceData;
@@ -75,26 +74,11 @@ s32 dance_reverse(EventEntry* event, BOOL isFirstCall);
 s32 dance_reverse(EventEntry* event, BOOL isFirstCall);
 s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall);
 s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall);
-s32 evt_eff_softdelete(EventEntry* event, BOOL isFirstCall);
-s32 evt_fade_in(EventEntry* event, BOOL isFirstCall);
-s32 evt_fade_softfocus_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_fade_tec_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_fuki_btn(EventEntry* event, BOOL isFirstCall);
 s32 evt_fuki_btn(EventEntry* event, BOOL isFirstCall);
 s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall);
 s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_checkanim(EventEntry* event, BOOL isFirstCall);
-s32 evt_map_pauseanim(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_rotate(EventEntry* event, BOOL isFirstCall);
-s32 evt_mapobj_scale(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_adjust_dir(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_dispdir(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_get_pos(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_dispdir(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_set_reardir(EventEntry* event, BOOL isFirstCall);
-s32 evt_npc_set_tribe(EventEntry* event, BOOL isFirstCall);
-s32 evt_peach_set_condition(EventEntry* event, BOOL isFirstCall);
 s32 evt_shuryolight_init(EventEntry* event, BOOL isFirstCall);
 s32 evt_shuryolight_run_evt(EventEntry* event, BOOL isFirstCall);
 s32 evt_snd_envoff_f(EventEntry* event, BOOL isFirstCall);

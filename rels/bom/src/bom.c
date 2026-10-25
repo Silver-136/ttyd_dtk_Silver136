@@ -17,7 +17,6 @@ extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 void* effMistEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 angle);
 
-USER_FUNC(bress);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

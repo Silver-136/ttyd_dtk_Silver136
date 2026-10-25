@@ -16,18 +16,6 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_set_scale);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_balloon_bikkuri);
-USER_FUNC(evt_mario_balloon_off);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_wait_animation_end);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
 

@@ -11,7 +11,6 @@
 
 static char name[8];
 
-USER_FUNC(evt_mapobj_rotate);
 static USER_FUNC(make_name);
 
 static EvtWord w_door_close[22];

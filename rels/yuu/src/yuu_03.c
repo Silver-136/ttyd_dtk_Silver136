@@ -34,7 +34,6 @@
 #include "icon_ids.h"
 #include "yuu.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_sub_get_language);
 #endif
 
 typedef struct MonteSub { s32 unk0; Vec pos; f32 scale; u8 unk14[0x38 - 0x14]; } MonteSub;
@@ -57,14 +56,7 @@ void yuucounter_flag_on(s32 flag);
 #define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)
 
 USER_FUNC(eff_call_minigame);
-USER_FUNC(evt_cam3d_evt_set_now);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_fade_in);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_enable_key);
-USER_FUNC(evt_mario_set_prev_party_pos);
-USER_FUNC(evt_mario_wait_rideon);
 USER_FUNC(evt_ryushi);
 USER_FUNC(evt_ryushi_clr);
 USER_FUNC(evt_yuucounter_alloc);
@@ -77,10 +69,6 @@ USER_FUNC(evt_yuutitle_free);
 USER_FUNC(re_init_yuunpc);
 USER_FUNC(yuu_03_icon_monte_entry);
 USER_FUNC(yuu_03_cam_shift_reset);
-USER_FUNC(yuugijou_add_montemedal);
-USER_FUNC(yuugijou_get_montemedal);
-USER_FUNC(yuugijou_montemedal_disp_onoff);
-USER_FUNC(yuugijou_montemedal_wait);
 USER_FUNC(yuuminigame4_opening_chk);
 USER_FUNC(yuuminigame4_opening_on_off);
 USER_FUNC(yuuminigame4_set_phase);

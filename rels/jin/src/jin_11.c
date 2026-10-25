@@ -5,11 +5,9 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_map.h"
 
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_breaking_floor);
-USER_FUNC(evt_mobj_powerupblk);
 
 EvtWord jin_11_ana[12];
 static EvtWord s_close[12];

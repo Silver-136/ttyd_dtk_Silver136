@@ -10,12 +10,11 @@
 #include "evt/evt_party.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_switch_red);
 
 static EvtWord s1_close[12];
 static EvtWord s1_open[12];

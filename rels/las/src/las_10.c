@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_pouch.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -22,21 +23,8 @@
 
 
 USER_FUNC(check_party_pos);
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_map_set_playrate);
-USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mario_set_reardir);
-USER_FUNC(evt_party_set_dispdir);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_sfx_dist);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(make_kagi_tbl);

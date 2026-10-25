@@ -5,10 +5,9 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_mobj_signboard);
 
 EvtWord oshimodo_event_sub[33];
 static EvtWord oshimodo_event[10];

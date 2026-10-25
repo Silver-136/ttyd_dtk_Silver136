@@ -8,9 +8,8 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_lv_blk);
 
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[13];

@@ -12,8 +12,6 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
 #ifdef VERSION_G8ME01
 #endif
 

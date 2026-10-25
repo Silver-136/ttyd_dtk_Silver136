@@ -10,3 +10,4 @@ USER_FUNC(evt_eff_delete_ptr);
 USER_FUNC(evt_eff_fukidashi);
 USER_FUNC(evt_eff_softdelete_ptr);
 s32 evt_eff64(EventEntry *event, BOOL isFirstCall);
+USER_FUNC(evt_eff_softdelete);

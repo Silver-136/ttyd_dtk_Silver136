@@ -5,6 +5,7 @@
 #include "evt/evt_msg.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -15,7 +16,6 @@
 static USER_FUNC(booboo_main);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_item_entry);
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);

@@ -13,13 +13,7 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_msg.h"
 
-extern USER_FUNC(evt_mario_set_prev_party_pos);
-extern USER_FUNC(evt_mario_set_enable_key);
-extern USER_FUNC(evt_mario_get_pos);
 
-USER_FUNC(yuuminigame_get_window_evt);
-USER_FUNC(yuuminigame_end);
-USER_FUNC(yuuminigame_window_end);
 
 //.bss
 PiantaParlorWork yuugijouwork;

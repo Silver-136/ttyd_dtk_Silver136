@@ -3,6 +3,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
+#include "evt/evt_cmd.h"
 
 struct ExtdrvPose;
 struct HitEntry;
@@ -111,3 +112,21 @@ extern NanNPCWork* nanNPCWork;
 void nanNPCOption(void);
 void evt_nannpc_set_animtbl_sub(NanNPC* npc, s16* tbl);
 void nannpc_ext_main_sub_fast();
+USER_FUNC(evt_nannpc_flag_onoff);
+USER_FUNC(evt_nannpc_get_position);
+USER_FUNC(evt_nannpc_get_work);
+USER_FUNC(evt_nannpc_init);
+USER_FUNC(evt_nannpc_jump_position);
+USER_FUNC(evt_nannpc_move_position2);
+USER_FUNC(evt_nannpc_ppflag_onoff);
+USER_FUNC(evt_nannpc_set_animtbl);
+USER_FUNC(evt_nannpc_set_color);
+USER_FUNC(evt_nannpc_set_dir);
+USER_FUNC(evt_nannpc_set_func);
+USER_FUNC(evt_nannpc_set_hosei_position);
+USER_FUNC(evt_nannpc_set_position);
+USER_FUNC(evt_nannpc_set_shadow_position);
+USER_FUNC(evt_nannpc_set_size);
+USER_FUNC(evt_nannpc_set_subfunc);
+USER_FUNC(evt_nannpc_set_work);
+USER_FUNC(evt_nannpcwork_flag_onoff);

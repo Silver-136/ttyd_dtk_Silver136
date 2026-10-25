@@ -13,14 +13,8 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_party_pos);
-USER_FUNC(evt_npc_reverse_ry);
 
 EvtWord bero_05_custom_in[30];
 EvtWord bero_05_custom_out[12];

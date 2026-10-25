@@ -11,9 +11,6 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_tornadoswitch_blue);
 
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[9];

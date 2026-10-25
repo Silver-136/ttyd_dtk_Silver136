@@ -3,6 +3,7 @@
 #include "dolphin/types.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_word.h"
+#include "evt/evt_cmd.h"
 
 extern NpcTerritoryInfo btl_tik_setup_no_tbl[];
 extern NpcSetupBattleInfo btlsetup_tik_tbl[];
@@ -45,3 +46,4 @@ extern BattleUnitKind unit_togekuri;
 extern BattleUnitKind unit_togenoko;
 
 extern EvtWord evt_uranai_cap[];
+USER_FUNC(evt_tik_villager_urouro_check_func);

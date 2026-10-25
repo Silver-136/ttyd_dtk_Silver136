@@ -11,6 +11,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
+#include "evt/evt_map.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -19,16 +21,7 @@
 #include "mario/mario_pouch.h"
 
 static USER_FUNC(bgm_start_wait);
-USER_FUNC(evt_img_set_virtual_point);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_pouch_add_item);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_win_item_select);
 static void majin_callback(s32 type);
 

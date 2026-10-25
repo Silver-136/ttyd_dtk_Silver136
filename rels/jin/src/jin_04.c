@@ -12,6 +12,8 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
 
 #include "mario/mario_pouch.h"
 #include "evt/evt_bero.h"
@@ -20,26 +22,10 @@
 #include "evt/evt_npc.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(L_evt_party_dokan);
-USER_FUNC(evt_cam3d_evt_set_npc_rel);
-USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_jin_vivian_pose_set);
 USER_FUNC(evt_kagemario_change);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mobj_jumpstand_red);
 USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_set_pose);
 USER_FUNC(evt_pouch_party_join);
 USER_FUNC(evt_pouch_party_left);
 static USER_FUNC(getYoshiColor);

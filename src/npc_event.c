@@ -22,6 +22,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "dolphin/mtx.h"
+#include "evt/evt_item.h"
 static void piders_draw_yarn_sub(CameraId cameraId, void* param);
 
 double sqrt(double);
@@ -226,41 +227,12 @@ USER_FUNC(piders_get_height) {
 
 
 
-USER_FUNC(evt_fbat_trans_floor_position);
-USER_FUNC(evt_get_target_dir);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_add_dirdist);
-USER_FUNC(evt_npc_blur_onoff);
-USER_FUNC(evt_npc_calc_score);
-USER_FUNC(evt_npc_facedirection_add);
-USER_FUNC(evt_npc_get_btlsetup_work);
-USER_FUNC(evt_npc_get_drop_coin);
-USER_FUNC(evt_npc_get_drop_fixitem);
-USER_FUNC(evt_npc_get_drop_flower);
-USER_FUNC(evt_npc_get_drop_heart);
-USER_FUNC(evt_npc_get_drop_item);
-USER_FUNC(evt_npc_get_kpencount_type);
-USER_FUNC(evt_npc_get_loiter_dir);
-USER_FUNC(evt_npc_get_unitwork);
-USER_FUNC(evt_npc_getback_item_entry);
-USER_FUNC(evt_npc_homing_target);
-USER_FUNC(evt_npc_jump_position);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_return_interrupt);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_attack_mode);
-USER_FUNC(evt_npc_set_btlsetup_work);
 USER_FUNC(evt_npc_set_confuse_anim);
 USER_FUNC(evt_npc_set_damage_anim);
 USER_FUNC(evt_npc_set_run_anim);
 USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_npc_set_talk_anim);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_npc_set_unitwork);
 USER_FUNC(evt_npc_set_walk_anim);
-USER_FUNC(evt_npc_wait_msec);
-USER_FUNC(evt_set_dir_to_home);
 USER_FUNC(piders_draw_yawn);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
@@ -280,7 +252,6 @@ USER_FUNC(chain_main);
 USER_FUNC(kamec_fire_magic_delete);
 USER_FUNC(kamec_fire_magic);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_fbat_trans_floor_position_wide);
 #endif
 
 EvtWord enemy_common_dead_event[156];

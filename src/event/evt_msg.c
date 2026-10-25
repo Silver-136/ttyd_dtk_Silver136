@@ -191,9 +191,7 @@ const char* msg_es_article_tbl[6] = {"un ", "una ", "", "", "unos ", "unas "};
 
 char* strstr(const char* s, const char* sub);
 
-s32 evt_msg_fmt_int(EventEntry* event, BOOL isFirstCall);
 void evtMsgFmtInt(char* buf, s32 count);
-s32 evt_msg_fmt_str(EventEntry* event, BOOL isFirstCall);
 void evtMsgFmtStr(char* buf, const char* name);
 
 // clang-format on

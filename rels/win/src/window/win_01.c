@@ -13,16 +13,8 @@
 #include "evt/evt_party.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mario_balloon_bikkuri);
-USER_FUNC(evt_mario_balloon_off);
-USER_FUNC(evt_mario_clear_party);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_jump_position);
-USER_FUNC(evt_party_flg_onoff);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
 

@@ -9,16 +9,9 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_float_blk);
-USER_FUNC(evt_mobj_get_kindname);
-USER_FUNC(evt_mobj_hitevt_onoff);
-USER_FUNC(evt_mobj_switch_float_blk);
 
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];

@@ -14,6 +14,8 @@
 #include "evt/evt_party.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
+#include "evt/evt_sub.h"
 
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
@@ -45,22 +47,7 @@ double sqrt(double x);
 static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_fade_set_spot_pos);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_get_pose);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_msg_npc);
-USER_FUNC(evt_npc_set_balloontype);
-USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_sub_area_check);
 static USER_FUNC(senkaronAttackStart);
 static USER_FUNC(senkaronFlagOffMesPushing);
 static USER_FUNC(senkaronFlagOnMesPushing);

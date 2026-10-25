@@ -16,6 +16,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/msgdrv.h"
 #include "mario/mario.h"
@@ -24,24 +25,7 @@
 #include "aji.h"
 #include "mario/mario_pouch.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_evt_set_now);
-USER_FUNC(evt_cam3d_road_shift_onoff);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_reverse_ry);
 USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_get_status);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_nokotaro_get_status);
-USER_FUNC(evt_peach_transform_gundan_on);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(evt_win_nameent_name);
 USER_FUNC(evt_win_nameent_off);

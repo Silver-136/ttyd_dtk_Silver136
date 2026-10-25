@@ -15,6 +15,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
 
 #include "manager/evtmgr.h"
 #include "driver/msgdrv.h"
@@ -23,13 +24,7 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_set_link);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_snd_envon_f);
 #ifdef VERSION_G8ME01

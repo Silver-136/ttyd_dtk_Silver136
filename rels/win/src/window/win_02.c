@@ -9,15 +9,9 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_switch_blue);
 
 static BeroEntry bero_entry_data[5];
 EvtWord evt_hikou_nobiru_init[89];

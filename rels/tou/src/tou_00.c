@@ -23,9 +23,6 @@
 #include "driver/effdrv.h"
 #include "evt/evt_npc.h"
 
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_bgmode_on);
-USER_FUNC(evt_npc_reverse_ry);
 USER_FUNC(evt_snd_bgm_freq);
 USER_FUNC(kemuri_move);
 static USER_FUNC(kpa_hikousen_yure);

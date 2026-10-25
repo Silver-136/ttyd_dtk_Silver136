@@ -21,32 +21,6 @@
 
 void togeMakeRetsu(Vec* pos, s32 leader, s32 start, s32 end);
 
-USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mri_puni_win_attack);
-USER_FUNC(evt_mri_puni_win_end);
-USER_FUNC(evt_mri_puni_win_init);
-USER_FUNC(evt_mri_toge_enter_init);
-USER_FUNC(evt_mri_toge_make_retsu);
-USER_FUNC(evt_mri_toge_retsu_stop);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_puni_all_movestop);
-USER_FUNC(evt_puni_attack_on);
-USER_FUNC(evt_puni_flag_onoff);
-USER_FUNC(evt_puni_force_se_off);
-USER_FUNC(evt_puni_get_flag);
-USER_FUNC(evt_puni_get_position);
-USER_FUNC(evt_puni_landon_check);
-USER_FUNC(evt_puni_move_position2);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_mode);
-USER_FUNC(evt_puni_set_position);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_puni_wait_systemmode);
-USER_FUNC(evt_puni_winddisable_onoff);
-USER_FUNC(evt_puni_zenmetsu_check);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
 USER_FUNC(toge_enter_func00);

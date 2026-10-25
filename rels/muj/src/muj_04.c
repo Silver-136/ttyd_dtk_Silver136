@@ -6,6 +6,7 @@
 #include "evt/evt_case.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_mobj.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -22,14 +23,6 @@
 #include "evt/evt_sub.h"
 #include "data_tables.h"
 
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mario_cam_y_on);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_jumpstand_blue);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_sub_area_check);
 USER_FUNC(mario_moveride_check);
 
 static NpcSetupInfo npcEnt[6];

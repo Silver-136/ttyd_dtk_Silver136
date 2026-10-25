@@ -6,6 +6,8 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_item.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -14,9 +16,6 @@
 #include "aji.h"
 
 USER_FUNC(camAtY);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(slit_chk);
 
 static EvtWord s_door_open[22];

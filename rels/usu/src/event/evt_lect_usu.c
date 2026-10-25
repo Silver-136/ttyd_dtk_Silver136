@@ -20,6 +20,7 @@
 #include "evt/evt_lecture.h"
 #include "mot/mot_slit.h"
 #include "mot/mot_roll.h"
+#include "evt/evt_pouch.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -57,27 +58,9 @@ static USER_FUNC(efffukidashichange_cam);
 static USER_FUNC(effitemget_busaiku);
 static USER_FUNC(effitemget_open);
 static USER_FUNC(effitemgetchange_cam);
-USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_cam3d_evt_set_rel_dir);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_eff_softdelete);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_set_enable_key);
-USER_FUNC(evt_mario_set_party_pos);
 USER_FUNC(evt_mario_trigflag_onoff);
-USER_FUNC(evt_msg_print_insert);
 static USER_FUNC(evt_nomal_cange);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_stop_for_one_event);
-USER_FUNC(evt_party_init_camid);
-USER_FUNC(evt_party_set_camid);
-USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_party_vivian_hold);
-USER_FUNC(evt_party_vivian_unhold);
-USER_FUNC(evt_pouch_get_yoshiname);
 USER_FUNC(evt_pouch_party_join);
 static USER_FUNC(evtflash);
 static USER_FUNC(lect_itemget_kesan);

@@ -7,18 +7,14 @@
 #include "evt/evt_case.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
 
 #include "eff/eff_small_star.h"
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
 #include "las.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_floatswitch_red);
-USER_FUNC(evt_mobj_hit_onoff);
-USER_FUNC(evt_mobj_wait_animation_end);
 static USER_FUNC(small_star);
 
 static EvtWord e_door_close[12];

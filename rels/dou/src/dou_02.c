@@ -10,11 +10,9 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mobj_powerupblk);
 
 static BeroEntry bero_entry_data[4];
 static EvtWord yari_trap_sub[119];

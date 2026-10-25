@@ -13,19 +13,9 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_jump_jumpstand);
-USER_FUNC(evt_mobj_jumpstand_red);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_party_get_name_hitobj_ride);
-USER_FUNC(evt_party_jump_pos);
 
 static EvtWord w_close[12];
 static EvtWord w_open[12];

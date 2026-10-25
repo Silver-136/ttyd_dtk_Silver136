@@ -14,16 +14,9 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_party_set_pose);
 
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];

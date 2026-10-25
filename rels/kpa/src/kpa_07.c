@@ -25,11 +25,8 @@
 #endif
 
 
-USER_FUNC(evt_koopa_hip_attack);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_npc_set_tribe);
 static USER_FUNC(get_starstone_pos);
 USER_FUNC(kpa_chg_pose);
 static USER_FUNC(set_starstone_pos);

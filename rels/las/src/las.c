@@ -18,11 +18,6 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(mobj_color_off);
-USER_FUNC(mobj_set_color);
-USER_FUNC(mobj_set_ry);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

@@ -6,7 +6,6 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 
-USER_FUNC(evt_map_set_tevcallback);
 extern s32 hei_test_water_tev[];
 
 static BeroEntry bero_entry_data[3];

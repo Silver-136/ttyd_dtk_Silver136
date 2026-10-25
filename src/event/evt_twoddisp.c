@@ -27,7 +27,6 @@ typedef struct TwodEntry {
 
 TwodEntry* twodPtr;
 s32 twodID;
-USER_FUNC(twoddisp_main);
 
 static void twoddisp_disp(CameraId camera, void* param) {
     char buf[0x100];

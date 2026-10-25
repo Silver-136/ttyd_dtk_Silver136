@@ -27,26 +27,7 @@ void mapSetBlend2(GXColor color);
 void mapGetFog(s32* type, f32* start, f32* end, GXColor* color);
 void mapSetFog(s32 type, f32 start, f32 end, GXColor color);
 
-USER_FUNC(N_evt_mapdisp_onoff);
-USER_FUNC(evt_map_replace_mapobj);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(check2);
 static USER_FUNC(check);
-USER_FUNC(evt_map_get_flush_color);
-USER_FUNC(evt_map_set_flush_color);
-USER_FUNC(evt_map_set_flush_onoff);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_map_set_playrate);
-USER_FUNC(evt_map_pauseanim);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_map_blend_set_mobj_flag);
-USER_FUNC(evt_map_blend_set_flag);
-USER_FUNC(evt_map_fog_onoff);
-USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mapobj_rotate);
 
 USER_FUNC(evt_mapobj_trans) {
     EvtWord* args = event->args;

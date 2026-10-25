@@ -55,3 +55,25 @@ typedef struct ShopWork {
 USER_FUNC(evt_shop_setup);
 
 BOOL evtShopIsActive(void);
+USER_FUNC(add_shop_point);
+USER_FUNC(chk_shop_point);
+USER_FUNC(disp_list);
+USER_FUNC(evt_shop_main_func);
+USER_FUNC(exchange_shop_point);
+USER_FUNC(get_buy_evt);
+USER_FUNC(get_fook_evt);
+USER_FUNC(get_msg);
+USER_FUNC(get_shop_point);
+USER_FUNC(item_data_db_arrange);
+USER_FUNC(item_data_db_restore);
+USER_FUNC(keep_pouchcheck_func);
+USER_FUNC(name_price);
+USER_FUNC(point_disp_onoff);
+USER_FUNC(point_wait);
+USER_FUNC(reset_shop_point);
+USER_FUNC(sell_pouchcheck_func);
+USER_FUNC(set_buy_item_id);
+USER_FUNC(shop_flag_onoff);
+USER_FUNC(shop_point_item);
+USER_FUNC(shopper_name);
+USER_FUNC(unkeep_pouchcheck_func);

@@ -8,7 +8,6 @@
 #include "driver/npcdrv.h"
 #include "evt/evt_map.h"
 
-USER_FUNC(evt_map_set_tevcallback);
 USER_FUNC(tou_gamen_screen_tev_init);
 extern s32 tou_gamen_screen_tev[];
 extern BattleUnitKind unit_jyugem;

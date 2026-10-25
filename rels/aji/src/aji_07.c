@@ -8,6 +8,9 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -15,17 +18,6 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mario_cam_off);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_party_get_dispdir);
-USER_FUNC(evt_party_set_dispdir);
 static USER_FUNC(scale_func);
 
 static EvtWord s_door_open[22];

@@ -21,6 +21,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_johoya.h"
+#include "evt/evt_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -48,8 +49,6 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_msg_fmt_int);
-USER_FUNC(evt_msg_fmt_str);
 #endif
 
 void mapGrpSetColor(const char* name, GXColor color);
@@ -62,42 +61,15 @@ static s32 ssf;
 UranaiWork* uranai_wp;
 char* uranaisi_msgp;
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(card_camid);
-USER_FUNC(evt_door_end_wait);
-USER_FUNC(evt_door_param);
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_cam_off);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mobj_check);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print_add_insert);
-USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_npc_set_offscreen);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_set_tribe);
 static USER_FUNC(evt_osreport);
-USER_FUNC(evt_party_set_dispdir);
 USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_add_item);
 USER_FUNC(evt_pouch_add_starpiece);
 USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(evt_pouch_get_starpiece);
 USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(evt_snd_envon_f);
-USER_FUNC(evt_sub_get_language);
 USER_FUNC(evt_uranaisi_msg_alloc);
 USER_FUNC(evt_uranaisi_msg_free);
 USER_FUNC(evt_uranaisi_msg_set);
@@ -105,12 +77,6 @@ USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);
 USER_FUNC(evt_win_coin_wait);
 USER_FUNC(evt_win_other_select);
-USER_FUNC(johoya_keti_newjoho_check);
-USER_FUNC(johoya_keti_newjoho_makelabel);
-USER_FUNC(johoya_keti_newjoho_setreadflag);
-USER_FUNC(johoya_keti_oldspeak_check);
-USER_FUNC(johoya_keti_oldspeak_makelabel);
-USER_FUNC(johoya_keti_oldspeak_setreadflag);
 static USER_FUNC(scale_func);
 static USER_FUNC(setmertn);
 static USER_FUNC(ss_set);

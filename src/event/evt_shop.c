@@ -33,9 +33,8 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_sub.h"
 #include "win/win_main.h"
+#include "evt/evt_pouch.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_msg_fmt_int);
-USER_FUNC(evt_msg_fmt_str);
 #endif
 
 #define SHOP_PTS(p) ((p)->mShopPoints)
@@ -55,46 +54,15 @@ void help_disp(WinMgrEntry* entry);
 void help_main(WinMgrEntry* entry);
 void name_disp(WinMgrEntry* entry);
 
-USER_FUNC(N_evt_pouch_remove_item_index);
-USER_FUNC(add_shop_point);
-USER_FUNC(chk_shop_point);
-USER_FUNC(disp_list);
 USER_FUNC(disp_off);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_msg_print_add_insert);
-USER_FUNC(evt_msg_print_insert);
 USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_add_item);
-USER_FUNC(evt_pouch_add_keepitem);
 USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_pouch_remove_keepitem);
-USER_FUNC(evt_shop_main_func);
-USER_FUNC(evt_sub_get_language);
-USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);
 USER_FUNC(evt_win_coin_wait);
 USER_FUNC(evt_win_item_select);
-USER_FUNC(exchange_shop_point);
-USER_FUNC(get_buy_evt);
-USER_FUNC(get_fook_evt);
-USER_FUNC(get_msg);
 USER_FUNC(get_ptr);
-USER_FUNC(get_shop_point);
 USER_FUNC(get_value);
-USER_FUNC(item_data_db_arrange);
-USER_FUNC(item_data_db_restore);
-USER_FUNC(keep_pouchcheck_func);
-USER_FUNC(name_price);
-USER_FUNC(point_disp_onoff);
-USER_FUNC(point_wait);
-USER_FUNC(reset_shop_point);
-USER_FUNC(sell_pouchcheck_func);
-USER_FUNC(set_buy_item_id);
-USER_FUNC(shop_flag_onoff);
-USER_FUNC(shop_point_item);
-USER_FUNC(shopper_name);
-USER_FUNC(unkeep_pouchcheck_func);
 
 static const GXColor shop_name_color = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor shop_price_color = {0xFF, 0xFF, 0xFF, 0xFF};

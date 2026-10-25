@@ -8,6 +8,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
 
 #include "driver/camdrv.h"
 #include "mario/mariost.h"
@@ -22,11 +23,6 @@
 #include "data_tables.h"
 
 USER_FUNC(camera_action);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mario_bgmode_on);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_check);
 
 EvtWord clouda_house_in[12];
 EvtWord clouda_house_out[19];

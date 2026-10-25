@@ -13,9 +13,6 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_scale);
 USER_FUNC(hi_onoff);
 USER_FUNC(mugen_kairou_get_list);
 

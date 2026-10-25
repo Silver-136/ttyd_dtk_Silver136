@@ -4,6 +4,7 @@
 #include "dolphin/mtx.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_word.h"
+#include "evt/evt_cmd.h"
 
 extern EvtWord all_juyoitem_lecture_rel[];
 extern EvtWord all_party_lecture[];
@@ -38,3 +39,10 @@ extern const char* irai_msg_kakunin[];
 extern s32 special_cook_list[];
 extern Vec suifu100kaidanDOWN[];
 extern Vec suifu100kaidanUP[];
+USER_FUNC(evt_goki_sub_intpl_get_value);
+USER_FUNC(evt_goki_sub_intpl_init);
+USER_FUNC(evt_gor_inemuri_snd_off);
+USER_FUNC(evt_gor_inemuri_snd_set);
+USER_FUNC(evt_gor_msg_cat_alloc);
+USER_FUNC(evt_gor_msg_cat_free);
+USER_FUNC(evt_gor_villager_urouro_check_func);

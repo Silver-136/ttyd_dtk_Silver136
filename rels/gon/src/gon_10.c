@@ -6,7 +6,6 @@
 #include "evt/evt_npc.h"
 #include "party/party_motion.h"
 
-USER_FUNC(evt_mapobj_rotate);
 
 static EvtWord door02_close[22];
 static EvtWord door02_open[22];

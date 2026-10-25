@@ -11,6 +11,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_pouch.h"
 
 #include "memory.h"
 #include "cam_road.h"
@@ -27,20 +28,6 @@ static u8* _ap;
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 USER_FUNC(cam_displacement);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_mov_spd);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_win_item_select);
 static void alpha_tev(MapTevCallbackInfo* info);
 

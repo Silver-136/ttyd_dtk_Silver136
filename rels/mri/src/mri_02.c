@@ -14,6 +14,7 @@
 #include "evt/evt_case.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
 #include "pmario_sound.h"
 #include "manager/evtmgr_cmd.h"
@@ -25,18 +26,6 @@
 typedef struct Mri02Switch { f32 base; f32 weight; f32 target; f32 pos; } Mri02Switch;
 Mri02Switch mri02switch;
 
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_puni_dokan_onoff);
-USER_FUNC(evt_puni_get_flag);
-USER_FUNC(evt_puni_get_position);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_target_flag_onoff);
-USER_FUNC(evt_target_set_position);
 USER_FUNC(getSwitch);
 USER_FUNC(moveSwitch);
 USER_FUNC(setPuniWeight);

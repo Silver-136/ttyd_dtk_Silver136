@@ -30,16 +30,7 @@ static MonitorWork* monitor_wp;
 void mapObjGetPos(const char* name, Vec* pos);
 void monitor_cap_capture(CameraId cameraId, void* param);
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_fade_tec_onoff);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_majo_disp_on);
 USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_peach_set_condition);
-USER_FUNC(evt_peach_transform_gundan_on);
 USER_FUNC(evt_shuryolight_init);
 USER_FUNC(evt_shuryolight_run_evt);
 USER_FUNC(evt_snd_sfx_dist);

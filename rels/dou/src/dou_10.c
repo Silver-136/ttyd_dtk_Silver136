@@ -11,6 +11,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "mot/mot_ship.h"
+#include "dou.h"
+#include "evt/evt_mobj.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -27,13 +29,7 @@ typedef struct EntryMgrEntry { s32 used; s32 id; f32 reg[3]; } EntryMgrEntry;
 typedef struct EntryMgr { s32 count; EntryMgrEntry* entries; } EntryMgr;
 
 USER_FUNC(dou_namiatari_check);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_dou_normal_puka);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mobj_powerupblk);
 USER_FUNC(evt_sub_entrymgr_check);
 USER_FUNC(evt_sub_entrymgr_delete);
 USER_FUNC(evt_sub_entrymgr_entry);

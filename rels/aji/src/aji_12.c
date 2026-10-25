@@ -8,6 +8,7 @@
 #include "evt/evt_mobj.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
 #include "mario/mario.h"
 #include "pmario_sound.h"
@@ -21,10 +22,6 @@
 #include "manager/evtmgr_cmd.h"
 
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_wait_animation_end);
 static USER_FUNC(hikaru_off);
 static USER_FUNC(mario_chk);
 static USER_FUNC(thunder_main);

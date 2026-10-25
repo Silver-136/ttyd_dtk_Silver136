@@ -15,15 +15,9 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "dou.h"
+#include "evt/evt_pouch.h"
 
-USER_FUNC(evt_dou_normal_puka);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_map_pauseanim);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_win_item_select);
 
 EvtWord dou_03_custom[10];

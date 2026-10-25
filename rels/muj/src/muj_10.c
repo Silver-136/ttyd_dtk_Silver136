@@ -27,25 +27,9 @@
 #include "driver/hitdrv.h"
 #include "data_tables.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_bero_mario_go);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_motion);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_nannpc_entry);
-USER_FUNC(evt_nannpc_init);
-USER_FUNC(evt_nannpc_ppflag_onoff);
-USER_FUNC(evt_nannpc_set_animtbl);
-USER_FUNC(evt_nannpc_set_color);
-USER_FUNC(evt_nannpc_set_dir);
-USER_FUNC(evt_nannpc_set_func);
-USER_FUNC(evt_nannpc_set_position);
-USER_FUNC(evt_nannpc_set_subfunc);
-USER_FUNC(evt_nannpcwork_flag_onoff);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_jump_pos);
 USER_FUNC(suifu_option_func);
 USER_FUNC(suifu_option_init_func);
 #ifdef VERSION_G8ME01

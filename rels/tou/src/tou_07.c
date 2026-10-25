@@ -30,27 +30,9 @@
 #include "tou.h"
 #include "evt/evt_npc.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_fade_set_spot_pos);
-USER_FUNC(evt_hitobj_name_callback);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_balloon_bikkuri);
-USER_FUNC(evt_mario_balloon_off);
 USER_FUNC(evt_mario_flag_onoff);
-USER_FUNC(evt_mario_get_exparty);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_party_pos);
-USER_FUNC(evt_mobj_wait_animation_end);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(mario_recovery);
 static USER_FUNC(paper_off);

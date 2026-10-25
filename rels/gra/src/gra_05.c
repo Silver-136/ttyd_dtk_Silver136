@@ -12,30 +12,17 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(camera_curve_off);
 USER_FUNC(camera_curve_on);
-USER_FUNC(evt_cam3d_evt_set_now);
-USER_FUNC(evt_cam_shift_reset);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_cloud_set_cap_size);
-USER_FUNC(evt_hit_get_position);
 USER_FUNC(evt_iwamove_ent);
 USER_FUNC(evt_iwamove_init);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_bgmode_off);
-USER_FUNC(evt_mario_bgmode_on);
-USER_FUNC(evt_mario_cam_y_on);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_prev_party);
-USER_FUNC(evt_mobj_breaking_floor);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_party_force_reset_outofscreen);
-USER_FUNC(evt_party_jump_pos);
 
 EvtWord gra_05_in_01[5];
 EvtWord gra_05_out_01[149];

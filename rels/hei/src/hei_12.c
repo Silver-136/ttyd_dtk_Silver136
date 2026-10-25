@@ -5,21 +5,13 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_bero.h"
 #include "npc_event.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_set_tevcallback);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_wait_movable);
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_check_escape_battle);
-USER_FUNC(evt_npc_get_battle_result);
-USER_FUNC(evt_npc_jump_position);
-USER_FUNC(evt_npc_restart_regular_event);
 static USER_FUNC(npc_dead);
 static USER_FUNC(npc_set_me);
 extern s32 hei_test_water_tev[];

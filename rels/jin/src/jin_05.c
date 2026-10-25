@@ -8,12 +8,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_wait_animation_end);
 
 static EvtWord check_roll[16];
 static BeroEntry bero_entry_data[2];

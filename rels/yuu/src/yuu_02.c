@@ -48,16 +48,8 @@ static BOOL get_monte_check(Vec* a, Vec* b);
 void yuu_02_icon_monte_disp(CameraId camera, void* param);
 
 USER_FUNC(eff_call_minigame);
-USER_FUNC(evt_cam_get_pos);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_fade_in);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_cam_y_on);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_prev_party_pos);
-USER_FUNC(evt_moving_floor_delete);
 USER_FUNC(evt_yuucounter_alloc);
 USER_FUNC(evt_yuucounter_free);
 USER_FUNC(evt_yuuminigame_alloc);
@@ -73,10 +65,6 @@ USER_FUNC(yuu_atai_init);
 USER_FUNC(yuu_atai_pop);
 USER_FUNC(yuu_atai_push);
 USER_FUNC(yuu_roll_reset);
-USER_FUNC(yuugijou_add_montemedal);
-USER_FUNC(yuugijou_get_montemedal);
-USER_FUNC(yuugijou_montemedal_disp_onoff);
-USER_FUNC(yuugijou_montemedal_wait);
 USER_FUNC(yuuminigame3_opening_chk);
 USER_FUNC(yuuminigame3_opening_on_off);
 USER_FUNC(yuuminigame3_roll_fix_off);
@@ -827,7 +815,6 @@ EVT_BEGIN(s_en1_turn)
 EVT_END()
 
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_sub_get_language);
 EVT_BEGIN(yuu_02_init_evt)
     CALL(evt_map_playanim, STRING("den1"), 1, 0)
     CALL(evt_map_playanim, STRING("den2"), 1, 0)

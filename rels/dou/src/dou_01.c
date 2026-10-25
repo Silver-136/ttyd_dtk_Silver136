@@ -7,9 +7,8 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_jumpstand_blue);
 
 static BeroEntry bero_entry_data[3];
 static EvtWord korutesu_event[74];

@@ -28,12 +28,7 @@
 #include "system.h"
 #include "evt/evt_bero.h"
 
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_set_link);
 USER_FUNC(mario_set_dir);
 static void callback(s32 type, void** work);
 

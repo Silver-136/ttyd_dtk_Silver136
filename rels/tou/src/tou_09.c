@@ -11,14 +11,9 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_sub_get_dist);
 
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];

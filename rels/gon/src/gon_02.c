@@ -5,9 +5,8 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_badgeblk);
 
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];

@@ -23,20 +23,7 @@
 #include "data_tables.h"
 
 
-USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_off);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_set_force_regl_anim);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_sub_get_coin);
 USER_FUNC(item_check_necklace_exist);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);

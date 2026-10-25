@@ -14,7 +14,6 @@ static void callback(MapTevCallbackInfo* info);
 static s32 color_change_evt(s32 on);
 
 static USER_FUNC(check);
-USER_FUNC(evt_mario_clear_party);
 static USER_FUNC(test);
 USER_FUNC(evt_kagemario_change);
 USER_FUNC(evt_kagemario_init);

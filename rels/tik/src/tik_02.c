@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_mobj.h"
 
 #include "evt/evt_npc.h"
 #include "party.h"
@@ -32,15 +33,6 @@
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_hosei_xyz);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_npc_set_balloontype);
 USER_FUNC(geso_set_checkpose);
 USER_FUNC(hokori_color_func);
 USER_FUNC(mario_hosei_all);

@@ -16,11 +16,6 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_fog_onoff);
-USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_peach_set_condition);
 USER_FUNC(evt_snd_sfx_dist);
 USER_FUNC(peach_chk_aftershower);
 USER_FUNC(peach_set_pos);

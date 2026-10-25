@@ -14,28 +14,11 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_pouch.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_float_blk);
-USER_FUNC(evt_mobj_get_kindname);
-USER_FUNC(evt_mobj_hitevt_onoff);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mobj_switch_float_blk);
-USER_FUNC(evt_party_outofscreen);
-USER_FUNC(evt_party_wait_landon);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_sub_save_playtime);
 USER_FUNC(evt_win_item_select);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_npc_set_ry_lr);
 #endif
 
 static EvtWord door01_close[12];

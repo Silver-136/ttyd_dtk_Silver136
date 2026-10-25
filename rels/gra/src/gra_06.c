@@ -15,16 +15,9 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_item_entry);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_set_pose);
 #ifdef VERSION_G8ME01
 USER_FUNC(evt_mario_dispflag_onoff);
 #endif

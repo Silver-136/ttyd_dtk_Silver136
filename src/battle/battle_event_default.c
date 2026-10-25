@@ -18,6 +18,7 @@
 #include "battle/battle_message.h"
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
+#include "evt/evt_audience.h"
 
 
 s32 BattleDamageDirect(s32 attackerId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage,
@@ -44,7 +45,6 @@ USER_FUNC(btlevtcmd_WaitAttackEndCheck);
 USER_FUNC(btlevtcmd_audience_code_escape);
 USER_FUNC(btlevtcmd_audience_code_escape_fail);
 USER_FUNC(btlevtcmd_audience_code_escape_success);
-USER_FUNC(evt_audience_sound_cheer);
 
 EvtWord btldefaultevt_Damage[1133];
 EvtWord btldefaultevt_ChangeParty[174];

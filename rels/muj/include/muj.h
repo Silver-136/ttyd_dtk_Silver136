@@ -36,3 +36,7 @@ extern BattleUnitKind unit_poison_pakkun;
 
 extern EvtWord korutesu_appear_event[];
 extern TreeAccess tree_tbl_treeb_evt[];
+USER_FUNC(muj_mario_pos_osreport_func);
+USER_FUNC(muj_npc_buruburu);
+USER_FUNC(muj_npc_fuwafuwa);
+USER_FUNC(muj_ship_puka_func);

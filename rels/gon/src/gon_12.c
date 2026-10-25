@@ -19,17 +19,7 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_bero_mario_go_init);
-USER_FUNC(evt_bero_mario_go_wait);
 static USER_FUNC(evt_chuchu_back_loop);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_npc_reverse_ry);
 
 static EvtWord door_close[12];
 static EvtWord door_open[12];

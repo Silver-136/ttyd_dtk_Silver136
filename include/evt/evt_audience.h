@@ -36,3 +36,5 @@ USER_FUNC(evt_audience_abnormal_natural_all);
 
 USER_FUNC(evt_audience_acrobat_notry);
 USER_FUNC(evt_audience_num_updown_in_event);
+USER_FUNC(evt_audience_joy_ending);
+USER_FUNC(evt_audience_sound_cheer);

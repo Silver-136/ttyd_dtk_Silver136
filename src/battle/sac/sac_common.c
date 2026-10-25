@@ -9,8 +9,8 @@
 #include "system.h"
 #include "battle/battle_camera.h"
 #include "evt/evt_eff.h"
+#include "evt/evt_audience.h"
 
-USER_FUNC(evt_audience_sound_cheer);
 
 s32 BattleAudienceSoundCheck(s32 id);
 

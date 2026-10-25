@@ -8,9 +8,8 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
 
-USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_fade_in);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_snd_envoff_f);
 

@@ -12,14 +12,9 @@
 #include "evt/evt_paper.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mobj_wait_animation_end);
 
 static EvtWord w_door_close[12];
 static EvtWord w_door_open[12];

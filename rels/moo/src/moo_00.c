@@ -17,6 +17,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_item.h"
 
 #include "party.h"
 #include "mario/mario.h"
@@ -24,18 +25,7 @@
 #include "evt/evt_bero.h"
 
 
-USER_FUNC(L_evt_party_vivian_tail);
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_sub_spline_get_value);
-USER_FUNC(evt_sub_spline_init);
 static USER_FUNC(mario_kirimomi);
 USER_FUNC(mario_reset);
 USER_FUNC(party_kirimomi);

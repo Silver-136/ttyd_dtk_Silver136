@@ -15,9 +15,6 @@
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_switch_float_blk);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

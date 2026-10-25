@@ -25,6 +25,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_telop.h"
 #include "mot/mot_ship.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
@@ -67,7 +68,6 @@ void gundan1000tai_seq00(NanNPC* npc);
 
 USER_FUNC(L_evt_pouch_get_hp);
 USER_FUNC(L_evt_pouch_set_hp);
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 static USER_FUNC(cam_kaiten_get_para);
@@ -75,60 +75,14 @@ static USER_FUNC(cam_kaiten_init);
 static USER_FUNC(cam_kaiten_set_direct);
 static USER_FUNC(cam_kaiten_set_para);
 static USER_FUNC(delete_itemsel_table);
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_img_set_virtual_point);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_move_3d_position);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_koopa_fire);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_map_set_playrate);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_balloon_bikkuri);
-USER_FUNC(evt_mario_balloon_off);
-USER_FUNC(evt_mario_chk_join_party);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_flag_onoff);
-USER_FUNC(evt_mario_get_motion);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mario_set_hosei_xyz);
-USER_FUNC(evt_mario_set_party_pos);
-USER_FUNC(evt_mario_set_reardir);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_msg_togelr);
 USER_FUNC(evt_nannpc_entry);
-USER_FUNC(evt_nannpc_flag_onoff);
-USER_FUNC(evt_nannpc_get_work);
-USER_FUNC(evt_nannpc_init);
-USER_FUNC(evt_nannpc_set_animtbl);
-USER_FUNC(evt_nannpc_set_func);
-USER_FUNC(evt_nannpc_set_size);
-USER_FUNC(evt_nannpc_set_subfunc);
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_flg_onoff);
-USER_FUNC(evt_party_force_reset_outofscreen);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_set_hosei_xyz);
 USER_FUNC(evt_pouch_add_coin);
 USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_sub_get_coin);
 USER_FUNC(evt_unitwin_alloc);
 USER_FUNC(evt_unitwin_free);
 USER_FUNC(evt_win_item_select);

@@ -4,9 +4,8 @@
 #include "evt/evt_map.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_rotate);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

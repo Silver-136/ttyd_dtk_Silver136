@@ -48,16 +48,12 @@ void demo_book(CameraId cameraId, void* param);
 void demo_desk(CameraId cameraId, void* param);
 void demo_window(CameraId cameraId, void* param);
 
-USER_FUNC(N_evt_img_set_z);
 USER_FUNC(adjust);
 USER_FUNC(book_r);
 USER_FUNC(demo_scale);
 USER_FUNC(demo_winonoff);
 USER_FUNC(eff_cam);
 USER_FUNC(eff_cam1);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_tribe);
 USER_FUNC(evt_snd_sfxon_);
 USER_FUNC(make_msg);
 static USER_FUNC(next);

@@ -12,7 +12,6 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 
-USER_FUNC(evt_mario_get_pos);
 
 static BeroEntry bero_data[3];
 static EvtWord evt_dakuto[44];

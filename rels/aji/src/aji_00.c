@@ -17,7 +17,6 @@
 #include "evt/evt_telop.h"
 
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

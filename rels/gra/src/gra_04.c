@@ -11,21 +11,12 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "mot/mot_roll.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_cam3d_evt_set_now);
-USER_FUNC(evt_cam_shift_reset);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_cloud_set_cap_size);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_bgmode_off);
-USER_FUNC(evt_mario_bgmode_on);
-USER_FUNC(evt_mario_cam_y_on);
-USER_FUNC(evt_mario_get_exparty);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_prev_party_pos);
-USER_FUNC(evt_mobj_badgeblk);
 USER_FUNC(roll_release_check);
 
 static EvtWord in_evt[5];

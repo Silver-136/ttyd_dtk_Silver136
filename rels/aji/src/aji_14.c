@@ -10,6 +10,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -18,12 +19,6 @@
 #include "aji.h"
 #include "evt/evt_npc.h"
 
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_wait_anim);
 USER_FUNC(waku);
 
 static EvtWord w_door_close[22];

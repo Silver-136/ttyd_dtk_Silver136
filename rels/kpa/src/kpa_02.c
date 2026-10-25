@@ -7,11 +7,8 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_seq.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_koopa_chk_dead);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(kpa_status_init);
 
 EvtWord kpa_act_stg1_mobj[151];
 EvtWord kpa_act_stg1_item[31];

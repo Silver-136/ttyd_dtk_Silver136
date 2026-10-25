@@ -10,6 +10,8 @@
 #include "evt/evt_case.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
 
 #include "driver/hitdrv.h"
 #include "driver/camdrv.h"
@@ -38,13 +40,8 @@ static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
 static void _img_alloc_capture(EvtWord a0, EvtWord a1, EvtWord a2, EvtWord a3, EvtWord a4, EvtWord a5, EvtWord a6, EvtWord a7);
 
 static USER_FUNC(evt_cloud_main);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_las_cloud_ent);
 USER_FUNC(evt_las_cloud_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_hit_onoff);
-USER_FUNC(evt_mobj_wait_animation_end);
 static void _mapclsofs_all(CloudWork* wp);
 static void _mapsetofs_all(CloudWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);

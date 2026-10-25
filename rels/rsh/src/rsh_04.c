@@ -11,6 +11,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "win/win_main.h"
+#include "evt/evt_pouch.h"
 
 #include "mario/mario.h"
 #include "driver/npcdrv.h"
@@ -22,21 +23,9 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_wait_movable);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(mario_flag);
-USER_FUNC(evt_party_trigflg_onoff);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_get_dispdir);
 #endif
 
 static BeroEntry bero_data_a[3];

@@ -18,17 +18,6 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(evt_cam3d_evt_set_at);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_pauseanim);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_sub_countdown_get_status);
-USER_FUNC(evt_sub_countdown_start);
 
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];

@@ -22,11 +22,6 @@
 
 static s32 lock;
 
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_wait_animation_end);
 USER_FUNC(sw_entry);
 s32 sw_main(MapObjectEntry* mobj);
 void sw_reset(void);

@@ -22,12 +22,7 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(muj_mario_pos_osreport_func);
-USER_FUNC(muj_ship_puka_func);
 static USER_FUNC(tornade_alpha_func);
-USER_FUNC(muj_npc_buruburu);
-USER_FUNC(muj_npc_fuwafuwa);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

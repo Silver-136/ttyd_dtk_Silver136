@@ -15,6 +15,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -30,28 +31,9 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(anim_tevcallback);
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_set_tevcallback);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_party_pos);
-USER_FUNC(evt_mario_sleep_off);
-USER_FUNC(evt_mario_sleep_on);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(starstone_entry);
@@ -60,7 +42,6 @@ static USER_FUNC(starstone_set_ry);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_party_move_behind_mario);
 #endif
 static USER_FUNC(yami_view);
 void iri_08_msg(s32 type, void** work);

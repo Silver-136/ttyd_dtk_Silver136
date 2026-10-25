@@ -3,6 +3,7 @@
 #include "dolphin/types.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_word.h"
+#include "evt/evt_cmd.h"
 
 extern NpcTerritoryInfo btl_jin_setup_no_tbl[];
 extern NpcSetupBattleInfo btlsetup_jin_tbl[];
@@ -25,3 +26,4 @@ extern BattleUnitKind unit_boss_rampell;
 extern BattleUnitKind unit_met;
 extern BattleUnitKind unit_teresa;
 extern BattleUnitKind unit_togemet;
+USER_FUNC(evt_jin_vivian_pose_set);

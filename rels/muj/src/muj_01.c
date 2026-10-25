@@ -14,6 +14,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_pouch.h"
+#include "muj.h"
 
 #include "driver/effdrv.h"
 #include "manager/evtmgr_cmd.h"
@@ -42,37 +44,12 @@ static s32* itemsel_table_ram;
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
 static USER_FUNC(delete_itemsel_table);
-USER_FUNC(door_dark_flag);
-USER_FUNC(evt_cam3d_evt_set_xyz);
-USER_FUNC(evt_cam3d_evt_xyz_off);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_door_param);
-USER_FUNC(evt_door_save_mapflag);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mario_chk_join_party);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
 USER_FUNC(evt_mario_get_reqdir);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_hello_exparty_pos);
-USER_FUNC(evt_mario_party_door_move);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_party_pos);
-USER_FUNC(evt_msg_togelr);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_release_fieldnpc);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_move_behind_mario);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(make_itemsel_table);
 USER_FUNC(muj_get_door_check);
-USER_FUNC(muj_npc_buruburu);
 USER_FUNC(sekai_yami_omise);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);

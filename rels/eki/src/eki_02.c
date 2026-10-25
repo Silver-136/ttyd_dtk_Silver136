@@ -4,6 +4,7 @@
 #include "libc_decls.h"
 #include "evt/evt_map.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -12,8 +13,6 @@
 #include "dolphin/mtx.h"
 #include "evt/evt_bero.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(hit_move);
 
 static EvtWord s_close[12];

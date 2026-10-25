@@ -9,15 +9,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_important_item);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_puni_puninum_onoff);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_yuka);
 
 static BeroEntry bero_entry_data[2];
 static EvtWord item_evt[68];

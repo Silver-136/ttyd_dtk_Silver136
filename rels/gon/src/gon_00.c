@@ -6,8 +6,6 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_mobj_jumpstand_blue);
 
 static BeroEntry bero_entry_data[4];
 static BeroEntry e3_bero[2];

@@ -19,19 +19,7 @@
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_motion);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_jumpstand_blue);
-USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_mobj_wait_animation_end);
 
 static BeroEntry bero_entry_data[5];
 static EvtWord puni_walk_se[20];

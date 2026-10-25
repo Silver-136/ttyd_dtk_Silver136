@@ -16,6 +16,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -46,52 +47,7 @@ USER_FUNC(akari_charge_entry);
 USER_FUNC(bossrobot);
 USER_FUNC(elder_talk_sub_fadeoff);
 USER_FUNC(elder_talk_sub_punicheck);
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_fade_in);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_flag_off);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_move_3d_position);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_clear_party);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_sleep_off);
-USER_FUNC(evt_mario_sleep_on);
-USER_FUNC(evt_npc_release_fieldnpc);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_flg_onoff);
-USER_FUNC(evt_party_sleep_off);
-USER_FUNC(evt_party_sleep_on);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_puni_all_movestop);
-USER_FUNC(evt_puni_flag_onoff);
-USER_FUNC(evt_puni_get_flag);
-USER_FUNC(evt_puni_get_lsw_index);
-USER_FUNC(evt_puni_get_position);
-USER_FUNC(evt_puni_get_trap_index);
-USER_FUNC(evt_puni_init_puni);
-USER_FUNC(evt_puni_jump_position);
-USER_FUNC(evt_puni_korokoro);
-USER_FUNC(evt_puni_move_position2);
-USER_FUNC(evt_puni_pera_onoff);
-USER_FUNC(evt_puni_puninum_onoff);
-USER_FUNC(evt_puni_set_anim);
-USER_FUNC(evt_puni_set_dir);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_lsw_index);
-USER_FUNC(evt_puni_set_mode);
-USER_FUNC(evt_puni_set_position);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_puni_wait_systemmode);
-USER_FUNC(evt_sub_get_coin);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(kpa_chg_pose);
 static USER_FUNC(evtflash);

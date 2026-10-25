@@ -32,28 +32,10 @@
 typedef struct SharinData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat speed; } SharinData;
 typedef struct ClankData { const char* name; s32 field_0x4; s32 field_0x8; EvtFloat x; EvtFloat y; } ClankData;
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_balloon_bikkuri);
-USER_FUNC(evt_mario_balloon_off);
-USER_FUNC(evt_mario_bgmode_on);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_sub_get_dist);
-USER_FUNC(evt_sub_get_mapname);
 #ifdef VERSION_G8ME01
-USER_FUNC(N_evt_sub_status_gauge_force_update);
 #endif
 static USER_FUNC(ramp_r);
 static USER_FUNC(kpa_hikousen_yure);

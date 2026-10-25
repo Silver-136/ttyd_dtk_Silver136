@@ -3,6 +3,7 @@
 #include "dolphin/types.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_word.h"
+#include "evt/evt_cmd.h"
 
 extern NpcTerritoryInfo btl_rsh_setup_no_tbl[];
 extern NpcSetupBattleInfo btlsetup_rsh_tbl[];
@@ -53,3 +54,9 @@ extern EvtWord rsh_07_a_init_evt[];
 extern EvtWord rsh_07_b_init_evt[];
 extern EvtWord rsh_07_c_init_evt[];
 extern EvtWord rsh_08_a_init_evt[];
+USER_FUNC(debug_print_func);
+USER_FUNC(evt_rsh_get_rnd_npc);
+USER_FUNC(evt_rsh_get_rnd_npc_data);
+USER_FUNC(evt_rsh_get_rnd_npc_talk_evt);
+USER_FUNC(evt_rsh_set_rnd_npc);
+USER_FUNC(evt_rsh_set_rnd_npc_talk_evt);

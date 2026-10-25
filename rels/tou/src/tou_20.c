@@ -11,11 +11,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_sub_spline_get_value);
-USER_FUNC(evt_sub_spline_init);
 
 static EvtWord evt_tou_balloon[85];
 EvtWord evt_anim[66];

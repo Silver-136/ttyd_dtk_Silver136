@@ -45,11 +45,6 @@ static Vec daiv;
 
 static USER_FUNC(dai_moveti_get);
 static USER_FUNC(dai_moveti_set);
-USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_enable_key);
 USER_FUNC(evt_mario_trigflag_onoff);
 static USER_FUNC(evtflash);
 static USER_FUNC(lect_map_cam_chg);

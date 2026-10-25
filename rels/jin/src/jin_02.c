@@ -9,10 +9,10 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mobj.h"
 
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_switch_red);
 
 static EvtWord n2_close[12];
 static EvtWord n2_open[12];

@@ -11,17 +11,6 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_important_item);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_item_set_bound_rate);
-USER_FUNC(evt_item_set_gravity);
-USER_FUNC(evt_item_set_jump_power);
-USER_FUNC(evt_item_set_move_dir_speed);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_wait_animation_end);
 #ifdef VERSION_G8ME01
 #endif
 

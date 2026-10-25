@@ -11,12 +11,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_party_set_breed_pose);
 
 static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];

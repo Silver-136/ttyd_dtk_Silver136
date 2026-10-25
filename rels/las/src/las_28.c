@@ -30,25 +30,8 @@
 
 static char name[8];
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(eff_guruguru);
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_check_landon);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_npc_kamek_kemuri2);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_npc_wait_anim);
-USER_FUNC(evt_party_get_dispdir);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_set_breed_pose);
-USER_FUNC(evt_party_set_dispdir);
-USER_FUNC(evt_party_set_homing_dist);
-USER_FUNC(evt_party_set_pose);
 USER_FUNC(evt_shuryolight_init);
 USER_FUNC(evt_shuryolight_run_evt);
 USER_FUNC(evt_shuryolight_run_head_evt);

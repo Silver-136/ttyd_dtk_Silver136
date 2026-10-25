@@ -19,6 +19,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
+#include "evt/evt_pouch.h"
 
 #include "mario/mario.h"
 #include "driver/animdrv.h"
@@ -37,7 +38,6 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mario_get_motion);
 #endif
 
 extern ItemData itemDataTable[];
@@ -48,51 +48,10 @@ USER_FUNC(box_r);
 USER_FUNC(check_tabemono);
 USER_FUNC(chk_fuki);
 USER_FUNC(delete_item_list);
-USER_FUNC(door_dark_flag);
-USER_FUNC(evt_cam3d_evt_set_xyz);
-USER_FUNC(evt_cam3d_evt_xyz_off);
-USER_FUNC(evt_cam_get_pos);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_door_load_mapflag);
-USER_FUNC(evt_door_param);
-USER_FUNC(evt_img_set_virtual_point);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_set_position);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_balloon_off);
-USER_FUNC(evt_mario_balloon_tenten);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_party_door_move);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_wait_movable);
-USER_FUNC(evt_mario_wait_rideon);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_get_status);
-USER_FUNC(evt_party_move_behind_mario);
-USER_FUNC(evt_party_set_homing_dist);
-USER_FUNC(evt_party_yoshi_ride);
-USER_FUNC(evt_pouch_add_item);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_sub_get_dist);
-USER_FUNC(evt_sub_save_playtime);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(get_item_list);
 USER_FUNC(ie2_npc_disp_off);

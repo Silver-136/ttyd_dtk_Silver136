@@ -12,6 +12,8 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "system.h"
@@ -56,38 +58,10 @@ static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 
 USER_FUNC(chk_mario_ctrloff);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_set_bound_limit);
-USER_FUNC(evt_item_set_bound_rate);
-USER_FUNC(evt_item_set_gravity);
-USER_FUNC(evt_item_set_jump_power);
-USER_FUNC(evt_item_set_move_dir_speed);
 USER_FUNC(evt_key_get_button);
 USER_FUNC(evt_key_get_dir);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_cam_off);
-USER_FUNC(evt_mario_cam_on);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_get_pose);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mario_set_motion);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_set_balloontype);
 USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_party_get_status);
-USER_FUNC(evt_party_set_dispdir);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_sub_get_dist);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(get_mario_y_pos);
 USER_FUNC(get_party_y_pos);

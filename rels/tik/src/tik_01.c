@@ -19,15 +19,6 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_wait_animation_end);
 USER_FUNC(evt_npc_set_damage_anim);
 USER_FUNC(evt_npc_set_run_anim);
 USER_FUNC(evt_pouch_get_equipbadgecnt);

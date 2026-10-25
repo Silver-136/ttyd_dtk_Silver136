@@ -9,6 +9,9 @@
 #include "evt/evt_party.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -33,17 +36,7 @@ void FontDrawString(f32 x, f32 y, const char* str);
 void printCount(CameraId camera, void* param);
 
 USER_FUNC(countDisp);
-USER_FUNC(evt_get_target_dir);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_win_item_select);
 #ifdef VERSION_G8ME01
 #endif

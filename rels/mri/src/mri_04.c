@@ -24,26 +24,8 @@
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 USER_FUNC(bero_get_position_normal);
 static USER_FUNC(evt_chuchu_back_loop);
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_puni_get_flag);
-USER_FUNC(evt_puni_init_puni);
-USER_FUNC(evt_puni_move_position2);
-USER_FUNC(evt_puni_set_anim);
-USER_FUNC(evt_puni_set_dir);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_mode);
-USER_FUNC(evt_puni_set_position);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_puni_wait_systemmode);
-USER_FUNC(mri_npc_buruburu);
 
 static EvtWord bero_custom[13];
 static BeroEntry bero_entry_data[2];

@@ -10,6 +10,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/mapdrv.h"
 #include "mario/mario.h"
@@ -17,16 +19,7 @@
 #include "aji.h"
 #include "mario/mario_pouch.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_npc_wait_anim);
-USER_FUNC(evt_peach_set_condition);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_sfxon_3d_ex);
-USER_FUNC(evt_sub_system_flag_onoff);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(map_anim_flag_off);
 static USER_FUNC(peach_evt_toumei);

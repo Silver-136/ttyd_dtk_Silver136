@@ -15,6 +15,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_item.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_pouch.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mario.h"
@@ -37,25 +39,7 @@ Vec camAt;
 EffectEntry* effFireEntry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 void mapObjGetPos(const char* name, Vec* pos);
 
-USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_clear_offscreen);
 USER_FUNC(evt_mario_flag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_jump_position);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_sub_get_coin);
-USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(fire);
 USER_FUNC(iri_22_make_item_tbl);
@@ -64,9 +48,6 @@ USER_FUNC(omiseFukki);
 USER_FUNC(omiseHozon);
 USER_FUNC(npc_alpha_except_tenin);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_sub_get_language);
 #endif
 
 static BeroEntry bero_data_a[3];

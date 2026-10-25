@@ -19,6 +19,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_item.h"
 
 #include "driver/offscreendrv.h"
 #include "mario/mario.h"
@@ -52,41 +53,12 @@ static s32 _ofs_get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h
 static void _img_alloc_capture(EvtWord a0, EvtWord a1, EvtWord a2, EvtWord a3, EvtWord a4, EvtWord a5, EvtWord a6, EvtWord a7);
 void envSetYamiView(Mtx mtx);
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(anim_tevcallback);
-USER_FUNC(evt_bero_overwrite);
 static USER_FUNC(evt_cloud_main);
-USER_FUNC(evt_get_target_dir);
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mario_clear_party);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_party_pos);
 USER_FUNC(evt_mri_cloud_ent);
 USER_FUNC(evt_mri_cloud_init);
-USER_FUNC(evt_mri_get16bitdata);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_move_beside_mario);
-USER_FUNC(evt_puni_flag_onoff);
-USER_FUNC(evt_puni_get_dir);
-USER_FUNC(evt_puni_get_position);
-USER_FUNC(evt_puni_init_puni);
-USER_FUNC(evt_puni_pera_onoff);
-USER_FUNC(evt_puni_set_dir);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_puni_wait_systemmode);
-USER_FUNC(evt_sub_spline_get_value);
-USER_FUNC(evt_sub_spline_init);
 USER_FUNC(get_puni_pos);
 #ifdef VERSION_G8ME01
-USER_FUNC(N_evt_sub_status_gauge_force_update);
-USER_FUNC(evt_sub_get_language);
 #endif
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);

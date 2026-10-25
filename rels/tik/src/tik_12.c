@@ -9,6 +9,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_pouch.h"
 
 #include "eff/eff_stardust.h"
 #include "manager/evtmgr_cmd.h"
@@ -18,20 +19,10 @@
 #include "mario/mario_pouch.h"
 
 static USER_FUNC(effect_stardust);
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_map_blend_set_flag);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_exparty);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_motion);
 USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(evt_pouch_majinai_set);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_sub_get_coin);
 USER_FUNC(evt_unitwin_alloc);
 USER_FUNC(evt_unitwin_free);
 USER_FUNC(evt_win_item_select);

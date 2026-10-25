@@ -9,6 +9,7 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_party.h"
 
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
@@ -16,19 +17,8 @@
 #include "evt/evt_bero.h"
 #include "las.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_set_hosei_xyz);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_float_blk);
-USER_FUNC(evt_mobj_get_kindname);
-USER_FUNC(evt_mobj_jumpstand_blue);
-USER_FUNC(evt_mobj_switch_float_blk);
-USER_FUNC(evt_party_get_name_hitobj_head);
-USER_FUNC(evt_party_get_name_hitobj_ride);
-USER_FUNC(evt_party_set_hosei_xyz);
 USER_FUNC(set_mobj_y_position);
 static USER_FUNC(set_party_y_pos);
 

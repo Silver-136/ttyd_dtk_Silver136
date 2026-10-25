@@ -16,6 +16,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -34,28 +36,8 @@
 
 static USER_FUNC(anim_tevcallback);
 USER_FUNC(chk_luigi_color);
-USER_FUNC(evt_get_target_dir);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_lock_unlock);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_npc_add_dirdist);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_force_regl_anim);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_sub_get_coin);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(kpa_chg_pose);
 USER_FUNC(kpa_lock_hit_scale);

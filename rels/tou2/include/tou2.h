@@ -45,3 +45,5 @@ extern BattleUnitKind unit_togenoko_ace;
 extern BattleUnitKind unit_togezo;
 extern BattleUnitKind unit_ura_noko;
 extern BattleUnitKind unit_ura_pata;
+USER_FUNC(evt_tou_get_fighter_num);
+USER_FUNC(tou2_rankingReset);

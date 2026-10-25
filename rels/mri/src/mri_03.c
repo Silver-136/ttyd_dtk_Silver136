@@ -15,6 +15,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"
@@ -32,52 +33,7 @@ static u8* _ap;
 void puniMoveAtari(PuniData* puni, Vec pos, Vec dir, s32 flag, f32 speed);
 void puniModeEventparent(PuniData* puni);
 
-USER_FUNC(evt_fade_in);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_move_3d_position);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_item_set_scale);
-USER_FUNC(evt_map_blend_set_flag);
-USER_FUNC(evt_map_blend_set_mobj_flag);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mario_sleep_off);
-USER_FUNC(evt_mario_sleep_on);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mri_get16bitdata);
-USER_FUNC(evt_msg_togelr);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_party_get_dispdir);
-USER_FUNC(evt_party_jump_pos);
-USER_FUNC(evt_party_set_dispdir);
-USER_FUNC(evt_party_sleep_off);
-USER_FUNC(evt_party_sleep_on);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_puni_flag_onoff);
-USER_FUNC(evt_puni_get_lsw_index);
-USER_FUNC(evt_puni_get_position);
-USER_FUNC(evt_puni_init_puni);
-USER_FUNC(evt_puni_move_position);
-USER_FUNC(evt_puni_pera_onoff);
-USER_FUNC(evt_puni_puninum_onoff);
-USER_FUNC(evt_puni_set_anim);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_lsw_index);
-USER_FUNC(evt_puni_set_mode);
-USER_FUNC(evt_puni_set_position);
-USER_FUNC(evt_puni_set_trap_index);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_puni_wait_systemmode);
-USER_FUNC(evt_sub_spline_get_value);
-USER_FUNC(evt_sub_spline_init);
 USER_FUNC(evt_win_item_desttable);
 USER_FUNC(evt_win_item_maketable);
 USER_FUNC(evt_win_item_select);

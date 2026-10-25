@@ -15,6 +15,7 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_pouch.h"
 
 #include "stdio.h"
 #include "memory.h"
@@ -29,26 +30,8 @@ s32* tbl;
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_balloon_bikkuri);
-USER_FUNC(evt_mario_balloon_off);
-USER_FUNC(evt_mario_cam_off);
-USER_FUNC(evt_mario_cam_on);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(free_tbl);
 static USER_FUNC(get_pos);

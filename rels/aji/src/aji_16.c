@@ -14,21 +14,14 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_fade.h"
 
 #include "mario/mario.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
 #include "aji.h"
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_fade_softfocus_onoff);
-USER_FUNC(evt_fade_tec_onoff);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_set_paper);
-USER_FUNC(evt_npc_set_paper_anim);
-USER_FUNC(evt_peach_set_condition);
 static USER_FUNC(peach_set_pose);
 
 static EvtWord w_door_close[22];

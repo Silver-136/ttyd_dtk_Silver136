@@ -11,9 +11,6 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 
-USER_FUNC(evt_cam3d_evt_set_at);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_npc_set_link);
 
 static BeroEntry bero_entry_data[3];
 static EvtWord dead_evt1[10];

@@ -8,6 +8,7 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_npc.h"
 #include "evt/evt_case.h"
+#include "evt/evt_door.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -28,7 +29,6 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_item_delete_check);
 #endif
 
 typedef struct IraiWork { s32 state; s32 count; s32 list[30]; s32 cursor; s32 last; s32 top; s32 yubiX; s32 yubiY; s32 field_0x94; f32 scroll; char client[30][21]; char contents[30][31]; u8 field_0x6B4[0x416C - 0x6B4]; } IraiWork;
@@ -37,7 +37,6 @@ void irai_window_disp(CameraId camera, void* param);
 void irai_flag_disp(void);
 void irai_flag_clear(void);
 
-USER_FUNC(evt_door_set_param);
 USER_FUNC(evt_pouch_add_coin);
 USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(irai_cancel_func);

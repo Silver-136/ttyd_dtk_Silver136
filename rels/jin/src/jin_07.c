@@ -38,19 +38,7 @@ void computePosHermite(ExtdrvPose* pose, Teresa* ter);
 f32 randf(f32 min, f32 max);
 static inline f32 cosf(f32 x) { return cos(x); }
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_set_bound_rate);
-USER_FUNC(evt_item_set_gravity);
-USER_FUNC(evt_item_set_jump_power);
-USER_FUNC(evt_item_set_move_dir_speed);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_map_replace_mapobj);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_reverse_ry);
 USER_FUNC(senteresa_okure_move);
 USER_FUNC(senteresa_okure_move_init);
 USER_FUNC(senteresa_get_position);

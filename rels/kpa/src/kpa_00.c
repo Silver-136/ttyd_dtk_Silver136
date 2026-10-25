@@ -11,7 +11,6 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(evt_npc_kamek_kemuri2);
 USER_FUNC(evt_snd_envoff_f);
 #ifdef VERSION_G8ME01
 #endif

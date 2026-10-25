@@ -10,11 +10,6 @@ BOOL dbg_lotteryinfo;
 static s32 lotteryUnused;
 
 //local prototypes
-USER_FUNC(evt_lottery);
-USER_FUNC(evt_lottery_buy);
-USER_FUNC(evt_lottery_flag);
-USER_FUNC(evt_lottery_todaynum);
-USER_FUNC(evt_lottery_error_check);
 
 lottery_info* lotteryGetPtr(void) {
     return &gp->mLotteryInfo;

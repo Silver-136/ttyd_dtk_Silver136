@@ -7,6 +7,7 @@
 #include "evt/evt_case.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_mobj.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -15,13 +16,7 @@
 #include "jin.h"
 
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_exparty);
 USER_FUNC(evt_mario_get_name_hitobj_push);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_push);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_party_get_status);
 static USER_FUNC(get_pos);
 USER_FUNC(get_width);
 USER_FUNC(set_pos);

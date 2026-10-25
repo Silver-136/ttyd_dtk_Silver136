@@ -11,6 +11,8 @@
 #include "evt/evt_case.h"
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "memory.h"
 #include "mario/mariost.h"
@@ -32,22 +34,6 @@
 static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_cam3d_evt_set_xyz);
-USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(test_glare);
 USER_FUNC(tokei);

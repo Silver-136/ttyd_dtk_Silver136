@@ -10,6 +10,9 @@
 #include "evt/evt_party.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -23,27 +26,13 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_sub_get_language);
 #endif
 
 
 static USER_FUNC(cam_r);
 USER_FUNC(camera_yure);
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_gra_vivian_pose_set);
-USER_FUNC(evt_img_set_position);
-USER_FUNC(evt_img_set_virtual_point);
-USER_FUNC(evt_item_entry);
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_party_set_dispdir);
-USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_sub_get_dist);
 USER_FUNC(evt_win_nameent_name);
 USER_FUNC(evt_win_nameent_off);
 USER_FUNC(evt_win_nameent_on);

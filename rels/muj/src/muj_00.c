@@ -13,6 +13,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_item.h"
 
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"
@@ -55,57 +56,18 @@ static inline f32 sinf_l(f32 x) { f32 v = sin(x); return v; }
 static inline f32 cosf_l(f32 x) { return cos(x); }
 static inline f32 orbit_update(f32 x) { return x * 3.141592f / 180.0f; }
 
-USER_FUNC(L_evt_mario_keyon_wait);
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 USER_FUNC(cam_test_func);
 USER_FUNC(cam_test_init_func);
 USER_FUNC(dai3_butai_main_func);
-USER_FUNC(evt_eff_softdelete);
-USER_FUNC(evt_img_set_virtual_point);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_clear_party);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_party_pos);
 USER_FUNC(evt_nannpc_entry);
-USER_FUNC(evt_nannpc_flag_onoff);
-USER_FUNC(evt_nannpc_get_position);
-USER_FUNC(evt_nannpc_init);
-USER_FUNC(evt_nannpc_ppflag_onoff);
-USER_FUNC(evt_nannpc_set_animtbl);
-USER_FUNC(evt_nannpc_set_color);
-USER_FUNC(evt_nannpc_set_dir);
-USER_FUNC(evt_nannpc_set_func);
-USER_FUNC(evt_nannpc_set_position);
-USER_FUNC(evt_nannpc_set_shadow_position);
-USER_FUNC(evt_nannpc_set_size);
-USER_FUNC(evt_nannpc_set_subfunc);
-USER_FUNC(evt_nannpc_set_work);
-USER_FUNC(evt_nannpcwork_flag_onoff);
-USER_FUNC(evt_npc_reaction_flag_onoff);
-USER_FUNC(evt_npc_release_fieldnpc);
-USER_FUNC(evt_npc_reverse_ry);
 USER_FUNC(evt_npc_set_damage_anim);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_jump_pos);
 USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_snd_sfx_all_stop);
 USER_FUNC(evt_snd_sfx_dist);
-USER_FUNC(evt_sub_get_dist);
-USER_FUNC(evt_sub_spline_free);
-USER_FUNC(evt_sub_spline_get_value);
-USER_FUNC(evt_sub_spline_get_value_manual);
-USER_FUNC(evt_sub_spline_init);
 USER_FUNC(kaizoku_main_func);
 USER_FUNC(koburon_get_encount_info);
 USER_FUNC(mario_main_func);
@@ -117,7 +79,6 @@ USER_FUNC(ship_rotate_rev);
 USER_FUNC(tobikakaru_end);
 USER_FUNC(tobikakaru_init);
 #ifdef VERSION_G8ME01
-USER_FUNC(N_evt_sub_status_gauge_force_update);
 #endif
 void tobikakari_seq00(NanNPC* npc);
 NanNPC* random_choice_target(s32 type);

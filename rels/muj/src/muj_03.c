@@ -11,12 +11,9 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_powerupblk);
 
 EvtWord muj_03_event_01[22];
 static BeroEntry bero_entry_data[3];

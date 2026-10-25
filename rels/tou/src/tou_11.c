@@ -19,9 +19,6 @@
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
 
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];

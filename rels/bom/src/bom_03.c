@@ -6,9 +6,9 @@
 #include "data_tables.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mobj_powerupblk);
 
 static TreeAccess tree_tbl[4];
 static EvtWord evt_tree[7];

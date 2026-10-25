@@ -7,12 +7,8 @@
 #include "evt/evt_mario.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_cam.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_koopa_chk_dead);
-USER_FUNC(evt_koopa_set_level);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(kpa_status_init);
 
 static EvtWord kpa_act_stg3_mobj[68];
 static EvtWord kpa_fall[41];

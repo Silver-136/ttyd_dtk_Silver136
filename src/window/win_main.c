@@ -43,16 +43,7 @@ extern ItemData itemDataTable[];
 
 #define HALF_F float_0p5_8041dc98
 USER_FUNC(cam_r);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_normal_pose);
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_nokotaro_get_status);
-USER_FUNC(evt_party_set_breed_pose);
-USER_FUNC(evt_party_set_pose);
 USER_FUNC(lecture_key_mask_off);
 USER_FUNC(lecture_step_wait);
 USER_FUNC(all_party_slit_off);

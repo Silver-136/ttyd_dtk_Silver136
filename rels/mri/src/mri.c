@@ -14,6 +14,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_pouch.h"
 
 #include "data/mapdata.h"
 #include "manager/evtmgr_cmd.h"
@@ -38,50 +39,16 @@ GXColor HSV2RGB(HSV hsv);
 PuniWork* puniGetPunigp(void);
 void puniModeWinjump(PuniData* puni);
 
-USER_FUNC(evt_bero_mario_go);
-USER_FUNC(evt_cam_get_pos);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mario_get_dir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mri_door_naname_func);
-USER_FUNC(evt_pouch_add_item);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_puni_all_save);
-USER_FUNC(evt_puni_flag_onoff);
-USER_FUNC(evt_puni_get_lsw_index);
-USER_FUNC(evt_puni_get_mode);
-USER_FUNC(evt_puni_get_trap_index);
-USER_FUNC(evt_puni_init_puni);
-USER_FUNC(evt_puni_set_lsw_index);
-USER_FUNC(evt_puni_set_position);
-USER_FUNC(evt_puni_set_trap_index);
 USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_sub_countdown_get_status);
-USER_FUNC(evt_sub_countdown_set_restart_time);
-USER_FUNC(evt_sub_countdown_start);
-USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_target_flag_onoff);
 USER_FUNC(evt_win_item_select);
-USER_FUNC(hakari_color);
 void _prolog(void);
 void _epilog(void);
 void _unresolved(void);
-USER_FUNC(evt_mri_get16bitdata);
-USER_FUNC(mri_npc_buruburu);
 BOOL toge_searchParent(PuniData* self, s16 group);
 void togeModeParent(PuniData* puni);
 void togeMoveParent(PuniData* puni);
 void puniModeWinjump(PuniData* puni);
 void togeMakeRetsu(Vec* pos, s16 leader, s16 start, s16 end);
-USER_FUNC(evt_mri_toge_make_retsu);
-USER_FUNC(evt_mri_toge_retsu_stop);
-USER_FUNC(evt_mri_toge_enter_init);
-USER_FUNC(evt_mri_puni_win_init);
-USER_FUNC(evt_mri_puni_win_attack);
-USER_FUNC(evt_mri_puni_win_end);
 
 void _prolog(void) {
     voidfunctionptr* ctor;

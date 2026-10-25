@@ -59,7 +59,6 @@ USER_FUNC(btlevtcmd_InterruptStop);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(eff_queen_set_alpha_evt);
-USER_FUNC(evt_eff_softdelete);
 USER_FUNC(make_pattern);
 USER_FUNC(peach_hand1000_dark_drag_1_evt);
 USER_FUNC(peach_talk_synchro_shadow_head_evt);

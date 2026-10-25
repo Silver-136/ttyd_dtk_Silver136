@@ -4,9 +4,8 @@
 #include "evt/evt_map.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_checkanim);
 
 static BeroEntry bero_entry_data[2];
 EvtWord tik_13_init_evt[60];

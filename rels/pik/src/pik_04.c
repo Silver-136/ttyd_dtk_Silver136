@@ -23,22 +23,11 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_img_set_color);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_item_set_alpha);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_npc_set_offscreen);
-USER_FUNC(evt_npc_set_tribe);
 USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(evt_pouch_get_haveitemcnt);
 USER_FUNC(evt_snd_env_lpf);

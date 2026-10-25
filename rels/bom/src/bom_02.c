@@ -14,6 +14,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "dolphin/mtx.h"
@@ -31,26 +33,8 @@
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_map_replace_mapobj);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_dispdir);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_set_breed_pose);
-USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_sub_get_coin);
-USER_FUNC(evt_sub_save_playtime);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(yami_view);
 extern s32 envSetYami[];

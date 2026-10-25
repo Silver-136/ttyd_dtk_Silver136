@@ -16,7 +16,6 @@ static void* pose_buf;
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
-USER_FUNC(evt_gra_vivian_pose_set);
 
 USER_FUNC(evt_gra_vivian_pose_set) {
     EvtWord* args = event->args;

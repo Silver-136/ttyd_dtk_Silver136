@@ -17,26 +17,11 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 typedef struct KemuriPos { s32 x; s32 z; } KemuriPos;
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
 USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_float_blk);
-USER_FUNC(evt_mobj_get_kindname);
-USER_FUNC(evt_mobj_hitevt_onoff);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_mobj_switch_float_blk);
-USER_FUNC(evt_mobj_switch_red);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_win_item_select);
 
 static EvtWord w1_door_close[12];

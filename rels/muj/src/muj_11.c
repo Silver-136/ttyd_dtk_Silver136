@@ -5,8 +5,8 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_map.h"
 
-USER_FUNC(evt_mapobj_rotate);
 
 static EvtWord w_close[12];
 static EvtWord w_open[12];

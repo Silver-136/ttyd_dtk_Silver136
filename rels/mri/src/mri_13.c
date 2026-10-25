@@ -12,6 +12,7 @@
 #include "evt/evt_case.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
 #include "driver/hitdrv.h"
 #include "dolphin/mtx.h"
@@ -22,27 +23,7 @@
 #include "manager/evtmgr_cmd.h"
 
 
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_puni_flag_onoff);
 USER_FUNC(evt_puni_force_pose);
-USER_FUNC(evt_puni_get_flag);
-USER_FUNC(evt_puni_get_mode);
-USER_FUNC(evt_puni_get_position);
-USER_FUNC(evt_puni_set_anim);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_mode);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_puni_winddisable_onoff);
-USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_target_flag_onoff);
-USER_FUNC(evt_target_set_position);
 USER_FUNC(yuka_fall_check);
 
 BeroEntry bero_dai3_kanbu[1];

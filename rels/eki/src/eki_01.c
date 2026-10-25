@@ -8,15 +8,11 @@
 #include "evt/evt_mario.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_pouch.h"
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_exec_cancel);
-USER_FUNC(evt_mobj_lock);
-USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_win_item_select);
 
 static EvtWord e_close[12];

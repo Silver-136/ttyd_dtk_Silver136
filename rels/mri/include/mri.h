@@ -3,6 +3,7 @@
 #include "dolphin/types.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_word.h"
+#include "evt/evt_cmd.h"
 
 extern EvtWord all_juyoitem_lecture_rel[];
 extern NpcTerritoryInfo btl_mri_setup_no_tbl[];
@@ -69,3 +70,13 @@ extern u8 puniMapdata_MRI_06[];
 extern u8 puniMapdata_MRI_09[];
 extern u8 puniMapdata_MRI_09_01[];
 extern u8 puniMapdata_MRI_16[];
+USER_FUNC(evt_mri_door_naname_func);
+USER_FUNC(evt_mri_get16bitdata);
+USER_FUNC(evt_mri_puni_win_attack);
+USER_FUNC(evt_mri_puni_win_end);
+USER_FUNC(evt_mri_puni_win_init);
+USER_FUNC(evt_mri_toge_enter_init);
+USER_FUNC(evt_mri_toge_make_retsu);
+USER_FUNC(evt_mri_toge_retsu_stop);
+USER_FUNC(hakari_color);
+USER_FUNC(mri_npc_buruburu);

@@ -15,12 +15,6 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_puni_flag_onoff);
-USER_FUNC(evt_puni_init_puni);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_mode);
-USER_FUNC(evt_puni_set_yuka);
 
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];

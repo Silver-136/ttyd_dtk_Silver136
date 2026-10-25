@@ -20,7 +20,6 @@ void mapObjGetPos(const char* name, Vec* pos);
 
 USER_FUNC(_gear_rotate);
 USER_FUNC(check_battle_end);
-USER_FUNC(evt_eff_softdelete);
 USER_FUNC(hi_fire_end);
 USER_FUNC(hi_fire_main);
 extern BattleUnitKind unit_black_karon;

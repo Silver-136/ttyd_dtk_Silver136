@@ -5,11 +5,9 @@
 #include "evt/evt_map.h"
 #include "evt/evt_mario.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_jump_jumpstand);
-USER_FUNC(evt_mobj_jumpstand_red);
 
 static EvtWord e_close[12];
 static EvtWord e_open[12];

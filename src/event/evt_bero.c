@@ -24,6 +24,7 @@
 #include "evt/evt_party.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_hit.h"
 
 //.bss
 
@@ -38,49 +39,6 @@ Vec BeroPT, BeroAT;
 BOOL BeroMarioGO;
 
 USER_FUNC(bero_get_position_normal);
-USER_FUNC(bero_get_position_pipe2);
-USER_FUNC(bero_get_position_pipe_pure);
-USER_FUNC(evt_bero_1stcheck);
-USER_FUNC(evt_bero_cam3d_change);
-USER_FUNC(evt_bero_cam_shift_init);
-USER_FUNC(evt_bero_case_id_load);
-USER_FUNC(evt_bero_case_id_save);
-USER_FUNC(evt_bero_disppos_load);
-USER_FUNC(evt_bero_disppos_save);
-USER_FUNC(evt_bero_get_info_num);
-USER_FUNC(evt_bero_get_number);
-USER_FUNC(evt_bero_mario_go);
-USER_FUNC(evt_bero_mario_go_init);
-USER_FUNC(evt_bero_mario_go_wait);
-USER_FUNC(evt_bero_move_mario_speed);
-USER_FUNC(evt_bero_read_mario_pera);
-USER_FUNC(evt_bero_switch_off);
-USER_FUNC(evt_bero_switch_on);
-USER_FUNC(evt_cam_road_reset2);
-USER_FUNC(evt_camera_change_event_from_road);
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_pauseanim);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_bgmode_off);
-USER_FUNC(evt_mario_bgmode_on);
-USER_FUNC(evt_mario_cam_off);
-USER_FUNC(evt_mario_cam_on);
-USER_FUNC(evt_mario_dokan_end);
-USER_FUNC(evt_mario_dokan_prepare);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_paper_pose_dokan);
-USER_FUNC(evt_mario_paper_pose_off);
-USER_FUNC(evt_mario_party_bero_move);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mario_set_force_dir);
-USER_FUNC(evt_mario_set_prev_party);
-USER_FUNC(evt_mario_set_prev_party_dokan);
-USER_FUNC(evt_party_set_homing_dist);
-USER_FUNC(evt_bero_overwrite);
-USER_FUNC(evt_bero_id_filter);
 extern s32 bero_set_disp_position_pipe();
 
 BeroEntry bero_null[] = {

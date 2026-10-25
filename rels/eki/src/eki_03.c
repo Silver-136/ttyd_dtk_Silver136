@@ -7,6 +7,8 @@
 #include "evt/evt_map.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
 #include "memory.h"
 #include "mario/mariost.h"
@@ -21,13 +23,7 @@ void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_brick);
-USER_FUNC(evt_mobj_powerupblk);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mobj_blk);
 #endif
 static USER_FUNC(test_glare);
 static void sun_tev(MapTevCallbackInfo* info);

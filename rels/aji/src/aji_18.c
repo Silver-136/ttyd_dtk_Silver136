@@ -11,6 +11,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_sub.h"
 
 #include "mario/mario_pouch.h"
 #include "mario/mariost.h"
@@ -20,12 +21,8 @@
 
 s32 key_list[4];
 
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_win_item_select);
 #ifdef VERSION_G8ME01
-USER_FUNC(N_evt_sub_status_gauge_force_update);
 #endif
 static USER_FUNC(make_list);
 static USER_FUNC(sysflag);

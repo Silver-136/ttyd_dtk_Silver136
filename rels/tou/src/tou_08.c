@@ -12,6 +12,9 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/effdrv.h"
 #include "driver/npcdrv.h"
@@ -24,23 +27,7 @@
 #include "evt/evt_npc.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_hitobj_name_callback);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_balloon_bikkuri);
-USER_FUNC(evt_mario_balloon_off);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_pouch_get_yoshiname);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
 USER_FUNC(evt_snd_envoff_f);
@@ -51,9 +38,6 @@ USER_FUNC(icon_off);
 USER_FUNC(tou_champion_belt);
 USER_FUNC(tou_08_belt_camid);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_restart_regular_event);
 #endif
 
 static EvtWord evt_toile[42];

@@ -3,9 +3,8 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_npc.h"
 
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_set_link);
 
 static BeroEntry bero_entry_data[3];
 EvtWord dou_13_init_evt[44];

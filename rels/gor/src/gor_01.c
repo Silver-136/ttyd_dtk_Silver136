@@ -21,6 +21,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
+#include "evt/evt_pouch.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -54,8 +55,6 @@
 #include "data_tables.h"
 #include "driver/msgdrv.h"
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_msg_fmt_int);
-USER_FUNC(evt_msg_fmt_str);
 #endif
 
 extern ItemData itemDataTable[];
@@ -71,7 +70,6 @@ s32 itemNameToID(const char* name);
 static s32 item_tbl[21];
 s32 chk_cook_eff_type(s32 item);
 
-USER_FUNC(N_evt_pouch_remove_item_index);
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
 USER_FUNC(chk_cook_msg);
@@ -86,64 +84,16 @@ static USER_FUNC(delete_npc_regl_evt);
 static USER_FUNC(disp_off);
 static USER_FUNC(evt_StatusClose);
 static USER_FUNC(evt_StatusOpen);
-USER_FUNC(evt_door_end_wait);
-USER_FUNC(evt_door_set_param);
-USER_FUNC(evt_goki_sub_intpl_get_value);
-USER_FUNC(evt_goki_sub_intpl_init);
-USER_FUNC(evt_gor_villager_urouro_check_func);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_important_item);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_item_set_scale);
-USER_FUNC(evt_koopa_weary);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_color);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_clear_party);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_get_state);
-USER_FUNC(evt_mario_party_use_check);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_enable_key);
-USER_FUNC(evt_mario_set_party_pos);
-USER_FUNC(evt_mario_wait_movable);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_msg_print_add_insert);
-USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_npc_add_dirdist);
-USER_FUNC(evt_npc_get_loiter_dir);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_kamek_kemuri1);
-USER_FUNC(evt_npc_reaction_flag_onoff);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_return_interrupt);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_ry_lr);
-USER_FUNC(evt_npc_set_tribe);
 static USER_FUNC(evt_osreport);
-USER_FUNC(evt_party_set_pose);
-USER_FUNC(evt_party_wait_landon);
 USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_add_item);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(evt_pouch_get_havebadgecnt);
 USER_FUNC(evt_pouch_get_haveitemcnt);
 USER_FUNC(evt_pouch_party_join);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_pouch_set_coin);
 USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_sub_get_coin);
-USER_FUNC(evt_sub_get_dist);
-USER_FUNC(evt_sub_get_language);
-USER_FUNC(evt_sub_save_playtime);
 USER_FUNC(evt_unitwin_alloc);
 USER_FUNC(evt_unitwin_free);
 USER_FUNC(evt_unitwin_selltable_setup);

@@ -7,6 +7,7 @@
 #include "evt/evt_seq.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
 #include "stdio.h"
 #include "mario/mario.h"
@@ -25,12 +26,7 @@
 
 
 USER_FUNC(all_flag_off);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_wait_animation_end);
 USER_FUNC(hikaru_off_func);
 USER_FUNC(hikaru_on_func);
 static USER_FUNC(ride_chk);

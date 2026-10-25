@@ -7,10 +7,8 @@
 #include "evt/evt_npc.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mobj_badgeblk);
 
 static BeroEntry bero_entry_data[3];
 static TreeAccess ki_data[5];

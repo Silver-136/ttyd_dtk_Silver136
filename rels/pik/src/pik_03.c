@@ -11,13 +11,11 @@
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_item.h"
+#include "evt/evt_map.h"
+#include "evt/evt_mobj.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_map_entry_airport_harbor);
-USER_FUNC(evt_mobj_powerupblk);
-USER_FUNC(evt_party_yoshi_ride);
 
 EvtWord bero_in[45];
 EvtWord bero_out[53];

@@ -9,10 +9,8 @@
 #include "evt/evt_case.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_item.h"
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_brick);
 
 static BeroEntry bero_entry_data[5];
 static TreeAccess ki_data[2];

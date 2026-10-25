@@ -22,10 +22,7 @@
 
 
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_party_set_pose);
 USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_sub_spline_get_value);
-USER_FUNC(evt_sub_spline_init);
 static USER_FUNC(mario_kirimomi);
 
 static f32 spline_dt[9];

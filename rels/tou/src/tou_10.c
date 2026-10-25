@@ -16,6 +16,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_hit.h"
+#include "evt/evt_pouch.h"
 
 #include "mario/mario.h"
 #include "mario/mario_pouch.h"
@@ -27,30 +29,9 @@
 #include "tou.h"
 #include "evt/evt_npc.h"
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_hitobj_name_callback);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_clear_party);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_lv_blk);
-USER_FUNC(evt_msg_print_add_insert);
-USER_FUNC(evt_msg_print_insert);
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_get_reglid);
-USER_FUNC(evt_npc_restart_regular_event);
-USER_FUNC(evt_npc_reverse_ry);
-USER_FUNC(evt_npc_set_tribe);
-USER_FUNC(evt_party_yoshi_ride);
 USER_FUNC(evt_pouch_add_coin);
 USER_FUNC(evt_pouch_party_join);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_pouch_set_yoshiname);
 USER_FUNC(evt_tou_get_fighter_info);
 USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(evt_tou_get_rule_msg2);
@@ -64,8 +45,6 @@ USER_FUNC(setYoshiColor);
 USER_FUNC(tou_10_mario_keyoff_check);
 USER_FUNC(tou_10_mario_free_wait);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_sub_get_language);
-USER_FUNC(evt_msg_fmt_int);
 #endif
 
 EvtWord room_out[8];

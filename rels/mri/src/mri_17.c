@@ -14,6 +14,8 @@
 #include "evt/evt_case.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/imgdrv.h"
@@ -24,32 +26,6 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 
-USER_FUNC(evt_hit_get_position);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_breaking_floor);
-USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_mri_get16bitdata);
-USER_FUNC(evt_puni_all_fall_check);
-USER_FUNC(evt_puni_count_area);
-USER_FUNC(evt_puni_flag_onoff);
-USER_FUNC(evt_puni_get_flag);
-USER_FUNC(evt_puni_get_position);
-USER_FUNC(evt_puni_get_trap_index);
-USER_FUNC(evt_puni_init_puni);
-USER_FUNC(evt_puni_set_anim);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_mode);
-USER_FUNC(evt_puni_set_position);
-USER_FUNC(evt_puni_set_trap_index);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_puni_wait_systemmode);
-USER_FUNC(evt_sub_area_check);
-USER_FUNC(evt_target_flag_onoff);
-USER_FUNC(evt_target_set_position);
 static USER_FUNC(set_depthPlaneOffset);
 
 EvtWord bero_02_into_event[14];

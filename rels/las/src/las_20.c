@@ -13,10 +13,6 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_floatswitch_red);
-USER_FUNC(evt_mobj_switch_red);
 USER_FUNC(get_hosi_name);
 
 static EvtWord e_door_close[22];

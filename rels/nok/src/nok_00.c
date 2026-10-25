@@ -16,6 +16,8 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_item.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"
@@ -39,24 +41,9 @@ PosterWork* poster;
 void draw_poster(void* userdata, s32 group);
 void animPoseSetDispCallBack(s32 poseId, void (*callback)(void*, s32), void* userdata);
 
-USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_goodbye_party);
-USER_FUNC(evt_mario_hello_party);
-USER_FUNC(evt_mario_set_motion);
-USER_FUNC(evt_mario_set_talk_motion);
-USER_FUNC(evt_npc_blur_onoff);
-USER_FUNC(evt_npc_set_tribe);
 USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_bgm_freq);
 USER_FUNC(evt_snd_sfxon_3d_ex);
-USER_FUNC(evt_sub_save_playtime);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(kpa_chg_pose);
 USER_FUNC(pposter_init);

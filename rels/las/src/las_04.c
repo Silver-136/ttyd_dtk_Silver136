@@ -43,8 +43,6 @@ void _firebar_trans(FirebarWork* wp);
 s32 _firebar_hitCheck2(FirebarWork* wp);
 
 USER_FUNC(coin_entry);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_brick);
 USER_FUNC(firebar_disp_evt);
 USER_FUNC(firebar_entry);
 void firebar_cb(FirebarWork* wp, s32 type);

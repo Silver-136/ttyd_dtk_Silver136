@@ -10,14 +10,11 @@
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_mario.h"
+#include "evt/evt_mobj.h"
 
 u16 toge_flag;
 
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mario_get_motion);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_sub_area_check);
 USER_FUNC(get_toge_name);
 USER_FUNC(toge_check_flag);
 USER_FUNC(toge_flag_onoff);

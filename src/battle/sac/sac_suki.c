@@ -82,9 +82,6 @@ typedef struct StarEffWork {
     s32 mode; // 0x38
 } StarEffWork;
 
-USER_FUNC(evt_batstage_return_stg_dark_base);
-USER_FUNC(evt_batstage_set_stg_dark);
-USER_FUNC(evt_map_set_tevcallback);
 extern s32 tou_gamen_screen_tev[];
 
 USER_FUNC(aud_set_draw);

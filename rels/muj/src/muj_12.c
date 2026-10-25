@@ -24,15 +24,7 @@
 #include "evt/evt_sub.h"
 #include "muj.h"
 
-USER_FUNC(evt_bero_mario_go);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_position);
-USER_FUNC(evt_item_move_3d_position);
-USER_FUNC(evt_item_set_alpha);
-USER_FUNC(evt_mapobj_rotate);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_party_set_pose);
 USER_FUNC(evt_snd_bgm_freq);
 static USER_FUNC(evtflash);
 USER_FUNC(muj_item_move_3d_position);

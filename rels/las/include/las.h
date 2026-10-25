@@ -3,6 +3,7 @@
 #include "dolphin/types.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_word.h"
+#include "evt/evt_cmd.h"
 
 extern EvtWord box_syutugen[];
 extern NpcTerritoryInfo btl_las_setup_no_tbl[];
@@ -69,3 +70,6 @@ extern u8 kurokaron_same_goal;
 extern u8 kurokaron_stop_cnt;
 extern s32 kurokaron_vivian_prev_sts;
 extern s32 move_check_list[];
+USER_FUNC(mobj_color_off);
+USER_FUNC(mobj_set_color);
+USER_FUNC(mobj_set_ry);

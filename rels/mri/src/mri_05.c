@@ -11,6 +11,9 @@
 #include "evt/evt_case.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_item.h"
+#include "evt/evt_mobj.h"
 
 #include "mario/mario.h"
 #include "mario/mario_motion.h"
@@ -24,23 +27,9 @@
 
 EffectEntry* marioeff;
 
-USER_FUNC(evt_cam_letter_box_disable);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_set_position);
-USER_FUNC(evt_map_pauseanim);
 USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_get_state);
-USER_FUNC(evt_mario_set_motion);
-USER_FUNC(evt_mobj_powerupblk);
 USER_FUNC(evt_pcharge_pos);
-USER_FUNC(evt_puni_set_hamari);
-USER_FUNC(evt_puni_set_yuka);
-USER_FUNC(evt_target_flag_onoff);
-USER_FUNC(evt_target_set_position);
-USER_FUNC(evt_target_set_soko);
 USER_FUNC(mario_shabon_eff);
 USER_FUNC(mario_shabon_effdel);
 USER_FUNC(mario_shabon_effpos);

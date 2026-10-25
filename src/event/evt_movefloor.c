@@ -13,6 +13,9 @@
 #include "evt/evt_mario.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_party.h"
+#include "evt/evt_sub.h"
+#include "evt/evt_movefloor.h"
 
 void mapObjGetPos();
 
@@ -42,29 +45,8 @@ typedef struct MovingFloor {
     f32 angle;       // 0x84
 } MovingFloor;
 
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_scale);
-USER_FUNC(evt_mario_get_exparty);
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_mario_set_hosei_xyz);
-USER_FUNC(evt_party_get_name_hitobj_head);
-USER_FUNC(evt_party_get_name_hitobj_ride);
-USER_FUNC(evt_party_set_hosei_xyz);
-USER_FUNC(evt_sub_get_areaname);
-USER_FUNC(moving_floor_get_end);
-USER_FUNC(moving_floor_get_kind);
-USER_FUNC(moving_floor_get_mode);
-USER_FUNC(moving_floor_get_pause);
-USER_FUNC(moving_floor_get_stmsec);
-USER_FUNC(moving_floor_getf_now_bpoint);
-USER_FUNC(moving_floor_getf_pos);
-USER_FUNC(moving_floor_getf_xz_scale);
-USER_FUNC(moving_floor_halt_se);
-USER_FUNC(moving_floor_reverse);
-USER_FUNC(moving_floor_set_se);
-USER_FUNC(moving_floor_stop_se);
-USER_FUNC(moving_floor_update_turn);
 
 static f32 sintbl[450] = {
     0.0f, 0.017452f, 0.034899f, 0.052336f, 0.069756f, 0.087156f, 0.104528f, 0.121869f,

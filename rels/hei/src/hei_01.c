@@ -14,6 +14,7 @@
 #include "evt/evt_party.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "evt/evt_item.h"
 
 #include "party.h"
 #include "evt/evt_bero.h"
@@ -25,32 +26,10 @@
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(evt_cam3d_evt_set_rel);
-USER_FUNC(evt_cam_shift_reset);
-USER_FUNC(evt_img_set_paper_timerate);
-USER_FUNC(evt_item_delete_check);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_set_scale);
-USER_FUNC(evt_map_checkanim);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_adjust_dir);
-USER_FUNC(evt_mario_balloon_bikkuri);
-USER_FUNC(evt_mario_balloon_off);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mario_set_dispdir);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_mobj_switch_blue);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_party_set_dispdir);
-USER_FUNC(evt_party_set_pose);
 USER_FUNC(evt_pouch_open_mail);
 USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_sub_get_dist);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_party_move_behind_mario);
 #endif
 static USER_FUNC(set_dir);
 

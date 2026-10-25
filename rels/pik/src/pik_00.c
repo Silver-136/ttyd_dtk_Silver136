@@ -21,6 +21,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_telop.h"
+#include "evt/evt_pouch.h"
 
 #include "driver/imgdrv.h"
 #include "driver/animdrv.h"
@@ -49,33 +50,11 @@ typedef struct ClankData { const char* name; s32 field_0x4; s32 field_0x8; EvtFl
 
 HitEntry* marioSearchUnder(void);
 
-USER_FUNC(evt_cam_ctrl_onoff);
-USER_FUNC(evt_hitobj_attr_onoff);
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_item_get_item_end_wait);
-USER_FUNC(evt_map_set_tevcallback);
-USER_FUNC(evt_mapobj_clear_offscreen);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mapobj_set_offscreen);
-USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_dispdir);
 USER_FUNC(evt_mario_get_name_hitobj_under);
-USER_FUNC(evt_mario_get_pos);
-USER_FUNC(evt_mario_set_dir_npc);
-USER_FUNC(evt_mobj_wait_animation_end);
-USER_FUNC(evt_npc_add_dirdist);
 USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_check_item);
 USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_pouch_remove_item);
 USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_sub_get_coin);
-USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(evt_sub_status_gauge_check_update);
-USER_FUNC(evt_sub_status_gauge_force_close);
-USER_FUNC(evt_sub_status_gauge_force_open);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(img_flag);
 static USER_FUNC(ramp_r);

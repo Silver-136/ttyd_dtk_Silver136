@@ -2,6 +2,7 @@
 
 #include <dolphin/types.h>
 #include <dolphin/os.h>
+#include "evt/evt_cmd.h"
 
 typedef struct lottery_info {
     u16 flags; //0x0
@@ -19,3 +20,8 @@ typedef struct lottery_info {
 lottery_info* lotteryGetPtr(void);
 
 extern BOOL dbg_lotteryinfo; // evt_lottery
+USER_FUNC(evt_lottery);
+USER_FUNC(evt_lottery_buy);
+USER_FUNC(evt_lottery_error_check);
+USER_FUNC(evt_lottery_flag);
+USER_FUNC(evt_lottery_todaynum);

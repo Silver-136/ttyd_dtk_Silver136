@@ -1,6 +1,7 @@
 #pragma once
 
 #include <dolphin/types.h>
+#include "evt/evt_cmd.h"
 
 typedef struct PiantaParlorWork {
     u32 flags; //0x00, 1: token counter shown, 2: tokens taken out (playing), 4: counter raised, 8: window closed
@@ -104,3 +105,16 @@ extern PiantaParlorWork* yuwp;
 void evtYuuWindow(void);
 s32 evtYuuWindowEndChk(void);
 void monteCountDisp(void);
+USER_FUNC(yuugijou_add_montemedal);
+USER_FUNC(yuugijou_add_montemedal_moto);
+USER_FUNC(yuugijou_get_montemedal);
+USER_FUNC(yuugijou_get_montemedal_keep);
+USER_FUNC(yuugijou_get_takeoutflag);
+USER_FUNC(yuugijou_montemedal_disp_onoff);
+USER_FUNC(yuugijou_montemedal_keep);
+USER_FUNC(yuugijou_montemedal_return);
+USER_FUNC(yuugijou_montemedal_wait);
+USER_FUNC(yuugijou_set_yupflag);
+USER_FUNC(yuuminigame_end);
+USER_FUNC(yuuminigame_get_window_evt);
+USER_FUNC(yuuminigame_window_end);

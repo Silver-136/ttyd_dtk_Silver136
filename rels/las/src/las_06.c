@@ -4,6 +4,8 @@
 #include "evt/evt_map.h"
 #include "evt/evt_snd.h"
 #include "party/party_motion.h"
+#include "evt/evt_mobj.h"
+#include "evt/evt_npc.h"
 
 #include "stdio.h"
 #include "evt/evt_bero.h"
@@ -11,10 +13,6 @@
 
 static char name[8];
 
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_badgeblk);
-USER_FUNC(evt_npc_check);
-USER_FUNC(evt_npc_set_link);
 static USER_FUNC(make_name);
 
 static EvtWord w_door_close[22];

@@ -5,6 +5,7 @@
 #include "evt/evt_case.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "evt/evt_bero.h"
 
 #include "data/mapdata.h"
 #include "win.h"
@@ -13,8 +14,6 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_bero_mario_go);
-USER_FUNC(evt_mapobj_rotate);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

@@ -14,10 +14,6 @@
 
 static char name[8];
 
-USER_FUNC(evt_item_entry);
-USER_FUNC(evt_item_get_item);
-USER_FUNC(evt_mapobj_rotate);
-USER_FUNC(evt_mobj_wait_animation_end);
 static USER_FUNC(make_name);
 
 static EvtWord w_door_close[22];
