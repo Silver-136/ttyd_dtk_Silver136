@@ -27,3 +27,7 @@ void btlDispMain(void);
 
 
 void btlDispEntAnime(BattleUnit* unit);
+void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL flag);
+void btlDispPoseAnime(BattleUnitPart* part);
+void btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, GXColor color);
+void btlGetScreenPoint(Vec* in, Vec* out);

@@ -222,7 +222,6 @@ void BattleStatusIconDelete(BattleUnit* unit) {
 
 
 
-extern void btlGetScreenPoint(Vec* in, Vec* out);
 
 void BattleStatusIconDisp(CameraId camId, void* param) {
     BattleWorkStatusIcon* icon = &((BattleUnit*)param)->mStatusIconWork;

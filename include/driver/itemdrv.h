@@ -74,3 +74,4 @@ void itemForceGet(ItemEntry* entry);
 ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range);
 ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 void itemStatusOn(ItemEntry* entry, u32 flags);
+void itemCoinDrop(Vec* position);

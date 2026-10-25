@@ -430,7 +430,6 @@ void monosiriMain(MonosiriWork* m);
 void monosiriClose(MonosiriWork* m);
 BOOL monosiriCloseWait(MonosiriWork* m);
 void monosiriExit(MonosiriWork* m);
-const char* winGetMapTplName(void);
 
 s32 winLogMain(WindowWork* w) {
     static char name[0x40];
@@ -967,14 +966,11 @@ void winLogMain2(WindowWork* w) {
     w->log.recipe.f2C += (w->log.recipe.tf2C - w->log.recipe.f2C) / FPS_EASE(6.0f);
 }
 
-void winTexSet_x2(u32 a, u32 b, Vec translate, Vec scale, GXColor color);
-void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
 void effStarStoneDraw(CameraId cam, EffectEntry* e);
 void mapGX(WindowWork* w, f32 x, f32 y);
 void monoshiriGX(WindowWork* w, f32 x, f32 y);
 
 #ifdef VERSION_G8ME01
-void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 #endif
 
 void winLogDisp(CameraId cam, void* param, s32 idx) {
@@ -1205,10 +1201,8 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
     }
 }
 
-void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 
 #ifdef VERSION_G8ME01
-void winFontSetWidth(Vec translate, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 #endif
 void monoshiriGX(WindowWork* w, f32 x, f32 y) {
     GXColor k1;

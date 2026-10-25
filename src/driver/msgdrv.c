@@ -428,9 +428,7 @@ s32 msgMain(smartEntry* smart) {
     return 3;
 }
 
-GXColor FontGetDrawColor(void);
 #ifdef VERSION_G8ME01
-void FontDrawScaleVec(Vec scale);
 
 // US: <scaleX> letters (flag 0x10000) are stretched on x only
 #define MSG_DRAW_SCALE(c)                                   \
@@ -441,7 +439,6 @@ void FontDrawScaleVec(Vec scale);
         FontDrawScale((c)->scale);                            \
     }
 #endif
-void FontDrawCodeMtx(Mtx mtx, u16 code);
 
 BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y);
 BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {

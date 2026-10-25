@@ -20,7 +20,6 @@
 #include "win/win_root.h"
 
 extern ItemData itemDataTable[];
-void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
 
 typedef struct LinkDt {
     s16 x;              // 0x0
@@ -388,14 +387,8 @@ void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
     }
 }
 
-void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
 
 #ifdef VERSION_G8ME01
-void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...);
-void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 
 // US: every float live range has its own variable (register order); rowC is the second value of rowB
 void winMarioDisp(s32 camId, void* param, s32 idx) {

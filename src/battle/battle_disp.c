@@ -58,7 +58,6 @@ void btlUnitItemDisp(CameraId camId, BattleUnit* unit);
 void _pose_def(BattleUnitPart* part);
 void _pose_one_pattern(BattleUnitPart* part);
 void _pose_two_pattern(BattleUnitPart* part);
-void btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, GXColor color);
 void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXColor color);
 void _btlStockExpDisp(CameraId camId, void* param);
 
@@ -121,7 +120,6 @@ void btlDispGXInit2D(void) {
 int animPoseVivianMain();
 void BattleCommandDisplay(BattleWork* wp);
 void BattleStockExpDisp(void);
-void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part);
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed);
 void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, GXColor color, f32 rotation);
 void floatOffsetControl(BattleUnitPart* part);

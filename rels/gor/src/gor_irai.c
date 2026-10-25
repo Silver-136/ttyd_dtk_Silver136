@@ -763,7 +763,6 @@ USER_FUNC(irai_end_func) {
 }
 
 #ifdef VERSION_G8ME01
-void FontDrawScaleVec(Vec scale);
 
 // US: text centered in a boxW-wide box at x, x-squeezed to maxW; w is the width variable of the caller.
 #define iraiDrawCentered(msg, x, y, boxW, maxW, scale, trans, w) { \

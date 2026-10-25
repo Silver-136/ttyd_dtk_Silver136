@@ -364,18 +364,10 @@ MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index) {
     return mapEntrySub(joint, NULL, mtx, TRUE, index);
 }
 
-GXTexObj* shadowGetCharShadowTexObj(void);
-GXColor shadowGetCharShadowColor(void);
 f32 (*shadowGetCharShadowProjTexMtx(void))[4];
-GXTexObj* shadowGetDepthShadowTexObj(void);
 f32 (*shadowGetDepthShadowDepthMtx(void))[4];
 f32 (*shadowGetDepthShadowProjTexMtx(void))[4];
-GXColor shadowGetDepthShadowColor(void);
-GXTexObj* shadowGetRamp8TexObj(void);
-GXTexObj* shadowGetRamp16TexObj(void);
-GXTexObj* shadowGetProjShadowTexObj(void);
 f32 (*shadowGetProjShadowProjTexMtx(void))[4];
-GXColor shadowGetProjShadowColor(void);
 static inline void mapResetPaperCraftAmbColor(void);
 
 void makeDisplayList(BOOL group) {

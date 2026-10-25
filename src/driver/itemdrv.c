@@ -1769,7 +1769,6 @@ void itemMain(void);
 BOOL N_itemPickUpFromFieldCheck(void);
 BOOL itemGetNokoCheck(ItemEntry* entry);
 BOOL itemGetCheck(ItemEntry* entry);
-void itemCoinDrop(Vec* position);
 void itemReInit(void);
 void itemInit(void);
 

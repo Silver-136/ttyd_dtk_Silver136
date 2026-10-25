@@ -16,7 +16,6 @@ void FontDrawString(f32 x, f32 y, const char* msg);
 extern ItemData itemDataTable[];
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 double sin(double);
-void btlGetScreenPoint(Vec* pos, Vec* out);
 
 void btlDispGXInit2D(void);
 

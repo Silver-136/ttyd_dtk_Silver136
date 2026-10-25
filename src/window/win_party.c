@@ -31,13 +31,7 @@
 
 extern ItemData itemDataTable[];
 
-void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color);
-void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
 #ifdef VERSION_G8ME01
-void winFontSetWidth(Vec translate, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 #endif
 void animPoseVivianMain(s32 poseId, Vec* pos);
 

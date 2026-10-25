@@ -17,10 +17,6 @@
 
 extern ItemData itemDataTable[];
 
-void winTexSet_x2(u32 a, u32 b, Vec translate, Vec scale, GXColor color);
-void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
-void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetR(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 
 void winMakeEquipList(WindowWork* w) {
     s32 n = 0;
@@ -281,7 +277,6 @@ void winBadgeMain2(WindowWork* w) {
 }
 
 #ifdef VERSION_G8ME01
-void winFontSetWidth(Vec translate, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 #endif
 void badge_disp(WindowWork* w, f32 xo, f32 yo);
 

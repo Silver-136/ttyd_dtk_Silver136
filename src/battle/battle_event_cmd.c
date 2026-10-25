@@ -3366,8 +3366,6 @@ void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
 BattleWeapon* BattleGetSelectWeapon(BattleWork* wp);
 extern ItemData itemDataTable[];
 void btlDispChangePeraAnime(BattleUnitPart* part, s32 anim);
-void BtlUnit_PoseSoundInit(BattleUnitPart* part);
-void btlDispPoseAnime(BattleUnitPart* part);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* name);
 void BattleAttackDeclareAll(BattleWork* wp);
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);

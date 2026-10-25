@@ -993,3 +993,5 @@ void BtlUnit_SetSeMode(BecSndWork* work, const char* name0, const char* name1, s
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 BOOL BtlUnit_EnemyItemCanUseCheck(s32 item);
 void BtlUnit_SetTotalHitDamage(BattleUnit* unit, s16 damage);
+void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part);
+void BtlUnit_PoseSoundInit(BattleUnitPart* part);

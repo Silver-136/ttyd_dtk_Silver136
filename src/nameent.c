@@ -17,7 +17,6 @@
 #include "eff/eff_magic1_n64.h"
 #include "dolphin/gx.h"
 
-void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
 void FontDrawString(f32 x, f32 y, const char* str);
 void nameBG(void);
 void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h);

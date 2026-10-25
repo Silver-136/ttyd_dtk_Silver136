@@ -24,8 +24,8 @@
 #include "system.h"
 #include "pmario_sound.h"
 #include "eff/n64/eff_stamp_n64.h"
+#include "battle/battle_disp.h"
 
-void btlDispPoseAnime(BattleUnitPart* part);
 
 void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* outTime, s8* outStrength);
 s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u32 special, s32 type, s32 rate, s32 levelDiff, s8 time, s8 strength);

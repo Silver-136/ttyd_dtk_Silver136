@@ -8,6 +8,7 @@
 #include "pmario_sound.h"
 #include "driver/camdrv.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_disp.h"
 
 #ifdef VERSION_G8ME01
 #define AC_ICON_OFS 8
@@ -17,8 +18,6 @@
 #define AC_TEX_OFS 0
 #endif
 
-void btlDispTex4(s32 id, Vec pos, Vec scale, Vec rot, GXColor color);
-void btlGetScreenPoint(Vec* in, Vec* out);
 
 typedef struct ShotWork {
     s32 timer;        // 0x0

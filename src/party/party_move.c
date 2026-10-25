@@ -32,7 +32,6 @@ extern void party_set_behind_dir(PartyEntry* party);
 static void flyMain(PartyEntry* party);
 extern void vivianShadow(PartyEntry* party);
 #ifdef VERSION_G8ME01
-void partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height);
 #endif
 extern HitEntry* partySearchHead(PartyEntry* party, Vec* pos, f32* h, f32 a);
 
@@ -1511,7 +1510,6 @@ static inline void partyAppearMoveBack(Vec* out, f32 d, f32 ang) {
     movePos(&out->x, &out->z, -d, ang);
 }
 
-BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
 
 BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
     HitCheckQuery query;

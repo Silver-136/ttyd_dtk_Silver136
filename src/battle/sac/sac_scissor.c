@@ -28,6 +28,7 @@
 #include "battle/battle_audience.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_disp.h"
 
 double sqrt(double);
 double fabs(double);
@@ -918,7 +919,6 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
     return 0;
 }
 
-void btlGetScreenPoint(Vec* in, Vec* out);
 
 s32 scissor_damage(EventEntry* evt, BOOL first) {
     BattleWork* wp;

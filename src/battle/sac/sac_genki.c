@@ -32,6 +32,7 @@
 #include "eff/n64/eff_stardust_n64.h"
 #include "eff/eff_hit.h"
 #include "statuswindow.h"
+#include "battle/battle_disp.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -115,7 +116,6 @@ typedef struct GenkiWork {
 
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 EffectEntry* effStardustEntry(s32 type, s32 count, s32 camera, f32 x, f32 y, f32 z, f32 vx, f32 vy);
-void btlDispTex4(s32 id, Vec pos, Vec scale, Vec rot, GXColor color);
 USER_FUNC(recover_cmd_disable);
 USER_FUNC(star_appear);
 USER_FUNC(status_on);

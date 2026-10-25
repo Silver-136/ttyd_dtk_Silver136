@@ -80,11 +80,8 @@ typedef struct WinDt {
 extern BOOL psndENVOn(u32 flags, const char* name);
 double sin(double);
 double fmod(double, double);
-void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
-void winTexSetRot(u32 id, Vec translate, Vec scale, GXColor color, f32 rot);
 void FontDrawString(f32 x, f32 y, const char* str);
 #ifdef VERSION_G8ME01
-void FontDrawScaleVec(Vec scale);
 #endif
 void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);

@@ -30,7 +30,6 @@ typedef struct WinSortData {
 } WinSortData;
 
 void winMakeSkipList(WindowWork* wp);
-void winTexSet_x2(u32 a, u32 b, Vec translate, Vec scale, GXColor color);
 void winBadgeDisp(s32 camId, WindowWork* wp, s32 n);
 void winLogDisp(s32 camId, WindowWork* wp, s32 n);
 void winMailDisp(WindowWork* wp);
@@ -88,23 +87,18 @@ u8 enemy_monoshiri_sort_table[] = {
 void winMarioInit();
 void winItemInit();
 void winBadgeInit();
-void winLogInit();
 void winMarioInit2();
 void winItemInit2();
 void winBadgeInit2();
-void winLogInit2();
 s32 winMarioMain();
 s32 winItemMain();
 s32 winBadgeMain();
-s32 winLogMain();
 void winMarioMain2();
 void winItemMain2();
 void winBadgeMain2();
-void winLogMain2();
 void winMarioExit();
 void winItemExit();
 void winBadgeExit();
-void winLogExit();
 void winRootBgDrawDisp();
 void winRootBgCaptureDisp();
 double fabs(double);
@@ -740,14 +734,9 @@ void winMsgMain(WindowWork* wp) {
 
 void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve);
 void winIconInit(void);
-void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
 void winFontInit(void);
-void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetEdge(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetLabel(Vec translate, Vec scale, GXColor color, const char* msg);
 
 #ifdef VERSION_G8ME01
-void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 #endif
 void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
     GXColor white = { 0xFF, 0xFF, 0xFF, 0xFF };
@@ -1038,7 +1027,6 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 }
 
 void winFontInit(void);
-void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
 void* L_msgGetWork(void);
 
 static inline void winBookTex(WindowWork* w, s32 id, f32 x, f32 y, f32 width, f32 height) {
@@ -1265,8 +1253,6 @@ void winMailGX(WindowWork* wp, f32 x, f32 y) {
 }
 
 void winIconInit(void);
-void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
-void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 BOOL swGet(s32 id);
 
 void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
@@ -2451,7 +2437,6 @@ void winZClear(void) {
 }
 
 #ifdef VERSION_G8ME01
-void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 #endif
 void winMailDisp(WindowWork* wp) {
     s32 i;

@@ -34,7 +34,6 @@
 #define MW_US 0
 #endif
 
-extern void partyGetAppearPos(PartyEntry* party, Vec* pos);
 
 extern u8* caseCheckHitObj2(void* hit);
 

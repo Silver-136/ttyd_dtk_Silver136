@@ -32,8 +32,8 @@
 #include "evt/evt_img.h"
 #include "evt/evt_paper.h"
 #include "party/party_motion.h"
+#include "battle/battle_disp.h"
 
-void btlGetScreenPoint(Vec* in, Vec* out);
 
 typedef struct SukiBtn {
     s32 state;  // 0x0

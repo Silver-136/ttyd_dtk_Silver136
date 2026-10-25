@@ -33,7 +33,6 @@ PartyData* party_dp;
 s32 partyCtrlNo;
 
 s32 partyEntryMain(s32 memberId);
-void partyGetAppearPos2(PartyEntry* party, Vec* pos);
 
 PartyEntry* partyGetPtr(s32 index) {
     if (index >= 0) {
@@ -1060,7 +1059,6 @@ void partyHello(PartyEntry* party) {
     partyHello_inl(party);
 }
 
-void partyGetAppearPos(PartyEntry* party, Vec* pos);
 
 s32 partyHelloMain(PartyEntry* party) {
     s32 ret = 0;

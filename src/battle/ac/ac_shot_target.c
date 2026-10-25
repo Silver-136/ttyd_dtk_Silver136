@@ -7,12 +7,11 @@
 #include <string.h>
 #include "version.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_disp.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 
-void btlDispTex4(s32 id, Vec pos, Vec scale, Vec rot, GXColor color);
-void btlGetScreenPoint(Vec* in, Vec* out);
 
 typedef struct ShotTargetWork {
     s32 frame;    // 0x0

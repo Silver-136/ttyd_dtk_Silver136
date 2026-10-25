@@ -33,9 +33,10 @@
 #include "peach.h"
 #include "driver/npcdrv.h"
 #include "dolphin/mtx.h"
+#include "party/party_move.h"
+#include "driver/itemdrv.h"
 
 #ifdef VERSION_G8ME01
-BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
 #endif
 
 
@@ -888,7 +889,6 @@ void marioReInit(void) {
     wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
 }
 
-void itemCoinDrop(Vec* position);
 void peachMain(void);
 #ifdef VERSION_G8ME01
 #define mario_kemuri_80130474 mario_kemuri // US: global name

@@ -76,8 +76,6 @@ static WindowWork* wp;
 #include "manager/evtmgr_cmd.h"
 s32 winRootMain(WindowWork* wp);
 void winRootDisp(CameraId camId, WindowWork* wp);
-const char* winGetMapTplName(void);
-void FontDrawScaleVec(Vec scale);
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
 void winLectureKeyMask(void);
 void iconGetTexObj(GXTexObj* obj, u16 iconId);

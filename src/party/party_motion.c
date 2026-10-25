@@ -37,17 +37,13 @@ static f32 upstairs_dy;
 
 BOOL party_slit(PartyEntry* party);
 #ifdef VERSION_G8ME01
-BOOL partyChkBetweenWalls(PartyEntry* party, Vec pos);
 #endif
 BOOL party_roll(PartyEntry* party);
 void partyFlyAdjustY(PartyEntry* party);
 void partyWalkChkGnd(PartyEntry* party);
 void* partySearchHead(PartyEntry* party, Vec* pos, f32* height, f32 dir);
-s32 partyChkNoStandMobj(HitEntry* hit);
-void partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out);
 void partyChgPose(PartyEntry* party, const char* pose);
 s32 partyGetFootmarkId();
-void partyGetAppearPos4(PartyEntry* party, Vec* pos);
 
 // Note: the real evt_snd user functions live in this split (see evt_snd.c).
 // Functions are defined in reverse order (-inline deferred).
@@ -289,7 +285,6 @@ void N_partyFollowCloseOff(PartyEntry* party) {
     party->trigFlags &= ~0x20000;
 }
 
-void partyGetAppearPos3(PartyEntry* party, Vec* pos);
 static inline HitEntry* partyBehindGround(PartyEntry* party) {
     HitEntry* hit = partySearchGround(party, 10.0f, 0.0f);
     if (hit && (hitGetAttr(hit) & 0x200)) {
@@ -312,9 +307,7 @@ static void partyGorFix(PartyEntry* party);
 static void partyPoseA2(PartyEntry* party);
 s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
 
-f32 partyGetTargetDist3D(s32 id, Vec* p);
 #ifdef VERSION_G8ME01
-HitEntry* partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 w, f32 h);
 #endif
 
 void party_force_reset_outofscreen(PartyEntry* party);

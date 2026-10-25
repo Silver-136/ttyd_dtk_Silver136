@@ -45,7 +45,6 @@ void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 void _btlcmd_MakeMultiItemTable(BattleWork* wp);
 void _btlcmd_MakeOperationTable(BattleWork* wp);
 void _btlcmd_MakeActClassTable(BattleWork* wp);
-void btlGetScreenPoint(Vec* pos, Vec* out);
 void FontDrawString(f32 x, f32 y, const char* msg);
 unsigned long strlen(const char* s);
 BOOL BattleCommandAttackAudienceCheck(void);

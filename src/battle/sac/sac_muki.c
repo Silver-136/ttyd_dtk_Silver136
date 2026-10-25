@@ -32,7 +32,6 @@
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 
-void btlGetScreenPoint(Vec* in, Vec* out);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 
 

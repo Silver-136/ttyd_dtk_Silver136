@@ -34,14 +34,11 @@ WinMgrDesc* descriptors; // 0x4
 } WinMgrSelectTbl;
 
 extern ItemData itemDataTable[];
-void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
-void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*));
 #ifdef VERSION_G8ME01
 u16 L_pouchEquipBadge(s32 index);
 int select_comp_bteresa(void* a, void* b);
 #endif
-void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
 
 
 
@@ -1195,8 +1192,6 @@ void select_main(WinMgrEntry* entry) {
 }
 
 #ifdef VERSION_G8ME01
-void winFontSetWidth(Vec translate, Vec scale, GXColor color, f32 width, const char* fmt, ...);
-void winFontSetEdgeWidth(Vec translate, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 #endif
 void select_disp(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;

@@ -70,7 +70,6 @@ s32 evt_yoshi_frm;
 f32 jumpheight;
 
 #ifdef VERSION_G8ME01
-void partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height);
 #endif
 void inertia(PartyEntry* party);
 void searchGround(PartyEntry* party);

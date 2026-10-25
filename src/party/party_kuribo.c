@@ -188,7 +188,6 @@ EVT_BEGIN(kurio_msg_evt)
     CALL(post_kurio_use)
     RETURN
 EVT_END()
-BOOL partyGetAppearPos3(PartyEntry* party, Vec* pos);
 s32 fbatNpcTalkCheck(void);
 
 
