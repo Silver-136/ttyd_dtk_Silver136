@@ -18,6 +18,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "libc_decls.h"
+#include "poly_trig.h"
 
 #include "string.h"
 #include "mario/mariost.h"
@@ -52,75 +53,7 @@ FanWork* fan_wp;
 static void pose_init(void);
 static void pose_change(Fan* fan, const char* name, const char* anim);
 static f32 randf(f32 min, f32 max);
-static inline f32 fan_sin(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * y;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    }
-    return a;
-}
 
-static inline f32 fan_cos(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 s32 check_hammer(Fan* fan);
 void psndSFX_vol(s32 id, u8 vol);
@@ -1748,8 +1681,8 @@ void ext_fan_main(void) {
                             angle = (6.2831855f * ((r * (k = 225.0f - 135.0f)) + (mn = 135.0f))) / 360.0f;
                         }
                         dist = randf(400.0f, 500.0f);
-                        x = fan->pos.x + dist * fan_sin(angle);
-                        z = fan->pos.z - dist * fan_cos(angle);
+                        x = fan->pos.x + dist * polySinf(angle);
+                        z = fan->pos.z - dist * polyCosf(angle);
                         {
                             Vec tgt = {0.0f, 0.0f, 0.0f};
 
@@ -1777,9 +1710,9 @@ void ext_fan_main(void) {
                         fan->target = fan_zero;
                         spd = randf(0.1f, 0.2f);
                         angle = 6.2831855f * angle / 360.0f;
-                        fan->param.x = spd * fan_sin(angle);
+                        fan->param.x = spd * polySinf(angle);
                         fan->param.y = randf(0.03f, 0.06f);
-                        fan->param.z = spd * -fan_cos(angle);
+                        fan->param.z = spd * -polyCosf(angle);
                         fan->timer = 120;
                         // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
@@ -1834,8 +1767,8 @@ void ext_fan_main(void) {
                     lfan->param.x -= lfan->param.z;
                     angle = angleABf(lfan->pos.x, lfan->pos.z, lfan->target.x, lfan->target.z);
                     angle = 6.2831855f * angle / 360.0f;
-                    lfan->pos.x += lfan->param.y * fan_sin(angle);
-                    lfan->pos.z += lfan->param.y * -fan_cos(angle);
+                    lfan->pos.x += lfan->param.y * polySinf(angle);
+                    lfan->pos.z += lfan->param.y * -polyCosf(angle);
                     if (--lfan->timer < 0) {
                         lfan->state = 100;
                     }
@@ -2039,8 +1972,8 @@ s32 check_hammer(Fan* fan) {
     if (mario->currMotionId == MARIO_MOTION_HAMMER && fan_wp->hammerTimer > 10) {
         rot = 6.2831855f * reviseAngle(mario->displayDirection - 90.0f + camGetPtr(CAMERA_3D)->viewYaw) / 360.0f;
 
-        x = mario->position.x + 35.0f * fan_sin(rot);
-        z = mario->position.z - 35.0f * fan_cos(rot);
+        x = mario->position.x + 35.0f * polySinf(rot);
+        z = mario->position.z - 35.0f * polyCosf(rot);
         if (distABf(fan->pos.x, fan->pos.z, x, z) < 35.0f) {
             return 1;
         }
@@ -2052,9 +1985,9 @@ s32 check_hammer(Fan* fan) {
     if (party != NULL && party->currentMemberId == 5 && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         angle = 6.2831855f * cloudGetBreathDir() / 360.0f;
         dist = cloudGetBreathDist();
-        pos.x = party->position.x + dist * fan_sin(angle);
+        pos.x = party->position.x + dist * polySinf(angle);
         pos.y = party->position.y;
-        pos.z = party->position.z - dist * fan_cos(angle);
+        pos.z = party->position.z - dist * polyCosf(angle);
         if (angle >= 0.0f && PSVECDistance(&pos, &fan->pos) < 30.0f) {
             return 2;
         }

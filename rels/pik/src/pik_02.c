@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_mobj.h"
+#include "poly_trig.h"
 
 #include "driver/effdrv.h"
 #include "mario/mario.h"
@@ -28,75 +29,7 @@
 #include "evt/evt_sub.h"
 #include "mario/mario_cam.h"
 
-static inline f32 hoshi_sin(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * y;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    }
-    return a;
-}
 
-static inline f32 hoshi_cos(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_snd_envoff_f);
@@ -528,8 +461,8 @@ USER_FUNC(hoshi_jump) {
     vy = event->userdataf[1];
     speed = event->userdataf[2];
     angle = 6.2831855f * angleABf(pos[0], pos[2], x, z) / 360.0f;
-    pos[0] = speed * hoshi_sin(angle) + pos[0];
-    pos[2] = pos[2] - speed * hoshi_cos(angle);
+    pos[0] = speed * polySinf(angle) + pos[0];
+    pos[2] = pos[2] - speed * polyCosf(angle);
     pos[1] += vy;
     vy -= 0.1f;
     t -= 1.0f;

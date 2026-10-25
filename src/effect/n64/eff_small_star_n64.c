@@ -9,6 +9,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include <math.h>
+#include "poly_trig.h"
 
 #define PI 3.1415927f
 #define HALF_PI 1.5707964f
@@ -173,38 +174,6 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
-static inline f32 _cosf(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 x2;
-
-    if (x <= PI) {
-        if (x <= HALF_PI) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        } else {
-            x = HALF_PI - (x - HALF_PI);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    } else if (x < 4.712389f) {
-        x = x - PI;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    } else {
-        x = HALF_PI - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 inline f32 alphaf(f32 m, s32 x) { return x * m; }
 void effSmallStarMain(EffectEntry* effect) {
@@ -230,7 +199,7 @@ void effSmallStarMain(EffectEntry* effect) {
     ang = 6.2831855f * (f32)(w->frame * 6);
     for (i = 0; i < effect->count; i++, w++) {
         if (w->type == 2) {
-            c = _cosf(ang / 360.0f);
+            c = polyCosf(ang / 360.0f);
             w->velocity.y = 4.0f * c;
             w->velocity.x *= 0.94f;
             w->velocity.z *= 0.94f;

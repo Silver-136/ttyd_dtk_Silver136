@@ -5,78 +5,11 @@
 #include "mario/mariost.h"
 #include "system.h"
 #include <dolphin/os.h>
+#include "poly_trig.h"
 
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
 
-static inline f32 item_sin(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * y;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    }
-    return a;
-}
 
-static inline f32 item_cos(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 #define ITEM(ev) itemNameToPtr((char*)evtGetValue(ev, args[0]))
 
@@ -341,9 +274,9 @@ USER_FUNC(evt_item_get_important_item) {
     tb = event->userdataf[1];
     spd = event->userdataf[2];
     rad = 6.2831855f * angleABf(item->position.x, item->position.z, mx, mz) / 360.0f;
-    s = item_sin(rad);
+    s = polySinf(rad);
     item->position.x = spd * s + item->position.x;
-    c = item_cos(rad);
+    c = polyCosf(rad);
     item->position.z = item->position.z - spd * c;
     item->position.y += tb;
     tb = tb - 0.1f;

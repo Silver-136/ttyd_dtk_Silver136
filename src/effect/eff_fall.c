@@ -16,6 +16,7 @@
 #include "eff/n64/eff_kemuri1_n64.h"
 #include "evt/evt_cam.h"
 #include "dolphin/os.h"
+#include "poly_trig.h"
 
 typedef struct EffFallWork {
     s32 type;       // 0x0
@@ -93,81 +94,7 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect);
 void effFallDispInseki(CameraId cameraId, EffectEntry* effect);
 void effFallDispWater(CameraId cameraId, EffectEntry* effect);
 
-static inline f32 fall_sinf(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 x2;
 
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        }
-        else {
-            x = 1.5707964f - (x - 1.5707964f);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        }
-    }
-    else if (x < 4.712389f) {
-        x = x - 3.1415927f;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    }
-    else {
-        x = 1.5707964f - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    }
-    return a;
-}
-
-static inline f32 fall_cosf(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 x2;
-
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        }
-        else {
-            x = 1.5707964f - (x - 1.5707964f);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    }
-    else if (x < 4.712389f) {
-        x = x - 3.1415927f;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    }
-    else {
-        x = 1.5707964f - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration);
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration) {
@@ -737,8 +664,8 @@ void effFallMain(EffectEntry* effect) {
                     case 7:
                         e->pos.y += e->f34;
                         e->f34 -= e->f30;
-                        e->pos.x += 5.0f * fall_sinf((6.2831855f * e->rotY) / 360.0f);
-                        e->pos.z += 5.0f * -fall_cosf((6.2831855f * e->rotY) / 360.0f);
+                        e->pos.x += 5.0f * polySinf((6.2831855f * e->rotY) / 360.0f);
+                        e->pos.z += 5.0f * -polyCosf((6.2831855f * e->rotY) / 360.0f);
                         if ((--e->timer) < 0) {
                             e->pos.x = e->vel.x;
                             e->pos.y = e->vel.y;

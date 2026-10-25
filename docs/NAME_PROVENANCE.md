@@ -2125,3 +2125,6 @@ one turns up.
 | data | cardmgr | `cardFileName` ("mariost_save_file") | `str_802CCC80` | 2026-10-25 |
 | data | cardmgr | `cardGameTitle` (memory card title, US/JP text) | `str_802CCC94` | 2026-10-25 |
 | data | cardmgr | `cardDateFormat` (memory card comment format) | `str_802CCCAC` | 2026-10-25 |
+| inline | include/poly_trig.h | `polySinf`, `polyCosf` (polynomial sine/cosine shared by many units) | private copies `npc_sin`, `moa_sin`, `item_sin`, `coin_sin`, `_sinf`, ... | 2026-10-25 |
+| type | include/party/party_move.h | `FOOTMARK_FLAG_JUMP`, `FOOTMARK_FLAG_SLIT` | literal 1, 4 | 2026-10-25 |
+| type | include/battle/battle_damage.h | `CounterWork` fields (attackHits, payback, burnStatus, ..., hitEvent) | `field_0x0` .. `field_0x2C` | 2026-10-25 |

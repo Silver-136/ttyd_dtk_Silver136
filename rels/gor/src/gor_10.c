@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
 #include "evt/evt_cam.h"
+#include "poly_trig.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -25,45 +26,7 @@
 #include "string.h"
 #include "win/win_main.h"
 #include "pmario_sound.h"
-static inline f32 dd_sin(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a;
-    }
-    return a;
-}
 
-static inline f32 dd_cos(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x; a = a * x2 - b; a = a * x2 + c;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c;
-    }
-    return a;
-}
 
 void mabutaDisp(CameraId camera, void* param);
 static void depthDisp(CameraId camera, void* param);
@@ -139,8 +102,8 @@ static void depthDisp(CameraId camera, void* param) {
     GXSetNumTevStages(8);
     for (i = 0; i < 8; i++) {
         a = 6.2831855f * i / 8.0f;
-        s = dd_sin(a);
-        c = dd_cos(a);
+        s = polySinf(a);
+        c = polyCosf(a);
         MTXTrans(mtx, (amp * s) / 100.0f, (amp * c) / 100.0f, 0.0f);
         GXLoadTexMtxImm(mtx, GX_TEXMTX0 + i * 3, GX_MTX2x4);
         GXSetTexCoordGen2((GXTexCoordID)i, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0 + i * 3, GX_FALSE, GX_PTIDENTITY);

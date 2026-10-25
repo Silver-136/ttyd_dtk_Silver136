@@ -5,6 +5,7 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 #include "icon_ids.h"
+#include "poly_trig.h"
 
 #define PI 3.1415927f
 #define HALF_PI 1.5707964f
@@ -24,45 +25,6 @@ typedef struct EffStarPointWork {
 } EffStarPointWork;
 
 // cheap polynomial approximations, valid for x in [0, 2pi]
-static inline f32 _sinf(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 x2;
-
-    if (x <= PI) {
-        if (x <= HALF_PI) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        }
-        else {
-            x = HALF_PI - (x - HALF_PI);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        }
-    }
-    else if (x < 4.712389f) {
-        x = x - PI;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    }
-    else {
-        x = HALF_PI - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    }
-    return a;
-}
 
 static inline f32 _cosf(f32 x) {
     f32 a = 0.03705f;
@@ -130,7 +92,7 @@ EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
         work->position.y = 0.0f;
         work->position.z = 0.0f;
         angle = r * 6.2831855f / 360.0f;
-        work->velX = 2.0f * _sinf(angle);
+        work->velX = 2.0f * polySinf(angle);
         work->velZ = 2.0f * _cosf(angle);
         work->velY = 14.0f;
         work->gravity = 2.0f;

@@ -15,6 +15,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "poly_trig.h"
 #pragma inline_max_total_size(11500)
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -61,7 +62,6 @@ static inline f32 moa_sin(f32 x) {
     f32 a = 0.00761f;
     f32 b = 0.16605f;
     f32 c = 1.0f;
-    f32 y;
     f32 x2;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
@@ -70,25 +70,25 @@ static inline f32 moa_sin(f32 x) {
             a = a * x2 + c;
             a = a * x;
         } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
+            x = 1.5707964f - (x - 1.5707964f);
+            x2 = x * x;
             a = a * x2 - b;
             a = a * x2 + c;
-            a = a * y;
+            a = a * x;
         }
     } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
+        x = x - 3.1415927f;
+        x2 = x * x;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = a * y;
+        a = a * x;
         a = -a;
     } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
+        x = 1.5707964f - (x - 4.712389f);
+        x2 = x * x;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = a * y;
+        a = a * x;
         a = -a;
     }
     return a;
@@ -98,75 +98,6 @@ static inline f32 moa_cos(f32 x) {
     f32 a = 0.03705f;
     f32 b = 0.4967f;
     f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
-
-static inline f32 moa_sinx(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        } else {
-            x = 1.5707964f - (x - 1.5707964f);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        }
-    } else if (x < 4.712389f) {
-        x = x - 3.1415927f;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    } else {
-        x = 1.5707964f - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    }
-    return a;
-}
-
-static inline f32 moa_cosx(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
     f32 x2;
     if (x <= 3.1415927f) {
         if (x <= 1.5707964f) {
@@ -194,6 +125,8 @@ static inline f32 moa_cosx(f32 x) {
     }
     return a;
 }
+
+
 
 static void ext_moamoa_main(void);
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
@@ -755,8 +688,8 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     }
     if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->field_0x40 > 10) {
         rad = 6.2831855f * reviseAngle(camGetPtr(CAMERA_3D)->viewYaw + (mario->displayDirection - 90.0f)) / 360.0f;
-        dist = 35.0f * moa_sinx(rad) + mario->position.x;
-        if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], dist, mario->position.z - 35.0f * moa_cosx(rad)) < 35.0f) {
+        dist = 35.0f * polySinf(rad) + mario->position.x;
+        if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], dist, mario->position.z - 35.0f * polyCosf(rad)) < 35.0f) {
             return 2;
         }
     }
@@ -802,11 +735,11 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
         if (dist < range) {
             angle = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
             if (__fabsf(compAngle(angle, mario->directionView)) < 40.0f) {
-                mario->floorMove.x = -((range - dist) * moa_sinx(6.2831855f * mario->directionView / 360.0f));
-                mario->floorMove.z = (range - dist) * moa_cosx(6.2831855f * mario->directionView / 360.0f);
+                mario->floorMove.x = -((range - dist) * polySinf(6.2831855f * mario->directionView / 360.0f));
+                mario->floorMove.z = (range - dist) * polyCosf(6.2831855f * mario->directionView / 360.0f);
             } else {
-                mario->floorMove.x = (*pose->mtx)[0][3] - range * moa_sinx(6.2831855f * angle / 360.0f) - mario->position.x;
-                mario->floorMove.z = (*pose->mtx)[2][3] + range * moa_cosx(6.2831855f * angle / 360.0f) - mario->position.z;
+                mario->floorMove.x = (*pose->mtx)[0][3] - range * polySinf(6.2831855f * angle / 360.0f) - mario->position.x;
+                mario->floorMove.z = (*pose->mtx)[2][3] + range * polyCosf(6.2831855f * angle / 360.0f) - mario->position.z;
             }
         }
     }
@@ -877,9 +810,9 @@ static void ext_moamoa_main(void) {
     if (party->currentMemberId == 5 && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         wp->breathDir = cloudGetBreathDir();
         wp->breathDist = cloudGetBreathDist();
-        wp->breathPos.x = wp->breathDist * moa_sinx(6.2831855f * wp->breathDir / 360.0f) + party->position.x;
+        wp->breathPos.x = wp->breathDist * polySinf(6.2831855f * wp->breathDir / 360.0f) + party->position.x;
         wp->breathPos.y = party->position.y;
-        wp->breathPos.z = party->position.z - wp->breathDist * moa_cosx(6.2831855f * wp->breathDir / 360.0f);
+        wp->breathPos.z = party->position.z - wp->breathDist * polyCosf(6.2831855f * wp->breathDir / 360.0f);
     }
     if (wp->field_0x3a[0] > 50) {
         wp->target[0] = wp->target[1];
@@ -960,9 +893,9 @@ static void ext_moamoa_main(void) {
                 moa->target = moamoa_zero_vec;
                 spd = randf(0.1f, 0.2f);
                 rad = (6.2831855f * angle) / 360.0f;
-                moa->vy = spd * moa_sinx(rad);
+                moa->vy = spd * polySinf(rad);
                 moa->speed = randf(0.03f, 0.06f);
-                moa->gravity = spd * (-moa_cosx(rad));
+                moa->gravity = spd * (-polyCosf(rad));
                 moa->jumpTimer = 120;
                 {
                 s32 idx;
@@ -999,12 +932,12 @@ static void ext_moamoa_main(void) {
         f32 ar;
         rad = randf(0.0f, 6.2831855f);
         dist = randf(0.0f, 50.0f);
-        ax = wp->target[i % 3].x + (dist * moa_sinx(rad));
-        az = wp->target[i % 3].z - (dist * moa_cosx(rad));
+        ax = wp->target[i % 3].x + (dist * polySinf(rad));
+        az = wp->target[i % 3].z - (dist * polyCosf(rad));
         ar = (6.2831855f * angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], ax, az)) / 360.0f;
-        x = (15.0f * moa_sinx(ar)) + (*pose->mtx)[0][3];
+        x = (15.0f * polySinf(ar)) + (*pose->mtx)[0][3];
         y = (*pose->mtx)[1][3];
-        z = (*pose->mtx)[2][3] - (15.0f * moa_cosx(ar));
+        z = (*pose->mtx)[2][3] - (15.0f * polyCosf(ar));
         {
           f32 k1;
           f32 k2;
@@ -1028,9 +961,9 @@ static void ext_moamoa_main(void) {
           a = randf(0.0f, 360.0f);
         }
         r = (6.2831855f * a) / 360.0f;
-        rad = (5.0f * moa_sinx(r)) + (*pose->mtx)[0][3];
+        rad = (5.0f * polySinf(r)) + (*pose->mtx)[0][3];
         y = (*pose->mtx)[1][3];
-        z = (*pose->mtx)[2][3] - (5.0f * moa_cosx(r));
+        z = (*pose->mtx)[2][3] - (5.0f * polyCosf(r));
       }
       {
         f32 k1;
@@ -1086,9 +1019,9 @@ static void ext_moamoa_main(void) {
           rad = (6.2831855f * a) / 360.0f;
         }
         d = wp->dist;
-        x = (*pose->mtx)[0][3] + (15.0f * moa_sinx(rad));
+        x = (*pose->mtx)[0][3] + (15.0f * polySinf(rad));
         dist = (*pose->mtx)[1][3];
-        z = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
+        z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
         { f32 hopSpeed; f32 k; f32 r1 = rand() / 32767.0f; hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
         { f32 g2 = randf(0.4f, 0.4f); { f32 x2 = x; f32 y2 = dist; f32 z2 = z; f32 s2 = hopSpeed; f32 g3 = g2; moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g3); } } }
@@ -1106,7 +1039,7 @@ static void ext_moamoa_main(void) {
       }
         a += 180.0f;
         d = wp->dist;
-        x = (*pose->mtx)[0][3] + (30.0f * moa_sinx((6.2831855f * a) / 360.0f));
+        x = (*pose->mtx)[0][3] + (30.0f * polySinf((6.2831855f * a) / 360.0f));
         y = (*pose->mtx)[1][3];
         z = (*pose->mtx)[2][3];
       {
@@ -1135,8 +1068,8 @@ static void ext_moamoa_main(void) {
         moa->vy -= moa->gravity;
       {
         f32 rad = (6.2831855f * angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], moa->target.x, moa->target.z)) / 360.0f;
-        (*pose->mtx)[0][3] += moa->speed * moa_sinx(rad);
-        (*pose->mtx)[2][3] = (*pose->mtx)[2][3] + (moa->speed * (-moa_cosx(rad)));
+        (*pose->mtx)[0][3] += moa->speed * polySinf(rad);
+        (*pose->mtx)[2][3] = (*pose->mtx)[2][3] + (moa->speed * (-polyCosf(rad)));
       }
         if ((--moa->jumpTimer) < 0)
       {
@@ -1184,9 +1117,9 @@ static void ext_moamoa_main(void) {
               a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
               rad = (6.2831855f * a3) / 360.0f;
           }
-          ty = (*pose->mtx)[0][3] + (15.0f * moa_sinx(rad));
+          ty = (*pose->mtx)[0][3] + (15.0f * polySinf(rad));
           y = (*pose->mtx)[1][3];
-          z = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
+          z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
         }
         {
           f32 k;
@@ -1218,8 +1151,8 @@ static void ext_moamoa_main(void) {
         s = rand() / 32767.0f;
         dist = randf(300.0f, 500.0f);
         { f32 k; rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f; }
-        x = (dist * moa_sinx(rad)) + (*pose->mtx)[0][3];
-        y = (*pose->mtx)[2][3] - (dist * moa_cosx(rad));
+        x = (dist * polySinf(rad)) + (*pose->mtx)[0][3];
+        y = (*pose->mtx)[2][3] - (dist * polyCosf(rad));
       }
       {
         f32 k;
@@ -1311,8 +1244,8 @@ static void ext_moamoa_main(void) {
                 a3 += ((tz * (k = 45.0f - -45.0f)) + -45.0f);
                 if (d > 6.0f && (x = (*pose->mtx)[1][3]) < 60.0f) {
                     f32 rad = (6.2831855f * a3) / 360.0f;
-                    dist = (15.0f * moa_sinx(rad)) + (*pose->mtx)[0][3];
-                    angle = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
+                    dist = (15.0f * polySinf(rad)) + (*pose->mtx)[0][3];
+                    angle = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                     {
                         f32 k;
                         f32 r1 = rand() / 32767.0f;
@@ -1334,9 +1267,9 @@ static void ext_moamoa_main(void) {
                         a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
                         rad = (6.2831855f * a3) / 360.0f;
                     }
-                    x = (15.0f * moa_sinx(rad)) + (*pose->mtx)[0][3];
+                    x = (15.0f * polySinf(rad)) + (*pose->mtx)[0][3];
                     y = (*pose->mtx)[1][3];
-                    grav = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
+                    grav = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                     {
                         f32 k;
                         f32 r1 = rand() / 32767.0f;
@@ -1361,9 +1294,9 @@ static void ext_moamoa_main(void) {
         moa->timer = irand(i / 2);
         rad = (6.2831855f * ((s * (k = 315.0f - 225.0f)) + 225.0f)) / 360.0f;
       }
-        moa->target.x = spd * moa_sinx(rad);
+        moa->target.x = spd * polySinf(rad);
         moa->target.y = randf(1.0f, 2.0f);
-        moa->target.z = spd * (-moa_cosx(rad));
+        moa->target.z = spd * (-polyCosf(rad));
         moa->state++;
         break;
 
@@ -1484,8 +1417,8 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     vy = event->userdataf[1];
     speed = event->userdataf[2];
     angle = 6.2831855f * angleABf(npc->position.x, npc->position.z, x, z) / 360.0f;
-    npc->position.x = speed * moa_sinx(angle) + npc->position.x;
-    npc->position.z = npc->position.z - speed * moa_cosx(angle);
+    npc->position.x = speed * polySinf(angle) + npc->position.x;
+    npc->position.z = npc->position.z - speed * polyCosf(angle);
     npc->position.y += vy;
     vy -= gravity;
     t -= 1.0f;

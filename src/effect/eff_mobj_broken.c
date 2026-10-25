@@ -10,6 +10,7 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "poly_trig.h"
 
 
 #define PI 3.1415927f
@@ -33,75 +34,7 @@ static void effMObjBrokenDisp(CameraId cameraId, EffectEntry* effect);
 static void effMObjBrokenDisp2(CameraId cameraId, EffectEntry* effect);
 static void rendermodeFunc(s32 arg);
 
-static inline f32 _sinf(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 x2;
 
-    if (x <= PI) {
-        if (x <= HALF_PI) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        } else {
-            x = HALF_PI - (x - HALF_PI);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        }
-    } else if (x < 4.712389f) {
-        x = x - PI;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    } else {
-        x = HALF_PI - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    }
-    return a;
-}
-
-static inline f32 _cosf(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 x2;
-
-    if (x <= PI) {
-        if (x <= HALF_PI) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        } else {
-            x = HALF_PI - (x - HALF_PI);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    } else if (x < 4.712389f) {
-        x = x - PI;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    } else {
-        x = HALF_PI - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -246,8 +179,8 @@ static void effMObjBrokenMain(EffectEntry* effect) {
             }
             break;
         }
-        work->position.x += work->speed * _sinf(6.2831855f * work->angle / 360.0f);
-        work->position.z += work->speed * -_cosf(6.2831855f * work->angle / 360.0f);
+        work->position.x += work->speed * polySinf(6.2831855f * work->angle / 360.0f);
+        work->position.z += work->speed * -polyCosf(6.2831855f * work->angle / 360.0f);
         work->position.y += work->velY;
         work->velY -= work->gravity;
         if (type < 6) {

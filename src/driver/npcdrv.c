@@ -38,76 +38,11 @@
 #include "koopa.h"
 #include "koopa_hit.h"
 #include "mario/mario_hit.h"
+#include "poly_trig.h"
 
 f32 cloudGetBreathPower(Vec pos, f32 width);
 void kpaPowDown(void);
-static inline f32 npc_sin(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        } else {
-            x = 1.5707964f - (x - 1.5707964f);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        }
-    } else if (x < 4.712389f) {
-        x = x - 3.1415927f;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    } else {
-        x = 1.5707964f - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * x;
-        a = -a;
-    }
-    return a;
-}
 
-static inline f32 npc_cos(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        } else {
-            x = 1.5707964f - (x - 1.5707964f);
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    } else if (x < 4.712389f) {
-        x = x - 3.1415927f;
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    } else {
-        x = 1.5707964f - (x - 4.712389f);
-        x2 = x * x;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 void FontDrawStringShake(f32 x, f32 y, const char* message);
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s32 evtCode, f32 x, f32 y, f32 z);
@@ -486,8 +421,8 @@ void npcDisp_blur(CameraId camId, void* param) {
 
     rotY = reviseAngle(-entry->direction);
     flag = animPoseGetMaterialFlag(entry->poseId);
-    x = 2.0f * npc_sin((6.2831855f * camGetPtr(camId)->viewYaw) / 360.0f);
-    z = 2.0f * -npc_cos((6.2831855f * camGetPtr(camId)->viewYaw) / 360.0f);
+    x = 2.0f * polySinf((6.2831855f * camGetPtr(camId)->viewYaw) / 360.0f);
+    z = 2.0f * -polyCosf((6.2831855f * camGetPtr(camId)->viewYaw) / 360.0f);
     animPoseMain(entry->poseId);
     i = 4;
     alpha = 100;
@@ -1303,13 +1238,13 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     mario->targetNpc = npc;
     angle = angleABf(mario->position.x, mario->position.z, npc->position.x, npc->position.z);
     if (__fabsf(compAngle(angle, mario->directionView)) < 40.0f) {
-        dx = (range - dist) * ( -npc_sin((6.2831855f * mario->directionView) / 360.0f) );
-        dz = (range - dist) * npc_cos((6.2831855f * mario->directionView) / 360.0f);
+        dx = (range - dist) * ( -polySinf((6.2831855f * mario->directionView) / 360.0f) );
+        dz = (range - dist) * polyCosf((6.2831855f * mario->directionView) / 360.0f);
 
     } else {
         rad = (6.2831855f * angle) / 360.0f;
-        dx = (npc->position.x - ( range * npc_sin(rad) )) - mario->position.x;
-        dz = (npc->position.z + ( range * npc_cos(rad) )) - mario->position.z;
+        dx = (npc->position.x - ( range * polySinf(rad) )) - mario->position.x;
+        dz = (npc->position.z + ( range * polyCosf(rad) )) - mario->position.z;
     }
     len = sqrtf(( dx * dx ) + ( dz * dz) );
     if (len > ( (mario->wPlayerCollisionBox.z > 4.0f ) ? ( 3.0f ) : ( 1.5f))) { if (1 ) {

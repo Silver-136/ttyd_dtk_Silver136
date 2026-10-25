@@ -29,6 +29,7 @@
 #include "dolphin/exi.h"
 #include "eff/n64/eff_stardust2_n64.h"
 #include "eff/n64/eff_stardust_n64.h"
+#include "poly_trig.h"
 
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
@@ -63,75 +64,7 @@ static KaitenParam* ckp1;
 static KaitenParam* ckpw;
 BrokenWork broken_work;
 s32 select;
-static inline f32 tb_sin(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * y;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    }
-    return a;
-}
 
-static inline f32 tb_cos(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-    if (x <= 3.1415927f) {
-        if (x <= 1.5707964f) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        } else {
-            y = 1.5707964f - (x - 1.5707964f);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    } else if (x < 4.712389f) {
-        y = x - 3.1415927f;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    } else {
-        y = 1.5707964f - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 void tiz_broken_draw(CameraId cameraId, void* param);
 void effStarStoneDraw(CameraId camera, void* param);
@@ -1095,12 +1028,12 @@ USER_FUNC(tiz_broken) {
                 angle = 6.2831855f * angleABf(0.0f, 0.0f, dx, dy) / 360.0f;
 #ifdef VERSION_G8ME01
                 inv = param_tbl[3];
-                p->gx = inv * tb_sin(angle);
-                p->gy = inv * -tb_cos(angle);
+                p->gx = inv * polySinf(angle);
+                p->gy = inv * -polyCosf(angle);
 #else
                 nx = param_tbl[3];
-                p->gx = nx * tb_sin(angle);
-                p->gy = nx * -tb_cos(angle);
+                p->gx = nx * polySinf(angle);
+                p->gy = nx * -polyCosf(angle);
 #endif
 #ifdef VERSION_G8ME01
                 p->gx *= 60.0f / gp->framerate;

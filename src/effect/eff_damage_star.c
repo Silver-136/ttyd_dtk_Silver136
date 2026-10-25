@@ -9,6 +9,7 @@
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
 #include "libc_decls.h"
+#include "poly_trig.h"
 
 #define PI 3.1415927f
 #define HALF_PI 1.5707964f
@@ -67,77 +68,7 @@ typedef struct DamageStarWork {
     MayaAnim* anim; // 0x44
 } DamageStarWork;
 
-static inline f32 _sinf(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
 
-    if (x <= PI) {
-        if (x <= HALF_PI) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        } else {
-            y = HALF_PI - (x - HALF_PI);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * y;
-        }
-    } else if (x < 4.712389f) {
-        y = x - PI;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    } else {
-        y = HALF_PI - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    }
-    return a;
-}
-
-static inline f32 _cosf(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-
-    if (x <= PI) {
-        if (x <= HALF_PI) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        } else {
-            y = HALF_PI - (x - HALF_PI);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    } else if (x < 4.712389f) {
-        y = x - PI;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    } else {
-        y = HALF_PI - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 MayaHermitKey damageStar_effHermit_0[] = {
     {
@@ -404,8 +335,8 @@ EffectEntry* effDamageStarEntry(s32 type, s32 number, f32 x, f32 y, f32 z, f32 s
         work->position.y = 0.0f;
         work->position.z = 0.0f;
         a = 6.2831855f * ang / 360.0f;
-        work->velocity.x = 1.5f * (scale * -_sinf(a));
-        work->velocity.y = 1.5f * (scale * _cosf(a));
+        work->velocity.x = 1.5f * (scale * -polySinf(a));
+        work->velocity.y = 1.5f * (scale * polyCosf(a));
         work->velocity.z = 0.0f;
         work->rotation = 0.0f;
         work->alpha = 255;

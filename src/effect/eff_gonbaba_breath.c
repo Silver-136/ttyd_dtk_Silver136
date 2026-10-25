@@ -11,6 +11,7 @@
 #include "version.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "poly_trig.h"
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 
@@ -49,83 +50,7 @@ u32 gap_07_80417E8C_sdata[5] = {0,0,0,0,0};
 #pragma force_active reset
 
 // cheap polynomial approximations, valid for x in [0, 2pi]
-static inline f32 _sinf(f32 x) {
-    f32 a = 0.00761f;
-    f32 b = 0.16605f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
 
-    if (x <= PI) {
-        if (x <= HALF_PI) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * x;
-        }
-        else {
-            y = HALF_PI - (x - HALF_PI);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = a * y;
-        }
-    }
-    else if (x < 4.712389f) {
-        y = x - PI;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    }
-    else {
-        y = HALF_PI - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = a * y;
-        a = -a;
-    }
-    return a;
-}
-
-static inline f32 _cosf(f32 x) {
-    f32 a = 0.03705f;
-    f32 b = 0.4967f;
-    f32 c = 1.0f;
-    f32 y;
-    f32 x2;
-
-    if (x <= PI) {
-        if (x <= HALF_PI) {
-            x2 = x * x;
-            a = a * x2 - b;
-            a = a * x2 + c;
-        }
-        else {
-            y = HALF_PI - (x - HALF_PI);
-            x2 = y * y;
-            a = a * x2 - b;
-            a = a * x2 + c;
-            a = -a;
-        }
-    }
-    else if (x < 4.712389f) {
-        y = x - PI;
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-        a = -a;
-    }
-    else {
-        y = HALF_PI - (x - 4.712389f);
-        x2 = y * y;
-        a = a * x2 - b;
-        a = a * x2 + c;
-    }
-    return a;
-}
 
 void effGonbabaBreathMain(EffectEntry* effect);
 void effGonbabaBreathDisp(CameraId cameraId, EffectEntry* effect);
@@ -184,8 +109,8 @@ void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
             work->position.x = 0.0f;
             work->position.y = 0.0f;
             work->position.z = 0.0f;
-            work->velX = spd2 * _sinf(rad2);
-            work->velY = spd2 * _cosf(rad2);
+            work->velX = spd2 * polySinf(rad2);
+            work->velY = spd2 * polyCosf(rad2);
             work->scale = 1.0f;
             work->life = 30;
             work->alpha = 255;
@@ -206,8 +131,8 @@ void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
             work->position.y = 0.0f;
             work->position.z = 0.0f;
             rad = 6.2831855f * ang / 360.0f;
-            work->velX = spd * _sinf(rad);
-            work->velY = spd * _cosf(rad);
+            work->velX = spd * polySinf(rad);
+            work->velY = spd * polyCosf(rad);
             work->scale = 1.0f;
             work->life = 60;
             work->alpha = 255;
