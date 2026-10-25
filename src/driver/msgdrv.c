@@ -726,9 +726,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
     s32 wwD;
     s32 wwR;
     s32 kR;
-    s16 s234;
-    s16 s232;
-    s16 s230;
+    s16 topY;
+    s16 savedPage;
+    s16 savedScroll;
 
     MsgWinData* data;
     /* FAKE: nn, fp, fx, ys and yx are one-element arrays (IRO scalarizes them into @ temps). nn is the ruby index copy
@@ -771,26 +771,24 @@ void msgAnalize(smartEntry* smart, char* msg) {
     f32 scale;
 #endif
     f32 fv;
-    s32 v48;
-    // FAKE: int, not s32 (same width/sign; changes colouring)
-    int v44;
-    s32 v40;
+    s32 posX;
+    int posY;
+    s32 waitTime;
     s32 iconId;
-    s32 i38;
-    s32 i34;
+    s32 iconOffX;
+    s32 iconY;
     MsgWinData* data2;
-    s32 i30;
+    s32 iconAdvance;
     f32 iconScale;
-    s32 i28;
-    // FAKE: int, not s32 (same width/sign; changes colouring)
-    int i24;
-    s32 i20;
-    f32 f1c;
-    s32 i18;
-    s16 w16;
-    s16 w14;
-    s16 w12;
-    s16 w10;
+    s32 animX;
+    int animY;
+    s32 animFlip;
+    f32 animScale;
+    s32 paperTime;
+    s16 winX;
+    s16 winY;
+    s16 winHeight;
+    s16 winWidth;
     s16 sel0;
     s16 sel1;
     u16 iw;
@@ -824,10 +822,10 @@ void msgAnalize(smartEntry* smart, char* msg) {
         window->type = 0;
     }
     time = data->parseTime;
-    s234 = 0;
-    s232 = data->parsePage;
+    topY = 0;
+    savedPage = data->parsePage;
     x = data->parseX;
-    s230 = data->parseScroll;
+    savedScroll = data->parseScroll;
     y = data->parseY;
     step = data->parseSpeed;
     switch (window->type) {
@@ -916,8 +914,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
             data->parseTime = time;
             data->parseX = x;
             data->parseY = y;
-            data->parsePage = s232;
-            data->parseScroll = s230;
+            data->parsePage = savedPage;
+            data->parseScroll = savedScroll;
             return;
         case '\n':
             entry->glyph = 0xFFFB;
@@ -929,10 +927,10 @@ void msgAnalize(smartEntry* smart, char* msg) {
             if (data->flags & 0x10) {
                 // US: tighter line spacing
                 y -= 0.7f * (32.0f * maxScale);
-                s230 -= 0.7f * (32.0f * maxScale);
+                savedScroll -= 0.7f * (32.0f * maxScale);
             } else {
                 y -= 32.0f * maxScale;
-                s230 -= 32.0f * maxScale;
+                savedScroll -= 32.0f * maxScale;
             }
 #else
             x = 0;
@@ -940,7 +938,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 maxScale = 1.0f;
             }
             y -= 32.0f * maxScale;
-            s230 -= 32.0f * maxScale;
+            savedScroll -= 32.0f * maxScale;
 #endif
             msg++;
             entry++;
@@ -976,24 +974,24 @@ void msgAnalize(smartEntry* smart, char* msg) {
             }
             if (( strcmp(tag, "k") == 0 ) || ( strcmp(tag, "key") == 0) ) {
                 entry->glyph = 0xFFFE;
-                entry->x = s232;
+                entry->x = savedPage;
                 entry->time = time;
                 time += 100;
                 entry++;
                 data->charCount++;
-                s232++;
+                savedPage++;
             } else if (strcmp(tag, "keyxon") == 0) {
                 data->flags |= 0x100;
             } else if (( strcmp(tag, "p") == 0 ) || ( strcmp(tag, "scrl_auto") == 0) ) {
-                if (s230 != 0) {
+                if (savedScroll != 0) {
                     entry->glyph = 0xFFFD;
-                    entry->y = s230 - 3;
-                    s234 = y - 6;
+                    entry->y = savedScroll - 3;
+                    topY = y - 6;
                     y -= 3;
                     entry->time = time;
                     time += 0x32;
                     entry++;
-                    s230 = 0;
+                    savedScroll = 0;
                     data->charCount++;
                 }
             } else if (( strcmp(tag, "o") == 0 ) || ( strcmp(tag, "once_stop") == 0) ) {
@@ -1003,16 +1001,16 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "pos") == 0) {
-                sscanf(args, "%d%d", &v48, &v44);
-                x = v48;
-                if (v44 != 999) {
-                    y = s234 - v44;
+                sscanf(args, "%d%d", &posX, &posY);
+                x = posX;
+                if (posY != 999) {
+                    y = topY - posY;
 #ifdef VERSION_G8ME01
-                    s230 = -v44;
+                    savedScroll = -posY;
                 }
 #else
                 }
-                s230 = -v44;
+                savedScroll = -posY;
 #endif
 #ifdef VERSION_G8ME01
             } else if (strcmp(tag, "scale") == 0) {
@@ -1033,8 +1031,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 scale = 1.0f;
 #endif
             } else if (strcmp(tag, "wait") == 0) {
-                sscanf(args, "%d", &v40);
-                time += v40;
+                sscanf(args, "%d", &waitTime);
+                time += waitTime;
             } else if (strcmp(tag, "speed") == 0) {
                 sscanf(args, "%d", &step);
             } else if (strcmp(tag, "/speed") == 0) {
@@ -1125,12 +1123,12 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "clear") == 0) {
                 window->type = 11;
             } else if (strcmp(tag, "wpos") == 0) {
-                sscanf(args, "%hd%hd%hd%hd", &w16, &w14, &w12, &w10);
+                sscanf(args, "%hd%hd%hd%hd", &winX, &winY, &winHeight, &winWidth);
                 window->flags |= 4;
-                window->x = w16;
-                window->y = w14;
-                window->height = w12;
-                window->width = w10;
+                window->x = winX;
+                window->y = winY;
+                window->height = winHeight;
+                window->width = winWidth;
             } else if (strcmp(tag, "select") == 0) {
                 window->type = 5;
                 data->flags |= 0x20;
@@ -1155,9 +1153,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "icon") == 0) {
                 isHM = FALSE;
                 if ((( (s8) args [0] ) >= '0') && (((s8) args [0]) <= '9') ) {
-                    sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &i38, &i34, &i30);
+                    sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
                 } else {
-                    sscanf(args, "%s%f%d%d%d", name, &iconScale, &i38, &i34, &i30);
+                    sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
                     if (strcmp(name, "HM") == 0) {
                         isHM = TRUE;
                     }
@@ -1171,17 +1169,17 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
                     ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
                     entry->glyph = 0xFFF8;
-                    entry->x = (x + (( 0.5f * iw ) * iconScale) ) + i38;
+                    entry->x = (x + (( 0.5f * iw ) * iconScale) ) + iconOffX;
 #ifndef VERSION_G8ME01
                     x += 0x28;
 #endif
                     entry->y = y - ( ih * iconScale) ;
-                    entry->iconY = i34;
+                    entry->iconY = iconY;
                     entry->scale = iconScale;
                     entry->time = time;
                     entry++;
 #ifdef VERSION_G8ME01
-                    x += i30 + 0x28;
+                    x += iconAdvance + 0x28;
 #endif
                     time += step;
                     data->charCount++;
@@ -1227,7 +1225,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     data->charCount++;
                 }
             } else if (strcmp(tag, "anim") == 0) {
-                sscanf(args, "%s%s%d%d%f%d", anim1, anim2, &i28, &i24, &f1c, &i20);
+                sscanf(args, "%s%s%d%d%f%d", anim1, anim2, &animX, &animY, &animScale, &animFlip);
                 entry->value = animPoseEntry(anim1, 2);
                 animPoseSetAnim(entry->value, anim2, 1);
                 animPoseSetMaterialFlagOn(entry->value, 0x1800);
@@ -1237,18 +1235,18 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     animPoseSetGXFunc(msgw->poseId, msgDispKeyWait_render, 0);
                 }
                 entry->glyph = 0xFFF4;
-                entry->x = i28;
-                entry->y = s234 - i24;
-                entry->scale = f1c;
-                entry->rot = (i20 == 0) ? ( 0.0f ) : ( 180.0f) ;
+                entry->x = animX;
+                entry->y = topY - animY;
+                entry->scale = animScale;
+                entry->rot = (animFlip == 0) ? ( 0.0f ) : ( 180.0f) ;
                 entry++;
                 time += step;
                 data->charCount++;
             } else if (strcmp(tag, "paper") == 0) {
-                sscanf(args, "%s%d", paper, &i18);
+                sscanf(args, "%s%d", paper, &paperTime);
                 entry->npc = (strcmp(paper, "me") != 0) ? npcNameToPtr(paper) : NULL;
                 entry->glyph = 0xFFF3;
-                entry->time = i18;
+                entry->time = paperTime;
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "/paper") == 0) {
