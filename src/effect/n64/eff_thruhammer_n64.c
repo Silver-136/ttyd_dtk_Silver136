@@ -208,7 +208,6 @@ void effThruHammerDisp(CameraId cameraId, EffectEntry* effect) {
     main_dl(effect, mtx);
 }
 
-#pragma opt_lifetimes off
 static void main_dl(EffectEntry* effect, Mtx camMtx) {
     EffThruHammerN64Work* work = effect->userdata;
     s32 i;

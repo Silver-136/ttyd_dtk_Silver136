@@ -5498,7 +5498,6 @@ BOOL psndBGMOn_f(u32 r3, char* bgm_name, u32 fadetime, s32 r6) {
     return psndBGMOn_f_d(r3, bgm_name, fadetime, 750, r6);
 }
 
-#pragma dont_inline off
 static inline s32 psndSSFindCh(void) {
   u32 ch;
   for (ch = 0; ch < 3; ch++)
@@ -5993,7 +5992,6 @@ static inline s32 sfxvol(PaperSoundEffect* s) {
 #define SFX_VOL(s) sfxvol(s)
 
 
-#pragma dont_inline off
 void psndSFXMain(void) {
     SoundEffectEntry* e;
     u32 j;

@@ -288,7 +288,6 @@ void cardMain(void) {
             break;
     }
 }
-#pragma opt_propagation on
 
 void cardCopy2Main(s32 slot) {
 #ifdef VERSION_G8ME01
