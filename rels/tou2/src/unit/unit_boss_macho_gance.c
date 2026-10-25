@@ -2,6 +2,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_env.h"
+#include "battle/battle_status_effect.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_event_default.h"
@@ -909,7 +910,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, -2, 0, LW(1))
     ADD(LW(1), 1)
     CALL(btlevtcmd_SetUnitWork, -2, 0, LW(1))
-    CALL(btlevtcmd_CheckStatus, -2, 19, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_FAST, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_gance_macho_speed))
         CALL_CHILD(PTR(gance_macho_speed_attack_event))

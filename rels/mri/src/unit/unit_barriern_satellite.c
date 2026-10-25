@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_cmd.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -173,7 +174,7 @@ static EVT_BEGIN(wait_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckActStatus, -2, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            CALL(btlevtcmd_CheckStatus, -2, 5, LW(0))
+            CALL(btlevtcmd_CheckStatus, -2, STATUS_CONFUSE, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("S_4"))
                 WAIT_FRAMES(180)

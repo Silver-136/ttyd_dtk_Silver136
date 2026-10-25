@@ -8,6 +8,7 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_status_effect.h"
 
 USER_FUNC(btlevtcmd_SetJumpSound);
 
@@ -283,7 +284,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     ADD(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
-        CALL(btlevtcmd_CheckStatus, -2, 10, LW(2))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(2))
         IF_INT_EQUAL(LW(2), 0)
             CALL_CHILD(PTR(dekadeka_event))
             GOTO(99)

@@ -19,6 +19,7 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "evt/evt_audience.h"
+#include "battle/battle_status_effect.h"
 
 
 s32 BattleDamageDirect(s32 attackerId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage,
@@ -587,7 +588,7 @@ EVT_END()
 EVT_BEGIN(btldefaultevt_Appeal)
     CALL(btlevtcmd_GetBodyId, -2, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, -2, LW(0), 43)
-    CALL(btlevtcmd_CheckStatus, -2, 10, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), LW(1))

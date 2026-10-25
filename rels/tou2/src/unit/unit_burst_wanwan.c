@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -440,7 +441,7 @@ EVT_END()
 
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetUnitWork, -2, 2, 0)
-    CALL(btlevtcmd_CheckStatus, -2, 1, LW(15))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_SLEEP, LW(15))
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_SetUnitWork, -2, 2, 2)
         CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("WAN_N_1"))
@@ -462,8 +463,8 @@ static EVT_BEGIN(wait_event)
         END_SIBLING_EVENT
         GOTO(98)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 2, LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 9, LW(15))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_STOP, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_FREEZE, LW(15))
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_SetUnitWork, -2, 2, 2)
@@ -477,9 +478,9 @@ static EVT_BEGIN(wait_event)
         END_SIBLING_EVENT
         GOTO(98)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 5, LW(13))
-    CALL(btlevtcmd_CheckStatus, -2, 4, LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 3, LW(15))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_CONFUSE, LW(13))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_POISON, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_DIZZY, LW(15))
     OR(LW(15), LW(13))
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)

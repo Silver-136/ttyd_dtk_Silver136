@@ -8,6 +8,7 @@
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
 #include "evt/evt_eff.h"
+#include "battle/battle_status_effect.h"
 
 
 BattleUnitKind unit_togedaruma;
@@ -203,12 +204,12 @@ EVT_END()
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_CheckStatus, -2, 10, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         ADD(LW(1), 58)
         GOTO(90)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         ADD(LW(1), 32)
         GOTO(90)
@@ -224,7 +225,7 @@ EVT_END()
 static EVT_BEGIN(dmg_avoid_counter_thorn_front_event)
     CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_TOGEDA_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
-        CALL(btlevtcmd_CheckStatus, -2, 17, LW(0))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_FLIPPED, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("TGD_J_3"))
             WAIT_FRAMES(60)
@@ -237,13 +238,13 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_front_event)
     END_SIBLING_EVENT
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_CheckStatus, -2, 10, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 53)
         ADD(LW(1), 26)
         GOTO(90)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         CALL(btlevtcmd_FaceDirectionAdd, -2, LW(0), 33)
         ADD(LW(1), 16)
@@ -450,27 +451,27 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
     LABEL(0)
     SET_VALUE(LW(15), 0)
-    CALL(btlevtcmd_CheckStatus, -2, 1, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_SLEEP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         ADD(LW(15), 1)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 2, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_STOP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         ADD(LW(15), 1)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 3, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_DIZZY, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         ADD(LW(15), 1)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 4, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_POISON, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         ADD(LW(15), 1)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 5, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_CONFUSE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         ADD(LW(15), 1)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 9, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_FREEZE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         ADD(LW(15), 1)
     END_IF

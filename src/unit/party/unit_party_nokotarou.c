@@ -22,6 +22,7 @@
 #include "unit/unit_koura.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_snd.h"
+#include "battle/battle_status_effect.h"
 
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetJumpSound);
@@ -1668,7 +1669,7 @@ EVT_BEGIN(nokotarou_appeal_event)
 EVT_END()
 
 static EVT_BEGIN(party_win_reaction)
-    CALL(btlevtcmd_CheckStatus, -2, 17, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_FLIPPED, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("PNK_Y_1"))
     END_IF

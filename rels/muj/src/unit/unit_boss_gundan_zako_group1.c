@@ -4,6 +4,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -298,29 +299,29 @@ static EVT_BEGIN(damage_event)
         ELSE
         SET_VALUE(LW(15), 0)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 27, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INSTANT_KILL, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 1, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_SLEEP, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 3, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_DIZZY, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 5, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_CONFUSE, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 9, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_FREEZE, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 2, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_STOP, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 4, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_POISON, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 8, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_BURN, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 15, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_DEFENSE_DOWN, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 20, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_SLOW, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 0, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_ALLERGIC, LW(14))
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(zakogun_damage_pose)

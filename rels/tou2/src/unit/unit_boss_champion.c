@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_stage_object.h"
@@ -646,7 +647,7 @@ static EVT_BEGIN(damage_event)
             END_IF
             CASE_END
         END_SWITCH
-        CALL(btlevtcmd_CheckStatus, -2, 11, LW(0))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(2), 1)
         END_IF
@@ -759,7 +760,7 @@ static EVT_BEGIN(phase_event)
         DEBUG_PUT_REG(LW(1))
         IF_INT_LESS_OR_EQUAL(LW(1), LW(0))
             SET_VALUE(LW(0), 0)
-            CALL(btlevtcmd_CheckStatus, -2, 11, LW(1))
+            CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(1))
             IF_INT_EQUAL(LW(1), 0)
                 CALL(btlevtcmd_SetUnitWork, -2, 0, 3)
                 IF_INT_LESS(GSW_STORY_PROGRESS, 158)
@@ -876,7 +877,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_CheckAttribute, -2, kCeiling, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LW(2), 30)
-            CALL(btlevtcmd_CheckStatus, -2, 11, LW(1))
+            CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(1))
             IF_INT_NOT_EQUAL(LW(1), 0)
                 SET_VALUE(LW(2), 0)
             END_IF

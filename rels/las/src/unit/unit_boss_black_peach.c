@@ -19,6 +19,7 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
 #include "eff/n64/eff_stardust2_n64.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -1910,7 +1911,7 @@ EVT_BEGIN(peach_attack_event)
         CALL_CHILD(PTR(peack_attack_dark_drag))
         CASE_EQUAL(3)
         CALL(btlevtcmd_DrawLots, LW(0), 4, 100, 30, 30, 30)
-        CALL(btlevtcmd_CheckStatus, -2, 14, LW(1))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_DEFENSE_UP, LW(1))
         IF_INT_EQUAL(LW(1), 1)
             IF_INT_EQUAL(LW(0), 1)
                 SET_VALUE(LW(0), 0)
@@ -3017,7 +3018,7 @@ EVT_BEGIN(queen_attack_event)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 30, 20, 30, 30)
 #endif
-        CALL(btlevtcmd_CheckStatus, -2, 14, LW(1))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_DEFENSE_UP, LW(1))
         IF_INT_EQUAL(LW(1), 1)
             IF_INT_EQUAL(LW(0), 1)
                 SET_VALUE(LW(0), 0)

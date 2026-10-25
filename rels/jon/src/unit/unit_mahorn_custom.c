@@ -1661,9 +1661,9 @@ static EVT_BEGIN(wait_event)
             CALL(btlevtcmd_AnimeChangePoseFromTable, LW(4), 1)
         END_IF
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 9, LW(13))
-    CALL(btlevtcmd_CheckStatus, -2, 1, LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 2, LW(15))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_FREEZE, LW(13))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_SLEEP, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_STOP, LW(15))
     OR(LW(15), LW(13))
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)

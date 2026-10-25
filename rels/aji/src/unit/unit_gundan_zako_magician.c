@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
@@ -486,7 +487,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
-        CALL(btlevtcmd_CheckStatus, -2, 7, LW(2))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_DODGY, LW(2))
         IF_INT_EQUAL(LW(2), 0)
             CALL_CHILD(PTR(yokeyoke_bottle_event))
             GOTO(99)

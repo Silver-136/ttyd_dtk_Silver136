@@ -8,6 +8,7 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_status_effect.h"
 
 
 BattleUnitKind unit_bomhei;
@@ -290,7 +291,7 @@ static EVT_BEGIN(damage_event)
         END_SWITCH
     END_IF
     CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_CheckStatus, -2, 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INSTANT_KILL, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckActStatus, -2, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

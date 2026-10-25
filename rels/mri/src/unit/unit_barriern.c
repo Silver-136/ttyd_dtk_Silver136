@@ -6,6 +6,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
 #include "eff/n64/eff_glass_n64.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -1450,9 +1451,9 @@ static EVT_BEGIN(wait_event)
     WAIT_FRAMES(LW(0))
     CALL(btlevtcmd_CheckActStatus, -2, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckStatus, -2, 5, LW(0))
-        CALL(btlevtcmd_CheckStatus, -2, 3, LW(1))
-        CALL(btlevtcmd_CheckStatus, -2, 4, LW(2))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_CONFUSE, LW(0))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_DIZZY, LW(1))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_POISON, LW(2))
         OR(LW(0), LW(1))
         OR(LW(0), LW(2))
         IF_INT_EQUAL(LW(0), 0)

@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_status_effect.h"
 
 #include "system.h"
 #include "manager/evtmgr_cmd.h"
@@ -276,7 +277,7 @@ static EVT_BEGIN(patakuri_dmg_first_attack_pos)
 EVT_END()
 
 static EVT_BEGIN(attack_event_patakuri)
-    CALL(btlevtcmd_CheckStatus, -2, 16, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_CHARGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(10)
     END_IF
@@ -586,7 +587,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 16, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_CHARGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(10)
     END_IF

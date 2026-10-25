@@ -7,6 +7,7 @@
 #include "battle/battle_weapon_power.h"
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
+#include "battle/battle_status_effect.h"
 
 USER_FUNC(btlevtcmd_SetJumpSound);
 
@@ -329,7 +330,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
         WAIT_MS(800)
     ELSE
-        CALL(btlevtcmd_CheckStatus, -2, 16, LW(0))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_CHARGE, LW(0))
         IF_INT_EQUAL(LW(0), 1)
             GOTO(10)
         END_IF

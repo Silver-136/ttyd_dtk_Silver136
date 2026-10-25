@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
@@ -378,12 +379,12 @@ EVT_END()
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_CheckStatus, -2, 10, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         ADD(LW(1), 70)
         GOTO(90)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         ADD(LW(1), 40)
         GOTO(90)
@@ -487,7 +488,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         GOTO(99)
         ELSE
-        CALL(btlevtcmd_CheckStatus, -2, 16, LW(0))
+        CALL(btlevtcmd_CheckStatus, -2, STATUS_CHARGE, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(0), 0)
             ADD(LW(0), 50)

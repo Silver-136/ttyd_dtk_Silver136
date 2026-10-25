@@ -5,6 +5,7 @@
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
 #include "muj.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_event_default.h"
@@ -531,7 +532,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INSTANT_KILL, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF

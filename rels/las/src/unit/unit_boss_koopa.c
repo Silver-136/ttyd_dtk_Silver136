@@ -3,6 +3,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_status_effect.h"
 
 #include "driver/icondrv.h"
 #include "driver/camdrv.h"
@@ -491,7 +492,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckStatus, -2, 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INSTANT_KILL, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF

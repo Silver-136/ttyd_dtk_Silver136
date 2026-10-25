@@ -10,6 +10,7 @@
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
 #include "evt/evt_eff.h"
+#include "battle/battle_status_effect.h"
 
 
 BattleUnitKind unit_sambo_mummy;
@@ -900,7 +901,7 @@ EVT_END()
 
 static EVT_BEGIN(attack_head_2_event)
     SET_VALUE(LW(6), LW(11))
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(5))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(5))
     SWITCH(LW(10))
         CASE_EQUAL(4)
         CALL(btlevtcmd_GetEnemyBelong, -2, LW(0))
@@ -1285,7 +1286,7 @@ static EVT_BEGIN(attack_spike_event)
     END_SWITCH
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetPartsScale, -2, 5, FLOAT(0.69921875f), FLOAT(0.69921875f), FLOAT(1.0f))
     ELSE
@@ -1321,7 +1322,7 @@ static EVT_BEGIN(attack_spike_event)
     CALL(btlevtcmd_OnPartsAttribute, -2, LW(7), 50397184)
     CALL(btlevtcmd_OnPartsAttribute, -2, LW(6), 9)
     CALL(btlevtcmd_OffPartsAttribute, -2, LW(6), 16842752)
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(5))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(5))
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
         IF_INT_EQUAL(LW(5), 0)

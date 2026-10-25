@@ -10,6 +10,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_audience.h"
+#include "battle/battle_status_effect.h"
 
 
 
@@ -22,7 +23,7 @@ u8 volPer;
 EVT_BEGIN(sac_start_camera_evt)
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, -2, -1)
-    CALL(btlevtcmd_CheckStatus, -2, 10, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_btl_camera_set_zoom, 0, 100)
     ELSE

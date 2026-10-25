@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "dou.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -437,7 +438,7 @@ static EVT_BEGIN(friend_event)
     ELSE
         CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_KILLER_CANNON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 10, LW(5))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 0)
         CALL(btlevtcmd_GetPos, -2, LW(7), LW(8), LW(9))
         CALL(btlevtcmd_FaceDirectionAdd, -2, LW(7), 70)
@@ -445,7 +446,7 @@ static EVT_BEGIN(friend_event)
         CALL(evt_eff, STRING(""), STRING("kemuri_test"), 18, LW(7), 50, LW(9), FLOAT(1.5f), 0, 0, 0, 0, 0, 0, 0)
         GOTO(10)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(5))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 0)
         CALL(btlevtcmd_GetPos, -2, LW(7), LW(8), LW(9))
         CALL(btlevtcmd_FaceDirectionAdd, -2, LW(7), 28)
@@ -508,7 +509,7 @@ static EVT_BEGIN(friend_event_sky)
     ELSE
         CALL(btlevtcmd_snd_se, -2, STRING("SFX_ENM_KILLER_CANNON2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 10, LW(5))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 0)
         CALL(btlevtcmd_GetPos, -2, LW(7), LW(8), LW(9))
         CALL(btlevtcmd_FaceDirectionAdd, -2, LW(7), 60)
@@ -516,7 +517,7 @@ static EVT_BEGIN(friend_event_sky)
         CALL(evt_eff, STRING(""), STRING("kemuri_test"), 18, LW(7), 75, LW(9), FLOAT(1.5f), 0, 0, 0, 0, 0, 0, 0)
         GOTO(10)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(5))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 0)
         CALL(btlevtcmd_GetPos, -2, LW(7), LW(8), LW(9))
         CALL(btlevtcmd_FaceDirectionAdd, -2, LW(7), 28)

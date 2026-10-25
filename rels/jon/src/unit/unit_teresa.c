@@ -387,19 +387,19 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, -2)
         RETURN
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 18, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INVISIBLE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(13), 0)
         ELSE
         SET_VALUE(LW(13), 1)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 5, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_CONFUSE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), 0)
         ELSE
         CALL(teresa_check_trans, -2, LW(14))
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 5, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_CONFUSE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(15), 0)
         ELSE
@@ -549,7 +549,7 @@ EVT_END()
 static EVT_BEGIN(trans_myself_event)
     SET_VALUE(LW(3), -2)
     SET_VALUE(LW(4), 1)
-    CALL(btlevtcmd_CheckStatus, -2, 18, LW(8))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INVISIBLE, LW(8))
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_teresa_trans_myself))
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_PayWeaponCost, -2, PTR(&weapon_teresa_trans_myself))

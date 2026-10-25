@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -383,7 +384,7 @@ static EVT_BEGIN(unison_phase_event)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INSTANT_KILL, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
@@ -392,11 +393,11 @@ static EVT_BEGIN(unison_phase_event)
         GOTO(99)
     END_IF
     SET_VALUE(LW(15), 0)
-    CALL(btlevtcmd_CheckStatus, -2, 3, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_DIZZY, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 5, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_CONFUSE, LW(14))
     OR(LW(15), LW(14))
-    CALL(btlevtcmd_CheckStatus, -2, 6, LW(14))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_ELECTRIC, LW(14))
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)
         GOTO(99)
@@ -422,12 +423,12 @@ EVT_END()
 static EVT_BEGIN(avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_CheckStatus, -2, 10, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         ADD(LW(1), 45)
         GOTO(90)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         ADD(LW(1), 25)
         GOTO(90)

@@ -2,6 +2,7 @@
 #include "evt/evt_cmd.h"
 #include "battle/battle_camera.h"
 #include "party/party_motion.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"
@@ -532,7 +533,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
-    CALL(btlevtcmd_CheckStatus, -2, 9, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_FREEZE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, -2, 0, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

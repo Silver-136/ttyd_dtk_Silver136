@@ -19,6 +19,7 @@
 #include "party/party_motion.h"
 #include "unit/unit_bomzou.h"
 #include "evt/evt_snd.h"
+#include "battle/battle_status_effect.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 #include "battle/battle_unit.h"
@@ -256,7 +257,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(wait_event)
-    CALL(btlevtcmd_CheckStatus, -2, 22, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HOLD_FAST, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table_counter_sanders))
         ELSE

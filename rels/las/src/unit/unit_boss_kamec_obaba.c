@@ -4,6 +4,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_msg.h"
+#include "battle/battle_status_effect.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -446,7 +447,7 @@ static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
-    CALL(btlevtcmd_CheckStatus, -2, 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INSTANT_KILL, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
@@ -575,7 +576,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INSTANT_KILL, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         GOTO(99)
     END_IF

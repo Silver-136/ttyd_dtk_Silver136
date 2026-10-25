@@ -8,6 +8,7 @@
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
 #include "evt/evt_eff.h"
+#include "battle/battle_status_effect.h"
 
 
 static BattleUnitKind unit_hennya;
@@ -171,12 +172,12 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 31)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_CheckStatus, -2, 10, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_HUGE, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         ADD(LW(1), 53)
         GOTO(90)
     END_IF
-    CALL(btlevtcmd_CheckStatus, -2, 11, LW(3))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_TINY, LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
         ADD(LW(1), 33)
         GOTO(90)

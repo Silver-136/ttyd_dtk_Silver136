@@ -15,6 +15,7 @@
 #include "battle/battle_camera.h"
 #include "party/party_motion.h"
 #include "battle/battle_event_subset.h"
+#include "battle/battle_status_effect.h"
 
 USER_FUNC(_binta_effect);
 USER_FUNC(btlevtcmd_AnimeCmpPoseType);
@@ -778,7 +779,7 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_POS_CHANGE1"), 0)
     CALL(btlevtcmd_GetPartnerId, -2, LW(3))
     CALL(btlevtcmd_GetBodyId, -2, LW(5))
-    CALL(btlevtcmd_CheckStatus, -2, 27, LW(0))
+    CALL(btlevtcmd_CheckStatus, -2, STATUS_INSTANT_KILL, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePoseType, -2, LW(5), 42)
     END_IF

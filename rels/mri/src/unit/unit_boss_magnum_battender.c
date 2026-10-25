@@ -3,6 +3,7 @@
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_status_effect.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle.h"
@@ -726,7 +727,7 @@ static EVT_BEGIN(shake_attack_event)
     WAIT_MS(900)
     CALL(btlevtcmd_CheckActStatus, -3, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckStatus, -3, 18, LW(0))
+        CALL(btlevtcmd_CheckStatus, -3, STATUS_INVISIBLE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StopWaitEvent, -3)
             CALL(btlevtcmd_AnimeChangePose, -3, 1, STRING("M_I_O"))
@@ -793,7 +794,7 @@ static EVT_BEGIN(shake_attack_event)
     LABEL(90)
     CALL(btlevtcmd_CheckActStatus, -3, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_CheckStatus, -3, 18, LW(0))
+        CALL(btlevtcmd_CheckStatus, -3, STATUS_INVISIBLE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StopWaitEvent, -3)
             CALL(btlevtcmd_AnimeChangePoseFromTable, -2, 1)
