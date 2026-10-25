@@ -9,8 +9,8 @@
 #include <dolphin/os.h>
 #include <string.h>
 #include "icon_ids.h"
+#include "dolphin/si.h"
 
-u32 SIProbe(s32 chan);
 void BattleAcDrawGauge();
 
 typedef struct RepeatDisp {

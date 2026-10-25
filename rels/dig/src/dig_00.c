@@ -8,6 +8,7 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_party.h"
 #include "evt/evt_seq.h"
+#include "dolphin/exi.h"
 
 #include "seq/seq_demo.h"
 #include "memory.h"
@@ -26,7 +27,6 @@ typedef struct DigAnim { const char* name; u32 mask; s32 anim; } DigAnim;
 #define ANIM_TBL (anim_tbl)
 static s32 work[1];
 #define DIG_WP (wp[0])
-s32 EXIGetType(s32 chan, u32 dev, u32* type);
 
 USER_FUNC(evt_action_sub);
 USER_FUNC(evt_cam_letter_box_disable);

@@ -9,6 +9,9 @@
 #include "memory.h"
 #include "system.h"
 #include "addr_word.h"
+#include "dolphin/os.h"
+#include "dolphin/gx.h"
+#include "dolphin/mtx.h"
 
 #include <stdio.h>
 
@@ -333,47 +336,9 @@ void* testAlloc(u32 size) {
     return alloc;
 }
 
-void DCFlushRange(void* addr, u32 nBytes);
-void GXBegin(GXPrimitive type, GXVtxFmt vtxfmt, u16 nverts);
-void GXClearBoundingBox(void);
-void GXClearVtxDesc(void);
-void GXCopyTex(void* dest, GXBool clear);
-u32 GXGetTexBufferSize(u16 width, u16 height, u32 format, u8 mipmap, u8 max_lod);
-void GXInitTexObj(GXTexObj* obj, void* image_ptr, u16 width, u16 height, GXTexFmt format, GXTexWrapMode wrap_s, GXTexWrapMode wrap_t, u8 mipmap);
-void GXInitTexObjCI(GXTexObj* obj, void* image_ptr, u16 width, u16 height, GXCITexFmt format, GXTexWrapMode wrap_s, GXTexWrapMode wrap_t, u8 mipmap, u32 tlut_name);
 void GXInitTexObjLOD(GXTexObj* obj, GXTexFilter min_filt, GXTexFilter mag_filt,
     f32 min_lod, f32 max_lod, f32 lod_bias, GXBool bias_clamp,
     GXBool do_edge_lod, GXAnisotropy max_aniso);
-void GXInitTlutObj(GXTlutObj* tlut_obj, void* lut, GXTlutFmt fmt, u16 n_entries);
-void GXInvalidateVtxCache(void);
-void GXLoadNrmMtxImm(const f32 mtx[3][4], u32 id);
-void GXLoadPosMtxImm(const f32 mtx[3][4], u32 id);
-void GXLoadTexMtxImm(const f32 mtx[][4], u32 id, GXTexMtxType type);
-void GXLoadTexObj(GXTexObj* obj, GXTexMapID id);
-void GXLoadTlut(GXTlutObj* tlut_obj, u32 tlut_name);
-void GXPixModeSync(void);
-void GXReadBoundingBox(u16* left, u16* top, u16* right, u16* bottom);
-void GXSetAlphaCompare(GXCompare comp0, u8 ref0, GXAlphaOp op, GXCompare comp1, u8 ref1);
-void GXSetArray(GXAttr attr, void* base_ptr, u8 stride);
-void GXSetBlendMode(GXBlendMode type, GXBlendFactor src_factor, GXBlendFactor dst_factor, GXLogicOp op);
-void GXSetCullMode(GXCullMode mode);
-void GXSetCurrentMtx(u32 id);
-void GXSetTevAlphaIn(GXTevStageID stage, GXTevAlphaArg a, GXTevAlphaArg b, GXTevAlphaArg c, GXTevAlphaArg d);
-void GXSetTexCoordGen2(GXTexCoordID dst_coord, GXTexGenType func, GXTexGenSrc src_param, u32 mtx, GXBool normalize, u32 pt_texmtx);
-void GXSetTexCopyDst(u16 wd, u16 ht, GXTexFmt fmt, GXBool mipmap);
-void GXSetTexCopySrc(u16 left, u16 top, u16 wd, u16 ht);
-void GXSetVtxAttrFmt(GXVtxFmt vtxfmt, GXAttr attr, GXCompCnt cnt, GXCompType type, u8 frac);
-void GXSetVtxDesc(GXAttr attr, GXAttrType type);
-void GXSetZCompLoc(GXBool before_tex);
-void GXSetZMode(GXBool compare_enable, GXCompare func, GXBool update_enable);
-void PSMTXConcat(const Mtx a, const Mtx b, Mtx ab);
-void PSMTXCopy(const Mtx src, Mtx dst);
-void PSMTXIdentity(Mtx m);
-u32 PSMTXInvXpose(const Mtx src, Mtx invX);
-void PSMTXMultVec(const Mtx m, const Vec* src, Vec* dst);
-void PSMTXRotRad(Mtx m, char axis, f32 rad);
-void PSMTXScale(Mtx m, f32 xS, f32 yS, f32 zS);
-void PSMTXTrans(Mtx m, f32 xT, f32 yT, f32 zT);
 int __cvt_dbl_usll();
 int __cvt_ull_flt();
 int __div2i();

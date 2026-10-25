@@ -21,13 +21,13 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "dolphin/mtx.h"
 static void piders_draw_yarn_sub(CameraId cameraId, void* param);
 
 double sqrt(double);
 double __fabs(double);
 #define fabs(x) __fabs(x)
 
-void PSVECSubtract(const Vec* a, const Vec* b, Vec* ab);
 
 // functions are defined in reverse of target order (deferred inlining)
 

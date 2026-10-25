@@ -15,6 +15,7 @@
 #include "libc_decls.h"
 #include "eff/n64/eff_kemuri1_n64.h"
 #include "evt/evt_cam.h"
+#include "dolphin/os.h"
 
 typedef struct EffFallWork {
     s32 type;       // 0x0
@@ -169,32 +170,6 @@ static inline f32 fall_cosf(f32 x) {
 }
 
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration);
-void DCFlushRange(void* addr, u32 nBytes);
-void GXBegin(GXPrimitive type, GXVtxFmt vtxfmt, u16 nverts);
-void GXCallDisplayList(void* list, u32 nbytes);
-void GXClearVtxDesc(void);
-u16 GXGetTexObjHeight(const GXTexObj* to);
-void GXLoadPosMtxImm(const f32 mtx[3][4], u32 id);
-void GXLoadTexMtxImm(const f32 mtx[][4], u32 id, GXTexMtxType type);
-void GXLoadTexObj(GXTexObj* obj, GXTexMapID id);
-void GXSetArray(GXAttr attr, void* base_ptr, u8 stride);
-void GXSetChanCtrl(GXChannelID chan, GXBool enable, GXColorSrc amb_src, GXColorSrc mat_src, u32 light_mask, GXDiffuseFn diff_fn, GXAttnFn attn_fn);
-void GXSetChanMatColor(GXChannelID chan, GXColor mat_color);
-void GXSetCullMode(GXCullMode mode);
-void GXSetCurrentMtx(u32 id);
-void GXSetNumChans(u8 nChans);
-void GXSetNumTevStages(u8 nStages);
-void GXSetNumTexGens(u8 nTexGens);
-void GXSetTevAlphaIn(GXTevStageID stage, GXTevAlphaArg a, GXTevAlphaArg b, GXTevAlphaArg c, GXTevAlphaArg d);
-void GXSetTevAlphaOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale scale, GXBool clamp, GXTevRegID out_reg);
-void GXSetTevColor(GXTevRegID id, GXColor color);
-void GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c, GXTevColorArg d);
-void GXSetTevColorOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale scale, GXBool clamp, GXTevRegID out_reg);
-void GXSetTevOp(GXTevStageID id, GXTevMode mode);
-void GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXChannelID color);
-void GXSetTexCoordGen2(GXTexCoordID dst_coord, GXTexGenType func, GXTexGenSrc src_param, u32 mtx, GXBool normalize, u32 pt_texmtx);
-void GXSetVtxAttrFmt(GXVtxFmt vtxfmt, GXAttr attr, GXCompCnt cnt, GXCompType type, u8 frac);
-void GXSetVtxDesc(GXAttr attr, GXAttrType type);
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration) {
     const char* sfxName;
     EffectEntry* effect;

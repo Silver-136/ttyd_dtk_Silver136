@@ -15,12 +15,11 @@
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
 #include "eff/eff_magic1_n64.h"
+#include "dolphin/gx.h"
 
 void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
 void FontDrawString(f32 x, f32 y, const char* str);
-void GXGetProjectionv(f32* ptr);
-void GXGetViewportv(f32* vp);
 void nameBG(void);
 void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h);
 void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type);

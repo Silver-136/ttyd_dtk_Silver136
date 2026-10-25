@@ -19,6 +19,8 @@
 #include "battle/battle_break_slot.h"
 #include "battle/battle_stage.h"
 #include "battle/battle_sub.h"
+#include "dolphin/gx.h"
+#include "dolphin/mtx.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
@@ -118,24 +120,6 @@ void btlDispGXInit2D(void) {
 }
 
 int BtlUnit_CanActStatus();
-void GXBegin(GXPrimitive type, GXVtxFmt vtxfmt, u16 nverts);
-GXTexFmt GXGetTexObjFmt(const GXTexObj* to);
-u16 GXGetTexObjHeight(const GXTexObj* to);
-u16 GXGetTexObjWidth(const GXTexObj* to);
-void GXLoadTexObj(GXTexObj* obj, GXTexMapID id);
-void GXSetNumTevStages(u8 nStages);
-void GXSetTevAlphaIn(GXTevStageID stage, GXTevAlphaArg a, GXTevAlphaArg b, GXTevAlphaArg c, GXTevAlphaArg d);
-void GXSetTevAlphaOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale scale, GXBool clamp, GXTevRegID out_reg);
-void GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c, GXTevColorArg d);
-void GXSetTevColorOp(GXTevStageID stage, GXTevOp op, GXTevBias bias, GXTevScale scale, GXBool clamp, GXTevRegID out_reg);
-void GXSetTevOp(GXTevStageID id, GXTevMode mode);
-void GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXChannelID color);
-void PSMTXConcat(const Mtx a, const Mtx b, Mtx ab);
-void PSMTXCopy(const Mtx src, Mtx dst);
-void PSMTXIdentity(Mtx m);
-void PSMTXRotRad(Mtx m, char axis, f32 rad);
-void PSMTXScale(Mtx m, f32 xS, f32 yS, f32 zS);
-void PSMTXTrans(Mtx m, f32 xT, f32 yT, f32 zT);
 int animPoseVivianMain();
 void BattleCommandDisplay(BattleWork* wp);
 void BattleStockExpDisp(void);

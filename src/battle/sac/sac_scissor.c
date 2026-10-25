@@ -22,6 +22,7 @@
 #include "evt/evt_offscreen.h"
 #include "evt/evt_paper.h"
 #include "party/party_motion.h"
+#include "dolphin/os.h"
 
 double sqrt(double);
 double fabs(double);
@@ -90,7 +91,6 @@ void scissor_disp_region(CameraId camera, void* param);
 void scissor_capture(CameraId camera, void* param);
 void tess(Pt* buf, s32 count);
 void* memcpy(void*, const void*, u32);
-void DCFlushRange(void*, u32);
 void star_disp2D_sub(s32 idx, s32 alpha);
 s32 scissor_damage_sub2(Vec pt);
 void scissor_damage_sub(BattleUnit* unit, s32* out);
