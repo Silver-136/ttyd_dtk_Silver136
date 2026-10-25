@@ -265,7 +265,8 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
 
 void fileGarbageDataAdrSet(void* data, s32 type) {
     u16 i;
-    u32 off; u32 off2;
+    u32 off;
+    u32 off2;
     TEXPalette* tpl;
     u8* q;
     s32 j, n;

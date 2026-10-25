@@ -1177,7 +1177,8 @@ static void ext_moamoa_main(void) {
             case 1: {
                     f32 rad;
                     {
-                        f32 k; f32 r1 = rand() / 32767.0f;
+                        f32 k;
+                        f32 r1 = rand() / 32767.0f;
                         f32 a = wp->angle + ((r1 * (k = 45.0f - -45.0f)) + -45.0f);
                         rad = (6.2831855f * a) / 360.0f;
                     }
@@ -1265,7 +1266,8 @@ static void ext_moamoa_main(void) {
                     {
                         f32 z;
                         {
-                            f32 rad; f32 k;
+                            f32 rad;
+                            f32 k;
                             s = rand() / 32767.0f;
                             {
                                 f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);

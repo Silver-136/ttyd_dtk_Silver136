@@ -196,7 +196,8 @@ void effIbukiMain(EffectEntry* effect) {
 
 void effIbukiDisp(CameraId cameraId, EffectEntry* effect) {
     s32 i;
-u8* sz; u8** dl;
+u8* sz;
+u8** dl;
     EffIbukiWork* work = effect->userdata;
     Mtx trans;
     Mtx rot;

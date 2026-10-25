@@ -1055,7 +1055,8 @@ s32 scissor_damage_sub2(Vec pt) {
         for (j = 0; j < 3; j++) {
             s32 k = (j + 1) % 3;
             // FAKE: y[j] read through q = &x[j] (index = the x-to-y distance in floats) keeps the target register order (t->y[j] / t->x[j]: 99.65%)
-            q = &t->x[j]; y0 = q[(offsetof(ScissorTri, y) - offsetof(ScissorTri, x)) / sizeof(f32)];
+            q = &t->x[j];
+            y0 = q[(offsetof(ScissorTri, y) - offsetof(ScissorTri, x)) / sizeof(f32)];
             x0 = q[0];
             c[j] = (pt.x - x0) * (t->y[k] - y0) - (pt.y - y0) * (t->x[k] - x0);
         }

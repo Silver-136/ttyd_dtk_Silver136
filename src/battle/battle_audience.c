@@ -307,7 +307,8 @@ BattleAudienceSound* BattleAudienceSoundGetPtr(s32 id) {
 void BattleAudience_Init(void) {
     BattleAudience* audience;
     BattleAudienceWindow* window;
-    int j; int i;
+    int j;
+    int i;
     u8 status;
 
     audience = BattleAudienceBaseGetPtr();
@@ -1144,7 +1145,8 @@ void BattleAudienceSettingAudience(void) {
                 counts[id]++;
             }
         }
-        i++; i %= 12;
+        i++;
+        i %= 12;
     }
     if (hasKind == 1 && used != 0 && (irand(20) == 0 || (bflags->flags & 0x40000))) {
         for (i = 0; i < 12; i++) perm[i] = i;
@@ -1784,9 +1786,11 @@ void BattleAudienceApSrcCtrlProcess(void) {
             /* fallthrough */
         case 5:
             (s->timer)++;
-            dx = s->startPos.x; dy = s->targetPos.x;
+            dx = s->startPos.x;
+            dy = s->targetPos.x;
             s->position.x = intplGetValue(5, dx, dy, s->timer, s->duration);
-            dx = s->startPos.y; dy = s->targetPos.y;
+            dx = s->startPos.y;
+            dy = s->targetPos.y;
             s->position.y = intplGetValue(5, dx, dy, s->timer, s->duration);
             if (s->timer >= s->duration - 20) {
                 s->scale.y = intplGetValue(4, 0.9f, 0.8f, s->timer - (s->duration - 20), 10);
@@ -2100,9 +2104,12 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
         a0 = m->mRotation.x * k;
         a1 = m->mRotation.y * k;
         a2 = m->mRotation.z * k; }
-        sx = sin(a0); cx = cos(a0);
-        sy = sin(a1); cy = cos(a1);
-        sz = sin(a2); cz = cos(a2);
+        sx = sin(a0);
+        cx = cos(a0);
+        sy = sin(a1);
+        cy = cos(a1);
+        sz = sin(a2);
+        cz = cos(a2);
         t0 = sx * sy;
         t1 = sx * cy;
         rot[0][0] = cy * cz - t0 * sz;

@@ -261,7 +261,8 @@ void mot_damage(void) {
     case 20: {
         HitEntry* h;
         f32 landY;
-        f32 spd; f32 baseY;
+        f32 spd;
+        f32 baseY;
 
         mario->hitobjStandOn = NULL;
         spd = marioGetFallSpd();

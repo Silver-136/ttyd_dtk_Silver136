@@ -363,7 +363,8 @@ void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const ch
 
     BattleGetUnitPtr(wp, wp->activeUnitId);
     cursor = menu->cursor;
-    ofs = menu->scrollPos - (f32)(s32)menu->scrollPos; ofs = 24.0f * ofs;
+    ofs = menu->scrollPos - (f32)(s32)menu->scrollPos;
+    ofs = 24.0f * ofs;
     for (i = 0; i < 7; i++) {
         if ((s32)menu->scrollPos + i < cursor->count && (menu->rowFlags[i] & 1)) {
             PSMTXTrans(m, 100.0f, 35.0f - 24.0f * i + ofs, 0.0f);
@@ -465,11 +466,20 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
         d1[1] = (cost - ( d1[2] * 100) ) / 10;
         d1[0] = (cost - ( d1[2] * 100) ) - ( d1[1] * 10) ;
         if (d1[2] > 0) {
-            o1[0] = 28; o1[1] = 14; o1[2] = 0; n = 3;
+            o1[0] = 28;
+            o1[1] = 14;
+            o1[2] = 0;
+            n = 3;
         } else if (d1[1] > 0) {
-            o1[0] = 21; o1[1] = 7; o1[2] = 0; n = 2;
+            o1[0] = 21;
+            o1[1] = 7;
+            o1[2] = 0;
+            n = 2;
         } else {
-            o1[0] = 14; o1[1] = 0; o1[2] = 0; n = 1;
+            o1[0] = 14;
+            o1[1] = 0;
+            o1[2] = 0;
+            n = 1;
         }
         PSMTXScale(scl, 1.0f, 1.0f, 1.0f);
         for (j = 0; j < n; j++) {
@@ -491,11 +501,20 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
         d2[1] = (p34 - ( d2[2] * 100) ) / 10;
         d2[0] = (p34 - ( d2[2] * 100) ) - ( d2[1] * 10) ;
         if (d2[2] > 0) {
-            o2[0] = 28; o2[1] = 14; o2[2] = 0; n = 3;
+            o2[0] = 28;
+            o2[1] = 14;
+            o2[2] = 0;
+            n = 3;
         } else if (d2[1] > 0) {
-            o2[0] = 21; o2[1] = 7; o2[2] = 0; n = 2;
+            o2[0] = 21;
+            o2[1] = 7;
+            o2[2] = 0;
+            n = 2;
         } else {
-            o2[0] = 14; o2[1] = 0; o2[2] = 0; n = 1;
+            o2[0] = 14;
+            o2[1] = 0;
+            o2[2] = 0;
+            n = 1;
         }
         PSMTXScale(scl, 1.0f, 1.0f, 1.0f);
         for (j = 0; j < n; j++) {
@@ -515,7 +534,8 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
     if (party != NULL) {
         s16* p = (s16*)((( u8*)party ) + ( (i + ( (s32)menu->scrollPos) ) * 0x18) );
         s32 n;
-        s32 hp; s32 maxhp;
+        s32 hp;
+        s32 maxhp;
         hp = p[10];
         maxhp = p[11];
         PSMTXTrans(trn, 30.0f, 22.0f, 0.0f);
@@ -527,11 +547,20 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
         d3[1] = (hp - ( d3[2] * 100) ) / 10;
         d3[0] = (hp - ( d3[2] * 100) ) - ( d3[1] * 10) ;
         if (d3[2] > 0) {
-            o3[0] = 28; o3[1] = 14; o3[2] = 0; n = 3;
+            o3[0] = 28;
+            o3[1] = 14;
+            o3[2] = 0;
+            n = 3;
         } else if (d3[1] > 0) {
-            o3[0] = 21; o3[1] = 7; o3[2] = 0; n = 2;
+            o3[0] = 21;
+            o3[1] = 7;
+            o3[2] = 0;
+            n = 2;
         } else {
-            o3[0] = 14; o3[1] = 0; o3[2] = 0; n = 1;
+            o3[0] = 14;
+            o3[1] = 0;
+            o3[2] = 0;
+            n = 1;
         }
         PSMTXScale(scl, 1.0f, 1.0f, 1.0f);
         for (j = 0; j < n; j++) {
@@ -559,11 +588,20 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
         d3[1] = (maxhp - ( d3[2] * 100) ) / 10;
         d3[0] = (maxhp - ( d3[2] * 100) ) - ( d3[1] * 10) ;
         if (d3[2] > 0) {
-            o3[0] = 28; o3[1] = 14; o3[2] = 0; n = 3;
+            o3[0] = 28;
+            o3[1] = 14;
+            o3[2] = 0;
+            n = 3;
         } else if (d3[1] > 0) {
-            o3[0] = 21; o3[1] = 7; o3[2] = 0; n = 2;
+            o3[0] = 21;
+            o3[1] = 7;
+            o3[2] = 0;
+            n = 2;
         } else {
-            o3[0] = 14; o3[1] = 0; o3[2] = 0; n = 1;
+            o3[0] = 14;
+            o3[1] = 0;
+            o3[2] = 0;
+            n = 1;
         }
         PSMTXScale(scl, 1.0f, 1.0f, 1.0f);
         for (j = 0; j < n; j++) {

@@ -6071,19 +6071,22 @@ sgfound:
         if (sfx[0]->flags & 0x40) {
             f = e->fxId;
             if (f & 0x80000000) {
-                r = (u8)SoundSSGetVolCh(sfx[0]->channel); r = (r * fade) / 127;
+                r = (u8)SoundSSGetVolCh(sfx[0]->channel);
+                r = (r * fade) / 127;
                 SoundSSSetVolCh(sfx[0]->channel, r);
                 if (r == 0) {
                     psndSFXOff(i);
                 }
             } else if (f & 0x40000000) {
-                r = (u8)SoundSongGetVolCh(sfx[0]->channel); r = (r * fade) / 127;
+                r = (u8)SoundSongGetVolCh(sfx[0]->channel);
+                r = (r * fade) / 127;
                 SoundSongSetVolCh(sfx[0]->channel, r);
                 if (r == 0) {
                     psndSFXOff(i);
                 }
             } else {
-                r = (u8)SoundEfxGetVolume(sfx[0]->channel); r = (r * fade) / 127;
+                r = (u8)SoundEfxGetVolume(sfx[0]->channel);
+                r = (r * fade) / 127;
                 SoundEfxSetVolume(sfx[0]->channel, r);
                 if (r == 0) {
                     psndSFXOff(i);
@@ -6445,7 +6448,8 @@ void psndENVMain(void) {
     s32 i;
     PaperSoundEnv* e;
     s32 lim = 100;
-    f32 ang, r, a2; s32 rr;
+    f32 ang, r, a2;
+    s32 rr;
     PaperSoundEnv* ent;
     if ((psnd.flags & 0x20) && !(psnd.flags & 0x40)) lim = 80;
     if (seqGetSeq() != 3 && (gp->retraceCount & 1)) {

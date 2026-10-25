@@ -500,7 +500,8 @@ static inline f32 slitWalkSpeed(void) {
     f32 spd = p->mBaseWalkSpeed;
     if (p->flags & MARIO_FLAG_PAPER_MODE) {
         if (p->mot.slit.timer != 0) return spd; {
-            int a = p->wStickDir1; int b = p->wStickDir2;
+            int a = p->wStickDir1;
+            int b = p->wStickDir2;
             if (a * a + b * b <= 0xbd1) {
                 spd *= 0.5f;
             }
@@ -791,7 +792,8 @@ void mot_slit(void) {
                         m->mot.slit.pushDir = 0.0f;
                     }
                     if (++m->mot.slit.counter >= sysMsec2Frame(50)) {
-                        qp = &q; m->directionView = revise360(m->mot.slit.pushDir + m->targetYaw);
+                        qp = &q;
+                        m->directionView = revise360(m->mot.slit.pushDir + m->targetYaw);
                         m->mot.slit.counter = 0;
                         sincosf(&sn, &cs, m->directionView);
                         { Vec tmp = {0, 0, 0};

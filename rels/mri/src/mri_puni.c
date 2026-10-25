@@ -201,7 +201,8 @@ void puniAnimationInit(s16** a, s16** b) {
         s0->table[i] = a[i];
         puniAnimCount(a[i], &s0->count[i], &s0->end[i]);
         s1->table[i] = b[i];
-        k = 0; j = 0;
+        k = 0;
+        j = 0;
         for (p = b[i];; j++, k++) {
             v = p[k];
             if (v == -1) {
@@ -4820,7 +4821,8 @@ f32 cloudGetBreathPower(Vec pos, f32 r);
 extern double fabs(double);
 
 void puni_puni_main(void) {
-    PuniTarget* tg; s32 i, k, j;
+    PuniTarget* tg;
+    s32 i, k, j;
     MarioWork* mario;
     PuniData* p;
     PuniData* t;

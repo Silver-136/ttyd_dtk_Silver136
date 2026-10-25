@@ -722,7 +722,8 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
         if (entry->flags & 2) { do { } while (0); continue; }
         if (entry->flags2 & 0x1000) continue;
         if (entry->mode == ITEM_MODE_GET) continue;
-        dx = x - entry->position.x; dy = y - entry->position.y;
+        dx = x - entry->position.x;
+        dy = y - entry->position.y;
         dz = z - entry->position.z;
         xzdist = sqrtf(dx * dx + dz * dz);
         dist = sqrtf(dx * dx + dy * dy + dz * dz);

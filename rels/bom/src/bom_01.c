@@ -966,7 +966,8 @@ static void ext_main(void) {
                     (*pose->mtx)[1][3] = (*pose->mtx)[1][3] - 2.0f;
                     pose->flags &= ~2;
                     PSMTXTrans(m1, 0.0f, -20.0f, 0.0f);
-                    val = (f32)sin((i + gp->retraceCount) / 100.0f); PSMTXRotRad(m2, 'z', 0.017453292f * (10.0f * val));
+                    val = (f32)sin((i + gp->retraceCount) / 100.0f);
+                    PSMTXRotRad(m2, 'z', 0.017453292f * (10.0f * val));
                     PSMTXTrans(m3, 0.0f, 20.0f, 0.0f);
                     PSMTXConcat(m1, m2, m2);
                     PSMTXConcat(m2, m3, m3);

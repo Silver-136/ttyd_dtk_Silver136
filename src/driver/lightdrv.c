@@ -248,7 +248,8 @@ s32 lightGetNearObj(const Vec* position, LightEntry** out, s32 count, LightEntry
         }
     }
 
-    op = out; tp = tmp;
+    op = out;
+    tp = tmp;
     mask = flags;
     found = 0;
     for (i = 0; i < n; i++, tp++) {

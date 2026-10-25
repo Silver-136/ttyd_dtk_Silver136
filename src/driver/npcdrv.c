@@ -1200,7 +1200,8 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     f32 dist;
     f32 range;
     f32 angle;
-    f32 dx; f32 dz;
+    f32 dx;
+    f32 dz;
     f32 rad;
     f32 len;
     f32 scale;

@@ -166,7 +166,8 @@ void effSleepDisp(CameraId camId, EffectEntry* effect) {
             while (j < 8) {
                 s0 = 0.5f * (f32)sin((t = (tau * (f32)(u32)(gp->retraceCount + base + off)), t *= 0.015625f));
                 s1 = 0.5f * (f32)sin((t = (tau * (f32)(u32)(gp->retraceCount + base + (j + 1) * 10)), t *= 0.015625f));
-                xh = x0; xh *= 0.5f;
+                xh = x0;
+                xh *= 0.5f;
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 sleepPos(xh + s1, 1.0f, j + 1);
                 GXTexCoord2f32(0.0f, 0.125f * (f32)(7 - j));

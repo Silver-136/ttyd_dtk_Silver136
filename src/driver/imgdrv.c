@@ -327,7 +327,8 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
             }
             if (!(sh->flags & 0x100)) sh->flags &= ~0x10;
         } else {
-            GXTexObj* o2; smartEntry* b2;
+            GXTexObj* o2;
+            smartEntry* b2;
             offscreenGetTexObj(offId, &o2, &b2);
             if (o2) {
                 sh->texObj = *o2;
@@ -605,12 +606,15 @@ void imgShadowDisp(CameraId camId, void* param) {
     animPoseSetMaterialLightFlagOn(entry->poseId, 1);
     entry->loopTimes = animPoseGetLoopTimes(entry->poseId);
     {
-        f32 x0, y0, w, h; f32 sc, z;
+        f32 x0, y0, w, h;
+        f32 sc, z;
         typedef struct { u16 p, q, w, h; } RM;
         if (entry->flags & 8) {
-            sc = 1.0f; z = 0.0f;
+            sc = 1.0f;
+            z = 0.0f;
         } else {
-            sc = 1.0f; z = 0.0f;
+            sc = 1.0f;
+            z = 0.0f;
         }
         if (entry->flags & 4) {
             x0 = entry->shadows[first].rect.left;
@@ -620,7 +624,8 @@ void imgShadowDisp(CameraId camId, void* param) {
         } else {
             x0 = entry->shadows[first].x;
             y0 = entry->shadows[first].y;
-            w = entry->width; h = entry->height;
+            w = entry->width;
+            h = entry->height;
         }
         PSMTXTrans(t, 64.0f * ((entry->offsetX + x0) / (f32)((RM*)DEMOGetRenderModeObj())->w), 48.0f * (-(entry->offsetY + y0) / (f32)((RM*)DEMOGetRenderModeObj())->h), z);
         PSMTXTrans(m2, -32.0f, 24.0f, 0.0f);

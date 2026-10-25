@@ -166,8 +166,10 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
         ang = (f32)irand(360);
         r = (f32)irand(5);
         ang = 6.2831855f * ang / 360.0f;
-        s = sin(ang); work->f10 = r * s;
-        c = cos(ang); work->f14 = r * c;
+        s = sin(ang);
+        work->f10 = r * s;
+        c = cos(ang);
+        work->f14 = r * c;
         work->position.x = 2.0f * work->f10;
         work->position.y = 0.0f;
         work->position.z = 2.0f * work->f14;

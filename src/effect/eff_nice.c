@@ -473,7 +473,8 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
 #else
     ten = 10.0f;
     size = -size;
-    half = size; half *= 0.5f;
+    half = size;
+    half *= 0.5f;
 #endif
     wp++;
     for (i = 1; i < effect->count; i++, wp++) {

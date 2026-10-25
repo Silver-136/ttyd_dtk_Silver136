@@ -1285,7 +1285,8 @@ void winIconInit(void) {
     winTexInit(NULL);}
 
 void winIconGrayInit(void) {
-    winTexInit(NULL);    GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
+    winTexInit(NULL);
+    GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
     GXSetTevSwapModeTable(GX_TEV_SWAP2, GX_CH_GREEN, GX_CH_GREEN, GX_CH_GREEN, GX_CH_ALPHA);
     GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
     GXSetTevColor(GX_TEVREG1, (GXColor){ 0x55, 0x55, 0x55, 0xFF });

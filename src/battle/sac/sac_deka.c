@@ -402,7 +402,8 @@ static void main_base(void) {
             if (i == 8) {
                 found = 0;
                 for (j = 0; j < 8; j++) {
-                    DekaTiming* t2 = &w->timing[idx[j]]; t = t2;
+                    DekaTiming* t2 = &w->timing[idx[j]];
+                    t = t2;
                     if (t->state == 2 && t->type == 1) {
                         w->state = 5;
                         w->gaugeState = 4;

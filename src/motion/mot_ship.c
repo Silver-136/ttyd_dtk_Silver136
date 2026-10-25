@@ -806,7 +806,8 @@ void mot_ship(void) {
         shipMove();
         if ((s32)m->flags & MARIO_FLAG_IS_FALLING) {
             MarioWork* mm;
-            s32 ok; HitEntry* land;
+            s32 ok;
+            HitEntry* land;
             f32 ly;
             marioMakeJumpPara();
             if (m->jumpVelocityY <= -7.0f) {

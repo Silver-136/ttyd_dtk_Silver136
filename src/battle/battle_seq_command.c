@@ -1758,7 +1758,8 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckSetup(BattleWork* wp) {
 #pragma dont_inline reset
 
 s32 BattleCommandDisplay_WeaponMultiItemCancelCheckMain(BattleWork* wp) {
-    BattleCommand* cmd = &wp->commandMenu; BattleCursor* cursor = &cmd->cursor[13];
+    BattleCommand* cmd = &wp->commandMenu;
+    BattleCursor* cursor = &cmd->cursor[13];
     s32 done = 0;
     s32 cancel = 0;
 

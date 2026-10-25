@@ -143,7 +143,8 @@ void effRappaDisp(CameraId cameraId, EffectEntry* effect) {
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
-    idx = (work->frame - 1) * 3; idx %= 36;
+    idx = (work->frame - 1) * 3;
+    idx %= 36;
     alpha = work->alpha;
     GXSetNumChans(0);
     GXSetNumTexGens(1);

@@ -305,7 +305,8 @@ static void actionCommandDisp(f32 x, f32 y) {
     s32 id;
     s32 cnt;
     Vec pos;
-    Vec d0; Vec d1;
+    Vec d0;
+    Vec d1;
 
     camGetPtr(CAMERA_2D);
     gw = (GT2Work*)ac->work;

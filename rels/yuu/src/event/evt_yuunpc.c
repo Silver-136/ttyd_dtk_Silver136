@@ -498,7 +498,8 @@ f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc) {
 
     if (!(ext->flags & 2)) {
         f32 c, s;
-        a = ext->dir; a = 450.0f - a;
+        a = ext->dir;
+        a = 450.0f - a;
         if (a >= 360.0f) {
             a -= 360.0f;
         }
@@ -1541,7 +1542,8 @@ void yuunpc_pose_minigame4_main(void) {
                 case 14:
                 case 15:
                     if ((u16)npc->id & 3) {
-                        off = (3 - (h - 12)) * 50.0f; px += off;
+                        off = (3 - (h - 12)) * 50.0f;
+                        px += off;
                         npc->dest.x = yuunpc_snap(px);
                         npc->dest.z = -(75.0f + yuunpc_rnd10(npc));
                         npc->dest.y = npc->pos.y;
@@ -1556,7 +1558,8 @@ void yuunpc_pose_minigame4_main(void) {
                 case 18:
                 case 19:
                     if ((u16)npc->id & 3) {
-                        off = (3 - (h - 16)) * 50.0f; px += off;
+                        off = (3 - (h - 16)) * 50.0f;
+                        px += off;
                         npc->dest.x = yuunpc_snap(px);
                         npc->dest.z = -25.0f + yuunpc_rnd10(npc);
                         npc->dest.y = npc->pos.y;
@@ -1571,7 +1574,8 @@ void yuunpc_pose_minigame4_main(void) {
                 case 22:
                 case 23:
                     if ((u16)npc->id & 3) {
-                        off = (3 - (h - 20)) * 50.0f; px += off;
+                        off = (3 - (h - 20)) * 50.0f;
+                        px += off;
                         npc->dest.x = yuunpc_snap(px);
                         npc->dest.z = 75.0f + yuunpc_rnd10(npc);
                         npc->dest.y = npc->pos.y;

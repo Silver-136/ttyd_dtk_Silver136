@@ -190,7 +190,9 @@ USER_FUNC(btlevtcmd_DrawLots) {
         max += alloc[i];
     }
     ceiling = irand(max);
-    nv[1] = 0; i = 0; nv[0] = i;
+    nv[1] = 0;
+    i = 0;
+    nv[0] = i;
     for (; i < count; i++) {
         nv[1] += alloc[i];
         if (ceiling < nv[1]) {
@@ -1908,7 +1910,8 @@ USER_FUNC(btlevtcmd_GetDamageCode) {
 
 USER_FUNC(btlevtcmd_CheckDamageCode) {
     EvtWord* args = event->args;
-    s32 btlId, id, mask, index; BattleUnit* unit;
+    s32 btlId, id, mask, index;
+    BattleUnit* unit;
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
@@ -2386,7 +2389,8 @@ USER_FUNC(btlevtcmd_ResetFaceDirection) {
 
 USER_FUNC(btlevtcmd_CheckAttribute) {
     EvtWord* args = event->args;
-    s32 btlId, id, mask, index; BattleUnit* unit;
+    s32 btlId, id, mask, index;
+    BattleUnit* unit;
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
@@ -4235,7 +4239,8 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
                 t += 47.0;
                 unit->mMoveTotalFrames = t;
                 if (type == 2) {
-                    unit->mMoveTotalFrames *= 1.12; t = unit->mMoveTotalFrames;
+                    unit->mMoveTotalFrames *= 1.12;
+                    t = unit->mMoveTotalFrames;
                     unit->mMoveTotalFrames = t;
                 }
                 unit->mJumpBaseY = 0.0f;
@@ -4250,7 +4255,8 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
                 t += 47.0;
                 unit->mMoveTotalFrames = t;
                 if (type == 4) {
-                    unit->mMoveTotalFrames *= 1.25; t = unit->mMoveTotalFrames;
+                    unit->mMoveTotalFrames *= 1.25;
+                    t = unit->mMoveTotalFrames;
                     unit->mMoveTotalFrames = t;
                 }
                 unit->mJumpBaseY = 0.0f;

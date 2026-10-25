@@ -220,7 +220,8 @@ void effFireMain(EffectEntry* effect) {
                     break;
             }
             while (1) {
-                kf = work->keyFrame; idx = work->keyIdx;
+                kf = work->keyFrame;
+                idx = work->keyIdx;
                 if (kf < tbl[idx].frame) {
                     break;
                 }
@@ -335,7 +336,8 @@ void effFireDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', MTXDegToRad(-camGetPtr(cameraId)->viewYaw));
     {
-        f32 s = 20.0f * work->scale; s *= 0.03125f;
+        f32 s = 20.0f * work->scale;
+        s *= 0.03125f;
         PSMTXScale(scaleMtx, s * work->scaleX, s * work->scaleY, s);
     }
     PSMTXConcat(trans, rot, m6c);

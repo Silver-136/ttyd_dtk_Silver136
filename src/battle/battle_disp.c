@@ -506,7 +506,8 @@ next:
                     spos.z += vpos.z;
                     spos.z *= 0.5f;
                 }
-                spos.y = BattleGetFloorHeight(wp, spos.x, spos.y, spos.z); h = spos.y;
+                spos.y = BattleGetFloorHeight(wp, spos.x, spos.y, spos.z);
+                h = spos.y;
                 if (ppos.y <= h) {
                     scale = 1.0f;
                 } else {

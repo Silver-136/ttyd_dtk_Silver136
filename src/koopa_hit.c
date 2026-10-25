@@ -208,12 +208,15 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
         case 1:
             ang = rad / 180.0f;
             ox = (r2 - 0.05f) * (f32)sin(ang);
-            nv = (f32)cos(ang); oz = (r2 - 0.05f) * -nv;
+            nv = (f32)cos(ang);
+            oz = (r2 - 0.05f) * -nv;
             break;
         case 2:
             ang = rad / 180.0f;
-            nv = (f32)sin(ang); ox = (r2 - 0.05f) * -nv;
-            nv = (f32)cos(ang); oz = (r2 - 0.05f) * -nv;
+            nv = (f32)sin(ang);
+            ox = (r2 - 0.05f) * -nv;
+            nv = (f32)cos(ang);
+            oz = (r2 - 0.05f) * -nv;
             break;
         case 3:
             ang = rad / 180.0f;

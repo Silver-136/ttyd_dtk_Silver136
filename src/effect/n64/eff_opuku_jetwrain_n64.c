@@ -174,7 +174,8 @@ void effOpukuJetwrainDisp(CameraId cameraId, EffectEntry* effect) {
     s32 y1;
     s32 by, bx;
     s32 x0;
-    s32 k; s32 edgeX;
+    s32 k;
+    s32 edgeX;
 
     camGetPtr(cameraId);
     work = effect->userdata;

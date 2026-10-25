@@ -411,7 +411,8 @@ BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
         *ctr = 0;
         return FALSE;
     }
-    (*ctr)++; t = (*ctr * 12) % 720;
+    (*ctr)++;
+    t = (*ctr * 12) % 720;
     if (t >= 360) t = 720 - t;
     BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;

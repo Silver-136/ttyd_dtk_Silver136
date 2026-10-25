@@ -607,7 +607,8 @@ static inline void _ssDropStop(void) {
 }
 
 BOOL SoundDropData(void) {
-    SoundGroup *group; SoundGroup *temp;
+    SoundGroup *group;
+    SoundGroup *temp;
     u32 i;
 
     group = sound.groups;
@@ -1642,7 +1643,8 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                      ssDecodeDPCM(stream, entry, buffer1, len1, entry->loadBuffer[entry->curBuf] + entry->srcPos));
     } else if (stream->flags & 0x100) {
         dst = buffer1; // FAKE: dst (not a u8* dst8) for the byte copies, so dst's split webs number above i/n
-        src8 = entry->loadBuffer[entry->curBuf]; src8 = src8 + entry->srcPos;
+        src8 = entry->loadBuffer[entry->curBuf];
+        src8 = src8 + entry->srcPos;
         n = ((len1 + 13) / 14) * 8;
         while (n != 0) {
             *(((u8*)dst)++) = *(src8++);

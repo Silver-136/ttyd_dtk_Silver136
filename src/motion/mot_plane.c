@@ -612,7 +612,8 @@ static void flyMain(void) {
             if (t <= 0.0f) {
                 t = 0.0f;
             }
-            t *= 90.0f / planeData[0]; t = planeData[27] * (f32)sin(PI * t / 180.0f);
+            t *= 90.0f / planeData[0];
+            t = planeData[27] * (f32)sin(PI * t / 180.0f);
             if (t <= planeData[28]) {
                 t = planeData[28];
             }
@@ -638,7 +639,8 @@ static void flyMain(void) {
     if (mp->motPlane->pitch >= 0.0f) {
         mp->motPlane->flags |= 0x10;
         a = (f32)sin(PI * (mp->motPlane->pitch * planeData[7]) / 180.0f);
-        a = SPD * (planeData[8] * a); SPD = SPD + a;
+        a = SPD * (planeData[8] * a);
+        SPD = SPD + a;
         if (STICK != 0 && mp->motPlane->pitch >= planeData[3]) {
             SPD += planeData[2];
         }
@@ -679,7 +681,8 @@ static void flyMain(void) {
                 mp->motPlane->sinkSpeed = planeData[19];
             }
         } else {
-            v = mp->motPlane->sinkSpeed + 0.1f * (0.0f - mp->motPlane->sinkSpeed); mp->motPlane->sinkSpeed = v;
+            v = mp->motPlane->sinkSpeed + 0.1f * (0.0f - mp->motPlane->sinkSpeed);
+            mp->motPlane->sinkSpeed = v;
         }
         mp->motPlane->pitch += v;
     } else if (mp->motPlane->pitch >= -80.0f) {

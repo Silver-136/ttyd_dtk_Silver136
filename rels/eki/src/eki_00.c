@@ -726,7 +726,8 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
         f32 r2;
         f32 t;
         cam = camGetPtr(CAMERA_3D);
-        t = cam->viewYaw; r2 = 6.2831855f * reviseAngle((f32)(mario->displayDirection - 90.0f) + t) / 360.0f;
+        t = cam->viewYaw;
+        r2 = 6.2831855f * reviseAngle((f32)(mario->displayDirection - 90.0f) + t) / 360.0f;
         angle = 35.0f * moa_sin(r2) + mario->position.x;
         dist = mario->position.z - 35.0f * moa_cos(r2);
         if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], angle, dist) < 35.0f) {
@@ -1011,7 +1012,8 @@ static void ext_moamoa_main(void) {
             case 1: {
                     f32 rad;
                     {
-                        f32 k; f32 r1 = rand() / 32767.0f;
+                        f32 k;
+                        f32 r1 = rand() / 32767.0f;
                         f32 a = wp->angle + ((r1 * (k = 45.0f - -45.0f)) + -45.0f);
                         rad = (6.2831855f * a) / 360.0f;
                     }
@@ -1100,7 +1102,8 @@ static void ext_moamoa_main(void) {
                     {
                         f32 z;
                         {
-                            f32 rad; f32 k;
+                            f32 rad;
+                            f32 k;
                             s = rand() / 32767.0f;
                             {
                                 f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);

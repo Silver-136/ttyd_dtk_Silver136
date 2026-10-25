@@ -124,27 +124,33 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
                 switch (i - 1) {
                     case 0:
                         angle = 2.3561945f;
-                        tmp = sin(angle); data->position.x = 25.0f * -tmp;
+                        tmp = sin(angle);
+                        data->position.x = 25.0f * -tmp;
                         data->position.y = 0.0f;
-                        tmp = cos(angle); data->position.z = 25.0f * -tmp;
+                        tmp = cos(angle);
+                        data->position.z = 25.0f * -tmp;
                         data->vSpeed = 0.95f;
                         data->f24 = -0.04f;
                         data->f28 = 0.94f;
                         break;
                     case 1:
                         angle = -2.3561945f;
-                        tmp = sin(angle); data->position.x = 25.0f * -tmp;
+                        tmp = sin(angle);
+                        data->position.x = 25.0f * -tmp;
                         data->position.y = 4.0f;
-                        tmp = cos(angle); data->position.z = 25.0f * -tmp;
+                        tmp = cos(angle);
+                        data->position.z = 25.0f * -tmp;
                         data->vSpeed = 0.84999996f;
                         data->f24 = -0.04f;
                         data->f28 = 0.94f;
                         break;
                     case 2:
                         angle = 0.34906587f;
-                        tmp = sin(angle); data->position.x = 25.0f * -tmp;
+                        tmp = sin(angle);
+                        data->position.x = 25.0f * -tmp;
                         data->position.y = 10.0f;
-                        tmp = cos(angle); data->position.z = 25.0f * -tmp;
+                        tmp = cos(angle);
+                        data->position.z = 25.0f * -tmp;
                         data->vSpeed = 0.75f;
                         data->f24 = -0.04f;
                         data->f28 = 0.94f;

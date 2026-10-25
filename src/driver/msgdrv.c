@@ -1900,7 +1900,8 @@ void msgWindow_Disp(CameraId camId, void* param) {
     Vec pos;
     f32 w;
     f32 h;
-    f32 ex; f32 ey;
+    f32 ex;
+    f32 ey;
     s32 sy;
     static u16 active;
 

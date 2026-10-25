@@ -570,7 +570,8 @@ s32 marioGetRub(u32 btn, s32* dirOut, s32* countOut, f32* magOut) {
     }
     rw->idleTimer = 0;
     rw->hist[rw->idx] = a;
-    j = rubwork.idx; j++;
+    j = rubwork.idx;
+    j++;
     while (j < 0) {
         j += 20;
     }
