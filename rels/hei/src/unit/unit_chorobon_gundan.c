@@ -34,7 +34,6 @@ typedef struct Chorogun {
 } Chorogun;
 Chorogun* chorogun;
 s32 chorogun_targetId;
-s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);
 double sqrt(double x);
 
 USER_FUNC(chorogun_after_attack);

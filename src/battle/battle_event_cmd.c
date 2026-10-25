@@ -3371,7 +3371,6 @@ void BtlUnit_SetAnim(BattleUnitPart* part, const char* name);
 void BattleAttackDeclareAll(BattleWork* wp);
 void BattleGetFirstAttackUnit(BattleWork* wp, s32* a, BattleUnit** unit);
 void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, s32 a, s32* b, s32* c);
-s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s32 pitch, Vec* pos);
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work);
 void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* part, f32 x, f32 y, f32 z);
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit);

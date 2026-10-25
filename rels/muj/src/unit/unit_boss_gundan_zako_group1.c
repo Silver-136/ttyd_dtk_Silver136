@@ -52,7 +52,6 @@ void zakogun_ext_main1(void);
 void zakogun_ext_main2(void);
 void zakogun_ext_main3(void);
 void zakogun_ext_disp(CameraId camera, void* param);
-s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);
 
 USER_FUNC(zakogun_attack1);
 USER_FUNC(zakogun_damage_pose);

@@ -120,8 +120,8 @@ USER_FUNC(recover_cmd_disable);
 USER_FUNC(star_appear);
 USER_FUNC(status_on);
 USER_FUNC(get_score);
-USER_FUNC(object_get_num);
-USER_FUNC(object_entry);
+s32 object_get_num(void);
+void object_entry(void);
 void weapon_entry(void);
 USER_FUNC(main_genki);
 USER_FUNC(end_genki);
@@ -301,7 +301,7 @@ static void main_base(void) {
                 w->objTimer = 18;
             }
             if (w->timeLeft > 0) {
-                ((void (*)(void))object_entry)();
+                object_entry();
             }
         }
         if (w->timeLeft <= 0) {
@@ -338,7 +338,7 @@ void main_mario(void) {
     EffectEntry* eff;
 
     if (w->marioState >= 1 && w->marioState <= 4 && w->timeLeft <= 0 &&
-        ((s32 (*)(void))object_get_num)() == 0) {
+        object_get_num() == 0) {
         w->marioState = 5;
         w->targetState = 4;
         BtlUnit_SetAnim(part, "M_S_1");
@@ -355,7 +355,7 @@ void main_mario(void) {
     case 2:
         if (stick > -20) {
             w->marioState = 1;
-            ((void (*)(void))weapon_entry)();
+            weapon_entry();
         } else {
             w->marioCnt--;
             if (w->marioCnt == 2) {
@@ -363,7 +363,7 @@ void main_mario(void) {
             }
             if (w->marioCnt <= 0 && w->mode == 1) {
                 w->marioCnt = 10;
-                ((void (*)(void))weapon_entry)();
+                weapon_entry();
             }
         }
         break;
@@ -1353,7 +1353,7 @@ void weapon_entry(void) {
     }
 }
 
-USER_FUNC(object_entry) {
+void object_entry(void) {
     GenkiWork* w = get_ptr();
     s32 i;
     for (i = 0; i < 10; i++) {
@@ -1365,7 +1365,7 @@ USER_FUNC(object_entry) {
     }
 }
 
-USER_FUNC(object_get_num) {
+s32 object_get_num(void) {
     GenkiWork* w = get_ptr();
     s32 i;
     s32 n;

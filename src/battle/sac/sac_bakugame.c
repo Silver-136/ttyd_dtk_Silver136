@@ -33,7 +33,6 @@
 void btlGetScreenPoint(Vec* in, Vec* out);
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
 void btlDispPoseAnime(BattleUnitPart* part);
-s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);
 void psndSFX_pit(s32 id, s32 pitch);
 
 #define GET_EXIST(i) ((u8(*)(s32))BattleAudience_GetExist)(i)

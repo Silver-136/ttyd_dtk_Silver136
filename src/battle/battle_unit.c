@@ -40,8 +40,6 @@ s32 _enemy_can_use_item_table[] = {
     ITEM_HOT_DOG, ITEM_CAKE, 0,
 };
 
-s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s16 pitch, Vec* pos);
-
 //local prototypes
 void _CheckMoveCount(BattleUnit* unit);
 

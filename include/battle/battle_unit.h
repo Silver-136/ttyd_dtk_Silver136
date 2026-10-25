@@ -972,6 +972,7 @@ s32 BtlUnit_GetEnemyBelong(BattleUnit* unit);
 void BtlUnit_ReviseHpFp(BattleUnit* unit);
 void BtlUnit_SetParamFromPouch(BattleUnit* unit);
 s32 BtlUnit_snd_se(BattleUnit* unit, const char* sfxName, s32 volume, s32 pan);
+s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* sfxName, s32 volume, s16 pitch, Vec* pos);
 BattleUnit* BtlUnit_GetGuardKouraPtr(BattleUnit* unit);
 
 BOOL BtlUnit_CanActStatus(BattleUnit* unit);
