@@ -37,7 +37,6 @@ typedef struct GT2Work {
 #define GT_DISP(w) (&(w)->actionCommands.disp)
 #define GT_WORK(w) ((GT2Work*)(w)->actionCommands.work)
 #define ICON ((void (*)(Vec*, s16, s32, f32))iconDispGx)
-#define TEXPLANE ((void (*)(u32, GXColor, s32, f32, f32, f32, f32, f32))btlDispTexPlane)
 
 static void actionCommandDisp(f32 x, f32 y);
 
@@ -363,16 +362,16 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     btlDispGXInit2DRasta();
     GXLoadPosMtxImm(cam->view, 0);
-    TEXPLANE(BTL_TEX(0x43), (GXColor){255, 255, 255, 255}, 0, x0, y1, 0.0f, 1.0f, 1.0f);
+    btlDispTexPlane(x0, y1, 0.0f, 1.0f, 1.0f, BTL_TEX(0x43), (GXColor){255, 255, 255, 255}, 0);
     t = 2.0f + (8.0f + x0);
     for (i = 0; i < q; i++) {
         if (i != q - 1) {
-            TEXPLANE(BTL_TEX(0x44), (GXColor){255, 255, 255, 255}, 0, t + (f32)(i * 4), y1, 0.0f, 1.0f, 1.0f);
+            btlDispTexPlane(t + (f32)(i * 4), y1, 0.0f, 1.0f, 1.0f, BTL_TEX(0x44), (GXColor){255, 255, 255, 255}, 0);
         } else {
-            TEXPLANE(BTL_TEX(0x44), (GXColor){255, 255, 255, 255}, 0, (f32)r + (t + (f32)(i * 4)), y1, 0.0f, 1.0f, 1.0f);
+            btlDispTexPlane((f32)r + (t + (f32)(i * 4)), y1, 0.0f, 1.0f, 1.0f, BTL_TEX(0x44), (GXColor){255, 255, 255, 255}, 0);
         }
     }
-    TEXPLANE(BTL_TEX(0x43), (GXColor){255, 255, 255, 255}, 0, 16.0f + x0 + (f32)v, y1, 0.0f, -1.0f, 1.0f);
+    btlDispTexPlane(16.0f + x0 + (f32)v, y1, 0.0f, -1.0f, 1.0f, BTL_TEX(0x43), (GXColor){255, 255, 255, 255}, 0);
     ratio = gw->cursor / 100.0f;
     if (ratio > 1.0f) {
         ratio = 1.0f;
@@ -454,7 +453,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 break;
         }
         if ((u16)id != BTL_TEX(0x45)) {
-            TEXPLANE((u16)id, (GXColor){255, 255, 255, 255}, 0, - 288.0f + x + (((f32)gw->width) * gw->targets[i]) / 100.0f, y4, 0.0f, 1.0f, 1.0f);
+            btlDispTexPlane(- 288.0f + x + (((f32)gw->width) * gw->targets[i]) / 100.0f, y4, 0.0f, 1.0f, 1.0f, (u16)id, (GXColor){255, 255, 255, 255}, 0);
         }
     }
     }

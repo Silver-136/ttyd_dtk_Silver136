@@ -2592,7 +2592,6 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
 }
 
 
-#define TEXPLANE ((void (*)(u32, GXColor, s32, f32, f32, f32, f32, f32))btlDispTexPlane)
 #pragma dont_inline on
 void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
@@ -2601,7 +2600,7 @@ void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
     btlDispGXInit2DRasta();
     GXLoadPosMtxImm(cam->view, 0);
     pos.x -= 10.0f;
-    TEXPLANE(VERSION_PICK(10, 17), color, 0, 19.0f + pos.x, pos.y - 3.0f, 0.0f, 1.0f, 1.0f);
+    btlDispTexPlane(19.0f + pos.x, pos.y - 3.0f, 0.0f, 1.0f, 1.0f, VERSION_PICK(10, 17), color, 0);
     switch (unit->hpGauge.mode) {
     case 1:
         if (unit->hpGauge.drainTimer > 0) {
@@ -2613,11 +2612,11 @@ void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
             btlDispGXInit2DRasta();
             GXLoadPosMtxImm(cam->view, 0);
         }
-        TEXPLANE(VERSION_PICK(11, 18), color, 0, 19.0f + pos.x - 20.0f * (1.0f - unit->hpGauge.barRatio), pos.y - 3.0f, 0.0f, unit->hpGauge.barRatio, 1.0f);
+        btlDispTexPlane(19.0f + pos.x - 20.0f * (1.0f - unit->hpGauge.barRatio), pos.y - 3.0f, 0.0f, unit->hpGauge.barRatio, 1.0f, VERSION_PICK(11, 18), color, 0);
         break;
     default:
         x = unit->hpGauge.barRatio;
-        TEXPLANE(VERSION_PICK(11, 18), color, 0, 19.0f + pos.x - 20.0f * (1.0f - x), pos.y - 3.0f, 0.0f, x, 1.0f);
+        btlDispTexPlane(19.0f + pos.x - 20.0f * (1.0f - x), pos.y - 3.0f, 0.0f, x, 1.0f, VERSION_PICK(11, 18), color, 0);
         break;
     }
 }
