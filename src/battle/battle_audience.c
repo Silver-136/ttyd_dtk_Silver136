@@ -17,7 +17,6 @@
 #include "battle/battle_status_effect.h"
 #include "statuswindow.h"
 
-#pragma dont_inline on
 
 
 #include "evt/evt_cmd.h"

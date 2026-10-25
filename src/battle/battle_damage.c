@@ -11,7 +11,6 @@
 #include "eff/eff_recovery.h"
 #include "battle/battle_audience.h"
 #include "battle/battle_actrecord.h"
-#pragma dont_inline on
 #include "battle/battle_damage.h"
 #include "battle/battle.h"
 #include "battle/battle_unit.h"

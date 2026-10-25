@@ -7,7 +7,6 @@
 #include "battle/battle.h"
 #include "mario/mariost.h"
 
-#pragma dont_inline on
 
 void BattlePadInit(void) {
     int i;

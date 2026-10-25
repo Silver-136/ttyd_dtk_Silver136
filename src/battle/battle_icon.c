@@ -10,7 +10,6 @@
 extern ItemData itemDataTable[];
 #include "system.h"
 
-#pragma dont_inline on
 BattleIcon* BtlIconGetPtr(s32 index) {
     BattleIcon* icon;
     int i;

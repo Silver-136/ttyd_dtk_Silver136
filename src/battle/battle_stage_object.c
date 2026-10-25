@@ -32,7 +32,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_ac.h"
 
-#pragma dont_inline on
 
 #define STAGE_WORK(wp) (&(wp)->stageObjectWork)
 

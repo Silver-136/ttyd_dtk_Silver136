@@ -19,7 +19,6 @@
 #include "battle/battle_stage.h"
 #include "battle/battle_stage_object.h"
 
-#pragma dont_inline on
 
 
 double sqrt(double);

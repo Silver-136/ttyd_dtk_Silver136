@@ -33,7 +33,6 @@ typedef struct ShotTargetWork {
 #define ST_WORK(ac) ((ShotTargetWork*)(ac)->work)
 #define ST_DISP(ac) (&(ac)->disp)
 
-#pragma dont_inline on
 
 static void _ac_disp_init(BattleWork* work);
 static void actionCommandDisp(f32 x, f32 y);

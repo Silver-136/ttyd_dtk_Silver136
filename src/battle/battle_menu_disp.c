@@ -1,4 +1,3 @@
-#pragma dont_inline on
 #include "battle/battle_menu_disp.h"
 #include "battle/battle_seq_command.h"
 #include "battle/battle_unit.h"

@@ -1,4 +1,3 @@
-#pragma dont_inline on
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
 #include "data/item_data.h"
