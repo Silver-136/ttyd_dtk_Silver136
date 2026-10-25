@@ -234,9 +234,9 @@ void mot_plane(void) {
             animPoseSetLocalTime(mp->paperPoseId, 0.0f);
             animPoseSetLocalTime(mp->paperAnimGroupId[marioAnimeId()], 0.0f);
             evt = evtEntry(sound_evt, 0, 0);
-            evt->lwData[0] = (s32)(1024.0f * mp->position.x) + -230000000;
-            evt->lwData[1] = (s32)(1024.0f * mp->position.y) + -230000000;
-            evt->lwData[2] = (s32)(1024.0f * mp->position.z) + -230000000;
+            evt->lwData[0] = FLOAT(mp->position.x);
+            evt->lwData[1] = FLOAT(mp->position.y);
+            evt->lwData[2] = FLOAT(mp->position.z);
         }
         if (mp->jumpVelocityY > 0.0f) {
             mp->position.y += mp->jumpVelocityY;

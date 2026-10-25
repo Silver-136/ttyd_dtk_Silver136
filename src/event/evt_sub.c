@@ -71,7 +71,6 @@ void spline_getvalue(f32* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl);
 void spline_maketable(s32 n, Vec* pts, f32* ts, Vec* tbl);
 #define INTPL_F(mode, cur, steps, a, b) ((f32 (*)(s32, f32, f32, s32, s32))intplGetValue)(mode, a, b, cur, steps)
 
-#define EVT_FLOAT_OF(x) ((s32)(1024.0f * (x)) - 230000000)
 
 
 #pragma force_active on
@@ -1802,8 +1801,8 @@ USER_FUNC(evt_sub_intpl_init_float) {
     f32 end = evtGetFloat(event, args[2]);
     s32 steps = evtGetValue(event, args[3]);
     event->lwData[11] = mode;
-    event->lwData[12] = EVT_FLOAT_OF(start);
-    event->lwData[13] = EVT_FLOAT_OF(end);
+    event->lwData[12] = FLOAT(start);
+    event->lwData[13] = FLOAT(end);
     event->lwData[14] = 0;
     event->lwData[15] = steps;
     return EVT_RETURN_DONE;
@@ -1906,9 +1905,9 @@ USER_FUNC(evt_sub_spline_get_value) {
         t = INTPL_F(w->mode, (s32)el, w->msec, 0.0f, 1.0f);
     }
     spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
-    evtSetValue(event, args[0], EVT_FLOAT_OF(v[0]));
-    evtSetValue(event, args[1], EVT_FLOAT_OF(v[1]));
-    evtSetValue(event, args[2], EVT_FLOAT_OF(v[2]));
+    evtSetValue(event, args[0], FLOAT(v[0]));
+    evtSetValue(event, args[1], FLOAT(v[1]));
+    evtSetValue(event, args[2], FLOAT(v[2]));
     w->cur++;
     if (!w->manual) {
         if (w->cur <= w->steps) {
@@ -1934,9 +1933,9 @@ USER_FUNC(evt_sub_spline_get_value_manual) {
     t = t;
     t = t / (w->manual ? (f32)w->msec : (f32)w->steps);
     spline_getvalue(v, t, w->n, w->pts, w->ts, w->tbl);
-    evtSetValue(event, args[1], EVT_FLOAT_OF(v[0]));
-    evtSetValue(event, args[2], EVT_FLOAT_OF(v[1]));
-    evtSetValue(event, args[3], EVT_FLOAT_OF(v[2]));
+    evtSetValue(event, args[1], FLOAT(v[0]));
+    evtSetValue(event, args[2], FLOAT(v[1]));
+    evtSetValue(event, args[3], FLOAT(v[2]));
     return EVT_RETURN_DONE;
 }
 
@@ -1952,9 +1951,9 @@ USER_FUNC(evt_sub_get_sincos) {
     EvtWord* args = event->args;
     f32 rad = (3.141592f * evtGetFloat(event, args[0])) / 180.0f;
     f32 s = (f32)sin(rad);
-    evtSetValue(event, args[1], (s32)(1024.0f * s) - 230000000);
+    evtSetValue(event, args[1], FLOAT(s));
     s = (f32)cos(rad);
-    evtSetValue(event, args[2], (s32)(1024.0f * s) - 230000000);
+    evtSetValue(event, args[2], FLOAT(s));
     return EVT_RETURN_DONE;
 }
 

@@ -12,7 +12,7 @@
 
 #define PTR(value) (EvtWord)(value)
 #define STRING(value) PTR(value)
-#define FLOAT(value) ((s32)((value) * 1024.0f) - EVTDAT_FLOAT_BASE)
+#define FLOAT(value) ((s32)(1024.0f * (value)) - EVTDAT_FLOAT_BASE)
 
 #define EVT_CMD(param_count, opcode) (((param_count) << 16) | (opcode))
 

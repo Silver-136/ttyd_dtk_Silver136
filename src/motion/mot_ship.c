@@ -378,9 +378,9 @@ void mot_ship(void) {
             marioGetPtr()->motShip->turnAccel = f30;
             {
                 EventEntry* e = evtEntry(sound_evt, 0, 0);
-                e->lwData[0] = (s32)(1024.0f * m->position.x) - 230000000;
-                e->lwData[1] = (s32)(1024.0f * m->position.y) - 230000000;
-                e->lwData[2] = (s32)(1024.0f * m->position.z) - 230000000;
+                e->lwData[0] = FLOAT(m->position.x);
+                e->lwData[1] = FLOAT(m->position.y);
+                e->lwData[2] = FLOAT(m->position.z);
             }
         }
         if (m->jumpVelocityY > 0.0f) {
@@ -645,9 +645,9 @@ void mot_ship(void) {
         psndSFXOn_3D((const char*)0x192, &m->position);
         {
             EventEntry* e = evtEntry(sound_evt2, 0, 0);
-            e->lwData[0] = (s32)(1024.0f * m->position.x) - 230000000;
-            e->lwData[1] = (s32)(1024.0f * m->position.y) - 230000000;
-            e->lwData[2] = (s32)(1024.0f * m->position.z) - 230000000;
+            e->lwData[0] = FLOAT(m->position.x);
+            e->lwData[1] = FLOAT(m->position.y);
+            e->lwData[2] = FLOAT(m->position.z);
         }
         break;
     case 43:

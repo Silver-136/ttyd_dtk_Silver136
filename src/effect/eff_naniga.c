@@ -217,9 +217,9 @@ void effNanigaMain(EffectEntry* effect) {
             animPoseSetAnim(work->pose, "A_1", TRUE);
             work->state++;
             evt = evtEntryType(sound_evt, 0, 0, 0);
-            evt->lwData[0] = (s32)(1024.0f * pos.x) - 230000000;
-            evt->lwData[1] = (s32)(1024.0f * pos.y) - 230000000;
-            evt->lwData[2] = (s32)(1024.0f * pos.z) - 230000000;
+            evt->lwData[0] = FLOAT(pos.x);
+            evt->lwData[1] = FLOAT(pos.y);
+            evt->lwData[2] = FLOAT(pos.z);
         }
         break;
     case 11:
