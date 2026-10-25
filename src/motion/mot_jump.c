@@ -1,11 +1,13 @@
-#ifdef VERSION_G8ME01
-#include "mario/mariost.h"
-#include <string.h>
 #include "sfx_name_word.h"
 #include "mario/mario_hit.h"
 #include "koopa_motion.h"
 #include "koopa.h"
-void camFollowYOn(void);
+#include "mario/mario_sbr.h"
+#include "system.h"
+#include "mot/mot_jump.h"
+#ifdef VERSION_G8ME01
+#include "mario/mariost.h"
+#include <string.h>
 BOOL marioPriCheckJabara(void);
 #endif
 #include "dolphin/types.h"
@@ -21,16 +23,9 @@ BOOL marioPriCheckJabara(void);
 #ifdef VERSION_G8ME01
 #define kpa_fall_80213C38 kpa_fall
 #endif
-void kpaChgPose(const char* a, const char* b);
-void marioSetPeakYpos(void);
 void marioChgMotAuto(void);
 void marioSlitForceCancel(void);
 void* marioChkFront(Vec* out, Vec* pos, f32 dir, f32 dist);
-f32 revise360(f32);
-f32 distABf(f32, f32, f32, f32);
-void sincosf(f32* s, f32* c, f32 deg);
-s32 irand(s32);
-void marioPreJump(void);
 
 
 static f32 marioJumpStandData[] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
