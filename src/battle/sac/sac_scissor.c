@@ -105,12 +105,12 @@ s32 wait_star_standby(void);
 s32 scissor_end(void);
 s32 scissor_init(void);
 s32 scissor_offscreen(void);
-s32 scissor_ofscreen_ok();
-s32 scissor_damage();
-s32 scissor_control();
+s32 scissor_ofscreen_ok(EventEntry* evt);
+s32 scissor_damage(EventEntry* evt, BOOL first);
+s32 scissor_control(EventEntry* evt, BOOL first);
 s32 scissor_timer_main(void);
-s32 scissor_timer_get();
-s32 star_control();
+s32 scissor_timer_get(EventEntry* evt);
+s32 star_control(EventEntry* evt, BOOL first);
 s32 scissor_tess(void);
 
 BattleWeapon weapon_scissor;

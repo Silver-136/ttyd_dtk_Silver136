@@ -84,8 +84,8 @@ u8 enemy_monoshiri_sort_table[] = {
 
 void winMarioMain2();
 void winBadgeExit();
-void winRootBgDrawDisp();
-void winRootBgCaptureDisp();
+void winRootBgDrawDisp(s32 unused, WindowWork* bg);
+void winRootBgCaptureDisp(s32 unused, WindowWork* bg);
 double fabs(double);
 
 #define WIN_ROOT_ADD_TAB(n)                       \

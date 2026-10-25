@@ -37,19 +37,19 @@ void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioItemThrow();
-void BattleAudienceCtrlProcessKinopioBooing();
-void BattleAudienceCtrlProcessKinopioDamage();
-void BattleAudienceCtrlProcessKinopioEnter();
-void BattleAudienceCtrlProcessKinopioEscape();
+void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front);
+void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front);
+void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front);
+void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front);
+void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioTransEvt();
-void BattleAudienceCtrlProcessKinopioIntrude();
-void BattleAudienceCtrlProcessKinopioSing();
-void BattleAudienceCtrlProcessKinopioShell();
+void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front);
+void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front);
+void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front);
+void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioEat();
+void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioSingSub(s32 index);
 void BattleAudienceCtrlProcessKinopioFireSub(s32 index);
 
@@ -524,7 +524,7 @@ void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
     }
 }
 
-void BattleAudienceCtrlProcessKinopioItemThrow(s32 index) {
+void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     BattleAudience_SetAnim(index, 6, FALSE);
     if (BattleAudience_GetAnimEnd(index) == 1) {
@@ -543,7 +543,7 @@ void BattleAudienceCtrlProcessKinopioItemThrow(s32 index) {
     }
 }
 
-void BattleAudienceCtrlProcessKinopioBooing(s32 index) {
+void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     BattleAudience_SetAnim(index, 4, FALSE);
     switch (m->step) {
@@ -568,7 +568,7 @@ void BattleAudienceCtrlProcessKinopioBooing(s32 index) {
     }
 }
 
-void BattleAudienceCtrlProcessKinopioDamage(s32 index) {
+void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front) {
     BattleAudienceMember* m;
     BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
@@ -604,7 +604,7 @@ void BattleAudienceCtrlProcessKinopioDamage(s32 index) {
     }
 }
 
-void BattleAudienceCtrlProcessKinopioEnter(s32 index) {
+void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
     BattleAudienceMember* m;
     f32 dx;
     f32 dz;
@@ -684,7 +684,7 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index) {
     }
 }
 
-void BattleAudienceCtrlProcessKinopioEscape(s32 index) {
+void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front) {
     BattleAudienceMember* m;
     BattleAudienceBaseGetPtr();
     m = BattleAudienceGetPtr(index);
@@ -824,7 +824,7 @@ static BattleWeapon weapon_teresa_trans = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-void BattleAudienceCtrlProcessKinopioTransEvt(s32 index) {
+void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     static f32 x;
@@ -891,7 +891,7 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index) {
 s32 intrudeSound;
 
 static const Vec v0 = {0.0f, 0.0f, 0.0f};
-void BattleAudienceCtrlProcessKinopioIntrude(s32 index) {
+void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudienceMember* m;
     PouchData* pouch;
@@ -1097,7 +1097,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index) {
     }
 }
 
-void BattleAudienceCtrlProcessKinopioSing(s32 index) {
+void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     f32 y;
@@ -1159,7 +1159,7 @@ void BattleAudienceCtrlProcessKinopioSingSub(s32 index) {
     }
 }
 
-void BattleAudienceCtrlProcessKinopioShell(s32 index) {
+void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if (m->step >= 2 && m->step <= 5) {
         BattleAudience_SetAnim(index, 15, FALSE);
@@ -1312,7 +1312,7 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 index) {
     }
 }
 
-void BattleAudienceCtrlProcessKinopioEat(s32 index) {
+void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
     BattleAudience* base;
     BattleAudienceMember* m;
     BattleStage* stage;
