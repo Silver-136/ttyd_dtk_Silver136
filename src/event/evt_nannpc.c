@@ -318,7 +318,7 @@ USER_FUNC(evt_nannpc_init) {
     EvtWord* args = event->args;
     NanNPCWork* w;
     s32 i;
-    ExtdrvTexInfo* texInfo = (ExtdrvTexInfo*)evtGetValue(event, args[0]);
+    ExtTexInfo* texInfo = (ExtTexInfo*)evtGetValue(event, args[0]);
     s16* tbl = (s16*)evtGetValue(event, args[1]);
     void (*initf)(void) = (void (*)(void))evtGetValue(event, args[2]);
     void (*mainf)(void) = (void (*)(void))evtGetValue(event, args[3]);

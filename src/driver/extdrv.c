@@ -92,12 +92,12 @@ void extInit(void) {
     wp->poses = NULL;
 }
 
-void extEntry(s32 poseNum, ExtdrvTexInfo* texInfo, void (*initFunc)(void), void (*mainFunc)(void), void (*mainFunc2)(void)) {
+void extEntry(s32 poseNum, ExtTexInfo* texInfo, void (*initFunc)(void), void (*mainFunc)(void), void (*mainFunc2)(void)) {
     static f32 Normals[] = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f};
     static GXColor Colors[] = {{0xFF, 0xFF, 0xFF, 0xFF}};
     static f32 UVs[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
     ExtdrvWork* wp = extGetWork();
-    ExtdrvTexInfo* info;
+    ExtTexInfo* info;
     s32 texNum;
     s32 i;
 
@@ -133,7 +133,7 @@ void extEntry(s32 poseNum, ExtdrvTexInfo* texInfo, void (*initFunc)(void), void 
 
 void extMakeTexture(CameraId camId, void* param) {
     ExtdrvWork* wp = extGetWork();
-    ExtdrvTexInfo* info;
+    ExtTexInfo* info;
     ExtdrvTex* tex;
     s32 i;
     s32 n;

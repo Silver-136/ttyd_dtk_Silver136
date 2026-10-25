@@ -18,6 +18,8 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_break_slot.h"
+#include "driver/extdrv.h"
 #include "eff/n64/eff_stardust2_n64.h"
 #include "battle/battle_status_effect.h"
 
@@ -72,12 +74,9 @@ typedef struct HandWork {
     s32 timer;
     s32 state;
 } HandWork;
-typedef struct HandData { const char* name; const char* anim; f32 rate; } HandData;
 typedef struct QueenConnect { s32 poseId[3]; u8 field_0xc[0x40 - 0xC]; s32 idx[2]; } QueenConnect;
-HandData hand_data[32];
+ExtTexInfo hand_data[32];
 HandWork* hand_wp;
-#include "battle/battle_break_slot.h"
-#include "driver/extdrv.h"
 u8* lightGetPaperCraft(void);
 void btl_camera_shake_w(s32 a, s32 b, s32 c, f32 d, f32 e);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
@@ -4878,7 +4877,7 @@ static void pose_main(void) {
 static void pose_init(void) {
     char name[32];
     char anim[32];
-    HandData* d = hand_data;
+    ExtTexInfo* d = hand_data;
     s32 i = 0;
     s32 start;
 
@@ -4889,8 +4888,8 @@ static void pose_init(void) {
     strcpy(anim, "");
     hand_wp->animNum = -1;
     do {
-        if (strcmp(d->name, name) != 0) {
-            strcpy(name, d->name);
+        if (strcmp(d->group, name) != 0) {
+            strcpy(name, d->group);
             strcpy(anim, "");
         }
         if (strcmp(d->anim, anim) != 0) {
@@ -4902,15 +4901,15 @@ static void pose_init(void) {
         strcpy(hand_wp->anim[hand_wp->animNum].anim, anim);
         hand_wp->anim[hand_wp->animNum].start = start;
         hand_wp->anim[hand_wp->animNum].count = i - start + 1;
-        hand_wp->anim[hand_wp->animNum].rate = d->rate;
+        hand_wp->anim[hand_wp->animNum].rate = d->frame;
         i++;
         d++;
-    } while (d->name != NULL);
+    } while (d->group != NULL);
     hand_wp->animNum++;
 }
 
 USER_FUNC(make_pattern) {
-    HandData* d = hand_data;
+    ExtTexInfo* d = hand_data;
     NpcEntry* npc = npcNameToPtr("dummy");
     AnimData* data;
     s32 i;
@@ -4919,11 +4918,11 @@ USER_FUNC(make_pattern) {
     animPoseGetAnimPosePtr(npc->poseId);
     data = animPoseGetAnimDataPtr(npc->poseId);
     for (i = 0; i < (s32)(data->loopInfo)[2]; i += 3, d++) {
-        d->name = "c_s_hand";
+        d->group = "c_s_hand";
         d->anim = "KRT_S_1";
-        d->rate = 3.0f * i;
+        d->frame = 3.0f * i;
     }
-    d->name = NULL;
+    d->group = NULL;
     return EVT_RETURN_DONE;
 }
 

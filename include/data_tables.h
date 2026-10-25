@@ -2,6 +2,7 @@
 
 #include <dolphin/types.h>
 #include <dolphin/mtx.h>
+#include "driver/extdrv.h"
 
 /* Layouts of data tables read by the event/battle code (see the readers named in each comment). */
 
@@ -15,12 +16,7 @@ typedef struct PoseSoundTiming {
     u16 flags;            // 0x12
 } PoseSoundTiming;
 
-/* evt_ext_entry */
-typedef struct ExtTexInfo {
-    const char* group; // 0x0
-    const char* anim;  // 0x4
-    f32 frame;         // 0x8
-} ExtTexInfo;
+/* evt_ext_entry: ExtTexInfo tables (driver/extdrv.h) */
 
 /* door_entry / evt_door_set_param: per-door parameter block (npcs/mobjs/items are NULL-terminated name lists) */
 typedef struct DoorParam {

@@ -46,7 +46,6 @@
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 typedef struct EndMoa { Vec pos; s32 chain; s32 idx; } EndMoa;
-typedef struct EndExtData { const char* anim; const char* pose; f32 speed; } EndExtData;
 typedef struct EndWork {
     FileEntry* tpl;
     s32 mode;
@@ -78,7 +77,7 @@ typedef struct CreditActor {
 EndWork end_work;
 s32 (*end_moa_chain_group)[2];
 s32* end_moa_chain_count;
-EndExtData* end_moa_ext_data;
+ExtTexInfo* end_moa_ext_data;
 EndMoa* end_moa_tbl;
 extern EndWork* end_wp;
 extern CreditMsg end_staff_roll_msg_tbl[50];
@@ -1422,12 +1421,12 @@ USER_FUNC(evt_end_moamoa_init) {
     end_moa_tbl = _mapAlloc(sizeof(EndMoa) * 300);
     memset(end_moa_tbl, 0, sizeof(EndMoa) * 300);
     animPoseWorldPositionEvalOn(npc->poseId);
-    end_moa_ext_data = _mapAlloc(sizeof(EndExtData) * 41);
-    memset(end_moa_ext_data, 0, sizeof(EndExtData) * 41);
+    end_moa_ext_data = _mapAlloc(sizeof(ExtTexInfo) * 41);
+    memset(end_moa_ext_data, 0, sizeof(ExtTexInfo) * 41);
     for (i = 0; i < 40; i++) {
-        end_moa_ext_data[i].anim = end_moa_ext_anim;
-        end_moa_ext_data[i].pose = end_moa_ext_pose;
-        end_moa_ext_data[i].speed = i;
+        end_moa_ext_data[i].group = end_moa_ext_anim;
+        end_moa_ext_data[i].anim = end_moa_ext_pose;
+        end_moa_ext_data[i].frame = i;
     }
     evtSetValue(event, LW(10), (EvtWord)end_moa_ext_data);
     ap = animPoseGetAnimPosePtr(npc->poseId);

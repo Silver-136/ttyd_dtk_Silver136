@@ -4,11 +4,12 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-typedef struct ExtdrvTexInfo {
+// one pose of an extEntry/evt_ext_entry table
+typedef struct ExtTexInfo {
     const char* group; // 0x0
     const char* anim;  // 0x4
     f32 frame;         // 0x8
-} ExtdrvTexInfo;
+} ExtTexInfo;
 
 typedef struct ExtdrvPose {
     u32 flags;     // 0x0
@@ -55,7 +56,7 @@ typedef struct ExtdrvWork {
 void extInit(void);
 void extMain(void);
 void extReset(void);
-void extEntry(s32 poseNum, ExtdrvTexInfo* texInfo, void (*initFunc)(void), void (*mainFunc)(void), void (*mainFunc2)(void));
+void extEntry(s32 poseNum, ExtTexInfo* texInfo, void (*initFunc)(void), void (*mainFunc)(void), void (*mainFunc2)(void));
 ExtdrvPose* extGetPosePtr(void);
 s32 extGetPoseNum(void);
 void extPoseDraw(s32 index);
