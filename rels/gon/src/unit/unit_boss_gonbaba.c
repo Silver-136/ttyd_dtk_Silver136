@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
+#include "eff/n64/eff_kemuri9_n64.h"
 
 #include "battle/battle_unit.h"
 #include "manager/evtmgr_cmd.h"
@@ -66,7 +67,6 @@ s32 weaponGetPower_Gonbaba(BattleUnit* unit, s32* weapon) {
     return power;
 }
 
-struct EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32 z, f32 radiusEnd, f32 angle);
 
 static USER_FUNC(_leg_smoke_effect) {
     EvtWord* args = event->args;

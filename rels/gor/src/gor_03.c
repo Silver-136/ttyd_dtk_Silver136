@@ -20,6 +20,7 @@
 #include "evt/evt_party.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "eff/eff_bomb.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
@@ -88,7 +89,6 @@ void slot_neon_sub(GoryuuWork* wp, SlotWork* data);
 void mapObjGetPos(const char* name, Vec* pos);
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 typedef struct KujiMsgWork { u8 unk0[8]; u16 unk8; u8 unkA[6]; s32 unk10; } KujiMsgWork;
-void* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 
 USER_FUNC(desk_talk_func);
 USER_FUNC(desk_talk_init_func);

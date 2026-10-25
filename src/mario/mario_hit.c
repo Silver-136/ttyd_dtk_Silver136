@@ -27,15 +27,14 @@
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
 #include "koopa.h"
+#include "pmario_sound.h"
 
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
-extern BOOL marioChgMot(s32 mot);
 extern HitEntry* kpaSearchGround(f32* a, f32* b, f32* c, f32 d);
 extern HitEntry* marioSearchHead(Vec* pos, f32* h, f32 d);
 #ifdef VERSION_G8ME01
-extern s32 kpaGetLevel(void);
 #endif
 
 static inline BOOL marioChkBeroSub(s32 attr) {
@@ -1226,10 +1225,8 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
 }
 
 extern HitEntry* kpaSearchHead(Vec* pos, f32* h, f32 d);
-extern s32 kpaGetBodyStatus(void);
 extern void marioClearJumpPara(void);
 extern void marioChgStayMotion(void);
-extern s32 psndSFXOn_3D(const char* name, Vec* position);
 
 typedef struct { u8 pad[0x15]; char name[16]; } MobjNameView;
 
@@ -2312,7 +2309,6 @@ void marioHitStrippedPool(f32* f) {
     f[4] = 2.0f;
 }
 
-extern s32 kpaGetStageViewType(void);
 static inline void wallBase(Vec* pos, Vec* hi, Vec* lo, f32 h, f32* half, f32 w) {
     Vec base = *pos;
     *hi = base;

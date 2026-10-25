@@ -57,9 +57,7 @@ BinaryFontHeader* pfh; //pointer to font header
 void JUTFont_DrawStart(GXColor color);
 void _JUTFont_DrawPos(u16 code, s16 x, s16 y);
 u16 JUTFont_CodeToGlyph(u32 code);
-void JUTFontSetup(u16 font);
 GXColor HSV2RGB(GXColor hsv);
-void FontDrawColorIDX(s32 idx);
 #ifdef VERSION_G8ME01
 void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg);
 #endif

@@ -7,6 +7,7 @@
 #include "nameent.h"
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
+#include "libc_decls.h"
 
 #ifdef VERSION_G8ME01
 // US version: all functions exact (loadDraw needs the two FAKE spellings marked inside it).
@@ -1360,7 +1361,6 @@ void GXInitTexObjLOD(GXTexObj* obj, GXTexFilter min_filt, GXTexFilter mag_filt,
     f32 min_lod, f32 max_lod, f32 lod_bias, GXBool bias_clamp,
     GXBool do_edge_lod, GXAnisotropy max_aniso);
 int __div2i();
-int __div2u();
 int __mod2u();
 void seq_loadMain(SequenceWork* seq) {
     switch (seq->state) {

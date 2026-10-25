@@ -8,6 +8,9 @@
 #include <string.h>
 #include "mario/mario_sbr.h"
 #include <dolphin/pad.h>
+#include "party/party_move.h"
+#include "party/party_motion.h"
+#include "mario/mario_motion.h"
 
 #ifdef VERSION_G8ME01
 // US has no local duplicate: this is the global vivian_init
@@ -30,10 +33,6 @@ typedef struct VivianTail {
 
 #define TAIL_OFF(p) (((VivianTail*)&(p)->field_4F)->off)
 
-extern void partyMoveFlyInit(PartyEntry* party, s32 arg);
-extern void partyFlyMain(PartyEntry* party);
-extern void partyPaperOff(PartyEntry* party);
-extern void partyChgRunMode(PartyEntry* party, s32 mode);
 
 s32 vivian_cancel_req;
 
@@ -208,7 +207,6 @@ void vivian_move(PartyEntry* party) {
 }
 
 
-extern void L_partyForceSlitOff(PartyEntry* party);
 extern void* marioSearchGround(f32* x, f32* y, f32* z, f32 a, f32 b);
 extern void marioChkWallAround(Vec* pos, s32 arg, f32 a, f32 b, f32 c, f32 d);
 #ifdef VERSION_G8ME01
@@ -219,9 +217,6 @@ extern s32 psndSFXOn_3D(s32 id, Vec* pos);
 extern void* effRippleEntry(s32 type, f32 x, f32 y, f32 z);
 extern void effRippleSetCamId(void* eff, s32 cam);
 extern void effRippleSetPosition(void* eff, f32 x, f32 y, f32 z);
-extern void partyUpdateKeyData(PartyEntry* party);
-extern void marioChgSmallJumpMotion(void);
-extern void marioChgMot(s32 mot);
 
 #pragma opt_common_subs off
 static inline void vivianFollow(PartyEntry* party) {

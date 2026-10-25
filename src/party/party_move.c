@@ -23,6 +23,7 @@
 #include <math.h>
 #include "sfx_name_word.h"
 #include "driver/npcdrv.h"
+#include "mario/mario_hit.h"
 
 typedef struct Footmark {
     u8 flag;    // 0x0
@@ -36,7 +37,6 @@ f32 partyUpdMoveSpd(PartyEntry* party, f32 spd);
 extern void party_set_behind_dir(PartyEntry* party);
 static void flyMain(PartyEntry* party);
 extern void vivianShadow(PartyEntry* party);
-extern HitEntry* marioChkWallAround(Vec* pos, s32 a, f32 spd, f32 dir, f32 w, f32 h);
 #ifdef VERSION_G8ME01
 void partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height);
 #endif

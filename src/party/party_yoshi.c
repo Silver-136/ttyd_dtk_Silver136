@@ -18,6 +18,7 @@
 #include "mot/mot_jump.h"
 #include "mario/mario_cam.h"
 #include <dolphin/pad.h>
+#include "party/party_yoshi.h"
 
 typedef struct YoshiWork {
     u8 pad0[0x4];         // 0x0
@@ -30,7 +31,6 @@ typedef struct YoshiWork {
 
 
 extern void partyChgPose(PartyEntry* party, const char* pose);
-void yoshi_use(PartyEntry* party);
 extern f32 marioGetMoveRate(void);
 extern HitEntry* dou10_yoko_yari2(void* out);
 extern void psndSFXOff(s32 id);
@@ -69,7 +69,6 @@ f32 evt_yoshi_spd;
 s32 evt_yoshi_frm;
 f32 jumpheight;
 
-s32 yoshiGetStatus(void);
 #ifdef VERSION_G8ME01
 void partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height);
 #endif

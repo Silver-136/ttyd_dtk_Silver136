@@ -20,6 +20,7 @@
 #include "evt/evt_johoya.h"
 #include "win/win_main.h"
 #include "evt/evt_pouch.h"
+#include "statuswindow.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -53,8 +54,6 @@
 f32 reviseAngle(f32 angle);
 typedef struct MonosiriFollow { s32 seq; s32* list; s32 count; } MonosiriFollow;
 #define FOLLOW (follow)
-void statusWinForceOff(void);
-void statusWinForceOpen(void);
 void door_position_sub(s32 type, const char* mapObj, const char* hitA, const char* hitB, Vec* outPos, Vec* inPos, s32 flag);
 f32 intplGetValue(s32 mode, s32 currStep, f32 start, f32 end, s32 steps);
 typedef struct DoorColorWork { GXColor color; GXColor color2; } DoorColorWork;

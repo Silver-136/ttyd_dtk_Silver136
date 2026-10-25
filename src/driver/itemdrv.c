@@ -37,6 +37,7 @@
 #include "eff/eff_starstone.h"
 #include "eff/eff_splash.h"
 #include "party/party_nokonoko.h"
+#include "mario/mario_cam.h"
 
 inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
@@ -59,7 +60,6 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
 }
 
 extern ItemData itemDataTable[];
-void marioSetCamId(s32 camId);
 s32 msgWindow_Entry(const char* msg, s32 a2, s32 a3);
 EffectEntry* effHagetakaFlushN64Entry(s32 a1, s32 a2, f32 x, f32 y, f32 z, f32 scale);
 

@@ -20,8 +20,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | US | src/driver/icondrv.c | iconDispGx2 | US: `ep->iconId = (u16)(s16)iconId`, a no-op round trip (the field is u16), steers register choice | see comment |
 | US | src/driver/icondrv.c | iconDispGxCol | US: `ep->iconId = (u16)(s16)iconId`, a no-op round trip (the field is u16), steers register choice | see comment |
 | US | src/driver/itemdrv.c | itemEntry | US: a named search pointer `e` and entries base `base`; the 0x79/0x7C searches are written as explicit loops, while 0x7B uses the itemFindDeletable inline (register numbering only) | see comment |
-| US | src/event/evt_msg.c | evtMsgFmtInt | US: one base pointer `words = str_Einen_802cc608` plus fixed offsets into the pooled .rodata strings instead of naming each string (same addresses) | see comment |
-| US | src/event/evt_msg.c | evtMsgFmtStr | US: one base pointer `words = str_Einen_802cc608` plus fixed offsets into the pooled .rodata strings instead of naming each string (same addresses) | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringShake | US: dead guard `s32 gz = 0; if (gz != 0) x = -1.0f;` (folded after register allocation, emits no code) only creates the -1.0f .sdata2 literal early, before the 28.0f of FontDrawStringMtx | see comment |
 | US | src/manager/fontmgr.c | FontDrawStringVecPitch | US: `#pragma auto_inline off` around it keeps the FontDrawString/FontDrawStringPitch wrappers calling it, as in the target | see comment |
 | US | src/mario/mario_hit.c | marioChkOverhead | US: redundant second `m != w->prevMotionId` test reproduces the double beq of the target (same result) | see comment |

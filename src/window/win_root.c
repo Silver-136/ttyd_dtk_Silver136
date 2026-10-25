@@ -30,7 +30,6 @@ typedef struct WinSortData {
 } WinSortData;
 
 void winMakeSkipList(WindowWork* wp);
-void winTexInit_x2(TEXPalette* tpl);
 void winTexSet_x2(u32 a, u32 b, Vec translate, Vec scale, GXColor color);
 void winBadgeDisp(s32 camId, WindowWork* wp, s32 n);
 void winLogDisp(s32 camId, WindowWork* wp, s32 n);

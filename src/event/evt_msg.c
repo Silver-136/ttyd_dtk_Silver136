@@ -190,8 +190,6 @@ const char* msg_es_article_tbl[6] = {"un ", "una ", "", "", "unos ", "unas "};
 
 char* strstr(const char* s, const char* sub);
 
-void evtMsgFmtInt(char* buf, s32 count);
-void evtMsgFmtStr(char* buf, const char* name);
 
 // clang-format on
 #endif

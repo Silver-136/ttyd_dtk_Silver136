@@ -27,6 +27,9 @@
 #include "mot/mot_walk.h"
 #include "mot/mot_plane.h"
 #include "mot/mot_stay.h"
+#include "peach.h"
+#include "party/party_yoshi.h"
+#include "party/party_vivian.h"
 
 
 typedef struct MarioJumpData {
@@ -57,7 +60,6 @@ void mot_hammer(void);
 void mot_hammer2(void);
 void mot_ham2_post(void);
 void mot_kaze(void);
-void mot_cloud(void);
 void mot_vivian(void);
 void mot_vivian_post(void);
 void mot_dokan(void);
@@ -65,12 +67,8 @@ void mot_bottomless(void);
 void mot_forceReset(void);
 void mot_shadow(void);
 void mot_partyUse(void);
-void kpa_swim(void);
-void kpa_powup(void);
-void kpa_powdown(void);
 void mot_dummy(void);
 
-void movePos(f32* x, f32* z, f32 speed, f32 angle);
 s32 psndSFXOn_3D(s32 id, Vec* position);
 void* marioChkLandon(f32* y, f32 spd);
 #define PCHK(x) pouchCheckItem(x)
@@ -82,18 +80,11 @@ BOOL marioChkShipPlace(void* hit);
 BOOL marioChkPlanePlace(void* hit);
 MotCaseEntry* caseCheckHitObj(void* hit);
 void* fbatNpcTalkCheck(void);
-void peach_talk(void);
 void effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
-void yoshi_jumpStand(void);
 void kpaClearHitobjRide(void);
 void* kpaChkHitobjRide(void);
 BOOL kpaHipAttackOk(void);
 BOOL marioChkHipAttack(void);
-BOOL vivianGetStatus(void);
-void allPartyForceRideOn(void);
-void marioLandOn(void);
-void marioClearJumpPara(void);
-void marioChgRollMotion(void);
 
 MarioMotTblEntry marioMotTbl[] = {
     {mot_stay, NULL, mot_stay_post},

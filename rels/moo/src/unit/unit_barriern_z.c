@@ -3,6 +3,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
+#include "eff/n64/eff_glass_n64.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -19,7 +20,6 @@
 #include "manager/evtmgr_cmd.h"
 
 s32 irand(s32 scalar);
-EffectEntry* effGlassN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n);
 f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);

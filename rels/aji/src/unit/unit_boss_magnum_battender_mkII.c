@@ -3,6 +3,9 @@
 #include "evt/evt_audience.h"
 #include "evt/evt_msg.h"
 #include "evt/evt_sub.h"
+#include "libc_decls.h"
+#include "eff/n64/eff_kumokumo_n64.h"
+#include "eff/n64/eff_kameki_tornade_n64.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/effdrv.h"
@@ -36,14 +39,11 @@ typedef struct TargetWork { s32 state; s32 count; EffectEntry* eff; } TargetWork
 f32 intplGetValue(f32 start, f32 end, s32 mode, s32 cur, s32 steps);
 typedef struct AudMember { s32 flags; s32 step; s32 counter; u8 pad_0C[0x48 - 0xC]; Vec position; u8 pad_54[0x60 - 0x54]; Vec scale; u8 pad_6C[0x9C - 0x6C]; Vec rotation; u8 pad_A8[0xB4 - 0xA8]; Vec home; u8 pad_C0[0xF8 - 0xC0]; s32 frame; s32 frames; } AudMember;
 s32 irand(s32 scalar);
-int rand(void);
 extern EvtWord aud_hit_event[];
 void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z);
 void aud_fire_eff(f32 x, f32 y, f32 z);
 void effKemuTestSetRxRz(EffectEntry* eff, f32 rx, f32 rz);
 void psndSFX_vol(s32 id, u8 vol);
-EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 scale1, f32 scale2);
-EffectEntry* effKamekiTornadeN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* eff_tor;
 s32 torCount;
 EffectEntry* eff_jet[2];

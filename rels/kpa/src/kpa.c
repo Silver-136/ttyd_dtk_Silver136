@@ -13,6 +13,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_mobj.h"
+#include "kpa_act.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -30,9 +31,7 @@
 
 typedef struct KpaWork { u8 stage; u8 lives; u8 time; } KpaWork;
 KpaWork* kwp;
-void kpaAddScore(s32 score);
 void kpa_stageclear_disp(CameraId camera, void* param);
-void FontDrawScale(f32 scale);
 void FontDrawString(f32 x, f32 y, const char* message);
 void kpa_status_disp(CameraId camera, void* param);
 void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
@@ -41,7 +40,6 @@ s32 kpaMutekiCheck(void);
 f32 kpaGetWidth(s32 type);
 void kpaFireDelete(void);
 void kpaAddCoinPos(s32 num, Vec* pos);
-void mobjKoopaOn(void);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];

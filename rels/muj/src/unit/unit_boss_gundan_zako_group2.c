@@ -4,6 +4,7 @@
 #include "evt/evt_eff.h"
 #include "party/party_motion.h"
 #include "evt/evt_sub.h"
+#include "libc_decls.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -35,8 +36,6 @@ extern ZakoGunWork* work;
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
 BattleUnit* zakogun_get_ptr(void);
 void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
-int rand(void);
-void btl_camera_set_mode(s32 a, s32 b);
 
 USER_FUNC(shake_ceil);
 USER_FUNC(zakogun_attack2);

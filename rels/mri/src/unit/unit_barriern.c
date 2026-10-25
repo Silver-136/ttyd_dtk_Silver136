@@ -4,6 +4,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
+#include "eff/n64/eff_glass_n64.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -38,7 +39,6 @@ static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n);
 static void outSplineTableSet_Sub(BattleUnit* unit, s32 n, Vec* table);
 s32 irand(s32 scalar);
-EffectEntry* effGlassN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 
 static USER_FUNC(_check_satellite);
 static USER_FUNC(barriern_satellite_zanzou);
