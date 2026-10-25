@@ -65,8 +65,6 @@ static effN64Vtx balloon_vtx[] = {
 void effBalloonMain(EffectEntry* effect);
 void effBalloonDisp(CameraId cameraId, EffectEntry* effect);
 
-#pragma explicit_zero_data on
-static const u32 gap_09_8041E97C_sdata2 = 0;
 
 EffectEntry* effBalloonN64Entry(s32 type, f32 x, f32 y, f32 z, f32 targetScale, f32 rotation) {
     EffectEntry* effect;
@@ -88,10 +86,8 @@ EffectEntry* effBalloonN64Entry(s32 type, f32 x, f32 y, f32 z, f32 targetScale, 
     work->targetScale = targetScale;
     work->scale = 0.0f;
     work->frame = 0;
-    (void)&gap_09_8041E97C_sdata2;
     return effect;
 }
-#pragma explicit_zero_data reset
 
 void effBalloonMain(EffectEntry* effect) {
     s32 lifetime;

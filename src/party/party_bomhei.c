@@ -94,10 +94,7 @@ static inline BOOL isBombRock(HitEntry* hit) {
         (p)->useStruct = NULL;            \
     }
 
-#pragma explicit_zero_data on
 void bomhei_bye(PartyEntry* party) {
-    static const volatile u32 gap_09_8041B2C4_sdata2 = 0;
-    (void)&gap_09_8041B2C4_sdata2;
     if (party->trigFlags & 8) {
         party->trigFlags &= ~8;
         partyGoodbyeInit(party);
@@ -108,7 +105,6 @@ void bomhei_bye(PartyEntry* party) {
         partyChgRunMode(party, 14);
     }
 }
-#pragma explicit_zero_data reset
 
 void bomhei_init_800BFBB0(PartyEntry* party) {
     party->memberKind = 3;

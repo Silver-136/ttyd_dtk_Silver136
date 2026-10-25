@@ -117,13 +117,9 @@ void winDispKoopa(CameraId camId, void* param);
 void statusWinForceOff(void);
 void allPartyForceSlitOff(void);
 
-#pragma explicit_zero_data on
 WindowWork* winGetPtr(void) {
-    static const volatile u32 gap_09_8041DCCC_sdata2 = 0;
-    (void)&gap_09_8041DCCC_sdata2;
     return wp;
 }
-#pragma explicit_zero_data reset
 
 void winInit(void) {
     wp = __memAlloc(HEAP_DEFAULT, sizeof(WindowWork));
@@ -171,7 +167,6 @@ typedef struct { const char* s[2]; } WinLangTbl;
 #endif
 static const WinLangTbl winLangTbl;
 
-#pragma explicit_zero_data on
 void winMain(void) {
     MarioWork* mario;
     s32 i;
@@ -483,7 +478,6 @@ void winMain(void) {
         }
     }
 }
-#pragma explicit_zero_data reset
 
 void winDisp(CameraId camId, void* param) {
     winRootDisp(camId, wp);

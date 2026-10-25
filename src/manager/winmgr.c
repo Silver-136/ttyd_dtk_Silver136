@@ -250,8 +250,6 @@ USER_FUNC(evt_win_party_lankdown_chk) {
 
 
 void winMgrInit(void) {
-    static const u32 gap_09_80421AD4_sdata2 = 0;
-    (void)&gap_09_80421AD4_sdata2;
     wp->mNumEntries = 32;
     wp->mEntries = (WinMgrEntry*)__memAlloc(HEAP_DEFAULT, wp->mNumEntries * sizeof(WinMgrEntry));
     memset(wp->mEntries, 0, wp->mNumEntries * sizeof(WinMgrEntry));
