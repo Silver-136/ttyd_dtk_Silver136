@@ -168,7 +168,7 @@ void cardMain(void) {
     s32 inserted;
 
     if (wp->flags & 0x8000) {
-        inserted = (s32)(s64)-(CARDProbe(0) == 0); //is something inserted?
+        inserted = CARDProbe(0) ? 0 : -1; // -1 when no card answers in slot A, else 0
         if (wp->prevInserted != inserted) {
             wp->flags |= 0x4000;
         }
