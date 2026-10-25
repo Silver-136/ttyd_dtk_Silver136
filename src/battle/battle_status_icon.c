@@ -22,14 +22,6 @@ BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIc
 BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 
 #ifdef VERSION_G8ME01
-__declspec(section ".data") f32 fd_bsi_0[2] = {-1.0f, 1.0f}; // MWCC trig-pool pair (+-1.0f)
-__declspec(section ".data") f32 fd_bsi_1[2] = {-1.0f, 1.0f}; // MWCC trig-pool pair (+-1.0f)
-__declspec(section ".data") f32 fd_bsi_2[2] = {1.0f, -1.0f}; // MWCC trig-pool pair (+-1.0f)
-__declspec(section ".data") f32 fd_bsi_3[2] = {1.0f, -1.0f}; // MWCC trig-pool pair (+-1.0f)
-__declspec(section ".data") f32 fd_bsi_4[2] = {-1.0f, 1.0f}; // MWCC trig-pool pair (+-1.0f)
-__declspec(section ".data") f32 fd_bsi_5[2] = {-1.0f, 1.0f}; // MWCC trig-pool pair (+-1.0f)
-__declspec(section ".data") f32 fd_bsi_6[2] = {1.0f, -1.0f}; // MWCC trig-pool pair (+-1.0f)
-__declspec(section ".data") f32 fd_bsi_7[2] = {1.0f, -1.0f}; // MWCC trig-pool pair (+-1.0f)
 IconDispTableEntry _disp_table[0x17] = {
 		{1, _bsi_default_turn, 22, 1},
 		{4, _bsi_default_turn, 20, 1},
