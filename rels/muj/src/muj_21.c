@@ -184,7 +184,6 @@ EVT_BEGIN(muj_21_init_evt)
     RETURN
 EVT_END()
 
-EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);
 void mapObjGetPos(const char* name, Vec* pos);
 
 static USER_FUNC(fune_eff) {

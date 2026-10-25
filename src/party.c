@@ -21,6 +21,7 @@
 #include "party/party_chuchu.h"
 #include "driver/shadowdrv.h"
 #include "mot/mot_damage.h"
+#include "mot/mot_ship.h"
 
 //.data
 
@@ -741,7 +742,6 @@ void getRidePos(PartyEntry* party, Vec* pos);
 void driveParty(PartyEntry* party);
 #include "mario/mario_sbr.h"
 s32 partyHelloMain(PartyEntry* party);
-BOOL N_marioShipGetDir(void);
 static inline void partyShadowOn(PartyEntry* party) {
     if (party) {
         party->flags2 &= ~0x100000;

@@ -17,6 +17,7 @@
 #include "evt/evt_snd.h"
 #include "mot/mot_slit.h"
 #include "evt/evt_yuugijou.h"
+#include "mot/mot_roll.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -42,7 +43,6 @@ void yuu_03_icon_monte_disp(CameraId camera, void* param);
 void ext_yuunpc_minigame4_init_sub(void);
 void yuunpc_wp_flag_off(s32 flag);
 void marioRollTryCancel(void);
-BOOL marioRollKeyDisable(void);
 typedef struct RyushiWork { s32 flag; s32 mode; Vec base; Vec pos; s32 alpha; s32 count; f32 scale; s32 r; s32 g; s32 b; s32 r2; s32 g2; s32 b2; } RyushiWork;
 static void* yuunpc_wp;
 s32 ryuwp;

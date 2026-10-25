@@ -87,7 +87,6 @@ void effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 void yoshi_jumpStand(void);
 void kpaClearHitobjRide(void);
 void* kpaChkHitobjRide(void);
-BOOL getRollEvtFlag(void);
 BOOL kpaHipAttackOk(void);
 BOOL marioChkHipAttack(void);
 BOOL vivianGetStatus(void);

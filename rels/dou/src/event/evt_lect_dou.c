@@ -15,6 +15,8 @@
 #include "evt/evt_snd.h"
 #include "evt/evt_lecture.h"
 #include "mot/mot_slit.h"
+#include "mot/mot_roll.h"
+void marioRollTryCancel(void);
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -41,8 +43,6 @@ typedef struct LectButton { u8 flags; u8 seq; u8 pad_2[0x8 - 0x2]; LectButtonDis
 static LectButton lbtn[2];
 static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) { camera->presetPos = camera->cameraPos; camera->presetAt = camera->cameraAt; PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos); PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt); camera->startTimeA = gp->renderTime; camera->durationA = 0; camera->stateA = 3; camera->curveA = 11; }
 static Vec daiv;
-void marioRollTryCancel(void);
-BOOL marioRollKeyDisable(void);
 
 static USER_FUNC(dai_moveti_get);
 static USER_FUNC(dai_moveti_set);

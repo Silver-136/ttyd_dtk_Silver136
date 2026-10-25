@@ -10,3 +10,4 @@ BOOL marioWaitDamageReturnFall(void);
 BOOL marioWaitDamageTogeReturnFall(void);
 void mot_damage(void);
 void mot_damageToge(void);
+BOOL marioChkDamageSink(void);

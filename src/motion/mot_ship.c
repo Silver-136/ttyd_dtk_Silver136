@@ -89,7 +89,6 @@ static inline s32 harborKind(HitEntry* hit) {
 BOOL checkHarbor(Vec* out);
 
 
-void* effFunemizuEntry(s32, f32, f32, f32, f32, f32);
 
 
 double __fabs(double);

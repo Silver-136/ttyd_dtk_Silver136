@@ -36,7 +36,6 @@ extern HitEntry* dou10_yoko_yari2(void* out);
 extern void psndSFXOff(s32 id);
 extern s32 psndSFXOn_3D(s32 id, Vec* pos);
 extern void* marioSearchHead(Vec* pos, f32 range, f32* height);
-extern s32 marioChkDamageSink(void);
 double sin(double);
 
 f32 ofs_PYS_S_2[52] = {

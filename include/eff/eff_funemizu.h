@@ -27,3 +27,4 @@ typedef struct EffFunemizuWork {
 } EffFunemizuWork;
 
 GXColor effFunemizuGetMapColor(void);
+EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);

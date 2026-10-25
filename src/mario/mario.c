@@ -31,11 +31,9 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
 
 
 //external prototypes (TODO: move to headers)
-BOOL marioRollKeyDisable(void);
 s32 yoshiGetStatus(void);
 BOOL nokonoko_holdItem(void);
 void marioYoshiForceCancel(void);
-BOOL getRollEvtFlag(void);
 f32 marioGetMoveRate(f32 dir);
 void marioCheckWall(f32 dist, f32 dir);
 void marioCheckWall_roll(f32 dist, f32 dir);

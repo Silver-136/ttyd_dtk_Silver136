@@ -52,7 +52,6 @@
 #include "driver/hitdrv.h"
 #include "driver/msgdrv.h"
 
-EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);
 void mapObjGetPos(const char* name, Vec* pos);
 void suifu100taikikan_seq01(NanNPC* npc);
 void suifu100taikikan_seq00(NanNPC* npc);

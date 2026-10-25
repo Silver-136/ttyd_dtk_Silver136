@@ -18,3 +18,6 @@ void mot_roll(void);
 void mot_roll_post(void);
 void rollEvtJumpSetup(void);
 void setRollEvtFlag(void);
+s32 getRollEvtFlag(void);
+s32 marioRollCancel(void);
+s32 marioRollKeyDisable(void);

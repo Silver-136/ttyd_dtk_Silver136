@@ -49,7 +49,6 @@ MarcoShip* marcoship;
 typedef struct MapAnimRate { f32 fune; f32 funeTarget; f32 nami; f32 namiTarget; } MapAnimRate;
 MapAnimRate mapAnimRate;
 static u8* _ap;
-EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);
 void mapObjGetPos(const char* name, Vec* pos);
 typedef struct LogoWork { FileEntry* tpl; f32 y; s32 alpha; s32 state; s32 counter; } LogoWork;
 static void draw(CameraId camera, void* param);

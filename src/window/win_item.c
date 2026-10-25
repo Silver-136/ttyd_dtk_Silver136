@@ -20,6 +20,7 @@
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
 #include "mot/mot_roll.h"
+#include "mot/mot_slit.h"
 
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 #ifdef VERSION_G8ME01
@@ -37,7 +38,6 @@ void winFontSetPitch(f32 pitch, Vec translate, Vec scale, GXColor color, const c
 extern ItemData itemDataTable[];
 void winFontSetR(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 
-BOOL U_marioSlitContinueChk(void);
 
 static const char* luigi_book_1[] = {
     "msg_luigi_book1_txt1",

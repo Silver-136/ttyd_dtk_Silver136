@@ -16,6 +16,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "mot/mot_roll.h"
+#include "mot/mot_slit.h"
 
 #include "mario/mario.h"
 #include "mario/mariost.h"
@@ -28,7 +29,6 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 
-s32 U_marioSlitContinueChk(void);
 NpcEntry* fbatHitCheckAll(void);
 
 USER_FUNC(bgm_wait_stop);
