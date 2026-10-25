@@ -2,11 +2,7 @@
 #include "eff/eff_itemget.h"
 #include "driver/swdrv.h"
 #include <dolphin/pad.h>
-#define iconEntry iconEntry_hidden
-#define iconChange iconChange_hidden
 #include "driver/icondrv.h"
-#undef iconEntry
-#undef iconChange
 #include "driver/windowdrv.h"
 #include "manager/evtmgr.h"
 #include "driver/camdrv.h"
@@ -56,8 +52,6 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
 }
 
 extern ItemData itemDataTable[];
-void iconEntry(const char* name, u16 iconId);
-void iconChange(const char* name, u16 iconId);
 BOOL marioChkItemGetMotion(void);
 void marioChgGetItemMotion(void);
 void marioChgStayMotion(void);

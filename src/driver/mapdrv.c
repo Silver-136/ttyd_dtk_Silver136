@@ -994,8 +994,8 @@ void mapUnLoad(void) {
     memset(wp, 0, sizeof(MapWork));
 }
 
-BOOL mapPreLoad(void) {
-    return TRUE; //do nothing
+BOOL mapPreLoad(const char* map) {
+    return TRUE;
 }
 
 void mapLoad(const char* map) {

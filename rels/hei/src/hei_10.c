@@ -17,11 +17,6 @@
 #include "driver/animdrv.h"
 #include "evt/evt_bero.h"
 #include "data_tables.h"
-#ifndef VERSION_G8ME01
-void* _mapAlloc(u32 size);
-#else
-#include "memory.h"
-#endif
 #include "driver/extdrv.h"
 
 typedef struct Chorobon { s16 flags; s16 state; s16 field_0x4; u8 field_0x6[2]; Vec target; f32 vy; s16 timer; u8 field_0x1a[2]; f32 speed; f32 gravity; s16 next; u8 field_0x26[0x30 - 0x26]; } Chorobon;

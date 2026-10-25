@@ -1,17 +1,4 @@
-#define iconNumberDispGx iconNumberDispGx_f32
-#define iconNumberDispGx3D iconNumberDispGx3D_f32
-#ifdef VERSION_G8ME01
-/* FAKE: the header declares these with s16 ids; the US definitions take s32 (only the low 16 bits are used) */
-#define iconGetTexObj iconGetTexObj_hdr
-#define iconGetWidthHight iconGetWidthHight_hdr
-#endif
 #include "driver/icondrv.h"
-#ifdef VERSION_G8ME01
-#undef iconGetTexObj
-#undef iconGetWidthHight
-#endif
-#undef iconNumberDispGx
-#undef iconNumberDispGx3D
 #include "driver/camdrv.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
@@ -282,7 +269,7 @@ void iconMain(void) {
     }
 }
 
-void iconEntry(const char* name, s16 iconId) {
+void iconEntry(const char* name, u16 iconId) {
     IconWork* wp = iconGetWork();
     int i;
     IconEntry* entry = iconFindIn(wp, name); // inline
@@ -372,7 +359,7 @@ void iconDelete(const char* name) {
     }
 }
 
-void iconChange(const char* name, s16 iconId) {
+void iconChange(const char* name, u16 iconId) {
     IconEntry* entry = iconNameToPtr(name); // inline
     IconBinData* data;
 

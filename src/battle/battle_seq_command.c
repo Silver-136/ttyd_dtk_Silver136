@@ -111,7 +111,7 @@ void BattleCommandInit(BattleWork* wp) {
 void btlDispGXInit2DRasta(void);
 void btlDispGXQuads2DRasta(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a);
 void btlDispTexPlane(u32 id, GXColor color, f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY);
-f32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color);
+s32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color);
 f32 intplGetValue(s32 mode, s32 currStep, s32 steps, f32 start, f32 end);
 #define PADREP(x) (BattlePadCheckRepeat(x))
 void _btlcmd_MakeActClassTable(BattleWork* wp) {

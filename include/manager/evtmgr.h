@@ -263,7 +263,7 @@ typedef struct EventWork {
 EventWork* evtGetWork(void);
 void evtmgrInit(void);
 void evtmgrReInit(void);
-EventEntry* evtEntry(void* evtCode, u8 priority, u8 flags);
+EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags);
 EventEntry* evtEntryType(void* evtCode, u8 priority, u8 flags, u8 type);
 EventEntry* evtChildEntry(EventEntry* parent, void* evtCode, u8 flags);
 EventEntry* evtBrotherEntry(EventEntry* brother, void* evtCode, u8 flags);

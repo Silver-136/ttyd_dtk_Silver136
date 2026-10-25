@@ -159,7 +159,7 @@ void evtEntryRunCheck(EventEntry* entry) {
     }
 }
 
-EventEntry* evtEntry(void* evtCode, u8 priority, u8 flags) {
+EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags) {
     EventWork* wp = evtGetWork();
     EventEntry* entry;
     int i, id;

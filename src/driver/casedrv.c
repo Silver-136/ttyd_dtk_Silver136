@@ -4,11 +4,8 @@
 #include "driver/swdrv.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
-#define evtEntry evtEntry_hdr
 #include "manager/evtmgr.h"
 #include "party/party_yoshi.h"
-#undef evtEntry
-extern EventEntry* evtEntry(void* evtCode, s32 priority, u8 flags);
 #include "mario/mario.h"
 #include "mario/mario_party.h"
 #include "mario/mariost.h"

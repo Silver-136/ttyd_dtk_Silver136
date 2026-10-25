@@ -25,7 +25,7 @@
 #include "evt/evt_env.h"
 #include "evt/evt_sub.h"
 #undef btlDispTexPlane
-void btlDispTexPlane(u32 id, GXColor color, s32 unk, f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY);
+void btlDispTexPlane(f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY, u32 id, GXColor color, s32 unk);
 
 
 typedef struct YoshiGundanPart YoshiGundanPart;
@@ -2391,7 +2391,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
     f32 s;
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
-    ((void (*)(f32, f32, f32, f32, f32, u32, GXColor, s32))btlDispTexPlane)(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
+    btlDispTexPlane(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255,255,255,255}, 0);
 }
 
 void yoshiStrippedPool(f32* f, s32 i) {

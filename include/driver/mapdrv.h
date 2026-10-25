@@ -334,7 +334,7 @@ MapEntryAnimData* mapSearchAnmObj(const char* animName);
 void mapCheckAnimation(const char* animName, BOOL* valid, f32* a3);
 // more animation functions?
 void mapUnLoad(void);
-BOOL mapPreLoad(void);
+BOOL mapPreLoad(const char* map);
 void mapLoad(const char* map);
 
 void mapMain(void);

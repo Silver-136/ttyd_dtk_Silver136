@@ -2573,14 +2573,11 @@ USER_FUNC(evt_npc_kamek_kemuri1) {
             _kamek_houki_kemuri(npc, npc->moveAnimState);
             return EVT_RETURN_BLOCK;
         }
-        goto block_7;
-    }
-
-    if (npc->moveSpeed > 0.0f) {
+    } else if (npc->moveSpeed > 0.0f) {
         _kamek_houki_kemuri(npc, npc->moveAnimState);
         return EVT_RETURN_BLOCK;
     }
-block_7:
+
     return EVT_RETURN_DONE;
 }
 
