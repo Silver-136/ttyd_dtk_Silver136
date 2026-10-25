@@ -126,8 +126,8 @@ void mot_walk(void) {
     f32 walkSpeed;
     s32 trigFlags;
     s32 flags;
-    BOOL unkConditionActive;
-    s32 unkArgMarioWalkDashSe;
+    BOOL pushCaseActive;
+    s32 seInterval;
     s8 characterId;
     s8 stickDir2;
     s8 stickDir1;
@@ -146,16 +146,16 @@ void mot_walk(void) {
     }
     if (player->flags & MARIO_FLAG_IS_PUSHING) {
         if (player->hitobjPush == NULL) {
-            unkConditionActive = FALSE;
+            pushCaseActive = FALSE;
         } else {
             caseEntry = caseCheckHitObj(player->hitobjPush);
             if (caseEntry != NULL && caseEntry->conditionId == 0xA) {
-                unkConditionActive = TRUE;
+                pushCaseActive = TRUE;
             } else {
-                unkConditionActive = FALSE;
+                pushCaseActive = FALSE;
             }
         }
-        if (!unkConditionActive) {
+        if (!pushCaseActive) {
             player->flags = player->flags & ~MARIO_FLAG_IS_PUSHING;
             if (marioChkPushAnime() && !marioBgmodeChk()) {
                 marioChgPose("M_W_1");
@@ -217,13 +217,13 @@ void mot_walk(void) {
             }
             player->directionView = player->controlStickAngle;
             if (player->hitobjStandOn != 0) {
-                // Redundant, but doesn't match otherwise
+                // both branches pass 0x28: the gravity check is in the retail code
                 if (player->playerGravity == 1.0f) {
-                    unkArgMarioWalkDashSe = 0x28;
+                    seInterval = 0x28;
                 } else {
-                    unkArgMarioWalkDashSe = 0x28;
+                    seInterval = 0x28;
                 }
-                marioWalkDashSe(player->hitobjStandOn, unkArgMarioWalkDashSe);
+                marioWalkDashSe(player->hitobjStandOn, seInterval);
             }
             player->multiTimer = player->multiTimer + 1;
             if (player->flags & MARIO_FLAG_IS_PUSHING && !marioChkPushAnime()) {
@@ -239,8 +239,8 @@ void mot_walk(void) {
 void mot_dash(void) {
     f32 dashSpeed;
     u32 trigFlags;
-    BOOL unkConditionActive;
-    s32 unkArgMarioWalkDashSe;
+    BOOL pushCaseActive;
+    s32 seInterval;
     s8 characterId;
     s8 stickDir2;
     s8 stickDir1;
@@ -258,16 +258,16 @@ void mot_dash(void) {
         return;
     }
     if (player->hitobjPush == NULL) {
-        unkConditionActive = FALSE;
+        pushCaseActive = FALSE;
     } else {
         caseEntry = caseCheckHitObj(player->hitobjPush);
         if (caseEntry != NULL && caseEntry->conditionId == 0xA) {
-            unkConditionActive = TRUE;
+            pushCaseActive = TRUE;
         } else {
-            unkConditionActive = FALSE;
+            pushCaseActive = FALSE;
         }
     }
-    if (!unkConditionActive && player->hitobjPush == NULL) {
+    if (!pushCaseActive && player->hitobjPush == NULL) {
         player->flags = player->flags & ~MARIO_FLAG_IS_PUSHING;
         if (marioChkPushAnime() && !marioBgmodeChk()) {
             marioChgPose("M_R_1");
@@ -319,11 +319,11 @@ void mot_dash(void) {
         marioChkTransform();
         if (player->hitobjStandOn != NULL) {
             if (player->playerGravity == 1.0f) {
-                unkArgMarioWalkDashSe = 0x14;
+                seInterval = 0x14;
             } else {
-                unkArgMarioWalkDashSe = 0x28;
+                seInterval = 0x28;
             }
-            marioWalkDashSe(player->hitobjStandOn, unkArgMarioWalkDashSe);
+            marioWalkDashSe(player->hitobjStandOn, seInterval);
         }
         player->multiTimer = player->multiTimer + 1;
         if (!(player->flags & MARIO_FLAG_FORCED_MOVEMENT)) {

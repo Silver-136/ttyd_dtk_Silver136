@@ -2384,7 +2384,7 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if (npc == NULL) continue;                                                             \
     if (!(npc->flags & 2)) continue;                                                       \
     if (f1000) { if (!(npc->flags & 8)) continue; } else { if (npc->flags & 8) continue; } \
-    if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & (bit))) continue;            \
+    if (soft && !((*(u32*)&npc->reactionFlags) & (bit))) continue;            \
     if (npc->flags & 0x20000000) continue;                                                 \
     if (npc->flags & 0x20) continue;                                                       \
     if (npc->flags & 0x08000000) continue;                                                 \

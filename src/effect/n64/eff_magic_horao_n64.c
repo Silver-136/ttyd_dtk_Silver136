@@ -16,12 +16,12 @@ typedef struct EffMagicHoraoN64Work {
     s32 type;      // 0x0
     Vec position;  // 0x4
     f32 vy;        // 0x10
-    f32 unk14;     // 0x14
-    f32 unk18;     // 0x18
-    s32 unk1C;     // 0x1C
-    s32 unk20;     // 0x20
-    f32 unk24;     // 0x24
-    f32 unk28;     // 0x28
+    f32 startSize;     // 0x14
+    f32 endSize;     // 0x18
+    s32 startAlpha;     // 0x1C
+    s32 endAlpha;     // 0x20
+    f32 size;     // 0x24
+    f32 blendRate;     // 0x28
     s32 state;     // 0x2C
     s32 timer;     // 0x30
     f32 scale;     // 0x34
@@ -42,7 +42,8 @@ static effN64Vtx size64x64_tex64x64_vtx[] = {
 void effMagicHoraoMain(EffectEntry* effect);
 void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect);
 
-EffectEntry* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, s32 b, f32 c, s32 d, f32 e, s32 f) {
+EffectEntry* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, f32 startSize, s32 startAlpha, f32 endSize, s32 endAlpha,
+                                   f32 blendRate, s32 lifetime) {
     EffectEntry* effect;
     EffMagicHoraoN64Work* work;
 
@@ -56,17 +57,17 @@ EffectEntry* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, s32 b, 
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
-    work->unk28 = e;
-    work->unk14 = a;
-    work->unk1C = b;
-    work->unk18 = c;
-    work->unk20 = d;
+    work->blendRate = blendRate;
+    work->startSize = startSize;
+    work->startAlpha = startAlpha;
+    work->endSize = endSize;
+    work->endAlpha = endAlpha;
     work->scale = 1.0f;
     work->angle = rand() % 360;
-    work->lifetime = f;
+    work->lifetime = lifetime;
     work->frame = 0;
-    work->alpha = b;
-    work->unk24 = a;
+    work->alpha = startAlpha;
+    work->size = startSize;
     work->vy = 0.0f;
     work->state = 0;
     return effect;
@@ -89,8 +90,8 @@ void effMagicHoraoMain(EffectEntry* effect) {
     }
     switch (work->state) {
         case 0:
-            work->unk24 += work->unk28 * (work->unk18 - work->unk24);
-            work->alpha = work->alpha + work->unk28 * (work->unk20 - work->alpha);
+            work->size += work->blendRate * (work->endSize - work->size);
+            work->alpha = work->alpha + work->blendRate * (work->endAlpha - work->alpha);
             work->scale -= 0.02f;
             if (work->scale < 0.0f) {
                 work->scale = 0.0f;
@@ -166,7 +167,7 @@ void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(scale, 0.01f, 0.01f, 0.01f);
     PSMTXTrans(mtx, 100.0f * work->position.x, 100.0f * work->position.y, 100.0f * work->position.z);
     PSMTXConcat(scale, mtx, mtx);
-    PSMTXScale(scale, work->unk24, work->unk24, work->unk24);
+    PSMTXScale(scale, work->size, work->size, work->size);
     PSMTXConcat(mtx, scale, mtx);
     PSMTXConcat(camera->view, mtx, mtx);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);

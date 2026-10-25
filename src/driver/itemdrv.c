@@ -610,7 +610,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, s32 type, s32 collectFlag, s3
     default:
         entry->effect = NULL;
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
-        { char* nm = ((ItemEntry*)entry)->name; iconSetPos(nm, x, y, z); }
+        { char* nm = entry->name; iconSetPos(nm, x, y, z); }
         iconSetScale(entry->name, entry->scale);
         iconSetAlpha(entry->name, entry->alpha);
         break;

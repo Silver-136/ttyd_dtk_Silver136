@@ -619,7 +619,7 @@ void mot_roll(void) {
         m->camShiftTargetZ = 0.4f;
         m->camShiftRate.z = 0.01f;
         m->camZoom = 2.0f;
-        ((MarioWork*)m)->camZoomOfs = rollOfs;
+        m->camZoomOfs = rollOfs;
         RW()->squashTrigger = z0;
         z1 = 0;
         RW()->squashState = z1;

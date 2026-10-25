@@ -4762,7 +4762,7 @@ USER_FUNC(btlevtcmd_DivePartsPosition) {
         else if (tx - x < 0.0f) {
             unit->moveDirection = -1;
         }
-        BtlUnit_LoadSeMode(3, kind, &((BattleUnitPart*)unit)->moveSndTable, &((BattleUnitPart*)unit)->moveSnd);
+        BtlUnit_LoadSeMode(3, kind, &unit->moveSndTable, &unit->moveSnd);
     }
     unit->mMoveCurrentPos.x = intpl_sub(mode, unit->mMoveStartPos.x, unit->mMoveTargetPos.x, (s32)unit->moveFrame, unit->moveTotalFrames);
     unit->mMoveCurrentPos.y = intpl_sub(mode, unit->mMoveStartPos.y, unit->mMoveTargetPos.y, (s32)unit->moveFrame, unit->moveTotalFrames);
