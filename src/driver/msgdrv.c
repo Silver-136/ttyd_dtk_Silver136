@@ -68,8 +68,6 @@ void selectWindow_Main(WindowEntry* window);
 s32 msgMain(smartEntry* smart);
 void selectWindow_Disp(CameraId camId, void* param);
 
-void npcSetStayPose(const char* name);
-void npcSetTalkPose(const char* name);
 
 typedef struct MsgLookupEntry {
     u32 startaddr; //0x0

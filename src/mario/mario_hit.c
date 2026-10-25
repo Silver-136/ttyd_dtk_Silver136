@@ -26,14 +26,13 @@
 #include <math.h>
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "koopa.h"
 
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 
 extern BOOL marioChgMot(s32 mot);
 extern HitEntry* kpaSearchGround(f32* a, f32* b, f32* c, f32 d);
-extern BOOL kpaFireAttackCheck(void);
-extern void kpaCamFollow(void);
 extern HitEntry* marioSearchHead(Vec* pos, f32* h, f32 d);
 #ifdef VERSION_G8ME01
 extern s32 kpaGetLevel(void);

@@ -24,7 +24,6 @@ void marioGetRubInit(void);
 void allPartyRideShip(void);
 void allPartyRideOff(void);
 void allPartyForceRideOn(void);
-s32 marioSlitChkWallAround(void);
 
 #define CAMF() (camGetPtr((CameraId)8)->flags)
 

@@ -22,7 +22,6 @@ extern voidfunctionptr _dtors[];
 void mapGrpSetColor(const char* name, GXColor color);
 typedef struct HSV { u8 h; u8 s; u8 v; u8 a; } HSV;
 GXColor HSV2RGB(HSV hsv);
-PuniData* puniGetPunidat(void);
 PuniWork* puniGetPunigp(void);
 void puniModeWinjump(PuniData* puni);
 

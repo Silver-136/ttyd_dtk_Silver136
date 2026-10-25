@@ -21,7 +21,6 @@
 #define MW_US 0
 #endif
 
-s32 mobjCheckItemboxOpen(void* mobj);
 
 //.sbss
 u32 msg_ep; //unknown since it only gets written to once and never used
@@ -152,8 +151,6 @@ USER_FUNC(pre_kurio_use) {
 }
 
 void marioStSystemLevel(s32 level);
-void partyGoodbyeInit(PartyEntry* party);
-BOOL partyGoodbyeMain(PartyEntry* party);
 
 USER_FUNC(post_kurio_use) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());

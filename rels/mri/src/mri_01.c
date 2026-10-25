@@ -24,7 +24,6 @@
 #include "mario/mario_pouch.h"
 
 void* puniGetPunigp(void);
-void* puniGetPunidat(void);
 void puniswGetindex(s32 flag, s32 index, s32* a, s32* b);
 void puniFadeOff(s32 index);
 static u8* bp;

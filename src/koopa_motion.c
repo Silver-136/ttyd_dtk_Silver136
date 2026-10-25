@@ -22,9 +22,6 @@
 #define kpa_fall_80213C38 kpa_fall
 #endif
 
-extern s32 kpaFireAttackCheck(void);
-extern void kpaCamFollow(void);
-extern void marioChgMot2(s32 id);
 extern void* marioChkLandon(f32* outY, f32 y);
 f32 kpaStickSpd(s32 dash);
 
@@ -50,7 +47,6 @@ EVT_BEGIN(quake_kpaHipAttack_evt)
 EVT_END()
 
 extern void* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle);
-extern void* kpaGetHitobjHead2(void);
 void kpaSetSpec(void);
 
 static inline void kpa_hip_launch(MarioWork* m) {

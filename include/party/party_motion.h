@@ -37,3 +37,4 @@ void allPartySlitOff(void);
 void allPartySlitOn(void);
 void partyResetTouchWallCt(void);
 void partySlitReset(PartyEntry* party);
+s32 party_motion_fall(PartyEntry* party);

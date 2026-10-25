@@ -38,7 +38,6 @@ typedef struct CloudWork {
 
 USER_FUNC(evt_img_alloc_capture);
 void mapGrpSetOffScreen(const char* name, const char* offscreen);
-void hitObjFlagOn(const char* name, u32 flags);
 void mapObjGetPos(const char* name, Vec* pos);
 
 static CloudWork cloud[16];

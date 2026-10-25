@@ -27,7 +27,6 @@ USER_FUNC(evt_eff);
 USER_FUNC(evt_eff_delete);
 
 s32 BattleAudienceSoundCheck(s32 id);
-void BattleAudienceSoundSetVol(s32 id, u8 vol, s32 c);
 
 static s32 count;
 s32 count2;

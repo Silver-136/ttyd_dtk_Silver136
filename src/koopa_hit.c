@@ -19,7 +19,6 @@ s32 kpaEnemyFireHitChk(f32 x, f32 y, f32 z, f32 h, f32 w);
 BOOL kpaFlameHitFilter(HitCheckQuery* query, HitEntry* entry);
 
 
-extern s32 kpaFireAttackCheck(void);
 
 
 #define KPW (marioGetPtr()->kpaWork)

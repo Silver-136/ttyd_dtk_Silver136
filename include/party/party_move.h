@@ -40,3 +40,7 @@ void partyNextReadId(s32 id);
 void partySetDir(PartyEntry* party, f32 x, f32 z);
 void partySetDispDirToMario(PartyEntry* party);
 void party_move_mode_wait(PartyEntry* party);
+f32 partyForceSetSpd(PartyEntry* party, f32 spd);
+void partyMoveBehindMario(PartyEntry* party, s32 arg);
+void partyMoveBesideMario(PartyEntry* party, s32 arg);
+f32 partySetTargetSpd(PartyEntry* party, f32 spd);

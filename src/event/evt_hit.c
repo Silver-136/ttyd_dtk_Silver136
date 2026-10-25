@@ -5,13 +5,6 @@
 #include "memory.h"
 #include <string.h>
 
-void hitObjAttrOn(const char* name, s32 attr);
-void hitObjAttrOff(const char* name, s32 attr);
-void hitGrpAttrOn(const char* name, s32 attr);
-void hitGrpAttrOff(const char* name, s32 attr);
-void hitObjFlagOn(const char* name, u16 flag);
-void hitGrpFlagOn(const char* name, u16 flag);
-void hitGrpFlagOff(const char* name, u16 flag);
 
 HitDamageReturn* hitDmgretPtr;
 

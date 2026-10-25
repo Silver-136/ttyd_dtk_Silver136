@@ -34,8 +34,6 @@
 #define MW_US 0
 #endif
 
-extern void partyGoodbyeInit(PartyEntry* party);
-extern s32 partyGoodbyeMain(PartyEntry* party);
 extern void partyGetAppearPos(PartyEntry* party, Vec* pos);
 
 extern u8* caseCheckHitObj2(void* hit);

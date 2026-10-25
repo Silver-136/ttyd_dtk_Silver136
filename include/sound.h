@@ -231,3 +231,4 @@ void SoundSSSetPlayFreqCh(s32 chan, u16 freq);
 void SoundSSSetSrndPanCh(s32 chan, u8 span);
 void SoundSSSetVolCh(s32 chan, u8 vol);
 void SoundSSStopCh(s32 chan);
+s32 SoundSSGetVolCh(s32 chan);

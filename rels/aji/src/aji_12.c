@@ -14,8 +14,6 @@
 #include "aji.h"
 #include "manager/evtmgr_cmd.h"
 
-void hitGrpAttrOn(const char* name, u32 flags);
-void hitGrpAttrOff(const char* name, u32 flags);
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_hit_damage_return_set);

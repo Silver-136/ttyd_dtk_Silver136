@@ -22,6 +22,7 @@
 #include "libc_decls.h"
 #include <math.h>
 #include "sfx_name_word.h"
+#include "driver/npcdrv.h"
 
 typedef struct Footmark {
     u8 flag;    // 0x0
@@ -33,7 +34,6 @@ typedef struct Footmark {
 s32 partyMoveMain(PartyEntry* party, s32 hosei);
 f32 partyUpdMoveSpd(PartyEntry* party, f32 spd);
 extern void party_set_behind_dir(PartyEntry* party);
-extern void party_motion_fall(PartyEntry* party);
 static void flyMain(PartyEntry* party);
 extern void vivianShadow(PartyEntry* party);
 extern HitEntry* marioChkWallAround(Vec* pos, s32 a, f32 spd, f32 dir, f32 w, f32 h);
@@ -1536,7 +1536,6 @@ static void flyMain(PartyEntry* party) {
 
 #include "mario/mariost.h"
 
-extern NpcEntry* npcNearDistCheck(f32 x, f32 y, f32 z, f32 r);
 extern f32 partyNrmToAngle(Vec* n);
 extern s32 marioPlaneGetFlyingDir(void);
 

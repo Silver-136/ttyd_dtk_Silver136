@@ -433,7 +433,6 @@ void BattlePartyAnimeLoad(s32 partyId) {
     animEffectAsync(setup->mUnitKindParams->mParts->modelName, 1);
 }
 
-void statusWinOpen(void);
 
 BattleUnit* BattleChangeParty(BattleWork* wp) {
     s32 kind = wp->commandMenu.partyKind;

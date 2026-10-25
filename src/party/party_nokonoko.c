@@ -17,8 +17,6 @@
 
 extern void partyUpdMoveSpd(PartyEntry* party);
 extern void partyWalkInit(PartyEntry* party, s32 mode);
-extern void partyGoodbyeInit(PartyEntry* party);
-extern s32 partyGoodbyeMain(PartyEntry* party);
 
 
 static s32 nokoSe;
@@ -34,7 +32,6 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
 HitEntry* hitCheckFilter(HitFilterCallback callback, f32* hitX, f32* hitY, f32* hitZ, f32* distance, f32* hitNX,
                          f32* hitNY, f32* hitNZ, f32 x, f32 y, f32 z, f32 nx, f32 ny, f32 nz);
 #define EXT_LIT(sym, val) (val)
-extern ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 extern void marioChkWallAround(Vec* pos, s32 a1, f32 a2, f32 angle, f32 radius, f32 height);
 #ifdef VERSION_G8ME01
 void partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height);

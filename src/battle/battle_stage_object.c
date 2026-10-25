@@ -30,6 +30,7 @@
 #include "battle/battle_camera.h"
 #include "battle/battle_seq.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_ac.h"
 
 #pragma dont_inline on
 
@@ -44,7 +45,6 @@ BOOL effFallCheckHit(EffectEntry* effect);
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
 void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, u32 flags, s32* unitId, s32* partId);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
-s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon);
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
 //local prototypes

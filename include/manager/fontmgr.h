@@ -107,3 +107,4 @@ void FontDrawRainbowColorOff(void);
 void FontDrawScale(f32 scale);
 void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg);
 void JUTFont_Free(void);
+void JUTFontSetup(u16 font);

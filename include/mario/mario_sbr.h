@@ -24,3 +24,5 @@ void marioGetRubInit(void);
 void marioGetStick(f32* dir, f32* mag);
 void marioResetGravity(void);
 void marioUpdateKeyData(void);
+void* marioGetTouchNpcPtr(void);
+BOOL marioSetDirEventMain(void);

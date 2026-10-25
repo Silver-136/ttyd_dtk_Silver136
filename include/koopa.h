@@ -71,3 +71,7 @@ void kpaPauseSE2(void);
 void kpaPreInit(void);
 void kpaSetLevel(s32 lv);
 void kpa_jumpNpc(void);
+s32 kpaCamFollow(void);
+s32 kpaFireAttackCheck(void);
+s32 kpaHipAttackCheck(void);
+f32 kpaSetJumpPara(void);

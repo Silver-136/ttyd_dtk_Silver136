@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
+#include "mario/mario_sbr.h"
 
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
@@ -20,7 +21,6 @@
 
 extern s32 partyCtrlNo;
 void partyChgPose(PartyEntry* party, const char* pose);
-NpcEntry* marioGetTouchNpcPtr(void);
 typedef struct Senkaron { s8 state; s32 timer; f32 vx; f32 vy; f32 vz; u32 flags; } Senkaron;
 Senkaron* senkaron;
 s32 senkaronAttackStartFlag;

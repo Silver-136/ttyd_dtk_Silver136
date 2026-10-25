@@ -7,6 +7,7 @@
 #include "mario/mario_motion.h"
 #include "pmario_sound.h"
 #include "statuswindow.h"
+#include "driver/hitdrv.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -39,7 +40,6 @@ typedef struct LectButtonDisp { s32 unk0; Vec pos; } LectButtonDisp;
 typedef struct LectButton { u8 flags; u8 seq; u8 pad_2[0x8 - 0x2]; LectButtonDisp disp; u8 pad_18[0x40 - 0x18]; s16 iconId; s16 alpha; } LectButton;
 static LectButton lbtn[2];
 static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) { camera->presetPos = camera->cameraPos; camera->presetAt = camera->cameraAt; PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos); PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt); camera->startTimeA = gp->renderTime; camera->durationA = 0; camera->stateA = 3; camera->curveA = 11; }
-void hitGrpFlagOn(const char* name, u32 flags);
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 static EffectEntry* eff;
 

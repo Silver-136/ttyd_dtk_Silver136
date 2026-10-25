@@ -15,3 +15,5 @@ void evt_set_yoshi_spd(f32 spd);
 void marioRideYoshi(void);
 void marioYoshiForceCancel(void);
 void yoshi_jumpStand(void);
+void evt_set_yoshi_frm(s32 msec);
+s32 marioGetoffYoshi(void);

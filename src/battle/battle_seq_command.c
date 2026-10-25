@@ -31,12 +31,11 @@
 #include "system.h"
 #include "battle/battle_stage.h"
 #include "battle/battle_actrecord.h"
+#include "battle/battle_attack_audience.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
 void BattleMenuDisp_WeaponSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandWeapon* weapons, s32 a);
-void BattleMenuDisp_Operation_Init(BattleWork* wp, s32 a);
-void BattleMenuDisp_MultiItem_Init(BattleWork* wp, s32 a);
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleStageOffLightInCommand(s32 a, s32 b);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
@@ -2299,7 +2298,6 @@ void BattleCommandDisplay_AllEnd(BattleWork* wp) {
 }
 #pragma dont_inline reset
 
-void* btlataudGetAttackEventPtr(s32 id);
 void* btlataudGetMoveEventPtr(s32 id);
 s32 _check_weapon_type_attack(BattleWeapon* weapon);
 #define UEVT(u) ((u)->attackEventCode)

@@ -6,13 +6,6 @@
 #include <dolphin/pad.h>
 #include "driver/npcdrv.h"
 
-s32 partyEntry(PartyId id);
-s32 partyEntry2(PartyId id);
-s32 partyEntryHello(PartyId id);
-s32 partyEntry2Hello(PartyId id);
-void partyGoodbye(s32 slot);
-void partyKill(s32 slot);
-s32 partyDoWork(void);
 BOOL yoshiGetStatus(void);
 
 static inline void marioPartyKillSlot0(void) {

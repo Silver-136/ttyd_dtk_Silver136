@@ -40,15 +40,11 @@
 
 // external prototypes
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
-void BattleMajinaiCheck(void);
-void BattleFogEndCheck(void);
 void BattleCommandInit(BattleWork* wp);
 BOOL BattleCommandInput(BattleWork* wp);
 void BattleStatusChangeMsgAdjust(BattleWork* wp);
 BOOL BattleStatusChangeMsgMain(BattleWork* wp);
 BOOL BattleStatusChangeAnnouceMain(BattleWork* wp);
-void BtlUnit_SetTotalHitDamage(BattleUnit* unit, s32 damage);
-BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 s32 BattleDamageDirect(s32 unitIdx, BattleUnit* unit, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 stopFlags, u32 damageEffect, u32 pattern);
 void effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z);
 void effFreezeN64Entry(s32 a, s32 b, f32 x, f32 y, f32 z, f32 scale);

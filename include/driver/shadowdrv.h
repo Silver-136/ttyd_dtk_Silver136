@@ -93,3 +93,7 @@ void U_shadowSetMode(s32 id, u8 alpha);
 s32 shadowGetCharShadowProjection(void);
 ShadowConfig* shadowGetDepthShadowConfig(void);
 ShadowConfig* shadowGetProjShadowConfig(void);
+s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size);
+void shadowFlagOn(s32 id, u16 flags);
+void shadowSetCollision(s32 id, BOOL enable);
+void shadowSetType(s32 id, u8 type);

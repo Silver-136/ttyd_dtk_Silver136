@@ -16,7 +16,6 @@
 #include "mario/mariost.h"
 #endif
 #include "mario/mario_sbr.h"
-void marioChgMot2(MarioMotion);
 void motSlitCancel(void);
 BOOL marioChkJabara(void);
 

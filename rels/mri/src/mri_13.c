@@ -10,7 +10,6 @@
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
 
-PuniData* puniGetPunidat(void);
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_overwrite);

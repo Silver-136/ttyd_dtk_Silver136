@@ -17,7 +17,6 @@
 u8 dark;
 s32 darkCount;
 f32 point[4];
-void BattleAudienceAddAudienceNum(s32 num);
 #include "battle/battle_break_slot.h"
 
 static USER_FUNC(_battle_set_lecture_unit_id);

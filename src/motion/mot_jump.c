@@ -23,7 +23,6 @@ BOOL marioPriCheckJabara(void);
 #endif
 void kpaChgPose(const char* a, const char* b);
 void marioSetPeakYpos(void);
-void marioChgMot2(MarioMotion);
 void marioChgMotAuto(void);
 void marioSlitForceCancel(void);
 void* marioChkFront(Vec* out, Vec* pos, f32 dir, f32 dist);

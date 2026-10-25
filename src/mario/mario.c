@@ -18,6 +18,8 @@
 #include <string.h>
 #include "libc_decls.h"
 #include <math.h>
+#include "party/party_kuribo.h"
+#include "party/party_bomhei.h"
 
 #ifdef VERSION_G8ME01
 BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
@@ -28,13 +30,10 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out);
 s32 marioShipChanging(void);
 BOOL marioRollKeyDisable(void);
 BOOL marioSlitKeyDisable(void);
-s32 christineGetStatus(void);
-BOOL mario_bomhei_keychk2(void);
 s32 yoshiGetStatus(void);
 BOOL nokonoko_holdItem(void);
 void marioYoshiForceCancel(void);
 BOOL getRollEvtFlag(void);
-BOOL L_marioChkRub(void);
 void marioSetRollDispDir(void);
 void marioShipSetDispDir(void);
 f32 marioGetMoveRate(f32 dir);
@@ -46,7 +45,6 @@ void marioChkToge(void);
 void marioResetGravity(void);
 void partyInit(void);
 s32 kpaNoHitEnemyCheck(void);
-s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size);
 void partyReInit(void);
 void marioBaloonInit(void);
 void marioGetRubInit(void);
@@ -941,7 +939,6 @@ void marioReInit(void) {
     wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
 }
 
-void marioSetDirEventMain(void);
 void marioHitCheckWidth(void);
 void itemCoinDrop(Vec* position);
 void* marioSearchGround(f32* y, f32* a, f32* b, f32 h, f32 vy);

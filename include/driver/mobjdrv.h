@@ -77,3 +77,6 @@ BOOL mobjCheckExec();
 void mobjReset(BOOL inBattle);
 void mobjSetPosition(const char* name, f32 x, f32 y, f32 z);
 void mobjKoopaOn(void);
+s32 mobjCheckItemboxOpen(MapObjectEntry* entry);
+BOOL mobjGetHint(MapObjectEntry* entry);
+MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char** names);

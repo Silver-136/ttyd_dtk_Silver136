@@ -4,6 +4,7 @@
 #include "sfx_name_word.h"
 #include "mot/mot_damage.h"
 #include "pmario_sound.h"
+#include "driver/shadowdrv.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -29,8 +30,6 @@ typedef struct FirebarSetup { u8 type; u8 count; u8 field_0x2[2]; Vec pos; f32 s
 typedef struct FirebarWork { u8 type; u8 count; u16 flags; Vec pos; f32 prevAngle; f32 angle; f32 speed; f32 spacing; f32 field_0x20; f32 scale; f32 field_0x28; f32 radius; void (*callback)(struct FirebarWork* wp, s32 type); s32 hitCount; s32 sfxId; s32 state; f32 shadowAngle; FirebarBall* balls; FirebarSetup* setup; } FirebarWork;
 void marioChgMot(s32 motion);
 ItemEntry* itemEntry(const char* name, s32 itemId, s32 mode, s32 flag, void* script, f32 x, f32 y, f32 z);
-void itemStatusOn(ItemEntry* item, s32 flags);
-void shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 scale);
 void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
 void firebar_disp(CameraId camera, void* param);
 void _firebar_rot(FirebarWork* wp);

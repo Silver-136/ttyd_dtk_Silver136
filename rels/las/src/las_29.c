@@ -32,8 +32,6 @@
 #include "mario/mario_party.h"
 
 void* effMistEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 angle);
-void npcSetTalkPose(const char* name);
-void npcSetStayPose(const char* name);
 void mapObjGetPos(const char* name, Vec* pos);
 void _hikariEntry(const char* name, s32 type, f32 scale);
 typedef struct HikariData { s32 key; s32 id; } HikariData;

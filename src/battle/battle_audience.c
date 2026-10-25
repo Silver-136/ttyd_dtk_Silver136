@@ -1464,7 +1464,6 @@ BattleUnit* BattleAudienceDetectTargetPlayer(void) {
     return BattleGetUnitPtr(wp, ids[i]);
 }
 
-extern s32 BtlUnit_CheckShadowGuard(BattleUnit*);
 extern double __fabs(double);
 void BattleAudienceItemCtrlProcess(void) {
     Vec hv;

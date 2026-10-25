@@ -3449,7 +3449,6 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 /* first-half (target order 1..153) functions, generated block */
 #include <string.h>
 #include "data/item_data.h"
-void BattleStatusWindowCheck(void);
 s32 BattleEnemyUseItemCheck(BattleUnit* unit);
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
@@ -3460,7 +3459,6 @@ void btlDispChangePeraAnime(BattleUnitPart* part, s32 anim);
 void BtlUnit_PoseSoundInit(BattleUnitPart* part);
 void btlDispPoseAnime(BattleUnitPart* part);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* name);
-void BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon);
 void BattleAttackDeclareAll(BattleWork* wp);
 void BattleGetFirstAttackUnit(BattleWork* wp, s32* a, BattleUnit** unit);
 void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* targets, s32 a, s32* b, s32* c);
@@ -5941,7 +5939,6 @@ USER_FUNC(btlevtcmd_GetItemRecoverParam) {
     return EVT_RETURN_DONE;
 }
 
-void BattleStage_ObjectFallCheck(void);
 
 USER_FUNC(btlevtcmd_WeaponAftereffect) {
     BattleWork* wp = _battleWorkPointer;

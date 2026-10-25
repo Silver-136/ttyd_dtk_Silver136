@@ -31,3 +31,4 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs);
 void marioChkToge(void);
 HitEntry* marioHitCheck(f32* ox, f32* oy, f32* oz, f32* dist, f32* nx, f32* ny, f32* nz, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz);
 void marioHitCheckWidth(void);
+BOOL marioSlitChkWallAround(void);

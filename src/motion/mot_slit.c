@@ -18,9 +18,6 @@
 #ifdef VERSION_G8ME01
 #endif
 
-BOOL marioRollChgChk(void);
-void marioChgMot2(MarioMotion);
-BOOL marioSlitChkWallAround(void);
 void mapSetPaperAmbColor(GXColor);
 double fabs(double);
 BOOL marioCreviceWallChk(const Vec* p);

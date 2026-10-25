@@ -396,3 +396,4 @@ void mapReStartAnimation(const char* name);
 void mapReStartAnimationAll(const char* name);
 void mapResetPaperAmbColor(void);
 void mapSetPlayRate(const char* name, f32 rate);
+void bmapLoad(const char *map, const char *map2);

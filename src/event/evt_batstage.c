@@ -3,13 +3,6 @@
 #include <dolphin/mtx.h>
 #include "battle/battle_stage.h"
 
-void BattleStageLightRelease(s32 idx, s32 a, s32 b);
-void BattleStageLightSetLightColor(s32 idx, u8 r, u8 g, u8 b, s32 a, s32 c);
-void BattleStageLightSetWidth(s32 idx, s32 w, s32 a, s32 b);
-void BattleStageLightSetPosition(s32 idx, f32 x, f32 y, f32 z, s32 a, s32 b);
-void BattleStageLightSetUpVec(s32 idx, f32 x, f32 y, f32 z, s32 a, s32 b);
-void BattleStageLightSetTarget(s32 idx, f32 x, f32 y, f32 z, s32 a, s32 b);
-void BattleStageLightSetTargetByUnit(s32 idx, s32 unit, f32 x, f32 y, f32 z, s32 a, s32 b);
 void BattleStageReturnAudDarkBase(s32 a, s32 b);
 void BattleStageSetAudDarkBase(u8 a, s32 b, s32 c);
 void BattleStageSetAudDark(u8 a, s32 b, s32 c);

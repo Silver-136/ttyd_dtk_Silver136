@@ -5979,7 +5979,6 @@ s32 psndBGMPlayTime(s32 id) {
     return OSTicksToMilliseconds(gp->renderTime - bgm->startTime);
 }
 
-u8 SoundSSGetVolCh(s32 chan);
 void SoundSSSetVolCh(s32 chan, u8 vol);
 void SoundSSSetPanCh(s32 chan, u8 pan);
 void SoundSSSetSrndPanCh(s32 chan, u8 span);

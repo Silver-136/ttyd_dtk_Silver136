@@ -9,11 +9,11 @@
 #include "system.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "mario/mario_sbr.h"
 
 #define fabs(x) __fabs(x)
 #define fabsf(x) __fabsf(x)
 
-NpcEntry* marioGetTouchNpcPtr(void);
 
 typedef struct UrouroWork {
     u32 flags;     // 0x0

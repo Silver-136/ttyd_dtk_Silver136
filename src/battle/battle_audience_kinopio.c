@@ -17,6 +17,7 @@
 #include "eff/eff_sandars.h"
 #include "battle/battle_camera.h"
 #include "battle/battle_stage.h"
+#include "battle/battle_stage_object.h"
 
 #pragma dont_inline on
 
@@ -35,13 +36,10 @@ void BattleAudienceSoundBombFire(s32 index);
 void BattleAudienceSoundPakkunEat(s32 index);
 void BattleAudienceSoundSleep(s32 index);
 void BattleAudienceSoundZZZ(s32 index);
-BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 void btl_camera_set_moveto(s32 a, s32 b, f32 c, f32 d, f32 e, f32 f, f32 g, f32 h, s32 i);
 void btl_camera_shake_h(s32 a, f32 b, f32 c, s32 d, s32 e);
-s32 BattleStage_ObjectFallCheck();
 void BattleStage_NozzleWorkCheck(s32 a);
 s32 BattleBreakSlot_GetBreakTurn();
-BOOL BattleAudience_GetAnimEnd();
 u8 BattleAudience_GetEscapeChangeOK();
 BOOL BattleAudience_GetFront(s32 index);
 s32 BattleAudience_GetAudienceNoFromOffset(s32 index, s32 column, s32 row);

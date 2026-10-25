@@ -17,8 +17,6 @@
 #include "aji.h"
 #include "manager/evtmgr_cmd.h"
 
-void hitGrpAttrOn(const char* name, u32 flags);
-void hitGrpAttrOff(const char* name, u32 flags);
 
 USER_FUNC(all_flag_off);
 USER_FUNC(evt_bero_get_entername);

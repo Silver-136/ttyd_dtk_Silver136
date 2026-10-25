@@ -23,7 +23,6 @@
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
 extern ItemData itemDataTable[];
-s32 BtlUnit_EnemyItemCanUseCheck(s32 item);
 
 #define PART_GRAVITY(p) ((p)->gravityTimer)
 #define PART_FLOAT(p) ((p)->floatTimer)

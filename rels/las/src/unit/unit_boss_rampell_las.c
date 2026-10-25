@@ -3924,7 +3924,6 @@ static USER_FUNC(eff_scanning) {
     ((effScanningData*)eff->userdata)->field_0x10 = unit->mSizeMultiplier;
     return EVT_RETURN_DONE;
 }
-BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
 
 USER_FUNC(mario_shadow_guard_check) {
     EvtWord* args = event->args;

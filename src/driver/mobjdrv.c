@@ -21,6 +21,7 @@
 #include "driver/shadowdrv.h"
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/pad.h>
+#include "koopa_hit.h"
 
 
 
@@ -585,12 +586,6 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
 
 s32 marioChkHipBump(void);
 s32 mobjCheckItemboxOpen(MapObjectEntry* entry);
-extern void* kpaGetHitobjHead(s32 idx);
-extern void* kpaGetHitobjRide(s32 idx);
-extern BOOL kpaHipAttackCheck(void);
-extern void* kpaGetHitobj(void);
-extern void* kpaGetHitFlame(void);
-extern void shadowSetType(s32 id, s32 type);
 
 typedef struct MobjWorkHit {
     s32 count;

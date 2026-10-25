@@ -41,12 +41,9 @@ void partyWalkChkGnd(PartyEntry* party);
 void* partySearchHead(PartyEntry* party, Vec* pos, f32* height, f32 dir);
 s32 partyChkNoStandMobj(HitEntry* hit);
 void partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out);
-void partyMoveBehindMario(PartyEntry* party, s32 a);
 s32 marioChkDeepSleep(void);
 s32 chuchu_searchObject(void);
 void partyChgPose(PartyEntry* party, const char* pose);
-void partyForceSetSpd(PartyEntry* party, f32 a);
-void partyChgPaper(PartyEntry* party, const char* name);
 void marioClearSlitFloor(void);
 void movePos(f32* x, f32* z, f32 dist, f32 dir);
 s32 partyGetFootmarkId();
@@ -57,8 +54,6 @@ void partyGetAppearPos4(PartyEntry* party, Vec* pos);
 
 BOOL psndENVOn(s32 a, s32 b);
 BOOL psndENVOn_f_d(s32 a, s32 b, s32 c, s32 d);
-BOOL psndENVOff_f_d(s32 a, s32 b, s32 c);
-void psndENV_LPF(s32 a, u16 b);
 void psndSFX_vol(s32 id, u8 vol);
 void psndSFX_pit(s32 id, s16 pit);
 BOOL psndBGMOn_f_d(s32 a, s32 b, s32 c, s32 d, s32 e);
@@ -295,7 +290,6 @@ void N_partyFollowCloseOff(PartyEntry* party) {
     party->trigFlags &= ~0x20000;
 }
 
-void partySetTargetSpd(PartyEntry* party, f32 spd);
 void partyGetAppearPos3(PartyEntry* party, Vec* pos);
 static inline HitEntry* partyBehindGround(PartyEntry* party) {
     HitEntry* hit = partySearchGround(party, 10.0f, 0.0f);
@@ -833,7 +827,6 @@ s32 marioGetSlitFloorPos(Vec* pos);
 
 void partyGetReadId2(s32 id, Vec* pos);
 void L_getTargetPos(s32 id, Vec* pos);
-void partyChkFrontStep(PartyEntry* party, f32 dist, f32* y, f32* a, f32* b);
 
 void party_motion_homing_walk(PartyEntry* party) {
     HitEntry* hit = NULL;

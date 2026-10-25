@@ -19,6 +19,7 @@
 #include "party/party_vivian.h"
 #include "party/party_motion.h"
 #include "party/party_chuchu.h"
+#include "driver/shadowdrv.h"
 
 //.data
 
@@ -736,7 +737,6 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
 
 void partyShadowOff(PartyEntry* party);
 void vivianUnhold(PartyEntry* party);
-void marioGetoffYoshi(void);
 void L_partyVivianTailStart(PartyEntry* party);
 void getRidePos(PartyEntry* party, Vec* pos);
 void driveParty(PartyEntry* party);
@@ -2670,9 +2670,7 @@ void partySetCamId(PartyEntry* party, s32 cameraId) {
 /* @@DISP@@ */
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
-s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size);
 void shadowSetCamId(s32 id, s32 camId);
-void shadowFlagOn(s32 id, u32 flag);
 BOOL N_vivianDisplayTailCheck(PartyEntry* party);
 void animPoseVivianMain(s32 poseId, Vec* pos);
 struct HitEntry* partyHitCheck(PartyEntry* party, Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);

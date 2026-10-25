@@ -9,7 +9,6 @@
 #include "driver/hitdrv.h"
 
 static s32 ssf;
-PuniData* puniGetPunidat(void);
 
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_cam3d_evt_off);

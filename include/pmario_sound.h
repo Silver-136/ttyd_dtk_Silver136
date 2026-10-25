@@ -177,3 +177,6 @@ s32 psndSFXOn_(const char* name);
 void psndSFX_dist(s32 id, u16 dist);
 u8 psndSFX_get_vol(s32 id);
 void psndSetReverb(s32 mode);
+s32 psndBGMChk(s32 id);
+BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 r5);
+BOOL psndENV_LPF(s32 id, u16 freq);

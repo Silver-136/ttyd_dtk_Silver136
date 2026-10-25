@@ -181,3 +181,4 @@ USER_FUNC(evt_puni_mem_init);
 void PuniDokuritsu(PuniData* p);
 void puniMoveDecel(PuniData* p);
 void puniswTrapGetindex(s32 idx, s32* out);
+PuniData* puniGetPunidat(void);

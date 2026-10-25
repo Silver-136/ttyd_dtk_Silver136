@@ -71,7 +71,6 @@ s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);
 void slot_neon_sub(GoryuuWork* wp, SlotWork* data);
 void mapObjGetPos(const char* name, Vec* pos);
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
-void shadowSetCollision(s32 id, s32 on);
 typedef struct KujiMsgWork { u8 unk0[8]; u16 unk8; u8 unkA[6]; s32 unk10; } KujiMsgWork;
 void* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 

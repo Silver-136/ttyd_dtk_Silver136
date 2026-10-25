@@ -32,6 +32,7 @@
 #include "libc_decls.h"
 #include "pmario_sound.h"
 #include "sfx_name_word.h"
+#include "driver/hitdrv.h"
 s32 mobj_koopa_pole_evt(MapObjectEntry* mobj);
 void kpa_disp_pole_score(CameraId camId, void* param);
 static USER_FUNC(kpa_get_level);
@@ -128,10 +129,8 @@ USER_FUNC(evt_mobj_check);
 USER_FUNC(evt_mobj_delete);
 USER_FUNC(evt_mobj_entry);
 
-extern void hitGrpFlagOn(const char* name, u32 flag);
 extern EventEntry* mobjRunEvent(MapObjectEntry* mobj, EvtWord* eventCode);
 extern void kpaPowUp(void);
-extern void hitGrpFlagOff(const char* name, u32 flag);
 
 static inline MapObjectEntry* MOBJ_PTR(EventEntry* event, const char* name) {
     return strcmp(name, "me") ? mobjNameToPtr(name) : event->thisMapObj;
@@ -173,7 +172,6 @@ static inline BOOL isAnimA13(const s8* a) {
 }
 
 extern void* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 id, s32 mode, s32 collect, void* script);
-extern void itemForceGet(void* item);
 s32 mobj_recovery_blk(MapObjectEntry* mobj);
 
 extern void npcKoopaModeMobjBoundDeadCheck(void* hit);
@@ -183,7 +181,6 @@ s32 mobj_koopa_badgeblk(MapObjectEntry* mobj);
 
 s32 mobj_brickblk(MapObjectEntry* mobj);
 
-extern void itemStatusOn(void* item, u32 flag);
 s32 kpa_powerup(EventEntry* event, BOOL isFirstCall);
 s32 fire_func(EventEntry* event, BOOL isFirstCall);
 EVT_BEGIN(kpa_powerup_evt)
@@ -3117,9 +3114,6 @@ void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
     memcpy(camGetPtr(camId), saved, 0x260);
 }
 
-extern void* itemHitCheck(f32 x, f32 y, f32 z, f32 r);
-extern void* npcNearDistCheck(f32 x, f32 y, f32 z, f32 r);
-extern void* itemNearDistCheck(f32 x, f32 y, f32 z, f32 r);
 
 static inline BOOL kururing_in_box(f32 x, f32 z, f32 px, f32 pz, f32 r) {
     if (x - r <= px && px <= x + r && z - r <= pz && pz <= z + r) {

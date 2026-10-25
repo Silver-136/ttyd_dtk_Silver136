@@ -217,7 +217,6 @@ extern void marioChkWallAround(Vec* pos, s32 arg, f32 a, f32 b, f32 c, f32 d);
 extern void partyChkWallAround(struct PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width, f32 height);
 #endif
 extern void partyChgPose(PartyEntry* party, const char* name);
-extern void partyChgPaper(PartyEntry* party, const char* name);
 extern s32 psndSFXOn_3D(s32 id, Vec* pos);
 extern void* effRippleEntry(s32 type, f32 x, f32 y, f32 z);
 extern void effRippleSetCamId(void* eff, s32 cam);

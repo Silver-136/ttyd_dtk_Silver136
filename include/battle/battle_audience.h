@@ -314,3 +314,6 @@ void BattleAudience_Case_PartyDown(void);
 void BattleAudience_Case_TurnEnd(void);
 s32 BattleAudience_GetAudienceNoFromOffset(s32 index, s32 column, s32 row);
 BOOL BattleAudience_GetFront(s32 index);
+s32 BattleAudienceAddAudienceNum(s32 num);
+void BattleAudienceSoundSetVol(s32 index, u8 a2, s32 a3);
+BOOL BattleAudience_GetAnimEnd(s32 index);

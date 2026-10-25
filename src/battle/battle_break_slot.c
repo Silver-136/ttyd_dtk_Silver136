@@ -278,7 +278,6 @@ void BattleBreakSlot_Init(void) {
     memcpy(reel->cards, &c3, reel->numCards * 4);
 }
 
-s32 BattleAudienceAddAudienceNum(s32 num);
 
 
 void BattleBreakSlot_Main(void) {

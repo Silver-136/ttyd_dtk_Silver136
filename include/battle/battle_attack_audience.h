@@ -7,3 +7,4 @@ USER_FUNC(_get_attack_aud_no);
 
 extern EvtWord btlataudevtPresentItem_Damage[];
 extern EvtWord btlataudevtPresentItem_Get[];
+EvtWord* btlataudGetAttackEventPtr(s32 unitId);

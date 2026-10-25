@@ -296,3 +296,5 @@ void BattleStatusWindowEventOff(void);
 void BattleStoreCoin(BattleWork* wp, s32 coin);
 void BattleStoreExp(BattleWork* wp, s32 exp);
 BattleUnitType BattleTransPartyIdToUnitKind(s32 partyId);
+u8 BattleMajinaiCheck(void);
+BOOL BattleStatusWindowCheck(void);

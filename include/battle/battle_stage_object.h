@@ -119,3 +119,5 @@ void BattleStage_IronFrameFallCheck(void);
 void BattleStage_NozzleDirChangeCheck(void);
 void BattleStage_NozzleWorkCheck(s32 type);
 void BattleStage_WallCloseCheck(void);
+BOOL BattleFogEndCheck(void);
+s32 BattleStage_ObjectFallCheck(void);

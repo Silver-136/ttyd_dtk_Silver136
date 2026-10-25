@@ -20,6 +20,7 @@
 #include "mot/mot_damage.h"
 #include "mot/mot_slit.h"
 #include "koopa_motion.h"
+#include "mario/mario_hit.h"
 
 
 typedef struct MarioJumpData {
@@ -98,29 +99,23 @@ void* marioChkLandon(f32* y, f32 spd);
 #define PCHK(x) pouchCheckItem(x)
 void marioDmgRetQuakeOn(void);
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
-BOOL marioSlitChkWallAround(void);
 BOOL marioCreviceWallChk(Vec pos);
 s32 marioGetHammerLevel(void);
 BOOL marioChkHammer2(void);
 BOOL marioChkShipPlace(void* hit);
 BOOL marioChkPlanePlace(void* hit);
-s32 mobjGetHint(void* mobj);
 MotCaseEntry* caseCheckHitObj(void* hit);
 void* fbatNpcTalkCheck(void);
 void peach_talk(void);
-void* marioGetTouchNpcPtr(void);
-void kpaCamFollow(void);
 void effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 void yoshi_jumpStand(void);
 void marioSlitReenter(void);
 void motSlitCancel(void);
-s32 kpaFireAttackCheck(void);
 void N_marioSlitSetAfterLand(void);
 void kpaClearHitobjRide(void);
 void* kpaChkHitobjRide(void);
 BOOL getRollEvtFlag(void);
 BOOL marioPriCheckJabara(void);
-void kpaSetJumpPara(void);
 BOOL kpaHipAttackOk(void);
 BOOL marioChkHipAttack(void);
 BOOL vivianGetStatus(void);

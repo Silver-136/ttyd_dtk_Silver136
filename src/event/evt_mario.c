@@ -28,12 +28,6 @@
 
 void mario_plane_cancel(void);
 s32 marioGetPlaneStatus(void);
-s32 partyKill(s32 id);
-void partyGoodbye(s32 id);
-s32 partyEntry(s32 id);
-s32 partyEntry2(s32 id);
-s32 partyEntryHello(s32 id);
-s32 partyEntry2Hello(s32 id);
 BOOL marioChkSlitThrouhEnd(void);
 void marioRollTryCancel(void);
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
@@ -116,9 +110,7 @@ static inline BOOL marioChkLanding(void) {
     return FALSE;
 }
 
-BOOL partyRideChk(PartyEntry* party);
 void vivianUnhold(PartyEntry* party);
-BOOL marioGetoffYoshi(void);
 void marioRollCancel(void);
 void motSlitCancel2(void);
 

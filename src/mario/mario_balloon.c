@@ -7,8 +7,6 @@
 #include <string.h>
 #include "mario/mario_hit.h"
 
-extern s32 mobjGetHint(MapObjectEntry* mobj);
-extern s32 mobjCheckItemboxOpen(MapObjectEntry* mobj);
 extern NpcEntry* fbatNpcTalkCheck(void);
 extern EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
 

@@ -12,3 +12,4 @@ void partyGetReturnPos(Vec* out);
 void bomhei_init_800BFBB0(PartyEntry* party);
 void bomhei_use_cancel2(void);
 s32 mario_bomhei_keychk(void);
+s32 mario_bomhei_keychk2(void);
