@@ -40,29 +40,28 @@
 #include "sdk/texPalette.h"
 #ifndef VERSION_G8ME01
 #include "evt/evt_cmd.h"
-#define EXT_LIT(sym, val) (val)
 
 #endif
 typedef struct LoadWork {
-    u16 flags;          // 0x0
-    FileEntry* file;    // 0x4
-    f32 x;              // 0x8
-    f32 y;              // 0xC
-    f32 tx;             // 0x10
-    f32 ty;             // 0x14
-    s32 unk18;          // 0x18
-    s32 unk1C;          // 0x1C
-    s32 slot;           // 0x20
-    s32 unk24;          // 0x24
-    s32 unk28;          // 0x28
-    f32 alpha;          // 0x2C
-    s32 unk30;          // 0x30
-    s32 unk34;          // 0x34
-    const char* msg;    // 0x38
-    EventEntry* evt;    // 0x3C
-    s32 unk40;          // 0x40
-    s32 unk44;          // 0x44
-    s32 unk48;          // 0x48
+    u16 flags;         // 0x0
+    FileEntry* file;   // 0x4
+    f32 x;             // 0x8
+    f32 y;             // 0xC
+    f32 tx;            // 0x10
+    f32 ty;            // 0x14
+    s32 state;         // 0x18, state machine step
+    s32 cardCode;      // 0x1C, last cardGetCode() result
+    s32 slot;          // 0x20
+    s32 soundModeSel;  // 0x24, sound mode being chosen (0 mono, 1 stereo, 2 surround)
+    s32 rumbleOffSel;  // 0x28, rumble-off choice being edited
+    f32 alpha;         // 0x2C
+    s32 copyFrom;      // 0x30, copy: source slot
+    s32 copyTo;        // 0x34, copy: destination slot
+    const char* msg;   // 0x38
+    EventEntry* evt;   // 0x3C
+    s32 soundMode;     // 0x40, sound mode in effect
+    s32 rumbleOff;     // 0x44, 1 = rumble disabled
+    s32 printWindowId; // 0x48, saved evt->printWindowId
 } LoadWork;
 
 typedef struct WinDt {
@@ -70,8 +69,8 @@ typedef struct WinDt {
     f32 y;      // 0x4
     f32 ofsX;   // 0x8
     f32 ofsY;   // 0xC
-    s32 unk10;  // 0x10
-    s32 unk14;  // 0x14
+    s32 tex;    // 0x10, window texture id (winTexSet)
+    s32 tex2;   // 0x14, second texture (winTexSet_x2)
     u8 next[4]; // 0x18
 } WinDt;
 
@@ -134,7 +133,7 @@ static EvtWord evt_shake[12];
 
 s32 evt_seq_load_keep_msg_window(EventEntry* evt, BOOL isFirstCall) {
     fadeReset(4);
-    wp->unk48 = evt->printWindowId;
+    wp->printWindowId = evt->printWindowId;
     return 2;
 }
 
@@ -179,7 +178,7 @@ void seq_loadMain(SequenceWork* seq) {
             if (wp->flags & 0x80) {
                 wp->flags &= ~0x80;
                 wp->evt->lwData[10] = 1;
-                wp->evt->printWindowId = wp->unk48;
+                wp->evt->printWindowId = wp->printWindowId;
             }
             seq->state++;
             break;
@@ -190,24 +189,24 @@ void seq_loadMain(SequenceWork* seq) {
                 } else {
                     wp->evt = NULL;
                     seq->state++;
-                    wp->unk18 = 0;
-                    wp->unk1C = cardGetCode();
+                    wp->state = 0;
+                    wp->cardCode = cardGetCode();
                     wp->flags &= ~0x40;
                     if (OSGetSoundMode() == 0) {
                         SoundSetOutputMode(0);
                         gp->soundMode = 0;
-                        wp->unk40 = 0;
+                        wp->soundMode = 0;
                     } else {
                         SoundSetOutputMode(1);
                         if (gp->soundMode == 0) {
-                            wp->unk40 = 1;
+                            wp->soundMode = 1;
                         } else {
-                            wp->unk40 = 2;
+                            wp->soundMode = 2;
                         }
                     }
-                    wp->unk44 = gp->rumbleEnabled == 0;
-                    wp->unk24 = wp->unk40;
-                    wp->unk28 = wp->unk44;
+                    wp->rumbleOff = gp->rumbleEnabled == 0;
+                    wp->soundModeSel = wp->soundMode;
+                    wp->rumbleOffSel = wp->rumbleOff;
                     wp->slot = gp->lastSlot;
                     wp->x = win_dt[wp->slot].x;
                     wp->y = win_dt[wp->slot].y;
@@ -258,11 +257,11 @@ void loadMain(SequenceWork* seq) {
         trg = 0;
         dir = 0;
     }
-    if (wp->unk1C != code) {
+    if (wp->cardCode != code) {
         trg = 0;
         dir = 0;
     }
-    wp->unk1C = code;
+    wp->cardCode = code;
     for (i = 0; i < 4; i++) {
         flags = SLOTFLAGS(i);
         if (!(flags & 1) || (flags & 2)) {
@@ -285,9 +284,9 @@ void loadMain(SequenceWork* seq) {
         wp->flags |= 0x20;
     }
 
-    switch (wp->unk18) {
+    switch (wp->state) {
         case 0:
-            wp->unk18++;
+            wp->state++;
         case 1:
             wp->msg = msgSearch("msg_savefile_select");
             prev = wp->slot;
@@ -309,10 +308,10 @@ void loadMain(SequenceWork* seq) {
                         if (flags & 2) {
                             SFX(0x13);
                         } else if (flags & 1) {
-                            wp->unk18 = 0x1e;
+                            wp->state = 0x1e;
                             SFX(0x12);
                         } else {
-                            wp->unk18 = 0x14;
+                            wp->state = 0x14;
                             SFX(0x12);
                         }
                         break;
@@ -327,7 +326,7 @@ void loadMain(SequenceWork* seq) {
                             if (i < 4) {
                                 SFX(0x12);
                                 wp->slot = 0;
-                                wp->unk18 = 0x28;
+                                wp->state = 0x28;
                             } else {
                                 SFX(0x13);
                             }
@@ -344,7 +343,7 @@ void loadMain(SequenceWork* seq) {
                             if (i < 4) {
                                 SFX(0x12);
                                 wp->slot = 0;
-                                wp->unk18 = 0x32;
+                                wp->state = 0x32;
                             } else {
                                 SFX(0x13);
                             }
@@ -352,21 +351,21 @@ void loadMain(SequenceWork* seq) {
                         break;
                     case 6:
                         SFX(0x13);
-                        wp->unk18 = 0xa;
+                        wp->state = 0xa;
                         break;
                     case 7:
                         SFX(0x12);
                         psndBGMOff(0x800);
-                        wp->unk18 = 0x64;
+                        wp->state = 0x64;
                         break;
                     case 8:
                         SFX(0x12);
-                        wp->unk18 = 0xc8;
+                        wp->state = 0xc8;
                         break;
                 }
             } else if (trg & 0x200) {
                 SFX(0x13);
-                wp->unk18 = 0xa;
+                wp->state = 0xa;
             }
             if (prev != wp->slot) {
                 if (wp->slot < 4) {
@@ -380,7 +379,7 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0xa:
             fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
-            wp->unk18++;
+            wp->state++;
             break;
         case 0xb:
             if (fadeIsFinish()) {
@@ -391,28 +390,28 @@ void loadMain(SequenceWork* seq) {
             wp->flags |= 0x40;
             wp->evt = evtEntryType(evt_memcard_start, 0, 0, 0);
             wp->evt->lwData[0] = wp->slot;
-            wp->unk18++;
+            wp->state++;
             break;
         case 0x15:
             if (!evtCheckID(wp->evt->eventId)) {
                 wp->flags &= ~0x40;
                 if (evtGetValue(NULL, (s32)0xFD050F80) == 1) {
-                    wp->unk18++;
+                    wp->state++;
                 } else {
-                    wp->unk18 = 1;
+                    wp->state = 1;
                 }
             }
             break;
         case 0x16:
             fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
             psndBGMOff_f_d(0x200, 2000, 0);
-            wp->unk18++;
+            wp->state++;
             break;
         case 0x17:
             if (fadeIsFinish()) {
                 wp->flags |= 0x40;
                 wp->evt = evtEntryType(evt_continue, 0, 0, 0);
-                wp->unk18++;
+                wp->state++;
             }
             break;
         case 0x18:
@@ -423,18 +422,18 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x1e:
             fadeEntry(0x1b, 0, (GXColor){0, 0, 0, 255});
-            wp->unk18++;
+            wp->state++;
             break;
         case 0x1f:
             if (fadeIsFinish()) {
-                wp->unk18++;
+                wp->state++;
             }
             break;
         case 0x20:
             if (nameEntPrepare()) {
                 nameEntOn(0);
                 fadeEntry(0x1c, 0, (GXColor){0, 0, 0, 255});
-                wp->unk18++;
+                wp->state++;
             }
             break;
         case 0x21:
@@ -443,7 +442,7 @@ void loadMain(SequenceWork* seq) {
                 if (!nameEntIsCancel()) {
                     psndBGMOff_f_d(0x200, 3000, 0);
                 }
-                wp->unk18++;
+                wp->state++;
             }
             break;
         case 0x22:
@@ -451,7 +450,7 @@ void loadMain(SequenceWork* seq) {
                 nameEntOff();
                 if (nameEntIsCancel()) {
                     fadeEntry(0x1c, 0, (GXColor){0, 0, 0, 255});
-                    wp->unk18 = 1;
+                    wp->state = 1;
                 } else {
                     strcpy((char*)gp->playerName, nameEntGetName());
                     gp->lastSlot = wp->slot;
@@ -475,7 +474,7 @@ void loadMain(SequenceWork* seq) {
                         wp->evt = evtEntryType(evt_memcard_save, 0, 0, 0);
 #endif
                         wp->evt->lwData[0] = 0x17;
-                        wp->unk18++;
+                        wp->state++;
                     } else {
                         seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
                     }
@@ -503,18 +502,18 @@ void loadMain(SequenceWork* seq) {
                     flags = SLOTFLAGS(wp->slot);
                     if ((flags & 2) || !(flags & 1)) {
                         SFX(0x12);
-                        wp->unk18++;
+                        wp->state++;
                     } else {
                         SFX(0x13);
                     }
                 } else {
                     wp->slot = 4;
-                    wp->unk18 = 1;
+                    wp->state = 1;
                     SFX(0x13);
                 }
             } else if (trg & 0x200) {
                 wp->slot = 4;
-                wp->unk18 = 1;
+                wp->state = 1;
                 SFX(0x13);
             }
             if (prev != wp->slot && wp->slot < 4) {
@@ -527,14 +526,14 @@ void loadMain(SequenceWork* seq) {
             wp->flags |= 0x40;
             wp->evt = evtEntryType(evt_memcard_delete, 0, 0, 0);
             wp->evt->lwData[0] = wp->slot;
-            wp->unk18++;
+            wp->state++;
             break;
         case 0x2a:
             if (!evtCheckID(wp->evt->eventId)) {
                 if (evtGetValue(NULL, (s32)0xFAA2B580) == 0) {
                     wp->flags &= ~0x40;
                     wp->slot = 4;
-                    wp->unk18 = 1;
+                    wp->state = 1;
                 } else {
                     wp->flags |= 0x80;
                     seq->state = 1;
@@ -557,20 +556,20 @@ void loadMain(SequenceWork* seq) {
                 if (prev < 4) {
                     flags = SLOTFLAGS(wp->slot);
                     if (!(flags & 2) && !(flags & 1)) {
-                        wp->unk18 = 0x33;
-                        wp->unk30 = wp->slot;
-                        wp->unk34 = (wp->unk30 + 1) % 4;
-                        wp->slot = wp->unk34;
+                        wp->state = 0x33;
+                        wp->copyFrom = wp->slot;
+                        wp->copyTo = (wp->copyFrom + 1) % 4;
+                        wp->slot = wp->copyTo;
                         SFX(0x12);
                     }
                 } else {
                     wp->slot = 5;
-                    wp->unk18 = 1;
+                    wp->state = 1;
                     SFX(0x13);
                 }
             } else if (trg & 0x200) {
                 wp->slot = 5;
-                wp->unk18 = 1;
+                wp->state = 1;
                 SFX(0x13);
             }
             if (prev != wp->slot && wp->slot < 4) {
@@ -585,48 +584,48 @@ void loadMain(SequenceWork* seq) {
             if (dir & 0x1000) {
                 do {
                     wp->slot = win_dt3[wp->slot].next[0];
-                } while (wp->slot == wp->unk30);
+                } while (wp->slot == wp->copyFrom);
             } else if (dir & 0x2000) {
                 do {
                     wp->slot = win_dt3[wp->slot].next[1];
-                } while (wp->slot == wp->unk30);
+                } while (wp->slot == wp->copyFrom);
             } else if (dir & 0x4000) {
                 do {
                     wp->slot = win_dt3[wp->slot].next[2];
-                } while (wp->slot == wp->unk30);
+                } while (wp->slot == wp->copyFrom);
             } else if (dir & 0x8000) {
                 do {
                     wp->slot = win_dt3[wp->slot].next[3];
-                } while (wp->slot == wp->unk30);
+                } while (wp->slot == wp->copyFrom);
             } else if (trg & 0x100) {
-                wp->unk18 = 0x34;
-                wp->unk34 = wp->slot;
+                wp->state = 0x34;
+                wp->copyTo = wp->slot;
                 SFX(0x12);
             } else if (trg & 0x200) {
-                wp->slot = wp->unk30;
-                wp->unk18 = 0x32;
+                wp->slot = wp->copyFrom;
+                wp->state = 0x32;
                 SFX(0x13);
             }
             if (prev != wp->slot && wp->slot < 4) {
                 SFX(9);
             }
-            wp->unk34 = wp->slot;
+            wp->copyTo = wp->slot;
             wp->tx = win_dt2[wp->slot].x + win_dt2[wp->slot].ofsX;
             wp->ty = win_dt2[wp->slot].y + win_dt2[wp->slot].ofsY;
             break;
         case 0x34:
             wp->flags |= 0x40;
             wp->evt = evtEntryType(evt_memcard_copy, 0, 0, 0);
-            wp->evt->lwData[0] = wp->unk30;
-            wp->evt->lwData[1] = wp->unk34;
-            wp->unk18++;
+            wp->evt->lwData[0] = wp->copyFrom;
+            wp->evt->lwData[1] = wp->copyTo;
+            wp->state++;
             break;
         case 0x35:
             if (!evtCheckID(wp->evt->eventId)) {
                 if (evtGetValue(NULL, (s32)0xFAA2B580) == 0) {
                     wp->flags &= ~0x40;
                     wp->slot = 5;
-                    wp->unk18 = 1;
+                    wp->state = 1;
                 } else {
                     wp->flags |= 0x80;
                     seq->state = 1;
@@ -636,12 +635,12 @@ void loadMain(SequenceWork* seq) {
             break;
         case 0x64:
             wp->flags |= 1;
-            sound = wp->unk24;
+            sound = wp->soundModeSel;
             if (dir & 0x1000) {
-                wp->unk24 = wp->unk24 - 1;
+                wp->soundModeSel = wp->soundModeSel - 1;
                 SFX(5);
             } else if (dir & 0x2000) {
-                wp->unk24 = wp->unk24 + 1;
+                wp->soundModeSel = wp->soundModeSel + 1;
                 SFX(5);
             } else if (trg & 0x100) {
                 switch (sound) {
@@ -666,32 +665,32 @@ void loadMain(SequenceWork* seq) {
                 SFX(0x12);
                 psndBGMOn(0xa0, NULL);
                 psndENVOff(0x200);
-                wp->unk40 = wp->unk24;
+                wp->soundMode = wp->soundModeSel;
                 wp->flags &= ~1;
-                wp->unk18 = 1;
+                wp->state = 1;
                 break;
             } else if (trg & 0x200) {
                 SFX(0x13);
                 psndBGMOn(0xa0, NULL);
                 psndENVOff(0x200);
-                wp->unk24 = wp->unk40;
+                wp->soundModeSel = wp->soundMode;
                 if (OSGetSoundMode() == 0) {
                     SoundSetOutputMode(0);
                 } else {
                     SoundSetOutputMode(1);
                 }
                 wp->flags &= ~1;
-                wp->unk18 = 1;
+                wp->state = 1;
                 break;
             }
-            if (wp->unk24 >= 3) {
-                wp->unk24 = 0;
+            if (wp->soundModeSel >= 3) {
+                wp->soundModeSel = 0;
             }
-            if (wp->unk24 < 0) {
-                wp->unk24 = 2;
+            if (wp->soundModeSel < 0) {
+                wp->soundModeSel = 2;
             }
-            if (wp->unk24 != sound) {
-                switch (wp->unk24) {
+            if (wp->soundModeSel != sound) {
+                switch (wp->soundModeSel) {
                     case 0:
                         SoundSetOutputMode(0);
                         break;
@@ -706,44 +705,44 @@ void loadMain(SequenceWork* seq) {
             }
 #ifdef VERSION_G8ME01
             wp->tx = -74.0f;
-            wp->ty = 4.0f + (50.0f - 50.0f * wp->unk24);
+            wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
 #else
-            wp->tx = EXT_LIT(float_neg74_8041be74, -74.0f);
-            wp->ty = EXT_LIT(float_4_8041be78, 4.0f) + (EXT_LIT(float_50_8041be6c, 50.0f) - 50.0f * wp->unk24);
+            wp->tx = (-74.0f);
+            wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
 #endif
             break;
         case 0xc8:
             wp->flags |= 1;
             if (dir & 0x1000) {
-                wp->unk28--;
+                wp->rumbleOffSel--;
                 SFX(5);
             } else if (dir & 0x2000) {
-                wp->unk28++;
+                wp->rumbleOffSel++;
                 SFX(5);
             } else if (trg & 0x100) {
-                gp->rumbleEnabled = wp->unk28 == 0;
+                gp->rumbleEnabled = wp->rumbleOffSel == 0;
                 SFX(0x12);
-                wp->unk44 = wp->unk28;
+                wp->rumbleOff = wp->rumbleOffSel;
                 wp->flags &= ~1;
-                wp->unk18 = 1;
+                wp->state = 1;
                 if (gp->rumbleEnabled) {
                     evtEntryType(evt_shake, 0, 0, 0);
                 }
             } else if (trg & 0x200) {
                 SFX(0x13);
-                wp->unk28 = wp->unk44;
+                wp->rumbleOffSel = wp->rumbleOff;
                 wp->flags &= ~1;
-                wp->unk18 = 1;
+                wp->state = 1;
             }
-            if (wp->unk28 >= 2) {
-                wp->unk28 = 0;
+            if (wp->rumbleOffSel >= 2) {
+                wp->rumbleOffSel = 0;
             }
-            if (wp->unk28 < 0) {
-                wp->unk28 = 1;
+            if (wp->rumbleOffSel < 0) {
+                wp->rumbleOffSel = 1;
             }
 #ifdef VERSION_G8ME01
             wp->tx = -74.0f;
-            wp->ty = 4.0f + (30.0f - 50.0f * wp->unk28);
+            wp->ty = 4.0f + (30.0f - 50.0f * wp->rumbleOffSel);
             break;
     }
     wp->x += (wp->tx - wp->x) / 4.0f;
@@ -751,14 +750,14 @@ void loadMain(SequenceWork* seq) {
     { f32 s = 2.0f * (f32)sin(gp->retraceCount / 8.0f); wp->x += __fabsf(s); }
     dispEntry(CAMERA_3D, 1000.0f, 0, loadDraw, NULL);
 #else
-            wp->tx = EXT_LIT(float_neg74_8041be74, -74.0f);
-            wp->ty = EXT_LIT(float_4_8041be78, 4.0f) + (EXT_LIT(float_30_8041be3c, 30.0f) - 50.0f * wp->unk28);
+            wp->tx = (-74.0f);
+            wp->ty = 4.0f + (30.0f - 50.0f * wp->rumbleOffSel);
             break;
     }
-    wp->x += (wp->tx - wp->x) / EXT_LIT(float_4_8041be78, 4.0f);
-    wp->y += (wp->ty - wp->y) / EXT_LIT(float_4_8041be78, 4.0f);
+    wp->x += (wp->tx - wp->x) / 4.0f;
+    wp->y += (wp->ty - wp->y) / 4.0f;
     { f32 s = 2.0f * (f32)sin(gp->retraceCount / 8.0f); wp->x += __fabsf(s); }
-    dispEntry(CAMERA_3D, EXT_LIT(float_1000_8041be84, 1000.0f), 0, loadDraw, NULL);
+    dispEntry(CAMERA_3D, 1000.0f, 0, loadDraw, NULL);
 #endif
 }
 
@@ -774,7 +773,7 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
 #ifdef VERSION_G8ME01
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 #else
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_0_8041bde4, 0.0f), GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 #endif
     GXLoadTexObj(&obj, GX_TEXMAP0);
     GXSetNumTexGens(1);
@@ -784,7 +783,7 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
 #ifdef VERSION_G8ME01
     PSMTXScale(m, (f32)w / GXGetTexObjWidth(&obj), (f32)h / GXGetTexObjHeight(&obj), 1.0f);
 #else
-    PSMTXScale(m, (f32)w / GXGetTexObjWidth(&obj), (f32)h / GXGetTexObjHeight(&obj), EXT_LIT(float_1_8041bde8, 1.0f));
+    PSMTXScale(m, (f32)w / GXGetTexObjWidth(&obj), (f32)h / GXGetTexObjHeight(&obj), 1.0f);
 #endif
     GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -810,24 +809,24 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
     GXFIFO_F32 = 1.0f;
     GXFIFO_F32 = 0.0f;
 #else
-    GXFIFO_F32 = EXT_LIT(float_0_8041bde4, 0.0f);
-    GXFIFO_F32 = EXT_LIT(float_0_8041bde4, 0.0f);
-    GXFIFO_F32 = EXT_LIT(float_0_8041bde4, 0.0f);
+    GXFIFO_F32 = 0.0f;
+    GXFIFO_F32 = 0.0f;
+    GXFIFO_F32 = 0.0f;
     GXFIFO_F32 = x0;
     GXFIFO_F32 = y1;
-    GXFIFO_F32 = EXT_LIT(float_0_8041bde4, 0.0f);
-    GXFIFO_F32 = EXT_LIT(float_0_8041bde4, 0.0f);
-    GXFIFO_F32 = EXT_LIT(float_1_8041bde8, 1.0f);
+    GXFIFO_F32 = 0.0f;
+    GXFIFO_F32 = 0.0f;
+    GXFIFO_F32 = 1.0f;
     GXFIFO_F32 = x1;
     GXFIFO_F32 = y1;
-    GXFIFO_F32 = EXT_LIT(float_0_8041bde4, 0.0f);
-    GXFIFO_F32 = EXT_LIT(float_1_8041bde8, 1.0f);
-    GXFIFO_F32 = EXT_LIT(float_1_8041bde8, 1.0f);
+    GXFIFO_F32 = 0.0f;
+    GXFIFO_F32 = 1.0f;
+    GXFIFO_F32 = 1.0f;
     GXFIFO_F32 = x1;
     GXFIFO_F32 = y0;
-    GXFIFO_F32 = EXT_LIT(float_0_8041bde4, 0.0f);
-    GXFIFO_F32 = EXT_LIT(float_1_8041bde8, 1.0f);
-    GXFIFO_F32 = EXT_LIT(float_0_8041bde4, 0.0f);
+    GXFIFO_F32 = 0.0f;
+    GXFIFO_F32 = 1.0f;
+    GXFIFO_F32 = 0.0f;
 #endif
 }
 
@@ -858,7 +857,7 @@ void loadDraw(CameraId camera, void* param) {
 #endif
     s32 k;
 
-    if (wp->unk18 >= 0x20 && wp->unk18 < 0x28) {
+    if (wp->state >= 0x20 && wp->state < 0x28) {
         return;
     }
     GXGetViewportv(vp);
@@ -873,7 +872,7 @@ void loadDraw(CameraId camera, void* param) {
 #ifdef VERSION_G8ME01
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){255, 255, 255, 255});
 #else
-    GXSetFog(GX_FOG_NONE, EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_0_8041bde4, 0.0f), (GXColor){255, 255, 255, 255});
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){255, 255, 255, 255});
 #endif
     GXSetNumChans(0);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
@@ -900,9 +899,9 @@ void loadDraw(CameraId camera, void* param) {
     win1 = (WinDt*)cam;
     GXLoadPosMtxImm(((CameraEntry*)win1)->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    loadDrawBg(0x35, EXT_LIT(float_neg304_8041bdec, -304.0f), EXT_LIT(float_240_8041bdf0, 240.0f), EXT_LIT(float_neg272_8041bdf8, -272.0f), EXT_LIT(float_neg240_8041bdf4, -240.0f));
-    loadDrawBg(0x34, EXT_LIT(float_neg272_8041bdf8, -272.0f), EXT_LIT(float_240_8041bdf0, 240.0f), EXT_LIT(float_272_8041bdfc, 272.0f), EXT_LIT(float_neg240_8041bdf4, -240.0f));
-    loadDrawBg(0x36, EXT_LIT(float_272_8041bdfc, 272.0f), EXT_LIT(float_240_8041bdf0, 240.0f), EXT_LIT(float_304_8041be00, 304.0f), EXT_LIT(float_neg240_8041bdf4, -240.0f));
+    loadDrawBg(0x35, (-304.0f), 240.0f, (-272.0f), (-240.0f));
+    loadDrawBg(0x34, (-272.0f), 240.0f, 272.0f, (-240.0f));
+    loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, (-240.0f));
 
     win1 = win_dt;
 #endif
@@ -911,7 +910,7 @@ void loadDraw(CameraId camera, void* param) {
         if (i == wp->slot) {
             col = white;
         }
-        if (wp->unk18 == 0x33 && (i == wp->unk30 || i == wp->unk34)) {
+        if (wp->state == 0x33 && (i == wp->copyFrom || i == wp->copyTo)) {
             col = white;
         }
         if (i == 4 && (wp->flags & 0x10)) {
@@ -921,9 +920,9 @@ void loadDraw(CameraId camera, void* param) {
             col = dark;
         }
 #ifdef VERSION_G8ME01
-        switch (win1[0][i].unk10) {
+        switch (win1[0][i].tex) {
 #else
-        switch (win1[i].unk10) {
+        switch (win1[i].tex) {
 #endif
             case 10:
             case 11:
@@ -934,20 +933,20 @@ void loadDraw(CameraId camera, void* param) {
 #ifdef VERSION_G8ME01
                 winTexSet(0xe, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
                 winTexInit(*wp->file->data);
-                winTexSet(win1[0][i].unk10, (Vec){win1[0][i].x, 60.0f + win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+                winTexSet(win1[0][i].tex, (Vec){win1[0][i].x, 60.0f + win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #else
-                winTexSet(0xe, (Vec){win1[i].x, win1[i].y, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, col);
+                winTexSet(0xe, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
                 winTexInit(*wp->file->data);
-                winTexSet(win1[i].unk10, (Vec){win1[i].x, EXT_LIT(float_60_8041be04, 60.0f) + win1[i].y, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, col);
+                winTexSet(win1[i].tex, (Vec){win1[i].x, 60.0f + win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #endif
                 break;
             }
             default: {
                 winTexInit_x2(*wp->file->data);
 #ifdef VERSION_G8ME01
-                winTexSet_x2(win1[0][i].unk10, win1[0][i].unk14, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+                winTexSet_x2(win1[0][i].tex, win1[0][i].tex2, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #else
-                winTexSet_x2(win1[i].unk10, win1[i].unk14, (Vec){win1[i].x, win1[i].y, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, col);
+                winTexSet_x2(win1[i].tex, win1[i].tex2, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #endif
                 break;
             }
@@ -957,7 +956,7 @@ void loadDraw(CameraId camera, void* param) {
 #ifdef VERSION_G8ME01
     windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, -250.0f, 200.0f, 500.0f, 40.0f, 20.0f);
 #else
-    windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, EXT_LIT(float_neg250_8041be08, -250.0f), EXT_LIT(float_200_8041be0c, 200.0f), EXT_LIT(float_500_8041be10, 500.0f), EXT_LIT(float_40_8041be14, 40.0f), EXT_LIT(float_20_8041be18, 20.0f));
+    windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, (-250.0f), 200.0f, 500.0f, 40.0f, 20.0f);
 #endif
     FontDrawStart();
     {
@@ -1014,12 +1013,12 @@ void loadDraw(CameraId camera, void* param) {
         FontDrawEdgeOff();
         FontDrawScale(1.0f);
 #else
-        FontDrawScale(EXT_LIT(float_0p6_8041be1c, 0.6f));
+        FontDrawScale(0.6f);
         FontDrawEdge();
         sprintf(buf, "\203f\201[\203^%s", winZenkakuStr(i + 1));
-        FontDrawString(win1->x - 100.0f, EXT_LIT(float_84_8041be24, 84.0f) + win1->y, buf);
+        FontDrawString(win1->x - 100.0f, 84.0f + win1->y, buf);
         FontDrawEdgeOff();
-        FontDrawScale(EXT_LIT(float_1_8041bde8, 1.0f));
+        FontDrawScale(1.0f);
 #endif
         FontDrawColor((GXColor){32, 32, 32, 255});
         if (i == wp->slot) {
@@ -1058,13 +1057,13 @@ void loadDraw(CameraId camera, void* param) {
             FontGetMessageWidth(LANG != 0 ? "88" : "\x82\x57\x82\x57");
 #else
             str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
-            FontDrawString(win1->x - FontGetMessageWidth(str) / EXT_LIT(float_2_8041be70, 2.0f), EXT_LIT(float_12_8041be2c, 12.0f) + win1->y, str);
+            FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
         } else if (flags & 1) {
             str = "\203j\203\205\201[\203Q\201[\203\200";
-            FontDrawString(win1->x - FontGetMessageWidth(str) / EXT_LIT(float_2_8041be70, 2.0f), EXT_LIT(float_12_8041be2c, 12.0f) + win1->y, str);
+            FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
         } else if (gsw0 == 0) {
             str = "\202\315\202\266\202\337\202\251\202\347";
-            FontDrawString(win1->x - FontGetMessageWidth(str) / EXT_LIT(float_2_8041be70, 2.0f), EXT_LIT(float_12_8041be2c, 12.0f) + win1->y, str);
+            FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
             if (strlen(name) != 0) {
                 FontDrawString(win1->x - FontGetMessageWidth(name) / 2, 70.0f + win1->y, name);
             }
@@ -1090,7 +1089,7 @@ void loadDraw(CameraId camera, void* param) {
                 FontDrawString(win1->x - FontGetMessageWidth(name) / 2, 70.0f + win1->y, name);
             }
             sprintf(buf2, "\203\214\203x\203\213\201@%s", winZenkakuStr(level));
-            FontDrawString(win1->x - FontGetMessageWidth(buf2) / EXT_LIT(float_2_8041be70, 2.0f), EXT_LIT(float_30_8041be3c, 30.0f) + win1->y, buf2);
+            FontDrawString(win1->x - FontGetMessageWidth(buf2) / 2.0f, 30.0f + win1->y, buf2);
             strcpy(buf2, "\203v\203\214\203C\202\266\202\251\202\361\201@");
 #endif
             strcat(buf2, winZenkakuStrPad(hours, 2));
@@ -1123,12 +1122,12 @@ void loadDraw(CameraId camera, void* param) {
                 if (stars & (1 << (k + 1))) {
                     PSMTXTrans(m, (win1[0]->x - 106.0f) + k * 32, *(f32*)((u8*)win1[0] + offsetof(WinDt, y)) /* FAKE: win1->y read through a byte offset (same load) keeps &win1->y a late loop temp, as in the target's numbering */ - 52.0f, 0.0f);
 #else
-            FontDrawString(win1->x - w / EXT_LIT(float_2_8041be70, 2.0f), win1->y, buf2);
+            FontDrawString(win1->x - w / 2.0f, win1->y, buf2);
             strcpy(buf2, "\203v\203\214\203C\202\266\202\251\202\361\201@");
             strcat(buf2, winZenkakuStrPad(hours, 2));
             x = FontGetMessageWidth(buf2);
-            PSMTXTrans(m, EXT_LIT(float_8_8041be44, 8.0f) + (x + (win1->x - w / EXT_LIT(float_2_8041be70, 2.0f))), EXT_LIT(float_1_8041bde8, 1.0f) + (win1->y - 22.0f), EXT_LIT(float_0_8041bde4, 0.0f));
-            PSMTXScale(s, EXT_LIT(float_1p5_8041be4c, 1.5f), EXT_LIT(float_1p5_8041be4c, 1.5f), EXT_LIT(float_1p5_8041be4c, 1.5f));
+            PSMTXTrans(m, 8.0f + (x + (win1->x - w / 2.0f)), 1.0f + (win1->y - 22.0f), 0.0f);
+            PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(m, s, m);
             iconDispGxCol(m, 0, 0x201, (GXColor){0, 0, 0, 255});
             // FAKE: y read through a byte offset so the loop-invariant &win1->y becomes a hoisted @ temp (target pop order)
@@ -1153,28 +1152,28 @@ void loadDraw(CameraId camera, void* param) {
     }
     if (wp->alpha > 1.0f) {
 #else
-    if (wp->alpha < EXT_LIT(float_0_8041bde4, 0.0f)) {
+    if (wp->alpha < 0.0f) {
         wp->alpha = 0.0f;
     }
-    if (wp->alpha > EXT_LIT(float_1_8041bde8, 1.0f)) {
+    if (wp->alpha > 1.0f) {
 #endif
         wp->alpha = 1.0f;
     }
     nameMaskGX(wp->alpha);
 
-    if (wp->unk18 >= 100 && wp->unk18 < 200) {
+    if (wp->state >= 100 && wp->state < 200) {
         winTexInit(*wp->file->data);
 #ifdef VERSION_G8ME01
         winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
         winTexInit_x2(*wp->file->data);
         winTexSet_x2(0x13, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
 #else
-        winTexSet(0xf, (Vec){EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){255, 255, 255, 255});
+        winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
         winTexInit_x2(*wp->file->data);
-        winTexSet_x2(0x13, 0x1f, (Vec){EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_100_8041be20, 100.0f), EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){255, 255, 255, 255});
+        winTexSet_x2(0x13, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
 #endif
         for (i = 0; i < 3; i++) {
-            if (i == wp->unk24) {
+            if (i == wp->soundModeSel) {
                 winTexInit(*wp->file->data);
 #ifdef VERSION_G8ME01
                 winTexSet(0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
@@ -1184,30 +1183,30 @@ void loadDraw(CameraId camera, void* param) {
                 winTexInit_x2(*wp->file->data);
                 winTexSet_x2(i + 0x15, 0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
 #else
-                winTexSet(0x33, (Vec){EXT_LIT(float_0_8041bde4, 0.0f), 50 - i * 50, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){0, 0, 0, 64});
+                winTexSet(0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
                 winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x15, 0x33, (Vec){-4.0f, 54 - i * 50, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){255, 255, 255, 255});
+                winTexSet_x2(i + 0x15, 0x33, (Vec){-4.0f, 54 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
             } else {
                 winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x15, 0x33, (Vec){EXT_LIT(float_0_8041bde4, 0.0f), 50 - i * 50, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){255, 255, 255, 255});
+                winTexSet_x2(i + 0x15, 0x33, (Vec){0.0f, 50 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
 #endif
             }
         }
     }
 
-    if (wp->unk18 >= 200 && wp->unk18 < 300) {
+    if (wp->state >= 200 && wp->state < 300) {
         winTexInit(*wp->file->data);
 #ifdef VERSION_G8ME01
         winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
         winTexInit_x2(*wp->file->data);
         winTexSet_x2(0x14, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
 #else
-        winTexSet(0xf, (Vec){EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){255, 255, 255, 255});
+        winTexSet(0xf, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
         winTexInit_x2(*wp->file->data);
-        winTexSet_x2(0x14, 0x1f, (Vec){EXT_LIT(float_0_8041bde4, 0.0f), EXT_LIT(float_100_8041be20, 100.0f), EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){255, 255, 255, 255});
+        winTexSet_x2(0x14, 0x1f, (Vec){0.0f, 100.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
 #endif
         for (i = 0; i < 2; i++) {
-            if (i == wp->unk28) {
+            if (i == wp->rumbleOffSel) {
                 winTexInit(*wp->file->data);
 #ifdef VERSION_G8ME01
                 winTexSet(0x20, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
@@ -1217,18 +1216,18 @@ void loadDraw(CameraId camera, void* param) {
                 winTexInit_x2(*wp->file->data);
                 winTexSet_x2(i + 0x18, 0x20, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
 #else
-                winTexSet(0x33, (Vec){EXT_LIT(float_0_8041bde4, 0.0f), 30 - i * 50, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){0, 0, 0, 64});
+                winTexSet(0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
                 winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x18, 0x33, (Vec){-4.0f, 34 - i * 50, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){255, 255, 255, 255});
+                winTexSet_x2(i + 0x18, 0x33, (Vec){-4.0f, 34 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
             } else {
                 winTexInit_x2(*wp->file->data);
-                winTexSet_x2(i + 0x18, 0x33, (Vec){EXT_LIT(float_0_8041bde4, 0.0f), 30 - i * 50, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){255, 255, 255, 255});
+                winTexSet_x2(i + 0x18, 0x33, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
 #endif
             }
         }
     }
 
-    if (wp->unk18 == 0x33 && wp->unk34 < 4) {
+    if (wp->state == 0x33 && wp->copyTo < 4) {
         f32 angle[4][4] = {
             {0.0f, -90.0f, -180.0f, -135.0f},
             {90.0f, 0.0f, 135.0f, 180.0f},
@@ -1237,10 +1236,10 @@ void loadDraw(CameraId camera, void* param) {
         };
         f32 cx;
         f32 cy;
-        if (!(f32)fmod(angle[wp->unk30][wp->unk34], 90.0)) {
-            f32 c0 = wp->unk30 % 2;
-            f32 r0 = wp->unk30 / 2;
-            f32 r1 = wp->unk34 / 2;
+        if (!(f32)fmod(angle[wp->copyFrom][wp->copyTo], 90.0)) {
+            f32 c0 = wp->copyFrom % 2;
+            f32 r0 = wp->copyFrom / 2;
+            f32 r1 = wp->copyTo / 2;
             if (r0 == r1) {
                 cx = 0.0f;
 #ifdef VERSION_G8ME01
@@ -1249,10 +1248,10 @@ void loadDraw(CameraId camera, void* param) {
                 cx = -150.0f + 300.0f * c0;
                 cy = 50.0f;
 #else
-                cy = EXT_LIT(float_120_8041be5c, 120.0f) - 140.0f * r0;
+                cy = 120.0f - 140.0f * r0;
             } else {
                 cx = -150.0f + 300.0f * c0;
-                cy = EXT_LIT(float_50_8041be6c, 50.0f);
+                cy = 50.0f;
 #endif
             }
         } else {
@@ -1262,15 +1261,15 @@ void loadDraw(CameraId camera, void* param) {
         }
         cy -= 40.0f;
         winTexInit(*wp->file->data);
-        winTexSetRot(0x1d, (Vec){2.0f + cx, cy - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128}, angle[wp->unk30][wp->unk34]);
-        winTexSetRot(0x1d, (Vec){cx, cy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, angle[wp->unk30][wp->unk34]);
+        winTexSetRot(0x1d, (Vec){2.0f + cx, cy - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128}, angle[wp->copyFrom][wp->copyTo]);
+        winTexSetRot(0x1d, (Vec){cx, cy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, angle[wp->copyFrom][wp->copyTo]);
 #else
-            cy = EXT_LIT(float_50_8041be6c, 50.0f);
+            cy = 50.0f;
         }
-        cy -= EXT_LIT(float_40_8041be14, 40.0f);
+        cy -= 40.0f;
         winTexInit(*wp->file->data);
-        winTexSetRot(0x1d, (Vec){EXT_LIT(float_2_8041be70, 2.0f) + cx, cy - 2.0f, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){0, 0, 0, 128}, angle[wp->unk30][wp->unk34]);
-        winTexSetRot(0x1d, (Vec){cx, cy, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, white, angle[wp->unk30][wp->unk34]);
+        winTexSetRot(0x1d, (Vec){2.0f + cx, cy - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128}, angle[wp->copyFrom][wp->copyTo]);
+        winTexSetRot(0x1d, (Vec){cx, cy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, angle[wp->copyFrom][wp->copyTo]);
 #endif
     }
 
@@ -1280,8 +1279,8 @@ void loadDraw(CameraId camera, void* param) {
         winTexSet(0, (Vec){2.0f + wp->x, wp->y - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128});
         winTexSet(0, (Vec){wp->x, wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
 #else
-        winTexSet(0, (Vec){EXT_LIT(float_2_8041be70, 2.0f) + wp->x, wp->y - 2.0f, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, (GXColor){0, 0, 0, 128});
-        winTexSet(0, (Vec){wp->x, wp->y, EXT_LIT(float_0_8041bde4, 0.0f)}, (Vec){EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f), EXT_LIT(float_1_8041bde8, 1.0f)}, white);
+        winTexSet(0, (Vec){2.0f + wp->x, wp->y - 2.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 128});
+        winTexSet(0, (Vec){wp->x, wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
 #endif
     }
 

@@ -20,7 +20,6 @@
 #include "sfx_name_word.h"
 #include "eff/eff_magic1_n64.h"
 #include "battle/battle_unit.h"
-#define EXT_LIT(sym, val) (val)
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
 #ifdef VERSION_G8ME01
 const char R_no_messages_US[] = "<col ff0000ff>No messages.[English]<col>\012<key>";
@@ -490,10 +489,10 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
             case 0xFFF4:
                 col = FontGetDrawColor();
                 PSMTXIdentity(m);
-                if (c->rot >= EXT_LIT(float_90_8041a680, 90.0f) && c->rot <= EXT_LIT(float_270_8041a684, 270.0f)) {
+                if (c->rot >= 90.0f && c->rot <= 270.0f) {
                     PSMTXScaleApply(m, m, 1.0f, 1.0f, -1.0f);
                 }
-                PSMTXTransApply(m, m, x + c->x, c->y + (y + data->scrollPos) - 40.0f, EXT_LIT(float_0_8041a514, 0.0f));
+                PSMTXTransApply(m, m, x + c->x, c->y + (y + data->scrollPos) - 40.0f, 0.0f);
                 animPoseMain((s32)c->value);
                 animPoseDrawMtx((s32)c->value, m, 2, c->rot, c->scale);
                 FontDrawStart_alpha(alpha);
@@ -574,15 +573,15 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                         break;
                     }
 #endif
-                    pos.x = EXT_LIT(float_28_8041a550, 20.0f) + (x + c->x);
+                    pos.x = 20.0f + (x + c->x);
                     pos.y = c->iconY + (c->y + (y + data->scrollPos) - 40.0f);
-                    pos.z = EXT_LIT(float_0_8041a514, 0.0f);
+                    pos.z = 0.0f;
                     iconDispGxAlpha(&pos, 0x10, (u16)c->value, a * al / 255, c->scale);
                     FontDrawStart_alpha(alpha);
                     FontDrawColor(col4);
                     break;
                 }
-                if ((f32)(c->y + data->scrollPos) >= EXT_LIT(float_32_8041a588, 32.0f) * c->scale - 10.0f) {
+                if ((f32)(c->y + data->scrollPos) >= 32.0f * c->scale - 10.0f) {
                     break;
                 }
                 if (hide) {
@@ -623,13 +622,13 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                         hy = sy + irand(10000) % 3;
                     }
 #endif
-                    PSMTXTrans(m2, -w, EXT_LIT(float_12_8041a68c, 12.0f), EXT_LIT(float_0_8041a514, 0.0f));
+                    PSMTXTrans(m2, -w, 12.0f, 0.0f);
                     PSMTXScaleApply(m2, m2, c->rot, c->rot, c->rot);
-                    PSMTXTransApply(m2, m2, (u32)w, EXT_LIT(float_neg12_8041a690, -12.0f), EXT_LIT(float_0_8041a514, 0.0f));
+                    PSMTXTransApply(m2, m2, (u32)w, (-12.0f), 0.0f);
                     PSMTXScaleApply(m2, m2, c->scale, c->scale, c->scale);
-                    PSMTXTransApply(m2, m2, hx, hy, EXT_LIT(float_0_8041a514, 0.0f));
+                    PSMTXTransApply(m2, m2, hx, hy, 0.0f);
                     FontDrawCodeMtx(m2, c->glyph);
-                    c->rot = EXT_LIT(float_1_8041a52c, 1.0f) + EXT_LIT(float_0p5_8041a534, 0.5f) * (c->rot - 1.0f);
+                    c->rot = 1.0f + 0.5f * (c->rot - 1.0f);
                 }
                 else if (c->value & 2) {
 #ifdef VERSION_G8ME01
@@ -656,19 +655,19 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     hx = cos(t);
                     hy = sin(t);
                     FontDrawScale(c->scale);
-                    FontDrawCode(sx + EXT_LIT(float_3p2_8041a69c, 3.2f) * hx, sy - 3.2f * hy, c->glyph);
+                    FontDrawCode(sx + 3.2f * hx, sy - 3.2f * hy, c->glyph);
 #endif
                 }
                 else if (c->value & (0x100 << data->sel)) {
                     f32 hx2;
-                    t = EXT_LIT(float_0p01_8041a694, 0.01f) * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
+                    t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
 #ifdef VERSION_G8ME01
                     hx2 = sx + 3.2f * (f32)cos(t);
                     sy -= 3.2f * (f32)sin(t);
                     hy = sy;
                     MSG_DRAW_SCALE(c);
 #else
-                    hx2 = sx + EXT_LIT(float_3p2_8041a69c, 3.2f) * (f32)cos(t);
+                    hx2 = sx + 3.2f * (f32)cos(t);
                     hy = sy - 3.2f * (f32)sin(t);
                     FontDrawScale(c->scale);
 #endif
@@ -683,7 +682,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                         GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
                         FontDrawColor(white);
                     }
-                    FontDrawCode(hx2 - 4.0f, EXT_LIT(float_4_8041a67c, 4.0f) + hy, c->glyph);
+                    FontDrawCode(hx2 - 4.0f, 4.0f + hy, c->glyph);
                     FontDrawEdgeOff();
                     FontDrawRainbowColorOff();
                     FontDrawColorIDX(0);
@@ -811,7 +810,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     window = data->window;
     entry = &data->entries[data->charCount];
     flags = 0;
-    maxScale = EXT_LIT(float_0_8041a514, 0.0f);
+    maxScale = 0.0f;
 #ifdef VERSION_G8ME01
     {
         Vec one = {1.0f, 1.0f, 1.0f};
@@ -819,7 +818,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     }
     maxW = 70;
 #else
-    scale = EXT_LIT(float_1_8041a52c, 1.0f);
+    scale = 1.0f;
 #endif
     if (window->type < 0) {
         window->type = 0;
@@ -873,7 +872,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             ww = scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) );
             entry->glyph = glyph;
             entry->x = x;
-            entry->y = y - (s16)(EXT_LIT(float_10_8041a538, 10.0f) * scale);
+            entry->y = y - (s16)(10.0f * scale);
             entry->scale = scale;
 #endif
             entry->value = flags;
@@ -937,17 +936,17 @@ void msgAnalize(smartEntry* smart, char* msg) {
             }
 #else
             x = 0;
-            if (EXT_LIT(float_0_8041a514, 0.0f) == maxScale) {
+            if (0.0f == maxScale) {
                 maxScale = 1.0f;
             }
-            y -= EXT_LIT(float_32_8041a588, 32.0f) * maxScale;
-            s230 -= EXT_LIT(float_32_8041a588, 32.0f) * maxScale;
+            y -= 32.0f * maxScale;
+            s230 -= 32.0f * maxScale;
 #endif
             msg++;
             entry++;
             time += step;
             data->charCount++;
-            maxScale = EXT_LIT(float_0_8041a514, 0.0f);
+            maxScale = 0.0f;
             if (data->flags & 0x20) {
                 flags &= ~0xFF00;
                 flags |= 0x100 << data->numSel;
@@ -1172,7 +1171,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
                     ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
                     entry->glyph = 0xFFF8;
-                    entry->x = (x + (( EXT_LIT(float_0p5_8041a534, 0.5f) * iw ) * iconScale) ) + i38;
+                    entry->x = (x + (( 0.5f * iw ) * iconScale) ) + i38;
 #ifndef VERSION_G8ME01
                     x += 0x28;
 #endif
@@ -1203,7 +1202,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     iw = scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) );
                     entry->glyph = glyph;
                     entry->x = x;
-                    entry->y = y - (s16)(EXT_LIT(float_10_8041a538, 10.0f) * scale);
+                    entry->y = y - (s16)(10.0f * scale);
                     entry->scale = scale;
 #endif
                     entry->value = flags;
@@ -1241,7 +1240,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry->x = i28;
                 entry->y = s234 - i24;
                 entry->scale = f1c;
-                entry->rot = (i20 == 0) ? ( EXT_LIT(float_0_8041a514, 0.0f) ) : ( EXT_LIT(float_180_8041a568, 180.0f)) ;
+                entry->rot = (i20 == 0) ? ( 0.0f ) : ( 180.0f) ;
                 entry++;
                 time += step;
                 data->charCount++;
@@ -1280,7 +1279,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #ifdef VERSION_G8ME01
                     total += (s32)(0.55f * (scale.y * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) )));
 #else
-                    total += (s32)(EXT_LIT(float_0p55_8041a678, 0.55f) * (scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) )));
+                    total += (s32)(0.55f * (scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) )));
 #endif
                     j += 2;
                 }
@@ -1288,8 +1287,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 total = (u16)total - ( 0.55f * (4.0f * scale.x));
                 rubyX = ((rubyX + x) - 4.0f * scale.x - (u16)total) / 2;
 #else
-                total = (u16)total - ( EXT_LIT(float_0p55_8041a678, 0.55f) * (EXT_LIT(float_4_8041a67c, 4.0f) * scale));
-                rubyX = ((rubyX + x) - EXT_LIT(float_4_8041a67c, 4.0f) * scale - (u16)total) / 2;
+                total = (u16)total - ( 0.55f * (4.0f * scale));
+                rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
 #endif
                 /* second loop open-coded: kR is its counter and glyph its glyph (split webs, numbered as in the target) */
                 yx[0] = y;
@@ -1312,7 +1311,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #ifdef VERSION_G8ME01
                     wwR = 0.55f * (scale.x * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) ));
 #else
-                    wwR = EXT_LIT(float_0p55_8041a678, 0.55f) * (scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) ));
+                    wwR = 0.55f * (scale * (( f32)(kanjiGetWidth((u16)(glyph + 0)) + 4) ));
 #endif
                     entry->glyph = glyph;
                     entry->x = rubyX;
@@ -1320,7 +1319,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #ifdef VERSION_G8ME01
                     entry->scale = 0.55f * scale.x;
 #else
-                    entry->scale = EXT_LIT(float_0p55_8041a678, 0.55f) * scale;
+                    entry->scale = 0.55f * scale;
 #endif
                     entry->value = flags;
                     if (fp[0]) {
@@ -1356,7 +1355,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             wwD = scale * (( f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2) );
             entry->glyph = glyphD;
             entry->x = x;
-            entry->y = y - (s16)(EXT_LIT(float_10_8041a538, 10.0f) * scale);
+            entry->y = y - (s16)(10.0f * scale);
             entry->scale = scale;
 #endif
             entry->value = flags;
@@ -1557,9 +1556,9 @@ s32 msgWindow_Entry(const char* msg, s32 field_0x79FC, u16 priority) {
     case 10:
         if (!(window->flags & 4)) {
             window->x = -280.0f;
-            window->y = EXT_LIT(float_225_8041a578, 225.0f);
-            window->height = EXT_LIT(float_560_8041a57c, 560.0f);
-            window->width = EXT_LIT(float_176_8041a580, 176.0f);
+            window->y = 225.0f;
+            window->height = 560.0f;
+            window->width = 176.0f;
         }
         break;
     case 5:
@@ -1864,7 +1863,7 @@ void msgWindow_Main(WindowEntry* window) {
         }
         break;
     }
-    dispEntry(CAMERA_2D, EXT_LIT(float_400_8041a530, 400.0f) - window->priority, 0, msgWindow_Disp, window);
+    dispEntry(CAMERA_2D, 400.0f - window->priority, 0, msgWindow_Disp, window);
 }
 
 #pragma opt_common_subs reset
@@ -1927,7 +1926,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
         }
         break;
     }
-    dispEntry(CAMERA_2D, EXT_LIT(float_400_8041a530, 400.0f) - window->priority, 0, msgWindow_Disp, window);
+    dispEntry(CAMERA_2D, 400.0f - window->priority, 0, msgWindow_Disp, window);
 }
 
 void msgWindow_Disp(CameraId camId, void* param) {
@@ -1940,7 +1939,7 @@ void msgWindow_Disp(CameraId camId, void* param) {
     s32 sy;
     static u16 active;
 
-    GXSetFog(GX_FOG_NONE, EXT_LIT(float_0_8041a514, 0.0f), EXT_LIT(float_0_8041a514, 0.0f), EXT_LIT(float_0_8041a514, 0.0f), EXT_LIT(float_0_8041a514, 0.0f), (GXColor){0, 0, 0, 0});
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
 
     switch (window->type) {
     case 0:
@@ -1959,28 +1958,28 @@ void msgWindow_Disp(CameraId camId, void* param) {
             case 6:
             case 8:
             case 9:
-                ex = intplGetValue(0, pos.x, ( window->height / EXT_LIT(float_2_8041a524, 2.0f) ) + window->x, window->alpha, 255);
-                ey = intplGetValue(0, pos.y, window->y - ( window->width / EXT_LIT(float_2_8041a524, 2.0f) ), window->alpha, 255);
-                w = intplGetValue(0, EXT_LIT(float_10_8041a538, 10.0f), window->height, window->alpha, 255);
-                h = intplGetValue(0, EXT_LIT(float_10_8041a538, 10.0f), window->width, window->alpha, 255);
-                windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / EXT_LIT(float_2_8041a524, 2.0f) ), ey + ( h / EXT_LIT(float_2_8041a524, 2.0f) ), w, h, pos.x, pos.y);
+                ex = intplGetValue(0, pos.x, ( window->height / 2.0f ) + window->x, window->alpha, 255);
+                ey = intplGetValue(0, pos.y, window->y - ( window->width / 2.0f ), window->alpha, 255);
+                w = intplGetValue(0, 10.0f, window->height, window->alpha, 255);
+                h = intplGetValue(0, 10.0f, window->width, window->alpha, 255);
+                windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / 2.0f ), ey + ( h / 2.0f ), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
                     GXSetScissor(camera->scissor[0], 240.0f - (window->y - 36.0f), camera->scissor[2], 100);
-                    ret = msgDisp(window->userdata, window->alpha, EXT_LIT(float_62_8041a544, 62.0f) + window->x, window->y - 36.0f);
+                    ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
                 }
                 break;
             case 1:
-                window->x = pos.x - ( window->height / EXT_LIT(float_2_8041a524, 2.0f)) ;
+                window->x = pos.x - ( window->height / 2.0f) ;
                 if (window->tailMode & 8) {
                     window->y = pos.y - 80.0f;
                 } else {
                     window->y = 60.0f + pos.y;
                 }
-                ex = intplGetValue(0, pos.x, ( window->height / EXT_LIT(float_2_8041a524, 2.0f) ) + window->x, window->alpha, 255);
-                ey = intplGetValue(0, pos.y, window->y - ( window->width / EXT_LIT(float_2_8041a524, 2.0f) ), window->alpha, 255);
-                w = intplGetValue(0, EXT_LIT(float_10_8041a538, 10.0f), window->height, window->alpha, 255);
-                h = intplGetValue(0, EXT_LIT(float_10_8041a538, 10.0f), window->width, window->alpha, 255);
-                windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / EXT_LIT(float_2_8041a524, 2.0f) ), ey + ( h / EXT_LIT(float_2_8041a524, 2.0f) ), w, h, pos.x, pos.y);
+                ex = intplGetValue(0, pos.x, ( window->height / 2.0f ) + window->x, window->alpha, 255);
+                ey = intplGetValue(0, pos.y, window->y - ( window->width / 2.0f ), window->alpha, 255);
+                w = intplGetValue(0, 10.0f, window->height, window->alpha, 255);
+                h = intplGetValue(0, 10.0f, window->width, window->alpha, 255);
+                windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - ( w / 2.0f ), ey + ( h / 2.0f ), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
                     sy = 240 - ((( s32)window->y ) - 10);
                     if (sy < 0) { sy = 0;
@@ -1994,30 +1993,30 @@ void msgWindow_Disp(CameraId camId, void* param) {
             }
         } else {
             windowDispGX_Message(window->type, 0, window->alpha, window->x, window->y, window->height, window->width, 0.0f, 0.0f);
-            GXSetScissor(camera->scissor[0], ( EXT_LIT(float_240_8041a53c, 240.0f) - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], 0x7E);
-            ret = msgDisp(window->userdata, window->alpha, EXT_LIT(float_62_8041a544, 62.0f) + window->x, window->y - 36.0f);
+            GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], 0x7E);
+            ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         }
         break;
     case 2:
     case 4:
     case 10:
         windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->height, window->width);
-        GXSetScissor(camera->scissor[0], ( EXT_LIT(float_240_8041a53c, 240.0f) - (window->y - 36.0f) ) - 2.0f, camera->scissor[2], 0x68);
-        ret = msgDisp(window->userdata, window->alpha, EXT_LIT(float_62_8041a544, 62.0f) + window->x, window->y - 36.0f);
+        GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 2.0f, camera->scissor[2], 0x68);
+        ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
     case 7:
         windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->height, window->width);
-        GXSetScissor(camera->scissor[0], ( EXT_LIT(float_240_8041a53c, 240.0f) - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], 0x7E);
-        ret = msgDisp(window->userdata, window->alpha, EXT_LIT(float_62_8041a544, 62.0f) + window->x, window->y - 36.0f);
+        GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], 0x7E);
+        ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
     case 3:
         windowDispGX_System(window->type, window->alpha, window->x, window->y, window->height, window->width);
-        GXSetScissor(camera->scissor[0], ( EXT_LIT(float_240_8041a53c, 240.0f) - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], window->width - 50.0f);
-        ret = msgDisp(window->userdata, window->alpha, EXT_LIT(float_62_8041a544, 62.0f) + window->x, window->y - 36.0f);
+        GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], window->width - 50.0f);
+        ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
     case 11:
-        GXSetScissor(camera->scissor[0], ( EXT_LIT(float_240_8041a53c, 240.0f) - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], window->width - 50.0f);
-        ret = msgDisp(window->userdata, window->alpha, EXT_LIT(float_62_8041a544, 62.0f) + window->x, window->y - 36.0f);
+        GXSetScissor(camera->scissor[0], ( 240.0f - (window->y - 36.0f) ) - 8.0f, camera->scissor[2], window->width - 50.0f);
+        ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
     case 5:
         break;
@@ -2028,7 +2027,7 @@ void msgWindow_Disp(CameraId camId, void* param) {
         if (active == 0) { active = 1;
         }
         animPoseMain(msgw->poseId);
-        animPoseDraw(msgw->poseId, ( window->x + window->height ) - 52.0f, EXT_LIT(float_31_8041a564, 31.0f) + (window->y - window->width), EXT_LIT(float_0_8041a514, 0.0f), EXT_LIT(float_180_8041a568, 180.0f), EXT_LIT(float_5_8041a56c, 5.0f), 2);
+        animPoseDraw(msgw->poseId, ( window->x + window->height ) - 52.0f, 31.0f + (window->y - window->width), 0.0f, 180.0f, 5.0f, 2);
     }
 }
 
@@ -2107,7 +2106,7 @@ void selectWindow_Main(WindowEntry* window) {
     case 4:
         return;
     }
-    dispEntry(CAMERA_2D, EXT_LIT(float_400_8041a530, 400.0f) - window->priority, 0, selectWindow_Disp, window);
+    dispEntry(CAMERA_2D, 400.0f - window->priority, 0, selectWindow_Disp, window);
 }
 
 void selectWindow_Disp(CameraId camId, void* param) {
@@ -2115,13 +2114,13 @@ void selectWindow_Disp(CameraId camId, void* param) {
     MsgWinData* data = window->userdata->address;
     Vec pos;
 
-    GXSetFog(GX_FOG_NONE, EXT_LIT(float_0_8041a514, 0.0f), EXT_LIT(float_0_8041a514, 0.0f), EXT_LIT(float_0_8041a514, 0.0f), EXT_LIT(float_0_8041a514, 0.0f), (GXColor){0, 0, 0, 0});
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, window->alpha}, window->x, window->y, window->height, window->width, EXT_LIT(float_30_8041a518, 30.0f));
-    msgDisp(window->userdata, window->alpha, EXT_LIT(float_40_8041a51c, 40.0f) + window->x, window->y - 25.0f);
-    pos.x = EXT_LIT(float_2_8041a524, 2.0f) + window->x;
-    data->cursorY += EXT_LIT(float_0p3_8041a528, 0.3f) * (window->y - (f32)(data->sel * 31 + 58) - data->cursorY);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
+    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, window->alpha}, window->x, window->y, window->height, window->width, 30.0f);
+    msgDisp(window->userdata, window->alpha, 40.0f + window->x, window->y - 25.0f);
+    pos.x = 2.0f + window->x;
+    data->cursorY += 0.3f * (window->y - (f32)(data->sel * 31 + 58) - data->cursorY);
     pos.y = data->cursorY;
-    pos.z = EXT_LIT(float_0_8041a514, 0.0f);
-    iconDispGxAlpha(&pos, 0x14, ICON_1F0, window->alpha, EXT_LIT(float_1_8041a52c, 1.0f));
+    pos.z = 0.0f;
+    iconDispGxAlpha(&pos, 0x14, ICON_1F0, window->alpha, 1.0f);
 }
 

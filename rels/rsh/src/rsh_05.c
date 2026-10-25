@@ -46,8 +46,6 @@
 #include "evt/evt_npc.h"
 #include "data_tables.h"
 #include "driver/extdrv.h"
-#undef EXT_LIT
-#define EXT_LIT(sym, val) (val)
 // target .bss/.sbss pad (uninitialised objects are emitted in reverse order, so this sits last)
 
 typedef struct MoamoaPoseDef { char model[16]; char anim[8]; s16 loop; f32 speed; s32 start; s32 count; } MoamoaPoseDef;
