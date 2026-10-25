@@ -522,7 +522,14 @@ static inline f32 slitWalkSpeed(void) {
 
 #define SLITDIR(m) 	(m)->displayDirection = (revise360((m)->directionView - (m)->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
 
-#define SLITDIR2(m) 	if (revise360((m)->directionView - (m)->targetYaw) <= 180.0f) { 		m->mot.slit.side = 1; 		(m)->displayDirection = 260.0f; 	} else { 		m->mot.slit.side = 2; 		(m)->displayDirection = 280.0f; 	}
+#define SLITDIR2(m)                                                 \
+    if (revise360((m)->directionView - (m)->targetYaw) <= 180.0f) { \
+        m->mot.slit.side = 1;                                       \
+        (m)->displayDirection = 260.0f;                             \
+    } else {                                                        \
+        m->mot.slit.side = 2;                                       \
+        (m)->displayDirection = 280.0f;                             \
+    }
 
 #define CAMFIX(m) \
     { \

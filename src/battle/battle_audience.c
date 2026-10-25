@@ -70,7 +70,16 @@ typedef struct AudSound {
 
 #define AudSoundGetPtr(id) ((AudSound*)BattleAudienceSoundGetPtr(id))
 
-#define AUD_SOUND_START(sound, dur, fade)                                           if ((sound)->sfxId != -1) {                                                         (sound)->flags |= 1;                                                            (sound)->duration = (dur);                                                      (sound)->mFadeoutTime = (fade);                                                 (sound)->mBaseSfxVolume = (sound)->mCurrentBaseSfxVolume = psndSFX_get_vol((sound)->sfxId);         (sound)->mForceFadeLength = 0;                                                  (sound)->mForceFadeTimer = 0;                                                   (sound)->mVolumeMultiplier = 100;                                           }
+#define AUD_SOUND_START(sound, dur, fade)                                                           \
+    if ((sound)->sfxId != -1) {                                                                     \
+        (sound)->flags |= 1;                                                                        \
+        (sound)->duration = (dur);                                                                  \
+        (sound)->mFadeoutTime = (fade);                                                             \
+        (sound)->mBaseSfxVolume = (sound)->mCurrentBaseSfxVolume = psndSFX_get_vol((sound)->sfxId); \
+        (sound)->mForceFadeLength = 0;                                                              \
+        (sound)->mForceFadeTimer = 0;                                                               \
+        (sound)->mVolumeMultiplier = 100;                                                           \
+    }
 
 s32 psndSFXChk(s32 id);
 void psndSFX_vol(s32 id, s32 vol);

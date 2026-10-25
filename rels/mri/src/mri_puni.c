@@ -418,8 +418,28 @@ void _ymode_mri_09(PuniData* p) {
     }
 }
 
-#define YSTEPX(thr, base)                             if (p->pos.x <= (thr)) {                              f32 t = ((thr) - p->pos.x) / 20.0f;               f32 u;                                            if (t > 0.5f) {                                       u = (t - 0.5f) / 0.5f;                        } else {                                              u = 0.0f;                                     }                                                 p->pos.y = 10.0f * u + (base);                }
-#define YSTEPZ(thr, base)                             if (p->pos.x <= (thr)) {                              f32 t = ((thr) - p->pos.x) / 20.0f;               f32 u;                                            if (t > 0.5f) {                                       u = (t - 0.5f) / 0.5f;                        } else {                                              u = 0.0f;                                     }                                                 { f32 bz = (base); p->pos.y = 10.0f * u + bz; }                }
+#define YSTEPX(thr, base)                   \
+    if (p->pos.x <= (thr)) {                \
+        f32 t = ((thr) - p->pos.x) / 20.0f; \
+        f32 u;                              \
+        if (t > 0.5f) {                     \
+            u = (t - 0.5f) / 0.5f;          \
+        } else {                            \
+            u = 0.0f;                       \
+        }                                   \
+        p->pos.y = 10.0f * u + (base);      \
+    }
+#define YSTEPZ(thr, base)                               \
+    if (p->pos.x <= (thr)) {                            \
+        f32 t = ((thr) - p->pos.x) / 20.0f;             \
+        f32 u;                                          \
+        if (t > 0.5f) {                                 \
+            u = (t - 0.5f) / 0.5f;                      \
+        } else {                                        \
+            u = 0.0f;                                   \
+        }                                               \
+        { f32 bz = (base); p->pos.y = 10.0f * u + bz; } \
+    }
 
 void _ymode_mri_16_00(PuniData* p) {
     u32 old = p->flags2;
@@ -2180,7 +2200,12 @@ void puniModeParent(PuniData* p) {
     }
 }
 
-#define PSEARCH_POS(a, b)                                                      { s32 _pa = (b); s32 _pb = (a); switch (Punigp->mapKind) {                                                     case 0: break; case 1: puniMapdata_MRI_06_getpos(_pa, _pb, &tgx, &tgz); break;         case 2: puniMapdata_MRI_09_getpos(_pa, _pb, &tgx, &tgz); break;         case 3: puniMapdata_MRI_16_getpos(_pa, _pb, &tgx, &tgz); break;     } }
+#define PSEARCH_POS(a, b)                                                                  \
+    { s32 _pa = (b); s32 _pb = (a); switch (Punigp->mapKind) {                             \
+            case 0: break; case 1: puniMapdata_MRI_06_getpos(_pa, _pb, &tgx, &tgz); break; \
+            case 2: puniMapdata_MRI_09_getpos(_pa, _pb, &tgx, &tgz); break;                \
+            case 3: puniMapdata_MRI_16_getpos(_pa, _pb, &tgx, &tgz); break;                \
+        } }
 
 void puniModeSearch(PuniData* p) {
     static u16 takasa;
@@ -5137,7 +5162,25 @@ USER_FUNC(evt_puni_set_hamari) {
     return EVT_RETURN_DONE;
 }
 
-#define puniMapDataSetI(w_, h_, src_, x_, z_)     do {         s32 w = (w_);         s32 h = (h_);                  Punimap->x = (x_);         Punimap->z = (z_);         if ((src_) == NULL) {             Punimap->enabled = 0;         } else {             Punimap->width = w;             Punimap->height = h;             Punimap->enabled = 1;             Punimap->src = (src_);             Punimap->inRange = 0;             Punimap->size = h * (w * 4);             Punimap->data = _mapAlloc(Punimap->size);             memcpy(Punimap->src, (src_), Punimap->size);         }     } while (0)
+#define puniMapDataSetI(w_, h_, src_, x_, z_)            \
+    do {                                                 \
+        s32 w = (w_);                                    \
+        s32 h = (h_);                                    \
+        Punimap->x = (x_);                               \
+        Punimap->z = (z_);                               \
+        if ((src_) == NULL) {                            \
+            Punimap->enabled = 0;                        \
+        } else {                                         \
+            Punimap->width = w;                          \
+            Punimap->height = h;                         \
+            Punimap->enabled = 1;                        \
+            Punimap->src = (src_);                       \
+            Punimap->inRange = 0;                        \
+            Punimap->size = h * (w * 4);                 \
+            Punimap->data = _mapAlloc(Punimap->size);    \
+            memcpy(Punimap->src, (src_), Punimap->size); \
+        }                                                \
+    } while (0)
 
 USER_FUNC(evt_puni_set_maze) {
     switch (Punigp->mapKind) {
@@ -6548,7 +6591,11 @@ const char* npcGetTribeName(const char** name) {
     return *name;
 }
 
-#define PIDERS_Y(n)                                           if (50.0 >= __fabs(v.y - Punigp->posY[n])) {                  found = TRUE;                                              v.y = Punigp->posY[n];                                 }
+#define PIDERS_Y(n)                              \
+    if (50.0 >= __fabs(v.y - Punigp->posY[n])) { \
+        found = TRUE;                            \
+        v.y = Punigp->posY[n];                   \
+    }
 
 static const Vec puni_fall_dir;
 s32 puni_piders_check_func(EventEntry *event, BOOL isFirstCall)

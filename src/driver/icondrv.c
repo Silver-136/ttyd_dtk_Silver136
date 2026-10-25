@@ -859,6 +859,8 @@ s32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color) {
 }
 
 s32 iconNumberDispGx3D(Mtx mtx, s32 number, BOOL small, GXColor color) {
+    // One element short: digits[4] below writes past the array (the retail code has the same 16-byte
+    // array; a fifth element changes the stack offsets).
     s32 digits[4];
     Mtx m;
     s32 n;

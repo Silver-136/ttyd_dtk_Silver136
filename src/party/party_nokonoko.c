@@ -211,7 +211,15 @@ static inline void noko_star(PartyEntry* party, s32 n) {
     effSmallStarN64Entry(3, n, party->position.x, party->position.y + party->height, party->position.z, s, EXT_LIT(float_neg1_8041b520, -1.0f), -c);
 }
 
-#define NOKO_ITEM(party, body)                                                                              if (party->work.nokonoko.heldItem == NULL) {                                                                                  party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z,                                                   0.5f * party->width + 12.0f);                                    if (party->work.nokonoko.heldItem != NULL) {                                                                                  itemPickUp(party->work.nokonoko.heldItem);                                                                 body                                                                                                  }                                                                                                     }
+#define NOKO_ITEM(party, body)                                                                                     \
+    if (party->work.nokonoko.heldItem == NULL) {                                                                   \
+        party->work.nokonoko.heldItem = itemNearDistCheck(party->position.x, party->position.y, party->position.z, \
+        0.5f * party->width + 12.0f);                                                                              \
+        if (party->work.nokonoko.heldItem != NULL) {                                                               \
+            itemPickUp(party->work.nokonoko.heldItem);                                                             \
+            body                                                                                                   \
+        }                                                                                                          \
+    }
 void nokonoko_use(PartyEntry* party);
 void nokonoko_use(PartyEntry* party) {
     Vec out;

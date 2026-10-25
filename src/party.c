@@ -1479,8 +1479,39 @@ static inline void partyPaperOff_inl(PartyEntry* party) {
 // US partyDokanInit repeats the paper/pose setup in every case. The flag and pose name share one
 // register across all cases there, which these macros reproduce with function-level locals
 // (same behaviour as partyPaperOn_inl + partyChgPoseId_inl(party, 0)).
-#define DOKAN_POSE()                                                                                        if (!(party->flags2 & 2)) {                                                                                 partyIsPinch(party);                                                                                    if (!(party->flags2 & 0x8000)) {                                                                            v6 = partyPoseTbl[party->currentMemberId][0];                                                       } else if (party->currentMemberId != PARTY_MEMBER_YOSHI) {                                                  v6 = partyDotPoseTbl[party->currentMemberId][0];                                                    } else {                                                                                                    v6 = yoshiDotPoseTbl[pouchGetPartyColor(PARTNER_YOSHI)][0];                                         }                                                                                                       if (!party->animName || strcmp(party->animName, v6)) {                                                      party->animName = v6;                                                                                   party->poseTime = 0;                                                                                    party->trigFlags |= 0x2000u;                                                                          }                                                                                                   }
-#define DOKAN_PAPER_ON(grp)                                                                                 if (party->paperPoseId >= 0) {                                                                              animPaperPoseRelease(party->paperPoseId);                                                               party->paperPoseId = -1;                                                                            }                                                                                                       party->flags2 |= 0x4000000;                                                                             party->paperPoseId = animPaperPoseEntry(grp, 2);                                                        v5 = FALSE;                                                                                             if (!strcmp(grp, "p_roll") || !strcmp(grp, "p_plane") || !strcmp(grp, "p_dokan_x") ||                     !strcmp(grp, "p_dokan_y")) {                                                                            v5 = TRUE;                                                                                          }                                                                                                       v5 = !v5;                                                                                               if (!strcmp(grp, "p_slit")) {                                                                               v5 = party->currentMemberId == PARTY_MEMBER_FLURRIE;                                                }                                                                                                       animPoseSetPaperAnimGroup(party->paperAnimGroup, grp, v5);
+#define DOKAN_POSE()                                                    \
+    if (!(party->flags2 & 2)) {                                         \
+        partyIsPinch(party);                                            \
+        if (!(party->flags2 & 0x8000)) {                                \
+            v6 = partyPoseTbl[party->currentMemberId][0];               \
+        } else if (party->currentMemberId != PARTY_MEMBER_YOSHI) {      \
+            v6 = partyDotPoseTbl[party->currentMemberId][0];            \
+        } else {                                                        \
+            v6 = yoshiDotPoseTbl[pouchGetPartyColor(PARTNER_YOSHI)][0]; \
+        }                                                               \
+        if (!party->animName || strcmp(party->animName, v6)) {          \
+            party->animName = v6;                                       \
+            party->poseTime = 0;                                        \
+            party->trigFlags |= 0x2000u;                                \
+        }                                                               \
+    }
+#define DOKAN_PAPER_ON(grp)                                                               \
+    if (party->paperPoseId >= 0) {                                                        \
+        animPaperPoseRelease(party->paperPoseId);                                         \
+        party->paperPoseId = -1;                                                          \
+    }                                                                                     \
+    party->flags2 |= 0x4000000;                                                           \
+    party->paperPoseId = animPaperPoseEntry(grp, 2);                                      \
+    v5 = FALSE;                                                                           \
+    if (!strcmp(grp, "p_roll") || !strcmp(grp, "p_plane") || !strcmp(grp, "p_dokan_x") || \
+    !strcmp(grp, "p_dokan_y")) {                                                          \
+        v5 = TRUE;                                                                        \
+    }                                                                                     \
+    v5 = !v5;                                                                             \
+    if (!strcmp(grp, "p_slit")) {                                                         \
+        v5 = party->currentMemberId == PARTY_MEMBER_FLURRIE;                              \
+    }                                                                                     \
+    animPoseSetPaperAnimGroup(party->paperAnimGroup, grp, v5);
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     BOOL v5;

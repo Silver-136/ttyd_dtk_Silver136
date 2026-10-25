@@ -624,7 +624,15 @@ void npcMoveG(NpcEntry* npc);
 BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 s32 vivianGetStatus(void);
-#define NPC_CHKMARIO(ok) do {     m = marioGetPtr();     if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) { ok = 0; break; }     if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { ok = 0; break; }     if (gp->mapEventId != 0) { ok = 0; break; }     if (seqGetSeq() != 2) { ok = 0; break; }     if (m->currMotionId == MARIO_MOTION_SHIP) { ok = 0; break; }     if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok = 0; } else { ok = 1; } } while (0)
+#define NPC_CHKMARIO(ok)                                                              \
+    do {                                                                              \
+        m = marioGetPtr();                                                            \
+        if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) { ok = 0; break; } \
+        if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) { ok = 0; break; } \
+        if (gp->mapEventId != 0) { ok = 0; break; }                                   \
+        if (seqGetSeq() != 2) { ok = 0; break; }                                      \
+        if (m->currMotionId == MARIO_MOTION_SHIP) { ok = 0; break; }                  \
+        if (vivianGetStatus() != 0 && vivianGetStatus() != 1) { ok = 0; } else { ok = 1; } } while (0)
 void shadowSetCollision(s32 shadow, s32 val);
 s32 shadowEntry(f32 x, f32 y, f32 z, f32 size);
 void animPoseVivianMain(s32 poseId, Vec* pos);
@@ -2385,7 +2393,15 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if ((*(u32*)&((NpcEntry*)npc)->jumpFlags) & 4) continue;                                           \
     if (npc->flags & 0x08000000) continue;
 
-#define FH_NPC_FILTER2(f1000, bit)                                                        if (npc == NULL) continue;                                                           if (!(npc->flags & 2)) continue;                                                     if (f1000) { if (!(npc->flags & 8)) continue; } else { if (npc->flags & 8) continue; }     if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & (bit))) continue;                                  if (npc->flags & 0x20000000) continue;                                               if (npc->flags & 0x20) continue;                                                     if (npc->flags & 0x08000000) continue;                                               if ((*(u32*)&((NpcEntry*)npc)->jumpFlags) & 4) continue;
+#define FH_NPC_FILTER2(f1000, bit)                                                         \
+    if (npc == NULL) continue;                                                             \
+    if (!(npc->flags & 2)) continue;                                                       \
+    if (f1000) { if (!(npc->flags & 8)) continue; } else { if (npc->flags & 8) continue; } \
+    if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & (bit))) continue;            \
+    if (npc->flags & 0x20000000) continue;                                                 \
+    if (npc->flags & 0x20) continue;                                                       \
+    if (npc->flags & 0x08000000) continue;                                                 \
+    if ((*(u32*)&((NpcEntry*)npc)->jumpFlags) & 4) continue;
 
 typedef struct { s32 v[11]; } SinTbl;
 static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};

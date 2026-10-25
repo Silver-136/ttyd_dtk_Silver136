@@ -95,7 +95,26 @@ void marioUpdateCamCollision(Vec collision) {
     mario->dispFlags |= 0x40000;
 }
 
-#define UPDATE_CAM_SHIFT(cur, target, rate)     {                                               f32 c_ = cur;                               f32 t_ = target;                            f32 r_ = rate;                              f32 d_;                                     if (c_ > t_) {                                  d_ = r_ * ((t_ - 1.0f) - c_);               cur = c_ + d_;                              if (cur < target) {                             cur = target;                           }                                       } else if (c_ < t_) {                           d_ = r_ * ((1.0f + t_) - c_);               cur = c_ + d_;                              if (cur > target) {                             cur = target;                           }                                       }                                       }
+#define UPDATE_CAM_SHIFT(cur, target, rate) \
+    {                                       \
+        f32 c_ = cur;                       \
+        f32 t_ = target;                    \
+        f32 r_ = rate;                      \
+        f32 d_;                             \
+        if (c_ > t_) {                      \
+            d_ = r_ * ((t_ - 1.0f) - c_);   \
+            cur = c_ + d_;                  \
+            if (cur < target) {             \
+                cur = target;               \
+            }                               \
+        } else if (c_ < t_) {               \
+            d_ = r_ * ((1.0f + t_) - c_);   \
+            cur = c_ + d_;                  \
+            if (cur > target) {             \
+                cur = target;               \
+            }                               \
+        }                                   \
+    }
 
 void marioUpdateCam(void) {
     MarioWork* mario = marioGetPtr();

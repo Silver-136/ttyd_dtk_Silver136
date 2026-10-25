@@ -6549,8 +6549,39 @@ void psndENV_stop(u32 id) {
     }
 }
 
-#define ENVVOL(e, p, out) 	{ 		PaperSoundFade* f = NULL; 		s16 v; 		if ((p)->envId[0] == (e)->id) f = &(p)->fade[0]; 		if ((p)->envId[1] == (e)->id) f = &(p)->fade[1]; 		if (f == NULL) out = (e)->volume * (p)->envVolume / 100; 		else { 			if (f->dipState == 0) v = 0x7f; else v = f->dipTime * 0x7f / f->dipTimeMax; 			if (f->state == 0) out = (p)->envVolume * ((e)->volume * v / 127) / 100; 			else { 				{ s16 w = f->timeMax * ((e)->volume * v / 127) / f->time; out = w * (p)->envVolume / 100; } 			} 		} 	}
-#define ENVDONE(e) 	{ 		(e)->sfx = -1; 		(e)->state = 0; 		(e)->timer = 0; 		switch ((e)->type) { 		case 0: (e)->timer = (e)->interval * PSND_FPS; (e)->timer += irand((e)->intervalRand) * PSND_FPS; break; case 2: (e)->timer = (e)->interval * PSND_FPS; (e)->timer += irand((e)->intervalRand) * PSND_FPS; break; case 3: break; 		} 	}
+#define ENVVOL(e, p, out)                                                                                   \
+    {                                                                                                       \
+        PaperSoundFade* f = NULL;                                                                           \
+        s16 v;                                                                                              \
+        if ((p)->envId[0] == (e)->id) f = &(p)->fade[0];                                                    \
+        if ((p)->envId[1] == (e)->id) f = &(p)->fade[1];                                                    \
+        if (f == NULL) out = (e)->volume * (p)->envVolume / 100;                                            \
+        else {                                                                                              \
+            if (f->dipState == 0) v = 0x7f; else v = f->dipTime * 0x7f / f->dipTimeMax;                     \
+            if (f->state == 0) out = (p)->envVolume * ((e)->volume * v / 127) / 100;                        \
+            else {                                                                                          \
+                { s16 w = f->timeMax * ((e)->volume * v / 127) / f->time; out = w * (p)->envVolume / 100; } \
+            }                                                                                               \
+        }                                                                                                   \
+    }
+#define ENVDONE(e)                                                                                                   \
+    {                                                                                                                \
+        (e)->sfx = -1;                                                                                               \
+        (e)->state = 0;                                                                                              \
+        (e)->timer = 0;                                                                                              \
+        switch ((e)->type) {                                                                                         \
+            case 0:                                                                                                  \
+                (e)->timer = (e)->interval * PSND_FPS;                                                               \
+                (e)->timer += irand((e)->intervalRand) * PSND_FPS;                                                   \
+                break;                                                                                               \
+            case 2:                                                                                                  \
+                (e)->timer = (e)->interval * PSND_FPS;                                                               \
+                (e)->timer += irand((e)->intervalRand) * PSND_FPS;                                                   \
+                break;                                                                                               \
+            case 3:                                                                                                  \
+                break;                                                                                               \
+        }                                                                                                            \
+    }
 void psndENVMain(void) {
     char* B = (char*)_buf;
     char* base = B;
@@ -6646,7 +6677,44 @@ void psndENVMain(void) {
             break;
         }
     }
-#define ENVAPPLY { u8 vol; u16 lpf; ENVVOL(e, &psnd, vol) { s32 id = *(s32*)&e->sfx; PaperSoundEffect* sfx; if (id != 0xFFFFFFFF) { sfx = &pssfx[id & 0xFF]; if (sfx->listId != 0xFFFFFFFF) { sfx->volume = vol; } } } lpf = 0; if (psnd.envId[0] == e->id) lpf = psnd.envLpf[0]; if (psnd.envId[1] == e->id) lpf = psnd.envLpf[1]; { s32 id = e->sfx; PaperSoundEffect* sfx; if (id != 0xFFFFFFFF) { sfx = &pssfx[id & 0xFF]; if (sfx->listId != 0xFFFFFFFF) { SoundEffectEntry* entry = &pssfxlist[sfx->listId & PSND_SFX_INDEX_MASK]; sfx->lpf = lpf; { if (sfx->flags & 1) { } else if (!(entry->fxId & 0x80000000)) { if (!(entry->fxId & 0x80000000)) { SoundEfxSetLPF(sfx->channel, (s16)lpf); } } } } } } }
+#define ENVAPPLY                                                                             \
+    {                                                                                        \
+        u8 vol;                                                                              \
+        u16 lpf;                                                                             \
+        ENVVOL(e, &psnd, vol)                                                                \
+        {                                                                                    \
+            s32 id = *(s32*)&e->sfx;                                                         \
+            PaperSoundEffect* sfx;                                                           \
+            if (id != 0xFFFFFFFF) {                                                          \
+                sfx = &pssfx[id & 0xFF];                                                     \
+                if (sfx->listId != 0xFFFFFFFF) {                                             \
+                    sfx->volume = vol;                                                       \
+                }                                                                            \
+            }                                                                                \
+        }                                                                                    \
+        lpf = 0;                                                                             \
+        if (psnd.envId[0] == e->id) lpf = psnd.envLpf[0];                                    \
+        if (psnd.envId[1] == e->id) lpf = psnd.envLpf[1];                                    \
+        {                                                                                    \
+            s32 id = e->sfx;                                                                 \
+            PaperSoundEffect* sfx;                                                           \
+            if (id != 0xFFFFFFFF) {                                                          \
+                sfx = &pssfx[id & 0xFF];                                                     \
+                if (sfx->listId != 0xFFFFFFFF) {                                             \
+                    SoundEffectEntry* entry = &pssfxlist[sfx->listId & PSND_SFX_INDEX_MASK]; \
+                    sfx->lpf = lpf;                                                          \
+                    {                                                                        \
+                        if (sfx->flags & 1) {                                                \
+                        } else if (!(entry->fxId & 0x80000000)) {                            \
+                            if (!(entry->fxId & 0x80000000)) {                               \
+                                SoundEfxSetLPF(sfx->channel, (s16)lpf);                      \
+                            }                                                                \
+                        }                                                                    \
+                    }                                                                        \
+                }                                                                            \
+            }                                                                                \
+        }                                                                                    \
+    }
     for (i = 0; i < 16; i++) {
 #define e ent
         ent = &psenv[i];

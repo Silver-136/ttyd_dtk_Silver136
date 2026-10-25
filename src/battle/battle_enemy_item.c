@@ -17,7 +17,20 @@ void* _check_hp_recover_item(BattleUnit* self);
 
 
 
-#define SETUP()                                                                            BattleWork* wp;                                                                        s32 itemId;                                                                            BattleWorkWeaponTargets* targets;                                                      BattleWeapon* weapon;                                                                  s32 i;                                                                                 BattleUnit* unit;                                                                      itemId = self->heldItem;                                                               wp = _battleWorkPointer;                                                               targets = &wp->weaponTargets;                                                          weapon = itemDataTable[itemId].battle_params;                                          BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),                           weapon->targetClassFlags, weapon->targetPropertyFlags,                                 (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
+#define SETUP()                                                                      \
+    BattleWork* wp;                                                                  \
+    s32 itemId;                                                                      \
+    BattleWorkWeaponTargets* targets;                                                \
+    BattleWeapon* weapon;                                                            \
+    s32 i;                                                                           \
+    BattleUnit* unit;                                                                \
+    itemId = self->heldItem;                                                         \
+    wp = _battleWorkPointer;                                                         \
+    targets = &wp->weaponTargets;                                                    \
+    weapon = itemDataTable[itemId].battle_params;                                    \
+    BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self), \
+    weapon->targetClassFlags, weapon->targetPropertyFlags,                           \
+    (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
 
 #define GETUNIT() unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx)
 #define RET() return itemDataTable[itemId].battle_params->mAttackEvtScript

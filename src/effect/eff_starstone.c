@@ -305,7 +305,12 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
 #define POS_ID
 #define NEG -
 
-#define LOOP2(w, tbl, sz, n)                                           for (i = 0; i < n##U; i++) {                                              if ((w->flags & 1) || i != 0) {                                        GXCallDisplayList(tbl[i], sz[i] << 5);                         }                                                              }
+#define LOOP2(w, tbl, sz, n)                       \
+    for (i = 0; i < n##U; i++) {                   \
+        if ((w->flags & 1) || i != 0) {            \
+            GXCallDisplayList(tbl[i], sz[i] << 5); \
+        }                                          \
+    }
 
 #define LOOP2V(i1, w, tbl, sz, n) { for (i1 = 0; i1 < n; i1++) { if ((w->flags & 1) || (s32)i1 != 0) { GXCallDisplayList(tbl[i1], sz[i1] << 5); } } }
 #define LOOP2X(i1, w, tbl, sz, n) dq = tbl; sq = sz; for (i1 = 0; i1 < n##U; i1++, sq++, dq++) { if ((w->flags & 1) || i1 != 0) { GXCallDisplayList(*dq, *sq << 5); } }

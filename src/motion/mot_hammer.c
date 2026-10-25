@@ -52,7 +52,15 @@ inline BOOL chkRevDir(f32 angle) {
     return ret;
 }
 
-#define HAM_DIR(mario, dst)                                         	{                                                               		f32 a = mario->displayDirection;                                          		MarioWork* p = marioGetPtr(); f32 r;                         		f32 off = 0.0f;                                             		if (p->dispFlags & 0x80000000) {                            			off = chkRevDir(p->displayDirection) ? 30.0f : -30.0f;            		} if (a >= 90.0f && a <= 270.0f) { r = revise360(180.0f + off); } else { r = revise360(off); } dst = r;                                                           	}
+#define HAM_DIR(mario, dst)                                                                                     \
+    {                                                                                                           \
+        f32 a = mario->displayDirection;                                                                        \
+        MarioWork* p = marioGetPtr(); f32 r;                                                                    \
+        f32 off = 0.0f;                                                                                         \
+        if (p->dispFlags & 0x80000000) {                                                                        \
+            off = chkRevDir(p->displayDirection) ? 30.0f : -30.0f;                                              \
+        } if (a >= 90.0f && a <= 270.0f) { r = revise360(180.0f + off); } else { r = revise360(off); } dst = r; \
+    }
 
 static inline s32 hamLv(void) {
     return pouchGetHammerLv();
