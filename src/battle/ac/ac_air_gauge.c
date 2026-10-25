@@ -25,14 +25,6 @@ typedef struct AirGaugeWork {
 } AirGaugeWork;
 
 // static data from inlined header functions
-__declspec(section ".data") f32 air_lbl_0[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 air_negone_one_374[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 air_lbl_1[] = {1.0f, -1.0f};
-__declspec(section ".data") f32 air_one_negone_373[] = {1.0f, -1.0f};
-__declspec(section ".data") f32 air_lbl_2[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 air_negone_one_360[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 air_lbl_3[] = {1.0f, -1.0f};
-__declspec(section ".data") f32 air_one_negone_359[] = {1.0f, -1.0f};
 
 typedef struct GaugeKey {
     s32 frame;

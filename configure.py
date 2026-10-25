@@ -2094,7 +2094,7 @@ config.libs = [
 ]
 
 # main.dol game units built with msl_main.pch (being moved over unit by unit)
-MAIN_PCH = {"driver/shadowdrv.c", "driver/envdrv.c"}
+MAIN_PCH = {"battle/ac/ac_air_gauge.c", "battle/battle_audience.c", "battle/battle_break_slot.c", "battle/battle_seq.c", "battle/battle_seq_end.c", "battle/battle_stage_object.c", "driver/envdrv.c", "driver/mobjdrv.c", "driver/shadowdrv.c", "effect/eff_fall.c", "effect/eff_fukidashi.c", "effect/eff_funemizu.c", "effect/eff_ibuki.c", "effect/eff_nozle.c", "effect/eff_starstone.c", "effect/eff_toiki.c", "effect/eff_ultra_hammer.c", "effect/n64/eff_booboo_n64.c", "effect/n64/eff_fireflower_n64.c", "effect/n64/eff_flame_n64.c", "effect/n64/eff_hokori_n64.c", "effect/n64/eff_kumokumo_n64.c", "effect/n64/eff_opuku_jetw_n64.c", "effect/n64/eff_pokopi_pcharge_n64.c", "effect/n64/eff_pturn_n64.c", "effect/n64/eff_recover_heart_n64.c", "effect/n64/eff_release_n64.c", "effect/n64/eff_snow_dust_n64.c", "effect/n64/eff_water_damage_n64.c", "event/evt_mobj.c", "unit/party/unit_party_christine.c", "unit/party/unit_party_chuchurina.c", "unit/party/unit_party_clauda.c", "unit/party/unit_party_nokotarou.c", "unit/party/unit_party_sanders.c", "unit/party/unit_party_vivian.c", "unit/party/unit_party_yoshi.c"}
 for lib in config.libs:
     for obj in lib.get("objects", []):
         if obj.name in MAIN_PCH:

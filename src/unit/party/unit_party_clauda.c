@@ -65,14 +65,6 @@ static USER_FUNC(_clauda_breath_effect_ready);
 USER_FUNC(_check_blow_rate);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
-f32 unit_party_clauda_negone_one_a[2] __attribute__((aligned(8)));
-f32 fd_clauda_negone_one_374[2] __attribute__((aligned(8)));
-f32 unit_party_clauda_one_negone_a[2] __attribute__((aligned(8)));
-f32 fd_clauda_one_negone_373[2] __attribute__((aligned(8)));
-f32 unit_party_clauda_negone_one_b[2] __attribute__((aligned(8)));
-f32 fd_clauda_negone_one_360[2] __attribute__((aligned(8)));
-f32 unit_party_clauda_one_negone_b[2] __attribute__((aligned(8)));
-f32 fd_clauda_one_negone_359[2] __attribute__((aligned(8)));
 BattleWeapon partyWeapon_ClaudaNormalAttack;
 BattleWeapon partyWeapon_ClaudaBreathAttack;
 BattleWeapon partyWeapon_ClaudaPredationAttack;
@@ -108,21 +100,13 @@ static EvtWord party_win_reaction[11];
 
 
 
-__declspec(section ".data") f32 unit_party_clauda_negone_one_a[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 fd_clauda_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 unit_party_clauda_one_negone_a[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 fd_clauda_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 unit_party_clauda_negone_one_b[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 fd_clauda_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 unit_party_clauda_one_negone_b[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 fd_clauda_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
 BattleWeapon partyWeapon_ClaudaNormalAttack = {
     "btl_wn_pwd_normal", // name

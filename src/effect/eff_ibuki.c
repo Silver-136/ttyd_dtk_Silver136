@@ -29,14 +29,6 @@ typedef struct EffIbukiWork {
     s32 delay;     // 0x50
 } EffIbukiWork;
 
-__declspec(section ".data") f32 ibuki_negone_one_a[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 fd_eff_ibuki_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 ibuki_one_negone_a[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 fd_eff_ibuki_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 ibuki_negone_one_b[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 fd_eff_ibuki_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 ibuki_one_negone_b[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 fd_eff_ibuki_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
 static s16 ibuki_vertex_tbl[] __attribute__((aligned(32))) = { 0, 0, 0, 3840, 0, 0, 7679, 0, 0, 17919, 0, 0, 21760, 0, 0, 0, 1280, 0, 3840, 1280, 0, 7679, 1280, 0, 17919, 1280, 0, 21760, 1280, 0, 0, 2560, 0, 3840, 3840, 0, 7679, 5120, 0, 17919, 8960, 0, 21760, 10240, 0, 0, 0, 0 };
 static s16 ibuki_texcoord0_tbl[] __attribute__((aligned(32))) = { 0, 8192, 2891, 11468, 2891, 16384, 0, 16384, 5782, 13107, 5782, 16384, 13492, 14336, 13492, 16384, 16384, 14336, 16384, 16384, 0, 0, 2891, 0, 5782, 0, 13492, 0, 16384, 0};

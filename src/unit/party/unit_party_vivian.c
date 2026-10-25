@@ -80,14 +80,6 @@ USER_FUNC(_get_move_frame);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 USER_FUNC(battle_evt_majo_disp_off);
 
-f32 unit_party_vivian_negone_one_a[2] __attribute__((aligned(8)));
-static f32 negone_one$374[2] __attribute__((aligned(8)));
-f32 unit_party_vivian_one_negone_a[2] __attribute__((aligned(8)));
-static f32 one_negone$373[2] __attribute__((aligned(8)));
-f32 unit_party_vivian_negone_one_b[2] __attribute__((aligned(8)));
-static f32 negone_one$360[2] __attribute__((aligned(8)));
-f32 unit_party_vivian_one_negone_b[2] __attribute__((aligned(8)));
-static f32 one_negone$359[2] __attribute__((aligned(8)));
 PoseTableEntry pose_table_vivian_stay[24];
 static BattleDataEntry data_table[20];
 BattleUnitKindPart unitpartsdata_Party_Vivian[1];
@@ -129,21 +121,13 @@ static EvtWord attack_audience_event[189];
 
 
 
-__declspec(section ".data") f32 unit_party_vivian_negone_one_a[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") static f32 negone_one$374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 unit_party_vivian_one_negone_a[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") static f32 one_negone$373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 unit_party_vivian_negone_one_b[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") static f32 negone_one$360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 unit_party_vivian_one_negone_b[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") static f32 one_negone$359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
 PoseTableEntry pose_table_vivian_stay[] = {
     {9, "PTR_D_4"},

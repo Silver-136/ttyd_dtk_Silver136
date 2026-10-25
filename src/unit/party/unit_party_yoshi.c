@@ -128,14 +128,6 @@ USER_FUNC(_get_nomikomi_hit_position);
 USER_FUNC(btl_yoshi_yoroyoro_jump_move);
 USER_FUNC(btl_yoshi_yoroyoro_jump_calc_param);
 
-f32 unit_party_yoshi_negone_one_a[2] __attribute__((aligned(8)));
-f32 fd_yoshi_negone_one_374[2] __attribute__((aligned(8)));
-f32 unit_party_yoshi_one_negone_a[2] __attribute__((aligned(8)));
-f32 fd_yoshi_one_negone_373[2] __attribute__((aligned(8)));
-f32 unit_party_yoshi_negone_one_b[2] __attribute__((aligned(8)));
-f32 fd_yoshi_negone_one_360[2] __attribute__((aligned(8)));
-f32 unit_party_yoshi_one_negone_b[2] __attribute__((aligned(8)));
-f32 fd_yoshi_one_negone_359[2] __attribute__((aligned(8)));
 PoseTableEntry pose_table_yoshi_stay[25];
 static BattleDataEntry data_table[8];
 static BattleUnitDefense defence;
@@ -171,21 +163,13 @@ static EvtWord wait_event[6];
 u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
 
 
-__declspec(section ".data") f32 unit_party_yoshi_negone_one_a[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 fd_yoshi_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 unit_party_yoshi_one_negone_a[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 fd_yoshi_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 unit_party_yoshi_negone_one_b[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 fd_yoshi_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 unit_party_yoshi_one_negone_b[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 fd_yoshi_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
 PoseTableEntry pose_table_yoshi_stay[] = {
     {9, "PYS_D_5"},

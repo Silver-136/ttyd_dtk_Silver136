@@ -46,14 +46,6 @@ USER_FUNC(btlevtcmd_RecoverFp);
 USER_FUNC(btlevtcmd_RecoverHp);
 USER_FUNC(evt_eff);
 
-__declspec(section ".data") f32 battle_break_slot_negone_one_a[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 fd_battle_break_slot_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 battle_break_slot_one_negone_a[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 fd_battle_break_slot_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 battle_break_slot_negone_one_b[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 fd_battle_break_slot_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 battle_break_slot_one_negone_b[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 fd_battle_break_slot_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
 EVT_BEGIN(kinoko_effect)
     CALL(btlevtcmd_GetUnitId, -3, LW(3))

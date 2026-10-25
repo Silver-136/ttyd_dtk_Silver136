@@ -141,21 +141,13 @@ static inline MapObjectEntry* MOBJ_PTR2(EventEntry* event, const char* name) {
     return !strcmp(name, "me") ? event->thisMapObj : mobjNameToPtr(name);
 }
 
-__declspec(section ".data") f32 fd_evt_mobj_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 evt_mobj_negone_one_a[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 fd_evt_mobj_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 evt_mobj_one_negone_a[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 fd_evt_mobj_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 evt_mobj_negone_one_b[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
-__declspec(section ".data") f32 fd_evt_mobj_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
-__declspec(section ".data") f32 evt_mobj_one_negone_b[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
 static EVT_BEGIN(evt_shake)
     CALL(evt_cam_shake, 4, 4064967296, 4064967306, 200)

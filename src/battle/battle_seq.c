@@ -105,30 +105,6 @@ void btlseqTurn(BattleWork* wp);
 void btlseqEnd(BattleWork* wp);
 
 // static data from an inlined header function (see unit_party_sanders.c)
-__declspec(section ".data") f32 battle_seq_negone_one_a[] = {
-	-1.0f, 1.0f,
-};
-static __declspec(section ".data") f32 seq_negone_one_374[] = {
-	-1.0f, 1.0f,
-};
-__declspec(section ".data") f32 battle_seq_one_negone_a[] = {
-	1.0f, -1.0f,
-};
-static __declspec(section ".data") f32 seq_one_negone_373[] = {
-	1.0f, -1.0f,
-};
-__declspec(section ".data") f32 battle_seq_negone_one_b[] = {
-	-1.0f, 1.0f,
-};
-static __declspec(section ".data") f32 seq_negone_one_360[] = {
-	-1.0f, 1.0f,
-};
-__declspec(section ".data") f32 battle_seq_one_negone_b[] = {
-	1.0f, -1.0f,
-};
-static __declspec(section ".data") f32 seq_one_negone_359[] = {
-	1.0f, -1.0f,
-};
 
 const BattleWeapon N_weapon_lucky_start = {
     NULL, 0, // name..icon

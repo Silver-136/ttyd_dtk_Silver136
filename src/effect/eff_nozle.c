@@ -31,14 +31,6 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect);
 
 
 
-__declspec(section ".data") f32 eff_nozle_negone_one_a[] = {-1.0f, 1.0f};
-static __declspec(section ".data") f32 negone_one_374[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 eff_nozle_one_negone_a[] = {1.0f, -1.0f};
-static __declspec(section ".data") f32 one_negone_373[] = {1.0f, -1.0f};
-__declspec(section ".data") f32 eff_nozle_negone_one_b[] = {-1.0f, 1.0f};
-static __declspec(section ".data") f32 negone_one_360[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 eff_nozle_one_negone_b[] = {1.0f, -1.0f};
-static __declspec(section ".data") f32 one_negone_359[] = {1.0f, -1.0f};
 static s16 nozle_1_vertex_tbl[] __attribute__((aligned(32))) = {
     -796, 0, 0, 796, 0, 0,
     -1741, 2132, 0, 1741, 2132, 0,

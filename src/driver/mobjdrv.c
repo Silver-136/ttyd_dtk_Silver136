@@ -41,14 +41,6 @@ CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
 CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
 
 // static data from inlined header functions
-__declspec(section ".data") f32 fd_mobjdrv_negone_one_374[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 mobjdrv_negone_one_a[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 fd_mobjdrv_one_negone_373[] = {1.0f, -1.0f};
-__declspec(section ".data") f32 mobjdrv_one_negone_a[] = {1.0f, -1.0f};
-__declspec(section ".data") f32 fd_mobjdrv_negone_one_360[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 mobjdrv_negone_one_b[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 fd_mobjdrv_one_negone_359[] = {1.0f, -1.0f};
-__declspec(section ".data") f32 mobjdrv_one_negone_b[] = {1.0f, -1.0f};
 
 typedef struct CubeVtxData34 { s32 count; Vec v[34]; } CubeVtxData34;
 typedef struct CubeVtxData18 { s32 count; Vec v[18]; } CubeVtxData18;

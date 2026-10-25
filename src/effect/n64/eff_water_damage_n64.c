@@ -30,14 +30,6 @@ typedef struct EffWaterDamageN64Work {
 } EffWaterDamageN64Work;
 
 #ifdef __MWERKS__
-static __declspec(section ".data") f32 negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 eff_water_damage_n64_negone_one_a[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-static __declspec(section ".data") f32 one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 eff_water_damage_n64_one_negone_a[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-static __declspec(section ".data") f32 negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 eff_water_damage_n64_negone_one_b[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-static __declspec(section ".data") f32 one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 eff_water_damage_n64_one_negone_b[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 #endif
 
 effN64Vtx size8x8_tex16x16_0_vtx[] = {

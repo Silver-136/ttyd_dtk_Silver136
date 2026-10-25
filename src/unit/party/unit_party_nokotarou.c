@@ -77,14 +77,6 @@ USER_FUNC(_color_lv_set);
 USER_FUNC(_check_mario_move_count);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
-f32 unit_party_nokotarou_negone_one_a[2];
-f32 nokotarou_negone_one_374[2];
-f32 unit_party_nokotarou_one_negone_a[2];
-f32 nokotarou_one_negone_373[2];
-f32 unit_party_nokotarou_negone_one_b[2];
-f32 nokotarou_negone_one_360[2];
-f32 unit_party_nokotarou_one_negone_b[2];
-f32 nokotarou_one_negone_359[2];
 PoseTableEntry pose_table_nokotarou_stay[26];
 PoseTableEntry pose_table_nokotarou_turn[12];
 static BattleDataEntry data_table[12];
@@ -123,37 +115,13 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 BattleUnitSetup entry_koura;
 
-__declspec(section ".data") f32 unit_party_nokotarou_negone_one_a[] = {
-    -1.0f, 1.0f,
-};
 
-__declspec(section ".data") f32 nokotarou_negone_one_374[] = {
-    -1.0f, 1.0f,
-};
 
-__declspec(section ".data") f32 unit_party_nokotarou_one_negone_a[] = {
-    1.0f, -1.0f,
-};
 
-__declspec(section ".data") f32 nokotarou_one_negone_373[] = {
-    1.0f, -1.0f,
-};
 
-__declspec(section ".data") f32 unit_party_nokotarou_negone_one_b[] = {
-    -1.0f, 1.0f,
-};
 
-__declspec(section ".data") f32 nokotarou_negone_one_360[] = {
-    -1.0f, 1.0f,
-};
 
-__declspec(section ".data") f32 unit_party_nokotarou_one_negone_b[] = {
-    1.0f, -1.0f,
-};
 
-__declspec(section ".data") f32 nokotarou_one_negone_359[] = {
-    1.0f, -1.0f,
-};
 
 PoseTableEntry pose_table_nokotarou_stay[] = {
     {9, "PNK_D_5"},

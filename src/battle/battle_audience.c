@@ -169,14 +169,6 @@ extern ItemData itemDataTable[];
 void BattleStatusWindowAPRecoveryOn(void);
 #pragma force_active on
 
-__declspec(section ".data") u8 battle_audience_negone_one_a[8] = {0xBF, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00};
-__declspec(section ".data") f32 aud_uv0[2] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 aud_uv1[2] = {1.0f, -1.0f};
-__declspec(section ".data") f32 aud_uv2[2] = {1.0f, -1.0f};
-__declspec(section ".data") f32 aud_uv3[2] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 aud_uv4[2] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 aud_uv5[2] = {1.0f, -1.0f};
-__declspec(section ".data") f32 aud_uv6[2] = {1.0f, -1.0f};
 BattleWeapon weapon_data_akikan = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1502,7 +1494,6 @@ BattleUnit* BattleAudienceDetectTargetPlayer(void) {
 extern s32 BtlUnit_CheckShadowGuard(BattleUnit*);
 extern double __fabs(double);
 void BattleAudienceItemCtrlProcess(void) {
-	u8* d = battle_audience_negone_one_a;
 	Vec hv;
 	s32 i;
 	BattleWork* wp = _battleWorkPointer;
@@ -1676,19 +1667,19 @@ void BattleAudienceItemCtrlProcess(void) {
 				BattleAudience_SetPresentTargetUnitId(BtlUnit_GetUnitId((BattleUnit*)aud));
 				switch (it->mItemType) {
 				case 0xec:
-					memcpy(base + 0x137fc, d + 0x40, 0xc0);
+					memcpy(base + 0x137fc, &weapon_data_akikan, sizeof(BattleWeapon));
 					*(s32*)(base + 0x1381c) = (*(s32*)(base + 0x137f8)) + *(s32*)(base + 0x1381c) - 1;
 					break;
 				case 0xed:
-					memcpy(base + 0x137fc, d + 0x100, 0xc0);
+					memcpy(base + 0x137fc, &weapon_data_brick, sizeof(BattleWeapon));
 					*(s32*)(base + 0x1381c) = (*(s32*)(base + 0x137f8)) + *(s32*)(base + 0x1381c) - 1;
 					break;
 				case 0xee:
-					memcpy(base + 0x137fc, d + 0x1c0, 0xc0);
+					memcpy(base + 0x137fc, &weapon_data_bone, sizeof(BattleWeapon));
 					*(s32*)(base + 0x1381c) = (*(s32*)(base + 0x137f8)) + *(s32*)(base + 0x1381c) - 1;
 					break;
 				case 0xef:
-					memcpy(base + 0x137fc, d + 0x280, 0xc0);
+					memcpy(base + 0x137fc, &weapon_data_hammer, sizeof(BattleWeapon));
 					*(s32*)(base + 0x1381c) = (*(s32*)(base + 0x137f8)) + *(s32*)(base + 0x1381c) - 1;
 					break;
 				}

@@ -57,14 +57,6 @@ USER_FUNC(btlevtcmd_get_monosiri_msg_no);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 static USER_FUNC(krb_get_dir);
 
-f32 unit_party_christine_negone_one_a[2];
-f32 christine_negone_one_374[2];
-f32 unit_party_christine_one_negone_a[2];
-f32 christine_one_negone_373[2];
-f32 unit_party_christine_negone_one_b[2];
-f32 christine_negone_one_360[2];
-f32 unit_party_christine_one_negone_b[2];
-f32 christine_one_negone_359[2];
 PoseTableEntry pose_table_christine_stay[25];
 static BattleDataEntry data_table[8];
 BattleUnitKindPart unitpartsdata_Party_Christine[1];
@@ -94,37 +86,13 @@ static StatusVulnerability regist;
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 
-__declspec(section ".data") f32 unit_party_christine_negone_one_a[] = {
-    -1.0f, 1.0f,
-};
 
-__declspec(section ".data") f32 christine_negone_one_374[] = {
-    -1.0f, 1.0f,
-};
 
-__declspec(section ".data") f32 unit_party_christine_one_negone_a[] = {
-    1.0f, -1.0f,
-};
 
-__declspec(section ".data") f32 christine_one_negone_373[] = {
-    1.0f, -1.0f,
-};
 
-__declspec(section ".data") f32 unit_party_christine_negone_one_b[] = {
-    -1.0f, 1.0f,
-};
 
-__declspec(section ".data") f32 christine_negone_one_360[] = {
-    -1.0f, 1.0f,
-};
 
-__declspec(section ".data") f32 unit_party_christine_one_negone_b[] = {
-    1.0f, -1.0f,
-};
 
-__declspec(section ".data") f32 christine_one_negone_359[] = {
-    1.0f, -1.0f,
-};
 
 PoseTableEntry pose_table_christine_stay[] = {
     {9, "PKR_D_5"},

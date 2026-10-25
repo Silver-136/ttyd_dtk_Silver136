@@ -20,14 +20,6 @@ typedef struct EffToikiWork {
     s32 timer;        // 0x30
 } EffToikiWork;
 
-__declspec(section ".data") u64 toiki_negone_one_a __attribute__((aligned(32))) = 0xBF8000003F800000;
-__declspec(section ".data") f32 fd_eff_toiki_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 toiki_one_negone_a[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 fd_eff_toiki_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 toiki_negone_one_b[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 fd_eff_toiki_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 toiki_one_negone_b[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 fd_eff_toiki_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
 static s16 queen_toiki_vertex_tbl[] __attribute__((aligned(32))) = {
     -20614, -6729, 0, -20385, -6698, 0, -19918, -6319,
