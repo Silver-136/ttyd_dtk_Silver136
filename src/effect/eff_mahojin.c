@@ -36,7 +36,7 @@ static void callback(MapTevCallbackInfo* info) {
     s32 tevStage = info->tevStage;
     s32 texMap = info->texMap;
     s32 texCoord = info->texCoord;
-    s32 field_0x18 = info->indStage;
+    s32 indStage = info->indStage;
 
     GXSetTevColor(GX_TEVREG0, (GXColor){ 0xE8, 0x00, 0xE8, mahojin_rate });
     GXSetTevOrder(tevStage, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
@@ -47,7 +47,7 @@ static void callback(MapTevCallbackInfo* info) {
     GXSetTevSwapMode(tevStage, GX_TEV_SWAP0, GX_TEV_SWAP0);
     info->tevStage = tevStage + 1;
     info->texCoord = texCoord;
-    info->indStage = field_0x18;
+    info->indStage = indStage;
     info->texMap = texMap;
 }
 

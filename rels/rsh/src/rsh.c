@@ -1393,7 +1393,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     GXTevStageID tevStage;
     GXTexMapID texMap;
     GXTexCoordID texCoord;
-    int field_0x18;
+    int indStage;
     u16 x0, y0, x1, y1;
     s32 height, width;
     s32 halfHeight, halfWidth;
@@ -1406,7 +1406,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     tevStage = info->tevStage;
     texMap = info->texMap;
     texCoord = info->texCoord;
-    field_0x18 = info->indStage;
+    indStage = info->indStage;
     flags = p->flags;
     if (flags & 0x20) {
         while ((p = p->parent) != NULL) {
@@ -1482,7 +1482,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     texMap++;
     info->tevStage = tevStage;
     info->texCoord = texCoord;
-    info->indStage = field_0x18;
+    info->indStage = indStage;
     info->texMap = texMap;
 }
 

@@ -20,17 +20,17 @@
 #define STG ((BattleStage*)BattleStageGetPtr()) // FAKE: no-op cast; without it US BattleStageEnd swaps the registers of s and i (r28/r29) around the batSpotEnd call
 
 typedef struct ScreenWork {
-    void* tex;      // 0x0
-    s32 captured;   // 0x4
-    f32 field_8;    // 0x8
-    f32 field_C;    // 0xC
-    f32 field_10;   // 0x10
-    f32 field_14;   // 0x14
-    f32 field_18;   // 0x18
-    f32 field_1C;   // 0x1C
-    s32 field_20;   // 0x20
-    s32 field_24;   // 0x24
-    f32 field_28;   // 0x28
+    void* tex;         // 0x0
+    s32 captured;      // 0x4
+    f32 scale;         // 0x8
+    f32 scaleTarget;   // 0xC
+    f32 x;             // 0x10
+    f32 xTarget;       // 0x14
+    f32 y;             // 0x18
+    f32 yTarget;       // 0x1C
+    s32 count;         // 0x20
+    s32 mode;          // 0x24
+    f32 field_28;      // 0x28
 } ScreenWork;
 
 //.sbss
@@ -770,13 +770,13 @@ USER_FUNC(tou_gamen_screen_tev_init) {
     screen_wp = _mapAlloc(sizeof(ScreenWork));
     screen_wp->tex = _mapAlloc(size);
     screen_wp->captured = 0;
-    screen_wp->field_8 = screen_wp->field_C = 1.0f;
-    screen_wp->field_10 = screen_wp->field_14 = 0.0f;
-    screen_wp->field_18 = screen_wp->field_1C = 0.0f;
-    screen_wp->field_20 = 0;
+    screen_wp->scale = screen_wp->scaleTarget = 1.0f;
+    screen_wp->x = screen_wp->xTarget = 0.0f;
+    screen_wp->y = screen_wp->yTarget = 0.0f;
+    screen_wp->count = 0;
     screen_wp->field_28 = -1.0f;
     if (evtGetValue(event, GSW_STORY_PROGRESS) == 163) {
-        screen_wp->field_24 = 1;
+        screen_wp->mode = 1;
     }
     evtEntry(screen_evt, 0, 0);
     return 2;
@@ -797,7 +797,7 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
     if (screen_wp->captured == 0) {
         return;
     }
-    if (screen_wp->field_24 != 0) {
+    if (screen_wp->mode != 0) {
         tex = screen_wp->tex;
         for (i = 0; i < 64; i++) {
             for (j = 0; j < 64; j++) {
@@ -843,31 +843,31 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
     GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
-    if (screen_wp->field_24 == 0) {
-        screen_wp->field_20++;
-        if (screen_wp->field_20 % 200 == 0) {
+    if (screen_wp->mode == 0) {
+        screen_wp->count++;
+        if (screen_wp->count % 200 == 0) {
             switch (rand() % 3) {
                 case 0:
-                    screen_wp->field_14 = randf(0.0f, (1.0f - screen_wp->field_8) / screen_wp->field_8);
-                    screen_wp->field_1C = randf(0.0f, (1.0f - screen_wp->field_8) / screen_wp->field_8);
+                    screen_wp->xTarget = randf(0.0f, (1.0f - screen_wp->scale) / screen_wp->scale);
+                    screen_wp->yTarget = randf(0.0f, (1.0f - screen_wp->scale) / screen_wp->scale);
                     break;
                 case 1:
-                    screen_wp->field_C = randf(1.0f, 0.25f);
+                    screen_wp->scaleTarget = randf(1.0f, 0.25f);
                     break;
                 case 2:
                     break;
             }
         }
-        screen_wp->field_8 += (screen_wp->field_C - screen_wp->field_8) / 60.0f;
-        screen_wp->field_10 += (screen_wp->field_14 - screen_wp->field_10) / 60.0f;
-        screen_wp->field_18 += (screen_wp->field_1C - screen_wp->field_18) / 60.0f;
-        PSMTXScale(m1, screen_wp->field_8, screen_wp->field_8, 1.0f);
-        lim = (1.0f - screen_wp->field_8) / screen_wp->field_8;
-        y = screen_wp->field_18 > lim ? lim : screen_wp->field_18;
-        if (screen_wp->field_10 > lim) {
+        screen_wp->scale += (screen_wp->scaleTarget - screen_wp->scale) / 60.0f;
+        screen_wp->x += (screen_wp->xTarget - screen_wp->x) / 60.0f;
+        screen_wp->y += (screen_wp->yTarget - screen_wp->y) / 60.0f;
+        PSMTXScale(m1, screen_wp->scale, screen_wp->scale, 1.0f);
+        lim = (1.0f - screen_wp->scale) / screen_wp->scale;
+        y = screen_wp->y > lim ? lim : screen_wp->y;
+        if (screen_wp->x > lim) {
             x = lim;
         } else {
-            x = screen_wp->field_10;
+            x = screen_wp->x;
         }
         PSMTXTrans(m2, x, y, 0.0f);
         PSMTXConcat(m1, m2, m);
