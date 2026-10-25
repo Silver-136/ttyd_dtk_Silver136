@@ -1,4 +1,3 @@
-#pragma auto_inline off
 #include "battle/battle_unit.h"
 #include "battle/battle.h"
 #include "system.h"

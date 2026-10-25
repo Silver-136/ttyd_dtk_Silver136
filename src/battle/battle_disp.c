@@ -1,4 +1,3 @@
-#pragma auto_inline off
 #include "battle/battle_disp.h"
 #include "battle/battle.h"
 #include "battle/battle_menu_disp.h"

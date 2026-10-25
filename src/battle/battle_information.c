@@ -6,7 +6,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_unit.h"
 
-#pragma auto_inline off
 
 void BattleInformationSetMode(FieldBattleInfo* info, u32 mode) {
     info->mode = mode;
