@@ -201,7 +201,7 @@ PoseTableEntry gesso_pose_table_turn[] = {
 };
 
 static BattleDataEntry data_table[] = {
-    {50, dead_subevent},
+    {UNIT_DATA_PRE_DEAD_EVENT, dead_subevent},
     {0, NULL},
 };
 

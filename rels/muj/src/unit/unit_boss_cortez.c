@@ -744,8 +744,8 @@ PoseTableEntry pose_table_honeduka[] = {
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, dead_event},
-    {71, mode2_honeduka_damage_event},
-    {36, cortez_ac_counter_damage_event},
+    {UNIT_DATA_WEAPON_BREAK_EVENT, mode2_honeduka_damage_event},
+    {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, cortez_ac_counter_damage_event},
     {UNIT_DATA_AVOID_THORN_EVENT, avoid_thorn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, avoid_thorn_event},
     {0, NULL},
@@ -2110,28 +2110,28 @@ static EVT_BEGIN(dead_event)
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_SetUnitWork, LW(3), 0, -1)
             CALL(btlevtcmd_SetUnitWork, -2, 1, -1)
-            CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), 71)
+            CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), UNIT_DATA_WEAPON_BREAK_EVENT)
             CALL(btlevtcmd_RunHitEventDirect, LW(3), 0, LW(0), 0)
         END_IF
         CALL(btlevtcmd_GetUnitWork, -2, 2, LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_SetUnitWork, LW(3), 0, -1)
             CALL(btlevtcmd_SetUnitWork, -2, 2, -1)
-            CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), 71)
+            CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), UNIT_DATA_WEAPON_BREAK_EVENT)
             CALL(btlevtcmd_RunHitEventDirect, LW(3), 0, LW(0), 0)
         END_IF
         CALL(btlevtcmd_GetUnitWork, -2, 3, LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_SetUnitWork, LW(3), 0, -1)
             CALL(btlevtcmd_SetUnitWork, -2, 3, -1)
-            CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), 71)
+            CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), UNIT_DATA_WEAPON_BREAK_EVENT)
             CALL(btlevtcmd_RunHitEventDirect, LW(3), 0, LW(0), 0)
         END_IF
         CALL(btlevtcmd_GetUnitWork, -2, 4, LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
             CALL(btlevtcmd_SetUnitWork, LW(3), 0, -1)
             CALL(btlevtcmd_SetUnitWork, -2, 4, -1)
-            CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), 71)
+            CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), UNIT_DATA_WEAPON_BREAK_EVENT)
             CALL(btlevtcmd_RunHitEventDirect, LW(3), 0, LW(0), 0)
         END_IF
         CALL(btlevtcmd_AnimeChangePose, -2, 1, STRING("KRT_D_3"))

@@ -100,7 +100,7 @@ BattleDataEntry data_table_mario[] = {
     {UNIT_DATA_EMERGENCY_REVIVAL_EVENT, mario_emergency_revival_event},
     {UNIT_DATA_DEAD_EVENT, mario_dead_event},
     {UNIT_DATA_WIN_REACTION_EVENT, mario_win_reaction},
-    {7, subset_attack_ready_jump_event},
+    {UNIT_DATA_ATTACK_READY_EVENT, subset_attack_ready_jump_event},
     {UNIT_DATA_RIDE_ENTRY_EVENT, mario_ride_btl_entry_event},
     {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},

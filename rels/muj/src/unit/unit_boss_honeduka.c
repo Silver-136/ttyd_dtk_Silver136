@@ -122,7 +122,7 @@ EVT_END()
 
 EVT_BEGIN(honeduka_damage_sub_event)
     CALL(btlevtcmd_GetUnitWork, -2, 0, LW(3))
-    CALL(btlevtcmd_RunDataEventChild, LW(3), 71)
+    CALL(btlevtcmd_RunDataEventChild, LW(3), UNIT_DATA_WEAPON_BREAK_EVENT)
     CALL(btlevtcmd_StartWaitEvent, -2)
     RETURN
 EVT_END()

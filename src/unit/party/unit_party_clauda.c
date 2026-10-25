@@ -294,7 +294,7 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_TECH_MENU_FUNC, __makeTechMenuFunc},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
-    {7, subset_attack_ready_jump_event},
+    {UNIT_DATA_ATTACK_READY_EVENT, subset_attack_ready_jump_event},
     {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},
 };
@@ -418,7 +418,7 @@ EVT_BEGIN(partyClaudaAttack_NormalAttack)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(evt_btl_camera_set_mode, 0, 11)
     CALL(evt_btl_camera_set_homing_unitparts, 0, -2, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -610,7 +610,7 @@ EVT_BEGIN(partyClaudaAttack_BreathAttack)
     CALL(btlevtcmd_AttackDeclareAll, -2)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, -2, LW(12))
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     WAIT_FRAMES(20)
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, -2, -2)
@@ -776,7 +776,7 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(evt_btl_camera_set_mode, 0, 11)
     CALL(evt_btl_camera_set_homing_unitparts, 0, -2, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1027,7 +1027,7 @@ EVT_BEGIN(partyClaudaAttack_KumoGuard)
     CALL(btlevtcmd_AttackDeclareAll, -2)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_CalculateFaceDirection, -2, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, -2, LW(15))
     CALL(btlevtcmd_GetPos, -2, LW(0), EVT_NULLPTR, EVT_NULLPTR)
@@ -1094,7 +1094,7 @@ EVT_BEGIN(partyClaudaAttack_KumoGuard)
 EVT_END()
 
 EVT_BEGIN(clauda_appeal_event)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 66)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_APPEAL1"), LW(0), LW(1), LW(2), 0)

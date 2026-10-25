@@ -193,9 +193,9 @@ BattleWeapon _lec_weapon_hammer = {
 };
 
 static BattleDataEntry data_table[] = {
-    {68, &_lec_weapon_jump},
-    {69, &_lec_weapon_hammer},
-    {70, lecture_end_event},
+    {UNIT_DATA_LECTURE_JUMP_WEAPON, &_lec_weapon_jump},
+    {UNIT_DATA_LECTURE_HAMMER_WEAPON, &_lec_weapon_hammer},
+    {UNIT_DATA_LECTURE_END_EVENT, lecture_end_event},
     {0, NULL},
 };
 
@@ -450,7 +450,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(evt_btl_camera_set_mode, 0, 11)
     CALL(evt_btl_camera_set_homing_unitparts, 0, -2, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -642,7 +642,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_GetUnitWork, -6, 1, LW(0))
     IF_INT_EQUAL(LW(0), 5)
         CALL(btlevtcmd_SetTalkPose, -6, STRING("T_1"))

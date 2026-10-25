@@ -349,7 +349,7 @@ void btlseqEnd(BattleWork* wp) {
             BattleUnit* p2 = BattleGetPartyPtr(wp);
             EventEntry* e;
             if (!p2) break;
-            e = evtEntry(BtlUnit_GetData(p2, 3), 10, 0);
+            e = evtEntry(BtlUnit_GetData(p2, UNIT_DATA_HIDE_EVENT), 10, 0);
             e->unitId = p2->unitId;
             p2->attackEventId = e->eventId;
             break;
@@ -1450,7 +1450,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
         if (kind == UNIT_SYSTEM) continue;
         if (kind == UNIT_MARIO) continue;
         if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER && kind != UNIT_BOBBERY) continue;
-        data = BtlUnit_GetData(unit, 0x42);
+        data = BtlUnit_GetData(unit, UNIT_DATA_BATTLE_END_HIDE_EVENT);
         if (data) {
             evt = evtEntry(data, 10, 0);
             evt->unitId = unit->unitId;

@@ -399,7 +399,7 @@ void btlseqFirstAct(BattleWork* wp) {
             evt = evtEntry(b->damageEventCode, 10, EVENT_START_IMMEDIATE);
             if (evt) {
                 evt->unitId = b->unitId;
-                b->damageCode = 0x39;
+                b->damageCode = DAMAGE_CODE_FIRST_ATTACK_POS;
                 b->damageEventId = evt->eventId;
             }
             a->flags |= BATTLE_UNIT_FLAG_ACTING;
@@ -2255,7 +2255,7 @@ void btlseqAct(BattleWork* wp) {
             break;
         case 0x6000005:
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-            unit->attackEventCode = BtlUnit_GetData(unit, 2);
+            unit->attackEventCode = BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
             unit->attackEventFlags = 1;
             BattleSetSeq(wp, SEQ_ACT, 0x6000006);
             break;
@@ -2267,7 +2267,7 @@ void btlseqAct(BattleWork* wp) {
             break;
         case 0x6000004:
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
-            unit->attackEventCode = BtlUnit_GetData(unit, 3);
+            unit->attackEventCode = BtlUnit_GetData(unit, UNIT_DATA_HIDE_EVENT);
             unit->attackEventFlags = 0x1B;
             BattleSetSeq(wp, SEQ_ACT, 0x6000006);
             break;

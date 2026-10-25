@@ -120,19 +120,19 @@ static PoseTableEntry pose_table[] = {
 };
 
 BattleDataEntry gesso_right_arm_data_table[] = {
-    {24, gesso_right_arm_damage_event},
-    {25, gesso_right_arm_damage_event},
-    {26, gesso_right_arm_damage_event},
-    {27, gesso_right_arm_damage_event},
-    {28, gesso_right_arm_damage_event},
-    {29, gesso_right_arm_damage_event},
-    {30, gesso_right_arm_damage_event},
-    {31, gesso_right_arm_damage_event},
-    {32, gesso_right_arm_damage_event},
-    {33, gesso_right_arm_damage_event},
-    {34, gesso_right_arm_damage_event},
-    {35, gesso_right_arm_damage_event},
-    {36, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_FIERY_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_ICY_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIC_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_EXPLOSIVE_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_VOLATILE_EXPLOSIVE_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_POISON_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIFIED_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_PAYBACK_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_HOLD_FAST_EVENT, gesso_right_arm_damage_event},
+    {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, gesso_right_arm_damage_event},
 };
 
 static BattleDataEntry data_table[] = {

@@ -260,7 +260,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     if (target->currentHp <= 0) {
         target->currentHp = 0;
         if (result & 0x100) {
-            result |= 0x200;
+            result |= DAMAGE_RESULT_ZERO_HP;
             if (target->mAttributeFlags & kUndead) {
                 switch ((u8)result) {
                     case DAMAGE_CODE_FIRE:
@@ -269,11 +269,11 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                     case DAMAGE_CODE_COUNTER_EXPLOSIVE:
                     case DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE:
                     case DAMAGE_CODE_COUNTER_HOLD_FAST:
-                        result |= 0x400;
+                        result |= DAMAGE_RESULT_DEATH;
                         break;
                 }
             } else {
-                result |= 0x400;
+                result |= DAMAGE_RESULT_DEATH;
                 _checkDamageCode_EmergencyRevival(target, &result);
             }
             if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
@@ -1548,7 +1548,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         BtlUnit_GetHitPos(target, part, &hit.x, &hit.y, &hit.z);
         eff = effNiceEntry(2, hit.x - 60.0f, 45.0f + hit.y, hit.z - 10.0f);
         ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
-        flags |= 0x80000;
+        flags |= DAMAGE_RESULT_SUPERGUARD;
         psndSFXOn("SFX_SYSTEM_GREAT1");
         BattleAudience_Case_GuardGood();
         attacker->superguardedCount++;
@@ -1603,7 +1603,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 BtlUnit_GetHitPos(target, part, &hit2.x, &hit2.y, &hit2.z);
                 eff = effNiceEntry(0, hit2.x - 60.0f, 45.0f + hit2.y, hit2.z - 10.0f);
                 ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
-                flags |= 0x40000;
+                flags |= DAMAGE_RESULT_GUARD;
                 psndSFXOn("SFX_SYSTEM_NICE1");
                 BattleAudience_Case_GuardGood();
             } else {
@@ -1912,28 +1912,28 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         work->type = DAMAGE_CODE_COUNTER_TOP_SPIKY;
         work->msg = 0x12B;
         work->count++;
-        work->hitEvent = 0x1F;
+        work->hitEvent = DAMAGE_CODE_AVOID_TOP_SPIKY;
         *flags |= 0x100;
         work->attackHits = 0;
     } else if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & COUNTER_RESIST_PREEMPTIVE_SPIKY)) {
         work->type = DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY;
         work->msg = 0x12C;
         work->count++;
-        work->hitEvent = 0x20;
+        work->hitEvent = DAMAGE_CODE_AVOID_PREEMPTIVE_SPIKY;
         *flags |= 0x100;
         work->attackHits = 0;
     } else if ((part->counterAttributes & kCounterFrontSpiky) && !attacker->badgesEquipped.SpikeShield && !(weapon->counterResistFlags & COUNTER_RESIST_FRONT_SPIKY)) {
         work->type = DAMAGE_CODE_COUNTER_FRONT_SPIKY;
         work->msg = 0x12D;
         work->count++;
-        work->hitEvent = 0x21;
+        work->hitEvent = DAMAGE_CODE_AVOID_FRONT_SPIKY;
         *flags |= 0x100;
         work->attackHits = 0;
     } else if (((part->counterAttributes & kCounterFiery) || (part->counterAttributes & kCounterFieryStatus)) && !attacker->badgesEquipped.IcePower && !(weapon->counterResistFlags & COUNTER_RESIST_FIERY)) {
         work->type = DAMAGE_CODE_COUNTER_FIERY;
         work->msg = 0x12E;
         work->count++;
-        work->hitEvent = 0x22;
+        work->hitEvent = DAMAGE_CODE_AVOID_FIERY;
         *flags |= 0x100;
         work->attackHits = 0;
         if (part->counterAttributes & kCounterFieryStatus) {
@@ -1943,7 +1943,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         work->type = DAMAGE_CODE_COUNTER_ICY;
         work->msg = 0x12F;
         work->count++;
-        work->hitEvent = 0x23;
+        work->hitEvent = DAMAGE_CODE_AVOID_ICY;
         *flags |= 0x100;
         work->attackHits = 0;
         if (part->counterAttributes & kCounterIcyStatus) {
@@ -1953,7 +1953,7 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         work->type = DAMAGE_CODE_COUNTER_ELECTRIC;
         work->msg = 0x130;
         work->count++;
-        work->hitEvent = 0x24;
+        work->hitEvent = DAMAGE_CODE_AVOID_ELECTRIC;
         *flags |= 0x100;
         work->attackHits = 0;
         if (part->counterAttributes & kCounterElectricStatus) {

@@ -128,11 +128,11 @@ static BattleDataEntry data_table[] = {
     {4, change_party_spawn_init_event},
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_TECH_MENU_FUNC, __makeTechMenuFunc},
-    {2, wakeup_event},
+    {UNIT_DATA_WAKEUP_EVENT, wakeup_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
-    {7, subset_attack_ready_jump_event},
-    {67, nokotarou_revive_event},
+    {UNIT_DATA_ATTACK_READY_EVENT, subset_attack_ready_jump_event},
+    {UNIT_DATA_REVIVE_EVENT, nokotarou_revive_event},
     {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
     {0, NULL},
 };
@@ -702,7 +702,7 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     CALL(btlevtcmd_AttackDeclare, -2, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, -2, 1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -937,7 +937,7 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     CALL(btlevtcmd_AttackDeclareAll, -2)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, -2, 1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1141,7 +1141,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, -2, -2)
@@ -1389,7 +1389,7 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     CALL(btlevtcmd_AttackDeclareAll, -2)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, -2)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, -2, 1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1657,7 +1657,7 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
 EVT_END()
 
 EVT_BEGIN(nokotarou_appeal_event)
-    CALL(btlevtcmd_RunDataEventChild, -2, 7)
+    CALL(btlevtcmd_RunDataEventChild, -2, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePoseType, -2, 1, 66)
     CALL(btlevtcmd_GetPos, -2, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_APPEAL1"), LW(0), LW(1), LW(2), 0)

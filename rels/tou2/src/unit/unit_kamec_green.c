@@ -705,9 +705,9 @@ static EVT_BEGIN(kamec_subset_bunsin_all_kill)
 EVT_END()
 
 static EVT_BEGIN(kamec_subset_dead_event)
-    CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), 50)
+    CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(btlevtcmd_RunDataEventChild, LW(10), 50)
+        CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_PRE_DEAD_EVENT)
     END_IF
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)

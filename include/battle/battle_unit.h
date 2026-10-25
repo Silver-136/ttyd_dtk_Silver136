@@ -340,25 +340,47 @@ typedef enum BattleUnitType {
 } BattleUnitType;
 
 // BattleDataEntry.tag: slots of a unit's data table, named after the (original) events the units put there;
-// hit events use tag = damage code + 6 for most codes. Unnamed tags (2, 3, 7, 24-36, 41-45, 50, 66, ...) hold
-// different events per unit.
+// avoid events use tag = damage code + 6 (codes 0x1F..0x27), counter-damage overrides tag = code - 19
+// (codes 0x2B..0x37). Tags 68/69 hold weapons, not events.
 typedef enum BattleDataTag {
     UNIT_DATA_TECH_MENU_FUNC = 1, // __makeTechMenuFunc
+    UNIT_DATA_WAKEUP_EVENT = 2, // wakeup_event: recovery from the flipped state
+    UNIT_DATA_HIDE_EVENT = 3, // vivian_hide_event: Veil / hidden-state action
     UNIT_DATA_APPEAL_EVENT = 5, // *_appeal_event
     UNIT_DATA_ATTACK_AUDIENCE = 6, // attack_audience_event
+    UNIT_DATA_ATTACK_READY_EVENT = 7, // subset_attack_ready_jump_event: run before an attack, after the cost
     UNIT_DATA_DAMAGE_SUB_EVENT = 9, // *damage_sub_event
     UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT = 11, // damage_fire_explosion_event
     UNIT_DATA_DAMAGE_TURN_EVENT = 13, // dmg_turn_event
     UNIT_DATA_DAMAGE_FALL_EVENT = 14, // dmg_fall_event
     UNIT_DATA_FAKE_DEAD_EVENT = 15, // fake_dead_event
+    UNIT_DATA_COUNTER_TOP_SPIKY_EVENT = 24, // counter damage of kind top_spiky (damage code 0x2B)
+    UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT = 25, // counter damage of kind preemptive_spiky (damage code 0x2C)
+    UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT = 26, // counter damage of kind front_spiky (damage code 0x2D)
+    UNIT_DATA_COUNTER_FIERY_EVENT = 27, // counter damage of kind fiery (damage code 0x2E)
+    UNIT_DATA_COUNTER_ICY_EVENT = 28, // counter damage of kind icy (damage code 0x2F)
+    UNIT_DATA_COUNTER_ELECTRIC_EVENT = 29, // counter damage of kind electric (damage code 0x30)
+    UNIT_DATA_COUNTER_EXPLOSIVE_EVENT = 30, // counter damage of kind explosive (damage code 0x31)
+    UNIT_DATA_COUNTER_VOLATILE_EXPLOSIVE_EVENT = 31, // counter damage of kind volatile_explosive (damage code 0x32)
+    UNIT_DATA_COUNTER_POISON_EVENT = 32, // counter damage of kind poison (damage code 0x33)
+    UNIT_DATA_COUNTER_ELECTRIFIED_EVENT = 33, // counter damage of kind electrified (damage code 0x34)
+    UNIT_DATA_COUNTER_PAYBACK_EVENT = 34, // counter damage of kind payback (damage code 0x35)
+    UNIT_DATA_COUNTER_HOLD_FAST_EVENT = 35, // counter damage of kind hold_fast (damage code 0x36)
+    UNIT_DATA_COUNTER_SUPERGUARD_EVENT = 36, // counter damage of kind superguard (damage code 0x37)
     UNIT_DATA_AVOID_THORN_HEAD_EVENT = 37, // dmg_avoid_counter_thorn_head_event
     UNIT_DATA_AVOID_THORN_FRONT_EVENT = 38, // dmg_avoid_counter_thorn_front_event
     UNIT_DATA_AVOID_THORN_EVENT = 39, // dmg_avoid_counter_thorn_event
     UNIT_DATA_AVOID_FIRE_EVENT = 40, // avoid_fire_event
+    UNIT_DATA_AVOID_ICE_EVENT = 41, // counter_event: icy contact avoided (damage code 0x23)
+    UNIT_DATA_AVOID_ELECTRIC_EVENT = 42, // counter_event: electric contact avoided (0x24)
+    UNIT_DATA_AVOID_POISON_EVENT = 43, // counter_event: poison contact avoided (0x25)
+    UNIT_DATA_AVOID_DODGY_EVENT = 44, // Dodgy avoid (0x27)
+    UNIT_DATA_AVOID_LUCKY_EVENT = 45, // Lucky avoid (0x26)
     UNIT_DATA_AVOID_MISS_EVENT = 46, // avoid_miss_event; looked up for damage code 0x28
     UNIT_DATA_AVOID_COUNTER_EVENT = 47, // btldefaultevt_avoid_counter
     UNIT_DATA_FIRST_ATTACK_POS_EVENT = 48, // dmg_first_attack_pos; most units list btldefaultevt_Dummy
     UNIT_DATA_DEAD_EVENT = 49, // dead_event
+    UNIT_DATA_PRE_DEAD_EVENT = 50, // dead_subevent: run before the KO spin/smoke/drops
     UNIT_DATA_EMERGENCY_REVIVAL_EVENT = 51, // *_emergency_revival_event
     UNIT_DATA_EXPLOSION_EVENT = 52, // explosion_event
     UNIT_DATA_SWALLOW_BODY_EVENT = 54, // damage_swallow_body
@@ -368,6 +390,12 @@ typedef enum BattleDataTag {
     UNIT_DATA_BATTLE_END_EVENT = 63, // battle_end_event
     UNIT_DATA_WIN_REACTION_EVENT = 64, // *_win_reaction
     UNIT_DATA_RIDE_ENTRY_EVENT = 65, // mario_ride_btl_entry_event
+    UNIT_DATA_BATTLE_END_HIDE_EVENT = 66, // sanders_battle_end_event: replaces hiding the unit at battle end
+    UNIT_DATA_REVIVE_EVENT = 67, // nokotarou_revive_event: partner revival after the Life Shroom display
+    UNIT_DATA_LECTURE_JUMP_WEAPON = 68, // _lec_weapon_jump: a weapon, not an event
+    UNIT_DATA_LECTURE_HAMMER_WEAPON = 69, // _lec_weapon_hammer: a weapon, not an event
+    UNIT_DATA_LECTURE_END_EVENT = 70, // lecture_end_event
+    UNIT_DATA_WEAPON_BREAK_EVENT = 71, // cortez_weapon_break_event (Cortez family)
 } BattleDataTag;
 
 typedef struct BattleDataEntry {

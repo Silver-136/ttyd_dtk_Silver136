@@ -417,7 +417,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
                 if (wp->flags & 0x9000000 && wp->lectureUnitId != -1) {
-                    cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x44);
+                    cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_JUMP_WEAPON);
                 }
                 num++;
             }
@@ -464,7 +464,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
                 if (wp->flags & 0xA000000 && wp->lectureUnitId != -1) {
-                    cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x45);
+                    cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_HAMMER_WEAPON);
                 }
                 num++;
             }
@@ -2384,7 +2384,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             unit->attackEventFlags = 1;
             break;
         case 8:
-            UEVT(unit) = BtlUnit_GetData(unit, 2);
+            UEVT(unit) = BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
             unit->attackEventFlags = 3;
             break;
         default:
@@ -2754,7 +2754,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             }
             return WEVT(&badgeWeapon_SuperChargeP);
         case 8:
-            return BtlUnit_GetData(unit, 2);
+            return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
         case 0: {
             u8 cnt;
             u8 i;

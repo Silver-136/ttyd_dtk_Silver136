@@ -29,12 +29,26 @@ typedef struct BattleVulnerableStatus {
 
 // Low byte of a hit result (the upper bits are flags; 0x16, 0x1C and 0x1D are status-only outcomes not named yet)
 typedef enum BattleDamageCode {
+    DAMAGE_CODE_STATUS_ONLY = 0x16, // status effect without normal impact
     DAMAGE_CODE_NORMAL = 0x17, // hit by a normal-element weapon
     DAMAGE_CODE_FIRE = 0x18,
     DAMAGE_CODE_EXPLOSION = 0x19,
     DAMAGE_CODE_ICE = 0x1A,
     DAMAGE_CODE_ELECTRIC = 0x1B,
+    DAMAGE_CODE_FRIGHT = 0x1C, // Fright outcome
+    DAMAGE_CODE_GALE_FORCE = 0x1D, // Gale Force (blown away) outcome
     DAMAGE_CODE_NO_DAMAGE = 0x1E, // the hit did no damage (default result)
+    DAMAGE_CODE_AVOID_TOP_SPIKY = 0x1F, // contact hazards that stopped the attack (BattleCheckCounter)
+    DAMAGE_CODE_AVOID_PREEMPTIVE_SPIKY = 0x20,
+    DAMAGE_CODE_AVOID_FRONT_SPIKY = 0x21,
+    DAMAGE_CODE_AVOID_FIERY = 0x22,
+    DAMAGE_CODE_AVOID_ICY = 0x23,
+    DAMAGE_CODE_AVOID_ELECTRIC = 0x24,
+    DAMAGE_CODE_AVOID_POISON = 0x25, // default route exists; no producer in BattleCheckCounter
+    DAMAGE_CODE_LUCKY = 0x26, // evaded by Lucky (badges)
+    DAMAGE_CODE_DODGY = 0x27, // evaded by Dodgy
+    DAMAGE_CODE_MISS = 0x28,
+    DAMAGE_CODE_PROTECTED = 0x29, // target whose attack a bodyguard took
     DAMAGE_CODE_SUPERGUARDED = 0x2A,
     DAMAGE_CODE_COUNTER_TOP_SPIKY = 0x2B, // BattleCheckCounter kinds; the message id is 0x100 + the code
     DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY = 0x2C,
@@ -48,7 +62,21 @@ typedef enum BattleDamageCode {
     DAMAGE_CODE_COUNTER_ELECTRIFIED = 0x34, // target under STATUS_ELECTRIC
     DAMAGE_CODE_COUNTER_PAYBACK = 0x35, // Payback status or Return Postage
     DAMAGE_CODE_COUNTER_HOLD_FAST = 0x36,
+    DAMAGE_CODE_SUPERGUARD_COUNTER = 0x37, // superguard damage back to the attacker
+    DAMAGE_CODE_BODYGUARD_MOVE = 0x38, // the guarding unit moves in
+    DAMAGE_CODE_FIRST_ATTACK_POS = 0x39, // first-strike positioning
 } BattleDamageCode;
+
+// Upper bits of BattleUnit.damageCode next to the low-byte BattleDamageCode (BattleCheckDamage's result)
+typedef enum BattleDamageResultFlags {
+    DAMAGE_RESULT_FINAL_HIT = 0x100, // last hit of the attack (status, gauge and death are resolved)
+    DAMAGE_RESULT_ZERO_HP = 0x200, // HP is zero after the final hit
+    DAMAGE_RESULT_DEATH = 0x400, // the unit dies (undead only from fire/explosive hits)
+    DAMAGE_RESULT_REVIVAL = 0x800, // a Life Shroom can revive the unit
+    DAMAGE_RESULT_AC_SUCCESS = 0x20000, // the attack's action command succeeded
+    DAMAGE_RESULT_GUARD = 0x40000,
+    DAMAGE_RESULT_SUPERGUARD = 0x80000,
+} BattleDamageResultFlags;
 
 // Counter result filled by BattleCheckCounter (BattleInitCounterPreCheckWork clears it and sets attackHits)
 typedef struct CounterWork {
