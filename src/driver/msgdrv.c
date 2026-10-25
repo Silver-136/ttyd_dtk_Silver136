@@ -32,23 +32,6 @@ const char R_no_messages_DU[] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>
 #else
 const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 #endif
-const char str_802C4E4C[12] = "STICK_LEFT";
-const char str_802C4E58[12] = "BUTTON_L";
-const char str_802C4E64[12] = "BUTTON_R";
-const char str_802C4E70[12] = "PAD_X_ON";
-const char str_802C4E7C[12] = "PAD_Y_ON";
-const char str_802C4E88[12] = "PAD_Z_OFF";
-const char str_802C4E94[12] = "PAD_ST_OFF";
-const char str_802C4EA0[12] = "black_key";
-const char str_802C4EAC[12] = "ANM_PAD_A";
-const char str_802C4EB8[16] = "ANM_STICK_RIGHT";
-const char str_802C4EC8[16] = "ANM_PAD_START";
-const char str_802C4ED8[8] = "PM_Y_1B";
-const char str_802C4EE0[8] = "PM_Y_2B";
-const char str_802C4EE8[8] = "PM_F_1B";
-const char str_802C4EF0[8] = "PM_F_3B";
-const char str_802C4EF8[8] = "PM_C_1B";
-const char str_802C4F00[8] = "PM_C_2B";
 
 #ifdef VERSION_G8ME01
 #endif
@@ -80,26 +63,25 @@ typedef struct MsgIcon {
 } MsgIcon;
 
 //.data
-#define STR(sym, lit) lit
 MsgIcon msgIcon[] = {
-    {STR(str_8041A4B0, "PAD_A"), ICON_064},
-    {STR(str_8041A4B8, "PAD_B"), ICON_066},
-    {str_802C4E4C, ICON_078},
-    {STR(str_8041A4C0, "STICK"), ICON_079},
-    {STR(str_8041A4C8, "AC_ON"), ICON_095},
-    {str_802C4E58, ICON_07E},
-    {str_802C4E64, ICON_080},
-    {STR(str_8041A4D0, "HM"), ICON_19F},
-    {STR(str_8041A4D4, "PAD_X"), ICON_068},
-    {str_802C4E70, ICON_069},
-    {STR(str_8041A4DC, "PAD_Y"), ICON_06A},
-    {str_802C4E7C, ICON_06B},
-    {str_802C4E88, ICON_082},
-    {str_802C4E94, ICON_084},
-    {str_802C4EA0, ICON_130},
-    {str_802C4EAC, ICON_20B},
-    {str_802C4EB8, ICON_20C},
-    {str_802C4EC8, ICON_20D}
+    {"PAD_A", ICON_064},
+    {"PAD_B", ICON_066},
+    {"STICK_LEFT", ICON_078},
+    {"STICK", ICON_079},
+    {"AC_ON", ICON_095},
+    {"BUTTON_L", ICON_07E},
+    {"BUTTON_R", ICON_080},
+    {"HM", ICON_19F},
+    {"PAD_X", ICON_068},
+    {"PAD_X_ON", ICON_069},
+    {"PAD_Y", ICON_06A},
+    {"PAD_Y_ON", ICON_06B},
+    {"PAD_Z_OFF", ICON_082},
+    {"PAD_ST_OFF", ICON_084},
+    {"black_key", ICON_130},
+    {"ANM_PAD_A", ICON_20B},
+    {"ANM_STICK_RIGHT", ICON_20C},
+    {"ANM_PAD_START", ICON_20D}
 };
 
 s32 msgWindowOpen_SE_Data[] = {
@@ -123,13 +105,13 @@ const char* ErrMessage[7] = {R_no_messages_JP, R_no_messages_US, R_no_messages_D
 const char* ErrMessage[2] = {R_no_messages_JP, R_no_messages_US};
 #endif
 const char* paperPoseTbl[6] = {
-    str_802C4ED8, str_802C4EE0, str_802C4EE8,
-    str_802C4EF0, str_802C4EF8, str_802C4F00
+    "PM_Y_1B", "PM_Y_2B", "PM_F_1B",
+    "PM_F_3B", "PM_C_1B", "PM_C_2B"
 };
 #ifdef VERSION_G8ME01
 const char* language_dir[7] = {"msg/JP", "msg/US", "msg/DE", "msg/FR", "msg/SP", "msg/IT", "msg/US"};
 #else
-const char* language_dir[2] = {STR(str_8041A4E4, "msg"), STR(str_8041A4E8, "emsg")};
+const char* language_dir[2] = {"msg", "emsg"};
 #endif
 
 //local prototypes
@@ -175,7 +157,7 @@ void msgLoad(const char* filename, s32 index) {
         max = 0;
         for (i = 0; i <= 6; i++) {
             sprintf(filepath, "./%s/%s.txt", language_dir[i], filename);
-            sprintf(dvdpath, STR(str_8041A6A4, "%s/%s"), getMarioStDvdRoot(), filepath);
+            sprintf(dvdpath, "%s/%s", getMarioStDvdRoot(), filepath);
             dvd = DVDMgrOpen(dvdpath, 2, 0);
             if (dvd) {
                 len = DVDMgrGetLength(dvd);
@@ -189,7 +171,7 @@ void msgLoad(const char* filename, s32 index) {
     }
     entry->length = 0;
     sprintf(filepath, "./%s/%s.txt", language_dir[gp->language], filename);
-    sprintf(dvdpath, STR(str_8041A6A4, "%s/%s"), getMarioStDvdRoot(), filepath);
+    sprintf(dvdpath, "%s/%s", getMarioStDvdRoot(), filepath);
     dvd = DVDMgrOpen(dvdpath, 2, 0);
     if (dvd) {
         entry->length = DVDMgrGetLength(dvd);
@@ -215,7 +197,7 @@ void msgLoad(const char* filename, s32 index) {
     entry->length = 0;
 
     if (!entry->address) {
-        sprintf(dvdpath, STR(str_8041A6A4, "%s/%s"), getMarioStDvdRoot(), filepath);
+        sprintf(dvdpath, "%s/%s", getMarioStDvdRoot(), filepath);
         dvd = DVDMgrOpen(dvdpath, 2, 0);
         if (dvd) {
             entry->length = DVDMgrGetLength(dvd);
