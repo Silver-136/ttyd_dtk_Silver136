@@ -1477,7 +1477,7 @@ static USER_FUNC(mahorn_get_bunsin) {
     // indices of the wizzerd's copies
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == 0x81 || unit->currentKind == 0xAA)) {
+        if (unit != NULL && (unit->currentKind == UNIT_DARK_WIZZERD_CLONE || unit->currentKind == UNIT_ELITE_WIZZERD_CLONE)) {
             copies[n] = i;
             n++;
         }

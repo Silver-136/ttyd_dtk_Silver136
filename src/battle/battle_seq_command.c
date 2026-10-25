@@ -2203,7 +2203,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             icon.y = screen1.y;
             icon.z = 0.0f;
             iconDispGx(&icon, 0x10, ICON_1EF, 1.0f);
-            if (unit->currentKind == 0xe2) {
+            if (unit->currentKind == UNIT_YOSHI) {
                 name = pouchGetYoshiName();
             } else {
                 name = msgSearch(part->partName);
@@ -2217,7 +2217,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             icon.y = screen1.y;
             icon.z = 0.0f;
             iconDispGx(&icon, 0x18, ICON_1EF, 1.0f);
-            if (unit->currentKind == 0xe2) {
+            if (unit->currentKind == UNIT_YOSHI) {
                 name = pouchGetYoshiName();
             } else {
                 name = msgSearch(part->partName);
@@ -2241,7 +2241,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 icon.y = screen2.y;
                 icon.z = 0.0f;
                 iconDispGx(&icon, 0x10, ICON_1EF, 1.0f);
-                if (unit2->currentKind == 0xe2) {
+                if (unit2->currentKind == UNIT_YOSHI) {
                     name = pouchGetYoshiName();
                 } else {
                     name = msgSearch(part2->partName);
@@ -2255,7 +2255,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 icon.y = screen2.y;
                 icon.z = 0.0f;
                 iconDispGx(&icon, 0x18, ICON_1EF, 1.0f);
-                if (unit2->currentKind == 0xe2) {
+                if (unit2->currentKind == UNIT_YOSHI) {
                     name = pouchGetYoshiName();
                 } else {
                     name = msgSearch(part2->partName);
@@ -2352,7 +2352,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         switch ((u32)cmd->operationType) {
         case 6:
             unit->attackEventFlags = 1;
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 UEVT(unit) = btldefaultevt_Defend;
             } else {
                 UEVT(unit) = btldefaultevt_DefendParty;
@@ -2361,7 +2361,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         case 5:
             UEVT(unit) = btldefaultevt_Appeal;
             unit->attackEventFlags = 1;
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioAppeals);
             } else {
                 BtlActRec_AddCount(&wp->actRecord.partnerAppeals);
@@ -2370,7 +2370,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         case 7:
             UEVT(unit) = btldefaultevt_Wait;
             unit->attackEventFlags = 1;
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioAppeals);
             } else {
                 BtlActRec_AddCount(&wp->actRecord.partnerAppeals);
@@ -2379,7 +2379,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         case 3:
             UEVT(unit) = btldefaultevt_Escape;
             unit->attackEventFlags = 1;
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioEscapes);
             } else {
                 BtlActRec_AddCount(&wp->actRecord.partnerEscapes);
@@ -2387,7 +2387,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 1:
             unit->attackEventFlags = 0;
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 UEVT(unit) = WEVT(&badgeWeapon_Charge);
                 BtlActRec_AddCount(&wp->actRecord.marioCharges);
             } else {
@@ -2397,7 +2397,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 2:
             unit->attackEventFlags = 0;
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 UEVT(unit) = WEVT(&badgeWeapon_SuperCharge);
                 BtlActRec_AddCount(&wp->actRecord.marioSuperCharges);
             } else {
@@ -2412,7 +2412,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             if (wp->badgeEquippedFlags & 1) {
                 unit->moveState = 3;
             }
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioPartyChanges);
             } else {
                 BtlActRec_AddCount(&wp->actRecord.partnerPartyChanges);
@@ -2460,7 +2460,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 2:
             if ((EvtWord)weapon == (EvtWord)&ItemWeaponData_Naniga_Okorukana) break; // FAKE: integer compare gives the target's signed cmpw
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 if (_check_weapon_type_attack(weapon)) {
                     BtlActRec_AddCount(&wp->actRecord.marioAttackItems);
                 } else {
@@ -2497,7 +2497,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         }
         UEVT(unit) = btlataudGetAttackEventPtr(unit->unitId);
         unit->attackEventFlags = 3;
-        if (unit->currentKind == 0xde) {
+        if (unit->currentKind == UNIT_MARIO) {
             BtlActRec_AddCount(&wp->actRecord.marioAudienceAttacks);
         } else {
             BtlActRec_AddCount(&wp->actRecord.partnerAudienceAttacks);
@@ -2672,7 +2672,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     if (unit->mAlliance) {
         return subsetevt_confuse_flustered;
     }
-    if (unit->currentKind != 0xde && (unit->currentKind < 0xe0 || unit->currentKind >= 0xe7)) {
+    if (unit->currentKind != UNIT_MARIO && (unit->currentKind < 0xe0 || unit->currentKind >= 0xe7)) {
         return subsetevt_confuse_flustered;
     }
 #ifdef VERSION_G8ME01
@@ -2775,7 +2775,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         cmd->operationType = cmd->operation[cursor->absPos].type;
         switch ((u32)cmd->operationType) {
         case 6:
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 return btldefaultevt_Defend;
             }
             return btldefaultevt_DefendParty;
@@ -2786,12 +2786,12 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         case 3:
             return btldefaultevt_Escape;
         case 1:
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 return WEVT(&badgeWeapon_Charge);
             }
             return WEVT(&badgeWeapon_ChargeP);
         case 2:
-            if (unit->currentKind == 0xde) {
+            if (unit->currentKind == UNIT_MARIO) {
                 return WEVT(&badgeWeapon_SuperCharge);
             }
             return WEVT(&badgeWeapon_SuperChargeP);

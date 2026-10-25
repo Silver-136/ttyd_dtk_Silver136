@@ -135,7 +135,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     } else if ((r -= held) < 0) {
         type = 2;
     }
-    setup->itemDropped = 0;
+    setup->itemDropped = ITEM_NULL;
     switch (type) {
         case 0:
             break;
@@ -174,7 +174,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
                     }
                 }
                 if (i >= 8) {
-                    setup->itemDropped = 0;
+                    setup->itemDropped = ITEM_NULL;
                 }
             }
 #ifndef VERSION_G8ME01
@@ -186,7 +186,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
             break;
     }
 #ifdef VERSION_G8ME01
-    if (setup->itemDropped == 0 && pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
+    if (setup->itemDropped == ITEM_NULL && pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
         hog = N_item_hog_table;
         setup->itemDropped = hog.items[irand(25)];
     }

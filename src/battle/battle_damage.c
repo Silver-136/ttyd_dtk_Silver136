@@ -269,7 +269,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         target->totalFpLost += target->fpLost;
     }
     if (damage > 0) {
-        if (target->currentKind == 0xde) {
+        if (target->currentKind == UNIT_MARIO) {
             BtlActRec_AddCount(&wp->actRecord.marioHitsTaken);
             BtlActRec_AddPoint(&wp->actRecord.marioDamageTaken, damage);
         } else if (target->currentKind >= 0xe0 && target->currentKind < 0xe7) {
@@ -286,7 +286,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         y += BtlUnit_GetHeight(target) / 2;
         effFukidashiEntry(0, 0, 0, 0x3c, x, y, z, 10.0f, 0.0f);
     }
-    if (target->currentKind == 0xde) {
+    if (target->currentKind == UNIT_MARIO) {
         BattleAudience_Case_MarioBigDamage(target->hpDamageTaken);
     }
     if (target->currentHp <= 0) {
@@ -556,7 +556,7 @@ skip:
                 defense = 0;
             }
         }
-        if (wp->majinaiState == 2 && target->currentKind == 0xDE) {
+        if (wp->majinaiState == 2 && target->currentKind == UNIT_MARIO) {
             defense += 3;
         }
         if (part->attributes & VERSION_PICK(0x20, 0x80)) {
@@ -895,7 +895,7 @@ void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* o
     }
     if (type == 16) {
         if (weapon == &badgeWeapon_Charge || weapon == &badgeWeapon_ChargeP) {
-            if (unit->currentKind == 0xDE) {
+            if (unit->currentKind == UNIT_MARIO) {
                 n = pouchEquipCheckBadge(0x100);
             } else {
                 n = pouchEquipCheckBadge(0x101);
@@ -904,7 +904,7 @@ void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* o
                 strength += n - 1;
             }
         } else if (weapon == &badgeWeapon_SuperCharge || weapon == &badgeWeapon_SuperChargeP) {
-            if (unit->currentKind == 0xDE) {
+            if (unit->currentKind == UNIT_MARIO) {
                 n = pouchEquipCheckBadge(0x151);
             } else {
                 n = pouchEquipCheckBadge(0x152);
@@ -1538,7 +1538,7 @@ s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
         }
         return 0;
     }
-    if (unit->heldItem == 0x97) {
+    if (unit->heldItem == ITEM_LIFE_SHROOM) {
         *flags |= 0x800;
         return 1;
     }

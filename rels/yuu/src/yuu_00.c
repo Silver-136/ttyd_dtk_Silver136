@@ -1352,9 +1352,9 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
     if (mario->hitobjStandOn != NULL) {
         sub = evtEntry(minigame01_floor_delete, 0, 0);
         sub->lwData[0] = event->lwData[0];
-        if ((u16)((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId) != 0x18) {
+        if ((u16)((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId) != MARIO_MOTION_PLANE) {
 #else
-    if (mario->hitobjStandOn != NULL && (u16)((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId) != 0x18) {
+    if (mario->hitobjStandOn != NULL && (u16)((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId) != MARIO_MOTION_PLANE) {
 #endif
         data->result = 1;
         data->coins = yuucounter_get_data();

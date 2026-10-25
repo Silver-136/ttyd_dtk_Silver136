@@ -4366,7 +4366,7 @@ USER_FUNC(_hpfp_change_declare_1) {
     BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
 
     if (unit) {
-        if (unit->currentKind == 0xDE) {
+        if (unit->currentKind == UNIT_MARIO) {
             BattleStatusWindowSystemOn();
         } else if (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {
             BattleStatusWindowSystemOn();
@@ -4381,7 +4381,7 @@ USER_FUNC(_hpfp_change_declare_2) {
     BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
 
     if (unit) {
-        if (unit->currentKind == 0xDE) {
+        if (unit->currentKind == UNIT_MARIO) {
             N_statusClearBlink();
             statusMarioHPBlink(120);
             statusFPBlink(120);
@@ -4422,7 +4422,7 @@ USER_FUNC(_naniga_okorukana_check) {
         event->userdata[0] = (EvtWord)effNanigaEntry(0, R_mystery_item_table, item, pos.x, pos.y, pos.z);
         effSetName((EffectEntry*)event->userdata[0], "effNaniga");
         evtSetValue(event, out, item);
-        if (unit->currentKind == 0xDE) {
+        if (unit->currentKind == UNIT_MARIO) {
             a = &wp->actRecord.marioAttackItems;
             b = &wp->actRecord.marioSupportItems;
         } else if (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {

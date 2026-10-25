@@ -2,6 +2,7 @@
 #include "battle/ac/ac_timing_a.h"
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_status_effect.h"
+#include "mario/mario_pouch.h"
 #pragma optimize_for_size on
 #include "battle/battle_acrobat.h"
 #include "battle/battle_disp.h"
@@ -2709,7 +2710,7 @@ USER_FUNC(btlevtcmd_GetBackItem) {
 
     btlId = evtGetValue(event, args[0]);
     unit = BattleGetUnitPtr(wp, BattleTransID(event, btlId));
-    if ((unit->flags & 0x40000000) && (item = unit->heldItem) != 0) {
+    if ((unit->flags & 0x40000000) && (item = unit->heldItem) != ITEM_NULL) {
         info = wp->fbatInfo->setup;
         for (i = 0; i < 8; i++) {
             if (info->recoveredItems[i] == 0) {
@@ -2717,7 +2718,7 @@ USER_FUNC(btlevtcmd_GetBackItem) {
             }
         }
         info->recoveredItems[i] = item;
-        unit->heldItem = 0;
+        unit->heldItem = ITEM_NULL;
     }
     return EVT_RETURN_DONE;
 }
@@ -3689,7 +3690,7 @@ USER_FUNC(btlevtcmd_ConsumeItem) {
     id = evtGetValue(event, event->args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
-    if (unit->currentKind == 0xDE || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7)) {
+    if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7)) {
         BattleCommand* cmd = &wp->commandMenu;
         item = cmd->weapon[cmd->cursor[11].absPos].itemId;
         idx = cmd->weapon[cmd->cursor[11].absPos].index;
@@ -3698,7 +3699,7 @@ USER_FUNC(btlevtcmd_ConsumeItem) {
         }
         bec_coin(unit, item);
     } else {
-        unit->heldItem = 0;
+        unit->heldItem = ITEM_NULL;
     }
     return EVT_RETURN_DONE;
 }
@@ -3717,7 +3718,7 @@ USER_FUNC(btlevtcmd_ConsumeItemReserve) {
     item = evtGetValue(event, args[1]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
-    if (unit->currentKind == 0xDE || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7)) {
+    if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7)) {
         if (itemDataTable[item].usable_locations & 1) {
             for (i = 0; i < 4; i++) {
                 if ((s32)wp->reserveItems[i] == item) {
@@ -3738,8 +3739,8 @@ USER_FUNC(btlevtcmd_ConsumeItemReserve) {
             }
         }
     } else {
-        if (unit->heldItem == 0x97) {
-            unit->heldItem = 0;
+        if (unit->heldItem == ITEM_LIFE_SHROOM) {
+            unit->heldItem = ITEM_NULL;
         }
         goto end;
     end:;

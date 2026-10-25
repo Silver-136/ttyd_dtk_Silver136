@@ -76,7 +76,7 @@ static USER_FUNC(togenoko_getnum) {
 
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
-        if (unit != NULL && unit->currentKind == 0x3C) {
+        if (unit != NULL && unit->currentKind == UNIT_DARK_KOOPATROL) {
             num++;
         }
     }

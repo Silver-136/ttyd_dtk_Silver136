@@ -704,10 +704,10 @@ static USER_FUNC(teresa_check_trans) {
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
         if (unit != NULL) {
-            if (unit->currentKind == 0x4B && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
+            if (unit->currentKind == UNIT_BOO && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
                 num++;
             }
-            if (unit->currentKind == 0x6A && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
+            if (unit->currentKind == UNIT_DARK_BOO && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
                 num++;
             }
         }
@@ -727,10 +727,10 @@ static USER_FUNC(teresa_check_move) {
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
         if (unit != NULL) {
-            if (unit->currentKind == 0x4B && unit->work[0] == 0) {
+            if (unit->currentKind == UNIT_BOO && unit->work[0] == 0) {
                 num++;
             }
-            if (unit->currentKind == 0x6A && unit->work[0] == 0) {
+            if (unit->currentKind == UNIT_DARK_BOO && unit->work[0] == 0) {
                 num++;
             }
         }
@@ -752,10 +752,10 @@ static USER_FUNC(teresa_check_teresa) {
         evtSetValue(event, args[1], 0);
         return EVT_RETURN_DONE;
     }
-    if (unit->currentKind == 0x4B) {
+    if (unit->currentKind == UNIT_BOO) {
         result = 1;
     }
-    if (unit->currentKind == 0x6A) {
+    if (unit->currentKind == UNIT_DARK_BOO) {
         result = 1;
     }
     evtSetValue(event, args[1], result);

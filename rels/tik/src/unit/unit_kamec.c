@@ -1785,7 +1785,7 @@ static USER_FUNC(kamec_shuffle) {
     // the real magikoopa and its copies
     for (i = 0; i < 64; i++) {
         kamecs[n] = wp->units[i];
-        if (kamecs[n] != NULL && (kamecs[n]->currentKind == 0xC || kamecs[n]->currentKind == 0xD)) {
+        if (kamecs[n] != NULL && (kamecs[n]->currentKind == UNIT_MAGIKOOPA || kamecs[n]->currentKind == UNIT_MAGIKOOPA_CLONE)) {
             n++;
         }
     }
@@ -1823,7 +1823,7 @@ static USER_FUNC(kamec_get_bunsin) {
     // indices of the magikoopa's copies
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->currentKind == 0xD) {
+        if (unit != NULL && unit->currentKind == UNIT_MAGIKOOPA_CLONE) {
             copies[n] = i;
             n++;
         }

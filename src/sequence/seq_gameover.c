@@ -293,7 +293,7 @@ void seq_gameOverMain(SequenceWork* work) {
             if (work->mapName == NULL) {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(2, 1000, color);
-                gp->areaFadeInType = 10;
+                gp->areaFadeInType = FADE_OUT_BLACK;
                 gp->areaFadeInDuration = 300;
             }
             mapPreLoad("sys_00");

@@ -504,7 +504,7 @@ void kpa_hip(void) {
         if (hit) {
             m->hitobjStandOn = hit;
             m->hitobjJumpFrom = NULL;
-            m->currMotionId = 0x11;
+            m->currMotionId = MARIO_MOTION_HIP_2;
             m->currSubMotionId = 0x15;
             m->multiTimer = 0x14;
             m->position.y = y;

@@ -278,7 +278,7 @@ static USER_FUNC(piders_get_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == 0x1B || unit->currentKind == 0xA4) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             num++;
         }
     }
@@ -299,7 +299,7 @@ static USER_FUNC(piders_get_zyun) {
     id = BattleTransID(event, id);
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == 0x1B || unit->currentKind == 0xA4)) {
+        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA)) {
             if (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                 order++;
             }
@@ -322,7 +322,7 @@ static USER_FUNC(piders_get_first_pos_attr) {
     // find the first living pider
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == 0x1B || unit->currentKind == 0xA4) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && (unit->currentKind == UNIT_PIDER || unit->currentKind == UNIT_ARANTULA) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             break;
         }
     }

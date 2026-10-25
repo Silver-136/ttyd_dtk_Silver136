@@ -171,7 +171,7 @@ BattleUnit* zakogun_get_ptr(void) {
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && (unit->initialKind == 0x64 || unit->initialKind == 0x65 || unit->initialKind == 0x66)) {
+        if (unit != NULL && (unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION1 || unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION2 || unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION3)) {
             return unit;
         }
     }
@@ -603,7 +603,7 @@ USER_FUNC(zakogun_get_kanbu_id_evtcmd) {
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == 0x63) {
+        if (unit != NULL && unit->initialKind == UNIT_LORD_CRUMP_CHAPTER5) {
             id = i;
         }
     }
@@ -619,7 +619,7 @@ s32 zakogun_get_kanbu_id(void) {
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == 0x63) {
+        if (unit != NULL && unit->initialKind == UNIT_LORD_CRUMP_CHAPTER5) {
             id = i;
         }
     }

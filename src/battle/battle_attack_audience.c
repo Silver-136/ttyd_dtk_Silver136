@@ -127,7 +127,7 @@ s32 _get_present_item(EventEntry* event, BOOL isFirstCall) {
 
     if (unit->mAlliance == 0) {
         pouchGetItem(item);
-    } else if (unit->heldItem == 0) {
+    } else if (unit->heldItem == ITEM_NULL) {
         unit->heldItem = item;
     }
     return 2;

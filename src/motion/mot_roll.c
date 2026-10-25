@@ -495,7 +495,7 @@ void marioReInit_roll(void) {
 #endif
     }
     mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-    mario->currMotionId = 0x16;
+    mario->currMotionId = MARIO_MOTION_ROLL;
     mario->flags |= MARIO_FLAG_TUBE_MODE;
     mario->rollFlags = 0x10;
     marioPaperOn("p_roll");

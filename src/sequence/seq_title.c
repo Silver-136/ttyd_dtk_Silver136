@@ -250,7 +250,7 @@ void titleMain(SequenceWork* work) {
                 if (pouchGetHP() <= 0) {
                     pouchSetHP(1);
                 }
-                gp->areaFadeInType = 10;
+                gp->areaFadeInType = FADE_OUT_BLACK;
                 gp->areaFadeInDuration = 0;
                 seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
             }

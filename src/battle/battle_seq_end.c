@@ -809,7 +809,7 @@ void btlseqEnd(BattleWork* wp) {
         BtlUnit_SetBodyAnimType(BattleGetMarioPtr(wp), 0x2A);
         if (BattleGetPartyPtr(wp)) {
             BattleUnit* party = BattleGetPartyPtr(wp);
-            if ((s32)party->currentKind != 0xE1 || party->flippedTurns < 1) {
+            if ((s32)party->currentKind != UNIT_KOOPS || party->flippedTurns < 1) {
                 BtlUnit_SetBodyAnimType(BattleGetPartyPtr(wp), 0x2A);
             }
         }
@@ -1611,7 +1611,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
         if (data) {
             evt = evtEntry(data, 10, 0);
             evt->unitId = unit->unitId;
-        } else if (unit->currentKind != 0xE5) {
+        } else if (unit->currentKind != UNIT_BOBBERY) {
             unit->mAttributeFlags |= 0x21000000;
         }
     }

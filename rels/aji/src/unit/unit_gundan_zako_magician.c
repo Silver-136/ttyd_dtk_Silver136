@@ -67,7 +67,7 @@ static USER_FUNC(kanbu_get_id) {
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == 99) {
+        if (unit != NULL && unit->initialKind == UNIT_LORD_CRUMP_CHAPTER5) {
             id = i;
             break;
         }

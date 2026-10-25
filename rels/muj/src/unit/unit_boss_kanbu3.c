@@ -1252,7 +1252,7 @@ USER_FUNC(check_exist_group) {
 
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && (unit->initialKind == 0x64 || unit->initialKind == 0x65 || unit->initialKind == 0x66)) {
+        if (unit != NULL && (unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION1 || unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION2 || unit->initialKind == UNIT_X_NAUTS_CRUMP_FORMATION3)) {
             id = i;
         }
     }
@@ -1267,7 +1267,7 @@ USER_FUNC(check_exist_kenkyu) {
 
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == 0x77) {
+        if (unit != NULL && unit->initialKind == UNIT_X_NAUT_PHD) {
             id = i;
         }
     }

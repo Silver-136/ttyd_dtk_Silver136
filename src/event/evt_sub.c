@@ -2347,7 +2347,7 @@ USER_FUNC(stone_bg) {
     u8* item;
     name = (char*)evtGetValue(event, event->args[0]);
     cam = camGetPtr(CAMERA_2D);
-    cam->letterBoxCamId = 5;
+    cam->letterBoxCamId = CAMERA_3D_EFFECTA;
     eff = effNameToPtr("sub_bg");
     ((ItemGetWork*)eff->userdata)->camera = 5;
     item = (u8*)itemNameToPtr(name);

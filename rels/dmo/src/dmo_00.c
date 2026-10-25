@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "driver/fadedrv.h"
 
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
@@ -128,7 +129,7 @@ USER_FUNC(demo_init) {
     }
     if (fileAsyncf(4, NULL, "%s/demo.tpl", getMarioStDvdRoot()) != 0U) {
         wp->tpl = fileAllocf(4, "%s/demo.tpl", getMarioStDvdRoot());
-        gp->areaFadeOutType = 9;
+        gp->areaFadeOutType = FADE_IN_BLACK;
         gp->areaFadeOutDuration = 500;
         return EVT_RETURN_DONE;
     }

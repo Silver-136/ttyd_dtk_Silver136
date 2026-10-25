@@ -798,17 +798,17 @@ void npcMain(void) {
                                 goto interrupt;
                             }
                         }
-                        if (entry->territoryType != 0 && (st == 1 || st == 2)) {
+                        if (entry->territoryType != NPC_TERRITORY_TYPE_NOTHING && (st == 1 || st == 2)) {
                             int trig;
                             trig = 0;
-                            if (entry->territoryType == 1) {
+                            if (entry->territoryType == NPC_TERRITORY_TYPE_CIRCLE) {
                                 f32 tz = entry->territoryBase.z - entry->position.z;
                                 f32 tx = entry->territoryBase.x - entry->position.x;
                                 f32 d = sqrtf(tx * tx + tz * tz);
                                 if (d > (st == 2 ? entry->territoryHoming.x : entry->territoryHoming.x)) {
                                     trig = 1;
                                 }
-                            } else if (entry->territoryType == 2) {
+                            } else if (entry->territoryType == NPC_TERRITORY_TYPE_SQUARE) {
                                 if (st == 2) {
                                     if (entry->position.x < entry->territoryBase.x - entry->territoryHoming.x ||
                                         entry->position.x > entry->territoryBase.x + entry->territoryHoming.x ||
@@ -926,7 +926,7 @@ void npcMain(void) {
                                     } else if (-dy > entry->territoryHoming.y) {
                                         trig = 0;
                                     } else if (st == 4) {
-                                        if (entry->territoryType == 1) {
+                                        if (entry->territoryType == NPC_TERRITORY_TYPE_CIRCLE) {
                                             f32 tz = entry->territoryBase.z - entry->position.z;
                                             f32 tx = entry->territoryBase.x - entry->position.x;
                                             f32 d = sqrtf(tx * tx + tz * tz);
@@ -2368,9 +2368,9 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
     if (!(wp->flags & 1) && (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) return FALSE;
     if ((*(s32*)&((GlobalWork*)gp)->mapEventId)) return FALSE;
     if (seqGetSeq() != 2) return FALSE;
-    if ((*(u16*)&((MarioWork*)m)->currMotionId) == 0x19) return FALSE;
+    if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_SHIP) return FALSE;
     if (vivianGetStatus()) return FALSE;
-    if ((*(u16*)&((MarioWork*)m)->currMotionId) == 0x1F || (*(u16*)&((MarioWork*)m)->currMotionId) == 0x20) return FALSE;
+    if ((*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE || (*(u16*)&((MarioWork*)m)->currMotionId) == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
     if ((*(u16*)&((NpcEntry*)npc)->wFbatHitCheckRelated)) return FALSE;
     return TRUE;
 }
@@ -2808,7 +2808,7 @@ void npcSetupBattleInfo(NpcEntry* npc, NpcSetupBattleInfo* setup) {
         }
         info->battleFlags = setup->battleFlags;
         info->fixedItem = setup->fixedItem;
-        info->itemDropped = 0;
+        info->itemDropped = ITEM_NULL;
         info->heartsDropped = 0;
         info->flowersDropped = 0;
         info->bgmName = setup->bgmName;

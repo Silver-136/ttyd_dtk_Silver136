@@ -1859,7 +1859,7 @@ static USER_FUNC(mahorn_shuffle) {
     // the real wizzerd and its copies
     for (i = 0; i < 64; i++) {
         kamecs[n] = wp->units[i];
-        if (kamecs[n] != NULL && (kamecs[n]->currentKind == 0x80 || kamecs[n]->currentKind == 0x81 || kamecs[n]->currentKind == 0xA9 || kamecs[n]->currentKind == 0xAA)) {
+        if (kamecs[n] != NULL && (kamecs[n]->currentKind == UNIT_DARK_WIZZERD || kamecs[n]->currentKind == UNIT_DARK_WIZZERD_CLONE || kamecs[n]->currentKind == UNIT_ELITE_WIZZERD || kamecs[n]->currentKind == UNIT_ELITE_WIZZERD_CLONE)) {
             n++;
         }
     }
@@ -1897,7 +1897,7 @@ static USER_FUNC(mahorn_get_bunsin) {
     // indices of the wizzerd's copies
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == 0x81 || unit->currentKind == 0xAA)) {
+        if (unit != NULL && (unit->currentKind == UNIT_DARK_WIZZERD_CLONE || unit->currentKind == UNIT_ELITE_WIZZERD_CLONE)) {
             copies[n] = i;
             n++;
         }

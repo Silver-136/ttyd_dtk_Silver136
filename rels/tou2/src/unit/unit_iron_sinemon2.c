@@ -473,10 +473,10 @@ static USER_FUNC(get_id) {
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
         if (unit != NULL) {
-            if (unit->currentKind == 0x3D) {
+            if (unit->currentKind == UNIT_IRON_CLEFT_RED) {
                 id1 = i;
             }
-            if (unit->currentKind == 0x3E) {
+            if (unit->currentKind == UNIT_IRON_CLEFT_GREEN) {
                 id2 = i;
             }
         }

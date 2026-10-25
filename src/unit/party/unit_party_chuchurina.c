@@ -25,6 +25,7 @@
 #include "evt/evt_sub.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
+#include "mario/mario_pouch.h"
 
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* parts);
 void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);
@@ -2877,7 +2878,7 @@ USER_FUNC(_chuchu_item_steal) {
         evtSetValue(event, out, 0);
         return EVT_RETURN_DONE;
     }
-    unit->heldItem = 0;
+    unit->heldItem = ITEM_NULL;
     if (BtlUnit_CheckUnitFlag(unit, 0x40000000)) {
         BtlUnit_OffUnitFlag(unit, 0x40000000);
         if (unit->groupSetupId >= 0) {
@@ -2890,7 +2891,7 @@ USER_FUNC(_chuchu_item_steal) {
         arr[unit->groupSetupId + 7] = 0;
     }
     if ((u16)(s32)item >= 0xF0 && (u16)(s32)item < 0x153) {
-        if (unit->currentKind == 0xDE) {
+        if (unit->currentKind == UNIT_MARIO) {
             BtlUnit_EquipItem(unit, 3, 0);
         } else if (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {
             BtlUnit_EquipItem(unit, 5, 0);

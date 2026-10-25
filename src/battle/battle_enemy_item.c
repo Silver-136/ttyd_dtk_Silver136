@@ -104,7 +104,7 @@ void* _check_attack_item(BattleUnit* self) {
     if (itemId == 0x8B || itemId == 0x85) {
         for (i = 0; i < targets->numTargets; i++) {
             GETUNIT();
-            if (unit->currentKind == 0xE1 && !NOFLAG && !BtlUnit_CanActStatus(unit)) {
+            if (unit->currentKind == UNIT_KOOPS && !NOFLAG && !BtlUnit_CanActStatus(unit)) {
                 RET();
             }
         }

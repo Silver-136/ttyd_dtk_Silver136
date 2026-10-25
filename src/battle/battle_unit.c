@@ -95,7 +95,7 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     unit->groupSetupId = -1;
     unit->mAlliance = setup->alliance;
     unit->mLevel = unit->mKindParams->mLevel;
-    if (unit->currentKind == 0xDE || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7)) {
+    if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7)) {
         unit->mLevel = pouchGetPtr()->level;
     }
     unit->attackPhase = setup->attackPhase;

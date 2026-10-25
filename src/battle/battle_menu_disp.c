@@ -154,7 +154,7 @@ void DrawMainIcon(BattleSubMenu* menu, BattleCommandAct* acts, Mtx* a, Vec* b, f
     s32 j;
     s32 k;
 
-    if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == 0xDE) {
+    if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == UNIT_MARIO) {
         cursor = &wp->commandMenu.cursor[0];
     } else {
         cursor = &wp->commandMenu.cursor[1];
@@ -971,7 +971,7 @@ void InitSubMenuCommonProcess(BattleSubMenu** out, BattleCursor** mainCursor, Ba
     (*out)->reserved_10 = 0;
     (*out)->shown = 0;
     (*out)->prevAbsPos = cursor->absPos;
-    if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == 0xDE) {
+    if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == UNIT_MARIO) {
         *mainCursor = &wp->commandMenu.cursor[0];
     } else {
         *mainCursor = &wp->commandMenu.cursor[1];
@@ -1087,7 +1087,7 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
     s32 sw;
     s32 nn;
 
-    if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == 0xDE) {
+    if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == UNIT_MARIO) {
         mainCursor = &wp->commandMenu.cursor[0];
     } else {
         mainCursor = &wp->commandMenu.cursor[1];
@@ -1666,7 +1666,7 @@ void BattleMenuDisp_Operation_Init(BattleWork* wp, BOOL flag) {
     BattleCursor* mainCursor;
     BattleCursor* cursor;
 
-    if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == 0xDE) {
+    if (BattleGetUnitPtr(wp, wp->activeUnitId)->currentKind == UNIT_MARIO) {
         cursor = &wp->commandMenu.cursor[8];
     } else {
         cursor = &wp->commandMenu.cursor[9];

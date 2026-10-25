@@ -582,7 +582,7 @@ USER_FUNC(get_gold_chorobon_id) {
 
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == 0x14) {
+        if (unit != NULL && unit->initialKind == UNIT_GOLD_FUZZY) {
             break;
         }
     }

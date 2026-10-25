@@ -104,7 +104,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 { ok = FALSE; break; }
             }
             if (flags & 0x10000) {
-                if (unit->currentKind != 0xDE) {
+                if (unit->currentKind != UNIT_MARIO) {
                     { ok = FALSE; break; }
                 }
             }
@@ -114,7 +114,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (flags & 1) {
-                if (unit->currentKind == 0xDE || unit->currentKind == 0xDF) {
+                if (unit->currentKind == UNIT_MARIO || unit->currentKind == UNIT_SHELL_SHIELD) {
                     { ok = FALSE; break; }
                 }
             }
@@ -437,7 +437,7 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
             s32 id = d->targetIndices[i];
             unit = BattleGetUnitPtr(wp, d->targets[id].unitIdx);
             w[id] += 100;
-            if ((flags & 1) && unit->currentKind == 0xDE) {
+            if ((flags & 1) && unit->currentKind == UNIT_MARIO) {
                 w[id] = 1.5f * w[id];
             }
             if ((flags & 2) && unit->currentKind >= 0xE0 && unit->currentKind < 0xE7) {

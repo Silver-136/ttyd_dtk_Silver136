@@ -1487,7 +1487,7 @@ void BattleAudienceItemCtrlProcess(void) {
         switch (it->state) {
         case 0: {
             it->flags |= 2;
-            if (it->mItemType == 0) {
+            if (it->mItemType == ITEM_NULL) {
                 s32* tbl = (s32*)kd->itemTable;
                 s32 cnt = 0;
                 s32 sum;

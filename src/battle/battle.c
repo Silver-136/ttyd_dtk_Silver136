@@ -387,7 +387,7 @@ BattleUnit* BattleGetSystemPtr(BattleWork* wp) {
     BattleUnit* unit;
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->currentKind == 0xDC) {
+        if (unit != NULL && unit->currentKind == UNIT_SYSTEM) {
             return unit;
         }
     }
@@ -399,7 +399,7 @@ BattleUnit* BattleGetMarioPtr(BattleWork* wp) {
     BattleUnit* unit;
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->currentKind == 0xDE && unit->mAlliance == 0) {
+        if (unit != NULL && unit->currentKind == UNIT_MARIO && unit->mAlliance == 0) {
             return unit;
         }
     }
@@ -420,7 +420,7 @@ BattleUnit* BattleGetPartyPtr(BattleWork* wp) {
 }
 
 BattleUnit* BattleGetPartnerPtr(BattleWork* wp, BattleUnit* unit) {
-    if (unit->currentKind == 0xDE) {
+    if (unit->currentKind == UNIT_MARIO) {
         return BattleGetPartyPtr(wp);
     }
     return BattleGetMarioPtr(wp);

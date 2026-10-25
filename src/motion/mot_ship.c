@@ -181,7 +181,7 @@ void marioReInit_ship(void) {
     p = __memAlloc(HEAP_DEFAULT, 0x48);
     marioGetPtr()->motStruct = p;
     memset(marioGetPtr()->motStruct, 0, 0x48);
-    m->currMotionId = 0x19;
+    m->currMotionId = MARIO_MOTION_SHIP;
     m->dispOfs.y = -15.0f;
     m->currSubMotionId = 0x32;
     m->wPlayerCollisionBox.x = 40.0f;

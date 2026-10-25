@@ -483,9 +483,9 @@ static USER_FUNC(get_attacker) {
     EvtWord* args = event->args;
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
 
-    if (unit->initialKind == 0xDE) {
+    if (unit->initialKind == UNIT_MARIO) {
         evtSetValue(event, args[0], 0);
-    } else if (unit->initialKind == 0xE0) {
+    } else if (unit->initialKind == UNIT_GOOMBELLA) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 2);

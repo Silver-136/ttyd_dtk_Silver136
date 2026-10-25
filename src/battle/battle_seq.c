@@ -384,10 +384,10 @@ void btlseqFirstAct(BattleWork* wp) {
                 for (i = 0; i < 64; i++) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit && unit->entryEventCode) {
-                        if ((((NpcBattleInfo*)info)->battleFlags & 0x100000) && (unit->currentKind == 0xDE || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7))) {
+                        if ((((NpcBattleInfo*)info)->battleFlags & 0x100000) && (unit->currentKind == UNIT_MARIO || (unit->currentKind >= 0xE0 && unit->currentKind < 0xE7))) {
                             continue;
                         }
-                        if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == 0xDE) {
+                        if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI && unit->currentKind == UNIT_MARIO) {
                             evt = evtEntry((s32*)BtlUnit_GetData(unit, 0x41), 10, 0);
                             unit->entryEventId = evt->eventId;
                             evt->unitId = unit->unitId;

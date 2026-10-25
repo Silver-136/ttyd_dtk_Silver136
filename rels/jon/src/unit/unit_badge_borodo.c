@@ -168,7 +168,7 @@ static USER_FUNC(_steal_item) {
             }
             unit->heldItem = item;
             if (item >= 240 && item < 339) {
-                if (target->currentKind == 222) {
+                if (target->currentKind == UNIT_MARIO) {
                     BtlUnit_EquipItem(target, 3, 0);
                 } else if (target->currentKind >= 224 && target->currentKind < 231) {
                     BtlUnit_EquipItem(target, 5, 0);

@@ -126,7 +126,7 @@ void seq_mapChangeMain(SequenceWork* work) {
     switch (work->state) {
     case 0:
         if (strcmp(_next_map, "sys_01") == 0) {
-            if (gp->areaFadeInType != 10) {
+            if (gp->areaFadeInType != FADE_OUT_BLACK) {
                 fadeEntry(gp->areaFadeInType, gp->areaFadeInDuration, (GXColor){0, 0, 0, 0xFF});
             }
             fadeEntry(FADE_OUT_WHITE, 2000, (GXColor){0, 0, 0, 0xFF});
@@ -135,9 +135,9 @@ void seq_mapChangeMain(SequenceWork* work) {
         } else {
             fadeEntry(gp->areaFadeInType, gp->areaFadeInDuration, (GXColor){0, 0, 0, 0xFF});
         }
-        gp->mapFadeInType = 10;
+        gp->mapFadeInType = FADE_OUT_BLACK;
         gp->mapFadeInDuration = 300;
-        gp->areaFadeInType = 10;
+        gp->areaFadeInType = FADE_OUT_BLACK;
         gp->areaFadeInDuration = 300;
         psndSFXAllOff();
         if (!newarea) {
