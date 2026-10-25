@@ -8,39 +8,34 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 
-typedef struct effKemuri1Data {
-    u16 type; //0x0
-    u8 align_2[2]; //0x2, TODO: verify align
-    Vec position; //0x4
-    u8 field_0x10[0x38 - 0x10]; //0x10
-    s32 field_0x38; //0x38
-    s32 field_0x3C; //0x3C
-    u8 field_0x40[0x4C - 0x40]; //0x40
-    s32 field_0x4C; //0x4C
-} effKemuri1Data;
+// One entry per element: entry 0 is the effect header (type, position, frame counter, duration, texture frames),
+// entries 1.. are the puffs (position, speeds, direction, colour).
+typedef struct EffKemuri1Work {
+    u16 type;           // 0x0
+    u8 pad_2[2];        // 0x2
+    Vec position;       // 0x4
+    f32 hSpeed;         // 0x10, along (dirX, dirZ)
+    f32 f14, f18, f1C;  // 0x14, per type: horizontal speed factors
+    f32 vSpeed;         // 0x20
+    f32 f24, f28, f2C;  // 0x24, per type: vertical speed factors
+    f32 dirX;           // 0x30, sin of the puff's direction
+    f32 dirZ;           // 0x34, cos of the puff's direction
+    s32 field_0x38;     // 0x38, header: 0/3/2 by type, never read
+    s32 frame;          // 0x3C, header: frames elapsed
+    s32 animFrame;      // 0x40, header: texture frame (0..15); puffs with one above 15 are not drawn
+    u8 r, g, b;         // 0x44, puff colour
+    u8 pad_47;          // 0x47
+    s32 nextAnimFrame;  // 0x48, header: texture frame of the next frame
+    s32 duration;       // 0x4C, header: frames for the 16 texture frames
+} EffKemuri1Work;
 
 //local prototypes
 void effKemuri1Main(EffectEntry* effect);
 
-typedef struct effKemuri1EWork {
-    u16 type;
-    u8 pad_2[2];
-    Vec position; //0x4
-    f32 f10, f14, f18, f1C, f20, f24, f28, f2C, f30, f34; //0x10
-    s32 field_0x38;
-    s32 timer; //0x3C
-    s32 field_0x40;
-    u8 r, g, b; //0x44
-    u8 pad_47;
-    s32 field_0x48;
-    s32 field_0x4C;
-} effKemuri1EWork;
-
 EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
 
-
     EffectEntry* effect;
-    effKemuri1EWork* data;
+    EffKemuri1Work* data;
     s32 effCount;
     s32 i;
     f32 off; f32 angle; f32 tmp; f32 angle2;
@@ -66,32 +61,32 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
 
     effect->type = "Kemuri1N64";
     effect->count = effCount;
-    data = __memAlloc(HEAP_EFFECT, sizeof(effKemuri1EWork) * effCount);
+    data = __memAlloc(HEAP_EFFECT, sizeof(EffKemuri1Work) * effCount);
     effect->userdata = data;
     effect->callback = effKemuri1Main;
     switch (type) {
         case 0:
         case 1:
             data->field_0x38 = 0;
-            data->field_0x4C = 15;
+            data->duration = 15;
             break;
         case 2:
             data->field_0x38 = 3;
-            data->field_0x4C = 65;
+            data->duration = 65;
             break;
         case 3:
             data->field_0x38 = 2;
-            data->field_0x4C = 129;
+            data->duration = 129;
             break;
         case 4:
         case 5:
         case 6:
         case 7:
             data->field_0x38 = 3;
-            data->field_0x4C = 65;
+            data->duration = 65;
             break;
     }
-    data->timer = 0;
+    data->frame = 0;
     data->type = type;
     data->position.x = x;
     data->position.y = y;
@@ -101,11 +96,11 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
         case 0:
         case 1:
             for (i = 1; i < effCount; i++, data++) {
-                data->f10 = -3.0f;
+                data->hSpeed = -3.0f;
                 data->f14 = 0.29999998f;
                 data->f18 = 0.0f;
                 data->f1C = 0.0f;
-                data->f20 = 1.75f;
+                data->vSpeed = 1.75f;
                 data->f24 = -0.16f;
                 data->f28 = 0.0f;
                 data->f2C = 0.0f;
@@ -114,8 +109,8 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
                 data->position.z = 4.0f;
                 angle = reviseAngle(90.0f + 180.0f * (i - 1));
                 angle = 6.2831855f * angle / 360.0f;
-                data->f30 = sin(angle);
-                data->f34 = cos(angle);
+                data->dirX = sin(angle);
+                data->dirZ = cos(angle);
                 data->r = 0xFF;
                 data->g = 0xFF;
                 data->b = 0xFF;
@@ -129,7 +124,7 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
                         tmp = sin(angle); data->position.x = 25.0f * -tmp;
                         data->position.y = 0.0f;
                         tmp = cos(angle); data->position.z = 25.0f * -tmp;
-                        data->f20 = 0.95f;
+                        data->vSpeed = 0.95f;
                         data->f24 = -0.04f;
                         data->f28 = 0.94f;
                         break;
@@ -138,7 +133,7 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
                         tmp = sin(angle); data->position.x = 25.0f * -tmp;
                         data->position.y = 4.0f;
                         tmp = cos(angle); data->position.z = 25.0f * -tmp;
-                        data->f20 = 0.84999996f;
+                        data->vSpeed = 0.84999996f;
                         data->f24 = -0.04f;
                         data->f28 = 0.94f;
                         break;
@@ -147,13 +142,13 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
                         tmp = sin(angle); data->position.x = 25.0f * -tmp;
                         data->position.y = 10.0f;
                         tmp = cos(angle); data->position.z = 25.0f * -tmp;
-                        data->f20 = 0.75f;
+                        data->vSpeed = 0.75f;
                         data->f24 = -0.04f;
                         data->f28 = 0.94f;
                         break;
                 }
-                data->f30 = 0.0f;
-                data->f34 = 0.0f;
+                data->dirX = 0.0f;
+                data->dirZ = 0.0f;
                 data->r = 0xFF;
                 data->g = 0xFF;
                 data->b = 0xFF;
@@ -164,9 +159,9 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
         case 6:
         case 7:
             for (i = 1; i < effCount; i++, data++) {
-                data->f10 = -3.0f;
+                data->hSpeed = -3.0f;
                 data->f14 = 0.93f;
-                data->f20 = 0.0f;
+                data->vSpeed = 0.0f;
                 data->f24 = 0.099999994f;
                 data->f28 = 0.94f;
                 data->f2C = 0.94f;
@@ -177,9 +172,9 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
                 tmp = cos(angle2);
                 data->position.z = 10.0f * -tmp;
                 tmp = sin(angle2);
-                data->f30 = tmp;
+                data->dirX = tmp;
                 tmp = cos(angle2);
-                data->f34 = tmp;
+                data->dirZ = tmp;
                 switch (type) {
                     case 4:
                     case 7:
@@ -207,21 +202,8 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
 #include "driver/dispdrv.h"
 void effKemuri1Disp(CameraId cameraId, EffectEntry* effect);
 
-typedef struct effKemuri1MWork {
-    u16 type;
-    u8 pad_2[2];
-    Vec position; //0x4
-    f32 f10, f14, f18, f1C, f20, f24, f28, f2C, f30, f34; //0x10
-    s32 field_0x38;
-    s32 timer; //0x3C
-    s32 field_0x40;
-    s32 field_0x44;
-    s32 field_0x48;
-    s32 field_0x4C;
-} effKemuri1MWork;
-
 void effKemuri1Main(EffectEntry* effect) {
-    effKemuri1MWork* work = effect->userdata;
+    EffKemuri1Work* work = effect->userdata;
     Vec pos2;
     Vec pos = {0.0f, 0.0f, 0.0f};
     s32 type, i, t, b, a;
@@ -231,11 +213,11 @@ void effKemuri1Main(EffectEntry* effect) {
     pos.z = work->position.z;
     pos2 = pos;
 
-    t = work->timer;
+    t = work->frame;
     type = work->type;
-    b = 16.0f * t / work->field_0x4C;
-    a = 16.0f * (t + 1) / work->field_0x4C;
-    work->timer = t + 1;
+    b = 16.0f * t / work->duration;
+    a = 16.0f * (t + 1) / work->duration;
+    work->frame = t + 1;
     if (a > 15) {
         a = 15;
     }
@@ -243,38 +225,38 @@ void effKemuri1Main(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    work->field_0x40 = b;
-    work->field_0x48 = a;
+    work->animFrame = b;
+    work->nextAnimFrame = a;
     for (i = 1, work++; i < effect->count; i++, work++) {
         switch (type) {
             case 0:
             case 1:
                 work->f18 += work->f1C;
                 work->f14 += work->f18;
-                work->f10 += work->f14;
-                work->position.x += work->f10 * work->f30;
-                work->position.z += work->f10 * work->f34;
+                work->hSpeed += work->f14;
+                work->position.x += work->hSpeed * work->dirX;
+                work->position.z += work->hSpeed * work->dirZ;
                 work->f28 += work->f2C;
                 work->f24 += work->f28;
-                work->f20 += work->f24;
-                work->position.y += work->f20;
+                work->vSpeed += work->f24;
+                work->position.y += work->vSpeed;
                 break;
             case 3:
-                work->position.y += work->f20;
-                work->f20 += work->f24;
+                work->position.y += work->vSpeed;
+                work->vSpeed += work->f24;
                 work->f24 *= work->f28;
                 break;
             case 4:
             case 5:
             case 6:
             case 7:
-                work->position.x += work->f10 * work->f30;
-                work->position.z += work->f10 * work->f34;
-                work->f10 *= work->f14;
-                work->position.y += work->f20;
-                work->f20 += work->f24;
+                work->position.x += work->hSpeed * work->dirX;
+                work->position.z += work->hSpeed * work->dirZ;
+                work->hSpeed *= work->f14;
+                work->position.y += work->vSpeed;
+                work->vSpeed += work->f24;
                 work->f24 *= work->f28;
-                work->f20 *= work->f2C;
+                work->vSpeed *= work->f2C;
                 break;
         }
     }
@@ -285,22 +267,10 @@ void effKemuri1Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, (DispCallback)effKemuri1Disp, effect);
 }
 
-typedef struct effKemuri1Work {
-    u16 type; //0x0
-    u8 pad_2[2];
-    Vec position; //0x4
-    u8 field_0x10[0x40 - 0x10];
-    s32 timer; //0x40
-    u8 r, g, b; //0x44
-    u8 pad_47;
-    s32 field_0x48;
-    u8 pad_4C[4];
-} effKemuri1Work;
-
 void effKemuri1Disp(CameraId cameraId, EffectEntry* effect) {
     Mtx mtx, scale, rot, view;
     GXTexObj tex;
-    effKemuri1Work* work;
+    EffKemuri1Work* work;
     CameraEntry* camera;
     s32 type;
     s32 i, j;
@@ -310,8 +280,8 @@ void effKemuri1Disp(CameraId cameraId, EffectEntry* effect) {
     work = effect->userdata;
     camera = camGetPtr(cameraId);
     type = work->type;
-    a = work->timer;
-    b = work->field_0x48;
+    a = work->animFrame;
+    b = work->nextAnimFrame;
     s = 1.0f;
     switch (type) {
         case 5:
@@ -361,7 +331,7 @@ void effKemuri1Disp(CameraId cameraId, EffectEntry* effect) {
     for (i = 1, work++; i < effect->count; i++, work++) {
         f32 h;
         f32 w;
-        if (work->timer > 15) {
+        if (work->animFrame > 15) {
             continue;
         }
         PSMTXTrans(mtx, ofsS, 0.0f, 0.0f);
