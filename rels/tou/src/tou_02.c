@@ -1673,7 +1673,12 @@ void ext_fan_main(void) {
                         break;
                     case 1:
                         fan->state = 10;
-                        { f32 k; f32 mn; f32 r = rand() / 32767.0f; angle = (6.2831855f * ((r * (k = 225.0f - 135.0f)) + (mn = 135.0f))) / 360.0f; } // FAKE: hand-inlined randf(135.0f, 225.0f) (same rand() call, r*90+135), 6.28 first so its pool address is created before 90/135 as in the target
+                        { // FAKE: hand-inlined randf(135.0f, 225.0f) (same rand() call, r*90+135), 6.28 first so its pool address is created before 90/135 as in the target
+                            f32 k;
+                            f32 mn;
+                            f32 r = rand() / 32767.0f;
+                            angle = (6.2831855f * ((r * (k = 225.0f - 135.0f)) + (mn = 135.0f))) / 360.0f;
+                        }
                         dist = randf(400.0f, 500.0f);
                         x = fan->pos.x + dist * fan_sin(angle);
                         z = fan->pos.z - dist * fan_cos(angle);

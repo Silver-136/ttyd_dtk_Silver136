@@ -1300,7 +1300,11 @@ int puniMoveAtari(PuniData* p, Vec start, Vec dir, int reflect, f32 dist) {
             PSVECScale(&refl, &p->vel, dist);
             ret = 0;
         }
-        { f32 dp = PSVECDotProduct(&dir, &n); f32 t = -(dist - d); PSVECScale(&n, &n, dp * t + 0.1f); }
+        {
+            f32 dp = PSVECDotProduct(&dir, &n);
+            f32 t = -(dist - d);
+            PSVECScale(&n, &n, dp * t + 0.1f);
+        }
         PSVECAdd(&p->pos, &n, &p->pos);
         PSVECSubtract(&p->pos, &old, &diff);
         d = PSVECMag(&diff);

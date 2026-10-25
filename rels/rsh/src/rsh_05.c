@@ -984,7 +984,14 @@ static void ext_moamoa_main(void) {
         r2 = rand() / 32767.0f;
         b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
-        { f32 x2 = x; f32 y2 = y; f32 z2 = z; f32 s2 = a2; f32 g2 = b; moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g2); }
+        {
+            f32 x2 = x;
+            f32 y2 = y;
+            f32 z2 = z;
+            f32 s2 = a2;
+            f32 g2 = b;
+            moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g2);
+        }
       }
         break;
       }
@@ -1038,7 +1045,11 @@ static void ext_moamoa_main(void) {
         {
           f32 rad; f32 k;
           s = rand() / 32767.0f;
-          { f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]); a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f); rad = (6.2831855f * a3) / 360.0f; }
+          {
+              f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+              a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
+              rad = (6.2831855f * a3) / 360.0f;
+          }
           ty = (*pose->mtx)[0][3] + (15.0f * moa_sinx(rad));
           y = (*pose->mtx)[1][3];
           z = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
@@ -1168,7 +1179,12 @@ static void ext_moamoa_main(void) {
                     f32 rad = (6.2831855f * a3) / 360.0f;
                     dist = (15.0f * moa_sinx(rad)) + (*pose->mtx)[0][3];
                     angle = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
-                    { f32 k; f32 r1 = rand() / 32767.0f; f32 r2 = rand() / 32767.0f; moamoa_jump(pose, moa, moa->state, 1, dist, x, angle, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f); }
+                    {
+                        f32 k;
+                        f32 r1 = rand() / 32767.0f;
+                        f32 r2 = rand() / 32767.0f;
+                        moamoa_jump(pose, moa, moa->state, 1, dist, x, angle, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
+                    }
                 } else {
                     moa->state++;
                 }
@@ -1178,11 +1194,21 @@ static void ext_moamoa_main(void) {
                 if ((*pose->mtx)[0][3] > -350.0f) {
                     f32 rad;
                     s = rand() / 32767.0f;
-                    { f32 k; f32 a3 = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -350.0f, -100.0f); a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f); rad = (6.2831855f * a3) / 360.0f; }
+                    {
+                        f32 k;
+                        f32 a3 = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -350.0f, -100.0f);
+                        a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
+                        rad = (6.2831855f * a3) / 360.0f;
+                    }
                     x = (15.0f * moa_sinx(rad)) + (*pose->mtx)[0][3];
                     y = (*pose->mtx)[1][3];
                     grav = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
-                    { f32 k; f32 r1 = rand() / 32767.0f; f32 r2 = rand() / 32767.0f; moamoa_jump(pose, moa, moa->state, 1, x, y, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f); }
+                    {
+                        f32 k;
+                        f32 r1 = rand() / 32767.0f;
+                        f32 r2 = rand() / 32767.0f;
+                        moamoa_jump(pose, moa, moa->state, 1, x, y, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
+                    }
                 } else {
                     moa->state = 0x3e;
                 }

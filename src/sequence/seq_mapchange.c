@@ -33,6 +33,7 @@
 #include "driver/npcdrv.h"
 #include "evt/evt_fade.h"
 #include "evt/evt_mario.h"
+#include "evt/evt_nannpc.h"
 
 //.sbss
 char _next_area[0x20];
@@ -325,7 +326,6 @@ void seq_mapChangeMain(SequenceWork* work) {
 }
 
 void _unload(const char* prevMap, const char* nextMap, const char* bero) {
-    extern void* nanNPCWork;
     BOOL swReinit = FALSE;
     int i;
 

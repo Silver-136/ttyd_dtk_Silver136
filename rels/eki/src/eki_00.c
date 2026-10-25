@@ -954,7 +954,14 @@ static void ext_moamoa_main(void)
         r2 = rand() / 32767.0f;
         b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
-        { f32 x2 = x; f32 y2 = y; f32 z2 = z; f32 s2 = a2; f32 g2 = b; moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g2); }
+        {
+            f32 x2 = x;
+            f32 y2 = y;
+            f32 z2 = z;
+            f32 s2 = a2;
+            f32 g2 = b;
+            moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g2);
+        }
       }
         break;
       }
@@ -1008,7 +1015,11 @@ static void ext_moamoa_main(void)
         {
           f32 rad; f32 k;
           s = rand() / 32767.0f;
-          { f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]); a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f); rad = (6.2831855f * a3) / 360.0f; }
+          {
+              f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+              a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
+              rad = (6.2831855f * a3) / 360.0f;
+          }
           ty = (*pose->mtx)[0][3] + (15.0f * moa_sinx(rad));
           y = (*pose->mtx)[1][3];
           z = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
@@ -1134,7 +1145,12 @@ static void ext_moamoa_main(void)
         if ((__fabs((*pose->mtx)[0][3]) < 300.0) && (__fabs((*pose->mtx)[2][3]) < 300.0))
         {
           s = rand() / 32767.0f;
-          { f32 k; f32 a3 = angleABf(wp->target[i % 3].x, wp->target[i % 3].z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]); a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f); rad = (6.2831855f * a3) / 360.0f; }
+          {
+              f32 k;
+              f32 a3 = angleABf(wp->target[i % 3].x, wp->target[i % 3].z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+              a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
+              rad = (6.2831855f * a3) / 360.0f;
+          }
           x = (15.0f * moa_sinx(rad)) + (*pose->mtx)[0][3];
           grav = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
           {

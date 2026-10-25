@@ -2454,7 +2454,11 @@ pose->texId = calcPose(i, kpaSen[i].pose1Lo, kpaSen[i].pose1Hi, 1); if (i % 10 =
                 if (i < 100) {
                     pose->texId = calcPose(i, kpaSen[i].pose99Lo, kpaSen[i].pose99Hi, 0);
                 } else {
-                    { s32 lo = kpaSen[i].pose99Lo; s32 hi = kpaSen[i].pose99Hi; pose->texId = calcPose(i - 100, lo, hi, 0); }
+                    {
+                        s32 lo = kpaSen[i].pose99Lo;
+                        s32 hi = kpaSen[i].pose99Hi;
+                        pose->texId = calcPose(i - 100, lo, hi, 0);
+                    }
                 }
                 break;
             case -1:

@@ -789,7 +789,13 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
         if (entry->flags2 & 0x100000) continue;
         if (entry->mode == 2) continue;
         if (entry->flags2 & 0x2000000) continue;
-        { f32 iz, iy, ix; ix = entry->position.x; iy = entry->position.y; iz = entry->position.z; itemPos = makeVecByValue(ix, iy, iz); }
+        {
+            f32 iz, iy, ix;
+            ix = entry->position.x;
+            iy = entry->position.y;
+            iz = entry->position.z;
+            itemPos = makeVecByValue(ix, iy, iz);
+        }
         PSVECSubtract(&itemPos, &pos, &diff);
         dist = PSVECMag(&diff);
         if (dist < range) {

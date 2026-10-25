@@ -396,7 +396,11 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 BattleWorkTarget* ta = &t[idx[i]];
                 BattleWorkTarget* tb = &t[idx[j]];
                 if (ta->posX + ta->score * 10 > tb->posX + tb->score * 10) {
-                    { s8 a = idx[i]; idx[i] = idx[j]; idx[j] = a; }
+                    {
+                        s8 a = idx[i];
+                        idx[i] = idx[j];
+                        idx[j] = a;
+                    }
                 }
             }
         }
@@ -406,7 +410,11 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 BattleWorkTarget* ta = &t[idx[i]];
                 BattleWorkTarget* tb = &t[idx[j]];
                 if (ta->posX + ta->score * 10 <= tb->posX + tb->score * 10) {
-                    { s8 a = idx[i]; idx[i] = idx[j]; idx[j] = a; }
+                    {
+                        s8 a = idx[i];
+                        idx[i] = idx[j];
+                        idx[j] = a;
+                    }
                 }
             }
         }

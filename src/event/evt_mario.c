@@ -995,7 +995,11 @@ USER_FUNC(evt_mario_party_door_move) {
             if (mp->flags & MARIO_FLAG_BG_MODE) {
                 spd *= 0.4f;
             }
-            { s32 n = (f32)gp->framerate * (dist / spd); spd = spd / (f32)gp->framerate; marioSetForceMove(n, mp->directionView, spd); }
+            {
+                s32 n = (f32)gp->framerate * (dist / spd);
+                spd = spd / (f32)gp->framerate;
+                marioSetForceMove(n, mp->directionView, spd);
+            }
             event->userdata[0] = 2;
             break;
         case 2:
@@ -1126,7 +1130,11 @@ USER_FUNC(evt_mario_party_bero_move) {
             if (mp->flags & MARIO_FLAG_BG_MODE) {
                 spd *= 0.4f;
             }
-            { s32 n = (f32)gp->framerate * (dist / spd); spd = spd / (f32)gp->framerate; marioSetForceMove(n, mp->directionView, spd); }
+            {
+                s32 n = (f32)gp->framerate * (dist / spd);
+                spd = spd / (f32)gp->framerate;
+                marioSetForceMove(n, mp->directionView, spd);
+            }
             event->userdata[0] = 2;
             break;
         case 2:

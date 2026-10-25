@@ -948,7 +948,11 @@ void yuka_capture(CameraId cam, void* param) {
     camera->cameraUp = (Vec){0.0f, 0.0f, -1.0f};
     camera->cameraPos = c;
     camera->cameraAt = camera->cameraPos;
-    { f32 t = tan(0.21816616f); f32 h = w->h0; camera->cameraPos.y += (f32)w->h0 / 2 / t; }
+    {
+        f32 t = tan(0.21816616f);
+        f32 h = w->h0;
+        camera->cameraPos.y += (f32)w->h0 / 2 / t;
+    }
     C_MTXLookAt(camera->view, &camera->cameraPos, &camera->cameraUp, &camera->cameraAt);
     C_MTXPerspective(camera->projection, 25.0f, (f32)w->w0 / (f32)w->h0, 1.0f, 32767.0f);
     camera->projType = 0;

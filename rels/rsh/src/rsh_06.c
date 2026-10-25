@@ -895,11 +895,24 @@ static void ext_moamoa_main(void) {
                 if (dist > 31.0f) {
                     x1 = ( 30.0f * moa_sinx(( 6.2831855f * angle ) / 360.0f) ) + (*pose->mtx)[0][3];
                     dist = (*pose->mtx)[2][3] - ( 30.0f * moa_cosx(( 6.2831855f * angle ) / 360.0f) );
-                    { f32 k; f32 r2; f32 aa; s = rand() / 32767.0f; r2 = rand() / 32767.0f; moamoa_jump(pose, m, m->state, 0, x1, 215.0f, dist, 2.0f * (aa = (s * (k = 1.0f - 1.0f)) + 1.0f), 2.0f * ((r2 * k) + 0.4f)); } // FAKE: `aa` is a never-read holder kept by opt_dead_assignments off (in-argument sum stays in argument order, numbered below k/r2)
+                    { // FAKE: `aa` is a never-read holder kept by opt_dead_assignments off (in-argument sum stays in argument order, numbered below k/r2)
+                        f32 k;
+                        f32 r2;
+                        f32 aa;
+                        s = rand() / 32767.0f;
+                        r2 = rand() / 32767.0f;
+                        moamoa_jump(pose, m, m->state, 0, x1, 215.0f, dist, 2.0f * (aa = (s * (k = 1.0f - 1.0f)) + 1.0f), 2.0f * ((r2 * k) + 0.4f));
+                    }
                 } else {
                     moamoa_joint_position(m, &jv);
                     PSVECAdd(&jv, &m->jitter, &jv);
-                    { f32 k; f32 r2; d = rand() / 32767.0f; r2 = rand() / 32767.0f; moamoa_jump(pose, m, 61, 0, jv.x, jv.y, jv.z, 2.0f * ((d * (k = 1.5f - 1.5f)) + 1.5f), 2.0f * ((r2 * k) + 0.8f)); }
+                    {
+                        f32 k;
+                        f32 r2;
+                        d = rand() / 32767.0f;
+                        r2 = rand() / 32767.0f;
+                        moamoa_jump(pose, m, 61, 0, jv.x, jv.y, jv.z, 2.0f * ((d * (k = 1.5f - 1.5f)) + 1.5f), 2.0f * ((r2 * k) + 0.8f));
+                    }
                     m->flags |= 0x200;
                     pose->flags |= 4;
                 }
@@ -984,7 +997,14 @@ static void ext_moamoa_main(void) {
         r2 = rand() / 32767.0f;
         b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
-        { f32 x2 = x; f32 y2 = y; f32 z2 = z; f32 s2 = a2; f32 g2 = b; moamoa_jump(pose, m, (d < 100.0f) ? (m->state) : (0), 0, x2, y2, z2, s2, g2); }
+        {
+            f32 x2 = x;
+            f32 y2 = y;
+            f32 z2 = z;
+            f32 s2 = a2;
+            f32 g2 = b;
+            moamoa_jump(pose, m, (d < 100.0f) ? (m->state) : (0), 0, x2, y2, z2, s2, g2);
+        }
       }
         break;
       }
@@ -1036,7 +1056,11 @@ static void ext_moamoa_main(void) {
         {
           f32 rad; f32 k;
           s = rand() / 32767.0f;
-          { f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]); a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f); rad = (6.2831855f * a3) / 360.0f; }
+          {
+              f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+              a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
+              rad = (6.2831855f * a3) / 360.0f;
+          }
           x = (*pose->mtx)[0][3] + (15.0f * moa_sinx(rad));
           y = (*pose->mtx)[1][3];
           z = (*pose->mtx)[2][3] - (15.0f * moa_cosx(rad));
@@ -1173,17 +1197,37 @@ static void ext_moamoa_main(void) {
         }
         if (!(m->flags & 0x588)) {
             if ((*pose->mtx)[0][3] > 100.0f) {
-                { f32 k; f32 mn; f32 r = rand() / 32767.0f; (*pose->mtx)[0][3] = 100.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f)); } // FAKE: hand-inlined randf(0.0f, 5.0f) (same rand() call, same r*5+0 then +c), so the constant is reloaded after the call as in the target
+                { // FAKE: hand-inlined randf(0.0f, 5.0f) (same rand() call, same r*5+0 then +c), so the constant is reloaded after the call as in the target
+                    f32 k;
+                    f32 mn;
+                    f32 r = rand() / 32767.0f;
+                    (*pose->mtx)[0][3] = 100.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f));
+                }
             }
             if ((*pose->mtx)[0][3] < -1870.0f) {
-                { f32 k; f32 mn; f32 r = rand() / 32767.0f; (*pose->mtx)[0][3] = -1870.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f)); }
+                {
+                    f32 k;
+                    f32 mn;
+                    f32 r = rand() / 32767.0f;
+                    (*pose->mtx)[0][3] = -1870.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f));
+                }
             }
             if (!(m->flags & 0x40)) {
                 if ((*pose->mtx)[2][3] > 45.0f) {
-                    { f32 k; f32 mn; f32 r = rand() / 32767.0f; (*pose->mtx)[2][3] = 45.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f)); }
+                    {
+                        f32 k;
+                        f32 mn;
+                        f32 r = rand() / 32767.0f;
+                        (*pose->mtx)[2][3] = 45.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f));
+                    }
                 }
                 if ((*pose->mtx)[2][3] < -45.0f) {
-                    { f32 k; f32 mn; f32 r = rand() / 32767.0f; (*pose->mtx)[2][3] = -45.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f)); }
+                    {
+                        f32 k;
+                        f32 mn;
+                        f32 r = rand() / 32767.0f;
+                        (*pose->mtx)[2][3] = -45.0f + ((r * mmI(5.0f - 0.0f)) + mmI(0.0f));
+                    }
                 }
             }
         }

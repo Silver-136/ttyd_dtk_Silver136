@@ -1626,7 +1626,11 @@ void party_motion_behind_mario(PartyEntry* party) {
         }
     }
     if (!(party->trigFlags & 0x100000) && marioKeyOffChk()) {
-        { f32 t2 = partyGetFollowDir(party); t2 += 180.0f; party->homeDir = revise360(t2); }
+        {
+            f32 t2 = partyGetFollowDir(party);
+            t2 += 180.0f;
+            party->homeDir = revise360(t2);
+        }
     }
     partyGetAppearPos4(party, &target);
     x = target.x;
@@ -1765,7 +1769,11 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     f32 thr;
     f32 x, z;
 
-    { f32 t = partyGetFollowDir(party); t += 180.0f; party->homeDir = revise360(t); }
+    {
+        f32 t = partyGetFollowDir(party);
+        t += 180.0f;
+        party->homeDir = revise360(t);
+    }
     if (party->trigFlags & 2) {
         party->trigFlags &= ~2;
         sp = 1.5f * mario->wPlayerCollisionBox.x;
@@ -1778,7 +1786,11 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         }
     }
     if (marioKeyOffChk()) {
-        { f32 t = partyGetFollowDir(party); t += 180.0f; party->homeDir = revise360(t); }
+        {
+            f32 t = partyGetFollowDir(party);
+            t += 180.0f;
+            party->homeDir = revise360(t);
+        }
     }
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
         sp = 1.5f * mario->wPlayerCollisionBox.x;
