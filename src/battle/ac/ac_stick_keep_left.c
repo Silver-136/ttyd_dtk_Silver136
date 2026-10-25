@@ -186,8 +186,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     }
                 }
                 break;
-            case 1003:
-                {
+            case 1003: {
                     s32 k;
                     j = cw->idx - 2; if (j >= 0) for (k = 0; k <= j; k++) {
                     }

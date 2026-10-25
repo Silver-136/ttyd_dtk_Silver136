@@ -1686,8 +1686,7 @@ void yuunpc_pose_minigame4_main(void) {
                     case 5:
                     case 6:
                     case 27:
-                    case 28:
-                        {
+                    case 28: {
                                                 if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
                             f32 tt = 50.0f * kind;
                             if (npc->pos.z >= -150.0f + tt && npc->pos.z < 150.0f - tt + w) {

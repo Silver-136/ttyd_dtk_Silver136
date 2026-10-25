@@ -4024,8 +4024,7 @@ s32 _object_fall_attack(EventEntry *event, BOOL isFirstCall) {
                                 case 4:
                                     break;
 
-                                case 3:
-                                {
+                                case 3: {
                                     EffectEntry *eff;
                                     BtlUnit_GetPos(unit2, &p.x, &p.y, &p.z);
                                     if (p.y < 85.0f) {

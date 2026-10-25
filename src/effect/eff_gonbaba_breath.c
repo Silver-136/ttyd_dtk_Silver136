@@ -97,8 +97,7 @@ void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
         case 13:
         case 14:
         case 15:
-        case 16:
-            {
+        case 16: {
             f32 ang2, rad2, spd2;
             ang2 = 240.0f + irand(60);
             spd2 = (irand(50) + 10) / 10.0f;
@@ -454,8 +453,7 @@ void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect) {
 
             case 16:
 
-            case 17:
-                {
+            case 17: {
                 GXColor c;
                 c.r = work->from[0];
                 c.g = work->from[1];

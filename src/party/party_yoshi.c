@@ -649,8 +649,7 @@ void yoshi_use(PartyEntry* party) {
             mario->mot.yoshi.bobOfs = 0.0f;
             mario->mot.yoshi.baseY = party->position.y;
             party->yoshiPsndSFXId = psndSFXOn_3D(0x941, &party->position);
-        case 21:
-            {
+        case 21: {
                 f32 s = sin(3.141592653589793f * YW(party)->angle / 180.0f);
                 mario->mot.yoshi.bobSpeed = s * (YW(party)->angle <= 180.0f ? 0.5f : 0.37f);
             }
@@ -660,8 +659,7 @@ void yoshi_use(PartyEntry* party) {
                 YW(party)->angle = 360.0f;
                 party->useMotionId = 22;
             }
-        case 22:
-            {
+        case 22: {
                 f32 y = 18.0f + party->position.y;
                 f32 x = party->position.x;
                 f32 z = party->position.z;
@@ -781,8 +779,7 @@ void yoshi_use(PartyEntry* party) {
             party->work.common.accelY = marioJumpStandData[1];
             party->work.yoshi.gravityAccel = marioJumpStandData[2];
             party->accelY = marioJumpStandData[3];
-        case 61:
-            {
+        case 61: {
                 f32 prev = party->gravity;
                 party->work.yoshi.gravityAccel += party->accelY;
                 party->work.common.accelY += party->work.yoshi.gravityAccel;

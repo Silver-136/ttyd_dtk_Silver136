@@ -3464,8 +3464,7 @@ void puniModeFunbari(PuniData* p) {
             break;
         }
         case 1:
-        case 2:
-            {
+        case 2: {
                 f32 s = sin(3.1415927f * p->modeF0 / 180.0f);
                 if (p->modeF0 <= 180.0f) {
                     p->modeF1 = 0.5f * s;
@@ -3500,8 +3499,7 @@ void puniModeFunbari(PuniData* p) {
             if (p->timer-- == 0) p->modeStep = 10;
 #endif
             break;
-        case 10:
-            {
+        case 10: {
                 Vec v_ = {0.0f, 0.0f, 0.0f};
                 p->vel = v_;
             }
@@ -3836,8 +3834,7 @@ void puniModeEnterSub(PuniData* p) {
 void puniModeEnter(PuniData* p) {
     Vec d;
     switch (p->modeStep) {
-        case 0:
-            {
+        case 0: {
                 p->startTime = gp->renderTime;
             }
             p->timer = 200;
@@ -4396,8 +4393,7 @@ void puniMoveMain(PuniData* p) {
         case 23:
         case 25:
         case 26:
-        case 27:
-        {
+        case 27: {
             Vec d2;
             Vec s2;
             Vec dir;
@@ -4433,8 +4429,7 @@ void puniMoveMain(PuniData* p) {
         mv_end1:
             puniSetYPosition(p);
             break;
-        case 4:
-        {
+        case 4: {
             Vec d2;
             Vec s2;
             Vec dir;
@@ -4462,8 +4457,7 @@ void puniMoveMain(PuniData* p) {
         mv_end2:
             puniSetYPosition(p);
             break;
-        case 9:
-        {
+        case 9: {
             Vec d2;
             Vec s2;
             Vec dir;
@@ -4487,8 +4481,7 @@ void puniMoveMain(PuniData* p) {
         mv_end3:
             puniSetYPosition(p);
             break;
-        case 29:
-        {
+        case 29: {
             if (p->moveFunc) {
                 p->moveFunc(p);
             }
@@ -4500,8 +4493,7 @@ void puniMoveMain(PuniData* p) {
         case 13:
             puniSetYPosition(p);
             break;
-        case 24:
-        {
+        case 24: {
             Vec d2;
             Vec s2;
             Vec dir;
@@ -5655,8 +5647,7 @@ void puniHagurePos(PuniData* p) {
         case 18:
         case 19:
         case 21:
-        case 22:
-            {
+        case 22: {
                 Vec v_ = {0.0f, -1000.0f, 0.0f};
                 p->pos = v_;
             }

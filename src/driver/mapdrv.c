@@ -283,8 +283,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
                 else obj->blendMode = 0;
                 break;
             }
-            case 1:
-                {
+            case 1: {
                     u8 m = 0;
                     if (obj->flags & 8) m = 3;
                     obj->blendMode = m;

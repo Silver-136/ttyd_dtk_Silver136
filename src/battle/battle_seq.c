@@ -356,8 +356,7 @@ void btlseqFirstAct(BattleWork* wp) {
     switch (BattleGetSeq(wp, SEQ_FIRST_ACT)) {
         case 0x2000000:
             switch (type) {
-                case 0:
-                    {
+                case 0: {
                         wp->ruleDispTimer = 0;
                         evtEntry(_default_haikei_set_entry_event, 10, 0);
                         info = (u8*)wp->fbatInfo->setup;
@@ -522,8 +521,7 @@ void btlseqFirstAct(BattleWork* wp) {
             }
             break;
 
-        case 0x2000009:
-            {
+        case 0x2000009: {
                 s32* id = &wp->stageObjectWork.closeWallEvtId;
                 if (*id != 0 && !evtCheckID(*id)) {
                     *id = 0;
@@ -1109,8 +1107,7 @@ void btlseqTurn(BattleWork *wp) {
             btlseqTurn(wp);
             break;
 
-        case 0x3000020:
-            {
+        case 0x3000020: {
                 BattleUnit *unit;
                 sfxName = "SFX_CONDITION_BREAK_ICE1";
                 for (i = 0; i < 64; i++) {

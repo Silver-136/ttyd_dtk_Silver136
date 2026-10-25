@@ -1181,8 +1181,7 @@ static void ext_moamoa_main(void) {
                     m->timer++;
                     break;
             }
-            case 1:
-                {
+            case 1: {
                     f32 rad;
                     {
                         f32 k; f32 r1 = rand() / 32767.0f;
@@ -1199,8 +1198,7 @@ static void ext_moamoa_main(void) {
                 }
                 break;
 
-            case 2:
-                {
+            case 2: {
                     f32 z;
                     f32 x;
                     {
@@ -1262,8 +1260,7 @@ static void ext_moamoa_main(void) {
 
             case 37:
 
-            case 38:
-                {
+            case 38: {
                     f32 tz;
                     if (!(m->flags & 1)) {
                         tx = mario->position.x;
@@ -1306,8 +1303,7 @@ static void ext_moamoa_main(void) {
                     m->state = 49;
                 }
                 break;
-            case 47:
-                {
+            case 47: {
                     f32 rad;
                     s = rand() / 32767.0f;
                     dist = randf(300.0f, 500.0f);
@@ -1369,8 +1365,7 @@ static void ext_moamoa_main(void) {
                 pose->flags &= ~1;
                 pose->flags |= 4;
                 break;
-            case 63:
-                {
+            case 63: {
                     f32 k;
                     s = rand() / 32767.0f;
                     spd = randf(2.0f, 3.0f);

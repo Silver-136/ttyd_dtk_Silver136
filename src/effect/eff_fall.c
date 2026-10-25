@@ -390,8 +390,7 @@ void effFallMain(EffectEntry* effect) {
                             psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_FORK1"), &sndPos);
                         }
                         break;
-                    case 1:
-                        {
+                    case 1: {
                             f32 s = (f32)sin((62.831856f * e->timer) / 60.0f);
                             e->f44 = ((60.0f - e->timer) * s) / 60.0f;
                         }

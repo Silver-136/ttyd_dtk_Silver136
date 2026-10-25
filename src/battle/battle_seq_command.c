@@ -2758,8 +2758,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             return WEVT(&badgeWeapon_SuperChargeP);
         case 8:
             return BtlUnit_GetData(unit, 2);
-        case 0:
-            {
+        case 0: {
             u8 cnt;
             u8 i;
             _btlcmd_GetCursorPtr(cmd, 10, &cursor);

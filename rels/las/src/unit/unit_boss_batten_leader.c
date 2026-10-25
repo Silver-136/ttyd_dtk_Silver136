@@ -2624,36 +2624,31 @@ void _light_point_callback(BattleUnitPart* part, s32 group) {
         idx = -1;
     }
     switch (idx) {
-        case 0:
-            {
+        case 0: {
                 s32 pose = BtlUnit_GetPartsPtr(unit, 3)->poseId;
                 s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape34");
                 animPoseDrawShape(pose, sh);
             }
             break;
-        case 1:
-            {
+        case 1: {
                 s32 pose = BtlUnit_GetPartsPtr(unit, 4)->poseId;
                 s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape37");
                 animPoseDrawShape(pose, sh);
             }
             break;
-        case 2:
-            {
+        case 2: {
                 s32 pose = BtlUnit_GetPartsPtr(unit, 5)->poseId;
                 s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape36");
                 animPoseDrawShape(pose, sh);
             }
             break;
-        case 3:
-            {
+        case 3: {
                 s32 pose = BtlUnit_GetPartsPtr(unit, 6)->poseId;
                 s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape35");
                 animPoseDrawShape(pose, sh);
             }
             break;
-        case 4:
-            {
+        case 4: {
                 s32 pose = BtlUnit_GetPartsPtr(unit, 7)->poseId;
                 s32 sh = animPoseGetShapeIdx(pose, "pPlaneShape36");
                 animPoseDrawShape(pose, sh);

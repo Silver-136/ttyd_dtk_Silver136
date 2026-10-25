@@ -41,8 +41,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
     do {
         allDone = 0;
         switch (ac->mAcState) {
-            case 0:
-                {
+            case 0: {
                     ac->result = 1;
                     memset(disp, 0, 0x2c);
                     disp->iconX = -300.0f;
@@ -90,8 +89,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                                 }
                                 break;
 
-                            default:
-                                {
+                            default: {
                                     s32 found = 0;
                                     u32 cand;
                                     while (!found) {

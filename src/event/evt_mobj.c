@@ -3159,8 +3159,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             mobj->state = 0;
         }
         break;
-    case 10:
-    {
+    case 10: {
         void* joint;
         KURU_POSE_FLAGS(mobj) |= 0x10;
         mobj->flags |= 0x400;

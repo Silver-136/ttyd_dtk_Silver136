@@ -74,8 +74,7 @@ void effQueen2Main(EffectEntry* effect) {
                 work->state++;
             }
             break;
-        case 1:
-            {
+        case 1: {
                 f32 base = work->baseScale;
                 s32 t = work->timer++;
                 work->scale = intplGetValue(11, base, 3.0f, t, 120);

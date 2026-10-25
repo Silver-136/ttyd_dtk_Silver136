@@ -189,8 +189,7 @@ void effBrokenBarrierMain(EffectEntry* effect) {
             t = (f32)(rand() % 360);
             switch (type) {
             case 0:
-            case 2:
-                {
+            case 2: {
                     f32 lat = 6.2831855f * t / 360.0f;
                     f32 lon;
                     f32 c;

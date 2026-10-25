@@ -1724,8 +1724,7 @@ void partyRideMain(PartyEntry *party) {
             party->motionStep = 1;
             break;
 
-        case 1:
-            {
+        case 1: {
                 f32 t;
                 party->velY = (party->velY) - (party->gravity);
                 party->position.y = party->position.y + (party->velY);
@@ -1748,8 +1747,7 @@ void partyRideMain(PartyEntry *party) {
                 break;
             }
 
-        case 2:
-            {
+        case 2: {
                 partyChgPoseId(party, 1);
                 party->velY = 0.0f;
                 party->position.y = party->moveTarget.y;
@@ -1766,8 +1764,7 @@ void partyRideMain(PartyEntry *party) {
             party->moveDir = toMovedir(party->displayDirectionTarget);
             break;
 
-        case 11:
-            {
+        case 11: {
                 partyChgPoseId(party, 1);
                 party->flags2 |= 1;
                 partyShadowOff(party);
@@ -1811,8 +1808,7 @@ void partyRideMain(PartyEntry *party) {
 
         case 100:
 
-        case 101:
-            {
+        case 101: {
                 f32 x;
                 f32 y;
                 f32 z;

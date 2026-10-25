@@ -1551,8 +1551,7 @@ USER_FUNC(_lvup_spot_on) {
         e->pos = v;
         break;
     }
-    case 3:
-        {
+    case 3: {
             Vec v = {0.0f, -10.0f, -50.0f};
             v.x = 25.0f * n + -50.0f;
             e->pos = v;

@@ -342,8 +342,7 @@ void battleCameraMain(void) {
         strcpy(name, "\202\251\202\337\202\347\201\100\202\121\202\317\201\133\202\302\202\251\202\361\202\302\202\242\202\321");
         break;
     }
-    case 12:
-        {
+    case 12: {
             BattleAudienceMember* m = &aud->members[wp->cameraWork.audienceId];
             battleCameraMoveTo(1, 0, m->position.x, 200.0f, 400.0f + m->position.z, m->position.x, 0.0f, m->position.z, &dX, &dY, &dZ, &dAtX, &dAtY, &dAtZ);
         }

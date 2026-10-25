@@ -780,8 +780,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
             wp->state++;
             break;
 
-        case 4:
-            {
+        case 4: {
                 img = imgNameToPtr(wp->imgName, inBattle);
                 if ((wp->lastFrame == 0.0f) || ((wp->lastFrame + 1.0f) < img->loopTimes)) {
                     psndSFXOn_3D("SFX_OFF_CLAUD_WIND2", &mario->position);
