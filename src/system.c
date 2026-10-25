@@ -7,7 +7,6 @@
 #include <dolphin/pad.h>
 #include <math.h>
 #include <stdlib.h>
-// #include <string.h>
 #include <demo/DEMOPad.h>
 #include "mario/mariost.h"
 #include "R_build.h"

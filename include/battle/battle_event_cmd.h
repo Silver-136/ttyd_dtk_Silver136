@@ -132,15 +132,6 @@ USER_FUNC(btlevtcmd_OffToken);
 USER_FUNC(btlevtcmd_CheckToken);
 USER_FUNC(btlevtcmd_SetRegistStatus);
 USER_FUNC(btlevtcmd_CheckCommandUnit);
-//USER_FUNC();
-//USER_FUNC();
-//USER_FUNC();
-//USER_FUNC();
-//USER_FUNC();
-//USER_FUNC();
-//USER_FUNC();
-//USER_FUNC();
-//USER_FUNC();
 
 
 

@@ -100,7 +100,6 @@ void npcReleaseFieldNpc(void) {
     if (wp->flags & 2) {
         entry = wp->entries;
         for (i = 0; i < wp->total; i++, entry++) {
-            // entry = &wp->entries[i];
             if (entry->flags & 1 && entry->flags & 2 && animPoseGetAnimPosePtr(entry->poseId)->paperId == -1) {
                 if (entry->poseId >= 0) {
                     pose = animPoseGetAnimPosePtr(entry->poseId);
@@ -668,7 +667,6 @@ void npcMain(void) {
     s32 fire, jump;
 
     npcwork = gp->inBattle ? &work.battle : &work.field;
-    // npcwork = npcGetWorkPtr();
     marioGetPtr()->targetNpc = NULL;
     kpaSfx = "SFX_KUPPA_3RD_WATER_FALL1";
 
