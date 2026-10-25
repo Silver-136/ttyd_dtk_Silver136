@@ -334,7 +334,6 @@ void* testAlloc(u32 size) {
 }
 
 void DCFlushRange(void* addr, u32 nBytes);
-GXRenderModeObj* DEMOGetRenderModeObj(void);
 void GXBegin(GXPrimitive type, GXVtxFmt vtxfmt, u16 nverts);
 void GXClearBoundingBox(void);
 void GXClearVtxDesc(void);
@@ -375,7 +374,6 @@ void PSMTXMultVec(const Mtx m, const Vec* src, Vec* dst);
 void PSMTXRotRad(Mtx m, char axis, f32 rad);
 void PSMTXScale(Mtx m, f32 xS, f32 yS, f32 zS);
 void PSMTXTrans(Mtx m, f32 xT, f32 yT, f32 zT);
-TEXDescriptor* TEXGet(TEXPalette* pal, u32 id);
 int __cvt_dbl_usll();
 int __cvt_ull_flt();
 int __div2i();

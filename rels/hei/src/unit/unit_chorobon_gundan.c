@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -22,7 +23,6 @@ typedef struct Chorogun { u8 flags; u8 state; u8 pad_2[2]; Vec vel; f32 speed; V
 Chorogun* chorogun;
 s32 chorogun_targetId;
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);
-int rand(void);
 double sqrt(double x);
 
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);

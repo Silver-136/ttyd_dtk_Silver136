@@ -3,6 +3,8 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "statuswindow.h"
+#include "eff/eff_magic1_n64.h"
 
 #include "driver/imgdrv.h"
 #include "driver/animdrv.h"
@@ -2146,7 +2148,6 @@ void irai_29_15_cb(s32 type, smartEntry* smart) {
 }
 
 #ifdef VERSION_G8ME01
-void statusWinForceOff(void);
 
 USER_FUNC(pik_00_statuswin_force_off) {
     statusWinForceOff();
@@ -2197,7 +2198,6 @@ static void resha_tev(MapTevCallbackInfo* info) {
     envAddTev(7, info);
 }
 
-double sin(double x);
 
 static USER_FUNC(ramp_r) {
     f32 amp = __fabsf(evtGetFloat(event, GW(0)));

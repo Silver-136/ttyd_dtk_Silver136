@@ -1,6 +1,8 @@
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "party.h"
+#include "cam_shift.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -25,7 +27,6 @@
 typedef struct HikokiWork { u32 flags; s32 phase; s32 coins; s32 result; s32 monteCount; EventEntry* viewEvent; } HikokiWork;
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
-void partyKeyOff(void);
 void monteCountDisp(void);
 #ifdef VERSION_G8ME01
 USER_FUNC(yuuminigame1_floor_chk);
@@ -38,7 +39,6 @@ static void* yuunpc_wp;
 static Monte* monte_p;
 #define MONTETABLE (montetable)
 static void monte_disp(CameraId camera, void* param);
-void camShiftReset(void);
 
 USER_FUNC(eff_call_minigame);
 USER_FUNC(evt_bero_mapchange);

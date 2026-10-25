@@ -16,6 +16,8 @@
 #include <string.h>
 #include <stdarg.h>
 #include "evt/evt_yuugijou.h"
+#include "koopa.h"
+#include "eff/eff_magic1_n64.h"
 #ifdef VERSION_G8ME01
 char* strstr(const char* str, const char* sub);
 #endif
@@ -100,9 +102,7 @@ static WindowWork* wp;
 s32 winRootMain(WindowWork* wp);
 void winRootDisp(CameraId camId, WindowWork* wp);
 const char* winGetMapTplName(void);
-s32 kpaGetStageViewType(void);
 void kpaPauseSE2(void);
-double sin(double);
 void FontDrawScaleVec(Vec scale);
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
 void winLectureKeyMask(void);

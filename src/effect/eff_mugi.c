@@ -7,8 +7,8 @@
 #include <dolphin/mtx.h>
 #include <string.h>
 #include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
 
-double sin(double);
 
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"

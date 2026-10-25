@@ -6,6 +6,8 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
@@ -14,8 +16,6 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 32, 0, 0, 0, 255},
 };
 
-double sin(double);
-double cos(double);
 
 void effGuruguruMain(EffectEntry* effect);
 void effGuruguruDisp(CameraId cameraId, EffectEntry* effect);

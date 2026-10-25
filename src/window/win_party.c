@@ -26,6 +26,7 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
+#include "win/win_mario.h"
 
 extern ItemData itemDataTable[];
 
@@ -40,7 +41,6 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
 #ifdef VERSION_G8ME01
 void winFontSetWidth(Vec translate, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 #endif
-const char* winZenkakuStr(s32 num);
 void animPoseVivianMain(s32 poseId, Vec* pos);
 
 BattleWeapon* chri_waza[4] = {

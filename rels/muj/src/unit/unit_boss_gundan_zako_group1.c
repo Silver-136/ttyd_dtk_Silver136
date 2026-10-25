@@ -1,6 +1,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "battle/battle_camera.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -33,7 +34,6 @@ void zakogun_ext_main2(void);
 void zakogun_ext_main3(void);
 void zakogun_ext_disp(CameraId camera, void* param);
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);
-void btl_camera_set_mode(s32 a, s32 b);
 
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);
 USER_FUNC(btlevtcmd_AttackDeclare);

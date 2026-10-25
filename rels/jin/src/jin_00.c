@@ -1,6 +1,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
+#include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -28,7 +30,6 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 
-int rand(void);
 typedef struct Teresa { Vec vel; f32 angle; Vec ofs; f32 field_0x1C; f32 field_0x20; Vec from; Vec to; s32 wait; u8 alpha; u8 seq; } Teresa;
 static Teresa* pTeresa;
 Vec g_vecRotCenter;
@@ -39,7 +40,6 @@ s32 g_nNumHarituku[1];
 static s32 g_nNumEndProc[1];
 f32 g_fSpeed;
 static f32 randf(f32 min, f32 max);
-double sin(double x);
 static inline f32 sinf(f32 x) { return sin(x); }
 f32 marioGetAngleKaitenHammer(void);
 static void computePos(Teresa* ter, Vec* out);
@@ -49,7 +49,6 @@ f32 computeAngle(ExtdrvPose* pose, MarioWork* mp);
 static void senteresa_ext_disp(CameraId camera, void* param);
 void senteresa_loadTev(void);
 void senteresa_loadRenderMode(void);
-double cos(double x);
 static inline f32 cosf(f32 x) { return cos(x); }
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);
@@ -203,7 +202,6 @@ s32 randn(s32 min, s32 max) {
     return min + rand() % (max - min);
 }
 
-int rand(void);
 
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;

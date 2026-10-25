@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "libc_decls.h"
 
 #include "seq/seq_demo.h"
 #include "memory.h"
@@ -20,7 +21,6 @@ typedef struct DigAnim { const char* name; u32 mask; s32 anim; } DigAnim;
 static s32 work[1];
 #define DIG_WP (wp[0])
 s32 EXIGetType(s32 chan, u32 dev, u32* type);
-double tan(double x);
 
 USER_FUNC(evt_action_sub);
 USER_FUNC(evt_cam3d_evt_set);

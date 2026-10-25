@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
@@ -181,7 +182,6 @@ static EVT_BEGIN(door01_close)
     RETURN
 EVT_END()
 
-int rand(void);
 
 static EVT_BEGIN(door01_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))

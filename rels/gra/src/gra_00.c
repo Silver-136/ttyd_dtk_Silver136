@@ -1,6 +1,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
 
 #include "driver/camdrv.h"
 #include "driver/msgdrv.h"
@@ -17,7 +18,6 @@
 USER_FUNC(evt_sub_get_language);
 #endif
 
-double sin(double x);
 
 static USER_FUNC(cam_r);
 USER_FUNC(camera_yure);

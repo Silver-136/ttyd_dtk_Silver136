@@ -12,9 +12,8 @@
 #include "libc_decls.h"
 #include "cam_road.h"
 #include <math.h>
+#include "cam_shift.h"
 
-void camShiftReset(void);
-void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out);
 void OSReport(const char* msg, ...);
 
 // CameraId id, BOOL on

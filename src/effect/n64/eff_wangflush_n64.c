@@ -5,7 +5,7 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
-double sin(double x);
+#include "eff/eff_magic1_n64.h"
 
 typedef struct EffWangFlushN64Work {
     s32 type;      // 0x0

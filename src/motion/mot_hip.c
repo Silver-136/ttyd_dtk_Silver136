@@ -12,10 +12,10 @@
 #include "evt/evt_cmd.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "mario/mario_hit.h"
+#include "mot/mot_damage.h"
 
 HitEntry* marioChkLandon(f32* outY, f32 y);
-HitEntry* marioSearchGround(f32* a, f32* b, f32* c, f32 d, f32 e);
-void set_damage_root_ypos(f32 y);
 void kpa_hip(void);
 
 #ifdef VERSION_G8ME01

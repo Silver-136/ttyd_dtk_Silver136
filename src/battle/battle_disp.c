@@ -13,6 +13,9 @@
 #include <string.h>
 #include "icon_ids.h"
 #include "battle/battle_status_effect.h"
+#include "battle/battle_audience.h"
+#include "battle/battle_status_icon.h"
+#include "manager/evtmgr.h"
 
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 
@@ -113,9 +116,6 @@ void btlDispGXInit2D(void) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 }
 
-void BattleAudience_Disp(void);
-void BattleStatusEffectMain(struct BattleUnit* unit);
-void BattleStatusIconMain(struct BattleUnit* unit);
 int BtlUnit_CanActStatus();
 void GXBegin(GXPrimitive type, GXVtxFmt vtxfmt, u16 nverts);
 GXTexFmt GXGetTexObjFmt(const GXTexObj* to);
@@ -136,7 +136,6 @@ void PSMTXRotRad(Mtx m, char axis, f32 rad);
 void PSMTXScale(Mtx m, f32 xS, f32 yS, f32 zS);
 void PSMTXTrans(Mtx m, f32 xT, f32 yT, f32 zT);
 int animPoseVivianMain();
-BOOL evtCheckID(s32 eventId);
 void BattleBreakSlot_Disp(void);
 void BattleCommandDisplay(BattleWork* wp);
 void BattleStageDisp(void);

@@ -12,6 +12,7 @@
 #include <dolphin/mtx.h>
 #include <string.h>
 #include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
 
 
 
@@ -75,7 +76,6 @@ void batSpotInit(void);
 f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x);
 void batSpotMain();
 void drawCone(CameraId camId, BattleSpotEntry* e);
-double sin(double);
 
 BattleStage* BattleStageGetPtr(void) {
     return &_battleWorkPointer->stage;

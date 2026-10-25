@@ -4,6 +4,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
+#include "pmario_sound.h"
+#include "libc_decls.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -35,14 +37,12 @@ typedef struct HandData { const char* name; const char* anim; f32 rate; } HandDa
 typedef struct QueenConnect { s32 poseId[3]; u8 field_0xc[0x40 - 0xC]; s32 idx[2]; } QueenConnect;
 HandData hand_data[32];
 HandWork* hand_wp;
-s32 psndSFXOn_3D(const char* name, Vec* position);
 #include "battle/battle_break_slot.h"
 #include "driver/extdrv.h"
 u8* lightGetPaperCraft(void);
 EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 camera, f32 x, f32 y, f32 z, f32 vx, f32 vy);
 void btl_camera_shake_w(s32 a, s32 b, s32 c, f32 d, f32 e);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
-double cos(double);
 
 USER_FUNC(battle_evt_majo_disp_off);
 USER_FUNC(battle_evt_majo_disp_on);

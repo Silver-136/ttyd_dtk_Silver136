@@ -7,8 +7,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "eff/n64/eff_sunlight_n64.h"
+#include "eff/eff_magic1_n64.h"
 
-double sin(double);
 
 typedef struct EffSunlightN64Work {
     s32 type;      // 0x0

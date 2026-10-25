@@ -2,6 +2,8 @@
 #include "eff/eff_starstone.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
 
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -26,13 +28,10 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 
-double tan(double x);
 typedef struct ShadowWork { GXTexObj obj; smartEntry* tex; } ShadowWork;
 void mapSetProjTexObj(GXTexObj* obj, smartEntry* tex);
 void make_shadow_disp(CameraId camera, void* param);
 void mapSetProjMtx(Mtx mtx);
-double sin(double x);
-double cos(double x);
 void envSetYamiView(Mtx mtx);
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);

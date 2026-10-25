@@ -8,9 +8,9 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
-double sin(double x);
-double cos(double x);
 
 #define PI 3.1415927f
 #define HALF_PI 1.5707964f

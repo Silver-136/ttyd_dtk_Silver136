@@ -12,11 +12,15 @@
 #include "battle/battle_audience_kinopio.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_status_effect.h"
+#include "eff/eff_magic1_n64.h"
+#include "eff/n64/eff_onpu_n64.h"
+#include "eff/eff_sandars.h"
+#include "battle/battle_camera.h"
+#include "battle/battle_stage.h"
 
 #pragma dont_inline on
 
 
-double sin(double);
 double sqrt(double);
 double fabs(double);
 double __fabs(double);
@@ -32,15 +36,10 @@ void BattleAudienceSoundPakkunEat(s32 index);
 void BattleAudienceSoundSleep(s32 index);
 void BattleAudienceSoundZZZ(s32 index);
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit);
-EffectEntry* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z);
-EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
-void btl_camera_set_mode(s32 a, s32 b);
 void btl_camera_set_moveto(s32 a, s32 b, f32 c, f32 d, f32 e, f32 f, f32 g, f32 h, s32 i);
-void btl_camera_set_moveSpeedLv(s32 a, s32 b);
 void btl_camera_shake_h(s32 a, f32 b, f32 c, s32 d, s32 e);
 s32 BattleStage_ObjectFallCheck();
 void BattleStage_NozzleWorkCheck(s32 a);
-BattleStage* BattleStageGetPtr(void);
 s32 BattleBreakSlot_GetBreakTurn();
 BOOL BattleAudience_GetAnimEnd();
 u8 BattleAudience_GetEscapeChangeOK();

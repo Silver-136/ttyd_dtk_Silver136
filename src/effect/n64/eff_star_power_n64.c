@@ -5,8 +5,8 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_magic1_n64.h"
 
-double sin(double);
 
 typedef struct EffStarPowerN64Work {
     s16 unk0;      // 0x0

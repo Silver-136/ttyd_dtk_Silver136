@@ -1,6 +1,9 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/n64/eff_pokopi_thunder_n64.h"
+#include "libc_decls.h"
+#include "eff/n64/eff_glass_n64.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/effdrv.h"
@@ -24,11 +27,8 @@
 #include "party/party_motion.h"
 #include "battle/battle_database_common.h"
 
-EffectEntry* effPokopiThunderN64Entry(s32 type, s32 time, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, f32 scale);
-int rand(void);
 Vec nowv;
 f32 maer;
-EffectEntry* effGlassN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 static s32 xlw[16];
 s32 xlw2[16];
 char xmemo[20];

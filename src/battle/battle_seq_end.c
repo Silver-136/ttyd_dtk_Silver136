@@ -27,6 +27,9 @@
 #include "pmario_sound.h"
 #include "driver/msgdrv.h"
 #include "manager/fontmgr.h"
+#include "driver/mapdrv.h"
+#include "eff/n64/eff_pokopi_pcharge_n64.h"
+#include "battle/battle_disp.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -48,7 +51,6 @@ void FontDrawString(f32 x, f32 y, const char* msg);
 
 void BattleAudience_Case_GreatVictory(void);
 void BattleAudience_Case_FastVictory(f32 rate);
-void mapGrpFlagOn(const char* name, u32 flags);
 
 typedef struct SeqEndObj {
     Vec pos;                    // 0x0
@@ -108,7 +110,6 @@ typedef struct SeqEndSpot {
     Vec scale;               // 0x1C
     GXColor color;           // 0x28
 } SeqEndSpot;
-EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale);
 
 void _GetExpIcon_Main(BattleWork* wp);
 void _LvupParamConfirmDisp(CameraId camId, void* param);
@@ -1984,8 +1985,6 @@ s32 _keta_get(s32 n) {
         0x27 + n, (o)->color, 0, (o)->pos.x - 16.0f, 20.0f + (o)->pos.y,             \
         2.0f + (o)->pos.z, (o)->scale.x, (o)->scale.y)
 #endif
-void btlDispTexPlane(u32 id, GXColor color, f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY);
-void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color);
 #define LVOBJ_PLANE(o, n, tbl)                                                            \
     if ((o)->blinkOn) {                                                             \
         PSMTXIdentity(m);                                                              \

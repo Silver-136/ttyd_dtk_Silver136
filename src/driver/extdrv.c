@@ -9,11 +9,11 @@
 #include <dolphin/os.h>
 #include "gxsub.h"
 #include "driver/animdrv.h"
+#include "eff/eff_n64.h"
+#include "libc_decls.h"
 
 void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame, f32 scale, GXTexObj* obj, void*** image, s32* x0, s32* y0, s32* x1, s32* y1);
-void effGetTexObjN64(u32 id, GXTexObj* obj);
 void qqsort(void* array, u32 num, u32 size, s32 (*compare)(const void*, const void*));
-double atan2(double y, double x);
 
 
 static ExtdrvWork work[2];

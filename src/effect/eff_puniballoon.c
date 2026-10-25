@@ -7,9 +7,9 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
-double sin(double);
-int rand(void);
 
 void effPuniBalloonMain(EffectEntry* effect);
 void effPuniBalloonDisp(CameraId cameraId, EffectEntry* effect);

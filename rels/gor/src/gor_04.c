@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
@@ -2181,7 +2182,6 @@ EVT_BEGIN(gor_04_init_evt)
     RETURN
 EVT_END()
 
-double sin(double x);
 
 static USER_FUNC(ramp_r) {
     f32 amp = __fabsf(evtGetFloat(event, GW(0)));

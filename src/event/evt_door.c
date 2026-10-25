@@ -15,9 +15,9 @@
 #include "memory.h"
 #include "pmario_sound.h"
 #include <dolphin/mtx.h>
+#include "libc_decls.h"
 
 double atan(double);
-double cos(double);
 
 typedef struct HouseData {
     s32 type;               // 0x0

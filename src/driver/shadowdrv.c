@@ -7,8 +7,8 @@
 #include "system.h"
 #include <string.h>
 #include "driver/mobjdrv.h"
+#include "eff/eff_n64.h"
 
-void effGetTexObjN64(u32 id, GXTexObj* obj);
 
 void shadowCharShadowDisp_Collision(CameraId cameraId, void* param);
 void shadowCharShadowDisp_Projection(CameraId cameraId, void* param);

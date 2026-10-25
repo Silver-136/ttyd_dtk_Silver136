@@ -1,9 +1,8 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_unit.h"
 #include "battle/battle.h"
-double cos(double);
-double sin(double);
-double atan2(double, double);
+#include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
 
 f32 sinfd(f32 deg) {
     return sin((6.2831855f * deg) / 360.0f);

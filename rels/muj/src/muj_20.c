@@ -2,6 +2,11 @@
 #include "eff/eff_funemizu.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "eff/eff_mist.h"
+#include "eff/eff_splash.h"
+#include "eff/n64/eff_water_damage_n64.h"
 
 #include "driver/npcdrv.h"
 #include "mario/mariost.h"
@@ -37,14 +42,9 @@ void mapSetPlayRate(const char* name, f32 rate);
 typedef struct MapAnimRate { f32 fune; f32 funeTarget; f32 nami; f32 namiTarget; } MapAnimRate;
 MapAnimRate mapAnimRate;
 static u8* _ap;
-double sin(double x);
-double cos(double x);
-EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw);
 void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
-EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);
 void mapObjGetPos(const char* name, Vec* pos);
-EffectEntry* effWaterDamageN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale);
 typedef struct LogoWork { FileEntry* tpl; f32 y; s32 alpha; s32 state; s32 counter; } LogoWork;
 static void draw(CameraId camera, void* param);
 

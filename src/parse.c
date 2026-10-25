@@ -1,8 +1,8 @@
 #include "parse.h"
 #include <string.h>
 #include <stdio.h>
+#include "libc_decls.h"
 
-int sscanf(const char* s, const char* format, ...);
 
 //.bss
 ParseWork parse;

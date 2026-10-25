@@ -5,6 +5,7 @@
 #include "icon_ids.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -690,7 +691,6 @@ static USER_FUNC(set_dir) {
     return EVT_RETURN_DONE;
 }
 
-BOOL psndBGMStartCheck(s32 id);
 
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

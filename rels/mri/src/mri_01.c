@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "countdown.h"
 
 #include "driver/fadedrv.h"
 #include "mario/mariost.h"
@@ -27,7 +28,6 @@ void puniswGetindex(s32 flag, s32 index, s32* a, s32* b);
 void puniswTrapGetindex(s32 index, s32* trap);
 void puniFadeOff(s32 index);
 static u8* bp;
-void countDownStop(void);
 
 USER_FUNC(akari_charge_entry);
 USER_FUNC(bossrobot);

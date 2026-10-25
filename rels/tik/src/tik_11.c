@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "driver/bgdrv.h"
+#include "pmario_sound.h"
 
 #include "driver/npcdrv.h"
 #include "eff/eff_stardust.h"
@@ -11,8 +13,6 @@
 #include "evt/evt_npc.h"
 
 static s32 xlw[16];
-void bgTransOffsetOn(void);
-void bgTransOffsetOff(void);
 
 static USER_FUNC(bgScrollControll);
 static USER_FUNC(bgm_start_wait);
@@ -269,7 +269,6 @@ static USER_FUNC(bgScrollControll) {
     return EVT_RETURN_DONE;
 }
 
-BOOL psndBGMStartCheck(s32 id);
 
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

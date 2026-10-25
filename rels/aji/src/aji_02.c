@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "driver/mapdrv.h"
 
 #include "stdio.h"
 #include "mario/mario.h"
@@ -16,8 +17,6 @@
 #include "aji.h"
 #include "manager/evtmgr_cmd.h"
 
-void mapGrpFlagOn(const char* name, u32 flags);
-void mapGrpFlagOff(const char* name, u32 flags);
 void hitGrpAttrOn(const char* name, u32 flags);
 void hitGrpAttrOff(const char* name, u32 flags);
 

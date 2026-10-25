@@ -4,6 +4,7 @@
 #include "kpa.h"
 #include "evt/evt_npc.h"
 #include "kpa_stage_data.h"
+#include "koopa.h"
 
 USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_road_reset);
@@ -139,7 +140,6 @@ EVT_BEGIN(kpa_05_init_evt)
     RETURN
 EVT_END()
 
-s32 kpaGetLevel(void);
 
 static USER_FUNC(kpa_get_level) {
     EvtWord* args = event->args;

@@ -23,6 +23,10 @@
 #include <demo/DEMOPad.h>
 #include "driver/camdrv.h"
 #include "sfx_name_word.h"
+#include "manager/fontmgr.h"
+#include "eff/eff_magic1_n64.h"
+#include "driver/msgdrv.h"
+#include "libc_decls.h"
 
 typedef struct TubuDt {
     s16 x;
@@ -974,7 +978,6 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y);
 #ifdef VERSION_G8ME01
 void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
-u16 FontGetMessageWidth(const char* message);
 #endif
 
 void winLogDisp(CameraId cam, void* param, s32 idx) {
@@ -1096,7 +1099,6 @@ const char* winGetMapTplName(void) {
     return "map7.tpl";
 }
 
-double sin(double);
 double __fabs(double);
 static inline double fabs(double x) { return __fabs(x); }
 
@@ -1208,9 +1210,6 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
 
 void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
-const char* msgSearch(const char* tag);
-u16 FontGetMessageWidth(const char* msg);
-int sprintf(char* buf, const char* fmt, ...);
 
 #ifdef VERSION_G8ME01
 void winFontSetWidth(Vec translate, Vec scale, GXColor color, f32 width, const char* fmt, ...);
@@ -1441,7 +1440,6 @@ typedef struct MoaChain {
 
 extern const s32 g_moamoa_chain_num;
 extern MoaChain g_moamoa_chain_tbl[];
-double tan(double);
 void animPoseVivianMain(s32 poseId, Vec* v);
 
 
@@ -1577,9 +1575,6 @@ void capture(CameraId camera, void* param) {
 void winHalfBookGX(TEXPalette* tpl, s32 a, f32 x, f32 y);
 void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
-const char* msgSearch(const char* tag);
-u16 FontGetMessageWidth(const char* msg);
-int sprintf(char* buf, const char* fmt, ...);
 
 void monosiri_disp(CameraId camera, void* param) {
     MonosiriWork* m = param;

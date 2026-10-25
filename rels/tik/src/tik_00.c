@@ -1,6 +1,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -35,7 +36,6 @@ USER_FUNC(evt_msg_fmt_str);
 void mapGrpSetColor(const char* name, GXColor color);
 typedef struct UranaiWork { s32 lwData[16]; s32 gwData[32]; smartEntry* buf; GXTexObj tex; s32 ready; EventEntry* capEvent; s32 x; s32 y; s32 w; s32 h; } UranaiWork;
 void uranai_cap(CameraId cameraId, void* param);
-double tan(double);
 static inline f32 tanf(f32 x) { return tan(x); }
 const char* search_evt_moji(s32 id);
 s32 uranaisi_ryokin_rtn(s32 type);

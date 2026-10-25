@@ -26,6 +26,9 @@
 #include "driver/mobjdrv.h"
 #include "cam_road.h"
 #include "driver/seqdrv.h"
+#include "statuswindow.h"
+#include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
 
 //.sbss
 char _next_area[0x20];
@@ -55,9 +58,6 @@ void N_marioSetBottomlessRespawnPos(f32, f32, f32);
 void npcExecAllInitEvt(void);
 BOOL npcWaitAllInitEvtEnd(void);
 void npcExecAllReglEvt(void);
-void statusWinForceUpdate(void);
-double cos(double);
-double sin(double);
 
 static const char mc_tou[4];
 static const char mc_tou2[5];

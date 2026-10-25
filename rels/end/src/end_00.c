@@ -1,6 +1,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #include "driver/animdrv.h"
 #include "driver/npcdrv.h"
@@ -46,8 +47,6 @@ extern EndWork* end_wp;
 extern CreditMsg end_staff_roll_msg_tbl[50];
 extern CreditNpc R_credits_npc_info[152];
 extern const char* g_moamoa_chain_tbl[][2];
-int rand(void);
-double tan(double x);
 static inline f32 tanf(f32 x) { return tan(x); }
 s32 EXIGetType(s32 chan, u32 dev, u32* type);
 void L_animPoseWorldPositionEvalOff(s32 poseId);

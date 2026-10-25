@@ -2,6 +2,9 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "mario/mario_cam.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -22,10 +25,7 @@ void* _mapAlloc(u32 size);
 #else
 #include "memory.h"
 #endif
-double sin(double x);
-double cos(double x);
 typedef struct { Vec pos; Vec delta; } BeltWork;
-void camFollowYOn(void);
 
 USER_FUNC(bg_cam_chk);
 USER_FUNC(evt_bero_exec_wait);

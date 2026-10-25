@@ -1,6 +1,7 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -27,7 +28,6 @@ typedef struct Moamoa { u16 flags; u8 field_0x2[2]; Vec pos; s16 group; u8 field
 typedef struct MoamoaWork { s32 field_0x0; s32 count; Moamoa* elems; s32 numGroups; MoamoaGroup groups[32]; s16 chainNum[128]; s16 chainIdx[128][2]; s32 poseId[5]; s32 unitId; Vec center; f32 angle; f32 radius; f32 targetScale; f32 scale; } MoamoaWork;
 typedef struct MoamoaExtData { const char* anim; const char* pose; f32 speed; } MoamoaExtData;
 static MoamoaWork* wp;
-int rand(void);
 void moamoa_mainUnitIdClear(void);
 static f32 randf(f32 min, f32 max);
 extern const char* g_moamoa_chain_tbl[][2];

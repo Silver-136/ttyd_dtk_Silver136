@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "party.h"
+#include "statuswindow.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -7,10 +9,6 @@
 
 typedef struct IwaMoveWork { s32 init; s32 timer; s32 state; EventEntry* event; EvtWord* script; } IwaMoveWork;
 IwaMoveWork iwamove;
-void partyKeyOn(void);
-void partyKeyOff(void);
-void statusWinForceOpen(void);
-void statusWinForceOff(void);
 
 USER_FUNC(evt_iwamove_main);
 USER_FUNC(evt_iwamove_ent);

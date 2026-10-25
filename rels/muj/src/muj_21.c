@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "eff/eff_funemizu.h"
 #include "evt/evt_cmd.h"
+#include "eff/n64/eff_water_damage_n64.h"
 
 #include "driver/effdrv.h"
 #include "mario/mariost.h"
@@ -203,7 +204,6 @@ EVT_BEGIN(muj_21_init_evt)
 EVT_END()
 
 EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);
-EffectEntry* effWaterDamageN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale);
 void mapObjGetPos(const char* name, Vec* pos);
 
 static USER_FUNC(fune_eff) {

@@ -16,6 +16,9 @@
 #include "battle/battle_event_subset.h"
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
+#include "battle/battle_stage.h"
+#include "battle/battle_ac.h"
+#include "battle/battle_stage_object.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -3454,7 +3457,6 @@ USER_FUNC(btlevtcmd_PartsFaceDirectionSub) {
 void BattleStatusWindowCheck(void);
 s32 BattleEnemyUseItemCheck(BattleUnit* unit);
 void BattleAudience_ApRecoveryBuild(StarPowerInfo* info);
-BattleStage* BattleStageGetPtr(void);
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
 void battleSortPhaseMoveTable(BattleWork* wp, s32 a);
 void BtlUnit_PayWeaponCost(BattleUnit* unit, BattleWeapon* weapon);
@@ -3483,14 +3485,12 @@ void _MoveSoundControlCore(BattleUnit* unit, BecSndWork* work, BattleUnitPart* p
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit);
 void BattleSamplingEnemy(BattleWorkWeaponTargets* targets, BattleWeapon* weapon, s32 unitId, s8 belong, u32 classFlags, u32 propFlags, s8 direction);
 void BattleAttackDeclare(s32* unitIdx, s32* partIdx);
-void BattleActionCommandDeclareACResult(BattleWork* work, BattleWeapon* weapon, s32 result);
 void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
 void BattleInitCounterPreCheckWork(s32* work);
 s32 BattleCheckCounter(s32* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
 s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags);
 void* itemEntry(const char* name, s32 itemId, s32 type, s32 evtId, s32 a5, f32 x, f32 y, f32 z);
 #include "eff/n64/eff_coin_n64.h"
-s16 pouchAddCoin(s16 coins);
 static inline void bec_coin(BattleUnit* unit, s32 item) {
     s32 coins;
     Vec pos;
@@ -6695,7 +6695,6 @@ USER_FUNC(btlevtcmd_StatusWindowOnOff) {
 }
 /* half_A end MID */
 
-BOOL BattleFogForceStop(void);
 
 USER_FUNC(btlevtcmd_StageDispellFog) {
     BattleFogForceStop();

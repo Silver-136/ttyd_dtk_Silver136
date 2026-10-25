@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #pragma defer_codegen on
 #include "manager/evtmgr_cmd.h"
@@ -23,8 +24,6 @@ static s32 g_nNumEndProc[1];
 s32 g_nNumOutBox[1];
 void computePosHermite(ExtdrvPose* pose, Teresa* ter);
 f32 randf(f32 min, f32 max);
-int rand(void);
-double cos(double x);
 static inline f32 cosf(f32 x) { return cos(x); }
 
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);

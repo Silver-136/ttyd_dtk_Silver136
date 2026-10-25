@@ -6,14 +6,13 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "version.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "system.h"
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 
 
-double sin(double);
-double cos(double);
-double fmod(double, double);
-s32 irand(s32);
 
 #include "eff/n64/eff_kumokumo_n64.h"
 

@@ -17,6 +17,8 @@
 #include "evt/evt_mario.h"
 #include "party/party_vivian.h"
 #include "mario/mario_hit.h"
+#include "party/party_yoshi.h"
+#include "mot/mot_slit.h"
 
 
 void mario_plane_cancel(void);
@@ -130,11 +132,9 @@ static inline BOOL marioChkLanding(void) {
 
 BOOL partyRideChk(PartyEntry* party);
 void vivianUnhold(PartyEntry* party);
-s32 yoshiGetStatus(void);
 BOOL marioGetoffYoshi(void);
 void marioRollCancel(void);
 void motSlitCancel2(void);
-BOOL marioGetMotSlitCancel3(void);
 
 void marioClearJumpPara(void);
 void quake_kpaHipAttack(void);

@@ -18,6 +18,7 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
+#include "eff/eff_magic1_n64.h"
 #define EXT_LIT(sym, val) (val)
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
 #ifdef VERSION_G8ME01
@@ -460,7 +461,6 @@ s32 msgMain(smartEntry* smart) {
     return 3;
 }
 
-double sin(double);
 void FontDrawNoise(void);
 void FontDrawNoiseOff(void);
 void FontDrawRainbowColor(void);

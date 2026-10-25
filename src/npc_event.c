@@ -16,14 +16,14 @@
 #include <string.h>
 #include "evt/evt_eff.h"
 #include "evt/evt_mario.h"
+#include "libc_decls.h"
+#include "koopa.h"
 static void piders_draw_yarn_sub(CameraId cameraId, void* param);
 
 double sqrt(double);
-double cos(double);
 double __fabs(double);
 #define fabs(x) __fabs(x)
 
-s32 kpaGetLevel(void);
 BOOL npcCheckBlow(NpcEntry* npc);
 void PSVECSubtract(const Vec* a, const Vec* b, Vec* ab);
 

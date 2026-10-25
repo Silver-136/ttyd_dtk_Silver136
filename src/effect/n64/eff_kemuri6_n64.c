@@ -8,9 +8,9 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <stdlib.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
-double sin(double x);
-double cos(double x);
 
 typedef struct EffKemuri6N64Work {
     BOOL active;     // 0x0

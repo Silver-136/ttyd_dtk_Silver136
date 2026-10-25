@@ -2,6 +2,8 @@
 #include "eff/eff_starstone.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 #include "memory.h"
 #include "string.h"
@@ -61,14 +63,12 @@ static inline f32 chb_sin(f32 x) { f32 y; f32 x2; f32 r; f32 a = 0.00761f; f32 b
 static inline f32 chb_cos(f32 x) { f32 y; f32 x2; f32 r; f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; r = a; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; r = a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; r = a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; r = a; } return r; }
 static void pose_init(void);
 static void pose_init(void);
-double sin(double x);
 void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void pose_main(void);
 static void pose_main(void);
 static void ext_disp(CameraId camera, void* param);
 static void ext_disp(CameraId camera, void* param);
-double cos(double x);
 void effKemuTestSetRxRz(EffectEntry* effect, f32 rx, f32 rz);
 static void depthDisp(CameraId camera, void* param);
 static void depthDisp(CameraId camera, void* param);

@@ -6,8 +6,8 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_magic1_n64.h"
 
-double sin(double);
 
 void effCrystalMain(EffectEntry* effect);
 void effCrystalDisp(CameraId cameraId, EffectEntry* effect);

@@ -6,6 +6,7 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <stdlib.h>
+#include "eff/n64/eff_hokori_n64.h"
 
 typedef struct EffRubbleN64Work {
     s32 type;     // 0x0
@@ -28,7 +29,6 @@ typedef struct EffRubbleN64Work {
     s32 frame;    // 0x4C
 } EffRubbleN64Work;
 
-EffectEntry* effHokoriN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z);
 
 effN64Vtx stg_hahen_v[58] = {
     {3, 3, -3, 0, 0, 50, 50, 50, 255},

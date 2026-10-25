@@ -1,6 +1,9 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "cam_shift.h"
+#include "libc_decls.h"
+#include "party.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -21,7 +24,6 @@ USER_FUNC(evt_mapobj_flag_onoff);
 USER_FUNC(evt_sub_get_language);
 #endif
 
-void camShiftReset(void);
 typedef struct MonteSub { s32 unk0; Vec pos; f32 scale; u8 unk14[0x38 - 0x14]; } MonteSub;
 typedef struct Monte { u8 hidden; u8 unk1; s16 num; u8 state; u8 unk5[3]; MonteSub sub; MiniGameWork* wp; } Monte;
 void yuu_03_icon_monte_disp(CameraId camera, void* param);
@@ -37,7 +39,6 @@ s32 ryuwp;
 RyushiWork* xwp;
 Monte* yuu_03_monte_p;
 static void polygon(f32 x, f32 y, f32 w, f32 h, f32 u, f32 v);
-int rand(void);
 static f32 randf(f32 min, f32 max);
 void ryushi_disp(CameraId camera, void* param);
 USER_FUNC(evt_ryushi_init);
@@ -46,7 +47,6 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
 void monteCountDisp(void);
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
-void partyKeyOff(void);
 #define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)
 
 USER_FUNC(eff_call_minigame);

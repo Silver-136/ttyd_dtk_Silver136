@@ -7,8 +7,8 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "eff/n64/eff_vapor_n64.h"
 
-EffectEntry* effVaporN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale);
 void effIbukiMain(EffectEntry* effect);
 void effIbukiDisp(CameraId cameraId, EffectEntry* effect);
 

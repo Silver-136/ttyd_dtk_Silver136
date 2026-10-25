@@ -17,6 +17,10 @@
 #include "seq/seq_gameover.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "statuswindow.h"
+#include "countdown.h"
+#include "cam_road.h"
+#include "cam_shift.h"
 
 typedef struct GameOverWork {
     EventEntry* evt; // 0x0
@@ -25,13 +29,7 @@ typedef struct GameOverWork {
 
 void _relUnLoad(void);
 void _unload(const char* map, const char* nextMap, const char* nextBero);
-void statusWinForceOff(void);
-void statusWinDispOff(void);
-void statusWinDispOn(void);
 void npcClearDeadInfo(void);
-void countDownEnd(void);
-void camRoadReset(void);
-void camShiftReset(void);
 
 USER_FUNC(evt_mapobj_trans);
 USER_FUNC(evt_mapobj_flag_onoff);

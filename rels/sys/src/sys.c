@@ -2,6 +2,9 @@
 #include "eff/eff_itemget.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
+#include "eff/n64/eff_stardust_n64.h"
 
 #include "data/mapdata.h"
 #include "pmario_sound.h"
@@ -22,13 +25,8 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-double tan(double x);
 #ifdef VERSION_G8ME01
-double sin(double x);
-double cos(double x);
 #endif
-double fmod(double x, double y);
-EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 size);
 void effStardustN64SetDrawCam(EffectEntry* eff, s32 camera);
 void display_func(CameraId cameraId, void* param);
 typedef struct SysChar { f32 x; f32 y; f32 z; f32 rot; s32 timer; s32 state; s32 texid; } SysChar;

@@ -29,6 +29,7 @@
 #include "data/npc_data.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "libc_decls.h"
 
 typedef struct RankEntry {
     u16 flags;
@@ -122,8 +123,6 @@ extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 extern NpcSetupBattleInfo btlsetup_tou_tbl[];
 
-double atan2(double y, double x);
-int rand(void);
 void FontDrawScale(f32 scale);
 
 static RankData rank_work;

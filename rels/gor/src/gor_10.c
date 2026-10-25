@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -54,7 +55,6 @@ static inline f32 dd_cos(f32 x) {
     return a;
 }
 
-double sin(double x);
 void mabutaDisp(CameraId camera, void* param);
 static void depthDisp(CameraId camera, void* param);
 typedef struct TegamiWork { s32 alpha; FileEntry* tpl; } TegamiWork;

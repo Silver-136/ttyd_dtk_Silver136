@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "pmario_sound.h"
 
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -270,7 +271,6 @@ static void majin_callback(s32 type) {
     }
 }
 
-BOOL psndBGMStartCheck(s32 id);
 
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

@@ -5,8 +5,9 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
-double sin(double x);
-double cos(double x);
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "eff/n64/eff_fire_dust_n64.h"
 
 typedef struct EffFireRingN64Work {
     s32 type;      // 0x0
@@ -22,7 +23,6 @@ typedef struct EffFireRingN64Work {
     u8 r, g, b;    // 0x50
 } EffFireRingN64Work;
 
-EffectEntry* effFireDustN64Entry(s32 type, s32 lifetime, s32 unk, f32 x, f32 y, f32 z, f32 a, f32 b);
 void effFireRingMain(EffectEntry* effect);
 void effFireRingDisp(CameraId cameraId, EffectEntry* effect);
 

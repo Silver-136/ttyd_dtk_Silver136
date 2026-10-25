@@ -13,6 +13,7 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
+#include "win/win_mario.h"
 
 extern ItemData itemDataTable[];
 
@@ -24,7 +25,6 @@ void winIconSet(u32 id, Vec translate, Vec scale, GXColor color);
 void winFontInit(void);
 void winFontSet(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetR(Vec translate, Vec scale, GXColor color, const char* fmt, ...);
-const char* winZenkakuStr(s32 n);
 
 void winMakeEquipList(WindowWork* w) {
     s32 n = 0;

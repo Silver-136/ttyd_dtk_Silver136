@@ -8,10 +8,10 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
-double sin(double);
-double cos(double);
 #include <string.h>
 #include "version.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 

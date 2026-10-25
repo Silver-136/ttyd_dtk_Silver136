@@ -9,11 +9,11 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 #include "version.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 // US effect texture ids are 0x1C lower for these entries.
 #define EFF_TEX(id) ((id) - VERSION_PICK(0, 0x1C))
 
-double sin(double);
-double cos(double);
 
 #define PI 3.1415927f
 #define HALF_PI 1.5707964f

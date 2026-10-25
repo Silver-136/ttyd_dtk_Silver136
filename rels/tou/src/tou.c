@@ -3,6 +3,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
+#include "libc_decls.h"
+#include "eff/eff_starstone.h"
 
 #include "data/mapdata.h"
 #include "driver/swdrv.h"
@@ -70,9 +72,7 @@ typedef struct GansWork { smartEntry* buf; GXTexObj tex; s32 onoff; s32 alpha; s
 GansWork* gans_wp;
 void gans_tex(CameraId cameraId, void* param);
 BOOL partyChkJoin(s32 id);
-double atan2(double y, double x);
 typedef struct StarStoneWork { u8 field_0x0[8]; Vec pos; u8 field_0x14[8]; f32 rot; } StarStoneWork;
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 static s32 champion_belt_onoff;
 
 USER_FUNC(chk);

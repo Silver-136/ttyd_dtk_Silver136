@@ -32,10 +32,10 @@
 #include "driver/seqdrv.h"
 #include "battle/battle_information.h"
 #include <string.h>
+#include "kpa_act.h"
 
 f32 cloudGetBreathPower(Vec pos, f32 width);
 BOOL kpaMutekiCheck(void);
-void kpaAddScorePos(s32 score, Vec* pos);
 s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 height, f32 width);
 void kpaPowDown(void);
 void marioChkWallAround(Vec* pos, s32 a1, f32 a2, f32 angle, f32 radius, f32 height);

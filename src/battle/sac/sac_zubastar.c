@@ -21,10 +21,10 @@
 #include "battle/sac/sac_zubastar.h"
 #include "battle/battle_database_common.h"
 #include <dolphin/pad.h>
+#include "libc_decls.h"
 
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
 #define INTPL(m, c, n, a, b) ((f32 (*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, m, c, n)
-int rand(void);
 
 typedef struct ZSObj {
     /* 0x00 */ s32 a;

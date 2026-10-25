@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
 
 #include "driver/npcdrv.h"
 #include "manager/evtmgr.h"
@@ -20,7 +21,6 @@
 #include "jon.h"
 
 void raster_disp(CameraId cameraId, void* param);
-double sin(double x);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];

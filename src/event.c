@@ -16,10 +16,10 @@
 #include "evt/evt_badgeshop.h"
 #include "evt/evt_yuugijou.h"
 #include "evt/evt_johoya.h"
+#include "statuswindow.h"
 //TODO: put in /evt?
 //funcs sorted backwards aka original source file
 
-void statusWinForceUpdate(void);
 s32 yoshiSetColor(void);
 
 #ifdef VERSION_G8ME01

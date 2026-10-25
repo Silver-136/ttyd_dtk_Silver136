@@ -12,14 +12,11 @@
 #include <math.h>
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "mario/mario_sbr.h"
+#include "system.h"
+#include "mario/mario_hit.h"
+#include "mot/mot_roll.h"
 
-f32 revise360(f32);
-f32 distABf(f32, f32, f32, f32);
-f32 angleABf(f32, f32, f32, f32);
-f32 toMovedir(f32);
-void sincosf(f32* s, f32* c, f32 deg);
-BOOL marioChkBero(HitEntry* hit);
-HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 HitEntry* marioChkLandon(f32* outY, f32 y);
 void marioLandOn(void);
 void marioClearJumpPara(void);
@@ -28,7 +25,6 @@ void allPartyRideShip(void);
 void allPartyRideOff(void);
 void allPartyForceRideOn(void);
 s32 marioSlitChkWallAround(void);
-void marioAdjustMoveDir(void);
 
 #define CAMF() (camGetPtr((CameraId)8)->flags)
 
@@ -1276,7 +1272,6 @@ void marioRollStrippedPool(void) {
 // prototypes for asm stopgap forward references
 void mot_fall_roll(void);
 void roll_upstairs(void);
-void roll_upstairs_on(void);
 void mot_roll(void);
 void marioReInit_roll(void);
 void rollEvtJumpSetup(void);

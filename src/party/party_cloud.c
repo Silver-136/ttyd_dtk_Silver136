@@ -1,7 +1,5 @@
 #define _MATH_H_
 double fabs(double x);
-double sin(double x);
-double cos(double x);
 #define fabs(x) __fabs(x)
 #define fabsf(x) __fabsf(x)
 #include "party/party_cloud.h"
@@ -15,6 +13,9 @@ double cos(double x);
 #include "system.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "party/party_move.h"
 
 Vec cloud_at;
 
@@ -36,7 +37,6 @@ void N__cloud_use(PartyEntry* party);
 void getHitBreatheout2(PartyEntry* party, f32 unk);
 void partyChgRunMode(PartyEntry* party, s32 mode);
 void partyChgPose(PartyEntry* party, const char* pose);
-void partyChgMot(PartyEntry* party, s32 mot);
 
 
 #define CW(p) ((PartyCloud*)(p)->useStruct)
@@ -63,7 +63,6 @@ static inline void cloudSweep(PartyEntry* party, f32 sign, s32 i) {
 #include "eff/n64/eff_kumokumo_n64.h"
 void partyChgMoveMode(PartyEntry* party, s32 mode);
 void partyUpdateKeyData(PartyEntry* party);
-void* memset(void*, int, unsigned long);
 
 
 

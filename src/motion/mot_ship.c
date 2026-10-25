@@ -17,6 +17,10 @@
 #include "mario/mariost.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "mot/mot_jump.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "mot/mot_ship.h"
 
 typedef struct MotShipWork {
     u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = N_marioShipGetDir; set to 0/1/2 by shipDecideDir
@@ -87,7 +91,6 @@ void allPartyRideOff(void);
 void allPartyForceRideOn(void);
 void* effFunemizuEntry(s32, f32, f32, f32, f32, f32);
 
-void marioPreJump(void);
 void allPartyRideShip(void);
 void marioClearJumpPara(void);
 void N_marioReloadMapOnBottomlessOff(void);
@@ -98,8 +101,6 @@ HitEntry* marioChkLandon(f32, f32*);
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
 
 void marioCheckWallShip(f32, f32);
-double sin(double);
-double cos(double);
 void shipMove(void);
 #define EFFP() ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)
 s32 N_marioShipGetDir(void) {
@@ -893,8 +894,6 @@ BOOL marioChkShipMoveMode(void) {
     return FALSE;
 }
 
-double sin(double);
-double cos(double);
 
 #define SHIP_WORK marioGetPtr()->motShip
 #define SHIP_DISP marioGetPtr()->motShip
@@ -1077,8 +1076,6 @@ BOOL checkHarbor(Vec* out) {
 // prototypes for asm stopgap forward references
 BOOL checkHarbor(Vec* out);
 void shipMove(void);
-BOOL marioChkShipMoveMode(void);
-void marioShipChgFall(void);
 void mot_ship(void);
 void mot_ship_post(void);
 void marioReInit_ship(void);

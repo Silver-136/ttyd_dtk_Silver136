@@ -3,6 +3,7 @@
 #include "driver/effdrv.h"
 #include "memory.h"
 #include <stdlib.h>
+#include "eff/n64/eff_snow_dust_n64.h"
 
 typedef struct EffSnowmanN64Work {
     s32 type;      // 0x0
@@ -26,7 +27,6 @@ typedef struct EffSnowmanN64Work {
 } EffSnowmanN64Work;
 
 EffectEntry* effVaporN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 delay);
-EffectEntry* effSnowDustN64Entry(s32 a, s32 b, s32 c, f32 x, f32 y, f32 z, f32 d, f32 e, f32 f);
 
 static s8 jump_hscale_data[] = {100, 90, 82, 76, 72, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
 static u8 land_hscale_data[] = "dZRLHFJYdlnlf`_`ceddddddddd";

@@ -11,6 +11,12 @@
 #include "pmario_sound.h"
 #include "mario/mario.h"
 #include "sfx_name_word.h"
+#include "party/party_move.h"
+#include "party/party_bomhei.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "party/party_yoshi.h"
+#include "party/party_vivian.h"
 
 //.data
 
@@ -127,7 +133,6 @@ PartyData* party_dp;
 s32 partyCtrlNo;
 
 void partyChgRunMode(PartyEntry* party, s32 mode);
-void partyChgMot(PartyEntry* party, s32 mot);
 s32 partyEntryMain(s32 memberId);
 void partyGetAppearPos2(PartyEntry* party, Vec* pos);
 
@@ -727,7 +732,6 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
     return slot;
 }
 
-void bomhei_use_cancel(void);
 void partyShadowOff(PartyEntry* party);
 void vivianUnhold(PartyEntry* party);
 void marioGetoffYoshi(void);
@@ -736,11 +740,7 @@ void getRidePos(PartyEntry* party, Vec* pos);
 void driveParty(PartyEntry* party);
 #include "mario/mario_sbr.h"
 s32 partyHelloMain(PartyEntry* party);
-double sin(double);
-double cos(double);
-s32 yoshiGetStatus(void);
 BOOL N_marioShipGetDir(void);
-void partyClearJumpPara(PartyEntry* party);
 void L_partyForceSlitOff(PartyEntry* party);
 static inline void partyShadowOn(PartyEntry* party) {
     if (party) {
@@ -752,7 +752,6 @@ void partyInit(void) {
     memset(partyPtrTbl, 0, sizeof(partyPtrTbl));
 }
 
-void partyClearFootmark(void);
 void chuchu_reinit(PartyEntry* party);
 void partyResetTouchWallCt(void);
 
@@ -1019,7 +1018,6 @@ void partyMain(void) {
 /* @@DRIVE@@ */
 void party_kemuri(PartyEntry* party);
 void vivianShadow(PartyEntry* party);
-s32 vivianGetStatus(void);
 void party_move_mode_wait(PartyEntry* party);
 void partyForceWalk(PartyEntry* party);
 void L_partyForceSlitOff(PartyEntry* party);
@@ -1213,7 +1211,6 @@ void partyHello(PartyEntry* party) {
 }
 
 /* @@HELLO@@ */
-void partyMoveNoHosei(PartyEntry* party);
 void partyGetAppearPos(PartyEntry* party, Vec* pos);
 void allPartyForceRideOn(void);
 
@@ -2362,12 +2359,10 @@ s32 partyRideYoshiMain(PartyEntry* party) {
     return 0;
 }
 
-void marioGetScreenPos(Vec position, f32* x, f32* y, f32* z);
 s32 hitGetAttr(struct HitEntry* hit);
 BOOL marioWaitDamageReturnFall(void);
 BOOL marioWaitDamageTogeReturnFall(void);
 void vivianShadow(PartyEntry* party);
-void partyMove(PartyEntry* party);
 
 void party_damage_return(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -2581,7 +2576,6 @@ PartyData* party_dp;
 s32 partyCtrlNo;
 
 void partyChgRunMode(PartyEntry* party, s32 mode);
-void partyChgMot(PartyEntry* party, s32 mot);
 s32 partyEntryMain(s32 memberId);
 void partyGetAppearPos2(PartyEntry* party, Vec* pos);
 

@@ -11,6 +11,9 @@
 #include "mario/mario_motion.h"
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "party/party_nokonoko.h"
 
 extern void partyUpdMoveSpd(PartyEntry* party);
 extern void partyWalkInit(PartyEntry* party, s32 mode);
@@ -20,8 +23,6 @@ extern void partyChgRunMode(PartyEntry* party, s32 mode);
 
 
 static s32 nokoSe;
-double sin(double);
-double cos(double);
 #include "driver/hitdrv.h"
 #include "mario/mario_sbr.h"
 
@@ -41,7 +42,6 @@ void partyChkWallAround(PartyEntry* party, Vec* pos, f32 spd, f32 dir, f32 width
 #endif
 extern void partyChgPose(PartyEntry* party, char* pose);
 double sqrt(double);
-void nokonoko_finish(PartyEntry* party);
 HitEntry* ccwall(PartyEntry* party, s32 mode);
 void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out);
 void lookupSafetyPos3(Vec pos, f32 height, Vec* out);
@@ -220,7 +220,6 @@ static inline void noko_star(PartyEntry* party, s32 n) {
             body                                                                                                   \
         }                                                                                                          \
     }
-void nokonoko_use(PartyEntry* party);
 void nokonoko_use(PartyEntry* party) {
     Vec out;
     Vec out2;

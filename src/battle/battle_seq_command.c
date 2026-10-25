@@ -22,6 +22,13 @@
 #include "battle/battle_menu_disp.h"
 #include "battle/battle_status_effect.h"
 #include "sfx_name_word.h"
+#include "battle/battle_camera.h"
+#include "manager/fontmgr.h"
+#include "driver/icondrv.h"
+#include "driver/windowdrv.h"
+#include "libc_decls.h"
+#include "battle/battle_disp.h"
+#include "system.h"
 
 
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, s32 a);
@@ -39,7 +46,6 @@ void BattleMenuDisp_MultiItem_End(BattleWork* wp);
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleMenuDisp_ChangePartySelect_Disp(BattleWork* wp);
 void BattleMenuDisp_ChangePartySelect_End(BattleWork* wp);
-void btl_camera_set_mode(s32 a, s32 b);
 void BattleStageOffLightInCommand(s32 a, s32 b);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 void _btlcmd_MakeMultiItemTable(BattleWork* wp);
@@ -47,11 +53,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp);
 void _btlcmd_MakeActClassTable(BattleWork* wp);
 void btlGetScreenPoint(Vec* pos, Vec* out);
 void FontDrawString(f32 x, f32 y, const char* msg);
-void FontDrawStart(void);
-void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale);
-void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve);
 unsigned long strlen(const char* s);
-int sprintf(char* buf, const char* fmt, ...);
 BOOL BattleCommandAttackAudienceCheck(void);
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param);
 USER_FUNC(_get_msg);
@@ -108,11 +110,6 @@ void BattleCommandInit(BattleWork* wp) {
     wp->flags |= 0x80;
 }
 
-void btlDispGXInit2DRasta(void);
-void btlDispGXQuads2DRasta(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a);
-void btlDispTexPlane(u32 id, GXColor color, f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY);
-s32 iconNumberDispGx(Mtx mtx, s32 number, BOOL small, GXColor color);
-f32 intplGetValue(s32 mode, s32 currStep, s32 steps, f32 start, f32 end);
 #define PADREP(x) (BattlePadCheckRepeat(x))
 void _btlcmd_MakeActClassTable(BattleWork* wp) {
     PouchData* pouch;
@@ -1484,8 +1481,6 @@ void BattleCommandDisplay_ActMenuSetup(BattleWork* wp, u32 a) {
         return FALSE; \
     }
 
-void btl_camera_set_mode(s32 id, s32 mode);
-void btl_camera_set_moveSpeedLv(s32 id, s32 lv);
 void BattleMenuDisp_ActSelect_Main(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp);
@@ -2165,8 +2160,6 @@ void BattleCommandDisplay_TargetSelectMenuSetup(BattleWork* wp) {
 }
 #pragma dont_inline reset
 
-u16 FontGetMessageWidth(const char* message);
-void btl_camera_set_mode(s32 id, s32 mode);
 
 void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
     BattleWork* wp = param;
@@ -2626,7 +2619,6 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
     }
 }
 
-s32 irand(s32 scalar);
 
 #define TEXPLANE ((void (*)(u32, GXColor, s32, f32, f32, f32, f32, f32))btlDispTexPlane)
 #pragma dont_inline on

@@ -2,6 +2,9 @@
 #include "eff/eff_funemizu.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/n64/eff_water_damage_n64.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 #include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
@@ -31,7 +34,6 @@
 
 s32 marioShipChanging(void);
 EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw);
-EffectEntry* effWaterDamageN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 scale);
 void mapObjGetPos(const char* name, Vec* pos);
 void suifu100taikikan_seq01(NanNPC* npc);
 void suifu100taikikan_seq00(NanNPC* npc);
@@ -41,9 +43,6 @@ static s32* itemsel_table_ram;
 static KaitenParam* ckp0;
 static KaitenParam* ckp1;
 static KaitenParam* ckpw;
-double sin(double x);
-double cos(double x);
-double atan2(double y, double x);
 static inline f32 fid(f32 x) { return x; }
 void gundan1000tai_seq01(NanNPC* npc);
 void gundan1000tai_seq00(NanNPC* npc);

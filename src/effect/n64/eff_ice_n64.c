@@ -6,9 +6,9 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <stdlib.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
-double sin(double);
-double cos(double);
 
 typedef struct EffIceN64Piece {
     s32 unk0;     // 0x0

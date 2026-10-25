@@ -8,8 +8,8 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
-double sin(double);
-double cos(double);
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 void effMist2Main(EffectEntry* effect);
 void effMist2Disp(CameraId cameraId, EffectEntry* effect);

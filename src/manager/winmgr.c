@@ -24,6 +24,7 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
+#include "statuswindow.h"
 
 typedef struct WinMgrSelectTbl {
     u16 numDescriptors; // 0x0
@@ -32,11 +33,9 @@ WinMgrDesc* descriptors; // 0x4
 } WinMgrSelectTbl;
 
 extern ItemData itemDataTable[];
-void statusWinForceOpen(void);
 void winFontInit(void);
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
-void statusWinForceOff(void);
 s16 johoya_get(u8* table, s16 id);
 void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*));
 #ifdef VERSION_G8ME01

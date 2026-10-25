@@ -7,9 +7,9 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <stdlib.h>
+#include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
 
-double cos(double);
-double sin(double);
 
 typedef struct EffPacknBfireWork {
     s32 type;     // 0x0

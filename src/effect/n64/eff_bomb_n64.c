@@ -5,6 +5,8 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/n64/eff_kemuri8_n64.h"
+#include "eff/n64/eff_confetti_n64.h"
 
 typedef struct EffBombN64Work {
     s32 type;        // 0x0
@@ -33,10 +35,8 @@ typedef struct EffBombN64Work {
     u8 pad_c4[8];    // 0xC4
 } EffBombN64Work;
 
-EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z);
 void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId);
 void effConfettiN64SetCamId(EffectEntry* effect, s32 camId);
-EffectEntry* effConfettiN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale);
 
 static effN64Vtx size8x8_tex32x32_vtx[] = {
     {-4, -4, 0, 0, 0, 255, 255, 255, 255},

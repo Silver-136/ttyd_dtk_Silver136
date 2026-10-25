@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
@@ -56,8 +58,6 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
-double sin(double x);
-double cos(double x);
 
 USER_FUNC(hit_move) {
     MarioWork* mario = marioGetPtr();

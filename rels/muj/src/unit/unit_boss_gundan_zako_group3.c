@@ -1,6 +1,8 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "pmario_sound.h"
+#include "libc_decls.h"
 
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -30,8 +32,6 @@ BattleUnit* zakogun_get_ptr(void);
 s32 zakogun_get_kanbu_id(void);
 void zakogun_set_pose(ZakoGun* zako, s32 base, s32 num, s32 div);
 void zakogun_ext_init123_common(ExtdrvPose* pose, s32 i);
-void psndSFXOff(s32 id);
-int rand(void);
 double sqrt(double x);
 
 USER_FUNC(btlevtcmd_AnimeChangePoseFromTable);

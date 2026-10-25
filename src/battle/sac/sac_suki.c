@@ -24,8 +24,8 @@
 #include "battle/battle_database_common.h"
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
+#include "eff/n64/eff_stardust_n64.h"
 
-EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 size);
 void btlGetScreenPoint(Vec* in, Vec* out);
 void BattleAudienceSoundWhistleKind(s32 kind);
 void BattleAudienceSoundCallKind(s32 kind);

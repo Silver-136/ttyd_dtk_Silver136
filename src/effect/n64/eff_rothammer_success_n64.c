@@ -6,9 +6,9 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "eff/n64/eff_rothammer_success_n64.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
-double sin(double);
-double cos(double);
 
 typedef struct EffRotHammerSuccessWork {
     s16 type;     // 0x0

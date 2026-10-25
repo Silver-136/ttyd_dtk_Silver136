@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -13,9 +15,6 @@ typedef struct KaitenParam { Vec pos; Vec target; f32 angle; f32 dist; } KaitenP
 static KaitenParam* ckp0;
 static KaitenParam* ckp1;
 static KaitenParam* ckpw;
-double sin(double x);
-double cos(double x);
-double atan2(double y, double x);
 
 static USER_FUNC(cam_kaiten_get_para);
 static USER_FUNC(cam_kaiten_init);

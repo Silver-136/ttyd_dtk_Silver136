@@ -8,11 +8,11 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
+#include "libc_decls.h"
 
 #define PI 3.1415927f
 #define HALF_PI 1.5707964f
 
-int sprintf(char* str, const char* format, ...);
 u32 strlen(const char* s);
 void* memset(void* dst, int val, u32 n);
 void effNumberGX(Mtx mtx, s32 type, s32 number, u8 alpha, s32 extra);

@@ -5,8 +5,8 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "libc_decls.h"
 
-int rand(void);
 
 typedef struct EffFireSparkN64Work {
     s32 type;           // 0x0

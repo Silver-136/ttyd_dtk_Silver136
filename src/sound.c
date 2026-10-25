@@ -6,8 +6,8 @@
 #include "musyx/musyx.h"
 #include "system.h"
 #include "libc_decls.h"
-double sin(double);
 #include <string.h>
+#include "eff/eff_magic1_n64.h"
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif

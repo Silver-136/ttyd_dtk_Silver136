@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"
@@ -32,15 +34,12 @@ static u8 muj_00_bss_0C[4];
 static u8* _ap;
 typedef struct TobiWork { Vec pos; s32 type; } TobiWork;
 void suifu_kyorokyoro(NanNPC* npc);
-double sin(double x);
-double cos(double x);
 typedef struct OrbitData { f32 angle; f32 dist; } OrbitData;
 OrbitData* _op;
 #define ORBIT(i, p) op[i].angle += d; t = op[i].angle; rad = orbit_update(t); r = op[i].dist; x = r * sinf_l(rad) + cx; t = r * cosf_l(rad) + cz; p.x = x; p.z = t; (void)0
 NanNPC* random_choice_target(s32 type);
 TobiWork* Tobidat;
 void tobikakari_seq00(NanNPC* npc);
-double atan2(double y, double x);
 static inline f32 sinf_l(f32 x) { f32 v = sin(x); return v; }
 static inline f32 cosf_l(f32 x) { return cos(x); }
 static inline f32 orbit_update(f32 x) { return x * 3.141592f / 180.0f; }

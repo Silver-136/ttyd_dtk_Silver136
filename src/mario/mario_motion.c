@@ -9,6 +9,17 @@
 #include "driver/mobjdrv.h"
 #include <dolphin/pad.h>
 #include "driver/camdrv.h"
+#include "motion/mot_yoshi.h"
+#include "party/party_cloud.h"
+#include "mario/mario_party.h"
+#include "system.h"
+#include "mario/mario_sbr.h"
+#include "mario/mario_pouch.h"
+#include "mario/mario_cam.h"
+#include "koopa.h"
+#include "mot/mot_damage.h"
+#include "mot/mot_slit.h"
+#include "koopa_motion.h"
 
 
 typedef struct MarioJumpData {
@@ -63,10 +74,7 @@ void mot_plane(void);
 void mot_plane_post(void);
 void mot_ship(void);
 void mot_ship_post(void);
-void mot_yoshi(void);
-void mot_yoshi_post(void);
 void mot_cloud(void);
-void cloudResetAt();
 void mot_vivian(void);
 void mot_vivian_post(void);
 void mot_dokan(void);
@@ -84,21 +92,11 @@ void mot_dummy(void);
 void mot_fall_roll(void);
 
 void marioSlitForceCancel(void);
-s32 marioGetPartyId(void);
-s32 marioGetExtraPartyId(void);
-f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
-f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2);
 void movePos(f32* x, f32* z, f32 speed, f32 angle);
-f32 revise360(f32 angle);
-f32 toMovedir(f32 angle);
 s32 psndSFXOn_3D(s32 id, Vec* position);
 void* marioChkLandon(f32* y, f32 spd);
-s16 pouchAddHP(s16 points);
-s32 pouchGetHP(void);
 #define PCHK(x) pouchCheckItem(x)
 void marioDmgRetQuakeOn(void);
-void marioUpdateCamPos(void);
-s32 kpaGetBodyStatus(void);
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioSlitChkWallAround(void);
 BOOL marioCreviceWallChk(Vec pos);
@@ -109,26 +107,19 @@ BOOL marioChkPlanePlace(void* hit);
 s32 mobjGetHint(void* mobj);
 MotCaseEntry* caseCheckHitObj(void* hit);
 void* fbatNpcTalkCheck(void);
-void marioAdjustMoveDir(void);
 void peach_talk(void);
 void* marioGetTouchNpcPtr(void);
-void kpaChgPose(const char* a, const char* b);
-void camFollowYOn(void);
 void kpaCamFollow(void);
-void set_damage_root_ypos(f32 y);
 void effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 void yoshi_jumpStand(void);
 void marioSlitReenter(void);
-BOOL marioChkSlitEnd(void);
 void motSlitCancel(void);
 s32 kpaFireAttackCheck(void);
-void quake_kpaLandOn(void);
 void N_marioSlitSetAfterLand(void);
 void kpaClearHitobjRide(void);
 void* kpaChkHitobjRide(void);
 BOOL getRollEvtFlag(void);
 BOOL marioPriCheckJabara(void);
-void marioSetPeakYpos(void);
 void kpaSetJumpPara(void);
 BOOL kpaHipAttackOk(void);
 BOOL marioChkHipAttack(void);

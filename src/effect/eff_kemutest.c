@@ -10,11 +10,11 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 
 
-double sin(double);
-double cos(double);
 
 typedef struct KemuTestWork {
     s32 type;       // 0x0

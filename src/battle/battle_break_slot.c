@@ -19,12 +19,12 @@
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
 #include <dolphin/pad.h>
+#include "battle/battle_camera.h"
+#include "eff/eff_magic1_n64.h"
 
 typedef struct { s32 v[8]; } SlotCards8;
 typedef struct { s32 v[5]; } SlotCards5;
 
-void btl_camera_set_mode(s32 pri, s32 mode);
-void btl_camera_set_moveSpeedLv(s32 pri, s32 lv);
 void BattleAudienceNumToTarget(void);
 
 BreakSlotReel* BattleBreakSlotReelGetPtr(s32 no);
@@ -284,7 +284,6 @@ void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 x);
 void btl_camera_noshake(s32 pri);
 void BattleAudienceSoundRun(s32 id);
 void BattleAudienceSoundBooing(void);
-double sin(double);
 
 
 void BattleBreakSlot_Main(void) {

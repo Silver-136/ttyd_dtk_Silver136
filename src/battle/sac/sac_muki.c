@@ -24,22 +24,19 @@
 #include "pmario_sound.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
+#include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
+#include "battle/battle_disp.h"
+#include "eff/eff_hit.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 
-double cos(double);
-double sin(double);
-void btlDispTexPlane2(Mtx, u32, GXColor);
-void btlDispTexPlane3(Mtx, u32, GXColor, GXColor, GXColor, GXColor);
-void btlDispGXInit2DRasta(void);
-void btlDispGXQuads2DRasta(f32 x, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a);
 void btlGetScreenPoint(Vec* in, Vec* out);
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
 void BattleAudienceSoundHandBeat(void);
 void BattleAudienceSoundCallKind(s32 kind);
 void BattleAudienceSoundBooingKind(s32 kind);
-EffectEntry* effHitEntry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale);
 
 #define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 

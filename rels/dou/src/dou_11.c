@@ -1,6 +1,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 #include "driver/hitdrv.h"
 #include "string.h"
@@ -17,8 +19,6 @@
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 BOOL hitIsGroup(HitEntry* target, HitEntry* group);
-double sin(double x);
-double cos(double x);
 
 USER_FUNC(dou_mario_kaiten_hosei);
 USER_FUNC(evt_bero_exec_wait);

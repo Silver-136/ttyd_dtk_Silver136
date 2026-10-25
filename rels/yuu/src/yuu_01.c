@@ -2,6 +2,9 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
+#include "party.h"
+#include "mario/mario_motion.h"
+#include "cam_shift.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -24,13 +27,10 @@ USER_FUNC(evt_sub_get_language);
 typedef struct FuneWork { u32 flags; s32 phase; s32 coins; s32 result; s32 index; s32 state; f32 dist; Vec dir; s32 timer; f32 y; f32 x; s32 monteCount; EventEntry* viewEvent; } FuneWork;
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
-void partyKeyOff(void);
-void partyKeyOn(void);
 void mapObjGetPos(const char* name, Vec* pos);
 BOOL marioChkSwirlPower(void);
 void marioSetSwirlPower(s32 time, f32 speed, f32 angle);
 void monteCountDisp(void);
-void marioChgShipMotion(void);
 typedef struct MonteSub { s32 unk0; Vec pos; f32 scale; u8 unk14[0x38 - 0x14]; } MonteSub;
 typedef struct Monte { u8 hidden; u8 unk1; s16 num; u8 state; u8 unk5[3]; MonteSub sub; MiniGameWork* wp; } Monte;
 typedef struct MonteTable { f32 x0; f32 x1; f32 y0; f32 y1; s32 num; } MonteTable;
@@ -40,7 +40,6 @@ static Monte* monte_p;
 static void monte_disp(CameraId camera, void* param);
 static inline BOOL monte_check_inl(Vec* a, Vec* b) { if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) { return TRUE; } return FALSE; }
 static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
-void camShiftReset(void);
 
 USER_FUNC(eff_call_minigame);
 USER_FUNC(evt_bero_mapchange);

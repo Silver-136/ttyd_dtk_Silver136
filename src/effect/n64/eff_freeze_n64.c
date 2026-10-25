@@ -7,6 +7,8 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 #include "eff/n64/eff_glass_n64.h"
+#include "eff/n64/eff_vapor_n64.h"
+#include "eff/n64/eff_snow_dust_n64.h"
 
 typedef struct EffFreezeN64Work {
     s32 type;           // 0x0
@@ -21,8 +23,6 @@ typedef struct EffFreezeN64Work {
     EffectEntry* dust;  // 0x28
 } EffFreezeN64Work;
 
-EffectEntry* effVaporN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale);
-EffectEntry* effSnowDustN64Entry(s32 a, s32 b, s32 c, f32 x, f32 y, f32 z, f32 d, f32 e, f32 f);
 
 
 static effN64Vtx size32x64_tex32x64_vtx[] = {

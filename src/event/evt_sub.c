@@ -22,10 +22,13 @@
 #include "evt/evt_memcard.h"
 #include "evt/evt_sub.h"
 #include <dolphin/pad.h>
+#include "statuswindow.h"
+#include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
+#include "mario/mario_motion.h"
 
 void marioSetCamId(s32);
 s32 effStageClearEndChk();
-void statusWinForceOpen();
 void statusWinForceClose();
 BOOL statusWinCheckUpdate();
 
@@ -37,12 +40,8 @@ BOOL statusWinCheckUpdate();
 #include <dolphin/os.h>
 #ifdef VERSION_G8ME01
 void evtMsgFmtInt(char* buf, s32 value);
-void statusWinForceUpdate(void);
 #endif
 
-int rand(void);
-double sin(double);
-double cos(double);
 
 #define KEYFN(name, fn)                                       \
     USER_FUNC(name) {                                         \
@@ -2237,7 +2236,6 @@ void coingetDisp(WinMgrEntry* entry) {
 static inline f32 coin_sin(f32 x) { f32 a = 0.00761f; f32 b = 0.16605f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; a = a * x; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = a * y; a = -a; } return a; }
 static inline f32 coin_cos(f32 x) { f32 a = 0.03705f; f32 b = 0.4967f; f32 c = 1.0f; f32 y; f32 x2; if (x <= 3.1415927f) { if (x <= 1.5707964f) { x2 = x * x; a = a * x2 - b; a = a * x2 + c; } else { y = 1.5707964f - (x - 1.5707964f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } } else if (x < 4.712389f) { y = x - 3.1415927f; x2 = y * y; a = a * x2 - b; a = a * x2 + c; a = -a; } else { y = 1.5707964f - (x - 4.712389f); x2 = y * y; a = a * x2 - b; a = a * x2 + c; } return a; }
 void marioChgGetItemMotion(void);
-void marioChgStayMotion(void);
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 USER_FUNC(evt_sub_get_coin) {

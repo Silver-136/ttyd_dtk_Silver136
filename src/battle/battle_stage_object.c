@@ -27,6 +27,7 @@
 #include "unit/unit_object_tree.h"
 #include "unit/unit_object_switch.h"
 #include "battle/battle_status_effect.h"
+#include "battle/battle_camera.h"
 
 #pragma dont_inline on
 
@@ -54,8 +55,6 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
 BOOL BtlUnit_GetACPossibility(BattleUnit* unit);
 s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon);
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);
-void btl_camera_set_mode(s32 a, s32 b);
-void btl_camera_set_moveSpeedLv(s32 a, s32 b);
 
 //local prototypes
 void BattleObjectConfig(void);

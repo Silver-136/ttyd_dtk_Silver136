@@ -8,6 +8,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <stdlib.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 typedef struct EffKemuri4N64Work {
     s32 active;      // 0x0
@@ -32,8 +34,6 @@ typedef struct EffKemuri4N64Work {
     f32 dirZ;        // 0x84
 } EffKemuri4N64Work;
 
-double sin(double);
-double cos(double);
 
 effN64Vtx flowers_v[41] = {
     {-9, 8, -7, 0, 512, 255, 255, 255, 255},

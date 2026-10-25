@@ -5,9 +5,9 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
-double sin(double x);
-double cos(double x);
 
 typedef struct EffThunderflareN64Elem {
     s32 unk0;     // 0x0

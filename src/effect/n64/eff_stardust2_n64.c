@@ -6,8 +6,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
 
-double sin(double);
 
 typedef struct EffStardust2N64Work {
     s16 flag;     // 0x0

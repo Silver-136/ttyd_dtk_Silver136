@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
+#include "libc_decls.h"
 
 #include "stdio.h"
 #include "string.h"
@@ -19,7 +20,6 @@
 #include "rsh.h"
 
 typedef struct RshRndNpc { const char* name; const char* model; EvtWord* talkEvt; } RshRndNpc;
-double tan(double x);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];

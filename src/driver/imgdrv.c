@@ -11,6 +11,7 @@
 #include "driver/offscreendrv.h"
 #include "driver/shadowdrv.h"
 #include "libc_decls.h"
+#include "driver/mapdrv.h"
 
 //.data
 
@@ -202,9 +203,6 @@ void imgDisp(CameraId camId, void* param) {
     if (i < wp->count) sysWaitDrawSync();
 }
 
-void mapSetMaterialLight(s32 flags, Vec position);
-void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2);
-void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx);
 
 void imgDisp_ProjPlane(CameraId camId, void* param) {
     ImageEntry* entry = param;

@@ -7,12 +7,13 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "eff/n64/eff_stardust_n64.h"
+#include "eff/eff_kiss.h"
 
-double sin(double);
-double cos(double);
 double fabs(double);
 
-EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 size);
 void effStardustN64SetScale(EffectEntry* effect, f32 scale);
 
 typedef struct KissWork {
@@ -30,7 +31,6 @@ typedef struct KissWork {
     s32 pad;      // 0x34
 } KissWork;
 
-EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle);
 void effKissMain(EffectEntry* effect);
 void effKissDisp(CameraId cameraId, EffectEntry* effect);
 void effKissDisp2(CameraId cameraId, EffectEntry* effect);

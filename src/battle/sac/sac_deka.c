@@ -27,11 +27,12 @@
 #include "battle/sac/sac_deka.h"
 #include <dolphin/pad.h>
 #include "battle/battle_status_effect.h"
+#include "eff/eff_starstone.h"
+#include "libc_decls.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 size);
 void BattleAudienceSoundWhistleKind(s32 kind);
 void BattleAudienceSoundCallKind(s32 kind);
 void BattleAudienceSoundHandBeat(void);
@@ -39,8 +40,6 @@ void BattleAudienceSoundBooing(void);
 void btl_camera_shake_h(s32 a, f32 b, f32 c, s32 d, s32 e);
 void psndSFX_pit(s32 id, s32 pitch);
 void test_kururing_mapdisp(CameraId cam);
-int rand(void);
-double tan(double);
 
 #define INTPL(mode, cur, steps, a, b) (((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps))
 #define SFXON(name) (psndSFXOn(name))

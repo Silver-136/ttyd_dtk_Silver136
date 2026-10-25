@@ -2,6 +2,7 @@
 #define LogoWork LogoWorkJP
 #endif
 #include "seq/seq_logo.h"
+#include "libc_decls.h"
 #ifdef VERSION_G8ME01
 #undef LogoWork
 #endif
@@ -36,7 +37,6 @@ typedef struct LogoWork {
 } LogoWork;
 
 static inline s32* logoStoryTime(void);
-double cos(double);
 extern u32 seq_logo_zero_color;
 #endif
 //.sbss

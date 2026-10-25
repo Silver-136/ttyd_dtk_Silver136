@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "system.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -10,7 +11,6 @@
 #include "evt/evt_npc.h"
 
 f32 sinfd(f32 degrees);
-f32 reviseAngle(f32 angle);
 void mapObjTranslate(const char* name, f32 x, f32 y, f32 z);
 
 USER_FUNC(evt_bero_get_info);

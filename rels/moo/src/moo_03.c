@@ -1,11 +1,10 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #include "mario/mario.h"
 #include "party.h"
 
-double tan(double x);
-double fmod(double x, double y);
 
 USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam3d_evt_set);

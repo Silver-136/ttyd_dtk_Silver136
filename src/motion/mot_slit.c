@@ -10,13 +10,14 @@
 #include "mario/mario_pouch.h"
 #include "driver/camdrv.h"
 #include "sfx_name_word.h"
+#include "mario/mario_sbr.h"
+#include "mario/mario_hit.h"
 
 #ifdef VERSION_G8ME01
 void U_allPartySlitOffReq(void);
 #endif
 
 BOOL marioRollChgChk(void);
-void marioAdjustMoveDir(void);
 void marioChgMot2(MarioMotion);
 BOOL marioSlitChkWallAround(void);
 void allPartySlitOn(void);
@@ -24,12 +25,8 @@ void allPartySlitOff(void);
 void allPartyForceSlitOff(void);
 void mapSetPaperAmbColor(GXColor);
 void mapResetPaperAmbColor(void);
-f32 toMovedirSimple(f32);
-f32 revise360(f32);
-HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 double fabs(double);
 BOOL marioCreviceWallChk(const Vec* p);
-CameraEntry* camGetPtr(CameraId);
 
 int __abs(int);
 #define abs __abs

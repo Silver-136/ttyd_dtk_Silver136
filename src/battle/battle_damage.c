@@ -3,6 +3,12 @@
 #include "version.h"
 #include "mario/mario_pouch.h"
 #include "battle/battle_status_effect.h"
+#include "battle/battle_ac.h"
+#include "battle/battle_ac_help.h"
+#include "eff/eff_bomb.h"
+#include "eff/n64/eff_ice_n64.h"
+#include "eff/eff_damage_star.h"
+#include "eff/eff_recovery.h"
 #pragma dont_inline on
 #include "battle/battle_damage.h"
 #include "battle/battle.h"
@@ -46,10 +52,6 @@ s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
 void BattleInitCounterPreCheckWork(s32* work);
 s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32* flags);
 BOOL BtlUnit_GetACPossibility(BattleUnit* unit);
-s32 BattleActionCommandGetDefenceResult(void);
-void BattleActionCommandStop(BattleWork* work);
-void BattleAcHelpSetDispType(s32 type);
-EffectEntry* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 void BattleAudience_Case_GuardGood(void);
 void BattleAudience_Case_GuardBad(void);
 void BattleAudience_Case_EnemyNoDamage(void);
@@ -57,10 +59,7 @@ void BattleAudience_Case_EnemyDamage(s32 damage);
 void BattleAudience_Case_Countered(void);
 void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart);
 
-EffectEntry* effIceN64Entry(s32 type, f32 x, f32 y, f32 z);
-EffectEntry* effDamageStarEntry(s32 type, s32 value, f32 x, f32 y, f32 z, f32 scale, f32 angle);
 EffectEntry* effFukidashiEntry(s32 a, s32 b, s32 c, s32 d, f32 x, f32 y, f32 z, f32 scale, f32 e);
-EffectEntry* effRecoveryEntry(s32 type, s32 value, f32 x, f32 y, f32 z);
 void BtlActRec_AddCount(u8* count);
 void BtlActRec_AddPoint(u8* rec, u8 points);
 void BattleAudience_Case_MarioBigDamage(s32 damage);

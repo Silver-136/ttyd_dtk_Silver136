@@ -3,6 +3,8 @@
 #include "eff/eff_itemget.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "mario/mario_motion.h"
+#include "pmario_sound.h"
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
@@ -43,7 +45,6 @@ static LectButton lbtn[2];
 static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) { camera->presetPos = camera->cameraPos; camera->presetAt = camera->cameraAt; PSVECAdd(&camera->cameraPos, &ofs, &camera->storedPos); PSVECAdd(&camera->cameraAt, &ofs, &camera->storedAt); camera->startTimeA = gp->renderTime; camera->durationA = 0; camera->stateA = 3; camera->curveA = 11; }
 void hitGrpFlagOn(const char* name, u32 flags);
 void itemSetPosition(ItemEntry* item, f32 x, f32 y, f32 z);
-void marioChgStayMotion(void);
 
 USER_FUNC(evt_cam3d_evt_set_rel);
 USER_FUNC(evt_mario_cont_onoff);
@@ -790,7 +791,6 @@ static USER_FUNC(lect_push_b_check) {
     return EVT_RETURN_DONE;
 }
 
-BOOL psndBGMStartCheck(s32 id);
 
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

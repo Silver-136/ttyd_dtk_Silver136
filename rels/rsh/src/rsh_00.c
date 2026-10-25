@@ -1,6 +1,8 @@
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
+#include "eff/eff_magic1_n64.h"
 
 #include "string.h"
 #include "dolphin/os.h"
@@ -22,12 +24,9 @@ typedef struct Moamoa { u16 flags; s16 state; s16 timer; Vec pos; f32 angle; s16
 typedef struct MoamoaWork { s32 field_0x0; s32 count; Moamoa* moa; s32 numDefs; MoamoaPoseDef defs[32]; } MoamoaWork;
 typedef struct MoamoaData { const char* model; const char* anim; f32 speed; } MoamoaData;
 static MoamoaWork* wp;
-int rand(void);
 static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
-double sin(double x);
-double cos(double x);
 static void moamoa_pose_main(void);
 static void ext_disp(CameraId camera, void* param);
 
@@ -1076,4 +1075,3 @@ EVT_BEGIN(rsh_00_c_init_evt_nidome)
     RETURN
 EVT_END()
 
-int rand(void);

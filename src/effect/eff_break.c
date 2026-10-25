@@ -4,8 +4,8 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/n64/eff_stardust_n64.h"
 
-EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 size);
 void effStardustN64SetDrawCam(EffectEntry* eff, s32 camera);
 
 typedef struct EffBreakWork {

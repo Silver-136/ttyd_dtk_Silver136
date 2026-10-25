@@ -31,6 +31,7 @@ void N_battleMapAlloc(void);
 #include "seq/seq_title.h"
 #include "system.h"
 #include <dolphin/mtx.h>
+#include "driver/mobjdrv.h"
 
 typedef struct BattleSeqWork {
     s32 sequence;   // 0x0
@@ -44,7 +45,6 @@ void bmapUnLoad(void);
 BattleUnitType BattleTransPartyIdToUnitKind(s32 id);
 void psndBGMOn_f(u32 a, u32 b, u32 c, u32 d);
 BOOL psndENVOn(u32 a, char* b);
-void mobjReset(BOOL inBattle);
 
 s32 debug_battle_flag;
 s32 seq_battle_unk_8041874c;

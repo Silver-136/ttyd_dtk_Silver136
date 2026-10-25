@@ -25,6 +25,12 @@
 #include "party/party_motion.h"
 #include "battle/sac/sac_genki.h"
 #include "sfx_name_word.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "eff/eff_recovery.h"
+#include "eff/eff_starstone.h"
+#include "eff/n64/eff_stardust_n64.h"
+#include "eff/eff_hit.h"
 // US battle texture ids are 0x16 higher for these entries.
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
@@ -117,16 +123,9 @@ typedef struct GenkiWork {
     GenkiStar star[7]; // 0x510
 } GenkiWork;
 
-double sin(double);
-double cos(double);
-int rand(void);
 s32 statusWinOpen();
 void BtlUnit_SetAnim(BattleUnitPart* part, const char* anim);
-EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z);
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effStardustEntry(s32 type, s32 count, s32 camera, f32 x, f32 y, f32 z, f32 vx, f32 vy);
-EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 size);
-EffectEntry* effHitEntry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale);
 void BattleAudienceSoundBooingKind(s32 kind);
 void BattleAudienceSoundCallKind(s32 kind);
 void BattleAudienceSoundHandBeat(void);

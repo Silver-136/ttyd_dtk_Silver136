@@ -1,6 +1,9 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "pmario_sound.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -28,8 +31,6 @@ USER_FUNC(N_evt_sub_status_gauge_force_update);
 #endif
 
 typedef struct DanceData { u16 flags; u8 step; u8 movePos; f32 cx; f32 cy; f32 rot; } DanceData;
-double sin(double x);
-double cos(double x);
 typedef struct HorogramWork { void* buf0; void* buf1; GXTexObj tex0; GXTexObj tex1; u16 ready; u16 flags; } HorogramWork;
 HorogramWork* horogram_wp;
 DanceData dance_dt;
@@ -39,7 +40,6 @@ void disp_horogram(CameraId cameraId, void* param);
 void disp_horogram(CameraId cameraId, void* param);
 void noiseDisp(CameraId cameraId, void* param);
 void noiseDisp(CameraId cameraId, void* param);
-int rand(void);
 
 static s32 bgm_start_wait(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(bgm_start_wait);
@@ -257,7 +257,6 @@ s32 peach_evt_stg4_read_quiz_data(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-BOOL psndBGMStartCheck(s32 id);
 
 static s32 bgm_start_wait(EventEntry* event, BOOL isFirstCall) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

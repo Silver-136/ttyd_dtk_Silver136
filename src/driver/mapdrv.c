@@ -12,9 +12,10 @@
 #include "driver/shadowdrv.h"
 #include "gxsub.h"
 #include <math.h>
+#include "driver/envdrv.h"
+#include "libc_decls.h"
 static inline f32 sinf(f32 x) { return sin(x); }
 #include <string.h>
-void envReInit(void);
 
 void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table);
 int __cvt_dbl_usll();
@@ -52,7 +53,6 @@ void mapDispMapObj(CameraId cam, MapObject* obj);
 void mapDispMapObj_bbox(CameraId cam, MapObject* obj);
 void mapDispMapObj_off(CameraId cam, MapObject* obj);
 void bmapUnLoad(void);
-extern int sprintf(char* str, const char* format, ...);
 
 #define TWO_PI 6.28318530717958647692528676655900576839433879875021f
 

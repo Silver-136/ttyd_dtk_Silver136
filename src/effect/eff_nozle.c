@@ -6,6 +6,7 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_kemu_test.h"
 
 typedef struct EffNozleWork {
     s32 type;       // 0x0
@@ -25,7 +26,6 @@ typedef struct EffNozleWork {
     f32 rotY;       // 0x40
 } EffNozleWork;
 
-EffectEntry* effKemuTestEntry(s32, f32, f32, f32, f32);
 void effNozleMain(EffectEntry* effect);
 void effNozleDisp(CameraId cameraId, EffectEntry* effect);
 

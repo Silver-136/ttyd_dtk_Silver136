@@ -12,6 +12,7 @@
 #include "system.h"
 #include "sdk/texPalette.h"
 #include <string.h>
+#include "driver/shadowdrv.h"
 
 #include <stdio.h>
 #include "icon_ids.h"
@@ -203,7 +204,6 @@ void iconReInit(void) {
     memset(wp->entries, 0, sizeof(IconEntry) * wp->count);
 }
 
-s32 shadowEntry(f32 x, f32 y, f32 z, f32 size);
 
 void iconMain(void) {
     IconWork* wp;

@@ -1,6 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/fadedrv.h"
+#include "eff/eff_magic1_n64.h"
 
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
@@ -33,7 +34,6 @@ typedef struct DemoWork { s32 field_0x0; f32 bookRot; s32 page; s32 captured; f3
 static DemoWork work;
 char buf[0x200];
 static DemoWork* wp;
-double sin(double x);
 void demo_img(CameraId cameraId, void* param);
 void demo_book(CameraId cameraId, void* param);
 void demo_desk(CameraId cameraId, void* param);

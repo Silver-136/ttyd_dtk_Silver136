@@ -12,9 +12,8 @@
 #include "evt/evt_cam.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
+#include "libc_decls.h"
 
-double tan(double);
-int rand(void);
 EffectEntry* effMiniGameEntry(s32);
 
 typedef struct StageClearWork {

@@ -1,12 +1,12 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #include "party.h"
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_bero.h"
 
-double fmod(double x, double y);
 
 USER_FUNC(L_evt_party_vivian_tail);
 USER_FUNC(N_evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos);

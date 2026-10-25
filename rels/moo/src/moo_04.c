@@ -1,12 +1,12 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #include "mario/mario.h"
 #include "party.h"
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_npc.h"
 
-double fmod(double x, double y);
 
 USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_bg_disp_onoff);

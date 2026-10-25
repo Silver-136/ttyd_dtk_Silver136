@@ -1,6 +1,9 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
+#include "driver/mapdrv.h"
+#include "driver/shadowdrv.h"
 
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
@@ -57,10 +60,8 @@ static s32 xlw[16];
 char* exchange_msgp;
 typedef struct GorYuuWork { s32 unk0; s32 unk4; s32 medals; } GorYuuWork;
 extern GorYuuWork* yuwp;
-int rand(void);
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
-void mapGrpFlagOn(const char* name, u32 flags);
 typedef struct SlotDrum { const char* drum[3]; const char* reber; const char* anim; const char* window[3][3]; const char* neon[3]; } SlotDrum;
 void mapObjRotate(const char* name, f32 x, f32 y, f32 z);
 void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel);
@@ -72,7 +73,6 @@ s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);
 void slot_neon_sub(GoryuuWork* wp, SlotWork* data);
 void mapObjGetPos(const char* name, Vec* pos);
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
-s32 shadowEntry(f32 x, f32 y, f32 z, f32 size);
 void shadowSetCollision(s32 id, s32 on);
 typedef struct KujiMsgWork { u8 unk0[8]; u16 unk8; u8 unkA[6]; s32 unk10; } KujiMsgWork;
 void* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);

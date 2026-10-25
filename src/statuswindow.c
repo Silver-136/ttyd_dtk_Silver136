@@ -15,8 +15,8 @@
 #include <string.h>
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
+#include "libc_decls.h"
 
-double cos(double);
 
 typedef StatusValue SVal;
 

@@ -15,10 +15,10 @@
 #include "icon_ids.h"
 #include "evt/evt_snd.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_itemget.h"
 
 extern ItemData itemDataTable[];
 void effKemuTestDrawCam(EffectEntry* effect, s32 camera);
-EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z);
 extern s32 rand(void);
 
 typedef struct EffNanigaWork {

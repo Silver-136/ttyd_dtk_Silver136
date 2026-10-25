@@ -8,9 +8,8 @@
 #include "pmario_sound.h"
 #include "system.h"
 #include <string.h>
+#include "battle/battle_disp.h"
 
-void btlDispGXInit2DRasta(void);
-void btlDispGXQuads2DRasta(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a);
 u16 BattleACGetButtonIcon(s32 button, s32 pressed);
 void BattleAcDrawGauge(s32 x, s32 y, s32 icon, f32 ratio, s32 a, s32 b, s32 c, s32 d, s32 e);
 

@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "driver/mapdrv.h"
 
 #include "mario/mario_pouch.h"
 #include "party.h"
@@ -7,8 +8,6 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
-void mapGrpFlagOn(const char* name, u32 flags);
-void mapGrpFlagOff(const char* name, u32 flags);
 
 USER_FUNC(check_party_pos);
 USER_FUNC(evt_bero_exec_wait);

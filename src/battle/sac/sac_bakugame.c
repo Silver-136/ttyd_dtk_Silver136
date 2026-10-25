@@ -2,6 +2,8 @@
 #include "icon_ids.h"
 #include <dolphin/pad.h>
 #include "battle/battle_status_effect.h"
+#include "eff/eff_sandars.h"
+#include "battle/battle_sub.h"
 #pragma dont_inline on
 #include "battle/battle.h"
 #include "battle/battle_audience.h"
@@ -28,7 +30,6 @@
 #include "battle/battle_database_common.h"
 #include "pmario_sound.h"
 
-EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 w);
 void btlGetScreenPoint(Vec* in, Vec* out);
 void BattleAudienceSoundWhistleKind(s32 kind);
 void BattleAudienceSoundCallKind(s32 kind);
@@ -40,7 +41,6 @@ void btlDispPoseAnime(BattleUnitPart* part);
 s32 BtlUnit_snd_se_pos(BattleUnit* unit, const char* name, s32 vol, s32 pan, Vec* pos);
 void psndSFX_pit(s32 id, s32 pitch);
 s32 psndSFXChk(s32 id);
-s32 BattleTransID(EventEntry* event, s32 type);
 
 #define INTPL(mode, cur, steps, a, b) ((f32(*)(f32, f32, s32, s32, s32))intplGetValue)(a, b, mode, cur, steps)
 #define GET_EXIST(i) ((u8(*)(s32))BattleAudience_GetExist)(i)

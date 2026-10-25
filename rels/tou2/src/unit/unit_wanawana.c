@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "libc_decls.h"
 
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"
@@ -14,7 +15,6 @@
 #include "battle/battle_event_default.h"
 #include "battle/battle_sub.h"
 
-double tan(double x);
 typedef struct WanaWork { s32 ready; s32 poseId; Mtx mtx; GXTexObj obj; BattleUnitPart* part; smartEntry* tex; } WanaWork;
 void test_kururing_mapdisp(CameraId camera);
 static f32 tanf(f32 x);

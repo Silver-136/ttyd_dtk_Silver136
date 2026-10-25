@@ -7,6 +7,7 @@
 #include "mario/mariost.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/n64/eff_shock_n64.h"
 
 typedef struct EffThunderN64Work {
     s32 type;            // 0x0
@@ -29,7 +30,6 @@ typedef struct EffThunderN64Work {
 } EffThunderN64Work;
 
 EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 w);
-EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b);
 
 void effThunderMain(EffectEntry* effect);
 void effThunderDisp(CameraId cameraId, EffectEntry* effect);

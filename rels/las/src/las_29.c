@@ -7,6 +7,8 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_pouch.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/effdrv.h"
@@ -29,10 +31,7 @@
 #include "las.h"
 #include "mario/mario_party.h"
 
-double sin(double);
-double cos(double);
 void* effMistEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 angle);
-int rand(void);
 void npcSetTalkPose(const char* name);
 void npcSetStayPose(const char* name);
 void mapObjGetPos(const char* name, Vec* pos);

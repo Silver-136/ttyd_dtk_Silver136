@@ -5,11 +5,11 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 
 #pragma opt_propagation off
 
-double sin(double);
-double cos(double);
 
 typedef struct EffRotHammerFailN64Work {
     s16 type;      // 0x0

@@ -13,9 +13,9 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "driver/shadowdrv.h"
+#include "eff/n64/eff_stardust_n64.h"
 
 extern double __fabs(double);
-EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a);
 void effStardustN64SetColor(EffectEntry* effect, f32 r, f32 g, f32 b);
 void effStardustN64SetDrawCam(EffectEntry* effect, s32 camera);
 

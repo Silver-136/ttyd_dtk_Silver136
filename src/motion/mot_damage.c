@@ -15,8 +15,8 @@
 #include "evt/evt_damage.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
+#include "eff/eff_splash.h"
 
-EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 HitEntry* marioChkLandon(f32* outY, f32 y);
 void marioClearSlitFloor(void);
 void marioSlitForceCancel(void);

@@ -13,6 +13,7 @@
 #include "eff/n64/eff_water_damage_n64.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+#include "eff/n64/eff_kemuri1_n64.h"
 
 typedef struct EffFallWork {
     s32 type;       // 0x0
@@ -86,7 +87,6 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 
-EffectEntry* effKemuri1N64Entry(s32 type, f32 a2, f32 a3, f32 a4, f32 a5);
 void effFallMain(EffectEntry* effect);
 void effFallDisp(CameraId cameraId, EffectEntry* effect);
 void effFallDispInseki(CameraId cameraId, EffectEntry* effect);

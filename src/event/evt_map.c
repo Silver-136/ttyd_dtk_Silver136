@@ -14,8 +14,8 @@
 #include <dolphin/gx.h>
 #include <string.h>
 #include "evt/evt_map.h"
+#include "eff/eff_torch.h"
 
-EffectEntry* effTorchEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 
 void mapObjGetPos(const char* name, Vec* pos);
 void mapObjFlagOn(const char* name, u32 flags);

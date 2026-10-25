@@ -3,6 +3,13 @@
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_badgeshop.h"
+#include "statuswindow.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
+#include "pmario_sound.h"
+#include "eff/eff_fire.h"
+#include "eff/n64/eff_kemuri12_n64.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/npcdrv.h"
@@ -40,27 +47,18 @@ USER_FUNC(evt_msg_fmt_int);
 USER_FUNC(evt_msg_fmt_str);
 #endif
 
-s32 U_badgeShop_SpecialCheck(void);
-void statusWinForceOpen(void);
-void statusWinForceOff(void);
 extern ItemData itemDataTable[];
 typedef struct ShopSel { u8 field_0x0[8]; s32* items; u8 field_0xC[0x24 - 0xC]; s32 sel; } ShopSel;
 void mapGrpSetColor(const char* name, GXColor color);
 NpcEntry* fbatNpcTalkCheck(MarioWork* mario);
 EffectEntry* effKemuriEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 s32 search_evt_moji(s32 id);
-double sin(double);
-double cos(double);
 void effStarStoneDraw(CameraId camera, void* param);
 s32* iri_09_item_tbl;
-int rand(void);
 s32 naniga_okorukana_cook(void);
 s32 itemNameToID(const char* name);
 static s32 item_tbl[21];
 s32 chk_cook_eff_type(s32 item);
-s32 psndSFXOn_3D(const char* name, Vec* position);
-EffectEntry* effFireEntry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
-EffectEntry* effKemuri12N64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 scale);
 
 USER_FUNC(N_evt_pouch_remove_item_index);
 USER_FUNC(U_evt_badgeShop_get_special_zaiko);

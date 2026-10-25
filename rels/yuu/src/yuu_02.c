@@ -1,5 +1,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "party.h"
+#include "cam_shift.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "driver/camdrv.h"
@@ -27,7 +29,6 @@ static Monte* monte_p; /* monte_p */
 static Monte* icon_monte_p;
 s32 yuucounter_get_data(void);
 void yuucounter_flag_on(s32 flag);
-void partyKeyOff(void);
 void marioResetRollSpd(void);
 void clrRollEvtFlag(void);
 void monteCountDisp(void);
@@ -37,7 +38,6 @@ extern MonteTable montetable[];
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
 void yuu_02_icon_monte_disp(CameraId camera, void* param);
-void camShiftReset(void);
 
 USER_FUNC(eff_call_minigame);
 USER_FUNC(evt_bero_mapchange);

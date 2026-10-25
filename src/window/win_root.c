@@ -17,6 +17,7 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
+#include "eff/eff_magic1_n64.h"
 
 extern ItemData itemDataTable[];
 void qqsort(void* base, u32 n, u32 size, s32 (*compare)(const void*, const void*));
@@ -111,7 +112,6 @@ void winBadgeExit();
 void winLogExit();
 void winRootBgDrawDisp();
 void winRootBgCaptureDisp();
-double sin(double);
 double fabs(double);
 
 #define WIN_ROOT_ADD_TAB(n)                       \

@@ -1,5 +1,6 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "eff/eff_torch.h"
 
 #include "driver/mapdrv.h"
 #include "driver/hitdrv.h"
@@ -369,7 +370,6 @@ EVT_BEGIN(las_08_init_evt)
     RETURN
 EVT_END()
 
-EffectEntry* effTorchEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 
 USER_FUNC(hi_onoff) {
     EvtWord* args = event->args;

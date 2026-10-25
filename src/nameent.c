@@ -14,6 +14,7 @@
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
 #include "sfx_name_word.h"
+#include "eff/eff_magic1_n64.h"
 
 void winTexInit_x2(TEXPalette* texture);
 void winTexSet_x2(u32 id1, u32 id2, Vec translate, Vec scale, GXColor color);
@@ -27,7 +28,6 @@ void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type);
 #include <string.h>
 
 s32 nameMain(void);
-double sin(double);
 void nameEntDisp(CameraId cameraId, void* param);
 
 //.data

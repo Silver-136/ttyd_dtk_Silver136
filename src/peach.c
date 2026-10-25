@@ -7,8 +7,12 @@
 #include "driver/animdrv.h"
 #include "peach.h"
 #include "sfx_name_word.h"
+#include "libc_decls.h"
+#include "mario/mario_cam.h"
+#include "mario/mario_hit.h"
+#include "mario/mario_sbr.h"
+#include "driver/npcdrv.h"
 
-int strcmp(const char*, const char*);
 void marioChkOverhead(void);
 void marioBottomless(void);
 void marioBalloonMain(void);
@@ -17,14 +21,10 @@ void marioBalloonMain(void);
 #endif
 void mario_kemuri_80130474(void);
 void partyMain(void);
-void marioCamMain(void);
 void marioJump(void);
 void marioFall(void);
-void marioChkGnd(void);
 void marioChkGnd2(void);
 void marioBoots(void);
-void marioAdjustMoveDir(void);
-void npcSetMarioAutoTalkPose(const char*, const char*);
 
 void peachChgPose(const char* name);
 void peachTransformOff(void);
