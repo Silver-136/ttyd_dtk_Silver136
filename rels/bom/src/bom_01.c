@@ -509,7 +509,29 @@ s32 bom_fall(EventEntry* event, BOOL isFirstCall) {
 }
 
 static void pose_init(void) {
-    BomWork* wp; ExtAnimDef* def; char buf[32]; s32 i; s32 start; i = 0; wp = lp->address; def = EXT_DATA; strcpy(buf, ""); wp->animCount = -1; do { if (strcmp(def->name, buf) != 0) { strcpy(buf, def->name); wp->animCount++; start = i; } strcpy(wp->anims[wp->animCount].name, buf); wp->anims[wp->animCount].start = start; wp->anims[wp->animCount].count = i - start + 1; i++; wp->anims[wp->animCount].time = def->time; } while ((++def)->file != NULL); wp->animCount++;
+    BomWork* wp;
+    ExtAnimDef* def;
+    char buf[32];
+    s32 i;
+    s32 start;
+    i = 0;
+    wp = lp->address;
+    def = EXT_DATA;
+    strcpy(buf, "");
+    wp->animCount = -1;
+    do {
+        if (strcmp(def->name, buf) != 0) {
+            strcpy(buf, def->name);
+            wp->animCount++;
+            start = i;
+        }
+        strcpy(wp->anims[wp->animCount].name, buf);
+        wp->anims[wp->animCount].start = start;
+        wp->anims[wp->animCount].count = i - start + 1;
+        i++;
+        wp->anims[wp->animCount].time = def->time;
+    } while ((++def)->file != NULL);
+    wp->animCount++;
 }
 
 static void pose_main(void) {

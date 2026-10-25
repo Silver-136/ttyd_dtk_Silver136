@@ -1014,7 +1014,13 @@ static void ext_moamoa_main(void) {
             }
         }
         if (((( wp->flags & 1) && ( !(m->flags & 0x444) )) && ( i == ( gp->retraceCount % wp->count ))) && ( irand(1000) < 200) ) {
-            { Vec tmp = {0.0f, 0.0f, 0.0f}; tmp.x = (*pose->mtx)[0][3]; tmp.y = (*pose->mtx)[1][3]; tmp.z = (*pose->mtx)[2][3]; sp = tmp; }
+            {
+                Vec tmp = {0.0f, 0.0f, 0.0f};
+                tmp.x = (*pose->mtx)[0][3];
+                tmp.y = (*pose->mtx)[1][3];
+                tmp.z = (*pose->mtx)[2][3];
+                sp = tmp;
+            }
             psndSFXOn_3D(SFX_NAME_WORD("SFX_STG6_MOAMOA_VOICE1"), &sp); /* FAKE: integer cast hoists the literal as an @ temp (sfx local removed) */
         }
         switch (m->state) {

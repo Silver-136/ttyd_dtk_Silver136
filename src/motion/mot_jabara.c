@@ -387,7 +387,15 @@ void mot_jabara(void) {
             break;
         }
         if ((f32)hitY < mario->lastGroundPos.y) {
-            marioPaperOff(); { void* h = mario->hitobjStandOn; jabaraLand(mario->lastGroundPos.y, h); } camFollowYOn(); marioGetPtr(); allPartyRideOff(); JAB_TAIL(MOTSUB_)
+            marioPaperOff();
+            {
+                void* h = mario->hitobjStandOn;
+                jabaraLand(mario->lastGroundPos.y, h);
+            }
+            camFollowYOn();
+            marioGetPtr();
+            allPartyRideOff();
+            JAB_TAIL(MOTSUB_)
             return;
         }
         mario->position.y = hitY;
