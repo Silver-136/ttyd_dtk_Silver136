@@ -10,7 +10,7 @@ typedef struct EffPokopiThunderN64Work {
     Vec position; // 0x4
     Vec start;    // 0x10
     Vec end;      // 0x1C
-    s32 unk28;    // 0x28
+    s32 lifetime; // 0x28
     s32 frame;    // 0x2C
     s32 r;        // 0x30
     s32 g;        // 0x34

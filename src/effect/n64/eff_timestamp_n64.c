@@ -15,9 +15,9 @@ typedef struct EffTimestampN64Work {
     Vec position;       // 0x4
     s32 lifetime;       // 0x10
     s32 frame;          // 0x14
-    s32 unk18;          // 0x18
-    s32 unk1C;          // 0x1C
-    s32 unk20;          // 0x20
+    s32 r;              // 0x18
+    s32 g;              // 0x1C
+    s32 b;              // 0x20
     s32 bright;         // 0x24
     f32 scale;          // 0x28
     s32 alpha;          // 0x2C
@@ -71,9 +71,9 @@ EffectEntry* effTimestampN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 
     work->position.y = y;
     work->position.z = z;
     work->scale = scale;
-    work->unk18 = 70;
-    work->unk1C = 180;
-    work->unk20 = 120;
+    work->r = 70;
+    work->g = 180;
+    work->b = 120;
     work->alpha = 0;
     work->scale2 = 1.0f;
     p = pos_data;

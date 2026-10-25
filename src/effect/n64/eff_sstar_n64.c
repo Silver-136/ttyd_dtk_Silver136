@@ -28,7 +28,7 @@ typedef struct EffSstarN64Work {
     f32 unk28;         // 0x28
     f32 rotSpeed;      // 0x2c
     s32 life;          // 0x30
-    f32 unk34;         // 0x34
+    f32 screenVelX;    // 0x34
     s32 subtype;       // 0x38
     s32 idx;           // 0x3c
     Mtx mtx[8];        // 0x40
@@ -134,7 +134,7 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
     ang = angleABf(0.0f, 0.0f, -w->velocity.y, sq);
     w->rotZ2 = ang;
     w->rotZ = ang;
-    w->unk34 = sq;
+    w->screenVelX = sq;
     w->life = (s32)(len / speed);
     for (i = 0; i < 8; i++) {
         PSMTXTrans(w->mtx[i], w->position.x, w->position.y, w->position.z);
@@ -170,7 +170,7 @@ void effSstarMain(EffectEntry* effect) {
             len < 42.0f) {
             w->velocity.y = 0.6f * -w->velocity.y;
             w->velocity.x *= 0.7f;
-            w->unk34 *= 0.7f;
+            w->screenVelX *= 0.7f;
             w->rotSpeed *= 0.7f;
             w->bounce += 1.0f;
             w->type = 0;
@@ -181,7 +181,7 @@ void effSstarMain(EffectEntry* effect) {
         if (w->bounce) {
             w->velocity.y += -0.5f;
             w->rotZ2 += w->rotSpeed;
-            w->rotZ = angleABf(0.0f, 0.0f, -w->velocity.y, w->unk34);
+            w->rotZ = angleABf(0.0f, 0.0f, -w->velocity.y, w->screenVelX);
         }
     }
     if (gp->inBattle == 0) {

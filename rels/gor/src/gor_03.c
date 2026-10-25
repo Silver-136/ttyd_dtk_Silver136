@@ -30,6 +30,7 @@
 #include "memory.h"
 #include "string.h"
 #include "driver/msgdrv.h"
+#include "evt/evt_yuugijou.h"
 #include "stdio.h"
 #include "dolphin/mtx.h"
 #include "driver/camdrv.h"
@@ -75,8 +76,6 @@ NpcEntry* npc;
 static EffectEntry* eff;
 static s32 xlw[16];
 char* exchange_msgp;
-typedef struct GorYuuWork { s32 unk0; s32 unk4; s32 medals; } GorYuuWork;
-extern GorYuuWork* yuwp;
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
 typedef struct SlotDrum { const char* drum[3]; const char* reber; const char* anim; const char* window[3][3]; const char* neon[3]; } SlotDrum;
@@ -88,7 +87,6 @@ s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);
 void slot_neon_sub(GoryuuWork* wp, SlotWork* data);
 void mapObjGetPos(const char* name, Vec* pos);
 EffectEntry* effMarioBalloonEntry(s32 type, NpcEntry* npc);
-typedef struct KujiMsgWork { u8 unk0[8]; u16 unk8; u8 unkA[6]; s32 unk10; } KujiMsgWork;
 
 USER_FUNC(desk_talk_func);
 USER_FUNC(desk_talk_init_func);
@@ -190,7 +188,7 @@ USER_FUNC(yuugijou_montemedal_return);
 USER_FUNC(yuugijou_montemedal_wait);
 USER_FUNC(yuugijou_set_yupflag);
 USER_FUNC(yuuranking_wait_button);
-void kuji_bomb_055_callback(s32 type, KujiMsgWork** work);
+void kuji_bomb_055_callback(s32 type, MsgWinData** work);
 void goryuugijo_disp_slot(CameraId camera, void* param);
 void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall);
 void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall);
@@ -5459,8 +5457,8 @@ static USER_FUNC(fall_rtn) {
                 }
                 if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == TRUE) {
                     psndSFXOn_3D(sfx2, &m->sub.pos);
-                    if (yuwp->medals < 99999) {
-                        yuwp->medals++;
+                    if (yuwp->tokens < 99999) {
+                        yuwp->tokens++;
                     }
                     m->hidden = 1;
                     m->state = 3;
@@ -5483,8 +5481,8 @@ static USER_FUNC(fall_rtn) {
                 pos.y = 0.0f;
                 if (get_monte_check(&pos, &marioGetPtr()->position) == TRUE) {
                     psndSFXOn_3D(sfx3, &m->sub.pos);
-                    if (yuwp->medals < 99999) {
-                        yuwp->medals++;
+                    if (yuwp->tokens < 99999) {
+                        yuwp->tokens++;
                     }
                     m->hidden = 1;
                     m->state = 3;
@@ -6167,18 +6165,18 @@ static USER_FUNC(viewport) {
     return EVT_RETURN_DONE;
 }
 
-void kuji_bomb_055_callback(s32 type, KujiMsgWork** work) {
-    KujiMsgWork* wp = *work;
+void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
+    MsgWinData* wp = *work;
     NpcEntry* npc = npcNameToPtr("\203O\203\213\203\201\203{\203\200\225\272");
 
     switch (type) {
         case 3:
-            if (wp->unk8 == 1) {
+            if (wp->curPage == 1) {
                 evtSetValue(NULL, GF(0), 1);
             }
             break;
         case 5:
-            switch (wp->unk10) {
+            switch (wp->nextEntry) {
                 case 0x1D:
                     animPoseSetAnim(npc->poseId, "T_3", 1);
                     break;

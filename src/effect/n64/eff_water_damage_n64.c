@@ -21,9 +21,9 @@ typedef struct EffWaterDamageN64Work {
     f32 velZ;     // 0x18
     s32 lifetime; // 0x1C
     s32 frame;    // 0x20
-    s32 unk24;    // 0x24
-    s32 unk28;    // 0x28
-    s32 unk2C;    // 0x2C
+    s32 r;        // 0x24
+    s32 g;        // 0x28
+    s32 b;        // 0x2C
     s32 alpha;    // 0x30
     f32 scale;    // 0x34
     s32 variant;  // 0x38
@@ -112,9 +112,9 @@ EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
     work->position.y = y;
     work->position.z = z;
     work->scale = scale;
-    work->unk24 = 70;
-    work->unk28 = 180;
-    work->unk2C = 255;
+    work->r = 70;
+    work->g = 180;
+    work->b = 255;
     work->variant = variant;
     p = work + 1;
     for (i = 1, j = 3; i < effect->count; j += 3, i++, p++) {

@@ -71,9 +71,9 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     work->type = type;
     work->frame = 0;
     if (duration <= 0) {
-        work->unk28 = 1000;
+        work->lifetime = 1000;
     } else {
-        work->unk28 = duration;
+        work->lifetime = duration;
     }
     work->alpha = 255;
     dy = y - y2;
@@ -124,13 +124,13 @@ void effPokopiThunderMain(EffectEntry* effect) {
     type = work->type;
     if (effect->flags & 4) {
         effect->flags &= ~4;
-        work->unk28 = 16;
+        work->lifetime = 16;
     }
-    if (work->unk28 < 1000) {
-        work->unk28--;
+    if (work->lifetime < 1000) {
+        work->lifetime--;
     }
     work->frame++;
-    if (work->unk28 < 0) {
+    if (work->lifetime < 0) {
         effDelete(effect);
         return;
     }
