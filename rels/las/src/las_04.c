@@ -385,8 +385,8 @@ void _firebar_rot(FirebarWork* wp) {
     s32 hit;
     f32 dist;
     f32 limit;
-    f32 a1;
-    f32 a2;
+    f32 angle1;
+    f32 angle2;
     f32 diff;
     f32 r;
     f32 s;
@@ -414,9 +414,9 @@ void _firebar_rot(FirebarWork* wp) {
     dist = distABf(wp->pos.x, wp->pos.z, mario->position.x, mario->position.z);
     limit = mario->wPlayerCollisionBox.x / 2.0f / 2.0f + wp->spacing / 2.0f * wp->scale / 2.0f +
             distABf(wp->pos.x, wp->pos.z, wp->balls[wp->count - 1].pos.x, wp->balls[wp->count - 1].pos.z);
-    a1 = angleABf(wp->pos.x, wp->pos.z, mario->position.x, mario->position.z);
-    a2 = angleABf(wp->pos.x, wp->pos.z, wp->balls[wp->count - 1].pos.x, wp->balls[wp->count - 1].pos.z);
-    diff = compAngle(a1, a2);
+    angle1 = angleABf(wp->pos.x, wp->pos.z, mario->position.x, mario->position.z);
+    angle2 = angleABf(wp->pos.x, wp->pos.z, wp->balls[wp->count - 1].pos.x, wp->balls[wp->count - 1].pos.z);
+    diff = compAngle(angle1, angle2);
     if (hit > 0) {
         wp->hitCount = 0;
         if (wp->callback != NULL) {
@@ -446,8 +446,8 @@ void _firebar_trans(FirebarWork* wp) {
     FirebarBall* ball = wp->balls;
     MarioWork* mario = marioGetPtr();
     s32 hit;
-    f32 a1;
-    f32 a2;
+    f32 angle1;
+    f32 angle2;
     f32 diff;
     f32 k;
     f32 dy;
@@ -494,9 +494,9 @@ void _firebar_trans(FirebarWork* wp) {
     }
     if (wp->state == 1) {
         hit = _firebar_hitCheck2(wp);
-        a1 = angleABf(wp->pos.x, wp->pos.z, mario->position.x, mario->position.z);
-        a2 = angleABf(wp->pos.x, wp->pos.z, wp->balls[wp->count - 1].pos.x, wp->balls[wp->count - 1].pos.z);
-    diff = compAngle(a1, a2);
+        angle1 = angleABf(wp->pos.x, wp->pos.z, mario->position.x, mario->position.z);
+        angle2 = angleABf(wp->pos.x, wp->pos.z, wp->balls[wp->count - 1].pos.x, wp->balls[wp->count - 1].pos.z);
+    diff = compAngle(angle1, angle2);
         if (hit > 0) {
             wp->hitCount = 0;
             if (wp->callback != NULL) {

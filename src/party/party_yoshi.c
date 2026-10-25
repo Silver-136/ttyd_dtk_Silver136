@@ -1253,9 +1253,9 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
         party->hitobjFront = hit;
         mario->hitobjFront = hit;
         if (hit == NULL) {
-            f32 d = toMovedir(party->displayDirection);
+            f32 ang = toMovedir(party->displayDirection);
             pos = party->position;
-            hit = partySearchWallFront(party, &pos, spd, d);
+            hit = partySearchWallFront(party, &pos, spd, ang);
             party->hitobjFront = hit;
             mario->hitobjFront = hit;
         }

@@ -51,15 +51,15 @@ extern MapAttrEntry _map_attr_data[];
 
 BOOL setupDataCheck(void) {
     char tribeName[64];
-    BOOL b;
+    BOOL group;
 
     if (!ptr) return TRUE;
     parseInit(ptr, size);
     while (parsePush("<Npc>")) {
         parseTagGet1("<tribe>", 0, tribeName);
         parsePopNext();
-        b = gp->inBattle != 0;
-        if (!animGroupBaseAsync(npcGetTribe(tribeName)->modelName, b, NULL)) return FALSE;
+        group = gp->inBattle != 0;
+        if (!animGroupBaseAsync(npcGetTribe(tribeName)->modelName, group, NULL)) return FALSE;
     }
     parsePop();
     return TRUE;

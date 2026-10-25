@@ -2529,9 +2529,9 @@ USER_FUNC(evt_mobj_badgeblk) {
     kind = args[7];
     flagVar = args[6];
     {
-        BOOL b = gp->inBattle != 0;
+        BOOL group = gp->inBattle != 0;
         anim = kind != 0 ? "MOBJ_BadgeBlock" : "MOBJ_HatenaBlock";
-        if (animGroupBaseAsync(anim, b, NULL) == 0) {
+        if (animGroupBaseAsync(anim, group, NULL) == 0) {
         return EVT_RETURN_BLOCK;
     }}
     mobjEntry(name, anim);

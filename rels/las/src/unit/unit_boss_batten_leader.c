@@ -624,7 +624,7 @@ USER_FUNC(evt_eff_firechange00) {
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, args[0]));
     s32 mode = evtGetValue(event, args[1]);
     BOOL reset;
-    f32 a;
+    f32 angle1;
     f32 d;
 
     target.x = evtGetValue(event, args[2]);
@@ -670,9 +670,9 @@ USER_FUNC(evt_eff_firechange00) {
         reset = TRUE;
     }
     PSVECNormalize(&dir, &dir);
-    a = angleABf(0.0f, 0.0f, nowv.x, nowv.y);
+    angle1 = angleABf(0.0f, 0.0f, nowv.x, nowv.y);
     d = angleABf(0.0f, 0.0f, dir.x, dir.y);
-    d = compAngle(a, d);
+    d = compAngle(angle1, d);
     if (!reset) {
         if ((d >= 0.0f ? d : -d) > 15.0f) {
             d = (d > 0.0f) ? 15.0f : -15.0f;

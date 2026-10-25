@@ -1641,9 +1641,9 @@ static USER_FUNC(eff_magic) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    f32 a = evtGetFloat(event, args[1]);
-    f32 b = evtGetFloat(event, args[2]);
-    f32 c = evtGetFloat(event, args[3]);
+    f32 tx = evtGetFloat(event, args[1]);
+    f32 ty = evtGetFloat(event, args[2]);
+    f32 tz = evtGetFloat(event, args[3]);
     s32 type = evtGetValue(event, args[4]);
     f32 x;
     f32 y;
@@ -1655,7 +1655,7 @@ static USER_FUNC(eff_magic) {
     x += 25.0f * unit->mSizeMultiplier * unit->faceDirection;
     y += 20.0f * unit->mSizeMultiplier;
     z += 5.0f;
-    eff = effMagic1N64Entry(0, type, x, y, z, a, b, c);
+    eff = effMagic1N64Entry(0, type, x, y, z, tx, ty, tz);
     unit->work[5] = (EvtWord)eff;
     ((EffMagic1N64Work*)eff->userdata)->scale = unit->mSizeMultiplier;
     return EVT_RETURN_DONE;

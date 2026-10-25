@@ -3711,7 +3711,7 @@ USER_FUNC(btlevtcmd_PreCheckDamage) {
     s32 pno;
     s32 res;
     s32 out;
-    s32 a4;
+    s32 flags;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
@@ -3722,9 +3722,9 @@ USER_FUNC(btlevtcmd_PreCheckDamage) {
     pno = evtGetValue(event, args[2]);
     part = BtlUnit_GetPartsPtr(target, pno);
     weapon = (BattleWeapon*)evtGetValue(event, args[3]);
-    a4 = args[4];
+    flags = args[4];
     args = (EvtWord*)args[5];
-    res = BattlePreCheckDamage(attacker, target, part, weapon, a4);
+    res = BattlePreCheckDamage(attacker, target, part, weapon, flags);
     if (res < 0) {
         return EVT_RETURN_FINISH;
     }

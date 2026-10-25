@@ -67,9 +67,9 @@ USER_FUNC(evt_snd_bgmon) {
 USER_FUNC(evt_snd_bgmon_f) {
     EvtWord* args = event->args;
     s32 a = args[0];
-    s32 b = args[1];
+    s32 bgm_name = args[1];
     s32 fadetime = evtGetValue(event, args[2]);
-    psndBGMOn_f(a, b, fadetime, 0);
+    psndBGMOn_f(a, bgm_name, fadetime, 0);
     return EVT_RETURN_DONE;
 }
 
@@ -90,25 +90,25 @@ USER_FUNC(evt_snd_bgmoff) {
 
 USER_FUNC(evt_snd_bgmoff_f) {
     EvtWord* args = event->args;
-    s32 a = args[0];
+    s32 flags = args[0];
     s32 t = evtGetValue(event, args[1]);
-    psndBGMOff_f_d(a, t, 0);
+    psndBGMOff_f_d(flags, t, 0);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_snd_bgm_freq) {
     EvtWord* args = event->args;
-    s32 a = args[0];
+    s32 id = args[0];
     s32 t = evtGetValue(event, args[1]);
-    psndBGM_rate(a, t);
+    psndBGM_rate(id, t);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_snd_bgm_scope) {
     EvtWord* args = event->args;
-    s32 a = args[0];
+    s32 id = args[0];
     s32 t = evtGetValue(event, args[1]);
-    psndBGMScope(a, t);
+    psndBGMScope(id, t);
     return EVT_RETURN_DONE;
 }
 
@@ -240,10 +240,10 @@ USER_FUNC(evt_snd_envon) {
 
 USER_FUNC(evt_snd_envon_f) {
     EvtWord* args = event->args;
-    s32 a = args[0];
+    s32 flags = args[0];
     s32 b = args[1];
     s32 fadetime = evtGetValue(event, args[2]);
-    psndENVOn_f_d(a, SFX_NAME_WORD(b), fadetime, 0);
+    psndENVOn_f_d(flags, SFX_NAME_WORD(b), fadetime, 0);
     return EVT_RETURN_DONE;
 }
 
@@ -254,16 +254,16 @@ USER_FUNC(evt_snd_envoff) {
 
 USER_FUNC(evt_snd_envoff_f) {
     EvtWord* args = event->args;
-    s32 a = args[0];
+    s32 flags = args[0];
     s32 t = evtGetValue(event, args[1]);
-    psndENVOff_f_d(a, t, 0);
+    psndENVOff_f_d(flags, t, 0);
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_snd_env_lpf) {
     EvtWord* args = event->args;
-    s32 a = args[0];
-    psndENV_LPF(a, evtGetValue(event, args[1]));
+    s32 id = args[0];
+    psndENV_LPF(id, evtGetValue(event, args[1]));
     return EVT_RETURN_DONE;
 }
 
@@ -3170,8 +3170,8 @@ void party_force_reset_outofscreen(PartyEntry* party) {
             return;
         }
         {
-            f32 a = angleABf(pos.x, pos.z, m2->position.x, m2->position.z);
-            movePos(&pos.x, &pos.z, speed, a);
+            f32 degree = angleABf(pos.x, pos.z, m2->position.x, m2->position.z);
+            movePos(&pos.x, &pos.z, speed, degree);
         }
         up = 200.0f;
         j = 0;
