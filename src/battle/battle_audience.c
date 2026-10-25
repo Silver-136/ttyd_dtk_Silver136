@@ -1465,7 +1465,7 @@ void BattleAudienceItemCtrlProcess(void) {
     Vec hv;
     s32 i;
     BattleWork* wp = _battleWorkPointer;
-    u8* base = (u8*)BattleAudienceBaseGetPtr();
+    BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceItem* it;
     u8* aud;
     BattleAudienceKind* kd;
@@ -1595,7 +1595,7 @@ void BattleAudienceItemCtrlProcess(void) {
                 it->velocity.x += it->accel.x;
                 it->velocity.y += it->accel.y;
                 it->velocity.z += it->accel.z;
-                if (it->mItemType == 0xef) {
+                if (it->mItemType == ITEM_AUDIENCE_HAMMER) {
                     it->rotZ += 18.0f;
                 }
                 it->timer--;
@@ -1615,40 +1615,40 @@ void BattleAudienceItemCtrlProcess(void) {
             if (it->flags & 4) {
                 it->mode = 0;
             }
-            if (it->mItemType >= 0x80 && it->mItemType < 0xec && pouchGetEmptyHaveItemCnt() <= 0) {
+            if (it->mItemType >= ITEM_THUNDER_BOLT && it->mItemType < ITEM_MAX && pouchGetEmptyHaveItemCnt() <= 0) {
                 it->mode = 0;
             }
             if (it->mode != 0) {
-                (*(s32*)(base + 0x137f8))++;
-                if ((*(s32*)(base + 0x137f8)) > 3) {
-                    (*(s32*)(base + 0x137f8)) = 3;
+                base->presentHitCount++;
+                if (base->presentHitCount > 3) {
+                    base->presentHitCount = 3;
                 }
                 if (it->mode == 2) {
                     it->state = 4;
                     goto s4;
                 }
-                if (it->mItemType >= 0x79 && it->mItemType < 0xec) {
+                if (it->mItemType >= ITEM_MIN && it->mItemType < ITEM_MAX) {
                     BattleAudience_SetPresentItemType(0);
-                } else if (it->mItemType >= 0xec && it->mItemType < 0xf0) {
+                } else if (it->mItemType >= ITEM_AUDIENCE_CAN && it->mItemType < BADGE_MIN) {
                     BattleAudience_SetPresentItemType(1);
                 }
                 BattleAudience_SetPresentTargetUnitId(BtlUnit_GetUnitId((BattleUnit*)aud));
                 switch (it->mItemType) {
-                case 0xec:
-                    memcpy(base + 0x137fc, &weapon_data_akikan, sizeof(BattleWeapon));
-                    *(s32*)(base + 0x1381c) = (*(s32*)(base + 0x137f8)) + *(s32*)(base + 0x1381c) - 1;
+                case ITEM_AUDIENCE_CAN:
+                    memcpy(&base->presentWeapon, &weapon_data_akikan, sizeof(BattleWeapon));
+                    base->presentWeapon.hpDamageWork[0] = base->presentHitCount + base->presentWeapon.hpDamageWork[0] - 1;
                     break;
-                case 0xed:
-                    memcpy(base + 0x137fc, &weapon_data_brick, sizeof(BattleWeapon));
-                    *(s32*)(base + 0x1381c) = (*(s32*)(base + 0x137f8)) + *(s32*)(base + 0x1381c) - 1;
+                case ITEM_AUDIENCE_ROCK:
+                    memcpy(&base->presentWeapon, &weapon_data_brick, sizeof(BattleWeapon));
+                    base->presentWeapon.hpDamageWork[0] = base->presentHitCount + base->presentWeapon.hpDamageWork[0] - 1;
                     break;
-                case 0xee:
-                    memcpy(base + 0x137fc, &weapon_data_bone, sizeof(BattleWeapon));
-                    *(s32*)(base + 0x1381c) = (*(s32*)(base + 0x137f8)) + *(s32*)(base + 0x1381c) - 1;
+                case ITEM_AUDIENCE_BONE:
+                    memcpy(&base->presentWeapon, &weapon_data_bone, sizeof(BattleWeapon));
+                    base->presentWeapon.hpDamageWork[0] = base->presentHitCount + base->presentWeapon.hpDamageWork[0] - 1;
                     break;
-                case 0xef:
-                    memcpy(base + 0x137fc, &weapon_data_hammer, sizeof(BattleWeapon));
-                    *(s32*)(base + 0x1381c) = (*(s32*)(base + 0x137f8)) + *(s32*)(base + 0x1381c) - 1;
+                case ITEM_AUDIENCE_HAMMER:
+                    memcpy(&base->presentWeapon, &weapon_data_hammer, sizeof(BattleWeapon));
+                    base->presentWeapon.hpDamageWork[0] = base->presentHitCount + base->presentWeapon.hpDamageWork[0] - 1;
                     break;
                 }
                 BattleAudience_SetPresentItemNo(it->mItemType);
@@ -1669,7 +1669,7 @@ void BattleAudienceItemCtrlProcess(void) {
                     it->state = 4;
                     break;
                 }
-                (*(s32*)(base + 0x137f8)) = 0;
+                base->presentHitCount = 0;
             } else {
                 it->state = 4;
             }

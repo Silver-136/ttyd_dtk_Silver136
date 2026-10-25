@@ -6,7 +6,7 @@
 // TODO: change name if it collides with backpack something
 #define MAX_HELD_ITEMS 20
 #define HELD_ITEM_COUNT_BASE 10
-#define GetHeldItemCount pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE
+#define GetHeldItemCount (pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE)
 #define MAX_STORED_ITEMS 32
 #define MAX_BADGES 200
 
@@ -135,7 +135,7 @@ typedef enum ItemType {
     ITEM_SAPPHIRE_STAR,                // 0x76
     ITEM_GARNET_STAR,                  // 0x77
     ITEM_CRYSTAL_STAR,                 // 0x78
-#define KEY_ITEM_MAX ITEM_CRYSTAL_STAR + 1
+#define KEY_ITEM_MAX (ITEM_CRYSTAL_STAR + 1)
 #define KEY_ITEM_COUNT (KEY_ITEM_MAX - KEY_ITEM_MIN)
     // Normal Items ---------------------------------------
     ITEM_COIN,             // 0x79
@@ -254,7 +254,7 @@ typedef enum ItemType {
     ITEM_HEALTHY_SALAD,    // 0xE9
     ITEM_KOOPA_BUN,        // 0xEA
     ITEM_FRESH_JUICE,      // 0xEB
-#define ITEM_MAX ITEM_FRESH_JUICE + 1
+#define ITEM_MAX (ITEM_FRESH_JUICE + 1)
 #define ITEM_COUNT (ITEM_MAX - ITEM_MIN)
     // ??? ------------------------------------------------
     // Audience-thrown items
@@ -363,7 +363,7 @@ typedef enum ItemType {
     ITEM_UNUSED_DEFEND_BADGE_P,   // 0x150
     ITEM_SUPER_CHARGE,            // 0x151
     ITEM_SUPER_CHARGE_P,          // 0x152
-#define BADGE_MAX ITEM_SUPER_CHARGE_P + 1
+#define BADGE_MAX (ITEM_SUPER_CHARGE_P + 1)
 #define BADGE_COUNT (BADGE_MAX - BADGE_MIN)
     ITEM_TYPE_MAX
 } ItemType;
