@@ -305,6 +305,11 @@ config.precompiled_headers = [
         "mw_version": "GC/2.6",
         "cflags": [*cflags_rel],
     },
+    {
+        "source": "msl_main.pch",
+        "mw_version": "GC/2.6",
+        "cflags": [*cflags_static],
+    },
 ]
 # end_00's constants follow its own data in the original, so that unit is not built with the header
 PCH_EXCLUDE = {"end_00.c"}
@@ -2087,6 +2092,13 @@ config.libs = [
         ]
     )
 ]
+
+# main.dol game units built with msl_main.pch (being moved over unit by unit)
+MAIN_PCH = {"driver/shadowdrv.c", "driver/envdrv.c"}
+for lib in config.libs:
+    for obj in lib.get("objects", []):
+        if obj.name in MAIN_PCH:
+            obj.options["extra_cflags"] = [*obj.options["extra_cflags"], "-prefix msl_main.mch"]
 
 # Optional extra categories for progress tracking
 # Adjust as desired for your project

@@ -16,15 +16,6 @@
 #define EXT_LIT(sym, val) (val)
 
 //.data
-// static data from an inlined header function
-__declspec(section ".data") f32 envdrv_negone_one_a[] = {-1.0f, 1.0f};
-__declspec(section ".data") static f32 negone_one$374[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 envdrv_one_negone_a[] = {1.0f, -1.0f};
-__declspec(section ".data") static f32 one_negone$373[] = {1.0f, -1.0f};
-__declspec(section ".data") f32 envdrv_negone_one_b[] = {-1.0f, 1.0f};
-__declspec(section ".data") static f32 negone_one$360[] = {-1.0f, 1.0f};
-__declspec(section ".data") f32 envdrv_one_negone_b[] = {1.0f, -1.0f};
-__declspec(section ".data") static f32 one_negone$359[] = {1.0f, -1.0f};
 
 EnvironmentGlare envGlare0 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, (GXTevKColorSel)1, (GXTevKColorSel)0, 5.25f, 16,
