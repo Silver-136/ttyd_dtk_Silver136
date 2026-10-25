@@ -178,7 +178,7 @@ void nameEntOn(s32 type) {
 	wp->y1 = wp->y2 = (f32)(112 - wp->cursorY * 28);
 	wp->caretX = wp->caretTargetX = -106.0f;
 	wp->caretY = wp->caretTargetY = 135.0f;
-	strcpy(wp->name, "\0\0\0");
+	strcpy(wp->name, "");
 	for (i = 0; i < 8; i++) {
 #ifdef VERSION_G8ME01
 		strcat(wp->name, (u32)gp->language == 0 ? "\x81\x40" : " ");
