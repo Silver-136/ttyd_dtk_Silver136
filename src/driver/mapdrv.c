@@ -2107,7 +2107,7 @@ s32 mapSetLight(MapObject* obj, LightEntry** lights) {
             for (i = 0; i < 32; i++) {
                 if ((obj->joints->drawMode)->lightMask & (1 << i)) {
                     light = lightNameToPtr(mapWork[activeGroup].entries[obj->groupIndex].lightTable->lights[i]->name);
-                    if (!(light->flags & 0x8000)) {
+                    if (!(light->flags & LIGHT_AMBIENT)) {
                         lights[count] = light;
                         count++;
                         if (count >= 8) {
@@ -2125,7 +2125,7 @@ s32 mapSetLight(MapObject* obj, LightEntry** lights) {
         for (i = 0; i < 32; i++) {
             if ((obj->joints->drawMode)->lightMask & (1 << i)) {
                 light = lightNameToPtr(mapWork[activeGroup].entries[obj->groupIndex].lightTable->lights[i]->name);
-                if (!(light->flags & 0x8000)) {
+                if (!(light->flags & LIGHT_AMBIENT)) {
                     lights[count] = light;
                     count++;
                     if (count >= 8) {

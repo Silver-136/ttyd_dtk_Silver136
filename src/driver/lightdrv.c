@@ -125,7 +125,7 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, GXColor
 
     entry = wp->entries;
     for (i = 0; i < wp->count; i++, entry++) {
-        if (entry->flags & 1 && !strcmp(entry->name, name)) {
+        if (entry->flags & LIGHT_ENABLED && !strcmp(entry->name, name)) {
             break;
         }
     }
@@ -136,7 +136,7 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, GXColor
             entry = wp->entries;
             name = v41; //will keep getting longer
             for (i = 0; i < wp->count; i++, entry++) {
-                if (entry->flags & 1 && !strcmp(entry->name, name)) {
+                if (entry->flags & LIGHT_ENABLED && !strcmp(entry->name, name)) {
                     break;
                 }
             }
@@ -148,7 +148,7 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, GXColor
 
     entry = wp->entries;
     for (n = 0; n < wp->count; n++, entry++) {
-        if (!(entry->flags & 1)) {
+        if (!(entry->flags & LIGHT_ENABLED)) {
             break;
         }
     }
@@ -163,7 +163,7 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, GXColor
     entry->attenDistCoef.x = decay_tbl[attenType].x;
     entry->attenDistCoef.y = decay_tbl[attenType].y;
     entry->attenDistCoef.z = decay_tbl[attenType].z;
-    entry->flags |= 1;
+    entry->flags |= LIGHT_ENABLED;
     switch (type) {
         case 0:
             entry->flags |= LIGHT_AMBIENT;
@@ -190,7 +190,7 @@ LightEntry* lightNameToPtr(const char* name) {
     s32 i;
 
     for (i = 0; i < wp->count; i++, entry++) {
-        if (entry->flags & 1 && !strcmp(name, entry->name)) {
+        if (entry->flags & LIGHT_ENABLED && !strcmp(name, entry->name)) {
             return entry;
         }
     }

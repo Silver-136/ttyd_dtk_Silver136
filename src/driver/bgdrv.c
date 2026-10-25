@@ -41,7 +41,7 @@ static inline void bgLoad(BackgroundWork* bgwork, const char* filename) {
 
     size = 0;
     if (!filename) {
-        bgwork->flags &= ~1;
+        bgwork->flags &= ~BG_RENDERING;
     }
     else {
         bgwork->data = NULL;
@@ -59,9 +59,9 @@ static inline void bgLoad(BackgroundWork* bgwork, const char* filename) {
         tpl = (TEXPalette*)bgwork->data;
         if (tpl) {
             UnpackTexPalette(tpl);
-            bgwork->flags |= 1;
-            bgwork->flags &= ~2;
-            bgwork->flags &= ~4;
+            bgwork->flags |= BG_RENDERING;
+            bgwork->flags &= ~BG_DO_MULTIPLY;
+            bgwork->flags &= ~BG_NO_AUTOSCROLL;
             bgwork->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
         }
         else {
@@ -124,20 +124,20 @@ void bgMain(void) {
     int width;
         
     bgwork = bgGetWork();
-    if (bgwork->flags & 1) {
+    if (bgwork->flags & BG_RENDERING) {
         camera = camGetPtr(CAMERA_3D);
         angle = (TWO_PI * reviseAngle(-camera->viewYaw)) / 360.0f;
         sinangle = sin(angle);
         cosangle = cos(angle);
         v8 = 0.0f;
-        if (!(bgwork->flags & 2)) {
+        if (!(bgwork->flags & BG_DO_MULTIPLY)) {
             TEXGetGXTexObjFromPalette(bgwork->data, &texobj, 0);
             width = gp->fbWidth / GXGetTexObjWidth(&texobj);
         }
         else {
             width = 0;
         }
-        if (!(bgwork->flags & 8)) {
+        if (!(bgwork->flags & BG_NO_TRANSLATION)) {
             v8 = (0.001f * ((cosangle * camera->cameraAt.x) - (sinangle * camera->cameraAt.z))) + v8;
         }
         v11 = 4.0f * (camGetPtr(CAMERA_3D)->viewYaw / 360.0f);
@@ -154,7 +154,7 @@ void bgDisp(CameraId camId, void* param) {
     GXTexObj texobj;
     Mtx trans, scale;
     f32 sy;
-    if (bgwork->flags & 1) {
+    if (bgwork->flags & BG_RENDERING) {
         GXSetAlphaUpdate(GX_FALSE);
         GXSetCullMode(GX_CULL_BACK);
         GXSetZCompLoc(GX_TRUE);
@@ -167,7 +167,7 @@ void bgDisp(CameraId camId, void* param) {
         blend.a = blend.a * bgwork->color.a / 255;
         blend.r = blend.r * bgwork->color.r / 255;
         GXSetTevColor(GX_TEVREG0, blend);
-        if (!(bgwork->flags & 2)) {
+        if (!(bgwork->flags & BG_DO_MULTIPLY)) {
             GXSetNumChans(0);
             GXSetNumTevStages(1);
             GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
@@ -178,7 +178,7 @@ void bgDisp(CameraId camId, void* param) {
             TEXGetGXTexObjFromPalette(bgwork->data, &texobj, 0);
             GXLoadTexObj(&texobj, GX_TEXMAP0);
             MTXScale(scale, 608.0f / (f32)GXGetTexObjWidth(&texobj), 480.0f / (f32)GXGetTexObjHeight(&texobj), 1.0f);
-            if (bgwork->flags & 4) {
+            if (bgwork->flags & BG_NO_AUTOSCROLL) {
                 MTXTrans(trans, bgwork->scrl_x, bgwork->scrl_y, 0.0f);
             }
             else {
