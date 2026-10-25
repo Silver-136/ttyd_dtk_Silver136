@@ -1106,6 +1106,7 @@ s32 BattleCommandInput(BattleWork* work) {
         BattleAcHelpSetDispType(0);
     }
     _commandRestoreRec();
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfxA = (0, "SFX_BTL_CURSOR_MOVE2");
     loop = 1;
     while (loop) {

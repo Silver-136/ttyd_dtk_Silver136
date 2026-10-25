@@ -624,6 +624,7 @@ USER_FUNC(_set_effect_luck) {
     pw = (0, &weapon);
     pz = (0, &z);
     py = (0, &y);
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfx = (0, "SFX_SYSTEM_LUCKY1");
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);

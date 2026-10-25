@@ -765,10 +765,13 @@ static void senkaron_ext_main(void) {
         marioHammerFrame = 0;
     }
     n = extGetPoseNum();
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfxLand = (0, "SFX_STG1_HONE_LANDING1");
     range = 1.5f * (6.0f * scale);
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfxFly = (0, "SFX_STG1_HONE_FLY1");
     near = 3.0f * scale;
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfxFly2 = (0, "SFX_STG1_HONE_FLY1");
     for (i = n - 1; i >= 0; i--, pose++) {
         switch (senkaron[i].state) {

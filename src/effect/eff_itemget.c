@@ -206,6 +206,7 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(m16c, scale, scale, scale);
     PSMTXConcat(m19c, m13c, m19c);
     PSMTXConcat(m19c, m16c, m7c);
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     cs = (0, (f32)cos(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f));
     s = (f32)sin(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f);
     PSMTXTrans(m19c, 2.0f * s, 0.0f, -cs * 2.0f);

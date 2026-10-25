@@ -584,7 +584,9 @@ void zakogun_ext_main2(void) {
         return;
     }
     body = BattleSearchObjectPtr("if_body");
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     se1 = (0, "SFX_BOSS_TEAM_3RD_ATTACK2");
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     se2 = (0, "SFX_BOSS_TEAM_3RD_MOVE_CAILING2");
     se3 = "SFX_BOSS_TEAM_3RD_ATTACK2";
     for (i = 0; i < 25; i++, pose++) {

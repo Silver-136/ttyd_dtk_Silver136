@@ -188,3 +188,20 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_telop.c | telop | `scale = scale;` as the then-branch | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/manager/fontmgr.c | FontDrawMessageMtx | `scale = scale;` before iconDispGxAlpha | removing it changes the object in both versions (dead_probe.py) |
 | Both | src/mario/mario_kemuri.c | mario_kemuri_80130474 | `s = s;` as the then-branch of the dokan check | removing it changes the object in both versions (dead_probe.py) |
+| Both | rels/gon/src/gon_03.c | senkaron_ext_main | comma expression(s) `(0, "SFX_STG1_HONE_FLY1")`; `(0, "SFX_STG1_HONE_LANDING1")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | rels/gor/src/gor_03.c | fall_rtn | comma expression(s) `(0, "SFX_EVT_GAME_MONTE_COUNT1")`; `(0, "SFX_EVT_GAME_MONTE_LEAPED1")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | rels/gor/src/gor_03.c | goryuugijo_main_slot | comma expression(s) `(0, "SFX_EVT_GAME_SLOT_STOP1")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | rels/gor/src/gor_03.c | kuzi_bomb_bomb_eff | comma expression(s) `(0, evtGetValue(event, args[1]))` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | rels/hei/src/hei_10.c | ext_main | comma expression(s) `(0, "SFX_STG1_CHORO_ESCAPE1")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | rels/muj/src/unit/unit_boss_gundan_zako_group2.c | zakogun_ext_main2 | comma expression(s) `(0, "SFX_BOSS_TEAM_3RD_ATTACK2")`; `(0, "SFX_BOSS_TEAM_3RD_MOVE_CAILING2")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | rels/yuu/src/yuu_02.c | fall_rtn | comma expression(s) `(0, "SFX_EVT_GAME_MONTE_COUNT1")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/battle/ac/ac_button_down.c | battleAcMain_ButtonDown | comma expression(s) `(0, "SFX_AC_BUTTON_PUSH1")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/battle/ac/ac_shot.c | battleAcMain_Shot | comma expression(s) `(0, "SFX_AC_CURSOR_MOVE1")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/battle/battle_seq.c | _set_effect_luck | comma expression(s) `(0, "SFX_SYSTEM_LUCKY1")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/battle/battle_seq_command.c | BattleCommandInput | comma expression(s) `(0, "SFX_BTL_CURSOR_MOVE2")` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/driver/mapdrv.c | bmapLoad | comma expression(s) `(0, &mapWork[1])` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/driver/mapdrv.c | mapEntry | comma expression(s) `(0, &mapWork[activeGroup])` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/driver/shadowdrv.c | shadowBegin | comma expression(s) `(0, &shadowConfig[wp->configIdx])` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/effect/eff_itemget.c | effItemGetDisp | comma expression(s) `(0, (f32)cos(6.2831855f * camGetPtr(cameraId)->...` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/event/evt_mobj.c | mobj_breaking_floor | comma expression(s) `(0, c3)` keep the value as a separate temp | the plain expression (dead_probe.py) |
+| Both | src/sound.c | SoundDropData | comma expression(s) `(0, &sound.dvds[i])`; `(0, &sound.effects[i])` keep the value as a separate temp | the plain expression (dead_probe.py) |

@@ -5472,8 +5472,11 @@ static USER_FUNC(fall_rtn) {
             monte_p[i].wait = ((rand() % 700 + 100) * 60) / 1000;
         }
     }
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfx1 = (0, "SFX_EVT_GAME_MONTE_LEAPED1");
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfx2 = (0, "SFX_EVT_GAME_MONTE_COUNT1");
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfx3 = (0, "SFX_EVT_GAME_MONTE_COUNT1");
     for (i = 0; i < monte_p->owner->monteCount; i++) {
         GMonte* m = &monte_p[i];
@@ -5818,6 +5821,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                     }
                 }
             }
+            // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
             sfx = (0, "SFX_EVT_GAME_SLOT_STOP1");
             count = 0;
             for (j = 0; j < 3; j++) {
@@ -6283,6 +6287,7 @@ USER_FUNC(kuzi_get_keihin) {
 USER_FUNC(kuzi_bomb_bomb_eff) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     s32 phase = (0, evtGetValue(event, args[1]));
     NpcEntry* npc = npcNameToPtr("\203O\203\213\203\201\203{\203\200\225\272");
 

@@ -623,6 +623,7 @@ BOOL SoundDropData(void) {
         }
     }
     for (i = 0; i < 40; i++) {
+        // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
         SoundEffect* effect = (0, &sound.effects[i]);
         if (effect->flags) {
             sndFXKeyOff(effect->voiceId);
@@ -634,6 +635,7 @@ BOOL SoundDropData(void) {
     }
 
     for (i = 0; i < 2; i++) {
+        // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
         SoundDVD* dvd = (0, &sound.dvds[i]);
         if (dvd->flags & 3) {
             AISetStreamPlayState(0);

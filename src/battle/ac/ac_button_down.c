@@ -37,6 +37,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
     if (ac->mAcUnit->badgesEquipped.AutoCommand) {
         flag = 1;
     }
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfx = (0, "SFX_AC_BUTTON_PUSH1");
     do {
         allDone = 0;

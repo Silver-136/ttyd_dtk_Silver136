@@ -342,6 +342,7 @@ static void ext_main(void) {
 
     pose = extGetPosePtr();
     chb = wp->chb;
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfx = (0, "SFX_STG1_CHORO_ESCAPE1");
     for (i = 0; i < wp->count; i++, pose++, chb++) {
         switch (chb->state) {

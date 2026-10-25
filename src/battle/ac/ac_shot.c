@@ -74,6 +74,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
     BattleActions* ac;
     ShotWork* sw;
     s32 loop;
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     sfx = (0, "SFX_AC_CURSOR_MOVE1");
     ac = &work->actionCommands;
     sw = SH_WORK(ac);

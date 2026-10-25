@@ -2932,6 +2932,7 @@ s32 mobj_breaking_floor(MapObjectEntry* mobj) {
         break;
     case 1:
         c3 = animPoseGetMaterialEvtColor(mobj->poseId);
+        // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
         if (((0, c3)).a >= 4) {
             c3.a -= 4;
         } else {

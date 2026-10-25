@@ -354,6 +354,7 @@ MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isR
 }
 
 MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index) {
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     MapWork* wp = (0, &mapWork[activeGroup]);
     u32 size;
 
@@ -1079,6 +1080,7 @@ void bmapLoad(const char *map, const char *map2) {
         }
     }
 
+    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     wp = (0, &mapWork[1]);
     activeGroup = 1;
     memset(wp, 0, sizeof(MapWork));
