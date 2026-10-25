@@ -36,8 +36,6 @@
 void psndSFX_pit(s32 id, s32 pitch);
 void test_kururing_mapdisp(CameraId cam);
 
-#define SFXON(name) (psndSFXOn(name))
-#define TEXPLANE(m, id, col) (btlDispTexPlane2(m, id, col, 0))
 
 typedef struct DekaTiming {
     s32 state;  // 0x0
@@ -335,7 +333,7 @@ static void main_base(void) {
             break;
         }
         w->state = 3;
-        w->sfx = SFXON("SFX_BTL_SAC_DOKKAN1_1");
+        w->sfx = psndSFXOn("SFX_BTL_SAC_DOKKAN1_1");
     case 3:
         if (w->gaugeState == 3) {
             w->cursor += 0.1f * w->result + 0.8f;
@@ -439,7 +437,7 @@ static void main_base(void) {
         w->offsetY = intplGetValue(0, -40.0f, 0.0f, 30 - w->timer, 30);
         if (w->timer <= 0) {
             w->state = 3;
-            w->sfx = SFXON("SFX_BTL_SAC_DOKKAN1_1");
+            w->sfx = psndSFXOn("SFX_BTL_SAC_DOKKAN1_1");
         }
         break;
     case 5:
@@ -830,15 +828,15 @@ static void disp_2D(CameraId cam, void* param) {
     if (w->gaugeState >= 2 && w->gaugeState <= 5) {
         col = (GXColor){0xFF, 0xFF, 0xFF, w->alpha};
         PSMTXTrans(m, w->gaugePos.x - 0.5f * w->gaugeW - 8.0f, w->gaugePos.y, w->gaugePos.z);
-        TEXPLANE(m, BTL_TEX(0x43), col);
+        btlDispTexPlane2(m, BTL_TEX(0x43), col, 0);
         PSMTXScale(sc, w->gaugeW / 4.0f, 1.0f, 1.0f);
         PSMTXTrans(tr, w->gaugePos.x, w->gaugePos.y, w->gaugePos.z);
         PSMTXConcat(tr, sc, m);
-        TEXPLANE(m, BTL_TEX(0x44), col);
+        btlDispTexPlane2(m, BTL_TEX(0x44), col, 0);
         PSMTXScale(sc, -1.0f, 1.0f, 1.0f);
         PSMTXTrans(tr, 8.0f + (0.5f * w->gaugeW + w->gaugePos.x), w->gaugePos.y, w->gaugePos.z);
         PSMTXConcat(tr, sc, m);
-        TEXPLANE(m, BTL_TEX(0x43), col);
+        btlDispTexPlane2(m, BTL_TEX(0x43), col, 0);
     }
     if (w->gaugeState >= 2 && w->gaugeState <= 5) {
         ratio = w->cursor / w->gaugeLen;
@@ -866,7 +864,7 @@ static void disp_2D(CameraId cam, void* param) {
                 PSMTXScale(sc, 1.0f, 1.0f, 1.0f);
                 PSMTXTrans(tr, x, 40.0f + (w->offsetY + (w->gaugePos.y + t->off.y)), w->gaugePos.z + t->off.z);
                 PSMTXConcat(tr, sc, m);
-                TEXPLANE(m, BTL_TEX(0x2C), col);
+                btlDispTexPlane2(m, BTL_TEX(0x2C), col, 0);
             }
         }
         for (i = 0; i < 8; i++) {
@@ -893,7 +891,7 @@ static void disp_2D(CameraId cam, void* param) {
                     PSMTXScale(sc, 1.0f, 1.0f, 1.0f);
                     PSMTXTrans(tr, x, w->offsetY + (w->gaugePos.y + t->off.y), w->gaugePos.z + t->off.z);
                     PSMTXConcat(tr, sc, m);
-                    TEXPLANE(m, BTL_TEX(0x2C), col);
+                    btlDispTexPlane2(m, BTL_TEX(0x2C), col, 0);
                 }
             }
             PSMTXScale(sc, 1.0f, 1.0f, 1.0f);
@@ -903,10 +901,10 @@ static void disp_2D(CameraId cam, void* param) {
             case 0:
                 break;
             case 1:
-                TEXPLANE(m, BTL_TEX(0x3E), col);
+                btlDispTexPlane2(m, BTL_TEX(0x3E), col, 0);
                 break;
             case 2:
-                TEXPLANE(m, BTL_TEX(0x3F), col);
+                btlDispTexPlane2(m, BTL_TEX(0x3F), col, 0);
                 break;
             }
         }

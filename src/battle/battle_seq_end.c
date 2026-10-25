@@ -1814,19 +1814,11 @@ s32 _keta_get(s32 n) {
 #ifdef VERSION_G8ME01
 #define LVOBJ_TEX2 0x31
 #define LVOBJ_ICON 0x16B
-// FAKE: same registers as (id, color, 0, x, y, z, sx, sy); listing the float arguments
-// first makes MWCC evaluate the texture-table load last, as in the US build.
-#define LVOBJ_TEXPLANE(o, n, tbl)                                                   \
-    btlDispTexPlane(\
-        (o)->pos.x - 16.0f, 20.0f + (o)->pos.y, 2.0f + (o)->pos.z, \
-        (o)->scale.x, (o)->scale.y, tbl[gp->language], (o)->color, 0)
+#define LVOBJ_TEX(n, tbl) (tbl[gp->language])
 #else
 #define LVOBJ_TEX2 0x24
 #define LVOBJ_ICON 0x163
-#define LVOBJ_TEXPLANE(o, n, tbl)                                                   \
-    btlDispTexPlane((o)->pos.x - 16.0f, 20.0f + (o)->pos.y, \
-        2.0f + (o)->pos.z, (o)->scale.x, (o)->scale.y, \
-        0x27 + n, (o)->color, 0)
+#define LVOBJ_TEX(n, tbl) (0x27 + (n))
 #endif
 #define LVOBJ_PLANE(o, n, tbl)                                                            \
     if ((o)->blinkOn) {                                                             \
@@ -1842,7 +1834,8 @@ s32 _keta_get(s32 n) {
         PSMTXConcat(rotY, m, m);                                                       \
         PSMTXConcat(trans, m, m);                                                      \
         btlDispTexPlane2(m, LVOBJ_TEX2 + n, (o)->color, 0); \
-        LVOBJ_TEXPLANE(o, n, tbl);                              \
+        btlDispTexPlane((o)->pos.x - 16.0f, 20.0f + (o)->pos.y, 2.0f + (o)->pos.z,  \
+                        (o)->scale.x, (o)->scale.y, LVOBJ_TEX(n, tbl), (o)->color, 0); \
     }
 
 void _lvup_select_object_disp(CameraId camId, void* param) {
