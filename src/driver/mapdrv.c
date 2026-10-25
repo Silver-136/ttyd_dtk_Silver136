@@ -1070,57 +1070,57 @@ void bmapUnLoad(void) {
 
 void bmapLoad(const char *map, const char *map2)
 {
-  MapWork *wp;
-  MapEntry *entry;
-  MapEntry *e;
-  int i;
-  sysWaitDrawSync();
-  activeGroup = 0;
-  wp = mapGetWork();
-  for (i = 0; i < wp->entries[0].count; i++)
-  {
-    e = &mapWork[activeGroup].entries[i];
-    entry = &wp->entries[i];
-    if (e->dispListBuf)
+    MapWork *wp;
+    MapEntry *entry;
+    MapEntry *e;
+    int i;
+    sysWaitDrawSync();
+    activeGroup = 0;
+    wp = mapGetWork();
+    for (i = 0; i < wp->entries[0].count; i++)
     {
-      _mapFree(e->dispListBuf);
+        e = &mapWork[activeGroup].entries[i];
+        entry = &wp->entries[i];
+        if (e->dispListBuf)
+        {
+            _mapFree(e->dispListBuf);
+        }
+        e->dispListSize = 0;
+        e->dispListBuf = (void *) 0;
+        // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
+        entry->datAram = (void *) 0;
+        MAPENT_TPLARAM(entry) = (void *) 0;
+        entry->arcAram = (void *) 0;
+        if (entry->dat)
+        {
+            if (!arcDataCheck(entry->dat))
+            {
+                entry->datAram = aramMgrToAram(entry->dat, entry->datSize);
+                MAPENT_TPLARAM(entry) = aramMgrToAram(entry->tpl, entry->tplSize);
+                _mapFree(entry->tpl);
+                _mapFree(entry->dat);
+                entry->tpl = (void *) 0;
+                entry->dat = (void *) 0;
+            }
+            else
+            {
+                entry->arcAram = aramMgrToAram(entry->arcData, entry->arcSize);
+                _mapFree(entry->arcData);
+                entry->arcData = (void *) 0;
+            }
+        }
     }
-    e->dispListSize = 0;
-    e->dispListBuf = (void *) 0;
-    // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
-    entry->datAram = (void *) 0;
-    MAPENT_TPLARAM(entry) = (void *) 0;
-    entry->arcAram = (void *) 0;
-    if (entry->dat)
-    {
-      if (!arcDataCheck(entry->dat))
-      {
-        entry->datAram = aramMgrToAram(entry->dat, entry->datSize);
-        MAPENT_TPLARAM(entry) = aramMgrToAram(entry->tpl, entry->tplSize);
-        _mapFree(entry->tpl);
-        _mapFree(entry->dat);
-        entry->tpl = (void *) 0;
-        entry->dat = (void *) 0;
-      }
-      else
-      {
-        entry->arcAram = aramMgrToAram(entry->arcData, entry->arcSize);
-        _mapFree(entry->arcData);
-        entry->arcData = (void *) 0;
-      }
-    }
-  }
 
-  wp = (0, &mapWork[1]);
-  activeGroup = 1;
-  memset(wp, 0, sizeof(MapWork));
-  _mapLoad(wp, 0, map);
-  wp->entries[0].count = 1;
-  if (map2)
-  {
-    _mapLoad(wp, 1, map2);
-    wp->entries[0].count = 2;
-  }
+    wp = (0, &mapWork[1]);
+    activeGroup = 1;
+    memset(wp, 0, sizeof(MapWork));
+    _mapLoad(wp, 0, map);
+    wp->entries[0].count = 1;
+    if (map2)
+    {
+        _mapLoad(wp, 1, map2);
+        wp->entries[0].count = 2;
+    }
 }
 
 typedef struct MapAnimKeyCh {
@@ -1668,185 +1668,185 @@ static inline BOOL mapObjIsTranslucent(u32 flags, GXColor objColor, GXColor matC
 }
 
 static inline void callPackedLists(MapFileMesh* mesh) {
-  int j;
-  for (j = 0; j < mesh->displayListCount; j++)
-  {
-    GXCallDisplayList((void *) mesh->displayLists.packedLists[j].offset, mesh->displayLists.packedLists[j].size);
-  }
+    int j;
+    for (j = 0; j < mesh->displayListCount; j++)
+    {
+        GXCallDisplayList((void *) mesh->displayLists.packedLists[j].offset, mesh->displayLists.packedLists[j].size);
+    }
 }
 
 void _mapDispMapObj(CameraId cam, MapObject *obj)
 {
-  CameraEntry *camera;
-  CameraEntry *cur;
-  MapFileJoint *joint;
-  f32 scale;
-  s32 n;
-  s32 mode;
-  GXCullMode cull;
-  f32 d;
-  Mtx mtx;
-  Mtx nrm;
-  f32 proj[7];
-  MapFileMesh *mesh;
-  int i;
-  MapWork *wp;
-  int j;
-  void *material;
-  camera = camGetPtr(cam);
-  current_mp = obj;
-  if (!(obj->flags & 0x20))
-  {
-    goto setup;
-  }
-  if (obj->flags & 0x8000)
-  {
-    n = 0;
-    for (joint = obj->joints; joint->prev; joint = joint->prev)
+    CameraEntry *camera;
+    CameraEntry *cur;
+    MapFileJoint *joint;
+    f32 scale;
+    s32 n;
+    s32 mode;
+    GXCullMode cull;
+    f32 d;
+    Mtx mtx;
+    Mtx nrm;
+    f32 proj[7];
+    MapFileMesh *mesh;
+    int i;
+    MapWork *wp;
+    int j;
+    void *material;
+    camera = camGetPtr(cam);
+    current_mp = obj;
+    if (!(obj->flags & 0x20))
     {
+        goto setup;
     }
-
-    for (; joint != obj->joints; joint = joint->next)
+    if (obj->flags & 0x8000)
     {
-      n++;
+        n = 0;
+        for (joint = obj->joints; joint->prev; joint = joint->prev)
+        {
+        }
+
+        for (; joint != obj->joints; joint = joint->next)
+        {
+            n++;
+        }
+
+        scale = 0.01f * n;
+        GXGetProjectionv(proj);
+        d = 1.0f;
+        d = (d * (camera->far + camera->near)) * (d + scale);
+        proj[5] *= 1.0f + ((scale * (((-2.0f) * camera->far) * camera->near)) / d);
+        GXSetProjectionv(proj);
     }
-
-    scale = 0.01f * n;
-    GXGetProjectionv(proj);
-    d = 1.0f;
-    d = (d * (camera->far + camera->near)) * (d + scale);
-    proj[5] *= 1.0f + ((scale * (((-2.0f) * camera->far) * camera->near)) / d);
-    GXSetProjectionv(proj);
-  }
-  mode = obj->blendMode;
-  if (obj->joints->partCount > 0)
-  {
-    if (mapObjIsTranslucent(obj->flags, obj->color, obj->joints->parts[0].material->blendColor))
+    mode = obj->blendMode;
+    if (obj->joints->partCount > 0)
     {
-      mode = 2;
+        if (mapObjIsTranslucent(obj->flags, obj->color, obj->joints->parts[0].material->blendColor))
+        {
+            mode = 2;
+        }
     }
-  }
-  switch (mode)
-  {
-    case 0:
-      GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 7);
-      GXSetZCompLoc((GXBool) 1);
-      GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-      GXSetZMode((GXBool) 1, GX_LEQUAL, (GXBool) 1);
-      break;
-
-    case 3:
-      GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 0);
-      GXSetZCompLoc((GXBool) 1);
-      GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-      GXSetZMode((GXBool) 0, GX_LEQUAL, (GXBool) 0);
-      break;
-
-    case 1:
-      GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 0);
-      GXSetZCompLoc((GXBool) 0);
-      GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-      GXSetZMode((GXBool) 1, GX_LEQUAL, (GXBool) 1);
-      break;
-
-    case 4:
-      GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 0);
-      GXSetZCompLoc((GXBool) 0);
-      GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-      GXSetZMode((GXBool) 0, GX_LEQUAL, (GXBool) 0);
-      break;
-
-    case 2:
-
-    case 5:
-
-    default:
-      GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, 0);
-      GXSetZCompLoc((GXBool) 1);
-      GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-      GXSetZMode((GXBool) 1, GX_LEQUAL, (GXBool) 0);
-      break;
-
-  }
-
-  setup:
-  if (cam == 1)
-  {
-    GXSetZCompLoc((GXBool) 0);
-  }
-
-  PSMTXConcat(camera->view, obj->modelWorldMtx, mtx);
-  GXLoadPosMtxImm(mtx, 0);
-  if (!(obj->flags & 0x100))
-  {
-    PSMTXInvXpose(mtx, nrm);
-    GXLoadNrmMtxImm(nrm, 0);
-  }
-  GXSetCurrentMtx(0);
-  GXGetCullMode(&cull);
-  if (cull != culling[obj->joints->drawMode->cullMode])
-  {
-    GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
-  }
-  mapSetObjFog(obj);
-  if (obj->flags & 0x20)
-  {
-    if (obj->flags & 0x4000)
+    switch (mode)
     {
-      goto end;
-    }
-    if ((obj->flags & 1) && (!(obj->flags & 0x80)))
-    {
-      goto end;
-    }
-    if ((obj->flags & 0x40) && (obj->color.a == 0))
-    {
-      goto end;
-    }
-  }
-  if (obj->flags & 0x100)
-  {
-    for (i = 0; i < obj->joints->partCount; i++)
-    {
-      mesh = obj->joints->parts[i].mesh;
-      material = obj->joints->parts[i].material;
-      mapSetTextureMatrix(material);
-      mapSetMaterialLastStageBlend(obj->flags, obj->color, ((MapMaterial*)material)->blendColor);
-      mapSetPolygonVtxDesc(obj, mesh);
-      GXCallDisplayList(obj->displayList[i], obj->displayListSize[i]);
-      callPackedLists(mesh);
+        case 0:
+            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 7);
+            GXSetZCompLoc((GXBool) 1);
+            GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+            GXSetZMode((GXBool) 1, GX_LEQUAL, (GXBool) 1);
+            break;
+
+        case 3:
+            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 0);
+            GXSetZCompLoc((GXBool) 1);
+            GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+            GXSetZMode((GXBool) 0, GX_LEQUAL, (GXBool) 0);
+            break;
+
+        case 1:
+            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 0);
+            GXSetZCompLoc((GXBool) 0);
+            GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
+            GXSetZMode((GXBool) 1, GX_LEQUAL, (GXBool) 1);
+            break;
+
+        case 4:
+            GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, 0);
+            GXSetZCompLoc((GXBool) 0);
+            GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
+            GXSetZMode((GXBool) 0, GX_LEQUAL, (GXBool) 0);
+            break;
+
+        case 2:
+
+        case 5:
+
+        default:
+            GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, 0);
+            GXSetZCompLoc((GXBool) 1);
+            GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+            GXSetZMode((GXBool) 1, GX_LEQUAL, (GXBool) 0);
+            break;
 
     }
 
-  }
-  else
-  {
-    for (i = 0; i < obj->joints->partCount; i++)
+    setup:
+    if (cam == 1)
     {
-      material = obj->joints->parts[i].material;
-      mesh = obj->joints->parts[i].mesh;
-      mapSetTextureMatrix(material);
-      mapSetMaterialLastStageBlend(obj->flags, obj->color, ((MapMaterial*)material)->blendColor);
-      mapSetMaterial(obj, material);
-      mapSetPolygon(obj, mesh);
+        GXSetZCompLoc((GXBool) 0);
     }
 
-  }
-  end:
-  if (obj->flags & 0x8000)
-  {
-    GXSetProjection(camera->projection, camera->projType);
-  }
+    PSMTXConcat(camera->view, obj->modelWorldMtx, mtx);
+    GXLoadPosMtxImm(mtx, 0);
+    if (!(obj->flags & 0x100))
+    {
+        PSMTXInvXpose(mtx, nrm);
+        GXLoadNrmMtxImm(nrm, 0);
+    }
+    GXSetCurrentMtx(0);
+    GXGetCullMode(&cull);
+    if (cull != culling[obj->joints->drawMode->cullMode])
+    {
+        GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
+    }
+    mapSetObjFog(obj);
+    if (obj->flags & 0x20)
+    {
+        if (obj->flags & 0x4000)
+        {
+            goto end;
+        }
+        if ((obj->flags & 1) && (!(obj->flags & 0x80)))
+        {
+            goto end;
+        }
+        if ((obj->flags & 0x40) && (obj->color.a == 0))
+        {
+            goto end;
+        }
+    }
+    if (obj->flags & 0x100)
+    {
+        for (i = 0; i < obj->joints->partCount; i++)
+        {
+            mesh = obj->joints->parts[i].mesh;
+            material = obj->joints->parts[i].material;
+            mapSetTextureMatrix(material);
+            mapSetMaterialLastStageBlend(obj->flags, obj->color, ((MapMaterial*)material)->blendColor);
+            mapSetPolygonVtxDesc(obj, mesh);
+            GXCallDisplayList(obj->displayList[i], obj->displayListSize[i]);
+            callPackedLists(mesh);
 
-  if (obj->flags & 0x0F000000)
-  {
-    GXSetTevDirect(GX_TEVSTAGE0);
-    GXSetTevDirect(GX_TEVSTAGE1);
-    GXSetTevDirect(GX_TEVSTAGE2);
-    GXSetTevDirect(GX_TEVSTAGE3);
-    GXSetTevDirect(GX_TEVSTAGE4);
-    GXSetNumIndStages(0);
-  }
+        }
+
+    }
+    else
+    {
+        for (i = 0; i < obj->joints->partCount; i++)
+        {
+            material = obj->joints->parts[i].material;
+            mesh = obj->joints->parts[i].mesh;
+            mapSetTextureMatrix(material);
+            mapSetMaterialLastStageBlend(obj->flags, obj->color, ((MapMaterial*)material)->blendColor);
+            mapSetMaterial(obj, material);
+            mapSetPolygon(obj, mesh);
+        }
+
+    }
+    end:
+    if (obj->flags & 0x8000)
+    {
+        GXSetProjection(camera->projection, camera->projType);
+    }
+
+    if (obj->flags & 0x0F000000)
+    {
+        GXSetTevDirect(GX_TEVSTAGE0);
+        GXSetTevDirect(GX_TEVSTAGE1);
+        GXSetTevDirect(GX_TEVSTAGE2);
+        GXSetTevDirect(GX_TEVSTAGE3);
+        GXSetTevDirect(GX_TEVSTAGE4);
+        GXSetNumIndStages(0);
+    }
 }
 
 void _mapDispMapGrp(CameraId cam, MapObject* obj) {

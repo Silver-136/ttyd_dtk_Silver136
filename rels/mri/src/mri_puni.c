@@ -1210,22 +1210,22 @@ PuniData* PuniSakanobori(PuniData* p) {
 
 void PuniChildHagure(PuniData *p)
 {
-  if (p->child1 != NULL)
-  {
-    PuniData *c = p->child1;
-    c->mode = 16;
-    p->modeStep = 0;
-    PuniChildHagure(c);
-    PuniDokuritsu(c);
-  }
-  if (p->child2 != NULL)
-  {
-    PuniData *c = p->child2;
-    c->mode = 16;
-    p->modeStep = 0;
-    PuniChildHagure(c);
-    PuniDokuritsu(c);
-  }
+    if (p->child1 != NULL)
+    {
+        PuniData *c = p->child1;
+        c->mode = 16;
+        p->modeStep = 0;
+        PuniChildHagure(c);
+        PuniDokuritsu(c);
+    }
+    if (p->child2 != NULL)
+    {
+        PuniData *c = p->child2;
+        c->mode = 16;
+        p->modeStep = 0;
+        PuniChildHagure(c);
+        PuniDokuritsu(c);
+    }
 }
 
 BOOL searchParent(PuniData* p) {
@@ -3247,145 +3247,145 @@ void puniModePreupdraft(PuniData* p) {
 static const Vec puni_fall_dir;
 void puniModeUpdraft(PuniData *p)
 {
-  MarioWork *mario = marioGetPtr();
-  Vec d;
-  Vec save;
-  Vec savev;
-  Vec dir;
-  f32 mag;
-  f32 fx;
-  f32 fz;
-  s32 a;
-  s32 b;
-  s32 t;
-  if (p->modeStep == 0)
-  {
+    MarioWork *mario = marioGetPtr();
+    Vec d;
+    Vec save;
+    Vec savev;
+    Vec dir;
+    f32 mag;
+    f32 fx;
+    f32 fz;
+    s32 a;
+    s32 b;
+    s32 t;
+    if (p->modeStep == 0)
     {
-      Vec v_ = {0.0f, 0.94f, 0.0f};
-      p->vel = v_;
+        {
+            Vec v_ = {0.0f, 0.94f, 0.0f};
+            p->vel = v_;
+        }
     }
-  }
-  else
-  {
+    else
     {
-      Vec v_ = {0.0f, 0.66f, 0.0f};
-      p->vel = v_;
+        {
+            Vec v_ = {0.0f, 0.66f, 0.0f};
+            p->vel = v_;
+        }
     }
-  }
-  if ((gp->retraceCount & 0x1F) == 0)
-  {
-    psndSFXOn_3D("SFX_STG2_SOAPBALL_MOVE1", &p->pos);
-  }
-  t = (gp->retraceCount + p->index) & 0xF;
-  if (t > 7)
-  {
-    t = 4 - (t & 7);
-  }
-  else
-  {
-    t = t - 3;
-  }
-  p->dispOfs.x = 0.5f * ((f32) t);
-  switch (p->modeStep)
-  {
-    case 0:
-      if (p->breathPower > 10.0f)
+    if ((gp->retraceCount & 0x1F) == 0)
     {
-      p->target = Punigp->marioPuni;
-      PSVECSubtract(&p->pos, &mario->position, &d);
-      mag = PSVECMag(&d);
-      if (0.0f != mag)
-      {
-        PSVECNormalize(&d, &d);
-      }
-      d.y = 0.0f;
-      d.z = 0.0f;
-      p->modeF2 = 1.2f + (p->breathPower / 100.0f);
-      p->moveStart = d;
-      p->modeF0 = 0.0f;
-      p->modeF1 = 0.0f;
-      p->modeStep = 1;
+        psndSFXOn_3D("SFX_STG2_SOAPBALL_MOVE1", &p->pos);
     }
-      break;
+    t = (gp->retraceCount + p->index) & 0xF;
+    if (t > 7)
+    {
+        t = 4 - (t & 7);
+    }
+    else
+    {
+        t = t - 3;
+    }
+    p->dispOfs.x = 0.5f * ((f32) t);
+    switch (p->modeStep)
+    {
+        case 0:
+            if (p->breathPower > 10.0f)
+        {
+            p->target = Punigp->marioPuni;
+            PSVECSubtract(&p->pos, &mario->position, &d);
+            mag = PSVECMag(&d);
+            if (0.0f != mag)
+            {
+                PSVECNormalize(&d, &d);
+            }
+            d.y = 0.0f;
+            d.z = 0.0f;
+            p->modeF2 = 1.2f + (p->breathPower / 100.0f);
+            p->moveStart = d;
+            p->modeF0 = 0.0f;
+            p->modeF1 = 0.0f;
+            p->modeStep = 1;
+        }
+            break;
 
-    case 1:
-      PSVECScale(&p->moveStart, &d, p->modeF0);
-      PSVECAdd(&p->vel, &d, &p->vel);
-      p->modeF0 += p->modeF1;
-      p->modeF1 += 0.06f;
-      if ((p->modeF0) >= (p->modeF2))
-    {
-      p->modeF0 = p->modeF2;
-    }
-      break;
+        case 1:
+            PSVECScale(&p->moveStart, &d, p->modeF0);
+            PSVECAdd(&p->vel, &d, &p->vel);
+            p->modeF0 += p->modeF1;
+            p->modeF1 += 0.06f;
+            if ((p->modeF0) >= (p->modeF2))
+        {
+            p->modeF0 = p->modeF2;
+        }
+            break;
 
-    case 2:
-      PSVECScale(&p->moveStart, &d, p->modeF0);
-      PSVECAdd(&p->vel, &d, &p->vel);
-      p->modeF0 -= p->modeF1;
-      p->modeF1 += 0.03f;
-      if ((p->modeF0) < 0.0f)
-    {
-      p->modeStep = 0;
-    }
-      break;
+        case 2:
+            PSVECScale(&p->moveStart, &d, p->modeF0);
+            PSVECAdd(&p->vel, &d, &p->vel);
+            p->modeF0 -= p->modeF1;
+            p->modeF1 += 0.03f;
+            if ((p->modeF0) < 0.0f)
+        {
+            p->modeStep = 0;
+        }
+            break;
 
-  }
+    }
 
-  mag = PSVECMag(&p->vel);
-  if (0.0f != mag)
-  {
-    PSVECNormalize(&p->vel, &d);
-  }
-  else
-  {
+    mag = PSVECMag(&p->vel);
+    if (0.0f != mag)
     {
-      Vec v_ = {0.0f, 0.0f, 0.0f};
-      d = v_;
+        PSVECNormalize(&p->vel, &d);
     }
-  }
-  save = p->pos;
-  savev = p->vel;
-  puniMoveAtari(p, save, d, 1, mag);
-  {
-    Vec q = p->pos;
-    q.x += (p->dispOfs.x);
-    q.y += 15.0f;
-    q.z += 3.0f;
-    ((PuniBalloonWork*)p->effect->userdata)->position.x = q.x;
-    ((PuniBalloonWork*)p->effect->userdata)->position.y = q.y;
-    ((PuniBalloonWork*)p->effect->userdata)->position.z = q.z;
-    if ((p->hitMove != NULL) || (p->hitCheck != NULL))
+    else
     {
-      s32 f = 0;
-      if ((p->hitMove != NULL) && (p->hitMove->attributes & 4))
-      {
-        f = 1;
-      }
-      if ((p->hitCheck != NULL) && (p->hitCheck->attributes & 4))
-      {
-        f = 1;
-      }
-      if (f == 0)
-      {
-        p->mode = 20;
-        p->modeStep = 0;
-        p->dispOfs.x = 0.0f;
-      }
-      else
-      {
-        p->pos = save;
-        p->vel = savev;
-        PSVECAdd(&p->pos, &p->vel, &p->pos);
-      }
+        {
+            Vec v_ = {0.0f, 0.0f, 0.0f};
+            d = v_;
+        }
     }
-    if (p->pos.y >= 0.0f)
+    save = p->pos;
+    savev = p->vel;
+    puniMoveAtari(p, save, d, 1, mag);
     {
-      p->mode = 20;
-      p->modeStep = 0;
-      p->dispOfs.x = 0.0f;
+        Vec q = p->pos;
+        q.x += (p->dispOfs.x);
+        q.y += 15.0f;
+        q.z += 3.0f;
+        ((PuniBalloonWork*)p->effect->userdata)->position.x = q.x;
+        ((PuniBalloonWork*)p->effect->userdata)->position.y = q.y;
+        ((PuniBalloonWork*)p->effect->userdata)->position.z = q.z;
+        if ((p->hitMove != NULL) || (p->hitCheck != NULL))
+        {
+            s32 f = 0;
+            if ((p->hitMove != NULL) && (p->hitMove->attributes & 4))
+            {
+                f = 1;
+            }
+            if ((p->hitCheck != NULL) && (p->hitCheck->attributes & 4))
+            {
+                f = 1;
+            }
+            if (f == 0)
+            {
+                p->mode = 20;
+                p->modeStep = 0;
+                p->dispOfs.x = 0.0f;
+            }
+            else
+            {
+                p->pos = save;
+                p->vel = savev;
+                PSVECAdd(&p->pos, &p->vel, &p->pos);
+            }
+        }
+        if (p->pos.y >= 0.0f)
+        {
+            p->mode = 20;
+            p->modeStep = 0;
+            p->dispOfs.x = 0.0f;
+        }
     }
-  }
 }
 
 void puniModeWonder(PuniData* p) {
@@ -4711,195 +4711,195 @@ void puniCollideAll(void) {
 
 void puniSound(void)
 {
-  int i;
-  PuniData *p;
-  PuniData *d;
-  int n;
-  int special;
-  int div;
-  int k;
-  int m;
-  Vec pos;
-  k = 0;
-  special = 0;
-  for (i = 1; i <= 102; i++)
-  {
-    p = &Punidat[i];
-    if ((p->flags & 0x400) && (((p->anim) == 1) || ((p->anim) == 2)))
-    {
-      if (i == 3)
-      {
-        special++;
-      }
-      else
-      {
-        k++;
-      }
-    }
-  }
-
-  Punigp->puniMoveCount = k;
-  if (k == 0)
-  {
-    Punigp->puniMoveLevel = 0;
-    div = 5;
-  }
-  else
-    if (k <= 2)
-  {
-    Punigp->puniMoveLevel = 1;
-    div = 5;
-  }
-  else
-    if (k <= 11)
-  {
-    Punigp->puniMoveLevel = 2;
-    div = 4;
-  }
-  else
-    if (k <= 30)
-  {
-    Punigp->puniMoveLevel = 3;
-    div = 3;
-  }
-  else
-    if (k <= 50)
-  {
-    Punigp->puniMoveLevel = 4;
-    div = 2;
-  }
-  else
-    if (k <= 70)
-  {
-    Punigp->puniMoveLevel = 5;
-    div = 2;
-  }
-  else
-  {
-    Punigp->puniMoveLevel = 6;
-    div = 2;
-  }
-  if (((Punigp->puniMoveLevel) != 0) && ((gp->retraceCount % div) == 0))
-  {
-    m = Punigp->puniMoveCount;
-    n = (rand() % m) + 1;
+    int i;
+    PuniData *p;
+    PuniData *d;
+    int n;
+    int special;
+    int div;
+    int k;
+    int m;
+    Vec pos;
     k = 0;
+    special = 0;
     for (i = 1; i <= 102; i++)
     {
-      p = &Punidat[i];
-      if ((p->flags & 0x400) && (((p->anim) == 1) || ((p->anim) == 2)))
-      {
-        k++;
-        if (k == n)
+        p = &Punidat[i];
+        if ((p->flags & 0x400) && (((p->anim) == 1) || ((p->anim) == 2)))
         {
-          break;
+            if (i == 3)
+            {
+                special++;
+            }
+            else
+            {
+                k++;
+            }
         }
-      }
     }
 
-    pos = p->pos;
-    m = Punigp->puniMoveLevel;
-    switch ((rand() % m) + 1)
+    Punigp->puniMoveCount = k;
+    if (k == 0)
     {
-      case 1:
-        psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_1", &pos);
-        break;
-
-      case 2:
-        psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_2", &pos);
-        break;
-
-      case 3:
-        psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_3", &pos);
-        break;
-
-      case 4:
-        psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_4", &pos);
-        break;
-
-      case 5:
-        psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_5", &pos);
-        break;
-
-      case 6:
-        psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_6", &pos);
-        break;
-
+        Punigp->puniMoveLevel = 0;
+        div = 5;
     }
-
-  }
-  d = Punidat;
-  if (special != 0)
-  {
-    if (((u32) ((s32)Punigp->sfxTogetti)) == 0)
+    else
+        if (k <= 2)
     {
-      Punigp->sfxTogetti = psndSFXOn_3D("SFX_STG2_TOGETTI_MOVE1", &d[3].pos);
+        Punigp->puniMoveLevel = 1;
+        div = 5;
     }
-  }
-  else
+    else
+        if (k <= 11)
+    {
+        Punigp->puniMoveLevel = 2;
+        div = 4;
+    }
+    else
+        if (k <= 30)
+    {
+        Punigp->puniMoveLevel = 3;
+        div = 3;
+    }
+    else
+        if (k <= 50)
+    {
+        Punigp->puniMoveLevel = 4;
+        div = 2;
+    }
+    else
+        if (k <= 70)
+    {
+        Punigp->puniMoveLevel = 5;
+        div = 2;
+    }
+    else
+    {
+        Punigp->puniMoveLevel = 6;
+        div = 2;
+    }
+    if (((Punigp->puniMoveLevel) != 0) && ((gp->retraceCount % div) == 0))
+    {
+        m = Punigp->puniMoveCount;
+        n = (rand() % m) + 1;
+        k = 0;
+        for (i = 1; i <= 102; i++)
+        {
+            p = &Punidat[i];
+            if ((p->flags & 0x400) && (((p->anim) == 1) || ((p->anim) == 2)))
+            {
+                k++;
+                if (k == n)
+                {
+                    break;
+                }
+            }
+        }
+
+        pos = p->pos;
+        m = Punigp->puniMoveLevel;
+        switch ((rand() % m) + 1)
+        {
+            case 1:
+                psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_1", &pos);
+                break;
+
+            case 2:
+                psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_2", &pos);
+                break;
+
+            case 3:
+                psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_3", &pos);
+                break;
+
+            case 4:
+                psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_4", &pos);
+                break;
+
+            case 5:
+                psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_5", &pos);
+                break;
+
+            case 6:
+                psndSFXOn_3D("SFX_STG2_PUNI_MOVE2_6", &pos);
+                break;
+
+        }
+
+    }
+    d = Punidat;
+    if (special != 0)
+    {
+        if (((u32) ((s32)Punigp->sfxTogetti)) == 0)
+        {
+            Punigp->sfxTogetti = psndSFXOn_3D("SFX_STG2_TOGETTI_MOVE1", &d[3].pos);
+        }
+    }
+    else
+        if (((u32) ((s32)Punigp->sfxTogetti)) != 0)
+    {
+        psndSFXOff((s32)Punigp->sfxTogetti);
+        Punigp->sfxTogetti = 0;
+    }
     if (((u32) ((s32)Punigp->sfxTogetti)) != 0)
-  {
-    psndSFXOff((s32)Punigp->sfxTogetti);
-    Punigp->sfxTogetti = 0;
-  }
-  if (((u32) ((s32)Punigp->sfxTogetti)) != 0)
-  {
-    psndSFX_pos((s32)Punigp->sfxTogetti, &d[3].pos);
-  }
-  k = 0;
-  for (i = 110; i < 210; i++)
-  {
-    if ((Punidat[i].flags & 0x400) && ((Punidat[i].anim == 1) || (Punidat[i].anim == 2)))
     {
-      k++;
+        psndSFX_pos((s32)Punigp->sfxTogetti, &d[3].pos);
     }
-  }
-
-  Punigp->togeMoveCount = k;
-  if (k == 0)
-  {
-    Punigp->togeMoveLevel = 0;
-  }
-  else
-    if (k <= 2)
-  {
-    Punigp->togeMoveLevel = 1;
-  }
-  else
-    if (k <= 11)
-  {
-    Punigp->togeMoveLevel = 2;
-  }
-  else
-  {
-    Punigp->togeMoveLevel = 3;
-  }
-  if ((Punigp->togeMoveLevel) != (Punigp->togeMoveLevelPrev))
-  {
-    if (((u32) ((s32)Punigp->sfx468)) != 0)
+    k = 0;
+    for (i = 110; i < 210; i++)
     {
-      psndSFXOff((s32)Punigp->sfx468);
-    }
-    switch (Punigp->togeMoveLevel)
-    {
-      case 1:
-        Punigp->sfx468 = psndSFXOn("SFX_STG2_TOGE_MOVE1");
-        break;
-
-      case 2:
-        Punigp->sfx468 = psndSFXOn("SFX_STG2_TOGE_MOVE2");
-        break;
-
-      case 3:
-        Punigp->sfx468 = psndSFXOn("SFX_STG2_TOGE_MOVE3");
-        break;
-
+        if ((Punidat[i].flags & 0x400) && ((Punidat[i].anim == 1) || (Punidat[i].anim == 2)))
+        {
+            k++;
+        }
     }
 
-  }
-  Punigp->togeMoveLevelPrev = Punigp->togeMoveLevel;
-  Punigp->fightSfxCount1 = 0;
-  Punigp->fightSfxCount2 = 0;
+    Punigp->togeMoveCount = k;
+    if (k == 0)
+    {
+        Punigp->togeMoveLevel = 0;
+    }
+    else
+        if (k <= 2)
+    {
+        Punigp->togeMoveLevel = 1;
+    }
+    else
+        if (k <= 11)
+    {
+        Punigp->togeMoveLevel = 2;
+    }
+    else
+    {
+        Punigp->togeMoveLevel = 3;
+    }
+    if ((Punigp->togeMoveLevel) != (Punigp->togeMoveLevelPrev))
+    {
+        if (((u32) ((s32)Punigp->sfx468)) != 0)
+        {
+            psndSFXOff((s32)Punigp->sfx468);
+        }
+        switch (Punigp->togeMoveLevel)
+        {
+            case 1:
+                Punigp->sfx468 = psndSFXOn("SFX_STG2_TOGE_MOVE1");
+                break;
+
+            case 2:
+                Punigp->sfx468 = psndSFXOn("SFX_STG2_TOGE_MOVE2");
+                break;
+
+            case 3:
+                Punigp->sfx468 = psndSFXOn("SFX_STG2_TOGE_MOVE3");
+                break;
+
+        }
+
+    }
+    Punigp->togeMoveLevelPrev = Punigp->togeMoveLevel;
+    Punigp->fightSfxCount1 = 0;
+    Punigp->fightSfxCount2 = 0;
 }
 
 
@@ -5134,21 +5134,21 @@ static inline void puniAnimationInit_inl(s16** a, s16** b) {
 }
 s32 evt_puni_init(EventEntry *event, BOOL isFirstCall)
 {
-  EvtWord *args = event->args;
-  s32 a = evtGetValue(event, args[0]);
-  PuniTexInfo *tex = Punitex;
-  EvtWord b = evtGetValue(event, args[1]);
-  EvtWord c = evtGetValue(event, args[2]);
-  EvtWord d = evtGetValue(event, args[3]);
-  if (isFirstCall)
-  {
-    puniInit();
-    return 0;
-  }
-  puniAnimationInit_inl((s16 **) puni_patern_table, (s16 **) toge_patern_table);
-  puniAnimationInit2();
-  puniEntry(a, (PunidrvTexInfo *) tex, (void *) b, (void *) c, (void *) d);
-  return 2;
+    EvtWord *args = event->args;
+    s32 a = evtGetValue(event, args[0]);
+    PuniTexInfo *tex = Punitex;
+    EvtWord b = evtGetValue(event, args[1]);
+    EvtWord c = evtGetValue(event, args[2]);
+    EvtWord d = evtGetValue(event, args[3]);
+    if (isFirstCall)
+    {
+        puniInit();
+        return 0;
+    }
+    puniAnimationInit_inl((s16 **) puni_patern_table, (s16 **) toge_patern_table);
+    puniAnimationInit2();
+    puniEntry(a, (PunidrvTexInfo *) tex, (void *) b, (void *) c, (void *) d);
+    return 2;
 }
 
 USER_FUNC(evt_puni_set_yuka) {
@@ -5400,97 +5400,97 @@ static inline void puni_swget_idx(s32 idx, s32* val, Vec* pos) {
 
 s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall)
 {
-  char buf[256];
-  s32 i;
-  for (i = 1; i <= 102; i++)
-  {
-    s32 b0;
-    Vec pos;
-    s32 a;
-    s32 trap;
-    f32 fx;
-    f32 fy;
-    f32 fz;
-    puni_swget_idx(i, &b0, &pos);
-    fx = pos.x;
-    fy = pos.y;
-    fz = pos.z;
-    if (i >= 103)
+    char buf[256];
+    s32 i;
+    for (i = 1; i <= 102; i++)
     {
-      a = 0;
-    }
-    else
-    {
-      a = 8;
-      trap = swByteGet((i / 8) + 0x28C);
-      a = (trap >> (i % a)) & 1;
-    }
-    trap = 0;
-    if (i == 1)
-    {
-      if (!swGet(0xB3C))
-      {
-        trap = 1;
-      }
-    }
-    else
-      if (i == 2)
-    {
-      if (!swGet(0xB3D))
-      {
-        trap = 1;
-      }
-    }
-    else
-      if (i == 4)
-    {
-      if (!swGet(0xB3F))
-      {
-        trap = 1;
-      }
-    }
-    else
-      if (i == 3)
-    {
-      if (!swGet(0xB3E))
-      {
-        trap = 1;
-      }
-    }
-    else
-      if ((swByteGet(0x28B) + 5) <= i)
-    {
-      trap = 1;
-    }
-    if (a == 0)
-    {
-      if (trap == 0)
-      {
-        if (b0 == 0)
+        s32 b0;
+        Vec pos;
+        s32 a;
+        s32 trap;
+        f32 fx;
+        f32 fy;
+        f32 fz;
+        puni_swget_idx(i, &b0, &pos);
+        fx = pos.x;
+        fy = pos.y;
+        fz = pos.z;
+        if (i >= 103)
         {
-          sprintf(buf, "No%03d,ついて来ています\n", i);
+            a = 0;
         }
         else
         {
-          sprintf(buf, "No%03d,はぐれています area = mri_%02d, x = %04d, y = %04d, z = %04d,\n", i, b0 - 1, (s32) fx, (s32) fy, (s32) fz);
+            a = 8;
+            trap = swByteGet((i / 8) + 0x28C);
+            a = (trap >> (i % a)) & 1;
         }
-      }
-      else
-      {
-        sprintf(buf, "No%03d,＜まだ仲間になっていません＞\n", i);
-      }
+        trap = 0;
+        if (i == 1)
+        {
+            if (!swGet(0xB3C))
+            {
+                trap = 1;
+            }
+        }
+        else
+            if (i == 2)
+        {
+            if (!swGet(0xB3D))
+            {
+                trap = 1;
+            }
+        }
+        else
+            if (i == 4)
+        {
+            if (!swGet(0xB3F))
+            {
+                trap = 1;
+            }
+        }
+        else
+            if (i == 3)
+        {
+            if (!swGet(0xB3E))
+            {
+                trap = 1;
+            }
+        }
+        else
+            if ((swByteGet(0x28B) + 5) <= i)
+        {
+            trap = 1;
+        }
+        if (a == 0)
+        {
+            if (trap == 0)
+            {
+                if (b0 == 0)
+                {
+                    sprintf(buf, "No%03d,ついて来ています\n", i);
+                }
+                else
+                {
+                    sprintf(buf, "No%03d,はぐれています area = mri_%02d, x = %04d, y = %04d, z = %04d,\n", i, b0 - 1, (s32) fx, (s32) fy, (s32) fz);
+                }
+            }
+            else
+            {
+                sprintf(buf, "No%03d,＜まだ仲間になっていません＞\n", i);
+            }
+        }
+        else
+        {
+            sprintf(buf, "No%03d,＜トラップにかかっています＞\n", i);
+        }
+        if ((i == 1) && swGet(0xB14))
+        {
+            sprintf(buf, "No%03d,＜mri_03の牢屋に滞在しています＞\n", i);
+        }
     }
-    else
-    {
-      sprintf(buf, "No%03d,＜トラップにかかっています＞\n", i);
-    }
-    if ((i == 1) && swGet(0xB14))
-    {
-      sprintf(buf, "No%03d,＜mri_03の牢屋に滞在しています＞\n", i);
-    }
-  }
 
-  return 2;
+    return 2;
 }
 
 USER_FUNC(evt_puni_setup) {
@@ -5655,64 +5655,64 @@ USER_FUNC(evt_puni_setup) {
 
 s32 evt_toge_setup(EventEntry *event, BOOL isFirstCall)
 {
-  EvtWord *args = event->args;
-  s32 end = 1;
-  s32 kind = evtGetValue(event, args[0]);
-  f32 x = evtGetValue(event, args[1]);
-  f32 y = evtGetValue(event, args[2]);
-  f32 z = evtGetValue(event, args[3]);
-  PuniData *p;
-  switch (kind)
-  {
-    case 0:
-      return 2;
+    EvtWord *args = event->args;
+    s32 end = 1;
+    s32 kind = evtGetValue(event, args[0]);
+    f32 x = evtGetValue(event, args[1]);
+    f32 y = evtGetValue(event, args[2]);
+    f32 z = evtGetValue(event, args[3]);
+    PuniData *p;
+    switch (kind)
+    {
+        case 0:
+            return 2;
 
-    case 1:
-      end = 210;
-      break;
+        case 1:
+            end = 210;
+            break;
 
-    case 2:
-      end = 120;
-      break;
+        case 2:
+            end = 120;
+            break;
 
-  }
+    }
 
-  for (kind = 110; kind < end; kind++)
-  {
-    f32 rx;
-    f32 rz;
-    p = &Punidat[kind];
-    rx = randf(x - 50.0f, x + 50.0f);
-    rz = randf(z - 120.0f, z + 120.0f);
-    p->flags |= 0x10;
-    p->mode = 0;
-    p->index = kind;
-    p->anim = 0;
-    p->modeStep = 0;
-    p->prevAnim = 1000;
-    p->pos.x = rx;
-    p->pos.y = y;
-    p->pos.z = rz;
-    p->prevPos = p->pos;
-    p->radius.x = 6.0f;
-    p->radius.y = 2.0f;
-    p->radius.z = 3.0f;
-    p->hp = 60;
-    p->maxHp = 60;
-    p->regen = 10;
-    p->regenTimer = 60;
-    p->regenInterval = 60;
-    p->attack = 20;
-    p->defense = 10;
-    p->reserved_582 = 10;
-    p->damage = 0;
-    p->attacked = kind * 0;
-    p->hitRate = 50;
-    p->hitRateGuard = 70;
-    p->flags |= 0x101402;
-  }
+    for (kind = 110; kind < end; kind++)
+    {
+        f32 rx;
+        f32 rz;
+        p = &Punidat[kind];
+        rx = randf(x - 50.0f, x + 50.0f);
+        rz = randf(z - 120.0f, z + 120.0f);
+        p->flags |= 0x10;
+        p->mode = 0;
+        p->index = kind;
+        p->anim = 0;
+        p->modeStep = 0;
+        p->prevAnim = 1000;
+        p->pos.x = rx;
+        p->pos.y = y;
+        p->pos.z = rz;
+        p->prevPos = p->pos;
+        p->radius.x = 6.0f;
+        p->radius.y = 2.0f;
+        p->radius.z = 3.0f;
+        p->hp = 60;
+        p->maxHp = 60;
+        p->regen = 10;
+        p->regenTimer = 60;
+        p->regenInterval = 60;
+        p->attack = 20;
+        p->defense = 10;
+        p->reserved_582 = 10;
+        p->damage = 0;
+        p->attacked = kind * 0;
+        p->hitRate = 50;
+        p->hitRateGuard = 70;
+        p->flags |= 0x101402;
+    }
 
-  return 2;
+    return 2;
 }
 
 BOOL _puniVAtari(PuniData* p, Vec* from, Vec* to) {
@@ -6614,56 +6614,56 @@ const char* npcGetTribeName(const char** name) {
 static const Vec puni_fall_dir;
 s32 puni_piders_check_func(EventEntry *event, BOOL isFirstCall)
 {
-  s32 k;
-  s32 count;
-  NpcEntry *npc;
-  s32 i;
-  NpcWork *work;
-  work = npcGetWorkPtr();
-  count = work->total;
-  npc = work->entries;
-  for (i = 2; i < 10; i++)
-  {
-    Punigp->targets[i].flags &= ~5;
-  }
-  k = 2;
-  for (i = 0; i < count; i++, npc++)
-  {
-    if ((npc->flags & 1) && (npc->flags & 2) && npc->tribe != NULL && strcmp(npc->tribe->nameJp, "\203p\203C\203_\201[\203X") == 0)
+    s32 k;
+    s32 count;
+    NpcEntry *npc;
+    s32 i;
+    NpcWork *work;
+    work = npcGetWorkPtr();
+    count = work->total;
+    npc = work->entries;
+    for (i = 2; i < 10; i++)
     {
-      Vec v;
-      BOOL found = 0;
-      v = npc->position;
-      if (50.0 >= __fabs(v.y - Punigp->posY[0]))
-      {
-        found = 1;
-        v.y = Punigp->posY[0];
-      }
-      if (50.0 >= __fabs(v.y - Punigp->posY[1]))
-      {
-        found = 1;
-        v.y = Punigp->posY[1];
-      }
-      if (50.0 >= __fabs(v.y - Punigp->posY[2]))
-      {
-        found = 1;
-        v.y = Punigp->posY[2];
-      }
-      if (50.0 >= __fabs(v.y - Punigp->posY[3]))
-      {
-        found = 1;
-        v.y = Punigp->posY[3];
-      }
-      if (found)
-      {
-        PuniTarget *t = &Punigp->targets[k];
-        t->pos = v;
-        t->flags |= 5;
-      }
-      k++;
+        Punigp->targets[i].flags &= ~5;
     }
-  }
-  return 2;
+    k = 2;
+    for (i = 0; i < count; i++, npc++)
+    {
+        if ((npc->flags & 1) && (npc->flags & 2) && npc->tribe != NULL && strcmp(npc->tribe->nameJp, "\203p\203C\203_\201[\203X") == 0)
+        {
+            Vec v;
+            BOOL found = 0;
+            v = npc->position;
+            if (50.0 >= __fabs(v.y - Punigp->posY[0]))
+            {
+                found = 1;
+                v.y = Punigp->posY[0];
+            }
+            if (50.0 >= __fabs(v.y - Punigp->posY[1]))
+            {
+                found = 1;
+                v.y = Punigp->posY[1];
+            }
+            if (50.0 >= __fabs(v.y - Punigp->posY[2]))
+            {
+                found = 1;
+                v.y = Punigp->posY[2];
+            }
+            if (50.0 >= __fabs(v.y - Punigp->posY[3]))
+            {
+                found = 1;
+                v.y = Punigp->posY[3];
+            }
+            if (found)
+            {
+                PuniTarget *t = &Punigp->targets[k];
+                t->pos = v;
+                t->flags |= 5;
+            }
+            k++;
+        }
+    }
+    return 2;
 }
 
 USER_FUNC(puni_disp_info_kassencheck) {

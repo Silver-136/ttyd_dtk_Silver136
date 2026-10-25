@@ -283,43 +283,43 @@ USER_FUNC(end_bakugame) {
 
 s32 bakuGameDecideWeapon(EventEntry *event, BOOL isFirstCall)
 {
-  EvtWord *args = event->args;
-  s32 v;
-  BakuWork *w;
-  u8 *q;
-  BattleWeapon *wp;
-  evtGetFloat(event, args[0]);
-  v = evtGetValue(event, args[1]);
-  w = GetBakuGamePtr();
+    EvtWord *args = event->args;
+    s32 v;
+    BakuWork *w;
+    u8 *q;
+    BattleWeapon *wp;
+    evtGetFloat(event, args[0]);
+    v = evtGetValue(event, args[1]);
+    w = GetBakuGamePtr();
 
-  wp = (BattleWeapon *) w->weapon;
-  q = &wp->sleepChance;
-  memcpy(w->weapon, &weapon, 0xC0);
+    wp = (BattleWeapon *) w->weapon;
+    q = &wp->sleepChance;
+    memcpy(w->weapon, &weapon, 0xC0);
 
-  q[2] = 100;
-  if (v != (-1))
-  {
-    if (w->gauge >= 100.0f)
+    q[2] = 100;
+    if (v != (-1))
     {
-      q[2] = 127;
-      // FAKE: same-value second def of q (q == &wp->sleepChance already). It keeps q a named multi-def
-      // pointer (addi r28) with no in-block copy. That keeps the q addi at height 1, so lis issues before
-      // `mr w,r3` and takes r4, as in the target.
-      q = &w->weapon[0x80];
+        if (w->gauge >= 100.0f)
+        {
+            q[2] = 127;
+            // FAKE: same-value second def of q (q == &wp->sleepChance already). It keeps q a named multi-def
+            // pointer (addi r28) with no in-block copy. That keeps the q addi at height 1, so lis issues before
+            // `mr w,r3` and takes r4, as in the target.
+            q = &w->weapon[0x80];
+        }
+        else
+        {
+            q[2] = 100;
+        }
+        q[3] = v - 1;
     }
     else
     {
-      q[2] = 100;
+        q[2] = 0;
+        q[3] = 0;
     }
-    q[3] = v - 1;
-  }
-  else
-  {
-    q[2] = 0;
-    q[3] = 0;
-  }
-  evtSetValue(event, args[2], (EvtWord) w->weapon);
-  return 2;
+    evtSetValue(event, args[2], (EvtWord) w->weapon);
+    return 2;
 }
 
 USER_FUNC(bakuGameBombEntry) {

@@ -348,145 +348,145 @@ void effGonbabaBreathMain(EffectEntry* effect) {
 
 void effGonbabaBreathDisp(CameraId cameraId, EffectEntry *effect)
 {
-  EffGonbabaBreathWork *work = effect->userdata;
-  Mtx trans;
-  Mtx rot;
-  Mtx scale;
-  Mtx mtx;
-  GXTexObj texObj;
-  s32 i;
-  s32 j;
-  CameraEntry *cam;
-  s32 type;
-  s32 alpha;
-  f32 f4 = 4.0f;
-  cam = camGetPtr(cameraId);
-  type = work->type;
-  alpha = work->alpha;
-  if (type < 10)
-  {
-    PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
-  }
-  else
-  {
-    f32 c = cos((6.2831855f * camGetPtr(CAMERA_3D)->viewYaw) / 360.0f);
-    f32 s = sin((6.2831855f * camGetPtr(CAMERA_3D)->viewYaw) / 360.0f);
-    PSMTXTrans(trans, work->position.x - (2.0f * s), work->position.y, work->position.z + (2.0f * c));
-  }
-  PSMTXRotRad(rot, 'y', (work->yaw - camGetPtr(cameraId)->viewYaw) * 0.01745329252f);
-  if ((work->yaw > 90.0f) && (work->yaw < 270.0f))
-  {
-    PSMTXScale(scale, work->scale, work->scale, -work->scale);
-  }
-  else
-  {
-    PSMTXScale(scale, work->scale, work->scale, work->scale);
-  }
-  PSMTXConcat(trans, rot, trans);
-  PSMTXConcat(trans, scale, trans);
-  PSMTXConcat(cam->view, trans, mtx);
-  effGetTexObj(EFF_TEX(0x8e), &texObj);
-  GXLoadTexObj(&texObj, GX_TEXMAP0);
-  GXSetNumChans(1);
-  GXSetChanCtrl(GX_COLOR0A0, (GXBool) 0, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-  GXSetNumTexGens(1);
-  GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, (GXBool) 0, GX_PTIDENTITY);
-  GXSetNumTevStages(1);
-  GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-  GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
-  GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
-  GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, (((((((((GX_CC_RASC & 0xFFFFFFFFFFFFFFFF) & ((0, 0xFFFFFFFFFFFFFFFF))) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF);
-  GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_RASA, GX_CA_TEXA, GX_CA_ZERO);
-  GXSetCullMode(GX_CULL_NONE);
-  GXClearVtxDesc();
-  GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-  GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-  GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-  GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-  work++;
-  for (i = 1; i < effect->count; i++, work++)
-  {
-    if (work->delay != 0)
+    EffGonbabaBreathWork *work = effect->userdata;
+    Mtx trans;
+    Mtx rot;
+    Mtx scale;
+    Mtx mtx;
+    GXTexObj texObj;
+    s32 i;
+    s32 j;
+    CameraEntry *cam;
+    s32 type;
+    s32 alpha;
+    f32 f4 = 4.0f;
+    cam = camGetPtr(cameraId);
+    type = work->type;
+    alpha = work->alpha;
+    if (type < 10)
     {
-      continue;
+        PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
     }
-    PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
-    PSMTXScale(scale, work->scale, work->scale, work->scale);
+    else
+    {
+        f32 c = cos((6.2831855f * camGetPtr(CAMERA_3D)->viewYaw) / 360.0f);
+        f32 s = sin((6.2831855f * camGetPtr(CAMERA_3D)->viewYaw) / 360.0f);
+        PSMTXTrans(trans, work->position.x - (2.0f * s), work->position.y, work->position.z + (2.0f * c));
+    }
+    PSMTXRotRad(rot, 'y', (work->yaw - camGetPtr(cameraId)->viewYaw) * 0.01745329252f);
+    if ((work->yaw > 90.0f) && (work->yaw < 270.0f))
+    {
+        PSMTXScale(scale, work->scale, work->scale, -work->scale);
+    }
+    else
+    {
+        PSMTXScale(scale, work->scale, work->scale, work->scale);
+    }
+    PSMTXConcat(trans, rot, trans);
     PSMTXConcat(trans, scale, trans);
-    PSMTXConcat(mtx, trans, trans);
-    GXLoadPosMtxImm(trans, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    switch (work->type)
+    PSMTXConcat(cam->view, trans, mtx);
+    effGetTexObj(EFF_TEX(0x8e), &texObj);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, (GXBool) 0, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, (GXBool) 0, GX_PTIDENTITY);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, (((((((((GX_CC_RASC & 0xFFFFFFFFFFFFFFFF) & ((0, 0xFFFFFFFFFFFFFFFF))) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF) & 0xFFFFFFFFFFFFFFFF);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_RASA, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetCullMode(GX_CULL_NONE);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    work++;
+    for (i = 1; i < effect->count; i++, work++)
     {
-      case 0:
-
-      case 1:
-
-      case 2:
-
-      case 3:
-
-      case 4:
-
-      case 5:
-
-      case 6:
-
-      case 7:
-        for (j = 0; j < 3; j++)
-      {
-        f32 w;
-        col_tbl[type % 10][j].a = (work->alpha * alpha) / 255;
-        GXSetChanMatColor(GX_COLOR0A0, col_tbl[type % 10][j]);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32((-(16.0f - (4.0f * j))) / 2.0f, (16.0f - (4.0f * j)) / 2.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32((16.0f - (4.0f * j)) / 2.0f, (16.0f - (4.0f * j)) / 2.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 0.0f);
-        GXPosition3f32((16.0f - (4.0f * j)) / 2.0f, (-(16.0f - (4.0f * j))) / 2.0f, 0.0f);
-        GXTexCoord2f32(1.0f, 1.0f);
-        GXPosition3f32((-(16.0f - (4.0f * j))) / 2.0f, (-(16.0f - (4.0f * j))) / 2.0f, 0.0f);
-        GXTexCoord2f32(0.0f, 1.0f);
-      }
-
-        break;
-
-      case 10:
-
-      case 11:
-
-      case 12:
-
-      case 13:
-
-      case 14:
-
-      case 15:
-
-      case 16:
-
-      case 17:
+        if (work->delay != 0)
         {
-        GXColor c;
-        c.r = work->from[0];
-        c.g = work->from[1];
-        c.b = work->from[2];
-        c.a = (work->alpha * alpha) / 255;
-        GXSetChanMatColor(GX_COLOR0A0, c);
+            continue;
         }
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        GXPosition3f32((-f4 / 2.0f), f4 * 0.5f, 0.0f);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32(f4 * 0.5f, f4 * 0.5f, 0.0f);
-        GXTexCoord2f32(1.0f, 0.0f);
-        GXPosition3f32(f4 * 0.5f, (-f4 / 2.0f), 0.0f);
-        GXTexCoord2f32(1.0f, 1.0f);
-        GXPosition3f32((-f4 / 2.0f), (-f4 / 2.0f), 0.0f);
-        GXTexCoord2f32(0.0f, 1.0f);
-        break;
+        PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
+        PSMTXScale(scale, work->scale, work->scale, work->scale);
+        PSMTXConcat(trans, scale, trans);
+        PSMTXConcat(mtx, trans, trans);
+        GXLoadPosMtxImm(trans, GX_PNMTX0);
+        GXSetCurrentMtx(GX_PNMTX0);
+        switch (work->type)
+        {
+            case 0:
+
+            case 1:
+
+            case 2:
+
+            case 3:
+
+            case 4:
+
+            case 5:
+
+            case 6:
+
+            case 7:
+                for (j = 0; j < 3; j++)
+            {
+                f32 w;
+                col_tbl[type % 10][j].a = (work->alpha * alpha) / 255;
+                GXSetChanMatColor(GX_COLOR0A0, col_tbl[type % 10][j]);
+                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+                GXPosition3f32((-(16.0f - (4.0f * j))) / 2.0f, (16.0f - (4.0f * j)) / 2.0f, 0.0f);
+                GXTexCoord2f32(0.0f, 0.0f);
+                GXPosition3f32((16.0f - (4.0f * j)) / 2.0f, (16.0f - (4.0f * j)) / 2.0f, 0.0f);
+                GXTexCoord2f32(1.0f, 0.0f);
+                GXPosition3f32((16.0f - (4.0f * j)) / 2.0f, (-(16.0f - (4.0f * j))) / 2.0f, 0.0f);
+                GXTexCoord2f32(1.0f, 1.0f);
+                GXPosition3f32((-(16.0f - (4.0f * j))) / 2.0f, (-(16.0f - (4.0f * j))) / 2.0f, 0.0f);
+                GXTexCoord2f32(0.0f, 1.0f);
+            }
+
+                break;
+
+            case 10:
+
+            case 11:
+
+            case 12:
+
+            case 13:
+
+            case 14:
+
+            case 15:
+
+            case 16:
+
+            case 17:
+                {
+                GXColor c;
+                c.r = work->from[0];
+                c.g = work->from[1];
+                c.b = work->from[2];
+                c.a = (work->alpha * alpha) / 255;
+                GXSetChanMatColor(GX_COLOR0A0, c);
+                }
+                GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+                GXPosition3f32((-f4 / 2.0f), f4 * 0.5f, 0.0f);
+                GXTexCoord2f32(0.0f, 0.0f);
+                GXPosition3f32(f4 * 0.5f, f4 * 0.5f, 0.0f);
+                GXTexCoord2f32(1.0f, 0.0f);
+                GXPosition3f32(f4 * 0.5f, (-f4 / 2.0f), 0.0f);
+                GXTexCoord2f32(1.0f, 1.0f);
+                GXPosition3f32((-f4 / 2.0f), (-f4 / 2.0f), 0.0f);
+                GXTexCoord2f32(0.0f, 1.0f);
+                break;
+
+        }
 
     }
-
-  }
 
 }

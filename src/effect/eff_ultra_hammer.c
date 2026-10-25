@@ -509,84 +509,84 @@ inline Vec initializeVec(Vec* input) {
 
 void effUltraHammerDisp(enum CameraId camId, void *param)
 {
-  u32 fmtLoop[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
-  CameraEntry *cam;
-  EffUltraHammerData *data;
-  s32 i;
-  s32 mode;
-  EffectEntry *effect;
-  Mtx mtx;
-  Mtx yawMtx;
-  Mtx scaleMtx;
-  Mtx baseMtx;
-  GXTexObj texObj;
-  effect = param;
-  data = effect->userdata;
-  cam = camGetPtr(camId);
-  mode = data->mode;
-  PSMTXTrans(mtx, data->position.x, data->position.y, data->position.z);
-  PSMTXScale(scaleMtx, data->scale, data->scale, data->scale);
-  PSMTXRotRad(yawMtx, 'y', (-camGetPtr(camId)->viewYaw) * 0.01745329252f);
-  PSMTXConcat(mtx, yawMtx, mtx);
-  PSMTXConcat(mtx, scaleMtx, baseMtx);
-  GXSetNumChans(1);
-  GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
-  GXSetNumTevStages(2);
-  GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-  GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
-  GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
-  GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
-  GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_RASA, GX_CA_TEXA, GX_CA_ZERO);
-  GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-  GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
-  GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
-  GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
-  GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
-  GXSetNumTexGens(1);
-  GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);
-  effGetTexObj(EFF_TEX(145), &texObj);
-  GXLoadTexObj(&texObj, GX_TEXMAP0);
-  GXSetCullMode(GX_CULL_NONE);
-  GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, data->alpha});
-  data++;
-  for (i = 1; i < effect->count; i++, data++)
-  {
-    if (data->update == 0)
+    u32 fmtLoop[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
+    CameraEntry *cam;
+    EffUltraHammerData *data;
+    s32 i;
+    s32 mode;
+    EffectEntry *effect;
+    Mtx mtx;
+    Mtx yawMtx;
+    Mtx scaleMtx;
+    Mtx baseMtx;
+    GXTexObj texObj;
+    effect = param;
+    data = effect->userdata;
+    cam = camGetPtr(camId);
+    mode = data->mode;
+    PSMTXTrans(mtx, data->position.x, data->position.y, data->position.z);
+    PSMTXScale(scaleMtx, data->scale, data->scale, data->scale);
+    PSMTXRotRad(yawMtx, 'y', (-camGetPtr(camId)->viewYaw) * 0.01745329252f);
+    PSMTXConcat(mtx, yawMtx, mtx);
+    PSMTXConcat(mtx, scaleMtx, baseMtx);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, 0, GX_SRC_REG, GX_SRC_VTX, 0, GX_DF_NONE, GX_AF_NONE);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_RASA, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, (GXBool) 1, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 30, 0, 125);
+    effGetTexObj(EFF_TEX(145), &texObj);
+    GXLoadTexObj(&texObj, GX_TEXMAP0);
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, data->alpha});
+    data++;
+    for (i = 1; i < effect->count; i++, data++)
     {
-      PSMTXTrans(mtx, data->position.x, data->position.y, data->position.z);
-      PSMTXScale(scaleMtx, 0.6f * data->scale, 0.6f * data->scale, 0.6f * data->scale);
-      PSMTXConcat(mtx, scaleMtx, mtx);
-      if (mode != 0)
-      {
-        PSMTXScale(scaleMtx, -1.0f, 1.0f, 1.0f);
-        PSMTXConcat(mtx, scaleMtx, mtx);
-      }
-      PSMTXConcat(baseMtx, mtx, mtx);
-      PSMTXConcat(cam->view, mtx, mtx);
-      GXLoadPosMtxImm(mtx, 0);
-      GXSetCurrentMtx(0);
-      PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
-      GXLoadTexMtxImm(mtx, 30, GX_MTX2x4);
-      GXClearVtxDesc();
-      GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
-      GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_TEX_ST, GX_RGBA4, 10);
-      GXSetArray(GX_VA_POS, &wakka_vertex_tbl, 6);
-      GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-      fmtLoop[0] = GX_VTXFMT0;
-      GXSetVtxAttrFmt(fmtLoop[0], GX_VA_NRM, GX_TEX_S, GX_RGB8, 6);
-      GXSetArray(GX_VA_NRM, &wakka_normal_tbl, 3);
-      GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
-      GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_TEX_ST, GX_RGBA8, 0);
-      GXSetArray(GX_VA_CLR0, &wakka_color0_tbl, 4);
-      GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
-      GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_RGBA4, 13);
-      GXSetArray(GX_VA_TEX0, &wakka_texcoord0_tbl, 4);
-      for (fmtLoop[1] = 0; fmtLoop[1] < 20; fmtLoop[1]++)
-      {
-        GXCallDisplayList(wakka_dl_0_tbl[fmtLoop[1]], wakka_dl_0_size_tbl[fmtLoop[1]] << 5);
-      }
+        if (data->update == 0)
+        {
+            PSMTXTrans(mtx, data->position.x, data->position.y, data->position.z);
+            PSMTXScale(scaleMtx, 0.6f * data->scale, 0.6f * data->scale, 0.6f * data->scale);
+            PSMTXConcat(mtx, scaleMtx, mtx);
+            if (mode != 0)
+            {
+                PSMTXScale(scaleMtx, -1.0f, 1.0f, 1.0f);
+                PSMTXConcat(mtx, scaleMtx, mtx);
+            }
+            PSMTXConcat(baseMtx, mtx, mtx);
+            PSMTXConcat(cam->view, mtx, mtx);
+            GXLoadPosMtxImm(mtx, 0);
+            GXSetCurrentMtx(0);
+            PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
+            GXLoadTexMtxImm(mtx, 30, GX_MTX2x4);
+            GXClearVtxDesc();
+            GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_TEX_ST, GX_RGBA4, 10);
+            GXSetArray(GX_VA_POS, &wakka_vertex_tbl, 6);
+            GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
+            fmtLoop[0] = GX_VTXFMT0;
+            GXSetVtxAttrFmt(fmtLoop[0], GX_VA_NRM, GX_TEX_S, GX_RGB8, 6);
+            GXSetArray(GX_VA_NRM, &wakka_normal_tbl, 3);
+            GXSetVtxDesc(GX_VA_CLR0, GX_INDEX8);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_TEX_ST, GX_RGBA8, 0);
+            GXSetArray(GX_VA_CLR0, &wakka_color0_tbl, 4);
+            GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_RGBA4, 13);
+            GXSetArray(GX_VA_TEX0, &wakka_texcoord0_tbl, 4);
+            for (fmtLoop[1] = 0; fmtLoop[1] < 20; fmtLoop[1]++)
+            {
+                GXCallDisplayList(wakka_dl_0_tbl[fmtLoop[1]], wakka_dl_0_size_tbl[fmtLoop[1]] << 5);
+            }
 
+        }
     }
-  }
 
 }

@@ -503,82 +503,82 @@ USER_FUNC(evt_bero_get_info_num) {
 
 s32 bero_get_position_normal(EventEntry *event, BOOL isFirstCall)
 {
-  EvtWord *args = event->args;
-  MarioWork *wp = marioGetPtr();
-  s32 dir = evtGetValue(event, args[0]);
-  float halfTurn;
-  f32 respawnZ;
-  f32 len = evtGetFloat(event, args[1]);
-  s32 *pos = (s32 *) event->lwData[6];
-  const char *name = (const char *) event->lwData[3];
-  s32 angle = event->lwData[5];
-  Vec start;
-  f32 *hxPtr;
-  Vec end;
-  start.x = pos[0];
-  start.y = pos[1];
-  start.z = pos[2];
-  end.x = pos[0];
-  end.y = pos[1];
-  end.z = pos[2];
-  if (pos[0] == 100000)
-  {
-    hitObjGetPos((const char *) name, &start);
-  }
-  if (len != 0.0f)
-  {
-    Vec tmp2;
-    Vec tmp;
-    f32 nz;
-    f32 ny;
-    f32 nx;
-    f32 dist;
-    f32 hz;
-    f32 hy;
-    f32 hx;
-    f32 deg;
-    f32 rad;
-    hz = (hy = (hx = 0.0f));
-    dist = 1000000.0f;
-    deg = 0.125f;
-    deg = (angle * 360.0f) * deg;
-    halfTurn = 180.0f;
-    if (dir == 1)
+    EvtWord *args = event->args;
+    MarioWork *wp = marioGetPtr();
+    s32 dir = evtGetValue(event, args[0]);
+    float halfTurn;
+    f32 respawnZ;
+    f32 len = evtGetFloat(event, args[1]);
+    s32 *pos = (s32 *) event->lwData[6];
+    const char *name = (const char *) event->lwData[3];
+    s32 angle = event->lwData[5];
+    Vec start;
+    f32 *hxPtr;
+    Vec end;
+    start.x = pos[0];
+    start.y = pos[1];
+    start.z = pos[2];
+    end.x = pos[0];
+    end.y = pos[1];
+    end.z = pos[2];
+    if (pos[0] == 100000)
     {
-      deg += halfTurn;
+        hitObjGetPos((const char *) name, &start);
     }
-    rad = (6.2831855f * deg) / 360.0f;
-    tmp.x = start.x - (30.0f * ((f32) sin((6.2831855f * deg) / 360.0f)));
-    tmp.y = start.y;
+    if (len != 0.0f)
     {
-      f32 c0 = (f32) cos(rad);
-      tmp.z = start.z - (30.0f * (-c0));
+        Vec tmp2;
+        Vec tmp;
+        f32 nz;
+        f32 ny;
+        f32 nx;
+        f32 dist;
+        f32 hz;
+        f32 hy;
+        f32 hx;
+        f32 deg;
+        f32 rad;
+        hz = (hy = (hx = 0.0f));
+        dist = 1000000.0f;
+        deg = 0.125f;
+        deg = (angle * 360.0f) * deg;
+        halfTurn = 180.0f;
+        if (dir == 1)
+        {
+            deg += halfTurn;
+        }
+        rad = (6.2831855f * deg) / 360.0f;
+        tmp.x = start.x - (30.0f * ((f32) sin((6.2831855f * deg) / 360.0f)));
+        tmp.y = start.y;
+        {
+            f32 c0 = (f32) cos(rad);
+            tmp.z = start.z - (30.0f * (-c0));
+        }
+        dist = 1000000.0f;
+        hxPtr = &hx;
+        if (hitCheckFilter((void *) 0, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f))
+        {
+            tmp.y = hy;
+        }
+        tmp2 = tmp;
+        tmp2.x += (30.0f + len) * ((0, (f32) sin(rad)));
+        tmp2.z += (30.0f + len) * (-((f32) cos((6.2831855f * deg) / 360.0f)));
+        start = tmp;
+        end = tmp2;
     }
-    dist = 1000000.0f;
-    hxPtr = &hx;
-    if (hitCheckFilter((void *) 0, hxPtr, &hy, &hz, &dist, &nx, &ny, &nz, tmp.x, tmp.y, tmp.z, 0.0f, -1.0f, 0.0f))
+    BeroSX = start.x;
+    BeroSY = start.y;
+    BeroSZ = start.z;
+    BeroEX = end.x;
+    respawnZ = end.z;
+    BeroEY = end.y;
+    BeroEZ = end.z;
+    N_marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, respawnZ);
+    if (wp->currMotionId == MARIO_MOTION_SHIP)
     {
-      tmp.y = hy;
+        N_marioReloadMapOnBottomlessOn();
     }
-    tmp2 = tmp;
-    tmp2.x += (30.0f + len) * ((0, (f32) sin(rad)));
-    tmp2.z += (30.0f + len) * (-((f32) cos((6.2831855f * deg) / 360.0f)));
-    start = tmp;
-    end = tmp2;
-  }
-  BeroSX = start.x;
-  BeroSY = start.y;
-  BeroSZ = start.z;
-  BeroEX = end.x;
-  respawnZ = end.z;
-  BeroEY = end.y;
-  BeroEZ = end.z;
-  N_marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, respawnZ);
-  if (wp->currMotionId == MARIO_MOTION_SHIP)
-  {
-    N_marioReloadMapOnBottomlessOn();
-  }
-  return 2;
+    return 2;
 }
 
 void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* start, Vec* end) {

@@ -398,50 +398,50 @@ USER_FUNC(evt_nannpc_set_subfunc) {
 
 s32 evt_nannpc_entry(EventEntry *event, BOOL isFirstCall)
 {
-  NanNPC *p;
-  ExtdrvPose *pose;
-  char *str;
-  s32 off;
-  EvtWord name;
-  s32 i;
-  EvtWord *args;
-  NanNPCWork *w;
-  args = event->args;
-  pose = extGetPosePtr();
-  name = (long long) evtGetValue(event, args[0]);
-  w = nanNPCWork;
-  for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++)
-  {
-    p = (NanNPC *) (((u8 *) w->npc) - (-off));
-    str = (char *) name;
-    if (!(((EvtWord) str) & 0x80000000))
+    NanNPC *p;
+    ExtdrvPose *pose;
+    char *str;
+    s32 off;
+    EvtWord name;
+    s32 i;
+    EvtWord *args;
+    NanNPCWork *w;
+    args = event->args;
+    pose = extGetPosePtr();
+    name = (long long) evtGetValue(event, args[0]);
+    w = nanNPCWork;
+    for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++)
     {
- do { } while (0);
-      sprintf(makestring, "%06x", name);
-      str = makestring;
+        p = (NanNPC *) (((u8 *) w->npc) - (-off));
+        str = (char *) name;
+        if (!(((EvtWord) str) & 0x80000000))
+        {
+  do { } while (0);
+            sprintf(makestring, "%06x", name);
+            str = makestring;
+        }
+        strcmp((char *) p->name, str);
+        if (!p->pose)
+        {
+            strcpy((char *) p->name, str);
+            p->pose = &pose[i];
+            p->flags = 0;
+            p->field_16 = 0;
+            p->pos = (Vec){0.0f, -1000.0f, 0.0f};
+            p->target = (Vec){0.0f, -1000.0f, 0.0f};
+            p->hosei = (Vec){0.0f, 0.0f, 0.0f};
+            p->sizeX = 32.0f;
+            p->sizeY = 32.0f;
+            p->startTime = 0;
+            p->animnum = 0;
+            p->dir = 0.0f;
+            p->pose->dir = -p->dir;
+            p->color = (GXColor){255, 255, 255, 255};
+            break;
+        }
     }
-    strcmp((char *) p->name, str);
-    if (!p->pose)
-    {
-      strcpy((char *) p->name, str);
-      p->pose = &pose[i];
-      p->flags = 0;
-      p->field_16 = 0;
-      p->pos = (Vec){0.0f, -1000.0f, 0.0f};
-      p->target = (Vec){0.0f, -1000.0f, 0.0f};
-      p->hosei = (Vec){0.0f, 0.0f, 0.0f};
-      p->sizeX = 32.0f;
-      p->sizeY = 32.0f;
-      p->startTime = 0;
-      p->animnum = 0;
-      p->dir = 0.0f;
-      p->pose->dir = -p->dir;
-      p->color = (GXColor){255, 255, 255, 255};
-      break;
-    }
-  }
 
-  return 2;
+    return 2;
 }
 
 USER_FUNC(evt_nannpc_set_position) {

@@ -575,141 +575,141 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 
 void partySearchHead(PartyEntry *party, Vec *pos, f32 *dist, f32 angle)
 {
-  f32 lx;
-  f32 ly;
-  f32 lz;
-  f32 best;
-  f32 oz;
-  f32 ox;
-  Vec t;
-  f32 s;
-  f32 c;
-  volatile f32 px;
-  volatile f32 py;
-  volatile f32 pz;
-  f32 d0;
-  f32 nz0;
-  f32 ny0;
-  f32 nx0;
-  float probeHeight;
-  // FAKE: t.y read into a reused local right after each t store, so the load numbers below the 10.0f
-  // (the add is written probeHeight + ty, as in the target operand order)
-  f32 ty;
-  f32 hz0;
-  f32 hy0;
-  f32 hx0;
-  f32 d1;
-  f32 nz1;
-  f32 ny1;
-  f32 nx1;
-  f32 hz1;
-  f32 hy1;
-  f32 hx1;
-  f32 d2;
-  f32 nz2;
-  f32 ny2;
-  f32 nx2;
-  f32 hz2;
-  f32 hy2;
-  f32 hx2;
-  f32 d3;
-  f32 nz3;
-  f32 ny3;
-  f32 nx3;
-  f32 hz3;
-  f32 hy3;
-  f32 hx3;
-  HitEntry *hit;
-  f32 zero = 0.0f;
-  f32 one = 1.0f;
-  oz = party->width * 0.3f;
-  sincosf(&s, &c, angle);
-  px = pos->x;
-  ox = (-oz) * c;
-  oz = oz * s;
-  py = pos->y;
-  pz = pos->z;
-  best = *dist;
-  {
-    lx = px + oz;
-    lz = pz + ox;
-    ly = py;
-    t = (Vec){lx, ly, lz};
-    ty = t.y;
-    d0 = best;
-    // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
-    if ((t.z && t.z) && t.z)
+    f32 lx;
+    f32 ly;
+    f32 lz;
+    f32 best;
+    f32 oz;
+    f32 ox;
+    Vec t;
+    f32 s;
+    f32 c;
+    volatile f32 px;
+    volatile f32 py;
+    volatile f32 pz;
+    f32 d0;
+    f32 nz0;
+    f32 ny0;
+    f32 nx0;
+    float probeHeight;
+    // FAKE: t.y read into a reused local right after each t store, so the load numbers below the 10.0f
+    // (the add is written probeHeight + ty, as in the target operand order)
+    f32 ty;
+    f32 hz0;
+    f32 hy0;
+    f32 hx0;
+    f32 d1;
+    f32 nz1;
+    f32 ny1;
+    f32 nx1;
+    f32 hz1;
+    f32 hy1;
+    f32 hx1;
+    f32 d2;
+    f32 nz2;
+    f32 ny2;
+    f32 nx2;
+    f32 hz2;
+    f32 hy2;
+    f32 hx2;
+    f32 d3;
+    f32 nz3;
+    f32 ny3;
+    f32 nx3;
+    f32 hz3;
+    f32 hy3;
+    f32 hx3;
+    HitEntry *hit;
+    f32 zero = 0.0f;
+    f32 one = 1.0f;
+    oz = party->width * 0.3f;
+    sincosf(&s, &c, angle);
+    px = pos->x;
+    ox = (-oz) * c;
+    oz = oz * s;
+    py = pos->y;
+    pz = pos->z;
+    best = *dist;
     {
-    }
-    probeHeight = 10.0f;
-    hit = hitCheckFilter((void *) 0, &hx0, &hy0, &hz0, &d0, &nx0, &ny0, &nz0, t.x, probeHeight + ty, t.z, zero, one, zero);
-    if (hit && (best >= d0))
-    {
-      best = d0;
-    }
-  }
-  if (!hit)
-  {
-    lx = px - oz;
-    ly = py;
-    lz = pz - ox;
-    t = (Vec){lx, ly, lz};
-    ty = t.y;
-    // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
-    if ((t.z && t.z) && t.z) { }
-    d1 = best;
-    hit = hitCheckFilter((void *) 0, &hx1, &hy1, &hz1, &d1, &nx1, &ny1, &nz1, t.x, probeHeight + ty, t.z, zero, one, zero);
-    if (hit && (best >= d1))
-    {
-      best = d1;
+        lx = px + oz;
+        lz = pz + ox;
+        ly = py;
+        t = (Vec){lx, ly, lz};
+        ty = t.y;
+        d0 = best;
+        // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
+        if ((t.z && t.z) && t.z)
+        {
+        }
+        probeHeight = 10.0f;
+        hit = hitCheckFilter((void *) 0, &hx0, &hy0, &hz0, &d0, &nx0, &ny0, &nz0, t.x, probeHeight + ty, t.z, zero, one, zero);
+        if (hit && (best >= d0))
+        {
+            best = d0;
+        }
     }
     if (!hit)
     {
-      lx = px + ox;
-      ly = py;
-      lz = pz + oz;
-      t = (Vec){lx, ly, lz};
-      ty = t.y;
-      // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
-      if ((t.z && t.z) && t.z) { }
-      d2 = best;
-      hit = hitCheckFilter((void *) 0, &hx2, &hy2, &hz2, &d2, &nx2, &ny2, &nz2, t.x, probeHeight + ty, t.z, zero, one, zero);
-      if (hit && (best >= d2))
-      {
-        best = d2;
-      }
-      if (!hit)
-      {
-        lx = px - ox;
+        lx = px - oz;
         ly = py;
-        lz = pz - oz;
+        lz = pz - ox;
         t = (Vec){lx, ly, lz};
         ty = t.y;
         // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
         if ((t.z && t.z) && t.z) { }
-        d3 = best;
-        hit = hitCheckFilter((void *) 0, &hx3, &hy3, &hz3, &d3, &nx3, &ny3, &nz3, t.x, probeHeight + ty, t.z, zero, one, zero);
-        if (hit && (best >= d3))
+        d1 = best;
+        hit = hitCheckFilter((void *) 0, &hx1, &hy1, &hz1, &d1, &nx1, &ny1, &nz1, t.x, probeHeight + ty, t.z, zero, one, zero);
+        if (hit && (best >= d1))
         {
-          best = d3;
+            best = d1;
         }
-      }
+        if (!hit)
+        {
+            lx = px + ox;
+            ly = py;
+            lz = pz + oz;
+            t = (Vec){lx, ly, lz};
+            ty = t.y;
+            // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
+            if ((t.z && t.z) && t.z) { }
+            d2 = best;
+            hit = hitCheckFilter((void *) 0, &hx2, &hy2, &hz2, &d2, &nx2, &ny2, &nz2, t.x, probeHeight + ty, t.z, zero, one, zero);
+            if (hit && (best >= d2))
+            {
+                best = d2;
+            }
+            if (!hit)
+            {
+                lx = px - ox;
+                ly = py;
+                lz = pz - oz;
+                t = (Vec){lx, ly, lz};
+                ty = t.y;
+                // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
+                if ((t.z && t.z) && t.z) { }
+                d3 = best;
+                hit = hitCheckFilter((void *) 0, &hx3, &hy3, &hz3, &d3, &nx3, &ny3, &nz3, t.x, probeHeight + ty, t.z, zero, one, zero);
+                if (hit && (best >= d3))
+                {
+                    best = d3;
+                }
+            }
+        }
     }
-  }
-  if (hit)
-  {
-    pos->x = lx;
-    pos->y = ly;
-    pos->z = lz;
-    *dist = best;
-  }
-  if (!hit)
-  {
-    pos->x = lx;
-    pos->y = ly;
-    pos->z = lz;
-    *dist = 0.0f;
-  }
+    if (hit)
+    {
+        pos->x = lx;
+        pos->y = ly;
+        pos->z = lz;
+        *dist = best;
+    }
+    if (!hit)
+    {
+        pos->x = lx;
+        pos->y = ly;
+        pos->z = lz;
+        *dist = 0.0f;
+    }
 }
 
 void partyHitStrippedPool(f32* f, s32 i) {

@@ -391,60 +391,60 @@ void iconDisp(CameraId camId, void* param) {
 
 void iconDispGxAlpha(Vec *position, s16 flags, u16 iconId, u8 alpha, f32 scale)
 {
-  IconEntry entry;
-  Mtx transmtx;
-  Mtx scalemtx;
-  Mtx rotmtx;
-  Mtx mtx;
-  CameraEntry *camera;
-  IconBinData *data;
-  IconEntry *ep;
-  camera = camGetCurPtr();
-  ep = &entry;
-  if ((!icon_tpl_ok) || (!icon_bin_ok))
-  {
-    return;
-  }
-  PSMTXTrans(transmtx, position->x, position->y, position->z);
-  PSMTXScale(scalemtx, scale, scale, scale);
-  PSMTXRotRad(rotmtx, 'y', (-camera->viewYaw) * 0.01745329252f);
-  PSMTXConcat(transmtx, rotmtx, mtx);
-  PSMTXConcat(mtx, scalemtx, mtx);
-  PSMTXConcat(camera->view, mtx, mtx);
-  entry.color = (GXColor){0xFF, 0xFF, 0xFF, alpha};
-  entry.uflags = flags;
-  iconId++;
-  iconId--;
-  entry.iconId = iconId;
-  data = iconGetBinData(iconId);
-  entry.width = data->width;
-  entry.height = data->height;
-  entry.tplId = data->frames[0].tplId;
-  entry.frameDelay = data->frames[0].delay;
-  if (data->numIcons > 1)
-  {
-    s32 i;
-    s32 t;
-    s32 total = 0;
-    for (i = 0; i < data->numIcons; i++)
+    IconEntry entry;
+    Mtx transmtx;
+    Mtx scalemtx;
+    Mtx rotmtx;
+    Mtx mtx;
+    CameraEntry *camera;
+    IconBinData *data;
+    IconEntry *ep;
+    camera = camGetCurPtr();
+    ep = &entry;
+    if ((!icon_tpl_ok) || (!icon_bin_ok))
     {
-      total += data->frames[i].delay;
+        return;
     }
-
-    t = ((s32) gp->retraceCount) % total;
-    for (i = 0; i < data->numIcons; i++)
+    PSMTXTrans(transmtx, position->x, position->y, position->z);
+    PSMTXScale(scalemtx, scale, scale, scale);
+    PSMTXRotRad(rotmtx, 'y', (-camera->viewYaw) * 0.01745329252f);
+    PSMTXConcat(transmtx, rotmtx, mtx);
+    PSMTXConcat(mtx, scalemtx, mtx);
+    PSMTXConcat(camera->view, mtx, mtx);
+    entry.color = (GXColor){0xFF, 0xFF, 0xFF, alpha};
+    entry.uflags = flags;
+    iconId++;
+    iconId--;
+    entry.iconId = iconId;
+    data = iconGetBinData(iconId);
+    entry.width = data->width;
+    entry.height = data->height;
+    entry.tplId = data->frames[0].tplId;
+    entry.frameDelay = data->frames[0].delay;
+    if (data->numIcons > 1)
     {
-      if (t < data->frames[i].delay)
-      {
-        entry.tplId = data->frames[i].tplId;
-        break;
-      }
-      t -= data->frames[i].delay;
-    }
+        s32 i;
+        s32 t;
+        s32 total = 0;
+        for (i = 0; i < data->numIcons; i++)
+        {
+            total += data->frames[i].delay;
+        }
 
-  }
-  ;
-  iconGX(mtx, ep);
+        t = ((s32) gp->retraceCount) % total;
+        for (i = 0; i < data->numIcons; i++)
+        {
+            if (t < data->frames[i].delay)
+            {
+                entry.tplId = data->frames[i].tplId;
+                break;
+            }
+            t -= data->frames[i].delay;
+        }
+
+    }
+    ;
+    iconGX(mtx, ep);
 }
 
 void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale) {
@@ -453,60 +453,60 @@ void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale) {
 
 void iconDispGx2(Mtx mtx, s16 flags, s16 iconId)
 {
-  IconEntry entry;
-  Mtx m;
-  CameraEntry *camera;
-  IconBinData *data;
-  IconEntry *ep;
-  u16 id;
-  camera = camGetCurPtr();
-  ep = &entry;
-  if ((!icon_tpl_ok) || (!icon_bin_ok))
-  {
-    return;
-  }
-  entry.uflags = flags;
-  entry.color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-  if (icon_bin_ok && icon_bin_ok)
-  {
-  }
+    IconEntry entry;
+    Mtx m;
+    CameraEntry *camera;
+    IconBinData *data;
+    IconEntry *ep;
+    u16 id;
+    camera = camGetCurPtr();
+    ep = &entry;
+    if ((!icon_tpl_ok) || (!icon_bin_ok))
+    {
+        return;
+    }
+    entry.uflags = flags;
+    entry.color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+    if (icon_bin_ok && icon_bin_ok)
+    {
+    }
 #ifdef VERSION_G8ME01
-  /* FAKE: (u16)(s16) round-trip is a no-op on the u16 field (the s32 id goes through s16 first); it steers MWCC's register choice */
-  ep->iconId = (u16)(s16)iconId;
-  data = iconGetBinData((u16)iconId);
+    /* FAKE: (u16)(s16) round-trip is a no-op on the u16 field (the s32 id goes through s16 first); it steers MWCC's register choice */
+    ep->iconId = (u16)(s16)iconId;
+    data = iconGetBinData((u16)iconId);
 #else
-  entry.iconId = (id = iconId);
-  data = iconGetBinData(id);
+    entry.iconId = (id = iconId);
+    data = iconGetBinData(id);
 #endif
-  entry.width = data->width;
-  entry.height = data->height;
-  entry.tplId = data->frames[0].tplId;
-  entry.frameDelay = data->frames[0].delay;
-  if (data->numIcons > 1)
-  {
-    s32 i;
-    s32 t;
-    s32 total = 0;
-    for (i = 0; i < data->numIcons; i++)
+    entry.width = data->width;
+    entry.height = data->height;
+    entry.tplId = data->frames[0].tplId;
+    entry.frameDelay = data->frames[0].delay;
+    if (data->numIcons > 1)
     {
-      total += data->frames[i].delay;
-    }
+        s32 i;
+        s32 t;
+        s32 total = 0;
+        for (i = 0; i < data->numIcons; i++)
+        {
+            total += data->frames[i].delay;
+        }
 
-    t = ((s32) gp->retraceCount) % total;
-    for (i = i * 0; i < data->numIcons; i++)
-    {
-      if (t < data->frames[i].delay)
-      {
-        entry.tplId = data->frames[i].tplId;
-        break;
-      }
-      t -= data->frames[i].delay;
-    }
+        t = ((s32) gp->retraceCount) % total;
+        for (i = i * 0; i < data->numIcons; i++)
+        {
+            if (t < data->frames[i].delay)
+            {
+                entry.tplId = data->frames[i].tplId;
+                break;
+            }
+            t -= data->frames[i].delay;
+        }
 
-  }
-  ;
-  PSMTXConcat(camera->view, mtx, m);
-  iconGX(m, ep);
+    }
+    ;
+    PSMTXConcat(camera->view, mtx, m);
+    iconGX(m, ep);
 }
 
 void iconDispGxCol(Mtx pos, s16 flags, s32 iconId, GXColor color) {
