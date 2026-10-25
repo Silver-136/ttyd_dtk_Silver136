@@ -18,11 +18,6 @@
 #include "sfx_name_word.h"
 #include "eff/eff_mizutama.h"
 
-#ifdef VERSION_G8ME01
-// US exports this as the global kpa_fall (mot_jump calls it by that name)
-#define kpa_fall_80213C38 kpa_fall
-#endif
-
 extern void* marioChkLandon(f32* outY, f32 y);
 f32 kpaStickSpd(s32 dash);
 
@@ -404,7 +399,7 @@ void kpa_jump(void) {
     }
 }
 
-void kpa_fall_80213C38(void) {
+void kpa_fall(void) {
     MarioWork* m = marioGetPtr();
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;

@@ -21,9 +21,6 @@
 #include <string.h>
 #include "driver/mobjdrv.h"
 
-#ifdef VERSION_G8ME01
-#define kpa_fall_80213C38 kpa_fall
-#endif
 void* marioChkFront(Vec* out, Vec* pos, f32 dir, f32 dist);
 
 
@@ -456,7 +453,7 @@ void mot_upstairs(void) {
 void mot_fall(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->characterId == CHARACTER_BOWSER) {
-        kpa_fall_80213C38();
+        kpa_fall();
         return;
     }
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
