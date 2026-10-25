@@ -333,7 +333,6 @@ void battleAcDelete_RepeatedlyLv(BattleWork* work) {
     BattleAcGaugeSeDelete();
 }
 
-#pragma dont_inline on
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

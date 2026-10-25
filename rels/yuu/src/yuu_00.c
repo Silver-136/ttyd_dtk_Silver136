@@ -1345,7 +1345,6 @@ void yuuminigame_disp_1hikoki(CameraId camera, void* param) {
     monteCountDisp();
 }
 
-#pragma dont_inline on
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data) {
     MarioWork* mario = marioGetPtr();
 
@@ -1409,4 +1408,3 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
     }
     return FALSE;
 }
-#pragma dont_inline reset

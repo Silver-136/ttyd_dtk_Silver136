@@ -39,7 +39,6 @@ static EvtWord nagemakuri_attack_event[316];
 EvtWord nagemakuri_judge_last_attack_event[73];
 static EvtWord wait_event[6];
 
-#pragma dont_inline on
 void fire_bros_get_next_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
 
@@ -53,9 +52,7 @@ void fire_bros_get_next_target(s32* unitIdx, s32* partIdx) {
         *partIdx = 0;
     }
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 void fire_bros_get_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
     BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
@@ -63,7 +60,6 @@ void fire_bros_get_target(s32* unitIdx, s32* partIdx) {
     *unitIdx = target->unitIdx;
     *partIdx = target->partIdx;
 }
-#pragma dont_inline reset
 
 USER_FUNC(fire_bros_nagemakuri_set_target) {
     EvtWord* args = event->args;

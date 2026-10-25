@@ -16,7 +16,6 @@
 
 extern EffectEntry* effKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 s, f32 c);
 
-#pragma dont_inline on
 #ifdef VERSION_G8ME01
 #define mario_kemuri_80130474 mario_kemuri
 #endif
@@ -359,4 +358,3 @@ void party_kemuri(PartyEntry* party) {
         }
     }
 }
-#pragma dont_inline reset

@@ -1118,7 +1118,6 @@ static inline f32 angleLerp(f32 from, f32 to, f32 r) {
     }
     return r * (to - from) + from;
 }
-#pragma dont_inline on
 void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t) {
     f32 r, a0, a1, a2;
     r = hokanRate(t, 0.0f, 0.0f, 1.0f, 0.0f);
@@ -1149,7 +1148,6 @@ void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadSta
     out->rot = r * (to->rot - from->rot) + from->rot;
     out->shiftXRate = r * (to->shiftXRate - from->shiftXRate) + from->shiftXRate;
 }
-#pragma dont_inline reset
 #define CAMROAD_HOKAN_START(src, flags)                                                                     \
     {                                                                                                         \
         wp->cmpFlags = flags;                                                                                 \

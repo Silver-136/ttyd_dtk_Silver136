@@ -294,7 +294,6 @@ void battleAcDelete_Shot(BattleWork* work) {
     work->actionCommands.mAcState = 1004;
 }
 
-#pragma dont_inline on
 static void _ac_disp_init(BattleWork* work) {
     BattleACDispParams* disp = SH_DISP(&work->actionCommands);
     memset(disp, 0, 0x2C);
@@ -308,7 +307,6 @@ static void _ac_disp_init(BattleWork* work) {
     disp->colorStep[3] = 0;
     disp->gaugeRatio = 0.0f;
 }
-#pragma dont_inline reset
 
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
@@ -354,7 +352,6 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
 }
 
-#pragma dont_inline on
 static void _draw_target_mark(GXColor color, f32 x, f32 y, f32 z, f32 angle) {
     Vec pos = {0.0f, 0.0f, 0.0f};
     pos.x = x;
@@ -363,7 +360,6 @@ static void _draw_target_mark(GXColor color, f32 x, f32 y, f32 z, f32 angle) {
     btlDispTex4(0x42 + AC_TEX_OFS, pos, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, reviseAngle(-angle)}, color);
     btlDispTex4(0x41 + AC_TEX_OFS, pos, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, reviseAngle(angle)}, color);
 }
-#pragma dont_inline reset
 
 static void _disp_target_mark(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;

@@ -5,7 +5,6 @@
 #include "eff/eff_sandars.h"
 #include "battle/battle_sub.h"
 #include "evt/evt_audience.h"
-#pragma dont_inline on
 #include "battle/battle.h"
 #include "battle/battle_audience.h"
 #include "battle/battle_unit.h"
@@ -1355,7 +1354,6 @@ void bakuGameDisp2D(CameraId cam, void* param) {
     BattleAcDrawGauge(w->dc, w->e0, 0xB1, w->rate, 3, 0x21, 0x42, 0x64, full);
 }
 
-#pragma dont_inline reset
 void bakuGameDisp3D(CameraId cam, void* param) {
     BakuWork* w = GetBakuGamePtr();
     CameraEntry* camera = camGetPtr(CAMERA_3D);

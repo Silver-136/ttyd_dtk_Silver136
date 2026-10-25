@@ -501,7 +501,6 @@ static void disp_proc(CameraId cameraId, void* param) {
     }
 }
 
-#pragma dont_inline on
 static void printRanking(void) {
     s32 i;
 
@@ -509,7 +508,6 @@ static void printRanking(void) {
     for (i = 0; i < rank_wp->count; i++) {
     }
 }
-#pragma dont_inline reset
 
 USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
@@ -1090,7 +1088,6 @@ static USER_FUNC(evt_rankingReInit) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 static void rankingExit(void) {
     s32 i;
     s32 j;
@@ -1108,7 +1105,6 @@ static void rankingExit(void) {
     }
     _mapFree(rank_wp->entries);
 }
-#pragma dont_inline reset
 
 static void rankingInit(void) {
     s32 temp;

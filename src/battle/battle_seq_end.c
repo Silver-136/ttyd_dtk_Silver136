@@ -837,7 +837,6 @@ void btlseqEnd(BattleWork* wp) {
     btlseqEnd_DispMain((CameraId)8, wp);
 }
 
-#pragma dont_inline on
 void _ExecAllUnitBattleEndEvent(void) {
     BattleUnit* unit;
     BattleWork* wp = _battleWorkPointer;

@@ -623,7 +623,6 @@ void shadowCharShadowDisp_Texture(CameraId cameraId, void* param) {
     }
 }
 
-#pragma dont_inline on
 void cylinder(ShadowEntry* entry) {
     f32 inner;
     f32 a;
@@ -665,7 +664,6 @@ void cylinder(ShadowEntry* entry) {
     GXCallDisplayList(cylinder_dl_bottom, 0x40);
     GXCallDisplayList(cylinder_dl_side, 0x40);
 }
-#pragma dont_inline reset
 
 static inline void shadowDrawVolume(ShadowEntry* entry) {
     switch (entry->type) {

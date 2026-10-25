@@ -2970,7 +2970,6 @@ void _mapobj_data_touch_scale(s32 layer) {
     }
 }
 
-#pragma dont_inline on
 USER_FUNC(_set_haikei_entry_scale) {
     BattleWork* wp = _battleWorkPointer;
     BOOL busy = FALSE;

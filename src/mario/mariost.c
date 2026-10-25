@@ -648,7 +648,6 @@ diff = (s32)now - (s32)gp->rumbleForcedOffTime[i];
     }
 }
 
-#pragma dont_inline on
 void L_gcResetCheck(void) {
     u32 code;
 
@@ -695,7 +694,6 @@ void L_gcResetCheck(void) {
         while (1) {}
     }
 }
-#pragma dont_inline reset
 
 // forward declarations: these functions are defined further down
 void L_gcResetCheck(void);

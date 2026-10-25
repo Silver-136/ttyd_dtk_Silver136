@@ -6219,7 +6219,6 @@ USER_FUNC(btlevtcmd_SetPartsJumpSound) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 void _UnitMoveSoundControl(BattleUnit* unit) {
     f32 x, y, z;
     BtlUnit_GetPos(unit, &x, &y, &z);
@@ -6299,7 +6298,6 @@ void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work) {
         work->sfxId = -1;
     }
 }
-#pragma dont_inline reset
 
 USER_FUNC(btlevtcmd_snd_se) {
     EvtWord* args = event->args;

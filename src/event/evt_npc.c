@@ -1460,7 +1460,6 @@ USER_FUNC(evt_npc_set_camid) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 f32 _get_target_dir(EventEntry* event, NpcEntry* npc, const char* targetName) {
     Vec target, position, diff;
 
@@ -1480,7 +1479,6 @@ f32 _get_target_dir(EventEntry* event, NpcEntry* npc, const char* targetName) {
     PSVECSubtract(&target, &position, &diff);
     return angleABf(0.0f, 0.0f, diff.x, diff.z);
 }
-#pragma dont_inline reset
 
 // const char* lookupName, const char* targetName, f32 dirStoreIndex
 USER_FUNC(evt_get_target_dir) {
@@ -1662,7 +1660,6 @@ USER_FUNC(evt_npc_facedirection_add) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 NpcEntry* evtNpcNameToPtr(EventEntry* event, const char* name) {
     if (!strcmp(name, "me")) {
         return event->ownerNPC;
@@ -1730,7 +1727,6 @@ NpcEntry* evtNpcNameToPtr_NoAssert(EventEntry* event, const char* name) {
     }
     return npcNameToPtr_NoAssert(name);
 }
-#pragma dont_inline reset
 
 USER_FUNC(evt_npc_stop_for_event) {
     npcStopForEvent();
@@ -2088,7 +2084,6 @@ USER_FUNC(evt_npc_get_drop_flower) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 void _npc_check_coin(NpcEntry* npc, s32* value) {
     *value += npc->btlCoinDropCount;
 }
@@ -2108,7 +2103,6 @@ void _npc_check_coin_group(NpcEntry* npc, s32* value) {
     }
     _npc_check_coin(npc, value);
 }
-#pragma dont_inline reset
 
 USER_FUNC(evt_npc_get_drop_coin) {
     EvtWord* args = event->args;
@@ -2406,7 +2400,6 @@ USER_FUNC(evt_npc_calc_score) {
     return EVT_RETURN_DONE;
 }
 
-#pragma dont_inline on
 void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
     static u8 cnt;
     f32 a2, a5;
@@ -2440,7 +2433,6 @@ void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
         }
     }
 }
-#pragma dont_inline reset
 
 USER_FUNC(evt_npc_kamek_move_position) {
     EvtWord* args = event->args;

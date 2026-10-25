@@ -225,7 +225,6 @@ EVT_BEGIN(msg_fault)
 EVT_END()
 
 
-#pragma dont_inline on
 BreakSlotWork* BattleBreakSlotGetPtr(void) {
     return &_battleWorkPointer->breakSlot;
 }
@@ -233,7 +232,6 @@ BreakSlotWork* BattleBreakSlotGetPtr(void) {
 BreakSlotReel* BattleBreakSlotReelGetPtr(s32 no) {
     return &BattleBreakSlotGetPtr()->reels[no];
 }
-#pragma dont_inline reset
 
 const SlotCards8 R_slot_1_cards = {{0, 1, 2, 1, 2, 0, 3, 4}};
 const SlotCards8 R_slot_2_cards = {{3, 1, 0, 1, 4, 2, 0, 2}};
@@ -922,7 +920,6 @@ void BattleBreakSlot_PointInc(void) {
     }
 }
 
-#pragma dont_inline on
 void BattleBreakSlot_Start(void) {
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
     BreakSlotReel* reel;
@@ -938,7 +935,6 @@ void BattleBreakSlot_Start(void) {
         }
     }
 }
-#pragma dont_inline reset
 
 BOOL BattleBreakSlot_CheckReaction(void) {
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
@@ -981,7 +977,6 @@ void BattleBreakSlot_HideReel(void) {
     slot->reelNo = 0;
 }
 
-#pragma dont_inline on
 void item_appear_force(BreakSlotReel* reel, s32 item) {
     s32 i;
 
@@ -994,4 +989,3 @@ void item_appear_force(BreakSlotReel* reel, s32 item) {
         }
     }
 }
-#pragma dont_inline reset

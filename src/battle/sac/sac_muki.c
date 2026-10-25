@@ -930,12 +930,10 @@ break;
     }
 }
 
-#pragma dont_inline on
 static MukiWork* get_ptr(void) {
     return (MukiWork*)_battleWorkPointer->actionCommands.work;
 }
 
-#pragma dont_inline reset
 
 static USER_FUNC(set_weapon) {
     EvtWord* args = event->args;

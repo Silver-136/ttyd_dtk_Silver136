@@ -35,11 +35,9 @@ static void actionCommandDisp(f32 x, f32 y);
 
 s32 _frame_table[] = {240, 180, 120, 90, 70, 40, 20};
 
-#pragma dont_inline on
 s32 _getmaxcount(void) {
     return _frame_table[BattleActionCommandGetDifficulty(_battleWorkPointer)];
 }
-#pragma dont_inline reset
 
 s32 battleAcMain_MonosiriTarget(BattleWork* work) {
     BattleActions* ac;
@@ -150,7 +148,6 @@ void battleAcDelete_MonosiriTarget(BattleWork* work) {
     work->actionCommands.mAcState = 1002;
 }
 
-#pragma dont_inline on
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -193,5 +190,4 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     ((void (*)(Vec*, s32, s32, f32))iconDispGx)(&(Vec){-200.0f + x, 50.0f + y, 0.0f}, 0x10, icon, 1.0f);
 }
-#pragma dont_inline reset
 

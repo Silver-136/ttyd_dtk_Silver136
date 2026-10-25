@@ -190,11 +190,9 @@ BattleWeapon weapon_scissor_finish = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-#pragma dont_inline on
 ScissorWork* GetScissorPtr(void) {
     return (ScissorWork*)_battleWorkPointer->actionCommands.work;
 }
-#pragma dont_inline reset
 
 s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     f32 a1, a2, d;
@@ -375,7 +373,6 @@ s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4,
     return 0;
 }
 
-#pragma dont_inline on
 s32 scissor_intersection2(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     if (x1 == x3 && y1 == y3) {
         return 0;
@@ -392,8 +389,6 @@ s32 scissor_intersection2(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4
     return scissor_intersection(x1, y1, x2, y2, x3, y3, x4, y4, ox, oy);
 }
 
-#pragma dont_inline reset
-#pragma dont_inline on
 s32 scissor_intersection3(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     f32 dx = x2 - x1;
     f32 slope;
@@ -421,9 +416,7 @@ s32 scissor_intersection3(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4
     }
     return scissor_intersection(x1, y1, x2, y2, x3, y3, x4, y4, ox, oy);
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 s32 scissor_intersection4(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     if (x1 == x3 && y1 == y3) {
         *ox = x1;
@@ -448,7 +441,6 @@ s32 scissor_intersection4(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4
     return scissor_intersection3(x1, y1, x2, y2, x3, y3, x4, y4, ox, oy);
 }
 
-#pragma dont_inline reset
 s32 scissor_cross(Pt* a, Pt* b, Pt* pts, s32 n) {
     f32 xs[512];
     f32 ys[512];
@@ -735,7 +727,6 @@ s32 star_control(EventEntry* evt, BOOL first) {
     return 0;
 }
 
-#pragma dont_inline on
 void star_disp2D(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();
     if (w->phase >= 2 && w->phase <= 6) {
@@ -746,9 +737,7 @@ void star_disp2D(CameraId camera, void* param) {
         star_disp2D_sub(4, 32);
     }
 }
-#pragma dont_inline reset
 
-#pragma dont_inline on
 void star_disp2D_sub(s32 idx, s32 alpha) {
     ScissorWork* w = GetScissorPtr();
     Mtx rotMtx;
@@ -789,7 +778,6 @@ void star_disp2D_sub(s32 idx, s32 alpha) {
     PSMTXConcat(transMtx, rotMtx, rotMtx);
     iconDispGxCol(rotMtx, 0x10, ICON_19C, col);
 }
-#pragma dont_inline reset
 
 s32 scissor_timer_get(EventEntry* evt) {
     ScissorWork* w = GetScissorPtr();
@@ -1056,7 +1044,6 @@ void scissor_damage_sub(BattleUnit* unit, s32* out) {
     }
 }
 
-#pragma dont_inline on
 s32 scissor_damage_sub2(Vec pt) {
     ScissorWork* w = GetScissorPtr();
     s32 n = w->triCount;
@@ -1080,7 +1067,6 @@ s32 scissor_damage_sub2(Vec pt) {
     return 0;
 }
 
-#pragma dont_inline reset
 s32 scissor_ofscreen_ok(EventEntry* evt) {
     EvtWord* args = evt->args;
     ScissorWork* w = GetScissorPtr();

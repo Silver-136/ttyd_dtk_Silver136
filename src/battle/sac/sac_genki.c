@@ -395,7 +395,6 @@ void main_mario(void) {
     }
 }
 
-#pragma dont_inline on
 void main_target(void) {
     GenkiWork* w = get_ptr();
     switch (w->targetState) {
@@ -434,7 +433,6 @@ void main_target(void) {
         break;
     }
 }
-#pragma dont_inline reset
 
 void main_weapon(s32 idx) {
     GenkiWork* w = get_ptr();
@@ -719,7 +717,6 @@ void main_object(s32 idx) {
     }
 }
 
-#pragma dont_inline on
 static void main_star(void) {
     GenkiWork* w = get_ptr();
     s32 i;
@@ -731,7 +728,6 @@ static void main_star(void) {
         main_star1();
     }
 }
-#pragma dont_inline reset
 
 void main_star0(s32 idx) {
     GenkiWork* w = get_ptr();
@@ -1329,11 +1325,9 @@ EVT_BEGIN(status_recover_evt)
 EVT_END()
 
 
-#pragma dont_inline on
 static GenkiWork* get_ptr(void) {
     return (GenkiWork*)_battleWorkPointer->actionCommands.work;
 }
-#pragma dont_inline reset
 
 void weapon_entry(void) {
     GenkiWork* w = get_ptr();

@@ -45,7 +45,6 @@ TimingAEntry* _ac_timing_a_timing_tbl[] = {
     _ac_timing_a_timing_lv_6,
 };
 
-#pragma dont_inline on
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -65,7 +64,6 @@ static void actionCommandDisp(f32 x, f32 y) {
     (*frame)++;
 }
 
-#pragma dont_inline reset
 void battleAcDelete_TimingA(BattleWork* work) {
     work->actionCommands.mAcState = 1000;
 }
@@ -100,7 +98,6 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     }
 }
 
-#pragma dont_inline on
 
 s32 battleAcResult_TimingA(BattleWork* work) {
     s32 successFrame = battleAcTimingA_GetSuccessFrame(work);
@@ -175,7 +172,6 @@ s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
     return ret;
 }
 
-#pragma dont_inline reset
 s32 battleAcMain_TimingA(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     TimingAWork* tw = TA_WORK(ac);

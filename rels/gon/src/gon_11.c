@@ -688,7 +688,6 @@ static void _mapclsofs_all(CloudWork* wp) {
     }
 }
 
-#pragma dont_inline on
 static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall)
 {
   HitEntry *hit0;
@@ -879,7 +878,6 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall)
 
   return 0;
 }
-#pragma dont_inline reset
 
 USER_FUNC(evt_iri_16_cloud_init) {
     s32 i;

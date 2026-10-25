@@ -392,7 +392,6 @@ void BattleStatusChangeInfoWorkInit(BattleUnit* unit) {
 }
 #pragma optimize_for_size reset
 
-#pragma dont_inline on
 //should be StatusEffectType, TODO fix for s8
 s32 _get_pri(s8 type) {
     s8* val;

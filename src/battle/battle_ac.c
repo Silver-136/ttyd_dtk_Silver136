@@ -114,7 +114,6 @@ void BattleActionCommandStop(BattleWork* work) {
 }
 
 
-#pragma dont_inline on
 s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     BattleWork* wp;
     void* pad;
@@ -220,7 +219,6 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
 s32 BattleACPadCheckRecordTrigger(s32 chan, s32 mask) {
     return _battleWorkPointer->actionCommands.pad.mButtonsPressedHistory[chan] & mask;
 }
-#pragma dont_inline reset
 
 s32 BattleActionCommandGetDefenceResult(void) {
     return _battleWorkPointer->actionCommands.mDefenseResult;

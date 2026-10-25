@@ -496,7 +496,6 @@ void main_gauge(void) {
     }
 }
 
-#pragma dont_inline on
 void main_timing(s32 idx) {
     DekaWork* w = get_ptr();
     DekaTiming* t = &w->timing[idx];
@@ -520,7 +519,6 @@ void main_timing(s32 idx) {
         break;
     }
 }
-#pragma dont_inline reset
 
 static void main_star(void) {
     DekaWork* w = get_ptr();
@@ -702,7 +700,6 @@ static void main_star(void) {
     }
 }
 
-#pragma dont_inline on
 void main_enemy(void) {
     BattleWork* bw = _battleWorkPointer;
     DekaWork* w = get_ptr();
@@ -720,7 +717,6 @@ void main_enemy(void) {
         w->enemies[i] = -1;
     }
 }
-#pragma dont_inline reset
 
 void main_enemy_sub(BattleUnit* unit, s32* n) {
     DekaWork* w = get_ptr();
@@ -1190,11 +1186,9 @@ void yuka_disp(CameraId cam, void* param) {
     }
 }
 
-#pragma dont_inline on
 static DekaWork* get_ptr(void) {
     return (DekaWork*)_battleWorkPointer->actionCommands.work;
 }
-#pragma dont_inline reset
 
 void create_timing(void) {
     DekaWork* w = get_ptr();

@@ -48,7 +48,6 @@ static void actionCommandDisp(f32 x, f32 y);
 void actionCommandDisp2(f32 x, f32 y);
 u16 _get_icon_id(s8 dir);
 
-#pragma dont_inline on
 s32 _GetInputDir(void) {
     if (AC_PARAMS(_battleWorkPointer)->button != 0 && !PAD(AC_PARAMS(_battleWorkPointer)->button)) {
         return -1;
@@ -108,7 +107,6 @@ s32 _CalcRollDir(void) {
         restart = TRUE;                      \
     } while (0)
 
-#pragma dont_inline reset
 s32 battleAcMain_StickRotate(BattleWork* work) {
     StickRotateWork* sw;
     BattleACDispParams* disp;

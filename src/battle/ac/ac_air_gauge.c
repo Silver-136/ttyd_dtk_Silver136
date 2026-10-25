@@ -269,7 +269,6 @@ void battleAcDelete_AirGauge(BattleWork* work) {
     work->actionCommands.mAcState = 1002;
 }
 
-#pragma dont_inline on
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -306,4 +305,3 @@ static void actionCommandDisp(f32 x, f32 y) {
         iconDispGx(&pos, 0x10, ICON_064, 1.0f);
     }
 }
-#pragma dont_inline reset

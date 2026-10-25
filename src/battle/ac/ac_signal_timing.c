@@ -61,7 +61,6 @@ s32 ac_signaltiming_ok_frame_range_2[7] = {30, 30, 30, 30, 25, 20, 15};
 static void actionCommandDisp(f32 x, f32 y);
 s32 _get_ok_frame_range(s32 difficulty);
 
-#pragma dont_inline on
 s32 _get_ok_frame_range(s32 difficulty) {
     BattleWork* work = _battleWorkPointer;
     switch (ST_MODE(work)) {
@@ -71,7 +70,6 @@ s32 _get_ok_frame_range(s32 difficulty) {
     return ST_OKBASE(work) + ac_signaltiming_ok_frame_range[difficulty];
 }
 
-#pragma dont_inline reset
 s32 battleAcMain_SignalTiming(BattleWork *work)
 {
   const char *sfxPi;

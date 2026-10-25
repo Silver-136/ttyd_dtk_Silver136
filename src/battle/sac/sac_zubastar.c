@@ -216,18 +216,15 @@ s32 main_star(void) {
 void zubaStarDispStar(CameraId cam, void* param) {
 }
 
-#pragma dont_inline on
 ZubaStarWork* GetZubaStarPtr(void) {
     return (ZubaStarWork*)_battleWorkPointer->actionCommands.work;
 }
 
-#pragma dont_inline reset
 s32 weaponGetPower_ZubaStar(void* a, s32* tbl) {
     return tbl[GetZubaStarPtr()->level + 8];
 }
 
 
-#pragma dont_inline on
 void zubastar_create_takaku(s32 n, Vec* pts) {
     ZubaStarWork* w = GetZubaStarPtr();
     ZSObj* t;
@@ -245,7 +242,6 @@ void zubastar_create_takaku(s32 n, Vec* pts) {
     }
     w->count++;
 }
-#pragma dont_inline reset
 
 void zubastar_bunkatu(Vec* p0, Vec* p1) {
     ZubaStarWork* w = GetZubaStarPtr();
@@ -335,7 +331,6 @@ void zubastar_bunkatu(Vec* p0, Vec* p1) {
     }
 }
 
-#pragma dont_inline on
 s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     f32 dx1 = x2 - x1;
     f32 d, a, t, e1, e2, dx2, b;
@@ -354,7 +349,6 @@ s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, 
     if (t >= 0.0f && t <= 1.0f) return 1;
     return 0;
 }
-#pragma dont_inline reset
 
 static EVT_BEGIN(nice_event)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -120, 140, 0)

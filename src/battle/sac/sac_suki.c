@@ -306,7 +306,6 @@ static void main_base(void) {
     }
 }
 
-#pragma dont_inline on
 void main_button(s32 idx) {
     SukiWork* w = get_ptr();
     SukiBtn* b = &w->btn[idx];
@@ -328,7 +327,6 @@ void main_button(s32 idx) {
         break;
     }
 }
-#pragma dont_inline reset
 
 static void main_star(void) {
     SukiWork* w = get_ptr();
@@ -571,11 +569,9 @@ static void disp_3D(CameraId cam, void* param) {
 static void disp_3D_alpha(CameraId cam, void* param) {
 }
 
-#pragma dont_inline on
 static SukiWork* get_ptr(void) {
     return (SukiWork*)_battleWorkPointer->actionCommands.work;
 }
-#pragma dont_inline reset
 
 static USER_FUNC(start_game) {
     SukiWork* w = get_ptr();

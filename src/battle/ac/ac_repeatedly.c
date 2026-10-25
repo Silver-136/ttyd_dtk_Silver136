@@ -322,7 +322,6 @@ void battleAcDisp_Repeatedly(CameraId cameraId, BattleWork* work) {
     }
 }
 
-#pragma dont_inline on
 void battleAcDelete_Repeatedly(BattleWork* work) {
     switch (work->actionCommands.params[0]) {
         case 10:
@@ -332,7 +331,6 @@ void battleAcDelete_Repeatedly(BattleWork* work) {
     BattleAcGaugeSeDelete();
     work->actionCommands.mAcState = 1002;
 }
-#pragma dont_inline reset
 
 static void actionCommandDisp(f32 x, f32 y) {
     RepeatWork* r;
