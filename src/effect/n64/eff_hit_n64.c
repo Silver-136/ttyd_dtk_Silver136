@@ -49,9 +49,9 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
 };
 
 static u8 cnt_table[4] = {13, 13, 13, 13};
-static u8 anim_data[16] = {0x40, 0x68, 0x90, 0xA4, 0xB8, 0xC0, 0xD0, 0xD8, 0xE0, 0xE8, 0xF0, 0xF8, 0xFF};
-static u8 radius_data[16] = {10, 20, 28, 35, 42, 48, 53, 57, 60, 62, 63, 64, 65};
-static u8 fire_data[16] = {255, 255, 200, 130, 60};
+static u8 anim_data[13] = {0x40, 0x68, 0x90, 0xA4, 0xB8, 0xC0, 0xD0, 0xD8, 0xE0, 0xE8, 0xF0, 0xF8, 0xFF};
+static u8 radius_data[13] = {10, 20, 28, 35, 42, 48, 53, 57, 60, 62, 63, 64, 65};
+static u8 fire_data[13] = {255, 255, 200, 130, 60};
 
 void effHitMain(EffectEntry* effect);
 void effHitDisp(CameraId cameraId, EffectEntry* effect);

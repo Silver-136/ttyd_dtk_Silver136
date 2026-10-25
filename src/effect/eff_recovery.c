@@ -186,7 +186,6 @@ s16 recovery_effFace_pPlane2_q007_0[] = {
     768, -768, 0, 512, 512,
     768, 768, 0, 512, 0,
     -768, 768, 0, 0, 0,
-    0, // pad
 };
 s16* recovery_effFaceDt_pPlane2_q007 = recovery_effFace_pPlane2_q007_0;
 MayaPoly recovery_effAnimRST[] = {

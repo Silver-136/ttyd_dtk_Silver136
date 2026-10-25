@@ -23,8 +23,8 @@ typedef struct EffKemuri2N64Work {
     s32 frame;      // 0x60
 } EffKemuri2N64Work;
 
-static s8 anim_data_0[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, -1, 0};
-static s8 anim_data_1[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, -1, 0, 0, 0};
+static s8 anim_data_0[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, -1};
+static s8 anim_data_1[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, -1};
 static s8* anim_data_table[] = {anim_data_0, anim_data_1};
 
 void effKemuri2Main(EffectEntry* effect);

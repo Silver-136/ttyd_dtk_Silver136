@@ -58,7 +58,7 @@ u8 color_table[] = {
     0xE8, 0xA0, 0xE8, 0xB0, 0x40, 0xA0, 0xA0, 0xD8, 0xD8, 0x58, 0xA8, 0xA8,
 };
 
-u8 anm_seq[] = {0, 1, 2, 3, 2, 1, 0, 0};
+u8 anm_seq[] = {0, 1, 2, 3, 2, 1};
 
 void effConfettiN64SetCamId(EffectEntry* effect, s32 camId) {
     EffConfettiN64Work* w = effect->userdata;

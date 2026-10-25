@@ -27,7 +27,7 @@ typedef struct EffButterflyN64Work {
     Vec velocity;   // 0x3C
 } EffButterflyN64Work;
 
-static s8 y_data[32] = {-1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -17, -15, -13, -11, -9, -7, -5, -3, -1, 0, 0, 0, 0};
+static s8 y_data[30] = {-1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -17, -15, -13, -11, -9, -7, -5, -3, -1, 0, 0};
 
 void effButterflyMain(EffectEntry* effect);
 void effButterflyDisp(CameraId cameraId, EffectEntry* effect);

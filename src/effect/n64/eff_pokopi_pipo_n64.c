@@ -39,8 +39,8 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, 16, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-static u8 w_scale_data[8] = {110, 150, 130, 110, 100, 95, 100};
-static u8 h_scale_data[8] = {80, 60, 80, 100, 120, 110, 100};
+static u8 w_scale_data[7] = {110, 150, 130, 110, 100, 95, 100};
+static u8 h_scale_data[7] = {80, 60, 80, 100, 120, 110, 100};
 
 void effPokopiPipoMain(EffectEntry* effect);
 void effPokopiPipoDisp(CameraId cameraId, EffectEntry* effect);

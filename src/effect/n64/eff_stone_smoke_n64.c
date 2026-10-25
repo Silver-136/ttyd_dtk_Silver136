@@ -13,8 +13,8 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
-static u8 scale_data[8] = {0, 30, 80, 120, 112, 104, 100};
-static u8 scale_data2[8] = {94, 92, 100, 105, 107, 105, 100};
+static u8 scale_data[7] = {0, 30, 80, 120, 112, 104, 100};
+static u8 scale_data2[7] = {94, 92, 100, 105, 107, 105, 100};
 
 void effStoneSmokeMain(EffectEntry* effect);
 void effStoneSmokeDisp(CameraId cameraId, EffectEntry* effect);

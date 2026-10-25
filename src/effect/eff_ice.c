@@ -884,7 +884,6 @@ s16 ice_effFace_pPlane17_0[] = {
     1280, -1280, 0, 512, 512,
     1280, 1280, 0, 512, 0,
     -1280, 1280, 0, 0, 0,
-    0, // pad
 };
 s16* ice_effFaceDt_pPlane17 = ice_effFace_pPlane17_0;
 MayaKeyList ice_effAnimRSTDt = {18, ice_effAnimRST};

@@ -82,7 +82,7 @@ s8 _st_pri_data[] = {
 	STATUS_HOLD_FAST,
 	STATUS_HP_REGEN,
 	STATUS_FP_REGEN,
-	-1, 0, 0, 0
+	-1,
 };
 
 //local prototypes

@@ -348,7 +348,6 @@ s16 damageStar_effFace_pPlane168_0[] = {
     1024, -1024, 0, 512, 512,
     1024, 1024, 0, 512, 0,
     -1024, 1024, 0, 0, 0,
-    0, // pad
 };
 s16* damageStar_effFaceDt_pPlane168 = damageStar_effFace_pPlane168_0;
 MayaPoly damageStar_effAnimRST[] = {
