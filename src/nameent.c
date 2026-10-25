@@ -36,17 +36,6 @@ void nameEntDisp(CameraId cameraId, void* param);
 #define NAME_LANG_PICK(jp, en) (jp)
 #endif
 
-#ifdef VERSION_G8ME01
-/* US: eight unreferenced {+-1.0f, -+1.0f} pairs open nameent .data (r31 anchors here) */
-__declspec(section ".data") f32 nameent_unused_pm1_0[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 nameent_unused_pm1_1[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 nameent_unused_pm1_2[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 nameent_unused_pm1_3[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 nameent_unused_pm1_4[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 nameent_unused_pm1_5[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-__declspec(section ".data") f32 nameent_unused_pm1_6[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-__declspec(section ".data") f32 nameent_unused_pm1_7[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-#endif
 #define NAMEENT_COLS 14 // characters per row of hiragana_tbl, katakana_tbl and latin_tbl
 
 const char* hiragana_tbl[] = {
