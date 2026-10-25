@@ -224,7 +224,7 @@ void marioStInit(void) {
     gp->systemLevelFlags = 0;
     badgeShop_init(); //Badge Shop
     yuugijou_init(); //Pianta Parlor
-    johoya_init(); //?????
+    johoya_init(); //information broker (johoya)
 #ifdef VERSION_G8ME01
     gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 670 * 1024);
 #else

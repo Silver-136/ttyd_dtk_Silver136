@@ -256,7 +256,6 @@ typedef enum ItemType {
     ITEM_FRESH_JUICE,      // 0xEB
 #define ITEM_MAX (ITEM_FRESH_JUICE + 1)
 #define ITEM_COUNT (ITEM_MAX - ITEM_MIN)
-    // ??? ------------------------------------------------
     // Audience-thrown items
     ITEM_AUDIENCE_CAN,    // 0xEC
     ITEM_AUDIENCE_ROCK,   // 0xED

@@ -348,7 +348,7 @@ void __VIInit(VITVMode mode) {
     tm = getTiming(mode);
     __VIRegs[1] = 2;
 
-    // why?
+    // short delay while the interface is held in reset
     for (a = 0; a < 1000; a++) {}
 
     __VIRegs[1] = 0;

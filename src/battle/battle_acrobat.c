@@ -17,7 +17,7 @@ s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,
     work->mStylishUnitId = unitId;
     work->mStylishResult = 0;
     work->mStylishEarlyFrames = earlyFrames;
-    return 0; //???
+    return 0;
 }
 
 s32 BattleAcrobatMain(BattleWork* work) {

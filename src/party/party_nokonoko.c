@@ -1245,4 +1245,3 @@ void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
     *out = *p;
 }
 
-// target pad words (G5: section sizes must match or later DOL addresses shift)

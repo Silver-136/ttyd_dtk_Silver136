@@ -8,7 +8,7 @@
 #define ASSERTMSGLINE(line, cond, msg) \
     ((cond) || (OSPanic(__FILE__, line, msg), 0))
 
-// This is dumb but we dont have a Metrowerks way to do variadic macros in the macro to make this done in a not scrubby way.
+// MWCC has no variadic macros, so there is one assert macro per argument count.
 #define ASSERTMSG1LINE(line, cond, msg, arg1) \
     ((cond) || (OSPanic(__FILE__, line, msg, arg1), 0))
     

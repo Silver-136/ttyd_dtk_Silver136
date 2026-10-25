@@ -217,7 +217,7 @@ extract: $(DTK)
 	$(info Extracting files...)
 	@$(DTK) ar extract $(TARGET_LIBS) --out baserom/release/src
 	@$(DTK) ar extract $(TARGET_LIBS_DEBUG) --out baserom/debug/src
-    # Thank you GPT, very cool. Temporary hack to remove D off of inner src folders to let objdiff work.
+    # Drop the trailing 'D' (debug) from the extracted inner folder names so objdiff finds them.
 	@for dir in $$($(FIND) baserom/debug/src -type d -name 'src'); do \
 		$(FIND) "$$dir" -mindepth 1 -maxdepth 1 -type d | while read subdir; do \
 			mv "$$subdir" "$${subdir%?}"; \

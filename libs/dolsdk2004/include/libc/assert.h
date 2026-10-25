@@ -5,7 +5,7 @@
 // The C11 way
 #define static_assert(cond, msg) _Static_assert(cond, #msg)
 #else
-// The old, hacky way
+// Before C11: a false condition gives an array of negative size, which does not compile
 #define static_assert(cond, msg) typedef char static_assertion_##msg[(cond)?1:-1]
 #endif
 

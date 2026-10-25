@@ -111,7 +111,7 @@ typedef struct AnimTexBind {
 
 struct AnimTexMtx {
     u8 mTexBindIdx; // 0x0
-    u8 align[3];    // 0x1, ???
+    u8 align[3];    // 0x1, padding
     f32 mTransS;    // 0x4
     f32 mTransT;    // 0x8
     f32 mScaleS;    // 0xC

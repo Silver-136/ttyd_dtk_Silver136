@@ -74,7 +74,7 @@ static USER_FUNC(ss_check) {
     s32 a;
     s32 z;
 
-    // FAKEMATCH (decomp-permuter): the dead condition moves the ssf load ahead of event->args; casts, temps and
+    // FAKE: the dead condition moves the ssf load ahead of event->args; casts, temps and
     // u32 index variants do not reproduce it
     a = event->args[0];
     z = !ssf;

@@ -771,7 +771,7 @@ void partySearchHead(PartyEntry *party, Vec *pos, f32 *dist, f32 angle)
     if ((t.z && t.z) && t.z)
     {
     }
-    // FAKE: probeHeight reloaded with the same 10.0f (permuter idiom)
+    // FAKE: probeHeight reloaded with the same 10.0f
     probeHeight = 10.0f;
     hit = hitCheckFilter((void *) 0, &hx0, &hy0, &hz0, &d0, &nx0, &ny0, &nz0, t.x, probeHeight + ty, t.z, zero, one, zero);
     if (hit && (best >= d0))
@@ -789,7 +789,7 @@ void partySearchHead(PartyEntry *party, Vec *pos, f32 *dist, f32 angle)
     // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
     if ((t.z && t.z) && t.z) { }
     d1 = best;
-    // FAKE: probeHeight reloaded with the same 10.0f (permuter idiom)
+    // FAKE: probeHeight reloaded with the same 10.0f
     probeHeight = 10.0f;
     hit = hitCheckFilter((void *) 0, &hx1, &hy1, &hz1, &d1, &nx1, &ny1, &nz1, t.x, probeHeight + ty, t.z, zero, one, zero);
     if (hit && (best >= d1))
@@ -806,7 +806,7 @@ void partySearchHead(PartyEntry *party, Vec *pos, f32 *dist, f32 angle)
       // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
       if ((t.z && t.z) && t.z) { }
       d2 = best;
-      // FAKE: probeHeight reloaded with the same 10.0f (permuter idiom)
+      // FAKE: probeHeight reloaded with the same 10.0f
       probeHeight = 10.0f;
       hit = hitCheckFilter((void *) 0, &hx2, &hy2, &hz2, &d2, &nx2, &ny2, &nz2, t.x, probeHeight + ty, t.z, zero, one, zero);
       if (hit && (best >= d2))
@@ -823,7 +823,7 @@ void partySearchHead(PartyEntry *party, Vec *pos, f32 *dist, f32 angle)
         // FAKE: empty barrier (no code) steers scheduling of the 10.0f + t.y argument
         if ((t.z && t.z) && t.z) { }
         d3 = best;
-        // FAKE: probeHeight reloaded with the same 10.0f (permuter idiom)
+        // FAKE: probeHeight reloaded with the same 10.0f
         probeHeight = 10.0f;
         hit = hitCheckFilter((void *) 0, &hx3, &hy3, &hz3, &d3, &nx3, &ny3, &nz3, t.x, probeHeight + ty, t.z, zero, one, zero);
         if (hit && (best >= d3))

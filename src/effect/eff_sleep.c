@@ -193,4 +193,3 @@ void effSleepDisp(CameraId camId, EffectEntry* effect) {
 
 #pragma pop
 
-// target pad words (G5: section sizes must match or later DOL addresses shift)

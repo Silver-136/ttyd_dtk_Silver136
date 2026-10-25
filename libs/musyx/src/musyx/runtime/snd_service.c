@@ -127,7 +127,7 @@ void* sndBSearch(void* key, void* base, s32 num, s32 len, SND_COMPARE cmp) {
     l = 1;
     r = num;
     do {
-      // This is kind of gross....
+      // binary search: ptr is element m (1-based) of the sorted table
       if ((c = cmp(key, (ptr = (void*)((size_t)base + len * ((m = (l + r) >> 1) - 1))))) == 0) {
         return ptr;
       }

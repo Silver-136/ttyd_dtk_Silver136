@@ -397,7 +397,7 @@ static void PERFTimerCallback(OSAlarm* alarm, OSContext* context) {
     if (PERFCurrSample != 0) {
         if (CurrToken < 0xFFFF) {
             sample = (u8)(u16)CurrToken;
-            // stupid CurrToken loading AGAIN
+            // CurrToken is read again here, as in the original
             if ((u8)((CurrToken >> 8) & 0xF) != (s32)magic) {
                 PERFEndAutoSample();
                 PERFStartAutoSample();

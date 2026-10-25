@@ -39,8 +39,7 @@ static void __SYNSetupAdpcm(SYNVOICE* voice) {
         ASSERTLINE(80, (sampleLoop & 0x000f) > 1);
         ASSERTLINE(81, (sampleEnd & 0x000f) > 1);
 
-        // the hell? why not just write the members??? what is this doing???
-        // why not just write to the members directly?
+        // the address fields are written as consecutive words through a pointer, as in the original
         sampleStart = sampleStart + 2;
         p = (u32*)&axvpb->pb.addr;
         *(p) = 0x10000; p += 1;
@@ -79,7 +78,7 @@ static void __SYNSetupAdpcm(SYNVOICE* voice) {
         ASSERTLINE(135, (sampleStart & 0x000f) == 0);
         ASSERTLINE(136, (sampleEnd & 0x000f) > 1);
 
-        // same wtf writes here
+        // the same word-by-word writes as above
         sampleStart = sampleStart + 2;
         p = (void*)&axvpb->pb.addr;
         *(p) = 0; p += 1;

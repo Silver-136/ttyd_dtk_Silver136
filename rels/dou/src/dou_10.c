@@ -636,7 +636,7 @@ USER_FUNC(dou_namiatari_check) {
         d *= r;
     }
     hit = TRUE;
-    // FAKEMATCH (decomp-permuter): the addf inline fixes the fadds operand order
+    // FAKE: the addf inline fixes the fadds operand order
     if (__fabsf(x - mx) > __fabsf(addf(w, 20.0f))) {
         hit = FALSE;
     }

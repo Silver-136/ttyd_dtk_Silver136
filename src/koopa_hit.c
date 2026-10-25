@@ -109,7 +109,7 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
     if (kpaEnemyFireHitChk(x, y, z, h, w)) {
         return 2;
     }
-    // FAKE: no-op self-assignment; fixes the scheduling of the position.y load (permuter)
+    // FAKE: no-op self-assignment; fixes the scheduling of the position.y load
     m->wPlayerCollisionBox.y = m->wPlayerCollisionBox.y;
     dh = 0.5f * (m->wPlayerCollisionBox.y + h);
     dw = 0.5f * (m->wPlayerCollisionBox.x + w);

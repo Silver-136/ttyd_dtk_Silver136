@@ -217,7 +217,7 @@ void bero_clear_Offset(void) {
     BeroOZ = 0.0f;
 }
 
-s32 bero_id_filter(EvtWord id) { //1:1, cursed function, do not touch
+s32 bero_id_filter(EvtWord id) {
     BeroEntry** temp, **table = BeroINFOARR;
     s32 newId = id;
     const char *string, *test;

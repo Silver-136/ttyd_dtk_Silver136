@@ -353,7 +353,6 @@ static inline RomFontChar* romFontFindChar(u16 code) {
     return table; // not found
 }
 
-// Not quite matched, see: https://decomp.me/scratch/cdEUS
 void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ...) {
     char buf[1024];  // 0x158
     Mtx mtx;         // 0x128

@@ -1,8 +1,3 @@
-/* TODO: whoever's unfucking this file, every function before btlevtcmd_GetHp
- * needs to be refactored to have BattleWork* wp = _battleWorkPointer; right
- * below args (line 2 in each function), along with having to explicitly store
- * btlId (can't condense to one line), should fix most problems
-*/
 #include "driver/itemdrv.h"
 #include "battle/ac/ac_timing_a.h"
 #include "battle/battle_event_cmd.h"

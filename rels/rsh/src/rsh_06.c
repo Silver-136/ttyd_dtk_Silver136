@@ -2405,6 +2405,4 @@ s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall) {
 void __cvt_ull_flt();
 void __div2u();
 
-// target pad words (G5: section sizes must match or later DOL addresses shift)
-// gap_04_000184F4_data removed: the switch jumptable is emitted after all .data, so the target word after it is link padding (see scratch/phase3/DATA.md D4)
 

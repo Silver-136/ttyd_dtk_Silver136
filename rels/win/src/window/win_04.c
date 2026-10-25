@@ -516,7 +516,7 @@ EVT_BEGIN(dummy2_jump)
 EVT_END()
 
 USER_FUNC(ss_ch_check) {
-    u64 out; // FAKEMATCH (decomp-permuter): reorders the args[1] load
+    u64 out; // FAKE: reorders the args[1] load
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
 

@@ -154,7 +154,6 @@ inline CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect,
     camera->callback = callback;
     camera->mode = 0;
     camera->rollAngle = 0.0f;
-    // ???
     camera->viewOffset.z = 0.0f;
     camera->viewOffset.y = 0.0f;
     camera->viewOffset.x = 0.0f;
@@ -315,7 +314,7 @@ void camEvalNearFar(CameraEntry* camera) {
         if (far < 1.0f) {
             far = 1.0f;
         }
-        // needed for match for some dumb reason
+        // the original stores 1.0f first and then the computed value
         camera->near = 1.0f;
         camera->near = near;
         camera->far = far;
@@ -540,7 +539,6 @@ void cam3dMain(CameraEntry* camera) {
                             camShiftMain(camera, mario, &bank);
                             camRoadMain(&work2, camera->blendPos.x, camera->blendPos.y, camera->blendPos.z,
                                         camera->blendAt.x, camera->blendAt.y, camera->blendAt.z, bank);
-                            /// ???
                             dolly = camera->dollyPercent;
                             oldx = work2.pos.x;
                             oldy = work2.pos.y;

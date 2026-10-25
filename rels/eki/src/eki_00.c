@@ -2012,5 +2012,4 @@ EVT_BEGIN(eki_00_init_evt)
     RETURN
 EVT_END()
 
-// target pad words (G5: section sizes must match or later DOL addresses shift)
 

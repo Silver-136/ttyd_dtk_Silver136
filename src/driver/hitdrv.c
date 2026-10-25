@@ -130,7 +130,6 @@ void hitReInit(void) {
     }
 }
 
-// This function is cursed, managed to hit 99% - https://decomp.me/scratch/FjwSA
 HitEntry* _hitEnt(MapFileJoint* joint, HitEntry* parent, Mtx parentMtx, s32 mapIndex) {
     MapWork* wp = mapGetWork();
     HitEntry* hit = wp->entries[mapIndex].hitEntries;

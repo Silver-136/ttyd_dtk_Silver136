@@ -2164,4 +2164,3 @@ void selectWindow_Disp(CameraId camId, void* param) {
     iconDispGxAlpha(&pos, 0x14, ICON_1F0, window->alpha, EXT_LIT(float_1_8041a52c, 1.0f));
 }
 
-// target pad words (G5: section sizes must match or later DOL addresses shift)

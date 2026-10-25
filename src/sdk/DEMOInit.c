@@ -1,6 +1,6 @@
-// custom version of normal DEMOInit, idk why they customized it
+// TTYD's own version of the SDK's DEMOInit, set up with the game's memory manager
 #include "sdk/DEMOInit.h"
-#include "memory.h" //functions we hook
+#include "memory.h"
 #include <dolphin/dvd.h>
 #include <dolphin/os.h>
 #include <dolphin/vi.h>
