@@ -356,7 +356,7 @@ EVT_BEGIN(cortez_weapon_phase_event)
                 CALL(btlevtcmd_ClearAllStatus, -2)
                 CALL(btlevtcmd_OffPartsAttribute, -2, 1, kNotTargetable)
                 CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table))
-                CALL(btlevtcmd_OffAttribute, -2, 33554432)
+                CALL(btlevtcmd_OffAttribute, -2, kUnitNoHpGauge)
                 CALL(btlevtcmd_StartWaitEvent, -2)
                 RETURN
             END_IF
@@ -705,7 +705,7 @@ EVT_BEGIN(cortez_weapon_dead_event)
     CALL(btlevtcmd_SetUnitWork, -2, 1, 2)
     CALL(btlevtcmd_OnPartsAttribute, -2, 1, kNotTargetable)
     CALL(btlevtcmd_AnimeSetPoseTable, -2, 1, PTR(pose_table_break))
-    CALL(btlevtcmd_OnAttribute, -2, 33554432)
+    CALL(btlevtcmd_OnAttribute, -2, kUnitNoHpGauge)
     CALL(btlevtcmd_KillUnit, -2, 1)
     RETURN
 EVT_END()

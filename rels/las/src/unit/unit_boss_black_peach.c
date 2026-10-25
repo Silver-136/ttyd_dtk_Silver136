@@ -1291,7 +1291,7 @@ EVT_BEGIN(peach_init_event)
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_queen), 0)
         CALL(btlevtcmd_SetPos, -2, 0, -1000, 0)
         CALL(btlevtcmd_OnPartsAttribute, -2, 1, kNotTargetable | kHidden | kNoShadow)
-        CALL(btlevtcmd_OnAttribute, -2, 301989888)
+        CALL(btlevtcmd_OnAttribute, -2, kUnitNoHpGauge | kUnitNoncombatant)
         CALL(btlevtcmd_SetMaxMoveCount, -2, 0)
         CALL(btlevtcmd_OnPartsAttribute, -2, 2, kHidden)
         RETURN
@@ -3220,7 +3220,7 @@ EVT_BEGIN(queen_hand_1_init_event)
         CALL(btlevtcmd_SetRegistStatus, -2, PTR(&queen_muteki_regist))
     END_IF
     CALL(btlevtcmd_OffPartsAttribute, -2, 1, kNotTargetable)
-    CALL(btlevtcmd_OffAttribute, -2, 33554432)
+    CALL(btlevtcmd_OffAttribute, -2, kUnitNoHpGauge)
     CALL(btlevtcmd_StartWaitEvent, -2)
     SET_VALUE(GF(0), 1)
     RETURN
@@ -3524,7 +3524,7 @@ EVT_BEGIN(queen_hand_2_init_event)
         CALL(btlevtcmd_SetRegistStatus, -2, PTR(&queen_muteki_regist))
     END_IF
     CALL(btlevtcmd_OffPartsAttribute, -2, 1, kNotTargetable)
-    CALL(btlevtcmd_OffAttribute, -2, 33554432)
+    CALL(btlevtcmd_OffAttribute, -2, kUnitNoHpGauge)
     CALL(btlevtcmd_StartWaitEvent, -2)
     SET_VALUE(GF(0), 1)
     RETURN

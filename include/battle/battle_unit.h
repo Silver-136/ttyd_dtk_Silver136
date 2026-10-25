@@ -61,11 +61,13 @@ typedef enum BattleUnitAttribute_Flags { // 32-bit size
     kUnknownUnit_0x2000 = (1 << 13),     // 0x2000
     kUndead = (1 << 16),                 // 0x10000, keeps taking turns while KO'd (STATUS_INSTANT_KILL)
     kInactive = (1 << 17),               // 0x20000
+    kUnitLeader = (1 << 18),             // 0x40000, the side whose leaders are all down is defeated
     kNoTurn = (1 << 19),                 // 0x80000, never put in the turn order
     kUnitNoSpin = (1 << 21),             // 0x200000, never spins when hit (slap patterns dropped, sac_deka skips it)
     kNoDamageNumber = (1 << 22),         // 0x400000, the damage star with the HP number is not shown
     kUnitHidden = (1 << 24),             // 0x1000000, no part is drawn
-    kUnknownUnit_0x2000000 = (1 << 25),  // 0x2000000
+    kUnitNoHpGauge = (1 << 25),          // 0x2000000, no HP gauge (BattleDrawEnemyHP)
+    kUnitNoncombatant = (1 << 28),       // 0x10000000, not counted when checking whether its side is defeated
     kUnitNoShadow = (1 << 29),           // 0x20000000, no part casts a shadow
     kUnitHpFixed = (1 << 30)             // 0x40000000, HP neither falls from damage nor rises from HP Regen (lecture mode)
 } BattleUnitAttribute_Flags;

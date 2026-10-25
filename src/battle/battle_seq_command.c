@@ -2563,7 +2563,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
         if (!unit) continue;
         if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) continue;
         if (!battleCheckUnitMonosiriFlag(wp->units[i])) continue;
-        if (unit->mAttributeFlags & 0x2000000) continue;
+        if (unit->mAttributeFlags & kUnitNoHpGauge) continue;
         if (!(wp->commandMenu.flags & 0x1000000) && !(unit->flags & 1)) continue;
         position.x = unit->mPosition.x;
         position.y = unit->mPosition.y;

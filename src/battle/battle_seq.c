@@ -2922,7 +2922,7 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
                 if (unit && unit->mAlliance == i &&
                     !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
                     !(unit->mAttributeFlags & kInactive) &&
-                    !(unit->mAttributeFlags & 0x10000000)) {
+                    !(unit->mAttributeFlags & kUnitNoncombatant)) {
                     break;
                 }
             }
@@ -2936,9 +2936,9 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
             for (j = 0; j < 64; j++) {
                 unit = BattleGetUnitPtr(wp, j);
                 if (unit && unit->mAlliance == i &&
-                    (unit->mAttributeFlags & 0x40000) &&
+                    (unit->mAttributeFlags & kUnitLeader) &&
                     !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
-                    !(unit->mAttributeFlags & 0x10000000)) {
+                    !(unit->mAttributeFlags & kUnitNoncombatant)) {
                     break;
                 }
             }
