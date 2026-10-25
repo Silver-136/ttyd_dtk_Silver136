@@ -306,7 +306,7 @@ config.precompiled_headers = [
         "cflags": [*cflags_rel],
     },
 ]
-PCH_RELS = {"aaa", "bom", "dig", "dmo", "end", "hom", "qiz"}
+PCH_RELS = {"aaa", "bom", "dig", "dmo", "eki", "end", "hom", "kpa", "moo", "nok", "pik", "qiz", "rsh", "sys", "usu", "yuu"}
 # end_00's constants follow its own data in the original, so that unit is not built with the header
 PCH_EXCLUDE = {"end_00.c"}
 

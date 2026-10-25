@@ -73,20 +73,6 @@ USER_FUNC(evt_mario_adjust_dir);
 USER_FUNC(evt_mario_get_dispdir);
 #endif
 
-f32 fd_rsh_04_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_rsh_04_neg_one_382;
-f32 fd_rsh_04___local_PI_383;
-f32 fd_rsh_04___local_3PIO2_385;
-f32 fd_rsh_04_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_rsh_04___local_PIO2_384;
-f32 fd_rsh_04_one_381;
-f32 fd_rsh_04_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_rsh_04_neg_one_365;
-f32 fd_rsh_04___local_PI_366;
-f32 fd_rsh_04___local_3PIO2_368;
-f32 fd_rsh_04_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_rsh_04___local_PIO2_367;
-f32 fd_rsh_04_one_364;
 static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];
 static BeroEntry bero_data_c[3];
@@ -167,34 +153,6 @@ EvtWord rsh_04_init_evt_nidome[149];
 EvtWord rsh_04_a_init_evt_nidome[28];
 EvtWord rsh_04_b_init_evt_nidome[28];
 EvtWord rsh_04_c_init_evt_nidome[38];
-
-f32 fd_rsh_04_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_rsh_04_neg_one_382 = -1.0f;
-
-f32 fd_rsh_04___local_PI_383 = 3.1415927f;
-
-f32 fd_rsh_04___local_3PIO2_385 = 4.712389f;
-
-f32 fd_rsh_04_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh_04___local_PIO2_384 = 1.5707964f;
-
-f32 fd_rsh_04_one_381 = 1.0f;
-
-f32 fd_rsh_04_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_rsh_04_neg_one_365 = -1.0f;
-
-f32 fd_rsh_04___local_PI_366 = 3.1415927f;
-
-f32 fd_rsh_04___local_3PIO2_368 = 4.712389f;
-
-f32 fd_rsh_04_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh_04___local_PIO2_367 = 1.5707964f;
-
-f32 fd_rsh_04_one_364 = 1.0f;
 
 static BeroEntry bero_data_a[] = {
     {

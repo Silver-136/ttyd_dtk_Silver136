@@ -122,20 +122,6 @@ static USER_FUNC(yami_view);
 void iri_08_msg(s32 type, void** work);
 extern s32 envSetYami[];
 
-f32 fd_nok_01_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_nok_01_neg_one_382;
-f32 fd_nok_01___local_PI_383;
-f32 fd_nok_01___local_3PIO2_385;
-f32 fd_nok_01_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_nok_01___local_PIO2_384;
-f32 fd_nok_01_one_381;
-f32 fd_nok_01_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_nok_01_neg_one_365;
-f32 fd_nok_01___local_PI_366;
-f32 fd_nok_01___local_3PIO2_368;
-f32 fd_nok_01_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_nok_01___local_PIO2_367;
-f32 fd_nok_01_one_364;
 EvtWord nokonoko_G_regl[19];
 EvtWord nokonoko_G_talk[44];
 EvtWord nokonoko_H_regl[19];
@@ -207,34 +193,6 @@ void iri_08_msg(s32 type, void** work) {
         evtSetValue(NULL, GF(0), 0);
     }
 }
-
-f32 fd_nok_01_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_nok_01_neg_one_382 = -1.0f;
-
-f32 fd_nok_01___local_PI_383 = 3.1415927f;
-
-f32 fd_nok_01___local_3PIO2_385 = 4.712389f;
-
-f32 fd_nok_01_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_nok_01___local_PIO2_384 = 1.5707964f;
-
-f32 fd_nok_01_one_381 = 1.0f;
-
-f32 fd_nok_01_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_nok_01_neg_one_365 = -1.0f;
-
-f32 fd_nok_01___local_PI_366 = 3.1415927f;
-
-f32 fd_nok_01___local_3PIO2_368 = 4.712389f;
-
-f32 fd_nok_01_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_nok_01___local_PIO2_367 = 1.5707964f;
-
-f32 fd_nok_01_one_364 = 1.0f;
 
 EVT_BEGIN(nokonoko_G_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))

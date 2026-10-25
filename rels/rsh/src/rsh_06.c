@@ -165,20 +165,6 @@ static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim)
 static void moamoa_pose_main(void);
 static void moamoa_pose_init(void);
 
-f32 fd_rsh_06_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_rsh_06_neg_one_382;
-f32 fd_rsh_06___local_PI_383;
-f32 fd_rsh_06___local_3PIO2_385;
-f32 fd_rsh_06_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_rsh_06___local_PIO2_384;
-f32 fd_rsh_06_one_381;
-f32 fd_rsh_06_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_rsh_06_neg_one_365;
-f32 fd_rsh_06___local_PI_366;
-f32 fd_rsh_06___local_3PIO2_368;
-f32 fd_rsh_06_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_rsh_06___local_PIO2_367;
-f32 fd_rsh_06_one_364;
 static ExtTexInfo ext_moamoa_data[71];
 static SharinData sharinDt[29];
 static EvtWord evt_sharin_main[87];
@@ -212,34 +198,6 @@ EvtWord rsh_06_init_evt[84];
 EvtWord rsh_06_a_init_evt[32];
 EvtWord rsh_06_init_evt_nidome[41];
 EvtWord rsh_06_a_init_evt_nidome[11];
-
-f32 fd_rsh_06_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_rsh_06_neg_one_382 = -1.0f;
-
-f32 fd_rsh_06___local_PI_383 = 3.1415927f;
-
-f32 fd_rsh_06___local_3PIO2_385 = 4.712389f;
-
-f32 fd_rsh_06_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh_06___local_PIO2_384 = 1.5707964f;
-
-f32 fd_rsh_06_one_381 = 1.0f;
-
-f32 fd_rsh_06_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_rsh_06_neg_one_365 = -1.0f;
-
-f32 fd_rsh_06___local_PI_366 = 3.1415927f;
-
-f32 fd_rsh_06___local_3PIO2_368 = 4.712389f;
-
-f32 fd_rsh_06_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh_06___local_PIO2_367 = 1.5707964f;
-
-f32 fd_rsh_06_one_364 = 1.0f;
 
 static ExtTexInfo ext_moamoa_data[] = {
     {((char*)"c_n_moa_a"), ((char*)"S_1"), 0.0f},
@@ -2449,5 +2407,4 @@ void __div2u();
 
 // target pad words (G5: section sizes must match or later DOL addresses shift)
 // gap_04_000184F4_data removed: the switch jumptable is emitted after all .data, so the target word after it is link padding (see scratch/phase3/DATA.md D4)
-
 

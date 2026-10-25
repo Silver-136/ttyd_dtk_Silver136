@@ -12,20 +12,6 @@
 static USER_FUNC(_space_rotate);
 extern BattleUnitKind unit_barriern_z;
 
-f32 fd_battle_database_moo_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_moo_neg_one_382;
-f32 fd_battle_database_moo___local_PI_383;
-f32 fd_battle_database_moo___local_3PIO2_385;
-f32 fd_battle_database_moo_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_moo___local_PIO2_384;
-f32 fd_battle_database_moo_one_381;
-f32 fd_battle_database_moo_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_moo_neg_one_365;
-f32 fd_battle_database_moo___local_PI_366;
-f32 fd_battle_database_moo___local_3PIO2_368;
-f32 fd_battle_database_moo_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_moo___local_PIO2_367;
-f32 fd_battle_database_moo_one_364;
 BattleStageObjectData moo_btlobject_data[5];
 BattleStageData moo_btlstage_data[1];
 BattleUnitSetup btlparty_moo_moo_00_01_off_1[3];
@@ -95,34 +81,6 @@ NpcBattleSelect btlgrpsel_moo_btlno_moo_05_05_off[4];
 NpcSetupBattleInfo btlsetup_moo_tbl[17];
 NpcTerritoryInfo btl_moo_setup_no_tbl[17];
 EvtWord bgset_moo_space_event[35];
-
-f32 fd_battle_database_moo_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_moo_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_moo___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_moo___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_moo_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_moo___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_moo_one_381 = 1.0f;
-
-f32 fd_battle_database_moo_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_moo_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_moo___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_moo___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_moo_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_moo___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_moo_one_364 = 1.0f;
 
 BattleStageObjectData moo_btlobject_data[] = {
     {"B", 2, 2, {0}, 0, 60, {0}},

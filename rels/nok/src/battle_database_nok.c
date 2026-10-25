@@ -6,23 +6,8 @@
 #include "battle/battle_stage_object.h"
 #include "driver/npcdrv.h"
 
-
 extern BattleUnitKind unit_act_mario;
 
-f32 fd_battle_database_nok_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_battle_database_nok_neg_one_382;
-f32 fd_battle_database_nok___local_PI_383;
-f32 fd_battle_database_nok___local_3PIO2_385;
-f32 fd_battle_database_nok_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_battle_database_nok___local_PIO2_384;
-f32 fd_battle_database_nok_one_381;
-f32 fd_battle_database_nok_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_battle_database_nok_neg_one_365;
-f32 fd_battle_database_nok___local_PI_366;
-f32 fd_battle_database_nok___local_3PIO2_368;
-f32 fd_battle_database_nok_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_battle_database_nok___local_PIO2_367;
-f32 fd_battle_database_nok_one_364;
 BattleStageObjectData nok_btlobject_data[10];
 BattleStageData nok_btlstage_data[1];
 BattleUnitSetup btlparty_nok_hei_ep[1];
@@ -30,34 +15,6 @@ BattleGroupSetup btlgrp_nok_hei_ep;
 NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[2];
 NpcSetupBattleInfo btlsetup_nok_tbl[2];
 NpcTerritoryInfo btl_nok_setup_no_tbl[2];
-
-f32 fd_battle_database_nok_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_nok_neg_one_382 = -1.0f;
-
-f32 fd_battle_database_nok___local_PI_383 = 3.1415927f;
-
-f32 fd_battle_database_nok___local_3PIO2_385 = 4.712389f;
-
-f32 fd_battle_database_nok_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_nok___local_PIO2_384 = 1.5707964f;
-
-f32 fd_battle_database_nok_one_381 = 1.0f;
-
-f32 fd_battle_database_nok_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_battle_database_nok_neg_one_365 = -1.0f;
-
-f32 fd_battle_database_nok___local_PI_366 = 3.1415927f;
-
-f32 fd_battle_database_nok___local_3PIO2_368 = 4.712389f;
-
-f32 fd_battle_database_nok_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_battle_database_nok___local_PIO2_367 = 1.5707964f;
-
-f32 fd_battle_database_nok_one_364 = 1.0f;
 
 BattleStageObjectData nok_btlobject_data[] = {
     {"ki_1", 2, 0, {-100.0f, 0.0f, -30.0f}, 0, 60, {0}},

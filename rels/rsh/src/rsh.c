@@ -80,22 +80,6 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
-f32 fd_rsh_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_rsh_neg_one_382;
-f32 fd_rsh___local_PI_383;
-f32 fd_rsh___local_3PIO2_385;
-f32 fd_rsh_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_rsh___local_PIO2_384;
-f32 fd_rsh_one_381;
-f32 fd_rsh_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_rsh_neg_one_365;
-f32 fd_rsh___local_PI_366;
-f32 fd_rsh___local_3PIO2_368;
-f32 fd_rsh_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_rsh___local_PIO2_367;
-f32 fd_rsh_one_364;
-f64 fd_rsh__three_localstatic4_sqrtf;
-f64 fd_rsh__half_localstatic3_sqrtf;
 EvtWord simi_check[57];
 EvtWord simi_offscreen_check[41];
 EvtWord kami_check[85];
@@ -171,37 +155,13 @@ EvtWord evt_rsh_03_rnd_npc_entry[95];
 NpcSetupInfo rsh_04_rnd_npc_3_ent[2];
 EvtWord evt_rsh_04_rnd_npc_entry[185];
 
-f32 fd_rsh_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
+// FAKE: stand-in for the weak constant pair of MSL sqrtf (see docs/FAKES.md)
+#pragma push
+#pragma dollar_identifiers on
+static f64 _three$localstatic4$sqrtf = 3.0;
 
-f32 fd_rsh_neg_one_382 = -1.0f;
-
-f32 fd_rsh___local_PI_383 = 3.1415927f;
-
-f32 fd_rsh___local_3PIO2_385 = 4.712389f;
-
-f32 fd_rsh_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh___local_PIO2_384 = 1.5707964f;
-
-f32 fd_rsh_one_381 = 1.0f;
-
-f32 fd_rsh_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_rsh_neg_one_365 = -1.0f;
-
-f32 fd_rsh___local_PI_366 = 3.1415927f;
-
-f32 fd_rsh___local_3PIO2_368 = 4.712389f;
-
-f32 fd_rsh_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh___local_PIO2_367 = 1.5707964f;
-
-f32 fd_rsh_one_364 = 1.0f;
-
-f64 fd_rsh__three_localstatic4_sqrtf = 3.0;
-
-f64 fd_rsh__half_localstatic3_sqrtf = 0.5;
+static f64 _half$localstatic3$sqrtf = 0.5;
+#pragma pop
 
 EVT_BEGIN(simi_check)
     SET_VALUE(LF(0), 0)
@@ -1642,5 +1602,4 @@ void _prolog(void) {
     }
     relSetBtlAddr("rsh", btlsetup_rsh_tbl, btl_rsh_setup_no_tbl);
 }
-
 

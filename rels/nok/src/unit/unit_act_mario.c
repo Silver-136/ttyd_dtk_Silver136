@@ -48,20 +48,6 @@ extern BattleUnitKind unit_act_kinopiko;
 extern BattleUnitKind unit_act_kinopio;
 extern BattleUnitKind unit_act_teresa;
 
-f32 fd_act_mario_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_act_mario_neg_one_382;
-f32 fd_act_mario___local_PI_383;
-f32 fd_act_mario___local_3PIO2_385;
-f32 fd_act_mario_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_act_mario___local_PIO2_384;
-f32 fd_act_mario_one_381;
-f32 fd_act_mario_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_act_mario_neg_one_365;
-f32 fd_act_mario___local_PI_366;
-f32 fd_act_mario___local_3PIO2_368;
-f32 fd_act_mario_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_act_mario___local_PIO2_367;
-f32 fd_act_mario_one_364;
 BattleUnitKind unit_act_mario;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -84,34 +70,6 @@ EvtWord _act_clauda_press_attack[350];
 EvtWord _act_clauda_breath_attack[269];
 EvtWord _act_teresa_attack[190];
 EvtWord _act_atmic_teresa_press_attack[188];
-
-f32 fd_act_mario_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_act_mario_neg_one_382 = -1.0f;
-
-f32 fd_act_mario___local_PI_383 = 3.1415927f;
-
-f32 fd_act_mario___local_3PIO2_385 = 4.712389f;
-
-f32 fd_act_mario_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_act_mario___local_PIO2_384 = 1.5707964f;
-
-f32 fd_act_mario_one_381 = 1.0f;
-
-f32 fd_act_mario_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_act_mario_neg_one_365 = -1.0f;
-
-f32 fd_act_mario___local_PI_366 = 3.1415927f;
-
-f32 fd_act_mario___local_3PIO2_368 = 4.712389f;
-
-f32 fd_act_mario_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_act_mario___local_PIO2_367 = 1.5707964f;
-
-f32 fd_act_mario_one_364 = 1.0f;
 
 BattleUnitKind unit_act_mario = {
     181,

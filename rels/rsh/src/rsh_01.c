@@ -5,7 +5,6 @@
 #include "evt/evt_npc.h"
 #include "mario/mario_pouch.h"
 
-
 USER_FUNC(evt_bero_exec_wait);
 USER_FUNC(evt_bero_get_info);
 USER_FUNC(evt_bero_mapchange);
@@ -50,20 +49,6 @@ USER_FUNC(evt_sub_get_mapname);
 USER_FUNC(evt_sub_get_system_flag);
 USER_FUNC(evt_win_item_select);
 
-f32 fd_rsh_01_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_rsh_01_neg_one_382;
-f32 fd_rsh_01___local_PI_383;
-f32 fd_rsh_01___local_3PIO2_385;
-f32 fd_rsh_01_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_rsh_01___local_PIO2_384;
-f32 fd_rsh_01_one_381;
-f32 fd_rsh_01_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_rsh_01_neg_one_365;
-f32 fd_rsh_01___local_PI_366;
-f32 fd_rsh_01___local_3PIO2_368;
-f32 fd_rsh_01_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_rsh_01___local_PIO2_367;
-f32 fd_rsh_01_one_364;
 EvtWord s_bero_close[12];
 EvtWord s_bero_open[12];
 static BeroEntry bero_data_a[4];
@@ -98,34 +83,6 @@ EvtWord rsh_01_init_evt_nidome[206];
 EvtWord rsh_01_a_init_evt_nidome[49];
 EvtWord rsh_01_b_init_evt_nidome[31];
 EvtWord rsh_01_c_init_evt_nidome[41];
-
-f32 fd_rsh_01_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_rsh_01_neg_one_382 = -1.0f;
-
-f32 fd_rsh_01___local_PI_383 = 3.1415927f;
-
-f32 fd_rsh_01___local_3PIO2_385 = 4.712389f;
-
-f32 fd_rsh_01_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh_01___local_PIO2_384 = 1.5707964f;
-
-f32 fd_rsh_01_one_381 = 1.0f;
-
-f32 fd_rsh_01_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_rsh_01_neg_one_365 = -1.0f;
-
-f32 fd_rsh_01___local_PI_366 = 3.1415927f;
-
-f32 fd_rsh_01___local_3PIO2_368 = 4.712389f;
-
-f32 fd_rsh_01_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh_01___local_PIO2_367 = 1.5707964f;
-
-f32 fd_rsh_01_one_364 = 1.0f;
 
 EVT_BEGIN(s_bero_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.3330078f))

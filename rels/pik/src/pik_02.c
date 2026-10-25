@@ -117,20 +117,6 @@ static USER_FUNC(starstone_fall);
 static USER_FUNC(stone_bg);
 static USER_FUNC(npc_set_pos);
 
-f32 fd_pik_02_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_pik_02_neg_one_382;
-f32 fd_pik_02___local_PI_383;
-f32 fd_pik_02___local_3PIO2_385;
-f32 fd_pik_02_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_pik_02___local_PIO2_384;
-f32 fd_pik_02_one_381;
-f32 fd_pik_02_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_pik_02_neg_one_365;
-f32 fd_pik_02___local_PI_366;
-f32 fd_pik_02___local_3PIO2_368;
-f32 fd_pik_02_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_pik_02___local_PIO2_367;
-f32 fd_pik_02_one_364;
 EvtWord haikei_on[24];
 EvtWord haikei_off[28];
 EvtWord evt_return_sub[99];
@@ -160,34 +146,6 @@ EvtWord pik_02_init_evt[172];
 #else
 EvtWord pik_02_init_evt[166];
 #endif
-
-f32 fd_pik_02_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_pik_02_neg_one_382 = -1.0f;
-
-f32 fd_pik_02___local_PI_383 = 3.1415927f;
-
-f32 fd_pik_02___local_3PIO2_385 = 4.712389f;
-
-f32 fd_pik_02_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_pik_02___local_PIO2_384 = 1.5707964f;
-
-f32 fd_pik_02_one_381 = 1.0f;
-
-f32 fd_pik_02_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_pik_02_neg_one_365 = -1.0f;
-
-f32 fd_pik_02___local_PI_366 = 3.1415927f;
-
-f32 fd_pik_02___local_3PIO2_368 = 4.712389f;
-
-f32 fd_pik_02_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_pik_02___local_PIO2_367 = 1.5707964f;
-
-f32 fd_pik_02_one_364 = 1.0f;
 
 EVT_BEGIN(haikei_on)
     CALL(evt_hitobj_onoff, STRING("a_E_yuka"), 1, 1)

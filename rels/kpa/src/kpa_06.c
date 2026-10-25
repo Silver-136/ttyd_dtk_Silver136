@@ -4,7 +4,6 @@
 #include "evt/evt_npc.h"
 #include "kpa_stage_data.h"
 
-
 USER_FUNC(evt_bero_mapchange);
 USER_FUNC(evt_cam_letter_box_disable);
 USER_FUNC(evt_koopa_chk_dead);
@@ -18,53 +17,11 @@ USER_FUNC(evt_snd_envoff);
 USER_FUNC(evt_sub_get_system_flag);
 USER_FUNC(kpa_status_init);
 
-f32 fd_kpa_06_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_kpa_06_neg_one_382;
-f32 fd_kpa_06___local_PI_383;
-f32 fd_kpa_06___local_3PIO2_385;
-f32 fd_kpa_06_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_kpa_06___local_PIO2_384;
-f32 fd_kpa_06_one_381;
-f32 fd_kpa_06_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_kpa_06_neg_one_365;
-f32 fd_kpa_06___local_PI_366;
-f32 fd_kpa_06___local_3PIO2_368;
-f32 fd_kpa_06_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_kpa_06___local_PIO2_367;
-f32 fd_kpa_06_one_364;
 static EvtWord kpa_act_stg3_mobj[68];
 static EvtWord kpa_fall[41];
 static EvtWord kpa_goal[22];
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_06_init_evt[56];
-
-f32 fd_kpa_06_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_kpa_06_neg_one_382 = -1.0f;
-
-f32 fd_kpa_06___local_PI_383 = 3.1415927f;
-
-f32 fd_kpa_06___local_3PIO2_385 = 4.712389f;
-
-f32 fd_kpa_06_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_kpa_06___local_PIO2_384 = 1.5707964f;
-
-f32 fd_kpa_06_one_381 = 1.0f;
-
-f32 fd_kpa_06_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_kpa_06_neg_one_365 = -1.0f;
-
-f32 fd_kpa_06___local_PI_366 = 3.1415927f;
-
-f32 fd_kpa_06___local_3PIO2_368 = 4.712389f;
-
-f32 fd_kpa_06_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_kpa_06___local_PIO2_367 = 1.5707964f;
-
-f32 fd_kpa_06_one_364 = 1.0f;
 
 static EvtWord kpa_act_stg3_mobj[] = {
     KPA_OBJ_DOKAN_0(-225.0f, 0.0f), KPA_OBJ_BRICK_2(-175.0f, 0.0f), KPA_OBJ_BRICK_2(-125.0f, 0.0f),

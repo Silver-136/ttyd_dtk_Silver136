@@ -106,20 +106,6 @@ static USER_FUNC(x_flag_add);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 extern s32 evt_mario_dispflag_onoff[];
 
-f32 fd_evt_lect_eki_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_eki_neg_one_382;
-f32 fd_evt_lect_eki___local_PI_383;
-f32 fd_evt_lect_eki___local_3PIO2_385;
-f32 fd_evt_lect_eki_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_eki___local_PIO2_384;
-f32 fd_evt_lect_eki_one_381;
-f32 fd_evt_lect_eki_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_eki_neg_one_365;
-f32 fd_evt_lect_eki___local_PI_366;
-f32 fd_evt_lect_eki___local_3PIO2_368;
-f32 fd_evt_lect_eki_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_evt_lect_eki___local_PIO2_367;
-f32 fd_evt_lect_eki_one_364;
 EvtWord boots_lv3_juyoitem_lecture_init[104];
 EvtWord boots_lv3_juyoitem_lecture_sub01[29];
 EvtWord boots_lv3_juyoitem_lecture_sub02[78];
@@ -431,34 +417,6 @@ static USER_FUNC(effitemget_busaiku) {
     effitemget_cam_move(camera, ofs);
     return EVT_RETURN_DONE;
 }
-
-f32 fd_evt_lect_eki_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_evt_lect_eki_neg_one_382 = -1.0f;
-
-f32 fd_evt_lect_eki___local_PI_383 = 3.1415927f;
-
-f32 fd_evt_lect_eki___local_3PIO2_385 = 4.712389f;
-
-f32 fd_evt_lect_eki_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_evt_lect_eki___local_PIO2_384 = 1.5707964f;
-
-f32 fd_evt_lect_eki_one_381 = 1.0f;
-
-f32 fd_evt_lect_eki_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_evt_lect_eki_neg_one_365 = -1.0f;
-
-f32 fd_evt_lect_eki___local_PI_366 = 3.1415927f;
-
-f32 fd_evt_lect_eki___local_3PIO2_368 = 4.712389f;
-
-f32 fd_evt_lect_eki_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_evt_lect_eki___local_PIO2_367 = 1.5707964f;
-
-f32 fd_evt_lect_eki_one_364 = 1.0f;
 
 EVT_BEGIN(boots_lv3_juyoitem_lecture_init)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))

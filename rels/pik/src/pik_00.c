@@ -146,20 +146,6 @@ USER_FUNC(pik_00_statuswin_force_off);
 void irai_29_15_cb(s32 type, smartEntry* smart);
 static void resha_tev(MapTevCallbackInfo* info);
 
-f32 fd_pik_00_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_pik_00_neg_one_382;
-f32 fd_pik_00___local_PI_383;
-f32 fd_pik_00___local_3PIO2_385;
-f32 fd_pik_00_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_pik_00___local_PIO2_384;
-f32 fd_pik_00_one_381;
-f32 fd_pik_00_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_pik_00_neg_one_365;
-f32 fd_pik_00___local_PI_366;
-f32 fd_pik_00___local_3PIO2_368;
-f32 fd_pik_00_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_pik_00___local_PIO2_367;
-f32 fd_pik_00_one_364;
 static HitDamageReturn dmgReturnPt[2];
 static SharinData sharinDt[29];
 static EvtWord evt_sharin_main[87];
@@ -226,34 +212,6 @@ EvtWord evt_pik_00_arrival[86];
 EvtWord evt_seacret[131];
 static EvtWord mobj_box00[34];
 EvtWord pik_00_init_evt[410];
-
-f32 fd_pik_00_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_pik_00_neg_one_382 = -1.0f;
-
-f32 fd_pik_00___local_PI_383 = 3.1415927f;
-
-f32 fd_pik_00___local_3PIO2_385 = 4.712389f;
-
-f32 fd_pik_00_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_pik_00___local_PIO2_384 = 1.5707964f;
-
-f32 fd_pik_00_one_381 = 1.0f;
-
-f32 fd_pik_00_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_pik_00_neg_one_365 = -1.0f;
-
-f32 fd_pik_00___local_PI_366 = 3.1415927f;
-
-f32 fd_pik_00___local_3PIO2_368 = 4.712389f;
-
-f32 fd_pik_00_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_pik_00___local_PIO2_367 = 1.5707964f;
-
-f32 fd_pik_00_one_364 = 1.0f;
 
 static HitDamageReturn dmgReturnPt[] = {
     {"mod_1", {0.0f, -1000.0f, 0.0f}},

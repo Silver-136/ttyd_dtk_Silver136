@@ -82,20 +82,6 @@ extern BattleUnitKind unit_boss_moamoa_tentacle_a;
 extern BattleUnitKind unit_boss_moamoa_tentacle_b;
 extern BattleUnitKind unit_boss_moamoa_tentacle_c;
 
-f32 fd_boss_moamoa_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_boss_moamoa_neg_one_382;
-f32 fd_boss_moamoa___local_PI_383;
-f32 fd_boss_moamoa___local_3PIO2_385;
-f32 fd_boss_moamoa_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_boss_moamoa___local_PIO2_384;
-f32 fd_boss_moamoa_one_381;
-f32 fd_boss_moamoa_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_boss_moamoa_neg_one_365;
-f32 fd_boss_moamoa___local_PI_366;
-f32 fd_boss_moamoa___local_3PIO2_368;
-f32 fd_boss_moamoa_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_boss_moamoa___local_PIO2_367;
-f32 fd_boss_moamoa_one_364;
 BattleUnitKind unit_boss_moamoa;
 BattleUnitDefense moamoa_defence;
 s32 moamoa_defence_no_parts[2];
@@ -158,34 +144,6 @@ static f32 randf(f32 min, f32 max) {
 void moamoa_mainUnitIdClear(void) {
     wp->unitId = -1;
 }
-
-f32 fd_boss_moamoa_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_moamoa_neg_one_382 = -1.0f;
-
-f32 fd_boss_moamoa___local_PI_383 = 3.1415927f;
-
-f32 fd_boss_moamoa___local_3PIO2_385 = 4.712389f;
-
-f32 fd_boss_moamoa_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_moamoa___local_PIO2_384 = 1.5707964f;
-
-f32 fd_boss_moamoa_one_381 = 1.0f;
-
-f32 fd_boss_moamoa_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_boss_moamoa_neg_one_365 = -1.0f;
-
-f32 fd_boss_moamoa___local_PI_366 = 3.1415927f;
-
-f32 fd_boss_moamoa___local_3PIO2_368 = 4.712389f;
-
-f32 fd_boss_moamoa_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_boss_moamoa___local_PIO2_367 = 1.5707964f;
-
-f32 fd_boss_moamoa_one_364 = 1.0f;
 
 BattleUnitKind unit_boss_moamoa = {
     107,

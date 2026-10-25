@@ -111,20 +111,6 @@ USER_FUNC(mario_normalize_wait);
 void yuurei_callback(s32 type, void* param);
 void powan_callback(s32 type, void* param);
 
-f32 fd_rsh_02_negone_one_374[2] __attribute__((aligned(8)));
-f32 fd_rsh_02_neg_one_382;
-f32 fd_rsh_02___local_PI_383;
-f32 fd_rsh_02___local_3PIO2_385;
-f32 fd_rsh_02_one_negone_373[2] __attribute__((aligned(8)));
-f32 fd_rsh_02___local_PIO2_384;
-f32 fd_rsh_02_one_381;
-f32 fd_rsh_02_negone_one_360[2] __attribute__((aligned(8)));
-f32 fd_rsh_02_neg_one_365;
-f32 fd_rsh_02___local_PI_366;
-f32 fd_rsh_02___local_3PIO2_368;
-f32 fd_rsh_02_one_negone_359[2] __attribute__((aligned(8)));
-f32 fd_rsh_02___local_PIO2_367;
-f32 fd_rsh_02_one_364;
 static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];
 static BeroEntry bero_data_c[3];
@@ -183,34 +169,6 @@ USER_FUNC(mario_normalize_wait) {
     }
     return EVT_RETURN_BLOCK;
 }
-
-f32 fd_rsh_02_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_rsh_02_neg_one_382 = -1.0f;
-
-f32 fd_rsh_02___local_PI_383 = 3.1415927f;
-
-f32 fd_rsh_02___local_3PIO2_385 = 4.712389f;
-
-f32 fd_rsh_02_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh_02___local_PIO2_384 = 1.5707964f;
-
-f32 fd_rsh_02_one_381 = 1.0f;
-
-f32 fd_rsh_02_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
-
-f32 fd_rsh_02_neg_one_365 = -1.0f;
-
-f32 fd_rsh_02___local_PI_366 = 3.1415927f;
-
-f32 fd_rsh_02___local_3PIO2_368 = 4.712389f;
-
-f32 fd_rsh_02_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
-
-f32 fd_rsh_02___local_PIO2_367 = 1.5707964f;
-
-f32 fd_rsh_02_one_364 = 1.0f;
 
 static BeroEntry bero_data_a[] = {
     {
