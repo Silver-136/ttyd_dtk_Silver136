@@ -509,9 +509,9 @@ s32 winLogMain(WindowWork* w) {
         break;
     case 10:
 #ifdef VERSION_G8ME01
-        if (!((void* (*)(u8, FileCallback, const char*, ...))fileAsyncf)(4, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us", winGetMapTplName())) break;
+        if (fileAsyncf(4, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us", winGetMapTplName()) == 0U) break;
 #else
-        if (!((void* (*)(u8, FileCallback, const char*, ...))fileAsyncf)(4, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName())) break;
+        if (fileAsyncf(4, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U) break;
 #endif
         if (!w->mapRes) {
 #ifdef VERSION_G8ME01
@@ -1327,11 +1327,11 @@ void monosiriMain(MonosiriWork* m) {
     if (!m) return;
     switch (m->state) {
     case 0:
-        if (!((void* (*)(u8, FileCallback, const char*, ...))fileAsyncf)(4, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language])) break;
+        if (fileAsyncf(4, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]) == 0U) break;
 #ifdef VERSION_G8ME01
-        if (!((void* (*)(u8, FileCallback, const char*, ...))fileAsyncf)(0, NULL, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us")) break;
+        if (fileAsyncf(0, NULL, "%s/w/%s/mono.dat", getMarioStDvdRoot(), (u32)gp->language == 0 ? "jp" : "us") == 0U) break;
 #else
-        if (!((void* (*)(u8, FileCallback, const char*, ...))fileAsyncf)(0, NULL, "%s/w/jp/mono.dat", getMarioStDvdRoot())) break;
+        if (fileAsyncf(0, NULL, "%s/w/jp/mono.dat", getMarioStDvdRoot()) == 0U) break;
 #endif
         m->file1 = fileAllocf(4, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #ifdef VERSION_G8ME01
