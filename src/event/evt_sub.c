@@ -1759,9 +1759,7 @@ __declspec(section ".data") s32 evt_sub_mail_event_end[] = {
 #endif
 #pragma force_active reset
 
-#pragma explicit_zero_data on
 USER_FUNC(evt_sub_intpl_init) {
-    static const u32 gap_09_80419DAC_sdata2 = 0;
 	EvtWord* args = event->args;
 	s32 mode = evtGetValue(event, args[0]);
 	s32 start = evtGetValue(event, args[1]);
@@ -1772,10 +1770,8 @@ USER_FUNC(evt_sub_intpl_init) {
 	event->lwData[13] = end;
 	event->lwData[14] = 0;
 	event->lwData[15] = steps;
-	(void)&gap_09_80419DAC_sdata2;
 	return EVT_RETURN_DONE;
 }
-#pragma explicit_zero_data reset
 
 USER_FUNC(evt_sub_intpl_get_value) {
 	event->lwData[0] = intplGetValue(event->lwData[11], event->lwData[14], event->lwData[15], event->lwData[12], event->lwData[13]);
@@ -2491,17 +2487,10 @@ USER_FUNC(irai_mail_check) {
 	return EVT_RETURN_DONE;
 }
 
-#pragma explicit_zero_data on
 USER_FUNC(mail_evt_gor_04_keyoff_check) {
 	EvtWord* args = event->args;
 	s32 a = marioCtrlOffChk();
 	s32 b = marioKeyOffChk();
-	(void)"\0\0\0";
 	evtSetValue(event, args[0], b + a);
 	return EVT_RETURN_DONE;
 }
-#pragma explicit_zero_data reset
-
-
-#pragma explicit_zero_data on
-#pragma explicit_zero_data reset
