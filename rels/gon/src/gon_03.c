@@ -697,7 +697,7 @@ USER_FUNC(leader_touch_check) {
     if (marioKeyOffChk() || marioCtrlOffChk()) {
         off = TRUE;
     }
-    if (marioStGetSystemLevel() != 0U) {
+    if (marioStGetSystemLevel() != 0) {
         off = TRUE;
     }
     if (npc != NULL && strcmp(npc->description, "\203\212\201[\203_\201[") == 0 && !off) {

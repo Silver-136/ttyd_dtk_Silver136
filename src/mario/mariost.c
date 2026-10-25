@@ -382,7 +382,7 @@ void marioStSystemLevel(s32 level) {
     }
 }
 
-s32 marioStGetSystemLevel(void) {
+u32 marioStGetSystemLevel(void) {
     return gp->systemLevelFlags;
 }
 
@@ -636,7 +636,7 @@ diff = (s32)now - (s32)gp->rumbleForcedOffTime[i];
         if (gp->dvdError) {
             array[i] = TRUE;
         }
-        if (gp->systemLevelFlags != 0U) {
+        if (gp->systemLevelFlags != 0) {
             array[i] = TRUE;
         }
         if (array[i]) {
@@ -702,7 +702,6 @@ void L_gcResetCheck(void);
 void gcRumbleCheck(void);
 void* gcDvdCheckThread(void* param);
 void viPostCallback(u32 retraceCount);
-s32 marioStGetSystemLevel(void);
 void marioStSystemLevel(s32 level);
 void marioStDisp(void);
 void marioStMain(void);

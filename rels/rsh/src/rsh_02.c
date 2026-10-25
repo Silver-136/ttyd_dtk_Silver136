@@ -635,7 +635,7 @@ USER_FUNC(toron_check) {
     if (marioKeyOffChk() || marioCtrlOffChk()) {
         busy = TRUE;
     }
-    if ((u32)marioStGetSystemLevel() != 0) {
+    if (marioStGetSystemLevel() != 0) {
         busy = TRUE;
     }
     if (npc == hit && !busy) {

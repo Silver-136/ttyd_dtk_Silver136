@@ -811,7 +811,7 @@ void mobjMain(void) {
         if (entry->flags & 0x100) {
             entry->flags &= ~8;
         }
-        if ((u32)marioStGetSystemLevel() != 0) {
+        if (marioStGetSystemLevel() != 0) {
             entry->flags &= ~8;
         }
         {

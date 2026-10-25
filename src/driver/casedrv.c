@@ -99,7 +99,7 @@ void caseMain(void) {
     h1fc = mario->hitobjHammer;
     h1f4 = mario->hitobjHead;
     btn = mario->buttonTrg;
-    if ((u32)marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
+    if (marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
         !N_fbatPreventMarioEventChk() && marioCaseEventValidChk()) {
         if (mario->currMotionId != MARIO_MOTION_STAY && mario->currMotionId != MARIO_MOTION_WALK && mario->currMotionId != MARIO_MOTION_DASH &&
             yoshiGetStatus() != 1) {

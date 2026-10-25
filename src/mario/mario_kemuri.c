@@ -35,7 +35,7 @@ void mario_kemuri_80130474(void) {
 
     attr = 0;
 
-    if ((u32)marioStGetSystemLevel() == 0) {
+    if (marioStGetSystemLevel() == 0) {
       if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         if (mario->currMotionId == MARIO_MOTION_DOKAN) {
             s = s;
@@ -277,7 +277,7 @@ void kemuri(void) {
 void party_kemuri(PartyEntry* party) {
 
 #ifdef VERSION_G8ME01
-    if ((u32)marioStGetSystemLevel() == 0) {
+    if (marioStGetSystemLevel() == 0) {
         if (party->runMode != 10) {
             if (party->moveKind != 1) {
                 if (party->runMode == 3 && party->currentMemberId == 4) {

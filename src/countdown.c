@@ -112,7 +112,7 @@ void countDownMain(void) {
             }
             break;
         }
-        if ((wp->flags & 8) == 0 && marioStGetSystemLevel() == 0U) {
+        if ((wp->flags & 8) == 0 && marioStGetSystemLevel() == 0) {
             wp->elapsed += (s32)((u32)gp->renderTime - (u32)wp->prevTime);
         }
         wp->prevTime = gp->renderTime;

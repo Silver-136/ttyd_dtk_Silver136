@@ -1596,7 +1596,6 @@ void* fbatHitCheck(u32 flags, void* result);
 
 s32 _majinai_effect(EventEntry* event, BOOL isFirstCall);
 s32 _check(EventEntry* event, BOOL isFirstCall);
-s32 marioStGetSystemLevel(void);
 BOOL N_itemPickUpFromFieldCheck(void);
 void marioChgMotJump2(void);
 f32 marioGetDispDir(void);
@@ -1637,7 +1636,7 @@ void fbatEncountCheck(void)
   NpcEntry *talk;
   f32 best;
   wp->talkTarget = (void *) 0;
-  if (((u32) marioStGetSystemLevel()) != 0)
+  if (marioStGetSystemLevel() != 0)
   {
     return;
   }

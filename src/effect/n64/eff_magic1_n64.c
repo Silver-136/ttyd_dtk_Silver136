@@ -69,7 +69,7 @@ void effMagic1Main(EffectEntry* effect) {
     tmp.y = work->offset.y;
     tmp.z = work->offset.z;
     position = tmp;
-    if ((u32)marioStGetSystemLevel() != 0) {
+    if (marioStGetSystemLevel() != 0) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagic1Disp, effect);
         return;
     }

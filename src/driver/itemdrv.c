@@ -193,12 +193,12 @@ BOOL itemGetCheck(ItemEntry* entry) {
     if (entry->flags2 & 0x100000) return FALSE;
     if (mario->characterId == CHARACTER_BOWSER) {
         if (!(mario->stageFlags & 1)) {
-            if (marioStGetSystemLevel() != 0U) return FALSE;
+            if (marioStGetSystemLevel() != 0) return FALSE;
             if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
         }
     }
     else {
-        if (marioStGetSystemLevel() != 0U) return FALSE;
+        if (marioStGetSystemLevel() != 0) return FALSE;
         if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
     }
     if (gp->mapEventId) return FALSE;
@@ -242,7 +242,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
 
     if (!entry) return FALSE;
     if (entry->flags2 & 0x100000) return FALSE;
-    if (marioStGetSystemLevel() != 0U) return FALSE;
+    if (marioStGetSystemLevel() != 0) return FALSE;
     if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
     if (entry->flags2 & 0x2000000) return FALSE;
     if (gp->mapEventId) return FALSE;

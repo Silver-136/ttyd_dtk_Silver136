@@ -230,7 +230,7 @@ void extMain(void) {
     f32 ry, angle, diff, c, s;
     u32 flags;
 
-    if (((u32 (*)(void))marioStGetSystemLevel)() == 0 && wp->mainFunc != NULL) {
+    if (marioStGetSystemLevel() == 0 && wp->mainFunc != NULL) {
         wp->mainFunc();
     }
     if (wp->mainFunc2 != NULL) {

@@ -177,7 +177,7 @@ void winMain(void) {
         switch (wp->menuState) {
             case WIN_MENU_IDLE:
                 if (!(wp->flags & 0x1000)) {
-                    if (marioStGetSystemLevel() != 0U) {
+                    if (marioStGetSystemLevel() != 0) {
                         break;
                     }
                     if (marioCheckMenuDisable()) {
