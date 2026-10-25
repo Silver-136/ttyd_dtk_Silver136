@@ -52,7 +52,6 @@ typedef struct RepeatWork {
 static void actionCommandDisp(f32 x, f32 y);
 void battleAcDelete_Repeatedly(BattleWork* work);
 
-#define PadNow(m) (BattlePadCheckNow(m))
 
 static s32 _power_table[] = {55, 50, 45, 40, 35, 30, 25};
 
@@ -155,7 +154,7 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
             if (!((work->actionCommands.setupFlags & 1) &&
                   (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
                 if (r->holdMask) {
-                    if (!PadNow(r->holdMask)) {
+                    if (!BattlePadCheckNow(r->holdMask)) {
                         break;
                     }
                 }
@@ -253,7 +252,7 @@ s32 battleAcMain_Repeatedly(BattleWork* work) {
                 }
             }
             if (r->holdMask) {
-                if (!PadNow(r->holdMask)) {
+                if (!BattlePadCheckNow(r->holdMask)) {
                     r->grace = 0;
                 }
             }

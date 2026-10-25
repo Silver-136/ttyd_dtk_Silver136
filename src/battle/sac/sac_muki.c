@@ -722,7 +722,6 @@ USER_FUNC(end_muki) {
 
 static inline f32 addf(f32 a, f32 b) { return a + b; }
 static inline f32 mulf(f32 x, f32 y) { return x * y; }
-#define TEXPLANE2(m, id, c) btlDispTexPlane2(m, id, c, 0)
 static void disp_2D(CameraId cam, void* param) {
     MukiWork* w = get_ptr();
     Mtx m;
@@ -748,13 +747,13 @@ static void disp_2D(CameraId cam, void* param) {
         y = s.y;
         c = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
         PSMTXTrans(m, (x = s.x) - 32.0f - 8.0f, y, 0.0f);
-        TEXPLANE2(m, BTL_TEX(0x43), c);
+        btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
         PSMTXScale(m, 16.0f, 1.0f, 1.0f);
         PSMTXTransApply(m, m, x, y, 0.0f);
-        TEXPLANE2(m, BTL_TEX(0x44), c);
+        btlDispTexPlane2(m, BTL_TEX(0x44), c, 0);
         PSMTXScale(m, -1.0f, 1.0f, 1.0f);
         PSMTXTransApply(m, m, 8.0f + addf(x, 32.0f), y, 0.0f);
-        TEXPLANE2(m, BTL_TEX(0x43), c);
+        btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
         x = x - 32.0f - 8.0f;
         frac = w->f18 - (f32)(s32)w->f18;
         btlDispGXInit2DRasta();
@@ -802,13 +801,13 @@ static void disp_2D(CameraId cam, void* param) {
         y = s.y;
         c = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
         PSMTXTrans(m, x - 32.0f - 8.0f, y, 0.0f);
-        TEXPLANE2(m, BTL_TEX(0x43), c);
+        btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
         PSMTXScale(m, 16.0f, 1.0f, 1.0f);
         PSMTXTransApply(m, m, x, y, 0.0f);
-        TEXPLANE2(m, BTL_TEX(0x44), c);
+        btlDispTexPlane2(m, BTL_TEX(0x44), c, 0);
         PSMTXScale(m, -1.0f, 1.0f, 1.0f);
         PSMTXTransApply(m, m, 8.0f + addf(x, 32.0f), y, 0.0f);
-        TEXPLANE2(m, BTL_TEX(0x43), c);
+        btlDispTexPlane2(m, BTL_TEX(0x43), c, 0);
         x = x - 32.0f - 8.0f;
         frac = w->f20 - (f32)(s32)w->f20;
         btlDispGXInit2DRasta();
@@ -866,7 +865,7 @@ static void disp_3D(CameraId cam, void* param) {
             PSMTXScale(m, w->cscale.x * (f32)c[j * 2], w->cscale.y * (f32)c[j * 2 + 1], w->cscale.z);
             PSMTXTransApply(m, m, w->cpos.x, w->cpos.y, w->cpos.z);
             PSMTXTransApply(m, m, w->cscale.x * (f32)b[j * 2], w->cscale.y * (f32)b[j * 2 + 1], 0.0f);
-            TEXPLANE2(m, BTL_TEX(0x41), w->col74);
+            btlDispTexPlane2(m, BTL_TEX(0x41), w->col74, 0);
         }
     }
 }
@@ -921,7 +920,7 @@ break;
                 PSMTXTransApply(m, m, 15.0f * (f32)sin(a), 0.0f, 15.0f * c);
                 {
                 col[0] = (GXColor){0xFF, 0xFF, 0xFF, o->alpha};
-                TEXPLANE2(m, BTL_TEX(0x31), col[0]);
+                btlDispTexPlane2(m, BTL_TEX(0x31), col[0], 0);
                 }
                 }
 break;

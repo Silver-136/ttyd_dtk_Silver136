@@ -11,7 +11,6 @@
 #endif
 #include "driver/swdrv.h"
 
-#define CHECK_ITEM(id) pouchCheckItem(id)
 
 extern ItemData itemDataTable[];
 
@@ -162,7 +161,7 @@ s32 pouchGetEquipBadgeCnt(void) {
 s32 pouchGetEmptyHaveItemCnt(void) {
     s32 i, count, max;
 
-    max = CHECK_ITEM(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
+    max = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
     for (count = 0, i = 0; i < max; i++) {
         if (mpp->heldItems[i] == ITEM_NULL) {
             count++;
@@ -314,7 +313,7 @@ BOOL pouchGetItem(ItemType type)
   if ((type >= 0x79) && (type < 0xEC))
   {
     itemLists[0] = mpp->heldItems;
-    size = (pouchCheckItem(ITEM_STRANGE_SACK)) ? (20) : (10);
+    size = pouchCheckItem(ITEM_STRANGE_SACK) ? (20) : (10);
     ok = 1;
   }
   else
@@ -410,7 +409,7 @@ BOOL pouchRemoveItem(ItemType type)
   {
     table1 = mpp->heldItems;
     table2 = (void *) 0;
-    maximum = (pouchCheckItem(ITEM_STRANGE_SACK)) ? (20) : (10);
+    maximum = pouchCheckItem(ITEM_STRANGE_SACK) ? (20) : (10);
     valid = 1;
   }
   else
@@ -461,7 +460,7 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     if (type >= ITEM_MIN && type < ITEM_MAX) {
         table1 = mpp->heldItems;
         table2 = NULL;
-        maximum = CHECK_ITEM(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
+        maximum = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
         valid = TRUE;
     }
     else if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
@@ -907,13 +906,13 @@ void pouchSetAudienceNum(f32 num) {
 s32 pouchGetJumpLv(void) {
     s32 level = 0;
 
-    if (CHECK_ITEM(ITEM_ULTRA_BOOTS)) {
+    if (pouchCheckItem(ITEM_ULTRA_BOOTS)) {
         level = 3;
     }
-    else if (CHECK_ITEM(ITEM_SUPER_BOOTS)) {
+    else if (pouchCheckItem(ITEM_SUPER_BOOTS)) {
         level = 2;
     }
-    else if (CHECK_ITEM(ITEM_BOOTS)) {
+    else if (pouchCheckItem(ITEM_BOOTS)) {
         level = 1;
     }
     mpp->jumpLevel = level;
@@ -923,13 +922,13 @@ s32 pouchGetJumpLv(void) {
 s32 pouchGetHammerLv(void) {
     s32 level = 0;
 
-    if (CHECK_ITEM(ITEM_ULTRA_HAMMER)) {
+    if (pouchCheckItem(ITEM_ULTRA_HAMMER)) {
         level = 3;
     }
-    else if (CHECK_ITEM(ITEM_SUPER_HAMMER)) {
+    else if (pouchCheckItem(ITEM_SUPER_HAMMER)) {
         level = 2;
     }
-    else if (CHECK_ITEM(ITEM_HAMMER)) {
+    else if (pouchCheckItem(ITEM_HAMMER)) {
         level = 1;
     }
     mpp->hammerLevel = level;

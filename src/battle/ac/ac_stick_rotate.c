@@ -42,32 +42,31 @@ typedef struct StickRotateWork {
 #define AC_WORK(bw) ((StickRotateWork*)((BattleActions*)&(bw)->actionCommands)->work)
 #define AC_DISP(w) ((BattleACDispParams*)&(w)->actionCommands.disp)
 
-#define PAD(m) (BattlePadCheckNow(m))
 
 static void actionCommandDisp(f32 x, f32 y);
 void actionCommandDisp2(f32 x, f32 y);
 u16 _get_icon_id(s8 dir);
 
 s32 _GetInputDir(void) {
-    if (AC_PARAMS(_battleWorkPointer)->button != 0 && !PAD(AC_PARAMS(_battleWorkPointer)->button)) {
+    if (AC_PARAMS(_battleWorkPointer)->button != 0 && !BattlePadCheckNow(AC_PARAMS(_battleWorkPointer)->button)) {
         return -1;
     }
-    if (PAD(0x10000)) {
-        if (PAD(0x80000)) {
+    if (BattlePadCheckNow(0x10000)) {
+        if (BattlePadCheckNow(0x80000)) {
             return 2;
         }
-        if (PAD(0x40000)) {
+        if (BattlePadCheckNow(0x40000)) {
             return 8;
         }
         return 1;
     }
-    if (PAD(0x20000)) {
-        if (PAD(0x80000)) {
+    if (BattlePadCheckNow(0x20000)) {
+        if (BattlePadCheckNow(0x80000)) {
             return 4;
         }
         return (BattlePadCheckNow(0x40000) != 0U) + 5;
     }
-    if (PAD(0x80000)) {
+    if (BattlePadCheckNow(0x80000)) {
         return 3;
     }
     return BattlePadCheckNow(0x40000) != 0U ? 7 : 0;
@@ -192,11 +191,11 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 }
                 sw->timer--;
                 sw->stall++;
-                if ((s32)AC_PARAMS(work)->button != 0 && !PAD((s32)AC_PARAMS(work)->button)) {
+                if ((s32)AC_PARAMS(work)->button != 0 && !BattlePadCheckNow((s32)AC_PARAMS(work)->button)) {
                     sw->timer = 0;
                 }
                 if (sw->timer < 0) {
-                    if ((s32)ac->outputParams[0] >= AC_PARAMS(work)->needCount && !PAD((s32)AC_PARAMS(work)->button)) {
+                    if ((s32)ac->outputParams[0] >= AC_PARAMS(work)->needCount && !BattlePadCheckNow((s32)AC_PARAMS(work)->button)) {
                         ac->result |= 2;
                     }
                     ac->result &= ~1;

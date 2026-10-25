@@ -71,7 +71,6 @@ void mot_dummy(void);
 
 s32 psndSFXOn_3D(s32 id, Vec* position);
 void* marioChkLandon(f32* y, f32 spd);
-#define PCHK(x) pouchCheckItem(x)
 BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioCreviceWallChk(Vec pos);
 s32 marioGetHammerLevel(void);
@@ -906,11 +905,11 @@ BOOL marioChkTransform(void) {
     if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         return FALSE;
     }
-    if (PCHK(5) > 0 && marioChkShipPlace(mario->hitobjStandOn)) {
+    if (pouchCheckItem(5) > 0 && marioChkShipPlace(mario->hitobjStandOn)) {
         marioChgMot(MARIO_MOTION_SHIP);
         return FALSE;
     }
-    if (PCHK(4) > 0 && marioChkPlanePlace(mario->hitobjStandOn)) {
+    if (pouchCheckItem(4) > 0 && marioChkPlanePlace(mario->hitobjStandOn)) {
         marioChgMot(MARIO_MOTION_PLANE);
         return FALSE;
     }
@@ -965,7 +964,7 @@ s32 marioRollChgChk(void) {
     if (b < 3) {
         return 0;
     }
-    if (!PCHK(3)) {
+    if (!pouchCheckItem(3)) {
         return 0;
     }
     if (marioSlitChkWallAround() || marioCreviceWallChk(mario->position)) {

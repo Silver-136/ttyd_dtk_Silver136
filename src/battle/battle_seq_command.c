@@ -102,7 +102,6 @@ void BattleCommandInit(BattleWork* wp) {
     wp->flags |= 0x80;
 }
 
-#define PADREP(x) (BattlePadCheckRepeat(x))
 void _btlcmd_MakeActClassTable(BattleWork* wp) {
     PouchData* pouch;
     BattleUnit* unit;
@@ -1240,7 +1239,7 @@ s32 BattleCommandInput(BattleWork* work) {
             }
             targets->currentTarget = i;
             if ((s32)cmd->weapon[cursor->absPos].weapon->targetClassFlags & TARGET_CLASS_SINGLE) {
-                if (PADREP(0x80000)) {
+                if (BattlePadCheckRepeat(0x80000)) {
                     targets->currentTarget++;
                     if (targets->currentTarget >= targets->numTargets) {
                         targets->currentTarget = 0;
@@ -1249,7 +1248,7 @@ s32 BattleCommandInput(BattleWork* work) {
                         psndSFXOn(sfxA);
                     }
                 }
-                if (PADREP(0x40000)) {
+                if (BattlePadCheckRepeat(0x40000)) {
                     targets->currentTarget--;
                     if (targets->currentTarget < 0) {
                         targets->currentTarget = targets->numTargets - 1;
@@ -1570,7 +1569,7 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
                 break;
             }
         }
-        if (PADREP(0x80000)) {
+        if (BattlePadCheckRepeat(0x80000)) {
             if (cursor->absPos < cursor->count - 1) {
                 cursor->absPos++;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE1");
@@ -1578,7 +1577,7 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
                 psndSFXOn("SFX_BTL_CURSOR_MOVE1");
                 cursor->absPos = 0;
             }
-        } else if (PADREP(0x40000)) {
+        } else if (BattlePadCheckRepeat(0x40000)) {
             if (cursor->absPos > 0) {
                 cursor->absPos--;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE1");
@@ -1692,7 +1691,7 @@ s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type) {
             break;
         }
         if (cursor->absPos < cursor->count - 1) {
-            if (PADREP(0x20000)) {
+            if (BattlePadCheckRepeat(0x20000)) {
                 cursor->absPos++;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 break;
@@ -1705,7 +1704,7 @@ s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type) {
             }
         }
         if (cursor->absPos > 0) {
-            if (PADREP(0x10000)) {
+            if (BattlePadCheckRepeat(0x10000)) {
                 cursor->absPos--;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 break;
@@ -1906,7 +1905,7 @@ s32 BattleCommandDisplay_OperationMenuMain(BattleWork* wp) {
             goto end;
         }
         if (cursor->absPos < cursor->count - 1) {
-            if (PADREP(0x20000)) {
+            if (BattlePadCheckRepeat(0x20000)) {
                 cursor->absPos++;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
@@ -1919,7 +1918,7 @@ s32 BattleCommandDisplay_OperationMenuMain(BattleWork* wp) {
             }
         }
         if (cursor->absPos > 0) {
-            if (PADREP(0x10000)) {
+            if (BattlePadCheckRepeat(0x10000)) {
                 cursor->absPos--;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
@@ -1996,7 +1995,7 @@ s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp) {
             goto end;
         }
         if (cursor->absPos < cursor->count - 1) {
-            if (PADREP(0x20000)) {
+            if (BattlePadCheckRepeat(0x20000)) {
                 cursor->absPos++;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
@@ -2009,7 +2008,7 @@ s32 BattleCommandDisplay_MultiItemMenuMain(BattleWork* wp) {
             }
         }
         if (cursor->absPos > 0) {
-            if (PADREP(0x10000)) {
+            if (BattlePadCheckRepeat(0x10000)) {
                 cursor->absPos--;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
@@ -2077,7 +2076,7 @@ s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp) {
             wp->commandMenu.attackAudience = 0;
         }
         if (cursor->absPos < cursor->count - 1) {
-            if (PADREP(0x20000)) {
+            if (BattlePadCheckRepeat(0x20000)) {
                 cursor->absPos++;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
@@ -2090,7 +2089,7 @@ s32 BattleCommandDisplay_ChangePartySelectMenuMain(BattleWork* wp) {
             }
         }
         if (cursor->absPos > 0) {
-            if (PADREP(0x10000)) {
+            if (BattlePadCheckRepeat(0x10000)) {
                 cursor->absPos--;
                 psndSFXOn("SFX_BTL_CURSOR_MOVE2");
                 goto end;
