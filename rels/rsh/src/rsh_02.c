@@ -29,7 +29,6 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 
-NpcEntry* fbatHitCheckAll(void);
 
 USER_FUNC(bgm_wait_stop);
 USER_FUNC(evt_mario_dispflag_onoff);

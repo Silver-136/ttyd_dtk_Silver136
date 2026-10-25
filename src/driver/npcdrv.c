@@ -2338,8 +2338,8 @@ NpcEntry* fbatNpcTalkCheck(void) {
     return NULL;
 }
 
-void fbatHitCheckAll(void) {
-    fbatHitCheck(0x13f1, NULL);
+NpcEntry* fbatHitCheckAll(void) {
+    return fbatHitCheck(0x13f1, NULL);
 }
 
 // FAKE: fbatHitCheck reads its NpcEntry/MarioWork/GlobalWork/CameraEntry/FieldBattleData fields as (*(T*)&((S*)p)->field): the plain field forms lower the function's inline cost, and the deferred inliner then pulls _npcHitCheckSphere/_npcHitCheckHammerAllMotion into it
@@ -3397,7 +3397,7 @@ void npcSetupBattleInfo(NpcEntry* npc, NpcSetupBattleInfo* setup);
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
 void* fbatHitCheck(u32 flags, void* a1);
-void fbatHitCheckAll(void);
+NpcEntry* fbatHitCheckAll(void);
 NpcEntry* fbatNpcTalkCheck(void);
 void npcGroupDead(NpcEntry* entry, u16 reason);
 void _npcGroupDead(NpcEntry* entry, u16 reason);

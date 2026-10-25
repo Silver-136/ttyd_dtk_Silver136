@@ -25,7 +25,7 @@ USER_FUNC(_mario_super_emblem_anim_set);
 USER_FUNC(btlevtcmd_SetEventEntry);
 USER_FUNC(btlevtcmd_SetJumpSound);
 static USER_FUNC(_get_mario_hammer_lv);
-void faker_mario_makkuro_set(void);
+void faker_mario_makkuro_set(BattleUnit* unit);
 static void callback(MapTevCallbackInfo* info);
 s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
 
@@ -312,7 +312,7 @@ static void callback(MapTevCallbackInfo* info) {
     info->texCoord = texCoord;
 }
 
-void faker_mario_makkuro_set(void) {
+void faker_mario_makkuro_set(BattleUnit* unit) {
     mapSetTevCallback(11, callback);
 }
 

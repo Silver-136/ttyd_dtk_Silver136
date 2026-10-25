@@ -328,3 +328,4 @@ s32 partyGoodbyeMain(PartyEntry* party);
 s32 partyKill(s32 id);
 s32 partyRideChk(PartyEntry* party);
 void partySetCamId(PartyEntry* party, s32 cameraId);
+void partySetForceMove(PartyEntry* party, s32 a2, f32 a3, f32 a4);

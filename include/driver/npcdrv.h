@@ -335,3 +335,4 @@ BOOL npcWaitAllInitEvtEnd(void);
 NpcEntry* npcNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 void npcSetStayPose(char* name);
 void npcSetTalkPose(char* name);
+NpcEntry* fbatHitCheckAll(void);

@@ -2,6 +2,7 @@
 #include "eff/eff_scanning.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
+#include "unit/unit_mario.h"
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -67,7 +68,6 @@ static EvtWord marioAttackEvent_NormalHammer[299];
 static EvtWord marioAttackEvent_KaitenHammer[299];
 static EvtWord wait_event_fmario[6];
 
-void faker_mario_makkuro_set(BattleUnit* unit);
 
 static USER_FUNC(_mario_makkuro_set) {
     BattleWork* wp = _battleWorkPointer;

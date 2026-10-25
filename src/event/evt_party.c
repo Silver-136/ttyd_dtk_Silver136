@@ -20,7 +20,6 @@
 #define PARTY_ID(args) ((args)[0] == 0 ? partyCtrlNo : 1)
 
 extern void partyChgPose();
-extern void partySetForceMove(PartyEntry* party, s32 a2, f32 a3, f32 a4);
 extern s32 bomheiGetStatus();
 extern void vivianUnhold(PartyEntry* party);
 extern void L_partyVivianTailStart();
