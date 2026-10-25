@@ -196,7 +196,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
 
     if (!entry) return FALSE;
     if (entry->flags2 & 0x100000) return FALSE;
-    if (mario->characterId == 2) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         if (!(mario->stageFlags & 1)) {
             if (marioStGetSystemLevel() != 0U) return FALSE;
             if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
@@ -1608,7 +1608,7 @@ void itemseq_Bound(ItemEntry* entry) {
                     }
                     else if (hitGetAttr(hit) & 0x80000000 && entry->velocityY != 0.0f) {
                         mobj = mobjHitObjPtrToPtr(hit);
-                        if (mario->characterId == 2) {
+                        if (mario->characterId == CHARACTER_BOWSER) {
                             bounce = FALSE;
                         }
                         else if (mobj && strcmp(mobj->animName, "MOBJ_KururinFloor")) {

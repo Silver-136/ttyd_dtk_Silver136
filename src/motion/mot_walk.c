@@ -136,11 +136,11 @@ void mot_walk(void) {
 
     player = marioGetPtr();
     characterId = player->characterId;
-    if (characterId == 2) {
+    if (characterId == CHARACTER_BOWSER) {
         kpa_walk();
         return;
     }
-    if (characterId == 1) {
+    if (characterId == CHARACTER_PEACH) {
         peach_walk();
         return;
     }
@@ -249,11 +249,11 @@ void mot_dash(void) {
 
     player = marioGetPtr();
     characterId = player->characterId;
-    if (characterId == 2) {
+    if (characterId == CHARACTER_BOWSER) {
         kpa_dash();
         return;
     }
-    if (characterId == 1) {
+    if (characterId == CHARACTER_PEACH) {
         peach_dash();
         return;
     }

@@ -371,7 +371,7 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -417,7 +417,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, // element
     6, // damagePattern
@@ -464,7 +464,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, // element
     5, // damagePattern
@@ -511,7 +511,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -553,7 +553,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     1, // element
     0, // damagePattern
@@ -562,7 +562,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     "msg_ac_nomikomi", // acHelpMsg
     0x20040, // special
     0x7FF, // counterResistFlags
-    0x80000004, // targetWeightFlags
+    TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -584,7 +584,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     {1, 4, 2, 5, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20102000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -630,7 +630,7 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -679,7 +679,7 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
     {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel

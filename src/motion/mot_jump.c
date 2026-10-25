@@ -38,12 +38,12 @@ static f32 marioJumpStandData[] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f
 f32 marioJumpSwData[] = {2.5f, -0.1f, 0.02f, -0.01f, -0.08f, -0.4f, 0.0f, -0.002f};
 
 static inline void chgPoseB(MarioWork* mario) {
-    if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == 0) {
+    if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == CHARACTER_MARIO) {
         marioChgPose("M_J_1B");
     }
 }
 static inline void chgPoseC(MarioWork* mario) {
-    if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == 0) {
+    if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == CHARACTER_MARIO) {
         marioChgPose("M_J_1C");
     }
 }
@@ -238,19 +238,19 @@ void mot_jumpNpc(void) {
     void* mobj;
     f32 dir;
     f32 x, z;
-    if (mario->characterId == 2) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         kpa_jumpNpc();
         return;
     }
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         marioResetCamFollowRate();
-        if (mario->characterId != 2) {
+        if (mario->characterId != CHARACTER_BOWSER) {
             mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         }
         camFollowYOff();
         marioPreJump();
-        if (mario->characterId == 2) {
+        if (mario->characterId == CHARACTER_BOWSER) {
             mario->jumpVelocityY = 2.6f;
             mario->jumpAccelerationY = -0.06f;
             mario->jumpJerkY = -0.01f;
@@ -356,7 +356,7 @@ void N_mot_jumpNpc_post(void) {
 #endif
 void mot_jump(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->characterId == 2) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         kpa_jump();
         return;
     }
@@ -395,7 +395,7 @@ void mot_jump(void) {
 
 void mot_jumpSmall(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->characterId == 2) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         kpa_jump();
         return;
     }
@@ -462,7 +462,7 @@ void mot_upstairs(void) {
 
 void mot_fall(void) {
     MarioWork* mario = marioGetPtr();
-    if (mario->characterId == 2) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         kpa_fall_80213C38();
         return;
     }
@@ -481,9 +481,9 @@ void mot_fall(void) {
         marioResetCamFollowRate();
         mario->currSubMotionId = 0;
         if (mario->currMotionId != MARIO_MOTION_FALL_2) {
-            if (mario->characterId == 2) {
+            if (mario->characterId == CHARACTER_BOWSER) {
                 kpaChgPose("KPA_J_1B", "KPA2_J_1B");
-            } else if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == 0) {
+            } else if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == CHARACTER_MARIO) {
                 marioChgPose("M_J_1C");
             }
         } else {

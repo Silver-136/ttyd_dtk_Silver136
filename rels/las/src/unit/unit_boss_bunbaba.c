@@ -200,7 +200,7 @@ BattleWeapon weapon_bunbaba_fumituke_attack = {
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, // element
     11, // damagePattern
@@ -241,7 +241,7 @@ BattleWeapon weapon_bunbaba_kamituki_attack = {
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -280,7 +280,7 @@ BattleWeapon weapon_bunbaba_poison_attack = {
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -322,7 +322,7 @@ BattleWeapon weapon_bunbaba_eq_attack = {
     {10, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000008, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -356,7 +356,7 @@ BattleWeapon weapon_bunbaba_charge = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -396,7 +396,7 @@ BattleWeapon weapon_bunbaba_mega_attack = {
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel

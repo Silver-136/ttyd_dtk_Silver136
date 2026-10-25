@@ -123,7 +123,7 @@ BattleWeapon weapon_kamec_obaba_attack_magic = {
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -131,7 +131,7 @@ BattleWeapon weapon_kamec_obaba_attack_magic = {
     NULL, // acHelpMsg
     0x47, // special
     0x7FF, // counterResistFlags
-    0x80000000, // targetWeightFlags
+    TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -158,7 +158,7 @@ BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1100160, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -166,7 +166,7 @@ BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
     NULL, // acHelpMsg
     8, // special
     0x7FF, // counterResistFlags
-    0x80000000, // targetWeightFlags
+    TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, // burnTime..freezeTime
@@ -196,7 +196,7 @@ BattleWeapon weapon_kamec_obaba_biribiri_magic = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1100160, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -204,7 +204,7 @@ BattleWeapon weapon_kamec_obaba_biribiri_magic = {
     NULL, // acHelpMsg
     8, // special
     0x7FF, // counterResistFlags
-    0x80000000, // targetWeightFlags
+    TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, // poisonStrength..confuseTime
     100, // electricChance
@@ -234,7 +234,7 @@ BattleWeapon weapon_kamec_obaba_katikati_magic = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1100160, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -242,7 +242,7 @@ BattleWeapon weapon_kamec_obaba_katikati_magic = {
     NULL, // acHelpMsg
     8, // special
     0x7FF, // counterResistFlags
-    0x80000000, // targetWeightFlags
+    TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -273,7 +273,7 @@ BattleWeapon weapon_kamec_obaba_trans_magic = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1100160, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -281,7 +281,7 @@ BattleWeapon weapon_kamec_obaba_trans_magic = {
     NULL, // acHelpMsg
     8, // special
     0x7FF, // counterResistFlags
-    0x80000000, // targetWeightFlags
+    TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -310,7 +310,7 @@ BattleWeapon weapon_kamec_obaba_recover_magic = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1100160, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -318,7 +318,7 @@ BattleWeapon weapon_kamec_obaba_recover_magic = {
     NULL, // acHelpMsg
     8, // special
     0x7FF, // counterResistFlags
-    0x1500, // targetWeightFlags
+    TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_LOW_HP | TARGET_WEIGHT_LOW_HP_RATIO, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime

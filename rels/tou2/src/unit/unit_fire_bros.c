@@ -246,7 +246,7 @@ BattleWeapon weapon_fire_bros_attack = {
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     1, // element
     0, // damagePattern
@@ -285,7 +285,7 @@ BattleWeapon weapon_fire_bros_renzoku_attack = {
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     1, // element
     0, // damagePattern
@@ -324,7 +324,7 @@ BattleWeapon weapon_fire_bros_nagemakuri_attack = {
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     1, // element
     0, // damagePattern
@@ -333,7 +333,7 @@ BattleWeapon weapon_fire_bros_nagemakuri_attack = {
     NULL, // acHelpMsg
     7, // special
     0x7FF, // counterResistFlags
-    0x80000000, // targetWeightFlags
+    TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
     30, // burnChance

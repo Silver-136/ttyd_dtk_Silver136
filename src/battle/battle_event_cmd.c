@@ -5841,7 +5841,7 @@ USER_FUNC(btlevtcmd_CheckWeaponPluralTarget) {
     u8* weapon = (u8*)evtGetValue(event, args[0]);
     s32 out;
     out = args[1];
-    if (((BattleWeapon*)weapon)->targetClassFlags & 0x1000000) {
+    if (((BattleWeapon*)weapon)->targetClassFlags & TARGET_CLASS_SINGLE) {
         evtSetValue(event, out, 0);
     }
     else {

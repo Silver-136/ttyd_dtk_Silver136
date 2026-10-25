@@ -201,7 +201,7 @@ void winMain(void) {
         winLectureKeyMask();
 
         switch (wp->menuState) {
-            case 0:
+            case WIN_MENU_IDLE:
                 if (!(wp->flags & 0x1000)) {
                     if (marioStGetSystemLevel() != 0U) {
                         break;
@@ -215,7 +215,7 @@ void winMain(void) {
                     if (!fadeIsFinish()) {
                         break;
                     }
-                    if (mario->characterId == 2) {
+                    if (mario->characterId == CHARACTER_BOWSER) {
                         if (!(wp->buttonTrg & PAD_BUTTON_START)) {
                             break;
                         }
@@ -262,7 +262,7 @@ void winMain(void) {
                     npcStopForEvent();
                 }
                 fbatChangeMode(7);
-                if (mario->characterId == 2) {
+                if (mario->characterId == CHARACTER_BOWSER) {
                     if (!kpaGetStageViewType()) {
                         marioCtrlOff();
                     } else {
@@ -273,7 +273,7 @@ void winMain(void) {
                 }
                 partyCtrlOff();
                 psndSetFlag(0x80);
-                if (mario->characterId == 2) {
+                if (mario->characterId == CHARACTER_BOWSER) {
                     kpaPauseSE2();
                 }
                 if (mario->flags & MARIO_FLAG_IS_8_BIT) {
@@ -299,13 +299,13 @@ void winMain(void) {
                 }
                 wp->active = 0;
                 if (strncmp(gp->currentMapName, "yuu_", 4) == 0) {
-                    wp->menuState = 400;
+                    wp->menuState = WIN_MENU_YUU;
                 } else {
                     wp->menuState++;
                 }
                 break;
 
-            case 1: {
+            case WIN_MENU_LOAD: {
                 WinLangTbl lang = winLangTbl;
                 BOOL ok;
 
@@ -321,32 +321,32 @@ void winMain(void) {
                 break;
             }
 
-            case 2:
+            case WIN_MENU_ROOT:
                 if (!marioGetPtr()->characterId) {
                     switch (winRootMain(wp)) {
                         case -1:
                             wp->menuState++;
                             break;
                         case -2:
-                            wp->menuState = 100;
+                            wp->menuState = WIN_MENU_PARTY_LOAD;
                             break;
                         case -3:
                             if (wp->item.useItem == 0x4E) {
-                                wp->menuState = 300;
+                                wp->menuState = WIN_MENU_DIARY;
                             } else {
-                                wp->menuState = 200;
+                                wp->menuState = WIN_MENU_ITEM_USE;
                             }
                             break;
                     }
                 } else if (wp->buttonTrg & PAD_BUTTON_START) {
                     kpaPauseSE2();
-                    wp->menuState = 3;
+                    wp->menuState = WIN_MENU_CLOSE;
                 }
                 break;
 
-            case 3:
+            case WIN_MENU_CLOSE:
                 camGetPtr((CameraId)8)->flags &= ~0x200;
-                if (mario->characterId == 2) {
+                if (mario->characterId == CHARACTER_BOWSER) {
                     if (!kpaGetStageViewType()) {
                         marioCtrlOn();
                     } else {
@@ -369,32 +369,32 @@ void winMain(void) {
                 }
                 wp->res = NULL;
                 wp->flags = 0;
-                wp->menuState = 0;
+                wp->menuState = WIN_MENU_IDLE;
                 break;
 
-            case 100:
+            case WIN_MENU_PARTY_LOAD:
                 if (marioBgmodeChk()) {
                     MarioWork* m = marioGetPtr();
                     m->prevPartyMemberId[0] = wp->party.partyIds[wp->party.cursor];
-                    wp->menuState = 3;
+                    wp->menuState = WIN_MENU_CLOSE;
                 } else if (animGroupBaseAsync(partyDataTbl[wp->party.partyIds[wp->party.cursor]].name, 2, 0)) {
                     wp->menuState++;
                 }
                 break;
 
-            case 101:
+            case WIN_MENU_PARTY_OUT:
                 marioPartyGoodbye();
                 wp->menuState++;
                 break;
 
-            case 102:
+            case WIN_MENU_PARTY_IN:
                 if (!marioGetParty()) {
                     marioPartyHello(wp->party.partyIds[wp->party.cursor]);
-                    wp->menuState = 3;
+                    wp->menuState = WIN_MENU_CLOSE;
                 }
                 break;
 
-            case 200: {
+            case WIN_MENU_ITEM_USE: {
 #ifdef VERSION_G8ME01
                 WindowPartyDt* list[11]; /* FAKE */ // US frame is 96 bytes; only 7 entries used
 #else
@@ -427,36 +427,36 @@ void winMain(void) {
                 break;
             }
 
-            case 201:
+            case WIN_MENU_ITEM_USE_WAIT:
                 if (!evtCheckID(wp->currentEvent->eventId)) {
-                    wp->menuState = 3;
+                    wp->menuState = WIN_MENU_CLOSE;
                 }
                 break;
 
-            case 300:
+            case WIN_MENU_DIARY:
                 wp->currentEvent = evtEntryType(evt_diary_read, 0, 0, 0);
                 wp->menuState++;
                 break;
 
-            case 301:
+            case WIN_MENU_DIARY_WAIT:
                 if (!evtCheckID(wp->currentEvent->eventId)) {
-                    wp->menuState = 3;
+                    wp->menuState = WIN_MENU_CLOSE;
                 }
                 break;
 
-            case 400:
+            case WIN_MENU_YUU:
                 evtYuuWindow();
                 wp->menuState++;
                 break;
 
-            case 401:
+            case WIN_MENU_YUU_WAIT:
                 if (evtYuuWindowEndChk()) {
-                    wp->menuState = 3;
+                    wp->menuState = WIN_MENU_CLOSE;
                 }
                 break;
         }
 
-        if (wp->menuState == 2) {
+        if (wp->menuState == WIN_MENU_ROOT) {
             switch (marioGetPtr()->characterId) {
                 case 0:
                     if (!(wp->flags & 0x1000)) {
@@ -933,7 +933,7 @@ USER_FUNC(cam_r) {
 }
 
 BOOL winGhostDiaryChk(void) {
-    if (wp->menuState == 301) {
+    if (wp->menuState == WIN_MENU_DIARY_WAIT) {
         return TRUE;
     }
     return seqGetSeq() == 5;

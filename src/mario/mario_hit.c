@@ -361,7 +361,7 @@ HitEntry* marioHitCheck2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist
 void clear_hitobj_ride(void) {
     MarioWork* w = marioGetPtr();
     w->hitobjStandOn = NULL;
-    if (w->characterId == 2) {
+    if (w->characterId == CHARACTER_BOWSER) {
         kpaClearHitobjRide();
     }
 }
@@ -468,7 +468,7 @@ void marioChkGnd(void) {
         return;
     }
     w->hitobjStandOn = NULL;
-    if (w->characterId == 2) {
+    if (w->characterId == CHARACTER_BOWSER) {
         kpaClearHitobjRide();
     }
     w->hitobjUnder = marioSearchUnder();
@@ -486,7 +486,7 @@ void marioChkGnd(void) {
                 w->groundY = (s32)(100.0f * y + 0.5f) / 100.0f;
             }
         } else {
-            if (w->characterId == 2) {
+            if (w->characterId == CHARACTER_BOWSER) {
                 hit = kpaSearchGround(&y, &b, &c, 11.0f);
             } else {
                 hit = marioSearchGround(&y, &b, &c, 11.0f, w->jumpVelocityY);
@@ -498,7 +498,7 @@ void marioChkGnd(void) {
         }
     } else {
         y = w->position.y;
-        if (w->characterId == 2) {
+        if (w->characterId == CHARACTER_BOWSER) {
             if (w->airTimer == 0) {
                 marioChgMot(MARIO_MOTION_FALL);
                 marioSetFallPara();
@@ -565,7 +565,7 @@ void marioChkGnd(void) {
         }
     }
     w->position.y = y;
-    if (w->characterId == 2) {
+    if (w->characterId == CHARACTER_BOWSER) {
         hit = kpaChkHitobjRide();
     } else {
         hit = w->hitobjStandOn;
@@ -607,7 +607,7 @@ void marioChkGnd2(void) {
     f32 d;
     MarioWork* w = marioGetPtr();
     if (!(w->flags & MARIO_FLAG_IS_JUMPING)) {
-        if (w->characterId != 2) {
+        if (w->characterId != CHARACTER_BOWSER) {
             hit = marioSearchGround(&y, &b, &c, 0.1f, w->jumpVelocityY);
         } else {
             hit = kpaSearchGround(&y, &b, &c, 0.1f);
@@ -620,7 +620,7 @@ void marioChkGnd2(void) {
                 w->flags &= ~(MARIO_FLAG_USE_FORCE_DIRECTION | MARIO_FLAG_STOP_AIR_MOVEMENT);
                 w->airTimer = 0;
                 w->jumpPeakAirTime = 0;
-                if (w->characterId == 2) {
+                if (w->characterId == CHARACTER_BOWSER) {
                     if (w->controlStickSensitivity || !kpaFireAttackCheck()) {
                         s32 sx = (s8)w->wStickDir1;
                         s32 sy = (s8)w->wStickDir2;
@@ -636,7 +636,7 @@ void marioChkGnd2(void) {
                 } else {
                     marioChgMot(MARIO_MOTION_STAY);
                 }
-                if (w->characterId != 2) {
+                if (w->characterId != CHARACTER_BOWSER) {
                     if (!marioBgmodeChk()) {
                         camFollowYOn();
                     }
@@ -944,7 +944,7 @@ HitEntry* marioChkLandon(f32* a, f32 d) {
     f32 b, c;
     HitEntry* ret;
     MarioWork* w = marioGetPtr();
-    if (w->characterId != 2) {
+    if (w->characterId != CHARACTER_BOWSER) {
         if (!(w->flags & MARIO_FLAG_TUBE_MODE)) {
             ret = marioSearchGround(a, &b, &c, d, d);
         } else {
@@ -1079,7 +1079,7 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
     px = w->position.x;
     py = w->position.y;
     pz = w->position.z;
-    if (w->characterId == 2) {
+    if (w->characterId == CHARACTER_BOWSER) {
         f32 gy, gb, gc;
         hit = kpaSearchGround(&gy, &gb, &gc, 11.0f);
         *outY = gy;
@@ -1298,7 +1298,7 @@ f32 marioChkOverhead(void) {
         pos = w->position;
         h = w->wPlayerCollisionBox.y;
         d = (w->flags & MARIO_FLAG_IS_JUMPING) ? w->jumpVelocityY : 10.0f;
-        if (w->characterId == 2) {
+        if (w->characterId == CHARACTER_BOWSER) {
             w->hitobjHead = kpaSearchHead(&pos, &h, d);
         } else {
             w->hitobjHead = marioSearchHead(&pos, &h, d);
@@ -1311,7 +1311,7 @@ f32 marioChkOverhead(void) {
             w->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         }
         w->flags |= MARIO_FLAG_IS_TOUCHING_CEILING;
-        if (w->characterId == 2) {
+        if (w->characterId == CHARACTER_BOWSER) {
             marioItemGetDisable();
             if (!kpaGetBodyStatus()) {
                 marioClearJumpPara();
@@ -1321,7 +1321,7 @@ f32 marioChkOverhead(void) {
         if (!(w->flags & MARIO_FLAG_IS_FALLING) && pos.y < w->lastGroundPos.y) {
             pos.y = w->lastGroundPos.y;
             if (!(w->flags & MARIO_FLAG_TUBE_MODE) && w->currMotionId != MARIO_MOTION_SHIP && w->currMotionId != MARIO_MOTION_PLANE &&
-                w->currMotionId != MARIO_MOTION_VIVIAN && w->characterId != 2 && !marioChkSlitEnd()) {
+                w->currMotionId != MARIO_MOTION_VIVIAN && w->characterId != CHARACTER_BOWSER && !marioChkSlitEnd()) {
                 if (w->baseSpeed == 0.0f) {
                     if (w->currMotionId != MARIO_MOTION_STAY) {
                         marioChgStayMotion();
@@ -1345,7 +1345,7 @@ f32 marioChkOverhead(void) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HEAD1), &w->position);
             marioClearJumpPara();
             w->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-            if (w->characterId != 2) {
+            if (w->characterId != CHARACTER_BOWSER) {
                 marioChgMot(MARIO_MOTION_FALL);
                 marioSetFallPara();
             }
@@ -1963,7 +1963,7 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
         return NULL;
     }
     count = 2;
-    if (mp->characterId == 2) {
+    if (mp->characterId == CHARACTER_BOWSER) {
         if (mp->stageFlags & 1) {
             count = 3;
             heights[0] = 0.75f * mp->wPlayerCollisionBox.y;

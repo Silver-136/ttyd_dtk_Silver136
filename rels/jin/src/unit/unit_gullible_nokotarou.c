@@ -140,7 +140,7 @@ static BattleWeapon enemyWeapon_NokotarouKouraAttack = {
     {2, 3, 5, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21004004, // targetPropertyFlags
     0, // element
     8, // damagePattern
@@ -177,7 +177,7 @@ static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
     {2, 3, 5, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20004004, // targetPropertyFlags
     0, // element
     8, // damagePattern

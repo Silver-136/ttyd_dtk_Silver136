@@ -440,7 +440,7 @@ long kpaClearHitobjRide(void) {
 
 HitEntry* kpaGetHitobj(void) {
     MarioWork* m = marioGetPtr();
-    if (m->characterId != 2) {
+    if (m->characterId != CHARACTER_BOWSER) {
         return NULL;
     }
     return m->kpaWork->objHit;
@@ -448,7 +448,7 @@ HitEntry* kpaGetHitobj(void) {
 
 HitEntry* kpaGetHitFlame(void) {
     MarioWork* m = marioGetPtr();
-    if (m->characterId != 2) {
+    if (m->characterId != CHARACTER_BOWSER) {
         return NULL;
     }
     return m->kpaWork->flameHit;
@@ -503,7 +503,7 @@ HitEntry* kpaHitCheck(void) {
 
     best = NULL;
     m = marioGetPtr();
-    if (m->characterId != 2) {
+    if (m->characterId != CHARACTER_BOWSER) {
         return NULL;
     }
     m->kpaWork->objHit = NULL;

@@ -119,7 +119,7 @@ void mot_hip(void) {
     u32 attr;
 
     mario = marioGetPtr();
-    if (mario->characterId == 2) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         kpa_hip();
         return;
     }

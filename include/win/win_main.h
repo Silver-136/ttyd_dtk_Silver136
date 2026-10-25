@@ -192,6 +192,23 @@ typedef struct WinLogState {
     u8 pad_1204[0x1208 - 0x1204]; // 0x1204
 } WinLogState;
 
+/* WinMainWork.menuState: winMain's state machine */
+typedef enum WinMenuState {
+    WIN_MENU_IDLE =           0, // closed; opens on Start or a D-pad shortcut
+    WIN_MENU_LOAD =           1, // load the window textures
+    WIN_MENU_ROOT =           2, // the menus are running (winRootMain)
+    WIN_MENU_CLOSE =          3, // give control back and return to WIN_MENU_IDLE
+    WIN_MENU_PARTY_LOAD =     100, // partner change: load the new partner's model
+    WIN_MENU_PARTY_OUT =      101, // send the current partner away
+    WIN_MENU_PARTY_IN =       102, // bring the new partner in
+    WIN_MENU_ITEM_USE =       200, // start evt_item_use
+    WIN_MENU_ITEM_USE_WAIT =  201, // wait for it
+    WIN_MENU_DIARY =          300, // start evt_diary_read
+    WIN_MENU_DIARY_WAIT =     301, // wait for it
+    WIN_MENU_YUU =            400, // Pianta Parlor maps: evtYuuWindow instead of the menus
+    WIN_MENU_YUU_WAIT =       401, // wait for it
+} WinMenuState;
+
 typedef struct WindowWork {
     u16 flags;                  // 0x0
     u8 pad_2[2];                // 0x2

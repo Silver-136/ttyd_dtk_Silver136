@@ -71,7 +71,7 @@ void mario_kemuri_80130474(void) {
                 }
             }
             else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-                if (kpaGetBodyStatus() <= 0 && mario->characterId != 1) {
+                if (kpaGetBodyStatus() <= 0 && mario->characterId != CHARACTER_PEACH) {
                     kemuri();
                 }
             }
@@ -217,7 +217,7 @@ void kemuri(void) {
             x = mario->position.x;
             y = mario->position.y;
             z = mario->position.z;
-            if (mario->characterId == 2) {
+            if (mario->characterId == CHARACTER_BOWSER) {
                 eff = kemuriEntry(0, x, y, 10.0f + z, 0.0f);
                 ((effKemuriData*)eff->userdata)->scale = kpaGetBaseScale(kpaGetLevel());
             }
@@ -229,7 +229,7 @@ void kemuri(void) {
     else if (mario->currMotionId != MARIO_MOTION_DASH) {
         ct = 7;
     }
-    else if (mario->characterId != 2) {
+    else if (mario->characterId != CHARACTER_BOWSER) {
         if (ct++ > 6) {
             ct = 0;
             sincosf(&s, &c, 6.2831855f * reviseAngle(-mario->directionView) / 360.0f);

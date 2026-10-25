@@ -3217,8 +3217,8 @@ void npcKoopaModeMain(void) {
     mario = marioGetPtr();
     jump = 0;
     fire = jump;
-    if (mario->characterId == 2) jump = kpaJumpChk();
-    if (mario->characterId == 2) fire = kpaFireAttackCheck();
+    if (mario->characterId == CHARACTER_BOWSER) jump = kpaJumpChk();
+    if (mario->characterId == CHARACTER_BOWSER) fire = kpaFireAttackCheck();
     if (jump) {
         if (*(s32*)(fb2 + 0x57c) > 0 && *(s32*)(fb2 + 0x578) >= 2) {
             Vec pos = mario->position;

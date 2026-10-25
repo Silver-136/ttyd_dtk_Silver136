@@ -987,7 +987,7 @@ s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
             if (ev) {
                 ev->lwData[0] = mario->fallStartPos.y < mario->position.y ? 0 : (mario->fallStartPos.y < mobj->position.y + mario->wPlayerCollisionBox.y ? 0 : 1);
             }
-            if ((s32)(u8)mario->characterId != 2) {
+            if ((s32)(u8)mario->characterId != CHARACTER_BOWSER) {
                 if (!strcmp(mobj->animName, "MOBJ_RedJumpStand")) {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND1), &mobj->position);
                 } else {
@@ -1079,7 +1079,7 @@ s32 mobj_jumpstand_blue(MapObjectEntry* mobj) {
             if (mobj->hitFlag == 0x200000) {
                 marioChgJumpStandMotion(mobj->typeDataF[3]);
             }
-            if (mario->characterId != 2) {
+            if (mario->characterId != CHARACTER_BOWSER) {
                 if (!strcmp(mobj->animName, "MOBJ_BlueJumpStand")) {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND1), &mobj->position);
                 } else {
@@ -4579,7 +4579,7 @@ s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
         if (!(mobj->flags & 8)) {
             break;
         }
-        if (mario->characterId != 2) {
+        if (mario->characterId != CHARACTER_BOWSER) {
             mobj->flags &= ~8;
             break;
         }

@@ -1260,7 +1260,7 @@ USER_FUNC(evt_mario_jump_pos) {
                 mp->jumpSnapY = 0.0f;
             } else {
                 if (dy >= 0.0f) {
-                    if (mp->characterId == 2) {
+                    if (mp->characterId == CHARACTER_BOWSER) {
                         dy += 18.5f;
                     } else {
                         dy = 0.5f * mp->wPlayerCollisionBox.y + dy;

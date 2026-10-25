@@ -269,6 +269,13 @@ typedef struct MarioStayWork {     // US only, MarioWork 0x2AC: mot_stay's count
 } MarioStayWork;
 #endif
 
+/* MarioWork.characterId: who the player controls (marioSetCharMode) */
+typedef enum MarioCharacter {
+    CHARACTER_MARIO,
+    CHARACTER_PEACH,
+    CHARACTER_BOWSER,
+} MarioCharacter;
+
 typedef struct MarioWork {
     u32 flags;                     // 0x0
     u32 dispFlags;                 // 0x4

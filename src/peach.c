@@ -175,8 +175,8 @@ void peachChgPose(const char* name) {
 
 void peachTransformOn(void) {
     MarioWork* mp = marioGetPtr();
-    if (mp->characterId != 1) {
-        marioSetCharMode(1);
+    if (mp->characterId != CHARACTER_PEACH) {
+        marioSetCharMode(CHARACTER_PEACH);
     }
     if (!(mp->peachFlags & 0x2000)) {
         mp->peachFlags |= 0x2000;
@@ -192,8 +192,8 @@ void peachTransformOn(void) {
 
 void peachTransformOff(void) {
     MarioWork* mp = marioGetPtr();
-    if (mp->characterId != 1) {
-        marioSetCharMode(1);
+    if (mp->characterId != CHARACTER_PEACH) {
+        marioSetCharMode(CHARACTER_PEACH);
     }
     if (mp->peachFlags & 0x2000) {
         mp->peachFlags &= ~0x2000;

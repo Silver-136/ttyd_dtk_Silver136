@@ -107,7 +107,7 @@ void mot_damage(void) {
         marioSlitForceCancel();
         bomhei_use_cancel2();
         marioNoUpdateCamPos();
-        if (mario->characterId == 2) {
+        if (mario->characterId == CHARACTER_BOWSER) {
             marioChgPose("KPA_D_1");
         } else {
             marioChgEvtPose("M_F_1");
@@ -286,7 +286,7 @@ void mot_damage(void) {
             mario->hitobjStandOn = h;
             mario->hitobjJumpFrom = NULL;
             mario->position.y = landY;
-            if (mario->characterId == 2) {
+            if (mario->characterId == CHARACTER_BOWSER) {
                 marioChgPose("KPA_D_2");
             } else {
                 marioChgPose("M_D_2");
@@ -307,7 +307,7 @@ void mot_damage(void) {
         if (--mario->multiTimer > 0) {
             break;
         }
-        if (mario->characterId == 0) {
+        if (mario->characterId == CHARACTER_MARIO) {
             pouchAddHP(-1);
         }
         if (pouchGetHP() <= 0) {
@@ -315,7 +315,7 @@ void mot_damage(void) {
             marioUpdateCamPos();
             break;
         }
-        if (mario->characterId != 2) {
+        if (mario->characterId != CHARACTER_BOWSER) {
             marioChgPose("M_U_3");
         }
         mario->multiTimer = 12;

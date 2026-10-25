@@ -713,7 +713,7 @@ void mobjMain(void) {
         if (!(entry->flags & 8)) {
             hit = 0;
             hitPtr = entry->hitObj[0].hitObject;
-            if ((s32)(u8)mario->characterId != 2) {
+            if ((s32)(u8)mario->characterId != CHARACTER_BOWSER) {
                 if ((entry->flags & 0x10000) && mario->hitobjHammer == hitPtr) {
                     if (marioGetPtr()->position.y <= 5.0f + entry->position.y) {
                         entry->hitFlag = 0x10000;

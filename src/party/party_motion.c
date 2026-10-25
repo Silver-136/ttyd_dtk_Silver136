@@ -361,7 +361,7 @@ void party_motion_stay(PartyEntry* party) {
     if (!mario->controlStickSensitivity && mario->baseSpeed < 1.0f) {
         lim = 100.0f;
     }
-    if ((s8)mario->characterId == 2) {
+    if ((s8)mario->characterId == CHARACTER_BOWSER) {
         lim = 70.0f;
     }
     if (!strcmp(gp->currentMapName, "aji_02") || !strcmp(gp->currentMapName, "aji_05") ||
@@ -897,7 +897,7 @@ void party_motion_homing_walk(PartyEntry* party) {
     } else {
         lim2 = VERSION_PICK(35.0f, 45.0f);
     }
-    if ((s32)mario->characterId == 2) {
+    if ((s32)mario->characterId == CHARACTER_BOWSER) {
         lim2 = 70.0f;
     }
     if ((party->trigFlags >> 17) & 1) {

@@ -254,7 +254,7 @@ BOOL marioCamZoomUp(void) {
     mario->dispFlags |= 0x100000;
     mario->zoomOffTimer = 0;
 
-    zoomDistance = (mario->characterId == 2) ? 750.0f : 450.0f;
+    zoomDistance = (mario->characterId == CHARACTER_BOWSER) ? 750.0f : 450.0f;
 
     xOffset = (f32)(mario->screenX - 303) / 5.0f;
     yOffset = 0.0f;

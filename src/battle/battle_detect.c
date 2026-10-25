@@ -28,7 +28,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     s32 np2;
     BattleUnit* u2;
 
-    if (d->classFlags & 0x80000000) {
+    if (d->classFlags & TARGET_CLASS_NONE) {
         d->numTargets = -1;
         return;
     }
@@ -99,84 +99,99 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
         BOOL ok;
         do {
             u32 flags = d->classFlags;
-            if (flags & 0x80000000) {
-                { ok = FALSE; break; }
+            if (flags & TARGET_CLASS_NONE) {
+                ok = FALSE;
+                break;
             }
-            if (flags & 0x10000) {
+            if (flags & TARGET_CLASS_ONLY_MARIO) {
                 if (unit->currentKind != UNIT_MARIO) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x20000) {
+            if (flags & TARGET_CLASS_ONLY_TREE_OR_SWITCH) {
                 if (unit->currentKind < UNIT_UNUSED_TREE || unit->currentKind >= UNIT_UNUSED_TESTNPC) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 1) {
+            if (flags & TARGET_CLASS_NO_MARIO_OR_SHELL) {
                 if (unit->currentKind == UNIT_MARIO || unit->currentKind == UNIT_SHELL_SHIELD) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 2) {
+            if (flags & TARGET_CLASS_NO_PARTNER) {
                 if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x10) {
+            if (flags & TARGET_CLASS_NO_ENEMY) {
                 if (unit->currentKind >= UNIT_GOOMBA && unit->currentKind < UNIT_UNUSED_TREE) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x40) {
+            if (flags & TARGET_CLASS_NO_SYSTEM_UNIT) {
                 if (unit->currentKind >= UNIT_UNUSED_TESTNPC && unit->currentKind < UNIT_MARIO) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x20) {
+            if (flags & TARGET_CLASS_NO_TREE_OR_SWITCH) {
                 if (unit->currentKind >= UNIT_UNUSED_TREE && unit->currentKind < UNIT_UNUSED_TESTNPC) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x1000) {
+            if (flags & TARGET_CLASS_NO_SELF) {
                 if (d->unitId == unit->unitId) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x100) {
+            if (flags & TARGET_CLASS_NO_OPPOSITE_SIDE) {
                 if (d->belong == unit->mAlliance) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x200) {
+            if (flags & TARGET_CLASS_NO_OWN_SIDE) {
                 if (d->belong != unit->mAlliance && unit->mAlliance != ALLIANCE_NEUTRAL) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x2000) {
+            if (flags & TARGET_CLASS_NO_SAME_KIND) {
                 if (d->unitId != unit->unitId && unit->currentKind == BattleGetUnitPtr(wp, d->unitId)->currentKind) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             flags = d->classFlags;
-            if (flags & 0x4000) {
+            if (flags & TARGET_CLASS_ONLY_SELF) {
                 if (d->unitId != unit->unitId) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x100000) {
+            if (flags & TARGET_CLASS_ONLY_MAIN_PARTS) {
                 u32 a = part->attributes;
                 if (!((a & 1) || (a & 2)) || (a & 0x40000)) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
-            if (flags & 0x200000) {
+            if (flags & TARGET_CLASS_ONLY_MAIN_OR_SEMI_PARTS) {
                 u32 a = part->attributes;
 #ifdef VERSION_G8ME01
                 if (!((a & 1) || (a & 2) || (a & 4)) || (a & 0x10) || (a & 0x40000)) {
 #else
                 if (!((a & 1) || (a & 2) || (a & 4)) || (a & 0x40000)) {
 #endif
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             ok = TRUE;
@@ -202,66 +217,79 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
         do {
                         if (d->propFlags & 1) {
                 if (part->attributes & 0x80000) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
                 if (!battleGetUnitMonosiriPtr(unit->currentKind)) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
                 if (!battleGetUnitMonosiriPtr(unit->currentKind)->tattleBtlTag) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             if (d->propFlags & 2) {
                 if (unit->mAttributeFlags & 4) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             if (d->propFlags & 4) {
                 if (unit->mAttributeFlags & 2) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             if (d->propFlags & 8) {
                 if (unit->mAttributeFlags & 4) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             if (d->propFlags & 0x10) {
                 u32 a = unit->mAttributeFlags;
                 if (!(a & 4) && !(a & 2)) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             if (d->propFlags & 0x1000) {
                 if (part->attributes & 0x100000) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             if (d->propFlags & 0x2000) {
                 if (part->attributes & 0x200000) {
                     if (!(d->propFlags & 0x100000) || d->unitId != unit->unitId) {
-                        { ok = FALSE; break; }
+                        ok = FALSE;
+                        break;
                     }
                 }
             }
             if (d->propFlags & 0x4000) {
                 if (part->attributes & 0x400000) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             if (d->propFlags & 0x8000) {
                 if (!(part->attributes & 0x400000)) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             if (d->propFlags & 0x2000000) {
                 if (unit->mAttributeFlags & 0x20) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             if (d->propFlags & 0x4000000) {
                 if (part->attributes & 0x2000000) {
-                    { ok = FALSE; break; }
+                    ok = FALSE;
+                    break;
                 }
             }
             ok = TRUE;
@@ -277,7 +305,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
         }
     }
 
-    if (d->classFlags & 0x100000) {
+    if (d->classFlags & TARGET_CLASS_ONLY_MAIN_PARTS) {
         {
             for (i = 0; n > i; i++) {
                 BattleWorkTarget* tg = &t[i];
@@ -396,14 +424,14 @@ BOOL BattleSamplingEnemy(BattleWorkWeaponTargets* d, BattleWeapon* weapon, s32 u
     d->propFlags = propFlags;
     d->direction = direction;
     if (BattleGetUnitPtr(_battleWorkPointer, unitId)->mTokenFlags & 0x10) {
-        if ((d->classFlags & 0x100) && !(d->classFlags & 0x200)) {
+        if ((d->classFlags & TARGET_CLASS_NO_OPPOSITE_SIDE) && !(d->classFlags & TARGET_CLASS_NO_OWN_SIDE)) {
             r = TRUE;
-            d->classFlags &= ~0x100;
-            d->classFlags |= 0x200;
-        } else if (!(d->classFlags & 0x100) && (d->classFlags & 0x200)) {
+            d->classFlags &= ~TARGET_CLASS_NO_OPPOSITE_SIDE;
+            d->classFlags |= TARGET_CLASS_NO_OWN_SIDE;
+        } else if (!(d->classFlags & TARGET_CLASS_NO_OPPOSITE_SIDE) && (d->classFlags & TARGET_CLASS_NO_OWN_SIDE)) {
             r = TRUE;
-            d->classFlags |= 0x100;
-            d->classFlags &= ~0x200;
+            d->classFlags |= TARGET_CLASS_NO_OPPOSITE_SIDE;
+            d->classFlags &= ~TARGET_CLASS_NO_OWN_SIDE;
         }
     }
     _btlSamplingEnemy(d);
@@ -436,39 +464,39 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
             s32 id = d->targetIndices[i];
             unit = BattleGetUnitPtr(wp, d->targets[id].unitIdx);
             w[id] += 100;
-            if ((flags & 1) && unit->currentKind == UNIT_MARIO) {
+            if ((flags & TARGET_WEIGHT_MARIO) && unit->currentKind == UNIT_MARIO) {
                 w[id] = 1.5f * w[id];
             }
-            if ((flags & 2) && unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+            if ((flags & TARGET_WEIGHT_PARTNER) && unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
                 w[id] = 1.5f * w[id];
             }
-            if ((flags & 4)) {
+            if ((flags & TARGET_WEIGHT_FRONT)) {
                 f32 t = 0.4f * (d->numTargets - i);
                 w[id] *= 0.1f + t;
             }
-            if ((flags & 8)) {
+            if ((flags & TARGET_WEIGHT_BACK)) {
                 f32 t = 0.4f * i;
                 w[id] = (0.5f + t) * w[id];
             }
-            if ((flags & 0x10) && active->mAlliance == unit->mAlliance) {
+            if ((flags & TARGET_WEIGHT_OWN_SIDE) && active->mAlliance == unit->mAlliance) {
                 w[id] = 1.5f * w[id];
             }
-            if ((flags & 0x20) && active->mAlliance != unit->mAlliance && unit->mAlliance != ALLIANCE_NEUTRAL) {
+            if ((flags & TARGET_WEIGHT_OPPOSITE_SIDE) && active->mAlliance != unit->mAlliance && unit->mAlliance != ALLIANCE_NEUTRAL) {
                 w[id] = 1.5f * w[id];
             }
-            if ((flags & 0x100)) {
+            if ((flags & TARGET_WEIGHT_LOW_HP_RATIO)) {
                 w[id] = (2.0f - (f32)unit->currentHp / (f32)unit->maxHp) * w[id];
             }
-            if ((flags & 0x200)) {
+            if ((flags & TARGET_WEIGHT_HIGH_HP_RATIO)) {
                 w[id] = (1.0f + (f32)unit->currentHp / (f32)unit->maxHp) * w[id];
             }
-            if ((flags & 0x400)) {
+            if ((flags & TARGET_WEIGHT_LOW_HP)) {
                 w[id] = (1.5f - 0.05f * unit->currentHp) * w[id];
             }
-            if ((flags & 0x800)) {
+            if ((flags & TARGET_WEIGHT_HIGH_HP)) {
                 w[id] = (1.0f + 0.05f * unit->currentHp) * w[id];
             }
-            if ((flags & 0x1000) && unit->currentHp <= unit->mKindParams->mPerilHP) {
+            if ((flags & TARGET_WEIGHT_IN_PERIL) && unit->currentHp <= unit->mKindParams->mPerilHP) {
                 w[id] = 1.5f * w[id];
             }
             if (d->weapon) {
@@ -542,7 +570,7 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
                 }
             }
         }
-        if (!(flags & 0x80000000)) {
+        if (!(flags & TARGET_WEIGHT_RANDOM)) {
             s32 best = 0;
             s32 bestVal = 0;
             for (i = 0; i < 74; i++) {

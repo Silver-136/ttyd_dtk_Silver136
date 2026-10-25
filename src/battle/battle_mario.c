@@ -206,7 +206,7 @@ BattleWeapon marioDefaultWeapon_Jump = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -243,7 +243,7 @@ BattleWeapon marioDefaultWeapon_Jump = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -283,7 +283,7 @@ BattleWeapon marioWeapon_KururinJump = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -321,7 +321,7 @@ BattleWeapon marioWeapon_KururinJump = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -361,7 +361,7 @@ BattleWeapon marioWeapon_KururinJump2 = {
     {1, 2, 3, 4, 5, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -398,7 +398,7 @@ BattleWeapon marioWeapon_KururinJump2 = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -438,7 +438,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
     {1, 2, 2, 4, 5, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -476,7 +476,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -516,7 +516,7 @@ BattleWeapon marioWeapon_JyabaraJumpFailed = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -554,7 +554,7 @@ BattleWeapon marioWeapon_JyabaraJumpFailed = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -590,7 +590,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackKaitenHammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, // element
     14, // damagePattern
@@ -626,7 +626,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1101260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, // element
     16, // damagePattern
@@ -665,7 +665,7 @@ BattleWeapon marioDefaultWeapon_Hammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -702,7 +702,7 @@ BattleWeapon marioDefaultWeapon_Hammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -742,7 +742,7 @@ BattleWeapon marioWeapon_KaitenHammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, // element
     14, // damagePattern
@@ -781,7 +781,7 @@ BattleWeapon marioWeapon_KaitenHammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, // element
     14, // damagePattern
@@ -813,7 +813,7 @@ BattleWeapon marioWeapon_KaitenHammerInvolved = {
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100060, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20102000, // targetPropertyFlags
     0, // element
     15, // damagePattern
@@ -852,7 +852,7 @@ BattleWeapon marioWeapon_UltraHammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, // element
     16, // damagePattern
@@ -891,7 +891,7 @@ BattleWeapon marioWeapon_UltraHammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, // element
     16, // damagePattern
@@ -923,7 +923,7 @@ BattleWeapon marioWeapon_UltraHammerInvolved = {
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100060, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20102000, // targetPropertyFlags
     0, // element
     17, // damagePattern
@@ -961,7 +961,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1100060, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, // element
     19, // damagePattern
@@ -999,7 +999,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1100060, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, // element
     19, // damagePattern
@@ -1039,7 +1039,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     {0, 0, 1, 1, 2, 2, 241, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1076,7 +1076,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     {0, 0, 1, 1, 2, 2, 241, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1114,7 +1114,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
     {1, 2, 2, 4, 3, 6, 240, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1151,7 +1151,7 @@ BattleWeapon badgeWeapon_DokanJump = {
     {1, 2, 2, 4, 3, 6, 332, 4}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1189,7 +1189,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     {0, 0, 1, 1, 2, 2, 242, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1226,7 +1226,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     {0, 0, 1, 1, 2, 2, 242, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1265,7 +1265,7 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     {0, 1, 1, 3, 2, 5, 243, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1302,7 +1302,7 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     {0, 1, 1, 3, 2, 5, 243, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1333,7 +1333,7 @@ BattleWeapon badgeWeapon_TatsumakiJumpInvolved = {
     {0, 2, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000010, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1370,7 +1370,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1410,7 +1410,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1452,7 +1452,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1491,7 +1491,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1532,7 +1532,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1573,7 +1573,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1615,7 +1615,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
     {1, 2, 2, 4, 3, 6, 247, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1652,7 +1652,7 @@ BattleWeapon badgeWeapon_DokanHammer = {
     {1, 2, 2, 4, 3, 6, 333, 4}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1690,7 +1690,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     {0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 248, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000008, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1727,7 +1727,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     {0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 248, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000008, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1765,7 +1765,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
     {3, 6, 3, 6, 3, 6, 334, 4}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000008, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1802,7 +1802,7 @@ BattleWeapon badgeWeapon_HammerNageru = {
     {0, 1, 1, 3, 2, 5, 249, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1840,7 +1840,7 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1877,7 +1877,7 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1916,7 +1916,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1956,7 +1956,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -1998,7 +1998,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     {0xFFFFFFFF, 3, 0, 3, 1, 3, 252, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2001260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20002000, // targetPropertyFlags
     1, // element
     0, // damagePattern
@@ -2038,7 +2038,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     {0xFFFFFFFF, 3, 0, 3, 1, 3, 252, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2001260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20002000, // targetPropertyFlags
     1, // element
     0, // damagePattern
@@ -2080,7 +2080,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     {1, 5, 2, 5, 3, 5, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100160, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10002000, // targetPropertyFlags
     1, // element
     0, // damagePattern
@@ -2120,7 +2120,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     {1, 5, 2, 5, 3, 5, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100160, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10002000, // targetPropertyFlags
     1, // element
     0, // damagePattern
@@ -2162,7 +2162,7 @@ BattleWeapon badgeWeapon_IceNaguri = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     2, // element
     0, // damagePattern
@@ -2203,7 +2203,7 @@ BattleWeapon badgeWeapon_IceNaguri = {
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x21002000, // targetPropertyFlags
     2, // element
     0, // damagePattern
@@ -2247,7 +2247,7 @@ BattleWeapon badgeWeapon_Charge = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2286,7 +2286,7 @@ BattleWeapon badgeWeapon_Charge = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2327,7 +2327,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2366,7 +2366,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2407,7 +2407,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2446,7 +2446,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2487,7 +2487,7 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2526,7 +2526,7 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2560,7 +2560,7 @@ BattleWeapon badgeWeapon_2KaiItem = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2592,7 +2592,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2623,7 +2623,7 @@ BattleWeapon badgeWeapon_DefenceCommand = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2658,7 +2658,7 @@ BattleWeapon badgeWeapon_DefenceCommandP = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1004020, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_SELF | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2702,7 +2702,7 @@ BattleWeapon marioWeapon_BakuGame = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100060, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2743,7 +2743,7 @@ BattleWeapon marioWeapon_BakuGame = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100060, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2786,7 +2786,7 @@ BattleWeapon marioWeapon_Scissor = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2824,7 +2824,7 @@ BattleWeapon marioWeapon_Scissor = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2864,7 +2864,7 @@ BattleWeapon marioWeapon_ZubaStar = {
     {0, 3, 6, 9, 12, 15, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2902,7 +2902,7 @@ BattleWeapon marioWeapon_ZubaStar = {
     {0, 3, 6, 9, 12, 15, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2942,7 +2942,7 @@ BattleWeapon marioWeapon_Genki0 = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100070, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -2980,7 +2980,7 @@ BattleWeapon marioWeapon_Genki0 = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100070, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -3020,7 +3020,7 @@ BattleWeapon marioWeapon_Genki1 = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100070, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -3058,7 +3058,7 @@ BattleWeapon marioWeapon_Genki1 = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100070, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -3098,7 +3098,7 @@ BattleWeapon marioWeapon_Deka = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -3136,7 +3136,7 @@ BattleWeapon marioWeapon_Deka = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -3176,7 +3176,7 @@ BattleWeapon marioWeapon_Muki = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100070, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -3214,7 +3214,7 @@ BattleWeapon marioWeapon_Muki = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2100070, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_ENEMY, // targetClassFlags
     0x10000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -3254,7 +3254,7 @@ BattleWeapon marioWeapon_Suki = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -3293,7 +3293,7 @@ BattleWeapon marioWeapon_Suki = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x2101260, // targetClassFlags
+    TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20000000, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel

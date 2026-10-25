@@ -176,7 +176,7 @@ void kpaChgPose(const char* a, const char* b) {
 s32 kpaGetLevel(void) {
     s32 lv = 0;
     MarioWork* mp = marioGetPtr();
-    if (mp->characterId == 2) {
+    if (mp->characterId == CHARACTER_BOWSER) {
         lv = KPW(mp)->level;
     }
     return lv;
@@ -184,7 +184,7 @@ s32 kpaGetLevel(void) {
 
 void kpaSetLevel(s32 lv) {
     MarioWork* mp = marioGetPtr();
-    if (mp->characterId == 2 && KPW(mp) != NULL) {
+    if (mp->characterId == CHARACTER_BOWSER && KPW(mp) != NULL) {
         f32 s;
         KPW(mp)->level = lv;
         s = baseScaleTbl[lv];
@@ -201,7 +201,7 @@ f32 kpaGetWidth(s32 lv) {
 s32 kpaGetBodyStatus(void) {
     MarioWork* mp = marioGetPtr();
     s32 st;
-    if (mp->characterId != 2) {
+    if (mp->characterId != CHARACTER_BOWSER) {
         return -1;
     }
     st = 0;
@@ -516,7 +516,7 @@ void kpa_jumpNpc(void) {
         camFollowYOff();
         marioPreJump();
         SETP(mp, 2.6f, -0.06f, -0.01f, -0.002f);
-        if (!(mp->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mp->characterId == 0) {
+        if (!(mp->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mp->characterId == CHARACTER_MARIO) {
             marioChgPose("M_J_1B");
         }
         mp->flags |= MARIO_FLAG_IS_JUMPING;
@@ -525,7 +525,7 @@ void kpa_jumpNpc(void) {
     switch ((s32)mp->currSubMotionId) { case 0: {
         marioMakeJumpPara();
         if (mp->jumpVelocityY <= 0.0f) {
-            if (!(mp->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mp->characterId == 0) {
+            if (!(mp->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mp->characterId == CHARACTER_MARIO) {
                 marioChgPose("M_J_1C");
             }
             marioSetPeakYpos();
@@ -917,7 +917,7 @@ f32 kpaGetBaseScale(s32 lv) {
 s32 kpaHipAttackCheck(void) {
     s32 r = 0;
     MarioWork* mp = marioGetPtr();
-    if (mp->characterId != 2) {
+    if (mp->characterId != CHARACTER_BOWSER) {
         return 0;
     }
     if (mp->currMotionId == MARIO_MOTION_HIP_2) {

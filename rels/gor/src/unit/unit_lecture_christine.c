@@ -283,7 +283,7 @@ BattleWeapon lec_weapon_zutsuki_1 = {
     {1, 1, 1, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel
@@ -319,7 +319,7 @@ BattleWeapon lec_weapon_zutsuki_2 = {
     {1, 1, 1, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    0x1001260, // targetClassFlags
+    TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
     0x20001004, // targetPropertyFlags
     0, 0, // element..damagePattern
     3, // acLevel

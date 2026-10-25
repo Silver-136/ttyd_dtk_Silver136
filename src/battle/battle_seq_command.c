@@ -1239,7 +1239,7 @@ s32 BattleCommandInput(BattleWork* work) {
                 i = 0;
             }
             targets->currentTarget = i;
-            if ((s32)cmd->weapon[cursor->absPos].weapon->targetClassFlags & 0x1000000) {
+            if ((s32)cmd->weapon[cursor->absPos].weapon->targetClassFlags & TARGET_CLASS_SINGLE) {
                 if (PADREP(0x80000)) {
                     targets->currentTarget++;
                     if (targets->currentTarget >= targets->numTargets) {
@@ -1671,12 +1671,12 @@ s32 BattleCommandDisplay_WeaponSelectMenuMain(BattleWork* wp, s32 type) {
                 _btlcmd_SelectWeaponDecide(wp, type, cursor->absPos);
                 BattleCommandDisplay_TargetSelectMenuSetup(wp);
                 cmd->state = 10;
-                if (!(cmd->weapon[cursor->absPos].weapon->targetClassFlags & 0x200)) {
+                if (!(cmd->weapon[cursor->absPos].weapon->targetClassFlags & TARGET_CLASS_NO_OWN_SIDE)) {
                     BattleStageOnLightFriendInCommand();
                 }
-                if (!(cmd->weapon[cursor->absPos].weapon->targetClassFlags & 0x4000)
-                    && !(cmd->weapon[cursor->absPos].weapon->targetClassFlags & 0x100)
-                    && !(cmd->weapon[cursor->absPos].weapon->targetClassFlags & 0x10)) {
+                if (!(cmd->weapon[cursor->absPos].weapon->targetClassFlags & TARGET_CLASS_ONLY_SELF)
+                    && !(cmd->weapon[cursor->absPos].weapon->targetClassFlags & TARGET_CLASS_NO_OPPOSITE_SIDE)
+                    && !(cmd->weapon[cursor->absPos].weapon->targetClassFlags & TARGET_CLASS_NO_ENEMY)) {
                     BattleStageOnLightEnemyInCommand();
                 }
                 ret = 1;
@@ -2162,7 +2162,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
     BattleUnitPart* part2;
 
     _btlcmd_GetCursorPtr(cmd, wp->commandMenu.actType, &cursor);
-    if (cmd->weapon[cursor->absPos].weapon->targetClassFlags & 0x1000000) {
+    if (cmd->weapon[cursor->absPos].weapon->targetClassFlags & TARGET_CLASS_SINGLE) {
         wt = &wp->weaponTargets;
         t = &wt->targets[wt->targetIndices[wt->currentTarget]];
         unit = BattleGetUnitPtr(wp, t->unitIdx);
@@ -2690,7 +2690,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         for (i = 0; i < cursor->count; i++) {
             weapon = cmd->weapon[i].weapon;
             if (cmd->weapon[i].enabled && ((u32)weapon->special & 0x10000) &&
-                !(weapon->targetClassFlags & 0x2000000) && (weapon->targetClassFlags & 0x1000000)) {
+                !(weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) && (weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
                 list[cnt++] = i;
             }
         }
@@ -2709,7 +2709,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         if (!((u32)weapon->special & 0x10000)) {
             return subsetevt_confuse_flustered;
         }
-        if ((weapon->targetClassFlags & 0x2000000) || !(weapon->targetClassFlags & 0x1000000)) {
+        if ((weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) || !(weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
             return subsetevt_confuse_flustered;
         }
         if (wp->weaponTargets.numTargets <= 0) {

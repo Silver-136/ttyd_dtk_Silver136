@@ -62,11 +62,11 @@ void mot_stay(void) {
 
     mario = marioGetPtr();
     newMot = FALSE;
-    if (mario->characterId == 2) {
+    if (mario->characterId == CHARACTER_BOWSER) {
         kpa_stay();
         return;
     }
-    if (mario->characterId == 1) {
+    if (mario->characterId == CHARACTER_PEACH) {
         peach_stay();
         return;
     }

@@ -2,6 +2,39 @@
 
 #include <dolphin/types.h>
 
+/* BattleWeapon.targetClassFlags: which units an attack may target */
+#define TARGET_CLASS_NO_MARIO_OR_SHELL       0x1 // not Mario or the shell shield
+#define TARGET_CLASS_NO_PARTNER              0x2 // not a partner
+#define TARGET_CLASS_NO_ENEMY                0x10 // not an enemy (UNIT_GOOMBA..UNIT_UNUSED_FLAVIO)
+#define TARGET_CLASS_NO_TREE_OR_SWITCH       0x20 // not UNIT_UNUSED_TREE or UNIT_UNUSED_SWITCH
+#define TARGET_CLASS_NO_SYSTEM_UNIT          0x40 // not UNIT_UNUSED_TESTNPC..UNIT_PROLOGUE_GOOMBELLA
+#define TARGET_CLASS_NO_OPPOSITE_SIDE        0x100 // not the attacker's opponents
+#define TARGET_CLASS_NO_OWN_SIDE             0x200 // not the attacker's own side
+#define TARGET_CLASS_NO_SELF                 0x1000 // not the attacker
+#define TARGET_CLASS_NO_SAME_KIND            0x2000 // not another unit of the attacker's kind
+#define TARGET_CLASS_ONLY_SELF               0x4000 // only the attacker
+#define TARGET_CLASS_ONLY_MARIO              0x10000 // only Mario
+#define TARGET_CLASS_ONLY_TREE_OR_SWITCH     0x20000 // only UNIT_UNUSED_TREE or UNIT_UNUSED_SWITCH
+#define TARGET_CLASS_ONLY_MAIN_PARTS         0x100000 // only main or important parts
+#define TARGET_CLASS_ONLY_MAIN_OR_SEMI_PARTS 0x200000 // only main, important or semi-important parts
+#define TARGET_CLASS_SINGLE                  0x1000000 // one target at a time
+#define TARGET_CLASS_MULTIPLE                0x2000000 // all targets at once
+#define TARGET_CLASS_NONE                    0x80000000 // no valid targets
+
+/* BattleWeapon.targetWeightFlags: how an enemy chooses among the targets */
+#define TARGET_WEIGHT_MARIO         0x1 // prefer Mario
+#define TARGET_WEIGHT_PARTNER       0x2 // prefer a partner
+#define TARGET_WEIGHT_FRONT         0x4 // prefer targets early in the target list
+#define TARGET_WEIGHT_BACK          0x8 // prefer targets late in the target list
+#define TARGET_WEIGHT_OWN_SIDE      0x10 // prefer the attacker's side
+#define TARGET_WEIGHT_OPPOSITE_SIDE 0x20 // prefer the attacker's opponents
+#define TARGET_WEIGHT_LOW_HP_RATIO  0x100 // prefer a low HP / max HP
+#define TARGET_WEIGHT_HIGH_HP_RATIO 0x200 // prefer a high HP / max HP
+#define TARGET_WEIGHT_LOW_HP        0x400 // prefer low HP
+#define TARGET_WEIGHT_HIGH_HP       0x800 // prefer high HP
+#define TARGET_WEIGHT_IN_PERIL      0x1000 // prefer targets in Peril
+#define TARGET_WEIGHT_RANDOM        0x80000000 // pick at random by weight (else the heaviest)
+
 typedef enum BattleWeaponSpecialFlags { SPECIAL_UNGUARDABLE = 0x20000 } BattleWeaponSpecialFlags;
 
 typedef struct BattleWeapon {

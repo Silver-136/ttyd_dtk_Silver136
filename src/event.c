@@ -583,7 +583,7 @@ void stg0_00_init(void) {
     yuugijou_init();
     johoya_init();
     gp->retraceLocalTime = 0;
-    marioSetCharMode(0);
+    marioSetCharMode(CHARACTER_MARIO);
     statusWinForceUpdate();
 }
 
@@ -712,7 +712,7 @@ void stg1_19_init(void) {
 }
 
 void stg1_20_init(void) {
-    marioSetCharMode(0);
+    marioSetCharMode(CHARACTER_MARIO);
 }
 
 void stg1_30_init(void) {
@@ -885,7 +885,7 @@ void stg2_25_02_init(void) {
 }
 
 void stg2_26_init(void) {
-    marioSetCharMode(0);
+    marioSetCharMode(CHARACTER_MARIO);
 }
 
 void stg2_40_init(void) {
@@ -1263,7 +1263,7 @@ void stg3_34_init(void) {
 
     swSet(0x962);
     swSet(0x963);
-    marioSetCharMode(0);
+    marioSetCharMode(CHARACTER_MARIO);
     pouchRemoveItem(ITEM_CHAMPS_BELT);
     for (i = 0; i < 20; i++) {
         swClear(i + 0x9A1);
@@ -1366,7 +1366,7 @@ void stg4_15_03_init(void) {
 }
 
 void stg4_16_init(void) {
-    marioSetCharMode(0);
+    marioSetCharMode(CHARACTER_MARIO);
 }
 
 void stg4_30_init(void) {
@@ -1488,7 +1488,7 @@ void stg5_47_init(void) {
 }
 
 void stg5_58_init(void) {
-    marioSetCharMode(0);
+    marioSetCharMode(CHARACTER_MARIO);
 }
 
 void stg5_59_01_init(void) {
@@ -1641,7 +1641,7 @@ void stg6_54_init(void) {
 }
 
 void stg6_56_init(void) {
-    marioSetCharMode(0);
+    marioSetCharMode(CHARACTER_MARIO);
 }
 
 void stg6_70_init(void) {
